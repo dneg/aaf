@@ -139,6 +139,7 @@ HUMAN_TYPED_COMTEST = \
 	AAFSourceMob \
 	AAFSourceReference \
 	AAFComponent \
+	AAFHeader \
 	EnumAAFMobs
 
 # Build the list of all objects that have automatically-generated
@@ -201,7 +202,6 @@ AUTO_GEN_COMTEST = \
 	EnumAAFReferenceValues \
 	EnumAAFSegments \
 	EnumAAFTypeDefs \
-	AAFHeader \
 	AAFIdentification \
 	AAFObject \
 	AAFFileDescriptor \
