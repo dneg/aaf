@@ -89,9 +89,62 @@ LINK32=link.exe
 
 # Name "ComPersonnelExtension - Win32 Release"
 # Name "ComPersonnelExtension - Win32 Debug"
-# Begin Group "Source Files"
+# Begin Group "AAF Libraries"
 
-# PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
+# PROP Default_Filter "lib"
+# Begin Source File
+
+SOURCE=..\..\..\lib\AAF.lib
+
+!IF  "$(CFG)" == "ComPersonnelExtension - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "ComPersonnelExtension - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\lib\AAFD.lib
+
+!IF  "$(CFG)" == "ComPersonnelExtension - Win32 Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "ComPersonnelExtension - Win32 Debug"
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\lib\AAFIID.lib
+
+!IF  "$(CFG)" == "ComPersonnelExtension - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "ComPersonnelExtension - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\lib\AAFIIDD.lib
+
+!IF  "$(CFG)" == "ComPersonnelExtension - Win32 Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "ComPersonnelExtension - Win32 Debug"
+
+!ENDIF 
+
+# End Source File
+# End Group
 # Begin Source File
 
 SOURCE="..\..\..\..\examples\com-api\ComExtension\ComPersonnelExtension\AAFPersonnelExtension.cpp"
@@ -132,46 +185,5 @@ SOURCE="..\..\..\..\ref-impl\src\com-api\com-dll\CAAFUnknown.cpp"
 
 SOURCE="..\..\..\..\examples\com-api\ComExtension\extensionUtils.cpp"
 # End Source File
-# End Group
-# Begin Group "Header Files"
-
-# PROP Default_Filter "h;hpp;hxx;hm;inl"
-# Begin Source File
-
-SOURCE="..\..\..\..\examples\com-api\ComExtension\ComPersonnelExtension\AAFPersonnelExtension.h"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\..\examples\com-api\ComExtension\ComPersonnelExtension\CAAFAdminMob.h"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\..\ref-impl\src\com-api\com-dll\CAAFClassFactory.h"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\..\examples\com-api\ComExtension\ComPersonnelExtension\CAAFPersonnelMob.h"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\..\examples\com-api\ComExtension\ComPersonnelExtension\CAAFPersonnelResource.h"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\..\ref-impl\src\com-api\com-dll\CAAFServer.h"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\..\ref-impl\src\com-api\com-dll\CAAFUnknown.h"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\..\examples\com-api\ComExtension\extensionUtils.h"
-# End Source File
-# End Group
-# Begin Group "Resource Files"
-
-# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
-# End Group
 # End Target
 # End Project
