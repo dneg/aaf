@@ -305,7 +305,7 @@ ImplAAFFile::OpenExistingModify (const aafCharacter * pFileName,
 		checkExpression(NULL != _head, AAFRESULT_BADHEAD);
 		
 		// Check for file format version.
-		if (! _head->IsObjectModelVersionPresent())
+		if (_head->IsObjectModelVersionPresent())
 		  {
 			// If property isn't present, the default version is 0,
 			// which is always (supposed to be) legible.  If it is
