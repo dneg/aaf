@@ -157,10 +157,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFPulldown*		pPulldown = NULL;
 	IAAFCompositionMob*	pCompMob = NULL;
 	IAAFComponent*		pComponent = NULL;
-	aafInt32			fadeInLen  = 1000;
-	aafInt32			fadeOutLen = 2000;
-	aafFadeType_t		fadeInType = kAAFFadeLinearAmp;
-	aafFadeType_t		fadeOutType = kAAFFadeLinearPower;
 	aafSourceRef_t		sourceRef; 
 	aafLength_t			fillerLength = 3200;
 
@@ -209,7 +205,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		pComponent = NULL;
 
 		// Set the properties for the SourceClip
-		checkResult(pSourceClip->SetFade( fadeInLen, fadeInType, fadeOutLen, fadeOutType));
 		sourceRef.sourceID = TEST_referencedMobID;
 		sourceRef.sourceSlotID = 0;
 		sourceRef.startTime = 0;

@@ -49,10 +49,6 @@ static aafWChar *slotNames[5] = { L"SLOT1", L"SLOT2", L"SLOT3", L"SLOT4", L"SLOT
 static const aafUID_t *	slotDDefs[5] = {&DDEF_Picture, &DDEF_Sound, &DDEF_Sound, &DDEF_Picture, &DDEF_Picture};
 static aafLength_t	slotsLength[5] = { 297, 44100, 44100, 44100, 44100};
 
-static aafInt32 fadeInLen  = 1000;
-static aafInt32 fadeOutLen = 2000;
-static aafFadeType_t fadeInType = kAAFFadeLinearAmp;
-static aafFadeType_t fadeOutType = kAAFFadeLinearPower;
 static aafSourceRef_t sourceRef; 
 static aafWChar* TagNames =  L"TAG01";
 static aafWChar* Comments =  L"Comment 1";	
@@ -180,7 +176,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 			IAAFDataDefSP pDataDef;
 			checkResult(pDictionary->LookupDataDef(*slotDDefs[test], &pDataDef));
 			checkResult(sclp->Initialize(pDataDef, slotsLength[test], sourceRef));
-			checkResult(sclp->SetFade( fadeInLen, fadeInType, fadeOutLen, fadeOutType));
 
 			checkResult(sclp->QueryInterface (IID_IAAFSegment, (void **)&seg));
 			
