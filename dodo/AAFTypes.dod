@@ -187,12 +187,11 @@ AD_CPP_QUOTE(\ *************************************************************/)
 AD_CPP_QUOTE(/*** Types for all components***/)
 typedef aafInt64   		aafLength_t;
 
-AD_CPP_QUOTE(/*** Types for tracks and mob slots***/)
+AD_CPP_QUOTE(/*** Types for mob slots***/)
 typedef aafInt64  		aafPosition_t;
 typedef aafUInt32		aafFrameOffset_t;
 typedef aafUInt32		aafFrameLength_t;
-typedef aafUInt32   	aafTrackID_t;  
-typedef aafInt32   		aafNumTracks_t;
+typedef aafUInt32   	aafSlotID_t;  
 
 typedef aafInt8			*aafCodecID_t;
 typedef aafInt32   		aafNumSlots_t;
@@ -641,7 +640,7 @@ typedef struct _aafmMultiCreate_t
 {
 	aafUID_t *			mediaKind;		/* IN -- */
 	aafInt16			subTrackNum;	/* IN - The physical output channel */
-	aafInt32           	trackID;		/* IN -- */
+	aafInt32           	slotID;		/* IN -- */
 	aafRational_t		sampleRate;
 } aafmMultiCreate_t;
 
@@ -814,7 +813,7 @@ AD_CPP_QUOTE(/*** Types for clips ***/)
 typedef struct _aafSourceRef_t
 {
 	aafUID_t        sourceID;
-	aafTrackID_t    sourceTrackID;
+	aafSlotID_t    sourceSlotID;
 	aafPosition_t   startTime;
 } aafSourceRef_t;
 
