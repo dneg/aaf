@@ -209,7 +209,7 @@ AAFRESULT STDMETHODCALLTYPE
 	IAAFPlugin						*pPlug = NULL;
 	IAAFEssenceCodec				*pCodec = NULL;
 	aafBool							found;
-	aafInt32						flavourCount;
+	aafUInt32						flavourCount;
 
 	if(pResult == NULL)
 		return(AAFRESULT_NULL_PARAM);
@@ -230,7 +230,7 @@ AAFRESULT STDMETHODCALLTYPE
 		if(!found)
 			RAISE(AAFRESULT_CODEC_INVALID);
 
-		CHECK(pCodec->GetFlavourCount(&flavourCount));
+		CHECK(pCodec->CountFlavours(&flavourCount));
 		*pResult = (flavourCount >= 2 ? kAAFTrue : kAAFFalse);
 		pPlug->Release();
 		pPlug = NULL;
