@@ -136,7 +136,7 @@ bool OMStoredPropertySetIndex::isValid(void) const
         position = currentOffset + currentLength;
         firstEntry = false;
       } else {
-        if (currentOffset <= previousOffset) {
+        if (currentOffset < previousOffset) {
           result = false; // entries out of order
           break;
         } else if (position > currentOffset) {
