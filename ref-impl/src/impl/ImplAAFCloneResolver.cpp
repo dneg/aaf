@@ -36,7 +36,7 @@ ImplAAFCloneResolver::ImplAAFCloneResolver( ImplAAFFile* pDstFile )
 }
 
 ImplAAFCloneResolver::ImplAAFCloneResolver( ImplAAFDictionary* pDstDict )
-: _pDstDict( pDstDict )
+  : _pDstDict( pDstDict )
 {}
 
 ImplAAFCloneResolver::~ImplAAFCloneResolver()
@@ -99,9 +99,18 @@ void ImplAAFCloneResolver::CloneClassDef( const OMClassId& id,
 					  OMClassFactory* pDstFactory,
 					  ImplAAFMetaDictionary* pSrcDict )
 {
+  // We may be handed an ImplAAFDictionary, or ImplAAFMetaDictionary.
+  // In either case, we need to get to the ImplAAFDictionary.
+
   ImplAAFDictionary* pDstDict = dynamic_cast<ImplAAFDictionary*>(pDstFactory);
-  if (!pDstDict) {
-    return;
+  ImplAAFMetaDictionary* pDstMetaDict = dynamic_cast<ImplAAFMetaDictionary*>(pDstFactory);
+
+  if ( !pDstDict && pDstMetaDict ) {
+    pDstDict = pDstMetaDict->dataDictionary();
+  }
+
+  if ( !pDstDict ) {
+    _AAFCLONE_CHECK_HRESULT( AAFRESULT_BAD_TYPE );
   }
 
   assert( sizeof(aafUID_t) == sizeof(id) );

@@ -26,6 +26,10 @@
 #include "AAFResult.h"
 
 #include "ImplAAFDictionary.h"
+#include "ImplAAFMetaDictionary.h"
+#include "ImplAAFPropertyDef.h"
+#include "ImplAAFTypeDef.h"
+#include "ImplAAFClassDef.h"
 
 #include "OMWeakRefProperty.h"
 #include "OMWeakRefSetProperty.h"
@@ -209,7 +213,20 @@ class ImplAAFCloneResolver {
     if ( AAFRESULT_NO_MORE_OBJECTS == hr ) {
 
       Type* pDstDef;
-      OMStorable* pDstStorable = pSrcDef->shallowCopy( _pDstDict );
+
+      // If this is a meta definition, then pass the meta dictionary
+      // to shallowCopy(), else pass the ordinary dictionary.
+      OMClassFactory* pOMDstFactory;
+      if ( dynamic_cast<const ImplAAFPropertyDef*>(pSrcDef) ||
+		   dynamic_cast<const ImplAAFClassDef*>(pSrcDef) ||
+		   dynamic_cast<const ImplAAFTypeDef*>(pSrcDef) ) {
+		pOMDstFactory = _pDstDict->metaDictionary();
+      }
+      else {
+		pOMDstFactory = _pDstDict;
+      }
+
+      OMStorable* pDstStorable = pSrcDef->shallowCopy( pOMDstFactory );
 	  
       pDstDef = dynamic_cast<Type*>( pDstStorable );
       if ( !pDstDef ) {
