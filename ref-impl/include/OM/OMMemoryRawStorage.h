@@ -41,7 +41,7 @@
   //        This is an Object Manager built-in implementation of the
   //        <c OMRawStorage> interface.
   //
-  //   @base public | OMRawStorage
+  //   @base public | <c OMRawStorage>
 class OMMemoryRawStorage : public OMRawStorage {
 public:
   // @access Static members.
@@ -51,17 +51,11 @@ public:
 
   // @access Public members.
 
-    // @cmember Constructor.
-  OMMemoryRawStorage(void);
-
     // @cmember Destructor.
   virtual ~OMMemoryRawStorage(void);
 
     // @cmember Is it possible to read from this <c OMMemoryRawStorage> ?
   virtual bool isReadable(void) const;
-
-    // @cmember Is it possible to write to this <c OMMemoryRawStorage> ?
-  virtual bool isWritable(void) const;
 
     // @cmember Attempt to read the number of bytes given by <p byteCount>
     //          from the current position in this <c OMMemoryRawStorage>
@@ -74,6 +68,9 @@ public:
   virtual void read(OMByte* bytes,
                     OMUInt32 byteCount,
                     OMUInt32& bytesRead) const;
+
+    // @cmember Is it possible to write to this <c OMMemoryRawStorage> ?
+  virtual bool isWritable(void) const;
 
     // @cmember Attempt to write the number of bytes given by <p byteCount>
     //          to the current position in this <c OMMemoryRawStorage>
@@ -129,6 +126,9 @@ public:
 
 private:
   // @access Private members.
+
+    // @cmember Constructor.
+  OMMemoryRawStorage(void);
 
     // @cmember Write a page or partial page.
   virtual void write(size_t page,

@@ -41,7 +41,7 @@
   //        This is an Object Manager built-in implementation of the
   //        <c OMRawStorage> interface.
   //
-  //   @base public | OMRawStorage
+  //   @base public | <c OMRawStorage>
 class OMMappedFileRawStorage : public OMRawStorage {
 public:
   // @access Static members.
@@ -65,17 +65,11 @@ public:
 
   // @access Public members.
 
-    // @cmember Constructor.
-  OMMappedFileRawStorage(/* TBS */ OMFile::OMAccessMode accessMode);
-
     // @cmember Destructor.
   virtual ~OMMappedFileRawStorage(void);
 
     // @cmember Is it possible to read from this <c OMMappedFileRawStorage> ?
   virtual bool isReadable(void) const;
-
-    // @cmember Is it possible to write to this <c OMMappedFileRawStorage> ?
-  virtual bool isWritable(void) const;
 
     // @cmember Attempt to read the number of bytes given by <p byteCount>
     //          from the current position in this <c OMMappedFileRawStorage>
@@ -89,6 +83,9 @@ public:
   virtual void read(OMByte* bytes,
                     OMUInt32 byteCount,
                     OMUInt32& bytesRead) const;
+
+    // @cmember Is it possible to write to this <c OMMappedFileRawStorage> ?
+  virtual bool isWritable(void) const;
 
     // @cmember Attempt to write the number of bytes given by <p byteCount>
     //          to the current position in this <c OMMappedFileRawStorage>
@@ -142,6 +139,12 @@ public:
     // @cmember Synchronize this <c OMMappedFileRawStorage> with its external
     //          representation.
   virtual void synchronize(void);
+
+private:
+  // @access Private members.
+
+    // @cmember none | OMMappedFileRawStorage | accessMode | Constructor.
+  OMMappedFileRawStorage(/* TBS */ OMFile::OMAccessMode accessMode);
 
 };
 

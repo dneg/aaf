@@ -26,7 +26,6 @@
 ************************************************************************/
 
 // @doc OMINTERNAL
-
 #include "OMMappedFileRawStorage.h"
 
   // @mfunc Create an <c OMMappedFileRawStorage> object by opening
@@ -105,18 +104,6 @@ bool OMMappedFileRawStorage::isReadable(void) const
   return false;
 }
 
-  // @mfunc Is it possible to write to this <c OMMappedFileRawStorage> ?
-  //  @rdesc True if this <c OMMappedFileRawStorage> is writable,
-  //         false otherwise.
-  //  @this const
-bool OMMappedFileRawStorage::isWritable(void) const
-{
-  TRACE("OMMappedFileRawStorage::isWritable");
-
-  // TBS
-  return false;
-}
-
   // @mfunc Attempt to read the number of bytes given by <p byteCount>
   //        from the current position in this <c OMMappedFileRawStorage>
   //        into the buffer at address <p bytes>.
@@ -137,6 +124,18 @@ void OMMappedFileRawStorage::read(OMByte* /* bytes */,
   TRACE("OMMappedFileRawStorage::read");
 
   // TBS
+}
+
+  // @mfunc Is it possible to write to this <c OMMappedFileRawStorage> ?
+  //  @rdesc True if this <c OMMappedFileRawStorage> is writable,
+  //         false otherwise.
+  //  @this const
+bool OMMappedFileRawStorage::isWritable(void) const
+{
+  TRACE("OMMappedFileRawStorage::isWritable");
+
+  // TBS
+  return false;
 }
 
   // @mfunc Attempt to write the number of bytes given by <p byteCount>
