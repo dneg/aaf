@@ -93,6 +93,10 @@ SOURCE="..\..\ref-impl\include\comidl\AAF_i.c"
 
 SOURCE=..\..\..\Utilities\AafOmf\AafOmf.cpp
 # End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFGroup.cpp"
+# End Source File
 # End Group
 # Begin Group "Header Files"
 
