@@ -60,7 +60,7 @@ public:
   OMRedBlackTree(void);
 
     // @cmember Destructor.
-  ~OMRedBlackTree(void);
+  virtual ~OMRedBlackTree(void);
 
     // @cmember Insert the <p Value> <p v> into this
     //          <c OMRedBlackTree> and associate it with <p Key> <p k>.
