@@ -53,24 +53,60 @@ interface I.this-module : IUnknown
 
 #ccccccccccccccccccccccccccc
 #c
-#c Starts a class definition
-#c
-#c Arguments: none
-#c
-#startm AD_CLASS_BEGIN 00
-interface I.this-module : IUnknown
-{
-#endm
-
-
-#ccccccccccccccccccccccccccc
-#c
 #c Starts a class definition with no parent class
 #c
 #c Arguments: none
 #c
 #startm AD_ROOT_CLASS_BEGIN 00
 AD_CLASS_BEGIN
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Types definitions should only be used by idl and c++ & impl headers
+#c 
+#c
+#c GUID
+#c Argument01: hex long  0-3[leading 0's w/o leading 0x]
+#c Argument02: hex short 4-5[leading 0's w/o leading 0x]
+#c Argument03: hex short 6-7[leading 0's w/o leading 0x]
+#c Argument04: hex byte   8 [leading 0's w/o leading 0x]
+#c Argument05: hex byte   9 [leading 0's w/o leading 0x]
+#c Argument06: hex byte  10 [leading 0's w/o leading 0x]
+#c Argument07: hex byte  11 [leading 0's w/o leading 0x]
+#c Argument08: hex byte  12 [leading 0's w/o leading 0x]
+#c Argument09: hex byte  13 [leading 0's w/o leading 0x]
+#c Argument10: hex byte  14 [leading 0's w/o leading 0x]
+#c Argument11: hex byte  15 [leading 0's w/o leading 0x]
+#c
+#c Example:
+#c AD_TYPES_BEGIN(b1a21372, 1a7d, 11d2, bf, 78, 00, 10, 4b, c9, 15, 6d)
+#c
+#c TomR:980716: Added
+#c
+#startm AD_TYPES_BEGIN 11
+[
+	uuid(%01-%02-%03-%04%05-%06%07%08%09%10%11),
+	pointer_default(unique)
+]
+
+interface I.this-module
+{
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Ends a types definition
+#c
+#c Types definitions should only be used by idl and c++ & impl headers. This should
+#c be the last line of a "types" dodo file.
+#c
+#c Arguments: none
+#c
+#startm AD_TYPES_END 00
+}
 #endm
 
 
@@ -441,7 +477,7 @@ AD_CLASS_BEGIN
 #c TomR:980713: Added
 #c
 #startm AD_FORWARD_DECLARATION 01
-interface "I%01";
+interface I%01; \
 #endm
 
 
@@ -513,6 +549,12 @@ interface "I%01";
 #c Arguments: none
 #c
 #startm AD_CLASS_END 00
+  //
+  // Return private implementation pointer for delegation.
+  // NOTE: This is NOT the pointer to the COM object's implementation
+  // object!
+  //
+  void * GetImplRep();
 }
 #endm
 
@@ -524,6 +566,12 @@ interface "I%01";
 #c Arguments: none
 #c
 #startm AD_ROOT_CLASS_END 00
+  //
+  // Return private implementation pointer for delegation.
+  // NOTE: This is NOT the pointer to the COM object's implementation
+  // object!
+  //
+  void * GetImplRep();
 }
 #endm
 
@@ -662,6 +710,46 @@ interface "I%01";
   AAFRESULT %01 (
 	%02 %03 * I%04);
 #endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Argument1: text to be quoted.
+#c 
+#c Just pass through the input quoted to cpp_quote and then
+#c let the midl compiler pass the quoted text to its ???.h 
+#c output.
+#c
+#c TomR:added 980714
+#c
+#startm AD_CPP_QUOTE 01
+cpp_quote("%01") \
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Argument1: base name to be converted to output type.
+#c NOTE: The \n is escaped so that the macro can be used
+#c in a statement without emitting a new line.
+#c
+#c TomR:added 980714
+#c
+#startm AD_AAFTYPES 01
+I%01 \
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Argument1: base name to be converted to output type.
+#c
+#c TomR:added 980714
+#c
+#startm AD_DECLARE_FORWARD_AAFTYPES 01
+interface I%01; \
+#endm
+
 
 
 
