@@ -31,7 +31,6 @@
 
 #include "aafErr.h"
 #include "AAFUtils.h"
-#include "aafCvt.h"
 #include "AAFDataDefs.h"
 #include "AAFDefUIDs.h"
 #include "AAFStoredObjectIDs.h"
@@ -932,20 +931,17 @@ HRESULT STDMETHODCALLTYPE
 
 	XPROTECT()
 	{
-		CvtInt32toInt64(0, &zero);
-		temp = _sampleFrames;
-		CHECK(AddInt32toInt64(1, &temp));
-		if (Int64Greater(sampleFrame, temp))
+		zero = 0;
+		temp = _sampleFrames + 1;
+		if (sampleFrame > temp)
 			RAISE(AAFRESULT_BADSAMPLEOFFSET);
 	
 		nBytes = sampleFrame;
 		
-		if(Int64Less(nBytes, zero))
+		if(nBytes < zero)
 			RAISE(AAFRESULT_BADSAMPLEOFFSET);
 		bytesPerFrame = ((_bitsPerSample + 7) / 8) * _numCh;
-		CHECK(MultInt32byInt64(bytesPerFrame, nBytes, &nBytes));
-		offset = _dataStartOffset;
-		CHECK(AddInt64toInt64(nBytes, &offset));
+		offset = _dataStartOffset + (bytesPerFrame * nBytes);
 	
 		CHECK(_stream->Seek(offset));
 	}
@@ -1706,7 +1702,7 @@ AAFRESULT CAAFWaveCodec::loadWAVEHeader(void)
 		if (memcmp(&chunkID, "WAVE", (size_t) 4) != 0)
 			RAISE(AAFRESULT_BADWAVEDATA);
 		CHECK(_stream->GetPosition(&chunkStart64));
-		CHECK(TruncInt64toInt32(chunkStart64, &offset));	// OK - 32-bit format
+		offset = (aafInt32)chunkStart64;		// truncate to limits of WAVE format
 	
 		while ((offset < formSize) && _stream->Read(4L, chunkID, &bytesRead) == AAFRESULT_SUCCESS)
 		{
@@ -1742,13 +1738,13 @@ AAFRESULT CAAFWaveCodec::loadWAVEHeader(void)
 				fmtFound = kAAFTrue;
 			} else if (memcmp(&chunkID, "data", (size_t) 4) == 0)
 			{
-				CvtInt32toInt64(chunkSize / _bytesPerFrame, &_sampleFrames);
+				_sampleFrames = chunkSize / _bytesPerFrame;
 				/* Positioned at beginning of audio data */
 				CHECK(_stream->GetPosition(&_dataStartOffset));
 	
 				dataFound = kAAFTrue;
 			}
-			CHECK(TruncInt64toInt32(chunkStart64, &chunkStart));	// OK - 32-bit format
+			chunkStart = (aafInt32)chunkStart64;	// truncate to limits of WAVE format
 			offset = chunkStart + chunkSize;
 	
 			if(offset > formSize)
@@ -1806,11 +1802,9 @@ AAFRESULT CAAFWaveCodec::ComputeWriteChunkSize(
 	{
 		CHECK(_stream->GetPosition(&savePos));
 	
-		tmpOffset = sizeOff;
-		CHECK(AddInt32toInt64(4L, &tmpOffset));
-		result = end;
-		CHECK(SubInt64fromInt64(tmpOffset, &result));
-		CHECK(TruncInt64toUInt32(result, &size));	/* OK WAVE */
+		tmpOffset = sizeOff + 4;
+		result = end - tmpOffset;
+		size = (aafUInt32)result;	// truncate to limit of WAVE format
 #if DEBUG_READ
 		CHECK(_stream->Seek(0L));
 		_stream->Read(64L, debugBuf, &bytesRead);

@@ -299,7 +299,7 @@ private:
 	aafUInt16			_bitsPerSample;
 	aafUInt16			_numCh;
 	aafUInt16			_bytesPerFrame;
-	aafUInt32			_sampleFrames;
+	aafPosition_t		_sampleFrames;
 	aafBoolean_t				_headerLoaded;
 	interleaveBufAIFF_t		*_interleaveBuf;
 	aafInt64			_dataStartOffset;

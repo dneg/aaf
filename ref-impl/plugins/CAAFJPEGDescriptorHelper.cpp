@@ -29,7 +29,6 @@
 #include "AAF.h"
 
 #include "AAFUtils.h"
-#include "aafCvt.h"
 #include "AAFDataDefs.h"
 #include "AAFDefUIDs.h"
 #include "AAFTypeDefUIDs.h"
