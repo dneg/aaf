@@ -28,7 +28,7 @@ private:
 
   // OMPropertySetElement for 'pid' or null if not found.
   //
-  OMPropertySetElement* find(int pid) const;
+  OMPropertySetElement* find(const int pid) const;
 
   // First free entry or null if full.
   //
