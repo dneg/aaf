@@ -257,8 +257,6 @@ AAFRESULT
 	{
 		iUnk = static_cast<IUnknown *> (pDictionary->GetContainer());
 		CHECK(iUnk->QueryInterface(IID_IAAFDictionary, (void **)&iDictionary));
-		iUnk->Release();
-		iUnk = NULL;
 		CHECK(GetPluginInstance(pluginDefID, &plugin));
 		CHECK(plugin->GetNumDefinitions (&count));
 		found = AAFFalse;
@@ -279,6 +277,8 @@ AAFRESULT
 		//!!!Assert found
 		plugin->Release();
 		plugin = NULL;
+		iDictionary->Release();
+		iDictionary = NULL;
 	}
 	XEXCEPT
 	{
