@@ -49,8 +49,8 @@
 //
 // DictP18-277-1847BMaster.csv 
 //
-// This file was generated on Wed Mar 22 09:54:07 EST 2000
-// by user bedell on system JBEDELL2.
+// This file was generated on Thu Mar 23 08:53:49 EST 2000
+// by user transdel on system TRANSDEL.
 //
 // Key to macros.
 //
@@ -1230,7 +1230,7 @@ AAF_CLASS(DefinitionObject,
       0x0000, 0x0000,
       0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
     0x1b04,
-    AAF_REFERENCE_TYPE(WeakReferenceSet, PluginDescriptor),
+    AAF_TYPE(AUIDArray),
     false,
     DefinitionObject)
 AAF_CLASS_END(DefinitionObject)
@@ -1397,7 +1397,7 @@ AAF_CLASS(PropertyDefinition,
       0x0000, 0x0000,
       0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
     0x2006,
-    AAF_TYPE(DataValue),
+    AAF_TYPE(Indirect),
     false,
     PropertyDefinition)
   AAF_PROPERTY(LocalIdentification,
@@ -1459,7 +1459,7 @@ AAF_CLASS(PluginDescriptor,
       0x0000, 0x0000,
       0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
     0x2203,
-    AAF_REFERENCE_TYPE(WeakReference, DefinitionObject),
+    AAF_TYPE(AUID),
     true,
     PluginDescriptor)
   AAF_PROPERTY(VersionNumber,
