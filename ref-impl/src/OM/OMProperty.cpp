@@ -29,10 +29,12 @@
 
 #include "OMProperty.h"
 
+#include "OMAssertions.h"
 #include "OMStorable.h"
 #include "OMType.h"
 #include "OMUtilities.h"
 #include "OMPropertyDefinition.h"
+#include "OMStoredObject.h"
 
 #include <memory.h>
 
