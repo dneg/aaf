@@ -23,5 +23,131 @@
 // @doc OMINTERNAL
 #ifndef OMIOSTREAM_H
 #define OMIOSTREAM_H
-// Nothing yet
+
+#include "OMDataTypes.h"
+
+class OMRawStorage;
+
+class OMIOStreamManipulator;
+
+class OMIOStream {
+public:
+
+  OMIOStream(OMRawStorage* rawStorage);
+
+  ~OMIOStream(void);
+
+  void put(char c);
+
+  OMIOStream& operator << (const char* string);
+
+  OMIOStream& operator << (const wchar_t* string);
+
+  OMIOStream& operator << (const OMUInt8 i);
+
+  OMIOStream& operator << (const OMUInt16 i);
+
+  OMIOStream& operator << (const OMUInt32 i);
+
+  OMIOStream& operator << (const OMUInt64 i);
+
+  OMIOStream& operator << (const OMObjectIdentification& id);
+
+  OMIOStream& operator << (const OMMaterialIdentification& id);
+
+  OMIOStream& operator << (OMIOStream& (*manipulator)(OMIOStream&));
+
+  OMIOStream& operator << (const OMIOStreamManipulator& m);
+
+  OMIOStream& beginl(void);
+
+  OMIOStream& endl(void);
+
+  OMIOStream& indent(void);
+
+  OMIOStream& outdent(void);
+
+  OMIOStream& flush(void);
+
+  OMIOStream& showbase(void);
+
+  OMIOStream& dec(void);
+
+  OMIOStream& hex(void);
+
+  OMIOStream& uppercase(void);
+
+  OMIOStream& lowercase(void);
+
+  OMIOStream& setfill(int c);
+
+  OMIOStream& setw(int n);
+
+protected:
+
+  void write(const char* string);
+
+private:
+
+  OMRawStorage* _store;
+  bool _showBase;
+  size_t _base;
+  bool _uppercase;
+  char _fill;
+  int _width;
+  const char* _newLine;
+  static size_t _level;
+
+};
+
+class OMIOStreamManipulator {
+public:
+  OMIOStreamManipulator(OMIOStream& (*f)(OMIOStream&, int), int i);
+
+  OMIOStream& (*_f)(OMIOStream&, int);
+  int _i;
+};
+
+inline OMIOStreamManipulator::OMIOStreamManipulator(
+                                            OMIOStream& (*f)(OMIOStream&, int),
+                                            int i)
+: _f(f),
+  _i(i)
+{
+}
+
+OMIOStream& beginl(OMIOStream& s);
+
+OMIOStream& endl(OMIOStream& s);
+
+OMIOStream& indent(OMIOStream& s);
+
+OMIOStream& outdent(OMIOStream& s);
+
+OMIOStream& flush(OMIOStream& s);
+
+OMIOStream& showbase(OMIOStream& s);
+
+OMIOStream& dec(OMIOStream& s);
+
+OMIOStream& hex(OMIOStream& s);
+
+OMIOStream& uppercase(OMIOStream& s);
+
+OMIOStream& lowercase(OMIOStream& s);
+
+OMIOStream& set_fill(OMIOStream& s, int c);
+
+OMIOStream& set_w(OMIOStream& s, int n);
+
+inline OMIOStreamManipulator setfill(int c)
+{
+  return OMIOStreamManipulator(set_fill, c);
+}
+
+inline OMIOStreamManipulator setw(int n)
+{
+  return OMIOStreamManipulator(set_w, n);
+}
+
 #endif
