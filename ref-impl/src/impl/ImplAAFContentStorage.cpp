@@ -422,7 +422,7 @@ AAFRESULT STDMETHODCALLTYPE
 	if (NULL == pEssenceData)
 		return AAFRESULT_NULL_PARAM;
 
-#if 0
+#if FULL_TOOLKIT
 	XPROTECT()
 	{
 		//!!!_essenceData.removeValue(pEssenceData);	// This call doesn't exist yet
