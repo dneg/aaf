@@ -57,6 +57,7 @@ typedef IAAFSmartPointer<IAAFPropertyDef>          IAAFPropertyDefSP;
 typedef IAAFSmartPointer<IAAFTypeDef>              IAAFTypeDefSP;
 typedef IAAFSmartPointer<IAAFDefObject>            IAAFDefObjectSP;
 typedef IAAFSmartPointer<IAAFDictionary>           IAAFDictionarySP;
+typedef IAAFSmartPointer<IAAFTypeDefCharacter>     IAAFTypeDefCharacterSP;
 typedef IAAFSmartPointer<IAAFTypeDefIndirect>      IAAFTypeDefIndirectSP;
 typedef IAAFSmartPointer<IAAFTypeDefInt>           IAAFTypeDefIntSP;
 typedef IAAFSmartPointer<IAAFTypeDefObjectRef>     IAAFTypeDefObjectRefSP;
@@ -558,15 +559,15 @@ HRESULT dumpPropertyValue (IAAFPropertyValueSP pPVal,
 			IAAFTypeDefSP pETD;
 			checkResult(pTDS->GetType(&pETD));
 
-			// Strings *must* be made up of integral types.
-			IAAFTypeDefIntSP pETDInt;
-			checkResult(pETD->QueryInterface(IID_IAAFTypeDefInt,
-											 (void**) &pETDInt));
+			// Strings *must* be made up of character types.(see spec)
+			IAAFTypeDefCharacterSP pETDcharacter;
+			checkResult(pETD->QueryInterface(IID_IAAFTypeDefCharacter,
+											 (void**) &pETDcharacter));
 
 			// get the type category of the element
 			eAAFTypeCategory_t elemTID;
 			checkResult(pETD->GetTypeCategory (&elemTID));
-			assert (kAAFTypeCatInt == elemTID);
+			assert (kAAFTypeCatCharacter == elemTID);
 
 			// determine the sizes of elements, and of the buffer
 			// required to hold them.
@@ -575,46 +576,28 @@ HRESULT dumpPropertyValue (IAAFPropertyValueSP pPVal,
 			aafUInt32 elemSize = 0;
 			checkResult(pTDS->GetCount(pPVal, &count));
 			count ++; // make room for terminator
-			checkResult(pETDInt->GetSize (&elemSize));
+//			checkResult(pETDcharacter->GetSize (&elemSize));
+      // The element size must be the in-memory size of an aafCharacter since
+      // the character type currently only supports 2 byte <=> 2 byte and
+      // 2 byte <=> 4 byte character conversion. There is no support for
+      // non-unicode character conversion: 1 byte <=> 2 byte, or 1 byte <=> 4 byte.
+      elemSize = sizeof(aafCharacter);
 			bufSize = count * elemSize;
 
-			// See if this is a type we can easily represent.  We know
-			// it is some kind of integral type.  Maybe we can dump
-			// it.  First, let's actually get the bits.
+			// First, let's actually get the bits.
 
 			// get bits
-			aafUInt8 * buf = new aafUInt8[bufSize];
+			aafCharacter * buf = new aafCharacter[count];
 			memset (buf, 0, bufSize);  // zero all, including terminator
-			checkResult(pTDS->GetElements(pPVal, buf, bufSize));
+			checkResult(pTDS->GetElements(pPVal, (aafDataBuffer_t)buf, bufSize));
 
-			// Now determine size of integral elements
-			if (1 == elemSize)
-			  {
-				// 1-byte integer characters; interpret as a
-				// NULL-terminated C string.
-				printIndent (indent, os);
-				os << " value: \"" << buf << "\"" << endl;
-			  }
-			else if (2 == elemSize)
-			  {
-				// 2-byte integral characters; interpret as a
-				// NULL-terminated wide character string.
-				// create an ansi/asci
-				char *mbBuf = make_mbstring(bufSize, (aafCharacter*) buf);
-				checkExpression(NULL != mbBuf, AAFRESULT_NOMEMORY);
-				os << " value: \"" << mbBuf << "\"" << endl;
-				delete [] mbBuf;
-				mbBuf = 0;
-			  }
-			else
-			  {
-				// elements are too wide to be C or unicode strings;
-				// perhaps just hex dump them, looking for terminator
-				// character.
-
-				// But for now, we won't bother dumping them... ;)
-				assert (0);
-			  }
+			// NULL-terminated wide character string.
+			// create an ansi/asci
+			char *mbBuf = make_mbstring(bufSize, (aafCharacter*) buf);
+			checkExpression(NULL != mbBuf, AAFRESULT_NOMEMORY);
+			os << " value: \"" << mbBuf << "\"" << endl;
+			delete [] mbBuf;
+			mbBuf = 0;
 
 			assert (buf);     delete[] buf;       buf = 0;
 			break;
