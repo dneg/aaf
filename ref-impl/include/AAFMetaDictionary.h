@@ -49,8 +49,8 @@
 //
 // DictP18-277-1847BMaster.csv 
 //
-// This file was generated on Sun Mar 19 10:55:07 EST 2000
-// by user transdel on system FVEGLT.
+// This file was generated on Wed Mar 22 09:54:07 EST 2000
+// by user bedell on system JBEDELL2.
 //
 // Key to macros.
 //
@@ -1383,14 +1383,6 @@ AAF_CLASS(PropertyDefinition,
     0x2001,
     AAF_REFERENCE_TYPE(WeakReference, TypeDefinition),
     true,
-    PropertyDefinition)
-  AAF_PROPERTY(IsSearchable,
-    AAF_LITERAL_AUID(0x06444504,
-      0x0000, 0x0000,
-      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
-    0x2004,
-    AAF_TYPE(Boolean),
-    false,
     PropertyDefinition)
   AAF_PROPERTY(IsOptional,
     AAF_LITERAL_AUID(0x06444505,
