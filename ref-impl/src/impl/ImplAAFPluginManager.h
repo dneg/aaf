@@ -66,6 +66,14 @@ public:
 	//Toolkit internal only
 static ImplAAFPluginManager *GetPluginManager(void);
 
+// Create an object contained within one of the loaded plugin files.
+AAFRESULT CreateInstance(
+			REFCLSID rclsid, 
+			IUnknown* pUnkOuter, 
+			REFIID riid, 
+			void ** result);
+
+
 AAFRESULT GetPluginInstance(
 			aafUID_t		pluginID,
 			IAAFPlugin		**result);
@@ -88,6 +96,7 @@ AAFRESULT CreatePluginDefinition (aafUID_t  pluginDefID,
         IAAFDefObject ** pPluginDesc);
 
 private:
+  aafTable_t	*_pluginFiles;
 	aafTable_t	*_plugins;
 	aafTable_t	*_codecDesc;
 };
