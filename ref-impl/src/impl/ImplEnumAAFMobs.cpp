@@ -1,4 +1,3 @@
-
 /******************************************\
 *                                          *
 * Advanced Authoring Format                *
@@ -94,6 +93,9 @@ AAFRESULT STDMETHODCALLTYPE
 //				aafCriteriaType_t mediaCrit;
 					RAISE(AAFRESULT_NOT_IMPLEMENTED);
 				}
+				if(!found)
+					(*ppMob)->ReleaseReference();
+
 			} while(!found && cur < siz);
 		}
 	
