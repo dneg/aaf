@@ -1,23 +1,11 @@
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
-
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
-
-
-
+/***********************************************\
+*												*
+* Advanced Authoring Format						*
+*												*
+* Copyright (c) 1998-1999 Avid Technology, Inc. *
+* Copyright (c) 1998-1999 Microsoft Corporation *
+*												*
+\***********************************************/
 
 #ifndef __ImplAAFTimecode_h__
 #include "ImplAAFTimecode.h"
@@ -32,7 +20,7 @@
 #include "aafErr.h"
 #include "aafCvt.h"
 #include "AAFUtils.h"
-#include "AAFDefUIDs.h"
+#include "AAFDataDefs.h"
 
 ImplAAFTimecode::ImplAAFTimecode ():
 _start(	PID_Timecode_Start,	"Start"),
