@@ -36,6 +36,7 @@
 
 static wchar_t *manuf1URL = L"www.microsoft.com";
 static wchar_t *manuf2URL = L"www.avid.com";
+static wchar_t *manuf3URL = L"www.softimage.com";
 
 #include <iostream.h>
 #include <stdlib.h>
@@ -160,14 +161,12 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
   IAAFCodecDef*		pCodecDef = NULL;
   IAAFPluginDef *pDesc = NULL;
   IAAFClassDef *pClassDef = NULL;
-  IAAFNetworkLocator *pNetLoc = NULL, *pNetLoc2 = NULL, *pNetLoc3 = NULL;
-  IAAFLocator		*pLoc = NULL, *pLoc2 = NULL, *pLoc3 = NULL;
+  IAAFNetworkLocator *pNetLoc = NULL;
+  IAAFLocator		*pLoc = NULL;
   aafUID_t			category = AUID_AAFDefObject, manufacturer = MANUF_JEFFS_PLUGINS;
   bool				bFileOpen = false;
   aafUInt32			numLocators;
 	HRESULT			hr = S_OK;
-/*	long			test;
-*/
 
   try
   {
@@ -225,11 +224,11 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	  /**/
 	checkResult(defs.cdNetworkLocator()->
 				CreateInstance(IID_IAAFNetworkLocator, 
-							   (IUnknown **)&pNetLoc2));
-	checkResult(pNetLoc2->QueryInterface (IID_IAAFLocator,
-                                          (void **)&pLoc2));
-	checkResult(pLoc2->SetPath (manuf2URL));
-    checkResult(pDesc->AppendLocator(pLoc2));
+							   (IUnknown **)&pNetLoc));
+	checkResult(pNetLoc->QueryInterface (IID_IAAFLocator,
+                                          (void **)&pLoc));
+	checkResult(pLoc->SetPath (manuf3URL));
+    checkResult(pDesc->AppendLocator(pLoc));
 	/**/
 	checkResult(pDesc->SetDefinitionObjectID(CODEC_DEF_ID));
 
@@ -244,28 +243,37 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	/**/
 	checkResult(defs.cdNetworkLocator()->
 				CreateInstance(IID_IAAFNetworkLocator, 
-							   (IUnknown **)&pNetLoc3));
-	checkResult(pNetLoc3->QueryInterface (IID_IAAFLocator,
-                                          (void **)&pLoc3));
-	checkResult(pLoc3->SetPath (manuf1URL));
-    checkResult(pDesc->PrependLocator(pLoc3));
-	pLoc3->Release();
-	pLoc3 = NULL;
-	// Create a second locator, check for three locators, then delete it and recheck for two.
+							   (IUnknown **)&pNetLoc));
+	checkResult(pNetLoc->QueryInterface (IID_IAAFLocator,
+                                          (void **)&pLoc));
+	checkResult(pLoc->SetPath (manuf1URL));
+    checkResult(pDesc->PrependLocator(pLoc));
+	pLoc->Release();
+	pLoc = NULL;
+	// Create a third locator, check for three locators, then delete it and recheck for two.
 	checkResult(defs.cdNetworkLocator()->
 				CreateInstance(IID_IAAFNetworkLocator, 
-							   (IUnknown **)&pNetLoc3));
-	checkResult(pNetLoc3->QueryInterface (IID_IAAFLocator,
-                                          (void **)&pLoc3));
-	checkResult(pLoc3->SetPath (manuf1URL));
-    checkResult(pDesc->AppendLocator(pLoc3));
-	pLoc3->Release();
-	pLoc3 = NULL;
+							   (IUnknown **)&pNetLoc));
+	checkResult(pNetLoc->QueryInterface (IID_IAAFLocator,
+                                          (void **)&pLoc));
+	checkResult(pLoc->SetPath (manuf1URL));
+    checkResult(pDesc->AppendLocator(pLoc));
+	pLoc->Release();
+	pLoc = NULL;
     checkResult(pDesc->CountLocators (&numLocators));
 	checkExpression(3 == numLocators, AAFRESULT_TEST_FAILED);
     checkResult(pDesc->RemoveLocatorAt(2));
     checkResult(pDesc->CountLocators (&numLocators));
 	checkExpression(2 == numLocators, AAFRESULT_TEST_FAILED);
+
+	// Now create a new locator and add it using InsertLocatorAt()
+	checkResult(defs.cdNetworkLocator()->
+				CreateInstance(IID_IAAFNetworkLocator, 
+							   (IUnknown **)&pNetLoc));
+	checkResult(pNetLoc->QueryInterface (IID_IAAFLocator,
+                                          (void **)&pLoc));
+	checkResult(pLoc->SetPath (manuf2URL));
+    checkResult(pDesc->InsertLocatorAt(1,pLoc));
   }
   catch (HRESULT& rResult)
   {
@@ -287,20 +295,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
   if (pNetLoc)
     pNetLoc->Release();
 
-  if (pNetLoc2)
-    pNetLoc2->Release();
-
-  if (pNetLoc3)
-    pNetLoc3->Release();
-
   if (pLoc)
     pLoc->Release();
-
-  if (pLoc2)
-    pLoc2->Release();
-
-  if (pLoc3)
-    pLoc3->Release();
 
   if (pCodecDef)
     pCodecDef->Release();
@@ -410,18 +406,47 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 
 		/**/
 		checkResult(pPlugin->CountLocators(&count));
-		checkExpression (count == 2, AAFRESULT_TEST_FAILED);
+		checkExpression (count == 3, AAFRESULT_TEST_FAILED);
+
+		/* Verify using enumerator */
 		checkResult(pPlugin->GetLocators(&pEnumLoc));
 
 		checkResult(pEnumLoc->NextOne (&pLoc));
  		checkResult(pLoc->GetPath (testString, sizeof(testString)));
 		checkExpression (wcscmp(testString, manuf1URL) == 0, AAFRESULT_TEST_FAILED);
-
-		pLoc->Release(); // this local variable was already has a reference that must be released!
+		pLoc->Release();
 		pLoc = NULL;
+
 		checkResult(pEnumLoc->NextOne (&pLoc));
  		checkResult(pLoc->GetPath (testString, sizeof(testString)));
 		checkExpression (wcscmp(testString, manuf2URL) == 0, AAFRESULT_TEST_FAILED);
+		pLoc->Release();
+		pLoc = NULL;
+
+		checkResult(pEnumLoc->NextOne (&pLoc));
+ 		checkResult(pLoc->GetPath (testString, sizeof(testString)));
+		checkExpression (wcscmp(testString, manuf3URL) == 0, AAFRESULT_TEST_FAILED);
+		pLoc->Release();
+		pLoc = NULL;
+
+		/* Verify using GetLocatorAt() */
+		checkResult(pPlugin->GetLocatorAt(0,&pLoc));
+ 		checkResult(pLoc->GetPath (testString, sizeof(testString)));
+		checkExpression (wcscmp(testString, manuf1URL) == 0, AAFRESULT_TEST_FAILED);
+		pLoc->Release();
+		pLoc = NULL;
+
+		checkResult(pPlugin->GetLocatorAt(1,&pLoc));
+ 		checkResult(pLoc->GetPath (testString, sizeof(testString)));
+		checkExpression (wcscmp(testString, manuf2URL) == 0, AAFRESULT_TEST_FAILED);
+		pLoc->Release();
+		pLoc = NULL;
+
+		checkResult(pPlugin->GetLocatorAt(2,&pLoc));
+ 		checkResult(pLoc->GetPath (testString, sizeof(testString)));
+		checkExpression (wcscmp(testString, manuf3URL) == 0, AAFRESULT_TEST_FAILED);
+		pLoc->Release();
+		pLoc = NULL;
 		
 		checkResult(pPlugin->IsSoftwareOnly(&testBool));
  		checkExpression(testBool == kAAFTrue, AAFRESULT_TEST_FAILED);
