@@ -1,0 +1,89 @@
+#startm .this-module 0
+EnumAAFLoadedPlugins\
+#endm
+#startm .parent-module 0
+AAFRoot\
+#endm
+#c
+AD_HEAD
+AD_IDL(//
+// An object which allows iteration over all of the AAFPluggableDefinitions
+// managed by the AAFPluginManager.  This is useful when adding something pluggable
+// into an AAF file\, as you know what choices are locally available.
+//
+// In addition to the specific error results listed for each method\,
+// all methods in this interface may also return one of the following
+// values:
+// 
+// AAFRESULT_NOMEMORY
+//   - insufficient system memory is available to perform the
+//     operation.
+//)
+
+/******************************************\
+*                                          *
+* Advanced Authoring Format                *
+*                                          *
+* Copyright (c) 1998 Avid Technology, Inc. *
+* Copyright (c) 1998 Microsoft Corporation *
+*                                          *
+\******************************************/
+
+
+/***********************************************\
+*	Stub only.   Implementation not yet added	*
+\***********************************************/
+
+
+AD_CLASS_UUID(AD1BB860, DBB2, 11d2, 80, 9C, 00, 60, 08, 14, 3E, 6F)
+
+AD_DEFAULT_UUID(AD1BB861, DBB2, 11d2, 80, 9C, 00, 60, 08, 14, 3E, 6F)
+AD_XCLASS_BEGIN(Concrete, Transient)
+
+AD_XMETHOD1(NextOne,
+			[out\,retval],
+			objOut,
+			AAFPluggableDefinition,
+			ppAAFPluggableDef,
+			The Next AAFPluggableDef,
+			Enumerates to the next element in the enumerators list. The caller is responsible 
+  // for properly releasing the returned pointer when it is no longer needed.
+  // @comm This is a just simplified version of the Next method. )
+
+AD_XMETHOD3(Next,
+			[in], objPass, aafUInt32, count, number of AAFPluggableDefs requested,
+			[out\, size_is\(count\)\, length_is\(*pFetched\)],
+			objOut, AAFPluggableDef, ppAAFPluggableDefs, array to receive AAFPluggableDefs,
+			[out\,ref], objPass, aafUInt32 *, pFetched,
+			number of actual AAFPluggableDefs fetched into ppAAFPluggableDefs array,
+			Enumerates the next count elements \(AAFPluggableDef pointers\) in 
+  // the enumerator's list\, returning them in the given array along with the actual 
+  // number of enumerated elements in pFetched. The caller is responsible for 
+  // properly releasing the returned pointers.)
+
+AD_METHOD1(Skip,
+		   [in], aafUInt32, count, Number of elements to skip,
+		   Instructs the enumerator to skip the next count elements in the enumeration so that 
+  // the next call to EnumAAFLoadedPlugins::Next will not return 
+  // those elements.)
+
+AD_METHOD0(Reset,
+Instructs the enumerator to position itself at the beginning of the list of elements. 
+  // @comm There is no guarantee that the same set of elements will be enumerated on 
+  // each pass through the list\, nor will the elements necessarily be enumerated in 
+  // the same order. The exact behavior depends on the collection being enumerated.)
+
+AD_XMETHOD1(Clone,
+			[out\,retval],
+			objOut,
+			EnumAAFLoadedPlugins,
+			ppEnum,
+			new enumeration,
+			Creates another EnumAAFLoadedPlugins enumerator with the same state as the current 
+  // enumerator to iterate over the same list. This method makes it possible to 
+  // record a point in the enumeration sequence in order to return to that point 
+  // at a later time.
+  // @comm The caller must release this new enumerator separately from the first
+  // enumerator.)
+
+AD_XCLASS_END(Concrete, Transient)
