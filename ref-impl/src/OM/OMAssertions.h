@@ -47,6 +47,10 @@
   //        when an assertion violation occurs.
 class OMAssertionViolation;
 
+  // @func Never define a name. Use to avoid compiler warnings.
+  //   @parm The name not to define.
+#define NNAME(name)
+
 #if defined (OM_ENABLE_DEBUG)
 
 #include "OMDataTypes.h"
@@ -116,7 +120,7 @@ void trace(const char* routineName);
 
 #else
 
-inline void noTrace(const char* /* routine */) {}
+inline void noTrace(const char* NNAME(routine)) {}
 
 #define TRACE(routine) \
   char* currentRoutineName; \
