@@ -79,6 +79,11 @@ import "unknwn.idl";
 #ifndef DO_NO_IMPORTS
 import "AAFTypes.idl";
 #endif\
+
+
+// Forward declaration of interface. This should make sure that for any "circular" 
+// imports a given iterface will always have a forward declaration.
+interface I.this-module;
 #endm
 
 #ccccccccccccccccccccccccccc
@@ -541,7 +546,10 @@ interface I.this-module
 #c
 #startm AD_FORWARD_DECLARATION 01
 #ifndef DO_NO_IMPORTS
+#ifndef __%01_idl__
+#define __%01_idl__
 import "%01.idl";
+#endif // __%01_idl__
 #endif
 #endm
 
