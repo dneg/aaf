@@ -3,7 +3,7 @@
 #define OMSTOREDOBJECT_H
 
 #include "OMPortability.h"
-#include "OMTypes.h"
+#include "OMDataTypes.h"
 #include "OMFile.h"
 
 #include <stddef.h>
