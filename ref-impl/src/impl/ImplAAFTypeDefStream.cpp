@@ -69,9 +69,24 @@ AAFRESULT STDMETHODCALLTYPE
   if (!pTypeDef->attached())
     return AAFRESULT_OBJECT_ALREADY_ATTACHED;
 
+  return pvtInitialize(id, pTypeDef, pTypeName);
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFTypeDefStream::pvtInitialize (
+      const aafUID_t & id,
+      ImplAAFTypeDef * pTypeDef,
+      const aafCharacter * pTypeName)
+{
+  if (! pTypeDef)
+	return AAFRESULT_NULL_PARAM;
+  if (! pTypeName)
+	return AAFRESULT_NULL_PARAM;
+
   assert (pTypeDef);
   if (! pTypeDef->IsStreamable() || !pTypeDef->IsFixedSize())
-	return AAFRESULT_BAD_TYPE;
+    return AAFRESULT_BAD_TYPE;
 
   _elementType = pTypeDef;
 
@@ -186,3 +201,25 @@ bool ImplAAFTypeDefStream::IsVariableArrayable () const
 
 bool ImplAAFTypeDefStream::IsStringable () const
 { return false; }
+
+
+
+
+
+
+// override from OMStorable.
+const OMClassId& ImplAAFTypeDefStream::classId(void) const
+{
+  return (*reinterpret_cast<const OMClassId *>(&AUID_AAFTypeDefStream));
+}
+
+// Override callbacks from OMStorable
+void ImplAAFTypeDefStream::onSave(void* clientContext) const
+{
+  ImplAAFTypeDef::onSave(clientContext);
+}
+
+void ImplAAFTypeDefStream::onRestore(void* clientContext) const
+{
+  ImplAAFTypeDef::onRestore(clientContext);
+}

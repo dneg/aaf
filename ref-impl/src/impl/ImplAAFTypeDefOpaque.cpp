@@ -154,14 +154,33 @@ ImplAAFTypeDefOpaque::~ImplAAFTypeDefOpaque ()
 //   Called when we initialize as one of the "builtin" types.
 //
 AAFRESULT
-  ImplAAFTypeDefOpaque::pvtInitialize
+  ImplAAFTypeDefOpaque::Initialize
       (// @parm [in, ref] auid to be used to identify this type
        aafUID_constref  id,
 
        // @parm [in, ref, string] friendly name of this type definition
        aafCharacter_constptr  pTypeName)
 {
-  return ImplAAFTypeDefIndirect::pvtInitialize(id, pTypeName);
+  return ImplAAFTypeDefIndirect::Initialize(id, pTypeName);
+}
+
+//   Called when we initialize as one of the "builtin" types.
+//
+AAFRESULT
+  ImplAAFTypeDefOpaque::pvtInitialize
+      (// @parm [in, ref] auid to be used to identify this type
+       aafUID_constref  id,
+
+       // @parm [in, ref, string] friendly name of this type definition
+       aafCharacter_constptr  pTypeName,
+       
+       // @parm [in] the type definition for kAAFTypeID_AUID.
+       ImplAAFTypeDef *pTypeDefAUID,
+
+       // @parm [in] the dictionary for this instance
+       ImplAAFDictionary *pDictionary)
+{
+  return ImplAAFTypeDefIndirect::pvtInitialize(id, pTypeName, pTypeDefAUID, pDictionary);
 }
 
 
@@ -532,3 +551,21 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 
+
+
+// override from OMStorable.
+const OMClassId& ImplAAFTypeDefOpaque::classId(void) const
+{
+  return (*reinterpret_cast<const OMClassId *>(&AUID_AAFTypeDefOpaque));
+}
+
+// Override callbacks from OMStorable
+void ImplAAFTypeDefOpaque::onSave(void* clientContext) const
+{
+  ImplAAFTypeDefIndirect::onSave(clientContext);
+}
+
+void ImplAAFTypeDefOpaque::onRestore(void* clientContext) const
+{
+  ImplAAFTypeDefIndirect::onRestore(clientContext);
+}
