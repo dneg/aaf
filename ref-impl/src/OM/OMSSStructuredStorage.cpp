@@ -559,18 +559,10 @@ OMSSIStream::Release(void)
 	{
 		if (_stream != 0)
 		{
-			unsigned SSRW_INT64 p, sz;
-			// save position for later test
-			status = streamGetPos64(_stream, &p);
-			// seek to the end of the stream
-			// SchemaSoft resizes the stream upon close
-			status = streamSeek64( _stream, 0, STG_END );
-	
-			// test position
-			status = streamGetPos64(_stream, &sz);
-	
-			if( p != sz )
-				OMUInt64 err = sz-p;
+			// Since SchemaSoft does not maintain a 'highwater mark'
+			// it is necessary to seek to the end of a stream
+			// before closing it otherwise streams can be truncated.
+			streamSeek64( _stream, 0, STG_END );
 	
 			status = ::closeStream(&_stream);
 			_stream = 0;
