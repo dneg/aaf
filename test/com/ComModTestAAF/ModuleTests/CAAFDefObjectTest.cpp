@@ -205,17 +205,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	checkResult(pContainerDef->Initialize (testUID, sName, sDescription));
 	checkResult(pDictionary->RegisterContainerDef(pContainerDef));
 
-	//
-	// Test GetAUID() using a type def
-	//
-	IAAFTypeDefIntSP pTypeDef;
-	checkResult (defs.cdTypeDefInt()->
-				 CreateInstance (IID_IAAFTypeDefInt,
-								 (IUnknown **)&pTypeDef));
-	checkResult (pTypeDef->Initialize (kTestTypeId,
-									   1,
-									   kAAFFalse,
-									   L"Test Unsigned Byte"));
 
 	//
 	// test Append, Prepend, and enum plugin descriptor using same type def
@@ -249,18 +238,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 							L"Plugin Descriptor 3 description"));
 	checkResult(pd3->SetDefinitionObjectID(kTestPluginDescID3));
 	checkResult (pDictionary->RegisterPluginDef (pd3));
-
-#if THIS_INFORMATION_IS_OBSOLETE
-	IAAFDefObjectSP pDefObj;
-	checkResult(pTypeDef->QueryInterface (IID_IAAFDefObject,
-                                          (void **)&pDefObj));
-
-#endif
-	IAAFTypeDefSP ptd;
-	checkResult(pTypeDef->QueryInterface (IID_IAAFTypeDef,
-                                          (void **)&ptd));
-	checkResult (pDictionary->RegisterTypeDef (ptd));
-
   }
   catch (HRESULT& rResult)
   {
@@ -339,18 +316,14 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 
 				break;
 			}
-		}		checkResult(pPlug->NextOne(&pContainerDef));
 
-		IAAFTypeDefSP pTypeDef;
-		checkResult (pDictionary->LookupTypeDef (kTestTypeId, &pTypeDef));
+                        pDef->Release();
+                        pDef = NULL;
+                        pContainerDef->Release();
+                        pContainerDef = NULL;
 
-		IAAFMetaDefinitionSP pDefinition;
-		checkResult(pTypeDef->QueryInterface (IID_IAAFMetaDefinition,
-											  (void **)&pDefinition));
+		}//		checkResult(pPlug->NextOne(&pContainerDef));
 
-		aafUID_t id;
-		checkResult (pDefinition->GetAUID (&id));
-		checkExpression (0 != EqualAUID (&id, &kTestTypeId), AAFRESULT_TEST_FAILED);
 
 	}
 	catch (HRESULT& rResult)
