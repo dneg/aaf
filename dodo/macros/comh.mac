@@ -568,7 +568,7 @@ public:
 
 #ccccccccccccccccccccccccccc
 #c
-#c Ends a class definition for AAFObject
+#c Ends a class definition for AAFRoot
 #c
 #c Arguments: none
 #c
