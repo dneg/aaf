@@ -21,18 +21,52 @@ test_only:
 run:
 	 cd tool ; $(MAKE) run
 
-.SUFFIXES: .cpp .h .comc .comh .dod .exp .idl .implc .implh .comt .cppt .refh
+.SUFFIXES: .cpp .h .comc .comh .dod .exp .idl .fidl .implc .implh .comt .cppt .refh
 
 # This file contains the list of all of the targets to be built...								   
 include targets.mk
 include aafobjects.mk
 
 
-targets: $(DODO_TARGETS)
+INCLUDE_DIR = ../ref-impl/include
+
+targets: $(DODO_TARGETS) $(INCLUDE_DIR)/com-api/AAF.idl
+
+$(INCLUDE_DIR)/com-api/AAF.idl : $(FIDL_TARGETS)
+	@ echo Generating AAF.idl...
+	@ ( echo "cpp_quote(\"//=--------------------------------------------------------------------------=\")" ; \
+	    echo "cpp_quote(\"// (C) Copyright 1998 Avid Technology.\")" ; \
+	    echo "cpp_quote(\"// (C) Copyright 1998 Microsoft Corporation.\")" ; \
+	    echo "cpp_quote(\"//\")" ; \
+	    echo "cpp_quote(\"// THIS CODE AND INFORMATION IS PROVIDED 'AS IS' WITHOUT WARRANTY OF\")" ; \
+	    echo "cpp_quote(\"// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO\")" ; \
+	    echo "cpp_quote(\"// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A\")" ; \
+	    echo "cpp_quote(\"// PARTICULAR PURPOSE.\")" ; \
+	    echo "cpp_quote(\"//=--------------------------------------------------------------------------=\")" ; \
+	    echo "cpp_quote(\"// AAF Interfaces.\")" ; \
+	    echo "cpp_quote(\"//=--------------------------------------------------------------------------=\")" ; \
+	    echo "cpp_quote(\"//\")" ; \
+	    echo "" ; \
+	    echo \#ifndef DO_NO_IMPORTS ; \
+	    echo import \"unknwn.idl\"\; ; \
+	    echo \#endif ; \
+	    echo "" ; \
+	    echo \#ifndef DO_NO_IMPORTS ; \
+	    echo import \"AAFTypes.idl\"\; ; \
+	    echo \#endif ; \
+	    echo "" ; \
+	    for class in $(DODO_TARGET_NAMES) ; do \
+	    	echo interface I$$class\;; \
+	    done ; \
+	    for class in $(DODO_TARGET_NAMES); do \
+	    	echo ""; \
+	    	echo "// I$$class"; \
+	    	echo ""; \
+	    	cat $$class.fidl; \
+	    done ; \
+	) > $(INCLUDE_DIR)/com-api/AAF.idl
 
 SRC_DIR = ../ref-impl/src
-
-INCLUDE_DIR = ../ref-impl/include
 
 .dod.exp :
 	$(RM) -f $*.exp
@@ -93,6 +127,11 @@ INCLUDE_DIR = ../ref-impl/include
 	mv $*.tmp $*.idl
 	cp $*.idl $(INCLUDE_DIR)/com-api/
 
+.dod.fidl :
+	$(RM) -f $*.fidl
+	./tool/$(DODO) -f macros/fidl.mac < $*.dod > $*.tmp
+	mv $*.tmp $*.fidl
+
 .dod.refh :
 	$(RM) -f $*.refh
 	./tool/$(DODO) -f macros/refh.mac < $*.dod > $*.tmp
@@ -103,17 +142,22 @@ INCLUDE_DIR = ../ref-impl/include
 
 clean:
 	cd tool ; $(MAKE) clean
-	$(RM) -f *.cpp *.cppt *.h *.idl *.exp
-	$(RM) -f *.comc *.comh *.comt
+	$(RM) -f *.cpp *.cppt *.h *.idl *.fidl *.exp
+	$(RM) -f *.comc *.comh *.comt *.refh
 	$(RM) -f *.implc *.implh
 	$(RM) -f core
 	$(RM) -f $(SRC_DIR)/cpp-api/AAF*.cpp
+	$(RM) -f $(SRC_DIR)/cpp-api/EnumAAF*.cpp
 	$(RM) -f $(SRC_DIR)/com-api/CAAF*.h
 	$(RM) -f $(SRC_DIR)/com-api/CAAF*.cpp
-	$(RM) -f $(INCLUDE_DIR)/com-api/AAF*.h
-	$(RM) -f $(INCLUDE_DIR)/com-api/EnumAAF*.h
-	$(RM) -f $(INCLUDE_DIR)/com-api/AAF*.idl
-	$(RM) -f $(INCLUDE_DIR)/com-api/EnumAAF*.idl
+	$(RM) -f $(SRC_DIR)/com-api/CEnumAAF*.h
+	$(RM) -f $(SRC_DIR)/com-api/CEnumAAF*.cpp
+	$(RM) -f $(INCLUDE_DIR)/com-api/AAF.h
+	$(RM) -f $(INCLUDE_DIR)/com-api/AAFTypes.h
+	$(RM) -f $(INCLUDE_DIR)/com-api/AAFModuleTest.h
+	$(RM) -f $(INCLUDE_DIR)/com-api/AAF.idl
+	$(RM) -f $(INCLUDE_DIR)/com-api/AAFTypes.idl
+	$(RM) -f $(INCLUDE_DIR)/com-api/AAFModuleTest.idl
 	$(RM) -f $(INCLUDE_DIR)/cpp-api/AAF*.h
 	$(RM) -f $(INCLUDE_DIR)/cpp-api/EnumAAF*.h
 	$(RM) -f $(INCLUDE_DIR)/ref-api/AAF*.h
