@@ -252,9 +252,9 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 
 		checkResult(pOperationDef->QueryInterface(IID_IAAFDefObject, (void **) &pDefObject));
 		checkResult(pDefObject->GetName (checkName, sizeof(checkName)));
-		checkExpression(wcscmp(checkName, effectNames[0/*!!!*/]) == 0, AAFRESULT_TEST_FAILED);
+		checkExpression(wcscmp(checkName, effectNames[0]) == 0, AAFRESULT_TEST_FAILED);
 		checkResult(pDefObject->GetDescription (checkName, sizeof(checkName)));
-		checkExpression(wcscmp(checkName, effectDesc[0/*!!!*/]) == 0, AAFRESULT_TEST_FAILED);
+		checkExpression(wcscmp(checkName, effectDesc[0]) == 0, AAFRESULT_TEST_FAILED);
 		pDefObject->Release();
 		pDefObject = NULL;
 		

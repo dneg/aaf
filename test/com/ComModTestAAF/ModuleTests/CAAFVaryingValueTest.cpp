@@ -219,7 +219,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pMob->SetName(L"AAFOperationGroupTest"));
 	  
 		// Add some slots
-		for(test = 0; test < 1/*!!!*/; test++)
+		for(test = 0; test < 2; test++)
 		{
  			checkResult(pDictionary->CreateInstance(&AUID_AAFOperationGroup,
 							     IID_IAAFOperationGroup, 
