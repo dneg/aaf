@@ -14,23 +14,26 @@
 //
 // Usage:
 //
-//  $ dump [-r -p -a -s -z <pid> -h] files...
+//  $ dump [-r -p -a -s -z <pid> -m <n> -h] files...
 //
-//    -r   = raw dump, works for any structured storage file.
-//    -p   = property dump, works for files using the AAF stored object format.
-//    -a   = AAF file dump, works only for AAF files.
-//    -s   = print statistics.
-//    -z n = dump properties with id <pid> (hex) as all zeroes.
-//    -h   = print help.
+//    -r       = raw dump, works for any structured storage file.
+//    -p       = property dump, works for files using the AAF stored
+//                 object format.
+//    -a       = AAF file dump, works only for AAF files.
+//    -s       = print statistics.
+//    -z <pid> = dump properties with pid <pid> (hex) as all zeroes.
+//    -m <n>   = dump only the first <n> bytes (dec) of media streams. 
+//    -h       = print help.
 //
 //  Notes:
 //
-//    1) - r, -p and -a are mutually exclusive.
+//    1) -r, -p and -a are mutually exclusive.
 //    2) -s is valid with -r, -p and -a. When combined with either -p or -a
 //       statistics on objects and properties are displayed, when combined
 //       with -r statistics on IStorages, IStreams and bytes are displayed.
 //    3) -z is not valid with -r. Multiple -z flags may be supplied.
 //    4) <pid> must be specified in hex. Examples are 1a00 0x1a00 0x1A00 
+//    5) -m is not valid with -r.
 //
 
 #include <iostream.h>
@@ -189,6 +192,8 @@ const int HIGHVERSION = 6;
 enum optionType {raw, property, aaf};
 enum optionType option = raw; // default
 bool zFlag = false;
+bool mFlag = false;
+unsigned long int mLimit = 0;
 
 // Statistics gathering
 //
@@ -1457,11 +1462,34 @@ void dumpDataStream(IStream* stream,
   totalStreamBytes = totalStreamBytes + streamBytes;
   totalPropertyBytes = totalPropertyBytes + streamBytes;
 
-  cout << "( Size = " << streamBytes << " )" << endl;
+  unsigned long int limit = streamBytes;
+  if (mFlag) {
+    if (mLimit <= limit) {
+      limit = mLimit;
+      cout << "( Size = "
+           << streamBytes
+           << ", output limited to "
+           << mLimit
+           << " )"
+           << endl;
+    } else {
+      cout << "( Size = "
+           << streamBytes
+           << ", smaller than output limit of "
+           << mLimit
+           << " )"
+           << endl;
+    }
+  } else {
+    cout << "( Size = "
+         << streamBytes
+         << " )"
+         << endl;
+  }
 
   if (streamBytes > 0) {
     for (unsigned long int byteCount = 0;
-         byteCount < streamBytes;
+         byteCount < limit;
          byteCount++) {
 
       unsigned char ch;
@@ -1919,7 +1947,7 @@ static bool isAnAAFFile(const char* fileName)
 void usage(void)
 {
   cerr << programName << ": Usage : "
-       << programName << " [-r -p -a -s -z <pid> -h] <file...>" << endl;
+       << programName << " [-r -p -a -s -z <pid> -m <n> -h] <file...>" << endl;
   cerr << "-r       = raw dump"
        << " : for any structured storage file (default)." << endl;
   cerr << "-p       = property dump"
@@ -1928,8 +1956,12 @@ void usage(void)
        << " : for any AAF file." << endl;
   cerr << "-s       = print statistics"
        << " : combine with -r, -p and -a." << endl;
-  cerr << "-z <pid> = dump properties with id <pid> (hex) as all zeros"
-       << " : combine with -p and -a." << endl;
+  cerr << "-z <pid> = dump properties with pid <pid> (hex) as all zeros :"
+       << endl
+       << "             combine with -p and -a." << endl;
+  cerr << "-m <n>   = dump only the first <n> bytes (dec) of media streams :"
+       << endl
+       << "             combine with -p and -a." << endl;
   cerr << "-h       = help"
        << " : print this message and exit." << endl;
 }
@@ -2185,7 +2217,45 @@ int main(int argumentCount, char* argumentVector[])
 	  }
         } else {
           cerr << programName
-               << ": Error : -x must be followed by a property id."
+               << ": Error : -z must be followed by a property id."
+               << endl;
+          usage();
+          exit(FAILURE);
+        }
+        break;
+      case 'm':
+
+        // Does a value follow -m ?
+        //
+        if ((i + 1 < argumentCount) && (*argumentVector[i + 1] != '-' )) {
+
+          mFlag = true;
+
+          // Consume value
+          //
+          flagCount = flagCount + 1;
+          i = i + 1;
+
+          // Convert value
+          //
+          char* bytess = argumentVector[i];
+          char* expectedEnd = &bytess[strlen(bytess)];
+          char* end;
+          int bytes = strtoul(bytess, &end, 10);
+
+          if (end != expectedEnd) { // Some characters not consumed
+            cerr << programName
+                 << ": Error : \""
+                 << bytess
+                 << "\" is not a valid byte count."
+                 << endl;
+            usage();
+            exit(FAILURE);
+          }
+          mLimit = bytes;
+        } else {
+          cerr << programName
+               << ": Error : -m must be followed by a byte count."
                << endl;
           usage();
           exit(FAILURE);
