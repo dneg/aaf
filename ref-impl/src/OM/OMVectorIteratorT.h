@@ -135,6 +135,19 @@ bool OMVectorIterator<Element>::after(void) const
   return result;
 }
 
+  // @mfunc The number of <p Elements>s in the associated
+  //        <c OMVector>.
+  //   @tcarg class | Element | The type of the contained elements.
+  //   @rdesc The number of <p Elements>s
+  //   @this const
+template <typename Element>
+size_t OMVectorIterator<Element>::count(void) const
+{
+  TRACE("OMVectorIterator<Element>::count");
+
+  return _vector->count();
+}
+
   // @mfunc Advance this <c OMVectorIterator> to the next <p Element>,
   //        if any.
   //        If the end of the associated <c OMVector> is not
