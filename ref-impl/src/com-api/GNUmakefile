@@ -30,10 +30,15 @@ com-dll :
 .PHONY : com-api
 com-api : $(LIBTARGET)
 
+# Link object files created from com-dll directory source.
+# These file are created building com-dll target above.
+CXXFILES_COMDLL = $(wildcard ./com-dll/*.$(CPP_EXTENSION))
+CXXOBJS_COMDLL = $(CXXFILES_COMDLL:./com-dll/%.$(CPP_EXTENSION)=$(OBJDIR)/../../com-dll/obj/%.o)
+CXXOBJS += $(CXXOBJS_COMDLL)
+
 $(LIBTARGET) : $(OBJDIR) $(LIBDIR) $(CXXOBJS)
 	$(LD_DYN_LIB) $(CC2LDOPT) $(LD_DYN_LIB_PATH_FLAG) $(CC2LDOPT) \
-	$(LIBDIR) $(CC2LDOPT) -shared -L$(LIBDIR) $(CXXOBJS) -o \
-	$@ -limpl -lcom-dll
+	$(LIBDIR) $(CC2LDOPT) -shared -L$(LIBDIR) $(CXXOBJS) -o $@ -limpl
 
 .PHONY : clean
 clean:
