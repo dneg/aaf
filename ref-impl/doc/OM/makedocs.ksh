@@ -8,7 +8,7 @@
 #
 # Where autoduck was installed
 #
-ADROOT="c:/program files/autoduck"
+ADROOT="../bin"
 #
 # The autoduck program
 #
