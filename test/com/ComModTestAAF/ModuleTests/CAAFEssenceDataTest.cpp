@@ -21,6 +21,8 @@
 #include <string.h>
 #include <stdio.h>
 
+#include "AAFStoredObjectIDs.h"
+
 
 // Utility class to implement the test.
 struct EssenceDataTest
@@ -54,6 +56,7 @@ struct EssenceDataTest
   IAAFFile *_pFile;
   bool _bFileOpen;
   IAAFHeader *_pHeader;
+  IAAFDictionary *_pDictionary;
 
   IAAFMob *_pMob;
   IAAFSourceMob *_pSourceMob;
@@ -139,6 +142,7 @@ EssenceDataTest::EssenceDataTest():
   _pFile(NULL),
   _bFileOpen(false),
   _pHeader(NULL),
+  _pDictionary(NULL),
   _pMob(NULL),
   _pSourceMob(NULL),
   _pEssenceDescriptor(NULL),
@@ -149,7 +153,7 @@ EssenceDataTest::EssenceDataTest():
   _bufferSize(0)
 {
   _productInfo.companyName = L"AAF Developers Desk";
-  _productInfo.productName = L"EssenceData Module Test";
+  _productInfo.productName = L"AAFEssenceData Test";
   _productInfo.productVersion.major = 1;
   _productInfo.productVersion.minor = 0;
   _productInfo.productVersion.tertiary = 0;
@@ -208,6 +212,12 @@ void EssenceDataTest::cleanupReferences()
   {
     _pMob->Release();
     _pMob = NULL;
+  }
+
+  if (NULL != _pDictionary)
+  {
+    _pDictionary->Release();
+    _pDictionary = NULL;
   }
 
   if (NULL != _pHeader)
@@ -285,6 +295,7 @@ void EssenceDataTest::createFile(wchar_t *pFileName)
   check(_pFile->OpenNewModify(pFileName, 0, &_productInfo));
   _bFileOpen = true;
   check(_pFile->GetHeader(&_pHeader));
+  check(_pHeader->GetDictionary(&_pDictionary));
 
   createFileMob();
   createFileMob();
@@ -311,7 +322,7 @@ void EssenceDataTest::openFile(wchar_t *pFileName)
 
 void EssenceDataTest::createFileMob()
 {
-  assert(_pFile && _pHeader);
+  assert(_pFile && _pHeader && _pDictionary);
   assert(NULL == _pSourceMob);
   assert(NULL == _pMob);
   assert(NULL == _pFileDescriptor);
@@ -319,11 +330,9 @@ void EssenceDataTest::createFileMob()
   assert(NULL == _pSourceMob);
 
   // Create a Mob
-  check(CoCreateInstance(CLSID_AAFSourceMob,
-              NULL, 
-              CLSCTX_INPROC_SERVER, 
+  check(_pDictionary->CreateInstance(&AUID_AAFSourceMob,
               IID_IAAFSourceMob, 
-              (void **)&_pSourceMob));
+              (IUnknown **)&_pSourceMob));
 
   check(_pSourceMob->QueryInterface (IID_IAAFMob, (void **)&_pMob));
   
@@ -332,11 +341,9 @@ void EssenceDataTest::createFileMob()
   check(_pMob->SetMobID(&newUID));
   check(_pMob->SetName(L"EssenceDataTest File Mob"));
   
-  check(CoCreateInstance(CLSID_AAFFileDescriptor,
-              NULL, 
-              CLSCTX_INPROC_SERVER, 
+  check(_pDictionary->CreateInstance(&AUID_AAFFileDescriptor,
               IID_IAAFEssenceDescriptor, 
-              (void **)&_pFileDescriptor));
+              (IUnknown **)&_pFileDescriptor));
 
   check(_pFileDescriptor->QueryInterface (IID_IAAFEssenceDescriptor,
                                           (void **)&_pEssenceDescriptor));
@@ -362,7 +369,7 @@ void EssenceDataTest::createFileMob()
 
 void EssenceDataTest::createEssenceData(IAAFSourceMob *pSourceMob)
 {
-  assert(_pFile && _pHeader);
+  assert(_pFile && _pHeader && _pDictionary);
   assert(pSourceMob);
   assert(NULL == _pEssenceData);
   
@@ -370,11 +377,9 @@ void EssenceDataTest::createEssenceData(IAAFSourceMob *pSourceMob)
 
 
   // Attempt to create an AAFEssenceData.
-  check(CoCreateInstance(CLSID_AAFEssenceData,
-                         NULL, 
-                         CLSCTX_INPROC_SERVER, 
+  check(_pDictionary->CreateInstance(&AUID_AAFEssenceData,
                          IID_IAAFEssenceData,
-                         (void **)&_pEssenceData));
+                         (IUnknown **)&_pEssenceData));
 
   check(_pEssenceData->SetFileMob(pSourceMob));
   check(_pHeader->AppendEssenceData(_pEssenceData));
