@@ -87,31 +87,27 @@ const aafUID_t aafFileKindMxfKlvBinary = aafFileKindMxfKlvBinary_Value;
 // the enum to select the installation default
 // this MUST match what is selected in ImplAAFFile.cpp
 #if defined( OS_WINDOWS )
-// DEFAULT for this build is Microsoft 512.
-const aafUID_t aafFileKindAaf512Binary = aafFileKindAafM512Binary_Value;
-//NOTE: Add default 4k binary
-const aafUID_t aafFileKindAaf4KBinary = aafFileKindAafM4KBinary_Value;
+// DEFAULT is Schemasoft (via libSSRW2C.a).
+const aafUID_t aafFileKindAaf512Binary = aafFileKindAafS512Binary_Value;
+const aafUID_t aafFileKindAaf4KBinary = aafFileKindAafS4KBinary_Value;
 
 #elif defined( OS_MACOS )
 // No SS implementation available since Microsoft 512 (via MacOLE) has been
 // deleted
 const aafUID_t aafFileKindAaf512Binary = aafFileKindPathalogical_Value;
-// default 4k binary
 const aafUID_t aafFileKindAaf4KBinary = aafFileKindPathalogical_Value;
 
 
 #elif defined( OS_DARWIN )
-// DEFAULT is Schemasoft 512 (via libSSRW2C.a).
+// DEFAULT is Schemasoft (via libSSRW2C.a).
 const aafUID_t aafFileKindAaf512Binary = aafFileKindAafS512Binary_Value;
-// default 4k binary
 const aafUID_t aafFileKindAaf4KBinary = aafFileKindAafS4KBinary_Value;
 
 
 #elif defined( OS_IRIX )
 
-// DEFAULT is Schemasoft 512 (via libSSRW2C.a). 
+// DEFAULT is Schemasoft (via libSSRW2C.a). 
 const aafUID_t aafFileKindAaf512Binary = aafFileKindAafS512Binary_Value;
-// default 4k binary
 const aafUID_t aafFileKindAaf4KBinary = aafFileKindAafS4KBinary_Value;
 
 #elif defined( OS_LINUX )
@@ -121,23 +117,20 @@ const aafUID_t aafFileKindAaf4KBinary = aafFileKindAafS4KBinary_Value;
 const aafUID_t aafFileKindAaf512Binary = aafFileKindAafG512Binary_Value;
 const aafUID_t aafFileKindAaf4KBinary = aafFileKindAafG4KBinary_Value;
 #else
-// DEFAULT is Schemasoft 512 (via libSSRW2C.a). 
+// DEFAULT is Schemasoft (via libSSRW2C.a). 
 const aafUID_t aafFileKindAaf512Binary = aafFileKindAafS512Binary_Value;
-// default 4k binary
 const aafUID_t aafFileKindAaf4KBinary = aafFileKindAafS4KBinary_Value;
 #endif
 
 #elif defined( OS_FREEBSD )
 // No SS implementations ported as yet
 const aafUID_t aafFileKindAaf512Binary = aafFileKindPathalogical_Value;
-// default 4k binary
 const aafUID_t aafFileKindAaf4KBinary = aafFileKindPathalogical_Value;
 
 
 #elif defined( OS_SOLARIS )
-// DEFAULT is SSS 512 (via libSSRW2C.a)
+// DEFAULT is Schemasoft (via libSSRW2C.a)
 const aafUID_t aafFileKindAaf512Binary = aafFileKindAafS512Binary_Value;
-// default 4k binary
 const aafUID_t aafFileKindAaf4KBinary = aafFileKindAafS4KBinary_Value;
 
 #else

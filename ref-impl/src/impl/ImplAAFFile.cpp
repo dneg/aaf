@@ -86,9 +86,8 @@ static const aafUInt32 sCurrentAAFObjectModelVersion = 1;
 // FileKind from the point of view of the OM
 #define ENCODING(x) *reinterpret_cast<const OMStoredObjectEncoding*>(&x)
 
-// this is the installation default. aafFileKindAafSSBin_512 set to MSS, SSS or other in AAFFileKinds.h
+// these are the installation defaults set in AAFFileKinds.h
 #define AAF512Encoding ENCODING(aafFileKindAaf512Binary)
-//NOTE: add 4k encoding
 #define AAF4KEncoding ENCODING(aafFileKindAaf4KBinary)
 
 
@@ -1514,51 +1513,7 @@ void ImplAAFFile::registerFactories(void)
 	// whereas under Linux the default 512-byte encoding is SSS encoding
 
 #if defined( OS_WINDOWS )
-// DEFAULT for this build is Microsoft 512.
-
-	assert( equalUID( aafFileKindAaf512Binary, aafFileKindAafM512Binary));
-
-	OMFile::registerFactory(AAFM512Encoding,
-                          new OMMSxMSSStoredObjectFactory(AAFM512Encoding,
-                                                       Signature_SSBin_512,
-                                                       L"AAF-M",
-                                                       L"AAF Microsoft SS"));
-
-	OMFile::registerFactory(AAFS512Encoding,
-                          new OMSSxMSSStoredObjectFactory(AAFS512Encoding,
-                                                       Signature_SSBin_512,
-                                                       L"AAF-S",
-                                                       L"AAF Schemasoft SS"));
-
-	assert( equalUID( aafFileKindAaf4KBinary, aafFileKindAafM4KBinary));
-
-	OMFile::registerFactory(AAFM4KEncoding,
-                          new OMMSxMSSStoredObjectFactory(AAFM4KEncoding,
-                                                       Signature_SSBin_4K,
-                                                       L"AAF-M4K",
-                                                       L"AAF Microsoft 4K"));
-	OMFile::registerFactory(AAFS4KEncoding,
-                          new OMSSxMSSStoredObjectFactory(AAFS4KEncoding,
-                                                       Signature_SSBin_4K,
-                                                       L"AAF-S4K",
-                                                       L"AAF Schemasoft 4K"));
-
-
-#elif defined( OS_MACOS )
-// No SS implementation available since Microsoft 512 (via MacOLE) has been
-// deleted
-#error No SS implementation available on platform
-
-#elif defined( OS_DARWIN )
-// DEFAULT is SchemaSoft 512.
-
-	assert( equalUID( aafFileKindAaf512Binary, aafFileKindAafS512Binary));
-
-	OMFile::registerFactory(AAFS512Encoding,
-                          new OMSSxMSSStoredObjectFactory(AAFS512Encoding,
-                                                       Signature_SSBin_512,
-                                                       L"AAF-S",
-                                                       L"AAF Schemasoft SS"));
+// DEFAULT is Schemasoft 4K
 
 	assert( equalUID( aafFileKindAaf4KBinary, aafFileKindAafS4KBinary));
 
@@ -1568,8 +1523,60 @@ void ImplAAFFile::registerFactories(void)
                                                        L"AAF-S4K",
                                                        L"AAF Schemasoft 4K"));
 
+	OMFile::registerFactory(AAFM4KEncoding,
+                          new OMMSxMSSStoredObjectFactory(AAFM4KEncoding,
+                                                       Signature_SSBin_4K,
+                                                       L"AAF-M4K",
+                                                       L"AAF Microsoft 4K"));
+
+	assert( equalUID( aafFileKindAaf512Binary, aafFileKindAafS512Binary));
+
+	OMFile::registerFactory(AAFS512Encoding,
+                          new OMSSxMSSStoredObjectFactory(AAFS512Encoding,
+                                                       Signature_SSBin_512,
+                                                       L"AAF-S",
+                                                       L"AAF Schemasoft SS"));
+
+	OMFile::registerFactory(AAFM512Encoding,
+                          new OMMSxMSSStoredObjectFactory(AAFM512Encoding,
+                                                       Signature_SSBin_512,
+                                                       L"AAF-M",
+                                                       L"AAF Microsoft SS"));
+
+#elif defined( OS_MACOS )
+// No SS implementation available since Microsoft 512 (via MacOLE) has been
+// deleted
+#error No SS implementation available on platform
+
+#elif defined( OS_DARWIN )
+// DEFAULT is SchemaSoft 4K
+
+	assert( equalUID( aafFileKindAaf4KBinary, aafFileKindAafS4KBinary));
+
+	OMFile::registerFactory(AAFS4KEncoding,
+                          new OMSSxMSSStoredObjectFactory(AAFS4KEncoding,
+                                                       Signature_SSBin_4K,
+                                                       L"AAF-S4K",
+                                                       L"AAF Schemasoft 4K"));
+
+	assert( equalUID( aafFileKindAaf512Binary, aafFileKindAafS512Binary));
+
+	OMFile::registerFactory(AAFS512Encoding,
+                          new OMSSxMSSStoredObjectFactory(AAFS512Encoding,
+                                                       Signature_SSBin_512,
+                                                       L"AAF-S",
+                                                       L"AAF Schemasoft SS"));
+
 #elif defined( OS_IRIX )
-// DEFAULT is SchemaSoft 512.
+// DEFAULT is SchemaSoft 4K
+
+	assert( equalUID( aafFileKindAaf4KBinary, aafFileKindAafS4KBinary));
+
+	OMFile::registerFactory(AAFS4KEncoding,
+                          new OMSSxMSSStoredObjectFactory(AAFS4KEncoding,
+                                                       Signature_SSBin_4K,
+                                                       L"AAF-S4K",
+                                                       L"AAF Schemasoft 4K"));
 
 	assert( equalUID( aafFileKindAaf512Binary, aafFileKindAafS512Binary));
 
@@ -1579,35 +1586,28 @@ void ImplAAFFile::registerFactories(void)
                                                        L"AAF-S",
                                                        L"AAF Schemasoft SS"));
 
-	assert( equalUID( aafFileKindAaf4KBinary, aafFileKindAafS4KBinary));
-
-	OMFile::registerFactory(AAFS4KEncoding,
-                          new OMSSxMSSStoredObjectFactory(AAFS4KEncoding,
-                                                       Signature_SSBin_4K,
-                                                       L"AAF-S4K",
-                                                       L"AAF Schemasoft 4K"));
 #elif defined( OS_LINUX )
 
 #ifdef USE_LIBGSF
 	// If LIBGSF support is explicitly requested, GSF SS is the default
-	assert( equalUID( aafFileKindAaf512Binary, aafFileKindAafG512Binary));
 	assert( equalUID( aafFileKindAaf4KBinary, aafFileKindAafG4KBinary));
+	assert( equalUID( aafFileKindAaf512Binary, aafFileKindAafG512Binary));
 
-	OMFile::registerFactory(AAFG512Encoding,
-                          new OMGSFxMSSStoredObjectFactory(AAFG512Encoding,
-                                                       Signature_SSBin_512,
-                                                       L"AAF-G",
-                                                       L"AAF GSF SS"));
 	OMFile::registerFactory(AAFG4KEncoding,
                           new OMGSFxMSSStoredObjectFactory(AAFG4KEncoding,
                                                        Signature_SSBin_4K,
                                                        L"AAF-G4K",
                                                        L"AAF GSF 4K"));
+	OMFile::registerFactory(AAFG512Encoding,
+                          new OMGSFxMSSStoredObjectFactory(AAFG512Encoding,
+                                                       Signature_SSBin_512,
+                                                       L"AAF-G",
+                                                       L"AAF GSF SS"));
 #else
 
-// DEFAULT is SchemaSoft 512.
-	assert( equalUID( aafFileKindAaf512Binary, aafFileKindAafS512Binary));
+// DEFAULT is SchemaSoft 4K
 	assert( equalUID( aafFileKindAaf4KBinary, aafFileKindAafS4KBinary));
+	assert( equalUID( aafFileKindAaf512Binary, aafFileKindAafS512Binary));
 
 #endif
 
@@ -1627,15 +1627,7 @@ void ImplAAFFile::registerFactories(void)
 #error No SS implementation available on platform
 
 #elif defined( OS_SOLARIS )
-// DEFAULT is SSS 512. MSS not available
-
-	assert( equalUID( aafFileKindAaf512Binary, aafFileKindAafS512Binary));
-
-	OMFile::registerFactory(AAFS512Encoding,
-                          new OMSSxMSSStoredObjectFactory(AAFS512Encoding,
-                                                       Signature_SSBin_512,
-                                                       L"AAF-S",
-                                                       L"AAF Schemasoft SS"));
+// DEFAULT is Schemasoft 4K
 
 	assert( equalUID( aafFileKindAaf4KBinary, aafFileKindAafS4KBinary));
 
@@ -1644,6 +1636,14 @@ void ImplAAFFile::registerFactories(void)
                                                        Signature_SSBin_4K,
                                                        L"AAF-S4K",
                                                        L"AAF Schemasoft 4K"));
+
+	assert( equalUID( aafFileKindAaf512Binary, aafFileKindAafS512Binary));
+
+	OMFile::registerFactory(AAFS512Encoding,
+                          new OMSSxMSSStoredObjectFactory(AAFS512Encoding,
+                                                       Signature_SSBin_512,
+                                                       L"AAF-S",
+                                                       L"AAF Schemasoft SS"));
 
 #else
 #error Unknown platform
