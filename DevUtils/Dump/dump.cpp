@@ -394,6 +394,9 @@ static size_t maxSignatureSize = signatureSize();
 //           into a single "properties" stream.
 //  0.22   : Put the count field first (instead of the high water mark)
 //           in strong reference vector and set indexes.
+//  0.23   : Remove high water mark from strong reference vector and
+//           strong reference set, replace with first free key and last
+//           free key.
 //
 
 // The following may change at run time depending on the file format
@@ -406,7 +409,7 @@ char* _closeArrayKeySymbol = (char*)closeArrayKeySymbol;
 
 // Highest version of file/index format recognized by this dumper
 //
-const OMUInt32 HIGHVERSION = 22;
+const OMUInt32 HIGHVERSION = 23;
 
 // Output format requested
 //
@@ -499,7 +502,9 @@ static void dumpVectorIndexEntry(OMUInt32 i,
                                  VectorIndexEntry* vectorIndexEntry);
 static void printVectorIndex(VectorIndexEntry* vectorIndex,
                              OMUInt32 count,
-                             OMUInt32 highWaterMark);
+                             OMUInt32 highWaterMark,
+                             OMUInt32 lowWaterMark,
+                             OMUInt32 version);
 static void readVectorIndexEntry(IStream* stream,
                            VectorIndexEntry* entry,
                            bool swapNeeded);
@@ -511,15 +516,18 @@ static void dumpSetIndexEntry(OMUInt32 i,
 static void printSetIndex(SetIndexEntry* setIndex,
                           OMUInt32 count,
                           OMUInt32 highWaterMark,
+                          OMUInt32 lowWaterMark,
                           OMUInt32 keyPid,
                           OMUInt32 keySize,
                           OMUInt32 version);
 static void printSetIndex(SetIndexEntry* setIndex,
                           OMUInt32 count,
                           OMUInt32 highWaterMark,
+                          OMUInt32 lowWaterMark,
                           OMUInt32 keyPid,
                           OMUInt32 keySize,
-                          OMByte* keys);
+                          OMByte* keys,
+                          OMUInt32 version);
 static void printWeakCollectionIndex(int containerType,
                                      WeakCollectionIndexEntry* collectionIndex,
                                      OMUInt32 count,
@@ -1652,11 +1660,20 @@ void dumpVectorIndexEntry(OMUInt32 i, VectorIndexEntry* vectorIndexEntry)
 
 void printVectorIndex(VectorIndexEntry* vectorIndex,
                       OMUInt32 count,
-                      OMUInt32 highWaterMark)
+                      OMUInt32 highWaterMark,
+                      OMUInt32 lowWaterMark,
+                      OMUInt32 version)
 {
-  cout << "Dump of vector index" << endl;
-  cout << "( Number of entries = " << count
-       << ", High water mark = " << highWaterMark << " )" << endl;
+  if (version >= 23) {
+    cout << "Dump of vector index" << endl;
+    cout << "( Number of entries    = " << count << "," << endl
+         << "  First free local key = " << highWaterMark
+         << ", Last free local key = " << lowWaterMark << " )" << endl;
+  } else {
+    cout << "Dump of vector index" << endl;
+    cout << "( Number of entries = " << count
+         << ", High water mark = " << highWaterMark << " )" << endl;
+  }
 
   if (count > 0) {
     cout << setw(8) << "ordinal"
@@ -1721,16 +1738,25 @@ void dumpSetIndexEntry(OMUInt32 i,
 void printSetIndex(SetIndexEntry* setIndex,
                    OMUInt32 count,
                    OMUInt32 highWaterMark,
+                   OMUInt32 lowWaterMark,
                    OMUInt32 keyPid,
                    OMUInt32 keySize,
                    OMUInt32 version)
 {
   cout << "Dump of set index" << endl;
   if (version > 19) {
-    cout << "( Number of entries = "   << count
-         << ", High water mark = " << highWaterMark
-         << ", Key pid = "    << hex << keyPid
-         << ", Key size = "   << dec << keySize<< " )" << endl;
+    if (version >= 23) {
+      cout << "( Number of entries    = " << count << "," << endl
+           << "  First free local key = " << highWaterMark
+           << ", Last free local key = " << lowWaterMark << endl
+           << "  Key pid = "    << hex << keyPid
+           << ", Key size = "   << dec << keySize<< " )" << endl;
+    } else {
+      cout << "( Number of entries = "   << count
+           << ", High water mark = " << highWaterMark
+           << ", Key pid = "    << hex << keyPid
+           << ", Key size = "   << dec << keySize<< " )" << endl;
+    }
   } else {
     cout << "( Number of entries = " << count
          << ", High water mark = " << highWaterMark << " )" << endl;
@@ -1757,15 +1783,25 @@ void printSetIndex(SetIndexEntry* setIndex,
 void printSetIndex(SetIndexEntry* setIndex,
                    OMUInt32 count,
                    OMUInt32 highWaterMark,
+                   OMUInt32 lowWaterMark,
                    OMUInt32 keyPid,
                    OMUInt32 keySize,
-                   OMByte* keys)
+                   OMByte* keys,
+                   OMUInt32 version)
 {
   cout << "Dump of set index" << endl;
-  cout << "( Number of entries = "   << count
-       << ", High water mark = " << highWaterMark
-       << ", Key pid = "    << hex << keyPid
-       << ", Key size = "   << dec << keySize<< " )" << endl;
+  if (version >= 23) {
+    cout << "( Number of entries    = " << count << "," << endl
+         << "  First free local key = " << highWaterMark
+         << ", Last free local key = " << lowWaterMark << endl
+         << "  Key pid = "    << hex << keyPid
+         << ", Key size = "   << dec << keySize<< " )" << endl;
+  } else {
+    cout << "( Number of entries = "   << count
+         << ", High water mark = " << highWaterMark
+         << ", Key pid = "    << hex << keyPid
+         << ", Key size = "   << dec << keySize<< " )" << endl;
+  }
 
   if (count > 0) {
     cout << setw(8) << "ordinal"
@@ -2061,9 +2097,13 @@ void dumpContainedObjects(IStorage* storage,
 
       OMUInt32 _count;
       OMUInt32 _highWaterMark;
+      OMUInt32 _lowWaterMark;
       if (version >= 22) {
         readUInt32(subStream, &_count, swapNeeded);
         readUInt32(subStream, &_highWaterMark, swapNeeded);
+        if (version >= 23) {
+          readUInt32(subStream, &_lowWaterMark, swapNeeded);
+        }
       } else {
         readUInt32(subStream, &_highWaterMark, swapNeeded);
         readUInt32(subStream, &_count, swapNeeded);
@@ -2079,7 +2119,11 @@ void dumpContainedObjects(IStorage* storage,
       //
       cout << endl;
       cout << thisPathName << endl;
-      printVectorIndex(vectorIndex, _count, _highWaterMark);
+      printVectorIndex(vectorIndex,
+                       _count,
+                       _highWaterMark,
+                       _lowWaterMark,
+                       version);
 
       // for each vector index entry
       //
@@ -2168,9 +2212,13 @@ void dumpContainedObjects(IStorage* storage,
 
       OMUInt32 _count;
       OMUInt32 _highWaterMark;
+      OMUInt32 _lowWaterMark;
       if (version >= 22) {
         readUInt32(subStream, &_count, swapNeeded);
         readUInt32(subStream, &_highWaterMark, swapNeeded);
+        if (version >= 23) {
+          readUInt32(subStream, &_lowWaterMark, swapNeeded);
+        }
       } else {
         readUInt32(subStream, &_highWaterMark, swapNeeded);
         readUInt32(subStream, &_count, swapNeeded);
@@ -2199,7 +2247,13 @@ void dumpContainedObjects(IStorage* storage,
         //
         cout << endl;
         cout << thisPathName << endl;
-        printSetIndex(setIndex, _count, _highWaterMark, keyPid, keySize, version);
+        printSetIndex(setIndex,
+                      _count,
+                      _highWaterMark,
+                      _lowWaterMark,
+                       keyPid,
+                       keySize,
+                       version);
       } else {
         // Read the set index.
         //
@@ -2215,7 +2269,14 @@ void dumpContainedObjects(IStorage* storage,
         //
         cout << endl;
         cout << thisPathName << endl;
-        printSetIndex(setIndex, _count, _highWaterMark, keyPid, keySize, keys);
+        printSetIndex(setIndex,
+                      _count,
+                      _highWaterMark,
+                      _lowWaterMark,
+                       keyPid,
+                       keySize,
+                       keys,
+                       version);
         delete [] keys;
       }
 
