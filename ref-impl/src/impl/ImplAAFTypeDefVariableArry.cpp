@@ -202,6 +202,7 @@ void ImplAAFTypeDefVariableArray::reorder(OMByte* externalBytes,
   ImplAAFTypeDefSP ptd = BaseType ();
   assert (ptd);
 
+  assert (ptd->IsFixedSize ());
   aafUInt32 extElemSize = PropValSize ();
   aafUInt32 numElems = externalBytesSize / extElemSize;
   aafInt32 numBytesLeft = externalBytesSize;
@@ -223,10 +224,11 @@ size_t ImplAAFTypeDefVariableArray::externalSize(OMByte* internalBytes,
   ImplAAFTypeDefSP ptd = BaseType ();
   assert (ptd);
 
-  // aafUInt32 extElemSize = ptd->PropValSize ();
-  // aafUInt32 intElemSize = ptd->NativeSize ();
-  aafUInt32 extElemSize = ptd->externalSize (0, 0);
-  aafUInt32 intElemSize = ptd->internalSize (0, 0);
+  assert (ptd->IsFixedSize ());
+  aafUInt32 extElemSize = ptd->PropValSize ();
+  aafUInt32 intElemSize = ptd->NativeSize ();
+  // aafUInt32 extElemSize = ptd->externalSize (0, 0);
+  // aafUInt32 intElemSize = ptd->internalSize (0, 0);
   assert (intElemSize);
   aafUInt32 numElems = internalBytesSize / intElemSize;
   return numElems * extElemSize;
@@ -242,8 +244,11 @@ void ImplAAFTypeDefVariableArray::externalize(OMByte* internalBytes,
   ImplAAFTypeDefSP ptd = BaseType ();
   assert (ptd);
 
-  aafUInt32 intElemSize = ptd->internalSize (0, 0);
-  aafUInt32 extElemSize = ptd->externalSize (0, 0);
+  assert (ptd->IsFixedSize ());
+  aafUInt32 intElemSize = ptd->NativeSize ();
+  aafUInt32 extElemSize = ptd->PropValSize ();
+  // aafUInt32 intElemSize = ptd->internalSize (0, 0);
+  // aafUInt32 extElemSize = ptd->externalSize (0, 0);
   if (intElemSize == extElemSize)
 	{
 	  copy (internalBytes,
@@ -281,10 +286,11 @@ size_t ImplAAFTypeDefVariableArray::internalSize(OMByte* externalBytes,
   ImplAAFTypeDefSP ptd = BaseType ();
   assert (ptd);
 
-  // aafUInt32 extElemSize = ptd->PropValSize ();
-  // aafUInt32 intElemSize = ptd->NativeSize ();
-  aafUInt32 extElemSize = ptd->externalSize (0, 0);
-  aafUInt32 intElemSize = ptd->internalSize (0, 0);
+  assert (ptd->IsFixedSize ());
+  aafUInt32 extElemSize = ptd->PropValSize ();
+  aafUInt32 intElemSize = ptd->NativeSize ();
+  // aafUInt32 extElemSize = ptd->externalSize (0, 0);
+  // aafUInt32 intElemSize = ptd->internalSize (0, 0);
   assert (intElemSize);
   aafUInt32 numElems = externalBytesSize / extElemSize;
   return numElems * intElemSize;
@@ -300,8 +306,11 @@ void ImplAAFTypeDefVariableArray::internalize(OMByte* externalBytes,
   ImplAAFTypeDefSP ptd = BaseType ();
   assert (ptd);
 
-  aafUInt32 intElemSize = ptd->internalSize (0, 0);
-  aafUInt32 extElemSize = ptd->externalSize (0, 0);
+  assert (ptd->IsFixedSize ());
+  aafUInt32 extElemSize = ptd->PropValSize ();
+  aafUInt32 intElemSize = ptd->NativeSize ();
+  // aafUInt32 intElemSize = ptd->internalSize (0, 0);
+  // aafUInt32 extElemSize = ptd->externalSize (0, 0);
   if (intElemSize == extElemSize)
 	{
 	  copy (externalBytes,

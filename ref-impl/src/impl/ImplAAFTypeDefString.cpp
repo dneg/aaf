@@ -240,10 +240,11 @@ size_t ImplAAFTypeDefString::externalSize(OMByte* internalBytes,
   ImplAAFTypeDefSP ptd = BaseType();
   assert (ptd);
 
-  // aafUInt32 extElemSize = ptd->PropValSize ();
-  // aafUInt32 intElemSize = ptd->NativeSize ();
-  aafUInt32 extElemSize = ptd->externalSize (0, 0);
-  aafUInt32 intElemSize = ptd->internalSize (0, 0);
+  assert (ptd->IsFixedSize ());
+  aafUInt32 extElemSize = ptd->PropValSize ();
+  aafUInt32 intElemSize = ptd->NativeSize ();
+  // aafUInt32 extElemSize = ptd->externalSize (0, 0);
+  // aafUInt32 intElemSize = ptd->internalSize (0, 0);
   assert (intElemSize);
   aafUInt32 numElems = internalBytesSize / intElemSize;
   return numElems * extElemSize;
@@ -259,8 +260,11 @@ void ImplAAFTypeDefString::externalize(OMByte* internalBytes,
   ImplAAFTypeDefSP ptd = BaseType();
   assert (ptd);
 
-  aafUInt32 intElemSize = ptd->NativeSize ();
+  assert (ptd->IsFixedSize ());
   aafUInt32 extElemSize = ptd->PropValSize ();
+  aafUInt32 intElemSize = ptd->NativeSize ();
+  // aafUInt32 intElemSize = ptd->NativeSize ();
+  // aafUInt32 extElemSize = ptd->PropValSize ();
   aafUInt32 numElems = internalBytesSize / intElemSize;
   aafInt32 intNumBytesLeft = externalBytesSize;
   aafInt32 extNumBytesLeft = internalBytesSize;
@@ -289,10 +293,11 @@ size_t ImplAAFTypeDefString::internalSize(OMByte* externalBytes,
   ImplAAFTypeDefSP ptd = BaseType();
   assert (ptd);
 
-  // aafUInt32 extElemSize = ptd->PropValSize ();
-  // aafUInt32 intElemSize = ptd->NativeSize ();
-  aafUInt32 extElemSize = ptd->externalSize (0, 0);
-  aafUInt32 intElemSize = ptd->internalSize (0, 0);
+  assert (ptd->IsFixedSize ());
+  aafUInt32 extElemSize = ptd->PropValSize ();
+  aafUInt32 intElemSize = ptd->NativeSize ();
+  // aafUInt32 extElemSize = ptd->externalSize (0, 0);
+  // aafUInt32 intElemSize = ptd->internalSize (0, 0);
   assert (intElemSize);
   aafUInt32 numElems = externalBytesSize / extElemSize;
   return numElems * intElemSize;
@@ -308,8 +313,11 @@ void ImplAAFTypeDefString::internalize(OMByte* externalBytes,
   ImplAAFTypeDefSP ptd = BaseType();
   assert (ptd);
 
-  aafUInt32 intElemSize = ptd->internalSize (0, 0);
-  aafUInt32 extElemSize = ptd->externalSize (0, 0);
+  assert (ptd->IsFixedSize ());
+  aafUInt32 extElemSize = ptd->PropValSize ();
+  aafUInt32 intElemSize = ptd->NativeSize ();
+  // aafUInt32 intElemSize = ptd->internalSize (0, 0);
+  // aafUInt32 extElemSize = ptd->externalSize (0, 0);
   aafUInt32 numElems = externalBytesSize / extElemSize;
   aafInt32 intNumBytesLeft = externalBytesSize;
   aafInt32 extNumBytesLeft = internalBytesSize;

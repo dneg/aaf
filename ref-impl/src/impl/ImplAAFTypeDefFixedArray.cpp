@@ -73,7 +73,7 @@ AAFRESULT STDMETHODCALLTYPE
 		  (ImplAAFTypeDefFixedArray *) this;
 
 	  // Make sure this is already done!
-	  pNonConstThis->InitOMProperties ();
+	  // pNonConstThis->InitOMProperties ();
 
 	  ImplAAFDictionarySP pDict;
 
@@ -193,7 +193,9 @@ size_t ImplAAFTypeDefFixedArray::externalSize(OMByte* /*internalBytes*/,
 											  size_t /*internalBytesSize*/) const
 {
   ImplAAFTypeDefSP ptd = BaseType ();
-  size_t result = _ElementCount * ptd->externalSize (0, 0);
+  assert (ptd->IsFixedSize ());
+  // size_t result = _ElementCount * ptd->externalSize (0, 0);
+  size_t result = _ElementCount * ptd->PropValSize ();
   return result;
 }
 
@@ -243,7 +245,9 @@ size_t ImplAAFTypeDefFixedArray::internalSize(OMByte* /*externalBytes*/,
 											  size_t /*externalBytesSize*/) const
 {
   ImplAAFTypeDefSP ptd = BaseType ();
-  size_t result = _ElementCount * ptd->internalSize (0, 0);
+  assert (ptd->IsFixedSize ());
+  // size_t result = _ElementCount * ptd->internalSize (0, 0);
+  size_t result = _ElementCount * ptd->NativeSize ();
   return result;
 }
 
@@ -258,8 +262,9 @@ void ImplAAFTypeDefFixedArray::internalize(OMByte* externalBytes,
   aafUInt32 elem = 0;
 
   ImplAAFTypeDefSP ptd = BaseType ();
-  aafUInt32 internalElemSize = ptd->internalSize (0, 0);
-  aafUInt32 externalElemSize = ptd->externalSize (0, 0);
+  assert (ptd->IsFixedSize ());
+  aafUInt32 internalElemSize = ptd->NativeSize ();
+  aafUInt32 externalElemSize = ptd->PropValSize ();
   if (internalElemSize == externalElemSize)
 	{
 	  copy (externalBytes,
