@@ -208,6 +208,15 @@ IAAFSmartPointer<IAAFFile> CmdState::GetFile()
   return _iaafFile;
 }
 
+void CmdState::ClearPriorToUnload()
+{
+	if ( _isFileSet ) {
+		IAAFSmartPointer<IAAFFile> null;
+		_iaafFile = null;
+		_isFileSet = false;
+	}
+}
+
 //=---------------------------------------------------------------------=
 
 void Usage( const char* argv0 )
@@ -316,35 +325,13 @@ void ProcessCommandLineArgs( int argc, char** argv )
 
   CmdState* state = new CmdState;
   for(i = 0; i < optionCmdFuncs.size(); i++ ) {
-     (*optionCmdFuncs[i])( *state );
+	cout << *optionCmdFuncs[i]->GetArgV() << "... ";
+	(*optionCmdFuncs[i])( *state );
+	cout << "done" << endl;
   }
- 
-  // Intentionally do *not* delete state if an exception is thrown
-  // by (*optionCmdFuncs[i])( *state ).  Deleting the encapsulated
-  // IAAFSmartPointer<IAAFFile> will cause the OmStoragable dtor
-  // "object not attached" precondition to fail.  FIXME - This is just
-  // a work around.
 
   delete state;
 }
-
-//=---------------------------------------------------------------------=
-
-class MultiGenTestInit {
-public:
-  MultiGenTestInit()
-  {
-    IAAFSmartPointer<IAAFPluginManager> _pluginMgr;
-    checkResult(AAFLoad("c:/cygwin/home/jpt/aaf/cvs/AAF/AAFWinSDK/Debug/Refimpl/AAFCOAPI.dll"));
-    checkResult(AAFGetPluginManager(&_pluginMgr));
-    checkResult(_pluginMgr->RegisterSharedPlugins());
-  }
-
-  ~MultiGenTestInit()
-  {
-    AAFUnload();
-  }
-};
 
 //=---------------------------------------------------------------------=
 
@@ -403,15 +390,13 @@ int main( int argc, char **argv )
       throw -1;
     }
 
-	MultiGenTestInit init;
-     
-	MultiGenTestRegistry& registry = MultiGenTestRegistry::GetInstance();
+    MultiGenTestRegistry& registry = MultiGenTestRegistry::GetInstance();
 
     ProcessCommandLineArgs( argc, argv );
  }
 
-  catch ( const HRESULT& ex_hr ) {
-    hr = ex_hr;
+  catch ( const HResultEx& ex_hr ) {
+    hr = ex_hr.GetHResult();
     cout << "hr = 0x" << hex << hr << endl;
   }
   catch ( const string& ex_string ) {
@@ -422,13 +407,15 @@ int main( int argc, char **argv )
     cout << ex_str << endl;
     hr = -1;
   }
-  catch ( const UsageError& ex_usage ) {
+  catch ( const UsageEx& ex_usage ) {
     cout << "Usage Error: " << ex_usage.GetMsg() << endl;
     hr = -1;
   }
   catch (...) {
+	cout << "caught an unknown exception" << endl;
     hr = -1;
   }
- 
+
+
   return hr;
 }

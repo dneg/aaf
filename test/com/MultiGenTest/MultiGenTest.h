@@ -42,6 +42,7 @@ public:
   
   void SetFile( IAAFSmartPointer<IAAFFile> iaafFile );
   IAAFSmartPointer<IAAFFile> GetFile();
+  void ClearPriorToUnload();
 
 private:
   bool _isFileSet;
@@ -167,12 +168,12 @@ inline void checkResult( HRESULT hr )
 // Ctor takes a string because it is expect that the error may be
 // allocated on the heap because it will be built on the fly.  In
 // that case, use a string to copy it.
-class UsageError {
+class UsageEx {
 public:
-  UsageError( const char* msg )
+  UsageEx( const char* msg )
     : _msg(msg) {}
 
-  UsageError( string& msg )
+  UsageEx( string& msg )
     : _msg(msg) {}
 
   const string& GetMsg() const
@@ -180,6 +181,30 @@ public:
 private:
   string _msg;
 };
+
+// HRESULT errors will be common.  Best to have an exception so that
+// they can be clearly reported as such
+class HResultEx {
+public:
+  HResultEx( HRESULT hr, const char *file, int line )
+    : _hr(hr), _file(file), _line(line) {}
+
+  HRESULT GetHResult() const
+  { return _hr; };
+
+private:
+  const HRESULT _hr;
+  const char* _file;
+  const int _line;
+};
+
+#define CHECK_HRESULT( expr )			       \
+{						       \
+  HRESULT _hr = (expr);				       \
+  if ( !SUCCEEDED( _hr ) ) {			       \
+     throw HResultEx( _hr, __FILE__, __LINE__ );       \
+  }						       \
+}
 
 template <class T>
 inline IUnknown** ToIUnknown( T** p )
