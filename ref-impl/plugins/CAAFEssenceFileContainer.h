@@ -65,7 +65,12 @@ public:
 
   // Tear down the plugin.
   STDMETHOD (Finish)(void);
+ 
+  STDMETHOD (GetPluginID)(aafUID_t *result);
 
+  STDMETHOD (GetPluggableDefinition)(IAAFDictionary *dict, IAAFPluggableDef **def);
+
+  STDMETHOD (GetDescriptor)(IAAFDictionary *dict, IAAFPluginDescriptor **desc);
 
   //
   // IAAFEssenceFileContainer interface methods.

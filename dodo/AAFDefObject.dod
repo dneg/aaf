@@ -17,6 +17,24 @@ AD_CLASS_UUID(dfbd6528, 1d81, 11d2, bf, 96, 00, 60, 97, 11, 62, 12)
 
 AD_DEFAULT_UUID(dfbd6527, 1d81, 11d2, bf, 96, 00, 60, 97, 11, 62, 12)
 AD_XCLASS_BEGIN(Abstract, StoredObject)
+
+AD_XMETHOD3(Init,
+		   [in],
+		   objPass,
+		   aafUID_t *,
+		   pAuid,
+		   AUID for new DeObject,
+		   [in],
+		   objPass,
+		   wchar_t *,
+		   pName,
+		   Name for new DefObject,
+		   [in],
+		   objPass,
+		   wchar_t *,
+		   pDescription,
+		   Description for new DefObject,
+		   Init all fields of a definition object.)
 AD_STD_METHOD_STRING_MULTI_SET_GET_SIZE(Name,
      the Name of this definition.)
 
