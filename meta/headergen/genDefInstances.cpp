@@ -44,7 +44,7 @@
     {#cls, name, desc, id},
 
 #define AAF_INSTANCE_TABLE_END()			\
-    {0,0,0,{0}}								\
+    {0,0,0,0,{0}}								\
   };
 
 // this only does DefinitionObject on AAF_INSTANCE lines

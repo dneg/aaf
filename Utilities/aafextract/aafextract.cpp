@@ -32,7 +32,7 @@ using namespace std;
 
 #include "AAF.h"					// AAF interface declarations
 #include "AAFResult.h"				// AAF error codes
-#include "AAFCompressionIDs.h"		// Compression IDs
+#include "AAFCompressionDefs.h"		// Compression IDs
 
 static bool verbose = false;
 

@@ -173,7 +173,7 @@ HRESULT STDMETHODCALLTYPE
 	if(uid == NULL)
 		return AAFRESULT_NULL_PARAM;
 
-	*uid = ContainerRIFFWAVE;		// UID of the DefObject
+	*uid = kAAFContainerDef_RIFFWAVE;		// UID of the DefObject
 	return AAFRESULT_SUCCESS;
 }
 
@@ -206,7 +206,7 @@ HRESULT STDMETHODCALLTYPE
 								  (IUnknown **)&container));
 		pcd->Release();
 		pcd = 0;
-		uid = ContainerRIFFWAVE;
+		uid = kAAFContainerDef_RIFFWAVE;
 		CHECK(container->SetEssenceIsIdentified(kAAFFalse));
 		CHECK(container->Initialize(uid, L"Raw file Container", L"Essence is in a non-container file."));
 		CHECK(container->QueryInterface(IID_IAAFDefObject, (void **)def));

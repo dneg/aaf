@@ -42,7 +42,7 @@ using namespace std;
 #include "AAFContainerDefs.h"
 #include "AAFCodecDefs.h"
 #include "AAFEssenceFormats.h"
-#include "AAFCompressionIDs.h"
+#include "AAFCompressionDefs.h"
 
 // Include the AAF interface declarations.
 #include "AAF.h"

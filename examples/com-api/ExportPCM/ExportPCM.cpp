@@ -326,15 +326,15 @@ void printUsage(const char *progname)
 	cout << "\tWith no arguments creates ExportPCM.aaf containing Laser audio samples" << endl;
 	cout << "\tand creates external BWF file Laser.wav" << endl;
 	cout << endl;
-	cout << "\t-File   use ContainerFile instead of ContainerRIFFWAVE" << endl;
-	cout << "\t-AAF    use ContainerAAF instead of ContainerRIFFWAVE" << endl;
+	cout << "\t-File   use ContainerFile instead of kAAFContainerDef_RIFFWAVE" << endl;
+	cout << "\t-AAF    use ContainerAAF instead of kAAFContainerDef_RIFFWAVE" << endl;
 	cout << "\t-embed  store embedded essence in ExportPCM.aaf (no external file)" << endl;
 	cout << endl;
 }
 
 extern int main(int argc, char *argv[])
 {
-	aafUID_t		container = ContainerRIFFWAVE;
+	aafUID_t		container = kAAFContainerDef_RIFFWAVE;
 	aafWChar		*pwFileName	= L"ExportPCM.aaf";
 
 	int i = 1;

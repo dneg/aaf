@@ -63,7 +63,7 @@ const aafUID_t kAAFCompression_IEC_DV_525_60 = { 0x04010202, 0x0201, 0x0100, { 0
 const aafUID_t *filekind_4K = &aafFileKindAaf4KBinary;
 #else
 // using v1.0.x toolkit
-#include "AAFCompressionIDs.h"
+#include "AAFCompressionDefs.h"
 const aafUID_t *filekind_4K = &kAAFFileKind_Aaf4KBinary;
 #endif
 

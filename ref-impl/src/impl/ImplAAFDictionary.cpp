@@ -1498,10 +1498,10 @@ void ImplAAFDictionary::InitBuiltins()
 
   //**********************
 
-  InitContainerDef (ContainerAAF, L"AAF", L"AAF Container");
-  InitContainerDef (ContainerFile, L"External", L"External Container");
-  InitContainerDef (ContainerRIFFWAVE, L"RIFFWAVE", L"RIFFWAVE Container");
-  InitContainerDef (ContainerOMF, L"OMF", L"OMF Container");
+  InitContainerDef (kAAFContainerDef_AAF, L"AAF", L"AAF Container");
+  InitContainerDef (kAAFContainerDef_External, L"External", L"External Container");
+  InitContainerDef (kAAFContainerDef_RIFFWAVE, L"RIFFWAVE", L"RIFFWAVE Container");
+  InitContainerDef (kAAFContainerDef_OMF, L"OMF", L"OMF Container");
 
   AssureClassPropertyTypes ();
 }

@@ -40,7 +40,7 @@
 #include "AAFStoredObjectIDs.h"
 #include "AAFCodecDefs.h"
 #include "AAFEssenceFormats.h"
-#include "AAFCompressionIDs.h"
+#include "AAFCompressionDefs.h"
 
 #include "CAAFBuiltinDefs.h"
 #include "utf8.h"
