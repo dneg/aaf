@@ -113,7 +113,7 @@
 	SetFile -t TEXT -c CWIE -a L "{refh}AAFPlugin.h"
 
 
-"{refh}AAF_i.c" Ä "{dod}aafobjects.mk" "{dod}dod2iid.awk" "{macdodo}macaafobjects.mk"
+"{refh}AAF_i.c" Ä "{dod}aafobjects.mk" "{dod}dod2iid.pl" "{macdodo}macaafobjects.mk"
 	echo "{refh}AAF_i.c"
 	if "`exists -f "{refh}AAF_i.c"`"
 		SetFile -a l "{refh}AAF_i.c"
@@ -162,13 +162,7 @@
 	  echo "typedef IID CLSID;" ; ¶
 	  echo '#endif // CLSID_DEFINED' ; ¶
 	  echo "" ; ¶
-	  for class in {AAFOBJECTS} {AAFCOMINTERFACESONLY} ; ¶
-	      "{DODO}" -f :macros:dod2iid.mac < {class}.dod > dod2iid.tmp ; ¶
-	      Search -q /¥const IID IID_/ dod2iid.tmp ; ¶
-	      echo "" ; ¶
-	      echo "" ; ¶
-	  end ; ¶
-	  Delete -i -ay dod2iid.tmp ; ¶
+	  perl dod2iid.pl {AAFOBJECTS} {AAFCOMINTERFACESONLY} ; ¶
 	  echo '#ifdef __cplusplus' ; ¶
 	  echo "}" ; ¶
 	  echo '#endif' ; ¶
@@ -177,7 +171,7 @@
 	SetFile -t TEXT -c CWIE -a L "{refh}AAF_i.c"
 
 
-"{refh}AAFPlugin_i.c" Ä "{dod}aafobjects.mk" "{dod}dod2iid.awk" "{macdodo}macaafobjects.mk"
+"{refh}AAFPlugin_i.c" Ä "{dod}aafobjects.mk" "{dod}dod2iid.pl" "{macdodo}macaafobjects.mk"
 	echo "{refh}AAFPlugin_i.c"
 	if "`exists -f "{refh}AAFPlugin_i.c"`"
 		SetFile -a l "{refh}AAFPlugin_i.c"
@@ -226,13 +220,7 @@
 	  echo "typedef IID CLSID;" ; ¶
 	  echo '#endif // CLSID_DEFINED' ; ¶
 	  echo "" ; ¶
-	  for class in {PLUGIN_OBJECTS} ; ¶
-	      "{DODO}" -f :macros:dod2iid.mac < {class}.dod > dod2iid.tmp ; ¶
-	      Search -q /¥const IID IID_/ dod2iid.tmp ; ¶
-	      echo "" ; ¶
-	      echo "" ; ¶
-	  end ; ¶
-	  Delete -i -ay dod2iid.tmp ; ¶
+	  perl dod2iid.pl {PLUGIN_OBJECTS} ; ¶
 	  echo '#ifdef __cplusplus' ; ¶
 	  echo "}" ; ¶
 	  echo '#endif' ; ¶
@@ -241,7 +229,7 @@
 	SetFile -t TEXT -c CWIE -a L "{refh}AAFPlugin_i.c"
 
 
-"{refh}AAFRoot_i.c" Ä "{dod}aafobjects.mk" "{dod}dod2iid.awk" "{macdodo}macaafobjects.mk"
+"{refh}AAFRoot_i.c" Ä "{dod}aafobjects.mk" "{dod}dod2iid.pl" "{macdodo}macaafobjects.mk"
 	echo "{refh}AAFRoot_i.c"
 	if "`exists -f "{refh}AAFRoot_i.c"`"
 		SetFile -a l "{refh}AAFRoot_i.c"
@@ -290,13 +278,7 @@
 	  echo "typedef IID CLSID;" ; ¶
 	  echo '#endif // CLSID_DEFINED' ; ¶
 	  echo "" ; ¶
-	  for class in AAFRoot ; ¶
-	      "{DODO}" -f :macros:dod2iid.mac < {class}.dod > dod2iid.tmp ; ¶
-	      Search -q /¥const IID IID_/ dod2iid.tmp ; ¶
-	      echo "" ; ¶
-	      echo "" ; ¶
-	  end ; ¶
-	  Delete -i -ay dod2iid.tmp ; ¶
+	  perl dod2iid.pl AAFRoot ; ¶
 	  echo '#ifdef __cplusplus' ; ¶
 	  echo "}" ; ¶
 	  echo '#endif' ; ¶
