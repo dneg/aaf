@@ -66,6 +66,8 @@ public:
     //          this <c OMStoredObject>.
   void restore(OMPropertySet& properties);
 
+  void saveIndex(void);
+
     // @cmember Save the <c OMStoredVectorIndex> <p vector> in this
     //          <c OMStoredObject>, the vector is named <p vectorName>.
   void save(const OMStoredVectorIndex* vector, const char* vectorName);
