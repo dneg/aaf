@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.00"
-	Name="ComClientTestAAF"
+	Name="eli2aaf"
 	SccProjectName=""
 	SccLocalPath="">
 	<Platforms>
@@ -17,21 +17,21 @@
 			ConfigurationType="1"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="FALSE"
-			CharacterSet="1">
+			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\include,../../../../ref-impl\src\com-api"
-				PreprocessorDefinitions="WIN32,_DEBUG,_WINDOWS,UNICODE,OM_DEBUG"
+				AdditionalIncludeDirectories="../../include,../../../examples2/axLib"
+				PreprocessorDefinitions="WIN32,_DEBUG,_CONSOLE"
+				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="2"
-				PrecompiledHeaderFile=".\Debug/ComClientTestAAF.pch"
+				PrecompiledHeaderFile=".\Debug/eli2aaf.pch"
 				AssemblerListingLocation=".\Debug/"
 				ObjectFile=".\Debug/"
 				ProgramDataBaseFileName=".\Debug/"
 				WarningLevel="3"
-				WarnAsError="TRUE"
 				SuppressStartupBanner="TRUE"
 				DebugInformationFormat="4"
 				CompileAs="0"/>
@@ -40,21 +40,17 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
-				AdditionalDependencies="aafd.lib aafiidd.lib"
-				OutputFile="../../../Debug/Examples/Com/ComClientAAF.exe"
+				AdditionalDependencies="axlib.lib aafd.lib aafiidd.lib odbc32.lib odbccp32.lib"
+				OutputFile=".\Debug/eli2aaf.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="..\..\..\lib"
-				IgnoreDefaultLibraryNames="libc.lib libcmt.lib msvcrt.lib libcd.lib libcmtd.lib,libc.lib,libcmt.lib,msvcrt.lib,libcd.lib,libcmtd.lib"
+				AdditionalLibraryDirectories="../../lib,../../../examples2/axLib/Debug,../../Debug/Refimpl"
 				GenerateDebugInformation="TRUE"
+				ProgramDatabaseFile=".\Debug/eli2aaf.pdb"
 				SubSystem="1"/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="_DEBUG"
-				MkTypLibCompatible="TRUE"
-				SuppressStartupBanner="TRUE"
-				TargetEnvironment="1"
-				TypeLibraryName=".\Debug/ComClientTestAAF.tlb"/>
+				TypeLibraryName=".\Debug/eli2aaf.tlb"/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
 			<Tool
@@ -64,7 +60,7 @@
 			<Tool
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="_DEBUG"
-				Culture="1033"/>
+				Culture="2057"/>
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
@@ -77,23 +73,22 @@
 			ConfigurationType="1"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="FALSE"
-			CharacterSet="1">
+			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="..\..\..\include,../../../../ref-impl\src\com-api"
-				PreprocessorDefinitions="WIN32,NDEBUG,_WINDOWS,UNICODE"
+				AdditionalIncludeDirectories="../../../Utilities/eli2aaf,../../include,../../../examples2/axLib"
+				PreprocessorDefinitions="WIN32,NDEBUG,_CONSOLE"
 				StringPooling="TRUE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="TRUE"
 				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="2"
-				PrecompiledHeaderFile=".\Release/ComClientTestAAF.pch"
+				PrecompiledHeaderFile=".\Release/eli2aaf.pch"
 				AssemblerListingLocation=".\Release/"
 				ObjectFile=".\Release/"
 				ProgramDataBaseFileName=".\Release/"
 				WarningLevel="3"
-				WarnAsError="TRUE"
 				SuppressStartupBanner="TRUE"
 				CompileAs="0"/>
 			<Tool
@@ -101,21 +96,16 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
-				AdditionalDependencies="aaf.lib aafiid.lib"
-				OutputFile="../../../Release/Examples/Com/ComClientAAF.exe"
+				AdditionalDependencies="axlib.lib aaf.lib aafiid.lib odbc32.lib odbccp32.lib"
+				OutputFile=".\Release/eli2aaf.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="..\..\..\lib"
-				IgnoreDefaultLibraryNames="libc.lib,libcmt.lib,libcd.lib,libcmtd.lib,msvcrtd.lib"
-				ProgramDatabaseFile=".\Release/ComClientAAF.pdb"
+				AdditionalLibraryDirectories="../../lib,../../../examples2/axLib/Release,../../Release/Refimpl"
+				ProgramDatabaseFile=".\Release/eli2aaf.pdb"
 				SubSystem="1"/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="NDEBUG"
-				MkTypLibCompatible="TRUE"
-				SuppressStartupBanner="TRUE"
-				TargetEnvironment="1"
-				TypeLibraryName=".\Release/ComClientTestAAF.tlb"/>
+				TypeLibraryName=".\Release/eli2aaf.tlb"/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
 			<Tool
@@ -125,7 +115,7 @@
 			<Tool
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="NDEBUG"
-				Culture="1033"/>
+				Culture="2057"/>
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
@@ -134,48 +124,20 @@
 	</Configurations>
 	<Files>
 		<Filter
-			Name="AAF Libraries"
-			Filter="lib">
+			Name="Source Files"
+			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat">
 			<File
-				RelativePath="..\..\..\lib\AAF.lib">
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="TRUE">
-					<Tool
-						Name="VCCustomBuildTool"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\..\lib\AAFD.lib">
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="TRUE">
-					<Tool
-						Name="VCCustomBuildTool"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\..\lib\AAFIID.lib">
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="TRUE">
-					<Tool
-						Name="VCCustomBuildTool"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\..\lib\AAFIIDD.lib">
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="TRUE">
-					<Tool
-						Name="VCCustomBuildTool"/>
-				</FileConfiguration>
+				RelativePath="..\..\..\Utilities\eli2aaf\eli2aaf.cpp">
 			</File>
 		</Filter>
-		<File
-			RelativePath="..\..\..\..\examples\com-api\comClientTest\ComClientTestAAF.cpp">
-		</File>
+		<Filter
+			Name="Header Files"
+			Filter="h;hpp;hxx;hm;inl">
+		</Filter>
+		<Filter
+			Name="Resource Files"
+			Filter="ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe">
+		</Filter>
 	</Files>
 	<Globals>
 	</Globals>

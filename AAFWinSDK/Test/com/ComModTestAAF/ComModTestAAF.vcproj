@@ -104,12 +104,12 @@
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
 				AdditionalDependencies="odbc32.lib odbccp32.lib aaf.lib aafiid.lib"
-				OutputFile="../../../Release/Test/COMMODAAF.EXE"
+				OutputFile="../../../Release/Test/ComModAAF.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="..\..\..\lib"
 				IgnoreDefaultLibraryNames="libc.lib,libcmt.lib,libcd.lib,libcmtd.lib,msvcrtd.lib"
-				ProgramDatabaseFile=".\Release/COMMODAAF.pdb"
+				ProgramDatabaseFile=".\Release/ComModAAF.pdb"
 				SubSystem="1"/>
 			<Tool
 				Name="VCMIDLTool"
