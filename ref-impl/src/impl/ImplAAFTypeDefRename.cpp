@@ -49,7 +49,7 @@ extern "C" const aafClassID_t CLSID_AAFPropValData;
 
 
 ImplAAFTypeDefRename::ImplAAFTypeDefRename ()
-  : _RenamedType  ( PID_TypeDefinitionRename_RenamedType, "RenamedType")
+  : _RenamedType  ( PID_TypeDefinitionRename_RenamedType, "RenamedType", "/Dictionary/TypeDefinitions", PID_DefinitionObject_Identification)
 {
   _persistentProperties.put(_RenamedType.address());
 }
@@ -73,45 +73,26 @@ AAFRESULT STDMETHODCALLTYPE
 	if (AAFRESULT_FAILED (hr))
     return hr;
 
-  aafUID_t baseId;
-  assert (pBaseType);
-  hr = pBaseType->GetAUID(&baseId);
-  if (! AAFRESULT_SUCCEEDED (hr)) return hr;
-  _RenamedType = baseId;
+  _RenamedType = pBaseType;
 
   return AAFRESULT_SUCCESS;
 }
-
 
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDefRename::GetBaseType (
       ImplAAFTypeDef ** ppBaseType) const
 {
-  if (! ppBaseType) return AAFRESULT_NULL_PARAM;
+  if (! ppBaseType)
+	return AAFRESULT_NULL_PARAM;
 
-  if (!_cachedBaseType)
-	{
-	  ImplAAFDictionarySP pDict;
+   if(_RenamedType.isVoid())
+		return AAFRESULT_OBJECT_NOT_FOUND;
+  ImplAAFTypeDef *pTypeDef = _RenamedType;
 
-	  AAFRESULT hr;
-	  hr = (GetDictionary(&pDict));
-	  if (AAFRESULT_FAILED(hr))
-		return hr;
-	  assert (pDict);
-
-	  ImplAAFTypeDefRename * pNonConstThis =
-		  (ImplAAFTypeDefRename *) this;
-	  hr = pDict->LookupTypeDef (_RenamedType, &pNonConstThis->_cachedBaseType);
-	  if (AAFRESULT_FAILED(hr))
-		return hr;
-	  assert (_cachedBaseType);
-	}
-  assert (ppBaseType);
-  *ppBaseType = _cachedBaseType;
+  *ppBaseType = pTypeDef;
   assert (*ppBaseType);
   (*ppBaseType)->AcquireReference ();
-
   return AAFRESULT_SUCCESS;
 }
 
