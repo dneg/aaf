@@ -39,6 +39,9 @@
 #include <stdlib.h>
 #include <iostream.h>
 
+#ifdef macintosh
+	#include <console.h>
+#endif 
 namespace OMF2
 {
 #include "omPublic.h"
