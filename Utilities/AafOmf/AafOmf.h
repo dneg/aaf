@@ -66,22 +66,6 @@ const unsigned	kLogError = 0; 	// Error level.
 const unsigned	kLogWarn 	= 1;  // Warning level.
 const unsigned	kLogInfo  = 2; 	// Informational level.
 
-// ============================================================================
-// simple helper class to initialize and cleanup COM library.
-// ============================================================================
-struct CComInitialize
-{
-	CComInitialize()
-	{
-		CoInitialize(NULL);
-	}
-
-	~CComInitialize()
-	{
-		CoUninitialize();
-	}
-};
-
 typedef struct _AafOmfGlobals
 {
 	aafInt16		numIndents;
@@ -133,6 +117,24 @@ typedef struct _AafOmfGlobals
 	OMF2::omfProperty_t		omCDCIPaddingBits;
 	~_AafOmfGlobals( void )		{ delete pLogger; }
 } AafOmfGlobals;
+
+
+// ============================================================================
+// simple helper class to initialize and cleanup COM library.
+// ============================================================================
+struct CComInitialize
+{
+	CComInitialize()
+	{
+		CoInitialize(NULL);
+	}
+
+	~CComInitialize()
+	{
+		CoUninitialize();
+	}
+};
+
 
 int deleteFile( char* fileName );
 void IncIndentLevel( void );
