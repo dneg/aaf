@@ -36,11 +36,6 @@
 #include "OMProperty.h"
 #include "AAFUtils.h"
 
-
-#ifndef __ImplAAFBuiltinProps_h__
-#include "ImplAAFBuiltinProps.h"
-#endif
-
 #ifndef __ImplAAFSearchableStack_h__
 #include "ImplAAFSearchableStack.h"
 #endif
