@@ -155,14 +155,6 @@ SOURCE="..\..\..\..\examples\com-api\ComExtension\ComPersonnelExtension\AAFPerso
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\..\examples\com-api\ComExtension\ComPersonnelExtension\AAFPersonnelExtension_i.c"
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\include\AAFPlugin_i.c
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\..\examples\com-api\ComExtension\ComPersonnelExtension\CAAFAdminMob.cpp"
 # End Source File
 # Begin Source File
