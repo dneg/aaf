@@ -16,5 +16,5 @@
 // Include all objects in the following table:
 //
 AAF_BEGIN_OBJECT_MAP(AAFPluginObjectMap)
-	AAF_OBJECT_ENTRY(AAFBasicInterp)
+	AAF_PLUGIN_OBJECT_ENTRY(AAFBasicInterp)
 AAF_END_OBJECT_MAP()
