@@ -22,8 +22,9 @@ const IID IID_IAAFEssenceData = { 0x6a33f4e2, 0x8ed6, 0x11d2, { 0xbf, 0x9d, 0x00
 const IID IID_IAAFEssenceDataStream = { 0xCDDB6AB1, 0x98DC, 0x11d2, { 0x80, 0x8a, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
 
 
-CAAFEssenceDataStream::CAAFEssenceDataStream (IUnknown * pControllingUnknown, aafBool doInit)
-  : CAAFDefaultStream (pControllingUnknown, AAFFalse)
+CAAFEssenceDataStream::CAAFEssenceDataStream (IUnknown * pControllingUnknown)
+  : CAAFUnknown (pControllingUnknown),
+  _data(NULL)
 {
 }
 
@@ -36,6 +37,12 @@ HRESULT STDMETHODCALLTYPE
 CAAFEssenceDataStream::Init(
             /* [in] */ IUnknown  *essenceData)
 {
+  if (NULL == essenceData)
+    return AAFRESULT_NULL_PARAM;
+
+  if (NULL != _data)
+    return AAFRESULT_NOT_INITIALIZED;
+
 	return(essenceData->QueryInterface (IID_IAAFEssenceData, (void **)&_data));
 }
 
@@ -43,6 +50,9 @@ HRESULT STDMETHODCALLTYPE
     CAAFEssenceDataStream::Write (aafDataBuffer_t  buffer,
         aafInt32  buflen)
 {
+  if (NULL == _data)
+    return AAFRESULT_NOT_INITIALIZED;
+
 	aafUInt32	written;
 
 	return(_data->Write (buflen, buffer, &written));
@@ -54,6 +64,9 @@ HRESULT STDMETHODCALLTYPE
         aafDataBuffer_t  buffer,
         aafUInt32 *  bytesRead)
 {
+  if (NULL == _data)
+    return AAFRESULT_NOT_INITIALIZED;
+
 	return(_data->Read (buflen, buffer, bytesRead));
 }
 
@@ -61,13 +74,34 @@ HRESULT STDMETHODCALLTYPE
 HRESULT STDMETHODCALLTYPE
     CAAFEssenceDataStream::Seek (aafInt64  byteOffset)
 {
+  if (NULL == _data)
+    return AAFRESULT_NOT_INITIALIZED;
+
 	return(_data->SetPosition(byteOffset));
 }
 
+// NOTE: If the GetPosition and SetPosition methods are changed 
+// to use a aafUInt64 then the following code will have to check
+// for sign wrapping...
 
 HRESULT STDMETHODCALLTYPE    CAAFEssenceDataStream::SeekRelative (aafInt32  byteOffset)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  if (NULL == _data)
+    return AAFRESULT_NOT_INITIALIZED;
+
+  HRESULT hr = S_OK;
+
+  // Get the current position and then just add the given offset 
+  // and attempt to set the new position.
+  aafInt64 pos;
+  hr = GetPosition(&pos);
+  if (SUCCEEDED(hr))
+  {
+    aafInt64 newPos = pos + byteOffset;
+    hr = Seek(newPos);
+  }
+
+  return hr;
 }
 
 
@@ -75,13 +109,44 @@ HRESULT STDMETHODCALLTYPE
     CAAFEssenceDataStream::IsPosValid (aafInt64  byteOffset,
         aafBool *  isValid)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  if (NULL == _data)
+    return AAFRESULT_NOT_INITIALIZED;
+  if (NULL == isValid)
+    return E_INVALIDARG;
+  
+  *isValid = AAFFalse;
+
+  if (0 < byteOffset)
+  {
+    aafInt64 length = 0;
+    HRESULT hr = GetLength(&length);
+    if (AAFRESULT_SUCCESS != hr)
+      return hr;
+
+    if (byteOffset < length)
+    {
+      *isValid = AAFTrue;
+    }
+    else if (byteOffset == length)
+    {
+      // Since we don't currently save the mode then
+      // we don't know whether or not the next
+      // file operation will be a read or a write
+      // so we just return true.
+      *isValid = AAFTrue;
+    }
+  }
+
+  return S_OK;
 }
 
 
 HRESULT STDMETHODCALLTYPE
     CAAFEssenceDataStream::GetPosition (aafInt64 *  position)
 {
+  if (NULL == _data)
+    return AAFRESULT_NOT_INITIALIZED;
+
 	return(_data->GetPosition (position));
 }
 
@@ -89,6 +154,9 @@ HRESULT STDMETHODCALLTYPE
 HRESULT STDMETHODCALLTYPE
     CAAFEssenceDataStream::GetLength (aafInt64 *  position)
 {
+  if (NULL == _data)
+    return AAFRESULT_NOT_INITIALIZED;
+
 	aafLength_t	result;
 	HRESULT		status;
 
@@ -101,14 +169,14 @@ HRESULT STDMETHODCALLTYPE
 HRESULT STDMETHODCALLTYPE
     CAAFEssenceDataStream::omcFlushCache ()
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  return S_OK; //AAFRESULT_NOT_IMPLEMENTED;
 }
 
 
 HRESULT STDMETHODCALLTYPE
     CAAFEssenceDataStream::SetCacheSize (aafInt32  itsSize)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  return S_OK; //AAFRESULT_NOT_IMPLEMENTED;
 }
 
 
@@ -125,16 +193,22 @@ HRESULT CAAFEssenceDataStream::InternalQueryInterface
     if (NULL == ppvObj)
         return E_INVALIDARG;
 
-    // We only support the IClassFactory interface 
+    // We only support the IID_IAAFEssenceDataStream interface 
     if (riid == IID_IAAFEssenceDataStream) 
     { 
         *ppvObj = (IAAFEssenceDataStream *)this; 
         ((IUnknown *)*ppvObj)->AddRef();
         return S_OK;
     }
+    else if (riid == IID_IAAFEssenceStream) 
+    { 
+        *ppvObj = (IAAFEssenceStream *)this; 
+        ((IUnknown *)*ppvObj)->AddRef();
+        return S_OK;
+    }
 
     // Always delegate back to base implementation.
-    return CAAFDefaultStream::InternalQueryInterface(riid, ppvObj);
+    return CAAFUnknown::InternalQueryInterface(riid, ppvObj);
 }
 
 //
