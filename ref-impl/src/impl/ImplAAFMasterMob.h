@@ -233,6 +233,10 @@ public:
   // Declare the module test method. The implementation of the will be be
   // in /test/ImplAAFMasterMobTest.cpp.
   static AAFRESULT test();
+
+  // Return this objects stored object class.
+  virtual AAFRESULT STDMETHODCALLTYPE
+	GetObjectClass(aafUID_t * pClass);
 };
 
 #endif // ! __ImplAAFMasterMob_h__
