@@ -62,8 +62,12 @@ extern "C" const aafClassID_t CLSID_EnumAAFTypeDefs;
 
 
 ImplAAFMetaDictionary::ImplAAFMetaDictionary () :
-  _typeDefinitions      (PID_MetaDictionary_TypeDefinitions,      "TypeDefinitions", PID_DefinitionObject_Identification),
-  _classDefinitions      (PID_MetaDictionary_ClassDefinitions,    "ClassDefinitions", PID_DefinitionObject_Identification)
+  _typeDefinitions  (PID_MetaDictionary_TypeDefinitions,
+                     "TypeDefinitions", 
+                     PID_MetaDefinition_Identification),
+  _classDefinitions (PID_MetaDictionary_ClassDefinitions,
+                     "ClassDefinitions", 
+                     PID_MetaDefinition_Identification)
 {
   _persistentProperties.put (_typeDefinitions.address());
   _persistentProperties.put (_classDefinitions.address());
