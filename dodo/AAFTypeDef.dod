@@ -12,7 +12,6 @@ AD_IDL(//
 // objects.
 AD_STD_COMMENT_IFC_HEADER
 AD_STD_COMMENT_IFC_INIT)
-AD_FORWARD_DECLARATION(EnumAAFReferenceValues)
 AD_CLASS_UUID(dfbd6524, 1d81, 11d2, bf, 96, 00, 60, 97, 11, 62, 12)
 
 AD_DEFAULT_UUID(dfbd6523, 1d81, 11d2, bf, 96, 00, 60, 97, 11, 62, 12)
@@ -166,24 +165,4 @@ AD_XMETHOD1(SetSwapNeeded\,
   // - This object has already been Initialize\\\(\\\)d.
   AD_STD_COMMENT_METH_ERR_HEADER\))
 
-
-AD_NO_EXPORT(
-AD_XMETHOD1(GetRefValues\,
-			[out\\\,retval]\,
-			objOut\,
-			EnumAAFReferenceValues\,
-			ppEnum\, 
-			Reference value Enumeration\,
-
-            Places an enumerator for reference values into the *ppEnum argument.
-  // 
-  // The returned enumerator is AddRef\\\(\\\)ed before it is returned.
-  AD_STD_COMMENT_METH_STUB
-  // 
-  // Succeeds if all of the following are true:
-  // - the ppEnum pointer is valid.
-  // 
-  // If this method fails nothing will be written to *ppEnum.
-  AD_STD_COMMENT_METH_ERR_HEADER
-  AD_STD_COMMENT_METH_ERR_NULL_PARAM\\\(ppEnum\\\)\))
 AD_XCLASS_END(Abstract, StoredObject)
