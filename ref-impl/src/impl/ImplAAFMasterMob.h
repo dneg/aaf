@@ -137,7 +137,7 @@ public:
 		 aafSlotID_t  slotID,
 
 		 // @parm [in] Index of requested representation
-		 aafInt32  index,
+		 aafUInt32  index,
 
 		 // @parm [out] Requested Source Clip
          ImplAAFSourceClip ** ppSourceClip);
