@@ -31,6 +31,7 @@
 
 #include "OMDataTypes.h"
 
+#include <stdio.h>
 #include <stddef.h>
 
   // @func Set the name of the program to be use in error messages.
@@ -144,5 +145,12 @@ size_t lengthOfPropertyPath(const OMPropertyId* path);
 OMPropertyId* savePropertyPath(const OMPropertyId* path);
 
 int comparePropertyPath(const OMPropertyId* path1, const OMPropertyId* path2);
+
+  // @func Open a named file. Just like ANSI fopen() except for
+  //       wchar_t* file names and modes.
+  //   @parm The file name.
+  //   @parm The mode.
+  //   @rdesc An ANSI FILE* 
+FILE* wfopen(const wchar_t* fileName, const wchar_t* mode);
 
 #endif

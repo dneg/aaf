@@ -420,3 +420,28 @@ int comparePropertyPath(const OMPropertyId* path1, const OMPropertyId* path2)
   }
   return result;
 }
+
+// Just like ANSI fopen() except for wchar_t* file names and modes.
+//
+FILE* wfopen(const wchar_t* fileName, const wchar_t* mode)
+{
+  TRACE("wfopen");
+  ASSERT("Valid file name", fileName != 0);
+  ASSERT("Valid mode", mode != 0);
+
+  FILE* result = 0;
+#if defined(_WIN32) || defined(WIN32)
+  result = _wfopen(fileName, mode);
+#else
+  char cFileName[FILENAME_MAX];
+  size_t status = wcstombs(cFileName, fileName, FILENAME_MAX);
+  ASSERT("Convert succeeded", status != (size_t)-1);
+
+  char cMode[FILENAME_MAX];
+  status = wcstombs(cMode, mode, FILENAME_MAX);
+  ASSERT("Convert succeeded", status != (size_t)-1);
+
+  result = fopen(cFileName, cMode);
+#endif
+  return result;
+}
