@@ -104,12 +104,11 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pHeader->CountIdentifications(&readNumIdents));
 		checkExpression(1 == readNumIdents, AAFRESULT_TEST_FAILED);
 		checkResult(pHeader->GetLastIdentification (&pIdent));
-		checkResult(pIdent->Initialize());
-		checkResult(pIdent->SetCompanyName(COMPANY_NAME));
-		checkResult(pIdent->SetProductName(PRODUCT_NAME));
-		checkResult(pIdent->SetProductVersionString(TEST_VERSION));
-		checkResult(pIdent->SetProductID(UnitTestProductID));
-		checkResult(pIdent->SetProductVersion(&testVersion));
+		checkResult(pIdent->Initialize(COMPANY_NAME,
+									   PRODUCT_NAME,
+									   TEST_VERSION,
+									   UnitTestProductID));
+		checkResult(pIdent->SetProductVersion(testVersion));
 		
 		// Attempt to save the file.
 		checkResult(pFile->Save());
