@@ -630,9 +630,10 @@ import "%01.idl";
 #c AD_CLASS_UUID(b1a21373, 1a7d, 11d2, bf, 78, 00, 10, 4b, c9, 15, 6d)
 #c
 #c TomR:980713: Added
+#c TomR:990304: Removed
+#c cpp_quote("EXTERN_C const CLSID CLSID_.this-module;")
 #c
 #startm AD_CLASS_UUID 11
-cpp_quote("EXTERN_C const CLSID CLSID_.this-module;")
 #endm
 
 

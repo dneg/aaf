@@ -754,7 +754,7 @@ interface I.this-module
 #c
 #c Defining the Class "Factory" UUID.
 #c NOTE: should be placed before AD_DEFAULT_UUID or after
-#c AD_CLASS_END
+#c AD_CLASS_UUID
 #c
 #c GUID
 #c Argument01: hex long  0-3[leading 0's w/o leading 0x]
@@ -773,9 +773,10 @@ interface I.this-module
 #c AD_CLASS_UUID(b1a21373, 1a7d, 11d2, bf, 78, 00, 10, 4b, c9, 15, 6d)
 #c
 #c TomR:980713: Added
+#c TomR:990303: Removed
+#c cpp_quote("EXTERN_C const CLSID CLSID_.this-module;")
 #c
 #startm AD_CLASS_UUID 11
-cpp_quote("EXTERN_C const CLSID CLSID_.this-module;")\
 #endm
 
 

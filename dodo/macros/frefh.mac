@@ -101,9 +101,6 @@
 #c
 #startm AD_CLASS_BEGIN 00
 
-#ifndef __.this-module_INTERFACE_DEFINED__
-#define __.this-module_INTERFACE_DEFINED__
-
 #undef  INTERFACE
 #define INTERFACE   I.this-module
 
@@ -568,9 +565,14 @@ AD_CLASS_BEGIN\
 #c Example:
 #c AD_DEFAULT_UUID(b1a21372, 1a7d, 11d2, bf, 78, 00, 10, 4b, c9, 15, 6d)
 #c
+#c TomR:990304: removed
+#c DEFINE_GUID(IID_I.this-module, 0x%01, 0x%02, 0x%03, 0x%04, 0x%05, 0x%06, 0x%07, 0x%08, 0x%09, 0x%10, 0x%11);
 #c
 #startm AD_DEFAULT_UUID 11
-DEFINE_GUID(IID_I.this-module, 0x%01, 0x%02, 0x%03, 0x%04, 0x%05, 0x%06, 0x%07, 0x%08, 0x%09, 0x%10, 0x%11);\
+#ifndef __I.this-module_INTERFACE_DEFINED__
+#define __I.this-module_INTERFACE_DEFINED__
+
+EXTERN_C const IID IID_I.this-module;\
 #endm
 
 
@@ -578,7 +580,7 @@ DEFINE_GUID(IID_I.this-module, 0x%01, 0x%02, 0x%03, 0x%04, 0x%05, 0x%06, 0x%07, 
 #c
 #c Defining the Class "Factory" UUID.
 #c NOTE: should be placed before AD_DEFAULT_UUID or after
-#c AD_CLASS_END
+#c AD_CLASS_UUID
 #c
 #c GUID
 #c Argument01: hex long  0-3[leading 0's w/o leading 0x]
@@ -597,9 +599,9 @@ DEFINE_GUID(IID_I.this-module, 0x%01, 0x%02, 0x%03, 0x%04, 0x%05, 0x%06, 0x%07, 
 #c AD_CLASS_UUID(b1a21373, 1a7d, 11d2, bf, 78, 00, 10, 4b, c9, 15, 6d)
 #c
 #c TomR:980713: Added
-#c
+#c TomR:990303: Removed 
+#c DEFINE_GUID(CLSID_.this-module, 0x%01, 0x%02, 0x%03, 0x%04, 0x%05, 0x%06, 0x%07, 0x%08, 0x%09, 0x%10, 0x%11);
 #startm AD_CLASS_UUID 11
-DEFINE_GUID(CLSID_.this-module, 0x%01, 0x%02, 0x%03, 0x%04, 0x%05, 0x%06, 0x%07, 0x%08, 0x%09, 0x%10, 0x%11);\
 #endm
 
 
@@ -614,7 +616,7 @@ DEFINE_GUID(CLSID_.this-module, 0x%01, 0x%02, 0x%03, 0x%04, 0x%05, 0x%06, 0x%07,
   END_INTERFACE
 };\
 
-#endif // __.this-module_INTERFACE_DEFINED__
+#endif // __I.this-module_INTERFACE_DEFINED__
 #endm
 
 
@@ -648,7 +650,7 @@ AD_CLASS_END\
   END_INTERFACE
 };\
 
-#endif // __.this-module_INTERFACE_DEFINED__
+#endif // __I.this-module_INTERFACE_DEFINED__
 #endm
 
 
