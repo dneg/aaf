@@ -558,10 +558,6 @@ SOURCE="..\..\..\ref-impl\include\OM\OMObjectReference.h"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\OM\OMObjectReferenceT.h"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\include\OM\OMObjectReferenceType.h"
 # End Source File
 # Begin Source File
