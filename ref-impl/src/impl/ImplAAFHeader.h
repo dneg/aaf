@@ -45,12 +45,11 @@ class ImplAAFFile;
 #include "ImplAAFIdentification.h"
 
 #include "OMProperty.h"
+#include "OMTypes.h"
 
 class AAFDataKind;
 class AAFEffectDef;
 class ImplAAFSession;
-
-const int CLSID_AAFHEADER = 43;
 
 const int PID_HEADER_BYTEORDER          = 0;
 const int PID_HEADER_LASTMODIFIED       = 1;
@@ -66,6 +65,7 @@ public:
   ImplAAFHeader ();
   ~ImplAAFHeader ();
 
+  OMDECLARE_STORABLE(AAFHeader);
 
   //****************
   // LookupMob()
@@ -237,9 +237,9 @@ AAFRESULT CreateTables(void);
 AAFRESULT UpdateFileCLSD(void);
 AAFRESULT CreateDatakindCache(void);
 #endif
-virtual int classId(void) const;
 
 private:
+
 		ImplAAFFile		*_file;
 #if FULL_TOOLKIT
 		aafTable_t       *_dataObjs;
