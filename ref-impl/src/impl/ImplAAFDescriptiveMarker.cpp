@@ -75,7 +75,7 @@ AAFRESULT STDMETHODCALLTYPE
   }
 
   _describedSlots.clear();
-  int i;
+  unsigned int i;
   for ( i = 0; i < numberElements; ++i ) {
     _describedSlots.insert( pDescribedSlotIDs[i] );
   }
