@@ -311,8 +311,9 @@ DotFactory::RegisterRemoveDotElement( DotElement *element )
 
 
 //-----------------------------------------------------------------------------
+// A MOB will have slots and a Nested Scope will have pseudo slots, ie segments
 vector< DotEdge* > 
-DotFactory::GetEdgesWithSourceNode( DotRecordNode *node )
+DotFactory::GetSlotEdgesWithSourceNode( DotRecordNode *node )
 {
    vector< DotEdge* > retVector;
    vector< DotElement* >::iterator iter;
@@ -321,13 +322,25 @@ DotFactory::GetEdgesWithSourceNode( DotRecordNode *node )
       DotEdge *edge = dynamic_cast< DotEdge* > (*iter);
       if ( edge != 0 )
       {
-	 DotEdgeEnd *source = edge->GetSource();
-	 if ( source != 0 )
+	 DotEdgeEnd *target = edge->GetTarget();
+	 if ( target != 0 ) 
 	 {
-	    DotRecordNode *reference = source->GetReference();
-	    if ( reference->GetUID().compare( node->GetUID() ) == 0 )
+	    DotRecordNode *reference = target->GetReference();
+	    if ( reference != 0 )
 	    {
-	       retVector.push_back( edge );
+	       if ( reference->GetID( "isslot" ).length() > 0 || 
+		    reference->GetID( "issegment" ).length() > 0 )
+	       {
+		  DotEdgeEnd *source = edge->GetSource();
+		  if ( source != 0 )
+		  {
+		     DotRecordNode *reference = source->GetReference();
+		     if ( reference->GetUID().compare( node->GetUID() ) == 0 )
+		     {
+			retVector.push_back( edge );
+		     }
+		  }
+	       }
 	    }
 	 }
       }
