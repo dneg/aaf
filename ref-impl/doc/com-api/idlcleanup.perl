@@ -23,6 +23,7 @@ while (<>) {
 	# insert Section directives in place of waffle 
 	s|This method will return the following codes\. |Returns:\n  //|;
 	s|This method will return the following codes:|Returns:|;
+	s|This function will return the following codes.|Returns:|;
 
 	# fix for indent continuation line following a - bullet
 	# docjet can't handle additional indent
@@ -33,6 +34,7 @@ while (<>) {
 	s|// Objects that implement (\S*) also implement the following interfaces:|// Implements:|;
 	s|This method succeeds if all of the following are true:|Succeeds if:|;
 	s|This method will succeed only if all of the following are true:|Succeeds if:|;
+	s|This method will succeed if the following are true:|Succeeds if:|;
 	s|Succeeds if all of the following are true:|Succeeds if:|;
 	s|Succeeds if the following is true:|Succeeds if:|;
 	s|Valid values include:|Valid values:|;

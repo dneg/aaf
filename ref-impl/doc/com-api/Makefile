@@ -56,8 +56,6 @@ AAFnospace.idl:	 idlcleanup.perl $(COMAPI_PATH)/AAF.idl
 #	Since idlcleanup reads paragraphs, had to strip CR's first with tr
 	tr -d "\r" <  $(COMAPI_PATH)/AAF.idl | $(PERL) idlcleanup.perl | $(PERL) idlblankcomfix.perl > AAFnospace.idl
 
-AAFglobals.h:	 $(COMAPI_PATH)/AAF.idl $(COMAPI_PATH)/AAF.h 
-
 AAFTypes.h:	 $(COMAPI_PATH)/AAFTypes.idl
 	cp  $(COMAPI_PATH)/AAFTypes.idl AAFTypes.idl
 
@@ -66,6 +64,7 @@ $(HTML_MAN):	$(HTML_MAN_PATH) $(HTML_MAN_PATH)/frontCover.html $(HTML_MAN_PATH)/
 #   Just echo the Errors from the logfile
 	grep -v Warning errors.txt
 #   Had to use find to list files thru stdio because there are too many for bash to glob
+	- rm aafapiman.zip
 	cd $(HTML_MAN_PATH); find . -print > ../../fileList.txt; $(WINZIP) ../../aafapiman.zip @../../fileList.txt
 	cd $(HTML_MAN_PATH); tar -T ../../fileList.txt -cvf ../../aafapiman.tgz
 
