@@ -161,9 +161,18 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTapeDescriptor::SetTapeFormFactor (aafTapeCaseType_t	formFactor)
 {
-	_formFactor = formFactor;
+    AAFRESULT aafError = AAFRESULT_SUCCESS;
+	if ( formFactor < kTapeCaseNull ||
+		 formFactor > kNagraAudioTape )
+	{
+		aafError = AAFRESULT_BAD_TYPE;
+	}
+	else
+	{
+		_formFactor = formFactor;
+	}
 	
-	return AAFRESULT_SUCCESS;
+	return aafError;
 }
 
 AAFRESULT STDMETHODCALLTYPE
@@ -177,6 +186,7 @@ AAFRESULT STDMETHODCALLTYPE
 	}
 	else
 	{
+		
 		*pFormFactor = _formFactor;
 	}
 
@@ -187,9 +197,19 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTapeDescriptor::SetSignalType (aafVideoSignalType_t	videoSignal)
 {
-	_videoSignalType = videoSignal;
+    AAFRESULT aafError = AAFRESULT_SUCCESS;
+
+	if (videoSignal < kVideoSignalNull ||
+		videoSignal > kSECAMSignal)
+	{
+		aafError = AAFRESULT_BAD_TYPE;
+	}
+	else
+	{
+		_videoSignalType = videoSignal;
+	}
 	
-	return AAFRESULT_SUCCESS;
+	return aafError;
 }
 
 AAFRESULT STDMETHODCALLTYPE
@@ -214,8 +234,19 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTapeDescriptor::SetTapeFormat (aafTapeFormatType_t	tapeFormat)
 {
-	_tapeFormat = tapeFormat;
-	return AAFRESULT_SUCCESS;
+    AAFRESULT aafError = AAFRESULT_SUCCESS;
+
+	if (tapeFormat < kTapeFormatNull ||
+		tapeFormat > kHi8Format)
+	{
+		aafError = AAFRESULT_BAD_TYPE;
+	}
+	else
+	{
+		_tapeFormat = tapeFormat;
+	}
+
+	return aafError;
 }
 
 AAFRESULT STDMETHODCALLTYPE
@@ -239,8 +270,18 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTapeDescriptor::SetTapeLength (aafLength_t	tapeLength)
 {
-	_tapeLength = tapeLength;
-	return AAFRESULT_SUCCESS;
+    AAFRESULT aafError = AAFRESULT_SUCCESS;
+
+	if (tapeLength < 0)
+	{
+		aafError = AAFRESULT_BAD_LENGTH;
+	}
+	else
+	{
+		_tapeLength = tapeLength;
+	}
+
+	return aafError;
 }
 
 AAFRESULT STDMETHODCALLTYPE
