@@ -205,7 +205,10 @@ ImplAAFFile::Save ()
 	  return AAFRESULT_NOT_OPEN;
 	}
 
-  return AAFRESULT_NOT_IMPLEMENTED;
+  // BobT Hack!  We don't have Save() hooked up yet; Close() will
+  // save, so I'll do something extremely ugly and just return without
+  // complaint.
+  return AAFRESULT_SUCCESS;
 }
 
 
