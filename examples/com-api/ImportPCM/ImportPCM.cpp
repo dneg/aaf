@@ -246,7 +246,7 @@ static HRESULT OpenAAFFile(aafWChar * pFileName)
 								MobSlotID, sampleRate.numerator, sampleRate.denominator,
 								maxSampleSize);
 			
-					printf("\t\tCountSamples=%lld\n", sampleCount);
+					printf("\t\tCountSamples=%"AAFFMT64"d\n", sampleCount);
 	
 					// Set a suitable buffer size						
 					dataBuff = new unsigned char[maxSampleSize];

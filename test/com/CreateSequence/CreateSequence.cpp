@@ -54,17 +54,6 @@ STDAPI MemoryFileSaveToDisk(
 // in aaf.lib.
 #include "AAFStoredObjectIDs.h"
 
-// There are differences in the microsoft and other compilers in the
-// "Length" specifier used in printf for 64bit integers.
-//
-// NOTE: If your compiler does not support 64 bit integers then this
-// example will NOT print out the correct lengths.
-#if defined( COMPILER_MSC )
-#define L64 "I64"
-#else
-#define L64 "ll"
-#endif
-
 // MAX is used for arrays when converting between types - set here for
 // debugging.
 const int MAX = 80;
