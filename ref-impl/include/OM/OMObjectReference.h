@@ -146,7 +146,7 @@ public:
   virtual OMStorable* getValue(void) const;
 
     // @cmember Set the value of this <c OMStrongObjectReference>.
-    //          The value is a pointer to the referenced <c OMstorable>.
+    //          The value is a pointer to the referenced <c OMStorable>.
   virtual OMStorable* setValue(const OMStorable* value);
 
 protected:
