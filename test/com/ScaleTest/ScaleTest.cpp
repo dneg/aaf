@@ -72,10 +72,6 @@ const aafUID_t *filekind_4K = &kAAFFileKind_Aaf4KBinary;
 #include "../ComModTestAAF/ModuleTests/EssenceTestData.h"
 
 
-// Use libdv API terminology for consistency with internal use of libdv API
-// where "PAL" & "NTSC" mean 625/50 and 525/60 respectively
-bool formatPAL = true;
-
 #define SIZE_2GB AAFCONSTINT64(2147483648)
 
 const aafInt32 UNC_PAL_FRAME_SIZE = 720*576*2;
@@ -108,6 +104,33 @@ static HRESULT moduleErrorTmp = S_OK; /* note usage in macro */
 { moduleErrorTmp = a; \
 	if (!SUCCEEDED(moduleErrorTmp)) \
 		exit(1);\
+}
+
+bool operator ==( const aafUID_t uid1, const aafUID_t uid2 )
+{
+    bool    are_equal = true;
+    int     i = 0;
+
+    for( i=0; i<8; i++ )
+    {
+        if( uid1.Data4[i] != uid2.Data4[i] )
+        {
+            are_equal = false;
+            break;
+        }
+    }
+
+    if( are_equal == true )
+    {
+        if( uid1.Data1 != uid2.Data1  ||
+            uid1.Data2 != uid2.Data2  ||
+            uid1.Data3 != uid2.Data3 )
+        {
+            are_equal = false;
+        }
+    }
+
+    return are_equal;
 }
 
 static void convert(char* cName, size_t length, const wchar_t* name)
@@ -259,7 +282,7 @@ static HRESULT CreateAAFFileEssenceData(aafWChar *pFileName, int frame_limit,
 		check(defs.cdCDCIDescriptor()->CreateInstance(IID_IAAFEssenceDescriptor, (IUnknown **)&edesc));
 		check(edesc->QueryInterface(IID_IAAFCDCIDescriptor, (void **)&pCDCIDesc));
 		check(edesc->QueryInterface(IID_IAAFDigitalImageDescriptor, (void **)&pDIDesc));
-		check(pDIDesc->SetCompression(kAAFCompression_IEC_DV_525_60));
+		check(pDIDesc->SetCompression(kAAFCompressionDef_IEC_DV_525_60));
 		check(pDIDesc->SetStoredView(576/2, 720));
 		check(pDIDesc->SetFrameLayout(kAAFSeparateFields));
 		check(pCDCIDesc->SetHorizontalSubsampling(2));
@@ -352,8 +375,9 @@ static HRESULT ReadAAFFileEssenceData(aafWChar *pFileName, int frame_limit, aafL
 }
 
 #ifndef AAF_TOOLKIT_V1_0
-static HRESULT CreateAAFFileCodec(aafWChar * pFileName, bool comp_enable, int frame_limit,
-									aafLength_t *p_bytes)
+static HRESULT CreateAAFFileCodec(aafWChar * pFileName, bool comp_enable,
+								aafUID_t codec, aafUID_t container,
+								int frame_limit, aafLength_t *p_bytes)
 {
 	IAAFFile*					pFile = NULL;
 	IAAFHeader*					pHeader = NULL;
@@ -363,11 +387,12 @@ static HRESULT CreateAAFFileCodec(aafWChar * pFileName, bool comp_enable, int fr
 	IAAFEssenceAccess*			pEssenceAccess = NULL;
 	aafMobID_t					masterMobID;
 	aafProductIdentification_t	ProductInfo;
-	aafRational_t				editRate = {25, 1};
-	aafRational_t				sampleRate = {25, 1};
-	aafRational_t				ntsc_rate = {30000, 1001};
+	aafRational_t				pictureEditRate = {25, 1}, pictureSampleRate = {25, 1};
+	aafRational_t				soundEditRate = {48000, 1}, soundSampleRate = {48000, 1};
+	aafRational_t				editRate, sampleRate;
 	IAAFClassDef				*pCDMasterMob = NULL;
-	IAAFDataDef					*pPictureDef = NULL;
+	IAAFDataDef					*pPictureDef = NULL, *pSoundDef;
+	IAAFDataDef					*media_kind = NULL;
 	aafUInt32					samplesWritten, bytesWritten;
 	aafInt32					frameSize;
 
@@ -402,6 +427,7 @@ static HRESULT CreateAAFFileCodec(aafWChar * pFileName, bool comp_enable, int fr
 
 	/* Lookup any necessary data definitions. */
 	check(pDictionary->LookupDataDef(kAAFDataDef_Picture, &pPictureDef));
+	check(pDictionary->LookupDataDef(kAAFDataDef_Sound, &pSoundDef));
 
 	/* Create a Mastermob */
 
@@ -423,6 +449,20 @@ static HRESULT CreateAAFFileCodec(aafWChar * pFileName, bool comp_enable, int fr
 	// Add Mobs to the Header
 	check(pHeader->AddMob(pMob));
 
+	// Prepare parameters based on codec selected
+	if (codec == kAAFCodecDef_PCM)
+	{
+		media_kind = pSoundDef;
+		editRate = soundEditRate;
+		sampleRate = soundSampleRate;
+	}
+	else if (codec == kAAFCodecDef_CDCI)
+	{
+		media_kind = pPictureDef;
+		editRate = pictureEditRate;
+		sampleRate = pictureSampleRate;
+	}
+
 	// Create a frame of colour bars
 	// experiment shows 4 bytes per pixel needed to avoid SMALLBUF using WriteSamples
 	// with kAAFMixedFields and 720x576
@@ -433,42 +473,23 @@ static HRESULT CreateAAFFileCodec(aafWChar * pFileName, bool comp_enable, int fr
 		create_colour_bars(video_buf, true);
 	}
 
-	if (! formatPAL)	// set NTSC rates if using NTSC video
-	{
-		editRate = ntsc_rate;
-		sampleRate = ntsc_rate;
-	}
-
-
 	/* Create the Essence Data specifying the codec, container, edit rate and sample rate */
 	check(pMasterMob->CreateEssence(1,			// Slot ID within MasterMob
-						pPictureDef,			// MediaKind
-						kAAFCodecCDCI,			// codecID
+						media_kind,				// MediaKind
+						codec,					// E.g. CDCI, WAVE, PCM
 						editRate,				// edit rate
 						sampleRate,				// sample rate
 						comp_enable ? kAAFCompressionEnable : kAAFCompressionDisable,
 						NULL,					// No Locator used
-						ContainerAAF,			// Essence embedded in AAF file
+						container,				// Essence embedded or external?
 						&pEssenceAccess));		//
 
 	// Set the codec flavour for desired video format
-	if (formatPAL)
+	if (codec == kAAFCodecDef_CDCI)
 	{
-		if (useLegacyDV)
-			pEssenceAccess->SetEssenceCodecFlavour( kAAFCodecFlavour_LegacyDV_625_50 );
-		else
-			pEssenceAccess->SetEssenceCodecFlavour( kAAFCodecFlavour_IEC_DV_625_50 );
+		pEssenceAccess->SetEssenceCodecFlavour( kAAFCodecFlavour_IEC_DV_625_50 );
 
 		frameSize = (comp_enable ? UNC_PAL_FRAME_SIZE : DV_PAL_FRAME_SIZE);
-	}
-	else	// format is NTSC
-	{
-		if (useLegacyDV)
-			pEssenceAccess->SetEssenceCodecFlavour( kAAFCodecFlavour_LegacyDV_525_60 );
-		else
-			pEssenceAccess->SetEssenceCodecFlavour( kAAFCodecFlavour_IEC_DV_525_60 );
-
-		frameSize = (comp_enable ? UNC_NTSC_FRAME_SIZE : DV_NTSC_FRAME_SIZE);
 	}
 
 	// For fun, print the name of the selected codec flavour
@@ -527,6 +548,7 @@ static HRESULT CreateAAFFileCodec(aafWChar * pFileName, bool comp_enable, int fr
 	pMasterMob->Release();
 
 	pPictureDef->Release();
+	pSoundDef->Release();
 	pCDMasterMob->Release();
 
 	pDictionary->Release();
@@ -586,16 +608,16 @@ static HRESULT RegisterRequiredPlugins(void)
 void printUsage(const char *progname)
 {
 #ifndef AAF_TOOLKIT_V1_0
-	cout << "Usage : " << progname << " [-compress]" << endl;
+	cout << "Usage : " << progname << " [-q] [-c] [-n frames]" << endl;
 	cout << endl;
 	cout << "\tWith no arguments creates TestDV.aaf containing 30 minutes of DV frames" << endl;
 	cout << endl;
 	cout << "\t-n frames   number of DV frames to write" << endl;
-	cout << "\t-compress   Test using uncompressed video passing through codec's compressor" << endl;
-	cout << "\t-q          Quiet (no status messages)" << endl;
 #else
-	cout << "Usage : " << progname << " [-n frames]" << endl;
+	cout << "\t-c          Test the codecs only (not EssenceData API)" << endl;
+	cout << "\t-compress   Test using uncompressed video passing through codec's compressor" << endl;
 #endif
+	cout << "\t-q          Quiet (no status messages)" << endl;
 }
 
 extern int main(int argc, char *argv[])
@@ -641,6 +663,12 @@ extern int main(int argc, char *argv[])
 				verbose = false;
 				i++;
 			}
+			else if (!strcmp(argv[i], "-c"))
+			{
+				testEssenceData = false;
+				testCodecs = true;
+				i++;
+			}
 #ifndef AAF_TOOLKIT_V1_0
 			else if (!strcmp(argv[i], "-compress"))
 			{
@@ -670,8 +698,25 @@ extern int main(int argc, char *argv[])
 	// Codec tests are not run under v1.0 toolkit due to 2GB limits in codecs
 	if (testCodecs)
 	{
+		// 2005-03-21
+		// Codecs that should support > 2GB files
+		//	CDCI codec
+		//		internal ContainerAAF
+		//		external ContainerAAF, ContainerFile
+		//	PCM codec
+		//		internal ContainerAAF
+		//		external ContainerAAF, ContainerFile
+		//		(note internal/external ContainerRIFFWAVE must be 2GB limited)
+
 		aafLength_t bytes = 0;
-		checkFatal(CreateAAFFileCodec(pwFileName, compressionEnable, frame_limit, &bytes));
+
+		checkFatal(CreateAAFFileCodec(pwFileName, compressionEnable, kAAFCodecCDCI, ContainerAAF,
+									frame_limit, &bytes));
+		checkFatal(ReadAAFFileEssenceData(pwFileName, frame_limit, bytes));
+
+		checkFatal(CreateAAFFileCodec(pwFileName, compressionEnable, kAAFCodecPCM, ContainerAAF,
+									frame_limit, &bytes));
+		checkFatal(ReadAAFFileEssenceData(pwFileName, frame_limit, bytes));
 
 		//checkFatal(ReadAAFFileCodec(pwFileName, frame_limit));
 	}
