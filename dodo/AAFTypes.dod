@@ -1,0 +1,720 @@
+#startm .this-module 0
+AAFTypes\
+#endm
+#c
+AD_HEAD
+/******************************************\
+*                                          *
+* Advanced Authoring Format                *
+*                                          *
+* Copyright (c) 1998 Avid Technology, Inc. *
+* Copyright (c) 1998 Microsoft Corporation *
+*                                          *
+\******************************************/
+
+
+AD_DECLARE_FORWARD_AAFTYPES(AAFMob)
+AD_DECLARE_FORWARD_AAFTYPES(AAFPulldown)
+AD_DECLARE_FORWARD_AAFTYPES(AAFEffect)
+//AD_DECLARE_FORWARD_AAFTYPES(AAFObject)
+//AD_DECLARE_FORWARD_AAFTYPES(AAFDataDefinition)
+//AD_DECLARE_FORWARD_AAFTYPES(AAFFile)
+
+
+AD_TYPES_BEGIN(B1A2137B, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
+
+AD_CPP_QUOTE(/*)
+AD_CPP_QUOTE(\ * Basic types that don't depend on other types.)
+AD_CPP_QUOTE(\ */)
+
+AD_CPP_QUOTE(#if \(__MWERKS__ >= 0x1100\))
+AD_CPP_QUOTE(#define AAF_INT64_NATIVE	1)
+AD_CPP_QUOTE(#define AAF_INT64_TYPE		long long)
+AD_CPP_QUOTE(#endif)
+
+AD_CPP_QUOTE(/* SGI Port definitions */)
+AD_CPP_QUOTE(#ifdef sgi)
+AD_CPP_QUOTE(#if defined\(__LONGLONG\) || defined\(_LONGLONG\))
+AD_CPP_QUOTE(#define AAF_INT64_NATIVE	1)
+AD_CPP_QUOTE(#define AAF_INT64_TYPE		long long)
+AD_CPP_QUOTE(#endif)
+AD_CPP_QUOTE(#endif)
+
+AD_CPP_QUOTE(/* PC Windows 32 Port Definitions */)
+#if defined(_WIN32)
+#if (!defined(MIDL_PASS) || defined(__midl)) && (!defined(_M_IX86) || (defined(_INTEGRAL_MAX_BITS) && _INTEGRAL_MAX_BITS >= 64))
+#define AAF_INT64_NATIVE 1
+#define AAF_INT64_TYPE   __int64
+#endif
+#endif
+
+
+
+
+AD_CPP_QUOTE(/*)
+AD_CPP_QUOTE(\ * May have to add compile-time switches for various)
+AD_CPP_QUOTE(\ * machines/compilers.  For now these work on the following platforms:)
+AD_CPP_QUOTE(\ *)
+AD_CPP_QUOTE(\ *	- NT/intel/VC++)
+AD_CPP_QUOTE(\ *	- FreeBSD/intel/GCC.)
+AD_CPP_QUOTE(\ *	- Irix/SGI/CC)
+AD_CPP_QUOTE(\ *	- MacOS/PPC+68k/CWPro)
+AD_CPP_QUOTE(\ */)
+
+typedef long			aafInt32;
+typedef short			aafInt16;
+typedef signed char		aafInt8;
+
+typedef unsigned long	aafUInt32;
+typedef unsigned short	aafUInt16;
+typedef unsigned char	aafUInt8;
+
+typedef aafUInt16		aafWchar;
+
+typedef aafUInt32		AAFRESULT;
+
+
+AD_CPP_QUOTE(#ifndef AAFRESULT_NOT_IMPLEMENTED)
+AD_CPP_QUOTE(#define AAFRESULT_NOT_IMPLEMENTED	 1	//!!!Move this somewhere else)
+AD_CPP_QUOTE(#endif)
+
+AD_CPP_QUOTE(#ifndef NULL)
+AD_CPP_QUOTE(#define NULL \(\(void *\)0L\))
+AD_CPP_QUOTE(#endif)
+
+typedef enum
+{
+  AAFFalse = 0,
+  AAFTrue = 1
+} aafBool;
+
+AD_CPP_QUOTE(#ifndef MAX_NUM_RGBA_COMPS)
+#define MAX_NUM_RGBA_COMPS 8 /* limit on the size of component arrays */
+AD_CPP_QUOTE(#endif)
+
+AD_CPP_QUOTE(/* Treated as an iteger\, defined as array of 4 shorts if needed */)
+#if AAF_USE_NATIVE64
+typedef AAF_INT64_TYPE aafInt64;
+#else
+typedef struct
+{
+	aafUInt32	words[2];
+} aafInt64;
+#endif
+
+
+
+typedef struct
+{
+	aafInt32	length;
+	aafWchar	*value;
+} aafString_t;
+
+
+AD_CPP_QUOTE(/************************************************************)
+AD_CPP_QUOTE(\ *)
+AD_CPP_QUOTE(\ * AAF types that map to an integral type or pointer to)
+AD_CPP_QUOTE(\ *  integeral type.)
+AD_CPP_QUOTE(\ *)
+AD_CPP_QUOTE(\ * These each map to an existing integral type or pointer.  Note)
+AD_CPP_QUOTE(\ * that aafClassID_t is a structure used to hold storage for a)
+AD_CPP_QUOTE(\ * classID\, but most functions take an aafClassIDPtr_t reference.)
+AD_CPP_QUOTE(\ *)
+AD_CPP_QUOTE(\ *************************************************************/)
+
+AD_CPP_QUOTE(/*** Types for all components***/)
+typedef aafInt64   		aafLength_t;
+
+AD_CPP_QUOTE(/*** Types for tracks and mob slots***/)
+typedef aafInt64  		aafPosition_t;
+typedef aafUInt32		aafFrameOffset_t;
+typedef aafUInt32		aafFrameLength_t;
+typedef aafUInt32   	aafTrackID_t;  
+typedef aafInt32   		aafNumTracks_t;
+
+typedef char   			*aafCodecID_t;
+typedef aafInt32   		aafNumSlots_t;
+typedef struct aafUID   aafClassID_t;
+typedef void    		*aafDataValue_t;
+
+AD_CPP_QUOTE(\/*** Types for effects ***/)
+typedef struct aafUID   aafArgIDType_t;
+	
+AD_CPP_QUOTE(/* typedefs for image processing */)
+typedef unsigned char 	aafCompSizeArray_t[MAX_NUM_RGBA_COMPS];
+typedef char 			aafCompArray_t[MAX_NUM_RGBA_COMPS];
+typedef aafInt32 		aafVideoLineMap_t[2];
+typedef aafInt32   		aafJPEGTableID_t; /* for TIFF objects */
+
+AD_CPP_QUOTE(/************************************************************)
+AD_CPP_QUOTE(\ *)
+AD_CPP_QUOTE(\ * Enumerated AAFI types.)
+AD_CPP_QUOTE(\ *)
+AD_CPP_QUOTE(\ *************************************************************/)
+typedef enum
+{
+	kMediaOpenReadOnly, 
+	kMediaOpenAppend
+} aafMediaOpenMode_t;
+	
+typedef enum
+{
+	kDominantField1 = 0, 
+	kDominantField2, 
+	kNoDominant
+} aafFieldDom_t;
+
+typedef enum
+{
+	kTopField1 = 0, 
+	kTopField2, 
+	kTopFieldNone
+} aafFieldTop_t;
+
+typedef enum
+{
+	kAAFVFmtEnd = 0,
+		 
+	kAAFPixelFormat, 		/* operand.expPixelFormat */
+	kAAFFrameLayout, 		/* operand.expFrameLayout */
+	kAAFFieldDominance,		/* operand.expFieldDom */
+	kAAFStoredRect, 		/* operand.expRect */
+	kAAFDisplayRect,  		/* operand.expRect */
+	kAAFSampledRect,  		/* operand.expRect */
+	kAAFPixelSize, 			/* operand.expInt16 */
+	kAAFAspectRatio,		/* operand.expRational */
+	kAAFAlphaTransparency,  /* operand.expInt32 */
+	kAAFGamma,				/* operand.expRational */
+	kAAFImageAlignmentFactor, /* operand.expInt32 */
+	kAAFVideoLineMap,		/* operand.expLineMap */
+	kAAFWillTransferLines,	/* operand.expBoolean */
+	kAAFIsCompressed,		/* operand.expBoolean */
+	kAAFLineLength,			/* operand.expInt32 */
+	
+	/* the following group is exclusive to RGBA codec */
+	kAAFRGBCompLayout,		/* operand.expCompArray */
+	kAAFRGBCompSizes,		/* operand.expCompSizeArray */
+	kAAFRGBPalette,			/* operand.expPointer */
+	kAAFRGBPaletteLayout,	/* operand.expCompArray */
+	kAAFRGBPaletteSizes,	/* operand.expCompSizeArray */	
+		
+	/* the following group is exclusive to CDCI codec */
+	kAAFCDCICompWidth,	    /* operand.expInt32 */
+	kAAFCDCIHorizSubsampling,/* operand.expUInt32 */
+	kAAFCDCIColorSiting,    /* operand.expColorSiting */
+	kAAFCDCIBlackLevel,     /* operand.expUInt32 */
+	kAAFCDCIWhiteLevel,     /* operand.expUInt32 */
+	kAAFCDCIColorRange,     /* operand.expUInt32 */
+	kAAFCDCIPadBits,	    /* operand.expInt16 */
+		
+	kAAFVideoOpcodeReserved1,
+	kAAFVideoOpcodeReserved2,
+	kAAFVideoOpcodeReserved3,
+	kAAFVideoOpcodeReserved4,
+	kAAFVideoOpcodeReserved5,
+	kAAFVideoOpcodeReserved6,
+	kAAFVideoOpcodeReserved7,
+	kAAFVideoOpcodeReserved8,
+		
+		
+	kAAFLastVideoOpcode
+} aafVideoFmtOpcode_t;
+
+typedef enum
+{
+	kAAFPixNone = 0, 
+	kAAFPixRGBA, 
+	kAAFPixYUV
+} aafPixelFormat_t;
+
+typedef enum
+{
+	kAAFAFmtEnd = 0, 
+	kAAFSampleSize, 
+	kAAFSampleRate, 
+	kAAFSampleFormat, 
+	kAAFNumChannels
+} aafAudioFmtOpcode_t;
+
+AD_CPP_QUOTE(#if 0)
+typedef enum
+{
+	kJcLuminance = 0, 
+	kJcChrominance, 
+	kJcLuminanceFP16, 
+	kJcChrominanceFP16
+} aafJPEGcomponent_t;
+AD_CPP_QUOTE(#endif)
+
+AD_CPP_QUOTE(typedef enum)
+AD_CPP_QUOTE({)
+AD_CPP_QUOTE(	kJcLuminance = 0\,) 
+AD_CPP_QUOTE(	kJcChrominance)
+AD_CPP_QUOTE(#if ! STANDARD_JPEG_Q)
+AD_CPP_QUOTE(	\, kJcLuminanceFP16\,) 
+AD_CPP_QUOTE(	kJcChrominanceFP16)
+AD_CPP_QUOTE(#endif)
+AD_CPP_QUOTE(} aafJPEGcomponent_t;)
+
+typedef enum
+{
+	kToolkitCompressionEnable = 0, 
+	kToolkitCompressionDisable
+} aafCompressEnable_t;
+
+typedef enum
+{
+	kAAFiMedia = 0, 
+	kForeignMedia
+} aafFileFormat_t;
+
+typedef enum
+{
+	kTcNonDrop = 0, 
+	kTcDrop
+} aafDropType_t;
+
+typedef enum
+{
+	kNoLayout = 0, 
+	kFullFrame, 
+	kSeparateFields, 
+	kOneField, 
+	kMixedFields
+} aafFrameLayout_t;
+	
+typedef enum
+{
+	kCoSiting = 0, 
+	kAveraging = 1, 
+	kThreeTap = 2
+} aafColorSiting_t;
+	
+typedef enum
+{
+	kPropRequired,
+	kPropOptional
+} aafPropertyOpt_t;
+
+typedef enum
+{
+	kExactMatch,
+	kConvertTo,
+	kConvertFrom
+} AAFDataDefinitionMatch_t;
+	  
+typedef enum
+{
+	kAAFAppendIfAbsent,
+	kAAFForceOverwrite
+} aafAppendOption_t;
+
+AD_CPP_QUOTE(/************************************************************)
+AD_CPP_QUOTE(\ *)
+AD_CPP_QUOTE(\ * Mob specific data types)
+AD_CPP_QUOTE(\ *)
+AD_CPP_QUOTE(\ *************************************************************/)
+typedef enum
+{
+	kCompMob = 0, 
+	kMasterMob, 
+	kFileMob, 
+	kTapeMob, 
+	kFilmMob,
+	kPrimaryMob, 
+	kAllMob
+} aafMobKind_t;
+
+typedef enum
+{
+  kFindNull, kFindIncoming, kFindOutgoing, kFindRender,
+  kFindEffectSrc1, kFindEffectSrc2, kFindEffectSrc3, kFindEffectSrc4, 
+  kFindEffectSrc5, kFindEffectSrc6, kFindEffectSrc7, kFindEffectSrc8
+} aafEffectChoice_t;
+
+typedef enum
+{
+	kNoFollowDepend = 0, 
+	kFollowDepend
+}
+aafDepend_t;
+
+typedef enum
+{
+	kNoIncludeMedia = 0,
+	kIncludeMedia
+} aafIncMedia_t;
+
+AD_CPP_QUOTE(/* aafIndexType_t: describes the types of HEAD indices */)
+typedef enum
+{
+	kCompMobIndex = 0,
+	kSourceMobIndex,
+	kMediaIndex,
+	kPrimaryMobIndex
+} aafIndexType_t;
+
+AD_CPP_QUOTE(/* aafFadeType_t: describes values for SCLP fadein and fadeout types  */)
+typedef enum
+{
+	kFadeNone = 0,
+	kFadeLinearAmp,
+	kFadeLinearPower
+} aafFadeType_t;
+
+typedef enum
+{
+	kAAFOffsetBinary,
+	kAAFSignedMagnitude
+} aafAudioSampleType_t;
+	
+typedef enum
+{
+	kTapeCaseNull = 0,
+	kThreeFourthInchVideoTape,
+    kVHSVideoTape,
+	k8mmVideoTape,
+	kBetacamVideoTape,
+	kCompactCassette,
+	kDATCartridge,
+	kNagraAudioTape
+} aafTapeCaseType_t;
+
+typedef enum
+{
+	kVideoSignalNull = 0,
+	kNTSCSignal,
+	kPALSignal,
+	kSECAMSignal
+} aafVideoSignalType_t;
+
+typedef enum
+{
+	kTapeFormatNull = 0,
+	kBetacamFormat,
+	kBetacamSPFormat,
+	kVHSFormat,
+	kSVHSFormat,
+	k8mmFormat,
+	kHi8Format
+} aafTapeFormatType_t;
+
+typedef enum
+{
+	kAAFNullAttribute = 0,
+	kAAFIntegerAttribute,
+	kAAFStringAttribute,
+	kAAFObjectAttribute
+} aafAttributeKind_t;
+	
+typedef enum
+{
+	kAAFTwoThreePD,
+	kAAFPALPD,
+	kAAFOneToOneNTSC,
+	kAAFOneToOnePAL
+} aafPulldownKind_t;
+
+typedef aafInt16	aafPhaseFrame_t;
+
+typedef enum
+{
+	kAAFTapeToFilmSpeed,
+	kAAFFilmToTapeSpeed
+}	aafPulldownDir_t;
+
+AD_CPP_QUOTE(/************************************************************)
+AD_CPP_QUOTE(\ *)
+AD_CPP_QUOTE(\ * Effect Types)
+AD_CPP_QUOTE(\ *)
+AD_CPP_QUOTE(\ *************************************************************/)	  
+typedef enum
+{
+	kConstInterp = 1, 
+	kLinearInterp
+} aafInterpKind_t;
+
+typedef enum
+{
+    kNoEditHint = 0, 
+	kProportional, 
+	kRelativeLeft, 
+	kRelativeRight, 
+	kRelativeFixed
+} aafEditHint_t;
+
+typedef enum
+{
+	kVersionUnknown = 0, 
+	kVersionReleased, 
+	kVersionDebug,
+	kVersionPatched, 
+	kVersionBeta, 
+	kVersionPrivateBuild
+} aafProductReleaseType_t;
+
+AD_CPP_QUOTE(\/************************************************************)
+AD_CPP_QUOTE(\ *)
+AD_CPP_QUOTE(\ * Structured AAFI types.)
+AD_CPP_QUOTE(\ *)
+AD_CPP_QUOTE(\ *************************************************************/)
+typedef struct
+{
+	char            major;
+	char            minor;
+} aafVersionType_t;
+
+typedef struct
+{
+	aafUInt16				major;
+	aafUInt16				minor;
+	aafUInt16				tertiary;
+	aafUInt16				patchLevel;
+	aafProductReleaseType_t	type;
+} aafProductVersion_t;
+
+typedef struct
+{
+	char				*companyName;
+	char				*productName;
+	char				*productVersionString;
+	aafInt32			productID;
+	char				*platform;
+	aafProductVersion_t	productVersion;
+} aafProductIdentification_t;
+
+AD_CPP_QUOTE(extern const aafProductVersion_t AAFToolkitVersion;)
+
+typedef struct
+{
+	aafUInt32         	TimeVal;
+	char            	IsGMT;
+} aafTimeStamp_t;
+
+typedef struct aafUID
+{
+//	aafUInt32           value[4]; // binary compatibility with GUID/CLSID and IID structures.
+    aafUInt32 Data1;
+    aafUInt16 Data2;
+    aafUInt16 Data3;
+    aafUInt8  Data4[8];
+} aafUID_t;
+
+
+typedef struct
+{
+	aafUID_t        	ID; // shouldn't we declare this as a pointer?
+	AD_AAFTYPES(AAFMob) *	Mob;
+} aafObjIndexElement_t;
+
+typedef struct
+{
+	aafInt32           numerator;
+	aafInt32           denominator;
+} aafRational_t;
+
+typedef struct
+{
+	aafInt32           xOffset;
+	aafInt32           yOffset;
+	aafInt32           xSize;
+	aafInt32           ySize;
+} aafRect_t;
+
+typedef struct
+{
+//	AD_AAFTYPES(AAFDataDefinition) *		mediaKind;		/* IN -- */
+	aafUID_t *			mediaKind;		/* IN -- */
+	aafInt16			subTrackNum;	/* IN - The physical output channel */
+	aafUInt32           numSamples;	/* IN -- */
+	aafUInt32          	buflen;	/* IN -- */
+	void           		*buffer;	/* IN/OUT -- */
+	aafUInt32          	bytesXfered;	/* OUT -- */
+	aafUInt32			samplesXfered;	/* OUT */
+} aafmMultiXfer_t;
+
+typedef struct
+{
+//	AD_AAFTYPES(AAFDataDefinition) *	mediaKind;		/* IN -- */
+	aafUID_t *			mediaKind;		/* IN -- */
+	aafInt16			subTrackNum;	/* IN - The physical output channel */
+	aafInt32           	trackID;		/* IN -- */
+	aafRational_t		sampleRate;
+} aafmMultiCreate_t;
+
+typedef struct
+{
+	aafVideoFmtOpcode_t opcode;
+	union
+	{
+		aafPixelFormat_t	expPixelFormat;
+		aafFrameLayout_t	expFrameLayout;
+		aafFieldDom_t		expFieldDom;
+		aafRect_t			expRect;
+		aafInt32			expInt32;
+		aafInt16			expInt16;
+		aafUInt32			expUInt32;
+		aafRational_t   	expRational;
+		void			   *expPointer;
+		aafCompArray_t		expCompArray;
+		aafCompSizeArray_t	expCompSizeArray;
+		aafColorSiting_t	expColorSiting;
+		aafVideoLineMap_t	expLineMap;
+		aafBool				expBoolean;
+	} operand;
+} aafVideoMemOp_t;
+
+typedef struct
+{
+	aafAudioFmtOpcode_t opcode;
+	union
+	{
+	    aafAudioSampleType_t	format;	/* OffsetBinary or SignedMagnitude */
+		aafInt16           		sampleSize;
+		aafRational_t   		sampleRate;
+		aafInt16				numChannels;
+		aafInt32				expLong;
+		aafRational_t   		expRational;
+	} operand;
+}               aafAudioMemOp_t;
+
+AD_CPP_QUOTE(/* Typedefs specific to edgecode and timecode */)
+typedef enum
+{
+	kEtNull = 0, 
+	kEtKeycode, 
+	kEtEdgenum4, 
+	kEtEdgenum5
+} aafEdgeType_t;
+
+typedef enum
+{
+	kFtNull = 0, 
+	kFt35MM = 1, 
+	kFt16MM, 
+	kFt8MM, 
+	kFt65MM
+} aafFilmType_t;
+
+typedef enum
+{
+    kDirCodeRight = 0, kDirCodeUpperRight, kDirCodeUp, kDirCodeUpperLeft, 
+	kDirCodeLeft, kDirCodeLowerLeft, kDirCodeDown, kDirCodeLowerRight
+} aafDirectionCode_t;
+
+typedef enum
+   {
+     kColorSpaceRGB = 0, kColorSpaceYUV, kColorSpaceYIQ, kColorSpaceHSI, 
+	 kColorSpaceHSV, kColorSpaceYCrCb, kColorSpaceYDrDb, kColorSpaceCMYK
+} aafColorSpace_t;
+
+typedef struct
+{
+	aafFrameOffset_t   	startFrame;
+	aafDropType_t   drop;
+	aafUInt16		fps;	/* frames per second */
+} aafTimecode_t;
+
+typedef struct
+{
+	aafFrameOffset_t   startFrame;
+	aafFilmType_t   filmKind;
+	aafEdgeType_t codeFormat;
+	char			header[8];
+} aafEdgecode_t;
+
+AD_CPP_QUOTE(/*** Types for clips ***/)
+typedef struct
+{
+	aafUID_t        sourceID;
+	aafTrackID_t    sourceTrackID;
+	aafPosition_t   startTime;
+} aafSourceRef_t;
+
+// TomR: The following struct needs to be converted into its own non-persistent AAF object
+// (not an AAFObject subclass).
+typedef struct
+{
+  AD_AAFTYPES(AAFMob) *	mob;
+  aafTrackID_t mobTrackID;
+  aafPosition_t position;
+  aafRational_t editrate;
+  aafLength_t minLength;
+  AD_AAFTYPES(AAFPulldown) *		filmTapePdwn;
+  aafInt32			filmTapePhase;
+  AD_AAFTYPES(AAFPulldown) *		tapeFilmPdwn;
+  aafInt32			tapeFilmPhase;
+  AD_AAFTYPES(AAFEffect) *		effeObject;
+} aafFindSourceInfo_t;
+
+typedef struct
+{
+	aafLength_t		fadeLength;
+	aafFadeType_t	fadeType;
+	aafRational_t	fadeEditUnit;
+	aafBool			valid;				/* Are the above fields valid? */
+} aafDefaultFade_t;	
+
+AD_CPP_QUOTE(\/************************************************************)
+AD_CPP_QUOTE(\ *)
+AD_CPP_QUOTE(\ * Multiple Media Representations Criteria types)
+AD_CPP_QUOTE(\ *)
+AD_CPP_QUOTE(\ *************************************************************/)
+//typedef aafInt16(*aafCriteriaProc_t)(AD_AAFTYPES(AAFFile) * file,
+//                                     AD_AAFTYPES(AAFObject) * mdes, 
+//                                     aafCodecID_t codecID);
+
+typedef enum
+{
+	kAAFAnyRepresentation = 0,
+	kAAFFastestRepresentation,
+	kAAFBestFidelityRepresentation,
+	kAAFSmallestRepresentation //, Jeff may add this one back.
+//	kAAFUseRepresentationProc
+} aafCriteriaType_t;
+
+typedef struct
+{
+	aafCriteriaType_t		type;
+//	aafCriteriaProc_t		proc;	
+} aafMediaCriteria_t;
+
+AD_CPP_QUOTE(/************************************************************)
+AD_CPP_QUOTE(\ *)
+AD_CPP_QUOTE(\ * Data Types for Search Criteria and Iterators) 
+AD_CPP_QUOTE(\ *)
+AD_CPP_QUOTE(\ *************************************************************/)
+
+typedef enum
+{
+	kNoSearch = 0, 
+	kByMobID, 
+	kByMobKind, 
+	kByName, 
+	kByClass, 
+	kByDatakind,
+	kByMediaCrit
+} aafSearchTag_t;
+
+typedef struct
+{
+	aafSearchTag_t     searchTag;
+	union 
+	{
+		aafUID_t        mobID;		// shouldn't this be a pointer?
+		aafMobKind_t    mobKind;
+		aafString_t       *name;
+		aafClassID_t      objClass;	// shouldn't this be a pointer?
+		aafUID_t		 datadef;	// shouldn't this be a pointer?
+		aafCriteriaType_t mediaCrit;
+	} tags;
+} aafSearchCrit_t;
+
+AD_CPP_QUOTE(/**************************/)
+AD_CPP_QUOTE(#ifndef STDMETHODCALLTYPE)
+AD_CPP_QUOTE(#define STDMETHODCALLTYPE)
+AD_CPP_QUOTE(#endif)
+
+
+AD_TYPES_END
+
