@@ -90,7 +90,6 @@ ImplAAFFile::~ImplAAFFile ()
 			{
 			case kOmCreate:
 			case kOmModify:
-				_container->SetHead(_head);
 				break;
 			
 			default:
@@ -375,18 +374,6 @@ AAFRESULT ImplAAFFile::Create(
 #if FULL_TOOLKIT
 		aafCheckBentoRaiseError(this, OM_ERR_BADSESSIONMETA);
 #endif
-		
-		_container = new OMContainer;
-		_container->OMLOpenNewContainer(session->GetContainerSession(), myRefCon,
-												"AAF",
-												(OMLContainerUseMode) kOMLWriting,
-												1, 0, 0);
-#if FULL_TOOLKIT
-		aafCheckBentoRaiseError(this, OM_ERR_BADOPEN);
-#endif
-		if(_container == NULL)
-			RAISE(OM_ERR_BADOPEN);
-	
 		head = dynamic_cast<ImplAAFHeader*>(CreateImpl(CLSID_AAFHeader));
 		_head = head;
 		if (head == NULL)
@@ -406,6 +393,18 @@ AAFRESULT ImplAAFFile::Create(
 		_head->DatakindLookup(SOUNDKIND, &_soundKind, &status);
 		CHECK(status);
 #endif
+		
+		_container = new OMContainer;
+		_container->OMLOpenNewContainer(_head, session->GetContainerSession(), myRefCon,
+												"AAF",
+												(OMLContainerUseMode) kOMLWriting,
+												1, 0, 0);
+#if FULL_TOOLKIT
+		aafCheckBentoRaiseError(this, OM_ERR_BADOPEN);
+#endif
+		if(_container == NULL)
+			RAISE(OM_ERR_BADOPEN);
+	
 	}
 	XEXCEPT
 	  {
