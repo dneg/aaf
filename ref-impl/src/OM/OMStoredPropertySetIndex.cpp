@@ -1,9 +1,10 @@
+// @doc OMINTERNAL
 #include "OMStoredPropertySetIndex.h"
 
 #include "OMAssertions.h"
 
 OMStoredPropertySetIndex::OMStoredPropertySetIndex(size_t capacity)
-: _capacity(capacity), _table(0), _entries(0), _dirty(false)
+: _capacity(capacity), _table(0), _entries(0)
 {
   TRACE("OMStoredPropertySetIndex::OMStoredPropertySetIndex");
 
@@ -27,6 +28,14 @@ OMStoredPropertySetIndex::~OMStoredPropertySetIndex(void)
   _table = 0;
 }
 
+  // @mfunc Insert a new property into this <c OMStoredPropertySetIndex>.
+  //        The new property has id <p propertyId>. The property
+  //        representation is of type <p type>. The property value
+  //        occupies <p length> bytes starting at offset <p offset>.
+  //   @parm The id of the property to insert.
+  //   @parm The type of representation to use for the property.
+  //   @parm The offset of the property value in bytes.
+  //   @parm The size of the property value in bytes.
 void OMStoredPropertySetIndex::insert(OMPropertyId propertyId,
                                       OMUInt32 type,
                                       OMUInt32 offset,
@@ -50,25 +59,9 @@ void OMStoredPropertySetIndex::insert(OMPropertyId propertyId,
   entry->_valid = true;
 }
 
-OMStoredPropertySetIndex::IndexEntry* OMStoredPropertySetIndex::find(
-                                                 OMPropertyId propertyId) const
-{
-  TRACE("OMStoredPropertySetIndex::find");
-
-  OMStoredPropertySetIndex::IndexEntry* result = 0;
-
-  for (size_t i = 0; i < _capacity; i++) {
-    if (_table[i]._valid) {
-      if (_table[i]._propertyId == propertyId) {
-        result = &_table[i];
-        break;
-      }
-    }
-  }
-  return result;
-
-}
-
+  // @mfunc The number of properties in this <c OMStoredPropertySetIndex>.
+  //   @rdesc The number of properties.
+  //   @this const
 size_t OMStoredPropertySetIndex::entries(void) const
 {
   TRACE("OMStoredPropertySetIndex::entries");
@@ -76,6 +69,14 @@ size_t OMStoredPropertySetIndex::entries(void) const
   return _entries;
 }
 
+  // @mfunc Iterate over the properties in this <c OMStoredPropertySetIndex>.
+  //   @parm Iteration  context. Set this to 0 to start with the
+  //         "first" property.
+  //   @parm The id of the "current" property.
+  //   @parm The type of representation used for the "current" property.
+  //   @parm The offset of the "current" property value in bytes.
+  //   @parm The size of the "current" property value in bytes.
+  //   @this const
 void OMStoredPropertySetIndex::iterate(size_t& context,
                                        OMPropertyId& propertyId,
                                        OMUInt32& type,
@@ -106,6 +107,15 @@ void OMStoredPropertySetIndex::iterate(size_t& context,
   }
 }
 
+  // @mfunc Find the property with property id <p propertyId> in this
+  //        <c OMStoredPropertySetIndex>. If found the <p type>,
+  //        <p offset> and <p length> of the property are returned.
+  //   @parm The id of the property to find.
+  //   @parm The type of representation used for the property.
+  //   @parm The offset of the property value in bytes.
+  //   @parm The size of the property value in bytes.
+  //   @rdesc True if a property with the given id was found, false otherwise.
+  //   @this const  
 bool OMStoredPropertySetIndex::find(const OMPropertyId& propertyId,
                                     OMUInt32& type,
                                     OMUInt32& offset,
@@ -125,6 +135,10 @@ bool OMStoredPropertySetIndex::find(const OMPropertyId& propertyId,
   return result;
 }
 
+  // @mfunc Is this <c OMStoredPropertySetIndex> valid ?
+  //   @rdesc True if this <c OMStoredPropertySetIndex> is valid,
+  //          false otherwise.
+  //   @this const
 bool OMStoredPropertySetIndex::isValid(void) const
 {
   TRACE("OMStoredPropertySetIndex::isValid");
@@ -187,4 +201,23 @@ OMStoredPropertySetIndex::IndexEntry* OMStoredPropertySetIndex::find(
     }
   }
   return result;
+}
+
+OMStoredPropertySetIndex::IndexEntry* OMStoredPropertySetIndex::find(
+                                                 OMPropertyId propertyId) const
+{
+  TRACE("OMStoredPropertySetIndex::find");
+
+  OMStoredPropertySetIndex::IndexEntry* result = 0;
+
+  for (size_t i = 0; i < _capacity; i++) {
+    if (_table[i]._valid) {
+      if (_table[i]._propertyId == propertyId) {
+        result = &_table[i];
+        break;
+      }
+    }
+  }
+  return result;
+
 }
