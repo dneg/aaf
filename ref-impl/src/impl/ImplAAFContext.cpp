@@ -83,7 +83,7 @@ ImplAAFSession::CreateFile (aafWChar *  pwFilePath,
 							aafFileRev_t  rev,
 							ImplAAFFile ** ppFile)
 {
-  ImplAAFRoot	*pRoot;
+//  ImplAAFRoot	*pRoot;
   if (! pwFilePath)
 	{
 	  return AAFRESULT_NULL_PARAM;
@@ -94,16 +94,18 @@ ImplAAFSession::CreateFile (aafWChar *  pwFilePath,
 	  return AAFRESULT_NULL_PARAM;
 	}
 
-  pRoot = CreateImpl(CLSID_AAFFile);
-  if (!pRoot)
-	{
-	  return(0x80004005L);	// TODO: change this to AAFRESULT_FAILED
-	}
+  return AAFRESULT_NOT_IMPLEMENTED;
 
-  *ppFile = static_cast<ImplAAFFile*>(pRoot);
-  (*ppFile)->Create(pwFilePath, this, rev);
+//  pRoot = CreateImpl(CLSID_AAFFile);
+//  if (!pRoot)
+//	{
+//	  return(0x80004005L);	// TODO: change this to AAFRESULT_FAILED
+//	}
 
-  return(AAFRESULT_SUCCESS);
+//  *ppFile = static_cast<ImplAAFFile*>(pRoot);
+//  (*ppFile)->Create(pwFilePath, this, rev);
+
+//  return(AAFRESULT_SUCCESS);
 }
 
 
@@ -114,7 +116,7 @@ AAFRESULT STDMETHODCALLTYPE
 ImplAAFSession::OpenReadFile(aafWChar *  pwFilePath,
 							 ImplAAFFile ** ppFile)
 {
-  ImplAAFRoot	*pRoot;
+//  ImplAAFRoot	*pRoot;
 
   if (! pwFilePath)
 	{
@@ -126,16 +128,19 @@ ImplAAFSession::OpenReadFile(aafWChar *  pwFilePath,
 	  return AAFRESULT_NULL_PARAM;
 	}
 
-  pRoot = CreateImpl(CLSID_AAFFile);
-  if (!pRoot)
-	{
-	  return(0x80004005L);	// TODO: change this to AAFRESULT_FAILED
-	}
+  return AAFRESULT_NOT_IMPLEMENTED;
 
-  *ppFile = static_cast<ImplAAFFile*>(pRoot);
-  (*ppFile)->OpenRead(pwFilePath, this);
 
-  return(AAFRESULT_SUCCESS);
+//  pRoot = CreateImpl(CLSID_AAFFile);
+//  if (!pRoot)
+//	{
+//	  return(0x80004005L);	// TODO: change this to AAFRESULT_FAILED
+//	}
+//
+//  *ppFile = static_cast<ImplAAFFile*>(pRoot);
+//  (*ppFile)->OpenRead(pwFilePath, this);
+//
+//  return(AAFRESULT_SUCCESS);
 }
 
 
@@ -146,8 +151,8 @@ AAFRESULT STDMETHODCALLTYPE
 ImplAAFSession::OpenModifyFile (aafWChar *  pwFilePath,
 								ImplAAFFile ** ppFile)
 {
-  AAFRESULT hr;
-  ImplAAFRoot	*pRoot;
+//  AAFRESULT hr;
+//  ImplAAFRoot	*pRoot;
 
   if (! pwFilePath)
 	{
@@ -159,16 +164,18 @@ ImplAAFSession::OpenModifyFile (aafWChar *  pwFilePath,
 	  return AAFRESULT_NULL_PARAM;
 	}
 
-  pRoot = CreateImpl(CLSID_AAFFile);
-  if (!pRoot)
-	{
-	  return(0x80004005L);	// TODO: change this to AAFRESULT_FAILED
-	}
+  return AAFRESULT_NOT_IMPLEMENTED;
 
-  *ppFile = static_cast<ImplAAFFile*>(pRoot);
-  hr = (*ppFile)->OpenModify(pwFilePath, this);
-
-  return(hr);
+//  pRoot = CreateImpl(CLSID_AAFFile);
+//  if (!pRoot)
+//	{
+//	  return(0x80004005L);	// TODO: change this to AAFRESULT_FAILED
+//	}
+//
+//  *ppFile = static_cast<ImplAAFFile*>(pRoot);
+//  hr = (*ppFile)->OpenModify(pwFilePath, this);
+//
+//  return(hr);
 }
 
 ImplAAFFile *ImplAAFSession::GetTopFile()
@@ -179,11 +186,6 @@ ImplAAFFile *ImplAAFSession::GetTopFile()
 void ImplAAFSession::SetTopFile(ImplAAFFile *file)
 {
 	_topFile = file;
-}
-
-OMLSession ImplAAFSession::GetContainerSession(void)
-{
-	return((OMLSession)NULL);
 }
 
 aafProductIdentification_t *ImplAAFSession::GetDefaultIdent(void)
