@@ -41,6 +41,8 @@ namespace OMF2
 #include "omMedia.h"
 }
 
+#include "AAFException.h"
+
 // OMF Includes
 
 
@@ -165,6 +167,7 @@ HRESULT InitGlobalVars( void )
 	gpGlobals->bCreateTOCFile = AAFFalse;
 	gpGlobals->bDefFile = AAFFalse;
 	gpGlobals->bLogFile = AAFFalse;
+	gpGlobals->pLogger = NULL;
 	gpGlobals->bOMFFileOpen = AAFFalse;
 	gpGlobals->bVerboseMode = AAFFalse;
 	gpGlobals->numIndents = 0;
@@ -393,53 +396,44 @@ HRESULT GetUserInput(int argc, char* argv[])
 //			This function returns AAFTrue if the given file is an OMF file.
 //
 // ============================================================================
-HRESULT IsOMFFile (char * pFileName, aafBool* pReturn)
+HRESULT IsOMFFile (char * pFileName )
 {
-	HRESULT		rc = AAFRESULT_SUCCESS;
-	FILE*		pStream = NULL;
-
-	int			result = 0;
-	char		ReadBuffer[8];
-	char		CompBuffer[8];
-
-
-	CompBuffer[0] = (char)0xA4;
-	CompBuffer[1] = 'C';
-	CompBuffer[2] = 'M';
-	CompBuffer[3] = (char)0xA5;
-	CompBuffer[4] = 'H';
-	CompBuffer[5] = 'd';
-	CompBuffer[6] = 'r';
-	CompBuffer[7] = 0x00;
-
 	// verify if file exists
-	if (strlen(pFileName) > 0)
+	gpGlobals->pLogger->Log( kLogInfo, "Verifying that \"%s\" is an OMF file\n", 
+		pFileName );
+	if ( strlen(pFileName) == 0)
 	{
-		pStream = fopen(pFileName, "r");
-		if (pStream != NULL)
+		return  AAFRESULT_NULL_PARAM;
+	}
+
+	FILE *pStream = fopen(pFileName, "r");
+	if( pStream == NULL )
+	{
+		return AAFRESULT_BADOPEN;
+	}
+
+	HRESULT rc = AAFRESULT_FILE_NOT_OMF;
+	int result = fseek(pStream, -24, SEEK_END);
+	if( result == 0 )
+	{	
+		char		ReadBuffer[8];
+		char		CompBuffer[8];
+		CompBuffer[0] = (char)0xA4;
+		CompBuffer[1] = 'C';
+		CompBuffer[2] = 'M';
+		CompBuffer[3] = (char)0xA5;
+		CompBuffer[4] = 'H';
+		CompBuffer[5] = 'd';
+		CompBuffer[6] = 'r';
+		CompBuffer[7] = 0x00;
+		result = fread(ReadBuffer, sizeof( char ), sizeof(ReadBuffer), pStream);
+		if (result > 0 && memcmp(CompBuffer, ReadBuffer, strlen(CompBuffer)) == 0)
 		{
-			result = fseek(pStream, -24, SEEK_END);
-			if (result == 0)
-			{
-				result = fread(ReadBuffer, sizeof( char ), sizeof(ReadBuffer), pStream);
-				if (result > 0)
-				{
-					if (memcmp(CompBuffer, ReadBuffer, strlen(CompBuffer)) == 0)
-						*pReturn = AAFTrue;
-				}
-			}
-			fclose(pStream);
-		}
-		else
-		{
-			rc = AAFRESULT_FILE_NOT_FOUND;
+				rc = AAFRESULT_SUCCESS;
 		}
 	}
-	else
-	{
-		rc = AAFRESULT_NULL_PARAM;
-	}
-			
+
+	fclose(pStream);
 	return rc;
 }
 
@@ -452,12 +446,9 @@ HRESULT IsOMFFile (char * pFileName, aafBool* pReturn)
 int main(int argc, char *argv[])
 {
 	HRESULT			hr;
-
 	CComInitialize	comInit;
 	Aaf2Omf			AAFMain;
 	Omf2Aaf			OMFMain;
-
-	aafBool			bIsOMFFile = AAFFalse;
 
 #ifdef macintosh
 	argc = ccommand(&argv);	// calls up a command line window
@@ -476,45 +467,85 @@ int main(int argc, char *argv[])
 		Usage();
 		return 1; //!!!UTLEcFromHr(hr);
 	}
-	if (gpGlobals->bConvertAAFFile)
-	{
-		// User indictaded input file must be an AAF 
-		// Convert AAF to OMF
-		hr = AAFMain.ConvertFile();
 
+	// ************** Set up the logging utility for the application.**********
+
+	// If in verbose mode we will have 3 levels of logging: error (0), warning (1),
+	// and info (2). Otherwise we just log warnings and errors.
+	unsigned logLevel = gpGlobals->bVerboseMode ? kLogInfo : kLogWarn;
+	if(  gpGlobals->bLogFile )
+	{
+		// The user specified a log file on the command line.
+		try
+		{
+			// Clobber any previous log file that was hanging around.
+			gpGlobals->pLogger = new FileStreamLogger( gpGlobals->sLogFileName, "w", logLevel );
+		}
+		catch( FileStreamLogger::LogStreamNULL )
+		{
+			// Couldn't open log file for writing. Send log output to stdout.
+			gpGlobals->pLogger = new StreamLogger( stdout, logLevel );
+			gpGlobals->pLogger->Log( kLogError, "Could not open log file %s."
+			"Logging to the console instead.\n", gpGlobals->sLogFileName );
+		}
 	}
 	else
 	{
-		// User indictaed Input file must be an OMF file
-		hr = IsOMFFile(gpGlobals->sInFileName, &bIsOMFFile);
-		if (FAILED(hr))
+		// Use stdout.
+		gpGlobals->pLogger = new StreamLogger( stdout, logLevel );
+	}
+
+	// Wire up excepion handling to the logger. .
+	ExceptionBase::SetLogger( gpGlobals->pLogger );
+	// **************************************************************************
+
+	try
+	{
+		AAFCheck check;
+		if (gpGlobals->bConvertAAFFile)
 		{
-			printf("OMF Input file NOT Found !!\n");
-			Usage();
+			// User indicated input file must be an AAF 
+			// Convert AAF to OMF
+			check = AAFMain.ConvertFile();
 		}
 		else
 		{
-			if (!bIsOMFFile)
-			{
-				printf("Input file is NOT a valid  OMF File !!\n");
-				Usage();
-			}
-			else
-			{
-				hr = OMFMain.ConvertFile();
-			}
+			// User indicated Input file must be an OMF file
+			// Conert OMF to AAF
+			check = IsOMFFile(gpGlobals->sInFileName);
+			check = OMFMain.ConvertFile();
 		}
-	}
 
-	// We are done, just
-	if (SUCCEEDED(hr))
+		// We are done, just display a summary of results
 		DisplaySummary();
+	}
+	catch( ExceptionBase &e )
+	{
+		// Ultimately we want the exception to print itself out instead
+		// of doing this case analysis...
+		if( e.Code() == AAFRESULT_FILE_NOT_OMF )
+		{
+			gpGlobals->pLogger->Log( kLogError, 
+				"File \"%s\" is not a valid OMF file.\n", gpGlobals->sInFileName );
+		}
+		else if( e.Code() == AAFRESULT_BADOPEN )
+		{
+			gpGlobals->pLogger->Log( kLogError, 
+				"Cannot open file \"%s\".\n", gpGlobals->sInFileName );
+		}
+		else
+		{
+			gpGlobals->pLogger->Log( kLogError, 
+				"main(): %s exception %ld\n", e.Type(), e.Code() );
+		}
+		hr = e.Code();
+	}
 
 	// clean up memory
 	if(gpGlobals)
 		delete gpGlobals;
 
-	return(0);
+	return( hr );
 }
 
 

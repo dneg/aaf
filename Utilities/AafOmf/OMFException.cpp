@@ -48,7 +48,8 @@ void OMFException::Check( OMF2::omfErr_t errCode, const char *fmt, ... )
 		{
 			va_list args;
 			va_start( args, fmt );
-			iLogger->Log( 0, fmt, args );
+			VaList valist( args );
+			iLogger->Log( 0, fmt, valist );
 			va_end( args );
 		}
 		throw OMFException( errCode );
