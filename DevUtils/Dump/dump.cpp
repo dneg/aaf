@@ -3541,9 +3541,6 @@ OMUInt16 determineVersion(IStorage* storage)
     } else {
       result = version;
     }
-#if 0
-    cout << "Format version of root = " << version << endl;
-#endif
     s->Release();
   } else {
     fatalError("determineVersion",
@@ -3573,10 +3570,6 @@ void dumpFileProperties(char* fileName, const char* label)
     _propertyIndexStreamName = "property index";
     _propertyValueStreamName = "property values";
   }
-#if 0
-  cout << "Index = \"" <<  _propertyIndexStreamName << "\"" << endl;
-  cout << "Value = \"" <<  _propertyValueStreamName << "\"" << endl;
-#endif
   cout << label << endl;
   dumpObject(storage, "/", 1, _version);
 
@@ -3899,10 +3892,6 @@ void printStatistics(void)
   size_t totalMetadataBytes = totalStreamBytes - totalPropertyBytes;
   if (printStats) {
     cout << endl;
-#if 0
-      printInteger(totalStreamBytes,
-        "Total number of bytes in all streams    (S) = ");
-#endif
     printInteger(totalFileBytes,
       "Total number of bytes in file           (F) = ");
     if ((option == property) || (option == aaf)) {
