@@ -69,7 +69,6 @@ AAFNONPERSISTENTOBJECTS = \
 	EnumAAFLocators \
 	EnumAAFMedia \
 	EnumAAFMobComments \
-	EnumAAFMobSlots \
 	EnumAAFParameterSlots \
 	EnumAAFPropertyDefs \
 	EnumAAFReferenceValues \
@@ -100,7 +99,8 @@ HUMAN_TYPED_IMPL = \
 	AAFSourceReference \
 	AAFSourceClip \
 	AAFSession \
-	EnumAAFMobs
+	EnumAAFMobs \
+	EnumAAFMobSlots
 
 
 # The list of standard dodo targets.
