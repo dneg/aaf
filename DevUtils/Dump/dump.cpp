@@ -488,7 +488,7 @@ static void indent(int level);
 static void getClass(IStorage* storage, CLSID* clsid, const char* fileName);
 static void printClsid(const CLSID& clsid);
 static void printRawKey(OMByte* key, size_t keySize);
-static void printUMID(UMID* umid);
+static void printUMID(const UMID& umid);
 static void openStream(IStorage* storage,
                        const char* streamName,
                        IStream** stream);
@@ -1170,24 +1170,24 @@ void printRawKey(OMByte* key, size_t keySize)
   cout.fill(savedFill);
 }
 
-void printUMID(UMID* umid)
+void printUMID(const UMID& umid)
 {
   IOS_FMT_FLAGS savedFlags = cout.setf(ios::basefield);
   char savedFill = cout.fill();
   cout << "{";
-  for (size_t i = 0; i < sizeof(umid->SMPTELabel); i++) {
-    cout << setfill('0') << setw(2) << hex << (int)umid->SMPTELabel[i];
+  for (size_t i = 0; i < sizeof(umid.SMPTELabel); i++) {
+    cout << setfill('0') << setw(2) << hex << (int)umid.SMPTELabel[i];
   }
   cout << "-";
-  cout << setfill('0') << setw(2) << hex << (int)umid->length;
+  cout << setfill('0') << setw(2) << hex << (int)umid.length;
   cout << "-";
-  cout << setfill('0') << setw(2) << hex << (int)umid->instanceHigh;
+  cout << setfill('0') << setw(2) << hex << (int)umid.instanceHigh;
   cout << "-";
-  cout << setfill('0') << setw(2) << hex << (int)umid->instanceMid;
+  cout << setfill('0') << setw(2) << hex << (int)umid.instanceMid;
   cout << "-";
-  cout << setfill('0') << setw(2) << hex << (int)umid->instanceLow;
+  cout << setfill('0') << setw(2) << hex << (int)umid.instanceLow;
   cout << "-";
-  printClsid(umid->material);
+  printClsid(umid.material);
   cout << "}";
   cout.setf(savedFlags, ios::basefield);
   cout.fill(savedFill);
@@ -2046,7 +2046,7 @@ void printSetIndex(SetIndexEntry* setIndex,
       cout << endl;
 	  cout << "  ";
       if (keySize == 32) {
-        printUMID((UMID*)&keys[i * keySize]);
+        printUMID((const UMID&)keys[i * keySize]);
       } else {
         printRawKey(&keys[i * keySize], keySize);
       }
