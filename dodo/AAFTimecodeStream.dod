@@ -54,10 +54,6 @@ Gets the user data [userbits] for a particular frame.)
 /****/
 AD_OVERRIDE(.method-SegmentOffsetToTC)
 AD_OVERRIDE(.method-SegmentTCToOffset)
-
-  //
-  // IAAFUnitTest interface method overrides
-  //
 AD_OVERRIDE(.method-Test)
 
 

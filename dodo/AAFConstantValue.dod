@@ -19,11 +19,11 @@ AD_HEAD
 AD_CLASS_BEGIN
 
 /****/
-AD_CONSTRUCTOR4(
-[in],AAFDataDefinition *,datadef,DataDefinition object,
-[in],aafLength_t,length,Length property value,
-[in],aafInt32,valueSize,Size of the value data,
-[in],void *,value,Value data,
+AD_XCONSTRUCTOR4(
+[in],objIn,AAFDataDefinition,datadef,DataDefinition object,
+[in],objPass,aafLength_t,length,Length property value,
+[in],objPass,aafInt32,valueSize,Size of the value data,
+[in],objPass,void *,value,Value data,
 Constructor given starting parameters)
 	//%comm The value data is passed in as a void * through the "value"
 	// argument.  The size of the value must be passed through the

@@ -87,6 +87,7 @@ AD_METHOD1(IsInt16Kind,
 		   pointer to the return value, 
 		   Sets return value to TRUE if DataKind is a INT16.)
 
+
 AD_METHOD1(IsInt32Kind,
 		   [retval][out],
 		   aafBool *,
@@ -205,6 +206,8 @@ AD_METHOD1(IsEdgecodeKind,
 		   bIsEdgecodeKind,
 		   pointer to the return value, 
 		   Sets return value to TRUE if DataKind is a edgecode.)
+
+
 
 AD_METHOD2(DoesDatakindConvertTo,
 		   [retval][out],aafBool *,bDoesConvertTo, pointer to result,

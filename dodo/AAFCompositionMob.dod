@@ -21,15 +21,15 @@ AD_CLASS_BEGIN
 
   //@access Public Members
 AD_CONSTRUCTOR2(
-			[in],aafString_t *,name,Mob name [optional],
-		   [in],aafBool,isPrimary,Whether or not the mob is a primary mob,
-		   Constructor given name and primary mob status.)
+				[in],aafString_t *,name,Mob name [optional],
+				[in],aafBool,isPrimary,Whether or not the mob is a primary mob,
+				Constructor given name and primary mob status.)
   //@rdesc Error code [see below].
 	
 
 AD_METHOD1(IsMobKind,
-		   [in],aafMobKind_t,mobKind,One of the defined mob kinds,
-		   Ask if mob is of a particular aafMobKind_t.)
+			[in],aafMobKind_t,mobKind,One of the defined mob kinds,
+			Ask if mob is of a particular aafMobKind_t.)
   //@comm<tab>ex:	kCompMob, kMasterMob, kFileMob, kTapeMob, kFilmMob,
   //<tab>		kPrimaryMob, kAllMob	//@rdesc TRUE if mob is the requested mob kind.
   //@comm Override

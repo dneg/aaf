@@ -43,19 +43,21 @@ AD_METHOD1(GetLength,
 		   // stored as an implicit property on 1.x objects\, so this routine
 		   // recursively calculates the length.)
 	
-AD_METHOD1(SetDataDefinition,
-		   [in],
-		   AAFDataDefinition *,
-		   datadef,
-		   Data Definition of this object,
-		   sets the datakind property values on the input component object.)
+AD_XMETHOD1(SetDataDefinition,
+			[in],
+			objIn,
+			AAFDataDefinition,
+			datadef,
+			Data Definition of this object,
+			sets the datakind property values on the input component object.)
 
-AD_METHOD1(GetDataKind,
-		  [retval][out],
-		  AAFDataDefinition *,
-		  datadef,
-		  Data Definition of this object,
-		  returns datakind definition object)
+AD_XMETHOD1(GetDataKind,
+			[retval][out],
+			objOut,
+			AAFDataDefinition *,
+			datadef,
+			Data Definition of this object,
+			returns datakind definition object)
 
 AD_OVERRIDE(.method-Test)
 

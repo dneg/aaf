@@ -26,23 +26,23 @@ AD_CLASS_BEGIN
 
 /****/
 AD_METHOD1(SetFilmManufacturer,
-[in],AAFString *,name,,
+[in],aafString_t *,name,,
 Sets the manufacturer name of the film stock [optional].)
 
 /****/
 AD_METHOD1(GetFilmManufacturer,
-[out],AAFString *,name,Pass in a string object which will be erased and filled,
+[out],aafString_t *,name,Pass in a string object which will be erased and filled,
 Gets the optional manufacturer name of the film stock.)
 	//@comm Returns a zero-length string if the property was not present
 	
 /****/
 AD_METHOD1(SetFilmModel,
-[in],AAFString *,name,,
+[in],aafString_t *,name,,
 Sets the model or brand of the film stock [optional].)
 
 /****/
 AD_METHOD1(GetFilmModel,
-[out],AAFString *,name,Pass in a string object which will be erased and filled,
+[out],aafString_t *,name,Pass in a string object which will be erased and filled,
 Gets the optional model or brand of the film stock.)
 
 /****/

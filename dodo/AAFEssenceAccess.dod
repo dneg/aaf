@@ -23,14 +23,14 @@ AD_FORWARD_DECLARATION(AAFSourceClip)
 AD_ROOT_CLASS_BEGIN
 
 /****/
-AD_METHOD7(AudioMediaCreate,
-[in],AAFMasterMob *,masterMob,on this master mob,
-[in],aafTrackID_t,masterTrackID,,
-[in],AAFFileMob *,fileMob,and this file mob create audio,
-[in],aafRational_t,samplerate,with this sample rate,
-[in],aafCompressEnable_t,enable,optionally compressing it,
-[in],aafInt16,sampleSize,with this sample size,
-[in],aafInt16,obj,and this many channels,
+AD_XMETHOD7(AudioMediaCreate,
+[in],objIn, AAFMasterMob,masterMob,on this master mob,
+[in],objPass, aafTrackID_t,masterTrackID,,
+[in],objIn, AAFFileMob,fileMob,and this file mob create audio,
+[in],objPass, aafRational_t,samplerate,with this sample rate,
+[in],objPass, aafCompressEnable_t,enable,optionally compressing it,
+[in],objPass, aafInt16,sampleSize,with this sample size,
+[in],objPass, aafInt16,obj,and this many channels,
 Creates an audio media stream.)
 //@comm Creates either a single stream of audio media, or interleaved
 // audio-only data.  A separate call (MediaMultiCreate) exists 
@@ -52,16 +52,16 @@ Creates an audio media stream.)
 //@comm omfmAudioMediaCreate
 
 /****/
-AD_METHOD9(VideoMediaCreate,
-[in],AAFMasterMob *,masterMob,on this master mob,
-[in],aafTrackID_t,masterTrackID,masterTrackID,
-[in],AAFFileMob *,fileMob,and this file mob create video,
-[in],aafCompressEnable_t,enable,optionally compressing it,
-[in],aafRational_t,editrate,editrate,
-[in],aafUInt32,StoredHeight,with this height,
-[in],aafUInt32,StoredWidth,and this width,
-[in],aafFrameLayout_t,layout,and this frame layout.,
-[in],aafRational_t,ratio,image aspect ratio,
+AD_XMETHOD9(VideoMediaCreate,
+[in],objIn, AAFMasterMob,masterMob,on this master mob,
+[in],objPass, aafTrackID_t,masterTrackID,masterTrackID,
+[in],objIn, AAFFileMob,fileMob,and this file mob create video,
+[in],objPass, aafCompressEnable_t,enable,optionally compressing it,
+[in],objPass, aafRational_t,editrate,editrate,
+[in],objPass, aafUInt32,StoredHeight,with this height,
+[in],objPass, aafUInt32,StoredWidth,and this width,
+[in],objPass, aafFrameLayout_t,layout,and this frame layout.,
+[in],objPass, aafRational_t,ratio,image aspect ratio,
 Creates an audio media stream.)
 //@comm Creates a single stream of video media.  A separate call
 // (MediaMultiCreate) exists to create interleaved audio and
@@ -83,13 +83,13 @@ Creates an audio media stream.)
 //@comm Replaces omfmVideoMediaCreate
 
 /****/
-AD_METHOD6(Create,
-[in],AAFMasterMob *,masterMob,on this master mob,
-[in],aafTrackID_t,masterTrackID,,
-[in],AAFFileMob *,fileMob,and this file mob,
-[in],AAFDataDefinition *,mediaKind,create media of this type,
-[in],aafRational_t,samplerate,with this sample rate,
-[in],aafCompressEnable_t,enable,optionally compressing it,
+AD_XMETHOD6(Create,
+[in],objIn, AAFMasterMob,masterMob,on this master mob,
+[in],objPass, aafTrackID_t,masterTrackID,,
+[in],objIn, AAFFileMob,fileMob,and this file mob,
+[in],objIn, AAFDataDefinition,mediaKind,create media of this type,
+[in],objPass, aafRational_t,samplerate,with this sample rate,
+[in],objPass, aafCompressEnable_t,enable,optionally compressing it,
 Creates a single channel stream of media.)
 	//@comm Creates a single channel stream of media.  Convenience functions
 	// exist to create audio or video media, and a separate call
@@ -105,13 +105,13 @@ Creates a single channel stream of media.)
 	//@comm Replaces omfmMediaCreate
 	
 /****/
-AD_METHOD6(MultiCreate,
-[in],AAFMasterMob *,masterMob,on this master mob,
-[in],AAFFileMob *,fileMob,and this file mob create,
-[in],aafInt16,arrayElemCount,this many channels,
-[in],aafmMultiCreate_t *,mediaArray,using these definitions,
-[in],aafRational_t ,editRate,,
-[in],aafCompressEnable_t,enable,optionally compressing it,
+AD_XMETHOD6(MultiCreate,
+[in],objIn, AAFMasterMob,masterMob,on this master mob,
+[in],objIn, AAFFileMob,fileMob,and this file mob create,
+[in],objPass, aafInt16,arrayElemCount,this many channels,
+[in],objPass, aafmMultiCreate_t *,mediaArray,using these definitions,
+[in],objPass, aafRational_t ,editRate,,
+[in],objPass, aafCompressEnable_t,enable,optionally compressing it,
 Creates a multi-channel interleaved stream of media.)
 	//@comm The media handle from this call can be used with
 	// WriteDataSamples or WriteMultiSamples but NOT with 
@@ -294,12 +294,12 @@ Gets a parameter block of private information from the CODEC for this media.)
 	//@comm Replaces omfmGetPrivateMediaData*/
 
 /****/
-AD_METHOD5(GetNumChannels,
-[in],AAFMasterMob*,masterMob,In this master mob,
-[in],aafTrackID_t,trackID,On this track,
-[in],aafMediaCriteria_t*,mediaCrit,using this media criteria,
-[in],AAFDataDefinition*,mediaKind,for this media type,
-[out],aafInt16*,numCh,How many channels?,
+AD_XMETHOD5(GetNumChannels,
+[in],objIn, AAFMasterMob,masterMob,In this master mob,
+[in],objPass, aafTrackID_t,trackID,On this track,
+[in],objPass, aafMediaCriteria_t*,mediaCrit,using this media criteria,
+[in],objIn, AAFDataDefinition,mediaKind,for this media type,
+[out],objPass, aafInt16*,numCh,How many channels?,
 Takes an opaque handle  a master mob reference  and a track ID so that it may be called before the media is opened.)
 	//@comm Returns the number of interleaved media channels of a given type in the media stream referenced by the given file mob
 	//@comm If the data format is not interleaved, then the answer will
@@ -309,9 +309,9 @@ Takes an opaque handle  a master mob reference  and a track ID so that it may be
 	//@comm Replaces omfmGetNumChannels*/
 
 /****/
-AD_METHOD2(GetLargestSampleSize,
-[in],AAFDataDefinition*,mediaKind,and this media type,
-[out],aafInt32*,maxSize,the largest sample size,
+AD_XMETHOD2(GetLargestSampleSize,
+[in],objIn, AAFDataDefinition,mediaKind,and this media type,
+[out],objPass, aafInt32*,maxSize,the largest sample size,
 Returns the size in bytes of the largest sample for a given media type.)
 	//@comm For uncompressed data, or the output of the software codec,
 	// the sample size will propably be a constant.
@@ -320,10 +320,10 @@ Returns the size in bytes of the largest sample for a given media type.)
 	//@comm Replaces omfmGetLargestSampleSize*/
 
 /****/
-AD_METHOD3(GetSampleFrameSize,
-[in],AAFDataDefinition*,mediaKind,and this media type,
-[in],aafPosition_t,frameNum,for this [1-based] sample frame number,
-[out],aafLength_t*,frameSize,How big is the sample frame?,
+AD_XMETHOD3(GetSampleFrameSize,
+[in],objIn, AAFDataDefinition,mediaKind,and this media type,
+[in],objPass, aafPosition_t,frameNum,for this [1-based] sample frame number,
+[out],objPass, aafLength_t*,frameSize,How big is the sample frame?,
 Returns the size in bytes of the given sample for a given media type.)
 	//@comm For uncompressed data, or the output of the software codec,
 	// the sample size will propably be a constant.
@@ -335,12 +335,12 @@ Returns the size in bytes of the given sample for a given media type.)
 	//@comm Replaces omfmGetSampleFrameSize*/
 
 /****/
-AD_METHOD5(Open,
-[in],AAFMasterMob*,masterMob,In this master mob,
-[in],aafTrackID_t,trackID,On this track,
-[in],aafMediaCriteria_t*,mediaCrit,using this media criteria,
-[in],aafMediaOpenMode_t,openMode,ReadOnly or Append,
-[in],aafCompressEnable_t,compEnable,optionally decompressing,
+AD_XMETHOD5(Open,
+[in],objIn, AAFMasterMob,masterMob,In this master mob,
+[in],objPass, aafTrackID_t,trackID,On this track,
+[in],objPass, aafMediaCriteria_t*,mediaCrit,using this media criteria,
+[in],objPass, aafMediaOpenMode_t,openMode,ReadOnly or Append,
+[in],objPass, aafCompressEnable_t,compEnable,optionally decompressing,
 Opens a single channel of a file mob.)
 	//@comm If the media is interleaved,
 	// then it will be di-interleaved when samples are read.  This routine
@@ -358,12 +358,12 @@ Opens a single channel of a file mob.)
 	//@comm Replaces omfmMediaOpen*/
 	
 /****/
-AD_METHOD5(MultiOpen,
-[in],AAFMasterMob*,masterMob,In this master mob,
-[in],aafTrackID_t,trackID,On this track,
-[in],aafMediaCriteria_t*,mediaCrit,using this media criteria,
-[in],aafMediaOpenMode_t,openMode,ReadOnly or Append,
-[in],aafCompressEnable_t,compEnable,optionally decompressing,
+AD_XMETHOD5(MultiOpen,
+[in],objPass, AAFMasterMob,masterMob,In this master mob,
+[in],objPass, aafTrackID_t,trackID,On this track,
+[in],objPass, aafMediaCriteria_t*,mediaCrit,using this media criteria,
+[in],objPass, aafMediaOpenMode_t,openMode,ReadOnly or Append,
+[in],objPass, aafCompressEnable_t,compEnable,optionally decompressing,
 Opens a all channels associated with a file mob.)
 	//@comm This routine
 	// follows the locator, and may call the locator failure callback if
@@ -519,19 +519,19 @@ Given an array of video format blocks  read the opcodes and operands and change 
 	//@comm Replaces omfmPutVideoInfoArray */
 
 /****/
-AD_METHOD3(GetNumRepresentations,
-[in],AAFMasterMob*,masterMob,,
-[in],aafTrackID_t,trackID,,
-[out],aafInt32*,numReps,,
+AD_XMETHOD3(GetNumRepresentations,
+[in],objIn, AAFMasterMob,masterMob,,
+[in],objPass, aafTrackID_t,trackID,,
+[out],objPass, aafInt32*,numReps,,
 Find out how many media representations [high/low res] exist for a particular track on this master mob.)
 	//@comm Replaces omfmGetNumRepresentations */
 
 /****/
-AD_METHOD4(GetRepresentationSourceClip,
-[in],AAFMasterMob*,masterMob,,
-[in],aafTrackID_t,trackID,,
-[in],aafInt32,index,,
-[out],AAFSourceClip**,sourceClip,,
+AD_XMETHOD4(GetRepresentationSourceClip,
+[in],objIn, AAFMasterMob,masterMob,,
+[in],objPass, aafTrackID_t,trackID,,
+[in],objPass, aafInt32,index,,
+[out],objOut, AAFSourceClip,sourceClip,,
 Get the indexed [1-based] representation for a particular track on this master mob.)
 	//@comm Replaces omfmGetRepresentationSourceClip */
 
@@ -560,10 +560,10 @@ AD_METHOD1(PutAudioInfoArray,
 Given an array of audio format blocks read the opcodes and operands and change the file format.)
 
 /****/
-AD_METHOD3(IsHardwareAssistedCodec,
-[in],aafCodecID_t,codecID,,
-[in],AAFFileMob *,mob,,
-[out],aafBool*,result,,
+AD_XMETHOD3(IsHardwareAssistedCodec,
+[in],objPass, aafCodecID_t,codecID,,
+[in],objIn, AAFFileMob,mob,,
+[out],objPass, aafBool*,result,,
 Tells if the given codec is hardware-assisted.)
 	//@comm That is, does
 	// it contain calls to a particular hardware device which speeds

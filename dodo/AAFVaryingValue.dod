@@ -18,19 +18,19 @@ AD_HEAD
 \******************************************/
 AD_CLASS_BEGIN
 
-AD_METHOD5(AddPoint,
-		   [in],aafRational_t, time, time for Control Point,
-		   [in],aafEditHint_t, editHint, Edit hint,
-		   [in],AAFDataDefinition *, datadef, pointer to data definition object,
-		   [in],aafInt32, valueSize, Size of value data,
-		   [in],void *, pValue, Ponter to the value data,
-		   This function adds a control point in time order into a varying
-		   // value object.)
+AD_XMETHOD5(AddPoint,
+			[in],objPass,aafRational_t, time, time for Control Point,
+			[in],objPass,aafEditHint_t, editHint, Edit hint,
+			[in],objIn,AAFDataDefinition, datadef, pointer to data definition object,
+			[in],objPass,aafInt32, valueSize, Size of value data,
+			[in],objPass,void *, pValue, Ponter to the value data,
+			This function adds a control point in time order into a varying
+			// value object.)
 
-AD_METHOD3(GetInfo,
-		   [retval][out],AAFDataDefinition *, pDatadef, Data Definition  object,
-		   [out], aafLength_t *, pLength, Length of varying value object,
-		   [out], aafInterpKind_t *, pInterpolation, Interpolation method,
+AD_XMETHOD3(GetInfo,
+			[retval][out],objOut,AAFDataDefinition, pDatadef, Data Definition  object,
+			[out], objPass, aafLength_t *, pLength, Length of varying value object,
+		   [out], objPass, aafInterpKind_t *, pInterpolation, Interpolation method,
 		   This function returns the required property values for the varying
 		   // value object.)
 

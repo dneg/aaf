@@ -23,22 +23,22 @@ AD_FORWARD_DECLARATION(AAFFile)
 
 AD_CLASS_BEGIN
 
-AD_CONSTRUCTOR3(
-[in], AAFFile *, file,File Handle ,
-[in], AAFDataDefinition *, datadef,Data Definition object,
-[in], aafLength_t, length,Length property value,
+AD_XCONSTRUCTOR3(
+[in], objIn, AAFFile, file,File Handle ,
+[in], objIn, AAFDataDefinition, datadef,Data Definition object,
+[in], objPass, aafLength_t, length,Length property value,
 Creates a new empty media group object with the given property values.)
 
 /****/
-AD_METHOD1(SetStillFrame,
-[in], AAFSegment *, stillFrame,Still Frame source clip ,
+AD_XMETHOD1(SetStillFrame,
+[in], objIn, AAFSegment, stillFrame,Still Frame source clip ,
 sets the still frame property on a media group to be the source clip passed as the stillFrame argument.)
     //@comm Replaces omfiMediaGroupSetStillFrame
     //@comm Media group choices should be added with the omfiMediaGroupAddChoice() function.
     
 /****/
-AD_METHOD1(AddChoice,
-[in], AAFSegment *, choice,Source clip to add as a choice ,
+AD_XMETHOD1(AddChoice,
+[in], objIn, AAFSegment, choice,Source clip to add as a choice ,
 adds the source clip specified in the choice argument as  a choice to the given media group object.)
     //@comm Replaces omfiMediaGroupAddChoice
 
@@ -58,9 +58,6 @@ adds the source clip specified in the choice argument as  a choice to the given 
 //		AAFSourceClip			*_stillFrame;
 //		vector<AAFSourceClip *>	_choices;
 
-  //
-  // IAAFUnitTest interface method overrides
-  //
 AD_OVERRIDE(.method-Test)
 
 
