@@ -21,6 +21,7 @@ CFLAGS = -Olimit 1026
 ARFLAGS = -r
 OBJFILE = -o $*.${OBJ}
 EXEFILE = -o unittest.${EXE}
+CP = cp
 
 SH_PREFIX = 
 SH_SUFFIX =
