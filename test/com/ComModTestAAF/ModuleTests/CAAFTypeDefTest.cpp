@@ -47,10 +47,6 @@ typedef IAAFSmartPointer<IAAFTypeDef>    IAAFTypeDefSP;
 typedef IAAFSmartPointer<IAAFTypeDefInt> IAAFTypeDefIntSP;
 typedef IAAFSmartPointer<IUnknown>       IUnknownSP;
 
-// {C3930DD6-E603-11d2-842A-00600832ACB8}
-static aafUID_t TypeID_LocalInt32 = 
-{ 0xc3930dd6, 0xe603, 0x11d2, { 0x84, 0x2a, 0x0, 0x60, 0x8, 0x32, 0xac, 0xb8 } };
-
 static wchar_t testFileName[] = L"AAFTypeDefTest.aaf";
 
 
@@ -106,16 +102,9 @@ static HRESULT TestTypeDef ()
 
   // Let's try to do something interesting with a type definition
   IAAFTypeDefIntSP pTypeDefInt;
-  hr = defs.cdTypeDefInt()->CreateInstance (IID_IAAFTypeDefInt,
-											(IUnknown **) &pTypeDefInt);
+  hr = defs.tdInt32()->QueryInterface (IID_IAAFTypeDefInt, (void **) &pTypeDefInt);
   if (! SUCCEEDED (hr)) return hr;
   assert (pTypeDefInt);
-
-  hr = pTypeDefInt->Initialize (TypeID_LocalInt32,
-								4,        // 4-byte (32-bit) int
-								kAAFTrue,  // signed
-								L"Local 32-bit int");
-  if (! SUCCEEDED (hr)) return hr;
 
   IAAFTypeDefSP pTypeDef;
   hr = pTypeDefInt->QueryInterface(IID_IAAFTypeDef, (void **)&pTypeDef);
