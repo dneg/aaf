@@ -153,80 +153,39 @@ void FileOp::RunTest( CmdState& state, int argc, char** argv )
 
     std::string fileName( argv[3] );
     IAAFSmartPointer<IAAFFile> spFile;
-
+    
     std::string kind( argv[2] );
-
-#if AAFPLATFORM == MipsIrix
-
-    // FIXME
-    // On Irix, as of 20 Jan 04, the schemasoft branch implementation of
-    // AAFCreateAAFFileOnRawStorage is not working.  If passed 
-    // aafFileKindAafMSSBinary it reports that the factory is not found.
-    // As it does if aafFileKindAAFSSBinary is used.  This is temporary
-    // until the problem is understood.  It is correct as long as the only
-    // SS implementation available on Irix is SchemaSoft.
-
-    if ( kind == "MSSBinary" ) {
-
-      std::auto_ptr<wchar_t> wfileName( ToWideString(fileName.c_str()) );
-
-      if ( which == "write" ) {
-	CHECK_HRESULT( AAFFileOpenNewModify( wfileName.get(),
-					     0,
-					     &productInfo,
-					     &spFile) );
-      }
-      else if ( which == "read" ) {
-	CHECK_HRESULT( AAFFileOpenExistingRead( wfileName.get(),
-						0,
-						&spFile) );
-      }
-      else if ( which == "modify" ) {
-	CHECK_HRESULT( AAFFileOpenExistingModify( wfileName.get(),
-						  0,
-						  &productInfo,
-						  &spFile) );
-      }
-      else {
-	assert(0);
-      }
-
+    
+    KindMap kmap;
+    aafUID_t fileKind = kmap.GetKind( argv[2] );
+    
+    aafFileExistence_e existance;
+    aafFileAccess_e access;
+    
+    if ( which == "write" ) {
+      existance = kAAFFileExistence_new;
+      access = kAAFFileAccess_modify;
     }
-    else 
-#endif 
-
-   {
-      KindMap kmap;
-      aafUID_t fileKind = kmap.GetKind( argv[2] );
-
-      aafFileExistence_e existance;
-      aafFileAccess_e access;
-
-      if ( which == "write" ) {
-	existance = kAAFFileExistence_new;
-	access = kAAFFileAccess_modify;
-      }
-      else if ( which == "read" ) {
-	existance = kAAFFileExistence_existing;
-	access = kAAFFileAccess_read;
-      }
-      else if ( which == "modify" ) {
-	existance = kAAFFileExistence_existing;
-	access = kAAFFileAccess_modify;
-      }
-      else {
-	assert(0);
-      }
-      
-      spFile =
-	CreateFileOfKind( fileName,
-			  existance,
-			  access,
-			  fileKind,
-			  productInfo );
-      
-      CHECK_HRESULT( spFile->Open() );
+    else if ( which == "read" ) {
+      existance = kAAFFileExistence_existing;
+      access = kAAFFileAccess_read;
     }
+    else if ( which == "modify" ) {
+      existance = kAAFFileExistence_existing;
+      access = kAAFFileAccess_modify;
+    }
+    else {
+      assert(0);
+    }
+    
+    spFile =
+      CreateFileOfKind( fileName,
+			existance,
+			access,
+			fileKind,
+			productInfo );
+    
+    CHECK_HRESULT( spFile->Open() );
 
     state.SetFile( spFile );
   }
