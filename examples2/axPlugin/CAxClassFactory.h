@@ -81,7 +81,7 @@ public:
 #if defined(OS_MACOS)
 	typedef OLEBOOL LockServerBool_t;
 #else
-	typedef BOOL    LookServerBool_t;
+	typedef BOOL    LockServerBool_t;
 #endif
 
 public:
