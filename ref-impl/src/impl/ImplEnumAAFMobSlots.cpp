@@ -105,5 +105,5 @@ AAFRESULT
 
 extern "C" const aafClassID_t CLSID_EnumAAFMobSlots;
 
-OMDEFINE_STORABLE(EnumAAFMobSlots, CLSID_EnumAAFMobSlots);
+OMDEFINE_STORABLE(ImplEnumAAFMobSlots, CLSID_EnumAAFMobSlots);
 
