@@ -116,7 +116,10 @@ AD_XMETHOD4(GetValue,
   // pValBuf.  The size of the buffer indicated by pValBuf is passed
   // in through the valBufSize argument.  The actual number of bytes
   // read is returned in *pLenRead.  Assumes that the given Property
-  // Value is of the kAAFTypeCategoryInt.
+  // Value is of the kAAFTypeCategoryInt.  If the buffer specified by
+  // valBufSize is actually larger than the contained value\, the
+  // value written to the buffer will be LSB-justified and
+  // sign-extended.
   //
   // Note: GetSize\(\) may be called to determine the size of buffer
   // required for this method to succeed.
@@ -172,7 +175,7 @@ AD_XMETHOD3(SetValue,
   // Property Value to the value given in the memory specified by
   // pValBuf.  The size of the data in the buffer is passed in through
   // the valSize argument.  Assumes that the given Property Value is
-  // of the kAAFTypeCategoryInt.  If the contained value is actuall
+  // of the kAAFTypeCategoryInt.  If the contained value is actually
   // larger than specified by valSize\, the contained value will be
   // LSB-justified and sign-extended.
   //
