@@ -266,6 +266,23 @@ size_t OMSimpleProperty::size(void) const
   return _size;
 }
 
+  // @mfunc Set the size of this <c OMSimpleProperty> to <p newSize> bytes.
+  //   @parm The new property size in bytes.
+void OMSimpleProperty::setSize(size_t newSize)
+{
+  TRACE("OMSimpleProperty::setSize");
+
+  PRECONDITION("Valid size", newSize > 0);
+
+  if (newSize != _size) {
+    delete [] _bits;
+    _bits = 0; // for BoundsChecker
+    _bits = new unsigned char[newSize];
+    ASSERT("Valid heap pointer", _bits != 0);
+    _size = newSize;
+  }
+}
+
   // @mfunc Write this property to persistent store, performing
   //        any necessary externalization and byte reordering.
   //   @this const
