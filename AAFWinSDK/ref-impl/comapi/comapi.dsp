@@ -224,6 +224,10 @@ SOURCE="..\..\..\ref-impl\src\com-api\CAAFFindSourceInfo.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFGetFileBits.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFGPITrigger.cpp"
 # End Source File
 # Begin Source File
@@ -340,6 +344,18 @@ SOURCE="..\..\..\ref-impl\src\com-api\CAAFPulldown.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFRandomFile.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFRandomRawStorage.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFRawStorage.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFRGBADescriptor.cpp"
 # End Source File
 # Begin Source File
@@ -365,6 +381,10 @@ SOURCE="..\..\..\ref-impl\src\com-api\CAAFSequence.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\com-api\com-dll\CAAFServer.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFSetFileBits.cpp"
 # End Source File
 # Begin Source File
 
