@@ -2940,41 +2940,6 @@ wchar_t* OMMSSStoredObject::collectionIndexStreamName(
   return indexName;
 }
 
-IStream*
-OMMSSStoredObject::createBufferedStream(IStorage* storage,
-                                        const wchar_t* streamName)
-{
-  TRACE("OMMSSStoredObject::createBufferedStream");
-  PRECONDITION("Valid storage", storage != 0);
-  PRECONDITION("Valid stream name", validWideString(streamName));
-  PRECONDITION("Valid mode", _mode == OMFile::modifyMode);
-
-  IStream* iStream = createStream(storage, streamName);
-  ASSERT("Valid IStream", iStream != 0);
-
-  IStream* stream = new OMBufferedIStream(iStream, 1024);
-  ASSERT("Valid heap pointer", stream != 0);
-
-  return stream;
-}
-
-IStream*
-OMMSSStoredObject::openBufferedStream(IStorage* storage,
-                                      const wchar_t* streamName)
-{
-  TRACE("OMMSSStoredObject::openBufferedStream");
-  PRECONDITION("Valid storage", storage != 0);
-  PRECONDITION("Valid stream name", validWideString(streamName));
-
-  IStream* iStream = openStream(storage, streamName);
-  ASSERT("Valid IStream", iStream != 0);
-
-  IStream* stream = new OMBufferedIStream(iStream, 1024);
-  ASSERT("Valid heap pointer", stream != 0);
-
-  return stream;
-}
-
 IStream* OMMSSStoredObject::createStream(IStorage* storage,
                                          const wchar_t* streamName)
 {
@@ -3037,6 +3002,41 @@ IStream* OMMSSStoredObject::openStream(IStorage* storage,
 
   return stream;
 
+}
+
+IStream*
+OMMSSStoredObject::createBufferedStream(IStorage* storage,
+                                        const wchar_t* streamName)
+{
+  TRACE("OMMSSStoredObject::createBufferedStream");
+  PRECONDITION("Valid storage", storage != 0);
+  PRECONDITION("Valid stream name", validWideString(streamName));
+  PRECONDITION("Valid mode", _mode == OMFile::modifyMode);
+
+  IStream* iStream = createStream(storage, streamName);
+  ASSERT("Valid IStream", iStream != 0);
+
+  IStream* stream = new OMBufferedIStream(iStream, 1024);
+  ASSERT("Valid heap pointer", stream != 0);
+
+  return stream;
+}
+
+IStream*
+OMMSSStoredObject::openBufferedStream(IStorage* storage,
+                                      const wchar_t* streamName)
+{
+  TRACE("OMMSSStoredObject::openBufferedStream");
+  PRECONDITION("Valid storage", storage != 0);
+  PRECONDITION("Valid stream name", validWideString(streamName));
+
+  IStream* iStream = openStream(storage, streamName);
+  ASSERT("Valid IStream", iStream != 0);
+
+  IStream* stream = new OMBufferedIStream(iStream, 1024);
+  ASSERT("Valid heap pointer", stream != 0);
+
+  return stream;
 }
 
 IStorage* OMMSSStoredObject::createStorage(IStorage* storage,
