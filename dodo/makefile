@@ -82,7 +82,9 @@ DODO_TARGETS = \
 	EnumAAFClassDefinitions.all \
 	EnumAAFPropertyDefinitions.all \
 	EnumAAFMedia.all \
-	EnumAAFComponents.all
+	EnumAAFComponents.all \
+	EnumAAFReferenceValues.all \
+	AAFClassDictionary.all
 
 # Jeff hasn't finished with these yet
 #	AAFMediaTapeDescriptor.all \
@@ -905,3 +907,30 @@ EnumAAFDefinitions.comc : EnumAAFDefinitions.exp macros/comc.mac
 EnumAAFDefinitions.comh : EnumAAFDefinitions.exp macros/comh.mac
 EnumAAFDefinitions.implc : EnumAAFDefinitions.exp macros/implc.mac
 EnumAAFDefinitions.implh : EnumAAFDefinitions.exp macros/implh.mac
+
+EnumAAFReferenceValues.all : EnumAAFReferenceValues.cpp EnumAAFReferenceValues.h
+EnumAAFReferenceValues.all : EnumAAFReferenceValues.comc EnumAAFReferenceValues.comh
+EnumAAFReferenceValues.all : EnumAAFReferenceValues.exp EnumAAFReferenceValues.idl
+EnumAAFReferenceValues.all : EnumAAFReferenceValues.implc EnumAAFReferenceValues.implh
+EnumAAFReferenceValues.exp : AAFUnitTest.exp macros/exp.mac
+EnumAAFReferenceValues.h : EnumAAFReferenceValues.exp macros/h.mac
+EnumAAFReferenceValues.cpp : EnumAAFReferenceValues.exp macros/cpp.mac
+EnumAAFReferenceValues.idl : EnumAAFReferenceValues.exp macros/idl.mac
+EnumAAFReferenceValues.comc : EnumAAFReferenceValues.exp macros/comc.mac
+EnumAAFReferenceValues.comh : EnumAAFReferenceValues.exp macros/comh.mac
+EnumAAFReferenceValues.implc : EnumAAFReferenceValues.exp macros/implc.mac
+EnumAAFReferenceValues.implh : EnumAAFReferenceValues.exp macros/implh.mac
+
+AAFClassDictionary.all : AAFClassDictionary.cpp AAFClassDictionary.h
+AAFClassDictionary.all : AAFClassDictionary.comc AAFClassDictionary.comh
+AAFClassDictionary.all : AAFClassDictionary.exp AAFClassDictionary.idl
+AAFClassDictionary.all : AAFClassDictionary.implc AAFClassDictionary.implh
+AAFClassDictionary.exp : AAFUnitTest.exp macros/exp.mac
+AAFClassDictionary.h : AAFClassDictionary.exp macros/h.mac
+AAFClassDictionary.cpp : AAFClassDictionary.exp macros/cpp.mac
+AAFClassDictionary.idl : AAFClassDictionary.exp macros/idl.mac
+AAFClassDictionary.comc : AAFClassDictionary.exp macros/comc.mac
+AAFClassDictionary.comh : AAFClassDictionary.exp macros/comh.mac
+AAFClassDictionary.implc : AAFClassDictionary.exp macros/implc.mac
+AAFClassDictionary.implh : AAFClassDictionary.exp macros/implh.mac
+
