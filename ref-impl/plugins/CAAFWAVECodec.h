@@ -12,18 +12,10 @@
 *                                          *
 \******************************************/
 
-#ifndef __AAF_h__
-#include "AAF.h"
-#endif
 
-#include "AAFPlugin.h"
 
 #ifndef __AAFDefaultCodec_h__
 #include "CAAFDefaultCodec.h"
-#endif
-
-#ifndef __CAAFUnknown_h__
-#include "CAAFUnknown.h"
 #endif
 
 EXTERN_C const CLSID CLSID_AAFWaveCodec;
