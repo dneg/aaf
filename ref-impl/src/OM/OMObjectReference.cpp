@@ -11,7 +11,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 // 
-// The Original Code of this file is Copyright 1998-2001, Licensor of the
+// The Original Code of this file is Copyright 1998-2002, Licensor of the
 // AAF Association.
 // 
 // The Initial Developer of the Original Code of this file and the
@@ -158,6 +158,20 @@ OMStrongObjectReference::OMStrongObjectReference(OMProperty* property,
                                                  const wchar_t* name)
 : OMObjectReference(property),
   _isLoaded(true),
+  _name(saveWideString(name))
+{
+  TRACE("OMStrongObjectReference::OMStrongObjectReference");
+}
+
+  // @mfunc Constructor.
+  //   @parm The <c OMProperty> that contains this <c OMStrongObjectReference>.
+  //   @parm The name of this <c OMStrongObjectReference>.
+  //   @parm The state (loaded or not) of this <c OMStrongObjectReference>.
+OMStrongObjectReference::OMStrongObjectReference(OMProperty* property,
+                                                 const wchar_t* name,
+                                                 bool isLoaded)
+: OMObjectReference(property),
+  _isLoaded(isLoaded),
   _name(saveWideString(name))
 {
   TRACE("OMStrongObjectReference::OMStrongObjectReference");

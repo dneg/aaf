@@ -109,6 +109,11 @@ public:
     // @cmember Constructor.
   OMStrongObjectReference(OMProperty* property, const wchar_t* name);
 
+    // @cmember Constructor.
+  OMStrongObjectReference(OMProperty* property,
+                          const wchar_t* name,
+                          bool isLoaded);
+
     // @cmember Copy constructor.
   OMStrongObjectReference(const OMStrongObjectReference&);
 
