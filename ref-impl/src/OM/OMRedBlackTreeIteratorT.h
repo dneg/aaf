@@ -320,12 +320,11 @@ Value OMRedBlackTreeIterator<Key, Value>::setValue(const Key ANAME(k),
   //   @rdesc The <p Key> at the current position.
   //   @this const
 template <typename Key, typename Value>
-Key OMRedBlackTreeIterator<Key, Value>::key(void) const
+const Key& OMRedBlackTreeIterator<Key, Value>::key(void) const
 {
   TRACE("OMRedBlackTreeIterator<Key, Value>::key");
 
   PRECONDITION("Valid iterator", this->valid());
 
-  Key result = _current->_key;
-  return result;
+  return _current->_key;
 }
