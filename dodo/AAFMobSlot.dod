@@ -26,10 +26,10 @@ AD_HEAD
 // aafPosition_t,
 // aafTrackID_t,
 // aafUInt32,
-// AAFDataDefinition
+// AAFDataDef
 
 AD_FORWARD_DECLARATION(AAFSegment)
-AD_FORWARD_DECLARATION(AAFDataDefinition)
+AD_FORWARD_DECLARATION(AAFDataDef)
 
 
 AD_CLASS_UUID(B1A21377, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
@@ -73,7 +73,7 @@ Sets the physical output channel associated with the Track.
   // The function returns an error if the Mob Slot passed in is not a track.)
 
 AD_XMETHOD1(GetDataKind,
-[out\,retval], objOut, AAFDataDefinition, result, Data Definition object,
+[out\,retval], objOut, AAFDataDef, result, Data Definition object,
 This method will return Data Definition object associated with this Mob Slot.)
 
 AD_CLASS_END
