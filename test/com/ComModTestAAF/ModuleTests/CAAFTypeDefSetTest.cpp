@@ -27,19 +27,6 @@
  *
  ************************************************************************/
 
-// Conditional symbol for testing the creation of a new optional 
-// strong reference set property on the dictionary. This is experimental
-// because the AAFDictionary is still considered "axiomatic" by
-// ImplAAFBuiltinClasses and itself. The problem is that the
-// class definitions for such axiomatic objects are unpersisted
-// but NOT used by the DM, the "builtin" class definition is used instead!
-// 2000-SEPT-14 transdel.
-#ifndef SUPPORT_EXPERIMENTAL_OPTIONAL_SETS
-#define SUPPORT_EXPERIMENTAL_OPTIONAL_SETS 0
-#endif
-
-
-
 #include "AAF.h"
 #include "AAFResult.h"
 #include "ModuleTest.h"
@@ -72,6 +59,9 @@ typedef IAAFSmartPointer<IAAFTypeDefSet>           IAAFTypeDefSetSP;
 typedef IAAFSmartPointer<IAAFDataDef>              IAAFDataDefSP;
 typedef IAAFSmartPointer<IEnumAAFDataDefs>         IEnumAAFDataDefsSP;
 typedef IAAFSmartPointer<IEnumAAFPropertyValues>   IEnumAAFPropertyValuesSP;
+typedef IAAFSmartPointer<IAAFTypeDefWeakObjRef>    IAAFTypeDefWeakObjRefSP;
+typedef IAAFSmartPointer<IEnumAAFPropertyValues>   IEnumAAFPropertyValuesSP;
+
 
 
 
@@ -284,6 +274,44 @@ static const MyDefRecord kMyDefTestData[] =
 
 static const aafUInt32 kMyDefTestDataCount = sizeof(kMyDefTestData) / sizeof(MyDefRecord);
 
+//
+// Data for weak reference set test.
+// {c0444f80-f46a-11d4-8cc5-8c00111e02b0}
+static const aafUID_t kAAFTypeID_WeakReferenceToMyDefinition = 
+{ 0xc0444f80, 0xf46a, 0x11d4, { 0x8c, 0xc5, 0x8c, 0x00, 0x11, 0x1e, 0x02, 0xb0 } };
+
+static const MyDefRecord kMyWeakRefData =
+  MyDefRecord( kAAFTypeID_WeakReferenceToMyDefinition,
+      L"WeakReference<MyDefinition>",
+      L"My Weak Reference to MyDefinition",
+      false
+    );
+
+
+// {c0444f81-f46a-11d4-8cc5-8c00111e02b0}
+static const aafUID_t kAAFTypeID_WeakReferenceSetToMyDefinitions = 
+{ 0xc0444f81, 0xf46a, 0x11d4, { 0x8c, 0xc5, 0x8c, 0x00, 0x11, 0x1e, 0x02, 0xb0 } };
+
+
+static const MyDefRecord kMyWeakRefSetData =
+  MyDefRecord( kAAFTypeID_WeakReferenceSetToMyDefinitions,
+      L"WeakReferenceSet<MyDefinition>",
+      L"My Weak Reference Set of MyDefinitions",
+      false
+    );
+
+
+// {24872080-f5dd-11d4-9ba2-8cc72a2d6747}
+static const aafUID_t kAAFPropID_Header_MyDefinitions = 
+{ 0x24872080, 0xf5dd, 0x11d4, { 0x9b, 0xa2, 0x8c, 0xc7, 0x2a, 0x2d, 0x67, 0x47 } };
+
+static const MyDefRecord kMyWeakRefSetPropData =
+  MyDefRecord( kAAFPropID_Header_MyDefinitions,
+      L"Test Property - WeakReferenceSet<MyDefinition>",
+      L"Test Property - My Weak Reference Set of MyDefinitions",
+      false
+    );
+
 
 // forward declarations and prototypes
 extern "C"
@@ -311,11 +339,6 @@ extern "C" HRESULT CAAFTypeDefSet_test(testMode_t mode)
   catch (HRESULT& rhr)
   {
     hr = rhr;
-  }
-
-  if (SUCCEEDED(hr))
-  {
-    hr = AAFRESULT_TEST_PARTIAL_SUCCESS;
   }
 
   return hr;
@@ -476,30 +499,70 @@ void CAAFTypeDefSet_Register(IAAFHeader * pHeader, IAAFDictionary* pDictionary)
     checkResult(pDictionary->LookupClassDef(AUID_AAFDictionary, &pDictionaryClass));
     IAAFPropertyDefSP pMyDefsSetPropertyDef;
     checkResult(pDictionaryClass->RegisterOptionalPropertyDef(kMyStrongRefSetPropData.id, kMyStrongRefSetPropData.name, pTempType, &pMyDefsSetPropertyDef));
-    //kMyStrongRefSetPropData
+
+    if (WeakReferenceSetsSupported(toolkitVersion))
+    {
+      // Create the weak reference set of my definitions type definition.
+
+      // Target array for initializing the weak reference to my definitions.
+      aafUID_t myDefinitionsTargetArray[3];
+      myDefinitionsTargetArray[0] = kAAFPropID_Root_Header;
+      myDefinitionsTargetArray[1] = kAAFPropID_Header_Dictionary;
+      myDefinitionsTargetArray[2] = kMyPropID_Dictionary_MyDefinitions;
+
+      const aafUInt32 myDefinitionsTargetArrayCount = 
+               sizeof(myDefinitionsTargetArray)/sizeof(aafUID_t);
+
+      
+      // Create and initialize the element type for the weak reference set.
+      IAAFTypeDefWeakObjRefSP pWeakObjRef;
+      checkResult(pDictionary->CreateMetaInstance(AUID_AAFTypeDefWeakObjRef,
+                                                  IID_IAAFTypeDefWeakObjRef,
+                                                  (IUnknown **)&pWeakObjRef));
+      IAAFClassDefSP pTargetClass;
+      checkResult(pDictionary->LookupClassDef(kMyClassDefData.id, &pTargetClass));   
+      checkResult(pWeakObjRef->Initialize(kMyWeakRefData.id,
+                                          pTargetClass,
+                                          kMyWeakRefData.name,
+                                          myDefinitionsTargetArrayCount,
+                                          myDefinitionsTargetArray));
+      checkResult(pWeakObjRef->QueryInterface(IID_IAAFTypeDef, (void**)&pTempType)); // recycle pTempType smart ptr
+      checkResult(pDictionary->RegisterTypeDef(pTempType));
+      
+      // Create and initialize the weak reference set.
+      IAAFTypeDefSetSP pMyWeakRefSetType;
+      checkResult(pDictionary->CreateMetaInstance(AUID_AAFTypeDefSet, IID_IAAFTypeDefSet, (IUnknown**)&pMyWeakRefSetType));
+      checkResult(pMyWeakRefSetType->Initialize(kMyWeakRefSetData.id, pTempType, kMyWeakRefSetData.name)); // pTempType <==> weak reference type
+      checkResult(pMyWeakRefSetType->QueryInterface(IID_IAAFTypeDef, (void**)&pTempType)); // recycle pTempType smart ptr
+      checkResult(pDictionary->RegisterTypeDef(pTempType));
+      
+      // Now add the weak reference set property to the header.
+      IAAFClassDefSP pHeaderClass;
+      checkResult(pDictionary->LookupClassDef(AUID_AAFHeader, &pHeaderClass));
+      IAAFPropertyDefSP pMyWeakRerenceSetPropertyDef;
+      checkResult(pHeaderClass->RegisterOptionalPropertyDef(kMyWeakRefSetData.id, kMyWeakRefSetData.name, pTempType, &pMyWeakRerenceSetPropertyDef));
+    }
   }  
 } 
 
 
 static void CAAFTypeDefSet_GetDefinitionsSet(
-  IAAFDictionary* pDictionary,
+  IAAFObject * pObject,
   aafUID_constref propertyID,
   bool createOptional,
   IAAFTypeDefSet** ppDefinitionsSet,
   IAAFTypeDefObjectRef** ppElementType, 
   IAAFPropertyValue** ppDefinitionsValue)
 {    
-  // Read selected sets in the dictionary.
-  IAAFObjectSP pDictionaryObject;
-  checkResult(pDictionary->QueryInterface(IID_IAAFObject, (void**)&pDictionaryObject));
-  IAAFClassDefSP pDictionaryClass;
-  checkResult(pDictionaryObject->GetDefinition(&pDictionaryClass));
+  // Read selected set property in the given object.
+  IAAFClassDefSP pClass;
+  checkResult(pObject->GetDefinition(&pClass));
 
   //
   // Read the data definitions
   //
   IAAFPropertyDefSP pDefinitionsPropertyDef;
-  checkResult(pDictionaryClass->LookupPropertyDef(propertyID, &pDefinitionsPropertyDef));
+  checkResult(pClass->LookupPropertyDef(propertyID, &pDefinitionsPropertyDef));
   // Make sure that the type is a set
   IAAFTypeDefSP pDefinitionsType;
   checkResult(pDefinitionsPropertyDef->GetTypeDef(&pDefinitionsType));
@@ -514,16 +577,16 @@ static void CAAFTypeDefSet_GetDefinitionsSet(
   if (kAAFTrue == optional)
   {
     aafBoolean_t present = kAAFFalse;
-    checkResult(pDictionaryObject->IsPropertyPresent(pDefinitionsPropertyDef, &present));
+    checkResult(pObject->IsPropertyPresent(pDefinitionsPropertyDef, &present));
     if (kAAFTrue == present)
     {
-      checkResult(pDictionaryObject->GetPropertyValue(pDefinitionsPropertyDef, ppDefinitionsValue));
+      checkResult(pObject->GetPropertyValue(pDefinitionsPropertyDef, ppDefinitionsValue));
     }
     else
     {
       if (createOptional)
       {
-        checkResult(pDictionaryObject->CreateOptionalPropertyValue(pDefinitionsPropertyDef, ppDefinitionsValue));
+        checkResult(pObject->CreateOptionalPropertyValue(pDefinitionsPropertyDef, ppDefinitionsValue));
       }
       else
       {
@@ -533,7 +596,7 @@ static void CAAFTypeDefSet_GetDefinitionsSet(
   }
   else
   {
-    checkResult(pDictionaryObject->GetPropertyValue(pDefinitionsPropertyDef, ppDefinitionsValue));
+    checkResult(pObject->GetPropertyValue(pDefinitionsPropertyDef, ppDefinitionsValue));
   }
   
   // If this value really a set type?
@@ -562,10 +625,12 @@ void CAAFTypeDefSet_Write(IAAFHeader* pHeader, IAAFDictionary* pDictionary)
 
   
   // Get the property value that represents the set of data definitions.
+  IAAFObjectSP pDictionaryObject;
+  checkResult(pDictionary->QueryInterface(IID_IAAFObject, (void**)&pDictionaryObject));
   IAAFTypeDefSetSP pDataDefinitionsSet;
   IAAFTypeDefObjectRefSP pElementType;
   IAAFPropertyValueSP pDataDefinitionsValue;
-  CAAFTypeDefSet_GetDefinitionsSet(pDictionary,
+  CAAFTypeDefSet_GetDefinitionsSet(pDictionaryObject,
                                    kAAFPropID_Dictionary_DataDefinitions,
                                    false, /*createOptional*/
                                    &pDataDefinitionsSet,
@@ -633,7 +698,7 @@ void CAAFTypeDefSet_Write(IAAFHeader* pHeader, IAAFDictionary* pDictionary)
     IAAFTypeDefSetSP pMyDefinitionsSet;
     IAAFPropertyValueSP pMyDefinitionsValue;
     IAAFTypeDefObjectRefSP pMyElementType;
-    CAAFTypeDefSet_GetDefinitionsSet(pDictionary,
+    CAAFTypeDefSet_GetDefinitionsSet(pDictionaryObject,
                                      kMyStrongRefSetPropData.id,
                                      true, /*createOptional*/
                                      &pMyDefinitionsSet,
@@ -665,7 +730,36 @@ void CAAFTypeDefSet_Write(IAAFHeader* pHeader, IAAFDictionary* pDictionary)
         ++removeCount;    
         checkResult(pMyDefinitionsSet->RemoveElement(pMyDefinitionsValue, pMyDefValue));
       }    
-    }  
+    }
+    
+    if (WeakReferenceSetsSupported(toolkitVersion))
+    {
+      // Get the property value that represents the set of the new definitions.
+      IAAFObjectSP pHeaderObject;
+      checkResult(pHeader->QueryInterface(IID_IAAFObject, (void**)&pHeaderObject));
+      IAAFTypeDefSetSP pMyWeakDefinitionsSet;
+      IAAFPropertyValueSP pMyWeakDefinitionsValue;
+      IAAFTypeDefObjectRefSP pMyWeakElementType;
+      CAAFTypeDefSet_GetDefinitionsSet(pHeaderObject,
+                                       kMyWeakRefSetData.id,
+                                       true, /*createOptional*/
+                                       &pMyWeakDefinitionsSet,
+                                       &pMyWeakElementType,
+                                       &pMyWeakDefinitionsValue);
+      
+      // Add all of the current objects in the my definitions strong reference set into the
+      // weak reference set on the header.                                
+      IEnumAAFPropertyValuesSP pEnumMyDefinitions;
+      IAAFPropertyValueSP pMyWeakReferenceValue;
+      checkResult(pMyDefinitionsSet->GetElements(pMyDefinitionsValue, &pEnumMyDefinitions));
+      while (SUCCEEDED(pEnumMyDefinitions->NextOne(&pMyDefValue)))
+      {
+        checkResult(pMyElementType->GetObject(pMyDefValue, IID_IAAFDefObject, (IUnknown **)&pMyDefObject));
+        // "convert" into a weak reference...
+        checkResult(pMyWeakElementType->CreateValue(pMyDefObject, &pMyWeakReferenceValue));
+        checkResult(pMyWeakDefinitionsSet->AddElement(pMyWeakDefinitionsValue, pMyWeakReferenceValue));
+      }
+    } 
   }  
 
 } // CAAFTypeDefSet_Write
@@ -684,10 +778,12 @@ void CAAFTypeDefSet_Read(IAAFHeader* pHeader, IAAFDictionary* pDictionary)
   if (StrongReferenceSetsSupported(fileToolkitVersion))
   {
     // Get the property value that represents the set of data definitions.
+    IAAFObjectSP pDictionaryObject;
+    checkResult(pDictionary->QueryInterface(IID_IAAFObject, (void**)&pDictionaryObject));
     IAAFTypeDefSetSP pDataDefinitionsSet;
     IAAFPropertyValueSP pDataDefinitionsValue;
     IAAFTypeDefObjectRefSP pElementType;
-    CAAFTypeDefSet_GetDefinitionsSet(pDictionary,
+    CAAFTypeDefSet_GetDefinitionsSet(pDictionaryObject,
                                      kAAFPropID_Dictionary_DataDefinitions,
                                      false, /*createOptional*/
                                      &pDataDefinitionsSet,
@@ -768,7 +864,7 @@ void CAAFTypeDefSet_Read(IAAFHeader* pHeader, IAAFDictionary* pDictionary)
       IAAFTypeDefSetSP pMyDefinitionsSet;
       IAAFPropertyValueSP pMyDefinitionsValue;
       IAAFTypeDefObjectRefSP pMyElementType;
-      CAAFTypeDefSet_GetDefinitionsSet(pDictionary,
+      CAAFTypeDefSet_GetDefinitionsSet(pDictionaryObject,
                                        kMyStrongRefSetPropData.id,
                                        false, /*createOptional*/
                                        &pMyDefinitionsSet,
@@ -826,6 +922,76 @@ void CAAFTypeDefSet_Read(IAAFHeader* pHeader, IAAFDictionary* pDictionary)
         }
       }
 
+      if (WeakReferenceSetsSupported(toolkitVersion) && WeakReferenceSetsSupported(fileToolkitVersion))
+      {
+        // Get the property value that represents the set of the new definitions.
+        IAAFObjectSP pHeaderObject;
+        checkResult(pHeader->QueryInterface(IID_IAAFObject, (void**)&pHeaderObject));
+        IAAFTypeDefSetSP pMyWeakDefinitionsSet;
+        IAAFPropertyValueSP pMyWeakDefinitionsValue;
+        IAAFTypeDefObjectRefSP pMyWeakElementType;
+        CAAFTypeDefSet_GetDefinitionsSet(pHeaderObject,
+                                         kMyWeakRefSetData.id,
+                                         false, /*!createOptional*/
+                                         &pMyWeakDefinitionsSet,
+                                         &pMyWeakElementType,
+                                         &pMyWeakDefinitionsValue);
+
+        pEnumMyDefValues->Reset();
+        IAAFPropertyValueSP pMyWeakReferenceValue;
+        IAAFDefObjectSP pMyWeakDefObject;
+        while (SUCCEEDED(pEnumMyDefValues->NextOne(&pMyDefValue)))
+        {  
+          // Make sure that we actually found the "same" definition.
+          checkResult(pMyElementType->GetObject(pMyDefValue, IID_IAAFDefObject, (IUnknown**)&pMyDefObject));
+          checkResult(pMyDefObject->GetAUID(&id));
+          
+          // See if the given id can be found in the weak reference set.
+          checkResult(pMyWeakDefinitionsSet->CreateKey((aafDataBuffer_t)&id, sizeof(id), &pKeyValue));
+          
+          // Is the key in the set?
+          checkResult(pMyWeakDefinitionsSet->ContainsKey(pMyWeakDefinitionsValue, pKeyValue, &containsKey));
+          checkExpression(kAAFTrue == containsKey, AAFRESULT_TEST_FAILED);
+      
+          // Get the value with the same key from the set.
+          checkResult(pMyWeakDefinitionsSet->LookupElement(pMyWeakDefinitionsValue, pKeyValue, &pMyWeakReferenceValue));
+          
+          // The property value's type  must be the same as the elment type of the set!
+          checkResult(pMyWeakReferenceValue->GetType(&pMyDefValueType));
+          checkExpression(EqualObject(pMyDefValueType, pMyWeakElementType), AAFRESULT_TEST_FAILED);
+          
+          checkResult(pMyWeakElementType->GetObject(pMyWeakReferenceValue, IID_IAAFDefObject, (IUnknown**)&pMyWeakDefObject));
+          checkExpression(EqualObject(pMyWeakDefObject, pMyDefObject), AAFRESULT_TEST_FAILED);
+        }
+        
+        // Turn the test around...
+        IEnumAAFPropertyValuesSP pEnumMyWeakDefinitions;
+        checkResult(pMyWeakDefinitionsSet->GetElements(pMyWeakDefinitionsValue, &pEnumMyWeakDefinitions));
+        while (SUCCEEDED(pEnumMyWeakDefinitions->NextOne(&pMyWeakReferenceValue)))
+        {           
+          // The property value's type  must be the same as the elment type of the set!
+          checkResult(pMyWeakReferenceValue->GetType(&pMyDefValueType));
+          checkExpression(EqualObject(pMyDefValueType, pMyWeakElementType), AAFRESULT_TEST_FAILED);
+
+          // Make sure that we actually found the "same" definition.
+          checkResult(pMyWeakElementType->GetObject(pMyWeakReferenceValue, IID_IAAFDefObject, (IUnknown**)&pMyWeakDefObject));
+          checkResult(pMyWeakDefObject->GetAUID(&id));
+         
+          // See if the given id can be found in the strong reference set.
+          checkResult(pMyDefinitionsSet->CreateKey((aafDataBuffer_t)&id, sizeof(id), &pKeyValue));
+          
+          // Is the key in the set?
+          checkResult(pMyDefinitionsSet->ContainsKey(pMyDefinitionsValue, pKeyValue, &containsKey));
+          checkExpression(kAAFTrue == containsKey, AAFRESULT_TEST_FAILED);
+      
+          // Get the value with the same key from the set.
+          checkResult(pMyDefinitionsSet->LookupElement(pMyDefinitionsValue, pKeyValue, &pMyDefValue));
+          
+          checkResult(pMyElementType->GetObject(pMyDefValue, IID_IAAFDefObject, (IUnknown**)&pMyDefObject));
+          checkExpression(EqualObject(pMyWeakDefObject, pMyDefObject), AAFRESULT_TEST_FAILED);
+        }
+        
+      }
       
     } // reading extended objects supported
     
