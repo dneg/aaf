@@ -2647,7 +2647,7 @@ HRESULT Omf2Aaf::ConvertOMFVaryingValue(OMF2::omfSegObj_t segment,
 	{
 		UTLstdprintf("%sProcessing Varying Value of length = %ld and %ld Control Points\n ", gpGlobals->indentLeader, (int)vvLength, (int)numPoints);
 	}
-	ConvertOMFDatakind(vvDatakind, &datadef);
+//	ConvertOMFDatakind(vvDatakind, &datadef);
 	if (numPoints > 0)
 	{
 		OMF2::omfiIteratorAlloc(OMFFileHdl, &OMFIterator);
@@ -2668,7 +2668,7 @@ HRESULT Omf2Aaf::ConvertOMFVaryingValue(OMF2::omfSegObj_t segment,
 				pControlPoint->SetTime(AAFCPTime);
 				pControlPoint->SetEditHint(AAFCPEditHint);
 				pControlPoint->SetValue((aafUInt32)valueSize, (unsigned char *)pCPBuffer);
-				pVaryingValue->AddPoint(pControlPoint);
+				pVaryingValue->AppendPoint(pControlPoint);
 			}
 			if (pCPBuffer)
 				UTLMemoryFree(pCPBuffer);
@@ -2683,6 +2683,7 @@ HRESULT Omf2Aaf::ConvertOMFVaryingValue(OMF2::omfSegObj_t segment,
 		pParameter->Release();
 	DecIndentLevel();
 	return rc;
+
 }
 // ============================================================================
 // ConvertOMFNestedScope
@@ -3130,6 +3131,41 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 					pEffectSegment->Release();
 					pSegment = NULL;
 					pEffectSegment = NULL;
+				}
+				if (levelSegment)
+				{
+					if (OMF2::omfiIsAConstValue(OMFFileHdl, levelSegment, &OMFError))
+					{
+						IAAFConstValue* pConstantValue = NULL;
+			
+						rc = pDictionary->CreateInstance(&AUID_AAFConstValue, IID_IAAFConstValue, (IUnknown **)&pConstantValue);
+						if (SUCCEEDED(rc))
+						{
+							rc = ConvertOMFConstValue(levelSegment, pConstantValue);
+							rc = pConstantValue->QueryInterface(IID_IAAFParameter, (void **)&pParameter);
+							pEffect->AddNewParameter(pParameter);
+							pParameter->Release();
+							pParameter = NULL;
+							pConstantValue->Release();
+							pConstantValue = NULL;
+						}
+					}
+					else if (OMF2::omfiIsAVaryValue(OMFFileHdl, levelSegment, &OMFError))
+					{
+						IAAFVaryingValue* pVaryingValue = NULL;
+
+						rc = pDictionary->CreateInstance(&AUID_AAFVaryingValue, IID_IAAFVaryingValue, (IUnknown **)&pVaryingValue);
+						if (SUCCEEDED(rc))
+						{
+							rc = ConvertOMFVaryingValue(levelSegment, pVaryingValue);
+							rc = pVaryingValue->QueryInterface(IID_IAAFParameter, (void **)&pParameter);
+							pEffect->AddNewParameter(pParameter);
+							pParameter->Release();
+							pParameter = NULL;
+							pVaryingValue->Release();
+							pVaryingValue = NULL;
+						}
+					}
 				}
 			}
 		}
