@@ -25,7 +25,6 @@ AAFPERSISTENTOBJECTS = \
 
 # These are all of the other non-persistent objects:
 AAFNONPERSISTENTOBJECTS = \
-	AAFRoot \
 	EnumAAFClassDefs \
 	EnumAAFDefs \
 	EnumAAFObjects \
