@@ -39,7 +39,6 @@ AAFPERSISTENTOBJECTS = \
 	AAFPropertyDef \
 	AAFReferenceValue \
 	AAFScopeReference \
-	AAFSegment \
 	AAFSequence \
 	AAFSourceClip \
 	AAFSourceMob \
@@ -93,6 +92,7 @@ HUMAN_TYPED_IMPL = \
 	AAFObject \
 	AAFComponent \
 	AAFMob  \
+	AAFSegment \
 	AAFMobSlot \
 	AAFSession
 
