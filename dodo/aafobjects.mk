@@ -12,7 +12,7 @@ AAFPERSISTENTOBJECTS = \
 	AAFClassDef \
 	AAFDictionary \
 	AAFConstValue \
-	AAFControlCodeDef \
+	AAFParameterDef \
 	AAFControlPoint \
 	AAFDataDef \
 	AAFDefObject \
@@ -58,7 +58,7 @@ AAFNONPERSISTENTOBJECTS = \
 	AAFPropertyValue \
 	EnumAAFAttributes \
 	EnumAAFClassDefs \
-	EnumAAFControlCodeDefs \
+	EnumAAFParameterDefs \
 	EnumAAFControlPoints \
 	EnumAAFDataDefs \
 	EnumAAFDefs \
