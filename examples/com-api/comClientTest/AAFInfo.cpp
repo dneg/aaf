@@ -251,6 +251,9 @@ static void printIdentification(IAAFIdentification* pIdent)
   printTimeStamp(&timeStamp);
   printf("\n");
 
+  check(pIdent->GetRefImplVersion(&version));
+  printProductVersion(&version);
+
   check(pIdent->GetPlatform(wchName, sizeof (wchName)));
   convert(chName, sizeof(chName), wchName);
   printf("Platform             = \"%s\"\n", chName);
