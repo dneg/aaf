@@ -68,6 +68,12 @@ aafRGBAComponent_t	testElements2[NUM_TEST_ELEMENTS] = { {kAAFCompGreen,8}, {kAAF
 #define TEST_PALETTE_SIZE	16
 aafUInt8	bogusPalette[TEST_PALETTE_SIZE] = { 1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31 };
 
+static const 	aafMobID_t	TEST_MobID =
+{{0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00},
+0x13, 0x00, 0x00, 0x00,
+{0x37792fba, 0x0404, 0x11d4, 0x8e, 0x3d, 0x00, 0x90, 0x27, 0xdf, 0xca, 0x7c}};
+
+
 // Cross-platform utility to delete a file.
 static void RemoveTestFile(const wchar_t* pFileName)
 {
@@ -164,7 +170,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFDigitalImageDescriptor*	pDIDesc = NULL;
 	IAAFRGBADescriptor*	pRGBADesc = NULL;
 	IAAFEssenceDescriptor*	pEssDesc = NULL;
-	aafMobID_t		newMobID;
 	HRESULT			hr = AAFRESULT_SUCCESS;
 
 
@@ -186,8 +191,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 							   (IUnknown **)&pSourceMob));
     checkResult(pSourceMob->QueryInterface(IID_IAAFMob, (void **)&pMob));
 
-    checkResult(CoCreateGuid((GUID *)&newMobID));
-    checkResult(pMob->SetMobID(newMobID));
+    checkResult(pMob->SetMobID(TEST_MobID));
     checkResult(pMob->SetName(L"RGBADescriptorTest"));
 
 

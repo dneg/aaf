@@ -90,7 +90,9 @@ const aafString_t  TEST_PARAM_DESC [2]	=	{L"A longer description of the TestEffe
 												L"An aproximation of PI"};
 const aafString_t  TEST_PARAM_UNITS[2]	=   {L"Furlongs per Fortnight", L"PI fractional members"};
 
-aafUID_t kTestParm2ID = {0x14b66cc5, 0x1a1, 0x11d4, { 0x80, 0x46, 0x8, 0x0, 0x36, 0x21, 0x8, 0x4 } };
+static const 	aafUID_t	kTestParm2ID =
+{ 0x47240c2b, 0x19d, 0x11d4, { 0x8e, 0x3d, 0x0, 0x90, 0x27, 0xdf, 0xca, 0x7c } };
+
 
 typedef IAAFSmartPointer<IAAFParameterDef>					IAAFParameterDefSP;
 typedef IAAFSmartPointer<IEnumAAFParameters>				IEnumAAFParametersSP;
