@@ -27,7 +27,7 @@ GEN_H_DIR=./include
 EXE=
 OBJ=.o
 COMPILE=c++
-COMPILEFLAGS=-I.. -I../../AAFi686LinuxSDK/g++/include
+COMPILEFLAGS=-I.. -I../../ref-impl/include/ref-api -I../../ref-impl/include
 LINK=c++
 
 PROGS=classDefUid$(EXE) \
