@@ -82,6 +82,33 @@ AD_XMETHOD2(SetPixelLayout,
   // AAFRESULT_SUCCESS
   //   - succeeded.  \(This is the only code indicating success.\))
 
+AD_XMETHOD1(CountPixelLayoutElements,
+			[out],
+			objPass,
+			aafUInt32 *,
+			pResult,
+			Number of components,
+			This function returns the number of components in a pixel.
+  // 
+  // Succeeds if all of the following are true:
+  // - this object has already been initialized.
+  // - the pResult pointer is valid.
+  // 
+  // If this method fails no state is changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - Initialize\(\) has already been called on this object.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pResult is null.)
+
 AD_XMETHOD2(GetPixelLayout,
 			[in],
 				objPass,
@@ -211,12 +238,39 @@ AD_XMETHOD1(GetPaletteSize,
   // AAFRESULT_NULL_PARAM
   //   - pNumberBytes is NULL.)
 
+AD_XMETHOD1(CountPaletteLayoutElements,
+			[out],
+			objPass,
+			aafUInt32 *,
+			pResult,
+			Number of components,
+			This function returns the number of components in a pixel.
+  // 
+  // Succeeds if all of the following are true:
+  // - this object has already been initialized.
+  // - the pResult pointer is valid.
+  // 
+  // If this method fails no state is changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - Initialize\(\) has already been called on this object.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pResult is null.)
+
 AD_XMETHOD2(SetPaletteLayout,
 			[in],
 				objPass,
 				aafUInt32,
 				numberElements,
-				The number of bytes in the array,
+				The number of elements in the array,
 			[in],
 				objPass,
 				aafRGBAComponent_t*,
