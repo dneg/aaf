@@ -1,6 +1,6 @@
 /***********************************************************************
  *
- *              Copyright (c) 1998-1999 Avid Technology, Inc.
+ *              Copyright (c) 1998-2001 Avid Technology, Inc.
  *
  * Permission to use, copy and modify this software and accompanying 
  * documentation, and to distribute and sublicense application software
@@ -26,6 +26,12 @@
  ************************************************************************/
 
 
+
+// Define this to 1 to use raw storage implementations of the
+// traditional AAFFileOpenXXX(filename) methods.
+#ifndef USE_RAW_STORAGE
+#define USE_RAW_STORAGE 0
+#endif // ! USE_RAW_STORAGE
 
 
 // Declare the public interface that must be implemented.
@@ -203,6 +209,7 @@ STDAPI AAFFileOpenExistingRead (
   aafUInt32  modeFlags,
   IAAFFile ** ppFile)
 {
+  TRACE("AAFFileOpenExistingRead");
   HRESULT hr = S_OK;
   AAFDLL *pAAFDLL = NULL;
 
@@ -223,8 +230,38 @@ STDAPI AAFFileOpenExistingRead (
  
   try
   {
+#if USE_RAW_STORAGE
+	IAAFRawStorage * pRawStg = 0;
+	hr = AAFCreateRawStorageDisk
+	  (pFileName,
+	   kAAFFileExistence_existing,
+	   kAAFFileAccess_read,
+	   &pRawStg);
+	if (AAFRESULT_SUCCEEDED (hr))
+	  {
+		hr = AAFCreateAAFFileOnRawStorage
+		  (pRawStg,
+		   kAAFFileExistence_existing,
+		   kAAFFileAccess_read,
+		   &aafFileKindAafSSBinary,
+		   modeFlags,
+		   0,
+		   ppFile);
+		if (AAFRESULT_SUCCEEDED (hr))
+		  {
+			ASSERT ("Valid ppFile pointer", ppFile);
+			ASSERT ("Valid *ppFile", *ppFile);
+			hr = (*ppFile)->Open ();
+		  }
+	  }
+	if (pRawStg)
+	  {
+		pRawStg->Release ();
+	  }
+#else // ! USE_RAW_STORAGE
     // Attempt to call the dll's exported function...
     hr = pAAFDLL->OpenExistingRead(pFileName, modeFlags, ppFile);
+#endif // USE_RAW_STORAGE
   }
   catch (const char* exStr)
   {
@@ -254,6 +291,7 @@ STDAPI AAFFileOpenExistingModify (
   aafProductIdentification_t *  pIdent,
   IAAFFile ** ppFile)
 {
+  TRACE("AAFFileOpenExistingModify");
   HRESULT hr = S_OK;
   AAFDLL *pAAFDLL = NULL;
 
@@ -274,8 +312,38 @@ STDAPI AAFFileOpenExistingModify (
   
   try
   {
+#if USE_RAW_STORAGE
+	IAAFRawStorage * pRawStg = 0;
+	hr = AAFCreateRawStorageDisk
+	  (pFileName,
+	   kAAFFileExistence_existing,
+	   kAAFFileAccess_modify,
+	   &pRawStg);
+	if (AAFRESULT_SUCCEEDED (hr))
+	  {
+		hr = AAFCreateAAFFileOnRawStorage
+		  (pRawStg,
+		   kAAFFileExistence_existing,
+		   kAAFFileAccess_modify,
+		   &aafFileKindAafSSBinary,
+		   modeFlags,
+		   pIdent,
+		   ppFile);
+		if (AAFRESULT_SUCCEEDED (hr))
+		  {
+			ASSERT ("Valid ppFile pointer", ppFile);
+			ASSERT ("Valid *ppFile", *ppFile);
+			hr = (*ppFile)->Open ();
+		  }
+	  }
+	if (pRawStg)
+	  {
+		pRawStg->Release ();
+	  }
+#else // ! USE_RAW_STORAGE
     // Attempt to call the dll's exported function...
     hr = pAAFDLL->OpenExistingModify(pFileName, modeFlags, pIdent, ppFile);
+#endif // USE_RAW_STORAGE
   }
   catch (const char* exStr)
   {
@@ -307,9 +375,9 @@ STDAPI AAFFileOpenNewModify (
   aafProductIdentification_t *  pIdent,
   IAAFFile ** ppFile)
 {
+  TRACE("AAFFileOpenNewModify");
   HRESULT hr = S_OK;
   AAFDLL *pAAFDLL = NULL;
-
 
   // Get the dll wrapper
   hr = LoadIfNecessary(&pAAFDLL);
@@ -318,8 +386,38 @@ STDAPI AAFFileOpenNewModify (
   
   try
   {
+#if USE_RAW_STORAGE
+	IAAFRawStorage * pRawStg = 0;
+	hr = AAFCreateRawStorageDisk
+	  (pFileName,
+	   kAAFFileExistence_new,
+	   kAAFFileAccess_modify,
+	   &pRawStg);
+	if (AAFRESULT_SUCCEEDED (hr))
+	  {
+		hr = AAFCreateAAFFileOnRawStorage
+		  (pRawStg,
+		   kAAFFileExistence_new,
+		   kAAFFileAccess_modify,
+		   &aafFileKindAafSSBinary,
+		   modeFlags,
+		   pIdent,
+		   ppFile);
+		if (AAFRESULT_SUCCEEDED (hr))
+		  {
+			ASSERT ("Valid ppFile pointer", ppFile);
+			ASSERT ("Valid *ppFile", *ppFile);
+			hr = (*ppFile)->Open ();
+		  }
+	  }
+	if (pRawStg)
+	  {
+		pRawStg->Release ();
+	  }
+#else // ! USE_RAW_STORAGE
     // Attempt to call the dll's exported function...
     hr = pAAFDLL->OpenNewModify(pFileName, modeFlags, pIdent, ppFile);
+#endif // USE_RAW_STORAGE
   }
   catch (const char* exStr)
   {
@@ -348,9 +446,9 @@ STDAPI AAFFileOpenTransient (
   aafProductIdentification_t *  pIdent,
   IAAFFile ** ppFile)
 {
+  TRACE("AAFFileOpenTransient");
   HRESULT hr = S_OK;
   AAFDLL *pAAFDLL = NULL;
-
 
   // Get the dll wrapper
   hr = LoadIfNecessary(&pAAFDLL);
@@ -359,8 +457,36 @@ STDAPI AAFFileOpenTransient (
   
   try
   {
+#if USE_RAW_STORAGE
+	IAAFRawStorage * pRawStg = 0;
+	hr = AAFCreateRawStorageMemory
+	  (kAAFFileAccess_modify,
+	   &pRawStg);
+	if (AAFRESULT_SUCCEEDED (hr))
+	  {
+		hr = AAFCreateAAFFileOnRawStorage
+		  (pRawStg,
+		   kAAFFileExistence_new,
+		   kAAFFileAccess_modify,
+		   &aafFileKindAafSSBinary,
+		   0,
+		   pIdent,
+		   ppFile);
+		if (AAFRESULT_SUCCEEDED (hr))
+		  {
+			ASSERT ("Valid ppFile pointer", ppFile);
+			ASSERT ("Valid *ppFile", *ppFile);
+			hr = (*ppFile)->Open ();
+		  }
+	  }
+	if (pRawStg)
+	  {
+		pRawStg->Release ();
+	  }
+#else // ! USE_RAW_STORAGE
     // Attempt to call the dll's exported function...
     hr = pAAFDLL->OpenTransient(pIdent, ppFile);
+#endif // USE_RAW_STORAGE
   }
   catch (const char* exStr)
   {
@@ -653,6 +779,8 @@ STDAPI AAFCreateRawStorageDisk (
 //
 STDAPI AAFCreateAAFFileOnRawStorage (
   IAAFRawStorage * pRawStorage,
+  aafFileExistence_t  existence,
+  aafFileAccess_t  access,
   aafUID_constptr  pFileKind,
   aafUInt32  modeFlags,
   aafProductIdentification_constptr  pIdent,
@@ -671,6 +799,8 @@ STDAPI AAFCreateAAFFileOnRawStorage (
     // Attempt to call the dll's exported function...
     hr = pAAFDLL->CreateAAFFileOnRawStorage
 	  (pRawStorage,
+	   existence,
+	   access,
 	   pFileKind,
 	   modeFlags,
 	   pIdent,
@@ -984,6 +1114,8 @@ HRESULT AAFDLL::CreateRawStorageDisk (
 
 HRESULT AAFDLL::CreateAAFFileOnRawStorage (
     IAAFRawStorage * pRawStorage,
+	aafFileExistence_t  existence,
+	aafFileAccess_t  access,
 	aafUID_constptr  pFileKind,
 	aafUInt32  modeFlags,
 	aafProductIdentification_constptr  pIdent,
@@ -997,6 +1129,8 @@ HRESULT AAFDLL::CreateAAFFileOnRawStorage (
     
   return _pfnCreateAAFFileOnRawStorage
 	(pRawStorage,
+	 existence,
+	 access,
 	 pFileKind,
 	 modeFlags,
 	 pIdent,
