@@ -156,7 +156,7 @@ AAFRESULT ImplAAFSegment::GenerateSequence(ImplAAFSequence **seq)
 	{
 // ***	CHECK(GetDatakind(&datakind));
 		tmp = new ImplAAFSequence();
-		CHECK(tmp->AppendCpnt(this));
+		CHECK(tmp->AppendComponent(this));
 		*seq = tmp;
 	} /* XPROTECT */
 	XEXCEPT
