@@ -210,6 +210,16 @@ public:
     //          <c OMStoredObject>.
   void restore(OMDataStream& stream, size_t externalSize);
 
+  // Stream manipulation
+
+    // @cmember Open the <c OMStoredStream> representing the property
+    //          <p stream> contained within this <c OMStoredObject>.
+  OMStoredStream* openStoredStream(const OMDataStream& property);
+
+    // @cmember Create an <c OMStoredStream> representing the property
+    //          <p stream> contained within this <c OMStoredObject>.
+  OMStoredStream* createStoredStream(const OMDataStream& property);
+
   // Name manipulation.
 
     // @cmember Compute the name for a stream.
