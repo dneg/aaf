@@ -403,8 +403,8 @@ void ImplAAFTypeDefVariableArray::externalize(OMByte* internalBytes,
 	{
 	  if (numElems > 0)
 	  {
-		  copy (externalBytes,
-				internalBytes,
+		  copy (internalBytes,
+				externalBytes,
 				externalBytesSize);
 	  }
 	}
@@ -472,7 +472,7 @@ void ImplAAFTypeDefVariableArray::internalize(OMByte* externalBytes,
 		{
 		  copy (externalBytes,
 				internalBytes,
-				externalBytesSize);
+				internalBytesSize);
 		}
 	}
 	else
