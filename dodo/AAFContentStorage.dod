@@ -7,20 +7,14 @@ AAFObject\
 #endm
 #c
 AD_HEAD
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
-
- 
 /***********************************************\
-*	Stub only.   Implementation not yet added	*
+*												*
+* Advanced Authoring Format						*
+*												*
+* Copyright (c) 1998-1999 Avid Technology, Inc. *
+* Copyright (c) 1998-1999 Microsoft Corporation *
+*												*
 \***********************************************/
-
 
 AD_CLASS_UUID(54D4C481, 5F8B, 11d2, 80, 73, 00, 60, 08, 14, 3E, 6F)
 
