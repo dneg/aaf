@@ -16,6 +16,14 @@ OMStorable::OMStorable(void)
   _persistentProperties.setContainingObject(this);
 }
 
+OMStorable::~OMStorable(void)
+{
+  delete _name;
+  _name = 0;
+  delete _pathName;
+  _pathName = 0;
+}
+
 void OMStorable::saveTo(OMStoredObject& s) const
 {
   TRACE("OMStorable::saveTo");
@@ -72,6 +80,7 @@ OMStorable* OMStorable::containingObject(void) const
 void OMStorable::setContainingObject(const OMStorable* containingObject)
 {
   _containingObject = containingObject;
+  delete _pathName;
   _pathName = 0;
 }
 
@@ -82,7 +91,11 @@ const char* OMStorable::name(void) const
 
 void OMStorable::setName(const char* name)
 {
-  _name = name;
+  PRECONDITION("Valid name", validString(name));
+  delete _name;
+  _name = new char[strlen(name) + 1];
+  strcpy(_name, name);
+  delete _pathName;
   _pathName = 0;
 }
 
@@ -94,6 +107,18 @@ OMFile* OMStorable::file(void) const
 const char* OMStorable::pathName(void) const
 {
   TRACE("OMStorable::pathName");
+
+  if (_pathName == 0) {
+    OMStorable* nonConstThis = const_cast<OMStorable*>(this);
+    nonConstThis->_pathName = nonConstThis->makePathName();
+  }
+  ASSERT("Valid path name", validString(_pathName));
+  return _pathName;
+}
+
+char* OMStorable::makePathName(void)
+{
+  TRACE("OMStorable::makePathName");
   // Don't need to compute path name each time, should save once computed.
 
   // All objects must have a name.
