@@ -308,6 +308,15 @@ bool OMStorable::persistent(void) const
   return result;
 }
 
+  // @mfunc This object's property set.
+  //   @rdesc A pointer to this object's <c OMPropertySet>.
+OMPropertySet* OMStorable::propertySet(void)
+{
+  TRACE("OMStorable::propertySet");
+
+  return &_persistentProperties;
+}
+
 char* OMStorable::makePathName(void)
 {
   TRACE("OMStorable::makePathName");
