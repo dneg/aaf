@@ -1731,7 +1731,6 @@ AAFRESULT STDMETHODCALLTYPE
 {
 	IAAFEssenceFormat	*iFormat = NULL;
 	IUnknown			*iUnknown;
-	AAFRESULT			aafError;
 
 	XPROTECT()
 	{
