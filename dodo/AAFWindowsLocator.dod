@@ -1,0 +1,41 @@
+#startm .this-module 0
+AAFWindowsLocator\
+#endm
+#c
+#startm .parent-module 0
+AAFLocator\
+#endm
+#c
+#import ./AAFUnitTest.exp
+
+/******************************************\
+*                                          *
+* Advanced Authoring Format                *
+*                                          *
+* Copyright (c) 1998 Avid Technology, Inc. *
+* Copyright (c) 1998 Microsoft Corporation *
+*                                          *
+\******************************************/
+
+AD_CLASS_BEGIN()
+
+//@access Public Members
+/****/
+AD_METHOD2(GetShortcut,
+[in],aafInt32,shortCutLen,Length of the buffer in bytes,
+[out],char*,shortCutBuf,A Windows shortcut,
+Get the windows shortcut.)
+
+/****/
+AD_METHOD2(SetShortcut,
+[in],aafInt32,shortCutLen,Length of the buffer in bytes,
+[in],char*,shortCutBuf,A Windows shortcut,
+Set the windows shortcut.)
+
+  //
+  // IAAFUnitTest interface method overrides
+  //
+.method-Test
+
+
+AD_CLASS_END
