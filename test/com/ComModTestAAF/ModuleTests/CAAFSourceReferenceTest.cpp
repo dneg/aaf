@@ -9,137 +9,199 @@
 *                                          *
 \******************************************/
 
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
-
-
-
 
 #ifndef __CAAFSourceReference_h__
 #include "CAAFSourceReference.h"
 #endif
 
 #include <iostream.h>
+#include <stdio.h>
+
+
+#include "AAFStoredObjectIDs.h"
 #include "AAFResult.h"
 #include "AAFDefUIDs.h"
 
-// Temporarily necessary global declarations.
-extern "C" const CLSID CLSID_AAFSourceReference;
 
 
-HRESULT CAAFSourceReference::test()
+// Cross-platform utility to delete a file.
+static void RemoveTestFile(const wchar_t* pFileName)
 {
-	HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
-	IAAFSourceReference *pObject = NULL;
-	aafUID_t		inSourceID;
-	aafUID_t		outSourceID;
-	aafSlotID_t		inMobSlotID;
-	aafSlotID_t		outMobSlotID;
+  const size_t kMaxFileName = 512;
+  char cFileName[kMaxFileName];
+
+  size_t status = wcstombs(cFileName, pFileName, kMaxFileName);
+  if (status != (size_t)-1)
+  { // delete the file.
+    remove(cFileName);
+  }
+}
+
+// convenient error handlers.
+inline void checkResult(HRESULT r)
+{
+  if (FAILED(r))
+    throw r;
+}
+inline void checkExpression(bool expression, HRESULT r)
+{
+  if (!expression)
+    throw r;
+}
+
+
+
+static HRESULT CreateAAFFile(aafWChar * pFileName)
+{
+	IAAFFile *					pFile = NULL;
+	bool bFileOpen = false;
+	IAAFHeader *        pHeader = NULL;
+	IAAFDictionary*  pDictionary = NULL;
+	IAAFSourceReference	*pSourceReference = NULL;
+	aafProductIdentification_t	ProductInfo;
+	aafUID_t					inSourceID, outSourceID;
+	aafUInt32 inMobSlotID, outMobSlotID;
+	HRESULT						hr = S_OK;
+
+
+	ProductInfo.companyName = L"AAF Developers Desk";
+	ProductInfo.productName = L"AAFSourceReference Test";
+	ProductInfo.productVersion.major = 1;
+	ProductInfo.productVersion.minor = 0;
+	ProductInfo.productVersion.tertiary = 0;
+	ProductInfo.productVersion.patchLevel = 0;
+	ProductInfo.productVersion.type = kVersionUnknown;
+	ProductInfo.productVersionString = NULL;
+	ProductInfo.productID = -1;
+	ProductInfo.platform = NULL;
+
 
 	try
 	{
-		// Attempt to create an AAFSourceReference.
-		hr = CoCreateInstance(
-							 CLSID_AAFSourceReference,
-							 NULL, 
-							 CLSCTX_INPROC_SERVER, 
-							 IID_IAAFSourceReference, (void **)&pObject);
-		if (FAILED(hr))
-		{
-			cerr << "CAAFSourceReference::test...FAILED!";
-			cerr << hr;
-			cerr << "\tCoCreateInstance(&CLSID_AAFSourceReference, NULL,"
-			" CLSCTX_INPROC_SERVER, &IID_IAAFSourceReference, ...);" <<
-			  endl;
-			return hr;
-		}
+		// Remove the previous test file if any.
+		RemoveTestFile(pFileName);
+
+		// Create the file.
+		checkResult(AAFFileOpenNewModify(pFileName, 0, &ProductInfo, &pFile));
+		bFileOpen = true;
+ 
+		// We can't really do anthing in AAF without the header.
+		checkResult(pFile->GetHeader(&pHeader));
+
+		// Get the AAF Dictionary so that we can create valid AAF objects.
+		checkResult(pHeader->GetDictionary(&pDictionary));
+ 		
+
+		// Create an Abstract SourceReference
+		checkResult(pDictionary->CreateInstance(&AUID_AAFSourceReference,
+								  IID_IAAFSourceReference, 
+								  (IUnknown **)&pSourceReference));
 
 		// module-specific tests go here
 		//		Set Values.	
 
 		inSourceID = DDEF_Video;   // Could have been any other value !
-		hr = pObject->SetSourceID( inSourceID);
-		if (FAILED(hr))
-		{
-			if (pObject)
-				pObject->Release();
-			return hr;
-		}
+		checkResult(pSourceReference->SetSourceID( inSourceID));
 		
 		inMobSlotID = 100;   // Could have been any other value !
-		hr = pObject->SetSourceMobSlotID( inMobSlotID);
-		if (FAILED(hr))
-		{
-			if (pObject)
-				pObject->Release();
-			return hr;
-		}
+		checkResult(pSourceReference->SetSourceMobSlotID( inMobSlotID));
 
 		//	Now Get Values
-		hr = pObject->GetSourceID( &outSourceID);
-		if (FAILED(hr))
-		{
-			if (pObject)
-				pObject->Release();
-			return hr;
-		}
+		checkResult(pSourceReference->GetSourceID( &outSourceID));
+
 		// Compare value with the one we set
-		if (memcmp(&inSourceID, &outSourceID, sizeof(inSourceID)) != 0)
-		{
-			if (pObject)
-				pObject->Release();
-			hr = AAFRESULT_TEST_FAILED;
-			return hr;
-		}
+		checkExpression(memcmp(&inSourceID, &outSourceID, sizeof(inSourceID)) == 0, AAFRESULT_TEST_FAILED);
 
 		
-		hr = pObject->GetSourceMobSlotID( &outMobSlotID);
-		if (FAILED(hr))
-		{
-			if (pObject)
-				pObject->Release();
-			return hr;
-		}
+		checkResult(pSourceReference->GetSourceMobSlotID( &outMobSlotID));
+
 		// Compare value with the one we set
-		if (inMobSlotID != outMobSlotID)
-		{
-			if (pObject)
-				pObject->Release();
-			hr = AAFRESULT_TEST_FAILED;
-			return hr;
-		}
-
-		if (pObject)
-			pObject->Release();
-		return AAFRESULT_SUCCESS;
-
+		checkExpression(inMobSlotID == outMobSlotID, AAFRESULT_TEST_FAILED);
 	}
-	catch (...)
+	catch (HRESULT& rResult)
 	{
-		cerr << "CAAFSourceReference::test...Caught general C++"
-		" exception!" << endl; 
+		hr = rResult;
 	}
 
-	// Cleanup our object if it exists.
-	if (pObject)
-		pObject->Release();
 
-	return hr;
+  // Cleanup and return
+  if (pSourceReference)
+    pSourceReference->Release();
+
+  if (pDictionary)
+    pDictionary->Release();
+
+  if (pHeader)
+    pHeader->Release();
+      
+  if (pFile)
+  {  // Close file
+    if (bFileOpen)
+	  {
+		  pFile->Save();
+		  pFile->Close();
+	  }
+    pFile->Release();
+  }
+
+  return hr;
 }
 
 
+static HRESULT ReadAAFFile(aafWChar * pFileName)
+{
+	IAAFFile *					pFile = NULL;
+	bool bFileOpen = false;
+	IAAFHeader *				pHeader = NULL;
+	HRESULT						hr = S_OK;
 
 
+	try
+	{
+		// Open the file
+		checkResult(AAFFileOpenExistingRead(pFileName, 0, &pFile));
+		bFileOpen = true;
 
+		// We can't really do anthing in AAF without the header.
+		checkResult(pFile->GetHeader(&pHeader));
+	}
+	catch (HRESULT& rResult)
+	{
+    hr = rResult;
+	}
 
+	// Cleanup object references
+  if (pHeader)
+    pHeader->Release();
+      
+  if (pFile)
+  {  // Close file
+    if (bFileOpen)
+      pFile->Close();
+     pFile->Release();
+  }
 
+  return hr;
+}
+ 
 
+HRESULT CAAFSourceReference::test()
+{
+	HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
+ 	aafWChar * pFileName = L"SourceReferenceTest.aaf";
 
+	try
+	{
+		hr = CreateAAFFile(	pFileName );
+		if(hr == AAFRESULT_SUCCESS)
+			hr = ReadAAFFile( pFileName );
+	}
+	catch (...)
+	{
+	  cerr << "CSourceReferences::test...Caught general C++"
+		" exception!" << endl; 
+	  hr = AAFRESULT_TEST_FAILED;
+	}
 
-
+  return hr;
+}
