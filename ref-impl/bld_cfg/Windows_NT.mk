@@ -30,6 +30,7 @@ CHMOD = chmod.exe
 MV = mv.exe
 SH = sh.exe
 TOUCH = touch.exe
+PERL = perl.exe
 
 SHELL = c:/mksnt/sh.exe
 MAKE_SUFFIX =

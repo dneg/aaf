@@ -30,6 +30,7 @@ ARFLAGS = -c -q
 OBJFILE = -o $*.${OBJ}
 EXEFILE = -o unittest.${EXE}
 CP = cp
+PERL = perl
 MAKE_SUFFIX = .gmake
 
 UNICODE = 1

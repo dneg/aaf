@@ -33,6 +33,7 @@ CHMOD = ${CMD_DIR}/chmod.exe
 MV = ${CMD_DIR}/mv.exe
 SH = ${CMD_DIR}/sh.exe
 TOUCH = ${CMD_DIR}/touch.exe
+PERL = ${CMD_DIR}/perl.exe
 
 SHELL = ${CMD_DIR}/sh.exe
 MAKE_SUFFIX =
