@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "Container.h"
+#include "ImplAAFObject.h"
 #include "AAFUtils.h"
 #include "aafansic.h"
 #include "aafCvt.h"
@@ -9,6 +10,8 @@
 #include "OMFile.h"
 #include "OMClassFactory.h"
 #include "ImplAAFIdentification.h"
+
+#include "ImplAAFObjectCreation.h"
 
 // Later: These two functions set a global alignment in the
 //file for writing properties.  Used only for media data
@@ -48,17 +51,21 @@ void OMContainer::OMLAbortContainer(void)
 {
 }
 
+extern "C" const aafClassID_t CLSID_AAFHeader;
+
 OMStorable* makeHeader(void)
 {
-  ImplAAFHeader* newAAFHeader = new ImplAAFHeader;
-  OMStorable* retval = dynamic_cast<OMStorable*> (newAAFHeader);
+  ImplAAFHeader* newAAFHeader = dynamic_cast<ImplAAFHeader*>(CreateImpl(CLSID_AAFHeader));
+  OMStorable* retval = newAAFHeader;
   return retval;
 }
 
+extern "C" const aafClassID_t CLSID_AAFIdentification;
+
 OMStorable* makeIdentification(void)
 {
-  ImplAAFIdentification* newAAFIdentification = new ImplAAFIdentification;
-  OMStorable* retval = dynamic_cast<OMStorable*> (newAAFIdentification);
+  ImplAAFIdentification* newAAFIdentification = dynamic_cast<ImplAAFIdentification*>(CreateImpl(CLSID_AAFIdentification));
+  OMStorable* retval = newAAFIdentification;
   return retval;
 }
 
@@ -66,7 +73,8 @@ OMStorable* makeIdentification(void)
 void OMContainer::OMLOpenContainer(OMLSession sessionData,
                                  OMLRefCon attributes,
                                  OMLconst_OMLGlobalName typeName, 
-                                 OMLContainerUseMode useFlags)
+                                 OMLContainerUseMode useFlags,
+                                 ImplAAFHeader*& header)
 {
 	char *pathname;
 
@@ -79,7 +87,7 @@ void OMContainer::OMLOpenContainer(OMLSession sessionData,
   OMFile::classFactory()->add(CLSID_AAFIDENTIFICATION, makeIdentification);
 
   OMStorable* head = OMStorable::restoreFrom(_file, "head", _file->root());
-
+  header = dynamic_cast<ImplAAFHeader *>(head);
 }
 
 //Will remove this!
