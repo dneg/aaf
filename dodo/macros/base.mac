@@ -421,7 +421,7 @@ AD_XCONSTRUCTOR2(%01, objPass, %02, %03, %04,
 #c Macro Arg 13: method description
 #c
 #startm AD_CONSTRUCTOR3 13
-AD_XCONSTRUCTOR2(%01, objPass, %02, %03, %04,
+AD_XCONSTRUCTOR3(%01, objPass, %02, %03, %04,
 				 %05, objPass, %06, %07, %08,
 				 %09, objPass, %10, %11, %12,
 				 %13)
@@ -445,7 +445,7 @@ AD_XCONSTRUCTOR2(%01, objPass, %02, %03, %04,
 #c Macro Arg 17: method description
 #c
 #startm AD_CONSTRUCTOR4 17
-AD_XCONSTRUCTOR2(%01, objPass, %02, %03, %04,
+AD_XCONSTRUCTOR4(%01, objPass, %02, %03, %04,
 				 %05, objPass, %06, %07, %08,
 				 %09, objPass, %10, %11, %12,
 				 %13, objPass, %14, %15, %16,
