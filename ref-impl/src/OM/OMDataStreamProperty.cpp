@@ -276,6 +276,11 @@ void OMDataStreamProperty::readTypedElements(const OMType* elementType,
   PRECONDITION("Valid element count", elementCount > 0);
   PRECONDITION("Stream byte order is known", hasByteOrder());
 
+  bool reorder = false;
+  if (byteOrder() != hostByteOrder()) {
+    reorder = true;
+  }
+
   // Allocate buffer for one element
   OMByte* buffer = new OMByte[externalElementSize];
 
@@ -287,7 +292,7 @@ void OMDataStreamProperty::readTypedElements(const OMType* elementType,
     ASSERT("All bytes read", actualByteCount == externalElementSize);
 
     // Reorder an element of the property value
-    if (store()->byteOrder() != hostByteOrder()) {
+    if (reorder) {
       elementType->reorder(buffer, externalElementSize);
     }
 
@@ -333,6 +338,11 @@ void OMDataStreamProperty::writeTypedElements(const OMType* elementType,
   PRECONDITION("Valid element count", elementCount > 0);
   PRECONDITION("Stream byte order is known", hasByteOrder());
 
+  bool reorder = false;
+  if (byteOrder() != hostByteOrder()) {
+    reorder = true;
+  }
+
   // Allocate buffer for one element
   size_t externalBytesSize = elementType->externalSize(
                                                  const_cast<OMByte*>(elements),
@@ -349,10 +359,10 @@ void OMDataStreamProperty::writeTypedElements(const OMType* elementType,
                        externalElementSize,
                        buffer,
                        externalBytesSize,
-                       store()->byteOrder());
+                       hostByteOrder());
 
     // Reorder an element of the property value
-    if (store()->byteOrder() != hostByteOrder()) {
+    if (reorder) {
       elementType->reorder(buffer, externalBytesSize);
     }
 
