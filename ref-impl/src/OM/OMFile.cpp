@@ -187,12 +187,12 @@ OMFile* OMFile::openExistingModify(const wchar_t* fileName,
   //        <c OMFile> is named <p fileName>, use the <c OMClassFactory>
   //        <p factory> to create the objects. The file must not already
   //        exist. The byte ordering on the newly created file is given
-  //        by <p byteOrder>. The root <c OMStorable> in the newly
+  //        by <p byteOrder>. The client root <c OMStorable> in the newly
   //        created file is given by <p root>.
   //   @parm The name of the file to create.
   //   @parm The factory to use for creating objects.
   //   @parm The byte order to use for the newly created file.
-  //   @parm The root <c OMStorable> in the newly created file.
+  //   @parm The client root <c OMStorable> in the newly created file.
   //   @rdesc The newly created <c OMFile>.
 OMFile* OMFile::openNewModify(const wchar_t* fileName,
                               const OMClassFactory* factory,
@@ -288,8 +288,8 @@ void OMFile::revert(void)
   ASSERT("Unimplemented code not reached", false);
 }
 
-  // @mfunc Restore the root <c OMStorable> object from this <c OMFile>.
-  //   @rdesc The newly restored roo <c OMStorable>.
+  // @mfunc Restore the client root <c OMStorable> object from this <c OMFile>.
+  //   @rdesc The newly restored root <c OMStorable>.
 OMStorable* OMFile::restore(void)
 {
   TRACE("OMFile::restore");
@@ -331,7 +331,7 @@ void OMFile::close(void)
   }
 }
 
-  // @mfunc Retrieve the root <c OMStorable> from this <c OMFile>.
+  // @mfunc Retrieve the client root <c OMStorable> from this <c OMFile>.
   //   @rdesc The root <c OMStorable>.
 OMStorable* OMFile::root(void)
 {
