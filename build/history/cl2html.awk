@@ -27,11 +27,16 @@ BEGIN {
     if (match(fields[1], "/$")) {
       dir = fields[1];
       files = trim(fields[2], 1);
+      cs = 3;
     } else {
       dir = "";
       files = fields[1];
+      cs = 2;
     }
-    comments = "";
+    comments = trim(fields[cs], 1);
+    for (i = cs + 1; i <= f; i++) {
+      comments = comments ":" fields[i]
+    }
 
     printf("[dir      = \"%s\"]\n", dir);
     printf("[files    = \"%s\"]\n", files);
