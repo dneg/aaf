@@ -51,7 +51,7 @@ AD_XMETHOD5(AddMasterSlot,
   // Master Mob contains a Source Clip that specifies the File Source
   // Mob in its source reference properties. Typically this is done
   // automatically by passing the Master Mob handle to
-  // omfmMedia-Create\, but this function allows you to add it later.
+  // AAFMedia::Create\, but this function allows you to add it later.
   //
   // Note: The mediaKind  parameter requires a data kind valid for a
   // media stream. Valid data kinds are:
@@ -170,11 +170,11 @@ AD_XMETHOD2(GetNumRepresentations,
   // This function returns the number of media representations
   // available for the specified SlotID on a specified Master
   // Mob. This function is meant to work with
-  // omfmGetRepresentationSourceClip\, so that you can iterate through
+  // GetRepresentationSourceClip\, so that you can iterate through
   // all of the choices yourself.  In most cases\, you can use
-  // omfmGetCriteriaSourceClip to handle multiple
+  // GetCriteriaSourceClip to handle multiple
   // representations. this function and
-  // omfmGetRepresentationSourceClip are lower-level functions.
+  // GetRepresentationSourceClip are lower-level functions.
   //
   // Succeeds if all of the following are true:
   // - the pNumReps pointer is valid.
@@ -215,7 +215,7 @@ AD_XMETHOD3(GetRepresentationSourceClip,
   // an iterator.  The function GetRepresentationSourceClip takes an
   // index between 1 and the number of representations [inclusive]\,
   // and returns the indexed File Source Mob. You can make calls to
-  // functions such as omfmGetVideoInfo and omfmIsMediaContiguous to
+  // functions such as AAFMedia::GetVideoInfo and AAFMedia::IsMediaContiguous to
   // determine which media is the best fit.
   //
   // Succeeds if all of the following are true:
