@@ -2975,6 +2975,6 @@ void Aaf2Omf::ConvertValueBuf(aafUID_t &typeDefID,
 }
 // OTher idea: Upon hitting ANY of the Avid private params (or level) find a VVAL
 // and assume that all VVALs containing AvidPrivate have identical times
-void Aaf2Omf::ConvertObjectProps(IAAFObject* pObj, omfObject_t	pOMFObject)
+void Aaf2Omf::ConvertObjectProps(IAAFObject* /*pObj*/, omfObject_t	/*pOMFObject*/)
 {
 }

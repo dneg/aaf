@@ -65,6 +65,22 @@ inline void checkExpression(bool expression, HRESULT r)
     throw r;
 }
 
+  static void SwapBytes(void *buffer, size_t count)
+  {
+    unsigned char *pBuffer = (unsigned char *)buffer;
+    unsigned char tmp;
+    int front = 0;
+    int back = count - 1;
+  
+    for (front = 0, back = count - 1; front < back; ++front, --back)
+    {
+      tmp = pBuffer[front];
+      pBuffer[front] = pBuffer[back];
+      pBuffer[back] = tmp;
+    }
+  }
+
+
 static aafRational_t	testSpeed = { 2997, 100 };
 static aafUInt32		userData1 = 0x526F626E;
 static aafUInt32		userData2 = 0x42656361;
@@ -323,11 +339,26 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 //		checkResult(pTimecodeStream12M->GetUserDataLength((aafInt32*)&checkUserDataLen));
 //       checkExpression(checkUserDataLen == 4, AAFRESULT_TEST_FAILED);	// For 12M
 		checkResult(pTimecodeStream->GetUserDataAtPosition(0, sizeof(checkUserData), (aafUInt8*)&checkUserData));
-        checkExpression(checkUserData == userData1, AAFRESULT_TEST_FAILED);
+        if(checkUserData != userData1)
+		{
+			SwapBytes((aafUInt8*)&checkUserData, sizeof(checkUserData));
+        	if(checkUserData != userData1)
+       			throw AAFRESULT_TEST_FAILED;
+       	}
 		checkResult(pTimecodeStream->GetUserDataAtPosition(120, sizeof(checkUserData), (aafUInt8*)&checkUserData));
-        checkExpression(checkUserData == userData2, AAFRESULT_TEST_FAILED);
+        if(checkUserData != userData2)
+		{
+			SwapBytes((aafUInt8*)&checkUserData, sizeof(checkUserData));
+        	if(checkUserData != userData2)
+       			throw AAFRESULT_TEST_FAILED;
+       	}
 		checkResult(pTimecodeStream->GetUserDataAtPosition(180, sizeof(checkUserData), (aafUInt8*)&checkUserData));
-        checkExpression(checkUserData == userData3, AAFRESULT_TEST_FAILED);
+        if(checkUserData != userData3)
+		{
+			SwapBytes((aafUInt8*)&checkUserData, sizeof(checkUserData));
+        	if(checkUserData != userData3)
+       			throw AAFRESULT_TEST_FAILED;
+       	}
 
 		/**********/
 		offset = 0;		// Group 1 lower bound	 

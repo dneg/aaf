@@ -59,7 +59,7 @@ protected:
   //
   // Constructor/destructor
   //
-  CAAFAIFCCodec (IUnknown * pControllingUnknown, aafBoolean_t doInit = kAAFTrue);
+  CAAFAIFCCodec (IUnknown * pControllingUnknown);
   virtual ~CAAFAIFCCodec ();
 
 public:

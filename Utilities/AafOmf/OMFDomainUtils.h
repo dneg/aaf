@@ -35,7 +35,7 @@ public:
 	virtual ~OMFDomainUtils();
 
 public:
-	virtual void RegisterOMFProperties(AafOmfGlobals *globals, omfSessionHdl_t OMFSession) {};
+	virtual void RegisterOMFProperties(AafOmfGlobals * /*globals*/, omfSessionHdl_t /*OMFSession*/) {};
 };
 
 #endif

@@ -87,12 +87,12 @@ public:
 	AAFCheck(AAFRESULT status = AAFRESULT_SUCCESS );
 };
 
-inline AAFCheck & AAFCheck::operator= ( AAFCheck &status )
+inline AAFCheck & AAFCheck::operator= ( AAFCheck &/*status*/ )
 { 
 	return *this; 
 }
 
-inline AAFCheck::AAFCheck(AAFCheck &status)
+inline AAFCheck::AAFCheck(AAFCheck &/*status*/)
 {
 }
 

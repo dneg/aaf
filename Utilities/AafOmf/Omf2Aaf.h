@@ -86,7 +86,7 @@ public:
 	void	ConvertOMFNestedScope(omfSegObj_t segment, IAAFNestedScope* pNestedScope);
 	void	ConvertOMFScopeRef(omfSegObj_t segment, IAAFScopeReference* pScopeRef);
 	virtual void ConvertObjectProps(omfObject_t pOMFObject, aafUID_t &classID, IAAFObject* pObj);
-	virtual void FinishUpMob(omfMobObj_t pOMFMob, IAAFMob* pMob) { };
+	virtual void FinishUpMob(omfMobObj_t  /*pOMFMob*/, IAAFMob*  /*pMob*/) { };
 
 protected:
 

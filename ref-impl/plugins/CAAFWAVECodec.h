@@ -59,7 +59,7 @@ protected:
   //
   // Constructor/destructor
   //
-  CAAFWaveCodec (IUnknown * pControllingUnknown, aafBoolean_t doInit = kAAFTrue);
+  CAAFWaveCodec (IUnknown * pControllingUnknown);
   virtual ~CAAFWaveCodec ();
 
 public:

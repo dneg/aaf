@@ -71,7 +71,7 @@ protected:
 		aafUID_t			&effectDefID,
 		omfSegObj_t pOMFEffect,
 		omfInt32 slotNum, omfLength_t effectLen);
-	virtual void	FinishUpMob(IAAFMob* pMob, omfMobObj_t pOMFMob) {};
+	virtual void	FinishUpMob(IAAFMob* /*pMob*/, omfMobObj_t /*pOMFMob*/) {};
 	omfObject_t LocateSlot(omfEffObj_t pOMFEffect, aafInt32 slotID);
 	virtual void ConvertValueBuf(aafUID_t &typeDefID,
 								aafDataBuffer_t srcValue, aafUInt32 srcValueLen,

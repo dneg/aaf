@@ -96,12 +96,12 @@ public:
 };
 
 
-inline OMFCheck & OMFCheck::operator= ( OMFCheck &status )
+inline OMFCheck & OMFCheck::operator= ( OMFCheck &/*status*/ )
 { 
 	return *this; 
 }
 
-inline OMFCheck::OMFCheck( OMFCheck &status )
+inline OMFCheck::OMFCheck( OMFCheck &/*status*/ )
 {
 }
 
