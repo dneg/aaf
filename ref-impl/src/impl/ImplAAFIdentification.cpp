@@ -48,6 +48,16 @@ _platform(            PID_IDENTIFICATION_PLATFORM,             "platform")
   // _persistentProperties.put(_toolKitVersion.address());
   _persistentProperties.put(   _platform.address());
   // _persistentProperties.put(_generation.address());
+
+  
+#if defined(_WIN32)
+  _platform = L"Win32";
+#elif defined(macintosh) || defined(_MAC)
+  _platform = L"MacOS";
+#else
+  _platform = L"Unknown";
+#endif
+
 }
 
 ImplAAFIdentification::ImplAAFIdentification(
@@ -276,7 +286,10 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 	  return AAFRESULT_NULL_PARAM;
 	}
-  return AAFRESULT_NOT_IMPLEMENTED;
+
+  _companyName = pName;
+
+  return AAFRESULT_SUCCESS;
 }
 
 
@@ -287,7 +300,10 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 	  return AAFRESULT_NULL_PARAM;
 	}
-  return AAFRESULT_NOT_IMPLEMENTED;
+
+  _productName = pName;
+
+  return AAFRESULT_SUCCESS;
 }
 
 
@@ -309,7 +325,10 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 	  return AAFRESULT_NULL_PARAM;
 	}
-  return AAFRESULT_NOT_IMPLEMENTED;
+
+  _productVersionString = pVS;
+
+  return AAFRESULT_SUCCESS;
 }
 
 
