@@ -1,7 +1,5 @@
-// @doc INTERNAL
-// @com This file implements the 6th and 7th of Tim Bingham's scalability tests
-// @com It is used for measuring Essence data read/write access times.
-// @com This was hacked together by Chris Morgan.  Allegedly. 
+// @com Executable test program by Chris Morgan, intern for Avid Technology, Tewksbury 
+// @com This is used for scalability testing of AAF code.  Last modified on 7/23/99.
 
 /******************************************\
 *                                          *
@@ -302,9 +300,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 			}
 			else if(testType == testStandardCalls)
 			{
-				check(pEssenceAccess->WriteSamples(	dataLen,	//!!! hardcoded bytes/sample ==1// Number of Samples
-												dataPtr,	// THE Raw data
-												sizeof(dataBuff)));// buffer size
+				check(pEssenceAccess->WriteSamples(	dataLen,		//!!! hardcoded bytes/sample ==1// Number of Samples
+												dataPtr,			// THE Raw data
+												sizeof(dataBuff)));	// buffer size
 				kind = "standard calls";
 			}
 			else if(testType == testFractionalCalls)
@@ -342,14 +340,14 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 		moduleErrorTmp = UTLEndPeriod(timerID, &elapsedtime);
 
 		//  now return the desired statistics 
-		if (elapsedtime!=0)	dataWriteRate = (dataWritten/elapsedtime);
+		if (elapsedtime!=0)	dataWriteRate = ((dataWritten/elapsedtime)*1000)/1024;
 		else dataWriteRate = 0;
 	
 		//  check output is of correct form for grep
 		if (location == "internal")
 			externalkind = "";
 
-		printf("Write rate (%s%s %s) = %ld kb/sec\n",externalkind, location, kind, dataWriteRate);
+		printf("Write rate (%s%s %s) = %ld kb/sec KBytes = %ld\n",externalkind, location, kind, dataWriteRate,dataWritten/1024);
 		
 		// close essence data file
 		fclose(pWavFile);
@@ -603,14 +601,14 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 					//  fill up the dataRead variable
 					dataRead=AAFBytesRead;
 					//  now return the desired statistics 
-					if (elapsedtime!=0)	dataReadRate = (dataRead/elapsedtime);
+					if (elapsedtime!=0)	dataReadRate = ((dataRead/elapsedtime)*1000)/1024;
 					else dataReadRate = 0;
 
 					//  convert pFileName to a printable form
 					char niceFileName[80];
 					wcstombs(niceFileName,pFileName,80);
 									
-					printf("File = %s Bytes = %ld Time(ms) = %ld Rate = %ld kb/sec\n",niceFileName,dataRead,elapsedtime,dataReadRate);
+					printf("File = %s KBytes = %ld Time(ms) = %ld Rate = %ld kb/sec\n",niceFileName,dataRead/1024,elapsedtime,dataReadRate);
 
 #if 0
 					// Now compare the data read from the AAF file to the actual WAV file
@@ -870,37 +868,44 @@ AAFRESULT loadWAVEHeader(aafUInt8 *buf,
 }
 
 
-//  Main adapted to use command-line arguments
-//  NOTE:  defining [0] prog-name; [1] Number N of wave files
-int main(int argc, char *argv[])
+//  A new usage function to make program more friendly
+void usage(void)
 {
-	// the second argument is stored as global variable N
-	char* Ns = argv[1];
-  char* expectedEnd = &Ns[strlen(Ns)];
-  char* end = 0;
-  long int N = strtoul(Ns, &end, 10);
-  
-	//  dealing with incorrect number of arguments and/or an argument less than one
+	printf ("Usage:\n EssenceAccess.exe <Number of copies of Laser.wav in AAF file>\n");
+	printf (" Number is required to be integer greater than zero.\n\n");
+}
 
-	if ((argc !=2) || (N<=0))
+//  Main adapted to use command-line arguments with argument checking
+//  NOTE:  defining [0] program name; [1] Number N of wave files
+int main(int argumentCount, char *argumentVector[])
+{
+	//  First checking for correct number of arguments 
+
+	if (argumentCount != 2)
 	{
-		printf ("Usage is EssenceAccess.exe [N] where N is non-zero positive integer\n");
-		printf ("N is the number of copies of Laser.wav that are placed in the AAF file\n");
+		usage();
 		return 0;
 	}
 
-	if (end != expectedEnd) 
+	//  Processing the second argument to be stored as global variable N
+	char* Ns = argumentVector[1];
+	char* expectedEnd = &Ns[strlen(Ns)];
+	char* end = 0;
+	long int N = strtoul(Ns, &end, 10);
+	
+	//  Testing for correct second argument (less than one)
+	if ((end != expectedEnd) || (N < 1))
 	{ 
-		  // Some characters not consumed
-			printf("Error\n");
-      exit(EXIT_FAILURE);
-  }
+		printf("The first argument was of the incorrect form. [%s]\n\n",argumentVector[1]);
+		usage();
+		return 0;
+	}
 	
 	//  Initialise timers
 	UTLInitTimers(1000);
 
 	CComInitialize comInit;
-  CAAFInitialize aafInit;
+	CAAFInitialize aafInit;
 
 	//  The new, non-interleaved code to fix the caching issues relating to statistic gathering
 
@@ -911,27 +916,27 @@ int main(int argc, char *argv[])
 	aafWChar *	rawData = L"EssenceTestRaw.wav";
 	aafWChar *	externalAAF = L"ExternalAAFEssence.aaf";
 	testDataFile_t	dataFile;
-
+	
 	pwFileName = L"InternalRaw.aaf";
 	pFileName = "InternalRaw.aaf";
 	printf("***Creating file %s using writeRawData (Internal Media)\n", pFileName);
 	checkFatal(CreateAAFFile(pwFileName, NULL, testRawCalls, N));
-
+	
 	pwFileName = L"InternalStandard.aaf";
 	pFileName = "InternalStandard.aaf";
 	printf("***Creating file %s using WriteSamples (Internal Media)\n", pFileName);
 	checkFatal(CreateAAFFile(pwFileName, NULL, testStandardCalls, N));
-
+	
 	pwFileName = L"InternalMulti.aaf";
 	pFileName = "InternalMulti.aaf";
 	printf("***Creating file %s using WriteMultiSamples (Internal Media)\n", pFileName);
 	checkFatal(CreateAAFFile(pwFileName, NULL, testMultiCalls, N));
-
+	
 	pwFileName = L"InternalFractional.aaf";
 	pFileName = "InternalFractional.aaf";
 	printf("***Creating file %s using WriteFractionalSample (Internal Media)\n", pFileName);
 	checkFatal(CreateAAFFile(pwFileName, NULL, testFractionalCalls, N));
-
+	
 	pwFileName = L"ExternalStandardRaw.aaf";
 	pFileName = "ExternalStandardRaw.aaf";
 	dataFile.dataFilename = rawData;
@@ -939,7 +944,7 @@ int main(int argc, char *argv[])
 	externalkind = "Raw ";
 	printf("***Creating file %s using WriteSamples (External Raw Media)\n", pFileName);
 	checkFatal(CreateAAFFile(pwFileName, &dataFile, testStandardCalls, N));
-
+	
 	pwFileName = L"ExternalStandardAAF.aaf";
 	pFileName = "ExternalStandardAAF.aaf";
 	dataFile.dataFilename = externalAAF;
@@ -947,29 +952,29 @@ int main(int argc, char *argv[])
 	externalkind = "AAF ";
 	printf("***Creating file %s using WriteSamples (External AAF Media)\n", pFileName);
 	checkFatal(CreateAAFFile(pwFileName, &dataFile, testStandardCalls, N));
-
+	
 	//  now, for the read calls, reading the 6 different files created
-
+	
 	pwFileName = L"InternalRaw.aaf";
 	pFileName = "InternalRaw.aaf";
 	printf("***Re-opening file %s using readRawData\n", pFileName);
 	ReadAAFFile(pwFileName, testRawCalls);
-
+	
 	pwFileName = L"InternalStandard.aaf";
 	pFileName = "InternalStandard.aaf";
 	printf("***Re-opening file %s using ReadSamples\n", pFileName);
 	ReadAAFFile(pwFileName, testStandardCalls);
-
+	
 	pwFileName = L"InternalMulti.aaf";
 	pFileName = "InternalMulti.aaf";
 	printf("***Re-opening file %s using ReadMultiSamples\n", pFileName);
 	ReadAAFFile(pwFileName, testMultiCalls);
-
+	
 	pwFileName = L"InternalFractional.aaf";
 	pFileName = "InternalFractional.aaf";
 	printf("***Re-opening file %s using ReadFractionalSample\n", pFileName);
 	ReadAAFFile(pwFileName, testFractionalCalls);
-
+	
 	pwFileName = L"ExternalStandardRaw.aaf";
 	pFileName = "ExternalStandardRaw.aaf";
 	dataFile.dataFilename = rawData;
@@ -985,11 +990,11 @@ int main(int argc, char *argv[])
 	externalkind = "AAF ";
 	printf("***Re-opening file %s using ReadSamples\n", pFileName);
 	ReadAAFFile(pwFileName, testStandardCalls);
-
+	
 	//  and now, we're all done...
 	printf("Done\n");
 	return(0);
-
+	
 }
 
 
