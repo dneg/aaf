@@ -15,6 +15,7 @@ AD_IDL(//
 //
 AD_STD_COMMENT_IFC_HEADER
 AD_STD_COMMENT_IFC_STUB)
+AD_FORWARD_DECLARATION(AAFPropertyValue)
 AD_CLASS_UUID(307e9e6d, dcb2, 11d2, 84, 29, 00, 60, 08, 32, ac, b8)
 
 AD_DEFAULT_UUID(307e9e6e, dcb2, 11d2, 84, 29, 00, 60, 08, 32, ac, b8)
@@ -107,7 +108,7 @@ AD_X2METHOD3(AppendElements,
 			 [in\, size_is\(numElements\)],
 			 objInArray,
 			 AAFPropertyValue,
-			 pMemberPropVals,
+			 ppMemberPropVals,
 			 values to be appended to this stream,
 			 numElements,
 
