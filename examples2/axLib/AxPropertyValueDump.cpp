@@ -296,7 +296,7 @@ void AxPropertyValueDump::process( IAAFPropertyValueSP& spPropVal,
 			axStrongObjRef.GetObject( spPropVal, IID_IAAFObject ),
 			IID_IAAFObject ) );
 		
-		_os << L" to object of class " << *axObj.GetClassName();
+		_os << L" to object of class " << axObj.GetClassName();
 	}
 }
 
@@ -316,7 +316,7 @@ void AxPropertyValueDump::process( IAAFPropertyValueSP& spPropVal,
 			axWeakObjRef.GetObject( spPropVal, IID_IAAFObject ),
 			IID_IAAFObject ) );
 		
-		_os << L"to object of class " << *axObj.GetClassName() << L" named \"";
+		_os << L"to object of class " << axObj.GetClassName() << L" named \"";
 
 		// Pluck out the value of the Name property.
 		AxPropertyIter axPropIter( axObj.CreatePropertyIter() );
@@ -326,7 +326,7 @@ void AxPropertyValueDump::process( IAAFPropertyValueSP& spPropVal,
 		      notAtEnd;
 		      notAtEnd = axPropIter.NextOne( nextProp ) ) {
 			AxProperty axProp ( nextProp );
-			if ( L"Name" == *axProp.GetName() ) {
+			if ( L"Name" == axProp.GetName() ) {
 				AxPropertyValue axPropVal( axProp.GetValue() );
 				AxPropertyValueDump dump( _os, false, true, _s );
 				axPropVal.Process( dump );

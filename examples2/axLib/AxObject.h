@@ -35,11 +35,9 @@ public:
 	AxObject( IAAFObjectSP spIaafObject );
 	virtual ~AxObject();
 
-	// FIXME - No need for auto_ptr<> here.  Better to optimize
-	// AxString that to optimize use of AxString.
-	auto_ptr< AxString > GetClassName() const;
-	
-	AxPropertyIter CreatePropertyIter() const;
+    AxString GetClassName();
+
+	AxPropertyIter CreatePropertyIter();
 
 private:
 
@@ -47,5 +45,12 @@ private:
 	
 	mutable IAAFObjectSP _spIaafObject;
 };
+
+#include "AxUtil.h"
+inline AxString AxObject::GetClassName()
+{
+	return AxDefNameToString< IAAFObject, IAAFClassDef >( _spIaafObject );
+}
+
 
 #endif

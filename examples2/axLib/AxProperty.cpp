@@ -43,7 +43,7 @@ IAAFPropertyValueSP AxProperty::GetValue() const
 	return spIaafPropertyValue;
 }
 
-std::auto_ptr< AxString > AxProperty::GetName() const
+AxString AxProperty::GetName() const
 {
 	return AxDefNameToString< IAAFProperty, IAAFPropertyDef >( _spIaafProperty );
 }

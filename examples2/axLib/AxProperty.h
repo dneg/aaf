@@ -35,7 +35,7 @@ public:
 
 	virtual ~AxProperty();
 
-	std::auto_ptr< AxString > GetName() const;
+	AxString GetName() const;
 		
 	IAAFPropertyValueSP GetValue() const;
 	

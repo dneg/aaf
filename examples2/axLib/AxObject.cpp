@@ -40,13 +40,14 @@ AxObject::AxObject( IAAFObjectSP spIaafObject )
 
 AxObject::~AxObject()
 {}
-
-std::auto_ptr< AxString > AxObject::GetClassName() const
+#if 0
+AxString AxObject::GetClassName()
 {
-	return AxDefNameToString< IAAFObject, IAAFClassDef >( _spIaafObject );
+	return *AxDefNameToString< IAAFObject, IAAFClassDef >( _spIaafObject );
 }
-	
-AxPropertyIter AxObject::CreatePropertyIter() const
+#endif
+
+AxPropertyIter AxObject::CreatePropertyIter()
 {
 	IEnumAAFPropertiesSP spIEnumProperties;
 
