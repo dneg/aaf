@@ -135,11 +135,12 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFFile*		pFile = NULL;
   IAAFHeader *        pHeader = NULL;
   IAAFDictionary*  pDictionary = NULL;
-  IAAFPluggableDef*	pPlugDef;
+  IAAFDefObject*	pPlugDef = NULL;
+  IAAFCodecDef*		pCodecDef = NULL;
   IAAFPluginDescriptor *pDesc;
   IAAFNetworkLocator *pNetLoc, *pNetLoc2, *pNetLoc3;
   IAAFLocator *pLoc, *pLoc2, *pLoc3;
-  aafUID_t			category = AUID_AAFPluggableDefinition, manufacturer = MANUF_JEFFS_PLUGINS;
+  aafUID_t			category = AUID_AAFDefObject, manufacturer = MANUF_JEFFS_PLUGINS;
   bool bFileOpen = false;
 	HRESULT			hr = S_OK;
 /*	long			test;
@@ -158,8 +159,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
     // Get the AAF Dictionary so that we can create valid AAF objects.
     checkResult(pHeader->GetDictionary(&pDictionary));
     
-	checkResult(pDictionary->CreateInstance(&AUID_AAFPluggableDef,
-							  IID_IAAFPluggableDef, 
+	checkResult(pDictionary->CreateInstance(&AUID_AAFCodecDef,
+							  IID_IAAFDefObject, 
 							  (IUnknown **)&pPlugDef));
     
 	checkResult(pDictionary->CreateInstance(&AUID_AAFPluginDescriptor,
@@ -206,7 +207,10 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	/**/
 	checkResult(pPlugDef->AppendPluginDescriptor(pDesc));
 
-	checkResult(pDictionary->RegisterPluggableDefinition(pPlugDef));
+	
+	checkResult(pPlugDef->QueryInterface (IID_IAAFCodecDef,
+                                          (void **)&pCodecDef));
+	checkResult(pDictionary->RegisterCodecDefinition(pCodecDef));
 	/**/
 	checkResult(pDictionary->CreateInstance(&AUID_AAFNetworkLocator,
 							  IID_IAAFNetworkLocator, 
@@ -251,8 +255,8 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	IAAFFile*		pFile = NULL;
 	IAAFHeader*		pHeader = NULL;
 	IAAFDictionary*  pDictionary = NULL;
-	IEnumAAFPluggableDefs *pEnumPluggable = NULL;
-	IAAFPluggableDef *pPluggable = NULL;
+//!!!	IEnumAAFPluggableDefs *pEnumPluggable = NULL;
+	IAAFCodecDef *pPluggable = NULL;
 	IEnumAAFPluginDescriptors *pEnumDesc;
 	IAAFPluginDescriptor *pPlugin = NULL;
 	IAAFNetworkLocator	*pNetLoc = NULL;
@@ -270,7 +274,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	aafPluginAPI_t	testAPI;
 	aafEngine_t		testEngine;
 	aafVersionType_t testMinVersion, testMaxVersion;
-  aafUID_t			category = AUID_AAFPluggableDefinition, manufacturer = MANUF_JEFFS_PLUGINS;
+  aafUID_t			category = AUID_AAFDefinitionObject, manufacturer = MANUF_JEFFS_PLUGINS;
 
 	try
 	{
@@ -280,6 +284,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 
 		checkResult(pHeader->GetDictionary(&pDictionary));
 	
+#if 0	//!!!
 		checkResult(pDictionary->GetPluggableDefinitions(&pEnumPluggable));
 		checkResult(pEnumPluggable->NextOne (&pPluggable));
 		checkResult(pPluggable->EnumPluginDescriptors (&pEnumDesc));
@@ -350,7 +355,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
  		checkExpression(testBool == AAFFalse, AAFRESULT_TEST_FAILED);
 		checkResult(pPlugin->SupportsAuthentication(&testBool));
 		checkExpression(testBool == AAFFalse, AAFRESULT_TEST_FAILED);
-
+#endif
 	}
 	catch (HRESULT& rResult)
 	{
@@ -376,8 +381,8 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	if (pPluggable)
 		pPluggable->Release();
 
-	if (pEnumPluggable)
-		pEnumPluggable->Release();
+//!!!	if (pEnumPluggable)
+//!!!		pEnumPluggable->Release();
 
 	if (pDictionary)
 		pDictionary->Release();

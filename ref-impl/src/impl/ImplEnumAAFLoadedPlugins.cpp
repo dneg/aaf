@@ -17,8 +17,8 @@
 * Copyright (c) 1998 Microsoft Corporation *
 *                                          *
 \******************************************/
-#ifndef __ImplAAFPluggableDef_h__
-#include "ImplAAFPluggableDef.h"
+#ifndef __ImplAAFDefObject_h__
+#include "ImplAAFDefObject.h"
 #endif
 
 

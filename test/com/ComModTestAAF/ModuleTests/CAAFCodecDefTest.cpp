@@ -123,7 +123,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFFile*		pFile = NULL;
   IAAFHeader *        pHeader = NULL;
   IAAFDictionary*  pDictionary = NULL;
-  IAAFPluggableDef*	pPlugDef;
+  IAAFCodecDef*	pPlugDef;
   bool bFileOpen = false;
 	HRESULT			hr = S_OK;
 /*	long			test;
@@ -143,11 +143,11 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
     checkResult(pHeader->GetDictionary(&pDictionary));
     
 	  checkResult(pDictionary->CreateInstance(&AUID_AAFCodecDef,
-							  IID_IAAFPluggableDef, 
+							  IID_IAAFCodecDef, 
 							  (IUnknown **)&pPlugDef));
     
 
-	  checkResult(pDictionary->RegisterPluggableDefinition(pPlugDef));
+	  checkResult(pDictionary->RegisterCodecDefinition(pPlugDef));
   }
   catch (HRESULT& rResult)
   {
@@ -183,7 +183,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	IAAFFile*		pFile = NULL;
 	IAAFHeader*		pHeader = NULL;
 	IAAFDictionary*  pDictionary = NULL;
-	IEnumAAFPluggableDefs *pPlug = NULL;
+//!!!	IEnumAAFPluggableDefs *pPlug = NULL;
   bool bFileOpen = false;
 	HRESULT			hr = S_OK;
 
@@ -195,7 +195,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 
 		checkResult(pHeader->GetDictionary(&pDictionary));
 	
-	  checkResult(pDictionary->GetPluggableDefinitions(&pPlug));
+//!!!	  checkResult(pDictionary->GetPluggableDefinitions(&pPlug));
 	}
 	catch (HRESULT& rResult)
 	{
@@ -203,8 +203,8 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	}
 
 	// Cleanup and return
-	if (pPlug)
-		pPlug->Release();
+//!!!	if (pPlug)
+//!!!		pPlug->Release();
 
 	if (pDictionary)
 		pDictionary->Release();
