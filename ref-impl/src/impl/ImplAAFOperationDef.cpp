@@ -148,29 +148,24 @@ AAFRESULT STDMETHODCALLTYPE
       ImplAAFOperationDef  *pOperationDef)
 {
 	aafUID_t	*tmp = NULL, newUID;
-	aafInt32	oldBufSize;
-	aafInt32	newBufSize;
-	aafInt32	n;
+	aafInt32	oldCount;
+	aafInt32	newCount;
 
 	if(pOperationDef == NULL)
 		return AAFRESULT_NULL_PARAM;
 	
 	XPROTECT()
 	{
-		oldBufSize = _degradeTo.size();
-		newBufSize = oldBufSize + sizeof(aafUID_t);
+		oldCount = _degradeTo.count();
+		newCount = oldCount + 1;
 		CHECK(pOperationDef->GetAUID(&newUID));
-		tmp = new aafUID_t[newBufSize];
+		tmp = new aafUID_t[newCount];
 		if(tmp == NULL)
 			RAISE(AAFRESULT_NOMEMORY);
-		if(oldBufSize != 0)
-			_degradeTo.copyToBuffer(tmp, oldBufSize);
-		for(n = oldBufSize/sizeof(aafUID_t); n >= 0; n--)
-		{
-			tmp[n+1] = tmp[n];
-		}
+		if(oldCount != 0)
+			_degradeTo.copyToBuffer(&tmp[1], oldCount * sizeof(aafUID_t));
 		tmp[0] = newUID;
-		_degradeTo.setValue(tmp, newBufSize);
+		_degradeTo.setValue(tmp, newCount * sizeof(aafUID_t));
 		delete [] tmp;
 	}
 	XEXCEPT
@@ -188,24 +183,24 @@ AAFRESULT STDMETHODCALLTYPE
       ImplAAFOperationDef  *pOperationDef)
 {
 	aafUID_t	*tmp, newUID;
-	aafInt32	oldBufSize;
-	aafInt32	newBufSize;
+	aafInt32	oldCount;
+	aafInt32	newCount;
 
 	if(pOperationDef == NULL)
 		return AAFRESULT_NULL_PARAM;
 	
 	XPROTECT()
 	{
-		oldBufSize = _degradeTo.size();
-		newBufSize = oldBufSize + sizeof(aafUID_t);
+		oldCount = _degradeTo.count();
+		newCount = oldCount + 1;
 		CHECK(pOperationDef->GetAUID(&newUID));
-		tmp = new aafUID_t[newBufSize];
+		tmp = new aafUID_t[newCount];
 		if(tmp == NULL)
 			RAISE(AAFRESULT_NOMEMORY);
-		if(oldBufSize != 0)
-			_degradeTo.copyToBuffer(tmp, oldBufSize);
-		tmp[oldBufSize/sizeof(aafUID_t)] = newUID;
-		_degradeTo.setValue(tmp, newBufSize);
+		if(oldCount != 0)
+			_degradeTo.copyToBuffer(tmp, oldCount * sizeof(aafUID_t));
+		tmp[newCount - 1] = newUID;
+		_degradeTo.setValue(tmp, newCount * sizeof(aafUID_t));
 		delete [] tmp;
 	}
 	XEXCEPT
@@ -378,8 +373,8 @@ AAFRESULT STDMETHODCALLTYPE
       ImplAAFParameterDef *pAAFParameterDef)
 {
 	aafUID_t					*tmp, newUID, oldUID;
-	aafInt32					oldBufSize;
-	aafInt32					newBufSize;
+	aafInt32					oldCount;
+	aafInt32					newCount;
 	ImplAAFParameterDef*		pParmDef = NULL;
 	ImplEnumAAFParameterDefs*	pEnum = NULL;
 	aafBool						parmDefFound = AAFFalse;
@@ -411,17 +406,17 @@ AAFRESULT STDMETHODCALLTYPE
 		if (!parmDefFound)
 		{
 			if (!_paramDefined.isPresent())
-				oldBufSize = 0;			
-			else oldBufSize = _paramDefined.size();
+				oldCount = 0;			
+			else oldCount = _paramDefined.count();
 
-			newBufSize = oldBufSize + sizeof(aafUID_t);
-			tmp = new aafUID_t[newBufSize];
+			newCount = oldCount + 1;
+			tmp = new aafUID_t[newCount];
 			if(tmp == NULL)
 				RAISE(AAFRESULT_NOMEMORY);
-			if(oldBufSize != 0)
-				_paramDefined.copyToBuffer(tmp, oldBufSize);
-			tmp[oldBufSize/sizeof(aafUID_t)] = newUID;
-			_paramDefined.setValue(tmp, newBufSize);
+			if(oldCount!= 0)
+				_paramDefined.copyToBuffer(tmp, oldCount * sizeof(aafUID_t));
+			tmp[newCount - 1] = newUID;
+			_paramDefined.setValue(tmp, newCount * sizeof(aafUID_t));
 			delete [] tmp;
 		}
 		else
