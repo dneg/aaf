@@ -66,6 +66,9 @@ AD_XMETHOD7(SearchSource,
   // MobGetThisSource\, and MobCloseSearch functions for those
   // purposes. 
   //
+  // The returned component and find source info are AddRef\(\)ed
+  // before they are returned.
+  //
   // Succeeds if all of the following are true:
   // - the ppThisCpnt pointer is valid.
   // \(other conditions here\)

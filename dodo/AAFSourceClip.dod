@@ -103,6 +103,8 @@ AD_XMETHOD6(GetFade,
 
 			This function returns the optional fade information from a
   // source clip.  This function only applies to audio source clips.
+  // Length units are specified by the containing mob slot's edit
+  // rate.
   //
   // Succeeds if all of the following are true:
   // - the all argument pointers are valid.
@@ -131,6 +133,8 @@ AD_XMETHOD1(ResolveRef,
 			Given a source clip object\, this function returns a pointer
   // to the mob that it references.
   //
+  // The returned mob is AddRef\(\)ed before it is returned.
+  //
   // Succeeds if all of the following are true:
   // - the ppMob pointer is valid.
   // 
@@ -150,16 +154,17 @@ AD_XMETHOD1(ResolveRef,
   //   - this mob does not exist.)
 
 
-AD_XMETHOD1(GetRef,
+AD_XMETHOD1(GetSourceReference,
 			[out],
 			objPass,
 			aafSourceRef_t *,
 			pSourceRef,
 			Source Reference,
 
-  // This function returns the 3 properties on a source Clip that make
-  // up the "source reference" \(sourceID\, sourceTrackID\, and
-  // startTime\).
+  // This function returns the source reference of this source clip.
+  //
+  // Note: the 3 properties of a source Clip that make up the "source
+  // reference" are sourceID\, sourceTrackID\, and startTime.
   //
   // Succeeds if all of the following are true:
   // - the pSourceRef pointer is valid.
@@ -199,10 +204,11 @@ AD_XMETHOD4(SetFade,
 				fadeOutType,
 				Fade Out Type,
 
-				This function sets the optional fade properties on the
-  // input source clip object.  The fade properties only apply to a
-  // source clip of datakind \(or convertible to a datakind\) of type
-  // Sound. All arguments should be specified.
+  // This function sets the optional fade properties on this source
+  // clip object.  The fade properties only apply to a source clip of
+  // datakind \(or convertible to a datakind\) of type Sound. All
+  // arguments should be specified.  Length units are specified by the
+  // containing mob slot's edit rate.
   // 
   // Always succeeds.
   // 
@@ -214,15 +220,16 @@ AD_XMETHOD4(SetFade,
   //   - succeeded.  \(This is the only code indicating success.\))
 
 
-AD_METHOD1(SetRef,
+AD_METHOD1(SetSourceReference,
 		   [in],
 				aafSourceRef_t,
 				sourceRef,
 				Source Reference,
 
-				This function sets the 3 properties on a source Clip that
-  // make up the "source reference" \\\(sourceID\\\, sourceTrackID\\\, and
-  // startTime\\\).
+				This function sets the source reference of this source clip.
+  //
+  // Note: the  3 properties of a source Clip that make up the "source
+  // reference" are sourceID\\\, sourceTrackID\\\, and startTime.
   // 
   // Always succeeds.
   // 
