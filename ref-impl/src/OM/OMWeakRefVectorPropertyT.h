@@ -71,10 +71,10 @@ OMWeakReferenceVectorProperty<ReferencedObject>::
   //         are uniquely identified (the key).
 template <typename ReferencedObject>
 OMWeakReferenceVectorProperty<ReferencedObject>::OMWeakReferenceVectorProperty(
-                                             const OMPropertyId propertyId,
-                                             const wchar_t* name,
-                                             const OMPropertyId keyPropertyId,
-                                             const OMPropertyId* targetPropertyPath)
+                                        const OMPropertyId propertyId,
+                                        const wchar_t* name,
+                                        const OMPropertyId keyPropertyId,
+                                        const OMPropertyId* targetPropertyPath)
 : OMReferenceVectorProperty(propertyId,
                             SF_WEAK_OBJECT_REFERENCE_VECTOR,
                             name),
