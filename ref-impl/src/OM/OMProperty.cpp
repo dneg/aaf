@@ -41,7 +41,7 @@ const char* OMProperty::name(void) const
   // @mfunc The property id of this <c OMProperty>.
   //   @rdesc The property id.
   //   @this const
-const OMPropertyId OMProperty::propertyId(void) const
+OMPropertyId OMProperty::propertyId(void) const
 {
   TRACE("OMProperty::propertyId");
 
