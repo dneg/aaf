@@ -171,18 +171,19 @@ ImplAAFDictionary::ImplAAFDictionary ()
 ImplAAFDictionary::~ImplAAFDictionary ()
 {
   // Release the _opaqueTypeDefinitions
-	OMSetIterator<OMUniqueObjectIdentification, OpaqueTypeDefinition>opaqueTypeDefinitions(_opaqueTypeDefinitions, OMBefore);
-	while(++opaqueTypeDefinitions)
-	{
-    // NOTE: Temporary OpaqueTypeDefinition are created to hold the type definition
-    // pointers.
-		ImplAAFTypeDef *pType = opaqueTypeDefinitions.setValue(0);
-		if (pType)
-		{
+  OMSetIterator<OMUniqueObjectIdentification, OpaqueTypeDefinition>opaqueTypeDefinitions(_opaqueTypeDefinitions, OMBefore);
+  while(++opaqueTypeDefinitions)
+  {
+    // NOTE: Temporary OpaqueTypeDefinitions are created to hold the type definition
+    // pointers.           |                               |
+    //                     V                               V
+    ImplAAFTypeDef *pType = opaqueTypeDefinitions.setValue(0);
+    if (pType)
+    {
 		  pType->ReleaseReference();
 		  pType = 0;
-		}
-	}
+    }
+  }
 
   // Release the _codecDefinitions
 	OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFCodecDef>codecDefinitions(_codecDefinitions);
@@ -1052,6 +1053,7 @@ const aafUID_t * ImplAAFDictionary::sAxiomaticTypeGuids[] =
   & kAAFTypeID_UInt8,
   & kAAFTypeID_UInt8Array8,
   & kAAFTypeID_Indirect,
+  & kAAFTypeID_Opaque,
   & kAAFTypeID_VersionType,
   & kAAFTypeID_RGBAComponent,
   & kAAFTypeID_MobID,
@@ -1287,9 +1289,12 @@ ImplAAFDictionary::OpaqueTypeDefinition::operator ImplAAFTypeDef * () const
 const OMUniqueObjectIdentification 
   ImplAAFDictionary::OpaqueTypeDefinition::identification(void) const
 {
-  aafUID_t typeId;
-  AAFRESULT result = _opaqueTypeDef->GetAUID(&typeId); // ignore error
-  assert (AAFRESULT_SUCCEEDED(result));
+  aafUID_t typeId = {0};
+	if (_opaqueTypeDef)
+	{
+		AAFRESULT result = _opaqueTypeDef->GetAUID(&typeId); // ignore error
+		assert (AAFRESULT_SUCCEEDED(result));
+	}
 
   return (*reinterpret_cast<const OMUniqueObjectIdentification *>(&typeId));
 }

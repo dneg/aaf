@@ -250,6 +250,7 @@ const /*static*/ aafUID_t * ImplAAFBuiltinClasses::sAxClassIDs[] =
   &AUID_AAFTypeDefCharacter,
   &AUID_AAFTypeDefString,
   &AUID_AAFTypeDefIndirect,
+  &AUID_AAFTypeDefOpaque,
   &AUID_AAFTypeDefEnum,
   &AUID_AAFTypeDefRename,
   &AUID_AAFTypeDefStrongObjRef,
