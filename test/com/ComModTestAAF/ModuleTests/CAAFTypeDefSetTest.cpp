@@ -42,6 +42,7 @@
 
 #include "AAF.h"
 #include "AAFResult.h"
+#include "ModuleTest.h"
 #include "AAFDataDefs.h"
 #include "AAFDefUIDs.h"
 #include "AAFStoredObjectIDs.h"
@@ -287,7 +288,7 @@ static const aafUInt32 kMyDefTestDataCount = sizeof(kMyDefTestData) / sizeof(MyD
 // forward declarations and prototypes
 extern "C"
 {
-  HRESULT CAAFTypeDefSet_test();
+  HRESULT CAAFTypeDefSet_test(testMode_t);
   void CAAFTypeDefSet_Create(aafCharacter_constptr fileName);
   void CAAFTypeDefSet_Open(aafCharacter_constptr fileName);
   void CAAFTypeDefSet_Register(IAAFDictionary* pDictionary);
@@ -295,7 +296,7 @@ extern "C"
   void CAAFTypeDefSet_Read(IAAFHeader* pHeader, IAAFDictionary* pDictionary);
 } 
 
-HRESULT CAAFTypeDefSet_test()
+extern "C" HRESULT CAAFTypeDefSet_test(testMode_t /*mode*/)
 {
   HRESULT hr = S_OK;
   aafCharacter_constptr pFileName = L"AAFTypeDefSetTest.aaf";
