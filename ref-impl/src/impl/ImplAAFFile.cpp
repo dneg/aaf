@@ -163,7 +163,7 @@ ImplAAFFile::OpenExistingRead (const aafCharacter * pFileName,
 	  return AAFRESULT_BAD_FLAGS;
 
 	if (modeFlags)
-	  return AAFRESULT_NOT_IMPLEMENTED;
+	  return AAFRESULT_NOT_IN_CURRENT_VERSION;
 
 	// Save the mode flags for now. They are not currently (2/4/1999) used by the
 	// OM to open the doc file. Why do we return an error if modeFlags != 0?
@@ -276,7 +276,7 @@ ImplAAFFile::OpenExistingModify (const aafCharacter * pFileName,
 	  return AAFRESULT_BAD_FLAGS;
 
 	if (modeFlags)
-	  return AAFRESULT_NOT_IMPLEMENTED;
+	  return AAFRESULT_NOT_IN_CURRENT_VERSION;
 	
 	// Save the mode flags for now. They are not currently (2/4/1999) used by the
 	// OM to open the doc file. Why do we return an error if modeFlags != 0?
@@ -399,7 +399,7 @@ ImplAAFFile::OpenNewModify (const aafCharacter * pFileName,
 	  return AAFRESULT_BAD_FLAGS;
 
 	if (modeFlags)
-	  return AAFRESULT_NOT_IMPLEMENTED;
+	  return AAFRESULT_NOT_IN_CURRENT_VERSION;
 
 	try
 	{
@@ -505,7 +505,7 @@ ImplAAFFile::OpenTransient (aafProductIdentification_t * pIdent)
 	if (! pIdent)
 		return AAFRESULT_NULL_PARAM;
 
-	return AAFRESULT_NOT_IMPLEMENTED;
+	return AAFRESULT_NOT_IN_CURRENT_VERSION;
 }
 
 
@@ -516,7 +516,7 @@ ImplAAFFile::Open ()
   if (_open)
 	return AAFRESULT_ALREADY_OPEN;
 
-  return AAFRESULT_NOT_IMPLEMENTED;
+  return AAFRESULT_NOT_IN_CURRENT_VERSION;
 }
 
 
@@ -572,7 +572,7 @@ ImplAAFFile::SaveCopyAs (ImplAAFFile * pDestFile)
 {
   if (! pDestFile)
 	return AAFRESULT_NULL_PARAM;
-  return AAFRESULT_NOT_IMPLEMENTED;
+  return AAFRESULT_NOT_IN_CURRENT_VERSION;
 }
 
 
@@ -590,7 +590,7 @@ ImplAAFFile::SaveAs (const aafCharacter * pFileName,
 	  return AAFRESULT_BAD_FLAGS;
 
 	if (modeFlags)
-	  return AAFRESULT_NOT_IMPLEMENTED;
+	  return AAFRESULT_NOT_IN_CURRENT_VERSION;
 
 	// Assure no registration of def objects in dictionary during
 	// save operation
