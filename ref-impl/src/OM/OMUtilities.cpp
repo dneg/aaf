@@ -861,7 +861,9 @@ OMUniqueObjectIdentification createUniqueIdentifier(void)
 
 #elif defined(OM_USE_LIBUUID_CREATEUUID)
 
+extern "C" {
 #include <uuid/uuid.h>
+}
 
 OMUniqueObjectIdentification createUniqueIdentifier(void)
 {
