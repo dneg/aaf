@@ -1,27 +1,34 @@
-
 PACKAGE = aafiid
 
 AAFBASE ?= ../..
 
-include $(AAFBASE)/build/defs.mk
 
+# Common definitions
+include $(AAFBASE)/build/common.mk
+
+
+# Include directories
 INCLUDES = -I../include/ref-api \
 	   -I../include
+
 
 .PHONY : all
 all : aafiid
 
-.PHONY : aafiid
-aafiid : $(LIBDIR)/libaafiid$(LIB_SUFFIX)
 
-$(LIBDIR)/libaafiid$(LIB_SUFFIX) : $(OBJDIR) $(LIBDIR) $(CXXOBJS)
-	$(LD_DYN_LIB) $(CC2LDOPT) $(LD_DYN_LIB_PATH_FLAG) $(CC2LDOPT) \
-	$(LIBDIR) $(CC2LDOPT) -shared -L$(LIBDIR) $(CXXOBJS) -o \
-	$@ $(PROPS_LIB)
+.PHONY : aafiid
+aafiid : $(LIBDIR)/libaafiid$(LIB)
+
+
+$(LIBDIR)/libaafiid$(LIB) : $(OBJDIR) $(LIBDIR) $(CXXOBJS)
+	$(LD_STAT_LIB) $@ $(CXXOBJS)
+
 
 .PHONY : clean
 clean:
-	-@rm -rf $(OBJDIR)/*.o
-	-@rm -rf $(LIBDIR)/libaafiid$(LIB_SUFFIX)
+	$(RM) $(OBJDIR)/*$(OBJ)
+	$(RM) $(LIBDIR)/libaafiid$(LIB)
+
 
 include $(AAFBASE)/build/rules.mk
+

@@ -1,10 +1,13 @@
-
 PACKAGE = ref-impl
 
 AAFBASE ?= ../..
 
-include $(AAFBASE)/build/defs.mk
 
+# Common definitions
+include $(AAFBASE)/build/common.mk
+
+
+# Include directories
 INCLUDES = -I. \
 	   -I../include \
 	   -I../include/ref-api \
@@ -13,6 +16,7 @@ INCLUDES = -I. \
 	   -I../libjpeg \
            -I../../Utilities/Include \
 	   -I../include/com-api
+
 
 CXXFILES = AAFPluginCOM.cpp \
 	   CAAFEssenceDataStream.cpp \
@@ -25,40 +29,50 @@ CXXFILES = AAFPluginCOM.cpp \
 	   jpegesdatadst.cpp \
 	   jpegesdatasrc.cpp
 
-SUPOBJS = $(OBJDIR)/aafCvt.o \
-	  $(OBJDIR)/AAFUtils.o \
-	  $(OBJDIR)/../../com-dll/obj/CAAFClassFactory.o \
-	  $(OBJDIR)/../../com-dll/obj/CAAFServer.o \
-	  $(OBJDIR)/../../com-dll/obj/CAAFUnknown.o \
-	  $(OBJDIR)/../../com-dll/obj/CAAFInProcServer.o
+
+SUPOBJS = $(OBJDIR)/aafCvt$(OBJ) \
+	  $(OBJDIR)/AAFUtils$(OBJ) \
+	  $(OBJDIR)/../../com-api/obj/com-dll/CAAFClassFactory$(OBJ) \
+	  $(OBJDIR)/../../com-api/obj/com-dll/CAAFClassFactory$(OBJ) \
+	  $(OBJDIR)/../../com-api/obj/com-dll/CAAFServer$(OBJ) \
+	  $(OBJDIR)/../../com-api/obj/com-dll/CAAFUnknown$(OBJ) \
+	  $(OBJDIR)/../../com-api/obj/com-dll/CAAFInProcServer$(OBJ)
+
 
 .PHONY : all
 all : aafpgapi aafintp
 
+
 .PHONY : aafpgapi
-aafpgapi : $(LIBDIR)/libaafpgapi$(LIB_SUFFIX)
+aafpgapi : $(LIBDIR)/libaafpgapi$(DLL)
+
 
 .PHONY : aafintp
-aafintp :  $(LIBDIR)/libaafintp$(LIB_SUFFIX)
+aafintp :  $(LIBDIR)/libaafintp$(DLL)
 
-$(LIBDIR)/libaafpgapi$(LIB_SUFFIX) : $(OBJDIR) $(LIBDIR) $(CXXOBJS)
-	$(LD_DYN_LIB)  $(CC2LDOPT) $(LD_DYN_LIB_PATH_FLAG) $(LIBDIR) \
-	-L$(LIBDIR) -L$(AAFSDK)/ss-impl/lib $(SUPOBJS) $(CXXOBJS) -o \
-	$@ -laaflib -laafiid -ljpeg
+
+$(LIBDIR)/libaafpgapi$(DLL) : $(OBJDIR) $(LIBDIR) $(CXXOBJS)
+	$(LD_DYN_LIB)  \
+	-L$(LIBDIR) $(SUPOBJS) $(CXXOBJS) -o $@ -laaflib -laafiid -ljpeg
+
+
 
 CXXFILES2 = AAFInterpCOM.cpp \
 	    AAFRational.cpp \
 	    CAAFBasicInterp.cpp
 
-$(LIBDIR)/libaafintp$(LIB_SUFFIX) :  $(OBJDIR) $(LIBDIR) $(CXXOBJS2)
-	$(LD_DYN_LIB)  $(CC2LDOPT) $(LD_DYN_LIB_PATH_FLAG) $(LIBDIR) \
-	-L$(LIBDIR) -L$(AAFSDK)/ss-impl/lib  $(SUPOBJS) $(CXXOBJS2) -o \
-	$@ -laaflib -laafiid
+
+$(LIBDIR)/libaafintp$(DLL) :  $(OBJDIR) $(LIBDIR) $(CXXOBJS2)
+	$(LD_DYN_LIB) \
+	-L$(LIBDIR) $(SUPOBJS) $(CXXOBJS2) -o $@ -laaflib -laafiid
+
 
 .PHONY : clean
 clean :
-	-@rm -rf $(OBJDIR)/*.o
-	-@rm -rf $(LIBDIR)/libaafpgapi$(LIB_SUFFIX)
+	$(RM) $(OBJDIR)/*$(OBJ)
+	$(RM) $(LIBDIR)/libaafpgapi$(DLL)
+	$(RM) $(LIBDIR)/libaafintp$(DLL)
+
 
 include $(AAFBASE)/build/rules.mk
 

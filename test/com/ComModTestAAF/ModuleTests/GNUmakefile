@@ -1,10 +1,13 @@
-
 PACKAGE = ComModAAF
 
 AAFBASE ?= ../../../..
 
-include $(AAFBASE)/build/defs.mk
 
+# Common definitions
+include $(AAFBASE)/build/common.mk
+
+
+# Include directories
 INCLUDES = -I.. -I. \
 	   -I../../../../ref-impl/include \
 	   -I../../../../ref-impl/include/com-api \
@@ -14,19 +17,18 @@ INCLUDES = -I.. -I. \
 	   -I../../../../ref-impl/include/ref-api \
 	   -I../../../../Utilities/Include
 
-OBJDIR = $(PACKDIR)/obj/ModTests
+
+OBJDIR = $(PACKDIR)/obj/ModuleTests
+
 
 .PHONY : all
-all : $(LIBDIR)/libModuleTests$(LIB_SUFFIX)
+all : $(OBJDIR) $(CXXOBJS)
 
-$(LIBDIR)/libModuleTests$(LIB_SUFFIX) : $(OBJDIR) $(LIBDIR) $(CXXOBJS)
-	$(LD_DYN_LIB) $(CC2LDOPT) $(LD_DYN_LIB_PATH_FLAG) $(CC2LDOPT) \
-	$(LIBDIR) -L$(LIBDIR) $(CXXOBJS) -o $@ -lC
 
 .PHONY : clean
 clean :
-	-@rm -rf $(OBJDIR)/*.o
-	-@rm -rf $(LIBDIR)/libModuleTests$(LIB_SUFFIX)
+	@$(RMDIR) $(OBJDIR)/*
+
 
 include $(AAFBASE)/build/rules.mk
 

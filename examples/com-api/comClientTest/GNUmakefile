@@ -1,37 +1,44 @@
-
 PACKAGE = Examples
 
 AAFBASE ?= ../../..
 
-include $(AAFBASE)/build/defs.mk
 
+# Common definitions
+include $(AAFBASE)/build/common.mk
+
+
+# Include directories
 INCLUDES = -I../../../ref-impl/include \
 	   -I../../../ref-impl/include/ref-api \
 	   -I../../../ref-impl/include/com-api \
 	   -I../../../Utilities/Include
 
+
 .PHONY : all
-all : $(BINDIR)/ComAAFInfo$(EXE_SUFFIX) $(BINDIR)/ComClientAAF$(EXE_SUFFIX)
+all : $(BINDIR)/ComAAFInfo$(EXE) $(BINDIR)/ComClientAAF$(EXE)
+
 
 CXXFILES = AAFInfo.cpp
 
-$(BINDIR)/ComAAFInfo$(EXE_SUFFIX) : $(BINDIR) $(OBJDIR) $(CXXOBJS)
-	$(CC) -n32 -Wl,-wall $(CXXOBJS) $(CC2LDOPT) \
-	$(LD_DYN_LIB_PATH_FLAG) $(CC2LDOPT) $(LIBDIR) \
-	-L$(LIBDIR) $(CC2LDOPT) -laaflib -laafiid -o $@ -lC -laafutils
+
+$(BINDIR)/ComAAFInfo$(EXE) : $(BINDIR) $(OBJDIR) $(CXXOBJS)
+	$(LD) $(CXXOBJS) -L$(LIBDIR) -laaflib -laafiid -o $@
+
 
 CXXFILES2 = ComClientTestAAF.cpp
 
-$(BINDIR)/ComClientAAF$(EXE_SUFFIX) : $(BINDIR) $(OBJDIR) $(CXXOBJS2)
-	$(CC) -n32 -Wl,-wall $(CXXOBJS2) $(CC2LDOPT) \
-	$(LD_DYN_LIB_PATH_FLAG) $(CC2LDOPT) $(LIBDIR) \
-	-L$(LIBDIR) $(CC2LDOPT) -laaflib -laafiid -o $@ -lC -laafutils
+
+$(BINDIR)/ComClientAAF$(EXE) : $(BINDIR) $(OBJDIR) $(CXXOBJS2)
+	$(LD) $(CXXOBJS2) -L$(LIBDIR) -laaflib -laafiid -o $@
+
 
 .PHONY : clean
 clean :
-	@rm -f $(CXXOBJS)
-	@rm -f $(CXXOBJS2)
-	@rm -f $(BINDIR)/ComAAFInfo$(EXE_SUFFIX)
-	@rm -f $(BINDIR)/ComClientAAF$(EXE_SUFFIX)
+	@$(RM) $(CXXOBJS)
+	@$(RM) $(CXXOBJS2)
+	@$(RM) $(BINDIR)/ComAAFInfo$(EXE)
+	@$(RM) $(BINDIR)/ComClientAAF$(EXE)
+
 
 include $(AAFBASE)/build/rules.mk
+

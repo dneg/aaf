@@ -1,27 +1,33 @@
-
 PACKAGE = DevUtils
 
 AAFBASE ?= ../..
 
-include $(AAFBASE)/build/defs.mk
 
+# Common definitions
+include $(AAFBASE)/build/common.mk
+
+
+# Include directories
 INCLUDES = -I../../ref-impl/include \
 	   -I../../ref-impl/include/ref-api \
 	   -I../../ref-impl/include/com-api \
 	   -I../../Utilities/Include \
 	   -I../../ss-impl/ref/h
 
-.PHONY : all
-all : $(BINDIR)/dump$(EXE_SUFFIX)
 
-$(BINDIR)/dump$(EXE_SUFFIX) : $(BINDIR) $(OBJDIR) $(CXXOBJS)
-	$(CC) -n32 -Wl,-wall $(CXXOBJS) $(CC2LDOPT) \
-	$(LD_DYN_LIB_PATH_FLAG) $(CC2LDOPT) $(LIBDIR) \
-	-L$(LIBDIR) $(CC2LDOPT) -lrefstg -lprops -o $@ -lC
+.PHONY : all
+all : $(BINDIR)/dump$(EXE)
+
+
+$(BINDIR)/dump$(EXE) : $(BINDIR) $(OBJDIR) $(CXXOBJS)
+	$(LD) $(CXXOBJS) $(RPATH_OPT) -L$(LIBDIR) -lrefstg -o $@
+
 
 .PHONY : clean
 clean :
-	@rm -f $(CXXOBJS)
-	@rm -f $(BINDIR)/dump$(EXE_SUFFIX)
+	@$(RM) $(CXXOBJS)
+	@$(RM) $(BINDIR)/dump$(EXE)
+
 
 include $(AAFBASE)/build/rules.mk
+
