@@ -367,23 +367,20 @@ aafErr_t TableRemove(
 			  else
 				table->hashTable[index] = entry->link;
 		  
-			  /* Use entryDispose callback to free internal
-			   * entry data.
-			   */
 			  if (table->entryDispose != NULL)
 				{
 				  if(entry->type == valueIsPtr)
 					{
-					  (*table->entryDispose)(entry->data);
-            // tomr 99-11-17 :  The following "delete" assumes that "pointer" was 
-            // allocated with new and not with new[] or malloc or some other allocator.
-            // Also, if the data is a C++ object the object's destrutor will not
-            // be called because entry->data is a void *.
-					  if(entry->data != NULL)
-						delete entry->data;
+			      /* Use entryDispose callback to free client allocated entry data.
+			       */
+			      if(entry->data != NULL)
+			        (*table->entryDispose)(entry->data);
 					}
 				  else
 					{
+			      /* Use entryDispose callback to free internal
+			       * entry data.
+			       */
 					  tmpMem = (char *)new char[entry->valueLen];
 						
 					  /* Force data alignment */
@@ -984,23 +981,20 @@ static aafErr_t DisposeList(
 			{
 				entryNext = entry->link;
 
-				/* Use entryDispose callback to free internal
-				 * entry data.
-				 */
 				if((table->entryDispose != NULL) && itemsAlso)
 				{
 				  if(entry->type == valueIsPtr)
 				  {
-					(*table->entryDispose)(entry->data);
-            // tomr 99-11-17 :  The following "delete" assumes that "pointer" was 
-            // allocated with new and not with new[] or malloc or some other allocator.
-            // Also, if the data is a C++ object the object's destrutor will not
-            // be called because entry->data is a void *.
-					if(entry->data != NULL)
-					  delete entry->data;
+			      /* Use entryDispose callback to free client allocated entry data.
+			       */
+			      if(entry->data != NULL)
+			        (*table->entryDispose)(entry->data);
 				  }
 				  else
 				    {
+				      /* Use entryDispose callback to free internal
+				       * entry data.
+				       */
 				      tmpMem = (char *)new char[entry->valueLen];
 						
 				      /* Force data alignment */
