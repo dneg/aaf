@@ -276,6 +276,8 @@ inline bool AxIsA( IUnknownSP sp, IAAFSmartPointer<TypeDst>& spDst )
 // conversion will work. Requires explicit template instantiation ie:
 // if(AxIsA<IAAFMasterMob>(mob) - This function is only a test and does
 // not return the converted type.
+/* I have found that it doesn't work at the moment. I will fix and then
+put the function back in as soon as I work out why it is broken.
 template <class TypeDst>
 inline bool AxIsA( IUnknownSP sp)
 {
@@ -289,11 +291,11 @@ inline bool AxIsA( IUnknownSP sp)
 	else if ( hr == E_NOINTERFACE ) {
 		return false;
 	}
-	
+
 	CHECK_HRESULT( hr );
-	
+
 	// Never reached;
 	return false;
 }
-
+*/
 #endif
