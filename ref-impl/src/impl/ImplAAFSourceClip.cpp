@@ -60,7 +60,6 @@ ImplAAFSourceClip::ImplAAFSourceClip ():
 	_persistentProperties.put(		_fadeOutLength.address());
 	_persistentProperties.put(		_fadeOutType.address());
 	_persistentProperties.put(		_startTime.address());
-
 }
 
 
@@ -82,11 +81,20 @@ AAFRESULT STDMETHODCALLTYPE
   SetSourceMobSlotID( sourceRef.sourceSlotID );
   _startTime = sourceRef.startTime;
 
-  _fadeInLength		= 0;
-  _fadeInType		= kAAFFadeNone;
-	
-  _fadeOutLength		= 0;
-  _fadeOutType	= kAAFFadeNone;
+  aafBool isSound;
+  AAFRESULT hr = pDataDef->IsSoundKind( &isSound );
+  if ( AAFRESULT_SUCCESS != hr ) {
+    return hr;
+  }
+
+  // Only set fade default values if the essence type is sound.
+  if ( isSound ) {
+       _fadeInLength		= 0;
+       _fadeInType		= kAAFFadeNone;
+       
+       _fadeOutLength		= 0;
+       _fadeOutType	        = kAAFFadeNone;
+  };
 
   return AAFRESULT_SUCCESS;
 }
