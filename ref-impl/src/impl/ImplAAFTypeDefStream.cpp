@@ -29,18 +29,27 @@
 
 
 
-#include "AAFStoredObjectIDs.h"
 
 #ifndef __ImplAAFTypeDefStream_h__
 #include "ImplAAFTypeDefStream.h"
 #endif
+
+#include "AAFStoredObjectIDs.h"
+#include "AAFPropertyIDs.h"
+
 
 #include <assert.h>
 #include <string.h>
 
 
 ImplAAFTypeDefStream::ImplAAFTypeDefStream ()
-{}
+  : _elementType  (PID_TypeDefinitionStream_ElementType,
+                   "ElementType", 
+                   "/Dictionary/TypeDefinitions", 
+                   PID_DefinitionObject_Identification)
+{
+  _persistentProperties.put(_elementType.address());
+}
 
 
 ImplAAFTypeDefStream::~ImplAAFTypeDefStream ()
@@ -57,12 +66,16 @@ AAFRESULT STDMETHODCALLTYPE
 	return AAFRESULT_NULL_PARAM;
   if (! pTypeName)
 	return AAFRESULT_NULL_PARAM;
+  if (!pTypeDef->attached())
+    return AAFRESULT_OBJECT_ALREADY_ATTACHED;
 
   assert (pTypeDef);
-  if (! pTypeDef->IsStreamable())
+  if (! pTypeDef->IsStreamable() || !pTypeDef->IsFixedSize())
 	return AAFRESULT_BAD_TYPE;
 
-  return AAFRESULT_NOT_IMPLEMENTED;
+  _elementType = pTypeDef;
+
+  return AAFRESULT_SUCCESS;
 }
 
 
@@ -74,7 +87,11 @@ AAFRESULT STDMETHODCALLTYPE
   if (! ppTypeDef)
 	return AAFRESULT_NULL_PARAM;
 
-  return AAFRESULT_NOT_IMPLEMENTED;
+  *ppTypeDef = _elementType;
+  if (*ppTypeDef)
+    (*ppTypeDef)->AcquireReference();
+
+  return AAFRESULT_SUCCESS;
 }
 
 
