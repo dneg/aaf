@@ -52,7 +52,7 @@ AD_X2METHOD5(Initialize,
 
 			 [in],
 			 objPass,
-			 wchar_t *,
+			 aafCharacter *,
 			 pTypeName,
 			 friendly name of this type definition,
 			 ,
@@ -113,7 +113,7 @@ AD_XMETHOD3(GetMemberName,
 
 			[out\, size_is\(bufSize\)\, string],
 			objPass,
-			wchar_t *,
+			aafCharacter *,
 			pName,
 			buffer into which the member name is written,
 

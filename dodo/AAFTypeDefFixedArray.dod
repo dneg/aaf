@@ -39,7 +39,7 @@ AD_XMETHOD4(Initialize,
 
 			[in],
 			objPass,
-			wchar_t *,
+			aafCharacter *,
 			pTypeName,
 			friendly name of this type definition,
 
