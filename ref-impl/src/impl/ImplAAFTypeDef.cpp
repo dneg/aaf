@@ -150,28 +150,9 @@ size_t ImplAAFTypeDef::NativeSize (void) const
 }
 
 
-/*
 OMProperty * ImplAAFTypeDef::pvtCreateOMProperty
-  (OMPropertyId pid,
-   const aafCharacter * name) const
-{
-  assert (name);
-  size_t wNameLen = wcslen (name) + 1;
-
-  // Convert the prop name
-  char * nameBuf = new char [wNameLen];
-  assert (nameBuf);
-  wcstombs (nameBuf, name, wNameLen);
-
-  OMProperty * result = pvtCreateOMPropertyMBS (pid, nameBuf);
-  delete[] nameBuf;
-  return result;
-}
-*/
-
-OMProperty * ImplAAFTypeDef::pvtCreateOMPropertyMBS
   (OMPropertyId /*pid*/,
-   const char * /*name*/) const
+   const wchar_t * /*name*/) const
 {
   // Should be implemented in derived class.
   assert (0);

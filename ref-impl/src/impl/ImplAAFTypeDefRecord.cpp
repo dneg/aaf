@@ -56,11 +56,11 @@ extern "C" const aafClassID_t CLSID_AAFPropValData;
 
 ImplAAFTypeDefRecord::ImplAAFTypeDefRecord ()
   : _memberTypes ( PID_TypeDefinitionRecord_MemberTypes, 
-                   "MemberTypes", 
-                   "/Dictionary/TypeDefinitions", 
+                   L"MemberTypes", 
+                   L"/Dictionary/TypeDefinitions", 
                    PID_MetaDefinition_Identification),
     _memberNames ( PID_TypeDefinitionRecord_MemberNames, 
-                   "MemberNames"),
+                   L"MemberNames"),
 	_registeredOffsets (0),
 	_registeredSize (0),
 	_internalSizes (0),
@@ -1034,9 +1034,9 @@ size_t ImplAAFTypeDefRecord::NativeSize (void) const
 }
 
 
-OMProperty * ImplAAFTypeDefRecord::pvtCreateOMPropertyMBS
+OMProperty * ImplAAFTypeDefRecord::pvtCreateOMProperty
   (OMPropertyId pid,
-   const char * name) const
+   const wchar_t * name) const
 {
   assert (name);
   size_t elemSize = PropValSize ();

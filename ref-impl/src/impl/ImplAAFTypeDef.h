@@ -120,20 +120,11 @@ public:
                            size_t internalBytesSize,
                            OMByteOrder byteOrder) const;
 
-
-  /*
-  // Allocate an OMProperty that can represent this type.  Does so by
-  // converting name to mbs and calling pvtCreateOMPropertyMBS().
-  virtual OMProperty *
-    pvtCreateOMProperty (OMPropertyId pid,
-						 const aafCharacter * name) const;
-						 */
-
   // Allocate an OMProperty that can represent this type.  Implemented
   // by derived classes.
   virtual OMProperty *
-    pvtCreateOMPropertyMBS (OMPropertyId pid,
-							const char * name) const;
+    pvtCreateOMProperty (OMPropertyId pid,
+							const wchar_t * name) const;
 
 
   //

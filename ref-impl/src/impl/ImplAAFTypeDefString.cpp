@@ -57,8 +57,8 @@ extern "C" const aafClassID_t CLSID_AAFPropValData;
 
 ImplAAFTypeDefString::ImplAAFTypeDefString ()
   : _ElementType  ( PID_TypeDefinitionString_ElementType,
-                    "ElementType", 
-                    "/Dictionary/TypeDefinitions", 
+                    L"ElementType", 
+                    L"/Dictionary/TypeDefinitions", 
                     PID_MetaDefinition_Identification)
 {
   _persistentProperties.put(_ElementType.address());
@@ -464,9 +464,9 @@ size_t ImplAAFTypeDefString::NativeSize (void) const
 }
 
 
-OMProperty * ImplAAFTypeDefString::pvtCreateOMPropertyMBS
+OMProperty * ImplAAFTypeDefString::pvtCreateOMProperty
   (OMPropertyId pid,
-   const char * name) const
+   const wchar_t * name) const
 {
   assert (name);
 

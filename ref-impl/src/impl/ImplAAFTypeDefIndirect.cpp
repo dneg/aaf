@@ -1343,9 +1343,9 @@ size_t ImplAAFTypeDefIndirect::NativeSize (void) const
 }
 
 
-OMProperty * ImplAAFTypeDefIndirect::pvtCreateOMPropertyMBS
+OMProperty * ImplAAFTypeDefIndirect::pvtCreateOMProperty
   (OMPropertyId pid,
-   const char * name) const
+   const wchar_t * name) const
 {
   assert (name);
 
