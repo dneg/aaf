@@ -28,6 +28,7 @@
 #include "OMUtilities.h"
 #include "OMAssertions.h"
 
+#include <iostream.h>
 #if defined(_WIN32)
 #include <strstrea.h>
 #else
