@@ -1830,8 +1830,8 @@ void reportBadIndex(char* pathName,
        << " (" << endianity << ")"
        << ", Version = " << version
        << ", Number of entries = " << entryCount << " )" << endl;
-  cerr << "Expected index stream size = " << expectedSize
-       << ", Actual index stream size = " << actualSize << "." << endl;
+  cerr << "Expected property stream size = " << expectedSize
+       << ", Actual property stream size = " << actualSize << "." << endl;
 }
 
 void reportBadIndexEntry(OMUInt32 i,
@@ -3161,10 +3161,22 @@ void dumpProperties(IStorage* storage,
     size_t correctSize = expectedStreamSize + 4 + (entries * 6);
     if (actualStreamSize != correctSize) {
       cerr << programName
-           << ": Warning : Property value stream wrong size"
-           << " (actual = " << actualStreamSize
-           << ", expected = " << correctSize <<" )." << endl;
+           << ": Warning : Incorrect property stream size." << endl;
       warningCount = warningCount + 1;
+      OMUInt16 bo = hostByteOrder();
+      if (swapNeeded) {
+        if (bo == littleEndian) {
+          bo = bigEndian;
+        } else {
+          bo = littleEndian;
+        }
+      }
+      reportBadIndex(pathName,
+                     bo,
+                     version,
+                     entries,
+                     correctSize,
+                     actualStreamSize);
     }
   }
 
