@@ -87,7 +87,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFEssenceDescriptor 		*edesc = NULL;
 	IEnumAAFLocators			*pEnumLocators = NULL;
 	aafProductIdentification_t	ProductInfo;
-	aafMobID_t					newMobID;
 	aafUInt32					numLocators, numLocators2;
 	aafUInt32					i;
 	HRESULT						hr = AAFRESULT_SUCCESS,
