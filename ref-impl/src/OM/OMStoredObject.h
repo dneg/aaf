@@ -88,10 +88,14 @@ public:
 
     // @cmember Create a new <c OMStoredObject>, named <p name>,
     //          contained by this <c OMStoredObject>.
+    //   @devnote The name argument to this member function doesn't
+    //            make sense for all derived instances of <c OMStoredObject>.
   OMStoredObject* create(const wchar_t* name);
 
     // @cmember Open an exsiting <c OMStoredObject>, named <p name>,
     //          contained by this <c OMStoredObject>.
+    //   @devnote The name argument to this member function doesn't
+    //            make sense for all derived instances of <c OMStoredObject>.
   OMStoredObject* open(const wchar_t* name);
 
     // @cmember Close this <c OMStoredObject>.
