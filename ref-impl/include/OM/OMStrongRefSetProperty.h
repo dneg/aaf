@@ -49,6 +49,7 @@ class OMStrongReferenceSetElement;
   //   @tcarg class | UniqueIdentification | The type of the unique key
   //          used to identify the referenced objects.
   //   @base public | <c OMReferenceSetProperty>
+  //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 template <typename UniqueIdentification, typename ReferencedObject>
 class OMStrongReferenceSetProperty : public OMReferenceSetProperty {
 public:

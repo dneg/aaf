@@ -57,6 +57,7 @@ class OMType;
 
   // @class Abstract base class for persistent properties supported by
   //        the Object Manager.
+  //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 class OMProperty {
 public:
   // @access Public members.
@@ -193,6 +194,7 @@ private:
   // @class Abstract base class for simple (data) persistent
   //        properties supported by the Object Manager.
   //   @base public | <c OMProperty>
+  //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 class OMSimpleProperty : public OMProperty {
 public:
   // @access Public members. 

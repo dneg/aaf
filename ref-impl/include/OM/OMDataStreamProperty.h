@@ -38,6 +38,7 @@ struct IStream;
   // @class Persistent data stream properties supported by the Object
   //        Manager.
   //   @base | public <c OMProperty>.
+  //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 class OMDataStreamProperty : public OMProperty {
 public:
   // @access Public members.

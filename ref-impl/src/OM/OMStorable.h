@@ -38,9 +38,9 @@ class OMStoredObject;
 class OMFile;
 class OMClassFactory;
 
-// @class Abstract base class for all objects that may be stored by
-//        the Object Manager.
-//
+  // @class Abstract base class for all objects that may be stored by
+  //        the Object Manager.
+  //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 class OMStorable : public OMObject {
 public:
   // @access Public members.
