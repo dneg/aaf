@@ -63,10 +63,12 @@ private:
 	HRESULT TraverseMob(IAAFMob* pMob, OMF2::omfMobObj_t* pOMFMob);
 	HRESULT ProcessComponent(IAAFComponent* pComponent, OMF2::omfObject_t* pOMFSegment);
 	HRESULT ConvertAAFDatadef(aafUID_t Datadef, OMF2::omfDDefObj_t* pDatakind);
+	HRESULT GetUniqueNameFromAUID(aafUID_t Datadef, OMF2::omfUniqueNamePtr_t UniqueName);
 	HRESULT TraverseSequence(IAAFSequence* pSequence, OMF2::omfObject_t* pOMFSequence );
 	HRESULT ConvertSelector(IAAFSelector* pSelector, OMF2::omfObject_t* pOMFSelector );
 	HRESULT ConvertLocator(IAAFEssenceDescriptor* pEssenceDesc, OMF2::omfMobObj_t*	pOMFSourceMob );
 	HRESULT ConvertEssenceDataObject(IAAFEssenceData* pEssenceData);
+	HRESULT ConvertEffects(IAAFEffect* pEffect, OMF2::omfEffObj_t*	pOMFEffect);
 
 private:
 
