@@ -50,7 +50,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386
-# ADD LINK32 ole32.lib uuid.lib AAF.lib AAFIID.lib /nologo /subsystem:console /machine:I386 /nodefaultlib:"libc.lib" /nodefaultlib:"libcmt.lib" /nodefaultlib:"libcd.lib" /nodefaultlib:"libcmtd.lib" /nodefaultlib:"msvcrtd.lib" /out:"../../../Release/Examples/Com/ExportSimpleComposition.exe" /libpath:"..\..\..\Release\RefImpl"
+# ADD LINK32 ole32.lib uuid.lib AAF.lib AAFIID.lib /nologo /subsystem:console /machine:I386 /nodefaultlib:"libc.lib" /nodefaultlib:"libcmt.lib" /nodefaultlib:"libcd.lib" /nodefaultlib:"libcmtd.lib" /nodefaultlib:"msvcrtd.lib" /out:"../../../Release/Examples/Com/ExportSimpleComposition.exe" /libpath:"..\..\..\lib"
 # SUBTRACT LINK32 /verbose
 
 !ELSEIF  "$(CFG)" == "ExportSimpleComposition - Win32 Debug"
@@ -76,7 +76,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 ole32.lib uuid.lib AAFD.lib AAFIIDD.lib /nologo /subsystem:console /debug /machine:I386 /nodefaultlib:"libc.lib libcmt.lib msvcrt.lib libcd.lib libcmtd.lib" /nodefaultlib:"libc.lib" /nodefaultlib:"libcmt.lib" /nodefaultlib:"msvcrt.lib" /nodefaultlib:"libcd.lib" /nodefaultlib:"libcmtd.lib" /out:"../../../Debug/Examples/Com/ExportSimpleComposition.exe" /pdbtype:sept /libpath:"../../../../Debug/RefImpl" /libpath:"..\..\..\Debug\RefImpl"
+# ADD LINK32 ole32.lib uuid.lib AAFD.lib AAFIIDD.lib /nologo /subsystem:console /debug /machine:I386 /nodefaultlib:"libc.lib libcmt.lib msvcrt.lib libcd.lib libcmtd.lib" /nodefaultlib:"libc.lib" /nodefaultlib:"libcmt.lib" /nodefaultlib:"msvcrt.lib" /nodefaultlib:"libcd.lib" /nodefaultlib:"libcmtd.lib" /out:"../../../Debug/Examples/Com/ExportSimpleComposition.exe" /pdbtype:sept /libpath:"..\..\..\lib"
 # SUBTRACT LINK32 /incremental:no /map
 
 !ENDIF 
@@ -85,6 +85,62 @@ LINK32=link.exe
 
 # Name "ExportSimpleComposition - Win32 Release"
 # Name "ExportSimpleComposition - Win32 Debug"
+# Begin Group "AAF Libraries"
+
+# PROP Default_Filter "lib"
+# Begin Source File
+
+SOURCE=..\..\..\Release\RefImpl\AAFIID.lib
+
+!IF  "$(CFG)" == "ExportSimpleComposition - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "ExportSimpleComposition - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Release\RefImpl\AAF.lib
+
+!IF  "$(CFG)" == "ExportSimpleComposition - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "ExportSimpleComposition - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Debug\RefImpl\AAFIIDD.lib
+
+!IF  "$(CFG)" == "ExportSimpleComposition - Win32 Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "ExportSimpleComposition - Win32 Debug"
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Debug\RefImpl\AAFD.lib
+
+!IF  "$(CFG)" == "ExportSimpleComposition - Win32 Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "ExportSimpleComposition - Win32 Debug"
+
+!ENDIF 
+
+# End Source File
+# End Group
 # Begin Source File
 
 SOURCE="..\..\..\..\examples\com-api\ExportSimpleComposition\ExportSimpleComposition.cpp"
