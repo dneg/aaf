@@ -275,7 +275,6 @@ AD_CLASS_BEGIN\
 #endif
 
 #include <assert.h>
-#include <iostream.h>
 
 #if defined(WIN32)
 // Include declarations for InterlockedIncrement() and InterlockcedDecrment().
@@ -342,15 +341,8 @@ aafUInt32 .this-module::AcquireReference() const
 aafUInt32 .this-module::ReleaseReference()
 {
   long count = InterlockedDecrement(reinterpret_cast<long *>(&_refCount));
-#if !defined(DONT_DELETE_LAST_REFERENCE)
   if (0 == count)
     delete this;
-#else
-  if (0 > count)
-  {
-    cerr << this << " Error: Releasing an object with reference count:" << count << endl;
-  }
-#endif
   
   return count;
 }
