@@ -52,7 +52,7 @@ public:
 
   // Seek to the absolute byte offset into the stream.
   STDMETHOD (Seek)
-    (/*[in]*/ aafUInt32  byteOffset); // The absolute byte offset into the stream. 
+    (/*[in]*/ aafInt64  byteOffset); // The absolute byte offset into the stream. 
 
   // Seek forward or backward the given byte count.
   STDMETHOD (SeekRelative)
@@ -60,7 +60,7 @@ public:
 
   // Returns AAFTrue if the byte offset is within the stream.
   STDMETHOD (IsPosValid)
-    (/*[in]*/ aafUInt32  byteOffset, // The absolute byte offset into the stream.
+    (/*[in]*/ aafInt64  byteOffset, // The absolute byte offset into the stream.
      /*[out]*/ aafBool *  isValid); // The result. 
 
   // Returns the position within the stream.

@@ -119,7 +119,7 @@ AD_IDL(//
 	// to before the stream is actually opened.
 	//)
 	
-AD_XMETHOD3(GetNumChannels,
+AD_XMETHOD4(GetNumChannels,
 		   [in],
 		   objIn,
 		   Unknown,
@@ -130,6 +130,11 @@ AD_XMETHOD3(GetNumChannels,
 		   aafUID_t,
 		   essenceKind,
 		   This is the type of essence to open,
+			[in],
+			objIn,
+			AAFEssenceStream,
+			stream,
+			Here is an essence stream with the raw data,
 		   [out],
 		   objPass,
 		   aafInt16 *,

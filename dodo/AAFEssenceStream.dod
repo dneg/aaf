@@ -47,7 +47,7 @@ AD_METHOD3(Read,
 
 AD_METHOD1(Seek,
 			[in],
-			aafUInt32,
+			aafInt64,
 			byteOffset,
 			The absolute byte offset into the stream.,
 			Seek to the absolute byte offset into the stream.)
@@ -61,7 +61,7 @@ AD_METHOD1(SeekRelative,
 
 AD_METHOD2(IsPosValid,
 			[in],
-			aafUInt32,
+			aafInt64,
 			byteOffset,
 			The absolute byte offset into the stream.,
 			[out],
