@@ -27,6 +27,8 @@
 class OMObject;
 class OMReferenceContainerIterator;
 
+#include <stddef.h>
+
   // @class Abstract base class for object reference containers
   //        supported by the Object Manager.
   //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.

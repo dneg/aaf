@@ -26,6 +26,8 @@
 
 #include "OMContainerIterator.h"
 
+#include <stddef.h>
+
 template <typename Element>
 class OMVector;
 
