@@ -45,44 +45,11 @@ extern "C" const aafClassID_t CLSID_AAFPluginManager;
 
 
 
-// Make private helper class a friend so that it
-// may call the destructor. This helper class is used
-// to ensure that the singleton context instance is 
-// cleaned up properly.
-
-class ImplAAFContextHelper
-{
-public:
-  ImplAAFContextHelper();
-  ~ImplAAFContextHelper();
-};
-
-
-
-
 
 // single instance of this class; initialized by first call to GetInstance().
 /*static*/ ImplAAFContext * ImplAAFContext::_singleton = 0;
 
-// Create an instance of the context helper. The helper's destructor will delete the context.
-static ImplAAFContextHelper g_ContextHelper;
 
-
-
-
-// Create and save the context.
-ImplAAFContextHelper::ImplAAFContextHelper()
-{
-}
-
-// Cleanup the context singleton if one exists.
-ImplAAFContextHelper::~ImplAAFContextHelper()
-{
-  if (ImplAAFContext::_singleton)
-  {
-    delete ImplAAFContext::_singleton;
-  }
-}
 
 
 /*static*/ ImplAAFContext * ImplAAFContext::GetInstance ()
@@ -97,11 +64,16 @@ ImplAAFContextHelper::~ImplAAFContextHelper()
   return _singleton;
 }
 
+/*static*/ void ImplAAFContext::DeleteInstance(void)
+{
+  delete _singleton;
+  _singleton = 0;
+}
+
 ImplAAFContext::ImplAAFContext ()
 {
   // There Can Be Only One!
   assert(NULL == _singleton);
-  _singleton = this;
 
   _plugins = NULL;
   OMObjectManager::initialize();
@@ -116,8 +88,6 @@ ImplAAFContext::~ImplAAFContext ()
     _plugins = 0;
   }
   
-  // Thare Can Be Only One!
-  _singleton = 0;
   ImplAAFFile::removeFactories();
   OMObjectManager::finalize();
 }

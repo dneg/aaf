@@ -47,6 +47,7 @@ public:
   //
   static ImplAAFContext * GetInstance ();
 
+  static void DeleteInstance(void);
 
 public:
 
@@ -67,11 +68,6 @@ private:
 
   ImplAAFPluginManager	*_plugins;
 
-  // Make private helper class a friend so that it
-  // may call the destructor. This helper class is used
-  // to ensure that the singleton context instance is 
-  // cleaned up properly.
-  friend class ImplAAFContextHelper;
 };
 
 #endif // ! __ImplAAFContext_h__

@@ -126,7 +126,10 @@ Initialize::Initialize()
 }
 
 Initialize::~Initialize()
-{}
+{
+	g_AAFInProcServer.Term();
+    ImplAAFContext::DeleteInstance();
+}
 
 Initialize init;
 
@@ -163,6 +166,7 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
 	else if (dwReason == DLL_PROCESS_DETACH)
 	{
 		g_AAFInProcServer.Term();
+		ImplAAFContext::DeleteInstance();
 	}
 	return TRUE;    // ok
 }
@@ -336,6 +340,7 @@ DllTerminationRoutine()
 	// Terminate the inproc server object.
 	g_AAFInProcServer.Term();
 	g_pAAFServer	= NULL;
+	ImplAAFContext::DeleteInstance();
 
 	if (DllData.Inited)
 	{
