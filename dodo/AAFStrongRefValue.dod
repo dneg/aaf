@@ -1,1 +1,24 @@
-#c/*************************************************\#c*                                                 *#c* Advanced Authoring Format                       *#c*                                                 *#c* Copyright (c) 2000 Avid Technology, Inc.        *#c*                                                 *#c\*************************************************/#startm .this-module 0AAFStrongRefValue\#endm#c#startm .parent-module 0AAFRefValue\#endm#cAD_HEADAD_IDL(//// Stub interface for an implementation class with no separate// published interface.)AD_CLASS_UUID(4142d581, 6892, 11d4, a8, 12, 8f, 71, e1, 57, e3, f3)AD_DEFAULT_UUID(4142d582, 6892, 11d4, a8, 12, 8f, 71, e1, 57, e3, f3)AD_XCLASS_BEGIN(Concrete, Transient)AD_XCLASS_END(Concrete, Transient)
+#c/*************************************************\
+#c*                                                 *
+#c* Advanced Authoring Format                       *
+#c*                                                 *
+#c* Copyright (c) 2000 Avid Technology, Inc.        *
+#c*                                                 *
+#c\*************************************************/
+#startm .this-module 0
+AAFStrongRefValue\
+#endm
+#c
+#startm .parent-module 0
+AAFRefValue\
+#endm
+#c
+AD_HEAD
+AD_IDL(//
+// Stub interface for an implementation class with no separate
+// published interface.)
+AD_CLASS_UUID(4142d581, 6892, 11d4, a8, 12, 8f, 71, e1, 57, e3, f3)
+
+AD_DEFAULT_UUID(4142d582, 6892, 11d4, a8, 12, 8f, 71, e1, 57, e3, f3)
+AD_XCLASS_BEGIN(Concrete, Transient)
+AD_XCLASS_END(Concrete, Transient)
