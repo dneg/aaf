@@ -9,7 +9,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -44,7 +44,6 @@
 #include <string.h>
 #include "AAFResult.h"
 #include "aafErr.h"
-// #include "ImplAAFHeader.h"
 #include "ImplAAFDictionary.h"
 #include "ImplAAFTypeDef.h"
 #include "ImplAAFParameterDef.h"
@@ -69,7 +68,6 @@ AAFRESULT STDMETHODCALLTYPE
       ImplAAFParameterDef *pParmDef)
 {
 	aafUID_t			newUID;
-	// ImplAAFHeader		*head = NULL;
 	ImplAAFDictionary	*dict = NULL;
 
 	if(pParmDef == NULL)
@@ -78,8 +76,6 @@ AAFRESULT STDMETHODCALLTYPE
 	XPROTECT()
 	{
 		CHECK(pParmDef->GetAUID(&newUID));
-		// CHECK(pParmDef->MyHeadObject(&head));
-		// CHECK(head->GetDictionary(&dict));
 		CHECK(GetDictionary(&dict));
 // This is a weak reference, not yet counted
 //		if(dict->LookupParameterDef(&newUID, &def) == AAFRESULT_SUCCESS)
@@ -87,16 +83,11 @@ AAFRESULT STDMETHODCALLTYPE
 
 		_parmDef = newUID;
 //		pParmDef->AcquireReference();
-		// head->ReleaseReference();
-		// head = NULL;
 		dict->ReleaseReference();
 		dict = NULL;
 	}
 	XEXCEPT
 	{
-	  // if(head)
-	  // head->ReleaseReference();
-	  // head = 0;
 		if(dict)
 		  dict->ReleaseReference();
 		dict = 0;
@@ -112,7 +103,6 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFParameter::GetParameterDefinition (
       ImplAAFParameterDef **ppParmDef)
 {
-  // ImplAAFHeader		*head = NULL;
 	ImplAAFDictionary	*dict = NULL;
 
 	if(ppParmDef == NULL)
@@ -120,21 +110,14 @@ AAFRESULT STDMETHODCALLTYPE
 
 	XPROTECT()
 	{
-	  // CHECK(MyHeadObject(&head));
-	  // CHECK(head->GetDictionary(&dict));
 	  CHECK(GetDictionary(&dict));
 		CHECK(dict->LookupParameterDef(_parmDef, ppParmDef));
 //		(*ppParmDef)->AcquireReference();
-		// head->ReleaseReference();
-		// head = NULL;
 		dict->ReleaseReference();
 		dict = NULL;
 	}
 	XEXCEPT
 	{
-	  // if(head)
-	  // head->ReleaseReference();
-	  // head = 0;
 		if(dict)
 		  dict->ReleaseReference();
 		dict = 0;
@@ -151,7 +134,6 @@ AAFRESULT STDMETHODCALLTYPE
       ImplAAFTypeDef*  pTypeDef)
 {
 	aafUID_t			newUID;
-	// ImplAAFHeader		*head = NULL;
 	ImplAAFDictionary	*dict = NULL;
 
 	if(pTypeDef == NULL)
@@ -160,8 +142,6 @@ AAFRESULT STDMETHODCALLTYPE
 	XPROTECT()
 	{
 		CHECK(pTypeDef->GetAUID(&newUID));
-		// CHECK(pTypeDef->MyHeadObject(&head));
-		// CHECK(head->GetDictionary(&dict));
 		CHECK(GetDictionary(&dict));
 // Weak references not yet refcounted
 //		if(dict->LookupTypeDef(&newUID, &def) == AAFRESULT_SUCCESS)
@@ -169,16 +149,11 @@ AAFRESULT STDMETHODCALLTYPE
 
 		_typeDef = newUID;
 //		pTypeDef->AcquireReference();
-		// head->ReleaseReference();
-		// head = NULL;
 		dict->ReleaseReference();
 		dict = NULL;
 	}
 	XEXCEPT
 	{
-	  // if(head)
-	  // head->ReleaseReference();
-	  // head = 0;
 		if(dict)
 		  dict->ReleaseReference();
 		dict = 0;
@@ -193,7 +168,6 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFParameter::GetTypeDefinition (
       ImplAAFTypeDef **ppTypeDef)
 {
-  // ImplAAFHeader		*head = NULL;
 	ImplAAFDictionary	*dict = NULL;
 
 	if(ppTypeDef == NULL)
@@ -201,21 +175,14 @@ AAFRESULT STDMETHODCALLTYPE
 
 	XPROTECT()
 	{
-	  // CHECK(MyHeadObject(&head));
-	  // CHECK(head->GetDictionary(&dict));
 	  CHECK(GetDictionary(&dict));
 		CHECK(dict->LookupTypeDef(_typeDef, ppTypeDef));
 //		(*ppTypeDef)->AcquireReference();
-		// head->ReleaseReference();
-		// head = NULL;
 		dict->ReleaseReference();
 		dict = NULL;
 	}
 	XEXCEPT
 	{
-	  // if(head)
-	  // head->ReleaseReference();
-	  // head = 0;
 		if(dict)
 		  dict->ReleaseReference();
 		dict = 0;
