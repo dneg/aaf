@@ -64,7 +64,6 @@ AAFNONPERSISTENTOBJECTS = \
 	EnumAAFDefs \
 	EnumAAFEffectDefs \
 	EnumAAFIdentifications \
-	EnumAAFLoadedPlugins \
 	EnumAAFMobComments \
 	EnumAAFObjects \
 	EnumAAFParameterDefs \
@@ -145,6 +144,7 @@ HUMAN_TYPED_IMPL = \
 	AAFWAVEDescriptor \
 	EnumAAFComponents \
 	EnumAAFEssenceData \
+	EnumAAFLoadedPlugins \
 	EnumAAFLocators \
 	EnumAAFMobSlots \
 	EnumAAFMobs \

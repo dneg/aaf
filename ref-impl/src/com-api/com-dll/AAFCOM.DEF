@@ -1,7 +1,7 @@
 ; --------------------------------------------------------------------------
 ; AAFCOM.def - Module definition file for AAFCOM.DLL
 ; --------------------------------------------------------------------------
-; Copyright 1998 Avid Technology, Inc.  All Rights Reserved.
+; Copyright 1998-1999 Avid Technology, Inc.  All Rights Reserved.
 ;
 ; THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF 
 ; ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO 
@@ -23,3 +23,4 @@ EXPORTS		AAFFileOpenExistingRead
 EXPORTS		AAFFileOpenExistingModify
 EXPORTS		AAFFileOpenNewModify
 EXPORTS		AAFFileOpenTransient
+EXPORTS		AAFGetPluginManager
