@@ -835,6 +835,39 @@ It' a macro processor.
   defined this maps to void FooW(wchar_t* bar); Of course this is confusing and 
   pollutes the name space. For example try debugging ImplAAFEssenceAccess and 
   you see that the CreateFile member ends up as CreateFileW, bah ! </p>
+<hr>
+<p> Is there a way to receive a more meaningful HRESULT when attempting to erroneously 
+  create an aaf file that already exists ?</p>
+<p>If I try this, the HRESULT I get from <b>AAFFileOpenNewModify</b>() is AAFRESULT_ASSERTION_VIOLATION.<br>
+  However the call to <b>AAFFileOpenNewModify</b>() resulted in a call to StgCreateDocfile() 
+  which did return a meaningful HRESULT (0x80030050, already exists) indicating 
+  that the file already exists.</p>
+<p>Unfortunately there is currently no way to receive a more meaningful HRESULT 
+  when attempting to erroneously create an .AAF file that already exists.<br>
+  We planned to provide complete error handling in the Object Manager but that 
+  work has not yet been done. This work was deferred to concentrate on work items 
+  of higher priority.</p>
+<p>Currently the HRESULT returned by StgCreateDocfile() is lost. I suggest the 
+  following <i>workaround</i> - Use the host file system [ansi - <b>fopen</b>(), 
+  W32 - <b>CreateFile</b>() etc.] to check that the file does not already exist 
+  prior to calling <b>AAFFileOpenNewModify</b>()<br>
+  If you have a GUI you probably want to report the error that the file already 
+  exists when the user _chooses_ the name of the file to create i.e. before calling 
+  <b>AAFFileOpenNewModify</b>(). Alternatively you could try calling the W32 API 
+  function GetLastError()</p>
+<p> Other workarounds involving the use of <b>AAFCreateAAFFileOnRawStorage</b>() 
+  [available in RC1] may be possible. <br>
+  Note that the goal is for AAF to support multiple external representations. 
+  In addition to structured storage binary files, support for XML (text) and SMPTE 
+  KLV (binary) encodings is possible.<br>
+  This means that calls to <b>AFFileOpenNewModify</b>() don't always result in 
+  a call to <b>StgCreateDocfile</b>(). For each external representation the function 
+  called by the Object Manager to open/create the file is different and may not 
+  even return an HRESULT [e.g. fopen()]<br>
+  Any error handling scheme that is eventually implemented in the Object Manager 
+  needs to take the support for multiple external representations into account 
+  while still preserving any HRESULT that may be available.</p>
+<p>&nbsp;</p>
 </BODY>
 </HTML>
  
