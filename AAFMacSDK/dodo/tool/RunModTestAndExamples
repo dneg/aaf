@@ -64,6 +64,7 @@ loop
 	else if "{1}" == "-m"
 		set MODULETEST "1"
 	else
+	  echo 'Unsupported parameter:"'"{1}"'"'
 		PrintHelp
 	end if
 
@@ -125,12 +126,12 @@ if "{CUTSTEST}{ALL_TESTS}" ­ ""
 end if
 
 
-if "{PROPDIRECTDUMP}{ALL_TESTS}" ­ ""
-	echo "Running COMPROPDIRECTDUMP"
-	ccommand COMPROPDIRECTDUMP CutsOnly.aaf
-	echo ""
-	echo ""
-end if
+#if "{PROPDIRECTDUMP}{ALL_TESTS}" ­ ""
+#	echo "Running COMPROPDIRECTDUMP"
+#	ccommand COMPROPDIRECTDUMP CutsOnly.aaf
+#	echo ""
+#	echo ""
+#end if
 
 if "{ESSENCETEST}{ALL_TESTS}" ­ ""
 	echo "Running COMESSENCEDATATEST"
