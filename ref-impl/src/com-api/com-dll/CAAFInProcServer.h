@@ -21,13 +21,22 @@ typedef struct tagAAFComObjectInfo
 	const CLSID* pCLSID;
 	LPCOLESTR pClassName;
 	AAFCreateComObjectProc pfnCreate;
+	bool bRegisterClass;
 } AAFComObjectInfo_t;
 
 
 
 #define AAF_BEGIN_OBJECT_MAP(x) static AAFComObjectInfo_t x[] = {
-#define AAF_END_OBJECT_MAP()   { NULL, NULL, NULL } };
-#define AAF_OBJECT_ENTRY(class) { &CLSID_##class, OLESTR(#class), &C##class##::COMCreate },
+#define AAF_LAST_ENTRY() { NULL, NULL, NULL, false }
+#define AAF_END_OBJECT_MAP()  AAF_LAST_ENTRY() };
+#define AAF_OBJECT_ENTRYX(class,reg) { &CLSID_##class, OLESTR(#class), &C##class##::COMCreate, reg },
+
+// Define standard entries do not register the class.
+#define AAF_OBJECT_ENTRY(class) AAF_OBJECT_ENTRYX(class,false)
+
+// Plugins/Class extensions are external and may have a registry component...
+#define AAF_PLUGIN_OBJECT_ENTRY(class) AAF_OBJECT_ENTRYX(class,true)
+
 
 
 class CAAFInProcServer : 
@@ -45,6 +54,8 @@ public:
 	HRESULT RegisterServer( BOOL bRegTypeLib = FALSE );
 	HRESULT UnregisterServer( );
 
+protected:
+	long GetRegisterIndex(long index);
 
 protected:
 	AAFComObjectInfo_t *_pObjectInfo;
