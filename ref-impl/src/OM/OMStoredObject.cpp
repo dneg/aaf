@@ -7,6 +7,8 @@
 #include "OMAssertions.h"
 #include "OMUtilities.h"
 
+#include <windows.h>
+
 OMStoredObject::OMStoredObject(struct IStorage* s)
 : _storage(s), _index(0), _indexStream(0), _propertiesStream(0),
   _offset(0), _classId(0), _open(false)
