@@ -386,6 +386,7 @@ ImplAAFDictionary::CreateAndInit(ImplAAFClassDef * pClassDef) const
 
 ImplAAFObject* ImplAAFDictionary::pvtInstantiate(const aafUID_t & auid) const
 {
+  static const aafUID_t kNullUID = { 0 } ;
   ImplAAFObject *result = 0;
 
   // Is this a request to create the dictionary?
@@ -428,7 +429,6 @@ ImplAAFObject* ImplAAFDictionary::pvtInstantiate(const aafUID_t & auid) const
 			  break;
 			}
 		  pcd->pvtGetParentAUID (parentAUID);
-		  const aafUID_t kNullUID = { 0 } ;
 		  if (EqualAUID (&parentAUID, &kNullUID))
 			{
 			  // Class was apparently registered, but no appropriate
@@ -518,7 +518,7 @@ AAFRESULT ImplAAFDictionary::dictLookupClassDef (
 	AAFRESULT result = AAFRESULT_SUCCESS;
   // NOTE: The following type cast is temporary. It should be removed as soon
 	// as the OM has a declarative sytax to include the type
-	// of the key used in the set. (trr:2000-FEB-29)
+	// of the key used in the set. (trr:2000-FEB-26)
 	if (_classDefinitions.find((*reinterpret_cast<const OMObjectIdentification *>(&classID)),
                              *ppClassDef))
 	{
@@ -553,8 +553,7 @@ ImplAAFDictionary::pvtLookupAxiomaticClassDef (const aafUID_t &classID,
 	  // It's axiomatic.  
 	  assert (ppClassDef);
 	  *ppClassDef = _pBuiltinClasses->LookupAxiomaticClass (classID);
-	  assert (*ppClassDef);
-	  (*ppClassDef)->AcquireReference ();
+	  assert (*ppClassDef); // reference count already incremented by LookupAxiomaticClass.
 	  return true;
 	}
   return false;
@@ -566,13 +565,13 @@ AAFRESULT STDMETHODCALLTYPE
       const aafUID_t & classID,
       ImplAAFClassDef ** ppClassDef)
 {
-  ImplAAFClassDefSP			classDef;
   AAFRESULT					status;
 
   if (! ppClassDef) return AAFRESULT_NULL_PARAM;
 
-  if (pvtLookupAxiomaticClassDef (classID, &classDef))
+  if (pvtLookupAxiomaticClassDef (classID, ppClassDef))
 	{
+	  assert (*ppClassDef);
 	  // Yes, this is an axiomatic class.  classDef should be filled
 	  // in.  Assure that it's in the dictionary, and return it.
 
@@ -582,12 +581,7 @@ AAFRESULT STDMETHODCALLTYPE
 	  //   put-it-into-the-dictionary();
 	  // }
 
-	  AssurePropertyTypes (classDef);
-
-	  assert (ppClassDef);
-	  *ppClassDef = classDef;
-	  assert (*ppClassDef);
-	  (*ppClassDef)->AcquireReference ();
+	  AssurePropertyTypes (*ppClassDef);
 	  return AAFRESULT_SUCCESS;
 	}
 
@@ -609,7 +603,7 @@ AAFRESULT STDMETHODCALLTYPE
 	}
 
   // If we're here, it was not found in dict.  Try it in builtins.
-  status = _pBuiltinClasses->NewBuiltinClassDef (classID, &classDef);
+  status = _pBuiltinClasses->NewBuiltinClassDef (classID, ppClassDef);
   if (AAFRESULT_FAILED (status))
 	{
 	  // no recognized class guid
@@ -617,15 +611,12 @@ AAFRESULT STDMETHODCALLTYPE
 	}
 
   // Yup, found it in builtins.  Register it.
-  assert (classDef);
-  status = RegisterClassDef (classDef);
+  assert (*ppClassDef);
+  status = RegisterClassDef (*ppClassDef);
   if (AAFRESULT_FAILED (status))
 	return status;
 		  
-  AssurePropertyTypes (classDef);
-  assert (ppClassDef);
-  *ppClassDef = classDef;
-  (*ppClassDef)->AcquireReference ();
+  AssurePropertyTypes (*ppClassDef);
 	
   return(AAFRESULT_SUCCESS);
 }
@@ -769,7 +760,7 @@ AAFRESULT ImplAAFDictionary::dictLookupTypeDef (
 	AAFRESULT result = AAFRESULT_SUCCESS;
   // NOTE: The following type cast is temporary. It should be removed as soon
 	// as the OM has a declarative sytax to include the type
-	// of the key used in the set. (trr:2000-FEB-29)
+	// of the key used in the set. (trr:2000-FEB-26)
 	if (_typeDefinitions.find((*reinterpret_cast<const OMObjectIdentification *>(&typeID)),
                              *ppTypeDef))
 	{

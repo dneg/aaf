@@ -491,9 +491,10 @@ AAFRESULT STDMETHODCALLTYPE
 								typeId,
 								isOptional));
 
-  ImplAAFPropertyDef * pdTemp = pd;
-  _Properties.appendValue(pdTemp);
-  pdTemp->AcquireReference ();
+//  ImplAAFPropertyDef * pdTemp = pd;
+//  _Properties.appendValue(pdTemp);
+//  pdTemp->AcquireReference ();
+  pvtRegisterExistingPropertyDef(pd);
 
   if (ppPropDef)
   {

@@ -458,6 +458,9 @@ ImplAAFClassDef * ImplAAFBuiltinClasses::LookupAxiomaticClass
 		{
 		  result = _axClassDefs[i];
 		  assert (result);
+      // We are returning a reference to a reference counted object so
+      // we need to bump the reference count.
+      result->AcquireReference ();
 		  break;
 		}
 	}
