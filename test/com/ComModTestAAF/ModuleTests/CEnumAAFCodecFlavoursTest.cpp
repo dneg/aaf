@@ -1,5 +1,5 @@
 // @doc INTERNAL
-// @com This file implements the module test for CAAFContainerDef
+// @com This file implements the module test for CEnumAAFCodecFlavours
 /***********************************************\
 *												*
 * Advanced Authoring Format						*
@@ -20,8 +20,9 @@
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFResult.h"
+#include "AAFDataDefs.h"
 #include "AAFDefUIDs.h"
-
+#include "aafUtils.h"
 
 // Cross-platform utility to delete a file.
 static void RemoveTestFile(const wchar_t* pFileName)
@@ -95,11 +96,13 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFFile*		pFile = NULL;
 	IAAFHeader *        pHeader = NULL;
 	IAAFDictionary*  pDictionary = NULL;
-	IAAFContainerDef*	pContainerDef = NULL;
-	IAAFDefObject*	pDef = NULL;
+	IAAFCodecDef*	pCodecDef = NULL;
+	IAAFDefObject	*pDef = NULL;
+	IAAFDataDef		*pDataDef = NULL;
+	IAAFPluginManager *mgr = NULL;
 	bool bFileOpen = false;
-	aafUID_t		uid = ContainerFile;
 	HRESULT			hr = S_OK;
+	aafUID_t		uid;
 /*	long			test;
 */
 
@@ -116,16 +119,13 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		// Get the AAF Dictionary so that we can create valid AAF objects.
 		checkResult(pHeader->GetDictionary(&pDictionary));
     
-		checkResult(pDictionary->CreateInstance(&AUID_AAFContainerDef,
-							  IID_IAAFContainerDef, 
-							  (IUnknown **)&pContainerDef));
-    
-		checkResult(pContainerDef->QueryInterface(IID_IAAFDefObject, (void **)&pDef));
-		checkResult(pDef->Init(&uid, L"Test Container", L"Test Container Definition"));
+		checkResult(AAFGetPluginManager(&mgr));
+		checkResult(mgr->CreatePluginDefinition (CodecWave, pDictionary, &pDef));
 
-		checkResult(pContainerDef->SetEssenceIsIdentified (AAFTrue));
-
-		checkResult(pDictionary->RegisterContainerDefinition(pContainerDef));
+		uid = DDEF_Sound;
+		checkResult(pDef->QueryInterface(IID_IAAFCodecDef, (void **)&pCodecDef));
+		checkResult(pCodecDef->AppendEssenceKind (&uid));
+		checkResult(pDictionary->RegisterCodecDefinition(pCodecDef));
 	}
 	catch (HRESULT& rResult)
 	{
@@ -134,11 +134,17 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 
   // Cleanup and return
-  if (pContainerDef)
-    pContainerDef->Release();
-
   if (pDef)
     pDef->Release();
+
+  if (mgr)
+    mgr->Release();
+
+  if (pDataDef)
+    pDataDef->Release();
+
+  if (pCodecDef)
+    pCodecDef->Release();
 
   if (pDictionary)
     pDictionary->Release();
@@ -164,11 +170,15 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	IAAFFile*		pFile = NULL;
 	IAAFHeader*		pHeader = NULL;
 	IAAFDictionary*  pDictionary = NULL;
-	IEnumAAFContainerDefs *pPlug = NULL;
-	IAAFContainerDef		*pPlugDef = NULL;
-	IAAFContainerDef		*pContainerDef = NULL;
+	IAAFCodecDef	*pCodec = NULL;
+	IAAFDataDef		*pDataDef = NULL;
+	IEnumAAFCodecFlavours	*pEnum = NULL;
 	bool bFileOpen = false;
-	aafBool			testBool;
+	aafBool			testResult;
+	aafUID_t		codecID = CodecWave;
+	aafUID_t		testMatte = DDEF_Matte, testPicture = DDEF_Picture;
+	aafUID_t		checkFlavour = NilCodecVariety;
+	aafUID_t		testFlavour;
 	HRESULT			hr = S_OK;
 
 	try
@@ -178,12 +188,13 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 		bFileOpen = true;
 
 		checkResult(pHeader->GetDictionary(&pDictionary));
-	
-		checkResult(pDictionary->GetContainerDefinitions(&pPlug));
-		checkResult(pPlug->NextOne (&pPlugDef));
-		checkResult(pPlugDef->QueryInterface (IID_IAAFContainerDef, (void **)&pContainerDef));
-		checkResult(pContainerDef->EssenceIsIdentified (&testBool));
-		checkExpression(testBool == AAFTrue, AAFRESULT_TEST_FAILED);
+		checkResult(pDictionary->LookupCodecDefinition(&codecID, &pCodec));
+
+		checkResult(pCodec->IsEssenceKindSupported (&testPicture, &testResult));
+		checkExpression (testResult == AAFFalse, AAFRESULT_TEST_FAILED);
+		checkResult(pCodec->EnumCodecFlavours (&pEnum));
+		checkResult(pEnum->NextOne (&testFlavour));
+		checkExpression (EqualAUID(&testFlavour, &checkFlavour), AAFRESULT_TEST_FAILED);
 	}
 	catch (HRESULT& rResult)
 	{
@@ -191,21 +202,18 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	}
 
 	// Cleanup and return
-	if (pContainerDef)
-		pContainerDef->Release();
-
-//!!!	if (pPlugDef)
-//		pPlugDef->Release();
-
-//!!!	if (pPlug)
-//		pPlug->Release();
-
-  if (pDictionary)
+	if (pEnum)
+		pEnum->Release();
+	if (pDataDef)
+		pDataDef->Release();
+	if (pCodec)
+		pCodec->Release();
+	if (pDictionary)
 		pDictionary->Release();
 
 	if (pHeader)
 		pHeader->Release();
-      
+
 	if (pFile)
 	{  // Close file
 		if (bFileOpen)
@@ -217,10 +225,10 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 }
  
 
-extern "C" HRESULT CAAFContainerDef_test()
+extern "C" HRESULT CEnumAAFCodecFlavours_test()
 {
 	HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
-	aafWChar * pFileName = L"ContainerDefTest.aaf";
+	aafWChar * pFileName = L"CodecDefTest.aaf";
 
 	try
 	{
@@ -230,43 +238,21 @@ extern "C" HRESULT CAAFContainerDef_test()
 	}
 	catch (...)
 	{
-		cerr << "CAAFContainerDef_test...Caught general C++ exception!" << endl; 
+		cerr << "CAAFCodecDef_test...Caught general C++ exception!" << endl; 
+	}
+
+	// When all of the functionality of this class is tested, we can return success.
+	// When a method and its unit test have been implemented, remove it from the list.
+	if (SUCCEEDED(hr))
+	{
+		cout << "The following IAAFCodecDef methods have not been implemented:" << endl; 
+		cout << "     Next" << endl; 
+		cout << "     Skip" << endl; 
+		cout << "     Reset" << endl; 
+		cout << "     Clone" << endl; 
+		hr = AAFRESULT_TEST_PARTIAL_SUCCESS;
 	}
 
 	return hr;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

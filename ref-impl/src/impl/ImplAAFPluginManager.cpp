@@ -268,6 +268,7 @@ AAFRESULT
 				CHECK(plugin->GetIndexedDefinitionObject(n, iDictionary, ppPluginDef));
 				CHECK(plugin->CreateDescriptor(iDictionary, &desc));
 				CHECK((*ppPluginDef)->AppendPluginDescriptor (desc));
+				CHECK(iDictionary->RegisterPluginDescriptor(desc));
 
 				desc->Release();
 				desc = NULL;
