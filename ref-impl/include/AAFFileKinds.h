@@ -86,14 +86,15 @@ const aafUID_t aafFileKindAafSSBinary = aafFileKindAafMSSBinary_Value;
 const aafUID_t aafFileKindAaf4KBinary = aafFileKindAafM4KBinary_Value;
 
 #elif defined( OS_MACOS )
-// DEFAULT is Microsoft 512 (via MacOLE). SchemaSoft not yet ported
-const aafUID_t aafFileKindAafSSBinary = aafFileKindAafMSSBinary_Value;
+// No SS implementation available since Microsoft 512 (via MacOLE) has been
+// deleted
+const aafUID_t aafFileKindAafSSBinary = aafFileKindPathalogical_Value;
 // default 4k binary
 const aafUID_t aafFileKindAaf4KBinary = aafFileKindPathalogical_Value;
 
 
 #elif defined( OS_DARWIN )
-// DEFAULT is Schemasoft 512 (via libSSRW2C.a)..  Microsoft not yet ported
+// DEFAULT is Schemasoft 512 (via libSSRW2C.a).
 const aafUID_t aafFileKindAafSSBinary = aafFileKindAafSSSBinary_Value;
 // default 4k binary
 const aafUID_t aafFileKindAaf4KBinary = aafFileKindAafS4KBinary_Value;
@@ -113,14 +114,14 @@ const aafUID_t aafFileKindAafSSBinary = aafFileKindAafSSSBinary_Value;
 const aafUID_t aafFileKindAaf4KBinary = aafFileKindAafS4KBinary_Value;
 
 #elif defined( OS_FREEBSD )
-// DEFAULT is Microsoft 512 (via librefstg). SchemaSoft not yet ported
-const aafUID_t aafFileKindAafSSBinary = aafFileKindAafMSSBinary_Value;
+// No SS implementations ported as yet
+const aafUID_t aafFileKindAafSSBinary = aafFileKindPathalogical_Value;
 // default 4k binary
 const aafUID_t aafFileKindAaf4KBinary = aafFileKindPathalogical_Value;
 
 
 #elif defined( OS_SOLARIS )
-// DEFAULT is SSS 512 (via libSSRW2C.a). MSS not available
+// DEFAULT is SSS 512 (via libSSRW2C.a)
 const aafUID_t aafFileKindAafSSBinary = aafFileKindAafSSSBinary_Value;
 // default 4k binary
 const aafUID_t aafFileKindAaf4KBinary = aafFileKindAafS4KBinary_Value;

@@ -1530,13 +1530,9 @@ void ImplAAFFile::registerFactories(void)
 
 
 #elif defined( OS_MACOS )
-// DEFAULT is Microsoft 512 (via MacOLE). No plans to add other implementations.
-
-	OMFile::registerFactory(ENCODING(DEFAULTFileKind),
-                          new OMMSSStoredObjectFactory(AAFMSSEncoding,
-                                                       Signature_SSBinary,
-                                                       L"AAF-M",
-                                                       L"AAF Microsoft SS"));
+// No SS implementation available since Microsoft 512 (via MacOLE) has been
+// deleted
+#error No SS implementation available on platform
 
 #elif defined( OS_DARWIN )
 // DEFAULT is SchemaSoft 512.
@@ -1561,11 +1557,6 @@ void ImplAAFFile::registerFactories(void)
                                                        L"AAF-S",
                                                        L"AAF Schemasoft SS"));
 
-	OMFile::registerFactory(AAFMSSEncoding,
-                          new OMMSSStoredObjectFactory(AAFMSSEncoding,
-						    						   Signature_SSBinary,
-                                                       L"AAF-M",
-                                                       L"AAF Microsoft SS"));
 	OMFile::registerFactory(AAFS4KEncoding,
                           new OMSSSStoredObjectFactory(AAFS4KEncoding,
                                                        Signature_SSBin_4K,
@@ -1580,25 +1571,14 @@ void ImplAAFFile::registerFactories(void)
                                                        L"AAF-S",
                                                        L"AAF Schemasoft SS"));
 
-	OMFile::registerFactory(AAFMSSEncoding,
-                          new OMMSSStoredObjectFactory(AAFMSSEncoding,
-                                                       Signature_SSBinary,
-                                                       L"AAF-M",
-                                                       L"AAF Microsoft SS"));
 	OMFile::registerFactory(AAFS4KEncoding,
                           new OMSSSStoredObjectFactory(AAFS4KEncoding,
                                                        Signature_SSBin_4K,
                                                        L"AAF-S4K",
                                                        L"AAF Schemasoft 4K"));
-
 #elif defined( OS_FREEBSD )
-// DEFAULT is Microsoft 512 (via librefstg). SchemaSoft not yet ported.
-
-	OMFile::registerFactory(ENCODING(DEFAULTFileKind),
-                          new OMMSSStoredObjectFactory(AAFMSSEncoding,
-                                                       Signature_SSBinary,
-                                                       L"AAF-M",
-                                                       L"AAF Microsoft SS"));
+// No SS implementations ported as yet
+#error No SS implementation available on platform
 
 #elif defined( OS_SOLARIS )
 // DEFAULT is SSS 512. MSS not available
