@@ -1,5 +1,5 @@
 #startm .this-module 0
-AAFMedia\
+AAFEssenceAccess\
 #endm
 #startm .parent-module 0
 AAFRoot\
@@ -19,7 +19,7 @@ AD_HEAD
 
 
 /***********************************************\
-*	Stub only.   Implementation not yet added	*
+*  Stub only.   Implementation not yet added    *
 \***********************************************/
 
 
@@ -35,7 +35,7 @@ AD_DEFAULT_UUID(aed97eb0, 2bc8, 11D2, bf, aa, 00, 60, 97, 11, 62, 12)
 AD_COM_EXT_CLASS_BEGIN(public IAAFEndian)
 
 /****/
-AD_XMETHOD7(AudioMediaCreate,
+AD_XMETHOD7(CreateAudioEssence,
 [in],objIn, AAFMasterMob,masterMob,on this master mob,
 [in],objPass, aafSlotID_t,masterSlotID,,
 [in],objIn, AAFSourceMob,fileMob,and this file mob create audio,
@@ -43,17 +43,17 @@ AD_XMETHOD7(AudioMediaCreate,
 [in],objPass, aafCompressEnable_t,Enable,optionally compressing it,
 [in],objPass, aafInt16,sampleSize,with this sample size,
 [in],objPass, aafInt16,obj,and this many channels,
-Creates an audio media stream.)
-//@comm Creates either a single stream of audio media, or interleaved
+Initializes an audio essence stream.)
+//@comm Creates either a single stream of audio essence, or interleaved
 // audio-only data.  A separate call (MediaMultiCreate) exists 
 // in order to create interleaved audio and video data.
 // 
-//@comm The media handle from this call can be used with
+//@comm The essence object initialized from this call can be used with
 // WriteDataSamples or WriteMultiSamples but NOT with 
 // or WriteDataLines.
 // 
 // Argument Notes:
-//@comm If you are creating the media, and then attaching it to a master
+//@comm If you are creating the essence, and then attaching it to a master
 // mob, then the "masterMob" field may be left NULL.
 // 
 //@comm The numChannels field refers to the number of interleaved
@@ -74,14 +74,14 @@ AD_XMETHOD9(VideoMediaCreate,
 [in],objPass, aafUInt32,StoredWidth,and this width,
 [in],objPass, aafFrameLayout_t,layout,and this frame layout.,
 [in],objPass, aafRational_t,ratio,image aspect ratio,
-Creates an audio media stream.)
-//@comm Creates a single stream of video media.  A separate call
+Creates an audio essence stream.)
+//@comm Creates a single stream of video essence.  A separate call
 // (MediaMultiCreate) exists to create interleaved audio and
 // video data.
-//@comm The media handle from this call can be used with
+//@comm The essence object initialized from this call can be used with
 // WriteDataSamples or WriteDataLines, but NOT with
 // WriteMultiSamples.
-//@comm If you are creating the media, and then attaching it to a master
+//@comm If you are creating the essence, and then attaching it to a master
 // mob, then the "masterMob" field may be left NULL.
 //@comm The storedHeight and storedWidth are the dimensions of the frame
 // as stored on disk (or as it should be restored by the codec.  The
@@ -99,18 +99,18 @@ AD_XMETHOD6(Create,
 [in],objIn, AAFMasterMob,masterMob,on this master mob,
 [in],objPass, aafSlotID_t,masterSlotID,,
 [in],objIn, AAFSourceMob,fileMob,and this file mob,
-[in],objIn, AAFDataDef,mediaKind,create media of this type,
+[in],objIn, AAFDataDef,mediaKind,create essence of this type,
 [in],objPass, aafRational_t,samplerate,with this sample rate,
 [in],objPass, aafCompressEnable_t,Enable,optionally compressing it,
-Creates a single channel stream of media.)
-	//@comm Creates a single channel stream of media.  Convenience functions
-	// exist to create audio or video media, and a separate call
+Creates a single channel stream of essence.)
+	//@comm Creates a single channel stream of essence.  Convenience functions
+	// exist to create audio or video essence, and a separate call
 	// (MultiCreate) exists to create interleaved audio and
 	// video data.
-	//@comm The media handle from this call can be used with
+	//@comm The essence handle from this call can be used with
 	// WriteDataSamples  and possibly WriteDataLines, but NOT with
 	// WriteMultiSamples.
-	//@comm If you are creating the media, and then attaching it to a master
+	//@comm If you are creating the essence, and then attaching it to a master
 	// mob, then the "masterMob" field may be left NULL.
 	// For video, the sampleRate should be the edit rate of the file mob.
 	// For audio, the sample rate should be the actual samples per second.
@@ -124,11 +124,11 @@ AD_XMETHOD6(MultiCreate,
 [in\,ref\,size_is\(arrayElemCount\)],objPass, aafmMultiCreate_t *,mediaArray,using these definitions,
 [in],objPass, aafRational_t ,editRate,,
 [in],objPass, aafCompressEnable_t,Enable,optionally compressing it,
-Creates a multi-channel interleaved stream of media.)
-	//@comm The media handle from this call can be used with
+Creates a multi-channel interleaved stream of essence.)
+	//@comm The essence handle from this call can be used with
 	// WriteDataSamples or WriteMultiSamples but NOT with 
 	// or WriteDataLines.
-	//@comm If you are creating the media, and then attaching it to a master
+	//@comm If you are creating the essence, and then attaching it to a master
 	// mob, then the "masterMob" field may be left NULL.
 	//@comm Replaces omfmMediaMultiCreate
 	
@@ -141,7 +141,7 @@ Sets the size of chunks allocated on disk during writes [only].)
 	// disk operations allocate space on the disk.  If the data written
 	// exceeds numBytes, then another disk block of numBytes size will be
 	// allocated.
-	//@comm Takes a media handle, so the media must have been opened or created.
+	//@comm Takes a essence handle, so the essence must have been opened or created.
 	// The space is allocated in terms of bytes.
 	//@comm Replaces omfmSetBlockingSize
 
@@ -150,14 +150,14 @@ AD_METHOD2(SetVideoLineMap,
 [in],aafInt16,startLine,set this starting video line,
 [in],aafFieldTop_t,type,and this top field,
 Sets the video line map structure used by the codecs to deinterlace fields.)
-	//@comm Takes a media handle, so the media must have been opened or created.
+	//@comm Takes a essence handle, so the essence must have been opened or created.
 	//@comm Replaces omfmSetVideoLineMap.
 
 /****/
 AD_METHOD1(GetVideoTopField,
 [out],aafFieldTop_t *,type,and this top field,
 Gets the top video field used by the codecs to deinterlace fields.)
-	//@comm Takes a media handle, so the media must have been opened or created.
+	//@comm Takes a essence handle, so the essence must have been opened or created.
 	//@comm Replaces omfmGetVideoTopField
 	
 /****/
@@ -169,14 +169,14 @@ Handles the case where the displayed rectangle is not the same as the stored rec
 	// A positive "leadingLines" (from 1.5) becomes a positive yOffset, and
 	// decreases the display height.
 	// A positive "trailingLines" (from 1.5) also decreases the display height.
-	//@comm Takes a media handle, so the media must have been opened or created.
+	//@comm Takes a essence handle, so the essence must have been opened or created.
 	//@comm Replaces  omfmSetDisplayRect
 
 /****/
 AD_METHOD1(SetSampledRect,
 [in\\\,ref],aafRect_t *,SampledRect,set sampled rectangle,
 Handles the case where the sampled rectangle is not the same as the stored rectangle.)
-	//@comm Takes a media handle, so the media must have been opened or created
+	//@comm Takes a essence handle, so the essence must have been opened or created
 	//@comm Replaces omfmSetSampledRect
 	
 /****/
@@ -195,8 +195,8 @@ AD_METHOD3(WriteDataSamples,
 [in],aafInt32,nSamples,write this many samples,
 [in\\\,size_is\\\(buflen\\\)],aafDataBuffer_t,buffer,to a buffer,
 [in],aafInt32,buflen,of this size,
-Writes data to a single-channel media stream.)
-	//@comm Takes a media handle, so the media must have been opened or created.
+Writes data to a single-channel essence stream.)
+	//@comm Takes a essence handle, so the essence must have been opened or created.
 	// A single video frame is ONE sample.
 	// Buflen must be large enough to hold nSamples * the maximum sample size.
 	//@comm Possible Errors:
@@ -210,7 +210,7 @@ AD_METHOD3(WriteRawData,
 [in],aafInt32,nSamples,write this many samples,
 [in\\\, size_is\\\(nSamples * sampleSize\\\)],aafDataBuffer_t,buffer,to a buffer,
 [in],aafInt32, sampleSize,of this size,
-Writes pre-interleaved data to a media stream.)
+Writes pre-interleaved data to a essence stream.)
 	//@comm A single video frame is ONE sample.
 	//@comm Buflen must be large enough to hold
 	// nSamples * the maximum sample size.
@@ -226,7 +226,7 @@ AD_METHOD5(ReadRawData,
 [out\\\, size_is\\\(buflen\\\)\\\, length_is\\\(*bytesRead\\\)],aafDataBuffer_t,buffer,here is the buffer,
 [out\\\,ref],aafUInt32 *,bytesRead,,
 [out\\\,ref],aafUInt32 *,samplesRead,,
-Read pre-interleaved data from a media stream.)
+Read pre-interleaved data from a essence stream.)
 	//@comm A single video frame is ONE sample.
 	//@comm Buflen must be large enough to hold nSamples * the maximum sample size.
 	//@comm Possible Errors:
@@ -245,18 +245,18 @@ Writes single lines of video to a file.)
 	// video frames in pieces, for low-memory situations.  When enough lines
 	// have been written to constitute a frame, then the number of samples will
 	// be incremented by one.
-	//@comm This function works only for video media.
+	//@comm This function works only for video essence.
 	//@comm The buffer must be large enough to hold an entire line of video. 
 	//@comm Possible Errors:
 	// Standard errors (see top of file).
-	// OM_ERR_BADRWLINES -- This function only works for video media.
+	// OM_ERR_BADRWLINES -- This function only works for video essence.
 	//@comm Replaces omfmWriteDataLines
 	//@devnote Previous version did not have nBytesPerLine, otherwise the actual size
 	// of the buffer cannot be known.
 	
 /****/
-AD_METHOD0(Close,Finish operations on media data and close any external files opened or created to hold the media..)
-	//@comm This function should be called whether the media was opened or created.
+AD_METHOD0(Close,Finish operations on essence data and close any external files opened or created to hold the essence..)
+	//@comm This function should be called whether the essence was opened or created.
 	//@comm Replaces omfmMediaClose
 
 /****/
@@ -287,7 +287,7 @@ Get common audio compression parms.)
 AD_METHOD2(SetPrivateMediaData,
 [in],aafUInt32,parmBlockSize,a block of this size,
 [in\\\,size_is\\\(parmBlockSize\\\)], aafDataBuffer_t,ParameterBlock,with these values,
-Sends a parameter block of private information to the CODEC for this media.)
+Sends a parameter block of private information to the CODEC for this essence.)
 	//@parm IN -- .
 	//@comm The parameter block should be defined in the
 	// "h" file of the codec, and must be included by the application in
@@ -300,7 +300,7 @@ Sends a parameter block of private information to the CODEC for this media.)
 AD_METHOD2(GetPrivateMediaData,
 [in],aafUInt32,blocksize,,
 [out\\\, size_is\\\(blocksize\\\)], aafDataBuffer_t, buffer,,
-Gets a parameter block of private information from the CODEC for this media.)
+Gets a parameter block of private information from the CODEC for this essence.)
 	//@comm The parameter block should be defined in the
 	// "h" file of the codec, and must be included by the application in
 	// order to use this call.
@@ -313,38 +313,38 @@ Gets a parameter block of private information from the CODEC for this media.)
 AD_XMETHOD5(GetNumChannels,
 [in],objIn, AAFMasterMob,masterMob,In this master mob,
 [in],objPass, aafSlotID_t,slotID,On this slot,
-[in],objPass, aafMediaCriteria_t*,mediaCrit,using this media criteria,
-[in],objIn, AAFDataDef,mediaKind,for this media type,
+[in],objPass, aafMediaCriteria_t*,mediaCrit,using this essence criteria,
+[in],objIn, AAFDataDef,mediaKind,for this essence type,
 [out],objPass, aafInt16*,numCh,How many channels?,
-Takes an opaque handle  a master mob reference  and a slot ID so that it may be called before the media is opened.)
-	//@comm Returns the number of interleaved media channels of a given type in the media stream referenced by the given file mob
+Takes an opaque handle  a master mob reference  and a slot ID so that it may be called before the essence is opened.)
+	//@comm Returns the number of interleaved essence channels of a given type in the essence stream referenced by the given file mob
 	//@comm If the data format is not interleaved, then the answer will
 	// always be zero or one.  This function correctly returns zero
-	// for media types not handled by a given codec, and handles codecs
-	// which work with multiple media types.
+	// for essence types not handled by a given codec, and handles codecs
+	// which work with multiple essence types.
 	//@comm Replaces omfmGetNumChannels*/
 
 /****/
 AD_XMETHOD2(GetLargestSampleSize,
-[in],objIn, AAFDataDef,mediaKind,and this media type,
+[in],objIn, AAFDataDef,mediaKind,and this essence type,
 [out],objPass, aafInt32*,maxSize,the largest sample size,
-Returns the size in bytes of the largest sample for a given media type.)
+Returns the size in bytes of the largest sample for a given essence type.)
 	//@comm For uncompressed data, or the output of the software codec,
 	// the sample size will propably be a constant.
-	//@comm The media type parameter exists to support codecs with multiple
-	// interleaved media types.
+	//@comm The essence type parameter exists to support codecs with multiple
+	// interleaved essence types.
 	//@comm Replaces omfmGetLargestSampleSize*/
 
 /****/
 AD_XMETHOD3(GetSampleFrameSize,
-[in],objIn, AAFDataDef,mediaKind,and this media type,
+[in],objIn, AAFDataDef,mediaKind,and this essence type,
 [in],objPass, aafPosition_t,frameNum,for this [1-based] sample frame number,
 [out],objPass, aafLength_t*,frameSize,How big is the sample frame?,
-Returns the size in bytes of the given sample for a given media type.)
+Returns the size in bytes of the given sample for a given essence type.)
 	//@comm For uncompressed data, or the output of the software codec,
 	// the sample size will propably be a constant.
-	//@comm The media type parameter exists to support codecs with multiple
-	// interleaved media types.
+	//@comm The essence type parameter exists to support codecs with multiple
+	// interleaved essence types.
 	//@comm Possible Errors:
 	// 	Standard errors (see top of file).
 	// 	OM_ERR_NULL_PARAM -- A return parameter was NULL.
@@ -354,22 +354,22 @@ Returns the size in bytes of the given sample for a given media type.)
 AD_XMETHOD5(Open,
 [in],objIn, AAFMasterMob,masterMob,In this master mob,
 [in],objPass, aafSlotID_t,slotID,On this slot,
-[in],objPass, aafMediaCriteria_t*,mediaCrit,using this media criteria,
+[in],objPass, aafMediaCriteria_t*,mediaCrit,using this essence criteria,
 [in],objPass, aafMediaOpenMode_t,openMode,ReadOnly or Append,
 [in],objPass, aafCompressEnable_t,compEnable,optionally decompressing,
 Opens a single channel of a file mob.)
-	//@comm If the media is interleaved,
+	//@comm If the essence is interleaved,
 	// then it will be di-interleaved when samples are read.  This routine
 	// follows the locator, and may call the locator failure callback if
-	// the media can not be found.  If the failure callback finds the media,
+	// the essence can not be found.  If the failure callback finds the essence,
 	// then this routine will return normally.
-	//@comm The media handle from this call can be used with
+	//@comm The essence handle from this call can be used with
 	// ReadDataSamples  and possibly ReadDataLines, but NOT with
 	// ReadMultiSamples.
 	//@comm Possible Errors:
 	// 	Standard errors (see top of file).
-	// 	OM_ERR_NOMEMORY -- couldn't allocate memory for the media handle
-	//@comm NOTE: If a locator is followed, then mediaPtr may reference ANOTHER file
+	// 	OM_ERR_NOMEMORY -- couldn't allocate memory for the essence handle
+	//@comm NOTE: If a locator is followed, then essencePtr may reference ANOTHER file
 	// object, which must be closed on file close.
 	//@comm Replaces omfmMediaOpen*/
 	
@@ -377,20 +377,20 @@ Opens a single channel of a file mob.)
 AD_XMETHOD5(MultiOpen,
 [in],objIn, AAFMasterMob,masterMob,In this master mob,
 [in],objPass, aafSlotID_t,slotID,On this slot,
-[in],objPass, aafMediaCriteria_t*,mediaCrit,using this media criteria,
+[in],objPass, aafMediaCriteria_t*,mediaCrit,using this essence criteria,
 [in],objPass, aafMediaOpenMode_t,openMode,ReadOnly or Append,
 [in],objPass, aafCompressEnable_t,compEnable,optionally decompressing,
 Opens a all channels associated with a file mob.)
 	//@comm This routine
 	// follows the locator, and may call the locator failure callback if
-	// the media can not be found.  If the failure callback finds the media,
+	// the essence can not be found.  If the failure callback finds the essence,
 	// then this routine will return normally.
-	//@comm The media handle from this call can be used with
+	//@comm The essence handle from this call can be used with
 	// WriteDataSamples or WriteMultiSamples but NOT with 
 	//  WriteDataLines.
 	//@comm Possible Errors:
 	// 	Standard errors (see top of file).
-	// 	OM_ERR_NOMEMORY -- couldn't allocate memory for the media handle
+	// 	OM_ERR_NOMEMORY -- couldn't allocate memory for the essence handle
 	//@comm Replaces omfmMediaMultiOpen*/
 
 /****/
@@ -422,7 +422,7 @@ Sets the audio memory format expected in memory.)
 /****/
 AD_METHOD1(GetDisplayRect,
 [out],aafRect_t*,result,Get the display rectangle,
-Returns the display rectangle for the current video media.)
+Returns the display rectangle for the current video essence.)
 	//@comm Handles the case where the displayed rectangle is not the same as
 	// the stored rectangle (as with the old leadingLines and
 	// trailingLines).<nl>
@@ -430,30 +430,30 @@ Returns the display rectangle for the current video media.)
 	// decreases the display height.<nl>
 	// A positive "trailingLines" (from 1.5) also decreases the display
 	// height.
-	//@comm Takes a media handle, so the media must have been opened or
+	//@comm Takes a essence handle, so the essence must have been opened or
 	// created.
 	//@comm Possible Errors:
 	// Standard errors (see top of file).
 	//   OM_ERR_NULL_PARAM -- A NULL rectangle pointer.
 	//   OM_ERR_INVALID_OP_CODEC -- This codec doesn't support display rect
-	//								(may not be video media)
+	//								(may not be video essence)
  	//@comm Replaces omfmGetDisplayRect
 
 /****/
 AD_METHOD1(GetSampledRect,
 [out],aafRect_t*,result,Get the sampled rectangle,
-Returns the sampled rectangle for the current video media.)
-	//@comm Takes a media handle, so the media must have been opened or created.
+Returns the sampled rectangle for the current video essence.)
+	//@comm Takes a essence handle, so the essence must have been opened or created.
 	//@comm Possible Errors:<nl>
 	//   OM_ERR_NULL_PARAM -- A NULL rectangle pointer.<nl>
 	//   OM_ERR_INVALID_OP_CODEC -- This codec doesn't support display rect<nl>
-	//   							(may not be video media)
+	//   							(may not be video essence)
  	//@comm Replaces omfmGetSampledRect
 
 /****/
 AD_METHOD1(GetSampleCount,
 [out],aafLength_t *,result,,
-Returns the number of samples on the given media stream.)
+Returns the number of samples on the given essence stream.)
 	//@comm A video sample is one frame.
 	//@comm Replaces omfmGetSampleCount
 
@@ -463,8 +463,8 @@ AD_METHOD4(ReadDataSamples,
 [in],aafInt32,buflen,,
 [out\\\, size_is\\\(buflen\\\)\\\,length_is\\\(*bytesRead\\\)],aafDataBuffer_t,buffer,,
 [out\\\,ref],aafUInt32*,bytesRead,,
-Read a given number of samples from an opened media stream.)
-	//@comm This call will only return a single channel of media from an interleaved
+Read a given number of samples from an opened essence stream.)
+	//@comm This call will only return a single channel of essence from an interleaved
 	// stream.
 	//@comm A video sample is a frame.
 	// Buflen is in bytes, and should be large enough to hold the samples
@@ -494,15 +494,15 @@ Reads single lines of video from a file.)
 	// have been read to constitute a frame, then the number of samples read
 	// be incremented by one.
 	//@comm The buffer must be large enough to hold an entire line of video.
-	//@comm This function works only for video media.
+	//@comm This function works only for video essence.
 	//@comm Replaces omfmReadDataLines
 
 /****/
 AD_METHOD1(GotoFrameNumber,
 [in],aafInt64,frameNum,,
-The seek function for media.)
+The seek function for essence.)
 	//@comm Useful only on reading, you
-	// can't seek aound while writing media.
+	// can't seek aound while writing essence.
 	//@comm An audio frame is one sample across all open channels.
 	//@comm Replaces omfmGotoFrameNumber
 
@@ -514,11 +514,11 @@ AD_METHOD6(GetVideoInfo,
 [out],aafRational_t *,editrate,,
 [out],aafInt16 *,bitsPerPixel,,
 [out],aafPixelFormat_t *,defaultPixelFmt,,
-Get video-related information about a given piece of media data.)
+Get video-related information about a given piece of essence data.)
 	//@comm Any parameters not required may have the pointers set to NULL.
 	//@comm Possible Errors:<nl>
 	// Standard errors (see top of file).<nl>
-	// OM_ERR_WRONG_MEDIATYPE -- Not video media.<nl>
+	// OM_ERR_WRONG_MEDIATYPE -- Not video essence.<nl>
 	//@comm Replaces omfmGetVideoInfo */
 			
 			
@@ -539,7 +539,7 @@ AD_XMETHOD3(GetNumRepresentations,
 [in],objIn, AAFMasterMob,masterMob,,
 [in],objPass, aafSlotID_t,slotID,,
 [out],objPass, aafInt32*,numReps,,
-Find out how many media representations [high/low res] exist for a particular slot on this master mob.)
+Find out how many essence representations [high/low res] exist for a particular slot on this master mob.)
 	//@comm Replaces omfmGetNumRepresentations */
 
 /****/
@@ -556,11 +556,11 @@ AD_METHOD3(GetAudioInfo,
 [out],aafRational_t*,rate,,
 [out],aafInt32*,sampleSize,,
 [out],aafInt32*,numChannels,,
-Get audio-related information about a given piece of media data.)
+Get audio-related information about a given piece of essence data.)
 	//@comm Any parameters not required may have the pointers set to NULL.
 	//@comm Possible Errors:<nl>
 	//	Standard errors (see top of file).<nl>
-	//	OM_ERR_WRONG_MEDIATYPE -- Not video media.
+	//	OM_ERR_WRONG_MEDIATYPE -- Not video essence.
 	//@comm Replaces omfmGetAudioInfo */
 
 
@@ -586,7 +586,7 @@ Tells if the given codec is hardware-assisted.)
 	// up transfer and compression/decompression.
 	//@comm If the hardware is not present in the system, this call should
 	// return FALSE.
-	//@comm If the parameters in the media descriptor are out-of-bounds
+	//@comm If the parameters in the essence descriptor are out-of-bounds
 	// for the hardware, then this call will return FALSE.
 	//@comm Replaces omfmIsHardwareAssistedCodec */
 
@@ -608,7 +608,7 @@ Returns the full name of the given codec expanded for human consumption.)
 /****/
 AD_METHOD1(GetCodecID,
 [out],aafCodecID_t*,codecID,,
-Returns the codec ID being used to handle the specified media.)
+Returns the codec ID being used to handle the specified essence.)
 	//@comm This will be required in order to send private data to the codec.
 	//@comm The name will be truncated to fit within "buflen" bytes.
 	//@comm Replaces omfmMediaGetCodecID */
@@ -616,19 +616,19 @@ Returns the codec ID being used to handle the specified media.)
 /****/
 AD_METHOD1(AddFrameIndexEntry,
 [in],aafInt64,frameOffset,add a frame offset to it's frame index,
-Adds a frame index entry for media which was added precompressed.)
-	//@comm This function should NOT be called when media is passed to
+Adds a frame index entry for essence which was added precompressed.)
+	//@comm This function should NOT be called when essence is passed to
 	//the reference implementation in an uncompressed format.
 	//@comm Possible Errors:<nl>
 	//	Standard errors (see top of file).<nl>
-	//	OM_ERR_INVALID_OP_CODEC -- This kind of media doesn't have a frame index<nl>
-	//	OM_ERR_MEDIA_OPENMODE -- The media is open for read-only.
+	//	OM_ERR_INVALID_OP_CODEC -- This kind of essence doesn't have a frame index<nl>
+	//	OM_ERR_MEDIA_OPENMODE -- The essence is open for read-only.
 	//@comm Replaces omfmAddFrameIndexEntry */
 
 /****/
 AD_METHOD1(SetStreamCacheSize,
 [in],aafUInt32,cacheSize,make the cache this many bytes long,
-Set the size of the cache buffer used for media transfers.)
+Set the size of the cache buffer used for essence transfers.)
 	//@comm Replaces omfmSetStreamCacheSize */
 
 /****/
