@@ -329,7 +329,7 @@ ImplAAFFile::Close ()
   AAFFile *tstFile;
   aafAssert((_topMedia == NULL) || (_closeMediaProc != NULL), 
 			this,
-			OM_ERR_MEDIA_CANNOT_CLOSE);
+			AAFRESULT_MEDIA_CANNOT_CLOSE);
 #endif
   
 #if FULL_TOOLKIT
@@ -500,17 +500,17 @@ AAFRESULT ImplAAFFile::InternOpenFile(aafWChar* stream,
 									  openType_t type)
 {
   OMLRefCon        	myRefCon = NULL;
-  aafErr_t			finalStatus = OM_ERR_NONE;
+  aafErr_t			finalStatus = AAFRESULT_SUCCESS;
 
   if (session == NULL)
-	return(OM_ERR_BAD_SESSION);	
+	return(AAFRESULT_BAD_SESSION);	
 
   XPROTECT()
 	{
 	  _openType = type;
 
 	  if (stream == NULL) 
-		RAISE(OM_ERR_NULL_PARAM);
+		RAISE(AAFRESULT_NULL_PARAM);
 	  
 	  /*
 	   * Open the container
@@ -593,17 +593,17 @@ AAFRESULT ImplAAFFile::Create(
   XPROTECT()
 	{
 	  if (stream == NULL) 
-		RAISE(OM_ERR_NULL_PARAM);
+		RAISE(AAFRESULT_NULL_PARAM);
 
 	  if (session == NULL)
-		RAISE(OM_ERR_BAD_SESSION);	
+		RAISE(AAFRESULT_BAD_SESSION);	
 
 	  _setrev = rev;
 	  _openType = kOmCreate;
 
 	  _head = dynamic_cast<ImplAAFHeader*>(CreateImpl(CLSID_AAFHeader));
 	  if (_head == NULL)
-		RAISE(OM_ERR_BADHEAD);
+		RAISE(AAFRESULT_BADHEAD);
 
 	  _head->AddIdentificationObject(&_ident);
 	  
@@ -619,7 +619,7 @@ AAFRESULT ImplAAFFile::Create(
 									  0,
 									  0);
 	  if(_container == NULL)
-		RAISE(OM_ERR_BADOPEN);
+		RAISE(AAFRESULT_BADOPEN);
 	  
 	}
   XEXCEPT
@@ -641,10 +641,9 @@ AAFRESULT ImplAAFFile::Create(
 	}
   XEND;
   
-  return (OM_ERR_NONE);
+  return (AAFRESULT_SUCCESS);
 }
 
-	OMLRefCon        myRefCon = NULL;
 
 /************************
  * Function: OpenRead
@@ -718,5 +717,5 @@ AAFRESULT ImplAAFFile::OpenModify(aafWChar*		stream,
 	}
   XEND;
   
-  return (OM_ERR_NONE);
+  return (AAFRESULT_SUCCESS);
 }
