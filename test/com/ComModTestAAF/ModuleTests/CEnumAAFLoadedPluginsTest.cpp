@@ -124,7 +124,7 @@ static HRESULT OpenAAFFile(aafWChar*			pFileName,
 extern "C" HRESULT CEnumAAFLoadedPlugins_test()
 {
 	HRESULT hr = AAFRESULT_SUCCESS;
-	IEnumAAFLoadedPlugins	*pEnum;
+	IEnumAAFLoadedPlugins	*pEnum = NULL, *pCloneEnum = NULL;
 	IAAFPluginManager		*pMgr;
 	aafUID_t				testUID;
 	IAAFFile*		pFile = NULL;
@@ -132,8 +132,8 @@ extern "C" HRESULT CEnumAAFLoadedPlugins_test()
 	IAAFHeader *        pHeader = NULL;
 	IAAFDictionary*  pDictionary = NULL;
 	aafWChar * pFileName = L"EnumAAFLoadedPluginsTest.aaf";
-//	IAAFDefObject	*pPluginDef;
-	
+	IAAFDefObject	*pPluginDef;
+	aafInt32		numPlugins, checkNumPlugins;
 
 	try
 	{
@@ -150,12 +150,52 @@ extern "C" HRESULT CEnumAAFLoadedPlugins_test()
 		
 		checkResult(AAFGetPluginManager (&pMgr));
 		checkResult(pMgr->EnumLoadedPlugins (AUID_AAFCodecDef, &pEnum));
+		numPlugins = 0;
 		while(pEnum->NextOne (&testUID) == AAFRESULT_SUCCESS)
 		{
-//			checkResult(pMgr->CreatePluginDefinition (testUID, pDictionary, &pPluginDef));
-//			pPluginDef->Release();
-//			pPluginDef = NULL;
+			checkResult(pMgr->CreatePluginDefinition (testUID, pDictionary, &pPluginDef));
+			pPluginDef->Release();
+			pPluginDef = NULL;
+			numPlugins++;
 		}
+		
+		// Test reset
+		checkResult(pEnum->Reset ());
+		checkNumPlugins = 0;
+		while(pEnum->NextOne (&testUID) == AAFRESULT_SUCCESS)
+		{
+			checkNumPlugins++;
+		}
+		checkExpression(numPlugins == checkNumPlugins, AAFRESULT_TEST_FAILED);
+		
+		// Test Next
+		checkResult(pEnum->Reset ());
+		checkNumPlugins = 0;
+		while(pEnum->Next (1, &testUID, NULL) == AAFRESULT_SUCCESS)
+		{
+			checkNumPlugins++;
+		}
+		checkExpression(numPlugins == checkNumPlugins, AAFRESULT_TEST_FAILED);
+		
+		// Test skip
+		checkResult(pEnum->Reset ());
+		checkResult(pEnum->Skip (1));
+		checkNumPlugins = 0;
+		while(pEnum->NextOne (&testUID) == AAFRESULT_SUCCESS)
+		{
+			checkNumPlugins++;
+		}
+		checkExpression((numPlugins-1) == checkNumPlugins, AAFRESULT_TEST_FAILED);
+
+		// Test Clone
+		checkResult(pEnum->Reset ());
+		checkResult(pEnum->Clone (&pCloneEnum));
+		checkNumPlugins = 0;
+		while(pCloneEnum->NextOne (&testUID) == AAFRESULT_SUCCESS)
+		{
+			checkNumPlugins++;
+		}
+		checkExpression(numPlugins == checkNumPlugins, AAFRESULT_TEST_FAILED);
 	}
 	catch (...)
 	{
@@ -169,6 +209,10 @@ extern "C" HRESULT CEnumAAFLoadedPlugins_test()
 	
 	if (pHeader)
 		pHeader->Release();
+	if (pEnum)
+		pEnum->Release();
+	if (pCloneEnum)
+		pCloneEnum->Release();
 	
 	if (pFile)
 	{  // Close file
@@ -182,15 +226,15 @@ extern "C" HRESULT CEnumAAFLoadedPlugins_test()
 	
 	// When all of the functionality of this class is tested, we can return success.
 	// When a method and its unit test have been implemented, remove it from the list.
-	if (SUCCEEDED(hr))
-	{
-		cout << "The following IEnumAAFLoadedPlugins tests have not been implemented:" << endl; 
-		cout << "     Next" << endl; 
-		cout << "     Skip" << endl; 
-		cout << "     Reset" << endl; 
-		cout << "     Clone" << endl; 
-		hr = AAFRESULT_TEST_PARTIAL_SUCCESS;
-	}
+//	if (SUCCEEDED(hr))
+//	{
+//		cout << "The following IEnumAAFLoadedPlugins tests have not been implemented:" << endl; 
+//		cout << "     Next" << endl; 
+//		cout << "     Skip" << endl; 
+//		cout << "     Reset" << endl; 
+///		cout << "     Clone" << endl; 
+//		hr = AAFRESULT_TEST_PARTIAL_SUCCESS;
+//	}
 
 	return hr;
 }

@@ -131,7 +131,15 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 		for(n = 0; n < count; n++)
 		{
-			CHECK(_manager->GetNextLoadedPlugin (_category, &_tableIter, &pJunk));
+			if(n == 0)
+			{
+				CHECK(_manager->GetFirstLoadedPlugin (_category, &_tableIter, &pJunk));
+				_isFirst = kAAFFalse;
+			}
+			else
+			{
+				CHECK(_manager->GetNextLoadedPlugin (_category, &_tableIter, &pJunk));
+			}
 		}
 	}
 	XEXCEPT
