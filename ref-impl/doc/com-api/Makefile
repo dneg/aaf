@@ -32,7 +32,6 @@ DOXYGEN = doxygen
 ZIP = zip
 TAR = tar
 
-# XXX - Not yet used
 # Only used for building the 'chm' (Windows Help file)
 HTMLHELP_WORKSHOP = C:/Program\ Files/HTML\ Help\ Workshop
 
