@@ -22,8 +22,7 @@
 #include "ImplAAFObject.h"
 #endif
 
-#if OM_PRESENT
-#include "property.h"
+#include "OMProperty.h"
 
 const int CLSID_AAFIDENTIFICATION = 44;
 
@@ -36,7 +35,6 @@ const int PID_IDENTIFICATION_DATE                 = 3;
 //const int PID_IDENTIFICATION_TOOLKITVERSION       = 6;
 const int PID_IDENTIFICATION_PLATFORM             = 4;
 //const int PID_IDENTIFICATION_GENERATION           = 8;
-#endif
 
 class ImplAAFIdentification : public ImplAAFObject
 {
@@ -45,11 +43,9 @@ public:
   // Constructor/destructor
   //
   //********
-  ImplAAFIdentification ();
   ~ImplAAFIdentification ();
 
-#if OM_PRESENT
-  AAFIdentification(
+  ImplAAFIdentification(
     const char* companyName,
     const char* productName,
     const aafProductVersion_t* productVersion,
@@ -62,7 +58,6 @@ public:
     );
 
   virtual int classId(void) const;
-#endif
 
   //****************
   // GetCompanyName()
@@ -172,18 +167,16 @@ public:
   // Declare the module test method. The implementation of the will be be
   // in /test/ImplAAFIdentificationTest.cpp.
   static AAFRESULT test();
-#if OM_PRESENT
 private:
-  StringProperty                             _companyName;
-  StringProperty                             _productName;
+  OMStringProperty                             _companyName;
+  OMStringProperty                             _productName;
   // StructuredProperty<aafProductVersion_t> _productVersion;
-  StringProperty                             _productVersionString;
+  OMStringProperty                             _productVersionString;
   // FixedSizeProperty<AUID>                 _productId;
-  FixedSizeProperty<aafTimeStamp_t>          _date;
+  OMFixedSizeProperty<aafTimeStamp_t>          _date;
   // StructuredProperty<aafProductVersion_t> _toolkitVersion;
-  StringProperty                             _platform;
+  OMStringProperty                             _platform;
   // FixedSizeProperty<AUID>                 _generation;
-#endif
 };
 
 #endif // ! __ImplAAFIdentification_h__
