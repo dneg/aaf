@@ -17,6 +17,14 @@
 #include "ImplAAFDataDef.h"
 #endif
 
+#ifndef __ImplAAFParameter_h__
+#include "ImplAAFParameter.h"
+#endif
+
+#ifndef __ImplAAFSourceReference_h__
+#include "ImplAAFSourceReference.h"
+#endif
+
 #include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIds.h"
 
@@ -39,11 +47,6 @@
 * Copyright (c) 1998 Microsoft Corporation *
 *                                          *
 \******************************************/
-
-
-/***********************************************\
-*	Stub only.   Implementation not yet added	*
-\***********************************************/
 
 
 #ifndef __ImplAAFTransition_h__
@@ -75,7 +78,7 @@ AAFRESULT STDMETHODCALLTYPE
 {
 	HRESULT		rc = AAFRESULT_SUCCESS;
 
-	if (pEffect == NULL)
+	if (pDatadef == NULL || pEffect == NULL)
 		return AAFRESULT_NULL_PARAM;
 
 	XPROTECT()
