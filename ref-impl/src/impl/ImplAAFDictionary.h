@@ -41,6 +41,7 @@ class ImplEnumAAFPluggableDefs;
 #include "OMClassFactory.h"
 
 
+#include "ImplAAFClassDef.h"
 #include "ImplAAFEffectDef.h"
 #include "ImplAAFPluggableDef.h"
 #include "ImplAAFTypeDef.h"
@@ -100,10 +101,7 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     RegisterClass
-        (// @parm [in] ID by which class is to be known
-         aafUID_t * pClassAUID,
-
-         // @parm [in] Class Definition
+        (// @parm [in] Class Definition
          ImplAAFClassDef * pClassDef);
 
 
@@ -277,6 +275,7 @@ private:
     OMStrongReferenceVectorProperty<ImplAAFEffectDef>		_effectDefinitions;
     OMStrongReferenceVectorProperty<ImplAAFParameterDef>	_parameterDefinitions;
     OMStrongReferenceVectorProperty<ImplAAFTypeDef>			_typeDefinitions;
+    OMStrongReferenceVectorProperty<ImplAAFClassDef>		_classDefinitions;
 };
 
 #endif // ! __ImplAAFDictionary_h__
