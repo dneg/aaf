@@ -40,6 +40,14 @@
 
 #include "CAAFBuiltinDefs.h"
 
+
+//{060c2b340205110101001000-13-00-00-00-{12bd35d0-996e-11d4-9f7b-080036210804}}
+static const aafMobID_t TEST_MobID = {
+{0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00}, 
+0x13, 0x00, 0x00, 0x00, 
+{0x12bd35d0, 0x996e, 0x11d4, 0x9f, 0x7b, 0x08, 0x00, 0x36, 0x21, 0x08, 0x04}};
+
+
 // Cross-platform utility to delete a file.
 static void RemoveTestFile(const wchar_t* pFileName)
 {
@@ -125,8 +133,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		
 		// Initialize mob properties:
 		checkResult(pSourceMob->QueryInterface (IID_IAAFMob, (void **)&pMob));
-		checkResult(CoCreateGuid((GUID *)&newMobID));
-		checkResult(pMob->SetMobID(newMobID));
+		checkResult(pMob->SetMobID(TEST_MobID));
 		checkResult(pMob->SetName(L"EssenceDescriptorTest"));
 		
 		// Create the descriptor:
