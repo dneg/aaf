@@ -1,5 +1,5 @@
 #startm .this-module 0
-AAFMediaFilmDescriptor\
+AAFFilmDescriptor\
 #endm
 #c
 #startm .parent-module 0
