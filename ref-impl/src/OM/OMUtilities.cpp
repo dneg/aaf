@@ -45,7 +45,9 @@ OMByteOrder hostByteOrder(void)
   return result;
 }
 
-size_t wideStringLength(const wchar_t* string)
+// Same as strlen(), but for wide characters.
+//
+size_t lengthOfWideString(const wchar_t* string)
 {
   const wchar_t* p = string;
   size_t length = 0;
@@ -58,7 +60,7 @@ size_t wideStringLength(const wchar_t* string)
 
 // Same as strncpy(), but for wide characters.
 //
-wchar_t* wideStringCopy(wchar_t* destination,
+wchar_t* copyWideString(wchar_t* destination,
                         const wchar_t* source,
                         const size_t length)
 {
@@ -73,4 +75,15 @@ wchar_t* wideStringCopy(wchar_t* destination,
     *d++ = 0;
   }
   return destination;
+}
+
+size_t lengthOfOMWideString(const OMWideCharacter* string)
+{
+  const OMWideCharacter* p = string;
+  size_t length = 0;
+  while (*p != 0) {
+    ++length;
+    ++p;
+  }
+  return length;
 }

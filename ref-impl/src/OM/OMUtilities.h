@@ -11,10 +11,12 @@ const char* getProgramName(void);
 
 OMByteOrder hostByteOrder(void);
 
-size_t wideStringLength(const wchar_t* string);
+size_t lengthOfWideString(const wchar_t* string);
 
-wchar_t* wideStringCopy(wchar_t* destination,
+wchar_t* copyWideString(wchar_t* destination,
                         const wchar_t* source,
                         const size_t length);
+
+size_t lengthOfOMWideString(const OMWideCharacter* string);
 
 #endif
