@@ -173,6 +173,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 					pHeader->Release();
 					pHeader = NULL;
 				}
+				pFile->Save();
 				pFile->Close();
 			}
 		}
