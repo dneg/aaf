@@ -60,7 +60,7 @@ ImplAAFEssenceData::~ImplAAFEssenceData ()
   if (NULL == buffer || NULL == bytesWritten)
     return AAFRESULT_NULL_PARAM;
   // Cannot access the data property if it is NOT associated with a file.
-  if (!attached())
+  if (!persistent())
     return AAFRESULT_NOT_IN_FILE;
   
   try
@@ -91,7 +91,7 @@ ImplAAFEssenceData::~ImplAAFEssenceData ()
   if (NULL == buffer || NULL == bytesRead)
     return AAFRESULT_NULL_PARAM;
   // Cannot access the data property if it is NOT associated with a file.
-  if (!attached())
+  if (!persistent())
     return AAFRESULT_NOT_IN_FILE;
   
   try
@@ -117,7 +117,7 @@ AAFRESULT STDMETHODCALLTYPE
 {
   AAFRESULT result = AAFRESULT_SUCCESS;
   // Cannot access the data property if it is NOT associated with a file.
-  if (!attached())
+  if (!persistent())
     return AAFRESULT_NOT_IN_FILE;
 
   try
@@ -146,7 +146,7 @@ AAFRESULT STDMETHODCALLTYPE
   if (NULL == pOffset)
     return AAFRESULT_NULL_PARAM;
   // Cannot access the data property if it is NOT associated with a file.
-  if (!attached())
+  if (!persistent())
     return AAFRESULT_NOT_IN_FILE;
 
   try
@@ -174,7 +174,7 @@ AAFRESULT STDMETHODCALLTYPE
   if (NULL == pSize)
     return AAFRESULT_NULL_PARAM;
   // Cannot access the data property if it is NOT associated with a file.
-  if (!attached())
+  if (!persistent())
     return AAFRESULT_NOT_IN_FILE;
 
 
