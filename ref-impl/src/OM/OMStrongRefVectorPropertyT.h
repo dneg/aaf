@@ -596,16 +596,20 @@ void OMStrongReferenceVectorProperty<ReferencedObject>::getBits(
                                                          size_t size) const
 {
   TRACE("OMStrongReferenceVectorProperty<ReferencedObject>::getBits");
+
   PRECONDITION("Optional property is present",
                                            IMPLIES(isOptional(), isPresent()));
   PRECONDITION("Valid bits", bits != 0);
   PRECONDITION("Valid size", size >= bitsSize());
 
   const ReferencedObject** p = (const ReferencedObject**)bits;
-  size_t count = _vector.count();
-  for (size_t i = 0; i < count; i++) {
+
+  OMVectorIterator<
     OMVectorElement<OMStrongObjectReference<ReferencedObject>,
-                    ReferencedObject>& element = _vector.getAt(i);
+                    ReferencedObject> > iterator(_vector, OMBefore);
+  while (++iterator) {
+    OMVectorElement<OMStrongObjectReference<ReferencedObject>,
+                    ReferencedObject>& element = iterator.value();
     *p++ = element.getValue();
   }
 }
@@ -625,15 +629,20 @@ void OMStrongReferenceVectorProperty<ReferencedObject>::setBits(
                                                          size_t size)
 {
   TRACE("OMStrongReferenceVectorProperty<ReferencedObject>::setBits");
+
   PRECONDITION("Valid bits", bits != 0);
   PRECONDITION("Valid size", size >= bitsSize());
 
   size_t count = size / sizeof(ReferencedObject*);
   ReferencedObject** p = (ReferencedObject**)bits;
 
-  for (size_t i = 0; i < count; i++) {
-    ReferencedObject* object = p[i];
-    setValueAt(object, i);
+  OMVectorIterator<
+    OMVectorElement<OMStrongObjectReference<ReferencedObject>,
+                    ReferencedObject> > iterator(_vector, OMBefore);
+  while (++iterator) {
+    OMVectorElement<OMStrongObjectReference<ReferencedObject>,
+                    ReferencedObject>& element = iterator.value();
+    element.setValue(*p++);
   }
 }
 

@@ -455,9 +455,7 @@ size_t OMStrongReferenceSetProperty<ReferencedObject>::bitsSize(void) const
 {
   TRACE("OMStrongReferenceSetProperty<ReferencedObject>::bitsSize");
 
-  ASSERT("Unimplemented code not reached", false);
-
-  return 0;
+  return sizeof(ReferencedObject*) * count();
 }
 
   // @mfunc Get the raw bits of this <c OMStrongReferenceSetProperty>.
@@ -474,12 +472,22 @@ void OMStrongReferenceSetProperty<ReferencedObject>::getBits(OMByte* bits,
                                                              size_t size) const
 {
   TRACE("OMStrongReferenceSetProperty<ReferencedObject>::getBits");
+
   PRECONDITION("Optional property is present",
                                            IMPLIES(isOptional(), isPresent()));
   PRECONDITION("Valid bits", bits != 0);
   PRECONDITION("Valid size", size >= bitsSize());
 
-  ASSERT("Unimplemented code not reached", false);
+  const ReferencedObject** p = (const ReferencedObject**)bits;
+
+  OMSetIterator<OMUniqueObjectIdentification,
+                OMSetElement<OMStrongObjectReference<ReferencedObject>,
+                             ReferencedObject> > iterator(_set, OMBefore);
+  while (++iterator) {
+    OMSetElement<OMStrongObjectReference<ReferencedObject>,
+                 ReferencedObject>& element = iterator.value();
+    *p++ = element.getValue();
+  }
 }
 
   // @mfunc Set the raw bits of this
@@ -497,10 +505,21 @@ void OMStrongReferenceSetProperty<ReferencedObject>::setBits(
                                                             size_t size)
 {
   TRACE("OMStrongReferenceSetProperty<ReferencedObject>::setBits");
+
   PRECONDITION("Valid bits", bits != 0);
   PRECONDITION("Valid size", size >= bitsSize());
 
-  ASSERT("Unimplemented code not reached", false);
+  size_t count = size / sizeof(ReferencedObject*);
+  ReferencedObject** p = (ReferencedObject**)bits;
+
+  OMSetIterator<OMUniqueObjectIdentification,
+                OMSetElement<OMStrongObjectReference<ReferencedObject>,
+                             ReferencedObject> > iterator(_set, OMBefore);
+  while (++iterator) {
+    OMSetElement<OMStrongObjectReference<ReferencedObject>,
+                 ReferencedObject>& element = iterator.value();
+    element.setValue(*p++);
+  }
 }
 
 #endif
