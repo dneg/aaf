@@ -125,9 +125,36 @@ public:
   virtual void getBits(OMByte* bits, size_t size) const;
 
 protected:
+  // @access Protected members.
+
+    // @cmember Load the persisted representation of this
+    //          <c OMReferenceProperty> into memory.
+  virtual void load(void) = 0;
+
+    // @cmember Is the persisted representation of this
+    //          <c OMReferenceProperty> loaded ?
+    // @this const
+  virtual bool isLoaded(void) const;
+
+    // @cmember Set the bit that indicates that the persisted
+    //          representation of this <c OMReferenceProperty> is loaded.
+  virtual void setLoaded(void);
+
+    // @cmember Clear the bit that indicates that the persisted
+    //          representation of this <c OMReferenceProperty> is loaded.
+  virtual void clearLoaded(void);
+
   virtual ReferencedObject* pointer(void) const;
 
   ReferencedObject* _pointer; // The referenced object
+
+private:
+
+    // False if a persisted representation exists that has not yet
+    // been loaded, true otherwise.
+    //
+  bool _loaded;
+
 };
 
   // @class Persistent strong reference (contained object)
@@ -188,6 +215,20 @@ public:
     //          to access the <c OMStorable> with the given <p key>.
   virtual void detach(const OMStorable* object, const size_t key);
 
+protected:
+  // @access Protected members.
+
+    // @cmember Load the persisted representation of this
+    //          <c OMStrongReferenceProperty> into memory.
+  virtual void load(void);
+
+private:
+
+    // The name of the storage containing the persisted representation
+    // of the referenced object.
+    //
+  char* _storageName;
+
 };
 
   // @class Persistent weak reference (pointer to shared object)
@@ -246,6 +287,13 @@ public:
     //          <c OMWeakReferenceProperty> must no longer attempt
     //          to access the <c OMStorable> with the given <p key>.
   virtual void detach(const OMStorable* object, const size_t key);
+
+protected:
+  // @access Protected members.
+
+    // @cmember Load the persisted representation of this
+    //          <c OMWeakReferenceProperty> into memory.
+  virtual void load(void);
 
 private:
   char* _pathName;
@@ -468,6 +516,42 @@ public:
     //          <p size> bytes in size.
   virtual void getBits(OMByte* bits, size_t size) const;
 
+protected:
+  // @access Protected members.
+
+    // @cmember Load the persisted representation of the element of
+    //          this <c OMStrongReferenceVectorProperty> given by <p index>
+    //          into memory.
+  virtual void loadElement(const size_t index);
+
+    // @cmember Is the persisted representation of the element of this
+    //          <c OMStrongReferenceVectorProperty> given by <p index>
+    //          loaded ?
+    // @this const
+  virtual bool isElementLoaded(const size_t index) const;
+
+    // @cmember Set the bit that indicates that the persisted
+    //          representation of the element of this
+    //          <c OMStrongReferenceVectorProperty> given by <p index>
+    //          is loaded.
+  virtual void setElementLoaded(const size_t index);
+
+    // @cmember Clear the bit that indicates that the persisted
+    //          representation of the element of this
+    //          <c OMStrongReferenceVectorProperty> given by <p index>
+    //          is loaded.
+  virtual void clearElementLoaded(const size_t index);
+
+    // @cmember The key of the element of this
+    //          <c OMStrongReferenceVectorProperty> given by <p index>.
+    // @this const
+  virtual OMUInt32 elementKey(const size_t key) const;
+
+    // @cmember Set the key of the element of this
+    //          <c OMStrongReferenceVectorProperty> given by <p index>
+    //          to <p key>.
+  virtual void setElementKey(const size_t index, const OMUInt32 key);
+
 private:
 
   void grow(size_t additionalElements);
@@ -477,6 +561,22 @@ private:
   const ReferencedObject** _vector;
   size_t _sizeOfVector; // Actual size
   size_t _size;         // Number of elements in use
+
+    // _loaded[i] is false if a persisted representation of _vector[i]
+    // exists that has not yet been loaded, true otherwise.
+    //
+  bool* _loaded;
+
+    // _keys[i] is the key for _vector[i].
+    //
+  OMUInt32* _keys;
+
+    // The name of the index describing the persisted representation
+    // of _vector. Also the prefix for the storages containing the
+    // persisted representation of the objects within _vector.
+    //
+  char* _propertyName;
+
 };
 
   // @class Abstract base class for persistent character string
