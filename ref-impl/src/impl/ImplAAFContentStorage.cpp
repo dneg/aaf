@@ -21,8 +21,8 @@
 #include "ImplEnumAAFMobs.h"
 #endif
 
-#ifndef __ImplEnumAAFMedia_h__
-#include "ImplEnumAAFMedia.h"
+#ifndef __ImplEnumAAFEssenceData_h__
+#include "ImplEnumAAFEssenceData.h"
 #endif
 
 #ifndef __ImplAAFContentStorage_h__
@@ -281,22 +281,40 @@ AAFRESULT
 	return(AAFRESULT_SUCCESS);
 }
 
-
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFContentStorage::IsMediaDataPresent (aafUID_t *  /*pFileMobID*/,
+    ImplAAFContentStorage::IsEssenceDataPresent (aafUID_t *  /*pFileMobID*/,
                            aafFileFormat_t  /*fmt*/,
-                           aafBool *  /*result*/)
+                           aafBool *  /*pResult*/)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
+
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFContentStorage::GetMedia (aafMediaCriteria_t *  /*pMediaCriteria*/,
-                           ImplEnumAAFMedia ** /*ppEnum*/)
+    ImplAAFContentStorage::EnumEssenceData (aafMediaCriteria_t *  /*pMediaCriteria*/,
+                           ImplEnumAAFEssenceData ** /*ppEnum*/)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFContentStorage::AppendEssenceData (ImplAAFEssenceData * /*pEssenceData*/)
+{
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFContentStorage::RemoveEssenceData (ImplAAFEssenceData * /*pEssenceData*/)
+{
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+
 
 AAFRESULT ImplAAFContentStorage::LoadMobTables(void)
 {
@@ -386,9 +404,7 @@ AAFRESULT ImplAAFContentStorage::BuildMediaCache(void)
 	return(OM_ERR_NONE);
 }
 
-aafBool ImplAAFContentStorage::IsMediaDataPresent(
-									aafUID_t				fileMobUid,	/* IN -- */
-									aafFileFormat_t	fmt)
+aafBool ImplAAFContentStorage::IsEssenceDataPresent(aafUID_t fileMobUid,	/* IN -- */ aafFileFormat_t fmt)
 {
 #if FULL_TOOLKIT
 	ImplAAFObject *	obj;
