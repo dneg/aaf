@@ -177,4 +177,3 @@ OMPropertyId ImplAAFPropertyDef::OmPid (void) const
 }
 
 
-OMDEFINE_STORABLE(ImplAAFPropertyDef, AUID_AAFPropertyDef);
