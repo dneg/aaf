@@ -53,6 +53,22 @@ OMContainerProperty::~OMContainerProperty(void)
   TRACE("OMContainerProperty::~OMContainerProperty");
 }
 
+  // @mfunc The current local key.
+  //   @rdesc The current local key.
+  //   @this const
+OMUInt32 OMContainerProperty::localKey(void) const
+{
+  return _localKey;
+}
+
+  // @mfunc Set the current local key. Used on restore to restart
+  //        local key assignment.
+  //   @parm The new local key.
+void OMContainerProperty::setLocalKey(OMUInt32 newLocalKey)
+{
+  _localKey = newLocalKey;
+}
+
   // @mfunc Compute the name of an element in this <c OMContainer>
   //        given the element's <p localKey>.
   //   @parm The element's local key.
@@ -69,23 +85,6 @@ wchar_t* OMContainerProperty::elementName(OMUInt32 localKey)
 OMUInt32 OMContainerProperty::nextLocalKey(void)
 {
   return _localKey++;
-}
-
-  // @mfunc The current local key.
-  //   @rdesc The current local key.
-  //   @this const
-
-OMUInt32 OMContainerProperty::localKey(void) const
-{
-  return _localKey;
-}
-
-  // @mfunc Set the current local key. Used on restore to restart
-  //        local key assignment.
-  //   @parm The new local key.
-void OMContainerProperty::setLocalKey(OMUInt32 newLocalKey)
-{
-  _localKey = newLocalKey;
 }
 
 const wchar_t* OMContainerProperty::storedName(void) const

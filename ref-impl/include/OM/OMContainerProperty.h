@@ -54,6 +54,13 @@ public:
     // @cmember Convert to <c OMReferenceContainer>.
   virtual OMReferenceContainer* referenceContainer(void) = 0;
 
+    // @cmember The current local key.
+  OMUInt32 localKey(void) const;
+
+    // @cmember Set the current local key. Used on restore to restart
+    //          local key assignment.
+  void setLocalKey(OMUInt32 newLocalKey);
+
 protected:
   // @access Protected members.
 
@@ -63,13 +70,6 @@ protected:
 
     // @cmember Obtain the next available local key.
   OMUInt32 nextLocalKey(void);
-
-    // @cmember The current local key.
-  OMUInt32 localKey(void) const;
-
-    // @cmember Set the current local key. Used on restore to restart
-    //          local key assignment.
-  void setLocalKey(OMUInt32 newLocalKey);
 
   virtual const wchar_t* storedName(void) const;
 
