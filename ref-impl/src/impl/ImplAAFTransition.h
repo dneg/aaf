@@ -115,6 +115,9 @@ public:
         (ImplAAFOperationGroup * group);
 
 
+  	virtual AAFRESULT ChangeContainedReferences(aafMobID_constref from,
+												aafMobID_constref to);
+
 
 private:
 	OMStrongReferenceProperty<ImplAAFOperationGroup>	_operationGroup;

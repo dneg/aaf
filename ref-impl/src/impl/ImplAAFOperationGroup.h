@@ -272,6 +272,11 @@ public:
         (// @parm [in] 1-based index into the effet inputs
          aafUInt32  index);
 
+public:
+
+	 virtual AAFRESULT ChangeContainedReferences(aafMobID_constref from,
+												aafMobID_constref to);
+
 private:
 	OMWeakReferenceProperty<ImplAAFOperationDef>		_operationDefinition;
 	OMStrongReferenceVectorProperty<ImplAAFSegment>		_inputSegments;

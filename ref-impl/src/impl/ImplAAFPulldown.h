@@ -149,6 +149,8 @@ public:
 					 aafInt32 *pulldownPhase,
 					 aafLength_t *sclpLen,
 					 aafBool *isMask);
+	virtual AAFRESULT ChangeContainedReferences(aafMobID_constref from,
+												aafMobID_constref to);
 private:
 	AAFRESULT GetRemFramesDrop(aafUInt32 maskBits, 
 							char ones, 

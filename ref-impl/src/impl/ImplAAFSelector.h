@@ -121,6 +121,8 @@ public:
 										aafPosition_t *diffPos, aafLength_t *minLength,
 										ImplAAFOperationGroup **groupObject, aafInt32	*nestDepth,
 										ImplAAFComponent **found, aafBool *foundTransition);
+	virtual AAFRESULT ChangeContainedReferences(aafMobID_constref from,
+												aafMobID_constref to);
 
 private:
 	OMStrongReferenceProperty<ImplAAFSegment>		_selected;
