@@ -70,22 +70,22 @@ typeDefUid$(OBJ) : typeDefUid.cpp headerGenUtils.h \
 	$(COMPILE) $(COMPILEFLAGS) -c $< -o $@
 
 # targets for generated source files
-AAFClassDefUIDs.h : classDefUid$(EXE)
+$(GEN_H_DIR)/AAFClassDefUIDs.h : classDefUid$(EXE)
 	./classDefUid AAFClassDefUIDs > $(GEN_H_DIR)/AAFClassDefUIDs.h
 
-AAFExtEnum.h : extEnumUid$(EXE)
+$(GEN_H_DIR)/AAFExtEnum.h : extEnumUid$(EXE)
 	./extEnumUid AAFExtEnum > $(GEN_H_DIR)/AAFExtEnum.h
 
-AAFPropertyDefs.h : propertyDefUid$(EXE)
+$(GEN_H_DIR)/AAFPropertyDefs.h : propertyDefUid$(EXE)
 	./propertyDefUid AAFPropertyDefs > $(GEN_H_DIR)/AAFPropertyDefs.h
 
-AAFPropertyIDs.h : propertyId$(EXE)
+$(GEN_H_DIR)/AAFPropertyIDs.h : propertyId$(EXE)
 	./propertyId AAFPropertyIDs > $(GEN_H_DIR)/AAFPropertyIDs.h
 
-AAFStoredObjectIDs.h : storedObjectUid$(EXE)
+$(GEN_H_DIR)/AAFStoredObjectIDs.h : storedObjectUid$(EXE)
 	./storedObjectUid AAFStoredObjectIDs > $(GEN_H_DIR)/AAFStoredObjectIDs.h
 
-AAFTypeDefUIDs.h : typeDefUid$(EXE)
+$(GEN_H_DIR)/AAFTypeDefUIDs.h : typeDefUid$(EXE)
 	./typeDefUid AAFTypeDefUIDs > $(GEN_H_DIR)/AAFTypeDefUIDs.h
 
 
