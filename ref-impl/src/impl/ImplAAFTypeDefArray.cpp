@@ -80,14 +80,19 @@ AAFRESULT STDMETHODCALLTYPE
   aafUInt32 elementSize = ptd->PropValSize();
 
   assert (pInPropVal);
-  pvd.SetPtr (dynamic_cast<ImplAAFPropValData*> (pInPropVal));
+  pvd = dynamic_cast<ImplAAFPropValData*> (pInPropVal);
 
   hr = pvd->GetBitsSize (&inBitsSize);
   if (! AAFRESULT_SUCCEEDED (hr)) return hr;
   assert ((index+1) * elementSize <= inBitsSize);
 
-  pOutPVData.SetPtr ((ImplAAFPropValData *)CreateImpl(CLSID_AAFPropValData));
+  pOutPVData = (ImplAAFPropValData *)CreateImpl(CLSID_AAFPropValData);
   if (! pOutPVData) return AAFRESULT_NOMEMORY;
+  // Bobt: Hack bugfix! SmartPointer operator= will automatically
+  // AddRef; CreateImpl *also* will addref, so we've got one too
+  // many.  Put us back to normal.
+  pOutPVData->ReleaseReference ();
+
   hr = pOutPVData->Initialize (ptd);
   if (AAFRESULT_FAILED(hr)) return hr;
 
@@ -99,6 +104,8 @@ AAFRESULT STDMETHODCALLTYPE
 
   assert (ppOutPropVal);
   *ppOutPropVal = pOutPVData;
+  assert (*ppOutPropVal);
+  (*ppOutPropVal)->AcquireReference ();
 
   return AAFRESULT_SUCCESS;
 }
