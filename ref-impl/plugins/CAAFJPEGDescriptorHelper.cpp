@@ -221,18 +221,18 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFJPEGDescriptorHelper::SetCodecDef (const aafUID_t & codecDef)
+    CAAFJPEGDescriptorHelper::SetCodecDef (IAAFCodecDef *pCodecDef)
 {
 	checkAssertion(NULL != _filedes);
-	return _filedes->SetCodecDef (codecDef);
+	return _filedes->SetCodecDef (pCodecDef);
 }
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFJPEGDescriptorHelper::GetCodecDef (aafUID_t *  pCodecDef)
+    CAAFJPEGDescriptorHelper::GetCodecDef (IAAFCodecDef **ppCodecDef)
 {
 	checkAssertion(NULL != _filedes);
-	return _filedes->GetCodecDef (pCodecDef);
+	return _filedes->GetCodecDef (ppCodecDef);
 }
 
 
@@ -253,27 +253,27 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFJPEGDescriptorHelper::SetContainerFormat (const aafUID_t & format)
+    CAAFJPEGDescriptorHelper::SetContainerFormat (IAAFContainerDef *pFormat)
 {
 	checkAssertion(NULL != _filedes);
-	return _filedes->SetContainerFormat (format);
+	return _filedes->SetContainerFormat (pFormat);
 }
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFJPEGDescriptorHelper::GetContainerFormat (aafUID_t *  pFormat)
+    CAAFJPEGDescriptorHelper::GetContainerFormat (IAAFContainerDef **ppFormat)
 {
 	checkAssertion(NULL != _filedes);
-	return _filedes->GetContainerFormat (pFormat);
+	return _filedes->GetContainerFormat (ppFormat);
 }
 
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFJPEGDescriptorHelper::SetCompression (const aafUID_t & codecID)
+    CAAFJPEGDescriptorHelper::SetCompression (const aafUID_t & compression)
 {
   checkAssertion(NULL != _dides);
-	return _dides->SetCompression (codecID);
+	return _dides->SetCompression (compression);
 }
 
 

@@ -90,6 +90,7 @@ ReferencedObject* OMWeakReferenceProperty<ReferencedObject>::setValue(
   TRACE("OMWeakReferenceProperty<ReferencedObject>::setValue");
 
   ReferencedObject* result = _reference.setValue(object);
+  setPresent();
   return result;
 }
 
@@ -218,7 +219,7 @@ void OMWeakReferenceProperty<ReferencedObject>::restore(size_t externalSize)
   _targetTag = tag;
   _reference = OMWeakObjectReference<ReferencedObject>(this, id, _targetTag);
   _reference.restore();
-
+  setPresent();
 }
 
   // @mfunc  Is this <c OMWeakReferenceProperty> void ?
