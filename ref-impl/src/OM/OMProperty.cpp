@@ -208,6 +208,44 @@ const OMType* OMProperty::type(void) const
   return result;
 }
 
+  // @mfunc The <c OMStorable> that contains this <c OMProperty>.
+  //   @rdesc The containing <c OMStorable>.
+  //   @this const
+OMStorable* OMProperty::container(void) const
+{
+  TRACE("OMProperty::container");
+
+  ASSERT("Valid property set", _propertySet != 0);
+  OMStorable* result = _propertySet->container();
+  ASSERT("Valid container", result != 0);
+  ASSERT("Container is persistent", result->persistent());
+
+  POSTCONDITION("Valid result", result != 0);
+  return result;
+}
+
+  // @mfunc The <c OMStoredObject> that contains the persisted
+  //        representation of this <c OMProperty>.
+  //   @rdesc The <c OMStoredObject>.
+  //   @this const
+OMStoredObject* OMProperty::store(void) const
+{
+  TRACE("OMProperty::store");
+
+  return container()->store();
+}
+
+  // @mfunc The <c OMFile> that contains the persisted
+  //        representation of this <c OMProperty>.
+  //   @rdesc The containing <c OMFile>.
+  //   @this const
+OMFile* OMProperty::file(void) const
+{
+  TRACE("OMProperty::file");
+
+  return container()->file();
+}
+
 // class OMSimpleProperty
 
   // @mfunc Constructor.
