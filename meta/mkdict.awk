@@ -618,8 +618,8 @@ BEGIN {
   firstType = 1;
 }
 
-/SMPTE Label Key/ {
-  next # Discard the key line
+/^#/ {
+  next # Discard the line
 }
 
 {
