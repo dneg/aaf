@@ -65,7 +65,7 @@ inline void checkExpression(bool expression, HRESULT r)
 		throw r;
 }
 
-static aafRational_t	checkEditRate = { 2997, 100 };
+static const aafRational_t	checkEditRate = { 30000, 1001 };
 
 static HRESULT CreateAAFFile(aafWChar * pFileName)
 {
@@ -111,7 +111,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		
 		//Make the first mob
 		long	test;
-		aafRational_t	audioRate = { 44100, 1 };
+		// audioRate not used
+		// aafRational_t	audioRate = { 44100, 1 };
 		
 		// Create a Mob
 		checkResult(pDictionary->CreateInstance(AUID_AAFMob,
@@ -134,7 +135,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 			checkResult(pDictionary->CreateInstance(AUID_AAFTimelineMobSlot,
 				IID_IAAFTimelineMobSlot, 
 				(IUnknown **)&timelineSlot));		
-			checkResult(timelineSlot->GetEditRate (&checkEditRate));
+			checkResult(timelineSlot->SetEditRate (checkEditRate));
 			checkResult(timelineSlot->SetOrigin (0));
 			checkResult(timelineSlot->QueryInterface (IID_IAAFMobSlot, (void **)&newSlot));
 			checkResult(newSlot->SetSegment(seg));
@@ -255,6 +256,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 			
 			checkResult(aMob->EnumAAFAllMobSlots(&slotIter));
 			
+
 			for(s = 0; s < numSlots; s++)
 			{
 				checkResult(slotIter->NextOne (&slot));
