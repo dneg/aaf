@@ -99,6 +99,9 @@ ImplAAFTypeDefEnum::Initialize (
 	if (kAAFTypeCatInt != baseTypeCat)
 		return AAFRESULT_BAD_TYPE;
 	
+	if( !aafLookupTypeDef( this, pType ) )
+		return AAFRESULT_TYPE_NOT_FOUND;
+
 	return pvtInitialize (id,
 		pType,
 		pElementValues,
