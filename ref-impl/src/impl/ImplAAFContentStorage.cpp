@@ -12,6 +12,7 @@
 #include "AAFTypes.h"
 #include "aafErr.h"
 #include "AAFResult.h"
+#include "aafUtils.h"
 
 #ifndef __ImplAAFMob_h__
 #include "ImplAAFMob.h"
@@ -45,17 +46,23 @@ OMDEFINE_STORABLE(ImplAAFContentStorage, AUID_AAFContentStorage);
 
 extern "C" const aafClassID_t CLSID_EnumAAFMobs;
 extern "C" const aafClassID_t CLSID_EnumAAFEssenceData;
+static void ReleaseMobRefs(void *valuePtr)
+{
+	ReleaseImplReference((ImplAAFRoot *)valuePtr);
+}
 
 ImplAAFContentStorage::ImplAAFContentStorage ()
 : _mobIndex(0),
   _mobs(PID_ContentStorage_Mobs, "Mobs"),
   _essenceData(PID_ContentStorage_EssenceData, "EssenceData")
 {
-  _persistentProperties.put(_mobs.address());
-  _persistentProperties.put(_essenceData.address());
+	_persistentProperties.put(_mobs.address());
+	_persistentProperties.put(_essenceData.address());
 
-  NewUIDTable(NULL, 100, &_mobIndex);		//!!! Handle error codes
+	NewUIDTable(NULL, 100, &_mobIndex);		//!!! Handle error codes
+//	(void)SetTableDispose(_mobIndex, ReleaseMobRefs);
 }
+
 
 
 ImplAAFContentStorage::~ImplAAFContentStorage ()
@@ -334,13 +341,71 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFContentStorage::IsEssenceDataPresent (aafUID_t *  /*pFileMobID*/,
-                           aafFileFormat_t  /*fmt*/,
-                           aafBool *  /*pResult*/)
+    ImplAAFContentStorage::IsEssenceDataPresent (aafUID_t *pFileMobID,
+                           aafFileFormat_t fmt,
+                           aafBool *pResult)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	aafUInt32			numEssence, n;
+	aafUID_t			testMobID;
+	ImplAAFEssenceData	*testData;
+
+	XPROTECT()
+	{
+		//!!!fmt is unused?
+		*pResult = AAFFalse;
+		CHECK(GetNumEssenceData(&numEssence));
+		for(n = 0; n < numEssence && !(*pResult); n ++)
+		{
+			CHECK(GetNthEssenceData(n, &testData));
+			CHECK(testData->GetFileMobID (&testMobID));
+			if(EqualAUID(pFileMobID, &testMobID))
+			{
+				*pResult = AAFTrue;
+			}
+		}
+	}
+	XEXCEPT
+	XEND
+
+	return AAFRESULT_SUCCESS;
 }
 
+//Internal function only.  Not exposed through the COM API
+AAFRESULT
+    ImplAAFContentStorage::LookupEssence (aafUID_t *pFileMobID,
+                           ImplAAFEssenceData **ppEssence)
+{
+	aafUInt32		numEssence, n;
+	aafBool			found;
+	aafUID_t		testMobID;
+	ImplAAFEssenceData	*testData;
+
+	XPROTECT()
+	{
+		found = AAFFalse;
+		CHECK(GetNumEssenceData(&numEssence));
+		for(n = 0; n < numEssence && !found; n ++)
+		{
+			CHECK(GetNthEssenceData(n, &testData));
+			CHECK(testData->GetFileMobID (&testMobID));
+			if(EqualAUID(pFileMobID, &testMobID))
+			{
+				found = AAFTrue;
+				*ppEssence = testData;
+			}
+		}
+		// trr - We are returning a copy of pointer stored in _mobs so we need
+		// to bump its reference count.
+		if (found)
+			(*ppEssence)->AcquireReference();
+		else
+			RAISE(AAFRESULT_NO_MORE_OBJECTS);
+	}
+	XEXCEPT
+	XEND
+
+	return AAFRESULT_SUCCESS;
+}
 
 
 AAFRESULT STDMETHODCALLTYPE
@@ -471,51 +536,6 @@ AAFRESULT ImplAAFContentStorage::LoadMobTables(void)
 	XEND;
 
 	return (AAFRESULT_SUCCESS);
-}
-
-aafBool ImplAAFContentStorage::IsEssenceDataPresent(aafUID_t fileMobUid,	/* IN -- */ aafFileFormat_t fmt)
-{
-#if FULL_TOOLKIT
-	ImplAAFObject *	obj;
-	aafBool		result;
-	
-	aafAssertValidFHdl(_file);
-	result = AAFFalse;
-	
-	if (fmt == kAAFiMedia)
-	  {
-		 obj = (ImplAAFObject *)TableUIDLookupPtr(_dataObjs, fileMobUid);
-		 if(obj != NULL)
-			result = AAFTrue;
-		 }
-	  }
-	else
-	  result = AAFTrue;
-	
-	return (result);
-#else
-  return AAFFalse;
-#endif
-}
-
-
-AAFRESULT ImplAAFContentStorage::AppendDataObject(aafUID_t mobID,      /* IN - Mob ID */
-						  ImplAAFObject *dataObj)    /* IN - Input Mob */ 
-{
-#if FULL_TOOLKIT
-	XPROTECT(_file)
-	  {
-		CHECK(AppendObjRefArray(OMHEADMediaData, dataObj));
-		CHECK(TableAddUID(_dataObjs, mobID, dataObj, kOmTableDupError));
-	  } /* XPROTECT */
-	XEXCEPT
-	  {
-		return(XCODE());
-	  }
-	XEND;
-#endif
-	
-	return(AAFRESULT_SUCCESS);
 }
 
 AAFRESULT ImplAAFContentStorage::UnlinkMobID(aafUID_t mobID)
