@@ -42,7 +42,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /c
-# ADD CPP /nologo /MD /W3 /GR /GX /Zi /O2 /I "../../../../ref-impl/src/com-api" /I "../../../../ref-impl/src/com-api/test" /I "../../../../ref-impl/plugins" /I "../../../../ref-impl/include/com-api/" /I "../../../../ref-impl/src/impl" /I "../../../ref-impl/include/comidl" /I "../../../../ref-impl/include" /FI"stdafx.h" /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "UNICODE" /D "_UNICODE" /Yu"stdafx.h" /FD /c
+# ADD CPP /nologo /MD /W3 /WX /GR /GX /Zi /O2 /I "../../../../ref-impl/src/com-api" /I "../../../../ref-impl/src/com-api/test" /I "../../../../ref-impl/plugins" /I "../../../../ref-impl/include/com-api/" /I "../../../../ref-impl/src/impl" /I "../../../ref-impl/include/comidl" /I "../../../../ref-impl/include" /FI"stdafx.h" /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "UNICODE" /D "_UNICODE" /Yu"stdafx.h" /FD /c
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
