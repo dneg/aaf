@@ -156,7 +156,25 @@ void OMStorable::attach(const OMStorable* container, const char* name)
 void OMStorable::detach(void)
 {
   TRACE("OMStorable::detach");
-  PRECONDITION("Attached", attached());
+
+  if (_store != 0) {
+    size_t context = 0;
+    for (size_t i = 0; i < _persistentProperties.count(); i++)
+    {
+      OMProperty* p = 0;
+      _persistentProperties.iterate(context, p);
+      ASSERT("Valid property", p != 0);
+      p->detach();
+    }
+
+    // Once incremental saving (dirty bit) is implemented we'll need
+    // to deal with any persisted representation of this unattached
+    // OMStorable.
+
+    _store->close();
+    delete _store;
+    _store = 0;
+  }
 
   _container = 0;
 
