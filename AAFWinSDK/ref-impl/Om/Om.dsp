@@ -86,6 +86,10 @@ LIB32=link.exe -lib
 # PROP Default_Filter "cpp"
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\OM\OMArrayType.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\OM\OMAssertions.cpp"
 # End Source File
 # Begin Source File
@@ -119,6 +123,10 @@ SOURCE="..\..\..\ref-impl\src\OM\OMDictionary.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\OM\OMDiskRawStorage.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\OM\OMEnumeratedType.cpp"
 # End Source File
 # Begin Source File
 
@@ -170,6 +178,10 @@ SOURCE="..\..\..\ref-impl\src\OM\OMObjectReference.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\OM\OMObjectReferenceType.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\OM\OMOStream.cpp"
 # End Source File
 # Begin Source File
@@ -198,6 +210,10 @@ SOURCE="..\..\..\ref-impl\src\OM\OMRawStorageLockBytes.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\OM\OMRecordType.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\OM\OMRefProperty.cpp"
 # End Source File
 # Begin Source File
@@ -207,6 +223,10 @@ SOURCE="..\..\..\ref-impl\src\OM\OMRefSetProperty.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\OM\OMRefVectorProperty.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\OM\OMRenamedType.cpp"
 # End Source File
 # Begin Source File
 
@@ -231,6 +251,14 @@ SOURCE="..\..\..\ref-impl\src\OM\OMStoredSetIndex.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\OM\OMStoredVectorIndex.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\OM\OMStreamType.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\OM\OMStringType.cpp"
 # End Source File
 # Begin Source File
 
@@ -288,6 +316,10 @@ SOURCE="..\..\..\ref-impl\src\OM\OMXMLStoredStream.cpp"
 # Begin Group "Header Files"
 
 # PROP Default_Filter "h"
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\include\OM\OMArrayType.h"
+# End Source File
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\OM\OMAssertions.h"
@@ -351,6 +383,10 @@ SOURCE="..\..\..\ref-impl\include\OM\OMDictionary.h"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\include\OM\OMDiskRawStorage.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\include\OM\OMEnumeratedType.h"
 # End Source File
 # Begin Source File
 
@@ -430,6 +466,10 @@ SOURCE="..\..\..\ref-impl\src\OM\OMObjectReferenceT.h"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\include\OM\OMObjectReferenceType.h"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\include\OM\OMObjectSet.h"
 # End Source File
 # Begin Source File
@@ -471,6 +511,10 @@ SOURCE="..\..\..\ref-impl\include\OM\OMRawStorage.h"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\include\OM\OMRawStorageLockBytes.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\include\OM\OMRecordType.h"
 # End Source File
 # Begin Source File
 
@@ -542,6 +586,10 @@ SOURCE="..\..\..\ref-impl\include\OM\OMRefVectorProperty.h"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\include\OM\OMRenamedType.h"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\OM\OMRootStorable.h"
 # End Source File
 # Begin Source File
@@ -599,6 +647,14 @@ SOURCE="..\..\..\ref-impl\include\OM\OMStreamProperty.h"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\OM\OMStreamPropertyT.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\include\OM\OMStreamType.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\include\OM\OMStringType.h"
 # End Source File
 # Begin Source File
 
