@@ -355,44 +355,66 @@ public:
   // These are low-level OMSet tests for containment.
   bool containsClass(aafUID_constref classId);
   bool containsType(aafUID_constref typeId);
+  bool containsForwardClassReference(aafUID_constref classId);
 
-
-  bool hasForwardClassReference(aafUID_constref classId);
   // If the given classId fromt the set of forward references.
   void RemoveForwardClassReference(aafUID_constref classId);
 
+  // Find the opaque type definition associated with the given type id.
+  ImplAAFTypeDef * findOpaqueTypeDefinition(aafUID_constref typeId); // NOT REFERENCE COUNTED!
 
-  ImplAAFTypeDef * findOpaqueTypeDefinition(aafUID_constref typeId);
+  // Find the aximatic class definition associated with the given class id.
+  ImplAAFClassDef * findAxiomaticClassDefinition(aafUID_constref classId); // NOT REFERENCE COUNTED!
+
+  // Find the aximatic property definition associated with the given property id.
+  ImplAAFPropertyDef * findAxiomaticPropertyDefinition(aafUID_constref propertyId); // NOT REFERENCE COUNTED!
+
+  // Find the aximatic type definition associated with the given type id.
+  ImplAAFTypeDef * findAxiomaticTypeDefinition(aafUID_constref typeId); // NOT REFERENCE COUNTED!
 
 
 
 private:
+
+  //
+  // Persistent data members.
+  //
   OMStrongReferenceSetProperty<OMUniqueObjectIdentification, ImplAAFTypeDef> _typeDefinitions;
   OMStrongReferenceSetProperty<OMUniqueObjectIdentification, ImplAAFClassDef> _classDefinitions;
 
-  // Private class that represents an opaque class definition in an OMSet.
-  class OpaqueTypeDefinition
+  // TEMPORARY class to be replaced by new non-persistent OM classes.
+  // Template class to store different types of non-persistent
+  // elements in an OMSet.
+  template <typename Element>
+  class SetElement
   {
   public:
-    OpaqueTypeDefinition();
-    OpaqueTypeDefinition(const OpaqueTypeDefinition& rhs);
-    OpaqueTypeDefinition(ImplAAFTypeDef * opaqueTypeDef);
+    SetElement();
+    SetElement(const SetElement& rhs);
+    SetElement(Element * value);
 
     // coersion operator to "transparently" extract the type
     // definition pointer. This will be called when the enumerator
     // attempts to assign an OpaqueTypeDefinition to an ImplAAFTypeDef *.
-    operator ImplAAFTypeDef * () const;
+    operator Element * () const;
 
     // Methods required by OMSet
     const OMUniqueObjectIdentification identification(void) const;
-    OpaqueTypeDefinition& operator= (const OpaqueTypeDefinition& rhs);
-    bool operator== (const OpaqueTypeDefinition& rhs);
+    SetElement& operator= (const SetElement& rhs);
+    bool operator== (const SetElement& rhs);
 
   private:
-    ImplAAFTypeDef * _opaqueTypeDef;
+    aafUID_t _id;
+    Element * _value;
   };
 
-  OMSet<OMUniqueObjectIdentification, OpaqueTypeDefinition> _opaqueTypeDefinitions;
+  //
+  // Non-persistent data members.
+  //
+  OMSet<OMUniqueObjectIdentification, SetElement<ImplAAFTypeDef> > _opaqueTypeDefinitions;
+  OMSet<OMUniqueObjectIdentification, SetElement<ImplAAFClassDef> > _axiomaticClassDefinitions;
+  OMSet<OMUniqueObjectIdentification, SetElement<ImplAAFPropertyDef> > _axiomaticPropertyDefinitions;
+  OMSet<OMUniqueObjectIdentification, SetElement<ImplAAFTypeDef> > _axiomaticTypeDefinitions;
 
   // Private class that represents a forward class reference.
   class ForwardClassReference
@@ -415,6 +437,91 @@ private:
 
 
 };
+
+
+
+
+
+// Template class to store different types of non-persistent
+template <typename Element>
+ImplAAFMetaDictionary::SetElement<Element>::SetElement() :
+  _value(NULL)
+{
+  memset(&_id, 0, sizeof(_id));
+}
+
+template <typename Element>
+ImplAAFMetaDictionary::SetElement<Element>::SetElement(const SetElement<Element> & rhs)
+{
+  _id = rhs._id;
+  _value = rhs._value;
+}
+
+template <typename Element>
+ImplAAFMetaDictionary::SetElement<Element>::SetElement(Element *value) :
+  _value(value)
+{
+  AAFRESULT result = AAFRESULT_NULL_PARAM;
+  if (_value)
+  {
+    result = value->GetAUID(&_id);
+  }
+  if (AAFRESULT_FAILED(result))
+  {
+    memset(&_id, 0, sizeof(_id));
+  }
+}
+
+
+// coersion operator to "transparently" extract the element
+// pointer. 
+template <typename Element>
+ImplAAFMetaDictionary::SetElement<Element>::operator Element * () const
+{
+  return _value;
+}
+
+
+template <typename Element>
+const OMUniqueObjectIdentification 
+  ImplAAFMetaDictionary::SetElement<Element>::identification(void) const
+{
+  return (*reinterpret_cast<const OMUniqueObjectIdentification *>(&_id));
+}
+
+template <typename Element>
+ImplAAFMetaDictionary::SetElement<Element> & ImplAAFMetaDictionary::SetElement<Element>::operator= (const ImplAAFMetaDictionary::SetElement<Element>& rhs)
+{
+  if (&rhs != this)
+  {
+    _id = rhs._id;
+    _value = rhs._value;
+  }
+  return *this;
+}
+
+template <typename Element>
+bool ImplAAFMetaDictionary::SetElement<Element>::operator== (const ImplAAFMetaDictionary::SetElement<Element>& rhs)
+{
+  if (&rhs == this)
+  {
+    return true;
+  }
+  else
+  {
+    // Test the value first since it is the more efficient comparison.
+    if (_value == rhs._value)
+    {
+      return true;
+    }
+    else
+    {
+      // Compare the ids.
+      return (0 == memcmp(&_id, &rhs._id, sizeof(_id)));
+    }
+  }
+}
+
 
 
 #endif // #ifndef __ImplAAFMetaDictionary_h__
