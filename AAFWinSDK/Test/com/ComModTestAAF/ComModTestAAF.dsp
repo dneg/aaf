@@ -221,10 +221,6 @@ SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFInterpolationDefTest.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFIntraFrameMarkerTest.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFKLVDataTest.cpp
 # End Source File
 # Begin Source File
