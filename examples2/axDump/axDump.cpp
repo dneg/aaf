@@ -46,7 +46,7 @@ namespace {
 
 void throwUsage()
 {
-	wostringstream msg;
+	std::wostringstream msg;
 	msg << L"Usage: " << L" -file filename [-objects] [-properties] [-values] [-records] [-verbose]";
 	throw AxEx( msg.str().c_str() );
 }

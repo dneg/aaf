@@ -33,9 +33,10 @@
 #include <sstream>
 #include <assert.h>
 
+using namespace std;
+
 void throwUsage()
 {
-	using namespace std;
 	wostringstream msg;
 	msg << L"Usage:\t" << L"-file filename {-load plugin_library_name}" << endl;
 	msg << L"Notes:\t" << L"Specify a file to create, and the name of the plugin to load." << endl;
@@ -44,7 +45,9 @@ void throwUsage()
 
 void ProcessEssenceFlavours( AxCodecDef& axCodecDef )
 {
-	std::wcout << L"Essence Flavours:\t";
+        using namespace std;
+
+	wcout << L"Essence Flavours:\t";
 
 	if ( axCodecDef.AreThereFlavours() ) {
 
