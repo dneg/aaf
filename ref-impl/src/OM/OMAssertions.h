@@ -233,6 +233,28 @@ void obsolete(const char* routineName, const char* newRoutineName);
 #define ANAME(name) \
   name
 
+  // @func Save the value of a variable on entry to a routine for
+  //       later retrieval in the postcondition with <f OLD>.
+  //   @parm The name of the variable to save.
+  //   @parm The type of the variable.
+#define SAVE(name, type) \
+  SAVE_EXPRESSION(name, name, type)
+
+  // @func Save the value of an expression on entry to a routine for
+  //       later retrieval in the postcondition with <f OLD>.
+  //   @parm The name of the saved expression.
+  //   @parm The expression to save.
+  //   @parm The type of the expression.
+#define SAVE_EXPRESSION(name, expression, type) \
+  type oldValueOf##name = expression
+
+  // @func Retrieve the value of a variable or expression saved on
+  //       entry to a routine with <f SAVE> or with <f SAVE_EXPRESSION>.
+  //       For use in postconditions.
+  //   @parm The name of the saved variable or expression.
+#define OLD(name) \
+  oldValueOf##name
+
 #else
 
 #define TRACE(name)
@@ -254,6 +276,12 @@ void obsolete(const char* routineName, const char* newRoutineName);
 #define FORALL(index, elementCount, expression)
 
 #define ANAME(name)
+
+#define SAVE(name, type)
+
+#define SAVE_EXPRESSION(name, expression, type)
+
+#define OLD(name)
 
 #endif
 
