@@ -644,6 +644,9 @@ extern "C" HRESULT CEnumAAFMobs_test()
 		hr = CreateAAFFile(	pFileName );
 		if(AAFRESULT_SUCCESS == hr)
 			hr = ReadAAFFile( pFileName );
+		
+		if(hr == AAFRESULT_SUCCESS)
+			hr = AAFRESULT_NOT_IN_CURRENT_VERSION;
 	}
   catch (...)
 	{
