@@ -23,6 +23,7 @@
 #include "AAFDataDefs.h"
 #include "AAFDefUIDs.h"
 #include "aafUtils.h"
+#include "AAFCodecDefs.h"
 
 // Cross-platform utility to delete a file.
 static void RemoveTestFile(const wchar_t* pFileName)
@@ -183,7 +184,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	aafUID_t		codecID = CodecWave;
 	// aafUID_t		testMatte = DDEF_Matte;
 	aafUID_t		testPicture = DDEF_Picture;
-	aafUID_t		checkFlavour = NilCodecVariety;
+	aafUID_t		checkFlavour = NilCodecFlavour;
 	aafUID_t		testFlavour;
 	HRESULT			hr = S_OK;
 

@@ -11,6 +11,7 @@
 
 
 #include "AAF.h"
+#include "AAFPluginDefs.h"
 
 #include <iostream.h>
 
