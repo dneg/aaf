@@ -293,34 +293,40 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		checkResult(pHeader->GetMobs(&criteria, &pMobIter));
 		while (AAFRESULT_SUCCESS == pMobIter->NextOne(&pMob))
 		{
+			aafMobID_t	debugMobID;
+
+			checkResult(pMob->GetMobID(&debugMobID));
 			checkResult(pMob->CountSlots(&numSlots));
-			checkExpression(1 == numSlots, AAFRESULT_TEST_FAILED);
-
-			checkResult(pMob->GetSlots(&pSlotIter));
-			while (AAFRESULT_SUCCESS == pSlotIter->NextOne(&pSlot))
+			if(0 != numSlots)	// numSlots == 0 on referenced mob
 			{
-				// The segment should be a source clip...
-				checkResult(pSlot->GetSegment(&pSegment));
-				checkResult(pSegment->QueryInterface (IID_IAAFComponent,
-                                          (void **)&comp));
-				checkResult(comp->GetDataDef (&pDataDef));
-				checkResult(pDataDef->QueryInterface (IID_IAAFDefObject,
-                                          (void **)&pDefObj));
-				checkResult(pDefObj->GetAUID (&testUID));
-				pDataDef->Release ();
-				pDataDef = 0;
-				pDefObj->Release ();
-				pDefObj = 0;
-				checkExpression(memcmp(&testUID, &checkUID, sizeof(testUID)) == 0, AAFRESULT_TEST_FAILED);
-				checkResult(comp->GetLength (&testLength));
-				checkExpression(TEST_LENGTH == testLength, AAFRESULT_TEST_FAILED);
-				comp->Release();
-				comp = NULL;
-				pSegment->Release();
-				pSegment = NULL;
-
-				pSlot->Release();
-				pSlot = NULL;
+				checkExpression(1 == numSlots, AAFRESULT_TEST_FAILED);
+				
+				checkResult(pMob->GetSlots(&pSlotIter));
+				while (AAFRESULT_SUCCESS == pSlotIter->NextOne(&pSlot))
+				{
+					// The segment should be a source clip...
+					checkResult(pSlot->GetSegment(&pSegment));
+					checkResult(pSegment->QueryInterface (IID_IAAFComponent,
+						(void **)&comp));
+					checkResult(comp->GetDataDef (&pDataDef));
+					checkResult(pDataDef->QueryInterface (IID_IAAFDefObject,
+						(void **)&pDefObj));
+					checkResult(pDefObj->GetAUID (&testUID));
+					pDataDef->Release ();
+					pDataDef = 0;
+					pDefObj->Release ();
+					pDefObj = 0;
+					checkExpression(memcmp(&testUID, &checkUID, sizeof(testUID)) == 0, AAFRESULT_TEST_FAILED);
+					checkResult(comp->GetLength (&testLength));
+					checkExpression(TEST_LENGTH == testLength, AAFRESULT_TEST_FAILED);
+					comp->Release();
+					comp = NULL;
+					pSegment->Release();
+					pSegment = NULL;
+					
+					pSlot->Release();
+					pSlot = NULL;
+				}
 			}
 
 			pMob->Release();
