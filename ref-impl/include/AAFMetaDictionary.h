@@ -49,8 +49,8 @@
 //
 // DictP18-277-1847BMaster.csv 
 //
-// This file was generated on Mon May  8 19:02:51 EDT 2000
-// by user tbingham on system TBINGHAMPC.
+// This file was generated on Tue May  9 09:20:25 EDT 2000
+// by user transdel on system TRANSDEL.
 //
 // Key to macros.
 //
@@ -3882,7 +3882,7 @@ AAF_TYPE_DEFINITION_VARYING_ARRAY(StringArray,
   AAF_LITERAL_AUID(0x0C040500,
     0x0000, 0x0000,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C),
-  AAF_TYPE(String))
+  AAF_TYPE(Character))
 AAF_TYPE_SEPARATOR()
 
 // AUIDArray
