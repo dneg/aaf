@@ -375,7 +375,26 @@ AAFRESULT STDMETHODCALLTYPE
 	return AAFRESULT_SUCCESS;
 }
 
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFHeader::LookupEssenceData (aafMobID_constref mobID,
+                           ImplAAFEssenceData **ppEssenceData)
+{
+    ImplAAFContentStorage *cstore = NULL;
 
+    if (! ppEssenceData)
+	  {
+		return AAFRESULT_NULL_PARAM;
+	  }
+	XPROTECT()
+	{
+		cstore = GetContentStorage();		// Does not AddRef
+		CHECK(cstore->LookupEssence(mobID, ppEssenceData));
+	}
+	XEXCEPT
+	XEND
+
+	return AAFRESULT_SUCCESS;
+}
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFHeader::GetContentStorage (ImplAAFContentStorage ** ppContentStorage)

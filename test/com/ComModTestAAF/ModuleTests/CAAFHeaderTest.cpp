@@ -606,6 +606,14 @@ void HeaderTest::openEssenceData()
   if (gMaxMobCount != essenceDataCount)
     check(AAFRESULT_TEST_FAILED);
  
+  // LookupEssenceData
+  check(_pHeader->LookupEssenceData(_mobID[0], &_pEssenceData));  
+  // Make sure that the essence data still references
+  // a valid mob.
+  check(_pEssenceData->GetFileMob(&_pSourceMob));
+  _pEssenceData->Release();
+  _pEssenceData = NULL;
+
   // EnumEssenceData
   checkhr(_pHeader->EnumEssenceData(NULL), AAFRESULT_NULL_PARAM);   
   check(_pHeader->EnumEssenceData(&_pEnumEssenceData));
