@@ -105,6 +105,13 @@ char* baseName(char* fullName)
 	return result;
 }
 
+void AUIDtoString(aafUID_t *uid, char *buf)
+{
+	sprintf(buf, "%08lx-%04x-%04x-%02x%02x%02x%02x%02x%02x%02x%02x",
+			uid->Data1, uid->Data2, uid->Data3, (int)uid->Data4[0],
+			(int)uid->Data4[1], (int)uid->Data4[2], (int)uid->Data4[3], (int)uid->Data4[4],
+			(int)uid->Data4[5], (int)uid->Data4[6], (int)uid->Data4[7]);
+}
 
 // ============================================================================
 // InitGlobalVars
@@ -219,12 +226,12 @@ void DisplaySummary( void )
 {
 	UTLstdprintf("\n*******************\n\n");
 	UTLstdprintf("%s Summary for the file :%s\n\n",gpGlobals->pProgramName, gpGlobals->sOutFileName);
-	UTLstdprintf("\tTotal OMF Mobs read \t\t: %ld\n", gpGlobals->nNumOMFMobs);
-	UTLstdprintf("\tTotal AAF Mobs written \t\t: %ld\n", gpGlobals->nNumAAFMobs);
-	UTLstdprintf("\tTotal OMF Objects read \t\t: %ld\n", gpGlobals->nNumOMFObjects);
-	UTLstdprintf("\tTotal AAF Objects written \t: %ld\n", gpGlobals->nNumAAFObjects);
-	UTLstdprintf("\tTotal OMF Properties read \t: %ld\n", gpGlobals->nNumOMFProperties);
-	UTLstdprintf("\tTotal AAF Properties written \t: %ld\n", gpGlobals->nNumAAFProperties);
+	UTLstdprintf("\tTotal OMF Mobs \t\t\t: %ld\n", gpGlobals->nNumOMFMobs);
+	UTLstdprintf("\tTotal AAF Mobs \t\t\t: %ld\n", gpGlobals->nNumAAFMobs);
+	UTLstdprintf("\tTotal OMF Objects \t\t: %ld\n", gpGlobals->nNumOMFObjects);
+	UTLstdprintf("\tTotal AAF Objects \t\t: %ld\n", gpGlobals->nNumAAFObjects);
+	UTLstdprintf("\tTotal OMF Properties \t\t: %ld\n", gpGlobals->nNumOMFProperties);
+	UTLstdprintf("\tTotal AAF Properties \t\t: %ld\n", gpGlobals->nNumAAFProperties);
 	UTLstdprintf("\tTotal OMF Objects NOT found\t: %ld\n", gpGlobals->nNumUndefinedOMFObjects);
 	UTLstdprintf("\n*******************\n\n");
 }
