@@ -48,9 +48,8 @@ OMWeakReferenceProperty<ReferencedObject>::OMWeakReferenceProperty(
                                               const wchar_t* name,
                                               const wchar_t* targetName,
                                               const OMPropertyId keyPropertyId)
-: OMReferenceProperty(propertyId,
-                      SF_WEAK_OBJECT_REFERENCE,
-                      name), _reference(),
+: OMWeakReference(propertyId, name),
+  _reference(),
   _targetTag(nullOMPropertyTag),
   _targetName(targetName),
   _targetPropertyPath(0),
@@ -75,9 +74,8 @@ OMWeakReferenceProperty<ReferencedObject>::OMWeakReferenceProperty(
                                         const wchar_t* name,
                                         const OMPropertyId keyPropertyId,
                                         const OMPropertyId* targetPropertyPath)
-: OMReferenceProperty(propertyId,
-                      SF_WEAK_OBJECT_REFERENCE,
-                      name), _reference(),
+: OMWeakReference(propertyId, name),
+  _reference(),
   _targetTag(nullOMPropertyTag),
   _targetName(0),
   _targetPropertyPath(0),
@@ -387,6 +385,25 @@ OMObject* OMWeakReferenceProperty<ReferencedObject>::setObject(
   ASSERT("Object is correct type", p != 0);
 
   return setValue(p);
+}
+
+
+template <typename ReferencedObject>
+OMPropertyId
+OMWeakReferenceProperty<ReferencedObject>::keyPropertyId(void) const
+{
+  TRACE("OMWeakReferenceProperty<ReferencedObject>::keyPropertyId");
+
+  return _keyPropertyId;
+}
+
+template <typename ReferencedObject>
+void OMWeakReferenceProperty<ReferencedObject>::setTargetTag(
+                                                       OMPropertyTag targetTag)
+{
+  TRACE("OMWeakReferenceProperty<ReferencedObject>::setTargetTag");
+
+  _targetTag = targetTag;
 }
 
 template <typename ReferencedObject>

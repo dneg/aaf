@@ -31,7 +31,7 @@
 
 #include "OMVector.h"
 #include "OMContainerElement.h"
-#include "OMRefVectorProperty.h"
+#include "OMWeakReferenceVector.h"
 
 template <typename ReferencedObject>
 class OMWeakReferenceVectorIterator;
@@ -47,10 +47,10 @@ class OMVectorIterator;
   //   @tcarg class | ReferencedObject | The type of the referenced
   //          (contained) object. This type must be a descendant of
   //          <c OMStorable>.
-  //   @base public | <c OMReferenceVectorProperty>
+  //   @base public | <c OMweakReferenceVector>
   //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 template <typename ReferencedObject>
-class OMWeakReferenceVectorProperty : public OMReferenceVectorProperty {
+class OMWeakReferenceVectorProperty : public OMWeakReferenceVector {
 public:
   // @access Public members.
 
@@ -250,17 +250,21 @@ public:
     //          higher are shifted up one index position.
   virtual void insertObjectAt(const OMObject* object, const size_t index);
 
+  virtual OMPropertyId keyPropertyId(void) const;
+
+  virtual OMPropertyTag targetTag(void) const;
+
+  virtual void setTargetTag(OMPropertyTag targetTag);
+
+  virtual void clearTargetTag(void) const;
+
 private:
 
   typedef OMWeakReferenceVectorElement<ReferencedObject> VectorElement;
 
   typedef OMVectorIterator<VectorElement> VectorIterator;
 
-  OMPropertyTag targetTag(void) const;
-
   OMPropertyId* targetPropertyPath(void) const;
-
-  void clearTargetTag(void) const;
 
     // The vector of references.
   OMVector<VectorElement> _vector;

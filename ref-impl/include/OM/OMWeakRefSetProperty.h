@@ -31,7 +31,7 @@
 
 #include "OMSet.h"
 #include "OMContainerElement.h"
-#include "OMRefSetProperty.h"
+#include "OMWeakReferenceSet.h"
 #include "OMDataTypes.h"
 
 template <typename ReferencedObject>
@@ -47,10 +47,10 @@ class OMSetIterator;
   //   @tcarg class | ReferencedObject | The type of the referenced
   //          (contained) object. This type must be a descendant of
   //          <c OMStorable> and of <c OMUnique>.
-  //   @base public | <c OMReferenceSetProperty>
+  //   @base public | <c OMWeakReferenceSet>
   //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 template <typename ReferencedObject>
-class OMWeakReferenceSetProperty : public OMReferenceSetProperty {
+class OMWeakReferenceSetProperty : public OMWeakReferenceSet {
 public:
   // @access Public members.
 
@@ -201,17 +201,21 @@ public:
     //          If the object is not found the result is <e bool.false>.
   virtual bool findObject(void* identification, OMObject*& object) const;
 
+  virtual OMPropertyId keyPropertyId(void) const;
+
+  virtual OMPropertyTag targetTag(void) const;
+
+  virtual void setTargetTag(OMPropertyTag targetTag);
+
+  virtual void clearTargetTag(void) const;
+
 private:
 
   typedef OMWeakReferenceSetElement<ReferencedObject> SetElement;
 
   typedef OMSetIterator<OMUniqueObjectIdentification, SetElement> SetIterator;
 
-  OMPropertyTag targetTag(void) const;
-
   OMPropertyId* targetPropertyPath(void) const;
-
-  void clearTargetTag(void) const;
 
   // The set of references.
   OMSet<OMUniqueObjectIdentification, SetElement> _set;

@@ -51,9 +51,7 @@ OMWeakReferenceVectorProperty<ReferencedObject>::
                                               const wchar_t* name,
                                               const wchar_t* targetName,
                                               const OMPropertyId keyPropertyId)
-: OMReferenceVectorProperty(propertyId,
-                            SF_WEAK_OBJECT_REFERENCE_VECTOR,
-                            name),
+: OMWeakReferenceVector(propertyId, name),
   _targetTag(nullOMPropertyTag),
   _targetName(targetName),
   _targetPropertyPath(0),
@@ -1089,6 +1087,25 @@ OMWeakReferenceVectorProperty<ReferencedObject>::targetTag(void) const
   }
   POSTCONDITION("Valid target property tag", _targetTag != nullOMPropertyTag);
   return _targetTag;
+}
+
+template <typename ReferencedObject>
+OMPropertyId
+OMWeakReferenceVectorProperty<ReferencedObject>::keyPropertyId(void) const
+{
+  TRACE("OMWeakReferenceVectorProperty<ReferencedObject>::keyPropertyId");
+
+  return _keyPropertyId;
+}
+
+template <typename ReferencedObject>
+void
+OMWeakReferenceVectorProperty<ReferencedObject>::setTargetTag(
+                                                       OMPropertyTag targetTag)
+{
+  TRACE("OMWeakReferenceVectorProperty<ReferencedObject>::setTargetTag");
+
+  _targetTag = targetTag;
 }
 
 template <typename ReferencedObject>

@@ -31,7 +31,7 @@
 
 #include "OMDataTypes.h"
 #include "OMProperty.h"
-#include "OMRefProperty.h"
+#include "OMWeakReference.h"
 #include "OMObjectReference.h"
 
   // @class Persistent weak reference (pointer to shared object)
@@ -39,10 +39,10 @@
   //   @tcarg class | ReferencedObject | The type of the referenced
   //          (pointed to) object. This type must be a descendant of
   //          <c OMStorable>.
-  //   @base public | <c OMReferenceProperty>
+  //   @base public | <c OMWeakReference>
   //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 template <typename ReferencedObject>
-class OMWeakReferenceProperty : public OMReferenceProperty {
+class OMWeakReferenceProperty : public OMWeakReference {
 public:
   // @access Public members.
 
@@ -115,13 +115,17 @@ public:
     // @cmember set the value of this <c OMWeakReferenceProperty>.
   virtual OMObject* setObject(const OMObject* object);
 
+  virtual OMPropertyId keyPropertyId(void) const;
+
+  virtual OMPropertyTag targetTag(void) const;
+
+  virtual void setTargetTag(OMPropertyTag targetTag);
+
+  virtual void clearTargetTag(void) const;
+
 private:
 
-  OMPropertyTag targetTag(void) const;
-
   OMPropertyId* targetPropertyPath(void) const;
-
-  void clearTargetTag(void) const;
 
   OMWeakObjectReference<ReferencedObject> _reference;
   OMPropertyTag _targetTag;
