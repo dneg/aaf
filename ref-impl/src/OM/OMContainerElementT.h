@@ -500,3 +500,239 @@ OMStrongReferenceSetElement<ReferencedObject>::referenceCount(void) const
 
   return _referenceCount;
 }
+
+// class OMWeakReferenceVectorElement<ReferencedObject>
+
+  // @mfunc Constructor.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          object. This type must be a descendant of <c OMStorable>.
+template <typename ReferencedObject>
+OMWeakReferenceVectorElement<ReferencedObject>::
+                                             OMWeakReferenceVectorElement(void)
+  : OMContainerElement<OMWeakObjectReference<ReferencedObject>,
+                       ReferencedObject>()
+{
+  TRACE("OMWeakReferenceVectorElement<ReferencedObject>::"
+                                               "OMWeakReferenceVectorElement");
+}
+
+  // @mfunc Constructor.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          object. This type must be a descendant of <c OMStorable>.
+  //   @parm The <c OMProperty> (a set property) that contains this
+  //         <c OMWeakReferenceVectorElement>.
+  //   @parm The unique key of this <c OMWeakReferenceVectorElement>.
+  //   @parm A tag identifying the <c OMStrongReferenceVectorProperty>
+  //         in which the target resides.
+template <typename ReferencedObject>
+OMWeakReferenceVectorElement<ReferencedObject>::OMWeakReferenceVectorElement(
+                                   OMProperty* property,
+                                   OMUniqueObjectIdentification identification,
+                                   OMPropertyTag targetTag)
+  : OMContainerElement<OMWeakObjectReference<ReferencedObject>,
+                       ReferencedObject>(
+  OMWeakObjectReference<ReferencedObject>(property, identification, targetTag))
+{
+  TRACE("OMWeakReferenceVectorElement<ReferencedObject>::"
+                                               "OMWeakReferenceVectorElement");
+}
+
+  // @mfunc Copy constructor.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          object. This type must be a descendant of <c OMStorable>.
+  //   @parm The <c OMWeakReferenceVectorElement> to copy.
+template <typename ReferencedObject>
+OMWeakReferenceVectorElement<ReferencedObject>::OMWeakReferenceVectorElement(
+                    const OMWeakReferenceVectorElement<ReferencedObject>& rhs)
+  : OMContainerElement<OMWeakObjectReference<ReferencedObject>,
+                       ReferencedObject>(rhs)
+{
+  TRACE("OMWeakReferenceVectorElement<ReferencedObject>::"
+                                               "OMWeakReferenceVectorElement");
+}
+
+  // @mfunc Destructor.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          object. This type must be a descendant of <c OMStorable>.
+template <typename ReferencedObject>
+OMWeakReferenceVectorElement<ReferencedObject>::
+                                            ~OMWeakReferenceVectorElement(void)
+{
+  TRACE("OMWeakReferenceVectorElement<ReferencedObject>::"
+                                              "~OMWeakReferenceVectorElement");
+}
+
+  // @mfunc Assignment.
+  //        This operator provides value semantics for <c OMVector>.
+  //        This operator does not provide assignment of object references.
+  //   @tcarg class | ObjectReference  | The type of the contained object
+  //          reference 
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          object. This type must be a descendant of <c OMStorable>.
+  //   @parm The <c OMWeakReferenceVectorElement> to be assigned.
+  //   @rdesc The <c OMWeakReferenceVectorElement> resulting from
+  //          the assignment. 
+template <typename ReferencedObject>
+OMWeakReferenceVectorElement<ReferencedObject>&
+OMWeakReferenceVectorElement<ReferencedObject>::operator= (
+                     const OMWeakReferenceVectorElement<ReferencedObject>& rhs)
+{
+  TRACE("OMWeakReferenceVectorElement<ReferencedObject>::operator=");
+
+  if (*this == rhs) {
+	return *this; // early return !
+  }
+
+  OMContainerElement<OMWeakObjectReference<ReferencedObject>,
+                     ReferencedObject>::operator=(rhs);
+  return *this;
+}
+
+  // @mfunc Equality.
+  //        This operator provides value semantics for <c OMVector>.
+  //        This operator does not provide equality of object references.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          object. This type must be a descendant of <c OMStorable>.
+  //   @parm The <c OMWeakReferenceVectorElement> to be compared.
+  //   @rdesc True if the values are the same, false otherwise. 
+template <typename ReferencedObject>
+bool OMWeakReferenceVectorElement<ReferencedObject>::operator== (
+               const OMWeakReferenceVectorElement<ReferencedObject>& rhs) const
+{
+  TRACE("OMWeakReferenceVectorElement<ReferencedObject>::operator==");
+
+  bool result = OMContainerElement<OMWeakObjectReference<ReferencedObject>,
+                                   ReferencedObject>::operator==(rhs);
+
+  return result;
+}
+
+  // @mfunc The unique key of this <c OMWeakReferenceVectorElement>.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          object. This type must be a descendant of <c OMStorable>.
+  //   @rdesc  The unique key of this <c OMWeakReferenceVectorElement>.
+template <typename ReferencedObject>
+const OMUniqueObjectIdentification
+OMWeakReferenceVectorElement<ReferencedObject>::identification(void) const
+{
+  TRACE("OMWeakReferenceVectorElement<ReferencedObject>::identification");
+
+  return _reference.identification();
+}
+
+// class OMWeakReferenceSetElement<ReferencedObject>
+
+  // @mfunc Constructor.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          object. This type must be a descendant of <c OMStorable>.
+template <typename ReferencedObject>
+OMWeakReferenceSetElement<ReferencedObject>::OMWeakReferenceSetElement(void)
+  : OMContainerElement<OMWeakObjectReference<ReferencedObject>,
+                       ReferencedObject>()
+{
+  TRACE("OMWeakReferenceSetElement<ReferencedObject>::"
+                                                  "OMWeakReferenceSetElement");
+}
+
+  // @mfunc Constructor.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          object. This type must be a descendant of <c OMStorable>.
+  //   @parm The <c OMProperty> (a set property) that contains this
+  //         <c OMWeakReferenceSetElement>.
+  //   @parm The unique key of this <c OMWeakReferenceSetElement>.
+  //   @parm A tag identifying the <c OMStrongReferenceSetProperty>
+  //         in which the target resides.
+template <typename ReferencedObject>
+OMWeakReferenceSetElement<ReferencedObject>::OMWeakReferenceSetElement(
+                                   OMProperty* property,
+                                   OMUniqueObjectIdentification identification,
+                                   OMPropertyTag targetTag)
+  : OMContainerElement<OMWeakObjectReference<ReferencedObject>,
+                       ReferencedObject>(
+  OMWeakObjectReference<ReferencedObject>(property, identification, targetTag))
+{
+  TRACE("OMWeakReferenceSetElement<ReferencedObject>::"
+                                                  "OMWeakReferenceSetElement");
+}
+
+  // @mfunc Copy constructor.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          object. This type must be a descendant of <c OMStorable>.
+  //   @parm The <c OMWeakReferenceSetElement> to copy.
+template <typename ReferencedObject>
+OMWeakReferenceSetElement<ReferencedObject>::OMWeakReferenceSetElement(
+                    const OMWeakReferenceSetElement<ReferencedObject>& rhs)
+  : OMContainerElement<OMWeakObjectReference<ReferencedObject>,
+                       ReferencedObject>(rhs)
+{
+  TRACE("OMWeakReferenceSetElement<ReferencedObject>::"
+                                                  "OMWeakReferenceSetElement");
+}
+
+  // @mfunc Destructor.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          object. This type must be a descendant of <c OMStorable>.
+template <typename ReferencedObject>
+OMWeakReferenceSetElement<ReferencedObject>::~OMWeakReferenceSetElement(void)
+{
+  TRACE("OMWeakReferenceSetElement<ReferencedObject>::"
+                                                 "~OMWeakReferenceSetElement");
+}
+
+  // @mfunc Assignment.
+  //        This operator provides value semantics for <c OMSet>.
+  //        This operator does not provide assignment of object references.
+  //   @tcarg class | ObjectReference  | The type of the contained object
+  //          reference 
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          object. This type must be a descendant of <c OMStorable>.
+  //   @parm The <c OMWeakReferenceSetElement> to be assigned.
+  //   @rdesc The <c OMWeakReferenceSetElement> resulting from
+  //          the assignment. 
+template <typename ReferencedObject>
+OMWeakReferenceSetElement<ReferencedObject>&
+OMWeakReferenceSetElement<ReferencedObject>::operator= (
+                        const OMWeakReferenceSetElement<ReferencedObject>& rhs)
+{
+  TRACE("OMWeakReferenceSetElement<ReferencedObject>::operator=");
+
+  if (*this == rhs) {
+	return *this; // early return !
+  }
+
+  OMContainerElement<OMWeakObjectReference<ReferencedObject>,
+                     ReferencedObject>::operator=(rhs);
+  return *this;
+}
+
+  // @mfunc Equality.
+  //        This operator provides value semantics for <c OMSet>.
+  //        This operator does not provide equality of object references.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          object. This type must be a descendant of <c OMStorable>.
+  //   @parm The <c OMWeakReferenceSetElement> to be compared.
+  //   @rdesc True if the values are the same, false otherwise. 
+template <typename ReferencedObject>
+bool OMWeakReferenceSetElement<ReferencedObject>::operator== (
+                const OMWeakReferenceSetElement<ReferencedObject>& rhs) const
+{
+  TRACE("OMWeakReferenceSetElement<ReferencedObject>::operator==");
+
+  bool result = OMContainerElement<OMWeakObjectReference<ReferencedObject>,
+                                   ReferencedObject>::operator==(rhs);
+
+  return result;
+}
+
+  // @mfunc The unique key of this <c OMWeakReferenceSetElement>.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          object. This type must be a descendant of <c OMStorable>.
+  //   @rdesc  The unique key of this <c OMWeakReferenceSetElement>.
+template <typename ReferencedObject>
+const OMUniqueObjectIdentification
+OMWeakReferenceSetElement<ReferencedObject>::identification(void) const
+{
+  TRACE("OMWeakReferenceSetElement<ReferencedObject>::identification");
+
+  return _reference.identification();
+}
