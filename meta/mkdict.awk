@@ -171,8 +171,8 @@ BEGIN {
   printf("\n");
   printf("//\n");
   "date" | getline date
-  "print $USERNAME" | getline user
-  "print $COMPUTERNAME" | getline computer
+  "echo $USER$USERNAME" | getline user
+  "hostname" | getline computer
   printf("// This file was generated on %s\n", date);
   printf("// by user %s on system %s.\n", user, computer);
   printf("//\n");
