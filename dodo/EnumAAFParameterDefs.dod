@@ -32,13 +32,13 @@ AD_XMETHOD1(NextOne,
   // @comm This is a just simplified version of the Next method. )
 
 AD_XMETHOD3(Next,
-			[in], aafUInt32, count, number of control code definitions requested,
+			[in], objPass, aafUInt32, count, number of control code definitions requested,
 			[out\, size_is\(count\)\, length_is\(*pFetched\)],
 			objOut, AAFControlCodeDefinition, ppControlCodeDefinitions,
 			array to receive control code definitions,
 			[out\,ref], objPass, aafUInt32 *, pFetched,
 			number of actual ControlCodeDefinitions fetched into ppControlCodeDefinitions array,
-			Enumerates the next count elements \(AD_AAFTYPES\(AAFControlCodeDefinition\) pointers\) in 
+			Enumerates the next count elements \(AAFControlCodeDefinition pointers\) in 
   // the enumerator's list\, returning them in the given array along with the actual 
   // number of enumerated elements in pcFetched. The caller is responsible for 
   // properly releasing the returned pointers.)
@@ -46,7 +46,7 @@ AD_XMETHOD3(Next,
 AD_METHOD1(Skip,
 		   [in], aafUInt32, count, Number of elements to skip,
 		   Instructs the enumerator to skip the next count elements in the enumeration so that 
-  // the next call to AD_AAFTYPES\(EnumAAFControlCodeDefinitions\)::Next will not return 
+  // the next call to EnumAAFControlCodeDefinitions::Next will not return 
   // those elements.)
 
 AD_METHOD0(Reset,

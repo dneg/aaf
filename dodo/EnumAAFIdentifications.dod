@@ -39,7 +39,7 @@ AD_XMETHOD3(Next,
 			objOut, AAFIdentification, ppIdentifications, array to receive mobs,
 			[out\,ref], objPass, aafUInt32 *, pFetched,
 			number of actual Identifications fetched into ppIdentifications array,
-			Enumerates the next count elements \(AD_AAFTYPES\(AAFIdentification\) pointers\) in 
+			Enumerates the next count elements \(AAFIdentification pointers\) in 
   // the enumerator's list\, returning them in the given array along with the actual 
   // number of enumerated elements in pcFetched. The caller is responsible for 
   // properly releasing the returned pointers when thery are no longer needed.)
@@ -47,7 +47,7 @@ AD_XMETHOD3(Next,
 AD_METHOD1(Skip,
 		   [in], aafUInt32, count, Number of elements to skip,
 Instructs the enumerator to skip the next count elements in the enumeration so that 
-  // the next call to AD_AAFTYPES\(EnumAAFIdentifications\)::Next will not return 
+  // the next call to EnumAAFIdentifications::Next will not return 
   // those elements.)
 
 AD_METHOD0(Reset,
