@@ -919,7 +919,8 @@ AAFRESULT ImplAAFSourceMob::FindTimecodeClip(
  */
 AAFRESULT ImplAAFSourceMob::ReconcileMobLength(void)
 {
-	aafInt32					numSlots, loop;
+	aafNumSlots_t				numSlots;
+	aafUInt32					loop;
 	aafLength_t					len;
 	ImplAAFMobSlot				*slot = NULL;
 	ImplAAFTimelineMobSlot		*timelineSlot = NULL;
