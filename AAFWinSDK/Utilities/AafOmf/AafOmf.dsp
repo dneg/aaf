@@ -42,7 +42,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /c
-# ADD CPP /nologo /W3 /GX /O2 /I "../../Release/Utilities" /I "..\..\..\OMF\include" /I "..\..\..\OMF\portinc" /I "../../../ref-impl/include" /I "../../../ref-impl/include/com-api" /I "../../../ref-impl/include/OM" /I "../../ref-impl/include/comidl" /I "../../../utilities/include" /I "../../../ref-impl/src/OM" /D "COM_NO_WINDOWS_H" /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_UNICODE" /D "UNICODE" /YX /FD /c
+# ADD CPP /nologo /MD /W3 /GX /O2 /I "../../Release/Utilities" /I "..\..\..\OMF\include" /I "..\..\..\OMF\portinc" /I "../../../ref-impl/include" /I "../../../ref-impl/include/com-api" /I "../../../ref-impl/include/OM" /I "../../ref-impl/include/comidl" /I "../../../utilities/include" /I "../../../ref-impl/src/OM" /D "COM_NO_WINDOWS_H" /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_UNICODE" /D "UNICODE" /YX /FD /c
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -50,7 +50,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386
-# ADD LINK32 libbento.lib libjpeg.lib libomfi.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /incremental:yes /machine:I386 /nodefaultlib:"libcmt.lib" /nodefaultlib:"msvcrt.lib" /nodefaultlib:"libcd.lib" /nodefaultlib:"libcmtd.lib" /nodefaultlib:"msvcrtd.lib" /libpath:"..\..\..\OMF" /libpath:"../Release/Utilities"
+# ADD LINK32 libbento.lib libjpeg.lib libomfi.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /incremental:yes /machine:I386 /nodefaultlib:"libc.lib" /nodefaultlib:"libcmt.lib" /nodefaultlib:"libcd.lib" /nodefaultlib:"libcmtd.lib" /nodefaultlib:"msvcrtd.lib" /libpath:"..\..\..\OMF" /libpath:"../Release/Utilities"
 # SUBTRACT LINK32 /pdb:none
 
 !ELSEIF  "$(CFG)" == "AafOmf - Win32 Debug"
@@ -67,7 +67,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /GZ /c
-# ADD CPP /nologo /W3 /WX /Gm /GX /ZI /Od /I "..\..\..\OMF\include" /I "..\..\..\OMF\portinc" /I "../../../ref-impl/include" /I "../../../ref-impl/include/com-api" /I "../../../ref-impl/include/OM" /I "../../ref-impl/include/comidl" /I "../../../utilities/include" /I "../../../ref-impl/src/impl" /I "../../../ref-impl/src/OM" /D "COM_NO_WINDOWS_H" /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_UNICODE" /D "UNICODE" /YX /FD /GZ /c
+# ADD CPP /nologo /MDd /W3 /WX /Gm /GX /ZI /Od /I "..\..\..\OMF\include" /I "..\..\..\OMF\portinc" /I "../../../ref-impl/include" /I "../../../ref-impl/include/com-api" /I "../../../ref-impl/include/OM" /I "../../ref-impl/include/comidl" /I "../../../utilities/include" /I "../../../ref-impl/src/impl" /I "../../../ref-impl/src/OM" /D "COM_NO_WINDOWS_H" /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_UNICODE" /D "UNICODE" /YX /FD /GZ /c
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
 BSC32=bscmake.exe
@@ -75,7 +75,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 libbento.lib libjpeg.lib libomfi.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib aafutil.lib /nologo /subsystem:console /debug /machine:I386 /nodefaultlib:"libc.lib" /nodefaultlib:"libcmt.lib" /nodefaultlib:"msvcrt.lib" /nodefaultlib:"libcmtd.lib" /nodefaultlib:"msvcrtd.lib" /pdbtype:sept /libpath:"..\..\..\OMF" /libpath:"../../Debug/Utilities"
+# ADD LINK32 libbento.lib libjpeg.lib libomfi.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib aafutil.lib /nologo /subsystem:console /debug /machine:I386 /nodefaultlib:"libc.lib libcmt.lib msvcrt.lib libcd.lib libcmtd.lib" /nodefaultlib:"libc.lib" /nodefaultlib:"libcmt.lib" /nodefaultlib:"msvcrt.lib" /nodefaultlib:"libcd.lib" /nodefaultlib:"libcmtd.lib" /pdbtype:sept /libpath:"..\..\..\OMF" /libpath:"../../Debug/Utilities"
 # SUBTRACT LINK32 /pdb:none
 
 !ENDIF 
