@@ -81,6 +81,7 @@ function createColorMap() {
 
   /* Pink */
   map["ref-impl/src/impl/"]        = "#FFCCCC";
+  map["ref-impl/include/"]         = "#FFCCCC";
   map["ref-impl/plugins/"]         = "#FFCCCC";
   map["ref-impl/aaflib/"]          = "#FFCCCC";
 
