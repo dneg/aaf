@@ -16,7 +16,7 @@
 // aafBool,
 // aafRational_t,
 // aafPosition_t,
-// aafTrackID_t,
+// aafSlotID_t,
 
 
 
@@ -67,7 +67,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFTimelineMobSlot::GetTrackID (aafTrackID_t *result)
+    ImplAAFTimelineMobSlot::GetSlotID (aafSlotID_t *result)
 {
     AAFRESULT aafError = AAFRESULT_SUCCESS;
 	assert(result != NULL);
@@ -138,14 +138,14 @@ AAFRESULT STDMETHODCALLTYPE
  *************************************************************************/
 AAFRESULT  ImplAAFTimelineMobSlot::
 			GetTrackDesc(aafInt32 nameSize,		// IN - Size of name buffer
-						aafString_t *name,		// IN/OUT preallocated buffer to return name
+						aafWChar *name,		// IN/OUT preallocated buffer to return name
 						aafPosition_t *origin,	// OUT - Origin property value
-						aafTrackID_t *trackID)	// OUT - ttrack id property value
+						aafSlotID_t *trackID)	// OUT - ttrack id property value
 
 {
-//    ImplAAFObject *tmp1xTrackCpnt = NULL;
-	aafInt16 tmp1xTrackID = 0;
-	aafInt16 tmp1xTrackType = 0;
+//    ImplAAFObject *tmp1xSlotCpnt = NULL;
+	aafInt16 tmp1xSlotID = 0;
+	aafInt16 tmp1xSlotType = 0;
 	aafInt32 tmp1xStartPosition = 0;
 	AAFRESULT aafError = AAFRESULT_SUCCESS;
 
