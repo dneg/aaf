@@ -65,32 +65,20 @@ ImplAAFTypeDefWeakObjRef::~ImplAAFTypeDefWeakObjRef ()
 {}
 
 
-/*
-// Override from AAFTypeDefObjectRef
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDefWeakObjRef::Initialize (
-      const aafUID_t *  pID,
-      const aafUID_t * pRefdObjID,
-      const aafCharacter * pTypeName)
+      const aafUID_t & id,
+      ImplAAFClassDef * pObjType,
+      const aafCharacter * pTypeName,
+	  aafUID_t * pTargetHint,
+	  aafUInt32 targetHintCount)
 {
-  if (! pID)       return AAFRESULT_NULL_PARAM;
-  if (! pRefdObjID)  return AAFRESULT_NULL_PARAM;
-  if (! pTypeName) return AAFRESULT_NULL_PARAM;
+  if (! pObjType)  return AAFRESULT_NULL_PARAM;
+  if (! pTypeName)  return AAFRESULT_NULL_PARAM;
+  if (! pTargetHint)  return AAFRESULT_NULL_PARAM;
 
-  AAFRESULT hr;
-
-  hr = SetName (pTypeName);
-  if (! AAFRESULT_SUCCEEDED (hr)) return hr;
-
-  _referencedType = *pRefdObjID;
-
-  hr = SetAUID (pID);
-  if (! AAFRESULT_SUCCEEDED (hr)) return hr;
-
-  return AAFRESULT_SUCCESS;
+  return pvtInitialize (id, pObjType, pTypeName);
 }
-*/
-
 
 
 AAFRESULT STDMETHODCALLTYPE
