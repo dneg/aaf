@@ -39,6 +39,15 @@
 #include "AAF.h"
 #include "AAFFileKinds.h"
 
+STDAPI AAFMemoryFileOpenNewModify (
+  aafUInt32  modeFlags,
+  aafProductIdentification_t*  pIdent,
+  IAAFFile** ppFile);
+
+STDAPI AAFMemoryFileSaveToDisk(
+  aafCharacter_constptr  pFileName,
+  IAAFFile* pFile);
+
 // Include the AAF Stored Object identifiers. These symbols are defined
 // in aaf.lib.
 #include "AAFStoredObjectIDs.h"
@@ -184,7 +193,11 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, long int N)
   ProductInfo.productID = NIL_UID;
   ProductInfo.platform = NULL;
 
+#if USE_MEMORY_FILE
+  check(AAFMemoryFileOpenNewModify (0, &ProductInfo, &pFile));
+#else
   check(AAFFileOpenNewModify (pFileName, 0, &ProductInfo, &pFile));
+#endif
 
   check(pFile->GetHeader(&pHeader));
 
@@ -519,6 +532,9 @@ cleanup:
     duration = ((double) (finish - start) / CLOCKS_PER_SEC);
 
     pFile->Close();
+#if USE_MEMORY_FILE
+    check(AAFMemoryFileSaveToDisk(pFileName, pFile));
+#endif
     pFile->Release();
 
     printf("Save time = %f seconds\n", duration);
