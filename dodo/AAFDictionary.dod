@@ -39,6 +39,10 @@ AD_CLASS_UUID(B1A21399, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
 AD_DEFAULT_UUID(B1A21398, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
 AD_XCLASS_BEGIN(Concrete, StoredObject)
 
+AD_DICTIONARY_FACTORY(CreateInstance,
+Creates a single uninitialized AAF object of the class associated 
+  // with a specified stored object id.)
+
 AD_XMETHOD2(LookupClass,
 [in\,ref], objPass, aafUID_t *, pClassID, Class Unique ID,
 [out\,retval], objOut, AAFClassDef, ppClassDef, Class Definition,
