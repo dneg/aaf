@@ -84,7 +84,7 @@ public:
     //          <c OMFile> is named <p fileName>, use the <c OMClassFactory>
     //          <p factory> to create the objects. The file must not already
     //          exist. The byte ordering on the newly created file is given
-    //          by <p byteOrder>. The root <c OMStorable> in the newly
+    //          by <p byteOrder>. The client root <c OMStorable> in the newly
     //          created file is given by <p root>.
   static OMFile* openNewModify(const wchar_t* fileName,
                                const OMClassFactory* factory,
@@ -139,13 +139,14 @@ public:
     //          last <mf OMFile::save> or <mf OMFile::open>.
   void revert(void);
 
-    // @cmember Restore the root <c OMStorable> object from this <c OMFile>.
+    // @cmember Restore the client root <c OMStorable> object from
+    //          this <c OMFile>.
   OMStorable* restore(void);
 
     // @cmember Close this <c OMFile>, any unsaved changes are discarded.
   void close(void);
 
-    // @cmember Retrieve the root <c OMStorable> from this <c OMFile>.
+    // @cmember Retrieve the client root <c OMStorable> from this <c OMFile>.
   OMStorable* root(void);
 
   OMDictionary* dictionary(void) const;
