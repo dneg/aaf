@@ -990,7 +990,7 @@ typedef enum _aafByteOrder_t
   //
   // Big Endian (e.g. Mac or Sparc byte order)
   //
-  kByteOrderBig	= 1,
+  kByteOrderBig	= 1
 
 } aafByteOrder_t;
 
