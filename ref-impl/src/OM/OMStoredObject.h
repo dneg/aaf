@@ -155,6 +155,8 @@ public:
 
     // @cmember Save the <c OMPropertyTable> <p table> in this
     //          <c OMStoredObject>.
+    //   @devnote Does this member function make sense for all
+    //            derived instances of <c OMStoredObject> ?
   void save(const OMPropertyTable* table);
 
     // @cmember Save the <c OMDataStream> <p stream> in this
@@ -227,6 +229,8 @@ public:
   void restore(OMWeakReferenceSet& set, size_t externalSize);
 
     // @cmember Restore the <c OMPropertyTable> in this <c OMStoredObject>.
+    //   @devnote Does this member function make sense for all
+    //            derived instances of <c OMStoredObject> ?
   void restore(OMPropertyTable*& table);
 
     // @cmember Restore the <c OMDataStream> <p stream> into this
