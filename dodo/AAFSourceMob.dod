@@ -20,13 +20,15 @@ AD_HEAD
 *                                          *
 \******************************************/
 
+AD_INCLUDE(AAFTypes)
+AD_FORWARD_DECLARATION(AAFMediaDescriptor)
+AD_FORWARD_DECLARATION(AAFDataDefinition)
+AD_FORWARD_DECLARATION(AAFFindSourceInfo)
+AD_FORWARD_DECLARATION(AAFComponent)
 
 ////////////////////////////////////////////////////////////////////////////////
 // Types required by this module:
 //
-
-AD_FORWARD_DECLARATION(AAFFile)
-
 
 
 AD_CLASS_UUID(B1A2137D, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
@@ -35,17 +37,9 @@ AD_DEFAULT_UUID(B1A2137C, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
 AD_CLASS_BEGIN
 
 
-AD_XMETHOD4(Setup,
-			[in\,ref], objIn, AAFFile, file, File for source mob,
+AD_XMETHOD2(Setup,
 			[in\,ref], objPass, aafString_t *, name, Name of new Source Mob.,
-			[in\,ref], objPass, aafClassIDPtr_t, mdesClass, ClassID of Media Descriptor.,
-			[in], objPass, aafPhysicalMobType_t, mobType, Mob type.
-  // @ex Possible values for an aafPhysicalMobType_t are: |
-  // PT_NULL
-  // PT_FILE_MOB
-  // PT_TAPE_MOB
-  // PT_FILM_MOB
-  // PT_NAGRA_MOB,
+			[in\,ref], objPass, aafClassID_t*, mdesClass, ClassID of Media Descriptor.,
 Low\-level function that creates a new Source Mob object for a nonstandard
   // Mob.
   // @commThis function creates Source Mobs that are not in the standard set \(that is\, not
@@ -67,7 +61,7 @@ Low\-level function that creates a new Source Mob object for a nonstandard
 AD_XMETHOD4(AddNilReference,
 			[in], objPass, aafTrackID_t, trackID, TrackID to be assigned to the new track.,
 			[in], objPass, aafLength_t, length, Duration of the Source Clip to be added to the new track.,
-			[in\,ref], objIn,AAFDataDefinition, dataKind, Data kind of the new track.,
+			[in\,ref], objIn,AAFDataDefinition, dataDef, Data kind of the new track.,
 			[in], objPass, aafRational_t, editRate, Edit rate of the new track.,
 Adds a track to a Source Mob that describes an original source of media.
   // @comm This function adds a track containing a Source Clip to a Source Mob. The
@@ -170,7 +164,7 @@ Connects the specified Source Mob with the physical Source Mob that
 AD_XMETHOD_10(AddPulldownRef,
 			  [in], objPass, aafRational_t, editrate, Edit rate of track to contain reference.,
 			  [in], objPass, aafTrackID_t, aMobTrack, TrackID of track to contain reference.,
-			  [in\,ref], objIn, AAFDataKind, mediaKind,
+			  [in\,ref], objIn, AAFDataDefinition, mediaKind,
 			  Data kind of track to contain reference. The mediaKind parameter
   // requires a data kind valid for a media stream. 
   // @ex Valid data kinds are: |
@@ -225,7 +219,7 @@ AD_XMETHOD7(SearchSource,
   // @ex Possible values for aafEffectChoice_t are: |
   // kFindNull,
 		   [out], objOut, AAFComponent, thisCpnt, ,
-		   [out], objPass, aafFindSourceInfo_t *, sourceInfo, Preallocated buffer to hold source information.,
+		   [out], objOut, AAFFindSourceInfo, sourceInfo, Preallocated buffer to hold source information.,
 Returns source information for a track in a Master Mob or Source Mob.
   // @comm This function returns the source information for a track in a Master Mob or
   // Source Mob. It follows the Source Clip references in the specified track until it
