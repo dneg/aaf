@@ -34,7 +34,7 @@
 
 class OMObject;
 class OMProperty;
-class OMContainerProperty;
+class OMReferenceContainer;
 
 
 class ImplAAFStorable;
@@ -61,8 +61,8 @@ protected:
   AAFRESULT Initialize (const ImplAAFTypeDef *containerType,
                         OMProperty *property);
   
-  // Retrieve the property as an OMContainerProperty.
-  OMContainerProperty * containerProperty(void) const;
+  // Retrieve the property as an OMReferenceContainer.
+  OMReferenceContainer* referenceContainer(void) const;
 
   // Utility for converting the a property value (parameter) into an object.
   static ImplAAFStorable * GetStorableFromPropertyValue(ImplAAFPropertyValue* pPropertyValue, AAFRESULT & result);
