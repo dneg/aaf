@@ -123,8 +123,7 @@ static HRESULT OpenAAFFile(aafWChar*			pFileName,
 
 extern "C" HRESULT CAAFPluginManager_test()
 {
-	HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
-#if 0
+	HRESULT hr = AAFRESULT_SUCCESS;
 	IEnumAAFLoadedPlugins	*pEnum;
 	IAAFPluginManager		*pMgr;
 	aafUID_t				testUID;
@@ -138,6 +137,7 @@ extern "C" HRESULT CAAFPluginManager_test()
 
 	try
 	{
+		
 		// Remove the previous test file if any.
 		RemoveTestFile(pFileName);
 		
@@ -150,14 +150,16 @@ extern "C" HRESULT CAAFPluginManager_test()
 		checkResult(pHeader->GetDictionary(&pDictionary));
 		
 		checkResult(AAFGetPluginManager (&pMgr));
+		checkResult(pMgr->RegisterSharedPlugins());
+
 		checkResult(pMgr->EnumLoadedPlugins (AUID_AAFCodecDef, &pEnum));
 		while(pEnum->NextOne (&testUID) == AAFRESULT_SUCCESS)
 		{
-//			checkExpression(EqualAUID(&testUID, &AUID_AAFCodecDef) == kAAFTrue, AAFRESULT_TEST_FAILED);
 			checkResult(pMgr->CreatePluginDefinition (testUID, pDictionary, &pPluginDef));
 			pPluginDef->Release();
 			pPluginDef = NULL;
 		}
+		hr = AAFRESULT_SUCCESS;
 	}
 	catch (...)
 	{
@@ -181,19 +183,15 @@ extern "C" HRESULT CAAFPluginManager_test()
 		}
 		pFile->Release();
 	}
-#endif
 	
-	return hr;
 	// When all of the functionality of this class is tested, we can return success.
 	// When a method and its unit test have been implemented, remove it from the list.
 	if (SUCCEEDED(hr))
 	{
 		cout << "The following IAAFPluginManager tests have not been implemented:" << endl; 
-		cout << "     RegisterSharedPlugins" << endl; 
 		cout << "     RegisterPluginDirectory" << endl; 
 		cout << "     RegisterPluginFile" << endl; 
 //		cout << "     EnumLoadedPlugins" << endl; 
-		cout << "     CreatePluginDefinition" << endl; 
 		cout << "     CreateInstance" << endl; 
 		hr = AAFRESULT_TEST_PARTIAL_SUCCESS;
 	}

@@ -54,6 +54,7 @@
 #include "AAFUtils.h"
 #include "AAFDefUIDs.h"
 #include "AAFStoredObjectIDs.h"
+#include "AAFPluginDefs.h"
 #include "aafErr.h"
 #include "ImplAAFObjectCreation.h"
 
@@ -65,6 +66,11 @@
 
 #include "AAFPlugin_i.c"
 
+typedef struct
+{
+	CLSID		itsClass;
+	aafUID_t	category;
+} pluginData_t;
 
 extern "C" const aafClassID_t CLSID_EnumAAFLoadedPlugins;
 
@@ -182,6 +188,7 @@ ImplAAFPluginManager::~ImplAAFPluginManager ()
 	  _pluginFiles = 0;
   }
 }
+
 
 
 AAFRESULT STDMETHODCALLTYPE
@@ -328,6 +335,7 @@ AAFRESULT ImplAAFPluginManager::ForEachPluginWithDefinitionDo(
 {
   AAFRESULT result = AAFRESULT_SUCCESS;
   int count = 0;
+	pluginData_t	pdata;
 
   if (NULL == proc)
     return AAFRESULT_NULL_PARAM;
@@ -342,7 +350,9 @@ AAFRESULT ImplAAFPluginManager::ForEachPluginWithDefinitionDo(
     while (AAFRESULT_SUCCESS == result && found)
     {
       assert(NULL != iter.valuePtr);
-      REFCLSID clsid = *static_cast<const CLSID *>(iter.valuePtr);
+
+      pdata = *((pluginData_t *)iter.valuePtr);
+	  REFCLSID clsid = pdata.itsClass;
       ++count;
 
       // Call the provided function for each plugin that has the given
@@ -367,12 +377,16 @@ bool ImplAAFPluginManager::FindPluginFromDefintion(
   aafUID_constref	pluginID,
   CLSID& clsid)
 {
-	aafBool		found = kAAFFalse;
-
-  if (NULL != _plugins)
-	  TableUIDLookupBlock(_plugins, pluginID, sizeof(CLSID), &clsid, &found);
-
-  return (kAAFTrue == found);
+	aafBool			found = kAAFFalse;
+	pluginData_t	pdata;
+	
+	if (NULL != _plugins)
+	{
+		TableUIDLookupBlock(_plugins, pluginID, sizeof(pdata), &pdata, &found);
+		clsid = pdata.itsClass;
+	}
+	
+	return (kAAFTrue == found);
 }
 
 AAFRESULT ImplAAFPluginManager::CreateInstanceFromDefinition(
@@ -737,59 +751,48 @@ AAFRESULT ImplAAFPluginManager::RegisterPluginFactory(
 AAFRESULT ImplAAFPluginManager::RegisterPlugin(CLSID pluginClass)
 {
 	IAAFPlugin	*plugin			= NULL;
-  IAAFClassExtension *pClassExtension = NULL;
+	IAAFClassExtension *pClassExtension = NULL;
 	IAAFEssenceCodec	*codec	= NULL;
-	aafUID_t	uid;
+	aafUID_t	uid, category = AUID_AAFDefObject;
 	aafUInt32 defIndex, defCount;
-
-
-  // Now attempt to register this class id for the current plugin file.
-  // HACK: Problem CAAFEssenceDataStream is NOT a plugin! This class
-  // should be INSIDE the reference implementation not in an external
-  // plugin!
+	pluginData_t	pdata;
+	
+	
+	// Now attempt to register this class id for the current plugin file.
+	// HACK: Problem CAAFEssenceDataStream is NOT a plugin! This class
+	// should be INSIDE the reference implementation not in an external
+	// plugin!
 	if (IsEqualCLSID(CLSID_AAFEssenceDataStream, pluginClass))
-    return AAFRESULT_SUCCESS;
-
-
+		return AAFRESULT_SUCCESS;
+	
+	
 	XPROTECT()
 	{
-    // Attempt to create the plugin using the registered plugin factory.
-    // This may fail.
+		// Attempt to create the plugin using the registered plugin factory.
+		// This may fail.
 		CHECK(CreateInstance(pluginClass,
-               NULL, 
-               IID_IAAFPlugin, 
-               (void **)&plugin));
-
-    // Get the Class extension interface.
-    if (SUCCEEDED(plugin->QueryInterface(IID_IAAFClassExtension, (void **)&pClassExtension)))
-    {
-      // TBD: Use this interface to filter for class extension plugins.
-      // We need to store whether or note this is a class extension with the
-      // CLSID...
-      pClassExtension->Release();
-      pClassExtension = NULL;
-    }
-
-    //
-    // NOTE: This version supports a multiple plugins per definition (id).
-    //
-    CHECK(plugin->CountDefinitions (&defCount));
-    for(defIndex = 0; defIndex < defCount; ++defIndex)
-    {
-      CHECK(plugin->GetIndexedDefinitionID(defIndex, &uid));
-      CHECK(TableAddUIDBlock(
-            _plugins,
-            uid,
-            &pluginClass,
-            sizeof(CLSID),
-            kAafTableDupAddDup));
-    }
-
-
+			NULL, 
+			IID_IAAFPlugin, 
+			(void **)&plugin));
+		
+		// Get the Class extension interface.
+		if (SUCCEEDED(plugin->QueryInterface(IID_IAAFClassExtension, (void **)&pClassExtension)))
+		{
+			// TBD: Use this interface to filter for class extension plugins.
+			// We need to store whether or note this is a class extension with the
+			// CLSID...
+			category = AUID_AAFClassDef;
+			pClassExtension->Release();
+			pClassExtension = NULL;
+		}
+		
+		
+		
 		if(plugin->QueryInterface(IID_IAAFEssenceCodec, (void **)&codec) == AAFRESULT_SUCCESS)
 		{
+			category = AUID_AAFCodecDef;
 			CHECK(codec->GetEssenceDescriptorID(&uid));
-
+			
 			CHECK(TableAddUIDBlock(
 				_codecDesc,
 				uid,
@@ -800,22 +803,43 @@ AAFRESULT ImplAAFPluginManager::RegisterPlugin(CLSID pluginClass)
 			codec->Release();
 			codec = NULL;
 		}
+		
+		if(plugin->QueryInterface(IID_IAAFInterpolator, (void **)&codec) == AAFRESULT_SUCCESS)
+			category = AUID_AAFInterpolationDef;
+
+		//
+		// NOTE: This version supports a multiple plugins per definition (id).
+		//
+		CHECK(plugin->CountDefinitions (&defCount));
+		for(defIndex = 0; defIndex < defCount; ++defIndex)
+		{
+			CHECK(plugin->GetIndexedDefinitionID(defIndex, &uid));
+			pdata.itsClass = pluginClass;
+			pdata.category = category;
+				CHECK(TableAddUIDBlock(
+				_plugins,
+				uid,
+				&pdata,
+				sizeof(pdata),
+				kAafTableDupAddDup));
+		}
+		
 		plugin->Release();
 		plugin = NULL;
 	}
 	XEXCEPT
 	{
-    if (NULL != pClassExtension)
-      pClassExtension->Release();
+		if (NULL != pClassExtension)
+			pClassExtension->Release();
 		if(codec != NULL)
 			codec->Release();
 		if(plugin != NULL)
 			plugin->Release();
 	}
 	XEND
-
-	return AAFRESULT_SUCCESS;
-
+		
+		return AAFRESULT_SUCCESS;
+	
 }
 
 
@@ -858,36 +882,70 @@ AAFRESULT ImplAAFPluginManager::UnregisterAllPlugins(void)
 
 // Internal to the toolkit functions
 AAFRESULT
-    ImplAAFPluginManager::GetFirstLoadedPlugin (aafTableIterate_t *iter, aafUID_t *pDesc)
+    ImplAAFPluginManager::GetFirstLoadedPlugin (aafUID_t category, aafTableIterate_t *iter, aafUID_t *pDesc)
 {
-	aafBool		found;
-	AAFRESULT	status;
+	aafBool			found, firstTimeThru = true;
+	AAFRESULT		status;
+	pluginData_t	pdata;
+	aafUID_t		noCat = kAAFPluginNoCategory;
+	aafUID_t		key;
 
 	if(pDesc == NULL || iter == NULL)
 		return(AAFRESULT_NULL_PARAM);
 
 
-	status = TableFirstEntry(_plugins, iter, &found);
-	if(!found)
-		return AAFRESULT_NO_MORE_OBJECTS; // AAFRESULT_BADINDEX ???
-	*pDesc = *((aafUID_t*)iter->valuePtr);
+	do {
+		if(firstTimeThru)
+			status = TableFirstEntry(_plugins, iter, &found);
+		else
+			status = TableNextEntry(iter, &found);
+		if(!found)
+			return AAFRESULT_NO_MORE_OBJECTS; // AAFRESULT_BADINDEX ???
+
+		pdata = *((pluginData_t*)iter->valuePtr);
+		key = *((aafUID_t*)iter->key);
+		found = memcmp((char *)&pdata.category, (char*)(&category), sizeof(aafUID_t)) == 0;
+		if(!found)
+			found = memcmp((char *)&pdata.category, (char*)(&noCat), sizeof(aafUID_t)) == 0;		
+		firstTimeThru = false;
+	} while(!found);
+
+	if(found)
+		memcpy((char*)pDesc, (char*)&key, sizeof(aafUID_t));
+	else
+		status = AAFRESULT_NO_MORE_OBJECTS;
 
 	return status;
 }
 AAFRESULT
-    ImplAAFPluginManager::GetNextLoadedPlugin (aafTableIterate_t *iter, aafUID_t *pDesc)
+    ImplAAFPluginManager::GetNextLoadedPlugin (aafUID_t category, aafTableIterate_t *iter, aafUID_t *pDesc)
 {
 	aafBool		found;
 	AAFRESULT	status;
+	pluginData_t	pdata;
+	aafUID_t		noCat = kAAFPluginNoCategory;
+	aafUID_t		key;
 
 	if(pDesc == NULL || iter == NULL)
 		return(AAFRESULT_NULL_PARAM);
 
 
-	status = TableNextEntry(iter, &found);
-	if(!found)
-		return AAFRESULT_NO_MORE_OBJECTS; // AAFRESULT_BADINDEX ???
-	*pDesc = *((aafUID_t*)iter->valuePtr);
+	do {
+		status = TableNextEntry(iter, &found);
+		if(!found)
+			return AAFRESULT_NO_MORE_OBJECTS;
+		pdata = *((pluginData_t*)iter->valuePtr);
+		key = *((aafUID_t*)iter->key);
+		found = memcmp((char *)&pdata.category, (char*)(&category), sizeof(aafUID_t)) == 0;
+		if(!found)
+			found = memcmp((char *)&pdata.category, (&noCat), sizeof(aafUID_t)) == 0;		
+	} while(!found);
+
+	if(found)
+		memcpy((char*)pDesc, (char*)&key, sizeof(aafUID_t));
+	else
+		status = AAFRESULT_NO_MORE_OBJECTS;
+
 	return status;
 }
 

@@ -70,12 +70,12 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 		if(_isFirst)
 		{
-			CHECK(_manager->GetFirstLoadedPlugin (&_tableIter, ppAAFPluginID));
+			CHECK(_manager->GetFirstLoadedPlugin (_category, &_tableIter, ppAAFPluginID));
 			_isFirst = kAAFFalse;
 		}
 		else
 		{
-			CHECK(_manager->GetNextLoadedPlugin (&_tableIter, ppAAFPluginID));
+			CHECK(_manager->GetNextLoadedPlugin (_category, &_tableIter, ppAAFPluginID));
 		}
 	}
 	XEXCEPT
@@ -131,7 +131,7 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 		for(n = 0; n < count; n++)
 		{
-			CHECK(_manager->GetNextLoadedPlugin (&_tableIter, &pJunk));
+			CHECK(_manager->GetNextLoadedPlugin (_category, &_tableIter, &pJunk));
 		}
 	}
 	XEXCEPT
