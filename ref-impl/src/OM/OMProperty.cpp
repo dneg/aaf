@@ -487,7 +487,7 @@ bool OMProperty::isVoid(void) const
 {
   TRACE("OMProperty::isVoid");
 
-  // most descendants of OMProperty are never void
+  // most descendants of OMProperty are always void
   return true;
 }
 
