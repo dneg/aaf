@@ -680,6 +680,13 @@ bool OMFile::isOMFile(void) const
   return result;
 }
 
+  // @mfuncThe name of this <c OMFile>.
+  //   @rdesc The name of this <c OMFile>.
+const wchar_t* OMFile::fileName(void) const
+{
+  return _fileName;
+}
+
   // @mfunc The signature of this <c OMFile>.
   //   @rdesc The signature of this <c OMFile>.
 OMFileSignature OMFile::signature(void) const
