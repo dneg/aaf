@@ -71,10 +71,9 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFKLVData::Initialize (
       aafUID_t keyUID, 
       aafUInt32 valueSize, 
-      aafDataBuffer_t pValue,
-	  ImplAAFTypeDef *underlyingType)
+      aafDataBuffer_t pValue)
 {
-	ImplAAFDictionary		*pDict = NULL, *pDict2/*DEBUG ONLY*/;
+	ImplAAFDictionary		*pDict = NULL;
 	ImplAAFTypeDef			*pDef = NULL;
 	ImplAAFTypeDefRename	*pRenameDef = NULL;
 	if (!pValue)
@@ -86,20 +85,14 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 	// Save the type so that SetValue will know the type of the value data.
 		CHECK(GetDictionary(&pDict));
-		if(pDict->LookupTypeDef(keyUID, &pDef) == AAFRESULT_SUCCESS)
-			_cachedRenameTypeDef = dynamic_cast<ImplAAFTypeDefRename*>(pDef);
-		else
-		{
-			CHECK(pDict->GetBuiltinDefs()->cdTypeDefRename()->
-				CreateInstance((ImplAAFObject**)&pRenameDef));
-			CHECK(pRenameDef->Initialize (keyUID, underlyingType, L"KLV Data"));
-			CHECK(pDict->RegisterTypeDef(pRenameDef));
-			_cachedRenameTypeDef = pRenameDef;
-			CHECK(pRenameDef->GetDictionary(&pDict2));
-		}
+		CHECK(pDict->LookupOpaqueTypeDef(keyUID, &pDef));
+		_cachedRenameTypeDef = dynamic_cast<ImplAAFTypeDefRename*>(pDef);
 		assert(_cachedRenameTypeDef);
 		CHECK(SetValue (valueSize, pValue));
 		_initialized = true;
+		if(pDict)
+		  pDict->ReleaseReference();
+		pDict = 0;
 	}
 	XEXCEPT
 	{
@@ -156,8 +149,22 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFKLVData::GetValue (aafUInt32 valueSize, aafDataBuffer_t pValue, aafUInt32* bytesRead)
 {
+	ImplAAFDictionary	*pDict;
+	ImplAAFTypeDef		*pType;
+	AAFRESULT			hr;
+	aafUID_t			theKey;
+
 	if (pValue == NULL || bytesRead == NULL)
 		return AAFRESULT_NULL_PARAM;
+
+	GetKey(&theKey);
+	GetDictionary(&pDict);
+	hr = pDict->LookupOpaqueTypeDef(theKey, &pType);
+	if(pDict)
+	  pDict->ReleaseReference();
+	pDict = 0;
+	if(hr != AAFRESULT_SUCCESS)
+		return hr;
 
 //	if (_value.size() > valueSize)
 //	  return AAFRESULT_SMALLBUF;
