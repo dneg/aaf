@@ -1,0 +1,61 @@
+#startm .this-module 0
+AAFSourceReference\
+#endm
+#c
+#startm .parent-module 0
+AAFSegment\
+#endm
+#c
+#import ./AAFUnitTest.exp
+#c #import ./AAFSegment.dod
+/******************************************\
+*                                          *
+* Advanced Authoring Format                *
+*                                          *
+* Copyright (c) 1998 Avid Technology, Inc. *
+* Copyright (c) 1998 Microsoft Corporation *
+*                                          *
+\******************************************/
+AD_CLASS_BEGIN
+
+AD_METHOD1(GetSourceID,
+		   [retval][out],
+		   AAFSourceID *,
+		   pSourceID,
+		   Place to put source ID,
+		   Gets the SourceID and places it into the pSourceID argument.)
+
+AD_METHOD1(SetSourceID,
+		   [in],
+		   AAFSourceID ,
+		   sourceID,
+		   Source ID to set,
+		   Sets the SourceID using the sourceID argument.)
+
+AD_METHOD1(GetSourceMobSlotID,
+		   [retval][out],
+		   AAFMobSlotID *,
+		   pMobSlotID,
+		   Place to put source mob slot ID,
+		   Gets the Mob Slot ID and places it into the pMobSlotID argument.)
+
+AD_METHOD1(SetSourceMobSlotID,
+		   [in],
+		   AAFMobSlotID ,
+		   mobSlotID,
+		   Source Mob ID to set,
+		   Sets the mob slot ID using the mobSlotID argument.)
+
+
+  //
+  // IAAFUnitTest interface method overrides
+  //
+.method-Test
+
+
+  //
+  // AAFSegment method overrides
+  //
+
+
+AD_CLASS_END
