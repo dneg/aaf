@@ -73,18 +73,18 @@ static const   aafMobID_t  TEST_MobID = {{0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x
 static const   aafMobID_t  TEST_SourceMobID = {{0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00}, 0x13, 0x00, 0x00, 0x00, {0xfd3cc402, 0x03fe, 0x11d4, {0x8e, 0x3d, 0x00, 0x90, 0x27, 0xdf, 0xca, 0x7c}}};
 
 static aafProductVersion_t TestVersion = { 1, 1, 0, 0, kAAFVersionUnknown };
-static aafProductIdentification_t TestProductID = {
-	L"AAF Developers Desk",			// companyName
-	L"OpenExistingModify",			// productName
-	NULL,							// productVersionString
-	UnitTestProductID,				// productID
-	NULL,							// platform
-	&TestVersion					// productVersion
-	};
+static aafProductIdentification_t TestProductID;
 
 
 static HRESULT CreateAAFFile(aafWChar *filename)
 {
+	TestProductID.companyName = L"AAF Developers Desk";
+	TestProductID.productName = L"OpenExistingModify";
+	TestProductID.productVersionString = NULL;
+	TestProductID.productID = UnitTestProductID;
+	TestProductID.platform = NULL;
+	TestProductID.productVersion = &TestVersion;
+
 	HRESULT			hr = S_OK;
 
 	try
