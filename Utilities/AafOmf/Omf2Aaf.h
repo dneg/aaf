@@ -83,6 +83,8 @@ public:
 	void CreateParameterDefinition(IAAFOperationDef*	pEffectDef);
 	HRESULT	ConvertOMFConstValue(OMF2::omfSegObj_t segment, IAAFConstValue* pConstValue);
 	HRESULT	ConvertOMFVaryingValue(OMF2::omfSegObj_t segment, IAAFVaryingValue* pVaryingValue);
+	HRESULT	ConvertOMFNestedScope(OMF2::omfSegObj_t segment, IAAFNestedScope* pNestedScope);
+	HRESULT	ConvertOMFScopeRef(OMF2::omfSegObj_t segment, IAAFScopeReference* pScopeRef);
 
 private:
 
