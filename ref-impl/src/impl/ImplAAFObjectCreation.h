@@ -53,6 +53,10 @@ ImplAAFRoot * CreateImpl (const aafClassID_t & rClassID);
 //
 void DeleteImpl (ImplAAFRoot *& pObj);
 
+// Initializes the given Impl object's container by calling
+// the container's initialization method.
+AAFRESULT InitializeImplExtension(ImplAAFRoot * pObj, aafUID_constref defID);
+
 // Increases the reference count of the API container object.
 aafUInt32 AcquireImplReference(ImplAAFRoot *pObj);
 
