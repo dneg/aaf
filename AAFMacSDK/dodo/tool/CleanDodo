@@ -1,0 +1,14 @@
+
+
+begin
+  ## Set the passed in parameters to variable names
+		
+  Echo "#--- Start clean of generated of source tree (dodo)  ------------------ `Date -t` ----"
+  directory "{MacDodo}"
+  echo "{MacDodo}"
+  make clean > make.out
+  make.out
+  Echo "#--- Finish clean of generated of source tree (dodo)  ------------------ `Date -t` ----"
+	
+end
+
