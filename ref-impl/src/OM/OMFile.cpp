@@ -971,7 +971,7 @@ OMFile::OMFile(const wchar_t* fileName,
   _fileName = saveWideString(fileName);
   setClassFactory(factory);
   setName(L"<file>");
-  _root->attach(this, L"/");
+  _root->attachToFile(this);
   _root->setStore(_rootStore);
   _isOpen = true;
   POSTCONDITION("File is open", _isOpen);
@@ -1053,7 +1053,7 @@ OMFile::OMFile(OMRawStorage* rawStorage,
 
   setClassFactory(factory);
   setName(L"<file>");
-  _root->attach(this, L"/");
+  _root->attachToFile(this);
   POSTCONDITION("File not yet open", !_isOpen);
 }
 
@@ -1122,7 +1122,7 @@ OMRootStorable* OMFile::restoreRoot(void)
 
   OMRootStorable* root = new OMRootStorable();
   ASSERT("Valid heap pointer", root != 0);
-  root->attach(this, L"/");
+  root->attachToFile(this);
   root->setStore(_rootStore);
   root->setClassFactory(_dictionary);
 

@@ -55,6 +55,22 @@ public:
     // @cmember Restore the contents of an <c OMRootStorable>.
   virtual void restoreContents(void);
 
+    // @cmember The <c OMFile> in which this <c OMRootStorable> has a
+    //          persistent representation.
+  virtual OMFile* file(void) const;
+
+    // @cmember Is this <c OMRootStorable> the root of the object
+    //          containment hierarchy.
+  virtual bool isRoot(void) const;
+
+    // @cmember Is this <c OMRootStorable> associated with an <c OMFile> ?
+  virtual bool inFile(void) const;
+
+    // @cmember Is this <c OMRootStorable> a persistent object ?
+    //          Persistent objects are associated with a persistent
+    //          store (disk file).
+  virtual bool persistent(void) const;
+
   // OMRootStorable functions
 
   void attachToFile(OMFile* file);

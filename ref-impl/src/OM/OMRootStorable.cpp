@@ -83,6 +83,55 @@ void OMRootStorable::restoreContents(void)
   store()->restore(_persistentProperties);
 }
 
+  // @mfunc The <c OMFile> in which this <c OMRootStorable> has a
+  //        persistent representation.
+  //   @rdesc The <c OMFile> in which this <c OMRootStorable> has a
+  //          persistent representation.
+  //   @this const
+OMFile* OMRootStorable::file(void) const
+{
+  TRACE("OMRootStorable::file");
+  return _file;
+}
+
+  // @mfunc Is this <c OMRootStorable> the root of the object
+  //        containment hierarchy.
+  //   @rdesc True if this is the root object, false otherwise.
+  //   @this const
+bool OMRootStorable::isRoot(void) const
+{
+  TRACE("OMRootStorable::isRoot");
+  return true;
+}
+
+  // @mfunc Is this <c OMRootStorable> associated with an <c OMFile> ?
+  //   @rdesc True if this <c OMRootStorable> is associated with
+  //          an <c OMFile> , false otherwise.
+  //   @this const
+bool OMRootStorable::inFile(void) const
+{
+  TRACE("OMRootStorable::inFile");
+  bool result;
+  if (_file != 0) {
+    result = true;
+  } else {
+    result = false;
+  }
+  return result;
+}
+
+  // @mfunc Is this <c OMRootStorable> associated with an <c OMFile> ?
+  //   @rdesc True if this <c OMRootStorable> is associated with an
+  //          <c OMFile> , false otherwise.
+  //   @this const
+bool OMRootStorable::persistent(void) const
+{
+  TRACE("OMRootStorable::persistent");
+
+  bool result = inFile(); // All files are persistent for now
+  return result;
+}
+
 void OMRootStorable::attachToFile(OMFile* file)
 {
   TRACE("OMRootStorable::attachToFile");
