@@ -650,7 +650,7 @@ static char* readName(IStream* stream,
        nameOffset,
        buffer,
        nameSize);
-  if (version < 25) {
+  if (version < 26) {
     result = buffer;
   } else {
     // name consists of 2-byte characters
