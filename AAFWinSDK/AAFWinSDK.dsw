@@ -117,51 +117,6 @@ Package=<4>
 
 ###############################################################################
 
-Project: "CppAAFInfo"=".\examples\cpp-api\CppAAFInfo\CppAAFInfo.dsp" - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name cppapi
-    End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "CppClientTestAAF"=".\examples\cpp-api\CppClientTestAAF\CppClientTestAAF.dsp" - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name cppapi
-    End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "CppModTestAAF"=".\Test\cpp\CppModTestAAF.dsp" - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name cppapi
-    End Project Dependency
-}}}
-
-###############################################################################
-
 Project: "Everything"=".\Everything\Everything.dsp" - Package Owner=<4>
 
 Package=<5>
@@ -172,9 +127,6 @@ Package=<4>
 {{{
     Begin Project Dependency
     Project_Dep_Name comapi
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name cppapi
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name Impl
@@ -192,12 +144,6 @@ Package=<4>
     Project_Dep_Name ComAAFInfo
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name CppAAFInfo
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name CppModTestAAF
-    End Project Dependency
-    Begin Project Dependency
     Project_Dep_Name ComModTestAAF
     End Project Dependency
     Begin Project Dependency
@@ -205,9 +151,6 @@ Package=<4>
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name ComClientTestAAF
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name CppClientTestAAF
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name ComCutsTestAAF
@@ -262,24 +205,6 @@ Package=<4>
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name COMIDL
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name AAFStandardCodecs
-    End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "cppapi"=".\ref-impl\cppapi\cppapi.dsp" - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name Impl
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name AAFStandardCodecs
