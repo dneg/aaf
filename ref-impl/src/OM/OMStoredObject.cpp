@@ -822,23 +822,27 @@ void OMStoredObject::save(const OMStoredSetIndex* set,
   OMUInt32 entries = set->entries();
   writeToStream(setIndexStream, &entries, sizeof(entries));
 
+  OMUInt32 keySize = set->keySize();
+
   // For each element write the element name, reference count and key.
   //
   size_t context = 0;
   OMUInt32 name;
   OMUInt32 count;
-  OMUniqueObjectIdentification key;
+  OMByte* key = new OMByte[keySize];
+  ASSERT("Valid heap pointer", key != 0);
   for (size_t i = 0; i < entries; i++) {
     set->iterate(context, name, count, key);
     writeToStream(setIndexStream, &name, sizeof(name));
     writeToStream(setIndexStream, &count, sizeof(count));
-    writeToStream(setIndexStream, &key, sizeof(key));
+    writeToStream(setIndexStream, key, keySize);
   }
 
   // Close the stream.
   //
   closeStream(setIndexStream);
 
+  delete [] key;
   delete [] setIndexName;
 }
 
@@ -884,10 +888,13 @@ void OMStoredObject::save(const OMPropertyTable* table)
   //   @parm The property type.
   //   @parm The unique identification of the target.
   //   @parm A tag identifying the collection in which the target resides.
+  //   @parm The id of the property whose value is the unique
+  //         identifier of objects in the target set.
 void OMStoredObject::save(OMPropertyId propertyId,
                           int type,
                           const OMUniqueObjectIdentification& id,
-                          OMPropertyTag tag)
+                          OMPropertyTag tag,
+                          OMPropertyId keyPropertyId)
 {
   TRACE("OMStoredObject::save");
 
@@ -907,12 +914,15 @@ void OMStoredObject::save(OMPropertyId propertyId,
   //   @parm Count of targets.
   //   @parm A tag identifying the collection in which each of the
   //         targets reside.
+  //   @parm The id of the property whose value is the unique
+  //         identifier of objects in the target set.
 void OMStoredObject::save(OMPropertyId propertyId,
                           int type,
                           const char* collectionName,
                           const OMUniqueObjectIdentification* index,
                           size_t count,
-                          OMPropertyTag tag)
+                          OMPropertyTag tag,
+                          OMPropertyId keyPropertyId)
 {
   TRACE("OMStoredObject::save");
 
@@ -1037,9 +1047,12 @@ void OMStoredObject::restore(OMStoredSetIndex*& set,
   OMUInt32 entries;
   readUInt32FromStream(setIndexStream, entries, _reorderBytes);
 
+  OMUInt32 keyPid = 0;
+  OMUInt32 keySize = sizeof(OMUniqueObjectIdentification);
+
   // Create an index.
   //
-  OMStoredSetIndex* setIndex = new OMStoredSetIndex(entries);
+  OMStoredSetIndex* setIndex = new OMStoredSetIndex(entries, keyPid, keySize);
   ASSERT("Valid heap pointer", setIndex != 0);
 
   // Set the high water mark.
@@ -1057,7 +1070,7 @@ void OMStoredObject::restore(OMStoredSetIndex*& set,
     readUniqueObjectIdentificationFromStream(setIndexStream,
                                              key,
                                              _reorderBytes);
-    setIndex->insert(i, name, count, key);
+    setIndex->insert(i, name, count, &key);
   }
 
   // Close the stream.
@@ -1152,10 +1165,13 @@ void OMStoredObject::restore(OMPropertyTable*& table)
   //   @parm The property type.
   //   @parm The unique identification of the target.
   //   @parm A tag identifying the collection in which the target resides.
+  //   @parm The id of the property whose value is the unique
+  //         identifier of objects in the target set.
 void OMStoredObject::restore(OMPropertyId propertyId,
                              int type,
                              OMUniqueObjectIdentification& id,
-                             OMPropertyTag& tag)
+                             OMPropertyTag& tag,
+                             OMPropertyId& keyPropertyId)
 {
   TRACE("OMStoredObject::restore");
 
@@ -1165,6 +1181,7 @@ void OMStoredObject::restore(OMPropertyId propertyId,
   read(propertyId, type, buffer, size);
   memcpy(&id, buffer, sizeof(id));
   memcpy(&tag, buffer + sizeof(id), sizeof(tag));
+  keyPropertyId = 0 /* tjb */;
 
   if (byteOrder() != hostByteOrder()) {
 	reorderUniqueObjectIdentification(id);
@@ -1180,13 +1197,16 @@ void OMStoredObject::restore(OMPropertyId propertyId,
   //   @parm Count of targets.
   //   @parm A tag identifying the collection in which each of the
   //         targets reside.
+  //   @parm The id of the property whose value is the unique
+  //         identifier of objects in the target set.
 void OMStoredObject::restore(OMPropertyId propertyId,
                              int type,
                              char*& collectionName,
                              size_t nameSize,
                              const OMUniqueObjectIdentification*& index,
                              size_t &count,
-                             OMPropertyTag& tag)
+                             OMPropertyTag& tag,
+                             OMPropertyId& keyPropertyId)
 {
   TRACE("OMStoredObject::restore");
   
@@ -1209,6 +1229,8 @@ void OMStoredObject::restore(OMPropertyId propertyId,
   // Read the tag. assumes sizeof(tag) == 4
   //
   readUInt32FromStream(indexStream, tag, _reorderBytes);
+
+  keyPropertyId = 0 /* tjb */;
 
   // Create an index.
   //
