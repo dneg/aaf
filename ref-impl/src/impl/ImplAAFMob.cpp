@@ -62,14 +62,10 @@
 #include "AAFUtils.h"
 #include "AAFDefUIDs.h"
 
-extern "C" const aafClassID_t CLSID_AAFMobSlot;
-extern "C" const aafClassID_t CLSID_AAFTimelineMobSlot;
 extern "C" const aafClassID_t CLSID_EnumAAFMobSlots;
 extern "C" const aafClassID_t CLSID_EnumAAFTaggedValues;
-extern "C" const aafClassID_t CLSID_AAFSourceClip;
 extern "C" const aafClassID_t CLSID_AAFFindSourceInfo;
 extern "C" const aafClassID_t CLSID_AAFTypeDefString;
-extern "C" const aafClassID_t CLSID_AAFTaggedValue;
 
 ImplAAFMob::ImplAAFMob ()
 : _mobID(			PID_Mob_MobID,			"MobID"),
@@ -288,7 +284,7 @@ AAFRESULT STDMETHODCALLTYPE
 	XPROTECT()
 	{
 	  if (inFile())
-          {
+		{
 		hr = MyHeadObject(&head);
 		if(hr == AAFRESULT_SUCCESS)
 		{			
@@ -321,7 +317,7 @@ AAFRESULT STDMETHODCALLTYPE
 		else
 			RAISE(hr);
 	  }
-          else
+    else
 		 _mobID = *newMobID;
 
 	} /* XPROTECT */
@@ -380,6 +376,7 @@ AAFRESULT STDMETHODCALLTYPE
 	ImplAAFMobSlot * tmpSlot = NULL;
 	aafLength_t length = CvtInt32toLength(0, length);
 	aafLength_t	mobLength = CvtInt32toLength(0, mobLength);
+  ImplAAFDictionary *pDictionary = NULL;
 	AAFRESULT aafError = AAFRESULT_SUCCESS;
 
 	*newSlot = NULL;
@@ -387,9 +384,12 @@ AAFRESULT STDMETHODCALLTYPE
 
 	XPROTECT()
 	{
-		tmpSlot = (ImplAAFMobSlot *)CreateImpl (CLSID_AAFMobSlot);
+		CHECK(GetDictionary(&pDictionary));
+		tmpSlot = (ImplAAFMobSlot *)pDictionary->CreateImplObject(AUID_AAFMobSlot);
 		if(tmpSlot == NULL)
-			return(AAFRESULT_NOMEMORY);
+			RAISE(AAFRESULT_NOMEMORY);
+		pDictionary->ReleaseReference();
+		pDictionary = NULL;
 
 //!!!	CHECK(tmpSlot->WriteRational(OMMSLTEditRate, editRate));
 		CHECK(tmpSlot->SetSegment(segment));
@@ -403,6 +403,8 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 		if (tmpSlot)
 			tmpSlot->ReleaseReference();
+		if(pDictionary != NULL)
+			pDictionary->ReleaseReference();
 		return(XCODE());
 	}
 	XEND;
@@ -428,6 +430,7 @@ AAFRESULT STDMETHODCALLTYPE
 {
 	ImplAAFTimelineMobSlot	*aSlot = NULL;
 	ImplAAFMobSlot			*tmpSlot = NULL;
+  ImplAAFDictionary *pDictionary = NULL;
 ///fLength_t length = CvtInt32toLength(0, length);
 ///	aafLength_t	mobLength = CvtInt32toLength(0, mobLength);
 	AAFRESULT aafError = AAFRESULT_SUCCESS;
@@ -437,9 +440,12 @@ AAFRESULT STDMETHODCALLTYPE
 
 	XPROTECT()
 	  {
-		aSlot = (ImplAAFTimelineMobSlot *)CreateImpl (CLSID_AAFTimelineMobSlot);
+		CHECK(GetDictionary(&pDictionary));
+		aSlot = (ImplAAFTimelineMobSlot *)pDictionary->CreateImplObject(AUID_AAFTimelineMobSlot);
 		if (NULL == aSlot)
 			return (AAFRESULT_NOMEMORY);
+		pDictionary->ReleaseReference();
+		pDictionary = NULL;
 
 		CHECK(aSlot->SetSegment(segment));
 		CHECK(aSlot->SetSlotID(slotID));
@@ -457,6 +463,8 @@ AAFRESULT STDMETHODCALLTYPE
 	  {
 		if (aSlot)
 			aSlot->ReleaseReference();
+		if(pDictionary != NULL)
+			pDictionary->ReleaseReference();
 		return(XCODE());
 	  }
 	XEND;
@@ -502,9 +510,10 @@ AAFRESULT STDMETHODCALLTYPE
 	ImplEnumAAFTaggedValues*	pEnum = NULL;
 	
 	aafWChar					oldTagName[64];
-    aafBool						commentFound = AAFFalse;
+	aafBool						commentFound = AAFFalse;
 	aafUID_t					stringTypeUID = CLSID_AAFTypeDefString;
 	aafUInt32					numComments = 0;
+	ImplAAFDictionary *pDictionary = NULL;
 	
 	if (pTagName == NULL || pComment == NULL)
 		return AAFRESULT_NULL_PARAM;
@@ -539,7 +548,10 @@ AAFRESULT STDMETHODCALLTYPE
 		else
 		{
 			// Create a new comment and add it to the list!
-			pTaggedValue = (ImplAAFTaggedValue *)CreateImpl(CLSID_AAFTaggedValue);
+			CHECK(GetDictionary(&pDictionary));
+			pTaggedValue = (ImplAAFTaggedValue *)pDictionary->CreateImplObject(AUID_AAFTaggedValue);
+			pDictionary->ReleaseReference();
+			pDictionary = NULL;
 			CHECK(pTaggedValue->Initialize(pTagName, &stringTypeUID));
 			CHECK(pTaggedValue->SetValue((wcslen(pComment)*sizeof(aafWChar)+2), (aafDataValue_t)pComment));
 			_userComments.appendValue(pTaggedValue);
@@ -548,6 +560,8 @@ AAFRESULT STDMETHODCALLTYPE
 	}
 	XEXCEPT
 	{
+		if(pDictionary != NULL)
+			pDictionary->ReleaseReference();
 		return(XCODE());
 	}
 	XEND;
@@ -1310,13 +1324,17 @@ ImplAAFMob::AddPhysSourceRef (aafAppendOption_t  addType,
 	ImplAAFTimelineMobSlot	*newSlot = NULL;
 	ImplEnumAAFComponents	*compEnum = NULL;
 	aafPosition_t			zeroPos;
+  ImplAAFDictionary *pDictionary = NULL;
 
 	XPROTECT()
 	{
 		CvtInt32toInt64(0, &zeroPos);
-		sclp = (ImplAAFSourceClip *)CreateImpl(CLSID_AAFSourceClip);
+		CHECK(GetDictionary(&pDictionary));
+		sclp = (ImplAAFSourceClip *)pDictionary->CreateImplObject(AUID_AAFSourceClip);
 		if (NULL == sclp)
 			RAISE(AAFRESULT_NOMEMORY);
+		pDictionary->ReleaseReference();
+		pDictionary = NULL;
 		CHECK(sclp->Initialize(pEssenceKind, &srcRefLength, ref));
 				
 		status = FindSlotBySlotID(aMobSlot, &slot);
@@ -1370,6 +1388,8 @@ ImplAAFMob::AddPhysSourceRef (aafAppendOption_t  addType,
 			slot->ReleaseReference();
 		if(cpnt != NULL)
 			cpnt->ReleaseReference();
+		if(pDictionary != NULL)
+			pDictionary->ReleaseReference();
 	}
 	XEND;
 
