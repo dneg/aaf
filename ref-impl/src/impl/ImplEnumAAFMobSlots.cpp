@@ -70,7 +70,7 @@ AAFRESULT STDMETHODCALLTYPE
 	AAFRESULT		result;
 	aafNumSlots_t	cur = _current, siz;
 
-    _mob->GetNumSlots (&siz);
+    _mob->CountSlots (&siz);
 	if(cur < siz)
 	{
 		result = _mob->GetNthMobSlot (cur, ppMobSlot);
@@ -125,7 +125,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 	newCurrent = _current + count;
 
-    _mob->GetNumSlots(&siz);
+    _mob->CountSlots(&siz);
 	if(newCurrent < siz)
 	{
 		_current = newCurrent;

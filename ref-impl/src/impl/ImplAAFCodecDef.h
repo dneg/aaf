@@ -71,14 +71,43 @@ public:
          // @parm [out,retval] Is this type supported
          aafBool*  pIsSupported);
  
-   //****************
-  // AppendEssenceKind()
+
+  //****************
+  // AddEssenceKind()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    AppendEssenceKind
+    AddEssenceKind
         // @parm [in] The essence kind
         (const aafUID_t & essenceKind);
 
+
+
+  //****************
+  // RemoveEssenceKind()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    RemoveEssenceKind
+        // @parm [in] The essence kind to remove
+        (const aafUID_t & essenceKind);
+
+
+
+  //****************
+  // CountEssenceKinds()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    CountEssenceKinds
+        // @parm [out, retval] The returned number of essece kinds
+        (aafUInt32 * pResult);
+
+
+  //****************
+  // GetEssenceKinds()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetEssenceKinds
+        // @parm [out, retval] The enumerator over essence kinds
+        (ImplEnumAAFDataDefs ** ppEnum);
 
 
   //****************
@@ -116,16 +145,6 @@ public:
         // @parm [out,retval] Codec flavour Enumeration
         (ImplEnumAAFCodecFlavours ** ppEnum);
   
-
-public:
-	// SDK-private
-  //****************
-  // GetParameterDefinitions()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    GetDataDefinitions
-        // @parm [out,retval] Parameter definition enumeration
-        (ImplEnumAAFDataDefs ** ppEnum);
 
 private:
 	DataDefWeakRefArrayProp_t			_dataDefs;

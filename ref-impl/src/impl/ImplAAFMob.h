@@ -108,7 +108,46 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     AppendSlot
-        (ImplAAFMobSlot *  pSlot);  //@parm [in,out] Mob Name length
+        (ImplAAFMobSlot *  pSlot);  //@parm [in,out] slot to append
+
+  //****************
+  // PrependSlot()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    PrependSlot
+        (ImplAAFMobSlot *  pSlot);  //@parm [in,out] slot to prepend
+
+  //****************
+  // InsertSlotAt()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    InsertSlotAt
+        (aafUInt32 index,			//@parm [in] index to insert
+		 ImplAAFMobSlot *  pSlot);  //@parm [in] slot to insert
+
+  //****************
+  // RemoveSlotAt()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    RemoveSlotAt
+        (aafUInt32 index);  //@parm [in] index of slot to remove
+
+  //****************
+  // GetSlotAt()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetSlotAt
+        (aafUInt32 index,		     //@parm [in] index to of slot get
+		 ImplAAFMobSlot ** ppSlot);  //@parm [out] returned slot
+
+  //****************
+  // LookupSlot()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    LookupSlot
+        (aafSlotID_t slotId,	     //@parm [in] ID of slot to get
+		 ImplAAFMobSlot ** ppSlot);  //@parm [out] returned slot
+
   //****************
   // RemoveSlot()
   //
@@ -143,10 +182,10 @@ public:
 		 aafInt32  strSize);
 
   //****************
-  // GetNumSlots()
+  // CountSlots()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetNumSlots
+    CountSlots
         (aafNumSlots_t *  numSlots);  //@parm [out] Number of slots
 
   //****************
@@ -205,7 +244,7 @@ public:
   // GetAllMobSlots()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    EnumAAFAllMobSlots
+    GetSlots
         (ImplEnumAAFMobSlots ** ppEnum);  //@parm [out,retval] Mob Slot Enumeration
 
 
@@ -222,13 +261,13 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     RemoveComment
-        (aafMobComment_t *  comment);
+        (ImplAAFTaggedValue * comment);
 
   //****************
-  // GetNumComments()
+  // CountComments()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetNumComments
+    CountComments
         (aafUInt32 *  pNumComments);  //@parm [out,retval] Number  of Mob Comments
 
 
@@ -236,7 +275,7 @@ public:
   // GetComments()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    EnumAAFAllMobComments
+    GetComments
         (ImplEnumAAFTaggedValues ** ppEnum);  //@parm [out,retval] Mob Comments
 
 

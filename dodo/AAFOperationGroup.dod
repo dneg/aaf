@@ -45,6 +45,7 @@ AD_FORWARD_DECLARATION(AAFParameter)
 AD_FORWARD_DECLARATION(AAFSourceReference)
 AD_FORWARD_DECLARATION(EnumAAFOperationDefs)
 AD_FORWARD_DECLARATION(EnumAAFParameterDefs)
+AD_FORWARD_DECLARATION(EnumAAFParameters)
 AD_FORWARD_DECLARATION(AAFSegment)
 AD_CLASS_UUID(3AE3BA81, 2C98, 11d2, 80, 42, 00, 60, 08, 14, 3E, 6F)
 
@@ -204,19 +205,19 @@ AD_METHOD1(GetBypassOverride,
   //   - pBypassOverride arg is NULL.)
 
 
-AD_METHOD1(GetNumSourceSegments,
+AD_METHOD1(CountSourceSegments,
 
 		   [out],
 		   aafInt32 *,
-		   pNumSources,
+		   pResult,
 		   Number of source media segments in the operation group,
 
      Returns the number of media sources to the operation group.
   //
   // Succeeds if all of the following are true:
-  // - the pNumSources pointer is valid.
+  // - the pResult pointer is valid.
   // 
-  // If this method fails nothing will be written to *pNumSources.
+  // If this method fails nothing will be written to *pResult.
   // 
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect\\\, it will return the first one
@@ -226,7 +227,7 @@ AD_METHOD1(GetNumSourceSegments,
   //   - succeeded.  \\\(This is the only code indicating success.\\\)
   //
   // AAFRESULT_NULL_PARAM
-  //   - pNumSources arg is NULL.)
+  //   - pResult arg is NULL.)
 
 
 AD_METHOD1(IsValidTranOperation,
@@ -258,19 +259,19 @@ AD_METHOD1(IsValidTranOperation,
   //   - pValidTransition arg is NULL.)
 
 
-AD_METHOD1(GetNumParameters,
+AD_METHOD1(CountParameters,
 
 		   [out],
 		   aafInt32 *,
-		   pNumParameters,
+		   pResult,
 		   Number of parameter slots in the operation group,
 
      Returns the number of parameters in the operation group.
   //
   // Succeeds if all of the following are true:
-  // - the pNumParameters pointer is valid.
+  // - the pResult pointer is valid.
   // 
-  // If this method fails nothing will be written to *pNumParameters.
+  // If this method fails nothing will be written to *pResult.
   // 
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect\\\, it will return the first one
@@ -280,15 +281,15 @@ AD_METHOD1(GetNumParameters,
   //   - succeeded.  \\\(This is the only code indicating success.\\\)
   //
   // AAFRESULT_NULL_PARAM
-  //   - pNumParameters arg is NULL.)
+  //   - pResult arg is NULL.)
 
 
-AD_XMETHOD1(AddNewParameter,
+AD_XMETHOD1(AddParameter,
 
 			[in],
 			objIn,
 			AAFParameter,
-			pValue,
+			pParameter,
 			Parameter to place in operation group slot,
 
      Adds a new parameter object.
@@ -310,7 +311,7 @@ AD_XMETHOD1(AddNewParameter,
   //   - pValue arg is NULL.)
 
 
-AD_XMETHOD1(AppendNewInputSegment,
+AD_XMETHOD1(AppendInputSegment,
 
 			[in],
 			objIn,
@@ -332,6 +333,74 @@ AD_XMETHOD1(AppendNewInputSegment,
   //
   // AAFRESULT_DUPLICATE_INDEX
   //   - The given index value is already present.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pSegment arg is NULL.)
+
+
+AD_XMETHOD1(PrependInputSegment,
+
+			[in],
+			objIn,
+			AAFSegment,
+			pSegment,
+			Segment to place in operation group,
+
+     Prepends another input segment to an operation group.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pSegment pointer is valid.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_DUPLICATE_INDEX
+  //   - The given index value is already present.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pSegment arg is NULL.)
+
+
+AD_XMETHOD2(InsertInputSegmentAt,
+
+			[in],
+			objPass,
+			aafUInt32,
+			index,
+			index to place this segment,
+
+			[in],
+			objIn,
+			AAFSegment,
+			pSegment,
+			Segment to place in operation group,
+
+     Inserts an input segment to an operation group at the given
+  // index.  The existing segments at the given and higher indices are
+  // moved up by one to make room.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pSegment pointer is valid.
+  // - the index is not greater than the value returned by
+  //   CountInputSegments\(\).
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_DUPLICATE_INDEX
+  //   - The given index value is already present.
+  //
+  // AAFRESULT_BAD_INDEX
+  //   - index is greater than the value returned by
+  //     CountInputSegments\(\).
   //
   // AAFRESULT_NULL_PARAM
   //   - pSegment arg is NULL.)
@@ -388,11 +457,37 @@ AD_METHOD1(SetBypassOverride,
   //   - This object has not yet had Initialize\\\(\\\) called on it.)
 
 
-AD_XMETHOD2(GetParameterByArgID,
+AD_XMETHOD1(GetParameters,
+
+			[out],
+			objOut,
+			EnumAAFParameters,
+			ppEnum,
+			Parameter enumerator,
+
+	 returns an enumerator across all parameters.
+  // 
+  // Succeeds if all of the following are true:
+  // - the ppEnum pointer is valid.
+  // 
+  // If this method fails nothing will be written to *ppEnum.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppEnum arg is NULL.)
+
+
+AD_XMETHOD2(LookupParameter,
 
 			[in],
 			objPass,
-			aafArgIDType_t,
+			aafArgIDType_constref,
 			argID,
 			Arg ID,
 
@@ -424,13 +519,13 @@ AD_XMETHOD2(GetParameterByArgID,
   //   - ppParameter arg is NULL.)
 
 
-AD_XMETHOD2(GetIndexedInputSegment,
+AD_XMETHOD2(GetInputSegmentAt,
 
 			[in],
 			objPass,
-			aafInt32,
+			aafUInt32,
 			index,
-			1-based index into the effet inputs,
+			0-based index into the effet inputs,
 
 			[out],
 			objOut,
@@ -459,4 +554,31 @@ AD_XMETHOD2(GetIndexedInputSegment,
   //
   // AAFRESULT_NULL_PARAM
   //   - ppInputSegment arg is NULL.)
+
+
+AD_XMETHOD1(RemoveInputSegmentAt,
+
+			[in],
+			objPass,
+			aafUInt32,
+			index,
+			0-based index into the effect inputs,
+
+     Removes the segment at the given index.  Existing segments at
+  // higher indices are moved down by one to accommodate.
+  // 
+  // Succeeds if all of the following are true:
+  // - index is less than the result of CountInputSegments\(\).
+  // 
+  // If this method fails no state will be changed.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_MISSING_INDEX
+  //   - The given index value is not present.)
 AD_XCLASS_END(Concrete, StoredObject)

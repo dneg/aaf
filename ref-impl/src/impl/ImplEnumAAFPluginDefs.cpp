@@ -105,7 +105,7 @@ AAFRESULT STDMETHODCALLTYPE
 			CHECK(head->GetDictionary (&dict));
 			if(EqualAUID(&value, &NilMOBID))		///!!! TEMP: to work without optional parms, handle NIL ID
 				RAISE(AAFRESULT_NO_MORE_OBJECTS)	//!!!
-			CHECK(dict->LookupPluginDescriptor(value, ppAAFPluginDescriptor));
+			CHECK(dict->LookupPluginDef (value, ppAAFPluginDescriptor));
 			head->ReleaseReference();
 			head = NULL;
 			dict->ReleaseReference();

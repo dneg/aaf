@@ -73,7 +73,7 @@ AAFRESULT STDMETHODCALLTYPE
   AAFRESULT hr = AAFRESULT_SUCCESS;
   aafUInt32 cur = _current, siz = 0;
 
-  hr = _contentStorage->GetNumEssenceData (&siz);
+  hr = _contentStorage->CountEssenceData (&siz);
   if (AAFRESULT_SUCCESS == hr)
   {    
     if (cur < siz)
@@ -120,7 +120,7 @@ AAFRESULT STDMETHODCALLTYPE
   aafUInt32 newCurrent = _current + count;
   aafUInt32 siz = 0;
 
-  result = _contentStorage->GetNumEssenceData(&siz);
+  result = _contentStorage->CountEssenceData(&siz);
   if (AAFRESULT_SUCCESS == result)
   {
     if (newCurrent < siz)

@@ -80,28 +80,70 @@ public:
 
 
   //****************
-  // RemoveComponent()
+  // PrependComponent()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    RemoveComponent
-		// @parm [in] Component to append to the sequence
+    PrependComponent
+		// @parm [in] Component to prepend to the sequence
         (ImplAAFComponent * pComponent);
 
 
   //****************
-  // GetNumComponents()
+  // InsertComponentAt()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetNumComponents
-		// @parm [out] Number of components
-        (aafInt32 *  pNumCpnts);
+    InsertComponentAt
+		// @parm [in] index to insert component
+        (aafUInt32 index,
+
+		 // @parm [in] Component to insert into the sequence
+		 ImplAAFComponent * pComponent);
 
 
   //****************
-  // EnumComponents()
+  // GetComponentAt()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    EnumComponents
+    GetComponentAt
+		// @parm [in] index of component to retrieve
+        (aafUInt32 index,
+
+		 // @parm [out, retval] retrieved component
+		 ImplAAFComponent ** ppComponent);
+
+
+  //****************
+  // RemoveComponentAt()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    RemoveComponentAt
+		// @parm [in] index of component to remove
+        (aafUInt32 index);
+
+
+  //****************
+  // RemoveComponent()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    RemoveComponent
+		// @parm [in] Component to remove from the sequence
+        (ImplAAFComponent * pComponent);
+
+
+  //****************
+  // CountComponents()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    CountComponents
+		// @parm [out, retval] Component Enumeration
+        (aafUInt32 * pResult);
+
+
+  //****************
+  // GetComponents()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetComponents
 		// @parm [out, retval] Component Enumeration
         (ImplEnumAAFComponents ** ppEnum);
 

@@ -95,7 +95,7 @@ AAFRESULT STDMETHODCALLTYPE
 			_enumProp->getValueAt(&value, _current);
 			CHECK(_enumObj->MyHeadObject(&head));
 			CHECK(head->GetDictionary (&dict));
-			CHECK(dict->LookupClass(value, ppClassDef));
+			CHECK(dict->LookupClassDef (value, ppClassDef));
 		}
 		else if(_enumStrongProp != NULL)
 			_enumStrongProp->getValueAt(*ppClassDef, _current);

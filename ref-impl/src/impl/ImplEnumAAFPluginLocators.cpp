@@ -68,7 +68,7 @@ AAFRESULT STDMETHODCALLTYPE
 
     XPROTECT()
 	{
-		CHECK(_cPluginDesc->GetNumLocators (&siz));
+		CHECK(_cPluginDesc->CountLocators (&siz));
 		if(cur < siz)
 		{
 			CHECK(_cPluginDesc->GetNthLocator (cur, ppAAFLocator));
@@ -128,7 +128,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 	newCurrent = _current + count;
 
-    _cPluginDesc->GetNumLocators(&siz);
+    _cPluginDesc->CountLocators(&siz);
 	if(newCurrent < siz)
 	{
 		_current = newCurrent;

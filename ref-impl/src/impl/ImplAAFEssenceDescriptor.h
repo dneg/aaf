@@ -64,12 +64,12 @@ public:
 
 
   //****************
-  // GetNumLocators()
+  // CountLocators()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetNumLocators
+    CountLocators
 		// @parm [out] Returns the number of locators
-        (aafInt32 *  pCount);
+        (aafUInt32 *  pCount);
   //@comm The number of locators may be zero if the essence is in the current file.
 
   //****************
@@ -92,6 +92,38 @@ public:
   //@comm    Use this function to add a locator to be scanned first when searching for
   // the essence (a secondary location for the essence).
 
+
+  //****************
+  // InsertLocatorAt()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    InsertLocatorAt
+		// @parm [in] place to insert locator
+        (aafUInt32 index,
+		// @parm [in] Locator to insert
+		 ImplAAFLocator * pLocator);
+
+
+  //****************
+  // GetLocatorAt()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetLocatorAt
+		// @parm [in] index of locator to get
+        (aafUInt32 index,
+		// @parm [in] returned locator
+		 ImplAAFLocator ** ppLocator);
+
+
+  //****************
+  // GetLocatorAt()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    RemoveLocatorAt
+		// @parm [in] index of locator to remove
+        (aafUInt32 index);
+
+
   //****************
   // RemoveLocator()
   //
@@ -101,10 +133,10 @@ public:
         (ImplAAFLocator * pLocator);
 
   //****************
-  // EnumAAFAllLocators()
+  // GetLocators()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    EnumAAFAllLocators
+    GetLocators
 		// @parm [out] An enumerator to the locators on this essence descriptor
         (ImplEnumAAFLocators ** ppEnum);
   //@comm The number of locators may be zero if the essence is in the current file.

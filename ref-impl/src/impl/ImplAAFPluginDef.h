@@ -482,10 +482,10 @@ public:
 
 
   //****************
-  // GetNumLocators()
+  // CountLocators()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetNumLocators
+    CountLocators
         // @parm [out] Returns the number of locators
         (aafUInt32 *  pCount);
 
@@ -506,6 +506,39 @@ public:
     PrependLocator
         // @parm [in] Locator to append
         (ImplAAFLocator * pLocator);
+
+
+  //****************
+  // InsertLocatorAt()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    InsertLocatorAt
+        // @parm [in] index to place new locator
+        (aafUInt32 index,
+
+        // @parm [in] Locator to insert
+		ImplAAFLocator * pLocator);
+
+
+  //****************
+  // GetLocatorAt()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetLocatorAt
+        // @parm [in] index to place new locator
+        (aafUInt32 index,
+
+        // @parm [out, retval] returned Locator
+		ImplAAFLocator ** ppLocator);
+
+
+  //****************
+  // RemoveLocatorAt()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    RemoveLocatorAt
+        // @parm [in] index of locator to remove
+        (aafUInt32 index);
 
 
   //****************
@@ -536,10 +569,10 @@ public:
   
 
   //****************
-  // EnumPluginLocators()
+  // GetLocators()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    EnumPluginLocators
+    GetLocators
         // @parm [out, retval] Plugin Locator Enumeration
         (ImplEnumAAFPluginLocators ** ppEnum);
 
@@ -547,8 +580,8 @@ public:
 public:
 	virtual AAFRESULT
 		GetNthLocator (aafInt32 index, ImplAAFLocator **ppLocator);
-	virtual AAFRESULT
-		 GetNumLocators (aafInt32 *  pCount);
+  //	virtual AAFRESULT
+  //		 GetNumLocators (aafInt32 *  pCount);
 
 private:
 	OMWideStringProperty          _name;
