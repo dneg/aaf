@@ -242,8 +242,20 @@ RunMainScript ()
 		PrintSeparator "AafOmf Convertor Test 1 -  AAF -> OMF"
 		cd Utilities
 		cp ../Test/AAFSequenceTest.aaf .
-		cp ../../Omf/omfToolkit.dll .
-		cp ../../Omf/omfToolkitd.dll .
+		# Copy the correct omf dll if necessary.
+		if [ CHECK_DEBUG -eq 1 ]; then
+		    OMFTOOLKITDLL="omfToolkitd.dll"
+		else
+		    OMFTOOLKITDLL="omfToolkit.dll"  
+		fi
+		if [ ! -f $OMFTOOLKITDLL ] || [ $OMFTOOLKITDLL -ot "../../../Omf/$OMFTOOLKITDLL" ]; then
+		    #echo "cp ../../../Omf/$OMFTOOLKITDLL `PWD`"
+		    cp "../../../Omf/$OMFTOOLKITDLL" .
+	    	#else
+		    #echo "$OMFTOOLKITDLL is up-to-date"
+		fi
+
+		
 		AafOmf -omf AAFSequenceTest.aaf
 		CheckExitCode $? "AafOmf Convertor Test 1 -  AAF -> OMF"
 
