@@ -1,8 +1,6 @@
 #startm .this-module 0
 AAFObject\
 #endm
-#c
-#import ./AAFUnitTest.exp
 AD_HEAD
 /******************************************\
 *                                          *
@@ -13,11 +11,10 @@ AD_HEAD
 *                                          *
 \******************************************/
 
-AD_CLASS_UUID(B1A213AC, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
-
-
 AD_INCLUDE(AAFTypes)
 
+
+AD_CLASS_UUID(B1A213AC, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
 
 AD_DEFAULT_UUID(B1A213AB, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
 AD_ROOT_CLASS_BEGIN
@@ -43,7 +40,5 @@ AD_XMETHOD2(IsTypeOf,
 		   [out],objPass,aafBool*,Result, ,
 		   Test if an object is a member of the given class\, or a
   // member of one of its subclasses.) 
-
-AD_OVERRIDE(.method-Test)
 
 AD_ROOT_CLASS_END
