@@ -24,7 +24,7 @@
 #endif
 
 #include <iostream.h>
-#include <AAFResult.h>
+#include "AAFResult.h"
 
 static aafWChar *slotNames[5] = { L"SLOT1", L"SLOT2", L"SLOT3", L"SLOT4", L"SLOT5" };
 
