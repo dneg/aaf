@@ -988,7 +988,22 @@ void OMStrongReferenceVectorProperty<ReferencedObject>::deepCopyTo(
                                                      void* clientContext) const
 {
   TRACE("OMStrongReferenceVectorProperty<ReferencedObject>::deepCopyTo");
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
+  PRECONDITION("Valid destination", destination != 0);
+
+  typedef OMStrongReferenceVectorProperty<ReferencedObject> Property;
+  Property* dest = dynamic_cast<Property*>(destination);
+  ASSERT("Destination is correct type", dest != 0);
+  ASSERT("Valid destination", dest != this);
+
+  ASSERT("Destination vector is void", dest->isVoid());
+  VectorIterator iterator(_vector, OMBefore);
+  while (++iterator) {
+    VectorElement& element = iterator.value();
+    OMStorable* source = element.getValue();
+    OMStorable* d = source->shallowCopy();
+    dest->insertObject(d);
+    source->deepCopyTo(d, clientContext);
+  }
 }
 
 #endif

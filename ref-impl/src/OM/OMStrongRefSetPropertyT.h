@@ -900,7 +900,23 @@ void OMStrongReferenceSetProperty<UniqueIdentification,
 {
   TRACE("OMStrongReferenceSetProperty<UniqueIdentification, "
                                      "ReferencedObject>::deepCopyTo");
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
+  PRECONDITION("Valid destination", destination != 0);
+
+  typedef OMStrongReferenceSetProperty<UniqueIdentification,
+                                       ReferencedObject> Property;
+  Property* dest = dynamic_cast<Property*>(destination);
+  ASSERT("Destination is correct type", dest != 0);
+  ASSERT("Valid destination", dest != this);
+
+  ASSERT("Destination set is void", dest->isVoid());
+  SetIterator iterator(_set, OMBefore);
+  while (++iterator) {
+    SetElement& element = iterator.value();
+    OMStorable* source = element.getValue();
+    OMStorable* d = source->shallowCopy();
+    dest->insertObject(d);
+    source->deepCopyTo(d, clientContext);
+  }
 }
 
 #endif
