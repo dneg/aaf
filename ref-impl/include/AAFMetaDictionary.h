@@ -49,7 +49,7 @@
 //
 // DictP18-277-1847BMaster.csv 
 //
-// This file was generated on Fri Oct 29 12:06:41 EDT 1999
+// This file was generated on Thu Dec  2 13:37:15 EST 1999
 // by user btillman on system BTILLMAN3PC.
 //
 // Key to macros.
@@ -1600,7 +1600,7 @@ AAF_CLASS(PluginDescriptor,
       0x0000, 0x0000,
       0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
     0x2214,
-    AAF_REFERENCE_TYPE(StrongReferenceSet, Locator),
+    AAF_REFERENCE_TYPE(StrongReferenceVector, Locator),
     false,
     PluginDescriptor)
   AAF_PROPERTY(Authentication,
