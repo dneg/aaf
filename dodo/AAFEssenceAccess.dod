@@ -111,7 +111,7 @@ AD_XMETHOD6(MultiCreate,
 [in],objIn, AAFMasterMob,masterMob,on this master mob,
 [in],objIn, AAFSourceMob,fileMob,and this file mob create,
 [in],objPass, aafInt16,arrayElemCount,this many channels,
-[in],objPass, aafmMultiCreate_t *,mediaArray,using these definitions,
+[in\,ref\,size_is\(arrayElemCount\)],objPass, aafmMultiCreate_t *,mediaArray,using these definitions,
 [in],objPass, aafRational_t ,editRate,,
 [in],objPass, aafCompressEnable_t,enable,optionally compressing it,
 Creates a multi-channel interleaved stream of media.)
@@ -152,7 +152,7 @@ Gets the top video field used by the codecs to deinterlace fields.)
 	
 /****/
 AD_METHOD1(SetDisplayRect,
-[in],aafRect_t,DisplayRect,set display rectangle,
+[in\\\,ref],aafRect_t *,DisplayRect,set display rectangle,
 Handles the case where the displayed rectangle is not the same as the stored rectangle [as with the old leadingLines and trailingLines])
 	//@comm Handles the case where the displayed rectangle is not the same as
 	// the stored rectangle (as with the old leadingLines and trailingLines).
@@ -164,7 +164,7 @@ Handles the case where the displayed rectangle is not the same as the stored rec
 
 /****/
 AD_METHOD1(SetSampledRect,
-[in],aafRect_t,SampledRect,set sampled rectangle,
+[in\\\,ref],aafRect_t *,SampledRect,set sampled rectangle,
 Handles the case where the sampled rectangle is not the same as the stored rectangle.)
 	//@comm Takes a media handle, so the media must have been opened or created
 	//@comm Replaces omfmSetSampledRect
@@ -172,7 +172,7 @@ Handles the case where the sampled rectangle is not the same as the stored recta
 /****/
 AD_METHOD2(WriteMultiSamples,
 [in],aafInt16,arrayElemCount,Do this many transfers,
-[out],aafmMultiXfer_t *,xferArray,referencing this array,
+[out\\\,size_is\\\(arrayElemCount\\\)],aafmMultiXfer_t *,xferArray,referencing this array,
 Writes multiple channels worth of sample data to an interleaved data stream in the natural order for the CODEC.)
 	//@comm arrayElemCount is the size of the array or transfer operations.
 	// xferArray points to an array of transfer parameters.  All fields
@@ -183,7 +183,7 @@ Writes multiple channels worth of sample data to an interleaved data stream in t
 /****/
 AD_METHOD3(WriteDataSamples,
 [in],aafInt32,nSamples,write this many samples,
-[in],void *,buffer,to a buffer,
+[in\\\,size_is\\\(buflen\\\)],aafDataBuffer_t,buffer,to a buffer,
 [in],aafInt32,buflen,of this size,
 Writes data to a single-channel media stream.)
 	//@comm Takes a media handle, so the media must have been opened or created.
@@ -198,8 +198,8 @@ Writes data to a single-channel media stream.)
 /****/
 AD_METHOD3(WriteRawData,
 [in],aafInt32,nSamples,write this many samples,
-[in],void *,buffer,to a buffer,
-[in],aafInt32,aafInt32,of this size,
+[in\\\, size_is\\\(nSamples * sampleSize\\\)],aafDataBuffer_t,buffer,to a buffer,
+[in],aafInt32, sampleSize,of this size,
 Writes pre-interleaved data to a media stream.)
 	//@comm A single video frame is ONE sample.
 	//@comm Buflen must be large enough to hold
@@ -213,9 +213,9 @@ Writes pre-interleaved data to a media stream.)
 AD_METHOD5(ReadRawData,
 [in],aafInt32,nSamples,write this many samples,
 [in],aafUInt32,buflen,to a buffer of this size,
-[out],void *,buffer,here is the buffer,
-[out],aafUInt32 *,bytesRead,,
-[out],aafUInt32 *,samplesRead,,
+[out\\\, size_is\\\(buflen\\\)\\\, length_is\\\(*bytesRead\\\)],aafDataBuffer_t,buffer,here is the buffer,
+[out\\\,ref],aafUInt32 *,bytesRead,,
+[out\\\,ref],aafUInt32 *,samplesRead,,
 Read pre-interleaved data from a media stream.)
 	//@comm A single video frame is ONE sample.
 	//@comm Buflen must be large enough to hold nSamples * the maximum sample size.
@@ -225,10 +225,11 @@ Read pre-interleaved data from a media stream.)
 	//@comm Replaces omfmReadRawData
 	
 /****/
-AD_METHOD3(WriteDataLines,
-[in],aafInt32,nLines,write this many lines on video,
-[in\\\, size_is\\\(nLines\\\)],aafDataBuffer_t,buffer,from a buffer,
-[out],aafInt32 *,bytesWritten,of this size,
+AD_METHOD4(WriteDataLines,
+[in],aafUInt32,nLines,write this many lines on video,
+[in], aafUInt32, nBytesPerLine, ,
+[in\\\, size_is\\\(nLines * nBytesPerLine\\\)],aafDataBuffer_t,buffer,from a buffer,
+[out\\\,ref],aafInt32 *,bytesWritten,of this size,
 Writes single lines of video to a file.)
 	//@comm Writes single lines of video to a file.  This function allows writing
 	// video frames in pieces, for low-memory situations.  When enough lines
@@ -240,6 +241,8 @@ Writes single lines of video to a file.)
 	// Standard errors (see top of file).
 	// OM_ERR_BADRWLINES -- This function only works for video media.
 	//@comm Replaces omfmWriteDataLines
+	//@devnote Previous version did not have nBytesPerLine, otherwise the actual size
+	// of the buffer cannot be known.
 	
 /****/
 AD_METHOD0(Close,Finish operations on media data and close any external files opened or created to hold the media..)
@@ -272,7 +275,7 @@ Get common audio compression parms.)
 	
 /****/
 AD_METHOD2(SetPrivateMediaData,
-[in],long,parmBlockSize,a block of this size,
+[in],aafUInt32,parmBlockSize,a block of this size,
 [in\\\,size_is\\\(parmBlockSize\\\)], aafDataBuffer_t,ParameterBlock,with these values,
 Sends a parameter block of private information to the CODEC for this media.)
 	//@parm IN -- .
@@ -285,8 +288,8 @@ Sends a parameter block of private information to the CODEC for this media.)
 
 /****/
 AD_METHOD2(GetPrivateMediaData,
-[in],long,blocksize,,
-[out\\\, size_is\\\(blockSize\\\)],aafDataBuffer_t,result,,
+[in],aafUInt32,blocksize,,
+[out\\\, size_is\\\(blocksize\\\)], aafDataBuffer_t, buffer,,
 Gets a parameter block of private information from the CODEC for this media.)
 	//@comm The parameter block should be defined in the
 	// "h" file of the codec, and must be included by the application in
@@ -294,6 +297,7 @@ Gets a parameter block of private information from the CODEC for this media.)
 	//@comm NOTE: All CODECs should default to reasonable parameters,
 	// in case the application doesn't know about a given codec.
 	//@comm Replaces omfmGetPrivateMediaData*/
+	//@devnote Added bytesRead 
 
 /****/
 AD_XMETHOD5(GetNumChannels,
@@ -448,7 +452,7 @@ AD_METHOD4(ReadDataSamples,
 [in],aafInt32,nSamples,,
 [in],aafInt32,buflen,,
 [out\\\, size_is\\\(buflen\\\)\\\,length_is\\\(*bytesRead\\\)],aafDataBuffer_t,buffer,,
-[out],aafUInt32*,bytesRead,,
+[out\\\,ref],aafUInt32*,bytesRead,,
 Read a given number of samples from an opened media stream.)
 	//@comm This call will only return a single channel of media from an interleaved
 	// stream.
@@ -460,7 +464,7 @@ Read a given number of samples from an opened media stream.)
 /****/
 AD_METHOD2(ReadMultiSamples,
 [in],aafInt16,elemCount,,
-[out],aafmMultiXfer_t *,xferArray,,
+[out\\\, size_is\\\(elemCount\\\)],aafmMultiXfer_t *,xferArray,,
 Reads one or more channels from an interleaved data stream)
 	//@comm arrayElemCount is the size of the array or transfer operations.
 	// xferArray points to an array of transfer parameters.  All fields
@@ -473,7 +477,7 @@ AD_METHOD4(ReadDataLines,
 [in],aafInt32,nLines,,
 [in],aafInt32,bufLen,,
 [out\\\, size_is\\\(bufLen\\\)\\\,length_is\\\(*bytesRead\\\)],aafDataBuffer_t,buffer,,
-[out],aafInt32*,bytesRead,,
+[out\\\,ref],aafInt32*,bytesRead,,
 Reads single lines of video from a file.)
 	//@comm This function allows reading
 	// video frames in pieces, for low-memory situations.  When enough lines
@@ -580,7 +584,7 @@ Tells if the given codec is hardware-assisted.)
 AD_METHOD3(GetCodecName,
 [in],aafCodecID_t,codecID,,
 [in],aafInt32,namelen,,
-[out],char *,name,,
+[out\\\,size_is\\\(namelen\\\)],aafUInt8 *,name,,
 Returns the full name of the given codec expanded for human consumption.)
 	//@comm No other call uses this name, so it may be fully descriptive, esp. of limitations.
 	//@comm The name will be truncated to fit within "buflen" bytes.
@@ -588,6 +592,8 @@ Returns the full name of the given codec expanded for human consumption.)
 	// 	Standard errors (see top of file).<nl>
 	//	OM_ERR_CODEC_INVALID - The given codec ID is not loaded.
 	//@comm Replaces omfmCodecGetName */
+	//@devnote Shouldn't we use a unicode aafString_t since AAF's public interface for
+	// strings is supposed to be unicode?(TomR)
 
 /****/
 AD_METHOD1(GetCodecID,
@@ -617,7 +623,7 @@ Set the size of the cache buffer used for media transfers.)
 
 /****/
 AD_METHOD1(SourceGetVideoSignalType,
-[in],aafVideoSignalType_t*,signalType,,
+[out],aafVideoSignalType_t*,signalType,,
 Get the video signal type [NTSC/PAL/SECAM].)
 	//@comm Replaces omfmSourceGetVideoSignalType */
 
