@@ -85,6 +85,10 @@ SOURCE="..\..\..\ref-impl\src\OM\OMClassFactory.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\OM\OMDataStreamProperty.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\OM\OMFile.cpp"
 # End Source File
 # Begin Source File
