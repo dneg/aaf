@@ -89,7 +89,7 @@
 
 
 
-void main ()
+int main ()
 {
   const aafWChar * filename = L"extensionPlugin.aaf";
 
@@ -100,7 +100,7 @@ void main ()
 		   << filename
 		   << "." << endl;
 
-	  exit (1);
+	  exit (EXIT_FAILURE);
 	}
   else
 	{
@@ -111,12 +111,15 @@ void main ()
 		     << filename
 		     << "." << endl;
 
-	    exit (2);
+	    exit (EXIT_FAILURE);
 	  }
     else
 	  {
 	    cout << "Succeeded." << endl;
-      exit (0);
+      exit (EXIT_SUCCESS);
 	  }
 	}
+
+
+  return EXIT_SUCCESS;
 }

@@ -25,7 +25,7 @@
 #include "extensionRead.h"
 #include "extensionUtils.h"
 
-void main ()
+int main ()
 {
   const aafWChar * filename = L"extension.aaf";
 
@@ -36,10 +36,13 @@ void main ()
 		   << filename
 		   << "." << endl;
 
-	  exit (1);
+	  exit (EXIT_FAILURE);
 	}
   else
 	{
 	  cout << "Succeeded." << endl;
 	}
+
+
+  return EXIT_SUCCESS;
 }
