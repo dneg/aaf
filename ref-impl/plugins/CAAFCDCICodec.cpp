@@ -129,9 +129,9 @@ inline void checkAssertion(bool test)
 
 inline bool IsDV(const aafUID_t &compId)
 {
-	if (EqualAUID(&compId, &kAAFCompression_LegacyDV) ||
-		EqualAUID(&compId, &kAAFCompression_IEC_DV_625_50) ||
-		EqualAUID(&compId, &kAAFCompression_IEC_DV_525_60))
+	if (EqualAUID(&compId, &kAAFCompressionDef_LegacyDV) ||
+		EqualAUID(&compId, &kAAFCompressionDef_IEC_DV_625_50) ||
+		EqualAUID(&compId, &kAAFCompressionDef_IEC_DV_525_60))
 	{
 		return true;
 	}
@@ -723,7 +723,7 @@ HRESULT STDMETHODCALLTYPE
 	// Legacy Flavours for supporting legacy apps.
 	if (flavour == kAAFCodecFlavour_LegacyDV_625_50)
 	{
-		memcpy( &_compression, &kAAFCompression_LegacyDV, sizeof(_compression) );
+		memcpy( &_compression, &kAAFCompressionDef_LegacyDV, sizeof(_compression) );
 		_frameLayout = kAAFMixedFields;
 		_imageWidth = _storedWidth = 720;
 		_imageHeight = _storedHeight = 288;
@@ -732,7 +732,7 @@ HRESULT STDMETHODCALLTYPE
 	}
 	else if (flavour == kAAFCodecFlavour_LegacyDV_525_60)
 	{
-		memcpy( &_compression, &kAAFCompression_LegacyDV, sizeof(_compression) );
+		memcpy( &_compression, &kAAFCompressionDef_LegacyDV, sizeof(_compression) );
 		_frameLayout = kAAFMixedFields;
 		_imageWidth = _storedWidth = 720;
 		_imageHeight = _storedHeight = 240;
@@ -742,7 +742,7 @@ HRESULT STDMETHODCALLTYPE
 	// The normal way to use the codec
 	else if (flavour == kAAFCodecFlavour_IEC_DV_625_50)
 	{
-		memcpy( &_compression, &kAAFCompression_IEC_DV_625_50, sizeof(_compression) );
+		memcpy( &_compression, &kAAFCompressionDef_IEC_DV_625_50, sizeof(_compression) );
 		_frameLayout = kAAFSeparateFields;
 		_imageWidth = _storedWidth = 720;
 		_imageHeight = _storedHeight = 288;
@@ -751,7 +751,7 @@ HRESULT STDMETHODCALLTYPE
 	}
 	else if (flavour == kAAFCodecFlavour_IEC_DV_525_60)
 	{
-		memcpy( &_compression, &kAAFCompression_IEC_DV_525_60, sizeof(_compression) );
+		memcpy( &_compression, &kAAFCompressionDef_IEC_DV_525_60, sizeof(_compression) );
 		_frameLayout = kAAFSeparateFields;
 		_imageWidth = _storedWidth = 720;
 		_imageHeight = _storedHeight = 240;
@@ -1734,7 +1734,7 @@ void CAAFCDCICodec::SetCodecState(void)
 		// 4:2:2 is not supported by libdv (e.g DVCPRO 50)
 		checkExpression( !(_verticalSubsampling == 1 && _horizontalSubsampling == 2), AAFRESULT_BADPIXFORM );
 
-		if (EqualAUID(&_compression, &kAAFCompression_LegacyDV))
+		if (EqualAUID(&_compression, &kAAFCompressionDef_LegacyDV))
 		{
 			// Experiment showed that legacy applications require display size set equal to stored size
 			// and that FrameLayout have the incorrect value of MixedFields, not SeparateFields
@@ -1813,7 +1813,7 @@ void CAAFCDCICodec::UpdateDescriptor (CAAFCDCIDescriptorHelper& descriptorHelper
 		_fileBytesPerSample ) );
 	}
 
-	if( EqualAUID(&_compression,&kAAFCompression_LegacyDV))
+	if( EqualAUID(&_compression,&kAAFCompressionDef_LegacyDV))
 	{
 	    checkResult( descriptorHelper.SetOffsetToFrameIndexes( 0 ) );
 	    checkResult( descriptorHelper.SetFrameIndexByteOrder( 0x4949) );
@@ -2084,8 +2084,8 @@ HRESULT STDMETHODCALLTYPE
 
 			// Only DV compressions supported for compressed CDCI
 			checkExpression (EqualAUID(&nullCompID, &param.operand.expUID) ||
-					EqualAUID(&kAAFCompression_IEC_DV_625_50, &param.operand.expUID) ||
-					EqualAUID(&kAAFCompression_IEC_DV_525_60, &param.operand.expUID),AAFRESULT_BADCOMPR);
+					EqualAUID(&kAAFCompressionDef_IEC_DV_625_50, &param.operand.expUID) ||
+					EqualAUID(&kAAFCompressionDef_IEC_DV_525_60, &param.operand.expUID),AAFRESULT_BADCOMPR);
 
 			memcpy( &_compression, &(param.operand.expUID), 
 			    sizeof(param.operand.expUID) );
