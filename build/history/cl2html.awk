@@ -14,8 +14,10 @@ BEGIN {
     exit 1;
   }
 
-  if (TITLE == "") {
+  if ((TAG1 == "") || (TAG2 == "")) {
     TITLE = "cvs change log";
+  } else {
+    TITLE=sprintf("Log of changes made between %s and %s", TAG1, TAG2);
   }
   entrytext = "";
   createColorMap(ARGV[1]);
