@@ -89,9 +89,10 @@ static void printHelp ()
 static void usage (const char * command)
 {
   assert (command);
-  fprintf (stderr, "Usage: %s -f macro_file\n", command);
+  fprintf (stderr, "Usage: %s -f macro_file {-o output_file}\n", command);
   fprintf (stderr,
-	   "  Uses stdin for input file and stdout for output file.\n");
+	   "  Uses stdin for input file; if specified, uses output_file"
+	   "  for output; if not specified, uses stdout.\n");
   fprintf (stderr, "       %s -h\n", command);
   fprintf (stderr,
 	   "  Prints help information.\n");
@@ -137,6 +138,7 @@ static TextStream UnEscape
 void main (int argc, char ** argv)
 {
   const char * command = argv[0];
+  const char * outfilename = NULL;
 
   assert (command);
 
@@ -161,6 +163,24 @@ void main (int argc, char ** argv)
 
   const char * macrofilename = argv[2];
   assert (macrofilename);
+
+  if (argc == 3)
+	{
+	  usage (command);	// does not return
+	}
+
+  if (argc >= 4)
+	{
+	  if (0 != strcmp ("-o", argv[3]))
+		{
+		  fprintf (stderr,
+				   "Unrecognized command line switch: \"%s\"\n", argv[3]);
+		  usage (command);	// does not return
+		}
+
+	  outfilename = argv[4];
+	  assert (outfilename);
+	}
 
   FILE * macrofile;
   macrofile = fopen (macrofilename, "r");
@@ -221,7 +241,19 @@ void main (int argc, char ** argv)
   input = output;
   output = UnEscape (input);
 
-  output.dump (stdout);
+  FILE * outfile = stdout;
+  if (outfilename)
+	{
+	  outfile = fopen (outfilename, "w");
+	  if (! outfile)
+		{
+		  fprintf (stderr, "Couldn't open output file \"%s\"\n",
+				   outfilename);
+		  usage (command);	// does not return
+		}
+	}
+
+  output.dump (outfile);
 
   exit (0);
 }
