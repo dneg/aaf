@@ -115,7 +115,7 @@ void OMVariableSizeProperty<PropertyType>::getValueAt(PropertyType* value,
                                                       const size_t index) const
 {
   TRACE("OMVariableSizeProperty<PropertyType>::getValueAt");
-  PRECONDITION("Valid index", (index >= 0) && (index < count()));
+  PRECONDITION("Valid index", index < count());
   PRECONDITION("Valid value", value != 0);
 
   *value = ((PropertyType*)_bits)[index];
@@ -136,7 +136,7 @@ void OMVariableSizeProperty<PropertyType>::setValueAt(
                                                      const size_t index)
 {
   TRACE("OMVariableSizeProperty<PropertyType>::setValueAt");
-  PRECONDITION("Valid index", (index >= 0) && (index < count()));
+  PRECONDITION("Valid index", index < count());
   PRECONDITION("Valid value", value != 0);
 
   ((PropertyType*)_bits)[index] = *value;
