@@ -49,10 +49,14 @@
 #include "ImplEnumAAFComponents.h"
 #include "ImplAAFTimecode.h"
 #include "ImplAAFFileDescriptor.h"
+#include "ImplAAFFiller.h"
+#include "ImplAAFEdgecode.h"
 
 extern "C" const aafClassID_t	CLSID_AAFSourceClip;
 extern "C" const aafClassID_t	CLSID_AAFSequence;
 extern "C" const aafClassID_t	CLSID_AAFTimecode;
+extern "C" const aafClassID_t	CLSID_AAFFiller;
+extern "C" const aafClassID_t	CLSID_AAFEdgecode;
 
 ImplAAFSourceMob::ImplAAFSourceMob ()
 : _essenceDesc(        PID_SourceMob_MediaDescription,          "MediaDescription")
@@ -260,65 +264,59 @@ AAFRESULT STDMETHODCALLTYPE
 // AddEdgecodeClip()
 //
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFSourceMob::AppendEdgecodeSlot (aafRational_t  /*editrate*/,
-                           aafInt32  /*slotID*/,
-                          aafFrameOffset_t  /*startEC*/,
-                           aafFrameLength_t  /*length32*/,
-                           aafFilmType_t  /*filmKind*/,
-                           aafEdgeType_t  /*codeFormat*/,
-                           aafEdgecodeHeader_t  /*header*/)
+    ImplAAFSourceMob::AppendEdgecodeSlot (aafRational_t  editrate,
+                           aafInt32  slotID,
+                          aafFrameOffset_t  startEC,
+                           aafFrameLength_t  length32,
+                           aafFilmType_t  filmKind,
+                           aafEdgeType_t  codeFormat,
+                           aafEdgecodeHeader_t  header)
 {
-#if FULL_TOOLKIT
+#if 1
 	ImplAAFFiller *     filler1= NULL, *filler2 = NULL;
 	ImplAAFSequence *ecSequence;
 	ImplAAFEdgecode *edgecodeClip;
-	ImplAAFRESULT			aafError = AAFRESULT_SUCCESS;
+	AAFRESULT			aafError = AAFRESULT_SUCCESS;
 	aafPosition_t	startPos, zeroPos;
 	aafLength_t		length, zeroLen;
-	ImplAAFMobSlot *	newSlot;
-	ImplAAFDataKind *	edgecodeKind;
+	ImplAAFTimelineMobSlot *	newSlot;
 	aafEdgecode_t	edge;
-	
+	aafUID_t		edgekind = DDEF_Edgecode;
+
 	// Validate film mobs only, return AAFRESULT_FILM_DESC_ONLY
 	CvtInt32toPosition(0, zeroPos);
 	CvtInt32toLength(0, zeroLen);
-	XPROTECT(_file)
+	XPROTECT()
 	{
-		_head->DatakindLookup(EDGECODEKIND, &edgecodeKind, &aafError);
-		if (aafError != AAFRESULT_SUCCESS)
-		{
-			RAISE(aafError);
-		}
-
-		filler1 = CreateImpl(CLSID_AAFFiller);
-		(_file, edgecodeKind, zeroLen);	
-		filler2 = CreateImpl(CLSID_AAFFiller);
-		(_file, edgecodeKind, zeroLen);	
+		filler1 = (ImplAAFFiller *)CreateImpl(CLSID_AAFFiller);
+		CHECK(filler1->Initialize(&edgekind, zeroLen));	
+		filler2 = (ImplAAFFiller *)CreateImpl(CLSID_AAFFiller);
+		CHECK(filler2->Initialize(&edgekind, zeroLen));	
 		if(filler1 == NULL || filler2 == NULL)
 			RAISE(E_FAIL);
 
-		ecSequence = CreateImpl(CLSID_AAFSequence);
+		ecSequence = (ImplAAFSequence *)CreateImpl(CLSID_AAFSequence);
 		if(ecSequence == NULL)
 			RAISE(E_FAIL);
-		(_file, edgecodeKind);
+		CHECK(ecSequence->Initialize(&edgekind));	
 
 		CvtInt32toLength(length32, length);
 		CvtInt32toPosition(startEC, startPos);
 		edge.startFrame = startPos;
 		edge.filmKind = filmKind;
 		edge.codeFormat = codeFormat;
-		strncpy((char *)edge.header, header, 8);
+		strncpy((char *)&edge.header, (char *)&header, 8);
 		
-		edgecodeClip = CreateImpl(CLSID_AAFEdgecode);
+		edgecodeClip = (ImplAAFEdgecode *)CreateImpl(CLSID_AAFEdgecode);
 		if(edgecodeClip == NULL)
 			RAISE(E_FAIL);
-		 (_file, length, edge);
+		CHECK(edgecodeClip->Create(length, edge));	
 		
-		CHECK(ecSequence->AppendCpnt(filler1));
-		CHECK(ecSequence->AppendCpnt(edgecodeClip));
-		CHECK(ecSequence->AppendCpnt(filler2));
-		CHECK(AppendNewSlot(editrate, ecSequence, zeroPos,
-											slotID, NULL, &newSlot));
+		CHECK(ecSequence->AppendComponent(filler1));
+		CHECK(ecSequence->AppendComponent(edgecodeClip));
+		CHECK(ecSequence->AppendComponent(filler2));
+		CHECK(AppendNewTimelineSlot(editrate, ecSequence, slotID,
+									NULL, zeroPos, &newSlot));
 
 		if(filler1 != NULL)
 			filler1->ReleaseReference();
@@ -737,7 +735,6 @@ AAFRESULT ImplAAFSourceMob::FindTimecodeClip(
 {
 #if FULL_TOOLKIT
 	ImplAAFSegment *	seg = NULL;
-	AAFIterate *		sequIter = NULL;
 	aafPosition_t		offset;
 	AAFRESULT			status = AAFRESULT_SUCCESS;
 	aafLength_t			zeroLen;
@@ -752,7 +749,7 @@ AAFRESULT ImplAAFSourceMob::FindTimecodeClip(
 		CHECK(FindTimecodeSlot(&seg));
 		CHECK(seg->GetLength(tcSlotLen));
 		CHECK(seg->OffsetToTimecodeClip(offset, result, &sequPos));
-		CHECK(TruncInt64toUInt32(sequPos, tcStartPos));		/* OK FRAMEOFFSET */
+		*tcStartPos = sequPos;
 	} /* XPROTECT */
 	XEXCEPT
 	{
@@ -764,7 +761,7 @@ AAFRESULT ImplAAFSourceMob::FindTimecodeClip(
 
 	return(AAFRESULT_SUCCESS);
 #else
-	return AAFRESULT_NOT_IMPLEMENTED;
+	return(AAFRESULT_NOT_IMPLEMENTED);
 #endif
 }
 
