@@ -18,19 +18,19 @@ include $(BLD_CFG_DIR)/common.mk
 DODO = dodo.$(EXE)
 
 dodo-app:
-	$(SH_PREFIX) cd tool ;  $(MAKE) $(SH_SUFFIX)
+	cd tool ;  $(MAKE)
 
 test_only:
-	$(SH_PREFIX) cd tool ; $(MAKE) test_only $(SH_SUFFIX)
-	$(SH_PREFIX) $(MAKE) -f dodotargets.mak $(SH_SUFFIX)
-	$(SH_PREFIX) $(MAKE) -f dododepend.mak $(SH_SUFFIX)
-	$(SH_PREFIX) $(MAKE) -f maketargets.mak $(SH_SUFFIX)
+	cd tool ; $(MAKE) test_only
+	$(MAKE) -f dodotargets.mak
+	$(MAKE) -f dododepend.mak
+	$(MAKE) -f maketargets.mak
 
 run:
-	$(SH_PREFIX) $(MAKE) -f dodotargets.mak $(SH_SUFFIX)
-	$(SH_PREFIX) $(MAKE) -f dododepend.mak $(SH_SUFFIX)
-	$(SH_PREFIX) $(MAKE) -f maketargets.mak $(SH_SUFFIX)
-	$(SH_PREFIX) cd tool ; $(MAKE) run $(SH_SUFFIX)
+	$(MAKE) -f dodotargets.mak
+	$(MAKE) -f dododepend.mak
+	$(MAKE) -f maketargets.mak
+	cd tool ; $(MAKE) run
 
 
 
@@ -43,16 +43,16 @@ aafobjects.all : \
 	$(SRC_DIR)/cpp-api/aafobjects.mk
 
 $(INCLUDE_DIR)/com-api/aafobjects.mk : aafobjects.mk
-	$(SH_PREFIX) $(RM) -f $(INCLUDE_DIR)/com-api/aafobjects.mk $(SH_SUFFIX)
-	$(SH_PREFIX) cp -m aafobjects.mk $(INCLUDE_DIR)/com-api $(SH_SUFFIX)
+	$(RM) -f $(INCLUDE_DIR)/com-api/aafobjects.mk
+	cp aafobjects.mk $(INCLUDE_DIR)/com-api
 
 $(SRC_DIR)/com-api/aafobjects.mk : aafobjects.mk
-	$(SH_PREFIX) $(RM) -f $(SRC_DIR)/com-api/aafobjects.mk $(SH_SUFFIX)
-	$(SH_PREFIX) cp -m aafobjects.mk $(SRC_DIR)/com-api $(SH_SUFFIX)
+	$(RM) -f $(SRC_DIR)/com-api/aafobjects.mk
+	cp aafobjects.mk $(SRC_DIR)/com-api
 
 $(SRC_DIR)/cpp-api/aafobjects.mk : aafobjects.mk
-	$(SH_PREFIX) $(RM) -f $(SRC_DIR)/cpp-api/aafobjects.mk $(SH_SUFFIX)
-	$(SH_PREFIX) cp -m aafobjects.mk $(SRC_DIR)/cpp-api $(SH_SUFFIX)
+	$(RM) -f $(SRC_DIR)/cpp-api/aafobjects.mk
+	cp aafobjects.mk $(SRC_DIR)/cpp-api
 
 
 
@@ -60,23 +60,21 @@ $(SRC_DIR)/cpp-api/aafobjects.mk : aafobjects.mk
 #targets: aafobjects.mk targets.mk depend.mk
 
 targets: 
-	$(SH_PREFIX) $(MAKE) -f maketargets.mak $(SH_SUFFIX)
+	$(MAKE) -f maketargets.mak
 
 
 targets.mk : aafobjects.mk
-	$(SH_PREFIX) $(MAKE) -f dodotargets.mak $(SH_SUFFIX)
+	$(MAKE) -f dodotargets.mak
 
 depend.mk : aafobjects.mk
-	$(SH_PREFIX) $(MAKE) -f dododepend.mak $(SH_SUFFIX)
+	$(MAKE) -f dododepend.mak
 
 depend : targets.mk depend.mk
 
 clean:
-	$(SH_PREFIX) cd tool ; $(MAKE) clean $(SH_SUFFIX)
-	$(SH_PREFIX) $(MAKE) -f dodotargets.mak clean $(SH_SUFFIX)
-	$(SH_PREFIX) $(MAKE) -f dododepend.mak clean $(SH_SUFFIX)
-	$(SH_PREFIX) touch targets.mk $(SH_SUFFIX)
-	$(SH_PREFIX) touch depend.mk $(SH_SUFFIX)
-	$(SH_PREFIX) $(MAKE) -f maketargets.mak clean $(SH_SUFFIX)
-
-
+	cd tool ; $(MAKE) clean
+	$(MAKE) -f dodotargets.mak clean
+	$(MAKE) -f dododepend.mak clean
+	touch targets.mk depend.mk
+	$(MAKE) -f maketargets.mak clean
+	$(RM) -f targets.mk depend.mk
