@@ -123,8 +123,8 @@ public:
   // DoesDataDefConvertTo()
   //
   // Sets return value to TRUE if the DataDef of the given object
-		   // can be converted to the DataDef specified in the IN 
-		   // parameter with the DataDefName string.
+   // can be converted to the DataDef specified in the IN 
+   // parameter with the DataDefName string.
   //
   STDMETHOD (DoesDataDefConvertTo) (
     // data def to compare against

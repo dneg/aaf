@@ -2357,7 +2357,7 @@ DECLARE_INTERFACE_(IAAFContentStorage, IUnknown)
   //
   // AAFRESULT_DUPLICATE_MOBID
   //   - The given mob has already been added.  The validation is done by comparing
-  //		mobIDs, which should be unique.
+  //     mobIDs, which should be unique.
   //
   // AAFRESULT_NULL_PARAM
   //   - pEssenceData is null.
@@ -2839,8 +2839,8 @@ DECLARE_INTERFACE_(IAAFDataDef, IUnknown)
   // DoesDataDefConvertTo()
   //
   // Sets return value to TRUE if the DataDef of the given object
-		   // can be converted to the DataDef specified in the IN 
-		   // parameter with the DataDefName string.
+   // can be converted to the DataDef specified in the IN 
+   // parameter with the DataDefName string.
   //
   STDMETHOD(DoesDataDefConvertTo) (THIS_
     // data def to compare against
@@ -11060,7 +11060,7 @@ DECLARE_INTERFACE_(IAAFHeader, IUnknown)
   //
   // AAFRESULT_DUPLICATE_MOBID
   //   - The given mob has already been added.  The validation is done by comparing
-  //		mobIDs, which should be unique.
+  //     mobIDs, which should be unique.
   //
   // AAFRESULT_NULL_PARAM
   //   - pEssenceData is null.
@@ -22063,7 +22063,7 @@ DECLARE_INTERFACE_(IAAFTypeDefEnum, IUnknown)
     /*[in, ref]*/ aafUID_constref  id,
 
     // Type of values in this enumeration.
-			// Has to be of type Int
+    // Has to be of type Int
     /*[in]*/ IAAFTypeDef * pType,
 
     // array of element values to be represented in this enumerated
@@ -26866,7 +26866,7 @@ DECLARE_INTERFACE_(IAAFVaryingValue, IUnknown)
 
     // Preallocated buffer to hold value
     /*[out,
-		   size_is(valueSize),length_is(*bytesRead)]*/ aafDataBuffer_t  pValue,
+   size_is(valueSize),length_is(*bytesRead)]*/ aafDataBuffer_t  pValue,
 
     // Number of actual bytes read
     /*[out]*/ aafInt32 *  bytesRead) PURE;

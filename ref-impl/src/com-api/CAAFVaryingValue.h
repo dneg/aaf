@@ -359,7 +359,7 @@ public:
 
     // Preallocated buffer to hold value
     /*[out,
-		   size_is(valueSize),length_is(*bytesRead)]*/ aafDataBuffer_t  pValue,
+   size_is(valueSize),length_is(*bytesRead)]*/ aafDataBuffer_t  pValue,
 
     // Number of actual bytes read
     /*[out]*/ aafInt32 *  bytesRead);

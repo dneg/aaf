@@ -108,7 +108,7 @@ public:
     /*[in, ref]*/ aafUID_constref  id,
 
     // Type of values in this enumeration.
-			// Has to be of type Int
+    // Has to be of type Int
     /*[in]*/ IAAFTypeDef * pType,
 
     // array of element values to be represented in this enumerated

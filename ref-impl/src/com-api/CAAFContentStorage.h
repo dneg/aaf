@@ -330,7 +330,7 @@ public:
   //
   // AAFRESULT_DUPLICATE_MOBID
   //   - The given mob has already been added.  The validation is done by comparing
-  //		mobIDs, which should be unique.
+  //     mobIDs, which should be unique.
   //
   // AAFRESULT_NULL_PARAM
   //   - pEssenceData is null.
