@@ -78,7 +78,7 @@ inline void checkResult(HRESULT r)
   if (FAILED(r))
     throw r;
 }
-inline void checkExpression(bool expression, HRESULT r)
+inline void checkExpression(bool expression, HRESULT r=AAFRESULT_TEST_FAILED)
 {
   if (!expression)
     throw r;
@@ -88,7 +88,6 @@ inline void checkExpression(bool expression, HRESULT r)
 
 static HRESULT CreateAAFFile(aafWChar * pFileName)
 {
-	// IAAFSession*				pSession = NULL;
 	IAAFFile*					pFile = NULL;
 	IAAFHeader*					pHeader = NULL;
 	IAAFDictionary*  pDictionary = NULL;
@@ -171,18 +170,16 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		pSourceClip->Release();
 		pSourceClip = NULL;
 		// Add a source clip alternate
+		aafSourceRef_t sourceRef={0};
 		checkResult(defs.cdSourceClip()->
 					CreateInstance(IID_IAAFSourceClip, 
 								   (IUnknown **)&pSourceClip));
-		checkResult(pSourceClip->QueryInterface (IID_IAAFComponent, (void **)&pComponent));
-		checkResult(pComponent->SetDataDef (defs.ddSound()));
-		checkResult(pComponent->SetLength (segLen));
+		sourceRef.startTime=2;
+		checkResult(pSourceClip->Initialize(defs.ddSound(),segLen,sourceRef));
 		checkResult(pSourceClip->QueryInterface (IID_IAAFSegment, (void **)&pSegment));
 		checkResult(essenceGroup->AppendChoice(pSegment)); 
 		pSegment->Release();
 		pSegment = NULL;
-		pComponent->Release();
-		pComponent = NULL;
 		pSourceClip->Release();
 		pSourceClip = NULL;
 		checkResult(essenceGroup->CountChoices(&numChoices));
@@ -191,23 +188,34 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(defs.cdSourceClip()->
 					CreateInstance(IID_IAAFSourceClip, 
 								   (IUnknown **)&pSourceClip));
-		checkResult(pSourceClip->QueryInterface (IID_IAAFComponent, (void **)&pComponent));
-		checkResult(pComponent->SetDataDef (defs.ddSound()));
-		checkResult(pComponent->SetLength (segLen));
+		sourceRef.startTime=0;
+		checkResult(pSourceClip->Initialize(defs.ddSound(),segLen,sourceRef));
 		checkResult(pSourceClip->QueryInterface (IID_IAAFSegment, (void **)&pSegment));
-		checkResult(essenceGroup->AppendChoice(pSegment)); 
+		checkResult(essenceGroup->PrependChoice(pSegment)); 
 		pSegment->Release();
 		pSegment = NULL;
-		pComponent->Release();
-		pComponent = NULL;
 		pSourceClip->Release();
 		pSourceClip = NULL;
 		checkResult(essenceGroup->CountChoices(&numChoices));
 		checkExpression(2 == numChoices, AAFRESULT_TEST_FAILED);
-		// Remove the second alternate, check for count 1 once again
-		checkResult(essenceGroup->RemoveChoiceAt(1));
+		// Insert a third choice in the middle
+		checkResult(defs.cdSourceClip()->
+					CreateInstance(IID_IAAFSourceClip, 
+								   (IUnknown **)&pSourceClip));
+		sourceRef.startTime=1;
+		checkResult(pSourceClip->Initialize(defs.ddSound(),segLen,sourceRef));
+		checkResult(pSourceClip->QueryInterface (IID_IAAFSegment, (void **)&pSegment));
+		checkResult(essenceGroup->InsertChoiceAt(1,pSegment)); 
+		pSegment->Release();
+		pSegment = NULL;
+		pSourceClip->Release();
+		pSourceClip = NULL;
 		checkResult(essenceGroup->CountChoices(&numChoices));
-		checkExpression(1 == numChoices, AAFRESULT_TEST_FAILED);
+		checkExpression(3 == numChoices, AAFRESULT_TEST_FAILED);
+		// Remove the third alternate, check for count of 2
+		checkResult(essenceGroup->RemoveChoiceAt(2));
+		checkResult(essenceGroup->CountChoices(&numChoices));
+		checkExpression(2 == numChoices, AAFRESULT_TEST_FAILED);
 
 		checkResult(essenceGroup->QueryInterface (IID_IAAFSegment, (void **)&pSeg));
 		aafRational_t editRate = { 0, 1};
@@ -373,16 +381,26 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 				pComponent = NULL;
 				/***/
 				checkResult(pEssenceGroup->CountChoices(&readNumChoices));
-				checkExpression(1 == readNumChoices, AAFRESULT_TEST_FAILED);
+				checkExpression(2 == readNumChoices, AAFRESULT_TEST_FAILED);
 				/***/
-				checkResult(pEssenceGroup->GetChoiceAt (0, &pSegment));
-				checkResult(pSegment->QueryInterface (IID_IAAFComponent, (void **)&pComponent));
-				checkResult(pComponent->GetLength(&readLength));
-				checkExpression(SUBSEG_LENGTH == readLength, AAFRESULT_TEST_FAILED);
-				pSegment->Release();
-				pSegment = NULL;
-				pComponent->Release();
-				pComponent = NULL;
+				for(int n=0;n<2;n++)
+				{
+					checkResult(pEssenceGroup->GetChoiceAt (n, &pSegment));
+					checkResult(pSegment->QueryInterface (IID_IAAFComponent, (void **)&pComponent));
+					checkResult(pComponent->GetLength(&readLength));
+					checkExpression(SUBSEG_LENGTH == readLength, AAFRESULT_TEST_FAILED);
+					checkResult(pSegment->QueryInterface(IID_IAAFSourceClip,
+						(void**)&pSourceClip));
+					aafSourceRef_t sourceRef;
+					checkResult(pSourceClip->GetSourceReference(&sourceRef));
+					checkExpression(sourceRef.startTime==n);
+					pSegment->Release();
+					pSegment = NULL;
+					pComponent->Release();
+					pComponent = NULL;
+					pSourceClip->Release();
+					pSourceClip = NULL;
+				}
 
 				pEssenceGroup->Release();
 				pEssenceGroup = NULL;
@@ -450,9 +468,6 @@ extern "C" HRESULT CAAFEssenceGroup_test()
 		hr = CreateAAFFile(	pFileName );
 		if(hr == AAFRESULT_SUCCESS)
 			hr = ReadAAFFile( pFileName );
-		
-		if(hr == AAFRESULT_SUCCESS)
-			hr = AAFRESULT_NOT_IN_CURRENT_VERSION;
 	}
 	catch (...)
 	{
@@ -460,17 +475,6 @@ extern "C" HRESULT CAAFEssenceGroup_test()
 		   << " exception!" << endl; 
 	  hr = AAFRESULT_TEST_FAILED;
 	}
-
-	// When all of the functionality of this class is tested, we can return success.
-	// When a method and its unit test have been implemented, remove it from the list.
-//	if (SUCCEEDED(hr))
-//	{
-//		cout << "The following AAFEssenceGroup tests have not been implemented:" << endl; 
-//		cout << "     GetStillFrame" << endl; 
-//		cout << "     GetNumChoices" << endl; 
-//		cout << "     GetIndexedChoice" << endl; 
-//		hr = AAFRESULT_TEST_PARTIAL_SUCCESS;
-//	}
 
 	return hr;
 }

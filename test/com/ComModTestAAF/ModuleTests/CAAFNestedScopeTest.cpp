@@ -76,7 +76,7 @@ inline void checkResult(HRESULT r)
   if (FAILED(r))
     throw r;
 }
-inline void checkExpression(bool expression, HRESULT r)
+inline void checkExpression(bool expression, HRESULT r=AAFRESULT_TEST_FAILED)
 {
   if (!expression)
     throw r;
@@ -222,7 +222,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 					CreateInstance(IID_IAAFFiller, 
 								   (IUnknown **)&pFiller));
 		// Set its properties.
-	    checkResult(pFiller->Initialize(defs.ddPicture(), fillerLength));
+	    checkResult(pFiller->Initialize(defs.ddPicture(), fillerLength+2));
 
 		// Now create a nested scope 
 	    checkResult(defs.cdNestedScope()->
@@ -239,22 +239,34 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		// Set all properties on the nested scope 
 		//	Set the selected segment on the nested scope 
 		checkResult(pNestedScope->AppendSegment(pSegment));
-		// Release the intreface so we can reuse the pointer
+		// Release the interface so we can reuse the pointer
 		pSegment->Release();
 		pSegment = NULL;
-		checkResult(pFiller->QueryInterface(IID_IAAFSegment, (void **)&pSegment));
-		checkResult(pNestedScope->AppendSegment(pSegment));
-		// Release the intreface so we can reuse the pointer
-		pSegment->Release();
-		pSegment = NULL;
+		pFiller->Release();
+		pFiller = NULL;
 
-		// create another filler, set its properties, and append
+		// Prepend a new filler
 	    checkResult(defs.cdFiller()->
 					CreateInstance(IID_IAAFFiller, 
 								   (IUnknown **)&pFiller));
 	    checkResult(pFiller->Initialize(defs.ddPicture(), fillerLength));
 		checkResult(pFiller->QueryInterface(IID_IAAFSegment, (void **)&pSegment));
-		checkResult(pNestedScope->AppendSegment(pSegment));
+		checkResult(pNestedScope->PrependSegment(pSegment));
+		// Release the intreface so we can reuse the pointer
+		pFiller->Release();
+		pFiller = NULL;
+		pSegment->Release();
+		pSegment = NULL;
+
+		// Create another filler, set its properties, and insert it in the middle
+	    checkResult(defs.cdFiller()->
+					CreateInstance(IID_IAAFFiller, 
+								   (IUnknown **)&pFiller));
+	    checkResult(pFiller->Initialize(defs.ddPicture(), fillerLength+1));
+		checkResult(pFiller->QueryInterface(IID_IAAFSegment, (void **)&pSegment));
+		checkResult(pNestedScope->InsertSegmentAt(1,pSegment));
+		pFiller->Release();
+		pFiller = NULL;
 		pSegment->Release();
 		pSegment = NULL;
 		checkResult(pNestedScope->CountSegments (&numSegments));
@@ -333,9 +345,9 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	IAAFMobSlot*		pSlot = NULL;
 	IAAFCompositionMob*	pCompMob = NULL;
 	IAAFSegment*		pSegment = NULL;
+	IAAFComponent*		pComponent = NULL;
 	IAAFFiller*			pFiller = NULL;
 	IAAFNestedScope*		pNestedScope = NULL;
-	IAAFSourceClip*		pSourceClip = NULL;
 	IEnumAAFSegments*	pSegIter = NULL;
 
 	aafNumSlots_t		numMobs;
@@ -371,32 +383,38 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 				checkResult(pSlot->GetSegment(&pSegment));
 				// See if it is a Selector
 				checkResult(pSegment->QueryInterface(IID_IAAFNestedScope, (void **) &pNestedScope));
-				pSegment->Release();
-				pSegment = NULL;
+
+				aafUInt32 numSegments;
+				checkResult(pNestedScope->CountSegments (&numSegments));
+				checkExpression(2 == numSegments, AAFRESULT_TEST_FAILED);
 
 				// -----------------------------------------------------------				
 				// Enumerate slots
 				checkResult(pNestedScope->GetSegments(&pSegIter));
-				checkResult(pSegIter->NextOne(&pSegment));
-				checkResult(pSegment->QueryInterface(IID_IAAFSourceClip, (void **)&pSourceClip));
 				pSegment->Release();
 				pSegment = NULL;
 
+				aafUInt32 segmentIndex=0;
 				while (pSegIter && pSegIter->NextOne(&pSegment) == AAFRESULT_SUCCESS)
 				{
-					// Make sure further segmenta are filler
+					// Make sure further segments are filler & verify lengths
 					checkResult(pSegment->QueryInterface(IID_IAAFFiller, (void **)&pFiller));
+					checkResult(pSegment->QueryInterface(IID_IAAFComponent, (void **)&pComponent));
+					aafLength_t fillerLength;
+					checkResult(pComponent->GetLength(&fillerLength));
+					checkExpression(fillerLength==3200+segmentIndex);
 					pSegment->Release();
 					pSegment = NULL;
 					pFiller->Release();
 					pFiller = NULL;
+					pComponent->Release();
+					pComponent = NULL;
+					segmentIndex++;
 				}
+				checkExpression(segmentIndex==2);
 
 				pSegIter->Release();
 				pSegIter = NULL;
-
-				pSourceClip->Release();
-				pSourceClip = NULL;
 
 				pNestedScope->Release();
 				pNestedScope = NULL;
@@ -417,10 +435,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	}
 
 	// Cleanup object references
-	if (pSourceClip)
-		pSourceClip->Release();
-
-	if (pCompMob)
+ 	if (pCompMob)
 		pCompMob->Release();
 
 	if (pSegment)
@@ -466,9 +481,6 @@ extern "C" HRESULT CAAFNestedScope_test()
 		hr = CreateAAFFile(pFileName);
 		if (SUCCEEDED(hr))
 			hr = ReadAAFFile(pFileName);
-		
-		if(hr == AAFRESULT_SUCCESS)
-			hr = AAFRESULT_NOT_IN_CURRENT_VERSION;
 	}
 	catch (...)
 	{
@@ -477,13 +489,5 @@ extern "C" HRESULT CAAFNestedScope_test()
 		hr = AAFRESULT_TEST_FAILED;
 	}
 
-	// When all of the functionality of this class is tested, we can return success.
-	// When a method and its unit test have been implemented, remove it from the list.
-//	if (SUCCEEDED(hr))
-//	{
-//		cout << "The following AAFNestedScope tests have not been implemented:" << endl; 
-//		cout << "     RemoveSegment" << endl; 
-//		hr = AAFRESULT_TEST_PARTIAL_SUCCESS;
-//	}
 	return hr;
 }
