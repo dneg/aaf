@@ -67,12 +67,20 @@ void OMDictionary::insert(const OMPropertyId propertyId,
                                     _propertyDefinitions.contains(propertyId));
 }
 
-OMPropertyDefinition* OMDictionary::remove(const OMPropertyId /* propertyId */)
+OMPropertyDefinition* OMDictionary::remove(const OMPropertyId propertyId)
 {
   TRACE("OMDictionary::remove");
 
   ASSERT("Unimplemented code not reached", false);
   OMPropertyDefinition* result = 0;
+  bool status = _propertyDefinitions.find(propertyId, result);
+  ASSERT("Property definition found", status);
+
+  status = _propertyDefinitions.remove(propertyId);
+  ASSERT("Property definition removed", status);
+
+  POSTCONDITION("Definition no longer present",
+                                   !_propertyDefinitions.contains(propertyId));
   return result;
 }
 
