@@ -1,3 +1,5 @@
+#ifndef _AAFPropertyIDs_H_
+#define _AAFPropertyIDs_H_
 
 const int PID_CDCI_DESC_COMPPONENTWIDTH               =  40;
 const int PID_CDCI_DESC_HORIZONTALSUBSAMPLING         =  41;
@@ -95,3 +97,5 @@ const int PID_TIMELINEMOBSLOT_ORIGIN                  =   5;
 const int PID_TIMECODE_TC                             =   5;
 
 const int PID_WAVEDESCRIPTOR_SUMMARY                  =  30;
+
+#endif
