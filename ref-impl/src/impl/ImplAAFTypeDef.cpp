@@ -185,7 +185,7 @@ AAFRESULT STDMETHODCALLTYPE
   AAFRESULT hr = GetDictionary(&pDict);
   if (AAFRESULT_FAILED (hr)) return hr;
   
-  return pDict->LookupType (kAAFTypeID_UInt8Array, ppRawTypeDef);
+  return pDict->LookupTypeDef (kAAFTypeID_UInt8Array, ppRawTypeDef);
 }
 
 

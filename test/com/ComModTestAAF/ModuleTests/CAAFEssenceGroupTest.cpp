@@ -82,7 +82,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFDictionary*  pDictionary = NULL;
 	IAAFMob*					pMob = NULL;
 	IAAFMob*					pReferencedMob = NULL;
-	IAAFMobSlot*				newSlot = NULL;
+	IAAFTimelineMobSlot*		newSlot = NULL;
 	IAAFEssenceGroup*			essenceGroup = NULL;
 	IAAFSegment*				pSeg = NULL;
 	IAAFSourceClip*				pSourceClip = NULL;
@@ -170,12 +170,18 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		pSourceClip = NULL;
 
 		checkResult(essenceGroup->QueryInterface (IID_IAAFSegment, (void **)&pSeg));
-		checkResult(pMob->AppendNewSlot (pSeg, 1, slotName, &newSlot));
+		aafRational_t editRate = { 0, 1};
+		checkResult(pMob->AppendNewTimelineSlot (editRate,
+												 pSeg,
+												 1,
+												 slotName,
+												 0,
+												 &newSlot));
 		pSeg->Release();
 		pSeg = NULL;
 
-		checkResult(pHeader->AppendMob(pMob));
-		checkResult(pHeader->AppendMob(pReferencedMob));
+		checkResult(pHeader->AddMob(pMob));
+		checkResult(pHeader->AddMob(pReferencedMob));
 	}
   catch (HRESULT& rResult)
   {
@@ -266,19 +272,19 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		checkResult(pFile->GetHeader(&pHeader));
 
 		// Get the number of mobs in the file (should be one)
-		checkResult(pHeader->GetNumMobs(kAllMob, &numMobs));
+		checkResult(pHeader->CountMobs(kAllMob, &numMobs));
 		checkExpression(2 == numMobs, AAFRESULT_TEST_FAILED);
 
 		// Enumerate over all Composition Mobs
 		criteria.searchTag = kByMobKind;
 		criteria.tags.mobKind = kCompMob;
-		checkResult(pHeader->EnumAAFAllMobs(&criteria, &pMobIter));
+		checkResult(pHeader->GetMobs(&criteria, &pMobIter));
 		while (AAFRESULT_SUCCESS == pMobIter->NextOne(&pMob))
 		{
-			checkResult(pMob->GetNumSlots(&numSlots));
+			checkResult(pMob->CountSlots(&numSlots));
 			checkExpression(1 == numSlots, AAFRESULT_TEST_FAILED);
 
-			checkResult(pMob->EnumAAFAllMobSlots(&pSlotIter));
+			checkResult(pMob->GetSlots(&pSlotIter));
 			while (AAFRESULT_SUCCESS == pSlotIter->NextOne(&pSlot))
 			{
 				// The segment should be a source clip...
@@ -296,10 +302,10 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 				pComponent->Release();
 				pComponent = NULL;
 				/***/
-				checkResult(pEssenceGroup->GetNumChoices(&readNumChoices));
+				checkResult(pEssenceGroup->CountChoices(&readNumChoices));
 				checkExpression(1 == readNumChoices, AAFRESULT_TEST_FAILED);
 				/***/
-				checkResult(pEssenceGroup->GetIndexedChoice (0, &pSourceClip));
+				checkResult(pEssenceGroup->GetChoiceAt (0, &pSourceClip));
 				checkResult(pSourceClip->QueryInterface (IID_IAAFComponent, (void **)&pComponent));
 				checkResult(pComponent->GetLength(&readLength));
 				checkExpression(SUBSEG_LENGTH == readLength, AAFRESULT_TEST_FAILED);

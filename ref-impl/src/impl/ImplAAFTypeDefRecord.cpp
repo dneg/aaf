@@ -271,7 +271,7 @@ AAFRESULT STDMETHODCALLTYPE
 	  hr = GetDictionary (&pDict);
 	  assert (AAFRESULT_SUCCEEDED(hr));
 	  assert (pDict);
-	  hr = pDict->LookupType(memberUID, &pMemberType);
+	  hr = pDict->LookupTypeDef (memberUID, &pMemberType);
 	  assert (AAFRESULT_SUCCEEDED(hr));
 	  assert (pMemberType);
 	  _cachedMemberTypes[index] = pMemberType;

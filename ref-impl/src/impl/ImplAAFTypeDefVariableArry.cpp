@@ -86,7 +86,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 	  ImplAAFTypeDefVariableArray * pNonConstThis =
 		  (ImplAAFTypeDefVariableArray*) this;
-	  hr = pDict->LookupType (_ElementType, &pNonConstThis->_cachedElemType);
+	  hr = pDict->LookupTypeDef (_ElementType, &pNonConstThis->_cachedElemType);
 	  if (AAFRESULT_FAILED(hr))
 		return hr;
 	  assert (_cachedElemType);

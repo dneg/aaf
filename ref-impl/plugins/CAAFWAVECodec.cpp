@@ -130,7 +130,7 @@ HRESULT STDMETHODCALLTYPE
 		uid = CodecWave;
 		CHECK(codecDef->QueryInterface(IID_IAAFDefObject, (void **)&obj));
 		CHECK(obj->Initialize(uid, L"WAVE Codec", L"Handles RIFF WAVE data."));
-		CHECK(codecDef->AppendEssenceKind (DDEF_Sound));
+		CHECK(codecDef->AddEssenceKind (DDEF_Sound));
 		*def = obj;
 		codecDef->Release();
 		codecDef = NULL;

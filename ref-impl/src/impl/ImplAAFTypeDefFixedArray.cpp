@@ -88,7 +88,7 @@ AAFRESULT STDMETHODCALLTYPE
 		return hr;
 	  assert (pDict);
 
-	  hr = pDict->LookupType (_ElementType, &pNonConstThis->_cachedBaseType);
+	  hr = pDict->LookupTypeDef (_ElementType, &pNonConstThis->_cachedBaseType);
 	  if (AAFRESULT_FAILED(hr))
 		return hr;
 	  assert (_cachedBaseType);

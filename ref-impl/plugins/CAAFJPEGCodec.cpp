@@ -341,7 +341,7 @@ HRESULT STDMETHODCALLTYPE
 							(IUnknown **)&codecDef));
 		
 		// Support "Picture" type of data definition.
-		checkResult(codecDef->AppendEssenceKind (DDEF_Picture));
+		checkResult(codecDef->AddEssenceKind (DDEF_Picture));
 
 		
 		// Initialize the standard Definition properties.
