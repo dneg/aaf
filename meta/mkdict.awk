@@ -667,8 +667,12 @@ BEGIN {
         errors++;
       }
       # AAF_CLASS(name, id, parent)
-      printf("AAF_CLASS(%s,\n  AAF_LITERAL_AUID(0x%s%s%s%s,\n    0x%s%s, 0x%s%s,\n    0x%s, 0x%s, 0x%s, 0x%s, 0x%s, 0x%s, 0x%s, 0x%s),\n  %s,\n  %s)\n",
-             $elementNameC, $SLO08C, $SLO09C, $SLO10C, $SLO11C, $SLO12C, $SLO13C, $SLO14C, $SLO15C, $SLO00C, $SLO01C, $SLO02C, $SLO03C, $SLO04C, $SLO05C, $SLO06C, $SLO07C, parent, concrete);
+      guid = formatAUID($SLO00C, $SLO01C, $SLO02C, $SLO03C,
+                        $SLO04C, $SLO05C, $SLO06C, $SLO07C,
+                        $SLO08C, $SLO09C, $SLO10C, $SLO11C,
+                        $SLO12C, $SLO13C, $SLO14C, $SLO15C, "  ");
+      printf("AAF_CLASS(%s,%s,\n  %s,\n  %s)\n",
+             $elementNameC, guid, parent, concrete);
     } else if ($typeNameC == "type" ) {
       # a type
       if (firstType) {
@@ -693,8 +697,10 @@ BEGIN {
         printf("AAF_TYPE_SEPARATOR()\n");
       }
 #
-      guid = sprintf("\n  AAF_LITERAL_AUID(0x%s%s%s%s,\n    0x%s%s, 0x%s%s,\n    0x%s, 0x%s, 0x%s, 0x%s, 0x%s, 0x%s, 0x%s, 0x%s)",
-             $SLO08C, $SLO09C, $SLO10C, $SLO11C, $SLO12C, $SLO13C, $SLO14C, $SLO15C, $SLO00C, $SLO01C, $SLO02C, $SLO03C, $SLO04C, $SLO05C, $SLO06C, $SLO07C);
+      guid = formatAUID($SLO00C, $SLO01C, $SLO02C, $SLO03C,
+                        $SLO04C, $SLO05C, $SLO06C, $SLO07C,
+                        $SLO08C, $SLO09C, $SLO10C, $SLO11C,
+                        $SLO12C, $SLO13C, $SLO14C, $SLO15C, "  ");
 #
       typeName = $elementNameC;
       parentTypeName = typeName;
@@ -775,10 +781,12 @@ BEGIN {
         printf("  AAF_TYPE_DEFINITION_RECORD_FIELD(%s, AAF_TYPE(%s),\n    %s)\n", memberName, $kindC, parentTypeName);
       } else if (kind == "extendible") {
 #
-      eguid = sprintf("AAF_LITERAL_AUID(0x%s%s%s%s,\n      0x%s%s, 0x%s%s,\n      0x%s, 0x%s, 0x%s, 0x%s, 0x%s, 0x%s, 0x%s, 0x%s)",
-             $SLO08C, $SLO09C, $SLO10C, $SLO11C, $SLO12C, $SLO13C, $SLO14C, $SLO15C, $SLO00C, $SLO01C, $SLO02C, $SLO03C, $SLO04C, $SLO05C, $SLO06C, $SLO07C);
+      eguid = formatAUID($SLO00C, $SLO01C, $SLO02C, $SLO03C,
+                         $SLO04C, $SLO05C, $SLO06C, $SLO07C,
+                         $SLO08C, $SLO09C, $SLO10C, $SLO11C,
+                         $SLO12C, $SLO13C, $SLO14C, $SLO15C, "    ");
 #
-        printf("  AAF_TYPE_DEFINITION_EXTENDIBLE_ENUMERATION_MEMBER(%s,\n    %s,\n    %s)\n", memberName, eguid, parentTypeName);
+        printf("  AAF_TYPE_DEFINITION_EXTENDIBLE_ENUMERATION_MEMBER(%s,%s,\n    %s)\n", memberName, eguid, parentTypeName);
       } else {
         # error, what is this a member of ?
       }     
@@ -853,7 +861,11 @@ BEGIN {
         uid = "false";
       }
       # AAF_PROPERTY(name, id, tag, type, mandatory, container)
-      printf("  AAF_PROPERTY(%s,\n    AAF_LITERAL_AUID(0x%s%s%s%s,\n      0x%s%s, 0x%s%s,\n      0x%s, 0x%s, 0x%s, 0x%s, 0x%s, 0x%s, 0x%s, 0x%s),\n    0x%s,\n    %s,\n    %s,\n    %s,\n    %s)\n", $elementNameC, $SLO08C, $SLO09C, $SLO10C, $SLO11C, $SLO12C, $SLO13C, $SLO14C, $SLO15C, $SLO00C, $SLO01C, $SLO02C, $SLO03C, $SLO04C, $SLO05C, $SLO06C, $SLO07C, $pidC, type, mandatory, uid, class);
+      guid = formatAUID($SLO00C, $SLO01C, $SLO02C, $SLO03C,
+                        $SLO04C, $SLO05C, $SLO06C, $SLO07C,
+                        $SLO08C, $SLO09C, $SLO10C, $SLO11C,
+                        $SLO12C, $SLO13C, $SLO14C, $SLO15C, "    ");
+      printf("  AAF_PROPERTY(%s,%s,\n    0x%s,\n    %s,\n    %s,\n    %s,\n    %s)\n", $elementNameC, guid, $pidC, type, mandatory, uid, class);
     }
   }
 }
@@ -954,6 +966,18 @@ END {
     printError(sprintf("File generation failed with %d errors.\n", errors));
     exit 1
   }
+}
+
+function formatAUID(O00, O01, O02, O03, O04, O05, O06, O07,
+                    O08, O09, O10, O11, O12, O13, O14, O15,
+                    indent)
+{
+  return sprintf("\n%sAAF_LITERAL_AUID(0x%s%s%s%s,\n%s  0x%s%s, 0x%s%s,\n%s  0x%s, 0x%s, 0x%s, 0x%s, 0x%s, 0x%s, 0x%s, 0x%s)",
+             indent,
+             O08, O09, O10, O11, indent,
+             O12, O13, O14, O15, indent,
+             O00, O01, O02, O03,
+             O04, O05, O06, O07);
 }
 
 function printError(message)
