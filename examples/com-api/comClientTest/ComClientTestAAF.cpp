@@ -36,7 +36,9 @@
 #else
 #include "AAF.h"
 // TODO: This should not be here, I added them for now to get a good link.
-const CLSID CLSID_AAFSession = { 0xF0C10891, 0x3073, 0x11d2, { 0x80, 0x4A, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } };
+// const CLSID CLSID_AAFSession = { 0xF0C10891, 0x3073, 0x11d2, { 0x80, 0x4A, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } };
+
+const CLSID CLSID_AAFFile = { 0x9346ACD2, 0x2713, 0x11d2, { 0x80, 0x35, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } };
 
 const CLSID CLSID_AAFMob =            { 0xB1A21375, 0x1A7D, 0x11d2, { 0xBF, 0x78, 0x00, 0x10, 0x4B, 0xC9, 0x15, 0x6D } };
 
@@ -213,14 +215,21 @@ static void printIdentification(IAAFIdentification* pIdent)
 static void ReadAAFFile(aafWChar * pFileName)
 {
   HRESULT hr = S_OK;
-  IAAFSession * pSession = NULL;
+  // IAAFSession * pSession = NULL;
+  IAAFFile * pFile = NULL;
 
-    
+  /*
   CoCreateInstance(CLSID_AAFSession,
                NULL, 
                CLSCTX_INPROC_SERVER, 
                IID_IAAFSession, 
                (void **)&pSession);
+  */
+  CoCreateInstance(CLSID_AAFFile,
+               NULL, 
+               CLSCTX_INPROC_SERVER, 
+               IID_IAAFFile, 
+               (void **)&pFile);
   check(hr); // display error message
   if (SUCCEEDED(hr))
   {
@@ -238,14 +247,16 @@ static void ReadAAFFile(aafWChar * pFileName)
     ProductInfo.productID = -1;
     ProductInfo.platform = NULL;
 
-    hr = pSession->SetDefaultIdentification(&ProductInfo);
-    check(hr); // display error message
-    if (SUCCEEDED(hr))
+    // hr = pSession->SetDefaultIdentification(&ProductInfo);
+    // check(hr); // display error message
+    // if (SUCCEEDED(hr))
     {
-      IAAFFile * pFile = NULL;
+      // IAAFFile * pFile = NULL;
 
-
-      hr = pSession->OpenReadFile(pFileName, &pFile);
+      // hr = pSession->OpenReadFile(pFileName, &pFile);
+      hr = pFile->Initialize();
+      check(hr); // display error message
+      hr = pFile->OpenExistingRead(pFileName, 0);
       check(hr); // display error message
       if (SUCCEEDED(hr))
       {
@@ -444,16 +455,16 @@ static void ReadAAFFile(aafWChar * pFileName)
       }
     }
 
-    check(pSession->EndSession());
+    // check(pSession->EndSession());
 
-    pSession->Release();
-    pSession = NULL;
+    // pSession->Release();
+    // pSession = NULL;
   }
 }
 
 static void CreateAAFFile(aafWChar * pFileName)
 {
-  IAAFSession *        pSession = NULL;
+  // IAAFSession *        pSession = NULL;
   IAAFFile *          pFile = NULL;
   IAAFHeader *        pHeader = NULL;
   aafProductIdentification_t  ProductInfo;
@@ -470,15 +481,24 @@ static void CreateAAFFile(aafWChar * pFileName)
   ProductInfo.productID = -1;
   ProductInfo.platform = NULL;
 
+  /*
   check(CoCreateInstance(CLSID_AAFSession,
                NULL, 
                CLSCTX_INPROC_SERVER, 
                IID_IAAFSession, 
                (void **)&pSession));
+  */
+  check(CoCreateInstance(CLSID_AAFFile,
+               NULL, 
+               CLSCTX_INPROC_SERVER, 
+               IID_IAAFFile, 
+               (void **)&pFile));
     
-  check(pSession->SetDefaultIdentification(&ProductInfo));
+  // check(pSession->SetDefaultIdentification(&ProductInfo));
 
-  check(pSession->CreateFile(pFileName, kAAFRev1, &pFile));
+  // check(pSession->CreateFile(pFileName, kAAFRev1, &pFile));
+  check(pFile->Initialize());
+  check(pFile->OpenNewModify(pFileName, 0, &ProductInfo));
   
   check(pFile->GetHeader(&pHeader));
    
@@ -585,10 +605,10 @@ static void CreateAAFFile(aafWChar * pFileName)
   if (pFile)
     pFile->Release();
 
-  check(pSession->EndSession());
+  // check(pSession->EndSession());
   
-  if (pSession)
-    pSession->Release();
+  // if (pSession)
+  //   pSession->Release();
 }
 
 // simple helper class to initialize and cleanup COM library.
