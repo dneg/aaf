@@ -445,7 +445,7 @@ typedef enum _aafPulldownKind_t
 	kAAFOneToOnePAL = 3
 } aafPulldownKind_t;
 
-typedef aafInt16	aafPhaseFrame_t;
+typedef aafInt32	aafPhaseFrame_t;
 
 typedef enum _aafPulldownDir_t
 {
@@ -458,6 +458,23 @@ typedef struct _aafMobComment_t
 	aafString_t category;
 	aafString_t comment;
 } aafMobComment_t;
+
+typedef enum _aafRGBAComponentKind_t
+{
+	None = 0x30,
+	Alpha = 0x41,
+	Blue = 0x42,
+	Fill = 0x46,
+	Green = 0x47,
+	Palette = 0x50,
+	Red = 0x52
+}	aafRGBAComponentKind_t;
+
+typedef struct _aafRGBAComponent_t
+{
+	aafRGBAComponentKind_t Code;
+	aafUInt8               Size;
+} aafRGBAComponent_t;
 
 
 
@@ -893,6 +910,14 @@ typedef enum _eAAFTypeCategory_t
 } eAAFTypeCategory_t;
 
 
+// typedefs to make things more consistent
+typedef aafBool                 aafBoolean_t;
+typedef aafColorSiting_t        aafColorSitingType_t;
+typedef aafEditHint_t           aafEditHintType_t;
+typedef aafFrameLayout_t        aafLayoutType_t;
+typedef aafTimecodeSourceType_t aafTCSource_t;
+typedef aafPulldownDir_t        aafPulldownDirectionType_t;
+typedef aafPulldownKind_t       aafPulldownKindType_t;
 
 
 AD_CPP_QUOTE(/**************************/)
