@@ -59,11 +59,30 @@ Type ParamMap<Type,Tag>::Find( AxFGOp& op, const AxString& name )
 
 	iter = _map.find( name );
 	if ( iter == _map.end() ) {
-		throw AxFGOpUsageEx( op, L"parameter \"" + name+ L"\"" + L" unknown" ); 
+		throw AxFGOpUsageEx( op, L"\"" + name + L"\"" + L" unknown, try: " +
+							  GenerateNameList() );
 	}
 
 	return _map[ name ];
 }
+
+template <class Type, class Tag>
+AxString ParamMap<Type,Tag>::GenerateNameList()
+{
+	MapIterType iter;
+	AxString listAsString ( L"" );
+
+	for ( iter = _map.begin();
+		  iter != _map.end();
+		  ++iter ) {
+
+		listAsString += L" " + iter->first;
+		  
+	}
+
+	return listAsString;
+}
+
 
 //=---------------------------------------------------------------------=
 //=---------------------------------------------------------------------=

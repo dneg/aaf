@@ -110,7 +110,7 @@ void CreateEssence::Execute( const std::vector<AxString>& argv )
 		
 	IAAFLocatorSP spLocator;
 	if ( locatorDefined ) {
-		throw AxFGOpUsageEx( *this, L"Sorry, locator support not yet implemented." );
+		GetInstance( locatorName ).GetCOM( spLocator );
 	}
 		
 	IAAFEssenceAccessSP spEssenceAccess;

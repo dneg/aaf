@@ -287,10 +287,10 @@ public:
 	void SetStoredView( aafUInt32 StoredHeight, aafUInt32 StoredWidth);
 
 	void SetSampledView( aafUInt32 SampledHeight, aafUInt32 SampledWidth,
-					aafUInt32 SampledXOffset, aafUInt32 SampledYOffset );
+			             aafInt32 SampledXOffset, aafInt32 SampledYOffset );
 	
 	void SetDisplayView( aafUInt32 DisplayedHeight, aafUInt32 DisplayedWidth,
-				 	     aafUInt32 DisplayedXOffset, aafUInt32 DisplayedYOffset );
+				 	     aafInt32 DisplayedXOffset, aafInt32 DisplayedYOffset );
 
 	void SetFrameLayout( aafFrameLayout_t FrameLayout );
 
@@ -303,10 +303,10 @@ public:
 	void GetStoredView( aafUInt32& StoredHeight, aafUInt32& StoredWidth);
 
 	void GetSampledView( aafUInt32& SampledHeight, aafUInt32& SampledWidth,
-			     aafUInt32& SampledXOffset, aafUInt32& SampledYOffset );
+			             aafInt32& SampledXOffset, aafInt32& SampledYOffset );
 	
 	void GetDisplayView( aafUInt32& DisplayedHeight, aafUInt32& DisplayedWidth,
-			     aafUInt32& DisplayedXOffset, aafUInt32& DisplayedYOffset );
+			             aafInt32& DisplayedXOffset, aafInt32& DisplayedYOffset );
 
 private:
 	AxDigitalImageDescriptor();

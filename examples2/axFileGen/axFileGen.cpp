@@ -329,7 +329,7 @@ AxFGOpUsageEx::AxFGOpUsageEx( const AxFGOp& op )
 AxFGOpUsageEx::AxFGOpUsageEx( const AxFGOp& op, const AxString msg )
 {
 	std::wostringstream os;
-	os << L"Usage: " << msg << std::endl;
+	os << L"Usage: " << msg << std::endl << std::endl;
 	opUseMessage( os, op );
 	_what = os.str();
 }
@@ -342,9 +342,9 @@ const AxString AxFGOpUsageEx::what() const
 void AxFGOpUsageEx::opUseMessage( std::wostringstream& os, const AxFGOp& op )
 {
 	os << L"Op Name:\t" << op.GetOpName() << std::endl; 
-	os << L"Usage:\t" << op.GetUsage() << std::endl;
-	os << L"Desc\t"  << op.GetDesc()  << std::endl;
-	os << L"Notes\t" << op.GetNotes() << std::endl;
+	os << L"Usage:\t\t" << op.GetUsage() << std::endl;
+	os << L"Desc\t\t"  << op.GetDesc()  << std::endl;
+	os << L"Notes\t\t" << op.GetNotes() << std::endl;
 	os << std::endl;
 }
 

@@ -49,6 +49,8 @@ public:
 	// These maps could be used outside of axFileGen.
 	Type Find( AxFGOp& op, const AxString& name );
 
+	AxString GenerateNameList();
+
 private:
 
 	ParamMap();

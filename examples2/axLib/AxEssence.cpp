@@ -377,14 +377,14 @@ void AxDigitalImageDescriptor::SetStoredView( aafUInt32 StoredHeight, aafUInt32 
 }
 
 void AxDigitalImageDescriptor::SetSampledView( aafUInt32 SampledHeight, aafUInt32 SampledWidth,
-					       aafUInt32 SampledXOffset, aafUInt32 SampledYOffset )
+					       aafInt32 SampledXOffset, aafInt32 SampledYOffset )
 {
 	CHECK_HRESULT( _spIaafDigitalImageDescriptor->SetSampledView( SampledHeight, SampledWidth,
 								      SampledXOffset, SampledYOffset ) );
 }
 
 void AxDigitalImageDescriptor::SetDisplayView( aafUInt32 DisplayedHeight, aafUInt32 DisplayedWidth,
-					       aafUInt32 DisplayedXOffset, aafUInt32 DisplayedYOffset )
+					       aafInt32 DisplayedXOffset, aafInt32 DisplayedYOffset )
 {
 	CHECK_HRESULT( _spIaafDigitalImageDescriptor->SetDisplayView( DisplayedHeight, DisplayedWidth,
 								      DisplayedXOffset, DisplayedYOffset ) );
@@ -400,6 +400,29 @@ void AxDigitalImageDescriptor::SetVideoLineMap( aafUInt32  numberElements, const
 	CHECK_HRESULT( _spIaafDigitalImageDescriptor->SetVideoLineMap( numberElements,
 								       const_cast<aafInt32*>(pVideoLineMap) ) );
 }
+
+
+
+void AxDigitalImageDescriptor::GetStoredView( aafUInt32& StoredHeight, aafUInt32& StoredWidth)
+{
+	CHECK_HRESULT( _spIaafDigitalImageDescriptor->GetStoredView( &StoredHeight, &StoredWidth) );
+}
+
+void AxDigitalImageDescriptor::GetSampledView( aafUInt32& SampledHeight, aafUInt32& SampledWidth,
+					       aafInt32& SampledXOffset, aafInt32& SampledYOffset )
+{
+	CHECK_HRESULT( _spIaafDigitalImageDescriptor->GetSampledView( &SampledHeight, &SampledWidth,
+								      &SampledXOffset, &SampledYOffset ) );
+}
+
+void AxDigitalImageDescriptor::GetDisplayView( aafUInt32& DisplayedHeight, aafUInt32& DisplayedWidth,
+					       aafInt32& DisplayedXOffset, aafInt32& DisplayedYOffset )
+{
+	CHECK_HRESULT( _spIaafDigitalImageDescriptor->GetDisplayView( &DisplayedHeight, &DisplayedWidth,
+								      &DisplayedXOffset, &DisplayedYOffset ) );
+}
+
+
 
 //=---------------------------------------------------------------------=
 
@@ -429,6 +452,34 @@ void AxCDCIDescriptor::SetVerticalSubsampling( aafUInt32 VerticalSubsampling )
 void AxCDCIDescriptor::SetColorRange( aafUInt32 ColorRange )
 {
 	CHECK_HRESULT( _spIaafCDCIDescriptor->SetColorRange( ColorRange ) );
+}
+
+aafInt32 AxCDCIDescriptor::GetComponentWidth()
+{
+  aafInt32 componentWidth;
+  CHECK_HRESULT( _spIaafCDCIDescriptor->GetComponentWidth( &componentWidth ) );
+  return componentWidth;
+}
+
+aafUInt32 AxCDCIDescriptor::GetHorizontalSubsampling()
+{
+  aafUInt32  horizontalSubsampling;
+  CHECK_HRESULT( _spIaafCDCIDescriptor->GetHorizontalSubsampling( &horizontalSubsampling ) );
+  return horizontalSubsampling;
+}
+
+aafUInt32 AxCDCIDescriptor::GetVerticalSubsampling()
+{
+  aafUInt32 verticalSubsampling;
+  CHECK_HRESULT( _spIaafCDCIDescriptor->GetVerticalSubsampling( &verticalSubsampling ) );
+  return verticalSubsampling;
+}
+
+aafUInt32 AxCDCIDescriptor::GetColorRange()
+{
+  aafUInt32 colorRange;
+  CHECK_HRESULT( _spIaafCDCIDescriptor->GetColorRange( &colorRange ) );
+  return colorRange;
 }
 
 //=---------------------------------------------------------------------=

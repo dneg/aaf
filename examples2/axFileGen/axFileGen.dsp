@@ -104,11 +104,31 @@ SOURCE=.\FileGenOps\DataDef.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\FileGenOps\EssenceDescriptor.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\FileGenOps\EssenceWrite.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\FileGenOps\File.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\FileGenOps\FormatSpecifiers.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\FileGenOps\InstanceDump.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\FileGenOps\Integer.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\FileGenOps\Locator.cpp
 # End Source File
 # Begin Source File
 
@@ -132,6 +152,10 @@ SOURCE=.\FileGenOps\Rate.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\FileGenOps\SampleSource.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\FileGenOps\Sequence.cpp
 # End Source File
 # Begin Source File
@@ -146,8 +170,12 @@ SOURCE=.\FileGenOps\SourceMob.cpp
 
 SOURCE=.\FileGenOps\TapeDescriptor.cpp
 # End Source File
+# Begin Source File
+
+SOURCE=.\FileGenOps\VideoEssenceSource.cpp
+# End Source File
 # End Group
-# Begin Group "Header Files No. 1"
+# Begin Group "HeaderFiles"
 
 # PROP Default_Filter ""
 # Begin Source File
@@ -157,6 +185,10 @@ SOURCE=.\FileGenOps\ParamMaps.h
 # Begin Source File
 
 SOURCE=.\FileGenOps\Rate.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\FileGenOps\SampleSource.h
 # End Source File
 # End Group
 # End Group
