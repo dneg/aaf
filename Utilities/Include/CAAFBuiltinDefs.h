@@ -234,6 +234,7 @@ public:
   //
   // Type Def 'get' methods
   //
+  TYPE_DEF_METHOD(Rational);
   TYPE_DEF_METHOD(String);
 
 
