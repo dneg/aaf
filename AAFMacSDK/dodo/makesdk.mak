@@ -44,7 +44,7 @@ targetIncludes = ¶
 	"{incl}AAFTypes.h"
 
 
-all Ä  checkDirectories "{incl}AAFSmartPointer.h"
+all Ä checkDirectories "{incl}AAFSmartPointer.h" finished
 
 	
 
@@ -57,8 +57,8 @@ checkDirectories Ä
 		NewFolder "{incl}"
 	end
 	Set Exit 0						# don't exit early
-	backup -from "{aaf}ref-impl:include:" -to "{aaf}AAFMacSDK:include:" -check from -a > makesdk.tmp
-	backup -from "{aaf}ref-impl:include:ref-api:" -to "{aaf}AAFMacSDK:include:" -check from -a | StreamEdit -e '/Prvate/ Delete' >>  makesdk.tmp
+	backup -p -from "{aaf}ref-impl:include:" -to "{aaf}AAFMacSDK:include:" -check from -a > makesdk.tmp
+	backup -p -from "{aaf}ref-impl:include:ref-api:" -to "{aaf}AAFMacSDK:include:" -check from -a | StreamEdit -e '/Prvate/ Delete' >>  makesdk.tmp
 	if `count -c makesdk.tmp` ­ 0
 		execute makesdk.tmp
 		if "`Search -e 'Duplicate' makesdk.tmp`"		
@@ -90,10 +90,15 @@ checkDirectories Ä
 		NewFolder "{aaf}AAFMacSDK:lib:debug"
 	end
 
+
 "{incl}AAFSmartPointer.h" Ä "{refi}com-api:AAFSmartPointer.h"
-	Duplicate -y "{refi}com-api:AAFSmartPointer.h" "{incl}AAFSmartPointer.h"
+	Duplicate -p -y "{refi}com-api:AAFSmartPointer.h" "{incl}AAFSmartPointer.h"
 	SetFile -c CWIE -a l "{incl}AAFSmartPointer.h"
 	OrphanFiles "{incl}AAFSmartPointer.h"
+
+finished Ä
+	echo "makesdk.mak done."
+	
 	
 clean Ä 
 	delete -i -y makesdk.tmp
