@@ -29,12 +29,6 @@
 #ifndef OMWEAKREFPROPERTY_H
 #define OMWEAKREFPROPERTY_H
 
-#if defined (_MSC_VER)
-  // - 'this' : used in base member initializer list
-  //
-#pragma warning(disable:4355) // Gak !
-#endif
-
 #include "OMDataTypes.h"
 #include "OMProperty.h"
 #include "OMObjectReference.h"

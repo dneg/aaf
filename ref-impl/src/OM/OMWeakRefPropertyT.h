@@ -1,6 +1,6 @@
 /***********************************************************************
 *
-*              Copyright (c) 1998-1999 Avid Technology, Inc.
+*              Copyright (c) 1998-2000 Avid Technology, Inc.
 *
 * Permission to use, copy and modify this software and accompanying
 * documentation, and to distribute and sublicense application software
@@ -40,12 +40,14 @@ OMWeakReferenceProperty<ReferencedObject>::OMWeakReferenceProperty(
                                               const OMPropertyId keyPropertyId)
 : OMReferenceProperty<ReferencedObject>(propertyId,
                                         SF_WEAK_OBJECT_REFERENCE,
-                                        name), _reference(this),
+                                        name), _reference(),
   _targetTag(nullOMPropertyTag),
   _targetName(saveString(targetName)),
   _keyPropertyId(keyPropertyId)
 {
   TRACE("OMWeakReferenceProperty<ReferencedObject>::OMWeakReferenceProperty");
+
+  _reference = OMWeakObjectReference<ReferencedObject>(this);
 }
 
 template<typename ReferencedObject>
