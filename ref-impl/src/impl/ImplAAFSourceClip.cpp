@@ -43,18 +43,14 @@
 ImplAAFSourceClip::ImplAAFSourceClip ():
 	_fadeInLength(		PID_SourceClip_FadeInLength,		"fadeInLength"),
 	_fadeInType(	PID_SourceClip_FadeInType,		"fadeInType"),
-	_fadeInPresent( PID_SOURCECLIP_FADEINPRESENT,	"fadeInPresent"),
 	_fadeOutLength(	PID_SourceClip_FadeOutLength,		"fadeOutLength"),
 	_fadeOutType(	PID_SourceClip_FadeOutType,		"fadeOutType"),
-	_fadeOutPresent(PID_SOURCECLIP_FADEOUTPRESENT,	"fadeOutPresent"),
 	_startTime(		PID_SourceClip_StartTime,		"startTime")
 {
 	_persistentProperties.put(		_fadeInLength.address());
 	_persistentProperties.put(		_fadeInType.address());
-	_persistentProperties.put(		_fadeInPresent.address());
 	_persistentProperties.put(		_fadeOutLength.address());
 	_persistentProperties.put(		_fadeOutType.address());
-	_persistentProperties.put(		_fadeOutPresent.address());
 	_persistentProperties.put(		_startTime.address());
 
 }
@@ -85,11 +81,9 @@ AAFRESULT STDMETHODCALLTYPE
 
 		_fadeInLength		= 0;
 		_fadeInType		= kFadeNone;
-		_fadeInPresent	= AAFFalse;
 	
 		_fadeOutLength		= 0;
 		_fadeOutType	= kFadeNone;
-		_fadeOutPresent = AAFFalse;
 }
 
 	return aafError;
@@ -120,11 +114,25 @@ AAFRESULT STDMETHODCALLTYPE
 	
 		*fadeInLen		= _fadeInLength;
 		*fadeInType		= _fadeInType;
-		*fadeInPresent	= _fadeInPresent;
+		if (_fadeInLength > 0)
+		{
+			*fadeInPresent	= AAFTrue;
+		}
+		else
+		{
+			*fadeInPresent = AAFFalse;
+		}
 
 		*fadeOutLen		= _fadeOutLength;
 		*fadeOutType	= _fadeOutType;
-		*fadeOutPresent	= _fadeOutPresent;
+		if (_fadeOutLength > 0)
+		{
+			*fadeOutPresent	= AAFTrue;
+		}
+		else
+		{
+			*fadeOutPresent = AAFFalse;
+		}
 	}
 
 	return aafError;
@@ -247,14 +255,12 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 		_fadeInLength	= fadeInLen;
 		_fadeInType	= fadeInType;
-		_fadeInPresent = AAFTrue;
 	}
 
 	if (fadeOutLen > 0)
 	{
 		_fadeOutLength		= fadeOutLen;
 		_fadeOutType	= fadeOutType;
-		_fadeOutPresent = AAFTrue;
 	}
 
 	return aafError;
