@@ -1,23 +1,3 @@
-//=---------------------------------------------------------------------=
-//
-// $Id$ $Name$
-//
-// The contents of this file are subject to the AAF SDK Public
-// Source License Agreement (the "License"); You may not use this file
-// except in compliance with the License.  The License is available in
-// AAFSDKPSL.TXT, or you may obtain a copy of the License from the AAF
-// Association or its successor.
-//
-// Software distributed under the License is distributed on an "AS IS"
-// basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.  See
-// the License for the specific language governing rights and limitations
-// under the License.
-//
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
-// AAF Association.
-//
-//=---------------------------------------------------------------------=
-
 /* this file contains the actual definitions of */
 /* the IIDs and CLSIDs */
 
@@ -440,6 +420,9 @@ const IID IID_IAAFMasterMobEx = {0xb1a21370,0x1a7d,0x11d2,{0xbf,0x78,0x00,0x10,0
 
 
 const IID IID_IAAFMob2 = {0xa94fdb8b,0x451f,0x4d62,{0xac,0x17,0x16,0x95,0x03,0x44,0x83,0x2e}};
+
+
+const IID IID_IAAFTimelineMobSlot2 = {0xdb347978,0xba72,0x4bdf,{0xa1,0x88,0x81,0x72,0xea,0x5c,0x5f,0x00}};
 
 
 const IID IID_IAAFComponent2 = {0xc703e7f5,0xb97f,0x44fb,{0x87,0xda,0xa4,0x12,0xe6,0x0e,0xa6,0xaa}};
