@@ -84,11 +84,6 @@ public:
 	AAFRESULT STDMETHODCALLTYPE
 		SetEnumCodec( IAAFEssenceCodec *pCodec);
 
-
-public:
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplEnumAAFCodecFlavoursTest.cpp.
-  static AAFRESULT test();
 private:
 	aafInt32			_current;
 	IAAFEssenceCodec	*_codec;

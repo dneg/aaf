@@ -149,10 +149,6 @@ public:
   //
   OMDECLARE_STORABLE(ImplAAFCDCIDescriptor)
 
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplAAFCDCIDescriptorTest.cpp.
-  static AAFRESULT test();
-
 protected:
 	OMFixedSizeProperty<aafInt32>			_componentWidth;
 	OMFixedSizeProperty<aafUInt32>			_horizontalSubsampling;

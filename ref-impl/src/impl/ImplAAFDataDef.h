@@ -103,10 +103,6 @@ public:
   // Declare this class to be storable.
   //
   OMDECLARE_STORABLE(ImplAAFDataDef)
-
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplAAFDataDefTest.cpp.
-  static AAFRESULT test();
 };
 
 #endif // ! __ImplAAFDataDef_h__
