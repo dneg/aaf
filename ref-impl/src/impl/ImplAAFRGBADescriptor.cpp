@@ -95,6 +95,25 @@ AAFRESULT STDMETHODCALLTYPE
 	return AAFRESULT_SUCCESS;
 }
 
+HRESULT STDMETHODCALLTYPE
+    ImplAAFRGBADescriptor::CountPixelLayoutElements (aafUInt32 *  pResult)
+{
+	aafUInt32			n, result;
+	RGBComponentArray	local;
+
+	local = _pixelLayout;
+	for( n = 0, result = 0; n < MAX_NUM_RGBA_COMPS; n++)
+	{
+		if(local.comps[n].Code != kAAFCompNone)
+		{
+			result++;
+		}
+	}
+
+	*pResult = result;
+
+	return AAFRESULT_SUCCESS;
+}
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFRGBADescriptor::GetPixelLayout (
@@ -184,6 +203,25 @@ AAFRESULT STDMETHODCALLTYPE
 	return AAFRESULT_SUCCESS;
 }
 
+HRESULT STDMETHODCALLTYPE
+    ImplAAFRGBADescriptor::CountPaletteLayoutElements (aafUInt32 *  pResult)
+{
+	aafUInt32			n, result;
+	RGBComponentArray	local;
+
+	local = _paletteLayout;
+	for( n = 0, result = 0; n < MAX_NUM_RGBA_COMPS; n++)
+	{
+		if(local.comps[n].Code != kAAFCompNone)
+		{
+			result++;
+		}
+	}
+
+	*pResult = result;
+
+	return AAFRESULT_SUCCESS;
+}
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFRGBADescriptor::GetPaletteLayout (
