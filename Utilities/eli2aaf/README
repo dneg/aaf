@@ -14,7 +14,7 @@ video and audio tracks of the DV files.
 Requirements
 ============
 
-AAD SDK from CVS from no earlier than April 2003.
+AAF SDK from CVS from no earlier than April 2003.
 
 Building
 ========
@@ -31,9 +31,9 @@ Usage
     outfile     AAF file to be written
     essencedir  Optional directory where raw DV files are stored.  If specified
                 this directory will be assumed to contain all DV files listed
-				in the ELI input file.  This is useful if the ELI file was
-				written under Unix, but the eli2aaf utility is being run under
-				MS Windows where drive letters complicate filepaths.
+                in the ELI input file.  This is useful if the ELI file was
+                written under Unix, but the eli2aaf utility is being run under
+                MS Windows where drive letters complicate filepaths.
 
   The DV files referenced in the ELI file must be accessible when eli2aaf is
   executed.
