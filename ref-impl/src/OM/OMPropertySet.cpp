@@ -226,7 +226,7 @@ void OMPropertySet::grow(const size_t additionalElements)
   
   // Copy over all elements from the old array
   //
-  size_t i;
+	size_t i;
   for (i = 0; i < oldCapacity; i++) {
     _propertySet[i] = oldPropertySet[i];
   }
