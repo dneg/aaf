@@ -25,10 +25,8 @@
 
 #include "OMRawStorage.h"
 #include "OMAssertions.h"
+#include "OMExceptions.h"
 #include "OMUtilities.h"
-
-#include <limits.h>
-#include <errno.h>
 
 #include "OMDiskRawStorage.h"
 
@@ -44,8 +42,7 @@ OMDiskRawStorage::openExistingRead(const wchar_t* fileName)
 
   PRECONDITION("Valid file name", validWideString(fileName));
 
-  FILE* file = wfopen(fileName, L"rb");
-  ASSERT("File successfully opened", file != 0); // tjb - error
+  OMStream* file = OMStream::openExistingRead(fileName);
 
   OMDiskRawStorage* result = new OMDiskRawStorage(file, OMFile::readOnlyMode);
   ASSERT("Valid heap pointer", result != 0);
@@ -65,8 +62,7 @@ OMDiskRawStorage::openExistingModify(const wchar_t* fileName)
 
   PRECONDITION("Valid file name", validWideString(fileName));
 
-  FILE* file = wfopen(fileName, L"r+b");
-  ASSERT("File successfully opened", file != 0); // tjb - error
+  OMStream* file = OMStream::openExistingModify(fileName);
 
   OMDiskRawStorage* result = new OMDiskRawStorage(file, OMFile::modifyMode);
   ASSERT("Valid heap pointer", result != 0);
@@ -86,8 +82,7 @@ OMDiskRawStorage::openNewModify(const wchar_t* fileName)
 
   PRECONDITION("Valid file name", validWideString(fileName));
 
-  FILE* file = wfopen(fileName, L"w+b");
-  ASSERT("File successfully opened", file != 0); // tjb - error
+  OMStream* file = OMStream::openNewModify(fileName);
 
   OMDiskRawStorage* result = new OMDiskRawStorage(file, OMFile::modifyMode);
   ASSERT("Valid heap pointer", result != 0);
@@ -102,7 +97,8 @@ OMDiskRawStorage::~OMDiskRawStorage(void)
 
   PRECONDITION("Valid file", _file != 0);
 
-  fclose(_file);
+  synchronize();
+  delete _file;
   _file = 0;
 }
 
@@ -142,7 +138,7 @@ void OMDiskRawStorage::read(OMByte* bytes,
 
   PRECONDITION("Readable", isReadable());
 
-  read(_file, bytes, byteCount, bytesRead);
+  _file->read(bytes, byteCount, bytesRead);
 }
 
   // @mfunc Attempt to read the number of bytes given by <p byteCount>
@@ -207,7 +203,7 @@ void OMDiskRawStorage::write(const OMByte* bytes,
 
   PRECONDITION("Writable", isWritable());
 
-  write(_file, bytes, byteCount, bytesWritten);
+  _file->write(bytes, byteCount, bytesWritten);
 }
 
   // @mfunc Attempt to write the number of bytes given by <p byteCount>
@@ -278,7 +274,7 @@ void OMDiskRawStorage::extend(OMUInt64 newSize)
   PRECONDITION("Extendible", isExtendible());
   PRECONDITION("Writable", isWritable());
 
-  setSize(_file, newSize);
+  _file->setSize(newSize);
 }
 
   // @mfunc The current size of this <c OMDiskRawStorage> in bytes.
@@ -291,7 +287,7 @@ OMUInt64 OMDiskRawStorage::size(void) const
 
   PRECONDITION("Positionable", isPositionable());
 
-  OMUInt64 result = size(_file);
+  OMUInt64 result = _file->size();
   return result;
 }
 
@@ -312,14 +308,15 @@ void OMDiskRawStorage::synchronize(void)
 {
   TRACE("OMDiskRawStorage::synchronize");
 
-  int status = fflush(_file);
-  ASSERT("Successful flush", status == 0); // tjb - error
+  if (_file->isWritable()) {
+    _file->synchronize();
+  }
 }
 
   // @mfunc Constructor.
   //   @parm The file.
   //   @parm The access mode.
-OMDiskRawStorage::OMDiskRawStorage(FILE* file,
+OMDiskRawStorage::OMDiskRawStorage(OMStream* file,
                                    OMFile::OMAccessMode accessMode)
 : _file(file),
   _mode(accessMode)
@@ -344,7 +341,7 @@ OMUInt64 OMDiskRawStorage::position(void) const
 
   PRECONDITION("Positionable", isPositionable());
 
-  OMUInt64 result = position(_file);
+  OMUInt64 result = _file->position();
   return result;
 }
 
@@ -362,94 +359,5 @@ void OMDiskRawStorage::setPosition(OMUInt64 newPosition) const
 
   PRECONDITION("Positionable", isPositionable());
 
-  setPosition(_file, newPosition);
-}
-
-void OMDiskRawStorage::read(FILE* file,
-                            OMByte* bytes,
-                            OMUInt32 byteCount,
-                            OMUInt32& bytesRead) const
-{
-  TRACE("OMDiskRawStorage::read");
-
-  size_t actualByteCount = fread(bytes, 1, byteCount, file);
-
-  bytesRead = actualByteCount;
-}
-
-void OMDiskRawStorage::write(FILE* file,
-                             const OMByte* bytes,
-                             OMUInt32 byteCount,
-                             OMUInt32& bytesWritten)
-{
-  TRACE("OMDiskRawStorage::write");
-
-  size_t actualByteCount = fwrite(bytes, 1, byteCount, file);
-
-  bytesWritten = actualByteCount;
-}
-
-OMUInt64 OMDiskRawStorage::size(FILE* file) const
-{
-  TRACE("OMDiskRawStorage::size");
-
-  OMUInt64 oldPosition = position();
-
-  long int seekStatus = fseek(file, 0, SEEK_END);
-  ASSERT("Successful seek", seekStatus == 0); // tjb - error
-
-  errno = 0;
-  long int position = ftell(file);
-  ASSERT("Successful tell", IMPLIES(position == -1L, errno == 0));
-
-  const_cast<OMDiskRawStorage*>(this)->setPosition(oldPosition);
-
-  OMUInt64 result = position;
-  return result;
-}
-
-void OMDiskRawStorage::setSize(FILE* file, OMUInt64 newSize)
-{
-  TRACE("OMDiskRawStorage::setSize");
-
-  OMUInt64 currentSize = size(file);
-
-  if (newSize > currentSize) {
-
-    // Extend by writing a single byte.
-    //
-    OMUInt64 oldPosition = position(file); // Save position
-    OMByte nullByte = 0;
-    OMUInt32 bytesWritten = 0;
-
-    setPosition(file, newSize - 1);
-    write(file, &nullByte, 1, bytesWritten);
-    ASSERT("Successful write", bytesWritten == 1);
-    ASSERT("Size properly changed", size(file) == newSize);
-    setPosition(file, oldPosition); // Restore position
-  }
-  // else no ISO/ANSI way to truncate the file in place
-}
-
-OMUInt64 OMDiskRawStorage::position(FILE* file) const
-{
-  TRACE("OMDiskRawStorage::position");
-
-  errno = 0;
-  long int position = ftell(file);
-  ASSERT("Successful tell", IMPLIES(position == -1L, errno == 0));
-
-  OMUInt64 result = position;
-  return result;
-}
-
-void OMDiskRawStorage::setPosition(FILE* file, OMUInt64 newPosition) const
-{
-  TRACE("OMDiskRawStorage::setPosition");
-
-  ASSERT("Supported position", newPosition <= LONG_MAX); // tjb - limit
-  long int liNewPosition = static_cast<long int>(newPosition);
-
-  int seekStatus = fseek(file, liNewPosition, SEEK_SET);
-  ASSERT("Successful seek", seekStatus == 0); // tjb - error
+  _file->setPosition(newPosition);
 }

@@ -26,8 +26,7 @@
 
 #include "OMRawStorage.h"
 #include "OMFile.h"
-
-#include <stdio.h>
+#include "OMStream.h"
 
   // @class Class supporting access to the raw bytes of disk
   //        files supported by the Object Manager.
@@ -172,30 +171,12 @@ protected:
   // @access Protected members.
 
     // @cmember Constructor.
-  OMDiskRawStorage(FILE* file, OMFile::OMAccessMode accessMode);
-
-  virtual void read(FILE* file,
-                    OMByte* bytes,
-                    OMUInt32 byteCount,
-                    OMUInt32& bytesRead) const;
-
-  virtual void write(FILE* file,
-                     const OMByte* bytes,
-                     OMUInt32 byteCount,
-                     OMUInt32& bytesWritten);
-
-  virtual OMUInt64 size(FILE* file) const;
-
-  virtual void setSize(FILE* file, OMUInt64 newSize);
-
-  virtual OMUInt64 position(FILE* file) const;
-
-  virtual void setPosition(FILE* file, OMUInt64 newPosition) const;
+  OMDiskRawStorage(OMStream* file, OMFile::OMAccessMode accessMode);
 
 private:
   // @access Private members.
 
-  FILE* _file;
+  OMStream* _file;
   OMFile::OMAccessMode _mode;
 
 };
