@@ -39,6 +39,7 @@
 #include "AAFTypeDefUIDs.h"
 #include <assert.h>
 #include <iostream.h>
+#include <iomanip.h>
 #include <fstream.h>
 #include <stdio.h> // for sprintf()
 
@@ -49,6 +50,17 @@
 #if defined(macintosh) || defined(_MAC)
 #include "DataInput.h"
 #endif
+
+#if defined(__MWERKS__)
+#if defined(__MSL_CPP__) && (__MSL_CPP__ >= 0x5300)
+#define IOS_FMT_FLAGS ios_base::fmtflags
+#else
+#define IOS_FMT_FLAGS long int
+#endif
+#else
+#define IOS_FMT_FLAGS long int
+#endif
+
 
 // handy smart pointer typedefs
 typedef IAAFSmartPointer<IAAFObject>               IAAFObjectSP;
@@ -71,6 +83,7 @@ typedef IAAFSmartPointer<IAAFTypeDefFixedArray>    IAAFTypeDefFixedArraySP;
 typedef IAAFSmartPointer<IAAFTypeDefVariableArray> IAAFTypeDefVariableArraySP;
 typedef IAAFSmartPointer<IAAFTypeDefString>        IAAFTypeDefStringSP;
 typedef IAAFSmartPointer<IAAFTypeDefRecord>        IAAFTypeDefRecordSP;
+typedef IAAFSmartPointer<IAAFTypeDefStream>        IAAFTypeDefStreamSP;
 typedef IAAFSmartPointer<IAAFFile>                 IAAFFileSP;
 typedef IAAFSmartPointer<IAAFHeader>               IAAFHeaderSP;
 typedef IAAFSmartPointer<IEnumAAFProperties>       IEnumAAFPropertiesSP;
@@ -229,6 +242,15 @@ static HRESULT dumpObject
 static HRESULT dumpPropertyValue
 (
  IAAFPropertyValueSP pPVal,
+ IAAFDictionary * pDict,  // dictionary for this file
+ int indent,
+ ostream & os
+);
+
+static HRESULT dumpRawStreamPropertyValue
+(
+ IAAFPropertyValue * pPVal,
+ IAAFTypeDef *pTD,
  IAAFDictionary * pDict,  // dictionary for this file
  int indent,
  ostream & os
@@ -861,7 +883,13 @@ HRESULT dumpPropertyValue (IAAFPropertyValueSP pPVal,
 											os));
       break;
       }
-
+    
+    case kAAFTypeCatStream:
+    {
+	    // Print out the actual value of the stream type.
+      checkResult(dumpRawStreamPropertyValue(pPVal, pTD, pDict, indent, os));
+      break;
+    }
 
 		default:
 		  os << "***Unknown type category " << dec << (int) tid
@@ -873,6 +901,146 @@ HRESULT dumpPropertyValue (IAAFPropertyValueSP pPVal,
 	} // !pTD
 }
 
+HRESULT dumpRawStreamPropertyValue
+(
+ IAAFPropertyValue * pPVal,
+ IAAFTypeDef *pTD,
+ IAAFDictionary * /*pDict*/,  // dictionary for this file
+ int /*indent*/,
+ ostream & os
+)
+{
+  // Interpret values 0x00 - 0xff as ASCII characters.
+  // 
+  static const char asciiTable[256] = 
+  {
+    '.',  '.',  '.',  '.',  '.',  '.',  '.',  '.',
+    '.',  '.',  '.',  '.',  '.',  '.',  '.',  '.',
+    '.',  '.',  '.',  '.',  '.',  '.',  '.',  '.',
+    '.',  '.',  '.',  '.',  '.',  '.',  '.',  '.',
+    ' ',  '!',  '"',  '#',  '$',  '%',  '&', '\'',
+    '(',  ')',  '*',  '+',  ',',  '-',  '.',  '/',
+    '0',  '1',  '2',  '3',  '4',  '5',  '6',  '7',
+    '8',  '9',  ':',  ';',  '<',  '=',  '>',  '?',
+    '@',  'A',  'B',  'C',  'D',  'E',  'F',  'G',
+    'H',  'I',  'J',  'K',  'L',  'M',  'N',  'O',
+    'P',  'Q',  'R',  'S',  'T',  'U',  'V',  'W',
+    'X',  'Y',  'Z',  '[', '\\',  ']',  '^',  '_',
+    '`',  'a',  'b',  'c',  'd',  'e',  'f',  'g',
+    'h',  'i',  'j',  'k',  'l',  'm',  'n',  'o',
+    'p',  'q',  'r',  's',  't',  'u',  'v',  'w',
+    'x',  'y',  'z',  '{',  '|',  '}',  '~',  '.',
+    '.',  '.',  '.',  '.',  '.',  '.',  '.',  '.',
+    '.',  '.',  '.',  '.',  '.',  '.',  '.',  '.',
+    '.',  '.',  '.',  '.',  '.',  '.',  '.',  '.',
+    '.',  '.',  '.',  '.',  '.',  '.',  '.',  '.',
+    '.',  '.',  '.',  '.',  '.',  '.',  '.',  '.',
+    '.',  '.',  '.',  '.',  '.',  '.',  '.',  '.',
+    '.',  '.',  '.',  '.',  '.',  '.',  '.',  '.',
+    '.',  '.',  '.',  '.',  '.',  '.',  '.',  '.',
+    '.',  '.',  '.',  '.',  '.',  '.',  '.',  '.',
+    '.',  '.',  '.',  '.',  '.',  '.',  '.',  '.',
+    '.',  '.',  '.',  '.',  '.',  '.',  '.',  '.',
+    '.',  '.',  '.',  '.',  '.',  '.',  '.',  '.',
+    '.',  '.',  '.',  '.',  '.',  '.',  '.',  '.',
+    '.',  '.',  '.',  '.',  '.',  '.',  '.',  '.',
+    '.',  '.',  '.',  '.',  '.',  '.',  '.',  '.',
+    '.',  '.',  '.',  '.',  '.',  '.',  '.',  '.'
+  };
+
+
+  // Print out the actual value of the stream type.
+  AAFRESULT streamResult = AAFRESULT_SUCCESS;
+  IAAFTypeDefStreamSP pStreamType;
+  checkResult(pTD->QueryInterface(IID_IAAFTypeDefStream,
+                  (void**)&pStreamType));
+
+  // Get number of bytes
+  aafInt64 streamSize = 0;
+  checkResult(pStreamType->GetSize(pPVal, &streamSize));
+
+  os << "Value: stream: " << endl;
+  if (0x00000000FFFFFFFF < streamSize)
+  {
+    os << "  Large (64-bit) stream not supported in ascii dump!" << endl;
+    os << "  WARNING: Stream will be truncated!" << endl;
+  }
+  
+  aafUInt32 bytesLeft = (aafUInt32)(streamSize);
+  const aafUInt32 kStreamBytesPerLine = 16;
+  const aafUInt32 kStreamReadSize = kStreamBytesPerLine;
+  const aafUInt32 kOffsetWidth = 8;
+  aafUInt8 streamBuffer[kStreamReadSize];
+  aafUInt32 bytes = 0;
+  aafUInt32 bytesRead = 0;
+  aafUInt32 offset = 0;
+                
+    
+  os << "{/* size: " << bytesLeft << " bytes */" << endl;
+  
+  while ((0 < bytesLeft) && AAFRESULT_SUCCEEDED(streamResult))
+  {
+    if (bytesLeft > kStreamReadSize)
+      bytes = kStreamReadSize;
+    else
+      bytes = bytesLeft;
+
+    streamResult = pStreamType->Read(pPVal, bytes, streamBuffer, &bytesRead);
+    if (AAFRESULT_FAILED(streamResult))
+    {
+      os << "  // FAILED after reading " << (aafUInt32)streamSize - bytesLeft << " bytes." << endl;
+      break;
+    }
+    bytesLeft -= bytesRead;
+
+
+    os << " /*" << dec << setw(kOffsetWidth) << offset << " */";  
+    offset += kStreamBytesPerLine;    
+    
+    aafUInt32 i;
+     
+    IOS_FMT_FLAGS savedFlags = os.setf(ios::basefield);
+    char savedFill = cout.fill();
+    
+    for (i = 0; (i < kStreamBytesPerLine) && (i < bytesRead);)
+    {
+      os << " 0x" << hex << setw(2) << setfill('0') << (int)streamBuffer[i++];
+      if (i == bytesRead && 0 == bytesLeft)
+      {
+        os << " ";
+        break;
+      }
+        
+      os << ",";
+    }
+    
+    os.setf(savedFlags, ios::basefield);
+    os.fill(savedFill);      
+
+    
+    // add padding on last row if necessary.
+    for (aafUInt32 j = i; (j < kStreamBytesPerLine); ++j)
+    {
+      os << "      ";
+    }
+
+    // dump the ascii representation of the stream bytes
+    os << " /*";
+    for (i = 0; i < bytesRead; ++i)
+    {
+        os << asciiTable[streamBuffer[i]];
+    } 
+    os << "*/";
+    
+    os << endl;
+  }
+
+  
+  os << "};" << endl;
+  os << dec << endl;
+  
+  return streamResult;
+}
 
 
 //
