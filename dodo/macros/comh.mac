@@ -168,8 +168,8 @@ public:
 #include "CAAFUnknown.h"
 #endif
 
-#ifndef __AAFResult_h_
-#include "AAFResult.h"
+#ifndef __AAFRoot_h__
+#include "AAFRoot.h"
 #endif
 
 //
