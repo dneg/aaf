@@ -997,110 +997,305 @@ AAFRESULT STDMETHODCALLTYPE
 	
 /**ImplementationPrivate**/
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceAccess::MultiOpen (ImplAAFMasterMob * /*masterMob*/,
-                           aafSlotID_t  /*slotID*/,
-                           aafMediaCriteria_t*  /*mediaCrit*/,
-                           aafMediaOpenMode_t  /*openMode*/,
-                           aafCompressEnable_t  /*compEnable*/)
+    ImplAAFEssenceAccess::MultiOpen (ImplAAFMasterMob *masterMob,
+                           aafSlotID_t  slotID,
+                           aafMediaCriteria_t*  mediaCrit,
+                           aafMediaOpenMode_t  openMode,
+                           aafCompressEnable_t compEnable)
 {
-#if FULL_TOOLKIT
+	IAAFEssenceDataStream	*edStream = NULL;
+	IUnknown				*edUnknown = NULL;
+	IAAFEssenceContainer	*container = NULL;
+	IAAFPlugin				*plug = NULL;
+	IUnknown				*iUnk = NULL;
+	IUnknown				*iFileMob = NULL;
+	IAAFEssenceAccess		*iAccess = NULL;
+	ImplAAFDictionary		*dict = NULL;
+	ImplAAFContainerDef		*containerDef = NULL;
+	ImplAAFContentStorage	*cStore = NULL;
+	ImplAAFMobSlot			*slot = NULL;
+	ImplAAFSegment			*seg = NULL;
+	ImplAAFFindSourceInfo	*sourceInfo = NULL;
+	ImplAAFSourceMob		*fileMob = NULL;
+	ImplAAFHeader			*dataHead = NULL;
+	ImplAAFEssenceData		*essenceData = NULL;
+	ImplAAFPluginManager	*plugins = NULL;
+	ImplAAFHeader			*compHead = NULL;
+	ImplEnumAAFLocators		*enumLocate = NULL;
+	ImplAAFLocator			*pLoc = NULL;
 	aafPosition_t	zeroPos;
-	aafFindSourceInfo_t	sourceInfo;
+	aafInt32		n;
+	aafUID_t		 mediaKind, fileMobID, myFileCLSID;
+	aafLength_t masterMobLength, one;
+	aafSourceRef_t	fileRef;
+	aafInt16		numCh;
+	wchar_t				*nameBuf = NULL;
+	aafInt32			buflen;
+	aafUID_t			essenceDescClass;
+	aafBool					found = AAFFalse, isIdentified;
+	aafUID_t				testFormat;
 	
-	XPROTECT(_mainFile)
+	XPROTECT()
 	{
-		
+		CHECK(masterMob->MyHeadObject(&compHead));
+
+		_openType = kAAFReadOnly;
 		CvtInt32toPosition(0, zeroPos);	
-		CHECK(masterMob->SearchSource(trackID, zeroPos,kFileMob,
-									mediaCrit, NULL, NULL, &sourceInfo));
+		CvtInt32toLength(1, one);
+		CHECK(masterMob->SearchSource(slotID, zeroPos,kFileMob,
+									   mediaCrit,
+									   NULL,
+									   &sourceInfo));
+//		masterMob->AcquireReference();		//!!!DEBUG
+									   
+		CHECK(masterMob->FindSlotBySlotID (slotID,&slot));
+		CHECK(slot->GetSegment(&seg));
+		slot->ReleaseReference();
+		slot = NULL;
 
-		CHECK(MultiOpenFromFileMob((AAFFileMob *)sourceInfo.mob, sourceInfo.mobTrackID, openMode, compEnable));
-aafErr_t AAFMedia::MultiOpenFromFileMob(
-			AAFFileMob *				fileMob,	/* IN -- In this master mob */
-			aafTrackID_t			trackID,
-			aafMediaOpenMode_t	openMode,	/* IN -- ReadOnly or Append */
-			aafCompressEnable_t	compEnable)	/* IN -- optionally decompressing */
-{
-	aafInt16           numVideo, numAudio, numOther = 0, n;
-	aafUID_t			fileMobID;
-	aafBool			isAAF;
-	aafPosition_t	numSamples;
-	AAFHeader		*dataHead;
-	
-	aafAssertValidFHdl(_mainFile);
-	aafAssertMediaInitComplete(_mainFile);
-	
-	aafAssert(fileMob != NULL, _mainFile, AAFRESULT_INVALID_FILE_MOB);
+		CHECK(seg->GetDataDef(&mediaKind));
+		CHECK(seg->GetLength(&masterMobLength));
+		seg->ReleaseReference();
+		seg = NULL;
+		
+		CHECK(sourceInfo->GetMob((ImplAAFMob **)&fileMob));
+		CHECK(sourceInfo->GetReference(&fileRef));
+		sourceInfo->ReleaseReference();
+		sourceInfo = NULL;
 
-	XPROTECT(_mainFile)
-	{
-		CHECK(InitMediaHandle(fileMob));
-		_compEnable = compEnable;
-		if(openMode == kMediaOpenAppend)
-			_openType = kAAFAppended;
-		else
-			_openType = kAAFOpened;
-	
-		CHECK(fileMob->GetMediaDescription(&_mdes));
-		CHECK(_codec->codecGetNumChannels(_mainFile, fileMob, _pictureKind,
-											&numVideo));
-		CHECK(_codec->codecGetNumChannels(_mainFile, fileMob, _soundKind,
-											&numAudio));
+		CHECK(fileMob->GetEssenceDescriptor((ImplAAFEssenceDescriptor **)&_mdes));
+		CHECK(fileMob->GetMobID(&fileMobID));
+		CHECK(_mdes->GetObjectClass(&essenceDescClass));
 
-		_numChannels = numVideo + numAudio + numOther;
-		_channels = (aafSubChannel_t *)
-			_mainFile->omOptMalloc(sizeof(aafSubChannel_t) * _numChannels);
-		XASSERT((_channels != NULL), AAFRESULT_NOMEMORY);
+		plugins = ImplAAFContext::GetInstance()->GetPluginManager();
+		CHECK(plugins->MakeCodecFromEssenceDesc(essenceDescClass, &_codec));
 
-		CHECK(_fileMob->LocateMediaFile(&_dataFile, &isAAF));
-		if(_dataFile == NULL)
-			RAISE(AAFRESULT_MEDIA_NOT_FOUND);
 
-		_rawFile = _dataFile->_rawFile;			/* If non-omfi file */
-		CHECK(_mdes->FindCodecForMedia(&_pvt->codecInfo));
-		if(isAAF)
-		{
-			CHECK(fileMob->ReadUID(OMMOBJMobID, &fileMobID));
-			/* MCX/NT Hack! */
-			CHECK(_dataFile->GetHeadObject(&dataHead));
-			CHECK(dataHead->LookupDataObject(fileMobID, &_dataObj));
-		}
-			
-		for (n = 0; n < _numChannels; n++)
-		{
-			if (n < numVideo)
+		iUnk = static_cast<IUnknown *> (this->GetContainer());
+		CHECK(iUnk->QueryInterface(IID_IAAFEssenceAccess, (void **)&iAccess));
+		iUnk->Release();
+		iUnk = NULL;
+		CHECK(_codec->SetEssenceAccess(iAccess));
+		// Now _codec is holding onto a reference to THIS, and we have a reference to _codec
+		// Creating a cycle which will never free.  I am decrementing the AAFEssenceAccess reference
+		//  Count  artificially by one, so that when EssenceAccess is Released, both objects will
+		// be deleted (the correct behavior).
+		iAccess->Release();
+
+//!!!		_physicalOutChanOpen = physicalOutChan;
+		
+
+		CHECK(_mdes->GetContainerFormat (&testFormat));
+		_fileFormat = testFormat;
+
+
+		CHECK(compHead->GetDictionary (&dict));
+		CHECK(dict->LookupContainerDefinition (&testFormat, &containerDef));
+		dict->ReleaseReference();
+		dict = NULL;
+
+		found = AAFFalse;
+		CHECK(containerDef->EssenceIsIdentified (&isIdentified));
+		containerDef->ReleaseReference();
+		containerDef = NULL;
+
+		if(isIdentified)
+		{						
+			CHECK(fileMob->GetMobID(&fileMobID));
+			CHECK(compHead->GetContentStorage (&cStore));
+			if(cStore->LookupEssence (&fileMobID, &essenceData) == AAFRESULT_SUCCESS)
 			{
-				_channels[n].mediaKind = _pictureKind;
-				_channels[n].physicalOutChan = n + 1;
-				_channels[n].trackID = trackID + n;
-			} else if (n < numVideo + numAudio)
-			{
-				_channels[n].mediaKind = _soundKind;
-				_channels[n].physicalOutChan = n + 1 - (numVideo);
-				_channels[n].trackID = trackID + n;
+				found = AAFTrue;
+				CHECK(CoCreateInstance(CLSID_AAFEssenceDataStream,
+					NULL, 
+					CLSCTX_INPROC_SERVER, 
+					IID_IAAFEssenceStream, 
+					(void **)&_stream));
+		
+				CHECK(_stream->QueryInterface(IID_IAAFEssenceDataStream, (void **)&edStream));
+				// This only works with a COM API
+				edUnknown = static_cast<IUnknown *> (essenceData->GetContainer());
+				edStream->Init(edUnknown);
+				edStream->Release();
+				edStream = NULL;
+				essenceData->ReleaseReference();
+				essenceData = NULL;
 			}
+			cStore->ReleaseReference();
+			cStore = NULL;
 		}
-		CHECK(_codec->codecOpen(this));
-		if(openMode == kMediaOpenAppend)
+
+		if(found == AAFFalse)
 		{
-			CHECK(GetSampleCount(&numSamples));										  
-			CHECK(AddInt32toInt64(1, &numSamples));
-			CHECK(GotoFrameNumber(numSamples));
+			AAFRESULT				status;
+
+			CHECK(_mdes->EnumAAFAllLocators(&enumLocate));
+			while(!found && (enumLocate->NextOne (&pLoc) == AAFRESULT_SUCCESS))
+			{
+				
+				pLoc->GetPathBufLen(&buflen);
+				nameBuf = new wchar_t[buflen];
+				if(nameBuf == NULL)
+					RAISE(AAFRESULT_NOMEMORY);
+				CHECK(pLoc->GetPath(nameBuf, buflen));
+				if(EqualAUID(&_fileFormat, &ContainerAAF) == AAFTrue)
+				{
+					if(openMode == kMediaOpenAppend)
+						status = ModifyEssenceFileFromLocator (compHead, pLoc, &_dataFile);
+					else
+					{
+						memcpy((void *)&myFileCLSID, (void *)&CLSID_AAFFile, sizeof(aafUID_t));
+						_dataFile = (ImplAAFFile *)CreateImpl(myFileCLSID);
+						CHECK(_dataFile->Initialize());
+						status = _dataFile->OpenExistingRead(nameBuf, 0);
+					}
+
+					if(status == AAFRESULT_SUCCESS)
+					{												
+						CHECK(_dataFile->GetHeader(&dataHead));
+						CHECK(dataHead->GetContentStorage (&cStore));
+						if(cStore->LookupEssence (&fileMobID, &essenceData) == AAFRESULT_SUCCESS)
+							found = AAFTrue;
+						cStore->ReleaseReference();
+						cStore = NULL;
+
+						if(found && EqualAUID(&_fileFormat, &ContainerAAF))
+						{
+							CHECK(CoCreateInstance(CLSID_AAFEssenceDataStream,
+								NULL, 
+								CLSCTX_INPROC_SERVER, 
+								IID_IAAFEssenceStream, 
+								(void **)&_stream));
+							
+							CHECK(_stream->QueryInterface(IID_IAAFEssenceDataStream, (void **)&edStream));
+							// This only works with a COM API
+							edUnknown = static_cast<IUnknown *> (essenceData->GetContainer());
+							edStream->Init(edUnknown);
+							edStream->Release();
+							edStream = NULL;
+							essenceData->ReleaseReference();
+							essenceData = NULL;
+						}
+						dataHead->ReleaseReference();
+						dataHead = NULL;
+					}
+					else
+					{
+						_dataFile->ReleaseReference();
+						_dataFile = NULL;
+					}
+				}
+				else
+				{
+					CHECK(plugins->GetPluginInstance(_fileFormat, &plug));
+					CHECK(plug->QueryInterface(IID_IAAFEssenceContainer, (void **)&container));
+					
+					if(openMode == kMediaOpenReadOnly)
+					{
+						status = container->OpenEssenceStreamReadOnly (nameBuf, &fileMobID, &_stream);
+					}
+					else if(openMode == kMediaOpenAppend)
+					{
+						status = container->OpenEssenceStreamAppend (nameBuf, &fileMobID, &_stream);
+					}
+					else
+						RAISE(AAFRESULT_MEDIA_OPENMODE);
+					
+					if(status == AAFRESULT_SUCCESS)
+						found = AAFTrue;
+					container->Release();
+					container = NULL;
+					plug->Release();
+					plug = NULL;
+				}
+
+				delete nameBuf;
+				nameBuf = NULL;
+				pLoc->ReleaseReference();
+				pLoc = NULL;
+			}
+			enumLocate->ReleaseReference();
+			enumLocate = NULL;
+			if(!found)
+				RAISE(AAFRESULT_MEDIA_NOT_FOUND);
 		}
+
+
+		iFileMob = static_cast<IUnknown *> (fileMob->GetContainer());
+		CHECK(_codec->GetNumChannels(iFileMob, mediaKind, _stream, &numCh));
+		if (numCh == 0)
+		  RAISE(AAFRESULT_INVALID_DATADEF);
+		
+		_channels = (aafSubChannel_t *) new aafSubChannel_t[numCh];
+		if(_channels == NULL)
+			RAISE(AAFRESULT_NOMEMORY);
+		_numChannels = numCh;
+		for(n = 0; n < numCh; n++)
+		{
+			_channels[n].mediaKind = mediaKind;
+			_channels[n].physicalOutChan = n+1;
+			_channels[n].trackID = slotID+n;
+		}
+
+		iFileMob = static_cast<IUnknown *> (fileMob->GetContainer());
+		CHECK(_codec->Open(iFileMob, slotID, openMode, _stream));
+		
+		_masterMob = masterMob;
+		_masterMob->AcquireReference();
+		fileMob->ReleaseReference();
+		fileMob = NULL;
+		compHead->ReleaseReference();
+		compHead = NULL;
+		if(plugins != NULL)
+			plugins->ReleaseReference();
 	}
 	XEXCEPT
+	{
+		if(_dataFile != NULL)
+			_dataFile->ReleaseReference();
+		_dataFile = NULL;
+		if(plugins != NULL)
+			plugins->ReleaseReference();
+		if(edStream != NULL)
+			edStream->Release();
+		if(iUnk != NULL)
+			iUnk->Release();
+		if(iAccess != NULL)
+			iAccess->Release();
+//		if(edUnknown != NULL)
+//			edUnknown->Release();
+		if(container != NULL)
+			container->Release();
+		if(plug != NULL)
+			plug->Release();
+		if(dict != NULL)
+			dict->ReleaseReference();
+		if(containerDef != NULL)
+			containerDef->ReleaseReference();
+		if(cStore != NULL)
+			cStore->ReleaseReference();
+		if(slot != NULL)
+			slot->ReleaseReference();
+		if(seg != NULL)
+			seg->ReleaseReference();
+		if(sourceInfo != NULL)
+			sourceInfo->ReleaseReference();
+		if(fileMob != NULL)
+			fileMob->ReleaseReference();
+		if(dataHead != NULL)
+			dataHead->ReleaseReference();
+		if(essenceData != NULL)
+			essenceData->ReleaseReference();
+		if(compHead != NULL)
+			compHead->ReleaseReference();
+		if(enumLocate != NULL)
+			enumLocate->ReleaseReference();
+		if(pLoc != NULL)
+			pLoc->ReleaseReference();
+	}
 	XEND
 	
 	return (AAFRESULT_SUCCESS);
-}
-	}
-	XEXCEPT
-	XEND
-	
-	return (AAFRESULT_SUCCESS);
-#else
-	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
 }
 
 	//@comm This routine
@@ -1141,23 +1336,6 @@ AAFRESULT ImplAAFEssenceAccess::SetEssenceCodecFlavour(aafUID_t variety)
 	//@comm If you are creating the essence, and then attaching it to a master
 	// mob, then the "masterMob" field may be left NULL.
 	//@comm Replaces omfmMediaMultiCreate
-	
-/****/
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceAccess::SetBlockingSize (aafUInt32  /*numBytes*/)
-{
-	return AAFRESULT_NOT_IMPLEMENTED;		// !!!Get rid of this from the API
-}
-
-	//@comm Allocating the space in this fashion ensures that the data will be
-	// contiguous on disk (for at least numBytes bytes) even if other
-	// disk operations allocate space on the disk.  If the data written
-	// exceeds numBytes, then another disk block of numBytes size will be
-	// allocated.
-	//@comm Takes a essence handle, so the essence must have been opened or created.
-	// The space is allocated in terms of bytes.
-	//@comm Replaces omfmSetBlockingSize
-
 	
 /****/
 AAFRESULT STDMETHODCALLTYPE
@@ -1443,33 +1621,17 @@ AAFRESULT STDMETHODCALLTYPE
 /****/
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFEssenceAccess::GetLargestSampleSize (aafUID_t mediaKind,
-                           aafUInt32*  maxSize)
+                           aafLength_t *maxSize)
 {
-#if FULL_TOOLKIT
-	aafMaxSampleSize_t	parms;
-	AAFFile *			main;
-	
-	aafAssertMediaHdl(this);
-	main = _mainFile;
-	aafAssertValidFHdl(main);
-	aafAssertMediaInitComplete(main);
-
 	aafAssert(maxSize != NULL, main, AAFRESULT_NULL_PARAM);
-	*maxSize = 0;
-	XPROTECT(main)
+	XPROTECT()
 	{
-		parms.mediaKind = mediaKind;
-		CHECK(_codec->codecGetInfo(this, kMaxSampleSize, mediaKind, sizeof(parms),
-								&parms));
-		*maxSize = parms.largestSampleSize;
+		CHECK(_codec->GetLargestSampleSize(mediaKind, maxSize));
 	}
 	XEXCEPT
 	XEND
 	
 	return(AAFRESULT_SUCCESS);
-#else
-	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
 }
 
 	//@comm For uncompressed data, or the output of the software codec,
@@ -1484,26 +1646,15 @@ AAFRESULT STDMETHODCALLTYPE
                            aafPosition_t frameNum,
                            aafLength_t* frameSize)
 {
-#if FULL_TOOLKIT
-	aafFrameSizeParms_t	parms;
-
 	aafAssert(frameSize != NULL, main, AAFRESULT_NULL_PARAM);
-	CvtInt32toInt64(0, frameSize);
-	XPROTECT(main)
+	XPROTECT()
 	{
-		parms.mediaKind = mediaKind;
-		parms.frameNum = frameNum;
-		CHECK(_codec->xxx(this, kSampleSize, mediaKind, sizeof(parms),
-								&parms));
-		*frameSize = parms.frameSize;
+		CHECK(_codec->GetIndexedSampleSize(mediaKind, frameNum, frameSize));
 	}
 	XEXCEPT
 	XEND
 	
 	return(AAFRESULT_SUCCESS);
-#else
-	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
 }
 
 	//@comm For uncompressed data, or the output of the software codec,
@@ -1642,25 +1793,17 @@ AAFRESULT STDMETHODCALLTYPE
 
 /****/
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceAccess::Seek (aafInt64  /*frameNum*/)
+    ImplAAFEssenceAccess::Seek (aafInt64  frameNum)
 {
-#if FULL_TOOLKIT
 	aafInt64		one;
-	aafErr_t		status;
+	AAFRESULT		status;
 	
-	aafAssertMediaHdl(this);
-	aafAssertValidFHdl(_mainFile);
-	aafAssertMediaInitComplete(_mainFile);
-
 	CvtInt32toInt64(1, &one);
-	if(Int64Greater(_pvt->repeatCount, one))
-		status = _codec->codecSetFrameNum(this, one);
-	else
-		status = _codec->codecSetFrameNum(this, frameNum);
+//!!!	if(Int64Greater(_pvt->repeatCount, one))
+//		status = _codec->Seek(one);
+//	else
+		status = _codec->Seek(frameNum);
 	return (status);
-#else
-	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
 }
 
 	//@comm Useful only on reading, you
@@ -1896,13 +2039,9 @@ AAFRESULT STDMETHODCALLTYPE
 
 /****/
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceAccess::AddFrameIndexEntry (aafInt64  /*frameOffset*/)
+    ImplAAFEssenceAccess::AddFrameIndexEntry (aafInt64 frameOffset)
 {
-#if FULL_TOOLKIT
-	return(_codec->codecAddFrameIndexEntry(this, frameOffset));
-#else
-	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
+	return(_codec->AddSampleIndexEntry(frameOffset));
 }
 
 	//@comm This function should NOT be called when essence is passed to
@@ -1912,15 +2051,6 @@ AAFRESULT STDMETHODCALLTYPE
 	//	AAFRESULT_INVALID_OP_CODEC -- This kind of essence doesn't have a frame index<nl>
 	//	AAFRESULT_MEDIA_OPENMODE -- The essence is open for read-only.
 	//@comm Replaces omfmAddFrameIndexEntry */
-
-/****/
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceAccess::SetStreamCacheSize (aafUInt32  /*cacheSize*/)
-{
-	return AAFRESULT_NOT_IMPLEMENTED;		// Get rid of this from the IDL!
-}
-
-	//@comm Replaces omfmSetStreamCacheSize */
 
 /****/
 

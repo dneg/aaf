@@ -45,15 +45,6 @@ ImplAAFDataDef::~ImplAAFDataDef ()
 {}
 
 
-
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFDataDef::GetName (
-      aafString_t *  /*pstrName*/)
-{
-  return AAFRESULT_NOT_IMPLEMENTED;
-}
-
-
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFDataDef::IsPictureKind (
       aafBool *bIsPictureKind)
