@@ -54,6 +54,7 @@ class ImplEnumAAFPluggableDefs;
 class ImplEnumAAFPluginDefs;
 class ImplEnumAAFTypeDefs;
 class ImplAAFMetaDictionary;
+class ImplAAFMetaDefinition;
 
 #ifndef __ImplAAFObject_h__
 #include "ImplAAFObject.h"
@@ -114,6 +115,21 @@ public:
     // Address of output variable that receives the 
     // object pointer requested in pAUID
     ImplAAFObject ** ppvObject);
+
+
+  //****************
+  // CreateMetaInstance()
+  //
+  // Creates a single uninitialized AAF meta definition associated 
+  // with a specified stored object id.
+  virtual AAFRESULT STDMETHODCALLTYPE 
+  CreateMetaInstance (
+    // Stored Object ID of the meta object to be created.
+    aafUID_constref classId,
+
+    // Address of output variable that receives the 
+    // object pointer requested in pAUID
+    ImplAAFMetaDefinition ** ppMetaObject);
 
 
   //****************
@@ -508,32 +524,6 @@ public:
   // meta data: classes, properties and types). This method
   // can only be called once.
   void setMetaDictionary(ImplAAFMetaDictionary *metaDictionary);
-
-
-#if USE_NEW_OBJECT_CREATION
-
-  //****************
-  // CreateImplClassDef() (not in the public API
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    CreateImplClassDef (
-      aafUID_constref classID,
-      ImplAAFClassDef * pParentClass,
-      aafCharacter_constptr pClassName,
-      ImplAAFClassDef ** ppClassDef);
-
-
-  //****************
-  // CreateClassDef()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    CreateClassDef (
-      aafUID_constref classID,
-      ImplAAFClassDef * pParentClass,
-      aafCharacter_constptr pClassName,
-      ImplAAFClassDef ** ppClassDef);
-
-#endif // #if USE_NEW_OBJECT_CREATION
 
 
   //****************
