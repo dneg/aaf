@@ -52,7 +52,7 @@
 extern "C" const aafClassID_t CLSID_AAFTypeDefRename;
 
 ImplAAFKLVData::ImplAAFKLVData ():
-	_value(		PID_KLVData_Value,		"Value"),
+	_value(		PID_KLVData_Value,		L"Value"),
   _initialized(false),
   _cachedRenameTypeDef(NULL)
 {
