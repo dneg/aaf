@@ -753,11 +753,28 @@ AAFRESULT
 {
 	HRESULT				hr;
 
+
+	if( pComponent == NULL )
+		return AAFRESULT_NULL_PARAM;
+
 	size_t numCpnts = _components.count();
 	if (index < numCpnts)
 	{
+		// Retreive the old component
+		// If it's the same as one we are setting just return success.
+		//
+		ImplAAFComponent	*pOldComponent = NULL;
+		_components.getValueAt( pOldComponent, index );
+		assert(pOldComponent);
+		if( pOldComponent != NULL && pOldComponent == pComponent )
+			return AAFRESULT_SUCCESS;
+
+		// Make sure the new component is not already in use.
 		if (pComponent->attached())
 			return AAFRESULT_OBJECT_ALREADY_ATTACHED;
+
+		if( pOldComponent != NULL )
+		    pOldComponent->ReleaseReference();
 
 		_components.setValueAt(pComponent, index);
 		pComponent->AcquireReference();
