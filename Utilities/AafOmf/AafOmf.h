@@ -33,11 +33,10 @@
  ************************************************************************/
 /************************************************************************
  *
- * AafOmf.h Describes structures and prototypes for the OMF to AAF 
+ * Omf2Aaf.h Describes structures and prototypes for the OMF to AAF 
  *          conversion utility.
  *
  ************************************************************************/
-
 
   
 #if defined(_MAC) || defined(macintosh)
@@ -45,18 +44,16 @@
 #include "AAF.h"
 #else
 #include "AAF.h"
-// TODO: This should not be here, I added them for now to get a good link.
-const CLSID CLSID_AAFFile = { 0x9346ACD2, 0x2713, 0x11d2, { 0x80, 0x35, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } };
 
 #endif
 
-// Include the defintions for the AAF Stored Object identifiers.
-#define INIT_AUID
-#include "AAFStoredObjectIDs.h"
 
+#include "AAFTypes.h"
+//#include "aafCvt.h"
+#include "AAFResult.h"
+#include "AAFDefUIDs.h"
 
 const int MAX_INDENT = 8;
-
 
 // ============================================================================
 // simple helper class to initialize and cleanup COM library.
@@ -74,86 +71,39 @@ struct CComInitialize
 	}
 };
 
-// ============================================================================
-// simple helper class to run the main application.
-// ============================================================================
-class AafOmf
+typedef struct _AafOmfGlobals
 {
-public:
-	AafOmf();
-	~AafOmf();
+	aafInt16		numIndents;
+	char			indentLeader[MAX_INDENT+1];	
 
-public:
-	void Usage( void );
-	void IncIndentLevel( void );
-	void DecIndentLevel( void );
-	void DisplaySummary( void );
-	HRESULT GetUserInput(int argc, char* argv[]);
-	HRESULT OpenInputFile( void );
-	HRESULT OpenOutputFile( void );
-	aafBool IsOMFFile(FILE* pStream);
-	HRESULT OMFFileOpen( char* pFileName );
-	HRESULT	TOCFileCreate( void ); 
-	void OMFFileClose( void );
-	HRESULT AAFFileOpen( char* pFileName );
-	HRESULT AAFDefinitionFileOpen( void );
-	void AAFFileClose(void );
-	HRESULT OMFFileRead( void );
-	HRESULT ConvertOMFHeader( void );
-	HRESULT ConvertOMFDataDefinitionObject( OMF2::omfObject_t obj);
-	HRESULT ConvertOMFClassDictionaryObject( OMF2::omfObject_t obj);
-	HRESULT ConvertOMFMediaDataObject( OMF2::omfObject_t obj);
-	HRESULT ConvertOMFDatakind(OMF2::omfDDefObj_t datakind, aafUID_t* pDatadef);
-	HRESULT ConvertOMFMOBObject( OMF2::omfObject_t obj, IAAFMob* pMob );
-	HRESULT ConvertOMFCompositionObject( OMF2::omfObject_t obj,IAAFCompositionMob* pCompMob );
-	HRESULT ConvertOMFMasterMob( OMF2::omfObject_t obj, IAAFMasterMob* pMasterMob );
-	HRESULT ConvertOMFSourceMob( OMF2::omfObject_t obj, IAAFSourceMob* pSourceMob );
-	HRESULT TraverseOMFMob( OMF2::omfObject_t obj, IAAFMob* pMob );
-	HRESULT ProcessOMFComponent( OMF2::omfObject_t obj, IAAFComponent** ppComponent );
-	HRESULT TraverseOMFSequence( OMF2::omfObject_t obj, IAAFSequence* pSequence );
-	HRESULT	ConvertOMFSequence( OMF2::omfObject_t sequence, IAAFSequence* pSequence);
-	HRESULT ConvertOMFSourceClip( OMF2::omfObject_t sourceclip, IAAFSourceClip* pSourceClip);
-	HRESULT ConvertOMFComponentProperties(OMF2::omfObject_t sequence, IAAFComponent* pComponent);
-	HRESULT ConvertOMFTransition(OMF2::omfObject_t transition, IAAFTransition* pTransition);
-	HRESULT ConvertOMFSelector(OMF2::omfObject_t selector, IAAFSelector* pSelector);
-	HRESULT ConvertOMFLocator(OMF2::omfObject_t locator, IAAFEssenceDescriptor* pEssenceDesc);
-	HRESULT ConvertOMFCDCIDescriptorLocator(OMF2::omfObject_t mediaDescriptor, IAAFCDCIDescriptor* pAAFDescriptor);
-
-	char*					pProgramName;
-
-private:
-	aafBool					bVerboseMode;
-	aafBool					bCreateTOCFile;
-	aafBool					bConvertAllObjects;
-	aafBool					bOMFFileOpen;
-	aafBool					bAAFFileOpen;
-	aafBool					bLogFile;
-	aafBool					bDefFile;
-	char					sInFileName[256];
-	char					sTOCFileName[256];
-	char					sDefinitionFileName[256];
-	char					sOutFileName[256];
-	char					sLogFileName[256];
+	aafBool			bVerboseMode;
+	aafBool			bCreateTOCFile;
+	aafBool			bConvertAllObjects;
+	aafBool			bOMFFileOpen;
+	aafBool			bAAFFileOpen;
+	aafBool			bLogFile;
+	aafBool			bDefFile;
 
 	// For Statistical summary
-	aafInt32				nNumOMFMobs;
-	aafInt32				nNumAAFMobs;
-	aafInt32				nNumOMFObjects;
-	aafInt32				nNumAAFObjects;
-	aafInt32				nNumOMFProperties;
-	aafInt32				nNumAAFProperties;
-	aafInt32				nNumUndefinedOMFObjects;
-	aafInt32				nNumUndefinedOMFProperties;
+	aafInt32		nNumOMFMobs;
+	aafInt32		nNumAAFMobs;
+	aafInt32		nNumOMFObjects;
+	aafInt32		nNumAAFObjects;
+	aafInt32		nNumOMFProperties;
+	aafInt32		nNumAAFProperties;
+	aafInt32		nNumUndefinedOMFObjects;
+	aafInt32		nNumUndefinedOMFProperties;
+	aafInt32		nNumUndefinedAAFObjects;
+	aafInt32		nNumUndefinedAAFProperties;
 
-	// For display and print purposes
-	aafInt16				numIndents;
-	char					indentLeader[MAX_INDENT+1];	
+	char			sInFileName[256];
+	char			sTOCFileName[256];
+	char			sDefinitionFileName[256];
+	char			sOutFileName[256];
+	char			sLogFileName[256];
+	char*			pProgramName;
+} AafOmfGlobals;
 
-    OMF2::omfSessionHdl_t	OMFSession;
-	OMF2::omfHdl_t			OMFFileHdl;
-	OMF2::omfFileRev_t		OMFFileRev;
-
-	IAAFFile*				pFile;
-	IAAFHeader*				pHeader;
-	IAAFDictionary*			pDictionary;
-};
+void deleteFile( char* fileName );
+void IncIndentLevel( void );
+void DecIndentLevel( void );
