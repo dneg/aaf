@@ -24,6 +24,7 @@
 #include "CAAFUnknown.h"
 #include "CAAFServer.h"
 #include <stddef.h>
+#include <iostream.h>
 
 
 //=--------------------------------------------------------------------------=
@@ -165,9 +166,15 @@ ULONG CAAFUnknown::CAAFPrivateUnknown::Release
 )
 {
     ULONG cRef = CAAFServer::InterlockedDecrement(&m_cRef);
-
+#if 0
     if (0 == m_cRef)
         delete This();
+#else
+    if (0 > (long)m_cRef)
+    {
+      cerr << This() << " Error: Releasing an object with reference count:" << (long)(m_cRef) << endl;
+    }
+#endif
 
     return cRef;
 }
