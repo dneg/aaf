@@ -165,6 +165,10 @@ SOURCE=.\FileGenOps\ParamMaps.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\FileGenOps\Plugin.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\FileGenOps\Properties.cpp
 # End Source File
 # Begin Source File
