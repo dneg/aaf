@@ -1170,12 +1170,15 @@ void ImplAAFFile::registerFactories(void)
 {
   OMFile::registerFactory(AAFMSSEncoding,
                           new OMMSSStoredObjectFactory(AAFMSSEncoding,
+                                                       L"AAF",
                                                        L"AAF MSS"));
   OMFile::registerFactory(AAFXMLEncoding,
                           new OMXMLStoredObjectFactory(AAFXMLEncoding,
+                                                       L"XML",
                                                        L"AAF XML"));
   OMFile::registerFactory(AAFKLVEncoding,
                           new OMKLVStoredObjectFactory(AAFKLVEncoding,
+                                                       L"KLV",
                                                        L"AAF KLV"));
 }
 

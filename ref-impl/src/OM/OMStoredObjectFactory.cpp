@@ -11,7 +11,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 // 
-// The Original Code of this file is Copyright 1998-2001, Licensor of the
+// The Original Code of this file is Copyright 1998-2002, Licensor of the
 // AAF Association.
 // 
 // The Initial Developer of the Original Code of this file and the
@@ -31,13 +31,16 @@
   // @mfunc Constructor.
 OMStoredObjectFactory::OMStoredObjectFactory(
                                         const OMStoredObjectEncoding& encoding,
-                                        const wchar_t* name)
+                                        const wchar_t* name,
+                                        const wchar_t* description)
 : _encoding(encoding),
-  _name(saveWideString(name))
+  _name(saveWideString(name)),
+  _description(saveWideString(description))
 {
   TRACE("OMStoredObjectFactory::OMStoredObjectFactory");
 
   PRECONDITION("Valid name", validWideString(name));
+  PRECONDITION("Valid name", validWideString(description));
   PRECONDITION("Valid encoding", encoding != nullOMStoredObjectEncoding);
 }
 
@@ -66,4 +69,13 @@ const wchar_t* OMStoredObjectFactory::name(void) const
 {
   TRACE("OMStoredObjectFactory::name");
   return _name;
+}
+
+  // @mfunc The description of the encoding of
+  //        <c OMStoredObject>s created by this <c OMStoredObjectFactory>.
+  //   @rdesc The description.
+const wchar_t* OMStoredObjectFactory::description(void) const
+{
+  TRACE("OMStoredObjectFactory::description");
+  return _description;
 }

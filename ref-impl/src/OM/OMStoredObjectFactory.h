@@ -40,7 +40,8 @@ public:
 
     // @cmember Constructor.
   OMStoredObjectFactory(const OMStoredObjectEncoding& encoding,
-                        const wchar_t* name);
+                        const wchar_t* name,
+                        const wchar_t* description);
 
     // @cmember Destructor.
   virtual ~OMStoredObjectFactory(void);
@@ -58,6 +59,10 @@ public:
     // @cmember The name used to identify the encoding of
     //          <c OMStoredObject>s created by this <c OMStoredObjectFactory>.
   virtual const wchar_t* name(void) const;
+
+    // @cmember The description of the encoding of
+    //         <c OMStoredObject>s created by this <c OMStoredObjectFactory>.
+  virtual const wchar_t* description(void) const;
 
     // @cmember Open the root <c OMStoredObject> in the raw storage
     //          <p rawStorage> for reading only.
@@ -130,6 +135,7 @@ private:
 
   OMStoredObjectEncoding _encoding;
   wchar_t* _name;
+  wchar_t* _description;
 
 };
 
