@@ -213,18 +213,32 @@ RunMainScript ()
 }
 
 
+PrintExitCodes ()
+{
+	ExTarget=$1
+
+	print "\nPrinting $ExTarget Test Exit Codes:\n$RESULTS"
+
+	if [ SANDBOX -eq 0 ]; then
+		print "\nPrinting Test Exit Codes:\n$RESULTS" | tee -a D:/Views/SandBox.log
+	fi
+}
+
+
 
 if [ CHECK_DEBUG -eq 1 ]; then
 	RunMainScript "Debug"
+	PrintExitCodes "Debug"
 fi
 
 
 if [ CHECK_RELEASE -eq 1 ]; then
 	RunMainScript "Release"
+	PrintExitCodes "Release"
 fi
 
 
-print "\nPrinting Test Exit Codes:\n$RESULTS" 
+
 
 
 exit $STATUS
