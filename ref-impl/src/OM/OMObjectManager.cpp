@@ -30,12 +30,22 @@
 
 #include "OMObjectManager.h"
 
+#include "OMAssertions.h"
+#include "OMUniqueObjectIdentType.h"
+#include "OMIntegerType.h"
+
 void initializeObjectManager(void)
 {
-  // Nothing yet
+#if defined(OM_ENABLE_DEBUG)
+  checkTypes();
+#endif
 }
 
 void finalizeObjectManager(void)
 {
-  // Nothing yet
+  OMInteger08Type::destroy();
+  OMInteger16Type::destroy();
+  OMInteger32Type::destroy();
+  OMInteger64Type::destroy();
+  OMUniqueObjectIdentificationType::destroy();
 }
