@@ -308,7 +308,7 @@ HRESULT STDMETHODCALLTYPE
 
 	
 HRESULT STDMETHODCALLTYPE
-    CAAFWaveCodec::GetNumChannels (IUnknown *fileMob,
+    CAAFWaveCodec::GetNumChannels (IAAFSourceMob *fileMob,
         aafUID_t  essenceKind,
         IAAFEssenceStream *stream,
         aafInt16 *  pNumChannels)
@@ -365,7 +365,7 @@ HRESULT STDMETHODCALLTYPE
 
 		
 HRESULT STDMETHODCALLTYPE
-    CAAFWaveCodec::Create (IUnknown *unk,
+    CAAFWaveCodec::Create (IAAFSourceMob *unk,
         aafUID_t  variant,
         IAAFEssenceStream * stream,
         aafInt32 numParms,
@@ -418,7 +418,7 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFWaveCodec::Open (IUnknown *unk,
+    CAAFWaveCodec::Open (IAAFSourceMob *unk,
         aafSlotID_t	slotID,
 		aafMediaOpenMode_t  openMode,
         IAAFEssenceStream * stream)
