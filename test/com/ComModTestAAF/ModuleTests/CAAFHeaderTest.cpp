@@ -629,11 +629,21 @@ void HeaderTest::createFileMob(int itemNumber)
   _pSourceMob = NULL;
 }
 
+  
+#define SZ_ESSENCE 512
 void HeaderTest::createEssenceData(IAAFSourceMob *pSourceMob)
 {
+
   assert(_pFile && _pHeader && _pDictionary);
   assert(pSourceMob);
   assert(NULL == _pEssenceData);
+
+  //prepare dummy essence
+  	char buff[SZ_ESSENCE];
+	aafUInt32 bytesWritten;
+	for(int i=0;i<SZ_ESSENCE;i++)
+		buff[i]=(char)i;
+
 
   CAAFBuiltinDefs defs (_pDictionary);
 
@@ -655,6 +665,9 @@ void HeaderTest::createEssenceData(IAAFSourceMob *pSourceMob)
 
   // Add it for real this time
   check(_pHeader->AddEssenceData(_pEssenceData));
+
+  check(_pEssenceData->Write(SZ_ESSENCE, (aafDataBuffer_t)buff,&bytesWritten));
+
   
   _pEssenceData->Release();
   _pEssenceData = NULL;
