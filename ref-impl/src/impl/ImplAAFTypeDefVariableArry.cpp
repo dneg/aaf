@@ -192,11 +192,68 @@ ImplAAFTypeDefVariableArray::GetTypeCategory (eAAFTypeCategory_t *  pTid)
 AAFRESULT STDMETHODCALLTYPE
 ImplAAFTypeDefVariableArray::AppendElement
 (
- ImplAAFPropertyValue * /*pInPropVal*/,
- ImplAAFPropertyValue * /*pMemberPropVal*/
+ ImplAAFPropertyValue * pInPropVal,
+ ImplAAFPropertyValue * pMemberPropVal
 )
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  if (!pInPropVal)
+	return AAFRESULT_NULL_PARAM;
+  if (!pMemberPropVal)
+	return AAFRESULT_NULL_PARAM;
+
+  AAFRESULT hr;
+
+  ImplAAFPropValData* inPvd =
+	dynamic_cast<ImplAAFPropValData*> (pInPropVal);
+  assert (inPvd);
+
+  ImplAAFPropValData* memPvd =
+	dynamic_cast<ImplAAFPropValData*> (pMemberPropVal);
+  assert (memPvd);
+
+  aafUInt32 oldSize = 0;
+  hr = inPvd->GetBitsSize (&oldSize);
+  assert (AAFRESULT_SUCCEEDED (hr));
+
+  aafUInt32 newElemSize = 0;
+  hr = memPvd->GetBitsSize (&newElemSize);
+  assert (AAFRESULT_SUCCEEDED (hr));
+  
+  aafUInt32 newSize = oldSize + newElemSize;
+  assert (newSize);
+  // sizeof (*buf) must be 1
+  aafUInt8* buf = new aafUInt8[newSize];
+  assert (buf);
+
+  aafMemPtr_t pBits = 0;
+
+  // Copy old bits into our buffer
+  if (oldSize)
+	{
+	  pBits = 0;
+	  hr = inPvd->GetBits (&pBits);
+	  assert (AAFRESULT_SUCCEEDED (hr));
+	  assert (pBits);
+	  memcpy (buf, pBits, oldSize);
+	}
+
+  // Append new prop val onto end of our buffer
+  pBits = 0;
+  hr = memPvd->GetBits (&pBits);
+  assert (AAFRESULT_SUCCEEDED (hr));
+  assert (pBits);
+  // Following ptr addition depends on buf being a byte pointer
+  memcpy (buf+oldSize, pBits, newElemSize);
+  
+  // Re-allocate prop val bits to hold newly expanded data
+  pBits = 0;
+  hr = inPvd->AllocateBits (newSize, &pBits);
+  assert (AAFRESULT_SUCCEEDED (hr));
+  assert (pBits);
+  memcpy (pBits, buf, newSize);
+
+  delete[] buf;
+  return AAFRESULT_SUCCESS;
 }
 
 
