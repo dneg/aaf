@@ -47,11 +47,11 @@
 ; @author <name> | <initials> | <organization> | <class>
 ;
 .tag=author, html, 4, 20, $3::Author
-.pre=$(page)
-$(rmh)Defined in file$(rmhe)
-$(cb)$!f$(cbe)<P>
-$(rmh)Author$(rmhe)
-$(cb)$1 - $2 - ($3)$(cbe)
+; .pre=$(page)
+; $(rmh)Defined in file$(rmhe)
+; $(cb)$!f$(cbe)<P>
+; $(rmh)Author$(rmhe)
+; $(cb)$1 - $2 - ($3)$(cbe)
 
 ; C topic tags overridden from the standard HTML.FMT
 
