@@ -54,14 +54,9 @@ AAFRESULT STDMETHODCALLTYPE
   hr = SetName (pTypeName);
   if (! AAFRESULT_SUCCEEDED (hr)) return hr;
 
-  // BobT note: We don't have class defs yet, so don't require
-  // this...
-  // if (! pObjType) return AAFRESULT_NULL_PARAM;
-  if (pObjType)
-	{
-	  _referencedType = pObjType;
-	  pObjType->AcquireReference ();
-	}
+  if (! pObjType) return AAFRESULT_NULL_PARAM;
+  _referencedType = pObjType;
+  pObjType->AcquireReference ();
 
   hr = SetAUID (pID);
   if (! AAFRESULT_SUCCEEDED (hr)) return hr;
