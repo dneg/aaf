@@ -18,12 +18,11 @@ p {  font-family: Verdana, Arial, Helvetica, sans-serif}
     <td colspan="2">&nbsp;</td>
   </tr>
 </table>
-<!-- #EndLibraryItem -->Prepared by Tim Bingham, May 2001. Acknowledgement due 
-to Josh Goldman who prepared the description of the directories, to Alexey Kharkevich 
-who provided the description of the Unix makefile targets Oliver Morgan who pointed 
-out the make -&gt; Anti-Virus workaround and to Tom Ransdell and Jeff Bedell who 
-helped with numerous questions. Although I prepared the first version of this 
-FAQ, I don't plan to be the maintainer, I believe that honor goes to <a href="mailto:support@aafassociation.org">Simon 
+<!-- #EndLibraryItem -->Originally prepared by Tim Bingham, May 2001. Acknowledgement 
+due to Josh Goldman who prepared the description of the directories, to Alexey 
+Kharkevich who provided the description of the Unix makefile targets, Oliver Morgan 
+who pointed out the make -&gt; Anti-Virus workaround and to Tom Ransdell and Jeff 
+Bedell who helped with numerous questions. Current maintainer is <a href="mailto:support@aafassociation.org">Simon 
 Carter</a>.<!--
 
 [Note to FAQ maintainer - feel free to merge or otherwise edit this
@@ -61,7 +60,7 @@ source files ?</a> regenerating the generated source files.
   Admin -&gt; Login ... -&gt; <font color="#FF0000">&lt;no password - just click 
   OK&gt;<br>
   </font>Create -&gt; Checkout module -&gt; Enter the module name and path on 
-  the server -&gt; <font color="#FF0000">AAF</font></p>
+  the server -&gt; <font color="#FF0000">AAFWinSDK</font></p>
 <P>Open AAF/AAFWinSDK/AAFWinSDK.dsw with Visual Studio,<br>
   click on the FileView tab in the workspace view then right click on "Everything 
   files" and select "Build" </p>
@@ -76,52 +75,57 @@ source files ?</a> regenerating the generated source files.
 <P> How do I obtain and build the AAF SDK on Macintosh <!--[Note to FAQ maintainer, this section should be updated to describe
   use of the MacCVS Pro client, the use of which is suggested
   elsewhere] --><br>
-  Using the MacCvs client (available from http://www.wincvs.org/)<br>
-  CvsAdmin -&gt; Preferences ... -&gt; Enter the CVSROOT -&gt;<font color="#FF0000"> 
-  :pserver:anonymous@cvs.aaf.sourceforge.net:/cvsroot/aaf</font><br>
-  CvsAdmin -&gt; Preferences ... -&gt; Authentication -&gt; Password ("pserver")<br>
-  CvsAdmin -&gt; Login ... -&gt; <br>
-  CvsAdmin -&gt; Checkout module -&gt; Module name and path on the server -&gt; 
-  <font color="#FF0000">AAF</font><br>
 </p>
-<P>Open AAF/AAFMacSDK/AAFMacSDK.mcp with CodeWarrior, select the "Everything Debug" 
-  target and press the build button </p>
+Use the MacCvsPro client (available from <a href="http://www.maccvs.org">maccvs.org</a>)<br>
+Refer to the AAF web page <a href="http://aaf.sourceforge.net/downMacOS.html">'Download 
+MacOS'</a> 
 <hr>
 <P>OK, I've built the thing, what do I do now ?</P>
-<p>First, try running the module test program.<br>
-  This test is self validating if you see the following output then you probably 
-  have a correct build.<br>
-  Tests Run: 119 Passed: 119 Failed: 0 Not Implemented: 0 Partial Success: 0</p>
-<p>The module test program is ...<br>
-  Windows COMMODAAF.EXE<br>
-  Macintosh COMMODAAF (PPC)<br>
-  Linux ComModAAF Next, try running the example programs.<br>
-  Examine the source code and project settings (GNUmakefile) for the examples.<br>
-  This will show you how to get started implementing AAF in your own applications. 
-</p>
+First, try running the module test program.<br>
+This test is self validating if you see the following output then you probably 
+have a correct build.<br>
+Tests Run: 119 Passed: 119 Failed: 0 Not Implemented: 0 Partial Success: 0The 
+module test program is ...<br>
+Windows COMMODAAF.EXE<br>
+Macintosh COMMODAAF (PPC)<br>
+Linux ComModAAF Next, try running the example programs.<br>
+Examine the source code and project settings (GNUmakefile) for the examples.<br>
+This will show you how to get started implementing AAF in your own applications. 
 <P> <a name="howDev">How do I become an AAF developer ?</a></P>
 Please contact <a href="mailto:bgilmer@users.sourceforge.net">Brad Gilmer</a> 
 or <a href="mailto:terabrit@users.sourceforge.net">Oliver Morgan</a> 
 <P> OK, I'm a developer. How do I obtain and build the AAF SDK ?</P>
 <p>How do I make checkins ?</P>
 <p>What's ssh ?</p>
-<p>ssh stands for <i>Secure Shell</i>.<!-- [TBS - needs more explanation] --> 
-  Note that you can't easily use the CVS sandbox you checked out anonymously with 
-  your developer account. I suggest a separate checkout. Using CVS/ssh on Windows.<!-- 
-  [TBS] --><br>
-  <br>
-  Using CVS/ssh on Linux.<br>
-  $ export CVSROOT=:ext:@cvs.aaf.sourceforge.net:/cvsroot/aaf <br>
-  $ export CVS_RSH=ssh ... <br>
-  $ cvs checkout AAF<br>
-  <font color="#FF0000">&lt;developer name&gt;</font>@cvs.aaf.sourceforge.net's 
-  password: <font color="#FF0000">&lt;enter your password&gt;<br>
-  </font>cvs server: Updating AAF ...<br>
-  $ cvs commit -m"Add new defrobnicate() member." frobber.cpp<br>
-  <font color="#FF0000">&lt;developer name&gt;</font>@cvs.aaf.sourceforge.net's 
-  password: <font color="#FF0000">&lt;enter your password&gt;<br>
-  </font>...<br>
-  $ <!--Using CVS/ssh on Macintosh [TBS] -->. </p>
+ssh stands for <i>Secure Shell</i>.<!-- [TBS - needs more explanation] --> Note 
+that you can't easily use the CVS sandbox you checked out anonymously with your 
+developer account. I suggest a separate checkout. See the AAF web page <a href="http://aaf.sourceforge.net/sshWin32.html">Using 
+CVS/ssh on Windows</a>.<br>
+<br>
+Using CVS/ssh on Linux.<br>
+$ export CVSROOT=:ext:@cvs.aaf.sourceforge.net:/cvsroot/aaf <br>
+$ export CVS_RSH=ssh ... <br>
+$ cvs checkout -rRC1 AAFLinuxSDK<br>
+<font color="#FF0000">&lt;developer name&gt;</font>@cvs.aaf.sourceforge.net's 
+password: <font color="#FF0000">&lt;enter your password&gt;<br>
+</font>cvs server: Updating AAF ...<br>
+$ cvs commit -m"Add new defrobnicate() member." frobber.cpp<br>
+<font color="#FF0000">&lt;developer name&gt;</font>@cvs.aaf.sourceforge.net's 
+password: <font color="#FF0000">&lt;enter your password&gt;<br>
+</font>...<br>
+$ <!--Using CVS/ssh on Macintosh [TBS] -->. 
+<p>Help - Redhat Linux 6.1 doesn't come with ssh pre-installed !</p>
+Unlike Redhat 7.x. you have to install ssh from an RPM. Note that SSH 2.0 can 
+be used despite notes to the contrary on SourceForge that state only SSH 1.5 is 
+supported. 
+<p>I get errors first time I use SSH access to SourceForge what's going on ?</p>
+SourceForge does not create a home directory for you until you attempt a real 
+login to the server (as opposed to a CVS session) with name and password:<br>
+ssh -l cvs.aaf.sourceforge.net 
+<p>My company's firewall is preventing me accessing sourceforge what do I need 
+  to do ? </p>
+see tha AAF web page <a href="http://aaf.sourceforge.net/sshFirewall.html">Firewalls 
+and SSH</a> 
 <HR>
 <P> What kinds of changes are allowed ?</P>
 You may add new interfaces. 
@@ -184,24 +188,26 @@ MacOS 8.6 is the earliest on which we've tested RC1.
 One dependency here is on a Carbonized version of the <b>Microsoft Structured 
 Storage</b> system extension. This is not yet available from Microsoft. 
 <P> Does AAF build with CodeWarrior 6.0 ?</P>
-No, some code changes are required. 
+Not quite there are syill a couple of outstanding Link problems 31/7/01. 
 <P> <a name="win9598MEsupport">What about Windows 95, Windows 98 and Windows ME 
   ?</a></P>
-<P> For brevity, let's refer collectively to Windows 95, Windows 98 and Windows 
-  ME as consumer versions of Windows. <br>
-  We have not tested building and running AAF on consumer versions Windows as 
-  we have on the "supported" platforms. However AAF does build and run on consumer 
-  versions of Windows after some minor modifications to the Visual C++ projects. 
-  <br>
-  To be able to build and run AAF on a consumer version of Windows you must change 
-  the C/C++ settings in the following projects ... </p>
-<p> ./AAFWinSDK/ref-impl/aaflib/AAFLIB.dsp<br>
-  ./AAFWinSDK/ref-impl/Om/Om.dsp<br>
-  ./AAFWinSDK/DevUtils/Dump/Dump.dsp </P>
+For brevity, let's refer collectively to Windows 95, Windows 98 and Windows ME 
+as consumer versions of Windows. <br>
+We have not tested building and running AAF on consumer versions Windows as we 
+have on the "supported" platforms. However AAF does build and run on consumer 
+versions of Windows after some minor modifications to the Visual C++ projects. 
+<br>
+To be able to build and run AAF on a consumer version of Windows you must change 
+the C/C++ settings in the following projects ...<br>
+<br>
+./AAFWinSDK/ref-impl/aaflib/AAFLIB.dsp<br>
+./AAFWinSDK/ref-impl/Om/Om.dsp<br>
+./AAFWinSDK/DevUtils/Dump/Dump.dsp <br>
+<br>
 Go to Settings -&gt; C/C++ -&gt; General -&gt; Preprocessor Definitions and add 
--DNO_W32_WFOPEN (make sure "Settings for:" says "All Configurations") If you wish 
-to create a single <b>aafdll</b> that runs on consumer versions of Windows and 
-on Windows Nt/2000, then different changes would be required. <!--
+-DNO_W32_WFOPEN (make sure "Settings for:" says "All Configurations")<br>
+If you wish to create a single <b>aafdll</b> that runs on consumer versions of 
+Windows and on Windows Nt/2000, then different changes would be required. <!--
 For brevity, let's refer collectively to Windows 95, Windows 98 and Windows ME 
 as consumer versions of Windows. We have not tested building and running AAF on 
 consumer versions Windows as we have the above platforms. However AAF does build 
@@ -234,30 +240,29 @@ the the cvs(1) command.
 --> 
 <P>When I open up AAFWinSDK.dsw I get a message "Unable to connect to source code 
   control project AAFStandardCodecs". How can I get rid of this ?</P>
-<P>What's happening is that you have Visual Source Safe (Microsoft's source control 
-  product) installed as well as Visual Studio, Visual Source Safe is insisting 
-  on looking for a source control project even though none exists.<BR>
-  You can get rid of the message temporarily (the setting is saved in AAFWinSDK.opt) 
-  by answering "no" to the question "Do you wish to attempt this connection in 
-  future sessions ?" To get rid of the message permanently, change the value of 
-  the registry key HKEY_CURRENT_USER\Software\Microsoft\DevStudio\6.0\Source Control\Disabled 
-  from 0 to 1. This part of the registry contains all the settings from the Visual 
-  Studio -&gt; Tools -&gt; Options ... -&gt; Source Contol dialog. Unfortunately 
-  it seems that there's no UI checkbox to disable Visual Studio/Visual Source 
-  Safe integration. For more details see <a href="http://support.microsoft.com/support/kb/articles/Q236/3/99.ASP">http://support.microsoft.com/support/kb/articles/Q236/3/99.ASP</A> 
-</P>
+What's happening is that you have Visual Source Safe (Microsoft's source control 
+product) installed as well as Visual Studio, Visual Source Safe is insisting on 
+looking for a source control project even though none exists.<BR>
+You can get rid of the message temporarily (the setting is saved in AAFWinSDK.opt) 
+by answering "no" to the question "Do you wish to attempt this connection in future 
+sessions ?" To get rid of the message permanently, change the value of the registry 
+key HKEY_CURRENT_USER\Software\Microsoft\DevStudio\6.0\Source Control\Disabled 
+from 0 to 1. This part of the registry contains all the settings from the Visual 
+Studio -&gt; Tools -&gt; Options ... -&gt; Source Contol dialog. Unfortunately 
+it seems that there's no UI checkbox to disable Visual Studio/Visual Source Safe 
+integration. For more details see <a href="http://support.microsoft.com/support/kb/articles/Q236/3/99.ASP">http://support.microsoft.com/support/kb/articles/Q236/3/99.ASP</A> 
 <P> Where can I find out more about CVS ?</P>
-<p>There's information to help you get started on SourceForge<br>
-  <img src="fogelBook.gif" width="111" height="140" align="right" alt="Fogel CVS book">One 
-  book CVS I have found useful is Karl Franz Fogel, "OpenSource Development with 
-  CVS", November 1999, The Coriolis Group, ISBN: 1576104907. Most of this is available 
-  online at <a href="http://cvsbook.red-bean.com/">http://cvsbook.red-bean.com/</a></p>
-<p>There's a catalog of CVS documentation at <a href="http://www.cvshome.org/docs/index.html">http://www.cvshome.org/docs/</a> 
-  I've found the PDF version of the "the Cederqvist" - the "official" CVS manual 
-  by Per Cederqvist most useful. There's also the book by Per Cederqvist "Version 
-  Management With CVS", December 2000, iUniverse.com, ISBN: 0595149219. I'm not 
-  sure how this differs from the stuff by Cederqvist that's available online. 
-</p>
+There's information to help you get started on SourceForge<br>
+<img src="fogelBook.gif" width="111" height="140" align="right" alt="Fogel CVS book">One 
+book CVS I have found useful is Karl Franz Fogel, "OpenSource Development with 
+CVS", November 1999, The Coriolis Group, ISBN: 1576104907. Most of this is available 
+online at <a href="http://cvsbook.red-bean.com/">http://cvsbook.red-bean.com/</a><br>
+<br>
+There's a catalog of CVS documentation at <a href="http://www.cvshome.org/docs/index.html">http://www.cvshome.org/docs/</a> 
+I've found the PDF version of the "the Cederqvist" - the "official" CVS manual 
+by Per Cederqvist most useful. There's also the book by Per Cederqvist "Version 
+Management With CVS", December 2000, iUniverse.com, ISBN: 0595149219. I'm not 
+sure how this differs from the stuff by Cederqvist that's available online. 
 <P> My line endings are messed up. What's going on ?</P>
 CVS rules for text files. - files are stored in the CVS repository with Unix line 
 endings. - the CVS client converts the CVS repository line endings to/from the 
@@ -322,21 +327,30 @@ to be regenerated (since the files get modification times corresponding to the
 time that the working copy is created and not when the file was checked in to 
 CVS). 
 <P> Why does "cvs checkout" take so long ?</P>
-(or, Why aren't there any cvs modules defined) No CVS "modules" have been defined 
-yet, there's just one module - the default one called AAF. This means that if 
-you download to Windows 2000 that you'll also get Linux and Macintosh files and 
-that if you just want the pre-built SDK for you platform you'll also get the source 
-code needed to build it. After the first time a "cvs update" command can be used 
-to retrieve only the changed files. Modules need to be defined for - pre-built 
-SDK on Windows, Macintosh and Unix (these should also be made available as "released 
-files"). These modules would be checked out by those wishing only to _use_ the 
-AAF SDK. These users could also be satisfied by pre-built SDKs in the form of 
-"released file packages". - everything needed to be a reference implementation 
-developer (i.e. make a change, such as a bug fix to some existing code.) These 
-modules would be checked out by those wishing to enhance the AAF SDK and by those 
-who wish to port the SDK to a new platform. - everything needed to add new interfaces 
-to AAF. This would include the dodo tool. This would be done by those wishing 
-to extend the set of interfaces supported by AAF. 
+If you are using a slow (e.g. 56K or ISDN) link consider setting the CVS compression 
+option<b> cvs -z3</b> (tune the compression level for best results), compression 
+is tradeoff between the horsepower available at each end of the link compared 
+to the thickness of the pipe.<br>
+<br>
+Make sure you are checking out the platform specific module such as <b>AAFWinSDK</b> 
+rather than the default <b>AAF</b> module which contains the entire source tree.<br>
+<br>
+For thetime being if you just want the pre-built SDK for you platform you'll also 
+get the source code needed to build it. <br>
+After the first checkout a <b>cvs update -d</b> command will be considerably faster 
+since it only needs to retrieve the changed files and new directories.<br>
+<br>
+Modules still need to be defined for - pre-built SDKs on Windows, Macintosh and 
+Unix (these will also be made available as "released files").<br>
+These modules would be checked out by those wishing only to <i>use</i> the AAF 
+SDK. <br>
+These users could also be satisfied by pre-built SDKs in the form of "released 
+file packages". - everything needed to be a reference implementation developer 
+(i.e. make a change, such as a bug fix to some existing code.)<br>
+These modules would be checked out by those wishing to enhance the AAF SDK and 
+by those who wish to port the SDK to a new platform. - everything needed to add 
+new interfaces to AAF. This would include the dodo tool. This would be done by 
+those wishing to extend the set of interfaces supported by AAF. 
 <P> I just want to use the AAF SDK, why do I have to build it first ?</P>
 Because CVS modules and/or "released file packages" are not yet available. 
 <P> What is dodo ?</P>
@@ -421,7 +435,9 @@ dodo to generate them. If you want just generate files without building anything
 do: cd dodo; make 
 <P> When building on Linux I get errors because the directory "AAFi686LinuxSDK/g++/bin/debug/" 
   does not exist. What's going on ?</P>
-<!--[TBS - how do I do Release vs. Debug builds on Unix/Linux]  --> 
+Most likely you are trying to make in the examples directory before running <b>make 
+install</b> at the top level to create the target directories. 
+<p><!--[TBS - how do I do Release vs. Debug builds on Unix/Linux]  --> </p>
 <HR>
 <P> What are the major components of the AAF architecture ?</P>
 <ul>
@@ -569,8 +585,8 @@ available directly from Microsoft and are included (headers and binaries) with
 AAF. On other platforms it is possible to licence the source code for the Structured 
 Storage reference implementation from Microsoft. Header files and binaries for 
 Linux and Irix are included. 
-<P> Why does the Object Manager (ref-impl/src/OM and ref-impl/include/OM) depend 
-  on &lt;iostream.h&gt; ?</P>
+<P> <a name="#OMdebug"></a>Why does the Object Manager (ref-impl/src/OM and ref-impl/include/OM) 
+  depend on &lt;iostream.h&gt; ?</P>
 The release build does not. The debug build does. The default configuration for 
 the debug build defines OM_ENABLE_DEBUG which enables run-time assertion checking. 
 If an assertion fails information about the failing assertion is written to "omlog" 
@@ -841,7 +857,7 @@ plugins. The example extension includes "personnel" meta-data, AAFPersonnelExten
 is the example extension plugin. 
 <HR>
 <P> Why doesn't the OMF to AAF converter build on Linux ? </p>
-A version of the OMF library needs to be build for Linux. 
+A version of the OMF library needs to be built for Linux. 
 <HR>
 <P> Why does it say "This project has no CVS history." for AAF. I thought that 
   you checked in all of the RC1 files with their revision history ?</P>
@@ -877,7 +893,7 @@ before adding them to CVS.
 <!--No. I've successfully used anonymous CVS access from Windows, Linux and Macintosh 
 but I've only used ssh access from Linux.<br>
  -->There is a workable solution using MacCVSpro and MacSSH set for port forwarding 
-see our <a href="http://aaf.sourceforge.net/sshMacOS.html">CV S/SSH Mac</a> page. 
+see our <a href="http://aaf.sourceforge.net/sshMacOS.html">CVS/SSH Mac</a> page. 
 <P> I'm having problems with text file line endings using MacCVS on OSX, what's 
   going on ?</P>
 OSX is a Unix-like operating system and expects Unix style line endings. MacCVS 
@@ -906,7 +922,6 @@ It' a macro processor.
 <p>usw-pr-cvs.sourceforge.net: Connection refused cvs [history aborted]:end of 
   file from server (consult above messages if any</p>
 Check you have a CVS_RSH environment variable correctly set to SSH 
-<p>&nbsp; </p>
 <HR>
 <P> What's the deal with Unicode and wchar_t ?</P>
 <p>What are the portability issues ?</p>
@@ -973,7 +988,43 @@ still preserving any HRESULT that may be available.
   ?</p>
 Disable all anti-virus software. There are two different win api calls for spawning, 
 and one of them gets intercepted by Norton Anitvirus (and I've also seen the same 
-report for MacAfee). This problem was confirmed with Windows 98 and Norton Anti-Virus.
+report for MacAfee). This problem was confirmed with Windows 98 and Norton Anti-Virus. 
+<hr>
+<p>How do I get Visual Studio to prompt me with AAF class and interface information 
+  ? </p>
+In order to use the AAF class and interface information in Visual Studio (which 
+is not automatically built in the project files on SourceForge).<br>
+You will need to enable the generation of .SBR files when the AAF project is built, 
+then concatenate all these files together using the <b>bscmake</b> tool from a 
+command line<font face="Verdana, Arial, Helvetica, sans-serif">.</font><br>
+<br>
+With the top level AAFWinSDK workspace open, select Project-&gt;Settings...<br>
+Select the C/C++ tab and highlight the projects you want to generate Browse info 
+for on the left (most of the ones that start AAF...).<br>
+Then check the <b>Generate Browse info box</b> and hit OK.<br>
+The .SBR files during the build you can be combined with the <b>bscmake</b> command.<br>
+From the command line call bscmake with list of all the sbr files.In a <b>bash</b> 
+shell this is something like:<br>
+<font face="Courier New, Courier, mono"><br>
+cd AAF/AAFWinSDK/ref-impl<br>
+bscmake /o mydata.bsc */Debug/*.sbr</font><br>
+<br>
+Then open the mydata.bsc file in visual studio. By highlighting a member function 
+you will be now have the option to see it's parameters or jump to the definition.<br>
+Be careful not to check these modified project files back in to sourceforge. 
+<hr>
+<p>I'm having problems getting CVS to work, is there any way to view individual 
+  source files ?</p>
+<p>Yes, the <a href="http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/aaf/AAF/">CVS 
+  browse interface</a> on SourceForge allows you to download individual files 
+  as well as viewing the differences between versions. </p>
+<p>&nbsp;</p>
+<p>The C++ STL doesn't seem to be used anywhere in the current AAF implementation. 
+  Is this a deliberate policy? if so, why? </p>
+Although STL is <font size="+1"><i>standard library</i></font> it is not present 
+on all platforms. For example, some compilers for embedded systems don't have 
+it. The only appearence of STL is in OM code for debug mode only and it's very 
+easy to turn it off (see <a href="#OMdebug">OMdebug</a> above ). 
 </BODY>
 </HTML>
  
