@@ -390,4 +390,3 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 
-OMDEFINE_STORABLE(ImplAAFDigitalImageDescriptor, AUID_AAFDigitalImageDescriptor);

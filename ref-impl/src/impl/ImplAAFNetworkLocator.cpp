@@ -90,4 +90,3 @@ ImplAAFNetworkLocator::SetPath (aafWChar *  pPathBuf)
 
 
 
-OMDEFINE_STORABLE(ImplAAFNetworkLocator, AUID_AAFNetworkLocator);

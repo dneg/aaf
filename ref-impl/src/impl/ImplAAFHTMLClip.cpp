@@ -125,6 +125,5 @@ ImplAAFHTMLClip::SetEndAnchor (wchar_t *  pName)
 
 
 
-OMDEFINE_STORABLE(ImplAAFHTMLClip, AUID_AAFHTMLClip);
 
 
