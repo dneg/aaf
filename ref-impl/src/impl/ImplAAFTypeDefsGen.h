@@ -28,7 +28,7 @@
 
 
 // Get guids for types we'll use
-// #define TYPE_GUID_NAME(type) kAAFTypeID_##type
+#define TYPE_GUID_NAME(type) kAAFTypeID_##type
 #include "AAFTypeDefUIDs.h"
 #include "AAFPropertyDefs.h"
 
