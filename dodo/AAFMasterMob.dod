@@ -104,6 +104,9 @@ AD_XMETHOD5(AddMasterSlot,
   // AAFRESULT_SUCCESS
   //   - succeeded.  \(This is the only code indicating success.\)
   //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
+  //
   // AAFRESULT_NULL_PARAM
   //   - One or more of the following parameters are NULL pSourceMob\,
   //     pDataDef\, and pSlotName.
@@ -135,8 +138,8 @@ AD_XMETHOD3(GetTapeName,
 			  aafInt32,
 			  bufSize,
 			  the size of the pTapeName buffer,
-			Finds the videotape Source Mob associated with a Master Mob slot
-  // and writes the name of the videotape\, which is stored in the
+			Finds the tape Source Mob associated with a Master Mob slot
+  // and writes the name of the tape\, which is stored in the
   // Mobs Name property\, into the pTapeName buffer.  The buffer is
   // allocated by the caller.  The size of the buffer is given by
   // bufSize.  If the property name has not yet been set\, a
@@ -150,6 +153,8 @@ AD_XMETHOD3(GetTapeName,
   //
   // Succeeds if all of the following are true:
   // - the pTapeName pointer is valid.
+  // - the specified master slot was found.
+  // - the specified master slot contains a tape mob.
   // - bufSize indicates the buffer is large enough to hold the name.
   // 
   // If this method fails nothing will be written to *pTapeName.
@@ -160,6 +165,9 @@ AD_XMETHOD3(GetTapeName,
   // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
   //
   // AAFRESULT_NULL_PARAM
   //   - pTapeName arg is NULL.
@@ -204,6 +212,9 @@ AD_XMETHOD2(GetTapeNameBufLen,
   // AAFRESULT_SUCCESS
   //   - succeeded.  \(This is the only code indicating success.\)
   //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
+  //
   // AAFRESULT_NULL_PARAM
   //   - pLen arg is NULL.
   //
@@ -245,6 +256,9 @@ AD_XMETHOD2(GetNumRepresentations,
   // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
   //
   // AAFRESULT_NULL_PARAM
   //   - pNumReps arg is NULL.
@@ -294,6 +308,9 @@ AD_XMETHOD3(GetRepresentationSourceClip,
   // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
   //
   // AAFRESULT_NULL_PARAM
   //   - ppSourceClip arg is NULL.
@@ -359,6 +376,9 @@ AD_XMETHOD3(GetCriteriaSourceClip,
   // AAFRESULT_SUCCESS
   //   - succeeded.  \(This is the only code indicating success.\)
   //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
+  //
   // AAFRESULT_NULL_PARAM
   //   - ppSourceClip arg is NULL.
   //
@@ -422,6 +442,9 @@ AD_XMETHOD5(AppendPhysSourceRef,
   // AAFRESULT_SUCCESS
   //   - succeeded.  \(This is the only code indicating success.\)
   //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
+  //
   // AAFRESULT_NULL_PARAM
   //   - either pEssenceKind or pSourceRefObj is null.
   //
@@ -483,6 +506,9 @@ AD_XMETHOD5(NewPhysSourceRef,
   // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
   //
   // AAFRESULT_NULL_PARAM
   //   - either pEssenceKind or pSourceRefObj is null.
