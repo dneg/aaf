@@ -1,4 +1,9 @@
+#ifndef __PluginDefinition_h__
+#define __PluginDefinition_h__
+
 //=---------------------------------------------------------------------=
+//
+// This file was GENERATED for the AAF SDK
 //
 // $Id$ $Name$
 //
@@ -17,31 +22,43 @@
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
-// Licensor of the AAF Association is Avid Technology.
+// Licensor of the AAF Association is Metaglue Corporation.
 // All rights reserved.
 //
 //=---------------------------------------------------------------------=
 
-// Following are the UIDs of the well known constants used in AAFPluginDescriptors.
+
+#include "AAFTypes.h"
+
+// AAF well-known PluginDefinition instances
 //
 
-//******************
-// Which platforms is the code known to run on?
-//
-const aafUID_t kAAFPlatformIndependant = { 0x3D1DD891, 0xE793, 0x11d2, { 0x80, 0x9E, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } };
+//{3d1dd891-e793-11d2-809e-006008143e6f}
+const aafUID_t kAAFPlatform_Independent =
+{0x3d1dd891, 0xe793, 0x11d2, {0x80, 0x9e, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f}};
 
-//******************
-// Which media engines does the code require?
-//
-const aafUID_t kAAFNoEngine = { 0x9FDEF8C1, 0xE847, 0x11d2, { 0x80, 0x9E, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } };
 
-//******************
-// Which API does this plugin support?
-//
-const aafUID_t kAAFEssencePluginAPI = { 0x69C870A1, 0xE793, 0x11d2, { 0x80, 0x9E, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } };
+//{9fdef8c1-e847-11d2-809e-006008143e6f}
+const aafUID_t kAAFEngine_None =
+{0x9fdef8c1, 0xe847, 0x11d2, {0x80, 0x9e, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f}};
 
-//******************
-// Used for "don't care" when enumerating loaded plugins
-//
-const aafUID_t kAAFPluginNoCategory = { 0x56905e0b, 0x537d, 0x11d4, { 0xa3, 0x6c, 0x0, 0x90, 0x27, 0xdf, 0xca, 0x6a } };
 
+//{69c870a1-e793-11d2-809e-006008143e6f}
+const aafUID_t kAAFPluginAPI_EssenceAccess =
+{0x69c870a1, 0xe793, 0x11d2, {0x80, 0x9e, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f}};
+
+
+//{56905e0b-537d-11d4-a36c-009027dfca6a}
+const aafUID_t kAAFPluginCategory_Codec =
+{0x56905e0b, 0x537d, 0x11d4, {0xa3, 0x6c, 0x00, 0x90, 0x27, 0xdf, 0xca, 0x6a}};
+
+
+// AAF PluginDefinition legacy aliases
+//
+
+const aafUID_t kAAFPlatformIndependant = kAAFPlatform_Independent;
+const aafUID_t kAAFNoEngine = kAAFEngine_None;
+const aafUID_t kAAFEssencePluginAPI = kAAFPluginAPI_EssenceAccess;
+const aafUID_t kAAFPluginNoCategory = kAAFPluginCategory_Codec;
+
+#endif // ! __PluginDefinition_h__
