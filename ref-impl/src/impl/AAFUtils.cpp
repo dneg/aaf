@@ -49,19 +49,20 @@
 #include <time.h>
 #include <math.h>
 
-#if defined (_MAC) || defined(macintosh)
+#include "AAFTypes.h"
+
+#if defined( OS_MACOS )
 #include <OSUtils.h>
 #include <events.h>
 #endif
 
-#if defined (__sgi) || defined (__FreeBSD__)
+#if defined (OS_UNIX)
   #include <sys/time.h>
   #include <unistd.h>
   #include <sys/types.h>
   #include <sys/times.h>
 #endif
 
-#include "AAFTypes.h"
 #include "AAFUtils.h"
 #include "aafCvt.h"
 #include "AAFResult.h"
@@ -380,21 +381,25 @@ aafUInt32 aafGetTickCount()
     aafUInt32		ticks = 0;
 
 
-#if defined(_WIN32)
+#if defined( OS_WINDOWS )
 
     ticks = (aafUInt32)GetTickCount();
 
 
-#elif defined (_MAC) || defined(macintosh)
+#elif defined( OS_MACOS )
 
     ticks = (aafUInt32)TickCount();
 
-#else
+#elif defined( OS_UNIX )
 
     struct tms		tms_buf;
     ticks = (aafUInt32)times( &tms_buf );
 
-#endif    // _WIN32
+#else
+
+#error Unknown operating system
+
+#endif    // OS_*
 
 
     return ticks;
@@ -491,7 +496,7 @@ AAFRESULT aafMobIDFromMajorMinor(
 
 void aafCreateGUID( GUID *p_guid )
 {
-#ifdef _WIN32
+#if defined( OS_WINDOWS )
 
     assert( p_guid );
     CoCreateGuid( p_guid );
@@ -519,7 +524,7 @@ void aafCreateGUID( GUID *p_guid )
     ++sTemplate.Data1;
     *p_guid = sTemplate;
 
-#endif    // _WIN32
+#endif    // OS_*
 }
 
 
