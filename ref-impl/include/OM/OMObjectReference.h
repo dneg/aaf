@@ -45,7 +45,7 @@ public:
   OMObjectReference(void);
 
     // @cmember Constructor.
-  OMObjectReference(OMProperty* property, const char* name);
+  OMObjectReference(OMProperty* property);
 
     // @cmember Copy constructor.
   OMObjectReference(const OMObjectReference&);
@@ -79,6 +79,10 @@ public:
     // @cmember Restore this <c OMObjectReference>.
   virtual void restore(void) = 0;
 
+    // @cmember Get the value of this <c OMObjectReference>.
+    //          The value is a pointer to the <c ReferencedObject>.
+  virtual ReferencedObject* getValue(void) const = 0;
+
     // @cmember Set the value of this <c OMObjectReference>.
     //          The value is a pointer to the <c ReferencedObject>.
   virtual ReferencedObject* setValue(const ReferencedObject* value) = 0;
@@ -91,34 +95,11 @@ public:
 protected:
   // @access Protected members.
 
-    // @cmember Is this <c OMObjectReference> in the loaded state. If false
-    //          there is a persisted representation of this
-    //          <c OMObjectReference> that can be loaded.
-  bool isLoaded(void) const;
-
-    // @cmember Put this <c OMObjectReference> into the loaded state.
-  void setLoaded(void);
-
-    // @cmember Remove this <c OMObjectReference> from the loaded state.
-  void clearLoaded(void);
-
-    // @cmember Load the persisted representation of this
-    //          <c OMObjectReference>.
-  virtual void load(void) = 0;
-
     // @cmember The containing property.
   OMProperty* _property;
 
     // @cmember A pointer to the actual object.
   ReferencedObject* _pointer;
-
-    // @cmember The state of this <c OMObjectReference>. This is false
-    //          if a persisted representation of this element exists that
-    //          has not yet been loaded, true otherwise.
-  bool _isLoaded;
-
-    // @cmember The name of this <c OMObjectReference>.
-  char* _name;
 
 };
 
@@ -180,9 +161,28 @@ public:
 protected:
   // @access Protected members.
 
+    // @cmember Is this <c OMStrongObjectReference> in the loaded state.
+    //          If false there is a persisted representation of this
+    //          <c OMStrongObjectReference> that can be loaded.
+  bool isLoaded(void) const;
+
+    // @cmember Put this <c OMStrongObjectReference> into the loaded state.
+  void setLoaded(void);
+
+    // @cmember Remove this <c OMStrongObjectReference> from the loaded state.
+  void clearLoaded(void);
+
     // @cmember Load the persisted representation of this
     //          <c OMStrongObjectReference>.
   virtual void load(void);
+
+    // @cmember The state of this <c OMStrongObjectReference>. This is false
+    //          if a persisted representation of this element exists that
+    //          has not yet been loaded, true otherwise.
+  bool _isLoaded;
+
+    // @cmember The name of this <c OMStrongObjectReference>.
+  char* _name;
 
 };
 
@@ -202,7 +202,13 @@ public:
   OMWeakObjectReference(void);
 
     // @cmember Constructor.
-  OMWeakObjectReference(OMProperty* property, const char* name);
+  OMWeakObjectReference(OMProperty* property);
+
+    // @cmember Constructor.
+  OMWeakObjectReference(
+                    OMProperty* property,
+                    OMUniqueObjectIdentification identification,
+                    OMPropertyTag targetTag);
 
     // @cmember Copy constructor.
   OMWeakObjectReference(const OMWeakObjectReference&);
@@ -238,8 +244,7 @@ public:
 
     // @cmember Get the value of this <c OMWeakObjectReference>.
     //          The value is a pointer to the <c ReferencedObject>.
-  virtual ReferencedObject* getValue(
-                    OMStrongReferenceSetProperty<ReferencedObject>* set) const;
+  virtual ReferencedObject* getValue(void) const;
 
     // @cmember Set the value of this <c OMWeakObjectReference>.
     //          The value is a pointer to the <c ReferencedObject>.
@@ -247,20 +252,13 @@ public:
 
   const OMUniqueObjectIdentification& identification(void) const;
 
-  void setIdentification(const OMUniqueObjectIdentification& identification);
-
-  OMStrongReferenceSetProperty<ReferencedObject>* targetSet(
-                                                 const char* targetName) const;
-
-  const char* targetName(OMPropertyTag targetTag) const;
-
-protected:
-
-  virtual void load(void);
-
 private:
 
+  OMStrongReferenceSetProperty<ReferencedObject>* set(void) const;
+
   OMUniqueObjectIdentification _identification;
+  OMPropertyTag _targetTag;
+  OMStrongReferenceSetProperty<ReferencedObject>* _targetSet; // cache only
 
 };
 

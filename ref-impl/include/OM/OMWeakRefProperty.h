@@ -29,11 +29,9 @@
 #ifndef OMWEAKREFPROPERTY_H
 #define OMWEAKREFPROPERTY_H
 
+#include "OMDataTypes.h"
 #include "OMPropertyBase.h"
 #include "OMObjectReference.h"
-
-template <typename ReferencedObject>
-class OMStrongReferenceSetProperty;
 
   // @class Persistent weak reference (pointer to shared object)
   //        properties supported by the Object Manager.
@@ -99,15 +97,11 @@ public:
     //          is <p size> bytes in size.
   virtual void setBits(const OMByte* bits, size_t size);
 
-protected:
-
-  OMStrongReferenceSetProperty<ReferencedObject>* set(void) const;
-
 private:
 
   OMWeakObjectReference<ReferencedObject> _reference;
+  OMPropertyTag _targetTag;
   char* _targetName;
-  OMStrongReferenceSetProperty<ReferencedObject>* _targetSet;
 
 };
 
