@@ -241,9 +241,7 @@ void OMXMLStoredObject::save(OMStorable& object)
   _stream << indent;
   _stream << beginl;
   const wchar_t* name = 0;
-#if 1
-  name = L"Unknown";
-#else
+#if defined(OM_DEFINITIONS)
   const OMClassDefinition* definition = object.definition();
   if (definition != 0) {
     ASSERT("Valid definition", definition != 0);
@@ -251,6 +249,8 @@ void OMXMLStoredObject::save(OMStorable& object)
   } else {
     name = L"Unknown";
   }
+#else
+  name = L"Unknown";
 #endif
   ASSERT("Valid name", name != 0);
   _stream << "<!-- object of class " << name << " -->" << endl;
