@@ -46,7 +46,7 @@ OMXMLStoredStream::~OMXMLStoredStream(void)
   PRECONDITION("Stream not open", _store == 0);
 }
 
-void OMXMLStoredStream::read(void* data, size_t size) const
+void OMXMLStoredStream::read(void* ANAME(data), size_t ANAME(size)) const
 {
   TRACE("OMXMLStoredStream::read");
   PRECONDITION("Valid store", _store != 0);
@@ -56,9 +56,9 @@ void OMXMLStoredStream::read(void* data, size_t size) const
   ASSERT("Unimplemented code not reached", false); // tjb TBS
 }
 
-void OMXMLStoredStream::read(OMByte* data,
-                             const OMUInt32 bytes,
-                             OMUInt32& bytesRead) const
+void OMXMLStoredStream::read(OMByte* ANAME(data),
+                             const OMUInt32 ANAME(bytes),
+                             OMUInt32& /* bytesRead */) const
 {
   TRACE("OMXMLStoredStream::read");
   PRECONDITION("Valid store", _store != 0);
@@ -68,7 +68,7 @@ void OMXMLStoredStream::read(OMByte* data,
   ASSERT("Unimplemented code not reached", false); // tjb TBS
 }
 
-void OMXMLStoredStream::write(void* data, size_t size)
+void OMXMLStoredStream::write(void* ANAME(data), size_t ANAME(size))
 {
   TRACE("OMXMLStoredStream::write");
   PRECONDITION("Valid store", _store != 0);
@@ -78,9 +78,9 @@ void OMXMLStoredStream::write(void* data, size_t size)
   ASSERT("Unimplemented code not reached", false); // tjb TBS
 }
 
-void OMXMLStoredStream::write(const OMByte* data,
-                              const OMUInt32 bytes,
-                              OMUInt32& bytesWritten)
+void OMXMLStoredStream::write(const OMByte* ANAME(data),
+                              const OMUInt32 ANAME(bytes),
+                              OMUInt32& /* bytesWritten */)
 {
   TRACE("OMXMLStoredStream::write");
   PRECONDITION("Valid store", _store != 0);
@@ -100,7 +100,7 @@ OMUInt64 OMXMLStoredStream::size(void) const
   return result;
 }
 
-void OMXMLStoredStream::setSize(const OMUInt64 newSize)
+void OMXMLStoredStream::setSize(const OMUInt64 /* newSize */)
 {
   TRACE("OMXMLStoredStream::setSize");
   PRECONDITION("Valid store", _store != 0);
@@ -117,7 +117,7 @@ OMUInt64 OMXMLStoredStream::position(void) const
   return 0;
 }
 
-void OMXMLStoredStream::setPosition(const OMUInt64 offset)
+void OMXMLStoredStream::setPosition(const OMUInt64 /* offset */)
 {
   TRACE("OMXMLStoredStream::setPosition");
   PRECONDITION("Valid store", _store != 0);
