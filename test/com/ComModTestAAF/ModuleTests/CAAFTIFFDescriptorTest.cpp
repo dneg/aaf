@@ -238,6 +238,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	if (pTIFFDesc)
 	   pTIFFDesc->Release();
 
+	if (pDictionary)
+	   pDictionary->Release();
+
 	if (pEssDesc)
 		pEssDesc->Release();
 
@@ -333,6 +336,9 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 
 	if (pHeader)
 	    pHeader->Release();
+
+	if (pMobIter)
+	    pMobIter->Release();
 
 	if (pFile)
 	{
