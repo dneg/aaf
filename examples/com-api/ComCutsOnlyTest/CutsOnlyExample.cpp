@@ -26,7 +26,7 @@
 
 #include "AAFTypes.h"
 #include "AAFResult.h"
-#include "AAFDefUIDs.h"
+#include "AAFDataDefs.h"
 
 // Include the AAF interface declarations.
 #include "AAF.h"
