@@ -174,6 +174,12 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFWeakRefValue::SetObject(ImplAAFStorable *pObj
   if (!isInitialized())
     return AAFRESULT_NOT_INITIALIZED;
 
+  if (!pObject->attached())
+  {
+    return AAFRESULT_OBJECT_NOT_ATTACHED;
+  }
+ 
+
   if (NULL != referenceProperty())
   {
     // Save the reference in the OMReferenceProperty
