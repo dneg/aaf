@@ -41,8 +41,6 @@ namespace OMF2
 #include "omMedia.h"
 }
 
-// AAF Utilities Infra-structure 
-#include "UtlConsole.h"
 // OMF Includes
 
 
@@ -156,9 +154,9 @@ AAFRESULT aafMobIDFromMajorMinor(
 // ============================================================================
 HRESULT InitGlobalVars( void )
 {
-	HRESULT hr = UTLMemoryAlloc(sizeof(AafOmfGlobals),(void**)&gpGlobals);
-	if (FAILED(hr))
-		return hr;
+	gpGlobals = new AafOmfGlobals;
+	if (gpGlobals == NULL)
+		return AAFRESULT_NOMEMORY;
 
 	gpGlobals->bAAFFileOpen = AAFFalse;
 	gpGlobals->bConvertAllObjects = AAFFalse;
@@ -201,20 +199,20 @@ HRESULT InitGlobalVars( void )
 // ============================================================================
 void Usage( void )
 {
-	UTLstdprintf("\n*******************\n\n");
-	UTLstdprintf("%s : OMF/AAF file conversion Version 0.01.00\n\n", gpGlobals->pProgramName);
-	UTLstdprintf("Usage: \n");
-	UTLstdprintf("%s [-v] [-s] [-p logfile] [-d deffile] [-t tocfile] <infile> [outfile]\n\n", gpGlobals->pProgramName);
-	UTLstdprintf("-v         = Verbose - give progress report (optional)\n" );
-	UTLstdprintf("-s         = Straight conversion. Do NOT discard unnecessary objects (optional)\n");
-	UTLstdprintf("-nr        = DO NOT replace Output file. If Output file is present, give an error (optional)!!\n");
-//	UTLstdprintf("-p logfile = Log file name(optional)\n");
-//	UTLstdprintf("-d deffile = Definition file (optional)\n");
-//	UTLstdprintf("-t tocfile = Dump OMFI Table of contents (optional)\n");
-	UTLstdprintf("-OMF       = Convert an AAF file to OMF 2.1 version\n");
-	UTLstdprintf("infile     = input file name (required)\n");
-	UTLstdprintf("outfile    = output file name (optional)\n");
-	UTLstdprintf("\n*******************\n\n");
+	printf("\n*******************\n\n");
+	printf("%s : OMF/AAF file conversion Version 0.01.00\n\n", gpGlobals->pProgramName);
+	printf("Usage: \n");
+	printf("%s [-v] [-s] [-p logfile] [-d deffile] [-t tocfile] <infile> [outfile]\n\n", gpGlobals->pProgramName);
+	printf("-v         = Verbose - give progress report (optional)\n" );
+	printf("-s         = Straight conversion. Do NOT discard unnecessary objects (optional)\n");
+	printf("-nr        = DO NOT replace Output file. If Output file is present, give an error (optional)!!\n");
+//	printf("-p logfile = Log file name(optional)\n");
+//	printf("-d deffile = Definition file (optional)\n");
+//	printf("-t tocfile = Dump OMFI Table of contents (optional)\n");
+	printf("-OMF       = Convert an AAF file to OMF 2.1 version\n");
+	printf("infile     = input file name (required)\n");
+	printf("outfile    = output file name (optional)\n");
+	printf("\n*******************\n\n");
 }
 /******************** IncIndentLevel *******************
 	Increases the incrementation used for readability
@@ -263,16 +261,16 @@ void DecIndentLevel(void)
 // ============================================================================
 void DisplaySummary( void )
 {
-	UTLstdprintf("\n*******************\n\n");
-	UTLstdprintf("%s Summary for the file :%s\n\n",gpGlobals->pProgramName, gpGlobals->sOutFileName);
-	UTLstdprintf("\tTotal OMF Mobs \t\t\t: %ld\n", gpGlobals->nNumOMFMobs);
-	UTLstdprintf("\tTotal AAF Mobs \t\t\t: %ld\n", gpGlobals->nNumAAFMobs);
-	UTLstdprintf("\tTotal OMF Objects \t\t: %ld\n", gpGlobals->nNumOMFObjects);
-	UTLstdprintf("\tTotal AAF Objects \t\t: %ld\n", gpGlobals->nNumAAFObjects);
-	UTLstdprintf("\tTotal OMF Properties \t\t: %ld\n", gpGlobals->nNumOMFProperties);
-	UTLstdprintf("\tTotal AAF Properties \t\t: %ld\n", gpGlobals->nNumAAFProperties);
-	UTLstdprintf("\tTotal OMF Objects NOT found\t: %ld\n", gpGlobals->nNumUndefinedOMFObjects);
-	UTLstdprintf("\n*******************\n\n");
+	printf("\n*******************\n\n");
+	printf("%s Summary for the file :%s\n\n",gpGlobals->pProgramName, gpGlobals->sOutFileName);
+	printf("\tTotal OMF Mobs \t\t\t: %ld\n", gpGlobals->nNumOMFMobs);
+	printf("\tTotal AAF Mobs \t\t\t: %ld\n", gpGlobals->nNumAAFMobs);
+	printf("\tTotal OMF Objects \t\t: %ld\n", gpGlobals->nNumOMFObjects);
+	printf("\tTotal AAF Objects \t\t: %ld\n", gpGlobals->nNumAAFObjects);
+	printf("\tTotal OMF Properties \t\t: %ld\n", gpGlobals->nNumOMFProperties);
+	printf("\tTotal AAF Properties \t\t: %ld\n", gpGlobals->nNumAAFProperties);
+	printf("\tTotal OMF Objects NOT found\t: %ld\n", gpGlobals->nNumUndefinedOMFObjects);
+	printf("\n*******************\n\n");
 }
 // ============================================================================
 // GetUserInput
@@ -463,22 +461,18 @@ int main(int argc, char *argv[])
 	argc = ccommand(&argv);	// calls up a command line window
 #endif 
 
-	hr = UTLInitFileIO();
-	if (FAILED(hr))
-		return UTLEcFromHr(hr);
-
 	hr = InitGlobalVars();
 	if (FAILED(hr))
-		return UTLEcFromHr(hr);
+		return 1; //!!!UTLEcFromHr(hr);
 
 	gpGlobals->pProgramName = baseName(argv[0]);
 
-	UTLstdprintf("%s: Version 0.01.00\n", gpGlobals->pProgramName);
+	printf("%s: Version 0.01.00\n", gpGlobals->pProgramName);
 	hr = GetUserInput(argc, argv);
 	if (FAILED(hr))
 	{
 		Usage();
-		return UTLEcFromHr(hr);
+		return 1; //!!!UTLEcFromHr(hr);
 	}
 	if (gpGlobals->bConvertAAFFile)
 	{
@@ -493,14 +487,14 @@ int main(int argc, char *argv[])
 		hr = IsOMFFile(gpGlobals->sInFileName, &bIsOMFFile);
 		if (FAILED(hr))
 		{
-			UTLstdprintf("OMF Input file NOT Found !!\n");
+			printf("OMF Input file NOT Found !!\n");
 			Usage();
 		}
 		else
 		{
 			if (!bIsOMFFile)
 			{
-				UTLstdprintf("Input file is NOT a valid  OMF File !!\n");
+				printf("Input file is NOT a valid  OMF File !!\n");
 				Usage();
 			}
 			else
@@ -516,10 +510,7 @@ int main(int argc, char *argv[])
 
 	// clean up memory
 	if(gpGlobals)
-		UTLMemoryFree(gpGlobals);
+		delete gpGlobals;
 
-	// close fileio
-	hr = UTLExitFileIO();
-
-	return UTLEcFromHr(hr);
+	return(0);
 }
