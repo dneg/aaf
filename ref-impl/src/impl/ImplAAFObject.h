@@ -13,13 +13,12 @@
 \******************************************/
 
 
-
-
-
 //
-// Forward declaration
+// Forward declarations
 //
 class AAFObject;
+class ImplEnumAAFProperties;
+
 
 #include "AAFTypes.h"
 #include "OMStorable.h"
@@ -54,6 +53,22 @@ public:
         (aafUID_t *  pGeneration);
 
 
+  //****************
+  // GetObjectClass()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+	GetObjectClass
+		(aafUID_t * pClass);
+
+
+  //****************
+  // EnumProperties()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+	EnumProperties
+		(ImplEnumAAFProperties ** ppEnum);
+
+
   //***********************************************************
   // METHOD NAME: GetStoredByteOrder()
   //
@@ -68,8 +83,8 @@ public:
   // 
   virtual AAFRESULT STDMETHODCALLTYPE
   GetStoredByteOrder (
-    // @parm [out] aafByteOrder_t * | pOrder | Pointer to place where byte order is to be put
-    aafByteOrder_t *  pOrder
+    // @parm [out] eAAFByteOrder_t * | pOrder | Pointer to place where byte order is to be put
+    eAAFByteOrder_t *  pOrder
   );
 
 
@@ -86,8 +101,8 @@ public:
   // 
   virtual AAFRESULT STDMETHODCALLTYPE
   GetNativeByteOrder (
-    // @parm [out] aafByteOrder_t * | pOrder | Pointer to place where byte order is to be put
-    aafByteOrder_t *  pOrder
+    // @parm [out] eAAFByteOrder_t * | pOrder | Pointer to place where byte order is to be put
+    eAAFByteOrder_t *  pOrder
   );
 
 
