@@ -49,7 +49,7 @@ public:
 // object.
 #ifdef AAF_END_OBJECT_MAP
 #undef AAF_END_OBJECT_MAP
-#define AAF_END_OBJECT_MAP() AAF_OBJECT_ENTRY(AAFModuleTest) { NULL, NULL, NULL } };
+#define AAF_END_OBJECT_MAP() AAF_OBJECT_ENTRYX(AAFModuleTest, true) AAF_LAST_ENTRY() };
 #endif
 
 
