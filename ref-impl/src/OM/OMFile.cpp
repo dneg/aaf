@@ -652,6 +652,16 @@ OMFile::OMLoadMode OMFile::loadMode(void) const
   return _loadMode;
 }
 
+  // @mfunc The access mode of this <c OMFile>.
+  //   @rdesc The access mode of this <c OMFile>. 
+  //   @this const
+OMFile::OMAccessMode OMFile::accessMode(void) const
+{
+  TRACE("OMFile::acessMode");
+
+  return _mode;
+}
+
   // @mfunc Is this file recognized by the Object Manager ?
   //   @rdesc True if this file is recognized by the Object Manager,
   //          false otherwise.
