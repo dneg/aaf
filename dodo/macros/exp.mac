@@ -3392,7 +3392,7 @@ HRESULT STDMETHODCALLTYPE
     .%10-internalname(%12),
     .%17-internalname(%19),
     .%24-internalname(%26),
-    .%31-internalname(%233));
+    .%31-internalname(%33));
 .%03-cleanup(%04, %05, %07)
 .%10-cleanup(%11, %12, %14)
 .%17-cleanup(%18, %19, %21)
