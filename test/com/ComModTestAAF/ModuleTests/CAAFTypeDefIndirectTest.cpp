@@ -70,13 +70,12 @@ extern "C"
 {
   // Main test function.
   HRESULT CAAFTypeDefIndirect_test(testMode_t mode);
-
+}
   // Create the test file.
   void CAAFTypeDefIndirect_create (aafCharacter_constptr pFileName); // throw HRESULT
 
   // Open the test file read only and validate the data.
   void CAAFTypeDefIndirect_read (aafCharacter_constptr pFileName); // throw HRESULT
-}
 
 extern "C" HRESULT CAAFTypeDefIndirect_test(testMode_t mode);
 extern "C" HRESULT CAAFTypeDefIndirect_test(testMode_t mode)

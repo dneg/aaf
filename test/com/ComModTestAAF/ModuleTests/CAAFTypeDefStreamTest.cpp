@@ -136,12 +136,12 @@ extern "C"
   // Main test function.
   HRESULT CAAFTypeDefStream_test(testMode_t mode);
 
+}
   // Create the test file.
   void CAAFTypeDefStream_create (aafCharacter_constptr pFileName); // throw HRESULT
 
   // Open the test file read only and validate the data.
   void CAAFTypeDefStream_read (aafCharacter_constptr pFileName); // throw HRESULT
-}
 
 
 HRESULT CAAFTypeDefStream_test(testMode_t mode)

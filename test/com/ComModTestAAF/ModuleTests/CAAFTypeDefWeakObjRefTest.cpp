@@ -64,10 +64,6 @@ using namespace std;
 
 
 // Required function prototypes
-extern "C"
-{
-  // Main test function.
-  HRESULT CAAFTypeDefWeakObjRef_test(testMode_t mode);
 
   // Create the test file.
   void CAAFTypeDefWeakObjRef_create (aafCharacter_constptr pFileName); // throw HRESULT
@@ -76,7 +72,6 @@ extern "C"
   void CAAFTypeDefWeakObjRef_read (aafCharacter_constptr pFileName); // throw HRESULT
   
   void CAAFTypeDefWeakObjRef_verify (IAAFHeader * pHeader); // throw HRESULT
-}
 
 
 extern "C" HRESULT CAAFTypeDefWeakObjRef_test(testMode_t);

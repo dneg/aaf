@@ -315,13 +315,13 @@ static const MyDefRecord kMyWeakRefSetPropData =
 extern "C"
 {
   HRESULT CAAFTypeDefSet_test(testMode_t);
+} 
   void CAAFTypeDefSet_Create(aafCharacter_constptr fileName);
   void CAAFTypeDefSet_Open(aafCharacter_constptr fileName);
   
   void CAAFTypeDefSet_Register(IAAFHeader * pHeader, IAAFDictionary* pDictionary);
   void CAAFTypeDefSet_Write(IAAFHeader* pHeader, IAAFDictionary* pDictionary);
   void CAAFTypeDefSet_Read(IAAFHeader* pHeader, IAAFDictionary* pDictionary);
-} 
 
 extern "C" HRESULT CAAFTypeDefSet_test(testMode_t mode)
 {
