@@ -1944,9 +1944,9 @@ AAFRESULT ImplAAFDictionary::GenerateOmPid
 		  assert (! _lastGeneratedPid);
 
 		  // must be signed!
-		  aafInt32 tmpUserPid = 0;
+		  aafInt16 tmpUserPid = 0;
 		  // Make sure we aren't cheating ourselves
-		  assert (sizeof (OMPropertyId) == sizeof (aafInt32));
+		  assert (sizeof (OMPropertyId) == sizeof (aafInt16));
 
 		  // Need to determine which user PIDs have already been used.
 		  ImplEnumAAFClassDefsSP enumClassDefs;
@@ -1967,7 +1967,7 @@ AAFRESULT ImplAAFDictionary::GenerateOmPid
 					 (enumPropDefs->NextOne (&propDef)))
 				{
 				  // must be signed!
-				  aafInt32 tmpPid = (aafInt32) propDef->OmPid ();
+				  aafInt16 tmpPid = (aafInt16) propDef->OmPid ();
 				  if (tmpPid < tmpUserPid)
 					tmpUserPid = tmpPid;
 				}
@@ -1977,7 +1977,7 @@ AAFRESULT ImplAAFDictionary::GenerateOmPid
 		}
 
 	  result = (OMPropertyId) --_lastGeneratedPid;
-	  assert (((aafInt32) result) < 0);
+	  assert (((aafInt16) result) < 0);
 	  rOutPid = result;
 	}
   return AAFRESULT_SUCCESS;
