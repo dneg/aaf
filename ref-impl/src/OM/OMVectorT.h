@@ -301,6 +301,21 @@ Element& OMVector<Element>::getAt(const size_t index) const
   return _vector[index];
 }
 
+  // @mfunc The value of the <p Element> at
+  //        position <p index> in this <c OMVector>.
+  //   @tcarg class | Element | The type of an <c OMVector> element.
+  //          This type must support operator = and operator ==.
+  //   @parm The index.
+  //   @this const
+template <typename Element>
+Element& OMVector<Element>::valueAt(const size_t index) const
+{
+  TRACE("OMVector<Element>::valueAt");
+  PRECONDITION("Valid index", ((index >= 0) && (index < _count)));
+
+  return _vector[index];
+}
+
   // @mfunc Insert <p value> into this <c OMVector> at
   //        position <p index>. Existing values in this
   //        <c OMVector> at <p index> and higher are

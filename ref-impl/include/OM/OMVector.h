@@ -100,6 +100,10 @@ public:
     //          position <p index> in this <c OMVector>.
   Element& getAt(const size_t index) const;
 
+    // @cmember The value of the <p Element> at
+    //          position <p index> in this <c OMVector>.
+  Element& valueAt(const size_t index) const;
+
     // @cmember Insert <p value> into this <c OMVector> at
     //          position <p index>. Existing values in this
     //          <c OMVector> at <p index> and higher are
