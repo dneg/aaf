@@ -99,6 +99,11 @@ sdk-dist :
 ccversion :
 	@$(CCVERSION)
 
+# This target simply prints the build directory.
+.PHONY : 
+builddir :
+	@echo $(AAFBUILDDIR)
+
 #
 # Clean up after 'make'
 #
