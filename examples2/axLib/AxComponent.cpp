@@ -37,6 +37,11 @@ aafLength_t AxComponent::GetLength()
 	return len;
 }
 
+void AxComponent::SetLength( const aafLength_t& len )
+{
+	CHECK_HRESULT( _spIaafComponent->SetLength( len ) );
+}
+
 void AxComponent::SetDataDef( IAAFDataDefSP spIaafDataDef )
 {
 	CHECK_HRESULT( _spIaafComponent->SetDataDef( spIaafDataDef ) );

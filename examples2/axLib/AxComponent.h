@@ -32,6 +32,8 @@ public:
 	~AxComponent();
 
 	aafLength_t GetLength();
+	void SetLength( const aafLength_t& len );
+
 
 	void SetDataDef( IAAFDataDefSP );
 	IAAFDataDefSP GetDataDef();
