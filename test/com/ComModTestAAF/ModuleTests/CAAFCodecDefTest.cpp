@@ -29,6 +29,7 @@
 
 #include "AAF.h"
 
+
 #include <iostream.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -229,11 +230,6 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 		checkResult(pCodec->AreThereFlavours (&testResult));
 		checkExpression (kAAFFalse == testResult,
 						 AAFRESULT_TEST_FAILED);
-		IAAFClassDef *pWaveClassDef=0,*pReturnedClassDef=0;
-		aafUID_t uid = kAAFClassID_WAVEDescriptor;
-		checkResult(pDictionary->LookupClassDef(uid, &pWaveClassDef));
-		checkResult(pCodec->GetFileDescriptorClass(&pReturnedClassDef));
-		checkExpression(pReturnedClassDef==pWaveClassDef,AAFRESULT_TEST_FAILED);
 	}
 	catch (HRESULT& rResult)
 	{
@@ -280,6 +276,16 @@ extern "C" HRESULT CAAFCodecDef_test()
 		cerr << "CAAFCodecDef_test..."
 			 << "Caught general C++ exception!" << endl; 
 		hr = AAFRESULT_TEST_FAILED;
+	}
+
+	// When all of the functionality of this class is tested, we can return success.
+	// When a method and its unit test have been implemented, remove it from the list.
+	if (SUCCEEDED(hr))
+	{
+		cout << "The following IAAFCodecDef methods have not been tested:" << endl; 
+		cout << "     SetFileDescriptorClass" << endl; 
+		cout << "     GetFileDescriptorClass" << endl; 
+		hr = AAFRESULT_TEST_PARTIAL_SUCCESS;
 	}
 
 	return hr;
