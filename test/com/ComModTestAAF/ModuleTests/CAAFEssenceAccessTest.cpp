@@ -50,6 +50,8 @@ using namespace std;
 
 #include "CAAFBuiltinDefs.h"
 
+// EssenceTestData.h contains sample audio and video data to use as essence data.
+#include "EssenceTestData.h"
 
 // convenient error handlers.
 inline void checkResult(HRESULT r)
@@ -221,11 +223,8 @@ static aafUInt8 *readDVframe(aafUInt32 *bufferSize)
 	aafUInt8 *buf = new aafUInt8[*bufferSize];
 
 	// Read in a DV-compressed frame
-	FILE *fp = fopen("../ScaleTest/1frame.dv", "rb");
+	memcpy(buf, compressedDV_25_625, sizeof(compressedDV_25_625));
 
-	checkExpression(fp != NULL, AAFRESULT_TEST_FAILED);
-	checkExpression(fread(buf, *bufferSize, 1, fp) == 1, AAFRESULT_TEST_FAILED);
-	fclose(fp);
 	return buf;
 }
 
@@ -567,7 +566,6 @@ static HRESULT CreateStaticEssenceAAFFile(
 	aafProductIdentification_t	ProductInfo;
 	aafRational_t				editRate = {44100, 1};
 	aafRational_t				sampleRate = {44100, 1};
-	FILE*						pWavFile = NULL;
 	aafUID_t			 testContainer;
 
 	// delete any previous test file before continuing...
@@ -666,9 +664,6 @@ static HRESULT CreateStaticEssenceAAFFile(
 	if (pEssenceAccess)
 		pEssenceAccess->Release();
 
-	if (pWavFile)
-		fclose(pWavFile);
-	
 	if(pLocator)
 		pLocator->Release();
 
@@ -720,7 +715,6 @@ static HRESULT CreateAudioAAFFile(aafWChar * pFileName, testDataFile_t *dataFile
 	aafProductIdentification_t	ProductInfo;
 	aafRational_t				editRate = {44100, 1};
 	aafRational_t				sampleRate = {44100, 1};
-	FILE*						pWavFile = NULL;
 	unsigned char				dataBuff[4096], *dataPtr;
 	aafUInt32					dataOffset, dataLen;
 	aafUInt16					bitsPerSample, numCh;
@@ -795,14 +789,9 @@ static HRESULT CreateAudioAAFFile(aafWChar * pFileName, testDataFile_t *dataFile
 		}
 		
 		
-		// open the Essence file to be included in this AAF file("Laser.wav")
-		pWavFile = fopen("Laser.wav", "r");
-                if (pWavFile == 0) {
-                  cerr << "Can't find \"Laser.wav\"." << endl;
-                }
-		checkExpression(pWavFile != NULL, AAFRESULT_TEST_FAILED);
-		// read in the essence data
-		fread(dataBuff, sizeof(unsigned char), sizeof(dataBuff), pWavFile);
+		// copy contents of Laser.wav into buffer
+		memcpy(dataBuff, uncompressedWAVE_Laser, sizeof(uncompressedWAVE_Laser));
+
 		checkResult(loadWAVEHeader(dataBuff,
 			&bitsPerSample,
 			&numCh,
@@ -886,10 +875,6 @@ static HRESULT CreateAudioAAFFile(aafWChar * pFileName, testDataFile_t *dataFile
 			bytesWritten = result.bytesXfered;
 		}
 
-		// close essence data file
-		fclose(pWavFile);
-		pWavFile = NULL;
-		
 		// Finish writing the destination
 		checkResult(pEssenceAccess->CompleteWrite());
 	}
@@ -916,9 +901,6 @@ static HRESULT CreateAudioAAFFile(aafWChar * pFileName, testDataFile_t *dataFile
 	if (pEssenceAccess)
 		pEssenceAccess->Release();
 
-	if (pWavFile)
-		fclose(pWavFile);
-	
 	if(pLocator)
 		pLocator->Release();
 
@@ -970,9 +952,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType, aafUID_t c
 	aafWChar					namebuf[1204];
 	unsigned char				AAFDataBuf[4096];
 	aafUInt32					AAFBytesRead, samplesRead;
-	FILE*						pWavFile = NULL;
 	unsigned char				WAVDataBuf[4096], *dataPtr;
-	size_t						WAVBytesRead;
 	aafUInt32					dataOffset, dataLen;
 	aafUInt16					bitsPerSample, numCh;
 	
@@ -1024,17 +1004,9 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType, aafUID_t c
 			}
 
       
-      // Open and read the Wave file (for comparison)
-			pWavFile = fopen("Laser.wav", "r");
-                        if (pWavFile == 0) {
-                          cerr << "Can't find \"Laser.wav\"." << endl;
-                        }
-			checkExpression(pWavFile != NULL, AAFRESULT_TEST_FAILED);
-			
-			// read in the essence data
-			WAVBytesRead = fread(WAVDataBuf, sizeof(unsigned char), sizeof(WAVDataBuf), pWavFile);
-			fclose(pWavFile);
-			pWavFile = NULL;
+			// copy contents of Laser.wav into buffer
+			memcpy(WAVDataBuf, uncompressedWAVE_Laser, sizeof(uncompressedWAVE_Laser));
+
 			checkResult(loadWAVEHeader(WAVDataBuf,
 				&bitsPerSample,
 				&numCh,
@@ -1088,7 +1060,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType, aafUID_t c
 							cout << "***Wrong number of bytes read ( was "
 									 << AAFBytesRead
 									 << ", should be "
-									 << WAVBytesRead
+									 << sizeof(uncompressedWAVE_Laser)
 									 << ")"
 									 << endl;
 			}
@@ -1124,9 +1096,6 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType, aafUID_t c
 
 	if(fmtTemplate)
 		fmtTemplate->Release();
-
-	if (pWavFile)
-		fclose(pWavFile);
 
 	if (pEssenceAccess)
 		pEssenceAccess->Release();
