@@ -24,6 +24,7 @@
 class CAAFPersonnelResource : 
   public IAAFPersonnelResource,
   public IAAFPlugin,
+  public IAAFClassExtension,
   public CAAFUnknown
 {
 protected:
@@ -101,24 +102,18 @@ public:
   // IAAFPlugin interface methods
 	//
 
-  STDMETHOD (Start)
-     (void);
-
-  STDMETHOD (Finish)
-     (void);
-
-  STDMETHOD (GetNumDefinitions)
-	  (/*[out]*/ aafInt32 *pDefCount);
+  STDMETHOD (CountDefinitions)
+	  (/*[out]*/ aafUInt32 *pDefCount);
 
   STDMETHOD (GetIndexedDefinitionID)
-	  (/*[in] */ aafInt32 index, 
+	  (/*[in] */ aafUInt32 index, 
 		 /*[out]*/ aafUID_t *result);
 
   STDMETHOD (GetPluginDescriptorID)
 	  (/*[out]*/ aafUID_t *result);
 
   STDMETHOD (GetIndexedDefinitionObject)
-	  (/*[in] */ aafInt32 index, 
+	  (/*[in] */ aafUInt32 index, 
 		 /*[in] */ IAAFDictionary *dict, 
 		 /*[out]*/ IAAFDefObject **def);
 
@@ -126,6 +121,12 @@ public:
 	  (/*[in] */ IAAFDictionary *dict,
 		 /*[out]*/ IAAFPluginDescriptor **desc);
 
+  //
+  // IAAFClassExtension interface methods
+	//
+
+  STDMETHOD (RegisterDefinitions)
+    (/*[in] */ IAAFDictionary *pDictionary);
 
 
 protected:
