@@ -19,7 +19,7 @@
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFResult.h"
-#include "AAFDefUIDs.h"
+#include "AAFDataDefs.h"
 
 // Cross-platform utility to delete a file.
 static void RemoveTestFile(const wchar_t* pFileName)
@@ -107,7 +107,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	bool				bFileOpen = false;
 	HRESULT				hr = S_OK;
 	long				n;
-	aafUID_t			testDataDef = DDEF_Video;
+	aafUID_t			testDataDef = DDEF_Picture;
 /*	long				test;
 */
 

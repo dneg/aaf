@@ -19,6 +19,7 @@
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFResult.h"
+#include "AAFDataDefs.h"
 #include "AAFDefUIDs.h"
 
 // Cross-platform utility to delete a file.
@@ -103,6 +104,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFCodecDef*	pCodecDef = NULL;
 	bool				bFileOpen = false;
 	HRESULT				hr = S_OK;
+	aafUID_t			uid;
 /*	long				test;
 */
 
@@ -126,8 +128,10 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	checkResult(pCodecDef->QueryInterface (IID_IAAFDefObject,
                                           (void **)&pDef));
 
-	checkResult(pDef->SetName(sName1));
-	checkResult(pDef->SetDescription(sDescription1));
+	uid = DDEF_Matte;
+	checkResult(pCodecDef->AppendEssenceKind (&uid));
+	uid = NoCodec;
+	checkResult(pDef->Init (&uid, sName1, sDescription1));
 	checkResult(pDictionary->RegisterCodecDefinition(pCodecDef));
 	pDef->Release();
 	pDef = NULL;
@@ -139,9 +143,10 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
     
 	checkResult(pCodecDef->QueryInterface (IID_IAAFDefObject,
                                           (void **)&pDef));
-
-	checkResult(pDef->SetName(sName2));
-	checkResult(pDef->SetDescription(sDescription2));
+	uid = DDEF_Matte;
+	checkResult(pCodecDef->AppendEssenceKind (&uid));
+	uid = NoCodec;
+	checkResult(pDef->Init (&uid, sName2, sDescription2));
 
 	checkResult(pDictionary->RegisterCodecDefinition(pCodecDef));
   }
@@ -268,6 +273,10 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 		checkExpression (wcscmp(testString, sName2) == 0, AAFRESULT_TEST_FAILED);
 		pDef->Release();
 		pDef = NULL;
+		pArrayDef[0]->Release();
+		pArrayDef[0] = NULL;
+		pArrayDef[1]->Release();
+		pArrayDef[1] = NULL;
 		/* Read one past to make sure that it fails */
 		checkExpression(pPlug->NextOne(&pCodecDef) != AAFRESULT_SUCCESS, AAFRESULT_TEST_FAILED);
 		/* Clone the enumerator, and read one element */
@@ -292,6 +301,9 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	// Cleanup and return
 	if (pHeader)
 		pHeader->Release();
+      
+	if (pDictionary)
+		pDictionary->Release();
       
 	if (pPlug)
 		pPlug->Release();

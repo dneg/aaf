@@ -13,7 +13,7 @@
 #include "AAF.h"
 
 #include "AAFResult.h"
-#include "AAFDefUIDs.h"
+#include "AAFDataDefs.h"
 #include <iostream.h>
 #include <stdio.h>
 
@@ -60,7 +60,7 @@ static HRESULT CreateAAFSequence(IAAFDictionary *pDictionary,
 						   (IUnknown **)&pSequence);		
  	if (SUCCEEDED(hr))
 	{
-		pSequence->Initialize((aafUID_t*)&DDEF_Audio);
+		pSequence->Initialize((aafUID_t*)&DDEF_Sound);
 
 		//
 		//	Add some segments.  Need to test failure conditions
@@ -78,7 +78,7 @@ static HRESULT CreateAAFSequence(IAAFDictionary *pDictionary,
  			if (FAILED(hr))
 				break;
 
-			pComponent->SetDataDef((aafUID_t*)&DDEF_Audio);
+			pComponent->SetDataDef((aafUID_t*)&DDEF_Sound);
 			pComponent->SetLength(&len);
 			hr = pSequence->AppendComponent(pComponent);
 
