@@ -6,6 +6,10 @@ AAFRoot\
 #endm
 #c
 AD_HEAD
+AD_IDL(//
+// This interfaces allows access to individual
+// IAAFIdentification-supporting objects within a collection.
+//)
 AD_FORWARD_DECLARATION(AAFIdentification)
 AD_CLASS_UUID(B1A21385, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
 
