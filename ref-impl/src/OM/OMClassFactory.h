@@ -9,50 +9,9 @@ class OMStorable;
 class OMClassFactory {
 public:
 
-  // Create with space for `capacity' entries.
-  //
-  OMClassFactory(int capacity);
-
-  virtual ~OMClassFactory(void);
-
-  // Register a class id and its associated creation function.
-  //
-  void add(const OMClassId& classId, OMStorable* (*create)(const OMClassId&));
-
-  // Deregister a class id.
-  //
-  void remove(const OMClassId& classId);
-
   // Create an instance of the appropriate derived class, given the class id.
   //
-  OMStorable* create(const OMClassId& classId) const;
-
-private:
-
-  struct FactoryEntry;
-
-protected:
-
-  // FactoryEntry for `classId' or null if not found.
-  //
-  FactoryEntry* find(const OMClassId& classId) const;
-
-  // First free entry or null if full.
-  //
-  FactoryEntry* find(void) const;
-
-  static bool equal(const OMClassId& ida, const OMClassId& idb);
-
-private:
-
-  struct FactoryEntry {
-    OMClassId _classId;
-    OMStorable* (*_creationFunction)(const OMClassId&);
-    int _valid;
-  };
-
-  int _capacity;        // Number of potential entries.
-  FactoryEntry* _table; // Dynamically allocated array.
+  virtual OMStorable* create(const OMClassId& classId) const = 0;
 
 };
 
