@@ -100,6 +100,9 @@ public:
   // Declare the module test method. The implementation of the will be be
   // in /test/ImplAAFConstValueTest.cpp.
   static AAFRESULT test();
+
+private:
+OMVariableSizeProperty<aafUInt8>	_value;
 };
 
 #endif // ! __ImplAAFConstValue_h__
