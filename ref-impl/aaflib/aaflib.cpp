@@ -48,10 +48,10 @@
 
 
 // ASSERT code copied from OM...
+#include <iostream.h>
 
 #ifdef _DEBUG
 
-#include <iostream.h>
 #include <stdlib.h>
 
 #define FAILURE -1
@@ -203,9 +203,25 @@ STDAPI AAFFileOpenExistingRead (
   hr = LoadIfNecessary(&pAAFDLL);
   if (FAILED(hr))
     return hr;
-  
-  // Attempt to call the dll's exported function...
-  hr = pAAFDLL->OpenExistingRead(pFileName, modeFlags, ppFile);
+ 
+  try
+  {
+    // Attempt to call the dll's exported function...
+    hr = pAAFDLL->OpenExistingRead(pFileName, modeFlags, ppFile);
+  }
+  catch (const char* exStr)
+  {
+    // Return a reasonable exception code.
+    //
+    cerr << "Assertion: \"" << exStr << "\" failed!" << endl;
+    hr = AAFRESULT_ASSERTION_VIOLATION;
+  }
+  catch (...)
+  {
+    // Return a reasonable exception code.
+    //
+    hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+  }
 
   return hr;
 }
@@ -230,8 +246,24 @@ STDAPI AAFFileOpenExistingModify (
   if (FAILED(hr))
     return hr;
   
-  // Attempt to call the dll's exported function...
-  hr = pAAFDLL->OpenExistingModify(pFileName, modeFlags, pIdent, ppFile);
+  try
+  {
+    // Attempt to call the dll's exported function...
+    hr = pAAFDLL->OpenExistingModify(pFileName, modeFlags, pIdent, ppFile);
+  }
+  catch (const char* exStr)
+  {
+    // Return a reasonable exception code.
+    //
+    cerr << "Assertion: \"" << exStr << "\" failed!" << endl;
+    hr = AAFRESULT_ASSERTION_VIOLATION;
+  }
+  catch (...)
+  {
+    // Return a reasonable exception code.
+    //
+    hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+  }
 
   return hr;
 }
@@ -258,8 +290,24 @@ STDAPI AAFFileOpenNewModify (
   if (FAILED(hr))
     return hr;
   
-  // Attempt to call the dll's exported function...
-  hr = pAAFDLL->OpenNewModify(pFileName, modeFlags, pIdent, ppFile);
+  try
+  {
+    // Attempt to call the dll's exported function...
+    hr = pAAFDLL->OpenNewModify(pFileName, modeFlags, pIdent, ppFile);
+  }
+  catch (const char* exStr)
+  {
+    // Return a reasonable exception code.
+    //
+    cerr << "Assertion: \"" << exStr << "\" failed!" << endl;
+    hr = AAFRESULT_ASSERTION_VIOLATION;
+  }
+  catch (...)
+  {
+    // Return a reasonable exception code.
+    //
+    hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+  }
 
   return hr;
 }
@@ -283,8 +331,24 @@ STDAPI AAFFileOpenTransient (
   if (FAILED(hr))
     return hr;
   
-  // Attempt to call the dll's exported function...
-  hr = pAAFDLL->OpenTransient(pIdent, ppFile);
+  try
+  {
+    // Attempt to call the dll's exported function...
+    hr = pAAFDLL->OpenTransient(pIdent, ppFile);
+  }
+  catch (const char* exStr)
+  {
+    // Return a reasonable exception code.
+    //
+    cerr << "Assertion: \"" << exStr << "\" failed!" << endl;
+    hr = AAFRESULT_ASSERTION_VIOLATION;
+  }
+  catch (...)
+  {
+    // Return a reasonable exception code.
+    //
+    hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+  }
 
   return hr;
 }
@@ -307,8 +371,24 @@ STDAPI AAFGetPluginManager (
   if (FAILED(hr))
     return hr;
   
-  // Attempt to call the dll's exported function...
-  hr = pAAFDLL->GetPluginManager(ppPluginManager);
+  try
+  {
+    // Attempt to call the dll's exported function...
+    hr = pAAFDLL->GetPluginManager(ppPluginManager);
+  }
+  catch (const char* exStr)
+  {
+    // Return a reasonable exception code.
+    //
+    cerr << "Assertion: \"" << exStr << "\" failed!" << endl;
+    hr = AAFRESULT_ASSERTION_VIOLATION;
+  }
+  catch (...)
+  {
+    // Return a reasonable exception code.
+    //
+    hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+  }
 
   return hr;
 }
