@@ -236,7 +236,7 @@ HRESULT STDMETHODCALLTYPE
 	/* There is nothing to semantic check if just a media descriptor is poresent
 	 */
 	if(dataObj == NULL)
-		return(OM_ERR_NONE);
+		return(AAFRESULT_SUCCESS);
 		
 	file = parmblk->spc.semCheck.file;
 	parmblk->spc.semCheck.message = NULL;
@@ -263,24 +263,24 @@ HRESULT STDMETHODCALLTYPE
 		if(mdesNumCh != dataNumCh)
 		{
 			parmblk->spc.semCheck.message = "Number of channels";
-			RAISE(OM_ERR_DATA_MDES_DISAGREE);
+			RAISE(AAFRESULT_DATA_MDES_DISAGREE);
 		}
 		if(mdesPD.fileBitsPerSample != dataPD.fileBitsPerSample)
 		{
 			parmblk->spc.semCheck.message = "Bits Per Sample";
-			RAISE(OM_ERR_DATA_MDES_DISAGREE);
+			RAISE(AAFRESULT_DATA_MDES_DISAGREE);
 		}
 		if((mdesPD.fileRate.numerator != dataPD.fileRate.numerator) ||
 		   (mdesPD.fileRate.denominator != dataPD.fileRate.denominator))
 		{
 			parmblk->spc.semCheck.message = "Frame Rate";
-			RAISE(OM_ERR_DATA_MDES_DISAGREE);
+			RAISE(AAFRESULT_DATA_MDES_DISAGREE);
 		}
 	}
 	XEXCEPT
 	XEND
 	
-	return(OM_ERR_NONE);
+	return(AAFRESULT_SUCCESS);
 #else
 	return HRESULT_NOT_IMPLEMENTED;
 #endif
@@ -371,7 +371,7 @@ HRESULT STDMETHODCALLTYPE
 
 	XPROTECT()
 	{
-		XASSERT(_bitsPerSample != 0, OM_ERR_ZERO_SAMPLESIZE);
+		XASSERT(_bitsPerSample != 0, AAFRESULT_ZERO_SAMPLESIZE);
 
 		if(!_sampleDataHeaderWritten)
 		{
@@ -416,7 +416,7 @@ HRESULT STDMETHODCALLTYPE
 		
 				fileBytes = xfer->numSamples * _bytesPerFrame;
 				if (fileBytes > xfer->buflen)
-					RAISE(OM_ERR_SMALLBUF);
+					RAISE(AAFRESULT_SMALLBUF);
 				
 				CHECK(_stream->Write(xfer->buffer, fileBytes));
 		
@@ -486,7 +486,7 @@ HRESULT STDMETHODCALLTYPE
 	XEXCEPT
 	XEND
 	
-	return (OM_ERR_NONE);
+	return (AAFRESULT_SUCCESS);
 }
 
 
@@ -512,7 +512,7 @@ HRESULT STDMETHODCALLTYPE
 			_initialSeekPerformed = AAFTrue;
 		}
 
-		XASSERT(_bitsPerSample != 0, OM_ERR_ZERO_SAMPLESIZE);
+		XASSERT(_bitsPerSample != 0, AAFRESULT_ZERO_SAMPLESIZE);
 		
 		for (n = 0; n < xferBlockCount; n++)
 		{
@@ -544,7 +544,7 @@ HRESULT STDMETHODCALLTYPE
 		
 				fileBytes = xfer->numSamples * _bytesPerFrame;
 				if (fileBytes > xfer->buflen)
-					RAISE(OM_ERR_SMALLBUF);
+					RAISE(AAFRESULT_SMALLBUF);
 		
 				CHECK(_stream->Read(fileBytes, xfer->buffer, &nbytes));
 				xfer->bytesXfered = nbytes;
@@ -610,7 +610,7 @@ HRESULT STDMETHODCALLTYPE
 				}
 				fileBytes = xferSamples * bytesPerSample * _numCh;
 				if ((aafInt32)fileBytes > startBuflen)
-					RAISE(OM_ERR_SMALLBUF);
+					RAISE(AAFRESULT_SMALLBUF);
 		
 				CHECK(_stream->Read(fileBytes, start, &nbytes));
 				
@@ -680,7 +680,7 @@ HRESULT STDMETHODCALLTYPE
 	XEXCEPT
 	XEND
 
-	return (OM_ERR_NONE);
+	return (AAFRESULT_SUCCESS);
 }
 
 
@@ -787,7 +787,7 @@ HRESULT STDMETHODCALLTYPE
 {
 	XPROTECT()
 	{
-		XASSERT(buflen > nSamples * _bytesPerFrame, OM_ERR_SMALLBUF);
+		XASSERT(buflen > nSamples * _bytesPerFrame, AAFRESULT_SMALLBUF);
 		if(!_initialSeekPerformed)
 		{
 			CHECK(_stream->Seek(0L));
@@ -858,7 +858,7 @@ HRESULT STDMETHODCALLTYPE
 	XEXCEPT
 	XEND
 	
-	return(OM_ERR_NONE);
+	return(AAFRESULT_SUCCESS);
 }
 #else
 	return HRESULT_NOT_IMPLEMENTED;
@@ -1226,11 +1226,11 @@ AAFRESULT CAAFWaveCodec::loadWAVEHeader(void)
 		CHECK(_stream->Seek(0L));
 		CHECK(_stream->Read(4L, chunkID, &bytesRead));
 		if (memcmp(&chunkID, "RIFF", (size_t) 4) != 0)
-			RAISE(OM_ERR_BADWAVEDATA);
+			RAISE(AAFRESULT_BADWAVEDATA);
 		CHECK(GetWAVEData(4L, (void *) &formSize));	
 		CHECK(_stream->Read(4L, chunkID, &bytesRead));
 		if (memcmp(&chunkID, "WAVE", (size_t) 4) != 0)
-			RAISE(OM_ERR_BADWAVEDATA);
+			RAISE(AAFRESULT_BADWAVEDATA);
 		CHECK(_stream->GetPosition(&chunkStart64));
 		CHECK(TruncInt64toInt32(chunkStart64, &offset));	// OK - 32-bit format
 	
@@ -1244,7 +1244,7 @@ AAFRESULT CAAFWaveCodec::loadWAVEHeader(void)
 				/* WAVE field: wFormatTag */
 				CHECK(GetWAVEData(2L, &pcm_format));
 				if (pcm_format != 1)
-					RAISE(OM_ERR_BADWAVEDATA);
+					RAISE(AAFRESULT_BADWAVEDATA);
 	
 				/* WAVE field: wChannels */
 				CHECK(GetWAVEData(2L, &_numCh));
@@ -1288,7 +1288,7 @@ AAFRESULT CAAFWaveCodec::loadWAVEHeader(void)
 	}
 	XEXCEPT
 	{
-		RERAISE(OM_ERR_BADWAVEDATA);
+		RERAISE(AAFRESULT_BADWAVEDATA);
 	}
 	XEND
 	
@@ -1345,7 +1345,7 @@ AAFRESULT CAAFWaveCodec::ComputeWriteChunkSize(
 	XEXCEPT
 	XEND
 
-	return (OM_ERR_NONE);
+	return (AAFRESULT_SUCCESS);
 }
 
 AAFRESULT CAAFWaveCodec::CreateAudioDataEnd(void)
