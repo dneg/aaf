@@ -26,7 +26,7 @@
 extern "C" const aafClassID_t CLSID_EnumAAFComponents;
 
 ImplAAFSequence::ImplAAFSequence ()
-:   _components(			PID_SEQUENCE_COMPONENTS,		"Components")
+:   _components(			PID_Sequence_Components,		"Components")
 {
 	_persistentProperties.put(_components.address());
 }

@@ -36,10 +36,10 @@
 #include "aafErr.h"
 
 ImplAAFMobSlot::ImplAAFMobSlot ()
-: _name(			PID_MOBSLOT_NAME,			"Name"),
-  _trackID(			PID_MOBSLOT_TRACKID,		"SlotID"),
-  _physicalTrackNum(PID_MOBSLOT_PHYSICAL_TRACK,	"PhysicalTrack"),
-  _segment(			PID_MOBSLOT_SEGMENT,		"Segment") 
+: _name(			PID_MobSlot_SlotName,			"Slot Name"),
+  _trackID(			PID_MobSlot_SlotID,		"Slot ID"),
+  _physicalTrackNum(PID_MobSlot_PhysicalTrackNumber,	"Physical Track Number"),
+  _segment(			PID_MobSlot_Segment,		"Segment") 
 {
 	_persistentProperties.put(_name.address());
 	_persistentProperties.put(_trackID.address());
