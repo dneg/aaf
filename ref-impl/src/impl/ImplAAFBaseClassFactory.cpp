@@ -26,7 +26,7 @@ OMContainer::~OMContainer(void)
   // cleanup the file reference if on exists.
   if (_file)
   {
-    _file->ReleaseReference();
+    delete _file;
     _file = 0;
   }
 }
@@ -65,7 +65,7 @@ void OMContainer::OMLCloseContainer(void)
   // every open of the container creates a new file.
   if (_file)
   {
-    _file->ReleaseReference();
+    delete _file;
     _file = 0;
   }
 
@@ -78,7 +78,7 @@ void OMContainer::OMLAbortContainer(void)
   // every open of the container creates a new file.
   if (_file)
   {
-    _file->ReleaseReference();
+    delete _file;
     _file = 0;
   }
 }
