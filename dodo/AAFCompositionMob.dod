@@ -23,7 +23,7 @@ AD_CLASS_BEGIN
 
   //@access Public Members
 AD_METHOD2(SetInitialValues,
-				[in],aafString_t *,name,Mob name [optional],
+				[in\\\, string],aafWChar *,pName,Mob name [optional],
 				[in],aafBool,isPrimary,Whether or not the mob is a primary mob,
 				Constructor given name and primary mob status.)
   //@rdesc Error code [see below].
@@ -45,5 +45,6 @@ AD_METHOD3(SetDefaultFade,
 		   Adds the default crossfade properties to the Mob.)
   //@rdesc Error code [see below].
   //@comm Maps to omfiMobSetDefaultFade
+
 
 AD_CLASS_END
