@@ -31,8 +31,8 @@
 
 
 ImplAAFSourceReference::ImplAAFSourceReference ():
-	_sourceID(			PID_SourceReference_SourceID,		"Source ID"),
-	_sourceMobSlotId(	PID_SourceReference_SourceMobSlotID,	"Source Mob Slot ID")
+	_sourceID(			PID_SourceReference_SourceID,		"SourceID"),
+	_sourceMobSlotId(	PID_SourceReference_SourceMobSlotID,	"SourceMobSlotID")
 {
 	_persistentProperties.put(		_sourceID.address());
 	_persistentProperties.put(		_sourceMobSlotId.address());
