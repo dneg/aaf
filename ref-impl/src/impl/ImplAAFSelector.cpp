@@ -311,63 +311,6 @@ AAFRESULT
 
   return(AAFRESULT_SUCCESS);
 }
-#if 0
-aafErr_t ImplAAFSelector::Verify(char *buf, validateData_t *result)
-{
-
-	AAFSegment * slot = NULL;
-	aafLength_t parentLen, slotLen, selectedLen;
-	char	 parentLenBuf[32], slotLenBuf[32], selectedLenBuf[32];
-	aafInt32 numSlots, loop;
-	
-	AAFIterate	*iter;
-	
-	XPROTECT(_file)
-	{
-		/* Verify length of slots == length of parent */
-			CHECK(GetLength(&parentLen));
-			CHECK(GetLength(&selectedLen));
-		if (Int64NotEqual(selectedLen, parentLen))
-		{
-		      CHECK(Int64ToString(selectedLen, 10, sizeof(selectedLenBuf), selectedLenBuf));  
-		      CHECK(Int64ToString(parentLen, 10, sizeof(parentLenBuf), parentLenBuf));  
-			fprintf(result->textOut, "*** ERROR: %s Selector length (%s) != length of selected slot (%s)\n", 
-				buf, selectedLenBuf, parentLenBuf);
-			result->numErrors++;
-		}
-
-		iter = new AAFIterate(_file);
-		CHECK(GetNumAltSlots(&numSlots));
-		for (loop = 1; loop <= numSlots; loop++)
-		{
-			CHECK(iter->SelectorGetNextAltSlot(this, NULL, &slot));
-			if (slot)
-			{
-			    CHECK(slot->GetLength(&slotLen));
-				if (Int64NotEqual(parentLen, slotLen))
-				{
-		      		CHECK(Int64ToString(parentLen, 10, sizeof(parentLenBuf), parentLenBuf));  
-		      		CHECK(Int64ToString(slotLen, 10, sizeof(slotLenBuf), slotLenBuf));  
-					fprintf(result->textOut, "*** ERROR: %s Selector length (%s) != length of Selector Alternate slot (%s)\n", 
-						buf, parentLenBuf, slotLenBuf);
-					result->numErrors++;
-				}
-			}
-		} /* for */
-
-		delete iter;
-		iter = NULL;
-	 	} /* XPROTECT */
-  XEXCEPT
-	{
-	  if (iter)
-		delete iter;
-	}
-  XEND;
-
-  return(AAFRESULT_SUCCESS);
-}
-#endif
 
 OMDEFINE_STORABLE(ImplAAFSelector, AUID_AAFSelector);
 
