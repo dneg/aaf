@@ -296,6 +296,7 @@ void printStackTrace(OMOStream& s)
 
 void printStackTrace(OMOStream& s)
 {
+  s << "Symbolic stack trace." << endl;
   void* addresses[64];
 
   size_t depth = backtrace(addresses, sizeof(addresses)/sizeof(addresses[0]));
@@ -306,6 +307,7 @@ void printStackTrace(OMOStream& s)
     s << names[i] << endl;
   }
   free(names);
+  s << "End of symbolic stack trace." << endl;
 }
 
 #else
