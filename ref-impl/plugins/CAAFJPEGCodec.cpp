@@ -120,7 +120,6 @@ CAAFJPEGCodec::CAAFJPEGCodec (IUnknown * pControllingUnknown)
 	_openMode = kAAFMediaOpenReadOnly;
 	_compressEnable = kAAFCompressionEnable;
 	_length = 0;  // 64 bit int
-	_isInAAFContainer = kAAFFalse; // not in an aaf file
 	_sampleRate = NULL_RATIONAL;
 	_containerFormat = NULL_ID;
 	_codecID = CodecJPEG;
@@ -865,7 +864,6 @@ HRESULT STDMETHODCALLTYPE
 		checkResult(_descriptorHelper.GetLength(&_length));
 		checkAssertion(_length < 0xFFFFFFFF);
 		_numberOfSamples = (aafUInt32)_length; // The length in the file descriptor (mdes in omfi) seems to be in samples.
-		checkResult(_descriptorHelper.GetIsInContainer(&_isInAAFContainer));
 		checkResult(_descriptorHelper.GetSampleRate(&_sampleRate));
 		checkResult(_descriptorHelper.GetContainerFormat(&_containerFormat));
 
