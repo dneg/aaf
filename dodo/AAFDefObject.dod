@@ -38,7 +38,7 @@ AD_INCLUDE(AAFTypes)
 AD_CLASS_UUID(dfbd6528, 1d81, 11d2, bf, 96, 00, 60, 97, 11, 62, 12)
 
 AD_DEFAULT_UUID(dfbd6527, 1d81, 11d2, bf, 96, 00, 60, 97, 11, 62, 12)
-AD_CLASS_BEGIN
+AD_XCLASS_BEGIN(Abstract, StoredObject)
 
 
 AD_XMETHOD1(GetAUID,
@@ -50,4 +50,4 @@ AD_XMETHOD1(GetAUID,
 		   Gets the AUID for this object.)
 
 
-AD_CLASS_END
+AD_XCLASS_END(Abstract, StoredObject)

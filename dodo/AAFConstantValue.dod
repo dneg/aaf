@@ -29,7 +29,7 @@ AD_CLASS_UUID(b8ddc081, 2afa, 11D2, bf, A5, 00, 60, 97, 11, 62, 12)
 
 AD_DEFAULT_UUID(b8ddc080, 2afa, 11D2, bf, A5, 00, 60, 97, 11, 62, 12)
 
-AD_CLASS_BEGIN
+AD_XCLASS_BEGIN(Concrete, StoredObject)
 
 /****/
 AD_XMETHOD4(SetInitialValues,
@@ -66,4 +66,4 @@ AD_METHOD2(SetValue,
 //@com		void			*_value;
 //@com		aafUInt32		_valueLen;
 
-AD_CLASS_END
+AD_XCLASS_END(Concrete, StoredObject)

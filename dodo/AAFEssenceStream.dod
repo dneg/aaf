@@ -17,7 +17,7 @@ AD_IDL(//
 AD_CLASS_UUID(83402901, 9146, 11d2, 80, 88, 00, 60, 08, 14, 3e, 6f)
 
 AD_DEFAULT_UUID(83402902, 9146, 11d2, 80, 88, 00, 60, 08, 14, 3e, 6f)
-AD_CLASS_BEGIN
+AD_XCLASS_BEGIN(Abstract, Transient)
 
 AD_METHOD2(Write,
 			[in\\\,size_is\\\(buflen\\\)],
@@ -94,5 +94,5 @@ AD_METHOD1(SetCacheSize,
 			Sets the size of the cache buffer used for further operations.
 			// Destroys the current contents of the cache.)
 
-AD_CLASS_END
+AD_XCLASS_END(Abstract, Transient)
 

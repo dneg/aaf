@@ -26,11 +26,11 @@ AD_HEAD
 AD_CLASS_UUID(92B88032, 2B2B, 11d2, BF, 7E, 00, 10, 4B, C9, 15, 6D)
 
 AD_DEFAULT_UUID(92B88031, 2B2B, 11d2, BF, 7E, 00, 10, 4B, C9, 15, 6D)
-AD_CLASS_BEGIN
+AD_XCLASS_BEGIN(Concrete, StoredObject)
 
 // Need get/set methods for pulldown properties
 
 AD_OVERRIDE(.method-SegmentOffsetToTC)
 AD_OVERRIDE(.method-SegmentTCToOffset)
 
-AD_CLASS_END
+AD_XCLASS_END(Concrete, StoredObject)

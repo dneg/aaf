@@ -32,7 +32,7 @@ AD_IDL(//
 AD_CLASS_UUID(e58a8562, 2a3e, 11D2, bf, a4, 00, 60, 97, 11, 62, 12)
 
 AD_DEFAULT_UUID(e58a8561, 2a3e, 11D2, bf, a4, 00, 60, 97, 11, 62, 12)
-AD_CLASS_BEGIN
+AD_XCLASS_BEGIN(Abstract, StoredObject)
 AD_XMETHOD1(SetLength,
 			[in],
 			objPass,
@@ -218,4 +218,4 @@ AD_XMETHOD1(GetContainerFormat,
   //
   // AAFRESULT_NULL_PARAM
   //   - pFormat arg is NULL.)
-AD_CLASS_END
+AD_XCLASS_END(Abstract, StoredObject)

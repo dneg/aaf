@@ -29,7 +29,7 @@ AD_FORWARD_DECLARATION(EnumAAFReferenceValues)
 AD_CLASS_UUID(20045fa2, 1d87, 11d2, bf, 96, 00, 60, 97, 11, 62, 12) 
 
 AD_DEFAULT_UUID(20045fa1, 1d87, 11d2, bf, 96, 00, 60, 97, 11, 62, 12)
-AD_CLASS_BEGIN
+AD_XCLASS_BEGIN(Concrete, StoredObject)
 
 AD_METHOD1(GetParameterDataDefID,
 		   [retval][out],
@@ -97,4 +97,4 @@ AD_XMETHOD1(GetRefValues,
 			Reference value Enumeration,
 			Return an enumerator for the reference values.)
 
-AD_CLASS_END
+AD_XCLASS_END(Concrete, StoredObject)

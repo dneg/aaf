@@ -33,7 +33,7 @@ AD_FORWARD_DECLARATION(EnumAAFParameterDefs)
 AD_CLASS_UUID(14035d92, 1ff5, 11d2, bf, 97, 00, 60, 97, 11, 62, 12) 
 
 AD_DEFAULT_UUID(14035d91, 1ff5, 11d2, bf, 97, 00, 60, 97, 11, 62, 12)
-AD_CLASS_BEGIN
+AD_XCLASS_BEGIN(Concrete, StoredObject)
 
 AD_METHOD1(GetAUID,
 		   [out\\\,retval],
@@ -212,4 +212,4 @@ AD_XMETHOD1(GetParameterDefinitions,
 			Parameter definition enumeration,
 			Return an enumerator for aaf Parameter definition.)
 
-AD_CLASS_END
+AD_XCLASS_END(Concrete, StoredObject)

@@ -31,7 +31,7 @@ AD_FORWARD_DECLARATION(AAFDataDef)
 AD_CLASS_UUID(e58a8568, 2a3e, 11D2, bf, a4, 00, 60, 97, 11, 62, 12)
 
 AD_DEFAULT_UUID(e58a8567, 2a3e, 11D2, bf, a4, 00, 60, 97, 11, 62, 12)
-AD_CLASS_BEGIN
+AD_XCLASS_BEGIN(Concrete, StoredObject)
 
 AD_XMETHOD2(SetInitialValues,
 [in], objIn, AAFDataDef, datadef,Data Definition object,
@@ -63,4 +63,4 @@ adds the source clip specified in the choice argument as  a choice to the given 
 //		vector<AAFSourceClip *>	_choices;
 
 
-AD_CLASS_END
+AD_XCLASS_END(Concrete, StoredObject)

@@ -25,7 +25,7 @@ AD_IDL(//
 AD_CLASS_UUID(91920d64, 2a2e, 11D2, bf, A3, 00, 60, 97, 11, 62, 12)
 
 AD_DEFAULT_UUID(91920d63, 2a2e, 11D2, bf, A3, 00, 60, 97, 11, 62, 12)
-AD_CLASS_BEGIN
+AD_XCLASS_BEGIN(Concrete, StoredObject)
 AD_XMETHOD1(Initialize,
 			[in\, string],
 			objPass,
@@ -121,4 +121,4 @@ AD_XMETHOD3(SetDefaultFade,
   //
   // AAFRESULT_BAD_LENGTH
   //   - invalid fadeLength.)
-AD_CLASS_END
+AD_XCLASS_END(Concrete, StoredObject)

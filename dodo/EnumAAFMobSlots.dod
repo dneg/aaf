@@ -22,7 +22,7 @@ AD_FORWARD_DECLARATION(AAFMobSlot)
 AD_CLASS_UUID(B1A21389, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
 
 AD_DEFAULT_UUID(B1A21388, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
-AD_CLASS_BEGIN
+AD_XCLASS_BEGIN(Concrete, Transient)
 AD_XMETHOD1(NextOne,
 			[out\,retval],
 			objOut,
@@ -158,4 +158,4 @@ AD_XMETHOD1(Clone,
   //
   // AAFRESULT_NULL_PARAM
   //   - ppEnum is null.)
-AD_CLASS_END
+AD_XCLASS_END(Concrete, Transient)

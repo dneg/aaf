@@ -28,7 +28,7 @@ AD_FORWARD_DECLARATION(AAFDataDef)
 AD_CLASS_UUID(9c568a82, 2096, 11d2, bf, 98, 00, 60, 97, 11, 62, 1) 
 
 AD_DEFAULT_UUID(9c568a81, 2096, 11d2, bf, 98, 00, 60, 97, 11, 62, 12)
-AD_CLASS_BEGIN
+AD_XCLASS_BEGIN(Abstract, StoredObject)
 
 AD_METHOD1(SetLength,
 		   [in],
@@ -64,6 +64,6 @@ AD_XMETHOD1(GetDataDef,
 			Data Definition of this object,
 			returns DataDef definition object)
 
-AD_CLASS_END
+AD_XCLASS_END(Abstract, StoredObject)
 
 

@@ -27,7 +27,7 @@ AD_FORWARD_DECLARATION(AAFDataDef)
 AD_CLASS_UUID(86192db2, 2a23, 11D2, BF, a3, 00, 60, 97, 11, 62, 12)
 
 AD_DEFAULT_UUID(86192db1, 2a23, 11D2, BF, a3, 00, 60, 97, 11, 62, 12)
-AD_CLASS_BEGIN
+AD_XCLASS_BEGIN(Concrete, StoredObject)
 
 AD_METHOD1(GetTime,
 			[out\\\,retval],
@@ -74,5 +74,5 @@ AD_METHOD2(SetValue,
 		   [in\\\, size_is\\\(valueSize\\\)], aafDataBuffer_t, pValue, Preallocated buffer to hold value,
 		   Sets the control point data value.)
 
-AD_CLASS_END
+AD_XCLASS_END(Concrete, StoredObject)
 

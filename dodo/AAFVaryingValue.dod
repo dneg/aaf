@@ -28,7 +28,7 @@ AD_FORWARD_DECLARATION(AAFDataDef)
 AD_CLASS_UUID(91920d61, 2a2e, 11D2, bf, A3, 00, 60, 97, 11, 62, 12)
 
 AD_DEFAULT_UUID(91920d60, 2a2e, 11D2, bf, A3, 00, 60, 97, 11, 62, 12)
-AD_CLASS_BEGIN
+AD_XCLASS_BEGIN(Concrete, StoredObject)
 
 AD_XMETHOD5(AddPoint,
 			[in],objPass,aafRational_t, time, time for Control Point,
@@ -51,5 +51,5 @@ AD_METHOD1(GetNumPoints,
 		   This function gets the number of control points in the varying
 		   // value object.)
 
-AD_CLASS_END
+AD_XCLASS_END(Concrete, StoredObject)
 

@@ -22,7 +22,7 @@ AD_CLASS_UUID(AF98DE41, 952D, 11D2, 80, 89, 00, 60, 08, 14, 3e, 6f)
 
 AD_DEFAULT_UUID(AF98DE42, 952D, 11D2, 80, 89, 00, 60, 08, 14, 3e, 6f)
 
-AD_CLASS_BEGIN
+AD_XCLASS_BEGIN(Abstract, Transient)
 
 AD_XMETHOD3(NumCodecsMatching,
 [in],objPass,aafUID_t,dataDefinition,Looking for audio or video codecs,
@@ -63,4 +63,4 @@ AD_XMETHOD6(GetIndexedCodecInfo,
 			ID used to access the codec,
 			Get the codec name and ID.)
 
-AD_CLASS_END
+AD_XCLASS_END(Abstract, Transient)

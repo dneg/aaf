@@ -24,9 +24,9 @@ AD_IDL(//
 AD_CLASS_UUID(3631F7A3, 9121, 11d2, 80, 88, 00, 60, 08, 14, 3e, 6f)
 
 AD_DEFAULT_UUID(3631F7A4, 9121, 11d2, 80, 88, 00, 60, 08, 14, 3e, 6f)
-AD_CLASS_BEGIN
+AD_XCLASS_BEGIN(Abstract, Transient)
 
 AD_METHOD0(Start, Set up a codec.)
 AD_METHOD0(Finish, Tear down a codec.)
 
-AD_CLASS_END
+AD_XCLASS_END(Abstract, Transient)
