@@ -64,7 +64,7 @@ OMReferenceVectorIterator<ReferencedObject>::~OMReferenceVectorIterator(void)
   //   @rdesc The new <c OMReferenceVectorIterator>.
   //   @this const
 template <typename ReferencedObject>
-OMReferenceContainerIterator<ReferencedObject>*
+OMReferenceContainerIterator*
                   OMReferenceVectorIterator<ReferencedObject>::copy(void) const
 {
   TRACE("OMReferenceVectorIterator<ReferencedObject>::copy");
@@ -232,6 +232,24 @@ OMReferenceVectorIterator<ReferencedObject>::setValue(
 
   ReferencedObject* result = element.setValue(newObject);
 
+  return result;
+}
+
+  // @mfunc Return the <p OMObject> in the associated
+  //        reference container at the position currently
+  //        designated by this <c OMReferenceVectorIterator>.
+  //   @tcarg class | ReferencedObject | The type of the contained objects.
+  //   @rdesc The <c OMObject> at the current position.
+  //   @this const
+template <typename ReferencedObject>
+OMObject*
+OMReferenceVectorIterator<ReferencedObject>::currentObject(void) const
+{
+  TRACE("OMReferenceVectorIterator<ReferencedObject>::currentObject");
+
+  OMObject* result = value();
+
+  POSTCONDITION("Valid result", result != 0);
   return result;
 }
 

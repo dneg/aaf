@@ -39,8 +39,7 @@ class OMReferenceVector;
 // @class Iterators over <c OMReferenceVector>s.
 //   @tcarg class | ReferencedObject | The type of the contained objects.
 template <typename ReferencedObject>
-class OMReferenceVectorIterator :
-                        public OMReferenceContainerIterator<ReferencedObject> {
+class OMReferenceVectorIterator : public OMReferenceContainerIterator {
 public:
   // @access Public members.
 
@@ -62,7 +61,7 @@ public:
                              OMIteratorPosition initialPosition = OMBefore);
 
     // @cmember Create a copy of this <c OMReferenceVectorIterator>.
-  virtual OMReferenceContainerIterator<ReferencedObject>* copy(void) const;
+  virtual OMReferenceContainerIterator* copy(void) const;
 
     // @cmember Destroy this <c OMReferenceVectorIterator>.
   virtual ~OMReferenceVectorIterator(void);
@@ -140,6 +139,11 @@ public:
     //          <p newObject>. The previous <p ReferencedObject>, if any,
     //          is returned.
    virtual ReferencedObject* setValue(const ReferencedObject* newObject);
+
+    // @cmember Return the <p OMObject> in the associated
+    //          reference container at the position currently
+    //          designated by this <c OMReferenceVectorIterator>.
+   virtual OMObject* currentObject(void) const;
 
     // @cmember Return the index of the <p ReferencedObject> in the
     //          associated <c OMReferenceVector> at the position

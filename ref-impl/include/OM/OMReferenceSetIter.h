@@ -39,8 +39,7 @@ class OMReferenceSet;
 // @class Iterators over <c OMReferenceSet>s.
 //   @tcarg class | ReferencedObject | The type of the contained objects.
 template <typename UniqueIdentification, typename ReferencedObject>
-class OMReferenceSetIterator :
-                        public OMReferenceContainerIterator<ReferencedObject> {
+class OMReferenceSetIterator : public OMReferenceContainerIterator {
 public:
   // @access Public members.
 
@@ -65,7 +64,7 @@ public:
   virtual ~OMReferenceSetIterator(void);
 
     // @cmember Create a copy of this <c OMReferenceSetIterator>.
-  virtual OMReferenceContainerIterator<ReferencedObject>* copy(void) const;
+  virtual OMReferenceContainerIterator* copy(void) const;
 
     // @cmember Reset this <c OMReferenceSetIterator> to the given
     //          <p initialPosition>.
@@ -142,6 +141,11 @@ public:
     //          <p Key> of <p newObject> must be the same as that of the
     //          existing <p ReferencedObject>.
    virtual ReferencedObject* setValue(const ReferencedObject* newObject);
+
+    // @cmember Return the <p OMObject> in the associated
+    //          reference container at the position currently
+    //          designated by this <c OMReferenceSetIterator>.
+   virtual OMObject* currentObject(void) const;
 
     // @cmember Return the <p Key> of the <p ReferencedObject> in the
     //          associated <c OMReferenceSet> at the position
