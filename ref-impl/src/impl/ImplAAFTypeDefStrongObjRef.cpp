@@ -368,8 +368,21 @@ AAFRESULT STDMETHODCALLTYPE
     {
       // set the storage in the prop value
       OMObject* object = refProperty->getObject();
+#if 1
+	  // This code can be called during lazy initialization of the
+	  // property set. The initialization takes place the first time
+	  // any property of this object is given a value.
+	  // That means we can't assert that this particular property always
+	  // has a value - tjb 01/30/02.
+	  ImplAAFStorable* pObject = 0;
+	  if (object != 0)
+		{
+		  pObject = ImplAAFRefValue::ConvertOMObjectToRoot(object);
+		}
+#else
       assert (NULL != object);
       ImplAAFStorable* pObject = ImplAAFRefValue::ConvertOMObjectToRoot(object);
+#endif
       result = pStrongRefValue->SetObject(pObject);
     }
   }
