@@ -1041,7 +1041,7 @@ HRESULT Aaf2Omf::ProcessComponent(IAAFComponent* pComponent,
 	IAAFFiller*				pFiller = NULL;
 	IAAFTransition*			pTransition = NULL;
 	IAAFSelector*			pSelector = NULL;
-	IAAFEffect*				pEffect = NULL;
+	IAAFOperationGroup*		pEffect = NULL;
 
 	aafUID_t				datadef;
 	aafLength_t				length;
@@ -1186,7 +1186,7 @@ HRESULT Aaf2Omf::ProcessComponent(IAAFComponent* pComponent,
 			UTLstdprintf("%sProcessing Transition of length: %ld\n ", gpGlobals->indentLeader, (int)length);
 		}
 		pTransition->GetCutPoint(&cutPoint);
-		rc = pTransition->GetEffect(&pEffect);
+		rc = pTransition->GetOperationGroup(&pEffect);
 		// At this time (4/99) effects are not implemented therefore we 
 		// will have to create an Effect from thin air.(hack it !!)
 		rc = ConvertEffects(pEffect, &effect);
@@ -1742,7 +1742,7 @@ Cleanup:
 // Returns: AAFRESULT_SUCCESS if object is converted.
 //
 // ============================================================================
-HRESULT Aaf2Omf::ConvertEffects(IAAFEffect* pEffect,
+HRESULT Aaf2Omf::ConvertEffects(IAAFOperationGroup* pEffect,
 								OMF2::omfEffObj_t*	pOMFEffect)
 {
 	HRESULT					rc = AAFRESULT_SUCCESS;
@@ -1754,7 +1754,7 @@ HRESULT Aaf2Omf::ConvertEffects(IAAFEffect* pEffect,
 	OMF2::omfErr_t			OMFError;
 	OMF2::omfBool			bDefExists;
 
-	IAAFEffectDef*			pEffectDef = NULL;
+	IAAFOperationDef*		pEffectDef = NULL;
 	IAAFParameterDef*		pParameterDef = NULL;
 	IAAFParameter*			pParameter = NULL;
 	IAAFDefObject*			pDefObject = NULL;
@@ -1792,7 +1792,7 @@ HRESULT Aaf2Omf::ConvertEffects(IAAFEffect* pEffect,
 		pEffect->IsATimeWarp(&isATimeWarp);
 		pEffect->GetNumSourceSegments(&numSources);
 		pEffect->GetNumParameters(&numParameters);
-		rc = pEffect->GetEffectDefinition(&pEffectDef);
+		rc = pEffect->GetOperationDefinition(&pEffectDef);
 		pEffectDef->GetDataDefinitionID(&datadefAUID);
 		pEffectDef->GetBypass(&bypassOverride);
 		rc = pEffectDef->QueryInterface(IID_IAAFDefObject, (void **) &pDefObject);

@@ -68,7 +68,7 @@ private:
 	HRESULT ConvertSelector(IAAFSelector* pSelector, OMF2::omfObject_t* pOMFSelector );
 	HRESULT ConvertLocator(IAAFEssenceDescriptor* pEssenceDesc, OMF2::omfMobObj_t*	pOMFSourceMob );
 	HRESULT ConvertEssenceDataObject(IAAFEssenceData* pEssenceData);
-	HRESULT ConvertEffects(IAAFEffect* pEffect, OMF2::omfEffObj_t*	pOMFEffect);
+	HRESULT ConvertEffects(IAAFOperationGroup* pEffect, OMF2::omfEffObj_t*	pOMFEffect);
 
 private:
 
