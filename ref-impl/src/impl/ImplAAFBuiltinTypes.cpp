@@ -30,7 +30,6 @@
 #include "ImplAAFBuiltinTypes.h"
 #endif
 
-
 #ifndef __ImplAAFDictionary_h__
 #include "ImplAAFDictionary.h"
 #endif
@@ -936,7 +935,13 @@ AAFRESULT ImplAAFBuiltinTypes::ImportBuiltinTypeDef
  ImplAAFTypeDef ** ppResult)
 {
   AAFRESULT hr;
-  hr = pvtCreateBuiltinTypeDef (idToCreate, ppResult);
+  ImplAAFUID popped;
+
+  assert (! _lookupStack.isPresent (idToCreate));
+
+  _lookupStack.push (idToCreate);
+
+  hr = NewBuiltinTypeDef (idToCreate, ppResult);
   if (AAFRESULT_SUCCEEDED (hr))
 	{
 	  assert (*ppResult);
@@ -947,21 +952,16 @@ AAFRESULT ImplAAFBuiltinTypes::ImportBuiltinTypeDef
 		  assert (*ppResult);
 		  (*ppResult)->ReleaseReference ();
 		  *ppResult = 0;
-		  return hr;
 		}
+	}
 
-	  assert (*ppResult);
-	  _dictionary->pvtInitObjectProperties (*ppResult);
-	  return AAFRESULT_SUCCESS;
-	}
-  else
-	{
-	  return hr;
-	}
+  popped = _lookupStack.pop ();
+  assert (popped == idToCreate);
+  return hr;
 }
 
 
-AAFRESULT ImplAAFBuiltinTypes::pvtCreateBuiltinTypeDef
+AAFRESULT ImplAAFBuiltinTypes::NewBuiltinTypeDef
 (const aafUID_t & idToCreate,
  ImplAAFTypeDef ** ppCreatedTypeDef)
 {
