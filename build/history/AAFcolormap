@@ -25,11 +25,11 @@ color Pale-Magenta        FFCCFF
 color Pale-Yellow         FFFFCC
 color Blue                CCCCFF
 color Light-Hard-Azure    3399FF
-color Green               00FF00
+color Light-Faded-Green   66FF66
 
 # default color
 
-default Green
+default Light-Faded-Green
 
 # Components
 
@@ -53,7 +53,7 @@ component API Light-Hard-Azure
   dodo/
 end
 
-component Project-and-Makefiles Green
+component Project-and-Makefiles Light-Faded-Green
   AAF
 end
 
