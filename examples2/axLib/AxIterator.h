@@ -109,10 +109,14 @@ private:
 };
 
 
-// Iterator for fixed and variable arrays. Works around lack of 
-// implementation (AAFRESULT_NOT_IN_CURRENT_VERSION) of the 
-// GetElement() COM interface for arrays.
-
+// Iterator for fixed and variable arrays.
+//
+// These formerly worked around a lack of (full) implementation
+// (AAFRESULT_NOT_IN_CURRENT_VERSION) of the GetElement() COM
+// interface for arrays.  As of 10 June 2003 the
+// IAAFTypeDef{Fixed,Variable}Array::GetElements() interface is
+// implemented, hence, this class is redundant.
+//
 // Type is indented to be IAAFTypeDefFixedArray or IAAFTypeDefVariableArray
 
 template <class TypeDef>
