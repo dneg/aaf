@@ -1,0 +1,324 @@
+#ifndef __AAFSmartPointerBase_h__
+#define __AAFSmartPointerBase_h__
+/***********************************************\
+*                                               *
+* Advanced Authoring Format                     *
+*                                               *
+* Copyright (c) 1998-1999 Avid Technology, Inc. *
+* Copyright (c) 1998-1999 Microsoft Corporation *
+*                                               *
+\***********************************************/
+
+//
+// This is a smart pointer template class for use as a reference to
+// objects which support reference counting.  A helper class is also
+// specified which defines a generalized reference counting interface
+// used by the smart pointer template.  Clients of this SP template
+// are expected to create two classes:
+//
+// - A class inherited from the AAFCountedReference class, providing
+//   implementations for the acquire() and release() methods
+//   appropriate for the referenced objects of interest.
+//
+// - A template instantiation of AAFSmartPointerBase, specifying the
+//   referenced type of interest and the appropriate class derived
+//   from AAFCountedReference which implements reference counting for
+//   the referenced type.
+//
+// For example, clients interested in COM reference counting can
+// supply a class derived from AAFCountedReference implementing its
+// acquire() and release() methods.  Since we're talking about COM
+// interfaces, they'd have to be implemented in terms of the IUnknown
+// methods AddRef() and Release().  For the sake of argument, let's
+// call this class ComCountedReference.
+//
+// In this example, the client may also wish to provide his own
+// template, instantiating AAFSmartPointerBase with the appropriate
+// template arguments:
+//
+// template <typename T>
+// ComSmartPointer<T, ComCountedReference>
+// {}
+//
+// This will declare a template class, called ComSmartPointer, which
+// can be used with any type T which is derived from IUnknown.
+//
+// This resulting smart pointer template will have the following
+// properties.
+//
+// Clients may define the macro AAF_SMART_POINTER_ASSERT(condition)
+// which is used by the smart pointer implementation to test pointer
+// values.  If not client-defined, it will be set to assert(condition)
+// by default.
+//
+// Smart pointer instances of this template are designed for use with
+// functions which return pointers to objects by reference as a
+// function's argument.  For example:
+//
+// void GetObject (IAAFObject ** ppObj);
+//
+// where the object pointer is returned from GetObject() through the
+// ppObj argument.  This template handles that by allowing itself to
+// be converted to a T** pointer through the '&' operator.  In the
+// case of the GetObject function above, you'd use it thusly:
+//
+// // Handy typedef
+// typedef ComSmartPointer<IAAFObject> ObjectSP;
+// ObjectSP myObjSmartPointer;
+// GetObject (& myObjSmartPointer);
+//
+// This sp class will note that its internal representation was
+// changed and do the appropriate acquire/release references.
+//
+// Note that this arrangement opens the door to some abuse by
+// permitting clients to convert a sp to a T* or T** and mangling the
+// contents directly; however IMO that liabililty is less than the
+// liability of having reference counts going awry.
+//
+// The other usual smart pointer benefits apply.  When an instance of
+// this smart pointer class is destroyed (e.g. when it goes out of
+// scope) the reference count of the referenced object will
+// automatically be decremented.
+//
+
+//
+// And now, here are the guts.
+//
+
+//
+// Abstract base class defining an interface to objects which maintain
+// reference-counted references to other objects.  For example, a
+// smart pointer class may derive from this interface in order to
+// service reference counts to objects to which the smart pointer
+// refers.
+template <typename ReferencedObject>
+struct AAFCountedReference
+{
+protected:
+  virtual void acquire (ReferencedObject * pObj) = 0;
+  virtual void release (ReferencedObject * pObj) = 0;
+};
+
+
+//
+// Smart pointer template.  Template arguments:
+//
+// ReferencedType: the kind of object to which this pointer will
+// point.
+//
+// RefCountType: a (derived) implementation of the AAFCountedReference
+// class which implements reference counting for the type of object
+// specified in ReferencedType.
+//
+template <typename ReferencedType, typename RefCountType>
+struct AAFSmartPointerBase : public RefCountType
+{
+  // ctor to create 
+  AAFSmartPointerBase ();
+
+  // copy ctor
+  AAFSmartPointerBase (const AAFSmartPointerBase<ReferencedType, RefCountType> & src);
+  
+  // dtor
+  ~AAFSmartPointerBase ();
+
+  // assignment operator
+  AAFSmartPointerBase<ReferencedType, RefCountType> & operator=
+    (const AAFSmartPointerBase<ReferencedType, RefCountType> & src);
+  
+  // Allows passing this smart ptr as argument to methods which expect
+  // a ReferencedType**, in order to fill it in.
+  ReferencedType ** operator & ();
+ 
+  // Allows passing this smart ptr as argument to methods which expect
+  // a ReferencedType* (non-const and const)
+  operator ReferencedType * ();
+  operator ReferencedType * () const;
+ 
+  // member access operators (non-const and const)
+  ReferencedType * operator-> ();
+  const ReferencedType * operator-> () const;
+
+protected:
+
+  // Utility to keep track of who should get acquired and released
+  void updateRefCounts ();
+
+private:
+
+  // Current referenced object
+  ReferencedType * _rep;
+
+  // Last known referenced object.  If _rep changes from under us, we
+  // can detect it with this and do the appropriate acquire/release
+  // references.
+  ReferencedType * _lastKnownRep;
+};
+
+
+//
+// Implementations
+//
+
+// Clients may define AAF_SMART_POINTER_ASSERT(condition).  If not
+// client-defined, will use assert().
+//
+#ifndef AAF_SMART_POINTER_ASSERT
+#include <assert.h>
+#define AAF_SMART_POINTER_ASSERT(condition) assert(condition)
+#endif // ! AAF_SMART_POINTER_ASSERT
+
+template <typename ReferencedType, typename RefCountType>
+AAFSmartPointerBase<ReferencedType, RefCountType>::
+AAFSmartPointerBase ()
+  : _rep (0),
+	_lastKnownRep (0)
+{}
+
+
+template <typename ReferencedType, typename RefCountType>
+AAFSmartPointerBase<ReferencedType, RefCountType>::
+AAFSmartPointerBase\
+  (const AAFSmartPointerBase<ReferencedType, RefCountType> & src)
+	: _rep (src._rep),
+	  _lastKnownRep (0) // NULL to make updateRefCounts() work
+{
+  // BobT 1999-07-07: Bug! See comment in updateRefCounts() to see why
+  // we need to addref this one explicitly.
+  if (_rep)
+	acquire(_rep);
+
+  // depends on _lastKnownRep being NULL for proper operation in this
+  // case.
+  updateRefCounts ();
+}  
+
+
+template <typename ReferencedType, typename RefCountType>
+AAFSmartPointerBase<ReferencedType, RefCountType>::
+~AAFSmartPointerBase ()
+{
+  // in case something changed since last time
+  updateRefCounts ();
+
+  // Set _rep to NULL to let updateRefCounts() do the dirty work.
+  _rep = 0;
+  updateRefCounts ();
+}
+
+
+template <typename ReferencedType, typename RefCountType>
+AAFSmartPointerBase<ReferencedType, RefCountType> &
+AAFSmartPointerBase<ReferencedType, RefCountType>::
+operator=
+  (const AAFSmartPointerBase<ReferencedType, RefCountType> & src)
+{
+  // in case something changed since last time
+  updateRefCounts ();
+
+  // Set _rep to NULL to let updateRefCounts() do the dirty work.
+  _rep = 0;
+  updateRefCounts ();
+
+  _rep = src._rep;
+
+  // BobT 1999-07-07: Bug! See comment in updateRefCounts() to see why
+  // we need to addref this one explicitly.
+  if (_rep)
+	acquire(_rep);
+
+  updateRefCounts ();
+
+  return *this;
+}
+  
+
+template <typename ReferencedType, typename RefCountType>
+ReferencedType** AAFSmartPointerBase<ReferencedType, RefCountType>::
+operator & ()
+{
+  // in case something changed since last time
+
+  updateRefCounts ();
+  return &_rep;
+}
+
+
+template <typename ReferencedType, typename RefCountType>
+AAFSmartPointerBase<ReferencedType, RefCountType>::
+operator ReferencedType* ()
+{
+  // in case something changed since last time
+
+  updateRefCounts ();
+  return _rep;
+}
+
+
+template <typename ReferencedType, typename RefCountType>
+AAFSmartPointerBase<ReferencedType, RefCountType>::
+operator ReferencedType* () const
+{
+  // in case something changed since last time
+
+  ((AAFSmartPointerBase<ReferencedType, RefCountType>*)this)->updateRefCounts ();
+  return _rep;
+}
+
+
+template <typename ReferencedType, typename RefCountType>
+ReferencedType* AAFSmartPointerBase<ReferencedType, RefCountType>::
+operator-> ()
+{
+  // in case something changed since last time
+  updateRefCounts ();
+
+  AAF_SMART_POINTER_ASSERT (_rep);
+  return _rep;
+}
+
+template <typename ReferencedType, typename RefCountType>
+const ReferencedType *
+AAFSmartPointerBase<ReferencedType, RefCountType>::
+operator-> () const
+{
+  // in case something changed since last time
+  updateRefCounts ();
+
+  AAF_SMART_POINTER_ASSERT (_rep);
+  return _rep;
+}
+
+
+template <typename ReferencedType, typename RefCountType>
+void AAFSmartPointerBase<ReferencedType, RefCountType>::
+updateRefCounts ()
+{
+  if (_rep != _lastKnownRep)
+	{
+	  // _rep changed since we last knew it.  Release last known
+	  // rep.
+	  if (_lastKnownRep)
+		{
+		  release(_lastKnownRep);
+		}
+	  // Make sure we know what we're pointing to now
+	  _lastKnownRep = _rep;
+	  if (_rep)
+		{
+		  // _rep was changed to something else since we last knew.
+		  // acquire the new one.
+		  //
+		  // BobT 1999-07-07: Bug! operator&() is used when passing a
+		  // smart pointer to GetObject(obj**)-style methods; however
+		  // these typically addref the returned object before they
+		  // return it! So in that case, we *don't* want to acquire a
+		  // reference to it, since it was already done for us.
+		  // Comment out this acquire()...
+		  // acquire(_rep);
+		}
+	}
+}
+
+
+#endif // ! __AAFSmartPointerBase_h__
