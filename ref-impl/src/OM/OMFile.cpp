@@ -58,9 +58,9 @@ OMFile::OMFile(const OMAccessMode mode,
 {
   TRACE("OMFile::OMFile");
 
-  setName("/");
+  setName("<file>");
   _root->setContainingObject(this);
-  _root->setName("head");
+  _root->setName("/");
   _root->setStore(rootStoredObject());
 }
 
@@ -243,7 +243,7 @@ OMStorable* OMFile::restore(void)
 {
   TRACE("OMFile::restore");
 
-  _root = OMStorable::restoreFrom(this, "head", *rootStoredObject());
+  _root = OMStorable::restoreFrom(this, "/", *rootStoredObject());
   return root();
 }
 
