@@ -873,7 +873,7 @@ static void formatError(DWORD errorCode)
     if (length >= 2) {
       message[length - 2] = '\0';
     }
-    cerr << message << endl;
+    cerr << "Error text = \"" << message << "\"" << endl;
   } else {
     cerr << "Error code = " << hex << errorCode << dec << endl;
   }
@@ -952,7 +952,7 @@ static int checkStorage(HRESULT resultCode, const char* storageName)
 
 static void printError(const char* prefix, const char* type)
 {
-  cerr << prefix << ": " << type << ": ";
+  cerr << prefix << " : " << type << " : ";
 }
 
 static void printName(const char* name)
@@ -963,5 +963,8 @@ static void printName(const char* name)
 static void printName(const wchar_t* name)
 {
   TRACE("printName");
-  ASSERT("Code not reached", false);
+  char cName[256];
+
+  convert(cName, 256, name);
+  cerr << "\"" << cName << "\" : ";
 }
