@@ -54,6 +54,15 @@ public:
 	inline operator IUnknownSP ()
 	{ return _spIUnknown; }
 
+
+protected:
+
+	template <class T>
+	void setIUnknown( IAAFSmartPointer<T> sp )
+	{ 
+		AxQueryInterface( sp, _spIUnknown );
+	}
+
 private:
 	IUnknownSP _spIUnknown;
 };
