@@ -31,6 +31,8 @@
 #include "OMAssertions.h"
 
 // class OMStrongReferenceVectorElement
+// @author Tim Bingham | tjb | Avid Technology, Inc. |
+//         OMStrongReferenceVectorElement
 
   // @mfunc Constructor.
 OMStrongReferenceVectorElement::OMStrongReferenceVectorElement(void)
@@ -136,6 +138,8 @@ OMUInt32 OMStrongReferenceVectorElement::localKey(void) const
 }
 
 // class OMStrongReferenceSetElement
+// @author Tim Bingham | tjb | Avid Technology, Inc. |
+//         OMStrongReferenceSetElement
 
   // @mfunc Constructor.
 OMStrongReferenceSetElement::OMStrongReferenceSetElement(void)
@@ -300,6 +304,8 @@ OMUInt32 OMStrongReferenceSetElement::referenceCount(void) const
 }
 
 // class OMWeakReferenceVectorElement
+// @author Tim Bingham | tjb | Avid Technology, Inc. |
+//         OMWeakReferenceVectorElement
 
   // @mfunc Constructor.
 OMWeakReferenceVectorElement::OMWeakReferenceVectorElement(void)
@@ -374,10 +380,10 @@ bool OMWeakReferenceVectorElement::operator== (
   return result;
 }
 
-  // @mfunc Set the value of this <c OMContainerElement>.
-  //   @param TBS.
-  //   @parm A pointer to the new <p ReferencedObject>.
-  //   @rdesc A pointer to previous <p ReferencedObject>, if any.
+  // @mfunc Set the value of this <c OMWeakReferenceVectorElement>.
+  //   @parm TBS
+  //   @parm A pointer to the new <c OMStorable>.
+  //   @rdesc A pointer to previous <c OMStorable>, if any.
 OMStorable* OMWeakReferenceVectorElement::setValue(
                             const OMUniqueObjectIdentification& identification,
                             const OMStorable* value)
@@ -399,6 +405,8 @@ OMWeakReferenceVectorElement::identification(void) const
 }
 
 // class OMWeakReferenceSetElement
+// @author Tim Bingham | tjb | Avid Technology, Inc. |
+//         OMWeakReferenceSetElement
 
   // @mfunc Constructor.
 OMWeakReferenceSetElement::OMWeakReferenceSetElement(void)
@@ -472,12 +480,11 @@ bool OMWeakReferenceSetElement::operator== (
   return result;
 }
 
-  // @mfunc Set the value of this <c OMContainerElement>.
+  // @mfunc Set the value of this <c OMWeakReferenceSetElement>.
   //   @parm TBS
   //   @parm A pointer to the new <c OMStorable>.
   //   @rdesc A pointer to previous <c OMStorable>, if any.
-OMStorable*
-OMWeakReferenceSetElement::setValue(
+OMStorable* OMWeakReferenceSetElement::setValue(
                             const OMUniqueObjectIdentification& identification,
                             const OMStorable* value)
 {
