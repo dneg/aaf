@@ -27,8 +27,9 @@ CAAFEssenceDataStream::CAAFEssenceDataStream (IUnknown * pControllingUnknown)
 
 CAAFEssenceDataStream::~CAAFEssenceDataStream ()
 {
-	if(_data == NULL)
+	if(_data != NULL)
 		_data->Release();
+	_data = NULL;
 }
 
 HRESULT STDMETHODCALLTYPE
