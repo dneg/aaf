@@ -99,9 +99,18 @@ inline bool operator!=( const tagGUID& uidL, const tagGUID& uidR )
 // data member so that a buffer pointer and its size can travel
 // together.
 
+// FIXME - The auto_ptr data member is declared mutable because SGI's
+// compiler will not recognize the copy constructor and assignment
+// operator if the const declaration is not used.  This should be
+// fixed.  The copy constructor and assignment operator should not
+// require a const reference.
+
 template <class T>
 class AxBuffer {
 public:
+
+        AxBuffer()
+        {}
 
 	// Size should be be in units of sizeof(T).
 	AxBuffer( std::auto_ptr<T> ptr,  int size )
@@ -109,15 +118,15 @@ public:
 		  _size( size )
 	{}
 
-	AxBuffer( AxBuffer<T>& other )
+	AxBuffer( const AxBuffer& other )
 		: _ptr( other._ptr ),
 		  _size( other._size )
 	{}
-	
+
 	~AxBuffer()
 	{}
 
-	AxBuffer<T>& operator=( const AxBuffer<T>& rhs )
+	AxBuffer& operator=( const AxBuffer& rhs )
 	{
 		if ( this != &rsh ) {
 			_ptr = rhs._ptr;
@@ -139,9 +148,11 @@ public:
 	}
 
 private:
-	std::auto_ptr<T> _ptr;
+	mutable std::auto_ptr<T> _ptr;
 	int _size;
 };
 
 
 #endif
+
+

@@ -30,7 +30,7 @@
 
 #include "ParamMaps.h"
 
-#include <AxFileGen.h>
+#include <axFileGen.h>
 
 #include <AAFContainerDefs.h>
 #include <AAFCodecDefs.h>
@@ -95,6 +95,7 @@ AxString ParamMap<Type,Tag>::GenerateNameList()
 //=---------------------------------------------------------------------=
 //=---------------------------------------------------------------------=
 
+template <>
 ParamMap< aafUID_t, _ContainerDefsTag >::ParamMap()
 {
 	_map[ L"ContainerAAF" ]  = ContainerAAF;
@@ -106,6 +107,7 @@ template class ParamMap< aafUID_t, _ContainerDefsTag >;
 
 //=---------------------------------------------------------------------=
 
+template <>
 ParamMap< aafCompressEnable_t, aafCompressEnable_e >::ParamMap()
 {
 	_map[ L"kAAFCompressionEnable" ]      = kAAFCompressionEnable;
@@ -122,6 +124,7 @@ template class ParamMap< aafCompressEnable_t, aafCompressEnable_e >;
 
 //=---------------------------------------------------------------------=
 
+template <>
 ParamMap< aafUID_t, _CodecIDTag >::ParamMap()
 {
 	_map[ L"kAAFNoCodec" ]         = kAAFNoCodec;
@@ -154,6 +157,7 @@ template class ParamMap< aafUID_t, _CodecIDTag >;
 
 //=---------------------------------------------------------------------=
 
+template <>
 ParamMap< aafTapeCaseType_t, aafTapeCaseType_e >::ParamMap()
 {
 	_map[ L"kAAFTapeCaseNull"]              = kAAFTapeCaseNull;
@@ -192,6 +196,7 @@ template class ParamMap< aafTapeCaseType_t, aafTapeCaseType_e >;
 
 //=---------------------------------------------------------------------=
 
+template <>
 ParamMap< aafVideoSignalType_t, aafVideoSignalType_e >::ParamMap()
 {
 	_map[ L"kAAFVideoSignalNull" ] = kAAFVideoSignalNull;
@@ -215,6 +220,7 @@ template class ParamMap< aafVideoSignalType_t, aafVideoSignalType_e >;
 
 //=---------------------------------------------------------------------=
 
+template <>
 ParamMap< aafTapeFormatType_t, aafTapeFormatType_e >::ParamMap()
 {
 	_map[ L"kAAFTapeFormatNull" ]	= kAAFTapeFormatNull;
@@ -250,6 +256,7 @@ template class ParamMap< aafTapeFormatType_t, aafTapeFormatType_e >;
 
 //=---------------------------------------------------------------------=
 
+template <>
 ParamMap< aafUID_t, _DDefTag >::ParamMap()
 {
 	_map[ L"DDEF_Picture" ]          = DDEF_Picture;
@@ -278,6 +285,7 @@ template class ParamMap< aafUID_t, _DDefTag >;
 
 //=---------------------------------------------------------------------=
 
+template <>
 ParamMap< aafFrameLayout_t, aafFrameLayout_e >::ParamMap()
 {
 	_map[ L"kAAFFullFrame" ]      = kAAFFullFrame;
@@ -297,6 +305,7 @@ template class ParamMap< aafFrameLayout_t, aafFrameLayout_e >;
 
 //=---------------------------------------------------------------------=
 
+template <>
 ParamMap< aafColorSpace_t, aafColorSpace_e >::ParamMap()
 {
  	_map[ L"kAAFColorSpaceRGB" ]   = kAAFColorSpaceRGB;
@@ -336,6 +345,7 @@ template class ParamMap< aafColorSpace_t, aafColorSpace_e >;
 
 //=---------------------------------------------------------------------=
 
+template <>
 ParamMap< aafPixelFormat_t, aafPixelFormat_e >::ParamMap()
 {
 	_map[ L"kAAFPixNone" ] = kAAFPixNone;
@@ -355,6 +365,7 @@ template class ParamMap< aafPixelFormat_t, aafPixelFormat_e >;
 
 //=---------------------------------------------------------------------=
 
+template <>
 ParamMap< aafDropType_t, aafDropType_e >::ParamMap()
 {
 	_map[ L"kAAFTcNonDrop" ] = kAAFTcNonDrop;
@@ -370,6 +381,7 @@ template class ParamMap< aafDropType_t, aafDropType_e >;
 
 //=---------------------------------------------------------------------=
 
+template <>
 ParamMap< aafBoolean_t, aafBoolean_e >::ParamMap()
 {
 	_map[ L"kAAFFalse" ] = kAAFFalse;
@@ -387,6 +399,7 @@ template class ParamMap< aafBoolean_t, aafBoolean_e >;
 
 //=---------------------------------------------------------------------=
 
+template <>
 ParamMap< aafUID_t, _OperationDefTag >::ParamMap()
 {
 

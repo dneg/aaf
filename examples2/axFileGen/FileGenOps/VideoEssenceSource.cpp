@@ -120,7 +120,7 @@ inline aafUInt32 rgb_pixel_to_ycrcb( aafUInt32 val )
 	cb = (unsigned char)( 128.0 + ( -44.182*r -  86.740*g + 130.922*b )/256.0 );
 	cr = (unsigned char)( 128.0 + ( 130.922*r - 109.631*g -  21.291*b )/256.0 );
 
-	return pack32( r, g, b );
+	return pack32( y, cb, cr );
 }
 
 // Convert one line of pixels
@@ -160,7 +160,7 @@ void convert_line_444yuvx_to_422uyvy( aafUInt32* yuv,
 
 }
 
-convert_rgbx_to_yuv422( int width, int height, int stride, aafUInt8* rgbxBuf,
+void convert_rgbx_to_yuv422( int width, int height, int stride, aafUInt8* rgbxBuf,
 						int& convertedBufSize, aafUInt8*& convertedBuf )
 {
 	int uyvyBufStride = width*4/2;             // 2 pixels fit in 4 in bytes
@@ -191,7 +191,7 @@ convert_rgbx_to_yuv422( int width, int height, int stride, aafUInt8* rgbxBuf,
 	convertedBuf = reinterpret_cast<aafUInt8*>(uyvyBuf);
 }
 
-convert_rgbx_to_yuvx4444( int width, int height, int stride, aafUInt8* rgbxBuf,
+void convert_rgbx_to_yuvx4444( int width, int height, int stride, aafUInt8* rgbxBuf,
 						int& convertedBufSize, aafUInt8*& convertedBuf )
 {
 	int uyvyBufStride = width*4;             // in bytes

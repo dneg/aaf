@@ -16,7 +16,7 @@
 // 
 //=---------------------------------------------------------------------=
 
-#include "AxFileGen.h"
+#include "axFileGen.h"
 
 #include <AxFile.h>
 #include <AxHeader.h>
@@ -523,7 +523,6 @@ void FileCmd::ReadFile( const char* fileName )
 
 	// Various parser state variables.
 	bool quote_on = false;
-	bool string_on = false;
 	bool start_new_line = true;
 	bool start_new_string = true;
 	bool comment_on = false;
@@ -532,9 +531,9 @@ void FileCmd::ReadFile( const char* fileName )
 	char look_ahead_two;
 	char c;
 
-	for( c = ::getc(fp), look_ahead_one = ::getc(fp), look_ahead_two = ::getc(fp);
+	for( c = getc(fp), look_ahead_one = getc(fp), look_ahead_two = getc(fp);
 		 c != EOF;
-		 c = look_ahead_one, look_ahead_one = look_ahead_two, look_ahead_two = ::getc( fp ) ) {
+		 c = look_ahead_one, look_ahead_one = look_ahead_two, look_ahead_two = getc( fp ) ) {
 
 		if ( !isascii(c) ) {
 			throw AxFGEx( L"Found non ascii character." );
@@ -577,7 +576,6 @@ void FileCmd::ReadFile( const char* fileName )
 
 				// Reset all state.
 				quote_on = false;
-				string_on = false;
 				start_new_string = true;
 				comment_on = false;
 			}
@@ -598,7 +596,6 @@ void FileCmd::ReadFile( const char* fileName )
 
 			// Reset all state.
 			quote_on = false;
-			string_on = false;
 			start_new_string = true;
 
 			if ( !escaped_comment_on ) {
@@ -619,7 +616,6 @@ void FileCmd::ReadFile( const char* fileName )
 		// start of quoted string
 		else if ( !quote_on && c == '"' ) {
 			quote_on = true;
-			string_on = true;
 			start_new_string = true;
 			continue;
 		}
@@ -627,12 +623,10 @@ void FileCmd::ReadFile( const char* fileName )
 		// end of quoted string
 		else if ( quote_on && c == '"' ) {
 			quote_on = false;
-			string_on = false;
 			start_new_string = true;
 			continue;
 		}
 		else if ( !quote_on && c == '#' ) {
-			string_on = false;
 			start_new_string = true;
 			start_new_line = true;
 			comment_on = true;
@@ -642,7 +636,6 @@ void FileCmd::ReadFile( const char* fileName )
 			// If c is white space, and we're not in midst of a quoted
 			// string, then skip it.
 			if ( isspace( c ) && !quote_on ) {
-				string_on = false;
 				start_new_string = true;
 				continue;
 			}
@@ -659,7 +652,6 @@ void FileCmd::ReadFile( const char* fileName )
 				start_new_string = false;
 			}
 
-			string_on = true;
 			_cmdlines.back().back().insert( _cmdlines.back().back().end() , c );
 		}		  
 	}

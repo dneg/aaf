@@ -40,12 +40,12 @@ class ParamMap {
 public:
 
 	typedef std::map<AxString, Type> MapType;
-	typedef std::map<AxString, Type>::iterator MapIterType;
+	typedef typename std::map<AxString, Type>::iterator MapIterType;
 
 	static ParamMap& GetInstance();
 		
-	// The AxFGOp& is used to build a meaning message in 
-	// event an exception is thrown.
+	// The AxFGOp& is used to build a meaningful message in 
+	// the event an exception is thrown.
 	// FIXME - Perhaps AxFGOps& not such a good idea. 
 	// These maps could be used outside of axFileGen.
 	Type Find( AxFGOp& op, const AxString& name );

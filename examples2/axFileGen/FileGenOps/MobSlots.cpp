@@ -20,10 +20,10 @@
 
 #include <axFileGen.h>
 
-#include <axDictionary.h>
-#include <axMob.h>
-#include <axMobSlot.h>
-#include <axIterator.h>
+#include <AxDictionary.h>
+#include <AxMob.h>
+#include <AxMobSlot.h>
+#include <AxIterator.h>
 
 namespace {
 

@@ -21,44 +21,44 @@
 ###############################################################################
 
 PACKAGE = axExamples
+export PACKAGE
 
-AAFBASE ?= ../..
+AAFBASE ?= ../../..
 
 ifeq ($(shell uname), IRIX)
 # Warnings turned off:
 # 1107 - signed bit field has length of 1 bit in various stl files
 # 1682 - partial overide of AxPropertyValuePrtcl::process
 MODULE_PLATFORM_CFLAGS = -LANG:std -woff 1107,1682
-LIBCIO = -lCio
 endif
 
 # Common definitions
 include $(AAFBASE)/build/common.mk
 
-# Include directories
-INCLUDES = -I$(AAFSDKINCLUDEDIR) \
-	   -I../axLib
-
-BINTARGET = $(AAFSDKBINDIR)/$(PROGNAME)$(EXE)
+INCLUDES = -I../../axLib -I.. \
+	   -I$(AAFSDKINCLUDEDIR)
 
 .PHONY : all
-all : $(OBJDIR) $(BINTARGET)
+all : axFileGenOps
 
-$(BINTARGET) : $(CXXOBJS) $(AXPROGRAM_ADDITIONAL_DEPENDS)
-	$(LD) $(CXXOBJS) $(RPATH_OPT) \
-	-L$(AAFSDKLIBDIR) -L$(OBJDIR) $(AXPROGRAM_LD_OPTIONS) -laxLib -laaflib -laafiid $(LIBCIO) -o $@
+
+.PHONY : axFileGenOps
+axFileGenOps : $(OBJDIR) $(LIBDIR) $(LIBDIR)/libaxFileGenOps$(LIB)
+
+
+$(LIBDIR)/libaxFileGenOps$(LIB) : $(CXXOBJS)
+	$(LD_STAT_LIB) $@ $(CXXOBJS)
+
 
 .PHONY : clean
-clean ::
+clean :
 	@$(RM) $(CXXOBJS)
 	@$(RM) $(DEPS)
-	@$(RM) $(BINTARGET)
+	@$(RM) $(LIBDIR)/libaxFileGenOps$(LIB)
 	@$(RMDIR) $(OBJDIR)/ii_files
 
-
 .PHONY : realclean
-realclean :: clean
-
+realclean : clean
 
 include $(AAFBASE)/build/rules.mk
 

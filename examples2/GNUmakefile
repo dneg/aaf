@@ -48,6 +48,10 @@ axPluginInfo:
 axPlugin:
 	cd axPlugin && $(MAKE)
 
+.PHONY: axPlugin
+axFileGen:
+	cd axFileGen && $(MAKE)
+
 .PHONY: clean
 clean:
 	cd axLib && $(MAKE) GENDEPS=0 $@
@@ -56,6 +60,7 @@ clean:
 	cd axMasterMobEx && $(MAKE) GENDEPS=0 $@
 	cd axPluginInfo && $(MAKE) GENDEPS=0 $@
 	cd axPlugin && $(MAKE) GENDEPS=0 $@
+	cd axFileGen && $(MAKE) GENDEPS=0 $@
 
 .PHONY:  realclean
 realclean:
@@ -65,6 +70,4 @@ realclean:
 	cd axMasterMobEx && $(MAKE) GENDEPS=0 $@
 	cd axPluginInfo && $(MAKE) GENDEPS=0 $@
 	cd axPlugin && $(MAKE) GENDEPS=0 $@
-
-
-
+	cd axFileGen && $(MAKE) GENDEPS=0 $@

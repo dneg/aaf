@@ -50,7 +50,7 @@ public:
 	// Access the COM object created by this object.  Query to ComType is
 	// automatic.
 	template <class ComType>
-	GetCOM( IAAFSmartPointer<ComType>& dstPtr )
+	void GetCOM( IAAFSmartPointer<ComType>& dstPtr )
 	{
 		AxQueryInterface( _spIUnknown, dstPtr );
 	}
@@ -79,7 +79,7 @@ protected:
     virtual ~AxFGOp();
 
 	template <class ComType>
-	SetCOM( IAAFSmartPointer<ComType> spComType ) 
+	void SetCOM( IAAFSmartPointer<ComType> spComType ) 
 	{
 		AxQueryInterface( spComType, _spIUnknown ); 
 	}
@@ -145,7 +145,7 @@ private:
 //=---------------------------------------------------------------------=
 
 template <class OpType>
-class AxFGStandardOpFactory : AxFGOpFactory {
+class AxFGStandardOpFactory : public AxFGOpFactory {
 public:
 
 	AxFGStandardOpFactory( const AxString& name,
@@ -212,14 +212,14 @@ AxFGStandardOpFactory<TYPE> PREFIX##_Factory( \
 // The class must implement the following:
 //		AxString GetName() const
 
-// FIXME - Remoe the GetName() requirement.  It is not necessary... just burdensom for
-// AxFGOp.
+// FIXME - Remove the GetName() requirement.  It is not
+// necessary... just burdensome for AxFGOp.
 
 template <class T>
 class AxFGRegistry {
 
    typedef std::map<AxString,T*> MapType;
-   typedef std::map<AxString,T*>::iterator MapIterType;
+   typedef typename std::map<AxString,T*>::iterator MapIterType;
 
 public:
 

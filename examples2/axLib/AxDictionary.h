@@ -79,7 +79,7 @@ template <class Type>
 void AxCreateInstance( AxDictionary& dict,
 	    	           IAAFSmartPointer<Type>& sp )
 {
-	Type* dummy;
+        Type* dummy = 0;
 
 	IUnknownSP spIUnknown = dict.CreateInstance( AxAUID(dummy), AxIID(dummy) );
 	AxQueryInterface( spIUnknown, sp );

@@ -16,7 +16,7 @@
 // 
 //=---------------------------------------------------------------------=
 
-#include <AxFileGen.h>
+#include <axFileGen.h>
 
 #include "SampleSource.h"
 

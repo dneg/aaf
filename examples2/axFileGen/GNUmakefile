@@ -20,45 +20,23 @@
 #
 ###############################################################################
 
-PACKAGE = axExamples
 
-AAFBASE ?= ../..
+PROGNAME = axFileGen
 
-ifeq ($(shell uname), IRIX)
-# Warnings turned off:
-# 1107 - signed bit field has length of 1 bit in various stl files
-# 1682 - partial overide of AxPropertyValuePrtcl::process
-MODULE_PLATFORM_CFLAGS = -LANG:std -woff 1107,1682
-LIBCIO = -lCio
-endif
+AXPROGRAM_LD_OPTIONS=-laxFileGenOps
+AXPROGRAM_ADDITIONAL_DEPENDS=FileGenOps
 
-# Common definitions
-include $(AAFBASE)/build/common.mk
-
-# Include directories
-INCLUDES = -I$(AAFSDKINCLUDEDIR) \
-	   -I../axLib
-
-BINTARGET = $(AAFSDKBINDIR)/$(PROGNAME)$(EXE)
-
-.PHONY : all
-all : $(OBJDIR) $(BINTARGET)
-
-$(BINTARGET) : $(CXXOBJS) $(AXPROGRAM_ADDITIONAL_DEPENDS)
-	$(LD) $(CXXOBJS) $(RPATH_OPT) \
-	-L$(AAFSDKLIBDIR) -L$(OBJDIR) $(AXPROGRAM_LD_OPTIONS) -laxLib -laaflib -laafiid $(LIBCIO) -o $@
+.PHONY: FileGenOps
+FileGenOps:
+	cd FileGenOps && $(MAKE)
 
 .PHONY : clean
 clean ::
-	@$(RM) $(CXXOBJS)
-	@$(RM) $(DEPS)
-	@$(RM) $(BINTARGET)
-	@$(RMDIR) $(OBJDIR)/ii_files
-
+	cd FileGenOps && $(MAKE) clean
 
 .PHONY : realclean
 realclean :: clean
 
+include ../axexamplerules.mk
 
-include $(AAFBASE)/build/rules.mk
 

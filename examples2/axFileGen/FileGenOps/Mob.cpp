@@ -31,7 +31,7 @@ namespace {
 
 //=---------------------------------------------------------------------=
 
-AXFG_OP(,
+AXFG_OP(
   AppendTimelineMobSlot,
   L"AppendTimelineMobSlot",
   L"Create a new mob slot and add to the mob at the specified slot..",
@@ -76,7 +76,7 @@ void AppendTimelineMobSlot::Execute( const std::vector<AxString>& argv )
 
 //=---------------------------------------------------------------------=
 
-AXFG_OP(,
+AXFG_OP(
   LookupSourceID,
   L"LookupSourceID",
   L"Get the the source ID from a source clip, and lookup the identified mob.",

@@ -16,6 +16,8 @@
 // 
 //=---------------------------------------------------------------------=
 
+#if 0
+
 #include <axFileGen.h>
 
 namespace {
@@ -68,3 +70,4 @@ void OPNAME::Execute( const std::vector<AxString>& args )
 } // end of namespace
 
 
+#endif
