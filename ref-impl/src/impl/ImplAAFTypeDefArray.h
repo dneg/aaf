@@ -58,6 +58,15 @@ public:
 
 
   //****************
+  // CreateEmptyValue()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    CreateEmptyValue
+        (// @parm [out] newly-created property empty value,
+         ImplAAFPropertyValue ** ppPropVal);
+
+
+  //****************
   // CreateValueFromValues()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
