@@ -62,7 +62,6 @@
 #include "ImplAAFObjectCreation.h"
 #include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
-//#include "OMProperty.h"
 #include "OMPropertyDefinition.h"
 #include "AAFUtils.h"
 
