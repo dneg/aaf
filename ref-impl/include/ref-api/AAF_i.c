@@ -43,7 +43,7 @@ extern "C"{
 
 typedef struct _IID
 {
-    unsigned long x;
+    unsigned int x;
     unsigned short s1;
     unsigned short s2;
     unsigned char  c[8];

@@ -82,13 +82,13 @@ typedef signed char aafInt8;
 
 typedef short aafInt16;
 
-typedef long aafInt32;
+typedef int aafInt32;
 
 typedef unsigned char aafUInt8;
 
 typedef unsigned short aafUInt16;
 
-typedef unsigned long aafUInt32;
+typedef unsigned int aafUInt32;
 
 typedef hyper aafInt64;
 
