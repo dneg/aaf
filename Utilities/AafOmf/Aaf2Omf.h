@@ -57,19 +57,22 @@ private:
 	HRESULT TraverseMob(IAAFMob* pMob, OMF2::omfMobObj_t* pOMFMob);
 	HRESULT ProcessComponent(IAAFComponent* pComponent, OMF2::omfObject_t* pOMFSegment);
 	HRESULT ConvertAAFDatadef(aafUID_t Datadef, OMF2::omfDDefObj_t* pDatakind);
-	HRESULT GetUniqueNameFromAUID(aafUID_t Datadef, OMF2::omfUniqueNamePtr_t UniqueName);
+	HRESULT ConvertAAFTypeIDDatakind(aafUID_t, OMF2::omfDDefObj_t* pDatakind);
+	HRESULT GetEffectIDsFromAUID(aafUID_t Datadef, OMF2::omfUniqueNamePtr_t effectID, OMF2::omfUniqueNamePtr_t MCEffectID);
 	HRESULT TraverseSequence(IAAFSequence* pSequence, OMF2::omfObject_t* pOMFSequence );
 	HRESULT ConvertSelector(IAAFSelector* pSelector, OMF2::omfObject_t* pOMFSelector );
 	HRESULT ConvertLocator(IAAFEssenceDescriptor* pEssenceDesc, OMF2::omfMobObj_t*	pOMFSourceMob );
 	HRESULT ConvertEssenceDataObject(IAAFEssenceData* pEssenceData);
 	HRESULT ConvertEffects(IAAFOperationGroup* pEffect, OMF2::omfEffObj_t*	pOMFEffect);
+	HRESULT ConvertParameter(IAAFParameter* pParm, OMF2::omfSegObj_t pOMFEffect, OMF2::omfInt32 slotNum, OMF2::omfLength_t effectLen);
+	HRESULT UpdateKeyFrameVVAL(IAAFControlPoint* controlPoint, OMF2::omfSegObj_t vval, OMF2::omfRational_t time, aafInt32 destValueLen, OMF2::omfEditHint_t editHint, OMF2::omfDDefObj_t dataKind);
 
 private:
 
     OMF2::omfSessionHdl_t	OMFSession;
 	OMF2::omfHdl_t			OMFFileHdl;
 	OMF2::omfFileRev_t		OMFFileRev;
-
+	OMF2::omfProperty_t		privateEffectProp;
 	IAAFFile*				pFile;
 	IAAFHeader*				pHeader;
 	IAAFDictionary*			pDictionary;
