@@ -131,6 +131,10 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFClassFactory.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFCodecDef.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFCommentMarker.cpp"
 # End Source File
 # Begin Source File
@@ -144,6 +148,10 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFCompositionMob.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFConstValue.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFContainerDef.cpp"
 # End Source File
 # Begin Source File
 
@@ -323,6 +331,22 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFParameterDef.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFPluggableCode.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFPluggableDef.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFPluginDescriptor.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFPluginManager.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFProperty.cpp"
 # End Source File
 # Begin Source File
@@ -459,6 +483,10 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFClassDefs.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFCodecFlavours.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFComponents.cpp"
 # End Source File
 # Begin Source File
@@ -487,6 +515,10 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFIdentifications.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFLoadedPlugins.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFLocators.cpp"
 # End Source File
 # Begin Source File
@@ -504,6 +536,14 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFMobSlots.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFParameterDefs.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFPluginDescriptors.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFPluginLocators.cpp"
 # End Source File
 # Begin Source File
 

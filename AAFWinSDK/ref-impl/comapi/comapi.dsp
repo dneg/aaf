@@ -149,6 +149,10 @@ SOURCE="..\..\..\ref-impl\src\com-api\com-dll\CAAFClassFactory.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFCodecDef.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFCommentMarker.cpp"
 # End Source File
 # Begin Source File
@@ -178,6 +182,10 @@ SOURCE="..\..\..\ref-impl\src\com-api\CAAFConstValue.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFConstValueTest.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFContainerDef.cpp"
 # End Source File
 # Begin Source File
 
@@ -543,6 +551,22 @@ SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFParameterTest.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFPluggableCode.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFPluggableDef.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFPluginDescriptor.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFPluginManager.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFProperty.cpp"
 # End Source File
 # Begin Source File
@@ -815,6 +839,10 @@ SOURCE="..\..\..\ref-impl\src\com-api\test\CEnumAAFClassDefsTest.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFCodecFlavours.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFComponents.cpp"
 # End Source File
 # Begin Source File
@@ -871,6 +899,10 @@ SOURCE="..\..\..\ref-impl\src\com-api\test\CEnumAAFIdentificationsTest.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFLoadedPlugins.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFLocators.cpp"
 # End Source File
 # Begin Source File
@@ -908,6 +940,14 @@ SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFParameterDefs.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\com-api\test\CEnumAAFParameterDefsTest.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFPluginDescriptors.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFPluginLocators.cpp"
 # End Source File
 # Begin Source File
 
