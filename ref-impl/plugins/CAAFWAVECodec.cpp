@@ -83,7 +83,7 @@ HRESULT STDMETHODCALLTYPE
 HRESULT STDMETHODCALLTYPE
     CAAFWaveCodec::GetEssenceDataID (aafUID_t *uid)
 {
-	*uid = AUID_AAFWAVEData;		// stored class UID of the WAVE data object
+	*uid = AUID_AAFEssenceData;			// stored class UID of the WAVE data object
 	return AAFRESULT_SUCCESS;
 }
 
