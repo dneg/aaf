@@ -164,7 +164,7 @@ AAFRESULT STDMETHODCALLTYPE
 			RAISE(AAFRESULT_INVALID_DATADEF);
 		
 		status = GetLength(&sequLen);
-		if(status == AAFRESULT_BAD_PROP)
+		if(status == AAFRESULT_PROP_NOT_PRESENT /*AAFRESULT_BAD_PROP ???*/)
 			sequLen = 0;
 		else
 		{
@@ -181,13 +181,13 @@ AAFRESULT STDMETHODCALLTYPE
 		// 4) Sequence has a length, component does NOT have a length
 		//		Add zero-length component and set length on the sequence
 		sclpStatus = pComponent->GetLength(&cpntLen);
-		if(sclpStatus == AAFRESULT_BAD_PROP && status == AAFRESULT_SUCCESS)
+		if(sclpStatus == AAFRESULT_PROP_NOT_PRESENT /*AAFRESULT_BAD_PROP ???*/ && status == AAFRESULT_SUCCESS)
 		{
 			// Case #4
 			sequLen = 0;
 			sclpStatus = AAFRESULT_SUCCESS;
 		}
-		if(sclpStatus != AAFRESULT_BAD_PROP)
+		if(sclpStatus != AAFRESULT_PROP_NOT_PRESENT /*AAFRESULT_BAD_PROP??? */)
 		{
 			// Make it here on cases #1, #3, and #4
 			CHECK(sclpStatus);
