@@ -303,11 +303,8 @@ private:
 };
 
   // @class Elements of Object Manager reference vectors.
-  //   @tcarg class | ReferencedObject | The type of the referenced
-  //          object. This type must be a descendant of <c OMStorable>.
   //   @base public | <c OMContainerElement>
   //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
-template <typename ReferencedObject>
 class OMWeakReferenceVectorElement : public
                                     OMContainerElement<OMWeakObjectReference> {
 public:
@@ -322,8 +319,7 @@ public:
                                OMPropertyTag targetTag);
 
     // @cmember Copy constructor.
-  OMWeakReferenceVectorElement(
-                    const OMWeakReferenceVectorElement<ReferencedObject>& rhs);
+  OMWeakReferenceVectorElement(const OMWeakReferenceVectorElement& rhs);
 
     // @cmember Destructor.
   ~OMWeakReferenceVectorElement(void);
@@ -331,17 +327,17 @@ public:
     // @cmember Assignment.
     //          This operator provides value semantics for <c OMVector>.
     //          This operator does not provide assignment of object references.
-  OMWeakReferenceVectorElement<ReferencedObject>& operator=(
-                    const OMWeakReferenceVectorElement<ReferencedObject>& rhs);
+  OMWeakReferenceVectorElement& operator=(
+                                      const OMWeakReferenceVectorElement& rhs);
 
     // @cmember Equality.
     //          This operator provides value semantics for <c OMVector>.
     //          This operator does not provide equality of object references.
-  bool operator== (
-              const OMWeakReferenceVectorElement<ReferencedObject>& rhs) const;
+  bool operator== (const OMWeakReferenceVectorElement& rhs) const;
 
     // @cmember Set the value of this <c OMWeakReferenceVectorElement>.
-  ReferencedObject* setValue(const ReferencedObject* value);
+  OMStorable* setValue(const OMUniqueObjectIdentification& identification,
+                       const OMStorable* value);
 
     // @cmember The unique key of this <c OMWeakReferenceVectorElement>.
   OMUniqueObjectIdentification identification(void) const;

@@ -237,10 +237,19 @@ OMWeakReferenceVectorIterator<ReferencedObject>::setValue(
 {
   TRACE("OMWeakReferenceVectorIterator<ReferencedObject>::setValue");
 
+  OMUniqueObjectIdentification id = nullOMUniqueObjectIdentification;
+  if (newObject != 0) {
+    id = newObject->identification();
+  }
+
   VectorElement& element = _iterator.value();
 
-  ReferencedObject* result = element.setValue(newObject);
-
+  ReferencedObject* result = 0;
+  OMStorable* p = element.setValue(id, newObject);
+  if (p != 0) {
+    result = dynamic_cast<ReferencedObject*>(p);
+    ASSERT("Object is correct type", result != 0);
+  }
   return result;
 }
 
@@ -258,8 +267,12 @@ OMWeakReferenceVectorIterator<ReferencedObject>::clearValue(void)
 
   VectorElement& element = _iterator.value();
 
-  ReferencedObject* result = element.setValue(0);
-
+  ReferencedObject* result = 0;
+  OMStorable* p = element.setValue(nullOMUniqueObjectIdentification, 0);
+  if (p != 0) {
+    result = dynamic_cast<ReferencedObject*>(p);
+    ASSERT("Object is correct type", result != 0);
+  }
   return result;
 }
 
