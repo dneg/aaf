@@ -154,11 +154,11 @@ STDMETHODIMP CAAFModuleTest::Test
 
 			testResults[testCount] = AAFObjectMap[testCount].pfnTestProc();
 			if ( AAFRESULT_SUCCESS == testResults[testCount] )
-				cout<< "SUCCEEDED." << endl;		
-			else if ( FAILED(testResults[testCount]) )
-				cout<< "FAILED" << endl;
+				cout<< "SUCCEEDED." << endl;
 			else if ( AAFRESULT_NOT_IMPLEMENTED == testResults[testCount] )
 				cout<< "NOT IMPLEMENTED!" << endl;
+			else if ( FAILED(testResults[testCount]) )
+				cout<< "FAILED" << endl;
 			else
 				cout<< "UNKNOWN HRESULT!" << endl;
 
@@ -172,9 +172,9 @@ STDMETHODIMP CAAFModuleTest::Test
 		{
 			if (AAFRESULT_SUCCESS == testResults[index])
 				++passCount;
-			if (AAFRESULT_NOT_IMPLEMENTED == testResults[index])
+			else if (AAFRESULT_NOT_IMPLEMENTED == testResults[index])
 				++nImplCount;
-			if (0 > testResults[index])
+			else if (0 > testResults[index])
 				++failCount;
 		}
 		runCount = passCount + nImplCount + failCount;
