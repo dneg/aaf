@@ -105,7 +105,7 @@ HRESULT C.this-module::test()
 #error - improperly defined include guard
 #endif
 
-#include <ostream.h>
+#include <iostream.h>
 
 HRESULT C.this-module::test()
 {
