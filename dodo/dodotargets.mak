@@ -19,6 +19,7 @@ include aafobjects.mk
 targets.mk : aafobjects.mk
 	@ $(ECHO) Creating targets.mk ...
 	$(CP)  aafobjects.mk tmp.sh
+	$(CHMOD) a+w tmp.sh
 	$(CAT) GenTargets.sh >> tmp.sh
 	sh tmp.sh > targets.tmp
 	@ $(MV) targets.tmp targets.mk
