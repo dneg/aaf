@@ -34,10 +34,9 @@
 #define CLSID_AAFDataDefinition CLSID_AAFDataDef
 #define CLSID_AAFDefinitionObject CLSID_AAFDefObject
 #define CLSID_AAFEdgeCode CLSID_AAFEdgecode
-#define CLSID_AAFEffectDefinition CLSID_AAFEffectDef
+#define CLSID_AAFOperationDefinition CLSID_AAFOperationDef
 #define CLSID_AAFEssenceGroup CLSID_AAFMediaGroup
 #define CLSID_AAFFilmDescriptor CLSID_AAFMediaFilmDescriptor
-#define CLSID_AAFEffect CLSID_AAFEffect
 #define CLSID_AAFInterchangeObject CLSID_AAFObject
 #define CLSID_AAFJPEGImageData CLSID_AAFJPEGData
 #define CLSID_AAFMIDIFileData CLSID_AAFMIDIData

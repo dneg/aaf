@@ -1,5 +1,5 @@
 #startm .this-module 0
-AAFEffectDef\
+AAFOperationDef\
 #endm
 #c
 #startm .parent-module 0
@@ -8,10 +8,10 @@ AAFDefObject\
 #c
 AD_HEAD
 AD_IDL(//
-// The IAAFEffectDef interface is implemented by objects that specify an
-// effect definition.  Effect definitions specify which parameters are possible
-// on an effect\, while an IAAFEffect specifies specific parameters and input segments
-// for a particular effect invocation.
+// The IAAFOperationDef interface is implemented by objects that specify an
+// operation definition.  Operation definitions specify which parameters are possible
+// on an operation\, while an IAAFOperationGroup specifies specific parameters and input segments
+// for a particular operation invocation.
 //
 // In addition to the specific error results listed for each method\,
 // all methods in this interface may also return one of the following
@@ -26,7 +26,7 @@ AD_FORWARD_DECLARATION(AAFParameterDef)
 AD_FORWARD_DECLARATION(AAFLocator)
 AD_FORWARD_DECLARATION(EnumAAFLocators)
 AD_FORWARD_DECLARATION(EnumAAFParameterDefs)
-AD_FORWARD_DECLARATION(EnumAAFEffectDefs)
+AD_FORWARD_DECLARATION(EnumAAFOperationDefs)
 AD_FORWARD_DECLARATION(AAFDataDef)
 
 
@@ -50,7 +50,7 @@ AD_XMETHOD1(GetDataDefinitionID,
 			aafUID_t *,
 			ppDataDef,
 			Returned DataDefinition object,
-			Places the IAAFDataDefinition object attached to this IAAFEffectDef into the
+			Places the IAAFDataDefinition object attached to this IAAFOperationDef into the
   // *ppDataDef argument.  If none exists yet\, NULL is placed into the
   // *ppDataDef argument.
   //
@@ -76,7 +76,7 @@ AD_XMETHOD1(GetDataDefinitionID,
   //
   // AAFRESULT_NO_ESSENCE_DESC
   //   - There is no IAAFDataDefinition.  There has to be one of some
-  //     kind for this to be a valid effect definition.)
+  //     kind for this to be a valid operation definition.)
 
 
 AD_XMETHOD1(SetDataDefinitionID,
@@ -85,7 +85,7 @@ AD_XMETHOD1(SetDataDefinitionID,
 			aafUID_t *,
 			pDataDef,
 			Essence Descriptor object,
-			Sets the IAAFDataDefinition of this IAAFEffectDef to be the given one.
+			Sets the IAAFDataDefinition of this IAAFOperationDef to be the given one.
   //
   // Succeeds if all of the following are true:
   // - the pDataDef pointer is valid.
@@ -108,7 +108,7 @@ AD_METHOD1(IsTimeWarp,
 		   aafBool *,
 		   bIsTimeWarp,
 		   pointer to the return value, 
-		   Returns the value of isTimeWarp.    IsTimeWarp is true if the length of an IAAFEffect
+		   Returns the value of isTimeWarp.    IsTimeWarp is true if the length of an IAAFOperationGroup
   // is different from the lengths of the input segments.  For example\\\, a slow motion effect.
   //
   // Succeeds if all of the following are true:
@@ -131,7 +131,7 @@ AD_METHOD1(SetIsTimeWarp,
 		   aafBool,
 		   IsTimeWarp,
 		   is timewarp value, 
-		Sets the IsTimeWarp boolean.  IsTimeWarp is true if the length of an IAAFEffect
+		Sets the IsTimeWarp boolean.  IsTimeWarp is true if the length of an IAAFOperationGroup
   // is different from the lengths of the input segments.  For example\\\, a slow motion effect.
   // 
   // This method will return the following codes.  If more than one of
@@ -142,18 +142,18 @@ AD_METHOD1(SetIsTimeWarp,
   //   - succeeded.  \\\(This is the only code indicating success.\\\)
   //		   .)
 
-AD_XMETHOD1(PrependDegradeToEffects,
+AD_XMETHOD1(PrependDegradeToOperations,
 			[in],
 			objIn,
-			AAFEffectDef,
-			pEffectDef, 
-			Degrade To Effect Definition Object,
-			Prepend another effect definition to the DegradeTo list of definitions.
-  // Use this function to add an effect definition to be scanned first when searching for
-  // the a replacement \(a more desirable alternate effect\).
+			AAFOperationDef,
+			pOperationDef, 
+			Degrade To Operation Definition Object,
+			Prepend another operation definition to the DegradeTo list of definitions.
+  // Use this function to add an operation definition to be scanned first when searching for
+  // the a replacement \(a more desirable alternate operation\).
   // 
   // Succeeds if all of the following are true:
-  // - the pEffectDef pointer is valid.
+  // - the pOperationDef pointer is valid.
   // 
   // If this method fails no state will be changed.
   // 
@@ -165,20 +165,20 @@ AD_XMETHOD1(PrependDegradeToEffects,
   //   - succeeded.  \(This is the only code indicating success.\)
   //
   // AAFRESULT_NULL_PARAM
-  //   - pEffectDef is null.)
+  //   - pOperationDef is null.)
 
-AD_XMETHOD1(AppendDegradeToEffects,
+AD_XMETHOD1(AppendDegradeToOperations,
 			[in],
 			objIn,
-			AAFEffectDef,
-			pEffectDef, 
-			Degrade To Effect Definition Object,
-			Append another effect definition to the DegradeTo list of definitions.
-  // Use this function to add an effect definition to be scanned last when searching for
-  // the a replacement \(a less desirable alternate effect\).
+			AAFOperationDef,
+			pOperationDef, 
+			Degrade To operation Definition Object,
+			Append another operation definition to the DegradeTo list of definitions.
+  // Use this function to add an operation definition to be scanned last when searching for
+  // the a replacement \(a less desirable alternate operation\).
   // 
   // Succeeds if all of the following are true:
-  // - the pEffectDef pointer is valid.
+  // - the pOperationDef pointer is valid.
   // 
   // If this method fails no state will be changed.
   // 
@@ -190,15 +190,15 @@ AD_XMETHOD1(AppendDegradeToEffects,
   //   - succeeded.  \(This is the only code indicating success.\)
   //
   // AAFRESULT_NULL_PARAM
-  //   - pEffectDef is null.)
+  //   - pOperationDef is null.)
 
-AD_XMETHOD1(GetDegradeToEffects,
+AD_XMETHOD1(GetDegradeToOperations,
 			[out\,retval], 
 			objOut,
-			EnumAAFEffectDefs,
+			EnumAAFOperationDefs,
 			ppEnum, 
-			Effect Definition Enumeration,
-			Return an enumerator for aaf effect definitions\, ordered from the most desirable
+			Operation Definition Enumeration,
+			Return an enumerator for aaf operation definitions\, ordered from the most desirable
   // to the least desirable alternative.
   // 
   // Succeeds if all of the following are true:
@@ -294,8 +294,8 @@ AD_XMETHOD1(SetCategory,
 			pCategory,
 			Category Name,
 
-		   Sets the category of the effect definition. Category is a
-  // name that describes  a group of effects.  A copy is made of the data so the caller
+		   Sets the category of the operation definition. Category is a
+  // name that describes  a group of operations.  A copy is made of the data so the caller
   // retains ownership of the *pCategory buffer and is responsible for
   // de-allocating it. 
   // 
