@@ -41,7 +41,6 @@
 #endif
 
 #include "ImplAAFDictionary.h"
-#include "ImplAAFWeakRefSetUtil.h"
 
 #include "AAFResult.h"
 #include "AAFStoredObjectIDs.h"
