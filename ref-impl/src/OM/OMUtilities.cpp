@@ -800,10 +800,12 @@ int wremove(const wchar_t* fileName)
 #define OM_USE_COM_CREATEUUID
 #elif defined(OM_OS_MACOS)
 #define OM_USE_OM_CREATEUUID
-#elif defined(OM_OS_UNIX) && !defined(__MACH__)
+#elif defined(OM_OS_UNIX) && defined(__linux__)
 #define OM_USE_LIBUUID_CREATEUUID
 #elif defined(OM_OS_UNIX) && defined(__MACH__)
 #define OM_USE_CF_CREATEUUID
+#elif defined(OM_OS_UNIX)
+#define OM_USE_OM_CREATEUUID
 #elif defined(OM_OS_MACOSX)
 #define OM_USE_OM_CREATEUUID
 #endif
