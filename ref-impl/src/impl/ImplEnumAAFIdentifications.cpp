@@ -9,7 +9,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -37,7 +37,6 @@
 #include "ImplEnumAAFIdentifications.h"
 #endif
 
-#include "ImplAAFHeader.h"
 #include "ImplAAFDictionary.h"
 #include "ImplAAFObjectCreation.h"
 
@@ -70,8 +69,6 @@ AAFRESULT STDMETHODCALLTYPE
       ImplAAFIdentification **ppIdentification)
 {
 	aafUInt32			numElem;
-//	aafUID_t			value;
-	ImplAAFHeader		*head = NULL;
 	ImplAAFDictionary	*dict = NULL;
 
 	if(_enumProp != NULL)
@@ -95,11 +92,8 @@ AAFRESULT STDMETHODCALLTYPE
 //!!!		if(_enumProp != NULL)
 //		{
 //			_enumProp->getValueAt(&value, _current);
-//			CHECK(_enumObj->MyHeadObject(&head));
-//			CHECK(head->GetDictionary (&dict));
+//			CHECK(GetDictionary (&dict));
 //			CHECK(dict->LookupParameterDefinition(&value, ppIdentification));
-//			head->ReleaseReference();
-//			head = NULL;
 //			dict->ReleaseReference();
 //			dict = NULL;
 //		}
@@ -112,10 +106,6 @@ AAFRESULT STDMETHODCALLTYPE
 		else
 			RAISE(AAFRESULT_INCONSISTANCY);
 		_current++;
-		if (head) {
-			head->ReleaseReference();
-			head = NULL;
-		}
 		if (dict) {
 			dict->ReleaseReference();
 			dict = NULL;
@@ -123,9 +113,6 @@ AAFRESULT STDMETHODCALLTYPE
 	}
 	XEXCEPT
 	{
-		if(head)
-		  head->ReleaseReference();
-		head = 0;
 		if(dict)
 		  dict->ReleaseReference();
 		dict = 0;
