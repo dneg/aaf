@@ -29,6 +29,9 @@
 #include "AAFResult.h"
 #include "AAFDefUIDs.h"
 
+// Temporarily necessary global declarations.
+extern "C" const CLSID CLSID_AAFSourceReference;
+
 
 HRESULT CAAFSourceReference::test()
 {
