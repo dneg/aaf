@@ -68,6 +68,10 @@ public:
     //          positioned on a <p ReferencedObject> ?
   virtual bool valid(void) const = 0;
 
+    // @cmember The number of <p ReferencedObject>s in the associated
+    //          reference container property.
+  virtual size_t count(void) const = 0;
+
     // @cmember Advance this <c OMReferenceContainerIterator> to the next
     //          <p ReferencedObject>, if any.
     //          If the end of the associated
