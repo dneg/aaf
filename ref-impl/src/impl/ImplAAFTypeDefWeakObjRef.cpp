@@ -121,8 +121,6 @@ AAFRESULT STDMETHODCALLTYPE
   if (0 == ids)
     return AAFRESULT_INVALID_PARAM;
   
-  
-#if ENABLE_WEAK_REFERENCES
 
   // Do not validate the given target hint until registration. If we attempt
   // to validate at this point the corresponding property definitions might
@@ -135,6 +133,8 @@ AAFRESULT STDMETHODCALLTYPE
   AAFRESULT result = pvtInitialize (id, pObjType, pTypeName);
   if (AAFRESULT_FAILED(result))
     return result;
+  
+#if ENABLE_WEAK_REFERENCES
   
   // TEMPORARY (for debugging): Allocate and initialize a weak reference property.
   if (!_targetPids)
@@ -173,15 +173,31 @@ AAFRESULT STDMETHODCALLTYPE
   return AAFRESULT_SUCCESS;
 }
 
-
+// Override from AAFTypeDefObjectRef
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFTypeDefWeakObjRef::SetObject (ImplAAFPropertyValue * pPropVal,
-										   ImplAAFObject * pObject)
+  ImplAAFTypeDefWeakObjRef::CreateValue (/*[in]*/ ImplAAFRoot * /*pObj*/,
+    /*[out]*/ ImplAAFPropertyValue ** /*ppPropVal*/)
 {
 #if ENABLE_WEAK_REFERENCES
 
+  return AAFRESULT_NOT_IMPLEMENTED;
+
+#else // #if ENABLE_WEAK_REFERENCES
+    
+  return AAFRESULT_NOT_IN_CURRENT_VERSION;
+    
+#endif // #else // #if ENABLE_WEAK_REFERENCES
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFTypeDefWeakObjRef::SetObject (ImplAAFPropertyValue * pPropVal,
+										   ImplAAFRoot * pObject)
+{
   if (! pPropVal) return AAFRESULT_NULL_PARAM;
   if (! pObject) return AAFRESULT_NULL_PARAM;
+
+#if ENABLE_WEAK_REFERENCES
 
   return AAFRESULT_NOT_IMPLEMENTED;
 
@@ -195,12 +211,12 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
 ImplAAFTypeDefWeakObjRef::GetObject (ImplAAFPropertyValue * pPropVal,
-									   ImplAAFObject ** ppObject)
+									   ImplAAFRoot ** ppObject)
 {
-#if ENABLE_WEAK_REFERENCES
-
   if (! pPropVal) return AAFRESULT_NULL_PARAM;
   if (! ppObject) return AAFRESULT_NULL_PARAM;
+
+#if ENABLE_WEAK_REFERENCES
 
   return AAFRESULT_NOT_IMPLEMENTED;
 
@@ -226,22 +242,6 @@ AAFRESULT STDMETHODCALLTYPE
   assert (*ppObjType);
   (*ppObjType)->AcquireReference ();
   return AAFRESULT_SUCCESS;
-}
-
-// Override from AAFTypeDefObjectRef
-AAFRESULT STDMETHODCALLTYPE
-  ImplAAFTypeDefWeakObjRef::CreateValue (/*[in]*/ ImplAAFObject * /*pObj*/,
-    /*[out]*/ ImplAAFPropertyValue ** /*ppPropVal*/)
-{
-#if ENABLE_WEAK_REFERENCES
-
-  return AAFRESULT_NOT_IMPLEMENTED;
-
-#else // #if ENABLE_WEAK_REFERENCES
-    
-  return AAFRESULT_NOT_IN_CURRENT_VERSION;
-    
-#endif // #else // #if ENABLE_WEAK_REFERENCES
 }
 
 
