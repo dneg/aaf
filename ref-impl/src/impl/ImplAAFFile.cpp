@@ -175,9 +175,6 @@ ImplAAFFile::OpenExistingRead (const aafCharacter * pFileName,
 		dictionary->ReleaseReference();
 		dictionary = 0;
 
-		// Initialize the mob lookup tables.
-		checkResult(_head->LoadMobTables());
-		
 		_open = kAAFTrue;
 		_openType = kOmOpenRead;
 	}
@@ -277,9 +274,6 @@ ImplAAFFile::OpenExistingModify (const aafCharacter * pFileName,
 		dictionary->InitBuiltins();
 		dictionary->ReleaseReference();
 		dictionary = 0;
-
-		// Initialize the mob lookup tables.
-		checkResult(_head->LoadMobTables());
 
 		checkResult(_head->SetToolkitRevisionCurrent());
 	  
