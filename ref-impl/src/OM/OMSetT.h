@@ -123,12 +123,40 @@ bool OMSet<Key, Element>::contains(const Key key) const
   //          elements. This type must support operator =, operator !=
   //          and operator <lt>.
   //   @parm The <p Key> for which to search.
-  //   @parm The value that was found, if any.
+  //   @parm The value that was found, if any, by reference.
   //   @rdesc True if this <c OMSet> contains an <p Element>
   //          identified by <p key>, false otherwise.
   //   @this const
 template <typename Key, typename Element>
 bool OMSet<Key, Element>::find(const Key key, Element& value) const
+{
+  TRACE("OMSet<Key, Element>::find");
+
+  bool result = _tree.find(key, value);
+
+  return result;
+}
+
+  // @mfunc Find the <p Element> in this <c OMSet> identified by
+  //        <p key>.  If the element is found it is returned in
+  //        <p value> and the result is true. If the element is
+  //        not found the result is false.
+  //   @tcarg class | Element | The type of an <c OMSet> element.
+  //          This type must support operator = and operator==.
+  //          Instances of this type must be able to return a unique
+  //          value of type <p Key> to identify themselves through a
+  //          function with the signature
+  //          const Key Element::identification(void) const.
+  //   @tcarg class | Key  | The type of the unique key used to identify
+  //          elements. This type must support operator =, operator !=
+  //          and operator <lt>.
+  //   @parm The <p Key> for which to search.
+  //   @parm The value that was found, if any, by pointer.
+  //   @rdesc True if this <c OMSet> contains an <p Element>
+  //          identified by <p key>, false otherwise.
+  //   @this const
+template <typename Key, typename Element>
+bool OMSet<Key, Element>::find(const Key key, Element** value) const
 {
   TRACE("OMSet<Key, Element>::find");
 

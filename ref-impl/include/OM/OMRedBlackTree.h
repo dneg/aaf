@@ -65,6 +65,12 @@ public:
     //          found the result is false.
   bool find(const Key k, Value& v) const;
 
+    // @cmember Find the item in this <c OMRedBlackTree> identified
+    //          <p k>.  If the item is found it is returned in
+    //          <p v> and the result is true. If the element is not
+    //          found the result is false.
+  bool find(const Key k, Value** v) const;
+
     // @cmember Does this <c OMRdBlackTree> contain an item
     //          identified by <p k>?
   bool contains(const Key k) const;

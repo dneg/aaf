@@ -76,6 +76,12 @@ public:
     //          not found the result is false.
   virtual bool find(const Key key, Element& value) const;
 
+    // @cmember Find the <p Element> in this <c OMSet> identified by
+    //          <p key>.  If the element is found it is returned in
+    //          <p value> and the result is true. If the element is
+    //          not found the result is false.
+  virtual bool find(const Key key, Element** value) const;
+
     // @cmember The number of elements in this <c OMSet>.
     //          <mf OMSet::count> returns the actual number
     //          of elements in the <c OMSet>.

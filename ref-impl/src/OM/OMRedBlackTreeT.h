@@ -134,7 +134,7 @@ bool OMRedBlackTree<Key, Value>::insert(const Key k, Value v)
   //   @tcarg class | Value | The type of the value carried in an
   //          <c OMRedBlackTree> item. This type must support operator =.
   //   @parm The <p Key> for which to search.
-  //   @parm The <p Value> associated with <p k>, if any.
+  //   @parm The <p Value> associated with <p k>, if any, by reference.
   //   @rdesc True if <p k> was found in this <c OMRedBlackTree>, false
   //          otherwise.
   //   @this const
@@ -152,6 +152,45 @@ bool OMRedBlackTree<Key, Value>::find(const Key k, Value& v) const
     // found
     result = true;
     v = n->_value;
+  } else {
+    // not found
+    result = false;
+  }
+
+  INVARIANT();
+  POSTCONDITION("Consistent result", IMPLIES( result,  contains(k)));
+  POSTCONDITION("Consistent result", IMPLIES(!result, !contains(k)));
+  return result;
+}
+
+  // @mfunc Find the item in this <c OMRedBlackTree> identified
+  //        by <p k>.  If the item is found it is returned in
+  //        <p v> and the result is true. If the element is not
+  //        found the result is false.
+  //   @tcarg class | Key  | The type of the unique key used to identify
+  //          elements. This type must support operator =, operator !=
+  //          and operator <lt>.
+  //   @tcarg class | Value | The type of the value carried in an
+  //          <c OMRedBlackTree> item. This type must support operator =.
+  //   @parm The <p Key> for which to search.
+  //   @parm The <p Value> associated with <p k>, if any, by pointer.
+  //   @rdesc True if <p k> was found in this <c OMRedBlackTree>, false
+  //          otherwise.
+  //   @this const
+template <typename Key, typename Value>
+bool OMRedBlackTree<Key, Value>::find(const Key k, Value** v) const
+{
+  TRACE("OMRedBlackTree<Key, Value>::find");
+  INVARIANT();
+
+  bool result;
+
+  Node* n = find(k, _root);
+
+  if (n != _nil) {
+    // found
+    result = true;
+    *v = &n->_value;
   } else {
     // not found
     result = false;
