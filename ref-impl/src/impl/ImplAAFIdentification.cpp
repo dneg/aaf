@@ -110,7 +110,6 @@ _platform(            PID_Identification_Platform,             "Platform")
 };
 
 
-OMDEFINE_STORABLE(ImplAAFIdentification, AUID_AAFIdentification);
 
 
 AAFRESULT STDMETHODCALLTYPE
