@@ -253,7 +253,7 @@ extern "C" HRESULT CEnumAAFCodecFlavours_test()
 	// When a method and its unit test have been implemented, remove it from the list.
 	if (SUCCEEDED(hr))
 	{
-		cout << "The following IEnumAAFCodecFlavours methods have not been implemented:" << endl; 
+		cout << "The following IEnumAAFCodecFlavours tests have not been implemented:" << endl; 
 		cout << "     Next" << endl; 
 		cout << "     Skip" << endl; 
 		cout << "     Reset" << endl; 
