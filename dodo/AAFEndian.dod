@@ -23,7 +23,11 @@ AD_IDL(//
 //
 // AAFRESULT_NOT_INITIALIZED
 //   - This object has not yet had Initialize\(\) called on it through
-//     this object's primary interface.
+//     this object's primary interface.  Note that IAAFEndian is not a
+//     primary interface for a concrete class\, so it is not
+//     appropriate for the Initialize\(\) method to exist in this
+//     interface.  The Initialize\(\) method is available through the
+//     concrete object's primary interface.
 //)
 AD_DEFAULT_UUID(6BACC0C1, 6091, 11D2, 84, 1B, 00, 60, 08, 32, AC, B8)
 AD_CLASS_BEGIN
