@@ -548,6 +548,7 @@ AAFRESULT STDMETHODCALLTYPE
 		{
 			// Update existing comment
 			CHECK(pTaggedValue->SetValue((wcslen(pComment)*sizeof(aafWChar)+2), (aafDataValue_t)pComment));
+			pTaggedValue->ReleaseReference();
 		}
 		else
 		{
@@ -559,7 +560,6 @@ AAFRESULT STDMETHODCALLTYPE
 			CHECK(pTaggedValue->Initialize(pTagName, &stringTypeUID));
 			CHECK(pTaggedValue->SetValue((wcslen(pComment)*sizeof(aafWChar)+2), (aafDataValue_t)pComment));
 			_userComments.appendValue(pTaggedValue);
-			pTaggedValue->AcquireReference();
 		}
 	}
 	XEXCEPT
@@ -569,7 +569,10 @@ AAFRESULT STDMETHODCALLTYPE
 		return(XCODE());
 	}
 	XEND;
-	
+
+//	if (pTaggedValue)
+//		pTaggedValue->AcquireReference();
+
 	return(AAFRESULT_SUCCESS);
 }
 
