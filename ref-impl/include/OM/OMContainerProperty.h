@@ -50,28 +50,6 @@ public:
     // @cmember Destructor.
   virtual ~OMContainerProperty(void);
 
-    // @cmember Insert <p object> into this <c OMContainerProperty>.
-  virtual void insertObject(const OMObject* object) = 0;
-
-    // @cmember Does this <c OMContainerProperty> contain <p object> ?
-  virtual bool containsObject(const OMObject* object) const = 0;
-
-    // @cmember The number of <p OMObject>s in this
-    //          <c OMContainerProperty>. <mf OMContainerProperty::count>
-    //          returns the actual number of <p OMObject>s in the
-    //          <c OMContainerProperty>.
-  virtual size_t count(void) const = 0;
-
-    // @cmember Remove <p object> from this <c OMContainerProperty>.
-  virtual void removeObject(const OMObject* object) = 0;
-
-    // @cmember Remove all objects from this <c OMContainerProperty>.
-  virtual void removeAllObjects(void) = 0;
-
-    // @cmember Create an <c OMReferenceContainerIterator> over this
-    //          <c OMContainerProperty>.
-  virtual OMReferenceContainerIterator* createIterator(void) const = 0;
-
 protected:
   // @access Protected members.
 
