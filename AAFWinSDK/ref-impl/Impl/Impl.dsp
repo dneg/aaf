@@ -386,6 +386,10 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFStaticMobSlot.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFStreamPropertyValue.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFTaggedValue.cpp"
 # End Source File
 # Begin Source File

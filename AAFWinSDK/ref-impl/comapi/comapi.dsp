@@ -384,6 +384,10 @@ SOURCE="..\..\..\ref-impl\src\com-api\CAAFStaticMobSlot.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFStreamPropertyValue.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFTaggedValue.cpp"
 # End Source File
 # Begin Source File
