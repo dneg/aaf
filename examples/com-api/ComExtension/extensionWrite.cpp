@@ -117,113 +117,135 @@ static void convert(char* cName, size_t length, const wchar_t* name)
 //
 void extensionWrite (const aafCharacter * filename)
 {
-  cout << "***Creating file " << filename << "***" << endl;
-
-  aafProductIdentification_t  ProductInfo;
-  
-  // delete any previous test file before continuing...
-  char chFileName[1000];
-  convert(chFileName, sizeof(chFileName), filename);
-  remove(chFileName);
-
-  // Create a new file...
-  static const aafUID_t NULL_UID = { 0 };
-  ProductInfo.companyName = L"AAF Developers Desk";
-  ProductInfo.productName = L"AAF extension example";
-  ProductInfo.productVersion.major = 1;
-  ProductInfo.productVersion.minor = 0;
-  ProductInfo.productVersion.tertiary = 0;
-  ProductInfo.productVersion.patchLevel = 0;
-  ProductInfo.productVersion.type = kVersionUnknown;
-  ProductInfo.productVersionString = 0;
-  ProductInfo.productID = NULL_UID;
-  ProductInfo.platform = 0;
-  
   IAAFFile *pFile=NULL;
-  check (AAFFileOpenNewModify ((aafCharacter*) filename,
-							   0,
-							   &ProductInfo,
-							   &pFile));
-  
   IAAFHeader *pHead=NULL;
-  check (pFile->GetHeader(&pHead));
-
   IAAFDictionary *pDict=NULL;
-  check (pHead->GetDictionary(&pDict));
-
-  DefineResourceClassExtensions(pDict);
-
- 
-  // Instantiate a AdministrativeMob object.
   IAAFMob *pAdminMob=NULL;
-  check (pDict->CreateInstance (kClassID_AdminMob,
-								IID_IAAFMob,
-								(IUnknown**) &pAdminMob));
-  check (pAdminMob->SetName (L"Administrative Information"));
+  IAAFObject *pPersResource=NULL;
+  
+
+  try
+  {
+    cout << "***Creating file " << filename << "***" << endl;
+
+    aafProductIdentification_t  ProductInfo;
+  
+    // delete any previous test file before continuing...
+    char chFileName[1000];
+    convert(chFileName, sizeof(chFileName), filename);
+    remove(chFileName);
+
+    // Create a new file...
+    static const aafUID_t NULL_UID = { 0 };
+    ProductInfo.companyName = L"AAF Developers Desk";
+    ProductInfo.productName = L"AAF extension example";
+    ProductInfo.productVersion.major = 1;
+    ProductInfo.productVersion.minor = 0;
+    ProductInfo.productVersion.tertiary = 0;
+    ProductInfo.productVersion.patchLevel = 0;
+    ProductInfo.productVersion.type = kVersionUnknown;
+    ProductInfo.productVersionString = 0;
+    ProductInfo.productID = NULL_UID;
+    ProductInfo.platform = 0;
+  
+    check (AAFFileOpenNewModify ((aafCharacter*) filename,
+							     0,
+							     &ProductInfo,
+							     &pFile));
+  
+    check (pFile->GetHeader(&pHead));
+    check (pHead->GetDictionary(&pDict));
+
+    DefineResourceClassExtensions(pDict);
+
+ 
+    // Instantiate a AdministrativeMob object.
+    check (pDict->CreateInstance (kClassID_AdminMob,
+								  IID_IAAFMob,
+								  (IUnknown**) &pAdminMob));
+    check (pAdminMob->SetName (L"Administrative Information"));
  
 
-  // Add the new AdministrativeMob object to the file's header.
-  check (pHead->AddMob (pAdminMob));
+    // Add the new AdministrativeMob object to the file's header.
+    check (pHead->AddMob (pAdminMob));
 
-  // Add several PersonnelResource objects to the AdminMob.
+    // Add several PersonnelResource objects to the AdminMob.
+    // Instantiate the PersonnelResource object.
+    check (pDict->CreateInstance (kClassID_PersonnelResource,
+								  IID_IAAFObject,
+								  (IUnknown**) &pPersResource));
+
+    PersonnelResourceInitialize (pPersResource,
+							     L"Morgan",
+							     L"Oliver",
+							     kPosition_FloorManager);
+    AdminMobAppendResource (pDict,
+						    pAdminMob,
+						    pPersResource);
+    pPersResource->Release();
+    pPersResource=NULL;
+
   // Instantiate the PersonnelResource object.
-  IAAFObject *pPersResource=NULL;
-  check (pDict->CreateInstance (kClassID_PersonnelResource,
-								IID_IAAFObject,
-								(IUnknown**) &pPersResource));
+    check (pDict->CreateInstance (kClassID_PersonnelResource,
+								  IID_IAAFObject,
+								  (IUnknown**) &pPersResource));
 
-  PersonnelResourceInitialize (pPersResource,
-							   L"Morgan",
-							   L"Oliver",
-							   kPosition_FloorManager);
-  AdminMobAppendResource (pDict,
-						  pAdminMob,
-						  pPersResource);
-  pPersResource->Release();
-  pPersResource=NULL;
+    PersonnelResourceInitialize (pPersResource,
+							     L"Ohanian",
+							     L"Tom",
+							     kPosition_Editor);
+    PersonnelResourceSetContractID(pPersResource, 299);
 
-// Instantiate the PersonnelResource object.
-  check (pDict->CreateInstance (kClassID_PersonnelResource,
-								IID_IAAFObject,
-								(IUnknown**) &pPersResource));
+    AdminMobAppendResource (pDict,
+						    pAdminMob,
+						    pPersResource);
+    pPersResource->Release();
+    pPersResource=NULL;
+  // Instantiate the PersonnelResource object.
+    check (pDict->CreateInstance (kClassID_PersonnelResource,
+								  IID_IAAFObject,
+								  (IUnknown**) &pPersResource));
 
-  PersonnelResourceInitialize (pPersResource,
-							   L"Ohanian",
-							   L"Tom",
-							   kPosition_Editor);
-  PersonnelResourceSetContractID(pPersResource, 299);
+    PersonnelResourceInitialize (pPersResource,
+							     L"Oldman",
+							     L"Arianna",
+							     kPosition_Actor);
+    PersonnelResourceSetActorRole(pPersResource, L"Lucy");
+    PersonnelResourceSetContractID(pPersResource, 735);
+    AdminMobAppendResource (pDict,
+						    pAdminMob,
+						    pPersResource);
+    pPersResource->Release();
+    pPersResource=NULL;
+    pAdminMob->Release();
+    pAdminMob=NULL;
+    pDict->Release();
+    pDict=NULL;
+    pHead->Release();
+    pHead=NULL;
+    // Save the file and close it.
+    check (pFile->Save());
+    check (pFile->Close());
+    pFile->Release();
+    pFile=NULL;
+  }
+  catch (...)
+  {
+    // cleanup on error...
+    if (pPersResource)
+      pPersResource->Release();
+    if (pAdminMob)
+      pAdminMob->Release();
+    if (pDict)
+      pDict->Release();
+    if (pHead)
+      pHead->Release();
+    if (pFile)
+    {
+      pFile->Close();
+      pFile->Release();
+    }
 
-  AdminMobAppendResource (pDict,
-						  pAdminMob,
-						  pPersResource);
-  pPersResource->Release();
-  pPersResource=NULL;
-// Instantiate the PersonnelResource object.
-  check (pDict->CreateInstance (kClassID_PersonnelResource,
-								IID_IAAFObject,
-								(IUnknown**) &pPersResource));
-
-  PersonnelResourceInitialize (pPersResource,
-							   L"Oldman",
-							   L"Arianna",
-							   kPosition_Actor);
-  PersonnelResourceSetActorRole(pPersResource, L"Lucy");
-  PersonnelResourceSetContractID(pPersResource, 735);
-  AdminMobAppendResource (pDict,
-						  pAdminMob,
-						  pPersResource);
-  pPersResource->Release();
-  pPersResource=NULL;
-  pAdminMob->Release();
-  pAdminMob=NULL;
-  pDict->Release();
-  pDict=NULL;
-  pHead->Release();
-  pHead=NULL;
-  // Save the file and close it.
-  check (pFile->Save());
-  check (pFile->Close());
-  pFile->Release();
-  pFile=NULL;
-
+    throw;
+  }
 }
