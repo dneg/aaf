@@ -293,7 +293,7 @@ RELEASE_DLL_FILES = \
 	$(AAFSDK_BIN_EXT)/libaafintp$(DLL) \
 	$(AAFSDK_BIN_EXT)/libaafpgapi$(DLL)
 
-ifdef $(OMF_LIBS)
+ifdef OMF_LIBS
 RELEASE_DLL_FILES += \
 	$(AAFSDK_BIN)/$(OMF_DLL_NAME)
 endif
@@ -306,7 +306,7 @@ DEBUG_DLL_FILES = \
 	$(AAFSDK_BIN_DEBUG_EXT)/libaafintp$(DLL) \
 	$(AAFSDK_BIN_DEBUG_EXT)/libaafpgapi$(DLL)
 
-ifdef $(OMF_LIBS)
+ifdef OMF_LIBS
 DEBUG_DLL_FILES += \
 	$(AAFSDK_BIN_DEBUG)/$(OMF_DLL_NAME)
 endif
@@ -591,7 +591,7 @@ $(AAFSDK_BIN)/libaafintp$(DLL) : $(TOOLKIT_REFIMPL_RELEASE_EXT)/libaafintp$(DLL)
 $(AAFSDK_BIN)/libaafpgapi$(DLL) : $(TOOLKIT_REFIMPL_RELEASE_EXT)/libaafpgapi$(DLL)
 	$(CP) $(CP_OPTS) $(TOOLKIT_REFIMPL_RELEASE_EXT)/libaafpgapi$(DLL) $@
 
-ifdef $(OMF_LIBS)
+ifdef OMF_LIBS
 $(AAFSDK_BIN)/$(OMF_DLL_NAME) :
 	$(CP) $(CP_OPTS) $(OMF_LIBS)/$(OMF_DLL_NAME) $@
 endif	
@@ -608,7 +608,7 @@ $(AAFSDK_BIN_DEBUG_EXT)/libaafintp$(DLL) : $(TOOLKIT_REFIMPL_DEBUG_EXT)/libaafin
 $(AAFSDK_BIN_DEBUG_EXT)/libaafpgapi$(DLL) : $(TOOLKIT_REFIMPL_DEBUG_EXT)/libaafpgapi$(DLL)
 	$(CP) $(CP_OPTS) $(TOOLKIT_REFIMPL_DEBUG_EXT)/libaafpgapi$(DLL) $@
 
-ifdef $(OMF_LIBS)
+ifdef OMF_LIBS
 $(AAFSDK_BIN_DEBUG)/$(OMF_DLL_NAME) :
 	$(CP) $(CP_OPTS) $(OMF_LIBS)/$(OMF_DLL_NAME) $@
 endif
