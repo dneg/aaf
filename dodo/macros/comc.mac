@@ -87,7 +87,7 @@
 * notice appear in all copies of the software and related documentation,
 * and (ii) the name Avid Technology, Inc. may not be used in any
 * advertising or publicity relating to the software without the specific,
-*  prior written permission of Avid Technology, Inc.
+* prior written permission of Avid Technology, Inc.
 *
 * THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND,
 * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -3070,7 +3070,7 @@ HRESULT C.this-module::%01
 * notice appear in all copies of the software and related documentation,
 * and (ii) the name Avid Technology, Inc. may not be used in any
 * advertising or publicity relating to the software without the specific,
-*  prior written permission of Avid Technology, Inc.
+* prior written permission of Avid Technology, Inc.
 *
 * THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND,
 * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -3273,6 +3273,58 @@ AD_CATCH_ASSERTION_END
 .%08-cleanup(%09, %10, foo, bar)\
 .%13-cleanup(%14, %15, foo, bar)\
 .%18-cleanup(%19, %20, foo, bar)\
+  return hr;
+}
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a function which takes five arguments.
+#c
+#c Macro Arg 01: function name
+#c
+#c Macro arguments 02+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt
+#c ----------   ----------   ---------   ----    ----    --------
+#c metharg 1    02           03          04      05      06
+#c metharg 2    07           08          09      10      11
+#c metharg 3    12           13          14      15      16
+#c metharg 4    17           18          19      20      21
+#c metharg 5    22           23          24      25      26
+#c
+#c Macro Arg 27: function description
+#c
+#startm AD_XFUNCTION5 27
+STDAPI
+    %01 (.%03-adornment%04 .%03-indirection %05,
+        .%08-adornment%09 .%08-indirection %10,
+        .%13-adornment%14 .%13-indirection %15,
+        .%18-adornment%19 .%18-indirection %20,
+        .%23-adornment%24 .%23-indirection %25)
+{
+  HRESULT hr;
+
+.%03-setup(%04, %05, foo, bar)\
+.%08-setup(%09, %10, foo, bar)\
+.%13-setup(%14, %15, foo, bar)\
+.%18-setup(%19, %20, foo, bar)\
+.%23-setup(%24, %25, foo, bar)\
+
+AD_CATCH_ASSERTION_BEGIN\
+  hr = Impl%01
+       (.%03-internalname(%05),
+        .%08-internalname(%10),
+        .%13-internalname(%15),
+        .%18-internalname(%20),
+        .%23-internalname(%25));
+AD_CATCH_ASSERTION_END
+.%03-cleanup(%04, %05, foo, bar)\
+.%08-cleanup(%09, %10, foo, bar)\
+.%13-cleanup(%14, %15, foo, bar)\
+.%18-cleanup(%19, %20, foo, bar)\
+.%23-cleanup(%24, %25, foo, bar)\
   return hr;
 }
 #endm
