@@ -210,4 +210,37 @@ OMPropertySet::OMPropertySetElement* OMPropertySet::find(void) const
 void OMPropertySet::grow(const size_t additionalElements)
 {
   TRACE("OMPropertySet::grow");
+
+  // Save old size and old property set element array
+  //
+  size_t oldCapacity = _capacity;
+  OMPropertySetElement* oldPropertySet = _propertySet;
+  
+  // New capacity
+  //
+  _capacity = _capacity + additionalElements;
+  
+  // Allocate new property set element array
+  //
+  _propertySet = new OMPropertySetElement[_capacity];
+  
+  // Copy over all elements from the old array
+  //
+  for (size_t i = 0; i < oldCapacity; i++) {
+    _propertySet[i] = oldPropertySet[i];
+  }
+
+  // Initialize new elements to be invalid
+  //
+  for (i = oldCapacity; i < _capacity; i++) {
+    _propertySet[i]._valid = false;
+  }
+
+  // Delete the old array
+  //
+  delete [] oldPropertySet;
+
+  POSTCONDITION("Size properly increased",
+                _capacity == oldCapacity + additionalElements);
+
 }
