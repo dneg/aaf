@@ -59,6 +59,13 @@ OMProperty* OMProperty::address(void)
   return this;
 }
 
+void OMProperty::detach(const OMStorable* object, const size_t index)
+{
+  TRACE("OMProperty::detach");
+  PRECONDITION("Valid object", object != 0);
+  // nothing to do for most descendants of OMProperty
+}
+
 // @doc OMINTERNAL
 
 // class OMSimpleProperty
