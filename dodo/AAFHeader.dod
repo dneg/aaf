@@ -20,10 +20,17 @@ AD_HEAD
 
 
 
+AD_FORWARD_DECLARATION(AAFMobs)
 AD_FORWARD_DECLARATION(EnumAAFMobs)
 AD_FORWARD_DECLARATION(EnumAAFMedia)
 AD_FORWARD_DECLARATION(AAFClassDictionary)
+AD_FORWARD_DECLARATION(AAFDataDefinition)
+AD_FORWARD_DECLARATION(EnumAAFDataDefinitions)
+AD_FORWARD_DECLARATION(AAFEffectDefinition)
+AD_FORWARD_DECLARATION(EnumAAFEffectDefinitions)
 AD_FORWARD_DECLARATION(EnumAAFDefinitions)
+AD_FORWARD_DECLARATION(AAFIdentification)
+AD_FORWARD_DECLARATION(EnumAAFIdentifications)
 
 
 AD_CLASS_UUID(B1A21383, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
@@ -43,12 +50,12 @@ Return the number of matches the given mob kind.
   // @devnote based on omfiGetNumMobs.)
 
 AD_METHOD1(GetPrimaryMobs,
-[out\,retval], AD_AAFTYPES\(EnumAAFMobs\) **, ppEnumMobs, Mob Enumeration,
+[out\,retval], AD_AAFTYPES\(EnumAAFMobs\) **, ppEnum, Mob Enumeration,
 Return an enumerator for only primary mobs.)
 
 AD_METHOD2(GetMobs,
 [in\,ref], aafSearchCrit_t *, pSearchCriteria, Search Criteria for enumeration,
-[out\,retval], AD_AAFTYPES\(EnumAAFMobs\) **, ppEnumMobs, Mob Enumeration,
+[out\,retval], AD_AAFTYPES\(EnumAAFMobs\) **, ppEnum, Mob Enumeration,
 Return an enumerator for mobs that will apply the criteria.)
 
 AD_METHOD1(AppendMob,
@@ -62,73 +69,97 @@ Remove the given mob from the header.
 
 
 AD_METHOD3(IsMediaDataPresent,
-[in\,ref], aafUID_t *, fileMobID, A Unique File Mob ID,
+[in\,ref], aafUID_t *, pFileMobID, A Unique File Mob ID,
 [in], aafFileFormat_t, fmt, The Media File Format,
 [out\,retval], aafBool *, result, True if the media is found,
   // @devnote based on omfmIsMediaDataPresent)
 
 AD_METHOD2(GetMedia,
 [in\,ref], aafMediaCriteria_t *, pMediaCriteria, Media Criteria for enumeration,
-[out\,retval], AD_AAFTYPES\(EnumAAFMedia\) **, ppEnumMedia, Media Enumeration,
+[out\,retval], AD_AAFTYPES\(EnumAAFMedia\) **, ppEnum, Media Enumeration,
 Return an enumerator for media that will apply the criteria.)
+
+
+AD_METHOD1(RegisterType,
+[in\,ref], AD_AAFTYPES\(AAFTypeDefinition\) *, pTypeDefinition, Type Definition Object,
+Add the type definition object to the header's list of definitions.)
+
+AD_METHOD2(LookupType,
+[in\,ref], aafUID_t *, pTypeID, Type Unique ID,
+[out\,retval], AD_AAFTYPES\(AAFTypeDefinition\) **, ppTypeDefinition, Datakind object,
+Return the data kind definition object with the given id.)
+
+AD_METHOD1(RegisterDatakind,
+[in\,ref], AD_AAFTYPES\(AAFDataDefinition\) *, pDataDefinition, Datakind Definition Object,
+Add the data kind definition object to the header's list of definitions.
+  // @devnote based on omfiDatakindRegister.)
+
+AD_METHOD2(LookupDatakind,
+[in\,ref], aafUID_t *, pDataKindID, Datakind Unique ID,
+[out\,retval], AD_AAFTYPES\(AAFDataDefinition\) **, ppDataDefinition, Datakind object,
+Return the data kind definition object with the given id.
+  // @devnote based on omfiDatakindLookup.)
+
+AD_METHOD1(GetDataDefinitions,
+[out\,retval], AD_AAFTYPES\(EnumAAFDataDefinitions\) **, ppEnum, Definition Enumeration,
+Return an enumerator for aff data definitions.)
+
+AD_METHOD1(RegisterEffectDefinition,
+[in\,ref], AD_AAFTYPES\(AAFEffectDefinition\) *, pEffectDefinition, Effect Definition Object,
+Add the effect definition object to the header's list of definitions.
+  // @devnote based on omfiEffectDefRegister.)
+
+AD_METHOD2(LookupEffectDefinition,
+[in\,ref], aafUID_t *, effectID, Effect Unique ID,
+[out\,retval], AD_AAFTYPES\(AAFEffectDefinition\) **, ppEffectDefinition, Effect definition object,
+Return the effect definition object with the given id.
+  // @devnote based on omfiEffectDefLookup.)
+
+AD_METHOD1(GetEffectDefinitions,
+[out\,retval], AD_AAFTYPES\(EnumAAFEffectDefinitions\) **, ppEnum, Definition Enumeration,
+Return an enumerator for aff effect definitions.)
+
+
+AD_METHOD2(GetDefinitions,
+[in\,ref], aafDefinitionCrit_t *, pDefCriteria, Definition Criteria for enumeration,
+[out\,retval], AD_AAFTYPES\(EnumAAFDefinitions\) **, ppEnum, Definition Enumeration,
+Return an enumerator for definitions that will apply the criteria.
+// @devnote Should this method be private?)
 
 
 AD_METHOD1(GetClassDictionary,
 [out\,retval], AD_AAFTYPES\(AAFClassDictionary\) **, ppClassDictionary, The Class Dictionary,
 Return the class dictionary for this header.)
 
-AD_METHOD2(GetDefinitions,
-[in\,ref], aafDefinitionCrit_t *, pDefCriteria, Definition Criteria for enumeration,
-[out\,retval], AD_AAFTYPES\(EnumAAFDefinitions\) **, ppEnumDefinitions, Definition Enumeration,
-Return an enumerator for definitions that will apply the criteria.)
 
-AD_METHOD1(RegisterDatakind,
-[in\,ref], AD_AAFTYPES\(AAFDataDefinition\) *, defObject, Datakind Definition Object,
-Add the data kind definition object to the header's list of definitions.
-  // @devnote based on omfiDatakindRegister.)
-
-AD_METHOD2(LookupDatakind,
-[in\,ref], aafUID_t *, dataKindID, Datakind Unique ID,
-[out\,retval], AD_AAFTYPES\(AAFDataDefinition\) **, defObject, Datakind object,
-Return the data kind definition object with the given id.
-  // @devnote based on omfiDatakindLookup.)
-
-AD_METHOD1(RegisterEffectDefinition,
-[in\,ref], AD_AAFTYPES\(AAFEffectDefinition\) *, defObject, Effect Definition Object,
-Add the effect definition object to the header's list of definitions.
-  // @devnote based on omfiEffectDefRegister.)
-
-AD_METHOD2(LookupEffectDefinition,
-[in\,ref], aafUID_t *, dataKindID, Datakind Unique ID,
-[out\,retval], AD_AAFTYPES\(AAFEffectDefinition\) **, defObject, Effect definition object,
-Return the effect definition object with the given id.
-  // @devnote based on omfiEffectDefLookup.)
-
+AD_METHOD1(GetToolkitVersion,
+[out\,retval], aafToolkitVersion_t *, pToolkitVersion, The Toolkit Version,
+Return the Toolkit Version property. This is a read-only property.)
 
 AD_METHOD1(GetFileRevision,
-[out\,retval], aafFileRev_t *, revision, The Toolkit Version,
+[out\,retval], aafFileRev_t *, pRevision, The Toolkit Version,
 Return the Toolkit Version property. This is a read-only property.)
 	
 AD_METHOD1(GetByteOrder,
-[out\,retval], aafInt16 *, byteOrder, The Byte order,
+[out\,retval], aafInt16 *, pByteOrder, The Byte order,
 Return the Byte Order property.)
 
 AD_METHOD1(GetLastModified,
-[out\,retval], aafTimeStamp_t *, lastModified, The modification date-time stamp,
+[out\,retval], aafTimeStamp_t *, pLastModified, The modification date-time stamp,
 Return the Last Modified property. This is a read-only property.)
 
-AD_METHOD1(GetToolkitVersion,
-[out\,retval], aafProductVersion_t *, productVersion, The Toolkit Version,
-Return the Toolkit Version property. This is a read-only property.)
+AD_METHOD1(GetLastIdentification,
+[out\,retval], AD_AAFTYPES\(AAFIdentification\) **, ppIdentification, Indentification Object,
+Return the last identification that modified the file.)
 
 AD_METHOD2(GetIdentification,
 [in\,ref], aafUID_t *, pGeneration, Unique Generation ID,
-[out\,retval], AD_AAFTYPES\(AAFIdentification\) **, ppAAFIdentification, Indentification Object,
-Return the Identification that matches the given criteria.)
+[out\,retval], AD_AAFTYPES\(AAFIdentification\) **, ppIdentification, Indentification Object,
+Return the Identification that matches the given generation.)
 
 AD_METHOD2(GetIdentificationList,
 [in\,ref], aafIndentificationCrit_t *, pCriteria, Identification Criteria for enumeration,
-[out\,retval], AD_AAFTYPES\(EnumAAFIdentifications\) **, ppEnumAAFIdentifications, Indentification Enumeration,
+[out\,retval], AD_AAFTYPES\(EnumAAFIdentifications\) **, ppEnum, Indentification Enumeration,
 Return an enumerator for all Identification the meet the given criteria.)
 
 
