@@ -66,6 +66,16 @@ public:
     
 /****/
   //****************
+  // GetStillFrame()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetStillFrame
+        // @parm [out] Still Frame source clip 
+        (ImplAAFSourceClip **stillFrame);
+    //@comm Essence group choices should be added with the AddChoice() function.
+    
+/****/
+  //****************
   // AddChoice()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
@@ -75,27 +85,22 @@ public:
 
 /****/
   //****************
-  // GetNumRepresentations()
+  // GetNumChoices()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetNumRepresentations
+    GetNumChoices
         (aafUInt32  *result);
 
   //****************
-  // GetIndexedRepresentation()
+  // GetIndexedChoice()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetIndexedRepresentation
+    GetIndexedChoice
         (// @parm [in] The 0-based index into the array
          aafUInt32  index,
 
          // @parm [out] The representation at that index
          ImplAAFSourceClip  ** result);
-
-//	private:
-//		AAFSourceClip			*_stillFrame;
-//		vector<AAFSourceClip *>	_choices;
-
 
 public:
 	//SDK-private methods
