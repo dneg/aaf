@@ -175,6 +175,7 @@ public:
   CLASS_DEF_METHOD(HTMLClip);
   CLASS_DEF_METHOD(Identification);
   CLASS_DEF_METHOD(InterpolationDefinition);
+  CLASS_DEF_METHOD(KLVData);
   CLASS_DEF_METHOD(Locator);
   CLASS_DEF_METHOD(MasterMob);
   CLASS_DEF_METHOD(Mob);
