@@ -9,6 +9,7 @@
 # to build:
 AFFOBJECTS = \
 	AAFObject \
-	AAFDefinitionObject
+	AAFDefinitionObject \
+	AAFDataDefinition
 
 
