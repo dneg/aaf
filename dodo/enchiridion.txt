@@ -51,7 +51,7 @@
     # Where you installed MacPerl
   set -e MACPERL 'MacintoshHD:Applications (Mac OS 9):MPW 3.6d7:MacPerl:'
 
-  directory "{aaf}:AAFMacSDK:dodo"
+  directory {MacDodo}
   make cleansdk > make.out
   make.out
 
