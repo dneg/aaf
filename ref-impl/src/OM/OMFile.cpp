@@ -799,7 +799,7 @@ void* OMFile::clientOnRestoreContext(void)
 }
 
   // @mfunc Constructor. Create an <c OMFile> object representing
-  //        an existing external file.
+  //        an existing named external file.
   //   @parm The name of this <c OMFile>.
   //   @parm The access mode of this <c OMFile>.
   //   @parm The <c OMStoredObject> containing the root
@@ -846,7 +846,7 @@ OMFile::OMFile(const wchar_t* fileName,
 }
 
   // @mfunc Constructor. Create an <c OMFile> object representing
-  //        a new external file.
+  //        a new named external file.
   //   @parm The name of this <c OMFile>.
   //   @parm The signature of this <c OMFile>.
   //   @parm The access mode of this <c OMFile>.
@@ -894,7 +894,7 @@ OMFile::OMFile(const wchar_t* fileName,
 }
 
   // @mfunc Constructor. Create an <c OMFile> object representing
-  //        an existing external file.
+  //        an existing external file on the given <c OMRawStorage>.
 OMFile::OMFile(OMRawStorage* rawStorage,
                void* clientOnRestoreContext,
                const OMAccessMode mode,
@@ -932,7 +932,7 @@ OMFile::OMFile(OMRawStorage* rawStorage,
 }
 
   // @mfunc Constructor. Create an <c OMFile> object representing
-  //          a new external file.
+  //          a new external file on the given <c OMRawStorage>.
 OMFile::OMFile(OMRawStorage* rawStorage,
                void* clientOnRestoreContext,
                OMFileSignature signature,

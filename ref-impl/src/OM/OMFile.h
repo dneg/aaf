@@ -265,7 +265,7 @@ private:
   // @access Private members.
 
     // @cmember Constructor. Create an <c OMFile> object representing
-    //          an existing external file.
+    //          an existing named external file.
   OMFile(const wchar_t* fileName,
          void* clientOnRestoreContext,
          const OMAccessMode mode,
@@ -275,7 +275,7 @@ private:
          const OMLoadMode loadMode);
 
     // @cmember Constructor. Create an <c OMFile> object representing
-    //          a new external file.
+    //          a new named external file.
   OMFile(const wchar_t* fileName,
          void* clientOnRestoreContext,
          OMFileSignature signature,
@@ -286,7 +286,7 @@ private:
          OMRootStorable* root);
 
     // @cmember Constructor. Create an <c OMFile> object representing
-    //          an existing external file.
+    //          an existing external file on the given <c OMRawStorage>.
     // @devnote Will superceed OMFile::OMFile (for existing files) above.
   OMFile(OMRawStorage* rawStorage,
          void* clientOnRestoreContext,
@@ -296,7 +296,7 @@ private:
          const OMLoadMode loadMode);
 
     // @cmember Constructor. Create an <c OMFile> object representing
-    //          a new external file.
+    //          a new external file on the given <c OMRawStorage>.
     // @devnote Will superceed OMFile::OMFile (for new files) above.
   OMFile(OMRawStorage* rawStorage,
          void* clientOnRestoreContext,
