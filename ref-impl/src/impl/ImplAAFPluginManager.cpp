@@ -1,5 +1,5 @@
 /************************************************\
-*	                                               *
+*                                                *
 * Advanced Authoring Format                      *
 *                                                *
 * Copyright (c) 1998-1999 Avid Technology, Inc.  *
@@ -352,7 +352,7 @@ AAFRESULT ImplAAFPluginManager::RegisterPlugin(CLSID pluginClass)
 				uid,
 				&pluginClass,
 				sizeof(CLSID),
-				kAafTableDupError));
+				kAafTableDupAddDup));
 			
 			codec->Release();
 			codec = NULL;
