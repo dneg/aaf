@@ -140,6 +140,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <assert.h>
 
 #if PORT_SYS_MAC
 #include <memory.h>		/* For AAFMalloc() and AAFFree() */
@@ -249,26 +250,21 @@ aafBool isObjFunc(ImplAAFFile * file,       /* IN - File Handle */
  * Possible Errors:
  *		Standard errors (see top of file).
  */
-void AAFGetDateTime(aafTimeStamp_t *time)
+void AAFGetDateTime(aafTimeStamp_t *ts)
 {
-#if defined(_MAC) || defined(macintosh)
-	unsigned long tmpTime;
-	GetDateTime(&tmpTime);
-	time->TimeVal = tmpTime;
-	time->IsGMT = FALSE;
-#elif  defined(_WIN32)
-	time->TimeVal = (long) clock();
-	time->IsGMT = FALSE;
-#else
-	{
-		struct timeval  tv;
-		struct timezone tz;
+	assert (ts);
 
-		gettimeofday(&tv, &tz);
-		time->TimeVal = tv.tv_sec;
-		time->IsGMT = false;
-	}
-#endif
+	const time_t t = time(0);
+	const struct tm * ansitime = gmtime (&t);
+	assert (ansitime);
+
+	ts->date.year   = ansitime->tm_year+1900;
+	ts->date.month  = ansitime->tm_mon+1;  // AAF months are 1-based
+	ts->date.day    = ansitime->tm_mday;   // tm_mday already 1-based
+	ts->time.hour   = ansitime->tm_hour;
+	ts->time.minute = ansitime->tm_min;
+	ts->time.second = ansitime->tm_sec;
+	ts->time.fraction = 0;            // not implemented yet!
 }
 
 aafErr_t AAFConvertEditRate(
@@ -519,7 +515,16 @@ AAFRESULT aafMobIDNew(
 	aafTimeStamp_t	timestamp;
 	
 	AAFGetDateTime(&timestamp);
-	major = (aafUInt32)timestamp.TimeVal;	// Will truncate
+	// major = (aafUInt32)timestamp.TimeVal;	// Will truncate
+	assert (sizeof (aafTimeStruct_t) == sizeof (aafUInt32));
+	union
+	{
+	  aafTimeStruct_t time;
+	  aafUInt32       seconds;
+	} time_to_int;
+	time_to_int.time = timestamp.time;
+	major = time_to_int.seconds;
+
 #if defined(_MAC) || defined(macintosh)
 	minor = TickCount();
 #else
