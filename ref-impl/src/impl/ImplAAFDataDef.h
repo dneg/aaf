@@ -32,17 +32,6 @@ protected:
   virtual ~ImplAAFDataDef ();
 
 public:
-
-
-
-  //****************
-  // GetName()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    GetName
-        // @parm [retval,out] Pointer to name
-        (aafString_t *  pstrName);
-
   //****************
   // IsPictureKind()
   //
