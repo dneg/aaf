@@ -387,7 +387,6 @@ static bool formatPAL = false;
 
 static aafRational_t PALrate = {25,1};
 static aafRational_t NTSCrate = {30000,1001};
-//static aafRational_t NTSCrate = {2997,100};
 
 
 // Macro to make AxLib declaration look clearer.
@@ -1262,7 +1261,7 @@ int main(int argc, char* argv[])
 {
 	if (argc < 3)
 	{
-		cout << "Usage: " << argv[0] << " [-netloc] [-useraw] [-smallSectors] infile outfile [essencedir]" << endl;
+		cout << "Usage: " << argv[0] << " [-netloc] [-useraw] [-smallSectors] [-nocompmob] [-notapemob] [-noaudio] infile outfile [essencedir]" << endl;
 		return 1;
 	}
 
@@ -1278,14 +1277,32 @@ int main(int argc, char* argv[])
 		}
 		else if (!strcmp(argv[i], "-useraw"))
 		{
-			//create AAF file on raw storage
+			// create AAF file on raw storage
 			useRawStorage = true;
 			i++;
 		}
 		else if (!strcmp(argv[i], "-smallSectors"))
 		{
-			//create AAF file using 4k sectors
+			// create AAF file using 4k sectors
 			useSmallSectors = true;
+			i++;
+		}
+		else if (!strcmp(argv[i], "-nocompmob"))
+		{
+			// create composition mob
+			create_compmob = false;
+			i++;
+		}
+		else if (!strcmp(argv[i], "-notapemob"))
+		{
+			// create tape mob
+			create_tapemob = false;
+			i++;
+		}
+		else if (!strcmp(argv[i], "-noaudio"))
+		{
+			// create two audio tracks in Mobs and EssenceData
+			add_audio = false;
 			i++;
 		}
 		else
@@ -1305,6 +1322,15 @@ int main(int argc, char* argv[])
 			idxOffset++;
 
 		if (useSmallSectors)
+			idxOffset++;
+
+		if (!create_compmob)
+			idxOffset++;
+
+		if (!create_tapemob)
+			idxOffset++;
+
+		if (!add_audio)
 			idxOffset++;
 
 		if (idxOffset <= (argc - 1))
@@ -1329,7 +1355,6 @@ int main(int argc, char* argv[])
 	if (strcmp(str, "PAL") == 0)
 	{
 		formatPAL = true;
-		add_audio = true;
 	}
 	else
 	{
