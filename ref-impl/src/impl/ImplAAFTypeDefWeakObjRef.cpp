@@ -190,7 +190,8 @@ size_t ImplAAFTypeDefWeakObjRef::PropValSize (void) const
 {
   // Temp change: currently weak refs are represented as auids.
   // return BaseType()->PropValSize();
-	if(memcmp(&_referencedType, &kAAFClassID_Mob, sizeof(aafUID_t)) == 0)
+  aafUID_t tmpID = _referencedType;
+	if(memcmp(&tmpID, &kAAFClassID_Mob, sizeof(aafUID_t)) == 0)
 	{
 		return sizeof (aafMobID_t);
 	}
@@ -211,7 +212,8 @@ size_t ImplAAFTypeDefWeakObjRef::NativeSize (void) const
 {
   // Temp change: currently weak refs are represented as auids.
   // return sizeof (ImplAAFObject*);
-	if(memcmp(&_referencedType, &kAAFClassID_Mob, sizeof(aafUID_t)) == 0)
+  aafUID_t tmpID = _referencedType;
+	if(memcmp(&tmpID, &kAAFClassID_Mob, sizeof(aafUID_t)) == 0)
 	{
 		return sizeof (aafMobID_t);
 	}
