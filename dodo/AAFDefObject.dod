@@ -32,6 +32,20 @@ AD_STD_METHOD_STRING_MULTI_SET_GET_SIZE(Description,
      the Description of this definition.)
 
 
+AD_XMETHOD2(Initialize,
+		   [in\, ref],
+		   objPass,
+		   aafUID_constref,
+		   id,
+		   AUID for new DeObject,
+		   [in\, string],
+		   objPass,
+		   aafCharacter_constptr,
+		   pName,
+		   Name for new DefObject,
+		   Init all fields of a definition object.)
+
+
 AD_XMETHOD1(GetAUID,
 		   [retval\,out],
 		   objPass,
