@@ -18,6 +18,12 @@ OMPropertySet::OMPropertySet(void)
   POSTCONDITION("Valid count", ((_count >= 0) && (_count <= _capacity)));
 }
 
+OMPropertySet::~OMPropertySet(void)
+{
+  delete _propertySet;
+  _propertySet = 0;
+}
+
 OMProperty* OMPropertySet::get(const int pid) const
 {
   TRACE("OMPropertySet::get");
