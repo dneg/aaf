@@ -290,7 +290,6 @@ ImplAAFEssenceAccess::Create (ImplAAFMasterMob *masterMob,
 {
 	aafUID_t			fileMobUID, audioDDEF = DDEF_Audio;
 	aafLength_t			oneLength = CvtInt32toLength(1, oneLength);
-	aafBool				found;
 	AAFRESULT			aafError = OM_ERR_NONE;
 	ImplAAFSourceMob	*fileMob;
 	ImplAAFMobSlot		*tmpSlot;
@@ -310,7 +309,6 @@ ImplAAFEssenceAccess::Create (ImplAAFMasterMob *masterMob,
 		*/
 		masterMob->MyHeadObject(&head);
 		fileMob = (ImplAAFSourceMob *)CreateImpl(CLSID_AAFSourceMob);
-		CHECK(masterMob->AddMasterSlot (&mediaKind, DEFAULT_FILE_SLOT, fileMob, masterSlotID, NULL));
 		CHECK(fileMob->GetMobID(&fileMobUID));
 		
 		//!!!		CHECK(InitMediaHandle( fileMob));
@@ -336,7 +334,7 @@ ImplAAFEssenceAccess::Create (ImplAAFMasterMob *masterMob,
 		* the file mob or media descriptor.
 		*/
 		CHECK(fileMob->GetEssenceDescriptor((ImplAAFEssenceDescriptor **)&_mdes));
-		CHECK(_mdes->SetSampleRate(&sampleRate));
+//!!!		CHECK(_mdes->SetSampleRate(&sampleRate));
 		
 		/* RPS-- don't use the 'best codec' method on WRITE. Instead,  */
 		/*   the toolkit now stores the codec ID in omfmFileMobNew()   */
@@ -361,21 +359,14 @@ ImplAAFEssenceAccess::Create (ImplAAFMasterMob *masterMob,
 			
 			/* JeffB: Handle the case where an existing file=>tape mob connection exists
 			*/
+			if(fileMob->FindSlotBySlotID(DEFAULT_FILE_SLOT, &tmpSlot) == AAFRESULT_SLOT_NOT_FOUND)
 			{
-				//!!!Find the header of the file mob, look up the mobID
-				aafError = head->LookupMob(&fileMobUID, (ImplAAFMob **)&fileMob);
-				if((aafError != OM_ERR_NONE) || (fileMob == NULL))
-				{
-					RAISE(AAFRESULT_MISSING_MOBID);
-				}
-				if(fileMob->FindSlotBySlotID(masterSlotID, &tmpSlot) == AAFRESULT_SLOT_NOT_FOUND)
-				{
-					CHECK(fileMob->AddNilReference(masterSlotID, 
-						oneLength, &mediaKind, editRate));
-				}
-				CHECK(fileMob->FindSlotBySlotID(masterSlotID, &tmpSlot));
-				CHECK(tmpSlot->SetPhysicalNum(masterSlotID));
+				CHECK(fileMob->AddNilReference(DEFAULT_FILE_SLOT, 
+						0, &mediaKind, editRate));
 			}
+			CHECK(masterMob->AddMasterSlot (&mediaKind, DEFAULT_FILE_SLOT, fileMob, masterSlotID, L"A Slot"));	// Should be NULL or something useful!!!
+			CHECK(fileMob->FindSlotBySlotID(masterSlotID, &tmpSlot));
+			CHECK(tmpSlot->SetPhysicalNum(masterSlotID));
 			
 			CHECK(_codec->GetMetaInfo(&metaInfo));
 			mdes = (ImplAAFEssenceDescriptor *)CreateImpl(metaInfo.mdesClassID);
