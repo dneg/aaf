@@ -527,14 +527,14 @@ cleanup:
     double duration;
 
     pFile->Save();
-
-    finish = clock();
-    duration = ((double) (finish - start) / CLOCKS_PER_SEC);
-
     pFile->Close();
+
 #if USE_MEMORY_FILE
     check(AAFMemoryFileSaveToDisk(pFileName, pFile));
 #endif
+    finish = clock();
+    duration = ((double) (finish - start) / CLOCKS_PER_SEC);
+
     pFile->Release();
 
     printf("Save time = %f seconds\n", duration);
