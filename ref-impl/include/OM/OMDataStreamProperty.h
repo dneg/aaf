@@ -34,15 +34,17 @@ public:
     //   @this const
   OMUInt64 size(void) const;
 
+    // @cmember Set the size, in bytes, of the data in this
+    //          <c OMDataStreamProperty>.
+  void setSize(const OMUInt64 newSize);
+
     // @cmember The current position for <f read()> and <f write()>, as an
     //          offset in bytes from the begining of the data stream.
-    //          The valid range for <p offset> is 0 .. <f size()>.
     // @this const
   OMUInt64 position(void) const;
 
     // @cmember Set the current position for <f read()> and <f write()>, as an
     //          offset in bytes from the begining of the data stream.
-    //          The valid range for <p offset> is 0 .. <f size()>.
   void setPosition(const OMUInt64 offset);
 
     // @cmember Attempt to read the number of bytes given by <p bytes>
