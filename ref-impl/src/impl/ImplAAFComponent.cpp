@@ -29,7 +29,7 @@
 #include "aafCvt.h"
 
 ImplAAFComponent::ImplAAFComponent ():
-	_dataDef(	PID_Component_DataDefinition,	"Data Definition"),
+	_dataDef(	PID_Component_DataDefinition,	"DataDefinition"),
 	_length(	PID_Component_Length,	"Length")
 {
 	_persistentProperties.put(   _dataDef.address());

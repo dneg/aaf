@@ -21,10 +21,10 @@
 #include "AAFResult.h"
 
 ImplAAFFileDescriptor::ImplAAFFileDescriptor ()
-: _sampleRate(			PID_FileDescriptor_SampleRate,	"Sample Rate"),
+: _sampleRate(			PID_FileDescriptor_SampleRate,	"SampleRate"),
  _length(				PID_FileDescriptor_Length,		"Length"),
- _isInContainer(        PID_FileDescriptor_IsInContainer,	"Is In Container"),
- _containerFmt(         PID_FileDescriptor_ContainerFormat,	"Container Format")
+ _isInContainer(        PID_FileDescriptor_IsInContainer,	"IsInContainer"),
+ _containerFmt(         PID_FileDescriptor_ContainerFormat,	"ContainerFormat")
 {
   _persistentProperties.put(_sampleRate.address());
   _persistentProperties.put(_length.address());
