@@ -31,7 +31,7 @@ AD_COM_EXT_CLASS_BEGIN(public IAAFEndian)
 /****/
 AD_XMETHOD7(AudioMediaCreate,
 [in],objIn, AAFMasterMob,masterMob,on this master mob,
-[in],objPass, aafTrackID_t,masterTrackID,,
+[in],objPass, aafSlotID_t,masterSlotID,,
 [in],objIn, AAFSourceMob,fileMob,and this file mob create audio,
 [in],objPass, aafRational_t,samplerate,with this sample rate,
 [in],objPass, aafCompressEnable_t,Enable,optionally compressing it,
@@ -60,7 +60,7 @@ Creates an audio media stream.)
 /****/
 AD_XMETHOD9(VideoMediaCreate,
 [in],objIn, AAFMasterMob,masterMob,on this master mob,
-[in],objPass, aafTrackID_t,masterTrackID,masterTrackID,
+[in],objPass, aafSlotID_t,masterSlotID,masterSlotID,
 [in],objIn, AAFSourceMob,fileMob,and this file mob create video,
 [in],objPass, aafCompressEnable_t,Enable,optionally compressing it,
 [in],objPass, aafRational_t,editrate,editrate,
@@ -91,7 +91,7 @@ Creates an audio media stream.)
 /****/
 AD_XMETHOD6(Create,
 [in],objIn, AAFMasterMob,masterMob,on this master mob,
-[in],objPass, aafTrackID_t,masterTrackID,,
+[in],objPass, aafSlotID_t,masterSlotID,,
 [in],objIn, AAFSourceMob,fileMob,and this file mob,
 [in],objIn, AAFDataDef,mediaKind,create media of this type,
 [in],objPass, aafRational_t,samplerate,with this sample rate,
@@ -306,11 +306,11 @@ Gets a parameter block of private information from the CODEC for this media.)
 /****/
 AD_XMETHOD5(GetNumChannels,
 [in],objIn, AAFMasterMob,masterMob,In this master mob,
-[in],objPass, aafTrackID_t,trackID,On this track,
+[in],objPass, aafSlotID_t,slotID,On this slot,
 [in],objPass, aafMediaCriteria_t*,mediaCrit,using this media criteria,
 [in],objIn, AAFDataDef,mediaKind,for this media type,
 [out],objPass, aafInt16*,numCh,How many channels?,
-Takes an opaque handle  a master mob reference  and a track ID so that it may be called before the media is opened.)
+Takes an opaque handle  a master mob reference  and a slot ID so that it may be called before the media is opened.)
 	//@comm Returns the number of interleaved media channels of a given type in the media stream referenced by the given file mob
 	//@comm If the data format is not interleaved, then the answer will
 	// always be zero or one.  This function correctly returns zero
@@ -347,7 +347,7 @@ Returns the size in bytes of the given sample for a given media type.)
 /****/
 AD_XMETHOD5(Open,
 [in],objIn, AAFMasterMob,masterMob,In this master mob,
-[in],objPass, aafTrackID_t,trackID,On this track,
+[in],objPass, aafSlotID_t,slotID,On this slot,
 [in],objPass, aafMediaCriteria_t*,mediaCrit,using this media criteria,
 [in],objPass, aafMediaOpenMode_t,openMode,ReadOnly or Append,
 [in],objPass, aafCompressEnable_t,compEnable,optionally decompressing,
@@ -370,7 +370,7 @@ Opens a single channel of a file mob.)
 /****/
 AD_XMETHOD5(MultiOpen,
 [in],objIn, AAFMasterMob,masterMob,In this master mob,
-[in],objPass, aafTrackID_t,trackID,On this track,
+[in],objPass, aafSlotID_t,slotID,On this slot,
 [in],objPass, aafMediaCriteria_t*,mediaCrit,using this media criteria,
 [in],objPass, aafMediaOpenMode_t,openMode,ReadOnly or Append,
 [in],objPass, aafCompressEnable_t,compEnable,optionally decompressing,
@@ -531,18 +531,18 @@ Given an array of video format blocks  read the opcodes and operands and change 
 /****/
 AD_XMETHOD3(GetNumRepresentations,
 [in],objIn, AAFMasterMob,masterMob,,
-[in],objPass, aafTrackID_t,trackID,,
+[in],objPass, aafSlotID_t,slotID,,
 [out],objPass, aafInt32*,numReps,,
-Find out how many media representations [high/low res] exist for a particular track on this master mob.)
+Find out how many media representations [high/low res] exist for a particular slot on this master mob.)
 	//@comm Replaces omfmGetNumRepresentations */
 
 /****/
 AD_XMETHOD4(GetRepresentationSourceClip,
 [in],objIn, AAFMasterMob,masterMob,,
-[in],objPass, aafTrackID_t,trackID,,
+[in],objPass, aafSlotID_t,slotID,,
 [in],objPass, aafInt32,index,,
 [out],objOut, AAFSourceClip,sourceClip,,
-Get the indexed [1-based] representation for a particular track on this master mob.)
+Get the indexed [1-based] representation for a particular slot on this master mob.)
 	//@comm Replaces omfmGetRepresentationSourceClip */
 
 /****/
