@@ -186,6 +186,14 @@ static HRESULT TestPropertyValue ()
   if (pPropUnknown != pTypeDefUnknown)
 	return AAFRESULT_TEST_FAILED;
 
+  // Test IsDefinedType ()
+  // (Currently only returns true.)
+  aafBool b = AAFFalse;
+  hr = pv->IsDefinedType (&b);
+	if (! SUCCEEDED (hr)) return hr;
+  if (AAFTrue != b)
+	return AAFRESULT_TEST_FAILED;
+
   pTypeDefUnknown->Release();
   pPropUnknown->Release();
   pTypeDef->Release();
@@ -215,15 +223,7 @@ extern "C" HRESULT CAAFPropertyValue_test()
   catch (...)
 	{
 	  cerr << "CAAFPropertyValue_test...Caught general C++ exception!" << endl; 
-	}
-
-  // When all of the functionality of this class is tested, we can return success.
-  // When a method and its unit test have been implemented, remove it from the list.
-  if (SUCCEEDED(hr))
-	{
-	  cout << "The following AAFPropertyValue methods have not been implemented:" << endl; 
-	  cout << "     IsDefinedType - needs unit test" << endl; 
-	  hr = AAFRESULT_TEST_PARTIAL_SUCCESS;
+	  hr = AAFRESULT_TEST_FAILED;
 	}
 
   return hr;
