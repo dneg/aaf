@@ -159,17 +159,28 @@ HRESULT Aaf2Omf::OpenInputFile ()
 
 	rc = AAFFileOpenExistingRead(pwFileName, 0, &pFile);
 	if (FAILED(rc))
+	{
+		UTLMemoryFree(pwFileName);
 		return rc;
+	}
 
 	rc = pFile->GetHeader(&pHeader);
 	if (FAILED(rc))
+	{
+		UTLMemoryFree(pwFileName);
 		return rc;
+	}
 
 	rc = pHeader->GetDictionary(&pDictionary);
 	if (FAILED(rc))
+	{
+		UTLMemoryFree(pwFileName);
 		return rc;
+	}
 
 	gpGlobals->bAAFFileOpen = AAFTrue;
+	UTLMemoryFree(pwFileName);
+
 	return rc;
 }
 // ============================================================================
@@ -269,22 +280,31 @@ HRESULT Aaf2Omf::OpenOutputFile ()
 
 	rc = OMF2::omfsBeginSession(&OMFProductInfo, &OMFSession);
 	if (rc != OMF2::OM_ERR_NONE )
-		return rc;
+	{
+		rc = AAFRESULT_BADOPEN;
+		goto Cleanup;
+	}
 	
 	bSessionStarted = AAFTrue;
 	rc = OMF2::omfmInit(OMFSession);
 	if (rc != OMF2::OM_ERR_NONE )
 	{
 		OMF2::omfsEndSession(OMFSession);
-		return AAFRESULT_BAD_SESSION;
+		rc = AAFRESULT_BAD_SESSION;
+		goto Cleanup;
 	}
 
 	rc = OMF2::omfsCreateFile((OMF2::fileHandleType)gpGlobals->sOutFileName, OMFSession, OMF2::kOmfRev2x, &OMFFileHdl);
 	if (rc != OMF2::OM_ERR_NONE )
-		return AAFRESULT_BADOPEN;
+	{
+		rc = AAFRESULT_BADOPEN;
+		goto Cleanup;
+	}
+	
 
 	gpGlobals->bOMFFileOpen = AAFTrue;
 	// Clean up and exit 
+Cleanup:
 	if (pIdent)
 		pIdent->Release();
 
@@ -299,6 +319,12 @@ HRESULT Aaf2Omf::OpenOutputFile ()
 
 	if (pszProductName)
 		UTLMemoryFree(pszProductName);
+
+	if (pwPlatform)
+		UTLMemoryFree(pwPlatform);
+
+	if (pszPlatform)
+		UTLMemoryFree(pszPlatform);
 
 	if (pwProductVersionString)
 		UTLMemoryFree(pwProductVersionString);
@@ -458,7 +484,6 @@ HRESULT Aaf2Omf::AAFFileRead()
 					pCommentIterator->Release();
 				}
 			}
-
 		}
 		UTLMemoryFree(pwMobName);
 		UTLMemoryFree(pszMobName);
@@ -487,12 +512,18 @@ HRESULT Aaf2Omf::AAFFileRead()
 			pEssenceDataIter->Release();
 			pEssenceDataIter = NULL;
 		}
-			if (pEssenceData)
+		if (pEssenceData)
 		{
 			pEssenceData->Release();
 			pEssenceData = NULL;
 		}
-}
+	}
+	if (pMasterMob)
+		pMasterMob->Release();
+	if (pSourceMob)
+		pSourceMob->Release();
+	if (pCompMob)
+		pCompMob->Release();
 	return rc;
 }
 // ============================================================================
@@ -809,18 +840,17 @@ HRESULT Aaf2Omf::ConvertSourceMob(IAAFSourceMob* pSourceMob,
 			aafUInt32			summarySize = 0;
 
 			// retrieve AIFC descriptor properties
-			// Not implemented YET
-			/*
 			rc = pAifcDesc->GetSummaryBufferSize(&summarySize);
 			UTLMemoryAlloc(summarySize, (void **)&pSummary);
 			rc = pAifcDesc->GetSummary(summarySize, *pSummary);
-			*/
+			
 			rc = OMF2::omfmFileMobNew(OMFFileHdl, pMobName, rate, CODEC_AIFC_AUDIO, pOMFSourceMob);
 			rc = OMF2::omfiMobSetIdentity(OMFFileHdl, *pOMFSourceMob, OMFMobID);
 			rc = OMF2::omfmMobGetMediaDescription(OMFFileHdl, *pOMFSourceMob, &mediaDescriptor);
 			rc = OMF2::omfsWriteLength(OMFFileHdl, mediaDescriptor, OMF2::OMMDFLLength, (OMF2::omfLength_t)length); 
 			if (gpGlobals->bVerboseMode)
 				UTLstdprintf("%sAdded an AIFC Media Descriptor to a Source MOB\n", gpGlobals->indentLeader);
+			UTLMemoryFree(pSummary);
 			goto Cleanup;
 		}
 		rc = pEssenceDesc->QueryInterface(IID_IAAFCDCIDescriptor, (void **)&pCDCIDesc);
@@ -937,7 +967,8 @@ HRESULT Aaf2Omf::TraverseMob(IAAFMob* pMob,
 			{
 				pTimelineMobSlot->GetOrigin((aafPosition_t *)&OMFOrigin);
 				pTimelineMobSlot->GetEditRate((aafRational_t *)&OMFeditRate);
-
+				pTimelineMobSlot->Release();
+				pTimelineMobSlot = NULL;
 			}
 			rc = pSlot->GetSegment(&pSegment);
 			if (FAILED(rc))
@@ -1203,6 +1234,7 @@ HRESULT Aaf2Omf::ProcessComponent(IAAFComponent* pComponent,
 	if (gpGlobals->bVerboseMode)
 		UTLstdprintf("%sInvalid component type found, datadef : %s\n", gpGlobals->indentLeader, szTempUID);
 	UTLerrprintf("%sInvalid component type found, datadef : %s\n", gpGlobals->indentLeader, szTempUID);
+
 Cleanup:
 
 	if (pSequence)
@@ -1316,7 +1348,11 @@ HRESULT Aaf2Omf::TraverseSequence(IAAFSequence* pSequence,
 				rc = OMF2::omfiSequenceAppendCpnt(OMFFileHdl, *pOMFSequence, newComponent);
 			}
 		}
+		pComponent->Release();
+		pComponent = NULL;
 	}
+	pCompIter->Release();
+	pCompIter = NULL;
 	return rc;
 }
 // ============================================================================
@@ -1380,6 +1416,8 @@ HRESULT Aaf2Omf::ConvertSelector(IAAFSelector* pSelector,
 			pEnumAlternates->Release();
 		}
 	}
+	if (pSegment)
+		pSegment->Release();
 	return rc;
 }
 
@@ -1396,13 +1434,13 @@ HRESULT Aaf2Omf::ConvertLocator(IAAFEssenceDescriptor* pEssenceDesc,
 {
 	HRESULT					rc = AAFRESULT_SUCCESS;
 	OMF2::omfClassID_t		locType;
-	char*					pszLocatorPath;
+	char*					pszLocatorPath = NULL;
 
 	IAAFLocator*			pLocator = NULL;
 	IEnumAAFLocators*		pLocatorIter = NULL;		
 	aafInt32				numLocators = 0;
-    aafWChar*				pwLocatorPath;
-	aafInt32				pathSize;
+    aafWChar*				pwLocatorPath = NULL;
+	aafInt32				pathSize = 0;
 
 	rc = pEssenceDesc->GetNumLocators(&numLocators);
 	if (SUCCEEDED(rc) && numLocators > 0)
@@ -1458,7 +1496,6 @@ HRESULT Aaf2Omf::ConvertEssenceDataObject( IAAFEssenceData* pEssenceData)
 	OMF2::omfUID_t			mediaID;
 	OMF2::omfProperty_t		idProperty;
 	OMF2::omfDDefObj_t		datakind;
-	OMF2::omfRational_t		sampleRate;
 	char					id[5];
 
 	IAAFTIFFData*			pTIFFData = NULL;
@@ -1471,7 +1508,6 @@ HRESULT Aaf2Omf::ConvertEssenceDataObject( IAAFEssenceData* pEssenceData)
 	IAAFObject*				pAAFObject = NULL;
 	aafUID_t				mobID;
 	aafBool					bConvertMedia = AAFFalse;
-	aafRational_t			AAFsampleRate;
 
 	// get the file mob id
 	rc = pEssenceData->GetFileMobID(&mobID);
@@ -1614,7 +1650,6 @@ CopyMedia:
 		aafLength_t		numBytes;
 		aafUInt32		nBlockSize;
 		aafUInt32		numBytesRead;
-		aafUInt32		numBytesWritten;
 		aafBool			bMore = AAFFalse;
 
 		rc = pEssenceData->GetSize(&numBytes);
@@ -1652,6 +1687,9 @@ CopyMedia:
 		}
 	}
 Cleanup:
+	if (pSourceMob)
+		pSourceMob->Release();
+
 	if (pTIFFData)
 		pTIFFData->Release();
 		
