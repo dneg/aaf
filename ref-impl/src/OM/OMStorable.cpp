@@ -83,7 +83,7 @@ const OMClassDefinition* OMStorable::definition(void) const
 {
   TRACE("OMStorable::definition");
   const OMClassDefinition* result = _definition;
-#if !defined(OM_DISABLE_VALIDATE_DEFINITIONS)
+#if !defined(OM_NO_VALIDATE_DEFINITIONS)
   POSTCONDITION("Valid result", result != 0);
 #endif
   return result;
@@ -94,7 +94,7 @@ const OMClassDefinition* OMStorable::definition(void) const
 void OMStorable::save(void) const
 {
   TRACE("OMStorable::save");
-#if !defined(OM_DISABLE_VALIDATE_DEFINITIONS)
+#if !defined(OM_NO_VALIDATE_DEFINITIONS)
   PRECONDITION("Valid class definition", definition() != 0);
 #endif
 
@@ -167,7 +167,7 @@ OMStorable* OMStorable::restoreFrom(const OMStorable* containingObject,
   OMStorable* object = classFactory->create(cid);
   ASSERT("Registered class id", object != 0);
   ASSERT("Valid class factory", classFactory == object->classFactory());
-#if !defined(OM_DISABLE_VALIDATE_DEFINITIONS)
+#if !defined(OM_NO_VALIDATE_DEFINITIONS)
   ASSERT("Valid class definition", object->definition() != 0);
 #endif
   // Attach the object.
@@ -528,7 +528,7 @@ OMStorable* OMStorable::shallowCopy(const OMClassFactory* factory) const
   OMStorable* object = factory->create(id);
   ASSERT("Registered class id", object != 0);
   ASSERT("Valid class factory", object->classFactory() != 0);
-#if !defined(OM_DISABLE_VALIDATE_DEFINITIONS)
+#if !defined(OM_NO_VALIDATE_DEFINITIONS)
   ASSERT("Valid class definition", object->definition() != 0);
 #endif
 

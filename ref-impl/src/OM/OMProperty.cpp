@@ -198,7 +198,7 @@ const OMType* OMProperty::type(void) const
 
   const OMType* result = _definition->type();
 
-#if !defined(OM_DISABLE_VALIDATE_DEFINITIONS)
+#if !defined(OM_NO_VALIDATE_DEFINITIONS)
   POSTCONDITION("Valid result", result != 0);
 #endif
   return result;
