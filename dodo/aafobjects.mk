@@ -26,7 +26,7 @@ AAFPERSISTENTOBJECTS = \
 	AAFMacLocator \
 	AAFMediaFilmDescriptor \
 	AAFMediaGroup  \
-	AAFMediaTapeDescriptor \
+	AAFTapeDescriptor \
 	AAFNestedScope\
 	AAFObjectAttribute \
 	AAFParameter \
@@ -165,7 +165,7 @@ AUTO_GEN_COMTEST = \
 	AAFMacLocator \
 	AAFMediaFilmDescriptor \
 	AAFMediaGroup \
-	AAFMediaTapeDescriptor \
+	AAFTapeDescriptor \
 	AAFNestedScope \
 	AAFObjectAttribute \
 	AAFParameter \
