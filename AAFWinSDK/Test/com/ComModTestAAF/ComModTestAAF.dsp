@@ -261,6 +261,10 @@ SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFMobTest.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\..\test\com\ComModTestAAF\CAAFModuleTest.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFNestedScopeTest.cpp
 # End Source File
 # Begin Source File
@@ -286,6 +290,10 @@ SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFParameterDefTest.cpp
 # Begin Source File
 
 SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFParameterTest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFPluginDefTest.cpp
 # End Source File
 # Begin Source File
 
@@ -346,6 +354,10 @@ SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFSourceReferenceTest.cp
 # Begin Source File
 
 SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFStaticMobSlotTest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFStreamPropertyValueTest.cpp
 # End Source File
 # Begin Source File
 
@@ -635,14 +647,6 @@ SOURCE="..\..\..\..\ref-impl\src\impl\aafCvt.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\..\ref-impl\src\impl\AAFUtils.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\..\test\com\ComModTestAAF\CAAFModuleTest.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFPluginDefTest.cpp
 # End Source File
 # Begin Source File
 
