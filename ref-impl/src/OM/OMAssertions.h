@@ -106,9 +106,12 @@ void trace(const char* routineName);
 
 #else
 
+inline void noTrace(const char* /* routine */) {}
+
 #define TRACE(routine) \
   char* currentRoutineName; \
-  currentRoutineName = routine;
+  currentRoutineName = routine; \
+  noTrace(currentRoutineName);
 
 #endif
 
