@@ -1,20 +1,30 @@
-#include <iostream.h>
-#include <assert.h>
-
-#include "AAFTypes.h"
 #include "OMUtilities.h"
 
 #include "OMAssertions.h"
 
-const char* programName = "Unknown program";
+#include <iostream.h>
+#include <assert.h>
+#include <string.h>
+
+#include "AAFTypes.h"
+
+char* programName = 0;
 
 void setProgramName(const char* name)
 {
-  programName = name;
+  PRECONDITION("Valid program name", validString(name));
+
+  size_t size = strlen(name) + 1;
+  delete [] programName;
+  programName = new char[size];
+  strncpy(programName, name, size);
 }
 
 const char* getProgramName(void)
 {
+  if (programName == 0) {
+    setProgramName("Unknown Program");
+  }
   return programName;
 }
 
