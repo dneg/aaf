@@ -35,4 +35,4 @@
 //
 //#define USECONSOLE
 #define USE_DATAINPUT
-//#define NODEBUG
+#define NODEBUG
