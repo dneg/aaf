@@ -59,6 +59,7 @@
 #include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
 #include "OMProperty.h"
+#include "OMPropertyDefinition.h"
 #include "AAFUtils.h"
 
 
@@ -284,14 +285,14 @@ AAFRESULT ImplPropertyCollection::Initialize
 	return AAFRESULT_NOMEMORY;
   _numAllocated = numPropsDefined;
 
-  ImplAAFDictionarySP pDict;
+  ImplAAFClassDefSP pClassDef;
   try
 	{
 	  AAFRESULT hr;
 	  assert (pObj);
-	  hr = pObj->GetDictionary(&pDict);
+	  hr = pObj->GetDefinition(&pClassDef);
 	  if (AAFRESULT_FAILED(hr)) throw hr;
-	  assert (pDict);
+	  assert (pClassDef);
 
 	  size_t omContext = 0;
 	  OMProperty * pOmProp = NULL;
@@ -307,8 +308,8 @@ AAFRESULT ImplPropertyCollection::Initialize
 			continue;
 
 		  OMPropertyId opid = pOmProp->propertyId ();
-		  assert (pDict);
-		  AAFRESULT hr = pDict->LookupPropDefByOMPid (opid, &pPropDef);
+		  assert (pClassDef);
+		  AAFRESULT hr = pClassDef->LookupPropertyDefbyOMPid (opid, &pPropDef);
 		  if (AAFRESULT_FAILED (hr)) throw hr;
 		  assert (pPropDef);
 
@@ -388,7 +389,7 @@ AAFRESULT ImplPropertyCollection::GetNthElement
 ImplAAFObject::ImplAAFObject ()
   : _pProperties (0),
 	_cachedDefinition (0),
-	_OMPropsInited (AAFFalse),
+	_OMPropInitStarted (AAFFalse),
 	_addedPropCount (0)
 {
   const aafUID_t null_uid = { 0 };
@@ -450,9 +451,12 @@ AAFRESULT STDMETHODCALLTYPE
 	  hr = GetObjectClass (&classID);
 	  assert (AAFRESULT_SUCCEEDED (hr));
 
-	  hr = pDict->LookupClass(&classID, &_cachedDefinition);
+	  ImplAAFClassDef * tmp;
+	  hr = pDict->LookupClass(&classID, &tmp);
 	  if (AAFRESULT_FAILED (hr))
 		return hr;
+	  if (! _cachedDefinition)
+		_cachedDefinition = tmp;
 	  assert (_cachedDefinition);
 		
 	  // We don't need to reference count the definitions since
@@ -772,6 +776,19 @@ ImplAAFObject::GetDictionary(ImplAAFDictionary **ppDictionary) const
 }
 
 
+void ImplAAFObject::pvtSetSoid (const aafUID_t & id)
+{
+  const aafUID_t null_uid = { 0 };
+
+  // make sure it hasn't been set already
+  assert (!EqualAUID (&id, &null_uid));
+
+  // make sure new one is valid
+  assert (EqualAUID (&_soid, &null_uid));
+  _soid = id;
+}
+
+
 //
 // Here is the mapping of DM type defs to OMProperty concrete
 // classes.
@@ -812,33 +829,10 @@ ImplAAFObject::GetDictionary(ImplAAFDictionary **ppDictionary) const
 //
 
 
-void ImplAAFObject::InitOMProperties (void)
+void ImplAAFObject::InitOMProperties ()
 {
-  if (_OMPropsInited)
-	return;
-
-  // Set this first to prevent calls below from re-attempting this
-  // method.
-  //
-  _OMPropsInited = AAFTrue;
-
-  //
-  // We want to do two things.
-  //
-  // 1. Iterate across the properties in the classdef; for each one,
-  //    see if there currently is an OMProperty to match it.  If not,
-  //    allocate one.
-  //
-  // 2. Iterate across all existing OM properties.  For each one:
-  //
-  // 2a. See if this currently existing OM property is defined in the
-  //     ClassDef, and the definition matches that of the property to
-  //     the best of our ability to test.
-  //
-  // 2b. If the property is there (and it's an error caught in the
-  //     previous stepif it isn't), then initialize it with whatever
-  //     info we have at hand from the class definition.
-  //
+  assert (! _OMPropInitStarted);
+  _OMPropInitStarted = AAFTrue;
 
   AAFRESULT hr;
 
@@ -869,58 +863,47 @@ void ImplAAFObject::InitOMProperties (void)
 		{
 		  // Loop through all properties of this class
 		  OMPropertyId defPid = propDefSP->OmPid ();
-		  OMPropertyId propPid = defPid + 1; // make sure it's set to
-											 // something different
-		  size_t context = 0;
-		  for (size_t i = 0; i < propCount; i++)
+
+//		  assert (ps->isAllowed (defPid));
+		  OMProperty * pProp = 0;
+		  if (ps->isPresent (defPid))
 			{
-			  OMProperty * pProp = 0;
-			  ps->iterate (context, pProp);
-			  assert (pProp);
-			  propPid = pProp->propertyId ();
-			  if (defPid == propPid)
-				break;
-			}
-		  if (defPid != propPid)
+			  pProp = ps->get (defPid);
+			}		  
+		  else
 			{
 			  // Defined property wasn't found in OM property set.
 			  // We'll have to install one.
 
-			  // Get type info for the prop to be installed
-			  ImplAAFTypeDefSP ptd;
-			  hr = propDefSP->GetTypeDef (&ptd);
-			  assert (AAFRESULT_SUCCEEDED (hr));
-			  assert (ptd);
-
-			  // Get the property name from the property def.
-			  aafUInt32 wNameLen = 0;
-			  hr = propDefSP->GetNameBufLen (&wNameLen);
-			  assert (AAFRESULT_SUCCEEDED (hr));
-			  assert (wNameLen > 0);
-			  aafCharacter * wNameBuf =
-				(aafCharacter *) new aafUInt8[wNameLen];
-			  assert (wNameBuf);
-			  hr = propDefSP->GetName (wNameBuf, wNameLen);
-			  assert (AAFRESULT_SUCCEEDED (hr));
-
-			  // Create the property with the given name.
-			  OMProperty * pNewProp =
-				ptd->pvtCreateOMProperty (defPid, wNameBuf);
+			  pProp = propDefSP->CreateOMProperty ();
+			  assert (pProp);
 
 			  // Remember this property so we can delete it later.
-			  _addedProps[_addedPropCount++] = pNewProp;
+			  _addedProps[_addedPropCount++] = pProp;
 			  assert (_addedPropCount <= kMaxAddedPropCount);
 
 			  // Bobt hack! this assertion was removed when optional
 			  // properties were put into service...
 			  //
-			  // assert (pNewProp->bitsSize ());
-			  delete[] wNameBuf;
+			  // assert (pProp->bitsSize ());
 
 			  // Add the property to the property set.
-			  ps->put (pNewProp);
+			  ps->put (pProp);
 			}
+
+		  ImplAAFPropertyDef * pPropDef =
+			(ImplAAFPropertyDef*) propDefSP;
+		  OMPropertyDefinition * pOMPropDef =
+			dynamic_cast<OMPropertyDefinition*>(pPropDef);
+		  assert (pOMPropDef);
+
+		  assert (pProp);
+		  pProp->initialize (pOMPropDef);
+
 		  propDefSP = 0;
+		  pProp = 0;
+		  pOMPropDef = 0;
+		  pPropDef = 0;
 		}
 
 	  // Look at the parent of this class
@@ -931,87 +914,6 @@ void ImplAAFObject::InitOMProperties (void)
 		break;
 	  spDef = parentSP;
 	}
-
-  // Step 2: look through OM properties.  2a. See if each is defined
-  // in the class def.  It's an error if it isn't. 2b. Initialize it
-  // with any info we can.
-  size_t context = 0;
-  for (size_t i = 0; i < propCount; i++)
-	{
-	  OMProperty * pProp = 0;
-	  ps->iterate (context, pProp);
-	  assert (pProp);
-	  OMPropertyId opid = pProp->propertyId ();
-
-	  ImplAAFPropertyDefSP ppd;
-	  ImplAAFClassDefSP pcd;
-	  hr = GetDefinition (&pcd);
-	  assert (AAFRESULT_SUCCEEDED (hr));
-	  hr = pcd->LookupPropertyDefbyOMPid (opid, &ppd);
-	  assert (AAFRESULT_SUCCEEDED (hr));
-
-	  // The following assertion will fail if the property is not
-	  // defined in the class definition for this object.
-	  assert (ppd);
-
-	  ImplAAFTypeDefSP ptd;
-	  hr = ppd->GetTypeDef (&ptd);
-	  assert (AAFRESULT_SUCCEEDED (hr));
-	  assert (ptd);
-
-#if 0
-	  // The only info we can compare is sizes of properties.  Let's
-	  // make sure they match.
-	  size_t omPropSize  = pProp->bitsSize ();
-	  // Hack!  We don't think internalsize() actually needs the
-	  // pointer to bits, so we'll pass zero since bits ptr is
-	  // difficult to get.
-	  size_t definedSize = ptd->internalSize (0, omPropSize);
-
-	  // If the assertion below fails, try un-commenting the lines
-	  // which follow it to find out which property is defined with
-	  // the wrong size.  You'll also have to add an include to
-	  // iostream.h .  Be sure to reinstate the comments, and remove
-	  // the include<iostream.h> before you check in any changes!
-	  // assert (definedSize == omPropSize);
-	  
-	  if (definedSize != omPropSize)
-		{
-		  cerr << "Property size error: "
-			   <<   "pid=0x"         << hex << opid
-			   << ", definedSize=0x" << hex << definedSize
-			   << ", omPropSize=0x"  << hex << omPropSize
-			   << endl;
-		}
-#endif	  
-
-	  // Fill in other OMProp info that the property def can offer.
-	  // Specifically, the property type, and 'optionality'.
-	  assert (pProp);
-	  const char * propName = pProp->name ();
-	  assert (propName);
-	  aafBool isOptional;
-	  hr = ppd->GetIsOptional (&isOptional);
-	  assert (AAFRESULT_SUCCEEDED (hr));
-	  pProp->initialize (opid,
-						 propName,
-						 ptd,
-						 isOptional ? true : false);
-	  ppd = 0;
-	}
-}
-
-
-void ImplAAFObject::pvtSetSoid (const aafUID_t & id)
-{
-  const aafUID_t null_uid = { 0 };
-
-  // make sure it hasn't been set already
-  assert (!EqualAUID (&id, &null_uid));
-
-  // make sure new one is valid
-  assert (EqualAUID (&_soid, &null_uid));
-  _soid = id;
 }
 
 
