@@ -250,6 +250,25 @@ OMReferenceVectorIterator<ReferencedObject>::currentObject(void) const
   return result;
 }
 
+  // @mfunc Clear (set to 0) the <p OMObject> in the associated
+  //        reference container at the position currently
+  //        designated by this <c OMReferenceVectorIterator>.
+  //        The existing object, if any, is returned. The associated
+  //        reference container is not modified in that no entry is
+  //        removed, the existing entry remains but no longer refers
+  //        to a valid object.
+  //   @rdesc The previous <c OMObject> at the current position.
+template <typename ReferencedObject>
+OMObject*
+OMReferenceVectorIterator<ReferencedObject>::clearObject(void)
+{
+  TRACE("OMReferenceVectorIterator<ReferencedObject>::clearObject");
+
+  OMObject* result = 0;
+  ASSERT("Unimplemented code not reached", false); // tjb
+  return result;
+}
+
   // @mfunc Return the index of the <p ReferencedObject> in the
   //        associated <c OMReferenceVector> at the position
   //        currently designated by this

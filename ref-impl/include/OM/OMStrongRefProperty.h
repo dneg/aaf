@@ -114,6 +114,9 @@ public:
     // @cmember set the value of this <c OMStrongReferenceProperty>.
   virtual OMObject* setObject(const OMObject* object);
 
+    // @cmember Clear the value of this <c OMStrongReferenceProperty>.
+  virtual OMObject* clearObject(void);
+
     // @cmember The value of this <c OMStrongReferenceProperty>
     //          as an <c OMStorable>.
   virtual OMStorable* storable(void) const;

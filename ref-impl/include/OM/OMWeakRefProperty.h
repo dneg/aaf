@@ -114,6 +114,9 @@ public:
     // @cmember set the value of this <c OMWeakReferenceProperty>.
   virtual OMObject* setObject(const OMObject* object);
 
+    // @cmember Clear the value of this <c OMWeakReferenceProperty>.
+  virtual OMObject* clearObject(void);
+
   virtual OMWeakObjectReference& reference(void) const;
 
     // @cmember The <c OMStrongReferenceSet> in which the object

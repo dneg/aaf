@@ -405,6 +405,21 @@ OMObject* OMStrongReferenceProperty<ReferencedObject>::setObject(
   return setValue(p);
 }
 
+  // @mfunc Clear the value of this <c OMStrongReferenceProperty>.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          (contained) object. This type must be a descendant of
+  //          <c OMStorable>.
+  //   @rdesc A pointer to the old <c OMObject>. If lazy
+  //          loading is enabled and the referenced object was never
+  //          loaded the value returned is 0.
+template <typename ReferencedObject>
+OMObject* OMStrongReferenceProperty<ReferencedObject>::clearObject(void)
+{
+  TRACE("OMStrongReferenceProperty<ReferencedObject>::clearObject");
+
+  return clearValue();
+}
+
   // @mfunc The value of this <c OMStrongReferenceProperty>
   //        as an <c OMStorable>.
   //   @rdesc The <c OMStorable> represented by this

@@ -143,6 +143,15 @@ public:
     //          designated by this <c OMReferenceSetIterator>.
   virtual OMObject* currentObject(void) const;
 
+    // @cmember Clear (set to 0) the <p OMObject> in the associated
+    //          reference container at the position currently
+    //          designated by this <c OMReferenceSetIterator>.
+    //          The existing object, if any, is returned. The associated
+    //          reference container is not modified in that no entry is
+    //          removed, the existing entry remains but no longer refers
+    //          to a valid object.
+  virtual OMObject* clearObject(void);
+
     // @cmember Return the <p Key> of the <p ReferencedObject> in the
     //          associated <c OMReferenceSet> at the position
     //          currently designated by this <c OMReferenceSetIterator>.

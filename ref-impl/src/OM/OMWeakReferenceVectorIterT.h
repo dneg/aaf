@@ -318,6 +318,25 @@ OMWeakReferenceVectorIterator<ReferencedObject>::currentObject(void) const
   return result;
 }
 
+  // @mfunc Clear (set to 0) the <p OMObject> in the associated
+  //        reference container at the position currently
+  //        designated by this <c OMWeakReferenceVectorIterator>.
+  //        The existing object, if any, is returned. The associated
+  //        reference container is not modified in that no entry is
+  //        removed, the existing entry remains but no longer refers
+  //        to a valid object.
+  //   @rdesc The previous <c OMObject> at the current position.
+template <typename ReferencedObject>
+OMObject*
+OMWeakReferenceVectorIterator<ReferencedObject>::clearObject(void)
+{
+  TRACE("OMWeakReferenceVectorIterator<ReferencedObject>::clearObject");
+
+  OMObject* result = 0;
+  ASSERT("Unimplemented code not reached", false); // tjb
+  return result;
+}
+
   // @mfunc Create an <c OMWeakReferenceVectorIterator> given
   //        an underlying <c OMVectorIterator>.
   //   @tcarg class | ReferencedObject | The type of the contained objects.

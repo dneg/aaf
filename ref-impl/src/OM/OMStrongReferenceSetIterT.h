@@ -336,6 +336,26 @@ OMStrongReferenceSetIterator<UniqueIdentification,
   return result;
 }
 
+  // @mfunc Clear (set to 0) the <p OMObject> in the associated
+  //        reference container at the position currently
+  //        designated by this <c OMStrongReferenceSetIterator>.
+  //        The existing object, if any, is returned. The associated
+  //        reference container is not modified in that no entry is
+  //        removed, the existing entry remains but no longer refers
+  //        to a valid object.
+  //   @rdesc The previous <c OMObject> at the current position.
+template <typename UniqueIdentification, typename ReferencedObject>
+OMObject*
+OMStrongReferenceSetIterator<UniqueIdentification,
+                             ReferencedObject>::clearObject(void)
+{
+  TRACE("OMStrongReferenceSetIterator<UniqueIdentification, "
+                                     "ReferencedObject>::clearObject");
+
+  OMObject* result = setValue(0);
+  return result;
+}
+
   // @mfunc Create an <c OMStrongReferenceSetIterator> given
   //        an underlying <c OMSetIterator>.
   //   @tcarg class | ReferencedObject | The type of the contained objects.

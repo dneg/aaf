@@ -269,6 +269,26 @@ OMObject* OMReferenceSetIterator<UniqueIdentification,
   return result;
 }
 
+  // @mfunc Clear (set to 0) the <p OMObject> in the associated
+  //        reference container at the position currently
+  //        designated by this <c OMReferenceSetIterator>.
+  //        The existing object, if any, is returned. The associated
+  //        reference container is not modified in that no entry is
+  //        removed, the existing entry remains but no longer refers
+  //        to a valid object.
+  //   @rdesc The previous <c OMObject> at the current position.
+template <typename UniqueIdentification, typename ReferencedObject>
+OMObject* OMReferenceSetIterator<UniqueIdentification,
+                                 ReferencedObject>::clearObject(void)
+{
+  TRACE("OMReferenceSetIterator<UniqueIdentification, "
+                               "ReferencedObject>::clearObject");
+
+  OMObject* result = 0;
+  ASSERT("Unimplemented code not reached", false); // tjb
+  return result;
+}
+
   // @mfunc Return the <p Key> of the <p ReferencedObject> in the
   //        associated <c OMReferenceSet> at the position
   //        currently designated by this <c OMReferenceSetIterator>.

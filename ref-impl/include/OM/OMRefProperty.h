@@ -56,6 +56,9 @@ public:
     // @cmember set the value of this <c OMReferenceProperty>.
   virtual OMObject* setObject(const OMObject* object) = 0;
 
+    // @cmember Clear the value of this <c OMReferenceProperty>.
+  virtual OMObject* clearObject(void) = 0;
+
 };
 
 #endif
