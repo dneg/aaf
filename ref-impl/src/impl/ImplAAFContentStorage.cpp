@@ -342,7 +342,7 @@ AAFRESULT STDMETHODCALLTYPE
 {
 	aafUInt32			numEssence, n;
 	aafUID_t			testMobID;
-	ImplAAFEssenceData	*testData;
+	ImplAAFEssenceData	*testData = NULL;
 
 	XPROTECT()
 	{
@@ -357,9 +357,15 @@ AAFRESULT STDMETHODCALLTYPE
 			{
 				*pResult = AAFTrue;
 			}
+			testData->ReleaseReference();
+			testData = NULL;
 		}
 	}
 	XEXCEPT
+	{
+		if(testData != NULL)
+			testData->ReleaseReference();
+	}
 	XEND
 
 	return AAFRESULT_SUCCESS;
