@@ -2,11 +2,14 @@
 #include <stdlib.h>
 #include "Container.h"
 #include "AAFObject.h"
+#include "AAFUtils.h"
 #include "aafansic.h"
+#include "aafCvt.h"
 
 #include "AAFHeader.h"
+#if OM_PRESENT
 #include "file.h"
-
+#endif
 
 // Later: These two functions set a global alignment in the
 //file for writing properties.  Used only for media data
@@ -22,7 +25,11 @@ void OMContainer::SetValueAlignment(aafInt32 alignment)
 // Later:  
 aafInt16 OMContainer::GetDefaultByteOrder(void)
 {
+#if FULL_TOOLKIT
 	return(OMNativeByteOrder);
+#else
+	return(0);
+#endif
 }
 void OMContainer::SetDefaultByteOrder(aafInt16 byteOrder)
 {
@@ -31,8 +38,10 @@ void OMContainer::SetDefaultByteOrder(aafInt16 byteOrder)
 // Close and save the file
 void OMContainer::OMLCloseContainer(void)
 {
-  *_file << *_head;
+#if OM_PRESENT
+	*_file << *_head;
   _file->close();
+#endif
 }
 
 // Close without saving the file
@@ -67,8 +76,10 @@ void OMContainer::OMLOpenNewContainer(OMLSession sessionData,
 	char *pathname;
 
 	pathname = GetFileName(attributes);
-  _file = new File(pathname);
+#if OM_PRESENT
+	_file = new File(pathname);
   _file->create();
+#endif
 }
 
 // OML Revision number
@@ -86,20 +97,26 @@ OMLCount32 OMContainer::OMLCountValues(OMLObject object, OMLProperty property, O
 // Submerge
 OMLValue OMContainer::OMLUseValue(OMLObject object, OMLProperty property, OMLType type)
 {
-	return(0);
+	return(NULL);
 }
 
 // Submerge
 OMLSize OMContainer::OMLGetValueDataOffset(OMLValue value, OMLCount offset, short *errVal)
 {
-	return(0);
+	aafInt64	tmp;
+	
+	CvtInt32toInt64(0, &tmp);
+	return(tmp);
 }
 
 // Submerge
 // Size of a property in bytes
 OMLSize OMContainer::OMLGetValueSize(OMLValue value)
 {
-	return(0);
+	aafInt64	tmp;
+	
+	CvtInt32toInt64(0, &tmp);
+	return(tmp);
 }
 
 // Property read
@@ -196,7 +213,7 @@ OMLProperty OMContainer::OMLGetNextProperty(OMLProperty currProperty)
 
 //Bento uses these as internal per-file-unique object IDs.  I think that only the dumper
 //uses these.
-AAF_EXPORT aafInt32 OMContainer::GetObjectID(OMLObject obj)
+aafInt32 OMContainer::GetObjectID(OMLObject obj)
 {
 	return(0);
 }
@@ -236,6 +253,7 @@ OMLValue OMContainer::OMLGetNextValue(OMLObject object, OMLProperty property, OM
 	return(0);
 }
 
+#if FULL_TOOLKIT
 // Get the file from an object pointer
 OMLContainer OMContainer::OMLGetObjectContainer(AAFObject *theObject)
 {
@@ -258,6 +276,7 @@ AAFObject *OMContainer::OMLGetNextObject(AAFObject *currObject)
 {
 	return(0);
 }
+#endif
 
 // May not need to implement.  These functions together tell how property values
 // exist in the file (absolute file positions).  A segment (ouch..) is a section of a 
@@ -281,10 +300,12 @@ void OMContainer::GetSegmentSizeLen(OMLObject	object,
 {
 }
 
+#if FULL_TOOLKIT
 void OMContainer::SetHead(const AAFHeader* head)
 {
   _head = head;
 }
+#endif
 
 /*****/
 // Called once at program start for your real globals
