@@ -35,7 +35,9 @@
 #include "ImplAAFDefObject.h"
 #endif
 
-class ImplAAFTypeDef;
+#ifndef __ImplAAFTypeDeft_h__
+#include "ImplAAFTypeDef.h"
+#endif
 
 class ImplAAFParameterDef : public ImplAAFDefObject
 {
@@ -111,7 +113,7 @@ public:
         (const aafCharacter *  pDisplayUnits);
 
 private:
-	OMFixedSizeProperty<aafUID_t>							_typeDef;
+	OMWeakReferenceProperty<ImplAAFTypeDef>					_typeDef;
 	OMWideStringProperty									_displayUnits;
 };
 
