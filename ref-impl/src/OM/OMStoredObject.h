@@ -205,6 +205,9 @@ public:
                      const OMUInt32 bytes,
                      OMUInt32& bytesWritten);
 
+    // @cmember Read an OMUInt8 from <p stream> into <p i>.
+  void readUInt8FromStream(IStream* stream, OMUInt8& i);
+
     // @cmember Read an OMUInt16 from <p stream> into <p i>.
     //          If <p reorderBytes> is true then the bytes are reordered.
   void readUInt16FromStream(IStream* stream, OMUInt16& i, bool reorderBytes);
