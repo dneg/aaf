@@ -147,10 +147,12 @@ AUTO_GEN_IMPL = \
 # NOT into AAF.idl.
 
 PLUGIN_OBJECTS = \
-	AAFEssenceFormat \
 	AAFPluginTypes \
+	AAFRoot \
+	AAFEssenceFormat \
 	AAFPlugin \
 	AAFEssenceStream \
+	AAFEssenceDataStream \
 	AAFEssenceCodec
 
 # objects in PLUGIN_OBJECTS are NOT built into the main interface IDL
