@@ -32,6 +32,9 @@
 #include "OMAssertions.h"
 #include <stddef.h>
 
+template <typename Key, typename Value>
+class OMRedBlackTreeIterator;
+
   // @class Red-black trees. A red-black tree is an approximately
   //        balanced binary search tree providing O(lg N) performance
   //        for the dynamic set operations. Items in the tree are
@@ -164,6 +167,8 @@ private:
     Node* _right;
     Color _color;
   };
+
+  friend class OMRedBlackTreeIterator<Key, Value>;
 
 };
 
