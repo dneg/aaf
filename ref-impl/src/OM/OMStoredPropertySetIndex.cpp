@@ -38,20 +38,16 @@ void OMStoredPropertySetIndex::insert(OMPropertyId propertyId,
 
   if (entry == 0 ) {
     entry = find();
-    if (entry != 0) {
-      entry->_propertyId = propertyId;
-      entry->_type = type;
-      entry->_offset = offset;
-      entry->_length = length;
-      entry->_valid = true;
-      _entries++;
-    } else {
-      // error - no free slots
-    }
-  } else {
-    // already in index
+    ASSERT("Found space for new entry", entry != 0);
+    _entries++;
   }
+  ASSERT("Valid index entry", entry != 0);
 
+  entry->_propertyId = propertyId;
+  entry->_type = type;
+  entry->_offset = offset;
+  entry->_length = length;
+  entry->_valid = true;
 }
 
 OMStoredPropertySetIndex::IndexEntry* OMStoredPropertySetIndex::find(
