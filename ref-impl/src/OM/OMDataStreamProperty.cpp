@@ -220,6 +220,9 @@ void OMDataStreamProperty::read(OMByte* buffer,
 {
   TRACE("OMDataStreamProperty::read");
 
+  PRECONDITION("Optional property is present",
+                                           IMPLIES(isOptional(), isPresent()));
+
   if (_stream == 0) {
     OMDataStreamProperty* p = const_cast<OMDataStreamProperty*>(this);
     p->create();
@@ -249,6 +252,7 @@ void OMDataStreamProperty::write(const OMByte* buffer,
   ASSERT("Valid stream", _stream != 0);
 
   store()->writeToStream(_stream, buffer, bytes, bytesWritten);
+  setPresent();
 }
 
   // @mfunc Attempt to read the number of elements given by
@@ -270,6 +274,8 @@ void OMDataStreamProperty::readTypedElements(const OMType* elementType,
 {
   TRACE("OMDataStreamProperty::readTypedElements");
 
+  PRECONDITION("Optional property is present",
+                                           IMPLIES(isOptional(), isPresent()));
   PRECONDITION("Valid element type", elementType != 0);
   PRECONDITION("Valid element size", externalElementSize!= 0);
   PRECONDITION("Valid buffer", elements != 0);
@@ -373,6 +379,7 @@ void OMDataStreamProperty::writeTypedElements(const OMType* elementType,
   }
   delete [] buffer;
   elementsWritten = elementCount;
+  setPresent();
 }
 
   // @mfunc The size of the raw bits of this
