@@ -8,6 +8,21 @@ AAFComponent\
 #c
 #import ./AAFComponent.exp
 AD_HEAD
+/******************************************\
+*                                          *
+* Advanced Authoring Format                *
+*                                          *
+* Copyright (c) 1998 Avid Technology, Inc. *
+* Copyright (c) 1998 Microsoft Corporation *
+*                                          *
+\******************************************/
+
+ 
+/***********************************************\
+*	Stub only.   Implementation not yet added	*
+\***********************************************/
+
+
 AD_IDL(//
 // The IAAFSegment interface is implemented by objects which represent
 // a component that is independent of any surrounding object.
