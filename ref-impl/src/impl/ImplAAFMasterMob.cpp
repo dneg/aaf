@@ -31,6 +31,14 @@ ImplAAFMasterMob::ImplAAFMasterMob ()
 ImplAAFMasterMob::~ImplAAFMasterMob ()
 {}
 
+
+AAFRESULT STDMETHODCALLTYPE
+ImplAAFMasterMob::Initialize ()
+{
+  return AAFRESULT_SUCCESS;
+}
+
+
 //***********************************************************
 //
 // AddMasterSlot()
@@ -131,7 +139,7 @@ AAFRESULT STDMETHODCALLTYPE
 		if(pSrcClip == NULL)
 			RAISE(E_FAIL);
 
-		CHECK(pSrcClip->InitializeSourceClip(pDataDef, &slotLength, ref));
+		CHECK(pSrcClip->Initialize(pDataDef, &slotLength, ref));
 		CHECK(AppendNewSlot(pSrcClip, masterSlotID, pSlotName, &pNewSlot));
 
 		pNewSlot->ReleaseReference();
