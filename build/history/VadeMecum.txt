@@ -30,7 +30,8 @@ build/history/AAFtagdates.
 
 How to add a new change log
 
-The following instructions assume you are adding a new tag and want to
+The following instructions assume that the most recent tag is
+Build-yyyy and that you are adding a new tag (Build-zzzz) and want to
 create a new page and an updated index. If you only want to update the
 page for the most recent changes (between the last build tag and head)
 you can omit steps 1, 2, and 3.
@@ -59,7 +60,7 @@ operate recursively (by default). So to tag all file in the repository
 the easiest way is to cd to the root of a working copy. For example -
 
 $ cd your-working-copy/AAF
-$ cvs rtag Build-506
+$ cvs rtag Build-zzzz
  
 Add the new tag and the corresponding date and time to AAFtagdates
 
@@ -104,7 +105,7 @@ Use scp to copy the new page and index. See the SourceForge.net site
 documentation "Guide to the SourceForge.net Project Web Hosting
 Services") for more details.
 
-$ scp Changes-TagA-TagB.html \
+$ scp Changes-Build-yyyy-Build-zzzz.html \
       yourname@shell.sourceforge.net:/home/groups/a/aa/aaf/htdocs/build
 $ scp Changes-index.html \
       yourname@shell.sourceforge.net:/home/groups/a/aa/aaf/htdocs/build
