@@ -14,7 +14,10 @@ class OMStoredVectorIndex;
 
 class OMStoredObject {
 public:
+
   OMStoredObject(IStorage* s);
+
+  ~OMStoredObject(void);
 
   static OMStoredObject* openRead(const char* fileName);
   static OMStoredObject* openModify(const char* fileName);
