@@ -118,7 +118,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     GetBypassOverride
         // @parm [out] Bypass override property value
-        (aafArgIDType_t *  bypassOverride);
+        (aafUInt32 *  bypassOverride);
 	//@comm If the property does not exist, the error OM_ERR_PROP_NOT_PRESENT will be returned.)
 	//@comm Replaces omfiEffectGetBypassOverride
 
@@ -185,7 +185,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     SetBypassOverride
         // @parm [in] Bypass override
-        (aafArgIDType_t  bypassOverride);
+        (aafUInt32  bypassOverride);
 	//@comm Replaces omfiEffectSetBypassOverride
 
   //****************
@@ -225,7 +225,7 @@ private:
 	OMFixedSizeProperty<aafUID_t>						_effectDefinition;
 	OMStrongReferenceVectorProperty<ImplAAFSegment>		_inputSegments;
 	OMStrongReferenceVectorProperty<ImplAAFParameter>	_parameters;
-	OMFixedSizeProperty<aafArgIDType_t>					_bypassOverride;
+	OMFixedSizeProperty<aafUInt32>						_bypassOverride;
 	OMStrongReferenceProperty<ImplAAFSourceReference>	_rendering;
 };
 
