@@ -552,10 +552,10 @@ public:
 
 /****/
   //****************
-  // AddFrameIndexEntry()
+  // AddSampleIndexEntry()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    AddFrameIndexEntry
+    AddSampleIndexEntry
         // @parm [in] add a frame offset to it's frame index
         (aafInt64  frameOffset);
 	//@comm This function should NOT be called when essence is passed to

@@ -9,6 +9,25 @@ AAFObject\
 #c #import ./AAFObject.exp
 AD_HEAD
 
+AD_IDL(//
+// The IAAFEssenceData interface is used to modify AAFEssenceData objects\,
+// which contain the actual essence data \(ex. WAVE\) when it is contained
+// within an AAF file.  Normally the client application would access the
+// essence through the IAAFEssenceAccess interface\, which handles the work
+// of finding and \(de\)compressing the data.  However\, in rare cases
+// direct access to the data is required\, so this interface is exposed.
+//
+// In addition to the specific error results listed for each method\,
+// all methods in this interface may also return one of the following
+// values:
+//
+// AAFRESULT_NULL_PARAM
+//   - One of the passed in pointers is NULL.
+//
+// AAFRESULT_NOMEMORY
+//   - insufficient system memory is available to perform the
+//     operation.
+//)
 
 /***********************************************\
 *												*
