@@ -114,7 +114,7 @@ template <typename ReferencedType, typename RefCountType>
 struct AAFSmartPointerBase : public RefCountType
 {
   // ctor to create 
-  AAFSmartPointerBase ();
+  inline AAFSmartPointerBase ();
 
   // copy ctor
   AAFSmartPointerBase (const AAFSmartPointerBase<ReferencedType, RefCountType> & src);
@@ -131,28 +131,17 @@ struct AAFSmartPointerBase : public RefCountType
   ReferencedType ** operator & ();
  
   // Allows passing this smart ptr as argument to methods which expect
-  // a ReferencedType* (non-const and const)
-  //operator ReferencedType * ();
-  operator ReferencedType * () const;
+  // a ReferencedType*
+  inline operator ReferencedType * () const;
  
   // member access operators (non-const and const)
-  ReferencedType * operator-> ();
-  const ReferencedType * operator-> () const;
-
-protected:
-
-  // Utility to keep track of who should get acquired and released
-  void updateRefCounts ();
+  inline ReferencedType * operator-> ();
+  inline const ReferencedType * operator-> () const;
 
 private:
 
   // Current referenced object
   ReferencedType * _rep;
-
-  // Last known referenced object.  If _rep changes from under us, we
-  // can detect it with this and do the appropriate acquire/release
-  // references.
-  ReferencedType * _lastKnownRep;
 };
 
 
@@ -169,10 +158,9 @@ private:
 #endif // ! AAF_SMART_POINTER_ASSERT
 
 template <typename ReferencedType, typename RefCountType>
-AAFSmartPointerBase<ReferencedType, RefCountType>::
+inline AAFSmartPointerBase<ReferencedType, RefCountType>::
 AAFSmartPointerBase ()
-  : _rep (0),
-	_lastKnownRep (0)
+  : _rep (0)
 {}
 
 
@@ -180,17 +168,10 @@ template <typename ReferencedType, typename RefCountType>
 AAFSmartPointerBase<ReferencedType, RefCountType>::
 AAFSmartPointerBase\
   (const AAFSmartPointerBase<ReferencedType, RefCountType> & src)
-	: _rep (src._rep),
-	  _lastKnownRep (0) // NULL to make updateRefCounts() work
+	: _rep (src._rep)
 {
-  // BobT 1999-07-07: Bug! See comment in updateRefCounts() to see why
-  // we need to addref this one explicitly.
   if (_rep)
 	acquire(_rep);
-
-  // depends on _lastKnownRep being NULL for proper operation in this
-  // case.
-  updateRefCounts ();
 }  
 
 
@@ -198,12 +179,11 @@ template <typename ReferencedType, typename RefCountType>
 AAFSmartPointerBase<ReferencedType, RefCountType>::
 ~AAFSmartPointerBase ()
 {
-  // in case something changed since last time
-  updateRefCounts ();
-
-  // Set _rep to NULL to let updateRefCounts() do the dirty work.
-  _rep = 0;
-  updateRefCounts ();
+  if (_rep)
+	{
+	  release (_rep);
+	  _rep = 0;
+	}
 }
 
 
@@ -213,21 +193,12 @@ AAFSmartPointerBase<ReferencedType, RefCountType>::
 operator=
   (const AAFSmartPointerBase<ReferencedType, RefCountType> & src)
 {
-  // in case something changed since last time
-  updateRefCounts ();
-
-  // Set _rep to NULL to let updateRefCounts() do the dirty work.
-  _rep = 0;
-  updateRefCounts ();
+  if (_rep)
+	release (_rep);
 
   _rep = src._rep;
-
-  // BobT 1999-07-07: Bug! See comment in updateRefCounts() to see why
-  // we need to addref this one explicitly.
   if (_rep)
 	acquire(_rep);
-
-  updateRefCounts ();
 
   return *this;
 }
@@ -237,87 +208,41 @@ template <typename ReferencedType, typename RefCountType>
 ReferencedType** AAFSmartPointerBase<ReferencedType, RefCountType>::
 operator & ()
 {
-  // in case something changed since last time
-
-  updateRefCounts ();
+  if (_rep)
+	{
+	  release (_rep);
+	  _rep = 0;
+	}
   return &_rep;
 }
 
-/*
-template <typename ReferencedType, typename RefCountType>
-AAFSmartPointerBase<ReferencedType, RefCountType>::
-operator ReferencedType* ()
-{
-  // in case something changed since last time
-
-  updateRefCounts ();
-  return _rep;
-}*/
-
 
 template <typename ReferencedType, typename RefCountType>
-AAFSmartPointerBase<ReferencedType, RefCountType>::
+inline AAFSmartPointerBase<ReferencedType, RefCountType>::
 operator ReferencedType* () const
 {
   // in case something changed since last time
 
-  ((AAFSmartPointerBase<ReferencedType, RefCountType>*)this)->updateRefCounts ();
+  // ((AAFSmartPointerBase<ReferencedType, RefCountType>*)this)->updateRefCounts ();
   return _rep;
 }
 
 
 template <typename ReferencedType, typename RefCountType>
-ReferencedType* AAFSmartPointerBase<ReferencedType, RefCountType>::
+inline ReferencedType* AAFSmartPointerBase<ReferencedType, RefCountType>::
 operator-> ()
 {
-  // in case something changed since last time
-  updateRefCounts ();
-
   AAF_SMART_POINTER_ASSERT (_rep);
   return _rep;
 }
 
 template <typename ReferencedType, typename RefCountType>
-const ReferencedType *
+inline const ReferencedType *
 AAFSmartPointerBase<ReferencedType, RefCountType>::
 operator-> () const
 {
-  // in case something changed since last time
-  updateRefCounts ();
-
   AAF_SMART_POINTER_ASSERT (_rep);
   return _rep;
-}
-
-
-template <typename ReferencedType, typename RefCountType>
-void AAFSmartPointerBase<ReferencedType, RefCountType>::
-updateRefCounts ()
-{
-  if (_rep != _lastKnownRep)
-	{
-	  // _rep changed since we last knew it.  Release last known
-	  // rep.
-	  if (_lastKnownRep)
-		{
-		  release(_lastKnownRep);
-		}
-	  // Make sure we know what we're pointing to now
-	  _lastKnownRep = _rep;
-	  if (_rep)
-		{
-		  // _rep was changed to something else since we last knew.
-		  // acquire the new one.
-		  //
-		  // BobT 1999-07-07: Bug! operator&() is used when passing a
-		  // smart pointer to GetObject(obj**)-style methods; however
-		  // these typically addref the returned object before they
-		  // return it! So in that case, we *don't* want to acquire a
-		  // reference to it, since it was already done for us.
-		  // Comment out this acquire()...
-		  // acquire(_rep);
-		}
-	}
 }
 
 
