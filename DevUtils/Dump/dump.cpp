@@ -217,8 +217,7 @@ const ByteOrder bigEndian         = 0x4d4d;
 
 // Stream names and punctuation
 //
-const char* const propertyIndexStreamName = "property index";
-const char* const propertyValueStreamName = "property values";
+const char* const propertiesStreamName = "properties";
 const char* const openArrayKeySymbol = "{";
 const char* const closeArrayKeySymbol = "}";
 
@@ -389,20 +388,23 @@ static size_t maxSignatureSize = signatureSize();
 //           StrongReferenceVector (was a StrongReferenceSet).
 //  0.19   : Introduced singleton weak references, added
 //           "referenced properties".
-//   0.20  : Set of objects with unique identifiers other than GUIDs.
+//  0.20   : Set of objects with unique identifiers other than GUIDs.
 //           Add keyPid and keySize to set index header.
+//  0.21   : Combine "property index" and "property values" streams
+//           into a single "properties" stream.
 //
 
 // The following may change at run time depending on the file format
 // version.
 //
-char* _propertyValueStreamName = (char*)propertyValueStreamName;
+char* _propertyValueStreamName = (char*)propertiesStreamName;
+char* _propertyIndexStreamName = (char*)propertiesStreamName;
 char* _openArrayKeySymbol = (char*)openArrayKeySymbol;
 char* _closeArrayKeySymbol = (char*)closeArrayKeySymbol;
 
 // Highest version of file/index format recognized by this dumper
 //
-const OMUInt32 HIGHVERSION = 20;
+const OMUInt32 HIGHVERSION = 21;
 
 // Output format requested
 //
@@ -458,6 +460,9 @@ static void printUMID(UMID* umid);
 static void openStream(IStorage* storage,
                        const char* streamName,
                        IStream** stream);
+static HRESULT openStreamTry(IStorage* storage,
+                             const char* streamName,
+                             IStream** stream);
 static size_t sizeOfStream(IStream* stream, const char* streamName);
 static void printStat(STATSTG* statstg, char* tag);
 static void dumpStream(IStream* stream, STATSTG* statstg, char* pathName);
@@ -550,6 +555,7 @@ static void dumpDataStream(IStream* stream,
                            const char* pathName,
                            const char* streamName);
 static void dumpProperties(IStorage* storage,
+                           IStream* stream,
                            IndexEntry* index,
                            OMUInt32 entries,
                            OMUInt32 version,
@@ -1075,6 +1081,24 @@ void openStream(IStorage* storage, const char* streamName, IStream** stream)
 
 }
 
+HRESULT openStreamTry(IStorage* storage,
+                      const char* streamName,
+                      IStream** stream)
+{
+  *stream = 0;
+  OMCHAR wcStreamName[256];
+  convert(wcStreamName, 256, streamName);
+
+  HRESULT result = storage->OpenStream(
+    wcStreamName,
+    NULL,
+    STGM_SHARE_EXCLUSIVE | STGM_READ,
+    0,
+    stream);
+
+  return result;
+}
+
 size_t sizeOfStream(IStream* stream, const char* streamName)
 {
   STATSTG statstg;
@@ -1518,6 +1542,14 @@ bool isValid(const IndexEntry* index, const OMUInt32 entries)
 //
 size_t valueStreamSize(const IndexEntry* index, const OMUInt32 entries)
 {
+#if 1
+  size_t result = 0;
+
+  for (size_t i = 0; i < entries; i++) {
+    result = result + index[i]._length;
+  }
+  return result;
+#else
   size_t result;
 
   if (entries != 0) {
@@ -1527,6 +1559,7 @@ size_t valueStreamSize(const IndexEntry* index, const OMUInt32 entries)
     result = 0;
   }
   return result;
+#endif
 }
 
 char* typeName(OMUInt32 type)
@@ -2395,6 +2428,7 @@ void dumpDataStream(IStream* stream,
 }
 
 void dumpProperties(IStorage* storage,
+                    IStream* stream,
                     IndexEntry* index,
                     OMUInt32 entries,
                     OMUInt32 version,
@@ -2402,11 +2436,11 @@ void dumpProperties(IStorage* storage,
                     int isRoot,
                     bool swapNeeded)
 {
-  IStream* stream = 0;
-  openStream(storage, _propertyValueStreamName, &stream);
-
-  if (stream == 0) {
-    fatalError("dumpProperties", "openStream() failed.");
+  if (version < 21) {
+    openStream(storage, _propertyValueStreamName, &stream);
+    if (stream == 0) {
+      fatalError("dumpProperties", "openStream() failed.");
+    }
   }
 
   // Check that the property value stream is the correct size for the
@@ -2418,7 +2452,14 @@ void dumpProperties(IStorage* storage,
   if (actualStreamSize < expectedStreamSize) {
     fatalError("dumpProperties", "Property value stream too small.");
   }
-  totalStreamBytes = totalStreamBytes + actualStreamSize;
+
+  // Add in the size of the property value stream
+  //
+  if (version >= 21) {
+    totalStreamBytes = totalStreamBytes + expectedStreamSize;
+  } else {
+    totalStreamBytes = totalStreamBytes + actualStreamSize;
+  }
 
   for (OMUInt32 i = 0; i < entries; i++) {
 
@@ -2473,21 +2514,16 @@ void dumpProperties(IStorage* storage,
                        isRoot,
                        swapNeeded);
 
-  stream->Release();
-  stream = 0;
-
+  if (version < 21) {
+    stream->Release();
+    stream = 0;
+  }
 }
 
 ByteOrder fileByteOrder = unspecifiedEndian;
 
 ByteOrder readByteOrder(IStream* stream)
 {
-  // Reset format version dependent parameters.
-  //
-  _propertyValueStreamName = (char*)propertyValueStreamName;
-  _openArrayKeySymbol = (char*)openArrayKeySymbol;
-  _closeArrayKeySymbol = (char*)closeArrayKeySymbol;
-
   OMUInt16 byteOrder;
   read(stream, &byteOrder, sizeof(byteOrder));
 
@@ -2549,7 +2585,7 @@ void dumpObject(IStorage* storage, char* pathName, int isRoot)
   totalObjects = totalObjects + 1; // Count this object
 
   IStream* stream = 0;
-  openStream(storage, propertyIndexStreamName, &stream);
+  openStream(storage, _propertyIndexStreamName, &stream);
 
   if (stream == 0) {
     fatalError("dumpObject", "Property index stream not found.");
@@ -2557,11 +2593,10 @@ void dumpObject(IStorage* storage, char* pathName, int isRoot)
 
   // Check that the stream is not empty.
   //
-  size_t indexStreamSize = sizeOfStream(stream, propertyIndexStreamName);
+  size_t indexStreamSize = sizeOfStream(stream, _propertyIndexStreamName);
   if (indexStreamSize == 0){
     fatalError("dumpObject", "Property index stream empty.");
   }
-  totalStreamBytes = totalStreamBytes + indexStreamSize;
 
   OMUInt16 _byteOrder = readByteOrder(stream);
 
@@ -2622,11 +2657,23 @@ void dumpObject(IStorage* storage, char* pathName, int isRoot)
   
   // Check that the stream size is consistent with the entry count
   //
-  size_t expectedSize = headSize + (_entryCount * sizeof(IndexEntry));
-  if (indexStreamSize < expectedSize) {
-    fatalError("dumpObject", "Property index stream too small.");
-  } else if (indexStreamSize > expectedSize) {
-    warning("dumpObject", "Property index stream too large.");
+  if (_formatVersion >= 21) {
+    // stream must be at least big enough to contain the index
+    size_t expectedSize = headSize + (_entryCount * sizeof(IndexEntry));
+    if (indexStreamSize < expectedSize) {
+      fatalError("dumpObject", "Property stream too small.");
+    }
+    // Add in the size of the index stream
+    totalStreamBytes = totalStreamBytes + expectedSize;
+  } else {
+    size_t expectedSize = headSize + (_entryCount * sizeof(IndexEntry));
+    if (indexStreamSize < expectedSize) {
+      fatalError("dumpObject", "Property index stream too small.");
+    } else if (indexStreamSize > expectedSize) {
+      warning("dumpObject", "Property index stream too large.");
+    }
+    // Add in the size of the index stream
+    totalStreamBytes = totalStreamBytes + indexStreamSize;
   }
 
   if ((isRoot) && (_formatVersion < 3)) {
@@ -2675,6 +2722,7 @@ void dumpObject(IStorage* storage, char* pathName, int isRoot)
 
   cout << "Dump of properties" << endl;
   dumpProperties(storage,
+                 stream,
                  index,
                  _entryCount,
                  _formatVersion,
@@ -2811,6 +2859,44 @@ void dumpFileProperties(char* fileName, const char* label)
     fatalError("dumpFileProperties", "openStorage() failed.");
   }
 
+  IStream* s = 0;
+  // Version >= 21 (or < 2)
+  HRESULT r = openStreamTry(storage, "properties", &s);
+  if (s == 0) {
+    // Version 2 - 20 (inclusive)
+    r = openStreamTry(storage, "property index", &s);
+  }
+
+  OMUInt16 byteOrder;
+  OMUInt16 version;
+  if (s != 0) {
+    read(s, &byteOrder, sizeof(byteOrder));
+    read(s, &version, sizeof(version));
+    ASSERT("Valid byte order",
+                      (byteOrder == littleEndian) || (byteOrder == bigEndian));
+    if (byteOrder != hostByteOrder()) {
+      swapUInt16(&version);
+    }
+#if 0
+    cout << "Format version of root = " << version << endl;
+#endif
+    s->Release();
+  } else {
+    fatalError("dumpFileProperties",
+               "Can't find property index of root object");
+  }
+
+  if (version >= 21) {
+    _propertyIndexStreamName = "properties";
+    _propertyValueStreamName = "properties";
+  } else {
+    _propertyIndexStreamName = "property index";
+    _propertyValueStreamName = "property values";
+  }
+#if 0
+  cout << "Index = \"" <<  _propertyIndexStreamName << "\"" << endl;
+  cout << "Value = \"" <<  _propertyValueStreamName << "\"" << endl;
+#endif
   cout << label << endl;
   dumpObject(storage, "/", 1);
     
@@ -3004,6 +3090,10 @@ void printStatistics(void)
   size_t totalMetadataBytes = totalStreamBytes - totalPropertyBytes;
   if (printStats) {
     cout << endl;
+#if 0
+      printInteger(totalStreamBytes,
+        "Total number of bytes in all streams    (S) = ");
+#endif
     printInteger(totalFileBytes,
       "Total number of bytes in file           (F) = ");
     if ((option == property) || (option == aaf)) {
@@ -3144,7 +3234,6 @@ int main(int argumentCount, char* argumentVector[])
 #if defined(_MAC) || defined(macintosh)
   argumentCount = ccommand(&argumentVector); // console window for mac
 #endif
-
 
   // Initialize com library for this process.
   CComInitialize comInit;
