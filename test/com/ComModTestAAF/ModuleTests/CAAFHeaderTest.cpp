@@ -139,7 +139,8 @@ extern "C" HRESULT CAAFHeader_test()
   catch (...)
   {
     cerr << "CAAFHeader_test...Caught general C++"
-    " exception!" << endl; 
+		 << " exception!" << endl; 
+	hr = AAFRESULT_TEST_FAILED;
   }
 
   // Cleanup our object if it exists.

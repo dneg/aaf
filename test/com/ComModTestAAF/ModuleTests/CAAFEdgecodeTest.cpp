@@ -319,7 +319,7 @@ extern "C" HRESULT CAAFEdgecode_test()
 	catch (...)
 	{
 	  cerr << "CAAFEdgecodeMob_test...Caught general C++"
-		" exception!" << endl; 
+		   << " exception!" << endl; 
 	  hr = AAFRESULT_TEST_FAILED;
 	}
 

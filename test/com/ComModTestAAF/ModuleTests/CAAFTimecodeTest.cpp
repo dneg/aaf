@@ -320,7 +320,7 @@ extern "C" HRESULT CAAFTimecode_test()
 	catch (...)
 	{
 	  cerr << "CAAFTimecodeMob_test...Caught general C++"
-		" exception!" << endl; 
+		   << " exception!" << endl; 
 	  hr = AAFRESULT_TEST_FAILED;
 	}
 

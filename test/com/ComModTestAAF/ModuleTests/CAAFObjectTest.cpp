@@ -40,6 +40,8 @@
 #include "CAAFBuiltinDefs.h"
 
 #include "AAFSmartPointer.h"
+typedef IAAFSmartPointer<IAAFFile>           IAAFFileSP;
+typedef IAAFSmartPointer<IAAFHeader>         IAAFHeaderSP;
 typedef IAAFSmartPointer<IAAFIdentification> IAAFIdentificationSP;
 
 static aafUID_t    fillerUID = DDEF_Timecode;
@@ -75,9 +77,9 @@ static void RemoveTestFile(const wchar_t* pFileName)
 }
 
 
-static HRESULT ObjectTest ()
+static HRESULT ObjectWriteTest ()
 {
-  HRESULT hr = AAFRESULT_SUCCESS;
+  HRESULT hr = AAFRESULT_TEST_FAILED;
 
   aafProductIdentification_t ProductInfo;
   IAAFFile* pFile = NULL;
@@ -104,7 +106,10 @@ static HRESULT ObjectTest ()
 	  ProductInfo.platform = NULL;
 
 	  RemoveTestFile (testFileName);
-	  checkResult (AAFFileOpenNewModify(testFileName, 0, &ProductInfo, &pFile));
+	  checkResult (AAFFileOpenNewModify(testFileName,
+										0,
+										&ProductInfo,
+										&pFile));
 	  assert (pFile);
 	  checkResult (pFile->GetHeader (&pHeader));
 	  assert (pHeader);
@@ -116,11 +121,11 @@ static HRESULT ObjectTest ()
 				   CreateInstance (IID_IAAFCompositionMob,
 								   (IUnknown **) &pCMob));
 	  assert (pCMob);
-	  checkResult (pCMob->Initialize (L"TestMob"));
-	  
 	  checkResult (pCMob->QueryInterface (IID_IAAFMob,
 										  (void **) &pMob));
 	  assert (pMob);
+
+	  checkResult (pCMob->Initialize (L"TestMob"));
 	  checkResult (pHeader->AddMob (pMob));
 
 	  checkResult (pCMob->QueryInterface (IID_IAAFObject,
@@ -161,11 +166,9 @@ static HRESULT ObjectTest ()
 	  aafRational_t eu = { 1, 1 };
 	  checkResult (pCMob->SetDefaultFade (0, kAAFFadeNone, eu));
 
+	  // Perform one save and verify that generation was not tracked.
+	  checkResult (pFile->Save());
 
-	  // BobT: Redundant saves do not appear to be supported yet, so
-	  // we'll only save it once at the end.
-	  // // Perform one save and verify that generation was not tracked.
-	  // checkResult (pFile->Save());
 	  AAFRESULT testhr;
 	  IAAFIdentificationSP pIdent;
 	  aafUID_t identAuid;
@@ -226,14 +229,12 @@ static HRESULT ObjectTest ()
 	  // First, change object to make sure Save() will save it
 	  checkResult (pCMob->SetDefaultFade (1, kAAFFadeNone, eu));
 
-#if 0 // BobT: redundant saves not yet supported
 	  checkResult (pFile->Save());
 	  IAAFIdentificationSP pReadIdent1;
 	  checkResult (pObj->GetGeneration(&pReadIdent1));
 	  aafUID_t readAuid1 = { 0 };
 	  checkResult (pReadIdent1->GetProductID(&readAuid1));
 	  checkExpression (1 == readAuid1.Data1, AAFRESULT_TEST_FAILED);
-#endif
 
 	  // Now make a new identification with the second version AUID,
 	  // and append it to the header.
@@ -241,10 +242,20 @@ static HRESULT ObjectTest ()
 				   CreateInstance (IID_IAAFIdentification,
 								   (IUnknown **) &pNewIdent));
 	  assert (pNewIdent);
+	  aafUID_t junkAuid;
+	  // make sure this isn't allowed before initialization
+	  HRESULT temphr = pNewIdent->GetProductID(&junkAuid);
+	  checkExpression (AAFRESULT_NOT_INITIALIZED == temphr,
+					   AAFRESULT_TEST_FAILED);
+
 	  checkResult (pNewIdent->Initialize (L"Avid",
 										  L"Test File",
 										  L"Second Test Version",
 										  versionUid2));
+
+	  // this should now work after initialization
+	  checkResult (pNewIdent->GetProductID(&junkAuid));
+
 	  checkResult (pHeader->AppendIdentification (pNewIdent));
 
 	  // With Version2 identification in the header, do a save and see
@@ -258,7 +269,9 @@ static HRESULT ObjectTest ()
 	  aafUID_t readAuid2 = { 0 };
 	  checkResult (pReadIdent2->GetProductID(&readAuid2));
 	  checkExpression (2 == readAuid2.Data1, AAFRESULT_TEST_FAILED);
-}
+
+	  hr = AAFRESULT_SUCCESS;
+	}
   catch (HRESULT & rResult)
 	{
 	  hr = rResult;
@@ -273,15 +286,47 @@ static HRESULT ObjectTest ()
   if (pFile)
 	{
 	  AAFRESULT temphr;
-#if 0 // BobT: redundant saves not yet supported
 	  temphr = pFile->Save();
 	  if (! SUCCEEDED (temphr)) return temphr;
-#endif
 	  temphr = pFile->Close();
 	  if (! SUCCEEDED (temphr)) return temphr;
 	  pFile->Release();
 	}
   
+  return hr;
+}
+
+
+static HRESULT ObjectReadTest ()
+{
+  HRESULT hr = AAFRESULT_TEST_FAILED;
+
+  try
+	{
+	  IAAFFileSP pFile;
+	  checkResult (AAFFileOpenExistingRead(testFileName,
+										   0,
+										   &pFile));
+	  assert (pFile);
+	  IAAFHeaderSP pHeader;
+	  checkResult (pFile->GetHeader (&pHeader));
+	  assert (pHeader);
+
+	  IAAFIdentificationSP pReadIdent;
+	  checkResult (pHeader->GetLastIdentification(&pReadIdent));
+
+	  // ident should be initialized, so this should work 
+	  aafUID_t junkAuid;
+	  checkResult (pReadIdent->GetProductID(&junkAuid));
+
+	  hr = AAFRESULT_SUCCESS;
+	}
+
+  catch (HRESULT & rResult)
+	{
+	  hr = rResult;
+	}
+
   return hr;
 }
 
@@ -292,8 +337,14 @@ extern "C" HRESULT CAAFObject_test()
 
   try
 	{
-	  hr = ObjectTest ();
+	  hr = ObjectWriteTest ();
+	  if (FAILED(hr))
+		{
+		  cerr << "CAAFObject_test...FAILED!" << endl;
+		  return hr;
+		}
 
+	  hr = ObjectReadTest ();
 	  if (FAILED(hr))
 		{
 		  cerr << "CAAFObject_test...FAILED!" << endl;
@@ -304,7 +355,8 @@ extern "C" HRESULT CAAFObject_test()
   catch (...)
 	{
 	  cerr << "CAAFObject_test...Caught general C++"
-		" exception!" << endl; 
+		   << " exception!" << endl; 
+	  hr = AAFRESULT_TEST_FAILED;
 	}
 
   return hr;

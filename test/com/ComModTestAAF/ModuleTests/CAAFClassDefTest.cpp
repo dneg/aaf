@@ -177,6 +177,7 @@ extern "C" HRESULT CAAFClassDef_test()
 	{
 	  cerr << "CAAFClassDef_test"
 		   << "...Caught general C++ exception!" << endl; 
+	  hr = AAFRESULT_TEST_FAILED;
 	}
 
   // When all of the functionality of this class is tested, we can
