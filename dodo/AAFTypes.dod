@@ -584,11 +584,11 @@ typedef struct _aafProductVersion_t
 
 typedef struct _aafProductIdentification_t
 {
-	aafUInt8				*companyName;
-	aafUInt8				*productName;
-	aafUInt8				*productVersionString;
+	aafWChar				*companyName;
+	aafWChar				*productName;
+	aafWChar				*productVersionString;
 	aafInt32			productID;
-	aafUInt8				*platform;
+	aafWChar				*platform;
 	aafProductVersion_t	productVersion;
 } aafProductIdentification_t;
 
