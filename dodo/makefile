@@ -34,15 +34,27 @@ run:
 
 
 
-# Make sure our list of objects in the src directories is up-to-date.
-aafobjects.all : aafobjects.list
-aafobjects.list : aafobjects.mk
-	$(SH_PREFIX) $(RM) -f aafobjects.list $(SH_SUFFIX)
-	$(SH_PREFIX) cp aafobjects.mk aafobjects.list $(SH_SUFFIX)
-	$(SH_PREFIX) $(RM) -f $(SRC_DIR)/com-api/aafobjects.mk $(SH_SUFFIX)
-	$(SH_PREFIX) cp aafobjects.mk $(SRC_DIR)/com-api $(SH_SUFFIX)
+# Make sure our list of objects in the include src directories is up-to-date.
+# (TomR) We should probably move aafobjects.mk and the following behavior to 
+# the ref-impl make file...
+aafobjects.all : \
+	$(INCLUDE_DIR)/com-api/aafobjects.mk \
+	$(SRC_DIR)/com-api/aafobjects.mk \
+	$(SRC_DIR)/cpp-api/aafobjects.mk
+
+$(INCLUDE_DIR)/com-api/aafobjects.mk : aafobjects.mk
 	$(SH_PREFIX) $(RM) -f $(INCLUDE_DIR)/com-api/aafobjects.mk $(SH_SUFFIX)
-	$(SH_PREFIX) cp aafobjects.mk $(INCLUDE_DIR)/com-api $(SH_SUFFIX)
+	$(SH_PREFIX) cp -p aafobjects.mk $(INCLUDE_DIR)/com-api $(SH_SUFFIX)
+
+$(SRC_DIR)/com-api/aafobjects.mk : aafobjects.mk
+	$(SH_PREFIX) $(RM) -f $(SRC_DIR)/com-api/aafobjects.mk $(SH_SUFFIX)
+	$(SH_PREFIX) cp -p aafobjects.mk $(SRC_DIR)/com-api $(SH_SUFFIX)
+
+$(SRC_DIR)/cpp-api/aafobjects.mk : aafobjects.mk
+	$(SH_PREFIX) $(RM) -f $(SRC_DIR)/cpp-api/aafobjects.mk $(SH_SUFFIX)
+	$(SH_PREFIX) cp -p aafobjects.mk $(SRC_DIR)/cpp-api $(SH_SUFFIX)
+
+
 
 
 #targets: aafobjects.mk targets.mk depend.mk
@@ -66,6 +78,5 @@ clean:
 	$(SH_PREFIX) $(MAKE) -f dodotargets.mak clean $(SH_SUFFIX)
 	$(SH_PREFIX) $(MAKE) -f dododepend.mak clean $(SH_SUFFIX)
 	$(SH_PREFIX) $(MAKE) -f maketargets.mak clean $(SH_SUFFIX)
-	$(SH_PREFIX) $(RM) -rf *.list $(SH_SUFFIX)
 
 
