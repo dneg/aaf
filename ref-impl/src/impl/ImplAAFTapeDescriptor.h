@@ -111,14 +111,14 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     SetTapeFormFactor
-		// @parm [in] ex: kVHSVideoTape,kDATCartridge 
+		// @parm [in] ex: kAAFVHSVideoTape,kDATCartridge 
         (aafTapeCaseType_t  formFactor);
   //****************
   // GetTapeFormFactor()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     GetTapeFormFactor
-		// @parm [out] ex: kVHSVideoTape,kDATCartridge
+		// @parm [out] ex: kAAFVHSVideoTape,kDATCartridge
         (aafTapeCaseType_t*  formFactor);
 
   //****************

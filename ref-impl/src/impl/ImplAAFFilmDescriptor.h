@@ -108,7 +108,7 @@ public:
     GetFilmFormat
         // @parm [out] filmFormat
         (aafFilmType_t*  filmFormat);
-	//@comm Film format may be: kFt35MM, kFt16MM, kFt8MM, kFt65MM
+	//@comm Film format may be: kAAFFt35MM, kFt16MM, kFt8MM, kFt65MM
 
 
   //****************
@@ -145,7 +145,7 @@ public:
     SetFilmFormat
         // @parm [in] Film Format
         (aafFilmType_t  filmFormat);
-	//@comm kFt35MM, kFt16MM, kFt8MM, kFt65MM
+	//@comm kAAFFt35MM, kFt16MM, kFt8MM, kFt65MM
 
 
   //****************
