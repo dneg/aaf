@@ -92,10 +92,6 @@ LINK32=link.exe
 # Name "ComClientTestAAF - Win32 Debug"
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\include\COMIDL\AAF_i.c"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\..\examples\com-api\comClientTest\ComClientTestAAF.cpp"
 # End Source File
 # End Target
