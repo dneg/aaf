@@ -66,6 +66,9 @@ AAFRESULT aafMobIDFromMajorMinor(
 		aafUInt32	minor,
 		aafUInt8	UMIDType,	// 0x01-picture, 0x02-audio, 0x03-sound, 0x04-data
 		aafMobID_t *mobID);     /* OUT - Newly created Mob ID */
+void aafCreateGUID( GUID *p_guid );
+aafUInt32 aafGetTickCount();
+
 
 // Initializes a new auid
 AAFRESULT aafAUIDNew(aafUID_t * auid);
