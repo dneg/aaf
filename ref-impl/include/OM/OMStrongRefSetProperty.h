@@ -163,8 +163,7 @@ private:
 
   // The set of references.
   OMSet<OMUniqueObjectIdentification,
-        OMSetElement<OMStrongObjectReference<ReferencedObject>,
-                     ReferencedObject> > _set;
+        OMStrongReferenceSetElement<ReferencedObject> > _set;
 
   friend class OMStrongReferenceSetIterator<ReferencedObject>;
 

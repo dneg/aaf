@@ -92,12 +92,11 @@ void OMStrongReferenceSetProperty<ReferencedObject>::save(
   // are written in order of their unique keys.
   //
   OMSetIterator<OMUniqueObjectIdentification,
-                OMSetElement<OMStrongObjectReference<ReferencedObject>,
-                             ReferencedObject> > iterator(_set, OMBefore);
+                OMStrongReferenceSetElement<ReferencedObject> >
+                                                      iterator(_set, OMBefore);
   while (++iterator) {
 
-    OMSetElement<OMStrongObjectReference<ReferencedObject>,
-                 ReferencedObject>& element = iterator.value();
+    OMStrongReferenceSetElement<ReferencedObject>& element = iterator.value();
 
     // enter into the index
     //
@@ -139,11 +138,10 @@ void OMStrongReferenceSetProperty<ReferencedObject>::close(void)
   TRACE("OMStrongReferenceSetProperty<ReferencedObject>::close");
 
   OMSetIterator<OMUniqueObjectIdentification,
-                OMSetElement<OMStrongObjectReference<ReferencedObject>,
-                             ReferencedObject> > iterator(_set, OMBefore);
+                OMStrongReferenceSetElement<ReferencedObject> >
+                                                      iterator(_set, OMBefore);
   while (++iterator) {
-    OMSetElement<OMStrongObjectReference<ReferencedObject>,
-                 ReferencedObject>& element = iterator.value();
+    OMStrongReferenceSetElement<ReferencedObject>& element = iterator.value();
     element.close();
   }
 }
@@ -158,11 +156,10 @@ void OMStrongReferenceSetProperty<ReferencedObject>::detach(void)
   TRACE("OMStrongReferenceSetProperty<ReferencedObject>::detach");
 
   OMSetIterator<OMUniqueObjectIdentification,
-                OMSetElement<OMStrongObjectReference<ReferencedObject>,
-                             ReferencedObject> > iterator(_set, OMBefore);
+                OMStrongReferenceSetElement<ReferencedObject> >
+                                                      iterator(_set, OMBefore);
   while (++iterator) {
-    OMSetElement<OMStrongObjectReference<ReferencedObject>,
-                 ReferencedObject>& element = iterator.value();
+    OMStrongReferenceSetElement<ReferencedObject>& element = iterator.value();
     element.detach();
   }
 }
@@ -180,6 +177,7 @@ void OMStrongReferenceSetProperty<ReferencedObject>::restore(
                                                            size_t externalSize)
 {
   TRACE("OMStrongReferenceSetProperty<ReferencedObject>::restore");
+
   PRECONDITION("Consistent property size", externalSize == strlen(name()) + 1);
 
   // get the name of the set index stream
@@ -216,8 +214,8 @@ void OMStrongReferenceSetProperty<ReferencedObject>::restore(
   for (size_t i = 0; i < entries; i++) {
     setIndex->iterate(context, localKey, count, key);
     char* name = elementName(localKey);
-    OMSetElement<OMStrongObjectReference<ReferencedObject>,
-                 ReferencedObject> newElement(this, name, localKey, key);
+    OMStrongReferenceSetElement<ReferencedObject>
+                                  newElement(this, name, localKey, count, key);
     newElement.restore();
     _set.insert(newElement);
     delete [] name;
@@ -274,8 +272,8 @@ void OMStrongReferenceSetProperty<ReferencedObject>::insert(
   char* name = elementName(localKey);
   OMUniqueObjectIdentification key = object->identification();
 
-  OMSetElement<OMStrongObjectReference<ReferencedObject>,
-               ReferencedObject> newElement(this, name, localKey, key);
+  OMStrongReferenceSetElement<ReferencedObject>
+                               newElement(this, name, localKey, 1/*tjb*/, key);
   newElement.setValue(object);
   _set.insert(newElement);
   setPresent();
@@ -348,8 +346,7 @@ OMStrongReferenceSetProperty<ReferencedObject>::remove(
 
   PRECONDITION("Object is present", contains(identification));
 
-  OMSetElement<OMStrongObjectReference<ReferencedObject>,
-               ReferencedObject>* element = 0;
+  OMStrongReferenceSetElement<ReferencedObject>* element = 0;
   bool found = _set.find(identification, &element);
   ASSERT("Object found", found);
   ReferencedObject* result = element->setValue(0);
@@ -374,8 +371,7 @@ bool OMStrongReferenceSetProperty<ReferencedObject>::ensureAbsent(
 {
   TRACE("OMStrongReferenceSetProperty<ReferencedObject>::ensureAbsent");
 
-  OMSetElement<OMStrongObjectReference<ReferencedObject>,
-               ReferencedObject>* element = 0;
+  OMStrongReferenceSetElement<ReferencedObject>* element = 0;
   bool result = _set.find(identification, &element);
   if (result) {
     ReferencedObject* result = element->setValue(0);
@@ -480,8 +476,7 @@ ReferencedObject* OMStrongReferenceSetProperty<ReferencedObject>::value(
 
   PRECONDITION("Object is present", contains(identification));
 
-  OMSetElement<OMStrongObjectReference<ReferencedObject>,
-               ReferencedObject>* element = 0;
+  OMStrongReferenceSetElement<ReferencedObject>* element = 0;
 
   _set.find(identification, &element);
   ReferencedObject* result = element->getValue();
@@ -509,8 +504,7 @@ bool OMStrongReferenceSetProperty<ReferencedObject>::find(
 {
   TRACE("OMStrongReferenceSetProperty<ReferencedObject>::find");
 
-  OMSetElement<OMStrongObjectReference<ReferencedObject>,
-               ReferencedObject>* element = 0;
+  OMStrongReferenceSetElement<ReferencedObject>* element = 0;
 
   bool result = _set.find(identification, &element);
   if (result) {
@@ -535,11 +529,10 @@ bool OMStrongReferenceSetProperty<ReferencedObject>::isVoid(void) const
   bool result = true;
 
   OMSetIterator<OMUniqueObjectIdentification,
-    OMSetElement<OMStrongObjectReference<ReferencedObject>,
-                 ReferencedObject> > iterator(_set, OMBefore);
+                OMStrongReferenceSetElement<ReferencedObject> >
+                                                      iterator(_set, OMBefore);
   while (++iterator) {
-    OMSetElement<OMStrongObjectReference<ReferencedObject>,
-                 ReferencedObject>& element = iterator.value();
+    OMStrongReferenceSetElement<ReferencedObject>& element = iterator.value();
     ReferencedObject* object = element.getValue();
     if (object != 0) {
       result = false;
@@ -603,11 +596,10 @@ void OMStrongReferenceSetProperty<ReferencedObject>::getBits(OMByte* bits,
   const ReferencedObject** p = (const ReferencedObject**)bits;
 
   OMSetIterator<OMUniqueObjectIdentification,
-                OMSetElement<OMStrongObjectReference<ReferencedObject>,
-                             ReferencedObject> > iterator(_set, OMBefore);
+                OMStrongReferenceSetElement<ReferencedObject> >
+                                                      iterator(_set, OMBefore);
   while (++iterator) {
-    OMSetElement<OMStrongObjectReference<ReferencedObject>,
-                 ReferencedObject>& element = iterator.value();
+    OMStrongReferenceSetElement<ReferencedObject>& element = iterator.value();
     *p++ = element.getValue();
   }
 }

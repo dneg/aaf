@@ -195,8 +195,7 @@ public:
 private:
 
     // The vector of references.
-  OMVector<OMVectorElement<OMStrongObjectReference<ReferencedObject>,
-                           ReferencedObject> > _vector;
+  OMVector<OMStrongReferenceVectorElement<ReferencedObject> > _vector;
 
   friend class OMStrongReferenceVectorIterator<ReferencedObject>;
 
