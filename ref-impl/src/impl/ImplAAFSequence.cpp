@@ -160,9 +160,7 @@ AAFRESULT STDMETHODCALLTYPE
 	aafLength_t		sequLen, cpntLen, prevLen;
 	ImplAAFDataDefSP sequDataDef, cpntDataDef;
 	aafBool			isPrevTran = kAAFFalse, willConvert;
-	aafErr_t		aafError = AAFRESULT_SUCCESS;
 	implCompType_t	type;
-	ImplAAFDictionary	*pDict = NULL;
 	AAFRESULT		status, sclpStatus;
 
 	if (pComponent == NULL)
