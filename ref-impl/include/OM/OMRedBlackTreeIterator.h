@@ -79,15 +79,15 @@ public:
     //          <c OMRedBlackTreeIterator> is made ready to traverse the
     //          associated <c OMRedBlackTree> in the reverse direction
     //          (decreasing <p Key>s).
-   virtual void reset(OMIteratorPosition initialPosition);
+  virtual void reset(OMIteratorPosition initialPosition);
 
     // @cmember Is this <c OMRedBlackTreeIterator> positioned before the first
     //          <p Value> ?
-   virtual bool before(void) const;
+  virtual bool before(void) const;
 
     // @cmember Is this <c OMRedBlackTreeIterator> positioned after the last
     //          <p Value> ?
-   virtual bool after(void) const;
+  virtual bool after(void) const;
 
     // @cmember The number of <p Value>s in the associated
     //          <c OMRedBlackTree>.
@@ -103,7 +103,7 @@ public:
     //          then the result is <e bool.false>,
     //          <mf OMRedBlackTreeIterator::valid> becomes <e bool.false> and
     //          <mf OMRedBlackTreeIterator::after> becomes <e bool.true>. 
-   virtual bool operator++();
+  virtual bool operator++();
 
     // @cmember Retreat this <c OMRedBlackTreeIterator> to the previous
     //          <p Value>, if any.
@@ -115,12 +115,12 @@ public:
     //          reached then the result is <e bool.false>,
     //          <mf OMRedBlackTreeIterator::valid> becomes <e bool.false> and
     //          <mf OMRedBlackTreeIterator::before> becomes <e bool.true>. 
-   virtual bool operator--();
+  virtual bool operator--();
 
     // @cmember Return the <p Value> in the associated <c OMRedBlackTree>
     //          at the position currently designated by this
     //          <c OMRedBlackTreeIterator>.
-   virtual Value& value(void) const;
+  virtual Value& value(void) const;
 
     // @cmember Set the <p Value> in the associated <c OMRedBlackTree> at the
     //          position currently designated by this
@@ -128,12 +128,12 @@ public:
     //          <p Value> is returned. To preserve the ordering of
     //          <p Key>s, the <p Key> of <p newValue> must be the same as
     //          that of the existing <p Value>.
-   virtual Value setValue(Value newValue);
+  virtual Value setValue(Value newValue);
 
     // @cmember Return the <p Key> of the <p Value> in the associated
     //          <c OMRedBlackTree> at the position currently designated by this
     //          <c OMRedBlackTreeIterator>.
-   Key key(void) const;
+  Key key(void) const;
 
 private:
 

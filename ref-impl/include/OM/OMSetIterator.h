@@ -76,15 +76,15 @@ public:
     //          <c OMSetIterator> is made ready to traverse the
     //          associated <c OMSet> in the reverse direction
     //          (decreasing <p Key>s).
-   virtual void reset(OMIteratorPosition initialPosition);
+  virtual void reset(OMIteratorPosition initialPosition);
 
     // @cmember Is this <c OMSetIterator> positioned before the first
     //          <p Element> ?
-   virtual bool before(void) const;
+  virtual bool before(void) const;
 
     // @cmember Is this <c OMSetIterator> positioned after the last
     //          <p Element> ?
-   virtual bool after(void) const;
+  virtual bool after(void) const;
 
     // @cmember The number of <p Elements>s in the associated
     //          <c OMSet>.
@@ -100,7 +100,7 @@ public:
     //          then the result is <e bool.false>,
     //          <mf OMSetIterator::valid> becomes <e bool.false> and
     //          <mf OMSetIterator::after> becomes <e bool.true>. 
-   virtual bool operator++();
+  virtual bool operator++();
 
     // @cmember Retreat this <c OMSetIterator> to the previous
     //          <p Element>, if any.
@@ -112,12 +112,12 @@ public:
     //          reached then the result is <e bool.false>,
     //          <mf OMSetIterator::valid> becomes <e bool.false> and
     //          <mf OMSetIterator::before> becomes <e bool.true>. 
-   virtual bool operator--();
+  virtual bool operator--();
 
     // @cmember Return the <p Element> in the associated <c OMSet>
     //          at the position currently designated by this
     //          <c OMSetIterator>.
-   virtual Element& value(void) const;
+  virtual Element& value(void) const;
 
     // @cmember Set the <p Element> in the associated <c OMSet> at the
     //          position currently designated by this
@@ -125,12 +125,12 @@ public:
     //          <p Element> is returned. To preserve the ordering of
     //          <p Key>s, the <p Key> of <p newElement> must be the same as
     //          that of the existing <p Element>.
-   virtual Element setValue(Element newElement);
+  virtual Element setValue(Element newElement);
 
     // @cmember Return the <p Key> of the <p Element> in the associated
     //          <c OMSet> at the position currently designated by this
     //          <c OMSetIterator>.
-   Key key(void) const;
+  Key key(void) const;
 
 private:
 
