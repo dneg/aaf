@@ -116,7 +116,7 @@ static void convert(wchar_t* wName, size_t length, const wchar_t* name)
     while (*wName++ = *name++)
       ;
   } else {
-    fprintf(stderr, "\nError : Failed to copy '%s'.\n\n", name);
+    fprintf(stderr, "\nError : Failed to copy string.\n\n");
     exit(1);  
   }
 }
@@ -375,7 +375,6 @@ static void ReadAAFFile(aafWChar * pFileName)
                   check(hr); // display error message
                   if(SUCCEEDED(hr))
                   {
-                    assert ((numLocators >= 0), "numLocators written");
                     printf ("    It has %d locator%s attached.\n",
                             numLocators,
                             numLocators==1 ? "" : "s");
