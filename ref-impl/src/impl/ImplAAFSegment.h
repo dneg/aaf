@@ -3,6 +3,17 @@
 #ifndef __ImplAAFSegment_h__
 #define __ImplAAFSegment_h__
 
+#include "OMStorable.h"
+
+/******************************************\
+*                                          *
+* Advanced Authoring Format                *
+*                                          *
+* Copyright (c) 1998 Avid Technology, Inc. *
+* Copyright (c) 1998 Microsoft Corporation *
+*                                          *
+\******************************************/
+
 /******************************************\
 *                                          *
 * Advanced Authoring Format                *
@@ -24,7 +35,6 @@ class ImplAAFPulldown;
 class ImplAAFTimecode;
 class ImplAAFSequence;
 
-
 class ImplAAFSegment : public ImplAAFComponent
 {
 public:
@@ -33,40 +43,51 @@ public:
   //
   //********
   ImplAAFSegment ();
-  ~ImplAAFSegment ();
+  virtual ~ImplAAFSegment ();
 
-  OMDECLARE_STORABLE(ImplAAFSegment);
+
 
   //****************
   // SegmentOffsetToTC()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     SegmentOffsetToTC
-        (aafPosition_t  offset,   //@parm [in] 
-		 aafTimecode_t *  tc,   //@parm [out] 
-         aafBool *  found);  //@parm [out] 
+	    (// @parm [in] Pointer to a Segment Offset to be convert to Timecode
+         aafPosition_t *  pOffset,
 
+		 // @parm [out] The converted timecode to be returned
+		 aafTimecode_t *  pTimecode);
 
   //****************
   // SegmentTCToOffset()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     SegmentTCToOffset
-        (aafTimecode_t  tc,   //@parm [in] 
-		 aafRational_t  editRate,   //@parm [in] 
-         aafFrameOffset_t *  offset,   //@parm [out] 
-		 aafBool *  found);  //@parm [out] 
+        (// @parm [in] Pointer to a timecode to be converted to Offset
+		 aafTimecode_t *  pTimecode,
 
+		 // @parm [in] The edit rate for the given timecode 
+		 aafRational_t *  pEditRate,
+
+		 // @parm [out] Frame Offset to be returned if found
+         aafFrameOffset_t *  pOffset);
 
   //****************
   // NumRepresentations()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     NumRepresentations
-        (aafInt32 *  count);  //@parm [out] 
+		// @parm [out] Pointer to Number of representations to be returned
+        (aafInt32 *  pCount);
+
 
 
 public:
+  // Declare this class to be storable.
+  //
+  OMDECLARE_STORABLE(ImplAAFSegment)
+
+
 	virtual AAFRESULT AccumulateLength(aafLength_t *length);
 
 	virtual AAFRESULT FindSubSegment( aafPosition_t offset,
@@ -86,7 +107,7 @@ public:
 											aafPosition_t *tcStartPos);
 
 	virtual AAFRESULT GenerateSequence(ImplAAFSequence **seq);
-	
+
 	// Declare the module test method. The implementation of the will be be
 	// in /test/ImplAAFSegmentTest.cpp.
 	static AAFRESULT test();
