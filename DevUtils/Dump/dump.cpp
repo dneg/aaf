@@ -379,9 +379,7 @@ static void readUInt8(IStream* stream, OMUInt8* value);
 static void readUInt16(IStream* stream, OMUInt16* value, bool swapNeeded);
 #endif
 static void readUInt32(IStream* stream, OMUInt32* value, bool swapNeeded);
-#if !defined (__GNUC__)
 static void swapUInt16(OMUInt16* value);
-#endif
 static void swapUInt32(OMUInt32* value);
 static void readCLSID(IStream* stream, CLSID* value, bool swapNeeded);
 static void swapCLSID(CLSID* value);
@@ -1212,8 +1210,6 @@ void readUInt32(IStream* stream, OMUInt32* value, bool swapNeeded)
   }
 }
 
-#if !defined(__GNUC__)
-
 void swapUInt16(OMUInt16* value)
 {
   OMUInt8* p = (OMUInt8*)value;
@@ -1224,8 +1220,6 @@ void swapUInt16(OMUInt16* value)
   p[1] = temp;
 
 }
-
-#endif
 
 void swapUInt32(OMUInt32* value)
 {
@@ -1762,7 +1756,7 @@ void dumpContainedObjects(IStorage* storage,
         strcat(elementName, _openArrayKeySymbol);
         
         char number[256];
-        sprintf(number, "%x", vectorIndex[entry]._elementName);
+        sprintf(number, "%lx", vectorIndex[entry]._elementName);
         
         size_t size = strlen(elementName) + strlen(number) + 1 + 1;
         char* subStorageName = new char[size];
@@ -1865,7 +1859,7 @@ void dumpContainedObjects(IStorage* storage,
         strcat(elementName, _openArrayKeySymbol);
         
         char number[256];
-        sprintf(number, "%x", setIndex[entry]._elementName);
+        sprintf(number, "%lx", setIndex[entry]._elementName);
         
         size_t size = strlen(elementName) + strlen(number) + 1 + 1;
         char* subStorageName = new char[size];
