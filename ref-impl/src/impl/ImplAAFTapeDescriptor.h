@@ -3,8 +3,6 @@
 #ifndef __ImplAAFTapeDescriptor_h__
 #define __ImplAAFTapeDescriptor_h__
 
-#include "OMStorable.h"
-
 /******************************************\
 *                                          *
 * Advanced Authoring Format                *
@@ -13,23 +11,12 @@
 * Copyright (c) 1998 Microsoft Corporation *
 *                                          *
 \******************************************/
+
+#include "OMStorable.h"
 
 #ifndef __AAFTypes_h__
 #include "AAFTypes.h"
 #endif
-
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
-
-
-
-
 
 #ifndef __ImplAAFEssenceDescriptor_h__
 #include "ImplAAFEssenceDescriptor.h"
@@ -57,6 +44,9 @@ public:
   ImplAAFTapeDescriptor ();
   virtual ~ImplAAFTapeDescriptor ();
 
+
+  virtual AAFRESULT STDMETHODCALLTYPE
+	Initialize ();
 
 
   //****************

@@ -49,6 +49,10 @@ public:
   virtual ~ImplAAFSourceMob ();
 
 
+  virtual AAFRESULT STDMETHODCALLTYPE
+	Initialize ();
+
+
   //****************
   // GetEssenceDescriptor()
   //
