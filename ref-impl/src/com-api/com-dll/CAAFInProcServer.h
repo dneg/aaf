@@ -68,6 +68,10 @@ public:
 	// Get the nth implementation coclass id.
 	HRESULT GetClassObjectID(ULONG index, CLSID *pClassID);
 
+	// Platform dependent file system information needed by the reference
+	// implementation.
+	const char* GetServerPath() const;
+	const char* GetServerDirectory() const;
 
 protected:
 	long GetRegisterIndex(long index);
@@ -75,6 +79,11 @@ protected:
 protected:
 	AAFComObjectInfo_t *_pObjectInfo;
 	HINSTANCE _hInstance;
+
+	// Platform dependent file system information needed by the reference
+	// implementation.
+	char * _serverPath;
+	char * _serverDirectory;
 };
 
 
