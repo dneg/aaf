@@ -531,14 +531,6 @@ public:
         (aafUInt32 index);
 
 
-  //****************
-  // IsPluginLocal()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    IsPluginLocal
-        // @parm [out] Returns kAAFTrue if the plugin is local
-        (aafBool *  pIsLocal);
-
 
   //****************
   // GetPluginDescriptorID()
