@@ -8,8 +8,8 @@
 \******************************************/
 
 
-#ifndef __ImplAAFPropertyValue_h__
-#include "ImplAAFPropertyValue.h"
+#ifndef __ImplAAFPropValData_h__
+#include "ImplAAFPropValData.h"
 #endif
 
 #ifndef __ImplAAFClassDef_h__
@@ -74,12 +74,19 @@ AAFRESULT STDMETHODCALLTYPE
   if (! pPropVal) return AAFRESULT_NULL_PARAM;
   if (! pObject) return AAFRESULT_NULL_PARAM;
 
-  aafMemPtr_t pBits;
+  OMStorable ** ppStorable = NULL;
+  aafUInt32 bitsSize = 0;
   AAFRESULT hr;
-  hr = pPropVal->GetBits (&pBits);
-  if (AAFRESULT_FAILED (hr)) return hr;
+  ImplAAFPropValData * pvd = dynamic_cast<ImplAAFPropValData*>(pPropVal);
+  assert (pvd);
 
-  memcpy (pBits, pObject, sizeof (ImplAAFObject*));
+  hr = pvd->AllocateBits (sizeof (OMStorable*), (aafMemPtr_t*) &ppStorable);
+  if (AAFRESULT_FAILED(hr)) return hr;
+  assert (*ppStorable);
+
+  assert (*ppStorable);
+  *ppStorable = pObject;
+  pObject->AcquireReference ();
 
   return AAFRESULT_SUCCESS;
 }
@@ -92,12 +99,23 @@ ImplAAFTypeDefStrongObjRef::GetObject (ImplAAFPropertyValue * pPropVal,
   if (! pPropVal) return AAFRESULT_NULL_PARAM;
   if (! ppObject) return AAFRESULT_NULL_PARAM;
 
-  aafMemPtr_t pBits;
+  OMStorable ** ppStorable = NULL;
+  aafUInt32 bitsSize = 0;
   AAFRESULT hr;
-  hr = pPropVal->GetBits (&pBits);
-  if (AAFRESULT_FAILED (hr)) return hr;
+  ImplAAFPropValData * pvd = dynamic_cast<ImplAAFPropValData*>(pPropVal);
+  assert (pvd);
 
-  memcpy (*ppObject, pBits, sizeof (ImplAAFObject*));
+  hr = pvd->GetBitsSize (&bitsSize);
+  if (AAFRESULT_FAILED(hr)) return hr;
+  assert (bitsSize >= sizeof (ImplAAFObject*));
+  hr = pvd->GetBits ((aafMemPtr_t*) &ppStorable);
+  if (AAFRESULT_FAILED(hr)) return hr;
+  assert (*ppStorable);
+  assert (ppObject);
+  ImplAAFObject * pObj = dynamic_cast<ImplAAFObject*>(*ppStorable);
+  assert (pObj);
+  *ppObject = pObj;
+  (*ppObject)->AcquireReference ();
 
   return AAFRESULT_SUCCESS;
 }
