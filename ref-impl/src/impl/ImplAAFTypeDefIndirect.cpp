@@ -177,14 +177,15 @@ static AAFRESULT GetPropertyInfo (
   
 	// Compute the actual data size.
 	//
-  actualValueSize = indirectProperty.bitsSize();
+	actualValueSize = indirectProperty.bitsSize();
 	if (0 < actualValueSize)
 	{
-    actualValueSize -= pIndirectType->GetIndirectValueOverhead ();
-    assert (0 <= actualValueSize);
-		if (0 > actualValueSize)
-			return (AAFRESULT_INVALID_OBJ);
-  }
+	    aafUInt32	valueOverhead = pIndirectType->GetIndirectValueOverhead ();
+	    assert (actualValueSize >= valueOverhead);
+	    if (actualValueSize < valueOverhead)
+		return (AAFRESULT_INVALID_OBJ);
+	    actualValueSize -= valueOverhead;
+	}
 
   if (ppObject)
 		*ppObject = pObject;
