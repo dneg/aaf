@@ -263,7 +263,6 @@ void OMVariableSizeProperty<PropertyType>::restore(size_t externalSize)
 {
   TRACE("OMVariableSizeProperty<PropertyType>::restore");
 
-  setSize(externalSize);
   read(externalSize);
 }
 
