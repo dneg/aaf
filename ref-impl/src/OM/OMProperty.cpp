@@ -191,13 +191,13 @@ void OMSimpleProperty::save(void) const
   s->write(_propertyId, _storedForm, _bits, _size);
 }
 
-  // @mfunc Restore this <c OMSimpleProperty>, the size of the
-  //        <c OMSimpleProperty> is <p size>.
+  // @mfunc Restore this <c OMSimpleProperty>, the external (persisted)
+  //        size of the <c OMSimpleProperty> is <p externalSize>.
   //   @parm The size of the <c OMSimpleProperty>.
-void OMSimpleProperty::restore(size_t size)
+void OMSimpleProperty::restore(size_t externalSize)
 {
   TRACE("OMSimpleProperty::restore");
-  ASSERT("Sizes match", size == _size);
+  ASSERT("Sizes match", externalSize == _size);
 
   OMStoredObject* store = _propertySet->container()->store();
   ASSERT("Valid store", store != 0);
