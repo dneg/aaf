@@ -215,6 +215,15 @@ unsigned char aafSSBinaryFileSignature[] = {
   0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xff
 };
 
+// The signature for structured storage binary MXF files. This includes
+// the structured storage file signature.
+//
+unsigned char mxfSSBinaryFileSignature[] = {
+  0xd0, 0xcf, 0x11, 0xe0, 0xa1, 0xb1, 0x1a, 0xe1,
+  0x4D, 0x58, 0x46, 0x0d, 0x4f, 0x4f, 0x4d, 0x4d,
+  0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xff
+};
+
 // Table of valid signatures. Signatures are found at the beginning of
 // the file and are variable in size. There are multiple signatures
 // since there are multiple external representations (or "types") of
@@ -225,9 +234,14 @@ struct format {
   size_t signatureSize;
   // Could add the offset of the signature here
   const char* formatName; // For now this is a string, this could be a GUID
-} formatTable[1] = {{aafSSBinaryFileSignature,
-                     sizeof(aafSSBinaryFileSignature),
-                     "SSBINARY"}};
+} formatTable[] = {
+  {aafSSBinaryFileSignature,
+   sizeof(aafSSBinaryFileSignature),
+   "AAFSSBINARY"},
+  {mxfSSBinaryFileSignature,
+   sizeof(mxfSSBinaryFileSignature),
+   "MXFSSBINARY"}
+};
 
 static size_t signatureSize(void);
 static size_t maxSignatureSize = signatureSize();
