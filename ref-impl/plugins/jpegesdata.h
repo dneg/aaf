@@ -11,7 +11,6 @@
 /* Standard data source and destination managers: stdio streams. */
 /* Caller is responsible for opening the file before and closing after. */
 EXTERN(void) jpeg_essencestream_dest JPP((j_compress_ptr cinfo, IAAFEssenceStream * outstream));
-EXTERN(void) jpeg_essencestream_src JPP((j_decompress_ptr cinfo, IAAFEssenceStream * instream));
-
+EXTERN(void) jpeg_essencestream_src JPP((j_decompress_ptr cinfo, IAAFEssenceStream * instream, aafUInt32 samplesize));
 
 #endif // #ifndef __jpegesdata_h__
