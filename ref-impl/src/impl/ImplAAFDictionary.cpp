@@ -1665,8 +1665,6 @@ void ImplAAFDictionary::InitBuiltins()
   containerDef = NULL;
 
 
-  _pBuiltinClasses;
-
   AssureClassPropertyTypes ();
 }
 
