@@ -270,7 +270,6 @@ AAFTestLibraryProcData::AAFTestLibraryProcData(ImplAAFPluginManager *pluginMgr, 
 
 static AAFRDLIRESULT testPluginProc(const char *path, const char* name, char isDirectory, void * userData)
 {
-  AAFRESULT rc = AAFRESULT_SUCCESS;
 	AAFTestLibraryProcData *pData = (AAFTestLibraryProcData *)userData;
 	assert(pData && pData->plugins && pData->pluginFiles && pData->currentLibraryPath && pData->pluginPrefix && pData->pluginPrefixSize);
 
@@ -286,13 +285,13 @@ static AAFRDLIRESULT testPluginProc(const char *path, const char* name, char isD
     if ( 0 == strncmp(pData->caseBuffer, pData->pluginPrefix, pData->pluginPrefixSize)) 
     { 
       if ( 0 != strcmp(path, pData->currentLibraryPath) )
-        rc = (pData->plugins)->RegisterPluginFile(path);
+        (pData->plugins)->RegisterPluginFile(path);
     }
   }
 #else
   if(!isDirectory && 0 != strcmp(pData->currentLibraryPath, name))
   {
-	rc = (pData->plugins)->RegisterPluginFile(name);
+	(pData->plugins)->RegisterPluginFile(name);
   }
 #endif
 
@@ -503,7 +502,6 @@ AAFRESULT ImplAAFPluginManager::MakeCodecFromEssenceDesc(
 	CLSID					codecCLSID;
 	aafUID_t				essenceDescClass;
 	IAAFEssenceCodec		*localCodec;
-	aafBool					found = kAAFFalse;
 	aafSelectInfo_t			selectInfo;
 	ImplAAFFileDescriptor	*fileDescriptor;
 	IUnknown				*iUnk;
