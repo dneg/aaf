@@ -34,20 +34,49 @@
 #include "AAFResult.h"
 #include "AAFDefUIDs.h"
 #include <iostream.h>
+#include <stdio.h>
+
+#include "AAFStoredObjectIDs.h"
 
 #define kNumComponents	5
 
-static HRESULT CreateAAFSequence(IAAFSequence** ppSequence)
+
+// Cross-platform utility to delete a file.
+static void RemoveTestFile(const wchar_t* pFileName)
 {
-	IAAFSequence*	pSequence;
-	HRESULT			hr;
+  const size_t kMaxFileName = 512;
+  char cFileName[kMaxFileName];
+
+  size_t status = wcstombs(cFileName, pFileName, kMaxFileName);
+  if (status != (size_t)-1)
+  { // delete the file.
+    remove(cFileName);
+  }
+}
+
+// convenient error handlers.
+inline void checkResult(HRESULT r)
+{
+  if (FAILED(r))
+    throw r;
+}
+inline void checkExpression(bool expression, HRESULT r)
+{
+  if (!expression)
+    throw r;
+}
+
+
+static HRESULT CreateAAFSequence(IAAFDictionary *pDictionary,
+                                 IAAFSequence** ppSequence)
+{
+	IAAFSequence*	pSequence = NULL;
+	HRESULT			hr = S_OK;
 	aafUInt32		i;
 
- 	hr = CoCreateInstance(CLSID_AAFSequence,
-						   NULL, 
-						   CLSCTX_INPROC_SERVER, 
+ 	hr = pDictionary->CreateInstance(&AUID_AAFSequence,
 						   IID_IAAFSequence, 
-						   (void **)&pSequence);		
+						   (IUnknown **)&pSequence);		
  	if (SUCCEEDED(hr))
 	{
 		pSequence->Initialize((aafUID_t*)&DDEF_Audio);
@@ -59,14 +88,12 @@ static HRESULT CreateAAFSequence(IAAFSequence** ppSequence)
 		//
 		for(i = 0; i < kNumComponents; i++)
 		{
-			IAAFComponent*	pComponent;
+	    IAAFComponent*	pComponent = NULL;
 			aafLength_t		len = 10;
 
-			hr = CoCreateInstance(CLSID_AAFFiller,
-									NULL, 
-									CLSCTX_INPROC_SERVER, 
+			hr = pDictionary->CreateInstance(&AUID_AAFFiller,
 									IID_IAAFComponent, 
-									(void **)&pComponent);
+									(IUnknown **)&pComponent);
  			if (FAILED(hr))
 				break;
 
@@ -75,6 +102,7 @@ static HRESULT CreateAAFSequence(IAAFSequence** ppSequence)
 			hr = pSequence->AppendComponent(pComponent);
 
 			pComponent->Release();
+      pComponent = NULL;
 
 			if (FAILED(hr))
 				break;
@@ -96,14 +124,14 @@ static HRESULT CreateAAFSequence(IAAFSequence** ppSequence)
 
 static HRESULT TestEnumerator(IAAFSequence*	pSequence)
 {
-	IEnumAAFComponents*	pCompIter;
-	IEnumAAFComponents*	pCompCloneIter;
-	IAAFComponent*		pComp;
+	IEnumAAFComponents*	pCompIter = NULL;
+	IEnumAAFComponents*	pCompCloneIter = NULL;
+	IAAFComponent*		pComp = NULL;
 #if 0
-	IAAFComponent*		pCompArray[kNumComponents];
+  IAAFComponent*		pCompArray[kNumComponents] = {0};
 	aafUInt32			numFetched, i;
 #endif
-	HRESULT				hr;
+	HRESULT				hr = S_OK;
 	aafInt32			numCpnts;
 
 	pSequence->GetNumComponents(&numCpnts);
@@ -117,10 +145,11 @@ static HRESULT TestEnumerator(IAAFSequence*	pSequence)
 	// Test the NextOne method
 	// Indirectly tests the Reset method.
 	numCpnts = 0;
-	while (pCompIter->NextOne(&pComp) != AAFRESULT_NO_MORE_OBJECTS)
+	while (pCompIter->NextOne(&pComp) == AAFRESULT_SUCCESS)
 	{
 		numCpnts++;
 		pComp->Release();
+    pComp = NULL;
 	}
 
 	if (numCpnts != kNumComponents)
@@ -144,10 +173,11 @@ static HRESULT TestEnumerator(IAAFSequence*	pSequence)
 	// Indirectly tests the Reset method.
 	pCompIter->Reset();
 	numCpnts = 0;
-	while (pCompIter->Next(1, &pComp, NULL) != AAFRESULT_NO_MORE_OBJECTS)
+	while (pCompIter->Next(1, &pComp, NULL) == AAFRESULT_SUCCESS)
 	{
 		numCpnts++;
 		pComp->Release();
+    pComp = NULL;
 	}
 
 	if (numCpnts != kNumComponents)
@@ -161,7 +191,7 @@ static HRESULT TestEnumerator(IAAFSequence*	pSequence)
 	pCompIter->Reset();
 	numCpnts = 0;
 	numFetched = 0;
-	while (pCompIter->Next(kNumComponents, (IAAFComponent**)&pCompArray, &numFetched) != AAFRESULT_NO_MORE_OBJECTS)
+	while (pCompIter->Next(kNumComponents, (IAAFComponent**)&pCompArray, &numFetched) == AAFRESULT_SUCCESS)
 	{
 		numCpnts += numFetched;
 
@@ -184,12 +214,14 @@ static HRESULT TestEnumerator(IAAFSequence*	pSequence)
 		goto Cleanup;
 
 	numCpnts = 0;
-	while (pCompCloneIter->NextOne(&pComp) != AAFRESULT_NO_MORE_OBJECTS)
+	while (pCompCloneIter->NextOne(&pComp) == AAFRESULT_SUCCESS)
 	{
 		numCpnts++;
 		pComp->Release();
+    pComp = NULL;
 	}
 	pCompCloneIter->Release();
+  pCompCloneIter = NULL;
 	if (numCpnts != kNumComponents)
 	{
 		hr = AAFRESULT_TEST_FAILED;
@@ -205,12 +237,14 @@ static HRESULT TestEnumerator(IAAFSequence*	pSequence)
 		goto Cleanup;
 
 	numCpnts = 0;
-	while (pCompCloneIter->NextOne(&pComp) != AAFRESULT_NO_MORE_OBJECTS)
+	while (pCompCloneIter->NextOne(&pComp) == AAFRESULT_SUCCESS)
 	{
 		numCpnts++;
 		pComp->Release();
+    pComp = NULL;
 	}
 	pCompCloneIter->Release();
+  pCompCloneIter = NULL;
 	if (numCpnts != 1)
 	{
 		hr = AAFRESULT_TEST_FAILED;
@@ -227,12 +261,14 @@ static HRESULT TestEnumerator(IAAFSequence*	pSequence)
 
 	pCompCloneIter->Skip(1);
 	numCpnts = 0;
-	while (pCompCloneIter->NextOne(&pComp) != AAFRESULT_NO_MORE_OBJECTS)
+	while (pCompCloneIter->NextOne(&pComp) == AAFRESULT_SUCCESS)
 	{
 		numCpnts++;
 		pComp->Release();
+    pComp = NULL;
 	}
 	pCompCloneIter->Release();
+  pCompCloneIter = NULL;
 	if (numCpnts != 1)
 	{
 		hr = AAFRESULT_TEST_FAILED;
@@ -245,33 +281,169 @@ Cleanup:
 	return hr;
 }
 
-HRESULT CEnumAAFComponents::test()
+static HRESULT CreateAAFFile(aafWChar * pFileName)
 {
-	IAAFSequence*	pSequence;
-	HRESULT			hr = AAFRESULT_NOT_IMPLEMENTED;
+	IAAFFile *					pFile = NULL;
+	bool bFileOpen = false;
+	IAAFHeader *				pHeader = NULL;
+	IAAFDictionary*	pDictionary = NULL;
+	IAAFSequence			*pSequence = NULL;
+	aafProductIdentification_t	ProductInfo;
+	HRESULT						hr = S_OK;
 
-	try
+
+	ProductInfo.companyName = L"AAF Developers Desk";
+	ProductInfo.productName = L"EnumAAFComponents Test";
+	ProductInfo.productVersion.major = 1;
+	ProductInfo.productVersion.minor = 0;
+	ProductInfo.productVersion.tertiary = 0;
+	ProductInfo.productVersion.patchLevel = 0;
+	ProductInfo.productVersion.type = kVersionUnknown;
+	ProductInfo.productVersionString = NULL;
+	ProductInfo.productID = -1;
+	ProductInfo.platform = NULL;
+
+
+  try 
+  {
+    // Remove the previous test file if any.
+    RemoveTestFile(pFileName);
+
+
+    // Create the file.
+    checkResult(CoCreateInstance(CLSID_AAFFile,
+								 NULL, 
+								 CLSCTX_INPROC_SERVER, 
+								 IID_IAAFFile, 
+								 (void **)&pFile));
+		checkResult(pFile->Initialize());
+		checkResult(pFile->OpenNewModify(pFileName, 0, &ProductInfo));
+	  bFileOpen = true;
+  
+    // We can't really do anthing in AAF without the header.
+		checkResult(pFile->GetHeader(&pHeader));
+
+
+    // TEMPORARY: make sure the content storage object is created and 
+    // persisted in the file...
+    aafInt32 numMobs = 0;
+    checkResult(pHeader->GetNumMobs(kAllMob, &numMobs));
+
+    // Get the AAF Dictionary so that we can create valid AAF objects.
+    checkResult(pHeader->GetDictionary(&pDictionary));
+ 
+    // Create a sequence withou attaching it to the file.
+    checkResult(CreateAAFSequence(pDictionary, &pSequence));
+    
+    // Test the enumeration methods.
+    checkResult(TestEnumerator(pSequence));
+  }
+	catch (HRESULT& rResult)
 	{
-		hr = CreateAAFSequence(&pSequence);
-		if (SUCCEEDED(hr))
-		{
-			hr = TestEnumerator(pSequence);
-			pSequence->Release();
-		}
-	}
-	catch (...)
-	{
-		cerr << "CEnumAAFComponents::test...Caught general C++ exception!" << endl; 
+    hr = rResult;
 	}
 
-	// When all of the functionality of this class is tested, we can return success
-	if (SUCCEEDED(hr))
-		hr = AAFRESULT_TEST_PARTIAL_SUCCESS;
 
+	// Cleanup and return
+  if (pSequence)
+    pSequence->Release();
+
+  if (pDictionary)
+    pDictionary->Release();
+
+  if (pHeader)
+		pHeader->Release();
+			
+	if (pFile)
+	{	// Close file
+		if (bFileOpen)
+			pFile->Close();
+ 		pFile->Release();
+	}
 
 	return hr;
 }
 
+static HRESULT ReadAAFFile(aafWChar * pFileName)
+{
+	IAAFFile *					pFile = NULL;
+	bool bFileOpen = false;
+	IAAFHeader *				pHeader = NULL;
+	aafProductIdentification_t	ProductInfo;
+	HRESULT						hr = S_OK;
+
+
+	ProductInfo.companyName = L"AAF Developers Desk";
+	ProductInfo.productName = L"EnumAAFComponents Test";
+	ProductInfo.productVersion.major = 1;
+	ProductInfo.productVersion.minor = 0;
+	ProductInfo.productVersion.tertiary = 0;
+	ProductInfo.productVersion.patchLevel = 0;
+	ProductInfo.productVersion.type = kVersionUnknown;
+	ProductInfo.productVersionString = NULL;
+	ProductInfo.productID = -1;
+	ProductInfo.platform = NULL;
+	  
+  try
+  {
+    // Open the file
+    checkResult(CoCreateInstance(CLSID_AAFFile,
+						     NULL, 
+						     CLSCTX_INPROC_SERVER, 
+						     IID_IAAFFile, 
+						     (void **)&pFile));
+    checkResult(pFile->Initialize());
+    checkResult(pFile->OpenExistingRead(pFileName, 0));
+	  bFileOpen = true;
+
+    // We can't really do anthing in AAF without the header.
+  	checkResult(pFile->GetHeader(&pHeader));
+
+  }
+  catch (HRESULT& rResult)
+  {
+    hr = rResult;
+  }
+
+
+	// Cleanup and return
+  if (pHeader)
+		pHeader->Release();
+			
+	if (pFile)
+	{	// Close file
+		if (bFileOpen)
+			pFile->Close();
+ 		pFile->Release();
+	}
+
+	return hr;
+}
+
+HRESULT CEnumAAFComponents::test()
+{
+	HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
+ 	aafWChar * pFileName = L"EnumAAFComponentsTest.aaf";
+
+	try
+	{
+		hr = CreateAAFFile(	pFileName );
+		if(hr == AAFRESULT_SUCCESS)
+			hr = ReadAAFFile( pFileName );
+	}
+	catch (...)
+	{
+	  cerr << "CEnumAAFComponents::test...Caught general C++"
+		" exception!" << endl; 
+	  hr = AAFRESULT_TEST_FAILED;
+	}
+
+
+  	// When all of the functionality of this class is tested, we can return success
+	if(hr == AAFRESULT_SUCCESS)
+		hr = AAFRESULT_TEST_PARTIAL_SUCCESS;
+  return hr;
+}
 
 
 
