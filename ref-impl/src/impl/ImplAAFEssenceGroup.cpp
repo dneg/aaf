@@ -15,6 +15,7 @@
 #include "ImplAAFDataDef.h"
 #endif
 
+#include "ImplAAFObjectCreation.h"
 #include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
 
@@ -33,6 +34,10 @@
 #include "ImplAAFMasterMob.h"
 #include "ImplAAFDictionary.h"
 #include "ImplAAFDataDef.h"
+#include "ImplAAFEssenceAccess.h"
+#include "ImplAAFSourceMob.h"
+
+extern "C" const aafClassID_t CLSID_AAFEssenceAccess;
 
 ImplAAFEssenceGroup::ImplAAFEssenceGroup ()
 :   _choices(	PID_EssenceGroup_Choices,		"Choices"),
@@ -286,6 +291,90 @@ AAFRESULT ImplAAFEssenceGroup::GetMinimumBounds(aafPosition_t rootPos, aafLength
 	  }
 	XEND;
 
+	return(AAFRESULT_SUCCESS);
+}
+
+AAFRESULT ImplAAFEssenceGroup::GetCriteriaSourceClip(
+			aafMediaCriteria_t *criteria,
+			ImplAAFSourceClip		**retSrcClip)
+{
+	aafInt32				score, highestScore;
+	aafUInt32				n, numReps;
+	ImplAAFMob				*mob = NULL;
+	ImplAAFSourceMob		*fileMob = NULL;
+	ImplAAFSourceClip		*highestScoreSourceClip = NULL, *sourceClip = NULL;
+	aafSelectInfo_t			selectInfo;
+	ImplAAFEssenceAccess	*access;
+
+	aafAssert(criteria != NULL, file, AAFRESULT_NULL_PARAM);
+	aafAssert(retSrcClip != NULL, file, AAFRESULT_NULL_PARAM);
+	highestScore = 0;
+	highestScoreSourceClip = NULL;
+	*retSrcClip = NULL;
+		
+	XPROTECT()
+	{
+		CHECK(GetNumChoices(&numReps));
+		for(n = 0; n < numReps; n++)
+		{
+			CHECK(GetIndexedChoice(n, &sourceClip));
+			if(numReps == 0)
+			{
+				highestScoreSourceClip = sourceClip;
+				break;
+			}
+			CHECK(sourceClip->ResolveRef(&mob));
+			fileMob = dynamic_cast<ImplAAFSourceMob*>(mob);
+			if(fileMob == NULL)
+				RAISE(AAFRESULT_INCONSISTANCY);
+
+			access = (ImplAAFEssenceAccess *)CreateImpl (CLSID_AAFEssenceAccess);
+			CHECK(access->GetSelectInfo (fileMob, &selectInfo))
+				
+			/* Check for locator file existance & continue if not present
+			 * A file which is supposed to be an OMFI file must be opened
+			 * to check for the existance of the data object, so we must
+			 * open the file here.
+			 */
+//!!!			CHECK(LocateMediaFile(file, fileMob, &dataFile, &isOMFI));
+//			if(dataFile == NULL)
+//				continue;
+//			if(dataFile != file)
+//				omfsCloseFile(dataFile);
+
+			score = 0;
+			switch(criteria->type)
+			{
+			case kAAFAnyRepresentation:
+				break;
+				
+			case kAAFFastestRepresentation:
+				if(selectInfo.hwAssisted)
+					score += 10;
+				if(selectInfo.isNative)
+					score += 10;
+				break;
+				
+			case kAAFBestFidelityRepresentation:
+				score = (100 - selectInfo.relativeLoss);
+				break;
+				
+			case kAAFSmallestRepresentation:
+				score = -1 * selectInfo.avgBitsPerSec;
+				break;
+			}
+	
+			if((score > highestScore) || (highestScoreSourceClip == NULL))
+			{
+				highestScore = score;
+				highestScoreSourceClip = sourceClip;
+			}
+		}
+	}
+	XEXCEPT
+	XEND
+		
+	*retSrcClip = highestScoreSourceClip;
 	return(AAFRESULT_SUCCESS);
 }
 
