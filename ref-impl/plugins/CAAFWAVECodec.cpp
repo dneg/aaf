@@ -223,7 +223,19 @@ CAAFWaveCodec::~CAAFWaveCodec ()
 HRESULT STDMETHODCALLTYPE
     CAAFWaveCodec::SetEssenceAccess(IUnknown *unk)
 {
-	return(unk->QueryInterface(IID_IAAFEssenceAccess, (void **)&_access));
+	XPROTECT()
+	{
+		if(_access != NULL)
+			_access->Release();
+		if(unk != NULL)
+		{
+			CHECK(unk->QueryInterface(IID_IAAFEssenceAccess, (void **)&_access));
+		}
+	}
+	XEXCEPT
+	XEND;
+
+	return AAFRESULT_SUCCESS;
 }
 
 HRESULT STDMETHODCALLTYPE
@@ -453,8 +465,8 @@ HRESULT STDMETHODCALLTYPE
         IAAFEssenceStream * stream)
 {
 	AAFRESULT		aafError;
-	IAAFSourceMob	*fileMob;
-	IAAFEssenceDescriptor *edes;
+	IAAFSourceMob	*fileMob = NULL;
+	IAAFEssenceDescriptor *edes = NULL;
 
 	if(_stream == NULL)
 	{
@@ -473,11 +485,16 @@ HRESULT STDMETHODCALLTYPE
 			CHECK(loadWAVEHeader());
 		}
 		fileMob->Release();
+		fileMob = NULL;
+		edes->Release();
+		edes = NULL;
 	}
 	XEXCEPT
 	{
 		if(fileMob != NULL)
 			fileMob->Release();
+		if(edes != NULL)
+			edes->Release();
 	}
 	XEND;
 	return AAFRESULT_SUCCESS;
@@ -835,7 +852,7 @@ HRESULT STDMETHODCALLTYPE
 
 		if(!_readOnly && _sampleDataHeaderWritten)
 			CHECK(CreateAudioDataEnd());	// Don't do this for raw calls?
-		_stream = NULL;
+//		_stream = NULL;
 		
 		if(_interleaveBuf != NULL)
 			delete _interleaveBuf;
@@ -1047,6 +1064,7 @@ HRESULT STDMETHODCALLTYPE
     CAAFWaveCodec::GetCurrentEssenceStream (IAAFEssenceStream ** ppStream)
 {
 	*ppStream = _stream;
+	_stream->AddRef();
 	return AAFRESULT_SUCCESS;
 }
 
