@@ -33088,6 +33088,70 @@ cpp_quote("          aafFileAccess_t  access,")
 cpp_quote("          IAAFRawStorage ** ppNewRawStorage);")
 cpp_quote("")
 
+  //***********************************************************
+  //
+  // AAFCreateRawStorageCachedDisk()
+  //
+  // Create a raw storage providing a built-in implementation of
+  // IAAFRawStorage on a file on disk with caching.
+  //
+  // Note that it is illegal to specify existence and access as "New"
+  // "Read".
+  //
+  // This is considered a value-added function since clients could
+  // actually create their own.
+  //
+  // Succeeds if:
+  // - The pFilename pointer is valid.
+  // - The ppNewRawStorage pointer is valid.
+  // - If the open mode is one of read, write, or modify.
+  // - If the file existence is one of new or existing.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pFilename or ppNewRawStorage arg is NULL.
+  //
+  // AAFRESULT_WRONG_OPENMODE
+  // - If none of read, modify, or write are specified as open
+  //   mode, or if neither new or existing is specified for the
+  //   existence.
+  // 
+  // STDAPI AAFCreateRawStorageCachedDisk (
+    //  Name of file to be associated with this storage
+    //  [in] aafCharacter_constptr  pFilename,
+    //
+    //  Governs whether storage is on pre-existing data, or is
+    //  newly created.
+    //  [in] aafFileExistence_t  existence,
+    //
+    //  Governs whether stream may be read from and/or written
+    //  to.
+    //  [in] aafFileAccess_t  access,
+    //
+    //  Count of cache pages
+    //  [in] aafUInt32  pageCount,
+    //
+    //  Cache page size in bytes
+    //  [in] aafUInt32  pageSize,
+    //
+    //  Newly created storage
+    //  [out] IpageCount ** ppNewRawStorage);
+
+cpp_quote("STDAPI AAFCreateRawStorageCachedDisk (")
+cpp_quote("          aafCharacter_constptr  pFilename,")
+cpp_quote("          aafFileExistence_t  existence,")
+cpp_quote("          aafFileAccess_t  access,")
+cpp_quote("          aafUInt32  pageCount,")
+cpp_quote("          aafUInt32  pageSize,")
+cpp_quote("          IAAFRawStorage ** ppNewRawStorage);")
+cpp_quote("")
+
 
   //***********************************************************
   //

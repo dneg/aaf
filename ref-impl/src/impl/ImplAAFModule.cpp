@@ -1061,6 +1061,17 @@ ImplAAFCreateRawStorageDisk
   return AAFRESULT_SUCCESS;
 }
 
+STDAPI
+ImplAAFCreateRawStorageCachedDisk
+  (aafCharacter_constptr /* pFilename */,
+   aafFileExistence_t /* existence */,
+   aafFileAccess_t /* access */,
+   aafUInt32  /* pageCount */,
+   aafUInt32  /* pageSize */,
+   ImplAAFRawStorage ** /* ppNewRawStorage */)
+{
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
 
 STDAPI
 ImplAAFCreateAAFFileOnRawStorage

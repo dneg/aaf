@@ -368,6 +368,14 @@ ImplAAFCreateRawStorageDisk
    aafFileAccess_t  access,
    ImplAAFRawStorage ** ppNewRawStorage);
 
+STDAPI
+ImplAAFCreateRawStorageCachedDisk
+  (aafCharacter_constptr pFilename,
+   aafFileExistence_t existence,
+   aafFileAccess_t access,
+   aafUInt32  pageCount,
+   aafUInt32  pageSize,
+   ImplAAFRawStorage ** ppNewRawStorage);
 
 STDAPI
 ImplAAFCreateAAFFileOnRawStorage

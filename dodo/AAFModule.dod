@@ -491,6 +491,68 @@ AD_XFUNCTION4(AAFCreateRawStorageDisk,
   //   mode\, or if neither new or existing is specified for the
   //   existence.)
 
+AD_XFUNCTION6(AAFCreateRawStorageCachedDisk,
+
+			  [in],
+			  objPass,
+			  aafCharacter_constptr,
+			  pFilename,
+			  Name of file to be associated with this storage,
+
+			  [in],
+			  objPass,
+			  aafFileExistence_t,
+			  existence,
+			  Governs whether storage is on pre-existing data\, or is
+    //  newly created.,
+
+			  [in],
+			  objPass,
+			  aafFileAccess_t,
+			  access,
+			  Governs whether stream may be read from and/or written
+    //  to.,
+
+			  [in],
+			  objPass,
+			  aafUInt32,
+			  pageCount,
+			  Count of cache pages,
+
+			  [in],
+			  objPass,
+			  aafUInt32,
+			  pageSize,
+			  Cache page size in bytes,
+
+			  [out],
+			  objOut,
+			  AAFRawStorage,
+			  ppNewRawStorage,
+			  Newly created storage,
+
+     Create a raw storage providing a built-in implementation of
+  // IAAFRawStorage on a file on disk with caching.
+  //
+  // Note that it is illegal to specify existence and access as "New"
+  // "Read".
+  //
+  // This is considered a value-added function since clients could
+  // actually create their own.
+  //
+  // Succeeds if:
+  // - The pFilename pointer is valid.
+  // - The ppNewRawStorage pointer is valid.
+  // - If the open mode is one of read\, write\, or modify.
+  // - If the file existence is one of new or existing.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pFilename or ppNewRawStorage\)
+  //
+  // AAFRESULT_WRONG_OPENMODE
+  // - If none of read\, modify\, or write are specified as open
+  //   mode\, or if neither new or existing is specified for the
+  //   existence.)
+
 
 AD_XFUNCTION7(AAFCreateAAFFileOnRawStorage,
 

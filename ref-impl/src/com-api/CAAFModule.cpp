@@ -671,6 +671,86 @@ STDAPI
 }
 
 
+STDAPI
+    AAFCreateRawStorageCachedDisk (aafCharacter_constptr  pFilename,
+        aafFileExistence_t  existence,
+        aafFileAccess_t  access,
+        aafUInt32  pageCount,
+        aafUInt32  pageSize,
+        IAAFRawStorage ** ppNewRawStorage)
+{
+  HRESULT hr;
+
+  //
+  // set up for ppNewRawStorage
+  //
+  ImplAAFRawStorage * internalppNewRawStorage = NULL;
+  ImplAAFRawStorage ** pinternalppNewRawStorage = NULL;
+  if (ppNewRawStorage)
+    {
+      pinternalppNewRawStorage = &internalppNewRawStorage;
+    }
+
+  try
+    {
+      hr = ImplAAFCreateRawStorageCachedDisk
+       (pFilename,
+        existence,
+        access,
+        pageCount,
+        pageSize,
+        pinternalppNewRawStorage);
+    }
+  catch (OMException& e)
+    {
+      // OMExceptions should be handled by the impl code. However, if an
+      // unhandled OMException occurs, control reaches here. We must not
+      // allow the unhandled exception to reach the client code, so we
+      // turn it into a failure status code.
+      //
+      // If the OMException contains an HRESULT, it is returned to the
+      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
+      //
+      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
+    }
+  catch (OMAssertionViolation &)
+    {
+      // Control reaches here if there is a programming error in the
+      // impl code that was detected by an assertion violation.
+      // We must not allow the assertion to reach the client code so
+      // here we turn it into a failure status code.
+      //
+      hr = AAFRESULT_ASSERTION_VIOLATION;
+    }
+  catch (...)
+    {
+      // We CANNOT throw an exception out of a COM interface method!
+      // Return a reasonable exception code.
+      //
+      hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+    }
+
+  //
+  // cleanup for ppNewRawStorage
+  //
+  if (SUCCEEDED(hr))
+    {
+      IUnknown *pUnknown;
+      HRESULT hStat;
+
+      if (internalppNewRawStorage)
+        {
+          pUnknown = static_cast<IUnknown *> (internalppNewRawStorage->GetContainer());
+          hStat = pUnknown->QueryInterface(IID_IAAFRawStorage, (void **)ppNewRawStorage);
+          assert (SUCCEEDED (hStat));
+          //pUnknown->Release();
+          internalppNewRawStorage->ReleaseReference(); // We are through with this pointer.
+        }
+    }
+  return hr;
+}
+
+
 
 STDAPI
     AAFCreateAAFFileOnRawStorage (IAAFRawStorage *  pRawStorage,
