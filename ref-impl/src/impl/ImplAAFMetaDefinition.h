@@ -140,10 +140,12 @@ public:
     GetDictionary(ImplAAFDictionary **ppDictionary) const;
 
 
+protected:
   // Associate the existing OMProperties with corresponding property definitions from
   // the given class definition. NOTE: This call is recursive, it calls itself again
   // for the parent class of the given class until current class is a "root" class.
   virtual void InitOMProperties (ImplAAFClassDef * pClassDef);
+public:
 
 
   virtual const OMUniqueObjectIdentification& identification(void) const;

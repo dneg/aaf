@@ -354,7 +354,7 @@ public:
   void RegisterAxiomaticProperties(void); // throw AAFRESULT
 
   // Initialize all of the OMProperties for each aximatic definition.
-  void InitializeAxiomaticOMProperties(void); // throw AAFRESULT
+  void InitializeAxiomaticOMDefinitions(void); // throw AAFRESULT
   
   // Complete the registration of the axiomatic class definitions
   // This must be called AFTER all other aximatic definitions have
@@ -366,6 +366,20 @@ public:
 
   // Initialize all of the axiomatic definitions.
   void InitializeAxiomaticDefinitions(void); // throw AAFRESULT
+  
+  
+  //
+  // Methods that would be inherited or overriden from ImplAAFStrorable
+  //
+  
+  // Associate OMClassDefinition and OMPropertyDefinitions with this object.
+  virtual void InitializeOMStorable(ImplAAFClassDef * pClassDef);
+
+protected:
+  // Associate the existing OMProperties with corresponding property definitions from
+  // the given class definition. NOTE: This call is recursive, it calls itself again
+  // for the parent class of the given class until current class is a "root" class.
+  virtual void InitOMProperties (ImplAAFClassDef * pClassDef);
 
 private:
 

@@ -342,7 +342,7 @@ ImplAAFDictionary::CreateAndInit(ImplAAFClassDef * pClassDef) const
   pNewObject = pvtInstantiate (auid);
   if (pNewObject)
 	{
-	  pNewObject->InitOMProperties (pClassDef);
+	  pNewObject->InitializeOMStorable (pClassDef);
 
 	  // Attempt to initialize any class extensions associated
 	  // with this object. Only the most derived extension that has an

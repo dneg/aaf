@@ -50,10 +50,12 @@ typedef ImplAAFEnumerator<ImplAAFPropertyDef> ImplEnumAAFPropertyDefs;
 #include "ImplAAFTypeDef.h"
 #endif
 
+#include "OMClassDefinition.h"
 #include "OMWeakRefProperty.h"
 #include "OMStrongRefSetProperty.h"
 
-class ImplAAFClassDef : public ImplAAFMetaDefinition
+class ImplAAFClassDef : public ImplAAFMetaDefinition,
+                        public OMClassDefinition
 {
 public:
   //

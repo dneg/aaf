@@ -424,7 +424,6 @@ ImplAAFProperty * ImplPropertyCollection::FindProperty(OMPropertyId pid) const /
 ImplAAFObject::ImplAAFObject ()
   : _generation(PID_InterchangeObject_Generation, L"Generation"),
 	_pProperties (0),
-	_cachedDefinition (0),
 	_apSavedProps (0),
 	_savedPropsSize (0),
 	_savedPropsCount (0)
@@ -517,8 +516,6 @@ ImplAAFObject::SavedProp::~SavedProp ()
 
 ImplAAFObject::~ImplAAFObject ()
 {
-  _cachedDefinition = 0; // we don't need to reference count this defintion
-
   if (_pProperties)
 	delete _pProperties;
 
@@ -634,48 +631,6 @@ AAFRESULT STDMETHODCALLTYPE
 
   assert (_generation.isPresent());
   *pResult = _generation;
-  return AAFRESULT_SUCCESS;
-}
-
-
-
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFObject::GetDefinition (ImplAAFClassDef ** ppClassDef)
-{
-  if (! ppClassDef)
-	return AAFRESULT_NULL_PARAM;
-
-  if (! _cachedDefinition)
-	{
-	  AAFRESULT ar;
-	  ImplAAFDictionarySP pDict;
-	  ar = GetDictionary(&pDict);
-	  if (AAFRESULT_FAILED (ar))
-		return ar;
-	  assert (pDict);
-
-	  aafUID_t classID;
-	  ar = GetObjectClass (&classID);
-	  assert (AAFRESULT_SUCCEEDED (ar));
-
-	  ImplAAFClassDef * tmp;
-	  ar = pDict->LookupClassDef(classID, &tmp);
-	  if (AAFRESULT_FAILED (ar))
-		return ar;
-	  if (! _cachedDefinition)
-		_cachedDefinition = tmp;
-	  assert (_cachedDefinition);
-		
-	  // We don't need to reference count the definitions since
-	  // they are owned by the dictionary.
-	  aafInt32 count = _cachedDefinition->ReleaseReference();
-	  assert(0 < count);
-	}
-  assert (ppClassDef);
-  *ppClassDef = _cachedDefinition;
-  assert (*ppClassDef);
-  (*ppClassDef)->AcquireReference ();
-
   return AAFRESULT_SUCCESS;
 }
 
@@ -1170,6 +1125,7 @@ void ImplAAFObject::InitOMProperties (ImplAAFClassDef * pClassDef)
 {
   assert (pClassDef);
   AAFRESULT ar;
+
 
   //
   // Init base class properties first

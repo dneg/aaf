@@ -564,7 +564,7 @@ AAFRESULT STDMETHODCALLTYPE
   
   // Make sure that we have connected all of the OMProperties
   // to the correct ImplAAFPropertyDefs.
-  (*ppMetaObject)->InitOMProperties(pClassDef);
+  (*ppMetaObject)->InitializeOMStorable(pClassDef);
 
 
   return hr;
@@ -1159,7 +1159,7 @@ void ImplAAFMetaDictionary::RegisterAxiomaticProperties(void)
 
 
 // Initialize all of the OMProperties for each aximatic definition.
-void ImplAAFMetaDictionary::InitializeAxiomaticOMProperties(void)
+void ImplAAFMetaDictionary::InitializeAxiomaticOMDefinitions(void)
 {
   ImplAAFClassDef *pClassDef;
  
@@ -1178,7 +1178,7 @@ void ImplAAFMetaDictionary::InitializeAxiomaticOMProperties(void)
     if (!pClass)
       throw AAFRESULT_INVALID_OBJ;
 
-    pClass->InitOMProperties(pClassDef);
+    pClass->InitializeOMStorable(pClassDef);
   }
 
  
@@ -1197,7 +1197,7 @@ void ImplAAFMetaDictionary::InitializeAxiomaticOMProperties(void)
     if (!pProperty)
       throw AAFRESULT_INVALID_OBJ;
 
-    pProperty->InitOMProperties(pClassDef);
+    pProperty->InitializeOMStorable(pClassDef);
   }
 
 
@@ -1231,24 +1231,15 @@ void ImplAAFMetaDictionary::InitializeAxiomaticOMProperties(void)
     if (!pType)
       throw AAFRESULT_CLASS_NOT_FOUND;
 
-    pType->InitOMProperties(pClassDef);
+    pType->InitializeOMStorable(pClassDef);
   }
   
    
   // Handle special case of initializition the meta dictionary's 
-  // OM propreties. TODO: Add InitOMProperties method to ImplAAFMetaDictionary.
+  // OM propreties. TODO: Add InitializeOMStorable method to ImplAAFMetaDictionary.
   pClassDef = findAxiomaticClassDefinition(AUID_AAFMetaDictionary);
   assert (pClassDef);
-  OMPropertySetIterator iter(*propertySet(), OMBefore);
-  while (++iter)
-  {
-    ImplAAFPropertyDefSP pPropertyDef;
-    pClassDef->LookupPropertyDefbyOMPid(iter.propertyId(), &pPropertyDef);
-    OMPropertyDefinition * propertyDefinition = static_cast<OMPropertyDefinition *>((ImplAAFPropertyDef *)pPropertyDef);
-    assert(propertyDefinition);
-    OMProperty *property = iter.property();
-    property->initialize(propertyDefinition);
-  }
+  InitializeOMStorable(pClassDef);
 }
 
 
@@ -1289,7 +1280,7 @@ void ImplAAFMetaDictionary::InitializeAxiomaticDefinitions(void)
   InitializeAxiomaticProperties();
 
   RegisterAxiomaticProperties();
-  InitializeAxiomaticOMProperties();
+  InitializeAxiomaticOMDefinitions();
 }
 
 // Create and initialize all of the axiomatic definitions.
@@ -1310,4 +1301,43 @@ AAFRESULT ImplAAFMetaDictionary::InstantiateAxiomaticDefinitions(void)
 
   return (result);
 }
+
+
+
+
+//
+// Methods that would be inherited or overriden from ImplAAFStrorable
+//
+
+// Associate OMClassDefinition and OMPropertyDefinitions with this object.
+void ImplAAFMetaDictionary::InitializeOMStorable(ImplAAFClassDef * pClassDef)
+{
+  assert (NULL != pClassDef);
+  
+  // Install the class definition for this storable.
+  setDefinition(pClassDef);
+  
+  // Make sure all of the properties exist and have property definitions.
+  InitOMProperties(pClassDef);
+}
+
+// Associate the existing OMProperties with corresponding property definitions from
+// the given class definition. NOTE: This call is recursive, it calls itself again
+// for the parent class of the given class until current class is a "root" class.
+void ImplAAFMetaDictionary::InitOMProperties (ImplAAFClassDef * pClassDef)
+{
+  assert (NULL != pClassDef);
+  
+  OMPropertySetIterator iter(*propertySet(), OMBefore);
+  while (++iter)
+  {
+    ImplAAFPropertyDefSP pPropertyDef;
+    pClassDef->LookupPropertyDefbyOMPid(iter.propertyId(), &pPropertyDef);
+    OMPropertyDefinition * propertyDefinition = static_cast<OMPropertyDefinition *>((ImplAAFPropertyDef *)pPropertyDef);
+    assert(propertyDefinition);
+    OMProperty *property = iter.property();
+    property->initialize(propertyDefinition);
+  }
+}
+
 

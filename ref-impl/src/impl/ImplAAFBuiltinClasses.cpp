@@ -98,7 +98,7 @@ ImplAAFBuiltinClasses::NewBuiltinClassDef (const aafUID_t & rClassID,
 	  // We've found the desired class in our table.
 	  ImplAAFClassDef * pcd = (ImplAAFClassDef*)(_dictionary->metaDictionary())->pvtCreateMetaDefinition(AUID_AAFClassDef);
 	  assert (pcd);
-    pcd->InitOMProperties(_dictionary->GetBuiltinDefs()->cdClassDef());
+    pcd->InitializeOMStorable(_dictionary->GetBuiltinDefs()->cdClassDef());
 
 	  status = InitBuiltinClassDef (rClassID, classDefinition, pcd);
 	  if (AAFRESULT_SUCCEEDED (status))

@@ -111,15 +111,6 @@ public:
 
 
   //****************
-  // GetDefinition()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    GetDefinition
-		// @parm [out] class definition of which this object is an instance.
-        (ImplAAFClassDef ** ppClassDef);
-
-
-  //****************
   // GetObjectClass()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
@@ -192,13 +183,14 @@ public:
 
 
 
-public:
   // Interfaces ivisible inside the toolkit, but not exposed through the API
+protected:
 
   // Associate the existing OMProperties with corresponding property definitions from
   // the given class definition. NOTE: This call is recursive, it calls itself again
   // for the parent class of the given class until current class is a "root" class.
   virtual void InitOMProperties (ImplAAFClassDef * pClassDef);
+public:
   
   // Same as above for a single property (not recursive).
   virtual OMProperty * InitOMProperty(ImplAAFPropertyDef * pPropertyDef, OMPropertySet * ps);
@@ -249,8 +241,6 @@ private:
   AAFRESULT InitProperties ();
 
   ImplPropertyCollection * _pProperties;
-
-  ImplAAFClassDef *        _cachedDefinition;
 
   // stored object ID
   aafUID_t                 _soid;

@@ -274,12 +274,6 @@ ImplAAFMetaDefinition::GetDictionary(ImplAAFDictionary **ppDictionary) const
 // for the parent class of the given class until current class is a "root" class.
 void ImplAAFMetaDefinition::InitOMProperties (ImplAAFClassDef * pClassDef)
 {
-#if 0
-  // Since ImplAAFMetaDefinition is still a subclass of ImplAAFObject we
-  // should just delegate property initialization:
-  ImplAAFObject::InitOMProperties(pClassDef);
-#else //#if 0
-
   assert (pClassDef);
   AAFRESULT hr;
 
@@ -325,18 +319,6 @@ void ImplAAFMetaDefinition::InitOMProperties (ImplAAFClassDef * pClassDef)
       && (defPid != PID_InterchangeObject_Generation))
     {
       assert (0);
-#if 0
-      // Defined property wasn't found in OM property set.
-      // We'll have to install one.
-      pProp = propDefSP->CreateOMProperty ();
-      assert (pProp);
-      
-      // Remember this property so we can delete it later.
-      RememberAddedProp (pProp);
-      
-      // Add the property to the property set.
-      ps->put (pProp);
-#endif
     }
     
   if(defPid != PID_InterchangeObject_ObjClass
@@ -357,7 +339,6 @@ void ImplAAFMetaDefinition::InitOMProperties (ImplAAFClassDef * pClassDef)
     propDefSP = 0;
     pProp = 0;
   }
-#endif // #else // #if 0
 }
 
 const OMUniqueObjectIdentification&

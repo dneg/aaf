@@ -39,6 +39,8 @@
 
 
 #include "ImplAAFStorable.h"
+#include "ImplAAFClassDef.h"
+#include "assert.h"
 
 ImplAAFStorable::ImplAAFStorable ()
 {
@@ -47,4 +49,35 @@ ImplAAFStorable::ImplAAFStorable ()
 
 ImplAAFStorable::~ImplAAFStorable ()
 {
+}
+
+
+// Associate OMClassDefinition and OMPropertyDefinitions with this object.
+void ImplAAFStorable::InitializeOMStorable(ImplAAFClassDef * pClassDef)
+{
+  assert (NULL != pClassDef);
+  
+  // Install the class definition for this storable.
+  setDefinition(pClassDef);
+  
+  // Make sure all of the properties exist and have property definitions.
+  InitOMProperties(pClassDef);
+}
+
+  
+AAFRESULT ImplAAFStorable::GetDefinition(ImplAAFClassDef ** ppClassDef)
+{
+  if (NULL == ppClassDef)
+    return AAFRESULT_NULL_PARAM;
+  *ppClassDef = NULL;
+  
+  OMClassDefinition * classDefinition = const_cast<OMClassDefinition *>(definition());
+  ImplAAFClassDef * pClassDef = dynamic_cast<ImplAAFClassDef *>(classDefinition);
+  assert (NULL != pClassDef);
+  if (!pClassDef)
+    return AAFRESULT_NOT_INITIALIZED;
+  
+  *ppClassDef = pClassDef;
+  pClassDef->AcquireReference();
+  return AAFRESULT_SUCCESS;
 }
