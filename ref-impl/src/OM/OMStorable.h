@@ -70,7 +70,7 @@ public:
   virtual void save(void) const;
 
     // @cmember Close this <c OMStorable>.
-  void close(void);
+  virtual void close(void);
 
     // @cmember Restore an <c OMStorable> (of unknown sub-class) from
     // the stored representation <p s>.
