@@ -753,8 +753,6 @@ public:
   // the listed errors is in effect, it will return the first one
   // encountered in the order given below:
   // 
-  // NOTE! Stub only.   Implementation not yet added.
-  //
   // AAFRESULT_SUCCESS
   //   - succeeded.  (This is the only code indicating success.)
   //

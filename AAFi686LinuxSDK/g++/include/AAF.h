@@ -2343,8 +2343,6 @@ DECLARE_INTERFACE_(IAAFContentStorage, IUnknown)
   //
   // Appends the given essence data object to the header.
   // 
-  // NOTE! Stub only.   Implementation not yet added.
-  //
   // Succeeds if all of the following are true:
   // - the pEssenceData pointer is valid.
   // 
@@ -7298,8 +7296,6 @@ DECLARE_INTERFACE_(IAAFFile, IUnknown)
   // *pDestFile be open, writeable or modifiable, and not yet
   // contain any objects.
   //
-  // NOTE! Stub only.   Implementation not yet added.
-  //
   // Succeeds if:
   // - This object is currently open.
   // - The named filesystem file is writable.
@@ -9925,12 +9921,6 @@ DECLARE_INTERFACE_(IAAFFiller, IUnknown)
 //
 // ************************
 
- 
-/***********************************************\
-*	Stub only.   Implementation not yet added	*
-\***********************************************/
-
-
 
 
 
@@ -11046,8 +11036,6 @@ DECLARE_INTERFACE_(IAAFHeader, IUnknown)
   //
   // Appends the given essence data object to the header.
   // 
-  // NOTE! Stub only.   Implementation not yet added.
-  //
   // Succeeds if all of the following are true:
   // - the pEssenceData pointer is valid.
   // 
@@ -11260,8 +11248,6 @@ DECLARE_INTERFACE_(IAAFHeader, IUnknown)
   // *ppEnum argument.  The returned enumerator is AddRef()ed before
   // it is returned.
   // 
-  // NOTE! Stub only.   Implementation not yet added.
-  //
   // Succeeds if all of the following are true:
   // - the ppEnum pointer is valid.
   // 
@@ -11376,8 +11362,6 @@ DECLARE_INTERFACE_(IAAFHeader, IUnknown)
   //
   // Return the File Revision property.
   // 
-  // NOTE! Stub only.   Implementation not yet added.
-  //
   // Succeeds if all of the following are true:
   // - the pRevision pointer is valid.
   // 
@@ -11404,8 +11388,6 @@ DECLARE_INTERFACE_(IAAFHeader, IUnknown)
   //
   // Return the Last Modified property.
   // 
-  // NOTE! Stub only.   Implementation not yet added.
-  //
   // Succeeds if all of the following are true:
   // - the pTimeStamp pointer is valid.
   // 
@@ -12578,8 +12560,6 @@ DECLARE_INTERFACE_(IAAFMasterMob, IUnknown)
   // Caller may call GetTapeNameBufLen() to determine the required
   // buffer size.
   // 
-  // NOTE! Stub only.   Implementation not yet added.
-  //
   // Succeeds if all of the following are true:
   // - the pTapeName pointer is valid.
   // - the specified master slot was found.
@@ -12629,8 +12609,6 @@ DECLARE_INTERFACE_(IAAFMasterMob, IUnknown)
   // method.  The value is placed into the location specified by
   // pLen.  The value will include space required for the trailing
   // null character.
-  //
-  // NOTE! Stub only.   Implementation not yet added.
   //
   // Succeeds if all of the following are true:
   // - the pLen pointer is valid.
@@ -12723,8 +12701,6 @@ DECLARE_INTERFACE_(IAAFMasterMob, IUnknown)
   //
   // The returned source clip is AddRef()ed before it is returned.
   //
-  // NOTE! Stub only.   Implementation not yet added.
-  //
   // Succeeds if all of the following are true:
   // - the ppSourceClip pointer is valid.
   //
@@ -12770,8 +12746,6 @@ DECLARE_INTERFACE_(IAAFMasterMob, IUnknown)
   // representations exist or not.
   //
   // The returned segment is AddRef()ed before it is returned.
-  //
-  // NOTE! Stub only.   Implementation not yet added.
   //
   // Succeeds if all of the following are true:
   // - the ppSegment pointer is valid.
@@ -13620,8 +13594,6 @@ DECLARE_INTERFACE_(IAAFMob, IUnknown)
   //
   // Appends the given mob slot to the mob.
   // 
-  // NOTE! Stub only.   Implementation not yet added.
-  //
   // Succeeds if all of the following are true:
   // - the pSlot pointer is valid.
   // 
@@ -13648,8 +13620,6 @@ DECLARE_INTERFACE_(IAAFMob, IUnknown)
   //
   // Prepends the given mob slot to the mob.
   // 
-  // NOTE! Stub only.   Implementation not yet added.
-  //
   // Succeeds if all of the following are true:
   // - the pSlot pointer is valid.
   // 
@@ -13678,8 +13648,6 @@ DECLARE_INTERFACE_(IAAFMob, IUnknown)
   // existing slots at the given and higher index will be moved up one
   // index to accommodate.
   // 
-  // NOTE! Stub only.   Implementation not yet added.
-  //
   // Succeeds if all of the following are true:
   // - the pSlot pointer is valid.
   // - index is less than or equal to the result obtained by
@@ -13716,8 +13684,6 @@ DECLARE_INTERFACE_(IAAFMob, IUnknown)
   // indices higher than the given index will be moved down one index
   // to accommodate.
   // 
-  // NOTE! Stub only.   Implementation not yet added.
-  //
   // Succeeds if all of the following are true:
   // - index is less than the result obtained by CountSlots().
   // 
@@ -13745,8 +13711,6 @@ DECLARE_INTERFACE_(IAAFMob, IUnknown)
   //
   // Returns the indexed slot in *ppSlot.
   // 
-  // NOTE! Stub only.   Implementation not yet added.
-  //
   // Succeeds if all of the following are true:
   // - ppSlot is a valid pointer.
   // - index is less than the result obtained by CountSlots().
@@ -14075,8 +14039,6 @@ DECLARE_INTERFACE_(IAAFMob, IUnknown)
   // Caller may call GetNameBufLen() to determine the required pName
   // buffer size.
   // 
-  // NOTE! Stub only.   Implementation not yet added.
-  //
   // Succeeds if all of the following are true:
   // - the pLastModified pointer is valid.
   // - the pCreationTime pointer is valid.
@@ -14120,8 +14082,6 @@ DECLARE_INTERFACE_(IAAFMob, IUnknown)
   // the given timecode segment, and will return it in *pResult.  If
   // pTcSeg is NULL, will search for the slot containing a timecode
   // segment and will use that instead.
-  //
-  // NOTE! Stub only.   Implementation not yet added.
   //
   // Succeeds if all of the following are true:
   // - the pTcSeg pointer is valid.
@@ -14199,8 +14159,6 @@ DECLARE_INTERFACE_(IAAFMob, IUnknown)
   // Mob looking for Source Clips, and changes the sourceID property
   // on all Source Clips with oldMobID to newMobID.
   //
-  // NOTE! Stub only.   Implementation not yet added.
-  //
   // If this method fails no state will be changed.
   // 
   // This method will return the following codes.  If more than one of
@@ -14240,8 +14198,6 @@ DECLARE_INTERFACE_(IAAFMob, IUnknown)
   // same AAF Version number.
   //
   // The returned mob is AddRef()ed before it is returned.
-  //
-  // NOTE! Stub only.   Implementation not yet added.
   //
   // Succeeds if all of the following are true:
   // - the pDestFile pointer is valid.
@@ -14285,8 +14241,6 @@ DECLARE_INTERFACE_(IAAFMob, IUnknown)
   // 
   // The returned mob is AddRef()ed before it is returned.
   //
-  // NOTE! Stub only.   Implementation not yet added.
-  //
   // Succeeds if all of the following are true:
   // - the pDestMobName pointer is valid.
   // - the ppDestMob pointer is valid.
@@ -14311,6 +14265,7 @@ DECLARE_INTERFACE_(IAAFMob, IUnknown)
 
     // Destination Mob
     /*[out]*/ IAAFMob ** ppDestMob) PURE;
+  //
 
   //***********************************************************
   //
@@ -16123,9 +16078,6 @@ DECLARE_INTERFACE_(IAAFPropertyDef, IUnknown)
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
   // encountered in the order given below:
-    // NOTE! Stub only.   Implementation not yet added.
-  //
-
   // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  (This is the only code indicating success.)
@@ -16150,9 +16102,6 @@ DECLARE_INTERFACE_(IAAFPropertyDef, IUnknown)
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
   // encountered in the order given below:
-    // NOTE! Stub only.   Implementation not yet added.
-  //
-
   // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  (This is the only code indicating success.)
@@ -33039,8 +32988,6 @@ DECLARE_INTERFACE_(IAAFMasterMobEx, IUnknown)
   // this file.
   //
   // Transient files are never considered Revertable.
-  //
-  // NOTE! Stub only.   Implementation not yet added.
   //
   // Succeeds if:
   // - This object has already been Initialize()d.

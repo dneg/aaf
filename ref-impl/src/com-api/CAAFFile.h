@@ -93,8 +93,6 @@ public:
   // *pDestFile be open, writeable or modifiable, and not yet
   // contain any objects.
   //
-  // NOTE! Stub only.   Implementation not yet added.
-  //
   // Succeeds if:
   // - This object is currently open.
   // - The named filesystem file is writable.

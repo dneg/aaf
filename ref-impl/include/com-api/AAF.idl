@@ -7164,8 +7164,6 @@ interface IAAFFile : IUnknown
   // *pDestFile be open, writeable or modifiable, and not yet
   // contain any objects.
   //
-  // NOTE! Stub only.   Implementation not yet added.
-  //
   // Succeeds if:
   // - This object is currently open.
   // - The named filesystem file is writable.
@@ -14085,8 +14083,6 @@ interface IAAFMob : IUnknown
   // the listed errors is in effect, it will return the first one
   // encountered in the order given below:
   // 
-  // NOTE! Stub only.   Implementation not yet added.
-  //
   // AAFRESULT_SUCCESS
   //   - succeeded.  (This is the only code indicating success.)
   //
@@ -30234,9 +30230,6 @@ interface IEnumAAFPropertyDefs : IUnknown
 //   - insufficient system memory is available to perform the
 //     operation.
 //
-/***********************************************
-*	Stub only.   Implementation not yet added	*
-***********************************************/
 
 
 [
@@ -32917,8 +32910,6 @@ cpp_quote("")
   // this file.
   //
   // Transient files are never considered Revertable.
-  //
-  // NOTE! Stub only.   Implementation not yet added.
   //
   // Succeeds if:
   // - This object has already been Initialize()d.

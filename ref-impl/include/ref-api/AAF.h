@@ -7296,8 +7296,6 @@ DECLARE_INTERFACE_(IAAFFile, IUnknown)
   // *pDestFile be open, writeable or modifiable, and not yet
   // contain any objects.
   //
-  // NOTE! Stub only.   Implementation not yet added.
-  //
   // Succeeds if:
   // - This object is currently open.
   // - The named filesystem file is writable.
@@ -14097,8 +14095,6 @@ DECLARE_INTERFACE_(IAAFMob, IUnknown)
   // the listed errors is in effect, it will return the first one
   // encountered in the order given below:
   // 
-  // NOTE! Stub only.   Implementation not yet added.
-  //
   // AAFRESULT_SUCCESS
   //   - succeeded.  (This is the only code indicating success.)
   //
@@ -32992,8 +32988,6 @@ DECLARE_INTERFACE_(IAAFMasterMobEx, IUnknown)
   // this file.
   //
   // Transient files are never considered Revertable.
-  //
-  // NOTE! Stub only.   Implementation not yet added.
   //
   // Succeeds if:
   // - This object has already been Initialize()d.
