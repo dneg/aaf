@@ -417,6 +417,10 @@ SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFTypeDefObjectRefTest.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFTypeDefOpaqueTest.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFTypeDefRecordTest.cpp
 # End Source File
 # Begin Source File
