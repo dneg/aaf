@@ -130,6 +130,7 @@ AAFRESULT ImplPropertyCollection::Initialize
 		  pHead = dynamic_cast<ImplAAFHeader*>(pObj);
 		  if (!pHead)
 			throw AAFRESULT_OBJECT_NOT_ATTACHED;
+		  pHead->AcquireReference();
 		}
 	  else
 		{
