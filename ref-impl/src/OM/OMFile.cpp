@@ -7,8 +7,9 @@
 
 #include <string.h>
 
-OMFile::OMFile(const char* name)
-: _name(name), _root(0), _classFactory(0), _objectDirectory(0)
+OMFile::OMFile(const char* name, const OMAccessMode mode)
+: _name(name), _root(0), _classFactory(0), _objectDirectory(0),
+  _mode(mode)
 {
   TRACE("OMFile::OMFile");
 
@@ -20,32 +21,49 @@ OMFile::~OMFile(void)
   TRACE("OMFile::~OMFile");
 }
 
-OMFile* OMFile::open(const char* fileName)
+OMFile* OMFile::openRead(const char* fileName)
 {
-  OMFile* newFile = new OMFile(fileName);
-  newFile->open();
+  OMFile* newFile = new OMFile(fileName, readOnlyMode);
+  newFile->openRead();
   return newFile;
 }
 
-OMFile* OMFile::create(const char* fileName)
+OMFile* OMFile::openModify(const char* fileName)
 {
-  OMFile* newFile = new OMFile(fileName);
-  newFile->create();
+  OMFile* newFile = new OMFile(fileName, modifyMode);
+  newFile->openModify();
   return newFile;
 }
 
-void OMFile::create(void)
+OMFile* OMFile::createModify(const char* fileName)
 {
-  TRACE("File::create");
-
-  _root = OMStoredObject::create(_name);
+  OMFile* newFile = new OMFile(fileName, modifyMode);
+  newFile->createModify();
+  return newFile;
 }
 
-void OMFile::open(void)
+void OMFile::openRead(void)
 {
-  TRACE("OMFile::open");
+  TRACE("OMFile::openRead");
+  ASSERT("Valid mode", _mode == readOnlyMode);
 
-  _root = OMStoredObject::open(_name);
+  _root = OMStoredObject::openRead(_name);
+}
+
+void OMFile::openModify(void)
+{
+  TRACE("OMFile::openModify");
+  ASSERT("Valid mode", _mode == modifyMode);
+
+  _root = OMStoredObject::openModify(_name);
+}
+
+void OMFile::createModify(void)
+{
+  TRACE("File::createModify");
+  ASSERT("Mode is modify", _mode == modifyMode);
+
+  _root = OMStoredObject::createModify(_name);
 }
 
 void OMFile::close(void)
