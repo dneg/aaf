@@ -1,13 +1,11 @@
 <!-- Low-level Object Manager dtd -->
-<!-- Tim Bingham 12/07/00 -->
+<!-- Tim Bingham 12/14/00 -->
 
   <!-- object -->
     <!-- An object contains one or more properties. -->
 <!ELEMENT object (property+)>
     <!-- All objects have a class -->
 <!ATTLIST object class CDATA #REQUIRED> <!-- guid -->
-    <!-- All objects have a property count. -->
-<!ATTLIST object count CDATA #REQUIRED> <!-- integer -->
 
   <!-- property -->
     <!-- Properties contain data, streams, objects or references (to objects).
@@ -19,20 +17,15 @@
                     reference | reference-vector | reference-set)>
     <!-- Every property has an identification. -->
 <!ATTLIST property identification CDATA #REQUIRED> <!-- integer -->
-<!ATTLIST property name CDATA #REQUIRED> <!-- name -->
 
   <!-- data -->
     <!-- Data elements are used to represent all of the non-object,
          non-essence content. -->
-<!ELEMENT data (#PCDATA)> <!-- data -->
-    <!-- Every data element has a size in bytes -->
-<!ATTLIST data size CDATA #REQUIRED> <!-- integer -->
+<!ELEMENT data (#PCDATA)> <!-- hex encoded binary data -->
 
   <!-- stream -->
     <!-- Stream elemens are used to represent essence content. -->
-<!ELEMENT stream (#PCDATA)> <!-- binary -->
-    <!-- Every stream has a size in bytes -->
-<!ATTLIST stream size CDATA #REQUIRED> <!-- integer -->
+<!ELEMENT stream (#PCDATA)> <!-- hex encoded binary data -->
 
   <!-- element -->
     <!-- A uniquely identified object. -->
@@ -43,15 +36,11 @@
   <!-- object-vector -->
     <!-- An ordered collection of zero or more contained objects. -->
 <!ELEMENT object-vector (object*)>
-    <!-- All vectors have an element count. -->
-<!ATTLIST object-vector count CDATA #REQUIRED> <!-- integer -->
 
   <!-- object-set -->
     <!-- An unordered collection of zero or more
          uniquely identified contained objects. -->
 <!ELEMENT object-set (element*)>
-    <!-- All sets have an element count. -->
-<!ATTLIST object-set count CDATA #REQUIRED> <!-- integer -->
 
   <!-- identification -->
     <!-- A unique identifier for an object. -->
@@ -72,8 +61,6 @@
     <!-- An ordered collection of zero or more references to
          uniquely identified objects. -->
 <!ELEMENT reference-vector (identification*)>
-    <!-- All reference-vectors have an element count. -->
-<!ATTLIST reference-vector count CDATA #REQUIRED> <!-- integer -->
     <!-- All reference-vectors have a target. All references in a given
          reference-vector reference objects in the same target. -->
 <!ATTLIST reference-vector target IDREF #REQUIRED> <!-- name -->
@@ -82,8 +69,6 @@
     <!-- An unordered collection of zero or more references to
          uniquely identified objects. -->
 <!ELEMENT reference-set (identification*)>
-    <!-- All reference-sets have an element count. -->
-<!ATTLIST reference-set count CDATA #REQUIRED> <!-- integer -->
     <!-- All reference-sets have a target. All references in a given
          reference-set reference objects in the same target. -->
 <!ATTLIST reference-set target IDREF #REQUIRED> <!-- name -->
