@@ -38,14 +38,6 @@ public:
 
   // Override from AAFTypeDefObjectRef
   virtual AAFRESULT STDMETHODCALLTYPE
-    Initialize
-        (aafUID_t *  pID,
-         ImplAAFClassDef * pObjType,
-         wchar_t *  pTypeName);
-
-
-  // Override from AAFTypeDefObjectRef
-  virtual AAFRESULT STDMETHODCALLTYPE
     SetObject (/*[in]*/ ImplAAFPropertyValue * pPropVal,
       /*[in]*/ ImplAAFObject * ppObject);
 
@@ -73,13 +65,17 @@ public:
   //
   OMDECLARE_STORABLE(ImplAAFTypeDefStrongObjRef)
 
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplAAFTypeDefStrongObjRefTest.cpp.
-  static AAFRESULT test();
-
   // non-published overrides from AAFTypeDef
   aafBool IsFixedSize (void) const;
   size_t PropValSize (void) const;
+
+
+  // Override from AAFTypeDefObjectRef
+  virtual AAFRESULT STDMETHODCALLTYPE
+    pvtInitialize
+        (const aafUID_t *  pID,
+         const aafUID_t * pRefdObjID,
+         wchar_t *  pTypeName);
 
 private:
   // OMWeakReferenceProperty<ImplAAFClassDef> _referencedType;
