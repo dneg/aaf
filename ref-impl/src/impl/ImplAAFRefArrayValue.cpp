@@ -259,16 +259,19 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFRefArrayValue::WriteTo(
     OMContainerProperty * pNewContainerProperty = dynamic_cast<OMContainerProperty *>(pOmProp);
     if (NULL == pNewContainerProperty)
       return AAFRESULT_INVALID_OBJ;
+    OMReferenceContainer *pNewReferenceContainer = pNewContainerProperty->referenceContainer();
+    if (NULL == pNewReferenceContainer)
+      return AAFRESULT_INVALID_OBJ;
     
     if (usesReferenceCounting())
     {
-      result = ReleaseAllObjects(pNewContainerProperty);
+      result = ReleaseAllObjects(pNewReferenceContainer);
       if (AAFRESULT_FAILED(result))
         return result;
     }
       
     // Make sure that there are no elements in the new property container.
-    pNewContainerProperty->removeAllObjects();
+    pNewReferenceContainer->removeAllObjects();
     
     // Install the new "empty" container property.
     SetProperty(pOmProp);
