@@ -124,18 +124,19 @@ inline aafUInt32 rgb_pixel_to_ycrcb( aafUInt32 val )
 }
 
 // Convert one line of pixels
-void convert_line_rgb_to_ycrcb( aafUInt32* line,
- 									   int width )    // number of 32 bit rgbx pixels
+void convert_line_rgbx_to_ycrcbx( aafUInt32* linergbx,
+                                  aafUInt32* lineycrcbx,
+								  int width )
 {
 	int i;
-	for (i = 0; i < width; i++, line++) {
-		*line = rgb_pixel_to_ycrcb( *line );
+	for (i = 0; i < width; i++, linergbx++, lineycrcbx) {
+		*lineycrcbx = rgb_pixel_to_ycrcb( *linergbx );
 	}
 }
 
-void convert_444yuv_to_422uyvy( aafUInt32* yuv,
-								aafUInt32* uyvy,
-								int width )
+void convert_line_444yuvx_to_422uyvy( aafUInt32* yuv,
+						  			  aafUInt32* uyvy,
+									  int width )
 {
 	int i;
 
@@ -159,77 +160,67 @@ void convert_444yuv_to_422uyvy( aafUInt32* yuv,
 
 }
 
-void convert_444yuv_to_411uyvy( aafUInt32* yuv,
-								aafUInt32* uyvy,
-								int width )
+convert_rgbx_to_yuv422( int width, int height, int stride, aafUInt8* rgbxBuf,
+						int& convertedBufSize, aafUInt8*& convertedBuf )
 {
+	int uyvyBufStride = width*4/2;             // 2 pixels fit in 4 in bytes
+
+	// Currently, this routine requires that strides are 32 bit aligned.
+	assert( 0 == uyvyBufStride % 4 );
+	assert( 0 == stride % 4 );	
+
+	int uyvyBufSize = uyvyBufStride*height;  // in bytes
+	aafUInt32* uyvyBuf = new aafUInt32[ uyvyBufSize/4 ];
+
+	// Store one line of 8 bit per component 444yuvx in this buffer.
+	aafUInt32* yuvxLineBuf = new aafUInt32[ width ];
+
 	int i;
 
-	assert( width % 4 == 0 );
+	for ( i = 0; i < height; i++ ) {
 
-	// This is cheating.  I beleive the chrome samples
-	// should come from two lines, not one.
-	for( i = 0; i < width; i += 4 ) {
+		convert_line_rgbx_to_ycrcbx( reinterpret_cast<aafUInt32*>(rgbxBuf + i*stride),
+									 yuvxLineBuf, width );
+		
+		convert_line_444yuvx_to_422uyvy( yuvxLineBuf, uyvyBuf + i*uyvyBufStride/4, width );					  
+	}	
 
-		unsigned char y1;
-		unsigned char u1;
-		unsigned char v1;
-	
-		unsigned char y2;
-		unsigned char u2;
-		unsigned char v2;
-	
-		unsigned char y3;
-		unsigned char u3;
-		unsigned char v3;
+	delete yuvxLineBuf;
 
-		unsigned char y4;
-		unsigned char u4;
-		unsigned char v4;
-
-		unpack32( y1, u1, v1, yuv[i+0] );
-		unpack32( y2, u2, v2, yuv[i+1] );
-		unpack32( y3, u3, v3, yuv[i+2] );
-		unpack32( y4, u4, v4, yuv[i+4] );
-
-		pack32( (u1+u2+u3+u4)/4, y1, (v1+v2+v3+v4)/4, y2 );
-	}
-
+	convertedBufSize = uyvyBufSize;
+	convertedBuf = reinterpret_cast<aafUInt8*>(uyvyBuf);
 }
 
-// caller takes ownership of allocated pointer
-void create_422uyvy_bars_image( int width, int height, int* pBufSize, aafUInt8** ppBuf )
+convert_rgbx_to_yuvx4444( int width, int height, int stride, aafUInt8* rgbxBuf,
+						int& convertedBufSize, aafUInt8*& convertedBuf )
 {
-	// This is just one line.  rgbx  = one pixel per 32 bpp
-	aafUInt32* rgbxlinebuf  = new aafUInt32[ width ];
+	int uyvyBufStride = width*4;             // in bytes
+
+	// Currently, this routine requires that strides are 32 bit aligned.
+	assert( 0 == uyvyBufStride % 4 );
+	assert( 0 == stride % 4 );	
+
+	int uyvyBufSize = uyvyBufStride*height;  // in bytes
+	aafUInt32* uyvyBuf = new aafUInt32[ uyvyBufSize/4 ];
+
+	int i;
+
+	for ( i = 0; i < height; i++ ) {
+
+		convert_line_rgbx_to_ycrcbx( reinterpret_cast<aafUInt32*>(rgbxBuf + i*stride),
+									 uyvyBuf + i*uyvyBufStride/4, width );
+		
+	}	
 	
-	// buf size in 32 bit words
-	int uyvyBufSize = height*width/2;
-
-	aafUInt32* uyvybuf = new aafUInt32[ uyvyBufSize ];  
-
-	colorbars_test_pattern( rgbxlinebuf, width, 1, sizeof(aafUInt32)*width, 8*sizeof(aafUInt32) );
-
-	// This is a 444rgb to 444yuv conversion.
-	convert_line_rgb_to_ycrcb( rgbxlinebuf, width );
-
-	// Now convert to 422.
-	// Call it yuv now... same as crcb for these purposes.
-	convert_444yuv_to_422uyvy( rgbxlinebuf, uyvybuf, width );  
-
-	delete rgbxlinebuf;
-
-	copy_first_line_to_all_lines( uyvybuf, height, 2*width );
-
-	*ppBuf = reinterpret_cast<aafUInt8*>(uyvybuf);
-	*pBufSize = sizeof(aafUInt32) * uyvyBufSize;
+	convertedBufSize = uyvyBufSize;
+	convertedBuf = reinterpret_cast<aafUInt8*>(uyvyBuf);
 }
 
 // caller takes ownership of allocated pointer
-void create_444rgbx_bars_image( int width, int height, int* pBufSize, aafUInt8** ppBuf )
+void create_rgbx_bars_image( int width, int height, int& stride, int& bufSize, aafUInt8*& pBuf )
 {
 	// buf size in 32 bit words.
-	int rgbxBufSize = height*width; 
+	int rgbxBufSize = height*width;
 
 	aafUInt32* rgbxbuf = new aafUInt32[ rgbxBufSize ];
 
@@ -237,16 +228,24 @@ void create_444rgbx_bars_image( int width, int height, int* pBufSize, aafUInt8**
 
 	copy_first_line_to_all_lines( rgbxbuf, height, 4*width );
 
-	*ppBuf = reinterpret_cast<aafUInt8*>(rgbxbuf);
-	*pBufSize = sizeof(aafUInt32) * rgbxBufSize;
+	pBuf = reinterpret_cast<aafUInt8*>(rgbxbuf);
+	bufSize = sizeof(aafUInt32) * rgbxBufSize;
+	stride = width*4;
 }
-
 
 //=---------------------------------------------------------------------=
 
 class BarsSource : public AxFGOp, public SampleSource { 
 
 public:
+
+  enum Format_e {
+   RGBX4444,
+   YUVX4444,
+   YUV422,
+   YUV411,
+   YUV420
+  };
 
   BarsSource ( const AxString& opName )
     : AxFGOp( opName ),
@@ -269,9 +268,12 @@ private:
 	int _numFrames;
 	int _width;
 	int _height;
+	int _bitsPaddingPerComponent;
+	int _bitsPerComponent;
 	int _sampVert;
 	int _sampHorz;
-	aafPixelFormat_t _pixelFormat;
+	Format_e _format;
+	aafColorSpace_t _colorSpace;
 	AxString _descName;
 };
 
@@ -280,8 +282,8 @@ AXFG_OP_FACTORY_DECLARATION(
   BarsSource,           
   L"BarsSource",
   L"Implements the BarsSampleSource protocol",
-  L"BarsSampleSourceName  CDCIDescriptorName pixel_format num_frames",
-  L"CDCIDescriptor used to determine size.  pixel_form is aafPixelFormat_t.",
+  L"BarsSampleSourceName  CDCIDescriptorName color_space num_frames",
+  L"CDCIDescriptor used to determine size.  color_space is aafColorSpace_t.",
   5,
   5 ) 
 
@@ -292,7 +294,7 @@ void BarsSource::Execute( const std::vector<AxString>& argv )
 {
 	AxString sourceName   = argv[1];
 	AxString cdciDescName = argv[2];
-	AxString pixelFormat  = argv[3];
+	AxString colorSpace   = argv[3];
 	AxString numFrames    = argv[4];
 
 	IAAFCDCIDescriptorSP spDesc;
@@ -313,18 +315,50 @@ void BarsSource::Execute( const std::vector<AxString>& argv )
 	_sampHorz = axDesc.GetHorizontalSubsampling();
 	_sampVert = axDesc.GetVerticalSubsampling();
 
-	// For the moment, require 1x1 sampling.
-	// The DVExpress dump shows 1x1 sampling, but format is supposedly,
-	// yuv so it doesn't mean chroma... assumed to be something used
-	// by the codec only.
-	if ( ! ( _sampHorz == 1 && _sampVert == 1 ) ) {
-		throw AxFGOpUsageEx( *this, L"unsupported sampling" );
+	_colorSpace = ColorSpaceParams::GetInstance().Find( *this, colorSpace );
+
+	if ( _sampHorz == 1 && _sampVert == 1 && _colorSpace == kAAFColorSpaceRGB ) {
+		_format = RGBX4444;
+	}
+	else if ( _sampHorz == 1 && _sampVert == 1 && _colorSpace == kAAFColorSpaceYUV ) {
+		_format = YUVX4444;
+	}
+	else if ( _sampHorz == 2 && _sampVert == 1 && _colorSpace == kAAFColorSpaceYUV ) {
+		_format = YUV422;
+	}
+// Support pending
+#if 0
+	else if ( _sampHorz == 2 && _sampVert == 2 && _colorSpace == kAAFColorSpaceYUV ) {
+		_format = YUV420;
+	}
+	else if ( _sampHorz == 4 && _sampVert == 1 && _colorSpace == kAAFColorSpaceYUV ) {
+		_format = YUV411;
+	}
+#endif
+	else {
+		throw AxFGOpUsageEx( *this, L"unsupported format" );
 	}
 
-	_pixelFormat = PixelFormatParams::GetInstance().Find( *this, pixelFormat );
+	_bitsPerComponent = axDesc.GetComponentWidth();
+	_bitsPaddingPerComponent = axDesc.GetPaddingBits();
 
-	if ( _pixelFormat == kAAFPixNone ) {
-		throw AxFGOpUsageEx( *this, L"\"" + pixelFormat + L"\" unsupported" );
+	// Currently only support 8 bits per component
+	if ( _bitsPerComponent != 8 ) {
+		throw AxFGOpUsageEx( *this, L"only 8 bits per component supported" );
+	}
+
+	if ( _bitsPaddingPerComponent != 0 ) {
+		throw AxFGOpUsageEx( *this, L"non-zero padding not supported" );
+	}
+
+
+	// If mixed, or separate, fields then simply double the height.
+	// This would not be correct for a more complex image.  In that case,
+	// and if the format was YUV420, the color space conversion and resampling
+	// would need to occur before interlacing or concantenating the image.
+	if( axDesc.GetFrameLayout() == kAAFSeparateFields ||
+		axDesc.GetFrameLayout() == kAAFMixedFields ) {
+		_height *= 2;
 	}
 
 	RegisterInstance( sourceName );
@@ -344,28 +378,58 @@ std::auto_ptr< SampleSrcBuffer > BarsSource::GetNext()
 	}
 
 	int numSamples = 1;
-	int numBytes; 
-	aafUInt8* buf;
 
-	if ( _pixelFormat == kAAFPixRGBA ) {
+	int rgbBufSize;
+	int rgbBufStride;
+	aafUInt8 *rgbBuf;
+
+	// This function allocates an 8 bits per component image and
+	// fills it with a color bar pattern.
+	// The component width is enforced in the Execute method.
+	create_rgbx_bars_image( _width, _height, rgbBufStride, rgbBufSize, rgbBuf );
+	
+	int convertedBufSize;
+	aafUInt8* convertedBuf;
 		
-		create_444rgbx_bars_image( _width, _height, &numBytes, &buf );
-	
-	}
-	else if ( _pixelFormat == kAAFPixYUV ) {
+	// Next, perform color space conversion and resampling.
+	switch ( _format ) {
 
-		// Assume tthat PixYUV means 422
-		create_422uyvy_bars_image( _width, _height, &numBytes, &buf );
-	
-	}
-	else {
-		throw AxFGEx( L"bad implementation" );
-	}
+		case RGBX4444:
+			// Nothing to convert.
+			convertedBufSize = rgbBufSize;
+			convertedBuf = rgbBuf;
+			break;
 
-	auto_ptr<aafUInt8> bufferToGiveUp( buf );
+		case YUVX4444:
+			convert_rgbx_to_yuvx4444( _width, _height, rgbBufStride, rgbBuf,
+									  convertedBufSize, convertedBuf );
+			break;
+
+		case YUV422:
+			convert_rgbx_to_yuv422( _width, _height, rgbBufStride, rgbBuf,
+									convertedBufSize, convertedBuf );
+			break;
+#if 0
+// Support pending
+		case YUV411:
+			convert_rgbx_to_yuv411( _width, _height, rgbBufStride, rgbBuf,
+									convertedBufSize, convertedBuf );
+			break;
+
+		case YUV420:
+			convert_rgbx_to_yuv420( _width, _height, rgbBufStride, rgbBuf, 
+									convertedBufSize, convertedBuf );
+			break;
+#endif
+
+		default:
+			assert(0);
+	};
+
+	auto_ptr<aafUInt8> bufferToGiveUp( convertedBuf );
 	
 	auto_ptr<SampleSrcBuffer> srcBuffer(
-		new SimpleSampleSrcBuffer( numSamples, numBytes, bufferToGiveUp ) );
+		new SimpleSampleSrcBuffer( numSamples, convertedBufSize, bufferToGiveUp ) );
 	
 	_count++;
 

@@ -94,58 +94,54 @@ inline bool operator!=( const tagGUID& uidL, const tagGUID& uidR )
 }
 #endif
 
-// AxAutoPtr - Just like auto_ptr, does not have const related
-// problems (using gcc 3.0.3) when using in maps, pairs, etc.
+
+// Preserve auto_ptr ownership semantics but add a size
+// data member so that a buffer pointer and its size can travel
+// together.
+
 template <class T>
-class AxAutoPtr
-{
+class AxBuffer {
 public:
-  AxAutoPtr()
-  : _p( 0 )
-  {}
 
-  explicit AxAutoPtr( T* p )
-    : _p(p)
-  {}
+	// Size should be be in units of sizeof(T).
+	AxBuffer( std::auto_ptr<T> ptr,  int size )
+		: _ptr( ptr ),
+		  _size( size )
+	{}
 
-  ~AxAutoPtr()
-  { delete _p; }
+	AxBuffer( const AxBuffer<T>& other )
+		: _ptr( other._ptr ),
+		  _size( other._size )
+	{}
+	
+	~AxBuffer()
+	{}
 
-  AxAutoPtr( const AxAutoPtr& other )
-  {
-    AxAutoPtr& ncother = const_cast<AxAutoPtr&>(other);
-    _p = ncother.release();
-  }
+	AxBuffer<T>& operator=( const AxBuffer<T>& rhs )
+	{
+		if ( this != &rsh ) {
+			_ptr = rhs._ptr;
+			_size = rhs._size;
+		}
 
-  AxAutoPtr& operator=( const AxAutoPtr& other )
-  {
-    AxAutoPtr& ncother = const_cast<AxAutoPtr&>(other);
-    if ( this != &other ) {
-      _p = ncother.release();
-    }
-	return *this;
-  }
+		return *this;
+	}
 
-  T* operator->() const
-  {
-	return _p;
-  }
+	int GetSize() const
+	{
+		return _size;
+	}
 
-  T& operator*() const
-  {
-	return *_p;
-  }
-
-  T* get() const
-  { return _p; }
-
-  T* release()
-  { T* p = _p; _p = 0; return p; }
+	// Caller takes ownership at their discretion.
+	std::auto_ptr<T>& GetPtr()
+	{
+		return _ptr;
+	}
 
 private:
-  T* _p;
+	std::auto_ptr<T> _ptr;
+	int _size;
 };
-
 
 
 #endif

@@ -60,6 +60,35 @@ void SourceMob::Execute( const std::vector<AxString>& argv )
 	RegisterInstance( sourceMobName );
 }
 
+//=---------------------------------------------------------------------=
+
+AXFG_OP(
+  SetEssenceDesc,           
+  L"SetEssenceDesc",
+  L"Set essence descriptor on a SourceMob",
+  L"SourceMobName DescName",
+  L"",
+  3,
+  3 ) 
+
+SetEssenceDesc::~SetEssenceDesc()
+{}
+
+void SetEssenceDesc::Execute( const std::vector<AxString>& argv )
+{
+	AxString srcMobName = argv[1];
+	AxString descName = argv[2];
+
+	IAAFSourceMobSP spSrcMob;
+	GetInstance( srcMobName ).GetCOM( spSrcMob );
+	AxSourceMob axSrcMob( spSrcMob );
+
+	IAAFEssenceDescriptorSP spDesc;
+	GetInstance( descName ).GetCOM( spDesc );
+
+	axSrcMob.SetEssenceDescriptor( spDesc );
+}
+
 } // end of namespace
 
 

@@ -33,9 +33,9 @@ namespace {
 // suffers as the tone frequency approaches the nyquist frequence because
 // we can only generate tones that are integer multiples of the
 // sample_freq/tone_freq.  The error introduced by this grows as the tone_freq
-// increases.  Since, in generate we assume nothing about the sample frequency
-// or the tone frequency, choose the more accurate approach and generate every
-// sample.
+// increases.  Since, in general we assume nothing about the sample frequency
+// or the tone frequency values, we choose the more accurate approach and
+// generate every sample at the expense of a bit of cpu time.
 
 class ToneGenerator {
 public:
@@ -88,7 +88,7 @@ ToneGenerator::ToneGenerator( int toneFrequency,
 		throw AxFGEx( L"Nyquist frequency exceeded." );
 	}
 	
-	// Get 2*pi in their now as well...
+	// Get 2*pi in there now as well...
 	_normalizedFrequency = (2.0 * _pi * _toneFrequency) / _sampleFrequency;
 
 	// Sine is from -1.0 to 1.0.
@@ -97,7 +97,7 @@ ToneGenerator::ToneGenerator( int toneFrequency,
 	// Reduce this by level/100 percent.
 	// Thus, value of sample i is:  level/100 * (2^bits_per_sample-1) * (1+sin(w*i))/2
 	//
-	// Combine constants:  _normalizedLevel * (1 + sin(_normalizeFrequency * i) )
+	// Combine constants:  _normalizedLevel * (1 + sin(_normalizedFrequency * i) )
 
 	_normalizedLevel = (level/100.0) * (pow(2.0, _bitsPerSample)-1) / 2.0;  
 }
@@ -180,7 +180,7 @@ void ToneSource::Execute( const std::vector<AxString>& argv )
 		throw AxFGOpUsageEx( *this, L"level out of range" );
 	}
 
-	std::pair<int, std::auto_ptr<aafUInt8> > waveHeaderBuffer = axDesc.GetSummary();
+	AxBuffer<aafUInt8> waveHeaderBuffer = axDesc.GetSummary();
 
 	WaveHeader waveHeader( waveHeaderBuffer );
 

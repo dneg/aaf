@@ -374,7 +374,7 @@ ParamMap< aafBoolean_t, aafBoolean_e >::ParamMap()
 {
 	_map[ L"kAAFFalse" ] = kAAFFalse;
 	_map[ L"False" ]     = kAAFFalse;
-	_map[ L"False" ]     = kAAFFalse;
+	_map[ L"FALSE" ]     = kAAFFalse;
 	_map[ L"false" ]     = kAAFFalse;
 
 	_map[ L"kAAFTrue" ]  = kAAFTrue;

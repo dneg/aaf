@@ -39,6 +39,8 @@
 #include <iostream>
 #include <sstream>
 
+#include <assert.h>
+
 namespace {
 
 void throwUsage()
@@ -85,15 +87,28 @@ std::wostream& operator<<( std::wostream& os, const Level& level )
 
 //=---------------------------------------------------------------------=
 
+AxString formatItemCount( unsigned int count )
+{
+	// 32 bit integer requires 10 chars plus null;
+	assert( sizeof(count) == 4 );
+	char buf[12];
+	sprintf( buf, "%6u", count);
+	return AxStringUtil::mbtowc( buf );
+}
+
 void dumpBaseObjects( AxDictionary& axDict,
 			 AxBaseObjRecIter& recIter,
 			 AxCmdLineArgs& args )
 {
 	using namespace std;
 
-	pair<bool,auto_ptr<AxBaseObj> > next;
+	bool nextExists;
+	auto_ptr<AxBaseObj> nextPtr;
+
 	Level level(0);
 
+	unsigned int itemCount;
+	
 	// FIXME - options require refinement.
 	pair<bool,int> verboseOpt = args.get("-verbose");
 	bool not_verbose = !verboseOpt.first;
@@ -127,24 +142,24 @@ void dumpBaseObjects( AxDictionary& axDict,
 	//		  and its subtree not descended.
 	
 	
-	for( next.first  = recIter.NextOne( next.second, level.getRef() );
-		 next.first;
-		 next.first = recIter.NextOne( next.second, level.getRef() ) ) {
+	for( itemCount = 0, nextExists  = recIter.NextOne( nextPtr, level.getRef() );
+		 nextExists;
+		 itemCount++, nextExists = recIter.NextOne( nextPtr, level.getRef() ) ) {
 
 		 if ( objectDump.first &&
-			  dynamic_cast<AxObject*>( next.second.get() ) ) {
+			  dynamic_cast<AxObject*>( nextPtr.get() ) ) {
 
 			auto_ptr<AxObject> obj( 
-				 dynamic_cast<AxObject*>( next.second.release() ) );
+				 dynamic_cast<AxObject*>( nextPtr.release() ) );
 
-			wcout << level.get() << L"\tObject\t" << level <<
+			wcout << formatItemCount(itemCount) << L"  " << level.get() << L"\tObject\t" << level <<
 				obj->GetClassName() << endl;
 		}
 
-		else if ( dynamic_cast<AxProperty*>( next.second.get() ) ) {
+		else if ( dynamic_cast<AxProperty*>( nextPtr.get() ) ) {
 
 			auto_ptr<AxProperty> prop( 
-				 dynamic_cast<AxProperty*>( next.second.release() ) );
+				 dynamic_cast<AxProperty*>( nextPtr.release() ) );
 
 			if ( not_verbose &&
 				 ( *prop == kAAFPropID_Header_Dictionary ||
@@ -155,32 +170,32 @@ void dumpBaseObjects( AxDictionary& axDict,
 
 			if ( propertyDump.first ) {
 				AxString name = prop->GetName();
-				wcout << level.get()<< L"\tProp\t" << level << name;
+				wcout << formatItemCount(itemCount) << L"  " << level.get()<< L"\tProp\t" << level << name;
 				wcout << endl;
 			}
 
 			
 		}
 		else if ( valueDump.first && 
-				  dynamic_cast<AxPropertyValue*>( next.second.get() ) ) {
+				  dynamic_cast<AxPropertyValue*>( nextPtr.get() ) ) {
 
 			auto_ptr<AxPropertyValue> propVal( 
-				 dynamic_cast<AxPropertyValue*>( next.second.release() ) );
+				 dynamic_cast<AxPropertyValue*>( nextPtr.release() ) );
 
 			AxPropertyValueDump axPropValueDump( std::wcout );
 
-			wcout << level.get() << L"\tValue\t" << level;
+			wcout << formatItemCount(itemCount) << L"  " << level.get() << L"\tValue\t" << level;
 			propVal->Process( axPropValueDump );
 			wcout << endl;
 		}
 
-		else if ( dynamic_cast< AxBaseObjAny<AxRecordIterator::Pair>* >( next.second.get() ) ) {
+		else if ( dynamic_cast< AxBaseObjAny<AxRecordIterator::Pair>* >( nextPtr.get() ) ) {
 
 			auto_ptr< AxBaseObjAny<AxRecordIterator::Pair> > recPair(
-				dynamic_cast< AxBaseObjAny<AxRecordIterator::Pair>* >( next.second.release() ) );
+				dynamic_cast< AxBaseObjAny<AxRecordIterator::Pair>* >( nextPtr.release() ) );
 
 			if ( recordDump.first ) {
-				wcout << level.get() << L"\tRecMem\t" << level;
+				wcout << formatItemCount(itemCount) << L"  " << level.get() << L"\tRecMem\t" << level;
 				wcout << recPair->get().first << endl;
 			}
 			else {
@@ -190,11 +205,11 @@ void dumpBaseObjects( AxDictionary& axDict,
 			}
 		}
 
-		else if ( dynamic_cast<AxBaseObjAny<AxExHResult>*>( next.second.get() ) ) {
+		else if ( dynamic_cast<AxBaseObjAny<AxExHResult>*>( nextPtr.get() ) ) {
 			auto_ptr< AxBaseObjAny<AxExHResult> > ex (
-				dynamic_cast<AxBaseObjAny<AxExHResult>*>( next.second.release() ) );
+				dynamic_cast<AxBaseObjAny<AxExHResult>*>( nextPtr.release() ) );
 
-			wcout << level.get() << L"\tExcep\t" << level;
+			wcout << formatItemCount(itemCount) << L"  " << level.get() << L"\tExcep\t" << level;
 			wcout << ex->get().what() << endl;
 		}
 
@@ -252,19 +267,20 @@ int renamePeskyOpaques( AxDictionary& axDict,
 {
 	using namespace std;
 
-	pair<bool, auto_ptr< AxBaseObj > > next;
+	bool nextExists;
+	auto_ptr<AxBaseObj> nextPtr;
 	Level level(0);
 
 	int count = 0;
 
-	for( next.first = recIter.NextOne( next.second, level.getRef() );
-		 next.first;
-		 next.first = recIter.NextOne( next.second, level.getRef() ) ) {
+	for( nextExists = recIter.NextOne( nextPtr, level.getRef() );
+		 nextExists;
+		 nextExists = recIter.NextOne( nextPtr, level.getRef() ) ) {
 
-		if ( dynamic_cast<AxPropertyValue*>( next.second.get() ) ) {
+		if ( dynamic_cast<AxPropertyValue*>( nextPtr.get() ) ) {
 
 			auto_ptr<AxPropertyValue> propVal( 
-				 dynamic_cast<AxPropertyValue*>( next.second.release() ) );
+				 dynamic_cast<AxPropertyValue*>( nextPtr.release() ) );
 
 			AxPropValueRenamePeskyOpaques axPropValueRenamePeskyOpaques( axDict );
 
@@ -330,6 +346,7 @@ int main( int argc, const char** argv )
 		// cast to AxObject so that the IAAFObject interface of the header can be used
 		// to access its properties.
 	
+#if 0	
 		{
 			auto_ptr< AxBaseObjIterPrtcl > axHeaderIter(
 				new AxBaseSolitaryObjIter<AxHeader>(axHeader) );
@@ -344,7 +361,10 @@ int main( int argc, const char** argv )
 			wcout << L"\tOpaques reported by dictionary: " << axDictionary.CountOpaqueTypeDefs() << endl;
 			wcout << L"\tOpaques found and renamed: " << count << endl;
 		}
+#endif
 
+		wcout << L"FIRST TRAVERSAL" << endl;
+		
 		{
 			auto_ptr< AxBaseObjIterPrtcl > axHeaderIter(
 			new AxBaseSolitaryObjIter<AxHeader>(axHeader) );
@@ -354,8 +374,25 @@ int main( int argc, const char** argv )
 
 			// ... and dump all objects.
 			wcout << endl << L"Recursive Dump:" << endl;
-			wcout << endl << L"Level   Desc.       Detail" << endl;
+			wcout << endl << L"  Item  Level   Desc.       Detail" << endl;
 			dumpBaseObjects( axDictionary, recIter, args );
+		}
+
+
+		wcout << endl << endl << L"SECOND TRAVERSAL" << endl;
+		
+		{
+			auto_ptr< AxBaseObjIterPrtcl > axHeaderIter(
+			new AxBaseSolitaryObjIter<AxHeader>(axHeader) );
+
+		    // Create a recursive iterator...
+			AxBaseObjRecIter recIter( axHeaderIter );
+
+			// ... and dump all objects.
+			wcout << endl << L"Recursive Dump:" << endl;
+			wcout << endl << L"  Item  Level   Desc.       Detail" << endl;
+			dumpBaseObjects( axDictionary, recIter, args );
+
 		}
 
 		// That's all folks.

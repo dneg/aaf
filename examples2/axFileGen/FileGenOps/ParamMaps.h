@@ -22,9 +22,10 @@
 
 class AxFGOp;
 
-// Yet another singleton class that stores a map of any data types.
-// Data is always returned by value.  No iterator.  It may be use full
-// to extend this to generate some kind of use message.
+// Yet another singleton class that stores a map of any data type.
+// An instance of the stored type is always returned by value.  No iterator
+// is implemented. It may be useful to extend this to generate some kind of
+// usage message.
 
 // Tag exists to permit different instances of the template for the
 // same Type.  This is required becaues explicit constructor instances

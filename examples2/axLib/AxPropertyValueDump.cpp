@@ -271,9 +271,11 @@ void AxPropertyValueDump::process( IAAFPropertyValueSP& spIaafPropertyValue,
 
 void AxPropertyValueDump::process( IAAFPropertyValueSP& spPropVal, IAAFTypeDefStringSP& spTypeDef )
 {
+
 	if ( _dumpValueType )
 		_os << L"IAAFTypeDefString" << _s;
 
+return;
 	AxTypeDefString axTypeDefString( spTypeDef );
 	
 	if ( _dumpValue ) {

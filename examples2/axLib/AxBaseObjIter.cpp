@@ -31,9 +31,7 @@ namespace {
 class PropValToIter : public AxPropertyValueNoopPrtcl {
 public:
 
-	typedef pair<bool, auto_ptr< AxBaseObjIterPrtcl > > Pair;
-	
-	PropValToIter( Pair& result );
+	PropValToIter();
 
 	virtual ~PropValToIter();
 
@@ -53,22 +51,37 @@ public:
 
 	virtual void process( IAAFPropertyValueSP&, IAAFTypeDefRenameSP& );
 
+	bool ResultExists();
+
+	std::auto_ptr<AxBaseObjIterPrtcl> GetResult();
+
 private:
 
-	inline void Post( auto_ptr< AxBaseObjIterPrtcl > iter ) {
-		_result.first = true;
-		_result.second = iter;
+	inline void Post( std::auto_ptr<AxBaseObjIterPrtcl> iter ) {
+		_isSet = true;
+		_result= iter;
 	}
 	
-	Pair& _result;
+	bool _isSet;
+	std::auto_ptr<AxBaseObjIterPrtcl> _result;
 };
 
-PropValToIter::PropValToIter( Pair& result )
-:	_result( result )
+PropValToIter::PropValToIter()
+:	_isSet( false )
 {}
 
 PropValToIter::~PropValToIter()
 {}
+
+bool PropValToIter::ResultExists()
+{
+	return _isSet;
+}
+
+std::auto_ptr<AxBaseObjIterPrtcl> PropValToIter::GetResult()
+{
+	return _result;
+}
 
 void PropValToIter::process( IAAFPropertyValueSP& spIaafPropertyValue,
 			     IAAFTypeDefStrongObjRefSP& spIaafTypeDefStrongObjRef )
@@ -76,7 +89,7 @@ void PropValToIter::process( IAAFPropertyValueSP& spIaafPropertyValue,
 	AxTypeDefStrongObjRef axStrongObjRef( spIaafTypeDefStrongObjRef );
 
 	IUnknownSP spIUnknown;
-	spIUnknown = axStrongObjRef.GetObject( spIaafPropertyValue, 				  						      IID_IAAFObject );
+	spIUnknown = axStrongObjRef.GetObject( spIaafPropertyValue, IID_IAAFObject );
 
 	IAAFObjectSP spIaafObject;
 	AxQueryInterface( spIUnknown, spIaafObject );
@@ -395,14 +408,12 @@ void AxBaseObjRecIter::HandlePropertyRecursion( AxProperty& prop )
 
 void AxBaseObjRecIter::HandlePropertyValueRecursion( AxPropertyValue& propVal )
 {
-	PropValToIter::Pair result;
-	
-	PropValToIter valuePrtcl( result );
+	PropValToIter valuePrtcl;
 
 	propVal.Process( valuePrtcl );
 
-	if ( result.first ) {
-		Push( result.second );
+	if ( valuePrtcl.ResultExists() ) {
+		Push( valuePrtcl.GetResult() );
 	}
 }
 

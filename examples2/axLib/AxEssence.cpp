@@ -356,7 +356,7 @@ void AxWAVEDescriptor::SetSummary( aafUInt32 size, aafDataValue_t  pSummary )
 	CHECK_HRESULT( _spIaafWAVEDescriptor->SetSummary( size, pSummary ) );
 }
 
-std::pair<int, std::auto_ptr<aafUInt8> > AxWAVEDescriptor::GetSummary()
+AxBuffer<aafUInt8> AxWAVEDescriptor::GetSummary()
 {
 	using namespace std;
 	
@@ -368,7 +368,7 @@ std::pair<int, std::auto_ptr<aafUInt8> > AxWAVEDescriptor::GetSummary()
 
 	CHECK_HRESULT( _spIaafWAVEDescriptor->GetSummary( size, buffer ) );
 
-	return pair<int, std::auto_ptr<aafUInt8> >( size, auto_ptr<aafUInt8>( buffer ) );
+	return AxBuffer<aafUInt8>( auto_ptr<aafUInt8>( buffer ), size );
 }
 
 //=---------------------------------------------------------------------=
@@ -478,6 +478,11 @@ AxCDCIDescriptor::AxCDCIDescriptor( IAAFCDCIDescriptorSP sp )
 AxCDCIDescriptor::~AxCDCIDescriptor()
 {}
 
+void AxCDCIDescriptor::SetPaddingBits( aafInt16 PaddingBits )
+{
+	CHECK_HRESULT( _spIaafCDCIDescriptor->SetPaddingBits( PaddingBits ) );
+}
+
 void AxCDCIDescriptor::SetComponentWidth( aafInt32 ComponentWidth )
 {
 	CHECK_HRESULT( _spIaafCDCIDescriptor->SetComponentWidth( ComponentWidth ) );
@@ -493,9 +498,26 @@ void AxCDCIDescriptor::SetVerticalSubsampling( aafUInt32 VerticalSubsampling )
 	CHECK_HRESULT( _spIaafCDCIDescriptor->SetVerticalSubsampling( VerticalSubsampling ) );
 }
 
+void AxCDCIDescriptor::SetBlackReferenceLevel( aafUInt32 BlackReferenceLevel )
+{
+	CHECK_HRESULT( _spIaafCDCIDescriptor->SetBlackReferenceLevel( BlackReferenceLevel ) );
+}
+
+void AxCDCIDescriptor::SetWhiteReferenceLevel( aafUInt32 WhiteReferenceLevel )
+{
+	CHECK_HRESULT( _spIaafCDCIDescriptor->SetWhiteReferenceLevel( WhiteReferenceLevel ) );
+}
+
 void AxCDCIDescriptor::SetColorRange( aafUInt32 ColorRange )
 {
 	CHECK_HRESULT( _spIaafCDCIDescriptor->SetColorRange( ColorRange ) );
+}
+
+aafInt16 AxCDCIDescriptor::GetPaddingBits()
+{
+	aafInt16 paddingBits;
+	CHECK_HRESULT( _spIaafCDCIDescriptor->GetPaddingBits( &paddingBits ) );
+	return paddingBits;
 }
 
 aafInt32 AxCDCIDescriptor::GetComponentWidth()
@@ -517,6 +539,21 @@ aafUInt32 AxCDCIDescriptor::GetVerticalSubsampling()
   aafUInt32 verticalSubsampling;
   CHECK_HRESULT( _spIaafCDCIDescriptor->GetVerticalSubsampling( &verticalSubsampling ) );
   return verticalSubsampling;
+}
+
+
+aafUInt32 AxCDCIDescriptor::GetBlackReferenceLevel()
+{
+	aafUInt32 level;
+	CHECK_HRESULT( _spIaafCDCIDescriptor->GetBlackReferenceLevel( &level ) );
+	return level;
+}
+
+aafUInt32 AxCDCIDescriptor::GetWhiteReferenceLevel()
+{
+	aafUInt32 level;
+	CHECK_HRESULT( _spIaafCDCIDescriptor->GetWhiteReferenceLevel( &level ) );
+	return level;
 }
 
 aafUInt32 AxCDCIDescriptor::GetColorRange()

@@ -67,7 +67,6 @@ public:
 
 	aafLength_t CountSamples( IAAFDataDefSP spDataDef );
 		
-	// pair<samplesWritten, bytesWritten>
 	WriteResult WriteSamples( aafUInt32 nSamples,
 					  		  aafUInt32 bufLength,
 							  aafDataBuffer_t buffer );
@@ -271,12 +270,13 @@ private:
 
 class AxWAVEDescriptor : public AxFileDescriptor {
 public:
+
 	AxWAVEDescriptor( IAAFWAVEDescriptorSP spIaafWAVEDescriptor );
 	~AxWAVEDescriptor();
 
 	void SetSummary( aafUInt32 size, aafDataValue_t  pSummary );
 
-	std::pair<int, std::auto_ptr<aafUInt8> > GetSummary();
+	AxBuffer<aafUInt8> GetSummary();
 
 private:
 	AxWAVEDescriptor();
@@ -340,14 +340,20 @@ public:
 	AxCDCIDescriptor( IAAFCDCIDescriptorSP spIaafCDCIDescriptor );
 	~AxCDCIDescriptor();
 
+	void SetPaddingBits( aafInt16 PaddingBits );
 	void SetComponentWidth( aafInt32 ComponentWidth );
 	void SetHorizontalSubsampling( aafUInt32  HorizontalSubsampling );
 	void SetVerticalSubsampling( aafUInt32 VerticalSubsampling );
+	void SetBlackReferenceLevel( aafUInt32 BlackReferenceLevel );
+	void SetWhiteReferenceLevel( aafUInt32 WhiteReferenceLevel );
 	void SetColorRange( aafUInt32 ColorRange );
 
+	aafInt16  GetPaddingBits();
 	aafInt32  GetComponentWidth();
 	aafUInt32 GetHorizontalSubsampling();
 	aafUInt32 GetVerticalSubsampling();
+	aafUInt32 GetBlackReferenceLevel();
+	aafUInt32 GetWhiteReferenceLevel();
 	aafUInt32 GetColorRange();
 
 private:

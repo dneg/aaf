@@ -126,16 +126,15 @@ void AxCreateCompositionExample( AxFile& axFile,
 	AxMobIter axMobIter( axContentStorage.GetMobs( &criteria ) );
 	IAAFMobSP nextMob;
 	bool notAtEnd;
-	typedef map< AxString, AxAutoPtr<AxMasterMob> > MobMap;
+	typedef map< AxString, IAAFMasterMobSP > MobMap;
 	MobMap mobMap;
 
 	for( notAtEnd = axMobIter.NextOne( nextMob );
 	     notAtEnd;
 	     notAtEnd = axMobIter.NextOne( nextMob ) ) { 
- 	         AxAutoPtr<AxMasterMob> axMasterMob(
-			    new AxMasterMob( AxQueryInterface<IAAFMob,IAAFMasterMob>( nextMob ) ) );
+ 	         AxMasterMob axMasterMob( AxQueryInterface<IAAFMob,IAAFMasterMob>( nextMob ) );
 
-			 mobMap[ axMasterMob->GetName() ] = axMasterMob;
+			 mobMap[ axMasterMob.GetName() ] = axMasterMob;
 	}
 
 	AxString audioA( L"Audio Mob A" );
@@ -202,11 +201,13 @@ void AxCreateCompositionExample( AxFile& axFile,
 
 	// First audio....
 
+	AxMasterMob axAudioMobA( mobMap[ audioA ] );
+	AxMasterMob axAudioMobB( mobMap[ audioB ] );
 	AxSourceClip axAudioClipA ( 
-		CreateSourceClipToAppendToSequence( axDictionary, *mobMap[ audioA ], axAudioSequence ) );
+		CreateSourceClipToAppendToSequence( axDictionary, axAudioMobA, axAudioSequence ) );
 	
 	AxSourceClip axAudioClipB ( 
-		CreateSourceClipToAppendToSequence( axDictionary, *mobMap[ audioB ], axAudioSequence ) );
+		CreateSourceClipToAppendToSequence( axDictionary, axAudioMobB, axAudioSequence ) );
 	
 	// If the operation definition is not in the dictionary already, then it is
 	// the programmers job to create the operation definition, initialize it,
@@ -246,11 +247,13 @@ void AxCreateCompositionExample( AxFile& axFile,
 
 	// Next video...
 
+	AxMasterMob axVideoMobA( mobMap[ videoA ] );
+	AxMasterMob axVideoMobB( mobMap[ videoB ] );
 	AxSourceClip axVideoClipA (
-		CreateSourceClipToAppendToSequence( axDictionary, *mobMap[ videoA ], axVideoSequence ) );
+		CreateSourceClipToAppendToSequence( axDictionary, axVideoMobA, axVideoSequence ) );
 		
 	AxSourceClip axVideoClipB (
-		CreateSourceClipToAppendToSequence( axDictionary, *mobMap[ videoB ], axVideoSequence ) );
+		CreateSourceClipToAppendToSequence( axDictionary, axVideoMobB, axVideoSequence ) );
 
 	//
 	// Setup a video dissolve

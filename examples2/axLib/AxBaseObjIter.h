@@ -207,9 +207,6 @@ private:
 //		NextOne( &level )
 //		if ( level != GetLevel() ) {recursed to next level};
 
-// FIXME - Should consolidate the Pair and level returned by
-// NextOne() into an instance of a single class.
-
 // TODO - Implement Clone and Reset methods.
 
 class AxBaseObjRecIter {

@@ -59,39 +59,44 @@ void GetEssenceDescriptor::Execute( const std::vector<AxString>& argv )
 
 //=---------------------------------------------------------------------=
 
+// FIXME - 13 arguments are difficult to manage.
+
 AXFG_OP(
   CDCIDescSet,           
   L"CDCIDescSet",
   L"Set minimal CDCI essence descriptor parameters.",
-  L"DescriptorName image_width image_height horz_subsampl vert_subsamp codec frame_layout [line_map_one] [line_map_two]",
+  L"DescriptorName image_width image_height horz_subsampl vert_subsamp codec frame_layout "
+    L"black_ref white_ref color_range [line_map_one] [line_map_two]",
   L"",
-  8,
-  10 ) 
+  11,
+  13 ) 
 
 CDCIDescSet::~CDCIDescSet()
 {}
 
 void CDCIDescSet::Execute( const std::vector<AxString>& argv )
 {
-	AxString  descName   = argv[1];
-	AxString  width      = argv[2];
-	AxString  height     = argv[3];
-	AxString  sampHorz   = argv[4];
-	AxString  sampVert   = argv[5];
-	AxString codecName   = argv[6];
-	AxString frameLayout = argv[7];
-
+	AxString  descName       = argv[1];
+	AxString  width          = argv[2];
+	AxString  height         = argv[3];
+	AxString  sampHorz       = argv[4];
+	AxString  sampVert       = argv[5];
+	AxString codecName       = argv[6];
+	AxString frameLayout     = argv[7];
+ 	AxString black_ref_level = argv[8];
+  	AxString white_ref_level = argv[9];
+	AxString color_range     = argv[10];
+	
 	std::pair<bool,AxString> line_map_one( false, L"" );
-	std::pair<bool,AxString> line_map_two( false, L"" );
-
-    if ( argv.size() >= 9 ) {
+	if ( argv.size() > 11 ) {
 		line_map_one.first = true;
-		line_map_one.second = argv[8];
+		line_map_one.second = argv[11];
 	}
 
-    if ( argv.size() == 10 ) {
-		line_map_two.first = true;
-		line_map_two.second = argv[9];
+	std::pair<bool,AxString> line_map_two( false, L"" );
+	if ( argv.size() > 12 ) {
+		line_map_one.first = true;
+		line_map_one.second = argv[11];
 	}
 	
 	IAAFCDCIDescriptorSP spCDCIDesc;
@@ -104,9 +109,9 @@ void CDCIDescSet::Execute( const std::vector<AxString>& argv )
 	rect.xSize   = AxStringUtil::strtol( width );
 	rect.ySize   = AxStringUtil::strtol( height );
 	
-	axCDCIDesc.SetStoredView ( rect.xSize, rect.ySize );
-	axCDCIDesc.SetSampledView( rect.xSize, rect.ySize, rect.xOffset, rect.yOffset );
-	axCDCIDesc.SetDisplayView( rect.xSize, rect.ySize, rect.xOffset, rect.yOffset );
+	axCDCIDesc.SetStoredView ( rect.ySize, rect.xSize );
+	axCDCIDesc.SetSampledView( rect.ySize, rect.xSize, rect.xOffset, rect.yOffset );
+	axCDCIDesc.SetDisplayView( rect.ySize, rect.xSize, rect.xOffset, rect.yOffset );
 
 	axCDCIDesc.SetHorizontalSubsampling( AxStringUtil::strtol( sampHorz ) );
 	axCDCIDesc.SetVerticalSubsampling( AxStringUtil::strtol( sampVert ) );
@@ -117,23 +122,25 @@ void CDCIDescSet::Execute( const std::vector<AxString>& argv )
 	axCDCIDesc.SetFrameLayout(
 		FrameLayoutParams::GetInstance().Find( *this, frameLayout ) );
 
+	axCDCIDesc.SetBlackReferenceLevel( AxStringUtil::strtol( black_ref_level ) );
+	axCDCIDesc.SetWhiteReferenceLevel( AxStringUtil::strtol( white_ref_level ) );
+	axCDCIDesc.SetColorRange( AxStringUtil::strtol( color_range ) );
+
 	aafInt32 lineMap[2];
-	int num_entries = 0;
+	int linemapSize = 0;
 
 	if ( line_map_one.first ) {
 		lineMap[0] = AxStringUtil::strtol( line_map_one.second );
-		num_entries++;
+		linemapSize++;
 	}
-	
+
 	if ( line_map_two.first ) {
 		assert( line_map_one.first );
 		lineMap[1] = AxStringUtil::strtol( line_map_two.second );
-		num_entries++;
+		linemapSize++;
 	}
 
-	if ( num_entries > 0 ) {
-		axCDCIDesc.SetVideoLineMap( num_entries, lineMap );
-	}
+	axCDCIDesc.SetVideoLineMap( 2, lineMap );
 }
 
 //=---------------------------------------------------------------------=
@@ -178,16 +185,42 @@ void WAVEDescSet::Execute( const std::vector<AxString>& argv )
 						   AxStringUtil::strtol( bitsPerSample ),
 						   AxStringUtil::strtol( numChannels ) );
 
-	// Size and pointer
-	std::pair<int, std::auto_ptr<aafUInt8> > header = waveHeader.GetHeader();
+	// Size and buffer pointer passed via an AxBuffer.
+	AxBuffer<aafUInt8> header = waveHeader.GetHeader();
 
-	axWaveDesc.SetSummary( header.first, header.second.get() );
+	axWaveDesc.SetSummary( header.GetSize(), header.GetPtr().get() );
 
 }
 
 
 //=---------------------------------------------------------------------=
 
+AXFG_OP(
+  WAVEDesc,
+  L"WAVEDesc",
+  L"Create buggy WAVE descriptor.",
+  L"FileName DescriptorName",
+  L"This is intended to test a bug.",
+  3,
+  3 ) 
+
+WAVEDesc::~WAVEDesc()
+{
+}
+
+void WAVEDesc::Execute( const std::vector<AxString>& argv )
+{
+	AxString fileName = argv[1];
+	AxString descName = argv[2];
+
+	IAAFWAVEDescriptorSP spDesc;
+	AxCreateInstance( DictionaryFromFileOp( fileName ), spDesc );
+
+	SetCOM( spDesc );
+	RegisterInstance( descName );
+}
+
+//=---------------------------------------------------------------------=
 
 AXFG_OP(
   AIFCDesc,           

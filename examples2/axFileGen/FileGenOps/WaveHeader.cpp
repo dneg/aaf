@@ -26,15 +26,15 @@
 WaveHeader::WaveHeader()
 {}
 
-WaveHeader::WaveHeader( std::pair<int, std::auto_ptr<aafUInt8> > buf )
+WaveHeader::WaveHeader( AxBuffer<aafUInt8> buf )
 {
 	// no can do yet
-	if ( buf.first != HEADER_SIZE ) {
+	if ( buf.GetSize() != HEADER_SIZE ) {
 		throw L"Wave header length too long (or not supported)";
 	}
 
-	_headerSize = buf.first;
-	memcpy( &_header, buf.second.get(), _headerSize );
+	_headerSize = buf.GetSize();
+	memcpy( &_header, buf.GetPtr().get(), _headerSize );
 	
 	_bitsPerSample = GetInt16( BITS_PER_SAMPLE );
 
@@ -216,12 +216,11 @@ aafUInt16 WaveHeader::GetInt16( int idx )
 	return val;
 }
 
-std::pair<int, std::auto_ptr<aafUInt8> > WaveHeader::GetHeader()
+AxBuffer<aafUInt8> WaveHeader::GetHeader()
 {		
 	aafUInt8* buffer = new aafUInt8[ sizeof(_header) ];
 	
 	memcpy( buffer, &_header, sizeof(_header) );
 
-	return 	std::pair<int, std::auto_ptr<aafUInt8> >(
-		sizeof(_header), std::auto_ptr<aafUInt8>( buffer ) );
+	return AxBuffer<aafUInt8>( std::auto_ptr<aafUInt8>( buffer ), sizeof(_header) );
 }

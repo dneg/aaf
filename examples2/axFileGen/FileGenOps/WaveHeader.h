@@ -16,7 +16,7 @@
 // 
 //=---------------------------------------------------------------------=
 
-#include <AAFTypes.h>
+#include <AxTypes.h>
 
 #include <memory>
 
@@ -24,7 +24,7 @@ class WaveHeader {
 public:
 	WaveHeader();
 	
-	WaveHeader( std::pair<int, std::auto_ptr<aafUInt8> > buf );
+	WaveHeader( AxBuffer<aafUInt8> buf );
 	
 	WaveHeader( int sampleRate,
 				int numSamples,
@@ -47,9 +47,9 @@ public:
 	int GetBytesPerSample();
 	int GetBitsPerSample();
 	int GetNumChannels();
-
-	// Size of buffer, and the buffer pointer.
-	std::pair<int, std::auto_ptr<aafUInt8> > GetHeader();
+	
+	// Buffer pointer, and size, returned via an AxBuffer<>.
+	AxBuffer<aafUInt8> GetHeader();
 
 private:
 

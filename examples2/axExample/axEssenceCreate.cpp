@@ -368,19 +368,17 @@ void AxCreateEssenceExample( AxFile& axFile,
 	IAAFMobSP nextMob;
 	bool notAtEnd;
 
-	// Use pointer because AxMasterMob has no copy ctor or assignment
-	// operator.
-	typedef map< AxString, AxAutoPtr<AxMasterMob> > MobMap;
+	typedef map< AxString, IAAFMasterMobSP > MobMap;
 	MobMap mobMap;
 
 	for( notAtEnd = axMobIter.NextOne( nextMob );
 	     notAtEnd;
 	     notAtEnd = axMobIter.NextOne( nextMob ) ) { 
 
-			 AxAutoPtr<AxMasterMob> axMasterMob(
-					new AxMasterMob( AxQueryInterface<IAAFMob,IAAFMasterMob>( nextMob ) ) );
+			 AxMasterMob axMasterMob(
+					AxQueryInterface<IAAFMob,IAAFMasterMob>( nextMob ) );
 
-			 mobMap[ axMasterMob->GetName() ] = axMasterMob;
+			 mobMap[ axMasterMob.GetName() ] = axMasterMob;
 		 }
 
 	AxString audioA( L"Audio Mob A" );
@@ -397,15 +395,19 @@ void AxCreateEssenceExample( AxFile& axFile,
 	// TODO - Create instances of data sources that will generate
 	// essence data.
 
-	AddAudioEssence( *mobMap[ audioA ], axHeader );
-	mobMap[ audioA ]->AppendComment( L"Essence Comment", L"Audio essence attached." );
+	AxMasterMob axAudioMobA( mobMap[ audioA ] );
+	AddAudioEssence( axAudioMobA, axHeader );
+	axAudioMobA.AppendComment( L"Essence Comment", L"Audio essence attached." );
 
-	AddAudioEssence( *mobMap[ audioB ], axHeader );
-	mobMap[ audioB ]->AppendComment( L"Essence Comment", L"Audio essence attached." );
+	AxMasterMob axAudioMobB( mobMap[ audioB ] );
+	AddAudioEssence( axAudioMobB, axHeader );
+	axAudioMobB.AppendComment( L"Essence Comment", L"Audio essence attached." );
 
-	AddImageEssence( *mobMap[ videoA ], axHeader, args );
-	mobMap[ videoA ]->AppendComment( L"Essence Comment", L"Image essence attached." );
+	AxMasterMob axVideoMobA( mobMap[ videoA ] );
+	AddImageEssence( axVideoMobA, axHeader, args );
+	axVideoMobA.AppendComment( L"Essence Comment", L"Image essence attached." );
 
-	AddImageEssence( *mobMap[ videoB ], axHeader, args );
-	mobMap[ videoB ]->AppendComment( L"Essence Comment", L"Image essence attached." );
+	AxMasterMob axVideoMobB( mobMap[ videoB ] );
+	AddImageEssence( axVideoMobB, axHeader, args );
+	axVideoMobB.AppendComment( L"Essence Comment", L"Image essence attached." );
 }

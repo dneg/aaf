@@ -157,10 +157,30 @@ private:
 
 //============================================================================
 
+// Adds GetNumSamples()
+class SampleBuffer : public AxBuffer<aafUInt8> {
+public:
+	SampleBuffer( AxBuffer<aafUInt8> axBuf, int numSamples )
+		: AxBuffer<aafUInt8>( axBuf ),
+ 		  _numSamples(numSamples)
+	{}
+
+	~SampleBuffer()
+	{}
+
+	int GetNumSamples() 
+	{
+		return _numSamples;
+	}
+
+private:
+	int _numSamples;
+};
+
 class SampleSource {
 
 public:
-
+	
 	SampleSource( aafUID_t dataDef, aafRational_t rate,
 				  aafCompressEnable_t compression, int sampleByteSize,
 				  int numSamplesPerChunk )
@@ -193,7 +213,7 @@ public:
 
 	virtual bool AtEnd() = 0;
 
-	virtual pair<int, AxAutoPtr<aafUInt8> > GetSamples() = 0;
+	virtual SampleBuffer GetSamples() = 0;
 
 private:
 
@@ -252,23 +272,23 @@ public:
 		return _numFramesToWrite > 0 ? false : true;
 	}
 
-	virtual pair<int, AxAutoPtr<aafUInt8> > GetSamples()
+	SampleBuffer GetSamples()
 	{
 		const int numSamples = GetNumSamplesPerChunk();  // frames
 		const int numBytes = GetSampleByteSize();
 
-		AxAutoPtr<aafUInt8> pixels( new aafUInt8 [numBytes] );
+		AxBuffer<aafUInt8> pixels( std::auto_ptr<aafUInt8>(new aafUInt8 [numBytes]), numBytes );
 
 		// Fill with random data.
 		int i;
-		aafInt32* p = reinterpret_cast<aafInt32*>( pixels.get() );
+		aafInt32* p = reinterpret_cast<aafInt32*>( pixels.GetPtr().get() );
 		for( i = 0; i < numBytes/sizeof(aafInt32); i++ ) {
 			p[i] = rand();
 		}
 
 		_numFramesToWrite -= numSamples;
-		pair<int, AxAutoPtr<aafUInt8> > ret(numSamples, pixels);
-		return ret;
+
+		return SampleBuffer( pixels, numSamples );
 	}
 	
 private:
@@ -318,7 +338,7 @@ public:
 		return _numSamplesToWrite > 0 ? false : true;
 	}
 
-	virtual pair<int, AxAutoPtr<aafUInt8> > GetSamples()
+	virtual SampleBuffer GetSamples()
 	{
 		// FIXME - Hardcoded: write 10 MByte at a time.
 		
@@ -330,18 +350,18 @@ public:
 		
 		const int numBytes = numSamples * _bytesPerSample;
 
-		AxAutoPtr<aafUInt8> samples( new aafUInt8 [numBytes] );
+		AxBuffer<aafUInt8> samples( std::auto_ptr<aafUInt8>(new aafUInt8 [numBytes]), numBytes );
 
 		// Fill with random data.
 		int i;
-		aafInt32* s = reinterpret_cast<aafInt32*>( samples.get() );
+		aafInt32* s = reinterpret_cast<aafInt32*>( samples.GetPtr().get() );
 		for( i = 0; i < numBytes/sizeof(aafInt32); i++ ) {
 			s[i] = rand();
 		}
 
 		_numSamplesToWrite -= numSamples;
-		pair<int, AxAutoPtr<aafUInt8> > ret(numSamples, samples );
-		return ret;
+
+		return SampleBuffer( samples, numSamples );
 	}
 	
 private:
@@ -677,9 +697,9 @@ void create_mastermob_and_write_essence( AxHeader axHeader,
 
 	while ( !sampleSource->AtEnd() ) {
 	
-		pair<int, AxAutoPtr<aafUInt8> > samples = sampleSource->GetSamples();
+		SampleBuffer samples = sampleSource->GetSamples();
 
-		int numSamplesToWriteThisTime = samples.first;
+		int numSamplesToWriteThisTime = samples.GetNumSamples();
 		int numSamplesWrittenThisTime = 0;
 	
 		while( numSamplesWrittenThisTime < numSamplesToWriteThisTime ) {
@@ -687,7 +707,7 @@ void create_mastermob_and_write_essence( AxHeader axHeader,
 			AxEssenceAccess::WriteResult writeResult = 
 			  axEssenceAccessPtr->WriteSamples( numSamplesToWriteThisTime,
 							  	  			    numSamplesToWriteThisTime * sampleSource->GetSampleByteSize(),
-											    reinterpret_cast<aafDataBuffer_t>(samples.second.get()) );
+											    reinterpret_cast<aafDataBuffer_t>(samples.GetPtr().get()) );
 
 			numSamplesWrittenThisTime += writeResult.samplesWritten;
 			numSamplesWrittenTotal += writeResult.samplesWritten;

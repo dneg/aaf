@@ -28,6 +28,94 @@
 namespace {
 
 AXFG_OP(
+  CDCIFormatSpecifiersSet,          
+  L"CDCIFormatSpecifiersSet",
+  L"Set CDCI codec format specifiers.",
+  L"CDCIDescriptorNAme EssenceAccessName colorspace",
+  L"",
+  4,
+  4 ) 
+
+CDCIFormatSpecifiersSet::~CDCIFormatSpecifiersSet()
+{}
+
+void CDCIFormatSpecifiersSet::Execute( const std::vector<AxString>& argv )
+{
+	AxString descName    = argv[1];
+	AxString accessName  = argv[2];
+	AxString colorSpace = argv[3];
+
+	IAAFCDCIDescriptorSP spDesc;
+	GetInstance( descName ).GetCOM( spDesc );
+	AxCDCIDescriptor axDesc( spDesc );
+
+	IAAFEssenceAccessSP spAccess;
+	GetInstance( accessName ).GetCOM( spAccess );
+	AxEssenceAccess axAccess( spAccess );
+
+	AxEssenceFormat axEssenceFormat( axAccess.GetEmptyFileFormat() );
+		
+	aafUInt32 tmpWidth;
+	aafUInt32 tmpHeight;
+
+	aafRect_t storedRect = { 0,0,0,0 };
+	axDesc.GetStoredView( tmpHeight, tmpWidth );
+	storedRect.ySize = tmpHeight;
+	storedRect.xSize = tmpWidth;
+	axEssenceFormat.AddFormatSpecifier( kAAFStoredRect, storedRect );
+
+	aafRect_t sampledRect = { 0,0,0,0 };
+	axDesc.GetSampledView( tmpHeight, tmpWidth, sampledRect.xOffset, sampledRect.yOffset );
+	sampledRect.ySize = tmpHeight;
+	sampledRect.xSize = tmpWidth;
+	axEssenceFormat.AddFormatSpecifier( kAAFSampledRect, sampledRect );
+
+	aafRect_t displayRect = { 0,0,0,0 };
+	axDesc.GetSampledView( tmpHeight, tmpWidth, displayRect.xOffset, displayRect.yOffset );
+	displayRect.ySize = tmpHeight;
+	displayRect.xSize = tmpWidth;
+	axEssenceFormat.AddFormatSpecifier( kAAFDisplayRect, displayRect );
+
+
+	
+	axEssenceFormat.AddFormatSpecifier(
+		kAAFCDCIHorizSubsampling,
+		axDesc.GetHorizontalSubsampling() );
+
+	// Note, a vertical subsampling property also exists in the CDCIDescriptor,
+	// howevever, there is not an equivalent format specifier.
+
+
+	axEssenceFormat.AddFormatSpecifier( kAAFFrameLayout,
+										axDesc.GetFrameLayout() );
+
+	axEssenceFormat.AddFormatSpecifier( kAAFCompression,
+										axDesc.GetCompression() );
+
+	// Why is there no pixel format parameter on the descriptor?
+	// FIXME - The SDK calls this specifier "PixelFormat", but the CDCI
+	// codec checks to see if equals kAAFColorSpaceRGB or kAAFColorSpaceYUV.
+	axEssenceFormat.AddFormatSpecifier( kAAFPixelFormat,
+		ColorSpaceParams::GetInstance().Find( *this, colorSpace ) );
+
+	aafInt32 lineMap[2];
+	axDesc.GetVideoLineMap( 2, lineMap );
+	axEssenceFormat.AddFormatSpecifier( kAAFVideoLineMap, lineMap );
+
+	axEssenceFormat.AddFormatSpecifier( kAAFCDCIBlackLevel,
+										axDesc.GetBlackReferenceLevel() );
+	axEssenceFormat.AddFormatSpecifier( kAAFCDCIWhiteLevel,
+										axDesc.GetWhiteReferenceLevel() );
+	axEssenceFormat.AddFormatSpecifier( kAAFCDCIColorRange,
+										axDesc.GetColorRange() );
+
+	axAccess.PutFileFormat( axEssenceFormat );
+}
+
+//=---------------------------------------------------------------------=
+
+
+AXFG_OP(
   JPEGFormatSpecifiersSet,          
   L"JPEGFormatSpecifiersSet",
   L"Set JPEG codec format specifiers.",
@@ -133,7 +221,7 @@ void WAVEFormatSpecifiers::Execute( const std::vector<AxString>& argv )
 	GetInstance( accessName ).GetCOM( spAccess );
 	AxEssenceAccess axAccess( spAccess );
 
-	std::pair<int, std::auto_ptr<aafUInt8> > waveHeaderBuffer = axDesc.GetSummary();
+	AxBuffer<aafUInt8> waveHeaderBuffer = axDesc.GetSummary();
 
 	WaveHeader waveHeader( waveHeaderBuffer );
 
