@@ -290,9 +290,9 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFMob::SetModTime (aafTimeStamp_t *modTime)
+    ImplAAFMob::SetModTime (const aafTimeStamp_t & modTime)
 {
-	_lastModified = *modTime;
+	_lastModified = modTime;
 
 	return(AAFRESULT_SUCCESS);
 }
