@@ -55,6 +55,7 @@ const aafRational_t		defaultRate = { 44100, 1 };
 const aafUInt32			defaultSampleWidth = 8;
 const aafUInt32			defaultNumCh = 1;
 
+const CLSID CLSID_AAFPCMCodec = { 0x98aa902d, 0x90ce, 0x402c, { 0xa3, 0x65, 0xf3, 0x75, 0x8c, 0x78, 0x99, 0x86 } };
 const aafUID_t AAFSDK_PCM_PLUGIN = { 0xbd1e9f34, 0xf509, 0x4ab9, { 0xb5, 0x4e, 0xf8, 0xb7, 0xb8, 0x46, 0xdf, 0xa2 } };
 
 
@@ -104,10 +105,10 @@ static void storeUInt16_LE(aafUInt8 *p, aafUInt16 value)
 
 static void storeUInt32_LE(aafUInt8 *p, aafUInt32 value)
 {
-	p[0] = (value & 0x000000ff) >> 0;
-	p[1] = (value & 0x0000ff00) >> 8;
-	p[2] = (value & 0x00ff0000) >> 16;
-	p[3] = (value & 0xff000000) >> 24;
+	p[0] = (aafUInt8)((value & 0x000000ff) >> 0);
+	p[1] = (aafUInt8)((value & 0x0000ff00) >> 8);
+	p[2] = (aafUInt8)((value & 0x00ff0000) >> 16);
+	p[3] = (aafUInt8)((value & 0xff000000) >> 24);
 }
 
 HRESULT CAAFPCMCodec::write_updated_BWF_size(void)
@@ -125,8 +126,8 @@ HRESULT CAAFPCMCodec::write_updated_BWF_size(void)
 	res = _stream->GetPosition(&currentPos);
 
 	// A BWF file is limited to 4GB (max UInt32)
-	datasize = (currentPos - 646) & 0xffffffff;
-	riffsize = (currentPos - 8) & 0xffffffff;
+	datasize = (aafUInt32)((currentPos - 646) & 0xffffffff);
+	riffsize = (aafUInt32)((currentPos - 8) & 0xffffffff);
 
 	storeUInt32_LE(buf, riffsize);
 	res |= _stream->Seek(4);
@@ -168,8 +169,8 @@ HRESULT CAAFPCMCodec::write_BWF_header(void)
 				ts.date.year, ts.date.month, ts.date.day,
 				ts.time.hour, ts.time.minute, ts.time.second);
 
-	storeUInt32_LE(&bext[256+32+32+10+8], _origin & 0xffffffff);	// TimeRef low
-	storeUInt32_LE(&bext[256+32+32+10+12], _origin >> 32);			// TimeRef high
+	storeUInt32_LE(&bext[256+32+32+10+8], (aafUInt32)(_origin & 0xffffffff));	// TimeRef low
+	storeUInt32_LE(&bext[256+32+32+10+12], (aafUInt32)(_origin >> 32));			// TimeRef high
 
 	memcpy(&bext[256+32+32+10+8+10], &_mobID, sizeof(_mobID));		// MobID
 
@@ -179,7 +180,7 @@ HRESULT CAAFPCMCodec::write_BWF_header(void)
 	_stream->Write(sizeof(data_hdr), data_hdr, &bytesWritten);
 
 	_stream->GetPosition(&currentPos);
-	_dataChunkOffset = currentPos;
+	_dataChunkOffset = (aafUInt32)currentPos;
 
 	return HRESULT_SUCCESS;
 }
@@ -213,7 +214,7 @@ HRESULT CAAFPCMCodec::find_data_chunk_offset(void)
 		if (memcmp(buf, "data", 4) == 0)
 		{
 			// save offset
-			_dataChunkOffset = currentPos;
+			_dataChunkOffset = (aafUInt32)currentPos;
 			break;
 		}
 		else
