@@ -75,7 +75,13 @@ public:
     //          persistent representation.
   void setStore(OMStoredObject* store);
 
-    // @cmember Is this <c OMStorable> attached to a file ?
+    // @cmember Is this <c OMStorable> a persistent object ?
+    //          Persistent objects are associated with a persistent
+    //          store (disk file).
+  virtual bool persistent(void);
+
+    // @cmember Is this <c OMStorable> attached to (owned by) another
+    //          OMStorable ?
   virtual bool attached(void);
 
 private:
