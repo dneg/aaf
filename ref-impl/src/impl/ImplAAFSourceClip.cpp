@@ -309,6 +309,8 @@ AAFRESULT ImplAAFSourceClip::TraverseToClip(aafLength_t length,
 	XPROTECT()
 	{
 		*sclp = this;
+		// We are returning a reference to this object so bump the ref count
+		AcquireReference();
 		CHECK((*sclp)->GetLength(sclpLen));
 		if (Int64Less(length, *sclpLen))
 		{
