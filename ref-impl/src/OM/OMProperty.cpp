@@ -325,13 +325,6 @@ void OMSimpleProperty::write(void) const
   PRECONDITION("Valid internal bytes", _bits != 0);
   PRECONDITION("Valid internal bytes size", _size > 0);
 
-  ASSERT("Valid property set", _propertySet != 0);
-  OMStorable* container = _propertySet->container();
-  ASSERT("Valid container", container != 0);
-  ASSERT("Container is persistent", container->persistent());
-  OMStoredObject* store = container->store();
-  ASSERT("Valid stored object", store != 0);
-
   const OMType* propertyType = type();
 
   if (propertyType != 0) { // tjb - temporary, should be ASSERTION below
@@ -349,21 +342,21 @@ void OMSimpleProperty::write(void) const
                               _size,
                               buffer,
                               externalBytesSize,
-                              store->byteOrder());
+                              store()->byteOrder());
   
     // Reorder property value
-    if (store->byteOrder() != hostByteOrder()) {
+    if (store()->byteOrder() != hostByteOrder()) {
       propertyType->reorder(buffer, externalBytesSize);
     }
 
     // Write property value
-    store->write(_propertyId, _storedForm, buffer, externalBytesSize);
+    store()->write(_propertyId, _storedForm, buffer, externalBytesSize);
     delete [] buffer;
 
   } else {
     // tjb - temporary, no type information, do it the old way
     //
-    store->write(_propertyId, _storedForm, _bits, _size);
+    store()->write(_propertyId, _storedForm, _bits, _size);
   }
 }
 
@@ -378,9 +371,6 @@ void OMSimpleProperty::read(size_t externalBytesSize)
 
   PRECONDITION("Valid external bytes size", externalBytesSize > 0);
 
-  OMStoredObject* store = _propertySet->container()->store();
-  ASSERT("Valid store", store != 0);
-
   const OMType* propertyType = type();
 
   if (propertyType != 0) { // tjb - temporary, should be ASSERTION below
@@ -392,10 +382,10 @@ void OMSimpleProperty::read(size_t externalBytesSize)
     ASSERT("Valid heap pointer", buffer != 0);
 
     // Read property value
-    store->read(_propertyId, _storedForm, buffer, externalBytesSize);
+    store()->read(_propertyId, _storedForm, buffer, externalBytesSize);
 
     // Reorder property value
-    if (store->byteOrder() != hostByteOrder()) {
+    if (store()->byteOrder() != hostByteOrder()) {
       propertyType->reorder(buffer, externalBytesSize);
     }
 
@@ -416,7 +406,7 @@ void OMSimpleProperty::read(size_t externalBytesSize)
     //
     setSize(externalBytesSize);
     ASSERT("Property value buffer large enough", _size >= externalBytesSize);
-    store->read(_propertyId, _storedForm, _bits, externalBytesSize);
+    store()->read(_propertyId, _storedForm, _bits, externalBytesSize);
   }
   setPresent();
 }
