@@ -169,10 +169,6 @@ void printStackTrace(OMOStream& s)
       s << "SymInitialize() failed." << endl;
     }
 
-    //DWORD options = SymGetOptions();
-    //options &= ~SYMOPT_UNDNAME;
-    //options = SymSetOptions(options);
-
     CONTEXT context;
     memset(&context, 0, sizeof(CONTEXT));
     context.ContextFlags = CONTEXT_FULL;
