@@ -1424,23 +1424,13 @@ AAFRESULT ImplAAFMetaDictionary::MergeWithFile()
             PrintPropertyName(pPropDef); 
             std::wcout << " compiled-in but not in file." << std::endl; 
 
-#if 1
+	    // Merge the property to the file class.
 	    hr = pPropDef->MergeTo( pFileClassDef );
 	    assert( AAFRESULT_SUCCESS == hr );
 	    if ( AAFRESULT_SUCCESS != hr ) {
 	      result = hr;
 	      break;
 	    }
-#else
-	    // This might (redundantly) be called multiple times.
-	    ImplAAFDictionary* pFileDictionary = 0;
-	    hr = pFileClassDef->GetDictionary( &pFileDictionary );
-	    assert( AAFRESULT_SUCCESS == hr );
-	    if ( AAFRESULT_SUCCESS == hr ) {
-	      pClassDef->MergeTo( pFileDictionary );
-	      pFileDictionary->ReleaseReference();
-	    }
-#endif
           }
         } 
       } 
