@@ -172,6 +172,33 @@ ImplAAFDictionary::~ImplAAFDictionary ()
 		  pClass->ReleaseReference();
 		}
 	}
+  size_t opsDefSize = _operationDefinitions.getSize();
+  for (i = 0; i < opsDefSize; i++)
+	{
+	  ImplAAFOperationDef *pOps = _operationDefinitions.setValueAt(0, i);
+	  if (pOps)
+		{
+		  pOps->ReleaseReference();
+		}
+	}
+  size_t parmDefSize = _parameterDefinitions.getSize();
+  for (i = 0; i < parmDefSize; i++)
+	{
+	  ImplAAFParameterDef *pParm = _parameterDefinitions.setValueAt(0, i);
+	  if (pParm)
+		{
+		  pParm->ReleaseReference();
+		}
+	}
+  size_t interpDefSize = _interpolationDefinitions.getSize();
+  for (i = 0; i < interpDefSize; i++)
+	{
+	  ImplAAFInterpolationDef *pInterp = _interpolationDefinitions.setValueAt(0, i);
+	  if (pInterp)
+		{
+		  pInterp->ReleaseReference();
+		}
+	}
 
   if (_pBuiltins)
 	{
