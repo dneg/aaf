@@ -41,6 +41,7 @@
 #define CLSID_AAFPropertyDefinition CLSID_AAFPropertyDef
 #define CLSID_AAFTypeDefinition CLSID_AAFTypeDef
 #define CLSID_AAFTypeDefinitionEnumeration CLSID_AAFTypeDefEnum
+#define CLSID_AAFTypeDefinitionExtendibleEnumeration CLSID_AAFTypeDefExtEnum
 #define CLSID_AAFTypeDefinitionFixedArray CLSID_AAFTypeDefFixedArray
 #define CLSID_AAFTypeDefinitionInteger CLSID_AAFTypeDefInt
 #define CLSID_AAFTypeDefinitionRecord CLSID_AAFTypeDefRecord
@@ -183,4 +184,3 @@ const aafClassID_t* ImplAAFBaseClassFactory::LookupClassID(const aafUID_t* pAUID
 
   return (pClassID);
 }
-
