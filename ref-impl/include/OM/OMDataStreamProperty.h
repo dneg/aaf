@@ -49,7 +49,7 @@ public:
   virtual ~OMDataStreamProperty(void);
 
     // @cmember Save this <c OMDataStreamProperty>.
-  virtual void save(void) const;
+  virtual void save(void* clientContext) const;
 
     // @cmember Restore this <c OMDataStreamProperty>, the size of the
     //          <c OMDataStreamProperty> is <p size>.

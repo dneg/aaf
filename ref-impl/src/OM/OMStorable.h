@@ -75,7 +75,7 @@ public:
   void setName(const char* name);
 
     // @cmember Save this <c OMStorable>.
-  void save(void) const;
+  void save(void* clientContext) const;
 
     // @cmember Close this <c OMStorable>.
   void close(void);
@@ -126,6 +126,10 @@ public:
     // @cmember Inform this <c OMStorable> of the <c OMClassFactory>
     //          that was used to create it.
   void setClassFactory(const OMClassFactory* classFactory);
+
+  // Callbacks.
+
+  virtual void onSave(void* clientContext) const {}
 
 private:
   // @access Private members.
