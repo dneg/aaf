@@ -184,20 +184,6 @@ static void ReadAAFFile(aafWChar * pFileName)
   }
 }
 
-// simple helper class to initialize and cleanup COM library.
-struct CComInitialize
-{
-  CComInitialize()
-  {
-    CoInitialize(NULL);
-  }
-
-  ~CComInitialize()
-  {
-    CoUninitialize();
-  }
-};
-
 // simple helper class to initialize and cleanup AAF library.
 struct CAAFInitialize
 {
@@ -228,7 +214,6 @@ int main(int argumentCount, char* argumentVector[])
   wchar_t wInputFileName[256];
   convert(wInputFileName, 256, inputFileName);
 
-  CComInitialize comInit;
   CAAFInitialize aafInit;
 
   ReadAAFFile(wInputFileName);

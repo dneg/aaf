@@ -2554,19 +2554,6 @@ static bool dumpFile (aafCharacter * pwFileName,
 }
 
 
-struct CComInitialize
-{
-	CComInitialize()
-	{
-		CoInitialize(NULL);
-	}
-	
-	~CComInitialize()
-	{
-		CoUninitialize();
-	}
-};
-
 // simple helper class to initialize and cleanup AAF library.
 struct CAAFInitialize
 {
@@ -2619,7 +2606,6 @@ int main(int argc, char* argv[])
 	bool file_opened = false;
 	dumpFlags_t dumpFlags;
 	
-	CComInitialize comInit;
 	CAAFInitialize aafInit;
 
 	// Initial values
