@@ -94,8 +94,7 @@ MultiGenTestFactory& MultiGenTestRegistry::GetFactory( const char* name )
     }
   }
 
-  // Should not call this routine with an unknown name;
-  assert(0);
+  throw "Uknown test name in GetFactory()";
 }
 
 bool MultiGenTestRegistry::IsKnown( const char* name )
@@ -198,7 +197,6 @@ void CmdState::SetFile( IAAFSmartPointer<IAAFFile> iaafFile )
 {
   _iaafFile = iaafFile;
   _isFileSet = true;
-    
 }
 
 IAAFSmartPointer<IAAFFile> CmdState::GetFile()
@@ -215,7 +213,7 @@ IAAFSmartPointer<IAAFFile> CmdState::GetFile()
 void Usage( const char* argv0 )
 {
   cout << "Usage: " << argv0 << endl;
-  cout << "        [{-r|-run} TestName Arg1 Arg2 ....]" << endl;              
+  cout << "        [{-r|-run} TestName Arg1 Arg2 ....] ..." << endl;              
   cout << endl;
   cout << "Registered Tests:" << endl << endl;
 
@@ -230,7 +228,6 @@ void Usage( const char* argv0 )
     cout << endl;
   }
 }
-
 
 //=---------------------------------------------------------------------=
 
@@ -267,8 +264,8 @@ public:
       MultiGenTestRegistry& registry = MultiGenTestRegistry::GetInstance();
 
       if ( !registry.IsKnown( GetArgV()[0] ) ) {
-	string anError( string( "Can't run unkown test: " ) + string( GetArgV()[0] ) );
-	throw anError.c_str();
+  	    string anError( string( "Can't run unkown test: " ) + string( GetArgV()[0] ) );
+		throw anError;
       }
 
       MultiGenTestFactory& factory = registry.GetFactory( GetArgV()[0] );
@@ -309,7 +306,7 @@ void ProcessCommandLineArgs( int argc, char** argv )
     if ( optionIndices[i] + optionCmdFuncs[i]->GetMinArgs() >= optionIndices[i+1] ) {
       string anError( string("not enough arguments for command: ") +
 		      string(argv[optionIndices[i]]) );
-      throw anError.c_str();
+      throw anError;
     }
     else {
       optionCmdFuncs[i]->SetArgV( &argv[ optionIndices[i]+1 ] );
@@ -317,10 +314,18 @@ void ProcessCommandLineArgs( int argc, char** argv )
     }
   }
 
-  CmdState state;
+  CmdState* state = new CmdState;
   for(i = 0; i < optionCmdFuncs.size(); i++ ) {
-    (*optionCmdFuncs[i])( state );
+     (*optionCmdFuncs[i])( *state );
   }
+ 
+  // Intentionally do *not* delete state if an exception is thrown
+  // by (*optionCmdFuncs[i])( *state ).  Deleting the encapsulated
+  // IAAFSmartPointer<IAAFFile> will cause the OmStoragable dtor
+  // "object not attached" precondition to fail.  FIXME - This is just
+  // a work around.
+
+  delete state;
 }
 
 //=---------------------------------------------------------------------=
@@ -329,7 +334,8 @@ class MultiGenTestInit {
 public:
   MultiGenTestInit()
   {
-    checkResult(AAFLoad(0));
+    IAAFSmartPointer<IAAFPluginManager> _pluginMgr;
+    checkResult(AAFLoad("c:/cygwin/home/jpt/aaf/cvs/AAF/AAFWinSDK/Debug/Refimpl/AAFCOAPI.dll"));
     checkResult(AAFGetPluginManager(&_pluginMgr));
     checkResult(_pluginMgr->RegisterSharedPlugins());
   }
@@ -337,17 +343,13 @@ public:
   ~MultiGenTestInit()
   {
     AAFUnload();
-  }  
-
-private:
-  IAAFSmartPointer<IAAFPluginManager> _pluginMgr;
+  }
 };
 
 //=---------------------------------------------------------------------=
 
 wchar_t* ToWideString( const char* str )
-{
-  
+{  
   int len = strlen( str );
   wchar_t *wstr = new wchar_t [ len + 1 ];
 
@@ -388,26 +390,26 @@ bool wstrcmp( wchar_t* a, wchar_t* b )
 // Test multiplatform read/modify/write of AAF files.
 //
 
-int main( int argc, char **argv )
+int real_main( int argc, char **argv )
 {
-  MultiGenTestInit init;
-
   using namespace std;
 
   HRESULT hr = AAFRESULT_SUCCESS;
 
-  MultiGenTestFactory* factory;
-  MultiGenTestRegistry& registry = MultiGenTestRegistry::GetInstance();
-
-  try {
+ try {
 
     if ( argc == 1 ) {
       Usage( argv[0] );
       throw -1;
     }
 
+	MultiGenTestInit init;
+     
+	MultiGenTestRegistry& registry = MultiGenTestRegistry::GetInstance();
+
     ProcessCommandLineArgs( argc, argv );
-  }
+ }
+
   catch ( const HRESULT& ex_hr ) {
     hr = ex_hr;
     cout << "hr = 0x" << hex << hr << endl;
@@ -427,8 +429,15 @@ int main( int argc, char **argv )
   catch (...) {
     hr = -1;
   }
-
+ 
   return hr;
 }
 
+int main( int argc, char** argv )
+{
+	char* myargv[] = { argv[0], "-r", "FileOp", "read", "c:/cygwin/tmp/test.aaf",
+		"-r", "FindMasterMobs", "Mob", "-r", "FileOp", "close"  };
+
+	return real_main( sizeof(myargv)/sizeof(myargv[0]), myargv ); 
+}
 

@@ -25,6 +25,11 @@
 #include <vector>
 #include <string>
 
+// iostream only required by the THROW_STRING macro
+#include <iostream>
+
+using namespace std;
+
 // Class that stores state info that must be passed between
 // tests.  i.e. One bit of test code opens the file and sets
 // it.  The next requireds that file so gets it.  Others added
@@ -42,7 +47,6 @@ private:
   bool _isFileSet;
   IAAFSmartPointer<IAAFFile> _iaafFile;
 };
-
 
 // MultiGenTest - Base class from which test implementations are derived.
 
@@ -167,8 +171,10 @@ class UsageError {
 public:
   UsageError( const char* msg )
     : _msg(msg) {}
+
   UsageError( string& msg )
     : _msg(msg) {}
+
   const string& GetMsg() const
     { return _msg; };
 private:
@@ -192,6 +198,5 @@ wchar_t* ToWideString( const char* str );
 
 // wide string compare
 bool wstrcmp( wchar_t* a, wchar_t* b );
-
 
 //=---------------------------------------------------------------------=

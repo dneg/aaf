@@ -22,6 +22,7 @@
 
 #include <string>
 #include <memory>
+#include <iostream>
 
 #include <stdlib.h>
 
@@ -45,6 +46,8 @@ public:
 
 void FileOp::RunTest( CmdState& state, int argc, char** argv )
 {
+  using namespace std;
+	
   IAAFSmartPointer<IAAFFile> iaafFile;
 
   aafProductVersion_t v;
@@ -83,7 +86,7 @@ void FileOp::RunTest( CmdState& state, int argc, char** argv )
     IAAFSmartPointer<IAAFFile> pFile;
     checkResult( AAFFileOpenNewModify( fileName.get(), 0, &productInfo,
 				       &iaafFile ) );
-    cout << "done" << endl;
+	cout << "done" << endl;
 
     state.SetFile( iaafFile );
   }

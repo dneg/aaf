@@ -45,7 +45,7 @@ void FindMasterMobs::RunTest( CmdState& state, int argc, char** argv )
   if ( argc < 2 ) {
     throw UsageError( "FindMasterMob expects one more mob names as arguments." );
   }
-
+  
   IAAFSmartPointer<IAAFFile> file = state.GetFile();
   IAAFSmartPointer<IAAFHeader> header;
   checkResult( file->GetHeader( &header ) );
@@ -109,11 +109,12 @@ void FindMasterMobs::RunTest( CmdState& state, int argc, char** argv )
   if (throwIt) {
     throw notFound;
   }
-
+  
   if ( strcmp( argv[0], "FindMasterMobsExclusive" ) == 0  &&
        mobCount != argc-1 ) {
     throw "Additional mobs exist.";
   }
+
 }
 
 MULTIGEN_TEST_FACTORY( FindMasterMobsFactory,
