@@ -1021,7 +1021,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFDictionary::RegisterDataDefintion (
+    ImplAAFDictionary::RegisterDataDefinition (
       ImplAAFDataDef *pDataDef)
 {
   assert (_defRegistrationAllowed);
@@ -1037,7 +1037,7 @@ AAFRESULT STDMETHODCALLTYPE
 
   // Is this type already registered ?
   ImplAAFDataDef * pExistingDataDef = NULL;
-  hr = LookupDataDefintion(&newAUID, &pExistingDataDef);
+  hr = LookupDataDefinition(&newAUID, &pExistingDataDef);
 
   if (hr != AAFRESULT_SUCCESS) {
     // This type is not yet registered, add it to the dictionary.
@@ -1065,8 +1065,8 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFDictionary::LookupDataDefintion (
-      aafUID_t *pDataDefintionID,
+    ImplAAFDictionary::LookupDataDefinition (
+      aafUID_t *pDataDefinitionID,
       ImplAAFDataDef **ppDataDef)
 {
 	ImplEnumAAFDataDefs		*dataEnum = NULL;
@@ -1083,7 +1083,7 @@ AAFRESULT STDMETHODCALLTYPE
 		while(status == AAFRESULT_SUCCESS && !defFound)
 		{
 			CHECK(dataDef->GetAUID (&testAUID));
-			if(EqualAUID(pDataDefintionID, &testAUID))
+			if(EqualAUID(pDataDefinitionID, &testAUID))
 			{
 				defFound = AAFTrue;
 				*ppDataDef = dataDef;
@@ -1631,79 +1631,79 @@ void ImplAAFDictionary::InitBuiltins()
   aafUID_t		uid;
 
   uid = DDEF_Picture;
-  hr = LookupDataDefintion (&uid, &dataDef);
+  hr = LookupDataDefinition (&uid, &dataDef);
   if (AAFRESULT_FAILED (hr))
 	{
 	  // not already in dictionary
 	  hr = CreateInstance (&AUID_AAFDataDef,
 						   (ImplAAFObject **)&dataDef);
 	  hr = dataDef->Init (&uid, L"Picture", L"Picture data");
-	  hr = RegisterDataDefintion (dataDef);
+	  hr = RegisterDataDefinition (dataDef);
 	}
   dataDef->ReleaseReference();
   dataDef = NULL;
 
   uid = DDEF_Sound;
-  hr = LookupDataDefintion (&uid, &dataDef);
+  hr = LookupDataDefinition (&uid, &dataDef);
   if (AAFRESULT_FAILED (hr))
 	{
 	  // not already in dictionary
 	  hr = CreateInstance (&AUID_AAFDataDef,
 						   (ImplAAFObject **)&dataDef);
 	  hr = dataDef->Init (&uid, L"Sound", L"Sound data");
-	  hr = RegisterDataDefintion (dataDef);
+	  hr = RegisterDataDefinition (dataDef);
 	}
   dataDef->ReleaseReference();
   dataDef = NULL;
 
   uid = DDEF_Timecode;
-  hr = LookupDataDefintion (&uid, &dataDef);
+  hr = LookupDataDefinition (&uid, &dataDef);
   if (AAFRESULT_FAILED (hr))
 	{
 	  // not already in dictionary
 	  hr = CreateInstance (&AUID_AAFDataDef,
 						   (ImplAAFObject **)&dataDef);
 	  hr = dataDef->Init (&uid, L"Timecode", L"Timecode data");
-	  hr = RegisterDataDefintion (dataDef);
+	  hr = RegisterDataDefinition (dataDef);
 	}
   dataDef->ReleaseReference();
   dataDef = NULL;
 
   uid = DDEF_Edgecode;
-  hr = LookupDataDefintion (&uid, &dataDef);
+  hr = LookupDataDefinition (&uid, &dataDef);
   if (AAFRESULT_FAILED (hr))
 	{
 	  // not already in dictionary
 	  hr = CreateInstance (&AUID_AAFDataDef,
 						   (ImplAAFObject **)&dataDef);
 	  hr = dataDef->Init (&uid, L"Edgecode", L"Edgecode data");
-	  hr = RegisterDataDefintion (dataDef);
+	  hr = RegisterDataDefinition (dataDef);
 	}
   dataDef->ReleaseReference();
   dataDef = NULL;
   
   uid = DDEF_Matte;
-  hr = LookupDataDefintion (&uid, &dataDef);
+  hr = LookupDataDefinition (&uid, &dataDef);
   if (AAFRESULT_FAILED (hr))
 	{
 	  // not already in dictionary
 	  hr = CreateInstance (&AUID_AAFDataDef,
 						   (ImplAAFObject **)&dataDef);
 	  hr = dataDef->Init (&uid, L"Matte", L"Matte data");
-	  hr = RegisterDataDefintion (dataDef);
+	  hr = RegisterDataDefinition (dataDef);
 	}
   dataDef->ReleaseReference();
   dataDef = NULL;
 
   uid = DDEF_PictureWithMatte;
-  hr = LookupDataDefintion (&uid, &dataDef);
+  hr = LookupDataDefinition (&uid, &dataDef);
   if (AAFRESULT_FAILED (hr))
 	{
 	  // not already in dictionary
 	  hr = CreateInstance (&AUID_AAFDataDef,
 						   (ImplAAFObject **)&dataDef);
 	  hr = dataDef->Init (&uid, L"PictureWithMatte", L"PictureWithMatte data");
-	  hr = RegisterDataDefintion (dataDef);
+	  hr = RegisterDataDefinition (dataDef);
 	}
   dataDef->ReleaseReference();
   dataDef = NULL;
