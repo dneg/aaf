@@ -70,7 +70,7 @@ void OMDataStreamProperty::save(void) const
   // @mfunc Restore this <c OMDataStreamProperty>, the size of the
   //        <c OMDataStreamProperty> is <p externalSize>.
   //   @parm The size of the <c OMDataStreamProperty>.
-void OMDataStreamProperty::restore(size_t externalSize)
+void OMDataStreamProperty::restore(size_t ANAME(externalSize))
 {
   TRACE("OMDataStreamProperty::restore");
 
