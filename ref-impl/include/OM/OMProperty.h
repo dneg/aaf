@@ -57,6 +57,8 @@ public:
     // @cmember The address of this <c OMProperty> object.
   OMProperty* address(void);
 
+  virtual void detach(const OMStorable* object, const size_t index);
+
 protected:
   int _propertyId;
   int _type;
@@ -150,6 +152,8 @@ public:
     //          <c OMStoredObject> <p s>, the size of the
     //          <c OMStrongReferenceProperty> is <p size>.
   virtual void restoreFrom(OMStoredObject& s, size_t size);
+
+  virtual void detach(const OMStorable* object, const size_t index);
 
 };
 
@@ -386,6 +390,8 @@ public:
     // @cmember Appened the given <p OMReferencedObject> <p value> to
     //          this <c OMStrongReferenceVectorProperty>.
   void appendValue(const ReferencedObject*& value);
+
+  virtual void detach(const OMStorable* object, const size_t index);
 
 private:
 

@@ -24,6 +24,13 @@ public:
 // private:
   
   void setContainingObject(const OMStorable* containingObject);
+
+  void clearContainingObject(void);
+
+  void setContainingProperty(const OMProperty* containingProperty,
+                             const size_t index);
+
+  void clearContainingProperty(void);
   
   void setName(const char* name);
 
@@ -64,6 +71,9 @@ private:
   const OMStorable* _containingObject;
   char* _name;
   char* _pathName;
+
+  OMProperty* _containingProperty;
+  size_t _index;
 
 };
 
