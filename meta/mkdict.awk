@@ -26,17 +26,23 @@
 #
 # Command line:
 #
-# awk -f mkdict.awk DictP18-277-1847BMaster.csv > AAFMetaDictionary.h
+# awk -f mkdict.awk AAFMetaDict.csv > AAFMetaDictionary.h
 #
-# Author
+# Authors
 #
-#   Tim Bingham tim_bingham@avid.com
+#   Tim Bingham tim_bingham@avid.com - original
+#   Oliver Morgan oliver@metaglue.com - extensive revisions for new features
 #
 # This program uses the following spreadsheet columns for the
 # purposes indicated ...
 #
 #      Column                          Purpose
 #
+# registerC               => which of the SMPTE registers this belongs in Groups Types Labels
+#                            (and Aliases - non SMPTE)
+# nodeleafC               => wheteher this line will be a Node L:eaf or Child in SMPTE
+# verC                    => (calculated in spreadsheet, ignored) SLO7C for ULs
+# levelC                  => (calculated in spreadsheet, ignored) number of used SLO8C-SLO15C for UL
 # SLO00C .. SLO15C        => AUID (with appropriate reordering).
 # elementNameC            => class/property name.
 # typeNameC               => if this field == "class" then the entity is a
@@ -63,15 +69,12 @@
 #                            the immediate ancestor (otherwise the field
 #                            is checked to see that it is the same as the
 #                            current class).
-# classNameC              => this field is not an input field to this program,
-#                            however it is checked. If this entity is a class
-#                            then this field should be the same as the class
-#                            name $elementNameC, otherwise the field should
-#                            be the same as the parent/owning class ($parentC).
-# pidC                    => property id. This field is ignored if
-#                            field $parentC == "class"
+# tag1C                   => property id most significant byte (for compatibility with 4 byte tags), ignored
+# tag2C                   => property id most significant byte (for compatibility with 4 byte tags), ignored
+# tag3C                   => property id upper byte. used only for Properties
+# tag4C                   => property id lower byte. used only for Properties
 # referenceTypeC          => if this is a property and the property type
-#                            ($typeNameC) is a reference then this field is
+#                            ($C["typeNameC"]) is a reference then this field is
 #                            the type (class) of the referenced object,
 #                            otherwise this field should be empty.
 # isAbstractC             => if this entity is a class and the class is
@@ -80,46 +83,15 @@
 # isUidC                  => if this entity is a property and the property is
 #                            unique identifier, this field contains "uid"
 #                            otherwise this field should be empty.
+# aliasC                  => full classname of which this is an (short) alias as used in code
 #
 BEGIN {
   #
-  # define symbolic names for columns
-  #
-  # SLO<n> SMPTE Label Octet n
-  #
-  SLO00C=2
-  SLO01C=3
-  SLO02C=4
-  SLO03C=5
-  SLO04C=6
-  SLO05C=7
-  SLO06C=8
-  SLO07C=9
-  SLO08C=10
-  SLO09C=11
-  SLO10C=12
-  SLO11C=13
-  SLO12C=14
-  SLO13C=15
-  SLO14C=16
-  SLO15C=17
-  #
-  elementNameC=18
-  aliasC=19
-  typeNameC=30
-  kindC=31
-  qualifC=32
-  elementTypeC=33
-  isMandatoryC=34
-  parentC=37
-  classNameC=38
-  pidC=41
-  referenceTypeC=42
-  isAbstractC=43
-  isUidC=44
+  # symbolic names for columns are input from line beginning #fields
   #
   errors = 0;
   FS=","
+  processedfields=0;
   #
   # Write a header to the generated file.
   #
@@ -699,57 +671,160 @@ BEGIN {
   firstAlias = 1;
 }
 
+/^#fields/ {
+	# set up indirect input column mapping
+	# e.g. if 18th input column == "elementNameC", $C["elementNameC"]==$18
+	for( i=1; i<=NF; i++)
+	{
+		if( $i != "" ) C[ $i ] = i;
+	}
+	processedfields=1;
+}
+
 /^#/ {
   next # Discard the line
 }
 
 {
-  if ($elementNameC != "") { # This item has a name
-    # printf("// <%s> \n", $parentC);
-    if ($typeNameC == "Class") { # This item is a class
-      if ($elementNameC != class) { # This is a new class
+  # Fields must be set up before processing begins
+  if( !processedfields ) {
+      printError(sprintf("File generation failed: no #fields record.\n", errors));
+      exit 1
+  }
+
+  # Discard lines with no name field
+  if ($C["elementNameC"] == "") next 
+
+  # Diagnostics
+  # printf("// <%s> \n", $C["parentC"]);
+
+  # Groups Register (SMPTE name for Classes)
+  if( $C["registerC"] == "Groups" ){
+
+    if ($C["typeNameC"] == "Class") { # This item is a class
+
+	  # assert( $C["nlcC"] == "Leaf" )
+      if ($C["elementNameC"] != class) { # This is a new class
         if (class != "" ) {
           # end the old one
           printf("AAF_CLASS_END(%s,%s,\n  %s,\n  %s)\n",
                  class, cguid, parent, concrete);
           printf("AAF_CLASS_SEPARATOR()\n");
-          parent = $parentC;
+          parent = $C["parentC"];
         } else {
           parent = "Root"
         }
-        class = $elementNameC;
+        class = $C["elementNameC"];
         printf("\n");
         printf("// %s\n", class);
         printf("//\n");
       }
-      if ($isMandatoryC != "") {
-        classError(class, isMandatoryC);
+      if ($C["isMandatoryC"] != "") {
+        classError(class, C["isMandatoryC"]);
         errors++;
       }
-      if ($classNameC != $elementNameC) {
-        classError(class, classNameC);
-        errors++;
-      }
-      if ($referenceTypeC != "") {
-        classError(class, referenceTypeC);
+      if ($C["referenceTypeC"] != "") {
+        classError(class, C["referenceTypeC"]);
         errors++;
       }
       concrete = "true";
-      if ($isAbstractC == "abstract") {
+      if ($C["isAbstractC"] == "abstract") {
         concrete = "false";
-      } else if ($isAbstractC != "") {
-        classError(class, isAbstractC);
+      } else if ($C["isAbstractC"] != "") {
+        classError(class, C["isAbstractC"]);
         errors++;
       }
       # AAF_CLASS(name, id, parent)
-      cguid = formatAUID($SLO00C, $SLO01C, $SLO02C, $SLO03C,
-                         $SLO04C, $SLO05C, $SLO06C, $SLO07C,
-                         $SLO08C, $SLO09C, $SLO10C, $SLO11C,
-                         $SLO12C, $SLO13C, $SLO14C, $SLO15C, "  ");
+      cguid = formatAUID($C["SLO00C"], $C["SLO01C"], $C["SLO02C"], $C["SLO03C"],
+                         $C["SLO04C"], $C["SLO05C"], $C["SLO06C"], $C["SLO07C"],
+                         $C["SLO08C"], $C["SLO09C"], $C["SLO10C"], $C["SLO11C"],
+                         $C["SLO12C"], $C["SLO13C"], $C["SLO14C"], $C["SLO15C"], "  ");
       printf("AAF_CLASS(%s,%s,\n  %s,\n  %s)\n",
-             $elementNameC, cguid, parent, concrete);
-    } else if ($typeNameC == "type" ) {
-      # a type
+             $C["elementNameC"], cguid, parent, concrete);
+
+    } else { # this item is a property
+
+	  # assert( $C["nlcC"] == "Child" )
+      type = $C["typeNameC"];
+      if (type == "Array of Int32") {
+        type = "Int32Array"
+      } else if (type == "Array of Int64") {
+        type = "Int64Array"
+      }
+
+      if        (type == "WeakReference") {
+        reftype = "WEAK_REFERENCE";
+      } else if (type == "WeakReferenceVector") {
+        reftype = "WEAK_REFERENCE_VECTOR";
+      } else if (type == "WeakReferenceSet") {
+        reftype = "WEAK_REFERENCE_SET";
+      } else if (type == "StrongReference") {
+        reftype = "STRONG_REFERENCE";
+      } else if (type == "StrongReferenceVector") {
+        reftype = "STRONG_REFERENCE_VECTOR";
+      } else if (type == "StrongReferenceSet") {
+        reftype = "STRONG_REFERENCE_SET";
+      } else {
+        reftype="";
+      }
+      if (reftype != "") {
+        if ($C["referenceTypeC"] != "") {
+          # type = sprintf("AAF_%s(%s, %s)", reftype, type, $C["referenceTypeC"]);
+          type = sprintf("AAF_REFERENCE_TYPE(%s, %s)", type, $C["referenceTypeC"]);
+        } else {
+          propertyError($C["elementNameC"], class, C["referenceTypeC"])
+          errors++;
+        }
+      } else {
+        if ($C["referenceTypeC"] == "") {
+          type = sprintf("AAF_TYPE(%s)", type);
+        } else {
+          propertyError($C["elementNameC"], class, C["referenceTypeC"]);
+          errors++;
+        }
+      }
+
+      if ($C["isMandatoryC"] == "M") {
+        mandatory = "true";
+      } else if ($C["isMandatoryC"] == "O") {
+        mandatory = "false";
+      } else {
+        propertyError($C["elementNameC"], class, C["isMandatoryC"]);
+        errors++;
+      }
+      if ($C["parentC"] != class) {
+        propertyError($C["elementNameC"], class, C["parentC"]);
+        errors++;
+      }
+      if ($C["isAbstractC"] != "") {
+        propertyError($C["elementNameC"], class, C["isAbstractC"]);
+        errors++;
+      }
+      if ($C["isUidC"] == "uid") {
+        uid = "true";
+        if ($C["isMandatoryC"] == "O") {
+          propertyError($C["elementNameC"], class, C["isUidC"]);
+          printError("A unique identifier must be mandatory.\n");
+          errors++;
+        }
+      } else {
+        uid = "false";
+      }
+      # AAF_PROPERTY(name, id, tag, type, mandatory, container)
+      pguid = formatAUID($C["SLO00C"], $C["SLO01C"], $C["SLO02C"], $C["SLO03C"],
+                         $C["SLO04C"], $C["SLO05C"], $C["SLO06C"], $C["SLO07C"],
+                         $C["SLO08C"], $C["SLO09C"], $C["SLO10C"], $C["SLO11C"],
+                         $C["SLO12C"], $C["SLO13C"], $C["SLO14C"], $C["SLO15C"], "    ");
+	  ppid = formatPID( $C["tag3C"], $C["tag4C"] );
+      printf("  AAF_PROPERTY(%s,%s,\n    %s,\n    %s,\n    %s,\n    %s,\n    %s)\n", $C["elementNameC"], pguid, ppid, type, mandatory, uid, class);
+    }
+
+  # Types Register
+  } else if( $C["registerC"] == "Types" ) {
+
+    if ($C["typeNameC"] == "type" ) { # a type
+
+	  # assert( $C["nlcC"] == "Leaf" )
       if (firstType) {
         printf("AAF_CLASS_END(%s,%s,\n  %s,\n  %s)\n",
                class, cguid, parent, concrete);
@@ -774,51 +849,51 @@ BEGIN {
         }
         printf("AAF_TYPE_SEPARATOR()\n");
       }
-#
-      tguid = formatAUID($SLO00C, $SLO01C, $SLO02C, $SLO03C,
-                         $SLO04C, $SLO05C, $SLO06C, $SLO07C,
-                         $SLO08C, $SLO09C, $SLO10C, $SLO11C,
-                         $SLO12C, $SLO13C, $SLO14C, $SLO15C, "  ");
-#
-      typeName = $elementNameC;
+
+      tguid = formatAUID($C["SLO00C"], $C["SLO01C"], $C["SLO02C"], $C["SLO03C"],
+                         $C["SLO04C"], $C["SLO05C"], $C["SLO06C"], $C["SLO07C"],
+                         $C["SLO08C"], $C["SLO09C"], $C["SLO10C"], $C["SLO11C"],
+                         $C["SLO12C"], $C["SLO13C"], $C["SLO14C"], $C["SLO15C"], "  ");
+
+      typeName = $C["elementNameC"];
       parentTypeName = typeName;
       printf("\n");
       printf("// %s", typeName);
-      if (($qualifC == "weak") || ($qualifC == "strong")) {
-        printf("<%s>\n", $elementTypeC);
+      if (($C["qualifC"] == "weak") || ($C["qualifC"] == "strong")) {
+        printf("<%s>\n", $C["elementTypeC"]);
       } else {
         printf("\n");
       }
       printf("//\n");
-      kind = $kindC;
-      qualif = $qualifC;
+      kind = $C["kindC"];
+      qualif = $C["qualifC"];
       if        (kind == "integer") {
-        printf("AAF_TYPE_DEFINITION_INTEGER(%s, %s, %s, %s)\n", typeName, tguid, $qualifC, $elementTypeC);
+        printf("AAF_TYPE_DEFINITION_INTEGER(%s, %s, %s, %s)\n", typeName, tguid, $C["qualifC"], $C["elementTypeC"]);
       } else if (kind == "enumeration" ) {
-        etype = $qualifC;
+        etype = $C["qualifC"];
         printf("AAF_TYPE_DEFINITION_ENUMERATION(%s, %s, AAF_TYPE(%s))\n", typeName, tguid, etype);
       } else if (kind == "array") {
-        elementType = $elementTypeC;
-        if ($qualifC == "varying") {
+        elementType = $C["elementTypeC"];
+        if ($C["qualifC"] == "varying") {
           printf("AAF_TYPE_DEFINITION_VARYING_ARRAY(%s, %s,\n  AAF_TYPE(%s))\n", typeName, tguid, elementType);
-        } else if ($qualifC == "fixed") {
-          printf("AAF_TYPE_DEFINITION_FIXED_ARRAY(%s, %s,\n  AAF_TYPE(%s), %s)\n", typeName, tguid, elementType, $isMandatoryC);
-        } else if ($qualifC == "strong") {
+        } else if ($C["qualifC"] == "fixed") {
+          printf("AAF_TYPE_DEFINITION_FIXED_ARRAY(%s, %s,\n  AAF_TYPE(%s), %s)\n", typeName, tguid, elementType, $C["isMandatoryC"]);
+        } else if ($C["qualifC"] == "strong") {
           # Special cases for strong reference vectors.
             printf("AAF_TYPE_DEFINITION_STRONG_REFERENCE_VECTOR(\n  AAF_REFERENCE_TYPE_NAME(%s, %s), %s,\n  AAF_TYPE(%s))\n", typeName, elementType, tguid, elementType);
-        } else if ($qualifC == "weak") {
+        } else if ($C["qualifC"] == "weak") {
           # Special cases for weak reference vectors.
             printf("AAF_TYPE_DEFINITION_WEAK_REFERENCE_VECTOR(\n  AAF_REFERENCE_TYPE_NAME(%s, %s), %s,\n  AAF_TYPE(%s))\n", typeName, elementType, tguid, elementType);
         } else {
-          typeError(typeName, qualifC);
+          typeError(typeName, C["qualifC"]);
           errors++;
         }
       } else if (kind == "record") {
         printf("AAF_TYPE_DEFINITION_RECORD(%s, %s)\n", typeName, tguid);
       } else if (kind == "rename") {
-        printf("AAF_TYPE_DEFINITION_RENAME(%s, %s, %s)\n", typeName, tguid, $elementTypeC);
+        printf("AAF_TYPE_DEFINITION_RENAME(%s, %s, %s)\n", typeName, tguid, $C["elementTypeC"]);
       } else if (kind == "string") {
-        printf("AAF_TYPE_DEFINITION_STRING(%s, %s, %s)\n", typeName, tguid, $elementTypeC);
+        printf("AAF_TYPE_DEFINITION_STRING(%s, %s, %s)\n", typeName, tguid, $C["elementTypeC"]);
       } else if (kind == "extendible") {
         printf("AAF_TYPE_DEFINITION_EXTENDIBLE_ENUMERATION(%s, %s)\n", typeName, tguid);
       } else if (kind == "character") {
@@ -828,51 +903,66 @@ BEGIN {
       } else if (kind == "opaque") {
         printf("AAF_TYPE_DEFINITION_OPAQUE(%s, %s)\n", typeName, tguid);
       } else if (kind == "set") {
-        elementType = $elementTypeC;
+        elementType = $C["elementTypeC"];
         # Special cases for strong/weak reference sets.
-        if ($qualifC == "strong") {
+        if ($C["qualifC"] == "strong") {
           printf("AAF_TYPE_DEFINITION_STRONG_REFERENCE_SET(\n  AAF_REFERENCE_TYPE_NAME(%s, %s), %s,\n  AAF_TYPE(%s))\n", typeName, elementType, tguid, elementType);
-        } else if ($qualifC == "weak") {
+        } else if ($C["qualifC"] == "weak") {
           printf("AAF_TYPE_DEFINITION_WEAK_REFERENCE_SET(\n  AAF_REFERENCE_TYPE_NAME(%s, %s), %s,\n  AAF_TYPE(%s))\n", typeName, elementType, tguid, elementType);
         } else { 
           printf("AAF_TYPE_DEFINITION_SET(%s, %s,\n  AAF_TYPE(%s))\n", typeName, tguid, elementType);
         }
       } else if (kind == "reference") {
-        targetType = $elementTypeC;
-        if ($qualifC == "strong") {
+        targetType = $C["elementTypeC"];
+        if ($C["qualifC"] == "strong") {
           printf("AAF_TYPE_DEFINITION_STRONG_REFERENCE(\n  AAF_REFERENCE_TYPE_NAME(%s, %s), %s,\n  AAF_TYPE(%s))\n", typeName, targetType, tguid, targetType);
-        } else if ($qualifC == "weak" ) {
+        } else if ($C["qualifC"] == "weak" ) {
           printf("AAF_TYPE_DEFINITION_WEAK_REFERENCE(\n  AAF_REFERENCE_TYPE_NAME(%s, %s), %s,\n  AAF_TYPE(%s))\n", typeName, targetType, tguid, targetType);
         } else {
-          typeError(typeName, qualifC);
+          typeError(typeName, C["qualifC"]);
           errors++;
         }
       } else if (kind == "stream") {
           printf("AAF_TYPE_DEFINITION_STREAM(%s, %s)\n", typeName, tguid);
       } else {
-        # better be another type
+        printError("Unknown kind of type");
+	    errors++;
       }
-    } else if ($typeNameC == "member") {
-      # a "member" of a type
-      memberName = $elementNameC;
+
+    } else if ($C["typeNameC"] == "member") { # a "member" of a type
+
+	  # assert( $C["nlcC"] == "Child" )
+      memberName = $C["elementNameC"];
       if (kind == "enumeration" ) {
-        printf("  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(%s,\n    %s, %s)\n", memberName, $kindC, parentTypeName);
+        printf("  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(%s,\n    %s, %s)\n", memberName, $C["kindC"], parentTypeName);
       } else if (kind == "record") {
-        printf("  AAF_TYPE_DEFINITION_RECORD_FIELD(%s, AAF_TYPE(%s),\n    %s)\n", memberName, $kindC, parentTypeName);
+        printf("  AAF_TYPE_DEFINITION_RECORD_FIELD(%s, AAF_TYPE(%s),\n    %s)\n", memberName, $C["kindC"], parentTypeName);
       } else if (kind == "extendible") {
-#
-      eguid = formatAUID($SLO00C, $SLO01C, $SLO02C, $SLO03C,
-                         $SLO04C, $SLO05C, $SLO06C, $SLO07C,
-                         $SLO08C, $SLO09C, $SLO10C, $SLO11C,
-                         $SLO12C, $SLO13C, $SLO14C, $SLO15C, "    ");
-#
+
+      eguid = formatAUID($C["SLO00C"], $C["SLO01C"], $C["SLO02C"], $C["SLO03C"],
+                         $C["SLO04C"], $C["SLO05C"], $C["SLO06C"], $C["SLO07C"],
+                         $C["SLO08C"], $C["SLO09C"], $C["SLO10C"], $C["SLO11C"],
+                         $C["SLO12C"], $C["SLO13C"], $C["SLO14C"], $C["SLO15C"], "    ");
+
         printf("  AAF_TYPE_DEFINITION_EXTENDIBLE_ENUMERATION_MEMBER(%s,%s,\n    %s)\n", memberName, eguid, parentTypeName);
       } else if ((kind == "reference") && (qualif == "weak")) {
-        printf("  AAF_TYPE_DEFINITION_WEAK_REFERENCE_MEMBER(%s, %s,\n    AAF_REFERENCE_TYPE_NAME(%s, %s))\n", memberName, $parentC, typeName, targetType);
+        printf("  AAF_TYPE_DEFINITION_WEAK_REFERENCE_MEMBER(%s, %s,\n    AAF_REFERENCE_TYPE_NAME(%s, %s))\n", memberName, $C["parentC"], typeName, targetType);
       } else {
-        # error, what is this a member of ?
+        printError("Member of unknown kind of type");
+	    errors++;
       }
-    } else if ($typeNameC == "alias") {
+
+	} else {
+        printError("Unknown child of type");
+	    errors++;
+	}
+
+  # Aliases Register (non SMPTE)
+  } else if( $C["registerC"] == "Aliases" ) {
+
+    if ($C["typeNameC"] == "alias") {
+
+	  # assert( $C["nlcC"] == "Leaf" )
       if (firstAlias) {
         if (kind == "enumeration" ) {
           printf("AAF_TYPE_DEFINITION_ENUMERATION_END(%s, %s, AAF_TYPE(%s))\n", typeName, tguid, etype);
@@ -883,6 +973,7 @@ BEGIN {
         } else if ((kind == "reference") && (qualif == "weak")) {
           printf("AAF_TYPE_DEFINITION_WEAK_REFERENCE_END(\n  AAF_REFERENCE_TYPE_NAME(%s, %s), %s,\n  AAF_TYPE(%s))\n", typeName, targetType, tguid, targetType);
         }
+
         printf("\n");
         printf("AAF_TYPE_TABLE_END()\n");
         printf("\n");
@@ -892,89 +983,25 @@ BEGIN {
         printf("AAF_ALIAS_TABLE_BEGIN()\n");
         printf("\n");
         firstAlias = 0;
+
       } else {
         printf("AAF_ALIAS_SEPARATOR()\n");
       }
-      aname = $elementNameC;
-      aalias = $aliasC;
-      printf("AAF_CLASS_ALIAS(%s, %s)\n", aname, aalias); 
-    } else { # this item is a property
-      type = $typeNameC;
-      if (type == "Array of Int32") {
-        type = "Int32Array"
-      } else if (type == "Array of Int64") {
-        type = "Int64Array"
-      }
-      #
-      if        (type == "WeakReference") {
-        reftype = "WEAK_REFERENCE";
-      } else if (type == "WeakReferenceVector") {
-        reftype = "WEAK_REFERENCE_VECTOR";
-      } else if (type == "WeakReferenceSet") {
-        reftype = "WEAK_REFERENCE_SET";
-      } else if (type == "StrongReference") {
-        reftype = "STRONG_REFERENCE";
-      } else if (type == "StrongReferenceVector") {
-        reftype = "STRONG_REFERENCE_VECTOR";
-      } else if (type == "StrongReferenceSet") {
-        reftype = "STRONG_REFERENCE_SET";
-      } else {
-        reftype="";
-      }
-      if (reftype != "") {
-        if ($referenceTypeC != "") {
-          # type = sprintf("AAF_%s(%s, %s)", reftype, type, $referenceTypeC);
-          type = sprintf("AAF_REFERENCE_TYPE(%s, %s)", type, $referenceTypeC);
-        } else {
-          propertyError($elementNameC, class, referenceTypeC)
-          errors++;
-        }
-      } else {
-        if ($referenceTypeC == "") {
-          type = sprintf("AAF_TYPE(%s)", type);
-        } else {
-          propertyError($elementNameC, class, referenceTypeC);
-          errors++;
-        }
-      }
-      #
-      if ($isMandatoryC == "M") {
-        mandatory = "true";
-      } else if ($isMandatoryC == "O") {
-        mandatory = "false";
-      } else {
-        propertyError($elementNameC, class, isMandatoryC);
-        errors++;
-      }
-      if ($parentC != class) {
-        propertyError($elementNameC, class, parentC);
-        errors++;
-      }
-      if ($classNameC != $parentC) {
-        propertyError($elementNameC, class, classNameC);
-        errors++;
-      }
-      if ($isAbstractC != "") {
-        propertyError($elementNameC, class, isAbstractC);
-        errors++;
-      }
-      if ($isUidC == "uid") {
-        uid = "true";
-        if ($isMandatoryC == "O") {
-          propertyError($elementNameC, class, isUidC);
-          printError("A unique identifier must be mandatory.\n");
-          errors++;
-        }
-      } else {
-        uid = "false";
-      }
-      # AAF_PROPERTY(name, id, tag, type, mandatory, container)
-      pguid = formatAUID($SLO00C, $SLO01C, $SLO02C, $SLO03C,
-                         $SLO04C, $SLO05C, $SLO06C, $SLO07C,
-                         $SLO08C, $SLO09C, $SLO10C, $SLO11C,
-                         $SLO12C, $SLO13C, $SLO14C, $SLO15C, "    ");
-      printf("  AAF_PROPERTY(%s,%s,\n    0x%s,\n    %s,\n    %s,\n    %s,\n    %s)\n", $elementNameC, pguid, $pidC, type, mandatory, uid, class);
-    }
+
+      aalias = $C["elementNameC"];
+      aoriginal = $C["aliasC"];
+      printf("AAF_CLASS_ALIAS(%s, %s)\n", aoriginal, aalias); 
+	}
+
+  # Labels Register
+  } else if( $C["registerC"] == "Labels" ) {
+
+    next # not emitting any macros for Labels yet
+
+  # Unknown Register
+  } else {
+      printError("Unknown Register");
+	  errors++;
   }
 }
 
@@ -1105,6 +1132,15 @@ function formatAUIS(O00, O01, O02, O03, O04, O05, O06, O07,
              O12, O13, O14, O15,
              O00, O01, O02, O03,
              O04, O05, O06, O07);
+}
+
+function formatPID( t3, t4 )
+{
+  while( length(t3)<2 ) t3 = "0" t3;
+  t3 = tolower( substr( t3,1,2) );
+  while( length(t4)<2 ) t4 = "0" t4;
+  t4 = tolower( substr( t4,1,2) );
+  return sprintf( "0x%s%s",t3,t4 );
 }
 
 function printError(message)
