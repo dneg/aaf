@@ -131,6 +131,7 @@ AUTO_GEN_IMPL = \
 # Do not add the 'Test' suffix here.
 HUMAN_TYPED_COMTEST = \
 	AAFMob \
+	AAFSourceClip \
 	AAFSourceMob
 
 # Build the list of all objects that have automatically-generated
@@ -208,7 +209,6 @@ AUTO_GEN_COMTEST = \
 	AAFMobSlot \
 	AAFTimelineMobSlot \
 	AAFSourceReference \
-	AAFSourceClip \
 	AAFSession \
 	EnumAAFMobs \
 	EnumAAFMobSlots
