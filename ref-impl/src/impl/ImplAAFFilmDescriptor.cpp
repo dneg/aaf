@@ -16,7 +16,7 @@
 
 #include <assert.h>
 #include <string.h>
-
+#include "aafErr.h"
 
 ImplAAFFilmDescriptor::ImplAAFFilmDescriptor ()
 : _manufacturer(	PID_FilmDescriptor_Manufacturer,			"Manufacturer"),
@@ -46,7 +46,12 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFFilmDescriptor::SetFilmManufacturer (
       wchar_t *name)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	if(name == NULL)
+		return(AAFRESULT_NULL_PARAM);
+
+	_manufacturer = name;
+
+	return(AAFRESULT_SUCCESS); 
 }
 
 
@@ -55,7 +60,18 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFFilmDescriptor::GetFilmManufacturer (
       wchar_t *name, aafInt32 bufSize)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	bool stat;
+
+	if(name == NULL)
+		return(AAFRESULT_NULL_PARAM);
+
+	stat = _manufacturer.copyToBuffer(name, bufSize);
+	if (! stat)
+	{
+	  return AAFRESULT_SMALLBUF;	// Shouldn't the API have a length parm?
+	}
+
+	return(AAFRESULT_SUCCESS); 
 }
 
 	//@comm Returns a zero-length string if the property was not present
@@ -65,7 +81,10 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFFilmDescriptor::GetFilmManufacturerBufLen (
       aafInt32 *bufSize)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	if(bufSize == NULL)
+		return(AAFRESULT_NULL_PARAM);
+	*bufSize = _manufacturer.size();
+	return(AAFRESULT_SUCCESS); 
 }
 	
 /****/
@@ -73,7 +92,12 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFFilmDescriptor::SetFilmModel (
       wchar_t *name)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	if(name == NULL)
+		return(AAFRESULT_NULL_PARAM);
+
+	_model = name;
+
+	return(AAFRESULT_SUCCESS); 
 }
 
 
@@ -82,7 +106,18 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFFilmDescriptor::GetFilmModel (
       wchar_t *name, aafInt32 bufSize)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	bool stat;
+
+	if(name == NULL)
+		return(AAFRESULT_NULL_PARAM);
+
+	stat = _model.copyToBuffer(name, bufSize);
+	if (! stat)
+	{
+	  return AAFRESULT_SMALLBUF;	// Shouldn't the API have a length parm?
+	}
+
+	return(AAFRESULT_SUCCESS); 
 }
 
 /****/
@@ -90,15 +125,20 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFFilmDescriptor::GetFilmModelBufLen (
       aafInt32 *bufSize)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	if(bufSize == NULL)
+		return(AAFRESULT_NULL_PARAM);
+	*bufSize = _model.size();
+	return(AAFRESULT_SUCCESS); 
 }
 
 /****/
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFFilmDescriptor::GetFilmFormat (
-      aafFilmType_t*  /*filmFormat*/)
+      aafFilmType_t*filmFormat)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	aafAssert(filmFormat != NULL, NULL, AAFRESULT_NULL_PARAM);
+	*filmFormat = _format;
+	return(AAFRESULT_SUCCESS); 
 }
 
 	//@comm Film format may be: kFt35MM, kFt16MM, kFt8MM, kFt65MM
@@ -106,36 +146,43 @@ AAFRESULT STDMETHODCALLTYPE
 /****/
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFFilmDescriptor::GetFrameRate (
-      aafUInt32*  /*rate*/)
+      aafUInt32*  rate)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	aafAssert(rate != NULL, NULL, AAFRESULT_NULL_PARAM);
+	*rate = _frameRate;
+	return(AAFRESULT_SUCCESS); 
 }
 
 
 /****/
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFFilmDescriptor::GetPerfPerFrame (
-      aafUInt8*  /*perfPerFrame*/)
+      aafUInt8* perfPerFrame)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	aafAssert(perfPerFrame != NULL, NULL, AAFRESULT_NULL_PARAM);
+	*perfPerFrame = _perfPerFrame;
+	return(AAFRESULT_SUCCESS); 
 }
 
 
 /****/
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFFilmDescriptor::GetFilmAspectRatio (
-      aafRational_t*  /*aspectRatio*/)
+      aafRational_t*aspectRatio)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	aafAssert(aspectRatio != NULL, NULL, AAFRESULT_NULL_PARAM);
+	*aspectRatio = _aspectRatio;
+	return(AAFRESULT_SUCCESS); 
 }
 
 
 /****/
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFFilmDescriptor::SetFilmFormat (
-      aafFilmType_t  /*filmFormat*/)
+      aafFilmType_t  filmFormat)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	_format = filmFormat;
+	return(AAFRESULT_SUCCESS); 
 }
 
 	//@comm kFt35MM, kFt16MM, kFt8MM, kFt65MM
@@ -143,27 +190,30 @@ AAFRESULT STDMETHODCALLTYPE
 /****/
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFFilmDescriptor::SetFrameRate (
-      aafUInt32  /*rate*/)
+      aafUInt32 rate)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	_frameRate = rate;
+	return(AAFRESULT_SUCCESS); 
 }
 
 
 /****/
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFFilmDescriptor::SetPerfPerFrame (
-      aafUInt8  /*perfPerFrame*/)
+      aafUInt8 perfPerFrame)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	_perfPerFrame = perfPerFrame;
+	return(AAFRESULT_SUCCESS); 
 }
 
 
 /****/
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFFilmDescriptor::SetFilmAspectRatio (
-      aafRational_t  /*aspectRatio*/)
+      aafRational_t  aspectRatio)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	_aspectRatio = aspectRatio;
+	return(AAFRESULT_SUCCESS); 
 }
 
 
