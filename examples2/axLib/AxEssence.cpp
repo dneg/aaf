@@ -135,6 +135,26 @@ void AxLocator::SetPath( const AxString& path )
 	CHECK_HRESULT( _spIaafLocator->SetPath( path.c_str() ) );
 }
 
+AxString AxLocator::GetPath()
+{
+	aafUInt32 sizeInBytes = 0;
+
+	CHECK_HRESULT( _spIaafLocator->GetPathBufLen( &sizeInBytes ) );
+
+	// size is in bytes!  Divide by sizeof(aafCharacter) to allocate correctly
+	// sized aafCharacter array.  Add one to account for possible rounding.
+
+	int sizeInChars = (sizeInBytes /sizeof(aafCharacter)) + 1;
+	std::vector< aafCharacter > buf( sizeInChars );
+
+	CHECK_HRESULT( _spIaafLocator->GetPath( &buf[0], sizeInChars*sizeof(aafCharacter) ) );
+	
+	AxString name( &buf[0] );
+
+	return name;
+}
+
+
 //=---------------------------------------------------------------------=
 
 AxNetworkLocator::AxNetworkLocator( IAAFNetworkLocatorSP spIaafNetworkLocator )
@@ -396,6 +416,21 @@ aafUInt32 AxEssenceDescriptor::CountLocators()
 	CHECK_HRESULT(_spIaafEssenceDescriptor->CountLocators(&numlocators));
 	return numlocators;
 }
+
+void AxEssenceDescriptor::AppendLocator( IAAFLocatorSP spLocator )
+{
+	CHECK_HRESULT( _spIaafEssenceDescriptor->AppendLocator( spLocator ) );
+}
+
+IEnumAAFLocatorsSP AxEssenceDescriptor::GetLocators()
+{
+	IEnumAAFLocatorsSP spIEnumAAFLocators;
+
+	CHECK_HRESULT( _spIaafEssenceDescriptor->GetLocators( &spIEnumAAFLocators ) );
+
+	return spIEnumAAFLocators;
+}
+
 
 //=---------------------------------------------------------------------=
 

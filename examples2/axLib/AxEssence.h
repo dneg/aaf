@@ -98,6 +98,7 @@ public:
 	~AxLocator();
 
 	void SetPath( const AxString& path );
+	AxString GetPath();
 
 	inline operator IAAFLocatorSP ()
 	{ return _spIaafLocator; }
@@ -279,7 +280,9 @@ public:
 	AxEssenceDescriptor( IAAFEssenceDescriptorSP spIaafEssenceDescriptor );
 	~AxEssenceDescriptor();
 
-       aafUInt32 CountLocators();
+	aafUInt32 CountLocators();
+	void AppendLocator( IAAFLocatorSP spLocator );
+	IEnumAAFLocatorsSP GetLocators();
 
 	inline operator IAAFEssenceDescriptorSP ()
 	{ return _spIaafEssenceDescriptor; }
