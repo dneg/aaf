@@ -1424,6 +1424,7 @@ AAFRESULT STDMETHODCALLTYPE
 			slot->ReleaseReference();
 			slot = NULL;
 		}
+    iter->ReleaseReference(); // 2000-OCT-19 transdel: plug memory leak
 	}
 	XEXCEPT
 	{
