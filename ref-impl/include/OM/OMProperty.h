@@ -50,6 +50,10 @@
 
 #include "OMStrongRefSetProperty.h"
 
+#include "OMWeakRefVectorProperty.h"
+
+#include "OMWeakRefSetProperty.h"
+
 #include "OMWideStringProperty.h"
 
 #include "OMPropertyT.h"
