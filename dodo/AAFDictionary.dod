@@ -157,14 +157,12 @@ AD_XMETHOD1(GetTypeDefinitions,
 
 AD_XMETHOD1(RegisterDataDefintion,
 [in], objIn, AAFDataDef, pDataDef, Data Definition Object,
-Add the data definition object to the header's list of definitions.
-  // @devnote based on omfiDatakindRegister.)
+Add the data definition object to the header's list of definitions.)
 
 AD_XMETHOD2(LookupDataDefintion,
 [in\,ref], objPass, aafUID_t *, pDataDefintionID, Datak Defintion Unique ID,
 [out\,retval], objOut, AAFDataDef, ppDataDef, Data Definition Object,
-Return the data definition object with the given id.
-  // @devnote based on omfiDatakindLookup.)
+Return the data definition object with the given id.)
 
 AD_XMETHOD1(GetDataDefinitions,
 [out\,retval], objOut, EnumAAFDataDefs, ppEnum, Definition Enumeration,
