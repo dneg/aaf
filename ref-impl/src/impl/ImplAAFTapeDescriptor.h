@@ -184,6 +184,7 @@ public:
 private:
 	OMFixedSizeProperty<aafTapeCaseType_t>		_formFactor;
 	OMFixedSizeProperty<aafVideoSignalType_t>	_videoSignalType;
+	OMFixedSizeProperty<aafTapeFormatType_t>	_tapeFormat;
 	OMFixedSizeProperty<aafLength_t>			_tapeLength;
 	OMWideStringProperty						_manufacturer;
 	OMWideStringProperty						_model;
