@@ -10,10 +10,12 @@
 #include "CAAFWAVECodec.h"
 
 #include <assert.h>
+#include "AAFResult.h"
 
+#include "AAF.h"
 
-#include "CAAFEssenceFormat.h"
-#include "ImplAAFEssenceFormat.h"
+//#include "CAAFEssenceFormat.h"
+//#include "ImplAAFEssenceFormat.h"
 
 
 // CLSID for AAFEssenceCodec 
