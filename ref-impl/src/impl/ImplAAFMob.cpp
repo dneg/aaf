@@ -1838,7 +1838,6 @@ AAFRESULT ImplAAFMob::ReconcileMobLength(void)
 }
 
 
-OMDEFINE_STORABLE(ImplAAFMob, AUID_AAFMob);
 
 
 

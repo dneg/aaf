@@ -43,7 +43,6 @@
 #define DEFAULT_NUM_MOBS				1000
 #define DEFAULT_NUM_DATAOBJ			200
 
-OMDEFINE_STORABLE(ImplAAFContentStorage, AUID_AAFContentStorage);
 
 extern "C" const aafClassID_t CLSID_EnumAAFMobs;
 extern "C" const aafClassID_t CLSID_EnumAAFEssenceData;
