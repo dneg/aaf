@@ -45,17 +45,6 @@ using namespace std;
 
 #include "CAAFBuiltinDefs.h"
 
-static void CoutTestFile(const aafWChar* pFileName)
-{
-  const size_t kMaxFileName = 512;
-  char cFileName[kMaxFileName];
-
-  size_t status = wcstombs(cFileName, pFileName, kMaxFileName);
-  if (status != (size_t)-1) {
-    cout << endl << cFileName << endl;
-  }
-}
-
 static void RemoveTestFile(const aafWChar* pFileName)
 {
   const size_t kMaxFileName = 512;

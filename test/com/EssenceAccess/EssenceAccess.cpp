@@ -54,8 +54,6 @@
 // This static variables are here so they can be referenced 
 // throughout the whole program.
 
-static aafSourceRef_t sourceRef; 
-
 #define assert(b, msg) \
   if (!(b)) {fprintf(stderr, "ASSERT: %s\n\n", msg); exit(1);}
 
@@ -99,7 +97,7 @@ static void convert(char* cName, size_t length, const wchar_t* name)
 
 static void MobIDtoString(aafMobID_constref uid, char *buf)
 {
-	sprintf(buf, "%02x%02x%02x%02x%02x%02x%02x%02x--%08lx-%04x-%04x-%02x%02x%02x%02x%02x%02x%02x%02x",
+	sprintf(buf, "%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x-%02x-%02x-%02x-%02x--%08x-%04x-%04x-%02x%02x%02x%02x%02x%02x%02x%02x",
 		(int)uid.SMPTELabel[0], (int)uid.SMPTELabel[1], (int)uid.SMPTELabel[2], (int)uid.SMPTELabel[3], 
 		(int)uid.SMPTELabel[4], (int)uid.SMPTELabel[5], (int)uid.SMPTELabel[6], (int)uid.SMPTELabel[7], 
 		(int)uid.SMPTELabel[8], (int)uid.SMPTELabel[8], (int)uid.SMPTELabel[10], (int)uid.SMPTELabel[11], 
@@ -305,8 +303,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 #endif
 
 		aafUInt32 dataWritten =0;
-		aafUInt32 dataWriteRate = 0;
-		
+
 		// the loop for creating files of cli-set size is below
 
 		for (long i=0; i<N; i++)
@@ -500,7 +497,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 	check(pHeader->CountMobs(kAAFMasterMob, &numMobs));
 	if (1 == numMobs )
 	{
-		printf("Found %ld Master Mobs\n", numMobs);
+		printf("Found %d Master Mobs\n", numMobs);
 		criteria.searchTag = kAAFByMobKind;
 		criteria.tags.mobKind = kAAFMasterMob;
 		check(pHeader->GetMobs(&criteria, &pMobIter));
@@ -660,8 +657,8 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 			}
 			else
 			{
-				printf("***Wrong number of slots in the Master Mob (was %ld should be %ld)\n",
-					numSlots, 1L);
+				printf("***Wrong number of slots in the Master Mob (was %d should be %d)\n",
+					numSlots, 1);
 			}
 			if (pMasterMob)
 			{
@@ -684,8 +681,8 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 	}
 	else
 	{
-		printf("***Wrong number of Master mobs in the file (was %ld should be %ld)\n",
-			numMobs, 1L);
+		printf("***Wrong number of Master mobs in the file (was %d should be %d)\n",
+			numMobs, 1);
 	}
 
 	printf("--------\n");
@@ -899,7 +896,6 @@ AAFRESULT loadWAVEHeader(aafUInt8 *buf,
 // Make sure all of our required plugins have been registered.
 static HRESULT RegisterRequiredPlugins(void)
 {
-  HRESULT hr = S_OK;
 	IAAFPluginManager	*mgr = NULL;
 
   // Load the plugin manager 
@@ -1027,7 +1023,3 @@ int main(int argumentCount, char *argumentVector[])
 	return(0);
 	
 }
-
-
-
-

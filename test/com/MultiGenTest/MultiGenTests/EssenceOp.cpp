@@ -70,7 +70,7 @@ void write_video_samples( IAAFSmartPointer<IAAFEssenceAccess> access,
   
   while (numSamplesStillToWrite > 0) {
     
-    const int numBytesPerSample = 2 * rect.xSize * rect.ySize;
+    const aafUInt32 numBytesPerSample = 2 * rect.xSize * rect.ySize;
     auto_ptr<aafUInt8> pixels( new aafUInt8 [numBytesPerSample] );
     
     // TODO - Write some unique data into the buffer that can be
@@ -105,18 +105,18 @@ void write_audio_samples( IAAFSmartPointer<IAAFEssenceAccess> access,
   
   CHECK_HRESULT( access->PutFileFormat( format ) );
   
-  int numSamplesStillToWrite = numSamples;
+  aafUInt32 numSamplesStillToWrite = numSamples;
 
   while (numSamplesStillToWrite > 0) {
 
-    int numSamplesThisTime = 1000;
+    aafUInt32 numSamplesThisTime = 1000;
 
     if ( numSamplesThisTime > numSamplesStillToWrite ) {
       numSamplesThisTime = numSamplesStillToWrite;
     }
 
-    const int numBytesPerSample = (MULTI_GEN_AUDIO_SAMPLE_BPP+7)/8;
-    const int numBytesThisTime = numSamplesThisTime * numBytesPerSample;
+    const aafUInt32 numBytesPerSample = (MULTI_GEN_AUDIO_SAMPLE_BPP+7)/8;
+    const aafUInt32 numBytesThisTime = numSamplesThisTime * numBytesPerSample;
     auto_ptr<aafUInt8> pixels( new aafUInt8 [numBytesThisTime] );
     
     // TODO - Write some unique data into the buffer that can be

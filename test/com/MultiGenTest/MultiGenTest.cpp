@@ -226,7 +226,7 @@ void Usage( const char* argv0 )
   MultiGenTestFactory* factory;
   MultiGenTestRegistry& registry = MultiGenTestRegistry::GetInstance();
   registry.ResetIter();
-  while ( factory = registry.Next() ) {
+  while ( (factory = registry.Next()) ) {
     cout << "Name:\t" << factory->GetName()  << endl;
     cout << "Desc:\t" << factory->GetDesc()  << endl;
     cout << "Usage:\t" << factory->GetUsage() << endl;
@@ -241,8 +241,8 @@ class CmdFunc {
 public:
   CmdFunc( int minArgs )
     : _minArgs( minArgs ),
-      _subArgV(0),
-      _subArgC(-1)
+      _subArgC(-1),
+      _subArgV(0)
   {}
   virtual void operator()( CmdState& state ) {}
   int GetMinArgs()               { return _minArgs; }
@@ -381,8 +381,6 @@ int main( int argc, char **argv )
       Usage( argv[0] );
       throw -1;
     }
-
-    MultiGenTestRegistry& registry = MultiGenTestRegistry::GetInstance();
 
     ProcessCommandLineArgs( argc, argv );
   }

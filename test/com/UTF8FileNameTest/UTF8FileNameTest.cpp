@@ -256,7 +256,6 @@ static HRESULT ReadAAFFile(aafWChar * pFileName,
 			   bool UseRaw = false,
                            const aafUID_t* pFileKind = &kAAFFileKind_DontCare)
 {
-  IAAFRawStorage* pRawStorage = 0;
   IAAFFile* pFile = NULL;
   IAAFHeader* pHeader = NULL;
   IEnumAAFMobs* mobIter = NULL;
@@ -431,7 +430,6 @@ struct _fileinfo_t {
 // Make sure all of our required plugins have been registered.
 static void RegisterRequiredPlugins(void)
 {
-  HRESULT hr = S_OK;
   IAAFPluginManager	*mgr = NULL;
 
   // Load the plugin manager 
@@ -475,7 +473,7 @@ int main(int argc, char* argv[])
 	UnicodeExtName[5]=0x2282;
 	UnicodeExtName[6]=0x221e;
 
-    for (int i = 0; i < sizeof(fileinfo)/sizeof(fileinfo[0]); i++)
+    for (unsigned i = 0; i < sizeof(fileinfo)/sizeof(fileinfo[0]); i++)
 	{
 		// Increment second character of filename to give different names per iteration
 		UnicodeFileName[1]=i+'1';
