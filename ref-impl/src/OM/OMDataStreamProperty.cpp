@@ -38,7 +38,8 @@
 
 OMDataStreamProperty::OMDataStreamProperty(const OMPropertyId propertyId,
                                            const wchar_t* name)
-  : OMProperty(propertyId, SF_DATA_STREAM, name),_stream(0)
+  : OMProperty(propertyId, SF_DATA_STREAM, name),_stream(0),
+    _byteOrder(unspecified)
 {
 }
 
@@ -54,7 +55,8 @@ void OMDataStreamProperty::save(void) const
 
   // Use the property name as the stream name
   //
-  saveName();
+  const wchar_t* name = storedName();
+  store()->saveStream(_propertyId, _storedForm, name, _byteOrder);
 
   // The stream has never been written to but we want the stream to
   // exist in the file, create it.
@@ -72,7 +74,16 @@ void OMDataStreamProperty::restore(size_t externalSize)
 {
   TRACE("OMDataStreamProperty::restore");
 
-  restoreName(externalSize);
+  wchar_t* name = 0;
+  OMByteOrder bo;
+  store()->restoreStream(_propertyId, _storedForm, externalSize, &name, &bo);
+  ASSERT("Consistent property size", externalSize == ((lengthOfWideString(storedName()) + 1) * sizeof(OMCharacter)) + 1);
+  ASSERT("Consistent property name", compareWideString(name, storedName()) == 0);
+  ASSERT("Valid stored byte order", ((bo == littleEndian) ||
+                                     (bo == bigEndian) ||
+                                     (bo == unspecified)));
+  _byteOrder = bo;
+  delete [] name;
 
   open();
   setPresent();
@@ -389,6 +400,57 @@ void OMDataStreamProperty::setBits(const OMByte* ANAME(bits),
   PRECONDITION("Valid size", size >= bitsSize());
 
   ASSERT("Unimplemented code not reached", false);
+}
+
+  // @mfunc Is a byte order specifed for this stream ?
+bool OMDataStreamProperty::hasByteOrder(void) const
+{
+  TRACE("OMDataStreamProperty::hasByteOrder");
+
+  bool result;
+  if ((_byteOrder == littleEndian) || (_byteOrder == bigEndian)) {
+    result = true;
+  } else {
+    result = false;
+  }
+  return result;
+}
+
+  // @mfunc Specify a byte order for this stream.
+void OMDataStreamProperty::setByteOrder(OMByteOrder byteOrder)
+{
+  TRACE("OMDataStreamProperty::setByteOrder");
+
+  PRECONDITION("Valid byte order",
+                    (_byteOrder == littleEndian) || (_byteOrder == bigEndian));
+  PRECONDITION("No existing byte order", !hasByteOrder());
+  PRECONDITION("Stream is empty", size() == 0);
+
+  _byteOrder = byteOrder;
+
+  POSTCONDITION("Byte order properly set", hasByteOrder());
+}
+
+  // @mfunc The byte order of this stream.
+OMByteOrder OMDataStreamProperty::byteOrder(void) const
+{
+  TRACE("OMDataStreamProperty::byteOrder");
+
+  PRECONDITION("Byte order set", hasByteOrder());
+
+  return _byteOrder;
+}
+
+  // @mfunc Clear the byte order of this stream
+void OMDataStreamProperty::clearByteOrder(void)
+{
+  TRACE("OMDataStreamProperty::clearByteOrder");
+
+  PRECONDITION("Byte order set", hasByteOrder());
+
+  _byteOrder = unspecified;
+
+  POSTCONDITION("Byte order properly cleared", !hasByteOrder());
 }
 
 const wchar_t* OMDataStreamProperty::storedName(void) const
