@@ -42,19 +42,6 @@
 #endif // GUID_DEFINED
 
 
-// Define to enable the module testing of the shared library.
-#define AAF_MODULE_TEST
-
-//#ifndef _DEBUG
-//#define _DEBUG
-//#endif
-
-
-// AAF OM symbols
-//#define OM_ENABLE_DEBUG
-//#define OM_ENABLE_TRACE
-
-#define BOB_TEST
 
 //OMF Prefix
 #define OMFI_NEED_ULONG 1
@@ -65,4 +52,36 @@
 #define NEW_MEMORY_MECHANISM	1
 #define VIRTUAL_BENTO_OBJECTS	1
 
-#include "AAFUtilLibPrecomp.pch"
+
+
+// Cannot include more than a single pre-compiled header (MacHeaders already included.
+// There is a conflict with the omf portkey.h file because one of its symbols is
+// precompiled with AAFTypes.h in AAFUtilLibPrecomp.pch.
+
+//#include "AAFUtilLibPrecomp.pch"
+
+// Define symbols needed to compile the headers from the UtlLib.
+// [The minimum set from AAFUtilLibPrecomp.pch]
+
+#define IN
+
+#define OUT
+
+
+
+#ifndef HKEY
+
+#define HKEY unsigned long
+
+#endif
+
+
+
+#define FACILITY_WIN32                   7
+
+#define HRESULT_FROM_WIN32(x)   (x ? ((HRESULT) (((x) & 0x0000FFFF) | (FACILITY_WIN32 << 16) | 0x80000000)) : 0 )
+
+
+typedef char            TCHAR;
+
+#define _TCHAR_DEFINED
