@@ -115,6 +115,12 @@ AAFRESULT STDMETHODCALLTYPE
 	return AAFRESULT_SUCCESS;
 }
 
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFFileDescriptor::GetOwningMobKind (aafMobKind_t *pMobKind)
+{
+	*pMobKind = kFileMob;
+	return(AAFRESULT_SUCCESS);
+}
 
 
 extern "C" const aafClassID_t CLSID_AAFFileDescriptor;
