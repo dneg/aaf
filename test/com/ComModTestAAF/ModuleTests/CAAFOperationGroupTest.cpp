@@ -163,10 +163,28 @@ static HRESULT verifyParams(IAAFOperationGroup * const pOperationGroup )
 	IAAFDefObjectSP spDefObject;
 
 
+  // Attempt to load the parameters into an array.
 	aafUInt32 num_fetched = 0;
+  aafUInt32 num_released = 0;
 	//make sure 2 parameters can be fetched
-	checkResult(spEnumParams->Next(2, &spParameter, &num_fetched));
+  IAAFParameter * parameterArray[2] = {0};
+	checkResult(spEnumParams->Next(2, parameterArray, &num_fetched));
+  if (parameterArray[0])
+  {
+    parameterArray[0]->Release();
+    parameterArray[0] = NULL;
+    ++num_released;
+  }
+  if (parameterArray[1])
+  {
+    parameterArray[1]->Release();
+    parameterArray[1] = NULL;
+    ++num_released;
+  }
+
 	checkExpression(num_fetched == 2, AAFRESULT_TEST_FAILED);
+	checkExpression(num_released == 2, AAFRESULT_TEST_FAILED);
+
 	//so far, so good.  Reset
 	spEnumParams->Reset();
 
@@ -299,6 +317,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 			checkResult(pOperationGroup->Initialize(defs.ddPicture(),
 				TEST_EFFECT_LEN,
 				pOperationDef));
+
+      pComponent->Release();
+      pComponent = NULL;
 			
 			checkResult(defs.cdConstantValue()->
 				CreateInstance(IID_IAAFConstantValue, 
@@ -326,6 +347,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 			checkResult(pOperationGroup->AddParameter (pParm));			
 			pConstValue->Release ();
 			pConstValue = NULL;
+			pParm->Release();
+			pParm = NULL;
 
 
 			// filler ....
@@ -343,6 +366,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 			checkResult(pOperationGroup->AppendInputSegment (pFiller));
 			pFiller->Release();
 			pFiller = NULL;
+      pComponent->Release();
+      pComponent = NULL;
+
 			checkResult(pOperationGroup->CountSourceSegments (&numSegments));
 			checkExpression(2 == numSegments, AAFRESULT_TEST_FAILED);
 			checkResult(pOperationGroup->RemoveInputSegmentAt (1));
@@ -375,10 +401,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 			
 			pOperationGroup->Release();
 			pOperationGroup = NULL;
-			pParm->Release();
-			pParm = NULL;
-			pComponent->Release();
-			pComponent = NULL;
 			pSourceRef->Release();
 			pSourceRef = NULL;
 			pSourceClip->Release();
@@ -634,6 +656,7 @@ extern "C" HRESULT CAAFOperationGroup_test()
 	catch (...)
 	{
 		cerr << "CAAFOperationGroup_test...Caught general C++ exception!" << endl; 
+    hr = AAFRESULT_UNEXPECTED_EXCEPTION;
 	}
 	
 	return hr;
