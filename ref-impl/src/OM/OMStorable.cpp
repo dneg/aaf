@@ -186,6 +186,20 @@ void OMStorable::setStore(OMStoredObject* store)
   _store = store;
 }
 
+bool OMStorable::attached(void)
+{
+  TRACE("OMStorable::attached");
+
+  bool result;
+  OMStorable* container = containingObject();
+  if (container != 0) {
+    result = container->attached();
+  } else {
+    result = false;
+  }
+  return result;
+}
+
 char* OMStorable::makePathName(void)
 {
   TRACE("OMStorable::makePathName");
