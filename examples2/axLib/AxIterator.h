@@ -29,8 +29,6 @@
 #include <vector>
 #include <memory>
 
-using namespace std;
-
 // This template will work for all IAAFEnum* enumerators
 // that have the following methods:
 // NextOne(), Next(int), Reset(), Skip(), Clone()
@@ -49,13 +47,13 @@ public:
 
 	bool NextOne( Type& );
 
-	auto_ptr< vector< Type > > Next( aafUInt32 count );
+	std::auto_ptr< std::vector< Type > > Next( aafUInt32 count );
 
 	void Reset();
 
 	void Skip( aafUInt32 count );
 
-	auto_ptr< AxIterator<Type, EnumeratorType> > Clone();	
+	std::auto_ptr< AxIterator<Type, EnumeratorType> > Clone();	
 
 private:
 
@@ -85,7 +83,7 @@ typedef AxIterator< IAAFSmartPointer<IAAFLocator>,       IEnumAAFLocators >     
 
 class AxRecordIterator {
 public:
-	typedef pair<AxString, IAAFPropertyValueSP> Pair;
+	typedef std::pair<AxString, IAAFPropertyValueSP> Pair;
 	
 	AxRecordIterator( IAAFPropertyValueSP& spPropVal,
 					  IAAFTypeDefRecordSP& spTypeDef );
@@ -95,7 +93,7 @@ public:
 
 	void Reset();
 
-	auto_ptr<AxRecordIterator> Clone();
+	std::auto_ptr<AxRecordIterator> Clone();
 
 private:
 	AxRecordIterator();
@@ -133,7 +131,7 @@ public:
 
 	void Reset();
 
-	auto_ptr< AxArrayIterator<TypeDef> > Clone();
+	std::auto_ptr< AxArrayIterator<TypeDef> > Clone();
 	
 private:
 

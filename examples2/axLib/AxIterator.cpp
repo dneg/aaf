@@ -97,13 +97,13 @@ bool AxIterator<Type, EnumeratorType>::NextOne( Type& ret )
 }
 
 template <class Type, class EnumeratorType>
-auto_ptr< vector< Type > > 
+std::auto_ptr< std::vector< Type > > 
 AxIterator<Type, EnumeratorType>::Next( aafUInt32 count )
 {
 	aafUInt32 i;
 
-	auto_ptr< vector< Type > >
-		typeV( new vector< Type > );
+	std::auto_ptr< std::vector< Type > >
+		typeV( new std::vector< Type > );
 
 	for( i = 0; i < count; i++ ) {
 		Type tmp;
@@ -119,9 +119,9 @@ AxIterator<Type, EnumeratorType>::Next( aafUInt32 count )
 }
 
 template <class Type, class EnumeratorType>
-auto_ptr< AxIterator<Type, EnumeratorType> > AxIterator<Type, EnumeratorType>::Clone()
+std::auto_ptr< AxIterator<Type, EnumeratorType> > AxIterator<Type, EnumeratorType>::Clone()
 {
-	auto_ptr< AxIterator<Type, EnumeratorType> >
+	std::auto_ptr< AxIterator<Type, EnumeratorType> >
 		pAxIterator( new AxIterator<Type, EnumeratorType>( _spEnumerator ) ) ;
 
 	return pAxIterator;
@@ -140,7 +140,7 @@ AxRecordIterator::AxRecordIterator( IAAFPropertyValueSP& spPropVal,
 AxRecordIterator::~AxRecordIterator()
 {}
 
-bool AxRecordIterator::NextOne( pair<AxString, IAAFPropertyValueSP>& ret )
+bool AxRecordIterator::NextOne( std::pair<AxString, IAAFPropertyValueSP>& ret )
 {
 	if ( _current == _count ) {
 		return false;
@@ -161,9 +161,9 @@ void AxRecordIterator::Reset()
 	_current = 0;
 }
 
-auto_ptr<AxRecordIterator> AxRecordIterator::Clone()
+std::auto_ptr<AxRecordIterator> AxRecordIterator::Clone()
 {
-	auto_ptr<AxRecordIterator> clone(
+	std::auto_ptr<AxRecordIterator> clone(
 		new AxRecordIterator( _spPropVal, _spTypeDef ) );
 
 	clone->_current = _current;
@@ -220,9 +220,9 @@ void AxArrayIterator<TypeDef>::Reset()
 }
 
 template <class TypeDef>
-auto_ptr<AxArrayIterator<TypeDef> > AxArrayIterator<TypeDef>::Clone()
+std::auto_ptr<AxArrayIterator<TypeDef> > AxArrayIterator<TypeDef>::Clone()
 {
-	auto_ptr<AxArrayIterator> iter(
+	std::auto_ptr<AxArrayIterator> iter(
 		new AxArrayIterator<TypeDef>( _spTypeDef, _spPropVal ) );
 
 	iter->_current = _current;
