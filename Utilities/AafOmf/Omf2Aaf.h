@@ -81,8 +81,8 @@ public:
 										char* defName, char* defDescription, aafUInt32 bypassOverride, aafBool isTimeWarp,
 										aafInt32 numberInputs, aafUID_t defDataDef, IAAFOperationDef** ppEffectDef);
 	void GetParameterDefinition(aafUID_t* pDefUID, IAAFTypeDef* pTypeDef,	aafWChar* pwName, aafWChar* pwDesc, aafWChar* pwDisplayUnits, IAAFParameterDef** ppParameterDef);
-	void	ConvertOMFConstValue(OMF2::omfSegObj_t segment, IAAFConstantValue* pConstValue);
-	void	ConvertOMFVaryingValue(OMF2::omfSegObj_t segment, IAAFVaryingValue* pVaryingValue);
+	void	ConvertOMFConstValue(OMF2::omfSegObj_t segment, IAAFParameterDef* pParameterDef, IAAFConstantValue* pConstValue);
+	void	ConvertOMFVaryingValue(OMF2::omfSegObj_t segment, IAAFParameterDef* pParameterDef, IAAFVaryingValue* pVaryingValue);
 	void	ConvertOMFNestedScope(OMF2::omfSegObj_t segment, IAAFNestedScope* pNestedScope);
 	void	ConvertOMFScopeRef(OMF2::omfSegObj_t segment, IAAFScopeReference* pScopeRef);
 	virtual void ConvertObjectProps(OMF2::omfObject_t pOMFObject, aafUID_t &classID, IAAFObject* pObj);

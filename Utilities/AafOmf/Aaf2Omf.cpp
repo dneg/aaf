@@ -68,7 +68,8 @@ extern AafOmfGlobals* gpGlobals;
 // ============================================================================
 // Constructor
 // ============================================================================
-Aaf2Omf::Aaf2Omf() : pFile(NULL), pHeader(NULL), pDictionary(NULL)
+Aaf2Omf::Aaf2Omf() : pFile(NULL), pHeader(NULL), pDictionary(NULL),
+pAAF(NULL), pOMF(NULL), pEffectTranslate(NULL)
 {
 	pAAF = new AAFDomainExtensionUtils;
 	pOMF = new OMFDomainExtensionUtils;
@@ -83,6 +84,13 @@ Aaf2Omf::Aaf2Omf() : pFile(NULL), pHeader(NULL), pDictionary(NULL)
 // ============================================================================
 Aaf2Omf::~Aaf2Omf()
 {
+  if (pEffectTranslate)
+    delete pEffectTranslate;
+  if (pOMF)
+    delete pOMF;
+  if (pAAF)
+    delete pAAF;
+
 	if (pHeader)
 		pHeader->Release();
 	if (pDictionary)

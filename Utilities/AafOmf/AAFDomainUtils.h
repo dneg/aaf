@@ -45,8 +45,8 @@ public:
 	IAAFInterpolationDef *CreateInterpolationDefinition(IAAFDictionary *dict, aafUID_t interpolationDefID);
 
 	virtual IAAFTypeDef *CreateTypeDefinition(IAAFDictionary *pDict, aafUID_t typeDefID);
-	IAAFVaryingValue *AAFAddEmptyVaryingVal(IAAFDictionary *dict, IAAFOperationGroup *pOutputEffect);
-	IAAFParameter *AAFAddConstantVal(IAAFDictionary *dict, long buflen, void *buf, IAAFOperationGroup *pGroup);
+	IAAFVaryingValue *AAFAddEmptyVaryingVal(IAAFDictionary *dict, IAAFParameterDef *pParameterDef, IAAFOperationGroup *pOutputEffect);
+	IAAFParameter *AAFAddConstantVal(IAAFDictionary *dict, IAAFParameterDef *pParameterDef, long buflen, void *buf, IAAFOperationGroup *pGroup);
 	void AAFAddOnePoint(IAAFDictionary *dict, aafRational_t percentTime, long buflen, void *buf, IAAFTypeDef *typeDef, IAAFVaryingValue *pVVal);
 	virtual IAAFParameterDef *CreateParameterDefinition(IAAFDictionary *dict, aafUID_t parmDefID);
 	HRESULT SetIntegerPropOnObject(IAAFObject* pObj, aafUID_t* pClassID, aafUID_t* pPropID, const aafUID_t* pIntTypeID,
