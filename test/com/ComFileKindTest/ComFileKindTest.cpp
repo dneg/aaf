@@ -260,7 +260,6 @@ static HRESULT ReadAAFContents(IAAFFile *pFile)
 
 static HRESULT OpenAAFFile(const aafUID_t *written_kind, aafWChar * pFileName)
 {
-	IAAFRawStorage* pRawStorage = 0;
 	IAAFFile* pFile = NULL;
 	HRESULT hr = S_OK;
 
@@ -371,6 +370,7 @@ static void SetFilename(aafWChar *filename, const char *api, const char *kind, b
 		mbstowcs(tmp, kind, strlen(kind)+1);
 		wcscat(filename, tmp);
 	}
+
 	if (largename)
 	{
 		// POSIX defines NAME_MAX for max bytes in a filename (excluding null term.)
@@ -384,22 +384,23 @@ static void SetFilename(aafWChar *filename, const char *api, const char *kind, b
 		_wfullpath(full, filename, FILENAME_MAX);
 		// Calculate filepath space remaining in current path
 		// leaving space for terminating null.
-		size_t padlen = FILENAME_MAX - wcslen(full) - 1;
+		size_t unused_chars = FILENAME_MAX - wcslen(full) - 1;
 #else
 
 #ifdef NAME_MAX
-		size_t padlen = NAME_MAX - wcslen(filename);
+		size_t unused_chars = NAME_MAX - wcslen(filename);
 #else
 		// Get the runtime value for NAME_MAX on the current filesystem
-		size_t padlen = pathconf(".", _PC_NAME_MAX) - wcslen(filename);
+		size_t unused_chars = pathconf(".", _PC_NAME_MAX) - wcslen(filename);
 #endif
 
 #endif
-		// Preserve space for ".aaf" (4 chars)
-		for (int i = 0; i < padlen - 4; i++)
-		{
+		size_t padlen = unused_chars;
+		if (padlen >= 4)	// Preserve space for ".aaf" (4 chars)
+			padlen -= 4;
+
+		for (size_t i = 0; i < padlen; i++)
 			wcscat(filename, L"X");
-		}
 	}
 	wcscat(filename, L".aaf");
 }
@@ -529,8 +530,6 @@ int main(void)
 
 	try
 	{
-		IAAFFile* pFile = 0;
-
 		printf("Legend:  ER - FileOpenExistingRead      ok - success\n");
 		printf("         EM - FileOpenExistingModify    ic - incompatible FileKinds\n");
 		printf("         RS - RawStorage                 x - FileKind not registered\n");
