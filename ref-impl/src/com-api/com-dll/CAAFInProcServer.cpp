@@ -39,7 +39,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#if ! defined (__sgi) && ! defined (__FreeBSD__)
 #include <olectl.h> // need ole control header for SELFREG_E_CLASS definition
+#endif
 
 #if defined(_WIN32) || defined(WIN32)
 # undef __TCHAR_DEFINED // why is this necessary!
@@ -52,15 +54,7 @@
 
 #include "AAFResult.h"
 
-
-// private key data for object info array. NOTE: This data is declared global to cause the
-// least amount of impact to other AAF source code. This is safe since there is only
-// a single CAAFInprocServer per dll.
-static AAFComObjectInfo_t **g_ppObjectInfoKey = NULL;
-static size_t g_objectCount = 0;
-
 static const char * g_EmptyString = "";
-
 
 // Implemented for each platform to get platform specific path information.
 static HRESULT AAFGetLibraryInfo(HINSTANCE hInstance, char **pServerPath, char **pServerDirectory);
@@ -104,29 +98,33 @@ static int CompareObjectInfo(const AAFComObjectInfo_t **elem1,
 
 CAAFInProcServer::CAAFInProcServer() :
   CAAFServer(),
-  _pObjectInfo(NULL),
-  _hInstance(NULL)
+  _pObjectInfo(0),
+  _hInstance(0),
+  _serverPath(0),
+  _serverDirectory(0),
+  _ppObjectInfoKey(0),
+  _objectCount(0)
 {
 }
 
 CAAFInProcServer::~CAAFInProcServer()
 {
-  if (NULL != g_ppObjectInfoKey)
+  if (_ppObjectInfoKey)
   {
-    delete [] g_ppObjectInfoKey;
-    g_ppObjectInfoKey = NULL;
+    delete [] _ppObjectInfoKey;
+    _ppObjectInfoKey = 0;
   }
 
 	if (_serverPath && _serverPath !=  g_EmptyString)
 	{
 		delete [] _serverPath;
-		_serverPath = NULL;
+		_serverPath = 0;
 	}
 
 	if (_serverDirectory && _serverDirectory !=  g_EmptyString)
 	{
 		delete [] _serverDirectory;
-		_serverDirectory = NULL;
+		_serverDirectory = 0;
 	}
 }
 
@@ -156,20 +154,22 @@ HRESULT CAAFInProcServer::Init
   size_t i = 0;
   while (pObjectInfo[i].pCLSID)
     ++i;
-  g_objectCount = i;
+  _objectCount = i;
+  printf("this = %p, &_objectCount = %p, _objectCount = %d\n",
+	this,&_objectCount,(int)_objectCount);
 
 
   // Allocate the key table to the object info table.
-  g_ppObjectInfoKey = new AAFComObjectInfo_t* [g_objectCount];
-  if (NULL == g_ppObjectInfoKey)
+  _ppObjectInfoKey = new AAFComObjectInfo_t* [_objectCount];
+  if (!_ppObjectInfoKey)
     return E_OUTOFMEMORY;
 
   // Initialize the table of pointers.
-  for (i = 0; g_objectCount > i; ++i)
-    g_ppObjectInfoKey[i] = &_pObjectInfo[i];
+  for (i = 0; _objectCount > i; ++i)
+    _ppObjectInfoKey[i] = &_pObjectInfo[i];
 
   // Sort the key for the table.
-  qsort(g_ppObjectInfoKey, g_objectCount , sizeof(AAFComObjectInfo_t *),
+  qsort(_ppObjectInfoKey, _objectCount , sizeof(AAFComObjectInfo_t *),
         (int (*)(const void*, const void*))CompareObjectInfo); 
  
   return S_OK;
@@ -189,26 +189,26 @@ HRESULT CAAFInProcServer::GetClassObject
   void ** ppv )
 {
   HRESULT hr = CLASS_E_CLASSNOTAVAILABLE;
-  if (NULL == ppv)
+  if (!ppv)
     return E_INVALIDARG;
-  *ppv = NULL;
+  *ppv = 0;
 
   // Search the object table for the given class id.
   // Lookup the class id in the com object table.
-  AAFComObjectInfo_t **ppResult = NULL;
-  AAFComObjectInfo_t key = {&rclsid, OLESTR("KEY"), NULL, false};
+  AAFComObjectInfo_t **ppResult = 0;
+  AAFComObjectInfo_t key = {&rclsid, OLESTR("KEY"), 0, false};
   AAFComObjectInfo_t *pKey = &key;
   
   // Use standard library's binary search routine.
-  ppResult = (AAFComObjectInfo_t **)bsearch(&pKey, g_ppObjectInfoKey, g_objectCount,
+  ppResult = (AAFComObjectInfo_t **)bsearch(&pKey, _ppObjectInfoKey, _objectCount,
                sizeof(AAFComObjectInfo_t *),
                (int (*)(const void*, const void*))CompareObjectInfo);
-  if (NULL == ppResult)
+  if (!ppResult)
     return hr;
 
   // We found the requested class id so attempt to create a class factory.
   CAAFClassFactory *pAAFClassFactory = new CAAFClassFactory((**ppResult).pfnCreate);
-  if (NULL == pAAFClassFactory)
+  if (!pAAFClassFactory)
     return E_OUTOFMEMORY;
 
   // We now have a local reference.
@@ -265,60 +265,60 @@ const AAFRegEntry g_AAFRegEntry[][3] =
 {
   {  // [0]
     { AAF_REG_SUB_CLSID, OLESTR("CLSID\\%s") }, 
-    { AAF_REG_SUB_SKIP, NULL }, 
+    { AAF_REG_SUB_SKIP, 0 }, 
     { AAF_REG_SUB_CLASSNAME, OLESTR("%s Class") }
   },
 #if defined(_MAC) 
   {  // [1]
     { AAF_REG_SUB_CLSID, OLESTR("CLSID\\%s\\InprocServer") },
-    { AAF_REG_SUB_SKIP, NULL },
+    { AAF_REG_SUB_SKIP, 0 },
     { AAF_REG_SUB_MODULE, OLESTR("ALS2:%s") }
   },
 #else
   {  // [1]
     { AAF_REG_SUB_CLSID, OLESTR("CLSID\\%s\\InprocServer32") },
-    { AAF_REG_SUB_SKIP, NULL }, 
+    { AAF_REG_SUB_SKIP, 0 }, 
     { AAF_REG_SUB_MODULE, OLESTR("%s") }
   },
 #endif 
   {  // [2] 
     { AAF_REG_SUB_CLSID, OLESTR("CLSID\\%s\\NotInsertable") }, 
-    { AAF_REG_SUB_SKIP, NULL }, 
-    { AAF_REG_SUB_SKIP, NULL }
+    { AAF_REG_SUB_SKIP, 0 }, 
+    { AAF_REG_SUB_SKIP, 0 }
   },
   {  // [3]
     { AAF_REG_SUB_CLSID, OLESTR("CLSID\\%s\\ProgID") }, 
-    { AAF_REG_SUB_SKIP, NULL }, 
+    { AAF_REG_SUB_SKIP, 0 }, 
     { AAF_REG_SUB_CLASSNAME, OLESTR("AAF.%s.1") }
   },
   {  // [4] 
     { AAF_REG_SUB_CLSID, OLESTR("CLSID\\%s\\VersionIndependentProgID") }, 
-    { AAF_REG_SUB_SKIP, NULL }, 
+    { AAF_REG_SUB_SKIP, 0 }, 
     { AAF_REG_SUB_CLASSNAME, OLESTR("AAF.%s") }  
   },
   {  // [5]  
     { AAF_REG_SUB_CLASSNAME, OLESTR("AAF.%s") }, 
-    { AAF_REG_SUB_SKIP, NULL }, 
+    { AAF_REG_SUB_SKIP, 0 }, 
     { AAF_REG_SUB_CLASSNAME, OLESTR("%s Class") }    
   },
   {  // [6]
     { AAF_REG_SUB_CLASSNAME, OLESTR("AAF.%s\\CLSID") }, 
-    { AAF_REG_SUB_SKIP, NULL }, 
+    { AAF_REG_SUB_SKIP, 0 }, 
     { AAF_REG_SUB_CLSID, OLESTR("%s") } 
   },
   {  // [7]
     { AAF_REG_SUB_CLASSNAME, OLESTR("AAF.%s\\CurVer") }, 
-    { AAF_REG_SUB_SKIP, NULL }, 
+    { AAF_REG_SUB_SKIP, 0 }, 
     { AAF_REG_SUB_CLASSNAME, OLESTR("AAF.%s.1") } 
   },
   {  // [8]
     { AAF_REG_SUB_CLASSNAME, OLESTR("AAF.%s.1") }, 
-    { AAF_REG_SUB_SKIP, NULL }, 
+    { AAF_REG_SUB_SKIP, 0 }, 
     { AAF_REG_SUB_CLASSNAME, OLESTR("%s Class") } 
   },
   {  // [9] 
     { AAF_REG_SUB_CLASSNAME, OLESTR("AAF.%s.1\\CLSID") }, 
-    { AAF_REG_SUB_SKIP, NULL }, 
+    { AAF_REG_SUB_SKIP, 0 }, 
     { AAF_REG_SUB_CLSID, OLESTR("%s") } 
   }
 };
@@ -333,7 +333,7 @@ static int FormatRegBuffer
   LPOLESTR pFileName
 )
 {
-  LPCOLESTR pParam = NULL;
+  LPCOLESTR pParam = 0;
 
   switch (entry.flags)
   {
@@ -365,7 +365,7 @@ static int FormatRegBuffer
   } // switch (entry.flags)
   
   // Format the buffer.
-  assert(NULL != pParam);
+  assert(pParam!=0);
   return _stprintf(pBuffer, entry.pFormat, pParam);
   
 }
@@ -381,7 +381,7 @@ long CAAFInProcServer::GetRegisterIndex(long index)
 
 	if (index >= 0)
 	{
-		while ((index < (long)g_objectCount) && NULL != _pObjectInfo[index].pCLSID)
+		while ((index < (long)_objectCount) && _pObjectInfo[index].pCLSID)
 		{
 			if (_pObjectInfo[index].bRegisterClass)
 			{
@@ -403,20 +403,20 @@ HRESULT CAAFInProcServer::RegisterServer
 {
   HRESULT hr = S_OK;
 
-
+#ifndef __sgi
 #if defined(_MAC)
   // In the MAC version we store the fragment block pointer in the HINSTANCE member.
   CFragInitBlockPtr initBlkPtr = static_cast<CFragInitBlockPtr>(_hInstance);
   assert(initBlkPtr);
   
   // Create the alias that we will be storing in the registry instead of the module path.
-  AliasHandle hAlias = NULL;
-  AliasPtr pAlias = NULL;
+  AliasHandle hAlias = 0;
+  AliasPtr pAlias = 0;
   unsigned long aliasLength = 0;
-  ::NewAlias (NULL, initBlkPtr->fragLocator.u.onDisk.fileSpec, &hAlias);
+  ::NewAlias (0, initBlkPtr->fragLocator.u.onDisk.fileSpec, &hAlias);
   
   // Alias could not be created: signal failure.
-  if (NULL == hAlias)
+  if (!hAlias)
     return SELFREG_E_CLASS;
   
   aliasLength = GetHandleSize((Handle)hAlias);
@@ -558,6 +558,7 @@ HRESULT CAAFInProcServer::RegisterServer
     DisposeHandle((Handle)hAlias);
   }
 #endif
+#endif // #ifndef __sgi
   return hr;
 }
 
@@ -566,6 +567,7 @@ HRESULT CAAFInProcServer::UnregisterServer
   void
 )
 {
+#ifndef __sgi
   HRESULT hr = S_OK;
 
   // Buffer for string version of each object's class id.
@@ -582,7 +584,7 @@ HRESULT CAAFInProcServer::UnregisterServer
   // Use g_AAFRegEntry data to register each object in the object info table.
   // Search the object table for the given class id.
   long int objectIndex = 0;
-  while (NULL != _pObjectInfo[objectIndex].pCLSID)
+  while (_pObjectInfo[objectIndex].pCLSID)
   {
     // Convert the object's class id into a string suitable for the 
     // registry.
@@ -604,7 +606,7 @@ HRESULT CAAFInProcServer::UnregisterServer
           g_AAFRegEntry[keyIndex][0],
           pCLSIDbuffer,
           _pObjectInfo[objectIndex].pClassName,
-          NULL);
+          0);
 
       // Delete the Key
       long err = RegDeleteKey(HKEY_CLASSES_ROOT, pKeyName);
@@ -615,7 +617,7 @@ HRESULT CAAFInProcServer::UnregisterServer
     // Next object in the table...
     ++objectIndex;
   }
-
+#endif // #ifndef __sgi
   return S_OK;
 }
 
@@ -624,21 +626,21 @@ HRESULT CAAFInProcServer::UnregisterServer
 ULONG CAAFInProcServer::GetClassCount( )
 {	
 	// Just return our global count computed by the Init() method.
-	return g_objectCount;
+	return _objectCount;
 }
 
 // Get the nth implementation coclass id.
 HRESULT CAAFInProcServer::GetClassObjectID(ULONG index, CLSID *pClassID)
 {
 	// Validate pre-conditions and parameters.
-  if (NULL == g_ppObjectInfoKey || 0 == GetClassCount())
+  if (!_ppObjectInfoKey || 0 == GetClassCount())
 		return CLASS_E_CLASSNOTAVAILABLE;
-	if (index >= GetClassCount() || NULL == pClassID)
+	if (index >= GetClassCount() || !pClassID)
 		return E_INVALIDARG;
 
 	// Lookup the corresponding object info pointer from our table.
-	AAFComObjectInfo_t *pInfo = g_ppObjectInfoKey[index];
-	assert(NULL != pInfo);
+	AAFComObjectInfo_t *pInfo = _ppObjectInfoKey[index];
+	assert(pInfo!=0);
 	memcpy(pClassID, pInfo->pCLSID, sizeof(CLSID));
 	
 	return S_OK;
@@ -666,10 +668,10 @@ HRESULT AAFGetLibraryInfo(HINSTANCE hInstance, char **pServerPath, char **pServe
 	HRESULT rc = S_OK;
 	char path[MAX_PATH];
 	int pathLen = 0;
-	char *pDirSeparator = NULL;
+	char *pDirSeparator = 0;
 
 
-	if (NULL == hInstance || NULL == pServerPath || NULL == pServerDirectory)
+	if (!hInstance || !pServerPath || !pServerDirectory)
 		return E_INVALIDARG;
 
 	pathLen = ::GetModuleFileNameA((HMODULE)hInstance, path, MAX_PATH);
@@ -680,7 +682,7 @@ HRESULT AAFGetLibraryInfo(HINSTANCE hInstance, char **pServerPath, char **pServe
 	else
 	{
 		*pServerPath = new char[pathLen + 1];
-		if (NULL == *pServerPath)
+		if (!(*pServerPath))
 			return E_OUTOFMEMORY;
 		strcpy(*pServerPath, path);
 
@@ -692,10 +694,10 @@ HRESULT AAFGetLibraryInfo(HINSTANCE hInstance, char **pServerPath, char **pServe
 		pathLen = strlen(path);
 
 		*pServerDirectory = new char[pathLen + 1];
-		if (NULL == *pServerDirectory)
+		if (!(*pServerDirectory))
 		{
 			delete [] *pServerPath;
-			*pServerPath = NULL;
+			*pServerPath = 0;
 			return E_OUTOFMEMORY;
 		}
 		strcpy(*pServerDirectory, path);
@@ -710,13 +712,13 @@ HRESULT AAFGetLibraryInfo(HINSTANCE hInstance, char **pServerPath, char **pServe
 {
 	HRESULT rc = S_OK;
 	char saveChar;
-	char *pDirSeparator = NULL;
+	char *pDirSeparator = 0;
 	int pathLen = 0;
 	
-	if (NULL == pServerPath || NULL == pServerDirectory)
+	if (!pServerPath || !pServerDirectory)
 	  return AAFRESULT_NULL_PARAM;
 	
-	*pServerPath = *pServerDirectory = NULL;
+	*pServerPath = *pServerDirectory = 0;
 	
 	// In the MAC version we store the fragment block pointer in the HINSTANCE member.
 	CFragInitBlockPtr initBlkPtr = static_cast<CFragInitBlockPtr>(hInstance);
@@ -729,13 +731,13 @@ HRESULT AAFGetLibraryInfo(HINSTANCE hInstance, char **pServerPath, char **pServe
 	do
 	{
 		*pServerPath = new char[pathBufferSize];
-		if (NULL == *pServerPath)
+		if (!(*pServerPath))
 			return E_OUTOFMEMORY;
 		rc = AAFFSSpecToPath(initBlkPtr->fragLocator.u.onDisk.fileSpec, *pServerPath, pathBufferSize);
 		if (S_OK != rc)
 		{
 			delete [] *pServerPath;
-			*pServerPath = NULL;
+			*pServerPath = 0;
 		}
 		pathBufferSize += sizeof(StrFileName);
 	} while (AAFRESULT_SMALLBUF == rc);
@@ -751,10 +753,10 @@ HRESULT AAFGetLibraryInfo(HINSTANCE hInstance, char **pServerPath, char **pServe
 		pathLen = strlen(*pServerPath);
 		
 		*pServerDirectory = new char[pathLen + 1];
-		if (NULL == *pServerDirectory)
+		if (!(*pServerDirectory))
 		{
 			delete [] *pServerPath;
-			*pServerPath = NULL;
+			*pServerPath = 0;
 			return E_OUTOFMEMORY;
 		}
 		strcpy(*pServerDirectory, *pServerPath);
@@ -764,7 +766,38 @@ HRESULT AAFGetLibraryInfo(HINSTANCE hInstance, char **pServerPath, char **pServe
 	return rc;
 }
 
-#else // Unix/SGI?
+#elif defined( __sgi )
+
+HRESULT AAFGetLibraryInfo(
+   HINSTANCE hInstance,
+   char **pServerPath,
+   char **pServerDirectory)
+{
+   HRESULT rc = S_OK;
+
+   // Library directory is not used under SGI
+   char pLibDirectory[] = "";
+
+   // Under SGI, we make the HINSTANCE pointer simply contain the name of
+   // the library.
+   if(!hInstance)
+   {
+	char pLibName[]="libcom-api.so";
+        *pServerPath = new char[strlen(pLibName)+1];
+   	strcpy( *pServerPath, pLibName );
+   }
+   else
+   {
+	*pServerPath = new char[strlen((char*)hInstance)];
+	strcpy( *pServerPath, (char*)hInstance);
+   }
+
+   *pServerDirectory = new char[strlen(pLibDirectory) + 1];
+   strcpy( *pServerDirectory, pLibDirectory );
+   return rc;
+}
+
+#else // other Unix?
 
 HRESULT AAFGetLibraryInfo(HINSTANCE hInstance, char **pServerPath, char **pServerDirectory)
 {
