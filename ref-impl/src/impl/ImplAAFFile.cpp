@@ -23,9 +23,11 @@
 #include "AAFUtils.h"
 #include "aafErr.h"
 //#include "aafDefs.h"
+#include "ImplAAFObjectCreation.h"
 
 #include <assert.h>
 
+extern "C" const aafClassID_t CLSID_AAFHeader;
 
 ImplAAFFile::ImplAAFFile ()
 : _fmt(kAAFiMedia)
@@ -162,6 +164,15 @@ ImplAAFFile::~ImplAAFFile ()
 		return(AAFRESULT_SUCCESS);
   }
 
+  AAFRESULT STDMETHODCALLTYPE
+  ImplAAFFile::GetHeader (
+    ImplAAFHeader ** header
+  )
+  {
+    *header = _head;
+    return(AAFRESULT_SUCCESS);
+  }
+
 /************************
  * Function: InternOpenFile	(INTERNAL)
  *
@@ -190,7 +201,6 @@ AAFRESULT ImplAAFFile::InternOpenFile(aafDataBuffer_t stream,
 								   openType_t type)
 {
 	OMLRefCon        	myRefCon = NULL;
-	ImplAAFHeader		*head;
 	aafErr_t      		status, finalStatus = OM_ERR_NONE;
 	aafInt32			errnum;
 
@@ -233,7 +243,7 @@ AAFRESULT ImplAAFFile::InternOpenFile(aafDataBuffer_t stream,
 #endif
 		_container = new OMContainer;
 		_container->OMLOpenContainer(session->GetContainerSession(), myRefCon, "AAF", 
-									useMode);
+									useMode, _head);
 		if (_container == NULL)
 		{
 #if FULL_TOOLKIT
@@ -256,13 +266,6 @@ AAFRESULT ImplAAFFile::InternOpenFile(aafDataBuffer_t stream,
 #endif
 		}
 		
-		/* This is a little bit of a catch-22, since we're setting
-		 * the rev "before" we can verify that the HEAD object is a head
-		 * object.   But, we need head object to get the rev! */
-		head = new ImplAAFHeader();
-//!!!		this, (OMLObject)_container->cmFindObject(1));
-//!!!		head->Load(this);
-		_head = head;
 		/* We now use datakinds in the whole API, not just 2.x
 		 */
 #if FULL_TOOLKIT
@@ -286,7 +289,6 @@ AAFRESULT ImplAAFFile::InternOpenFile(aafDataBuffer_t stream,
 		/* Reset to previous state before returning with error */
 		if (session && this)
 		{
-			delete head;
 
 #ifdef AAF_ERROR_TRACE
 		  if(_stackTrace != NULL)
