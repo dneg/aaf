@@ -66,13 +66,6 @@ public:
 
 
   //****************
-  // Revert()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    Revert ();
-
-
-  //****************
   // SaveAsFile()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
