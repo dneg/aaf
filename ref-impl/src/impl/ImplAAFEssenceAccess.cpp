@@ -48,14 +48,14 @@
 #endif
 
 #include "ImplAAFPluginManager.h"
-#include "aafUtils.h"
+#include "AAFUtils.h"
 #include "aafCvt.h"
-#include "aafUtils.h"
+#include "AAFUtils.h"
 #include "ImplAAFHeader.h"
 #include "ImplAAFSourceMob.h"
 #include "ImplAAFSourceMob.h"
 #include "ImplAAFFileDescriptor.h"
-#include "aafdefuids.h"
+#include "AAFDefUIDs.h"
 #include "ImplAAFObjectCreation.h"
 #include "ImplAAFContext.h"
 #include "ImplAAFWAVEDescriptor.h"	//!!!

@@ -9,16 +9,6 @@
 *                                          *
 \******************************************/
 
-
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
-
 #ifndef __CAAFTapeDescriptor_h__
 #include "CAAFTapeDescriptor.h"
 #endif
@@ -36,7 +26,7 @@ static aafLength_t TapeLength = 3200 ;
 
 static HRESULT CreateAAFFile(aafWChar * pFileName)
 {
-	IAAFSession *				pSession = NULL;
+	// IAAFSession *				pSession = NULL;
 	IAAFFile *					pFile = NULL;
 	IAAFHeader *				pHeader = NULL;
 
@@ -61,18 +51,26 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	ProductInfo.productID = -1;
 	ProductInfo.platform = NULL;
 
+	/*
 	hr = CoCreateInstance(CLSID_AAFSession,
 						   NULL, 
 						   CLSCTX_INPROC_SERVER, 
 						   IID_IAAFSession, 
 						   (void **)&pSession);
+	*/
+	hr = CoCreateInstance(CLSID_AAFFile,
+						   NULL, 
+						   CLSCTX_INPROC_SERVER, 
+						   IID_IAAFFile, 
+						   (void **)&pFile);
 
 	if (AAFRESULT_SUCCESS == hr)
 	{
-		hr = pSession->SetDefaultIdentification(&ProductInfo);
+		hr = pFile->Initialize();
 		if (AAFRESULT_SUCCESS == hr)
 		{
-			hr = pSession->CreateFile(pFileName, kAAFRev1, &pFile);
+			// hr = pSession->CreateFile(pFileName, kAAFRev1, &pFile);
+			hr = pFile->OpenNewModify(pFileName, 0, &ProductInfo);
 			if (AAFRESULT_SUCCESS == hr)
 			{
 				hr = pFile->GetHeader(&pHeader);
@@ -145,11 +143,13 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		pFile->Release();
 	}
 
+	/*
 	if (pSession)
 	{
 		pSession->EndSession();
 		pSession->Release();
 	}
+	*/
 
 	if (pHeader)
 		pHeader->Release();
@@ -171,7 +171,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 static HRESULT ReadAAFFile(aafWChar * pFileName)
 {
-	IAAFSession *				pSession = NULL;
+	// IAAFSession *				pSession = NULL;
 	IAAFFile *					pFile = NULL;
 	IAAFHeader *				pHeader = NULL;
 
@@ -205,18 +205,26 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	ProductInfo.productID = -1;
 	ProductInfo.platform = NULL;
 
+	/*
 	hr = CoCreateInstance(CLSID_AAFSession,
 						   NULL, 
 						   CLSCTX_INPROC_SERVER, 
 						   IID_IAAFSession, 
 						   (void **)&pSession);
+	*/
+	hr = CoCreateInstance(CLSID_AAFFile,
+						   NULL, 
+						   CLSCTX_INPROC_SERVER, 
+						   IID_IAAFFile, 
+						   (void **)&pFile);
 
 	if (AAFRESULT_SUCCESS == hr)
 	{
-		hr = pSession->SetDefaultIdentification(&ProductInfo);
+	    hr = pFile->Initialize();
 		if (AAFRESULT_SUCCESS == hr)
 		{
-			hr = pSession->OpenReadFile(pFileName, &pFile);
+			// hr = pSession->OpenReadFile(pFileName, &pFile);
+			hr = pFile->OpenExistingRead(pFileName, 0);
 			if (AAFRESULT_SUCCESS == hr)
 			{
 				hr = pFile->GetHeader(&pHeader);
@@ -240,11 +248,11 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 							{
 								// if there is an Essence Descriptor then it MUST be an (essence) TapeDescriptor
 								pEssDesc->QueryInterface(IID_IAAFTapeDescriptor, (void **) &pTapeDesc);
-								pTapeDesc->GetManufacturerNameLen(&length);
+								pTapeDesc->GetTapeManBufLen(&length);
 								hr = pTapeDesc->GetTapeManufacturer(readManufacturer, length);
 								if (AAFRESULT_SUCCESS == hr)
 								{
-									pTapeDesc->GetTapeModelLen(&length);
+									pTapeDesc->GetTapeModelBufLen(&length);
 									hr = pTapeDesc->GetTapeModel(readModel, length);
 									if (AAFRESULT_SUCCESS == hr)
 									{
@@ -285,11 +293,13 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		pFile->Release();
 	}
 
+	/*
 	if (pSession)
 	{
 		pSession->EndSession();
 		pSession->Release();
 	}
+	*/
 
 	if (pHeader)
 		pHeader->Release();
