@@ -200,7 +200,7 @@ private:
   ImplPropertyCollection * _pProperties;
 
   // Didn't use shorthand here in an attempt to avoid including ClassDef header.
-  ImplAAFSmartPointer<ImplAAFClassDef> _cachedDefinition;
+  ImplAAFClassDef * _cachedDefinition;
 
   aafBool                  _OMPropsInited;
 

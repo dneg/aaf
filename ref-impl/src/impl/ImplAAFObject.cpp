@@ -233,12 +233,15 @@ AAFRESULT ImplPropertyCollection::GetNthElement
 
 ImplAAFObject::ImplAAFObject ()
   : _pProperties (0),
+	_cachedDefinition(NULL),
 	_OMPropsInited (AAFFalse)
 {}
 
 
 ImplAAFObject::~ImplAAFObject ()
 {
+	_cachedDefinition = NULL; // we don't need to reference count this defintion
+
   if (_pProperties)
 	delete _pProperties;
 }
@@ -283,6 +286,11 @@ AAFRESULT STDMETHODCALLTYPE
 	  if (AAFRESULT_FAILED (hr))
 		return hr;
 	  assert (_cachedDefinition);
+		
+		// We don't need to reference count the definitions since
+		// they are owned by the dictionary.
+		aafInt32 count = _cachedDefinition->ReleaseReference();
+		assert(0 < count);
 	}
   assert (ppClassDef);
   *ppClassDef = _cachedDefinition;
