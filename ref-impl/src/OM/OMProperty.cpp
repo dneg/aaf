@@ -46,7 +46,7 @@ OMProperty::OMProperty(const OMPropertyId propertyId,
                        const OMStoredForm storedForm,
                        const char* name)
 : _propertyId(propertyId), _storedForm(storedForm), _name(name),
-  _propertySet(0), _definition(0), _type(0),
+  _propertySet(0), _definition(0),
   // _isOptional(false),
   // BobT: make optional by default, to hack around problem where
   // props may be restored before they're initialized by DM.
@@ -74,7 +74,6 @@ void OMProperty::initialize(const OMPropertyDefinition* definition)
   ASSERT("Consistent property name", strcmp(_name, _definition->name()) == 0);
   // ASSERT("Consistent property optionality",
   //                                 _isOptional == _definition->isOptional());
-  ASSERT("Not initialized by type", _type == 0);
   _isOptional = _definition->isOptional();
 }
 
@@ -193,14 +192,11 @@ const OMType* OMProperty::type(void) const
 {
   TRACE("OMProperty::type");
 
-  // BobT: temporarily remove this precondition to allow either
-  // _definition or _type to be set (but not both).
   // PRECONDITION("Valid property definition", _definition != 0);
 
-  const OMType* result = _type;
+  const OMType* result = 0;
   if (_definition != 0) {
     result = _definition->type();
-    PRECONDITION("Both _type and _definition not set", _type == 0);
   }
   return result;
 }
