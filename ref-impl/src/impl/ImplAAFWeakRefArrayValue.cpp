@@ -31,6 +31,12 @@
 #include "ImplAAFRoot.h"
 #endif
 
+// TBD: Note the following include for ImplAAFClassDef.h really belongs
+// in ImplAAFTypeDefWeakObjRef.h!
+#ifndef __ImplAAFClassDef_h__
+#include "ImplAAFClassDef.h"
+#endif
+
 #ifndef __ImplAAFTypeDefWeakObjRef_h__
 #include "ImplAAFTypeDefWeakObjRef.h"
 #endif
