@@ -9,13 +9,13 @@ set filesToDelete ""
 
 #
 # This variable will be set to "Yes" if the "-p" option is used.
-set printProgress "No"
+set printProgress ""
 
 
 # 
 # This variable is set to "Yes" if the "-f" option is used in the
 # parameter list.
-set silentDelete "No"
+set deleteReadOnly 0
 
 set oldParameters "{parameters}"
 
@@ -26,11 +26,13 @@ set oldParameters "{parameters}"
 loop
 	if "{1}" =~ /-[A-Za-z]+/
 		if "{1}" == "-f"
-			set silentDelete "Yes"
+			set deleteReadOnly 1
 		else if "{1}" == "-i"
-			set silentDelete "No"
+			set deleteReadOnly 0
+		else if "{1}" == "-p"
+			set printProgress "{1}"
 		else if "{1}" == "-v"
-			set printProgress "Yes"
+			set printProgress "-p"
 		else
 			echo '# Parameter "'{1}'" is an unknown or unsupported option for the '{0}' command.'
 			exit
@@ -50,21 +52,10 @@ end
 
 
 for theFile in {filesToDelete}
-	if "{printProgress}" == "Yes" 
-		echo -n '# Attempting to delete "'{theFile}'"'
-	end
-	
-	if "{silentDelete}" == "Yes"
+	if {deleteReadOnly}
 		if "`exists "{theFile}"`"
 			SetFile -a l "{theFile}"
-			Delete -i -ay "{theFile}"
-			if "{printProgress}" == "Yes"
-				echo '" done.'
-			end
-		else if "{printProgress}" == "Yes"
-			echo '" does not exist.'
 		end
-	else
-		Delete -ay "{theFile}"
 	end
+	Delete -i -ay "{printProgress}" "{theFile}"
 end
