@@ -371,13 +371,13 @@ void HeaderTest::openMobs()
   assert(NULL == _pSourceMob);
 
 
-  aafInt32 mobCount = 0;
+  aafNumSlots_t mobCount = 0;
   check(_pHeader->GetNumMobs(kAllMob, &mobCount));
   if (gMaxMobCount != mobCount)
     check(AAFRESULT_TEST_FAILED);
  
   check(_pHeader->EnumAAFAllMobs(NULL, &_pEnumMobs));
-  for (aafInt32 item = 0; item < mobCount; ++item)
+  for (aafUInt32 item = 0; item < mobCount; ++item)
   {
     check(_pEnumMobs->NextOne(&_pMob));
 
