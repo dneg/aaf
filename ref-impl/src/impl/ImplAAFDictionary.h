@@ -44,7 +44,6 @@ class ImplAAFPluginDef;
 class ImplAAFTypeDef;
 class ImplAAFTypeDefEnum;
 class ImplAAFTypeDefRecord;
-class ImplEnumAAFOperationDefs;
 template <class T> 
 class ImplAAFEnumerator;
 typedef ImplAAFEnumerator<ImplAAFClassDef>			ImplEnumAAFClassDefs;
@@ -54,6 +53,7 @@ typedef ImplAAFEnumerator<ImplAAFDataDef>			ImplEnumAAFDataDefs;
 typedef ImplAAFEnumerator<ImplAAFInterpolationDef>	ImplEnumAAFInterpolationDefs;
 typedef ImplAAFEnumerator<ImplAAFPluginDef>			ImplEnumAAFPluginDefs;
 typedef ImplAAFEnumerator<ImplAAFTypeDef>			ImplEnumAAFTypeDefs;
+typedef ImplAAFEnumerator<ImplAAFOperationDef>		ImplEnumAAFOperationDefs;
 
 class ImplAAFMetaDictionary;
 class ImplAAFMetaDefinition;
