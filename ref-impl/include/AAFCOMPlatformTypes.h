@@ -40,12 +40,6 @@
 
 #elif defined( OS_UNIX )
 
-  // Bobt: for some reason, gcc on FreeBSD needs this in order to  
-  // properly do rtti stuff.
-# if defined ( OS_FREEBSD )
-#  include <g++/std/typeinfo.h>
-# endif
-
   // Note! Much of the stuff in this section copied from
   // ss-impl/.../ref.hxx
 
