@@ -17,6 +17,8 @@
 
 class ImplEnumAAFLoadedPlugins;
 class ImplAAFPluginDescriptor;
+class ImplAAFDictionary;
+class ImplAAFDefObject;
 
 #ifndef __ImplAAFRoot_h__
 #include "ImplAAFRoot.h"
@@ -24,6 +26,8 @@ class ImplAAFPluginDescriptor;
 
 #include "AAFPlugin.h"
 #include "aafTable.h"
+
+class ImplAAFDictionary;
 
 class ImplAAFPluginManager : public ImplAAFRoot
 {
@@ -78,6 +82,10 @@ AAFRESULT Init(void);
 // Internal to the toolkit functions
 AAFRESULT GetFirstLoadedPlugin (aafTableIterate_t *iter, ImplAAFPluginDescriptor **ppDesc);
 AAFRESULT GetNextLoadedPlugin (aafTableIterate_t *iter, ImplAAFPluginDescriptor **ppDesc);
+
+AAFRESULT CreatePluginDefinition (aafUID_t  pluginDefID,
+        ImplAAFDictionary * pDictionary,
+        IAAFDefObject ** pPluginDesc);
 
 private:
 	aafTable_t	*_plugins;
