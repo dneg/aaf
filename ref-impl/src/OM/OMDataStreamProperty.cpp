@@ -101,13 +101,7 @@ OMUInt64 OMDataStreamProperty::size(void) const
 {
   TRACE("OMDataStreamProperty::size");
 
-  if (_stream == 0) {
-    OMDataStreamProperty* p = const_cast<OMDataStreamProperty*>(this);
-    p->create();
-  }
-  ASSERT("Valid stream", _stream != 0);
-
-  OMUInt64 result = _stream->size();
+  OMUInt64 result = stream()->size();
 
   return result;
 }
@@ -120,12 +114,7 @@ void OMDataStreamProperty::setSize(const OMUInt64 newSize)
 {
   TRACE("OMDataStreamProperty::setSize");
 
-  if (_stream == 0) {
-    create();
-  }
-  ASSERT("Valid stream", _stream != 0);
-
-  _stream->setSize(newSize);
+  stream()->setSize(newSize);
 
   POSTCONDITION("Size properly set", size() == newSize);
 }
@@ -139,13 +128,7 @@ OMUInt64 OMDataStreamProperty::position(void) const
 {
   TRACE("OMDataStreamProperty::position");
 
-  if (_stream == 0) {
-    OMDataStreamProperty* p = const_cast<OMDataStreamProperty*>(this);
-    p->create();
-  }
-  ASSERT("Valid stream", _stream != 0);
-
-  OMUInt64 result = _stream->position();
+  OMUInt64 result = stream()->position();
 
   POSTCONDITION("Valid position", result <= size());
   return result;
@@ -161,15 +144,20 @@ void OMDataStreamProperty::setPosition(const OMUInt64 offset) const
 {
   TRACE("OMDataStreamProperty::setPosition");
 
+  stream()->setPosition(offset);
+
+  POSTCONDITION("Position properly set", position() == offset);
+}
+
+OMStoredStream* OMDataStreamProperty::stream(void) const
+{
+  TRACE("OMDataStreamProperty::stream");
   if (_stream == 0) {
     OMDataStreamProperty* p = const_cast<OMDataStreamProperty*>(this);
     p->create();
   }
   ASSERT("Valid stream", _stream != 0);
-
-  _stream->setPosition(offset);
-
-  POSTCONDITION("Position properly set", position() == offset);
+  return _stream;
 }
 
 void OMDataStreamProperty::open(void)
@@ -221,14 +209,7 @@ void OMDataStreamProperty::read(OMByte* buffer,
   PRECONDITION("Optional property is present",
                                            IMPLIES(isOptional(), isPresent()));
 
-  if (_stream == 0) {
-    OMDataStreamProperty* p = const_cast<OMDataStreamProperty*>(this);
-    p->create();
-  }
-
-  ASSERT("Valid stream", _stream != 0);
-
-  _stream->read(buffer, bytes, bytesRead);
+  stream()->read(buffer, bytes, bytesRead);
 }
 
   // @mfunc  Attempt to write the number of bytes given by <p bytes>
@@ -244,12 +225,7 @@ void OMDataStreamProperty::write(const OMByte* buffer,
 {
   TRACE("OMDataStreamProperty::write");
 
-  if (_stream == 0) {
-    create();
-  }
-  ASSERT("Valid stream", _stream != 0);
-
-  _stream->write(buffer, bytes, bytesWritten);
+  stream()->write(buffer, bytes, bytesWritten);
   setPresent();
 }
 

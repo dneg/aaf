@@ -162,6 +162,8 @@ protected:
 
 private:
 
+  OMStoredStream* stream(void) const;
+
   void open(void);
   void create(void);
 
