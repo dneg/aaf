@@ -171,7 +171,7 @@
 // }
 //
 #define AAF_DEFINE_FACTORY(xclass) \
-  HRESULT C##xclass##::COMCreate(IUnknown *pUnkOuter, void **ppvObjOut) \
+  HRESULT C##xclass::COMCreate(IUnknown *pUnkOuter, void **ppvObjOut) \
   { \
     *ppvObjOut = NULL; \
     C##xclass *p##xclass = new C##xclass(pUnkOuter); \
