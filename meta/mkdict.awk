@@ -112,7 +112,7 @@ BEGIN {
   elementTypeC=33
   isMandatoryC=34
   parentC=37
-  className1C=38
+  classNameC=38
   pidC=41
   referenceTypeC=42
   isAbstractC=43
@@ -651,8 +651,8 @@ BEGIN {
         classError(class, isMandatoryC);
         errors++;
       }
-      if ($className1C != $elementNameC) {
-        classError(class, className1C);
+      if ($classNameC != $elementNameC) {
+        classError(class, classNameC);
         errors++;
       }
       if ($referenceTypeC != "") {
@@ -842,8 +842,8 @@ BEGIN {
         propertyError($elementNameC, class, parentC);
         errors++;
       }
-      if ($className1C != $parentC) {
-        propertyError($elementNameC, class, className1C);
+      if ($classNameC != $parentC) {
+        propertyError($elementNameC, class, classNameC);
         errors++;
       }
       if ($isAbstractC != "") {
