@@ -25,9 +25,6 @@
  *
  ************************************************************************/
 
-// Turn on/off experimental object creation code...
-#define USE_NEW_OBJECT_CREATION 1
-
 
 #ifndef __ImplAAFDictionary_h__
 #include "ImplAAFDictionary.h"
@@ -113,6 +110,13 @@
 #include "AAFClassDefUIDs.h"
 
 
+#if USE_NEW_OBJECT_CREATION
+#ifndef __ImplAAFMetaDictionary_h__
+#include "ImplAAFMetaDictionary.h"
+#endif
+#endif // #if USE_NEW_OBJECT_CREATION
+
+
 #include <assert.h>
 #include <string.h>
 #include "aafErr.h"
@@ -135,12 +139,11 @@ ImplAAFDictionary::ImplAAFDictionary ()
   _parameterDefinitions(PID_Dictionary_ParameterDefinitions, "ParameterDefinitions", PID_DefinitionObject_Identification),
   _codecDefinitions(PID_Dictionary_CodecDefinitions, "CodecDefinitions", PID_DefinitionObject_Identification),
   _containerDefinitions(PID_Dictionary_ContainerDefinitions, "ContainerDefinitions", PID_DefinitionObject_Identification),
-  _typeDefinitions      (PID_Dictionary_TypeDefinitions,      "TypeDefinitions", PID_DefinitionObject_Identification),
-  _classDefinitions      (PID_Dictionary_ClassDefinitions,    "ClassDefinitions", PID_DefinitionObject_Identification),
   _interpolationDefinitions      (PID_Dictionary_InterpolationDefinitions,    "InterpolationDefinitions", PID_DefinitionObject_Identification),
   _dataDefinitions      (PID_Dictionary_DataDefinitions,    "DataDefinitions", PID_DefinitionObject_Identification),
   _pluginDefinitions      (PID_Dictionary_PluginDefinitions,    "PluginDefinitions", PID_PluginDescriptor_Identification),
-	_opaqueTypeDefinitions (0),
+  _typeDefinitions      (PID_Dictionary_TypeDefinitions,      "TypeDefinitions", PID_DefinitionObject_Identification),
+  _classDefinitions      (PID_Dictionary_ClassDefinitions,    "ClassDefinitions", PID_DefinitionObject_Identification),
   _pBuiltinClasses (0),
   _pBuiltinTypes (0),
   _pBuiltinDefs (0),
@@ -167,6 +170,20 @@ ImplAAFDictionary::ImplAAFDictionary ()
 
 ImplAAFDictionary::~ImplAAFDictionary ()
 {
+  // Release the _opaqueTypeDefinitions
+	OMSetIterator<OMUniqueObjectIdentification, OpaqueTypeDefinition>opaqueTypeDefinitions(_opaqueTypeDefinitions, OMBefore);
+	while(++opaqueTypeDefinitions)
+	{
+    // NOTE: Temporary OpaqueTypeDefinition are created to hold the type definition
+    // pointers.
+		ImplAAFTypeDef *pType = opaqueTypeDefinitions.setValue(0);
+		if (pType)
+		{
+		  pType->ReleaseReference();
+		  pType = 0;
+		}
+	}
+
   // Release the _codecDefinitions
 	OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFCodecDef>codecDefinitions(_codecDefinitions);
 	while(++codecDefinitions)
@@ -583,7 +600,7 @@ ImplAAFDictionary::pvtLookupAxiomaticClassDef (const aafUID_t &classID,
 {
   if (_pBuiltinClasses->IsAxiomaticClass (classID))
 	{
-	  // It's axiomatic.  
+	  // It's axiomatic.
 	  assert (ppClassDef);
 	  *ppClassDef = _pBuiltinClasses->LookupAxiomaticClass (classID);
 	  assert (*ppClassDef); // reference count already incremented by LookupAxiomaticClass.
@@ -693,6 +710,10 @@ AAFRESULT STDMETHODCALLTYPE
 
 #if USE_NEW_OBJECT_CREATION
 
+
+
+
+
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFDictionary::CreateImplClassDef (
       aafUID_constref classID,
@@ -748,6 +769,100 @@ AAFRESULT STDMETHODCALLTYPE
 
 #endif // #if USE_NEW_OBJECT_CREATION
 
+
+
+ImplAAFDictionary::ForwardClassReference::ForwardClassReference()
+{
+}
+
+ImplAAFDictionary::ForwardClassReference::ForwardClassReference(const ImplAAFDictionary::ForwardClassReference& rhs)
+{
+  _classId = rhs._classId;
+}
+
+ImplAAFDictionary::ForwardClassReference::ForwardClassReference(aafUID_constref classId)
+{
+  _classId = classId;
+}
+
+const OMUniqueObjectIdentification 
+  ImplAAFDictionary::ForwardClassReference::identification(void) const
+{
+  return (*reinterpret_cast<const OMUniqueObjectIdentification *>(&_classId));
+}
+
+ImplAAFDictionary::ForwardClassReference& 
+  ImplAAFDictionary::ForwardClassReference::operator= (const ImplAAFDictionary::ForwardClassReference& rhs)
+{
+  _classId = rhs._classId;
+  return *this;
+}
+
+bool ImplAAFDictionary::ForwardClassReference::operator== (const ImplAAFDictionary::ForwardClassReference& rhs)
+{
+  if (&rhs == this)
+    return true;
+  else
+    return (0 == memcmp(&_classId, &rhs._classId, sizeof(_classId)));
+}
+
+bool ImplAAFDictionary::hasForwardClassReference(aafUID_constref classId)
+{
+  // Create a temporary test value and then look for the
+  // corresponding forward class reference in the set.
+  ImplAAFDictionary::ForwardClassReference forwardReference(classId);
+  return (_forwardClassReferences.containsValue(forwardReference));
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDictionary::CreateForwardClassReference (
+      aafUID_constref classId)
+{
+  AAFRESULT result = AAFRESULT_SUCCESS;
+
+  // First check to see of forward class reference has already
+  // been created.
+  if (hasForwardClassReference(classId))
+    return AAFRESULT_INVALID_PARAM;
+
+  // Create a local forward class reference.
+  ImplAAFDictionary::ForwardClassReference forwardReference(classId);
+
+  // If the class has already been registed then we cannot
+  // create a foward reference!
+  if (_classDefinitions.contains(forwardReference.identification()))
+    return AAFRESULT_INVALID_PARAM;
+
+  // It now safe to add the given classId to the set.
+  _forwardClassReferences.append(forwardReference); // the set will copy the value.
+
+  return result;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDictionary::HasForwardClassReference (
+      aafUID_constref classId,
+      aafBoolean_t * pResult)
+{
+  if (NULL == pResult)
+    return AAFRESULT_NULL_PARAM;
+
+  // Call the internal shared implementation.
+  *pResult = hasForwardClassReference(classId);
+
+  return AAFRESULT_SUCCESS;
+}
+
+// Remove the give classId from the foward class reference set.
+void ImplAAFDictionary::RemoveForwardClassReference(aafUID_constref classId)
+{
+  ImplAAFDictionary::ForwardClassReference forwardReference(classId);
+  assert(hasForwardClassReference(classId)); // classId must already be a forward reference!
+  _forwardClassReferences.removeValue(forwardReference);
+}
+
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFDictionary::RegisterClassDef (
       ImplAAFClassDef * pClassDef)
@@ -766,6 +881,13 @@ AAFRESULT STDMETHODCALLTYPE
   // Is this class already registered ?
   if (!PvtIsClassPresent(newAUID))
 	{
+    if (hasForwardClassReference(newAUID))
+    {
+      // This class is now defined so it can no longer have
+      // a forward reference.
+      RemoveForwardClassReference(newAUID);
+    }
+
 	  // This class is not yet registered, add it to the dictionary.
 	  _classDefinitions.appendValue(pClassDef);
 	  pClassDef->AcquireReference();
@@ -840,17 +962,21 @@ AAFRESULT STDMETHODCALLTYPE
   // Is this type already registered ?
   if (!PvtIsTypePresent(newAUID))
   {
-//	if (AAFRESULT_FAILED(hr))
-//	{
-		// TBD:(transdel 2000-MAR-19) we also nee to check it the
-		// given type is an opaque type. if it is then we
-		// need to remove it from the opaqueTypeDefinitions set
-		// if the registration of successful. This make sence
-		// since type can no longer be opaque.
-		// hr = LookupOpaqueTypeDef (newAUID, &pExistingTypeDef);
-		// etc,,,
-		//
-//	}
+		// We also need to check if the given type is an opaque type. if it is then we
+		// need to remove it from the opaqueTypeDefinitions set if the registration 
+    // of successful. This makes sense because the type can no longer be opaque.
+    ImplAAFTypeDef *pOpaqueType = findOpaqueTypeDefinition(newAUID);
+    if (pOpaqueType)
+    {
+      // Remove the type from the opaque list and release the reference.
+      // NOTE: This release may actually delete the opaque type from memory
+      // since it is possible that older pOpaqueType is not the same
+      // object pointer as the newer pTypeDef pointer eventhough they
+      // have the same identifier (newAUID).
+      _opaqueTypeDefinitions.removeValue(pOpaqueType);
+      pOpaqueType->ReleaseReference();
+      pOpaqueType = NULL;
+    }
 
 
     // This type is not yet registered, add it to the dictionary.
@@ -930,7 +1056,6 @@ const aafUID_t * ImplAAFDictionary::sAxiomaticTypeGuids[] =
   & kAAFTypeID_RGBAComponent,
   & kAAFTypeID_MobID,
   & kAAFTypeID_DataValue,
-  & kAAFTypeID_AUIDArray,
  
   & kAAFTypeID_ClassDefinitionStrongReference,
   & kAAFTypeID_ClassDefinitionStrongReferenceSet,
@@ -1135,6 +1260,55 @@ AAFRESULT STDMETHODCALLTYPE
   return AAFRESULT_SUCCESS;
 }
 
+ImplAAFDictionary::OpaqueTypeDefinition::OpaqueTypeDefinition() :
+  _opaqueTypeDef(NULL)
+{
+}
+
+ImplAAFDictionary::OpaqueTypeDefinition::OpaqueTypeDefinition(const ImplAAFDictionary::OpaqueTypeDefinition& rhs)
+{
+  _opaqueTypeDef = rhs._opaqueTypeDef;
+}
+
+ImplAAFDictionary::OpaqueTypeDefinition::OpaqueTypeDefinition(ImplAAFTypeDef * opaqueTypeDef)
+{
+  _opaqueTypeDef = opaqueTypeDef;
+}
+
+// coersion operator to "transparently" extract the type
+// definition pointer. This will be called when the enumerator
+// attempts to assign an OpaqueTypeDefinition to an ImplAAFTypeDef *.
+ImplAAFDictionary::OpaqueTypeDefinition::operator ImplAAFTypeDef * () const
+{
+  return _opaqueTypeDef;
+}
+
+
+const OMUniqueObjectIdentification 
+  ImplAAFDictionary::OpaqueTypeDefinition::identification(void) const
+{
+  aafUID_t typeId;
+  AAFRESULT result = _opaqueTypeDef->GetAUID(&typeId); // ignore error
+  assert (AAFRESULT_SUCCEEDED(result));
+
+  return (*reinterpret_cast<const OMUniqueObjectIdentification *>(&typeId));
+}
+
+ImplAAFDictionary::OpaqueTypeDefinition& 
+  ImplAAFDictionary::OpaqueTypeDefinition::operator= (const ImplAAFDictionary::OpaqueTypeDefinition& rhs)
+{
+  _opaqueTypeDef = rhs._opaqueTypeDef;
+  return *this;
+}
+
+bool ImplAAFDictionary::OpaqueTypeDefinition::operator== (const ImplAAFDictionary::OpaqueTypeDefinition& rhs)
+{
+  if (&rhs == this)
+    return true;
+  else
+    return (_opaqueTypeDef == rhs._opaqueTypeDef); // pointers are equal.
+}
+
 
 
 AAFRESULT STDMETHODCALLTYPE
@@ -1151,13 +1325,38 @@ AAFRESULT STDMETHODCALLTYPE
     return hr;
 
   // Is this type already registered ?
-  
+  // NOTE: Behave like all of the other "register" methods: do not
+  // fail if the type has already been registered. This is a little
+  // ambiguous since the client will not know whether the the given
+  // type definition was already public or already opaque...
+  // (transdel:2000-APR-03)
+  if (!PvtIsTypePresent(newAUID) && !findOpaqueTypeDefinition(newAUID))
+  {
+    // This type is not yet registered, add it to the dictionary.
+    ImplAAFDictionary::OpaqueTypeDefinition opaque(pTypeDef);
+    _opaqueTypeDefinitions.append(opaque);
+    pTypeDef->AcquireReference();
+  }
 
-  // This type is not yet registered, add it to the dictionary.
-//  _opaqueTypeDefinitions.appendValue(pTypeDef);
-//  pTypeDef->AcquireReference();
+  return (AAFRESULT_SUCCESS);
+}
 
-  return (AAFRESULT_NOT_IMPLEMENTED);
+
+ImplAAFTypeDef * ImplAAFDictionary::findOpaqueTypeDefinition(aafUID_constref typeId)
+{
+  // NOTE: The following type cast is temporary. It should be removed as soon
+	// as the OM has a declarative sytax to include the type
+	// of the key used in the set. (trr:2000-FEB-29)
+  ImplAAFDictionary::OpaqueTypeDefinition opaqueTypeDefinition;
+	if (_opaqueTypeDefinitions.find((*reinterpret_cast<const OMObjectIdentification *>(&typeId)),
+                             opaqueTypeDefinition))
+  {
+    return (ImplAAFTypeDef *)opaqueTypeDefinition;
+  }
+  else
+  {
+    return NULL;
+  }
 }
 
 
@@ -1167,15 +1366,18 @@ AAFRESULT STDMETHODCALLTYPE
       ImplAAFTypeDef ** ppTypeDef)
 {
   ImplAAFTypeDefSP			typeDef;
-//  AAFRESULT					status;
+  AAFRESULT					status = AAFRESULT_SUCCESS;
 
   if (! ppTypeDef) 
 		return AAFRESULT_NULL_PARAM;
-//  *ppTypeDef = typeDef;
-//  assert (*ppTypeDef);
-//  (*ppTypeDef)->AcquireReference ();
+
+  *ppTypeDef = findOpaqueTypeDefinition(typeID);
+  if (*ppTypeDef)
+    (*ppTypeDef)->AcquireReference ();
+  else
+    status = AAFRESULT_TYPE_NOT_FOUND;
 	
-  return (AAFRESULT_NOT_IMPLEMENTED);
+  return (status);
 }
 
 
@@ -1192,8 +1394,8 @@ AAFRESULT STDMETHODCALLTYPE
 	
 	XPROTECT()
 	{
-		OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFTypeDef>* iter = 
-			new OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFTypeDef>(_typeDefinitions);
+		OMSetIterator<OMUniqueObjectIdentification, ImplAAFDictionary::OpaqueTypeDefinition>* iter = 
+			new OMSetIterator<OMUniqueObjectIdentification, ImplAAFDictionary::OpaqueTypeDefinition>(_opaqueTypeDefinitions, OMBefore);
 		if(iter == 0)
 			RAISE(AAFRESULT_NOMEMORY);
 		CHECK(theEnum->SetIterator(this, iter));
@@ -1221,9 +1423,8 @@ AAFRESULT STDMETHODCALLTYPE
 {
   if (! pResult)
 		return AAFRESULT_NULL_PARAM;
-//	*pResult = _typeDefinitions.count();
-//  return AAFRESULT_SUCCESS;
-  return (AAFRESULT_NOT_IMPLEMENTED);
+	*pResult = _opaqueTypeDefinitions.count();
+  return AAFRESULT_SUCCESS;
 }
 
 
