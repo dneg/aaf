@@ -31,6 +31,7 @@
 #include "AAFDefUIDs.h"
 
 #include <stdlib.h>
+#include <string.h>
 
 typedef IAAFSmartPointer<IAAFFile> IAAFFileSP;
 typedef IAAFSmartPointer<IAAFHeader> IAAFHeaderSP;

@@ -60,6 +60,7 @@ typedef IAAFSmartPointer<IEnumAAFEssenceData>       IEnumAAFEssenceDataSP;
 #include <stdio.h>
 #include <assert.h>
 #include <stdlib.h>
+#include <string.h>
 
 static const aafMobID_t sMobID[] = {
   //{060c2b340205110101001000-13-00-00-00-{78de46cd-4622-11d4-8029-00104bc9156d}}

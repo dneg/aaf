@@ -31,6 +31,7 @@
 #include <iostream.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "AAFTypes.h"
 #include "AAFStoredObjectIDs.h"

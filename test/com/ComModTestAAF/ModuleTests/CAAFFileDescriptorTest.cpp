@@ -27,6 +27,7 @@
 #include <stdio.h>
 #include <iostream.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFResult.h"

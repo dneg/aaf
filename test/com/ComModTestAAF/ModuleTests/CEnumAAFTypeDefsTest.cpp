@@ -25,6 +25,7 @@
 #include <iostream.h>
 #include <stdio.h>
 #include <wchar.h>
+#include <string.h>
 
 #include "AAF.h"
 #include "AAFResult.h"

@@ -26,6 +26,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <wchar.h>
+#include <string.h>
 #include "AAF.h"
 #include "AAFResult.h"
 #include "ModuleTest.h"
