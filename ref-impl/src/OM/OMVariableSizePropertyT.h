@@ -33,7 +33,7 @@
 #include "OMPropertySet.h"
 #include "OMStorable.h"
 
-template<typename PropertyType>
+template <typename PropertyType>
 OMVariableSizeProperty<PropertyType>::OMVariableSizeProperty(
                                                  const OMPropertyId propertyId,
                                                  const wchar_t* name)
@@ -42,7 +42,7 @@ OMVariableSizeProperty<PropertyType>::OMVariableSizeProperty(
   TRACE("OMVariableSizeProperty<PropertyType>::OMVariableSizeProperty");
 }
 
-template<typename PropertyType>
+template <typename PropertyType>
 OMVariableSizeProperty<PropertyType>::~OMVariableSizeProperty(void)
 {
   TRACE("OMVariableSizeProperty<PropertyType>::~OMVariableSizeProperty");
@@ -54,7 +54,7 @@ OMVariableSizeProperty<PropertyType>::~OMVariableSizeProperty(void)
   //   @parm A pointer to a <p PropertyType>
   //   @parm The size of the <p value>
   //   @this const
-template<typename PropertyType>
+template <typename PropertyType>
 void OMVariableSizeProperty<PropertyType>::getValue(PropertyType* value,
                                                     size_t valueSize) const
 {
@@ -71,7 +71,7 @@ void OMVariableSizeProperty<PropertyType>::getValue(PropertyType* value,
   //          can be any type.
   //   @parm A pointer to an array of <p PropertyType>s
   //   @parm The size of the array <p value> in bytes
-template<typename PropertyType>
+template <typename PropertyType>
 void OMVariableSizeProperty<PropertyType>::setValue(const PropertyType* value,
                                                     size_t valueSize)
 {
@@ -87,7 +87,7 @@ void OMVariableSizeProperty<PropertyType>::setValue(const PropertyType* value,
   //          can be any type.
   //   @parm A pointer to an array of <p PropertyType>s
   //   @parm The number of element in the array <p value>
-template<typename PropertyType>
+template <typename PropertyType>
 void OMVariableSizeProperty<PropertyType>::setElementValues(
                                                      const PropertyType* value,
                                                      size_t elementCount)
@@ -110,7 +110,7 @@ void OMVariableSizeProperty<PropertyType>::setElementValues(
   //         this <c OMVariableSizeProperty>.
   //   @parm The index of the value to get.
   //   @this const
-template<typename PropertyType>
+template <typename PropertyType>
 void OMVariableSizeProperty<PropertyType>::getValueAt(PropertyType* value,
                                                       const size_t index) const
 {
@@ -130,7 +130,7 @@ void OMVariableSizeProperty<PropertyType>::getValueAt(PropertyType* value,
   //   @parm A pointer to the new value that is to be copied into
   //         this <c OMVariableSizeProperty>.
   //   @parm The index of the value to set.
-template<typename PropertyType>
+template <typename PropertyType>
 void OMVariableSizeProperty<PropertyType>::setValueAt(
                                                      const PropertyType* value,
                                                      const size_t index)
@@ -151,7 +151,7 @@ void OMVariableSizeProperty<PropertyType>::setValueAt(
   //          can be any type.
   //   @parm A pointer to the new value that is to be copied into
   //         this <c OMVariableSizeProperty>.
-template<typename PropertyType>
+template <typename PropertyType>
 void OMVariableSizeProperty<PropertyType>::appendValue(
                                                      const PropertyType* value)
 {
@@ -178,7 +178,7 @@ void OMVariableSizeProperty<PropertyType>::appendValue(
   //        <c OMVariableSizeProperty> at the first position.
   //   @parm A pointer to the new value that is to be copied into
   //         this <c OMVariableSizeProperty>.
-template<typename PropertyType>
+template <typename PropertyType>
 void OMVariableSizeProperty<PropertyType>::prependValue(
                                                      const PropertyType* value)
 {
@@ -209,7 +209,7 @@ void OMVariableSizeProperty<PropertyType>::prependValue(
   //   @rdesc <e bool.true> if the value was successfully copied <e
   //          bool.false> otherwise.
   //   @this const
-template<typename PropertyType>
+template <typename PropertyType>
 bool OMVariableSizeProperty<PropertyType>::copyToBuffer(
                                                        PropertyType* buffer,
                                                        size_t bufferSize) const
@@ -240,7 +240,7 @@ bool OMVariableSizeProperty<PropertyType>::copyToBuffer(
   //   @rdesc <e bool.true> if the value was successfully copied <e
   //          bool.false> otherwise.
   //   @this const
-template<typename PropertyType>
+template <typename PropertyType>
 bool OMVariableSizeProperty<PropertyType>::copyElementsToBuffer(
                                                      PropertyType* buffer,
                                                      size_t elementCount) const
@@ -258,7 +258,7 @@ bool OMVariableSizeProperty<PropertyType>::copyElementsToBuffer(
   //   @tcarg class | PropertyType | The type of the property. This
   //          can be any type.
   //   @parm The external (persisted) size of the <c OMVariableSizeProperty>.
-template<typename PropertyType>
+template <typename PropertyType>
 void OMVariableSizeProperty<PropertyType>::restore(size_t externalSize)
 {
   TRACE("OMVariableSizeProperty<PropertyType>::restore");
@@ -271,7 +271,7 @@ void OMVariableSizeProperty<PropertyType>::restore(size_t externalSize)
   //          can be any type.
   //   @rdesc The number of items in this <c OMVariableSizeProperty>.
   //   @this const 
-template<typename PropertyType>
+template <typename PropertyType>
 size_t OMVariableSizeProperty<PropertyType>::count(void) const
 {
   TRACE("OMVariableSizeProperty<PropertyType>::count");

@@ -31,7 +31,7 @@
 
 #include "OMAssertions.h"
 
-template<typename PropertyType>
+template <typename PropertyType>
 OMFixedSizeProperty<PropertyType>::OMFixedSizeProperty(
                                                  const OMPropertyId propertyId,
                                                  const wchar_t* name)
@@ -40,7 +40,7 @@ OMFixedSizeProperty<PropertyType>::OMFixedSizeProperty(
   TRACE("OMFixedSizeProperty<PropertyType>::OMFixedSizeProperty");
 }
 
-template<typename PropertyType>
+template <typename PropertyType>
 OMFixedSizeProperty<PropertyType>::~OMFixedSizeProperty(void)
 {
   TRACE("OMFixedSizeProperty<PropertyType>::~OMFixedSizeProperty");
@@ -52,7 +52,7 @@ OMFixedSizeProperty<PropertyType>::~OMFixedSizeProperty(void)
   //          semantics.
   //   @parm A value of <p PropertyType> by reference.
   //   @this const
-template<typename PropertyType>
+template <typename PropertyType>
 void OMFixedSizeProperty<PropertyType>::getValue(PropertyType& value) const
 {
   TRACE("OMFixedSizeProperty<PropertyType>::getValue");
@@ -66,7 +66,7 @@ void OMFixedSizeProperty<PropertyType>::getValue(PropertyType& value) const
   //          can be any type with well defined copy and assignment
   //          semantics.
   //   @parm A value of <p PropertyType> by reference.
-template<typename PropertyType>
+template <typename PropertyType>
 void OMFixedSizeProperty<PropertyType>::setValue(const PropertyType& value)
 {
   TRACE("OMFixedSizeProperty<PropertyType>::setValue");
@@ -81,7 +81,7 @@ void OMFixedSizeProperty<PropertyType>::setValue(const PropertyType& value)
   //          semantics.
   //   @parm A value of <p PropertyType> by reference.
   //   @rdesc A value of <c OMFixedSizeProperty> by reference.
-template<typename PropertyType>
+template <typename PropertyType>
 OMFixedSizeProperty<PropertyType>&
 OMFixedSizeProperty<PropertyType>::operator = (const PropertyType& value)
 {
@@ -99,7 +99,7 @@ OMFixedSizeProperty<PropertyType>::operator = (const PropertyType& value)
   //   @rdesc The result of the conversion as a value of type
   //          <p PropertyType>.
   //   @this const
-template<typename PropertyType>
+template <typename PropertyType>
 OMFixedSizeProperty<PropertyType>::operator PropertyType() const
 {
   TRACE("OMFixedSizeProperty<PropertyType>::operator PropertyType");
@@ -114,7 +114,7 @@ OMFixedSizeProperty<PropertyType>::operator PropertyType() const
   //          can be any type with well defined copy and assignment
   //          semantics.
   //   @rdesc Pointer to a <p PropertyType>
-template<typename PropertyType>
+template <typename PropertyType>
 PropertyType* OMFixedSizeProperty<PropertyType>::operator &(void)
 {
   return reinterpret_cast<PropertyType*>(_bits);
@@ -127,7 +127,7 @@ PropertyType* OMFixedSizeProperty<PropertyType>::operator &(void)
   //          semantics.
   //   @rdesc Const reference to a <p PropertyType>.
   //   @this const
-template<typename PropertyType>
+template <typename PropertyType>
 const PropertyType& OMFixedSizeProperty<PropertyType>::reference(void) const
 {
   return *reinterpret_cast<const PropertyType*>(_bits);
@@ -139,7 +139,7 @@ const PropertyType& OMFixedSizeProperty<PropertyType>::reference(void) const
   //          can be any type with well defined copy and assignment
   //          semantics.
   //   @parm The external (persisted) size of the <c OMFixedSizeProperty>.
-template<typename PropertyType>
+template <typename PropertyType>
 void OMFixedSizeProperty<PropertyType>::restore(size_t externalSize)
 {
   TRACE("OMFixedSizeProperty<PropertyType>::restore");
