@@ -403,7 +403,7 @@ AAFRESULT STDMETHODCALLTYPE
 // ValidateTimecodeRange()
 //
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFSourceMob::SpecifyValidCodeRange (ImplAAFDataDef *pEssenceKind,
+    ImplAAFSourceMob::SpecifyValidCodeRange (ImplAAFDataDef * /* pEssenceKind !!!*/,
                            aafSlotID_t  slotID,
                            aafRational_t  editrate,
                            aafFrameOffset_t  startOffset,
@@ -665,7 +665,7 @@ AAFRESULT STDMETHODCALLTYPE
 // AddPulldownRef()
 //
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFSourceMob::AddPulldownRef (aafAppendOption_t  addType,
+    ImplAAFSourceMob::AddPulldownRef (aafAppendOption_t  /* addType !!!*/,
 									  const aafRational_t & editrate,
 									  aafSlotID_t  aMobSlot,
 									  ImplAAFDataDef * pEssenceKind,
