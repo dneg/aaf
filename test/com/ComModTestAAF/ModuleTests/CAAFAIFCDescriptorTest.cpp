@@ -428,7 +428,9 @@ extern "C" HRESULT CAAFAIFCDescriptor_test()
 	}
 	catch (...)
 	{
-		cerr << "CAAFAIFCDescriptor_test...Caught general C++ exception!" << endl; 
+		cerr << "CAAFAIFCDescriptor_test..."
+			 << "Caught general C++ exception!" << endl; 
+		hr = AAFRESULT_TEST_FAILED;
 	}
 
 	return hr;
