@@ -123,25 +123,25 @@ AD_XMETHOD2(Setup,
 AD_XMETHOD4(AddNilReference,
 			[in],
 			  objPass,
-			  aafTrackID_t,
-			  trackID,
-			  TrackID to be assigned to the new track,
+			  aafSlotID_t,
+			  slotID,
+			  SlotID to be assigned to the new slot,
 			[in],
 			  objPass,
 			  aafLength_t,
 			  length,
-			  Duration of the Source Clip to be added to the new track,
+			  Duration of the Source Clip to be added to the new slot,
 			[in],
 			  objIn,
 			  AAFDataDef,
 			  dataDef,
-			  Data kind of the new track,
+			  Data kind of the new slot,
 			[in],
 			  objPass,
 			  aafRational_t,
 			  editRate,
-			  Edit rate of the new track,
-			This function adds a track containing a Source Clip to a Source
+			  Edit rate of the new slot,
+			This function adds a slot containing a Source Clip to a Source
   // Mob. The Source Clip does not reference another Mob as the source
   // of the media. The Source Clip specifies a source MobID value of
   // 0.0.0. The examples of Source Mobs that are not derived from a
@@ -168,12 +168,12 @@ AD_XMETHOD4(AddTimecodeClip,
 			  objPass,
 			  aafRational_t,
 			  editrate,
-			  Edit rate of Timecode track,
+			  Edit rate of Timecode slot,
 			[in],
 			  objPass,
 			  aafInt32,
-			  trackID,
-			  TrackID of Timecode track,
+			  slotID,
+			  SlotID of Timecode slot,
 		    [in],
 			  objPass,
 			  aafTimecode_t,
@@ -184,12 +184,12 @@ AD_XMETHOD4(AddTimecodeClip,
 			  aafFrameLength_t,
 			  length32,
 			  Duration of Timecode.,
-			This function adds a Timecode track to a specified tape Mob or
+			This function adds a Timecode slot to a specified tape Mob or
   // film Mob\, with a specified starting timecode\, length\, and edit
   // rate. Call the function omfm-MobValidateTimecodeRange following
   // this function to make sure that the tape Mob has valid Timecode
   // on a specified set of channels.  This function does not add the
-  // Filler to any of the other tracks to indicate that the Timecode
+  // Filler to any of the other slots to indicate that the Timecode
   // is valid for that channel\, so you should use
   // omfmMobValida-teTimecodeRange for that purpose.
   // 
@@ -219,12 +219,12 @@ AD_XMETHOD7(AddEdgecodeClip,
 			  objPass,
 			  aafRational_t,
 			  editrate,
-			  Edit rate of the Edgecode track,
+			  Edit rate of the Edgecode slot,
 			[in],
 			  objPass,
 			  aafInt32,
-			  trackID,
-			  TrackID to assign to the new Edgecode track,
+			  slotID,
+			  SlotID to assign to the new Edgecode slot,
 			[in],
 			  objPass,
 			  aafFrameOffset_t,
@@ -234,7 +234,7 @@ AD_XMETHOD7(AddEdgecodeClip,
 			  objPass,
 			  aafFrameLength_t,
 			  length32,
-			  Length of the Edgecode component in the track,
+			  Length of the Edgecode component in the slot,
 			[in],
 			  objPass,
 			  aafFilmType_t,
@@ -250,10 +250,10 @@ AD_XMETHOD7(AddEdgecodeClip,
 			  aafEdgecodeHeader_t,
 			  header,
 			  The Edgecode\'s 8-byte header,
-  // Adds an Edgecode track to a specified film Mob\, with a specified
+  // Adds an Edgecode slot to a specified film Mob\, with a specified
   // starting edgecode\, length\, and edit rate. You must add a media
-  // track with a Source Clip to the Film Source Mob to make the
-  // edgecode track valid.
+  // slot with a Source Clip to the Film Source Mob to make the
+  // edgecode slot valid.
   //
   // Note: Possible values for filmKind argument are:
   // - kFtNull
@@ -289,28 +289,28 @@ AD_XMETHOD5(ValidateTimecodeRange,
 			  objIn,
 			  AAFDataDef,
 			  pMediaKind,
-			  Data kind for the track to be added,
+			  Data kind for the slot to be added,
 			[in],
 			  objPass,
-			  aafTrackID_t,
-			  trackID,
-			  TrackID for the track to be added,
+			  aafSlotID_t,
+			  slotID,
+			  SlotID for the slot to be added,
 			[in],
 			  objPass,
 			  aafRational_t,
 			  editrate,
-			  Edit rate for the track to be added,
+			  Edit rate for the slot to be added,
 			[in],
 			  objPass,
 			  aafFrameOffset_t,
 			  startOffset,
-			  Start offset for the track to be added,
+			  Start offset for the slot to be added,
 			[in],
 			  objPass,
 			  aafFrameLength_t,
 			  length32,
-			  Duration of the Source Clip in the track,
-  // Adds track containing Source Clips to a tape Source Mob to
+			  Duration of the Source Clip in the slot,
+  // Adds slot containing Source Clips to a tape Source Mob to
   // indicate that the Timecode is valid for that channel.
   //
   // Note: The pMediaKind parameter requires a data kind valid for a
@@ -342,17 +342,17 @@ AD_XMETHOD7(AddPhysSourceRef,
 			  objPass,
 			  aafRational_t,
 			  editrate,
-			  Edit rate of track to contain reference,
+			  Edit rate of slot to contain reference,
 			[in],
 			  objPass,
-			  aafTrackID_t,
-			  aMobTrack,
-			  TrackID of track to contain reference,
+			  aafSlotID_t,
+			  aMobSlot,
+			  SlotID of slot to contain reference,
 			[in],
 			  objIn,
 			  AAFDataDef,
 			  pMediaKind,
-			  Data kind of track to contain reference,
+			  Data kind of slot to contain reference,
 			[in],
 			  objIn,
 			  AAFSegment,
@@ -366,8 +366,8 @@ AD_XMETHOD7(AddPhysSourceRef,
 			[in],
 			  objPass,
 			  aafInt32,
-			  srcRefTrack,
-			  TrackID of track in physical Source Mob,
+			  srcRefSlot,
+			  SlotID of slot in physical Source Mob,
 			[in],
 			  objPass,
 			  aafLength_t,
@@ -378,16 +378,16 @@ AD_XMETHOD7(AddPhysSourceRef,
   // Source Mob\, such as a File Source Mob or tape Source Mob\,
   // references another physical Source Mob as its ancestor\, then
   // this function makes the connection between the two. This function
-  // adds a track containing a Source Clip to the Source Mob specified
+  // adds a slot containing a Source Clip to the Source Mob specified
   // by the aSourceMob parameter. This Source Clip has a source
   // reference to the Physical Source Mob described by the
   // sourceRefObj parameter. This Physical Source Mob is the ancestor
   // of the aSourceMob. For example\, a File Source Mob can have a
   // Tape Source Mob as its ancestor and a Tape Source Mob can have a
-  // Film Source Mob as its ancestor.  If aSourceMob contains a track
-  // with the TrackID specified by a MobTrackID\, then this function
-  // sets the properties of that track's Source Clip to reference the
-  // physical Source Mob. Otherwise\, this function appends the track
+  // Film Source Mob as its ancestor.  If aSourceMob contains a slot
+  // with the SlotID specified by a MobSlotID\, then this function
+  // sets the properties of that slot's Source Clip to reference the
+  // physical Source Mob. Otherwise\, this function appends the slot
   // and adds a Source Clip that references the physical Source Mob.
   //
   // Note: The mediaKind parameter requires a data kind valid for a
@@ -420,17 +420,17 @@ AD_XMETHOD_10(AddPulldownRef,
 				objPass,
 				aafRational_t,
 				editrate,
-				Edit rate of track to contain reference,
+				Edit rate of slot to contain reference,
 			  [in],
 				objPass,
-				aafTrackID_t,
-				aMobTrack,
-				TrackID of track to contain reference,
+				aafSlotID_t,
+				aMobSlot,
+				SlotID of slot to contain reference,
 			  [in],
 				objIn,
 				AAFDataDef,
 				pMediaKind,
-				Data kind of track to contain reference,
+				Data kind of slot to contain reference,
 			  [in],
 				objIn,
 				AAFSegment,
@@ -444,8 +444,8 @@ AD_XMETHOD_10(AddPulldownRef,
 			  [in],
 				objPass,
 				aafInt32,
-				srcRefTrack,
-				TrackID of track in physical Source Mob,
+				srcRefSlot,
+				SlotID of slot in physical Source Mob,
 			  [in],
 				objPass,
 				aafLength_t,
