@@ -28,9 +28,6 @@ class ImplAAFSourceClip : public ImplAAFSourceReference
 {
 public:
 
-	// Declare class storable
-
-	OMDECLARE_STORABLE(ImplAAFSourceClip)
   //
   // Constructor/destructor
   //

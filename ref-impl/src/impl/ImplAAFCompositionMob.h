@@ -101,11 +101,6 @@ public:
   );
 
 
-public:
-  // Declare this class to be storable.
-  //
-  OMDECLARE_STORABLE(ImplAAFCompositionMob)
-
 private:
 	OMFixedSizeProperty<aafLength_t>	_defaultFadeLen;
 	OMFixedSizeProperty<aafFadeType_t>	_defaultFadeType;

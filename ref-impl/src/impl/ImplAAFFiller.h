@@ -68,9 +68,6 @@ public:
 									  aafInt32 *pulldownPhase,
 									  aafLength_t *sclpLen,
 									  aafBool *isMask);
-  // Declare this class to be storable.
-  //
-  OMDECLARE_STORABLE(ImplAAFFiller)
 };
 
 #endif // ! __ImplAAFFiller_h__
