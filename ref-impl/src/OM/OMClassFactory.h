@@ -42,6 +42,12 @@ public:
     // @cmember Is the given class id registered ?
   virtual bool isRegistered(const OMClassId& classId) const = 0;
 
+  // @cmember Copy the class identified by id to the destination class
+  //          factory.  A Subsequent call to dstFactory->create(id) should
+  //          succeed.  Return value is true if the copy succeed.  In normal
+  //          operation there is no reason for the copy to fail.
+  virtual void cloneClassDef(const OMClassId& id, OMClassFactory* dstFactory) = 0;
+
     // @cmember Create an instance of the appropriate derived class,
     //          given the class id.
   virtual OMStorable* create(const OMClassId& classId) const = 0;

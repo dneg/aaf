@@ -103,6 +103,8 @@ public:
 
   virtual bool isRegistered(const OMClassId& classId) const;
 
+  virtual void cloneClassDef(const OMClassId& id, OMClassFactory* dstFactory);
+
   //
   // Create an instance of the appropriate derived class, given the
   // class id.  Initializes the OM properties.

@@ -231,8 +231,8 @@ void ImplAAFDictionary::setMetaDictionary(ImplAAFMetaDictionary *metaDictionary)
 //
 // Factory function for all built-in classes.
 //
-/*static*/ ImplAAFObject *
-ImplAAFDictionary::pvtCreateBaseClassInstance(const aafUID_t & auid) 
+/*static*/ ImplAAFStorable *
+ImplAAFDictionary::pvtCreateBaseClassStorableInstance(const aafUID_t & auid) 
 {
 
   // Lookup the code class id for the given stored object id.
@@ -248,21 +248,47 @@ ImplAAFDictionary::pvtCreateBaseClassInstance(const aafUID_t & auid)
     assert(NULL != impl);
     return NULL;
   }
+  // Make sure that the object we created was actually one of our
+  // ImplAAFStorable derived classes.
+  // This should alway succeed unless a request to create an instance
+  // of ImplAAFMetaDictionary made it this far.
+  ImplAAFStorable* storable = dynamic_cast<ImplAAFStorable*>(impl);
+  if (NULL == storable)
+  {
+	impl->ReleaseReference();
+    impl = 0;
+    assert(NULL != storable);
+	  return NULL;
+  }
+
+  return storable;
+}
+
+//
+// Factory function for all built-in classes derived from ImplAAFObject.
+//
+/*static*/ ImplAAFObject *
+ImplAAFDictionary::pvtCreateBaseClassInstance(const aafUID_t & auid) 
+{
+  ImplAAFStorable* pStorable = pvtCreateBaseClassStorableInstance(auid);
+
+  if ( !pStorable ) {
+    return 0;
+  }
 
   // Make sure that the object we created was actually one of our
   // ImplAAFObject derived classes.
-  ImplAAFObject* object = dynamic_cast<ImplAAFObject*>(impl);
+  ImplAAFObject* object = dynamic_cast<ImplAAFObject*>(pStorable);
   if (NULL == object)
   { // Not a valid object. Release the pointer so we don't leak memory.
-    impl->ReleaseReference();
-    impl = 0;
+    pStorable->ReleaseReference();
+    pStorable = 0;
     assert(NULL != object);
 	  return NULL;
   }
 
   return object;
 }
-
 
 // Factory method for creating a Dictionary.
 ImplAAFDictionary *ImplAAFDictionary::CreateDictionary(void)
@@ -288,45 +314,67 @@ ImplAAFDictionary *ImplAAFDictionary::CreateDictionary(void)
   return pDictionary;
 }
 
+void ImplAAFDictionary::cloneClassDef( const OMClassId& id, OMClassFactory* pDstFactory )
+{
+  metaDictionary()->cloneClassDef( id, pDstFactory );
+}
+
 bool ImplAAFDictionary::isRegistered(const OMClassId& classId ) const
 {
   return metaDictionary()->isRegistered( classId );
 }
 
-//
-// Create an instance of the appropriate derived class, given the class id.
-//  This method implements the OMClassFactory interface.
-//
 OMStorable* ImplAAFDictionary::create(const OMClassId& classId) const
 {
-  AAFRESULT hr;
-  const aafUID_t * auid  = reinterpret_cast<const aafUID_t*>(&classId);
+  const aafUID_t& auid  = reinterpret_cast<const aafUID_t&>(classId);
   ImplAAFDictionary * pNonConstThis = (ImplAAFDictionary*) this;
 
-  if (memcmp(auid, &AUID_AAFMetaDictionary, sizeof(aafUID_t)) == 0)
+  if (memcmp(&auid, &AUID_AAFMetaDictionary, sizeof(aafUID_t)) == 0)
   { // TEMPORARY: Set the factory of the meta dictionary to this dictionary.
     metaDictionary()->setClassFactory(this);
     // Do not bump the reference count. The meta dictionary is currently
     // not publicly available and it is owned by ImplAAFFile not be another
     // OMStorable or ImplAAFObject.
 	  return metaDictionary();
-  } 
+  }
   else
   {
-    // Call the sample top-level dictionary method that is called
-    // by the API client to create objects.
-    ImplAAFObject *pObject = NULL;
-    hr = pNonConstThis->CreateInstance(*auid, &pObject);
-    assert (AAFRESULT_SUCCEEDED (hr));
-    return pObject;
-  }
-  // ImplAAFClassDefSP pcd;
-  // hr = pNonConstThis->LookupClassDef(*auid, &pcd);
-  // assert (AAFRESULT_SUCCEEDED (hr));
-  //
-  // return CreateAndInit (pcd);
-}
+    // Lookup the class definition for the given classId. If the class
+    // definition is one of the "built-in" class definitions then the
+    // definition will be created and registered with the dictionary
+    // if necessary. (TRR 2000-MAR-01)
+    ImplAAFClassDefSP pClassDef;
+    AAFRESULT hr;
+    hr = pNonConstThis->LookupClassDef (auid, &pClassDef);
+    if (AAFRESULT_FAILED (hr))
+		return 0;
+		//return hr;
 
+    if (! pClassDef->pvtIsConcrete ())
+		return 0;
+		//return AAFRESULT_ABSTRACT_CLASS;
+
+
+    ImplAAFStorable * pNewStorable = 0;
+    pNewStorable = pvtInstantiateStorable(auid);
+
+    if (pNewStorable) {
+		pNewStorable->InitializeOMStorable (pClassDef);
+	
+		// Attempt to initialize any class extensions associated
+		// with this object. Only the most derived extension that has an
+		// associated  plugin is created.
+		// QUESTION: How should we "deal with" failure? We really need
+		// an  error/warning log file for this kind of information.
+		ImplAAFObject* pNewObject = dynamic_cast<ImplAAFObject*>(pNewStorable);
+		if ( pNewObject ) {
+			AAFRESULT result = pNewObject->InitializeExtensions();
+		}
+    }
+    
+    return pNewStorable;
+  }
+}
 
 ImplAAFObject *
 ImplAAFDictionary::CreateAndInit(ImplAAFClassDef * pClassDef) const
@@ -354,9 +402,9 @@ ImplAAFDictionary::CreateAndInit(ImplAAFClassDef * pClassDef) const
   return pNewObject;
 }
 
-ImplAAFObject* ImplAAFDictionary::pvtInstantiate(const aafUID_t & auid) const
+ImplAAFStorable* ImplAAFDictionary::pvtInstantiateStorable(const aafUID_t & auid) const
 {
-  ImplAAFObject *result = 0;
+  ImplAAFStorable *result = 0;
   ImplAAFClassDef	*parent;
 
   // Is this a request to create the dictionary?
@@ -379,7 +427,7 @@ ImplAAFObject* ImplAAFDictionary::pvtInstantiate(const aafUID_t & auid) const
 
 	  // First see if this is a built-in class.
 	  //
-	  result = pvtCreateBaseClassInstance(auid);
+	  result = pvtCreateBaseClassStorableInstance(auid);
 
 //DAB+ 9-Sep-2001 Code corrected to REALLY iterate up the inheritance hierarchy
 	  aafUID_t parentAUID = auid;
@@ -413,14 +461,14 @@ ImplAAFObject* ImplAAFDictionary::pvtInstantiate(const aafUID_t & auid) const
 	      // registered class must have a registered parent class.
 	      // The only exception is AAFObject, which would have
 	      // been found by the earlier
-	      // pvtCreateBaseClassInstance() call.
+	      // pvtCreateBaseClassStorableInstance() call.
 	      assert (0);
 	    }
 
 	    hr = pcd->GetParent (&parent);
 	    hr = parent->GetAUID(&parentAUID);
 	    parent->ReleaseReference();
-	    result = pvtCreateBaseClassInstance(parentAUID);
+	    result = pvtCreateBaseClassStorableInstance(parentAUID);
 	  }
 	}
 
@@ -433,17 +481,28 @@ ImplAAFObject* ImplAAFDictionary::pvtInstantiate(const aafUID_t & auid) const
 		  //
 		  result->setClassFactory(this);
 
-		  // Set this object's stored ID.  Be sure to set it to the
+		  // If result is an ImplAAFObject, then
+		  // set this object's stored ID.  Be sure to set it to the
 		  // requested ID, not the instantiated one.  (These will be
 		  // different if the requested ID is a client-supplied
 		  // extension class.)
-		  result->pvtSetSoid (auid);
+		  ImplAAFObject* pObj = dynamic_cast<ImplAAFObject*>(result);
+		  if ( pObj ) {
+		    pObj->pvtSetSoid (auid);
+		  }
+
 		}
 	}
 
   return result;
 }
 
+ImplAAFObject* ImplAAFDictionary::pvtInstantiate(const aafUID_t & auid) const
+{
+  ImplAAFStorable* pStorable = pvtInstantiateStorable(auid);
+
+  return dynamic_cast<ImplAAFObject*>(pStorable);
+}
 
 // Creates a single uninitialized AAF object of the class associated 
   // with a specified stored object id.

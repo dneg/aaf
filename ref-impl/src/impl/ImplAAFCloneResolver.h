@@ -90,6 +90,7 @@ HRESULT ImplAAFCloneResolverRegisterDef( ImplAAFDictionary* pDict, Type* ppDef )
 
 // Required for OMVector
 bool operator==( const aafMobID_t& lhs, const aafMobID_t& rhs );
+bool operator==( const aafUID_t& lhs, const aafUID_t& rhs );
 
 //=---------------------------------------------------------------------=
 
@@ -98,12 +99,15 @@ bool operator==( const aafMobID_t& lhs, const aafMobID_t& rhs );
 // implementations during OM traversals of the object/property graph.
 // It is used to resolve weak references to definition objects stored
 // in the dictionary, and to maintain a set of source references
-// (i.e. the id's of referenced mobs).
+// (i.e. the id's of referenced mobs).  Finally, a set of type ids
+// referenced by cloned meta definitions is stored.
 //
 // The ResolveWeakReference(...) methods will resolve weak references
 // to any definition object that is derived from OMStorable and stored
 // in the dictionary.  The set of such classes is:
 //
+//   ImplAFClassDefinition
+//   ImplAAFTypeDef
 //   ImplAAFDataDef
 //   ImplAAFOperationDef
 //   ImplAAFParameterDef
@@ -112,18 +116,26 @@ bool operator==( const aafMobID_t& lhs, const aafMobID_t& rhs );
 //   ImplAAFInterpolationDef
 //   ImplAAFPluginDef
 //
-// ImplAAFClassDefinition and ImplAAFTypeDef are not supported by the
-// ResolveWeakReference() methods because they are not derived from
-// OMStorable.  The are, respectively, derived from OMClassDefinition
-// and OMType.
-//
 // The AddSourceReference() and GetSourceReferences() methods are used
 // to collect the set of mob id's for all ImplAAFSourceReference
-// objects visited by an OM deepCopy() traversal.
+// objects visited by an OM deepCopy() traversal.  These are the ids
+// of mobs that form a mob chain.
+//
+// The AddTypeReference() and GetTypeReferences() methods are used to
+// collect the set of type ids referenced by ImplAAFPropertyDef
+// objects visited by an OM deepCopy() traversal.  The
+// CloneAndRegister() method uses this to resolve extended types
+// referenced in the course of cloning a class definition.
 // 
 
 class ImplAAFCloneResolver {
  public:
+
+  // CopyClassDef is a small utility function to initiate a copy of
+  // the class definition identified by "id".
+  static void CloneClassDef( const OMClassId& id,
+			     OMClassFactory* pDstFactory,
+			     ImplAAFMetaDictionary* pSrcDict );
 
   ImplAAFCloneResolver( ImplAAFFile* pDstFile );
   ImplAAFCloneResolver( ImplAAFDictionary* pDstDict );
@@ -162,6 +174,27 @@ class ImplAAFCloneResolver {
 	}
   }
 
+  // Add a mobID to the list, and get the list.  AddSourceReference
+  // ignores mobID's that are already in the source reference list.
+  // The user is responsible for copying the referenced mobs.
+  void AddSourceReference( const aafMobID_t mobID );
+  const OMVector<aafMobID_t>& GetSourceReferences() const;
+
+  // Add the uid of a type to the type id list.  Ignores ids that are
+  // already in the list.  The user calls GetTypeReferences() and is
+  // responsible for initiating new copy operation on the referenced
+  // type definitions.
+  void AddTypeReference( const aafUID_t typeID );
+  const OMVector<aafUID_t>& GetTypeReferences() const;
+
+  // Clone and register any type definition.  The method depends on
+  // the ImplAAFCloneResolverLookupDef and
+  // ImplAAFCloneResolverRegisterDef methods, hence, support the the
+  // same set of definition types.
+  // 
+  // The method also clones referenced types not present in the
+  // destination dictionary.
+
   template <class Type>
   void CloneAndRegister( const Type* pSrcDef )
   {
@@ -169,36 +202,53 @@ class ImplAAFCloneResolver {
 
     _AAFCLONE_CHECK_HRESULT( pSrcDef->GetAUID( &auid ) );
 
-    Type* pDstDef;
-    HRESULT hr = ImplAAFCloneResolverLookupDef( _pDstDict, auid, &pDstDef );
+    ImplAAFSmartPointer<Type> spDstDef;
+    HRESULT hr = ImplAAFCloneResolverLookupDef( _pDstDict, auid,
+						&spDstDef );
 
     if ( AAFRESULT_NO_MORE_OBJECTS == hr ) {
-    
+
+      Type* pDstDef;
       OMStorable* pDstStorable = pSrcDef->shallowCopy( _pDstDict );
+	  
+      pDstDef = dynamic_cast<Type*>( pDstStorable );
+      if ( !pDstDef ) {
+		_AAFCLONE_CHECK_HRESULT( AAFRESULT_BAD_TYPE );
+      }
+
+      pSrcDef->onCopy( this );
+
       ImplAAFCloneResolver context( _pDstDict );
       pSrcDef->deepCopyTo( pDstStorable, &context );
 
-      pDstDef = dynamic_cast<Type*>( pDstStorable );
-      if ( !pDstStorable ) {
-		_AAFCLONE_CHECK_HRESULT( AAFRESULT_BAD_TYPE );
-      }
-    
+      // Check if the copied definition referenced any types that must
+      // also be cloned and registered with the destination
+      // dictionary.  This must be done before pDstDef is registered
+      // or else the registration will fail due to the undefined
+      // types.  This is only any issue when cloneing class
+      // definitions, the type id come from the property definitions
+      // encountered during the deepCopy traversal of the class
+      // definition.
+
+      const OMVector<aafUID_t>& referencedTypes = context.GetTypeReferences();
+      unsigned int i;
+      for( i = 0; i < referencedTypes.count(); ++i ) {
+		aafUID_t typeID = referencedTypes.valueAt(i);
+
+		ImplAAFSmartPointer<ImplAAFDictionary> spSrcDict;
+		_AAFCLONE_CHECK_HRESULT( pSrcDef->GetDictionary( &spSrcDict ) );
+
+		ImplAAFSmartPointer<ImplAAFTypeDef> spSrcTypeDef;
+		_AAFCLONE_CHECK_HRESULT( ImplAAFCloneResolverLookupDef( spSrcDict, typeID,
+									&spSrcTypeDef ) );
+
+		ImplAAFCloneResolver typeContext( _pDstDict );
+		typeContext.CloneAndRegister( static_cast<ImplAAFTypeDef*>(spSrcTypeDef) );
+      }	
+	  
       _AAFCLONE_CHECK_HRESULT( ImplAAFCloneResolverRegisterDef( _pDstDict, pDstDef ) );
-    
-      return;
     }
-	else {
-		_AAFCLONE_CHECK_HRESULT( hr );
-		pDstDef->ReleaseReference();
-	}
-
   }
-
-  // Add a mobID to the list, and get the list.
-  // AddSourceReference ignores mobID's that are already in the source
-  // reference list.
-  void AddSourceReference( const aafMobID_t mobID );
-  const OMVector<aafMobID_t>& GetSourceReferences() const;
 
 private:
 
@@ -208,6 +258,7 @@ private:
   ImplAAFCloneResolver& operator==( const ImplAAFCloneResolver& );
 
   OMVector<aafMobID_t> _sourceIDList;
+  OMVector<aafUID_t> _typeIDList;
   ImplAAFDictionary* _pDstDict;
 };
 

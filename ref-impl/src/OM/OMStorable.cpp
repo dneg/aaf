@@ -473,6 +473,10 @@ OMStorable* OMStorable::shallowCopy(const OMClassFactory* factory) const
   const OMStoredObjectIdentification& id = classId();
   OMStorable* object = 0;
 
+  if ( !factory->isRegistered(id) ) {
+    classFactory()->cloneClassDef(id, const_cast<OMClassFactory*>(factory));
+  }
+
   object = factory->create(id);
   ASSERT("Registered class id", object != 0);
 

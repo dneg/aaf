@@ -92,7 +92,12 @@ protected:
 
 public:
 
+  // Return true if "classId" is registered.
   virtual bool isRegistered(const OMClassId& classId) const;
+
+  // Copy the class definition identified by "id" to the destination
+  // class factory.
+  virtual void cloneClassDef(const OMClassId& id, OMClassFactory* dstFactory);
 
   // Create an instance of the appropriate derived class, given the
   // class id.  Initializes the OM properties.
@@ -570,6 +575,7 @@ AAFRESULT PvtIsPropertyDefDuplicate(
   // represents the given AUID.  Doesn't init its OM properties.
   //
   ImplAAFObject* pvtInstantiate(const aafUID_t & id) const;
+  ImplAAFStorable* pvtInstantiateStorable(const aafUID_t & id) const;
 
   //
   // If the given AUID is known to the code, instantiates an object of
@@ -577,6 +583,7 @@ AAFRESULT PvtIsPropertyDefDuplicate(
   // properties.
   //
   static ImplAAFObject* pvtCreateBaseClassInstance(const aafUID_t & id);
+  static ImplAAFStorable* pvtCreateBaseClassStorableInstance(const aafUID_t & id);
 
 
   // Generates an OM PID corresponding to the given property def auid.
