@@ -108,6 +108,10 @@ public:
     //            derived instances of <c OMStoredObject>.
   virtual OMByteOrder byteOrder(void) const;
 
+  virtual void save(OMFile& file);
+
+  virtual void save(OMStorable& object);
+
   // Saving and restoring properties
 
     // @cmember Save the <c OMStoredObjectIdentification> <p id>
