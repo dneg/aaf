@@ -62,6 +62,7 @@
 #elif defined(__GNUC__) && defined(__sparc__) && defined(__sun__)
 #define OM_COMPILER_GCC_SPARC_SUNOS
 #define OM_OS_UNIX
+typedef off64_t __off64_t
 #else
 #error "Unknown compiler"
 #endif
