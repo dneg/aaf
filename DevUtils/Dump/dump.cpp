@@ -34,6 +34,8 @@
 //
 // Tom Ransdell 28-Sept-1998 Tom_Ransdell@avid.com
 //              Adapt to building on the Macintosh with CodeWarrior Pro3
+//              24-Jan-2000
+//              Added new conditional macro IOS_FMT_FLAGS for CodeWarrior Pro5.
 //
 
 //
@@ -99,6 +101,18 @@ typedef int bool;
 const bool false = 0;
 const bool true = 1;
 #endif
+#endif
+
+// TRR:2000-JAN-24: Added the following conditional code support 
+// CodeWarrior Pro 5 MSL changes.
+#if defined(__MWERKS__)
+#if defined(__MSL_CPP__) && (__MSL_CPP__ >= 0x5300)
+#define IOS_FMT_FLAGS ios_base::fmtflags
+#else
+#define IOS_FMT_FLAGS long int
+#endif
+#else
+#define IOS_FMT_FLAGS long int
 #endif
 
 // The following should be provided in
@@ -616,7 +630,7 @@ void Dumper::output(void)
   spaces(LEADINGSPACES);
   _line++;
   
-  long int savedFlags = cout.setf(ios::basefield);
+  IOS_FMT_FLAGS savedFlags = cout.setf(ios::basefield);
   char savedFill = cout.fill();
   
   for (i = 0; i < _count; i++) {
@@ -2627,7 +2641,7 @@ void printInteger(const size_t value, char* label)
 
 void printFixed(const double value, char* label)
 {
-    long oldFlags = cout.flags(ios::right | ios::fixed);
+    IOS_FMT_FLAGS oldFlags = cout.flags(ios::right | ios::fixed);
     cout << label
          << setw(8)
          << setprecision(2)
@@ -2638,7 +2652,7 @@ void printFixed(const double value, char* label)
 
 void printFixedPercent(const double value, char* label)
 {
-    long oldFlags = cout.flags(ios::right | ios::fixed);
+    IOS_FMT_FLAGS oldFlags = cout.flags(ios::right | ios::fixed);
     cout << label
          << setw(8)
          << setprecision(2)
