@@ -123,7 +123,7 @@ ImplAAFIdentification::Initialize ()
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFIdentification::GetCompanyName (aafWChar *  pName,
-										   aafInt32 bufSize)
+										   aafUInt32 bufSize)
 {
   bool stat;
   if (! pName)
@@ -140,7 +140,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFIdentification::GetCompanyNameBufLen (aafInt32 *  pLen)
+    ImplAAFIdentification::GetCompanyNameBufLen (aafUInt32 *  pLen)
 {
   if (! pLen)
 	{
@@ -154,7 +154,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFIdentification::GetProductName (aafWChar *  pProductName,
-										   aafInt32 bufSize)
+										   aafUInt32 bufSize)
 {
   bool stat;
   if (! pProductName)
@@ -171,7 +171,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFIdentification::GetProductNameBufLen (aafInt32 *  pLen)
+    ImplAAFIdentification::GetProductNameBufLen (aafUInt32 *  pLen)
 {
   if (! pLen)
 	{
@@ -196,7 +196,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFIdentification::GetProductVersionString (aafWChar *  pVS,
-													aafInt32 bufSize)
+													aafUInt32 bufSize)
 {
   bool stat;
   if (! pVS)
@@ -213,7 +213,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFIdentification::GetProductVersionStringBufLen (aafInt32 *  pLen)
+    ImplAAFIdentification::GetProductVersionStringBufLen (aafUInt32 *  pLen)
 {
   if (! pLen)
 	{
@@ -260,7 +260,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFIdentification::GetPlatform (aafWChar *  pPlatform,
-										aafInt32 bufSize)
+										aafUInt32 bufSize)
 {
   bool stat;
   if (! pPlatform)
@@ -277,7 +277,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFIdentification::GetPlatformBufLen (aafInt32 *  pLen)
+    ImplAAFIdentification::GetPlatformBufLen (aafUInt32 *  pLen)
 {
   if (! pLen)
 	{
