@@ -498,5 +498,5 @@ ImplAAFContentStorage *ImplAAFHeader::GetContentStorage()
 
 extern "C" const aafClassID_t CLSID_AAFHeader;
 
-OMDEFINE_STORABLE(AAFHeader, CLSID_AAFHeader);
+OMDEFINE_STORABLE(ImplAAFHeader, CLSID_AAFHeader);
 
