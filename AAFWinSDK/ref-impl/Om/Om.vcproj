@@ -176,7 +176,7 @@
 				RelativePath="..\..\..\ref-impl\src\OM\OMFile.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\ref-impl\src\OM\OMGSFxMSSStoredObjectFactory.cpp">
+				RelativePath="..\..\..\ref-impl\src\OM\OMGSF_SSStoredObjectFactory.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\ref-impl\src\OM\OMIntegerType.cpp">
@@ -200,19 +200,19 @@
 				RelativePath="..\..\..\ref-impl\src\OM\OMMemoryRawStorage.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\ref-impl\src\OM\OMMSSStoredObject.cpp">
+				RelativePath="..\..\..\ref-impl\src\OM\OMSSStoredObject.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\ref-impl\src\OM\OMMSSStoredObjectFactory.cpp">
+				RelativePath="..\..\..\ref-impl\src\OM\OMSSStoredObjectFactory.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\ref-impl\src\OM\OMMSSStoredStream.cpp">
+				RelativePath="..\..\..\ref-impl\src\OM\OMSSStoredStream.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\ref-impl\src\OM\OMMSStructuredStorage.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\ref-impl\src\OM\OMMSxMSSStoredObjectFactory.cpp">
+				RelativePath="..\..\..\ref-impl\src\OM\OMMS_SSStoredObjectFactory.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\ref-impl\src\OM\OMObjectManager.cpp">
@@ -269,10 +269,10 @@
 				RelativePath="..\..\..\ref-impl\src\OM\OMSSSStorageRWInputSource.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\ref-impl\src\OM\OMSSSStructuredStorage.cpp">
+				RelativePath="..\..\..\ref-impl\src\OM\OMSSStructuredStorage.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\ref-impl\src\OM\OMSSxMSSStoredObjectFactory.cpp">
+				RelativePath="..\..\..\ref-impl\src\OM\OMSS_SSStoredObjectFactory.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\ref-impl\src\OM\OMStackTrace.cpp">
@@ -447,7 +447,7 @@
 				RelativePath="..\..\..\ref-impl\src\OM\OMFixedSizePropertyT.h">
 			</File>
 			<File
-				RelativePath="..\..\..\ref-impl\include\OM\OMGSFxMSSStoredObjectFactory.h">
+				RelativePath="..\..\..\ref-impl\include\OM\OMGSF_SSStoredObjectFactory.h">
 			</File>
 			<File
 				RelativePath="..\..\..\ref-impl\include\OM\OMIdentitySet.h">
@@ -489,19 +489,19 @@
 				RelativePath="..\..\..\ref-impl\include\OM\OMMemoryRawStorage.h">
 			</File>
 			<File
-				RelativePath="..\..\..\ref-impl\include\OM\OMMSSStoredObject.h">
+				RelativePath="..\..\..\ref-impl\include\OM\OMSSStoredObject.h">
 			</File>
 			<File
-				RelativePath="..\..\..\ref-impl\include\OM\OMMSSStoredObjectFactory.h">
+				RelativePath="..\..\..\ref-impl\include\OM\OMSSStoredObjectFactory.h">
 			</File>
 			<File
-				RelativePath="..\..\..\ref-impl\include\OM\OMMSSStoredStream.h">
+				RelativePath="..\..\..\ref-impl\include\OM\OMSSStoredStream.h">
 			</File>
 			<File
 				RelativePath="..\..\..\ref-impl\src\OM\OMMSStructuredStorage.h">
 			</File>
 			<File
-				RelativePath="..\..\..\ref-impl\include\OM\OMMSxMSSStoredObjectFactory.h">
+				RelativePath="..\..\..\ref-impl\include\OM\OMMS_SSStoredObjectFactory.h">
 			</File>
 			<File
 				RelativePath="..\..\..\ref-impl\include\OM\OMObject.h">
@@ -630,7 +630,7 @@
 				RelativePath="..\..\..\ref-impl\src\OM\OMSingletonT.h">
 			</File>
 			<File
-				RelativePath="..\..\..\ref-impl\include\OM\OMSSxMSSStoredObjectFactory.h">
+				RelativePath="..\..\..\ref-impl\include\OM\OMSS_SSStoredObjectFactory.h">
 			</File>
 			<File
 				RelativePath="..\..\..\ref-impl\include\OM\OMStackTrace.h">

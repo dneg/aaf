@@ -29,12 +29,12 @@
 #include "OMClassFactory.h"
 #include "OMMemoryRawStorage.h"
 
-#include "OMMSSStoredObjectFactory.h"
-#include "OMMSxMSSStoredObjectFactory.h"
+#include "OMSSStoredObjectFactory.h"
+#include "OMMS_SSStoredObjectFactory.h"
 #ifdef USE_LIBGSF
-#include "OMGSFxMSSStoredObjectFactory.h"
+#include "OMGSF_SSStoredObjectFactory.h"
 #endif
-#include "OMSSxMSSStoredObjectFactory.h"
+#include "OMSS_SSStoredObjectFactory.h"
 #include "OMXMLStoredObjectFactory.h"
 #include "OMKLVStoredObjectFactory.h"
 
@@ -1518,13 +1518,13 @@ void ImplAAFFile::registerFactories(void)
 	assert( equalUID( aafFileKindAaf4KBinary, aafFileKindAafS4KBinary));
 
 	OMFile::registerFactory(AAFS4KEncoding,
-                          new OMSSxMSSStoredObjectFactory(AAFS4KEncoding,
+                          new OMSS_SSStoredObjectFactory(AAFS4KEncoding,
                                                        Signature_SSBin_4K,
                                                        L"AAF-S4K",
                                                        L"AAF Schemasoft 4K"));
 
 	OMFile::registerFactory(AAFM4KEncoding,
-                          new OMMSxMSSStoredObjectFactory(AAFM4KEncoding,
+                          new OMMS_SSStoredObjectFactory(AAFM4KEncoding,
                                                        Signature_SSBin_4K,
                                                        L"AAF-M4K",
                                                        L"AAF Microsoft 4K"));
@@ -1532,13 +1532,13 @@ void ImplAAFFile::registerFactories(void)
 	assert( equalUID( aafFileKindAaf512Binary, aafFileKindAafS512Binary));
 
 	OMFile::registerFactory(AAFS512Encoding,
-                          new OMSSxMSSStoredObjectFactory(AAFS512Encoding,
+                          new OMSS_SSStoredObjectFactory(AAFS512Encoding,
                                                        Signature_SSBin_512,
                                                        L"AAF-S",
                                                        L"AAF Schemasoft SS"));
 
 	OMFile::registerFactory(AAFM512Encoding,
-                          new OMMSxMSSStoredObjectFactory(AAFM512Encoding,
+                          new OMMS_SSStoredObjectFactory(AAFM512Encoding,
                                                        Signature_SSBin_512,
                                                        L"AAF-M",
                                                        L"AAF Microsoft SS"));
@@ -1554,7 +1554,7 @@ void ImplAAFFile::registerFactories(void)
 	assert( equalUID( aafFileKindAaf4KBinary, aafFileKindAafS4KBinary));
 
 	OMFile::registerFactory(AAFS4KEncoding,
-                          new OMSSxMSSStoredObjectFactory(AAFS4KEncoding,
+                          new OMSS_SSStoredObjectFactory(AAFS4KEncoding,
                                                        Signature_SSBin_4K,
                                                        L"AAF-S4K",
                                                        L"AAF Schemasoft 4K"));
@@ -1562,7 +1562,7 @@ void ImplAAFFile::registerFactories(void)
 	assert( equalUID( aafFileKindAaf512Binary, aafFileKindAafS512Binary));
 
 	OMFile::registerFactory(AAFS512Encoding,
-                          new OMSSxMSSStoredObjectFactory(AAFS512Encoding,
+                          new OMSS_SSStoredObjectFactory(AAFS512Encoding,
                                                        Signature_SSBin_512,
                                                        L"AAF-S",
                                                        L"AAF Schemasoft SS"));
@@ -1573,7 +1573,7 @@ void ImplAAFFile::registerFactories(void)
 	assert( equalUID( aafFileKindAaf4KBinary, aafFileKindAafS4KBinary));
 
 	OMFile::registerFactory(AAFS4KEncoding,
-                          new OMSSxMSSStoredObjectFactory(AAFS4KEncoding,
+                          new OMSS_SSStoredObjectFactory(AAFS4KEncoding,
                                                        Signature_SSBin_4K,
                                                        L"AAF-S4K",
                                                        L"AAF Schemasoft 4K"));
@@ -1581,7 +1581,7 @@ void ImplAAFFile::registerFactories(void)
 	assert( equalUID( aafFileKindAaf512Binary, aafFileKindAafS512Binary));
 
 	OMFile::registerFactory(AAFS512Encoding,
-                          new OMSSxMSSStoredObjectFactory(AAFS512Encoding,
+                          new OMSS_SSStoredObjectFactory(AAFS512Encoding,
   						    						   Signature_SSBin_512,
                                                        L"AAF-S",
                                                        L"AAF Schemasoft SS"));
@@ -1594,12 +1594,12 @@ void ImplAAFFile::registerFactories(void)
 	assert( equalUID( aafFileKindAaf512Binary, aafFileKindAafG512Binary));
 
 	OMFile::registerFactory(AAFG4KEncoding,
-                          new OMGSFxMSSStoredObjectFactory(AAFG4KEncoding,
+                          new OMGSF_SSStoredObjectFactory(AAFG4KEncoding,
                                                        Signature_SSBin_4K,
                                                        L"AAF-G4K",
                                                        L"AAF GSF 4K"));
 	OMFile::registerFactory(AAFG512Encoding,
-                          new OMGSFxMSSStoredObjectFactory(AAFG512Encoding,
+                          new OMGSF_SSStoredObjectFactory(AAFG512Encoding,
                                                        Signature_SSBin_512,
                                                        L"AAF-G",
                                                        L"AAF GSF SS"));
@@ -1612,12 +1612,12 @@ void ImplAAFFile::registerFactories(void)
 #endif
 
 	OMFile::registerFactory(AAFS4KEncoding,
-                          new OMSSxMSSStoredObjectFactory(AAFS4KEncoding,
+                          new OMSS_SSStoredObjectFactory(AAFS4KEncoding,
                                                        Signature_SSBin_4K,
                                                        L"AAF-S4K",
                                                        L"AAF Schemasoft 4K"));
 	OMFile::registerFactory(AAFS512Encoding, 
-                          new OMSSxMSSStoredObjectFactory(AAFS512Encoding,
+                          new OMSS_SSStoredObjectFactory(AAFS512Encoding,
                                                        Signature_SSBin_512,
                                                        L"AAF-S",
                                                        L"AAF Schemasoft SS"));
@@ -1632,7 +1632,7 @@ void ImplAAFFile::registerFactories(void)
 	assert( equalUID( aafFileKindAaf4KBinary, aafFileKindAafS4KBinary));
 
 	OMFile::registerFactory(AAFS4KEncoding,
-                          new OMSSxMSSStoredObjectFactory(AAFS4KEncoding,
+                          new OMSS_SSStoredObjectFactory(AAFS4KEncoding,
                                                        Signature_SSBin_4K,
                                                        L"AAF-S4K",
                                                        L"AAF Schemasoft 4K"));
@@ -1640,7 +1640,7 @@ void ImplAAFFile::registerFactories(void)
 	assert( equalUID( aafFileKindAaf512Binary, aafFileKindAafS512Binary));
 
 	OMFile::registerFactory(AAFS512Encoding,
-                          new OMSSxMSSStoredObjectFactory(AAFS512Encoding,
+                          new OMSS_SSStoredObjectFactory(AAFS512Encoding,
                                                        Signature_SSBin_512,
                                                        L"AAF-S",
                                                        L"AAF Schemasoft SS"));

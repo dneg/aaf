@@ -166,7 +166,7 @@ SOURCE="..\..\..\ref-impl\src\OM\OMFile.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\OM\OMGSFxMSSStoredObjectFactory.cpp"
+SOURCE="..\..\..\ref-impl\src\OM\OMGSF_SSStoredObjectFactory.cpp"
 # End Source File
 # Begin Source File
 
@@ -198,15 +198,15 @@ SOURCE="..\..\..\ref-impl\src\OM\OMMemoryRawStorage.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\OM\OMMSSStoredObject.cpp"
+SOURCE="..\..\..\ref-impl\src\OM\OMSSStoredObject.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\OM\OMMSSStoredObjectFactory.cpp"
+SOURCE="..\..\..\ref-impl\src\OM\OMSSStoredObjectFactory.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\OM\OMMSSStoredStream.cpp"
+SOURCE="..\..\..\ref-impl\src\OM\OMSSStoredStream.cpp"
 # End Source File
 # Begin Source File
 
@@ -214,7 +214,7 @@ SOURCE="..\..\..\ref-impl\src\OM\OMMSStructuredStorage.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\OM\OMMSxMSSStoredObjectFactory.cpp"
+SOURCE="..\..\..\ref-impl\src\OM\OMMS_SSStoredObjectFactory.cpp"
 # End Source File
 # Begin Source File
 
@@ -290,11 +290,11 @@ SOURCE="..\..\..\ref-impl\src\OM\OMSSSStorageRWInputSource.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\OM\OMSSSStructuredStorage.cpp"
+SOURCE="..\..\..\ref-impl\src\OM\OMSSStructuredStorage.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\OM\OMSSxMSSStoredObjectFactory.cpp"
+SOURCE="..\..\..\ref-impl\src\OM\OMSS_SSStoredObjectFactory.cpp"
 # End Source File
 # Begin Source File
 
@@ -538,7 +538,7 @@ SOURCE="..\..\..\ref-impl\src\OM\OMFixedSizePropertyT.h"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\include\OM\OMGSFxMSSStoredObjectFactory.h"
+SOURCE="..\..\..\ref-impl\include\OM\OMGSF_SSStoredObjectFactory.h"
 # End Source File
 # Begin Source File
 
@@ -594,15 +594,15 @@ SOURCE="..\..\..\ref-impl\include\OM\OMMemoryRawStorage.h"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\include\OM\OMMSSStoredObject.h"
+SOURCE="..\..\..\ref-impl\include\OM\OMSSStoredObject.h"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\include\OM\OMMSSStoredObjectFactory.h"
+SOURCE="..\..\..\ref-impl\include\OM\OMSSStoredObjectFactory.h"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\include\OM\OMMSSStoredStream.h"
+SOURCE="..\..\..\ref-impl\include\OM\OMSSStoredStream.h"
 # End Source File
 # Begin Source File
 
@@ -610,7 +610,7 @@ SOURCE="..\..\..\ref-impl\src\OM\OMMSStructuredStorage.h"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\include\OM\OMMSxMSSStoredObjectFactory.h"
+SOURCE="..\..\..\ref-impl\include\OM\OMMS_SSStoredObjectFactory.h"
 # End Source File
 # Begin Source File
 
@@ -790,7 +790,7 @@ SOURCE="..\..\..\ref-impl\src\OM\OMSingletonT.h"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\include\OM\OMSSxMSSStoredObjectFactory.h"
+SOURCE="..\..\..\ref-impl\include\OM\OMSS_SSStoredObjectFactory.h"
 # End Source File
 # Begin Source File
 

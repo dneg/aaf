@@ -795,7 +795,7 @@ STDAPI ImplAAFFileIsAAFFile (
     return AAFRESULT_NULL_PARAM;
 
   // Crude file existance check.  May be better done in 
-  // OMMSSStoredObjectFactory::isRecognized(OMRawStorage* rawStorage) but
+  // OMSSStoredObjectFactory::isRecognized(OMRawStorage* rawStorage) but
   // reporting the right HRESULT is difficult from there.
   // There may also be another reason for failing to open the file than
   // non-existance. e.g. permissions problems.
