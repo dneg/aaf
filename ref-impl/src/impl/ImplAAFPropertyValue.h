@@ -74,6 +74,6 @@ private:
 #include "ImplAAFSmartPointer.h"
 #endif
 
-typedef ImplAAFSmartPointer<ImplAAFPropertyValue> ImplAAFPropPropertyValueSP;
+typedef ImplAAFSmartPointer<ImplAAFPropertyValue> ImplAAFPropertyValueSP;
 
 #endif // ! __ImplAAFPropertyValue_h__
