@@ -57,7 +57,7 @@ public:
   ImplAAFMob ();
   ~ImplAAFMob ();
 
-  OMDECLARE_STORABLE(ImplAAFMob);
+  OMDECLARE_STORABLE(ImplAAFMob)
 
   //****************
   // IsAPrimaryMob()
