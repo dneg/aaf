@@ -333,9 +333,9 @@ OMUInt64 OMMemoryRawStorage::size(void) const
   //        precondition - isExtendible()
   //   @parm The new size of this <c OMMemoryRawStorage> in bytes.
   //   @devnote There is no ANSI way of truncating a file in place.
-void OMMemoryRawStorage::setSize(OMUInt64 newSize)
+void OMMemoryRawStorage::extend(OMUInt64 newSize)
 {
-  TRACE("OMMemoryRawStorage::setSize");
+  TRACE("OMMemoryRawStorage::extend");
 
   PRECONDITION("Extendible", isExtendible());
 
