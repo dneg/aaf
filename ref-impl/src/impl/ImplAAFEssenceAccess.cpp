@@ -74,12 +74,10 @@ extern "C" const aafClassID_t CLSID_AAFSourceMob;
 extern "C" const aafClassID_t CLSID_AAFEssenceData;
 extern "C" const CLSID CLSID_AAFEssenceStream = { 0x66FE33B1, 0x946D, 0x11D2, { 0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
 extern "C" const IID IID_IAAFEssenceStream = { 0x83402902, 0x9146, 0x11d2, { 0x80, 0x88, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
-//extern "C" const CLSID CLSID_AAFEssenceCodec = { 0x74867B41, 0x946E, 0x11D2, { 0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
 extern "C" const IID IID_IAAFEssenceCodec = { 0x74867B42, 0x946E, 0x11D2, { 0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
 extern "C" const CLSID CLSID_AAFDefaultStream;
 
 const CLSID CLSID_AAFEssenceDataStream = { 0x42A63FE1, 0x968A, 0x11d2, { 0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
-//const IID IID_IAAFEssenceDataStream = { 0x298F2BE2, 0x96C0, 0x11d2, { 0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
 const IID IID_IAAFEssenceDataStream = { 0xCDDB6AB1, 0x98DC, 0x11d2, { 0x80, 0x8a, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
 const aafUID_t CLSID_AAFWaveCodec = { 0x8D7B04B1, 0x95E1, 0x11d2, { 0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
 
@@ -311,9 +309,10 @@ ImplAAFEssenceAccess::Create (ImplAAFMasterMob *masterMob,
 	ImplAAFHeader		*head;
 	AAFPluginManager	*plugins;
 	aafCodecMetaInfo_t	metaInfo;
-//!!!	ImplAAFFileDescriptor *mdes;
 	ImplAAFWAVEDescriptor *mdes;
 	IUnknown			*dataObj;
+	ImplAAFEssenceData	*implData;				
+	CLSID				dataClass;
 	
 	XPROTECT()
 	{
@@ -330,7 +329,6 @@ ImplAAFEssenceAccess::Create (ImplAAFMasterMob *masterMob,
 		fileMob = (ImplAAFSourceMob *)CreateImpl(CLSID_AAFSourceMob);
 		CHECK(fileMob->GetMobID(&fileMobUID));
 		
-		//!!!		CHECK(InitMediaHandle( fileMob));
 		_masterMob = masterMob;
 		_fileMob = fileMob;
 		_channels = (aafSubChannel_t *) new aafSubChannel_t[1];
@@ -374,7 +372,7 @@ ImplAAFEssenceAccess::Create (ImplAAFMasterMob *masterMob,
 			/* JEFF!! Changed masterSlotID to be 1 when creating mono 
 			* audio media, so file mob track will be labeled correctly */
 			if (EqualAUID(&mediaKind, &audioDDEF));
-			masterSlotID = 1;
+				masterSlotID = 1;
 			
 			/* JeffB: Handle the case where an existing file=>tape mob connection exists
 			*/
@@ -397,34 +395,12 @@ ImplAAFEssenceAccess::Create (ImplAAFMasterMob *masterMob,
 			aafUID_t	fileType = NilMOBID;//!!!
 			CHECK(mdes->SetContainerFormat (&fileType));	//!!!
 
-			//!!!Move out to the WAVE codec
-			unsigned char	someData[] = { 1, 2, 3, 4, 5, 6 };
-			CHECK(mdes->SetSummary (sizeof(someData), someData));
-
 			CHECK(fileMob->SetEssenceDescriptor(mdes));
 			CHECK(head->AppendMob(fileMob));
 			
-			//!!!Later use  dataClassID instead of hardwiring
-//!!!			dataObj = (ImplAAFEssenceData *)CreateImpl(metaInfo.dataClassID);
-			ImplAAFEssenceData		*implData;				
-			CLSID	dataClass;
 			
 			memcpy(&dataClass, &metaInfo.dataClassID, sizeof(dataClass));
 			implData = (ImplAAFEssenceData *)CreateImpl (metaInfo.dataClassID);
-/*			CoCreateInstance(dataClass,
-				NULL, 
-				CLSCTX_INPROC_SERVER, 
-				IID_IUnknown, 
-				(void **)&dataObj);
-
-			IAAFRoot				*CoObj;
-			ImplAAFRoot				*implRoot;
-
-			aafError = dataObj->QueryInterface(IID_IAAFRoot, (void **)&CoObj);
-
-			CoObj->GetImplRep((void **)&implRoot);
-			implData = (ImplAAFEssenceData *)implRoot;
-*/
 			dataObj = static_cast<IUnknown *> (implData->GetContainer());
 
 			CHECK(implData->SetFileMob(fileMob));
@@ -436,7 +412,7 @@ ImplAAFEssenceAccess::Create (ImplAAFMasterMob *masterMob,
 		}
 		
 		
-		//!!! Change to use the corrent Subclass
+		//!!! Change to use the correct Subclass
 		aafError = CoCreateInstance(CLSID_AAFEssenceDataStream,
 			NULL, 
 			CLSCTX_INPROC_SERVER, 
@@ -449,23 +425,19 @@ ImplAAFEssenceAccess::Create (ImplAAFMasterMob *masterMob,
 		aafError = (_stream->QueryInterface(IID_IAAFEssenceDataStream, (void **)&edStream));
 		edStream->Init(dataObj);
 		
-		// We now have a valid media handle, so tell the world so.  Then 
-		// fill in some of the more optional fields.
-		//	
 		fileMob->MyHeadObject(&head);
-//!!!Not yet implemented		CHECK(head->SetModified());		// To NOW
+		CHECK(head->SetModified());		// To NOW
 		
-		// do this now, delay may mess up data contiguity
-		//
-//!!! Not yet implemented		CHECK(dataObj->SetFileMob(fileMob));
-//!!!not implemented yet		CHECK(head->AppendEssenceData(dataObj));
 		
 		// Call the codec to create the actual media.
 		//
 		if(_codec != NULL)
 		{
-			CHECK(_codec->Create(fileMobUID, _variety, _stream));
-///!!!Not implemented yet			CHECK(_codec->SetCompression(enable));
+			IUnknown	*iFileMob;
+
+			iFileMob = static_cast<IUnknown *> (fileMob->GetContainer());
+			CHECK(_codec->Create(iFileMob, _variety, _stream));
+			(void)(_codec->SetCompression(enable));
 			//!!! 			SetVideoLineMap(16, kTopFieldNone);
 		}
 	}
@@ -994,8 +966,8 @@ AAFRESULT STDMETHODCALLTYPE
                            aafInt32  sampleSize)
 {
 	aafAssert(buffer != NULL, _mainFile, AAFRESULT_BADDATAADDRESS);
-//!!!	aafAssert((_openType == kAAFCreated) ||
-//				(_openType == kAAFAppended), _mainFile,AAFRESULT_MEDIA_OPENMODE);
+	aafAssert((_openType == kAAFCreated) ||
+				(_openType == kAAFAppended), _mainFile,AAFRESULT_MEDIA_OPENMODE);
 
 	XPROTECT()
 	{
@@ -1027,12 +999,10 @@ AAFRESULT STDMETHODCALLTYPE
 	aafAssert(buffer != NULL, _mainFile, OM_ERR_BADDATAADDRESS);
 	XPROTECT()
 	{
-		CHECK(_codec->ReadRawData (nSamples, buffer, bytesRead));
-		*samplesRead = *bytesRead;			//!!! Codec API needs to pass this out
+		CHECK(_codec->ReadRawData (nSamples, buflen, buffer, bytesRead, samplesRead));
 	}
 	XEXCEPT
 	{
-		*samplesRead = 0;			//!!! Codec API needs to pass this out
 	}
 	XEND
 	
@@ -1118,19 +1088,21 @@ AAFRESULT STDMETHODCALLTYPE
 		if(_codec != NULL)		/* A codec was opened */
 			CHECK(_codec->Close());
 
-		//!!!Set the length for now to 1 so that we can open it...
-		ImplAAFMobSlot	*tmpSlot;
-		ImplAAFSegment	*seg;
-		aafLength_t		len = 1;
-
 		if((_openType == kAAFCreated) || (_openType == kAAFAppended))
 		{
-			CHECK(_masterMob->FindSlotBySlotID(1, &tmpSlot));
-			CHECK(tmpSlot->GetSegment(&seg));
-			CHECK(seg->SetLength(&len));
+#if 0
 			CHECK(_fileMob->FindSlotBySlotID(1, &tmpSlot));
 			CHECK(tmpSlot->GetSegment(&seg));
 			CHECK(seg->SetLength(&len));
+			CHECK(_masterMob->FindSlotBySlotID(1, &tmpSlot));
+			CHECK(tmpSlot->GetSegment(&seg));
+			CHECK(seg->SetLength(&len));
+#else
+			// Make the lengths of the affected tracks equal the sample length
+			// adjusted for the edit rate
+			CHECK(_fileMob->ReconcileMobLength());
+			CHECK(_masterMob->ReconcileMobLength());
+#endif
 		}
 
 #if FULL_TOOLKIT
@@ -1560,7 +1532,11 @@ AAFRESULT STDMETHODCALLTYPE
 
 		plugins = ImplAAFSession::GetInstance()->GetPluginManager();
 		CHECK(plugins->GetCodecInstance(CLSID_AAFWaveCodec, _variety, &_codec));
-		CHECK(_codec->GetNumChannels(fileMobID, mediaKind, &numCh));
+
+		IUnknown	*iFileMob;
+
+		iFileMob = static_cast<IUnknown *> (fileMob->GetContainer());
+		CHECK(_codec->GetNumChannels(iFileMob, mediaKind, &numCh));
 		if (numCh == 0)
 		  RAISE(OM_ERR_INVALID_DATAKIND);
 
@@ -1629,7 +1605,8 @@ AAFRESULT STDMETHODCALLTYPE
 //		aafError = (essenceData->QueryInterface(IID_IUnknown, (void **)&edUnknown));
 		edStream->Init(edUnknown);
 
-		CHECK(_codec->Open(fileMobID, openMode, _stream));
+		iFileMob = static_cast<IUnknown *> (fileMob->GetContainer());
+		CHECK(_codec->Open(iFileMob, openMode, _stream));
 //!!!		if(openMode == kMediaOpenAppend)
 //		{
 //			CHECK(GetSampleCount(&numSamples));										  
@@ -2494,11 +2471,8 @@ ImplAAFEssenceAccess::GetObjectClass(aafUID_t * pClass)
 }
 
 
-/************************************************************************
- *
- * Codec stream functions
- *
- ************************************************************************/
+
+
 
 
  #if FULL_TOOLKIT
@@ -2708,172 +2682,6 @@ aafErr_t     AAFMedia::LocateMediaFile(
  *		Standard errors (see top of file).
  */
 
-/************************
- * Function: omfsReconcileMasterMobLength (INTERNAL)
- *
- * 	Called from omfsReconcileMobLength to handle the master mob case.
- *		Given a master mob, make sure that all fields which contain the
- *		length of the mob are in agreement.  Currently only makes sure
- *		that mob length references are >= each of the track lengths.
- *
- *		Since 2.0 does not contain a redundant mob length field, this
- *		function simply returns on 2.x era files.
- *
- * Argument Notes:
- *		<none>.
- *
- * ReturnValue:
- *		Error code (see below).
- *
- * Possible Errors:
- *		Standard errors (see top of file).
- */
-aafErr_t AAFMedia::ReconcileMasterMobLength(
-			AAFMasterMob * mob)
-{
-	AAFMob			*fileMob;
-	aafInt32		loop;
-	aafInt32		numSlots, fileNumSlots;
-	aafPosition_t	endPos;
-	aafRational_t	fileRate, masterRate;
-	AAFIterate		*slotIter = NULL, *fileSlotIter = NULL;
-	AAFMobSlot		*fileSlot, *slot;
-	AAFSegment		*fileSeg, *seg;
-	aafFileRev_t	rev;
-		
-	aafAssertValidFHdl(_mainFile);
-	aafAssertMediaInitComplete(_mainFile);
-
-	XPROTECT(_mainFile)
-	{
-		_mainFile->GetRevision(&rev);
-		switch(rev)
-		{
-		case kAAFRev2x:
-			/* Adjust the SCLP length from the master mob to the length of
-			 * the file mob, in the units of the master mob
-			 */
-			slotIter = new AAFIterate(_mainFile);
-			CHECK(mob->GetNumSlots(&numSlots));
-			for (loop = 1; loop <= numSlots; loop++)
-			{
-				CHECK(slotIter->MobGetNextSlot(mob, NULL, &slot));
-				CHECK(slot->GetSegment(&seg));
-				CHECK(((AAFSourceClip *)seg)->ResolveRef( &fileMob));	//!!!
-				CHECK(fileMob->GetNumSlots(&fileNumSlots));
-				if(fileNumSlots >= 1)
-				{
-					fileSlotIter = new AAFIterate(_mainFile);
-					CHECK(fileSlotIter->MobGetNextSlot(fileMob, NULL, &fileSlot));
-					CHECK(fileSlot->GetSegment(&fileSeg));
-					CHECK(fileSeg->ReadLength(OMCPNTLength, &endPos));
-					delete fileSlotIter;
-				}
-				
-				CHECK(fileSlot->ReadRational(OMMSLTEditRate, &fileRate));
-				CHECK(slot->ReadRational(OMMSLTEditRate, &masterRate));
-				if((fileRate.numerator != masterRate.numerator) ||
-				   (fileRate.denominator != masterRate.denominator))
-				{
-					CHECK(AAFConvertEditRate(fileRate, endPos, masterRate, kRoundFloor, &endPos));
-				}
-
-				CHECK(seg->WriteLength(OMCPNTLength, endPos));
-			}			
-			delete slotIter;
-			slotIter = NULL;
-			break;
-		}
-	}
-	XEXCEPT
-	XEND
-		
-	return (OM_ERR_NONE);
-}
-
-
-/************************
- * Function: omfsReconcileMobLength (INTERNAL)
- *
- * 	Given a master mob or file mob, make sure that all fields
- *		which contain the length of the mob are in agreement.  Currently
- *		only makes sure that mob length references are >= each of
- *		the track lengths.
- *
- * Argument Notes:
- *		<none>.
- *
- * ReturnValue:
- *		Error code (see below).
- *
- * Possible Errors:
- *		Standard errors (see top of file).
- */
-aafErr_t AAFMedia::ReconcileMobLength(
-			AAFMob *mob)
-{
-	aafInt32			numSlots, loop;
-	aafProperty_t	mdesProp;
-	aafLength_t		len;
-	AAFMobSlot *	slot;
-	AAFSegment *	seg;
-	AAFIterate *	slotIter = NULL;
-	aafRational_t	srcRate, destRate;
-	aafFileRev_t	rev;
-	AAFObject		*physMedia;
-		
-	aafAssertValidFHdl(_mainFile);
-	aafAssertMediaInitComplete(_mainFile);
-
-	XPROTECT(_mainFile)
-	{
-		_mainFile->GetRevision(&rev);
-		switch(rev)
-		{
-		case kAAFRev2x:
-			mdesProp = OMSMOBMediaDescription;
-			break;
-	
-		default:
-			RAISE(OM_ERR_FILEREV_NOT_SUPP);
-		}
-		
-		if(mob->IsPropertyPresent(mdesProp, OMObjRef))
-		{				/* We are a physical MOB */
-			CHECK(mob->ReadObjRef(mdesProp, &physMedia));
-			{
-				slotIter = new AAFIterate(_mainFile);
-				CHECK(mob->GetNumSlots(&numSlots));
-				for (loop = 1; loop <= numSlots; loop++)
-				{
-					CHECK(slotIter->MobGetNextSlot(mob, NULL, &slot));
-					CHECK(slot->GetEditRate(&destRate));
-					CHECK(slot->GetSegment(&seg));
-					CHECK(physMedia->ReadLength(OMMDFLLength, &len));
-					CHECK(physMedia->ReadRational(OMMDFLSampleRate, &srcRate));
-					if((srcRate.numerator != destRate.numerator) ||
-					   (srcRate.denominator != destRate.denominator))
-					{
-						CHECK(AAFConvertEditRate(	srcRate, len, destRate, kRoundFloor, &len));
-					}
-
-					CHECK(seg->WriteLength(OMCPNTLength, len));
-				}			
-				delete slotIter;
-				slotIter = NULL;
-			}
-				
-		}
-		else			/* Must be a master clip */
-		{
-			CHECK(ReconcileMasterMobLength((AAFMasterMob *)mob));	//!!!
-		}
-	}
-	XEXCEPT
-	XEND
-		
-	return (OM_ERR_NONE);
-}
 
  #define incrementListPtr(lp, t) lp = (t *) ((char *)lp + sizeof(t))
 
