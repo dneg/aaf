@@ -341,6 +341,45 @@ AD_XFUNCTION2(AAFFileOpenTransient,
   // AAFRESULT_NULL_PARAM
   //   - the pIdent pointer argument is NULL.)
 
+AD_XFUNCTION3(AAFFileIsAAFFile,
+
+			[in\, string],
+			objPass,
+			aafCharacter_constptr,
+			pFileName,
+			Null-terminated string containing name of filesystem file.,
+
+			[out],
+			objPass,
+			aafUID_t *,
+			pAAFFileKind,
+			Pointer to an AUID indicating the file kind,
+
+			[out\,retval],
+			objPass,
+			aafBool *,
+			pFileIsAAFFile,
+			Returns AAFTrue if the given file is an AAF file\, returns AAFFalse otherwise.,
+
+			Is the named file an AAF file ?
+  //
+  // Note that the function result is returned via the pFileIsAAFFile argument.
+  // If this function succeeds it returns AAFRESULT_SUCCESS even if the named
+  // file is not an AAF file.
+  //
+  // This function will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - at least one of the pointer arguments is NULL.
+  //
+  // AAFRESULT_FILE_NOT_FOUND
+  //   - the file named by pFileName cannot be found.)
+
 
 AD_XFUNCTION1(AAFGetPluginManager,
 			[out],
