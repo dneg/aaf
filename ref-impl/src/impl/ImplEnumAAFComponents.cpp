@@ -113,7 +113,7 @@ AAFRESULT STDMETHODCALLTYPE
 								 ImplAAFComponent**	ppComponents,
 								 aafUInt32*			pFetched)
 {
-	ImplAAFComponent*	pComponent;
+	ImplAAFComponent**	ppComponent;
 	aafUInt32			numComps;
 	HRESULT				hr;
 
@@ -121,10 +121,10 @@ AAFRESULT STDMETHODCALLTYPE
 		return E_INVALIDARG;
 
 	// Point at the first component in the array.
-	pComponent = *ppComponents;
+	ppComponent = ppComponents;
 	for (numComps = 0; numComps < count; numComps++)
 	{
-		hr = NextOne(&pComponent);
+		hr = NextOne(ppComponent);
 		if (FAILED(hr))
 			break;
 
@@ -132,7 +132,7 @@ AAFRESULT STDMETHODCALLTYPE
 		// will increment off the end of the array when
 		// numComps == count-1, but the for loop should
 		// prevent access to this location.
-		pComponent++;
+		ppComponent++;
 	}
 	
 	if (pFetched)
