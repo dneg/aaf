@@ -1862,7 +1862,7 @@ AAFRESULT ImplAAFDictionary::GenerateOmPid
 // If that time is now, will init immediately.  If not ready yet,
 // will put obj on queue to be initialized when everything's ready.
 void ImplAAFDictionary::pvtInitObjectProperties
-  (ImplAAFObjectSP pObj) const
+  (ImplAAFObject * pObj) const
 {
   assert (pObj);
   if (_OKToInitProps)
@@ -1955,16 +1955,20 @@ ImplAAFObjectSP ImplAAFDictionary::pvtObjFifo::GetNext (void)
   if (_getIdx < _putIdx)
 	{
 	  result = _objs[_getIdx];
-    _objs[_getIdx++] = 0;
+	  // This is required so that smart-pointed objects get deleted
+	  // immediately.  The problem is that the dictionary itself is
+	  // one of these objects; since it maintains a reference count to
+	  // itself through this fifo then it never gets deleted unless we
+	  // do so explicitly here.
+	  _objs[_getIdx++] = 0;
 	}
-  else
-	  result = 0;
 
   return result;
 }
 
-void ImplAAFDictionary::pvtObjFifo::Append (ImplAAFObjectSP obj)
+void ImplAAFDictionary::pvtObjFifo::Append (ImplAAFObject * obj)
 {
+  assert (obj);
   assert (_putIdx < kPvtMaxInitObjs);
   _objs[_putIdx++] = obj;
 }
