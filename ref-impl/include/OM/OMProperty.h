@@ -159,12 +159,7 @@ protected:
   const char* _name;
   const OMPropertySet* _propertySet; // The PropertySet that contains
                                      // this property
-  // The _definition member is set by clients which pass a definition
-  // to initialize().  It is preferred over the _type member, which is
-  // set by clients which pass a type to initialize().  Only one can
-  // be set.
   const OMPropertyDefinition* _definition;
-  const OMType* _type;
 
 private:
 
