@@ -307,6 +307,13 @@ AAFRESULT STDMETHODCALLTYPE
 
   if (index >= count) return AAFRESULT_ILLEGAL_VALUE;
 
+  aafUInt32 requiredSize;
+  hr = GetMemberNameBufLen (index, &requiredSize);
+  if (AAFRESULT_FAILED (hr))
+	return hr;
+  if (bufSize < requiredSize)
+	return AAFRESULT_SMALLBUF;
+
   wchar_t c;
   size_t numChars = _memberNames.count();
   indexIntoProp = 0;
@@ -338,12 +345,8 @@ AAFRESULT STDMETHODCALLTYPE
   // into the client's buffer.
   do
 	{
-	  if (! bufSize) return AAFRESULT_SMALLBUF;
 	  _memberNames.getValueAt(&c, indexIntoProp++);
-	  // BobT Note!!! We're cheating here, modifying client data
-	  // before we're sure this method will succeed.
 	  *pName++ = c;
-	  bufSize--;
 	}
   while (c);
   return AAFRESULT_SUCCESS;
@@ -409,7 +412,9 @@ AAFRESULT STDMETHODCALLTYPE
   nameLength++;
 
   assert (pLen);
-  *pLen = nameLength;
+  // nameLength is in number of aafCharacters; returned length must be
+  // in bytes
+  *pLen = (nameLength * sizeof (aafCharacter)) / sizeof (aafUInt8);
   return AAFRESULT_SUCCESS;
 }
 
