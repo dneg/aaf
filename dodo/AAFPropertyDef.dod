@@ -1,9 +1,9 @@
 #startm .this-module 0
-AAFPropertyDefinition\
+AAFPropertyDef\
 #endm
 #c
 #startm .parent-module 0
-AAFDefinitionObject\
+AAFDefObject\
 #endm
 #c
 AD_HEAD
@@ -22,10 +22,10 @@ AD_FORWARD_DECLARATION(AAFReferenceValue)
 
 /*************************************************************************
  * 
- * @module AAFPropertyDefinition | AAFPropertyDefinition describes 
+ * @module AAFPropertyDef | AAFPropertyDef describes 
  *				properties allowed for a class.
  *
- * @base public | AAFDefinitionObject
+ * @base public | AAFDefObject
  *
  *************************************************************************/
 
