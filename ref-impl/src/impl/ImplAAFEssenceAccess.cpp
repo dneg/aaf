@@ -480,7 +480,7 @@ AAFRESULT STDMETHODCALLTYPE
 	ImplAAFHeader			*dataHead;
 	aafSourceRef_t	fileRef;
 	aafInt16		numCh;
-	AAFRESULT		aafError;
+//	AAFRESULT		aafError;
 	ImplAAFEssenceData		*essenceData = NULL;
 	AAFPluginManager	*plugins;
 	wchar_t				*nameBuf = NULL;
