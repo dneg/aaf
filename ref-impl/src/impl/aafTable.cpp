@@ -1205,7 +1205,7 @@ aafErr_t NewUIDTable(
 			 aafInt32 numBuckets,
 			 aafTable_t **result)
 {
-  return(NewTable(file, sizeof(aafMobID_t), UidMap, Uidcompare, numBuckets, 
+  return(NewTable(file, sizeof(aafUID_t), UidMap, Uidcompare, numBuckets, 
 		      result));
 }	
 
@@ -1229,7 +1229,7 @@ aafErr_t TableAddUID(
 			void *value,
 			aafTableDuplicate_t dup)
 {
-  return(TableAddValuePtr(table, &key, sizeof(aafMobID_t), value, dup));
+  return(TableAddValuePtr(table, &key, sizeof(aafUID_t), value, dup));
 }
 		
 /************************
@@ -1253,7 +1253,7 @@ aafErr_t TableAddUIDBlock(
 			aafInt32 valueLen,
 			aafTableDuplicate_t dup)
 {
-  return(TableAddValueBlock(table, &key, sizeof(aafMobID_t), value, valueLen, dup));
+  return(TableAddValueBlock(table, &key, sizeof(aafUID_t), value, valueLen, dup));
 }
 		
 /************************
