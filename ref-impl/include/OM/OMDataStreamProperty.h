@@ -108,11 +108,11 @@ public:
 
     // @cmember Attempt to write the number of elements given by
     //          <p elementCount> and described by <p elementType> and
-    //          <p externalElementSize> to the data stream from the buffer
+    //          <p internalElementSize> to the data stream from the buffer
     //          at address <p elements>. The actual number of elements written
     //          is returned in <p elementsWritten>.
   void writeTypedElements(const OMType* elementType,
-                          size_t externalElementSize,
+                          size_t internalElementSize,
                           const OMByte* elements,
                           OMUInt32 elementCount,
                           OMUInt32& elementsWritten);
