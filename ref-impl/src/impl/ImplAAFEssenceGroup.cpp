@@ -102,11 +102,13 @@ AAFRESULT STDMETHODCALLTYPE
 		{
 			RAISE(AAFRESULT_STILLFRAME_BADLENGTH);
 		}
-		
-		ImplAAFSourceClip *pOldClip = _stillFrame;
-		if (pOldClip)
-			pOldClip->ReleaseReference();
-		
+		if (_stillFrame.isPresent())
+		  {
+			ImplAAFSourceClip *pOldClip = _stillFrame;
+			if (pOldClip)
+			  pOldClip->ReleaseReference();
+		  }
+
 		_stillFrame = stillFrame;
 		
 		if (stillFrame)

@@ -413,10 +413,12 @@ AAFRESULT STDMETHODCALLTYPE
 	if (ppResult == NULL)
 		return AAFRESULT_NULL_PARAM;
 
-	*ppResult = _manufacturerURL;
-	// !!!Handle case where manufacturer info may not
-	// exist, return  AAFRESULT_NO_ESSENCE_DESC.
+	if (! _manufacturerURL.isPresent())
+	  {
+		return AAFRESULT_NO_ESSENCE_DESC;
+	  }
 
+	*ppResult = _manufacturerURL;
 	if (*ppResult)
 		(*ppResult)->AcquireReference();
 
@@ -431,9 +433,12 @@ AAFRESULT STDMETHODCALLTYPE
 	if (pManufacturerInfo == NULL)
 		return AAFRESULT_NULL_PARAM;
 
-	ImplAAFNetworkLocator *pOldLoc = _manufacturerURL;
-	if (pOldLoc)
-		pOldLoc->ReleaseReference();
+	if (_manufacturerURL.isPresent ())
+	  {
+		ImplAAFNetworkLocator *pOldLoc = _manufacturerURL;
+		if (pOldLoc)
+		  pOldLoc->ReleaseReference();
+	  }
 
 	_manufacturerURL = pManufacturerInfo;
 	
