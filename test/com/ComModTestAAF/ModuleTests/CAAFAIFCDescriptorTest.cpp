@@ -41,6 +41,8 @@
 #include "AAFResult.h"
 #include "AAFDefUIDs.h"
 
+#include "CAAFBuiltinDefs.h"
+
 
 typedef struct tChunk
 {
@@ -235,7 +237,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pHeader->GetDictionary(&pDictionary));
  		
 		// Create a source mob
-		checkResult(pDictionary->CreateInstance(AUID_AAFSourceMob,
+		CAAFBuiltinDefs defs (pDictionary);
+		checkResult(pDictionary->CreateInstance(defs.cdSourceMob(),
 												IID_IAAFSourceMob, 
 												(IUnknown **)&pSourceMob));
 
@@ -244,7 +247,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(CoCreateGuid((GUID *)&newMobID));
 		checkResult(pMob->SetMobID(newMobID));
 		checkResult(pMob->SetName(L"AIFCDescriptorTest"));
-		checkResult(pDictionary->CreateInstance(AUID_AAFAIFCDescriptor,
+		checkResult(pDictionary->CreateInstance(defs.cdAIFCDescriptor(),
 												IID_IAAFAIFCDescriptor, 
 												(IUnknown **)&pAIFCDesc));		
 
