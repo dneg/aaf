@@ -99,10 +99,15 @@ static HRESULT moduleErrorTmp = S_OK; /* note usage in macro */
 
 static void MobIDtoString(aafMobID_constref uid, char *buf)
 {
-	sprintf(buf, "%08lx-%04x-%04x-%02x%02x%02x%02x%02x%02x%02x%02x",
-			uid.Data1, uid.Data2, uid.Data3, (int)uid.Data4[0],
-			(int)uid.Data4[1], (int)uid.Data4[2], (int)uid.Data4[3], (int)uid.Data4[4],
-			(int)uid.Data4[5], (int)uid.Data4[6], (int)uid.Data4[7]);
+	sprintf(buf, "%02x%02x%02x%02x%02x%02x%02x%02x--%08lx-%04x-%04x-%02x%02x%02x%02x%02x%02x%02x%02x",
+		(int)uid.SMPTELabel[0], (int)uid.SMPTELabel[1], (int)uid.SMPTELabel[2], (int)uid.SMPTELabel[3], 
+		(int)uid.SMPTELabel[4], (int)uid.SMPTELabel[5], (int)uid.SMPTELabel[6], (int)uid.SMPTELabel[7], 
+		(int)uid.SMPTELabel[8], (int)uid.SMPTELabel[8], (int)uid.SMPTELabel[10], (int)uid.SMPTELabel[11], 
+		(int)uid.length, (int)uid.instanceHigh, (int)uid.instanceMid, (int)uid.instanceLow, 
+		uid.material.Data1, uid.material.Data2, uid.material.Data3, (int)uid.material.Data4[0],
+		(int)uid.material.Data4[1], (int)uid.material.Data4[2], (int)uid.material.Data4[3],
+		(int)uid.material.Data4[4],
+		(int)uid.material.Data4[5], (int)uid.material.Data4[6], (int)uid.material.Data4[7]);
 }
 
 
