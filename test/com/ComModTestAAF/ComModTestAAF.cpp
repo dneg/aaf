@@ -13,9 +13,13 @@
 #include <objbase.h>
 #endif
 
-#ifdef __powerc
-
+#if defined(macintosh)
 #define _MAC
+
+// Make sure we have defined IID_IUnknown and IID_IClassFactory.
+#include <initguid.h>
+#include <coguid.h>	
+
 
 #if !defined(CDECL) && defined(_MSC_VER)
 #define CDECL	_cdecl
@@ -49,7 +53,6 @@
 #endif
 
 typedef AAFRESULT (*AAFModuleTestProc)();
-
 
 
 #define SUCCESS (0)
