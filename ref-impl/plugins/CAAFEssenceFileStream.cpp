@@ -528,8 +528,6 @@ HRESULT STDMETHODCALLTYPE
   *bytesWritten = fwrite(buffer, 1, bytes, _pFile);
   if (*bytesWritten != (size_t)bytes)
   { // What error code should we return?
-    long err = errno;
-
     return AAFRESULT_CONTAINERWRITE;
   }
 
@@ -572,8 +570,6 @@ HRESULT STDMETHODCALLTYPE
   *bytesRead = fread(buffer, 1, buflen, _pFile);
   if (ferror(_pFile))
   { // What error code should we return?
-    long err = errno;
-
     return AAFRESULT_END_OF_DATA;
   }
   else if (feof(_pFile))
