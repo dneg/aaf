@@ -294,27 +294,30 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	}
 
 	// Cleanup and return
-	if (pHeader)
-		pHeader->Release();
-      
-	if (pPlug)
-		pPlug->Release();
-
 	if (pClonePlug)
 		pClonePlug->Release();
 
 	if (pDef)
 		pDef->Release();
-      
+
 	if (pInterpolationDef)
 		pInterpolationDef->Release();
-            
+
 	if (pArray[0])
 		pArray[0]->Release();
 	if (pArray[1])
 		pArray[1]->Release();
-            
-	if (pFile)
+
+	if (pPlug)
+		pPlug->Release();
+
+	if (pDictionary)
+		pDictionary->Release();
+
+	if (pHeader)
+		pHeader->Release();
+
+  if (pFile)
 	{  // Close file
 		if (bFileOpen)
 			pFile->Close();
