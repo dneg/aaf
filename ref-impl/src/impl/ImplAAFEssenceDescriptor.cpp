@@ -115,6 +115,12 @@ AAFRESULT STDMETHODCALLTYPE
 
   //@comm The number of locators may be zero if the essence is in the current file.
 
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFEssenceDescriptor::GetOwningMobKind (aafMobKind_t *pMobKind)
+{
+	*pMobKind = kAllMob;		// Abstract superclass, only match "all"
+	return(AAFRESULT_SUCCESS);
+}
 
 
 extern "C" const aafClassID_t CLSID_AAFEssenceDescriptor;
