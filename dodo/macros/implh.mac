@@ -756,6 +756,96 @@ public:
 
 #ccccccccccccccccccccccccccc
 #c
+#c Inserts declaration for a method which takes three arguments.
+#c Allows an additional macro argument per method argument to let
+#c macro caller pass more info.  For example:
+#c
+#c For type           Arg is
+#c     ----           ------
+#c     objInArray     array size
+#c     objOutArray    array size
+#c     objInCustom    custom input "marshal" code
+#c     objOutCustom   custom output "marshal" code
+#c     all else       ignored
+#c
+#c Macro Arg 01: method name
+#c
+#c Macro arguments 02+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt aux
+#c ----------   ----------   ---------   ----    ----    -------- --
+#c metharg 1    02           03          04      05      06       07
+#c metharg 2    08           09          10      11      12       13
+#c metharg 3    14           15          16      17      18       19
+#c
+#c Macro Arg 20: method description
+#c
+#startm AD_X2METHOD3 20
+  //****************
+  // %01()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    %01
+        (// @parm %02 %06
+         .%03-adornment%04 .%03-indirection %05,
+
+         // @parm %08 %12
+         .%09-adornment%10 .%09-indirection %11,
+
+         // @parm %14 %18
+         .%15-adornment%16 .%15-indirection %17);\
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a method which takes four arguments.
+#c Allows an additional macro argument per method argument to let
+#c macro caller pass more info.  For example:
+#c
+#c For type           Arg is
+#c     ----           ------
+#c     objInArray     array size
+#c     objOutArray    array size
+#c     objInCustom    custom input "marshal" code
+#c     objOutCustom   custom output "marshal" code
+#c     all else       ignored
+#c
+#c Macro Arg 01: method name
+#c
+#c Macro arguments 02+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt aux
+#c ----------   ----------   ---------   ----    ----    -------- --
+#c metharg 1    02           03          04      05      06       07
+#c metharg 2    08           09          10      11      12       13
+#c metharg 3    14           15          16      17      18       19
+#c metharg 4    20           21          22      23      24       25
+#c
+#c Macro Arg 26: method description
+#c
+#startm AD_X2METHOD4 26
+  //****************
+  // %01()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    %01
+        (// @parm %02 %06
+         .%03-adornment%04 .%03-indirection %05,
+
+         // @parm %08 %12
+         .%09-adornment%10 .%09-indirection %11,
+
+         // @parm %14 %18
+         .%15-adornment%16 .%15-indirection %17),
+
+         // @parm %20 %24
+         .%21-adornment%22 .%21-indirection %23);\
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
 #c Ends a class definition
 #c
 #c Arguments: none
@@ -1073,11 +1163,31 @@ Impl\
 #endm
 
 
+#startm .objInArray-adornment 00
+Impl\
+#endm
+
+
+#startm .objInArrayCustom-adornment 00
+Impl\
+#endm
+
+
 #startm .objPass-adornment 00
 #endm
 
 
 #startm .objOut-adornment 00
+Impl\
+#endm
+
+
+#startm .objOutArray-adornment 00
+Impl\
+#endm
+
+
+#startm .objOutArrayCustom-adornment 00
 Impl\
 #endm
 

@@ -255,6 +255,12 @@ HRESULT C.this-module::test()
 #startm AD_XMETHOD_11 57
 #endm
 
+#startm AD_X2METHOD3 20
+#endm
+
+#startm AD_X2METHOD4 26
+#endm
+
 #startm AD_CLASS_END 00
 #endm
 
