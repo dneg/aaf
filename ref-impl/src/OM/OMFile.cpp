@@ -446,14 +446,17 @@ bool OMFile::isRecognized(OMRawStorage* rawStorage,
   bool result = false;
 
   ASSERT("Valid factory", _factory != 0);
+  ASSERT("Positionable raw storage", rawStorage->isPositionable());
   FactorySetIterator iterator(*_factory, OMBefore);
   while (++iterator) {
+    ASSERT("Properly positioned raw storage", rawStorage->position() == 0);
     if (iterator.value()->isRecognized(rawStorage)) {
       result = true;
       encoding = iterator.key();
       break;
     }
   }
+  ASSERT("Properly positioned raw storage", rawStorage->position() == 0);
   return result;
 }
 
@@ -650,6 +653,12 @@ void OMFile::open(void)
   PRECONDITION("Valid mode", (_mode == readOnlyMode) ||
                              (_mode == writeOnlyMode) ||
                              (_mode == modifyMode));
+
+  if (_rawStorage != 0) {
+    if (_rawStorage->isPositionable()) {
+      _rawStorage->setPosition(0);
+    }
+  }
 
   if (_isNew) { // new file - create
     ASSERT("Correct mode for new file", _mode != readOnlyMode);

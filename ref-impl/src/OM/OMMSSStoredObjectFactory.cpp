@@ -253,6 +253,7 @@ OMMSSStoredObjectFactory::isRecognized(OMRawStorage* rawStorage)
       }
     }
   }
+  rawStorage->setPosition(0);
   return result;
 }
 
