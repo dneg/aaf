@@ -69,7 +69,7 @@ $(LIBTARGET) : $(CXXOBJS) $(CXXOBJS2) $(AAFBUILDDIR)/ref-impl/$(AAFTARGETDIR)/li
 	$(AAFBUILDDIR)/ref-impl/$(AAFTARGETDIR)/libimpl$(LIB) \
 	$(AAFBUILDDIR)/OM/$(AAFTARGETDIR)/libom$(LIB) \
 	$(AAFBUILDDIR)/ss-impl/$(AAFTARGETDIR)/librefstg$(LIB) \
-	-lm
+	-lm -luuid
 
 
 .PHONY : clean
