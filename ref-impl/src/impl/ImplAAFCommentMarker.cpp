@@ -90,16 +90,19 @@ AAFRESULT STDMETHODCALLTYPE
 	if( pAnnotation == NULL )
 		return AAFRESULT_NULL_PARAM;
 
-	if( pAnnotation->attached() )
-		return AAFRESULT_OBJECT_ALREADY_ATTACHED;
-
-	ImplAAFSourceReference *oldValue = _annotation.clearValue();
+	ImplAAFSourceReference *oldValue = _annotation;
 	if (oldValue)
 	  {
+		if( oldValue == pAnnotation )
+			return AAFRESULT_SUCCESS;
+
 		oldValue->ReleaseReference();
 		oldValue = 0;
 	  }
-	
+
+	if( pAnnotation->attached() )
+		return AAFRESULT_OBJECT_ALREADY_ATTACHED;
+
 	_annotation = pAnnotation;
 	
 	if (pAnnotation)
