@@ -1,6 +1,6 @@
 /***********************************************************************
 *
-*              Copyright (c) 1998-1999 Avid Technology, Inc.
+*              Copyright (c) 1998-2000 Avid Technology, Inc.
 *
 * Permission to use, copy and modify this software and accompanying
 * documentation, and to distribute and sublicense application software
@@ -37,7 +37,7 @@
   //   @parm The name of this <c OMStreamProperty>.
 template <typename Element>
 OMStreamProperty<Element>::OMStreamProperty(const OMPropertyId propertyId,
-                                            const char* name)
+                                            const wchar_t* name)
   : OMDataStreamProperty(propertyId, name)
 {
 }

@@ -34,7 +34,7 @@
   //   @parm The property id.
   //   @parm The name of this <c OMWideStringProperty>.
 OMWideStringProperty::OMWideStringProperty(const OMPropertyId propertyId,
-                                           const char* name)
+                                           const wchar_t* name)
 : OMCharacterStringProperty<wchar_t>(propertyId, name)
 {
   TRACE("OMWideStringProperty::OMWideStringProperty");

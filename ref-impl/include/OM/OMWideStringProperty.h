@@ -38,7 +38,7 @@ public:
   // @access Public members.
 
     // @cmember Constructor.
-  OMWideStringProperty(const OMPropertyId propertyId, const char* name);
+  OMWideStringProperty(const OMPropertyId propertyId, const wchar_t* name);
 
     // @cmember Destructor.
   virtual ~OMWideStringProperty(void);

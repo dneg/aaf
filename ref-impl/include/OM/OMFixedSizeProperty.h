@@ -43,7 +43,7 @@ public:
   // @access Public members.
 
     // @cmember Constructor.
-  OMFixedSizeProperty(const OMPropertyId propertyId, const char* name);
+  OMFixedSizeProperty(const OMPropertyId propertyId, const wchar_t* name);
 
     // @cmember Destructor.
   virtual ~OMFixedSizeProperty(void);

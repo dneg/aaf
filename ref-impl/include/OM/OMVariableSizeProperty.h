@@ -42,7 +42,7 @@ public:
   // @access Public members.
 
     // @cmember Constructor.
-  OMVariableSizeProperty(const OMPropertyId propertyId, const char* name);
+  OMVariableSizeProperty(const OMPropertyId propertyId, const wchar_t* name);
 
     // @cmember Destructor.
   virtual ~OMVariableSizeProperty(void);

@@ -1,6 +1,6 @@
 /***********************************************************************
 *
-*              Copyright (c) 1998-1999 Avid Technology, Inc.
+*              Copyright (c) 1998-2000 Avid Technology, Inc.
 *
 * Permission to use, copy and modify this software and accompanying
 * documentation, and to distribute and sublicense application software
@@ -48,7 +48,7 @@ public:
 
     // @cmember The name of the <c OMProperty> defined by this
     //          <c OMPropertyDefinition>.
-  virtual const char* name(void) const = 0;
+  virtual const wchar_t* name(void) const = 0;
 
     // @cmember The locally unique identification of the <c OMProperty>
     //          defined by this <c OMPropertyDefinition>.
