@@ -994,7 +994,7 @@ AAFRESULT ImplAAFSequence::CheckPositionSemantics( ImplAAFEvent* pEvent )
 	return AAFRESULT_SUCCESS;
 }
 
-AAFRESULT ImplAAFSequence::CheckLengthSemantics( ImplAAFEvent* pEvent )
+AAFRESULT ImplAAFSequence::CheckLengthSemantics( ImplAAFEvent* /*pEvent*/ )
 {
 	// Nothing to check here.  The length property is optional on events.
 	// If it is specified, overlap may occur.  Hence, nothing to verify.
@@ -1097,7 +1097,7 @@ AAFRESULT ImplAAFSequence::CheckTypeSemantics( ImplAAFComponent* pComponent )
 	return AAFRESULT_SUCCESS;
 }
 
-AAFRESULT ImplAAFSequence::CheckPositionSemantics( ImplAAFComponent* pComponent )
+AAFRESULT ImplAAFSequence::CheckPositionSemantics( ImplAAFComponent* /*pComponent*/ )
 {
 	// There is nothing to check for a non-event.
 
