@@ -10,7 +10,5 @@ ADHTML="c:/program files/autoduck/html.fmt"
 OMHTML="docs/html.fmt"
 OMCONT="docs/contents.d"
 #
-# html output
-#
 "${AUTODUCK}" /x "${FLAGS}" /s"${OMHTML}" /o ${OUT} /r html /f"${ADHTML}" ${SRC} "${OMCONT}"
 #
