@@ -59,10 +59,11 @@ OMDataStreamProperty::~OMDataStreamProperty(void)
   }
   catch(...)
   {
+	puts("Caught exception in dataStreamexception");
 	  //close can throw exceptions under limited circustances with schemasoft library.
 	  //This is to ensure that exceptions do not get thrown outside the destructor.
 	  _stream=0;
-	  assert(0,"exception in OMDataStreamProperty destructor");
+	  assert(0); //placed here to be sure to recognise exception being thrwn in destructor in debug builds
   }
   POSTCONDITION("Stream closed", _stream == 0);
 }
