@@ -21,12 +21,6 @@ EXPORTS		DllGetClassObject private
 
 
 ;=--------------------------------------------------------------------------=
-; NON-COM AAF Plugin exports.
-EXPORTS		AAFGetClassCount
-EXPORTS		AAFGetClassObjectID
-
-
-;=--------------------------------------------------------------------------=
 ; AAF exports.
 EXPORTS		AAFFileOpenExistingRead
 EXPORTS		AAFFileOpenExistingModify
