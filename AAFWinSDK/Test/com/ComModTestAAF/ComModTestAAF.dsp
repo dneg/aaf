@@ -91,10 +91,6 @@ LINK32=link.exe
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFAIFCDataTest.cpp"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFAIFCDescriptorTest.cpp"
 # End Source File
 # Begin Source File
@@ -223,19 +219,11 @@ SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFHTMLClipTest.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFHTMLDataTest.cpp"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFHTMLDescriptorTest.cpp"
 # End Source File
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFIdentificationTest.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFImageDataTest.cpp"
 # End Source File
 # Begin Source File
 
@@ -247,19 +235,11 @@ SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFIntraFrameMarkerTest.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFJPEGDataTest.cpp"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFLocatorTest.cpp"
 # End Source File
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFMasterMobTest.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFMIDIDataTest.cpp"
 # End Source File
 # Begin Source File
 
@@ -391,10 +371,6 @@ SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFTextLocatorTest.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFTIFFDataTest.cpp"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFTIFFDescriptorTest.cpp"
 # End Source File
 # Begin Source File
@@ -476,10 +452,6 @@ SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFTypeDefWeakObjRefTest.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFVaryingValueTest.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFWAVEDataTest.cpp"
 # End Source File
 # Begin Source File
 
