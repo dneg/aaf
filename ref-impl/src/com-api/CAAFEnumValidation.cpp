@@ -653,6 +653,22 @@ bool Is_aafSearchTag_t_Valid(aafSearchTag_t param)
   }
 }
 
+bool Is_aafSignalStandard_t_Valid(aafSignalStandard_t param)
+{
+  switch (param) {
+    case kAAFSignalNone:
+    case kAAFSignalS125MInterlace:
+    case kAAFSignalS125MProgressive:
+    case kAAFSignalS347M:
+    case kAAFSignalS274M:
+    case kAAFSignalS296M:
+    case kAAFSignalS349M:
+      return true;
+    default:
+      return false;
+  }
+}
+
 bool Is_aafSwapNeeded_t_Valid(aafSwapNeeded_t param)
 {
   switch (param) {

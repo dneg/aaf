@@ -83,6 +83,7 @@ bool Is_aafRGBAComponentKind_t_Valid(aafRGBAComponentKind_t param);
 bool Is_aafReferenceType_t_Valid(aafReferenceType_t param);
 bool Is_aafSearchDictionaryTag_t_Valid(aafSearchDictionaryTag_t param);
 bool Is_aafSearchTag_t_Valid(aafSearchTag_t param);
+bool Is_aafSignalStandard_t_Valid(aafSignalStandard_t param);
 bool Is_aafSwapNeeded_t_Valid(aafSwapNeeded_t param);
 bool Is_aafTapeCaseType_t_Valid(aafTapeCaseType_t param);
 bool Is_aafTapeFormatType_t_Valid(aafTapeFormatType_t param);
