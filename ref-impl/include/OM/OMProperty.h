@@ -248,14 +248,6 @@ public:
 protected:
   // @access Protected members.
 
-    // @cmember Write this property to persistent store, performing
-    //          any necessary externalization and byte reordering.
-  void write(void) const;
-
-    // @cmember Read this property from persistent store, performing
-    //          any necessary byte reordering and internalization.
-  void read(size_t externalBytesSize);
-
     // @cmember Get the value of this <c OMSimpleProperty>.
   void get(void* value, size_t valueSize) const;
 
