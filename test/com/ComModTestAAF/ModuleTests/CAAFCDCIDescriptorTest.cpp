@@ -50,6 +50,7 @@ using namespace std;
 #define kWRLTest	255
 #define kCRTest		255
 #define kPBTest		0
+#define kAlphaSamplingWidthTestVal			8
 
 // default test values for DID
 #define kStoredHeightTestVal			248
@@ -70,8 +71,6 @@ using namespace std;
 #define kDisplayYOffsetTestVal			8
 #define kAlphaTransparencyTestVal		kAAFMaxValueTransparent
 #define kImageAlignmentFactorTestVal	0
-#define kGammaNumTestVal				7
-#define kGammaDenTestVal				8
 
 // our test Mob id 
 static const aafMobID_t	TEST_MobID = 
@@ -91,7 +90,7 @@ static HRESULT SetDigitalImageDescProps(IAAFCDCIDescriptor* pDesc)
 	memset(&compression, 0, sizeof(aafUID_t));
 
 	// TODO: add all DigitalImage properties
-	// Reguired Properties
+	// Required Properties
 	pDIDesc->SetStoredView(kStoredHeightTestVal, kStoredWidthTestVal);
 	pDIDesc->SetFrameLayout(kFrameLayoutTestVal);
 	pDIDesc->SetVideoLineMap(kVideoLineMapSizeTestVal, VideoLineMap);
@@ -106,10 +105,6 @@ static HRESULT SetDigitalImageDescProps(IAAFCDCIDescriptor* pDesc)
 	pDIDesc->SetDisplayView(kDisplayHeightTestVal, kDisplayWidthTestVal, kDisplayXOffsetTestVal, kDisplayYOffsetTestVal);
 	pDIDesc->SetAlphaTransparency(kAlphaTransparencyTestVal);
 	pDIDesc->SetImageAlignmentFactor(kImageAlignmentFactorTestVal);
-
-//	ratio.numerator = kGammaNumTestVal;
-//	ratio.denominator = kGammaDenTestVal;
-//!!!	pDIDesc->SetGamma(ratio);
 
 	pDIDesc->Release();
 
@@ -222,6 +217,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		  if (SUCCEEDED(hr))
 		  {
 			  IAAFCDCIDescriptor*	pCDCIDesc = NULL;
+			  IAAFCDCIDescriptor2*	pCDCIDesc2 = NULL;
 
 			  pMob->SetMobID(TEST_MobID);
 			  pMob->SetName(L"CDCIDescriptorTest");
@@ -240,6 +236,12 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 				  if (SUCCEEDED(hr)) hr = pCDCIDesc->SetColorRange(kCRTest);
 				  if (SUCCEEDED(hr)) hr = pCDCIDesc->SetPaddingBits(kPBTest);
 				  if (SUCCEEDED(hr)) hr = SetDigitalImageDescProps(pCDCIDesc);
+
+			    // Optional Properties accessed using IAAFCDCIDescriptor2
+					if (SUCCEEDED(hr)) hr = pCDCIDesc->QueryInterface (IID_IAAFCDCIDescriptor2, (void **)&pCDCIDesc2);
+				  if (SUCCEEDED(hr)) hr = pCDCIDesc2->SetAlphaSamplingWidth(kAlphaSamplingWidthTestVal);
+				  pCDCIDesc2->Release();
+				  pCDCIDesc2 = NULL;
 
 				  if (SUCCEEDED(hr))
 				  {
@@ -327,6 +329,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 				if (SUCCEEDED(hr))
 				{
 					IAAFCDCIDescriptor*	pCDCIDesc = NULL;
+					IAAFCDCIDescriptor2*	pCDCIDesc2 = NULL;
 
 					// if there is an Essence Descriptor then it MUST be an (essence) CDCI Descriptor
 					hr = pEssDesc->QueryInterface(IID_IAAFCDCIDescriptor, (void **) &pCDCIDesc);
@@ -336,6 +339,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 						aafInt32			val;
 						aafUInt32			uval;
 						aafColorSiting_t	csval;
+						aafUInt32			alphaSamplingWidthVal;
 
 						// test for expected CDCI properties
 						hr = pCDCIDesc->GetComponentWidth(&val);
@@ -362,6 +366,16 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 
 						if (FAILED(hr) || val16 != kPBTest)
 							hr = AAFRESULT_TEST_FAILED;
+
+				    // Optional Properties accessed using IAAFCDCIDescriptor2
+						if (SUCCEEDED(hr)) hr = pCDCIDesc->QueryInterface (IID_IAAFCDCIDescriptor2, (void **)&pCDCIDesc2);
+					  if (SUCCEEDED(hr)) hr = pCDCIDesc2->GetAlphaSamplingWidth(&alphaSamplingWidthVal);
+
+						if (FAILED(hr) || alphaSamplingWidthVal != kAlphaSamplingWidthTestVal)
+							hr = AAFRESULT_TEST_FAILED;
+
+					  pCDCIDesc2->Release();
+					  pCDCIDesc2 = NULL;
 
 						pCDCIDesc->Release();
 						pCDCIDesc = NULL;
