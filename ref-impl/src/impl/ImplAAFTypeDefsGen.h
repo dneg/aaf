@@ -391,6 +391,29 @@ static TypeCharacter s_AAFAllTypeCharacters [] = {
 
 
 
+//
+// Pass 13b:  Do stuff for indirect types. (there should be only one!)
+//
+#define AAF_TYPE_TABLE_BEGIN()  \
+struct TypeIndirect             \
+{                               \
+  const wchar_t * typeName;     \
+  aafUID_t        typeID;       \
+  int             isValid;      \
+};                              \
+                                \
+static TypeIndirect s_AAFAllTypeIndirects [] = {
+
+#define AAF_TYPE_DEFINITION_INDIRECT(name, id) \
+  {L##"aaf" L#name, id, 1},
+
+#define AAF_TYPE_TABLE_END()  \
+0 };
+
+#include "AAFMetaDictionary.h"
+
+
+
 
 //
 // Pass 14:  Do stuff for strong ref types.

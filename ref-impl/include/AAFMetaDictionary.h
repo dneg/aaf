@@ -49,8 +49,8 @@
 //
 // DictP18-277-1847BMaster.csv 
 //
-// This file was generated on Fri Feb 18 11:12:47 EST 2000
-// by user bedell on system JBEDELL2.
+// This file was generated on Tue Mar  7 17:04:18 EST 2000
+// by user transdel on system TRANSDEL.
 //
 // Key to macros.
 //
@@ -242,6 +242,13 @@
 //     id        = the auid used to identify the type [*]
 //     size      = the size (in bytes) of the type
 //
+// AAF_TYPE_DEFINITION_INDIRECT(name, id)
+//
+//   Define an AAF indirect type.
+//
+//     name      = the name of the type
+//     id        = the auid used to identify the type [*]
+//
 // AAF_TYPE_DEFINITION_SET(name, id, type)
 //
 //   Define an AAF set type.
@@ -416,6 +423,10 @@
 
 #ifndef AAF_TYPE_DEFINITION_CHARACTER
 #define AAF_TYPE_DEFINITION_CHARACTER(name, id, size)
+#endif
+
+#ifndef AAF_TYPE_DEFINITION_INDIRECT
+#define AAF_TYPE_DEFINITION_INDIRECT(name, id)
 #endif
 
 #ifndef AAF_TYPE_DEFINITION_SET
@@ -1155,20 +1166,12 @@ AAF_CLASS(ControlPoint,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
   InterchangeObject,
   true)
-  AAF_PROPERTY(Type,
-    AAF_LITERAL_AUID(0x06430100,
-      0x0000, 0x0000,
-      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
-    0x1a01,
-    AAF_REFERENCE_TYPE(WeakReference, TypeDefinition),
-    true,
-    ControlPoint)
   AAF_PROPERTY(Value,
     AAF_LITERAL_AUID(0x06430200,
       0x0000, 0x0000,
       0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
     0x1a02,
-    AAF_TYPE(DataValue),
+    AAF_TYPE(Indirect),
     true,
     ControlPoint)
   AAF_PROPERTY(Time,
@@ -2784,14 +2787,6 @@ AAF_CLASS(Parameter,
     AAF_REFERENCE_TYPE(WeakReference, ParameterDefinition),
     true,
     Parameter)
-  AAF_PROPERTY(Type,
-    AAF_LITERAL_AUID(0x064D0200,
-      0x0000, 0x0000,
-      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
-    0x4c02,
-    AAF_REFERENCE_TYPE(WeakReference, TypeDefinition),
-    true,
-    Parameter)
 AAF_CLASS_END(Parameter)
 AAF_CLASS_SEPARATOR()
 
@@ -2808,7 +2803,7 @@ AAF_CLASS(ConstantValue,
       0x0000, 0x0000,
       0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
     0x4d01,
-    AAF_TYPE(DataValue),
+    AAF_TYPE(Indirect),
     true,
     ConstantValue)
 AAF_CLASS_END(ConstantValue)
@@ -2836,30 +2831,6 @@ AAF_CLASS(VaryingValue,
       0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
     0x4e02,
     AAF_REFERENCE_TYPE(StrongReferenceVector, ControlPoint),
-    true,
-    VaryingValue)
-  AAF_PROPERTY(Value,
-    AAF_LITERAL_AUID(0x064E0100,
-      0x0000, 0x0000,
-      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
-    0x4f01,
-    AAF_TYPE(DataValue),
-    true,
-    VaryingValue)
-  AAF_PROPERTY(DisplayValue,
-    AAF_LITERAL_AUID(0x064E0200,
-      0x0000, 0x0000,
-      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
-    0x4f02,
-    AAF_TYPE(String),
-    false,
-    VaryingValue)
-  AAF_PROPERTY(Significance,
-    AAF_LITERAL_AUID(0x064E0300,
-      0x0000, 0x0000,
-      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
-    0x4f03,
-    AAF_TYPE(ReferenceType),
     true,
     VaryingValue)
 AAF_CLASS_END(VaryingValue)
@@ -2894,7 +2865,7 @@ AAF_CLASS(TaggedValue,
       0x0000, 0x0000,
       0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
     0x5003,
-    AAF_TYPE(DataValue),
+    AAF_TYPE(Indirect),
     true,
     TaggedValue)
 AAF_CLASS_END(TaggedValue)
@@ -3201,6 +3172,17 @@ AAF_CLASS(TypeDefinitionExtendibleEnumeration,
     true,
     TypeDefinitionExtendibleEnumeration)
 AAF_CLASS_END(TypeDefinitionExtendibleEnumeration)
+AAF_CLASS_SEPARATOR()
+
+// TypeDefinitionIndirect
+//
+AAF_CLASS(TypeDefinitionIndirect,
+  AAF_LITERAL_AUID(0x065D0000,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
+  TypeDefinition,
+  true)
+AAF_CLASS_END(TypeDefinitionIndirect)
 
 AAF_TABLE_END()
 
@@ -3873,6 +3855,14 @@ AAF_TYPE_DEFINITION_VARYING_ARRAY(PositionArray,
     0xFFFF, 0xFFFE,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0xFF),
   AAF_TYPE(UInt8))
+AAF_TYPE_SEPARATOR()
+
+// Indirect
+//
+AAF_TYPE_DEFINITION_INDIRECT(Indirect, 
+  AAF_LITERAL_AUID(0xFFFFFFFF,
+    0xFFFF, 0xFFFD,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0xFF))
 AAF_TYPE_SEPARATOR()
 
 // StrongReference<ContentStorage>
@@ -4601,6 +4591,8 @@ AAF_TYPE_TABLE_END()
 #undef AAF_TYPE_DEFINITION_EXTENDIBLE_ENUMERATION_END
 
 #undef AAF_TYPE_DEFINITION_CHARACTER
+
+#undef AAF_TYPE_DEFINITION_INDIRECT
 
 #undef AAF_TYPE_DEFINITION_SET
 

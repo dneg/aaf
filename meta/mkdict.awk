@@ -326,6 +326,13 @@ BEGIN {
   printf("//     id        = the auid used to identify the type [*]\n");
   printf("//     size      = the size (in bytes) of the type\n");
   printf("//\n");
+  printf("// AAF_TYPE_DEFINITION_INDIRECT(name, id)\n");
+  printf("//\n");
+  printf("//   Define an AAF indirect type.\n");
+  printf("//\n");
+  printf("//     name      = the name of the type\n");
+  printf("//     id        = the auid used to identify the type [*]\n");
+  printf("//\n");
   printf("// AAF_TYPE_DEFINITION_SET(name, id, type)\n");
   printf("//\n");
   printf("//   Define an AAF set type.\n");
@@ -502,6 +509,10 @@ BEGIN {
   printf("#define AAF_TYPE_DEFINITION_CHARACTER(name, id, size)\n");
   printf("#endif\n");
   printf("\n");
+  printf("#ifndef AAF_TYPE_DEFINITION_INDIRECT\n");
+  printf("#define AAF_TYPE_DEFINITION_INDIRECT(name, id)\n");
+  printf("#endif\n");
+  printf("\n");
   printf("#ifndef AAF_TYPE_DEFINITION_SET\n");
   printf("#define AAF_TYPE_DEFINITION_SET(name, id, type)\n");
   printf("#endif\n");
@@ -665,6 +676,8 @@ BEGIN {
         printf("AAF_TYPE_DEFINITION_EXTENDIBLE_ENUMERATION(%s, %s)\n", typeName, guid);
       } else if (kind == "character") {
         printf("AAF_TYPE_DEFINITION_CHARACTER(%s, %s, %s)\n", typeName, guid, $24);
+      } else if (kind == "indirect") {
+        printf("AAF_TYPE_DEFINITION_INDIRECT(%s, %s)\n", typeName, guid);
       } else if (kind == "set") {
         elementType = $25;
         # Special cases for strong/weak reference sets.
@@ -839,6 +852,8 @@ END {
     printf("#undef AAF_TYPE_DEFINITION_EXTENDIBLE_ENUMERATION_END\n");
     printf("\n");
     printf("#undef AAF_TYPE_DEFINITION_CHARACTER\n");
+    printf("\n");
+    printf("#undef AAF_TYPE_DEFINITION_INDIRECT\n");
     printf("\n");
     printf("#undef AAF_TYPE_DEFINITION_SET\n");
     printf("\n");
