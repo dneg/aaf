@@ -23,6 +23,7 @@ CHMOD = chmod
 MV = mv
 SH = sh
 TOUCH = touch
+PERL = perl
 
 CC = gcc
 LD = gcc
