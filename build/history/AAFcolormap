@@ -24,7 +24,7 @@ color Pale-Cyan           CCFFFF
 color Pale-Magenta        FFCCFF
 color Pale-Yellow         FFFFCC
 color Blue                CCCCFF
-color Magenta             FF00FF
+color Light-Hard-Azure    3399FF
 color Green               00FF00
 
 # default color
@@ -46,7 +46,7 @@ component Reference-Implementation Pale-Red
   ref-impl/aaflib/
 end
 
-component API Magenta
+component API Light-Hard-Azure
   ref-impl/src/com-api/
   ref-impl/include/com-api/
   ref-impl/include/ref-api
