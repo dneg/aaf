@@ -44,6 +44,7 @@ extern "C" const char * AAFGetLibraryPath();
 
 
 #include "CAAFInProcServer.h"
+#include "ImplAAFContext.h"
 
 CAAFInProcServer g_AAFInProcServer;
 CAAFServer* g_pAAFServer = &g_AAFInProcServer;
@@ -119,6 +120,19 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
 		// Initialize the inproc server object.
 		g_AAFInProcServer.Init(AAFObjectMap, hInstance);
 
+    // Attempt to intialize the global AAF context singleton.
+    // This is a thread safe because this initialization
+    // is only called when the dll is first loaded by the 
+    // main thread of the current process. 
+    // NOTE:This object is not reference counted!
+    if (NULL == ImplAAFContext::GetInstance ())
+    {
+      // Return the most liked error code.
+      return E_OUTOFMEMORY;
+    }
+
+    // We don't need to be notified everytime a thread is created
+    // or destroyed.
 		DisableThreadLibraryCalls(hInstance);
 	}
 	else if (dwReason == DLL_PROCESS_DETACH)
@@ -218,11 +232,6 @@ DllGetVersion(UInt32* pVersion)
 OSErr pascal
 DllInitializationRoutine(CFragInitBlockPtr initBlkPtr)
 {
-#ifdef _DEBUG
-	if (AmIBeingMWDebugged())
-		Debugger();
-#endif // _DEBUG
-
 	DllData.InitBlock = *initBlkPtr;
 	DllData.Inited = false;
 	DllData.ResRefNum = -1;
@@ -232,6 +241,19 @@ DllInitializationRoutine(CFragInitBlockPtr initBlkPtr)
 
 	// Initialize the inproc server object with a copy of the contents of the initBlkPtr.
 	g_AAFInProcServer.Init(AAFObjectMap, (HINSTANCE)&DllData.InitBlock);
+
+
+  // Attempt to intialize the global AAF context singleton.
+  // This is a thread safe because this initialization
+  // is only called when the dll is first loaded by the 
+  // main thread of the current process. 
+  // NOTE:This object is not reference counted!
+  if (NULL == ImplAAFContext::GetInstance ())
+  {
+    // Return the most liked error code.
+    return memFullErr;
+  }
+
 
 	if (!DllData.Inited && DllData.InitBlock.fragLocator.where == kDataForkCFragLocator)
 	{
