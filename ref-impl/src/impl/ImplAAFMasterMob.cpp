@@ -65,52 +65,45 @@ ImplAAFMasterMob::~ImplAAFMasterMob ()
 // (more results here)
 // 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFMasterMob::AddMasterSlot (ImplAAFDataDef*	pMediaKind,
+    ImplAAFMasterMob::AddMasterSlot (aafUID_t*			pDataDef,
 									 aafSlotID_t		slotID,
 									 aafSlotID_t		fileSlotID,
 									 aafWChar*			pSlotName,
-									 ImplAAFSourceMob*	/*pFileMob*/)
+									 ImplAAFSourceMob*	pFileMob)
 {
 	ImplAAFSegment			*pSegment = NULL;
 	ImplAAFSourceClip		*pSrcClip = NULL;
-	ImplAAFTimelineMobSlot	*pTLMobSlot = NULL;
 	ImplAAFMobSlot			*pMobSlot = NULL;
-	aafBool					bPicture = AAFFalse, bSound = AAFFalse;
-	aafRational_t			subEditRate;
 	aafLength_t				slotLength;
 	aafPosition_t			zeroPos;
 	aafSourceRef_t			ref;
-	
-	if (!pMediaKind)
+	aafUID_t				fileMobID;
+	aafUID_t				DataDef;
+
+	if (!pDataDef || !pFileMob)
 		return AAFRESULT_NULL_PARAM;
-
-	// Check that the media kind is valid for a media stream
-	pMediaKind->IsPictureKind(&bPicture);
-	pMediaKind->IsSoundKind(&bSound);
-	if ( !bPicture && !bSound )
-		return AAFRESULT_INVALID_DATAKIND;
-
-	CvtInt32toPosition(0, zeroPos);
 
 	XPROTECT()
 	{
-		CHECK(FindSlotBySlotID(fileSlotID, &pMobSlot));
-		// GetEditRate is only supported by Timeline MOB slots.
-		// Any way to ensure that the MOB slot returned is a Timeline MOB slot?
-		pTLMobSlot = static_cast<ImplAAFTimelineMobSlot*> (pMobSlot);
-		CHECK(pTLMobSlot->GetEditRate(&subEditRate));
+		CHECK(pFileMob->GetMobID(&fileMobID));
+		CHECK(pFileMob->FindSlotBySlotID(fileSlotID, &pMobSlot));
 		CHECK(pMobSlot->GetSegment(&pSegment));
 		CHECK(pSegment->GetLength(&slotLength));
+		CHECK(pSegment->GetDataDef(&DataDef));
 
-		// TODO: Release segment, timeline mob slot, mob slot
+		// Make sure the slot contains the expected media type.
+		if (memcmp(&DataDef, pDataDef, sizeof(aafUID_t)) != 0)
+			return AAFRESULT_INVALID_DATAKIND;
+
+		// TODO: Release segment and mob slot
 		//if (pSegment)
 		//	pSegment->ReleaseObject();
-		//if (pTLMobSlot)
-		//	pTLMobSlot->ReleaseObject();
 		//if (pMobSlot)
 		//	pMobSlot->ReleaseObject();
 		
-		ref.sourceID = _mobID;
+		CvtInt32toPosition(0, zeroPos);
+
+		ref.sourceID = fileMobID;
 		ref.sourceSlotID = fileSlotID;
 		ref.startTime = zeroPos;
 
@@ -118,20 +111,17 @@ AAFRESULT STDMETHODCALLTYPE
 		if (pSrcClip)
 		{
 			ImplAAFMobSlot	*pNewSlot = NULL;
-			aafUID_t		auid;
 
-			pMediaKind->GetAUID(&auid);
-			pSrcClip->InitializeSourceClip(&auid, &slotLength, ref);
+			pSrcClip->InitializeSourceClip(pDataDef, &slotLength, ref);
 			CHECK(AppendNewSlot(pSrcClip, slotID, pSlotName, &pNewSlot));
 
 			// TODO: Release the new slot
 			//if (pNewSlot)
 			//	pNewSlot->ReleaseObject();
-		}
 
-		// TODO: Release source clip
-		//if (pSrcClip)
-		//	pSrcClip->ReleaseObject();
+			// TODO: Release source clip
+			//	pSrcClip->ReleaseObject();
+		}
 
 	} /* XPROTECT */
 	XEXCEPT
@@ -181,15 +171,21 @@ AAFRESULT STDMETHODCALLTYPE
 								   aafWChar*	pTapeName,
 								   aafInt32		bufSize)
 {
-	aafPosition_t			zeroPos;
-	ImplAAFFindSourceInfo*	pSourceInfo;
+#if FULLTOOLKIT
+//	ImplAAFFindSourceInfo*	pSourceInfo;
+	ImplAAFSourceClip*	pSrcClip = NULL;
+	aafSourceRef_t		ref;
+//	aafPosition_t			zeroPos;
 	
 	XPROTECT()
 	{
-		CvtInt32toPosition(0, zeroPos);
+		CHECK(GetRepresentationSourceClip (masterSlotID, 0, &pSrcClip));
+		CHECK(pSrcClip->GetRef(&ref));
 
-		CHECK(GetName(pTapeName, bufSize));
-		CHECK(SearchSource(masterSlotID, zeroPos, kTapeMob, NULL, NULL, NULL, &pSourceInfo));
+
+//		CvtInt32toPosition(0, zeroPos);
+
+//		CHECK(SearchSource(masterSlotID, zeroPos, kTapeMob, NULL, NULL, NULL, &pSourceInfo));
 
 		// TODO: Need to implement ImplAAFFindSourceInfo, there are currently no methods.
 		//CHECK(pSourceInfo->mob->GetName(pTapeName, bufSize));
@@ -203,6 +199,9 @@ AAFRESULT STDMETHODCALLTYPE
 	XEND
 	
 	return AAFRESULT_SUCCESS;
+#else
+	return AAFRESULT_NOT_IMPLEMENTED;
+#endif
 }
 
 
@@ -233,6 +232,7 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFMasterMob::GetTapeNameBufLen (aafInt32 *  pLen)
 {
+#if FULLTOOLKIT
 	aafSlotID_t				slotID = 0;
  	aafPosition_t			zeroPos;
 	ImplAAFFindSourceInfo*	pSourceInfo;
@@ -255,6 +255,9 @@ AAFRESULT STDMETHODCALLTYPE
 	XEND
 	
 	return AAFRESULT_SUCCESS;
+#else
+	return AAFRESULT_NOT_IMPLEMENTED;
+#endif
 }
 
 
@@ -355,6 +358,7 @@ AAFRESULT STDMETHODCALLTYPE
 												   aafInt32				index,
 												   ImplAAFSourceClip**	ppSourceClip)
 {
+#if FULLTOOLKIT
 	ImplAAFMobSlot	*pSlot = NULL;
   	ImplAAFSegment	*pSegment = NULL;
 //	ImplAAFObject	*pTmp;
@@ -399,6 +403,9 @@ AAFRESULT STDMETHODCALLTYPE
 	
 	return status;
 	//return AAFRESULT_NOT_IMPLEMENTED;
+#else
+	return AAFRESULT_NOT_IMPLEMENTED;
+#endif
 }
 
 
