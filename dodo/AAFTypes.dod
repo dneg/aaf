@@ -878,18 +878,19 @@ AD_CPP_QUOTE(} aafSearchDictionaryCrit_t;)
 
 typedef enum _eAAFTypeCategory_t
 {
-  kAAFTypeCatUnknown       = 0, // can only occur in damaged files
-  kAAFTypeCatInt           = 1, // any integral type
-  kAAFTypeCatStrongObjRef  = 2, // strong object reference
-  kAAFTypeCatWeakObjRef    = 3, // weak object reference
-  kAAFTypeCatRename        = 4, // renamed type
-  kAAFTypeCatEnum          = 5, // enumerated type
-  kAAFTypeCatFixedArray    = 6, // fixed-size array
-  kAAFTypeCatVariableArray = 7, // variably-sized array
-  kAAFTypeCatRecord        = 8, // a structured type
-  kAAFTypeCatStream        = 9, // potentially huge amount of data
-  kAAFTypeCatString        = 10 // null-terminated variably-sized
-								// array
+  kAAFTypeCatUnknown       = 0,  // can only occur in damaged files
+  kAAFTypeCatInt           = 1,  // any integral type
+  kAAFTypeCatStrongObjRef  = 2,  // strong object reference
+  kAAFTypeCatWeakObjRef    = 3,  // weak object reference
+  kAAFTypeCatRename        = 4,  // renamed type
+  kAAFTypeCatEnum          = 5,  // enumerated type
+  kAAFTypeCatFixedArray    = 6,  // fixed-size array
+  kAAFTypeCatVariableArray = 7,  // variably-sized array
+  kAAFTypeCatRecord        = 8,  // a structured type
+  kAAFTypeCatStream        = 9,  // potentially huge amount of data
+  kAAFTypeCatString        = 10, // null-terminated variably-sized
+								 // array
+  kAAFTypeCatExtEnum       = 11  // extendible enumerated type
 } eAAFTypeCategory_t;
 
 
