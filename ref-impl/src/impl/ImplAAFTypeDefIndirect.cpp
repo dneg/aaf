@@ -1242,7 +1242,7 @@ void ImplAAFTypeDefIndirect::externalize(
   size_t internalBytesSize,
   OMByte* externalBytes,
   size_t externalBytesSize,
-  OMByteOrder byteOrder) const
+  OMByteOrder /*byteOrder*/) const
 {
   TRACE("ImplAAFTypeDefIndirect::externalize");
   PRECONDITION("Object has been initialized", _initialized);

@@ -291,6 +291,8 @@ HRESULT STDMETHODCALLTYPE
 {
 	if(NULL == uid)
 		return AAFRESULT_NULL_PARAM;
+	if(index > 0)
+		return AAFRESULT_BADINDEX;
 
 	*uid = kAAFCodecJPEG;		// UID of the JPEG codec definition
 
@@ -532,6 +534,8 @@ HRESULT STDMETHODCALLTYPE
 {
 	if(pFlavour == NULL)
 		return AAFRESULT_NULL_PARAM;
+	if(index > 0)
+		return AAFRESULT_BADINDEX;
 
 	*pFlavour = kAAFNilCodecFlavour;
 
@@ -550,7 +554,7 @@ HRESULT STDMETHODCALLTYPE
 }
 
 HRESULT STDMETHODCALLTYPE
-    CAAFJPEGCodec::GetIndexedDataDefinition (aafUInt32  index,
+    CAAFJPEGCodec::GetIndexedDataDefinition (aafUInt32  /*index*/,
         aafUID_t * pFlavour)
 {
 	if (NULL == pFlavour)
@@ -572,7 +576,7 @@ HRESULT STDMETHODCALLTYPE
 }	
 
 HRESULT STDMETHODCALLTYPE
-    CAAFJPEGCodec::GetCodecDisplayName (aafUID_constref flavour,
+    CAAFJPEGCodec::GetCodecDisplayName (aafUID_constref /*flavour*/,
         aafCharacter *  pName,
         aafUInt32  bufSize)
 {
@@ -755,9 +759,9 @@ HRESULT STDMETHODCALLTYPE
 HRESULT STDMETHODCALLTYPE
     CAAFJPEGCodec::ValidateEssence (IAAFSourceMob *fileMob,
         IAAFEssenceStream *stream,
-		aafCheckVerbose_t  verbose,
-        aafCheckWarnings_t warning,
-         aafUInt32  bufSize,
+		aafCheckVerbose_t   /*verbose*/,
+        aafCheckWarnings_t  /*warning*/,
+         aafUInt32   /*bufSize*/,
 		wchar_t *  pName,
         aafUInt32  *bytesWritten)
 {
@@ -1234,7 +1238,7 @@ HRESULT STDMETHODCALLTYPE
 }
 
 HRESULT STDMETHODCALLTYPE
-    CAAFJPEGCodec::WriteBlocks (aafDeinterleave_t  inter,
+    CAAFJPEGCodec::WriteBlocks (aafDeinterleave_t  /*inter*/,
         aafUInt16  xferBlockCount,
         aafmMultiXfer_t *  xferBlock,
         aafmMultiResult_t *  resultBlock)
@@ -1588,7 +1592,7 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFJPEGCodec::ReadBlocks (aafDeinterleave_t  inter,
+    CAAFJPEGCodec::ReadBlocks (aafDeinterleave_t  /*inter*/,
         aafUInt16  xferBlockCount,
         aafmMultiXfer_t *  xferBlock,
         aafmMultiResult_t *  resultBlock)

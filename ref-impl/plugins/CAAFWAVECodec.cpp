@@ -76,7 +76,8 @@ HRESULT STDMETHODCALLTYPE
 {
 	if(uid == NULL)
 		return AAFRESULT_NULL_PARAM;
-
+	if(index > 0)
+		return AAFRESULT_BADINDEX;
 	*uid = kAAFCodecWAVE;		// UID of the WAVE codec definition
 	return AAFRESULT_SUCCESS;
 }
@@ -113,6 +114,8 @@ HRESULT STDMETHODCALLTYPE
 	
 	if((dict == NULL) || (def == NULL))
 		return AAFRESULT_NULL_PARAM;
+	if(index > 0)
+		return AAFRESULT_BADINDEX;
 
 	XPROTECT()
 	{
@@ -249,7 +252,7 @@ HRESULT STDMETHODCALLTYPE
 }
 
 
-CAAFWaveCodec::CAAFWaveCodec (IUnknown * pControllingUnknown, aafBoolean_t doInit)
+CAAFWaveCodec::CAAFWaveCodec (IUnknown * pControllingUnknown)
   : CAAFUnknown (pControllingUnknown)
 {
 	_headerLoaded = kAAFFalse;
@@ -310,6 +313,8 @@ HRESULT STDMETHODCALLTYPE
 {
 	if(pFlavour == NULL)
 		return AAFRESULT_NULL_PARAM;
+	if(index > 0)
+		return AAFRESULT_BADINDEX;
 	*pFlavour = kAAFNilCodecFlavour;
 	return AAFRESULT_SUCCESS;
 }
@@ -324,7 +329,7 @@ HRESULT STDMETHODCALLTYPE
 }
 
 HRESULT STDMETHODCALLTYPE
-    CAAFWaveCodec::GetIndexedDataDefinition (aafUInt32  index,
+    CAAFWaveCodec::GetIndexedDataDefinition (aafUInt32  /*index*/,
         aafUID_t * pDataDefID)
 {
   if (! pDataDefID)
@@ -351,7 +356,7 @@ HRESULT STDMETHODCALLTYPE
 }	
 
 HRESULT STDMETHODCALLTYPE
-    CAAFWaveCodec::GetCodecDisplayName (aafUID_constref flavour,
+    CAAFWaveCodec::GetCodecDisplayName (aafUID_constref /*flavour*/,
         aafCharacter *  pName,
         aafUInt32  bufSize)
 {
@@ -363,7 +368,7 @@ HRESULT STDMETHODCALLTYPE
 }
 	
 HRESULT STDMETHODCALLTYPE
-    CAAFWaveCodec::CountChannels (IAAFSourceMob *fileMob,
+    CAAFWaveCodec::CountChannels (IAAFSourceMob * /*fileMob*/,
         aafUID_constref essenceKind,
         IAAFEssenceStream *stream,
         aafUInt16 *  pNumChannels)
@@ -393,7 +398,7 @@ HRESULT STDMETHODCALLTYPE
 }
 
 HRESULT STDMETHODCALLTYPE
-    CAAFWaveCodec::GetSelectInfo (IAAFSourceMob *fileMob,
+    CAAFWaveCodec::GetSelectInfo (IAAFSourceMob * /*fileMob*/,
         IAAFEssenceStream *stream,
         aafSelectInfo_t *  pSelectInfo)
 {
@@ -444,13 +449,13 @@ HRESULT STDMETHODCALLTYPE
 }
 
 HRESULT STDMETHODCALLTYPE
-    CAAFWaveCodec::ValidateEssence (IAAFSourceMob *fileMob,
-        IAAFEssenceStream *stream,
-		aafCheckVerbose_t  verbose,
-        aafCheckWarnings_t warning,
-         aafUInt32  bufSize,
-		wchar_t *  pName,
-        aafUInt32  *bytesWritten)
+    CAAFWaveCodec::ValidateEssence (IAAFSourceMob * /*fileMob*/,
+        IAAFEssenceStream * /*stream*/,
+		aafCheckVerbose_t   /*verbose*/,
+        aafCheckWarnings_t  /*warning*/,
+         aafUInt32   /*bufSize*/,
+		wchar_t *   /*pName*/,
+        aafUInt32  * /*bytesWritten*/)
 {
 	return HRESULT_NOT_IMPLEMENTED;
 }
@@ -1021,6 +1026,9 @@ HRESULT STDMETHODCALLTYPE
         aafUInt32  buflen)
 {
   aafUInt32 bytesWritten;
+  
+  	if(buflen < (nSamples * _bytesPerFrame))
+  		return AAFRESULT_SMALLBUF;
 	return _stream->Write (nSamples * _bytesPerFrame, buffer, &bytesWritten);
 }
 
@@ -1056,8 +1064,8 @@ HRESULT STDMETHODCALLTYPE
 
 	
 HRESULT STDMETHODCALLTYPE
-    CAAFWaveCodec::CreateDescriptorFromStream (IAAFEssenceStream * pStream,
-        IAAFSourceMob *fileMob)
+    CAAFWaveCodec::CreateDescriptorFromStream (IAAFEssenceStream *  /*pStream*/,
+        IAAFSourceMob * /*fileMob*/)
 {
 	return(AAFRESULT_NOT_IMPLEMENTED);
 }
@@ -1283,7 +1291,7 @@ HRESULT STDMETHODCALLTYPE
 		
 HRESULT STDMETHODCALLTYPE
     CAAFWaveCodec::MultiCreate (IAAFSourceMob *unk,
-        aafUID_constref flavour,
+        aafUID_constref /*flavour*/,
         IAAFEssenceStream * stream,
         aafCompressEnable_t compEnable,
         aafUInt32 numParms,
