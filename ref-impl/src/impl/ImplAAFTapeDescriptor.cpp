@@ -307,3 +307,15 @@ extern "C" const aafClassID_t CLSID_AAFTapeDescriptor;
 
 OMDEFINE_STORABLE(ImplAAFTapeDescriptor, CLSID_AAFTapeDescriptor);
 
+// Cheat!  We're using this object's CLSID instead of object class...
+AAFRESULT STDMETHODCALLTYPE
+ImplAAFTapeDescriptor::GetObjectClass(aafUID_t * pClass)
+{
+  if (! pClass)
+	{
+	  return AAFRESULT_NULL_PARAM;
+	}
+  memcpy (pClass, &CLSID_AAFTapeDescriptor, sizeof aafClassID_t);
+  return AAFRESULT_SUCCESS;
+}
+
