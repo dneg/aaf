@@ -1,5 +1,5 @@
 # Microsoft Developer Studio Project File - Name="AAFStandardCodecs" - Package Owner=<4>
-# Microsoft Developer Studio Generated Build File, Format Version 5.00
+# Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
 # TARGTYPE "Win32 (x86) Dynamic-Link Library" 0x0102
@@ -17,13 +17,12 @@ CFG=AAFStandardCodecs - Win32 Debug
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "AAFStandardCodecs - Win32 Release" (based on\
- "Win32 (x86) Dynamic-Link Library")
-!MESSAGE "AAFStandardCodecs - Win32 Debug" (based on\
- "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "AAFStandardCodecs - Win32 Release" (based on "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "AAFStandardCodecs - Win32 Debug" (based on "Win32 (x86) Dynamic-Link Library")
 !MESSAGE 
 
 # Begin Project
+# PROP AllowPerConfigDependencies 0
 # PROP Scc_ProjName ""
 # PROP Scc_LocalPath ""
 CPP=cl.exe
@@ -45,8 +44,8 @@ RSC=rc.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /YX /FD /c
 # ADD CPP /nologo /MT /W3 /GR /GX /O2 /I "../../../ref-impl/src/com-api" /I "../../../ref-impl/include/com-api/" /I "../../../ref-impl/src/impl" /I "../../../ref-impl/src/Om" /I "../../../ref-impl/include/OM" /I "../../../ref-impl/src/com-api/com-dll" /I "../include/comidl" /I "../../../ref-impl/include/ref-api" /I "../../../ref-impl/include" /I "../../../ref-impl/plugins" /D "NDEBUG" /D "_WIN32" /D "_WINDOWS" /D "UNICODE" /D "_UNICODE" /D "WIN32" /D "BOB_TEST" /D "AAF_MODULE_TEST" /YX /FD /c
-# ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o NUL /win32
-# ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o NUL /win32
+# ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
+# ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -56,7 +55,7 @@ LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /dll /machine:I386
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /dll /machine:I386 /out:"Release/AAFPGAPI.dll"
 # Begin Special Build Tool
-SOURCE=$(InputPath)
+SOURCE="$(InputPath)"
 PostBuild_Cmds=regsvr32 /s Release/AAFPGAPI.dll
 # End Special Build Tool
 
@@ -74,9 +73,9 @@ PostBuild_Cmds=regsvr32 /s Release/AAFPGAPI.dll
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /MTd /W3 /Gm /GR /GX /Zi /Od /I "../../../ref-impl/plugins" /I "../../../ref-impl/src/com-api" /I "../../../ref-impl/include/com-api/" /I "../../../ref-impl/src/impl" /I "../../../ref-impl/src/Om" /I "../../../ref-impl/include/OM" /I "../../../ref-impl/src/com-api/com-dll" /I "../include/comidl" /I "../../../ref-impl/include/ref-api" /I "../../../ref-impl/include" /D "_DEBUG" /D "OM_ENABLE_DEBUG" /D "_WIN32" /D "_WINDOWS" /D "UNICODE" /D "_UNICODE" /D "WIN32" /D "BOB_TEST" /D "AAF_MODULE_TEST" /FR /YX /FD /c
-# ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o NUL /win32
-# ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o NUL /win32
+# ADD CPP /nologo /MTd /W3 /Gm /GR /GX /ZI /Od /I "../../../ref-impl/plugins" /I "../../../ref-impl/src/com-api" /I "../../../ref-impl/include/com-api/" /I "../../../ref-impl/src/impl" /I "../../../ref-impl/src/Om" /I "../../../ref-impl/include/OM" /I "../../../ref-impl/src/com-api/com-dll" /I "../include/comidl" /I "../../../ref-impl/include/ref-api" /I "../../../ref-impl/include" /D "_DEBUG" /D "OM_ENABLE_DEBUG" /D "_WIN32" /D "_WINDOWS" /D "UNICODE" /D "_UNICODE" /D "WIN32" /D "BOB_TEST" /D "AAF_MODULE_TEST" /FR /YX /FD /c
+# ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
+# ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
 BSC32=bscmake.exe
@@ -87,7 +86,7 @@ LINK32=link.exe
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /dll /incremental:no /debug /machine:I386 /nodefaultlib:"libcd.lib libcid.lib" /out:"Debug/AAFPGAPI.dll" /pdbtype:sept
 # SUBTRACT LINK32 /nodefaultlib
 # Begin Special Build Tool
-SOURCE=$(InputPath)
+SOURCE="$(InputPath)"
 PostBuild_Cmds=regsvr32 /s Debug/AAFPGAPI.dll
 # End Special Build Tool
 
