@@ -168,8 +168,7 @@ PLUGIN_OBJECTS = \
 	AAFPlugin \
 	AAFEssenceStream \
 	AAFEssenceDataStream \
-	AAFEssenceCodec \
-	AAFEssenceFileStream
+	AAFEssenceCodec
 
 # objects in PLUGIN_OBJECTS are NOT built into the main interface IDL
 #---------------------------------------------
