@@ -13,7 +13,7 @@
 # the License for the specific language governing rights and limitations
 # under the License.
 #
-# The Original Code of this file is Copyright 1998-2004, Licensor of the
+# The Original Code of this file is Copyright 1998-2005, Licensor of the
 # AAF Association.
 #
 # The Initial Developer of the Original Code of this file and the
@@ -23,76 +23,135 @@
 ###############################################################################
 
 # Makefile (assumes GnuMake under CYGWIN)
-# builds AAF COM API documentation using DocJet and Microsoft HTMLHelp Compiler
+# builds AAF COM API documentation using doxygen
+# and Microsoft HTMLHelp Compiler
 
-DOCJET_PATH = C:/Program\ Files/TallTree/DocJet
+
+# Various binaries which might be in non-conventional locations
+DOXYGEN = doxygen
+ZIP = zip
+TAR = tar
+
+# XXX - Not yet used
+# Only used for building the 'chm' (Windows Help file)
 HTMLHELP_WORKSHOP = C:/Program\ Files/HTML\ Help\ Workshop
-WINZIP = C:/Program\ Files/winzip/wzzip
-DOCJET_BIN = $(DOCJET_PATH)/Program
-GENERATOR = $(DOCJET_BIN)/generator.exe
-SUMMARY_HOOK = $(DOCJET_PATH)/extensions/Summary\ Hook.dll
-AAFAPI_FORMAT = $(DOCJET_PATH)/Output\ Formats/AAFapi.dof
-PERL	=	perl
+
+# Directory for output.  Relative paths are relative to the directory
+# containing this Makefile.
+OUTPUT_DIR = output
+
+
+#######################################################
+# These variables are largely based on the above set.
+# These should not need to be changed.
+
+# Path from this directory to the COMAPI documents
 COMAPI_PATH = ../../include/com-api
-HTML_MAN_PATH = Documentation/New\ Standard\ HTML
-HTML_HELP_MAN_PATH = Documentation/New\ Standard\ HTMLHelp
-HTML_MAN = aafapiman.zip
-HTML_HELP_MAN = aafapi.chm
 
-.PHONY:	docjet
+AAF_TAG_FILE = $(AAF_HTML_MAN_DIR)/aaf.tag
 
-all:	docjet $(HTML_MAN) $(HTML_HELP_MAN)
+# The following set is just a collection of output file names
+# and paths.  All are relative to OUTPUT_DIR
+AAF_HTML_MAN_DIR_COMP = aafapiman
+AAF_HTML_MAN_DIR = $(OUTPUT_DIR)/$(AAF_HTML_MAN_DIR_COMP)
+AAF_HTML_MAN = $(AAF_HTML_MAN_DIR)/index.html
 
-docjet: $(SUMMARY_HOOK) $(AAFAPI_FORMAT)
+AAF_HTML_MAN_ZIP_FILE = aafapiman.zip
+AAF_HTML_MAN_ZIP = $(OUTPUT_DIR)/$(AAF_HTML_MAN_ZIP_FILE)
 
-$(SUMMARY_HOOK) : Summary\ Hook.dll
-	cp Summary\ Hook.dll $(SUMMARY_HOOK)
+AAF_HTML_MAN_TGZ_FILE = aafapiman.tgz
+AAF_HTML_MAN_TGZ = $(OUTPUT_DIR)/$(AAF_HTML_MAN_TGZ_FILE)
 
-$(AAFAPI_FORMAT) : AAFapi.dof
-	cp AAFapi.dof $(AAFAPI_FORMAT)
+AAF_HTML_HELP_MAN = $(OUTPUT_DIR)/aafapi.chm
 
-$(HTML_MAN_PATH) :
+PLUGIN_HTML_MAN_COMP = pluginapiman
+PLUGIN_HTML_MAN_DIR = $(OUTPUT_DIR)/$(PLUGIN_HTML_MAN_COMP)
+PLUGIN_HTML_MAN = $(PLUGIN_HTML_MAN_DIR)/index.html
+
+PLUGIN_HTML_MAN_ZIP_FILE = pluginapiman.zip
+PLUGIN_HTML_MAN_ZIP = $(OUTPUT_DIR)/$(PLUGIN_HTML_MAN_ZIP_FILE)
+PLUGIN_HTML_MAN_TGZ_FILE = pluginapiman.tgz
+PLUGIN_HTML_MAN_TGZ = $(OUTPUT_DIR)/$(PLUGIN_HTML_MAN_TGZ_FILE)
+PLUGIN_HTML_HELP_MAN = $(OUTPUT_DIR)/pluginapi.chm
+
+
+
+#####################################################################
+## Top-level targets
+
+.PHONY: doc doczip htmldoc dirs clean
+
+doc: dirs htmldoc
+doczip: dirs htmldoczip
+
+htmldoc: $(AAF_HTML_MAN) $(PLUGIN_HTML_MAN) \
+         $(AAF_HTML_MAN_DIR)/aafDSlogo.gif \
+         $(PLUGIN_HTML_MAN_DIR)/aafDSlogo.gif
+
+htmldoczip: htmldoc $(AAF_HTML_MAN_ZIP) $(AAF_HTML_MAN_TGZ) \
+            $(PLUGIN_HTML_MAN_ZIP) $(PLUGIN_HTML_MAN_TGZ)
+
+clean:
+	rm -rf $(OUTPUT_DIR)
+
+##############################################################
+#### Output directory creation targets
+
+dirs: $(OUTPUT_DIR) $(AAF_HTML_MAN_DIR) $(PLUGIN_HTML_MAN_DIR)
+
+$(AAF_HTML_MAN_DIR) $(PLUGIN_HTML_MAN_DIR):
 	if [ ! -d $@ ]; then \
 		mkdir -p $@; \
 	fi
 
-$(HTML_HELP_MAN_PATH) :
-	if [ ! -d $@ ]; then \
-		mkdir -p $@; \
-	fi
+$(OUTPUT_DIR) :
+	if [ ! -d $@ ] ; then mkdir -p $@ ; fi
 
-$(HTML_MAN_PATH)/DigImgAreas.gif: DigImgAreas.gif
-	cp DigImgAreas.gif $(HTML_MAN_PATH)
-	
-$(HTML_HELP_MAN_PATH)/DigImgAreas.bmp: DigImgAreas.bmp
-	cp DigImgAreas.bmp $(HTML_HELP_MAN_PATH)
-	
-$(HTML_MAN_PATH)/aafDSlogo.gif: aafDSlogo.gif
-	cp aafDSlogo.gif $(HTML_MAN_PATH)
-	
-$(HTML_MAN_PATH)/frontCover.html: frontCover.html
-	cp frontCover.html $(HTML_MAN_PATH)
-	
-$(HTML_HELP_MAN_PATH)/frontCover.html: frontCover.html
-	cp frontCover.html $(HTML_HELP_MAN_PATH)
-	
-AAFnospace.idl:	 idlcleanup.perl $(COMAPI_PATH)/AAF.idl
-#	Since idlcleanup reads paragraphs, had to strip CR's first with tr
-	tr -d "\r" <  $(COMAPI_PATH)/AAF.idl | $(PERL) idlcleanup.perl | $(PERL) idlblankcomfix.perl > AAFnospace.idl
 
-AAFTypes.h:	 $(COMAPI_PATH)/AAFTypes.idl
-	cp  $(COMAPI_PATH)/AAFTypes.idl AAFTypes.idl
 
-$(HTML_MAN):	$(HTML_MAN_PATH) $(HTML_MAN_PATH)/frontCover.html $(HTML_MAN_PATH)/DigImgAreas.gif AAFTypes.h AAFnospace.idl 
-	- $(GENERATOR) -v refDocFromIDL.djt 2> errors.txt
-#   Just echo the Errors from the logfile
-	grep -v Warning errors.txt
-#   Had to use find to list files thru stdio because there are too many for bash to glob
-	- rm aafapiman.zip
-	cd $(HTML_MAN_PATH); find . -print > ../../fileList.txt; $(WINZIP) ../../aafapiman.zip @../../fileList.txt
-	cd $(HTML_MAN_PATH); tar -T ../../fileList.txt -cvf ../../aafapiman.tgz
 
-$(HTML_HELP_MAN):	$(HTMLHELP_WORKSHOP)/hhc $(HTML_HELP_MAN_PATH) $(HTML_HELP_MAN_PATH)/frontCover.html $(HTML_MAN_PATH)/DigImgAreas.gif AAFTypes.h AAFnospace.idl 
+##############################################################
+####  Main doc generating targets
+
+
+$(OUTPUT_DIR)/AAF.idl: $(COMAPI_PATH)/AAF.idl
+	echo "/**" > $(OUTPUT_DIR)/AAF.idl
+	echo " * @mainpage notitle" >> $(OUTPUT_DIR)/AAF.idl
+	echo " * @htmlinclude frontCover.html" >> $(OUTPUT_DIR)/AAF.idl
+	echo " */" >> $(OUTPUT_DIR)/AAF.idl
+	cat $(COMAPI_PATH)/AAF.idl >> $(OUTPUT_DIR)/AAF.idl
+
+$(AAF_TAG_FILE) \
+$(AAF_HTML_MAN): $(OUTPUT_DIR)/AAF.idl \
+                 $(COMAPI_PATH)/AAFTypes.idl \
+		frontCover.html doxygen.cfg
+	( \
+	  cat doxygen.cfg ; \
+	  echo INPUT=$(OUTPUT_DIR)/AAF.idl $(COMAPI_PATH)/AAFTypes.idl ; \
+	  echo OUTPUT_DIRECTORY=$(AAF_HTML_MAN_DIR) ; \
+	  echo GENERATE_TAGFILE=$(AAF_TAG_FILE) ; \
+	  echo PROJECT_NAME=\"AAF COM API\" \
+	) | $(DOXYGEN) -
+
+
+$(PLUGIN_HTML_MAN): $(COMAPI_PATH)/AAFPlugin.idl \
+                    $(COMAPI_PATH)/AAFPluginTypes.idl \
+                    $(AAF_TAG_FILE) \
+                    doxygen.cfg
+	( \
+	  cat doxygen.cfg ; \
+	  echo INPUT=$(COMAPI_PATH)/AAFPlugin.idl $(COMAPI_PATH)/AAFPluginTypes.idl ; \
+	  echo OUTPUT_DIRECTORY=$(PLUGIN_HTML_MAN_DIR) ; \
+	  echo TAGFILES=\"$(AAF_TAG_FILE)=../$(AAF_HTML_MAN_DIR_COMP)\" ; \
+	  echo PROJECT_NAME=\"AAF Plug-In API\" \
+	) | $(DOXYGEN) -
+
+
+
+### XXX - Not yet working!
+
+$(HTML_HELP_MAN): $(HTMLHELP_WORKSHOP)/hhc $(HTML_HELP_MAN_PATH) $(HTML_HELP_MAN_PATH)/frontCover.html $(HTML_MAN_PATH)/DigImgAreas.gif AAFTypes.h AAFnospace.idl 
+	# XXX Try generating a file for HTML Help workshop on the fly and run it.
 	- $(GENERATOR) -v refHHDocFromIDL.djt 2> errorsHH.txt
 #   Just echo the Errors from the logfile
 	grep -v Warning errorsHH.txt
@@ -102,5 +161,39 @@ $(HTML_HELP_MAN):	$(HTMLHELP_WORKSHOP)/hhc $(HTML_HELP_MAN_PATH) $(HTML_HELP_MAN
 	- $(HTMLHELP_WORKSHOP)/hhc $(HTML_HELP_MAN_PATH)/$(HTML_HELP_MAN)
 	cp $(HTML_HELP_MAN_PATH)/$(HTML_HELP_MAN) $(HTML_HELP_MAN)
 
-test:	test.idl
-	- $(GENERATOR) -v test.djt
+
+
+##############################################################
+####  Document archive generation
+
+$(AAF_HTML_MAN_ZIP): $(AAF_HTML_MAN)
+	rm -f $(AAF_HTML_MAN_ZIP)
+	cd $(OUTPUT_DIR) && \
+		$(ZIP) -9rq $(AAF_HTML_MAN_ZIP_FILE) $(AAF_HTML_MAN_DIR_COMP)
+
+$(AAF_HTML_MAN_TGZ): $(AAF_HTML_MAN)
+	rm -f $(AAF_HTML_MAN_TGZ)
+	cd $(OUTPUT_DIR) && \
+		$(TAR) cfz $(AAF_HTML_MAN_TGZ_FILE) $(AAF_HTML_MAN_DIR_COMP)
+
+$(PLUGIN_HTML_MAN_ZIP): $(PLUGIN_HTML_MAN)
+	rm -f $(PLUGIN_HTML_MAN_ZIP)
+	cd $(OUTPUT_DIR) && \
+		$(ZIP) -9rq $(PLUGIN_HTML_MAN_ZIP_FILE) $(PLUGIN_HTML_MAN_DIR_COMP)
+
+$(PLUGIN_HTML_MAN_TGZ): $(PLUGIN_HTML_MAN)
+	rm -f $(PLUGIN_HTML_MAN_TGZ)
+	cd $(OUTPUT_DIR) && \
+		$(TAR) cfz $(PLUGIN_HTML_MAN_TGZ_FILE) $(PLUGIN_HTML_MAN_DIR_COMP)
+
+
+##############################################################
+#### Misc. targets
+
+$(AAF_HTML_MAN_DIR)/aafDSlogo.gif \
+$(PLUGIN_HTML_MAN_DIR)/aafDSlogo.gif: aafDSlogo.gif
+	cp aafDSlogo.gif $@
+	
+
+
+
