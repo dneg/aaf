@@ -237,7 +237,7 @@ void convertWideStringToString(char*  result,
   PRECONDITION("Valid output buffer", result != 0);
   PRECONDITION("Valid output buffer size", resultSize > 0);
 
-  size_t length = lengthOfWideString(string);
+  size_t length = wcsu8slen(string);
   if (length > (resultSize - 1)) {
     length = resultSize - 1;
   }

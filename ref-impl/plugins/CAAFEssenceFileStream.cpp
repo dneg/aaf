@@ -33,7 +33,6 @@
 #include <errno.h>
 
 
-
 // Changes Nov01: fpos_t is supposed to be opaque ... Glibc 2.2 uses a Struct
 // Attempt to use alternative 64 bit seeks where possible using XOpen5 fseeko
 
@@ -56,7 +55,12 @@ typedef off64_t off_t;
 // Win32 differences
 
 #if defined (_WIN32)
-typedef fpos_t off_t;
+typedef __int64 off_t;
+//next 2 lines needsd to prevent VC trying to redefine off_t in wchar.h
+// which is called from utf8.h.
+typedef long _off_t;
+#define _OFF_T_DEFINED
+
 #define fseeko(fp, off, whence) fsetpos(fp, &off)
 off_t ftello (FILE* fp)
 {
@@ -68,6 +72,9 @@ if(0 != fgetpos(fp, &position))
 return position;
 }
 #endif
+
+
+#include "utf8.h"
 
 
 /*inline*/ bool AafPos2XopenOff(off_t *xopenOff, const aafPosition_t *aafPos)
@@ -216,14 +223,14 @@ HRESULT STDMETHODCALLTYPE
   for (i = 0; i < charCount; ++i)
     _pwPath[i] = pFilePath[i];
   
-  // Convert the wide character path the an ascii character path.
-  // Allocate the maximum possible multibyte string for the current
-  // locale.
-  size_t byteCount = (MB_CUR_MAX * (charCount - 1)) + 1;
+  // Convert the wide character path the an utf8 character path.
+  size_t byteCount;
+  byteCount=wcsu8slen(_pwPath)+1;
+
   _pPath = new char[byteCount];
   if (NULL == _pPath)
     return AAFRESULT_NOMEMORY;
-  size_t convertedBytes = wcstombs( _pPath, _pwPath, byteCount);
+  size_t convertedBytes = wcstou8s( _pPath, _pwPath, byteCount);
   if (-1 == convertedBytes)
     return E_INVALIDARG;
 
@@ -355,7 +362,11 @@ HRESULT STDMETHODCALLTYPE
 
   // Attempt to create a new file for reading and writing.
   errno = 0;
+#if defined(OS_WINDOWS)
+  _pFile = _wfopen(_pwPath, L"w+b");
+#else
   _pFile = fopen(_pPath, "w+b");
+#endif
   if (NULL == _pFile)
   {
     return AAFRESULT_BADOPEN;

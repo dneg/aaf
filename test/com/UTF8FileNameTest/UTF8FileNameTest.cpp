@@ -67,7 +67,7 @@ static void RemoveTestFile(const wchar_t* pFileName)
 {
 
 #ifdef OS_WINDOWS
-	_wremove(pFileName);
+	int ret=_wremove(pFileName);
 #else
 	const size_t kMaxFileName = 512;
 	char cFileName[kMaxFileName];
@@ -120,7 +120,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName,
   HRESULT hr = S_OK;
  
   try {
-    RemoveTestFile(pFileName);
+		RemoveTestFile(pFileName);
 
 		if( !UseRaw )
 		{
@@ -218,13 +218,13 @@ static HRESULT WriteAAFFile(IAAFFile* pFile, aafWChar *pExternalFilename)
 	checkResult(pFormat->AddFormatSpecifier(kAAFAudioSampleBits, sizeof(sampleBits), (aafUInt8 *)&sampleBits));
 	checkResult(pEssenceAccess->PutFileFormat(pFormat));
 
-	aafUInt8 audioBuf[] = { 0x01, 0x02, 0x03, 0x04 }, *dataPtr;
+	aafUInt8 audioBuf[] = { 0x01, 0x02, 0x03, 0x04 };
 	aafUInt32 samplesWritten, bytesWritten;
 
 	checkResult(pEssenceAccess->WriteSamples(
 						4,
 						sizeof(audioBuf),
-						dataPtr,
+						audioBuf,
 						&samplesWritten,
 						&bytesWritten));
 
@@ -463,7 +463,7 @@ int main(int argc, char* argv[])
 	wchar_t UnicodeFileName[30], UnicodeExtName[30];
 
 	wcscpy(UnicodeFileName, L"zz12345z.aaf");		// filename of AAF file
-	wcscpy(UnicodeExtName, L"zzexternal.aaf");		// filename of external essence
+	wcscpy(UnicodeExtName, L"zzexternal.extess");		// filename of external essence
 	UnicodeFileName[2]=0x2200;
 	UnicodeFileName[3]=0x2297;
 	UnicodeFileName[4]=0x222F;
@@ -490,6 +490,7 @@ int main(int argc, char* argv[])
 
 		// Write the AAF file and the external essence file
 		cout << "  Writing" << endl;
+		RemoveTestFile(UnicodeExtName);
 		if (simpleFileIO)
 			checkResult(WriteAAFFile(pFile, L"external.wav"));
 		else

@@ -26,7 +26,6 @@
 
 #include <wchar.h>
 
-
 // UTF8 versions of mbs/wcs libc functions
 // (because MSFT and GNU take different approaches from each other)
 
