@@ -26,6 +26,7 @@
 
 #include "OMDataTypes.h"
 
+
 // @module OMMSStructuredStorage | Interface to various implementations
 //         of Microsoft Structured Storage.
 //   @mauthor Tim Bingham | tjb | Avid Technology, Inc.
@@ -67,6 +68,16 @@
 #else
 #error "Don't know which structured storage implementation to use."
 #endif
+
+ //redefine OM_STGOPTIONS so that it is available on all platforms
+typedef struct tagOM_STGOPTIONS
+{
+  USHORT      usVersion;
+  USHORT      reserved;
+  ULONG       ulSectorSize;
+  const WCHAR *pwcsTemplateFile;
+} OM_STGOPTIONS;
+
 
 // Determine whether or not UNICODE versions of the APIs are in use.
 //
@@ -130,12 +141,17 @@ void OMMSSInitialize(void);
 
 void OMMSSFinalize(void);
 
+
+
+
+
 #if defined(OM_DYNAMIC_SS)
 // For dynamic linking to the Structured Storage library redirect
 // the following calls to wrapper functions.
 //
 #define StgCreateDocfile OMStgCreateDocfile
 #define StgCreateDocfileOnILockBytes OMStgCreateDocfileOnILockBytes
+
 #define StgOpenStorage OMStgOpenStorage
 #define StgOpenStorageOnILockBytes OMStgOpenStorageOnILockBytes
 #define StgIsStorageFile OMStgIsStorageFile
@@ -154,6 +170,7 @@ OMInt32 OMStgCreateDocfileOnILockBytes(ILockBytes* plkbyt,
                                        OMUInt32 reserved,
                                        IStorage** ppstgOpen);
 
+
 OMInt32 OMStgOpenStorage(SSCHAR* pwcsName,
                          IStorage* pstgPriority,
                          OMUInt32 grfMode,
@@ -164,7 +181,7 @@ OMInt32 OMStgOpenStorage(SSCHAR* pwcsName,
 OMInt32 OMStgOpenStorageOnILockBytes(ILockBytes* plkbyt,
                                      IStorage* pstgPriority,
                                      OMUInt32 grfMode,
-                                     SSCHAR** snbExclude,
+                                      SSCHAR** snbExclude,
                                      OMUInt32 reserved,
                                      IStorage** ppstgOpen);
 
@@ -175,4 +192,28 @@ OMInt32 OMCoInitialize(void* pvReserved);
 
 void OMCoUninitialize(void);
 
+
+
+
 #endif
+
+
+
+#ifdef OM_USE_STORAGE_EX
+
+//this function does ot exist in the current MS Structured Storage Library
+// but is reqruied to create 4K files through the raw interface.
+//Therefore the function is simulated in OMMSStructuredStorage.cpp
+//040109 Ian Baker Metaglue Corp.
+OMInt32 StgCreateDocfileOnILockBytesEx (
+										ILockBytes* plkbyt,
+										DWORD grfMode,
+										DWORD stgfmt,
+										DWORD grfAttrs,
+										OM_STGOPTIONS* pStgOptions,
+										void* reserved2,
+										REFIID riid,
+										void** ppObjectOpen   );
+
+
+#endif // OM_USE_STORAGE_EX
