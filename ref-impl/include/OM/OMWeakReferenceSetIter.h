@@ -149,16 +149,17 @@ public:
 
 protected:
 
+  typedef OMWeakReferenceSetElement<ReferencedObject> SetElement;
+
+  typedef OMSetIterator<OMUniqueObjectIdentification, SetElement> SetIterator;
+
     // @cmember Create an <c OMWeakReferenceSetIterator> given
     //          an underlying <c OMSetIterator>.
-  OMWeakReferenceSetIterator(
-      const OMSetIterator<OMUniqueObjectIdentification,
-	                      OMWeakReferenceSetElement<ReferencedObject> >& iter);
+  OMWeakReferenceSetIterator(const SetIterator& iter);
 
 private:
 
-  OMSetIterator<OMUniqueObjectIdentification,
-	            OMWeakReferenceSetElement<ReferencedObject> > _iterator;
+  SetIterator _iterator;
 
 };
 

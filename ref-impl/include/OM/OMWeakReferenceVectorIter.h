@@ -153,15 +153,17 @@ public:
 
 protected:
 
+  typedef OMWeakReferenceVectorElement<ReferencedObject> VectorElement;
+
+  typedef OMVectorIterator<VectorElement> VectorIterator;
+
     // @cmember Create an <c OMWeakReferenceVectorIterator> given
     //          an underlying <c OMVectorIterator>.
-  OMWeakReferenceVectorIterator(
-    const OMVectorIterator<
-                       OMWeakReferenceVectorElement<ReferencedObject> >& iter);
+  OMWeakReferenceVectorIterator(const VectorIterator& iter);
 
 private:
 
-  OMVectorIterator<OMWeakReferenceVectorElement<ReferencedObject> > _iterator;
+  VectorIterator _iterator;
 
 };
 

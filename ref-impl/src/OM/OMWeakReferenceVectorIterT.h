@@ -207,8 +207,7 @@ OMWeakReferenceVectorIterator<ReferencedObject>::value(void) const
 {
   TRACE("OMWeakReferenceVectorIterator<ReferencedObject>::value");
 
-  const OMWeakReferenceVectorElement<ReferencedObject>&
-                                                   element = _iterator.value();
+  const VectorElement& element = _iterator.value();
 
   ReferencedObject* result = element.getValue();
 
@@ -231,7 +230,7 @@ OMWeakReferenceVectorIterator<ReferencedObject>::setValue(
 {
   TRACE("OMWeakReferenceVectorIterator<ReferencedObject>::setValue");
 
-  OMWeakReferenceVectorElement<ReferencedObject>& element = _iterator.value();
+  VectorElement& element = _iterator.value();
 
   ReferencedObject* result = element.setValue(newObject);
 
@@ -263,8 +262,7 @@ OMWeakReferenceVectorIterator<ReferencedObject>::identification(void) const
 {
   TRACE("OMWeakReferenceVectorIterator<ReferencedObject>::identification");
 
-  const OMWeakReferenceVectorElement<ReferencedObject>&
-                                                   element = _iterator.value();
+  const VectorElement& element = _iterator.value();
 
   return element.identification();
 }
@@ -275,8 +273,7 @@ OMWeakReferenceVectorIterator<ReferencedObject>::identification(void) const
   //   @parm The underlying <c OMVectorIterator>.
 template <typename ReferencedObject>
 OMWeakReferenceVectorIterator<ReferencedObject>::OMWeakReferenceVectorIterator(
-  const OMVectorIterator<
-                        OMWeakReferenceVectorElement<ReferencedObject> >& iter)
+                                                    const VectorIterator& iter)
   : _iterator(iter) // probably bitwise
 {
 }

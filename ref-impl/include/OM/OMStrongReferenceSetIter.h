@@ -149,16 +149,17 @@ public:
 
 protected:
 
+  typedef OMStrongReferenceSetElement<ReferencedObject> SetElement;
+
+  typedef OMSetIterator<OMUniqueObjectIdentification, SetElement> SetIterator;
+
     // @cmember Create an <c OMStrongReferenceSetIterator> given
     //          an underlying <c OMSetIterator>.
-  OMStrongReferenceSetIterator(
-         const OMSetIterator<OMUniqueObjectIdentification,
-	            OMStrongReferenceSetElement<ReferencedObject> >& iter);
+  OMStrongReferenceSetIterator(const SetIterator& iter);
 
 private:
 
-  OMSetIterator<OMUniqueObjectIdentification,
-	            OMStrongReferenceSetElement<ReferencedObject> > _iterator;
+  SetIterator _iterator;
 
 };
 

@@ -205,8 +205,7 @@ OMWeakReferenceSetIterator<ReferencedObject>::value(void) const
 {
   TRACE("OMWeakReferenceSetIterator<ReferencedObject>::value");
 
-  const OMWeakReferenceSetElement<ReferencedObject>&
-                                                   element = _iterator.value();
+  const SetElement& element = _iterator.value();
 
   ReferencedObject* result = element.getValue();
 
@@ -234,7 +233,7 @@ OMWeakReferenceSetIterator<ReferencedObject>::setValue(
   PRECONDITION("Matching keys",
     IMPLIES(newObject != 0 , newObject->identification() == identification()));
 
-  OMWeakReferenceSetElement<ReferencedObject>& element = _iterator.value();
+  SetElement& element = _iterator.value();
 
   ReferencedObject* result = element.setValue(newObject);
 
@@ -262,8 +261,7 @@ OMWeakReferenceSetIterator<ReferencedObject>::identification(void) const
   //   @parm The underlying <c OMSetIterator>.
 template <typename ReferencedObject>
 OMWeakReferenceSetIterator<ReferencedObject>::OMWeakReferenceSetIterator(
-       const OMSetIterator<OMUniqueObjectIdentification,
-	                       OMWeakReferenceSetElement<ReferencedObject> >& iter)
+                                                       const SetIterator& iter)
   : _iterator(iter) // probably bitwise
 {
 }
