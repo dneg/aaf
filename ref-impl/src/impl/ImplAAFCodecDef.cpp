@@ -59,7 +59,7 @@ extern "C" const aafClassID_t CLSID_EnumAAFDataDefs;
 extern "C" const aafClassID_t CLSID_EnumAAFCodecFlavours;
 
 ImplAAFCodecDef::ImplAAFCodecDef ()
-:  _dataDefs(		PID_CodecDefinition_DataDefinitions,			"DataDefinitions"),
+:  _dataDefs(		PID_CodecDefinition_DataDefinitions,			"DataDefinitions", "/Dictionary/DataDefinitions", PID_DefinitionObject_Identification),
    _fileDescClass(	PID_CodecDefinition_FileDescriptorClass,		"FileDescriptorClass", "/Dictionary/ClassDefinitions", PID_DefinitionObject_Identification)
 
 {
@@ -144,33 +144,10 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFCodecDef::AddEssenceKind (
       ImplAAFDataDef * pEssenceKind)
 {
-	aafUID_t	*tmp, newUID;
-	aafInt32	oldBufSize;
-	aafInt32	newBufSize;
-
 	if (! pEssenceKind)
 	  return AAFRESULT_NULL_PARAM;
 
-	XPROTECT()
-	{
-		oldBufSize = _dataDefs.size();
-		newBufSize = oldBufSize + sizeof(aafUID_t);
-		tmp = new aafUID_t[newBufSize];
-		CHECK(pEssenceKind->GetAUID(&newUID));
-		if(tmp == NULL)
-			RAISE(AAFRESULT_NOMEMORY);
-		if(oldBufSize != 0)
-			_dataDefs.copyToBuffer(tmp, oldBufSize);
-		tmp[oldBufSize/sizeof(aafUID_t)] = newUID;
-		_dataDefs.setValue(tmp, newBufSize);
-		delete [] tmp;
-	}
-	XEXCEPT
-	{
-		if(tmp != NULL)
-			delete [] tmp;
-	}
-	XEND;
+	_dataDefs.appendValue(pEssenceKind);
 
 	return AAFRESULT_SUCCESS;
 }
@@ -183,15 +160,12 @@ AAFRESULT STDMETHODCALLTYPE
 {
 	if (! pEssenceKind)
 		return AAFRESULT_NULL_PARAM;
-
-	return AAFRESULT_NOT_IMPLEMENTED;
 	
-//!!!Wait until weak ref arrays are done
-//	if(_dataDefs.countOfValue(pEssenceKind) == 0)
-//		return AAFRESULT_OBJECT_NOT_FOUND;
-//	_dataDefs.removeValue(pEssenceKind);
-//
-//	return AAFRESULT_SUCCESS;
+	if(_dataDefs.countOfValue(pEssenceKind) == 0)
+		return AAFRESULT_OBJECT_NOT_FOUND;
+	_dataDefs.removeValue(pEssenceKind);
+
+	return AAFRESULT_SUCCESS;
 }
 
 
@@ -203,11 +177,9 @@ AAFRESULT STDMETHODCALLTYPE
 	if (! pResult)
 		return AAFRESULT_NULL_PARAM;
 
-	return AAFRESULT_NOT_IMPLEMENTED;
-//!!!Wait until weak ref arrays are done
-//	*pResult = _dataDefs.countOfValue(pEssenceKind);
-//
-//  return AAFRESULT_SUCCESS;
+	*pResult = _dataDefs.count();
+
+	return AAFRESULT_SUCCESS;
 }
 
 
@@ -376,15 +348,32 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFCodecDef::GetEssenceKinds (
       ImplEnumAAFDataDefs  **ppEnum)
 {
-	if(ppEnum == NULL)
-		return(AAFRESULT_NULL_PARAM);
-
-	*ppEnum = (ImplEnumAAFDataDefs *)CreateImpl(CLSID_EnumAAFDataDefs);
-	if(*ppEnum == NULL)
-		return(AAFRESULT_NOMEMORY);
-	(*ppEnum)->SetEnumProperty(this, &_dataDefs);
-//	(*ppEnum)->SetIterator(this,
-//				OMReferenceContainerIterator<ImplAAFDataDef>* iterator);
+	if (NULL == ppEnum)
+		return AAFRESULT_NULL_PARAM;
+	*ppEnum = 0;
+	
+	ImplEnumAAFDataDefs *theEnum = (ImplEnumAAFDataDefs *)CreateImpl (CLSID_EnumAAFDataDefs);
+	
+	XPROTECT()
+	{
+		OMWeakReferenceVectorIterator</*OMUniqueObjectIdentification,*/ ImplAAFDataDef>* iter = 
+			new OMWeakReferenceVectorIterator</*OMUniqueObjectIdentification,*/ ImplAAFDataDef>(_dataDefs);
+		if(iter == 0)
+			RAISE(AAFRESULT_NOMEMORY);
+		CHECK(theEnum->SetIterator(this, iter));
+		*ppEnum = theEnum;
+	}
+	XEXCEPT
+	{
+		if (theEnum)
+		  {
+			theEnum->ReleaseReference();
+			theEnum = 0;
+		  }
+		return(XCODE());
+	}
+	XEND;
+	
 	return(AAFRESULT_SUCCESS);
 }
 
