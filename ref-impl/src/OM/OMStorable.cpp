@@ -248,10 +248,10 @@ OMStorable* OMStorable::find(const char* objectName) const
   TRACE("OMStorable::find");
 
   OMProperty* p = findProperty(objectName);
-  OMStorable* object = 0;
-  p->getBits((OMByte*)&object, sizeof(object)); // tjb Gak !
-  ASSERT("Valid object", object != 0);
-  return object;
+  ASSERT("Valid property", p != 0);
+  OMStorable* result = p->storable();
+  ASSERT("Valid object", result != 0);
+  return result;
 }
 
   // @mfunc Find the <c OMProperty> named <p propertyName> contained
