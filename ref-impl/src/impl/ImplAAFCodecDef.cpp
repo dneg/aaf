@@ -60,7 +60,7 @@ extern "C" const aafClassID_t CLSID_EnumAAFCodecFlavours;
 
 ImplAAFCodecDef::ImplAAFCodecDef ()
 :  _dataDefs(		PID_CodecDefinition_DataDefinitions,			"DataDefinitions"),
-   _fileDescClass(	PID_CodecDefinition_FileDescriptorClass,		"FileDescriptorClass")
+   _fileDescClass(	PID_CodecDefinition_FileDescriptorClass,		"FileDescriptorClass", "/Dictionary/ClassDefinitions", PID_DefinitionObject_Identification)
 
 {
 	_persistentProperties.put(_dataDefs.address());
@@ -274,9 +274,7 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFCodecDef::GetFileDescriptorClass (
       ImplAAFClassDef **ppClass)
 {
-	aafUID_t			classID;
-	ImplAAFDictionary	*pDict = NULL;
-	AAFRESULT			status;
+	AAFRESULT			status = AAFRESULT_SUCCESS;
 
 	if (ppClass == NULL)
 	{
@@ -284,10 +282,7 @@ AAFRESULT STDMETHODCALLTYPE
 	}
 	else
 	{
-		classID = _fileDescClass;
-		status = GetDictionary(&pDict);
-		if(status == AAFRESULT_SUCCESS)
-			status = pDict->LookupClassDef(classID, ppClass);
+		*ppClass = _fileDescClass;
 	}
 
 	return status;
@@ -299,16 +294,13 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFCodecDef::SetFileDescriptorClass (
       ImplAAFClassDef *pClass)
 {
-	aafUID_t	classID;
-	
 	if (pClass == NULL)
 	{
 		return AAFRESULT_NULL_PARAM;
 	}
 	else
 	{
-		pClass->GetAUID(&classID);
-		_fileDescClass = classID;
+		_fileDescClass = pClass;
 	}
 	return AAFRESULT_SUCCESS;
 }
