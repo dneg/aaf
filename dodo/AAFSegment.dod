@@ -8,20 +8,10 @@ AAFComponent\
 #c
 #import ./AAFComponent.exp
 AD_HEAD
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
-
 AD_CLASS_UUID(7a2f0571, 1ba3, 11D2, bf, aa, 00, 60, 97, 11, 62, 12)
 
 AD_DEFAULT_UUID(7a2f0570, 1ba3, 11D2, bf, aa, 00, 60, 97, 11, 62, 12)
 AD_CLASS_BEGIN
-
 AD_METHOD2(SegmentOffsetToTC,				  
 		   [in],
 				aafPosition_t *, 
@@ -48,6 +38,7 @@ AD_METHOD2(SegmentOffsetToTC,
   //
   // AAFRESULT_NULL_PARAM
   //   - any arg is NULL.)
+
 
 AD_METHOD3(SegmentTCToOffset,
 		   [in],
@@ -81,12 +72,13 @@ AD_METHOD3(SegmentTCToOffset,
   // AAFRESULT_NULL_PARAM
   //   - any arg is NULL.)
 
+
 AD_METHOD1(NumRepresentations,
 		   [out],
 		   aafInt32 *,
 		   pCount,
 		   Pointer to Number of representations to be returned,
 		   This is a virtual method and should be overriden in the derived class.
-	// By default it always succeeds and sets the value of pCount to 1.)
-
+  // By default it always succeeds \\\(returning AAFRESULT_SUCCESS\\\) and
+  // sets the value of pCount to 1.) 
 AD_CLASS_END
