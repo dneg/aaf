@@ -204,20 +204,6 @@ const OMType* OMProperty::type(void) const
   return result;
 }
 
-  // @mfunc The <c OMStorable> that contains this <c OMProperty>.
-  //   @rdesc The containing <c OMStorable>.
-  //   @this const
-OMStorable* OMProperty::container(void) const
-{
-  TRACE("OMProperty::container");
-
-  ASSERT("Valid property set", _propertySet != 0);
-  OMStorable* result = _propertySet->container();
-
-  POSTCONDITION("Valid result", result != 0);
-  return result;
-}
-
   // @mfunc The <c OMStoredObject> that contains the persisted
   //        representation of this <c OMProperty>.
   //   @rdesc The <c OMStoredObject>.
@@ -329,6 +315,20 @@ void OMSimpleProperty::setSize(size_t newSize)
     ASSERT("Valid heap pointer", _bits != 0);
     _size = newSize;
   }
+}
+
+  // @mfunc The <c OMStorable> that contains this <c OMProperty>.
+  //   @rdesc The containing <c OMStorable>.
+  //   @this const
+OMStorable* OMProperty::container(void) const
+{
+  TRACE("OMProperty::container");
+
+  ASSERT("Valid property set", _propertySet != 0);
+  OMStorable* result = _propertySet->container();
+
+  POSTCONDITION("Valid result", result != 0);
+  return result;
 }
 
 void OMSimpleProperty::shallowCopyTo(OMProperty* destination) const

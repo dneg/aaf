@@ -146,6 +146,9 @@ public:
     // @cmember The type of this <c OMProperty>.
   const OMType* type(void) const;
 
+    // @cmember The <c OMStorable> that contains this <c OMProperty>.
+  OMStorable* container(void) const;
+
   // Copying.
 
   virtual void shallowCopyTo(OMProperty* destination) const = 0;
@@ -163,9 +166,6 @@ protected:
     // @cmember Clear the bit that indicates that this optional <c OMProperty>
     //          is present.
   void clearPresent(void);
-
-    // @cmember The <c OMStorable> that contains this <c OMProperty>.
-  OMStorable* container(void) const;
 
     // @cmember The <c OMStoredObject> that contains the persisted
     //          representation of this <c OMProperty>.
