@@ -804,6 +804,60 @@ interface I.this-module
 
 #ccccccccccccccccccccccccccc
 #c
+#c Inserts declaration for a method which takes five arguments.
+#c Allows an additional macro argument per method argument to let
+#c macro caller pass more info.  For example:
+#c
+#c For type           Arg is
+#c     ----           ------
+#c     objInArray     array size
+#c     objPassArray   array size
+#c     objOutArray    array size
+#c     objInCustom    custom input "marshal" code
+#c     objOutCustom   custom output "marshal" code
+#c     all else       ignored
+#c
+#c Macro Arg 01: method name
+#c
+#c Macro arguments 02+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt aux
+#c ----------   ----------   ---------   ----    ----    -------- --
+#c metharg 1    02           03          04      05      06       07
+#c metharg 2    08           09          10      11      12       13
+#c metharg 3    14           15          16      17      18       19
+#c metharg 4    20           21          22      23      24       25
+#c metharg 5    26           27          28      29      30       31
+#c
+#c Macro Arg 32: method description
+#c
+#startm AD_X2METHOD5 32
+  //***********************************************************
+  //
+  // %01()
+  //
+  // %32
+  // 
+  HRESULT %01 (
+    // %06
+    %02 .%03-adornment%04 .%03-indirection %05,
+
+    // %12
+    %08 .%09-adornment%10 .%09-indirection %11,
+
+    // %18
+    %14 .%15-adornment%16 .%15-indirection %17,
+
+    // %24
+    %20 .%21-adornment%22 .%21-indirection %23,
+
+    // %30
+    %26 .%27-adornment%28 .%27-indirection %29);\
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
 #c Forward declaration of another interface.
 #c
 #c Argument: Base name
@@ -1348,28 +1402,29 @@ AD_CLASS_END\
 #c
 
 #startm AD_STD_COMMENT_IFC_HEADER 00
+//
 // In addition to the specific error results listed for each method,
 // all methods in this interface may also return one of the following
 // values:
 // 
 // AAFRESULT_NOMEMORY
 //   - insufficient system memory is available to perform the
-//     operation.
-//\
+//     operation.\
 #endm
 
 #startm AD_STD_COMMENT_IFC_INIT 00
+//
 // AAFRESULT_NOT_INITIALIZED
 //   - This object has not yet had Initialize() called on it through
 //     this object's primary interface.  Note that IAAFObject is a
 //     primary interface for an abstract class, so it is not
 //     appropriate for the Initialize() method to exist in this
 //     interface.  The Initialize() method is available through the
-//     concrete object's primary interface.
-//\
+//     concrete object's primary interface.\
 #endm
 
 #startm AD_STD_COMMENT_IFC_STUB 00
+//
 /***********************************************\\
 *   Stub only.   Implementation not yet added   *
 \\***********************************************/\
@@ -1382,41 +1437,41 @@ AD_CLASS_END\
 
 
 #startm AD_STD_COMMENT_METH_ADDREF 01
-// *%01 is AddRef()ed before it is returned.
-  //\
+//
+  // *%01 is AddRef()ed before it is returned.\
 #endm
 
 #startm AD_STD_COMMENT_METH_ERR_HEADER 00
-// This method will return the following codes.  If more than one of
+//
+  // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
   // encountered in the order given below:
   // 
   // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //\
+  //   - succeeded.  (This is the only code indicating success.)\
 #endm
 
 #startm AD_STD_COMMENT_METH_STUB 00
-// NOTE! Stub only.   Implementation not yet added.
-  //\
+//
+  // NOTE! Stub only.   Implementation not yet added.\
 #endm
 
 #startm AD_STD_COMMENT_METH_ERR_ALREADY_INIT 00
-// AAFRESULT_ALREADY_INITIALIZED
-  //   - This object has already had Initialize() called on it.
-  //\
+//
+  // AAFRESULT_ALREADY_INITIALIZED
+  //   - This object has already had Initialize() called on it.\
 #endm
 
 #startm AD_STD_COMMENT_METH_ERR_NO_INIT 00
-// AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize() called on it.
-  //\
+//
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize() called on it.\
 #endm
 
 #startm AD_STD_COMMENT_METH_ERR_NULL_PARAM 01
-// AAFRESULT_NULL_PARAM
-  //   - %01 arg is NULL.
-  //\
+//
+  // AAFRESULT_NULL_PARAM
+  //   - %01 arg is NULL.\
 #endm
 
 

@@ -98,6 +98,9 @@
 #startm AD_X2METHOD4 26
 #endm
 
+#startm AD_X2METHOD5 32
+#endm
+
 #startm AD_CLASS_END 00
 #endm
 
