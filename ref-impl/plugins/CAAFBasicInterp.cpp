@@ -113,7 +113,6 @@ HRESULT STDMETHODCALLTYPE
 	IAAFPluginDescriptor	*desc = NULL;
 	IAAFLocator				*pLoc = NULL;
  	IAAFNetworkLocator		*pNetLoc = NULL;
-	IAAFDefObject			*defObject = NULL;
 	aafUID_t				category = AUID_AAFDefObject, manufacturer = MANUF_AVID_TECH;
 	aafUID_t				plugID = BASIC_INTERP_PLUGIN;
 	
@@ -124,11 +123,7 @@ HRESULT STDMETHODCALLTYPE
 			(IUnknown **)&desc));
 		*descPtr = desc;
 		desc->AddRef();
-		CHECK(desc->QueryInterface(IID_IAAFDefObject, (void **)&defObject));
-		CHECK(defObject->Init(&plugID, L"Example interpolators", L"Handles step and linear interpolation."));
-		defObject->Release();
-		defObject = NULL;
-
+		CHECK(desc->Init(&plugID, L"Example interpolators", L"Handles step and linear interpolation."));
 		CHECK(desc->SetCategoryClass(&category));
 		CHECK(desc->SetPluginVersionString(manufRev));
 		CHECK(dict->CreateInstance(&AUID_AAFNetworkLocator,
@@ -167,8 +162,6 @@ HRESULT STDMETHODCALLTYPE
 			pLoc->Release();
 		if(pNetLoc != NULL)
 			pNetLoc->Release();
-		if(defObject != NULL)
-			defObject->Release();
 	}
 	XEND
 

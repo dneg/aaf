@@ -130,7 +130,6 @@ HRESULT STDMETHODCALLTYPE
 	IAAFPluginDescriptor	*desc = NULL;
 	IAAFLocator				*pLoc = NULL;
  	IAAFNetworkLocator		*pNetLoc = NULL;
-	IAAFDefObject			*defObject = NULL;
 	aafUID_t				category = AUID_AAFDefObject, manufacturer = MANUF_JEFFS_PLUGINS;
 	aafUID_t				plugID = JEFFS_WAVE_PLUGIN;
 	
@@ -141,10 +140,7 @@ HRESULT STDMETHODCALLTYPE
 			(IUnknown **)&desc));
 		*descPtr = desc;
 		desc->AddRef();
-		CHECK(desc->QueryInterface(IID_IAAFDefObject, (void **)&defObject));
-		CHECK(defObject->Init(&plugID, L"Example WAVE Codec", L"Handles RIFF WAVE data."));
-		defObject->Release();
-		defObject = NULL;
+		CHECK(desc->Init(&plugID, L"Example WAVE Codec", L"Handles RIFF WAVE data."));
 
 		CHECK(desc->SetCategoryClass(&category));
 		CHECK(desc->SetPluginVersionString(manufRev));
@@ -184,8 +180,6 @@ HRESULT STDMETHODCALLTYPE
 			pLoc->Release();
 		if(pNetLoc != NULL)
 			pNetLoc->Release();
-		if(defObject != NULL)
-			defObject->Release();
 	}
 	XEND
 
