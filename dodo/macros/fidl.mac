@@ -1,11 +1,10 @@
-#c /******************************************\
-#c *                                          *
-#c * Advanced Authoring Format                *
-#c *                                          *
-#c * Copyright (c) 1998 Avid Technology, Inc. *
-#c * Copyright (c) 1998 Microsoft Corporation *
-#c *                                          *
-#c \******************************************/
+#c /***********************************************\
+#c *                                               *
+#c * Advanced Authoring Format                     *
+#c *                                               *
+#c * Copyright (c) 1998-1999 Avid Technology, Inc. *
+#c *                                               *
+#c \***********************************************/
 
 
 
@@ -70,20 +69,33 @@
 #c Arguments: none
 #c
 #startm AD_TYPES_HEAD 00
-cpp_quote("//=--------------------------------------------------------------------------=")
-cpp_quote("// .this-module.h")
-cpp_quote("//=--------------------------------------------------------------------------=")
-cpp_quote("// (C) Copyright 1998 Avid Technology.")
-cpp_quote("// (C) Copyright 1998 Microsoft Corporation.")
-cpp_quote("//")
-cpp_quote("// THIS CODE AND INFORMATION IS PROVIDED 'AS IS' WITHOUT WARRANTY OF")
-cpp_quote("// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO")
-cpp_quote("// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A")
-cpp_quote("// PARTICULAR PURPOSE.")
-cpp_quote("//=--------------------------------------------------------------------------=")
-cpp_quote("// .this-module Interface.")
-cpp_quote("//=--------------------------------------------------------------------------=")
-cpp_quote("//")
+cpp_quote("/***********************************************************************")
+cpp_quote("*")
+cpp_quote("*              Copyright (c) 1998-1999 Avid Technology, Inc.")
+cpp_quote("*")
+cpp_quote("* Permission to use, copy and modify this software and accompanying")
+cpp_quote("* documentation, and to distribute and sublicense application software")
+cpp_quote("* incorporating this software for any purpose is hereby granted,")
+cpp_quote("* provided that (i) the above copyright notice and this permission")
+cpp_quote("* notice appear in all copies of the software and related documentation,")
+cpp_quote("* and (ii) the name Avid Technology, Inc. may not be used in any")
+cpp_quote("* advertising or publicity relating to the software without the specific,")
+cpp_quote("*  prior written permission of Avid Technology, Inc.")
+cpp_quote("*")
+cpp_quote("* THE SOFTWARE IS PROVIDED 'AS-IS' AND WITHOUT WARRANTY OF ANY KIND,")
+cpp_quote("* EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY")
+cpp_quote("* WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.")
+cpp_quote("* IN NO EVENT SHALL AVID TECHNOLOGY, INC. BE LIABLE FOR ANY DIRECT,")
+cpp_quote("* SPECIAL, INCIDENTAL, PUNITIVE, INDIRECT, ECONOMIC, CONSEQUENTIAL OR")
+cpp_quote("* OTHER DAMAGES OF ANY KIND, OR ANY DAMAGES WHATSOEVER ARISING OUT OF")
+cpp_quote("* OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE AND")
+cpp_quote("* ACCOMPANYING DOCUMENTATION, INCLUDING, WITHOUT LIMITATION, DAMAGES")
+cpp_quote("* RESULTING FROM LOSS OF USE, DATA OR PROFITS, AND WHETHER OR NOT")
+cpp_quote("* ADVISED OF THE POSSIBILITY OF DAMAGE, REGARDLESS OF THE THEORY OF")
+cpp_quote("* LIABILITY.")
+cpp_quote("*")
+cpp_quote("************************************************************************/")
+
 
 #ifndef DO_NO_IMPORTS
 import "wtypes.idl";
