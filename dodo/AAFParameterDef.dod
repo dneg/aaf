@@ -3,7 +3,7 @@ AAFParameterDef\
 #endm
 #c
 #startm .parent-module 0
-AAFPluggableDef\
+AAFDefObject\
 #endm
 #c
 AD_HEAD
