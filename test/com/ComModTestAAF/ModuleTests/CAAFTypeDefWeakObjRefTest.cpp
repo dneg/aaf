@@ -454,14 +454,18 @@ void CAAFTypeDefWeakObjRef_create (aafCharacter_constptr pFileName) // throw HRE
   }
   catch (HRESULT& rhr)
   {
-     pFile->Save();  // This may not be safe???
-     pFile->Close();
-     throw rhr;
+    if (pFile) // only save & close the file if it was actually opened
+    {
+      pFile->Save();  // This may not be safe???
+      pFile->Close();
+    }
+    throw rhr;
   }
   catch (...)
   {
-     pFile->Close();  
-     throw;
+    if (pFile) // only close the file if it was actually opened
+      pFile->Close();  
+    throw;
   }
 }
 
@@ -472,6 +476,7 @@ void CAAFTypeDefWeakObjRef_read (aafCharacter_constptr pFileName) // throw HRESU
 {
   IAAFFileSP pFile;
   IAAFHeaderSP pHeader;
+  HRESULT result = S_OK;
 
   try
   {
@@ -480,13 +485,15 @@ void CAAFTypeDefWeakObjRef_read (aafCharacter_constptr pFileName) // throw HRESU
     
     CAAFTypeDefWeakObjRef_verify (pHeader);
 
-    checkResult(pFile->Close());
+    result = pFile->Close();
   }
   catch (...)
   {
-     pFile->Close();  
-     throw;
+    if (pFile) // only close the file if it was actually opened
+      pFile->Close();  
+    throw;
   }
+  checkResult(result);
 }
 
 
