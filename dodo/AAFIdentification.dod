@@ -280,7 +280,7 @@ AD_STD_METHOD_STRING_GET_AND_SIZE(Platform,
   // - "Unknown" for unknown platforms)
 
 
-AD_XMETHOD1(GetGeneration,
+AD_XMETHOD1(GetGenerationID,
 			[out],
 			objPass,
 			aafUID_t *,

@@ -224,7 +224,7 @@ public:
   // GetGeneration()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetGeneration
+    GetGenerationID
 		// @parm [out] The unique generation
         (aafUID_t *  pGeneration);
 
