@@ -399,13 +399,13 @@ ImplAAFObject::ImplAAFObject ()
 	_cachedDefinition (0),
 	_apSavedProps (0),
 	_savedPropsSize (0),
-	_savedPropsCount (0)
+	_savedPropsCount (0),
+	_isInitialized (kAAFFalse)
 {
   _persistentProperties.put(_generation.address());
 
   const aafUID_t null_uid = { 0 };
   _soid = null_uid;
-  _isInitialized = kAAFFalse;
 }
 
 
@@ -1189,6 +1189,19 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 
+aafBool ImplAAFObject::isInitialized () const
+{
+  return _isInitialized;
+}
+
+
+void ImplAAFObject::setInitialized ()
+{
+  _isInitialized = kAAFTrue;
+  assert (isInitialized());
+}
+
+
 void ImplAAFObject::onSave(void* clientContext) const
 {
   if (clientContext)
@@ -1201,4 +1214,13 @@ void ImplAAFObject::onSave(void* clientContext) const
 		  pNonConstThis->_generation = *pGen;
 		}
 	}
+}
+
+
+void ImplAAFObject::onRestore(void* /*clientContext*/) const
+{
+  // clientContext currently unused
+
+  // Cast away constness (maintaining logical constness)
+  ((ImplAAFObject*) this)->setInitialized ();
 }
