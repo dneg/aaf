@@ -43,6 +43,13 @@ ImplAAFTimelineMobSlot::~ImplAAFTimelineMobSlot ()
 
 
 AAFRESULT STDMETHODCALLTYPE
+ImplAAFTimelineMobSlot::Initialize ()
+{
+  return AAFRESULT_SUCCESS;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
     ImplAAFTimelineMobSlot::GetEditRate (aafRational_t *editRate)
 {
 	if (editRate == NULL)

@@ -8,18 +8,6 @@
 \******************************************/
 
 
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
-
-
-
-
 #ifndef __ImplAAFTapeDescriptor_h__
 #include "ImplAAFTapeDescriptor.h"
 #endif
@@ -47,6 +35,13 @@ ImplAAFTapeDescriptor::ImplAAFTapeDescriptor ():
 
 ImplAAFTapeDescriptor::~ImplAAFTapeDescriptor ()
 {}
+
+
+AAFRESULT STDMETHODCALLTYPE
+ImplAAFTapeDescriptor::Initialize ()
+{
+  return AAFRESULT_SUCCESS;
+}
 
 
 AAFRESULT STDMETHODCALLTYPE
