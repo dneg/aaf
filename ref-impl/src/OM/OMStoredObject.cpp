@@ -80,7 +80,8 @@ static void printName(const wchar_t* name);
 
 OMStoredObject::OMStoredObject(IStorage* s)
 : _storage(s), _index(0), _indexStream(0), _propertiesStream(0),
-  _offset(0), _open(false), _mode(readOnlyMode)
+  _offset(0), _open(false), _mode(readOnlyMode),
+  _byteOrder(hostByteOrder()), _reorderBytes(false)
 {
 }
 
@@ -224,21 +225,23 @@ OMStoredPropertySetIndex* OMStoredObject::restore(void)
 
   // Read byte order flag.
   //
-  OMByteOrder byteOrder;
-  readFromStream(_indexStream, &byteOrder, sizeof(byteOrder));
-  ASSERT("Valid byte order flag", byteOrder == hostByteOrder());
+  readFromStream(_indexStream, &_byteOrder, sizeof(_byteOrder));
+  if (_byteOrder == hostByteOrder()) {
+    _reorderBytes = false;
+  } else {
+    _reorderBytes = true;
+  }
 
   // Read version number.
   //
   OMUInt32 version;
-  readFromStream(_indexStream, &version, sizeof(version));
-  ASSERT("Valid version number", version > 0);
+  readUInt32FromStream(_indexStream, version, _reorderBytes);
   ASSERT("Recognized version number", version == currentVersion);
   
   // Read count of entries.
   //
   OMUInt32 entries;
-  readFromStream(_indexStream, &entries, sizeof(entries));
+  readUInt32FromStream(_indexStream, entries, _reorderBytes);
   OMStoredPropertySetIndex* index = new OMStoredPropertySetIndex(entries);
   ASSERT("Valid heap pointer", index != 0);
 
@@ -249,10 +252,10 @@ OMStoredPropertySetIndex* OMStoredObject::restore(void)
   OMUInt32 offset;
   OMUInt32 length;
   for (size_t i = 0; i < entries; i++) {
-    readFromStream(_indexStream, &propertyId, sizeof(propertyId));
-    readFromStream(_indexStream, &type, sizeof(type));
-    readFromStream(_indexStream, &offset, sizeof(offset));
-    readFromStream(_indexStream, &length, sizeof(length));
+    readUInt32FromStream(_indexStream, propertyId, _reorderBytes);
+    readUInt32FromStream(_indexStream, type, _reorderBytes);
+    readUInt32FromStream(_indexStream, offset, _reorderBytes);
+    readUInt32FromStream(_indexStream, length, _reorderBytes);
     index->insert(propertyId, type, offset, length);
   }
   
@@ -635,12 +638,12 @@ void OMStoredObject::restore(OMStoredVectorIndex*& vector,
   // Read the high water mark.
   //
   OMUInt32 highWaterMark;
-  readFromStream(vectorIndexStream, &highWaterMark, sizeof(highWaterMark));
+  readUInt32FromStream(vectorIndexStream, highWaterMark, _reorderBytes);
 
   // Read the count of elements.
   //
   OMUInt32 entries;
-  readFromStream(vectorIndexStream, &entries, sizeof(entries));
+  readUInt32FromStream(vectorIndexStream, entries, _reorderBytes);
 
   // Create an index.
   //
@@ -651,7 +654,7 @@ void OMStoredObject::restore(OMStoredVectorIndex*& vector,
   //
   for (size_t i = 0; i < entries; i++) {
     OMUInt32 name;
-    readFromStream(vectorIndexStream, &name, sizeof(name));
+    readUInt32FromStream(vectorIndexStream, name, _reorderBytes);
     vectorIndex->insert(i, name);
   }
 
@@ -856,6 +859,38 @@ void OMStoredObject::readFromStream(IStream* stream, void* data, size_t size)
     exit(FAILURE);
   }
   ASSERT("Successful read", bytesRead == size);
+}
+
+  // @mfunc Read a UInt32 from <p stream> into <p i>. If <p
+  //        _reorderBytes> is true then the bytes are reordered.
+  //   @parm The stream from which to read.
+  //   @parm The resulting OMUInt32.
+  //   @parm If true then reorder the bytes.
+void OMStoredObject::readUInt32FromStream(IStream* stream,
+                                          OMUInt32& i,
+                                          bool _reorderBytes)
+{
+  readFromStream(stream, &i, sizeof(OMUInt32));
+  if (_reorderBytes) {
+    reorderOMUInt32(i);
+  }
+}
+
+  // @mfunc Reorder the UInt32 from <p i>.
+  //   @parm The OMUInt32 to reorder.
+void OMStoredObject::reorderOMUInt32(OMUInt32& i)
+{
+  OMUInt8* p = (OMUInt8*)&i;
+  OMUInt8 temp;
+
+  temp = p[0];
+  p[0] = p[3];
+  p[3] = temp;
+
+  temp = p[1];
+  p[1] = p[2];
+  p[2] = temp;
+
 }
 
 void OMStoredObject::setClass(IStorage* storage, const OMClassId& cid)
