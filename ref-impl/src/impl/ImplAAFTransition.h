@@ -25,8 +25,8 @@ class ImplAAFDataDef;
 #include "ImplAAFComponent.h"
 #endif
 
-#ifndef __ImplAAFGroup_h__
-#include "ImplAAFGroup.h"
+#ifndef __ImplAAFEffect_h__
+#include "ImplAAFEffect.h"
 #endif
 
 class ImplAAFTransition : public ImplAAFComponent
@@ -62,7 +62,7 @@ public:
          aafPosition_t  cutPoint,
 
          // @parm [in] A reference to an effect invocation object
-         ImplAAFGroup * effect);	 
+         ImplAAFEffect * effect);	 
 
   //****************
   // GetCutPoint()
@@ -79,7 +79,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     GetEffect
         // @parm [out] Effect used by transition
-        (ImplAAFGroup ** effObj);
+        (ImplAAFEffect ** effObj);
 	//@comm Replaces part of omfsTransitionGetInfo
 
   //****************
@@ -96,7 +96,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     SetEffect
         // @parm [in] Effect used by transition
-        (ImplAAFGroup * effObj);
+        (ImplAAFEffect * effObj);
 
 
 
@@ -107,8 +107,8 @@ public:
   static AAFRESULT test();
 
 private:
-	OMStrongReferenceProperty<ImplAAFGroup>	_effect;
-	OMFixedSizeProperty<aafPosition_t>		_cutPoint;
+	OMStrongReferenceProperty<ImplAAFEffect>	_effect;
+	OMFixedSizeProperty<aafPosition_t>			_cutPoint;
 
 };
 
