@@ -83,7 +83,7 @@ depend.mk : aafobjects.mk
 		echo $$base.implh : macros/implh.mac macros/base.mac >> depend.tmp ; \
 		echo $$base.idl : macros/idl.mac macros/base.mac >> depend.tmp ; \
 		echo $$base.exp : macros/exp.mac macros/base.mac >> depend.tmp ; \
-		for import in `grep '^#import' $$base.dod | sed -e 's,#import,,'` ; do \
+		for import in `grep '^#import' $$base.dod | sed -e 's,#import,,' | sed -e 's,.*/,,'` ; do \
 			echo $$base.cpp : $$import >> depend.tmp ; \
 			echo $$base.h : $$import >> depend.tmp ; \
 			echo $$base.cppt : $$import >> depend.tmp ; \
