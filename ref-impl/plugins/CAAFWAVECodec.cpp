@@ -105,6 +105,7 @@ HRESULT STDMETHODCALLTYPE
 HRESULT STDMETHODCALLTYPE
     CAAFWaveCodec::GetIndexedDefinitionObject (aafUInt32 index, IAAFDictionary *dict, IAAFDefObject **def)
 {
+	IAAFClassDef	*fileClass = NULL;
 	IAAFCodecDef	*codecDef = NULL;
 	IAAFDefObject	*obj = NULL;
 	IAAFClassDef    *pcd = 0;
@@ -115,7 +116,6 @@ HRESULT STDMETHODCALLTYPE
 
 	XPROTECT()
 	{
-		//!!!Later, add in dataDefs supported & filedescriptor class
 	  	CHECK(dict->LookupClassDef(AUID_AAFCodecDef, &pcd));
 		CHECK(pcd->CreateInstance(IID_IAAFCodecDef, 
 								  (IUnknown **)&codecDef));
@@ -126,6 +126,10 @@ HRESULT STDMETHODCALLTYPE
 		CHECK(codecDef->Initialize(uid, L"WAVE Codec", L"Handles RIFF WAVE data."));
 		CAAFBuiltinDefs defs (dict);
 		CHECK(codecDef->AddEssenceKind (defs.ddSound()));
+	  	CHECK(dict->LookupClassDef(AUID_AAFWAVEDescriptor, &fileClass));
+		CHECK(codecDef->SetFileDescriptorClass (fileClass));
+		fileClass->Release ();
+		fileClass = 0;
 		*def = obj;
 		codecDef->Release();
 		codecDef = NULL;
@@ -146,6 +150,11 @@ HRESULT STDMETHODCALLTYPE
 		  {
 			pcd->Release ();
 			pcd = 0;
+		  }
+		if (fileClass)
+		  {
+			fileClass->Release ();
+			fileClass = 0;
 		  }
 	}
 	XEND

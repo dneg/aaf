@@ -312,6 +312,7 @@ HRESULT STDMETHODCALLTYPE
 {
 	HRESULT hr = S_OK;
 	IAAFCodecDef	*codecDef = NULL;
+	IAAFClassDef	*fileClass = NULL;
 	IAAFDefObject	*obj = NULL;
 	IAAFClassDef    *pcd = 0;
 	aafUID_t		uid;
@@ -345,6 +346,11 @@ HRESULT STDMETHODCALLTYPE
 		checkResult(codecDef->Initialize(uid, 
 		                      const_cast<wchar_t *>(kDisplayName),
 		                      const_cast<wchar_t *>(kDescription)));
+
+	  	checkResult(dict->LookupClassDef(AUID_AAFWAVEDescriptor, &fileClass));
+		checkResult(codecDef->SetFileDescriptorClass (fileClass));
+		fileClass->Release ();
+		fileClass = 0;
 
 		// Cleanup
 		codecDef->Release();
@@ -381,6 +387,11 @@ HRESULT STDMETHODCALLTYPE
 	  {
 		pcd->Release();
 		pcd = 0;
+	  }
+	if (fileClass)
+	  {
+		fileClass->Release ();
+		fileClass = 0;
 	  }
 
 	return hr;
@@ -835,7 +846,8 @@ HRESULT STDMETHODCALLTYPE
     aafCompressEnable_t compEnable)
 {
 	HRESULT hr = S_OK;
-
+	IAAFContainerDef	*containerDef;
+	IAAFDefObject		*defObj;
 	
 	if (NULL == unk || NULL == stream)
 		return AAFRESULT_NULL_PARAM;
@@ -865,7 +877,11 @@ HRESULT STDMETHODCALLTYPE
 		checkAssertion(_length < 0xFFFFFFFF);
 		_numberOfSamples = (aafUInt32)_length; // The length in the file descriptor (mdes in omfi) seems to be in samples.
 		checkResult(_descriptorHelper.GetSampleRate(&_sampleRate));
-		checkResult(_descriptorHelper.GetContainerFormat(&_containerFormat));
+		checkResult(_descriptorHelper.GetContainerFormat(&containerDef));
+		checkResult(containerDef->QueryInterface(IID_IAAFDefObject, (void **)&defObj));
+		checkResult(defObj->GetAUID(&_containerFormat));
+		containerDef->Release();
+		defObj->Release();
 
 		//
 		// DigitalImageDescriptor methods:
