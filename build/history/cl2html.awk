@@ -77,12 +77,16 @@ function rowcolor(files) {
   ff = fns[1];
 #  printf("<!--[%s]-->\n", ff);
   /* Match directory of file to a color */
-  if (match(ff, "ref-impl/src/OM")) {
+  if (match(ff, "ref-impl/src/OM/")) {
     result = "#CCFFCC";
-  } else if (match(ff, "ref-impl/include/OM")) {
+  } else if (match(ff, "ref-impl/include/OM/")) {
     result = "#CCFFCC";
-  } else if (match(ff, "ref-impl/src/impl")) {
+  } else if (match(ff, "ref-impl/src/impl/")) {
     result = "#FFCCCC";
+  } else if (match(ff, "ref-impl/doc/")) {
+    result = "#CCFFFF";
+  } else if (match(ff, "doc/")) {
+    result = "#CCFFFF";
   } else if (match(ff, "examples/")) {
     result = "#FFCCFF";
   } else if (match(ff, "examples2/")) {
