@@ -19,6 +19,9 @@ AD_HEAD
 
 AD_INCLUDE(AAFTypes)
 
+AD_CLASS_UUID(7B007BF1, 2D39, 11d2, 80, 43, 00, 60, 08, 14, 3E, 6F)
+AD_DEFAULT_UUID(7B007BF2, 2D39, 11d2, 80, 43, 00, 60, 08, 14, 3E, 6F)
+
 AD_CLASS_BEGIN
 
 /****/
@@ -40,14 +43,14 @@ Gets the length of the user data for one frame.)
 AD_METHOD3(GetUserDataAtPosition,
 [in],aafPosition_t,position,Zero-based offset,
 [in],aafInt32,buflen,Length of the buffer,
-[out],void*,buffer,Passed in and filled with user data,
+[out],aafDataBuffer_t,buffer,Passed in and filled with user data,
 Gets the user data [userbits] for a particular frame.)
 
 /****/
 AD_METHOD3(SetUserDataAtPosition,
 [in],aafPosition_t,position,Zero-based offset to set the userbits at,
 [in],aafInt32,buflen,Length of the buffer,
-[in],void*,buffer,user data for the given frame,
+[in],aafDataBuffer_t,buffer,user data for the given frame,
 Gets the user data [userbits] for a particular frame.)
 							 
 /****/
