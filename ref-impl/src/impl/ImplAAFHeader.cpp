@@ -445,7 +445,7 @@ AAFRESULT
 	}
 	XEND
 	
-	return(OM_ERR_NONE);
+	return(AAFRESULT_SUCCESS);
 }
 
 
@@ -526,7 +526,8 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 	  return AAFRESULT_NULL_PARAM;
 	}
-  return AAFRESULT_NOT_IMPLEMENTED;
+  *pTimeStamp = _lastModified;
+  return AAFRESULT_SUCCESS;
 }
 
 AAFRESULT ImplAAFHeader::SetModified(void)		// To NOW
@@ -534,7 +535,8 @@ AAFRESULT ImplAAFHeader::SetModified(void)		// To NOW
 	aafTimeStamp_t	now;
 
 	AAFGetDateTime(&now);
-	return (OM_ERR_NONE);
+	_lastModified = now;
+	return (AAFRESULT_SUCCESS);
 }
 
 void ImplAAFHeader::SetByteOrder(const aafInt16 byteOrder)
@@ -545,7 +547,7 @@ void ImplAAFHeader::SetByteOrder(const aafInt16 byteOrder)
 AAFRESULT ImplAAFHeader::SetToolkitRevisionCurrent()
 {
 	_toolkitRev = AAFReferenceImplementationVersion;
-	return (OM_ERR_NONE);
+	return (AAFRESULT_SUCCESS);
 }
 
 AAFRESULT ImplAAFHeader::LoadMobTables(void)
