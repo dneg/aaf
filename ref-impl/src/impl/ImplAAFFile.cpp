@@ -303,7 +303,6 @@ ImplAAFFile::OpenExistingModify (const aafCharacter * pFileName,
 		OMStorable* head = _file->restore();
 		_head = dynamic_cast<ImplAAFHeader *>(head);
 		checkExpression(NULL != _head, AAFRESULT_BADHEAD);
-		
 		// Check for file format version.
 		if (_head->IsObjectModelVersionPresent())
 		  {
@@ -368,7 +367,6 @@ ImplAAFFile::OpenExistingModify (const aafCharacter * pFileName,
 			_head = 0;
 		}
 	}
-
 
 	return stat;
 }
@@ -664,7 +662,6 @@ ImplAAFFile::~ImplAAFFile ()
 		delete _file;
 		_file = NULL;
 	}
-
 }
 
 void ImplAAFFile::InternalReleaseObjects()
@@ -694,7 +691,6 @@ ImplAAFFile::Close ()
 	// Release all of the pointers that we created or copied
 	// during the create or open methods.
 	InternalReleaseObjects();
-
 
 	// Close the OM file.
 	_file->close();
@@ -765,5 +761,6 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 		return AAFRESULT_NULL_PARAM;
 	}
-    return AAFRESULT_NOT_IN_CURRENT_VERSION;
+
+	return(_head->GetDictionary(ppDictionary));
 }
