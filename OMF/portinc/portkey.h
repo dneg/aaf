@@ -160,17 +160,16 @@
 #endif
 
 /* Sun Port Definitions */
-#ifdef sun
+#ifdef __sun
 
 #define PORTKEY_CPU_SPARC     1
-#define PORTKEY_OS_UNIX SUNOS
-#define PORTKEY_COMP_UNIX_GCC 1
-#define PORTKEY_APP_MULTIPROC
-
-/* overrides for solaris */
-#ifdef solaris
 #define PORTKEY_OS_UNIX SOLARIS2.2
 #define PORTKEY_COMP_UNIX_ANSIC 1
+#define PORTKEY_APP_MULTIPROC
+
+#if defined (__GNUC__)
+#define PORTKEY_INT64_NATIVE 1
+#define PORTKEY_INT64_TYPE long long
 #endif
 
 #endif
@@ -209,8 +208,8 @@
 
 #endif
 
-/* Linux Port Definitions */
-#if defined(linux)
+/* Linux/Solaris/Darwin Port Definitions */
+#if defined(__linux) || defined(__APPLE__)
 
 #define PORTKEY_CPU_
 #define PORTKEY_OS_UNIX LINUX

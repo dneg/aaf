@@ -29,10 +29,6 @@
 
 #include <stdio.h>
 
-#if defined(sun)
-#include <sys/stdtypes.h>
-#endif
-
 #include "omErr.h"
 #include "omTypes.h"
 
