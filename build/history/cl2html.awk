@@ -71,8 +71,6 @@ END {
 }
 
 function printHeader() {
-#  printf("<HTML>");
-#  printf("<BODY>");
   printf("\
 <TABLE width=\"100%%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n");
 }
@@ -90,8 +88,6 @@ function printRow(date, name, files, comments, color) {
 
 function printTrailer() {
   printf("</TABLE>\n");
-#  printf("</HTML>");
-#  printf("</BODY>");
 }
 
 # Remove first n characters of s
