@@ -23,6 +23,10 @@ const bool true = 1;
 
 #elif defined (__sgi)  // SGI C++
 
+#define typename class
+typedef int bool;
+const bool false = 0;
+const bool true = 1;
 #include <stdlib.h> // for size_t
 
 #endif
