@@ -26,6 +26,8 @@
 
 #include "OMDataTypes.h"
 
+typedef OMInt32 OMResult;
+
   // @class Exceptions thrown by the Object Manager.
   //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 class OMException {
@@ -36,7 +38,13 @@ public:
   OMException(void);
 
     // @cmember Constructor.
+  OMException(OMResult result);
+
+    // @cmember Constructor.
   OMException(const char* name);
+
+    // @cmember Constructor.
+  OMException(const char* name, OMResult result);
 
     // @cmember Destructor.
   virtual ~OMException(void);
@@ -44,36 +52,17 @@ public:
     // @cmember The name of this <c OMException>.
   virtual const char* name(void) const;
 
+    // @cmember Does this <c OMException> have an associated result.
+  virtual bool hasResult(void);
+
+    // @cmember The result associated with this <c OMException>.
+  virtual OMResult result(void);
+
 private:
   // @access Private members.
   const char* _name;
-};
-
-  // Equivalent to an HRESULT
-typedef OMUInt32 OMWindowsResult;
-
-  // @class Windows specific descendant of <c OMException> thrown
-  //        by the Object Manager.
-  //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
-class OMWindowsException : public OMException {
-public:
-  // @access Public members.
-
-    // @cmember Constructor.
-  OMWindowsException(OMWindowsResult result);
-
-    // @cmember Constructor.
-  OMWindowsException(const char* name, OMWindowsResult result);
-
-    // @cmember Destructor.
-  virtual ~OMWindowsException(void);
-
-    // @cmember The result associated with this <c OMWindowsException>.
-  virtual OMWindowsResult result(void);
-
-private:
-  // @access Private members.
-  OMWindowsResult _result;
+  bool _hasResult;
+  OMResult _result;
 };
 
   // @func If <p exception> has an associated result code then return
@@ -83,8 +72,8 @@ private:
   //         if the exception does not have one.
   //   @rdesc The result code from the exception, if it has one, otherwise
   //          the fall back result code.
-OMWindowsResult OMExceptionToResult(
+OMResult OMExceptionToResult(
   OMException& exception,
-  OMWindowsResult fallback);
+  OMResult fallback);
 
 #endif

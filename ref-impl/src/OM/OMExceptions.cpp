@@ -21,15 +21,40 @@
 //=---------------------------------------------------------------------=
 
 // @doc OMEXTERNAL
+// @author Tim Bingham | tjb | Avid Technology, Inc. | OMException
 #include "OMExceptions.h"
 
+#include "OMAssertions.h"
+
 OMException::OMException(void)
-: _name("Unknown")
+: _name("Unknown"),
+  _hasResult(false),
+  _result(0)
+{
+}
+
+OMException::OMException(OMResult result)
+: _name("Unknown"),
+  _hasResult(true),
+  _result(result)
 {
 }
 
 OMException::OMException(const char* name)
-: _name(name)
+: _name(name),
+  _hasResult(false),
+  _result(0)
+{
+}
+
+OMException::OMException(const char* name, OMResult result)
+: _name(name),
+  _hasResult(true),
+  _result(result)
+{
+}
+
+OMException::~OMException(void)
 {
 }
 
@@ -38,41 +63,27 @@ const char* OMException::name(void) const
   return _name;
 }
 
-OMException::~OMException(void)
+bool OMException::hasResult(void)
 {
+  return _hasResult;
 }
 
-OMWindowsException::OMWindowsException(OMWindowsResult result)
-: _result(result)
+OMResult OMException::result(void)
 {
-}
+  TRACE("OMException::result");
+  PRECONDITION("Result available", hasResult());
 
-OMWindowsException::OMWindowsException(
-  const char* name,
-  OMWindowsResult result)
-: OMException(name),
-  _result(result)
-{
-}
-
-OMWindowsException::~OMWindowsException(void)
-{
-}
-
-OMWindowsResult OMWindowsException::result(void)
-{
   return _result;
 }
 
-OMWindowsResult OMExceptionToResult(
+OMResult OMExceptionToResult(
   OMException& exception,
-  OMWindowsResult fallback)
+  OMResult fallback)
 {
-  OMWindowsResult result;
+  OMResult result;
 
-  OMWindowsException* e = dynamic_cast<OMWindowsException*>(&exception);
-  if (e != 0) {
-    result = e->result();
+  if (exception.hasResult()) {
+    result = exception.result();
   } else {
     result = fallback;
   }
