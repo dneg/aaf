@@ -39,6 +39,26 @@
 #include "ImplAAFRefArrayValue.h"
 #endif
 
+#ifndef __ImplAAFTypeDefStrongObjRef_h__
+#include "ImplAAFTypeDefStrongObjRef.h"
+#endif
+
+#ifndef __ImplAAFTypeDefWeakObjRef_h__
+#include "ImplAAFTypeDefWeakObjRef.h"
+#endif
+
+#ifndef __ImplAAFStrongRefArrayValue_h__
+#include "ImplAAFStrongRefArrayValue.h"
+#endif
+
+#ifndef __ImplAAFWeakRefArrayValue_h__
+#include "ImplAAFWeakRefArrayValue.h"
+#endif
+
+#ifndef __ImplAAFClassDef_h__
+#include "ImplAAFClassDef.h"
+#endif
+
 #include "AAFPropertyIDs.h"
 #include "ImplAAFObjectCreation.h"
 
@@ -47,6 +67,8 @@
 
 extern "C" const aafClassID_t CLSID_AAFPropValData;
 extern "C" const aafClassID_t CLSID_AAFPropValObjVectElem;
+extern "C" const aafClassID_t CLSID_AAFStrongRefArrayValue;
+extern "C" const aafClassID_t CLSID_AAFWeakRefArrayValue;
 
 ImplAAFTypeDefArray::ImplAAFTypeDefArray ()
 {}
@@ -54,6 +76,72 @@ ImplAAFTypeDefArray::ImplAAFTypeDefArray ()
 
 ImplAAFTypeDefArray::~ImplAAFTypeDefArray ()
 {}
+
+
+
+// PATCH DR4_CPR: transdel. Create the appropriate ImplAAFRefArray without an associated
+// property. The property value's writeTo method needs to copy (or replace) the contents
+// of the current property. This a hybrid of the old-pseudo "direct access" and the new
+// more direct property access.
+
+// Method used internally by "fixed arrays" but called directly by variable arrays.
+
+AAFRESULT STDMETHODCALLTYPE
+ImplAAFTypeDefArray::CreateEmptyValue
+(ImplAAFPropertyValue ** ppPropVal)
+{
+  AAFRESULT result = AAFRESULT_SUCCESS;
+  if (NULL == ppPropVal)
+    return AAFRESULT_NULL_PARAM;
+      
+  ImplAAFTypeDefSP pElementType;
+  result = GetType(&pElementType);
+  if (AAFRESULT_FAILED(result))
+    return result;
+      
+      
+  if (dynamic_cast<ImplAAFTypeDefStrongObjRef*>((ImplAAFTypeDef*) pElementType))
+  {
+    // element is strong ref
+    ImplAAFStrongRefArrayValue* pStrongRefArray = NULL;
+    pStrongRefArray = (ImplAAFStrongRefArrayValue*) CreateImpl (CLSID_AAFStrongRefArrayValue);
+    if (!pStrongRefArray) 
+      return AAFRESULT_NOMEMORY;
+    result = pStrongRefArray->Initialize(this, kAAFTrue == IsFixedSize());
+    if (AAFRESULT_SUCCEEDED(result))
+    {
+      *ppPropVal = pStrongRefArray;
+    }
+    else
+    {
+      pStrongRefArray->ReleaseReference();
+    }
+  }
+  else if (dynamic_cast<ImplAAFTypeDefWeakObjRef*>((ImplAAFTypeDef*) pElementType))
+  {
+    // element is weak ref
+    ImplAAFWeakRefArrayValue* pWeakRefArray = NULL;
+    pWeakRefArray = (ImplAAFWeakRefArrayValue*) CreateImpl (CLSID_AAFWeakRefArrayValue);
+    if (!pWeakRefArray) 
+      return AAFRESULT_NOMEMORY;
+    result = pWeakRefArray->Initialize(this, kAAFTrue == IsFixedSize());
+    if (AAFRESULT_SUCCEEDED(result))
+    {
+      *ppPropVal = pWeakRefArray;
+    }
+    else
+    {
+      pWeakRefArray->ReleaseReference();
+    }
+  }
+  else
+  { 
+  	//simply defer to base impl (size is 0)
+  	result = CreateValue(ppPropVal);
+  }
+  
+  return result;
+}
 
 
 AAFRESULT STDMETHODCALLTYPE
@@ -213,42 +301,78 @@ ImplAAFTypeDefArray::CreateValueFromValues (
 													aafUInt32  numElements,
 													ImplAAFPropertyValue ** ppPropVal)
 {
-	AAFRESULT hr;
+	AAFRESULT hr = AAFRESULT_SUCCESS;
 	
 	//first validate params ...
 	if (!ppPropVal)
 		return AAFRESULT_NULL_PARAM;
 	
 	hr = ValidateInputParams(ppElementValues, numElements);
-	if (AAFRESULT_FAILED (hr)) return hr;
+	if (AAFRESULT_FAILED (hr))
+	  return hr;
 
 	// All params validated; proceed ....
-	
 
-	//2nd step - Create the value;  defer to base impl
+  // PATCH DR4_CPR: transdel. Create the appropriate ImplAAFRefArray without an associated
+  // property. The property value's writeTo method needs to copy (or replace) the contents
+  // of the current property. This a hybrid of the old-pseudo "direct access" and the new
+  // more direct property access.
 
-	//first, calculate the total size needed for allocation, based on type
-	//get Base TD
-	ImplAAFTypeDefSP spTargetTD;
-	hr = GetType(&spTargetTD); //gets base elem type
-	if (AAFRESULT_FAILED (hr)) return hr;
-	//Get Elem size
-	aafUInt32 targetElemSize = spTargetTD->NativeSize();
-	//Total size ...
-	aafUInt32 totalSize = targetElemSize * numElements; //size based on "n" Elements
+  ImplAAFTypeDefSP pElementType;
+  hr = GetType(&pElementType);
+  if (AAFRESULT_FAILED(hr))
+    return hr;
+
+  if (dynamic_cast<ImplAAFTypeDefObjectRef*>((ImplAAFTypeDef*) pElementType))
+  {
+    ImplAAFPropertyValue *pPropertyValue = NULL;
+    hr = CreateEmptyValue(&pPropertyValue);
+    if (AAFRESULT_SUCCEEDED(hr))
+    {
+      ImplAAFRefArrayValue *pRefArray = dynamic_cast<ImplAAFRefArrayValue *>(pPropertyValue);
+      assert(NULL != pRefArray);
+      if (NULL == pRefArray)
+        hr = AAFRESULT_INVALID_OBJ;
+      
+      aafUInt32 index;
+      for (index = 0; (index < numElements) && AAFRESULT_SUCCEEDED(hr); ++index)
+      {
+        hr = pRefArray->AppendElement(ppElementValues[index]);
+      }
+      
+      if (AAFRESULT_SUCCEEDED(hr))
+        *ppPropVal = pPropertyValue; // refcount already incremented
+      else
+        pPropertyValue->ReleaseReference();
+        
+      pPropertyValue = NULL;
+    }
+  }
+  else
+  {
+  	//2nd step - Create the value;  defer to base impl
+
+  	//first, calculate the total size needed for allocation, based on type
+  	//get Base TD
+  	ImplAAFTypeDefSP spTargetTD;
+  	hr = GetType(&spTargetTD); //gets base elem type
+  	if (AAFRESULT_FAILED (hr)) return hr;
+  	//Get Elem size
+  	aafUInt32 targetElemSize = spTargetTD->NativeSize();
+  	//Total size ...
+  	aafUInt32 totalSize = targetElemSize * numElements; //size based on "n" Elements
+  	
+  	//create the value
+  	hr = ImplAAFTypeDefArray::CreateValue(ppPropVal, totalSize);
+  	if (AAFRESULT_FAILED(hr)) return hr;
+  	
+  	
+  	//... Copy the values ; defer to base impl
+  	hr = ImplAAFTypeDefArray::CopyValuesIntoValue(ppElementValues,numElements,
+  												targetElemSize, ppPropVal);
+	}
 	
-	//create the value
-	hr = ImplAAFTypeDefArray::CreateValue(ppPropVal, totalSize);
-	if (AAFRESULT_FAILED(hr)) return hr;
-	
-	
-	//... Copy the values ; defer to base impl
-	hr = ImplAAFTypeDefArray::CopyValuesIntoValue(ppElementValues,numElements,
-												targetElemSize, ppPropVal);
-	if (AAFRESULT_FAILED(hr)) return hr;
-	
-	
-	return AAFRESULT_SUCCESS;
+	return hr;
 }
 
 
@@ -266,6 +390,20 @@ ImplAAFTypeDefArray::CreateValueFromCArray (
 	if (! ppPropVal)
 		return AAFRESULT_NULL_PARAM;
 	
+  ImplAAFTypeDefSP pElementType;
+  AAFRESULT result = GetType(&pElementType);
+  if (AAFRESULT_FAILED(result))
+    return result;     
+      
+  if (dynamic_cast<ImplAAFTypeDefObjectRef*>((ImplAAFTypeDef*) pElementType))
+  {
+    // This interface is not type-safe for accessing objects! There is also no
+    // mechanism in place to convert between a buffer pointer and an array
+    // of interface pointers; this convertion would not be necessary for
+    // arrays of non-objects.
+    return AAFRESULT_NOT_IN_CURRENT_VERSION; // AAFRESULT_INVALID_PARAM;
+  }
+
 	ImplAAFPropValDataSP pvd;
 	ImplAAFPropValData * tmp;
 	tmp = (ImplAAFPropValData*) CreateImpl (CLSID_AAFPropValData);
@@ -378,6 +516,19 @@ ImplAAFTypeDefArray::GetCArray (
 	assert (pBaseType->IsFixedSize ());
 	pBaseType->AttemptBuiltinRegistration ();
 	assert (pBaseType->IsRegistered ());
+
+	
+  ImplAAFRefArrayValue* pRefArray = dynamic_cast<ImplAAFRefArrayValue*>(pPropVal);
+  if (NULL != pRefArray)
+  {
+    // This interface is not type-safe for accessing objects! There is also no
+    // mechanism in place to convert between a buffer pointer and an array
+    // of interface pointers; this convertion would not be necessary for
+    // arrays of non-objects.
+    return AAFRESULT_NOT_IN_CURRENT_VERSION; // AAFRESULT_INVALID_PARAM;
+  }
+
+
 	aafUInt32 elemSize = pBaseType->NativeSize ();
 	aafUInt32 elemCount = pvtCount (pPropVal);
 	aafUInt32 propSize = elemSize * elemCount;
@@ -523,6 +674,17 @@ ImplAAFTypeDefArray::SetCArray (
 	assert (pBaseType->IsFixedSize ());
 	pBaseType->AttemptBuiltinRegistration ();
 	assert (pBaseType->IsRegistered ());
+	
+  ImplAAFRefArrayValue* pRefArray = dynamic_cast<ImplAAFRefArrayValue*>(pPropVal);
+  if (NULL != pRefArray)
+  {
+    // This interface is not type-safe for accessing objects! There is also no
+    // mechanism in place to convert between a buffer pointer and an array
+    // of interface pointers; this convertion would not be necessary for
+    // arrays of non-objects.
+    return AAFRESULT_NOT_IN_CURRENT_VERSION; // AAFRESULT_INVALID_PARAM;
+  }
+	
 	// Size of individual elements
 	aafUInt32 elemSize = pBaseType->NativeSize ();
 	// number of elements in input data.  If this is not an integral

@@ -265,14 +265,6 @@ ImplAAFTypeDefVariableArray::AppendElement
 }
 
 AAFRESULT STDMETHODCALLTYPE
-ImplAAFTypeDefVariableArray::CreateEmptyValue
-(ImplAAFPropertyValue ** ppPropVal)
-{
-	//simply defer to base impl (size is 0)
-	return ImplAAFTypeDefArray::CreateValue(ppPropVal);
-}
-
-AAFRESULT STDMETHODCALLTYPE
 ImplAAFTypeDefVariableArray::ValidateInputParams (
 												  ImplAAFPropertyValue ** ppElementValues,
 												  aafUInt32  numElements)								  
@@ -286,18 +278,6 @@ ImplAAFTypeDefVariableArray::ValidateInputParams (
 	//Next, do some additional specific checking for Fixed Array ...
 	
 	return AAFRESULT_SUCCESS;
-}
-
-
-AAFRESULT STDMETHODCALLTYPE
-ImplAAFTypeDefVariableArray::CreateValueFromValues (
-													ImplAAFPropertyValue ** ppElementValues,
-													aafUInt32  numElements,
-													ImplAAFPropertyValue ** ppPropVal)
-{
-	//Simply defer to base impl.
-	return  ImplAAFTypeDefArray::CreateValueFromValues(ppElementValues,numElements,
-		ppPropVal);
 }
 
 

@@ -406,20 +406,6 @@ ImplAAFTypeDefFixedArray::ValidateInputParams (
 }//ValidateInputParams()
 
 
-
-AAFRESULT STDMETHODCALLTYPE
-ImplAAFTypeDefFixedArray::CreateValueFromValues (
-													ImplAAFPropertyValue ** ppElementValues,
-													aafUInt32  numElements,
-													ImplAAFPropertyValue ** ppPropVal)
-{
-
-	//simply defer to base impl.
-	return ImplAAFTypeDefArray::CreateValueFromValues(ppElementValues,numElements,
-												ppPropVal);
-}
-
-
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDefFixedArray::RawAccessType (
       ImplAAFTypeDef ** ppRawTypeDef)
