@@ -280,11 +280,10 @@ typedef enum _aafDropType_t
 
 typedef enum _aafFrameLayout_t
 {
-	kNoLayout = 0, 
-	kFullFrame = 1, 
-	kSeparateFields = 2, 
-	kOneField = 3, 
-	kMixedFields = 4
+	kFullFrame = 0, 
+	kSeparateFields = 1, 
+	kOneField = 2, 
+	kMixedFields = 3
 } aafFrameLayout_t;
 	
 typedef enum _aafColorSiting_t
