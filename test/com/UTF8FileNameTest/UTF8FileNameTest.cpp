@@ -354,7 +354,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName,
   return hr;
 }
 
-struct {
+struct _fileinfo_t {
   wchar_t* name;
 	bool create;
 	bool createraw;
