@@ -46,12 +46,15 @@ CXXFILES = AAFPluginCOM.cpp \
 		CAAFEssenceDataStream.cpp \
 		CAAFEssenceFileStream.cpp \
 		CAAFEssenceFileContainer.cpp \
+		CAAFEssenceRIFFWAVEStream.cpp \
+		CAAFEssenceRIFFWAVEContainer.cpp \
 		CAAFJPEGCodec.cpp \
 		CAAFJPEGDescriptorHelper.cpp \
 		CAAFCDCICodec.cpp \
 		CAAFCDCIDescriptorHelper.cpp \
 		CAAFWAVECodec.cpp \
 		CAAFAIFCCodec.cpp \
+		CAAFPCMCodec.cpp \
 		jpegesdatadst.cpp \
 		jpegesdatasrc.cpp
 
