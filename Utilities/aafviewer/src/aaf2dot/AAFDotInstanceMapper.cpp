@@ -822,9 +822,9 @@ AAFDotInstanceMapper::MapAAFPropertyValueGeneric( AxTypeDef &axTypeDef,
 	 size = _profile.GetMaxAttributeLength() / 2;
       }
 
-      aafMemPtr_t buffer = new unsigned char[size];
+      aafMemPtr_t buffer = new unsigned char[(unsigned int)size];
       aafUInt32 readSize;
-      CHECK_HRESULT(spTypeDefStream->Read(propValue, size, buffer, &readSize));
+      CHECK_HRESULT(spTypeDefStream->Read(propValue, (aafUInt32)size, buffer, &readSize));
       
       string streamValue = "0x";
       for (aafUInt32 i=0; i<readSize; i++)
