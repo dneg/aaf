@@ -57,7 +57,7 @@ AD_METHOD1(GetTypeAUID,
 		   [retval][out],
 		   aafAuid_t *,
 		   pTypeAuid,
-		   Pointer to the Type Definition's AUID,
+		   Pointer to the Type Definitions AUID,
 		   Gets the Type Definition's AUID associated with this object.)
 
 AD_METHOD1(SetTypeAUID,
@@ -65,7 +65,7 @@ AD_METHOD1(SetTypeAUID,
 		   aafAuid_t,
 		   TypeAuid,
 		   Type Definition's AUID,
-		   Sets the Type Definition's AUID associated with this object.)
+		   Sets the Type Definitions AUID associated with this object.)
 
 AD_METHOD1(GetMinVersion,
 		   [retval][out],
@@ -141,7 +141,7 @@ AD_METHOD1(GetDefaultValue,
 		   [retval][out],
 		   aafDataValue_t *,
 		   pDataValue,
-		   Pointer to default data value,,
+		   Pointer to default data value,
 		   Gets the default data value of this property definition.)
 
 AD_METHOD1(SetDefaultValue,
@@ -166,7 +166,7 @@ AD_METHOD1(RemoveRefValue,
 		   Remove the reference value from the property definition.)
 
 AD_METHOD1(GetRefValues,
-		   [out\,retval], AD_AAFTYPES\(EnumAAFReferenceValue\) **, 
+		   [out\,retval], AD_AAFTYPES\(EnumAAFReferenceValues\) **, 
 		   ppEnum, 
 		   Reference value Enumeration,
 		   Return an enumerator for the reference values.)
