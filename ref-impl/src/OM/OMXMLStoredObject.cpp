@@ -104,6 +104,12 @@ void OMXMLStoredObject::close(void)
   ASSERT("Unimplemented code not reached", false); // tjb TBS
 }
 
+void OMXMLStoredObject::close(OMFile& file)
+{
+  TRACE("OMXMLStoredObject::close");
+  ASSERT("Unimplemented code not reached", false); // tjb TBS
+}
+
   // @mfunc The byte order of this <c OMXMLStoredObject>.
   //   @rdesc The byte order.
   //   @this const
