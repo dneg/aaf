@@ -686,7 +686,7 @@ static const fileInfo_t sFileDescriptions[] =
   {
 	{
 	  fileInfo_t::kStgTypeDisk,
-	  L"AAFRandomRawStgTestDisk.aaf",
+	  L"AAFRandomRawStgTest.aaf",
 	  "Disk",
 	  localOpenFileDiskWrite,
 	  localOpenFileDiskRead,
@@ -695,7 +695,7 @@ static const fileInfo_t sFileDescriptions[] =
 	},
 	{
 	  fileInfo_t::kStgTypeDiskStg,
-	  L"AAFRandomRawStgTestDiskStg.aaf",
+	  L"AAFRandomRawStgTestDisk.aaf",
 	  "Disk Storage",
 	  localOpenFileDiskStgWrite,
 	  localOpenFileDiskStgRead,
@@ -704,7 +704,7 @@ static const fileInfo_t sFileDescriptions[] =
 	},
 	{
 	  fileInfo_t::kStgTypeMemStg,
-	  L"AAFRandomRawStgTestMemStg.aaf",
+	  L"AAFRandomRawStgTestMem.aaf",
 	  "Mem Storage",
 	  localOpenFileMemStgWrite,
 	  localOpenFileMemStgRead,
@@ -713,7 +713,7 @@ static const fileInfo_t sFileDescriptions[] =
 	},
 	{
 	  fileInfo_t::kStgTypeCustomStg,
-	  L"AAFRandomRawStgTestCustomStg.aaf",
+	  L"AAFRandomRawStgTestCstm.aaf",
 	  "Custom Storage",
 	  localOpenFileCustomStgWrite,
 	  localOpenFileCustomStgRead,
