@@ -59,6 +59,7 @@ protected:
   //
   AAFRESULT SetType (ImplAAFTypeDef * pType);
 
+  const ImplAAFTypeDef * pvtGetType (void) const;
 
 private:
   // type of this property

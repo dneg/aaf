@@ -70,3 +70,9 @@ AAFRESULT STDMETHODCALLTYPE
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
+
+
+const ImplAAFTypeDef * ImplAAFPropertyValue::pvtGetType (void) const
+{
+  return _pType;
+}
