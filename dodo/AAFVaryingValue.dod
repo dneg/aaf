@@ -27,16 +27,16 @@ AD_METHOD5(AddPoint,
 		   This function adds a control point in time order into a varying
 		   // value object.)
 
-AD_METHOD1(GetInfo,
-		   [retval][out],AAFDatakind *, pDatakind, Number of Control Points,
-		   This function gets the number of control points in the varying
-		   // value object.)
-
-AD_METHOD3(GetNumPoints,
-		   [retval][out],AAFInt32 *, pNumPoints, Datakind definition object,
+AD_METHOD3(GetInfo,
+		   [retval][out],AAFDatakind *, pDatakind, Datakind definition object,
 		   [out], AAFLength *, pLength, Length of varying value object,
 		   [out], AAFInterpKind_t *, pInterpolation, Interpolation method,
 		   This function returns the required property values for the varying
+		   // value object.)
+
+AD_METHOD1(GetNumPoints,
+		   [retval][out],AAFInt32 *, pNumPoints, Number of control points,
+		   This function gets the number of control points in the varying
 		   // value object.)
 
 AD_OVERRIDE(.method-Test)
