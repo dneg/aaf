@@ -61,5 +61,11 @@ while (<>) {
 	# get rid of blank comments at start of interface description
 	s|(^//\s*{filename:.*}\n)\s*//\s*\n|\1|m;
 
+	# unquote global functions (bit a of hack - unquotes the rest of the paragraph as well)
+	if(s|^  // STDAPI|     STDAPI|m)
+		{
+		s|^    //\s+\[|       \[|mg;
+		}
+
 	print;
 }

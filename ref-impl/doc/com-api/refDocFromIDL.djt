@@ -1,6 +1,7 @@
 #!docjet_editor
 
 Root = 'default.djt'
+FormatsToGenerate = 'AAFapi\\\\HTML'
 Hooks = 'ArgumentHook; GroupHook; SummaryHook; IDLCleanupHook'
 Version = 40007
 
@@ -30,8 +31,8 @@ New Standard.Trailer URL = ''
 Example = 'Succeeds if'
 ImplementsInt = 'Implements'
 Results = \
-        'Return Value; Returns; Return Code; Result; Results; Possibl'\
-        'e Errors'
+        'Return Value; Returns; Return Code; Result; Possible Errors;'\
+        ' Results'
 SucceedsIf = 'Succeeds if'
 ValidValues = 'Valid values'
 

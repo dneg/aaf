@@ -18,44 +18,26 @@ Steps
 1. do a CVS update on your workspace to make sure the dodo files and headers are up to date
 
 2. From a cygwin shell (or equivalent) run Make in this directory (AAF/ref-impl/doc/com-api)
-   The first step will be to copy CVS based files from this  directory into the DocJet destination dirs.
+   
+2.1 The first step will be to copy CVS based files from this  directory into the DocJet destination dirs.
    This includes the Summary Hook extension which has been tweaked (See SummaryHook.cpp and diff with
    DocJet distribution) to allow the first sentence of a Comment to be isolated as the 'Summary'
    (quick one line description) and the remainder be passed as the 'Remarks' section.
    The original Summary Hook can only handle an initial sentence or paragraph one line long and
    it repeats the first sentence in the remarks.
-   There are two targets, regular HTML and Microsoft HtmlHelp which will be generated in
-   Documemtation\New Standard HTML  and Documemtation\New Standard HTMLHelp subdirectories
-   Perl scripts idlcleanup.perl and idlblanlkcomfix.perl are used to preprocess and tidy up the IDL
+   
+2.2 There are two targets, regular HTML and Microsoft HtmlHelp which will be generated in
+   Documemtation\New Standard HTML and Documemtation\New Standard HTMLHelp subdirectories.
+   
+2.3 Perl scripts idlcleanup.perl and idlblanlkcomfix.perl are used to preprocess and tidy up the IDL
    to run under Cygwin with CRLF line endings the CR's had to be stripped out with 'tr' first.
    With these scripts AAF/ref-impl/include/com-api/AAF.idl yields AAFnospace.idl
-   DocJet is run on this IDL file using the refDocFromIDL.djt and refHHDocFromIDL.djt configuration files.
+
+2.4 DocJet is run on this IDL file using the refDocFromIDL.djt and refHHDocFromIDL.djt configuration files.
    The output is redirected to the file errors.txt, it is worth examining this file,
    There will be loads of Warnings for missing sections but there should not be
    any major parsing 'Error D11042' could not decipher... or stuff gets left out of the HTML.
    
-**** FIXME Extra steps not yet being performed !
-
-4. Fix AAFGlobals.h if these interfaces have changed.
-Global functions not in AAF.idl. Global functions in AAF.h but
-comments are not. Workaround: create AAFGlobals.h with .h file and
-comments from .idl. Need to put the {filename in and remove comments from
-function and parameter lines. A sample version is in this directory. I put this
-file in the AAFWinSDK\include directory.
-
-5. Run Visual Studio C++. Open AAF SDK workspace. Add following Project to Workspace:
-
-     Ref doc from aaf idl/Ref doc from aaf idl.dsw 
-
-[you might want to rename it to get rid of the spaces.]
-This dsw project assumes that the input files are in the AAFWinSDK\include directory.
-This could be cleaned up.
-
-This project uses the following source files:
-
-AAFnospace.idl
-AAFTypes.h
-AAFglobal.h
 
 To edit the DocJet settings, double click on:
 
