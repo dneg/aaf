@@ -211,6 +211,16 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFHeader::GetNumEssenceData(aafUInt32 *  pNumEssenceData)
+{
+  if(pNumEssenceData == NULL)
+    return AAFRESULT_NULL_PARAM;
+
+  ImplAAFContentStorage *cstore = GetContentStorage();
+  return(cstore->GetNumEssenceData(pNumEssenceData));
+}
+
 
 // Implementer note:
 // based on omfmIsMediaDataPresent
@@ -230,15 +240,14 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFHeader::EnumEssenceData (aafMediaCriteria_t *pMediaCriteria,
-                           ImplEnumAAFEssenceData **ppEnum)
+    ImplAAFHeader::EnumEssenceData (ImplEnumAAFEssenceData **ppEnum)
 {
-    if ((! pMediaCriteria) || (! ppEnum))
+    if (! ppEnum)
 	  {
 		return AAFRESULT_NULL_PARAM;
 	  }
 	ImplAAFContentStorage *cstore = GetContentStorage();
-	return(cstore->EnumEssenceData(pMediaCriteria, ppEnum));
+	return(cstore->EnumEssenceData(ppEnum));
 }
 
 
@@ -250,7 +259,8 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 	  return AAFRESULT_NULL_PARAM;
 	}
-  return AAFRESULT_NOT_IMPLEMENTED;
+  ImplAAFContentStorage *cstore = GetContentStorage();
+  return(cstore->AppendEssenceData(pEssenceData));
 }
 
 
@@ -262,7 +272,8 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 	  return AAFRESULT_NULL_PARAM;
 	}
-  return AAFRESULT_NOT_IMPLEMENTED;
+  ImplAAFContentStorage *cstore = GetContentStorage();
+  return(cstore->RemoveEssenceData(pEssenceData));
 }
 
 
