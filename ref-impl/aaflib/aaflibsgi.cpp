@@ -52,7 +52,9 @@ AAFRDLIRESULT AAFLoadLibrary(
    *pLibHandle = ::dlopen(name, RTLD_NOW );
     
    if (NULL == *pLibHandle) {
+#if defined(_DEBUG)
       fprintf(stderr, "dlopen() failed for %s: <%s>\n", name, dlerror() );
+#endif
 		return -1; // Need an AAFRESULT
    }
    else {
@@ -85,7 +87,9 @@ AAFRDLIRESULT AAFFindSymbol(
    *pSymbol = ::dlsym(libHandle, symbolName );
    
    if (NULL == *pSymbol) {
+#if defined(_DEBUG)
       fprintf(stderr, "dlsym(\"%s\") failed <%s>.\n", symbolName, dlerror());
+#endif
       return -2; // Need an AAFRESULT
    }
  
