@@ -1450,7 +1450,7 @@ AD_CLASS_END\
     // Class identifier (AUID) of the stored object. This is the
     // corresponding SMPTE identifier (as a GUID) for all predefined
     // built-in classes.
-    aafUID_t * pAUID,
+    aafUID_constref id,
 
     // Reference to the identifier of the interface
     REFIID riid,

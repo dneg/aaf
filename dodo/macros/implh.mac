@@ -1474,7 +1474,7 @@ AD_CLASS_BEGIN\
     // Class identifier (AUID) of the stored object. This is the
     // corresponding SMPTE identifier (as a GUID) for all predefined
     // built-in classes.
-    aafUID_t * pAUID,
+    const aafUID_t & id,
 
     // Address of output variable that receives the 
     // object pointer requested in pAUID
