@@ -563,10 +563,6 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFLocators.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFMobComments.cpp"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFMobs.cpp"
 # End Source File
 # Begin Source File
