@@ -2650,7 +2650,9 @@ void dumpProperties(IStorage* storage,
 
     cout << endl;
     cout << "property " << i << " "
-         << "( "
+         << "( pid = "
+         << hex << index[i]._pid << dec
+         << ", form = "
          << typeName(typeOf(&index[i], version))
          << " )" << endl;
 
