@@ -1,11 +1,11 @@
-#c /******************************************\
-#c *                                          *
-#c * Advanced Authoring Format                *
-#c *                                          *
-#c * Copyright (c) 1998 Avid Technology, Inc. *
-#c * Copyright (c) 1998 Microsoft Corporation *
-#c *                                          *
-#c \******************************************/
+#c /***********************************************\
+#c *                                               *
+#c * Advanced Authoring Format                     *
+#c *                                               *
+#c * Copyright (c) 1998-1999 Avid Technology, Inc. *
+#c * Copyright (c) 1998-1999 Microsoft Corporation *
+#c *                                               *
+#c \***********************************************/
 
 
 
@@ -28,15 +28,15 @@
 #c
 #startm AD_HEAD 00
 // @doc INTERNAL
-// @com This file implements the module test for CAAFDefinitionObject
-/******************************************\\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\\******************************************/
+// @com This file implements the module test for C.this-module
+/***********************************************\\
+*                                               *
+* Advanced Authoring Format                     *
+*                                               *
+* Copyright (c) 1998-1999 Avid Technology, Inc. *
+* Copyright (c) 1998-1999 Microsoft Corporation *
+*                                               *
+\\***********************************************/
 #endm
 
 
@@ -53,55 +53,13 @@
 #error - improperly defined include guard
 #endif
 
-
-#include <iostream.h>
-
-// Temporarily necessary global declarations.
-extern "C" const CLSID CLSID_.this-module; // generated
+#include "AAFResult.h"
 
 
 HRESULT C.this-module::test()
 {
-  HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
-  I.this-module *pObject = NULL;
-
-  try
-    {
-      // Attempt to create an .this-module.
-      hr =  CoCreateInstance(
-                             CLSID_.this-module,
-                             NULL, 
-                             CLSCTX_INPROC_SERVER, 
-                             IID_I.this-module, (void **)&pObject);
-      if (FAILED(hr))
-        {
-          cerr << "C.this-module::test...FAILED!";
-          cerr << hr;
-          cerr << "\\tCoCreateInstance(&CLSID_.this-module, NULL,"
-            " CLSCTX_INPROC_SERVER, &IID_I.this-module, ...);" <<
-              endl;
-          return hr;
-        }
-
-      // module-specific tests go here
-
-      if (pObject)
-        pObject->Release();
-      return AAFRESULT_NOT_IMPLEMENTED;
-
-    }
-  catch (...)
-    {
-      cerr << "C.this-module::test...Caught general C++"
-        " exception!" << endl; 
-    }
-
-  // Cleanup our object if it exists.
-  if (pObject)
-    pObject->Release();
-
-  return hr;
-}
+  return AAFRESULT_NOT_IMPLEMENTED;
+}\
 #endm
 
 
@@ -130,55 +88,13 @@ AD_CLASS_BEGIN\
 #error - improperly defined include guard
 #endif
 
-
-#include <iostream.h>
-
-// Temporarily necessary global declarations.
-extern "C" const CLSID CLSID_.this-module; // generated
+#include "AAFResult.h"
 
 
 HRESULT C.this-module::test()
 {
-  HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
-  I.this-module *pObject = NULL;
-
-  try
-    {
-      // Attempt to create an .this-module.
-      hr =  CoCreateInstance(
-                             CLSID_.this-module,
-                             NULL, 
-                             CLSCTX_INPROC_SERVER, 
-                             IID_I.this-module, (void **)&pObject);
-      if (FAILED(hr))
-        {
-          cerr << "C.this-module::test...FAILED!";
-          cerr << hr; 
-          cerr << "\\tCoCreateInstance(&CLSID_.this-module, NULL,"
-            " CLSCTX_INPROC_SERVER, &IID_I.this-module, ...);" <<
-              endl;
-          return hr;
-        }
-
-      // module-specific tests go here
-
-      if (pObject)
-        pObject->Release();
-      return AAFRESULT_NOT_IMPLEMENTED;
-
-    }
-  catch (...)
-    {
-      cerr << "C.this-module::test...Caught general C++"
-        " exception!" << endl;
-    }
-
-  // Cleanup our object if it exists.
-  if (pObject)
-    pObject->Release();
-
-  return hr;
-}
+  return AAFRESULT_NOT_IMPLEMENTED;
+}\
 #endm
 
 
