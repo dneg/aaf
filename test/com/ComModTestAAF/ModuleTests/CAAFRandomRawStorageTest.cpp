@@ -381,7 +381,8 @@ class CCustomRawStorage :
 {
 public:
   CCustomRawStorage (const aafWChar * pFileName,
-					 aafFileAccess_e access)
+					 aafFileAccess_e access,
+					 aafFileExistence_e exist)
 	: _refCnt (1),
 	  _access (access),
 	  _file (0),
@@ -391,15 +392,26 @@ public:
 	size_t status = wcstombs(cFileName, pFileName, FILENAME_MAX);
 	assert (status != (size_t)-1);
 	if (kAAFFileAccess_write == access)
-	  // BobT: Tom R discovered that Structured Storage requires
-	  // readability even for AAF files which are open only for
-	  // write.
-	  // _file = fopen (cFileName, "wb");
-	  _file = fopen (cFileName, "w+b");
+	  _file = fopen (cFileName, "wb");
 	else if (kAAFFileAccess_read == access)
-	  _file = fopen (cFileName, "rb");
+	  {
+		assert (kAAFFileExistence_existing == exist);
+		_file = fopen (cFileName, "rb");
+	  }
 	else if (kAAFFileAccess_modify == access)
-	  _file = fopen (cFileName, "r+b");
+	  {
+		switch (exist)
+		  {
+		  case kAAFFileExistence_existing:
+			_file = fopen (cFileName, "r+b");
+			break;
+		  case kAAFFileExistence_new:
+			_file = fopen (cFileName, "w+b");
+			break;
+		  default:
+			assert (0);
+		  }
+	  }
 	else
 	  assert (0);
 	assert (_file); }
@@ -453,6 +465,9 @@ public:
 		  aafUInt32 *pNumRead)
     { if (! _file) return AAFRESULT_NOT_INITIALIZED;
 	  if (! pNumRead) return AAFRESULT_NULL_PARAM;
+	  aafBoolean_t readable = kAAFFalse;
+	  IsReadable (&readable);
+	  if (! readable) return AAFRESULT_NOT_READABLE;
 	  size_t actualByteCount = fread(buf, 1, bufSize, _file);
 	  *pNumRead = actualByteCount;
 	  return AAFRESULT_SUCCESS; }
@@ -471,6 +486,9 @@ public:
 		   aafUInt32 *pNumWritten)
     { if (! _file) return AAFRESULT_NOT_INITIALIZED;
 	  if (! pNumWritten) return AAFRESULT_NULL_PARAM;
+	  aafBoolean_t writeable = kAAFFalse;
+	  IsWriteable (&writeable);
+	  if (! writeable) return AAFRESULT_NOT_WRITEABLE;
 	  size_t actualByteCount = fwrite(buf, 1, bufSize, _file);
 	  *pNumWritten = actualByteCount;
 	  return AAFRESULT_SUCCESS; }
@@ -556,7 +574,8 @@ static HRESULT localOpenFileCustomStgWrite
   // Create a custom raw storage.
   IAAFRawStorage * pStg =
 	new CCustomRawStorage (pFileName,
-						   kAAFFileAccess_write);
+						   kAAFFileAccess_modify,
+						   kAAFFileExistence_new);
 
   // create the file and open it.
   checkResult
@@ -582,7 +601,8 @@ static HRESULT localOpenFileCustomStgRead
   // Create a custom raw storage.
   IAAFRawStorage * pStg =
 	new CCustomRawStorage (pFileName,
-						   kAAFFileAccess_read);
+						   kAAFFileAccess_read,
+						   kAAFFileExistence_existing);
 
   // create the file and open it.
   checkResult
