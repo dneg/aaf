@@ -279,8 +279,8 @@ static int DumpEssence(const char *file, bool mobIDfilename)
 			if (bKind) { static int c = 0; name = "Timecode"; kcount = c++; }
 			check(pDataDef3->IsEdgecodeKind(&bKind));
 			if (bKind) { static int c = 0; name = "Edgecode"; kcount = c++; }
-			check(pDataDef3->IsDescriptiveKind(&bKind));
-			if (bKind) { static int c = 0; name = "Descriptive"; kcount = c++; }
+			check(pDataDef3->IsDescriptiveMetadataKind(&bKind));
+			if (bKind) { static int c = 0; name = "DescriptiveMetadata"; kcount = c++; }
 
 			if (verbose)
 				printf("    Kind=%s", name);
