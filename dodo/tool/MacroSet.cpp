@@ -28,10 +28,27 @@
 template class Vector<MacroDef>;
 #endif
 
+MacroSet::MacroSet ()
+{
+  _nameInitials[0] = '\0';
+}
+
 void MacroSet::Append
 (const MacroDef & src)
 {
+  char initial = src.GetInitial();
   _macs.Append (src);
+  for (char * tmp = _nameInitials;
+	   *tmp;
+	   tmp++)
+	{
+	  if (*tmp == initial)
+		return;
+	}
+  // Made it here without finding our initial.  Add it.
+  assert ((tmp - _nameInitials) < sizeof (_nameInitials));
+  *tmp++ = initial;
+  *tmp = '\0';
 }
 
 
@@ -54,8 +71,22 @@ bool MacroSet::SearchMacroName
 (TextStream & input,
  MacroDef & foundMacro) const
 {
-  int i;
-  for (i = 0; i < GetNumMacros(); i++)
+  const char * pInitial = input.GetCString();
+  char * tmp;
+  for (tmp = _nameInitials;
+	   *tmp;
+	   tmp++)
+	{
+	  if (*tmp == *pInitial)
+		break;
+	}
+  if (*tmp != *pInitial)
+	{
+	  // Did't find it in our cached initials.  Bail out.
+	  return false;
+	}
+
+  for (int i = 0; i < GetNumMacros(); i++)
     {
       if (GetMacro(i).IsMacro(input))
 		{
