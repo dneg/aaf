@@ -8,6 +8,12 @@ AAFObject\
 #c
 #import ./AAFObject.exp
 AD_HEAD
+AD_IDL(//
+// The component class represents an essence element
+// A Component is an abastract class with two subclasses: Segment and Transition
+// The GetLength and SetLength only aplies to time-varying media and it is an 
+// optional property. Non time-varying objects DO NOT support these property.
+//)
 AD_FORWARD_DECLARATION(AAFDataDef)
 AD_CLASS_UUID(38e6f8a0, 2a2c, 11d2, 84, 11, 00, 60, 08, 32, ac, b8)
 
@@ -22,6 +28,8 @@ AD_METHOD1(SetLength,
   // 
   // Succeeds if all of the following are true:
   // - the pLength pointer is valid.
+  //
+  // This is an optional method and applies only to time-varying media.
   // 
   // If this method fails the length property will not be
   // changed.
@@ -46,6 +54,8 @@ AD_METHOD1(GetLength,
   //	
   // Succeeds if all of the following are true:
   // - the pLength pointer is valid.
+  //
+  // This is an optional method and applies only to time-varying media.
   // 
   // If this method fails nothing will be written to *pLength.
   // 
