@@ -1,6 +1,6 @@
 /***********************************************************************
  *
- *              Copyright (c) 1998-1999 Avid Technology, Inc.
+ *              Copyright (c) 1998-2000 Avid Technology, Inc.
  *
  * Permission to use, copy and modify this software and accompanying 
  * documentation, and to distribute and sublicense application software
@@ -34,13 +34,18 @@
 class CAAFModuleTest
 {
 public:
-	CAAFModuleTest();
-	~CAAFModuleTest();
+  CAAFModuleTest();
+  ~CAAFModuleTest();
     
+  //
+  // Print out a list of AAF class names, one per line, in the order that 
+  // the tests will be run.
+  //
+  void List(void);
 
   //
-	// Call  Module test functions.
-	//
+  // Call  Module test functions.
+  //
   HRESULT Test(testMode_t mode, unsigned char *pClassName = NULL);
 
 };

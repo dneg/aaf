@@ -1,6 +1,6 @@
 /***********************************************************************
  *
- *              Copyright (c) 1998-1999 Avid Technology, Inc.
+ *              Copyright (c) 1998-2000 Avid Technology, Inc.
  *
  * Permission to use, copy and modify this software and accompanying 
  * documentation, and to distribute and sublicense application software
@@ -113,8 +113,16 @@ CAAFModuleTest::~CAAFModuleTest()
 {
 }
 
+void CAAFModuleTest::List(void)
+{
+  aafUInt32 index = 0;
+  while (NULL != AAFObjectMap[index].pClassName)
+  {
+    cout << AAFObjectMap[index].pClassName << endl;
+    ++index;
+  }
 
-
+}
 
 #define MAX_TEST_COUNT 1000
 
@@ -270,3 +278,4 @@ HRESULT CAAFModuleTest::Test
 
 	return hr;
 }
+

@@ -1,6 +1,6 @@
 /***********************************************************************
  *
- *              Copyright (c) 1998-1999 Avid Technology, Inc.
+ *              Copyright (c) 1998-2000 Avid Technology, Inc.
  *
  * Permission to use, copy and modify this software and accompanying 
  * documentation, and to distribute and sublicense application software
@@ -196,12 +196,6 @@ int main(int argc, char* argv[])
 	{
 		HRESULT hr = S_OK;
 
-		// Make sure the dll can be loaded and initialized.
-		CAAFInitialize aafInit;
-
-		// Make sure the shared plugins can be loaded and registered.
-   		CAAFInitializePlugins aafInitPlugins;
-
 		/* Check arguments to see if help was requested */
 
 		if ( argc > 1 &&
@@ -219,13 +213,31 @@ int main(int argc, char* argv[])
 			return(0);
 		}
 
+		/* List the AAF class names, one per line, in the order that the tests will be run. */
+		/* This can be used for more selective automated testing... */
+		if ( argc > 1 &&
+			(0 == strncmp(argv[1],"-l",2) ||
+			 0 == strncmp(argv[1],"-L",2) )	)
+		{
+			AAFModuleTest.List();
+			return(0);
+		}
+
 		if ( argc > 1 &&
 			(0 == strncmp(argv[1],"-r",2) ||
-			 0 == strncmp(argv[1],"-r",2) )	)
+			 0 == strncmp(argv[1],"-R",2) )	)
 		{
 			testMode = kAAFUnitTestReadOnly;
 			startArg++;
 		}
+
+
+
+		// Make sure the dll can be loaded and initialized.
+		CAAFInitialize aafInit;
+
+		// Make sure the shared plugins can be loaded and registered.
+   		CAAFInitializePlugins aafInitPlugins;
 
 		/* Print Header */
 		cout<< "\n\n"<< endl;
