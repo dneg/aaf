@@ -148,11 +148,17 @@ ImplAAFFile::Initialize ()
 	_factory->setMetaDictionary(_metafactory);
 	_metafactory->setDataDictionary(_factory);
 	
+#if 0
 	// Experimental: Create and initialize all of the axiomatic definitions.
 	// This must be done before another other definitions or data objects
 	// can be created.
 	AAFRESULT result = _metafactory->InstantiateAxiomaticDefinitions();
 	assert(AAFRESULT_SUCCEEDED(result));
+#else
+    // Initialize only the non-persistent parts of the meta dictionary
+	AAFRESULT result = _metafactory->Initialize();
+	assert(AAFRESULT_SUCCEEDED(result));
+#endif
 
 	_initialized = kAAFTrue;
 
@@ -207,6 +213,16 @@ ImplAAFFile::OpenExistingRead (const aafCharacter * pFileName,
 		  *reinterpret_cast<const OMFileSignature *>
 		  (&aafFileSignatureAafSSBinaryGUID);
         checkExpression(sig == aafFileSignature, AAFRESULT_NOT_AAF_FILE);
+
+		// Restore the meta dictionary, it should be the same object
+		// as _metafactory
+		OMDictionary* mf = _file->dictionary();
+        assert(mf == _metafactory);
+
+		// Make sure all definitions are present in the meta dictionary
+		ImplAAFMetaDictionary* d = dynamic_cast<ImplAAFMetaDictionary*>(mf);
+		assert(d);
+		d->InstantiateAxiomaticDefinitions();
 
 		// Get the byte order
 		OMByteOrder byteOrder = _file->byteOrder();
@@ -319,6 +335,16 @@ ImplAAFFile::OpenExistingModify (const aafCharacter * pFileName,
 										   OMFile::lazyLoad,
 										   _metafactory);
 		checkExpression(NULL != _file, AAFRESULT_INTERNAL_ERROR);
+
+		// Restore the meta dictionary, it should be the same object
+		// as _metafactory
+		OMDictionary* mf = _file->dictionary();
+        assert(mf == _metafactory);
+
+		// Make sure all definitions are present in the meta dictionary
+		ImplAAFMetaDictionary* d = dynamic_cast<ImplAAFMetaDictionary*>(mf);
+		assert(d);
+		d->InstantiateAxiomaticDefinitions();
 
 		// Get the byte order
 		OMByteOrder byteOrder = _file->byteOrder();
@@ -487,6 +513,16 @@ ImplAAFFile::OpenNewModify (const aafCharacter * pFileName,
 									  aafFileSignature,
 									  _metafactory);
 		checkExpression(NULL != _file, AAFRESULT_INTERNAL_ERROR);
+
+		// Restore the meta dictionary, it should be the same object
+		// as _metafactory
+		OMDictionary* mf = _file->dictionary();
+        assert(mf == _metafactory);
+
+		// Make sure all definitions are present in the meta dictionary
+		ImplAAFMetaDictionary* d = dynamic_cast<ImplAAFMetaDictionary*>(mf);
+		assert(d);
+		d->InstantiateAxiomaticDefinitions();
 
 		// Now that the file is open and the header has been
 		// restored, complete the initialization of the
@@ -819,6 +855,16 @@ ImplAAFFile::Open ()
 			*reinterpret_cast<const OMFileSignature *>
 			(&aafFileSignatureAafSSBinaryGUID);
 		  checkExpression(sig == aafFileSignature, AAFRESULT_NOT_AAF_FILE);
+
+		// Restore the meta dictionary, it should be the same object
+		// as _metafactory
+		OMDictionary* mf = _file->dictionary();
+        assert(mf == _metafactory);
+
+		// Make sure all definitions are present in the meta dictionary
+		ImplAAFMetaDictionary* d = dynamic_cast<ImplAAFMetaDictionary*>(mf);
+		assert(d);
+		d->InstantiateAxiomaticDefinitions();
 
 		  // Get the byte order
 		  OMByteOrder byteOrder = _file->byteOrder();

@@ -211,6 +211,8 @@ OMStorable* ImplAAFMetaDictionary::create(const OMClassId& classId) const
   // If we are creating the meta dictionary then just return this.
   if (0 == memcmp(&AUID_AAFMetaDictionary, &classId, sizeof(classId)))
   {
+	ImplAAFClassDef* pClassDef = findAxiomaticClassDefinition(AUID_AAFMetaDictionary);
+    assert(NULL != pClassDef);
     storable = const_cast<ImplAAFMetaDictionary *>(this);
   }
   else
@@ -368,8 +370,10 @@ void ImplAAFMetaDictionary::addAxiomaticClassDefinition(ImplAAFClassDef *pClassD
   pClassDef->AcquireReference();
   
   // Save the new axiomatic class definition in a persistent set.
+#if 0
   _classDefinitions.appendValue(pClassDef);
   pClassDef->AcquireReference();
+#endif
 }
 
 
@@ -390,8 +394,10 @@ void ImplAAFMetaDictionary::addAxiomaticTypeDefinition(ImplAAFTypeDef *pTypeDef)
   pTypeDef->AcquireReference();
 
   // Save the new axiomatic type definition in a persistent set.
+#if 0
   _typeDefinitions.appendValue(pTypeDef);
   pTypeDef->AcquireReference();
+#endif
 }
 
 
@@ -1278,8 +1284,8 @@ void ImplAAFMetaDictionary::InitializeAxiomaticDefinitions(void)
   InitializeAxiomaticOMDefinitions();
 }
 
-// Create and initialize all of the axiomatic definitions.
-AAFRESULT ImplAAFMetaDictionary::InstantiateAxiomaticDefinitions(void)
+  // Initialize only the non-persistent parts of the meta dictionary
+AAFRESULT ImplAAFMetaDictionary::Initialize(void)
 {
   AAFRESULT result = AAFRESULT_SUCCESS;
   try
@@ -1295,6 +1301,63 @@ AAFRESULT ImplAAFMetaDictionary::InstantiateAxiomaticDefinitions(void)
   }
 
   return (result);
+}
+
+// Create and initialize all of the axiomatic definitions.
+AAFRESULT ImplAAFMetaDictionary::InstantiateAxiomaticDefinitions(void)
+{
+  AAFRESULT result = AAFRESULT_SUCCESS;
+	// Make sure that all of the axiomatic objects are in the dictionary.
+	// Use only low-level OM methods so that we can eliminate side-effects
+	// in the DM.
+	OMUniqueObjectIdentification id = {0};
+	ImplAAFMetaDictionary * nonConstThis = const_cast<ImplAAFMetaDictionary *>(this);
+	
+  // Make sure all of the _axiomaticClassDefinitions are in the persistent set.
+  OMReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFClassDef> axiomaticClassDefinitions(_axiomaticClassDefinitions);
+  while(++axiomaticClassDefinitions)
+  {
+    ImplAAFClassDef *pAxiomaticClassDef = axiomaticClassDefinitions.value();
+    assert (pAxiomaticClassDef);
+    if (pAxiomaticClassDef)
+    {
+      id = axiomaticClassDefinitions.identification();
+      if (!_classDefinitions.contains(id))
+      {
+	    nonConstThis->_classDefinitions.appendValue(pAxiomaticClassDef);
+      }
+      else
+      {
+	    ImplAAFClassDef* old = nonConstThis->_classDefinitions.replace(pAxiomaticClassDef);
+	    if (old != 0)
+	      old->ReleaseReference();
+      }
+      pAxiomaticClassDef->AcquireReference(); // saving another reference...
+    }
+  }
+
+  // Make sure all of the _axiomaticTypeDefinitions are in the persistent set.
+  OMReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFTypeDef> axiomaticTypeDefinitions(_axiomaticTypeDefinitions);
+  while(++axiomaticTypeDefinitions)
+  {
+    ImplAAFTypeDef *pAxiomaticTypeDef = axiomaticTypeDefinitions.value();
+    if (pAxiomaticTypeDef)
+    {
+      id = axiomaticTypeDefinitions.identification();
+      if (!_typeDefinitions.contains(id))
+      {
+	    nonConstThis->_typeDefinitions.appendValue(pAxiomaticTypeDef);
+      }
+      else
+      {
+	    ImplAAFTypeDef* old = nonConstThis->_typeDefinitions.replace(pAxiomaticTypeDef);
+	    if (old != 0)
+	      old->ReleaseReference();
+      }
+      pAxiomaticTypeDef->AcquireReference(); // saving another reference... 
+    }
+  }
+  return result;
 }
 
 

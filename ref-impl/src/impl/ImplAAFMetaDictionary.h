@@ -320,6 +320,9 @@ public:
   // given auid.
   ImplAAFMetaDefinition * pvtCreateMetaDefinition(const aafUID_t & auid);
 
+  // Initialize only the non-persistent parts of the meta dictionary
+  AAFRESULT Initialize(void);
+
   // Create and initialize all of the axiomatic definitions.
   AAFRESULT InstantiateAxiomaticDefinitions(void);
 
