@@ -211,7 +211,7 @@ void OMWeakReferenceSetProperty<ReferencedObject>::restore(
 
   // restore the index
   //
-  const OMUniqueObjectIdentification* setIndex = 0;
+  OMUniqueObjectIdentification* setIndex = 0;
   size_t entries;
   OMPropertyTag tag;
   OMPropertyId keyPropertyId;
