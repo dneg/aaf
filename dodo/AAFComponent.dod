@@ -20,36 +20,36 @@ AD_HEAD
 AD_CLASS_BEGIN
 
 AD_METHOD1(SetLength,
-				  [in],
-				  aafLength_t,
-				  length,
-				  Length of this object,
-				  sets the length property values on the input component object.)
+		   [in],
+		   aafLength_t,
+		   length,
+		   Length of this object,
+		   sets the length property values on the input component object.)
 
 AD_METHOD1(GetLength,
-				  [retval][out],
-				  aafLength_t,
-				  length,
-				  Length of this component,
+		   [retval][out],
+		   aafLength_t,
+		   length,
+		   Length of this component,
   Gets the starting time and places it into the pStartTime
   // argument.  This function returns the length of a component.  It
   // supports both 1.x and 2.x component objects.  Length is not
-  // stored as an implicit property on 1.x objects\, so this routine
+  // stored as an implicit property on 1.x objects\\\, so this routine
   // recursively calculates the length.)
 	
 AD_METHOD1(SetDataDefinition,
-				  [in],
-				  AAFDataDefinition*,
-				  datadef,
-				  DataDefinition of this object,
-				  sets the data definition property value on the input component object.)
+		   [in],
+		   AAFDataDefinition*,
+		   datadef,
+		   DataDefinition of this object,
+		   sets the data definition property value on the input component object.)
 
 AD_METHOD1(GetDataDefinition,
-				  [retval][out],
-				  AAFDataDefinition*,
-				  datadef,
-				  DataDefinition of this object,
-				  returns data definition object)
+		   [retval][out],
+		   AAFDataDefinition*,
+		   datadef,
+		   DataDefinition of this object,
+		   returns data definition object)
 
 AD_OVERRIDE(.method-Test)
 
