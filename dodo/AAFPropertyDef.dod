@@ -24,7 +24,7 @@ AD_FORWARD_DECLARATION(AAFReferenceValue)
 
 /*************************************************************************
  * 
- * @Property AAFPropertyDefinition | AAFPropertyDefinition describes 
+ * @module AAFPropertyDefinition | AAFPropertyDefinition describes 
  *				properties allowed for a class.
  *
  * @base public | AAFDefinitionObject
