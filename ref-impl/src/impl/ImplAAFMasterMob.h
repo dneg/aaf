@@ -44,6 +44,10 @@ public:
   virtual ~ImplAAFMasterMob ();
 
 
+  virtual AAFRESULT STDMETHODCALLTYPE
+	Initialize ();
+
+
   //****************
   // AddMasterSlot()
   //
