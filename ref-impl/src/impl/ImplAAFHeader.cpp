@@ -557,30 +557,35 @@ ImplAAFHeader::GetIdentificationAt
 
 
 AAFRESULT 
-    ImplAAFHeader::AddIdentificationObject (aafProductIdentification_t *pIdent)
+    ImplAAFHeader::AddIdentificationObject
+(aafProductIdentification_constptr pIdent)
 {
 	ImplAAFIdentification *		identObj;
-	aafProductIdentification_t	fiction;
-	
+	aafProductIdentification_t ident;
+
 	XPROTECT()
 	{		
 		if(pIdent == (aafProductIdentification_t *)NULL)
 		{
-			fiction.companyName = L"Unknown";
-			fiction.productName = L"Unknown";
-			fiction.productVersionString = (aafWChar*)NULL;
-			fiction.productID = NIL_UID;
-			fiction.platform = (aafWChar*)NULL;
-			fiction.productVersion = 0;
-			pIdent = &fiction;
+			ident.companyName = L"Unknown";
+			ident.productName = L"Unknown";
+			ident.productVersionString = (aafWChar*)NULL;
+			ident.productID = NIL_UID;
+			ident.platform = (aafWChar*)NULL;
+			ident.productVersion = 0;
+		}
+		else
+		{
+		    ident = *pIdent;
 		}
 		
 	XASSERT(pIdent != NULL, AAFRESULT_NEED_PRODUCT_IDENT);
-    if (pIdent->productVersionString == 0) {
-      pIdent->productVersionString = L"Unknown version";
+
+    if (ident.productVersionString == 0) {
+      ident.productVersionString = L"Unknown version";
     }
-    if (pIdent->platform == 0) {
-      pIdent->platform = L"Windows NT";
+    if (ident.platform == 0) {
+      ident.platform = L"Windows NT";
     }
     
     // Get the dictionary so that we can use the factory
@@ -592,14 +597,14 @@ AAFRESULT
 		  CreateInstance((ImplAAFObject **)&identObj));
     if (NULL == identObj)
       CHECK(AAFRESULT_NOMEMORY);
-	CHECK(identObj->Initialize(pIdent->companyName,
-							   pIdent->productName,
-							   pIdent->productVersionString,
-							   pIdent->productID));
+	CHECK(identObj->Initialize(ident.companyName,
+							   ident.productName,
+							   ident.productVersionString,
+							   ident.productID));
 
-	if (pIdent->productVersion)
+	if (ident.productVersion)
 	  {
-		CHECK (identObj->SetProductVersion (*pIdent->productVersion));
+		CHECK (identObj->SetProductVersion (*ident.productVersion));
 	  }
 
     _identificationList.appendValue(identObj);
