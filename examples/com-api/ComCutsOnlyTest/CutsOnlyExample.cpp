@@ -423,7 +423,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 
 	// Here we check on the number of tape mobs and file mobs in the file
 	// If this was an importing application, then the file and tape mobs
-	// often get converted first so that the compositions come in qithout
+	// often get converted first so that the compositions come in without
 	// forward references.
 	// Get the total number of mobs in the file (should be four)
 	check(pHeader->GetNumMobs(kAllMob, &numMobs));
