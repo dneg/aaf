@@ -182,8 +182,8 @@ AD_CLASS_BEGIN\
 #c
 #startm AD_TYPES_BEGIN 11
 [
-	uuid(%01-%02-%03-%04%05-%06%07%08%09%10%11),
-	pointer_default(unique)
+    uuid(%01-%02-%03-%04%05-%06%07%08%09%10%11),
+    pointer_default(unique)
 ]
 
 interface I.this-module
@@ -235,7 +235,7 @@ interface I.this-module
 #startm AD_XMETHOD1 07
   // %07
   HRESULT %01 (
-	%02 .%03-adornment%04 .%03-indirection %05);\
+    %02 .%03-adornment%04 .%03-indirection %05);\
 #endm
 
 
@@ -257,8 +257,8 @@ interface I.this-module
 #startm AD_XMETHOD2 12
   // %12
   HRESULT %01 (
-	%02 .%03-adornment%04 .%03-indirection %05,
-	%07 .%08-adornment%09 .%08-indirection %10);\
+    %02 .%03-adornment%04 .%03-indirection %05,
+    %07 .%08-adornment%09 .%08-indirection %10);\
 #endm
 
 
@@ -281,9 +281,9 @@ interface I.this-module
 #startm AD_XMETHOD3 17
   // %17
   HRESULT %01 (
-	%02 .%03-adornment%04 .%03-indirection %05,
-	%07 .%08-adornment%09 .%08-indirection %10,
-	%12 .%13-adornment%14 .%13-indirection %15);\
+    %02 .%03-adornment%04 .%03-indirection %05,
+    %07 .%08-adornment%09 .%08-indirection %10,
+    %12 .%13-adornment%14 .%13-indirection %15);\
 #endm
 
 
@@ -307,10 +307,10 @@ interface I.this-module
 #startm AD_XMETHOD4 22
   // %22
   HRESULT %01 (
-	%02 .%03-adornment%04 .%03-indirection %05,
-	%07 .%08-adornment%09 .%08-indirection %10,
-	%12 .%13-adornment%14 .%13-indirection %15,
-	%17 .%18-adornment%19 .%18-indirection %20);\
+    %02 .%03-adornment%04 .%03-indirection %05,
+    %07 .%08-adornment%09 .%08-indirection %10,
+    %12 .%13-adornment%14 .%13-indirection %15,
+    %17 .%18-adornment%19 .%18-indirection %20);\
 #endm
 
 
@@ -335,11 +335,11 @@ interface I.this-module
 #startm AD_XMETHOD5 27
   // %27
   HRESULT %01 (
-	%02 .%03-adornment%04 .%03-indirection %05,
-	%07 .%08-adornment%09 .%08-indirection %10,
-	%12 .%13-adornment%14 .%13-indirection %15,
-	%17 .%18-adornment%19 .%18-indirection %20,
-	%22 .%23-adornment%24 .%23-indirection %25);\
+    %02 .%03-adornment%04 .%03-indirection %05,
+    %07 .%08-adornment%09 .%08-indirection %10,
+    %12 .%13-adornment%14 .%13-indirection %15,
+    %17 .%18-adornment%19 .%18-indirection %20,
+    %22 .%23-adornment%24 .%23-indirection %25);\
 #endm
 
 
@@ -365,12 +365,12 @@ interface I.this-module
 #startm AD_XMETHOD6 32
   // %32
   HRESULT %01 (
-	%02 .%03-adornment%04 .%03-indirection %05,
-	%07 .%08-adornment%09 .%08-indirection %10,
-	%12 .%13-adornment%14 .%13-indirection %15,
-	%17 .%18-adornment%19 .%18-indirection %20,
-	%22 .%23-adornment%24 .%23-indirection %25,
-	%27 .%28-adornment%29 .%28-indirection %30);\
+    %02 .%03-adornment%04 .%03-indirection %05,
+    %07 .%08-adornment%09 .%08-indirection %10,
+    %12 .%13-adornment%14 .%13-indirection %15,
+    %17 .%18-adornment%19 .%18-indirection %20,
+    %22 .%23-adornment%24 .%23-indirection %25,
+    %27 .%28-adornment%29 .%28-indirection %30);\
 #endm
 
 
@@ -397,13 +397,13 @@ interface I.this-module
 #startm AD_XMETHOD7 37
   // %37
   HRESULT %01 (
-	%02 .%03-adornment%04 .%03-indirection %05,
-	%07 .%08-adornment%09 .%08-indirection %10,
-	%12 .%13-adornment%14 .%13-indirection %15,
-	%17 .%18-adornment%19 .%18-indirection %20,
-	%22 .%23-adornment%24 .%23-indirection %25,
-	%27 .%28-adornment%29 .%28-indirection %30,
-	%32 .%33-adornment%34 .%33-indirection %35);\
+    %02 .%03-adornment%04 .%03-indirection %05,
+    %07 .%08-adornment%09 .%08-indirection %10,
+    %12 .%13-adornment%14 .%13-indirection %15,
+    %17 .%18-adornment%19 .%18-indirection %20,
+    %22 .%23-adornment%24 .%23-indirection %25,
+    %27 .%28-adornment%29 .%28-indirection %30,
+    %32 .%33-adornment%34 .%33-indirection %35);\
 #endm
 
 
@@ -431,14 +431,14 @@ interface I.this-module
 #startm AD_XMETHOD8 42
   // %42
   HRESULT %01 (
-	%02 .%03-adornment%04 .%03-indirection %05,
-	%07 .%08-adornment%09 .%08-indirection %10,
-	%12 .%13-adornment%14 .%13-indirection %15,
-	%17 .%18-adornment%19 .%18-indirection %20,
-	%22 .%23-adornment%24 .%23-indirection %25,
-	%27 .%28-adornment%29 .%28-indirection %30,
-	%32 .%33-adornment%34 .%33-indirection %35,
-	%37 .%38-adornment%39 .%38-indirection %40);\
+    %02 .%03-adornment%04 .%03-indirection %05,
+    %07 .%08-adornment%09 .%08-indirection %10,
+    %12 .%13-adornment%14 .%13-indirection %15,
+    %17 .%18-adornment%19 .%18-indirection %20,
+    %22 .%23-adornment%24 .%23-indirection %25,
+    %27 .%28-adornment%29 .%28-indirection %30,
+    %32 .%33-adornment%34 .%33-indirection %35,
+    %37 .%38-adornment%39 .%38-indirection %40);\
 #endm
 
 
@@ -467,15 +467,15 @@ interface I.this-module
 #startm AD_XMETHOD9 47
   // %47
   HRESULT %01 (
-	%02 .%03-adornment%04 .%03-indirection %05,
-	%07 .%08-adornment%09 .%08-indirection %10,
-	%12 .%13-adornment%14 .%13-indirection %15,
-	%17 .%18-adornment%19 .%18-indirection %20,
-	%22 .%23-adornment%24 .%23-indirection %25,
-	%27 .%28-adornment%29 .%28-indirection %30,
-	%32 .%33-adornment%34 .%33-indirection %35,
-	%37 .%38-adornment%39 .%38-indirection %40,
-	%42 .%43-adornment%44 .%43-indirection %45);\
+    %02 .%03-adornment%04 .%03-indirection %05,
+    %07 .%08-adornment%09 .%08-indirection %10,
+    %12 .%13-adornment%14 .%13-indirection %15,
+    %17 .%18-adornment%19 .%18-indirection %20,
+    %22 .%23-adornment%24 .%23-indirection %25,
+    %27 .%28-adornment%29 .%28-indirection %30,
+    %32 .%33-adornment%34 .%33-indirection %35,
+    %37 .%38-adornment%39 .%38-indirection %40,
+    %42 .%43-adornment%44 .%43-indirection %45);\
 #endm
 
 
@@ -505,16 +505,16 @@ interface I.this-module
 #startm AD_XMETHOD_10 52
   // %52
   HRESULT %01 (
-	%02 .%03-adornment%04 .%03-indirection %05,
-	%07 .%08-adornment%09 .%08-indirection %10,
-	%12 .%13-adornment%14 .%13-indirection %15,
-	%17 .%18-adornment%19 .%18-indirection %20,
-	%22 .%23-adornment%24 .%23-indirection %25,
-	%27 .%28-adornment%29 .%28-indirection %30,
-	%32 .%33-adornment%34 .%33-indirection %35,
-	%37 .%38-adornment%39 .%38-indirection %40,
-	%42 .%43-adornment%44 .%43-indirection %45,
-	%47 .%48-adornment%49 .%48-indirection %50);\
+    %02 .%03-adornment%04 .%03-indirection %05,
+    %07 .%08-adornment%09 .%08-indirection %10,
+    %12 .%13-adornment%14 .%13-indirection %15,
+    %17 .%18-adornment%19 .%18-indirection %20,
+    %22 .%23-adornment%24 .%23-indirection %25,
+    %27 .%28-adornment%29 .%28-indirection %30,
+    %32 .%33-adornment%34 .%33-indirection %35,
+    %37 .%38-adornment%39 .%38-indirection %40,
+    %42 .%43-adornment%44 .%43-indirection %45,
+    %47 .%48-adornment%49 .%48-indirection %50);\
 #endm
 
 
@@ -545,17 +545,17 @@ interface I.this-module
 #startm AD_XMETHOD_11 57
   // %57
   HRESULT %01 (
-	%02 .%03-adornment%04 .%03-indirection %05,
-	%07 .%08-adornment%09 .%08-indirection %10,
-	%12 .%13-adornment%14 .%13-indirection %15,
-	%17 .%18-adornment%19 .%18-indirection %20,
-	%22 .%23-adornment%24 .%23-indirection %25,
-	%27 .%28-adornment%29 .%28-indirection %30,
-	%32 .%33-adornment%34 .%33-indirection %35,
-	%37 .%38-adornment%39 .%38-indirection %40,
-	%42 .%43-adornment%44 .%43-indirection %45,
-	%47 .%48-adornment%49 .%48-indirection %50,
-	%52 .%53-adornment%54 .%53-indirection %55);\
+    %02 .%03-adornment%04 .%03-indirection %05,
+    %07 .%08-adornment%09 .%08-indirection %10,
+    %12 .%13-adornment%14 .%13-indirection %15,
+    %17 .%18-adornment%19 .%18-indirection %20,
+    %22 .%23-adornment%24 .%23-indirection %25,
+    %27 .%28-adornment%29 .%28-indirection %30,
+    %32 .%33-adornment%34 .%33-indirection %35,
+    %37 .%38-adornment%39 .%38-indirection %40,
+    %42 .%43-adornment%44 .%43-indirection %45,
+    %47 .%48-adornment%49 .%48-indirection %50,
+    %52 .%53-adornment%54 .%53-indirection %55);\
 #endm
 
 
@@ -599,10 +599,10 @@ import "%01.idl";
 #c
 #startm AD_DEFAULT_UUID 11
 [
-	object,
-	uuid(%01-%02-%03-%04%05-%06%07%08%09%10%11),
-	helpstring("I.this-module Interface"),
-	pointer_default(unique)
+    object,
+    uuid(%01-%02-%03-%04%05-%06%07%08%09%10%11),
+    helpstring("I.this-module Interface"),
+    pointer_default(unique)
 ]
 #endm
 
@@ -793,7 +793,7 @@ AD_CLASS_END\
 #startm AD_GETOBJ_METHOD1 06
   // %06
   HRESULT %01 (
-	%02 %03 ** I%04);\
+    %02 %03 ** I%04);\
 #endm
 
 
@@ -814,7 +814,7 @@ AD_CLASS_END\
 #startm AD_SETOBJ_METHOD1 06
   // %06
   HRESULT %01 (
-	%02 %03 * I%04);\
+    %02 %03 * I%04);\
 #endm
 
 

@@ -651,9 +651,9 @@ AAFRESULT STDMETHODCALLTYPE
 Impl.this-module::GetObjectClass(aafUID_t * pClass)
 {
   if (! pClass)
-	{
-	  return AAFRESULT_NULL_PARAM;
-	}
+    {
+      return AAFRESULT_NULL_PARAM;
+    }
   memcpy (pClass, &CLSID_.this-module, sizeof (aafClassID_t));
   return AAFRESULT_SUCCESS;
 }
@@ -746,7 +746,7 @@ Impl.this-module::Impl.this-module (.%02-adornment%03 .%02-indirection /*%04*/)
 #c
 #startm AD_XCONSTRUCTOR2 11
 Impl.this-module::Impl.this-module (.%02-adornment%03 .%02-indirection /*%04*/,
-	.%07-adornment%08 .%07-indirection /*%09*/)
+    .%07-adornment%08 .%07-indirection /*%09*/)
 {}
 #endm
 
@@ -768,8 +768,8 @@ Impl.this-module::Impl.this-module (.%02-adornment%03 .%02-indirection /*%04*/,
 #c
 #startm AD_XCONSTRUCTOR3 16
 Impl.this-module::Impl.this-module (.%02-adornment%03 .%02-indirection /*%04*/,
-	.%07-adornment%08 .%07-indirection /*%09*/,
-	.%12-adornment%13 .%12-indirection /*%14*/)
+    .%07-adornment%08 .%07-indirection /*%09*/,
+    .%12-adornment%13 .%12-indirection /*%14*/)
 {}
 #endm
 
@@ -792,9 +792,9 @@ Impl.this-module::Impl.this-module (.%02-adornment%03 .%02-indirection /*%04*/,
 #c
 #startm AD_XCONSTRUCTOR4 21
 Impl.this-module::Impl.this-module (.%02-adornment%03 .%02-indirection /*%04*/,
-	.%07-adornment%08 .%07-indirection /*%09*/,
-	.%12-adornment%13 .%12-indirection /*%14*/,
-	.%17-adornment%18 .%17-indirection /*%19*/)
+    .%07-adornment%08 .%07-indirection /*%09*/,
+    .%12-adornment%13 .%12-indirection /*%14*/,
+    .%17-adornment%18 .%17-indirection /*%19*/)
 {}
 #endm
 

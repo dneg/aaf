@@ -429,7 +429,7 @@ AAFRESULT STDMETHODCALLTYPE
 #startm AD_XMETHOD2 12
 AAFRESULT STDMETHODCALLTYPE
     .this-module::%01 (%04 .%03-indirection %05,
-		%09 .%08-indirection %10)
+        %09 .%08-indirection %10)
 {
 #ifdef BOB_TEST
   AAFRESULT stat;
@@ -444,7 +444,7 @@ AAFRESULT STDMETHODCALLTYPE
 .%03-setup(%04, %05)
 .%08-setup(%09, %10)
   stat = ptr->%01 (.%03-internalname(%05),
-	.%08-internalname(%10));
+    .%08-internalname(%10));
 .%03-cleanup(%04, %05)
 .%08-cleanup(%09, %10)
   return stat;
@@ -474,8 +474,8 @@ AAFRESULT STDMETHODCALLTYPE
 #startm AD_XMETHOD3 17
 AAFRESULT STDMETHODCALLTYPE
     .this-module::%01 (%04 .%03-indirection %05,
-		%09 .%08-indirection %10,
-		%14 .%13-indirection %15)
+        %09 .%08-indirection %10,
+        %14 .%13-indirection %15)
 {
 #ifdef BOB_TEST
   AAFRESULT stat;
@@ -491,8 +491,8 @@ AAFRESULT STDMETHODCALLTYPE
 .%08-setup(%09, %10)
 .%13-setup(%14, %15)
   stat = ptr->%01 (.%03-internalname(%05),
-	.%08-internalname(%10),
-	.%13-internalname(%15));
+    .%08-internalname(%10),
+    .%13-internalname(%15));
 .%03-cleanup(%04, %05)
 .%08-cleanup(%09, %10)
 .%13-cleanup(%14, %15)
@@ -524,9 +524,9 @@ AAFRESULT STDMETHODCALLTYPE
 #startm AD_XMETHOD4 22
 AAFRESULT STDMETHODCALLTYPE
     .this-module::%01 (%04 .%03-indirection %05,
-		%09 .%08-indirection %10,
-		%14 .%13-indirection %15,
-		%19 .%18-indirection %20)
+        %09 .%08-indirection %10,
+        %14 .%13-indirection %15,
+        %19 .%18-indirection %20)
 {
 #ifdef BOB_TEST
   AAFRESULT stat;
@@ -543,9 +543,9 @@ AAFRESULT STDMETHODCALLTYPE
 .%13-setup(%14, %15)
 .%18-setup(%19, %20)
   stat = ptr->%01 (.%03-internalname(%05),
-	.%08-internalname(%10),
-	.%13-internalname(%15),
-	.%18-internalname(%20));
+    .%08-internalname(%10),
+    .%13-internalname(%15),
+    .%18-internalname(%20));
 .%03-cleanup(%04, %05)
 .%08-cleanup(%09, %10)
 .%13-cleanup(%14, %15)
@@ -579,10 +579,10 @@ AAFRESULT STDMETHODCALLTYPE
 #startm AD_XMETHOD5 27
 AAFRESULT STDMETHODCALLTYPE
     .this-module::%01 (%04 .%03-indirection %05,
-		%09 .%08-indirection %10,
-		%14 .%13-indirection %15,
-		%19 .%18-indirection %20,
-		%24 .%23-indirection %25)
+        %09 .%08-indirection %10,
+        %14 .%13-indirection %15,
+        %19 .%18-indirection %20,
+        %24 .%23-indirection %25)
 {
 #ifdef BOB_TEST
   AAFRESULT stat;
@@ -600,10 +600,10 @@ AAFRESULT STDMETHODCALLTYPE
 .%18-setup(%19, %20)
 .%23-setup(%24, %25)
   stat = ptr->%01 (.%03-internalname(%05),
-	.%08-internalname(%10),
-	.%13-internalname(%15),
-	.%18-internalname(%20),
-	.%23-internalname(%25));
+    .%08-internalname(%10),
+    .%13-internalname(%15),
+    .%18-internalname(%20),
+    .%23-internalname(%25));
 .%03-cleanup(%04, %05)
 .%08-cleanup(%09, %10)
 .%13-cleanup(%14, %15)
@@ -639,11 +639,11 @@ AAFRESULT STDMETHODCALLTYPE
 #startm AD_XMETHOD6 32
 AAFRESULT STDMETHODCALLTYPE
     .this-module::%01 (%04 .%03-indirection %05,
-		%09 .%08-indirection %10,
-		%14 .%13-indirection %15,
-		%19 .%18-indirection %20,
-		%24 .%23-indirection %25,
-		%29 .%28-indirection %30)
+        %09 .%08-indirection %10,
+        %14 .%13-indirection %15,
+        %19 .%18-indirection %20,
+        %24 .%23-indirection %25,
+        %29 .%28-indirection %30)
 {
 #ifdef BOB_TEST
   AAFRESULT stat;
@@ -662,11 +662,11 @@ AAFRESULT STDMETHODCALLTYPE
 .%23-setup(%24, %25)
 .%28-setup(%29, %30)
   stat = ptr->%01 (.%03-internalname(%05),
-	.%08-internalname(%10),
-	.%13-internalname(%15),
-	.%18-internalname(%20),
-	.%23-internalname(%25),
-	.%28-internalname(%30));
+    .%08-internalname(%10),
+    .%13-internalname(%15),
+    .%18-internalname(%20),
+    .%23-internalname(%25),
+    .%28-internalname(%30));
 .%03-cleanup(%04, %05)
 .%08-cleanup(%09, %10)
 .%13-cleanup(%14, %15)
@@ -704,12 +704,12 @@ AAFRESULT STDMETHODCALLTYPE
 #startm AD_XMETHOD7 37
 AAFRESULT STDMETHODCALLTYPE
     .this-module::%01 (%04 .%03-indirection %05,
-		%09 .%08-indirection %10,
-		%14 .%13-indirection %15,
-		%19 .%18-indirection %20,
-		%24 .%23-indirection %25,
-		%29 .%28-indirection %30,
-		%34 .%33-indirection %35)
+        %09 .%08-indirection %10,
+        %14 .%13-indirection %15,
+        %19 .%18-indirection %20,
+        %24 .%23-indirection %25,
+        %29 .%28-indirection %30,
+        %34 .%33-indirection %35)
 {
 #ifdef BOB_TEST
   AAFRESULT stat;
@@ -729,12 +729,12 @@ AAFRESULT STDMETHODCALLTYPE
 .%28-setup(%29, %30)
 .%33-setup(%34, %35)
   stat = ptr->%01 (.%03-internalname(%05),
-	.%08-internalname(%10),
-	.%13-internalname(%15),
-	.%18-internalname(%20),
-	.%23-internalname(%25),
-	.%28-internalname(%30),
-	.%33-internalname(%35));
+    .%08-internalname(%10),
+    .%13-internalname(%15),
+    .%18-internalname(%20),
+    .%23-internalname(%25),
+    .%28-internalname(%30),
+    .%33-internalname(%35));
 .%03-cleanup(%04, %05)
 .%08-cleanup(%09, %10)
 .%13-cleanup(%14, %15)
@@ -774,13 +774,13 @@ AAFRESULT STDMETHODCALLTYPE
 #startm AD_XMETHOD8 42
 AAFRESULT STDMETHODCALLTYPE
     .this-module::%01 (%04 .%03-indirection %05,
-		%09 .%08-indirection %10,
-		%14 .%13-indirection %15,
-		%19 .%18-indirection %20,
-		%24 .%23-indirection %25,
-		%29 .%28-indirection %30,
-		%34 .%33-indirection %35,
-		%39 .%38-indirection %40)
+        %09 .%08-indirection %10,
+        %14 .%13-indirection %15,
+        %19 .%18-indirection %20,
+        %24 .%23-indirection %25,
+        %29 .%28-indirection %30,
+        %34 .%33-indirection %35,
+        %39 .%38-indirection %40)
 {
 #ifdef BOB_TEST
   AAFRESULT stat;
@@ -801,13 +801,13 @@ AAFRESULT STDMETHODCALLTYPE
 .%33-setup(%34, %35)
 .%38-setup(%39, %40)
   stat = ptr->%01 (.%03-internalname(%05),
-	.%08-internalname(%10),
-	.%13-internalname(%15),
-	.%18-internalname(%20),
-	.%23-internalname(%25),
-	.%28-internalname(%30),
-	.%33-internalname(%35),
-	.%38-internalname(%40));
+    .%08-internalname(%10),
+    .%13-internalname(%15),
+    .%18-internalname(%20),
+    .%23-internalname(%25),
+    .%28-internalname(%30),
+    .%33-internalname(%35),
+    .%38-internalname(%40));
 .%03-cleanup(%04, %05)
 .%08-cleanup(%09, %10)
 .%13-cleanup(%14, %15)
@@ -849,14 +849,14 @@ AAFRESULT STDMETHODCALLTYPE
 #startm AD_XMETHOD9 47
 AAFRESULT STDMETHODCALLTYPE
     .this-module::%01 (%04 .%03-indirection %05,
-		%09 .%08-indirection %10,
-		%14 .%13-indirection %15,
-		%19 .%18-indirection %20,
-		%24 .%23-indirection %25,
-		%29 .%28-indirection %30,
-		%34 .%33-indirection %35,
-		%39 .%38-indirection %40,
-		%44 .%43-indirection %45)
+        %09 .%08-indirection %10,
+        %14 .%13-indirection %15,
+        %19 .%18-indirection %20,
+        %24 .%23-indirection %25,
+        %29 .%28-indirection %30,
+        %34 .%33-indirection %35,
+        %39 .%38-indirection %40,
+        %44 .%43-indirection %45)
 {
 #ifdef BOB_TEST
   AAFRESULT stat;
@@ -878,14 +878,14 @@ AAFRESULT STDMETHODCALLTYPE
 .%38-setup(%39, %40)
 .%43-setup(%44, %45)
   stat = ptr->%01 (.%03-internalname(%05),
-	.%08-internalname(%10),
-	.%13-internalname(%15),
-	.%18-internalname(%20),
-	.%23-internalname(%25),
-	.%28-internalname(%30),
-	.%33-internalname(%35),
-	.%38-internalname(%40),
-	.%43-internalname(%45));
+    .%08-internalname(%10),
+    .%13-internalname(%15),
+    .%18-internalname(%20),
+    .%23-internalname(%25),
+    .%28-internalname(%30),
+    .%33-internalname(%35),
+    .%38-internalname(%40),
+    .%43-internalname(%45));
 .%03-cleanup(%04, %05)
 .%08-cleanup(%09, %10)
 .%13-cleanup(%14, %15)
@@ -929,15 +929,15 @@ AAFRESULT STDMETHODCALLTYPE
 #startm AD_XMETHOD_10 52
 AAFRESULT STDMETHODCALLTYPE
     .this-module::%01 (%04 .%03-indirection %05,
-		%09 .%08-indirection %10,
-		%14 .%13-indirection %15,
-		%19 .%18-indirection %20,
-		%24 .%23-indirection %25,
-		%29 .%28-indirection %30,
-		%34 .%33-indirection %35,
-		%39 .%38-indirection %40,
-		%44 .%43-indirection %45,
-		%49 .%48-indirection %50)
+        %09 .%08-indirection %10,
+        %14 .%13-indirection %15,
+        %19 .%18-indirection %20,
+        %24 .%23-indirection %25,
+        %29 .%28-indirection %30,
+        %34 .%33-indirection %35,
+        %39 .%38-indirection %40,
+        %44 .%43-indirection %45,
+        %49 .%48-indirection %50)
 {
 #ifdef BOB_TEST
   AAFRESULT stat;
@@ -960,15 +960,15 @@ AAFRESULT STDMETHODCALLTYPE
 .%43-setup(%44, %45)
 .%48-setup(%49, %50)
   stat = ptr->%01 (.%03-internalname(%05),
-	.%08-internalname(%10),
-	.%13-internalname(%15),
-	.%18-internalname(%20),
-	.%23-internalname(%25),
-	.%28-internalname(%30),
-	.%33-internalname(%35),
-	.%38-internalname(%40),
-	.%43-internalname(%45),
-	.%48-internalname(%50));
+    .%08-internalname(%10),
+    .%13-internalname(%15),
+    .%18-internalname(%20),
+    .%23-internalname(%25),
+    .%28-internalname(%30),
+    .%33-internalname(%35),
+    .%38-internalname(%40),
+    .%43-internalname(%45),
+    .%48-internalname(%50));
 .%03-cleanup(%04, %05)
 .%08-cleanup(%09, %10)
 .%13-cleanup(%14, %15)
@@ -1014,7 +1014,7 @@ AAFRESULT STDMETHODCALLTYPE
 #startm AD_XMETHOD_11 57
 AAFRESULT STDMETHODCALLTYPE
     .this-module::%01 (%04 .%03-indirection %05,
-	    %09 .%08-indirection %10,
+        %09 .%08-indirection %10,
         %14 .%13-indirection %15,
         %19 .%18-indirection %20,
         %24 .%23-indirection %25,
@@ -1047,16 +1047,16 @@ AAFRESULT STDMETHODCALLTYPE
 .%48-setup(%49, %50)
 .%53-setup(%54, %55)
   stat = ptr->%01 (.%03-internalname(%05),
-	.%08-internalname(%10),
-	.%13-internalname(%15),
-	.%18-internalname(%20),
-	.%23-internalname(%25),
-	.%28-internalname(%30),
-	.%33-internalname(%35),
-	.%38-internalname(%40),
-	.%43-internalname(%45),
-	.%48-internalname(%50),
-	.%53-internalname(%55));
+    .%08-internalname(%10),
+    .%13-internalname(%15),
+    .%18-internalname(%20),
+    .%23-internalname(%25),
+    .%28-internalname(%30),
+    .%33-internalname(%35),
+    .%38-internalname(%40),
+    .%43-internalname(%45),
+    .%48-internalname(%50),
+    .%53-internalname(%55));
 .%03-cleanup(%04, %05)
 .%08-cleanup(%09, %10)
 .%13-cleanup(%14, %15)
@@ -1366,15 +1366,15 @@ AAFRESULT STDMETHODCALLTYPE
   Impl%01 * internal%02 = (Impl%01*)NULL;
   if (%02)
     {
-	  internal%02 = static_cast<Impl%01*>(%02->GetRepObject());
-	  assert (internal%02);
+      internal%02 = static_cast<Impl%01*>(%02->GetRepObject());
+      assert (internal%02);
     }
 #endm
 
 
 #ccccccccccccccccccccccccccc
 #c
-#c #define .objPass-setup(T, externArg, internArg)		/* nothing */
+#c #define .objPass-setup(T, externArg, internArg)      /* nothing */
 #c
 #c arg1 = unadorned type
 #c arg2 = external arg name
@@ -1395,14 +1395,14 @@ AAFRESULT STDMETHODCALLTYPE
   Impl%01 ** pinternal%02 = (Impl%01**)NULL;
   if (%02)
     {
-	  pinternal%02 = &internal%02;
+      pinternal%02 = &internal%02;
     }
 #endm
 
 
 #ccccccccccccccccccccccccccc
 #c
-#c #define .objIn-internalname(externArg, internArg)	(internArg)
+#c #define .objIn-internalname(externArg, internArg)    (internArg)
 #c
 #c arg1 = external arg name
 #c
@@ -1413,7 +1413,7 @@ internal%01\
 
 #ccccccccccccccccccccccccccc
 #c
-#c #define .objPass-internalname(externArg, internArg)	(internArg)
+#c #define .objPass-internalname(externArg, internArg)  (internArg)
 #c
 #c arg1 = external arg name
 #c
@@ -1424,7 +1424,7 @@ internal%01\
 
 #ccccccccccccccccccccccccccc
 #c
-#c #define .objOut-internalname(externArg, internArg)	(internArg)
+#c #define .objOut-internalname(externArg, internArg)   (internArg)
 #c
 #c arg1 = external arg name
 #c
@@ -1435,7 +1435,7 @@ pinternal%01\
 
 #ccccccccccccccccccccccccccc
 #c
-#c #define .objIn-cleanup(T, externArg, internArg)		/* nothing */
+#c #define .objIn-cleanup(T, externArg, internArg)      /* nothing */
 #c
 #c arg1 = unadorned type
 #c arg2 = external arg name
@@ -1446,7 +1446,7 @@ pinternal%01\
 
 #ccccccccccccccccccccccccccc
 #c
-#c #define .objPass-cleanup(T, externArg, internArg)	/* nothing */
+#c #define .objPass-cleanup(T, externArg, internArg)    /* nothing */
 #c
 #c arg1 = unadorned type
 #c arg2 = external arg name
@@ -1465,14 +1465,14 @@ pinternal%01\
 #startm .objOut-cleanup 02
   if (internal%02)
     {
-	  assert (%02);
-	  *%02 = static_cast<%01*>(internal%02->GetContainer());
-	  assert (*%02);
-	}
+      assert (%02);
+      *%02 = static_cast<%01*>(internal%02->GetContainer());
+      assert (*%02);
+    }
   else
     {
-	  *%02 = (%01*)NULL;
-	}
+      *%02 = (%01*)NULL;
+    }
 #endm
 
 

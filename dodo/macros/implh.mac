@@ -280,7 +280,7 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     %01
-		// @parm %02 %06
+        // @parm %02 %06
         (.%03-adornment%04 .%03-indirection %05);\
 #endm
 
@@ -306,11 +306,11 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     %01
-	    (// @parm %02 %06
+        (// @parm %02 %06
          .%03-adornment%04 .%03-indirection %05,
 
-		 // @parm %07 %11
-		 .%08-adornment%09 .%08-indirection %10);\
+         // @parm %07 %11
+         .%08-adornment%09 .%08-indirection %10);\
 #endm
 
 
@@ -337,12 +337,12 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     %01
         (// @parm %02 %06
-		 .%03-adornment%04 .%03-indirection %05,
+         .%03-adornment%04 .%03-indirection %05,
 
-		 // @parm %07 %11
-		 .%08-adornment%09 .%08-indirection %10,
+         // @parm %07 %11
+         .%08-adornment%09 .%08-indirection %10,
 
-		 // @parm %12 %16
+         // @parm %12 %16
          .%13-adornment%14 .%13-indirection %15);\
 #endm
 
@@ -371,16 +371,16 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     %01
         (// @parm %02 %06
-		 .%03-adornment%04 .%03-indirection %05,
+         .%03-adornment%04 .%03-indirection %05,
 
-		 // @parm %07 %11
-		 .%08-adornment%09 .%08-indirection %10,
+         // @parm %07 %11
+         .%08-adornment%09 .%08-indirection %10,
 
-		 // @parm %12 %16
+         // @parm %12 %16
          .%13-adornment%14 .%13-indirection %15,
 
-		 // @parm %17 %21
-		 .%18-adornment%19 .%18-indirection %20);\
+         // @parm %17 %21
+         .%18-adornment%19 .%18-indirection %20);\
 #endm
 
 
@@ -409,18 +409,18 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     %01
         (// @parm %02 %06
-		 .%03-adornment%04 .%03-indirection %05,
+         .%03-adornment%04 .%03-indirection %05,
 
-		 // @parm %07 %11
-		 .%08-adornment%09 .%08-indirection %10,
+         // @parm %07 %11
+         .%08-adornment%09 .%08-indirection %10,
 
-		 // @parm %12 %16
+         // @parm %12 %16
          .%13-adornment%14 .%13-indirection %15,
 
-		 // @parm %17 %21
-		 .%18-adornment%19 .%18-indirection %20,
+         // @parm %17 %21
+         .%18-adornment%19 .%18-indirection %20,
 
-		 // @parm %22 %26
+         // @parm %22 %26
          .%23-adornment%24 .%23-indirection %25);\
 #endm
 
@@ -451,22 +451,22 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     %01
         (// @parm %02 %06
-		 .%03-adornment%04 .%03-indirection %05,
+         .%03-adornment%04 .%03-indirection %05,
 
-		 // @parm %07 %11
-		 .%08-adornment%09 .%08-indirection %10,
+         // @parm %07 %11
+         .%08-adornment%09 .%08-indirection %10,
 
-		 // @parm %12 %16
+         // @parm %12 %16
          .%13-adornment%14 .%13-indirection %15,
 
-		 // @parm %17 %21
-		 .%18-adornment%19 .%18-indirection %20,
+         // @parm %17 %21
+         .%18-adornment%19 .%18-indirection %20,
 
-		 // @parm %22 %26
+         // @parm %22 %26
          .%23-adornment%24 .%23-indirection %25,
 
-		 // @parm %27 %31
-		 .%28-adornment%29 .%28-indirection %30);\
+         // @parm %27 %31
+         .%28-adornment%29 .%28-indirection %30);\
 #endm
 
 
@@ -497,24 +497,24 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     %01
         (// @parm %02 %06
-		 .%03-adornment%04 .%03-indirection %05,
+         .%03-adornment%04 .%03-indirection %05,
 
-		 // @parm %07 %11
-		 .%08-adornment%09 .%08-indirection %10,
+         // @parm %07 %11
+         .%08-adornment%09 .%08-indirection %10,
 
-		 // @parm %12 %16
+         // @parm %12 %16
          .%13-adornment%14 .%13-indirection %15,
 
-		 // @parm %17 %21
-		 .%18-adornment%19 .%18-indirection %20,
+         // @parm %17 %21
+         .%18-adornment%19 .%18-indirection %20,
 
-		 // @parm %22 %26
+         // @parm %22 %26
          .%23-adornment%24 .%23-indirection %25,
 
-		 // @parm %27 %31
-		 .%28-adornment%29 .%28-indirection %30,
+         // @parm %27 %31
+         .%28-adornment%29 .%28-indirection %30,
 
-		 // @parm %32 %36
+         // @parm %32 %36
          .%33-adornment%34 .%33-indirection %35);\
 #endm
 
@@ -547,28 +547,28 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     %01
         (// @parm %02 %06
-		 .%03-adornment%04 .%03-indirection %05,
+         .%03-adornment%04 .%03-indirection %05,
 
-		 // @parm %07 %11
-		 .%08-adornment%09 .%08-indirection %10,
+         // @parm %07 %11
+         .%08-adornment%09 .%08-indirection %10,
 
-		 // @parm %12 %16
+         // @parm %12 %16
          .%13-adornment%14 .%13-indirection %15,
 
-		 // @parm %17 %21
-		 .%18-adornment%19 .%18-indirection %20,
+         // @parm %17 %21
+         .%18-adornment%19 .%18-indirection %20,
 
-		 // @parm %22 %26
+         // @parm %22 %26
          .%23-adornment%24 .%23-indirection %25,
 
-		 // @parm %27 %31
-		 .%28-adornment%29 .%28-indirection %30,
+         // @parm %27 %31
+         .%28-adornment%29 .%28-indirection %30,
 
-		 // @parm %32 %36
+         // @parm %32 %36
          .%33-adornment%34 .%33-indirection %35,
 
-		 // @parm %37 %41
-		 .%38-adornment%39 .%38-indirection %40);\
+         // @parm %37 %41
+         .%38-adornment%39 .%38-indirection %40);\
 #endm
 
 
@@ -601,30 +601,30 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     %01
         (// @parm %02 %06
-		 .%03-adornment%04 .%03-indirection %05,
+         .%03-adornment%04 .%03-indirection %05,
 
-		 // @parm %07 %11
-		 .%08-adornment%09 .%08-indirection %10,
+         // @parm %07 %11
+         .%08-adornment%09 .%08-indirection %10,
 
-		 // @parm %12 %16
+         // @parm %12 %16
          .%13-adornment%14 .%13-indirection %15,
 
-		 // @parm %17 %21
-		 .%18-adornment%19 .%18-indirection %20,
+         // @parm %17 %21
+         .%18-adornment%19 .%18-indirection %20,
 
-		 // @parm %22 %26
+         // @parm %22 %26
          .%23-adornment%24 .%23-indirection %25,
 
-		 // @parm %27 %31
-		 .%28-adornment%29 .%28-indirection %30,
+         // @parm %27 %31
+         .%28-adornment%29 .%28-indirection %30,
 
-		 // @parm %32 %36
+         // @parm %32 %36
          .%33-adornment%34 .%33-indirection %35,
 
-		 // @parm %37 %41
-		 .%38-adornment%39 .%38-indirection %40,
+         // @parm %37 %41
+         .%38-adornment%39 .%38-indirection %40,
 
-		 // @parm %42 %46
+         // @parm %42 %46
          .%43-adornment%44 .%43-indirection %45);\
 #endm
 
@@ -659,34 +659,34 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     %01
         (// @parm %02 %06
-		 .%03-adornment%04 .%03-indirection %05,
+         .%03-adornment%04 .%03-indirection %05,
 
-		 // @parm %07 %11
-		 .%08-adornment%09 .%08-indirection %10,
+         // @parm %07 %11
+         .%08-adornment%09 .%08-indirection %10,
 
-		 // @parm %12 %16
+         // @parm %12 %16
          .%13-adornment%14 .%13-indirection %15,
 
-		 // @parm %17 %21
-		 .%18-adornment%19 .%18-indirection %20,
+         // @parm %17 %21
+         .%18-adornment%19 .%18-indirection %20,
 
-		 // @parm %22 %26
+         // @parm %22 %26
          .%23-adornment%24 .%23-indirection %25,
 
-		 // @parm %27 %31
-		 .%28-adornment%29 .%28-indirection %30,
+         // @parm %27 %31
+         .%28-adornment%29 .%28-indirection %30,
 
-		 // @parm %32 %36
+         // @parm %32 %36
          .%33-adornment%34 .%33-indirection %35,
 
-		 // @parm %37 %41
-		 .%38-adornment%39 .%38-indirection %40,
+         // @parm %37 %41
+         .%38-adornment%39 .%38-indirection %40,
 
-		 // @parm %42 %46
+         // @parm %42 %46
          .%43-adornment%44 .%43-indirection %45,
 
-		 // @parm %47 %51
-		 .%48-adornment%49 .%48-indirection %50);\
+         // @parm %47 %51
+         .%48-adornment%49 .%48-indirection %50);\
 #endm
 
 
@@ -721,36 +721,36 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     %01
         (// @parm %02 %06
-		 .%03-adornment%04 .%03-indirection %05,
+         .%03-adornment%04 .%03-indirection %05,
 
-		 // @parm %07 %11
-		 .%08-adornment%09 .%08-indirection %10,
+         // @parm %07 %11
+         .%08-adornment%09 .%08-indirection %10,
 
-		 // @parm %12 %16
+         // @parm %12 %16
          .%13-adornment%14 .%13-indirection %15,
 
-		 // @parm %17 %21
-		 .%18-adornment%19 .%18-indirection %20,
+         // @parm %17 %21
+         .%18-adornment%19 .%18-indirection %20,
 
-		 // @parm %22 %26
+         // @parm %22 %26
          .%23-adornment%24 .%23-indirection %25,
 
-		 // @parm %27 %31
-		 .%28-adornment%29 .%28-indirection %30,
+         // @parm %27 %31
+         .%28-adornment%29 .%28-indirection %30,
 
-		 // @parm %32 %36
+         // @parm %32 %36
          .%33-adornment%34 .%33-indirection %35,
 
-		 // @parm %37 %41
-		 .%38-adornment%39 .%38-indirection %40,
+         // @parm %37 %41
+         .%38-adornment%39 .%38-indirection %40,
 
-		 // @parm %42 %46
+         // @parm %42 %46
          .%43-adornment%44 .%43-indirection %45,
 
-		 // @parm %47 %51
-		 .%48-adornment%49 .%48-indirection %50,
+         // @parm %47 %51
+         .%48-adornment%49 .%48-indirection %50,
 
-		 // @parm %52 %56
+         // @parm %52 %56
          .%53-adornment%54 .%53-indirection %55);\
 #endm
 
@@ -775,7 +775,7 @@ public:
 
   // Return this objects stored object class.
   virtual AAFRESULT STDMETHODCALLTYPE
-	GetObjectClass(aafUID_t * pClass);
+    GetObjectClass(aafUID_t * pClass);
 };
 
 #endif // ! __Impl.this-module_h__

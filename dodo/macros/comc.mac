@@ -297,7 +297,7 @@ HRESULT STDMETHODCALLTYPE
 #startm AD_XMETHOD2 12
 HRESULT STDMETHODCALLTYPE
     C.this-module::%01 (.%03-adornment%04 .%03-indirection %05,
-		.%08-adornment%09 .%08-indirection %10)
+        .%08-adornment%09 .%08-indirection %10)
 {
 #ifdef BOB_TEST
   HRESULT hr;
@@ -312,7 +312,7 @@ HRESULT STDMETHODCALLTYPE
 .%03-setup(%04, %05)
 .%08-setup(%09, %10)
   hr = ptr->%01 (.%03-internalname(%05),
-	.%08-internalname(%10));
+    .%08-internalname(%10));
 .%03-cleanup(%04, %05)
 .%08-cleanup(%09, %10)
   return hr;
@@ -342,8 +342,8 @@ HRESULT STDMETHODCALLTYPE
 #startm AD_XMETHOD3 17
 HRESULT STDMETHODCALLTYPE
     C.this-module::%01 (.%03-adornment%04 .%03-indirection %05,
-		.%08-adornment%09 .%08-indirection %10,
-		.%13-adornment%14 .%13-indirection %15)
+        .%08-adornment%09 .%08-indirection %10,
+        .%13-adornment%14 .%13-indirection %15)
 {
 #ifdef BOB_TEST
   HRESULT hr;
@@ -359,8 +359,8 @@ HRESULT STDMETHODCALLTYPE
 .%08-setup(%09, %10)
 .%13-setup(%14, %15)
   hr = ptr->%01 (.%03-internalname(%05),
-	.%08-internalname(%10),
-	.%13-internalname(%15));
+    .%08-internalname(%10),
+    .%13-internalname(%15));
 .%03-cleanup(%04, %05)
 .%08-cleanup(%09, %10)
 .%13-cleanup(%14, %15)
@@ -392,9 +392,9 @@ HRESULT STDMETHODCALLTYPE
 #startm AD_XMETHOD4 22
 HRESULT STDMETHODCALLTYPE
     C.this-module::%01 (.%03-adornment%04 .%03-indirection %05,
-		.%08-adornment%09 .%08-indirection %10,
-		.%13-adornment%14 .%13-indirection %15,
-		.%18-adornment%19 .%18-indirection %20)
+        .%08-adornment%09 .%08-indirection %10,
+        .%13-adornment%14 .%13-indirection %15,
+        .%18-adornment%19 .%18-indirection %20)
 {
 #ifdef BOB_TEST
   HRESULT hr;
@@ -411,9 +411,9 @@ HRESULT STDMETHODCALLTYPE
 .%13-setup(%14, %15)
 .%18-setup(%19, %20)
   hr = ptr->%01 (.%03-internalname(%05),
-	.%08-internalname(%10),
-	.%13-internalname(%15),
-	.%18-internalname(%20));
+    .%08-internalname(%10),
+    .%13-internalname(%15),
+    .%18-internalname(%20));
 .%03-cleanup(%04, %05)
 .%08-cleanup(%09, %10)
 .%13-cleanup(%14, %15)
@@ -447,10 +447,10 @@ HRESULT STDMETHODCALLTYPE
 #startm AD_XMETHOD5 27
 HRESULT STDMETHODCALLTYPE
     C.this-module::%01 (.%03-adornment%04 .%03-indirection %05,
-		.%08-adornment%09 .%08-indirection %10,
-		.%13-adornment%14 .%13-indirection %15,
-		.%18-adornment%19 .%18-indirection %20,
-		.%23-adornment%24 .%23-indirection %25)
+        .%08-adornment%09 .%08-indirection %10,
+        .%13-adornment%14 .%13-indirection %15,
+        .%18-adornment%19 .%18-indirection %20,
+        .%23-adornment%24 .%23-indirection %25)
 {
 #ifdef BOB_TEST
   HRESULT hr;
@@ -468,10 +468,10 @@ HRESULT STDMETHODCALLTYPE
 .%18-setup(%19, %20)
 .%23-setup(%24, %25)
   hr = ptr->%01 (.%03-internalname(%05),
-	.%08-internalname(%10),
-	.%13-internalname(%15),
-	.%18-internalname(%20),
-	.%23-internalname(%25));
+    .%08-internalname(%10),
+    .%13-internalname(%15),
+    .%18-internalname(%20),
+    .%23-internalname(%25));
 .%03-cleanup(%04, %05)
 .%08-cleanup(%09, %10)
 .%13-cleanup(%14, %15)
@@ -507,11 +507,11 @@ HRESULT STDMETHODCALLTYPE
 #startm AD_XMETHOD6 32
 HRESULT STDMETHODCALLTYPE
     C.this-module::%01 (.%03-adornment%04 .%03-indirection %05,
-		.%08-adornment%09 .%08-indirection %10,
-		.%13-adornment%14 .%13-indirection %15,
-		.%18-adornment%19 .%18-indirection %20,
-		.%23-adornment%24 .%23-indirection %25,
-		.%28-adornment%29 .%28-indirection %30)
+        .%08-adornment%09 .%08-indirection %10,
+        .%13-adornment%14 .%13-indirection %15,
+        .%18-adornment%19 .%18-indirection %20,
+        .%23-adornment%24 .%23-indirection %25,
+        .%28-adornment%29 .%28-indirection %30)
 {
 #ifdef BOB_TEST
   HRESULT hr;
@@ -530,11 +530,11 @@ HRESULT STDMETHODCALLTYPE
 .%23-setup(%24, %25)
 .%28-setup(%29, %30)
   hr = ptr->%01 (.%03-internalname(%05),
-	.%08-internalname(%10),
-	.%13-internalname(%15),
-	.%18-internalname(%20),
-	.%23-internalname(%25),
-	.%28-internalname(%30));
+    .%08-internalname(%10),
+    .%13-internalname(%15),
+    .%18-internalname(%20),
+    .%23-internalname(%25),
+    .%28-internalname(%30));
 .%03-cleanup(%04, %05)
 .%08-cleanup(%09, %10)
 .%13-cleanup(%14, %15)
@@ -572,12 +572,12 @@ HRESULT STDMETHODCALLTYPE
 #startm AD_XMETHOD7 37
 HRESULT STDMETHODCALLTYPE
     C.this-module::%01 (.%03-adornment%04 .%03-indirection %05,
-		.%08-adornment%09 .%08-indirection %10,
-		.%13-adornment%14 .%13-indirection %15,
-		.%18-adornment%19 .%18-indirection %20,
-		.%23-adornment%24 .%23-indirection %25,
-		.%28-adornment%29 .%28-indirection %30,
-		.%33-adornment%34 .%33-indirection %35)
+        .%08-adornment%09 .%08-indirection %10,
+        .%13-adornment%14 .%13-indirection %15,
+        .%18-adornment%19 .%18-indirection %20,
+        .%23-adornment%24 .%23-indirection %25,
+        .%28-adornment%29 .%28-indirection %30,
+        .%33-adornment%34 .%33-indirection %35)
 {
 #ifdef BOB_TEST
   HRESULT hr;
@@ -597,12 +597,12 @@ HRESULT STDMETHODCALLTYPE
 .%28-setup(%29, %30)
 .%33-setup(%34, %35)
   hr = ptr->%01 (.%03-internalname(%05),
-	.%08-internalname(%10),
-	.%13-internalname(%15),
-	.%18-internalname(%20),
-	.%23-internalname(%25),
-	.%28-internalname(%30),
-	.%33-internalname(%35));
+    .%08-internalname(%10),
+    .%13-internalname(%15),
+    .%18-internalname(%20),
+    .%23-internalname(%25),
+    .%28-internalname(%30),
+    .%33-internalname(%35));
 .%03-cleanup(%04, %05)
 .%08-cleanup(%09, %10)
 .%13-cleanup(%14, %15)
@@ -642,13 +642,13 @@ HRESULT STDMETHODCALLTYPE
 #startm AD_XMETHOD8 42
 HRESULT STDMETHODCALLTYPE
     C.this-module::%01 (.%03-adornment%04 .%03-indirection %05,
-		.%08-adornment%09 .%08-indirection %10,
-		.%13-adornment%14 .%13-indirection %15,
-		.%18-adornment%19 .%18-indirection %20,
-		.%23-adornment%24 .%23-indirection %25,
-		.%28-adornment%29 .%28-indirection %30,
-		.%33-adornment%34 .%33-indirection %35,
-		.%38-adornment%39 .%38-indirection %40)
+        .%08-adornment%09 .%08-indirection %10,
+        .%13-adornment%14 .%13-indirection %15,
+        .%18-adornment%19 .%18-indirection %20,
+        .%23-adornment%24 .%23-indirection %25,
+        .%28-adornment%29 .%28-indirection %30,
+        .%33-adornment%34 .%33-indirection %35,
+        .%38-adornment%39 .%38-indirection %40)
 {
 #ifdef BOB_TEST
   HRESULT hr;
@@ -669,13 +669,13 @@ HRESULT STDMETHODCALLTYPE
 .%33-setup(%34, %35)
 .%38-setup(%39, %40)
   hr = ptr->%01 (.%03-internalname(%05),
-	.%08-internalname(%10),
-	.%13-internalname(%15),
-	.%18-internalname(%20),
-	.%23-internalname(%25),
-	.%28-internalname(%30),
-	.%33-internalname(%35),
-	.%38-internalname(%40));
+    .%08-internalname(%10),
+    .%13-internalname(%15),
+    .%18-internalname(%20),
+    .%23-internalname(%25),
+    .%28-internalname(%30),
+    .%33-internalname(%35),
+    .%38-internalname(%40));
 .%03-cleanup(%04, %05)
 .%08-cleanup(%09, %10)
 .%13-cleanup(%14, %15)
@@ -717,14 +717,14 @@ HRESULT STDMETHODCALLTYPE
 #startm AD_XMETHOD9 47
 HRESULT STDMETHODCALLTYPE
     C.this-module::%01 (.%03-adornment%04 .%03-indirection %05,
-		.%08-adornment%09 .%08-indirection %10,
-		.%13-adornment%14 .%13-indirection %15,
-		.%18-adornment%19 .%18-indirection %20,
-		.%23-adornment%24 .%23-indirection %25,
-		.%28-adornment%29 .%28-indirection %30,
-		.%33-adornment%34 .%33-indirection %35,
-		.%38-adornment%39 .%38-indirection %40,
-		.%43-adornment%44 .%43-indirection %45)
+        .%08-adornment%09 .%08-indirection %10,
+        .%13-adornment%14 .%13-indirection %15,
+        .%18-adornment%19 .%18-indirection %20,
+        .%23-adornment%24 .%23-indirection %25,
+        .%28-adornment%29 .%28-indirection %30,
+        .%33-adornment%34 .%33-indirection %35,
+        .%38-adornment%39 .%38-indirection %40,
+        .%43-adornment%44 .%43-indirection %45)
 {
 #ifdef BOB_TEST
   HRESULT hr;
@@ -746,14 +746,14 @@ HRESULT STDMETHODCALLTYPE
 .%38-setup(%39, %40)
 .%43-setup(%44, %45)
   hr = ptr->%01 (.%03-internalname(%05),
-	.%08-internalname(%10),
-	.%13-internalname(%15),
-	.%18-internalname(%20),
-	.%23-internalname(%25),
-	.%28-internalname(%30),
-	.%33-internalname(%35),
-	.%38-internalname(%40),
-	.%43-internalname(%45));
+    .%08-internalname(%10),
+    .%13-internalname(%15),
+    .%18-internalname(%20),
+    .%23-internalname(%25),
+    .%28-internalname(%30),
+    .%33-internalname(%35),
+    .%38-internalname(%40),
+    .%43-internalname(%45));
 .%03-cleanup(%04, %05)
 .%08-cleanup(%09, %10)
 .%13-cleanup(%14, %15)
@@ -797,15 +797,15 @@ HRESULT STDMETHODCALLTYPE
 #startm AD_XMETHOD_10 52
 HRESULT STDMETHODCALLTYPE
     C.this-module::%01 (.%03-adornment%04 .%03-indirection %05,
-		.%08-adornment%09 .%08-indirection %10,
-		.%13-adornment%14 .%13-indirection %15,
-		.%18-adornment%19 .%18-indirection %20,
-		.%23-adornment%24 .%23-indirection %25,
-		.%28-adornment%29 .%28-indirection %30,
-		.%33-adornment%34 .%33-indirection %35,
-		.%38-adornment%39 .%38-indirection %40,
-		.%43-adornment%44 .%43-indirection %45,
-		.%48-adornment%49 .%48-indirection %50)
+        .%08-adornment%09 .%08-indirection %10,
+        .%13-adornment%14 .%13-indirection %15,
+        .%18-adornment%19 .%18-indirection %20,
+        .%23-adornment%24 .%23-indirection %25,
+        .%28-adornment%29 .%28-indirection %30,
+        .%33-adornment%34 .%33-indirection %35,
+        .%38-adornment%39 .%38-indirection %40,
+        .%43-adornment%44 .%43-indirection %45,
+        .%48-adornment%49 .%48-indirection %50)
 {
 #ifdef BOB_TEST
   HRESULT hr;
@@ -828,15 +828,15 @@ HRESULT STDMETHODCALLTYPE
 .%43-setup(%44, %45)
 .%48-setup(%49, %50)
   hr = ptr->%01 (.%03-internalname(%05),
-	.%08-internalname(%10),
-	.%13-internalname(%15),
-	.%18-internalname(%20),
-	.%23-internalname(%25),
-	.%28-internalname(%30),
-	.%33-internalname(%35),
-	.%38-internalname(%40),
-	.%43-internalname(%45),
-	.%48-internalname(%50));
+    .%08-internalname(%10),
+    .%13-internalname(%15),
+    .%18-internalname(%20),
+    .%23-internalname(%25),
+    .%28-internalname(%30),
+    .%33-internalname(%35),
+    .%38-internalname(%40),
+    .%43-internalname(%45),
+    .%48-internalname(%50));
 .%03-cleanup(%04, %05)
 .%08-cleanup(%09, %10)
 .%13-cleanup(%14, %15)
@@ -882,16 +882,16 @@ HRESULT STDMETHODCALLTYPE
 #startm AD_XMETHOD_11 57
 HRESULT STDMETHODCALLTYPE
     C.this-module::%01 (.%03-adornment%04 .%03-indirection %05,
-		.%08-adornment%09 .%08-indirection %10,
-		.%13-adornment%14 .%13-indirection %15,
-		.%18-adornment%19 .%18-indirection %20,
-		.%23-adornment%24 .%23-indirection %25,
-		.%28-adornment%29 .%28-indirection %30,
-		.%33-adornment%34 .%33-indirection %35,
-		.%38-adornment%39 .%38-indirection %40,
-		.%43-adornment%44 .%43-indirection %45,
-		.%48-adornment%49 .%48-indirection %50,
-		.%53-adornment%54 .%53-indirection %55)
+        .%08-adornment%09 .%08-indirection %10,
+        .%13-adornment%14 .%13-indirection %15,
+        .%18-adornment%19 .%18-indirection %20,
+        .%23-adornment%24 .%23-indirection %25,
+        .%28-adornment%29 .%28-indirection %30,
+        .%33-adornment%34 .%33-indirection %35,
+        .%38-adornment%39 .%38-indirection %40,
+        .%43-adornment%44 .%43-indirection %45,
+        .%48-adornment%49 .%48-indirection %50,
+        .%53-adornment%54 .%53-indirection %55)
 {
 #ifdef BOB_TEST
   HRESULT hr;
@@ -915,16 +915,16 @@ HRESULT STDMETHODCALLTYPE
 .%48-setup(%49, %50)
 .%53-setup(%54, %55)
   hr = ptr->%01 (.%03-internalname(%05),
-	.%08-internalname(%10),
-	.%13-internalname(%15),
-	.%18-internalname(%20),
-	.%23-internalname(%25),
-	.%28-internalname(%30),
-	.%33-internalname(%35),
-	.%38-internalname(%40),
-	.%43-internalname(%45),
-	.%48-internalname(%50),
-	.%53-internalname(%55));
+    .%08-internalname(%10),
+    .%13-internalname(%15),
+    .%18-internalname(%20),
+    .%23-internalname(%25),
+    .%28-internalname(%30),
+    .%33-internalname(%35),
+    .%38-internalname(%40),
+    .%43-internalname(%45),
+    .%48-internalname(%50),
+    .%53-internalname(%55));
 .%03-cleanup(%04, %05)
 .%08-cleanup(%09, %10)
 .%13-cleanup(%14, %15)
@@ -956,24 +956,24 @@ HRESULT STDMETHODCALLTYPE
 // 
 HRESULT C.this-module::InternalQueryInterface
 (
-	REFIID riid,
-	void **ppvObj)
+    REFIID riid,
+    void **ppvObj)
 {
-	HRESULT hr = S_OK;
+    HRESULT hr = S_OK;
 
-	if (NULL == ppvObj)
-		return E_INVALIDARG;
+    if (NULL == ppvObj)
+        return E_INVALIDARG;
 
     // We only support the IClassFactory interface 
     if (riid == IID_I.this-module) 
     { 
         *ppvObj = (I.this-module *)this; 
         ((IUnknown *)*ppvObj)->AddRef();
-		return S_OK;
+        return S_OK;
     }
 
-	// Always delegate back to base implementation.
-	return C.parent-module::InternalQueryInterface(riid, ppvObj);
+    // Always delegate back to base implementation.
+    return C.parent-module::InternalQueryInterface(riid, ppvObj);
 }
 
 //
@@ -996,31 +996,31 @@ AAF_DEFINE_FACTORY(.this-module)\
 // 
 HRESULT C.this-module::InternalQueryInterface
 (
-	REFIID riid,
-	void **ppvObj)
+    REFIID riid,
+    void **ppvObj)
 {
-	HRESULT hr = S_OK;
+    HRESULT hr = S_OK;
 
-	if (NULL == ppvObj)
-		return E_INVALIDARG;
+    if (NULL == ppvObj)
+        return E_INVALIDARG;
 
     // We only support the IClassFactory interface 
     if (riid == IID_I.this-module) 
     { 
         *ppvObj = (I.this-module *)this; 
         ((IUnknown *)*ppvObj)->AddRef();
-		return S_OK;
+        return S_OK;
     }
 
     if (riid == IID_I%01) 
     { 
         *ppvObj = (I%01 *)this; 
         ((IUnknown *)*ppvObj)->AddRef();
-		return S_OK;
+        return S_OK;
     }
 
-	// Always delegate back to base implementation.
-	return C.parent-module::InternalQueryInterface(riid, ppvObj);
+    // Always delegate back to base implementation.
+    return C.parent-module::InternalQueryInterface(riid, ppvObj);
 }
 
 //
@@ -1042,24 +1042,24 @@ AAF_DEFINE_FACTORY(.this-module)\
 // 
 HRESULT C.this-module::InternalQueryInterface
 (
-	REFIID riid,
-	void **ppvObj)
+    REFIID riid,
+    void **ppvObj)
 {
-	HRESULT hr = S_OK;
+    HRESULT hr = S_OK;
 
-	if (NULL == ppvObj)
-		return E_INVALIDARG;
+    if (NULL == ppvObj)
+        return E_INVALIDARG;
 
     // We only support the IClassFactory interface 
     if (riid == IID_I.this-module) 
     { 
         *ppvObj = (I.this-module *)this; 
         ((IUnknown *)*ppvObj)->AddRef();
-		return S_OK;
+        return S_OK;
     }
 
-	// Always delegate back to base implementation.
-	return CAAFUnknown::InternalQueryInterface(riid, ppvObj);
+    // Always delegate back to base implementation.
+    return CAAFUnknown::InternalQueryInterface(riid, ppvObj);
 }
 
 //
@@ -1071,12 +1071,12 @@ HRESULT STDMETHODCALLTYPE
     C.this-module::GetImplRep (void **ppRep)
 {
 #ifdef BOB_TEST
-	if (!ppRep)
-		return E_INVALIDARG;  
-	*ppRep = static_cast<void*>(GetRepObject());
-	return S_OK;
+    if (!ppRep)
+        return E_INVALIDARG;  
+    *ppRep = static_cast<void*>(GetRepObject());
+    return S_OK;
 #else
-	return HRESULT_NOT_IMPLEMENTED;
+    return HRESULT_NOT_IMPLEMENTED;
 #endif
 }
 
@@ -1151,13 +1151,13 @@ C.this-module::C.this-module (.%02-adornment%03 .%02-indirection %04)
 #c
 #startm AD_XCONSTRUCTOR2 11
 C.this-module::C.this-module (.%02-adornment%03 .%02-indirection %04,
-	.%07-adornment%08 .%07-indirection %09)
+    .%07-adornment%08 .%07-indirection %09)
 {
 .%02-setup(%03, %04)
 .%07-setup(%08, %09)
   Impl.this-module * newRep;
   newRep = new Impl.this-module (.%02-internalname(%04),
-	.%07-internalname(%09));
+    .%07-internalname(%09));
   assert (newRep);
   InitRep (newRep);
 .%02-cleanup(%03, %04)
@@ -1183,16 +1183,16 @@ C.this-module::C.this-module (.%02-adornment%03 .%02-indirection %04,
 #c
 #startm AD_XCONSTRUCTOR3 16
 C.this-module::C.this-module (.%02-adornment%03 .%02-indirection %04,
-	.%07-adornment%08 .%07-indirection %09,
-	.%12-adornment%13 .%12-indirection %14)
+    .%07-adornment%08 .%07-indirection %09,
+    .%12-adornment%13 .%12-indirection %14)
 {
 .%02-setup(%03, %04)
 .%07-setup(%08, %09)
 .%12-setup(%13, %14)
   Impl.this-module * newRep;
   newRep = new Impl.this-module (.%02-internalname(%04),
-	.%07-internalname(%09),
-	.%12-internalname(%14));
+    .%07-internalname(%09),
+    .%12-internalname(%14));
   assert (newRep);
   InitRep (newRep);
 .%02-cleanup(%03, %04)
@@ -1220,9 +1220,9 @@ C.this-module::C.this-module (.%02-adornment%03 .%02-indirection %04,
 #c
 #startm AD_XCONSTRUCTOR4 21
 C.this-module::C.this-module (.%02-adornment%03 .%02-indirection %04,
-							  .%07-adornment%08 .%07-indirection %09,
-							  .%12-adornment%13 .%12-indirection %14,
-							  .%17-adornment%18 .%17-indirection %19)
+                              .%07-adornment%08 .%07-indirection %09,
+                              .%12-adornment%13 .%12-indirection %14,
+                              .%17-adornment%18 .%17-indirection %19)
 {
 .%02-setup(%03, %04)
 .%07-setup(%08, %09)
@@ -1230,9 +1230,9 @@ C.this-module::C.this-module (.%02-adornment%03 .%02-indirection %04,
 .%17-setup(%18, %19)
   Impl.this-module * newRep;
   newRep = new Impl.this-module (.%02-internalname(%04),
-	.%07-internalname(%09),
-	.%12-internalname(%14),
-	.%17-internalname(%19));
+    .%07-internalname(%09),
+    .%12-internalname(%14),
+    .%17-internalname(%19));
   assert (newRep);
   InitRep (newRep);
 .%02-cleanup(%03, %04)
@@ -1394,24 +1394,24 @@ const CLSID CLSID_.this-module = { 0x%01, 0x%02, 0x%03, { 0x%04, 0x%05, 0x%06, 0
   Impl%01 * internal%02 = NULL;
   if (%02)
     {
-	  HRESULT hStat;
-	  IAAFRoot * iObj;
-	  ImplAAFRoot *arg;
-	  hStat = %02->QueryInterface (IID_IAAFRoot, (void **)&iObj);
-	  assert (SUCCEEDED (hStat));
-	  assert (iObj);
-	  hStat = iObj->GetImplRep((void **)&arg);
-	  assert (SUCCEEDED (hStat));
+      HRESULT hStat;
+      IAAFRoot * iObj;
+      ImplAAFRoot *arg;
+      hStat = %02->QueryInterface (IID_IAAFRoot, (void **)&iObj);
+      assert (SUCCEEDED (hStat));
+      assert (iObj);
+      hStat = iObj->GetImplRep((void **)&arg);
+      assert (SUCCEEDED (hStat));
     iObj->Release(); // we are through with this interface pointer.
-	  internal%02 = static_cast<Impl%01*>(arg);
-	  assert (internal%02);
+      internal%02 = static_cast<Impl%01*>(arg);
+      assert (internal%02);
     }
 #endm
 
 
 #ccccccccccccccccccccccccccc
 #c
-#c #define .objPass-setup(T, externArg, internArg)		/* nothing */
+#c #define .objPass-setup(T, externArg, internArg)      /* nothing */
 #c
 #c arg1 = unadorned type
 #c arg2 = external arg name
@@ -1432,14 +1432,14 @@ const CLSID CLSID_.this-module = { 0x%01, 0x%02, 0x%03, { 0x%04, 0x%05, 0x%06, 0
   Impl%01 ** pinternal%02 = NULL;
   if (%02)
     {
-	  pinternal%02 = &internal%02;
+      pinternal%02 = &internal%02;
     }
 #endm
 
 
 #ccccccccccccccccccccccccccc
 #c
-#c #define .objIn-internalname(externArg, internArg)	(internArg)
+#c #define .objIn-internalname(externArg, internArg)    (internArg)
 #c
 #c arg1 = external arg name
 #c
@@ -1450,7 +1450,7 @@ internal%01\
 
 #ccccccccccccccccccccccccccc
 #c
-#c #define .objPass-internalname(externArg, internArg)	(internArg)
+#c #define .objPass-internalname(externArg, internArg)  (internArg)
 #c
 #c arg1 = external arg name
 #c
@@ -1461,7 +1461,7 @@ internal%01\
 
 #ccccccccccccccccccccccccccc
 #c
-#c #define .objOut-internalname(externArg, internArg)	(internArg)
+#c #define .objOut-internalname(externArg, internArg)   (internArg)
 #c
 #c arg1 = external arg name
 #c
@@ -1472,7 +1472,7 @@ pinternal%01\
 
 #ccccccccccccccccccccccccccc
 #c
-#c #define .objIn-cleanup(T, externArg, internArg)		/* nothing */
+#c #define .objIn-cleanup(T, externArg, internArg)      /* nothing */
 #c
 #c arg1 = unadorned type
 #c arg2 = external arg name
@@ -1483,7 +1483,7 @@ pinternal%01\
 
 #ccccccccccccccccccccccccccc
 #c
-#c #define .objPass-cleanup(T, externArg, internArg)	/* nothing */
+#c #define .objPass-cleanup(T, externArg, internArg)    /* nothing */
 #c
 #c arg1 = unadorned type
 #c arg2 = external arg name
@@ -1500,21 +1500,21 @@ pinternal%01\
 #c arg2 = external arg name
 #c
 #startm .objOut-cleanup 02
-	if (SUCCEEDED(hr))
-	{
-		IUnknown *pUnknown;
-		HRESULT	hStat;
+    if (SUCCEEDED(hr))
+    {
+        IUnknown *pUnknown;
+        HRESULT hStat;
 
-		pUnknown = static_cast<IUnknown *> (internal%02->GetContainer());
-		hStat = pUnknown->QueryInterface(IID_I%01, (void **)%02);
-		assert (SUCCEEDED (hStat));
-		//pUnknown->Release();
+        pUnknown = static_cast<IUnknown *> (internal%02->GetContainer());
+        hStat = pUnknown->QueryInterface(IID_I%01, (void **)%02);
+        assert (SUCCEEDED (hStat));
+        //pUnknown->Release();
     internal%02->ReleaseReference(); // We are through with this pointer.
-	}
-	else
-	{
-		*%02 = NULL;
-	}
+    }
+    else
+    {
+        *%02 = NULL;
+    }
 
 
 #endm
