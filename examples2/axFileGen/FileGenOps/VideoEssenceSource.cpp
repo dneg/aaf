@@ -17,6 +17,7 @@
 //=---------------------------------------------------------------------=
 
 #include "SampleSource.h"
+#include "ParamMaps.h"
 
 #include <axFileGen.h>
 
@@ -28,7 +29,7 @@
 namespace {
 
 
-// old C code cut/paste/modify
+// old C code... cut/paste/modify... in need of cleaning
 
 inline aafUInt32 pack32( unsigned char a, unsigned char  b, unsigned char c, unsigned char d = 0 )
 {
@@ -195,57 +196,47 @@ void convert_444yuv_to_411uyvy( aafUInt32* yuv,
 }
 
 // caller takes ownership of allocated pointer
-void create_422uyvy_bars_image( aafUInt32** bufptr,
-			 			        int width,
-								int height )
+void create_422uyvy_bars_image( int width, int height, int* pBufSize, aafUInt8** ppBuf )
 {
 	// This is just one line.  rgbx  = one pixel per 32 bpp
-	aafUInt32* rgblinebuf  = new aafUInt32[ width ];
+	aafUInt32* rgbxlinebuf  = new aafUInt32[ width ];
+	
+	// buf size in 32 bit words
+	int uyvyBufSize = height*width/2;
 
-	// This is a full image.  uyvy  = two pixels per 32 bpp
-	aafUInt32* uyvybuf = new aafUInt32[ height*width/2 ];  
+	aafUInt32* uyvybuf = new aafUInt32[ uyvyBufSize ];  
 
-	colorbars_test_pattern( rgblinebuf, width, 1, sizeof(aafUInt32)*width, 8*sizeof(aafUInt32) );
+	colorbars_test_pattern( rgbxlinebuf, width, 1, sizeof(aafUInt32)*width, 8*sizeof(aafUInt32) );
 
 	// This is a 444rgb to 444yuv conversion.
-	convert_line_rgb_to_ycrcb( rgblinebuf, width );
+	convert_line_rgb_to_ycrcb( rgbxlinebuf, width );
 
 	// Now convert to 422.
 	// Call it yuv now... same as crcb for these purposes.
-	convert_444yuv_to_422uyvy( rgblinebuf, uyvybuf, width );  
+	convert_444yuv_to_422uyvy( rgbxlinebuf, uyvybuf, width );  
 
-	delete rgblinebuf;
+	delete rgbxlinebuf;
 
-	copy_first_line_to_all_lines( uyvybuf, height, width/2 );
+	copy_first_line_to_all_lines( uyvybuf, height, 2*width );
 
-	*bufptr = uyvybuf;
+	*ppBuf = reinterpret_cast<aafUInt8*>(uyvybuf);
+	*pBufSize = sizeof(aafUInt32) * uyvyBufSize;
 }
 
 // caller takes ownership of allocated pointer
-void create_411uyvy_bars_image( aafUInt32** bufptr,
-			 			        int width,
-								int height )
+void create_444rgbx_bars_image( int width, int height, int* pBufSize, aafUInt8** ppBuf )
 {
-	// This is just one line.  rgbx  = one pixel per 32 bpp
-	aafUInt32* rgblinebuf  = new aafUInt32[ width ];
+	// buf size in 32 bit words.
+	int rgbxBufSize = height*width; 
 
-	// This is a full image.  uyvy  = two pixels per 32 bpp
-	aafUInt32* uyvybuf = new aafUInt32[ height*width/4 ];  
+	aafUInt32* rgbxbuf = new aafUInt32[ rgbxBufSize ];
 
-	colorbars_test_pattern( rgblinebuf, width, 1, sizeof(aafUInt32)*width, 8*sizeof(aafUInt32) );
+	colorbars_test_pattern( rgbxbuf, width, 1, sizeof(aafUInt32)*width, 8*sizeof(aafUInt32) );
 
-	// This is a 444rgb to 444yuv conversion.
-	convert_line_rgb_to_ycrcb( rgblinebuf, width );
+	copy_first_line_to_all_lines( rgbxbuf, height, 4*width );
 
-	// Now convert to 411
-	// Call it yuv now... same as crcb for these purposes.
-	convert_444yuv_to_411uyvy( rgblinebuf, uyvybuf, width );  
-
-	delete rgblinebuf;
-
-	copy_first_line_to_all_lines( uyvybuf, height, width/4 );
-
-	*bufptr = uyvybuf;
+	*ppBuf = reinterpret_cast<aafUInt8*>(rgbxbuf);
+	*pBufSize = sizeof(aafUInt32) * rgbxBufSize;
 }
 
 
@@ -278,6 +269,7 @@ private:
 	int _height;
 	int _sampVert;
 	int _sampHorz;
+	aafPixelFormat_t _pixelFormat;
 	AxString _descName;
 };
 
@@ -286,10 +278,10 @@ AXFG_OP_FACTORY_DECLARATION(
   BarsSource,           
   L"BarsSource",
   L"Implements the BarsSampleSource protocol",
-  L"BarsSampleSourceName  CDCIDescriptorName num_frames",
-  L"CDCIDescriptor used to determine size, etc.",
-  4,
-  4 ) 
+  L"BarsSampleSourceName  CDCIDescriptorName pixel_format num_frames",
+  L"CDCIDescriptor used to determine size.  pixel_form is aafPixelFormat_t.",
+  5,
+  5 ) 
 
 BarsSource::~BarsSource()
 {}
@@ -298,7 +290,8 @@ void BarsSource::Execute( const std::vector<AxString>& argv )
 {
 	AxString sourceName   = argv[1];
 	AxString cdciDescName = argv[2];
-	AxString numFrames    = argv[3];
+	AxString pixelFormat  = argv[3];
+	AxString numFrames    = argv[4];
 
 	IAAFCDCIDescriptorSP spDesc;
 	GetInstance( cdciDescName ).GetCOM( spDesc );
@@ -318,6 +311,20 @@ void BarsSource::Execute( const std::vector<AxString>& argv )
 	_sampHorz = axDesc.GetHorizontalSubsampling();
 	_sampVert = axDesc.GetVerticalSubsampling();
 
+	// For the moment, require 1x1 sampling.
+	// The DVExpress dump shows 1x1 sampling, but format is supposedly,
+	// yuv so it doesn't mean chroma... assumed to be something used
+	// by the codec only.
+	if ( ! ( _sampHorz == 1 && _sampVert == 1 ) ) {
+		throw AxFGOpUsageEx( *this, L"unsupported sampling" );
+	}
+
+	_pixelFormat = PixelFormatParams::GetInstance().Find( *this, pixelFormat );
+
+	if ( _pixelFormat == kAAFPixNone ) {
+		throw AxFGOpUsageEx( *this, L"\"" + pixelFormat + L"\" unsupported" );
+	}
+
 	RegisterInstance( sourceName );
 }
 
@@ -334,26 +341,29 @@ std::auto_ptr< SampleSrcBuffer > BarsSource::GetNext()
 		return auto_ptr<SampleSrcBuffer>( new SimpleSampleSrcBuffer() );
 	}
 
-	int numBytes   = _width * _height * 2;
 	int numSamples = 1;
+	int numBytes; 
+	aafUInt8* buf;
 
-	aafUInt8* uyvybuf;
-	if ( 2 == _sampVert && 1 == _sampHorz ) { 
-		create_422uyvy_bars_image( reinterpret_cast<aafUInt32**>(&uyvybuf),
-				                   _width, _height );
+	if ( _pixelFormat == kAAFPixRGBA ) {
+		
+		create_444rgbx_bars_image( _width, _height, &numBytes, &buf );
+	
 	}
-	else if ( 2 == _sampVert && 2 == _sampHorz ) {
-		create_411uyvy_bars_image( reinterpret_cast<aafUInt32**>(&uyvybuf),
-				                   _width, _height );
+	else if ( _pixelFormat == kAAFPixYUV ) {
+
+		// Assume tthat PixYUV means 422
+		create_422uyvy_bars_image( _width, _height, &numBytes, &buf );
+	
 	}
 	else {
-		throw AxFGEx( L"Unsupported subsampling specified by \"" + _descName + L"\"" );
+		throw AxFGEx( L"bad implementation" );
 	}
 
-	auto_ptr<aafUInt8> buffer( uyvybuf );
+	auto_ptr<aafUInt8> bufferToGiveUp( buf );
 	
 	auto_ptr<SampleSrcBuffer> srcBuffer(
-		new SimpleSampleSrcBuffer( numSamples, numBytes, buffer ) );
+		new SimpleSampleSrcBuffer( numSamples, numBytes, bufferToGiveUp ) );
 	
 	_count++;
 

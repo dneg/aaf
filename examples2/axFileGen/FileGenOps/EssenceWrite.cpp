@@ -47,7 +47,6 @@ void WriteEssence::Execute( const std::vector<AxString>& argv )
 
 	char *busy[4] = { "-", "\\", "|", "/" };
 
-
 	IAAFEssenceAccessSP spAccess;
 	GetInstance( essenceAccessName ).GetCOM( spAccess );
 	AxEssenceAccess axAccess( spAccess );
@@ -55,8 +54,8 @@ void WriteEssence::Execute( const std::vector<AxString>& argv )
 	SampleSource& src = GetSampleSource( *this, essenceSrcName );
 
 	// FIXME - the busy indicator should not be implemented here...
-	// should in axFileGen.cpp
-	
+	// should be in axFileGen.cpp
+
 	std::auto_ptr<SampleSrcBuffer> buf;
 	src.Reset();
 	int count;

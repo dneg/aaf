@@ -74,3 +74,6 @@ typedef ParamMap< aafTapeCaseType_t, aafTapeCaseType_e >		TapeCaseParams;
 typedef ParamMap< aafVideoSignalType_t, aafVideoSignalType_e >	SignalTypeParams;
 typedef ParamMap< aafTapeFormatType_t, aafTapeFormatType_e >	TapeFormatParams;
 typedef ParamMap< aafUID_t, _DDefTag >							DDefParams;
+typedef ParamMap< aafFrameLayout_t, aafFrameLayout_e >          FrameLayoutParams;
+typedef ParamMap< aafColorSpace_t, aafColorSpace_e >            ColorSpaceParams;
+typedef ParamMap< aafPixelFormat_t, aafPixelFormat_e >          PixelFormatParams;

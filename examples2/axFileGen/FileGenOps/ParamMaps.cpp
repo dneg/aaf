@@ -269,6 +269,83 @@ ParamMap< aafUID_t, _DDefTag >::ParamMap()
 template class ParamMap< aafUID_t, _DDefTag >;
 
 //=---------------------------------------------------------------------=
+
+ParamMap< aafFrameLayout_t, aafFrameLayout_e >::ParamMap()
+{
+	_map[ L"kAAFFullFrame" ]      = kAAFFullFrame;
+	_map[ L"FullFrame" ]          = kAAFFullFrame;
+
+	_map[ L"kAAFSeparateFields" ] = kAAFSeparateFields;
+	_map[ L"SeparateFields" ]     = kAAFSeparateFields;
+
+	_map[ L"kAAFOneField" ]       = kAAFOneField;
+	_map[ L"OneField" ]           = kAAFOneField;
+
+	_map[ L"kAAFMixedFields" ]    = kAAFMixedFields;
+	_map[ L"MixedFields" ]        = kAAFMixedFields;
+}
+
+template class ParamMap< aafFrameLayout_t, aafFrameLayout_e >;
+
+//=---------------------------------------------------------------------=
+
+ParamMap< aafColorSpace_t, aafColorSpace_e >::ParamMap()
+{
+ 	_map[ L"kAAFColorSpaceRGB" ]   = kAAFColorSpaceRGB;
+ 	_map[ L"ColorSpaceRGB" ]       = kAAFColorSpaceRGB;
+ 	_map[ L"RGB" ]                 = kAAFColorSpaceRGB;
+
+	_map[ L"kAAFColorSpaceYUV" ]   = kAAFColorSpaceYUV;
+	_map[ L"ColorSpaceYUV" ]       = kAAFColorSpaceYUV;
+	_map[ L"YUV" ]                 = kAAFColorSpaceYUV;
+
+	_map[ L"kAAFColorSpaceYIQ" ]   = kAAFColorSpaceYIQ;
+	_map[ L"ColorSpaceYIQ" ]       = kAAFColorSpaceYIQ;
+	_map[ L"YIQ" ]                 = kAAFColorSpaceYIQ;
+
+	_map[ L"kAAFColorSpaceHSI" ]   = kAAFColorSpaceHSI;
+	_map[ L"ColorSpaceHSI" ]       = kAAFColorSpaceHSI;
+	_map[ L"HSI" ]                 = kAAFColorSpaceHSI;
+
+	_map[ L"kAAFColorSpaceHSV" ]   = kAAFColorSpaceHSV;
+	_map[ L"ColorSpaceHSV" ]       = kAAFColorSpaceHSV;
+	_map[ L"HSV" ]                 = kAAFColorSpaceHSV;
+
+	_map[ L"kAAFColorSpaceYCrCb" ] = kAAFColorSpaceYCrCb;
+	_map[ L"ColorSpaceYCrCb" ]     = kAAFColorSpaceYCrCb;
+	_map[ L"YCrCb" ]               = kAAFColorSpaceYCrCb;
+
+	_map[ L"kAAFColorSpaceYDrDb" ] = kAAFColorSpaceYDrDb;
+	_map[ L"ColorSpaceYDrDb" ]     = kAAFColorSpaceYDrDb;
+	_map[ L"YDrDb" ]               = kAAFColorSpaceYDrDb;
+
+	_map[ L"kAAFColorSpaceCMYK" ]  = kAAFColorSpaceCMYK;
+	_map[ L"ColorSpaceCMYK" ]      = kAAFColorSpaceCMYK;
+	_map[ L"CMYK" ]                = kAAFColorSpaceCMYK;
+}
+
+template class ParamMap< aafColorSpace_t, aafColorSpace_e >;
+
+//=---------------------------------------------------------------------=
+
+ParamMap< aafPixelFormat_t, aafPixelFormat_e >::ParamMap()
+{
+	_map[ L"kAAFPixNone" ] = kAAFPixNone;
+	_map[ L"PixNone" ]     = kAAFPixNone;
+	_map[ L"None" ]        = kAAFPixNone;
+
+	_map[ L"kAAFPixRGBA" ] = kAAFPixRGBA;
+	_map[ L"PixRGBA" ]     = kAAFPixRGBA;
+	_map[ L"RGBA" ]        = kAAFPixRGBA;
+
+	_map[ L"kAAFPixYUV" ]  = kAAFPixYUV;
+	_map[ L"PixYUV" ]      = kAAFPixYUV;
+	_map[ L"YUV" ]         = kAAFPixYUV;
+}
+
+template class ParamMap< aafPixelFormat_t, aafPixelFormat_e >;
+
+//=---------------------------------------------------------------------=
 //=---------------------------------------------------------------------=
 
 // Recipe:
