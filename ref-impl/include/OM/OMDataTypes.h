@@ -175,6 +175,11 @@ typedef OMUInt16 OMStoredForm;
 typedef OMUInt8  OMVersion;
 typedef OMUInt8  OMKeySize;
 
+const OMUInt16 OMPROPERTYSIZE_MAX   = OMUINT16_MAX;
+const OMUInt16 OMPROPERTYCOUNT_MAX  = OMUINT16_MAX;
+const OMUInt32 OMPROPERTYOFFSET_MAX = OMUINT32_MAX;
+const OMUInt8  OMKEYSIZE_MAX        = OMUINT8_MAX;
+
 typedef OMUInt8 OMByteOrder;
 
 const OMByteOrder littleEndian      = 0x4c; // 'L' for little
