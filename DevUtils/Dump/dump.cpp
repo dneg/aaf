@@ -3307,6 +3307,12 @@ void dumpObject(IStorage* storage,
       expectedSize = headSize + (_entryCount * sizeof(IndexEntry));
     }
     if (indexStreamSize < expectedSize) {
+      reportBadIndex(pathName,
+                     _byteOrder,
+                     version,
+                     _entryCount,
+                     expectedSize,
+                     indexStreamSize);
       fatalError("dumpObject", "Property stream too small.");
     }
     // Add in the size of the index stream
