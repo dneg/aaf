@@ -64,7 +64,8 @@ static HRESULT ObjectTest ()
   IAAFFile* pFile = NULL;
   IAAFHeader * pHeader = NULL;
   IAAFDictionary * pDict = NULL;
-  IAAFFiller * pFill = NULL;
+  IAAFCompositionMob * pCMob = NULL;
+  IAAFMob * pMob = NULL;
   IAAFObject * pObj = NULL;
   IEnumAAFProperties * pEnum = NULL;
 
@@ -89,19 +90,24 @@ static HRESULT ObjectTest ()
 	  checkResult (pHeader->GetDictionary (&pDict));
 	  assert (pDict);
 
-	  checkResult (pDict->CreateInstance (&AUID_AAFFiller,
-										  IID_IAAFFiller,
-										  (IUnknown **) &pFill));
-	  assert (pFill);
-	  checkResult (pFill->Initialize (&fillerUID, fillerLength));
+	  checkResult (pDict->CreateInstance (&AUID_AAFCompositionMob,
+										  IID_IAAFCompositionMob,
+										  (IUnknown **) &pCMob));
+	  assert (pCMob);
+	  checkResult (pCMob->Initialize (L"TestMob"));
 	  
-	  checkResult (pFill->QueryInterface (IID_IAAFObject,
+	  checkResult (pCMob->QueryInterface (IID_IAAFMob,
+										  (void **) &pMob));
+	  assert (pMob);
+	  checkResult (pHeader->AppendMob (pMob));
+
+	  checkResult (pCMob->QueryInterface (IID_IAAFObject,
 										  (void **) &pObj));
 	  assert (pObj);
 
 	  aafUInt32 propCount = 0;
 	  checkResult (pObj->CountProperties (&propCount));
-	  checkExpression(2 == propCount, AAFRESULT_TEST_FAILED);
+	  checkExpression(8 == propCount, AAFRESULT_TEST_FAILED);
 
 	  checkResult (pObj->GetProperties (&pEnum));
 	  checkExpression (pEnum != 0, AAFRESULT_TEST_FAILED);
@@ -119,7 +125,7 @@ static HRESULT ObjectTest ()
 	}
 
   if (pEnum) pEnum->Release();
-  if (pFill) pFill->Release();
+  if (pCMob) pCMob->Release();
   if (pObj) pObj->Release();
   if (pDict) pDict->Release();
   if (pHeader) pHeader->Release();
