@@ -346,6 +346,15 @@ sub PrintConfigSummary {
 	}
     }
     print "\n";
+
+    print "\tMobCopy operations using version(s): ";
+    foreach $version ( @{$CFG{Versions}} ) {
+	if ( $CFG{NoCopyMobSupport}{Versions}{$version}  eq "true" ) {
+	    print "$version ";
+	}
+    }
+
+    print "\n";
     print "\tModify operations if creator and modifier byte order differ: $CFG{NoModifySupport}{ByteOrder}\n";
     print "\n";
 
@@ -531,6 +540,10 @@ sub ModifyTest {
 		    print "Excluded: $Cp and $Mp byte order mismatch;\n\n";
 		    $exclude = 1;
 		}
+		elsif ( $T eq "CopyMob" && $CFG{NoCopyMobSupport}{Versions}{$Mv} eq "true" ) {
+		    print "Excluded: $Mv does not support CopyMob.\n\n";
+		    $exclude = 1;
+		}  
 		elsif ( IsReadableByVersion( $Cv, $Mv ) eq "false" ) {
 		    print "Excluded: ${Cv} cannot be read by ${Mv}.\n\n";
 		    $exclude = 1;
