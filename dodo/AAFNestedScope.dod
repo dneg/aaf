@@ -6,7 +6,6 @@ AAFNestedScope\
 AAFSegment\
 #endm
 #c
-#import ./AAFUnitTest.exp
 AD_HEAD
 
 AD_INCLUDE(AAFTypes)
@@ -61,7 +60,4 @@ AD_XMETHOD1(GetSlots,
 			Slots - segment list  enumeration,
 			Returns an enumerator for aaf segment.)
 
-AD_OVERRIDE(.method-Test)
-
 AD_CLASS_END
-

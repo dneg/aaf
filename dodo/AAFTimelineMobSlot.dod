@@ -6,7 +6,6 @@ AAFTimelineMobSlot\
 AAFMobSlot\
 #endm
 #c
-#import ./AAFUnitTest.exp
 #import ./AAFObject.exp
 #import ./AAFMobSlot.exp
 
@@ -45,9 +44,6 @@ This method will return the origin of this mob slot.)
 AD_METHOD1(GetTrackID,
 [out\\\,retval], aafTrackID_t *, result, Track id of the Mob Slot,
 This method will return the track id of this mob slot.)
-
-
-AD_OVERRIDE(.method-Test)
 
 AD_OVERRIDE(.method-IsATrack)
 

@@ -6,7 +6,6 @@ AAFSourceReference\
 AAFSegment\
 #endm
 #c
-#import ./AAFUnitTest.exp
 #import ./AAFSegment.dod
 AD_HEAD
 /******************************************\
@@ -46,9 +45,5 @@ AD_METHOD1(SetSourceMobSlotID,
 		   mobSlotID,
 		   Source Mob ID to set,
 		   Sets the mob slot ID using the mobSlotID argument.)
-
-
-AD_OVERRIDE(.method-Test)
-
 
 AD_CLASS_END
