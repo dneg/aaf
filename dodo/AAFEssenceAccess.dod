@@ -236,7 +236,7 @@ Given an AAFEssenceFormat\, read the essence parameters inside and change the fi
 /****/
 AD_METHOD2(GetCodecName,
 [in],aafUInt32,namelen,The size of the name buffer to be filled,
-[out\\\,size_is\\\(namelen\\\)],wchar_t *,name,The buffer to fill,
+[out\\\,size_is\\\(namelen\\\)],aafCharacter *,name,The buffer to fill,
 Returns the full name of the given codec expanded for human consumption.)
 	//@comm No other call uses this name, so it may be fully descriptive, esp. of limitations.
 	//@comm The name will be truncated to fit within "buflen" bytes.
