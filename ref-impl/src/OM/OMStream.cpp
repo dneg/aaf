@@ -152,7 +152,7 @@ void OMStream::write(const OMByte* bytes,
   POSTCONDITION("All bytes written", actualByteCount == byteCount);
 }
 
-OMUInt64 OMStream::size(void)
+OMUInt64 OMStream::size(void) const
 {
   TRACE("OMStream::size");
   PRECONDITION("No error on stream", ferror(_file) == 0);
@@ -187,7 +187,8 @@ OMUInt64 OMStream::size(void)
 	OMUInt64 result = position();
 
 	// back to where we started from
-	setPosition( oldposition );
+	OMStream* nonConstThis = const_cast<OMStream*>(this);
+	nonConstThis->setPosition( oldposition );
 
 	return result;
 }
