@@ -1410,6 +1410,7 @@ void OMMSSStoredObject::save(const OMStoredVectorIndex* vector,
   // Create the stream.
   //
   IStream* vectorIndexStream = createStream(_storage, vectorIndexName);
+  delete [] vectorIndexName;
 
   // Write the count of elements.
   //
@@ -1438,8 +1439,6 @@ void OMMSSStoredObject::save(const OMStoredVectorIndex* vector,
   // Close the stream.
   //
   closeStream(vectorIndexStream);
-
-  delete [] vectorIndexName;
 }
 
   // @mfunc  Save the <c OMStoredSetIndex> <p set> in this
@@ -1460,6 +1459,7 @@ void OMMSSStoredObject::save(const OMStoredSetIndex* set,
   // Create the stream.
   //
   IStream* setIndexStream = createStream(_storage, setIndexName);
+  delete [] setIndexName;
 
   // Write the count of elements.
   //
@@ -1513,13 +1513,11 @@ void OMMSSStoredObject::save(const OMStoredSetIndex* set,
                                                 _reorderBytes);
     }
   }
+  delete [] key;
 
   // Close the stream.
   //
   closeStream(setIndexStream);
-
-  delete [] key;
-  delete [] setIndexName;
 }
 
   // @mfunc Save a single weak reference.
@@ -1581,6 +1579,7 @@ void OMMSSStoredObject::save(const wchar_t* collectionName,
   // Create the stream.
   //
   IStream* indexStream = createStream(_storage, indexName);
+  delete [] indexName;
 
   // Write the count of elements.
   //
@@ -1618,8 +1617,6 @@ void OMMSSStoredObject::save(const wchar_t* collectionName,
   // Close the stream.
   //
   closeStream(indexStream);
-
-  delete [] indexName;
 }
 
 void OMMSSStoredObject::saveStream(OMPropertyId pid,
@@ -1671,6 +1668,7 @@ void OMMSSStoredObject::restore(OMStoredVectorIndex*& vector,
   // Open the stream.
   //
   IStream* vectorIndexStream = openStream(_storage, vectorIndexName);
+  delete [] vectorIndexName;
 
   // Read the count of elements.
   //
@@ -1712,8 +1710,6 @@ void OMMSSStoredObject::restore(OMStoredVectorIndex*& vector,
   //
   closeStream(vectorIndexStream);
 
-  delete [] vectorIndexName;
-
   vector = vectorIndex;
 }
 
@@ -1734,6 +1730,7 @@ void OMMSSStoredObject::restore(OMStoredSetIndex*& set,
   // Open the stream.
   //
   IStream* setIndexStream = openStream(_storage, setIndexName);
+  delete [] setIndexName;
 
   // Read the count of elements.
   //
@@ -1801,8 +1798,6 @@ void OMMSSStoredObject::restore(OMStoredSetIndex*& set,
   //
   closeStream(setIndexStream);
 
-  delete [] setIndexName;
-
   set = setIndex;
 }
 
@@ -1868,6 +1863,7 @@ void OMMSSStoredObject::restore(const wchar_t* collectionName,
   // Open the stream.
   //
   IStream* indexStream = openStream(_storage, indexName);
+  delete [] indexName;
 
   // Read the count of elements.
   //
@@ -1910,8 +1906,6 @@ void OMMSSStoredObject::restore(const wchar_t* collectionName,
   // Close the stream.
   //
   closeStream(indexStream);
-
-  delete [] indexName;
 
   index = collectionIndex;
 }
