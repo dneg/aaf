@@ -339,8 +339,7 @@ AAFRESULT ImplAAFEssenceGroup::GetMinimumBounds(aafPosition_t rootPos, aafLength
 		  else
 			criteriaStruct.type = kAAFAnyRepresentation;
 		  ptrCriteriaStruct = &criteriaStruct;
-		  CHECK(((ImplAAFMasterMob *)this)->GetCriteriaSegment(trackID,
-											  ptrCriteriaStruct, &critClip));
+		  CHECK(this->GetCriteriaSegment(ptrCriteriaStruct, &critClip));
 
 		  if (critClip)
 			{
