@@ -868,22 +868,6 @@ HRESULT STDMETHODCALLTYPE
   return hr;
 }
 
-  // 
-  // Succeeds if all of the following are true:
-  // - the ppSourceRef pointer is valid.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\(\) called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - ppSourceRef arg is NULL.)
 
 
 HRESULT STDMETHODCALLTYPE

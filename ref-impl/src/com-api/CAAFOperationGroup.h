@@ -453,29 +453,29 @@ public:
   // SetRender()
   //
   // This function sets the final rendering for the given operation
-  // group to the input source clip.  Multiple renderings may exist if
+  // group to the input source clip.  (Multiple renderings may exist if
   // the source clip refers to a master mob that contains a Essence
-  // group.
-  //
-  STDMETHOD (SetRender) (
-    // A segment containing a representation of the rendering 
-    /*[in]*/ IAAFSourceReference * ppSourceRef);
+  // group.)
   // 
   // Succeeds if all of the following are true:
   // - the ppSourceRef pointer is valid.
   // 
   // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
+  // the listed errors is in effect, it will return the first one
   // encountered in the order given below:
   // 
   // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
+  //   - succeeded.  (This is the only code indicating success.)
   //
   // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\(\) called on it.
+  //   - This object has not yet had Initialize() called on it.
   //
   // AAFRESULT_NULL_PARAM
-  //   - ppSourceRef arg is NULL.)
+  //   - ppSourceRef arg is NULL.
+  //
+  STDMETHOD (SetRender) (
+    // A segment containing a representation of the rendering 
+    /*[in]*/ IAAFSourceReference * ppSourceRef);
 
 
   //***********************************************************
