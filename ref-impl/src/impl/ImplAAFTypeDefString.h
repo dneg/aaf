@@ -36,6 +36,9 @@ class ImplAAFPropertyValue;
 #include "ImplAAFTypeDef.h"
 #endif
 
+#include "OMWeakRefVectorProperty.h"
+#include "OMWeakRefProperty.h"
+
 class ImplAAFTypeDefString : public ImplAAFTypeDef
 {
 public:

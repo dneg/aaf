@@ -38,6 +38,7 @@ class ImplEnumAAFPropertyValues;
 #include "ImplAAFTypeDef.h"
 #endif
 
+#include "OMWeakRefVectorProperty.h"
 
 class ImplAAFTypeDefRecord : public ImplAAFTypeDef
 {
