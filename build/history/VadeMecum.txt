@@ -32,7 +32,7 @@ There are 6 steps
 
 2) add the new tag and the corresponding date and time to AAFtagdates
 
-3) generate a complete set of new pages and a new index
+3) generate new pages and a new index
 
 4) upload the new/changed pages and updated index to the web site
 
@@ -59,7 +59,7 @@ method given below for finding the dates/times corresponding to cvs
 tags. Either way you must add the tag and its date/time to the
 AAFtagdates file.
 
-Generate a complete set of new pages and a new index
+Generate new pages and a new index
 
 The cvs commands used by the AAFmkchangelogs script must be able to
 find the cvs repository so you must set the CVSROOT environment
@@ -71,11 +71,17 @@ root of a working copy. For example -
 $ cd your-working-copy/AAF
 $ ./build/history/AAFmkchangelogs
 
-Note that this step regenerates all the pages and creates an completly
-new index. This may seem wasteful but is useful to ensure that the
-generated pages are up to date with other changes. For example, a
+Note that the first time you you execute this step, all of the pages
+are generated from scratch. If you retain the output (and
+intermediate) files, the next time only pages corresponding to new
+tags will be created.
+
+To ensure that the generated pages are up to date with other changes
+you should remove the output (and intermediate) files. For example, a
 change to the color map (AAFcolormap) might cause all pages to be
-generated differently.
+generated differently. If you add a tag between (in time) existing
+tags you must remove the output and intermediate files othwise you
+will create overlapping pages.
 
 Upload the new (or changed) pages and updated index to the web site
 
