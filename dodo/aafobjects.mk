@@ -1,4 +1,4 @@
-#
+#!/bin/sh
 #
 # Advanced Authoring Format
 #
