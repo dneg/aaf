@@ -1,5 +1,5 @@
 // @doc INTERNAL
-// @com This file implements the module test for CAAFDefinitionObject
+// @com This file implements the module test for CAAFTypeDefVariableArray
 /******************************************\
 *                                          *
 * Advanced Authoring Format                *
@@ -13,17 +13,11 @@
 
 
 
-#include "CAAFTypeDefVariableArray.h"
-#include "CAAFTypeDefVariableArray.h"
-#ifndef __CAAFTypeDefVariableArray_h__
-#error - improperly defined include guard
-#endif
-
-
+#include "AAFTypes.h" //Use #include "AAF.h" for functional module test.
 #include "AAFResult.h"
 
 
-HRESULT CAAFTypeDefVariableArray::test()
+extern "C" HRESULT CAAFTypeDefVariableArray_test()
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
