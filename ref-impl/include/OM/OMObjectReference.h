@@ -71,6 +71,9 @@ public:
     // @cmember Close this <c OMObjectReference>.
   virtual void close(void) = 0;
 
+    // @cmember Detach this <c OMObjectReference>.
+  virtual void detach(void) = 0;
+
     // @cmember Restore this <c OMObjectReference>.
   virtual void restore(void) = 0;
 
@@ -157,6 +160,9 @@ public:
     // @cmember Close this <c OMStrongObjectReference>.
   virtual void close(void);
 
+    // @cmember Detach this <c OMStrongObjectReference>.
+  virtual void detach(void);
+
     // @cmember Restore this <c OMStrongObjectReference>.
   virtual void restore(void);
 
@@ -217,6 +223,9 @@ public:
 
     // @cmember Close this <c OMWeakObjectReference>.
   virtual void close(void);
+
+    // @cmember Detach this <c OMWeakObjectReference>.
+  virtual void detach(void);
 
     // @cmember Restore this <c OMWeakObjectReference>.
   virtual void restore(void);
