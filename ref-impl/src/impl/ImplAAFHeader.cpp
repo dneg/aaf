@@ -653,22 +653,6 @@ AAFRESULT ImplAAFHeader::LoadMobTables(void)
 	return(cstore->LoadMobTables());
 }
 
-AAFRESULT ImplAAFHeader::IsValidHeadObject(void)
-{
-#if FULL_TOOLKIT
-	aafClassID_t  		omfiID;
-
-	if (GetClassID(omfiID) != AAFRESULT_SUCCESS)
-		  return(AAFRESULT_NOTAAFFILE);
-	if (!streq(omfiID, "HEAD"))
-	  return(AAFRESULT_NOTAAFFILE);
-	return(AAFRESULT_SUCCESS);
-#else
-  return AAFRESULT_NOT_IMPLEMENTED;
-#endif
-}
-
-
 // trr - NOTE: Eventhough this method returns a reference counted object it
 // does NOT bump the reference count. Currently only other file that calls
 // this method is ImplAAFMob.cpp. We should probably make this method protected
