@@ -416,6 +416,15 @@ OMObject* OMWeakReferenceProperty<ReferencedObject>::clearObject(void)
 }
 
 template <typename ReferencedObject>
+const OMUniqueObjectIdentification&
+OMWeakReferenceProperty<ReferencedObject>::identification(void) const
+{
+  TRACE("OMWeakReferenceProperty<ReferencedObject>::identification");
+
+  return reference().identification();
+}
+
+template <typename ReferencedObject>
 OMWeakObjectReference&
 OMWeakReferenceProperty<ReferencedObject>::reference(void) const
 {

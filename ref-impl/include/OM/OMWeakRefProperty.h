@@ -117,6 +117,8 @@ public:
     // @cmember Clear the value of this <c OMWeakReferenceProperty>.
   virtual OMObject* clearObject(void);
 
+  const OMUniqueObjectIdentification& identification(void) const;
+
   virtual OMWeakObjectReference& reference(void) const;
 
     // @cmember The <c OMStrongReferenceSet> in which the object
