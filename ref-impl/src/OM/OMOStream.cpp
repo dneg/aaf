@@ -110,7 +110,7 @@ OMOStream& OMOStream::put(OMUInt32 i)
 {
   TRACE("OMOStream::put");
 
-  cerr << dec << i;
+  cerr << i;
   return *this;
 }
 
