@@ -58,7 +58,7 @@ public:
     // const AUID* generation
     );
 
-  OMDECLARE_STORABLE(AAFIdentification);
+  OMDECLARE_STORABLE(ImplAAFIdentification);
 
 
   //****************
