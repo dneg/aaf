@@ -116,10 +116,6 @@ AD_METHOD1(SetRef,
   // startTime\\\).)
 
 
-AD_OVERRIDE(.method-GetSourceID)
-AD_OVERRIDE(.method-SetSourceID)
-AD_OVERRIDE(.method-GetSourceMobSlotID)
-AD_OVERRIDE(.method-SetSourceMobSlotID)
 
 
 AD_CLASS_END
