@@ -161,11 +161,11 @@ OMStoredObject* OMStoredObject::openRead(const wchar_t* fileName)
   TRACE("OMStoredObject::openRead");
   PRECONDITION("Valid file name", validWideString(fileName));
 
-  OMStoredObject* newStoredObject = OMStoredObject::open(fileName,
-                                                         OMFile::readOnlyMode);
-  newStoredObject->open(OMFile::readOnlyMode);
+  OMStoredObject* newStore = OMStoredObject::openFile(fileName,
+                                                      OMFile::readOnlyMode);
+  newStore->open(OMFile::readOnlyMode);
 
-  return newStoredObject;
+  return newStore;
 }
 
   // @mfunc Open the root <c OMStoredObject> in the disk file
@@ -178,11 +178,11 @@ OMStoredObject* OMStoredObject::openModify(const wchar_t* fileName)
   TRACE("OMStoredObject::openModify");
   PRECONDITION("Valid file name", validWideString(fileName));
 
-  OMStoredObject* newStoredObject = OMStoredObject::open(fileName,
-                                                         OMFile::modifyMode);
-  newStoredObject->open(OMFile::modifyMode);
+  OMStoredObject* newStore = OMStoredObject::openFile(fileName,
+                                                      OMFile::modifyMode);
+  newStore->open(OMFile::modifyMode);
 
-  return newStoredObject;
+  return newStore;
 }
 
   // @mfunc Create a new root <c OMStoredObject> in the disk file
@@ -200,10 +200,10 @@ OMStoredObject* OMStoredObject::createModify(const wchar_t* fileName,
   PRECONDITION("Valid byte order",
                       (byteOrder == littleEndian) || (byteOrder == bigEndian));
 
-  OMStoredObject* newStoredObject = OMStoredObject::create(fileName);
-  newStoredObject->create(byteOrder);
+  OMStoredObject* newStore = OMStoredObject::createFile(fileName);
+  newStore->create(byteOrder);
 
-  return newStoredObject;
+  return newStore;
 }
 
   // @mfunc Save the <c OMPropertySet> <p properties> in this
@@ -371,10 +371,10 @@ void OMStoredObject::restore(OMPropertySet& properties)
                                        streamPosition(_properties) == 0);
 }
 
-OMStoredObject* OMStoredObject::open(const wchar_t* fileName,
-                                     const OMFile::OMAccessMode mode)
+OMStoredObject* OMStoredObject::openFile(const wchar_t* fileName,
+                                         const OMFile::OMAccessMode mode)
 {
-  TRACE("OMStoredObject::open");
+  TRACE("OMStoredObject::openFile");
   PRECONDITION("Valid file name", validWideString(fileName));
   PRECONDITION("Valid mode", (mode == OMFile::modifyMode) ||
                              (mode == OMFile::readOnlyMode));
@@ -407,9 +407,9 @@ OMStoredObject* OMStoredObject::open(const wchar_t* fileName,
   return newStoredObject;
 }
 
-OMStoredObject* OMStoredObject::create(const wchar_t* fileName)
+OMStoredObject* OMStoredObject::createFile(const wchar_t* fileName)
 {
-  TRACE("OMStoredObject::create");
+  TRACE("OMStoredObject::createFile");
   PRECONDITION("Valid file name", validWideString(fileName));
 
   OMCHAR omFileName[256];
