@@ -233,6 +233,10 @@ SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFIntraFrameMarkerTest.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFKLVDataTest.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFLocatorTest.cpp
 # End Source File
 # Begin Source File
@@ -494,6 +498,10 @@ SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CEnumAAFIdentificationsTes
 # Begin Source File
 
 SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CEnumAAFInterpolateDefsTest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CEnumAAFKLVDataTest.cpp
 # End Source File
 # Begin Source File
 
