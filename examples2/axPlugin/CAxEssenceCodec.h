@@ -21,6 +21,8 @@
 //
 //=---------------------------------------------------------------------=
 
+#include "AxPluginUtil.h"
+
 #include <AAFPlugin.h>
 #include <AAFResult.h>
 
