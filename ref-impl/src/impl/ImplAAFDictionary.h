@@ -77,6 +77,7 @@ class ImplAAFTypeDefSet;
 
 
 #include "OMClassFactory.h"
+#include "OMStrongRefSetProperty.h"
 
 
 #include "ImplAAFClassDef.h"
