@@ -3897,7 +3897,7 @@ HRESULT STDMETHODCALLTYPE
 }
 
 HRESULT STDMETHODCALLTYPE
-    CAAFDictionary::LookupDescriptiveDataDef (IAAFDataDef ** ppDataDef)
+    CAAFDictionary::LookupDescriptiveMetadataDataDef (IAAFDataDef ** ppDataDef)
 {
   HRESULT hr;
 
@@ -3920,7 +3920,7 @@ HRESULT STDMETHODCALLTYPE
 
   try
     {
-      hr = ptr->LookupDescriptiveDataDef (pinternalppDataDef);
+      hr = ptr->LookupDescriptiveMetadataDataDef (pinternalppDataDef);
     }
   catch (OMException& e)
     {

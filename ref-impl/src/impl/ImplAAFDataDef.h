@@ -146,12 +146,12 @@ public:
         (aafBool *  bIsAuxiliaryKind);
 
   //****************
-  // IsDescriptiveKind()
+  // IsDescriptiveMetadataKind()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    IsDescriptiveKind
+    IsDescriptiveMetadataKind
         // @parm [retval,out] pointer to the return value
-        (aafBool *  bIsDescriptiveKind);
+        (aafBool *  bIsDescriptiveMetadataKind);
 
 
 private:

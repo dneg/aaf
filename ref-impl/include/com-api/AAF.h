@@ -34924,8 +34924,8 @@ EXTERN_C const IID IID_IAAFDataDef3;
         virtual HRESULT STDMETHODCALLTYPE IsAuxiliaryKind( 
             /* [out][retval] */ aafBoolean_t __RPC_FAR *bIsAuxiliaryKind) = 0;
         
-        virtual HRESULT STDMETHODCALLTYPE IsDescriptiveKind( 
-            /* [out][retval] */ aafBoolean_t __RPC_FAR *bIsDescriptiveKind) = 0;
+        virtual HRESULT STDMETHODCALLTYPE IsDescriptiveMetadataKind( 
+            /* [out][retval] */ aafBoolean_t __RPC_FAR *bIsDescriptiveMetadataKind) = 0;
         
     };
     
@@ -34995,9 +34995,9 @@ EXTERN_C const IID IID_IAAFDataDef3;
             IAAFDataDef3 __RPC_FAR * This,
             /* [out][retval] */ aafBoolean_t __RPC_FAR *bIsAuxiliaryKind);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsDescriptiveKind )( 
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsDescriptiveMetadataKind )( 
             IAAFDataDef3 __RPC_FAR * This,
-            /* [out][retval] */ aafBoolean_t __RPC_FAR *bIsDescriptiveKind);
+            /* [out][retval] */ aafBoolean_t __RPC_FAR *bIsDescriptiveMetadataKind);
         
         END_INTERFACE
     } IAAFDataDef3Vtbl;
@@ -35055,8 +35055,8 @@ EXTERN_C const IID IID_IAAFDataDef3;
 #define IAAFDataDef3_IsAuxiliaryKind(This,bIsAuxiliaryKind)	\
     (This)->lpVtbl -> IsAuxiliaryKind(This,bIsAuxiliaryKind)
 
-#define IAAFDataDef3_IsDescriptiveKind(This,bIsDescriptiveKind)	\
-    (This)->lpVtbl -> IsDescriptiveKind(This,bIsDescriptiveKind)
+#define IAAFDataDef3_IsDescriptiveMetadataKind(This,bIsDescriptiveMetadataKind)	\
+    (This)->lpVtbl -> IsDescriptiveMetadataKind(This,bIsDescriptiveMetadataKind)
 
 #endif /* COBJMACROS */
 
@@ -35202,12 +35202,12 @@ void __RPC_STUB IAAFDataDef3_IsAuxiliaryKind_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IAAFDataDef3_IsDescriptiveKind_Proxy( 
+HRESULT STDMETHODCALLTYPE IAAFDataDef3_IsDescriptiveMetadataKind_Proxy( 
     IAAFDataDef3 __RPC_FAR * This,
-    /* [out][retval] */ aafBoolean_t __RPC_FAR *bIsDescriptiveKind);
+    /* [out][retval] */ aafBoolean_t __RPC_FAR *bIsDescriptiveMetadataKind);
 
 
-void __RPC_STUB IAAFDataDef3_IsDescriptiveKind_Stub(
+void __RPC_STUB IAAFDataDef3_IsDescriptiveMetadataKind_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
@@ -35413,7 +35413,7 @@ EXTERN_C const IID IID_IAAFDictionary2;
         virtual HRESULT STDMETHODCALLTYPE LookupAuxiliaryDataDef( 
             /* [retval][out] */ IAAFDataDef __RPC_FAR *__RPC_FAR *ppDataDef) = 0;
         
-        virtual HRESULT STDMETHODCALLTYPE LookupDescriptiveDataDef( 
+        virtual HRESULT STDMETHODCALLTYPE LookupDescriptiveMetadataDataDef( 
             /* [retval][out] */ IAAFDataDef __RPC_FAR *__RPC_FAR *ppDataDef) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE LookupEdgecodeDataDef( 
@@ -35696,7 +35696,7 @@ EXTERN_C const IID IID_IAAFDictionary2;
             IAAFDictionary2 __RPC_FAR * This,
             /* [retval][out] */ IAAFDataDef __RPC_FAR *__RPC_FAR *ppDataDef);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LookupDescriptiveDataDef )( 
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LookupDescriptiveMetadataDataDef )( 
             IAAFDictionary2 __RPC_FAR * This,
             /* [retval][out] */ IAAFDataDef __RPC_FAR *__RPC_FAR *ppDataDef);
         
@@ -35921,8 +35921,8 @@ EXTERN_C const IID IID_IAAFDictionary2;
 #define IAAFDictionary2_LookupAuxiliaryDataDef(This,ppDataDef)	\
     (This)->lpVtbl -> LookupAuxiliaryDataDef(This,ppDataDef)
 
-#define IAAFDictionary2_LookupDescriptiveDataDef(This,ppDataDef)	\
-    (This)->lpVtbl -> LookupDescriptiveDataDef(This,ppDataDef)
+#define IAAFDictionary2_LookupDescriptiveMetadataDataDef(This,ppDataDef)	\
+    (This)->lpVtbl -> LookupDescriptiveMetadataDataDef(This,ppDataDef)
 
 #define IAAFDictionary2_LookupEdgecodeDataDef(This,ppDataDef)	\
     (This)->lpVtbl -> LookupEdgecodeDataDef(This,ppDataDef)
@@ -36624,12 +36624,12 @@ void __RPC_STUB IAAFDictionary2_LookupAuxiliaryDataDef_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IAAFDictionary2_LookupDescriptiveDataDef_Proxy( 
+HRESULT STDMETHODCALLTYPE IAAFDictionary2_LookupDescriptiveMetadataDataDef_Proxy( 
     IAAFDictionary2 __RPC_FAR * This,
     /* [retval][out] */ IAAFDataDef __RPC_FAR *__RPC_FAR *ppDataDef);
 
 
-void __RPC_STUB IAAFDictionary2_LookupDescriptiveDataDef_Stub(
+void __RPC_STUB IAAFDictionary2_LookupDescriptiveMetadataDataDef_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,

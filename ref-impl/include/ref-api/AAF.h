@@ -36661,13 +36661,13 @@ DECLARE_INTERFACE_(IAAFDataDef3, IUnknown)
 
   //***********************************************************
   //
-  // IsDescriptiveKind()
+  // IsDescriptiveMetadataKind()
   //
-  // Sets return value to TRUE if DataDef is descriptive.
+  // Sets return value to TRUE if DataDef is descriptive metadata.
   //
-  STDMETHOD(IsDescriptiveKind) (THIS_
+  STDMETHOD(IsDescriptiveMetadataKind) (THIS_
     // pointer to the return value
-    /*[retval,out]*/ aafBoolean_t *  bIsDescriptiveKind) PURE;
+    /*[retval,out]*/ aafBoolean_t *  bIsDescriptiveMetadataKind) PURE;
 
 
   END_INTERFACE
@@ -37780,9 +37780,9 @@ DECLARE_INTERFACE_(IAAFDictionary2, IUnknown)
 
   //***********************************************************
   //
-  // LookupDescriptiveDataDef()
+  // LookupDescriptiveMetadataDataDef()
   //
-  // Return the Descriptive Data Definition Object.
+  // Return the Descriptive Metadata Data Definition Object.
   // 
   // Succeeds if:
   // - The ppDataDef pointer is valid.
@@ -37797,7 +37797,7 @@ DECLARE_INTERFACE_(IAAFDictionary2, IUnknown)
   // AAFRESULT_NULL_PARAM
   //   - ppDataDef arg is NULL.
   //
-  STDMETHOD(LookupDescriptiveDataDef) (THIS_
+  STDMETHOD(LookupDescriptiveMetadataDataDef) (THIS_
     // Data Definition Object
     /*[out,retval]*/ IAAFDataDef ** ppDataDef) PURE;
 

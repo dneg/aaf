@@ -1157,11 +1157,11 @@ public:
   );
 
   //***********************************************************
-  // METHOD NAME: LookupDescriptiveDataDef()
+  // METHOD NAME: LookupDescriptiveMetadataDataDef()
   //
   // DESCRIPTION:
-  // @mfunc AAFRESULT | AAFDictionary2 | LookupDescriptiveDataDef |
-  // Return the Descriptive Data Definition Object.
+  // @mfunc AAFRESULT | AAFDictionary2 | LookupDescriptiveMetadataDataDef |
+  // Return the Descriptive Metadata Data Definition Object.
   // 
   // Succeeds if:
   // - The ppDataDef pointer is valid.
@@ -1177,7 +1177,7 @@ public:
   //   - ppDataDef arg is NULL.
   // @end
   // 
-  STDMETHOD (LookupDescriptiveDataDef)
+  STDMETHOD (LookupDescriptiveMetadataDataDef)
    (
     // @parm [out,retval] AAFDataDef | ppDataDef | Data Definition Object
     IAAFDataDef ** ppDataDef

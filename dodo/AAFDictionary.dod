@@ -866,7 +866,7 @@ AD_COM_METH(.method-GetTaggedValueDefs)
 AD_COM_METH(.method-CountTaggedValueDefs)
 
 AD_COM_METH(.method-LookupAuxiliaryDataDef)
-AD_COM_METH(.method-LookupDescriptiveDataDef)
+AD_COM_METH(.method-LookupDescriptiveMetadataDataDef)
 AD_COM_METH(.method-LookupEdgecodeDataDef)
 AD_COM_METH(.method-LookupLegacyPictureDataDef)
 AD_COM_METH(.method-LookupLegacySoundDataDef)

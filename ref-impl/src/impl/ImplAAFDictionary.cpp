@@ -1483,7 +1483,7 @@ void ImplAAFDictionary::InitContainerDef(const aafUID_t & defID,
 void ImplAAFDictionary::InitBuiltins()
 {
   InitDataDef (kAAFDataDef_Auxiliary, L"Auxiliary", L"Auxiliary data");
-  InitDataDef (kAAFDataDef_Descriptive, L"Descriptive", L"Descriptive data");
+  InitDataDef (kAAFDataDef_DescriptiveMetadata, L"DescriptiveMetadata", L"Descriptive Metadata");
   InitDataDef (kAAFDataDef_Edgecode, L"Edgecode", L"Edgecode data");
   InitDataDef (kAAFDataDef_Matte, L"Matte", L"Matte data");
   InitDataDef (kAAFDataDef_Picture, L"Picture", L"Picture data");
@@ -1903,12 +1903,12 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFDictionary::LookupDescriptiveDataDef (
+    ImplAAFDictionary::LookupDescriptiveMetadataDataDef (
       ImplAAFDataDef **ppDataDef)
 {
   if (!ppDataDef) return AAFRESULT_NULL_PARAM;
 
-  AAFRESULT hr = LookupDataDef( kAAFDataDef_Descriptive, ppDataDef );
+  AAFRESULT hr = LookupDataDef( kAAFDataDef_DescriptiveMetadata, ppDataDef );
   assert(AAFRESULT_SUCCEEDED (hr));
   assert(NULL != *ppDataDef);
 

@@ -178,10 +178,10 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFDataDef::IsDescriptiveKind (
-      aafBool *bIsDescriptiveKind)
+    ImplAAFDataDef::IsDescriptiveMetadataKind (
+      aafBool *bIsDescriptiveMetadataKind)
 {
-	return(IsDataDefOf(GetDict()->GetBuiltinDefs()->ddkAAFDescriptive(), bIsDescriptiveKind));
+	return(IsDataDefOf(GetDict()->GetBuiltinDefs()->ddkAAFDescriptiveMetadata(), bIsDescriptiveMetadataKind));
 }
 
 

@@ -273,7 +273,7 @@ public:
 
   // defines ddkAAFXXX() which use AAF v1.1 values
   DATA_DEF_METHOD(Auxiliary);
-  DATA_DEF_METHOD(Descriptive);
+  DATA_DEF_METHOD(DescriptiveMetadata);
   DATA_DEF_METHOD(Edgecode);
   DATA_DEF_METHOD(Matte);
   DATA_DEF_METHOD(Picture);

@@ -404,8 +404,8 @@ static void ReadAAFFile(aafWChar * pFileName)
             printf("\"%s\" (recognized as Edgecode)\n", chName);
           else if (memcmp( &id, &kAAFDataDef_Auxiliary, sizeof(id)) == 0)
             printf("\"%s\" (recognized as Auxiliary)\n", chName);
-          else if (memcmp( &id, &kAAFDataDef_Descriptive, sizeof(id)) == 0)
-            printf("\"%s\" (recognized as Descriptive)\n", chName);
+          else if (memcmp( &id, &kAAFDataDef_DescriptiveMetadata, sizeof(id)) == 0)
+            printf("\"%s\" (recognized as DescriptiveMetadata)\n", chName);
           else if (memcmp( &id, &kAAFDataDef_Matte, sizeof(id)) == 0)
             printf("\"%s\" (recognized as Matte)\n", chName);
           else

@@ -684,10 +684,10 @@ public:
         (ImplAAFDataDef ** ppDataDef);
 
   //****************
-  // LookupDescriptiveDataDef()
+  // LookupDescriptiveMetadataDataDef()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    LookupDescriptiveDataDef
+    LookupDescriptiveMetadataDataDef
         // @parm [out,retval] Data Definition Object
         (ImplAAFDataDef ** ppDataDef);
 

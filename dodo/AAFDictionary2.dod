@@ -999,14 +999,14 @@ AD_XMETHOD1(LookupAuxiliaryDataDef,
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppDataDef\))
 
-AD_XMETHOD1(LookupDescriptiveDataDef,
+AD_XMETHOD1(LookupDescriptiveMetadataDataDef,
 
 			[out\,retval],
 			objOut,
 			AAFDataDef,
 			ppDataDef,
 			Data Definition Object,
-			Return the Descriptive Data Definition Object.
+			Return the Descriptive Metadata Data Definition Object.
   // 
   // Succeeds if:
   // - The ppDataDef pointer is valid.

@@ -196,7 +196,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 			else if (slot==3)
 				checkResult(pDictionary2->LookupEdgecodeDataDef(&pSeqDataDef));
 			else if (slot==4)
-				checkResult(pDictionary2->LookupDescriptiveDataDef(&pSeqDataDef));
+				checkResult(pDictionary2->LookupDescriptiveMetadataDataDef(&pSeqDataDef));
 			else if (slot==5)
 				checkResult(pDictionary2->LookupAuxiliaryDataDef(&pSeqDataDef));
 			else if (slot==6)
@@ -440,8 +440,8 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 					else
 						checkExpression(testBool == kAAFFalse, AAFRESULT_TEST_FAILED);
 
-					checkResult(pDataDef3->IsDescriptiveKind(&testBool));
-					if (slot==4) // descriptive
+					checkResult(pDataDef3->IsDescriptiveMetadataKind(&testBool));
+					if (slot==4) // descriptive metadata
 						checkExpression(testBool == kAAFTrue, AAFRESULT_TEST_FAILED);
 					else
 						checkExpression(testBool == kAAFFalse, AAFRESULT_TEST_FAILED);

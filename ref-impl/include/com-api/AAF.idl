@@ -36390,13 +36390,13 @@ interface IAAFDataDef3 : IUnknown
 
   //***********************************************************
   //
-  // IsDescriptiveKind()
+  // IsDescriptiveMetadataKind()
   //
-  // Sets return value to TRUE if DataDef is descriptive.
+  // Sets return value to TRUE if DataDef is descriptive metadata.
   // 
-  HRESULT IsDescriptiveKind (
+  HRESULT IsDescriptiveMetadataKind (
     // pointer to the return value
-    [retval,out] aafBoolean_t *  bIsDescriptiveKind);
+    [retval,out] aafBoolean_t *  bIsDescriptiveMetadataKind);
 
 }
 
@@ -37484,9 +37484,9 @@ interface IAAFDictionary2 : IUnknown
 
   //***********************************************************
   //
-  // LookupDescriptiveDataDef()
+  // LookupDescriptiveMetadataDataDef()
   //
-  // Return the Descriptive Data Definition Object.
+  // Return the Descriptive Metadata Data Definition Object.
   // 
   // Succeeds if:
   // - The ppDataDef pointer is valid.
@@ -37501,7 +37501,7 @@ interface IAAFDictionary2 : IUnknown
   // AAFRESULT_NULL_PARAM
   //   - ppDataDef arg is NULL.
   // 
-  HRESULT LookupDescriptiveDataDef (
+  HRESULT LookupDescriptiveMetadataDataDef (
     // Data Definition Object
     [out,retval] IAAFDataDef ** ppDataDef);
 

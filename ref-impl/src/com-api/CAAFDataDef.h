@@ -205,17 +205,17 @@ public:
 
 
   //***********************************************************
-  // METHOD NAME: IsDescriptiveKind()
+  // METHOD NAME: IsDescriptiveMetadataKind()
   //
   // DESCRIPTION:
-  // @mfunc AAFRESULT | AAFDataDef3 | IsDescriptiveKind |
-  // Sets return value to TRUE if DataDef is descriptive.
+  // @mfunc AAFRESULT | AAFDataDef3 | IsDescriptiveMetadataKind |
+  // Sets return value to TRUE if DataDef is descriptive metadata.
   // @end
   // 
-  STDMETHOD (IsDescriptiveKind)
+  STDMETHOD (IsDescriptiveMetadataKind)
    (
-    // @parm [retval,out] aafBoolean_t * | bIsDescriptiveKind | pointer to the return value
-    aafBoolean_t *  bIsDescriptiveKind
+    // @parm [retval,out] aafBoolean_t * | bIsDescriptiveMetadataKind | pointer to the return value
+    aafBoolean_t *  bIsDescriptiveMetadataKind
   );
 
   //***********************************************************

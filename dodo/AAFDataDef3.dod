@@ -178,12 +178,12 @@ AD_XMETHOD1(IsAuxiliaryKind,
 		   pointer to the return value, 
 		   Sets return value to TRUE if DataDef is auxiliary.)
 
-AD_XMETHOD1(IsDescriptiveKind,
+AD_XMETHOD1(IsDescriptiveMetadataKind,
 		   [retval\,out],
 		   objPass,
 		   aafBoolean_t *,
-		   bIsDescriptiveKind,
+		   bIsDescriptiveMetadataKind,
 		   pointer to the return value, 
-		   Sets return value to TRUE if DataDef is descriptive.)
+		   Sets return value to TRUE if DataDef is descriptive metadata.)
 
 AD_XCLASS_END(Concrete, StoredObject)

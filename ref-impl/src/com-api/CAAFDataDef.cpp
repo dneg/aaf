@@ -654,7 +654,7 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFDataDef::IsDescriptiveKind (aafBoolean_t *  bIsDescriptiveKind)
+    CAAFDataDef::IsDescriptiveMetadataKind (aafBoolean_t *  bIsDescriptiveMetadataKind)
 {
   HRESULT hr;
 
@@ -668,7 +668,7 @@ HRESULT STDMETHODCALLTYPE
 
   try
     {
-      hr = ptr->IsDescriptiveKind (bIsDescriptiveKind);
+      hr = ptr->IsDescriptiveMetadataKind (bIsDescriptiveMetadataKind);
     }
   catch (OMException& e)
     {

@@ -159,7 +159,7 @@ AD_COM_METH(.method-IsTimecodeKind)
 #c
 #c DataDef3 methods
 #c
-AD_COM_METH(.method-IsDescriptiveKind)
+AD_COM_METH(.method-IsDescriptiveMetadataKind)
 AD_COM_METH(.method-IsAuxiliaryKind)
 
 AD_COM_EXT2_CLASS_END(AAFDataDef2, AAFDataDef3)
