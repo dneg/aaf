@@ -1238,7 +1238,7 @@ HRESULT Omf2Aaf::ProcessOMFComponent(OMF2::omfObject_t OMFSegment, IAAFComponent
 	IAAFFiller*				pFiller = NULL;
 	IAAFTransition*			pTransition = NULL;
 	IAAFSelector*			pSelector = NULL;
-	IAAFGroup*				pEffect = NULL;
+	IAAFEffect*				pEffect = NULL;
 	IAAFEffectDef*			pEffectDef = NULL;
 	IAAFParameterDef*		pParameterDef = NULL;
 	IAAFDefObject*			pDefObject = NULL;
@@ -1413,8 +1413,8 @@ HRESULT Omf2Aaf::ProcessOMFComponent(OMF2::omfObject_t OMFSegment, IAAFComponent
 											  IID_IAAFTransition,
 											  (IUnknown **) &pTransition);
 
-			rc = pDictionary->CreateInstance(&AUID_AAFGroup,
-											  IID_IAAFGroup,
+			rc = pDictionary->CreateInstance(&AUID_AAFEffect,
+											  IID_IAAFEffect,
 											  (IUnknown **) &pEffect);
 
 			// Look in the dictionary to find if the effect Definition exists
