@@ -20,7 +20,7 @@
 //
 //=---------------------------------------------------------------------=
 
-#define __dest_os	__mac_os
+#define __dest_os __mac_os
 
 //#define CHECKMEMORYLEAKS // Uncomment this line to turn leak checking on
 
