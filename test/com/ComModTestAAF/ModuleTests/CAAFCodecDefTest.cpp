@@ -18,6 +18,7 @@
 #include <assert.h>
 #include <string.h>
 
+#include "AAFClassDefUIDs.h"
 #include "AAFStoredObjectIDs.h"
 #include "AAFResult.h"
 #include "AAFDataDefs.h"
@@ -104,6 +105,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFCodecDef*	pPlugDef = NULL;
 	IAAFDefObject	*pDef = NULL;
 	IAAFDataDef		*pDataDef = NULL;
+	IAAFClassDef	*classDef = NULL;
 	bool bFileOpen = false;
 	HRESULT			hr = S_OK;
 	aafUID_t		uid;
@@ -128,12 +130,15 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 							  (IUnknown **)&pPlugDef));
     
 		checkResult(pPlugDef->QueryInterface(IID_IAAFDefObject, (void **) &pDef));
-		uid = NoCodec;
+		uid = CodecWave;
 		checkResult(pDef->Init (&uid, L"TestCodec", L"TestCodecDescription"));
 
 		uid = DDEF_Matte;
 		checkResult(pPlugDef->AppendEssenceKind (&uid));
 		checkResult(pDictionary->RegisterCodecDefinition(pPlugDef));
+		uid = kAAFClassID_WAVEDescriptor;
+//		checkResult(pDictionary->LookupClass(&uid, &classDef));
+//		checkResult(pPlugDef->SetFileDescriptorClass (classDef));
 	}
 	catch (HRESULT& rResult)
 	{
@@ -144,6 +149,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
   // Cleanup and return
   if (pDef)
     pDef->Release();
+
+  if (classDef)
+    classDef->Release();
 
   if (pDataDef)
     pDataDef->Release();
@@ -172,16 +180,18 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 static HRESULT ReadAAFFile(aafWChar* pFileName)
 {
-	IAAFFile*		pFile = NULL;
-	IAAFHeader*		pHeader = NULL;
-	IAAFDictionary*  pDictionary = NULL;
-	IAAFCodecDef	*pCodec = NULL;
-	IAAFDataDef		*pDataDef = NULL;
-	bool bFileOpen = false;
-	aafBool			testResult;
-	aafUID_t		codecID = NoCodec;
-	aafUID_t		testMatte = DDEF_Matte, testPicture = DDEF_Picture;
-	HRESULT			hr = S_OK;
+	IAAFFile*				pFile = NULL;
+	IAAFHeader*				pHeader = NULL;
+	IAAFDictionary*			 pDictionary = NULL;
+	IAAFCodecDef			*pCodec = NULL;
+	IAAFDataDef				*pDataDef = NULL;
+	IEnumAAFCodecFlavours	*pEnum = NULL;
+	bool					bFileOpen = false;
+	aafBool					testResult;
+	aafUID_t				codecID = CodecWave;
+	aafUID_t				testMatte = DDEF_Matte, testPicture = DDEF_Picture;
+	aafUID_t				readFlavour, checkFlavour = NilCodecFlavour;
+	HRESULT					hr = S_OK;
 
 	try
 	{
@@ -196,6 +206,13 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 		checkExpression (testResult == AAFTrue, AAFRESULT_TEST_FAILED);
 		checkResult(pCodec->IsEssenceKindSupported (&testPicture, &testResult));
 		checkExpression (testResult == AAFFalse, AAFRESULT_TEST_FAILED);
+		checkResult(pCodec->EnumCodecFlavours (&pEnum));
+		checkResult(pEnum->NextOne (&readFlavour));
+		checkExpression (memcmp(&readFlavour, &checkFlavour, sizeof(checkFlavour)) == 0,
+						 AAFRESULT_TEST_FAILED);
+		checkResult(pCodec->AreThereFlavours (&testResult));
+		checkExpression (AAFFalse == testResult,
+						 AAFRESULT_TEST_FAILED);
 	}
 	catch (HRESULT& rResult)
 	{
@@ -203,6 +220,8 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	}
 
 	// Cleanup and return
+	if (pEnum)
+		pEnum->Release();
 	if (pDataDef)
 		pDataDef->Release();
 	if (pCodec)
@@ -245,10 +264,8 @@ extern "C" HRESULT CAAFCodecDef_test()
 	if (SUCCEEDED(hr))
 	{
 		cout << "The following IAAFCodecDef methods have not been implemented:" << endl; 
-		cout << "     AreThereFlavours" << endl; 
-		cout << "     GetFileDescriptorClass" << endl; 
 		cout << "     SetFileDescriptorClass" << endl; 
-		cout << "     EnumCodecFlavours" << endl; 
+		cout << "     GetFileDescriptorClass" << endl; 
 		hr = AAFRESULT_TEST_PARTIAL_SUCCESS;
 	}
 
