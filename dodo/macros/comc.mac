@@ -269,6 +269,13 @@ Impl.this-module * C.this-module::GetRepObject ()
       //
       hr = AAFRESULT_ASSERTION_VIOLATION;
     }
+  catch (...)
+    {
+      // We CANNOT throw an exception out of a COM interface method!
+      // Return a reasonable exception code.
+      //
+      hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+    }
 #endm
 
 
@@ -2399,7 +2406,7 @@ class OMAssertionViolation;
 #c Macro Arg 07: function description
 #c
 #startm AD_XFUNCTION1 07
-HRESULT STDMETHODCALLTYPE
+STDAPI
     %01 (.%03-adornment%04 .%03-indirection %05)
 {
   HRESULT hr;
@@ -2432,7 +2439,7 @@ AD_CATCH_ASSERTION_END
 #c Macro Arg 12: function description
 #c
 #startm AD_XFUNCTION2 12
-HRESULT STDMETHODCALLTYPE
+STDAPI
     %01 (.%03-adornment%04 .%03-indirection %05,
         .%08-adornment%09 .%08-indirection %10)
 {
@@ -2470,7 +2477,7 @@ AD_CATCH_ASSERTION_END
 #c Macro Arg 17: function description
 #c
 #startm AD_XFUNCTION3 17
-HRESULT STDMETHODCALLTYPE
+STDAPI
     %01 (.%03-adornment%04 .%03-indirection %05,
         .%08-adornment%09 .%08-indirection %10,
         .%13-adornment%14 .%13-indirection %15)
@@ -2513,7 +2520,7 @@ AD_CATCH_ASSERTION_END
 #c Macro Arg 22: function description
 #c
 #startm AD_XFUNCTION4 22
-HRESULT STDMETHODCALLTYPE
+STDAPI
     %01 (.%03-adornment%04 .%03-indirection %05,
         .%08-adornment%09 .%08-indirection %10,
         .%13-adornment%14 .%13-indirection %15,
