@@ -1258,7 +1258,7 @@ void Aaf2Omf::TraverseMob(IAAFMob* pMob,
 void Aaf2Omf::ProcessComponent(IAAFComponent* pComponent, 
 								  omfObject_t* pOMFSegment)
 {
-	AAFCheck					rc = AAFRESULT_SUCCESS;
+	AAFCheck					rc;
 	OMFCheck				OMFError;
 
 	omfDDefObj_t		OMFDatakind;
@@ -1278,6 +1278,8 @@ void Aaf2Omf::ProcessComponent(IAAFComponent* pComponent,
 	IAAFEssenceGroup*		pGroup = 0;
 	aafUID_t				datadef;
 	aafLength_t				length;
+
+	rc = AAFRESULT_SUCCESS;
 
 	IncIndentLevel();
 	
