@@ -10,7 +10,6 @@ AAFEssenceContainer\
 #endm
 #c
 AD_HEAD
-
 AD_IDL(//
 // This interface is used to access essence data in an external
 // data file.
@@ -24,23 +23,22 @@ AD_IDL(//
 //     operation.
 //)
 
-
 AD_DEFAULT_UUID(a7337031, c103, 11d2, 80, 8a, 00, 60, 08, 14, 3e, 6f)
 AD_XCLASS_BEGIN(Abstract, Transient)
 AD_XMETHOD3(CreateEssenceStream,
-			[in\,string],
+			[in\, string],
 			objPass,
-			aafCharacter *,
+			aafCharacter_constptr,
 			pName,
 			String key to identify the new essence within container,
 			
 			[in],
 			objPass,
-			aafUID_t *,
+			aafUID_constptr,
 			pMobID,
 			Optional mobID identifying the essence,
 
-			[out\,retval],
+			[out\, retval],
 			objOut,
 			AAFEssenceStream,
 			ppEssenceStream,
@@ -52,28 +50,32 @@ AD_XMETHOD3(CreateEssenceStream,
   //
   // AAFRESULT_SUCCESS
   //   - succeeded.  \(This is the only code indicating success.\)
+  //
   // AAFRESULT_NULL_PARAM
   //   - both pName and pMobID cannot be NULL.
+  //
   // AAFRESULT_ILLEGAL_VALUE
   //   - pName or pMobID \(or both\) are invalid
+  //
   // AAFRESULT_FILE_EXISTS
   //   - the given path and or mobID  already points to an existing stream 
   //     within the container.)
 
+
 AD_XMETHOD3(CreateEssenceStreamWriteOnly,
-			[in\,string],
+			[in\, string],
 			objPass,
-			aafCharacter *,
+			aafCharacter_constptr,
 			pPath,
 			String key to identify the new essence within container,
 			
 			[in],
 			objPass,
-			aafUID_t *,
+			aafUID_constptr,
 			pMobID,
 			Optional mobID identifying the essence,
 
-			[out\,retval],
+			[out\, retval],
 			objOut,
 			AAFEssenceStream,
 			ppEssenceStream,
@@ -85,28 +87,32 @@ AD_XMETHOD3(CreateEssenceStreamWriteOnly,
   //
   // AAFRESULT_SUCCESS
   //   - succeeded.  \(This is the only code indicating success.\)
+  //
   // AAFRESULT_NULL_PARAM
   //   - both pName and pMobID cannot be NULL.
+  //
   // AAFRESULT_ILLEGAL_VALUE
   //   - pName or pMobID \(or both\) are invalid
+  //
   // AAFRESULT_FILE_EXISTS
   //   - the given path and or mobID  already points to an existing stream 
   //     within the container.)
 
+
 AD_XMETHOD3(OpenEssenceStreamReadOnly,
-			[in\,string],
+			[in\, string],
 			objPass,
-			aafCharacter *,
+			aafCharacter_constptr,
 			pFilePath,
 			String key to identify the existing essence within container,
 			
 			[in],
 			objPass,
-			aafUID_t *,
+			aafUID_constptr,
 			pMobID,
 			Optional mobID identifying the essence,
 
-			[out\,retval],
+			[out\, retval],
 			objOut,
 			AAFEssenceStream,
 			ppEssenceStream,
@@ -117,30 +123,35 @@ AD_XMETHOD3(OpenEssenceStreamReadOnly,
   //
   // AAFRESULT_SUCCESS
   //   - succeeded.  \(This is the only code indicating success.\)
+  //
   // AAFRESULT_NULL_PARAM
   //   - both pName and pMobID cannot be NULL.
+  //
   // AAFRESULT_ILLEGAL_VALUE
   //   - pName or pMobID \(or both\) are invalid
+  //
   // AAFRESULT_MEDIA_NOT_FOUND
   //   - the given path does not point to an existing stream within 
   //     the container.
+  //
   // AAFRESULT_NOT_READABLE
   //   - stream is write-only\, cannot be opened for reading.)
 
+
 AD_XMETHOD3(OpenEssenceStreamAppend,
-			[in\,string],
+			[in\, string],
 			objPass,
-			aafCharacter *,
+			aafCharacter_constptr,
 			pFilePath,
 			String key to identify the existing essence within container,
 			
 			[in],
 			objPass,
-			aafUID_t *,
+			aafUID_constptr,
 			pMobID,
 			Optional mobID identifying the essence,
 
-			[out\,retval],
+			[out\, retval],
 			objOut,
 			AAFEssenceStream,
 			ppEssenceStream,
@@ -151,15 +162,17 @@ AD_XMETHOD3(OpenEssenceStreamAppend,
   //
   // AAFRESULT_SUCCESS
   //   - succeeded.  \(This is the only code indicating success.\)
+  //
   // AAFRESULT_NULL_PARAM
   //   - both pName and pMobID cannot be NULL.
+  //
   // AAFRESULT_ILLEGAL_VALUE
   //   - pName or pMobID \(or both\) are invalid
+  //
   // AAFRESULT_MEDIA_NOT_FOUND
   //   - the given path does not point to an existing stream within 
   //     the container.
+  //
   // AAFRESULT_NOT_WRITEABLE
   //   - stream is read-only\, cannot be opened for writing.)
-
 AD_XCLASS_END(Abstract, Transient)
-

@@ -62,30 +62,30 @@ bool extensionRead (const aafCharacter * filename)
   IAAFClassDef *pcd=NULL;
 
   cout << "Verifying role enum type has been registered." << endl;
-  check (pDict->LookupType ((aafUID_t*) &kTypeID_eRole, &ptd));
+  check (pDict->LookupType (kTypeID_eRole, &ptd));
   ptd->Release();
   ptd=NULL;
 
   cout << "Verifying PersonnelResource class has been registered." << endl;
-  check (pDict->LookupClass ((aafUID_t*) &kClassID_PersonnelResource, &pcd));
+  check (pDict->LookupClass (kClassID_PersonnelResource, &pcd));
   pcd->Release();
   pcd=NULL;
 
   cout << "Verifying PersonnelMob class has been registered." << endl;
-  check (pDict->LookupClass ((aafUID_t*) &kClassID_PersonnelMob, &pcd));
+  check (pDict->LookupClass (kClassID_PersonnelMob, &pcd));
   pcd->Release();
   pcd=NULL;
 
   cout << "Verifying PersonnelResourceReference type has been"
 	   << " registered." << endl;
-  check (pDict->LookupType ((aafUID_t*) &kTypeID_PersonnelResourceStrongReference,
+  check (pDict->LookupType (kTypeID_PersonnelResourceStrongReference,
 							&ptd));
   ptd->Release();
   ptd=NULL;
 
   cout << "Verifying PersonnelResourceReferenceVector type has been"
 	   << " registered." << endl; 
-  check (pDict->LookupType ((aafUID_t*) &kTypeID_PersonnelResourceStrongReferenceVector,
+  check (pDict->LookupType (kTypeID_PersonnelResourceStrongReferenceVector,
 							&ptd));
   ptd->Release();
   ptd=NULL;
@@ -93,7 +93,7 @@ bool extensionRead (const aafCharacter * filename)
   cout << "Verifying PersonnelMob instance has been created and added" 
 	   << " to header." << endl;
   IAAFMob *pMob=NULL;
-  check (pHead->LookupMob ((aafUID_t*) &kMobID_Personnel,
+  check (pHead->LookupMob (kMobID_Personnel,
 						   &pMob));
 
   cout << "Printing contents of PersonnelMob." << endl;

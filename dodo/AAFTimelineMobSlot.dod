@@ -84,13 +84,10 @@ AD_METHOD1(GetEditRate,
 
 AD_METHOD1(SetEditRate,
 		   [in], 
-		   aafRational_t *, 
-		   pEditRate, 
+		   aafRational_constref, 
+		   editRate, 
 		   Edit rate property value,
 		   This method will get set edit rate for this mob slot.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pEditRate pointer is valid.
   // 
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect\\\, it will return the first one
@@ -100,10 +97,7 @@ AD_METHOD1(SetEditRate,
   //   - succeeded.  \\\(This is the only code indicating success.\\\)
   //
   // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\\\(\\\) called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pEditRate arg is NULL.)
+  //   - This object has not yet had Initialize\\\(\\\) called on it.)
 
 
 AD_METHOD1(GetOrigin,

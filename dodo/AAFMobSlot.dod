@@ -269,7 +269,7 @@ AD_XMETHOD1(SetSegment,
 AD_XMETHOD1(SetName,
 			[in\, string],
 			objPass,
-			aafCharacter *,
+			aafCharacter_constptr,
 			pName,
 			Mob Slot Name,
 

@@ -26,10 +26,10 @@ AD_CLASS_UUID(307e9e67, dcb2, 11d2, 84, 29, 00, 60, 08, 32, ac, b8)
 AD_DEFAULT_UUID(307e9e68, dcb2, 11d2, 84, 29, 00, 60, 08, 32, ac, b8)
 AD_XCLASS_BEGIN(Concrete, StoredObject)
 AD_XMETHOD3(Initialize,
-			[in],
+			[in\, ref],
 			objPass,
-			aafUID_t *,
-			pID,
+			aafUID_constref,
+			id,
 			auid to be used to identify this type,
 
 			[in],
@@ -40,7 +40,7 @@ AD_XMETHOD3(Initialize,
 
 			[in],
 			objPass,
-			aafCharacter *,
+			aafCharacter_constptr,
 			pTypeName,
 			friendly name of this type definition,
 
@@ -60,7 +60,7 @@ AD_XMETHOD3(Initialize,
   // - element type is permissible for use in a String.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_ALREADY_INIT
-  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pID\\\, pTypeDef\\\, or pTypeName\))
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pTypeDef or pTypeName\))
 
 
 AD_XMETHOD1(GetType,

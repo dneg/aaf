@@ -46,7 +46,7 @@ public:
   // Utility to find the code class id for the corresponding stored
   // object id.
   static const aafClassID_t* 
-    LookupClassID(const aafUID_t* pAUID);
+    LookupClassID(const aafUID_t & auid);
 };
 
 
