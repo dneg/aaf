@@ -267,8 +267,13 @@ OMStrongReferenceSetIterator<UniqueIdentification,
 
   SetElement& element = _iterator.value();
 
-  ReferencedObject* result = element.setValue(newObject);
-
+  ReferencedObject* result = 0;
+  OMStorable* p = element.setValue(newObject->identification(),
+                                   newObject);
+  if (p != 0) {
+    result = dynamic_cast<ReferencedObject*>(p);
+    ASSERT("Object is correct type", result != 0);
+  }
   return result;
 }
 
@@ -288,8 +293,14 @@ OMStrongReferenceSetIterator<UniqueIdentification,
 
   SetElement& element = _iterator.value();
 
-  ReferencedObject* result = element.setValue(0);
-
+  ReferencedObject* result = 0;
+  UniqueIdentification nullUniqueIdentification;
+  memset(&nullUniqueIdentification, 0, sizeof(UniqueIdentification));
+  OMStorable* p = element.setValue(nullUniqueIdentification, 0);
+  if (p != 0) {
+    result = dynamic_cast<ReferencedObject*>(p);
+    ASSERT("Object is correct type", result != 0);
+  }
   return result;
 }
 

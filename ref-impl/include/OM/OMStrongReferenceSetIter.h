@@ -163,8 +163,7 @@ public:
 
 protected:
 
-  typedef OMStrongReferenceSetElement<UniqueIdentification,
-                                      ReferencedObject> SetElement;
+  typedef OMStrongReferenceSetElement<UniqueIdentification> SetElement;
 
   typedef OMSetIterator<UniqueIdentification, SetElement> SetIterator;
 

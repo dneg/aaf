@@ -235,11 +235,9 @@ private:
 };
 
   // @class Elements of Object Manager reference sets.
-  //   @tcarg class | ReferencedObject | The type of the referenced
-  //          object. This type must be a descendant of <c OMStorable>.
   //   @base public | <c OMContainerElement>
   //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
-template <typename UniqueIdentification, typename ReferencedObject>
+template <typename UniqueIdentification>
 class OMStrongReferenceSetElement : public OMStrongReferenceVectorElement {
 public:
   // @access Public members.
@@ -256,8 +254,7 @@ public:
 
     // @cmember Copy constructor.
   OMStrongReferenceSetElement(
-                 const OMStrongReferenceSetElement<UniqueIdentification,
-                                                   ReferencedObject>& rhs);
+                 const OMStrongReferenceSetElement<UniqueIdentification>& rhs);
 
     // @cmember Destructor.
   ~OMStrongReferenceSetElement(void);
@@ -265,20 +262,18 @@ public:
     // @cmember Assignment.
     //          This operator provides value semantics for <c OMSet>.
     //          This operator does not provide assignment of object references.
-  OMStrongReferenceSetElement<UniqueIdentification,
-                              ReferencedObject>& operator=(
-                 const OMStrongReferenceSetElement<UniqueIdentification,
-                                                   ReferencedObject>& rhs);
+  OMStrongReferenceSetElement<UniqueIdentification>& operator=(
+                 const OMStrongReferenceSetElement<UniqueIdentification>& rhs);
 
     // @cmember Equality.
     //          This operator provides value semantics for <c OMSet>.
     //          This operator does not provide equality of object references.
   bool operator== (
-           const OMStrongReferenceSetElement<UniqueIdentification,
-                                             ReferencedObject>& rhs) const;
+           const OMStrongReferenceSetElement<UniqueIdentification>& rhs) const;
 
     // @cmember Set the value of this <c OMStrongReferenceSetElement>.
-  ReferencedObject* setValue(const ReferencedObject* value);
+  OMStorable* setValue(const UniqueIdentification& identification,
+                       const OMStorable* value);
 
     // @cmember The unique key of this <c OMStrongReferenceSetElement>.
   UniqueIdentification identification(void) const;
