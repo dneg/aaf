@@ -51,11 +51,13 @@ ImplAAFStreamPropertyValue::ImplAAFStreamPropertyValue () :
 
 ImplAAFStreamPropertyValue::~ImplAAFStreamPropertyValue ()
 {
+#if defined(REFERENCE_PROPERTY_CONTAINER)
   if (_propertyContainer)
   {
     _propertyContainer->ReleaseReference();
     _propertyContainer = NULL;
   }
+#endif // #if defined(REFERENCE_PROPERTY_CONTAINER)
 }
  
 
@@ -90,8 +92,24 @@ AAFRESULT STDMETHODCALLTYPE
   if (0 > newSize) // TEMP: need unsigned aafUInt64!
     return AAFRESULT_INVALID_PARAM;
   
+  // *** Structured Storage PATCH! *** transdel:2000-JUN-20
+  // Save the old position so that we can detect whether
+  // or not the stream is being truncated.
+  OMUInt64 position = _streamProperty->position();
+
+
   // Set the new size of the data stream.
-  _streamProperty->setSize(newSize); // What happens if this call fails?
+  _streamProperty->setSize((OMUInt64)newSize); // What happens if this call fails?
+
+
+  // *** Structured Storage PATCH! *** transdel:2000-JUN-20
+  // If the file is truncated then force the position
+  // to be the same as the new stream size (eof).
+  // Without this PATCH Structrured Storage may leave
+  // "stale bytes" in the stream after the next write
+  // operation.
+  if (position > (OMUInt64)newSize)
+    _streamProperty->setPosition((OMUInt64)newSize); // What happens if this call fails?
     
   return AAFRESULT_SUCCESS;
 }
@@ -282,7 +300,7 @@ AAFRESULT STDMETHODCALLTYPE
                                      pData,
                                      elementCount,
                                      elementsRead);
-  *bytesRead = elementsRead * elementCount;
+  *bytesRead = elementsRead * internalElementSize;
   
   if (0 < dataSize && 0 == *bytesRead)
     return AAFRESULT_END_OF_DATA;
@@ -435,7 +453,9 @@ AAFRESULT ImplAAFStreamPropertyValue::Initialize (
   SetType(const_cast<ImplAAFTypeDefStream *>(streamType));
   _streamProperty = streamProperty;
   _propertyContainer = propertyContainer;
+#if defined(REFERENCE_PROPERTY_CONTAINER)
   _propertyContainer->AcquireReference();
+#endif // #if defined(REFERENCE_PROPERTY_CONTAINER)
   
  
   // This instance is now fully initialized.
