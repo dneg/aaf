@@ -163,9 +163,6 @@ void AAFByteSwap64(
 
 #define PROGRESS_UNKNOWN	-1
 
-aafBool isObjFunc(ImplAAFFile * file,
-                         ImplAAFObject * obj,
-                         void *data);
 
 aafErr_t AAFConvertEditRate(
 	aafRational_t srcRate,        /* IN - Source Edit Rate */
