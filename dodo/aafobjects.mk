@@ -103,7 +103,6 @@ HUMAN_TYPED_IMPL = \
 	EnumAAFMobs \
 	EnumAAFMobSlots
 
-
 # The list of standard dodo targets.
 # AAFTypes have to be handled separately since no object is to be created.
 DODO_TARGET_NAMES = \
@@ -124,3 +123,90 @@ AAFOBJECTS = \
 AUTO_GEN_IMPL = \
 	$(AAFPERSISTENTOBJECTS) \
 	$(AAFNONPERSISTENTOBJECTS)
+
+# These are the Com Test files that are typed by humans.  Be sure to
+# remove them from the other list.  As you check each one in, just add
+# its name here and remove it from AUTO_GEN_COMTEST (below).
+# Do not add the 'Test' suffix here.
+HUMAN_TYPED_COMTEST = \
+	AAFMob
+
+# Build the list of all objects that have automatically-generated
+# COM Test classes.
+#This can go away when we institute a requirement that a module test
+# exist for every class
+AUTO_GEN_COMTEST = \
+	AAFAttribute \
+	AAFClassDef \
+	AAFDictionary \
+	AAFCompositionMob \
+	AAFConstValue \
+	AAFControlCodeDef \
+	AAFControlPoint \
+	AAFDataDef \
+	AAFDefObject \
+	AAFEdgecode \
+	AAFEffectDef \
+	AAFEffectInvocation \
+	AAFFiller \
+	AAFFindSourceInfo \
+	AAFIntegerAttribute \
+	AAFLocator \
+	AAFMacLocator \
+	AAFMasterMob \
+	AAFMediaFilmDescriptor \
+	AAFMediaGroup \
+	AAFMediaTapeDescriptor \
+	AAFNestedScope \
+	AAFObjectAttribute \
+	AAFParameter \
+	AAFParameterSlot \
+	AAFPulldown \
+	AAFPropertyDef \
+	AAFReferenceValue \
+	AAFScopeReference \
+	AAFSequence \
+	AAFStringAttribute \
+	AAFTimecode \
+	AAFTimecodeStream \
+	AAFTimecodeStream12M \
+	AAFTransition \
+	AAFTypeDef \
+	AAFUnixLocator \
+	AAFVaryingValue \
+	AAFWindowsLocator \
+	AAFRoot \
+	AAFMedia \
+	EnumAAFAttributes \
+	EnumAAFClassDefs \
+	EnumAAFComponents \
+	EnumAAFControlCodeDefs \
+	EnumAAFControlPoints \
+	EnumAAFDataDefs \
+	EnumAAFDefs \
+	EnumAAFEffectDefs \
+	EnumAAFIdentifications \
+	EnumAAFLocators \
+	EnumAAFMedia \
+	EnumAAFMobComments \
+	EnumAAFParameterSlots \
+	EnumAAFPropertyDefs \
+	EnumAAFReferenceValues \
+	EnumAAFSegments \
+	EnumAAFTypeDefs \
+	AAFFile \
+	AAFHeader \
+	AAFIdentification \
+	AAFObject \
+	AAFComponent \
+	AAFEssenceDescriptor \
+	AAFFileDescriptor \
+	AAFSegment \
+	AAFSourceMob \
+	AAFMobSlot \
+	AAFTimelineMobSlot \
+	AAFSourceReference \
+	AAFSourceClip \
+	AAFSession \
+	EnumAAFMobs \
+	EnumAAFMobSlots
