@@ -404,6 +404,11 @@ public:
     //          is <p size> bytes in size.
   virtual void getBits(OMByte* bits, size_t size) const;
 
+    // @cmember Set the raw bits of this <c OMSimpleProperty>. The raw
+    //          bits are copied from the buffer at address <p bits> which
+    //          is <p size> bytes in size.
+  virtual void setBits(const OMByte* bits, size_t size);
+
 protected:
   void get(void* value, size_t valueSize) const;
   void set(const void* value, size_t valueSize);
