@@ -119,8 +119,6 @@ ImplAAFDictionary::ImplAAFDictionary ()
   _persistentProperties.put (_classDefinitions.address());
   _persistentProperties.put(_codecDefinitions.address());
   _persistentProperties.put(_containerDefinitions.address());
-
-  InitBuiltins();
 }
 
 
@@ -335,10 +333,29 @@ AAFRESULT STDMETHODCALLTYPE
   if (NULL == pTypeDef)
 	return AAFRESULT_NULL_PARAM;
 	
-  _typeDefinitions.appendValue(pTypeDef);
-  pTypeDef->AcquireReference();
-	
-  pTypeDef->SetDict(this);
+  // Get the AUID of the new type to register.
+  aafUID_t newAUID;
+  HRESULT hr = pTypeDef->GetAUID(&newAUID);
+  if (hr != AAFRESULT_SUCCESS)
+    return hr;
+
+  // Is this type already registered ?
+  ImplAAFTypeDef * pExistingTypeDef = NULL;
+  hr = LookupType(&newAUID, &pExistingTypeDef);
+
+  if (hr != AAFRESULT_SUCCESS) {
+    // This type is not yet registered, add it to the dictionary.
+    _typeDefinitions.appendValue(pTypeDef);
+    pTypeDef->AcquireReference();
+    // Set up the (non-persistent) dictionary pointer.
+    pTypeDef->SetDict(this);
+  } else {
+    // This type is already registered, probably because it was
+    // already in the persisted dictionary.
+    // Set up the (non-persistent) dictionary pointer.
+    pExistingTypeDef->SetDict(this);
+    pExistingTypeDef->ReleaseReference();
+  }
 
   return(AAFRESULT_SUCCESS);
 }
@@ -934,7 +951,7 @@ ImplAAFDictionary::LookupPropDef (OMPropertyId opid,
 {
   InitBuiltins ();
   assert (_pBuiltins);
-  return _pBuiltins->LookupPropDef (opid, ppd);
+  return _pBuiltins->LookupPropDef (this, opid, ppd);
 }
 
 
