@@ -141,6 +141,26 @@ STDAPI DllUnregisterServer(void)
 }
 
 
+
+//
+// Calls that need to be available for platforms that do 
+// not support COM or Registry.
+//
+
+// Return the number of coclasses exported from this dll.
+STDAPI_(ULONG) AAFGetClassCount(void)
+{
+	return g_AAFInProcServer.GetClassCount();
+}
+
+// Get the nth implementation coclass id.
+STDAPI AAFGetClassObjectID(ULONG index, CLSID *pClassID)
+{
+	return g_AAFInProcServer.GetClassObjectID(index, pClassID);
+}
+
+
+
 #if defined(_MAC)
 //
 //  DllGetVersion
