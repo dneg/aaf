@@ -91,7 +91,7 @@ ImplAAFFile::OpenExistingRead (wchar_t * pFileName,
 	try
 	{
 		// Ask the OM to open the file.
-		_file = OMFile::openExistingRead(pFileName, _dictionary);
+		_file = OMFile::openExistingRead(pFileName, _dictionary, OMFile::lazyLoad);
 		checkExpression(NULL != _file, AAFRESULT_INTERNAL_ERROR);
 
 		// Get the byte order
@@ -169,7 +169,7 @@ ImplAAFFile::OpenExistingModify (wchar_t * pFileName,
 	try 
 	{
 		// Ask the OM to open the file.
-		_file = OMFile::openExistingModify(pFileName, _dictionary);
+		_file = OMFile::openExistingModify(pFileName, _dictionary, OMFile::lazyLoad);
 		checkExpression(NULL != _file, AAFRESULT_INTERNAL_ERROR);
 
 		// Get the byte order
