@@ -209,37 +209,15 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFSelector::EnumAlternateSegments (ImplEnumAAFSegments** ppEnum)
 {
-	ImplEnumAAFSegments*	theEnum = NULL;
-	HRESULT					hr = AAFRESULT_SUCCESS;
+	if(ppEnum == NULL)
+		return(AAFRESULT_NULL_PARAM);
 
-	if (ppEnum == NULL)
-	{
-		hr = AAFRESULT_NULL_PARAM;
-	}
-	else
-	{
-		theEnum = (ImplEnumAAFSegments *)CreateImpl(CLSID_EnumAAFSegments);
-		if (theEnum == NULL)
-		{
-			hr = E_FAIL;
-		}
-		else
-		{
-			hr = theEnum->SetEnumSelector(this);
-			if (SUCCEEDED(hr))
-			{
-				theEnum->Reset();
-				*ppEnum = theEnum;
-			}
-			else
-			{
-				theEnum->ReleaseReference();
-				*ppEnum = NULL;
-			}
-		}
-	}
+	*ppEnum = (ImplEnumAAFSegments *)CreateImpl(CLSID_EnumAAFSegments);
+	if(*ppEnum == NULL)
+		return(AAFRESULT_NOMEMORY);
+	(*ppEnum)->SetEnumStrongProperty(this, &_alternates);
 
-	return hr;
+	return(AAFRESULT_SUCCESS);
 }
 
 //***********************************************************

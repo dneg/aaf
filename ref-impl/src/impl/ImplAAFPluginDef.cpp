@@ -879,18 +879,22 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFPluginDescriptor::GetPluginDescriptorID (
-      aafUID_t *  /*pDescriptorID*/)
+      aafUID_t *pDescriptorID)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	if(pDescriptorID == NULL)
+		return(AAFRESULT_NULL_PARAM);
+	*pDescriptorID = _identification;
+	return AAFRESULT_SUCCESS;
 }
 
 
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFPluginDescriptor::SetPluginDescriptorID (
-      aafUID_t  /*descriptorID*/)
+      aafUID_t  descriptorID)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	_identification = descriptorID;
+	return AAFRESULT_SUCCESS;
 }
 
   
