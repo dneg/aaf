@@ -236,6 +236,8 @@ public:
     //   @this const
   virtual void save(void) const;
 
+  virtual void restoreFrom(OMStoredObject& s, size_t size);
+
     // @cmember The size of this <c OMSimpleProperty>.
     //   @this const
   size_t size(void) const;

@@ -87,6 +87,9 @@ public:
     //          store (disk file).
   virtual bool persistent(void) const;
 
+    // @cmember This object's property set.
+  virtual OMPropertySet* propertySet(void);
+
 private:
   // @access Private members.
 
@@ -96,11 +99,11 @@ private:
 
   char* makePathName(void);
 
-    // @cmember The name of this <c OMStorable>.
-  const char* name(void) const;
-
 protected:
   // @access Protected members.
+
+    // @cmember The name of this <c OMStorable>.
+  const char* name(void) const;
 
     // @cmember The <c OMStorable> that contains (owns) this
     //          <c OMStorable>.
