@@ -13,11 +13,14 @@ AD_HEAD
 *                                          *
 \******************************************/
 
-AD_INCLUDE(AAFTypes)
 AD_FORWARD_DECLARATION(AAFDataDefinition)
 AD_FORWARD_DECLARATION(AAFMasterMob)
 AD_FORWARD_DECLARATION(AAFSourceMob)
 AD_FORWARD_DECLARATION(AAFSourceClip)
+
+AD_CLASS_UUID(aed97eb1, 2bc8, 11D2, bf, aa, 00, 60, 97, 11, 62, 12)
+
+AD_DEFAULT_UUID(aed97eb0, 2bc8, 11D2, bf, aa, 00, 60, 97, 11, 62, 12)
 
 AD_ROOT_CLASS_BEGIN
 
@@ -358,7 +361,7 @@ Opens a single channel of a file mob.)
 	
 /****/
 AD_XMETHOD5(MultiOpen,
-[in],objPass, AAFMasterMob,masterMob,In this master mob,
+[in],objIn, AAFMasterMob,masterMob,In this master mob,
 [in],objPass, aafTrackID_t,trackID,On this track,
 [in],objPass, aafMediaCriteria_t*,mediaCrit,using this media criteria,
 [in],objPass, aafMediaOpenMode_t,openMode,ReadOnly or Append,
