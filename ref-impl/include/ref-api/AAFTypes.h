@@ -255,7 +255,7 @@ typedef enum _aafJPEGcomponent_e
 {
 kAAFJcLuminance = 0, 
 kAAFJcChrominance = 1
-#if ! STANDARD_JPEG_Q
+#if ! defined(STANDARD_JPEG_Q)
 , kAAFJcLuminanceFP16 = 2, 
 kAAFJcChrominanceFP16 = 3
 #endif
