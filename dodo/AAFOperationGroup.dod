@@ -17,8 +17,7 @@ AD_FORWARD_DECLARATION(AAFEffectDefinition)
 AD_FORWARD_DECLARATION(AAFParameter)
 AD_FORWARD_DECLARATION(AAFParameterSlot)
 AD_FORWARD_DECLARATION(EnumAAFEffectDefinitions)
-AD_FORWARD_DECLARATION(EnumAAFPluginLocator)
-AD_FORWARD_DECLARATION(EnumAAFControlCodeDefinition)
+AD_FORWARD_DECLARATION(EnumAAFControlCodeDefinitions)
 
 /******************************************\
 *                                          *
