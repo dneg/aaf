@@ -47,6 +47,8 @@ const CLSID CLSID_AAFSourceClip = { 0x38e6f8a5, 0x2a2c, 0x11d2, { 0x84, 0x11, 0x
 const CLSID CLSID_AAFSourceMob = { 0xB1A2137D, 0x1A7D, 0x11D2, { 0xBF, 0x78, 0x00, 0x10, 0x4B, 0xC9, 0x15, 0x6D } };
 
 const CLSID CLSID_AAFFileDescriptor = { 0xe58a8562, 0x2a3e, 0x11D2, { 0xbf, 0xa4, 0x00, 0x60, 0x97, 0x11, 0x62, 0x12 } };
+
+const CLSID CLSID_AAFNetworkLocator = { 0x2c1097b1, 0x69d6, 0x11d2, { 0x84, 0x1b, 0x00, 0x60, 0x08, 0x32, 0xac, 0xb8 } };
 #endif
 
 static void     FatalErrorCode(HRESULT errcode, int line, char *file)
@@ -254,8 +256,8 @@ static void ReadAAFFile(aafWChar * pFileName)
 	check(pHeader->GetNumMobs(kAllMob, &numMobs));
 	printf("Number of Mobs = %ld\n", numMobs);
 
-	IEnumAAFMobs *mobIter;
-	IAAFSourceMob	*smob;
+	IEnumAAFMobs			*mobIter;
+	IAAFSourceMob			*smob;
 	IAAFEssenceDescriptor	*essenceDesc;
 	IAAFFileDescriptor		*fileDesc;
 
@@ -285,6 +287,8 @@ static void ReadAAFFile(aafWChar * pFileName)
 		printf("Found %ld slots\n", numSlots);
 	    if(SUCCEEDED(aMob->QueryInterface (IID_IAAFSourceMob, (void **)&smob)))
 		{
+		    aafInt32 numLocators;
+
 			check(smob->GetEssenceDescription(&essenceDesc));
 			if(SUCCEEDED(essenceDesc->QueryInterface (IID_IAAFFileDescriptor, (void **)&fileDesc)))
 			{
@@ -294,6 +298,12 @@ static void ReadAAFFile(aafWChar * pFileName)
 			}
 			else
 				printf("    It is a source mob, but not a file source mob\n");
+			numLocators = -1;
+			check(essenceDesc->GetNumLocators(&numLocators));
+			assert ((numLocators >= 0), "numLocators written");
+			printf ("    It has %d locator%s attached.\n",
+					numLocators,
+					numLocators==1 ? "" : "s");
 		}
 		check(aMob->GetNumSlots (&numSlots));
 		printf("Found %ld slots\n", numSlots);
@@ -367,6 +377,7 @@ static void CreateAAFFile(aafWChar * pFileName)
 	IAAFFileDescriptor	*fileDesc = NULL;
 	IAAFEssenceDescriptor *essenceDesc = NULL;
 	aafRational_t	audioRate = { 44100, 1 };
+	IAAFLocator		*pLocator;
 
 	for(test = 0; test < 5; test++)
 	{
@@ -389,6 +400,19 @@ static void CreateAAFFile(aafWChar * pFileName)
 						   (void **)&fileDesc));
 		check(fileDesc->SetSampleRate(&audioRate));
 		check(fileDesc->QueryInterface (IID_IAAFEssenceDescriptor, (void **)&essenceDesc));
+
+		{
+		  HRESULT stat;
+		  stat = CoCreateInstance(CLSID_AAFNetworkLocator,
+								  NULL, 
+								  CLSCTX_INPROC_SERVER, 
+								  IID_IAAFLocator, 
+								  (void **)&pLocator);
+		  check (stat);
+		}
+		check(fileDesc->SetSampleRate(&audioRate));
+
+		check(essenceDesc->AppendLocator (pLocator));
 		check(smob->SetEssenceDescription(essenceDesc));
 
 		// Add some slots
@@ -418,6 +442,9 @@ static void CreateAAFFile(aafWChar * pFileName)
 		
 		
 		// Cleanup references...
+		pLocator->Release();
+		pLocator = NULL;
+
 		fileDesc->Release();
 		fileDesc = NULL;
 		
