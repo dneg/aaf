@@ -105,11 +105,7 @@ void OMStrongReferenceVectorProperty<ReferencedObject>::save(void) const
 
   // make an entry in the property index
   //
-  const char* propertyName = name();
-  store()->write(_propertyId,
-                 _storedForm,
-                 (void *)propertyName,
-                 strlen(propertyName) + 1);
+  saveName();
 
 }
 
@@ -160,12 +156,7 @@ void OMStrongReferenceVectorProperty<ReferencedObject>::restore(
 
   // get the name of the vector index stream
   //
-  char* propertyName = new char[externalSize];
-  ASSERT("Valid heap pointer", propertyName != 0);
-
-  store()->read(_propertyId, _storedForm, propertyName, externalSize);
-  ASSERT("Consistent property name", strcmp(propertyName, name()) == 0);
-  delete [] propertyName;
+  restoreName(externalSize);
 
   // restore the index
   //

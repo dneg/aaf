@@ -169,11 +169,7 @@ void OMStrongReferenceProperty<ReferencedObject>::save(void) const
 
   // Write the index entry.
   //
-  const char* propertyName = name();
-  store()->write(_propertyId,
-                 _storedForm,
-                 (void *)propertyName,
-                 strlen(propertyName) + 1);
+  saveName();
 
   _reference.save();
 
@@ -219,13 +215,7 @@ void OMStrongReferenceProperty<ReferencedObject>::restore(size_t externalSize)
 
   // retrieve sub-storage name
   //
-  char* storageName = new char[externalSize];
-  ASSERT("Valid heap pointer", storageName != 0);
-
-  store()->read(_propertyId, _storedForm, storageName, externalSize);
-  ASSERT("Consistent property size", externalSize == strlen(storageName) + 1);
-  ASSERT("Consistent property name", strcmp(storageName, name()) == 0);
-  delete [] storageName;
+  restoreName(externalSize);
 
   _reference.restore();
 
