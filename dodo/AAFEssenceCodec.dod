@@ -303,7 +303,11 @@ AD_XMETHOD3(ReadFractionalSample,
 
 
 
-AD_METHOD2(WriteRawData,
+AD_METHOD3(WriteRawData,
+			[in],
+			aafUInt32,
+			nSamples,
+			Write this many samples,
 			[in\\\,size_is\\\(buflen\\\)],
 			aafDataBuffer_t,
 			buffer,
