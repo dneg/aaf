@@ -100,7 +100,8 @@ void OMStoredObject::restore(OMPropertySet& properties)
 {
   TRACE("OMStoredObject::restore");
   PRECONDITION("Already open", _open);
-  PRECONDITION("At start of properties stream", streamOffset(_propertiesStream) == 0);
+  PRECONDITION("At start of properties stream",
+               streamOffset(_propertiesStream) == 0);
 
   size_t entries = _index->entries();
   
@@ -174,7 +175,8 @@ void OMStoredObject::read(int pid, int type, void* start, size_t size)
 {
   TRACE("OMStoredObject::read");
 
-  // read property value
+  // Read property value.
+  //
   readFromStream(_propertiesStream, start, size);
 }
 
@@ -212,29 +214,30 @@ OMStoredObject* OMStoredObject::openSubStorage(const char* name)
   return result;
 }
 
-void OMStoredObject::save(const OMStoredVectorIndex* index, const char* vectorName)
+void OMStoredObject::save(const OMStoredVectorIndex* index,
+                          const char* vectorName)
 {
   TRACE("OMStoredObject::save");
 
-  // calculate the stream name for the index
+  // Calculate the stream name for the index.
   //
   char* vectorIndexName = vectorIndexStreamName(vectorName);
 
-  // create the stream
+  // Create the stream.
   //
   IStream* vectorIndexStream = createStream(_storage, vectorIndexName);
 
-  // write the high water mark
+  // Write the high water mark.
   //
   size_t highWaterMark = index->highWaterMark();
   writeToStream(vectorIndexStream, &highWaterMark, sizeof(highWaterMark));
 
-  // write the count of elements
+  // Write the count of elements.
   //
   size_t entries = index->entries();
   writeToStream(vectorIndexStream, &entries, sizeof(entries));
 
-  // write the element names
+  // Write the element names.
   //
   size_t context = 0;
   size_t name;
@@ -243,7 +246,7 @@ void OMStoredObject::save(const OMStoredVectorIndex* index, const char* vectorNa
     writeToStream(vectorIndexStream, &name, sizeof(name));
   }
 
-  // close the stream
+  // Close the stream.
   //
   closeStream(vectorIndexStream);
 }
@@ -252,29 +255,29 @@ OMStoredVectorIndex* OMStoredObject::restore(const char* vectorName)
 {
   TRACE("OMStoredObject::restore");
   
-  // calculate the stream name for the index
+  // Calculate the stream name for the index.
   //
   char* vectorIndexName = vectorIndexStreamName(vectorName);
 
-  // open the stream
+  // Open the stream.
   //
   IStream* vectorIndexStream = openStream(_storage, vectorIndexName);
 
-  // read the high water mark
+  // Read the high water mark.
   //
   size_t highWaterMark;
   readFromStream(vectorIndexStream, &highWaterMark, sizeof(highWaterMark));
 
-  // read the count of elements
+  // Read the count of elements.
   //
   size_t entries;
   readFromStream(vectorIndexStream, &entries, sizeof(entries));
 
-  // create an index
+  // Create an index.
   //
   OMStoredVectorIndex* vectorIndex = new OMStoredVectorIndex(entries);
 
-  // read the element names, placing them in the index
+  // Read the element names, placing them in the index.
   //
   for (size_t i = 0; i < entries; i++) {
     size_t name;
@@ -294,7 +297,8 @@ char* OMStoredObject::vectorIndexStreamName(const char* vectorName)
   return vectorIndexName;
 }
 
-IStream* OMStoredObject::createStream(IStorage* storage, const char* streamName)
+IStream* OMStoredObject::createStream(IStorage* storage,
+                                      const char* streamName)
 {
   TRACE("OMStoredObject::createStream");
   PRECONDITION("Valid storage", storage != 0);
@@ -350,7 +354,8 @@ void OMStoredObject::closeStream(IStream*& stream)
   ASSERT("Reference count is 0.", resultCode == 0);
 }
 
-IStorage* OMStoredObject::createStorage(IStorage* storage, const char* storageName)
+IStorage* OMStoredObject::createStorage(IStorage* storage,
+                                        const char* storageName)
 {
   TRACE("createStorage");
   PRECONDITION("Valid storage", storage != 0);
@@ -374,7 +379,8 @@ IStorage* OMStoredObject::createStorage(IStorage* storage, const char* storageNa
   return newStorage;
 }
 
-IStorage* OMStoredObject::openStorage(IStorage* storage, const char* storageName)
+IStorage* OMStoredObject::openStorage(IStorage* storage,
+                                      const char* storageName)
 {
   TRACE("openStorage");
   PRECONDITION("Valid storage", storage != 0);
@@ -469,8 +475,13 @@ size_t OMStoredObject::streamOffset(IStream* stream)
   HRESULT status = stream->Seek(zero, STREAM_SEEK_CUR, &position);
   if (!check(status)) {
   }
+#if defined(__sgi)
+  ASSERT("Small stream", position.u.HighPart == 0);
+  result = position.u.LowPart;
+#else
   ASSERT("Small stream", position.HighPart == 0);
   result = position.LowPart;
+#endif
   return result;
 }
 
@@ -483,5 +494,9 @@ void OMStoredObject::streamSeek(IStream* stream, size_t offset)
   HRESULT status = stream->Seek(newPosition, STREAM_SEEK_SET, &oldPosition);
   if (!check(status)) {
   }
+#if defined(__sgi)
+  ASSERT("Small stream", oldPosition.u.HighPart == 0);
+#else
   ASSERT("Small stream", oldPosition.HighPart == 0);
+#endif
 }
