@@ -13,7 +13,7 @@ AAFINFO=0
 AAFOMFTEST=0
 ALL=0
 PRINTPATH=0
-SANDBOX=0
+AAFWATCHDOG=0
 
 
 PrintHelp ()
@@ -31,7 +31,7 @@ PrintHelp ()
 	echo "-m  = ComModAAF"
 	echo "-p  = ComPropDirectDump"
 	echo "-t  = dump\n\n"
-	echo "-s  = update Sandbox.log with exit code results"
+	echo "-s  = update AAFWatchDog.log with exit code results"
 	echo "-pp = Print PATH variable\n\n"
 }
 
@@ -225,7 +225,7 @@ PrintExitCodes ()
 	print "\nPrinting $ExTarget Test Exit Codes:\n$RESULTS"
 
 	if [ AAFWATCHDOG -eq 1 ]; then
-		print "\nPrinting $ExTarget Test Exit Codes:\n$RESULTS" >> D:/Views/AAFWatchDog.log
+		print "\nPrinting $ExTarget Test Exit Codes:\n$RESULTS" >> D:/AAFWatchDog/AAFWatchDog.log
 	fi
 }
 
