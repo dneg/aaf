@@ -30,9 +30,9 @@ include $(AAFBASE)/build/common.mk
 
 
 #
-#  Default target to build SDK. It assumes that dodo
-#  generated files already exist. If they don't or dodo sources 
-#  have been changed use 'make dodo'.
+#  Default target to build SDK. It assumes that dodo generated
+#  files already exist. If they don't or dodo sources have
+#  been changed use 'cd dodo && make'.
 #  'make everything' must be used to build SDK and applications.
 #
 .PHONY : all
@@ -43,13 +43,8 @@ all : ref-impl
 everything : install examples devutils utilities test
 
 
-.PHONY : dodo
-dodo :
-	cd dodo && $(MAKE)
-
-
 .PHONY : ref-impl
-ref-impl : dodo
+ref-impl :
 	cd ref-impl && $(MAKE)
 
 
@@ -78,19 +73,24 @@ test : install
 check : ref-impl
 	cd test/com/ComModTestAAF && $(MAKE) check
 
+
+#
+# Clean up after 'make'
+#
 .PHONY : clean
 clean :
 	cd ref-impl && $(MAKE) $@
-	cd DevUtils && $(MAKE) $@
-	cd Utilities && $(MAKE) $@
-	cd examples && $(MAKE) $@
-	cd test && $(MAKE) $@
-	cd dodo && $(MAKE) $@
 
+#
+# Clean up after 'make install'
+#
 .PHONY : uninstall
 uninstall :
 	$(MAKE) -f unixaafsdk.mak CFG=$(AAFTARGET) clean
 
+#
+# Clean up after 'make everything'
+#
 .PHONY : realclean
 realclean : uninstall
 	cd ref-impl && $(MAKE) $@
@@ -98,5 +98,4 @@ realclean : uninstall
 	cd Utilities && $(MAKE) $@
 	cd examples && $(MAKE) $@
 	cd test && $(MAKE) $@
-	cd dodo && $(MAKE) $@
 
