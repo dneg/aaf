@@ -353,6 +353,7 @@ public:
 
 	void SetCompression( const aafUID_t& compression );
 
+	void SetImageAspectRatio( const aafRational_t & aspect);
 
 
 	void GetStoredView( aafUInt32& StoredHeight, aafUInt32& StoredWidth);

@@ -25,11 +25,12 @@
 
 //=---------------------------------------------------------------------=
 
-AxObject::AxObject()
-{}
+//AxObject::AxObject()
+//{}
 
 AxObject::AxObject( const AxObject& other )
-:	_spIaafObject( other._spIaafObject )
+:	AxBaseObj( AxQueryInterface<IAAFObject, IUnknown>(other._spIaafObject) ),
+	_spIaafObject( other._spIaafObject )
 {}
 
 AxObject::AxObject( IAAFObjectSP spIaafObject )

@@ -82,11 +82,13 @@ void AxPropertyValueNoopPrtcl::process( IAAFPropertyValueSP&, IAAFTypeDefVariabl
 //=---------------------------------------------------------------------=
 
 AxPropertyValue::AxPropertyValue( IAAFPropertyValueSP spIaafPropertyValue )
-:	_spIaafPropertyValue( spIaafPropertyValue )
+:	AxBaseObj( AxQueryInterface<IAAFPropertyValue, IUnknown>( spIaafPropertyValue )) ,
+	_spIaafPropertyValue( spIaafPropertyValue )
 {}
 
 AxPropertyValue::AxPropertyValue( const AxPropertyValue& other )
-:	_spIaafPropertyValue( other._spIaafPropertyValue )
+:	_spIaafPropertyValue( other._spIaafPropertyValue ),
+	AxBaseObj( AxQueryInterface<IAAFPropertyValue, IUnknown>( _spIaafPropertyValue )) 
 {}
 
 AxPropertyValue::~AxPropertyValue()

@@ -29,7 +29,7 @@
 
 class AxProperty : public AxBaseObj {
 public:
-	AxProperty();
+//	AxProperty();
 	AxProperty( const AxProperty& other );
 	AxProperty( IAAFPropertySP spIaafProperty );
 

@@ -520,6 +520,10 @@ void AxDigitalImageDescriptor::SetVideoLineMap( aafUInt32  numberElements, const
 			                                            const_cast<aafInt32*>(pVideoLineMap) ) );
 }
 
+void AxDigitalImageDescriptor::SetImageAspectRatio( const aafRational_t & aspect)
+{
+	CHECK_HRESULT( _spIaafDigitalImageDescriptor->SetImageAspectRatio( aspect ) );
+}
 
 
 void AxDigitalImageDescriptor::GetStoredView( aafUInt32& StoredHeight, aafUInt32& StoredWidth)

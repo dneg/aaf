@@ -88,6 +88,10 @@ public:
 	{
 		return _spIaafPropertyValue;
 	}
+	inline operator IAAFPropertyValueSP()
+	{
+		return _spIaafPropertyValue;
+	}
 
 private:
 	AxPropertyValue& operator=( const AxPropertyValue& );

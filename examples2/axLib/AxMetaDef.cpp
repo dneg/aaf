@@ -23,7 +23,8 @@
 #include <sstream>
 
 AxMetaDefinition::AxMetaDefinition( IAAFMetaDefinitionSP spIaafMetaDefinition )
-:	_spIaafMetaDefinition( spIaafMetaDefinition )
+:	AxBaseObj( AxQueryInterface<IAAFMetaDefinition,IUnknown>(spIaafMetaDefinition) ),
+	_spIaafMetaDefinition( spIaafMetaDefinition )
 {}
 
 AxMetaDefinition::~AxMetaDefinition()
@@ -285,6 +286,14 @@ void AxTypeDefInt::GetInteger( IAAFPropertyValueSP& spPropVal,
 	CHECK_HRESULT( _spIaafTypeDefInt->GetInteger( spPropVal, pVal, valSize ) );
 }
 
+IAAFPropertyValueSP AxTypeDefInt::CreateValue(aafMemPtr_t pVal, aafUInt32  valSize)
+{
+	IAAFPropertyValueSP propval;
+
+	CHECK_HRESULT( _spIaafTypeDefInt->CreateValue(pVal, valSize, &propval));
+
+	return propval;
+}
 
 //=---------------------------------------------------------------------=
 

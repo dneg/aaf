@@ -20,15 +20,17 @@
 #include "AxUtil.h"
 #include "AxEx.h"
 
-AxProperty::AxProperty()
-{}
+//AxProperty::AxProperty()
+//{}
 
 AxProperty::AxProperty( const AxProperty& other )
-:	_spIaafProperty( other._spIaafProperty )
+:	AxBaseObj( AxQueryInterface<IAAFProperty,IUnknown>(other._spIaafProperty) ),
+	_spIaafProperty( other._spIaafProperty )
 {}
 
 AxProperty::AxProperty( IAAFPropertySP spIaafProperty )
-:	_spIaafProperty( spIaafProperty )
+:	AxBaseObj( AxQueryInterface<IAAFProperty,IUnknown>(spIaafProperty) ),
+	_spIaafProperty( spIaafProperty )
 {}
 
 AxProperty::~AxProperty()

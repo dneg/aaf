@@ -93,6 +93,10 @@ public:
 	aafBoolean_t GetIsOptional();
 	aafBoolean_t GetIsUniqueIdentifier();
 	IAAFTypeDefSP GetTypeDef();
+	inline operator IAAFPropertyDefSP()
+	{
+		return _spIaafPropertyDef;
+	}
 
 private:
 	IAAFPropertyDefSP _spIaafPropertyDef;
@@ -213,6 +217,7 @@ public:
 		GetInteger( spPropVal, reinterpret_cast<aafMemPtr_t>(pVal), sizeof( IntType ) );
 	}
 
+	IAAFPropertyValueSP CreateValue(aafMemPtr_t pVal, aafUInt32  valSize);
 
 private:
 
