@@ -49,8 +49,8 @@
 //
 // DictP18-277-1847BMaster.csv 
 //
-// This file was generated on Wed May  3 15:27:21 EDT 2000
-// by user transdel on system TRANSDEL.
+// This file was generated on Mon May  8 19:02:51 EDT 2000
+// by user tbingham on system TBINGHAMPC.
 //
 // Key to macros.
 //
@@ -96,8 +96,9 @@
 //     type      = the type of the property [*]
 //     mandatory = true if the property is mandatory
 //                 false if the property is optional
-//     uid       = true if the property is the unique identifier for this class
-//                 false if the property is not the unique identifier for this class
+//     uid       = true if the property is the unique identifier
+//                 for this class, false if the property is not
+//                 the unique identifier for this class
 //     container = the class that defines this property
 //
 // AAF_TYPE(type)
