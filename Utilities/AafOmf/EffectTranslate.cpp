@@ -308,35 +308,35 @@ typedef struct
 static wipeTable_t wipeTable[] = {
 	{ 24, "EFF_BLEND_WIPE_RBOX" },
 	{ 23, "EFF_BLEND_WIPE_TBOX" },
-	{ 26, "EFF_BLEND_WIPE_LBOX_ID" },
-	{ 25, "EFF_BLEND_WIPE_BBOX_ID" },
-	{ 5, "EFF_BLEND_WIPE_LR_ID" },
-	{ 6, "EFF_BLEND_WIPE_LL_ID" },
-	{ 4, "EFF_BLEND_WIPE_UR_ID" },
-	{ 3, "EFF_BLEND_WIPE_UL_ID" },
-	{ 21, "EFF_BLEND_WIPE_VOPEN_ID" },
-	{ 22, "EFF_BLEND_WIPE_HOPEN_ID" },
-	{ 1, "EFF_BLEND_WIPE_VERT_ID" },
-	{ 2, "EFF_BLEND_WIPE_HORZ_ID" },
-	{ 41, "EFF_BLEND_WIPE_LRLDIAG_ID" },
-	{ 42, "EFF_BLEND_WIPE_LLRDIAG_ID" },
-	{ 42, "EFF_BLEND_WIPE_URLDIAG_ID" },
-	{ 41, "EFF_BLEND_WIPE_ULRDIAG_ID" },
-	{ 317, "EFF_BLEND_WIPE_SPIRAL_ID" },
-	{ 8, "EFF_BLEND_WIPE_GRID_ID" },
-	{ 352, "EFF_BLEND_WIPE_1ROW_ID" },
-	{ 409, "EFF_BLEND_WIPE_SPECKLE_ID" },
-	{ 301, "EFF_BLEND_WIPE_ZIG_ZAG_ID" },
-	{ 71, "EFF_BLEND_WIPE_VOPEN_SAW_ID" },
-	{ 72, "EFF_BLEND_WIPE_HOPEN_SAW_ID" },
-	{ 73, "EFF_BLEND_WIPE_VSAW_ID" },
-	{ 74, "EFF_BLEND_WIPE_HSAW_ID" },
-	{ 7, "EFF_BLEND_WIPE_4CORNER_ID" },
-	{ 101, "EFF_BLEND_WIPE_BOX_ID" },
-	{ 119, "EFF_BLEND_WIPE_CIRCLE_ID" },
-	{ 201, "EFF_BLEND_WIPE_RADAR_ID" },
-	{ 102, "EFF_BLEND_WIPE_DIAMOND_ID" },
-	{ 120, "EFF_BLEND_WIPE_ELLIPSE_ID" }
+	{ 26, "EFF_BLEND_WIPE_LBOX" },
+	{ 25, "EFF_BLEND_WIPE_BBOX" },
+	{ 5, "EFF_BLEND_WIPE_LR" },
+	{ 6, "EFF_BLEND_WIPE_LL" },
+	{ 4, "EFF_BLEND_WIPE_UR" },
+	{ 3, "EFF_BLEND_WIPE_UL" },
+	{ 21, "EFF_BLEND_WIPE_VOPEN" },
+	{ 22, "EFF_BLEND_WIPE_HOPEN" },
+	{ 1, "EFF_BLEND_WIPE_VERT" },
+	{ 2, "EFF_BLEND_WIPE_HORZ" },
+	{ 41, "EFF_BLEND_WIPE_LRLDIAG" },
+	{ 42, "EFF_BLEND_WIPE_LLRDIAG" },
+	{ 42, "EFF_BLEND_WIPE_URLDIAG" },
+	{ 41, "EFF_BLEND_WIPE_ULRDIAG" },
+	{ 317, "EFF_BLEND_WIPE_SPIRAL" },
+	{ 8, "EFF_BLEND_WIPE_GRID" },
+	{ 352, "EFF_BLEND_WIPE_1ROW" },
+	{ 409, "EFF_BLEND_WIPE_SPECKLE" },
+	{ 301, "EFF_BLEND_WIPE_ZIG_ZAG" },
+	{ 71, "EFF_BLEND_WIPE_VOPEN_SAW" },
+	{ 72, "EFF_BLEND_WIPE_HOPEN_SAW" },
+	{ 73, "EFF_BLEND_WIPE_VSAW" },
+	{ 74, "EFF_BLEND_WIPE_HSAW" },
+	{ 7, "EFF_BLEND_WIPE_4CORNER" },
+	{ 101, "EFF_BLEND_WIPE_BOX" },
+	{ 119, "EFF_BLEND_WIPE_CIRCLE" },
+	{ 201, "EFF_BLEND_WIPE_RADAR" },
+	{ 102, "EFF_BLEND_WIPE_DIAMOND" },
+	{ 120, "EFF_BLEND_WIPE_ELLIPSE" }
 };
 
 HRESULT GetEffectIDs(IAAFOperationGroup *effect,
@@ -352,6 +352,7 @@ HRESULT GetEffectIDs(IAAFOperationGroup *effect,
 	aafUInt32				wipeNumber;
 	aafUInt32				bytesRead;
 	bool					found = false;
+	unsigned char			reverse;
 	aafUID_t				AAFEffectID, direction;
 
 	try
@@ -360,6 +361,8 @@ HRESULT GetEffectIDs(IAAFOperationGroup *effect,
 		rc = effect->GetOperationDefinition(&pOpDef);
 		rc = pOpDef->QueryInterface(IID_IAAFDefObject, (void **) &pDef);
 		rc = pDef->GetAUID(&AAFEffectID);
+
+
 		for(n = 0; (n < numEntries) && !found; n++)
 		{
 			if ( CompareUUID(AAFEffectID, *(xlateTable[n].aafID)))
@@ -414,8 +417,23 @@ HRESULT GetEffectIDs(IAAFOperationGroup *effect,
 					pParameter->Release();
 					pParameter = NULL;
 				}
-				else if (CompareUUID(effectID, kAAFEffectSMPTEVideoWipe))
+				else if (CompareUUID(AAFEffectID, kAAFEffectSMPTEVideoWipe))
 				{
+					if(effect->GetParameterByArgID(kAAFParameterDefSMPTEReverse, &pParameter) == AAFRESULT_SUCCESS
+													&& pParameter != NULL)
+					{
+						if(pParameter->QueryInterface(IID_IAAFConstantValue, (void **) &pCVal) == AAFRESULT_SUCCESS)
+						{
+							// Determine reverse flag to help determine effect ID
+							(void)(pCVal->GetValue(sizeof(reverse),&reverse,&bytesRead));
+						}
+						// else error!!!
+						pParameter->Release();
+						pParameter = NULL;
+					}
+					else
+						reverse = FALSE;		// !!! Make this an error later
+
 					(void)(effect->GetParameterByArgID(kAAFParameterDefSMPTEWipeNumber,
 														&pParameter));
 					if(pParameter->QueryInterface(IID_IAAFConstantValue, (void **) &pCVal) == AAFRESULT_SUCCESS)
@@ -423,16 +441,33 @@ HRESULT GetEffectIDs(IAAFOperationGroup *effect,
 						// Determine effect ID from direction
 						(void)(pCVal->GetValue(sizeof(wipeNumber),(unsigned char*)&wipeNumber,&bytesRead));
 						// if bytesRead != sizeof(wipeNumber) error
-						// Determine effectID from wipe code	
-						bool foundWipe = false;
-						for(x = 0; (n < numWipeEntries) && !foundWipe; x++)
+						// Determine effectID from wipe code
+						if(wipeNumber == 41)	// Special-case those which depend on reverse
 						{
-							if (wipeNumber == wipeTable[x].wipeCode)
-							{							
-								if(wipeTable[x].effectName != NULL)
-									strcpy(MCEffectID, wipeTable[x].effectName);
-								// else error
-								foundWipe = true;
+							if (!reverse)
+								strcpy(MCEffectID, "EFF_BLEND_WIPE_ULRDIAG");
+							else
+								strcpy(MCEffectID, "EFF_BLEND_WIPE_LRLDIAG");
+						}
+						else if(wipeNumber == 42)	// Special-case those which depend on reverse
+						{
+							if (!reverse)
+								strcpy(MCEffectID, "EFF_BLEND_WIPE_URLDIAG");
+							else
+								strcpy(MCEffectID, "EFF_BLEND_WIPE_LLRDIAG");
+						}
+						else
+						{
+							bool foundWipe = false;
+							for(x = 0; (n < numWipeEntries) && !foundWipe; x++)
+							{
+								if (wipeNumber == wipeTable[x].wipeCode)
+								{							
+									if(wipeTable[x].effectName != NULL)
+										strcpy(MCEffectID, wipeTable[x].effectName);
+									// else error
+									foundWipe = true;
+								}
 							}
 						}
 						pCVal->Release();
@@ -458,6 +493,8 @@ HRESULT GetEffectIDs(IAAFOperationGroup *effect,
 	} // end try
 	catch( ExceptionBase &e )
 	{
+		if(pParameter != NULL)
+			pParameter->Release();
 		return e.Code();
 	}
 
@@ -1146,6 +1183,33 @@ void ExportSeparateKeyframeData(aafUID_t &effectUID,
 		pParm = NULL;
 	}
 	
+	//!!!New, merge into the Composer
+	//	dprintf("exporting selected\n");
+	unsigned char		selected;
+		
+	pVVal = AAFAddEmptyVaryingVal(pDict, pOutputEffect);
+	typeDef = CreateTypeDefinition(pDict, kAAFTypeID_Boolean);
+	for (short selKF = 0; selKF < numKF; selKF++)
+	{
+		selected = (keyframes[selKF]->selected ? 1 : 0);
+		AAFAddOnePoint(pDict, times[selKF], sizeof(selected), &selected,
+			typeDef, pVVal);
+	}
+	CHECKAAF(pVVal->QueryInterface(IID_IAAFParameter, (void **) &pParm));
+		
+	parmDef = CreateParameterDefinition(pDict, kAAFParamID_AvidSelected);
+	CHECKAAF(pParm->SetParameterDefinition(parmDef));
+	parmDef->Release();
+	parmDef = NULL;
+		
+	CHECKAAF(pParm->SetTypeDefinition(typeDef));
+	typeDef->Release();
+	typeDef = NULL;
+	pVVal->Release();
+	pVVal = NULL;
+	pParm->Release();
+	pParm = NULL;
+
 	if(keyframes[0]->userParamSize != 0)
 	{
 		//	dprintf("exporting user param\n");
@@ -1340,6 +1404,11 @@ IAAFParameterDef *CreateParameterDefinition(IAAFDictionary *pDict, aafUID_t parm
 	{
     	CHECKAAF(defObject->Initialize(parmDefID, L"EffectGlobals", L"Opaque Bits"));
 		typeUID = kAAFTypeID_String;
+	}
+	else if(memcmp(&parmDefID, &kAAFParamID_AvidSelected, sizeof(aafUID_t)) == 0)
+	{
+    	CHECKAAF(defObject->Initialize(parmDefID, L"Selected", L"Opaque Bits"));
+		typeUID = kAAFTypeID_Boolean;
 	}
 	else
 	{

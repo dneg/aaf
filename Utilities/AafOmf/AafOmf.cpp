@@ -49,6 +49,7 @@ namespace OMF2
 #include "Aaf2Omf.h"
 #include "Omf2Aaf.h"
 #include "aafclassdefuids.h"
+#include "EffectTranslate.h"
 
 //#include "AAFUtils.h"
 AAFRESULT aafMobIDNew(aafUID_t *mobID);
