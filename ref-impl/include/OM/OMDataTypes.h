@@ -48,6 +48,8 @@ typedef unsigned long long int OMUInt64;
 #endif
 
 typedef OMUInt8                OMByte;
+typedef OMUInt8                OMCharacter;
+typedef OMUInt16               OMWideCharacter;
 
 typedef struct _OMClassId
 {
