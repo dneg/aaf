@@ -198,8 +198,10 @@ DllGetVersion(UInt32* pVersion)
 OSErr pascal
 DllInitializationRoutine(CFragInitBlockPtr initBlkPtr)
 {
+#ifdef _DEBUG
 	if (AmIBeingMWDebugged())
 		Debugger();
+#endif // _DEBUG
 
 	DllData.InitBlock = *initBlkPtr;
 	DllData.Inited = false;
