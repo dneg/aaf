@@ -3679,7 +3679,15 @@ AD_CLASS_END\
 
 
 #ccccccccccccccccccccccccccc
-#c Begining of the module definitions
+#c
+#c Declaration for the class definition's factory method.
+#c
+#startm AD_CLASSDEF_FACTORY 02
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c Beginning of the module definitions
 #c
 #startm AD_MODULE_BEGIN 02
 #endm
