@@ -57,22 +57,7 @@ void AddImageEssence( AxMasterMob& masterMob,
 
 	AxDataDef axPictureDef( axDictionary.LookupDataDef( kAAFDataDef_Picture ) );
 	
-	// FIXME - This should be moved to a centralized location rather than having
-	// options strings tested all over the place.
-	std::pair<bool,int> mpegCodecOpt = args.get( "-mpeg2" );
-	aafUID_t codec;
-
-#if 0
-	// Activate this code if you would like to test the BBC Mpeg codec.
-	if ( mpegCodecOpt.first ) {
-		codec = kAAFCodecMPEG2;
-	}
-	else {
-#endif
-		codec = kAAFCodecJPEG;
-#if 0
-	}
-#endif
+	aafUID_t codec = kAAFCodecJPEG;
 
 	aafRational_t editRate = {25, 1};
 	aafRational_t sampleRate = {25, 1};

@@ -36,9 +36,8 @@ void throwUsage()
 {
 	using namespace std;
 	wostringstream msg;
-	msg << L"Usage:\t" << L"-file filename [-metadata] [-essence] [-composition] [-mpeg2]" << endl;
+	msg << L"Usage:\t" << L"-file filename [-metadata] [-essence] [-composition]" << endl;
 	msg << L"Notes:\t" << L"Run -essence before composition.  Run -metadata before -essence." << endl;
-	msg << L"      \t" << L"The -mpeg2 option selects the mpeg codec (currently disabled)." << endl;
 	throw AxEx( msg.str().c_str() );
 }
 
