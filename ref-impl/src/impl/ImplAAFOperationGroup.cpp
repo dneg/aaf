@@ -609,3 +609,31 @@ AAFRESULT STDMETHODCALLTYPE
 
 	return AAFRESULT_SUCCESS;
 }
+
+AAFRESULT ImplAAFOperationGroup::ChangeContainedReferences(aafMobID_constref from,
+													aafMobID_constref to)
+{
+	aafUInt32			n, count;
+	ImplAAFSegment		*seg = NULL;
+	
+	XPROTECT()
+	{
+		CHECK(CountSourceSegments (&count));
+		for(n = 0; n < count; n++)
+		{
+			CHECK(GetInputSegmentAt (n, &seg));
+			CHECK(seg->ChangeContainedReferences(from, to));
+			seg->ReleaseReference();
+			seg = NULL;
+		}
+	}
+	XEXCEPT
+	{
+		if(seg != NULL)
+		  seg->ReleaseReference();
+		seg = 0;
+	}
+	XEND;
+
+	return AAFRESULT_SUCCESS;
+}
