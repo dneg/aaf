@@ -1987,7 +1987,7 @@ AAFRESULT ImplAAFMob::FindNextMob(ImplAAFMobSlot *track,
 		nextTrack->ReleaseReference();
 		nextTrack = 0;
 
-//		sclp->ReleaseReference(); // causes 800400c8 to be returned from MasterMob::OpenEssence
+		sclp->ReleaseReference(); // causes 800400c8 to be returned from MasterMob::OpenEssence
 	}
 	XEXCEPT
 	{
@@ -1997,8 +1997,8 @@ AAFRESULT ImplAAFMob::FindNextMob(ImplAAFMobSlot *track,
 		if (nextMob)
 		  nextMob->ReleaseReference();
 		nextMob = 0;
-//		if (sclp)
-//			sclp->ReleaseReference();
+		if (sclp)
+			sclp->ReleaseReference();
 	}
 	XEND;
 	
