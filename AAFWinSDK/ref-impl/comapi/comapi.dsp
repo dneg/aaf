@@ -308,10 +308,6 @@ SOURCE="..\..\..\ref-impl\src\com-api\CAAFParameterDef.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\com-api\CAAFPluggableCode.cpp"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFPluginDescriptor.cpp"
 # End Source File
 # Begin Source File
