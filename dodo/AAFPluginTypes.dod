@@ -1,9 +1,9 @@
 #c/*************************************************\
-#c*													*
-#c* Advanced Authoring Format						*
-#c*													*
-#c* Copyright (c) 1998-1999 Avid Technology, Inc.	*
-#c*													*
+#c*                                                 *
+#c* Advanced Authoring Format                       *
+#c*                                                 *
+#c* Copyright (c) 1998-1999 Avid Technology, Inc.   *
+#c*                                                 *
 #c\*************************************************/
 #startm .this-module 0
 AAFPluginTypes\
@@ -13,31 +13,34 @@ AD_INCLUDE(AAFTypes)
 
 AD_TYPES_BEGIN(410ED8B1, 912B, 11D2, 80, 88, 00, 60, 08, 14, 3e, 6f)
 
-typedef enum _aafDeinterleave_t
+typedef aafInt32 aafDeinterleave_t;
+typedef enum _aafDeinterleave_e
 {
 	deinterleave,
 	leaveInterleaved
-} aafDeinterleave_t;
+} aafDeinterleave_e;
 
-typedef enum _aafCheckVerbose_t
+typedef aafInt32 aafCheckVerbose_t;
+typedef enum _aafCheckVerbose_e
 {
 	kAAFCheckVerbose, 
 	kCheckQuiet
-} aafCheckVerbose_t;
+} aafCheckVerbose_e;
 
-typedef enum _aafCheckWarnings_t 
+typedef aafInt32 aafCheckWarnings_t;
+typedef enum _aafCheckWarnings_e
 {
 	kAAFCheckPrintWarnings, 
 	kAAFCheckNoWarnings
-} aafCheckWarnings_t;
+} aafCheckWarnings_e;
 
 typedef struct _aafSelectInfo_t
 {
-	aafBool         	hwAssisted;
-	aafBool				isNative;
-	aafBool        		willHandleMDES;
-	aafInt16			relativeLoss;
-	aafUInt32			avgBitsPerSec;
+	aafBoolean_t         	hwAssisted;
+	aafBoolean_t		isNative;
+	aafBoolean_t   		willHandleMDES;
+	aafInt16		relativeLoss;
+	aafUInt32		avgBitsPerSec;
 } aafSelectInfo_t;
 
 AD_TYPES_END
