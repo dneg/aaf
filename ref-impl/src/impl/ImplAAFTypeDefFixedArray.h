@@ -100,9 +100,6 @@ protected:
   // returns number of elements in this array
 
 public:
-  // Declare this class to be storable.
-  //
-  OMDECLARE_STORABLE(ImplAAFTypeDefFixedArray)
 
   // overrides from ImplAAFTypeDef
   //

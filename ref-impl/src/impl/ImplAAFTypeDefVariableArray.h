@@ -116,9 +116,6 @@ protected:
 
 
 public:
-  // Declare this class to be storable.
-  //
-  OMDECLARE_STORABLE(ImplAAFTypeDefVariableArray)
 
   // overrides from ImplAAFTypeDef
   //
