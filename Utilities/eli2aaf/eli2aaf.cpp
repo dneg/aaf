@@ -20,7 +20,7 @@
 // USA
 
 
-#ifdef _WIN32
+#ifdef _MSC_VER
 #pragma warning( disable : 4786 )	// disable warning about debug info truncated
 #endif
 
@@ -55,6 +55,8 @@
 
 #define DV_PAL_FRAME_SIZE 144000
 #define DV_NTSC_FRAME_SIZE 120000
+
+using namespace std;
 
 const aafMobID_t zerouid = {{0,0,0,0,0,0,0,0,0,0,0,0},0,0,0,0,{0,0,0,{0,0,0,0,0,0,0,0}}};
 
