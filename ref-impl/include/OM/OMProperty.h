@@ -23,6 +23,7 @@ const int SF_WEAK_OBJECT_REFERENCE_SET      = 7;
 class OMStoredObject;
 class OMStorable;
 class OMPropertySet;
+class OMType;
 
   // @class Abstract base class for persistent properties supported by
   //        the Object Manager.
@@ -34,6 +35,12 @@ public:
   OMProperty(const OMPropertyId propertyId,
              const int storedForm,
              const char* name);
+
+    // Temporary pseudo-constructor.
+  void initialize(const OMPropertyId propertyId,
+                  const char* name,
+                  OMType* type,
+                  const bool isOptional = false);
 
     // @cmember Destructor.
   virtual ~OMProperty(void);
@@ -88,6 +95,8 @@ protected:
   const char* _name;
   const OMPropertySet* _propertySet; // The PropertySet that contains
                                      // this property
+  const OMType* _type;
+
 };
 
 // @doc OMINTERNAL
