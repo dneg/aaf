@@ -16,7 +16,7 @@
 #include "ImplEnumAAFProperties.h"
 #endif
 
-#include "ImplEnumerator.h"
+#include "ImplAAFEnumerator.h"
 #include "ImplAAFObjectCreation.h"
 
 #include <assert.h>
@@ -92,7 +92,7 @@ AAFRESULT STDMETHODCALLTYPE
 		
   // copy this enumerator
   assert (_rep);
-  theEnum->_rep = new ImplEnumerator<ImplAAFProperty*>(*_rep);
+  theEnum->_rep = new ImplAAFEnumerator<ImplAAFProperty*>(*_rep);
   if (! theEnum->_rep)
 	{
 	  theEnum->ReleaseReference();
@@ -108,14 +108,14 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT
     ImplEnumAAFProperties::Initialize (
-      ImplCollection<ImplAAFProperty*> * pProperties)
+      ImplAAFCollection<ImplAAFProperty*> * pProperties)
 {
   if (! pProperties)
 	return AAFRESULT_NULL_PARAM;
 
   // make sure it hasn't been init'd before
   assert (! _rep);
-  _rep = new ImplEnumerator<ImplAAFProperty*>(pProperties);
+  _rep = new ImplAAFEnumerator<ImplAAFProperty*>(pProperties);
   if (! _rep)
 	return AAFRESULT_NOMEMORY;
   assert (_rep);

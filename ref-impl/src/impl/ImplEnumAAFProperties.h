@@ -15,8 +15,8 @@
 class ImplAAFProperty;
 
 
-template <typename T> class ImplCollection;
-template <typename T> class ImplEnumerator;
+template <typename T> class ImplAAFCollection;
+template <typename T> class ImplAAFEnumerator;
 
 
 #ifndef __ImplAAFRoot_h__
@@ -93,10 +93,10 @@ public:
   // in /test/ImplEnumAAFPropertiesTest.cpp.
   static AAFRESULT test();
 
-  AAFRESULT Initialize (ImplCollection<ImplAAFProperty*> * pProperties);
+  AAFRESULT Initialize (ImplAAFCollection<ImplAAFProperty*> * pProperties);
 
 private:
-  ImplEnumerator<ImplAAFProperty*> * _rep;
+  ImplAAFEnumerator<ImplAAFProperty*> * _rep;
 };
 
 
