@@ -1007,7 +1007,7 @@ void OMFile::openModify(void)
   TRACE("OMFile::openModify");
 
   readSignature(_rawStorage, _signature);
-  OMFileEncoding encoding = encodingOf(_signature);
+  _encoding = encodingOf(_signature);
   ASSERT("Valid encoding", (_encoding == MSSBinaryEncoding) ||
                            (_encoding == KLVBinaryEncoding) ||
                            (_encoding == XMLTextEncoding));
