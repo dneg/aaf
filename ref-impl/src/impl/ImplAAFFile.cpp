@@ -957,38 +957,6 @@ ImplAAFFile::SaveCopyAs (ImplAAFFile * pDestFile)
 
 
 AAFRESULT STDMETHODCALLTYPE
-ImplAAFFile::SaveAs (const aafCharacter * pFileName,
-					 aafUInt32 modeFlags)
-{
-	if (! _initialized)
-		return AAFRESULT_NOT_INITIALIZED;
-
-	if (!IsOpen())
-		return AAFRESULT_NOT_OPEN;
-
-	if (! areAllModeFlagsDefined (modeFlags))
-	  return AAFRESULT_BAD_FLAGS;
-
-	if (modeFlags)
-	  return AAFRESULT_NOT_IN_CURRENT_VERSION;
-
-	// Assure no registration of def objects in dictionary during
-	// save operation
-	ImplAAFDictionarySP dictSP;
-	AAFRESULT hr = _head->GetDictionary(&dictSP);
-	dictSP->AssureClassPropertyTypes ();
-	bool regWasEnabled = dictSP->SetEnableDefRegistration (false);
-
-	assert(_file);
-	_file->saveAs(pFileName);
-
-	dictSP->SetEnableDefRegistration (regWasEnabled);
-
-	return AAFRESULT_SUCCESS;
-}
-
-
-AAFRESULT STDMETHODCALLTYPE
 ImplAAFFile::Revert ()
 {
 	if (! _initialized)

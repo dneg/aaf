@@ -87,10 +87,6 @@ public:
 	Save ();
 
   virtual AAFRESULT STDMETHODCALLTYPE
-	SaveAs (const aafCharacter * pFileName,
-			aafUInt32 modeFlags);
-
-  virtual AAFRESULT STDMETHODCALLTYPE
 	SaveCopyAs (ImplAAFFile * pDestFile);
 
   virtual AAFRESULT STDMETHODCALLTYPE
