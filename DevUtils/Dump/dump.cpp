@@ -1815,24 +1815,12 @@ bool isValid(const IndexEntry* index, const OMUInt32 entries)
 //
 size_t valueStreamSize(const IndexEntry* index, const OMUInt32 entries)
 {
-#if 1
   size_t result = 0;
 
   for (size_t i = 0; i < entries; i++) {
     result = result + index[i]._length;
   }
   return result;
-#else
-  size_t result;
-
-  if (entries != 0) {
-    size_t last = entries - 1;
-    result = index[last]._offset + index[last]._length;
-  } else {
-    result = 0;
-  }
-  return result;
-#endif
 }
 
 char* typeName(OMUInt32 type)
