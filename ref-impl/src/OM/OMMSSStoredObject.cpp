@@ -57,6 +57,8 @@
 #include "OMUniqueObjectIdentType.h"
 #include "OMBufferedIStream.h"
 
+#include <stdlib.h>
+
 const OMVersion currentVersion = 32;
 
 const size_t indexHeaderSize = sizeof(OMByteOrder) +
