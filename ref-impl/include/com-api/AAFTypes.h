@@ -2,9 +2,9 @@
 
 
 /* File created by MIDL compiler version 5.01.0164 */
-/* at Wed Jul 14 16:53:15 2004
+/* at TIMESTAMP REMOVED
  */
-/* Compiler settings for AAFTypes.idl:
+/* Compiler settings for ../ref-impl/include/com-api/AAFTypes.idl:
     Os (OptLev=s), W1, Zp8, env=Win32, ms_ext, c_ext
     error checks: allocation ref bounds_check enum stub_data 
 */
@@ -350,6 +350,19 @@ enum _aafElectroSpatialFormulation_e
 	kAAFEsStereoRightChannelDoubleSamplingFrequencyMode	= 9,
 	kAAFEsMultiChannelMode	= 15
     }	aafElectroSpatialFormulation_e;
+
+typedef aafInt32 aafSignalStandard_t;
+
+typedef 
+enum _aafSignalStandard_e
+    {	kAAFSignalNone	= 0,
+	kAAFSignalS125MInterlace	= 1,
+	kAAFSignalS125MProgressive	= 2,
+	kAAFSignalS347M	= 3,
+	kAAFSignalS274M	= 4,
+	kAAFSignalS296M	= 5,
+	kAAFSignalS349M	= 6
+    }	aafSignalStandard_e;
 
 typedef aafInt32 aafColorSiting_t;
 
@@ -1031,6 +1044,8 @@ typedef aafTimecodeSourceType_t aafTCSource_t;
 typedef aafPulldownDir_t aafPulldownDirectionType_t;
 
 typedef aafPulldownKind_t aafPulldownKindType_t;
+
+typedef aafSignalStandard_t aafSignalStandardType_t;
 
 /**************************/
 #ifndef STDMETHODCALLTYPE

@@ -36190,40 +36190,64 @@ EXTERN_C const IID IID_IAAFDigitalImageDescriptor2;
             /* [out] */ aafUInt32 __RPC_FAR *pImageAlignmentFactor) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetTransferCharacteristic( 
-            /* [in] */ aafUID_constref TransferCharacteristic) = 0;
+            /* [in] */ aafUID_constref transferCharacteristic) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTransferCharacteristic( 
             /* [out] */ aafUID_t __RPC_FAR *pTransferCharacteristic) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetCodingEquations( 
-            /* [in] */ aafUID_constref CodingEquations) = 0;
+            /* [in] */ aafUID_constref codingEquations) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCodingEquations( 
             /* [out] */ aafUID_t __RPC_FAR *pCodingEquations) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetColorPrimaries( 
-            /* [in] */ aafUID_constref ColorPrimaries) = 0;
+            /* [in] */ aafUID_constref colorPrimaries) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetColorPrimaries( 
             /* [out] */ aafUID_t __RPC_FAR *pColorPrimaries) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetFieldStartOffset( 
-            /* [in] */ aafUInt32 FieldStartOffset) = 0;
+            /* [in] */ aafUInt32 fieldStartOffset) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFieldStartOffset( 
             /* [out] */ aafUInt32 __RPC_FAR *pFieldStartOffset) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetFieldEndOffset( 
-            /* [in] */ aafUInt32 FieldEndOffset) = 0;
+            /* [in] */ aafUInt32 fieldEndOffset) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFieldEndOffset( 
             /* [out] */ aafUInt32 __RPC_FAR *pFieldEndOffset) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetFieldDominance( 
-            /* [in] */ aafFieldNumber_t FieldDominance) = 0;
+            /* [in] */ aafFieldNumber_t fieldDominance) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFieldDominance( 
             /* [out] */ aafFieldNumber_t __RPC_FAR *pFieldDominance) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetDisplayF2Offset( 
+            /* [in] */ aafInt32 displayF2Offset) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetDisplayF2Offset( 
+            /* [out] */ aafInt32 __RPC_FAR *pDisplayF2Offset) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetStoredF2Offset( 
+            /* [in] */ aafInt32 storedF2Offset) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetStoredF2Offset( 
+            /* [out] */ aafInt32 __RPC_FAR *pStoredF2Offset) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetActiveFormatDescriptor( 
+            /* [in] */ aafUInt8 activeFormatDescriptor) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetActiveFormatDescriptor( 
+            /* [out] */ aafUInt8 __RPC_FAR *pActiveFormatDescriptor) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetSignalStandard( 
+            /* [in] */ aafSignalStandard_t signalStandard) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetSignalStandard( 
+            /* [out] */ aafSignalStandard_t __RPC_FAR *pSignalStandard) = 0;
         
     };
     
@@ -36338,7 +36362,7 @@ EXTERN_C const IID IID_IAAFDigitalImageDescriptor2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetTransferCharacteristic )( 
             IAAFDigitalImageDescriptor2 __RPC_FAR * This,
-            /* [in] */ aafUID_constref TransferCharacteristic);
+            /* [in] */ aafUID_constref transferCharacteristic);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTransferCharacteristic )( 
             IAAFDigitalImageDescriptor2 __RPC_FAR * This,
@@ -36346,7 +36370,7 @@ EXTERN_C const IID IID_IAAFDigitalImageDescriptor2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetCodingEquations )( 
             IAAFDigitalImageDescriptor2 __RPC_FAR * This,
-            /* [in] */ aafUID_constref CodingEquations);
+            /* [in] */ aafUID_constref codingEquations);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCodingEquations )( 
             IAAFDigitalImageDescriptor2 __RPC_FAR * This,
@@ -36354,7 +36378,7 @@ EXTERN_C const IID IID_IAAFDigitalImageDescriptor2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetColorPrimaries )( 
             IAAFDigitalImageDescriptor2 __RPC_FAR * This,
-            /* [in] */ aafUID_constref ColorPrimaries);
+            /* [in] */ aafUID_constref colorPrimaries);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetColorPrimaries )( 
             IAAFDigitalImageDescriptor2 __RPC_FAR * This,
@@ -36362,7 +36386,7 @@ EXTERN_C const IID IID_IAAFDigitalImageDescriptor2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetFieldStartOffset )( 
             IAAFDigitalImageDescriptor2 __RPC_FAR * This,
-            /* [in] */ aafUInt32 FieldStartOffset);
+            /* [in] */ aafUInt32 fieldStartOffset);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetFieldStartOffset )( 
             IAAFDigitalImageDescriptor2 __RPC_FAR * This,
@@ -36370,7 +36394,7 @@ EXTERN_C const IID IID_IAAFDigitalImageDescriptor2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetFieldEndOffset )( 
             IAAFDigitalImageDescriptor2 __RPC_FAR * This,
-            /* [in] */ aafUInt32 FieldEndOffset);
+            /* [in] */ aafUInt32 fieldEndOffset);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetFieldEndOffset )( 
             IAAFDigitalImageDescriptor2 __RPC_FAR * This,
@@ -36378,11 +36402,43 @@ EXTERN_C const IID IID_IAAFDigitalImageDescriptor2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetFieldDominance )( 
             IAAFDigitalImageDescriptor2 __RPC_FAR * This,
-            /* [in] */ aafFieldNumber_t FieldDominance);
+            /* [in] */ aafFieldNumber_t fieldDominance);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetFieldDominance )( 
             IAAFDigitalImageDescriptor2 __RPC_FAR * This,
             /* [out] */ aafFieldNumber_t __RPC_FAR *pFieldDominance);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetDisplayF2Offset )( 
+            IAAFDigitalImageDescriptor2 __RPC_FAR * This,
+            /* [in] */ aafInt32 displayF2Offset);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDisplayF2Offset )( 
+            IAAFDigitalImageDescriptor2 __RPC_FAR * This,
+            /* [out] */ aafInt32 __RPC_FAR *pDisplayF2Offset);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetStoredF2Offset )( 
+            IAAFDigitalImageDescriptor2 __RPC_FAR * This,
+            /* [in] */ aafInt32 storedF2Offset);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStoredF2Offset )( 
+            IAAFDigitalImageDescriptor2 __RPC_FAR * This,
+            /* [out] */ aafInt32 __RPC_FAR *pStoredF2Offset);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetActiveFormatDescriptor )( 
+            IAAFDigitalImageDescriptor2 __RPC_FAR * This,
+            /* [in] */ aafUInt8 activeFormatDescriptor);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetActiveFormatDescriptor )( 
+            IAAFDigitalImageDescriptor2 __RPC_FAR * This,
+            /* [out] */ aafUInt8 __RPC_FAR *pActiveFormatDescriptor);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetSignalStandard )( 
+            IAAFDigitalImageDescriptor2 __RPC_FAR * This,
+            /* [in] */ aafSignalStandard_t signalStandard);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSignalStandard )( 
+            IAAFDigitalImageDescriptor2 __RPC_FAR * This,
+            /* [out] */ aafSignalStandard_t __RPC_FAR *pSignalStandard);
         
         END_INTERFACE
     } IAAFDigitalImageDescriptor2Vtbl;
@@ -36464,41 +36520,65 @@ EXTERN_C const IID IID_IAAFDigitalImageDescriptor2;
 #define IAAFDigitalImageDescriptor2_GetImageAlignmentFactor(This,pImageAlignmentFactor)	\
     (This)->lpVtbl -> GetImageAlignmentFactor(This,pImageAlignmentFactor)
 
-#define IAAFDigitalImageDescriptor2_SetTransferCharacteristic(This,TransferCharacteristic)	\
-    (This)->lpVtbl -> SetTransferCharacteristic(This,TransferCharacteristic)
+#define IAAFDigitalImageDescriptor2_SetTransferCharacteristic(This,transferCharacteristic)	\
+    (This)->lpVtbl -> SetTransferCharacteristic(This,transferCharacteristic)
 
 #define IAAFDigitalImageDescriptor2_GetTransferCharacteristic(This,pTransferCharacteristic)	\
     (This)->lpVtbl -> GetTransferCharacteristic(This,pTransferCharacteristic)
 
-#define IAAFDigitalImageDescriptor2_SetCodingEquations(This,CodingEquations)	\
-    (This)->lpVtbl -> SetCodingEquations(This,CodingEquations)
+#define IAAFDigitalImageDescriptor2_SetCodingEquations(This,codingEquations)	\
+    (This)->lpVtbl -> SetCodingEquations(This,codingEquations)
 
 #define IAAFDigitalImageDescriptor2_GetCodingEquations(This,pCodingEquations)	\
     (This)->lpVtbl -> GetCodingEquations(This,pCodingEquations)
 
-#define IAAFDigitalImageDescriptor2_SetColorPrimaries(This,ColorPrimaries)	\
-    (This)->lpVtbl -> SetColorPrimaries(This,ColorPrimaries)
+#define IAAFDigitalImageDescriptor2_SetColorPrimaries(This,colorPrimaries)	\
+    (This)->lpVtbl -> SetColorPrimaries(This,colorPrimaries)
 
 #define IAAFDigitalImageDescriptor2_GetColorPrimaries(This,pColorPrimaries)	\
     (This)->lpVtbl -> GetColorPrimaries(This,pColorPrimaries)
 
-#define IAAFDigitalImageDescriptor2_SetFieldStartOffset(This,FieldStartOffset)	\
-    (This)->lpVtbl -> SetFieldStartOffset(This,FieldStartOffset)
+#define IAAFDigitalImageDescriptor2_SetFieldStartOffset(This,fieldStartOffset)	\
+    (This)->lpVtbl -> SetFieldStartOffset(This,fieldStartOffset)
 
 #define IAAFDigitalImageDescriptor2_GetFieldStartOffset(This,pFieldStartOffset)	\
     (This)->lpVtbl -> GetFieldStartOffset(This,pFieldStartOffset)
 
-#define IAAFDigitalImageDescriptor2_SetFieldEndOffset(This,FieldEndOffset)	\
-    (This)->lpVtbl -> SetFieldEndOffset(This,FieldEndOffset)
+#define IAAFDigitalImageDescriptor2_SetFieldEndOffset(This,fieldEndOffset)	\
+    (This)->lpVtbl -> SetFieldEndOffset(This,fieldEndOffset)
 
 #define IAAFDigitalImageDescriptor2_GetFieldEndOffset(This,pFieldEndOffset)	\
     (This)->lpVtbl -> GetFieldEndOffset(This,pFieldEndOffset)
 
-#define IAAFDigitalImageDescriptor2_SetFieldDominance(This,FieldDominance)	\
-    (This)->lpVtbl -> SetFieldDominance(This,FieldDominance)
+#define IAAFDigitalImageDescriptor2_SetFieldDominance(This,fieldDominance)	\
+    (This)->lpVtbl -> SetFieldDominance(This,fieldDominance)
 
 #define IAAFDigitalImageDescriptor2_GetFieldDominance(This,pFieldDominance)	\
     (This)->lpVtbl -> GetFieldDominance(This,pFieldDominance)
+
+#define IAAFDigitalImageDescriptor2_SetDisplayF2Offset(This,displayF2Offset)	\
+    (This)->lpVtbl -> SetDisplayF2Offset(This,displayF2Offset)
+
+#define IAAFDigitalImageDescriptor2_GetDisplayF2Offset(This,pDisplayF2Offset)	\
+    (This)->lpVtbl -> GetDisplayF2Offset(This,pDisplayF2Offset)
+
+#define IAAFDigitalImageDescriptor2_SetStoredF2Offset(This,storedF2Offset)	\
+    (This)->lpVtbl -> SetStoredF2Offset(This,storedF2Offset)
+
+#define IAAFDigitalImageDescriptor2_GetStoredF2Offset(This,pStoredF2Offset)	\
+    (This)->lpVtbl -> GetStoredF2Offset(This,pStoredF2Offset)
+
+#define IAAFDigitalImageDescriptor2_SetActiveFormatDescriptor(This,activeFormatDescriptor)	\
+    (This)->lpVtbl -> SetActiveFormatDescriptor(This,activeFormatDescriptor)
+
+#define IAAFDigitalImageDescriptor2_GetActiveFormatDescriptor(This,pActiveFormatDescriptor)	\
+    (This)->lpVtbl -> GetActiveFormatDescriptor(This,pActiveFormatDescriptor)
+
+#define IAAFDigitalImageDescriptor2_SetSignalStandard(This,signalStandard)	\
+    (This)->lpVtbl -> SetSignalStandard(This,signalStandard)
+
+#define IAAFDigitalImageDescriptor2_GetSignalStandard(This,pSignalStandard)	\
+    (This)->lpVtbl -> GetSignalStandard(This,pSignalStandard)
 
 #endif /* COBJMACROS */
 
@@ -36753,7 +36833,7 @@ void __RPC_STUB IAAFDigitalImageDescriptor2_GetImageAlignmentFactor_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAFDigitalImageDescriptor2_SetTransferCharacteristic_Proxy( 
     IAAFDigitalImageDescriptor2 __RPC_FAR * This,
-    /* [in] */ aafUID_constref TransferCharacteristic);
+    /* [in] */ aafUID_constref transferCharacteristic);
 
 
 void __RPC_STUB IAAFDigitalImageDescriptor2_SetTransferCharacteristic_Stub(
@@ -36777,7 +36857,7 @@ void __RPC_STUB IAAFDigitalImageDescriptor2_GetTransferCharacteristic_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAFDigitalImageDescriptor2_SetCodingEquations_Proxy( 
     IAAFDigitalImageDescriptor2 __RPC_FAR * This,
-    /* [in] */ aafUID_constref CodingEquations);
+    /* [in] */ aafUID_constref codingEquations);
 
 
 void __RPC_STUB IAAFDigitalImageDescriptor2_SetCodingEquations_Stub(
@@ -36801,7 +36881,7 @@ void __RPC_STUB IAAFDigitalImageDescriptor2_GetCodingEquations_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAFDigitalImageDescriptor2_SetColorPrimaries_Proxy( 
     IAAFDigitalImageDescriptor2 __RPC_FAR * This,
-    /* [in] */ aafUID_constref ColorPrimaries);
+    /* [in] */ aafUID_constref colorPrimaries);
 
 
 void __RPC_STUB IAAFDigitalImageDescriptor2_SetColorPrimaries_Stub(
@@ -36825,7 +36905,7 @@ void __RPC_STUB IAAFDigitalImageDescriptor2_GetColorPrimaries_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAFDigitalImageDescriptor2_SetFieldStartOffset_Proxy( 
     IAAFDigitalImageDescriptor2 __RPC_FAR * This,
-    /* [in] */ aafUInt32 FieldStartOffset);
+    /* [in] */ aafUInt32 fieldStartOffset);
 
 
 void __RPC_STUB IAAFDigitalImageDescriptor2_SetFieldStartOffset_Stub(
@@ -36849,7 +36929,7 @@ void __RPC_STUB IAAFDigitalImageDescriptor2_GetFieldStartOffset_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAFDigitalImageDescriptor2_SetFieldEndOffset_Proxy( 
     IAAFDigitalImageDescriptor2 __RPC_FAR * This,
-    /* [in] */ aafUInt32 FieldEndOffset);
+    /* [in] */ aafUInt32 fieldEndOffset);
 
 
 void __RPC_STUB IAAFDigitalImageDescriptor2_SetFieldEndOffset_Stub(
@@ -36873,7 +36953,7 @@ void __RPC_STUB IAAFDigitalImageDescriptor2_GetFieldEndOffset_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAFDigitalImageDescriptor2_SetFieldDominance_Proxy( 
     IAAFDigitalImageDescriptor2 __RPC_FAR * This,
-    /* [in] */ aafFieldNumber_t FieldDominance);
+    /* [in] */ aafFieldNumber_t fieldDominance);
 
 
 void __RPC_STUB IAAFDigitalImageDescriptor2_SetFieldDominance_Stub(
@@ -36889,6 +36969,102 @@ HRESULT STDMETHODCALLTYPE IAAFDigitalImageDescriptor2_GetFieldDominance_Proxy(
 
 
 void __RPC_STUB IAAFDigitalImageDescriptor2_GetFieldDominance_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFDigitalImageDescriptor2_SetDisplayF2Offset_Proxy( 
+    IAAFDigitalImageDescriptor2 __RPC_FAR * This,
+    /* [in] */ aafInt32 displayF2Offset);
+
+
+void __RPC_STUB IAAFDigitalImageDescriptor2_SetDisplayF2Offset_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFDigitalImageDescriptor2_GetDisplayF2Offset_Proxy( 
+    IAAFDigitalImageDescriptor2 __RPC_FAR * This,
+    /* [out] */ aafInt32 __RPC_FAR *pDisplayF2Offset);
+
+
+void __RPC_STUB IAAFDigitalImageDescriptor2_GetDisplayF2Offset_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFDigitalImageDescriptor2_SetStoredF2Offset_Proxy( 
+    IAAFDigitalImageDescriptor2 __RPC_FAR * This,
+    /* [in] */ aafInt32 storedF2Offset);
+
+
+void __RPC_STUB IAAFDigitalImageDescriptor2_SetStoredF2Offset_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFDigitalImageDescriptor2_GetStoredF2Offset_Proxy( 
+    IAAFDigitalImageDescriptor2 __RPC_FAR * This,
+    /* [out] */ aafInt32 __RPC_FAR *pStoredF2Offset);
+
+
+void __RPC_STUB IAAFDigitalImageDescriptor2_GetStoredF2Offset_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFDigitalImageDescriptor2_SetActiveFormatDescriptor_Proxy( 
+    IAAFDigitalImageDescriptor2 __RPC_FAR * This,
+    /* [in] */ aafUInt8 activeFormatDescriptor);
+
+
+void __RPC_STUB IAAFDigitalImageDescriptor2_SetActiveFormatDescriptor_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFDigitalImageDescriptor2_GetActiveFormatDescriptor_Proxy( 
+    IAAFDigitalImageDescriptor2 __RPC_FAR * This,
+    /* [out] */ aafUInt8 __RPC_FAR *pActiveFormatDescriptor);
+
+
+void __RPC_STUB IAAFDigitalImageDescriptor2_GetActiveFormatDescriptor_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFDigitalImageDescriptor2_SetSignalStandard_Proxy( 
+    IAAFDigitalImageDescriptor2 __RPC_FAR * This,
+    /* [in] */ aafSignalStandard_t signalStandard);
+
+
+void __RPC_STUB IAAFDigitalImageDescriptor2_SetSignalStandard_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFDigitalImageDescriptor2_GetSignalStandard_Proxy( 
+    IAAFDigitalImageDescriptor2 __RPC_FAR * This,
+    /* [out] */ aafSignalStandard_t __RPC_FAR *pSignalStandard);
+
+
+void __RPC_STUB IAAFDigitalImageDescriptor2_GetSignalStandard_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
