@@ -588,8 +588,12 @@ OMSSIStream::Read(
 				)
 {
 	TRACE("OMSSIStream::Read");
-	*pcbRead = cb;
-	sresult result = streamRead( _stream, pv, pcbRead);
+
+	// Convert ULONG (which is a 32bit unsigned int) between unsigned long
+	// (64bit unsigned int on 64bit CPUs) for the streamRead API.
+	unsigned long full_read = cb;
+	sresult result = streamRead( _stream, pv, &full_read);
+	*pcbRead = (ULONG)full_read;
 
 	// Dealing with end of stream cases:
 	// 1. Read starts and ends before the end of the stream.
@@ -620,8 +624,13 @@ OMSSIStream::Write(
 										)
 {
 	TRACE("OMSSIStream::Write");
-	*pcbWritten = cb;
-	sresult result = streamWrite( _stream, pv, pcbWritten);
+
+	// Convert ULONG (which is a 32bit unsigned int) between unsigned long
+	// (64bit unsigned int on 64bit CPUs) for the streamRead API.
+	unsigned long full_written = cb;
+	sresult result = streamWrite( _stream, pv, &full_written);
+	*pcbWritten = (ULONG)full_written;
+
 	return makeStatus(result);
 }
 
