@@ -1,0 +1,123 @@
+
+; Derived from the standard HTML.FMT
+
+; todo (Tim Bingham)
+;  - add tags for
+;    - references (to books)
+;    - macros used by, but not defoned by, the code
+;  - fix links to overloaded member functions
+;  - make souce file names hyper-links
+
+[PARAGRAPH]
+
+; New C paragraph tags
+
+; @mauthor <name> | <initials> | <organization>
+;
+.tag=mauthor, html, 3, 1
+.pre=$(rmh)Author$(rmhe)
+.format=$(cb)$1 - $2 - ($3)$(cbe)
+
+; New C++ paragraph tags
+
+; @cauthor <name> | <initials> | <organization>
+;
+.tag=cauthor, html, 3, 1
+.pre=$(rmh)Author$(rmhe)
+.format=$(cb)$1 - $2 - ($3)$(cbe)
+
+; @precondition <boolean expression>
+;
+.tag=precondition, html, 1, 2
+.pre=$(cb)preconditions$(cbe)<DL>
+.format=$(def1)$1
+.post=</DL>$(par)
+
+; @postcondition <boolean expression>
+;
+.tag=postcondition, html, 1, 2
+.pre=$(cb)postconditions$(cbe)<DL>
+.format=$(def1)$1
+.post=</DL>$(par)
+
+[TOPIC]
+
+; New C++ topic tags
+
+; @author <name> | <initials> | <organization> | <class>
+;
+.tag=author, html, 4, 20, $3::Author
+.pre=$(page)<H1>$3 members</H1>
+$(rmh)Defined in file$(rmhe)
+$(cb)$!f$(cbe)<P>
+$(rmh)Author$(rmhe)
+$(cb)$1 - $2 - ($3)$(cbe)
+
+; C topic tags overridden from the standard HTML.FMT
+
+; Functions
+
+.tag=func, html, 3, 20, $2
+.order=syntax rdesc parm parmvar comm ex
+.parsesource=function
+.pre=$(page)
+<A NAME=$!c><H1>$!n</H1></A>
+$[function]
+$3$(par)
+Defined in: $!f$(par)
+
+; Modules
+
+.tag=module, html, 2, 10, $1
+.pre=$(page)
+<A NAME=$!c><H1>$!n</H1></A>
+Filename: $!f$(par)
+$(rmh)Description$(rmhe)
+$2$(par)
+
+; Enumeration Types
+
+.tag=enum, html, 2, 50, $1
+.order=emem comm ex
+.parsesource=enum
+.pre=$(page)
+<A NAME=$!c><H1>$!n</H1></A>
+$[enum]
+$2$(par)
+Defined in: $!f$(par)
+
+; C++ topic tags overridden from the standard HTML.FMT
+
+; Classes
+
+.tag=class, html, 2, 20, $1
+.parsesource=class
+.pre=$(page)
+<A NAME=$!c><H1>$!n class</H1></A>
+$[class]
+$2$(par)
+Defined in: $!f$(par)
+
+; Member functions
+
+.tag=mfunc, html, 4, 20, $2::$3
+.context=$2__$3
+.if=exists($2)
+.order=syntax rdesc parm comm ex
+.parsesource=memberfunction
+.post=Back to <A HREF=###2>#2</A>
+.pre=$(page)
+<A NAME=$!c><H1>$!n</H1></A>
+$[mfunction]
+$4$(par)
+Defined in: $!f$(par)
+
+; Member enumerations
+;
+.tag=menum, html, 3, 50, $1::$2
+.order=emem comm ex
+.pre=$(page)
+<A NAME=$!c><H1>$!n</H1></A>
+$[enum]
+$3$(par)
+Defined in: $!f$(par)
