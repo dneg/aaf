@@ -268,7 +268,15 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFParameterSlot.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFProperty.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFPropertyDef.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFPropertyValue.cpp"
 # End Source File
 # Begin Source File
 

@@ -459,11 +459,19 @@ SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFParameterTest.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFProperty.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFPropertyDef.cpp"
 # End Source File
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFPropertyDefTest.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFPropertyValue.cpp"
 # End Source File
 # Begin Source File
 
