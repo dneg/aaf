@@ -8,8 +8,7 @@
 # Place the object root name is this list if it is a "persistent"
 # aaf object:
 AAFPERSISTENTOBJECTS="\
-	AAFMIDIFileDescriptor \
-	AAFRGBADescriptor "
+	AAFMIDIFileDescriptor"
 
 
 # These are all of the other non-persistent objects:
@@ -84,6 +83,7 @@ HUMAN_TYPED_IMPL="\
 	AAFPluginDescriptor \
 	AAFPluginManager \
 	AAFPulldown \
+	AAFRGBADescriptor \
 	AAFScopeReference \
 	AAFSegment \
 	AAFSelector \
