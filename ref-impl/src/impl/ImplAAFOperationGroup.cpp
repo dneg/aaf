@@ -186,6 +186,18 @@ AAFRESULT STDMETHODCALLTYPE
   return AAFRESULT_SUCCESS;
 }
 
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFOperationGroup::SetOperationDefinition (ImplAAFOperationDef *OperationDef)
+{
+	if(OperationDef == NULL)
+		return AAFRESULT_NULL_PARAM;
+
+	_operationDefinition = OperationDef;
+	_operationDefinition->AcquireReference();
+
+	return AAFRESULT_SUCCESS;
+}
+
 	//@comm Replaces part of omfiOperationGroupGetInfo
 
 
