@@ -118,8 +118,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 	  CAAFBuiltinDefs defs (pDictionary);
  	  
-	  // Create a Mob
-	  checkResult(defs.cdMob()->
+	  // Create a concrete subclass of Mob
+	  checkResult(defs.cdMasterMob()->
 				  CreateInstance(IID_IAAFMob, 
 								 (IUnknown **)&pMob));
     

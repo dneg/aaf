@@ -134,7 +134,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pMob->SetName(L"EssenceDescriptorTest"));
 		
 		// Create the descriptor:
-		checkResult(defs.cdEssenceDescriptor()->
+		// instantiate a concrete subclass of EssenceDescriptor
+		checkResult(defs.cdHTMLDescriptor()->
 					CreateInstance(IID_IAAFEssenceDescriptor, 
 								   (IUnknown **)&edesc));		
  		checkResult(pSourceMob->SetEssenceDescriptor (edesc));
@@ -169,8 +170,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		// Append and Count a bunch of Locators
 		for (i=1; i<=10; i++)
 		{
-			// Make a locator, and attach it to the EssenceDescriptor
-			checkResult(defs.cdLocator()->
+			// Make a concrete subclass of locator, and attach it to
+			// the EssenceDescriptor
+			checkResult(defs.cdNetworkLocator()->
 					CreateInstance(IID_IAAFLocator, 
 								   (IUnknown **)&pLocator));	
 								   	
@@ -213,8 +215,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 		for (i; i<=20; i++)
 		{
-			// Make a locator, and attach it to the EssenceDescriptor
-			checkResult(defs.cdLocator()->
+			// Make a concrete subclass of locator, and attach it to
+			// the EssenceDescriptor
+			checkResult(defs.cdNetworkLocator()->
 					CreateInstance(IID_IAAFLocator, 
 								   (IUnknown **)&pLocator));	
 								   	
@@ -245,8 +248,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 /* InsertLocatorAt()	**************************************/
 		localhr = AAFRESULT_SUCCESS;
 
-		// Make a locator to attach
-		checkResult(defs.cdLocator()->
+		// Make a concrete subclass of locator to attach
+		checkResult(defs.cdNetworkLocator()->
 						CreateInstance(IID_IAAFLocator, 
 				   			(IUnknown **)&pLocator));			
 
@@ -273,8 +276,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 			localhr = AAFRESULT_TEST_FAILED;
 			
 		edesc->CountLocators(&numLocators);
-		// Make a locator to attach in the middle
-		checkResult(defs.cdLocator()->
+		// Make a concrete subclass of locator to attach in the middle
+		checkResult(defs.cdNetworkLocator()->
 						CreateInstance(IID_IAAFLocator, 
 				   			(IUnknown **)&pLocator));			
 		// Insert it
@@ -290,8 +293,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 			localhr = AAFRESULT_TEST_FAILED;
 
 		edesc->CountLocators(&numLocators);
-		// Make a locator to attach to the end
-		checkResult(defs.cdLocator()->
+		// Make a concrete subclass of locator to attach to the end
+		checkResult(defs.cdNetworkLocator()->
 						CreateInstance(IID_IAAFLocator, 
 				   			(IUnknown **)&pLocator));			
 		// Insert it.  note: its 0 based so the end is numLocators - 1
