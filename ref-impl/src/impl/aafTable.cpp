@@ -1400,7 +1400,7 @@ aafErr_t TableClassIDLookup(
 
 /************************************************************************
  *
- * TrackID Table Functions
+ * SlotID Table Functions
  *
  ************************************************************************/
  
@@ -1409,14 +1409,14 @@ aafErr_t TableClassIDLookup(
  *
  * 		WhatIt(Internal)Does
  */
-static aafInt32 TrackIDMap(void *temp)
+static aafInt32 SlotIDMap(void *temp)
 {
   aafInt32 key1 = *((aafInt32 *)temp);
 
   return(key1);
 }
 
-static aafBool	TrackIDcompare(void *temp1, void *temp2)
+static aafBool	SlotIDcompare(void *temp1, void *temp2)
 {
   aafInt32 key1 = *((aafInt32 *)temp1);
   aafInt32 key2 = *((aafInt32 *)temp2);
@@ -1438,12 +1438,12 @@ static aafBool	TrackIDcompare(void *temp1, void *temp2)
  * Possible Errors:
  *		Standard errors (see top of file).
  */
-aafErr_t NewTrackIDTable(
+aafErr_t NewSlotIDTable(
 			AAFFile * file,
 			aafInt32 numBuckets,
 			aafTable_t **result)
 {
-  return(NewTable(file, sizeof(aafTrackID_t), TrackIDMap, TrackIDcompare, 
+  return(NewTable(file, sizeof(aafSlotID_t), SlotIDMap, SlotIDcompare, 
 		      numBuckets, result));
 }	
 
@@ -1461,13 +1461,13 @@ aafErr_t NewTrackIDTable(
  * Possible Errors:
  *		Standard errors (see top of file).
  */
-aafErr_t TableAddTrackID(
+aafErr_t TableAddSlotID(
 			aafTable_t *table,
-			aafTrackID_t key,
+			aafSlotID_t key,
 			void *value,
 			aafInt32 valueLen)
 {
-  return(TableAddValueBlock(table, &key, sizeof(aafTrackID_t), value, 
+  return(TableAddValueBlock(table, &key, sizeof(aafSlotID_t), value, 
 				valueLen, kAafTableDupError));
 }
 	
@@ -1485,9 +1485,9 @@ aafErr_t TableAddTrackID(
  * Possible Errors:
  *		Standard errors (see top of file).
  */
-aafErr_t TableTrackIDLookup(
+aafErr_t TableSlotIDLookup(
 			aafTable_t *table,
-			aafTrackID_t key,
+			aafSlotID_t key,
 			void *value,
 			aafInt32 valueLen,
 			aafBool *found)
