@@ -327,7 +327,13 @@ void OMSimpleProperty::setSize(size_t newSize)
 void OMSimpleProperty::shallowCopyTo(OMProperty* destination) const
 {
   TRACE("OMSimpleProperty::shallowCopyTo");
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
+  PRECONDITION("Valid destination", destination != 0);
+  
+  OMSimpleProperty* dest = dynamic_cast<OMSimpleProperty*>(destination);
+  ASSERT("Destination is corret type", dest != 0);
+  ASSERT("Valid destination", dest != this);
+
+  dest->set(_bits, _size);
 }
 
 void OMSimpleProperty::deepCopyTo(OMProperty* /* destination */,
