@@ -161,7 +161,7 @@ public:
 
 protected:
 
-  typedef OMStrongReferenceVectorElement<ReferencedObject> VectorElement;
+  typedef OMStrongReferenceVectorElement VectorElement;
 
   typedef OMVectorIterator<VectorElement> VectorIterator;
 

@@ -240,8 +240,12 @@ OMStrongReferenceVectorIterator<ReferencedObject>::setValue(
 
   VectorElement& element = _iterator.value();
 
-  ReferencedObject* result = element.setValue(newObject);
-
+  ReferencedObject* result = 0;
+  OMStorable* p = element.setValue(newObject);
+  if (p != 0) {
+    result = dynamic_cast<ReferencedObject*>(p);
+    ASSERT("Object is correct type", result != 0);
+  }
   return result;
 }
 
@@ -259,8 +263,12 @@ OMStrongReferenceVectorIterator<ReferencedObject>::clearValue(void)
 
   VectorElement& element = _iterator.value();
 
-  ReferencedObject* result = element.setValue(0);
-
+  ReferencedObject* result = 0;
+  OMStorable* p = element.setValue(0);
+  if (p != 0) {
+    result = dynamic_cast<ReferencedObject*>(p);
+    ASSERT("Object is correct type", result != 0);
+  }
   return result;
 }
 
