@@ -112,6 +112,39 @@ static void convert(wchar_t* wName, size_t length, const wchar_t* name)
   }
 }
 
+static void printProductVersion(aafProductVersion_t* pProductVersion)
+{
+  printf("ProductVersion.major      = %d\n", pProductVersion->major);
+  printf("ProductVersion.minor      = %d\n", pProductVersion->minor);
+  printf("ProductVersion.tertiary   = %d\n", pProductVersion->tertiary);
+  printf("ProductVersion.patchLevel = %d\n", pProductVersion->patchLevel);
+  char* releaseType;
+  switch (pProductVersion->type) {
+    case kAAFVersionUnknown:
+      releaseType = "Unknown";
+      break;
+    case kAAFVersionReleased:
+      releaseType = "Released";
+      break;
+    case kAAFVersionDebug:
+      releaseType = "Debug";
+      break;
+    case kAAFVersionPatched:
+      releaseType = "Patched";
+      break;
+    case kAAFVersionBeta:
+      releaseType = "Beta";
+      break;
+    case kAAFVersionPrivateBuild:
+      releaseType = "PrivateBuild";
+      break;
+    default:
+      releaseType = "Not Recognized";
+      break;
+  }
+  printf("ProductVersion.type       = \"%s\"\n", releaseType);
+}
+
 #if defined( OS_UNIX )
 
 static const unsigned char guidMap[] =
@@ -205,36 +238,7 @@ static void printIdentification(IAAFIdentification* pIdent)
 
   aafProductVersion_t version;
   check(pIdent->GetProductVersion(&version));
-  convert(chName, sizeof(chName), wchName);
-  printf("ProductVersion.major      = %d\n", version.major);
-  printf("ProductVersion.minor      = %d\n", version.minor);
-  printf("ProductVersion.tertiary   = %d\n", version.tertiary);
-  printf("ProductVersion.patchLevel = %d\n", version.patchLevel);
-  char* releaseType;
-  switch (version.type) {
-    case kAAFVersionUnknown:
-      releaseType = "Unknown";
-      break;
-    case kAAFVersionReleased:
-      releaseType = "Released";
-      break;
-    case kAAFVersionDebug:
-      releaseType = "Debug";
-      break;
-    case kAAFVersionPatched:
-      releaseType = "Patched";
-      break;
-    case kAAFVersionBeta:
-      releaseType = "Beta";
-      break;
-    case kAAFVersionPrivateBuild:
-      releaseType = "PrivateBuild";
-      break;
-    default:
-      releaseType = "Not Recognized";
-      break;
-  }
-  printf("ProductVersion.type       = \"%s\"\n", releaseType);
+  printProductVersion(&version);
 
   aafUID_t productID;
   check(pIdent->GetProductID(&productID));
