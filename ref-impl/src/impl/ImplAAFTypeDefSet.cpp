@@ -1,6 +1,6 @@
 /***********************************************************************
 *
-*              Copyright (c) 1998-1999 Avid Technology, Inc.
+*              Copyright (c) 1998-2001 Avid Technology, Inc.
 *
 * Permission to use, copy and modify this software and accompanying 
 * documentation, and to distribute and sublicense application software
@@ -552,6 +552,20 @@ OMProperty * ImplAAFTypeDefSet::pvtCreateOMProperty
 	if (AAFRESULT_FAILED(rc))
 		return NULL;
   assert (ptd);
+
+  
+  // TODO: Need a hook to complete the initialization of objects
+  // after they are restored. There is no hook to initialize non-persistent
+  // members.
+  if (NULL == _uidType || NULL == _uidProperty)
+  {
+    AAFRESULT status = AAFRESULT_SUCCESS;
+    GetUIDType(ptd, status);
+    if (AAFRESULT_FAILED(status))
+      return NULL;
+    assert (_uidType && _uidProperty);
+  }
+
 
   OMProperty * result = 0;
   ImplAAFTypeDefWeakObjRef *pWeakRefType = NULL;
