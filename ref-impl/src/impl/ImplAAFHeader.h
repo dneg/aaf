@@ -318,6 +318,11 @@ public:
   void      SetObjectModelVersion (aafUInt32 version);
   void SetFile(ImplAAFFile *file) { _file = file; }
 
+  // Set content store and clean the ident list so that a new set of
+  // idents can be appended.  Used by ImplAAFFile::SaveCopyAs()
+  void SetContentStorage( ImplAAFContentStorage* pStorage );
+  void ClearIdentificationList();
+
 private:
   // These are private accessor methods.
   ImplAAFContentStorage *GetContentStorage(void);

@@ -81,9 +81,21 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFRandomFile::SaveAsFile (
-      ImplAAFFile * /*pDestFile*/)
+      ImplAAFFile * pDestFile )
 {
+#if 0
+  // Copy this file to the destination file.
+  // Note, If this == pDestFile, then SaveCopyAs() simply saves this
+  // file.
+  AAFRESULT hr = SaveCopyAs( pDestFile );
+  if ( hr != AAFRESULT_SUCCESS ) {
+    return hr;
+  }
+
+  return AAFRESULT_SUCCESS;
+#else
   return AAFRESULT_NOT_IN_CURRENT_VERSION;
+#endif
 }
 
 

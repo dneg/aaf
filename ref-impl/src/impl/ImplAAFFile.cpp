@@ -41,6 +41,7 @@
 #include "ImplAAFObjectCreation.h"
 #include "ImplAAFBuiltinDefs.h"
 #include "ImplAAFOMRawStorage.h"
+#include "ImplAAFCloneResolver.h"
 
 #include "AAFFileMode.h"
 #include "AAFFileKinds.h"
@@ -991,9 +992,95 @@ ImplAAFFile::Save ()
 AAFRESULT STDMETHODCALLTYPE
 ImplAAFFile::SaveCopyAs (ImplAAFFile * pDestFile)
 {
+  // Save all objects in this file to pDestFile.  Implemented by
+  // cloning the source header's content store and
+  // _identificationList.  The destination header's _byteOrder,
+  // _lastModified, _dictionary, _fileRef, and _objectModelVersion are
+  // not cloned - they all take care of themselves.  The destination dictionary
+  // is updated as a side effect of cloning the content store and ident list.
+
   if (! pDestFile)
 	return AAFRESULT_NULL_PARAM;
-  return AAFRESULT_NOT_IN_CURRENT_VERSION;
+
+  if ( this == pDestFile ) {
+    // The call is redundant.  Just save the file.
+    return Save();
+  }
+
+  try {
+    ImplAAFSmartPointer<ImplAAFHeader> spDstHeader;
+    checkResult( pDestFile->GetHeader(&spDstHeader) );
+
+    ImplAAFSmartPointer<ImplAAFContentStorage> spDstContentStore;
+    checkResult( spDstHeader->GetContentStorage(&spDstContentStore) );
+
+    aafUInt32 numDstMobs = 0;
+    checkResult( spDstContentStore->CountMobs(0, &numDstMobs) );
+
+    aafUInt32 numDstEssenceData = 0;
+    checkResult( spDstContentStore->CountEssenceData(&numDstEssenceData) );
+
+    if ( numDstMobs || numDstEssenceData ) {
+      throw AAFRESULT_OPERATION_NOT_PERMITTED;
+    }
+
+    ImplAAFSmartPointer<ImplAAFDictionary> spDstDict;
+    checkResult( spDstHeader->GetDictionary(&spDstDict) );
+
+    // Clone the content store.
+    {
+      ImplAAFSmartPointer<ImplAAFContentStorage> spSrcContentStore;
+      checkResult( _head->GetContentStorage( &spSrcContentStore ) );
+
+      OMStorable* pNewDstStorable = spSrcContentStore->shallowCopy(static_cast<ImplAAFDictionary*>(spDstDict));
+      ImplAAFContentStorage* pNewDstStorage = dynamic_cast<ImplAAFContentStorage*>(pNewDstStorable);
+      if ( !pNewDstStorage ) {
+		throw AAFRESULT_BAD_TYPE;
+      }
+      
+      spDstHeader->SetContentStorage( pNewDstStorage );
+
+      ImplAAFCloneResolver resolver(pDestFile);
+      pNewDstStorage->onCopy(&resolver);
+      spSrcContentStore->deepCopyTo( pNewDstStorable, &resolver );
+    }
+
+    // Clone the ident list.
+    {
+      spDstHeader->ClearIdentificationList();
+
+      aafUInt32 numSrcIdents = 0;
+      checkResult( _head->CountIdentifications(&numSrcIdents) );
+      
+      unsigned int i;
+      for( i = 0; i < numSrcIdents; ++i ) {
+
+	ImplAAFSmartPointer<ImplAAFIdentification> spSrcIdent;
+	checkResult( _head->GetIdentificationAt( i, &spSrcIdent ) );
+	
+	OMStorable* pNewDstStorable = spSrcIdent->shallowCopy(static_cast<ImplAAFDictionary*>(spDstDict));
+	ImplAAFIdentification* pNewDstIdent = dynamic_cast<ImplAAFIdentification*>(pNewDstStorable);
+	if ( !pNewDstIdent ) {
+	  throw AAFRESULT_BAD_TYPE;
+	}
+	
+	checkResult( spDstHeader->AppendIdentification( pNewDstIdent ) );
+
+	ImplAAFCloneResolver resolver(pDestFile);
+	pNewDstIdent->onCopy(&resolver);
+       	spSrcIdent->deepCopyTo( pNewDstIdent, &resolver );
+      }
+    }
+
+  }
+  catch( const HRESULT& ex ) {
+    return ex;
+  }
+  catch( const ImplAAFCloneResolverEx& ex ) {
+    return ex.GetHResult();
+  }
+
+  return pDestFile->Save();
 }
 
 

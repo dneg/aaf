@@ -813,3 +813,20 @@ AAFRESULT STDMETHODCALLTYPE
 
   return AAFRESULT_SUCCESS;
 }
+
+void ImplAAFHeader::SetContentStorage( ImplAAFContentStorage* pNewStorage )
+{
+  ImplAAFContentStorage* pStorage = _contentStorage.clearValue();
+  if (pStorage) {
+    pStorage->ReleaseReference();
+    pStorage = 0;
+  }
+
+  pNewStorage->AcquireReference();
+  _contentStorage = pNewStorage;
+}
+
+void ImplAAFHeader::ClearIdentificationList()
+{
+  _identificationList.removeAllObjects();
+}

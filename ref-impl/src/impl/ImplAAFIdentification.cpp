@@ -413,3 +413,8 @@ AAFRESULT STDMETHODCALLTYPE
   _productId = PID;
   return AAFRESULT_SUCCESS;
 }
+
+void ImplAAFIdentification::onCopy(void* clientContext) const
+{
+  const_cast<ImplAAFIdentification*>(this)->setInitialized();
+}
