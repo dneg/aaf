@@ -23,7 +23,6 @@
 //=---------------------------------------------------------------------=
 
 #include "AAF.h"
-#include "AAFUtils.h"
 
 #include <iostream>
 using namespace std;
@@ -86,8 +85,6 @@ inline void checkExpression(bool expression, HRESULT r)
 		throw r;
 }
 
-
-AAFByteOrder GetNativeByteOrder(void);	//defined in CAAFEssenceFormatTest.cpp
 
 //next 3 functions all defined in CAAFEssenceAccessTest.cpp
 void scanWAVEData(aafUInt8 **srcBufHdl, aafInt32 maxsize, void *data);
