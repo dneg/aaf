@@ -48,9 +48,12 @@
 OMProperty::OMProperty(const OMPropertyId propertyId,
                        const OMStoredForm storedForm,
                        const wchar_t* name)
-: _propertyId(propertyId), _storedForm(storedForm),
-  _storedName(0), _name(name),
-  _propertySet(0), _definition(0),
+: _propertyId(propertyId),
+  _storedForm(storedForm),
+  _storedName(0),
+  _name(name),
+  _propertySet(0),
+  _definition(0),
   _isOptional(false),
   _isPresent(false)
 {
