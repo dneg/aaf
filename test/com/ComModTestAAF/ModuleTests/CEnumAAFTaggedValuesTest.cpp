@@ -184,8 +184,8 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 
 	IAAFMobSlot		*slot = NULL;
 	aafProductIdentification_t	ProductInfo;
-	aafNumSlots_t	numMobs, n, s;
-	aafUInt32		numComments, bytesRead;
+	aafNumSlots_t	numMobs, n, slt;
+	aafUInt32		numComments, bytesRead, com;
 	HRESULT						hr = S_OK;
 	aafWChar		tag[64];
 	aafWChar		Value[64];
@@ -234,13 +234,13 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		  checkResult(aMob->GetNumComments(&numComments));
 		  checkExpression(3 == numComments, AAFRESULT_TEST_FAILED);
 		  checkResult(aMob->EnumAAFAllMobComments(&pCommentIterator));
-		  for(s = 0; s < numComments; s++)
+		  for(com = 0; com < numComments; com++)
 		  {
 			  checkResult(pCommentIterator->NextOne(&pComment));
 			  checkResult(pComment->GetName(tag, sizeof(tag)));
 			  checkResult(pComment->GetValue( sizeof(Value), (unsigned char *)Value, &bytesRead));
-			  checkExpression(wcscmp(tag, TagNames[s])== 0, AAFRESULT_TEST_FAILED);
-			  checkExpression(wcscmp(Value, Comments[s])== 0, AAFRESULT_TEST_FAILED);
+			  checkExpression(wcscmp(tag, TagNames[com])== 0, AAFRESULT_TEST_FAILED);
+			  checkExpression(wcscmp(Value, Comments[com])== 0, AAFRESULT_TEST_FAILED);
 			  pComment->Release();
 		  }
 		  // now check reset
@@ -278,12 +278,12 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 
 			checkResult(aMob->EnumAAFAllMobSlots(&slotIter));
 
-			for(s = 0; s < numSlots; s++)
+			for(slt = 0; slt < numSlots; slt++)
 			{
 				checkResult(slotIter->NextOne (&slot));
 				checkResult(slot->GetName (slotName, sizeof(slotName)));
 				checkResult(slot->GetSlotID(&trackID));
-				checkExpression (wcscmp(slotName, slotNames[s]) == 0, AAFRESULT_TEST_FAILED);
+				checkExpression (wcscmp(slotName, slotNames[slt]) == 0, AAFRESULT_TEST_FAILED);
 
 				slot->Release();
 				slot = NULL;
