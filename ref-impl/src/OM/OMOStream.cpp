@@ -41,6 +41,30 @@ OMOStream& OMOStream::operator << (OMUInt32 i)
   return put(i);
 }
 
+  // @mfunc Insert an OMInt32 in decimal.
+  //   @parm The OMInt32 to insert.
+  //   @rdesc The modified <c OMOStream>
+OMOStream& OMOStream::operator << (OMInt32 i)
+{
+  return put(i);
+}
+
+  // @mfunc Insert an OMUInt16 in decimal.
+  //   @parm The OMUInt16 to insert.
+  //   @rdesc The modified <c OMOStream>
+OMOStream& OMOStream::operator << (OMUInt16 i)
+{
+  return put(i);
+}
+
+  // @mfunc Insert an OMInt16 in decimal.
+  //   @parm The OMInt16 to insert.
+  //   @rdesc The modified <c OMOStream>
+OMOStream& OMOStream::operator << (OMInt16 i)
+{
+  return put(i);
+}
+
   // @mfunc Insert a pointer in hex.
   //   @parm The pointer to insert.
   //   @rdesc The modified <c OMOStream>
@@ -95,6 +119,33 @@ OMOStream& OMOStream::put(const char* string)
   //   @parm The OMUInt32 to write.
   //   @rdesc The modified <c OMOStream>
 OMOStream& OMOStream::put(OMUInt32 i)
+{
+  cerr << i;
+  return *this;
+}
+
+  // @mfunc Put an OMInt32 in decimal.
+  //   @parm The OMInt32 to write.
+  //   @rdesc The modified <c OMOStream>
+OMOStream& OMOStream::put(OMInt32 i)
+{
+  cerr << i;
+  return *this;
+}
+
+  // @mfunc Put an OMUInt16 in decimal.
+  //   @parm The OMUInt16 to write.
+  //   @rdesc The modified <c OMOStream>
+OMOStream& OMOStream::put(OMUInt16 i)
+{
+  cerr << i;
+  return *this;
+}
+
+  // @mfunc Put an OMInt16 in decimal.
+  //   @parm The OMInt16 to write.
+  //   @rdesc The modified <c OMOStream>
+OMOStream& OMOStream::put(OMInt16 i)
 {
   cerr << i;
   return *this;

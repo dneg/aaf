@@ -39,6 +39,15 @@ public:
     // @cmember Insert an OMUInt32 in decimal.
   OMOStream& operator << (OMUInt32 i);
 
+    // @cmember Insert an OMInt32 in decimal.
+  OMOStream& operator << (OMInt32 i);
+
+    // @cmember Insert an OMUInt16 in decimal.
+  OMOStream& operator << (OMUInt16 i);
+
+    // @cmember Insert an OMInt16 in decimal.
+  OMOStream& operator << (OMInt16 i);
+
     // @cmember Insert a pointer in hex.
   OMOStream& operator << (void* p);
 
@@ -56,6 +65,15 @@ protected:
 
     // @cmember Put an OMUInt32 in decimal.
   OMOStream& put(OMUInt32 i);
+
+    // @cmember Put an OMInt32 in decimal.
+  OMOStream& put(OMInt32 i);
+
+    // @cmember Put an OMUInt16 in decimal.
+  OMOStream& put(OMUInt16 i);
+
+    // @cmember Put an OMInt16 in decimal.
+  OMOStream& put(OMInt16 i);
 
     // @cmember Put a pointer in hex.
   OMOStream& put(void* p);
