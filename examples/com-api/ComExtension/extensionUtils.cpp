@@ -29,6 +29,7 @@
 #include "AAF.h"
 #include <assert.h>
 #include "AAFStoredObjectIDs.h"
+#include "AAFResult.h"
 
 #if defined(_MAC) || defined(macintosh)
 #include <wstring.h>
@@ -36,6 +37,136 @@
 
 #include <iostream.h>
 
+// utility function to set String property value
+static void SetStringProperty (IAAFObject * pObj,
+						const aafUID_t propertyID,
+						const aafCharacter * strValue)
+{
+  assert (pObj);
+  assert (strValue);
+
+  IAAFClassDef *cd=NULL;
+  check (pObj->GetDefinition (&cd));
+
+  IAAFPropertyDef *pd=NULL;
+  check (cd->LookupPropertyDef (propertyID,
+								&pd));
+
+  IAAFTypeDef *td=NULL;
+  check (pd->GetTypeDef (&td));
+
+  IAAFTypeDefString *tds=NULL;
+  check (td->QueryInterface (IID_IAAFTypeDefString, (void **)&tds));
+
+  IAAFPropertyValue *pv=NULL;
+  check (tds->CreateValueFromCString ( (aafMemPtr_t) strValue,
+										 wcslen (strValue) * sizeof (aafCharacter), 
+										 &pv));
+
+  check (pObj->SetPropertyValue (pd, pv));
+  cd->Release();
+  cd=NULL;
+  pd->Release();
+  pd=NULL;
+  pv->Release();
+  pv=NULL;
+  td->Release();
+  td=NULL;
+  tds->Release();
+  tds=NULL;
+}
+
+static void GetStringBufLen (IAAFObject * pObj,
+							 const aafUID_t propertyID,
+							 aafUInt32 *bufLen)
+{
+  assert (pObj);
+  assert (bufLen);
+		
+  IAAFClassDef *cd=NULL;
+  check (pObj->GetDefinition (&cd));
+
+  IAAFPropertyDef *pd=NULL;
+  check (cd->LookupPropertyDef (propertyID,
+								&pd));
+
+  IAAFPropertyValue *pv=NULL;
+  check (pObj->GetPropertyValue (pd, &pv));
+  
+  IAAFTypeDef *td=NULL;
+  check (pd->GetTypeDef (&td));
+
+  IAAFTypeDefString *tds=NULL;
+  check (td->QueryInterface (IID_IAAFTypeDefString, (void **)&tds));
+
+  aafUInt32 numChars = 0;
+  check (tds->GetCount (pv, &numChars));
+
+
+  // Add 1 for null terminator and 
+  // convert from count of aafCharacter to bytes
+//  *bufLen= (numChars + 1)*sizeof (aafCharacter);
+  *bufLen = (numChars +1)*2;
+
+  cd->Release();
+  cd=NULL;
+  pd->Release();
+  pd=NULL;
+  pv->Release();
+  pv=NULL;
+  td->Release();
+  td=NULL;
+  tds->Release();
+  tds=NULL;
+}
+
+void GetStringValue (IAAFObject * pObj,
+							 const aafUID_t propertyID,
+							 aafCharacter * buf,
+							 aafUInt32 buflen)
+{
+  assert (pObj);
+  assert (buf);
+  aafUInt32 stringBufLen,numCharsWNull;
+  GetStringBufLen (pObj, propertyID,
+					&stringBufLen);
+  assert (buflen >= stringBufLen);
+  numCharsWNull = stringBufLen/sizeof (aafCharacter);
+
+  IAAFClassDef *cd=NULL;
+  check (pObj->GetDefinition (&cd));
+
+  IAAFPropertyDef *pd=NULL;
+  check (cd->LookupPropertyDef (propertyID,
+								&pd));
+
+  IAAFPropertyValue *pv=NULL;
+  check (pObj->GetPropertyValue (pd, &pv));
+  
+  IAAFTypeDef *td=NULL;
+  check (pd->GetTypeDef (&td));
+
+  IAAFTypeDefString *tds=NULL;
+  check (td->QueryInterface (IID_IAAFTypeDefString, (void **)&tds));
+
+  check (tds->GetElements (pv, (aafMemPtr_t) buf, buflen));
+
+  // Make sure we're null-terminated.
+  buf[numCharsWNull-1] = '\0';
+  cd->Release();
+  cd=NULL;
+  pd->Release();
+  pd=NULL;
+  pv->Release();
+  pv=NULL;
+  td->Release();
+  td=NULL;
+  tds->Release();
+  tds=NULL;
+}
+
+
+// Checks if pClassDefQuery is or is a subclass of class defined for the specified AUID
 bool classDefinitionIsA ( IAAFClassDef *pClassDefQuery,
 							   const aafUID_t targetAUID)
 {
@@ -64,360 +195,61 @@ bool classDefinitionIsA ( IAAFClassDef *pClassDefQuery,
 	return classMatch;
 }
 
-//
-// Temporarily (?) only used to print out the role enum.
-//
-static void sPrintAuid (const aafUID_t auid)
+bool IsOptionalPropertyPresent (IAAFObject * pObj,
+								const aafUID_t propertyID)
 {
-  cout << hex
-	   << "{ 0x" << auid.Data1
-	   << ", 0x" << auid.Data2
-	   << ", 0x" << auid.Data3
-	   << ", {";
-  aafUInt32 i;
-  for (i = 0; i < 8; i++)
-	{
-	  if (i)
-		cout << ", ";
-	  cout << "0x" << (int) auid.Data4[i];
-	}
-  cout << "} }";
-}
-
-
-//
-// Prints the given string.
-//
-ostream& operator<< (ostream& s,
-					 const aafCharacter * wstring)
-{
-  assert (wstring);
-
-  const aafUInt32 numChars = wcslen (wstring);
-
-  char * cstring = new char [numChars+1];
-  assert (cstring);
-
-  size_t status = wcstombs(cstring, wstring, numChars);
-  assert (status != (size_t)-1);
-  cstring[numChars] = '\0';
-
-  s << cstring;
-
-  delete[] cstring;
-
-  return s;
-}
-
-
-//
-// Returns true if the roles match; returns false otherwise.
-//
-bool AreRolesEqual (const eRole & roleA, const eRole & roleB)
-{
-  return (memcmp (&roleA, &roleB, sizeof (eRole)) == 0 ?
-		  true : false);
-}
-
-
-//
-// Prints the given eRole.
-//
-void PrintRole (IAAFDictionary * pDict,
-				const eRole role)
-{
-  assert (pDict);
-  IAAFTypeDef *ptd=NULL;
-  check (pDict->LookupType (kTypeID_eRole, &ptd));
-
-  IAAFTypeDefExtEnum *ptde=NULL;
-  check (ptd->QueryInterface (IID_IAAFTypeDefExtEnum, (void **)&ptde));
-
-  aafUInt32 nameLen = 0;
-  check (ptde->GetNameBufLenFromAUID (role, &nameLen));
-  assert (nameLen);
-
-  aafCharacter *buf = 0;
-  buf = new aafCharacter[nameLen];
-  assert (buf);
-
-  check (ptde->GetNameFromAUID (role, buf, nameLen));
-
-  cout << buf;
-
-  delete[] buf;
-  ptd->Release();
-  ptd=NULL;
-  ptde->Release();
-  ptde=NULL;
-}
-
-
-//
-// Prints the given PersonnelResource.
-//
-void PrintPersonnelResource (IAAFDictionary * pDict,
-							 const PersonnelResource & resource)
-{
-  assert (pDict);
-  assert (resource.name);
-
-  cout << "Name:        " << resource.name << endl;
-  cout << "Role:        "; PrintRole (pDict, resource.role); cout << endl;
-  if (resource.cid_present)
-	cout << "Contract ID: " << dec << resource.cid << endl;
-}
-
-
-//
-// Prints all personnel resources in the given AdminMob.
-//
-void PrintPersonnelResources (IAAFDictionary * pDict,
-							  IAAFMob * pMob)
-{
-  // Get an IAAFObject for the mob, then use it to get the class
-  // definition describing the AdminMob
-  IAAFObject *pMobObj=NULL;
-  check (pMob->QueryInterface (IID_IAAFObject, (void **)&pMobObj));
-  IAAFClassDef *cd=NULL;
-  check (pMobObj->GetDefinition (&cd));
-
-  // Use the class definition to get the definition for the Personnel
-  // property.
-  IAAFPropertyDef *pd=NULL;
-  check (cd->LookupPropertyDef (kPropID_AdminMob_Personnel,
-								&pd));
-
-  // Get the property value for the array of personnel objects
-  IAAFPropertyValue *pva=NULL;
-  check (pMobObj->GetPropertyValue (pd, &pva));
-
-  // Get the type def for arrays
-  IAAFTypeDef *td=NULL;
-  check (pva->GetType (&td));
-  IAAFTypeDefVariableArray *tda=NULL;
-  check (td->QueryInterface (IID_IAAFTypeDefVariableArray, (void **)&tda));
-
-  // Use the type def for arrays to get the number of personnel
-  // objects in this property value.
-  aafUInt32 numPersonnel = 0;
-  check (tda->GetCount (pva, &numPersonnel));
-
-  // Get the type def describing elements of the array
-  IAAFTypeDef *basetd=NULL;
-  check (tda->GetType (&basetd));
-  IAAFTypeDefObjectRef *tdo=NULL;
-  check (basetd->QueryInterface (IID_IAAFTypeDefObjectRef, (void **)&tdo));
-
-  cout << "There are " << numPersonnel
-	   << " personnel record objects." << endl;
-
-  // Print each element in the array.
-  aafUInt32 i;
-  for (i = 0; i < numPersonnel; i++)
-	{
-	  // put a newline between each
-	  if (i)
-		cout << endl;
-
-	  // Get the property value for the indexed record
-	  IAAFPropertyValue *pvr=NULL;
-	  check (tda->GetElementValue (pva, i, &pvr));
-
-	  // Get the object contained in that property value
-	  IAAFObject *personObj=NULL;
-	  check (tdo->GetObject (pvr, &personObj));
-
-	  // Get the resource info from that object
-	  PersonnelResource r =
-		PersonnelRecordGetInfo (personObj);
-
-	  // print the resource info
-	  PrintPersonnelResource (pDict, r);
-	  pvr->Release();
-	  pvr=NULL;
-	  personObj->Release();
-	  personObj=NULL;
-	}
-  pMobObj->Release();
-  pMobObj=NULL;
-  cd->Release();
-  cd=NULL;
-  pd->Release();
-  pd=NULL;
-  pva->Release();
-  pva=NULL;
-  td->Release();
-  td=NULL;
-  tda->Release();
-  tda=NULL;
-  basetd->Release();
-  basetd=NULL;
-  tdo->Release();
-  tdo=NULL;
-}
-
-
-PersonnelResource FormatResource (aafCharacter * name,
-								  const eRole &  role)
-{
-  PersonnelResource r;
-  assert (name);
-  wcscpy (r.name, name);
-  r.role = role;
-  r.cid_present = false;
-  r.cid = 0;
-
-  return r;
-}
-
-
-PersonnelResource FormatResource (aafCharacter * name,
-								  const eRole &  role,
-								  contractID_t   cid)
-{
-  PersonnelResource r =
-	FormatResource (name, role);
-  r.cid_present = true;
-  r.cid = cid;
-  return r;
-}
-
-
-void PersonnelRecordSetName (IAAFObject * pObj,
-							 const aafCharacter * name)
-{
-  assert (pObj);
-  assert (name);
-
-  IAAFClassDef *cd=NULL;
-  check (pObj->GetDefinition (&cd));
-
-  IAAFPropertyDef *pd=NULL;
-  check (cd->LookupPropertyDef (kPropID_PersonnelResource_Name,
-								&pd));
-
-  IAAFPropertyValue *pv=NULL;
-  check (pObj->GetPropertyValue (pd, &pv));
-  
-  IAAFTypeDef *td=NULL;
-  check (pd->GetTypeDef (&td));
-
-  IAAFTypeDefString *tds=NULL;
-  check (td->QueryInterface (IID_IAAFTypeDefString, (void **)&tds));
-
-  check (tds->SetCString (pv,
-						  (aafMemPtr_t) name,
-						  wcslen (name) * sizeof (aafCharacter)));
-
-  check (pObj->SetPropertyValue (pd, pv));
-  cd->Release();
-  cd=NULL;
-  pd->Release();
-  pd=NULL;
-  pv->Release();
-  pv=NULL;
-  td->Release();
-  td=NULL;
-  tds->Release();
-  tds=NULL;
-}
-
-
-aafUInt32 PersonnelRecordGetNameBufLen (IAAFObject * pObj)
-{
+  aafBool r;
   assert (pObj);
 
   IAAFClassDef *cd=NULL;
   check (pObj->GetDefinition (&cd));
 
   IAAFPropertyDef *pd=NULL;
-  check (cd->LookupPropertyDef (kPropID_PersonnelResource_Name,
+  check (cd->LookupPropertyDef (propertyID,
 								&pd));
 
-  IAAFPropertyValue *pv=NULL;
-  check (pObj->GetPropertyValue (pd, &pv));
-  
-  IAAFTypeDef *td=NULL;
-  check (pd->GetTypeDef (&td));
-
-  IAAFTypeDefString *tds=NULL;
-  check (td->QueryInterface (IID_IAAFTypeDefString, (void **)&tds));
-
-  aafUInt32 numChars = 0;
-  check (tds->GetCount (pv, &numChars));
-
-  // Add 1 for null terminator.
+  check (pObj->IsPropertyPresent (pd, &r));
   cd->Release();
   cd=NULL;
   pd->Release();
   pd=NULL;
-  pv->Release();
-  pv=NULL;
-  td->Release();
-  td=NULL;
-  tds->Release();
-  tds=NULL;
-  return numChars + 1;
+  return r ? true : false;
+}
+
+// Main functions for PersonnelResource
+void PersonnelResourceSetFamilyName(IAAFObject *pResource,
+							   aafCharacter *familyName)
+{
+	assert (pResource);
+	assert (familyName);
+    SetStringProperty (pResource, kPropID_PersonnelResource_FamilyName,
+						familyName);
+}
+
+void PersonnelResourceSetGivenName(IAAFObject *pResource,
+							   aafCharacter *givenName)
+{
+	assert (pResource);
+	assert(givenName);
+    SetStringProperty (pResource, kPropID_PersonnelResource_GivenName,
+						givenName);
 }
 
 
-void PersonnelRecordGetName (IAAFObject * pObj,
-							 aafCharacter * buf,
-							 aafUInt32 buflen)
+void PersonnelResourceSetPosition (IAAFObject * pResource,
+							 ePosition position)
 {
-  assert (pObj);
-  assert (buf);
-  aafUInt32 nameLen = PersonnelRecordGetNameBufLen (pObj);
-  assert (buflen >= nameLen);
+  assert (pResource);
 
   IAAFClassDef *cd=NULL;
-  check (pObj->GetDefinition (&cd));
+  check (pResource->GetDefinition (&cd));
 
   IAAFPropertyDef *pd=NULL;
-  check (cd->LookupPropertyDef (kPropID_PersonnelResource_Name,
+  check (cd->LookupPropertyDef (kPropID_PersonnelResource_Position,
 								&pd));
 
   IAAFPropertyValue *pv=NULL;
-  check (pObj->GetPropertyValue (pd, &pv));
-  
-  IAAFTypeDef *td=NULL;
-  check (pd->GetTypeDef (&td));
-
-  IAAFTypeDefString *tds=NULL;
-  check (td->QueryInterface (IID_IAAFTypeDefString, (void **)&tds));
-
-  check (tds->GetElements (pv, (aafMemPtr_t) buf, buflen));
-
-  // Make sure we're null-terminated.
-  buf[nameLen-1] = '\0';
-  cd->Release();
-  cd=NULL;
-  pd->Release();
-  pd=NULL;
-  pv->Release();
-  pv=NULL;
-  td->Release();
-  td=NULL;
-  tds->Release();
-  tds=NULL;
-}
-
-
-void PersonnelRecordSetRole (IAAFObject * pObj,
-							 eRole role)
-{
-  assert (pObj);
-
-  IAAFClassDef *cd=NULL;
-  check (pObj->GetDefinition (&cd));
-
-  IAAFPropertyDef *pd=NULL;
-  check (cd->LookupPropertyDef (kPropID_PersonnelResource_Role,
-								&pd));
-
-  IAAFPropertyValue *pv=NULL;
-  check (pObj->GetPropertyValue (pd, &pv));
+  check (pResource->GetPropertyValue (pd, &pv));
   
   IAAFTypeDef *td=NULL;
   check (pd->GetTypeDef (&td));
@@ -425,8 +257,8 @@ void PersonnelRecordSetRole (IAAFObject * pObj,
   IAAFTypeDefExtEnum *tde=NULL;
   check (td->QueryInterface (IID_IAAFTypeDefExtEnum, (void **)&tde));
 
-  check (tde->SetAUIDValue (pv, role));
-  check (pObj->SetPropertyValue (pd, pv));
+  check (tde->SetAUIDValue (pv, position));
+  check (pResource->SetPropertyValue (pd, pv));
   cd->Release();
   cd=NULL;
   pd->Release();
@@ -438,50 +270,15 @@ void PersonnelRecordSetRole (IAAFObject * pObj,
   tde->Release();
   tde=NULL;
 }
-
-void PersonnelRecordSetJobFunction (IAAFObject *pObj,
-									eJobFunction jobFunction)
+void PersonnelResourceSetActorRole (IAAFObject *pResource,
+								  aafCharacter *role)
 {
-	PersonnelRecordSetRole (pObj, jobFunction);
+	assert (pResource);
+	assert (role);
+	SetStringProperty (pResource, kPropID_PersonnelResource_Role, role);
 }
 
-eRole PersonnelRecordGetRole (IAAFObject * pObj)
-{
-  eRole r;
-  assert (pObj);
-
-  IAAFClassDef *cd=NULL;
-  check (pObj->GetDefinition (&cd));
-
-  IAAFPropertyDef *pd=NULL;
-  check (cd->LookupPropertyDef (kPropID_PersonnelResource_Role,
-								&pd));
-
-  IAAFPropertyValue *pv=NULL;
-  check (pObj->GetPropertyValue (pd, &pv));
-  
-  IAAFTypeDef *td=NULL;
-  check (pd->GetTypeDef (&td));
-
-  IAAFTypeDefExtEnum *tde=NULL;
-  check (td->QueryInterface (IID_IAAFTypeDefExtEnum, (void **)&tde));
-
-  check (tde->GetAUIDValue (pv, &r));
-  cd->Release();
-  cd=NULL;
-  pd->Release();
-  pd=NULL;
-  pv->Release();
-  pv=NULL;
-  td->Release();
-  td=NULL;
-  tde->Release();
-  tde=NULL;
-  return r;
-}
-
-
-void PersonnelRecordSetContractID (IAAFObject * pObj,
+void PersonnelResourceSetContractID (IAAFObject * pObj,
 								   contractID_t cid)
 {
   assert (pObj);
@@ -515,52 +312,75 @@ void PersonnelRecordSetContractID (IAAFObject * pObj,
   pv=NULL;
 }
 
-
-bool PersonnelRecordContractIDIsPresent (IAAFObject * pObj)
+void PersonnelResourceInitialize(IAAFObject *pResource,
+							   aafCharacter *familyName,
+							   aafCharacter *givenName,
+							   ePosition position)
 {
-  aafBool r;
+    PersonnelResourceSetFamilyName (pResource, familyName);
+    PersonnelResourceSetGivenName (pResource, givenName);
+	PersonnelResourceSetPosition (pResource,position);
+}
+
+void PersonnelResourceGetGivenNameBufLen (IAAFObject * pObj, aafUInt32 *bufLen)
+{
   assert (pObj);
-
-  IAAFClassDef *cd=NULL;
-  check (pObj->GetDefinition (&cd));
-
-  IAAFPropertyDef *pd=NULL;
-  check (cd->LookupPropertyDef (kPropID_PersonnelResource_ContractID,
-								&pd));
-
-  check (pObj->IsPropertyPresent (pd, &r));
-  cd->Release();
-  cd=NULL;
-  pd->Release();
-  pd=NULL;
-  return r ? true : false;
+  GetStringBufLen (pObj, kPropID_PersonnelResource_GivenName,
+					bufLen);
 }
 
 
-contractID_t PersonnelRecordGetContractID (IAAFObject * pObj)
+void PersonnelResourceGetGivenName (IAAFObject * pObj,
+							 aafCharacter * buf,
+							 aafUInt32 buflen)
 {
   assert (pObj);
-  assert (PersonnelRecordContractIDIsPresent (pObj));
+  assert (buf);
+  GetStringValue (pObj, kPropID_PersonnelResource_GivenName,
+		          buf,buflen);
+}
 
-  contractID_t r;
+void PersonnelResourceGetFamilyNameBufLen (IAAFObject *pObj,
+										   aafUInt32 *bufLen)
+{
+  assert (pObj);
+  GetStringBufLen (pObj, kPropID_PersonnelResource_FamilyName,
+					bufLen);
+}
+
+
+void PersonnelResourceGetFamilyName (IAAFObject * pObj,
+							 aafCharacter * buf,
+							 aafUInt32 buflen)
+{
+  assert (pObj);
+  assert (buf);
+  GetStringValue (pObj, kPropID_PersonnelResource_FamilyName,
+		          buf,buflen);
+}
+
+void PersonnelResourceGetPosition (IAAFObject * pResource,
+							 ePosition *position)
+{
+  assert (pResource);
 
   IAAFClassDef *cd=NULL;
-  check (pObj->GetDefinition (&cd));
+  check (pResource->GetDefinition (&cd));
 
   IAAFPropertyDef *pd=NULL;
-  check (cd->LookupPropertyDef (kPropID_PersonnelResource_ContractID,
+  check (cd->LookupPropertyDef (kPropID_PersonnelResource_Position,
 								&pd));
 
   IAAFPropertyValue *pv=NULL;
-  check (pObj->GetPropertyValue (pd, &pv));
+  check (pResource->GetPropertyValue (pd, &pv));
   
   IAAFTypeDef *td=NULL;
   check (pd->GetTypeDef (&td));
 
-  IAAFTypeDefInt *tdi=NULL;
-  check (td->QueryInterface (IID_IAAFTypeDefInt, (void **)&tdi));
+  IAAFTypeDefExtEnum *tde=NULL;
+  check (td->QueryInterface (IID_IAAFTypeDefExtEnum, (void **)&tde));
 
-  check (tdi->GetInteger (pv, (aafMemPtr_t) &r, sizeof (r)));
+  check (tde->GetAUIDValue (pv, position));
   cd->Release();
   cd=NULL;
   pd->Release();
@@ -569,37 +389,351 @@ contractID_t PersonnelRecordGetContractID (IAAFObject * pObj)
   pv=NULL;
   td->Release();
   td=NULL;
-  tdi->Release();
-  tdi=NULL;
-  return r;
+  tde->Release();
+  tde=NULL;
 }
 
-
-void PersonnelRecordSetInfo (IAAFObject * pObj,
-							 const PersonnelResource & info)
+HRESULT PersonnelResourceGetContractID (IAAFObject * pObj,
+								   contractID_t *cid)
 {
-  assert (info.name);
-  PersonnelRecordSetName (pObj, info.name);
-  PersonnelRecordSetRole (pObj, info.role);
-  if (info.cid_present)
-	PersonnelRecordSetContractID (pObj, info.cid);
+  assert (pObj);
+  assert (cid);
+  if (IsOptionalPropertyPresent (pObj,
+	                             kPropID_PersonnelResource_ContractID))
+  {
+    IAAFClassDef *cd=NULL;
+    check (pObj->GetDefinition (&cd));
+
+    IAAFPropertyDef *pd=NULL;
+    check (cd->LookupPropertyDef (kPropID_PersonnelResource_ContractID,
+								&pd));
+
+    IAAFPropertyValue *pv=NULL;
+    check (pObj->GetPropertyValue (pd, &pv));
+  
+    IAAFTypeDef *td=NULL;
+    check (pd->GetTypeDef (&td));
+
+    IAAFTypeDefInt *tdi=NULL;
+    check (td->QueryInterface (IID_IAAFTypeDefInt, (void **)&tdi));
+
+    check (tdi->GetInteger (pv, (aafMemPtr_t) cid, sizeof (*cid)));
+    cd->Release();
+    cd=NULL;
+    pd->Release();
+    pd=NULL;
+    pv->Release();
+    pv=NULL;
+    td->Release();
+    td=NULL;
+    tdi->Release();
+    tdi=NULL;
+	return AAFRESULT_SUCCESS;
+  } else return AAFRESULT_PROP_NOT_PRESENT;
 }
 
 
-PersonnelResource PersonnelRecordGetInfo (IAAFObject * pObj)
+HRESULT PersonnelResourceGetActorNameBufLen (IAAFObject *pObj,
+										   aafUInt32 *bufLen)
 {
-  PersonnelResource r;
-
-  PersonnelRecordGetName (pObj, r.name, sizeof (r.name));
-  r.role = PersonnelRecordGetRole (pObj);
-  if (PersonnelRecordContractIDIsPresent (pObj))
-	{
-	  r.cid = PersonnelRecordGetContractID (pObj);
-	  r.cid_present = true;
-	}
-  else
-	{
-	  r.cid_present = false;
-	}
-  return r;
+  assert (pObj);
+  if (IsOptionalPropertyPresent (pObj,
+	                             kPropID_PersonnelResource_Role))
+  {
+	GetStringBufLen (pObj, kPropID_PersonnelResource_Role,
+					bufLen);
+	return AAFRESULT_SUCCESS;
+  } else return AAFRESULT_PROP_NOT_PRESENT;
 }
+
+HRESULT PersonnelResourceGetActorName (IAAFObject * pObj,
+							 aafCharacter * buf,
+							 aafUInt32 buflen)
+{
+  assert (pObj);
+  assert (buf);
+  if (IsOptionalPropertyPresent (pObj,
+	                             kPropID_PersonnelResource_Role))
+  {
+	GetStringValue (pObj, kPropID_PersonnelResource_Role,
+		          buf,buflen);
+	return AAFRESULT_SUCCESS;
+  } else return AAFRESULT_PROP_NOT_PRESENT;
+}
+
+
+
+//
+// Prints the given string.
+//
+ostream& operator<< (ostream& s,
+					 const aafCharacter * wstring)
+{
+  assert (wstring);
+
+  const aafUInt32 numChars = wcslen (wstring);
+
+  char * cstring = new char [numChars+1];
+  assert (cstring);
+
+  size_t status = wcstombs(cstring, wstring, numChars);
+
+  assert (status != (size_t)-1);
+  cstring[numChars] = '\0';
+
+  s << cstring;
+
+  delete[] cstring;
+
+  return s;
+}
+
+
+//
+// Returns true if the positions match; returns false otherwise.
+//
+bool ArePositionsEqual (const ePosition & positionA, const ePosition & positionB)
+{
+  return (memcmp (&positionA, &positionB, sizeof (ePosition)) == 0 ?
+		  true : false);
+}
+
+
+//
+// Prints the given ePosition.
+//
+void PrintPosition (IAAFDictionary * pDict,
+				const ePosition position)
+{
+  assert (pDict);
+  IAAFTypeDef *ptd=NULL;
+  check (pDict->LookupType (kTypeID_ePosition, &ptd));
+
+  IAAFTypeDefExtEnum *ptde=NULL;
+  check (ptd->QueryInterface (IID_IAAFTypeDefExtEnum, (void **)&ptde));
+
+  aafUInt32 nameLen = 0;
+  check (ptde->GetNameBufLenFromAUID (position, &nameLen));
+  assert (nameLen);
+
+  aafCharacter *buf = 0;
+  buf = new aafCharacter[nameLen];
+  assert (buf);
+
+  check (ptde->GetNameFromAUID (position, buf, nameLen));
+
+  cout << buf;
+
+  delete[] buf;
+  ptd->Release();
+  ptd=NULL;
+  ptde->Release();
+  ptde=NULL;
+}
+
+
+void AdminMobAppendResource (IAAFDictionary *pDict,
+									IAAFMob *pAdminMob,
+							        IAAFObject *pResource)
+{
+  assert (pAdminMob);
+  assert (pResource);
+
+
+
+  // Create a property value corresponding to new object reference.
+  // We'll have to do that through the type def for that kind of obj
+  // ref.
+
+  // Look up the type def for StrongReference-to-PersonnelResource
+  // objects.
+  IAAFTypeDef *td=NULL;
+  check (pDict->LookupType (kTypeID_PersonnelResourceStrongReference,
+							&td));
+  
+  // Create the StrongReference-to-PersonnelResource property value
+  // through the type def.  This must be done through the
+  // IAAFTypeDefObjectRef interface, so QI for that first.
+  IAAFTypeDefObjectRef *tdo=NULL;
+  check (td->QueryInterface (IID_IAAFTypeDefObjectRef,
+							 (void **)&tdo));
+
+  // Create the value.  The CreateValue() method takes as argument the
+  // object to which this value will refer.
+  IAAFPropertyValue *pv=NULL;
+  check (tdo->CreateValue (pResource, &pv));
+
+  // Append the new property value (which refers to the new
+  // PersonnelRecord object) to the existing array of PersonnelRecord
+  // object references.
+
+  // First get the existing array-of-objects property value from the
+  // AdminMob object.  To do so, we'll need:
+  // - The IAAFObject interface from the AdminMob object.
+  // - Using the IAAFObject interface, we obtain the ClassDefinition
+  //   describing this AdminMob object.
+  // - From that class definition, we look up the PropertyDef for the
+  //   Personnel property on AdminMob.
+  // - We use PropertyDef to specify which property value we're
+  //   getting, and get the property.
+
+  // QI for the AdminMob's IAAFObject interface
+  IAAFObject *pMobObj=NULL;
+  check (pAdminMob->QueryInterface (IID_IAAFObject,
+							   (void **)&pMobObj));
+
+  // Use the IAAFObject interface to obtain the class definition
+  // describing the AdminMob.
+  IAAFClassDef *cd=NULL;
+  check (pMobObj->GetDefinition (&cd));
+
+  // Use the ClassDefinition to look up the PropertyDefinition for the
+  // Personnel property on the Personnel mob.
+  IAAFPropertyDef *pd=NULL;
+  check (cd->LookupPropertyDef (kPropID_AdminMob_Personnel,
+								&pd));
+
+  // Use the PropertyDefinition to specify the property whose value we
+  // wish to obtain.
+  IAAFPropertyValue *pva=NULL;
+  check (pMobObj->GetPropertyValue (pd, &pva));
+
+  // Now get a type def for the array of personnel, and use that type
+  // def to append the new personnel prop val to it.
+  IAAFTypeDef *tdpv=NULL;
+  check (pva->GetType (&tdpv));
+  IAAFTypeDefVariableArray *tda=NULL;
+  check (tdpv->QueryInterface (IID_IAAFTypeDefVariableArray,
+							   (void **)&tda));
+  check (tda->AppendElement (pva, pv));
+
+  // Now that the property value has had the new element appended to
+  // it, set the property in the AdminMob to its new value.
+  check (pMobObj->SetPropertyValue (pd, pva));
+  td->Release();
+  td=NULL;
+  tdo->Release();
+  tdo=NULL;
+  pv->Release();
+  pv=NULL;
+  pMobObj->Release();
+  pMobObj=NULL;
+  cd->Release();
+  cd=NULL;
+  pd->Release();
+  pd=NULL;
+  pva->Release();
+  pva=NULL;
+  tdpv->Release();
+  tdpv=NULL;
+  tda->Release();
+  tda=NULL;
+
+}
+
+
+void AdminMobGetNumPersonnel (IAAFDictionary * pDict,
+							  IAAFMob * pMob,
+							  aafUInt32 *numPersonnel)
+{
+  // Get an IAAFObject for the mob, then use it to get the class
+  // definition describing the AdminMob
+  IAAFObject *pMobObj=NULL;
+  check (pMob->QueryInterface (IID_IAAFObject, (void **)&pMobObj));
+  IAAFClassDef *cd=NULL;
+  check (pMobObj->GetDefinition (&cd));
+
+  // Use the class definition to get the definition for the Personnel
+  // property.
+  IAAFPropertyDef *pd=NULL;
+  check (cd->LookupPropertyDef (kPropID_AdminMob_Personnel,
+								&pd));
+
+  // Get the property value for the array of personnel objects
+  IAAFPropertyValue *pva=NULL;
+  check (pMobObj->GetPropertyValue (pd, &pva));
+
+  // Get the type def for arrays
+  IAAFTypeDef *td=NULL;
+  check (pva->GetType (&td));
+  IAAFTypeDefVariableArray *tda=NULL;
+  check (td->QueryInterface (IID_IAAFTypeDefVariableArray, (void **)&tda));
+
+  // Use the type def for arrays to get the number of personnel
+  // objects in this property value.
+  check (tda->GetCount (pva, numPersonnel));
+  pMobObj->Release();
+  pMobObj=NULL;
+  cd->Release();
+  cd=NULL;
+  pd->Release();
+  pd=NULL;
+  pva->Release();
+  pva=NULL;
+  td->Release();
+  td=NULL;
+  tda->Release();
+  tda=NULL;
+}
+
+void AdminMobGetNthPersonnel (IAAFDictionary * pDict,
+							  IAAFMob * pMob,
+							  aafUInt32 index,
+							  IAAFObject **personnelResource)
+{
+  // Get an IAAFObject for the mob, then use it to get the class
+  // definition describing the AdminMob
+  IAAFObject *pMobObj=NULL;
+  check (pMob->QueryInterface (IID_IAAFObject, (void **)&pMobObj));
+  IAAFClassDef *cd=NULL;
+  check (pMobObj->GetDefinition (&cd));
+
+  // Use the class definition to get the definition for the Personnel
+  // property.
+  IAAFPropertyDef *pd=NULL;
+  check (cd->LookupPropertyDef (kPropID_AdminMob_Personnel,
+								&pd));
+
+  // Get the property value for the array of personnel objects
+  IAAFPropertyValue *pva=NULL;
+  check (pMobObj->GetPropertyValue (pd, &pva));
+
+  // Get the type def for arrays
+  IAAFTypeDef *td=NULL;
+  check (pva->GetType (&td));
+  IAAFTypeDefVariableArray *tda=NULL;
+  check (td->QueryInterface (IID_IAAFTypeDefVariableArray, (void **)&tda));
+  // Get the type def describing elements of the array
+  IAAFTypeDef *basetd=NULL;
+  check (tda->GetType (&basetd));
+  IAAFTypeDefObjectRef *tdo=NULL;
+  check (basetd->QueryInterface (IID_IAAFTypeDefObjectRef, (void **)&tdo));
+
+  // Get the property value for the indexed record
+  IAAFPropertyValue *pvr=NULL;
+  check (tda->GetElementValue (pva, index, &pvr));
+
+  // Get the object contained in that property value
+  check (tdo->GetObject (pvr, personnelResource));
+
+  pvr->Release();
+  pvr=NULL;
+  tdo->Release();
+  tdo=NULL;
+  basetd->Release();
+  basetd=NULL;
+  tda->Release();
+  tda=NULL;
+  td->Release();
+  td=NULL;
+  pva->Release();
+  pva=NULL;
+  pd->Release();
+  pd=NULL;
+  cd->Release();
+  cd=NULL;
+  pMobObj->Release();
+  pMobObj=NULL;
+}
+
+
