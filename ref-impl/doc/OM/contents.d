@@ -1,10 +1,14 @@
 /*
+
+Derived from the standard CONTENTS.D
+
 @doc OMEXTERNAL OMINTERNAL
 
 @contents1 AAF Object Manager Internal Documentation | 
 
 @subindex Classes
 @subindex Class Members
+@subindex Modules
 @subindex Macros and Functions
 @subindex Enums
 
@@ -25,6 +29,10 @@
 ***********************************************************************
 @contents2 Enums |
 @index enum, menum |
+
+***********************************************************************
+@contents2 Modules |
+@index module |
 
 */
 
