@@ -31,29 +31,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-static char programName[FILENAME_MAX] = "Object Manager";
-
-void setProgramName(const char* name)
-{
-  TRACE("setProgramName");
-
-  PRECONDITION("Valid program name", validString(name));
-
-  size_t size = strlen(name) + 1;
-  if (size >= FILENAME_MAX) {
-    size = FILENAME_MAX - 1;
-  }
-  strncpy(programName, name, size);
-  programName[size] = '\0';
-}
-
-const char* getProgramName(void)
-{
-  TRACE("getProgramName");
-
-  return programName;
-}
-
 OMByteOrder hostByteOrder(void)
 {
   TRACE("hostByteOrder");

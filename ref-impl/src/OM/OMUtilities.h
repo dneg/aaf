@@ -35,14 +35,6 @@
 //         disk files with wide character names.
 //   @mauthor Tim Bingham | tjb | Avid Technology, Inc.
 
-  // @func Set the name of the program to be use in error messages.
-  //   @parm The program name.
-void setProgramName(const char* name);
-
-  // @func Get the name of the program to be used in error messages.
-  //   @rdesc The program name.
-const char* getProgramName(void);
-
   // @func Get the byte order used on the host computer.
   //   @rdesc The host byte order.
 OMByteOrder hostByteOrder(void);
