@@ -149,6 +149,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	aafFadeType_t		fadeOutType = kAAFFadeLinearPower;
 	aafSourceRef_t		sourceRef; 
 	aafLength_t			fillerLength = 3200;
+	aafUInt32			numSegments;
 
 	HRESULT				hr = AAFRESULT_SUCCESS;
 
@@ -206,7 +207,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		// Set its properties.
 	    checkResult(pFiller->Initialize(defs.ddPicture(), fillerLength));
 
-		// Now create a selector 
+		// Now create a nested scope 
 	    checkResult(defs.cdNestedScope()->
 					CreateInstance(IID_IAAFNestedScope, 
 								   (IUnknown **)&pNestedScope));
@@ -214,8 +215,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		// Get a segment interface from the source clip
 		checkResult(pSourceClip->QueryInterface (IID_IAAFSegment, (void **)&pSegment));
 		// -----------------------------------------------------------------
-		// Set all properties on the Selector
-		//	Set the selected segment on the Selector
+		// Set all properties on the nested scope 
+		//	Set the selected segment on the nested scope 
 		checkResult(pNestedScope->AppendSegment(pSegment));
 		// Release the intreface so we can reuse the pointer
 		pSegment->Release();
@@ -225,6 +226,22 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		// Release the intreface so we can reuse the pointer
 		pSegment->Release();
 		pSegment = NULL;
+
+		// create another filler, set its properties, and append
+	    checkResult(defs.cdFiller()->
+					CreateInstance(IID_IAAFFiller, 
+								   (IUnknown **)&pFiller));
+	    checkResult(pFiller->Initialize(defs.ddPicture(), fillerLength));
+		checkResult(pFiller->QueryInterface(IID_IAAFSegment, (void **)&pSegment));
+		checkResult(pNestedScope->AppendSegment(pSegment));
+		pSegment->Release();
+		pSegment = NULL;
+		checkResult(pNestedScope->CountSegments (&numSegments));
+		checkExpression(3 == numSegments, AAFRESULT_TEST_FAILED);
+		checkResult(pNestedScope->RemoveSegmentAt (2));
+		checkResult(pNestedScope->CountSegments (&numSegments));
+		checkExpression(2 == numSegments, AAFRESULT_TEST_FAILED);
+
 		checkResult(pNestedScope->QueryInterface(IID_IAAFSegment, (void **)&pSegment));
 	    // append the Selector to the MOB tree
 		aafRational_t editRate = { 0, 1};

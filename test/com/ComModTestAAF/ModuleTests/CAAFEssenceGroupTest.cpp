@@ -94,6 +94,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	aafMobID_t					newMobID, referencedMobID;
 	aafLength_t					stillLength = 1, segLen = SUBSEG_LENGTH;
 	AAFRESULT					hr = AAFRESULT_SUCCESS;
+	aafUInt32					numChoices;
 
 	ProductInfo.companyName = L"AAF Developers Desk";
 	ProductInfo.productName = L"AAFEssenceGroup Test";
@@ -171,6 +172,26 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		pComponent = NULL;
 		pSourceClip->Release();
 		pSourceClip = NULL;
+		checkResult(essenceGroup->CountChoices(&numChoices));
+		checkExpression(1 == numChoices, AAFRESULT_TEST_FAILED);
+		// Add another source clip alternate
+		checkResult(defs.cdSourceClip()->
+					CreateInstance(IID_IAAFSourceClip, 
+								   (IUnknown **)&pSourceClip));
+		checkResult(pSourceClip->QueryInterface (IID_IAAFComponent, (void **)&pComponent));
+		checkResult(pComponent->SetDataDef (defs.ddSound()));
+		checkResult(pComponent->SetLength (segLen));
+		checkResult(essenceGroup->AppendChoice(pSourceClip)); 
+		pComponent->Release();
+		pComponent = NULL;
+		pSourceClip->Release();
+		pSourceClip = NULL;
+		checkResult(essenceGroup->CountChoices(&numChoices));
+		checkExpression(2 == numChoices, AAFRESULT_TEST_FAILED);
+		// Remove the second alternate, check for count 1 once again
+		checkResult(essenceGroup->RemoveChoiceAt(1));
+		checkResult(essenceGroup->CountChoices(&numChoices));
+		checkExpression(1 == numChoices, AAFRESULT_TEST_FAILED);
 
 		checkResult(essenceGroup->QueryInterface (IID_IAAFSegment, (void **)&pSeg));
 		aafRational_t editRate = { 0, 1};
@@ -302,7 +323,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
     // We can't really do anthing in AAF without the header.
 		checkResult(pFile->GetHeader(&pHeader));
 
-		// Get the number of mobs in the file (should be one)
+		// Get the number of mobs in the file (should be two)
 		checkResult(pHeader->CountMobs(kAAFAllMob, &numMobs));
 		checkExpression(2 == numMobs, AAFRESULT_TEST_FAILED);
 
