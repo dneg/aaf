@@ -49,6 +49,7 @@ const OMStoredForm SF_WEAK_OBJECT_REFERENCE_STORED_OBJECT_ID = 0x03;
 const OMStoredForm SF_UNIQUE_OBJECT_ID                       = 0x86;
 const OMStoredForm SF_OPAQUE_STREAM                          = 0x40;
 
+class OMFile;
 class OMStoredObject;
 class OMStorable;
 class OMPropertySet;
@@ -153,6 +154,17 @@ protected:
 
     // @cmember The type of this <c OMProperty>.
   const OMType* type(void) const;
+
+    // @cmember The <c OMStorable> that contains this <c OMProperty>.
+  OMStorable* container(void) const;
+
+    // @cmember The <c OMStoredObject> that contains the persisted
+    //          representation of this <c OMProperty>.
+  OMStoredObject* store(void) const;
+
+    // @cmember The <c OMFile> that contains the persisted
+    //          representation of this <c OMProperty>.
+  OMFile* file(void) const;
 
   OMPropertyId _propertyId;
   OMStoredForm _storedForm;
