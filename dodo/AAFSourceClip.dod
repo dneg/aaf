@@ -6,7 +6,7 @@ AAFSourceClip\
 AAFSourceReference\
 #endm
 #c
-#import ./AAFSourceReference.exp
+#c #import ./AAFSourceReference.exp
 AD_HEAD
 AD_IDL(//
 // The IAAFSourceClip interface is implemented by objects that
