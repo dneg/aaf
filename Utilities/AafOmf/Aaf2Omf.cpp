@@ -423,7 +423,7 @@ HRESULT Aaf2Omf::AAFFileRead()
 
 	OMF2::omfMobObj_t		OMFMob = NULL;
 
-	aafInt32				nAAFNumMobs;
+	aafNumSlots_t			nAAFNumMobs;
 	aafUInt32				numEssenceData = 0;
 	IEnumAAFMobs*			pMobIter = NULL;
 	IAAFMob*				pMob = NULL;
@@ -1037,7 +1037,7 @@ HRESULT Aaf2Omf::TraverseMob(IAAFMob* pMob,
 		printf("%sFound: %ld sub slots\n", gpGlobals->indentLeader, numSlots);
 	}
 
-	for (aafInt32 times = 0; times< numSlots; times++)
+	for (aafUInt32 times = 0; times< numSlots; times++)
 	{
 		rc = pSlotIter->NextOne(&pSlot);
 		if (AAFRESULT_SUCCESS == rc)
