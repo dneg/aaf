@@ -172,27 +172,6 @@ AAFRESULT STDMETHODCALLTYPE
     return AAFRESULT_NOT_IMPLEMENTED;
   }
 
-#if 0
-  #include <stdio.h>
-#include <stdlib.h> /* for abs() */
-#include "omCvt.h"
-#include "AAFPulldown.h"
-#include "AAFTimecode.h"	//!!!
-#include "AAFSourceClip.h"	//!!!
-#include "AAFFile.h"
-
-AAFPulldown::AAFPulldown(AAFFile *file)
-{
-	Init(file, NULL);
-}
-
-
-AAFPulldown::AAFPulldown(AAFFile *file, OMLObject obj)
-{
-	Init(file, obj);
-}
-#endif
-
 AAFRESULT ImplAAFPulldown::MapOffset(aafPosition_t offset,
 			   aafBool reverse,
 			   aafLength_t *numFrames,
