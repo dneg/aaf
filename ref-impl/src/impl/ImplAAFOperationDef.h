@@ -31,7 +31,6 @@
  ************************************************************************/
 
 
-class ImplAAFDataDef;
 class ImplAAFLocator;
 class ImplAAFParameterDef;
 class ImplEnumAAFLocators;
@@ -42,6 +41,7 @@ class ImplEnumAAFParameterDefs;
 #include "ImplAAFDefObject.h"
 #endif
 
+#include "ImplAAFDataDef.h"
 #include "ImplAAFParameterDef.h"
 #include "ImplEnumAAFOperationDefs.h"
 #include "ImplEnumAAFParameterDefs.h"
@@ -245,7 +245,7 @@ public:
 		 ImplAAFParameterDef ** ppParameterDef);
 
 private:
-	OMFixedSizeProperty<aafUID_t>					_dataDef;
+	OMWeakReferenceProperty<ImplAAFDataDef>			_dataDef;
 	OMFixedSizeProperty<aafBool>					_isTimeWarp;
 	OperationDefWeakRefArrayProp_t						_degradeTo;
 	OMWideStringProperty                            _category;
