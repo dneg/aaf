@@ -20,8 +20,10 @@
 //
 //=---------------------------------------------------------------------=
 
-// @com Executable test program by Chris Morgan, intern for Avid Technology, Tewksbury 
-// @com This is used for scalability testing of AAF code.  Last modified on 7/23/99.
+// @com Executable test program by Chris Morgan, intern for
+//      Avid Technology, Tewksbury 
+// @com This is used for scalability testing of AAF code.
+// Last modified on 9/2/01.
 
 #include <stdio.h>
 #include <string.h>
@@ -40,25 +42,27 @@
 // Include the AAF interface declarations.
 #include "AAF.h"
 
-// Include the AAF Stored Object identifiers. These symbols are defined in aaf.lib.
+// Include the AAF Stored Object identifiers. These symbols are defined
+// in aaf.lib.
 #include "AAFStoredObjectIDs.h"
 
 #if defined( OS_MACOS )
 #include "DataInput.h"
 #endif
 
-// There are differences in the microsoft and other compilers in the "Length" specifier
-// used in printf for 64bit integers.
+// There are differences in the microsoft and other compilers in the
+// "Length" specifier used in printf for 64bit integers.
 //
-// NOTE: If your compiler does not support 64 bit integers then this example will NOT
-// print out the correct lengths.
+// NOTE: If your compiler does not support 64 bit integers then this
+// example will NOT print out the correct lengths.
 #if defined( COMPILER_MSC )
 #define L64 "I64"
 #else
 #define L64 "ll"
 #endif
 
-// MAX is used for arrays when converting between types - set here for debugging. 
+// MAX is used for arrays when converting between types - set here for
+// debugging. 
 const int MAX = 80;
 static char niceFileName[FILENAME_MAX];
 static void usage(void);
@@ -70,10 +74,10 @@ static aafWChar* slotName = L"SLOT1";
 static aafSourceRef_t sourceRef; 
 
 
-#define TAPE_LENGTH                     1L * 60L *60L * 30L
-#define FILE1_LENGTH            60L * 30L
-#define SEG_LENGTH                      30L
-#define FILL_LENGTH                     10L
+#define TAPE_LENGTH     1L * 60L *60L * 30L
+#define FILE1_LENGTH    60L * 30L
+#define SEG_LENGTH      30L
+#define FILL_LENGTH     10L
 #define TEST_PATH       L"AnotherFile.aaf"
 
 #define assert(b, msg) \
@@ -112,9 +116,9 @@ static HRESULT convert(char* cName, size_t length, const wchar_t* name)
   if (status == (size_t)-1) {
     fprintf(stderr, ": Error : Conversion failed.\n");
     return -1; 
+  } else {
+    return S_OK;
   }
-  else
-        return S_OK;
 }
 
 const aafUID_t NIL_UID = { 0, 0, 0, { 0, 0, 0, 0, 0, 0, 0, 0 } };
@@ -537,38 +541,37 @@ cleanup:
 // now need the reading functionality
 static HRESULT ReadAAFFile(aafWChar * pFileName)
 {
-        IAAFFile *                                      pFile = NULL;
+  IAAFFile * pFile = NULL;
   // printing file open time
 #if USE_TIMER_LIB
-        aafUInt32 timerID, elapsedtime;
+  aafUInt32 timerID, elapsedtime;
 
-        moduleErrorTmp = UTLStartPeriod(&timerID);
+  moduleErrorTmp = UTLStartPeriod(&timerID);
 #endif
-        check(AAFFileOpenExistingRead ( pFileName, 0, &pFile));
+  check(AAFFileOpenExistingRead ( pFileName, 0, &pFile));
 #if USE_TIMER_LIB
-        moduleErrorTmp = UTLEndPeriod(timerID, &elapsedtime);
+  moduleErrorTmp = UTLEndPeriod(timerID, &elapsedtime);
 #endif
-        pFile->Close();
-        pFile->Release();
-        pFile=NULL;
+  pFile->Close();
+  pFile->Release();
+  pFile=NULL;
 #if USE_TIMER_LIB
-        printf("Open time = %ld\n", elapsedtime);
+  printf("Open time = %ld\n", elapsedtime);
 #endif
 cleanup:
-        if (pFile)
-                {
-                pFile->Close();
-                pFile->Release();
-                }
-        return AAFRESULT_SUCCESS;
+  if (pFile) {
+    pFile->Close();
+    pFile->Release();
+  }
+  return AAFRESULT_SUCCESS;
 }
 
 //  A new usage function to make program more friendly
 void usage(void)
 {
-        printf("Usage:\n Createsequence.exe <Number of components in file> <file name>.aaf \n");
-        printf(" NB: Number is required to be integer greater than zero.\n");
-        printf(" If only the number is given, the filename defaults to <number>.aaf\n");
+  printf("Usage:\n Createsequence.exe <Number of components in file> <file name>.aaf \n");
+  printf(" NB: Number is required to be integer greater than zero.\n");
+  printf(" If only the number is given, the filename defaults to <number>.aaf\n");
 }
 
 //  Main adapted to use command-line arguments with argument checking
