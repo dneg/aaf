@@ -213,9 +213,9 @@ HRESULT createRational16Type (IAAFDictionary * pDict)
 
   // Allocate a new typedef which will represent a 16-bit rational
   IAAFTypeDefRecordSP pTDRational16;
-  PROPAGATE_RESULT(pDict->CreateInstance(defs.cdTypeDefRecord(),
-										 IID_IAAFTypeDefRecord,
-										 (IUnknown **) &pTDRational16));
+  PROPAGATE_RESULT(defs.cdTypeDefRecord()->
+				   CreateInstance(IID_IAAFTypeDefRecord,
+								  (IUnknown **) &pTDRational16));
   PROPAGATE_RESULT(pTDRational16->Initialize(AUID_TypeRational16,
 											 memberTypes,
 											 memberNames,
@@ -243,9 +243,9 @@ HRESULT createRenamedRational16 (IAAFDictionary * pDict)
 										&pTDRational16));
 
   // create new (rename) type
-  PROPAGATE_RESULT(pDict->CreateInstance(defs.cdTypeDefRename(),
-										 IID_IAAFTypeDefRename,
-										 (IUnknown **) &pRenamedRational16));
+  PROPAGATE_RESULT(defs.cdTypeDefRename()->
+				   CreateInstance(IID_IAAFTypeDefRename,
+								  (IUnknown **) &pRenamedRational16));
 
   // connect 'em up
   PROPAGATE_RESULT(pRenamedRational16->Initialize(AUID_TypeRenamedRational16,
@@ -340,9 +340,9 @@ HRESULT createStinkyFiller (IAAFDictionary * pDict,
   // IAAFObject interface.
   //
   IAAFFiller * pFill = 0;
-  PROPAGATE_RESULT(pDict->CreateInstance(defs.cdFiller(),
-										 IID_IAAFFiller,
-										 (IUnknown **) &pFill));
+  PROPAGATE_RESULT(defs.cdFiller()->
+				   CreateInstance(IID_IAAFFiller,
+								  (IUnknown **) &pFill));
   assert (pFill);
   PROPAGATE_RESULT (pFill->Initialize(defs.ddSound(), 10));
 
@@ -732,9 +732,9 @@ static void CreateAAFFile(aafWChar * pFileName,
 
   // Create a source Mob
   IAAFSourceMobSP  smob;
-  check (spDictionary->CreateInstance(defs.cdSourceMob(),
-									 IID_IAAFSourceMob, 
-									 (IUnknown **)&smob));
+  check (defs.cdSourceMob()->
+		 CreateInstance(IID_IAAFSourceMob, 
+						(IUnknown **)&smob));
 
   IAAFMobSP spMob;
   check (smob->QueryInterface (IID_IAAFMob, (void **)&spMob));
@@ -745,9 +745,8 @@ static void CreateAAFFile(aafWChar * pFileName,
   check (spMob->SetName(L"a Source Mob"));
 
   IAAFFileDescriptorSP  spFileDesc;
-  check (spDictionary->
-		 CreateInstance(defs.cdFileDescriptor(),
-						IID_IAAFFileDescriptor, 
+  check (defs.cdFileDescriptor()->
+		 CreateInstance(IID_IAAFFileDescriptor, 
 						(IUnknown **) &spFileDesc));
   aafRational_t  audioRate = { 44100, 1 };
   check (spFileDesc->SetSampleRate(audioRate));
