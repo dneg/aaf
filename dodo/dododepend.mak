@@ -24,8 +24,10 @@ depend.mk : aafobjects.mk
 	@ echo AAFTypes.all...
 	@ $(SH_PREFIX) echo AAFTypes.all : AAFTypes.h >> depend.tmp $(SH_SUFFIX)
 	@ $(SH_PREFIX) echo AAFTypes.all : AAFTypes.idl >> depend.tmp $(SH_SUFFIX)
+	@ $(SH_PREFIX) echo AAFTypes.all : AAFTypes.refh >> depend.tmp $(SH_SUFFIX)
 	@ $(SH_PREFIX) echo AAFTypes.h : macros/h.mac macros/base.mac >> depend.tmp $(SH_SUFFIX)
 	@ $(SH_PREFIX) echo AAFTypes.idl : macros/idl.mac macros/base.mac >> depend.tmp $(SH_SUFFIX)
+	@ $(SH_PREFIX) echo AAFTypes.refh : macros/refh.mac macros/base.mac >> depend.tmp $(SH_SUFFIX)
 	@ $(SH_PREFIX) echo # >> depend.tmp $(SH_SUFFIX)
 	@ $(SH_PREFIX) echo # >> depend.tmp $(SH_SUFFIX)
 	@ $(SH_PREFIX) echo #special case the utility classes since they will not be exposed by com >> depend.tmp $(SH_SUFFIX)
@@ -35,7 +37,8 @@ depend.mk : aafobjects.mk
 		echo $$base.all : $$base.cpp $$base.h $$base.cppt >> depend.tmp ; \
 		echo $$base.all : $$base.comc $$base.comh $$base.comt >> depend.tmp ; \
 		echo $$base.all : $$base.implc $$base.implh >> depend.tmp ; \
-		echo $$base.all : $$base.idl $$base.exp >> depend.tmp ; \
+		echo $$base.all : $$base.idl >> depend.tmp ; \
+		echo $$base.all : $$base.refh >> depend.tmp ; \
 		echo $$base.cpp : macros/cpp.mac macros/base.mac >> depend.tmp ; \
 		echo $$base.h : macros/h.mac macros/base.mac >> depend.tmp ; \
 		echo $$base.cppt : macros/cppt.mac macros/base.mac >> depend.tmp ; \
@@ -45,6 +48,7 @@ depend.mk : aafobjects.mk
 		echo $$base.implc : macros/implc.mac macros/base.mac >> depend.tmp ; \
 		echo $$base.implh : macros/implh.mac macros/base.mac >> depend.tmp ; \
 		echo $$base.idl : macros/idl.mac macros/base.mac >> depend.tmp ; \
+		echo $$base.refh : macros/refh.mac macros/base.mac >> depend.tmp ; \
 		echo $$base.exp : macros/exp.mac macros/base.mac >> depend.tmp ; \
 		for import in `grep '^#import' $$base.dod | sed -e 's,#import,,' | sed -e 's,.*/,,'` ; do \
 			echo $$base.cpp : $$import >> depend.tmp ; \
@@ -56,6 +60,7 @@ depend.mk : aafobjects.mk
 			echo $$base.implc : $$import >> depend.tmp ; \
 			echo $$base.implh : $$import >> depend.tmp ; \
 			echo $$base.idl : $$import >> depend.tmp ; \
+			echo $$base.refh : $$import >> depend.tmp ; \
 			echo $$base.exp : $$import >> depend.tmp ; \
 		done ; \
 	done $(SH_SUFFIX)
@@ -66,3 +71,4 @@ depend.mk : aafobjects.mk
 
 clean :
 	$(SH_PREFIX) $(RM) -rf depend.mk $(SH_SUFFIX)
+	$(SH_PREFIX) touch depend.mk $(SH_SUFFIX)
