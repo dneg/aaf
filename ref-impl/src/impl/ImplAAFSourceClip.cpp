@@ -16,17 +16,6 @@
 #include "ImplAAFMob.h"
 #endif
 
-
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
-
-
 #ifndef __ImplAAFSourceClip_h__
 #include "ImplAAFSourceClip.h"
 #endif
@@ -100,15 +89,26 @@ AAFRESULT STDMETHODCALLTYPE
 {
     AAFRESULT aafError = AAFRESULT_SUCCESS;
 
-	if (fadeInLen == NULL ||
-		fadeInType == NULL ||
-		fadeInPresent == NULL ||
-		fadeOutLen == NULL ||
-		fadeOutType == NULL ||
+	if (fadeInLen      == NULL ||
+		fadeInType     == NULL ||
+		fadeInPresent  == NULL ||
+		fadeOutLen     == NULL ||
+		fadeOutType    == NULL ||
 		fadeOutPresent == NULL )
 	{
 		aafError = 	AAFRESULT_NULL_PARAM;
 	}
+	else
+
+
+	if (!_fadeInLength.isPresent()   ||
+		!_fadeInType.isPresent()  ||
+		!_fadeOutLength.isPresent()  ||
+		!_fadeOutType.isPresent() )
+	{
+		aafError =  AAFRESULT_PROP_NOT_PRESENT;
+	}
+
 	else
 	{
 	
