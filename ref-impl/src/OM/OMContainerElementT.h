@@ -529,8 +529,8 @@ OMContainerElement<ObjectReference, ReferencedObject>::pointer(void) const
 template <typename ReferencedObject>
 OMStrongReferenceVectorElement<ReferencedObject>::
                                            OMStrongReferenceVectorElement(void)
-  : OMContainerElement<OMStrongObjectReference<ReferencedObject>,
-                       ReferencedObject>(), _localKey(0)
+: OMContainerElement<OMStrongObjectReference, ReferencedObject>(),
+  _localKey(0)
 {
   TRACE("OMStrongReferenceVectorElement<ReferencedObject>::"
                                              "OMStrongReferenceVectorElement");
@@ -550,10 +550,9 @@ OMStrongReferenceVectorElement<ReferencedObject>::
                                                           OMProperty* property,
                                                           const wchar_t* name,
                                                           OMUInt32 localKey)
-  : OMContainerElement<OMStrongObjectReference<ReferencedObject>,
-                       ReferencedObject>(
-                    OMStrongObjectReference<ReferencedObject>(property, name)),
-    _localKey(localKey)
+: OMContainerElement<OMStrongObjectReference, ReferencedObject>(
+                                      OMStrongObjectReference(property, name)),
+  _localKey(localKey)
 {
   TRACE("OMStrongReferenceVectorElement<ReferencedObject>::"
                                              "OMStrongReferenceVectorElement");
@@ -567,8 +566,8 @@ template <typename ReferencedObject>
 OMStrongReferenceVectorElement<ReferencedObject>::
                                                 OMStrongReferenceVectorElement(
                    const OMStrongReferenceVectorElement<ReferencedObject>& rhs)
-  : OMContainerElement<OMStrongObjectReference<ReferencedObject>,
-                       ReferencedObject>(rhs), _localKey(rhs._localKey)
+: OMContainerElement<OMStrongObjectReference, ReferencedObject>(rhs),
+  _localKey(rhs._localKey)
 {
   TRACE("OMStrongReferenceVectorElement<ReferencedObject>::"
                                              "OMStrongReferenceVectorElement");
@@ -604,7 +603,7 @@ OMStrongReferenceVectorElement<ReferencedObject>::operator= (
     return *this; // early return !
   }
 
-  OMContainerElement<OMStrongObjectReference<ReferencedObject>,
+  OMContainerElement<OMStrongObjectReference,
                      ReferencedObject>::operator=(rhs);
   _localKey = rhs._localKey;
   return *this;
@@ -623,7 +622,7 @@ bool OMStrongReferenceVectorElement<ReferencedObject>::operator== (
 {
   TRACE("OMStrongReferenceVectorElement<ReferencedObject>::operator==");
 
-  bool result = OMContainerElement<OMStrongObjectReference<ReferencedObject>,
+  bool result = OMContainerElement<OMStrongObjectReference,
                                    ReferencedObject>::operator==(rhs);
   if (result) {
     if (_localKey != rhs._localKey) {

@@ -197,8 +197,8 @@ protected:
   //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 template <typename ReferencedObject>
 class OMStrongReferenceVectorElement : public
-                 OMContainerElement<OMStrongObjectReference<ReferencedObject>,
-                                                            ReferencedObject> {
+                                    OMContainerElement<OMStrongObjectReference,
+                                                       ReferencedObject> {
 public:
   // @access Public members.
 
