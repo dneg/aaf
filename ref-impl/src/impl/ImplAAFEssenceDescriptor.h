@@ -42,7 +42,6 @@ class ImplEnumAAFLocators;
 
 #include "OMProperty.h"
 
-#include "AAFPropertyIDs.h"
 
 class ImplAAFEssenceDescriptor : public ImplAAFObject
 {

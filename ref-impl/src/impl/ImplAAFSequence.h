@@ -33,8 +33,6 @@ class ImplEnumAAFComponents;
 #endif
 
 
-#include "AAFPropertyIDs.h"
-
 class ImplAAFSequence : public ImplAAFSegment
 {
 public:

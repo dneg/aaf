@@ -20,7 +20,6 @@
 #include "ImplAAFTimelineMobSlot.h"
 #endif
 
-#include "AAFPropertyIDs.h"
 
 
 class ImplAAFSegment;
