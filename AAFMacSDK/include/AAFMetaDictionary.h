@@ -44,7 +44,7 @@
 //
 // DictP18-277-1847BMaster.csv 
 //
-// This file was generated on Fri May 17 16:55:52 EDT 2002
+// This file was generated on Sat May 18 16:59:44 EDT 2002
 // by user tjb on system tjb.avid.com.
 //
 // Key to macros.
@@ -6129,6 +6129,8 @@ AAF_TYPE_DEFINITION_WEAK_REFERENCE_VECTOR(
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x04, 0x01, 0x01),
   AAF_TYPE(DataDefinition))
 
+AAF_TYPE_TABLE_END()
+
 // Aliases
 //
 AAF_CLASS_ALIAS(CodecDefinition, CodecDef)
@@ -6158,9 +6160,6 @@ AAF_CLASS_ALIAS(TypeDefinitionVariableArray, TypeDefVariableArray)
 AAF_CLASS_ALIAS(TypeDefinitionWeakObjectReference, TypeDefWeakObjRef)
 AAF_CLASS_ALIAS(ContainerDefinition, ContainerDef)
 AAF_CLASS_ALIAS(PluginDefinition, PluginDef)
-
-AAF_TYPE_TABLE_END()
-
 // Undefine all macros
 //
 #undef AAF_TABLE_BEGIN
