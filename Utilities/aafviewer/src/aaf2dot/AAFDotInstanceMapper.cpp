@@ -232,7 +232,7 @@ AAFDotInstanceMapper::MapAAFObject( AxObject axObject, bool &popStack )
    IAAFSourceReferenceSP spIaafSourceReference;
    if ( AxIsA( spIUnknown, spIaafSourceReference ) )
    {
-      aafMobID_t mobID = {0};
+      aafMobID_t mobID = {{0,0,0,0,0,0,0,0,0,0,0,0},0,0,0,0,{0,0,0,{0,0,0,0,0,0,0,0}}};
       HRESULT result = spIaafSourceReference->GetSourceID( &mobID );
       if (!SUCCEEDED(result)) {
 	 if (result != AAFRESULT_PROP_NOT_PRESENT) {
