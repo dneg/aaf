@@ -28,6 +28,7 @@
 #if defined(OM_STACK_TRACE_ON_ASSERT)
 
 #include "OMOStream.h"
+#include "OMUtilities.h"
 #include "OMAssertions.h"
 
 #include <windows.h>
@@ -244,6 +245,29 @@ void printStackTrace(OMOStream& s)
           }
         } else {
           s << "<unknown routine>";
+        }
+
+        wchar_t moduleName[MAX_PATH];
+        MEMORY_BASIC_INFORMATION mbi;
+
+        BOOL modStatus = VirtualQuery((void*)address, &mbi, sizeof(mbi));
+
+        DWORD moduleHandle = (DWORD)mbi.AllocationBase;
+
+        modStatus = GetModuleFileName((HMODULE)moduleHandle,
+                                      moduleName,
+                                      sizeof(moduleName));
+
+        if (modStatus) {
+          char* fullName = convertWideString(moduleName);
+          char* name = strrchr(fullName, '\\');
+          if (name != 0) {
+            name = name + 1;
+          } else {
+            name = fullName;
+          }
+          s << " in " << name;
+          delete [] fullName;
         }
         s << endl;
       }
