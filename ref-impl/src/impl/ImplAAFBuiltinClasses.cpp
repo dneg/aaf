@@ -770,7 +770,7 @@ void ImplAAFBuiltinClasses::RegisterBuiltinProperties
 /*static*/ OMProperty *
 ImplAAFBuiltinClasses::CreateOMPropTypeSimple
   (OMPropertyId /*pid*/,
-   const char * /*name*/)
+   const wchar_t * /*name*/)
 {
   // Let's return 0 so the caller will attempt to use the type def to
   // create the property.
@@ -786,7 +786,7 @@ ImplAAFBuiltinClasses::CreateOMPropTypeSimple
 /*static*/ OMProperty *
 ImplAAFBuiltinClasses::CreateOMPropTypeWeakReference
   (OMPropertyId pid,
-   const char * name)
+   const wchar_t * name)
 {
   assert (name);
   if(pid == PID_SourceReference_SourceID)
@@ -798,7 +798,7 @@ ImplAAFBuiltinClasses::CreateOMPropTypeWeakReference
 /*static*/ OMProperty *
 ImplAAFBuiltinClasses::CreateOMPropTypeWeakReferenceSet
   (OMPropertyId pid,
-   const char * name)
+   const wchar_t * name)
 {
   assert (name);
   return new OMSimpleProperty (pid, name, sizeof (aafUID_t));
@@ -807,7 +807,7 @@ ImplAAFBuiltinClasses::CreateOMPropTypeWeakReferenceSet
 /*static*/ OMProperty *
 ImplAAFBuiltinClasses::CreateOMPropTypeWeakReferenceVector
   (OMPropertyId pid,
-   const char * name)
+   const wchar_t * name)
 {
   assert (name);
   return new OMSimpleProperty (pid, name, sizeof (aafUID_t));
@@ -816,7 +816,7 @@ ImplAAFBuiltinClasses::CreateOMPropTypeWeakReferenceVector
 /*static*/ OMProperty *
 ImplAAFBuiltinClasses::CreateOMPropTypeStrongReference
   (OMPropertyId pid,
-   const char * name)
+   const wchar_t * name)
 {
   assert (name);
   return new OMStrongReferenceProperty<ImplAAFObject> (pid, name);
@@ -825,7 +825,7 @@ ImplAAFBuiltinClasses::CreateOMPropTypeStrongReference
 /*static*/ OMProperty *
 ImplAAFBuiltinClasses::CreateOMPropTypeStrongReferenceSet
   (OMPropertyId pid,
-   const char * name)
+   const wchar_t * name)
 {
   assert (name);
   return new OMStrongReferenceVectorProperty<ImplAAFObject> (pid, name);
@@ -834,7 +834,7 @@ ImplAAFBuiltinClasses::CreateOMPropTypeStrongReferenceSet
 /*static*/ OMProperty *
 ImplAAFBuiltinClasses::CreateOMPropTypeStrongReferenceVector
   (OMPropertyId pid,
-   const char * name)
+   const wchar_t * name)
 {
   assert (name);
   return new OMStrongReferenceVectorProperty<ImplAAFObject> (pid, name);

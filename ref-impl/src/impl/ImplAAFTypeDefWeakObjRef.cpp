@@ -56,8 +56,8 @@
 
 ImplAAFTypeDefWeakObjRef::ImplAAFTypeDefWeakObjRef ()
   : _referencedType ( PID_TypeDefinitionWeakObjectReference_ReferencedType, 
-                      "ReferencedType", 
-                      "/Dictionary/ClassDefinitions", 
+                      L"ReferencedType", 
+                      L"/Dictionary/ClassDefinitions", 
                       PID_MetaDefinition_Identification)
 {
   _persistentProperties.put(_referencedType.address());
@@ -213,9 +213,9 @@ size_t ImplAAFTypeDefWeakObjRef::NativeSize (void) const
 }
 
 
-OMProperty * ImplAAFTypeDefWeakObjRef::pvtCreateOMPropertyMBS
+OMProperty * ImplAAFTypeDefWeakObjRef::pvtCreateOMProperty
   (OMPropertyId pid,
-   const char * name) const
+   const wchar_t * name) const
 {
   assert (name);
   size_t elemSize = PropValSize ();

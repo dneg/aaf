@@ -87,11 +87,11 @@ extern "C" const aafClassID_t CLSID_EnumAAFParameters;
 const aafUID_t kNullID = {0};
 
 ImplAAFOperationGroup::ImplAAFOperationGroup ()
-: _operationDefinition( PID_OperationGroup_OperationDefinition, "OperationDefinition", "/Dictionary/OperationDefinitions", PID_DefinitionObject_Identification),
-  _inputSegments( PID_OperationGroup_InputSegments, "InputSegments"),
-  _parameters( PID_OperationGroup_Parameters, "Parameters", PID_DefinitionObject_Identification),
-  _bypassOverride( PID_OperationGroup_BypassOverride, "BypassOverride"),
-  _rendering( PID_OperationGroup_Rendering, "Rendering")
+: _operationDefinition( PID_OperationGroup_OperationDefinition, L"OperationDefinition", L"/Dictionary/OperationDefinitions", PID_DefinitionObject_Identification),
+  _inputSegments( PID_OperationGroup_InputSegments, L"InputSegments"),
+  _parameters( PID_OperationGroup_Parameters, L"Parameters", PID_DefinitionObject_Identification),
+  _bypassOverride( PID_OperationGroup_BypassOverride, L"BypassOverride"),
+  _rendering( PID_OperationGroup_Rendering, L"Rendering")
 {
 	_persistentProperties.put(_operationDefinition.address());
 	_persistentProperties.put(_inputSegments.address());

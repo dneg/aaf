@@ -44,7 +44,7 @@
 
 
 ImplAAFCommentMarker::ImplAAFCommentMarker () :
-  _annotation(PID_CommentMarker_Annotation, "Annotation")
+  _annotation(PID_CommentMarker_Annotation, L"Annotation")
 {
   _persistentProperties.put(_annotation.address());
 }

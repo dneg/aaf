@@ -54,26 +54,26 @@ extern "C" const aafClassID_t CLSID_EnumAAFPluginLocators;
 
 
 ImplAAFPluginDef::ImplAAFPluginDef ()
-: _categoryClass(		PID_PluginDefinition_CategoryClass,		"CategoryClass"),
- _pluginVersion(        PID_PluginDefinition_VersionNumber,     "VersionNumber"),
- _pluginVersionString(	PID_PluginDefinition_VersionString,		"VersionString"),
- _pluginManufacturerName(PID_PluginDefinition_Manufacturer,		"Manufacturer"),
- _manufacturerURL(		PID_PluginDefinition_ManufacturerInfo,  "ManufacturerInfo"),
- _pluginManufacturerID(	PID_PluginDefinition_ManufacturerID,	"ManufacturerID"),
- _platform(				PID_PluginDefinition_Platform,			"Platform"),
- _minPlatformVersion(   PID_PluginDefinition_MinPlatformVersion,"MinPlatformVersion"),
- _maxPlatformVersion(   PID_PluginDefinition_MaxPlatformVersion,"MaxPlatformVersion"),
- _engine(				PID_PluginDefinition_Engine,			"Engine"),
- _minEngineVersion(     PID_PluginDefinition_MinEngineVersion,  "MinEngineVersion"),
- _maxEngineVersion(     PID_PluginDefinition_MaxEngineVersion,  "MaxEngineVersion"),
- _pluginAPI(			PID_PluginDefinition_PluginAPI,			"PluginAPI"),
- _minPluginAPIVersion(  PID_PluginDefinition_MinPluginAPI,      "MinPluginAPI"),
- _maxPluginAPIVersion(  PID_PluginDefinition_MaxPluginAPI,      "MaxPluginAPI"),
- _softwareOnly(			PID_PluginDefinition_SoftwareOnly,		"SoftwareOnly"),
- _accelerator(			PID_PluginDefinition_Accelerator,		"Accelerator"),
- _locators(				PID_PluginDefinition_Locators,			"Locators"),
- _authentication(		PID_PluginDefinition_Authentication,	"Authentication"),
- _defObj(				PID_PluginDefinition_DefinitionObject,	"DefinitionObject")
+: _categoryClass(		PID_PluginDefinition_CategoryClass,		L"CategoryClass"),
+ _pluginVersion(        PID_PluginDefinition_VersionNumber,     L"VersionNumber"),
+ _pluginVersionString(	PID_PluginDefinition_VersionString,		L"VersionString"),
+ _pluginManufacturerName(PID_PluginDefinition_Manufacturer,		L"Manufacturer"),
+ _manufacturerURL(		PID_PluginDefinition_ManufacturerInfo,  L"ManufacturerInfo"),
+ _pluginManufacturerID(	PID_PluginDefinition_ManufacturerID,	L"ManufacturerID"),
+ _platform(				PID_PluginDefinition_Platform,			L"Platform"),
+ _minPlatformVersion(   PID_PluginDefinition_MinPlatformVersion,L"MinPlatformVersion"),
+ _maxPlatformVersion(   PID_PluginDefinition_MaxPlatformVersion,L"MaxPlatformVersion"),
+ _engine(				PID_PluginDefinition_Engine,			L"Engine"),
+ _minEngineVersion(     PID_PluginDefinition_MinEngineVersion,  L"MinEngineVersion"),
+ _maxEngineVersion(     PID_PluginDefinition_MaxEngineVersion,  L"MaxEngineVersion"),
+ _pluginAPI(			PID_PluginDefinition_PluginAPI,			L"PluginAPI"),
+ _minPluginAPIVersion(  PID_PluginDefinition_MinPluginAPI,      L"MinPluginAPI"),
+ _maxPluginAPIVersion(  PID_PluginDefinition_MaxPluginAPI,      L"MaxPluginAPI"),
+ _softwareOnly(			PID_PluginDefinition_SoftwareOnly,		L"SoftwareOnly"),
+ _accelerator(			PID_PluginDefinition_Accelerator,		L"Accelerator"),
+ _locators(				PID_PluginDefinition_Locators,			L"Locators"),
+ _authentication(		PID_PluginDefinition_Authentication,	L"Authentication"),
+ _defObj(				PID_PluginDefinition_DefinitionObject,	L"DefinitionObject")
 {
   _persistentProperties.put(_categoryClass.address());
   _persistentProperties.put(_pluginVersion.address());

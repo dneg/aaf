@@ -46,8 +46,8 @@ public:
 
     // @cmember Constructor.
   OMWeakReferenceProperty(const OMPropertyId propertyId,
-                          const char* name,
-                          const char* targetName,
+                          const wchar_t* name,
+                          const wchar_t* targetName,
                           const OMPropertyId keyPropertyId);
 
     // @cmember Destructor.

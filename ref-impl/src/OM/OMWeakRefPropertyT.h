@@ -31,18 +31,19 @@
 
 #include "OMAssertions.h"
 #include "OMPropertyTable.h"
+#include "OMUtilities.h"
 
 template<typename ReferencedObject>
 OMWeakReferenceProperty<ReferencedObject>::OMWeakReferenceProperty(
                                               const OMPropertyId propertyId,
-                                              const char* name,
-                                              const char* targetName,
+                                              const wchar_t* name,
+                                              const wchar_t* targetName,
                                               const OMPropertyId keyPropertyId)
 : OMReferenceProperty<ReferencedObject>(propertyId,
                                         SF_WEAK_OBJECT_REFERENCE,
                                         name), _reference(),
   _targetTag(nullOMPropertyTag),
-  _targetName(saveString(targetName)),
+  _targetName(convertWideString(targetName)),
   _keyPropertyId(keyPropertyId)
 {
   TRACE("OMWeakReferenceProperty<ReferencedObject>::OMWeakReferenceProperty");

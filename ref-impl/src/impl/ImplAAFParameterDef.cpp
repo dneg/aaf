@@ -40,10 +40,10 @@
 
 ImplAAFParameterDef::ImplAAFParameterDef ()
 : _typeDef     ( PID_ParameterDefinition_Type,
-                 "Type",
-                 "/Dictionary/TypeDefinitions",
+                 L"Type",
+                 L"/Dictionary/TypeDefinitions",
                  PID_MetaDefinition_Identification),
-  _displayUnits(	PID_ParameterDefinition_DisplayUnits,			"DisplayUnits")
+  _displayUnits(	PID_ParameterDefinition_DisplayUnits,			L"DisplayUnits")
 {
 	_persistentProperties.put(_typeDef.address());
 	_persistentProperties.put(_displayUnits.address());

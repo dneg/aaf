@@ -54,8 +54,8 @@
 extern "C" const aafClassID_t CLSID_EnumAAFControlPoints;
 
 ImplAAFVaryingValue::ImplAAFVaryingValue ()
-: _controlPoints(         PID_VaryingValue_PointList,          "PointList"),
-  _interpolation(         PID_VaryingValue_Interpolation,      "Interpolation", "/Dictionary/InterpolationDefinitions", PID_DefinitionObject_Identification)
+: _controlPoints(         PID_VaryingValue_PointList,          L"PointList"),
+  _interpolation(         PID_VaryingValue_Interpolation,      L"Interpolation", L"/Dictionary/InterpolationDefinitions", PID_DefinitionObject_Identification)
 {
 	  aafReferenceType_t	ref = kAAFRefLimitMinimum;
 	 aafInt32				zero = 0;

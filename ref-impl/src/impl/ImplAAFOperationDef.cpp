@@ -68,13 +68,13 @@ extern "C" const aafClassID_t CLSID_EnumAAFOperationDefs;
 extern "C" const aafClassID_t CLSID_EnumAAFParameterDefs;
  
 ImplAAFOperationDef::ImplAAFOperationDef ()
-: _dataDef(	PID_OperationDefinition_DataDefinition,	"DataDefinition", "/Dictionary/DataDefinitions", PID_DefinitionObject_Identification),
-  _isTimeWarp(		PID_OperationDefinition_IsTimeWarp,			"IsTimeWarp"),
-  _degradeTo(		PID_OperationDefinition_DegradeTo,			"DegradeTo"),
-  _category(		PID_OperationDefinition_Category,			"Category"),
-  _numInputs(		PID_OperationDefinition_NumberInputs,		"NumberInputs"),
-  _bypass(			PID_OperationDefinition_Bypass,				"Bypass"),
-  _paramDefined(	PID_OperationDefinition_ParametersDefined,	"ParametersDefined")
+: _dataDef(	PID_OperationDefinition_DataDefinition,	L"DataDefinition", L"/Dictionary/DataDefinitions", PID_DefinitionObject_Identification),
+  _isTimeWarp(		PID_OperationDefinition_IsTimeWarp,			L"IsTimeWarp"),
+  _degradeTo(		PID_OperationDefinition_DegradeTo,			L"DegradeTo"),
+  _category(		PID_OperationDefinition_Category,			L"Category"),
+  _numInputs(		PID_OperationDefinition_NumberInputs,		L"NumberInputs"),
+  _bypass(			PID_OperationDefinition_Bypass,				L"Bypass"),
+  _paramDefined(	PID_OperationDefinition_ParametersDefined,	L"ParametersDefined")
 {
 	_persistentProperties.put(_dataDef.address());
 	_persistentProperties.put(_isTimeWarp.address());

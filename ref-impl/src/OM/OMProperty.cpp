@@ -44,8 +44,8 @@
   //   @parm The name of this <c OMProperty>.
 OMProperty::OMProperty(const OMPropertyId propertyId,
                        const OMStoredForm storedForm,
-                       const char* name)
-: _propertyId(propertyId), _storedForm(storedForm), _name(name),
+                       const wchar_t* name)
+: _propertyId(propertyId), _storedForm(storedForm), _name(name), _cName(0),
   _propertySet(0), _definition(0),
   // _isOptional(false),
   // BobT: make optional by default, to hack around problem where
@@ -55,7 +55,7 @@ OMProperty::OMProperty(const OMPropertyId propertyId,
 {
   TRACE("OMProperty::OMProperty");
 
-  PRECONDITION("Valid name", validString(_name)); 
+  PRECONDITION("Valid name", validWideString(_name)); 
 }
 
   // @mfunc Temporary pseudo-constructor for clients which provide
@@ -71,7 +71,8 @@ void OMProperty::initialize(const OMPropertyDefinition* definition)
   // Temporary consistency checks
   ASSERT("Consistent property id",
                             _propertyId == _definition->localIdentification());
-  ASSERT("Consistent property name", strcmp(_name, _definition->name()) == 0);
+  ASSERT("Consistent property name",
+                           compareWideString(_name, _definition->name()) == 0);
   // ASSERT("Consistent property optionality",
   //                                 _isOptional == _definition->isOptional());
   _isOptional = _definition->isOptional();
@@ -81,6 +82,8 @@ void OMProperty::initialize(const OMPropertyDefinition* definition)
 OMProperty::~OMProperty(void)
 {
   TRACE("OMProperty::~OMProperty");
+
+  delete [] _cName;
 }
 
   // @mfunc Close this <c OMProperty>.
@@ -118,7 +121,11 @@ const char* OMProperty::name(void) const
 {
   TRACE("OMProperty::name");
 
-  return _name;
+  if (_cName == 0) {
+    OMProperty* nonConstThis = const_cast<OMProperty*>(this);
+    nonConstThis->_cName = convertWideString(_name);
+  }
+  return _cName;
 }
 
   // @mfunc The property id of this <c OMProperty>.
@@ -207,7 +214,7 @@ const OMType* OMProperty::type(void) const
   //   @parm The property id.
   //   @parm The name of this <c OMSimpleProperty>.
 OMSimpleProperty::OMSimpleProperty(const OMPropertyId propertyId,
-                                   const char* name)
+                                   const wchar_t* name)
 : OMProperty(propertyId, SF_DATA, name), _size(0), _bits(0)
 {
   TRACE("OMSimpleProperty::OMSimpleProperty");
@@ -218,7 +225,7 @@ OMSimpleProperty::OMSimpleProperty(const OMPropertyId propertyId,
   //   @parm The name of this <c OMSimpleProperty>.
   //   @parm The size of this <c OMSimpleProperty>.
 OMSimpleProperty::OMSimpleProperty(const OMPropertyId propertyId,
-                                   const char* name,
+                                   const wchar_t* name,
                                    size_t valueSize)
 : OMProperty(propertyId, SF_DATA, name),
   _size(0),

@@ -209,8 +209,8 @@ public:
   void AttemptBuiltinRegistration (void);
 
   virtual OMProperty * 
-    pvtCreateOMPropertyMBS (OMPropertyId pid,
-							const char * name) const;
+    pvtCreateOMProperty (OMPropertyId pid,
+							const wchar_t * name) const;
 
 
   //*************************************************************

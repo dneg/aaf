@@ -50,7 +50,7 @@ typedef ImplAAFSmartPointer<ImplAAFDictionary> ImplAAFDictionarySP;
 extern "C" const aafClassID_t CLSID_EnumAAFComponents;
 
 ImplAAFSequence::ImplAAFSequence ()
-:   _components(			PID_Sequence_Components,		"Components")
+:   _components(			PID_Sequence_Components,		L"Components")
 {
 	_persistentProperties.put(_components.address());
 }

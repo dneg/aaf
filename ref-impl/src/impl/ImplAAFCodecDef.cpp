@@ -60,12 +60,12 @@ extern "C" const aafClassID_t CLSID_EnumAAFCodecFlavours;
 
 ImplAAFCodecDef::ImplAAFCodecDef ()
 :  _dataDefs     ( PID_CodecDefinition_DataDefinitions,
-                   "DataDefinitions", 
-                   "/Dictionary/DataDefinitions", 
+                   L"DataDefinitions", 
+                   L"/Dictionary/DataDefinitions", 
                    PID_DefinitionObject_Identification),
    _fileDescClass( PID_CodecDefinition_FileDescriptorClass,
-                   "FileDescriptorClass", 
-                   "/Dictionary/ClassDefinitions", 
+                   L"FileDescriptorClass", 
+                   L"/Dictionary/ClassDefinitions", 
                    PID_MetaDefinition_Identification)
 
 {

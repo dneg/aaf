@@ -40,10 +40,10 @@
 #include "ImplAAFTimecode.h"
 
 ImplAAFPulldown::ImplAAFPulldown ()
-: _inputSegment(        PID_Pulldown_InputSegment,          "InputSegment"),
-  _pulldownKind(        PID_Pulldown_PulldownKind,          "PulldownKind"),
-  _pulldownDirection(   PID_Pulldown_PulldownDirection,     "PulldownDirection"),
-  _phaseFrame(			PID_Pulldown_PhaseFrame,	        "PhaseFrame")
+: _inputSegment(        PID_Pulldown_InputSegment,          L"InputSegment"),
+  _pulldownKind(        PID_Pulldown_PulldownKind,          L"PulldownKind"),
+  _pulldownDirection(   PID_Pulldown_PulldownDirection,     L"PulldownDirection"),
+  _phaseFrame(			PID_Pulldown_PhaseFrame,	        L"PhaseFrame")
 {
 	_persistentProperties.put(_inputSegment.address());
 	_persistentProperties.put(_pulldownKind.address());

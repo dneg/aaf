@@ -53,9 +53,9 @@
 
 
 ImplAAFMetaDefinition::ImplAAFMetaDefinition ()
-: _name           (PID_MetaDefinition_Name,           "Name"),
-  _description    (PID_MetaDefinition_Description,    "Description"),
-  _identification (PID_MetaDefinition_Identification, "Identification")
+: _name           (PID_MetaDefinition_Name,           L"Name"),
+  _description    (PID_MetaDefinition_Description,    L"Description"),
+  _identification (PID_MetaDefinition_Identification, L"Identification")
 {
   _persistentProperties.put(_name.address());
   _persistentProperties.put(_description.address());

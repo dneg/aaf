@@ -107,13 +107,13 @@ extern "C" const aafClassID_t CLSID_AAFTypeDefString;
 extern "C" const aafClassID_t CLSID_EnumAAFKLVData;
 
 ImplAAFMob::ImplAAFMob ()
-: _mobID(			PID_Mob_MobID,			"MobID"),
-  _name(			PID_Mob_Name,			"Name"),
-  _creationTime(    PID_Mob_CreationTime,	"CreationTime"),
-  _lastModified(    PID_Mob_LastModified,	"LastModified"),
-  _slots(			PID_Mob_Slots,			"Slots"),
-  _userComments(	PID_Mob_UserComments,	"UserComments"),
-  _KLVData(			PID_Mob_KLVData,		"KLVData")
+: _mobID(			PID_Mob_MobID,			L"MobID"),
+  _name(			PID_Mob_Name,			L"Name"),
+  _creationTime(    PID_Mob_CreationTime,	L"CreationTime"),
+  _lastModified(    PID_Mob_LastModified,	L"LastModified"),
+  _slots(			PID_Mob_Slots,			L"Slots"),
+  _userComments(	PID_Mob_UserComments,	L"UserComments"),
+  _KLVData(			PID_Mob_KLVData,		L"KLVData")
 {
 	_persistentProperties.put(_mobID.address());
 	_persistentProperties.put(_name.address());

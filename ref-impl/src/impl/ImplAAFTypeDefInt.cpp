@@ -201,8 +201,8 @@ static void pvtZeroFill (const aafMemPtr_t inVal,
 
 
 ImplAAFTypeDefInt::ImplAAFTypeDefInt ()
-  : _size     ( PID_TypeDefinitionInteger_Size,     "Size"),
-    _isSigned ( PID_TypeDefinitionInteger_IsSigned, "IsSigned")
+  : _size     ( PID_TypeDefinitionInteger_Size,     L"Size"),
+    _isSigned ( PID_TypeDefinitionInteger_IsSigned, L"IsSigned")
 {
   _persistentProperties.put(_size.address());
   _persistentProperties.put(_isSigned.address());
@@ -668,9 +668,9 @@ size_t ImplAAFTypeDefInt::NativeSize (void) const
 }
 
 
-OMProperty * ImplAAFTypeDefInt::pvtCreateOMPropertyMBS
+OMProperty * ImplAAFTypeDefInt::pvtCreateOMProperty
   (OMPropertyId pid,
-   const char * name) const
+   const wchar_t * name) const
 {
   assert (name);
   size_t elemSize = PropValSize ();

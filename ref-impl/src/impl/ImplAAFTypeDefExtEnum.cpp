@@ -57,8 +57,8 @@
 extern "C" const aafClassID_t CLSID_AAFPropValData;
 
 ImplAAFTypeDefExtEnum::ImplAAFTypeDefExtEnum ()
-  :	_ElementNames  ( PID_TypeDefinitionExtendibleEnumeration_ElementNames,  "ElementNames"),
-	_ElementValues ( PID_TypeDefinitionExtendibleEnumeration_ElementValues, "ElementValues")
+  :	_ElementNames  ( PID_TypeDefinitionExtendibleEnumeration_ElementNames,  L"ElementNames"),
+	_ElementValues ( PID_TypeDefinitionExtendibleEnumeration_ElementValues, L"ElementValues")
 {
   _persistentProperties.put(_ElementNames.address());
   _persistentProperties.put(_ElementValues.address());
@@ -607,9 +607,9 @@ size_t ImplAAFTypeDefExtEnum::NativeSize (void) const
 }
 
 
-OMProperty * ImplAAFTypeDefExtEnum::pvtCreateOMPropertyMBS
+OMProperty * ImplAAFTypeDefExtEnum::pvtCreateOMProperty
   (OMPropertyId pid,
-   const char * name) const
+   const wchar_t * name) const
 {
   assert (name);
   size_t elemSize = PropValSize ();

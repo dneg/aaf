@@ -393,7 +393,7 @@ AAFRESULT ImplPropertyCollection::GetNthElement
 
 
 ImplAAFObject::ImplAAFObject ()
-  : _generation(PID_InterchangeObject_Generation, "Generation"),
+  : _generation(PID_InterchangeObject_Generation, L"Generation"),
 	_pProperties (0),
 	_cachedDefinition (0),
 	_apSavedProps (0),
@@ -419,8 +419,8 @@ ImplAAFObject::SavedProp::~SavedProp ()
 {
   assert (_p);
   // The template argument here *must* match the type allocated in
-  // ImplAAFTypeDefFixedArray::pvtCreateOMPropertyMBS() and
-  // ImplAAFTypeDefVariableArray::pvtCreateOMPropertyMBS().
+  // ImplAAFTypeDefFixedArray::pvtCreateOMProperty() and
+  // ImplAAFTypeDefVariableArray::pvtCreateOMProperty().
   OMStrongReferenceVectorProperty<ImplAAFObject> * srv =
 	dynamic_cast<OMStrongReferenceVectorProperty <ImplAAFObject>*>(_p);
   if (srv)
@@ -440,7 +440,7 @@ ImplAAFObject::SavedProp::~SavedProp ()
 	{
 	  // The template argument here *must* match the type
 	  // allocated in
-	  // ImplAAFTypeDefStrongObjRef::pvtCreateOMPropertyMBS().
+	  // ImplAAFTypeDefStrongObjRef::pvtCreateOMProperty().
 	  OMStrongReferenceProperty<ImplAAFObject> * sro =
 		dynamic_cast<OMStrongReferenceProperty<ImplAAFObject>*>(_p);
 	  if (sro)

@@ -80,7 +80,7 @@ typedef ImplAAFSmartPointer<ImplAAFDataDef>    ImplAAFDataDefSP;
 
 
 ImplAAFSourceMob::ImplAAFSourceMob ()
-: _essenceDesc(        PID_SourceMob_EssenceDescription,          "EssenceDescription")
+: _essenceDesc(        PID_SourceMob_EssenceDescription,          L"EssenceDescription")
 {
   _persistentProperties.put(_essenceDesc.address());
 }

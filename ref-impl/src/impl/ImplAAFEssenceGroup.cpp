@@ -61,8 +61,8 @@ typedef ImplAAFSmartPointer<ImplAAFDataDef> ImplAAFDataDefSP;
 extern "C" const aafClassID_t CLSID_AAFEssenceAccess;
 
 ImplAAFEssenceGroup::ImplAAFEssenceGroup ()
-:   _choices(	PID_EssenceGroup_Choices,		"Choices"),
-  _stillFrame(	PID_EssenceGroup_StillFrame,    "StillFrame")
+:   _choices(	PID_EssenceGroup_Choices,		L"Choices"),
+  _stillFrame(	PID_EssenceGroup_StillFrame,    L"StillFrame")
 {
 	_persistentProperties.put(_choices.address());
 	_persistentProperties.put(_stillFrame.address());

@@ -65,7 +65,7 @@ extern "C" const aafClassID_t CLSID_AAFSegment;
 extern "C" const aafClassID_t CLSID_EnumAAFSegments;
 
 ImplAAFNestedScope::ImplAAFNestedScope ()
-:  _slots( PID_NestedScope_Slots, "Slots")
+:  _slots( PID_NestedScope_Slots, L"Slots")
 {
 	_persistentProperties.put(_slots.address());
 }

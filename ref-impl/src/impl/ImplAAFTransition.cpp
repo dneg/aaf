@@ -68,8 +68,8 @@
 
 
 ImplAAFTransition::ImplAAFTransition ():
-_operationGroup( PID_Transition_OperationGroup, "OperationGroup"),
-_cutPoint( PID_Transition_CutPoint, "CutPoint")
+_operationGroup( PID_Transition_OperationGroup, L"OperationGroup"),
+_cutPoint( PID_Transition_CutPoint, L"CutPoint")
 {
 	_persistentProperties.put(_operationGroup.address());
 	_persistentProperties.put(_cutPoint.address());
