@@ -33,88 +33,94 @@ ImplAAFHTMLClip::~ImplAAFHTMLClip ()
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFHTMLClip::GetBeginAnchor (
-      wchar_t *  pName,
-      aafInt32  bufSize)
+ImplAAFHTMLClip::GetBeginAnchor (wchar_t *  pName,
+								 aafInt32  bufSize)
 {
-  if (NULL == pName)
-    return(AAFRESULT_NULL_PARAM);
-
-  bool stat = _beginAnchor.copyToBuffer(pName, bufSize);
-  if (! stat)
-    return AAFRESULT_SMALLBUF;	// Shouldn't the API have a length parm?
+	if (NULL == pName)
+		return(AAFRESULT_NULL_PARAM);
 	
-  return (AAFRESULT_SUCCESS);
-}
-
-
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFHTMLClip::GetBeginAnchorBufLen (
-      aafUInt32 *  pLen)
-{
-  if (NULL == pLen)
-    return (AAFRESULT_NULL_PARAM);
-
-  *pLen = _beginAnchor.size();
-
-  return (AAFRESULT_SUCCESS); 
-}
-
-
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFHTMLClip::SetBeginAnchor (
-      wchar_t *  pName)
-{
-  if (NULL == pName)
-    return(AAFRESULT_NULL_PARAM);
-
-  _beginAnchor = pName;
-
-  return (AAFRESULT_SUCCESS); 
-}
-
-
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFHTMLClip::GetEndAnchor (
-      wchar_t *  pName,
-      aafInt32  bufSize)
-{
-  if (NULL == pName)
-    return(AAFRESULT_NULL_PARAM);
-
-  bool stat = _endAnchor.copyToBuffer(pName, bufSize);
-  if (! stat)
-    return AAFRESULT_SMALLBUF;	// Shouldn't the API have a length parm?
+	if (!_beginAnchor.isPresent())
+		return AAFRESULT_PROP_NOT_PRESENT;
 	
-  return (AAFRESULT_SUCCESS);
+	bool stat = _beginAnchor.copyToBuffer(pName, bufSize);
+	if (! stat)
+		return AAFRESULT_SMALLBUF;	// Shouldn't the API have a length parm?
+	
+	return (AAFRESULT_SUCCESS);
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+ImplAAFHTMLClip::GetBeginAnchorBufLen (aafUInt32 *  pLen)
+{
+	if (NULL == pLen)
+		return (AAFRESULT_NULL_PARAM);
+	
+	if(!_beginAnchor.isPresent())
+		return AAFRESULT_PROP_NOT_PRESENT;
+
+	*pLen = _beginAnchor.size();
+	
+	return (AAFRESULT_SUCCESS); 
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+ImplAAFHTMLClip::SetBeginAnchor (wchar_t *  pName)
+{
+	if (NULL == pName)
+		return(AAFRESULT_NULL_PARAM);
+	
+	_beginAnchor = pName;
+	
+	return (AAFRESULT_SUCCESS); 
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+ImplAAFHTMLClip::GetEndAnchor (wchar_t *  pName,
+							   aafInt32  bufSize)
+{
+	if (NULL == pName)
+		return(AAFRESULT_NULL_PARAM);
+	
+	if (!_endAnchor.isPresent())
+		return AAFRESULT_PROP_NOT_PRESENT;
+
+	bool stat = _endAnchor.copyToBuffer(pName, bufSize);
+	if (! stat)
+		return AAFRESULT_SMALLBUF;	// Shouldn't the API have a length parm?
+	
+	return (AAFRESULT_SUCCESS);
 }
 
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFHTMLClip::GetEndAnchorBufLen (
-      aafUInt32 *  pLen)
+ImplAAFHTMLClip::GetEndAnchorBufLen (aafUInt32 *  pLen)
 {
-  if (NULL == pLen)
-    return (AAFRESULT_NULL_PARAM);
-
-  *pLen = _endAnchor.size();
-
-  return (AAFRESULT_SUCCESS); 
+	if (NULL == pLen)
+		return (AAFRESULT_NULL_PARAM);
+	
+	if (!_endAnchor.isPresent())
+		return AAFRESULT_PROP_NOT_PRESENT;
+	
+	*pLen = _endAnchor.size();
+	
+	return (AAFRESULT_SUCCESS); 
 }
 
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFHTMLClip::SetEndAnchor (
-      wchar_t *  pName)
+ImplAAFHTMLClip::SetEndAnchor (wchar_t *  pName)
 {
-  if (NULL == pName)
-    return(AAFRESULT_NULL_PARAM);
-
-  _endAnchor = pName;
-
-  return (AAFRESULT_SUCCESS); 
+	if (NULL == pName)
+		return(AAFRESULT_NULL_PARAM);
+	
+	_endAnchor = pName;
+	
+	return (AAFRESULT_SUCCESS); 
 }
 
 
