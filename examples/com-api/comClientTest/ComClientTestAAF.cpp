@@ -71,6 +71,89 @@ static HRESULT moduleErrorTmp = S_OK; /* note usage in macro */
 #define assert(b, msg) \
   if (!(b)) {fprintf(stderr, "ASSERT: %s\n\n", msg); exit(1);}
 
+
+static void convert(wchar_t* wcName, size_t length, const char* name)
+{
+  assert((name && *name), "Valid input name");
+  assert(wcName != 0, "Valid output buffer");
+  assert(length > 0, "Valid output buffer size");
+  
+  size_t status = mbstowcs(wcName, name, length);
+  if (status == (size_t)-1) {
+	fprintf(stderr, "Error : Failed to convert'%s' to a wide character string.\n\n", name);
+    exit(1);  
+  }
+}
+
+static void convert(char* cName, size_t length, const wchar_t* name)
+{
+  assert((name && *name), "Valid input name");
+  assert(cName != 0, "Valid output buffer");
+  assert(length > 0, "Valid output buffer size");
+
+  size_t status = wcstombs(cName, name, length);
+  if (status == (size_t)-1) {
+	fprintf(stderr, ": Error : Conversion failed.\n\n");
+    exit(1);  
+  }
+}
+
+static void convert(char* cName, size_t length, const char* name)
+{
+  assert((name && *name), "Valid input name");
+  assert(cName != 0, "Valid output buffer");
+  assert(length > 0, "Valid output buffer size");
+
+  size_t sourceLength = strlen(name);
+  if (sourceLength < length - 1) {
+    strncpy(cName, name, length);
+  } else {
+	fprintf(stderr, "Error : Failed to copy '%s'.\n\n", name);
+    exit(1);  
+  }
+}
+
+static void convert(wchar_t* wName, size_t length, const wchar_t* name)
+{
+  assert((name && *name), "Valid input name");
+  assert(wName != 0, "Valid output buffer");
+  assert(length > 0, "Valid output buffer size");
+
+  size_t sourceLength = 0;
+  while (*name)
+	  ++sourceLength;
+  if (sourceLength < length - 1) {
+	// Copy the string if there is enough room in the destinition buffer.
+	while (*wName++ = *name++)
+		;
+  } else {
+	fprintf(stderr, "Error : Failed to copy '%s'.\n\n", name);
+    exit(1);  
+  }
+}
+
+// The maximum number of characters in the formated CLSID.
+// (as returned by StringFromGUID2).
+const size_t MAX_CLSID_BUFFER = 40;
+
+static void formatMobID(char *cBuffer, size_t length, aafUID_t *pMobID)
+{
+  assert(pMobID, "Valid input mobID");
+  assert(cBuffer != 0, "Valid output buffer");
+  assert(length > 0, "Valid output buffer size");
+
+  int bytesCopied = 0;
+  OLECHAR wCLSID[MAX_CLSID_BUFFER];
+
+  bytesCopied = StringFromGUID2(*((GUID *)pMobID), wCLSID, MAX_CLSID_BUFFER);
+  if (0 < bytesCopied) {
+    convert(cBuffer, length, wCLSID);
+  } else {
+	fprintf(stderr, "Error : formatMobID failed.\n\n");
+    exit(1);  
+  }
+}
+
 static void printIdentification(IAAFIdentification* pIdent)
 {
     aafWChar wchName[500];
@@ -78,19 +161,19 @@ static void printIdentification(IAAFIdentification* pIdent)
     
     
 	check(pIdent->GetCompanyName(wchName, sizeof (wchName)));
-	wcstombs(chName, wchName, sizeof(chName));
+	convert(chName, sizeof(chName), wchName);
 	printf("CompanyName          = \"%s\"\n", chName);
 
 	check(pIdent->GetProductName(wchName, sizeof (wchName)));
-	wcstombs(chName, wchName, sizeof(chName));
+	convert(chName, sizeof(chName), wchName);
 	printf("ProductName          = \"%s\"\n", chName);
 
 	check(pIdent->GetProductVersionString(wchName, sizeof (wchName)));
-	wcstombs(chName, wchName, sizeof(chName));
+	convert(chName, sizeof(chName), wchName);
 	printf("ProductVersionString = \"%s\"\n", chName);
 
 	check(pIdent->GetPlatform(wchName, sizeof (wchName)));
-	wcstombs(chName, wchName, sizeof(chName));
+	convert(chName, sizeof(chName), wchName);
 	printf("Platform             = \"%s\"\n", chName);
 }
 
@@ -144,12 +227,13 @@ static void ReadAAFFile(aafWChar * pFileName)
     check(pHeader->EnumAAFAllMobs (NULL, &mobIter));
 	for(n = 0; n < numMobs; n++)
 	{
-		IAAFMob			*aMob;
+		// Buffer for string version of each object's class id.
+		IAAFMob			*aMob = NULL;
 		aafWChar		name[500], slotName[500];
-    	char chName[1000];
+    	char chName[1000], chMobID[MAX_CLSID_BUFFER];
 		aafNumSlots_t	numSlots;
-		IEnumAAFMobSlots	*slotIter;
-		IAAFMobSlot		*slot;
+		IEnumAAFMobSlots	*slotIter = NULL;
+		IAAFMobSlot		*slot = NULL;
 		aafUID_t		mobID;
 		aafSlotID_t		trackID;
 		aafRational_t	rate;
@@ -157,8 +241,9 @@ static void ReadAAFFile(aafWChar * pFileName)
 		check(mobIter->NextOne (&aMob));
 		check(aMob->GetName (name));
 		check(aMob->GetMobID (&mobID));
-		wcstombs(chName, name, sizeof(chName));
-		printf("Mob %ld: (ID %ld) is named '%s'\n", n, mobID.Data1, chName);
+		formatMobID(chMobID, MAX_CLSID_BUFFER, &mobID);
+		convert(chName, sizeof(chName), name);
+		printf("Mob %ld: (ID %s) is named '%s'\n", n, chMobID, chName);
 	    check(aMob->GetNumSlots (&numSlots));
 		printf("Found %ld slots\n", numSlots);
 	    if(SUCCEEDED(aMob->QueryInterface (IID_IAAFSourceMob, (void **)&smob)))
@@ -183,7 +268,7 @@ static void ReadAAFFile(aafWChar * pFileName)
 				check(slotIter->NextOne (&slot));
 				check(slot->GetName (slotName));
 				check(slot->GetSlotID(&trackID));
-				wcstombs(chName, slotName, sizeof(chName));
+				convert(chName, sizeof(chName), slotName);
 				printf("    Slot %ld: (ID %ld), is named '%s'\n",
 							s, trackID, chName);
 			}
@@ -255,7 +340,8 @@ static void CreateAAFFile(aafWChar * pFileName)
 						   IID_IAAFSourceMob, 
 						   (void **)&smob));
 		check(smob->QueryInterface (IID_IAAFMob, (void **)&pMob));
-		newUID.Data1 = test;
+		check(CoCreateGuid((GUID *)&newUID)); // hack: we need a utility function.
+		//newUID.Data1 = test;
 		check(pMob->SetMobID(&newUID));
 		check(pMob->SetName(names[test]));
 
