@@ -158,6 +158,20 @@ int TextStream::GetLength () const
 void TextStream::Append
 (char c)
 {
+  // If the following assertion triggers we are probably running on Macintosh and
+  // '\r' is not being mapped to '\n' on input. Some ways that this can happen are
+  //
+  // 1) the file was opened in binary mode instead of text mode, or
+  // 2) the program was linked to a library that doesn't perform
+  //    the mapping even for files opened in text mode, or
+  // 3) the CodeWarrior C++ Language setting "Map newlines to CR" is
+  //    not checked (this enables '\n' -> '\r' on output and
+  //    maps '\r' -> '\n' on input).
+  //
+  // If this assertion would have failed but is disabled '#c' will incorrectly
+  // appear in the output - tjb 03/19/02.
+  //
+  assert(c != '\r');
   if (! _numAllocated)
 	{
 	  // If we don't have any allocated, allocate it!
