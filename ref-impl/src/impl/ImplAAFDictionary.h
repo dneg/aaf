@@ -335,6 +335,15 @@ public:
   // make sure built-in types are initialized.
   void InitBuiltins();
 
+  // Factory method for creating a Dictionary.
+  static ImplAAFDictionary *CreateDictionary(void);
+
+  // internal utility factory method to create an ImplAAFObject given an auid.
+  // This method was created to make it simpler to replace calls to "Deprecated"
+  // call to CreateImpl which should only be used for instanciating transient
+  // non-ImplAAFObject classes such as an enumerator.
+  ImplAAFObject *CreateImplObject(const aafUID_t& auid); 
+
 private:
   ImplAAFBuiltins * _pBuiltins;
 
