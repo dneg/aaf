@@ -12,6 +12,9 @@ AD_HEAD
 AD_INCLUDE(AAFTypes)
 AD_FORWARD_DECLARATION(AAFControlCodeDefinition)
 AD_FORWARD_DECLARATION(AAFLocator)
+AD_FORWARD_DECLARATION(EnumAAFEffectDefinitions)
+AD_FORWARD_DECLARATION(EnumAAFPluginLocator)
+AD_FORWARD_DECLARATION(EnumAAFControlCodeDefinition)
 
 
 /******************************************\
@@ -38,7 +41,7 @@ AD_CLASS_BEGIN
 
 AD_METHOD1(GetAUID,
 		   [retval][out],
-		   aafAuid_t *,
+		   aafUID_t *,
 		   pAuid,
 		   Pointer to an AUID reference,
 		   Gets the AUID for this object.)
@@ -111,14 +114,14 @@ AD_XMETHOD1(GetDegradeToEffects,
 
 AD_METHOD1(GetManufacturerAUID,
 		   [retval][out],
-		   aafAuid_t *,
+		   aafUID_t *,
 		   pManufacturerAuid,
 		   Pointer to an AUID reference,
 		   Gets the Manufacturer AUID for this effect definition.)
 
 AD_METHOD1(SetManufacturerAUID,
 		   [in],
-		   aafAuid_t,
+		   aafUID_t,
 		   ManufacturerAuid,
 		   an AUID reference,
 		   Sets the Manufacturer AUID for this effect definition.)
