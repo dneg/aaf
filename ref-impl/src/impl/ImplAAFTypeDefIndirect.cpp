@@ -476,7 +476,7 @@ aafUInt32 ImplAAFTypeDefIndirect::GetIndirectValueOverhead (void) const
 {
   assert (_initialized);
   if (_initialized)
-    return (_internalIndirectSize);
+    return (_externalIndirectSize);
   else
     return (sizeof(aafUID_t) + sizeof(OMByteOrder));
 }
@@ -676,24 +676,13 @@ AAFRESULT STDMETHODCALLTYPE
   if (AAFRESULT_FAILED(result))
     return result;
 
-
-#if USE_ACTUAL_TYPE
-
-  aafMemPtr_t pIndirectValueDataBits = NULL;
-  result = pIndirectValueData->AllocateBits (_internalIndirectSize + actualInternalSize,
-                                             &pIndirectValueDataBits);
-
-#else // #if USE_ACTUAL_TYPE
   // Get the external size of the actual value.
   aafUInt32 actualExternalSize = 0;
 	actualExternalSize = pActualType->externalSize((OMByte *)pActualValueDataBits, actualInternalSize);
 
   aafMemPtr_t pIndirectValueDataBits = NULL;
-  result = pIndirectValueData->AllocateBits (_internalIndirectSize + actualExternalSize,
+  result = pIndirectValueData->AllocateBits (_externalIndirectSize + actualExternalSize,
                                              &pIndirectValueDataBits);
-
-#endif // #else // #if USE_ACTUAL_TYPE
-
   if (AAFRESULT_FAILED(result))
     return result;
 
@@ -702,26 +691,19 @@ AAFRESULT STDMETHODCALLTYPE
   copy ((OMByte*)&originalByteOrder, (OMByte*)&pIndirectValueDataBits[0], 
         sizeof(originalByteOrder));
 
-  // Copy the actual type id for this indirect type...
-  copy ((OMByte*)&actualTypeID, (OMByte*)&pIndirectValueDataBits[sizeof(originalByteOrder)], _internalAUIDSize);
+	// Write the actual type id into the indirect value in its external form.
+  _typeDefAUID->externalize((OMByte*)&actualTypeID, 
+                            _internalAUIDSize,
+                            (OMByte*)&pIndirectValueDataBits[sizeof(originalByteOrder)],
+                            _externalAUIDSize,
+                            originalByteOrder);
 
-#if USE_ACTUAL_TYPE
-
-  // Copy the actual data value bits...
-  copy ((OMByte*)pActualValueDataBits, (OMByte*)&pIndirectValueDataBits[_internalIndirectSize], 
-        actualInternalSize);
-
-#else // #if USE_ACTUAL_TYPE
-
-	// Write the actual value into the indirect value in its
-	// external form.
+	// Write the actual value into the indirect value in its external form.
 	pActualType->externalize((OMByte *)pActualValueDataBits,
                            actualInternalSize,
-                           (OMByte*)&pIndirectValueDataBits[_internalIndirectSize],
+                           (OMByte*)&pIndirectValueDataBits[_externalIndirectSize],
                            actualExternalSize,
                            originalByteOrder);
-
-#endif // #else // #if USE_ACTUAL_TYPE
 
   // Return the newly allocated and initialized indirect data value.
   *ppIndirectValue = pIndirectValueData;
@@ -790,23 +772,13 @@ AAFRESULT STDMETHODCALLTYPE
   if (AAFRESULT_FAILED(result))
     return result;
 
-#if USE_ACTUAL_TYPE
-
-  aafMemPtr_t pIndirectValueDataBits = NULL;
-  result = pIndirectValueData->AllocateBits (_internalIndirectSize + initDataSize,
-                                             &pIndirectValueDataBits);
-#else // #if USE_ACTUAL_TYPE
-
   // Get the external size of the actual value.
   aafUInt32 actualExternalSize = 0;
 	actualExternalSize = pActualType->externalSize((OMByte *)pInitData, initDataSize);
 
   aafMemPtr_t pIndirectValueDataBits = NULL;
-  result = pIndirectValueData->AllocateBits (_internalIndirectSize + actualExternalSize,
+  result = pIndirectValueData->AllocateBits (_externalIndirectSize + actualExternalSize,
                                              &pIndirectValueDataBits);
-
-#endif // #else // #if USE_ACTUAL_TYPE
-
   if (AAFRESULT_FAILED(result))
     return result;
 
@@ -815,27 +787,20 @@ AAFRESULT STDMETHODCALLTYPE
   copy ((OMByte*)&originalByteOrder, (OMByte*)&pIndirectValueDataBits[0], 
         sizeof(originalByteOrder));
 
-  // Copy the actual type id for this indirect type...
-  copy ((OMByte*)&actualTypeID, (OMByte*)&pIndirectValueDataBits[sizeof(originalByteOrder)], _internalAUIDSize);
+	// Write the actual type id into the indirect value in its external form.
+  _typeDefAUID->externalize((OMByte*)&actualTypeID, 
+                            _internalAUIDSize,
+                            (OMByte*)&pIndirectValueDataBits[sizeof(originalByteOrder)],
+                            _externalAUIDSize,
+                            originalByteOrder);
 
-#if USE_ACTUAL_TYPE
-
-  // Copy the actual data value bits...
-  copy ((OMByte*)pInitData, (OMByte*)&pIndirectValueDataBits[_internalIndirectSize], 
-        initDataSize);
-
-#else // #if USE_ACTUAL_TYPE
-
-	// Write the actual value into the indirect value in its
-	// external form.
+	// Write the actual value into the indirect value in its external form.
 	pActualType->externalize((OMByte *)pInitData,
                            initDataSize,
-                           (OMByte*)&pIndirectValueDataBits[_internalIndirectSize],
+                           (OMByte*)&pIndirectValueDataBits[_externalIndirectSize],
                            actualExternalSize,
                            originalByteOrder);
 
-#endif // #else // #if USE_ACTUAL_TYPE
-  
   // Return the newly allocated and initialized indirect data value.
   *ppIndirectValue = pIndirectValueData;
   (*ppIndirectValue)->AcquireReference(); // refcount == 2, smartptr will reduce this to one.
@@ -883,7 +848,7 @@ AAFRESULT ImplAAFTypeDefIndirect::GetIndirectValueInfo (
 
   // Make sure that the indirect value data is at least large enough for the
   // actual auid and original byte order.
-  if (indirectValueSize < _internalIndirectSize)
+  if (indirectValueSize < _externalIndirectSize)
     return AAFRESULT_ILLEGAL_VALUE;
 
 	// Get the pointer to the indirect value bits.
@@ -901,9 +866,28 @@ AAFRESULT ImplAAFTypeDefIndirect::GetIndirectValueInfo (
   if ((originalByteOrder != littleEndian) && (originalByteOrder != bigEndian))
     return AAFRESULT_ILLEGAL_VALUE;
 
-  // Copy the actual type id for this indirect type. Validate that the id does
-  // belong to a type definition in the current dictionary.
-  copy ((OMByte*)&pIndirectValueDataBits[sizeof(originalByteOrder)], (OMByte*)&actualTypeID, _internalAUIDSize);
+  if (typeID || ppActualType)
+  {
+		// First make sure that the actual type id is in the correct byte order.
+		if (originalByteOrder != hostByteOrder())
+		  _typeDefAUID->reorder((OMByte*)&pIndirectValueDataBits[sizeof(originalByteOrder)], _externalAUIDSize);
+
+    // "read" the actual type id from the externalized indirect value.
+    _typeDefAUID->internalize ((OMByte*)&pIndirectValueDataBits[sizeof(originalByteOrder)],
+						                   _externalAUIDSize,
+						                   (OMByte*)&actualTypeID,
+						                   sizeof(actualTypeID),
+						                   hostByteOrder());
+
+		// Restore the original byte order (we may be able to optimize here...)
+		if (originalByteOrder != hostByteOrder())
+		  _typeDefAUID->reorder((OMByte*)&pIndirectValueDataBits[sizeof(originalByteOrder)], _externalAUIDSize);
+
+    // Return the actual type id.
+    if (typeID)
+      *typeID = actualTypeID;
+  }
+
 
   if (NULL != ppActualType)
   {
@@ -921,21 +905,14 @@ AAFRESULT ImplAAFTypeDefIndirect::GetIndirectValueInfo (
 	  }
   }
 
+
 	if (actualValueSize)
 	{
-#if USE_ACTUAL_TYPE
-
-	  // Compute the actual size of the data (minus the internal overhead of the
-		// indirect type)
-		*actualValueSize = indirectValueSize - _internalIndirectSize;
-
-#else // #if USE_ACTUAL_TYPE
-
     if (!ppActualType)
       return AAFRESULT_NULL_PARAM;
 
-		aafUInt32 actualExternalBytesSize = indirectValueSize - _internalIndirectSize;
-		OMByte *actualExternalBytes = (OMByte*)&pIndirectValueDataBits[_internalIndirectSize];
+		aafUInt32 actualExternalBytesSize = indirectValueSize - _externalIndirectSize;
+		OMByte *actualExternalBytes = (OMByte*)&pIndirectValueDataBits[_externalIndirectSize];
 
 		// First make sure that the actual data is in the correct byte order.
 		if (originalByteOrder != hostByteOrder())
@@ -947,13 +924,8 @@ AAFRESULT ImplAAFTypeDefIndirect::GetIndirectValueInfo (
 		// Restore the original byte order (we may be able to optimize here...)
 		if (originalByteOrder != hostByteOrder())
 			(*ppActualType)->reorder(actualExternalBytes, actualExternalBytesSize);
-
-#endif // #else // #if USE_ACTUAL_TYPE
 	}
 
-  // Return the actual type id.
-  if (typeID)
-    *typeID = actualTypeID;
 
   return result;
 }
@@ -1006,37 +978,27 @@ AAFRESULT STDMETHODCALLTYPE
   if (AAFRESULT_FAILED(result))
     return result;
 
-#if USE_ACTUAL_TYPE
+	OMByteOrder originalByteOrder = 0;
+	copy ((OMByte*)&pIndirectValueDataBits[0], (OMByte *)&originalByteOrder, sizeof(originalByteOrder));
 
-	// Copy the actual value bits from the indirect value to the actual value.
-  copy ((OMByte*)&pIndirectValueDataBits[_internalIndirectSize], (OMByte*)pActualValueDataBits,
-        actualValueDataSize);
+	aafUInt32 actualExternalBytesSize = indirectValueSize - _externalIndirectSize;
+	OMByte *actualExternalBytes = (OMByte*)&pIndirectValueDataBits[_externalIndirectSize];
 
-#else // #if USE_ACTUAL_TYPE
+	// First make sure that the actual data is in the correct byte order.
+	if (originalByteOrder != hostByteOrder())
+		pActualType->reorder(actualExternalBytes, actualExternalBytesSize);
 
-		OMByteOrder originalByteOrder = 0;
-		copy ((OMByte*)&pIndirectValueDataBits[0], (OMByte *)&originalByteOrder, sizeof(originalByteOrder));
+	// Ask the type to internalize into the actual value bytes.
+	pActualType->internalize(actualExternalBytes,
+                           actualExternalBytesSize,
+                           (OMByte *)pActualValueDataBits,
+                           actualValueDataSize,
+                           hostByteOrder());
 
-		aafUInt32 actualExternalBytesSize = indirectValueSize - _internalIndirectSize;
-		OMByte *actualExternalBytes = (OMByte*)&pIndirectValueDataBits[_internalIndirectSize];
+	// Restore the original byte order (we may be able to optimize here...)
+	if (originalByteOrder != hostByteOrder())
+		pActualType->reorder(actualExternalBytes, actualExternalBytesSize);
 
-		// First make sure that the actual data is in the correct byte order.
-		if (originalByteOrder != hostByteOrder())
-			pActualType->reorder(actualExternalBytes, actualExternalBytesSize);
-
-		// Ask the type to internalize into the actual value bytes.
-		pActualType->internalize(actualExternalBytes,
-                             actualExternalBytesSize,
-                             (OMByte *)pActualValueDataBits,
-                             actualValueDataSize,
-                             hostByteOrder());
-
-		// Restore the original byte order (we may be able to optimize here...)
-		if (originalByteOrder != hostByteOrder())
-			pActualType->reorder(actualExternalBytes, actualExternalBytesSize);
-
-#endif // #else // #if USE_ACTUAL_TYPE
-  
   // Return the newly allocated and initialized indirect data value.
   *ppActualValue = pActualValueData;
   (*ppActualValue)->AcquireReference(); // refcount == 2, smartptr will reduce this to one.
@@ -1126,35 +1088,26 @@ AAFRESULT STDMETHODCALLTYPE
 	if (dataSize < actualValueDataSize)
     return AAFRESULT_ILLEGAL_VALUE;
 
-#if USE_ACTUAL_TYPE
+	OMByteOrder originalByteOrder = 0;
+	copy ((OMByte*)&pIndirectValueDataBits[0], (OMByte *)&originalByteOrder, sizeof(originalByteOrder));
 
-	// Copy the actual value bits from the indirect value to the actual value.
-  copy ((OMByte*)&pIndirectValueDataBits[_internalIndirectSize], (OMByte*)pData, dataSize);
+	aafUInt32 actualExternalBytesSize = indirectValueSize - _externalIndirectSize;
+	OMByte *actualExternalBytes = (OMByte*)&pIndirectValueDataBits[_externalIndirectSize];
 
-#else // #if USE_ACTUAL_TYPE
+	// First make sure that the actual data is in the correct byte order.
+	if (originalByteOrder != hostByteOrder())
+		pActualType->reorder(actualExternalBytes, actualExternalBytesSize);
 
-		OMByteOrder originalByteOrder = 0;
-		copy ((OMByte*)&pIndirectValueDataBits[0], (OMByte *)&originalByteOrder, sizeof(originalByteOrder));
+	// Ask the type to internalize into the actual value bytes.
+	pActualType->internalize(actualExternalBytes,
+                           actualExternalBytesSize,
+                           (OMByte *)pData,
+                           dataSize,
+                           hostByteOrder());
 
-		aafUInt32 actualExternalBytesSize = indirectValueSize - _internalIndirectSize;
-		OMByte *actualExternalBytes = (OMByte*)&pIndirectValueDataBits[_internalIndirectSize];
-
-		// First make sure that the actual data is in the correct byte order.
-		if (originalByteOrder != hostByteOrder())
-			pActualType->reorder(actualExternalBytes, actualExternalBytesSize);
-
-		// Ask the type to internalize into the actual value bytes.
-		pActualType->internalize(actualExternalBytes,
-                             actualExternalBytesSize,
-                             (OMByte *)pData,
-                             dataSize,
-                             hostByteOrder());
-
-		// Restore the original byte order (we may be able to optimize here...)
-		if (originalByteOrder != hostByteOrder())
-			pActualType->reorder(actualExternalBytes, actualExternalBytesSize);
-
-#endif // #else // #if USE_ACTUAL_TYPE
+	// Restore the original byte order (we may be able to optimize here...)
+	if (originalByteOrder != hostByteOrder())
+		pActualType->reorder(actualExternalBytes, actualExternalBytesSize);
   
   return result;
 }
@@ -1196,51 +1149,19 @@ void ImplAAFTypeDefIndirect::reorder(OMByte* externalBytes,
   PRECONDITION("External byte size is large enough for id and byte order", 
                externalBytesSize >= _externalIndirectSize);
 
-  // Get the auid's external size.
-  aafUID_t actualTypeID = {0};
+
+  //
+  // Validate the fields in the property data.
+  //
   OMByteOrder originalByteOrder = 0;
-
-
-  // Get the original byte order saved in the property data.
   copy (&externalBytes[0], (OMByte*)&originalByteOrder, sizeof(originalByteOrder));
   ASSERT("Valid byte order",
          (originalByteOrder == littleEndian) || (originalByteOrder == bigEndian));
   
   //
-  // We need to read the id out of the externalBytes and be careful
-  // to use the correct byte order.
-  //
-  if (originalByteOrder != hostByteOrder())
-  {
-    // We need to reorder the bytes first before we can internalize the id.
-    _typeDefAUID->reorder (&externalBytes[sizeof(originalByteOrder)], _externalAUIDSize);
-  }
-
-  // "read" the actual type id from the externalized indirect value.
-  _typeDefAUID->internalize (&externalBytes[sizeof(originalByteOrder)],
-						                 _externalAUIDSize,
-						                 (OMByte*)&actualTypeID,
-						                 sizeof(actualTypeID),
-						                 hostByteOrder());
-  
-#if USE_ACTUAL_TYPE
-
-  //
-  // Lookup the actual type in the dictionary (use impl smartptrs to hide reference
-  // counting...this code should be moved down into the OM anyway...)
-	//
-  ImplAAFTypeDefSP pActualType;
-  checkResult (LookupActualType (actualTypeID, &pActualType)); // ASSERT
-
-  if (originalByteOrder != hostByteOrder())
-  {
-    // reorder the rest of the buffer with actual type.
-    aafInt32 actualExternalBytesSize = externalBytesSize - _externalIndirectSize;
-    OMByte *actualExternalBytes = &externalBytes[_externalIndirectSize];
-    pActualType->reorder (actualExternalBytes, actualExternalBytesSize);
-	}
-
-#endif // #if USE_ACTUAL_TYPE
+  // Reordering of the data is defered until the data is actually 
+  // read through an API method.
+  // 
 }
 
 size_t ImplAAFTypeDefIndirect::externalSize(OMByte* internalBytes,
@@ -1253,52 +1174,21 @@ size_t ImplAAFTypeDefIndirect::externalSize(OMByte* internalBytes,
   PRECONDITION("Internal byte size is large enough for id and byte order", 
                internalBytesSize >= _internalIndirectSize);
 
-  // return value...
-  size_t externalBytesSize = 0;
 
-
-  // Get the auid's internal size.
-  aafUID_t actualTypeID = {0};
+  //
+  // Validate the fields in the property data.
+  //
   OMByteOrder originalByteOrder = 0;
-
-
-
-  // Add the external size of the original byte order data.
-  externalBytesSize += sizeof(originalByteOrder);
-
-  // Add the external size of auid.
-  externalBytesSize += _typeDefAUID->externalSize (internalBytes, _internalAUIDSize);
-
-  // Get the original byte order.
   copy (&internalBytes[0], (OMByte*)&originalByteOrder, sizeof(originalByteOrder));
   ASSERT("Valid byte order",
          (originalByteOrder == littleEndian) || (originalByteOrder == bigEndian));
 
-  // The data has already been internalized (i.e. in native byte order).
-  copy (&internalBytes[sizeof(originalByteOrder)], (OMByte*)&actualTypeID, _internalAUIDSize);
-
-
-#if USE_ACTUAL_TYPE
-
-  // Lookup the actual type in the dictionary (use impl smartptrs to hide reference
-  // counting...this code should be moved down into the OM anyway...)
-  ImplAAFTypeDefSP pActualType;
-  checkResult (LookupActualType (actualTypeID, &pActualType)); // ASSERT
-
-  // Add the external size of the actual type.
-  aafInt32 actualInternalBytesSize = internalBytesSize - _internalIndirectSize;
-  OMByte *actualInternalBytes = &internalBytes[_internalIndirectSize];
-  externalBytesSize += pActualType->externalSize (actualInternalBytes, actualInternalBytesSize);
-
-#else // #if USE_ACTUAL_TYPE
-
-  // Add the external size of the actual type.
-  aafInt32 actualInternalBytesSize = internalBytesSize - _internalIndirectSize;
-  externalBytesSize += actualInternalBytesSize;
-
-#endif // #else // #if USE_ACTUAL_TYPE
-
-  return externalBytesSize;
+  //
+  // The internal size is the same as the external size.
+  // The data is only internalized when the data is requested
+  // through the client API.
+  //
+  return internalBytesSize;
 }
 
 void ImplAAFTypeDefIndirect::externalize(
@@ -1318,56 +1208,26 @@ void ImplAAFTypeDefIndirect::externalize(
                internalBytesSize >= _internalIndirectSize);
   PRECONDITION("External byte size is large enough for id and byte order", 
                externalBytesSize >= _externalIndirectSize);
+  PRECONDITION("External byte size is the same as the internal byte size", 
+               externalBytesSize == internalBytesSize);
 
-  // Get the auid's internal size.
-  aafUID_t actualTypeID = {0};
+
+  //
+  // Validate the fields in the property data.
+  //
   OMByteOrder originalByteOrder = 0;
-
-
-  // Get the original byte order.
   copy (&internalBytes[0], (OMByte*)&originalByteOrder, sizeof(originalByteOrder));
   ASSERT("Valid byte order",
          (originalByteOrder == littleEndian) || (originalByteOrder == bigEndian));
-  
-  // The original byte order does not have to be externalized.
-  copy ((OMByte*)&originalByteOrder, &externalBytes[0], sizeof(originalByteOrder));
- 
-  // The data has already been internalized (i.e. in native byte order).
-  copy (&internalBytes[sizeof(originalByteOrder)], (OMByte*)&actualTypeID, _internalAUIDSize);
-  
-  // Write the external data for the auid.
-  _typeDefAUID->externalize (&internalBytes[sizeof(originalByteOrder)], _internalAUIDSize, 
-                             &externalBytes[sizeof(originalByteOrder)], _externalAUIDSize, originalByteOrder);
 
-
-
-#if USE_ACTUAL_TYPE
-  // Lookup the actual type in the dictionary (use impl smartptrs to hide reference
-  // counting...this code should be moved down into the OM anyway...)
-  ImplAAFTypeDefSP pActualType;
-  checkResult (LookupActualType (actualTypeID, &pActualType)); // ASSERT
-
-
-  // Externalize the rest of the data using the actual type.
-  aafInt32 actualInternalBytesSize = internalBytesSize - _internalIndirectSize;
-  aafInt32 actualExternalBytesSize = externalBytesSize - _externalIndirectSize;
-  OMByte *actualInternalBytes = &internalBytes[_internalIndirectSize];
-  OMByte *actualExternalBytes = &externalBytes[_externalIndirectSize];
-  pActualType->externalize (actualInternalBytes, actualInternalBytesSize, 
-                            actualExternalBytes, actualExternalBytesSize, originalByteOrder);
-
-#else // #if USE_ACTUAL_TYPE
-
-  // Externalize the rest of the data using the actual type.
-  aafInt32 actualInternalBytesSize = internalBytesSize - _internalIndirectSize;
-  aafInt32 actualExternalBytesSize = externalBytesSize - _externalIndirectSize;
-  ASSERT("Valid actualExternalBytesSize", actualInternalBytesSize == actualExternalBytesSize);
-
-  OMByte *actualInternalBytes = &internalBytes[_internalIndirectSize];
-  OMByte *actualExternalBytes = &externalBytes[_externalIndirectSize];
-	copy (actualInternalBytes, actualExternalBytes, actualExternalBytesSize);
-
-#endif // #else // #if USE_ACTUAL_TYPE
+  //
+  // The internal form of this data is the same as its external form.
+  // The data is only internalized when the it is requested
+  // through the client API. Therefore we can just copy the data.
+  //
+  ASSERT("External byte size is the same as the internal byte size", 
+         externalBytesSize == internalBytesSize);
+  copy (internalBytes, externalBytes, externalBytesSize);
 }
 
 
@@ -1382,57 +1242,21 @@ size_t ImplAAFTypeDefIndirect::internalSize(
   PRECONDITION("External byte size is large enough for id and byte order", 
                externalSize >= _externalIndirectSize);
 
-  // return value...
-  size_t internalBytesSize = 0;
 
-
-  // Add the external size of the original byte order data.
-  OMByteOrder originalByteOrder = 0;
-  internalBytesSize += sizeof(originalByteOrder);
-
-  // Add the external size of auid.
-  internalBytesSize += _internalAUIDSize;
-
-  // 
-  // Get the original byte order. (this is redundent since reorder should
-  // have already been called)
   //
+  // Validate the fields in the property data.
+  //
+  OMByteOrder originalByteOrder = 0;
   copy (&externalBytes[0], (OMByte*)&originalByteOrder, sizeof(originalByteOrder));
   ASSERT("Valid byte order",
          (originalByteOrder == littleEndian) || (originalByteOrder == bigEndian));
 
-
   //
-  // Get the actual type id from the external bytes.
-  // The data has already been reorder (i.e. in native byte order but may need padding).
+  // The internal size is the same as the external size.
+  // The data is only internalized when the data is requested
+  // through the client API.
   //
-  aafUID_t actualTypeID = {0};
-  _typeDefAUID->internalize (&externalBytes[sizeof(originalByteOrder)], _externalAUIDSize,
-                             (OMByte*)&actualTypeID, _internalAUIDSize, hostByteOrder());
-
-#if USE_ACTUAL_TYPE  
-  //  
-  // Lookup the actual type in the dictionary (use impl smartptrs to hide reference
-  // counting...this code should be moved down into the OM anyway...)
-  //
-  ImplAAFTypeDefSP pActualType;
-  checkResult (LookupActualType (actualTypeID, &pActualType)); // ASSERT
-
-  // compute the internalSize for the rest of the buffer with actual type.
-  aafInt32 actualExternalBytesSize = externalSize - _externalIndirectSize;
-  OMByte *actualExternalBytes = &externalBytes[_externalIndirectSize];
-  internalBytesSize += pActualType->internalSize (actualExternalBytes, 
-                                                  actualExternalBytesSize);
-#else // #if USE_ACTUAL_TYPE
-
-	// Do not compute the actual internal size until the user asks to copy the data
-	// through the public API.
-  aafInt32 actualExternalBytesSize = externalSize - _externalIndirectSize;
-	internalBytesSize += actualExternalBytesSize;
-
-#endif // #else // #if USE_ACTUAL_TYPE
-
-  return internalBytesSize;
+  return externalSize;
 }
 
 void ImplAAFTypeDefIndirect::internalize(
@@ -1456,57 +1280,22 @@ void ImplAAFTypeDefIndirect::internalize(
 		           byteOrder == hostByteOrder ()); // why do we need this argument?
 
 
-  // Get the auid's internal size.
-
-  
-
-  // Get the original byte order.
+  //
+  // Validate the fields in the property data.
+  //
   OMByteOrder originalByteOrder = 0;
   copy (&externalBytes[0], (OMByte*)&originalByteOrder, sizeof(originalByteOrder));
   ASSERT("Valid byte order",
          (originalByteOrder == littleEndian) || (originalByteOrder == bigEndian));
-  
-  // Internalize the actual typed id.
-  _typeDefAUID->internalize (&externalBytes[sizeof(originalByteOrder)], _externalAUIDSize,
-                             &internalBytes[sizeof(originalByteOrder)], _internalAUIDSize, byteOrder);
-
-  // The data has already been internalized.
-  aafUID_t actualTypeID = {0};
-  copy (&internalBytes[sizeof(originalByteOrder)], (OMByte*)&actualTypeID, _internalAUIDSize);
-  // Just copy the original byte order.
-  copy ((OMByte*)&originalByteOrder, &internalBytes[0], sizeof(originalByteOrder));
-
-
-#if USE_ACTUAL_TYPE
 
   //
-  // Lookup the actual type in the dictionary (use impl smartptrs to hide reference
-  // counting...this code should be moved down into the OM anyway...)
+  // The internal form of this data is the same as its external form.
+  // The data is only internalized when the it is requested
+  // through the client API. Therefore we can just copy the data.
   //
-  ImplAAFTypeDefSP pActualType;
-  checkResult (LookupActualType (actualTypeID, &pActualType)); // ASSERT
-
-  // Internalize the rest of the data using the actual type.
-  aafInt32 actualInternalBytesSize = internalBytesSize - _internalIndirectSize;
-  aafInt32 actualExternalBytesSize = externalBytesSize - _externalIndirectSize;
-  OMByte *actualInternalBytes = &internalBytes[_internalIndirectSize];
-  OMByte *actualExternalBytes = &externalBytes[_externalIndirectSize];
-  pActualType->internalize (actualExternalBytes, actualExternalBytesSize, 
-                            actualInternalBytes, actualInternalBytesSize, byteOrder);
-
-#else // #if USE_ACTUAL_TYPE
-
-  // Internalize the rest of the data using the actual type.
-  aafInt32 actualInternalBytesSize = internalBytesSize - _internalIndirectSize;
-  aafInt32 actualExternalBytesSize = externalBytesSize - _externalIndirectSize;
-  ASSERT("Valid actualInternalBytesSize", actualInternalBytesSize == actualExternalBytesSize);
-
-  OMByte *actualInternalBytes = &internalBytes[_internalIndirectSize];
-  OMByte *actualExternalBytes = &externalBytes[_externalIndirectSize];
-	copy (actualExternalBytes, actualInternalBytes, actualExternalBytesSize);
-
-#endif // #else // #if USE_ACTUAL_TYPE
-
+  ASSERT("External byte size is the same as the internal byte size", 
+         externalBytesSize == internalBytesSize);
+  copy (externalBytes, internalBytes, externalBytesSize);
 }
 
 
