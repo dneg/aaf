@@ -485,7 +485,36 @@ void OMDataStreamProperty::deepCopyTo(OMProperty* destination,
                                       void* clientContext) const
 {
   TRACE("OMDataStreamProperty::deepCopyTo");
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
+  PRECONDITION("Valid destination", destination != 0);
+
+  typedef OMDataStreamProperty Property;
+  Property* dest = dynamic_cast<Property*>(destination);
+  ASSERT("Destination is correct type", dest != 0);
+  ASSERT("Valid destination", dest != this);
+
+  ASSERT("Destination stream is empty", dest->size() == 0);
+  if (hasByteOrder()) {
+    dest->setByteOrder(byteOrder());
+  }
+
+  // Save current position of source
+  OMUInt64 savedPosition = position();
+
+  // Copy the stream contents
+  setPosition(0);
+  dest->setPosition(0);
+  OMUInt32 bytesRead;
+  OMUInt32 bytesWritten;
+  OMUInt64 bytesToCopy = size();
+  OMByte buffer[1024];
+  while (bytesToCopy != 0) {
+    read(buffer, sizeof(buffer), bytesRead);
+    dest->write(buffer, bytesRead, bytesWritten);
+    bytesToCopy = bytesToCopy - bytesWritten;
+  }
+
+  // Restore current position of source
+  setPosition(savedPosition);
 }
 
 const wchar_t* OMDataStreamProperty::storedName(void) const
