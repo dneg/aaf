@@ -43,9 +43,9 @@
 #include "aafErr.h"
 
 ImplAAFTimecodeStream::ImplAAFTimecodeStream ()
-: _sampleRate(		PID_TimecodeStream_SampleRate,	"SampleRate"),
-  _source(			PID_TimecodeStream_Source,		"Source"),
-  _sourceType(		PID_TimecodeStream_SourceType,	"SourceType")
+: _sampleRate(		PID_TimecodeStream_SampleRate,	L"SampleRate"),
+  _source(			PID_TimecodeStream_Source,		L"Source"),
+  _sourceType(		PID_TimecodeStream_SourceType,	L"SourceType")
 {
   _persistentProperties.put(_sampleRate.address());
   _persistentProperties.put(_source.address());
