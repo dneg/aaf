@@ -35,7 +35,7 @@
 #include <iostream.h>
 #include <memory>
 #ifdef macintosh
-	#include <console.h>
+	#include "DataInput.h"
 #endif 
 namespace OMF2
 {
@@ -269,7 +269,8 @@ int main(int argc, char *argv[])
 	CComInitialize	comInit;
 
 #ifdef macintosh
-	argc = ccommand(&argv);	// calls up a command line window
+	char dataFile[] = "AafOmf (PPC).inp";
+	getInputData(&argc, argv, dataFile);
 #endif 
 
 	hr = InitGlobalVars();
@@ -366,6 +367,10 @@ int main(int argc, char *argv[])
 
 	// If we get here then the gpGlobals was created.
 	delete gpGlobals;
+
+#ifdef _MAC
+	cleanUpInputData(argc, argv);
+#endif
 
 	return( hr );
 }
