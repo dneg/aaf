@@ -89,6 +89,7 @@ const int TID_DATA                           = 0;
 const int TID_STRONG_OBJECT_REFERENCE        = 1;
 const int TID_STRONG_OBJECT_REFERENCE_VECTOR = 2;
 const int TID_WEAK_OBJECT_REFERENCE          = 3;
+const int TID_WEAK_OBJECT_REFERENCE_VECTOR   = 5;
 const int TID_DATA_STREAM                    = 4;
 
 // Integral types
@@ -192,11 +193,13 @@ bool zFlag = false;
 //
 size_t totalStorages;
 size_t totalStreams;
-size_t totalBytes;
 
 size_t totalPropertyBytes;
 size_t totalObjects;
 size_t totalProperties;
+
+size_t totalStreamBytes;
+size_t totalFileBytes;
 
 // Prototypes for local functions.
 //
@@ -289,12 +292,35 @@ static void dumpFileProperties(char* fileName);
 static bool isAnAAFFile(const char* fileName);
 static void usage(void);
 
+static void printInteger(const size_t value, char* label);
+static void printFixed(const double value, char* label);
+static void printFixedPercent(const double value, char* label);
+
 static void resetStatistics(void);
 static void printStatistics(void);
 static double divide(size_t dividend, size_t divisor);
+static double percent(size_t whole, size_t part);
 
 static bool ignoring(OMUInt32 pid);
 static void ignore(OMUInt32 pid);
+
+static size_t fileSize(const char* fileName)
+{
+  FILE* f = fopen(fileName, "r");
+  if (f == 0) {
+    fatalError("fileSize", "Can't open file");
+  }
+  int status = fseek(f, 0L, SEEK_END);
+  if (status != 0) {
+    fatalError("fileSize", "seek() failed");
+  }
+  errno = 0;
+  size_t result = ftell(f);
+  if ((result == -1L) && (errno != 0)) {
+    fatalError("fileSize", "ftell() failed");
+  }
+  return result;
+}
 
 // Hexadecimal/ASCII dumper.
 //
@@ -673,12 +699,12 @@ size_t sizeOfStream(IStream* stream, const char* streamName)
   if (!check(streamName, result)) {
     fatalError("sizeOfStream", "Falied to Stat() stream.");
   }
-  unsigned long int totalBytes = statstg.cbSize.LowPart;
+  unsigned long int streamBytes = statstg.cbSize.LowPart;
   if (statstg.cbSize.HighPart != 0) {
     warning("sizeOfStream", "Large streams not handled.");
-    totalBytes = ULONG_MAX;
+    streamBytes = ULONG_MAX;
   }
-  return totalBytes;
+  return streamBytes;
 }
 
 void printStat(STATSTG* statstg, char* tag)
@@ -778,7 +804,7 @@ void dumpStream(IStream* stream, STATSTG* statstg, char* pathName)
     warning("dumpStream", "Large streams not handled.");
     byteCount = ULONG_MAX;
   }
-  totalBytes = totalBytes + byteCount;
+  totalStreamBytes = totalStreamBytes + byteCount;
   
   for (unsigned long int i = 0; i < byteCount; i++) {
     result = stream->Read(&ch, 1, &bytesRead);
@@ -1294,6 +1320,8 @@ void dumpContainedObjects(IStorage* storage,
       if (subStream == 0) {
         fatalError("dumpContainedObjects", "openStream() failed.");
       }
+      size_t vectorIndexStreamSize = sizeOfStream(subStream, vectorIndexName);
+      totalStreamBytes = totalStreamBytes + vectorIndexStreamSize;
 
       OMUInt32 _highWaterMark;
       readUInt32(subStream, &_highWaterMark, swapNeeded);
@@ -1420,17 +1448,19 @@ void dumpDataStream(IStream* stream,
   if (!check(streamName, result)) {
     fatalError("dumpdataStream", "Falied to Stat() stream.");
   }
-  unsigned long int totalBytes = statstg.cbSize.LowPart;
+  unsigned long int streamBytes = statstg.cbSize.LowPart;
   if (statstg.cbSize.HighPart != 0) {
     warning("dumpDataStream", "Large streams not handled.");
-    totalBytes = ULONG_MAX;
+    streamBytes = ULONG_MAX;
   }
+  totalStreamBytes = totalStreamBytes + streamBytes;
+  totalPropertyBytes = totalPropertyBytes + streamBytes;
 
-  cout << "( Size = " << totalBytes << " )" << endl;
+  cout << "( Size = " << streamBytes << " )" << endl;
 
-  if (totalBytes > 0) {
+  if (streamBytes > 0) {
     for (unsigned long int byteCount = 0;
-         byteCount < totalBytes;
+         byteCount < streamBytes;
          byteCount++) {
 
       unsigned char ch;
@@ -1476,6 +1506,7 @@ void dumpProperties(IStorage* storage,
   if (actualStreamSize < expectedStreamSize) {
     fatalError("dumpProperties", "Property value stream too small.");
   }
+  totalStreamBytes = totalStreamBytes + actualStreamSize;
 
   for (OMUInt32 i = 0; i < entries; i++) {
 
@@ -1615,6 +1646,7 @@ void dumpObject(IStorage* storage, char* pathName, int isRoot)
   if (indexStreamSize == 0){
     fatalError("dumpObject", "Property index stream empty.");
   }
+  totalStreamBytes = totalStreamBytes + indexStreamSize;
 
   OMUInt16 _byteOrder = readByteOrder(stream);
 
@@ -1817,6 +1849,7 @@ void dumpFile(char* fileName)
   // Releasing the last reference to the root storage closes the file.
   storage->Release();
 
+  totalFileBytes = fileSize(fileName);
   printStatistics();
 }
 
@@ -1837,6 +1870,7 @@ void dumpFileProperties(char* fileName)
   storage->Release();
   storage = 0;
 
+  totalFileBytes = fileSize(fileName);
   printStatistics();
 
 }
@@ -1898,74 +1932,115 @@ void usage(void)
 
 bool printStats = false; // default
 
+void printInteger(const size_t value, char* label)
+{
+    cout << label
+         << setw(8)
+         << value
+         << endl;
+}
+
+void printFixed(const double value, char* label)
+{
+    long oldFlags = cout.flags(ios::right | ios::fixed);
+    cout << label
+         << setw(8)
+         << setprecision(2)
+         << value
+         << endl;
+    cout.flags(oldFlags);
+}
+
+void printFixedPercent(const double value, char* label)
+{
+    long oldFlags = cout.flags(ios::right | ios::fixed);
+    cout << label
+         << setw(8)
+         << setprecision(2)
+         << value
+         << " %"
+         << endl;
+    cout.flags(oldFlags);
+}
+
 void resetStatistics(void)
 {
   totalStorages = 0;
   totalStreams = 0;
-  totalBytes = 0;
 
   totalPropertyBytes = 0;
   totalObjects = 0;
   totalProperties = 0;
+
+  totalStreamBytes = 0;
+  totalFileBytes = 0;
 }
 
 void printStatistics(void)
 {
+  size_t totalMetadataBytes = totalStreamBytes - totalPropertyBytes;
   if (printStats) {
     cout << endl;
-    if (option == raw) {
-      cout << "Total number of storages                = "
-           << setw(8)
-           << totalStorages
-           << endl;
-      cout << "Total number of streams                 = "
-           << setw(8)
-           << totalStreams
-           << endl;
-      cout << "Total number of storage elements        = "
-           << setw(8)
-           << totalStorages + totalStreams
-           << endl;
-      cout << "Total number of bytes in all streams    = "
-           << setw(8)
-           << totalBytes
-           << endl;
-      double averageBytesPerStream = divide(totalBytes, totalStreams);
-      cout << "Average number of bytes per stream      = "
-           << setw(8)
-           << averageBytesPerStream
-           << endl;
-    } else if ((option == property) || (option == aaf)) {
-      cout << "Total number of objects                 = "
-           << setw(8)
-           << totalObjects
-           << endl;
-      cout << "Total number of properties              = "
-           << setw(8)
-           << totalProperties
-           << endl;
-      cout << "Total number of bytes in all properties = "
-           << setw(8)
-           << totalPropertyBytes
-           << endl;
+    printInteger(totalFileBytes,
+      "Total number of bytes in file           (F) = ");
+    if ((option == property) || (option == aaf)) {
+      printInteger(totalPropertyBytes,
+        "Total number of bytes in all properties (P) = ");
+      printInteger(totalMetadataBytes,
+        "Total number of bytes in AAF meta-data  (M) = ");
+      cout << endl;
+      printInteger(totalObjects,
+        "Total number of objects                     = ");
+      printInteger(totalProperties,
+        "Total number of properties                  = ");
+      cout << endl;
       double averageProperties = divide(totalProperties, totalObjects);
-      cout << "Average number of properties per object = "
-           << setw(8)
-           << averageProperties
-           << endl;
+      printFixed(averageProperties,
+        "Average number of properties per object     = ");
       double averageBytesPerObject = divide(totalPropertyBytes, totalObjects);
-      cout << "Average number of bytes per object      = "
-           << setw(8)
-           << averageBytesPerObject
-           << endl;
+      printFixed(averageBytesPerObject,
+        "Average number of bytes per object          = ");
       double averageBytesPerProperty = divide(totalPropertyBytes,
                                               totalProperties);
-      cout << "Average number of bytes per property    = "
-           << setw(8)
-           << averageBytesPerProperty
-           << endl;
+      printFixed(averageBytesPerProperty,
+        "Average number of bytes per property        = ");
+    } else if (option == raw) {
+      printInteger(totalStreamBytes,
+        "Total number of bytes in all streams    (S) = ");
+      cout << endl;
+      printInteger(totalStorages,
+        "Total number of storages                    = ");
+      printInteger(totalStreams,
+        "Total number of streams                     = ");
+      printInteger(totalStorages + totalStreams,
+        "Total number of storage elements            = ");
+      cout << endl;
+      double averageBytesPerStream = divide(totalStreamBytes, totalStreams);
+      printFixed(averageBytesPerStream,
+        "Average number of bytes per stream          = ");
     }
     cout << endl;
+    if ((option == property) || (option == aaf)) {
+      double structuredStorageOverhead = percent(
+                     totalFileBytes,
+                     totalFileBytes - totalPropertyBytes - totalMetadataBytes);
+      printFixedPercent(structuredStorageOverhead,
+      "Structured storage overhead (F - P - M) / F = ");
+      double aafOverhead = percent(totalPropertyBytes + totalMetadataBytes,
+                                   totalMetadataBytes);
+      printFixedPercent(aafOverhead,
+        "AAF Overhead                 M / (P + M)    = ");
+      double overallOverhead = percent(totalFileBytes,
+                                       totalFileBytes - totalPropertyBytes);
+      printFixedPercent(overallOverhead,
+        "Overall overhead            (F - P) / F     = ");
+    } else if (option == raw) {
+      double structuredStorageOverhead = percent(
+                                            totalFileBytes,
+                                            totalFileBytes - totalStreamBytes);
+      printFixedPercent(structuredStorageOverhead,
+        "Structured storage overhead (F - S) / F     = ");
+    }
   }
 }
 
@@ -1981,6 +2056,11 @@ double divide(size_t dividend, size_t divisor)
     result = 0.0;
   }
   return result;
+}
+
+static double percent(size_t whole, size_t part)
+{
+  return divide(part, whole) * 100.0;
 }
 
 #define MAXIGNORE 64
