@@ -1548,15 +1548,11 @@ void AAFObjectModel::InitializePrivateClassDefinitions(void)
 
 void AAFObjectModel::InitializeAxiomaticDefinitions(void)
 {
-  // There is only one meta dictionary and it must be internally
-  // created.
-  findClassDefinition(&AUID_AAFMetaDictionary)->makeAxiomatic();
-
   // We know that the class definition for all class definitions is
   // axiomatic. This should also make property definitions axiomatic
   // and all associated type definitions.
-//  findClassDefinition(&AUID_AAFClassDefinition)->makeAxiomatic();
-//  findClassDefinition(&AUID_AAFPropertyDefinition)->makeAxiomatic();
+  findClassDefinition(&AUID_AAFClassDefinition)->makeAxiomatic();
+  findClassDefinition(&AUID_AAFPropertyDefinition)->makeAxiomatic();
 
 
   // There really should only be 8 instances of TypeDefinitionInteger.
@@ -1576,6 +1572,12 @@ void AAFObjectModel::InitializeAxiomaticDefinitions(void)
   findTypeDefinition(&kAAFTypeID_Stream)->makeAxiomatic();
   findTypeDefinition(&kAAFTypeID_Indirect)->makeAxiomatic();
   findTypeDefinition(&kAAFTypeID_Opaque)->makeAxiomatic();
+
+
+  // There is only one meta dictionary and it must be internally
+  // created.
+  findClassDefinition(&AUID_AAFMetaDictionary)->makeAxiomatic();
+
 
   // Add the following two classes since the we still have the 
   // type, class and property definitions stored in the AAF dictionary.
