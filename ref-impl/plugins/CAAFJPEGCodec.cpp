@@ -424,7 +424,7 @@ HRESULT STDMETHODCALLTYPE
 		checkResult(desc->Initialize(AVID_JPEG_PLUGIN,
 		                       const_cast<wchar_t *>(kDisplayName),
 		                       const_cast<wchar_t *>(kDescription)));
-		checkResult(desc->SetCategoryClass(AUID_AAFDefObject));
+		checkResult(desc->SetCategoryClass(AUID_AAFCodecDef));
 		checkResult(desc->SetPluginVersionString(kManufRev));
 		checkResult(desc->SetManufacturerID(MANUF_AVID_PLUGINS));
 		checkResult(desc->SetPluginManufacturerName(kManufName));

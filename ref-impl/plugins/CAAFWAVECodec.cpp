@@ -189,7 +189,7 @@ HRESULT STDMETHODCALLTYPE
 		desc->AddRef();
 		CHECK(desc->Initialize(JEFFS_WAVE_PLUGIN, L"Example WAVE Codec", L"Handles RIFF WAVE data."));
 
-		CHECK(desc->SetCategoryClass(AUID_AAFDefObject));
+		CHECK(desc->SetCategoryClass(AUID_AAFCodecDef));
 		CHECK(desc->SetPluginVersionString(manufRev));
 		CHECK(dict->LookupClassDef(AUID_AAFNetworkLocator, &pcd));
 		CHECK(pcd->CreateInstance(IID_IAAFLocator, 

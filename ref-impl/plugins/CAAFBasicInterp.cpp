@@ -134,7 +134,7 @@ HRESULT STDMETHODCALLTYPE
 		*descPtr = desc;
 		desc->AddRef();
 		CHECK(desc->Initialize(BASIC_INTERP_PLUGIN, L"Example interpolators", L"Handles step and linear interpolation."));
-		CHECK(desc->SetCategoryClass(AUID_AAFDefObject));
+		CHECK(desc->SetCategoryClass(AUID_AAFInterpolationDefinition));
 		CHECK(desc->SetPluginVersionString(manufRev));
 		CHECK(defs.cdNetworkLocator()->
 			  CreateInstance(IID_IAAFLocator, 
