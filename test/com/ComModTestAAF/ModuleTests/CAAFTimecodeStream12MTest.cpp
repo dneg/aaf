@@ -81,6 +81,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFTimecodeStream12M		*pTimecodeStream12M = NULL;
 	IAAFTimecodeStream			*pTimecodeStream = NULL;
 	IAAFSegment					*pSeg = NULL;
+	IAAFComponent*		pComponent = NULL;
 
 	aafMobID_t					newMobID;
 	aafProductIdentification_t	ProductInfo;
@@ -134,6 +135,10 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(defs.cdTimecodeStream12M()->
 					CreateInstance(IID_IAAFTimecodeStream12M, 
 								   (IUnknown **)&pTimecodeStream12M));		
+		 checkResult(pTimecodeStream12M->QueryInterface(IID_IAAFComponent, (void **)&pComponent));
+		 checkResult(pComponent->SetDataDef(defs.ddPicture()));
+		pComponent->Release();
+		pComponent = NULL;
 		 
 
 		checkResult(pTimecodeStream12M->QueryInterface (IID_IAAFSegment, (void **)&pSeg));
@@ -212,6 +217,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	if (pSeg)
 		pSeg->Release();
 
+	if (pComponent)
+		pComponent->Release();
 	if (pTimecodeStream12M)
 		pTimecodeStream12M->Release();
 
