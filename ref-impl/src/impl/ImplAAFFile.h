@@ -96,6 +96,9 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
 	GetRevision (aafFileRev_t *  rev);
   
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetDictionary
+        (ImplAAFDictionary ** ppDictionary) const;  //@parm [out,retval] The AAF Dictionary
 
   //
   // Constructor/destructor

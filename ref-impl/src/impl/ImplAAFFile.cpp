@@ -757,3 +757,13 @@ ImplAAFFile::GetHeader (ImplAAFHeader ** header)
 
   return(AAFRESULT_SUCCESS);
 }
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFFile::GetDictionary (ImplAAFDictionary ** ppDictionary) const
+{
+	if (! ppDictionary)
+	{
+		return AAFRESULT_NULL_PARAM;
+	}
+    return AAFRESULT_NOT_IN_CURRENT_VERSION;
+}
