@@ -26,7 +26,16 @@
 #
 # Command line:
 #
-# awk -f mkdict.awk AAFMetaDict.csv > AAFMetaDictionary.h
+# awk [-v APP="app"] [-v APPVER="1.1" ] -f mkdict.awk AAFMetaDict.csv > AAFMetaDictionary.h
+#
+#	the csv file must have a line with "_fields" in the first column
+#	before any line that does not begin with #
+#
+#   if the -v APP= value is specified, mkdict will only parse lines with the given text in the r_app field
+#   if the -v APPVER= value is specified, mkdict will only parse lines in which r_app is a string like
+#   "AAF>=1.2" and the stated relation is true
+#   if no APP is specified, will skip lines beginning #
+#	always skips lines beginning ##
 #
 # Authors
 #
@@ -65,10 +74,8 @@
 #							 For enumeration members the value of the member
 # s_target_sym            => For enumerations the type of every member
 #							 For records the type of each member
+#								(this should also be sepcified in s_type_sym)
 #							 For arrays the element type.
-#							 For properties where the property type
-#                            ($C["s_type_sym"]) is a reference then this field is
-#                            the type (class) of the referenced object,
 #                            Otherwise this field should be empty.
 # r_minOccurs             => if this field == "1" then this is a required
 #                            property. If this field is "O" then this is an
@@ -766,29 +773,80 @@ BEGIN {
   firstInstance = -1; # set to 1 by Aliases
 }
 
-/^#fields/ {
+/^[#_]fields/ {
 	# set up indirect input column mapping
+	# line beginning #fields is legacy, line beginning _fields is now preferred 
 	# e.g. if 18th input column == "r_sym", $C["r_sym"]==$18
 	for( i=1; i<=NF; i++)
 	{
 		if( $i != "" ) C[ $i ] = i;
 	}
 	processedfields=1;
+	next
 }
 
-/^#/ {
-  next # Discard the line
+/^##/ {
+  next # Discard lines beginning ##
 }
 
 {
+  # Discard lines with no name field
+  if ($C["r_sym"] == "") next 
+
+  # If no APP is specified, discard lines beginning #
+  if( APP == "" && 1 == index($1,"#") ) next
+
+  # Discard lines that don't apply to the specified application
+  if( 0 == index($C["r_app"], APP) ) next 
+
+	# Discard lines that don't apply to the specified application version
+	# allow to specify an application version on the command line:  -v APPVER="1.2"
+	# interprets contents of r_app of the form "APP>=1.2" correctly
+	if( APPVER!="" )
+	{
+		# parse appver x.y to tgtver
+		# assert( 3==length(APPVER) )
+		tgtver = 10*substr(APPVER,1,1)+substr(APPVER,3,1);
+
+		# substr from r_app
+		ver = substr( $C["r_app"], index($C["r_app"], APP)+length(APP) );
+
+		# evaluate relation
+		if( substr(ver,2,1)=="=" ) rel=substr(ver,1,2);
+		else if( substr(ver,1,1)=="<" || substr(ver,1,1)==">" ) rel = substr(ver,1,1);
+		else rel = "";
+
+		# trim relation from ver
+		ver=substr(ver,1+length(rel));
+		
+		# trim from first space
+		if( 0 != index(ver," ") ) ver = substr( ver, 1, index(ver," ")-1 );
+
+		# if no valid relation, never discard
+		if( rel!="" )
+		{
+			# assert 3==length(ver)
+			relver = 10*substr(ver,1,1)+substr(ver,3,1);
+
+			# diagnostics
+			# printf( "%d %s %d \n", tgtver, rel, relver);
+
+			# evaluate condition and skip if false
+			if( rel== "<=" &&!( tgtver <= relver )) next;
+			if( rel== "<"  &&!( tgtver <  relver )) next;
+			if( rel== "==" &&!( tgtver == relver )) next;
+			if( rel== "!=" &&!( tgtver != relver )) next;
+			if( rel== ">=" &&!( tgtver >= relver )) next;
+			if( rel== ">"  &&!( tgtver >  relver )) next;
+		}
+	}
+
+
   # Fields must be set up before processing begins
   if( !processedfields ) {
       printError(sprintf("File generation failed: no #fields record.\n", errors));
       exit 1
   }
-
-  # Discard lines with no name field
-  if ($C["r_sym"] == "") next 
 
   # Diagnostics
   # printf("// <%s> \n", $C["s_parent_sym"]);
@@ -796,7 +854,11 @@ BEGIN {
   # Groups Register (SMPTE name for Classes)
   if( $C["r_reg"] == "Groups" ){
 
-    if ($C["s_type_sym"] == "Class" || $C["s_type_sym"] == "AAFClass") { # This item is a class
+    if ($C["s_type_sym"] == "AAFClass" || $C["s_type_sym"] == "Class" || $C["s_type_sym"] == "Group") { # This item is a class
+
+	  # "Class" allowed for backward compatibility; delete when old metadict.xls purged
+	  # "Group" allowed so headers may be generated for classes not derived from AAF
+	  #		e.g. ASPA::TimestampedKLV
 
 	  # assert( $C["r_nest"] == "Leaf" )
       if ($C["r_sym"] != class) { # This is a new class
@@ -859,18 +921,14 @@ BEGIN {
       } else {
         reftype="";
       }
+	  # if reftype, target_type = just the target
 
       if (reftype != "") {
         reference_type=type;
         sub(target_type, "", reference_type);
-        if ($C["s_target_sym"] == "" || $C["s_target_sym"] == target_type) {
-          type = sprintf("AAF_REFERENCE_TYPE(%s, %s)", reference_type, target_type);
-        } else if (target_type == "" && $C["s_target_sym"] != "") {
-          type = sprintf("AAF_REFERENCE_TYPE(%s, %s)", reference_type, $C["s_target_sym"]);
-        } else {
-          propertyError($C["r_sym"], class, C["s_target_sym"])
-          errors++;
-        }
+		# reference_type = the prefix
+
+        type = sprintf("AAF_REFERENCE_TYPE(%s, %s)", reference_type, target_type);
       } else {
         if ($C["s_target_sym"] == "") {
           type = sprintf("AAF_TYPE(%s)", type);
@@ -943,7 +1001,8 @@ BEGIN {
         } else if ((kind == "reference") && (qualif == "weak")) {
           printf("AAF_TYPE_DEFINITION_WEAK_REFERENCE_END(\n  AAF_REFERENCE_TYPE_NAME(%s, %s), %s,\n  AAF_TYPE(%s))\n", typeName, targetType, tguid, targetType);
         }
-        printf("AAF_TYPE_SEPARATOR()\n");
+
+        if( kind != "formal" ) printf("AAF_TYPE_SEPARATOR()\n");
       }
 
       tguid = formatAUID($C["ul_1"], $C["ul_2"], $C["ul_3"], $C["ul_4"],
@@ -951,7 +1010,8 @@ BEGIN {
                          $C["ul_9"], $C["ul_10"], $C["ul_11"], $C["ul_12"],
                          $C["ul_13"], $C["ul_14"], $C["ul_15"], $C["ul_16"], "  ");
 
-      kind = $C["r_kind"];
+      # set kind and qualifier for use by child members
+	  kind = $C["r_kind"];
       qualif = $C["r_qualif"];
 
       typeName = $C["r_sym"];
@@ -964,7 +1024,10 @@ BEGIN {
         printf("// %s\n", typeName);
       printf("//\n");
 
-      if        (kind == "integer") {
+      if        (kind == "formal") {
+	    # formal kind is just there as a target - nothing to emit
+		printf("// formal type\n");
+      } else if (kind == "integer") {
         printf("AAF_TYPE_DEFINITION_INTEGER(%s, %s, %s, %s)\n", typeName, tguid, qualif, $C["r_value"]);
 
       } else if (kind == "array") {
@@ -1001,9 +1064,15 @@ BEGIN {
 		  typeName = referenceTypeName( kind, qualif );
           printf("AAF_TYPE_DEFINITION_WEAK_REFERENCE_SET(\n  AAF_REFERENCE_TYPE_NAME(%s, %s), %s,\n  AAF_TYPE(%s))\n", typeName, elementType, tguid, elementType);
 
-        } else { 
+        } else if (qualif == "global") {
+          printf("AAF_TYPE_DEFINITION_SET(%s, %s,\n  AAF_TYPE(%s))\n", typeName, tguid, "AUID"); #FIXME
+
+        } else if (qualif == "") { 
           printf("AAF_TYPE_DEFINITION_SET(%s, %s,\n  AAF_TYPE(%s))\n", typeName, tguid, elementType);
 
+        } else {
+          typeError(typeName, C["r_qualif"]);
+          errors++;
         }
 
       } else if (kind == "reference") {
@@ -1050,35 +1119,69 @@ BEGIN {
           printf("AAF_TYPE_DEFINITION_STREAM(%s, %s)\n", typeName, tguid);
 
       } else {
-        printError("Unknown kind of type");
+        printError("Unknown kind \"" kind "\" of type");
 	    errors++;
       }
 
 	  # set parentTypeName for use by members
 	  parentTypeName = typeName;
 
+    } else if( $C["r_nest"] == "Child" ) { # all "member"s of a type are Child elements
 
-    } else if ($C["s_type_sym"] == "member") { # a "member" of a type
-
-	  # assert( $C["r_nest"] == "Child" )
       memberName = $C["r_sym"];
-      if (kind == "enumeration" ) {
-        printf("  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(%s,\n    %s, %s)\n", memberName, $C["r_value"], parentTypeName);
-      } else if (kind == "record") {
-        printf("  AAF_TYPE_DEFINITION_RECORD_FIELD(%s, AAF_TYPE(%s),\n    %s)\n", memberName, $C["s_target_sym"], parentTypeName);
-      } else if (kind == "extendible") {
+      if (kind == "enumeration" )
+	  {
+		if( $C["s_type_sym"]==etype || $C["s_type_sym"]=="member" ) # "member" is old-style, etype is new-style (!)
+			printf("  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(%s,\n    %s, %s)\n", memberName, $C["r_value"], parentTypeName);
+		else
+		{
+			printError( "Invalid type of member of Enumeration");
+			errors++;
+		} 
+      }
+	  else if (kind == "record")
+	  {
+		if( $C["s_type_sym"]=="member" ) targetType=$C["s_target_sym"]; # "member" is old-style
+		else							 targetType=$C["s_type_sym"];	# new-style
+		 
+		printf("  AAF_TYPE_DEFINITION_RECORD_FIELD(%s, AAF_TYPE(%s),\n    %s)\n", memberName, targetType, parentTypeName);
+      }
+	  else if (kind == "extendible")
+	  {
+		if( $C["s_type_sym"]==parentTypeName || $C["s_type_sym"]=="member" ) # "member" is old-style, "AUID" is new-style
+		{
+			targetType="AUID";		# "member" is old-style
+			eguid = formatAUID(	$C["ul_1"], $C["ul_2"], $C["ul_3"], $C["ul_4"],
+								$C["ul_5"], $C["ul_6"], $C["ul_7"], $C["ul_8"],
+								$C["ul_9"], $C["ul_10"], $C["ul_11"], $C["ul_12"],
+								$C["ul_13"], $C["ul_14"], $C["ul_15"], $C["ul_16"], "    ");
 
-      eguid = formatAUID($C["ul_1"], $C["ul_2"], $C["ul_3"], $C["ul_4"],
-                         $C["ul_5"], $C["ul_6"], $C["ul_7"], $C["ul_8"],
-                         $C["ul_9"], $C["ul_10"], $C["ul_11"], $C["ul_12"],
-                         $C["ul_13"], $C["ul_14"], $C["ul_15"], $C["ul_16"], "    ");
-
-        printf("  AAF_TYPE_DEFINITION_EXTENDIBLE_ENUMERATION_MEMBER(%s,%s,\n    %s)\n", memberName, eguid, parentTypeName);
-      } else if ((kind == "reference") && (qualif == "weak")) {
-        printf("  AAF_TYPE_DEFINITION_WEAK_REFERENCE_MEMBER(%s, %s,\n    AAF_REFERENCE_TYPE_NAME(%s, %s))\n", memberName, $C["s_parent_sym"], typeName, targetType);
-      } else {
-        printError("Member of unknown kind of type");
-	    errors++;
+			printf("  AAF_TYPE_DEFINITION_EXTENDIBLE_ENUMERATION_MEMBER(%s,%s,\n    %s)\n", memberName, eguid, parentTypeName);
+		}
+		else
+		{
+			# no others allowed at present
+			printError( "Invalid type of member of Extendible enumeration");
+			errors++;
+		}
+      }
+	  else if ((kind == "reference") && (qualif == "weak"))
+	  {
+		if( $C["s_type_sym"]=="member" ) # "member" is old-style, no new-style yet
+		{
+			printf("  AAF_TYPE_DEFINITION_WEAK_REFERENCE_MEMBER(%s, %s,\n    AAF_REFERENCE_TYPE_NAME(%s, %s))\n", memberName, $C["s_parent_sym"], typeName, targetType);
+		}
+		else
+		{
+			# no others allowed at present
+			printError( "Invalid type of member of weak reference");
+			errors++;
+		}
+      }
+	  else
+	  {
+			printError("Child member of unknown kind of type");
+			errors++;
       }
 
 	} else {
@@ -1139,9 +1242,33 @@ BEGIN {
 
         if( firstInstance<0 )
         {
-            # haven't had any aliases yet
-            printError("Instances in wrong context");
-	        errors++;
+			if (firstAlias)
+			{
+				# finish previous types, no aliases
+				if (kind == "enumeration" ) {
+				  printf("AAF_TYPE_DEFINITION_ENUMERATION_END(%s, %s, AAF_TYPE(%s))\n", typeName, tguid, etype);
+				} else if (kind == "record") {
+				  printf("AAF_TYPE_DEFINITION_RECORD_END(%s, %s)\n", typeName, tguid);
+				} else if (kind == "extendible") {
+				  printf("AAF_TYPE_DEFINITION_EXTENDIBLE_ENUMERATION_END(%s, %s)\n", typeName, tguid);
+				} else if ((kind == "reference") && (qualif == "weak")) {
+				  printf("AAF_TYPE_DEFINITION_WEAK_REFERENCE_END(\n  AAF_REFERENCE_TYPE_NAME(%s, %s), %s,\n  AAF_TYPE(%s))\n", typeName, targetType, tguid, targetType);
+				}
+				printf("AAF_TYPE_TABLE_END()\n");
+				printf("\n");
+				printf("// Instances\n");
+				printf("//\n");
+				printf("\n");
+				printf("AAF_INSTANCE_TABLE_BEGIN()\n");
+				printf("\n");
+				firstAlias = 0;
+				firstInstance = 1;
+			}
+			else
+			{
+				printError("Instances in wrong context");
+				errors++;
+			}
             firstInstance = 0;
         }
         else if( firstInstance>0 )
