@@ -1,0 +1,28 @@
+# This is the minimum set of files required to compile, link, and run
+# an AAF application.
+
+# First, the header files. (There are a couple of .c files in there as
+# well).
+include
+
+# The release versions of the com-api, plugins, and static
+# libraries.
+./bin/libcom-api.so
+./bin/libaafintp.so
+./bin/libaafpgapi.so
+./lib/libaafiid.a
+./lib/libaaflib.a
+
+# The debug versions of the com-api, plugins, and static libraries.
+
+# The debug libraries are more verbose in regards to error messages,
+# and also will dump a stack trace if any error is detected by the AAF
+# com library.  Of course, the debug libraries are also required in
+# order to run a debugger.  In that case, the source distribution will
+# also be required.
+
+./bin/debug/libcom-api.so
+./bin/debug/libaafintp.so
+./bin/debug/libaafpgapi.so
+./lib/debug/libaafiid.a
+./lib/debug/libaaflib.a

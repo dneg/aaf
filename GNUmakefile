@@ -52,7 +52,6 @@ ref-impl :
 install : ref-impl
 	$(MAKE) -f unixaafsdk.mak CFG=$(AAFTARGET)
 
-
 .PHONY : examples
 examples : install
 	cd examples && $(MAKE) 
@@ -73,6 +72,23 @@ test : install
 check : ref-impl
 	cd test/com/ComModTestAAF && $(MAKE) check
 
+#
+# Binary distributions
+#
+
+.PHONY : dist
+dist :  release-dist sdk-dist
+
+.PHONY : release-dist
+release-dist :
+	$(MAKE) CFG=Release ref-impl
+	cd dist && $(MAKE) release-dist
+
+.PHONY : sdk-dist
+sdk-dist :
+	$(MAKE) CFG=Release everything
+	$(MAKE) CFG=Debug everything
+	cd dist && $(MAKE) sdk-dist
 
 #
 # Clean up after 'make'
@@ -89,7 +105,7 @@ uninstall :
 	$(MAKE) -f unixaafsdk.mak CFG=$(AAFTARGET) clean
 
 #
-# Clean up after 'make everything'
+# Clean up after 'make everything' and 'make dist'
 #
 .PHONY : realclean
 realclean : uninstall
@@ -98,4 +114,5 @@ realclean : uninstall
 	cd Utilities && $(MAKE) $@
 	cd examples && $(MAKE) $@
 	cd test && $(MAKE) $@
+	cd dist && $(MAKE) $@
 
