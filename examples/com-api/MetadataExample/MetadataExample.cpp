@@ -165,7 +165,7 @@ typedef struct
 
 const aafUID_t NIL_UID = { 0, 0, 0, { 0, 0, 0, 0, 0, 0, 0, 0 } };
 
-static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, testType_t testType)
+static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, testType_t /* testType */)
 {
   IAAFFile*					pFile = NULL;
   IAAFHeader*					pHeader = NULL;
