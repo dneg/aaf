@@ -25,6 +25,10 @@
 #include "ImplEnumAAFEssenceData.h"
 #endif
 
+#ifndef __ImplAAFEssenceData_h__
+#include "ImplAAFEssenceData.h"
+#endif
+
 #ifndef __ImplAAFContentStorage_h__
 #include "ImplAAFContentStorage.h"
 #endif
@@ -34,20 +38,24 @@
 #define DEFAULT_NUM_MOBS				1000
 #define DEFAULT_NUM_DATAOBJ			200
 
+const int PID_CONTENT_STORAGE_MOBS	   = 0;
+const int PID_CONTENT_STORAGE_ESSENCEDATA  = 1;
+
 extern "C" const aafClassID_t	CLSID_AAFContentStorage;
 OMDEFINE_STORABLE(ImplAAFContentStorage, CLSID_AAFContentStorage);
 
 extern "C" const aafClassID_t CLSID_EnumAAFMobs;
+extern "C" const aafClassID_t CLSID_EnumAAFEssenceData;
 
 ImplAAFContentStorage::ImplAAFContentStorage ()
 : _mobIndex(0),
-  _mobs(PID_CONTENT_STORAGE_MOBS, "mobs") /*!!!,
-  _mediaData(      PID_CONTENT_STORAGE_MEDIA,       "mediaData") */
+  _mobs(PID_CONTENT_STORAGE_MOBS, "mobs"),
+  _essenceData(PID_CONTENT_STORAGE_ESSENCEDATA, "essenceData")
 {
   _persistentProperties.put(_mobs.address());
-//!!!  _persistentProperties.put(_mediaData.address());
+  _persistentProperties.put(_essenceData.address());
 
-	NewUIDTable(NULL, 100, &_mobIndex);		//!!! Handle error codes
+  NewUIDTable(NULL, 100, &_mobIndex);		//!!! Handle error codes
 }
 
 
@@ -58,15 +66,31 @@ ImplAAFContentStorage::~ImplAAFContentStorage ()
 	_mobIndex = 0;
 
 	// Cleanup the persistent data...
+	ImplAAFEssenceData *pEssenceData = NULL;
 	ImplAAFMob *pMob = NULL;
-	size_t size;
+	size_t size, i;
+
+	// Release the essence data
+	_essenceData.getSize(size);
+	for (i = 0; i < size; i++)
+	{
+		_essenceData.getValueAt(pEssenceData, i);
+		if (pEssenceData)
+		{
+		  pEssenceData->ReleaseReference();
+		  // Set value to 0 so OM can perform necessary cleanup.
+		  _essenceData.setValueAt(0, i);
+		}
+	}
+	
+	// Release the mobs
 	_mobs.getSize(size);
-	for (size_t i = 0; i < size; i++)
+	for (i = 0; i < size; i++)
 	{
 		_mobs.getValueAt(pMob, i);
 		if (pMob)
 		{
-			pMob->ReleaseReference();
+		  pMob->ReleaseReference();
 		  // Set value to 0 so OM can perform necessary cleanup.
 		  _mobs.setValueAt(0, i);
 		}
@@ -134,17 +158,17 @@ AAFRESULT STDMETHODCALLTYPE
 		siz = 0;
 		do {
 			hr = mobEnum->NextOne (&aMob);
-      if(hr == AAFRESULT_SUCCESS)
-      {
-				siz++;
-        aMob->ReleaseReference();
-        aMob = NULL;
-      }
+			if(hr == AAFRESULT_SUCCESS)
+			{
+			  siz++;
+			  aMob->ReleaseReference();
+			  aMob = NULL;
+			}
  		} while(hr == AAFRESULT_SUCCESS);
 		if(hr == AAFRESULT_NO_MORE_MOBS)
 			hr = AAFRESULT_SUCCESS;
-    if (mobEnum)
-      mobEnum->ReleaseReference();
+		if (mobEnum)
+		  mobEnum->ReleaseReference();
 	}
 	
 	*pNumMobs = siz;
@@ -203,6 +227,26 @@ AAFRESULT
 		return AAFRESULT_NO_MORE_MOBS;
 
 	return AAFRESULT_SUCCESS;
+}
+
+AAFRESULT
+    ImplAAFContentStorage::GetNthEssenceData (aafInt32 index, ImplAAFEssenceData **ppEssenceData)
+{
+  if (NULL == ppEssenceData)
+    return AAFRESULT_NULL_PARAM;
+
+  ImplAAFEssenceData *obj = NULL;
+  _essenceData.getValueAt(obj, index);
+  *ppEssenceData = obj;
+	
+  // trr - We are returning a copy of pointer stored in _mobs so we need
+  // to bump its reference count.
+  if (obj)
+    obj->AcquireReference();
+  else
+    return AAFRESULT_NO_MORE_OBJECTS;
+
+  return AAFRESULT_SUCCESS;
 }
 
 AAFRESULT STDMETHODCALLTYPE
@@ -282,6 +326,21 @@ AAFRESULT
 }
 
 AAFRESULT STDMETHODCALLTYPE
+    ImplAAFContentStorage::GetNumEssenceData(aafUInt32 *  pNumEssenceData)
+{
+  size_t siz;
+
+  if(pNumEssenceData == NULL)
+    return AAFRESULT_NULL_PARAM;
+  
+  _essenceData.getSize(siz);
+  
+  *pNumEssenceData = siz;
+  return AAFRESULT_SUCCESS;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
     ImplAAFContentStorage::IsEssenceDataPresent (aafUID_t *  /*pFileMobID*/,
                            aafFileFormat_t  /*fmt*/,
                            aafBool *  /*pResult*/)
@@ -292,26 +351,87 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFContentStorage::EnumEssenceData (aafMediaCriteria_t *  /*pMediaCriteria*/,
-                           ImplEnumAAFEssenceData ** /*ppEnum*/)
+    ImplAAFContentStorage::EnumEssenceData (ImplEnumAAFEssenceData ** ppEnum)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	if (NULL == ppEnum)
+		return AAFRESULT_NULL_PARAM;
+	*ppEnum = 0;
+	
+	ImplEnumAAFEssenceData *theEnum = (ImplEnumAAFEssenceData *)CreateImpl (CLSID_EnumAAFEssenceData);
+	
+	XPROTECT()
+	{
+		CHECK(theEnum->SetContentStorage(this));
+		*ppEnum = theEnum;
+	}
+	XEXCEPT
+	{
+		if (theEnum)
+			theEnum->ReleaseReference();
+		return(XCODE());
+	}
+	XEND;
+	
+	return(AAFRESULT_SUCCESS);
+ }
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFContentStorage::AppendEssenceData (ImplAAFEssenceData * pEssenceData)
+{
+	aafUID_t	mobID;
+	ImplAAFMob	*test;
+
+	if (NULL == pEssenceData)
+		return AAFRESULT_NULL_PARAM;
+	
+	XPROTECT()
+	{
+		// Get the file mob id so that we can validate
+		// that there is a file mob already associated
+		// with the same AAF file.
+		CHECK(pEssenceData->GetFileMobID(&mobID));
+
+		// JeffB: Test is a throwaway, so don't bump the refcount
+		CHECK(LookupMob (&mobID, &test));
+
+		_essenceData.appendValue(pEssenceData);
+		// trr - We are saving a copy of pointer in _essenceData so we need
+		// to bump its reference count.
+		pEssenceData->AcquireReference();
+	} /* XPROTECT */
+	XEXCEPT
+	{
+	}
+	XEND;
+	
+	return(AAFRESULT_SUCCESS);
 }
 
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFContentStorage::AppendEssenceData (ImplAAFEssenceData * /*pEssenceData*/)
+    ImplAAFContentStorage::RemoveEssenceData (ImplAAFEssenceData * pEssenceData)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
-}
+//	aafUID_t	mobID;
+	if (NULL == pEssenceData)
+		return AAFRESULT_NULL_PARAM;
 
-
-
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFContentStorage::RemoveEssenceData (ImplAAFEssenceData * /*pEssenceData*/)
-{
-  return AAFRESULT_NOT_IMPLEMENTED;
+#if 0
+	XPROTECT()
+	{
+		//!!!_essenceData.removeValue(pEssenceData);	// This call doesn't exist yet
+	} /* XPROTECT */
+	XEXCEPT
+	{
+	}
+	XEND;
+	
+	return(AAFRESULT_SUCCESS);
+#else
+	return(AAFRESULT_NOT_IMPLEMENTED);
+#endif
 }
 
 
