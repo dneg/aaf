@@ -297,7 +297,7 @@ AAFRESULT ImplPropertyCollection::RemovePropertyValue(ImplAAFPropertyDef *pPropD
 
 	  // Remove the OM property as well.
 	  assert(pOMProperty->isOptional()==kAAFTrue);
-	  pOMProperty->remove();
+	  pOMProperty->removeProperty();
 
 	  break;
 	}
@@ -1293,7 +1293,7 @@ AAFRESULT STDMETHODCALLTYPE
 {
   if (_generation.isPresent())
 	{
-	  _generation.remove();
+	  _generation.removeProperty();
 	}
   return AAFRESULT_SUCCESS;
 }
