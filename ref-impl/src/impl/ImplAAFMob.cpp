@@ -971,6 +971,7 @@ AAFRESULT STDMETHODCALLTYPE
     // has a segment with data definition of type DDEF_Timecode.
     
     if ( pTcSeg ) {
+      pTcSeg->AcquireReference();
       *(&spSeg) = pTcSeg;
 
       aafUID_t dataDefID;
