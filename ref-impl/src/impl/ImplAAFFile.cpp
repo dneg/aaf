@@ -112,6 +112,7 @@ ImplAAFFile::OpenExistingRead (wchar_t * pFileName,
 		_byteOrder = _file->byteOrder();
 
 		// Restore the header.
+		bool regWasEnabled = _factory->SetEnableDefRegistration (false);
 		OMStorable* head = _file->restore();
 		_head = dynamic_cast<ImplAAFHeader *>(head);
 		checkExpression(NULL != _head, AAFRESULT_BADHEAD);
@@ -124,6 +125,7 @@ ImplAAFFile::OpenExistingRead (wchar_t * pFileName,
 		HRESULT hr = _head->GetDictionary(&dictionary);
 		if (hr != AAFRESULT_SUCCESS)
 		  return hr;
+		_factory->SetEnableDefRegistration (regWasEnabled);
 		dictionary->InitBuiltins();
 		dictionary->ReleaseReference();
 		dictionary = 0;
@@ -198,6 +200,7 @@ ImplAAFFile::OpenExistingModify (wchar_t * pFileName,
 		_byteOrder = _file->byteOrder();
 
 		// Restore the header.
+		bool regWasEnabled = _factory->SetEnableDefRegistration (false);
 		OMStorable* head = _file->restore();
 		_head = dynamic_cast<ImplAAFHeader *>(head);
 		checkExpression(NULL != _head, AAFRESULT_BADHEAD);
@@ -210,6 +213,7 @@ ImplAAFFile::OpenExistingModify (wchar_t * pFileName,
 		HRESULT hr = _head->GetDictionary(&dictionary);
 		if (hr != AAFRESULT_SUCCESS)
 		  return hr;
+		_factory->SetEnableDefRegistration (regWasEnabled);
 		dictionary->InitBuiltins();
 		dictionary->ReleaseReference();
 		dictionary = 0;
