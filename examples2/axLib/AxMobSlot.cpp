@@ -49,6 +49,20 @@ void AxMobSlot::SetSlotID( aafSlotID_t val )
 	CHECK_HRESULT( _spIaafMobSlot->SetSlotID( val ) );
 }
 
+AxString AxMobSlot::GetName()
+{
+	return AxNameToString< IAAFMobSlot >( _spIaafMobSlot );
+}
+
+aafUInt32 AxMobSlot::GetPhysicalNum()
+{
+	aafUInt32 num;
+
+	CHECK_HRESULT( _spIaafMobSlot->GetPhysicalNum( &num ) );
+
+	return num;
+}
+
 aafSlotID_t AxMobSlot::GetSlotID()
 {
 	aafSlotID_t id;

@@ -30,14 +30,16 @@ public:
 	AxMobSlot( IAAFMobSlotSP spIaafMobSlot );
 	~AxMobSlot();
 
-	aafSlotID_t GetSlotID();
 
 	void SetName( const AxString& name );
 	void SetSegment( IAAFSegmentSP sp );
 	void SetPhysicalNum( aafUInt32 val );
 	void SetSlotID( aafSlotID_t val );
 
+	AxString GetName();
 	IAAFSegmentSP GetSegment();
+	aafUInt32 GetPhysicalNum();
+	aafSlotID_t GetSlotID();
 
 	IAAFDataDefSP GetDataDef();
 
