@@ -354,7 +354,7 @@ void OMDiskRawStorage::setSize(FILE* file, OMUInt64 newSize)
   if (newSize > currentSize) {
 
     // Extend by writing a single byte.
-	//
+    //
     OMUInt64 oldPosition = position(file); // Save position
     OMByte nullByte = 0;
     OMUInt32 bytesWritten = 0;
