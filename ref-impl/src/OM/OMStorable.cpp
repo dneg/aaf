@@ -70,8 +70,26 @@ void OMStorable::save(void) const
 {
   TRACE("OMStorable::save");
   
+  bool opened = false;
+  if (_store == 0 ) {
+    opened = true;
+  }
+
   store()->save(classId());
   store()->save(_persistentProperties);
+
+  // Temporary brute force solution to the Microsoft Structured
+  // Storage built in limit on the number of open storage elements
+  // (IStorages and IStreams) caused by use of a fixed size internal
+  // heap.
+  //
+  if (opened) {
+    ASSERT("Valid store", _store != 0);
+    _store->close();
+    delete _store;
+    OMStorable* nonConstThis = const_cast<OMStorable*>(this);
+    nonConstThis->_store = 0;
+  }
 }
 
   // @mfunc Close this <c OMStorable>.
@@ -132,7 +150,26 @@ OMStorable* OMStorable::restoreFrom(const OMStorable* containingObject,
 void OMStorable::restoreContents(void)
 {
   TRACE("OMStorable::restoreContents");
+
+  bool opened = false;
+  if (_store == 0 ) {
+    opened = true;
+  }
+
   store()->restore(_persistentProperties);
+
+  // Temporary brute force solution to the Microsoft Structured
+  // Storage built in limit on the number of open storage elements
+  // (IStorages and IStreams) caused by use of a fixed size internal
+  // heap.
+  //
+  if (opened) {
+    ASSERT("Valid store", _store != 0);
+    _store->close();
+    delete _store;
+    OMStorable* nonConstThis = const_cast<OMStorable*>(this);
+    nonConstThis->_store = 0;
+  }
 }
 
   // @mfunc Attach this <c OMStorable>.
