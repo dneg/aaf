@@ -38,11 +38,19 @@
 #include "AAFResult.h"
 #include "AAFDataDefs.h"
 #include "AAFDefUIDs.h"
+#include "AAFPropertyDefs.h"
 
 #include "CAAFBuiltinDefs.h"
 
 #include "AAFSmartPointer.h"
 typedef IAAFSmartPointer<IAAFDataDef> IAAFDataDefSP;
+typedef IAAFSmartPointer<IAAFObject> IAAFObjectSP;
+typedef IAAFSmartPointer<IAAFClassDef> IAAFClassDefSP;
+typedef IAAFSmartPointer<IAAFPropertyDef> IAAFPropertyDefSP;
+typedef IAAFSmartPointer<IAAFPropertyValue> IAAFPropertyValueSP;
+typedef IAAFSmartPointer<IAAFTypeDef> IAAFTypeDefSP;
+typedef IAAFSmartPointer<IAAFTypeDefOpaque> IAAFTypeDefOpaqueSP;
+typedef IAAFSmartPointer<IAAFKLVData> IAAFKLVDataSP;
 
 static aafWChar *slotNames[5] = { L"SLOT1", L"SLOT2", L"SLOT3", L"SLOT4", L"SLOT5" };
 static const aafUID_t *	slotDDefs[5] = {&DDEF_Picture, &DDEF_Sound, &DDEF_Sound, &DDEF_Picture, &DDEF_Picture};
@@ -132,6 +140,85 @@ inline void checkExpression(bool expression, HRESULT r)
     throw r;
 }
 
+// Use the direct access interfaces to extract an opaque
+// handle from the given KLVData object.
+static void CreateOpaqueHandleFromKLVData(
+  IAAFKLVData* pData,
+  aafDataBuffer_t &opaqueHandle,
+  aafUInt32 &handleSize)
+{
+  HRESULT result = S_OK;
+  checkExpression (NULL != pData, E_INVALIDARG);
+
+  IAAFObjectSP pObject;
+  checkResult(pData->QueryInterface(IID_IAAFObject, (void **)&pObject));
+
+  IAAFClassDefSP pClassDef;
+  checkResult(pObject->GetDefinition(&pClassDef));
+
+  IAAFPropertyDefSP pPropertyDef;
+  checkResult(pClassDef->LookupPropertyDef(kAAFPropID_KLVData_Value, &pPropertyDef));
+
+  IAAFPropertyValueSP pPropertyValue;
+  checkResult(pObject->GetPropertyValue(pPropertyDef, &pPropertyValue));
+
+  IAAFTypeDefSP pTypeDef;
+  checkResult(pPropertyDef->GetTypeDef(&pTypeDef));
+
+  IAAFTypeDefOpaqueSP pTypeDefOpaque;
+  checkResult(pTypeDef->QueryInterface(IID_IAAFTypeDefOpaque, (void **)&pTypeDefOpaque));
+
+  //
+  // Get the expected size of the handle.
+  //
+  checkResult(pTypeDefOpaque->GetHandleBufLen(pPropertyValue, &handleSize));
+
+  //
+  // Allocate the handle. NOTE: The caller must delete this memory!
+  //
+  opaqueHandle = new aafUInt8[handleSize];
+  checkExpression(NULL != opaqueHandle, AAFRESULT_NOMEMORY);
+
+  aafUInt32 bytesRead = 0;
+  checkResult(pTypeDefOpaque->GetHandle(pPropertyValue, handleSize, opaqueHandle, &bytesRead));
+  checkExpression(handleSize == bytesRead, AAFRESULT_TEST_FAILED);
+}
+
+
+// Use the direct access interfaces to write an opaque
+// handle to the given KLVData object.
+static void InitializeKLVDataFromOpaqueHandle(
+  IAAFKLVData *pData,
+  aafDataBuffer_t opaqueHandle,
+  aafUInt32 handleSize)
+{
+  HRESULT result = S_OK;
+  checkExpression (NULL != opaqueHandle && NULL != pData && 0 < handleSize, E_INVALIDARG);
+
+
+  IAAFObjectSP pObject;
+  checkResult(pData->QueryInterface(IID_IAAFObject, (void **)&pObject));
+
+  IAAFClassDefSP pClassDef;
+  checkResult(pObject->GetDefinition(&pClassDef));
+
+  IAAFPropertyDefSP pPropertyDef;
+  checkResult(pClassDef->LookupPropertyDef(kAAFPropID_KLVData_Value, &pPropertyDef));
+
+  IAAFPropertyValueSP pPropertyValue;
+  checkResult(pObject->GetPropertyValue(pPropertyDef, &pPropertyValue));
+
+  IAAFTypeDefSP pTypeDef;
+  checkResult(pPropertyDef->GetTypeDef(&pTypeDef));
+
+  IAAFTypeDefOpaqueSP pTypeDefOpaque;
+  checkResult(pTypeDef->QueryInterface(IID_IAAFTypeDefOpaque, (void **)&pTypeDefOpaque));
+
+  checkResult(pTypeDefOpaque->SetHandle(pPropertyValue, handleSize, opaqueHandle));
+  checkResult(pObject->SetPropertyValue(pPropertyDef, pPropertyValue));
+}
+
+
 
 static HRESULT CreateAAFFile(aafWChar * pFileName)
 {
@@ -152,6 +239,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	aafProductIdentification_t	ProductInfo;
 	HRESULT				hr = S_OK;
 	aafUInt32			numComments;
+  aafDataBuffer_t opaqueHandle = NULL;
+  aafUInt32 opaqueHandleSize = 0;
 
 	aafProductVersion_t v;
 	v.major = 1;
@@ -202,17 +291,20 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(defs.cdKLVData()->
 					CreateInstance(IID_IAAFKLVData, 
 								   (IUnknown **)&pData));
-		checkResult(pDictionary->LookupTypeDef (kAAFTypeID_UInt8Array, &pBaseType));
 		checkResult(pData->Initialize(TEST_KLV, sizeof(KLVfrowney), (unsigned char *)KLVfrowney));
 		checkResult(pData->SetValue(sizeof(KLVsmiley), (unsigned char *)KLVsmiley));
 		checkResult(pMob->AppendKLVData (pData));
+
+    // Test extracting an opaque handle from the KLVData value property.
+    // NOTE: This should be a "smiley" value.
+    CreateOpaqueHandleFromKLVData(pData, opaqueHandle, opaqueHandleSize);  
 		pData->Release();
 		pData = NULL;
-		// append a second KLVData to this mob, count, delete it, count again
+
+    // append a second KLVData to this mob, count, delete it, count again
 		checkResult(defs.cdKLVData()->
 					CreateInstance(IID_IAAFKLVData, 
 								   (IUnknown **)&pData));
-		checkResult(pDictionary->LookupTypeDef (kAAFTypeID_UInt8Array, &pBaseType));
 		checkResult(pData->Initialize(TEST_KLV, sizeof(KLVfrowney), (unsigned char *)KLVfrowney));
 		checkResult(pData->SetValue(sizeof(KLVsmiley), (unsigned char *)KLVsmiley));
 		checkResult(pMob->AppendKLVData (pData));
@@ -221,8 +313,21 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pMob->RemoveKLVData (pData));
 		checkResult(pMob->CountKLVData(&numComments));
 		checkExpression(1 == numComments, AAFRESULT_TEST_FAILED);
-		pData->Release();
+    pData->Release();
 		pData = NULL;
+    
+    // Create a new "frowney" KLVData value and then reinitialize it with the
+    // "smiley" opaque handle created above.
+		checkResult(defs.cdKLVData()->
+					CreateInstance(IID_IAAFKLVData, 
+								   (IUnknown **)&pData));
+		checkResult(pData->Initialize(TEST_KLV, sizeof(KLVfrowney), (unsigned char *)KLVfrowney));
+ 		checkResult(pMob->AppendKLVData (pData));
+    InitializeKLVDataFromOpaqueHandle(pData, opaqueHandle, opaqueHandleSize);    
+    pData->Release();
+		pData = NULL;
+		checkResult(pMob->CountKLVData(&numComments));
+	  checkExpression(2 == numComments, AAFRESULT_TEST_FAILED);
 
 		// Create a master mob to be referenced
 		checkResult(defs.cdMasterMob()->
@@ -254,7 +359,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 			checkResult(defs.cdKLVData()->
 						CreateInstance(IID_IAAFKLVData, 
 								   (IUnknown **)&pData));
-			checkResult(pDictionary->LookupTypeDef (kAAFTypeID_UInt8Array, &pBaseType));
 			checkResult(pData->Initialize(TEST_KLV, sizeof(KLVfrowney), (unsigned char *)KLVfrowney));
 			checkResult(pComponent->AppendKLVData (pData));
 			pData->Release();
@@ -263,7 +367,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 			checkResult(defs.cdKLVData()->
 					CreateInstance(IID_IAAFKLVData, 
 								   (IUnknown **)&pData));
-			checkResult(pDictionary->LookupTypeDef (kAAFTypeID_UInt8Array, &pBaseType));
 			checkResult(pData->Initialize(TEST_KLV, sizeof(KLVfrowney), (unsigned char *)KLVfrowney));
 			checkResult(pData->SetValue(sizeof(KLVsmiley), (unsigned char *)KLVsmiley));
 			checkResult(pComponent->AppendKLVData (pData));
@@ -308,6 +411,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 
   // Cleanup and return
+  if (opaqueHandle)
+    delete [] opaqueHandle;
+
   if (newSlot)
     newSlot->Release();
 
@@ -428,7 +534,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 
 			// Check for comments
 			checkResult(aMob->CountKLVData(&numComments));
-			checkExpression(1 == numComments, AAFRESULT_TEST_FAILED);
+			checkExpression(2 == numComments, AAFRESULT_TEST_FAILED);
 			checkResult(aMob->GetKLVData(&pKLVIterator));
 			for(com = 0; com < numComments; com++)
 			{
@@ -492,6 +598,12 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	}
 
 	// Cleanup object references
+  if (pKLVData)
+    pKLVData->Release();
+
+  if (pKLVIterator)
+    pKLVIterator->Release();
+
   if (slot)
     slot->Release();
 
