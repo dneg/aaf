@@ -51,7 +51,8 @@ axPlugin : $(OBJDIR) $(LIBDIR) $(LIBDIR)/libaxPlugin$(DLL)
 
 $(LIBDIR)/libaxPlugin$(DLL) : $(CXXOBJS)
 	$(LD_DYN_LIB) -o $@ $(CXXOBJS) -L$(OBJDIR) -laxLib \
-	$(AAFBUILDDIR)/aafiid/$(AAFTARGETDIR)/libaafiid$(LIB) \
+	-L$(AAFBUILDDIR)/aafiid/$(AAFTARGETDIR) -laafiid \
+	-L$(AAFBUILDDIR)/aaflib/$(AAFTARGETDIR) -laaflib
 
 
 .PHONY : clean
@@ -65,4 +66,3 @@ clean :
 realclean : clean
 
 include $(AAFBASE)/build/rules.mk
-
