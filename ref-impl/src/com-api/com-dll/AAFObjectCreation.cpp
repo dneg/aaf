@@ -1,5 +1,6 @@
 #include "ImplAAFObjectCreation.h"
 #include "AAF.h"
+#include "AAFRoot.h"
 #include "ImplAAFRoot.h"
 #include "ImplAAFContentStorage.h"
 
