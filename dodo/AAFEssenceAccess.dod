@@ -145,7 +145,7 @@ Sets the video line map structure used by the codecs to deinterlace fields.)
 
 /****/
 AD_METHOD1(GetVideoTopField,
-[out],aafFieldTop_t,type,and this top field,
+[out],aafFieldTop_t *,type,and this top field,
 Gets the top video field used by the codecs to deinterlace fields.)
 	//@comm Takes a media handle, so the media must have been opened or created.
 	//@comm Replaces omfmGetVideoTopField
@@ -227,7 +227,7 @@ Read pre-interleaved data from a media stream.)
 /****/
 AD_METHOD3(WriteDataLines,
 [in],aafInt32,nLines,write this many lines on video,
-[in],void *,buffer,from a buffer,
+[in\\\, size_is\\\(nLines\\\)],aafDataBuffer_t,buffer,from a buffer,
 [out],aafInt32 *,bytesWritten,of this size,
 Writes single lines of video to a file.)
 	//@comm Writes single lines of video to a file.  This function allows writing
@@ -273,7 +273,7 @@ Get common audio compression parms.)
 /****/
 AD_METHOD2(SetPrivateMediaData,
 [in],long,parmBlockSize,a block of this size,
-[in],void*,ParameterBlock,with these values,
+[in\\\,size_is\\\(parmBlockSize\\\)], aafDataBuffer_t,ParameterBlock,with these values,
 Sends a parameter block of private information to the CODEC for this media.)
 	//@parm IN -- .
 	//@comm The parameter block should be defined in the
@@ -286,7 +286,7 @@ Sends a parameter block of private information to the CODEC for this media.)
 /****/
 AD_METHOD2(GetPrivateMediaData,
 [in],long,blocksize,,
-[out],void*,result,,
+[out\\\, size_is\\\(blockSize\\\)],aafDataBuffer_t,result,,
 Gets a parameter block of private information from the CODEC for this media.)
 	//@comm The parameter block should be defined in the
 	// "h" file of the codec, and must be included by the application in
@@ -447,7 +447,7 @@ Returns the number of samples on the given media stream.)
 AD_METHOD4(ReadDataSamples,
 [in],aafInt32,nSamples,,
 [in],aafInt32,buflen,,
-[out],void*,buffer,,
+[out\\\, size_is\\\(buflen\\\)\\\,length_is\\\(*bytesRead\\\)],aafDataBuffer_t,buffer,,
 [out],aafUInt32*,bytesRead,,
 Read a given number of samples from an opened media stream.)
 	//@comm This call will only return a single channel of media from an interleaved
@@ -472,7 +472,7 @@ Reads one or more channels from an interleaved data stream)
 AD_METHOD4(ReadDataLines,
 [in],aafInt32,nLines,,
 [in],aafInt32,bufLen,,
-[out],void*,buffer,,
+[out\\\, size_is\\\(bufLen\\\)\\\,length_is\\\(*bytesRead\\\)],aafDataBuffer_t,buffer,,
 [out],aafInt32*,bytesRead,,
 Reads single lines of video from a file.)
 	//@comm This function allows reading
@@ -494,12 +494,12 @@ The seek function for media.)
 
 /****/
 AD_METHOD6(GetVideoInfo,
-[out],aafFrameLayout_t,layout,,
-[out],aafInt32,fieldWidth,,
-[out],aafInt32,fieldHeight,,
-[out],aafRational_t,editrate,,
-[out],aafInt16,bitsPerPixel,,
-[out],aafPixelFormat_t,defaultPixelFmt,,
+[out],aafFrameLayout_t *,layout,,
+[out],aafInt32 *,fieldWidth,,
+[out],aafInt32 *,fieldHeight,,
+[out],aafRational_t *,editrate,,
+[out],aafInt16 *,bitsPerPixel,,
+[out],aafPixelFormat_t *,defaultPixelFmt,,
 Get video-related information about a given piece of media data.)
 	//@comm Any parameters not required may have the pointers set to NULL.
 	//@comm Possible Errors:<nl>
