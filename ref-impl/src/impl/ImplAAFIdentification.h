@@ -47,14 +47,14 @@ public:
   ImplAAFIdentification();
 
   ImplAAFIdentification(
-    const char* companyName,
-    const char* productName,
+    const wchar_t* companyName,
+    const wchar_t* productName,
     const aafProductVersion_t* productVersion,
-    const char* productVersionString,
+    const wchar_t* productVersionString,
     // const AUID* productId,
     const aafTimeStamp_t date,
     const aafProductVersion_t* toolKitVersion,
-    const char* platform
+    const wchar_t* platform
     // const AUID* generation
     );
 
@@ -230,14 +230,14 @@ public:
   // in /test/ImplAAFIdentificationTest.cpp.
   static AAFRESULT test();
 private:
-  OMStringProperty                             _companyName;
-  OMStringProperty                             _productName;
+  OMWideStringProperty                             _companyName;
+  OMWideStringProperty                             _productName;
   // StructuredProperty<aafProductVersion_t> _productVersion;
-  OMStringProperty                             _productVersionString;
+  OMWideStringProperty                             _productVersionString;
   // FixedSizeProperty<AUID>                 _productId;
   OMFixedSizeProperty<aafTimeStamp_t>          _date;
   // StructuredProperty<aafProductVersion_t> _toolkitVersion;
-  OMStringProperty                             _platform;
+  OMWideStringProperty                             _platform;
   // FixedSizeProperty<AUID>                 _generation;
 };
 
