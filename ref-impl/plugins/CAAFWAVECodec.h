@@ -37,7 +37,10 @@ typedef struct
 } interleaveBuf_t;
 
 class CAAFWaveCodec
-  : public CAAFDefaultCodec
+  : public IAAFEssenceCodec,
+	public IAAFEssenceSampleStream,
+	public IAAFPlugin,
+    public CAAFUnknown
 {
 protected:
 
@@ -50,6 +53,14 @@ protected:
 
 public:
 
+
+  // Set up a codec.
+  STDMETHOD (Start)
+     (void);
+
+  // Tear down a codec.
+  STDMETHOD (Finish)
+     (void);
 
 
 
@@ -145,7 +156,7 @@ public:
     (/*[in]*/ aafPosition_t  sampleFrame); // The sample frame to seek to. 
 
   // Close the media stream, ready to open another or Finish.
-  STDMETHOD (Close)
+  STDMETHOD (CompleteWrite)
      ();
 
 		
@@ -176,7 +187,7 @@ public:
   STDMETHOD (WriteRawData)
     (/*[in]*/ aafUInt32 nSamples,	//number of samples to read
 	/*[in,size_is(buflen)]*/ aafDataBuffer_t  buffer, // to a buffer
-     /*[in]*/ aafInt32  buflen); // of this size 
+     /*[in]*/ aafUInt32  buflen); // of this size 
 
 
 
