@@ -30,14 +30,13 @@
 
 class ImplAAFPropertyValue;
 
-
-
-
-
 #ifndef __ImplAAFRoot_h__
 #include "ImplAAFRoot.h"
 #endif
 
+#include "ImplAAFEnumerator.h"
+#include "ImplAAFTypeDefArray.h"
+#include "ImplAAFPropertyValue.h"
 
 class ImplEnumAAFPropertyValues : public ImplAAFRoot
 {
@@ -52,6 +51,10 @@ protected:
   virtual ~ImplEnumAAFPropertyValues ();
 
 public:
+
+  // Internal initialize method.
+  AAFRESULT STDMETHODCALLTYPE Initialize( ImplAAFTypeDefArray* pDef,
+					  ImplAAFPropertyValue* pVal );
 
   //****************
   // NextOne()
@@ -108,6 +111,12 @@ public:
   // Declare the module test method. The implementation of the will be be
   // in /test/ImplEnumAAFPropertyValuesTest.cpp.
   static AAFRESULT test();
+ 
+private:
+  ImplAAFTypeDefArray* _pDef;
+  ImplAAFPropertyValue* _pVal;
+  aafUInt32 _count;
+  aafUInt32 _current;
 };
 
 #endif // ! __ImplEnumAAFPropertyValues_h__

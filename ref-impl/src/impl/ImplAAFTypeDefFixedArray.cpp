@@ -47,6 +47,7 @@
 #include "AAFPropertyIDs.h"
 #include "ImplAAFObjectCreation.h"
 #include "ImplAAFCloneResolver.h"
+#include "AAFClassIDs.h"
 
 #include <assert.h>
 #include <string.h>
@@ -144,11 +145,33 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 AAFRESULT
-ImplAAFTypeDefFixedArray::GetElements (
-								ImplAAFPropertyValue * /*pInPropVal*/,
-								ImplEnumAAFPropertyValues ** /*ppEnum*/)
+ImplAAFTypeDefFixedArray::GetElements ( ImplAAFPropertyValue * pInPropVal,
+				        ImplEnumAAFPropertyValues ** ppEnum)
 {
-	return AAFRESULT_NOT_IN_CURRENT_VERSION;
+  if (NULL == pInPropVal) {
+    return AAFRESULT_NULL_PARAM;
+  }
+
+  if (NULL == ppEnum) {
+    return AAFRESULT_NULL_PARAM;
+  }
+
+  ImplEnumAAFPropertyValues* pEnum = 
+    static_cast<ImplEnumAAFPropertyValues*>( ::CreateImpl(CLSID_EnumAAFPropertyValues) );
+
+  if ( !pEnum ) {
+    return AAFRESULT_NOMEMORY;
+  }
+
+  AAFRESULT hr = pEnum->Initialize( this, pInPropVal );
+  if ( AAFRESULT_FAILED( hr ) ) {
+    return hr;
+  }
+  
+  pEnum->AcquireReference();
+  *ppEnum = pEnum;
+  
+  return AAFRESULT_SUCCESS;
 }
 
 // Override from AAFTypeDef

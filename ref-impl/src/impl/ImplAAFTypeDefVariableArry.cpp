@@ -70,7 +70,7 @@
 extern "C" const aafClassID_t CLSID_AAFPropValData;
 extern "C" const aafClassID_t CLSID_AAFStrongRefArrayValue;
 extern "C" const aafClassID_t CLSID_AAFWeakRefArrayValue;
-
+extern "C" const aafClassID_t CLSID_EnumAAFPropertyValues;
 
 ImplAAFTypeDefVariableArray::ImplAAFTypeDefVariableArray ()
 : _ElementType  ( PID_TypeDefinitionVariableArray_ElementType,
@@ -331,8 +331,26 @@ ImplAAFTypeDefVariableArray::GetElements (
   {
     return pRefArray->GetElements(ppEnum);
   }
+  else {
+    // The property value is of the "old" variety.
 
-	return AAFRESULT_NOT_IN_CURRENT_VERSION;
+    ImplEnumAAFPropertyValues* pEnum = 
+      static_cast<ImplEnumAAFPropertyValues*>( ::CreateImpl(CLSID_EnumAAFPropertyValues) );
+
+    if ( !pEnum ) {
+      return AAFRESULT_NOMEMORY;
+    }
+
+    AAFRESULT hr = pEnum->Initialize( this, pInPropVal );
+    if ( AAFRESULT_FAILED( hr ) ) {
+      return hr;
+    }
+    
+    pEnum->AcquireReference();
+    *ppEnum = pEnum;
+  
+    return AAFRESULT_SUCCESS;
+  }
 }
 
 ImplAAFTypeDefSP ImplAAFTypeDefVariableArray::BaseType() const
