@@ -1938,4 +1938,34 @@ void ImplAAFDictionary::pvtInitCriticalBuiltins (void)
 }
 
 
+
+//
+// Private class implementations
+//
+
+ImplAAFDictionary::pvtObjFifo::pvtObjFifo ()
+: _putIdx (0),
+  _getIdx (0)
+{}
+
+ImplAAFObjectSP ImplAAFDictionary::pvtObjFifo::GetNext (void)
+{
+  ImplAAFObjectSP result;
+
+  if (_getIdx < _putIdx)
+	result = _objs[_getIdx++];
+  else
+	result = 0;
+
+  return result;
+}
+
+void ImplAAFDictionary::pvtObjFifo::Append (ImplAAFObjectSP obj)
+{
+  assert (_putIdx < kPvtMaxInitObjs);
+  _objs[_putIdx++] = obj;
+}
+
+
+
 OMDEFINE_STORABLE(ImplAAFDictionary, AUID_AAFDictionary);
