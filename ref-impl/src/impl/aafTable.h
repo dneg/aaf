@@ -215,6 +215,13 @@ aafErr_t TableAddUID(
 			void *value,
 			aafTableDuplicate_t dup);
 			
+aafErr_t TableAddUIDBlock(
+			aafTable_t *table,
+			aafUID_t key,
+			void *value,
+			aafInt32 valueLen,
+			aafTableDuplicate_t dup);
+			
 aafErr_t TableRemoveUID(
 			aafTable_t *table,
 			aafUID_t key);
@@ -227,6 +234,12 @@ void *TableUIDLookupPtr(
 			aafTable_t *table,
 			aafUID_t key);
 
+void TableUIDLookupBlock(
+			aafTable_t *table,
+			aafUID_t key,
+			aafInt32 valueLen,
+			void *valuePtr,
+			aafBool *found);
 
 /************************************************************************
  *
