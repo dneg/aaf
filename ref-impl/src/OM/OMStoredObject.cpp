@@ -520,7 +520,7 @@ void OMStoredObject::close(void)
   //   @parm The start address of the property value.
   //   @parm The size of the property value in bytes.
 void OMStoredObject::write(OMPropertyId propertyId,
-                           int type,
+                           OMStoredForm storedForm,
                            void* start,
                            size_t size)
 {
@@ -528,7 +528,7 @@ void OMStoredObject::write(OMPropertyId propertyId,
   PRECONDITION("Valid data", start != 0);
   PRECONDITION("Valid size", size > 0);
 
-  _index->insert(propertyId, type, _offset, size);
+  _index->insert(propertyId, storedForm, _offset, size);
 
   // Write property value.
   //
@@ -546,7 +546,7 @@ void OMStoredObject::write(OMPropertyId propertyId,
   //         property value.
   //   @parm size_t | size | The size of the buffer in bytes.
 void OMStoredObject::read(OMPropertyId propertyId,
-                          int ANAME(type),
+                          OMStoredForm ANAME(storedForm),
                           void* start,
                           size_t size)
 {
@@ -570,7 +570,7 @@ void OMStoredObject::read(OMPropertyId propertyId,
   if (!found) {
     // error illegal property for this object
   }
-  ASSERT("Matching property types", (OMUInt32)type == actualType);
+  ASSERT("Matching property types", storedForm == actualType);
   ASSERT("Matching property sizes", size == actualLength);
 
   // Since random access is not yet supported, check that the stream
@@ -902,7 +902,7 @@ void OMStoredObject::save(const OMPropertyTable* table)
   //   @parm The id of the property whose value is the unique
   //         identifier of objects in the target set.
 void OMStoredObject::save(OMPropertyId propertyId,
-                          int type,
+                          OMStoredForm storedForm,
                           const OMUniqueObjectIdentification& id,
                           OMPropertyTag tag,
                           OMPropertyId keyPropertyId)
@@ -923,7 +923,7 @@ void OMStoredObject::save(OMPropertyId propertyId,
   p += sizeof(keySize);
   memcpy(p, &id, sizeof(id));
 
-  write(propertyId, type, (void *)buffer, size); 
+  write(propertyId, storedForm, (void *)buffer, size); 
 }
 
   // @mfunc Save a collection (vector/set) of weak references.
@@ -937,7 +937,7 @@ void OMStoredObject::save(OMPropertyId propertyId,
   //   @parm The id of the property whose value is the unique
   //         identifier of objects in the target set.
 void OMStoredObject::save(OMPropertyId propertyId,
-                          int type,
+                          OMStoredForm storedForm,
                           const char* collectionName,
                           const OMUniqueObjectIdentification* index,
                           size_t count,
@@ -951,7 +951,10 @@ void OMStoredObject::save(OMPropertyId propertyId,
   PRECONDITION("Valid collection name", validString(collectionName));
 
   // Write the index entry
-  write(propertyId, type, (void *)collectionName, strlen(collectionName) + 1); 
+  write(propertyId,
+        storedForm,
+        (void *)collectionName,
+        strlen(collectionName) + 1); 
 
   // Calculate the stream name for the index.
   //
@@ -1230,7 +1233,7 @@ void OMStoredObject::restore(OMPropertyTable*& table)
   //   @parm The id of the property whose value is the unique
   //         identifier of objects in the target set.
 void OMStoredObject::restore(OMPropertyId propertyId,
-                             int type,
+                             OMStoredForm storedForm,
                              OMUniqueObjectIdentification& id,
                              OMPropertyTag& tag,
                              OMPropertyId& keyPropertyId)
@@ -1243,7 +1246,7 @@ void OMStoredObject::restore(OMPropertyId propertyId,
   OMByte buffer[size];
   OMByte* p = &buffer[0];
 
-  read(propertyId, type, buffer, size);
+  read(propertyId, storedForm, buffer, size);
   memcpy(&tag, p, sizeof(tag));
   p += sizeof(tag);
   memcpy(&keyPropertyId, p, sizeof(keyPropertyId));
@@ -1272,7 +1275,7 @@ void OMStoredObject::restore(OMPropertyId propertyId,
   //   @parm The id of the property whose value is the unique
   //         identifier of objects in the target set.
 void OMStoredObject::restore(OMPropertyId propertyId,
-                             int type,
+                             OMStoredForm storedForm,
                              char*& collectionName,
                              size_t nameSize,
                              const OMUniqueObjectIdentification*& index,
@@ -1282,7 +1285,7 @@ void OMStoredObject::restore(OMPropertyId propertyId,
 {
   TRACE("OMStoredObject::restore");
   
-  read(propertyId, type, collectionName, nameSize);
+  read(propertyId, storedForm, collectionName, nameSize);
 
   // Calculate the stream name for the index.
   //
