@@ -1,11 +1,8 @@
-//@doc
-//@class  AAFFile | Implementation class for AAFFile
 #ifndef __ImplAAFFile_h__
 #define __ImplAAFFile_h__
-
 /***********************************************************************
  *
- *              Copyright (c) 1998-1999 Avid Technology, Inc.
+ *              Copyright (c) 1998-2000 Avid Technology, Inc.
  *
  * Permission to use, copy and modify this software and accompanying 
  * documentation, and to distribute and sublicense application software
@@ -37,11 +34,17 @@
 // Forward declaration
 //
 class OMFile;
+class OMRawStorage;
 class ImplAAFDictionary;
 class ImplAAFMetaDictionary;
 class ImplAAFFile;
+class ImplAAFRawStorage;
 class ImplAAFHeader;
 class ImplAAFDataDef;
+class ImplAAFOMRawStorage;
+
+struct IAAFRawStorage;
+struct IAAFRandomRawStorage;
 
 class ImplAAFFile : public ImplAAFRoot
 {
@@ -73,6 +76,12 @@ public:
 
   virtual AAFRESULT STDMETHODCALLTYPE
 	OpenTransient (aafProductIdentification_t * pIdent);
+
+  virtual AAFRESULT STDMETHODCALLTYPE
+    CreateAAFFileOnRawStorage (IAAFRawStorage * pRawStorage,
+							   aafUID_constptr pFileKind,
+							   aafUInt32 modeFlags,
+							   aafProductIdentification_constptr pIdent);
 
   virtual AAFRESULT STDMETHODCALLTYPE
 	Close ();
@@ -107,33 +116,70 @@ public:
   ImplAAFFile ();
   virtual ~ImplAAFFile ();
 
-private:
+protected:
 
-  // Private state for this file.
   typedef enum _openType_t
   {
     kOmCreate = 0,
 	kOmModify = 1,
-	kOmOpenRead = 2,
+	kOmRead = 2,
 	kOmTransient = 3,
 	kOmUndefined = -1
   } openType_t;
 	
+  // Returns the open mode for this file.  Requires IsOpen() or
+  // IsClosed().
+  openType_t openType (void) const;
+
+  // Returns the OMFile associated with this AAFFile.  Requires
+  // IsOpen().
+  OMFile * omFile (void);
+
+  bool IsReadable () const;
+  bool IsWriteable () const;
+  bool IsOpen () const;
+  bool IsClosed () const;
+  OMRawStorage * RawStorage ();
+
+private:
 
   void InternalReleaseObjects();
+
+  AAFRESULT pvtCreateExistingRead
+    ();
+  AAFRESULT pvtCreateExistingModify
+    (aafProductIdentification_constptr pIdent);
+  AAFRESULT pvtCreateNewModify
+    (aafUID_constptr pFileKind,
+	 aafProductIdentification_constptr pIdent);
+
 
   aafInt32			_cookie;
   OMFile			*_file;
   ImplAAFDictionary *_factory;
   ImplAAFMetaDictionary *_metafactory;
   aafInt16			_byteOrder;
-  openType_t			_openType;
+  openType_t		_openType;
   ImplAAFHeader *   _head;		// Needed by Head object
   aafBool   _semanticCheckEnable;	//!!!  /* Used to stop recursion in checks */
   aafFileRev_t   _setrev;
   aafBool _initialized;
-  aafBool _open;
+  aafBool _isOpen;
   aafUInt32 _modeFlags;
+
+  // Remember these between calls to CreateAAFFileOnRawStorage() and
+  // Open().  Note that this may not be necessary later, when OM
+  // support to get the OMRawStorage of a file which has not yet been
+  // opened is implemented.
+  aafBool                    _preOpenFileKindSet;
+  aafUID_t                   _preOpenFileKind;
+  aafBool                    _preOpenIdentSet;
+  aafProductIdentification_t _preOpenIdent;
+
+  OMRawStorage *             _pOMStg;
+  bool                       _isReadable;
+  bool                       _isWriteable;
+  bool                       _isClosed;
 };
 
 //
