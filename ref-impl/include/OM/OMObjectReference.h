@@ -29,6 +29,8 @@
 #ifndef OMOBJECTREFERENCE_H
 #define OMOBJECTREFERENCE_H
 
+#include "OMDataTypes.h"
+
 class OMProperty;
 
   // @class Persistent references to persistent objects.
@@ -250,7 +252,7 @@ public:
   OMStrongReferenceSetProperty<ReferencedObject>* targetSet(
                                                  const char* targetName) const;
 
-  const char* targetName(OMUInt32 targetTag) const;
+  const char* targetName(OMPropertyTag targetTag) const;
 
 protected:
 

@@ -174,7 +174,7 @@ void OMWeakReferenceProperty<ReferencedObject>::save(void* clientContext) const
   OMStoredObject* store = container->store();
 
   OMFile* file = container->file();
-  OMUInt32 tag = file->referencedProperties()->insert(_targetName);
+  OMPropertyTag tag = file->referencedProperties()->insert(_targetName);
 
   const OMUniqueObjectIdentification& id = _reference.identification();
   store->save(_propertyId, _storedForm, id, tag);
@@ -213,7 +213,7 @@ void OMWeakReferenceProperty<ReferencedObject>::restore(size_t externalSize)
   ASSERT("Valid store", store != 0);
 
   OMUniqueObjectIdentification id;
-  OMUInt32 tag;
+  OMPropertyTag tag;
   ASSERT("Sizes match", (sizeof(id) + sizeof(tag)) == externalSize);
   store->restore(_propertyId, _storedForm, id, tag);
 
