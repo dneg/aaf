@@ -1,9 +1,15 @@
 #include "OMStoredPropertySetIndex.h"
 
+#include "OMAssertions.h"
+
 OMStoredPropertySetIndex::OMStoredPropertySetIndex(size_t capacity)
 : _capacity(capacity), _table(0), _entries(0), _dirty(false)
 {
+  TRACE("OMStoredPropertySetIndex::OMStoredPropertySetIndex");
+
   _table = new IndexEntry[_capacity];
+  ASSERT("Valid heap pointer", _table != 0);
+
   for (size_t i = 0; i < _capacity; i++) {
     _table[i]._valid = false;
     _table[i]._propertyId = 0;
@@ -15,6 +21,8 @@ OMStoredPropertySetIndex::OMStoredPropertySetIndex(size_t capacity)
 
 OMStoredPropertySetIndex::~OMStoredPropertySetIndex(void)
 {
+  TRACE("OMStoredPropertySetIndex::~OMStoredPropertySetIndex");
+
   delete [] _table;
   _table = 0;
 }
@@ -24,6 +32,8 @@ void OMStoredPropertySetIndex::insert(OMPropertyId propertyId,
                                       OMUInt32 offset,
                                       OMUInt32 length)
 {
+  TRACE("OMStoredPropertySetIndex::insert");
+
   IndexEntry* entry = find(propertyId);
 
   if (entry == 0 ) {
@@ -47,6 +57,8 @@ void OMStoredPropertySetIndex::insert(OMPropertyId propertyId,
 OMStoredPropertySetIndex::IndexEntry* OMStoredPropertySetIndex::find(
                                                  OMPropertyId propertyId) const
 {
+  TRACE("OMStoredPropertySetIndex::find");
+
   OMStoredPropertySetIndex::IndexEntry* result = 0;
 
   for (size_t i = 0; i < _capacity; i++) {
@@ -63,6 +75,8 @@ OMStoredPropertySetIndex::IndexEntry* OMStoredPropertySetIndex::find(
 
 size_t OMStoredPropertySetIndex::entries(void) const
 {
+  TRACE("OMStoredPropertySetIndex::entries");
+
   return _entries;
 }
 
@@ -72,6 +86,8 @@ void OMStoredPropertySetIndex::iterate(size_t& context,
                                        OMUInt32& offset,
                                        OMUInt32& length) const
 {
+  TRACE("OMStoredPropertySetIndex::iterate");
+
   OMStoredPropertySetIndex::IndexEntry* entry = 0;
   size_t start = context;
   size_t found = 0;
@@ -96,8 +112,10 @@ void OMStoredPropertySetIndex::iterate(size_t& context,
 
 bool OMStoredPropertySetIndex::isValid(void) const
 {
+  TRACE("OMStoredPropertySetIndex::isValid");
+
   bool result = true;
-    size_t entries = 0;
+  size_t entries = 0;
   size_t position;
   bool firstEntry = true;
   size_t previousOffset;
@@ -143,6 +161,8 @@ bool OMStoredPropertySetIndex::isValid(void) const
 OMStoredPropertySetIndex::IndexEntry* OMStoredPropertySetIndex::find(
                                                                     void) const
 {
+  TRACE("OMStoredPropertySetIndex::find");
+
   OMStoredPropertySetIndex::IndexEntry* result = 0;
 
   for (size_t i = 0; i < _capacity; i++) {
