@@ -156,6 +156,10 @@ void C.this-module::InitRep (Impl.this-module * newRep)
   assert (newRep);
   _rep = newRep;
   newRep->InitContainer (this);
+  // The InitContainer method holds onto a reference to this COM object. Since
+  // the impl classes do NOT know about COM reference counting we need to 
+  // increment the reference count here.
+  AddRef(); 
 #endif
 }
 
@@ -970,24 +974,6 @@ HRESULT C.this-module::InternalQueryInterface
 
 	// Always delegate back to base implementation.
 	return C.parent-module::InternalQueryInterface(riid, ppvObj);
-}
-
-//
-// Return private implementation pointer for delegation.
-// NOTE: This is NOT the pointer to the COM object's implementation
-// object!
-//
-HRESULT STDMETHODCALLTYPE
-    C.this-module::GetImplRep(void **ppRep)
-{
-#ifdef BOB_TEST
-    if (!ppRep)
-        return E_INVALIDARG;
-	*ppRep = static_cast<void *>(GetRepObject());
-	return S_OK;
-#else
-    return HRESULT_NOT_IMPLEMENTED;
-#endif
 }
 
 //
