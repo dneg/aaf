@@ -1,0 +1,39 @@
+#startm .this-module 0
+AAFLocator\
+#endm
+#c
+#startm .parent-module 0
+AAFObject\
+#endm
+#c
+#import ./AAFUnitTest.exp
+
+//@doc
+/******************************************\
+*                                          *
+* Advanced Authoring Format                *
+*                                          *
+* Copyright (c) 1998 Avid Technology, Inc. *
+* Copyright (c) 1998 Microsoft Corporation *
+*                                          *
+\******************************************/
+
+AD_CLASS_BEGIN()
+
+/****/
+AD_METHOD1(GetType,[out],AUID*,type,, Returns the AUID of the locator.)
+	//@comm Replaces part of omfmLocatorGetInfo
+/****/
+AD_METHOD1(GetPath,[in],AAFString,pathBuf, Pass in a string object which will be filled in, Return a full file path if available.)
+	//@comm Replaces part of omfmLocatorGetInfo
+
+/****/
+AD_METHOD1(SetPath,[in],AAFString*,pathBuf,, Sets a full file path.)
+
+  //
+  // IAAFUnitTest interface method overrides
+  //
+.method-Test
+
+
+AD_CLASS_END
