@@ -39,8 +39,8 @@ wchar_t* coLibraryName = L"Microsoft Component Library";
 #elif defined(OM_OS_MACOSX)
 #elif defined(OM_OS_UNIX)
 #define LINKAGE
-wchar_t* ssLibraryName = L"StructuredStorage.so";
-wchar_t* coLibraryName = L"StructuredStorage.so";
+wchar_t* ssLibraryName = L"librefstg.so";
+wchar_t* coLibraryName = L"librefstg.so";
 #endif
 
 typedef OMInt32 (LINKAGE *pStgCreateDocfile_t)(const SSCHAR*,
