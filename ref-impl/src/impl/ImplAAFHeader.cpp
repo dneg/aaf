@@ -460,43 +460,8 @@ AAFRESULT ImplAAFHeader::SetToolkitRevisionCurrent()
 
 AAFRESULT ImplAAFHeader::LoadMobTables(void)
 {
-#if FULL_TOOLKIT
-	aafInt32			mobTableSize, siz, n;
-	AAFObject			*obj;
-	AAFMob				*mob;
-	aafUID_t			uid;
-	
-	XPROTECT(_file)
-	{
-		/*
-		 * Make a table of all of the source & composition mobs
-		 */
-			mobTableSize = GetObjRefArrayLength(OMHEADMobs);
-
-		mobTableSize *= 2; /* Allow for some growth */
-		if(mobTableSize < DEFAULT_NUM_MOBS)
-			mobTableSize = DEFAULT_NUM_MOBS;
-		CHECK(NewUIDTable(_file, mobTableSize, &(_mobs)));
-//!!!		CHECK(omfsSetTableDispose(_mobs, &MobDisposeMap1X));
-
-		{
-			siz = GetObjRefArrayLength(OMHEADMobs);
-			for(n = 1; n <= siz; n++)
-			{
-				CHECK(ReadNthObjRefArray(OMHEADMobs, &obj, n));
-				CHECK(obj->ReadUID(OMMOBJMobID, &uid));
-				mob = (AAFMob *)obj;	// !!CASTING
-				CHECK(AddMobTableEntry(mob, uid, kOmTableDupAddDup));
-			}
-		}
-	}
-	XEXCEPT
-	{
-	}
-	XEND;
-#endif
-
-	return (OM_ERR_NONE);
+	ImplAAFContentStorage *cstore = _contentStorage;
+	return(cstore->LoadMobTables());
 }
 
 /************************

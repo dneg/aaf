@@ -74,13 +74,25 @@ AAFRESULT STDMETHODCALLTYPE
 	return(AAFRESULT_SUCCESS);
 }
 
-  //@comm    Use this function to add a locator to be scanned first when searching for
+  //@comm    Use this function to add a locator to be scanned last when searching for
   // the essence (a new primary location).
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceDescriptor::PrependLocator (ImplAAFLocator * /*pLocator*/)
+    ImplAAFEssenceDescriptor::PrependLocator (ImplAAFLocator *pLocator)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	size_t			siz;
+	long			n;
+	ImplAAFLocator	*obj;
+
+	_locators.getSize(siz);
+	for(siz-1; n >= 0; n--)
+	{
+		_locators.getValueAt(obj, n);
+		_locators.setValueAt(obj, n+1);
+	}
+	_locators.setValueAt(pLocator, 0);
+
+	return AAFRESULT_SUCCESS;
 }
 
   //@comm    Use this function to add a locator to be scanned first when searching for
