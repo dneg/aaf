@@ -48,3 +48,8 @@
 // Object Manager specific definitions
 //
 #define OM_DEBUG
+//#define OM_STACK_TRACE_ON_ASSERT
+//#define OM_NO_VALIDATE_PROPERTYSETS
+//#define OM_VALIDATE_WEAK_REFERENCES
+//#define OM_NO_VALIDATE_DEFINITIONS
+//#define OM_DEFINITIONS
