@@ -35,7 +35,10 @@
 #include "AAFTypes.h"
 #include "AAFResult.h"
 #include "AAFDataDefs.h"
+
+#if USE_TIMER_LIB
 #include "UtlConsole.h"
+#endif
 
 // Include the AAF interface declarations.
 #include "AAF.h"
@@ -411,6 +414,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, long int N)
 
 	if (pFile) 
 	{
+#if USE_TIMER_LIB
 		// printing file save time
 		aafUInt32 timerID, elapsedtime;
 		moduleErrorTmp = UTLStartPeriod(&timerID);
@@ -419,6 +423,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, long int N)
 		pFile->Close();
 		pFile->Release();
 		printf("Save time = %ld\n", elapsedtime);
+#endif
 	}
 	
 	return moduleErrorTmp;
@@ -442,6 +447,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 {
 	IAAFFile *					pFile = NULL;
   // printing file open time
+#if USE_TIMER_LIB
 	aafUInt32 timerID, elapsedtime;
 
 	moduleErrorTmp = UTLStartPeriod(&timerID);
@@ -452,6 +458,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	pFile=NULL;
 	printf("Open time = %ld\n\n", elapsedtime);
 cleanup:
+#endif
 	if (pFile)
 		{
 		pFile->Close();
@@ -517,7 +524,9 @@ int main(int argumentCount, char *argumentVector[])
 	}
 	//  and then carry on...
 
+#if USE_TIMER_LIB
 	UTLInitTimers(1000);
+#endif
 	CComInitialize comInit;
 	
 	aafWChar FileNameBuffer[MAX];
