@@ -308,7 +308,7 @@ int main( int argc, char* argv[] )
 		// Second command line argument is the filename
 		AxCmdLineArgs args( argc, argv );
 
-		pair<bool, const char*> fileArg = args.get(1);
+		// pair<bool, const char*> fileArg = args.get(1);
 
 		pair<bool, int> fileOpArg = args.get( "-file" );
 		if ( !fileOpArg.first ) {
