@@ -36,10 +36,9 @@ include $(AAFBASE)/build/common.mk
 
 
 # Include directories
-INCLUDES = -I../../ref-impl/src/com-api \
+INCLUDES = -I../../ref-impl/include -I../../ref-impl/include/ref-api \
 	   -I../../OMF/Include \
-	   -I../../OMF/portinc \
-	   -I../../ref-impl/include -I../../ref-impl/include/ref-api
+	   -I../../OMF/portinc
 
 
 # CXXOBJS2 is the list of files used to create the executable.

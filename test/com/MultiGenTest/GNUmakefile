@@ -39,8 +39,7 @@ include $(AAFBASE)/build/common.mk
 
 # Include directories
 INCLUDES = -I../../../ref-impl/include \
-		-I../../../ref-impl/include/ref-api \
-		-I../../../ref-impl/src/com-api
+		-I../../../ref-impl/include/ref-api
 
 
 # CXXFILES2 is declared just to get the list of object files
