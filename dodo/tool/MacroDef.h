@@ -120,6 +120,14 @@ struct MacroDef
   //********
 
 
+  char GetInitial () const;
+  //
+  // Returns the initial character of this macro's name.  Returns '\0'
+  // if it has not yet been initialized.
+  //
+  //********
+
+
   static void Test ();
   //
   // Unit test.  Will assert() if a problem is found.
