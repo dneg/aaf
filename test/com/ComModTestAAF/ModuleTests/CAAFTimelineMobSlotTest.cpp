@@ -29,14 +29,6 @@
 
 #include "AAF.h"
 
-#if defined( _MSC_VER )
-#define INT64_C(c) c
-#else
-#define __STDC_CONSTANT_MACROS		// needed in C++ to enable macros like INT64_C
-#include <inttypes.h>				// provides INT64_C macro
-#endif
-
-
 #include <iostream>
 using namespace std;
 #include <stdio.h>
@@ -53,9 +45,9 @@ using namespace std;
 
 static aafWChar *slotNames[5] = { L"SLOT1", L"SLOT2", L"SLOT3", L"SLOT4", L"SLOT5" };
 
-static aafPosition_t markInTestData[5] = { 0, 1, -3, INT64_C(0x7ffffffffffffffd), INT64_C(0x8000000000000000) };
-static aafPosition_t userPosTestData[5] = { 0, 2, -2, INT64_C(0x7ffffffffffffffe), INT64_C(0x8000000000000001) };
-static aafPosition_t markOutTestData[5] = { 0, 3, -1, INT64_C(0x7fffffffffffffff), INT64_C(0x8000000000000002) };
+static aafPosition_t markInTestData[5] = { 0, 1, -3, AAFCONSTINT64(0x7ffffffffffffffd), AAFCONSTINT64(0x8000000000000000) };
+static aafPosition_t userPosTestData[5] = { 0, 2, -2, AAFCONSTINT64(0x7ffffffffffffffe), AAFCONSTINT64(0x8000000000000001) };
+static aafPosition_t markOutTestData[5] = { 0, 3, -1, AAFCONSTINT64(0x7fffffffffffffff), AAFCONSTINT64(0x8000000000000002) };
 
 static const 	aafMobID_t	TEST_MobID =
 {{0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00},
