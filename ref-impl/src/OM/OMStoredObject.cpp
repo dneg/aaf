@@ -49,7 +49,7 @@
 #include <objbase.h>
 #endif
 
-const OMVersion currentVersion = 26;
+const OMVersion currentVersion = 27;
 
 const size_t indexHeaderSize = sizeof(OMByteOrder) +
                                sizeof(OMVersion) +
@@ -834,28 +834,28 @@ void OMStoredObject::save(const OMPropertyTable* table)
   ASSERT("Index in native byte order", _byteOrder == hostByteOrder());
   writeToStream(stream, &_byteOrder, sizeof(_byteOrder));
 
-  // count of strings
+  // count of paths
   OMPropertyCount count = table->count();
   writeToStream(stream, &count, sizeof(count));
  
-  // count of characters
-  OMUInt32 characterCount = 0;
+  // count of property ids
+  OMUInt32 pidCount = 0;
   for (size_t i = 0; i < count; i++) {
-    OMUInt32 length = lengthOfWideString(table->valueAt(i));
-    characterCount = characterCount + length + 1;
+    OMUInt32 length = lengthOfPropertyPath(table->valueAt(i));
+    pidCount = pidCount + length + 1;
   }
-  writeToStream(stream, &characterCount, sizeof(characterCount));
+  writeToStream(stream, &pidCount, sizeof(pidCount));
 
-  // sequence of null terminated strings
+  // sequence of null terminated pids
   for (size_t j = 0; j < count; j++) {
-    const wchar_t* internalName = table->valueAt(j);
-    size_t characterCount = lengthOfWideString(internalName);
-    size_t byteCount = characterCount * sizeof(OMCharacter);
-    OMCharacter* externalName = new OMCharacter[characterCount];
+    const OMPropertyId* internalName = table->valueAt(j);
+    size_t pidCount = lengthOfPropertyPath(internalName);
+    size_t byteCount = pidCount * sizeof(OMPropertyId);
+    OMPropertyId* externalName = new OMPropertyId[pidCount];
     ASSERT("Valid heap pointer", externalName != 0);
-    externalizeString(internalName, externalName, characterCount);
+    externalizeUInt16Array(internalName, externalName, pidCount);
     writeToStream(stream, (void*)externalName, byteCount);
-    const OMCharacter null = 0;
+    const OMPropertyId null = 0;
     writeToStream(stream, (void*)&null, sizeof(null));
     delete [] externalName;
   }
@@ -1143,31 +1143,31 @@ void OMStoredObject::restore(OMPropertyTable*& table)
     reorderBytes = true;
   }
 
-  // count of strings
+  // count of paths
   OMPropertyCount count;
   readUInt16FromStream(stream, count, reorderBytes);
   table = new OMPropertyTable();
   ASSERT("Valid heap pointer", table != 0);
  
   if (count > 0) {
-    // count of characters
-    OMUInt32 totalCharacters;
-    readUInt32FromStream(stream, totalCharacters, reorderBytes);
+    // count of property ids
+    OMUInt32 totalPids;
+    readUInt32FromStream(stream, totalPids, reorderBytes);
 
-    // sequence of null terminated strings
-    OMCharacter* buffer = new OMCharacter[totalCharacters];
+    // sequence of null terminated pids
+    OMPropertyId* buffer = new OMPropertyId[totalPids];
     ASSERT("Valid heap pointer", buffer != 0);
-    OMUInt32 totalBytes = totalCharacters * sizeof(OMCharacter);
+    OMUInt32 totalBytes = totalPids * sizeof(OMPropertyId);
     readFromStream(stream, buffer, totalBytes);
-    OMCharacter* externalName = buffer;
+    OMPropertyId* externalName = buffer;
     for (size_t i = 0; i < count; i++) {
-      size_t characterCount = lengthOfOMString(externalName);
-      wchar_t* internalName = new wchar_t[characterCount + 1];
+      size_t pidCount = lengthOfPropertyPath(externalName);
+      OMPropertyId* internalName = new OMPropertyId[pidCount + 1];
       ASSERT("Valid heap pointer", internalName != 0);
-      internalizeString(externalName, internalName, characterCount + 1);
+      internalizeUInt16Array(externalName, internalName, pidCount + 1);
       table->insert(internalName);
       delete [] internalName;
-      externalName = externalName + characterCount + 1;
+      externalName = externalName + pidCount + 1;
     }
     delete [] buffer;
   }
