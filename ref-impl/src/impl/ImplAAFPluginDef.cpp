@@ -949,14 +949,6 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFPluginDescriptor::IsPluginLocal (
-      aafBool *  /*pIsLocal*/)
-{
-  return AAFRESULT_NOT_IN_CURRENT_VERSION;
-}
-
-
-AAFRESULT STDMETHODCALLTYPE
     ImplAAFPluginDescriptor::GetPluginDescriptorID (
       aafUID_t *pDescriptorID)
 {
