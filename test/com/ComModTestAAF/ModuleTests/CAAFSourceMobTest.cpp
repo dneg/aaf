@@ -123,6 +123,11 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
  	if (AAFRESULT_SUCCESS != hr)
 		return hr;
 
+	edesc->Release();
+	edesc = NULL;
+	pMob->Release();
+	pMob = NULL;
+	
 	hr = pFile->Close();
  	if (AAFRESULT_SUCCESS != hr)
 		return hr;
@@ -233,6 +238,9 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 				hr = slot->GetSlotID(&trackID);
 				if (AAFRESULT_SUCCESS != hr)
 					return hr;
+
+				slot->Release();
+				slot = NULL;
 			}
 		}
 		hr = aMob->QueryInterface (IID_IAAFSourceMob, (void **)&pSourceMob);
@@ -241,9 +249,18 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		hr = pSourceMob->GetEssenceDescription (&pEdesc);
 		if (AAFRESULT_SUCCESS != hr)
 			return hr;
+
+		aMob->Release();
+		aMob = NULL;
+		pEdesc->Release();
+		pEdesc = NULL;
 	}
 
-	//!!! Problem deleting, let it leak -- 	delete mobIter;
+	if(mobIter != NULL)
+	{
+		mobIter->Release();
+		mobIter = NULL;
+	}
 	hr = pFile->Close();
 	if (AAFRESULT_SUCCESS != hr)
 		return hr;
