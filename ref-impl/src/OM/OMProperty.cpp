@@ -96,7 +96,7 @@ void OMProperty::initialize(const OMPropertyDefinition* definition)
 
   // Temporary consistency checks
   ASSERT("Consistent property id",
-                                 _propertyId == _definition->identification());
+                            _propertyId == _definition->localIdentification());
   ASSERT("Consistent property name", strcmp(_name, _definition->name()) == 0);
   // ASSERT("Consistent property optionality",
   //                                 _isOptional == _definition->isOptional());
