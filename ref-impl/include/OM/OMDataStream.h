@@ -46,9 +46,26 @@ public:
     // @cmember Destructor.
   ~OMDataStream(void);
 
+    // @cmember The size, in bytes, of the data in this
+    //          <c OMDataStreamProperty>.
+  virtual OMUInt64 size(void) const = 0;
+
+    // @cmember Set the current position for <f read()> and <f write()>, as an
+    //          offset in bytes from the begining of the data stream.
+  virtual void setPosition(const OMUInt64 offset) const = 0;
+
+    // @cmember Attempt to read the number of bytes given by <p bytes>
+    //          from the data stream into the buffer at address
+    //          <p buffer>. The actual number of bytes read is returned
+    //          in <p bytesRead>.
+  virtual void read(OMByte* buffer,
+                    const OMUInt32 bytes,
+                    OMUInt32& bytesRead) const = 0;
+
   virtual OMByteOrder storedByteOrder(void) const = 0;
 
   virtual void setStoredByteOrder(OMByteOrder byteOrder) = 0;
+
 };
 
 #endif
