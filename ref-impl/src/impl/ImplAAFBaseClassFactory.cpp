@@ -2,9 +2,7 @@
 #include <stdlib.h>
 
 
-// TODO: rename to ImplAAFBaseClassFactory.h and rename this file to ImplAAFBaseClassFactory.cpp
-
-#include "Container.h"
+#include "ImplAAFBaseClassFactory.h"
 
 #include "ImplAAFObject.h"
 #include "OMFile.h"
