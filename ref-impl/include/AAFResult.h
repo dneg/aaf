@@ -336,6 +336,11 @@
 #define AAFRESULT_PLUGIN_CIRCULAR_REFERENCE      MAKE_AAFHRESULT(0x0304)
 #define AAFRESULT_PLUGIN_INVALID_REFERENCE_COUNT MAKE_AAFHRESULT(0x0305)
 
+/* DLL/Shared Library runtime error codes */
+#define AAFRESULT_DLL_LOAD_FAILED                MAKE_AAFHRESULT(0x0400)
+    /* Either the DLL or a dependent DLL could not be found and loaded. */
+#define AAFRESULT_DLL_SYMBOL_NOT_FOUND           MAKE_AAFHRESULT(0x0401)
+    /* Expected symbol not exported from DLL. Need newer DLL. */
 
 
 #define AAFRESULT_MAXCODE                   MAKE_AAFHRESULT(0x0305)
