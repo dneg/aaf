@@ -200,6 +200,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	IAAFCodecDef	*pCodec = NULL;
 	IAAFDataDef		*pDataDef = NULL;
 	IEnumAAFCodecFlavours	*pEnum = NULL;
+	IEnumAAFCodecFlavours	*pCloneEnum = NULL;
 	bool bFileOpen = false;
 	aafBool			testResult;
 	aafUID_t		codecID = kAAFCodecWAVE;
@@ -222,6 +223,30 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 		checkExpression (testResult == kAAFFalse, AAFRESULT_TEST_FAILED);
 		checkResult(pCodec->EnumCodecFlavours (&pEnum));
 		checkResult(pEnum->NextOne (&testFlavour));
+		checkExpression (EqualAUID(&testFlavour, &checkFlavour) ? true : false,
+						 AAFRESULT_TEST_FAILED);
+		checkResult(pEnum->Reset ());
+		checkResult(pEnum->NextOne (&testFlavour));
+		checkExpression (EqualAUID(&testFlavour, &checkFlavour) ? true : false,
+						 AAFRESULT_TEST_FAILED);
+
+		// Test for correct "off end" behavior
+		checkExpression(pEnum->NextOne (&testFlavour) == AAFRESULT_NO_MORE_FLAVOURS, AAFRESULT_TEST_FAILED);
+
+		// Skip1 should also put us off of the end
+		checkResult(pEnum->Reset ());
+		checkExpression(pEnum->Skip (1) == AAFRESULT_NO_MORE_FLAVOURS, AAFRESULT_TEST_FAILED);
+
+		// Check with Next()
+		checkResult(pEnum->Reset ());
+		checkResult(pEnum->Next (1, &testFlavour, NULL));
+		checkExpression (EqualAUID(&testFlavour, &checkFlavour) ? true : false,
+						 AAFRESULT_TEST_FAILED);
+		
+		// Check out clones version
+		checkResult(pEnum->Reset ());
+		checkResult(pEnum->Clone (&pCloneEnum));
+		checkResult(pCloneEnum->Next (1, &testFlavour, NULL));
 		checkExpression (EqualAUID(&testFlavour, &checkFlavour) ? true : false,
 						 AAFRESULT_TEST_FAILED);
 	}
@@ -274,15 +299,13 @@ extern "C" HRESULT CEnumAAFCodecFlavours_test()
 
 	// When all of the functionality of this class is tested, we can return success.
 	// When a method and its unit test have been implemented, remove it from the list.
-	if (SUCCEEDED(hr))
-	{
-		cout << "The following IEnumAAFCodecFlavours tests have not been implemented:" << endl; 
-		cout << "     Next" << endl; 
-		cout << "     Skip" << endl; 
-		cout << "     Reset" << endl; 
-		cout << "     Clone" << endl; 
-		hr = AAFRESULT_TEST_PARTIAL_SUCCESS;
-	}
+//	if (SUCCEEDED(hr))
+//	{
+//		cout << "The following IEnumAAFCodecFlavours tests have not been implemented:" << endl; 
+//		cout << "     Next" << endl; 
+//		cout << "     Clone" << endl; 
+//		hr = AAFRESULT_TEST_PARTIAL_SUCCESS;
+//	}
 
 	return hr;
 }
