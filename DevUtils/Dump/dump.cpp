@@ -443,6 +443,7 @@ bool zFlag = false;
 bool mFlag = false;
 bool lFlag = false;
 bool vFlag = false;
+bool hFlag = false;
 unsigned long int mLimit = 0;
 unsigned long int lLimit = 0;
 
@@ -462,6 +463,18 @@ size_t totalFileBytes;
 //
 size_t warningCount = 0;
 size_t errorCount = 0;
+
+// Structured Storage file header
+//
+typedef struct {
+  OMUInt8  _abSig[8];
+  CLSID    _clid;
+  OMUInt16 _uMinorVersion;
+  OMUInt16 _uDllVersion;
+  OMUInt16 _uByteOrder;
+  OMUInt16 _uSectorShift;
+  OMUInt8 _padding[512 - 32]; // Other uninteresting fields
+} StructuredStorageHeader;
 
 // Prototypes for local functions.
 //
@@ -660,6 +673,9 @@ static void openStorage(char* fileName, IStorage** storage);
 static void dumpFileHex(char* fileName);
 static void dumpFile(char* fileName);
 static OMUInt16 determineVersion(IStorage* storage);
+static void readHeader(StructuredStorageHeader& header, FILE* f);
+static void printHeader(StructuredStorageHeader& header);
+static void dumpHeader(char* fileName);
 static void dumpFileProperties(char* fileName, const char* label);
 static void dumpReferencedProperties(IStorage* root, OMUInt16 version);
 static FILE* wfopen(const wchar_t* fileName, const wchar_t* mode);
@@ -930,6 +946,8 @@ void checkSizes(void)
   ASSERT("Correct definition for OMUInt8",  sizeof(OMUInt8)  == 1);
   ASSERT("Correct definition for OMUInt16", sizeof(OMUInt16) == 2);
   ASSERT("Correct definition for OMUInt32", sizeof(OMUInt32) == 4);
+  ASSERT("Correct definition for StructuredStorageHeader",
+          sizeof(StructuredStorageHeader) == 512);
 
   if (sizeof(OMUInt8) != 1) {
     fatalError("checkSizes", "Incorrect definition for OMUInt8.");
@@ -3547,9 +3565,89 @@ OMUInt16 determineVersion(IStorage* storage)
   return result;
 }
 
+void readHeader(StructuredStorageHeader& header, FILE* f)
+{
+  size_t result = fread(&header, sizeof(StructuredStorageHeader), 1, f);
+  if (result != 1 ) {
+    fatalError("readHeader", "fread() failed.");
+  }
+}
+
+void printHeader(StructuredStorageHeader& header)
+{
+  cout << "Structured Storage header." << endl;
+
+  // Structured storage signature
+  //
+  IOS_FMT_FLAGS savedFlags = cout.setf(ios::basefield);
+  char savedFill = cout.fill();
+  cout.setf(ios::uppercase);
+
+  cout << "  Signature      = [";
+  for (size_t i = 0; i < 8; i++) {
+    cout << setfill('0') << setw(2) << hex << (unsigned int)header._abSig[i];
+  }
+  cout << "]" << endl;
+
+  cout.setf(savedFlags, ios::basefield);
+  cout.fill(savedFill);
+  cout.unsetf(ios::uppercase);
+
+  // File signature
+  //
+  cout << "  File signature = ";
+  printClsid(header._clid, cout);
+  cout << endl;
+
+  // File version
+  //
+  cout << "  File version   = "
+       << dec
+       << header._uDllVersion
+       << "."
+       << header._uMinorVersion
+       << endl;
+
+  // Byte order
+  //
+  cout << "  Byte order     = ";
+  if ((header._uByteOrder != 0xFFFE) || (header._uByteOrder != 0xFEFF)) {
+    cout << "Intel";
+  } else {
+    cout << "Unknown";
+  }
+  cout << endl;
+
+  // Sector shift/sector size
+  //
+  cout << "  Sector shift   = "
+       << dec
+       << header._uSectorShift
+       << " (sector size = "
+       << (1 << header._uSectorShift)
+       << " bytes)"
+       << endl;
+}
+
+void dumpHeader(char* fileName)
+{
+  FILE* f = fopen(fileName, "rb");
+  if (f == 0) {
+    fatalError("dumpHeader", "fopen() failed.");
+  }
+  StructuredStorageHeader header;
+  readHeader(header, f);
+  fclose(f);
+  printHeader(header);
+}
+
 void dumpFileProperties(char* fileName, const char* label)
 {
   resetStatistics();
+
+  if (hFlag) {
+    dumpHeader(fileName);
+  }
 
   initializeCOM();
   IStorage* storage = 0;
@@ -3851,6 +3949,8 @@ void usage(void)
        << endl;
   cerr << "  --validate        = validate the structure of the file (-v)"
        << endl;
+  cerr << "  --mss-header      = dump the structured storage header"
+       << endl;
   cerr << endl;
   cerr << "Use the following with --hex-dump"
        << endl;
@@ -4052,7 +4152,6 @@ int main(int argumentCount, char* argumentVector[])
 {
   atexit(_exitHandler);
   checkSizes();
-
 #if defined(OM_OS_MACOS)
 #if defined(USECONSOLE)
   argumentCount = ccommand(&argumentVector); // console window for mac
@@ -4213,6 +4312,8 @@ int main(int argumentCount, char* argumentVector[])
       } else if ((strcmp(opt, "-v") == 0) ||
                  (strcmp(opt, "--validate") == 0)) {
         vFlag = true;
+      } else if (strcmp(opt, "--mss-header") == 0) {
+        hFlag = true;
       } else if ((strcmp(opt, "-h") == 0) ||
                  (strcmp(opt, "--help") == 0)) {
         usage();
@@ -4245,6 +4346,13 @@ int main(int argumentCount, char* argumentVector[])
     if (mFlag) {
       cerr << programName
            << ": Error : -m not valid with -x."
+           << endl;
+      usage();
+      exit(EXIT_FAILURE);
+    }
+    if (hFlag) {
+      cerr << programName
+           << ": Error : --mss-header not valid with --hex-dump."
            << endl;
       usage();
       exit(EXIT_FAILURE);
