@@ -106,7 +106,7 @@ static const TypeEnumerationMember *s_TypeEnumerationMembers_##name[] = {
 #define AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(name, value, parent) \
 	&s_TypeEnumerationMember_##parent##_##name,
 
-#define AAF_TYPE_DEFINITION_ENUMERATION_END(name) \
+#define AAF_TYPE_DEFINITION_ENUMERATION_END(name, id, type) \
   0 } ;
 
 #define AAF_TYPE(x) _aaf##x##_t
@@ -208,7 +208,7 @@ static const TypeRecordMember *s_TypeRecordMembers_##name[] = {
 #define AAF_TYPE_DEFINITION_RECORD_FIELD(name, type, parent) \
 	&s_TypeRecordMember_##parent##_##name,
 
-#define AAF_TYPE_DEFINITION_RECORD_END(name) \
+#define AAF_TYPE_DEFINITION_RECORD_END(name, id) \
   0 } ;
 
 #define AAF_TYPE(x) _aaf##x##_t
@@ -524,7 +524,7 @@ static const TypeWeakRefMember MY_ARRAY_NAME(name)[] = \
 #define AAF_TYPE_DEFINITION_WEAK_REFERENCE_MEMBER(name, parent, container) \
   MY_PROPERTY_ID(name, parent),
   
-#define AAF_TYPE_DEFINITION_WEAK_REFERENCE_END(name) \
+#define AAF_TYPE_DEFINITION_WEAK_REFERENCE_END(name, id, type) \
 };
 
 #include "AAFMetaDictionary.h"
@@ -648,7 +648,7 @@ static const TypeExtEnumerationMember *s_TypeExtEnumerationMembers_##name[] = {
 #define AAF_TYPE_DEFINITION_EXTENDIBLE_ENUMERATION_MEMBER(name, value, container) \
 	&s_TypeExtEnumerationMember_##container##_##name,
 
-#define AAF_TYPE_DEFINITION_EXTENDIBLE_ENUMERATION_END(name) \
+#define AAF_TYPE_DEFINITION_EXTENDIBLE_ENUMERATION_END(name, id) \
   0 } ;
 
 #define AAF_TYPE(x) _aaf##x##_t
