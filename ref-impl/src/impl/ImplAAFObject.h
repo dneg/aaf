@@ -194,12 +194,12 @@ protected:
   // Initializes the given OM property.
 
 private:
+
   // private method
   AAFRESULT InitProperties ();
 
   ImplPropertyCollection * _pProperties;
 
-  // Didn't use shorthand here in an attempt to avoid including ClassDef header.
   ImplAAFClassDef * _cachedDefinition;
 
   aafBool                  _OMPropsInited;
