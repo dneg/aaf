@@ -30,6 +30,13 @@
 
 #define TEST_NAME	L"This is a text locator"
 
+static aafWChar* Manufacturer = L"Sony";
+static aafWChar* Model = L"MyModel";
+static aafTapeCaseType_t FormFactor = kVHSVideoTape;
+static aafVideoSignalType_t VideoSignalType = kPALSignal;
+static aafTapeFormatType_t TapeFormat = kVHSFormat;
+static aafLength_t TapeLength = 3200 ;
+
 // Temporarily necessary global declarations.
 extern "C" const CLSID CLSID_AAFTextLocator; // generated
 
@@ -70,6 +77,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFSourceMob				*pSourceMob = NULL;
 	IAAFMob						*pMob = NULL;
 	IAAFEssenceDescriptor		*edesc = NULL;
+	IAAFTapeDescriptor*			pTapeDescriptor = NULL;
 	aafUID_t					newUID;
 	aafInt32					numLocators;
 	HRESULT						hr = AAFRESULT_SUCCESS;
@@ -115,10 +123,19 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pMob->SetMobID(&newUID));
 		checkResult(pMob->SetName(L"TextLocatorTestSourceMOB"));
 		
-		checkResult(pDictionary->CreateInstance(&AUID_AAFEssenceDescriptor,
-								IID_IAAFEssenceDescriptor, 
-								(IUnknown **)&edesc));
-										
+		checkResult(pDictionary->CreateInstance(&AUID_AAFTapeDescriptor,
+								IID_IAAFTapeDescriptor, 
+								(IUnknown **)&pTapeDescriptor));
+		
+		checkResult(pTapeDescriptor->QueryInterface(IID_IAAFEssenceDescriptor, (void **)&edesc));
+		// Set tape properties
+		checkResult(pTapeDescriptor->SetTapeManufacturer( Manufacturer ));
+		checkResult(pTapeDescriptor->SetTapeModel( Model ));
+		checkResult(pTapeDescriptor->SetTapeFormFactor( FormFactor ));
+		checkResult(pTapeDescriptor->SetSignalType( VideoSignalType ));
+		checkResult(pTapeDescriptor->SetTapeFormat( TapeFormat ));
+		checkResult(pTapeDescriptor->SetTapeLength( TapeLength ));
+
  		checkResult(pSourceMob->SetEssenceDescriptor(edesc));
 
 			// Verify that there are no locators
@@ -157,6 +174,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	if (pTextLocator)
 		pTextLocator->Release();
 
+	if (pTapeDescriptor)
+		pTapeDescriptor->Release();
 	if (edesc)
 		edesc->Release();
 
