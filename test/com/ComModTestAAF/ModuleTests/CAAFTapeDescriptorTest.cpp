@@ -30,10 +30,10 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFFile *					pFile = NULL;
 	IAAFHeader *				pHeader = NULL;
 
-	IAAFSourceMob*				pSourceMob;
-	IAAFMob*					pMob;
-	IAAFEssenceDescriptor*		pEssDesc;
-	IAAFTapeDescriptor*			pTapeDesc;
+	IAAFSourceMob*				pSourceMob = NULL;
+	IAAFMob*					pMob = NULL;
+	IAAFEssenceDescriptor*		pEssDesc = NULL;
+	IAAFTapeDescriptor*			pTapeDesc = NULL;
 
 	aafProductIdentification_t	ProductInfo;
 	aafUID_t					newUID;
@@ -87,7 +87,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 						hr = pSourceMob->QueryInterface(IID_IAAFMob, (void **)&pMob);
 						if (AAFRESULT_SUCCESS == hr)
 						{
-							newUID.Data1 = 0;
+							CoCreateGuid((GUID *)&newUID);
 							pMob->SetMobID(&newUID);
 							pMob->SetName(L"TapeDescriptorTest");
 							hr = CoCreateInstance(CLSID_AAFTapeDescriptor,
@@ -123,25 +123,34 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 											}
 										}
 									}
+									pEssDesc->Release();
+									pEssDesc = NULL;
 								}
+								pTapeDesc->Release();
+								pTapeDesc = NULL;
 							}
+
+							// Add the MOB to the file
+							if (AAFRESULT_SUCCESS == hr)
+								hr = pHeader->AppendMob(pMob);
+
+							pMob->Release();
+							pMob = NULL;
 						}
+						pSourceMob->Release();
+						pSourceMob = NULL;
 					}
+					pHeader->Release();
+					pHeader = NULL;
 				}
+				pFile->Close();
 			}
 		}
-	}
-
-	// Add the MOB to the file
-	if (AAFRESULT_SUCCESS == hr)
-		hr = pHeader->AppendMob(pMob);
-
-	// Cleanup and return
-	if (pFile) 
-	{
-		pFile->Close();
 		pFile->Release();
+		pFile = NULL;
 	}
+
+
 
 	/*
 	if (pSession)
@@ -151,20 +160,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	}
 	*/
 
-	if (pHeader)
-		pHeader->Release();
-
-	if (pSourceMob)
-		pSourceMob->Release();
-	
-	if (pMob)
-		pMob->Release();
-
-	if (pTapeDesc)
-		pTapeDesc->Release();
-	
-	if (pEssDesc)
-		pEssDesc->Release();
 
 	return hr;
 }
@@ -175,11 +170,11 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	IAAFFile *					pFile = NULL;
 	IAAFHeader *				pHeader = NULL;
 
-	IAAFSourceMob*				pSourceMob;
-	IAAFMob*					pMob;
-	IAAFEssenceDescriptor*		pEssDesc;
-	IAAFTapeDescriptor*			pTapeDesc;
-	IEnumAAFMobs*				pMobIter;
+	IAAFSourceMob*				pSourceMob = NULL;
+	IAAFMob*					pMob = NULL;
+	IAAFEssenceDescriptor*		pEssDesc = NULL;
+	IAAFTapeDescriptor*			pTapeDesc = NULL;
+	IEnumAAFMobs*				pMobIter = NULL;
 
 	aafProductIdentification_t	ProductInfo;
 	aafNumSlots_t				numMobs;
@@ -220,7 +215,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 
 	if (AAFRESULT_SUCCESS == hr)
 	{
-	    hr = pFile->Initialize();
+	  hr = pFile->Initialize();
 		if (AAFRESULT_SUCCESS == hr)
 		{
 			// hr = pSession->OpenReadFile(pFileName, &pFile);
@@ -235,45 +230,69 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 					{
 						if (1 == numMobs )
 						{
-							// We assume these next few calls WILL complete succesfully
-							// since we  are the ones who created the file and know it contents
-							
-							pHeader->EnumAAFAllMobs(NULL, &pMobIter);
-							pMobIter->NextOne(&pMob);
-							pMob->QueryInterface(IID_IAAFSourceMob, (void **)&pSourceMob);
-												 
-							// Back into testing mode
-							hr = pSourceMob->GetEssenceDescriptor(&pEssDesc);
+							hr = pHeader->EnumAAFAllMobs(NULL, &pMobIter);
 							if (AAFRESULT_SUCCESS == hr)
 							{
-								// if there is an Essence Descriptor then it MUST be an (essence) TapeDescriptor
-								pEssDesc->QueryInterface(IID_IAAFTapeDescriptor, (void **) &pTapeDesc);
-								pTapeDesc->GetTapeManBufLen(&length);
-								hr = pTapeDesc->GetTapeManufacturer(readManufacturer, length);
+								hr = pMobIter->NextOne(&pMob);
 								if (AAFRESULT_SUCCESS == hr)
 								{
-									pTapeDesc->GetTapeModelBufLen(&length);
-									hr = pTapeDesc->GetTapeModel(readModel, length);
+									hr = pMob->QueryInterface(IID_IAAFSourceMob, (void **)&pSourceMob);
 									if (AAFRESULT_SUCCESS == hr)
-									{
-										hr = pTapeDesc->GetTapeFormFactor(&readFormFactor);
-										hr = pTapeDesc->GetSignalType(&readVideoSignalType);
-										hr = pTapeDesc->GetTapeFormat( &readTapeFormat);
-										hr = pTapeDesc->GetTapeLength( &readTapeLength);
+									{					 
+										// Back into testing mode
+										hr = pSourceMob->GetEssenceDescriptor(&pEssDesc);
+										if (AAFRESULT_SUCCESS == hr)
+										{
+											// if there is an Essence Descriptor then it MUST be an (essence) TapeDescriptor
+											hr = pEssDesc->QueryInterface(IID_IAAFTapeDescriptor, (void **) &pTapeDesc);
+											if (AAFRESULT_SUCCESS == hr)
+											{
+												hr = pTapeDesc->GetTapeManBufLen(&length);
+												if (AAFRESULT_SUCCESS == hr)
+												{
+													hr = pTapeDesc->GetTapeManufacturer(readManufacturer, length);
+													if (AAFRESULT_SUCCESS == hr)
+													{
+														hr = pTapeDesc->GetTapeModelBufLen(&length);
+														if (AAFRESULT_SUCCESS == hr)
+														{
+															hr = pTapeDesc->GetTapeModel(readModel, length);
+															if (AAFRESULT_SUCCESS == hr)
+															{
+																hr = pTapeDesc->GetTapeFormFactor(&readFormFactor);
+																hr = pTapeDesc->GetSignalType(&readVideoSignalType);
+																hr = pTapeDesc->GetTapeFormat( &readTapeFormat);
+																hr = pTapeDesc->GetTapeLength( &readTapeLength);
 
-										if (( wcscmp(Manufacturer, readManufacturer) != 0) ||
-											( wcscmp(Model, readModel) != 0) ||
-											( FormFactor != readFormFactor) ||
-											( VideoSignalType != readVideoSignalType) ||
-											( TapeFormat != readTapeFormat ) ||
-											( TapeLength != readTapeLength))
+																if (( wcscmp(Manufacturer, readManufacturer) != 0) ||
+																	( wcscmp(Model, readModel) != 0) ||
+																	( FormFactor != readFormFactor) ||
+																	( VideoSignalType != readVideoSignalType) ||
+																	( TapeFormat != readTapeFormat ) ||
+																	( TapeLength != readTapeLength))
+																	hr = AAFRESULT_TEST_FAILED;
+															}
+														}
+													}
+												}
+												pTapeDesc->Release();
+												pTapeDesc = NULL;
+											}
+											pEssDesc->Release();
+											pEssDesc = NULL;
+										}
+										else
+										{
 											hr = AAFRESULT_TEST_FAILED;
+										}
+										pSourceMob->Release();
+										pSourceMob = NULL;
 									}
+									pMob->Release();
+									pMob = NULL;
 								}
-							}
-							else
-							{
-								hr = AAFRESULT_TEST_FAILED;
+								pMobIter->Release();
+								pMobIter = NULL;
 							}
 						}
 						else
@@ -281,17 +300,18 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 							hr = AAFRESULT_TEST_FAILED;
 						}
 					}
+					pHeader->Release();
+					pHeader = NULL;
 				}
+
+				pFile->Close();
 			}
 		}
+
+		pFile->Release();
+		pFile = NULL;
 	}
 
-	// Cleanup and return
-	if (pFile) 
-	{
-		pFile->Close();
-		pFile->Release();
-	}
 
 	/*
 	if (pSession)
@@ -300,21 +320,6 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		pSession->Release();
 	}
 	*/
-
-	if (pHeader)
-		pHeader->Release();
-
-	if (pSourceMob)
-		pSourceMob->Release();
-	
-	if (pMob)
-		pMob->Release();
-
-	if (pTapeDesc)
-		pTapeDesc->Release();
-	
-	if (pEssDesc)
-		pEssDesc->Release();
 
 	return hr;
 }
