@@ -830,6 +830,22 @@ int wremove(const wchar_t* fileName)
 #define OM_USE_COM_CREATEUUID
 #elif defined(OM_OS_UNIX) && defined(__linux__)
 #define OM_USE_LIBUUID_CREATEUUID
+#elif defined(OM_OS_UNIX) && defined(__FreeBSD__)
+
+/* See FreeBSD Porter's Handbook for how
+   to differentiate OS versions. */
+#if __FreeBSD__ >= 2
+#  include <osreldate.h>
+#  if __FreeBSD_version >= 500000
+     /* UUID was introduced in the 5.0 release */
+#    define OM_USE_LIBC_CREATEUUID 
+#  else
+#    define OM_USE_OM_CREATEUUID
+#  endif
+#else
+#  define OM_USE_OM_CREATEUUID
+#endif
+
 #elif defined(OM_OS_UNIX) && defined(__MACH__)
 #define OM_USE_CF_CREATEUUID
 #elif defined(OM_OS_UNIX)
@@ -898,6 +914,22 @@ OMUniqueObjectIdentification createUniqueIdentifier(void)
   OMUniqueObjectIdentification result = {0,0,0,{0}};
   uuid_t u;
   uuid_generate(u);
+  memcpy(&result, &u, sizeof(OMUniqueObjectIdentification));
+  return result;
+}
+#elif defined(OM_USE_LIBC_CREATEUUID)
+
+#include <uuid.h>
+
+OMUniqueObjectIdentification createUniqueIdentifier(void)
+{
+  TRACE("createUniqueIdentifier");
+
+  OMUniqueObjectIdentification result = {0,0,0,{0}};
+  uint32_t status;
+  uuid_t u;
+  uuid_create(&u, &status);
+  ASSERT("uuid_create() succeeded", status == uuid_s_ok);
   memcpy(&result, &u, sizeof(OMUniqueObjectIdentification));
   return result;
 }
