@@ -9,10 +9,23 @@ AAFObject\
 #import ./AAFObject.exp
 AD_HEAD
 AD_IDL(//
-// The component class represents an essence element
-// A Component is an abastract class with two subclasses: Segment and Transition
-// The GetLength and SetLength only aplies to time-varying media and it is an 
-// optional property. Non time-varying objects DO NOT support these property.
+// The component class represents an essence element.  A Component is
+// an abastract class with two subclasses: Segment and Transition.
+// The GetLength and SetLength only aplies to time-varying media and
+// it is an  optional property. Non time-varying objects DO NOT
+// support this property.
+//
+// In addition to the specific error results listed for each method\,
+// all methods in this interface may also return one of the following
+// values:
+// 
+// AAFRESULT_NOMEMORY
+//   - insufficient system memory is available to perform the
+//     operation.
+//
+// AAFRESULT_NOT_INITIALIZED
+//   - This object has not yet had Initialize\(\) called on it through
+//     this object's primary interface.
 //)
 AD_FORWARD_DECLARATION(AAFDataDef)
 AD_CLASS_UUID(38e6f8a0, 2a2c, 11d2, 84, 11, 00, 60, 08, 32, ac, b8)
@@ -28,8 +41,10 @@ AD_METHOD1(SetLength,
   // 
   // Succeeds if all of the following are true:
   // - the pLength pointer is valid.
+  // - the optional length property is present for this object.
   //
-  // This is an optional method and applies only to time-varying media.
+  // This method deals with an optional property\\\, which will only be
+  // present for time-varying media.
   // 
   // If this method fails the length property will not be
   // changed.
@@ -42,7 +57,10 @@ AD_METHOD1(SetLength,
   //   - succeeded.  \\\(This is the only code indicating success.\\\)
   //
   // AAFRESULT_NULL_PARAM
-  //   - pVersion arg is NULL.)
+  //   - pVersion arg is NULL.
+  //
+  // AAFRESULT_BAD_PROP
+  //   - the optional length property is not present for this object.)
 
 
 AD_METHOD1(GetLength,
@@ -54,8 +72,10 @@ AD_METHOD1(GetLength,
   //	
   // Succeeds if all of the following are true:
   // - the pLength pointer is valid.
+  // - the optional length property is present for this object.
   //
-  // This is an optional method and applies only to time-varying media.
+  // This method deals with an optional property\\\, which will only be
+  // present for time-varying media.
   // 
   // If this method fails nothing will be written to *pLength.
   // 
@@ -67,7 +87,10 @@ AD_METHOD1(GetLength,
   //   - succeeded.  \\\(This is the only code indicating success.\\\)
   //
   // AAFRESULT_NULL_PARAM
-  //   - pLength arg is NULL.)
+  //   - pLength arg is NULL.
+  //
+  // AAFRESULT_BAD_PROP
+  //   - the optional length property is not present for this object.)
 	
 
 AD_XMETHOD1(SetDataDef,
@@ -102,6 +125,7 @@ AD_XMETHOD1(GetDataDef,
 			pDatadef,
 			DataDef of this object,
 			returns data definition object.
+  //
   // Succeeds if all of the following are true:
   // - the pDatadef pointer is valid.
   // 
