@@ -16,9 +16,6 @@ AD_HEAD
 AD_DECLARE_FORWARD_AAFTYPES(AAFMob)
 AD_DECLARE_FORWARD_AAFTYPES(AAFPulldown)
 AD_DECLARE_FORWARD_AAFTYPES(AAFEffect)
-//AD_DECLARE_FORWARD_AAFTYPES(AAFObject)
-//AD_DECLARE_FORWARD_AAFTYPES(AAFDataDefinition)
-//AD_DECLARE_FORWARD_AAFTYPES(AAFFile)
 
 
 AD_TYPES_BEGIN(B1A2137B, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
@@ -727,6 +724,40 @@ typedef struct
 		aafCriteriaType_t mediaCrit;
 	} tags;
 } aafSearchCrit_t;
+
+
+
+typedef enum
+{
+	kAAFClassDefinition	    = 1,
+	kAAFPropertyDefinition  = 2,
+	kAAFTypeDefinition      = 4,
+	kAAFDataDefinition      = 8,
+	kAAFEffectDefinition    = 16,
+	kAAFAllDefinitions      = -1
+} aafDefinitionKind_t;
+
+typedef enum
+{
+	kNoDefSearch = 0, 
+	kByDefKind, 
+	kByDefName, 
+	kByDefClass 
+} aafDefinitionCritType_t;
+
+typedef struct
+{
+	aafDefinitionCritType_t type;
+	union 
+	{
+		aafDefinitionKind_t	defKind;
+		aafString_t         *name;
+		aafClassID_t        objClass;	// shouldn't this be a pointer?
+	} tags;
+} aafDefinitionCrit_t;
+
+
+
 
 AD_CPP_QUOTE(/**************************/)
 AD_CPP_QUOTE(#ifndef STDMETHODCALLTYPE)
