@@ -29,6 +29,17 @@ BEGIN {
       /* The first field is a directory */
       dir = fields[1];
       files = trim(fields[2], 1);
+      gsub(" ", "", files);
+      n = split(files, names, ",");
+#      printf("<!--[%d]-->\n", n);
+#      for (i = 1; i <= n; i++) {
+#        printf("<!--[%d : \"%s\"]-->\n", i, names[i]);
+#      }
+      /* Insert directory names */
+      files = dir names[1];
+      for (i = 2; i <= n; i++) {
+        files = files ", " dir names[i];
+      }
       cs = 3; /* Start of comment */
     } else {
       /* The first field is not a directory */
