@@ -25,10 +25,6 @@
 #include "AAFResult.h"
 #include "AAFDefUIDs.h"
 
-#define FORMCHUNKID "FORM"
-#define AIFCID		"AIFC"
-#define COMMONID	"COMM"
-#define SOUNDDATAID	"SSND"
 
 typedef struct tChunk
 {
@@ -97,17 +93,16 @@ typedef struct tAIFCSUMMARY
     }
   }
 
-  static void SwapSummary(WAVEFORMATEX&	summary)
+  static void SwapSummary(AIFCSummary&	summary)
   {
-    SwapBytes(&summary.wFormatTag, sizeof(summary.wFormatTag));
-    SwapBytes(&summary.nChannels, sizeof(summary.nChannels));
-    SwapBytes(&summary.nSamplesPerSec, sizeof(summary.nSamplesPerSec));
-    SwapBytes(&summary.nAvgBytesPerSec, sizeof(summary.nAvgBytesPerSec));
-    SwapBytes(&summary.nBlockAlign, sizeof(summary.nBlockAlign));
-    SwapBytes(&summary.wBitsPerSample, sizeof(summary.wBitsPerSample));
-    SwapBytes(&summary.cbSize, sizeof(summary.cbSize));
+    SwapBytes(&summary.commChunk, sizeof(summary.commChunk ));
+    SwapBytes(&summary.formChunk, sizeof(summary.formChunk ));
+    SwapBytes(&summary.ssndChunk, sizeof(summary.ssndChunk ));
 
-    // Ignore extra information for now trr: 1999-02-19
+	// tlk I am not completely convinced that this will work
+	// on a MAC. but anyhow the whole AIFC data is bogus and
+	// all we try to do here is unit test the AIFCDescriptor
+	// Get/Setsummary modules !!! 1999, 4, 21
   }
 
   #define SWAPSUMMARY(summary) SwapSummary(summary);
