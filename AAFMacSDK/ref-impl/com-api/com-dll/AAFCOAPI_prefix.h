@@ -1,5 +1,11 @@
 // >>> © 1998 Avid Technology, Inc.  All rights reserved. <<<
 
+#if (__MSL_CPP__ >= 0x6007)
+// required for CW6 ShLib (DLL) targets
+#define _MSL_IMP_EXP __declspec(dllimport)
+#define _MSL_NO_LOCALE
+#endif
+
 // Include the pre-compiled header that includes AAF.h
 #include "AAFHeaders.h"
 
@@ -38,3 +44,4 @@
 // Uncomment the following line if you want to see an exhausted list
 // of the calling sequence within the Object Manager.
 //#define OM_ENABLE_TRACE
+

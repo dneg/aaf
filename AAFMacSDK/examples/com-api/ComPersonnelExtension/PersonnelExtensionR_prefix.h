@@ -28,6 +28,12 @@
 #define _MAC
 #define NONAMELESSUNION
 
+#if (__MSL_CPP__ >= 0x6007)
+// required for CW6 ShLib (DLL) targets
+#define _MSL_IMP_EXP __declspec(dllimport)
+#define _MSL_NO_LOCALE
+#endif
+
 // We need to include some of the mac headers before the ole/ActiveX headers
 // so that certain include guards will be properly defined. This will keep
 // the OLE/ActiveX headers from attempting to include files that do not
@@ -76,3 +82,4 @@
 
 // Define "non-debug" symbol for compatibility with WIN32.
 #define NDEBUG
+
