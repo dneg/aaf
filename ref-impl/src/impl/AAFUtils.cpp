@@ -925,6 +925,13 @@ void wcsconvertURLtoFilepath(wchar_t *url, wchar_t *filepath)
 	while (*fpath && *fpath != '/')
 		fpath++;
 
+#ifdef _WIN32
+	// WIN32 filepaths must start with a drive letter, so remove the
+	// initial '/' from the URL.
+	if (*fpath == '/')
+		fpath++;
+#endif
+
 	unescapeURI(fpath);
 
 	mbstowcs(filepath, fpath, strlen(fpath)+1);		// convert back to wcs
