@@ -147,6 +147,29 @@ public:
     //          that was used to create it.
   void setClassFactory(const OMClassFactory* classFactory);
 
+  // Copying.
+
+    // @cmember Create a shallow copy of this <c OMStorable>.
+    //          In a shallow copy, strong references are not followed.
+    //          That is, contained objects are not copied.
+  OMStorable* shallowCopy(void) const;
+
+    // @cmember Create a deep copy of this <c OMStorable>, attach the
+    //          copy to <p destination>.  In a deep copy, strong
+    //          references are followed. That is, contained objects are copied.
+    //          This function copies the entire object tree rooted at this
+    //          <c OMStorable>. This root object is treated
+    //          differently than the contained objects in that only the
+    //          strong references are copied. Clients may choose to create
+    //          <p destination> using <mf OMStorable::shallowCopy>.
+    //          All strong reference properties of this <c OMStorable> must
+    //          be present in the property set of <p destination>. The values
+    //          of the strong reference properties of <p destination> must
+    //          be void and are replaced by those of this <c OMStorable>.
+    //          Any properties of <p destination> not also in this
+    //          <c OMStorable> are left unchanged.
+  void deepCopyTo(OMStorable* destination, void* clientContext) const;
+
   // Callbacks.
 
     // @cmember Inform this <c OMStorable> that it is about to be saved.
@@ -158,6 +181,18 @@ public:
     //          The <p clientContext> passed is the one that was specified
     //          in the currently active call to <mf OMStorable::restore>.
   virtual void onRestore(void* clientContext) const;
+
+    // @cmember Inform this <c OMStorable> that it has just been copied by
+    //          <mf OMStorable::deepCopyTo>. The <p clientContext> passed is
+    //          the one that was specified in the currently active call
+    //          to <mf OMStorable::deepCopyTo>. When <mf OMStorable::onCopy>
+    //          is called only the shallow portion of the deep copy to be
+    //          performed by <mf OMStorable::deepCopyTo> has been completed.
+    //          That is, this <c OMStorable> contains copies of all of the
+    //          properties of the souce <c OMStorable> except for strong
+    //          references (contained objects). Those properties wll be
+    //          copied after <mf OMStorable::onCopy> returns.
+  virtual void onCopy(void* clientContext) const;
 
 private:
   // @access Private members.
