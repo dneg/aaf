@@ -173,7 +173,7 @@ bool OMListIterator<Element>::operator++()
 {
   TRACE("OMListIterator<Element>::operator++()");
 
-  PRECONDITION("Valid iterator", before() || valid());
+  PRECONDITION("Valid iterator", before() || this->valid());
 
   bool result;
   _current = _current->_next;
@@ -186,8 +186,8 @@ bool OMListIterator<Element>::operator++()
   }
   POSTCONDITION("Consistent result", IMPLIES( result, !after()));
   POSTCONDITION("Consistent result", IMPLIES(!result,  after()));
-  POSTCONDITION("Consistent result", IMPLIES( result,  valid()));
-  POSTCONDITION("Consistent result", IMPLIES(!result, !valid()));
+  POSTCONDITION("Consistent result", IMPLIES( result,  this->valid()));
+  POSTCONDITION("Consistent result", IMPLIES(!result, !this->valid()));
   return result;
 }
 
@@ -209,7 +209,7 @@ bool OMListIterator<Element>::operator--()
 {
   TRACE("OMListIterator<Element>::operator--()");
 
-  PRECONDITION("Valid iterator", after() || valid());
+  PRECONDITION("Valid iterator", after() || this->valid());
 
   bool result;
   _current = _current->_previous;
@@ -222,8 +222,8 @@ bool OMListIterator<Element>::operator--()
   }
   POSTCONDITION("Consistent result", IMPLIES( result, !before()));
   POSTCONDITION("Consistent result", IMPLIES(!result,  before()));
-  POSTCONDITION("Consistent result", IMPLIES( result,  valid()));
-  POSTCONDITION("Consistent result", IMPLIES(!result, !valid()));
+  POSTCONDITION("Consistent result", IMPLIES( result,  this->valid()));
+  POSTCONDITION("Consistent result", IMPLIES(!result, !this->valid()));
 
   return result;
 }
@@ -239,7 +239,7 @@ Element& OMListIterator<Element>::value(void) const
 {
   TRACE("OMListIterator<Element>::value");
 
-  PRECONDITION("Valid iterator", valid());
+  PRECONDITION("Valid iterator", this->valid());
 
   return _current->_value;
 }
@@ -256,7 +256,7 @@ Element OMListIterator<Element>::setValue(Element newElement)
 {
   TRACE("OMListIterator<Element>::setValue");
 
-  PRECONDITION("Valid iterator", valid());
+  PRECONDITION("Valid iterator", this->valid());
 
   Element result = value();
 
