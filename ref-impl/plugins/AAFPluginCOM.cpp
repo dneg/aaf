@@ -44,8 +44,9 @@
 
 
 #include "CAAFInProcServer.h"
+#include "CAAFInProcServer.cpp"
 
-CAAFInProcServer g_AAFInProcServer;
+static CAAFInProcServer g_AAFInProcServer;
 CAAFServer* g_pAAFServer = &g_AAFInProcServer;
 
 // Include the table the associates all of the CLSID's with class names and factory methods.
@@ -102,7 +103,26 @@ void pascal DllTerminationRoutine();
 #pragma export on
 #endif // #if defined(_MAC)
 
+#if defined(__sgi)
 
+class PluginCOMInitialize {
+public:
+	PluginCOMInitialize();
+	~PluginCOMInitialize();
+};
+
+PluginCOMInitialize::PluginCOMInitialize()
+{
+	// Initialize the inproc server object.
+ 	g_AAFInProcServer.Init(AAFPluginObjectMap, 0);
+}
+
+PluginCOMInitialize::~PluginCOMInitialize()
+{}
+
+PluginCOMInitialize init;
+
+#endif
 
 #if defined(WIN32) || defined(_WIN32)
 // Include the entry point for the windows dll.
@@ -132,7 +152,7 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
 /////////////////////////////////////////////////////////////////////////////
 // Used to determine whether the DLL can be unloaded by OLE
 
-STDAPI DllCanUnloadNow(void)
+extern "C" STDAPI DllCanUnloadNow(void)
 {
 	return g_AAFInProcServer.CanUnloadNow();
 }
@@ -140,7 +160,7 @@ STDAPI DllCanUnloadNow(void)
 /////////////////////////////////////////////////////////////////////////////
 // Returns a class factory to create an object of the requested type
 
-STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
+extern "C" STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
 	return g_AAFInProcServer.GetClassObject(rclsid, riid, ppv);
 }
@@ -148,7 +168,7 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 /////////////////////////////////////////////////////////////////////////////
 // DllRegisterServer - Adds entries to the system registry
 
-STDAPI DllRegisterServer(void)
+extern "C" STDAPI DllRegisterServer(void)
 {
 	// registers objects, typelib and all interfaces in typelib
 	return g_AAFInProcServer.RegisterServer(TRUE);
@@ -157,7 +177,7 @@ STDAPI DllRegisterServer(void)
 /////////////////////////////////////////////////////////////////////////////
 // DllUnregisterServer - Removes entries from the system registry
 
-STDAPI DllUnregisterServer(void)
+extern "C" STDAPI DllUnregisterServer(void)
 {
 	// Unregisters all objects.
 	return g_AAFInProcServer.UnregisterServer();
@@ -172,13 +192,13 @@ STDAPI DllUnregisterServer(void)
 
 
 // Return the number of coclasses exported from this dll.
-STDAPI_(ULONG) AAFGetClassCount(void)
+extern "C" STDAPI_(ULONG) AAFGetClassCount(void)
 {
 	return g_AAFInProcServer.GetClassCount();
 }
 
 // Get the nth implementation coclass id.
-STDAPI AAFGetClassObjectID(ULONG index, CLSID *pClassID)
+extern "C" STDAPI AAFGetClassObjectID(ULONG index, CLSID *pClassID)
 {
 	return g_AAFInProcServer.GetClassObjectID(index, pClassID);
 }
