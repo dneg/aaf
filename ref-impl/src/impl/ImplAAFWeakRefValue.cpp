@@ -27,8 +27,8 @@
 
 #include "ImplAAFWeakRefValue.h"
 
-#ifndef __ImplAAFRoot_h__
-#include "ImplAAFRoot.h"
+#ifndef __ImplAAFStorable_h__
+#include "ImplAAFStorable.h"
 #endif
 
 // TBD: Note the following include for ImplAAFClassDef.h really belongs
@@ -76,6 +76,28 @@ AAFRESULT ImplAAFWeakRefValue::Initialize (
     // This instance is now fully initialized.
     setInitialized();
   }
+  
+  return result;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE ImplAAFWeakRefValue::GetObject(ImplAAFStorable **ppObject) const
+{
+  AAFRESULT result = AAFRESULT_NOT_IMPLEMENTED;
+  
+  if (NULL == ppObject)
+    return AAFRESULT_NULL_PARAM;
+  
+  return result;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE ImplAAFWeakRefValue::SetObject(ImplAAFStorable *pObject)
+{
+  AAFRESULT result = AAFRESULT_NOT_IMPLEMENTED;
+  
+  if (NULL == pObject)
+    return AAFRESULT_NULL_PARAM;
   
   return result;
 }
