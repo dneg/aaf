@@ -44,11 +44,8 @@ CXXFILES2 = $(CXXFILES_TMP:ModuleTests/%=%)
 
 
 .PHONY : all
-#all : $(OBJDIR) $(AAFSDKBINDIR)/ComModAAF$(EXE)
-all : $(AAFSDKBINDIR)/ComModAAF$(EXE)
+all : ModuleTests $(AAFSDKBINDIR)/ComModAAF$(EXE)
 
-
-# $(AAFSDKBINDIR)/ComModAAF$(EXE) : $(CXXOBJS) ModuleTests
 
 ifeq ($(AAFTARGET),Debug-static)
 $(AAFSDKBINDIR)/ComModAAF$(EXE) : $(CXXOBJS) $(CXXOBJS2)
@@ -59,9 +56,8 @@ $(AAFSDKBINDIR)/ComModAAF$(EXE) : $(CXXOBJS) $(CXXOBJS2)
 	-L$(AAFSDKLIBDIR) -laaflib -laafiid $(PLATFORMLIBS) $(LIBCIO) -o $@
 endif
 
-#.PHONY : ModuleTests
-#ModuleTests :
-$(CXXOBJS2):
+.PHONY : ModuleTests
+ModuleTests :
 	@echo "\nBuilding ModuleTests\n"
 	cd ModuleTests && $(MAKE)
 
@@ -86,4 +82,3 @@ check : $(AAFSDKBINDIR)/ComModAAF$(EXE)
 
 
 include $(AAFBASE)/build/rules.mk
-
