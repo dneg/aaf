@@ -60,11 +60,7 @@ ImplAAFSequence::~ImplAAFSequence ()
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFSequence::SetInitialValue (aafUID_t * pDatadef)
 {
-	HRESULT	hr;
-
-	hr = SetDataDef(pDatadef);
-
-	return hr;
+	return (SetDataDef(pDatadef));
 }
 
 //***********************************************************
@@ -115,23 +111,12 @@ AAFRESULT STDMETHODCALLTYPE
 		CHECK(pComponent->GetDataDef(&cpntDataDef));
 		CHECK(pComponent->GetLength(&cpntLen));
 
-#if 0
-		if (_file->IsSemanticCheckingEnabled())
-		{
-			aafUniqueName_t		datakindName;
+		// Verify that cpnt's datakind converts to sequence's datakind
+		if (memcmp(&sequDataDef, &cpntDataDef, sizeof(aafUID_t)) != 0)
+			RAISE(AAFRESULT_INVALID_DATAKIND);
 
-			/* Verify that cpnt's datakind converts to sequence's datakind */
-			CHECK(sequDatakind->GetName(OMUNIQUENAME_SIZE, datakindName));
-			if (!cpntDatakind->DoesDatakindConvertTo(datakindName, &aafError))
-			{
-				RAISE(OM_ERR_INVALID_DATAKIND);
-			}
-		} /* semanticCheckEnable */
-#endif
-
-		/* Get the previous element in the sequence to verify neighboring
-		 * transitions and source clip lengths.
-		 */
+		// Get the previous element in the sequence to verify neighboring
+		// transitions and source clip lengths.
 		_components.getSize(numCpnts);
 		if (numCpnts)
 		{
@@ -143,13 +128,11 @@ AAFRESULT STDMETHODCALLTYPE
 			{
 				isPrevTran = AAFTrue;
 			}
-			CHECK(pPrevCpnt->GetLength(&prevLen));
 
-			// TODO: Release reference
-			//pPrevCpnt->ReleaseObject();
+			CHECK(pPrevCpnt->GetLength(&prevLen));
 		}
 
-		/* Is the newly appended component a transition? */
+		// Is the newly appended component a transition?
 		pComponent->GetComponentType(&type);
 	    if (type == kTransition)
 		{
@@ -163,7 +146,7 @@ AAFRESULT STDMETHODCALLTYPE
 			}
 			else
 			{
-				/* Verify that previous SCLP is at least as long as the tran */
+				// Verify that previous SCLP is at least as long as the tran
 				if (Int64Less(prevLen, cpntLen))
 				{
 					RAISE(AAFRESULT_INSUFF_TRAN_MATERIAL);
@@ -173,22 +156,23 @@ AAFRESULT STDMETHODCALLTYPE
 			SubInt64fromInt64(cpntLen, &sequLen);
 			CHECK(SetLength(&sequLen));
 		}
-		else /* Not a transition */
+		else // Not a transition
 		{
 			if (isPrevTran)
 			{
-				/* Verify that length is at least as long as the prev tran */
+				// Verify that length is at least as long as the prev tran
 				if (Int64Less(cpntLen, prevLen))
 				{
 					RAISE(AAFRESULT_INSUFF_TRAN_MATERIAL);
 				}
 			}
-			/* Add length of component to sequence, if not transition */
+
+			// Add length of component to sequence, if not transition
 			AddInt64toInt64(cpntLen, &sequLen);
 			CHECK(SetLength(&sequLen));
 		}
 
-		/* If it all checks out, append the component to the sequence */
+		// If it all checks out, append the component to the sequence
 	    _components.appendValue(pComponent);
 	}
 	XEXCEPT
@@ -199,8 +183,6 @@ AAFRESULT STDMETHODCALLTYPE
 
 	return(AAFRESULT_SUCCESS);
 }
-
-
 
 //***********************************************************
 //
@@ -230,8 +212,6 @@ AAFRESULT STDMETHODCALLTYPE
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
-
-
 
 //***********************************************************
 //
@@ -265,8 +245,6 @@ AAFRESULT STDMETHODCALLTYPE
 	return AAFRESULT_SUCCESS;
 }
 
-
-
 //***********************************************************
 //
 // EnumComponents()
@@ -292,21 +270,26 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFSequence::EnumComponents (ImplEnumAAFComponents ** ppEnum)
 {
-	ImplEnumAAFComponents	*theEnum = (ImplEnumAAFComponents *)CreateImpl (CLSID_EnumAAFComponents);
+	ImplEnumAAFComponents*	theEnum;
+	HRESULT					hr;
+	
+	theEnum = (ImplEnumAAFComponents *)CreateImpl(CLSID_EnumAAFComponents);
+	if (theEnum == NULL)
+		return E_FAIL;
 		
-	XPROTECT()
+	hr = theEnum->SetEnumSequence(this);
+	if (SUCCEEDED(hr))
 	{
-		CHECK(theEnum->SetEnumSequence(this));
-		CHECK(theEnum->Reset());
+		theEnum->Reset();
 		*ppEnum = theEnum;
 	}
-	XEXCEPT
+	else
 	{
-		return(XCODE());
+		theEnum->ReleaseRef();
+		*ppEnum = NULL;
 	}
-	XEND;
-	
-	return(AAFRESULT_SUCCESS);
+
+	return hr;
 }
 
 
@@ -502,13 +485,25 @@ ImplAAFSequence::SegmentTCToOffset (/*[in]*/ aafTimecode_t *  /*pTimecode*/,
 #endif
 }
 
-// Internal to the toolkit functions
+//***********************************************************
+//
+// GetNthComponent()
+//
+// Get the component at the position specified by index from
+// the components vector.
+//
+// NOTES:
+//
+//    - The vector is 0-based.
+//    - AddRef the object being returned.
+// 
 AAFRESULT
-    ImplAAFSequence::GetNthComponent (aafInt32 index /*0-based*/, ImplAAFComponent **ppComponent)
+    ImplAAFSequence::GetNthComponent (aafInt32 index, ImplAAFComponent** ppComponent)
 {
-	ImplAAFComponent	*obj;
+	ImplAAFComponent*	obj;
 
 	_components.getValueAt(obj, index);
+	obj->AcquireReference();
 	*ppComponent = obj;
 
 	return AAFRESULT_SUCCESS;
