@@ -195,6 +195,10 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFEssenceFormat.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFEssenceGroup.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFEssencePlugin.cpp"
 # End Source File
 # Begin Source File
@@ -216,6 +220,10 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFFileDescriptor.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFFiller.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFFilmDescriptor.cpp"
 # End Source File
 # Begin Source File
 
@@ -268,14 +276,6 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFLocator.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFMasterMob.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\impl\ImplAAFMediaFilmDescriptor.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\impl\ImplAAFMediaGroup.cpp"
 # End Source File
 # Begin Source File
 

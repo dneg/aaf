@@ -291,6 +291,14 @@ SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFEssenceFormatTest.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFEssenceGroup.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFEssenceGroupTest.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFEssencePlugin.cpp"
 # End Source File
 # Begin Source File
@@ -336,6 +344,14 @@ SOURCE="..\..\..\ref-impl\src\com-api\CAAFFiller.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFFillerTest.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFFilmDescriptor.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFFilmDescriptorTest.cpp"
 # End Source File
 # Begin Source File
 
@@ -444,22 +460,6 @@ SOURCE="..\..\..\ref-impl\src\com-api\CAAFMasterMob.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFMasterMobTest.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\com-api\CAAFMediaFilmDescriptor.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFMediaFilmDescriptorTest.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\com-api\CAAFMediaGroup.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFMediaGroupTest.cpp"
 # End Source File
 # Begin Source File
 
