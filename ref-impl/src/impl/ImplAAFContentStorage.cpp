@@ -38,6 +38,8 @@
 
 #include "ImplAAFObjectCreation.h"
 
+#include <assert.h>
+
 #define DEFAULT_NUM_MOBS				1000
 #define DEFAULT_NUM_DATAOBJ			200
 
@@ -84,6 +86,7 @@ ImplAAFContentStorage::~ImplAAFContentStorage ()
 		if (pEssenceData)
 		{
 		  pEssenceData->ReleaseReference();
+		  pEssenceData = 0;
 		}
 	}
 	
@@ -95,6 +98,7 @@ ImplAAFContentStorage::~ImplAAFContentStorage ()
 		if (pMob)
 		{
 		  pMob->ReleaseReference();
+		  pMob = 0;
 		}
 	}
 }
@@ -163,6 +167,7 @@ AAFRESULT STDMETHODCALLTYPE
 			if(hr == AAFRESULT_SUCCESS)
 			{
 			  siz++;
+			  assert (aMob);
 			  aMob->ReleaseReference();
 			  aMob = NULL;
 			}
@@ -170,7 +175,10 @@ AAFRESULT STDMETHODCALLTYPE
 		if(hr == AAFRESULT_NO_MORE_MOBS)
 			hr = AAFRESULT_SUCCESS;
 		if (mobEnum)
-		  mobEnum->ReleaseReference();
+		  {
+			mobEnum->ReleaseReference();
+			mobEnum = 0;
+		  }
 	}
 	
 	*pNumMobs = siz;
@@ -197,7 +205,10 @@ AAFRESULT STDMETHODCALLTYPE
 	XEXCEPT
 	{
 		if (theEnum)
+		  {
 			theEnum->ReleaseReference();
+			theEnum = 0;
+		  }
 		return(XCODE());
 	}
 	XEND;
@@ -363,7 +374,10 @@ AAFRESULT STDMETHODCALLTYPE
 	XEXCEPT
 	{
 		if(testData != NULL)
+		  {
 			testData->ReleaseReference();
+			testData = 0;
+		  }
 	}
 	XEND
 
@@ -405,7 +419,10 @@ AAFRESULT
 	XEXCEPT
 	{
 		if(testData != NULL)
+		  {
 			testData->ReleaseReference();
+			testData = 0;
+		  }
 	}
 	XEND
 
@@ -430,7 +447,10 @@ AAFRESULT STDMETHODCALLTYPE
 	XEXCEPT
 	{
 		if (theEnum)
+		  {
 			theEnum->ReleaseReference();
+			theEnum = 0;
+		  }
 		return(XCODE());
 	}
 	XEND;
@@ -472,7 +492,10 @@ AAFRESULT STDMETHODCALLTYPE
 	XEND;
 
 	if (pMatchingMob)
+	  {
 		pMatchingMob->ReleaseReference();	
+		pMatchingMob = 0;
+	  }
 	
 	return(AAFRESULT_SUCCESS);
 }

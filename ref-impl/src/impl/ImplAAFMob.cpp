@@ -103,7 +103,8 @@ ImplAAFMob::~ImplAAFMob ()
 		ImplAAFMobSlot *pSlot = _slots.setValueAt(0, i);
 		if (pSlot)
 		{
-			pSlot->ReleaseReference();
+		  pSlot->ReleaseReference();
+		  pSlot = 0;
 		}
 	}
 
@@ -114,7 +115,8 @@ ImplAAFMob::~ImplAAFMob ()
 		{
 			ImplAAFTaggedValue* pTaggedValue = _userComments.setValueAt(0, j);
 			if (pTaggedValue)
-				pTaggedValue->ReleaseReference();
+			  pTaggedValue->ReleaseReference();
+			pTaggedValue = 0;
 		}
 	}
 }
@@ -409,9 +411,11 @@ AAFRESULT STDMETHODCALLTYPE
 	XEXCEPT
 	{
 		if (tmpSlot)
-			tmpSlot->ReleaseReference();
+		  tmpSlot->ReleaseReference();
+		tmpSlot = 0;
 		if(pDictionary != NULL)
-			pDictionary->ReleaseReference();
+		  pDictionary->ReleaseReference();
+		pDictionary = 0;
 		return(XCODE());
 	}
 	XEND;
@@ -469,9 +473,11 @@ AAFRESULT STDMETHODCALLTYPE
 	XEXCEPT
 	  {
 		if (aSlot)
-			aSlot->ReleaseReference();
+		  aSlot->ReleaseReference();
+		aSlot = 0;
 		if(pDictionary != NULL)
-			pDictionary->ReleaseReference();
+		  pDictionary->ReleaseReference();
+		pDictionary = 0;
 		return(XCODE());
 	  }
 	XEND;
@@ -500,7 +506,8 @@ AAFRESULT STDMETHODCALLTYPE
 	XEXCEPT
 	{
 		if (theEnum)
-			theEnum->ReleaseReference();
+		  theEnum->ReleaseReference();
+		theEnum = 0;
 		return(XCODE());
 	}
 	XEND;
@@ -546,12 +553,14 @@ AAFRESULT STDMETHODCALLTYPE
 				pEnum->NextOne(&pTaggedValue);
 			}
 			pEnum->ReleaseReference();
+			pEnum = 0;
 		}
 		if (commentFound)
 		{
 			// Update existing comment
 			CHECK(pTaggedValue->SetValue((wcslen(pComment)*sizeof(aafWChar)+2), (aafDataValue_t)pComment));
 			pTaggedValue->ReleaseReference();
+			pTaggedValue = 0;
 		}
 		else
 		{
@@ -568,7 +577,8 @@ AAFRESULT STDMETHODCALLTYPE
 	XEXCEPT
 	{
 		if(pDictionary != NULL)
-			pDictionary->ReleaseReference();
+		  pDictionary->ReleaseReference();
+		pDictionary = 0;
 		return(XCODE());
 	}
 	XEND;
@@ -629,7 +639,8 @@ AAFRESULT STDMETHODCALLTYPE
 	XEXCEPT
 	{
 		if (theEnum)
-			theEnum->ReleaseReference();
+		  theEnum->ReleaseReference();
+		theEnum = 0;
 		return(XCODE());
 	}
 	XEND;
@@ -734,13 +745,17 @@ AAFRESULT STDMETHODCALLTYPE
 	XEXCEPT
 	{
 		if(iter != NULL)
-			iter->ReleaseReference();
+		  iter->ReleaseReference();
+		iter = 0;
 		if(slot != NULL)
-			slot->ReleaseReference();
+		  slot->ReleaseReference();
+		slot = 0;
 		if(pdwn != NULL)
-			pdwn->ReleaseReference();
+		  pdwn->ReleaseReference();
+		pdwn = 0;
 		if(pdwnInput != NULL)
-			pdwnInput->ReleaseReference();
+		  pdwnInput->ReleaseReference();
+		pdwnInput = 0;
 		return(XCODE());
 	}
 	XEND;
@@ -867,15 +882,20 @@ AAFRESULT STDMETHODCALLTYPE
 	XEXCEPT
 	{
 		if (tapeMob)
-			dataDef->ReleaseReference();
+		  dataDef->ReleaseReference();
+		dataDef = 0;
 		if (dataDef)
-			dataDef->ReleaseReference();
+		  dataDef->ReleaseReference();
+		dataDef = 0;
 		if (slotIter)
-			slotIter->ReleaseReference();
+		  slotIter->ReleaseReference();
+		slotIter = 0;
 		if (slot)
-			slot->ReleaseReference();
+		  slot->ReleaseReference();
+		slot = 0;
 		if (dict)
-			dict->ReleaseReference();
+		  dict->ReleaseReference();
+		dict = 0;
 		return(XCODE());
 	}
 	XEND;
@@ -974,21 +994,29 @@ AAFRESULT STDMETHODCALLTYPE
 	XEXCEPT
 	{
 		if (tapeMob)
-			tapeMob->ReleaseReference();	
+		  tapeMob->ReleaseReference();	
+		tapeMob = 0;
 		if (sourceInfo)
-			sourceInfo->ReleaseReference();	
+		  sourceInfo->ReleaseReference();	
+		sourceInfo = 0;
 		if(iterHdl != NULL)
-			iterHdl->ReleaseReference();
+		  iterHdl->ReleaseReference();
+		iterHdl = 0;
 		if(sequIter != NULL)
-			sequIter->ReleaseReference();
+		  sequIter->ReleaseReference();
+		sequIter = 0;
 		if(slot != NULL)
-			slot->ReleaseReference();
+		  slot->ReleaseReference();
+		slot = 0;
 		if(pdwn != NULL)
-			pdwn->ReleaseReference();
+		  pdwn->ReleaseReference();
+		pdwn = 0;
 		if(seg != NULL)
-			seg->ReleaseReference();
+		  seg->ReleaseReference();
+		seg = 0;
 		if(pdwnInput != NULL)
-			pdwnInput->ReleaseReference();
+		  pdwnInput->ReleaseReference();
+		pdwnInput = 0;
 	}
 	XEND;
 	
@@ -1071,9 +1099,11 @@ AAFRESULT STDMETHODCALLTYPE
 	XEXCEPT
 	{
 		if(slot)
-			slot->ReleaseReference();
+		  slot->ReleaseReference();
+		slot = 0;
 		if(iter)
-			iter->ReleaseReference();
+		  iter->ReleaseReference();
+		iter = 0;
 	}
 	XEND;
 
@@ -1312,19 +1342,26 @@ ImplAAFMob::AddPhysSourceRef (aafAppendOption_t  addType,
 	XEXCEPT
 	{
 		if(sequence != NULL)
-			sequence->ReleaseReference();
+		  sequence->ReleaseReference();
+		sequence = 0;
 		if(sclp != NULL)
-			sclp->ReleaseReference();
+		  sclp->ReleaseReference();
+		sclp = 0;
 		if(slot != NULL)
-			slot->ReleaseReference();
+		  slot->ReleaseReference();
+		slot = 0;
 		if(slotSeg != NULL)
-			slotSeg->ReleaseReference();
+		  slotSeg->ReleaseReference();
+		slotSeg = 0;
 		if(slot != NULL)
-			slot->ReleaseReference();
+		  slot->ReleaseReference();
+		slot = 0;
 		if(cpnt != NULL)
-			cpnt->ReleaseReference();
+		  cpnt->ReleaseReference();
+		cpnt = 0;
 		if(pDictionary != NULL)
-			pDictionary->ReleaseReference();
+		  pDictionary->ReleaseReference();
+		pDictionary = 0;
 	}
 	XEND;
 
@@ -1415,13 +1452,19 @@ AAFRESULT ImplAAFMob::InternalSearchSource(
 			RAISE(AAFRESULT_TRAVERSAL_NOT_POSS);
 
 		nextMob->ReleaseReference();
+		nextMob = 0;
 		if (leafObj)
-			leafObj->ReleaseReference();
+		  leafObj->ReleaseReference();
+		leafObj = 0;
 		if (effeObject)
-			effeObject->ReleaseReference();
+		  effeObject->ReleaseReference();
+		effeObject = 0;
 		rootObj->ReleaseReference();
+		rootObj = 0;
 		track->ReleaseReference();
+		track = 0;
 		sourceInfo->ReleaseReference();
+		sourceInfo = 0;
 	} /* XPROTECT */
 	XEXCEPT
 	{
@@ -1429,17 +1472,23 @@ AAFRESULT ImplAAFMob::InternalSearchSource(
 			sourceInfo->SetOperationGroup(effeObject);
 
 		if (nextMob)
-			nextMob->ReleaseReference();
+		  nextMob->ReleaseReference();
+		nextMob = 0;
 		if (leafObj)
-			leafObj->ReleaseReference();
+		  leafObj->ReleaseReference();
+		leafObj = 0;
 		if (effeObject)
-			effeObject->ReleaseReference();
+		  effeObject->ReleaseReference();
+		effeObject = 0;
 		if (rootObj)
-			rootObj->ReleaseReference();
+		  rootObj->ReleaseReference();
+		rootObj = 0;
 		if (track)
-			track->ReleaseReference();
+		  track->ReleaseReference();
+		track = 0;
 		if (sourceInfo)
-			sourceInfo->ReleaseReference();
+		  sourceInfo->ReleaseReference();
+		sourceInfo = 0;
 	}
 	XEND;
 	
@@ -1579,15 +1628,18 @@ AAFRESULT ImplAAFMob::FindNextMob(ImplAAFMobSlot *track,
 		*retLen = sclpLen;
 
 		nextTrack->ReleaseReference();
+		nextTrack = 0;
 
 //		sclp->ReleaseReference(); // causes 800400c8 to be returned from MasterMob::OpenEssence
 	}
 	XEXCEPT
 	{
 		if (nextTrack)
-			nextTrack->ReleaseReference();
+		  nextTrack->ReleaseReference();
+		nextTrack = 0;
 		if (nextMob)
-			nextMob->ReleaseReference();
+		  nextMob->ReleaseReference();
+		nextMob = 0;
 //		if (sclp)
 //			sclp->ReleaseReference();
 	}
@@ -1664,7 +1716,9 @@ AAFRESULT ImplAAFMob::MobFindSource(
 				/*!!!*/NULL));		// What to put in for CPNT
 				
 			rootObj->ReleaseReference();
+			rootObj = 0;
 			track->ReleaseReference();
+			track = 0;
 			return(AAFRESULT_SUCCESS);
 		}
 		
@@ -1740,12 +1794,17 @@ AAFRESULT ImplAAFMob::MobFindSource(
 		}
 		
 		nextMob->ReleaseReference();
+		nextMob = 0;
 		if (leafObj)
-			leafObj->ReleaseReference();
+		  leafObj->ReleaseReference();
+		leafObj = 0;
 		if (effeObject)
-			effeObject->ReleaseReference();
+		  effeObject->ReleaseReference();
+		effeObject = 0;
 		rootObj->ReleaseReference();
+		rootObj = 0;
 		track->ReleaseReference();
+		track = 0;
 	}
 	XEXCEPT
 	{
@@ -1753,15 +1812,20 @@ AAFRESULT ImplAAFMob::MobFindSource(
 			sourceInfo->SetOperationGroup(effeObject);
 
 		if (nextMob)
-			nextMob->ReleaseReference();
+		  nextMob->ReleaseReference();
+		nextMob = 0;
 		if (leafObj)
-			leafObj->ReleaseReference();
+		  leafObj->ReleaseReference();
+		leafObj = 0;
 		if (effeObject)
-			effeObject->ReleaseReference();
+		  effeObject->ReleaseReference();
+		effeObject = 0;
 		if (rootObj)
-			rootObj->ReleaseReference();
+		  rootObj->ReleaseReference();
+		rootObj = 0;
 		if (track)
-			track->ReleaseReference();
+		  track->ReleaseReference();
+		track = 0;
 	}
 	XEND;
 	

@@ -56,7 +56,10 @@ ImplAAFFindSourceInfo::Init(ImplAAFMob *mob, aafSlotID_t slotID, aafPosition_t p
 							ImplAAFComponent *cpnt)
 {
 	if (_mob)
+	  {
 		_mob->ReleaseReference();
+		_mob = 0;
+	  }
 	_mob = mob;
 	if (mob)
 		mob->AcquireReference();
@@ -65,7 +68,10 @@ ImplAAFFindSourceInfo::Init(ImplAAFMob *mob, aafSlotID_t slotID, aafPosition_t p
 	_editRate = editRate;
 	_length = length;
 	if (_cpnt)
+	  {
 		_cpnt->ReleaseReference();
+		_cpnt = 0;
+	  }
 	_cpnt = cpnt;
 	if (cpnt)
 		cpnt->AcquireReference();
@@ -88,10 +94,16 @@ ImplAAFFindSourceInfo::Duplicate(ImplAAFFindSourceInfo *result)
 AAFRESULT STDMETHODCALLTYPE ImplAAFFindSourceInfo::Clear(void)
 {
 	if (_mob)
+	  {
 		_mob->ReleaseReference();
+		_mob = 0;
+	  }
 	_mob = NULL;
 	if (_cpnt)
+	  {
 		_cpnt->ReleaseReference();
+		_cpnt = 0;
+	  }
 	_cpnt = NULL;
 	_editRate.numerator = 0;
 	_editRate.denominator = 1;
@@ -112,7 +124,10 @@ ImplAAFFindSourceInfo::SetOperationGroup(
 				ImplAAFOperationGroup *group)
 {
 	if (_operationGroup)
+	  {
 		_operationGroup->ReleaseReference();
+		_operationGroup = 0;
+	  }
 	_operationGroup = group;
 	if (group)
 	  group->AcquireReference();
@@ -124,7 +139,10 @@ ImplAAFFindSourceInfo::SetComponent(
 				ImplAAFComponent *cpnt)
 {
 	if (_cpnt)
+	  {
 		_cpnt->ReleaseReference();
+		_cpnt = 0;
+	  }
 	_cpnt = cpnt;
 	if (cpnt)
 	  cpnt->AcquireReference();
