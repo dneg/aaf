@@ -194,7 +194,7 @@ inline void AxQueryInterface( IAAFSmartPointer<TypeSrc> spSrc,
 							  IAAFSmartPointer<TypeDst>& spDst,
 							  const IID& iid )
 {
-	TypeDst* dummy;
+	TypeDst* dummy = 0;
 
 	if ( !( iid == AxIID( dummy ) ) ) {
 		throw AxEx( L"IID TypeDst mismatch" );
