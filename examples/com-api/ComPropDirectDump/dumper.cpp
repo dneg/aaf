@@ -91,7 +91,7 @@ static void printIndent (int indent, ostream & os)
 }
 
 
-static void convert(wchar_t* wcName, size_t length, const char* name)
+static void convert(aafCharacter* wcName, size_t length, const char* name)
 {
   assert((name && *name));
   assert(wcName != 0);
@@ -122,7 +122,7 @@ static void convert(char* cName, size_t length, const char* name)
   }
 }
 
-static void convert(wchar_t* wName, size_t length, const wchar_t* name)
+static void convert(aafCharacter* wName, size_t length, const aafCharacter* name)
 {
   assert((name && *name));
   assert(wName != 0);
@@ -141,7 +141,7 @@ static void convert(wchar_t* wName, size_t length, const wchar_t* name)
   }
 }
 
-static void convert(char* cName, size_t length, const wchar_t* name)
+static void convert(char* cName, size_t length, const aafCharacter* name)
 {
   assert((name && *name));
   assert(cName != 0);
@@ -154,7 +154,7 @@ static void convert(char* cName, size_t length, const wchar_t* name)
   }
 }
 
-static char * make_mbstring(size_t length, const wchar_t* name)
+static char * make_mbstring(size_t length, const aafCharacter* name)
 {
   assert(name);
   assert(length > 0);
@@ -215,7 +215,7 @@ HRESULT dumpObject(IAAFObjectSP pContainer,
 	  checkResult(pContainer->GetDefinition (&pClassDef));
       aafUInt32 bufClassNameSize;
 		  checkResult(pClassDef->GetNameBufLen (&bufClassNameSize));
-		  wchar_t * classNameBuf = new wchar_t[bufClassNameSize];
+		  aafCharacter * classNameBuf = new aafCharacter[bufClassNameSize];
 		  assert (classNameBuf);
 		  checkResult(pClassDef->GetName(classNameBuf, bufClassNameSize));
 		  char *mbBuf = make_mbstring(bufClassNameSize, classNameBuf); // create an ansi/asci
@@ -233,7 +233,7 @@ HRESULT dumpObject(IAAFObjectSP pContainer,
 		  // Here we print out property's name using pPDef->GetName()
 		  aafUInt32 bufSize;
 		  checkResult(pPDef->GetNameBufLen (&bufSize));
-		  wchar_t * nameBuf = new wchar_t[bufSize];
+		  aafCharacter * nameBuf = new aafCharacter[bufSize];
 		  assert (nameBuf);
 		  checkResult(pPDef->GetName(nameBuf, bufSize));
 		  char *mbBuf = make_mbstring(bufSize, nameBuf); // create an ansi/asci
@@ -284,7 +284,7 @@ HRESULT dumpPropertyValue (IAAFPropertyValueSP pPVal,
   else
 	{
 	  {
-		wchar_t bigBuf[100];
+		aafCharacter bigBuf[100];
 		char mbBigBuf[100 * 3 /*MB_CUR_MAX */];
 		IAAFDefObjectSP pd;
 		checkResult(pTD->QueryInterface(IID_IAAFDefObject, (void**)&pd));
@@ -400,11 +400,11 @@ HRESULT dumpPropertyValue (IAAFPropertyValueSP pPVal,
 
 			// now, get the text tag for that value.  Start with name
 			// buf len, and allocating a buffer to hold the name
-			wchar_t * nameBuf;
+			aafCharacter * nameBuf;
 			aafUInt32 nameBufLen;
 			checkResult(pTDE->GetNameBufLenFromInteger(enumValue, &nameBufLen));
-			// don't forget NameBufLen is in bytes, not wchar_ts
-			nameBuf = (wchar_t*) new aafUInt8[nameBufLen];
+			// don't forget NameBufLen is in bytes, not aafCharacters
+			nameBuf = (aafCharacter*) new aafUInt8[nameBufLen];
 
 			// and now get the name itself
 			checkResult(pTDE->GetNameFromInteger(enumValue, nameBuf, nameBufLen));
@@ -434,11 +434,11 @@ HRESULT dumpPropertyValue (IAAFPropertyValueSP pPVal,
 
 			// now, get the text tag for that value.  Start with name
 			// buf len, and allocating a buffer to hold the name
-			wchar_t * nameBuf;
+			aafCharacter * nameBuf;
 			aafUInt32 nameBufLen;
 			checkResult(pTDE->GetNameBufLenFromAUID(&enumValue, &nameBufLen));
-			// don't forget NameBufLen is in bytes, not wchar_ts
-			nameBuf = (wchar_t*) new aafUInt8[nameBufLen];
+			// don't forget NameBufLen is in bytes, not aafCharacters
+			nameBuf = (aafCharacter*) new aafUInt8[nameBufLen];
 
 			// and now get the name itself
 			checkResult(pTDE->GetNameFromAUID(&enumValue, nameBuf, nameBufLen));
@@ -559,7 +559,7 @@ HRESULT dumpPropertyValue (IAAFPropertyValueSP pPVal,
 				// 2-byte integral characters; interpret as a
 				// NULL-terminated wide character string.
 				// create an ansi/asci
-				char *mbBuf = make_mbstring(bufSize, (wchar_t*) buf);
+				char *mbBuf = make_mbstring(bufSize, (aafCharacter*) buf);
 				checkExpression(NULL != mbBuf, AAFRESULT_NOMEMORY);
 				os << " value: \"" << mbBuf << "\"" << endl;
 				delete [] mbBuf;
@@ -633,7 +633,8 @@ HRESULT dumpPropertyValue (IAAFPropertyValueSP pPVal,
 				  {
 					aafUInt32 nameBufLen;
 					checkResult(pTDR->GetMemberNameBufLen(i, &nameBufLen));
-					wchar_t * nameBuf = (wchar_t*) new wchar_t[nameBufLen];
+					// nameBufLen is in bytes, not aafCharacters
+					aafCharacter * nameBuf = (aafCharacter*) new aafUInt8 [nameBufLen];
 					assert (nameBuf);
 					checkResult(pTDR->GetMemberName(i, nameBuf, nameBufLen));
 					// create an ansi/asci
@@ -675,7 +676,7 @@ HRESULT dumpPropertyValue (IAAFPropertyValueSP pPVal,
 // Dumps the given file.  Returns true if successful; returns false if
 // an error was encountered.
 //
-static bool dumpFile (wchar_t * pwFileName,
+static bool dumpFile (aafCharacter * pwFileName,
 					  const char * name,
 					  ostream & os)
 {
@@ -810,7 +811,7 @@ int main(int argc, char* argv[])
 	}
 
   // The first argument should be an AAF file name.
-  wchar_t pwFileName[260];
+  aafCharacter pwFileName[260];
   assert (infilename);
   assert (os);
   convert(pwFileName, 260, infilename);
