@@ -62,6 +62,9 @@ typedef struct
 	aafLength_t		numSamples;
 }               aafSubChannel_t;
 
+typedef enum { kAAFCreated, kAAFAppended, kAAFReadOnly } aafOpenType_t;
+
+
 class ImplAAFEssenceAccess : public ImplAAFRoot
 {
 public:
@@ -1127,6 +1130,7 @@ private:
 	ImplAAFFileDescriptor *_mdes;
 	IAAFEssenceCodec	*_codec;
 	IAAFEssenceStream	 *_stream;
+	aafOpenType_t		_openType;
 };
 
 #endif // ! __ImplAAFEssenceAccess_h__
