@@ -522,17 +522,17 @@ size_t OMVector<Element>::nextHigherCapacity(size_t capacity)
   // common case of creating a vector from scratch using a sequence
   // of append operations.
   // 
-  const size_t SIZE_T_MAX = ~(size_t)0;
-  const size_t SIZE_T_MASK = ~(SIZE_T_MAX >> 1); // set only the msb
+  const size_t OMSIZE_T_MAX = ~(size_t)0;
+  const size_t OMSIZE_T_MASK = ~(OMSIZE_T_MAX >> 1); // set only the msb
 
   size_t result;
   if (capacity == 0) {
     result = 0;
-  } else if (capacity < SIZE_T_MASK) {
+  } else if (capacity < OMSIZE_T_MASK) {
     ASSERT("Non-zero capacity", capacity > 0);
-    ASSERT("Capacity can be doubled", capacity < SIZE_T_MASK);
+    ASSERT("Capacity can be doubled", capacity < OMSIZE_T_MASK);
 
-    size_t mask = SIZE_T_MASK;
+    size_t mask = OMSIZE_T_MASK;
     size_t oldMask;
 
     do {
@@ -546,7 +546,7 @@ size_t OMVector<Element>::nextHigherCapacity(size_t capacity)
       result = oldMask; // next higher power
     }
   } else {
-    result = SIZE_T_MAX;
+    result = OMSIZE_T_MAX;
   }
   POSTCONDITION("Valid result", result >= capacity);
   return result;
