@@ -47,7 +47,7 @@ public:
 
     // @cmember The property id of this <c OMProperty>.
     // @this const
-  const OMPropertyId propertyId(void) const;
+  OMPropertyId propertyId(void) const;
 
     // @cmember Inform this <c OMProperty> that it is a member of
     //          the <c OMPropertySet> <p propertySet>.
