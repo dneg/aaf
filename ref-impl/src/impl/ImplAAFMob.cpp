@@ -664,6 +664,10 @@ AAFRESULT STDMETHODCALLTYPE
 				foundSlot = AAFTrue;
 				break;
 			}
+      
+      // We are done with the temporary slot. (getValueAt() has incremented the
+      // object's reference count.
+      tmpSlot->ReleaseRef();
 		}
 		if (!foundSlot)
 		{
