@@ -20,6 +20,8 @@ AD_IDL(//
 // the position of the class within the class heirarchy\, and
 // accessing property definitions associated with the class.
 AD_STD_COMMENT_IFC_HEADER)
+
+AD_FORWARD_DECLARATION(AAFObject)
 AD_FORWARD_DECLARATION(EnumAAFPropertyDefs)
 AD_FORWARD_DECLARATION(AAFPropertyDef)
 AD_FORWARD_DECLARATION(AAFMetaDefinition)

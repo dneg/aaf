@@ -10,7 +10,7 @@ AAFDictionary\
 #endm
 #c
 #startm .parent-module 0
-AAFMetaDictionary\
+AAFObject\
 #endm
 #c
 #c #import ./AAFObject.exp
