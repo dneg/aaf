@@ -499,6 +499,7 @@ bool Is_aafMobKind_t_Valid(aafMobKind_t param)
     case kAAFFilmMob:
     case kAAFPrimaryMob:
     case kAAFAllMob:
+    case kAAFPhysicalMob:
       return true;
     default:
       return false;

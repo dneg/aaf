@@ -43,5 +43,11 @@ ImplAAFPhysicalDescriptor::~ImplAAFPhysicalDescriptor ()
 {}
 
 
-
-
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFPhysicalDescriptor::GetOwningMobKind (aafMobKind_t *pMobKind)
+{
+	if(pMobKind  == NULL)
+		return(AAFRESULT_NULL_PARAM);
+	*pMobKind = kAAFPhysicalMob;
+	return(AAFRESULT_SUCCESS);
+}

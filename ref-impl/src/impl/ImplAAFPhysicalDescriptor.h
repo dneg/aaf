@@ -52,8 +52,8 @@ public:
 
 public:
 
-//  virtual AAFRESULT	STDMETHODCALLTYPE
-//		GetOwningMobKind (aafMobKind_t *pMobKind);
+  virtual AAFRESULT	STDMETHODCALLTYPE
+		GetOwningMobKind (aafMobKind_t *pMobKind);
 
 	// Persistent properties
 private:

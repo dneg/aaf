@@ -455,7 +455,8 @@ enum _aafMobKind_e
 	kAAFTapeMob	= 3,
 	kAAFFilmMob	= 4,
 	kAAFPrimaryMob	= 5,
-	kAAFAllMob	= 6
+	kAAFAllMob	= 6,
+	kAAFPhysicalMob	= 7
     }	aafMobKind_e;
 
 typedef aafInt32 aafOperationChoice_t;

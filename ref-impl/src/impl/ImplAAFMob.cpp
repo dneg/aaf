@@ -2140,7 +2140,8 @@ AAFRESULT ImplAAFMob::MobFindSource(
 			(mobKind == kAAFMasterMob) || 
 			(mobKind == kAAFFileMob) ||
 			(mobKind == kAAFTapeMob) ||
-			(mobKind == kAAFFilmMob))
+			(mobKind == kAAFFilmMob) ||
+			(mobKind == kAAFPhysicalMob) )
 		{
 			*foundSource = (mobKind == tstKind ? kAAFTrue : kAAFFalse);
 		}
