@@ -106,7 +106,6 @@ AAFRESULT ImplPropertyCollection::Initialize
 	   i < _count;
 	   i++)
 	{
-//	  assert (_pProperties[i]); // danger will robinson: accessing initialized memory !
 	  _pProperties[i] = NULL;
 	}
 

@@ -212,6 +212,8 @@ AAFRESULT STDMETHODCALLTYPE
   _isSigned = isSigned;
   AAFRESULT hr = SetName (pTypeName);
   if (! AAFRESULT_SUCCEEDED (hr)) return hr;
+  hr = SetAUID (pID);
+  if (! AAFRESULT_SUCCEEDED (hr)) return hr;
 
   return AAFRESULT_SUCCESS;
 }
@@ -508,6 +510,20 @@ aafBool ImplAAFTypeDefInt::IsFixedSize (void)
 size_t ImplAAFTypeDefInt::PropValSize (void)
 {
   return _size;
+}
+
+
+aafBool ImplAAFTypeDefInt::IsRegistered (void)
+{
+  // int types are registered by default
+  return AAFTrue;
+}
+
+
+size_t ImplAAFTypeDefInt::NativeSize (void)
+{
+  // same as property value size
+  return PropValSize();
 }
 
 
