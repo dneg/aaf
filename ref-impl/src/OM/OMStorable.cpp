@@ -39,17 +39,9 @@ void OMStorable::save(void) const
 {
   TRACE("OMStorable::save");
   
-  size_t context = 0;
   //_file->objectDirectory()->insert(pathName(), this);
   store()->save(classId());
-  for (size_t i = 0; i < _persistentProperties.count(); i++)
-  {
-    OMProperty* p = 0;
-    _persistentProperties.iterate(context, p);
-    ASSERT("Valid property", p != 0);
-    store()->save(p);
-  }
-  store()->saveIndex();
+  store()->save(_persistentProperties);
 }
 
   // @mfunc Close this <c OMStorable>.
