@@ -29,7 +29,6 @@
 #ifndef OMCLASSFACTORY_H
 #define OMCLASSFACTORY_H
 
-#include "OMPortability.h"
 #include "OMDataTypes.h"
 
 class OMStorable;

@@ -29,7 +29,6 @@
 #ifndef OMPROPERTYSET_H
 #define OMPROPERTYSET_H
 
-#include "OMPortability.h"
 #include "OMDataTypes.h"
 #include "OMRedBlackTree.h"
 

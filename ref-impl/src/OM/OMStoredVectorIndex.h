@@ -29,7 +29,6 @@
 #ifndef OMSTOREDVECTORINDEX_H
 #define OMSTOREDVECTORINDEX_H
 
-#include "OMPortability.h"
 #include "OMDataTypes.h"
 
 #include <stddef.h>

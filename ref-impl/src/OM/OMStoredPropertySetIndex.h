@@ -29,7 +29,6 @@
 #ifndef OMSTOREDPROPERTYSETINDEX_H
 #define OMSTOREDPROPERTYSETINDEX_H
 
-#include "OMPortability.h"
 #include "OMDataTypes.h"
 
 #include <stddef.h>
