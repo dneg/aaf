@@ -183,9 +183,10 @@ Impl.this-module::~Impl.this-module ()
 
 #ccccccccccccccccccccccccccc
 #c
-#c Starts a class definition
+#c Ends a class definition for classes which support more than the
+#c primary COM interface.
 #c
-#c Arguments: none
+#c Arguments: additional interface name
 #c
 #startm AD_COM_EXT_CLASS_BEGIN 01
 AD_CLASS_BEGIN\
@@ -614,6 +615,18 @@ AAFRESULT STDMETHODCALLTYPE
 extern "C" const aafClassID_t CLSID_.this-module;
 
 OMDEFINE_STORABLE(Impl.this-module, CLSID_.this-module);
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Ends a class definition for classes which support more than the
+#c primary COM interface.
+#c
+#c Arguments: additional interface name
+#c
+#startm AD_COM_EXT_CLASS_END 01
+AD_CLASS_END\
 #endm
 
 
