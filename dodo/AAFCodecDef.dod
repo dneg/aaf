@@ -21,20 +21,16 @@ AD_IDL(//
 //)
 
 AD_FORWARD_DECLARATION(AAFClassDef)
+AD_FORWARD_DECLARATION(AAFDataDef)
 AD_FORWARD_DECLARATION(EnumAAFCodecFlavours)
 
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
-
- 
 /***********************************************\
-*	Stub only.   Implementation not yet added	*
+*												*
+* Advanced Authoring Format						*
+*												*
+* Copyright (c) 1998-1999 Avid Technology, Inc. *
+* Copyright (c) 1998-1999 Microsoft Corporation *
+*												*
 \***********************************************/
 
 AD_CLASS_UUID(AD1BB855, DBB2, 11d2, 80, 9C, 00, 60, 08, 14, 3E, 6F)
@@ -45,7 +41,7 @@ AD_XCLASS_BEGIN(Concrete, StoredObject)
 AD_XMETHOD2(IsEssenceKindSupported,
 			[in\,ref],
 			  objPass,
-			  aafUID_t *,
+			  aafUID_t*,
 			  pEssenceKind,
 			  The essence kind,
 			[out\,retval],
@@ -74,8 +70,8 @@ AD_XMETHOD2(IsEssenceKindSupported,
  
  AD_XMETHOD1(AppendEssenceKind,
 			[in],
-			objPass,
-			aafUID_t *,
+		    objPass,
+			aafUID_t*,
 			pEssenceKind,
 			The essence kind,
 			Appends the given essence kind to those supported by the codec.  This is dependant upon
