@@ -23,19 +23,15 @@ AD_IDL(//
 //)
 
 AD_FORWARD_DECLARATION(EnumAAFLoadedPlugins)
+AD_FORWARD_DECLARATION(AAFDictionary)
 
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
-
- 
 /***********************************************\
-*	Stub only.   Implementation not yet added	*
+*												*
+* Advanced Authoring Format						*
+*												*
+* Copyright (c) 1998-1999 Avid Technology, Inc. *
+* Copyright (c) 1998-1999 Microsoft Corporation *
+*												*
 \***********************************************/
 
 AD_CLASS_UUID(AD1BB85B, DBB2, 11d2, 80, 9C, 00, 60, 08, 14, 3E, 6F)
@@ -72,5 +68,44 @@ AD_XMETHOD2(EnumLoadedPlugins,
   //
   // AAFRESULT_NULL_PARAM
   //   - if ppEnum is null.)
+
+AD_XMETHOD3(CreatePluginDefinition,
+			[in],
+			  objPass,
+			  aafUID_t,
+			  pluginDefID,
+			  Which plugin definition do you want to create,
+			[in],
+			objIn,
+			AAFDictionary,
+			pDictionary,
+			The dictionary of the file where the descriptor is to be created,
+			[out],
+			objPass,
+			IAAFDefObject**,
+			ppPluginDef,
+			The interface of the returned definition,
+			Given a plugin definition ID\, find a plugin and manufactures a plugin descriptor
+  // of the correct class for this plugin\, filling in the values\, and returning the definition
+  // through the *pPluginDesc argument.  The returned definition
+  // is AddRef\(\)ed before it is returned.  You must call QueryInterface
+  // on the result in order to find the correct interface\, and are responsible for adding the
+  // definition to the correct place in the dictionary\, as well as preventing duplicates.
+  // The resulting definiton has the plugin descriptor already attached.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pPluginDesc pointer is valid.
+  // 
+  // If this method fails nothing will be written to *ppEnum.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - if pPluginDesc is null.)
 
 AD_XCLASS_END(Concrete, Transient)
