@@ -453,8 +453,7 @@ static HRESULT verifyContents (IAAFHeader* const pHeader, IAAFDictionary* const 
 
 	//first, create a new member, and add it to the array
 	IAAFTypeDefIntSP spNewInt;
-	checkResult(defs.cdTypeDefInt()->CreateInstance(IID_IAAFTypeDefInt, (IUnknown**)&spNewInt));
-	checkResult (spNewInt->Initialize (TEST_some_int_id, sizeof(TEST_ELEM_t), kAAFTrue, L"Some Int Name"));
+	checkResult(defs.tdInt16()->QueryInterface(IID_IAAFTypeDefInt, (void **)&spNewInt));
 	TEST_ELEM_t  new_int = -115;
 	IAAFPropertyValueSP spNewInt_PV;
 	checkResult(spNewInt->CreateValue ((aafMemPtr_t)&new_int, sizeof(new_int), &spNewInt_PV));
