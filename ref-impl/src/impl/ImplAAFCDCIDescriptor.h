@@ -141,13 +141,6 @@ public:
 		// @parm [out] Address to store the number of bits.
         (aafInt16 *  pPaddingBits);
 
-
-
-public:
-  // Declare this class to be storable.
-  //
-  OMDECLARE_STORABLE(ImplAAFCDCIDescriptor)
-
 protected:
 	OMFixedSizeProperty<aafInt32>			_componentWidth;
 	OMFixedSizeProperty<aafUInt32>			_horizontalSubsampling;

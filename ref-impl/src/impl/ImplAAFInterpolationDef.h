@@ -45,16 +45,6 @@ public:
 
 protected:
   virtual ~ImplAAFInterpolationDef();
-
-public:
-
-  
-
-
-public:
-  // Declare this class to be storable.
-  //
-  OMDECLARE_STORABLE(ImplAAFInterpolationDef)
 };
 
 #endif // ! __ImplAAFInterpolationDef_h__

@@ -95,13 +95,6 @@ public:
 
          // @parm [retval,out] pointer to result
          aafBool *  bDoesConvertFrom);
-
-
-
-public:
-  // Declare this class to be storable.
-  //
-  OMDECLARE_STORABLE(ImplAAFDataDef)
 };
 
 #endif // ! __ImplAAFDataDef_h__
