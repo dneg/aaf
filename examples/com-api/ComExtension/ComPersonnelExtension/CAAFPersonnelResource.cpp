@@ -676,10 +676,10 @@ HRESULT STDMETHODCALLTYPE CAAFPersonnelResource::GetIndexedDefinitionObject(
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFPersonnelResource::CreateDescriptor (IAAFDictionary *dict, IAAFPluginDescriptor **descPtr)
+    CAAFPersonnelResource::CreateDescriptor (IAAFDictionary *dict, IAAFPluginDef **descPtr)
 {
 	HRESULT hr = S_OK;
-	IAAFPluginDescriptor	*desc = NULL;
+	IAAFPluginDef	*desc = NULL;
 	IAAFLocator				*pLoc = NULL;
  	IAAFNetworkLocator		*pNetLoc = NULL;
 	
@@ -693,8 +693,8 @@ HRESULT STDMETHODCALLTYPE
 	{
 	    CAAFBuiltinDefs defs (dict);
 
-		checkResult(defs.cdPluginDescriptor()->
-					CreateInstance(IID_IAAFPluginDescriptor, 
+		checkResult(defs.cdPluginDef()->
+					CreateInstance(IID_IAAFPluginDef, 
 								   (IUnknown **)&desc));
 
 		checkResult(desc->Initialize(AVID_PERSONNELRESOURCE_PLUGIN,

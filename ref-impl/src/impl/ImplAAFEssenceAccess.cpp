@@ -51,7 +51,7 @@
 #include "ImplAAFFindSourceInfo.h"
 #include "ImplEnumAAFEssenceData.h"
 #include "ImplAAFContainerDef.h"
-#include "ImplEnumAAFPluginDescriptors.h"
+#include "ImplEnumAAFPluginDefs.h"
 #include "ImplAAFDictionary.h"
 #include "ImplAAFDataDef.h"
 
@@ -2028,7 +2028,7 @@ AAFRESULT STDMETHODCALLTYPE
                            aafBool*result)
 {
 	ImplAAFDictionary		*dict = NULL;	
-	ImplAAFPluginDescriptor	*desc = NULL;
+	ImplAAFPluginDef	*desc = NULL;
 	aafUID_t				descID;
 
 	if(result == NULL)
@@ -2273,7 +2273,7 @@ ImplAAFEssenceAccess::CreateContainerDef (ImplAAFHeader *head)
 }
 
 AAFRESULT
-ImplAAFEssenceAccess::CreateCodecDef (ImplAAFHeader *head, const aafUID_t & codecID, IAAFPluginDescriptor **ppPluginDesc)
+ImplAAFEssenceAccess::CreateCodecDef (ImplAAFHeader *head, const aafUID_t & codecID, IAAFPluginDef **ppPluginDesc)
 {
 	IAAFPlugin					*plug = NULL;
 	ImplAAFCodecDef				*codecImpl = NULL;
@@ -2281,8 +2281,8 @@ ImplAAFEssenceAccess::CreateCodecDef (ImplAAFHeader *head, const aafUID_t & code
 	IAAFCodecDef				*codecDef = NULL;
 	IAAFDictionary				*dictInterface = NULL;
 	IUnknown					*pUnknown = NULL;
-	IAAFPluginDescriptor		*pluginDesc = NULL;
-	IEnumAAFPluginDescriptors	*descEnum = NULL;
+	IAAFPluginDef				*pluginDesc = NULL;
+	IEnumAAFPluginDefs			*descEnum = NULL;
 	IAAFDefObject				*defInterface = NULL;
 	ImplAAFDictionary			*dict = NULL;
 	ImplAAFPluginManager		*plugins = NULL;
@@ -2315,21 +2315,23 @@ ImplAAFEssenceAccess::CreateCodecDef (ImplAAFHeader *head, const aafUID_t & code
 		CHECK(pUnknown->QueryInterface(IID_IAAFDictionary, (void **)&dictInterface));
 		CHECK(_codec->QueryInterface(IID_IAAFPlugin, (void **)&plug));
 		CHECK(plug->GetPluginDescriptorID(&currentPlugDesc));
-		pUnknown = static_cast<IUnknown *> (codecImpl->GetContainer());
-		CHECK(pUnknown->QueryInterface(IID_IAAFDefObject, (void **)&defInterface));
+
+//		pUnknown = static_cast<IUnknown *> (codecImpl->GetContainer());
+//		CHECK(pUnknown->QueryInterface(IID_IAAFDefObject, (void **)&defInterface));
 		
-		CHECK(defInterface->GetPluginDefs (&descEnum));
-		defInterface->Release();
-		defInterface = NULL;
+
+		CHECK(dictInterface->GetPluginDefs (&descEnum));
 		
 		while(descEnum->NextOne(&pluginDesc) == AAFRESULT_SUCCESS)
 		{
-			CHECK(pluginDesc->GetAUID(&testAUID));
+			CHECK(pluginDesc->QueryInterface(IID_IAAFDefObject, (void **)&defInterface));
+			CHECK(defInterface->GetAUID(&testAUID));
 			if(EqualAUID(&testAUID, &currentPlugDesc))
 			{
 				found = kAAFTrue;
 				if(ppPluginDesc != NULL)
 				{
+					CHECK(pluginDesc->SetDefinitionObjectID(codecID));
 					pluginDesc->AddRef();	// About to store this 
 					*ppPluginDesc = pluginDesc;
 				}
@@ -2340,20 +2342,20 @@ ImplAAFEssenceAccess::CreateCodecDef (ImplAAFHeader *head, const aafUID_t & code
 		descEnum->Release();
 		descEnum = NULL;
 		
-		if(found == kAAFFalse)	// If pluginDescriptor is not in place
-		{
-			
-			CHECK(plug->CreateDescriptor (dictInterface, &pluginDesc));
-			CHECK(codecDef->QueryInterface(IID_IAAFDefObject, (void **)&def));
-			CHECK(def->AppendPluginDef (pluginDesc));
-			if(ppPluginDesc != NULL)
-			{
-				pluginDesc->AddRef();	// About to store this 
-				*ppPluginDesc = pluginDesc;
-			}
-			pluginDesc->Release();
-			def->Release();
-		}
+//		if(found == kAAFFalse)	// If pluginDescriptor is not in place
+//		{
+//			
+//			CHECK(plug->CreateDescriptor (dictInterface, &pluginDesc));
+//			CHECK(codecDef->QueryInterface(IID_IAAFDefObject, (void **)&def));
+//			CHECK(def->AppendPluginDef (pluginDesc));
+//			if(ppPluginDesc != NULL)
+//			{
+//				pluginDesc->AddRef();	// About to store this 
+//				*ppPluginDesc = pluginDesc;
+//			}
+//			pluginDesc->Release();
+//			def->Release();
+//		}
 		
 		codecDef->Release();
 		codecDef = NULL;

@@ -376,10 +376,10 @@ HRESULT STDMETHODCALLTYPE CAAFAdminMob::GetIndexedDefinitionObject(
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFAdminMob::CreateDescriptor (IAAFDictionary *dict, IAAFPluginDescriptor **descPtr)
+    CAAFAdminMob::CreateDescriptor (IAAFDictionary *dict, IAAFPluginDef **descPtr)
 {
 	HRESULT hr = S_OK;
-	IAAFPluginDescriptor	*desc = NULL;
+	IAAFPluginDef			*desc = NULL;
 	IAAFLocator				*pLoc = NULL;
  	IAAFNetworkLocator		*pNetLoc = NULL;
 	
@@ -393,8 +393,8 @@ HRESULT STDMETHODCALLTYPE
 	{
 	    CAAFBuiltinDefs defs (dict);
 
-		checkResult(defs.cdPluginDescriptor()->
-					CreateInstance(IID_IAAFPluginDescriptor, 
+		checkResult(defs.cdPluginDef()->
+					CreateInstance(IID_IAAFPluginDef, 
 								   (IUnknown **)&desc));
 
 		checkResult(desc->Initialize(AVID_PERSONNELMOB_PLUGIN,
