@@ -445,8 +445,3 @@ AAFRESULT STDMETHODCALLTYPE
 	
 	return(AAFRESULT_SUCCESS);
 }
-
-AAFRESULT ImplAAFContentStorage::UnlinkMobID(aafMobID_constref /*mobID*/)
-{
-	return(AAFRESULT_NOT_IMPLEMENTED);
-}
