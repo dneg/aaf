@@ -55,8 +55,8 @@
 extern "C" const aafClassID_t CLSID_AAFPropValData;
 
 ImplAAFTypeDefRecord::ImplAAFTypeDefRecord ()
-  : _memberTypes ( PID_TypeDefinitionRecord_MemberTypes, "Member Types"),
-	_memberNames ( PID_TypeDefinitionRecord_MemberNames, "Member Names"),
+  : _memberTypes ( PID_TypeDefinitionRecord_MemberTypes, "MemberTypes"),
+	_memberNames ( PID_TypeDefinitionRecord_MemberNames, "MemberNames"),
 	_registeredOffsets (0),
 	_registeredSize (0),
 	_internalSizes (0),
@@ -77,6 +77,7 @@ ImplAAFTypeDefRecord::~ImplAAFTypeDefRecord ()
   if (_internalSizes)
 	delete[] _internalSizes;
 
+  // these weren't ref counted here
   if (_cachedMemberTypes)
 	delete[] _cachedMemberTypes;
 }
@@ -176,6 +177,68 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
+    ImplAAFTypeDefRecord::pvtInitialize (
+      const aafUID_t * pID,
+      aafUID_t ** pMemberTypeIDs,
+      aafString_t * pMemberNames,
+      aafUInt32 numMembers,
+      wchar_t * pTypeName)
+{
+  if (!pID)
+	return AAFRESULT_NULL_PARAM;
+  if (!pTypeName)
+    return AAFRESULT_NULL_PARAM;
+
+  AAFRESULT hr;
+  hr = SetName (pTypeName);
+  if (! AAFRESULT_SUCCEEDED (hr)) return hr;
+  hr = SetAUID (pID);
+  if (! AAFRESULT_SUCCEEDED (hr)) return hr;
+
+  _cachedCount = numMembers;
+
+  aafUInt32 i;
+  aafUInt32 totalNameSize = 0;
+  for (i = 0; i < numMembers; i++)
+	{
+	  if ( !pMemberNames[i])
+		return AAFRESULT_NULL_PARAM;
+	  if ( !pMemberTypeIDs[i])
+		return AAFRESULT_NULL_PARAM;
+
+	  totalNameSize += (wcslen (pMemberNames[i]) + 1);
+	}
+
+  wchar_t * namesBuf = new wchar_t[totalNameSize];
+  if (!namesBuf)
+	return AAFRESULT_NOMEMORY;
+  // make it an empty string
+  *namesBuf = 0;
+  wchar_t * tmpNamePtr = namesBuf;
+
+  assert (0 == _memberTypes.count());
+  aafUID_t * buf = new aafUID_t[numMembers*sizeof(aafUID_t)];
+  for (i = 0; i < numMembers; i++)
+	{
+	  assert (pMemberTypeIDs[i]);
+	  buf[i] = *pMemberTypeIDs[i];
+
+	  assert (pMemberNames[i]);
+	  wcscpy(tmpNamePtr, pMemberNames[i]);
+	  // +1 to go past embedded null
+	  tmpNamePtr += wcslen (pMemberNames[i]) + 1;
+	}
+  _memberTypes.setValue(buf, numMembers*sizeof(aafUID_t));
+  delete[] buf;
+  _memberNames.setValue (namesBuf, totalNameSize * sizeof(wchar_t));
+  delete[] namesBuf;
+
+  return AAFRESULT_SUCCESS;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDefRecord::GetMemberType (
       aafUInt32 index,
       ImplAAFTypeDef ** ppTypeDef)
@@ -193,9 +256,12 @@ AAFRESULT STDMETHODCALLTYPE
 
   if (! _cachedMemberTypes)
 	{
-	  _cachedMemberTypes = new ImplAAFTypeDefSP[count];
+	  _cachedMemberTypes = new ImplAAFTypeDef *[count];
 	  if (! _cachedMemberTypes)
 		return AAFRESULT_NOMEMORY;
+	  aafUInt32 i;
+	  for (i = 0; i < count; i++)
+		_cachedMemberTypes[i] = 0;
 	}
 
   if (! _cachedMemberTypes[index])
