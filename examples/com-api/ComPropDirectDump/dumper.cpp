@@ -21,6 +21,13 @@ inline void checkExpression(bool expression, HRESULT r)
     throw r;
 }
 
+
+static void printIndent (int indent)
+{
+  while (indent--) printf (" ");
+}
+
+
 static void convert(wchar_t* wcName, size_t length, const char* name)
 {
   assert((name && *name));
@@ -97,16 +104,18 @@ static char * make_mbstring(size_t length, const wchar_t* name)
 
 static HRESULT dumpObject
 (
- IAAFObject *pContainer // object to be dumped
+ IAAFObject *pContainer, // object to be dumped
+ int indent
 );
 
 static HRESULT dumpPropertyValue
 (
- IAAFPropertyValue * pPVal
+ IAAFPropertyValue * pPVal,
+ int indent
 );
 
 
-HRESULT dumpObject(IAAFObject *pContainer)
+HRESULT dumpObject(IAAFObject *pContainer, int indent)
 {
   HRESULT returnHr = AAFRESULT_SUCCESS;
 
@@ -118,6 +127,10 @@ HRESULT dumpObject(IAAFObject *pContainer)
 	{
 	  // Get the contained properties.
 	  checkResult(pContainer->GetProperties (&pPropEnum));
+
+	  printf ("\n");
+	  printIndent (indent);
+	  printf ("***Dumping Object***\n");
 
 	  // Enumerate across Properties
 	  while (AAFRESULT_SUCCEEDED (pPropEnum->NextOne (&pProp)))
@@ -132,9 +145,10 @@ HRESULT dumpObject(IAAFObject *pContainer)
 		  wchar_t * nameBuf = new wchar_t[bufSize];
 		  assert (nameBuf);
 		  checkResult(pPDef->GetName(nameBuf, bufSize));
-      char *mbBuf = make_mbstring(bufSize, nameBuf); // create an ansi/asci
-      checkExpression(NULL != mbBuf, AAFRESULT_NOMEMORY);
-		  printf ("Property definition: %s; ", mbBuf);
+		  char *mbBuf = make_mbstring(bufSize, nameBuf); // create an ansi/asci
+		  checkExpression(NULL != mbBuf, AAFRESULT_NOMEMORY);
+		  printIndent (indent);
+		  printf ("Prop: %s; ", mbBuf);
 		  delete[] mbBuf;
 		  delete[] nameBuf;
 
@@ -142,7 +156,7 @@ HRESULT dumpObject(IAAFObject *pContainer)
 		  checkResult(pProp->GetValue(&pPVal));
 
 		  // dump property value
-		  dumpPropertyValue (pPVal);
+		  dumpPropertyValue (pPVal, indent+1);
 
 		  pPVal->Release();
 		  pPVal = 0;
@@ -166,7 +180,7 @@ HRESULT dumpObject(IAAFObject *pContainer)
 }
 
 
-HRESULT dumpPropertyValue (IAAFPropertyValue * pPVal)
+HRESULT dumpPropertyValue (IAAFPropertyValue * pPVal, int indent)
 {
   // get the type of the data value
   IAAFTypeDef *pTD = 0;
@@ -178,6 +192,7 @@ HRESULT dumpPropertyValue (IAAFPropertyValue * pPVal)
 
 	  // Dump "damaged object" message.
 	  // Optionally, dump the property's bits using pPVal->GetBits().
+	  printIndent (indent);
 	  printf ("Unknown type def.\n");
 	}
 
@@ -185,15 +200,15 @@ HRESULT dumpPropertyValue (IAAFPropertyValue * pPVal)
 	{
 	  {
 		wchar_t bigBuf[100];
-    char mbBigBuf[100 * 3 /*MB_CUR_MAX */];
+		char mbBigBuf[100 * 3 /*MB_CUR_MAX */];
 		assert (pTD);
 		IAAFDefObject * pd = NULL;
 		checkResult(pTD->QueryInterface(IID_IAAFDefObject, (void**)&pd));
 		assert (pd);
 		checkResult(pd->GetName (bigBuf, sizeof (bigBuf)));
 		pd->Release ();
-    convert(mbBigBuf, sizeof(mbBigBuf), bigBuf);
-		printf ("type is %s; ", mbBigBuf);
+		convert(mbBigBuf, sizeof(mbBigBuf), bigBuf);
+		printf ("type: %s; ", mbBigBuf);
 	  }
 
 	  // get the type category of the data value
@@ -213,7 +228,7 @@ HRESULT dumpPropertyValue (IAAFPropertyValue * pPVal)
 			aafInt64 val;
 			checkResult(pTDI->GetInteger(pPVal, (aafMemPtr_t) &val, sizeof (val)));
 
-			printf ("value is %d.\n", val);
+			printf ("value: %d.\n", val);
 
 			pTDI->Release();
 			pTDI = 0;
@@ -224,13 +239,14 @@ HRESULT dumpPropertyValue (IAAFPropertyValue * pPVal)
 		  {
 			// strong object reference; recursively dump contents.
 			IAAFTypeDefObjectRef * pTDO = 0;
-			checkResult(pTD->QueryInterface(IID_IAAFTypeDefObjectRef,
-										   (void**)&pTDO));
+			AAFRESULT hr = pTD->QueryInterface(IID_IAAFTypeDefObjectRef,
+										   (void**)&pTDO);
+			checkResult(hr);
 
 			IAAFObject * pObj = 0;
 			checkResult(pTDO->GetObject(pPVal, &pObj));
-			printf ("Value is an object:\n");
-			dumpObject (pObj);
+			printf ("Value: an object:\n");
+			dumpObject (pObj, indent+1);
 
 			pObj->Release();
 			pObj = 0;
@@ -282,7 +298,7 @@ HRESULT dumpPropertyValue (IAAFPropertyValue * pPVal)
 			// Now get base property value and recursively print that
 			IAAFPropertyValue * pBasePropValue = 0;
 			checkResult(pTDR->GetValue (pPVal, &pBasePropVal));
-			dumpPropertyValue (pBasePropVal);
+			dumpPropertyValue (pBasePropVal, indent+1);
 
 			pBasePropVal->Release();
 			pBasePropVal = 0;
@@ -338,15 +354,16 @@ HRESULT dumpPropertyValue (IAAFPropertyValue * pPVal)
 			aafUInt32 numElems = 0;
 			checkResult(pTDFA->GetCount(&numElems));
 
-			printf ("Value is a fixed-sized of size %d:\n", numElems);
+			printf ("Value: fixed-sized array[%d]:\n", numElems);
 
 			aafUInt32 i;
 			for (i = 0; i < numElems; i++)
 			  {
-				printf ("Element %d has value: ", i);
+				printIndent (indent);
+				printf ("  [%d]: ", i);
 				IAAFPropertyValue * pElemPropVal = 0;
 				checkResult(pTDFA->GetElementValue(pPVal, i, &pElemPropVal));
-				dumpPropertyValue (pElemPropVal);
+				dumpPropertyValue (pElemPropVal, indent+1);
 				pElemPropVal->Release();
 			  }
 
@@ -366,15 +383,17 @@ HRESULT dumpPropertyValue (IAAFPropertyValue * pPVal)
 			aafUInt32 numElems;
 			checkResult(pTDVA->GetCount(pPVal, &numElems));
 
-			printf ("Value is a variably-sized array of size %d:\n", numElems);
+			printf ("Value: variably-sized array[%d]:\n", numElems);
 
 			aafUInt32 i;
 			for (i = 0; i < numElems; i++)
 			  {
-				printf ("Element %d has value:\n", i);
+				printIndent (indent);
+				printf ("[%d]: ", i);
 				IAAFPropertyValue * pElemPropVal = 0;
 				checkResult(pTDVA->GetElementValue(pPVal, i, &pElemPropVal));
-				dumpPropertyValue (pElemPropVal);
+				assert (pElemPropVal);
+				dumpPropertyValue (pElemPropVal, indent+1);
 				pElemPropVal->Release();
 				pElemPropVal = 0;
 			  }
@@ -429,7 +448,8 @@ HRESULT dumpPropertyValue (IAAFPropertyValue * pPVal)
 					  {
 						// We'll interpret it as a C string.  Use printf
 						// or equiv to dump raw chars in buf.
-						printf ("string is: %s\n", buf);
+						printIndent (indent);
+						printf (" string is: %s\n", buf);
 					  }
 					else
 					  {
@@ -446,10 +466,12 @@ HRESULT dumpPropertyValue (IAAFPropertyValue * pPVal)
 					if (NULL == wterm)
 					  {
 						// We'll interpret it as a unicode string.
-            char *mbBuf = make_mbstring(bufSize, nameBuf); // create an ansi/asci
-            checkExpression(NULL != mbBuf, AAFRESULT_NOMEMORY);
-						printf ("string is %s\n", mbBuf);
-            delete [] mbBuf;
+						// create an ansi/asci
+						char *mbBuf = make_mbstring(bufSize, nameBuf);
+						checkExpression(NULL != mbBuf, AAFRESULT_NOMEMORY);
+						printIndent (indent);
+						printf (" string is %s\n", mbBuf);
+						delete [] mbBuf;
 					  }
 					else
 					  {
@@ -502,7 +524,7 @@ HRESULT dumpPropertyValue (IAAFPropertyValue * pPVal)
 				IAAFPropertyValue * pElemPropVal = 0;
 				checkResult(pTDC->GetElemValue(pPVal, i, &pElemPropVal));
 				// recursively dump prop value
-				dumpPropertyValue (pElemPropVal);
+				dumpPropertyValue (pElemPropVal, indent+1);
 				pElemPropVal->Release();
 				pElemPropVal = 0;
 			  }
@@ -548,7 +570,7 @@ static void dumpFile (wchar_t * pwFileName)
 									  (void**)&pHdrObj));
   assert (pHdrObj);
 
-  dumpObject (pHdrObj);
+  dumpObject (pHdrObj, 0);
   if (pHdrObj) pHdrObj->Release (); pHdrObj = 0;
   if (pHeader) pHeader->Release (); pHeader = 0;
   if (pFile)
@@ -594,7 +616,7 @@ int main(int argc, char* argv[])
   wchar_t pwFileName[260];
   convert(pwFileName, 260, argv[1]);
   
-  printf("***Dumping file %s using direct prop access)\n", argv[1]);
+  printf("***Dumping file %s using direct prop access***)\n", argv[1]);
   dumpFile (pwFileName);
 
   printf("Done\n");
