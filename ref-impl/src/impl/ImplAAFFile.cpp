@@ -303,13 +303,6 @@ void ImplAAFFile::InternalReleaseObjects()
 }
 
 
-AAFRESULT STDMETHODCALLTYPE
-ImplAAFFile::ForceClose ()
-{
-  return Close();
-}
-
-
 //***********************************************************
 // METHOD NAME: Close()
 //

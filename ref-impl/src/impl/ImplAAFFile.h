@@ -66,9 +66,6 @@ public:
 	Close ();
 
   virtual AAFRESULT STDMETHODCALLTYPE
-	ForceClose ();
-
-  virtual AAFRESULT STDMETHODCALLTYPE
 	Save ();
 
   virtual AAFRESULT STDMETHODCALLTYPE
