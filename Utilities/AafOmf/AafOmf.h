@@ -122,13 +122,14 @@ public:
 	HRESULT ConvertOMFHeader( void );
 	HRESULT ConvertOMFDataDefinitionObject( OMF2::omfObject_t obj);
 	HRESULT ConvertOMFClassDictionaryObject( OMF2::omfObject_t obj);
+	HRESULT ConvertOMFDatakind(OMF2::omfDDefObj_t datakind, aafUID_t* pDatadef);
 	HRESULT ConvertOMFMOBObject( OMF2::omfObject_t obj, IAAFMob* pMob );
 	HRESULT ConvertOMFCompositionObject( OMF2::omfObject_t obj,IAAFCompositionMob* pCompMob );
 	HRESULT ConvertOMFMasterMob( OMF2::omfObject_t obj, IAAFMasterMob* pMasterMob );
 	HRESULT ConvertOMFSourceMob( OMF2::omfObject_t obj, IAAFSourceMob* pSourceMob );
 	HRESULT TraverseOMFMob( OMF2::omfObject_t obj, IAAFMob* pMob );
 	HRESULT ProcessOMFComponent( OMF2::omfObject_t obj, IAAFSegment** ppSegment );
-	HRESULT TraverseOMFComponent( OMF2::omfObject_t obj );
+	HRESULT TraverseOMFSequence( OMF2::omfObject_t obj, IAAFSequence* pSequence );
 	HRESULT	ConvertOMFSequence( OMF2::omfObject_t sequence, IAAFSequence* pSequence);
 	HRESULT ConvertOMFComponentProperties(OMF2::omfObject_t sequence, IAAFComponent* pComponent);
 
