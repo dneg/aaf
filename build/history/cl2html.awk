@@ -50,6 +50,7 @@ BEGIN {
   }
   /* Build new table row */
   date = $1;
+  gsub("-", "/", date);
   name = $3;
   entrytext = "";
   files = "";
