@@ -38,5 +38,5 @@ baseclean:
 	${RM} -f vc50.*
 	${RM} -f *~ .*~
 	${RM} -f makefile.bak makefile.dep makefile.dep.bak
-	${RM} -f .objects.txt .testobjs.txt
+	${RM} -f .objects.*.txt .testobjs.*.txt
 	${RM} -f .cmake.state *.core core
