@@ -349,6 +349,53 @@ bool OMFile::validSignature(const OMFileSignature& signature)
   }
   return result;
 }
+  // @mfunc Is the file named <p FileName> a recognized file ?
+  //        If so, the result is true, and the signature is returned
+  //        in <p signature> and the encoding in <p encoding>.
+  //   @parm The name of the file to check.
+  //   @parm If recognized, the file signature.
+  //   @parm If recognized, the file encoding.
+  //   @rdesc True if the file is recognized, false otherwise.
+bool OMFile::isRecognized(const wchar_t* /* fileName */,
+                          OMFileSignature& /* signature */,
+                          OMFileEncoding& /* encoding */)
+{
+  bool result = false;
+  TRACE("OMFile::isRecognized");
+  ASSERT("Unimplemented code not reached", false);
+  return result;
+}
+
+  // @mfunc Does <p rawStorage> contain a recognized file ?
+  //        If so, the result is true, and the signature is returned
+  //        in <p signature> and the encoding in <p encoding>.
+  //   @parm The <c OMRawStorage> to check.
+  //   @parm If recognized, the file signature.
+  //   @parm If recognized, the file encoding.
+  //   @rdesc True if the <c OMRawStorage> contains a recognized
+  //          file, false otherwise.
+bool OMFile::isRecognized(OMRawStorage* /* rawStorage */,
+                          OMFileSignature& /* signature */,
+                          OMFileEncoding& /* encoding */)
+{
+  bool result = false;
+  TRACE("OMFile::isRecognized");
+  ASSERT("Unimplemented code not reached", false);
+  return result;
+}
+
+  // @mfunc Is <p signature> recognized ?
+  //        If so, the result is true, and the encoding in <p encoding>.
+  //   @parm If recognized, the encoding.
+  //   @rdesc True if the signature is recognized, false otherwise.
+bool OMFile::isRecognized(const OMFileSignature& /* signature */,
+                          OMFileEncoding& /* encoding */)
+{
+  bool result = false;
+  TRACE("OMFile::isRecognized");
+  ASSERT("Unimplemented code not reached", false);
+  return result;
+}
 
   // @mfunc Save all changes made to the contents of this
   //        <c OMFile>. It is not possible to save

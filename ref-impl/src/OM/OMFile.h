@@ -146,6 +146,26 @@ public:
      // @cmember Is <p signature> a valid signature for an <c OMFile> ?
   static bool validSignature(const OMFileSignature& signature);
 
+
+     // @cmember Is the file named <p FileName> a recognized file ?
+     //          If so, the result is true, and the signature is returned
+     //          in <p signature> and the encoding in <p encoding>.
+  static bool isRecognized(const wchar_t* fileName,
+                           OMFileSignature& signature,
+                           OMFileEncoding& encoding);
+
+     // @cmember Does <p rawStorage> contain a recognized file ?
+     //          If so, the result is true, and the signature is returned
+     //          in <p signature> and the encoding in <p encoding>.
+  static bool isRecognized(OMRawStorage* rawStorage,
+                           OMFileSignature& signature,
+                           OMFileEncoding& encoding);
+
+     // @cmember Is <p signature> recognized ?
+     //          If so, the result is true, and the encoding in <p encoding>.
+  static bool isRecognized(const OMFileSignature& signature,
+                           OMFileEncoding& encoding);
+
   // @access Public members.
 
     // @cmember Destructor.
