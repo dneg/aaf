@@ -203,6 +203,7 @@ void OMWeakReferenceProperty<ReferencedObject>::restore(size_t externalSize)
 
   _reference.setPathName(pathName);
   _reference.restore();
+  delete [] pathName;
 
 }
 
