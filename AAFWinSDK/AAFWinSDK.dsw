@@ -447,6 +447,36 @@ Package=<4>
 
 ###############################################################################
 
+Project: "ExportPCM"=".\examples\com-api\ExportPCM\ExportPCM.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name MakeSDK
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "ImportPCM"=".\examples\com-api\ImportPCM\ImportPCM.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name MakeSDK
+    End Project Dependency
+}}}
+
+###############################################################################
+
 Project: "MakeSDK"=.\MakeSDK.dsp - Package Owner=<4>
 
 Package=<5>
@@ -550,6 +580,18 @@ Package=<4>
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name InfoDumper
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name ExportDV
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name ImportDV
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name ExportPCM
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name ImportPCM
     End Project Dependency
 }}}
 
