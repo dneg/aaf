@@ -64,7 +64,10 @@ all : $(OBJDIR) $(LIBTARGET) $(BINTARGET)
 $(LIBTARGET) : $(LIBCXXOBJS)
 	$(LD_STAT_LIB) $@ $(LIBCXXOBJS)
 
+ifeq ($(AAFPLATFORM), MipsIrix)
+
 OMFLIBDIR=$(AAFBASE)/OMF/IrixLibs
+
 
 # Build executable. Note that CXXOBJS2 is used instead of CXXOBJS.
 $(BINTARGET) : $(CXXOBJS2) $(LIBTARGET)
@@ -72,6 +75,12 @@ $(BINTARGET) : $(CXXOBJS2) $(LIBTARGET)
 	-L$(OMFLIBDIR) -lAJPG -lOMFI -lbento -ljpeg \
 	-L$(AAFSDKLIBDIR) -laaflib -laafiid -o $@ -lm
 
+else
+
+$(BINTARGET) : $(CXXOBJS2) $(LIBTARGET)
+	@echo "OMF library not available for $(AAFPLATFORM)."
+
+endif
 
 .PHONY : clean
 clean :
