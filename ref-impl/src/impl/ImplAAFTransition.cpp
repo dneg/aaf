@@ -190,3 +190,4 @@ AAFRESULT ImplAAFTransition::ChangeContainedReferences(aafMobID_constref from,
 
 	return AAFRESULT_SUCCESS;
 }
+
