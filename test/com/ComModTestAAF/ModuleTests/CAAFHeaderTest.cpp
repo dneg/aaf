@@ -439,9 +439,16 @@ void HeaderTest::createFileMob(int itemNumber)
   check(_pMob->SetName(wcBuffer));
   
   // create concrete subclass of FileDescriptor
-  check(defs.cdHTMLDescriptor()->
+  check(defs.cdAIFCDescriptor()->
 		CreateInstance(IID_IAAFFileDescriptor, 
 					   (IUnknown **)&_pFileDescriptor));
+
+
+	IAAFAIFCDescriptor*			pAIFCDesc = NULL;
+	check(_pFileDescriptor->QueryInterface (IID_IAAFAIFCDescriptor, (void **)&pAIFCDesc));
+	check(pAIFCDesc->SetSummary (5, (unsigned char*)"TEST"));
+	pAIFCDesc->Release();
+	pAIFCDesc = NULL;
 
   check(_pFileDescriptor->QueryInterface (IID_IAAFEssenceDescriptor,
                                           (void **)&_pEssenceDescriptor));
