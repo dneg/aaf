@@ -66,10 +66,10 @@ ImplAAFSourceMob::ImplAAFSourceMob ()
 
 ImplAAFSourceMob::~ImplAAFSourceMob ()
 {
-	if(_essenceDesc != NULL)
+	ImplAAFEssenceDescriptor *essenceDesc = _essenceDesc.setValue(0);
+	if (essenceDesc)
 	{
-		_essenceDesc->ReleaseReference();
-		_essenceDesc = NULL;
+		essenceDesc->ReleaseReference();
 	}
 }
 
