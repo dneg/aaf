@@ -86,7 +86,7 @@ AAFRESULT STDMETHODCALLTYPE
 
   // BobT Hack!  Some implementations may not understand 64-bit
   // integer sizes, so we'll only allow 32-bit sizes...
-  if (size > ((unsigned long) ~0))
+  if (size > ((aafUInt32) ~0))
 	return AAFRESULT_DATA_SIZE;
 
   _rep->extend (size);
