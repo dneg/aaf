@@ -36,6 +36,13 @@ public:
 
 	IAAFDataDefSP GetDataDef();
 
+	// Allow typecast to internal type.  This seems to be needed for the
+	// AxString AxNameToString( IAAFSmartPointer< Type >& sp ) in
+	// AxUtil.h to work on Ax objects that don't have a get. Maybe there
+	// is a better way, in which case email me jtl21@users.sourceforge.net
+	inline operator IAAFMobSlotSP ()
+	{ return _spIaafMobSlot; }
+
 private:
 	AxMobSlot();
 	AxMobSlot( const AxMobSlot& );
@@ -52,6 +59,7 @@ public:
 	~AxTimelineMobSlot();
 
 	aafPosition_t GetOrigin();
+	aafRational_t GetEditRate();
 
 	operator IAAFTimelineMobSlotSP ()
 	{ return _spIaafTimelineMobSlot; }

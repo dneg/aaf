@@ -315,6 +315,13 @@ AxEssenceDescriptor::AxEssenceDescriptor( IAAFEssenceDescriptorSP sp )
 AxEssenceDescriptor::~AxEssenceDescriptor()
 {}
 
+aafUInt32 AxEssenceDescriptor::CountLocators()
+{
+	aafUInt32 numlocators;
+	CHECK_HRESULT(_spIaafEssenceDescriptor->CountLocators(&numlocators));
+	return numlocators;
+}
+
 //=---------------------------------------------------------------------=
 
 AxFileDescriptor::AxFileDescriptor( IAAFFileDescriptorSP sp )

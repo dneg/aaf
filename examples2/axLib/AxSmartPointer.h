@@ -272,4 +272,26 @@ inline bool AxIsA( IUnknownSP sp, IAAFSmartPointer<TypeDst>& spDst )
 }
 
 
+// AxIsA() - A test to check that calling query interface to make a
+// conversion will work. Takes a REFIID, removes need for an instance of
+// an IAAFSmartPointer of the tested destination type to be available.
+inline bool AxIsA( IUnknownSP sp, REFIID refid )
+{
+	HRESULT hr;
+	void * dummy;
+	hr = sp->QueryInterface( refid,&dummy);
+
+	if ( SUCCEEDED(hr) ) {
+		return true;
+	}
+	else if ( hr == E_NOINTERFACE ) {
+		return false;
+	}
+	
+	CHECK_HRESULT( hr );
+	
+	// Never reached;
+	return false;
+}
+
 #endif

@@ -73,3 +73,11 @@ aafPosition_t AxTimelineMobSlot::GetOrigin()
 
 	return pos;
 }
+aafRational_t AxTimelineMobSlot::GetEditRate()
+{
+	aafRational_t rate;
+
+	CHECK_HRESULT( _spIaafTimelineMobSlot->GetEditRate( &rate ) );
+
+	return rate;
+}

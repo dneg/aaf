@@ -234,6 +234,7 @@ class AxEssenceDescriptor : public AxObject {
 public:
 	AxEssenceDescriptor( IAAFEssenceDescriptorSP spIaafEssenceDescriptor );
 	~AxEssenceDescriptor();
+	aafUInt32 CountLocators();
 
 private:
 	AxEssenceDescriptor();
