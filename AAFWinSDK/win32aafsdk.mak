@@ -60,6 +60,7 @@
 #               switching between configurations. The debug versions of the   #
 #               dlls were not always replaced with release versions for the   #
 #               release and "FULL" builds of the sdk.                         #
+# 06-APR-2000 : transdel adding new required header files.                    #
 ###############################################################################
 
 
@@ -200,12 +201,15 @@ TARGET_H_FILES = \
 	$(AAFSDK_INCLUDE)\AAFDataDefs.h \
 	$(AAFSDK_INCLUDE)\AAFDefUIDs.h \
 	$(AAFSDK_INCLUDE)\AAFEssenceFormats.h \
+	$(AAFSDK_INCLUDE)\AAFFileKinds.h \
+	$(AAFSDK_INCLUDE)\AAFFileMode.h \
 	$(AAFSDK_INCLUDE)\AAFInterpolatorDefs.h \
 	$(AAFSDK_INCLUDE)\AAFMetaDictionary.h \
 	$(AAFSDK_INCLUDE)\AAFOperationCategories.h \
 	$(AAFSDK_INCLUDE)\AAFOperationDefs.h \
 	$(AAFSDK_INCLUDE)\AAFParameterDefs.h \
 	$(AAFSDK_INCLUDE)\AAFPluginDefs.h \
+	$(AAFSDK_INCLUDE)\AAFPropertyDefs.h \
 	$(AAFSDK_INCLUDE)\AAFPropertyIDs.h \
 	$(AAFSDK_INCLUDE)\AAFResult.h \
 	$(AAFSDK_INCLUDE)\AAFSmartPointer.h \
@@ -445,6 +449,12 @@ $(AAFSDK_INCLUDE)\AAFDefUIDs.h : $(TOOLKIT_INCLUDE)\AAFDefUIDs.h
 $(AAFSDK_INCLUDE)\AAFEssenceFormats.h : $(TOOLKIT_INCLUDE)\AAFEssenceFormats.h
 	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFEssenceFormats.h $(AAFSDK_INCLUDE)\
 
+$(AAFSDK_INCLUDE)\AAFFileKinds.h : $(TOOLKIT_INCLUDE)\AAFFileKinds.h
+	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFFileKinds.h $(AAFSDK_INCLUDE)\
+
+$(AAFSDK_INCLUDE)\AAFFileMode.h : $(TOOLKIT_INCLUDE)\AAFFileMode.h
+	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFFileMode.h $(AAFSDK_INCLUDE)\
+
 $(AAFSDK_INCLUDE)\AAFInterpolatorDefs.h : $(TOOLKIT_INCLUDE)\AAFInterpolatorDefs.h
 	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFInterpolatorDefs.h $(AAFSDK_INCLUDE)\
 
@@ -462,6 +472,9 @@ $(AAFSDK_INCLUDE)\AAFParameterDefs.h : $(TOOLKIT_INCLUDE)\AAFParameterDefs.h
 
 $(AAFSDK_INCLUDE)\AAFPluginDefs.h : $(TOOLKIT_INCLUDE)\AAFPluginDefs.h
 	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFPluginDefs.h $(AAFSDK_INCLUDE)\
+
+$(AAFSDK_INCLUDE)\AAFPropertyDefs.h : $(TOOLKIT_INCLUDE)\AAFPropertyDefs.h
+	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFPropertyDefs.h $(AAFSDK_INCLUDE)\
 
 $(AAFSDK_INCLUDE)\AAFPropertyIDs.h : $(TOOLKIT_INCLUDE)\AAFPropertyIDs.h
 	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFPropertyIDs.h $(AAFSDK_INCLUDE)\
