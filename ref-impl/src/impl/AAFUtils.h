@@ -36,11 +36,18 @@
 #include "aafErr.h"
 #include "AAFTypes.h"
 #include "Container.h"
+#include "OMUtilities.h"
 
 typedef enum
 {
 	kRoundCeiling, kRoundFloor
 } aafRounding_t;
+
+typedef aafInt16	AAFByteOrder;
+const AAFByteOrder INTEL_ORDER		      = 0x4949; // 'II' for Intel
+const AAFByteOrder MOTOROLA_ORDER         = 0x4d4d; // 'MM' for Motorola
+
+AAFByteOrder GetNativeByteOrder(void);
 
 aafBool	EqualAUID(const aafUID_t *uid1, const aafUID_t *uid2);
 
@@ -163,7 +170,12 @@ aafErr_t AAFConvertEditRate(
 	aafRational_t destRate,       /* IN - Destination Edit Rate */
 	aafRounding_t howRound,	      /* IN - Rounding method (floor or ceiling) */
 	aafPosition_t *destPosition) ; /* OUT - Destination Position */
-	
+
+double FloatFromRational(
+			aafRational_t	e);		/* IN - Convert this into a double */
+aafRational_t RationalFromFloat(
+			double	f);		/* IN - Convert this number into a rational */
+
 #endif				/* _AAF_UTIL_API_ */
 
 /* INDENT OFF */
