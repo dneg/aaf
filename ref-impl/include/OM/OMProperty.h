@@ -166,6 +166,14 @@ protected:
     //          representation of this <c OMProperty>.
   OMFile* file(void) const;
 
+    // @cmember The persisted value of this property is its name.
+    //          Write the property name and enter it into the property index.
+  void saveName(void) const;
+
+    // @cmember The persisted value of this property is its name.
+    //          Read (and check) the property name.
+  void restoreName(size_t size);
+
   OMPropertyId _propertyId;
   OMStoredForm _storedForm;
   const wchar_t* _name;
