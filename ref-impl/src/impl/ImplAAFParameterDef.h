@@ -33,13 +33,13 @@ class ImplEnumAAFReferenceValues;
 
 
 
-#ifndef __ImplAAFPluggableDef_h__
-#include "ImplAAFPluggableDef.h"
+#ifndef __ImplAAFDefObject_h__
+#include "ImplAAFDefObject.h"
 #endif
 
 class ImplAAFTypeDef;
 
-class ImplAAFParameterDef : public ImplAAFPluggableDef
+class ImplAAFParameterDef : public ImplAAFDefObject
 {
 public:
   //
