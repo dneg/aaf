@@ -382,7 +382,7 @@ CAAFAIFCCodec::CountChannels (IAAFSourceMob * /*fileMob*/,
 	XPROTECT()
 	{
 		if(EqualAUID(&essenceKind, &kAAFDataDef_Sound)
-			|| EqualAUID(&essenceKind, &DDEF_Sound))
+			|| EqualAUID(&essenceKind, &kAAFDataDef_LegacySound))
 		{
 			if(!_headerLoaded)
 			{
@@ -446,7 +446,7 @@ CAAFAIFCCodec::CountSamples (
 							 aafLength_t *  pNumSamples)
 {
 	if(EqualAUID(&essenceKind, &kAAFDataDef_Sound)
-		|| EqualAUID(&essenceKind, &DDEF_Sound))
+		|| EqualAUID(&essenceKind, &kAAFDataDef_LegacySound))
 	{
 		*pNumSamples = _sampleFrames;
 	}
@@ -1293,7 +1293,7 @@ CAAFAIFCCodec::GetIndexedSampleSize
 		return(AAFRESULT_EOF);
 	
 	if(EqualAUID(&dataDefID, &kAAFDataDef_Sound)
-		|| EqualAUID(&dataDefID, &DDEF_Sound))
+		|| EqualAUID(&dataDefID, &kAAFDataDef_LegacySound))
 		*pResult = _bytesPerFrame;
 	else
 		return(AAFRESULT_CODEC_CHANNELS);
@@ -1309,7 +1309,7 @@ CAAFAIFCCodec::GetLargestSampleSize (aafUID_constref dataDefID,
 		return(AAFRESULT_NULL_PARAM);
 	
 	if(EqualAUID(&dataDefID, &kAAFDataDef_Sound)
-		|| EqualAUID(&dataDefID, &DDEF_Sound))
+		|| EqualAUID(&dataDefID, &kAAFDataDef_LegacySound))
 		*pResult = _bytesPerFrame;
 	else
 		return(AAFRESULT_CODEC_CHANNELS);

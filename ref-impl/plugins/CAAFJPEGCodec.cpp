@@ -699,7 +699,7 @@ HRESULT STDMETHODCALLTYPE
 		return AAFRESULT_NULL_PARAM;
 
 	if(EqualAUID(&essenceKind, &kAAFDataDef_Picture)
-		|| EqualAUID(&essenceKind, &DDEF_Picture))
+		|| EqualAUID(&essenceKind, &kAAFDataDef_LegacyPicture))
 	{
 		*pNumChannels = 1;
 	}
@@ -845,7 +845,7 @@ HRESULT STDMETHODCALLTYPE
 		return AAFRESULT_NULL_PARAM;
 
 	if(EqualAUID(&essenceKind, &kAAFDataDef_Picture)
-		|| EqualAUID(&essenceKind, &DDEF_Picture))
+		|| EqualAUID(&essenceKind, &kAAFDataDef_LegacyPicture))
 	{
 		*pNumSamples = _numberOfSamples;
 	}
@@ -896,7 +896,7 @@ CAAFJPEGCodec::Create (IAAFSourceMob *unk,
 		checkResult(_descriptorHelper.Initialize(unk));
 
 		checkExpression( kAAFTrue == EqualAUID(&essenceKind, &kAAFDataDef_Picture)
-			|| kAAFTrue == EqualAUID(&essenceKind, &DDEF_Picture),
+			|| kAAFTrue == EqualAUID(&essenceKind, &kAAFDataDef_LegacyPicture),
 			AAFRESULT_INVALID_DATADEF );
     
 		_sampleRate = sampleRate;	// There is only one type of sample supported.
@@ -3017,7 +3017,7 @@ HRESULT STDMETHODCALLTYPE
 	try
 	{
 		if(EqualAUID(&dataDefID, &kAAFDataDef_Picture)
-			|| EqualAUID(&dataDefID, &DDEF_Picture))
+			|| EqualAUID(&dataDefID, &kAAFDataDef_LegacyPicture))
 		{
 			if (kAAFCompressionDisable == _compressEnable)
 			{ // The samples are compressed to we can so get the size of the sample
@@ -3064,7 +3064,7 @@ HRESULT STDMETHODCALLTYPE
 	try
 	{
 		if(EqualAUID(&dataDefID, &kAAFDataDef_Picture)
-			|| EqualAUID(&dataDefID, &DDEF_Picture))
+			|| EqualAUID(&dataDefID, &kAAFDataDef_LegacyPicture))
 		{ 
 			if (kAAFCompressionDisable == _compressEnable)
 			{ // If data is compressed, and will not be software decompressed, find
