@@ -557,7 +557,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 					// Now compare the data read from the AAF file to the actual WAV file
 					if (dataLen != AAFBytesRead)
 					{
-						printf("***Wrong number of bytes read ( was %d , should be %d)\n",
+						printf("***Wrong number of bytes read (was %u , should be %zu)\n",
 							AAFBytesRead, WAVBytesRead);
 					}
 					if (memcmp( dataPtr, AAFDataBuf, dataLen) != 0)
