@@ -124,7 +124,6 @@
 #define COMPILER_GCC
 #define PLATFORM_GCC_INTEL_FREEBSD
  
-#define PLATFORM_GCC_POWERPC_MACOS10
 /*
  *  Compiler:   GNU C++
  *  Processor:  PowerPC
@@ -136,11 +135,6 @@
 #define OS_UNIX
 #define COMPILER_GCC
 #define PLATFORM_GCC_POWERPC_DARWIN
-/*
- * FIXME: "MACOS10" depricated. Root out and change/remove. (cae 18-Feb-2004)
- */
-#define OS_MACOS10
-#define PLATFORM_GCC_POWERPC_MACOS10
 
 /*   
  *  Compiler:   Metrowerks CodeWarrior
@@ -251,7 +245,7 @@ typedef wchar_t			aafCharacter;
 /*
  *  Linux, FreeBSD, Darwin
  */
-#elif defined(PLATFORM_GCC_INTEL_LINUX) || defined(PLATFORM_GCC_INTEL_FREEBSD) || defined(PLATFORM_GCC_POWERPC_MACOS10)
+#elif defined(PLATFORM_GCC_INTEL_LINUX) || defined(PLATFORM_GCC_INTEL_FREEBSD) || defined(PLATFORM_GCC_POWERPC_DARWIN) || defined(PLATFORM_GCC_SPARC_SOLARIS)
 typedef signed char		aafInt8;
 typedef signed short int	aafInt16;
 typedef signed long int		aafInt32;
