@@ -178,76 +178,38 @@ AAFRESULT STDMETHODCALLTYPE
 
     //@comm Essence group choices should be added with the AddChoice() function.
     
-
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFEssenceGroup::AppendChoice (
       ImplAAFSegment *choice)
 {
-    // aafUID_t	newDataDef;
-	aafLength_t	groupLength, newLength;
-	ImplAAFDictionary	*pDict = NULL;
-	ImplAAFDataDef	*pDef = NULL;
-	aafBool			willConvert;
-
 	if(choice == NULL)
 		return(AAFRESULT_NULL_PARAM);
 	
-	XPROTECT()
-	{
-	    ImplAAFDataDefSP pNewDataDef;
-		CHECK(choice->GetDataDef(&pNewDataDef));
-		// CHECK(pNewDataDef->GetAUID(&newDataDef));
+	AAFRESULT ar=ValidateChoice(choice);
+	if(AAFRESULT_FAILED(ar))
+		return(ar);
 
-	    ImplAAFDataDefSP pGroupDataDef;
-		CHECK(GetDataDef(&pGroupDataDef));
-
-		/* Verify that groups's datakind converts to still's datakind */
-		CHECK(GetDictionary(&pDict));
-		// CHECK(pDict->LookupDataDef(newDataDef, &pDef));
-		pDict->ReleaseReference();
-		pDict = NULL;
-		CHECK(pNewDataDef->DoesDataDefConvertTo(pGroupDataDef, &willConvert));
-		// pDef->ReleaseReference();
-		// pDef = NULL;
-
-		if (willConvert == kAAFFalse)
-			RAISE(AAFRESULT_INVALID_DATADEF);
-		
-		/* Verify that length of choice matches length of group */
-		CHECK(GetLength (&groupLength));
-		CHECK(choice->GetLength (&newLength));
-		if (Int64NotEqual(groupLength, newLength))
-		{
-			RAISE(AAFRESULT_BAD_LENGTH);
-		}
-		
-		_choices.appendValue(choice);
-		choice->AcquireReference();
-	}
-	XEXCEPT
-	{
-		if(pDict != NULL)
-		  pDict->ReleaseReference();
-		pDict = 0;
-		// if(pDef != NULL)
-		//   pDef->ReleaseReference();
-		// pDef = 0;
-	}
-	XEND;
+	_choices.appendValue(choice);
+	choice->AcquireReference();
 	
 	return(AAFRESULT_SUCCESS);
 }
-
-
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFEssenceGroup::PrependChoice (
       ImplAAFSegment *choice)
 {
-  if (! choice)
-	return AAFRESULT_NULL_PARAM;
+	if(choice == NULL)
+		return(AAFRESULT_NULL_PARAM);
+	
+	AAFRESULT ar=ValidateChoice(choice);
+	if(AAFRESULT_FAILED(ar))
+		return(ar);
 
-  return AAFRESULT_NOT_IN_CURRENT_VERSION;
+	_choices.prependValue(choice);
+	choice->AcquireReference();
+	
+	return(AAFRESULT_SUCCESS);
 }
 
 
@@ -257,8 +219,8 @@ AAFRESULT STDMETHODCALLTYPE
 	  aafUInt32 index,
       ImplAAFSegment *choice)
 {
-  if (! choice)
-	return AAFRESULT_NULL_PARAM;
+  if(choice == NULL)
+	return(AAFRESULT_NULL_PARAM);
 
   aafUInt32 count;
   AAFRESULT hr;
@@ -266,9 +228,16 @@ AAFRESULT STDMETHODCALLTYPE
   if (AAFRESULT_FAILED (hr)) return hr;
 
   if (index > count)
-	return AAFRESULT_BADINDEX;
+	return(AAFRESULT_BADINDEX);
 
-  return AAFRESULT_NOT_IN_CURRENT_VERSION;
+  AAFRESULT ar=ValidateChoice(choice);
+  if(AAFRESULT_FAILED(ar))
+	return(ar);
+
+  _choices.insertAt(choice,index);
+  choice->AcquireReference();
+	
+  return(AAFRESULT_SUCCESS);
 }
 
 
@@ -508,4 +477,56 @@ AAFRESULT ImplAAFEssenceGroup::ChangeContainedReferences(aafMobID_constref from,
 	XEND;
 
 	return AAFRESULT_SUCCESS;
+}
+
+AAFRESULT ImplAAFEssenceGroup::ValidateChoice(
+		ImplAAFSegment *choice)
+{
+	aafLength_t	groupLength, newLength;
+	ImplAAFDictionary	*pDict = NULL;
+	ImplAAFDataDef	*pDef = NULL;
+	aafBool			willConvert;
+
+	if(choice == NULL)
+		return(AAFRESULT_NULL_PARAM);
+
+	XPROTECT()
+	{
+	    ImplAAFDataDefSP pNewDataDef;
+		CHECK(choice->GetDataDef(&pNewDataDef));
+		// CHECK(pNewDataDef->GetAUID(&newDataDef));
+
+	    ImplAAFDataDefSP pGroupDataDef;
+		CHECK(GetDataDef(&pGroupDataDef));
+
+		/* Verify that groups's datakind converts to still's datakind */
+		CHECK(GetDictionary(&pDict));
+		// CHECK(pDict->LookupDataDef(newDataDef, &pDef));
+		pDict->ReleaseReference();
+		pDict = NULL;
+		CHECK(pNewDataDef->DoesDataDefConvertTo(pGroupDataDef, &willConvert));
+		// pDef->ReleaseReference();
+		// pDef = NULL;
+
+		if (willConvert == kAAFFalse)
+			RAISE(AAFRESULT_INVALID_DATADEF);
+		
+		/* Verify that length of choice matches length of group */
+		CHECK(GetLength (&groupLength));
+		CHECK(choice->GetLength (&newLength));
+		if (Int64NotEqual(groupLength, newLength))
+		{
+			RAISE(AAFRESULT_BAD_LENGTH);
+		}
+		
+	}
+	XEXCEPT
+	{
+		if(pDict != NULL)
+		  pDict->ReleaseReference();
+		pDict = 0;
+	}
+	XEND;
+
+	return(AAFRESULT_SUCCESS);
 }

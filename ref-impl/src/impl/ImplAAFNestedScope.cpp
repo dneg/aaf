@@ -108,7 +108,10 @@ AAFRESULT STDMETHODCALLTYPE
 	if(pSegment == NULL)
 		return(AAFRESULT_NULL_PARAM);
 
-	return AAFRESULT_NOT_IN_CURRENT_VERSION;
+	_slots.prependValue(pSegment);
+	pSegment->AcquireReference();
+
+	return(AAFRESULT_SUCCESS);
 }
 
 
@@ -127,7 +130,10 @@ AAFRESULT STDMETHODCALLTYPE
   if (index > count)
 	return AAFRESULT_BADINDEX;
 
-  return AAFRESULT_NOT_IN_CURRENT_VERSION;
+  _slots.insertAt(pSegment,index);
+  pSegment->AcquireReference();
+
+  return AAFRESULT_SUCCESS;
 }
 
 
