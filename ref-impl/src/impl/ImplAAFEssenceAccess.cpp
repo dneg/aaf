@@ -371,7 +371,7 @@ ImplAAFEssenceAccess::Create (ImplAAFMasterMob *masterMob,
 			
 			/* JEFF!! Changed masterSlotID to be 1 when creating mono 
 			* audio media, so file mob track will be labeled correctly */
-			if (EqualAUID(&mediaKind, &audioDDEF));
+			if (EqualAUID(&mediaKind, &audioDDEF))
 				masterSlotID = 1;
 			
 			/* JeffB: Handle the case where an existing file=>tape mob connection exists
