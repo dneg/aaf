@@ -178,9 +178,37 @@ public:
          // @parm [in] friendly name of this type definition
          const aafCharacter * pTypeName);
 
-
+  /**********************************
+	   EX - METHODS
+	   ***********************************************/
+  
+  virtual AAFRESULT STDMETHODCALLTYPE
+	  PrependElement(
+	  // property value corresponding to array to which element is prepended, [in]
+	  ImplAAFPropertyValue * pInPropVal, 
+	  // value to be prepended to this array,  [in]
+	  ImplAAFPropertyValue * pMemberPropVal );
+  
+  virtual AAFRESULT STDMETHODCALLTYPE
+	  RemoveElement(
+	  // property value corresponding to array;  [in] 
+	  ImplAAFPropertyValue * pInPropVal,
+	  // zero-based index into elements in this array type; [in] 
+	  aafUInt32  index);
+  
+  virtual AAFRESULT STDMETHODCALLTYPE  
+	  InsertElement(
+	  // property value corresponding to array; [in] 
+	  ImplAAFPropertyValue * pInPropVal,
+	  // zero-based index into elements in this array type;  [in]
+	  aafUInt32  index,
+	  // value to be inserted into this array; [in]
+	  ImplAAFPropertyValue * pMemberPropVal);
+  
+  /////////////////////////////////////////////////////////
+  
 protected:
-  // override from ImplAAFTypeDefArray
+	// override from ImplAAFTypeDefArray
   virtual aafUInt32 pvtCount (ImplAAFPropertyValue * pInPropVal) const;
 
 
