@@ -33,35 +33,35 @@ include $(AAFBASE)/build/common.mk
 
 # Include directories
 INCLUDES = -I. \
-	   -I../include \
-	   -I../include/ref-api \
-	   -I../src/impl \
-	   -I../src/com-api/com-dll \
-	   -I../libjpeg \
-           -I../../Utilities/Include \
-	   -I../include/com-api
+		-I../include \
+		-I../include/ref-api \
+		-I../src/impl \
+		-I../src/com-api \
+		-I../src/com-api/com-dll \
+		-I../libjpeg \
+		-I../include/com-api
 
 
 CXXFILES = AAFPluginCOM.cpp \
-	   CAAFEssenceDataStream.cpp \
-	   CAAFEssenceFileStream.cpp \
-	   CAAFEssenceFileContainer.cpp \
-	   CAAFJPEGCodec.cpp \
-	   CAAFJPEGDescriptorHelper.cpp \
-	   CAAFCDCICodec.cpp \
-	   CAAFCDCIDescriptorHelper.cpp \
-	   CAAFWAVECodec.cpp \
-	   CAAFAIFCCodec.cpp \
-	   jpegesdatadst.cpp \
-	   jpegesdatasrc.cpp
+		CAAFEssenceDataStream.cpp \
+		CAAFEssenceFileStream.cpp \
+		CAAFEssenceFileContainer.cpp \
+		CAAFJPEGCodec.cpp \
+		CAAFJPEGDescriptorHelper.cpp \
+		CAAFCDCICodec.cpp \
+		CAAFCDCIDescriptorHelper.cpp \
+		CAAFWAVECodec.cpp \
+		CAAFAIFCCodec.cpp \
+		jpegesdatadst.cpp \
+		jpegesdatasrc.cpp
 
 
 SUPOBJS = $(OBJDIR)/aafCvt$(OBJ) \
-	  $(OBJDIR)/AAFUtils$(OBJ) \
-	  $(AAFBUILDDIR)/com-api/$(AAFTARGETDIR)/CAAFClassFactory$(OBJ) \
-	  $(AAFBUILDDIR)/com-api/$(AAFTARGETDIR)/CAAFServer$(OBJ) \
-	  $(AAFBUILDDIR)/com-api/$(AAFTARGETDIR)/CAAFUnknown$(OBJ) \
-	  $(AAFBUILDDIR)/com-api/$(AAFTARGETDIR)/CAAFInProcServer$(OBJ)
+		$(OBJDIR)/AAFUtils$(OBJ) \
+		$(AAFBUILDDIR)/com-api/$(AAFTARGETDIR)/CAAFClassFactory$(OBJ) \
+		$(AAFBUILDDIR)/com-api/$(AAFTARGETDIR)/CAAFServer$(OBJ) \
+		$(AAFBUILDDIR)/com-api/$(AAFTARGETDIR)/CAAFUnknown$(OBJ) \
+		$(AAFBUILDDIR)/com-api/$(AAFTARGETDIR)/CAAFInProcServer$(OBJ)
 
 
 .PHONY : all
@@ -73,11 +73,11 @@ aafpgapi : $(OBJDIR) $(LIBDIR) $(LIBDIR)/libaafpgapi$(DLL)
 
 
 .PHONY : aafintp
-aafintp :  $(OBJDIR) $(LIBDIR) $(LIBDIR)/libaafintp$(DLL)
+aafintp : $(OBJDIR) $(LIBDIR) $(LIBDIR)/libaafintp$(DLL)
 
 
 $(LIBDIR)/libaafpgapi$(DLL) : $(CXXOBJS)
-	$(LD_DYN_LIB)  \
+	$(LD_DYN_LIB) \
 	-L$(LIBDIR) $(SUPOBJS) $(CXXOBJS) -o $@ \
 	$(AAFBUILDDIR)/aaflib/$(AAFTARGETDIR)/libaaflib$(LIB) \
 	$(AAFBUILDDIR)/aafiid/$(AAFTARGETDIR)/libaafiid$(LIB) \
@@ -86,15 +86,15 @@ $(LIBDIR)/libaafpgapi$(DLL) : $(CXXOBJS)
 
 
 CXXFILES2 = AAFInterpCOM.cpp \
-	    AAFRational.cpp \
-	    CAAFBasicInterp.cpp
+		AAFRational.cpp \
+		CAAFBasicInterp.cpp
 
 
-$(LIBDIR)/libaafintp$(DLL) :  $(CXXOBJS2)
+$(LIBDIR)/libaafintp$(DLL) : $(CXXOBJS2)
 	$(LD_DYN_LIB) \
 	-L$(LIBDIR) $(SUPOBJS) $(CXXOBJS2) -o $@ \
-        $(AAFBUILDDIR)/aaflib/$(AAFTARGETDIR)/libaaflib$(LIB) \
-        $(AAFBUILDDIR)/aafiid/$(AAFTARGETDIR)/libaafiid$(LIB)
+	$(AAFBUILDDIR)/aaflib/$(AAFTARGETDIR)/libaaflib$(LIB) \
+	$(AAFBUILDDIR)/aafiid/$(AAFTARGETDIR)/libaafiid$(LIB)
 
 
 .PHONY : clean
