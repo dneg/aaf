@@ -398,7 +398,7 @@ AD_XFUNCTION2(AAFCreateRawStorageMemory,
 
 			  [in],
 			  objPass,
-			  aafFileAccess_e,
+			  aafFileAccess_t,
 			  access,
 			  Governs whether stream may be read from and/or written
     // to.,
@@ -431,14 +431,14 @@ AD_XFUNCTION4(AAFCreateRawStorageDisk,
 
 			  [in],
 			  objPass,
-			  aafFileExistence_e,
+			  aafFileExistence_t,
 			  existence,
 			  Governs whether storage is on pre-existing data\, or is
     //  newly created.,
 
 			  [in],
 			  objPass,
-			  aafFileAccess_e,
+			  aafFileAccess_t,
 			  access,
 			  Governs whether stream may be read from and/or written
     //  to.,

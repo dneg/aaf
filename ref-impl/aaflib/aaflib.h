@@ -70,13 +70,13 @@ typedef STDAPICALLTYPE HRESULT (* LPFNAAFGETPLUGINMANAGER)(
     IAAFPluginManager ** ppPluginManager);
 
 typedef STDAPICALLTYPE HRESULT (* LPFNAAFCREATERAWSTORAGEMEMORY)(
-	aafFileAccess_e  access,
+	aafFileAccess_t  access,
 	IAAFRawStorage ** ppNewRawStorage);
 
 typedef STDAPICALLTYPE HRESULT (* LPFNAAFCREATERAWSTORAGEDISK)(
     aafCharacter_constptr  pFilename,
-    aafFileExistence_e  existence,
-	aafFileAccess_e  access,
+    aafFileExistence_t  existence,
+	aafFileAccess_t  access,
 	IAAFRawStorage ** ppNewRawStorage);
 
 typedef STDAPICALLTYPE HRESULT (* LPFNAAFCREATEAAFFILEONRAWSTORAGE)(
@@ -116,13 +116,13 @@ typedef HRESULT (STDAPICALLTYPE * LPFNAAFGETPLUGINMANAGER)(
     IAAFPluginManager ** ppPluginManager);
 
 typedef HRESULT (STDAPICALLTYPE * LPFNAAFCREATERAWSTORAGEMEMORY)(
-	aafFileAccess_e  access,
+	aafFileAccess_t  access,
 	IAAFRawStorage ** ppNewRawStorage);
 
 typedef HRESULT (STDAPICALLTYPE * LPFNAAFCREATERAWSTORAGEDISK)(
     aafCharacter_constptr  pFilename,
-    aafFileExistence_e  existence,
-	aafFileAccess_e  access,
+    aafFileExistence_t  existence,
+	aafFileAccess_t  access,
 	IAAFRawStorage ** ppNewRawStorage);
 
 typedef HRESULT (STDAPICALLTYPE * LPFNAAFCREATEAAFFILEONRAWSTORAGE)(
@@ -203,13 +203,13 @@ public:
     IAAFPluginManager ** ppPluginManager);
   
   HRESULT CreateRawStorageMemory (
-	aafFileAccess_e  access,
+	aafFileAccess_t  access,
 	IAAFRawStorage ** ppNewRawStorage);
   
   HRESULT CreateRawStorageDisk (
     aafCharacter_constptr  pFilename,
-    aafFileExistence_e  existence,
-	aafFileAccess_e  access,
+    aafFileExistence_t  existence,
+	aafFileAccess_t  access,
 	IAAFRawStorage ** ppNewRawStorage);
 
   HRESULT CreateAAFFileOnRawStorage (
