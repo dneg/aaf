@@ -150,8 +150,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pTapeDescriptor->SetTapeFormat( TapeFormat ));
 		checkResult(pTapeDescriptor->SetTapeLength( TapeLength ));
 
- 		checkResult(pSourceMob->SetEssenceDescriptor(edesc));
-
 			// Verify that there are no locators
 		checkResult(edesc->CountLocators(&numLocators));
 		checkExpression(0 == numLocators, AAFRESULT_TEST_FAILED);

@@ -144,8 +144,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		pAIFCDesc->Release();
 		pAIFCDesc = NULL;
 
- 		checkResult(pSourceMob->SetEssenceDescriptor(edesc));
-
 			// Verify that there are no locators
 		checkResult(edesc->CountLocators(&numLocators));
 		checkExpression(0 == numLocators, AAFRESULT_TEST_FAILED);
