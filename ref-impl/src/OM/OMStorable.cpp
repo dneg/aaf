@@ -121,7 +121,12 @@ void OMStorable::save(void) const
   if (opened) {
     ASSERT("Valid store", _store != 0);
     _store->close();
-    delete _store;
+
+	 //There is no refenrce counting in the Schemasoft implmentation
+  //and thus this delete will cause exceptions when the stream is deleted by 
+  //other destructors. Streams shoudl only be deleted by the destructor that owns it.
+ //Ian Baker 20042803
+//    delete _store;
     nonConstThis->_store = 0;
   }
 #endif
@@ -180,7 +185,11 @@ void OMStorable::restoreContents(void)
   //
   ASSERT("Valid store", _store != 0);
   _store->close();
-  delete _store;
+ 	 //There is no refenrce counting in the Schemasoft implmentation
+  //and thus this delete will cause exceptions when the stream is deleted by 
+  //other destructors. Streams shoudl only be deleted by the destructor that owns it.
+ //Ian Baker 20042803
+  // delete _store;
   _store = 0;
   _exists = true;
 }
