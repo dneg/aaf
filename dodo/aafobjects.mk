@@ -25,7 +25,6 @@ AAFNONPERSISTENTOBJECTS = \
 # implemented in other objects.
 AAFCOMINTERFACESONLY = \
 	AAFEndian \
-	AAFEssenceSampleStream \
 	AAFSearchSource \
 	AAFEssenceMultiAccess \
 	AAFEssenceRawAccess
