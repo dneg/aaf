@@ -102,6 +102,16 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		}
 	}
 
+
+	if (pMob)
+		pMob->Release();
+
+	if (pCompMob)
+		pCompMob->Release();
+
+	if (pHeader)
+		pHeader->Release();
+
 	// Cleanup and return
 	if (pFile) 
 	{
@@ -117,14 +127,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	}
 	*/
 
-	if (pHeader)
-		pHeader->Release();
 
-	if (pCompMob)
-		pCompMob->Release();
-
-	if (pMob)
-		pMob->Release();
 
 	return hr;
 }
@@ -188,7 +191,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 			criteria.searchTag = kByMobKind;
 			criteria.tags.mobKind = kCompMob;
 			hr = pHeader->EnumAAFAllMobs(&criteria, &pMobIter);
-			while (pMobIter && pMobIter->NextOne(&pMob) !=AAFRESULT_NO_MORE_MOBS)
+			while (pMobIter && (pMobIter->NextOne(&pMob) == AAFRESULT_SUCCESS))
 			{
 				// Get A CompositionMob Interface 
 				hr = pMob->QueryInterface(IID_IAAFCompositionMob,(void **)&pCompMob);
@@ -203,11 +206,17 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 					{
 						hr = AAFRESULT_TEST_FAILED;
 					}
+
+					pCompMob->Release();
+					pCompMob = NULL;
 				}
 				else
 				{
 					hr = AAFRESULT_TEST_FAILED;
 				}
+
+				pMob->Release();
+				pMob = NULL;
 			}
 		}
 		else
@@ -218,6 +227,18 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 
 
 	// Cleanup and return
+	if (pMobIter)
+		pMobIter->Release();
+
+	if (pCompMob)
+		pCompMob->Release();
+
+	if (pMob)
+		pMob->Release();
+
+	if (pHeader)
+		pHeader->Release();
+
 	if (pFile) 
 	{
 		pFile->Close();
@@ -232,17 +253,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	}
 	*/
 
-	if (pHeader)
-		pHeader->Release();
 
-	if (pMob)
-		pMob->Release();
-
-	if (pCompMob)
-		pCompMob->Release();
-
-	if (pMobIter)
-		pMobIter->Release();
 	return hr;
 }
 

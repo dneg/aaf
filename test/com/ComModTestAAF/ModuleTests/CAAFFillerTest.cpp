@@ -114,8 +114,19 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 				{
 					// append the filler to the MOB tree
 					hr = pMob->AppendNewSlot(pSegment, 1, L"FillerSlot", &pSlot); 
+					if (AAFRESULT_SUCCESS == hr)
+					{
+						pSlot->Release();
+						pSlot = NULL;
+					}
 				}
+
+				pSegment->Release();
+				pSegment = NULL;
 			}
+
+			pFiller->Release();
+			pFiller = NULL;
 		}
 	}
 
@@ -123,7 +134,27 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	if (AAFRESULT_SUCCESS == hr)
 		hr = pHeader->AppendMob(pMob);
 
+
+
 	// Cleanup and return
+	if (pSegment)
+		pSegment->Release();
+
+	if (pSlot)
+		pSlot->Release();
+
+	if (pFiller)
+		pFiller->Release();
+
+	if (pMob)
+		pMob->Release();
+
+	if (pCompMob)
+		pCompMob->Release();
+
+	if (pHeader)
+		pHeader->Release();
+
 	if (pFile) 
 	{
 		pFile->Close();
@@ -137,24 +168,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		pSession->Release();
 	}
 	*/
-
-	if (pHeader)
-		pHeader->Release();
-
-	if (pCompMob)
-		pCompMob->Release();
-
-	if (pMob)
-		pMob->Release();
-
-	if (pFiller)
-		pFiller->Release();
-
-	if (pSlot)
-		pSlot->Release();
-
-	if (pSegment)
-		pSegment->Release();
 
 	return hr;
 }
@@ -224,13 +237,13 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 			criteria.searchTag = kByMobKind;
 			criteria.tags.mobKind = kCompMob;
 			hr = pHeader->EnumAAFAllMobs(&criteria, &pMobIter);
-			while (pMobIter && pMobIter->NextOne(&pMob) !=AAFRESULT_NO_MORE_MOBS)
+			while (pMobIter && (pMobIter->NextOne(&pMob) == AAFRESULT_SUCCESS))
 			{
 				pMob->GetNumSlots(&numSlots);
 				if (1 == numSlots)
 				{
 					hr = pMob->EnumAAFAllMobSlots(&pSlotIter);
-					while (pSlotIter && pSlotIter->NextOne(&pSlot) != AAFRESULT_NO_MORE_OBJECTS)
+					while (pSlotIter && (pSlotIter->NextOne(&pSlot) == AAFRESULT_SUCCESS))
 					{
 						hr = pSlot->GetSegment(&pSegment);
 						hr = pSegment->QueryInterface(IID_IAAFFiller, (void **) &pFiller);
@@ -248,18 +261,43 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 							{
 								 hr = AAFRESULT_TEST_FAILED;
 							}
+
+							pComponent->Release();
+							pComponent = NULL;
 						}
 						else
 						{
 							hr = AAFRESULT_TEST_FAILED;
 						}
+
+						pSegment->Release();
+						pSegment = NULL;
+
+						pSlot->Release();
+						pSlot = NULL;
+					}
+
+					if (pSlotIter)
+					{
+						pSlotIter->Release();
+						pSlotIter = NULL;
 					}
 				}
 				else
 				{
 					hr = AAFRESULT_TEST_FAILED;
 				}
+
+				pMob->Release();
+				pMob = NULL;
 			}
+
+			if (pMobIter)
+			{
+				pMobIter->Release();
+				pMobIter = NULL;
+			}
+
 		}
 		else
 		{
@@ -268,6 +306,31 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	}
 
 	// Cleanup and return
+
+	if (pComponent)
+		pComponent->Release();
+
+	if (pSegment)
+		pSegment->Release();
+
+	if (pSlot)
+		pSlot->Release();
+
+	if (pFiller)
+		pFiller->Release();
+
+	if (pSlotIter)
+		pSlotIter->Release();
+
+	if (pMob)
+		pMob->Release();
+
+	if (pMobIter)
+		pMobIter->Release();
+
+	if (pHeader)
+		pHeader->Release();
+
 	if (pFile) 
 	{
 		pFile->Close();
@@ -282,32 +345,10 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	}
 	*/
 
-	if (pHeader)
-		pHeader->Release();
-
 //	if (pSourceMob)
 //		pSourceMob->Release();
 
-	if (pMob)
-		pMob->Release();
 
-	if (pFiller)
-		pFiller->Release();
-
-	if (pSlot)
-		pSlot->Release();
-
-	if (pSegment)
-		pSegment->Release();
-
-	if (pComponent)
-		pComponent->Release();
-
-	if (pMobIter)
-		pMobIter->Release();
-
-	if (pSlotIter)
-		pSlotIter->Release();
 	
 
 	return hr;
