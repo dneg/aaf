@@ -43,20 +43,11 @@ AD_IDL(//
 // AAFRESULT_NOMEMORY
 //   - insufficient system memory is available to perform the
 //     operation.
-//
-// AAFRESULT_NOT_INITIALIZED
-//   - This object has not yet had Initialize\(\) called on it through
-//     this object's primary interface.  Note that
-//     IAAFSoundDescriptor is a primary interface for an
-//     abstract class\, so it is not appropriate for the
-//     Initialize\(\) method to exist in this interface.  The
-//     Initialize\(\) method is available through the concrete
-//     object's primary interface.
 //)
 AD_CLASS_UUID(DDC8931D, 1A32, 4362, BD, 78, 45, 0D, 0D, 97, 00, 47)
 
 AD_DEFAULT_UUID(DDC8931E, 1A32, 4362, BD, 78, 45, 0D, 0D, 97, 00, 47)
-AD_XCLASS_BEGIN(Abstract, StoredObject)
+AD_XCLASS_BEGIN(Concrete, StoredObject)
 AD_XMETHOD1(SetCompression,
 			[in],
 				objPass,
@@ -78,10 +69,7 @@ AD_XMETHOD1(SetCompression,
   // This method will return the following codes:
   // 
   // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.)
+  //   - succeeded.  \(This is the only code indicating success.\))
 
 
 AD_XMETHOD1(GetCompression,
@@ -106,9 +94,6 @@ AD_XMETHOD1(GetCompression,
   // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
   //
   // AAFRESULT_NULL_PARAM
   //   - pCompression arg is NULL.
@@ -137,10 +122,7 @@ AD_XMETHOD1(SetChannelCount,
   // This method will return the following codes:
   // 
   // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.)
+  //   - succeeded.  \(This is the only code indicating success.\))
 
 
 AD_XMETHOD1(GetChannelCount,
@@ -165,9 +147,6 @@ AD_XMETHOD1(GetChannelCount,
   // AAFRESULT_SUCCESS
   //   - succeeded.  \(This is the only code indicating success.\)
   //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
-  //
   // AAFRESULT_NULL_PARAM
   //   - pChannelCount arg is NULL.)
 
@@ -191,10 +170,7 @@ AD_XMETHOD1(SetAudioSamplingRate,
   // This method will return the following codes:
   // 
   // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.)
+  //   - succeeded.  \(This is the only code indicating success.\))
 
 
 AD_XMETHOD1(GetAudioSamplingRate,
@@ -217,9 +193,6 @@ AD_XMETHOD1(GetAudioSamplingRate,
   // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
   //
   // AAFRESULT_NULL_PARAM
   //   - pRate arg is NULL.)
@@ -245,10 +218,7 @@ AD_XMETHOD1(SetIsLocked,
   // This method will return the following codes:
   // 
   // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.)
+  //   - succeeded.  \(This is the only code indicating success.\))
 
 
 AD_XMETHOD1(IsLocked,
@@ -273,9 +243,6 @@ AD_XMETHOD1(IsLocked,
   // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
   //
   // AAFRESULT_NULL_PARAM
   //   - pLocked arg is NULL.
@@ -303,10 +270,7 @@ AD_XMETHOD1(SetElectroSpatialFormulation,
   // This method will return the following codes:
   // 
   // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.)
+  //   - succeeded.  \(This is the only code indicating success.\))
 
 
 AD_XMETHOD1(GetElectroSpatialFormulation,
@@ -330,9 +294,6 @@ AD_XMETHOD1(GetElectroSpatialFormulation,
   // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
   //
   // AAFRESULT_NULL_PARAM
   //   - pFormulation arg is NULL.
@@ -359,10 +320,7 @@ AD_XMETHOD1(SetAudioRefLevel,
   // This method will return the following codes:
   // 
   // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.)
+  //   - succeeded.  \(This is the only code indicating success.\))
 
 
 AD_XMETHOD1(GetAudioRefLevel,
@@ -385,9 +343,6 @@ AD_XMETHOD1(GetAudioRefLevel,
   // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
   //
   // AAFRESULT_NULL_PARAM
   //   - pLevel arg is NULL.
@@ -414,10 +369,7 @@ AD_XMETHOD1(SetDialNorm,
   // This method will return the following codes:
   // 
   // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.)
+  //   - succeeded.  \(This is the only code indicating success.\))
 
 
 AD_XMETHOD1(GetDialNorm,
@@ -440,9 +392,6 @@ AD_XMETHOD1(GetDialNorm,
   // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
   //
   // AAFRESULT_NULL_PARAM
   //   - pDialNorm arg is NULL.
@@ -469,10 +418,7 @@ AD_XMETHOD1(SetQuantizationBits,
   // This method will return the following codes:
   // 
   // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.)
+  //   - succeeded.  \(This is the only code indicating success.\))
 
 
 AD_XMETHOD1(GetQuantizationBits,
@@ -495,9 +441,6 @@ AD_XMETHOD1(GetQuantizationBits,
   // AAFRESULT_SUCCESS
   //   - succeeded.  \(This is the only code indicating success.\)
   //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
-  //
   // AAFRESULT_NULL_PARAM
   //   - pBitsCount arg is NULL.)
-AD_XCLASS_END(Abstract, StoredObject)
+AD_XCLASS_END(Concrete, StoredObject)

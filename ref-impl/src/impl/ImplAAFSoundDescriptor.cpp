@@ -52,7 +52,7 @@ ImplAAFSoundDescriptor::ImplAAFSoundDescriptor() :
 
 
     // Initialize the required properties with bogus values.
-    // Initialize() needs to be called to compelete initialization
+    // Initialize() may be called to complete initialization
     // of the object.
     _channels = 0;
 
@@ -73,19 +73,24 @@ ImplAAFSoundDescriptor::~ImplAAFSoundDescriptor()
 
 AAFRESULT STDMETHODCALLTYPE ImplAAFSoundDescriptor::Initialize()
 {
+	// ImplAAFSoundDescriptor::Initialize() cannot be called directly by a client
+	// application because an Initialize() method was omitted from
+	// IAAFSoundDescriptor.
+	// As a result, this implementation does not require the object to be
+	// initialized. However, to support derived classes, which may have
+	// public Initialize() methods that wish in turn to initialize this
+	// class, this Initialize() method is provided.
+	// It doesn't do anything beyond that done in the constructor.
+
     assert( !isInitialized() );
 
 
-    // Initialize parent class' required properties
+    // Initialize required properties
     _channels = 0;
     const aafRational_t  null_rational = { 0, 0 };
     _audioSamplingRate = null_rational;
     _quantizationBits = 0;
 
-
-    // Because this is an abstract class, do not call setInitialized()
-    // here. A concrete class inheriting from this one need to set the
-    // object to be 'initialized'.
 
 
     return AAFRESULT_SUCCESS;
@@ -96,12 +101,6 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFSoundDescriptor::Initialize()
 AAFRESULT STDMETHODCALLTYPE ImplAAFSoundDescriptor::SetCompression(
     const aafUID_t& compression )
 {
-    if( !isInitialized() )
-    {
-        return AAFRESULT_NOT_INITIALIZED;
-    }
-
-
     _compression = compression;
 
 
@@ -116,10 +115,6 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFSoundDescriptor::GetCompression(
     if( pCompression == 0 )
     {
         return AAFRESULT_NULL_PARAM;
-    }
-    if( !isInitialized() )
-    {
-        return AAFRESULT_NOT_INITIALIZED;
     }
 	if( !_compression.isPresent() )
     {
@@ -138,12 +133,6 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFSoundDescriptor::GetCompression(
 AAFRESULT STDMETHODCALLTYPE ImplAAFSoundDescriptor::SetChannelCount(
     aafUInt32 channelCount )
 {
-    if( !isInitialized() )
-    {
-        return AAFRESULT_NOT_INITIALIZED;
-    }
-
-
     _channels = channelCount;
 
 
@@ -159,10 +148,6 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFSoundDescriptor::GetChannelCount(
     {
         return AAFRESULT_NULL_PARAM;
     }
-    if( !isInitialized() )
-    {
-        return AAFRESULT_NOT_INITIALIZED;
-    }
 
 
     *pChannelCount = _channels;
@@ -176,12 +161,6 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFSoundDescriptor::GetChannelCount(
 AAFRESULT STDMETHODCALLTYPE ImplAAFSoundDescriptor::SetAudioSamplingRate(
     aafRational_t rate )
 {
-    if( !isInitialized() )
-    {
-        return AAFRESULT_NOT_INITIALIZED;
-    }
-
-
     _audioSamplingRate = rate;
 
 
@@ -197,11 +176,6 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFSoundDescriptor::GetAudioSamplingRate(
     {
         return AAFRESULT_NULL_PARAM;
     }
-    if( !isInitialized() )
-    {
-        return AAFRESULT_NOT_INITIALIZED;
-    }
-
 
     *pRate = _audioSamplingRate;
 
@@ -214,12 +188,6 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFSoundDescriptor::GetAudioSamplingRate(
 AAFRESULT STDMETHODCALLTYPE ImplAAFSoundDescriptor::SetIsLocked(
     aafBoolean_t locked )
 {
-    if( !isInitialized() )
-    {
-        return AAFRESULT_NOT_INITIALIZED;
-    }
-
-
     _locked = locked;
 
 
@@ -234,10 +202,6 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFSoundDescriptor::IsLocked(
     if( pLocked == 0 )
     {
         return AAFRESULT_NULL_PARAM;
-    }
-    if( !isInitialized() )
-    {
-        return AAFRESULT_NOT_INITIALIZED;
     }
 	if( !_locked.isPresent() )
     {
@@ -256,12 +220,6 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFSoundDescriptor::IsLocked(
 AAFRESULT STDMETHODCALLTYPE ImplAAFSoundDescriptor::SetElectroSpatialFormulation(
     aafElectroSpatialFormulation_t electroSpatialFormulation )
 {
-    if( !isInitialized() )
-    {
-        return AAFRESULT_NOT_INITIALIZED;
-    }
-
-
     _electroSpatial = electroSpatialFormulation;
 
 
@@ -276,10 +234,6 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFSoundDescriptor::GetElectroSpatialFormulation
     if( pElectroSpatialFormulation == 0 )
     {
         return AAFRESULT_NULL_PARAM;
-    }
-    if( !isInitialized() )
-    {
-        return AAFRESULT_NOT_INITIALIZED;
     }
 	if( !_electroSpatial.isPresent() )
     {
@@ -298,12 +252,6 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFSoundDescriptor::GetElectroSpatialFormulation
 AAFRESULT STDMETHODCALLTYPE ImplAAFSoundDescriptor::SetAudioRefLevel(
     aafInt8 level )
 {
-    if( !isInitialized() )
-    {
-        return AAFRESULT_NOT_INITIALIZED;
-    }
-
-
     _audioRefLevel = level;
 
 
@@ -318,10 +266,6 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFSoundDescriptor::GetAudioRefLevel(
     if( pLevel == 0 )
     {
         return AAFRESULT_NULL_PARAM;
-    }
-    if( !isInitialized() )
-    {
-        return AAFRESULT_NOT_INITIALIZED;
     }
 	if( !_audioRefLevel.isPresent() )
     {
@@ -340,12 +284,6 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFSoundDescriptor::GetAudioRefLevel(
 AAFRESULT STDMETHODCALLTYPE ImplAAFSoundDescriptor::SetDialNorm(
     aafInt8 dialNorm )
 {
-    if( !isInitialized() )
-    {
-        return AAFRESULT_NOT_INITIALIZED;
-    }
-
-
     _dialNorm = dialNorm;
 
 
@@ -360,10 +298,6 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFSoundDescriptor::GetDialNorm(
     if( pDialNorm == 0 )
     {
         return AAFRESULT_NULL_PARAM;
-    }
-    if( !isInitialized() )
-    {
-        return AAFRESULT_NOT_INITIALIZED;
     }
 	if( !_dialNorm.isPresent() )
     {
@@ -382,12 +316,6 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFSoundDescriptor::GetDialNorm(
 AAFRESULT STDMETHODCALLTYPE ImplAAFSoundDescriptor::SetQuantizationBits(
     aafUInt32 bitsCount )
 {
-    if( !isInitialized() )
-    {
-        return AAFRESULT_NOT_INITIALIZED;
-    }
-
-
     _quantizationBits = bitsCount;
 
 
@@ -402,10 +330,6 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFSoundDescriptor::GetQuantizationBits(
     if( pBitsCount == 0 )
     {
         return AAFRESULT_NULL_PARAM;
-    }
-    if( !isInitialized() )
-    {
-        return AAFRESULT_NOT_INITIALIZED;
     }
 
 

@@ -310,14 +310,13 @@ static HRESULT CreateAAFFile(
         checkResult(pMob->SetName(L"PCMDescriptorTest"));
 
 
-        // Create a PCMDescriptor,
-        // add the descriptor to the source mob.
+        // Create a PCMDescriptor
         checkResult(defs.cdPCMDescriptor()->CreateInstance(
             IID_IAAFPCMDescriptor,
             (IUnknown **)&pPCMDesc));
 
 
-        // Before initialization test if the SoundDescriptor
+        // Before initialization test if the PCMDescriptor
         // methods return valid error values.
         checkResult(Test_IAAFPCMDescriptor_Uninitialized (pPCMDesc));
 

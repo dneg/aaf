@@ -104,8 +104,6 @@ static HRESULT CreateAAFFile(
 static HRESULT ReadAAFFile(
     aafWChar * pFileName);
 
-static HRESULT Test_IAAFSoundDescriptor_Uninitialized( IAAFSoundDescriptor* );
-
 static HRESULT Test_IAAFSoundDescriptor( IAAFSoundDescriptor*, testMode_t );
 
 static HRESULT Test_IAAFSoundDescriptor_Compression(
@@ -259,7 +257,6 @@ static HRESULT CreateAAFFile(
     IAAFMob*                pMob = 0;
     IAAFEssenceDescriptor*  pEssenceDesc = 0;
     IAAFSoundDescriptor*    pSoundDesc = 0;
-    IAAFPCMDescriptor*      pPCMDesc = 0;
 
     HRESULT hr = S_OK;
 
@@ -287,28 +284,13 @@ static HRESULT CreateAAFFile(
         checkResult(pMob->SetName(L"SoundDescriptorTest"));
 
 
-        // Create a concrete subclass of SoundDescriptor,
-        // add the descriptor to the source mob.
-        checkResult(defs.cdPCMDescriptor()->CreateInstance(
+        // Create a SoundDescriptor
+        checkResult(defs.cdSoundDescriptor()->CreateInstance(
             IID_IAAFSoundDescriptor,
             (IUnknown **)&pSoundDesc));
 
 
-        // Before initialization test if the SoundDescriptor
-        // methods return valid error values.
-        checkResult(Test_IAAFSoundDescriptor_Uninitialized (pSoundDesc));
-
-
-        // Initialize SoundDescriptor object.
-        // Because the SoundDescriptor class is abstract it is initialized
-        // when a concrete class inheriting from it is initialized.
-        // In our case we need to call Initialize() on PCMDescriptor.
-        checkResult(pSoundDesc->QueryInterface(IID_IAAFPCMDescriptor,
-                                               (void **) &pPCMDesc));
-
-        checkResult(pPCMDesc->Initialize());
-
-        // Test initialized SoundDescriptor.
+        // Test SoundDescriptor.
         checkResult(Test_IAAFSoundDescriptor(pSoundDesc,
                                              kAAFUnitTestReadWrite));
 
@@ -330,10 +312,6 @@ static HRESULT CreateAAFFile(
     }
 
 
-    if (pPCMDesc) 
-    {
-        pPCMDesc->Release();
-    }
     if (pSoundDesc) 
     {
         pSoundDesc->Release();
@@ -431,138 +409,6 @@ static HRESULT ReadAAFFile(
         pFile->Close();
         pFile->Release();
     }
-
-
-    return hr;
-}
-
-
-
-static HRESULT Test_IAAFSoundDescriptor_Uninitialized( IAAFSoundDescriptor* pSoundDesc )
-{
-    HRESULT  hr = S_OK;
-
-
-    try
-    {
-        static const aafUID_t bogusCompressionID_1 =
-            { 0xcc263b77, 0x875d, 0x4f23,
-            { 0xac, 0x81, 0x87, 0xbd, 0xf4, 0x42, 0xca, 0x78 } };
-
-        hr = pSoundDesc->SetCompression( bogusCompressionID_1 );
-        checkExpression( hr == AAFRESULT_NOT_INITIALIZED, AAFRESULT_TEST_FAILED );
-
-        static const aafUID_t bogusCompressionID_2 =
-            { 0x8629080b, 0xd506, 0x4692,
-            { 0xab, 0xfa, 0x6d, 0x31, 0x77, 0x9f, 0x8a, 0x8c } };
-        assert( bogusCompressionID_1 != bogusCompressionID_2 );
-
-        aafUID_t  compressionID = bogusCompressionID_2;
-        hr = pSoundDesc->GetCompression( &compressionID );
-        checkExpression( hr == AAFRESULT_NOT_INITIALIZED, AAFRESULT_TEST_FAILED );
-        checkExpression( compressionID==bogusCompressionID_2, AAFRESULT_TEST_FAILED );
-
-
-
-        const aafUInt32  bogusChannelCount_1 = 54;
-        hr = pSoundDesc->SetChannelCount( bogusChannelCount_1 );
-        checkExpression( hr == AAFRESULT_NOT_INITIALIZED, AAFRESULT_TEST_FAILED );
-
-        const aafUInt32  bogusChannelCount_2 = 43;
-        assert( bogusChannelCount_1 != bogusChannelCount_2 );
-        aafUInt32  channelCount = bogusChannelCount_2;
-        hr = pSoundDesc->GetChannelCount( &channelCount );
-        checkExpression( hr == AAFRESULT_NOT_INITIALIZED, AAFRESULT_TEST_FAILED );
-        checkExpression( channelCount==bogusChannelCount_2, AAFRESULT_TEST_FAILED );
-
-
-
-        const aafRational_t  bogusRate_1 = { 378, 90 };
-        hr = pSoundDesc->SetAudioSamplingRate( bogusRate_1 );
-        checkExpression( hr == AAFRESULT_NOT_INITIALIZED, AAFRESULT_TEST_FAILED );
-
-        const aafRational_t  bogusRate_2 = { 4336, 65 };
-        assert( bogusRate_1 != bogusRate_2 );
-        aafRational_t  audioSamplingRate = bogusRate_2;
-        hr = pSoundDesc->GetAudioSamplingRate( &audioSamplingRate );
-        checkExpression( hr == AAFRESULT_NOT_INITIALIZED, AAFRESULT_TEST_FAILED );
-        checkExpression( audioSamplingRate==bogusRate_2, AAFRESULT_TEST_FAILED );
-
-
-
-        hr = pSoundDesc->SetIsLocked( kAAFFalse );
-        checkExpression( hr == AAFRESULT_NOT_INITIALIZED, AAFRESULT_TEST_FAILED );
-
-        const aafBoolean_t  bogusLockedFlag = kAAFTrue;
-        aafBoolean_t  locked = bogusLockedFlag;
-        hr = pSoundDesc->IsLocked( &locked );
-        checkExpression( hr == AAFRESULT_NOT_INITIALIZED, AAFRESULT_TEST_FAILED );
-        checkExpression( locked == bogusLockedFlag, AAFRESULT_TEST_FAILED );
-
-
-
-        const aafElectroSpatialFormulation_t  bogusESF_1 =
-            kAAFEsStereoLeftChannelDoubleSamplingFrequencyMode;
-        hr = pSoundDesc->SetElectroSpatialFormulation( bogusESF_1 );
-        checkExpression( hr == AAFRESULT_NOT_INITIALIZED, AAFRESULT_TEST_FAILED );
-
-        const aafElectroSpatialFormulation_t  bogusESF_2 = kAAFEsPrimarySecondaryMode;
-        assert( bogusESF_1 != bogusESF_2 );
-        aafElectroSpatialFormulation_t  esf = bogusESF_2;
-        hr = pSoundDesc->GetElectroSpatialFormulation( &esf );
-        checkExpression( hr == AAFRESULT_NOT_INITIALIZED, AAFRESULT_TEST_FAILED );
-        checkExpression( esf == bogusESF_2, AAFRESULT_TEST_FAILED );
-
-
-
-        const aafInt8  bogusRefLevel_1 = 94;
-        hr = pSoundDesc->SetAudioRefLevel( bogusRefLevel_1 );
-        checkExpression( hr == AAFRESULT_NOT_INITIALIZED, AAFRESULT_TEST_FAILED );
-
-        const aafInt8  bogusRefLevel_2 = 18;
-        assert( bogusRefLevel_1 != bogusRefLevel_2 );
-        aafInt8  audioRefLevel = bogusRefLevel_2;
-        hr = pSoundDesc->GetAudioRefLevel( &audioRefLevel );
-        checkExpression( hr == AAFRESULT_NOT_INITIALIZED, AAFRESULT_TEST_FAILED );
-        checkExpression( audioRefLevel == bogusRefLevel_2, AAFRESULT_TEST_FAILED );
-
-
-
-        const aafInt8  bogusDialNorm_1 = 116;
-        hr = pSoundDesc->SetDialNorm( bogusDialNorm_1 );
-        checkExpression( hr == AAFRESULT_NOT_INITIALIZED, AAFRESULT_TEST_FAILED );
-
-        const aafInt8  bogusDialNorm_2 = 15;
-        assert( bogusDialNorm_1 != bogusDialNorm_2 );
-        aafInt8  dialNorm = bogusDialNorm_2;
-        hr = pSoundDesc->GetDialNorm( &dialNorm );
-        checkExpression( hr == AAFRESULT_NOT_INITIALIZED, AAFRESULT_TEST_FAILED );
-        checkExpression( dialNorm == bogusDialNorm_2, AAFRESULT_TEST_FAILED );
-
-
-
-        const aafUInt32  bogusQuantizationBits_1 = 4387;
-        hr = pSoundDesc->SetQuantizationBits( bogusQuantizationBits_1 );
-        checkExpression( hr == AAFRESULT_NOT_INITIALIZED, AAFRESULT_TEST_FAILED );
-
-        const aafUInt32  bogusQuantizationBits_2 = 936;
-        assert( bogusQuantizationBits_1 != bogusQuantizationBits_2 );
-        aafUInt32  quantizationBitsCount = bogusQuantizationBits_2;
-        hr = pSoundDesc->GetQuantizationBits( &quantizationBitsCount );
-        checkExpression( hr == AAFRESULT_NOT_INITIALIZED, AAFRESULT_TEST_FAILED );
-        checkExpression( quantizationBitsCount == bogusQuantizationBits_2,
-                         AAFRESULT_TEST_FAILED );
-
-
-        // If we got to this point none of the tests above
-        // failed and the status can be set to 'success'.
-        hr = S_OK;
-    }
-    catch( HRESULT e )
-    {
-        hr = e;
-    }
-
 
 
     return hr;
