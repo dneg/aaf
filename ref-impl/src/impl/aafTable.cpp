@@ -141,7 +141,6 @@ aafErr_t NewTable(
 	}
 	XEXCEPT
 	{
-		return(XCODE());
 	}
 	XEND
 
@@ -237,7 +236,6 @@ aafErr_t TableAddValuePtr(
 	}
 	XEXCEPT
 	{
-		return(XCODE());
 	}
 	XEND
 
@@ -319,7 +317,6 @@ aafErr_t TableAddValueBlock(
 	}
 	XEXCEPT
 	{
-		return(XCODE());
 	}
 	XEND
 
@@ -405,7 +402,6 @@ aafErr_t TableRemove(
 	}
 	XEXCEPT
 	{
-		return(XCODE());
 	}
 	XEND
 	
@@ -753,7 +749,6 @@ aafErr_t TableNextEntry(
 	}
 	XEXCEPT
 	{
-		return(XCODE());
 	}
 	XEND
 	
@@ -795,6 +790,8 @@ aafInt32 TableNumEntriesMatching(
 		}
 	}
 	XEXCEPT
+	{
+	}
 	XEND_SPECIAL(0)
 	
 	return(numMatches);
@@ -847,7 +844,6 @@ aafErr_t TableSearchDataValue(
 	}
 	XEXCEPT
 	{
-		return(XCODE());
 	}
 	XEND
 	
