@@ -49,8 +49,8 @@
 //
 // DictP18-277-1847BMaster.csv 
 //
-// This file was generated on Fri Jan  7 14:48:18 EST 2000
-// by user transdel on system TRANSDEL.
+// This file was generated on Mon Jan 24 11:48:28 EST 2000
+// by user btillman on system BTILLMAN3PC.
 //
 // Key to macros.
 //
@@ -2392,6 +2392,14 @@ AAF_CLASS(Header,
     0x3b06,
     AAF_REFERENCE_TYPE(StrongReferenceVector, Identification),
     true,
+    Header)
+  AAF_PROPERTY(ObjectModelVersion,
+    AAF_LITERAL_AUID(0x06480700,
+      0x0000, 0x0000,
+      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
+    0x3b07,
+    AAF_TYPE(UInt32),
+    false,
     Header)
 AAF_CLASS_END(Header)
 AAF_CLASS_SEPARATOR()
