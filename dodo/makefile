@@ -21,7 +21,7 @@ test_only:
 run:
 	 $(SH_PREIX) cd tool ; $(MAKE) run $(SH_SUFFIX)
 
-.SUFFIXES: .cpp .h .comc .comh .dod .exp .idl .implc .implh
+.SUFFIXES: .cpp .h .comc .comh .dod .exp .idl .implc .implh .idlh
 								   
 DODO_TARGETS = \
 	AAFAttribute.all \
@@ -153,9 +153,14 @@ INCLUDE_DIR = ../ref-impl/include
 	$(SH_PREFIX) mv $*.tmp $*.idl $(SH_SUFFIX)
 	$(SH_PREFIX) cp $*.idl $(INCLUDE_DIR)/com-api/ $(SH_SUFFIX)
 
+.idl.idlh :
+	$(SH_PREFIX) $(RM) -f $*.idlh $(SH_SUFFIX)
+	$(SH_PREFIX) $(IDL) /out $(INCLUDE_DIR)/com-api $*.idl
+	$(SH_PREFIX) cp $(INCLUDE_DIR)/com-api/$*.h $*.idlh $(SH_SUFFIX)
+
 clean:
 	$(SH_PREFIX) cd tool ; $(MAKE) clean $(SH_SUFFIX)
-	$(SH_PREFIX) $(RM) -rf *.cpp *.h *.idl *.exp *.comc *.comh *.implc *.implh $(SH_SUFFIX)
+	$(SH_PREFIX) $(RM) -rf *.cpp *.h *.idl *.exp *.comc *.comh *.implc *.implh *.idlh $(SH_SUFFIX)
 	$(SH_PREFIX) $(RM) -rf $(SRC_DIR)/cpp-api/*.cpp $(SH_SUFFIX)
 	$(SH_PREFIX) $(RM) -rf $(SRC_DIR)/com-api/*.h $(SH_SUFFIX)
 	$(SH_PREFIX) $(RM) -rf $(SRC_DIR)/com-api/*.cpp $(SH_SUFFIX)
@@ -165,6 +170,7 @@ clean:
 	$(SH_PREFIX) $(RM) -rf $(INCLUDE_DIR)/com-api/*.idl $(SH_SUFFIX)
 	$(SH_PREFIX) $(RM) -rf $(INCLUDE_DIR)/cpp-api/*.h $(SH_SUFFIX)
 
+AAFTypes.all : AAFTypes.idlh
 AAFTypes.all : AAFTypes.h
 AAFTypes.all : AAFTypes.exp AAFTypes.idl
 AAFTypes.all : AAFTypes.implh
@@ -590,7 +596,8 @@ AAFObject.all : AAFObject.cpp AAFObject.h
 AAFObject.all : AAFObject.comc AAFObject.comh
 AAFObject.all : AAFObject.exp AAFObject.idl
 AAFObject.all : AAFObject.implc AAFObject.implh
-AAFObject.exp : AAFUnitTest.exp macros/exp.mac macros/base.mac
+AAFObject.all : AAFObject.idlh
+AAFObject.exp : macros/exp.mac macros/base.mac
 AAFObject.h : AAFObject.exp macros/h.mac macros/base.mac
 AAFObject.cpp : AAFObject.exp macros/cpp.mac macros/base.mac
 AAFObject.idl : AAFObject.exp macros/idl.mac macros/base.mac
@@ -598,6 +605,7 @@ AAFObject.comc : AAFObject.exp macros/comc.mac macros/base.mac
 AAFObject.comh : AAFObject.exp macros/comh.mac macros/base.mac
 AAFObject.implc : AAFObject.exp macros/implc.mac macros/base.mac
 AAFObject.implh : AAFObject.exp macros/implh.mac macros/base.mac
+AAFObject.idlh : AAFTypes.idlh
 
 AAFObjectAttribute.all : AAFObjectAttribute.cpp AAFObjectAttribute.h
 AAFObjectAttribute.all : AAFObjectAttribute.comc AAFObjectAttribute.comh
