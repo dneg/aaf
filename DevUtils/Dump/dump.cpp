@@ -105,9 +105,10 @@
 #if defined(OM_WINDOWS_SS)
 #include <objbase.h>
 #elif defined(OM_MACINTOSH_SS)
+
+#include "macpub.h"
 #include "wintypes.h"
 #include "macdef.h"
-#include "macpub.h"
 #include "compobj.h"
 #include "storage.h"
 #include "initguid.h"
