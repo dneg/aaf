@@ -514,11 +514,11 @@ typedef struct
 
 typedef struct
 {
-	char				*companyName;
-	char				*productName;
-	char				*productVersionString;
+	unsigned char				*companyName;
+	unsigned char				*productName;
+	unsigned char				*productVersionString;
 	aafInt32			productID;
-	char				*platform;
+	unsigned char				*platform;
 	aafProductVersion_t	productVersion;
 } aafProductIdentification_t;
 
