@@ -70,7 +70,12 @@ static wchar_t *sName1 = L"Test Descriptor Name1";
 static wchar_t *sDescription1 = L"Test Descriptor Description1";
 static wchar_t *sName2 = L"Test Descriptor Name2";
 static wchar_t *sDescription2 = L"Test Descriptor Description2";
-
+// {E4E190CA-EA4A-11d3-A352-009027DFCA6A}
+static const aafUID_t TEST_ID1 = 
+{ 0xe4e190ca, 0xea4a, 0x11d3, { 0xa3, 0x52, 0x0, 0x90, 0x27, 0xdf, 0xca, 0x6a } };
+// {E4E190CB-EA4A-11d3-A352-009027DFCA6A}
+static const aafUID_t TEST_ID2 = 
+{ 0xe4e190cb, 0xea4a, 0x11d3, { 0xa3, 0x52, 0x0, 0x90, 0x27, 0xdf, 0xca, 0x6a } };
 
 static HRESULT OpenAAFFile(aafWChar*			pFileName,
 						   aafMediaOpenMode_t	mode,
@@ -152,8 +157,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	checkResult(pContainerDef->QueryInterface (IID_IAAFDefObject,
                                           (void **)&pDef));
 
-	checkResult(pDef->SetName(sName1));
-	checkResult(pDef->SetDescription(sDescription1));
+	checkResult(pContainerDef->Initialize (TEST_ID1, sName1, sDescription1));
 	checkResult(pDictionary->RegisterContainerDef(pContainerDef));
 	pDef->Release();
 	pDef = NULL;
@@ -166,9 +170,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	checkResult(pContainerDef->QueryInterface (IID_IAAFDefObject,
                                           (void **)&pDef));
 
-	checkResult(pDef->SetName(sName2));
-	checkResult(pDef->SetDescription(sDescription2));
-
+	checkResult(pContainerDef->Initialize (TEST_ID2, sName2, sDescription2));
 	checkResult(pDictionary->RegisterContainerDef(pContainerDef));
   }
   catch (HRESULT& rResult)
