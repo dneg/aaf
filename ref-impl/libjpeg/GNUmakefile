@@ -1,11 +1,15 @@
-
 PACKAGE = ref-impl
 
 AAFBASE ?= ../..
 
-include $(AAFBASE)/build/defs.mk
 
+# Common definitions
+include $(AAFBASE)/build/common.mk
+
+
+# Include directories
 INCLUDES = -I.
+
 
 CFILES = jdapimin.c \
 	 jdapistd.c \
@@ -52,19 +56,24 @@ CFILES = jdapimin.c \
 	 jccoefct.c \
 	 jcmainct.c
 
+
 .PHONY : all
 all : jpeg
 
-.PHONY : jpeg
-jpeg : $(LIBDIR)/libjpeg$(LIB_SUFFIX)
 
-$(LIBDIR)/libjpeg$(LIB_SUFFIX) :  $(OBJDIR) $(LIBDIR) $(CXXOBJS)
-	$(LD_DYN_LIB)  $(CC2LDOPT) $(LD_DYN_LIB_PATH_FLAG) $(LIBDIR) \
-	-L$(LIBDIR) -L$(AAFSDK)/ss-impl/lib  $(CXXOBJS) -o $@
+.PHONY : jpeg
+jpeg : $(LIBDIR)/libjpeg$(LIB)
+
+
+$(LIBDIR)/libjpeg$(LIB) :  $(OBJDIR) $(LIBDIR) $(CXXOBJS)
+	$(LD_STAT_LIB) $@ $(CXXOBJS)
+
 
 .PHONY : clean
 clean :
-	-@rm -rf $(OBJDIR)/*.o
-	-@rm -rf $(LIBDIR)/libjpeg$(LIB_SUFFIX)
+	$(RMDIR) $(OBJDIR)/*$(OBJ)
+	$(RM) $(LIBDIR)/libjpeg$(LIB)
+
 
 include $(AAFBASE)/build/rules.mk
+
