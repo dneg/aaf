@@ -32,6 +32,7 @@
 #include "OMProperty.h"
 
 class OMObject;
+class OMReferenceContainer;
 class OMReferenceContainerIterator;
 
   // @class Abstract base class for persistent object reference container
@@ -49,6 +50,9 @@ public:
 
     // @cmember Destructor.
   virtual ~OMContainerProperty(void);
+
+    // @cmember Convert to <c OMReferenceContainer>.
+  virtual OMReferenceContainer* referenceContainer(void) = 0;
 
 protected:
   // @access Protected members.
