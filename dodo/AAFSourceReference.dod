@@ -38,14 +38,14 @@ AD_METHOD1(SetSourceID,
 
 AD_METHOD1(GetSourceMobSlotID,
 		   [retval][out],
-		   aafTrackID_t *,
+		   aafSlotID_t *,
 		   pMobSlotID,
 		   Place to put source mob slot ID,
 		   Gets the Mob Slot ID and places it into the pMobSlotID argument.)
 
 AD_METHOD1(SetSourceMobSlotID,
 		   [in],
-		   aafTrackID_t ,
+		   aafSlotID_t ,
 		   mobSlotID,
 		   Source Mob ID to set,
 		   Sets the mob slot ID using the mobSlotID argument.)
