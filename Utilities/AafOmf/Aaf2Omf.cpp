@@ -2270,8 +2270,8 @@ void Aaf2Omf::ConvertEffects(IAAFOperationGroup* pEffect,
 	aafUInt32				byPass, bypassOverride, *byPassPtr;
 	aafUInt32				textSize;
 	aafBool					isATimeWarp;
-	aafInt32				n, numSources;
-	aafInt32				numParameters;
+	aafInt32				n;
+	aafUInt32				numSources,numParameters;
 	aafWChar*				pwDesc = NULL;
 	aafWChar*				pwName = NULL;
 	
