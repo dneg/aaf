@@ -38,11 +38,16 @@
 
 #include "AAFPrivate.h"
 #include "AAFResult.h"
+#include "AAFFileSignatures.h"
+#include "AAFFileKinds.h"
+
 #include "ImplAAFPluginManager.h"
 #include "ImplAAFFile.h"
 #include "ImplAAFObjectCreation.h"
 #include "ImplAAFRandomRawStorage.h"
 
+#include "OMAssertions.h"
+#include "OMUtilities.h"
 #include "OMRawStorage.h"
 #include "OMDiskRawStorage.h"
 #include "OMMemoryRawStorage.h"
@@ -202,6 +207,16 @@ STDAPI ImplAAFFileOpenExistingRead (
 
   if (!pFileName || !ppFile)
     return AAFRESULT_NULL_PARAM;
+
+  // Check that the file is an AAF file
+  aafUID_t fileKind;
+  aafBool isAnAAFFile;
+  hr = ImplAAFFileIsAAFFile(pFileName, &fileKind, &isAnAAFFile);
+  if (FAILED(hr))
+    return hr;
+
+  if (isAnAAFFile == kAAFFalse)
+    return AAFRESULT_NOT_AAF_FILE;
 
   // Initialize the out parameter.
   *ppFile = 0;
@@ -371,6 +386,16 @@ STDAPI ImplAAFFileOpenExistingModify (
 
   if (!pFileName || !pIdent || !ppFile)
     return AAFRESULT_NULL_PARAM;
+
+  // Check that the file is an AAF file
+  aafUID_t fileKind;
+  aafBool isAnAAFFile;
+  hr = ImplAAFFileIsAAFFile(pFileName, &fileKind, &isAnAAFFile);
+  if (FAILED(hr))
+    return hr;
+
+  if (isAnAAFFile == kAAFFalse)
+    return AAFRESULT_NOT_AAF_FILE;
 
   // Initialize the out parameter.
   *ppFile = 0;
@@ -676,20 +701,157 @@ STDAPI ImplAAFFileOpenTransient (
 #endif // USE_RAW_STORAGE
 }
 
+// Helpers for AAFFileIsAAFFile().
+//
+
+// Table mapping valid signatures to file kinds.
+// Signatures are found at the beginning of the file and are variable in size.
+// There are multiple signatures since there are multiple file kinds
+// e.g. "AAF structured storage binary" and "AAF XML text".
+//
+struct mapSignatureToFileKind {
+  const aafUInt8* signature;
+  size_t signatureSize;
+  const aafUID_t* fileKind;
+} fileKindTable[] = {
+  {aafFileSignatureAafSSBinary,
+   sizeof(aafFileSignatureAafSSBinary),
+   &aafFileKindAafSSBinary},
+  {aafFileSignatureMxfSSBinary,
+   sizeof(aafFileSignatureMxfSSBinary),
+   &aafFileKindMxfSSBinary},
+  {aafFileSignatureAafXmlText,
+   sizeof(aafFileSignatureAafXmlText),
+   &aafFileKindAafXmlText},
+  {aafFileSignatureMxfXmlText,
+   sizeof(aafFileSignatureMxfXmlText),
+   &aafFileKindMxfXmlText}
+};
+
+static HRESULT readSignature(FILE* file,
+                             unsigned char* signature,
+                             size_t signatureSize);
+static size_t signatureSize(void);
+static aafBool isRecognizedSignature(unsigned char* signature,
+                                     size_t signatureSize,
+                                     aafUID_t* fileKind);
+
+static const size_t maxSignatureSize = 256; //signatureSize();
+
+// Read the file signature. Assumes that no valid file may be shorter
+// than the longest signature.
+//
+HRESULT readSignature(FILE* file,
+                      unsigned char* signature,
+                      size_t signatureSize)
+{
+  TRACE("readSignature");
+  ASSERT("Valid file", file != 0);
+  ASSERT("Valid signature buffer", signature != 0);
+  ASSERT("Valid signature buffer size", signatureSize != 0 
+                      && signatureSize <= maxSignatureSize);
+
+  HRESULT hr = S_OK;
+  unsigned char sig[maxSignatureSize];
+  if (sig == 0) {
+    hr = AAFRESULT_NOMEMORY;
+  } else {
+    size_t status = fread(sig, signatureSize, 1, file);
+    if (status == 1) {
+      memcpy(signature, sig, signatureSize);
+    } else {
+      hr = AAFRESULT_NOT_AAF_FILE;  // Can't read signature
+    }
+  }
+  return hr;
+}
+
+// The number of bytes to read to be sure of getting the signature.
+//
+size_t signatureSize(void)
+{
+  size_t result = 0;
+  for (size_t i = 0; i < sizeof(fileKindTable)/sizeof(fileKindTable[0]); i++) {
+    if (fileKindTable[i].signatureSize > result) {
+      result = fileKindTable[i].signatureSize;
+    }
+  }
+  return result;
+}
+
+// Try to recognize a file signature. Assumes that no signature is a
+// prefix of any other signature.
+//
+aafBool isRecognizedSignature(unsigned char* signature,
+                              size_t signatureSize,
+                              aafUID_t* fileKind)
+{
+  TRACE("isRecognizedSignature");
+  ASSERT("Valid signature buffer", signature != 0);
+  ASSERT("Valid signature buffer size", signatureSize != 0);
+  ASSERT("Valid file kind", fileKind != 0);
+
+  aafBool result = kAAFFalse;
+
+  for (size_t i = 0; i < sizeof(fileKindTable)/sizeof(fileKindTable[0]); i++) {
+    if (fileKindTable[i].signatureSize <= signatureSize) {
+      if (memcmp(fileKindTable[i].signature,
+                 signature,
+                 fileKindTable[i].signatureSize) == 0) {
+        result = kAAFTrue;
+        memcpy(fileKind, fileKindTable[i].fileKind, sizeof(CLSID));
+        break;
+      }
+    }
+  }
+  return result;
+}
+
 //***********************************************************
 //
 // AAFFileIsAAFFile()
 //
-// This function is implemented in aaflib. This stub is here only
-// because the dodo generated CAAFModule.cpp insists on it. This stub
-// is not and should not be called.
-//
 STDAPI ImplAAFFileIsAAFFile (
-  const aafCharacter *  /* pFileName */,
-  aafUID_t * /* pAAFFileKind */,
-  aafBool *  /* pFileIsAAFFile */)
+  const aafCharacter *  pFileName,
+  aafUID_t * pAAFFileKind,
+  aafBool *  pFileIsAAFFile)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  TRACE("AAFFileIsAAFFile");
+  if (pFileName == 0)
+    return AAFRESULT_NULL_PARAM;
+
+  if (pAAFFileKind == 0)
+    return AAFRESULT_NULL_PARAM;
+
+  if (pFileIsAAFFile == 0)
+    return AAFRESULT_NULL_PARAM;
+
+  ASSERT("Valid signature buffer size", signatureSize() <= maxSignatureSize);
+
+
+  HRESULT hr = S_OK;
+  unsigned char signature[maxSignatureSize];
+  if (signature == 0) {
+    hr = AAFRESULT_NOMEMORY;
+  } else {
+    FILE* f = wfopen(pFileName, L"rb");
+    if (f != 0) {
+      hr = readSignature(f, signature, signatureSize());
+      if (SUCCEEDED(hr)) {
+        *pFileIsAAFFile = isRecognizedSignature(signature,
+                                                signatureSize(),
+                                                pAAFFileKind);
+      } else {
+        // The file exists but we can't read the signature
+        *pFileIsAAFFile = kAAFFalse;
+        hr = S_OK;
+      }
+      fclose(f);
+    } else {
+      hr = AAFRESULT_FILE_NOT_FOUND; // Can't open file
+    }
+  }
+  return hr;
 }
 
 //***********************************************************
