@@ -132,9 +132,9 @@ bool OMRootStorable::persistent(void) const
   return result;
 }
 
-void OMRootStorable::attachToFile(OMFile* file)
+void OMRootStorable::attach(OMFile* file)
 {
-  TRACE("OMRootStorable::attachToFile");
+  TRACE("OMRootStorable::attach");
   _file = file;
 }
 

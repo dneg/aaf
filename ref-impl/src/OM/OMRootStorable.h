@@ -73,7 +73,7 @@ public:
 
   // OMRootStorable functions
 
-  void attachToFile(OMFile* file);
+  void attach(OMFile* file);
 
   OMStorable* clientRoot(void) const;
 
