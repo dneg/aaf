@@ -34,13 +34,16 @@
 class ImplAAFDataDef;
 class ImplAAFControlPoint;
 class ImplEnumAAFControlPoints;
-class ImplAAFInterpolationDef;
 
 
 
 
 #ifndef __ImplAAFParameter_h__
 #include "ImplAAFParameter.h"
+#endif
+
+#ifndef __ImplAAFInterpolationDef_h__
+#include "ImplAAFInterpolationDef.h"
 #endif
 
 #include "ImplEnumAAFControlPoints.h"
@@ -164,7 +167,7 @@ public:
 	// SDK-private methods
 
 private:
-	OMFixedSizeProperty<aafUID_t>						 _interpolation;
+	OMWeakReferenceProperty<ImplAAFInterpolationDef>		_interpolation;
   OMStrongReferenceVectorProperty<ImplAAFControlPoint> _controlPoints;
 
   ImplAAFTypeDef * _cachedTypeDef; // NOT REFERENCE COUNTED!
