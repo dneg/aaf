@@ -48,6 +48,21 @@ public:
     // @cmember Destructor.
   virtual ~OMContainerProperty(void);
 
+    // @cmember Insert <p object> into this <c OMContainerProperty>.
+  virtual void insert(const ReferencedObject* object) = 0;
+
+    // @cmember Does this <c OMContainerProperty> contain <p object> ?
+  virtual bool containsValue(const ReferencedObject* object) const = 0;
+
+    // @cmember The number of <p ReferencedObject>s in this
+    //          <c OMContainerProperty>. <mf OMContainerProperty::count>
+    //          returns the actual number of <p ReferencedObject>s in the
+    //          <c OMContainerProperty>.
+  virtual size_t count(void) const = 0;
+
+    // @cmember Remove <p object> from this <c OMContainerProperty>.
+  virtual void removeValue(const ReferencedObject* object) = 0;
+
 protected:
   // @access Protected members.
 
