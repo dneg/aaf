@@ -171,6 +171,13 @@ AAFDotInstanceMapper::MapAAFObject( AxObject axObject, bool &popStack )
    }
 
 
+   // if object is a Nested Scope, then record this fact
+   IAAFNestedScopeSP spIaafNestedScope;
+   if ( AxIsA( spIUnknown, spIaafNestedScope ) )
+   {
+      node->AddID( DotThingID( "NestedScope", "true" ) );
+   }
+
    // if object is a definition object, then record AUID for weak references
    IAAFDefObjectSP spIaafDefObject;
    if ( AxIsA( spIUnknown, spIaafDefObject ) )
@@ -205,6 +212,16 @@ AAFDotInstanceMapper::MapAAFObject( AxObject axObject, bool &popStack )
       tmp << slotID;
 
       node->AddID( DotThingID( "mobslotid", tmp.str() ) );
+
+      // for the benefit of resolving nested scopes
+      node->AddID( DotThingID( "isslot", "true" ) );
+   }
+
+   // if it is a segment, the record the fact for the benefit of resolving nested scopes
+   IAAFSegmentSP spIaafSegment;
+   if ( AxIsA( spIUnknown, spIaafSegment ) )
+   {
+      node->AddID( DotThingID( "issegment", "true" ) );
    }
 
    // if it is a source reference, then create an association for the reference
@@ -249,27 +266,30 @@ AAFDotInstanceMapper::MapAAFObject( AxObject axObject, bool &popStack )
       if ( refSlotNode == 0 )
       {
 	 cerr << "Error: Could not resolve scope reference." << endl;
-	 throw exception();
-      }
-
-      DotEdge *edge = _dotFactory->CreateEdge( "scope reference", _dotFactory->CreateEdgeUID() );
-      edge->SetElementAttribute( "color", "magenta" );
-      // this causes the dot program to fail      edge->SetElementAttribute( "constraint", "false" );
-
-      DotEdgeEnd *sourceEdgeEnd = new DotEdgeEnd();
-      sourceEdgeEnd->SetReference( node );
-      edge->SetSource( sourceEdgeEnd );
-      DotEdgeEnd *targetEdgeEnd = new DotEdgeEnd();
-      targetEdgeEnd->SetReference( refSlotNode );
-      edge->SetTarget( targetEdgeEnd );
-
-      if ( subGraph == 0 )
-      {
-	 _dotGraph->AddEdge( edge );
+	 cerr << "\tThe utility will not exit; we will continue despite the errors with scope references." << endl;
+         //throw exception();
       }
       else
       {
-	 subGraph->AddEdge( edge );
+	 DotEdge *edge = _dotFactory->CreateEdge( "scope reference", _dotFactory->CreateEdgeUID() );
+	 edge->SetElementAttribute( "color", "magenta" );
+	 // this causes the dot program to fail      edge->SetElementAttribute( "constraint", "false" );
+
+	 DotEdgeEnd *sourceEdgeEnd = new DotEdgeEnd();
+	 sourceEdgeEnd->SetReference( node );
+	 edge->SetSource( sourceEdgeEnd );
+	 DotEdgeEnd *targetEdgeEnd = new DotEdgeEnd();
+	 targetEdgeEnd->SetReference( refSlotNode );
+	 edge->SetTarget( targetEdgeEnd );
+
+	 if ( subGraph == 0 )
+	 {
+	    _dotGraph->AddEdge( edge );
+	 }
+	 else
+	 {
+	    subGraph->AddEdge( edge );
+	 }
       }
    }
 
@@ -1133,59 +1153,84 @@ DotRecordNode*
 AAFDotInstanceMapper::GetScopeReference( aafUInt32 relativeScope, aafUInt32 relativeSlot )
 {
    DotRecordNode *scopeReferenceNode = 0;
-
-   if ( relativeScope > 0 )
-   {
-      // no implemented yet.
-      cout << "Warning: Relative scope > 0 not implemented." << endl;
-      throw exception();
-   }
+   aafUInt32 scopeCount = relativeScope;
 
    StalkerStack poppedStalkers;
-
-   // go up the strong reference chain and find the MOB
-   DotRecordNode *mobNode;
    aafUInt32 numPops = 0;
-   bool foundMob = false;
-   for ( ; !foundMob; numPops++ )
+
+   try
    {
-      PropertyValueStalker *pStalker = dynamic_cast< PropertyValueStalker* > ( PopStalker() );
-      if ( pStalker == 0 )
+      // go up the strong reference chain and find a MOB or a Nested Scope
+      DotRecordNode *mobOrNestedScopeNode;
+      bool foundMobOrNestedScope = false;
+      for ( ; !foundMobOrNestedScope; numPops++ )
       {
-	 cerr << "Error: Property value stalker expected." << endl;
-	 throw;
-      }
-      ObjectStalker *oStalker = dynamic_cast< ObjectStalker* > ( PopStalker() );
-      if ( oStalker == 0 )
-      {
-	 cerr << "Error: Object stalker expected." << endl;
-	 throw;
-      }
-		
-      if ( ( oStalker->GetNode()->GetID( "mobid" ) ).length() > 0 )
-      {
-	 foundMob = true;
-	 mobNode = oStalker->GetNode();
+	 if ( _stalkers.size() < 2 )
+	 {
+	    cerr << "Error: Could not resolve scope reference. No objects left to search in the Mob chain." << endl;
+	    throw exception();
+	 }
+	 PropertyValueStalker *pStalker = dynamic_cast< PropertyValueStalker* > ( PopStalker() );
+	 if ( pStalker == 0 )
+	 {
+	    cerr << "Error: Property value stalker expected." << endl;
+	    throw;
+	 }
+	 ObjectStalker *oStalker = dynamic_cast< ObjectStalker* > ( PopStalker() );
+	 if ( oStalker == 0 )
+	 {
+	    cerr << "Error: Object stalker expected." << endl;
+	    throw;
+	 }
+
+	 // count down nested scopes
+	 if ( scopeCount > 0 )
+	 {
+	    if ( ( oStalker->GetNode()->GetID( "NestedScope" ) ).length() > 0 )
+	    {
+	       scopeCount--;
+	    }
+	 }
+	 // find the mob or nested scope in this scope
+	 else 
+	 {
+	    if ( ( oStalker->GetNode()->GetID( "NestedScope" ) ).length() > 0 )
+	    {
+	       foundMobOrNestedScope = true;
+	       mobOrNestedScopeNode = oStalker->GetNode();
+	    }
+	    else if ( ( oStalker->GetNode()->GetID( "mobid" ) ).length() > 0 )
+	    {
+	       foundMobOrNestedScope = true;
+	       mobOrNestedScopeNode = oStalker->GetNode();
+	    }
+	 }
+
+	 poppedStalkers.push_back( pStalker );
+	 poppedStalkers.push_back( oStalker );
       }
 
-      poppedStalkers.push_back( pStalker );
-      poppedStalkers.push_back( oStalker );
+      // count the number of slots in the MOB or the number of slots in the nested scope thus far
+      vector< DotEdge* > edges = _dotFactory->GetSlotEdgesWithSourceNode( mobOrNestedScopeNode );
+      aafUInt32 slotCount = edges.size();
+      if ( slotCount < relativeSlot + 1 )
+      {
+	 cerr << "Error: Relative slot exceeds current number of slots." << endl;
+	 cerr << "Slot count = " << slotCount << " and relative slot = " << relativeSlot << endl;
+	 throw exception();
+      }
+
+      // get the relative slot node
+      DotEdge *scopeEdge = edges[ slotCount - relativeSlot - 1 ];
+      DotEdgeEnd *scopeEdgeEnd = scopeEdge->GetTarget();
+      scopeReferenceNode = scopeEdgeEnd->GetReference();
+
    }
-
-   // count the number of slots in the MOB thus far
-   vector< DotEdge* > edges = _dotFactory->GetEdgesWithSourceNode( mobNode );
-
-   aafUInt32 slotCount = edges.size();
-   if ( slotCount < relativeSlot + 1 )
+   catch (...)
    {
-      cerr << "Error: Relative slot exceeds current size of slots in mob." << endl;
-      throw exception();
+      // NOTE: accepting exceptions (ie errors in file) and just continuing
+      scopeReferenceNode = 0;
    }
-
-   // get the relative slot node
-   DotEdge *scopeEdge = edges[ slotCount - relativeSlot - 1 ];
-   DotEdgeEnd *scopeEdgeEnd = scopeEdge->GetTarget();
-   scopeReferenceNode = scopeEdgeEnd->GetReference();
 
 
    // push back the popped stalkers
