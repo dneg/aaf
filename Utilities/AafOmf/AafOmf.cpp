@@ -73,7 +73,6 @@ namespace OMF2
 //		aafUInt32	minor,
 //		aafMobID_t *mobID);     /* OUT - Newly created Mob ID */
 
-
 // ============================================================================
 // Global Variables and functions
 // ============================================================================
@@ -462,6 +461,42 @@ HRESULT IsOMFFile (char * pFileName )
 	return rc;
 }
 
+void RegisterCodecProperties(AafOmfGlobals *globals, OMF2::omfSessionHdl_t OMFSession)
+{
+	OMFCheck	OMFError;
+
+	// To get the CDCI codec related properties we first reister them in OMF
+	OMFError = OMF2::omfsRegisterDynamicProp(OMFSession, OMF2::kOmfTstRevEither, 
+									   "ComponentWidth", OMClassCDCI, 
+									   OMF2::OMVersionType, OMF2::kPropRequired, 
+									   &(globals->omCDCIComponentWidth));
+	OMFError = OMF2::omfsRegisterDynamicProp(OMFSession, OMF2::kOmfTstRevEither, 
+									   "HorizontalSubsampling", OMClassCDCI, 
+									   OMF2::OMBoolean, OMF2::kPropRequired, 
+									   &(globals->omCDCIHorizontalSubsampling));
+	OMFError = OMF2::omfsRegisterDynamicProp(OMFSession, OMF2::kOmfTstRevEither, 
+									   "ColorSiting", OMClassCDCI, 
+									   OMF2::OMBoolean, OMF2::kPropRequired, 
+									   &(globals->omCDCIColorSiting));
+	OMFError = OMF2::omfsRegisterDynamicProp(OMFSession, OMF2::kOmfTstRevEither, 
+									   "BlackReferenceLevel", OMClassCDCI, 
+									   OMF2::OMInt32, OMF2::kPropRequired, 
+									   &(globals->omCDCIBlackReferenceLevel));
+	OMFError = OMF2::omfsRegisterDynamicProp(OMFSession, OMF2::kOmfTstRevEither, 
+									   "WhiteReferenceLevel", OMClassCDCI, 
+									   OMF2::OMInt32, OMF2::kPropRequired, 
+									   &(globals->omCDCIWhiteReferenceLevel));
+	OMFError = OMF2::omfsRegisterDynamicProp(OMFSession, OMF2::kOmfTstRevEither, 
+									   "ColorRange", OMClassCDCI, 
+									   OMF2::OMInt32, OMF2::kPropRequired, 
+									   &(globals->omCDCIColorRange));
+	OMFError = OMF2::omfsRegisterDynamicProp(OMFSession, OMF2::kOmfTstRevEither, 
+									   "PaddingBits", OMClassCDCI, 
+									   OMF2::OMInt32, OMF2::kPropRequired, 
+									   &(globals->omCDCIPaddingBits));
+}
+
+#ifndef COMPILE_AS_DLL
 // ============================================================================
 // MAIN Module 
 //
@@ -571,40 +606,5 @@ int main(int argc, char *argv[])
 
 	return( hr );
 }
-
-
-void RegisterCodecProperties(AafOmfGlobals *globals, OMF2::omfSessionHdl_t OMFSession)
-{
-	OMFCheck	OMFError;
-
-	// To get the CDCI codec related properties we first reister them in OMF
-	OMFError = OMF2::omfsRegisterDynamicProp(OMFSession, OMF2::kOmfTstRevEither, 
-									   "ComponentWidth", OMClassCDCI, 
-									   OMF2::OMVersionType, OMF2::kPropRequired, 
-									   &(globals->omCDCIComponentWidth));
-	OMFError = OMF2::omfsRegisterDynamicProp(OMFSession, OMF2::kOmfTstRevEither, 
-									   "HorizontalSubsampling", OMClassCDCI, 
-									   OMF2::OMBoolean, OMF2::kPropRequired, 
-									   &(globals->omCDCIHorizontalSubsampling));
-	OMFError = OMF2::omfsRegisterDynamicProp(OMFSession, OMF2::kOmfTstRevEither, 
-									   "ColorSiting", OMClassCDCI, 
-									   OMF2::OMBoolean, OMF2::kPropRequired, 
-									   &(globals->omCDCIColorSiting));
-	OMFError = OMF2::omfsRegisterDynamicProp(OMFSession, OMF2::kOmfTstRevEither, 
-									   "BlackReferenceLevel", OMClassCDCI, 
-									   OMF2::OMInt32, OMF2::kPropRequired, 
-									   &(globals->omCDCIBlackReferenceLevel));
-	OMFError = OMF2::omfsRegisterDynamicProp(OMFSession, OMF2::kOmfTstRevEither, 
-									   "WhiteReferenceLevel", OMClassCDCI, 
-									   OMF2::OMInt32, OMF2::kPropRequired, 
-									   &(globals->omCDCIWhiteReferenceLevel));
-	OMFError = OMF2::omfsRegisterDynamicProp(OMFSession, OMF2::kOmfTstRevEither, 
-									   "ColorRange", OMClassCDCI, 
-									   OMF2::OMInt32, OMF2::kPropRequired, 
-									   &(globals->omCDCIColorRange));
-	OMFError = OMF2::omfsRegisterDynamicProp(OMFSession, OMF2::kOmfTstRevEither, 
-									   "PaddingBits", OMClassCDCI, 
-									   OMF2::OMInt32, OMF2::kPropRequired, 
-									   &(globals->omCDCIPaddingBits));
-}
+#endif
 
