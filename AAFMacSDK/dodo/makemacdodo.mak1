@@ -1,9 +1,9 @@
-############################################
-# File: makemacdodo.mak1                   #
-#                                          #
-# Copyright (c) 1998 Avid Technology, Inc. #
-#                                          #
-############################################
+#################################################
+# File: makemacdodo.mak1                        #
+#                                               #
+# Copyright (c) 1998-1999 Avid Technology, Inc. #
+#                                               #
+#################################################
 dod = "{aaf}dodo:"
 macros = "{aaf}dodo:macros:"
 exp = "{aaf}dodo:"
@@ -11,7 +11,7 @@ frefh = "{aaf}dodo:"
 refh = "{aaf}ref-impl:include:ref-api:"
 comh = "{aaf}ref-impl:src:com-api:"
 comc = "{aaf}ref-impl:src:com-api:"
-comt = "{aaf}test:com:"
+comt = "{aaf}test:com:ComModTestAAF:ModuleTests:"
 impl = "{aaf}ref-impl:src:impl:"
 AAFMacSDK = "{aaf}AAFMacSDK:"
 DODO = "{AAFMacSDK}dodo:tool:dodo"
@@ -51,7 +51,7 @@ macaafobjects.mk Ä {dod}aafobjects.mk
 	echo 'refh = {aaf}ref-impl:include:ref-api:' >> macdodo.tmp
 	echo 'comh = {aaf}ref-impl:src:com-api:' >> macdodo.tmp
 	echo 'comc = {aaf}ref-impl:src:com-api:' >> macdodo.tmp
-	echo 'comt = {aaf}test:com:' >> macdodo.tmp
+	echo 'comt = {aaf}test:com:ComModTestAAF:ModuleTests:' >> macdodo.tmp
 	echo 'impl = {aaf}ref-impl:src:impl:' >> macdodo.tmp
 	echo 'AAFMacSDK = {aaf}AAFMacSDK:' >> macdodo.tmp
 	echo 'DODO = {AAFMacSDK}dodo:tool:dodo' >> macdodo.tmp
