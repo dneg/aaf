@@ -2062,7 +2062,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 /****/
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceAccess::AddFrameIndexEntry (aafInt64 frameOffset)
+    ImplAAFEssenceAccess::AddSampleIndexEntry (aafInt64 frameOffset)
 {
 	return(_codec->AddSampleIndexEntry(frameOffset));
 }
