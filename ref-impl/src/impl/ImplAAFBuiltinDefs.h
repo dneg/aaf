@@ -183,6 +183,7 @@ public:
   CLASS_DEF_METHOD(ContentStorage);
   CLASS_DEF_METHOD(ControlPoint);
   CLASS_DEF_METHOD(DataDef);
+  CLASS_DEF_METHOD(Dictionary);
   CLASS_DEF_METHOD(DigitalImageDescriptor);
   CLASS_DEF_METHOD(Edgecode);
   CLASS_DEF_METHOD(EssenceData);
