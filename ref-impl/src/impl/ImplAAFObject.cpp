@@ -396,10 +396,12 @@ ImplAAFObject::ImplAAFObject ()
 	_cachedDefinition (0),
 	_apSavedProps (0),
 	_savedPropsSize (0),
-	_savedPropsCount (0)
+	_savedPropsCount (0),
+	_generation(			PID_InterchangeObject_Generation,		"Generation")
 {
   const aafUID_t null_uid = { 0 };
   _soid = null_uid;
+	_persistentProperties.put(		_generation.address());
 }
 
 

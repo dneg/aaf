@@ -214,6 +214,7 @@ private:
 
   // stored object ID
   aafUID_t                 _soid;
+	OMFixedSizeProperty<aafMobID_t>	_generation;
 
   // 
   // The following section is intended only to delete added properties
