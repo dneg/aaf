@@ -406,6 +406,8 @@ static bool findReferencedClassDefintion(
   {
     return false;
   }
+
+  return false;
 }
 
 // Find the referenced class definition for the given property definition.
@@ -444,7 +446,6 @@ AAFRESULT ImplAAFTypeDefWeakObjRef::SyncTargetPidsFromTargetSet(void)
   aafUInt32 index = 0;
   aafUInt32 lastIndex = _targetSet.count() - 1;
   aafUID_t propertyID = {0};
-  eAAFTypeCategory_e expectedCategory = kAAFTypeCatUnknown;
   bool valid = false;
   
   // Replace with appropriate contants defined by OM:
