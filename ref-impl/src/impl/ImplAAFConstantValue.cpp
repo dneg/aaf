@@ -50,7 +50,7 @@
 
 
 ImplAAFConstantValue::ImplAAFConstantValue ()
-: _value(			PID_ConstantValue_Value,			"Value"),
+: _value(			PID_ConstantValue_Value,			L"Value"),
   _cachedTypeDef(NULL)
 {
 	_persistentProperties.put(_value.address());

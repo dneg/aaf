@@ -38,9 +38,9 @@
 #include "AAFResult.h"
 
 ImplAAFCompositionMob::ImplAAFCompositionMob ():
-	_defaultFadeLen(	PID_CompositionMob_DefaultFadeLength,		"DefaultFadeLength"),
-	_defaultFadeType(	PID_CompositionMob_DefFadeType,			"DefFadeType"),
-	_defaultFadeEditUnit(PID_CompositionMob_DefFadeEditUnit,	"DefFadeEditUnit")
+	_defaultFadeLen(	PID_CompositionMob_DefaultFadeLength,		L"DefaultFadeLength"),
+	_defaultFadeType(	PID_CompositionMob_DefFadeType,			L"DefFadeType"),
+	_defaultFadeEditUnit(PID_CompositionMob_DefFadeEditUnit,	L"DefFadeEditUnit")
 {
 	_persistentProperties.put(		_defaultFadeLen.address());
 	_persistentProperties.put(		_defaultFadeType.address());

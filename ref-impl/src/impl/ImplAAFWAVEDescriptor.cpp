@@ -42,7 +42,7 @@
 
 
 ImplAAFWAVEDescriptor::ImplAAFWAVEDescriptor ()
-:   _summary(PID_WAVEDescriptor_Summary,	"Summary")
+:   _summary(PID_WAVEDescriptor_Summary,	L"Summary")
 {
 	_persistentProperties.put(_summary.address());
 }

@@ -50,7 +50,7 @@
 #include "ImplAAFTypeDef.h"
 
 ImplAAFParameter::ImplAAFParameter ()
-: _parmDef(			PID_Parameter_Definition,	"Definition")
+: _parmDef(			PID_Parameter_Definition,	L"Definition")
 {
 	_persistentProperties.put(_parmDef.address());
 }

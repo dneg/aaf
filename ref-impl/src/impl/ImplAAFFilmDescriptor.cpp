@@ -37,12 +37,12 @@
 #include "aafErr.h"
 
 ImplAAFFilmDescriptor::ImplAAFFilmDescriptor ()
-: _manufacturer(	PID_FilmDescriptor_Manufacturer,		"Manufacturer"),
-  _model(			PID_FilmDescriptor_Model,				"Model"),
-  _format(			PID_FilmDescriptor_FilmFormat,			"FilmFormat"),
-  _frameRate(		PID_FilmDescriptor_FrameRate,			"FrameRate"),
-  _perfPerFrame(	PID_FilmDescriptor_PerforationsPerFrame,"PerforationsPerFrame"),
-  _aspectRatio(		PID_FilmDescriptor_FilmAspectRatio,		"FilmAspectRatio")
+: _manufacturer(	PID_FilmDescriptor_Manufacturer,		L"Manufacturer"),
+  _model(			PID_FilmDescriptor_Model,				L"Model"),
+  _format(			PID_FilmDescriptor_FilmFormat,			L"FilmFormat"),
+  _frameRate(		PID_FilmDescriptor_FrameRate,			L"FrameRate"),
+  _perfPerFrame(	PID_FilmDescriptor_PerforationsPerFrame,L"PerforationsPerFrame"),
+  _aspectRatio(		PID_FilmDescriptor_FilmAspectRatio,		L"FilmAspectRatio")
 {
 	_persistentProperties.put(_manufacturer.address());
 	_persistentProperties.put(_model.address());

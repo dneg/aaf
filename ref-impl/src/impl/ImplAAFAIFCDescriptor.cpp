@@ -37,7 +37,7 @@
 
 
 ImplAAFAIFCDescriptor::ImplAAFAIFCDescriptor ()
-:   _summary(PID_AIFCDescriptor_Summary,	"Summary")
+:   _summary(PID_AIFCDescriptor_Summary,	L"Summary")
 {
 	_persistentProperties.put(_summary.address());
 }

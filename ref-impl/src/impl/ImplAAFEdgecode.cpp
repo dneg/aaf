@@ -46,10 +46,10 @@
 #include "AAFDataDefs.h"
 
 ImplAAFEdgecode::ImplAAFEdgecode ():
-_start( PID_EdgeCode_Start, "Start"),
-_filmType( PID_EdgeCode_FilmKind, "FilmKind"),
-_edgeType( PID_EdgeCode_CodeFormat, "CodeFormat"),
-_header( PID_EdgeCode_Header, "Header")
+_start( PID_EdgeCode_Start, L"Start"),
+_filmType( PID_EdgeCode_FilmKind, L"FilmKind"),
+_edgeType( PID_EdgeCode_CodeFormat, L"CodeFormat"),
+_header( PID_EdgeCode_Header, L"Header")
 {
 	_persistentProperties.put(_start.address());
 	_persistentProperties.put(_filmType.address());

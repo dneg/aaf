@@ -38,8 +38,8 @@
 
 
 ImplAAFHTMLClip::ImplAAFHTMLClip () :
-  _beginAnchor(PID_HTMLClip_BeginAnchor, "BeginAnchor"),
-  _endAnchor(PID_HTMLClip_EndAnchor, "EndAnchor")
+  _beginAnchor(PID_HTMLClip_BeginAnchor, L"BeginAnchor"),
+  _endAnchor(PID_HTMLClip_EndAnchor, L"EndAnchor")
 {
   _persistentProperties.put(_beginAnchor.address());
   _persistentProperties.put(_endAnchor.address());

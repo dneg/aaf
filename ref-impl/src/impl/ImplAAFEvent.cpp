@@ -40,8 +40,8 @@
 
 
 ImplAAFEvent::ImplAAFEvent ():
-  _position(PID_Event_Position, "Position"),
-  _comment(PID_Event_Comment, "Comment")
+  _position(PID_Event_Position, L"Position"),
+  _comment(PID_Event_Comment, L"Comment")
 {
   _persistentProperties.put(_position.address());
   _persistentProperties.put(_comment.address());

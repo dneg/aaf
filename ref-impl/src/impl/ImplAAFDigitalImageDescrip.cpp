@@ -35,23 +35,23 @@
 #include <string.h>
 
 ImplAAFDigitalImageDescriptor::ImplAAFDigitalImageDescriptor ()
-:	_compression(PID_DigitalImageDescriptor_Compression,					"Compression"),
-	_storedHeight(PID_DigitalImageDescriptor_StoredHeight,					"StoredHeight"),
-	_storedWidth(PID_DigitalImageDescriptor_StoredWidth,					"StoredWidth"),
-	_sampledHeight(PID_DigitalImageDescriptor_SampledHeight,				"SampledHeight"),
-	_sampledWidth(PID_DigitalImageDescriptor_SampledWidth,					"SampledWidth"),
-	_sampledXOffset(PID_DigitalImageDescriptor_SampledXOffset,				"SampledXOffset"),
-	_sampledYOffset(PID_DigitalImageDescriptor_SampledYOffset,				"SampledYOffset"),
-	_displayHeight(PID_DigitalImageDescriptor_DisplayHeight,				"DisplayHeight"),
-	_displayWidth(PID_DigitalImageDescriptor_DisplayWidth,					"DisplayWidth"),
-	_displayXOffset(PID_DigitalImageDescriptor_DisplayXOffset,				"DisplayXOffset"),
-	_displayYOffset(PID_DigitalImageDescriptor_DisplayYOffset,				"DisplayYOffset"),
-	_frameLayout(PID_DigitalImageDescriptor_FrameLayout,					"FrameLayout"),
-	_videoLineMap(PID_DigitalImageDescriptor_VideoLineMap,					"VideoLineMap"),
-	_imageAspectRatio(PID_DigitalImageDescriptor_ImageAspectRatio,			"ImageAspectRatio"),
-	_alphaTransparency(PID_DigitalImageDescriptor_AlphaTransparency,		"AlphaTransparency"),
-	_gamma(PID_DigitalImageDescriptor_Gamma,								"Gamma"),
-	_imageAlignmentFactor(PID_DigitalImageDescriptor_ImageAlignmentFactor,	"ImageAlignmentFactor")
+:	_compression(PID_DigitalImageDescriptor_Compression,					L"Compression"),
+	_storedHeight(PID_DigitalImageDescriptor_StoredHeight,					L"StoredHeight"),
+	_storedWidth(PID_DigitalImageDescriptor_StoredWidth,					L"StoredWidth"),
+	_sampledHeight(PID_DigitalImageDescriptor_SampledHeight,				L"SampledHeight"),
+	_sampledWidth(PID_DigitalImageDescriptor_SampledWidth,					L"SampledWidth"),
+	_sampledXOffset(PID_DigitalImageDescriptor_SampledXOffset,				L"SampledXOffset"),
+	_sampledYOffset(PID_DigitalImageDescriptor_SampledYOffset,				L"SampledYOffset"),
+	_displayHeight(PID_DigitalImageDescriptor_DisplayHeight,				L"DisplayHeight"),
+	_displayWidth(PID_DigitalImageDescriptor_DisplayWidth,					L"DisplayWidth"),
+	_displayXOffset(PID_DigitalImageDescriptor_DisplayXOffset,				L"DisplayXOffset"),
+	_displayYOffset(PID_DigitalImageDescriptor_DisplayYOffset,				L"DisplayYOffset"),
+	_frameLayout(PID_DigitalImageDescriptor_FrameLayout,					L"FrameLayout"),
+	_videoLineMap(PID_DigitalImageDescriptor_VideoLineMap,					L"VideoLineMap"),
+	_imageAspectRatio(PID_DigitalImageDescriptor_ImageAspectRatio,			L"ImageAspectRatio"),
+	_alphaTransparency(PID_DigitalImageDescriptor_AlphaTransparency,		L"AlphaTransparency"),
+	_gamma(PID_DigitalImageDescriptor_Gamma,								L"Gamma"),
+	_imageAlignmentFactor(PID_DigitalImageDescriptor_ImageAlignmentFactor,	L"ImageAlignmentFactor")
 {
 	aafInt32	videoLineMap[2];
 

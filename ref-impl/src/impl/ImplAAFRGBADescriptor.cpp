@@ -46,9 +46,9 @@
 
 
 ImplAAFRGBADescriptor::ImplAAFRGBADescriptor ()
-:	_pixelLayout(PID_RGBADescriptor_PixelLayout,					"PixelLayout"),
-	_palette(PID_RGBADescriptor_Palette,							"Palette"),
-	_paletteLayout(PID_RGBADescriptor_PaletteLayout,				"PaletteLayout")
+:	_pixelLayout(PID_RGBADescriptor_PixelLayout,					L"PixelLayout"),
+	_palette(PID_RGBADescriptor_Palette,							L"Palette"),
+	_paletteLayout(PID_RGBADescriptor_PaletteLayout,				L"PaletteLayout")
 {
 	RGBComponentArray	comp;
 	aafUInt16			n;

@@ -38,12 +38,12 @@
 
 
 ImplAAFTIFFDescriptor::ImplAAFTIFFDescriptor ():
-_isUniform(PID_TIFFDescriptor_IsUniform,	"IsUniform"),
-_isContiguous(PID_TIFFDescriptor_IsContiguous,	"IsContiguous"),
-_leadingLines(PID_TIFFDescriptor_LeadingLines,	"LeadingLines"),
-_trailingLines(PID_TIFFDescriptor_TrailingLines,	"TrailingLines"),
-_jpegTableID(PID_TIFFDescriptor_JPEGTableID,	"JPEGTableID"),
-_summary(PID_TIFFDescriptor_Summary,	"Summary")
+_isUniform(PID_TIFFDescriptor_IsUniform,	L"IsUniform"),
+_isContiguous(PID_TIFFDescriptor_IsContiguous,	L"IsContiguous"),
+_leadingLines(PID_TIFFDescriptor_LeadingLines,	L"LeadingLines"),
+_trailingLines(PID_TIFFDescriptor_TrailingLines,	L"TrailingLines"),
+_jpegTableID(PID_TIFFDescriptor_JPEGTableID,	L"JPEGTableID"),
+_summary(PID_TIFFDescriptor_Summary,	L"Summary")
 {
 	_persistentProperties.put(_isUniform.address());
 	_persistentProperties.put(_isContiguous.address());
