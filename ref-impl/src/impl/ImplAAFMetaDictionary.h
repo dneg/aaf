@@ -225,7 +225,7 @@ public:
 
 
 
-protected: // will be changed to private:
+private:
   OMStrongReferenceSetProperty<OMUniqueObjectIdentification, ImplAAFTypeDef> _typeDefinitions;
   OMStrongReferenceSetProperty<OMUniqueObjectIdentification, ImplAAFClassDef> _classDefinitions;
 
