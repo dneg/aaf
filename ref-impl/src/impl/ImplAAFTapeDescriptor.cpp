@@ -74,6 +74,10 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 		aafError = AAFRESULT_NULL_PARAM;
 	}
+	else if(!_manufacturer.isPresent())
+	{
+		return AAFRESULT_PROP_NOT_PRESENT;
+	}
 	else
 	{
 		status = _manufacturer.copyToBuffer(pName, buflen);
@@ -92,6 +96,10 @@ AAFRESULT STDMETHODCALLTYPE
 	if (pLen == NULL)
 	{
 		aafError = AAFRESULT_NULL_PARAM;
+	}
+	else if(!_manufacturer.isPresent())
+	{
+		return AAFRESULT_PROP_NOT_PRESENT;
 	}
 	else
 	{
@@ -128,6 +136,10 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 		aafError = AAFRESULT_NULL_PARAM;
 	}
+	else if(!_model.isPresent())
+	{
+		return AAFRESULT_PROP_NOT_PRESENT;
+	}
 	else
 	{
 		status = _model.copyToBuffer(pModelName, buflen);
@@ -147,6 +159,10 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 		aafError = AAFRESULT_NULL_PARAM;
 	}
+	else if(!_model.isPresent())
+	{
+		return AAFRESULT_PROP_NOT_PRESENT;
+	}
 	else
 	{
 		*pLen = _model.size();
@@ -160,6 +176,7 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFTapeDescriptor::SetTapeFormFactor (aafTapeCaseType_t	formFactor)
 {
     AAFRESULT aafError = AAFRESULT_SUCCESS;
+	
 	if ( formFactor < kTapeCaseNull ||
 		 formFactor > kNagraAudioTape )
 	{
@@ -178,13 +195,17 @@ AAFRESULT STDMETHODCALLTYPE
 {
     AAFRESULT aafError = AAFRESULT_SUCCESS;
 
-	if (pFormFactor == NULL)
+	if(!_formFactor.isPresent())
+	{
+		return AAFRESULT_PROP_NOT_PRESENT;
+	}
+	
+	else if (pFormFactor == NULL)
 	{
 		aafError = AAFRESULT_NULL_PARAM;
 	}
 	else
 	{
-		
 		*pFormFactor = _formFactor;
 	}
 
@@ -215,7 +236,13 @@ AAFRESULT STDMETHODCALLTYPE
 {
     AAFRESULT aafError = AAFRESULT_SUCCESS;
 
-	if (pVideoSignal == NULL)
+	
+	if(!_videoSignalType.isPresent())
+	{
+		return AAFRESULT_PROP_NOT_PRESENT;
+	}
+	
+	else if (pVideoSignal == NULL)
 	{
 		aafError = AAFRESULT_NULL_PARAM;
 	}
@@ -252,7 +279,12 @@ AAFRESULT STDMETHODCALLTYPE
 {
     AAFRESULT aafError = AAFRESULT_SUCCESS;
 
-	if (pTapeFormat == NULL)
+	
+	if(!_tapeFormat.isPresent())
+	{
+		return AAFRESULT_PROP_NOT_PRESENT;
+	}
+	else if (pTapeFormat == NULL)
 	{
 		aafError = AAFRESULT_NULL_PARAM;
 	}
@@ -287,7 +319,12 @@ AAFRESULT STDMETHODCALLTYPE
 {
     AAFRESULT aafError = AAFRESULT_SUCCESS;
 
-	if (pTapeLength == NULL)
+	
+	if(!_tapeLength.isPresent())
+	{
+		return AAFRESULT_PROP_NOT_PRESENT;
+	}
+	else if (pTapeLength == NULL)
 	{
 		aafError = AAFRESULT_NULL_PARAM;
 	}
