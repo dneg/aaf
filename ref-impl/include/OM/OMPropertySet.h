@@ -5,6 +5,8 @@
 #include "OMPortability.h"
 #include "OMTypes.h"
 
+#include <stddef.h>
+
 class OMProperty;
 class OMStorable;
 

@@ -5,6 +5,8 @@
 #include "OMPortability.h"
 #include "OMTypes.h"
 
+#include <stddef.h>
+
   // @class The in-memory representation of the on-disk index for a
   //        stored object vector.
 class OMStoredVectorIndex {
