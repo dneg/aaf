@@ -569,7 +569,7 @@ char* OMContainerProperty::elementName(OMUInt32 localKey)
   strcat(elementName, "{");
 
   char number[256];
-  sprintf(number, "%x", localKey);
+  sprintf(number, "%lx", localKey);
 
   char* storageName = new char[strlen(elementName) + strlen(number) + 1 + 1];
   ASSERT("Valid heap pointer", storageName != 0);
