@@ -221,9 +221,12 @@ do
   let i=$i-1
 done
 
+DEST=http://aaf.sourceforge.net/build
+VALID=http://validator.w3.org/check
+
 for f in $files
 do
-  echo "<li>$f <a href=\"http://validator.w3.org/check?uri=http://aaf.sourceforge.net/build/$f\"> Validate</a>"
+  echo "<li>$f <a href=\"$VALID?uri=$DEST/$f\"> Validate</a>"
 done >> $validate
 
 endList >> $validate
