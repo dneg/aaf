@@ -353,7 +353,7 @@ HRESULT createStinkyFiller (IAAFDictionary * pDict,
 				   CreateInstance(IID_IAAFFiller,
 								  (IUnknown **) &pFill));
   assert (pFill);
-  PROPAGATE_RESULT (pFill->Initialize(defs.ddSound(), 10));
+  PROPAGATE_RESULT (pFill->Initialize(defs.ddkAAFSound(), 10));
 
   IAAFObjectSP pObj;
   PROPAGATE_RESULT (pFill->QueryInterface(IID_IAAFObject,

@@ -225,7 +225,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 									  &pCDMasterMob));
 	check(pDictionary->LookupClassDef(AUID_AAFNetworkLocator,
 									  &pCDNetworkLocator));
-	check(pDictionary->LookupDataDef(DDEF_Sound,
+	check(pDictionary->LookupDataDef(kAAFDataDef_Sound,
 									 &pDdefSound));
 
 	// !!!Previous revisions of this file contained code here required to handle external essence

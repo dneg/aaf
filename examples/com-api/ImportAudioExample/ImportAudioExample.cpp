@@ -191,7 +191,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 	check(pHeader->GetDictionary(&pDictionary));
 
 	/* Lookup any necessary data definitions. */
-	check(pDictionary->LookupDataDef(DDEF_Sound, &pSoundDef));
+	check(pDictionary->LookupDataDef(kAAFDataDef_Sound, &pSoundDef));
 
 	// Here we check on the number of mobs in the file. 
 	// Get the number of master mobs in the file (must not be zero)

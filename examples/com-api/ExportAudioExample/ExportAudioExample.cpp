@@ -186,7 +186,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
   check(pDictionary->LookupClassDef(AUID_AAFNetworkLocator, &pNetworkLocatorDef));
 
   /* Lookup any necessary data definitions. */
-  check(pDictionary->LookupDataDef(DDEF_Sound, &pSoundDef));
+  check(pDictionary->LookupDataDef(kAAFDataDef_Sound, &pSoundDef));
 
 	/* Create a Mastermob */
 	

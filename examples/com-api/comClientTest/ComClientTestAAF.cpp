@@ -535,7 +535,7 @@ static void CreateAAFFile(aafWChar * pFileName)
 			 CreateInstance(IID_IAAFSourceClip, 
 							(IUnknown **)&sclp));
 		 check(sclp->QueryInterface(IID_IAAFComponent, (void **)&pComponent));
-		 check(pComponent->SetDataDef(defs.ddPicture()));
+		 check(pComponent->SetDataDef(defs.ddkAAFPicture()));
 		pComponent->Release();
 		pComponent = NULL;
       check(sclp->QueryInterface (IID_IAAFSegment, (void **)&seg));

@@ -199,7 +199,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, bool comp_enable)
 	check(pDictionary->LookupClassDef(AUID_AAFMasterMob, &pCDMasterMob));
 
 	/* Lookup any necessary data definitions. */
-	check(pDictionary->LookupDataDef(DDEF_Picture, &pPictureDef));
+	check(pDictionary->LookupDataDef(kAAFDataDef_Picture, &pPictureDef));
 
 	/* Create a Mastermob */
 

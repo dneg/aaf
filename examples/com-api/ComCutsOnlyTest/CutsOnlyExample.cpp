@@ -257,7 +257,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	aDesc = NULL;
 		
 	check(pTapeMob->AppendTimecodeSlot (videoRate, 0, tapeTC, TAPE_LENGTH));
-	check(pDictionary->LookupDataDef (DDEF_Picture, &pDdefPicture));
+	check(pDictionary->LookupDataDef (kAAFDataDef_Picture, &pDdefPicture));
 	check(pTapeMob->AddNilReference (1,TAPE_LENGTH, pDdefPicture, videoRate));
 	check(pTapeMob->QueryInterface (IID_IAAFMob, (void **)&pMob));
 	check(pMob->SetName (L"A Tape Mob"));

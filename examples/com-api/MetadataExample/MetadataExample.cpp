@@ -50,7 +50,7 @@
 #include "AAFStoredObjectIDs.h"
 
 // Move to Header file for example
-static const aafUID_t DDEF_SceneDescription = 
+static const aafUID_t kAAFDataDef_SceneDescription = 
 { 0x6F3C8CE1, 0x6CEF, 0x11D2, { 0x80, 0x7D, 0x20, 0x15, 0x08, 0x2E, 0x3E, 0x6F } };
 
 // binary blob
@@ -252,7 +252,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 				    &pCDMasterMob));
   check(pDictionary->LookupClassDef(AUID_AAFNetworkLocator,
 				    &pCDNetworkLocator));
-  check(pDictionary->LookupDataDef(DDEF_Sound,
+  check(pDictionary->LookupDataDef(kAAFDataDef_Sound,
 				   &pDdefSound));
 
   // !!!Previous revisions of this file contained code here required to handle external essence
@@ -347,15 +347,15 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
       // First register DataDef for SceneDescription
       // Is SceneDescription in dictionary already
       // Try using Timecode for MC compat
-      hr = pDictionary->LookupDataDef(DDEF_Timecode,
+      hr = pDictionary->LookupDataDef(kAAFDataDef_Timecode,
 				      &pDDefSceneDesc);
-      // hr = pDictionary->LookupDataDef(DDEF_SceneDescription,
+      // hr = pDictionary->LookupDataDef(kAAFDataDef_SceneDescription,
       //					 &pDDefSceneDesc);
       if (hr != AAFRESULT_SUCCESS) 
 	{
 	  check(pDictionary->CreateInstance(AUID_AAFDataDef,IID_IAAFDataDef,
 					    (IUnknown **)&pDDefSceneDesc));
-	  check(pDDefSceneDesc->Initialize(DDEF_SceneDescription,
+	  check(pDDefSceneDesc->Initialize(kAAFDataDef_SceneDescription,
 					   L"SceneDescEvent",L"DataDefinition for Scene Description Events"));
 	  check(pDictionary->RegisterDataDef(pDDefSceneDesc));
 	}

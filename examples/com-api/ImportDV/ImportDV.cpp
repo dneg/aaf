@@ -142,7 +142,7 @@ static HRESULT OpenAAFFile(aafWChar * pFileName, bool comp_enable)
 	check(pHeader->GetDictionary(&pDictionary));
 
 	/* Lookup any necessary data definitions. */
-	check(pDictionary->LookupDataDef(DDEF_Picture, &pPictureDef));
+	check(pDictionary->LookupDataDef(kAAFDataDef_Picture, &pPictureDef));
 
 	/* Check number of Mobs in file */
 	check(pHeader->CountMobs(kAAFMasterMob, &numMobs));

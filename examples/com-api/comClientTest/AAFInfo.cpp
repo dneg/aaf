@@ -39,6 +39,7 @@
 #include "AAFFileMode.h"
 #include "AAFPropertyDefs.h"
 #include "AAFTypeDefUIDs.h"
+#include "AAFDataDefs.h"
 
 #if defined( OS_MACOS )
 #include "DataInput.h"
@@ -313,15 +314,6 @@ static void printIdentification(IAAFIdentification* pIdent)
 }
 
 
-// Values hardcoded here incase the values in AAFDataDefs.h are edited
-const aafUID_t DDEF_Picture_v1 = { 0x6F3C8CE1, 0x6CEF, 0x11D2, { 0x80, 0x7D, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } };
-const aafUID_t DDEF_Picture_v11 =  { 0x01030202, 0x0100, 0x0000, { 0x6, 0xe, 0x2b, 0x34, 0x4, 0x1, 0x1, 0x1 } };
-const aafUID_t DDEF_Sound_v1 = { 0x78E1EBE1, 0x6CEF, 0x11D2, { 0x80, 0x7D, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } };
-const aafUID_t DDEF_Sound_v11 = { 0x01030202, 0x0200, 0x0000, { 0x6, 0xe, 0x2b, 0x34, 0x4, 0x1, 0x1, 0x1 } }; 
-const aafUID_t DDEF_Timecode_v1 = { 0x7F275E81, 0x77E5, 0x11D2, { 0x80, 0x7F, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } };
-const aafUID_t DDEF_Timecode_v11 = { 0x01030201, 0x0100, 0x0000, { 0x6, 0xe, 0x2b, 0x34, 0x4, 0x1, 0x1, 0x1 } };
-
-
 static void ReadAAFFile(aafWChar * pFileName)
 {
   HRESULT hr = S_OK;
@@ -409,18 +401,28 @@ static void ReadAAFFile(aafWChar * pFileName)
           check( pDefObject->GetName(wchName, sizeof (wchName)) );
           convert(chName, sizeof(chName), wchName);
 
-          if (memcmp( &id, &DDEF_Picture_v1, sizeof(id)) == 0)
-            printf("\"%s\" (AAF v1.0)\n", chName);
-          else if (memcmp( &id, &DDEF_Picture_v11, sizeof(id)) == 0)
-            printf("\"%s\" (AAF v1.1)\n", chName);
-          else if (memcmp( &id, &DDEF_Sound_v1, sizeof(id)) == 0)
-            printf("\"%s\" (AAF v1.0)\n", chName);
-          else if (memcmp( &id, &DDEF_Sound_v11, sizeof(id)) == 0)
-            printf("\"%s\" (AAF v1.1)\n", chName);
-          else if (memcmp( &id, &DDEF_Timecode_v1, sizeof(id)) == 0)
-            printf("\"%s\" (AAF v1.0)\n", chName);
-          else if (memcmp( &id, &DDEF_Timecode_v11, sizeof(id)) == 0)
-            printf("\"%s\" (AAF v1.1)\n", chName);
+          if (memcmp( &id, &DDEF_Picture, sizeof(id)) == 0)
+            printf("\"%s\" (recognized as LegacyPicture)\n", chName);
+          else if (memcmp( &id, &kAAFDataDef_Picture, sizeof(id)) == 0)
+            printf("\"%s\" (recognized as Picture)\n", chName);
+          else if (memcmp( &id, &DDEF_Sound, sizeof(id)) == 0)
+            printf("\"%s\" (recognized as LegacySound)\n", chName);
+          else if (memcmp( &id, &kAAFDataDef_Sound, sizeof(id)) == 0)
+            printf("\"%s\" (recognized as Sound)\n", chName);
+          else if (memcmp( &id, &DDEF_Timecode, sizeof(id)) == 0)
+            printf("\"%s\" (recognized as LegacyTimecode)\n", chName);
+          else if (memcmp( &id, &kAAFDataDef_Timecode, sizeof(id)) == 0)
+            printf("\"%s\" (recognized as Timecode)\n", chName);
+          else if (memcmp( &id, &kAAFDataDef_PictureWithMatte, sizeof(id)) == 0)
+            printf("\"%s\" (recognized as PictureWithMatte)\n", chName);
+          else if (memcmp( &id, &kAAFDataDef_Edgecode, sizeof(id)) == 0)
+            printf("\"%s\" (recognized as Edgecode)\n", chName);
+          else if (memcmp( &id, &kAAFDataDef_Auxiliary, sizeof(id)) == 0)
+            printf("\"%s\" (recognized as Auxiliary)\n", chName);
+          else if (memcmp( &id, &kAAFDataDef_Descriptive, sizeof(id)) == 0)
+            printf("\"%s\" (recognized as Descriptive)\n", chName);
+          else if (memcmp( &id, &kAAFDataDef_Matte, sizeof(id)) == 0)
+            printf("\"%s\" (recognized as Matte)\n", chName);
           else
             printf("\"%s\"\n", chName);
           printf("                       ");
@@ -483,17 +485,17 @@ static void ReadAAFFile(aafWChar * pFileName)
     check(AAFFileIsAAFFile(pFileName, &fileKind, &isAAFFile));
     if (isAAFFile)
     {
-      if (memcmp( &fileKind, &aafFileKindAafM512Binary, sizeof(fileKind)) == 0)
+      if (memcmp( &fileKind, &kAAFFileKind_AafM512Binary, sizeof(fileKind)) == 0)
         printf("Filekind             = 512-byte SS (reading with Microsoft)\n");
-      else if (memcmp( &fileKind, &aafFileKindAafS512Binary, sizeof(fileKind)) == 0)
+      else if (memcmp( &fileKind, &kAAFFileKind_AafS512Binary, sizeof(fileKind)) == 0)
         printf("Filekind             = 512-byte SS (reading with Schemasoft)\n");
-      else if (memcmp( &fileKind, &aafFileKindAafG512Binary, sizeof(fileKind)) == 0)
+      else if (memcmp( &fileKind, &kAAFFileKind_AafG512Binary, sizeof(fileKind)) == 0)
         printf("Filekind             = 512-byte SS (reading with GSF)\n");
-      else if (memcmp( &fileKind, &aafFileKindAafM4KBinary, sizeof(fileKind)) == 0)
+      else if (memcmp( &fileKind, &kAAFFileKind_AafM4KBinary, sizeof(fileKind)) == 0)
         printf("Filekind             = 4096-byte SS (reading with Microsoft)\n");
-      else if (memcmp( &fileKind, &aafFileKindAafS4KBinary, sizeof(fileKind)) == 0)
+      else if (memcmp( &fileKind, &kAAFFileKind_AafS4KBinary, sizeof(fileKind)) == 0)
         printf("Filekind             = 4096-byte SS (reading with Schemasoft)\n");
-      else if (memcmp( &fileKind, &aafFileKindAafG4KBinary, sizeof(fileKind)) == 0)
+      else if (memcmp( &fileKind, &kAAFFileKind_AafG4KBinary, sizeof(fileKind)) == 0)
         printf("Filekind             = 4096-byte SS (reading with GSF)\n");
       else
         printf("Filekind             = Recognized by SDK but unknown to AAFInfo\n");
