@@ -1193,6 +1193,9 @@ void OMStoredObject::restore(OMPropertyTable*& table)
       size_t pidCount = lengthOfPropertyPath(externalName);
       OMPropertyId* internalName = new OMPropertyId[pidCount + 1];
       ASSERT("Valid heap pointer", internalName != 0);
+      if (reorderBytes) {
+        reorderUInt16Array(externalName, pidCount + 1);
+      }
       internalizeUInt16Array(externalName, internalName, pidCount + 1);
       table->insert(internalName);
       delete [] internalName;
