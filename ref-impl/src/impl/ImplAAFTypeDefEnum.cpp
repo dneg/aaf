@@ -654,4 +654,43 @@ ImplAAFTypeDefEnum::GetElementNameBufLen (
 }
 
 
+aafBool ImplAAFTypeDefEnum::IsFixedSize (void) const
+{
+  return AAFTrue;
+}
+
+
+size_t ImplAAFTypeDefEnum::PropValSize (void) const
+{
+  ImplAAFTypeDef * pBaseType = 0;
+  ImplAAFTypeDefEnum * pNonConstThis =
+	(ImplAAFTypeDefEnum *) this;
+  AAFRESULT hr = pNonConstThis->GetElementType (&pBaseType);
+  assert (AAFRESULT_SUCCEEDED (hr));
+  assert (pBaseType);
+  size_t retval = pBaseType->PropValSize ();
+  pBaseType->ReleaseReference ();
+  return retval;
+}
+
+aafBool ImplAAFTypeDefEnum::IsRegistered (void) const
+{
+  // enum types are registered by default
+  return AAFTrue;
+}
+
+size_t ImplAAFTypeDefEnum::NativeSize (void) const
+{
+  ImplAAFTypeDef * pBaseType = 0;
+  ImplAAFTypeDefEnum * pNonConstThis =
+	(ImplAAFTypeDefEnum *) this;
+  AAFRESULT hr = pNonConstThis->GetElementType (&pBaseType);
+  assert (AAFRESULT_SUCCEEDED (hr));
+  assert (pBaseType);
+  size_t retval = pBaseType->NativeSize ();
+  pBaseType->ReleaseReference ();
+  return retval;
+}
+
+
 OMDEFINE_STORABLE(ImplAAFTypeDefEnum, AUID_AAFTypeDefEnum);

@@ -426,7 +426,7 @@ AAFRESULT STDMETHODCALLTYPE
 // This function is used to maintain MOB and Definition tables in the
 // head object.
 AAFRESULT ImplAAFObject::MyHeadObject
-	(ImplAAFHeader **header)
+	(ImplAAFHeader **header) const
 {
 	OMFile			*myFile;
 	OMStorable		*theRoot;

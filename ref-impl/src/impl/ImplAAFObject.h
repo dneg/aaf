@@ -164,7 +164,7 @@ public:
   // This function is used to maintain MOB and Definition tables in the
   // head object.
   virtual AAFRESULT MyHeadObject
-    (class ImplAAFHeader **header);
+    (class ImplAAFHeader **header) const;
 
   // Gets the dictionary used to create this instance.
   virtual AAFRESULT STDMETHODCALLTYPE 
