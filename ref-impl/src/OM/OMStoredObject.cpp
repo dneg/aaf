@@ -165,15 +165,25 @@ OMStoredObject* OMStoredObject::openStoragePath(const char* storagePathName)
   return result;
 }
 
-  // @mfunc Save the <c OMProperty> <p p> in this <c OMStoredObject>.
-  //   @parm The <c OMProperty> to save.
-void OMStoredObject::save(OMProperty* p)
+  // @mfunc Save the <c OMPropertSet> <p p properties> in this
+  //        <c OMStoredObject>.
+  //   @parm The <c OMPropertySet> to save.
+void OMStoredObject::save(const OMPropertySet& properties)
 {
-  TRACE("OMStoredObject::save(OMProperty*)");
+  TRACE("OMStoredObject::save(OMPropertySet)");
   PRECONDITION("Already open", _open);
-  PRECONDITION("Valid property", p != 0);
 
-  p->save();
+  size_t count = properties.count();
+  size_t context = 0;
+  for (size_t i = 0; i < count; i++) {
+    OMProperty* p = 0;
+    properties.iterate(context, p);
+    ASSERT("Valid property", p != 0);
+    p->save();
+  }
+
+  save(_index);
+
 }
 
 void OMStoredObject::save(OMStoredPropertySetIndex* index)
@@ -292,11 +302,6 @@ void OMStoredObject::restore(OMPropertySet& properties)
   streamSetPosition(_propertiesStream, 0);
   POSTCONDITION("At start of properties stream",
                 streamPosition(_propertiesStream) == 0);
-}
-
-void OMStoredObject::saveIndex(void)
-{
-  save(_index);
 }
 
 OMStoredObject* OMStoredObject::open(const wchar_t* fileName,
