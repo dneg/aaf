@@ -58,7 +58,10 @@ endif
 # Create a 30 minute DV clip (requires 6GB disk space!)
 .PHONY : check
 check : $(AAFSDKBINDIR)/ScaleTest$(EXE)
-	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/ScaleTest$(EXE) -q
+	@echo "*** Testing EssenceData API ***"
+	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/ScaleTest$(EXE) -q -d
+	@echo "*** Testing EssenceAccess API (Plugin codecs) ***"
+	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/ScaleTest$(EXE) -q -c -d
 
 
 .PHONY : clean
