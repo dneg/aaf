@@ -118,10 +118,10 @@ public:
   //
 
   //****************
-  // Initialize()
+  // pvtInitialize()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    Initialize
+    pvtInitialize
        (// @parm [in] auid to be used to identify this property definition
         const aafUID_t & propertyAuid,
 			
