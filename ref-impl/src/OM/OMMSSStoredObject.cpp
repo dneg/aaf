@@ -112,6 +112,7 @@ OMMSSStoredObject* OMMSSStoredObject::openModify(const wchar_t* fileName)
   TRACE("OMMSSStoredObject::openModify");
   PRECONDITION("Valid file name", validWideString(fileName));
 
+  writeSignature(fileName, nullOMFileSignature);
   OMMSSStoredObject* newStore = OMMSSStoredObject::openFile(
                                                            fileName,
                                                            OMFile::modifyMode);
@@ -174,6 +175,7 @@ OMMSSStoredObject* OMMSSStoredObject::openModify(OMRawStorage* rawStorage)
   PRECONDITION("Compatible raw storage", rawStorage->isPositionable() &&
                                          rawStorage->isExtendible());
 
+  writeSignature(rawStorage, nullOMFileSignature);
   OMMSSStoredObject* newStore = OMMSSStoredObject::openFile(
                                                            rawStorage,
                                                            OMFile::modifyMode);
