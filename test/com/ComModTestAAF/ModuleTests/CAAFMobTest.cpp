@@ -138,6 +138,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		return hr;
 
 	pMob->Release();
+	pHeader->Release();
 	if (pFile) pFile->Release();
 	if (pSession) pSession->Release();
 
@@ -243,12 +244,23 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 //				if (memcmp(slotName, slotNames[s], 10) != 0) 
 				if (wcscmp(slotName, slotNames[s]) != 0) 
 					return AAFRESULT_TEST_FAILED;
+
+				slot->Release();
+				slot = NULL;
 			}
+
+		}
+		if(aMob != NULL)
+		{
+			aMob->Release();
+			aMob = NULL;
 		}
 	}
 
-	//!!! Problem deleting, let it leak -- 	delete mobIter;
-	hr = pFile->Close();
+	mobIter->Release();
+	mobIter = NULL;
+	
+ 	hr = pFile->Close();
 	if (AAFRESULT_SUCCESS != hr)
 		return hr;
 
