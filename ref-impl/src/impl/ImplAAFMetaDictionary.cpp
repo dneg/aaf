@@ -149,7 +149,7 @@ ImplAAFMetaDictionary::~ImplAAFMetaDictionary ()
   OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFTypeDef>typeDefinitions(_typeDefinitions);
   while(++typeDefinitions)
   {
-    ImplAAFTypeDef *pType = typeDefinitions.setValue(0);
+    ImplAAFTypeDef *pType = typeDefinitions.clearValue();
     if (pType)
     {
       pType->ReleaseReference();
@@ -161,7 +161,7 @@ ImplAAFMetaDictionary::~ImplAAFMetaDictionary ()
   OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFClassDef>classDefinitions(_classDefinitions);
   while(++classDefinitions)
   {
-    ImplAAFClassDef *pClass = classDefinitions.setValue(0);
+    ImplAAFClassDef *pClass = classDefinitions.clearValue();
     if (pClass)
     {
       pClass->ReleaseReference();

@@ -122,7 +122,7 @@ ImplAAFDictionary::~ImplAAFDictionary ()
 	OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFCodecDef>codecDefinitions(_codecDefinitions);
 	while(++codecDefinitions)
 	{
-		ImplAAFCodecDef *pCodec = codecDefinitions.setValue(0);
+		ImplAAFCodecDef *pCodec = codecDefinitions.clearValue();
 		if (pCodec)
 		{
 		  pCodec->ReleaseReference();
@@ -133,7 +133,7 @@ ImplAAFDictionary::~ImplAAFDictionary ()
 	OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFContainerDef>containerDefinitions(_containerDefinitions);
 	while(++containerDefinitions)
 	{
-		ImplAAFContainerDef *pContainer = containerDefinitions.setValue(0);
+		ImplAAFContainerDef *pContainer = containerDefinitions.clearValue();
 		if (pContainer)
 		{
 		  pContainer->ReleaseReference();
@@ -144,7 +144,7 @@ ImplAAFDictionary::~ImplAAFDictionary ()
 	OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFOperationDef>operationDefinitions(_operationDefinitions);
 	while(++operationDefinitions)
 	{
-		ImplAAFOperationDef *pOp = operationDefinitions.setValue(0);
+		ImplAAFOperationDef *pOp = operationDefinitions.clearValue();
 		if (pOp)
 		{
 		  pOp->ReleaseReference();
@@ -155,7 +155,7 @@ ImplAAFDictionary::~ImplAAFDictionary ()
 	OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFParameterDef>parameterDefinitions(_parameterDefinitions);
 	while(++parameterDefinitions)
 	{
-		ImplAAFParameterDef *pParm = parameterDefinitions.setValue(0);
+		ImplAAFParameterDef *pParm = parameterDefinitions.clearValue();
 		if (pParm)
 		{
 		  pParm->ReleaseReference();
@@ -166,7 +166,7 @@ ImplAAFDictionary::~ImplAAFDictionary ()
 	OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFInterpolationDef>interpolateDefinitions(_interpolationDefinitions);
 	while(++interpolateDefinitions)
 	{
-		ImplAAFInterpolationDef *pInterp = interpolateDefinitions.setValue(0);
+		ImplAAFInterpolationDef *pInterp = interpolateDefinitions.clearValue();
 		if (pInterp)
 		{
 		  pInterp->ReleaseReference();
@@ -177,7 +177,7 @@ ImplAAFDictionary::~ImplAAFDictionary ()
 	OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFPluginDef>pluginDefinitions(_pluginDefinitions);
 	while(++pluginDefinitions)
 	{
-		ImplAAFPluginDef *pPlug = pluginDefinitions.setValue(0);
+		ImplAAFPluginDef *pPlug = pluginDefinitions.clearValue();
 		if (pPlug)
 		{
 		  pPlug->ReleaseReference();
@@ -188,7 +188,7 @@ ImplAAFDictionary::~ImplAAFDictionary ()
 	OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFDataDef>dataDefinitions(_dataDefinitions);
 	while(++dataDefinitions)
 	{
-		ImplAAFDataDef *pData = dataDefinitions.setValue(0);
+		ImplAAFDataDef *pData = dataDefinitions.clearValue();
 		if (pData)
 		{
 		  pData->ReleaseReference();
