@@ -71,10 +71,10 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     InitializeSourceClip
         (// @parm [in] Data Definition object
-		 ImplAAFDataDef * datadef  ,
+		 aafUID_t * pDatadef  ,
 
 		 // @parm [in] Length property value
-		 aafLength_t      length   ,
+		 aafLength_t *     pLength   ,
 
 		 // @parm [in] Source Reference
          aafSourceRef_t   sourceRef);
