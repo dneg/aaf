@@ -29,8 +29,8 @@ AD_HEAD
 // aafUInt32,
 // AAFDataDefinition
 
-AD_FOWARD_DECLARATION(AAFSegment)
-AD_FOWARD_DECLARATION(AAFDataDefinition)
+AD_FORWARD_DECLARATION(AAFSegment)
+AD_FORWARD_DECLARATION(AAFDataDefinition)
 
 
 AD_CLASS_UUID(B1A21377, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
@@ -48,7 +48,7 @@ AD_METHOD1(GetSegment,
 This method will get the segment for this mob slot.)
 
 AD_METHOD1(GetName,
-[in\,out], aafString *, name, Mob Slot Name,
+[in\,out], aafString_t *, name, Mob Slot Name,
 This method will copy the mob slot name into the given aafString.)
 
 AD_METHOD1(GetPhysicalNum,
