@@ -136,6 +136,15 @@ public:
     //          precondition - isPositionable()
   virtual void setPosition(OMUInt64 newPosition) = 0;
 
+    // @cmember Synchronize this <c OMRawStorage> with its external
+    //          representation.
+    //          An implementation of <c OMRawStorage> for disk files would
+    //          most probably implement this virtual function as a flush.
+    //          This virtual function would probably be implemented as a
+    //          noop in implemetations for network streams and for memory
+    //          files.
+  virtual void synchronize(void) = 0;
+
 };
 
 #endif

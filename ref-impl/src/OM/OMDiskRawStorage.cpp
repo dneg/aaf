@@ -299,6 +299,16 @@ void OMDiskRawStorage::setPosition(OMUInt64 newPosition)
   setPosition(_file, newPosition);
 }
 
+  // @mfunc Synchronize this <c OMDiskRawStorage> with its external
+  //        representation.
+void OMDiskRawStorage::synchronize(void)
+{
+  TRACE("OMDiskRawStorage::synchronize");
+
+  int status = fflush(_file);
+  ASSERT("Successful flush", status == 0); // tjb - error
+}
+
 void OMDiskRawStorage::read(FILE* file,
                             OMByte* bytes,
                             OMUInt32 byteCount,

@@ -142,6 +142,10 @@ public:
     //          precondition - isPositionable()
   virtual void setPosition(OMUInt64 newPosition);
 
+    // @cmember Synchronize this <c OMDiskRawStorage> with its external
+    //          representation.
+  virtual void synchronize(void);
+
 protected:
   // @access Protected members.
 
