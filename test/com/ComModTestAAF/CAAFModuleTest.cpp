@@ -46,7 +46,7 @@ typedef struct tagAAFObjectTestInfo
 #endif
 
 #define AAF_BEGIN_OBJECT_MAP(x) static AAFObjectTestInfo_t x[] = {
-#define AAF_OBJECT_ENTRY(xclass) { &CLSID_##xclass, #xclass, &C##xclass##::test },
+#define AAF_OBJECT_ENTRY(xclass) { &CLSID_##xclass, #xclass, &C##xclass##_test },
 #define AAF_END_OBJECT_MAP() { NULL, NULL, NULL } };
 
 
