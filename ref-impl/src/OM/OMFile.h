@@ -148,9 +148,6 @@ public:
     // @cmember Retrieve the root <c OMStorable> from this <c OMFile>.
   OMStorable* root(void);
 
-    // @cmember Retrieve the root <c OMStoredObject> from this <c OMFile>.
-  OMStoredObject* rootStoredObject(void);
-
   OMDictionary* dictionary(void) const;
 
     // @cmember Retrieve the <c OMPropertyTable> from this <c OMFile>.
