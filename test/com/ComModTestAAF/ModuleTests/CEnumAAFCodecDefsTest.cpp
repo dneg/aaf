@@ -34,6 +34,7 @@
 #include <stdio.h>
 #include <assert.h>
 #include <string.h>
+#include <wchar.h>
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFResult.h"
@@ -42,8 +43,6 @@
 #include "AAFClassDefUIDs.h"
 #include "AAFCodecDefs.h"
 #include "AAFContainerDefs.h"
-
-#include "AAFWideString.h"
 
 #include "CAAFBuiltinDefs.h"
 

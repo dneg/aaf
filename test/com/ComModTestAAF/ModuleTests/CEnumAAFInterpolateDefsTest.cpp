@@ -39,6 +39,8 @@
 #include "AAFResult.h"
 #include "AAFDefUIDs.h"
 
+#include "AAFWideString.h"
+
 #include "CAAFBuiltinDefs.h"
 
 // Cross-platform utility to delete a file.

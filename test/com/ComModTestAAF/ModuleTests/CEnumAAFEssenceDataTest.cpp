@@ -50,8 +50,8 @@ struct EnumEssenceDataTest
   EnumEssenceDataTest();
   ~EnumEssenceDataTest();
 
-  void createFile(wchar_t *pFileName);
-  void openFile(wchar_t *pFileName);
+  void createFile(const wchar_t *pFileName);
+  void openFile(const wchar_t *pFileName);
 
   void createFileMob(int itemNumber);
   void createEssenceData(IAAFSourceMob *pSourceMob);
@@ -83,7 +83,7 @@ struct EnumEssenceDataTest
 extern "C" HRESULT CEnumAAFEssenceData_test()
 {
   HRESULT hr = AAFRESULT_SUCCESS;
-  wchar_t fileName[] = L"EnumAAFEssenceDataTest.aaf";
+  wchar_t const *fileName = L"EnumAAFEssenceDataTest.aaf";
   EnumEssenceDataTest edt;
 
   try
@@ -251,7 +251,7 @@ void EnumEssenceDataTest::removeTestFile(const wchar_t* pFileName)
   }
 }
 
-void EnumEssenceDataTest::createFile(wchar_t *pFileName)
+void EnumEssenceDataTest::createFile(const wchar_t *pFileName)
 {
   // Remove the previous test file if any.
   removeTestFile(pFileName);
@@ -270,7 +270,7 @@ void EnumEssenceDataTest::createFile(wchar_t *pFileName)
   cleanupReferences();
 }
 
-void EnumEssenceDataTest::openFile(wchar_t *pFileName)
+void EnumEssenceDataTest::openFile(const wchar_t *pFileName)
 {
   check(AAFFileOpenExistingRead(pFileName, 0, &_pFile));
   _bFileOpen = true;
