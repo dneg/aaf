@@ -170,7 +170,7 @@ static aafBool  InitCalled = AAFFalse;
 const aafProductVersion_t AAFReferenceImplementationVersion = {1, 0, 0, 1, kVersionBeta};
 
 
-aafBool	EqualAUID(aafUID_t *uid1, aafUID_t *uid2)
+aafBool	EqualAUID(const aafUID_t *uid1, const aafUID_t *uid2)
 {
 	return(memcmp((char *)uid1, (char *)uid2, sizeof(aafUID_t)) == 0 ? AAFTrue : AAFFalse);
 }
