@@ -37,7 +37,6 @@
 #include "AAFFileKinds.h"
 #include "AAFSmartPointer.h"
 #include "AAFFileMode.h"
-#include "AAFPropertyDefs.h"
 #include "AAFTypeDefUIDs.h"
 #include "AAFDataDefs.h"
 
@@ -244,6 +243,7 @@ static void printIdentification(IAAFIdentification* pIdent)
 {
   aafWChar wchName[500];
   char chName[1000];
+	AAFRESULT hr = AAFRESULT_SUCCESS;
     
     
   check(pIdent->GetCompanyName(wchName, sizeof (wchName)));
@@ -258,11 +258,19 @@ static void printIdentification(IAAFIdentification* pIdent)
   convert(chName, sizeof(chName), wchName);
   printf("ProductVersionString = \"%s\"\n", chName);
 
+	// optional
   aafProductVersion_t version;
-  check(pIdent->GetProductVersion(&version));
-  printf("ProductVersion       = ");
-  printProductVersion(&version);
-  printf("\n");
+  hr = pIdent->GetProductVersion(&version);
+	printf("ProductVersion       = ");
+	if (hr == AAFRESULT_SUCCESS)
+	{
+		printProductVersion(&version);
+		printf("\n");
+	}
+	else if (hr == AAFRESULT_PROP_NOT_PRESENT)
+		printf("(optional property not present)\n");
+	else
+		check(hr);
 
   aafUID_t productID;
   check(pIdent->GetProductID(&productID));
@@ -275,14 +283,31 @@ static void printIdentification(IAAFIdentification* pIdent)
   printTimeStamp(&timeStamp);
   printf("\n");
 
-  check(pIdent->GetRefImplVersion(&version));
+	// optional
+  hr = pIdent->GetRefImplVersion(&version);
   printf("RefImplVersion       = ");
-  printProductVersion(&version);
-  printf("\n");
+	if (hr == AAFRESULT_SUCCESS)
+	{
+		printProductVersion(&version);
+		printf("\n");
+	}
+	else if (hr == AAFRESULT_PROP_NOT_PRESENT)
+		printf("(optional property not present)\n");
+	else
+		check(hr);
 
-  check(pIdent->GetPlatform(wchName, sizeof (wchName)));
-  convert(chName, sizeof(chName), wchName);
-  printf("Platform             = \"%s\"\n", chName);
+	// optional
+  hr = pIdent->GetPlatform(wchName, sizeof (wchName));
+  printf("Platform             = ");
+	if (hr == AAFRESULT_SUCCESS)
+	{
+		convert(chName, sizeof(chName), wchName);
+		printf("\"%s\"\n", chName);
+	}
+	else if (hr == AAFRESULT_PROP_NOT_PRESENT)
+		printf("(optional property not present)\n");
+	else
+		check(hr);
 
   aafUID_t generationID;
   check(pIdent->GetGenerationID(&generationID));
@@ -327,35 +352,18 @@ static void ReadAAFFile(aafWChar * pFileName)
         check(pHeader->GetFileRevision (&version) );
         printf("\nHeader::Version      = %d.%d\n", version.major, version.minor);
 
-        // Public API doesn't have a method to access Header::ObjectModelVersion,
-        // so get it with property direct.
-        printf("Header::ObjectModelVersion = ");
-        IAAFObjectSP pObj;
-        IAAFClassDefSP pClassDef;
-        IAAFPropertyDefSP pPropertyDef;
-        IAAFPropertyValueSP pPropValue;
-        IAAFTypeDefSP pObjVerTypeDef;
-        IAAFTypeDefIntSP pTypeDefInt;
-        aafUInt32 val;
-        check(pHeader->QueryInterface(IID_IAAFObject, (void **)&pObj));
-        check(pObj->GetDefinition (&pClassDef));
-        check(pClassDef->LookupPropertyDef(kAAFPropID_Header_ObjectModelVersion, &pPropertyDef));
-        aafBoolean_t present;
-        check(pObj->IsPropertyPresent(pPropertyDef, &present));
-        aafUInt32 objectModelVersion = 0;
-        if (present)
-        {
-          check(pObj->GetPropertyValue (pPropertyDef, &pPropValue));
-          check(pPropValue->GetType(&pObjVerTypeDef));
-          check(pObjVerTypeDef->QueryInterface(IID_IAAFTypeDefInt, (void**)&pTypeDefInt));
-          check(pTypeDefInt->GetInteger(pPropValue, (aafMemPtr_t) &val, sizeof (val)));
-          objectModelVersion = val;
-          printf("%d\n", objectModelVersion);
-        }
-        else
-          printf("0 (implied by property not being present)\n");
+        aafFileRev_t fileVersion = kAAFRev1;
+        check(pFile->GetRevision (&fileVersion) );
+        printf("\nHeader::ObjectModelVersion = %d", fileVersion);
 
-        // Show datadefs, with version number
+				if (fileVersion == kAAFRev1)
+            printf(" (recognized as kAAFRev1)\n");
+				else if (fileVersion == kAAFRev2)
+            printf(" (recognized as kAAFRev2)\n");
+				else
+            printf("\n");
+
+        // Show datadefs, with version
         IEnumAAFDataDefsSP pEnumDataDef;
         IAAFDictionarySP pDictionary;
         check(pHeader->GetDictionary(&pDictionary));
@@ -379,15 +387,15 @@ static void ReadAAFFile(aafWChar * pFileName)
           convert(chName, sizeof(chName), wchName);
 
           if (memcmp( &id, &kAAFDataDef_LegacyPicture, sizeof(id)) == 0)
-            printf("\"%s\" (recognized as LegacyPicture)\n", chName);
+            printf("\"%s\" (recognized as legacy Picture)\n", chName);
           else if (memcmp( &id, &kAAFDataDef_Picture, sizeof(id)) == 0)
             printf("\"%s\" (recognized as Picture)\n", chName);
           else if (memcmp( &id, &kAAFDataDef_LegacySound, sizeof(id)) == 0)
-            printf("\"%s\" (recognized as LegacySound)\n", chName);
+            printf("\"%s\" (recognized as legacy Sound)\n", chName);
           else if (memcmp( &id, &kAAFDataDef_Sound, sizeof(id)) == 0)
             printf("\"%s\" (recognized as Sound)\n", chName);
           else if (memcmp( &id, &kAAFDataDef_LegacyTimecode, sizeof(id)) == 0)
-            printf("\"%s\" (recognized as LegacyTimecode)\n", chName);
+            printf("\"%s\" (recognized as legacy Timecode)\n", chName);
           else if (memcmp( &id, &kAAFDataDef_Timecode, sizeof(id)) == 0)
             printf("\"%s\" (recognized as Timecode)\n", chName);
           else if (memcmp( &id, &kAAFDataDef_PictureWithMatte, sizeof(id)) == 0)
