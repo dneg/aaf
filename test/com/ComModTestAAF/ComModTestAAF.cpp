@@ -194,6 +194,8 @@ int main(int argc, char* argv[])
 	char 		**myargv = NULL;
 
 
+
+
 	// Initialize com library for this process.
 	CComInitialize comInit;
 
@@ -208,12 +210,6 @@ int main(int argc, char* argv[])
 
 		// Make sure the shared plugins can be loaded and registered.
    		CAAFInitializePlugins aafInitPlugins;
-
-
-		#ifdef _MAC
-			char dataFile[] = "COMMODAAF (PPC).inp";
-			getInputData(&argc, argv, dataFile);
-		#endif
 
 		/* Check arguments to see if help was requested */
 
@@ -256,10 +252,6 @@ int main(int argc, char* argv[])
 			for (module = 1; module < argc; module++)
 				hr = AAFModuleTest.Test(reinterpret_cast<unsigned char *>(argv[module]));
 		}
-		
-		#ifdef _MAC
-			cleanUpInputData(argc, argv);
-		#endif
 
 		/* Get and Print finish time	*/
 		time_t e_time;
