@@ -101,6 +101,7 @@ struct HeaderTest
 
   // Shared member data:
   HRESULT _hr;
+  aafProductVersion_t _productVersion;
   aafProductIdentification_t _productInfo;
   IAAFFile *_pFile;
   bool _bFileOpen;
@@ -162,15 +163,14 @@ HeaderTest::HeaderTest():
   _pEnumEssenceData(NULL),
   _pEssenceData(NULL)
 {
-  aafProductVersion_t v;
-  v.major = 1;
-  v.minor = 0;
-  v.tertiary = 0;
-  v.patchLevel = 0;
-  v.type = kAAFVersionUnknown;
+  _productVersion.major = 1;
+  _productVersion.minor = 0;
+  _productVersion.tertiary = 0;
+  _productVersion.patchLevel = 0;
+  _productVersion.type = kAAFVersionUnknown;
   _productInfo.companyName = L"AAF Developers Desk";
   _productInfo.productName = L"AAFHeader Test";
-  _productInfo.productVersion = &v;
+  _productInfo.productVersion = &_productVersion;
   _productInfo.productVersionString = NULL;
   _productInfo.productID = UnitTestProductID;
   _productInfo.platform = NULL;
@@ -308,6 +308,7 @@ void HeaderTest::createFile(wchar_t *pFileName)
   checkhr(_pHeader->GetLastIdentification(NULL), AAFRESULT_NULL_PARAM);
   check(_pHeader->GetLastIdentification(&_pIdent));
   _pIdent->Release();
+  _pIdent = NULL;
   
   // AppendIdentification
   check(defs.cdIdentification()->
@@ -319,19 +320,23 @@ void HeaderTest::createFile(wchar_t *pFileName)
   check(_pHeader->CountIdentifications(&numIdents));
   checkhr(2 == numIdents, true);  
   _pIdent->Release();
+  _pIdent = NULL;
 
   // GetIdentificationAt
   checkhr(_pHeader->GetIdentificationAt(0, NULL), AAFRESULT_NULL_PARAM);
   checkhr(_pHeader->GetIdentificationAt(numIdents, &_pIdent), AAFRESULT_BADINDEX);
   check(_pHeader->GetIdentificationAt(0, &_pIdent));
   _pIdent->Release();
+  _pIdent = NULL;
   check(_pHeader->GetIdentificationAt(1, &_pIdent));
   _pIdent->Release();
+  _pIdent = NULL;
 
   // GetIdentifications
   checkhr(_pHeader->GetIdentifications(NULL), AAFRESULT_NULL_PARAM);
   check(_pHeader->GetIdentifications(&_pEnumIdent));
   _pEnumIdent->Release();
+  _pEnumIdent = NULL;
 
   aafUID_t generation;
   IAAFObject *pObject = NULL;
@@ -349,7 +354,9 @@ void HeaderTest::createFile(wchar_t *pFileName)
   check(pObject->GetGenerationAUID(&generation));
   check(_pHeader->LookupIdentification(generation, &_pIdent));
   _pIdent->Release();
+  _pIdent = NULL;
   pObject->Release();
+  pObject = NULL;
 
   // IsEssenceDataPresent
   aafBool 	pResult = true;
