@@ -17,6 +17,9 @@
 #ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
 
+#import macros/base.mac
+
+
 #ccccccccccccccccccccccccccc
 #c
 #c Includes another file.
@@ -117,18 +120,21 @@
 #c
 #c Inserts declaration for a method which takes one argument.
 #c
-#c Argument1: method name
-#c Argument2: argument modifiers (e.g. [in])
-#c Argument3: argument type
-#c Argument4: argument name
-#c Argument5: argument comment
-#c Argument6: method description
+#c Macro Arg 01: method name
 #c
-#startm AD_METHOD1 06
+#c Macro arguments 02+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt
+#c ----------   ----------   ---------   ----    ----    --------
+#c metharg 1    02           03          04      05      06
+#c
+#c Macro Arg 07: method description
+#c
+#startm AD_XMETHOD1 07
 \\\#startm .method-%01 00
   // Override from .this-module
   virtual AAFRESULT STDMETHODCALLTYPE
-    %01 (/*%02*/ %03 %04);\\
+    %01 (/*%02*/ %04 .%03-indirection %05);\\
 \\\#endm
 #endm
 
@@ -137,22 +143,23 @@
 #c
 #c Inserts declaration for a method which takes two arguments.
 #c
-#c Argument1: method name
-#c Argument2: argument modifiers (e.g. [in])
-#c Argument3: argument type
-#c Argument4: argument name
-#c Argument5: argument comment
-#c Argument6: argument modifiers (e.g. [in])
-#c Argument7: argument type
-#c Argument8: argument name
-#c Argument9: argument comment
-#c Argument10: method description
+#c Macro Arg 01: method name
 #c
-#startm AD_METHOD2 10
+#c Macro arguments 02+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt
+#c ----------   ----------   ---------   ----    ----    --------
+#c metharg 1    02           03          04      05      06
+#c metharg 2    07           08          09      10      11
+#c
+#c Macro Arg 12: method description
+#c
+#startm AD_XMETHOD2 12
 \\\#startm .method-%01 00
   // Override from .this-module
   virtual AAFRESULT STDMETHODCALLTYPE
-    %01 (/*%02*/ %03 %04, /*%06*/ %07 %08);\\
+    %01 (/*%02*/ %04 .%03-indirection %05,
+	  /*%07*/ %09 .%08-indirection %10);\\
 \\\#endm
 #endm
 
@@ -161,26 +168,25 @@
 #c
 #c Inserts declaration for a method which takes three arguments.
 #c
-#c Argument1: method name
-#c Argument2: argument modifiers (e.g. [in])
-#c Argument3: argument type
-#c Argument4: argument name
-#c Argument5: argument comment
-#c Argument6: argument modifiers (e.g. [in])
-#c Argument7: argument type
-#c Argument8: argument name
-#c Argument9: argument comment
-#c Argument10: argument modifiers (e.g. [in])
-#c Argument11: argument type
-#c Argument12: argument name
-#c Argument13: argument comment
-#c Argument14: method description
+#c Macro Arg 01: method name
 #c
-#startm AD_METHOD3 14
+#c Macro arguments 02+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt
+#c ----------   ----------   ---------   ----    ----    --------
+#c metharg 1    02           03          04      05      06
+#c metharg 2    07           08          09      10      11
+#c metharg 3    12           13          14      15      16
+#c
+#c Macro Arg 17: method description
+#c
+#startm AD_XMETHOD3 17
 \\\#startm .method-%01 00
   // Override from .this-module
   virtual AAFRESULT STDMETHODCALLTYPE
-    %01 (/*%02*/ %03 %04, /*%06*/ %07 %08, /*%10*/ %11 %12);\\
+    %01 (/*%02*/ %04 .%03-indirection %05,
+	  /*%07*/ %09 .%08-indirection %10,
+	  /*%12*/ %14 .%13-indirection %15);\\
 \\\#endm
 #endm
 
@@ -189,30 +195,27 @@
 #c
 #c Inserts declaration for a method which takes four arguments.
 #c
-#c Argument1: method name
-#c Argument2: argument modifiers (e.g. [in])
-#c Argument3: argument type
-#c Argument4: argument name
-#c Argument5: argument comment
-#c Argument6: argument modifiers (e.g. [in])
-#c Argument7: argument type
-#c Argument8: argument name
-#c Argument9: argument comment
-#c Argument10: argument modifiers (e.g. [in])
-#c Argument11: argument type
-#c Argument12: argument name
-#c Argument13: argument comment
-#c Argument14: argument modifiers (e.g. [in])
-#c Argument15: argument type
-#c Argument16: argument name
-#c Argument17: argument comment
-#c Argument18: method description
+#c Macro Arg 01: method name
 #c
-#startm AD_METHOD4 18
+#c Macro arguments 02+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt
+#c ----------   ----------   ---------   ----    ----    --------
+#c metharg 1    02           03          04      05      06
+#c metharg 2    07           08          09      10      11
+#c metharg 3    12           13          14      15      16
+#c metharg 4    17           18          19      20      21
+#c
+#c Macro Arg 22: method description
+#c
+#startm AD_XMETHOD4 22
 \\\#startm .method-%01 00
   // Override from .this-module
   virtual AAFRESULT STDMETHODCALLTYPE
-    %01 (/*%02*/ %03 %04, /*%06*/ %07 %08, /*%10*/ %11 %12, /*%14*/ %15 %16);\\
+    %01 (/*%02*/ %04 .%03-indirection %05,
+	  /*%07*/ %09 .%08-indirection %10,
+	  /*%12*/ %14 .%13-indirection %15,
+	  /*%17*/ %19 .%18-indirection %20);\\
 \\\#endm
 #endm
 
@@ -221,34 +224,29 @@
 #c
 #c Inserts declaration for a method which takes five arguments.
 #c
-#c Argument1: method name
-#c Argument2: argument modifiers (e.g. [in])
-#c Argument3: argument type
-#c Argument4: argument name
-#c Argument5: argument comment
-#c Argument6: argument modifiers (e.g. [in])
-#c Argument7: argument type
-#c Argument8: argument name
-#c Argument9: argument comment
-#c Argument10: argument modifiers (e.g. [in])
-#c Argument11: argument type
-#c Argument12: argument name
-#c Argument13: argument comment
-#c Argument14: argument modifiers (e.g. [in])
-#c Argument15: argument type
-#c Argument16: argument name
-#c Argument17: argument comment
-#c Argument18: argument modifiers (e.g. [in])
-#c Argument19: argument type
-#c Argument20: argument name
-#c Argument21: argument comment
-#c Argument22: method description
+#c Macro Arg 01: method name
 #c
-#startm AD_METHOD5 22
+#c Macro arguments 02+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt
+#c ----------   ----------   ---------   ----    ----    --------
+#c metharg 1    02           03          04      05      06
+#c metharg 2    07           08          09      10      11
+#c metharg 3    12           13          14      15      16
+#c metharg 4    17           18          19      20      21
+#c metharg 5    22           23          24      25      26
+#c
+#c Macro Arg 27: method description
+#c
+#startm AD_XMETHOD5 27
 \\\#startm .method-%01 00
   // Override from .this-module
   virtual AAFRESULT STDMETHODCALLTYPE
-    %01 (/*%02*/ %03 %04, /*%06*/ %07 %08, /*%10*/ %11 %12, /*%14*/ %15 %16, /*%18*/ %19 %20);\\
+    %01 (/*%02*/ %04 .%03-indirection %05,
+	  /*%07*/ %09 .%08-indirection %10,
+	  /*%12*/ %14 .%13-indirection %15,
+	  /*%17*/ %19 .%18-indirection %20,
+	  /*%22*/ %24 .%23-indirection %25);\\
 \\\#endm
 #endm
 
@@ -257,293 +255,226 @@
 #c
 #c Inserts declaration for a method which takes six arguments.
 #c
-#c Argument1: method name
-#c Argument2: argument modifiers (e.g. [in])
-#c Argument3: argument type
-#c Argument4: argument name
-#c Argument5: argument comment
-#c Argument6: argument modifiers (e.g. [in])
-#c Argument7: argument type
-#c Argument8: argument name
-#c Argument9: argument comment
-#c Argument10: argument modifiers (e.g. [in])
-#c Argument11: argument type
-#c Argument12: argument name
-#c Argument13: argument comment
-#c Argument14: argument modifiers (e.g. [in])
-#c Argument15: argument type
-#c Argument16: argument name
-#c Argument17: argument comment
-#c Argument18: argument modifiers (e.g. [in])
-#c Argument19: argument type
-#c Argument20: argument name
-#c Argument21: argument comment
-#c Argument22: argument modifiers (e.g. [in])
-#c Argument23: argument type
-#c Argument24: argument name
-#c Argument25: argument comment
-#c Argument26: method description
+#c Macro Arg 01: method name
 #c
-#startm AD_METHOD6 26
+#c Macro arguments 02+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt
+#c ----------   ----------   ---------   ----    ----    --------
+#c metharg 1    02           03          04      05      06
+#c metharg 2    07           08          09      10      11
+#c metharg 3    12           13          14      15      16
+#c metharg 4    17           18          19      20      21
+#c metharg 5    22           23          24      25      26
+#c metharg 6    27           28          29      30      31
+#c
+#c Macro Arg 32: method description
+#c
+#startm AD_XMETHOD6 32
 \\\#startm .method-%01 00
   // Override from .this-module
   virtual AAFRESULT STDMETHODCALLTYPE
-    %01 (/*%02*/ %03 %04, /*%06*/ %07 %08, /*%10*/ %11 %12, /*%14*/ %15 %16, /*%18*/ %19 %20, /*%22*/ %23 %24);\\
+    %01 (/*%02*/ %04 .%03-indirection %05,
+	  /*%07*/ %09 .%08-indirection %10,
+	  /*%12*/ %14 .%13-indirection %15,
+	  /*%17*/ %19 .%18-indirection %20,
+	  /*%22*/ %24 .%23-indirection %25,
+	  /*%27*/ %29 .%28-indirection %30);\\
 \\\#endm
 #endm
+
 
 #ccccccccccccccccccccccccccc
 #c
 #c Inserts declaration for a method which takes seven arguments.
 #c
-#c Argument1: method name
-#c Argument2: argument modifiers (e.g. [in])
-#c Argument3: argument type
-#c Argument4: argument name
-#c Argument5: argument comment
-#c Argument6: argument modifiers (e.g. [in])
-#c Argument7: argument type
-#c Argument8: argument name
-#c Argument9: argument comment
-#c Argument10: argument modifiers (e.g. [in])
-#c Argument11: argument type
-#c Argument12: argument name
-#c Argument13: argument comment
-#c Argument14: argument modifiers (e.g. [in])
-#c Argument15: argument type
-#c Argument16: argument name
-#c Argument17: argument comment
-#c Argument18: argument modifiers (e.g. [in])
-#c Argument19: argument type
-#c Argument20: argument name
-#c Argument21: argument comment
-#c Argument22: argument modifiers (e.g. [in])
-#c Argument23: argument type
-#c Argument24: argument name
-#c Argument25: argument comment
-#c Argument26: argument modifiers (e.g. [in])
-#c Argument27: argument type
-#c Argument28: argument name
-#c Argument29: argument comment
-#c Argument30: method description
+#c Macro Arg 01: method name
 #c
-#startm AD_METHOD7 30
+#c Macro arguments 02+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt
+#c ----------   ----------   ---------   ----    ----    --------
+#c metharg 1    02           03          04      05      06
+#c metharg 2    07           08          09      10      11
+#c metharg 3    12           13          14      15      16
+#c metharg 4    17           18          19      20      21
+#c metharg 5    22           23          24      25      26
+#c metharg 6    27           28          29      30      31
+#c metharg 7    32           33          34      35      36
+#c
+#c Macro Arg 37: method description
+#c
+#startm AD_XMETHOD7 37
 \\\#startm .method-%01 00
   // Override from .this-module
   virtual AAFRESULT STDMETHODCALLTYPE
-    %01 (/*%02*/ %03 %04, /*%06*/ %07 %08, /*%10*/ %11 %12, /*%14*/ %15 %16, /*%18*/ %19 %20, /*%22*/ %23 %24, /*%26*/ %27 %28);\\
+    %01 (/*%02*/ %04 .%03-indirection %05,
+	  /*%07*/ %09 .%08-indirection %10,
+	  /*%12*/ %14 .%13-indirection %15,
+	  /*%17*/ %19 .%18-indirection %20,
+	  /*%22*/ %24 .%23-indirection %25,
+	  /*%27*/ %29 .%28-indirection %30,
+	  /*%32*/ %34 .%33-indirection %35);\\
 \\\#endm
 #endm
+
 
 #ccccccccccccccccccccccccccc
 #c
 #c Inserts declaration for a method which takes eight arguments.
 #c
-#c Argument1: method name
-#c Argument2: argument modifiers (e.g. [in])
-#c Argument3: argument type
-#c Argument4: argument name
-#c Argument5: argument comment
-#c Argument6: argument modifiers (e.g. [in])
-#c Argument7: argument type
-#c Argument8: argument name
-#c Argument9: argument comment
-#c Argument10: argument modifiers (e.g. [in])
-#c Argument11: argument type
-#c Argument12: argument name
-#c Argument13: argument comment
-#c Argument14: argument modifiers (e.g. [in])
-#c Argument15: argument type
-#c Argument16: argument name
-#c Argument17: argument comment
-#c Argument18: argument modifiers (e.g. [in])
-#c Argument19: argument type
-#c Argument20: argument name
-#c Argument21: argument comment
-#c Argument22: argument modifiers (e.g. [in])
-#c Argument23: argument type
-#c Argument24: argument name
-#c Argument25: argument comment
-#c Argument26: argument modifiers (e.g. [in])
-#c Argument27: argument type
-#c Argument28: argument name
-#c Argument29: argument comment
-#c Argument30: argument modifiers (e.g. [in])
-#c Argument31: argument type
-#c Argument32: argument name
-#c Argument33: argument comment
-#c Argument34: method description
+#c Macro Arg 01: method name
 #c
-#startm AD_METHOD8 34
+#c Macro arguments 02+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt
+#c ----------   ----------   ---------   ----    ----    --------
+#c metharg 1    02           03          04      05      06
+#c metharg 2    07           08          09      10      11
+#c metharg 3    12           13          14      15      16
+#c metharg 4    17           18          19      20      21
+#c metharg 5    22           23          24      25      26
+#c metharg 6    27           28          29      30      31
+#c metharg 7    32           33          34      35      36
+#c metharg 8    37           38          39      40      41
+#c
+#c Macro Arg 42: method description
+#c
+#startm AD_XMETHOD8 42
 \\\#startm .method-%01 00
   // Override from .this-module
   virtual AAFRESULT STDMETHODCALLTYPE
-    %01 (/*%02*/ %03 %04, /*%06*/ %07 %08, /*%10*/ %11 %12, /*%14*/ %15 %16, /*%18*/ %19 %20, /*%22*/ %23 %24, /*%26*/ %27 %28, /*%30*/ %31 %32);\\
+    %01 (/*%02*/ %04 .%03-indirection %05,
+	  /*%07*/ %09 .%08-indirection %10,
+	  /*%12*/ %14 .%13-indirection %15,
+	  /*%17*/ %19 .%18-indirection %20,
+	  /*%22*/ %24 .%23-indirection %25,
+	  /*%27*/ %29 .%28-indirection %30,
+	  /*%32*/ %34 .%33-indirection %35,
+	  /*%37*/ %39 .%38-indirection %40);\\
 \\\#endm
 #endm
+
 
 #ccccccccccccccccccccccccccc
 #c
 #c Inserts declaration for a method which takes nine arguments.
 #c
-#c Argument1: method name
-#c Argument2: argument modifiers (e.g. [in])
-#c Argument3: argument type
-#c Argument4: argument name
-#c Argument5: argument comment
-#c Argument6: argument modifiers (e.g. [in])
-#c Argument7: argument type
-#c Argument8: argument name
-#c Argument9: argument comment
-#c Argument10: argument modifiers (e.g. [in])
-#c Argument11: argument type
-#c Argument12: argument name
-#c Argument13: argument comment
-#c Argument14: argument modifiers (e.g. [in])
-#c Argument15: argument type
-#c Argument16: argument name
-#c Argument17: argument comment
-#c Argument18: argument modifiers (e.g. [in])
-#c Argument19: argument type
-#c Argument20: argument name
-#c Argument21: argument comment
-#c Argument22: argument modifiers (e.g. [in])
-#c Argument23: argument type
-#c Argument24: argument name
-#c Argument25: argument comment
-#c Argument26: argument modifiers (e.g. [in])
-#c Argument27: argument type
-#c Argument28: argument name
-#c Argument29: argument comment
-#c Argument30: argument modifiers (e.g. [in])
-#c Argument31: argument type
-#c Argument32: argument name
-#c Argument33: argument comment
-#c Argument34: argument modifiers (e.g. [in])
-#c Argument35: argument type
-#c Argument36: argument name
-#c Argument37: argument comment
-#c Argument38: method description
+#c Macro Arg 01: method name
 #c
-#startm AD_METHOD9 38
+#c Macro arguments 02+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt
+#c ----------   ----------   ---------   ----    ----    --------
+#c metharg 1    02           03          04      05      06
+#c metharg 2    07           08          09      10      11
+#c metharg 3    12           13          14      15      16
+#c metharg 4    17           18          19      20      21
+#c metharg 5    22           23          24      25      26
+#c metharg 6    27           28          29      30      31
+#c metharg 7    32           33          34      35      36
+#c metharg 8    37           38          39      40      41
+#c metharg 9    42           43          44      45      46
+#c
+#c Macro Arg 47: method description
+#c
+#startm AD_XMETHOD9 47
 \\\#startm .method-%01 00
   // Override from .this-module
   virtual AAFRESULT STDMETHODCALLTYPE
-    %01 (/*%02*/ %03 %04, /*%06*/ %07 %08, /*%10*/ %11 %12, /*%14*/ %15 %16, /*%18*/ %19 %20, /*%22*/ %23 %24, /*%26*/ %27 %28, /*%30*/ %31 %32, /*%34*/ %35 %36);\\
+    %01 (/*%02*/ %04 .%03-indirection %05,
+	  /*%07*/ %09 .%08-indirection %10,
+	  /*%12*/ %14 .%13-indirection %15,
+	  /*%17*/ %19 .%18-indirection %20,
+	  /*%22*/ %24 .%23-indirection %25,
+	  /*%27*/ %29 .%28-indirection %30,
+	  /*%32*/ %34 .%33-indirection %35,
+	  /*%37*/ %39 .%38-indirection %40,
+	  /*%42*/ %44 .%43-indirection %45);\\
 \\\#endm
 #endm
+
 
 #ccccccccccccccccccccccccccc
 #c
 #c Inserts declaration for a method which takes ten arguments.
 #c
-#c Argument1: method name
-#c Argument2: argument modifiers (e.g. [in])
-#c Argument3: argument type
-#c Argument4: argument name
-#c Argument5: argument comment
-#c Argument6: argument modifiers (e.g. [in])
-#c Argument7: argument type
-#c Argument8: argument name
-#c Argument9: argument comment
-#c Argument10: argument modifiers (e.g. [in])
-#c Argument11: argument type
-#c Argument12: argument name
-#c Argument13: argument comment
-#c Argument14: argument modifiers (e.g. [in])
-#c Argument15: argument type
-#c Argument16: argument name
-#c Argument17: argument comment
-#c Argument18: argument modifiers (e.g. [in])
-#c Argument19: argument type
-#c Argument20: argument name
-#c Argument21: argument comment
-#c Argument22: argument modifiers (e.g. [in])
-#c Argument23: argument type
-#c Argument24: argument name
-#c Argument25: argument comment
-#c Argument26: argument modifiers (e.g. [in])
-#c Argument27: argument type
-#c Argument28: argument name
-#c Argument29: argument comment
-#c Argument30: argument modifiers (e.g. [in])
-#c Argument31: argument type
-#c Argument32: argument name
-#c Argument33: argument comment
-#c Argument34: argument modifiers (e.g. [in])
-#c Argument35: argument type
-#c Argument36: argument name
-#c Argument37: argument comment
-#c Argument38: argument modifiers (e.g. [in])
-#c Argument39: argument type
-#c Argument40: argument name
-#c Argument41: argument comment
-#c Argument42: method description
+#c Macro Arg 01: method name
 #c
-#startm AD_METHOD_10 42
+#c Macro arguments 02+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt
+#c ----------   ----------   ---------   ----    ----    --------
+#c metharg 1    02           03          04      05      06
+#c metharg 2    07           08          09      10      11
+#c metharg 3    12           13          14      15      16
+#c metharg 4    17           18          19      20      21
+#c metharg 5    22           23          24      25      26
+#c metharg 6    27           28          29      30      31
+#c metharg 7    32           33          34      35      36
+#c metharg 8    37           38          39      40      41
+#c metharg 9    42           43          44      45      46
+#c metharg 10   47           48          49      50      51
+#c
+#c Macro Arg 52: method description
+#c
+#startm AD_XMETHOD_10 52
 \\\#startm .method-%01 00
   // Override from .this-module
   virtual AAFRESULT STDMETHODCALLTYPE
-    %01 (/*%02*/ %03 %04, /*%06*/ %07 %08, /*%10*/ %11 %12, /*%14*/ %15 %16, /*%18*/ %19 %20, /*%22*/ %23 %24, /*%26*/ %27 %28, /*%30*/ %31 %32, /*%34*/ %35 %36, /*%38*/ %39 %40);\\
+    %01 (/*%02*/ %04 .%03-indirection %05,
+	  /*%07*/ %09 .%08-indirection %10,
+	  /*%12*/ %14 .%13-indirection %15,
+	  /*%17*/ %19 .%18-indirection %20,
+	  /*%22*/ %24 .%23-indirection %25,
+	  /*%27*/ %29 .%28-indirection %30,
+	  /*%32*/ %34 .%33-indirection %35,
+	  /*%37*/ %39 .%38-indirection %40,
+	  /*%42*/ %44 .%43-indirection %45,
+	  /*%47*/ %49 .%48-indirection %50);\\
 \\\#endm
 #endm
+
 
 #ccccccccccccccccccccccccccc
 #c
 #c Inserts declaration for a method which takes eleven arguments.
 #c
-#c Argument1: method name
-#c Argument2: argument modifiers (e.g. [in])
-#c Argument3: argument type
-#c Argument4: argument name
-#c Argument5: argument comment
-#c Argument6: argument modifiers (e.g. [in])
-#c Argument7: argument type
-#c Argument8: argument name
-#c Argument9: argument comment
-#c Argument10: argument modifiers (e.g. [in])
-#c Argument11: argument type
-#c Argument12: argument name
-#c Argument13: argument comment
-#c Argument14: argument modifiers (e.g. [in])
-#c Argument15: argument type
-#c Argument16: argument name
-#c Argument17: argument comment
-#c Argument18: argument modifiers (e.g. [in])
-#c Argument19: argument type
-#c Argument20: argument name
-#c Argument21: argument comment
-#c Argument22: argument modifiers (e.g. [in])
-#c Argument23: argument type
-#c Argument24: argument name
-#c Argument25: argument comment
-#c Argument26: argument modifiers (e.g. [in])
-#c Argument27: argument type
-#c Argument28: argument name
-#c Argument29: argument comment
-#c Argument30: argument modifiers (e.g. [in])
-#c Argument31: argument type
-#c Argument32: argument name
-#c Argument33: argument comment
-#c Argument34: argument modifiers (e.g. [in])
-#c Argument35: argument type
-#c Argument36: argument name
-#c Argument37: argument comment
-#c Argument38: argument modifiers (e.g. [in])
-#c Argument39: argument type
-#c Argument40: argument name
-#c Argument41: argument comment
-#c Argument42: argument modifiers (e.g. [in])
-#c Argument43: argument type
-#c Argument44: argument name
-#c Argument45: argument comment
-#c Argument46: method description
+#c Macro Arg 01: method name
 #c
-#startm AD_METHOD_11 46
+#c Macro arguments 02+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt
+#c ----------   ----------   ---------   ----    ----    --------
+#c metharg 1    02           03          04      05      06
+#c metharg 2    07           08          09      10      11
+#c metharg 3    12           13          14      15      16
+#c metharg 4    17           18          19      20      21
+#c metharg 5    22           23          24      25      26
+#c metharg 6    27           28          29      30      31
+#c metharg 7    32           33          34      35      36
+#c metharg 8    37           38          39      40      41
+#c metharg 9    42           43          44      45      46
+#c metharg 10   47           48          49      50      51
+#c metharg 11   52           53          54      55      56
+#c
+#c Macro Arg 57: method description
+#c
+#startm AD_XMETHOD_11 57
 \\\#startm .method-%01 00
   // Override from .this-module
   virtual AAFRESULT STDMETHODCALLTYPE
-    %01 (/*%02*/ %03 %04, /*%06*/ %07 %08, /*%10*/ %11 %12, /*%14*/ %15 %16, /*%18*/ %19 %20, /*%22*/ %23 %24, /*%26*/ %27 %28, /*%30*/ %31 %32, /*%34*/ %35 %36, /*%38*/ %39 %40, /*%42*/ %43 %44);\\
+    %01 (/*%02*/ %04 .%03-indirection %05,
+	  /*%07*/ %09 .%08-indirection %10,
+	  /*%12*/ %14 .%13-indirection %15,
+	  /*%17*/ %19 .%18-indirection %20,
+	  /*%22*/ %24 .%23-indirection %25,
+	  /*%27*/ %29 .%28-indirection %30,
+	  /*%32*/ %34 .%33-indirection %35,
+	  /*%37*/ %39 .%38-indirection %40,
+	  /*%42*/ %44 .%43-indirection %45,
+	  /*%47*/ %49 .%48-indirection %50,
+	  /*%52*/ %54 .%53-indirection %55);\\
 \\\#endm
 #endm
 
@@ -583,13 +514,15 @@
 #c Inserts declaration for a constructor which takes one argument.
 #c Constructor name is assumed to be .this-module.
 #c
-#c Argument1: argument modifiers (e.g. [in])
-#c Argument2: argument type
-#c Argument3: argument name
-#c Argument4: argument comment
-#c Argument5: constructor description
+#c Macro arguments 01+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt
+#c ----------   ----------   ---------   ----    ----    --------
+#c metharg 1    01           02          03      04      05
 #c
-#startm AD_CONSTRUCTOR1 05
+#c Macro Arg 06: method description
+#c
+#startm AD_XCONSTRUCTOR1 06
 #endm
 
 
@@ -598,17 +531,16 @@
 #c Inserts declaration for a constructor which takes two arguments.
 #c Constructor name is assumed to be .this-module.
 #c
-#c Argument1: argument1 modifiers (e.g. [in])
-#c Argument2: argument1 type
-#c Argument3: argument1 name
-#c Argument4: argument1 comment
-#c Argument5: argument2 modifiers (e.g. [in])
-#c Argument6: argument2 type
-#c Argument7: argument2 name
-#c Argument8: argument2 comment
-#c Argument9: constructor description
+#c Macro arguments 01+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt
+#c ----------   ----------   ---------   ----    ----    --------
+#c metharg 1    01           02          03      04      05
+#c metharg 2    06           07          08      09      10
 #c
-#startm AD_CONSTRUCTOR2 09
+#c Macro Arg 11: method description
+#c
+#startm AD_XCONSTRUCTOR2 11
 #endm
 
 
@@ -617,21 +549,17 @@
 #c Inserts declaration for a constructor which takes three arguments.
 #c Constructor name is assumed to be .this-module.
 #c
-#c Argument1: argument1 modifiers (e.g. [in])
-#c Argument2: argument1 type
-#c Argument3: argument1 name
-#c Argument4: argument1 comment
-#c Argument5: argument2 modifiers (e.g. [in])
-#c Argument6: argument2 type
-#c Argument7: argument2 name
-#c Argument8: argument2 comment
-#c Argument9: argument3 modifiers (e.g. [in])
-#c Argument10: argument3 type
-#c Argument11: argument3 name
-#c Argument12: argument3 comment
-#c Argument13: constructor description
+#c Macro arguments 01+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt
+#c ----------   ----------   ---------   ----    ----    --------
+#c metharg 1    01           02          03      04      05
+#c metharg 2    06           07          08      09      10
+#c metharg 3    11           12          13      14      15
 #c
-#startm AD_CONSTRUCTOR3 13
+#c Macro Arg 16: method description
+#c
+#startm AD_XCONSTRUCTOR3 16
 #endm
 
 
@@ -640,25 +568,18 @@
 #c Inserts declaration for a constructor which takes four arguments.
 #c Constructor name is assumed to be .this-module.
 #c
-#c Argument1: argument1 modifiers (e.g. [in])
-#c Argument2: argument1 type
-#c Argument3: argument1 name
-#c Argument4: argument1 comment
-#c Argument5: argument2 modifiers (e.g. [in])
-#c Argument6: argument2 type
-#c Argument7: argument2 name
-#c Argument8: argument2 comment
-#c Argument9: argument3 modifiers (e.g. [in])
-#c Argument10: argument3 type
-#c Argument11: argument3 name
-#c Argument12: argument3 comment
-#c Argument13: argument4 modifiers (e.g. [in])
-#c Argument14: argument4 type
-#c Argument15: argument4 name
-#c Argument16: argument4 comment
-#c Argument17: constructor description
+#c Macro arguments 01+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt
+#c ----------   ----------   ---------   ----    ----    --------
+#c metharg 1    01           02          03      04      05
+#c metharg 2    06           07          08      09      10
+#c metharg 3    11           12          13      14      15
+#c metharg 4    16           17          18      19      20
 #c
-#startm AD_CONSTRUCTOR4 17
+#c Macro Arg 21: method description
+#c
+#startm AD_XCONSTRUCTOR4 21
 #endm
 
 
