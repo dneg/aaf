@@ -21,6 +21,7 @@
 #include <assert.h>
 #include "AAFResult.h"
 #include "aafCvt.h"
+#include "aafUtils.h"
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
@@ -127,7 +128,7 @@ AAFRESULT STDMETHODCALLTYPE
 		pSegment = NULL;
 
 		// Make sure the slot contains the expected media type.
-		if (memcmp(&DataDef, pDataDef, sizeof(aafUID_t)) != 0)
+		if (!EqualAUID(&DataDef, pDataDef))
 			RAISE(AAFRESULT_INVALID_DATADEF);
 
 		pMobSlot->ReleaseReference();
