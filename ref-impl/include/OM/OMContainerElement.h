@@ -79,6 +79,9 @@ public:
     // @cmember Close this <c OMContainerElement>.
   void close(void);
 
+    // @cmember Detach this <c OMContainerElement>.
+  void detach(void);
+
     // @cmember Restore this <c OMContainerElement>.
   void restore(void);
 

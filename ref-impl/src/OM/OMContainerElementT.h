@@ -168,6 +168,19 @@ void OMContainerElement<ObjectReference, ReferencedObject>::close(void)
   _reference.close();
 }
 
+  // @mfunc Detach this <c OMContainerElement>.
+  //   @tcarg class | ObjectReference  | The type of the contained object
+  //          reference 
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          object. This type must be a descendant of <c OMStorable>.
+template <typename ObjectReference, typename ReferencedObject>
+void OMContainerElement<ObjectReference, ReferencedObject>::detach(void)
+{
+  TRACE("OMContainerElement<ObjectReference, ReferencedObject>::detach");
+
+  _reference.detach();
+}
+
   // @mfunc Restore this <c OMContainerElement>.
   //   @tcarg class | ObjectReference  | The type of the contained object
   //          reference 
