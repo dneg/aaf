@@ -156,57 +156,38 @@ void OMStream::write(const OMByte* bytes,
   POSTCONDITION("All bytes written", actualByteCount == byteCount);
 }
 
-
-
-
 OMUInt64 OMStream::size(void) const
 {
-TRACE("OMStream::size");
+  TRACE("OMStream::size");
   PRECONDITION("No error on stream", ferror(_file) == 0);
-	// where are we now?
-	OMUInt64 oldposition = position();
 
-	// seek to end
-  errno = 0;
-
-#if defined( OM_OS_UNIX )
-
-#if defined(OM_COMPILER_SGICC_MIPS_SGI)
-	// all POSIX-compliant
-	int status = fseeko64( _file, (off64_t)0, SEEK_END);
+  // Microsoft Visual C's fstat() is broken for 64bit filesizes
+  // so use custom _fstati64() instead.
+  // N.B. gcc's fstat() is 64bit safe on Win32.
+#if defined(_MSC_VER)
+  struct _stati64 fileStat;
 #else
-	// all POSIX-compliant
-	int status = fseeko64( _file, (__off64_t)0, SEEK_END);
+  struct stat fileStat;
 #endif
 
-#elif defined( OM_OS_WINDOWS )
+  fflush( _file );
 
-	// we have to rely upon fseek( _file, 0, SEEK_END ) to do the right thing
-  int status = fseek(_file, 0L, SEEK_END);
-  //ASSERT("Successful seek", status == 0);
-
-#else
-
-	// have to be regular ISO
-  int status = fseek(_file, 0L, SEEK_END);
-  //ASSERT("Successful seek", status == 0);
-
+#if defined(OM_DEBUG)
+  OMInt64 status =
 #endif
-  ASSERT("Successful seek", status == 0);
-  (void)status;
+#if defined(_MSC_VER)
+  _fstati64( fileno( _file ), &fileStat );
+#else
+  fstat( fileno( _file ), &fileStat );
+#endif
 
-	// where is the end?
-	OMUInt64 result = position();
+  ASSERT( "Successful fstat", status == 0 );
+  OMUInt64 result = fileStat.st_size;
 
-	// back to where we started from
-	OMStream* nonConstThis = const_cast<OMStream*>(this);
-	nonConstThis->setPosition( oldposition );
-
-	return result;
+  return result;
 }
 
-
-void OMStream::setSize(OMUInt64 newSize) 
+void OMStream::setSize(OMUInt64 newSize)
 {
   TRACE("OMStream::setSize");
   PRECONDITION("Stream is writable", isWritable());
