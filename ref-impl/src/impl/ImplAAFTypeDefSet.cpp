@@ -90,6 +90,7 @@
 #include "OMStrongRefSetProperty.h"
 #include "OMWeakRefSetProperty.h"
 #include "OMDataTypes.h"
+#include "OMSetProperty.h"
 
 
 #include "AAFStoredObjectIDs.h"
@@ -159,8 +160,6 @@ ImplAAFTypeDefSet::Initialize (
   // The object reference must be for a class that has a unique
   // identifier property. NOTE: The utility GetUIDType performs the validation.
   GetUIDType(pTypeDef, result); // ignore return value (it is NOT reference counted).
-  if (AAFRESULT_FAILED(result))
-    return result;    
   
   result = pvtInitialize(id, pTypeDef, pTypeName);
   
@@ -176,6 +175,14 @@ AAFRESULT STDMETHODCALLTYPE
   return AAFRESULT_SUCCESS;
 }
 
+OMType* ImplAAFTypeDefSet::elementType(void) const
+{
+  ImplAAFTypeDef* result = 0;
+  AAFRESULT hr = GetElementType(&result);
+  assert(hr == 0);
+  result->ReleaseReference();
+  return result;
+}
 
 AAFRESULT STDMETHODCALLTYPE
 ImplAAFTypeDefSet::pvtInitialize (
@@ -615,17 +622,6 @@ OMProperty * ImplAAFTypeDefSet::pvtCreateOMProperty
   assert (ptd);
 
   
-  // TODO: Need a hook to complete the initialization of objects
-  // after they are restored. There is no hook to initialize non-persistent
-  // members.
-  if (NULL == _uidType || NULL == _uidProperty)
-  {
-    AAFRESULT status = AAFRESULT_SUCCESS;
-    GetUIDType(ptd, status);
-    if (AAFRESULT_FAILED(status))
-      return NULL;
-    assert (_uidType && _uidProperty);
-  }
 
 
   OMProperty * result = 0;
@@ -634,8 +630,19 @@ OMProperty * ImplAAFTypeDefSet::pvtCreateOMProperty
   if (dynamic_cast<ImplAAFTypeDefStrongObjRef*>((ImplAAFTypeDef*) ptd))
 	{
 	  // element is strong ref
-	  
-//	  
+	  //
+
+	  // TODO: Need a hook to complete the initialization of objects
+	  // after they are restored. There is no hook to initialize non-persistent
+	  // members.
+	  if (NULL == _uidType || NULL == _uidProperty)
+	  {
+		AAFRESULT status = AAFRESULT_SUCCESS;
+		GetUIDType(ptd, status);
+		if (AAFRESULT_FAILED(status))
+		  return NULL;
+		assert (_uidType && _uidProperty);
+	  }
 
 		// TEMPORARY???: There are only a few types of object reference sets supported
 		// at this time.
@@ -689,7 +696,30 @@ OMProperty * ImplAAFTypeDefSet::pvtCreateOMProperty
   }
   else
   {
-    // bad type	
+    assert (ptd->IsFixedSize());
+
+    const aafUInt32 elemSize = ptd->NativeSize();
+    switch (elemSize)
+    {
+      case 1:
+        result = new OMSetProperty<aafUInt8> (pid, name);
+        break;
+      case 2:
+        result = new OMSetProperty<aafUInt16> (pid, name);
+        break;
+      case 4:
+        result = new OMSetProperty<aafUInt32> (pid, name);
+        break;
+      case 8:
+        result = new OMSetProperty<aafUInt64> (pid, name);
+        break;
+      case 16:
+        result = new OMSetProperty<aafUID_t> (pid, name);
+        break;
+      default:
+        // bad type
+        break;
+    }
   }
 
   assert (result);
@@ -714,7 +744,6 @@ AAFRESULT STDMETHODCALLTYPE
   *ppPropertyValue = NULL; // initialize out parameter
   
   OMReferenceSetProperty* pReferenceSetProperty = dynamic_cast<OMReferenceSetProperty*>(property);
-  assert(NULL != pReferenceSetProperty);
   if (NULL != pReferenceSetProperty)
   {
     assert (property->definition());

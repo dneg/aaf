@@ -40,9 +40,10 @@ class ImplAAFPropertyDef;
 #include "ImplAAFTypeDef.h"
 #endif
 
+#include "OMSetType.h"
 #include "OMWeakRefProperty.h"
 
-class ImplAAFTypeDefSet : public ImplAAFTypeDef
+class ImplAAFTypeDefSet : public ImplAAFTypeDef, public OMSetType
 {
 public:
   //
@@ -189,6 +190,9 @@ public:
     GetTypeCategory (/*[out]*/ eAAFTypeCategory_t *  pTid);
 
 public:
+
+  virtual OMType* elementType(void) const;
+
   //****************
   // pvtInitialize()
   //
