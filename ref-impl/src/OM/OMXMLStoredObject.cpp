@@ -58,12 +58,13 @@ OMXMLStoredObject* OMXMLStoredObject::openModify(
   //   @parm The desired byte ordering for the new file.
   //   @rdesc An <c OMXMLStoredObject> representing the root object.
 OMXMLStoredObject* OMXMLStoredObject::createModify(
-                                             OMRawStorage* /* rawStorage */,
+                                             OMRawStorage* rawStorage,
                                              const OMByteOrder /* byteOrder */)
 {
   TRACE("OMXMLStoredObject::createModify");
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
-  return 0;
+  OMXMLStoredObject* result = new OMXMLStoredObject(rawStorage);
+  ASSERT("Valid heap pointer", result != 0);
+  return result;
 }
 
   // @mfunc Destructor.

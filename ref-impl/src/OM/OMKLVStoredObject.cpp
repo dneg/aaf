@@ -58,12 +58,13 @@ OMKLVStoredObject* OMKLVStoredObject::openModify(
   //   @parm The desired byte ordering for the new file.
   //   @rdesc An <c OMKLVStoredObject> representing the root object.
 OMKLVStoredObject* OMKLVStoredObject::createModify(
-                                             OMRawStorage* /* rawStorage */,
+                                             OMRawStorage* rawStorage,
                                              const OMByteOrder /* byteOrder */)
 {
   TRACE("OMKLVStoredObject::createModify");
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
-  return 0;
+  OMKLVStoredObject* result= new OMKLVStoredObject(rawStorage);
+  ASSERT("Valid heap pointer", result != 0);
+  return result;
 }
 
   // @mfunc Destructor.
