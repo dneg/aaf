@@ -45,7 +45,7 @@ OMPropertyTable::~OMPropertyTable(void)
 
   size_t elements = _vector.count();
   for (size_t i = 0; i < elements; i++) {
-    char* p = _vector.valueAt(i);
+    wchar_t* p = _vector.valueAt(i);
     delete [] p;
   }
 }
@@ -56,17 +56,17 @@ OMPropertyTable::~OMPropertyTable(void)
   //        sequentially.
   //   @parm The property name to insert.
   //   @rdesc The assigned index.
-OMPropertyTag OMPropertyTable::insert(const char* propertyName)
+OMPropertyTag OMPropertyTable::insert(const wchar_t* propertyName)
 {
   TRACE("OMPropertyTable::insert");
 
-  PRECONDITION("Valid property name", validString(propertyName));
+  PRECONDITION("Valid property name", validWideString(propertyName));
 
   OMPropertyTag result;
   bool found = false;
   size_t elements = _vector.count();
   for (size_t i = 0; i < elements; i++) {
-    if (strcmp(_vector.valueAt(i), propertyName) == 0) {
+    if (compareWideString(_vector.valueAt(i), propertyName) == 0) {
      result = i;
      found = true;
      break;
@@ -74,7 +74,7 @@ OMPropertyTag OMPropertyTable::insert(const char* propertyName)
   }
 
   if (!found) {
-    _vector.append(saveString(propertyName));
+    _vector.append(saveWideString(propertyName));
     result = elements;
   }
 
@@ -86,7 +86,7 @@ OMPropertyTag OMPropertyTable::insert(const char* propertyName)
   //   @parm The index.
   //   @rdesc The property name.
   //   @this const
-const char* OMPropertyTable::valueAt(OMPropertyTag tag) const
+const wchar_t* OMPropertyTable::valueAt(OMPropertyTag tag) const
 {
   TRACE("OMPropertyTable::valueAt");
 
