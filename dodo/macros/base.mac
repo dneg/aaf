@@ -31,7 +31,7 @@
 #c Macro Arg 06: method description
 #c
 #startm AD_METHOD1 06
-AD_XMETHOD1(%01, %02, objPass, %03, %04, %05, %06)
+AD_XMETHOD1(%01, %02, objPass, %03, %04, %05, %06)\
 #endm
 
 
@@ -55,7 +55,7 @@ AD_XMETHOD1(%01, %02, objPass, %03, %04, %05, %06)
 AD_XMETHOD2(%01,
 			%02, objPass, %03, %04, %05,
 			%06, objPass, %07, %08, %09,
-			%10)
+			%10)\
 #endm
 
 
@@ -81,7 +81,7 @@ AD_XMETHOD3(%01,
 	%02, objPass, %03, %04, %05,
 	%06, objPass, %07, %08, %09,
 	%10, objPass, %11, %12, %13,
-	%14)
+	%14)\
 #endm
 
 
@@ -109,7 +109,7 @@ AD_XMETHOD4(%01,
 	%06, objPass, %07, %08, %09,
 	%10, objPass, %11, %12, %13,
 	%14, objPass, %15, %16, %17,
-	%18)
+	%18)\
 #endm
 
 
@@ -139,7 +139,7 @@ AD_XMETHOD5(%01,
 	%10, objPass, %11, %12, %13,
 	%14, objPass, %15, %16, %17,
 	%18, objPass, %19, %20, %21,
-	%22)
+	%22)\
 #endm
 
 
@@ -171,7 +171,7 @@ AD_XMETHOD6(%01,
 	%14, objPass, %15, %16, %17,
 	%18, objPass, %19, %20, %21,
 	%22, objPass, %23, %24, %25,
-	%26)
+	%26)\
 #endm
 
 
@@ -205,7 +205,7 @@ AD_XMETHOD7(%01,
 	%18, objPass, %19, %20, %21,
 	%22, objPass, %23, %24, %25,
 	%26, objPass, %27, %28, %29,
-	%30)
+	%30)\
 #endm
 
 
@@ -241,7 +241,7 @@ AD_XMETHOD8(%01,
 	%22, objPass, %23, %24, %25,
 	%26, objPass, %27, %28, %29,
 	%30, objPass, %31, %32, %33,
-	%34)
+	%34)\
 #endm
 
 
@@ -279,7 +279,7 @@ AD_XMETHOD9(%01,
 	%26, objPass, %27, %28, %29,
 	%30, objPass, %31, %32, %33,
 	%34, objPass, %35, %36, %37,
-	%38)
+	%38)\
 #endm
 
 
@@ -319,7 +319,7 @@ AD_XMETHOD_10(%01,
 	%30, objPass, %31, %32, %33,
 	%34, objPass, %35, %36, %37,
 	%38, objPass, %39, %40, %41,
-	%42)
+	%42)\
 #endm
 
 
@@ -361,7 +361,7 @@ AD_XMETHOD_11(%01,
 	%34, objPass, %35, %36, %37,
 	%38, objPass, %39, %40, %41,
 	%42, objPass, %43, %44, %45,
-	%46)
+	%46)\
 #endm
 
 
@@ -380,7 +380,7 @@ AD_XMETHOD_11(%01,
 #c
 #startm AD_CONSTRUCTOR1 05
 AD_XCONSTRUCTOR1(%01, objPass, %02, %03, %04,
-				 %05)
+				 %05)\
 #endm
 
 
@@ -401,7 +401,7 @@ AD_XCONSTRUCTOR1(%01, objPass, %02, %03, %04,
 #startm AD_CONSTRUCTOR2 09
 AD_XCONSTRUCTOR2(%01, objPass, %02, %03, %04,
 				 %05, objPass, %06, %07, %08,
-				 %09)
+				 %09)\
 #endm
 
 
@@ -424,7 +424,7 @@ AD_XCONSTRUCTOR2(%01, objPass, %02, %03, %04,
 AD_XCONSTRUCTOR3(%01, objPass, %02, %03, %04,
 				 %05, objPass, %06, %07, %08,
 				 %09, objPass, %10, %11, %12,
-				 %13)
+				 %13)\
 #endm
 
 
@@ -449,7 +449,7 @@ AD_XCONSTRUCTOR4(%01, objPass, %02, %03, %04,
 				 %05, objPass, %06, %07, %08,
 				 %09, objPass, %10, %11, %12,
 				 %13, objPass, %14, %15, %16,
-				 %17)
+				 %17)\
 #endm
 
 
