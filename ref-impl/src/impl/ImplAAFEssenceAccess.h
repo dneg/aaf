@@ -13,23 +13,6 @@
 *                                          *
 \******************************************/
 
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
-
-
-/***********************************************\
-*  Stub only.   Implementation not yet added    *
-\***********************************************/
-
-
-class ImplAAFDataDef;
-
 class ImplAAFMasterMob;
 
 class ImplAAFSourceMob;
@@ -350,7 +333,7 @@ public:
          aafMediaCriteria_t*  mediaCrit,
 
          // @parm [in] for this essence type
-         ImplAAFDataDef * mediaKind,
+         aafUID_t mediaKind,
 
          // @parm [out] How many channels?
          aafInt16*  numCh);
@@ -368,7 +351,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     GetLargestSampleSize
         (// @parm [in] and this essence type
-         ImplAAFDataDef * mediaKind,
+         aafUID_t mediaKind,
 
          // @parm [out] the largest sample size
          aafUInt32*  maxSize);
@@ -385,7 +368,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     GetSampleFrameSize
         (// @parm [in] and this essence type
-         ImplAAFDataDef * mediaKind,
+         aafUID_t  mediaKind,
 
          // @parm [in] for this [1-based] sample frame number
          aafPosition_t  frameNum,
@@ -420,7 +403,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     GetSampleCount
         (// @parm [in] and this essence type
-         ImplAAFDataDef * mediaKind,
+         aafUID_t mediaKind,
 
         // @parm [out] 
         aafLength_t *  result);
