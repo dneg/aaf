@@ -387,8 +387,19 @@ protected:
 
 private:
 
-  AAFRESULT PvtMergeBuiltinPropDefsToFile();
+  // Merge prop defs found in src but not in dst.
+  AAFRESULT PvtMergePropDefs( ImplAAFClassDef* pSrcClassDef, ImplAAFClassDef* pDstClassDef,
+			      const wchar_t* srcName, const wchar_t* dstName );
+
+  // Sync class defs found in both the _fileClassDefinitions and _classDefinitions.
+  AAFRESULT PvtSyncCommonClassDefs();
+
+  // Merge class defs that exist in _fileClassDefinition but in
+  // _classDefinitions into _classDefinitions.
   AAFRESULT PvtMergeBuiltinClassDefsToFile();
+
+  // Merge class defs that exist in _classDefinitions but not in
+  // _fileClassDefinition into _fileClassDefinition.
   AAFRESULT PvtMergeFileClassDefsToBuiltin();
 
   //

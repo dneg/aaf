@@ -1362,10 +1362,6 @@ AAFRESULT ImplAAFMetaDictionary::InstantiateAxiomaticDefinitions(void)
 	ImplAAFClassDef* old = nonConstThis->_classDefinitions.replace(pAxiomaticClassDef);
 	if (old != 0)
 	    old->ReleaseReference();
-#else
-	// There should never be an existing class definition found in the
-	// _classDefinitions.  Assert this.
-	assert(0);
 #endif
       }
       pAxiomaticClassDef->AcquireReference(); // saving another reference...
@@ -1475,58 +1471,93 @@ AAFRESULT ImplAAFMetaDictionary::PvtMergeFileClassDefsToBuiltin()
 }
 
 //
-// Merge the builtin dictionary into the file dictionary.
+
+AAFRESULT ImplAAFMetaDictionary::PvtMergePropDefs( ImplAAFClassDef* pSrcClassDef,
+						   ImplAAFClassDef* pDstClassDef,
+						   const wchar_t* srcName, const wchar_t* dstName )
+{
+  assert( pSrcClassDef );
+  assert( pDstClassDef );
+
+  AAFRESULT hr = AAFRESULT_SUCCESS;
+
+  ImplEnumAAFPropertyDefs* pEnumSrcPropDefs = 0; 
+  hr = pSrcClassDef->GetPropertyDefs(&pEnumSrcPropDefs); 
+
+  if (AAFRESULT_SUCCEEDED(hr)) { 
+    ImplAAFPropertyDef* pSrcPropDef; 
+    while (AAFRESULT_SUCCEEDED(pEnumSrcPropDefs->NextOne(&pSrcPropDef))) { 
+      aafUID_t puid; 
+      pSrcPropDef->GetAUID(&puid); 
+      ImplAAFPropertyDef* pDstPropDef = 0; 
+      AAFRESULT tmpHr = pDstClassDef->LookupPropertyDef(puid, &pDstPropDef); 
+      if (AAFRESULT_FAILED(tmpHr)) { 
+
+#ifdef DEBUG_DICTIONARY_SYNC
+	std::wcout << "Found property definition "; 
+	PrintClassName(pSrcClassDef); 
+	std::wcout << "::"; 
+	PrintPropertyName(pSrcPropDef); 
+	std::wcout << " in " << srcName << " but not in " << dstName << std::endl; 
+#endif
+	hr = pSrcPropDef->MergeTo( pDstClassDef );
+	assert( AAFRESULT_SUCCESS == hr );
+	if ( AAFRESULT_SUCCESS != hr ) {
+	  break;
+	}
+      }
+    }
+  }
+  
+  return hr;
+}
+
+// Sync the property definitions in class defs that exist in both the
+// builtin and file dictionaries..
 //
-AAFRESULT ImplAAFMetaDictionary::PvtMergeBuiltinPropDefsToFile()
+AAFRESULT ImplAAFMetaDictionary::PvtSyncCommonClassDefs()
 {
   AAFRESULT result = AAFRESULT_SUCCESS;
 
   OMStrongReferenceSetIterator<OMUniqueObjectIdentification, 
                                ImplAAFClassDef>
-    iter(_fileClassDefinitions); 
+  iter(_fileClassDefinitions); 
 
   OMUInt32 classes = iter.count(); 
 
 #ifdef DEBUG_DICTIONARY_SYNC
-  std::wcout << L"MergeBuiltinPropDefsToFile:" << std::endl;
+  std::wcout << L"SyncCommonClassDefs:" << std::endl;
   std::wcout << L"Initially " << classes << L" class definitions in file." << 
-    std::endl; 
+  std::endl;
+
+  OMReferenceSetIterator<OMUniqueObjectIdentification,
+						 ImplAAFClassDef> builtInIter(_classDefinitions);
+  std::wcout << L"Initially " << builtInIter.count() << L" class definitions built in." << 
+
+  std::endl; 
 #endif
 
+  // For each class def in file...
   while (++iter) {   
+
+    // Get the class def's id and check if the same class def exists in
+    // the built in dictionary.
     OMUniqueObjectIdentification id = iter.identification(); 
     ImplAAFClassDef* pFileClassDef = iter.value(); 
     aafUID_t* uid = reinterpret_cast<aafUID_t*>(&id); 
-    ImplAAFClassDef* pClassDef = 0; 
-    HRESULT hr = dataDictionary()->LookupClassDef(*uid, &pClassDef); 
+    ImplAAFClassDef* pBuiltinClassDef = 0; 
+    HRESULT hr = dataDictionary()->LookupClassDef(*uid, &pBuiltinClassDef); 
+    assert(pBuiltinClassDef);
 
     if (AAFRESULT_SUCCEEDED(hr)) {
-      ImplEnumAAFPropertyDefs* pEnumPropDefs = 0; 
-      hr = pClassDef->GetPropertyDefs(&pEnumPropDefs); 
-      if (AAFRESULT_SUCCEEDED(hr)) { 
-        ImplAAFPropertyDef* pPropDef; 
-        while (AAFRESULT_SUCCEEDED(pEnumPropDefs->NextOne(&pPropDef))) { 
-          aafUID_t puid; 
-          pPropDef->GetAUID(&puid); 
-          ImplAAFPropertyDef* pFilePropDef = 0; 
-          hr = pFileClassDef->LookupPropertyDef(puid, &pFilePropDef); 
-          if (AAFRESULT_FAILED(hr)) { 
-#ifdef DEBUG_DICTIONARY_SYNC
-            std::wcout << L"Found property definition "; 
-            PrintClassName(pClassDef); 
-            std::wcout << L"::"; 
-            PrintPropertyName(pPropDef); 
-            std::wcout << L" compiled-in but not in file." << std::endl; 
-#endif
-	    hr = pPropDef->MergeTo( pFileClassDef );
-	    assert( AAFRESULT_SUCCESS == hr );
-	    if ( AAFRESULT_SUCCESS != hr ) {
-	      result = hr;
-	      break;
-	    }
-          }
-        } 
-      } 
+      
+      // The class def exists in both the builtin and file
+      // dictionaries.  Sync the property defs contained by these two
+      // class defs to ensure both contain an identical set of
+      // properties.
+
+      PvtMergePropDefs( pBuiltinClassDef, pFileClassDef, L"Builtin", L"File" );
+      PvtMergePropDefs( pFileClassDef, pBuiltinClassDef, L"File", L"Builtin" );
     }
   }
 
@@ -1537,21 +1568,17 @@ AAFRESULT ImplAAFMetaDictionary::SyncMetaDictionaries()
 { 
   AAFRESULT hr = AAFRESULT_SUCCESS;
 
-  // First, merge the properties of each built in class defs into each
-  // class def that also exists in the file.  This ensures that
-  // properties that exist in the built in dictionary also exist in
-  // the file's dictionary.
-  // This must be done *before* MergeBuiltinClassDefsToFile();
-  // MergeBuiltinPropDefsToFile also causes all class defs in the file
-  // to be added to the builting dictionary.
+  // First, sync the class defs that exist in both the builtin and
+  // file dictionaries to ensures that each set of class defs have
+  // identical property sets.
   //
-  // Second, merge the classes in the built in dictionary into the file's
-  // dictionary.
+  // Second, merge the classes in the built in dictionary into the
+  // file's dictionary.
   //
   // Third, merge the classes in the file's dictionary into the built
   // in dictionary.
 
-  if ( AAFRESULT_SUCCESS == (hr = PvtMergeBuiltinPropDefsToFile())  &&
+  if ( AAFRESULT_SUCCESS == (hr = PvtSyncCommonClassDefs())  &&
        AAFRESULT_SUCCESS == (hr = PvtMergeBuiltinClassDefsToFile()) &&
        AAFRESULT_SUCCESS == (hr = PvtMergeFileClassDefsToBuiltin()) ) {
     // intentional noop
