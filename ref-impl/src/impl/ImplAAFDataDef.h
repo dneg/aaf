@@ -121,6 +121,22 @@ public:
          // @parm [retval,out] pointer to result
          aafBool *  bDoesConvertFrom);
 
+  //****************
+  // IsTimecodeKind()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    IsTimecodeKind
+        // @parm [retval,out] pointer to the return value
+        (aafBool *  bIsTimecodeKind);
+
+  //****************
+  // IsEdgecodeKind()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    IsEdgecodeKind
+        // @parm [retval,out] pointer to the return value
+        (aafBool *  bIsEdgecodeKind);
+
 private:
   // *NOT* reference counted!
   ImplAAFDictionary * _pCachedDict;

@@ -33,6 +33,7 @@ AAFNONPERSISTENTOBJECTS="\
 # These are files which specify COM interfaces, but which are
 # implemented in other objects.
 AAFCOMINTERFACESONLY="\
+	AAFDataDef2 \
 	AAFEndian \
 	AAFSearchSource \
 	AAFEssenceDataEx \
