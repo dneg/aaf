@@ -246,6 +246,14 @@ void OMKLVStoredObject::save(const OMDataStream& /* stream */)
   ASSERT("Unimplemented code not reached", false); // tjb TBS
 }
 
+OMRootStorable* OMKLVStoredObject::restore(OMFile& /* file */)
+{
+  TRACE("OMKLVStoredObject::restore(OMFile)");
+  ASSERT("Unimplemented code not reached", false); // tjb TBS
+  OMRootStorable* result = 0;
+  return result;
+}
+
   // @mfunc Restore the <c OMStoredObjectIdentification>
   //        of this <c OMKLVStoredObject> into <p id>.
   //   @parm The newly restored <t OMStoredObjectIdentification>.

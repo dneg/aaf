@@ -536,6 +536,13 @@ void OMXMLStoredObject::save(const OMDataStream& stream)
   _stream << outdent;
 }
 
+OMRootStorable* OMXMLStoredObject::restore(OMFile& /* file */)
+{
+  TRACE("OMXMLStoredObject::restore(OMFile)");
+  ASSERT("Unimplemented code not reached", false); // tjb TBS
+  OMRootStorable* result = 0;
+  return result;
+}
   // @mfunc Restore the <c OMStoredObjectIdentification>
   //        of this <c OMXMLStoredObject> into <p id>.
   //   @parm The newly restored <t OMStoredObjectIdentification>.

@@ -32,6 +32,7 @@
 #include "OMStoredSetIndex.h"
 #include "OMDataTypes.h"
 #include "OMPropertyTable.h"
+#include "OMRootStorable.h"
 
 #include "OMDiskRawStorage.h"
 #include "OMMemoryRawStorage.h"
@@ -808,6 +809,14 @@ void OMMSSStoredObject::save(const OMDataStream& stream)
   OMByteOrder byteOrder = stream.storedByteOrder();
   saveStream(propertyId, storedForm, name, byteOrder);
   delete [] name;
+}
+
+OMRootStorable* OMMSSStoredObject::restore(OMFile& /* file */)
+{
+  TRACE("OMMSSStoredObject::restore(OMFile)");
+  ASSERT("Unimplemented code not reached", false); // tjb TBS
+  OMRootStorable* result = 0;
+  return result;
 }
 
   // @mfunc Restore the <c OMStoredObjectIdentification>

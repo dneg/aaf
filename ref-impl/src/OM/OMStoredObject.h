@@ -119,6 +119,8 @@ public:
     //          <c OMStoredObject>.
   virtual void save(const OMDataStream& stream) = 0;
 
+  virtual OMRootStorable* restore(OMFile& file) = 0;
+
     // @cmember Restore the <c OMStoredObjectIdentification>
     //          of this <c OMStoredObject> into <p id>.
   virtual void restore(OMStoredObjectIdentification& id) = 0;

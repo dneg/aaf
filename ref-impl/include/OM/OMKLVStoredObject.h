@@ -143,6 +143,8 @@ public:
     //          <c OMKLVStoredObject>.
   virtual void save(const OMDataStream& stream);
 
+  virtual OMRootStorable* restore(OMFile& file);
+
     // @cmember Restore the <c OMStoredObjectIdentification>
     //          of this <c OMKLVStoredObject> into <p id>.
   virtual void restore(OMStoredObjectIdentification& id);
