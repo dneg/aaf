@@ -37,6 +37,7 @@ class ImplEnumAAFReferenceValues;
 #include "ImplAAFPluggableDef.h"
 #endif
 
+class ImplAAFTypeDef;
 
 class ImplAAFParameterDef : public ImplAAFPluggableDef
 {
@@ -57,17 +58,17 @@ public:
   // GetParameterDataDefID()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetParameterDataDefID
+    GetTypeDef
         // @parm [retval][out] Pointer to an AUID reference
-        (aafUID_t *  pParameterDataDefID);
+        (ImplAAFTypeDef **  pParameterDataDefID);
 
   //****************
   // SetParameterDataDefID()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    SetParameterDataDefID
+    SetTypeDef
         // @parm [in] an AUID reference
-        (aafUID_t  ParameterDataDefID);
+        (ImplAAFTypeDef * ParameterDataDefID);
 
   //****************
   // GetDisplayUnits()
@@ -126,7 +127,7 @@ public:
   static AAFRESULT test();
 
 private:
-	OMFixedSizeProperty<aafUID_t>							_dataDef;
+	OMFixedSizeProperty<aafUID_t>							_typeDef;
     OMStrongReferenceVectorProperty<ImplAAFReferenceValue>	_refVal;
 	OMWideStringProperty									_displayUnits;
 };
