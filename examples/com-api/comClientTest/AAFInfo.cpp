@@ -147,8 +147,25 @@ static void printProductVersion(aafProductVersion_t* pProductVersion)
 
 #if defined( OS_UNIX )
 
-static const unsigned char guidMap[] =
+aafUInt8 hostByteOrder(void)
+{
+  aafUInt16 word = 0x1234;
+  aafUInt8 byte = *((aafUInt8*)&word);
+  aafUInt8 result;
+
+  if (byte == 0x12) {
+    result = 'B';
+  } else {
+    result = 'L';
+  }
+  return result;
+}
+
+static const unsigned char idMapLittle[] =
 { 3, 2, 1, 0, '-', 5, 4, '-', 7, 6, '-', 8, 9, '-', 10, 11, 12, 13, 14, 15 }; 
+static const unsigned char idMapBig[] =
+{ 0, 1, 2, 3, '-', 4, 5, '-', 6, 7, '-', 8, 9, '-', 10, 11, 12, 13, 14, 15 }; 
+static const unsigned char* guidMap;
 static const wchar_t digits[] = L"0123456789ABCDEF"; 
 
 #define GUIDSTRMAX 38 
@@ -157,12 +174,17 @@ typedef OLECHAR OMCHAR;
 
 int StringFromGUID2(const GUID& guid, OMCHAR* buffer, int bufferSize) 
 {
+  if (hostByteOrder() == 'L') {
+    guidMap = &idMapLittle[0];
+  } else {
+    guidMap = &idMapBig[0];
+  }
   const unsigned char* ip = (const unsigned char*) &guid; // input pointer
   OMCHAR* op = buffer;                                    // output pointer
 
   *op++ = L'{'; 
  
-  for (size_t i = 0; i < sizeof(guidMap); i++) { 
+  for (size_t i = 0; i < sizeof(idMapLittle); i++) { 
 
     if (guidMap[i] == '-') { 
       *op++ = L'-'; 

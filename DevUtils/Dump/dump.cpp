@@ -1262,20 +1262,28 @@ void indent(int level)
 
 #if defined(OM_USE_REFERENCE_SS)
 
-static const unsigned char guidMap[] =
+static const unsigned char idMapLittle[] =
 { 3, 2, 1, 0, '-', 5, 4, '-', 7, 6, '-', 8, 9, '-', 10, 11, 12, 13, 14, 15 }; 
+static const unsigned char idMapBig[] =
+{ 0, 1, 2, 3, '-', 4, 5, '-', 6, 7, '-', 8, 9, '-', 10, 11, 12, 13, 14, 15 }; 
+static const unsigned char* guidMap;
 static const wchar_t digits[] = L"0123456789ABCDEF"; 
 
 #define GUIDSTRMAX 38 
 
 int StringFromGUID2(const GUID& guid, OMCHAR* buffer, int bufferSize) 
 {
+  if (hostByteOrder() == littleEndian) {
+    guidMap = &idMapLittle[0];
+  } else {
+    guidMap = &idMapBig[0];
+  }
   const unsigned char* ip = (const unsigned char*) &guid; // input pointer
   OMCHAR* op = buffer;                                    // output pointer
 
   *op++ = L'{'; 
  
-  for (size_t i = 0; i < sizeof(guidMap); i++) { 
+  for (size_t i = 0; i < sizeof(idMapLittle); i++) { 
 
     if (guidMap[i] == '-') { 
       *op++ = L'-'; 
