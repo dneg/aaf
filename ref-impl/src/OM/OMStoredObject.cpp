@@ -1679,6 +1679,30 @@ void OMStoredObject::closeStream(IStream*& stream)
 #endif
 }
 
+  // @mfunc The persisted value of <p property> is its name.
+  //        Write the property name and enter it into the property index.
+  //   @parm The property.
+  //   @parm TBS
+  //   @this const
+void OMStoredObject::saveName(const OMProperty& property, const wchar_t* name)
+{
+  TRACE("OMStoredObject::saveName");
+  ASSERT("Unimplemented code not reached", false);
+}
+
+  // @mfunc The persisted value of <p property> is its name.
+  //        Read (and check) the property name.
+  //   @parm The property.
+  //   @parm The expected property name.
+  //   @parm The (expected) size of the property name.
+void OMStoredObject::restoreName(OMProperty& property,
+                                 const wchar_t* name,
+                                 size_t size)
+{
+  TRACE("OMStoredObject::restoreName");
+  ASSERT("Unimplemented code not reached", false);
+}
+
 void OMStoredObject::mapCharacters(wchar_t* /* name */, size_t /* nameLength */)
 {
   TRACE("OMStoredObject::mapCharacters");
