@@ -35,14 +35,14 @@ AD_METHOD1(GetEditHint,
 
 AD_METHOD1(GetDatakind,
 		   [retval][out],
-		   AAFDatakind *,
-		   pDatakind,
-		   Pointer to a Datakind object,
-		   Returns the Datakind object of the control point.)
+		   AAFDataDefinition *,
+		   pDatadef,
+		   Pointer to a Data Definition object,
+		   Returns the Data Definition object of the control point.)
 
 AD_METHOD3(GetValue,
-		   [in],int32, valueSize, value size,
-		   [retval][out], pBytesRead, Pointer to actual bytes read, 
+		   [in],aafInt32, valueSize, value size,
+		   [retval][out], aafInt32 *,pBytesRead, Pointer to actual bytes read, 
 		   [retval][out],void *, pValue, Preallocated buffer to hold value,
 		   Returns the data value of the control point.)
 
@@ -54,12 +54,12 @@ AD_METHOD1(SetEditHint,
 		   [in],  aafEditHint_t, editHint,Control Point Edit hint,
 		   Sets the control point Edit hint value.)
 
-AD_METHOD1(SetDatakind,
-		   [in],  AAFDatakind *, datakind,Control Point datakind,
+AD_METHOD1(SetDataDefinition,
+		   [in],  AAFDataDefinition *, datadef,Control Point data definition,
 		   Sets the control point datakind value.)
 
 AD_METHOD2(SetValue,
-		   [in],int32, valueSize, value size,
+		   [in],aafInt32, valueSize, value size,
 		   [in],void *, pValue, Preallocated buffer to hold value,
 		   Sets the control point data value.)
 
