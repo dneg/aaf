@@ -27,6 +27,10 @@
 
 #include <map>
 
+// gcc3 complains that AxHrMap has a private destructor
+// and no friends.  This prevents the warning.
+class AxHrMapFriend_nonexistant;
+
 class AxHrMap {
 
 public:
@@ -37,6 +41,8 @@ public:
 	const AxString& getStr( HRESULT hr ) const;
 
 private:
+
+	friend class AxHrMapFriend_nonexistant;
 
 	AxHrMap();
 	AxHrMap( const AxHrMap& );
