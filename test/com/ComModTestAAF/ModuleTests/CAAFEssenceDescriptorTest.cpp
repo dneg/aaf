@@ -39,11 +39,6 @@
 
 #include "CAAFBuiltinDefs.h"
 
-static const 	aafMobID_t	TEST_MobID =
-{{0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00},
-0x13, 0x00, 0x00, 0x00,
-{0x9cb4ad10, 0x03fe, 0x11d4, 0x8e, 0x3d, 0x00, 0x90, 0x27, 0xdf, 0xca, 0x7c}};
-
 // Cross-platform utility to delete a file.
 static void RemoveTestFile(const wchar_t* pFileName)
 {
@@ -82,7 +77,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFMob						*pMob = NULL;
 	IAAFEssenceDescriptor 		*edesc = NULL;
 	IEnumAAFLocators			*pEnumLocators = NULL;
-	aafRational_t	audioRate = { 44100, 1 };
 	aafProductIdentification_t	ProductInfo;
 	aafMobID_t					newMobID;
 	aafUInt32					numLocators, numLocators2;
@@ -220,7 +214,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		if (edesc->PrependLocator(NULL) != AAFRESULT_NULL_PARAM)
 			localhr = AAFRESULT_TEST_FAILED;		
 
-		for (i; i<=20; i++)
+		for (; i<=20; i++)
 		{
 			// Make a concrete subclass of locator, and attach it to
 			// the EssenceDescriptor
