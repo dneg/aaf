@@ -162,6 +162,9 @@
 				RelativePath="..\..\..\ref-impl\src\OM\OMFile.cpp">
 			</File>
 			<File
+				RelativePath="..\..\..\ref-impl\src\OM\OMGSFxMSSStoredObjectFactory.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\ref-impl\src\OM\OMIOStream.cpp">
 			</File>
 			<File
@@ -187,6 +190,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\ref-impl\src\OM\OMMSStructuredStorage.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\ref-impl\src\OM\OMMSxMSSStoredObjectFactory.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\ref-impl\src\OM\OMMappedFileRawStorage.cpp">
@@ -249,13 +255,10 @@
 				RelativePath="..\..\..\ref-impl\src\OM\OMSSSStorageRWInputSource.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\ref-impl\src\OM\OMSSSStoredObject.cpp">
+				RelativePath="..\..\..\ref-impl\src\OM\OMSSSStructuredStorage.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\ref-impl\src\OM\OMSSSStoredObjectFactory.cpp">
-			</File>
-			<File
-				RelativePath="..\..\..\ref-impl\src\OM\OMSSSStoredStream.cpp">
+				RelativePath="..\..\..\ref-impl\src\OM\OMSSxMSSStoredObjectFactory.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\ref-impl\src\OM\OMStackTrace.cpp">
@@ -421,6 +424,9 @@
 				RelativePath="..\..\..\ref-impl\src\OM\OMFixedSizePropertyT.h">
 			</File>
 			<File
+				RelativePath="..\..\..\ref-impl\include\OM\OMGSFxMSSStoredObjectFactory.h">
+			</File>
+			<File
 				RelativePath="..\..\..\ref-impl\include\OM\OMIOStream.h">
 			</File>
 			<File
@@ -464,6 +470,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\ref-impl\src\OM\OMMSStructuredStorage.h">
+			</File>
+			<File
+				RelativePath="..\..\..\ref-impl\include\OM\OMMSxMSSStoredObjectFactory.h">
 			</File>
 			<File
 				RelativePath="..\..\..\ref-impl\include\OM\OMMappedFileRawStorage.h">
@@ -578,6 +587,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\ref-impl\src\OM\OMRootStorable.h">
+			</File>
+			<File
+				RelativePath="..\..\..\ref-impl\include\OM\OMSSxMSSStoredObjectFactory.h">
 			</File>
 			<File
 				RelativePath="..\..\..\ref-impl\include\OM\OMSet.h">
