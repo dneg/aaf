@@ -213,14 +213,6 @@ SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFHeaderTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFHTMLClipTest.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFHTMLDescriptorTest.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFIdentificationTest.cpp
 # End Source File
 # Begin Source File
@@ -354,10 +346,6 @@ SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFTaggedValueTest.cpp
 # Begin Source File
 
 SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFTapeDescriptorTest.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFTextClipTest.cpp
 # End Source File
 # Begin Source File
 
