@@ -388,6 +388,18 @@ SOURCE="..\..\..\ref-impl\src\com-api\CAAFStreamPropertyValue.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFStrongRefArrayValue.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFStrongRefSetValue.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFStrongRefValue.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFTaggedValue.cpp"
 # End Source File
 # Begin Source File
@@ -505,6 +517,18 @@ SOURCE="..\..\..\ref-impl\src\com-api\CAAFVaryingValue.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFWAVEDescriptor.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFWeakRefArrayValue.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFWeakRefSetValue.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFWeakRefValue.cpp"
 # End Source File
 # Begin Source File
 
