@@ -71,6 +71,10 @@ function trim(s, n) {
   return substr(s, n + 1, length(s) - n);
 }
 
+function rowcolor(files) {
+  return "#FFCCCC";
+}
+
 function entry(entrytext) {
 #  printf("<!--[%s]-->\n", entrytext);
   gsub("\t", " ", entrytext);
@@ -112,6 +116,8 @@ function entry(entrytext) {
   for (i = cs + 1; i <= f; i++) {
     comments = comments ":" fields[i]
   }
+
+  color = rowcolor(files);
 
 #  printf("<!--[dir      = \"%s\"]-->\n", dir);
 #  printf("<!--[files    = \"%s\"]-->\n", files);
