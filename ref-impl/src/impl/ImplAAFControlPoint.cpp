@@ -196,6 +196,7 @@ AAFRESULT STDMETHODCALLTYPE
 {
 	ImplAAFHeader		*head = NULL;
 	ImplAAFDictionary	*dict =  NULL;
+	aafUID_t			typeID;
 
 	if(ppTypeDef == NULL)
 		return AAFRESULT_NULL_PARAM;
@@ -204,7 +205,8 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 		CHECK(MyHeadObject(&head));
 		CHECK(head->GetDictionary(&dict));
-		CHECK(dict->LookupType(&_type, ppTypeDef) == AAFRESULT_SUCCESS);
+		typeID = _type;
+		CHECK(dict->LookupType(&typeID, ppTypeDef));
 		(*ppTypeDef)->AcquireReference();
 		head->ReleaseReference();
 		head = NULL;
