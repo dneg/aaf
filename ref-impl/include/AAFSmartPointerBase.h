@@ -132,7 +132,7 @@ struct AAFSmartPointerBase : public RefCountType
  
   // Allows passing this smart ptr as argument to methods which expect
   // a ReferencedType* (non-const and const)
-  operator ReferencedType * ();
+  //operator ReferencedType * ();
   operator ReferencedType * () const;
  
   // member access operators (non-const and const)
@@ -243,7 +243,7 @@ operator & ()
   return &_rep;
 }
 
-
+/*
 template <typename ReferencedType, typename RefCountType>
 AAFSmartPointerBase<ReferencedType, RefCountType>::
 operator ReferencedType* ()
@@ -252,7 +252,7 @@ operator ReferencedType* ()
 
   updateRefCounts ();
   return _rep;
-}
+}*/
 
 
 template <typename ReferencedType, typename RefCountType>
