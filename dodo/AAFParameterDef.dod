@@ -8,7 +8,6 @@ AAFDefinitionObject\
 #c
 AD_HEAD
 
-AD_INCLUDE(AAFTypes)
 AD_FORWARD_DECLARATION(AAFReferenceValue)
 AD_FORWARD_DECLARATION(EnumAAFReferenceValues)
 
@@ -70,7 +69,7 @@ AD_METHOD1(SetDisplayUnits,
 		   Sets the display units of the control code definition.)
 
 AD_XMETHOD1(AppendRefValue,
-			[in\,ref],
+			[in],
 			objIn,
 			AAFReferenceValue,
 			pRefValue, 
@@ -78,7 +77,7 @@ AD_XMETHOD1(AppendRefValue,
 			Add the reference value  to the ref value list.)
 
 AD_XMETHOD1(RemoveRefValue,
-			[in\,ref],
+			[in],
 			objIn,
 			AAFReferenceValue,
 			pRefValue, 
