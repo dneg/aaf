@@ -23,6 +23,9 @@
 // Licensor of the AAF Association is Avid Technology.
 // All rights reserved.
 //
+// Portions created by British Broadcasting Corporation are
+// Copyright 2004, British Broadcasting Corporation.  All rights reserved.
+//
 //=---------------------------------------------------------------------=
 
 
