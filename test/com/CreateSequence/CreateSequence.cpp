@@ -137,6 +137,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, long int N)
 	IAAFSequence*				pSequence = NULL;
 	IAAFComponent*				aComponent = NULL;
 	IAAFFileDescriptor*			pFileDesc = NULL;
+	IAAFAIFCDescriptor*			pAIFCDesc = NULL;
 	IAAFTapeDescriptor*			pTapeDesc = NULL;
 	IAAFTimelineMobSlot*		newSlot = NULL;
 	IAAFSegment*				seg = NULL;
@@ -150,7 +151,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, long int N)
 	IAAFClassDef *              pCDSequence = 0;
 	IAAFClassDef *              pCDSourceMob = 0;
 	IAAFClassDef *              pCDTapeDescriptor = 0;
-	IAAFClassDef *              pCDHTMLDescriptor = 0;
+	IAAFClassDef *              pCDAIFCDescriptor = 0;
 	IAAFClassDef *              pCDNetworkLocator = 0;
 	IAAFClassDef *              pCDMasterMob = 0;
 	IAAFClassDef *              pCDSourceClip = 0;
@@ -201,8 +202,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, long int N)
 									  &pCDSourceMob));
 	check(pDictionary->LookupClassDef(AUID_AAFTapeDescriptor,
 									  &pCDTapeDescriptor));
-	check(pDictionary->LookupClassDef(AUID_AAFHTMLDescriptor,
-									  &pCDHTMLDescriptor));
+	check(pDictionary->LookupClassDef(AUID_AAFAIFCDescriptor,
+									  &pCDAIFCDescriptor));
 	check(pDictionary->LookupClassDef(AUID_AAFNetworkLocator,
 									  &pCDNetworkLocator));
 	check(pDictionary->LookupClassDef(AUID_AAFMasterMob,
@@ -288,10 +289,14 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, long int N)
 		check(pCDSourceMob->
 			  CreateInstance(IID_IAAFSourceMob, 
 							 (IUnknown **)&pFileMob));
-		check(pCDHTMLDescriptor->
+		check(pCDAIFCDescriptor->
 			  CreateInstance(IID_IAAFFileDescriptor, 
 							 (IUnknown **)&pFileDesc));
 		check(pFileDesc->QueryInterface (IID_IAAFEssenceDescriptor, (void **)&aDesc));
+		check(pFileDesc->QueryInterface (IID_IAAFAIFCDescriptor, (void **)&pAIFCDesc));
+		check(pAIFCDesc->SetSummary (5, (unsigned char*)"TEST"));
+		pAIFCDesc->Release();
+		pAIFCDesc = NULL;
 
 		// Make a locator, and attach it to the EssenceDescriptor
 		check(pCDNetworkLocator->
@@ -485,10 +490,10 @@ cleanup:
 		pCDTapeDescriptor = 0;
 	  }
 
-	if (pCDHTMLDescriptor)
+	if (pCDAIFCDescriptor)
 	  {
-		pCDHTMLDescriptor->Release();
-		pCDHTMLDescriptor = 0;
+		pCDAIFCDescriptor->Release();
+		pCDAIFCDescriptor = 0;
 	  }
 
 	if (pCDNetworkLocator)
