@@ -74,6 +74,16 @@
 #include <errno.h>
 #include <string.h>
 
+// Determine host operating system.
+//
+#if defined(_WIN32)
+#define OM_OS_WINDOWS
+#elif defined(_MAC) || defined(macintosh)
+#define OM_OS_MACOS
+#elif defined(__sgi) || defined(__linux__) || defined (__FreeBSD__)
+#define OM_OS_UNIX
+#endif
+
 #if defined(_MAC) || defined(macintosh)
 #if !defined(USE_DATAINPUT)
 #include <console.h>
@@ -866,9 +876,9 @@ Dumper dumper;
 char* baseName(char* fullName)
 {
   char* result;
-#if defined(WIN32)
+#if defined(OM_OS_WINDOWS)
   const int delimiter = '\\';
-#elif defined(_MAC) || defined(macintosh)
+#elif defined(OM_OS_MACOS)
   const int delimiter = ':';
 #else
   const int delimiter = '/';
@@ -959,7 +969,7 @@ const char* byteOrder(ByteOrder bo)
 
 void formatError(DWORD errorCode)
 {
-#if defined(_WIN32) || defined(WIN32)
+#if defined(OM_OS_WINDOWS)
   OMCHAR buffer[256];
   int status = FormatMessage(
     FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
@@ -3944,7 +3954,7 @@ int main(int argumentCount, char* argumentVector[])
 {
   checkSizes();
 
-#if defined(_MAC) || defined(macintosh)
+#if defined(OM_OS_MACOS)
 #if defined(USECONSOLE)
   argumentCount = ccommand(&argumentVector); // console window for mac
 #endif
