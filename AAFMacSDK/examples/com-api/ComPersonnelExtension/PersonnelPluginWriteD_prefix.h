@@ -71,7 +71,7 @@
 
 
 // AAF OM symbols
-//#define OM_ENABLE_DEBUG
+//#define OM_DEBUG
 //#define OM_TRACE
 
 // Define "debug" symbol for compatibility with WIN32.

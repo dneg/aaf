@@ -77,7 +77,7 @@
 
 
 // AAF OM symbols
-//#define OM_ENABLE_DEBUG
+//#define OM_DEBUG
 //#define OM_TRACE
 
 #define BOB_TEST

@@ -547,7 +547,7 @@ private:
   OMByteOrder _byteOrder;
   bool _reorderBytes;
 
-#if defined(OM_ENABLE_DEBUG)
+#if defined(OM_DEBUG)
   static void incrementOpenStreamCount(void);
   static void decrementOpenStreamCount(void);
   static void incrementOpenStorageCount(void);

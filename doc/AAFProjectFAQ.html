@@ -629,7 +629,7 @@ Linux and Irix are included.
 <P> <a name="#OMdebug"></a>Why does the Object Manager (ref-impl/src/OM and ref-impl/include/OM) 
   depend on &lt;iostream.h&gt; ?</P>
 The release build does not. The debug build does. The default configuration for 
-the debug build defines OM_ENABLE_DEBUG which enables run-time assertion checking. 
+the debug build defines OM_DEBUG which enables run-time assertion checking. 
 If an assertion fails information about the failing assertion is written to "omlog" 
 an instance of class OMOStream. The distributed version of OMOStream is implemented 
 using &lt;iostream.h&gt; (only four functions in OMOStream.cpp). If you don't 

@@ -254,7 +254,7 @@ bool OMStrongReferenceSetElement::operator== (
   ASSERT("Consistent",
                       IMPLIES(result, _referenceCount == rhs._referenceCount));
 
-#if defined (OM_ENABLE_DEBUG)
+#if defined (OM_DEBUG)
   bool check = OMStrongReferenceVectorElement::operator==(rhs);
 #endif
   ASSERT("Consistent", IMPLIES(result, check));

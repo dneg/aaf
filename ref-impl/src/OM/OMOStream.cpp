@@ -20,7 +20,7 @@
 //
 //=---------------------------------------------------------------------=
 
-#if defined(OM_ENABLE_DEBUG)
+#if defined(OM_DEBUG)
 
 // @doc OMINTERNAL
 // @author Tim Bingham | tjb | Avid Technology, Inc. | OMOStream

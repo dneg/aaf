@@ -74,7 +74,7 @@ static void convert(char* cName, size_t length, const wchar_t* name);
 
 static void check(HRESULT status);
 
-#if defined(OM_ENABLE_DEBUG)
+#if defined(OM_DEBUG)
 void OMMSSStoredObject::incrementOpenStreamCount(void)
 {
   TRACE("OMMSSStoredObject::incrementOpenStreamCount");
@@ -588,7 +588,7 @@ void OMMSSStoredObject::save(const OMStrongReferenceVector& vector)
     //
     index->insert(position, element.localKey());
 
-#if defined(OM_ENABLE_DEBUG)
+#if defined(OM_DEBUG)
     wchar_t* name = elementName(vector.name(),
                                 vector.propertyId(),
                                 element.localKey());
@@ -654,7 +654,7 @@ void OMMSSStoredObject::save(const OMStrongReferenceSet& set)
                   element.referenceCount(),
                   key);
 
-#if defined(OM_ENABLE_DEBUG)
+#if defined(OM_DEBUG)
     wchar_t* name = elementName(set.name(),
                                 set.propertyId(),
                                 element.localKey());
@@ -2492,14 +2492,14 @@ void OMMSSStoredObject::closeStream(IStream*& stream)
   TRACE("OMMSSStoredObject::closeStream");
   PRECONDITION("Valid stream", stream != 0);
 
-#if defined(OM_ENABLE_DEBUG)
+#if defined(OM_DEBUG)
   HRESULT status = stream->Release();
   ASSERT("Reference count is 0.", status == 0);
 #else
   stream->Release();
 #endif
   stream = 0;
-#if defined(OM_ENABLE_DEBUG)
+#if defined(OM_DEBUG)
   decrementOpenStreamCount();
 #endif
 }
@@ -2672,7 +2672,7 @@ OMMSSStoredObject* OMMSSStoredObject::openFile(const wchar_t* fileName,
     &storage);
   check(status);
   ASSERT("StgOpenStorage() succeeded", SUCCEEDED(status));
-#if defined(OM_ENABLE_DEBUG)
+#if defined(OM_DEBUG)
   incrementOpenStorageCount();
 #endif
 
@@ -2699,7 +2699,7 @@ OMMSSStoredObject* OMMSSStoredObject::createFile(const wchar_t* fileName)
     &storage);
   check(status);
   ASSERT("StgCreateDocfile() succeeded", SUCCEEDED(status));
-#if defined(OM_ENABLE_DEBUG)
+#if defined(OM_DEBUG)
   incrementOpenStorageCount();
 #endif
 
@@ -2738,7 +2738,7 @@ OMMSSStoredObject* OMMSSStoredObject::openFile(OMRawStorage* rawStorage,
     &storage);
   check(status);
   ASSERT("StgOpenStorageOnILockBytes() succeeded", SUCCEEDED(status));
-#if defined(OM_ENABLE_DEBUG)
+#if defined(OM_DEBUG)
   incrementOpenStorageCount();
 #endif
 
@@ -2766,7 +2766,7 @@ OMMSSStoredObject* OMMSSStoredObject::createFile(OMRawStorage* rawStorage)
     &storage);
   check(status);
   ASSERT("StgCreateDocfileOnILockBytes() succeeded", SUCCEEDED(status));
-#if defined(OM_ENABLE_DEBUG)
+#if defined(OM_DEBUG)
   incrementOpenStorageCount();
 #endif
 
@@ -2946,7 +2946,7 @@ IStream* OMMSSStoredObject::createStream(IStorage* storage,
     &stream);
   check(status);
   ASSERT("IStorage::CreateStream() succeeded", SUCCEEDED(status));
-#if defined(OM_ENABLE_DEBUG)
+#if defined(OM_DEBUG)
   incrementOpenStreamCount();
 #endif
 
@@ -2979,7 +2979,7 @@ IStream* OMMSSStoredObject::openStream(IStorage* storage,
     &stream);
   check(status);
   ASSERT("IStorage::OpenStream() succeeded", SUCCEEDED(status));
-#if defined(OM_ENABLE_DEBUG)
+#if defined(OM_DEBUG)
   incrementOpenStreamCount();
 #endif
 
@@ -3010,7 +3010,7 @@ IStorage* OMMSSStoredObject::createStorage(IStorage* storage,
     &newStorage);
   check(status);
   ASSERT("IStorage::CreateStorage() succeeded", SUCCEEDED(status));
-#if defined(OM_ENABLE_DEBUG)
+#if defined(OM_DEBUG)
   incrementOpenStorageCount();
 #endif
 
@@ -3047,7 +3047,7 @@ IStorage* OMMSSStoredObject::openStorage(IStorage* storage,
     &newStorage);
   check(status);
   ASSERT("IStorage::OpenStorage() succeeded", SUCCEEDED(status));
-#if defined(OM_ENABLE_DEBUG)
+#if defined(OM_DEBUG)
   incrementOpenStorageCount();
 #endif
 
@@ -3059,14 +3059,14 @@ void OMMSSStoredObject::closeStorage(IStorage*& storage)
   TRACE("closeStorage");
   PRECONDITION("Valid storage", storage != 0);
 
-#if defined(OM_ENABLE_DEBUG)
+#if defined(OM_DEBUG)
   HRESULT status = storage->Release();
   ASSERT("Reference count is 0.", status == 0);
 #else
   storage->Release();
 #endif
   storage = 0;
-#if defined(OM_ENABLE_DEBUG)
+#if defined(OM_DEBUG)
   decrementOpenStorageCount();
 #endif
 }

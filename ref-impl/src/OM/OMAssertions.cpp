@@ -25,7 +25,7 @@
 
 #include "OMAssertions.h"
 
-#if defined (OM_ENABLE_DEBUG)
+#if defined (OM_DEBUG)
 
 #include <ctype.h>
 
@@ -124,7 +124,7 @@ void obsolete(const char* routineName, const char* newRoutineName)
 
 #endif
 
-#if defined(OM_ENABLE_DEBUG)
+#if defined(OM_DEBUG)
 
 void checkTypes(void)
 {

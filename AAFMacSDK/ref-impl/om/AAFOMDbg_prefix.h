@@ -39,4 +39,4 @@
 
 // Object Manager specific definitions
 //
-#define OM_ENABLE_DEBUG
+#define OM_DEBUG

@@ -160,7 +160,7 @@ void OMMSSStoredStream::close(void)
   TRACE("OMMSSStoredStream::close");
   PRECONDITION("Valid stream", _stream != 0);
 
-#if defined(OM_ENABLE_DEBUG)
+#if defined(OM_DEBUG)
   HRESULT status = _stream->Release();
   ASSERT("Reference count is 0.", status == 0);
 #else

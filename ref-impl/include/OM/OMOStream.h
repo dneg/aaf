@@ -24,7 +24,7 @@
 #ifndef OMOSTREAM_H
 #define OMOSTREAM_H
 
-#if defined(OM_ENABLE_DEBUG)
+#if defined(OM_DEBUG)
 
 #include "OMDataTypes.h"
 

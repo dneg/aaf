@@ -55,7 +55,7 @@ public:
   //   @parm The name not to define.
 #define NNAME(name)
 
-#if defined (OM_ENABLE_DEBUG)
+#if defined (OM_DEBUG)
 
 #include "OMDataTypes.h"
 
@@ -115,7 +115,7 @@ void checkTypes(void);
 void trace(const char* routineName);
 
   // @func Print routine tracing information (when enabled with
-  //       OM_ENABLE_DEBUG and OM_TRACE). The routine name
+  //       OM_DEBUG and OM_TRACE). The routine name
   //       provided is used by other assertions.
   //   @parm The routine name. For the most explicit output, names of
   //         member functions should be prefixed with the class name,
@@ -143,7 +143,7 @@ inline void noTrace(const char* NNAME(routine)) {}
   //   @parm The name of the routine that should be called instead.
 void obsolete(const char* routineName, const char* newRoutineName);
 
-  // @func Print a message (when enabled with OM_ENABLE_DEBUG and
+  // @func Print a message (when enabled with OM_DEBUG and
   //       OM_OBSOLETE) indicating that the current routine
   //       is obsolete and that <p newRoutineName> should be used instead.
   //       OBSOLETE is provided to aid clients in migrating from one
@@ -159,7 +159,7 @@ void obsolete(const char* routineName, const char* newRoutineName);
 
 #endif
 
-  // @func Assert (when enabled with OM_ENABLE_DEBUG) that the
+  // @func Assert (when enabled with OM_DEBUG) that the
   //       precondition described by <p name> and <p expression> is
   //       true. An invocation of this macro must be preceeded by an
   //       invocation of the <f TRACE> macro.
@@ -177,7 +177,7 @@ void obsolete(const char* routineName, const char* newRoutineName);
     : reportAssertionViolation("Precondition", name, #expression, \
                                currentRoutineName, __FILE__, __LINE__)
 
-  // @func Assert (when enabled with OM_ENABLE_DEBUG) that the
+  // @func Assert (when enabled with OM_DEBUG) that the
   //       postcondition described by <p name> and <p expression> is
   //       true. An invocation of this macro must be preceeded by an
   //       invocation of the <f TRACE> macro.
@@ -195,7 +195,7 @@ void obsolete(const char* routineName, const char* newRoutineName);
     : reportAssertionViolation("Postcondition", name, #expression, \
                                currentRoutineName, __FILE__, __LINE__)
 
-  // @func Assert (when enabled with OM_ENABLE_DEBUG) that the
+  // @func Assert (when enabled with OM_DEBUG) that the
   //       condition described by <p name> and <p expression> is
   //       true. An invocation of this macro must be preceeded by an
   //       invocation of the <f TRACE> macro.
@@ -213,7 +213,7 @@ void obsolete(const char* routineName, const char* newRoutineName);
     : reportAssertionViolation("Assertion",    name, #expression, \
                                currentRoutineName, __FILE__, __LINE__)
 
-  // @func Assert (when enabled with OM_ENABLE_DEBUG) that the
+  // @func Assert (when enabled with OM_DEBUG) that the
   //       invariant for the class of the current object is true.
 #define INVARIANT() \
   checkInvariant();
