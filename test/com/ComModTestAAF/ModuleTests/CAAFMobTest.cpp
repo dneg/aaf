@@ -200,11 +200,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
   try
 	{
-	  cout << "Removing test file\n";
 	  // Remove the previous test file if any.
 	  RemoveTestFile(pFileName);
 
-	  cout << "Creating test file\n";
 	  // Create the file.
 	  checkResult(AAFFileOpenNewModify(pFileName, 0, &ProductInfo, &pFile));
 	  bFileOpen = true;
@@ -220,7 +218,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	  //Make the first mob
 	  long	test;
 
-	  cout << "Creating first mob\n";
 	  // Create a concrete subclass of Mob
 	  checkResult(defs.cdMasterMob()->
 				  CreateInstance(IID_IAAFMob, 
@@ -238,7 +235,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	  // Add some slots
 	  for(test = 1; test < 6; test++)
 		{
- 			cout << "Adding some slots" << test << "\n";
 		  checkResult(defs.cdSourceClip()->
 					  CreateInstance(IID_IAAFSourceClip, 
 									 (IUnknown **)&sclp));		
@@ -306,7 +302,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		  pSourceRef = NULL;
 		}
 
-  			cout << "Prepend Slot\n";
 		// PrependSlot
  		checkResult(defs.cdStaticMobSlot()->
 					  CreateInstance(IID_IAAFMobSlot, 
@@ -337,7 +332,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		filler->Release();
 		filler = NULL;
 
-  			cout << "Append Slot\n";
 		// AppendSlot
  		checkResult(defs.cdStaticMobSlot()->
 					  CreateInstance(IID_IAAFMobSlot, 
@@ -368,7 +362,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		filler->Release();
 		filler = NULL;
 
-  			cout << "InsertSlotAt\n";
  		// InsertSlotAt -- insert a timecode object for OffsetToMobTimecode() testing
 		timecode.startFrame = TCstartFrame;	// One hour
 		timecode.drop = TCdrop;
@@ -406,14 +399,12 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		pTimecode->Release();
 		pTimecode = NULL;
 		
-  			cout << "CountKLVData\n";
 		// Try CountKLVData before any have been attached
 		numFound = 1;
 		checkResult(pMob->CountKLVData(&numFound));
 		checkExpression(numFound == 0, AAFRESULT_TEST_FAILED);
 		checkExpression(pMob->CountKLVData(NULL) == AAFRESULT_NULL_PARAM,
 		  												AAFRESULT_TEST_FAILED);		  
-  			cout << "AppendKLVData\n";
 		// AppendKLVData - attach some objects
 		checkResult(pDictionary->LookupTypeDef (kAAFTypeID_UInt8Array, &pBaseType));
 		checkResult(pDictionary->RegisterKLVDataKey(TEST_KLV, pBaseType));
@@ -440,7 +431,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkExpression(pMob->AppendKLVData(pKLVData) == AAFRESULT_OBJECT_ALREADY_ATTACHED,
 		  														AAFRESULT_TEST_FAILED);		  
 		  												
-  			cout << "RemoveKLVData\n";
 		// RemoveKLVData - remove object #2
 		checkExpression(pMob->RemoveKLVData(NULL) == AAFRESULT_NULL_PARAM,
 		  												AAFRESULT_TEST_FAILED);		  
@@ -452,7 +442,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		pKLVData->Release();
 		pKLVData = NULL;
  		  
-   			cout << "Try removing an object that is not attached\n";
 		// Try removing an object that is not attached
  		checkResult(defs.cdKLVData()->
 					  CreateInstance(IID_IAAFKLVData, 
@@ -496,7 +485,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pMob->GetComments(&enumTaggedVal));
 		for (i = 0; i < 5; ++i)
 		{						
-  			cout << "Check GetComments" << i << "\n";
 			checkResult(enumTaggedVal->NextOne(&taggedVal));
 			
 			checkResult(taggedVal->GetNameBufLen(&bufLen));
@@ -554,7 +542,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	  // Add the mob to the file.
 	  checkResult(pHeader->AddMob(pMob));
 
-	  cout << "Create another Mob, check mob count, then delete and recheck count\n";
 	  // Create another Mob, check mob count, then delete and recheck count
 	  checkResult(defs.cdMasterMob()->
 				  CreateInstance(IID_IAAFMob, 
@@ -573,7 +560,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	  checkResult(pHeader->CountMobs(kAAFAllMob, &numMobs));
 	  checkExpression(numMobs == 1, AAFRESULT_TEST_FAILED);
 
-	  cout << "try Copy() ... it is not implemented\n";
 	  //try Copy() ... it is not implemented
 	  const aafCharacter *copy_name = L"Name of Copied Mob";
 	  IAAFMobSP spCopiedMob;
@@ -581,7 +567,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	  checkExpression(hr == AAFRESULT_NOT_IMPLEMENTED, AAFRESULT_TEST_FAILED);
 	  hr = AAFRESULT_SUCCESS; //move on
 
-	  cout << "try CloneExternal() ... it is not implemented\n";
 	  //try CloneExternal ... it is not implemented
 	  IAAFMobSP spClonedMob;
 	  IAAFFileSP spDestFile;
@@ -591,11 +576,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	  checkResult(AAFFileOpenNewModify(dest_filename, 0, &ProductInfo, &spDestFile));
 	  hr = pMob->CloneExternal(kAAFNoFollowDepend, kAAFNoIncludeMedia, spDestFile, &spClonedMob);
 	  checkExpression(hr == AAFRESULT_NOT_IMPLEMENTED, AAFRESULT_TEST_FAILED);
-	  cout << "before destFile->Close()\n";
 	  spDestFile->Close();
-	  cout << "before RemoveTestFile()\n";
 	  RemoveTestFile(dest_filename);
-	  cout << "at the end\n";
 	  hr = AAFRESULT_SUCCESS; //move on
 
 	}
@@ -689,7 +671,6 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 
   try
 	{
-	  cout << "Before open read\n";
 	  // Open the file
 	  checkResult(AAFFileOpenExistingRead(pFileName, 0, &pFile));
 	  bFileOpen = true;
@@ -700,7 +681,6 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
  	  CAAFBuiltinDefs defs (pDictionary);
 
 
-	  cout << "Before CountMobs\n";
 	  checkResult(pHeader->CountMobs(kAAFAllMob, &numMobs));
 	  checkExpression(1 == numMobs, AAFRESULT_TEST_FAILED);
 
@@ -711,7 +691,6 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 
 	  for(n = 0; n < numMobs; n++)
 		{
-		cout << "Before checkin mob" << n <<"\n";
 		  aafWChar		name[500], slotName[500];
 		  aafNumSlots_t	numSlots;
 		  aafMobID_t		mobID;
@@ -773,7 +752,6 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 
 		  for(s = 0; s < numSlots; s++)
 			{
-	  cout << "Before checking slot(iter)" << s <<"\n";
 			  checkResult(slotIter->NextOne (&slot));
 			  checkResult(slot->GetNameBufLen(&bufLen));
 			  checkResult(slot->GetName (slotName, bufLen));
@@ -796,7 +774,6 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 														AAFRESULT_TEST_FAILED);
 			for (s = 0; s < numSlots; ++s)
 			{
-	  cout << "Before checking slot (get at)" << s <<"\n";
 				checkResult(aMob->GetSlotAt(s, &slot));
 				checkResult(slot->GetNameBufLen(&bufLen));
 				checkResult(slot->GetName(slotName, bufLen));
@@ -824,7 +801,6 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 				trackID = 0;
 			}			
 
-	  cout << "Before ChangeRef\n";
 		  // ChangeRef
 		  checkResult(aMob->ChangeRef(MOBTestID3, MOBTestID4));
 
@@ -849,7 +825,6 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 			  	pSourceRef = NULL;
 		  }
 
-	  cout << "try it again with a MobID it won't findf\n";
 		  // try it again with a MobID it won't find.  Make sure nothing changes
 		  checkResult(aMob->ChangeRef(MOBTestID3, MOBTestID2));
 
@@ -902,7 +877,6 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		  checkExpression(aMob->LookupSlot(0, NULL) == AAFRESULT_NULL_PARAM,
 													AAFRESULT_TEST_FAILED);
 					  												
-	  cout << "tOffsetToMobTimecode\n";
 		  // OffsetToMobTimecode
 		  // 7/5/00  - this method is broken so the tests that will 
 		  // make it fail have been commented out.  This module test 
@@ -953,20 +927,16 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		  pSegment->Release();
 		  pSegment = NULL;
 
-	  cout << "RegisterKLVData\n";
 		  // GetKLVData
 		  checkResult(pDictionary->LookupTypeDef (kAAFTypeID_UInt8Array, &pBaseType));
 		  checkResult(pDictionary->RegisterKLVDataKey(TEST_KLV, pBaseType));
 		  pBaseType->Release();
 		  pBaseType = NULL;
 
-	  cout << "CountKLVData\n";
 		  checkResult(aMob->CountKLVData(&numFound));
 		  checkExpression(numFound == 2, AAFRESULT_TEST_FAILED);
-	  cout << "GetKLVData\n";
 		  checkResult(aMob->GetKLVData(&klvEnum));
 		  
-	  cout << "NextOne(1)\n";
 		  checkResult(klvEnum->NextOne(&pKLVData));
 		  checkResult(pKLVData->GetValueBufLen(&bufLen));
 		  checkExpression(sizeof(KLVfrowney) == bufLen, AAFRESULT_TEST_FAILED);
@@ -977,7 +947,6 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		  pKLVData->Release();
 		  pKLVData = NULL;
 
-	  cout << "NextOne(2)\n";
 		  checkResult(klvEnum->NextOne(&pKLVData));
 		  checkResult(pKLVData->GetValueBufLen(&bufLen));
 		  checkExpression(sizeof(KLVsmiley) == bufLen, AAFRESULT_TEST_FAILED);
@@ -991,12 +960,10 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		  klvEnum->Release();
 		  klvEnum = NULL;
 
-	  cout << "GetKLVData(NULL)\n";
 		  checkExpression(aMob->GetKLVData(NULL) == AAFRESULT_NULL_PARAM,
 		  												AAFRESULT_TEST_FAILED);	  
 
 
-	  cout << "Check the comments\n";
 		  // Check the comments 
 		  checkResult(aMob->GetComments(&enumTaggedVal));
 		  for (i = 0; i < 5; ++i)
@@ -1024,7 +991,6 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		  aMob->Release();
 		  aMob = NULL;
 		}
-	  cout << "At the end\n";
 	}
   catch (HRESULT& rResult)
 	{
@@ -1072,14 +1038,12 @@ extern "C" HRESULT CAAFMob_test(testMode_t mode)
 		if(mode == kAAFUnitTestReadWrite)
 		{
 			hr = CreateAAFFile(pFileName);
-			cout << "Write phase returned" << hr;
 		}
 		else
 			hr = AAFRESULT_SUCCESS;
 		if(hr == AAFRESULT_SUCCESS)
 		{
 			hr = ReadAAFFile( pFileName );
-			cout << "Read phase returned" << hr;
 		}
 	}
 	catch (...)
