@@ -16,8 +16,10 @@ class OMStoredObject {
 public:
   OMStoredObject(IStorage* s);
 
-  static OMStoredObject* create(const char* fileName);
-  static OMStoredObject* open(const char* fileName);
+  static OMStoredObject* openRead(const char* fileName);
+  static OMStoredObject* openModify(const char* fileName);
+  static OMStoredObject* createModify(const char* fileName);
+
   OMStoredObject* openStoragePath(const char* storagePathName);
 
   void save(OMProperty* p);
@@ -33,8 +35,11 @@ public:
   OMStoredVectorIndex* restore(const char* vectorName);
 private:
 
+  static OMStoredObject* open(const char* fileName, const OMAccessMode mode);
+  static OMStoredObject* create(const char* fileName);
+
   void create(void);
-  void open(void);
+  void open(const OMAccessMode mode);
 
   void save(OMStoredPropertySetIndex *index);
   OMStoredPropertySetIndex* restore(void);
@@ -48,7 +53,9 @@ private:
   void readFromStream(IStream* stream, void* data, size_t size);
 
   IStorage* createStorage(IStorage* storage, const char* storageName);
-  IStorage* openStorage(IStorage* storage, const char* storageName);
+  IStorage* openStorage(IStorage* storage,
+                        const char* storageName,
+                        const OMAccessMode mode);
   void closeStorage(IStorage*& storage);
   size_t streamOffset(IStream* stream);
   void streamSeek(IStream* stream, size_t offset);
@@ -63,6 +70,7 @@ private:
   size_t _offset;
 
   bool _open;
+  OMAccessMode _mode;
 };
 
 #endif
