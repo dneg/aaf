@@ -5,6 +5,8 @@
 #include "OMTypes.h"
 
 class OMStoredPropertySetIndex {
+private:
+  struct IndexEntry;  
 public:
   
   OMStoredPropertySetIndex(size_t capacity);
@@ -12,8 +14,6 @@ public:
   ~OMStoredPropertySetIndex(void);
 
   void insert(OMPropertyId propertyId, int type, size_t offset, size_t length);
-  
-  struct IndexEntry;
   
   IndexEntry* find(OMPropertyId propertyId) const;
 

@@ -27,9 +27,11 @@ public:
   //
   OMStorable* create(const OMClassId& classId) const;
 
-protected:
+private:
 
   struct FactoryEntry;
+
+protected:
 
   // FactoryEntry for `classId' or null if not found.
   //
