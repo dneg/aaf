@@ -104,6 +104,10 @@ OMOStream omlog;
 // @devnote If your platform doesn't have iostream.h you'll need to
 //          implement the following functions differently.
 
+#if !defined(OM_OUTPUT_TO_DEBUGGER)
+
+// Diagnostic output to cerr
+
 #include <iostream.h>
 
   // @mfunc Put a character string.
@@ -167,4 +171,90 @@ OMOStream& OMOStream::putLine(void)
   cerr << endl;
   return *this;
 }
+
+#else
+
+// Diagnostic output to debugger (currently Windows only)
+
+#include <windows.h>
+
+#include <iostream.h>
+#if defined(OM_OS_WINDOWS)
+#include <strstrea.h>
+#else
+#include <strstream.h>
+#endif
+
+#include "OMUtilities.h"
+
+static void debugPrint(const char* string)
+{
+  wchar_t s[256];
+  convertStringToWideString(s, string, sizeof(s)/sizeof(s[0]));
+  OutputDebugString(s);
+}
+
+OMOStream& OMOStream::put(const char* string)
+{
+  debugPrint(string);
+  return *this;
+}
+
+OMOStream& OMOStream::put(OMUInt32 i)
+{
+  strstream s;
+  s << i << ends;
+  char* buffer = s.str();
+  debugPrint(buffer);
+  delete [] buffer;
+  return *this;
+}
+
+OMOStream& OMOStream::put(OMInt32 i)
+{
+  strstream s;
+  s << i << ends;
+  char* buffer = s.str();
+  debugPrint(buffer);
+  delete [] buffer;
+  return *this;
+}
+
+OMOStream& OMOStream::put(OMUInt16 i)
+{
+  strstream s;
+  s << i << ends;
+  char* buffer = s.str();
+  debugPrint(buffer);
+  delete [] buffer;
+  return *this;
+}
+
+OMOStream& OMOStream::put(OMInt16 i)
+{
+  strstream s;
+  s << i << ends;
+  char* buffer = s.str();
+  debugPrint(buffer);
+  delete [] buffer;
+  return *this;
+}
+
+OMOStream& OMOStream::put(void* p)
+{
+  strstream s;
+  s << p << ends;
+  char* buffer = s.str();
+  debugPrint(buffer);
+  delete [] buffer;
+  return *this;
+}
+
+OMOStream& OMOStream::putLine(void)
+{
+  debugPrint("\n");
+  return *this;
+}
+
+#endif
 
