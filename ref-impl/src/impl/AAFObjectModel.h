@@ -869,13 +869,31 @@ class TypeDefinitionWeakReference : public TypeDefinitionObjectReference
 public:
   TypeDefinitionWeakReference(aafCharacter_constptr name, 
                        aafUID_constptr id,
-                       aafUID_constptr targetId) :
-    TypeDefinitionObjectReference (name, id, targetId, true /*always concrete*/)
+                       aafUID_constptr targetId,
+                       aafUInt32 targetSetCount,
+                       aafUID_constptr * targetSet) :
+    TypeDefinitionObjectReference (name, id, targetId, true /*always concrete*/),
+    _targetSetCount(targetSetCount),
+    _targetSet(targetSet)
   {}
 
+  virtual void Initialize (void);
   virtual const ClassDefinition *classDefinition(void) const;
   virtual eAAFTypeCategory_e category(void) const { return kAAFTypeCatWeakObjRef; }
+
+  virtual void makeAxiomatic (void) const;
+
+  aafUInt32 targetSetCount(void) const { return _targetSetCount; }
+  aafUID_constptr targetAt(aafUInt32 index) const;
+  
+  
+private:
+  aafUInt32 _targetSetCount;
+  aafUID_constptr *_targetSet;
 };
+
+
+
 
 //
 // class for all of weak reference sets
