@@ -94,7 +94,7 @@ OMStrongReferenceSetProperty<UniqueIdentification,
   //
   size_t count = _set.count();
   size_t keySize = sizeof(UniqueIdentification);
-  ASSERT("Valid key size", keySize <= ~(OMKeySize)0);
+  ASSERT("Valid key size", keySize <= (OMKeySize)~0);
   OMStoredSetIndex* index = new OMStoredSetIndex(
                                               count,
                                               _keyPropertyId,

@@ -85,9 +85,9 @@ ReferencedObject* OMStrongReferenceProperty<ReferencedObject>::setValue(
 {
   TRACE("OMStrongReferenceProperty<ReferencedObject>::setValue");
 
+  ReferencedObject* result = _reference.setValue(object);
   setPresent();
-  return _reference.setValue(object);
-
+  return result;
 }
 
   // @mfunc Assignment operator.
