@@ -704,6 +704,7 @@ static void ignore(OMUInt32 pid);
 
 static void initializeCOM(void);
 static void finalizeCOM(void);
+void exitHandler(void);
 
 static char* readName(IStream* stream,
                       OMUInt32 nameOffset,
@@ -4138,11 +4139,11 @@ void finalizeCOM(void)
 #endif
 }
 
-bool _completed = false;
+bool completed = false;
 
-void _exitHandler(void)
+void exitHandler(void)
 {
-  if (!_completed) {
+  if (!completed) {
     cerr << programName << ": Dump incomplete because of errors."
          << endl;
   }
@@ -4156,7 +4157,7 @@ int main(int argumentCount, char* argumentVector[])
 #endif
 #endif
   programName = baseName(argumentVector[0]);
-  atexit(_exitHandler);
+  atexit(exitHandler);
   checkSizes();
 
   int fileCount = 0;
@@ -4317,7 +4318,7 @@ int main(int argumentCount, char* argumentVector[])
       } else if ((strcmp(opt, "-h") == 0) ||
                  (strcmp(opt, "--help") == 0)) {
         usage();
-        _completed = true;
+        completed = true;
         exit(EXIT_SUCCESS);
       } else {
         cerr << programName
@@ -4480,7 +4481,7 @@ int main(int argumentCount, char* argumentVector[])
   } else {
     result = EXIT_SUCCESS;
   }
-  _completed = true;
+  completed = true;
   return result;
 }
 
