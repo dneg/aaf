@@ -60,6 +60,14 @@ using namespace std;
 #include "OMFException.h"
 //#include "omcAvJPED.h"
 
+#ifdef _MSC_VER
+// For printf MSVC gives unpredictable behaviour for the %ll conversion
+// specifier so use the MSVC specific conversion specifier %I64.
+#define INT64FMT "I64"
+#else
+#define INT64FMT "ll"		// ISO C99
+#endif
+
 extern AafOmfGlobals* gpGlobals;
 
 static aafBool	EqualAUID(const aafUID_t *uid1, const aafUID_t *uid2)
@@ -1448,7 +1456,7 @@ void Aaf2Omf::ProcessComponent(IAAFComponent* pComponent,
 		{
 			printf("%sProcessing Timecode Clip of length: %ld\n ", gpGlobals->indentLeader, (int)length);
 			IncIndentLevel();
-			printf("%sstart Frame\t: %ld\n", gpGlobals->indentLeader, edgecode.startFrame);
+			printf("%sstart Frame\t: %"INT64FMT"d\n", gpGlobals->indentLeader, edgecode.startFrame);
 			DecIndentLevel();				
 		}
 		OMFError = omfiEdgecodeNew(OMFFileHdl, (omfLength_t)length, OMFEdgecode, pOMFSegment);		
@@ -1862,7 +1870,7 @@ void Aaf2Omf::ConvertSelector(IAAFSelector* pSelector,
 	pComponent->GetLength(&length);
 	
 	if (gpGlobals->bVerboseMode)
-		printf("%sProcessing Selector object of length = %ld\n", gpGlobals->indentLeader, length);
+		printf("%sProcessing Selector object of length = %"INT64FMT"d\n", gpGlobals->indentLeader, length);
 	
 	pComponent->Release();
 	pComponent = NULL;
@@ -1929,7 +1937,7 @@ void Aaf2Omf::ConvertNestedScope(IAAFNestedScope* pNest,
 	pComponent->GetLength(&length);
 
 	if (gpGlobals->bVerboseMode)
-		printf("%sProcessing Nest object of length = %ld\n", gpGlobals->indentLeader, length);
+		printf("%sProcessing Nest object of length = %"INT64FMT"d\n", gpGlobals->indentLeader, length);
 
 	rc = pNest->GetSegments (&pEnumSegments);
 	while(pEnumSegments->NextOne (&pSegment) == AAFRESULT_SUCCESS)
@@ -1980,7 +1988,7 @@ void Aaf2Omf::ConvertEssenceGroup(IAAFEssenceGroup* pGroup,
 	pComponent->GetLength(&length);
 
 	if (gpGlobals->bVerboseMode)
-		printf("%sProcessing EssenceGroup object of length = %ld\n", gpGlobals->indentLeader, length);
+		printf("%sProcessing EssenceGroup object of length = %"INT64FMT"d\n", gpGlobals->indentLeader, length);
 
 	rc = pGroup->CountChoices (&numChoices);
 	for(n = 0; n < numChoices; n++)
