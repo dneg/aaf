@@ -287,7 +287,7 @@ AAFRESULT STDMETHODCALLTYPE
 	//@comm Replaces omfiOperationGroupGetBypassOverride
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFOperationGroup::CountSourceSegments (aafInt32 *pNumSources)
+    ImplAAFOperationGroup::CountSourceSegments (aafUInt32 *pNumSources)
 {
    size_t numSlots;
 
@@ -304,7 +304,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFOperationGroup::CountParameters (aafInt32 * pNumParameters)
+    ImplAAFOperationGroup::CountParameters (aafUInt32 * pNumParameters)
 {
    size_t numSlots;
 
@@ -387,10 +387,17 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFOperationGroup::PrependInputSegment (ImplAAFSegment * value)
 {
-  if (! value)
-	return AAFRESULT_NULL_PARAM;
+  if(value == NULL)
+		return(AAFRESULT_NULL_PARAM);
 
-  return AAFRESULT_NOT_IN_CURRENT_VERSION;
+  // Make sure object is not already attached.
+  if (value->attached())
+    return AAFRESULT_OBJECT_ALREADY_ATTACHED;
+
+  _inputSegments.prependValue(value);
+  value->AcquireReference();
+
+  return AAFRESULT_SUCCESS;
 }
 
 
@@ -399,10 +406,25 @@ AAFRESULT STDMETHODCALLTYPE
       (aafUInt32 index,
 	   ImplAAFSegment * value)
 {
-  if (! value)
-	return AAFRESULT_NULL_PARAM;
+  if(value == NULL)
+		return(AAFRESULT_NULL_PARAM);
 
-  return AAFRESULT_NOT_IN_CURRENT_VERSION;
+  aafUInt32 count;
+  AAFRESULT ar;
+  ar = CountSourceSegments (&count);
+  if (AAFRESULT_FAILED (ar)) return ar;
+
+  if (index > (aafUInt32)count)
+    return AAFRESULT_BADINDEX;
+
+  // Make sure object is not already attached.
+  if (value->attached())
+    return AAFRESULT_OBJECT_ALREADY_ATTACHED;
+
+  _inputSegments.insertAt(value,index);
+  value->AcquireReference();
+
+  return AAFRESULT_SUCCESS;
 }
 
 
@@ -572,13 +594,13 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFOperationGroup::RemoveInputSegmentAt (aafUInt32  index)
 {
-	aafInt32 count;
+	aafUInt32 count;
 	AAFRESULT hr;
 	ImplAAFSegment	*pSeg;
 	
 	hr = CountSourceSegments (&count);
 	if (AAFRESULT_FAILED (hr)) return hr;
-	if (index >= (aafUInt32)count)
+	if (index >= count)
 		return AAFRESULT_BADINDEX;
 	
 	pSeg = _inputSegments.removeAt(index);

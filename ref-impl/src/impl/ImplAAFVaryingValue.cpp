@@ -193,13 +193,20 @@ AAFRESULT STDMETHODCALLTYPE
   if(! ppControlPoint) return(AAFRESULT_NULL_PARAM);
 
   aafUInt32 count;
-  AAFRESULT hr;
-  hr = CountControlPoints (& count);
-  if (AAFRESULT_FAILED (hr)) return hr;
+  AAFRESULT ar;
+  ar = CountControlPoints (& count);
+  if (AAFRESULT_FAILED (ar)) return ar;
   if (index >= count)
 	return AAFRESULT_BADINDEX;
 
-  return AAFRESULT_NOT_IN_CURRENT_VERSION;
+  ImplAAFControlPoint *pPoint;
+  _controlPoints.getValueAt(pPoint,index);
+
+  assert(pPoint);
+  pPoint->AcquireReference();
+  (*ppControlPoint)=pPoint;
+
+  return AAFRESULT_SUCCESS;
 }
 
 
