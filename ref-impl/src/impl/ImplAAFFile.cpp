@@ -482,6 +482,8 @@ ImplAAFFile::Save ()
 	  // save operation
 	  ImplAAFDictionarySP dictSP;
 	  AAFRESULT hr = _head->GetDictionary(&dictSP);
+	  if (AAFRESULT_FAILED (hr))
+		return hr;
 	  dictSP->AssureClassPropertyTypes ();
 	  bool regWasEnabled = dictSP->SetEnableDefRegistration (false);
 
