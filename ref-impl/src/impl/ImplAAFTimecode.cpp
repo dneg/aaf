@@ -42,7 +42,7 @@ ImplAAFTimecode::~ImplAAFTimecode ()
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFTimecode::InitTimecode (aafLength_t length,
+    ImplAAFTimecode::Initialize (aafLength_t length,
                            aafTimecode_t *timecode)
 {
 	aafUID_t	tcddef = DDEF_Timecode;
