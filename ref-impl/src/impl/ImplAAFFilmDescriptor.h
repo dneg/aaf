@@ -185,6 +185,12 @@ public:
         // @parm [in] Film Aspect Ratio
         (aafRational_t  aspectRatio);
 
+
+public:
+
+  virtual AAFRESULT	STDMETHODCALLTYPE
+		GetOwningMobKind (aafMobKind_t *pMobKind);
+
 private:
 	OMWideStringProperty				_manufacturer;
 	OMWideStringProperty				_model;
