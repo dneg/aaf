@@ -1,6 +1,6 @@
 /***********************************************************************
  *
- *              Copyright (c) 1998-1999 Avid Technology, Inc.
+ *              Copyright (c) 1998-2000 Avid Technology, Inc.
  *
  * Permission to use, copy and modify this software and accompanying 
  * documentation, and to distribute and sublicense application software
@@ -86,12 +86,20 @@
 #include "ImplAAFTypeDefWeakObjRef.h"
 #endif
 
+#ifndef __ImplAAFTypeDefStream_h__
+#include "ImplAAFTypeDefStream.h"
+#endif
+
 #ifndef __AAFStoredObjectIDs_h__
 #include "AAFStoredObjectIDs.h"
 #endif
 
 #ifndef __AAFClassDefUIDs_h__
 #include "AAFClassDefUIDs.h"
+#endif
+
+#ifndef __AAFTypeDefUIDs_h__
+#include "AAFTypeDefUIDs.h"
 #endif
 
 #include "ImplAAFBuiltinDefs.h"
@@ -923,6 +931,51 @@ static AAFRESULT CreateNewOpaqueType (const aafUID_t & idToCreate,
 }
 
 
+static AAFRESULT CreateNewStreamType (const aafUID_t & idToCreate,
+									ImplAAFDictionary * pDict,
+									ImplAAFTypeDef ** ppCreatedTypeDef)
+{
+  assert (pDict);
+  AAFRESULT hr = AAFRESULT_SUCCESS;
+  aafUInt32 index, count;
+  assert (ppCreatedTypeDef);
+
+  // Go through the list, attempting to identify the requested
+  // ID.
+  TypeStream * curStream = &s_AAFAllTypeStreams[0];
+  for (index = 0, count = (sizeof(s_AAFAllTypeStreams) / sizeof(TypeStream)); index < count; ++index)
+  {
+    // Check to see if the current ID matches the ID of the type
+    // def we want to create.
+    if (! memcmp (&idToCreate, curStream->typeID, sizeof (aafUID_t)))
+    {          
+      // Yes, this is the one.
+      ImplAAFTypeDefStream * ptd = 0;
+      hr = pDict->CreateMetaInstance (AUID_AAFTypeDefStream, (ImplAAFMetaDefinition **) &ptd);
+      if (AAFRESULT_FAILED (hr))
+        return hr;
+
+      hr = ptd->pvtInitialize (*curStream->typeID,
+                               curStream->typeName);
+      assert (AAFRESULT_SUCCEEDED (hr));
+      if (AAFRESULT_SUCCEEDED (hr))
+      {
+        *ppCreatedTypeDef = ptd; // refcount is 1.
+        ptd = NULL;
+      }
+      else
+      {
+        ptd->ReleaseReference ();
+      }
+      return hr;
+    }
+
+    curStream++;
+  }
+  return AAFRESULT_NO_MORE_OBJECTS;
+}
+
+
 static AAFRESULT CreateNewStrongRefType (const aafUID_t & idToCreate,
 									ImplAAFDictionary * pDict,
 									ImplAAFTypeDef ** ppCreatedTypeDef)
@@ -1347,6 +1400,11 @@ AAFRESULT ImplAAFBuiltinTypes::NewBuiltinTypeDef
   hr = CreateNewWeakRefVectorType (idToCreate,
 								   _dictionary,
 								   ppCreatedTypeDef);
+  if (AAFRESULT_SUCCEEDED (hr))	return hr;
+
+  hr = CreateNewStreamType (idToCreate,
+                            _dictionary,
+                            ppCreatedTypeDef);
   if (AAFRESULT_SUCCEEDED (hr))	return hr;
 
   // all known types failed

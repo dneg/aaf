@@ -93,6 +93,7 @@ HUMAN_TYPED_IMPL="\
 	AAFSourceMob \
 	AAFSourceReference \
 	AAFStaticMobSlot \
+	AAFStreamPropertyValue \
 	AAFTapeDescriptor \
 	AAFTaggedValue \
 	AAFTextClip \
