@@ -98,8 +98,8 @@ const CLSID CLSID_AAFWAVECodec = { 0x8D7B04B1, 0x95E1, 0x11d2, { 0x80, 0x89, 0x0
 // thru out the whole program.
 
 static aafSourceRef_t sourceRef; 
-
-static unsigned char smiley[] =        /* 16x16 smiley face */
+/*
+static unsigned char smiley[] =        // 16x16 smiley face 
   "      ****      "
   "    ********    "
   "   **********   "
@@ -116,6 +116,7 @@ static unsigned char smiley[] =        /* 16x16 smiley face */
   "   ****  ****   "
   "    ********    "
   "      ****      ";
+*/
 
 static aafBool	EqualAUID(aafUID_t *uid1, aafUID_t *uid2)
 {
@@ -174,6 +175,10 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	aafProductIdentification_t	ProductInfo;
 	aafRational_t				editRate = {44100, 1};
 	aafRational_t				sampleRate = {44100, 1};
+	FILE*						pWavFile = NULL;
+	unsigned char				dataBuff[4096];
+	size_t						bytesRead;
+
 
 	ProductInfo.companyName = L"AAF Developers Desk";
 	ProductInfo.productName = L"Make AVR Example";
@@ -251,10 +256,20 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 									sampleRate,		// sample rate
 									kSDKCompressionDisable));// Compress disabled
 
-	// write out the data (a smiley face)
-	check(pEssenceAccess->WriteRawData(	sizeof(smiley),			// Number of Samples
-										&smiley[0],	// THE Raw data
-										sizeof(smiley))); // buffer size
+	// open the Essence file to be included in this AAF file("Laser.wav")
+	pWavFile = fopen("Laser.wav", "r+b");
+	if (pWavFile)
+	{
+		// read in the essence data
+		bytesRead = fread(dataBuff, sizeof(unsigned char), sizeof(dataBuff), pWavFile);
+		// write out the data
+		check(pEssenceAccess->WriteRawData(	bytesRead,	// Number of Samples
+											dataBuff,	// THE Raw data
+											sizeof(dataBuff)));// buffer size
+
+		// close essence data file
+		fclose(pWavFile);
+	}
 
 
 	// Close the EssenceData
@@ -307,9 +322,12 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	aafSearchCrit_t				criteria;
 	aafUID_t					mobID;
 	aafWChar					namebuf[1204];
-	unsigned char				DataBuf[512];
-	aafUInt32					bytesRead, samplesRead;
-	
+	unsigned char				AAFDataBuf[4096];
+	aafUInt32					AAFBytesRead, samplesRead;
+	FILE*						pWavFile = NULL;
+	unsigned char				WAVDataBuf[4096];
+	size_t						WAVBytesRead;
+
 	check(CoCreateInstance(CLSID_AAFFile,
                NULL, 
                CLSCTX_INPROC_SERVER, 
@@ -358,29 +376,33 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 											kMediaOpenReadOnly,	// Open mode
 											kSDKCompressionDisable));// Compress disabled
 
-				// Read the Raw Data
-				check(pEssenceAccess->ReadRawData(	sizeof(smiley),					// Number of Salmples 
-													sizeof(DataBuf),	// Maximum buffer size
-													DataBuf,			// Buffer for the data
-													&bytesRead,			// Actual number of bytes read
-													&samplesRead));		// Actual number of samples read
+				// Open and read the Wave file (for comparison)
+				pWavFile = fopen("Laser.wav", "r+b");
+				if (pWavFile)
+				{
+					// read in the essence data
+					WAVBytesRead = fread(WAVDataBuf, sizeof(unsigned char), sizeof(WAVDataBuf), pWavFile);
+					fclose(pWavFile);
 
-				// Now compare the data read with the data we wrote when we created the file
-				if (sizeof(smiley) != samplesRead)
-				{
-					printf("***Wrong number of samples read ( was %ld , should be %ld)\n",
-						samplesRead, 1L);
+					// Read the Raw Data from the AAF file
+					check(pEssenceAccess->ReadRawData(	sizeof(AAFDataBuf),	// Number of Samples 
+														sizeof(AAFDataBuf),	// Maximum buffer size
+														AAFDataBuf,			// Buffer for the data
+														&AAFBytesRead,		// Actual number of bytes read
+														&samplesRead));		// Actual number of samples read
+
+					// Now compare the data read from the AAF file to the actual WAV file
+					if (WAVBytesRead != AAFBytesRead)
+					{
+						printf("***Wrong number of bytes read ( was %ld , should be %ld)\n",
+							AAFBytesRead, WAVBytesRead);
+					}
+					if (memcmp( WAVDataBuf, AAFDataBuf, WAVBytesRead) != 0)
+					{
+						printf("*** Data Read is different than the data in the WAV file ***\n");
+					}
 				}
-				if (bytesRead != sizeof(smiley))
-				{
-					printf("***Wrong number of bytes read ( was %ld , should be %ld)\n",
-						bytesRead, sizeof(smiley));
-				}
-				if (memcmp( smiley, DataBuf, bytesRead) != 0)
-				{
-					printf("*** Data Read is different than the data Written ***\n");
-				}
-				// Close the EssenceData
+					// Close the EssenceData
 				check(pEssenceAccess->Close());
 
 			}
