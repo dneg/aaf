@@ -43,22 +43,12 @@ typedef long AAFRDLIRESULT;
 
 
 
-
-#if !defined(_MSC_VER)
+// Callback function signature for AAFFindLibrary.
 
 typedef AAFRDLIRESULT (* LPFNAAFTESTFILEPROC)(
     const char* name,
 		char isDirectory,
 		void * userData);
-
-#else
-
-typedef AAFRDLIRESULT (__stdcall * LPFNAAFTESTFILEPROC)(
-    const char* name,
-		char isDirectory,
-		void * userData);
-
-#endif
 
 
 
