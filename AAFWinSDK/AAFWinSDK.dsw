@@ -21,7 +21,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "AAFConverterLib"=".\Utilities\AAFConverterLib\AAFConverterLib.dsp" - Package Owner=<4>
+Project: "AAFConverterLib"=.\Utilities\AAFConverterLib\AAFConverterLib.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -81,7 +81,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "AafOmf"=".\Utilities\AafOmf\AafOmf.dsp" - Package Owner=<4>
+Project: "AafOmf"=.\Utilities\AafOmf\AafOmf.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -189,7 +189,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "ComModTestAAF"=".\Test\com\ComModTestAAF\ComModTestAAF.dsp" - Package Owner=<4>
+Project: "ComModTestAAF"=.\Test\com\ComModTestAAF\ComModTestAAF.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -261,7 +261,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "CreateSequence"=".\Test\com\CreateSequence\CreateSequence.dsp" - Package Owner=<4>
+Project: "CreateSequence"=.\Test\com\CreateSequence\CreateSequence.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -276,7 +276,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "Dump"=".\DevUtils\dump\dump.dsp" - Package Owner=<4>
+Project: "Dump"=.\DevUtils\dump\dump.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -288,7 +288,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "EssenceAccess"=".\Test\com\EssenceAccess\EssenceAccess.dsp" - Package Owner=<4>
+Project: "EssenceAccess"=.\Test\com\EssenceAccess\EssenceAccess.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -303,7 +303,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "Everything"=".\Everything\Everything.dsp" - Package Owner=<4>
+Project: "Everything"=.\Everything\Everything.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -399,7 +399,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "MakeSDK"=".\MakeSDK.dsp" - Package Owner=<4>
+Project: "MakeSDK"=.\MakeSDK.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -426,7 +426,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "MakeSDKExamples"=".\MakeSDKExamples.dsp" - Package Owner=<4>
+Project: "MakeSDKExamples"=.\MakeSDKExamples.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -498,7 +498,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "MakeSDKUtilities"=".\MakeSDKUtilities.dsp" - Package Owner=<4>
+Project: "MakeSDKUtilities"=.\MakeSDKUtilities.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -511,6 +511,24 @@ Package=<4>
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name AafOmf
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "MultiGenTest"=.\TEST\COM\MultiGenTest\MultiGenTest.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name AAFIID
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name AAFLIB
     End Project Dependency
 }}}
 
