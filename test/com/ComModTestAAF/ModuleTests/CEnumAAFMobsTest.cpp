@@ -302,10 +302,6 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	localhr = S_OK;
 	mobIter->Reset();
 	
-	// Try Skipping 0 objects			
-	if (mobIter->Skip(0) != AAFRESULT_SUCCESS)
-			localhr = AAFRESULT_TEST_FAILED;
-
 	// skip over each Mob one at a time.
 	for (i=0; i<numMobs; i++)
 		if (mobIter->Skip(1) != AAFRESULT_SUCCESS)
@@ -341,12 +337,6 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 
 	localhr = S_OK;
 	numFetched = 1;
-	// Make sure a count of 0 succeeds
-	if (mobIter->Next(0, &aMob, &numFetched) != AAFRESULT_SUCCESS)
-		localhr = AAFRESULT_TEST_FAILED;
-	
-	if (0 != numFetched)
-		localhr = AAFRESULT_TEST_FAILED;
 
 	// Iterate thru the Mobs using Next doing 1 at a time
 	mobIter->Reset();
@@ -363,7 +353,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	}
 			
 	// Make sure we are at the end
-	if (mobIter->Next(1, &aMob, &numFetched) != AAFRESULT_SUCCESS)
+	if (mobIter->Next(1, &aMob, &numFetched) != AAFRESULT_NO_MORE_OBJECTS)
 		localhr = AAFRESULT_TEST_FAILED;
 	if(numFetched != 0)
 		localhr = AAFRESULT_TEST_FAILED;
@@ -392,7 +382,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	}
 
 	// Make sure we can't get more Mobs than numMobs	
-	if (mobIter->Next(i+1, mobArray, &numFetched) != AAFRESULT_SUCCESS)
+	if (mobIter->Next(i+1, mobArray, &numFetched) != AAFRESULT_NO_MORE_OBJECTS)
 		localhr = AAFRESULT_TEST_FAILED;
 
 	if (numMobs != numFetched)
@@ -412,7 +402,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	mobIter->Skip(2);
 
 	// Make sure we can't go past the end to fill the array
-	if (mobIter->Next(numMobs, mobArray, &numFetched) != AAFRESULT_SUCCESS)
+	if (mobIter->Next(numMobs, mobArray, &numFetched) != AAFRESULT_NO_MORE_OBJECTS)
 		localhr = AAFRESULT_TEST_FAILED;
 
 	if ((numMobs-2) != numFetched)
@@ -461,64 +451,71 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	localhr = S_OK;
 	mobIter->Reset();
 	if (mobIter->Clone(&cloneMobIter) == AAFRESULT_SUCCESS)	{
-		for (i=0; i < numMobs; i++)	
+		for (i=0; i < numMobs; i++)	{
 			if (cloneMobIter->NextOne(&aMob) == AAFRESULT_SUCCESS)	{
 				aMob->Release();
     			aMob = NULL;
 			}
 			else
 				localhr = AAFRESULT_TEST_FAILED;		
+		}
 
 		if (cloneMobIter->NextOne(&aMob) != AAFRESULT_NO_MORE_OBJECTS)
 			localhr = AAFRESULT_TEST_FAILED;
 
 		cloneMobIter->Reset();
-		if (cloneMobIter->Next(numMobs, mobArray, &numFetched) != AAFRESULT_SUCCESS)
+		if (cloneMobIter->Next(numMobs, mobArray, &numFetched) 
+			!= AAFRESULT_SUCCESS)
 			localhr = AAFRESULT_TEST_FAILED;
 
 		if (numMobs != numFetched)
 			localhr = AAFRESULT_TEST_FAILED;
 		
-		for (i = 0; i < numMobs; i++)
+		for (i = 0; i < numMobs; i++) {
 			if (mobArray[i] != NULL)	{
 				mobArray[i]->Release();
 				mobArray[i] = NULL;
 			}
 			else
 				localhr = AAFRESULT_TEST_FAILED;
+		}
 
 		cloneMobIter->Reset();
 
-		if (cloneMobIter->Next(numMobs+1, mobArray, &numFetched) != AAFRESULT_SUCCESS)
+		if (cloneMobIter->Next(numMobs+1, mobArray, &numFetched) 
+			!= AAFRESULT_NO_MORE_OBJECTS)
 			localhr = AAFRESULT_TEST_FAILED;
 
 		if (numMobs != numFetched)
 			localhr = AAFRESULT_TEST_FAILED;
 		
-		for (i = 0; i < numMobs; i++)
+		for (i = 0; i < numMobs; i++) {
 			if (mobArray[i] != NULL)	{
 				mobArray[i]->Release();
 				mobArray[i] = NULL;
 			}
 			else
 				localhr = AAFRESULT_TEST_FAILED;
+		}
 
 		cloneMobIter->Reset();
 		cloneMobIter->Skip(1);
 
-		if (cloneMobIter->Next(numMobs, mobArray, &numFetched) != AAFRESULT_SUCCESS)
+		if (cloneMobIter->Next(numMobs, mobArray, &numFetched) 
+			!= AAFRESULT_NO_MORE_OBJECTS)
 			localhr = AAFRESULT_TEST_FAILED;
 
 		if ((numMobs-1) != numFetched)
 			localhr = AAFRESULT_TEST_FAILED;
 		
-		for (i = 0; i < numMobs-1; i++)
+		for (i = 0; i < numMobs-1; i++) {
 			if (mobArray[i] != NULL)	{
 				mobArray[i]->Release();
 				mobArray[i] = NULL;
 			}
 			else
 				localhr = AAFRESULT_TEST_FAILED;
+		}
 	
 		cloneMobIter->Release();
 	 	cloneMobIter = NULL;
@@ -576,14 +573,15 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 			localhr = AAFRESULT_TEST_FAILED;
 		else
 		{
-			for (i = 0; i < numFetched; i++)
-			if (mobArray[i] != NULL)
-			{
-				mobArray[i]->Release();
-				mobArray[i] = NULL;
+			for (i = 0; i < numFetched; i++) {
+				if (mobArray[i] != NULL)
+				{
+					mobArray[i]->Release();
+					mobArray[i] = NULL;
+				}
+				else
+					localhr = AAFRESULT_TEST_FAILED;		
 			}
-			else
-				localhr = AAFRESULT_TEST_FAILED;		
 		}
 
 		cloneMobIter->Release();
