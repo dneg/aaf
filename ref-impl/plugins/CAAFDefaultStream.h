@@ -16,15 +16,6 @@
 #include "AAF.h"
 #endif
 
-
-
-
-
-
-#ifndef __CAAFRoot_h__
-#include "CAAFRoot.h"
-#endif
-
 #ifndef __CAAFUnknown_h__
 #include "CAAFUnknown.h"
 #endif
@@ -35,7 +26,7 @@ EXTERN_C const CLSID CLSID_AAFDefaultStream;
 
 class CAAFDefaultStream
   : public IAAFEssenceStream,
-    public CAAFRoot
+    public CAAFUnknown
 {
 protected:
 
