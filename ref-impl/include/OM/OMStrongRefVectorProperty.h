@@ -210,6 +210,35 @@ public:
     //          <c OMStrongReferenceVectorProperty>.
   virtual OMReferenceContainerIterator* createIterator(void) const;
 
+    // @cmember Set the value of this <c OMStrongReferenceVectorProperty>
+    //          at position <p index> to <p object>.
+  virtual OMObject* setObjectAt(const OMObject* object,
+                                const size_t index);
+
+    // @cmember The value of this <c OMStrongReferenceVectorProperty>
+    //          at position <p index>.
+  virtual OMObject* getObjectAt(const size_t index) const;
+
+    // @cmember Append the given <p OMObject> <p object> to
+    //          this <c OMStrongReferenceVectorProperty>.
+  virtual void appendObject(const OMObject* object);
+
+    // @cmember Prepend the given <p OMObject> <p object> to
+    //          this <c OMStrongReferenceVectorProperty>.
+  virtual void prependObject(const OMObject* object);
+
+    // @cmember Remove the object from this
+    //          <c OMStrongReferenceVectorProperty> at position <p index>.
+    //          Existing objects in this <c OMStrongReferenceVectorProperty>
+    //          at <p index> + 1 and higher are shifted down one index
+    //          position.
+  virtual OMObject* removeObjectAt(const size_t index);
+
+    // @cmember Insert <p object> into this <c OMStrongReferenceVectorProperty>
+    //          at position <p index>. Existing objects at <p index> and
+    //          higher are shifted up one index position.
+  virtual void insertObjectAt(const OMObject* object, const size_t index);
+
 private:
 
   typedef OMStrongReferenceVectorElement<ReferencedObject> VectorElement;
