@@ -908,6 +908,7 @@ bool ImplAAFDictionary::PvtIsTypePresent (
 const aafUID_t * ImplAAFDictionary::sAxiomaticTypeGuids[] = 
 {
   & kAAFTypeID_AUID,
+  & kAAFTypeID_AUIDArray,
   & kAAFTypeID_Boolean,
   & kAAFTypeID_Character,
   & kAAFTypeID_DateStruct,
