@@ -86,6 +86,6 @@ char* convertWideString(const wchar_t* string);
   //   @rdesc The saved character string.
 char* saveString(const char* string);
 
-size_t lengthOfOMWideString(const OMWideCharacter* string);
+size_t lengthOfOMString(const OMCharacter* string);
 
 #endif

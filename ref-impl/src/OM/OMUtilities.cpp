@@ -179,9 +179,9 @@ char* saveString(const char* string)
   return result;
 }
 
-size_t lengthOfOMWideString(const OMWideCharacter* string)
+size_t lengthOfOMString(const OMCharacter* string)
 {
-  const OMWideCharacter* p = string;
+  const OMCharacter* p = string;
   size_t length = 0;
   while (*p != 0) {
     ++length;
