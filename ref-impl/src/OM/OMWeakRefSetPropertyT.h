@@ -590,6 +590,7 @@ template<typename ReferencedObject>
 size_t OMWeakReferenceSetProperty<ReferencedObject>::bitsSize(void) const
 {
   TRACE("OMWeakReferenceSetProperty<ReferencedObject>::bitsSize");
+  OBSOLETE("methods on class OMReferenceSetProperty");
 
   return sizeof(ReferencedObject*) * count();
 }
@@ -609,6 +610,7 @@ void OMWeakReferenceSetProperty<ReferencedObject>::getBits(
                                                       size_t ANAME(size)) const
 {
   TRACE("OMWeakReferenceSetProperty<ReferencedObject>::getBits");
+  OBSOLETE("methods on class OMReferenceSetProperty");
 
   PRECONDITION("Optional property is present",
                                            IMPLIES(isOptional(), isPresent()));
@@ -638,6 +640,7 @@ void OMWeakReferenceSetProperty<ReferencedObject>::setBits(const OMByte* bits,
                                                            size_t size)
 {
   TRACE("OMWeakReferenceSetProperty<ReferencedObject>::setBits");
+  OBSOLETE("methods on class OMReferenceSetProperty");
 
   PRECONDITION("Valid bits", bits != 0);
   PRECONDITION("Valid size", size >= bitsSize());
