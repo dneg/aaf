@@ -66,6 +66,12 @@ ImplAAFEssenceData::~ImplAAFEssenceData ()
 {
 }
 
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFEssenceData::Initialize (ImplAAFSourceMob * pFileMob)
+{
+	return(SetFileMob (pFileMob));
+}
+
 
 /****/
  AAFRESULT STDMETHODCALLTYPE
