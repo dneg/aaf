@@ -1150,7 +1150,7 @@ OMProperty * ImplAAFTypeDefEnum::pvtCreateOMProperty
 	{
 		ImplAAFTypeDefInt *pTDInt;
 		//look to the _ElementType to get the size ...
-		pTDInt = dynamic_cast<ImplAAFTypeDefInt*>((ImplAAFTypeDef *)_ElementType);
+		pTDInt = dynamic_cast<ImplAAFTypeDefInt*>(bootstrapTypeWeakReference(_ElementType));
 		assert (pTDInt);
 		
 		aafUInt32 elem_size = 0;

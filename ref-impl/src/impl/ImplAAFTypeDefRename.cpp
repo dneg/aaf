@@ -90,7 +90,7 @@ AAFRESULT STDMETHODCALLTYPE
 
   if(_RenamedType.isVoid())
 		return AAFRESULT_OBJECT_NOT_FOUND;
-  ImplAAFTypeDef *pTypeDef = _RenamedType;
+  ImplAAFTypeDef *pTypeDef = bootstrapTypeWeakReference(_RenamedType);
 
   *ppBaseType = pTypeDef;
   assert (*ppBaseType);

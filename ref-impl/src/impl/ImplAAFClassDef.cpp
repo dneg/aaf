@@ -523,10 +523,7 @@ AAFRESULT STDMETHODCALLTYPE
 	if(isRoot)
 		return AAFRESULT_IS_ROOT_CLASS;
 
-	if(_ParentClass.isVoid())
-		*ppClassDef = _BootstrapParent;	// If we are in the bootstrap process
-	else
-		*ppClassDef = _ParentClass;		// else follow the weak reference
+	*ppClassDef = bootstrapClassWeakReference(_ParentClass);
 	assert(*ppClassDef != NULL);
 	if(*ppClassDef != NULL)
 		(*ppClassDef)->AcquireReference ();

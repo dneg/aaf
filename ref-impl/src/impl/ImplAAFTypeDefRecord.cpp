@@ -291,7 +291,7 @@ AAFRESULT STDMETHODCALLTYPE
   if (! _cachedMemberTypes[index])
 	{
 	  ImplAAFTypeDef *pMemberType;
-	  _memberTypes.getValueAt (pMemberType, index);
+	  pMemberType = bootstrapTypeWeakReferenceVectorElement(_memberTypes, index);
 
 //	  ImplAAFDictionarySP pDict;
 //	  hr = GetDictionary (&pDict);

@@ -95,7 +95,7 @@ ImplAAFTypeDefVariableArray::GetType (
 	
 	if(_ElementType.isVoid())
 		return AAFRESULT_OBJECT_NOT_FOUND;
-	ImplAAFTypeDef *pTypeDef = _ElementType;
+	ImplAAFTypeDef *pTypeDef = bootstrapTypeWeakReference(_ElementType);
 	
 	*ppTypeDef = pTypeDef;
 	assert (*ppTypeDef);

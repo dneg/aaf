@@ -323,7 +323,7 @@ AAFRESULT STDMETHODCALLTYPE
 
    if(_referencedType.isVoid())
 		return AAFRESULT_OBJECT_NOT_FOUND;
-  ImplAAFClassDef *pClassDef = _referencedType;
+  ImplAAFClassDef *pClassDef = bootstrapClassWeakReference(_referencedType);
 
   *ppObjType = pClassDef;
   assert (*ppObjType);

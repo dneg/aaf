@@ -292,7 +292,8 @@ ImplAAFTypeDefSet::GetElementType (
   if(_ElementType.isVoid())
     return AAFRESULT_OBJECT_NOT_FOUND;
   
-  *ppTypeDef = _ElementType;
+  *ppTypeDef = bootstrapTypeWeakReference(_ElementType);
+
   assert (*ppTypeDef);
   
   (*ppTypeDef)->AcquireReference ();
