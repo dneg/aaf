@@ -49,7 +49,7 @@
 //
 // DictP18-277-1847BMaster.csv 
 //
-// This file was generated on Mon May 22 19:32:41 EDT 2000
+// This file was generated on Mon May 22 20:53:31 EDT 2000
 // by user jgoldman on system JGOLDMANPC.
 //
 // Key to macros.
@@ -1067,7 +1067,7 @@ AAF_CLASS(Timecode,
     Timecode)
   AAF_PROPERTY(FPS,
     AAF_LITERAL_AUID(0x04040101,
-      0x0202, 0x0000,
+      0x0206, 0x0000,
       0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x02),
     0x1502,
     AAF_TYPE(UInt16),
