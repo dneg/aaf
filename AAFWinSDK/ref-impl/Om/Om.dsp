@@ -119,6 +119,10 @@ SOURCE="..\..\..\ref-impl\src\OM\OMStoredPropertySetIndex.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\OM\OMStoredSetIndex.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\OM\OMStoredVectorIndex.cpp"
 # End Source File
 # Begin Source File
