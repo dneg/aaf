@@ -5,6 +5,16 @@
 #include "CAAFUnknown.h"
 #endif
 
+// We meed the following definition for a bool type since
+// the Win32 used BOOL as an int and ActiveX SDK, MacOLE use
+// unsigned long for OLEBOOL.
+// NOTE: We may have to move this definition to AAFTypes.h.
+#if defined(_WIN32) || defined(WIN32)
+#define AAFBOOL BOOL
+#else
+#define AAFBOOL OLEBOOL
+#endif
+
 // Define the object creation callback function that should be
 // implemented as a static method for every concrete AAF object.
 // 
@@ -27,7 +37,7 @@ protected:
 public:
     // IClassFactory methods 
     STDMETHOD(CreateInstance)(IUnknown * punkOuter, REFIID riid, void ** ppv); 
-    STDMETHOD(LockServer)(BOOL fLock);     
+    STDMETHOD(LockServer)(AAFBOOL fLock);     
      
 
 private:

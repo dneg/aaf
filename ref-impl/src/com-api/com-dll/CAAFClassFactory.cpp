@@ -90,7 +90,7 @@ STDMETHODIMP CAAFClassFactory::CreateInstance
 
 STDMETHODIMP CAAFClassFactory::LockServer
 (
-	BOOL fLock
+	AAFBOOL fLock
 )
 {
 	g_pAAFServer->Lock(static_cast<aafBool>(fLock));
