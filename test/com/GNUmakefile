@@ -57,6 +57,8 @@ UTF8FileNameTest :
 check :
 	cd ComModTestAAF && $(MAKE) $@
 	cd CreateSequence && $(MAKE) $@
+	cd EssenceAccess && $(MAKE) $@
+	cd MultiGenTest && $(MAKE) $@
 	cd ComFileKindTest && $(MAKE) $@
 	cd UTF8FileNameTest && $(MAKE) $@
 

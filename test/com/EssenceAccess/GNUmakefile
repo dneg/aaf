@@ -50,6 +50,14 @@ $(AAFSDKBINDIR)/EssenceAccess$(EXE) : $(CXXOBJS)
 endif
 
 
+# Create a simple AAF file with 100 copies of the audio from Laser.wav
+# This exercises the EssenceAccess API and the WAVE Codec
+.PHONY : check
+check : $(AAFSDKBINDIR)/EssenceAccess$(EXE)
+	@if [ ! -r Laser.wav ]; then cp ../ComModTestAAF/Laser.wav .; fi
+	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/EssenceAccess$(EXE) 100
+
+
 .PHONY : clean
 clean :
 	@$(RM) $(CXXOBJS)

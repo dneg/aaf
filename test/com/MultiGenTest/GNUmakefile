@@ -71,6 +71,7 @@ $(CXXOBJS2):
 	@echo "\nBuilding MultiGenTests\n"
 	cd MultiGenTests && $(MAKE)
 
+
 .PHONY : clean
 clean :
 	cd MultiGenTests && $(MAKE) GENDEPS=0 $@
@@ -85,10 +86,15 @@ realclean : clean
 	cd MultiGenTests && $(MAKE) GENDEPS=0 $@
 
 
+# Check that the basic MultiGenTest operations work.
+# NOTE: MultiGenTest is designed to be run across multiple
+# platforms and SDK versions - this test merely checks that
+# MultiGenTest is in good working order.
 .PHONY : check
 check : $(AAFSDKBINDIR)/MultiGenTest$(EXE)
-	echo MultiGenTest not implemented yet.
+	rm -f basic.aaf
+	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/MultiGenTest$(EXE) -r LoadLib libcom-api.so -r FileOp write S4KBinary basic.aaf -r AddMasterMobs A B -r FileOp save_and_close -r UnloadLib || exit 1
+	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/MultiGenTest$(EXE) -r LoadLib libcom-api.so -r FileOp read S4KBinary basic.aaf -r FindMasterMobsExclusive A B -r FileOp close -r UnloadLib || exit 1
 
 
 include $(AAFBASE)/build/rules.mk
-
