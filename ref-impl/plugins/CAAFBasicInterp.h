@@ -50,7 +50,7 @@ protected:
   //
   // Constructor/destructor
   //
-  CAAFBasicInterp (IUnknown * pControllingUnknown, aafBool doInit = AAFTrue);
+  CAAFBasicInterp (IUnknown * pControllingUnknown, aafBool doInit = kAAFTrue);
   virtual ~CAAFBasicInterp ();
 
 public:

@@ -454,7 +454,7 @@ aafUInt32 ImplAAFTypeDefVariableArray::pvtCount
 
 aafBool ImplAAFTypeDefVariableArray::IsFixedSize (void) const
 {
-  return AAFFalse;
+  return kAAFFalse;
 }
 
 

@@ -43,7 +43,7 @@
 
 #include "CAAFBuiltinDefs.h"
 
-const aafProductVersion_t AAFPluginImplementationVersion = {1, 0, 0, 1, kVersionBeta};
+const aafProductVersion_t AAFPluginImplementationVersion = {1, 0, 0, 1, kAAFVersionBeta};
 
 const CLSID CLSID_AAFBasicInterp = { 0x5B6C85A1, 0x0EDE, 0x11d3, { 0x80, 0xA9, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
 
@@ -161,9 +161,9 @@ HRESULT STDMETHODCALLTYPE
 
 		CHECK(desc->SetManufacturerID(MANUF_AVID_TECH));
 		CHECK(desc->SetPluginManufacturerName(manufName));
-		CHECK(desc->SetIsSoftwareOnly(AAFTrue));
-		CHECK(desc->SetIsAccelerated(AAFFalse));
-		CHECK(desc->SetSupportsAuthentication(AAFFalse));
+		CHECK(desc->SetIsSoftwareOnly(kAAFTrue));
+		CHECK(desc->SetIsAccelerated(kAAFFalse));
+		CHECK(desc->SetSupportsAuthentication(kAAFFalse));
 		
 		/**/
 		CHECK(defs.cdNetworkLocator()->
@@ -419,7 +419,7 @@ HRESULT CAAFBasicInterp::FindBoundValues(aafRational_t point,
 
 			prevTime = zero;
 			CHECK(pVaryingValue->GetControlPoints(&theEnum));
-			found = AAFFalse;
+			found = kAAFFalse;
 			prevPoint = NULL;
 			while(!found && (theEnum->NextOne(&testPoint) == AAFRESULT_SUCCESS))
 			{

@@ -62,7 +62,7 @@ ImplAAFTypeDefRecord::ImplAAFTypeDefRecord ()
 	_internalSizes (0),
 	_cachedCount ((aafUInt32) -1),
 	_cachedMemberTypes (0),
-	_registrationAttempted (AAFFalse)
+	_registrationAttempted (kAAFFalse)
 {
   _persistentProperties.put(_memberTypes.address());
   _persistentProperties.put(_memberNames.address());
@@ -956,7 +956,7 @@ void ImplAAFTypeDefRecord::internalize(OMByte* externalBytes,
 
 aafBool ImplAAFTypeDefRecord::IsFixedSize (void) const
 {
-  return AAFTrue;
+  return kAAFTrue;
 }
 
 
@@ -997,10 +997,10 @@ aafBool ImplAAFTypeDefRecord::IsRegistered (void) const
 		  AAFRESULT hr = GetDictionary(&pDict);
 		  assert (AAFRESULT_SUCCEEDED (hr));
 		  pDict->pvtAttemptBuiltinSizeRegistration ((ImplAAFTypeDefRecord*) this);
-		  ((ImplAAFTypeDefRecord*)this)->_registrationAttempted = AAFTrue;
+		  ((ImplAAFTypeDefRecord*)this)->_registrationAttempted = kAAFTrue;
 		}
 	}
-  return (_registeredOffsets ? AAFTrue : AAFFalse);
+  return (_registeredOffsets ? kAAFTrue : kAAFFalse);
 }
 
 

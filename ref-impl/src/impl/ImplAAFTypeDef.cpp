@@ -117,7 +117,7 @@ aafBool ImplAAFTypeDef::IsFixedSize (void) const
 {
   // Should be implemented in derived class.
   assert (0);
-  return AAFFalse; // not reached!
+  return kAAFFalse; // not reached!
 }
 
 
@@ -133,7 +133,7 @@ aafBool ImplAAFTypeDef::IsRegistered (void) const
 {
   // Should be implemented in derived class.
   assert (0);
-  return AAFFalse; // not reached!
+  return kAAFFalse; // not reached!
 }
 
 

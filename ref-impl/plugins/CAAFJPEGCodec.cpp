@@ -59,7 +59,7 @@ const aafInt32 kSupportedCodeFlavours = 1;
 const wchar_t kDisplayName[] = L"AAF JPEG Codec";
 const wchar_t kDescription[] = L"Handles Standard JFIF/JPEG";
 
-const aafProductVersion_t kAAFPluginVersion = {1, 0, 0, 1, kVersionBeta};
+const aafProductVersion_t kAAFPluginVersion = {1, 0, 0, 1, kAAFVersionBeta};
 const aafRational_t		kDefaultRate = { 30000, 1001 };
 const aafInt32			kDefaultPixelWidth = 24;
 const aafInt32			kDefaultNumCh = 1;
@@ -117,10 +117,10 @@ CAAFJPEGCodec::CAAFJPEGCodec (IUnknown * pControllingUnknown)
 	_nativeByteOrder = GetNativeByteOrder();
 	_access = NULL;
 	_stream = NULL;
-	_openMode = kMediaOpenReadOnly;
-	_compressEnable = kSDKCompressionEnable;
+	_openMode = kAAFMediaOpenReadOnly;
+	_compressEnable = kAAFCompressionEnable;
 	_length = 0;  // 64 bit int
-	_isInAAFContainer = AAFFalse; // not in an aaf file
+	_isInAAFContainer = kAAFFalse; // not in an aaf file
 	_sampleRate = NULL_RATIONAL;
 	_containerFormat = NULL_ID;
 	_codecID = CodecJPEG;
@@ -134,7 +134,7 @@ CAAFJPEGCodec::CAAFJPEGCodec (IUnknown * pControllingUnknown)
 	_displayWidth = 0;
 	_displayXOffset = 0;
 	_displayYOffset = 0;
-	_frameLayout = kFullFrame;
+	_frameLayout = kAAFFullFrame;
 	_videoLineMapSize = sizeof(_videoLineMap)/sizeof(aafInt32);
 
 	// initialize the video line map.
@@ -142,13 +142,13 @@ CAAFJPEGCodec::CAAFJPEGCodec (IUnknown * pControllingUnknown)
 		_videoLineMap[i] = 0;
 
 	_imageAspectRatio = NULL_RATIONAL;
-	_alphaTransparency = kMinValueTransparent;
+	_alphaTransparency = kAAFMinValueTransparent;
 	_gamma = NULL_RATIONAL;
 	_imageAlignmentFactor = 0;
 	_componentWidth = kDefaultComponentWidth;
 	_horizontalSubsampling = 1;
 	_verticalSubsampling = 1;
-	_colorSiting = kCoSiting;
+	_colorSiting = kAAFCoSiting;
 	_blackReferenceLevel = 0;
 	_whiteReferenceLevel = 255;
 	_colorRange = 0;
@@ -156,14 +156,14 @@ CAAFJPEGCodec::CAAFJPEGCodec (IUnknown * pControllingUnknown)
 	_imageHeight = 0;
 	_imageWidth = 0;
 	_fileBytesPerSample = 0;
-	_descriptorFlushed = AAFFalse;
+	_descriptorFlushed = kAAFFalse;
 	_startingIndex = 0;
 	_currentIndex = 0;
 	_writeIndex = 0;
 	_maxIndex = 0;
 	_sampleIndex = NULL;
-	_pixelFormat = kColorSpaceRGB;
-	_fieldDominance = kNoDominant;
+	_pixelFormat = kAAFColorSpaceRGB;
+	_fieldDominance = kAAFNoDominant;
 	_memBitsPerPixel = kDefaultPixelWidth;
 	_bitsPerPixelAvg = kDefaultPixelWidth;
 	_memBytesPerSample = 0;
@@ -426,9 +426,9 @@ HRESULT STDMETHODCALLTYPE
 		checkResult(desc->SetPluginVersionString(kManufRev));
 		checkResult(desc->SetManufacturerID(MANUF_AVID_PLUGINS));
 		checkResult(desc->SetPluginManufacturerName(kManufName));
-		checkResult(desc->SetIsSoftwareOnly(AAFTrue));
-		checkResult(desc->SetIsAccelerated(AAFFalse));
-		checkResult(desc->SetSupportsAuthentication(AAFFalse));
+		checkResult(desc->SetIsSoftwareOnly(kAAFTrue));
+		checkResult(desc->SetIsAccelerated(kAAFFalse));
+		checkResult(desc->SetSupportsAuthentication(kAAFFalse));
 
 		// Create the network locator for the Manufacturer's web site: 
 		checkResult(dict->LookupClassDef(AUID_AAFNetworkLocator, &pcd));
@@ -537,7 +537,7 @@ HRESULT STDMETHODCALLTYPE
     CAAFJPEGCodec::SetCompressionEnabled (aafBool  enable)
 {
 	// Translate our bool enum into the compression enum.
-	_compressEnable = (enable == AAFTrue) ? kSDKCompressionEnable : kSDKCompressionDisable;
+	_compressEnable = (enable == kAAFTrue) ? kAAFCompressionEnable : kAAFCompressionDisable;
   return HRESULT_SUCCESS;
 }
 
@@ -649,24 +649,24 @@ HRESULT STDMETHODCALLTYPE
 		checkExpression(AAFRESULT_PROP_NOT_PRESENT == hr || AAFRESULT_SUCCESS == hr, hr);
 		if (AAFRESULT_SUCCESS == hr && EqualAUID(&codecID, &CodecJPEG) && 0 == padBits)
 		{
-			pSelectInfo->willHandleMDES = AAFTrue;
+			pSelectInfo->willHandleMDES = kAAFTrue;
 		}
 		else
 		{ // If the compression property was not present or the 
 			// give compression is not supported or padBits was not zero
 			// the set to false.
-			pSelectInfo->willHandleMDES = AAFFalse;
+			pSelectInfo->willHandleMDES = kAAFFalse;
 		}
 
 
 		// JPEG/JFIF is always in big-endian byte order...
 		if (INTEL_ORDER == _nativeByteOrder)
-			pSelectInfo->isNative = AAFFalse;
+			pSelectInfo->isNative = kAAFFalse;
 		else
-			pSelectInfo->isNative = AAFTrue;
+			pSelectInfo->isNative = kAAFTrue;
 
 		// This is a software only codec.
-		pSelectInfo->hwAssisted = AAFFalse;
+		pSelectInfo->hwAssisted = kAAFFalse;
 
 		pSelectInfo->relativeLoss = 10;	/* !!! Need to read MDES header here */ // comment from omcJPEG.c
 
@@ -678,13 +678,13 @@ HRESULT STDMETHODCALLTYPE
 
 		switch (frameLayout)
 		{
-			case kFullFrame:
-			case kOneField:
+			case kAAFFullFrame:
+			case kAAFOneField:
 				numFields = 1;
 				break;
 		
-			case kSeparateFields:
-			case kMixedFields:
+			case kAAFSeparateFields:
+			case kAAFMixedFields:
 				numFields = 2;
 				break;
 		
@@ -792,13 +792,13 @@ HRESULT STDMETHODCALLTYPE
 	try
 	{
 		// We are allowed to write to the given stream.
-		_openMode = kMediaOpenAppend;
+		_openMode = kAAFMediaOpenAppend;
 
 		// Save the given essence stream.
 		SetEssenceStream(stream);
 
 		_sampleRate = createParms[0].sampleRate;	// !!!Assumes all sample rates are the same
-		checkExpression(AAFTrue == EqualAUID(createParms[0].mediaKind, &DDEF_Picture),
+		checkExpression(kAAFTrue == EqualAUID(createParms[0].mediaKind, &DDEF_Picture),
 			              AAFRESULT_INVALID_DATADEF);
 
 
@@ -880,7 +880,7 @@ HRESULT STDMETHODCALLTYPE
 		// DigitalImageDescriptor methods:
 		//
 		checkResult(_descriptorHelper.GetCompression(&_codecID));
-		checkAssertion(AAFTrue == EqualAUID(&_codecID, &CodecJPEG));
+		checkAssertion(kAAFTrue == EqualAUID(&_codecID, &CodecJPEG));
 		checkResult(_descriptorHelper.GetStoredView(&_storedHeight, &_storedWidth));
 		_imageHeight = _storedHeight;
 		_imageWidth = _storedWidth;
@@ -912,7 +912,7 @@ HRESULT STDMETHODCALLTYPE
 
 
 		// Get VideoLineMap
-		if (kFullFrame != _frameLayout)
+		if (kAAFFullFrame != _frameLayout)
 		{
 			hr = _descriptorHelper.GetVideoLineMapSize(&_videoLineMapSize);
 			checkExpression(AAFRESULT_PROP_NOT_PRESENT == hr || AAFRESULT_SUCCESS == hr, hr);
@@ -925,14 +925,14 @@ HRESULT STDMETHODCALLTYPE
 				checkAssertion(2 > _videoLineMapSize);
 				checkResult(_descriptorHelper.GetVideoLineMap(_videoLineMapSize, _videoLineMap));
 
-				if (_frameLayout != kSeparateFields && _frameLayout != kMixedFields && 2 == _videoLineMapSize)
+				if (_frameLayout != kAAFSeparateFields && _frameLayout != kAAFMixedFields && 2 == _videoLineMapSize)
 				{
 					// There were two elements in the video line mab no corresponding froma layout type.
 					// Should this be an error in the descriptor? 
 					_videoLineMap[1] = 0;
 				}
 			}
-		} // if (kFullFrame != _frameLayout)
+		} // if (kAAFFullFrame != _frameLayout)
 
 
 		checkResult(_descriptorHelper.GetComponentWidth(&_componentWidth));
@@ -947,7 +947,7 @@ HRESULT STDMETHODCALLTYPE
 		hr = _descriptorHelper.GetColorSiting(&_colorSiting);
 		checkExpression(AAFRESULT_PROP_NOT_PRESENT == hr || AAFRESULT_SUCCESS == hr, hr);
 		if (AAFRESULT_PROP_NOT_PRESENT == hr)
-			_colorSiting = kCoSiting;
+			_colorSiting = kAAFCoSiting;
 
 		hr = _descriptorHelper.GetBlackReferenceLevel(&_blackReferenceLevel);
 		checkExpression(AAFRESULT_PROP_NOT_PRESENT == hr || AAFRESULT_SUCCESS == hr, hr);
@@ -1084,7 +1084,7 @@ HRESULT STDMETHODCALLTYPE
 		checkExpression(_componentWidth != 0, AAFRESULT_ZERO_PIXELSIZE);
 		/* this codec only allows one-channel media */
 
-		if (kSDKCompressionEnable == _compressEnable)
+		if (kAAFCompressionEnable == _compressEnable)
 		{
 			// If we are being asked compress the given buffer then
 			// the we should have already calculated the size of a sample.
@@ -1112,7 +1112,7 @@ HRESULT STDMETHODCALLTYPE
 			param.imageWidth = _imageWidth;
 			param.imageHeight = _imageHeight;
 			param.components = 3;
-//			param.imageHeight = (kSeparateFields == _frameLayout) ? (_imageHeight / 2) : _imageHeight;
+//			param.imageHeight = (kAAFSeparateFields == _frameLayout) ? (_imageHeight / 2) : _imageHeight;
 
 			param.colorSpace = _pixelFormat;
 			param.horizontalSubsampling = _horizontalSubsampling;
@@ -1144,7 +1144,7 @@ HRESULT STDMETHODCALLTYPE
 			checkExpression(param.bufferSize <= xferBlock[0].buflen, AAFRESULT_SMALLBUF);
 			
 			// Adjust the parameters for separate fields...
-			if (kSeparateFields == _frameLayout)
+			if (kAAFSeparateFields == _frameLayout)
 			{
 				param.imageHeight /= 2;
 				param.bufferSize = param.rowBytes * param.imageHeight;
@@ -1163,7 +1163,7 @@ HRESULT STDMETHODCALLTYPE
 				checkResult(CompressImage(param, cinfo));
 				resultBlock[0].bytesXfered += param.bufferSize;
 
-				if (kSeparateFields == _frameLayout)
+				if (kAAFSeparateFields == _frameLayout)
 				{
 					// Compress the second field right after the first field.
 					param.buffer = &xferBlock[0].buffer[resultBlock[0].bytesXfered];
@@ -1217,7 +1217,7 @@ HRESULT STDMETHODCALLTYPE
 
 
 	// Cleanup
-	if (kSDKCompressionEnable == _compressEnable)
+	if (kAAFCompressionEnable == _compressEnable)
 	{
 		/* Step 7: release JPEG compression object */
 
@@ -1287,7 +1287,7 @@ HRESULT STDMETHODCALLTYPE
 	try
 	{
 		
-		if (kSDKCompressionEnable == _compressEnable)
+		if (kAAFCompressionEnable == _compressEnable)
 		{ // If we are being asked decompress the given buffer.
 
 			/* Step 1: allocate and initialize JPEG decompression object */
@@ -1307,7 +1307,7 @@ HRESULT STDMETHODCALLTYPE
 
 			// Get the dimensions of the image data to compress.
 			param.imageWidth = _imageWidth;
-			param.imageHeight = (kSeparateFields == _frameLayout) ? (_imageHeight / 2) : _imageHeight;
+			param.imageHeight = (kAAFSeparateFields == _frameLayout) ? (_imageHeight / 2) : _imageHeight;
 			param.components = 3;
 
 			param.colorSpace = _pixelFormat;
@@ -1338,7 +1338,7 @@ HRESULT STDMETHODCALLTYPE
 				checkResult(DecompressImage(param, cinfo));
 				resultBlock[0].bytesXfered += param.bufferSize;
 
-				if (kSeparateFields == _frameLayout)
+				if (kAAFSeparateFields == _frameLayout)
 				{
 					// Compress the second field right after the first field.
 					param.buffer = &xferBlock[0].buffer[resultBlock[0].bytesXfered];
@@ -1376,7 +1376,7 @@ HRESULT STDMETHODCALLTYPE
 	}
 
 
-	if (kSDKCompressionEnable == _compressEnable)
+	if (kAAFCompressionEnable == _compressEnable)
 	{
 		/* Step 8: Release JPEG decompression object */
 
@@ -1401,7 +1401,7 @@ HRESULT STDMETHODCALLTYPE
 		checkExpression(NULL != _sampleIndex, AAFRESULT_NOFRAMEINDEX);
 		// Validate the index.
 		checkExpression(sampleFrame <= _numberOfSamples, AAFRESULT_BADFRAMEOFFSET);
-//		if (kMediaOpenAppend == _openMode)
+//		if (kAAFMediaOpenAppend == _openMode)
 //			checkExpression(sampleFrame == _numberOfSamples, AAFRESULT_BADFRAMEOFFSET);
 		
 		// Get the corresponding offset from the sample index.
@@ -1462,19 +1462,19 @@ void CAAFJPEGCodec::UpdateCalculatedData(void)
 		// We currently only support 601 4-4-4 and 4-2-2.
 //	checkExpression((1 == _verticalSubsampling && 1 == _horizontalSubsampling) ||
 //								  (1 == _verticalSubsampling && 2 == _horizontalSubsampling && 
-//									 kColorSpaceYUV == _pixelFormat),
+//									 kAAFColorSpaceYUV == _pixelFormat),
 //				          AAFRESULT_BADPIXFORM); // AAFRESULT_BADLAYOUT
 
 
 	switch (_frameLayout)
 	{
-		case kFullFrame:
-		case kOneField:
+		case kAAFFullFrame:
+		case kAAFOneField:
 			numFields = 1;
 			break;
 	
-		case kSeparateFields:
-		case kMixedFields:
+		case kAAFSeparateFields:
+		case kAAFMixedFields:
 			numFields = 2;
 			break;
 	
@@ -1491,7 +1491,7 @@ void CAAFJPEGCodec::UpdateCalculatedData(void)
 	_bitsPerPixelAvg = 0;
 	_bitsPerSample = 0;
 
-	if (kColorSpaceRGB == _pixelFormat)
+	if (kAAFColorSpaceRGB == _pixelFormat)
 	{
 		// If the output color space is RGB then decompressed sample size
 		// ignores any subsampling in the compressed image since the 
@@ -1611,7 +1611,7 @@ HRESULT STDMETHODCALLTYPE
 		checkExpression(NULL != _sampleIndex, AAFRESULT_NOFRAMEINDEX);
 		
 		// Make sure that we have been opened for append.		
-		checkExpression(kMediaOpenAppend == _openMode, AAFRESULT_NOT_WRITEABLE);
+		checkExpression(kAAFMediaOpenAppend == _openMode, AAFRESULT_NOT_WRITEABLE);
 
 		// Make sure that we do not attempt to write before the initial
 		// starting index.
@@ -1830,13 +1830,13 @@ HRESULT STDMETHODCALLTYPE
 				// Validate the frame layout:
 				switch (param.operand.expFrameLayout)
 				{
-					case kFullFrame:
-					case kOneField:
+					case kAAFFullFrame:
+					case kAAFOneField:
 						numFields = 1;
 						break;
 				
-					case kSeparateFields:
-					case kMixedFields:
+					case kAAFSeparateFields:
+					case kAAFMixedFields:
 						numFields = 2;
 						break;
 				
@@ -1934,8 +1934,8 @@ HRESULT STDMETHODCALLTYPE
 				checkExpression(param.size == sizeof(param.operand.expColorSpace), AAFRESULT_INVALID_PARM_SIZE);
 
 				// Currently we only support the following pixel transformations.
-				checkExpression(kColorSpaceRGB == param.operand.expColorSpace ||
-					              kColorSpaceYUV == param.operand.expColorSpace,
+				checkExpression(kAAFColorSpaceRGB == param.operand.expColorSpace ||
+					              kAAFColorSpaceYUV == param.operand.expColorSpace,
 					              AAFRESULT_BADPIXFORM);
 
 				_pixelFormat = param.operand.expColorSpace;
@@ -2119,7 +2119,7 @@ HRESULT STDMETHODCALLTYPE
 				param.operand.expColorSpace = _pixelFormat;
 				checkResult(fmt->AddFormatSpecifier (kAAFPixelFormat, sizeof(param.operand.expColorSpace), (aafDataBuffer_t)&param.operand.expColorSpace));
 			}
-			else if (EqualAUID(&kAAFRGBCompLayout, &param.opcode) && kColorSpaceRGB ==_pixelFormat)
+			else if (EqualAUID(&kAAFRGBCompLayout, &param.opcode) && kAAFColorSpaceRGB ==_pixelFormat)
 			{	// Default to standard component order.
 				param.operand.expCompArray[0] = 'R';
 				param.operand.expCompArray[1] = 'G';
@@ -2127,7 +2127,7 @@ HRESULT STDMETHODCALLTYPE
 				param.operand.expCompArray[3] = 0;
 				checkResult(fmt->AddFormatSpecifier (kAAFRGBCompLayout, sizeof(param.operand.expCompArray), (aafDataBuffer_t)&param.operand.expCompArray));
 			}
-			else if (EqualAUID(&kAAFRGBCompSizes, &param.opcode) && kColorSpaceRGB ==_pixelFormat)
+			else if (EqualAUID(&kAAFRGBCompSizes, &param.opcode) && kAAFColorSpaceRGB ==_pixelFormat)
 			{	// Default to standard component order.
 				param.operand.expCompSizeArray[0] = 8;
 				param.operand.expCompSizeArray[1] = 8;
@@ -2224,9 +2224,9 @@ HRESULT STDMETHODCALLTYPE
 		// Set the sample format and color space and component order and size.
 		// Initially use the same setup as omcJPEG.c...
 		//
-		if ((kSDKCompressionEnable == _compressEnable) && (kColorSpaceRGB == _pixelFormat))
+		if ((kAAFCompressionEnable == _compressEnable) && (kAAFColorSpaceRGB == _pixelFormat))
 		{
-			param.operand.expColorSpace = kColorSpaceRGB;
+			param.operand.expColorSpace = kAAFColorSpaceRGB;
 			checkResult(fmt->AddFormatSpecifier (kAAFPixelFormat,  sizeof(param.operand.expColorSpace), (aafDataBuffer_t)&param.operand.expColorSpace));
 
 			// Default to standard component order.
@@ -2245,7 +2245,7 @@ HRESULT STDMETHODCALLTYPE
 		}
 		else
 		{
-			param.operand.expColorSpace = kColorSpaceYUV;
+			param.operand.expColorSpace = kAAFColorSpaceYUV;
 			checkResult(fmt->AddFormatSpecifier (kAAFPixelFormat, sizeof(param.operand.expColorSpace), (aafDataBuffer_t)&param.operand.expColorSpace)); 
 		}
 
@@ -2316,7 +2316,7 @@ HRESULT STDMETHODCALLTYPE
 	{
 		if(EqualAUID(&dataDefID, &DDEF_Picture))
 		{
-			if (kSDKCompressionDisable == _compressEnable)
+			if (kAAFCompressionDisable == _compressEnable)
 			{ // The samples are compressed to we can so get the size of the sample
 				// from the corresponding element in the sampleIndex.
 				*pResult = GetSampleSizeFromIndex(pos);
@@ -2362,7 +2362,7 @@ HRESULT STDMETHODCALLTYPE
 	{
 		if(EqualAUID(&dataDefID, &DDEF_Picture))
 		{ 
-			if (kSDKCompressionDisable == _compressEnable)
+			if (kAAFCompressionDisable == _compressEnable)
 			{ // If data is compressed, and will not be software decompressed, find
 				// the largest frame by scanning the sample index.  This may take a
 				// while.
@@ -2451,7 +2451,7 @@ JSAMPIMAGE CAAFJPEGCodec::GetRawSampleImage(const aafCompressionParams& param) /
 {
 	// We currently only support 601 and 4-2-2.
 	checkExpression(1 == param.verticalSubsampling && 2 == param.horizontalSubsampling &&
-									kColorSpaceYUV == param.colorSpace,
+									kAAFColorSpaceYUV == param.colorSpace,
 				          AAFRESULT_BADPIXFORM); // AAFRESULT_BADLAYOUT
 
 	if (NULL == _rawSampleImage)
@@ -2572,7 +2572,7 @@ void CAAFJPEGCodec::DumpSampleImage(
 {
 	// We currently only support 601 and 4-2-2.
 	checkExpression(1 == param.verticalSubsampling && 2 == param.horizontalSubsampling &&
-									kColorSpaceYUV == param.colorSpace,
+									kAAFColorSpaceYUV == param.colorSpace,
 				          AAFRESULT_BADPIXFORM); // AAFRESULT_BADLAYOUT
 #ifdef _AAF_DUMP
 	
@@ -2625,7 +2625,7 @@ aafUInt32 CAAFJPEGCodec::CopyDataToSampleImage(
 {
 	// We currently only support 601 and 4-2-2.
 	checkExpression(1 == param.verticalSubsampling && 2 == param.horizontalSubsampling &&
-									kColorSpaceYUV == param.colorSpace,
+									kAAFColorSpaceYUV == param.colorSpace,
 				          AAFRESULT_BADPIXFORM); // AAFRESULT_BADLAYOUT
 	
 	// Move the CbYCrY' elements from the interleaved compression buffer
@@ -2676,7 +2676,7 @@ aafUInt32 CAAFJPEGCodec::CopyDataFromSampleImage(
 {
 	// We currently only support 601 and 4-2-2.
 	checkExpression(1 == param.verticalSubsampling && 2 == param.horizontalSubsampling &&
-									kColorSpaceYUV == param.colorSpace,
+									kAAFColorSpaceYUV == param.colorSpace,
 				          AAFRESULT_BADPIXFORM); // AAFRESULT_BADLAYOUT
 
 	DumpSampleImage(param, rawSampleImage);
@@ -2759,8 +2759,8 @@ HRESULT CAAFJPEGCodec::CompressImage(
 		/* colorspace of input image */
 		switch (param.colorSpace)
 		{
-			case kColorSpaceYUV:
-			case kColorSpaceYCrCb:
+			case kAAFColorSpaceYUV:
+			case kAAFColorSpaceYCrCb:
 				cinfo.in_color_space = JCS_YCbCr;
 				break;
 
@@ -2931,8 +2931,8 @@ HRESULT CAAFJPEGCodec::DecompressImage(
 		// Set the output color space.
 		switch (param.colorSpace)
 		{
-			case kColorSpaceYUV:
-			case kColorSpaceYCrCb:
+			case kAAFColorSpaceYUV:
+			case kAAFColorSpaceYCrCb:
 				cinfo.out_color_space = JCS_YCbCr;
 				break;
 
@@ -3220,7 +3220,7 @@ HRESULT CAAFJPEGCodec::AllocateSampleIndex(
 
 		if (newcount > _maxIndex)
 		{
-			if (kMediaOpenReadOnly != _openMode)
+			if (kAAFMediaOpenReadOnly != _openMode)
 			{
 				// Add extra elements to minimize resizing overhead.
 				newcount += kDefaultSampleIndexIncrement;

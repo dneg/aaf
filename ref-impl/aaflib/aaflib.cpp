@@ -210,7 +210,7 @@ STDAPI AAFFileOpenExistingRead (
   if (FAILED(hr))
     return hr;
 
-  if (isAnAAFFile == AAFFalse)
+  if (isAnAAFFile == kAAFFalse)
     return AAFRESULT_NOT_AAF_FILE;
 
   // Get the dll wrapper
@@ -261,7 +261,7 @@ STDAPI AAFFileOpenExistingModify (
   if (FAILED(hr))
     return hr;
 
-  if (isAnAAFFile == AAFFalse)
+  if (isAnAAFFile == kAAFFalse)
     return AAFRESULT_NOT_AAF_FILE;
 
   // Get the dll wrapper
@@ -492,14 +492,14 @@ aafBool isRecognizedSignature(unsigned char* signature,
   ASSERT("Valid signature buffer size", signatureSize != 0);
   ASSERT("Valid file kind", fileKind != 0);
 
-  aafBool result = AAFFalse;
+  aafBool result = kAAFFalse;
 
   for (size_t i = 0; i < sizeof(fileKindTable)/sizeof(fileKindTable[0]); i++) {
     if (fileKindTable[i].signatureSize <= signatureSize) {
       if (memcmp(fileKindTable[i].signature,
                  signature,
                  fileKindTable[i].signatureSize) == 0) {
-        result = AAFTrue;
+        result = kAAFTrue;
         memcpy(fileKind, fileKindTable[i].fileKind, sizeof(CLSID));
         break;
       }
@@ -543,7 +543,7 @@ STDAPI AAFFileIsAAFFile (
                                                 pAAFFileKind);
       } else {
         // The file exists but we can't read the signature
-        *pFileIsAAFFile = AAFFalse;
+        *pFileIsAAFFile = kAAFFalse;
         hr = S_OK;
       }
       fclose(f);

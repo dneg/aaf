@@ -450,7 +450,7 @@ void ImplAAFTypeDefString::internalize(OMByte* externalBytes,
 
 aafBool ImplAAFTypeDefString::IsFixedSize (void) const
 {
-  return AAFFalse;
+  return kAAFFalse;
 }
 
 
