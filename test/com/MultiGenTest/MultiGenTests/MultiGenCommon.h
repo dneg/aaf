@@ -85,7 +85,7 @@ void get_mob_throw_if_not_found( CmdState& state,
   CHECK_HRESULT( file->GetHeader( &header ) );
     
   if ( !get_mob_by_name( header, name, mob ) ) {
-    stringstream anError;
+    std::stringstream anError;
     anError << name << " not found";
     throw TestFailedEx( anError.str() );
   }
