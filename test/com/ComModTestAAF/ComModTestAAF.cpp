@@ -34,14 +34,25 @@
 #include <fstream.h>
 #include <stdlib.h>
 #include <time.h>
+#include <string.h>
 
 
-#ifdef WIN32
+#ifndef __AAF_h__
+#include "AAF.h"
+#endif
+
+#ifndef __AAFTypes_h__
+#include "AAFTypes.h"
+#endif
+
+
+#if defined( OS_WINDOWS )
+#include <winbase.h>
 #include <unknwn.h>
 #include <objbase.h>
 #endif
 
-#if defined(macintosh)
+#if defined( OS_MACOS )
 #define _MAC
 
 // Make sure we have defined IID_IUnknown and IID_IClassFactory.
@@ -61,21 +72,13 @@
 #include "dispatch.h"
 #include "wintypes.h"
 #include <olectl.h>
-#endif
 
-
-#ifndef __AAF_h__
-#include "AAF.h"
-#endif
+#endif  // OS_MACOS
 
 
 #include "CAAFModuleTest.h"
 #include "ModuleTest.h"
 
-#ifdef WIN32
-#include <winbase.h>
-//#include <tchar.h>
-#endif
 
 typedef AAFRESULT (*AAFModuleTestProc)();
 
@@ -88,7 +91,7 @@ static void formatError(DWORD errorCode)
 {
   cerr << "RESULT = " << (long)errorCode << " (0x" << hex << errorCode << dec << ")" << endl;
 
-#ifdef WIN32
+#if defined( OS_WINDOWS )
   CHAR buffer[256];
 
   int status = FormatMessageA(
@@ -106,7 +109,7 @@ static void formatError(DWORD errorCode)
     }
     cerr << buffer << endl;
   }
-#endif
+#endif // OS_WINDOWS
 
 	cerr << endl;
 }
