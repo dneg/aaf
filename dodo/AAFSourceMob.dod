@@ -21,7 +21,7 @@ AD_HEAD
 
 
 AD_FORWARD_DECLARATION(AAFMediaDescriptor)
-AD_FORWARD_DECLARATION(AAFDataDefinition)
+AD_FORWARD_DECLARATION(AAFDataDef)
 AD_FORWARD_DECLARATION(AAFFindSourceInfo)
 AD_FORWARD_DECLARATION(AAFComponent)
 AD_FORWARD_DECLARATION(AAFSegment)
@@ -61,7 +61,7 @@ Low\-level function that creates a new Source Mob object for a nonstandard
 AD_XMETHOD4(AddNilReference,
 			[in], objPass, aafTrackID_t, trackID, TrackID to be assigned to the new track.,
 			[in], objPass, aafLength_t, length, Duration of the Source Clip to be added to the new track.,
-			[in], objIn,AAFDataDefinition, dataDef, Data kind of the new track.,
+			[in], objIn,AAFDataDef, dataDef, Data kind of the new track.,
 			[in], objPass, aafRational_t, editRate, Edit rate of the new track.,
 Adds a track to a Source Mob that describes an original source of media.
   // @comm This function adds a track containing a Source Clip to a Source Mob. The
@@ -116,7 +116,7 @@ Adds an Edgecode track and Edgecode to the specified Source Mob.
   // @devnote based on omfmMobAddEdgecodeClip)
 
 AD_XMETHOD5(ValidateTimecodeRange,
-            [in], objIn, AAFDataDefinition, mediaKind,
+            [in], objIn, AAFDataDef, mediaKind,
             Data kind for the track to be added. The mediaKind parameter
   // requires a data kind valid for a media stream. 
   // @ex Valid data kinds are: |
@@ -133,7 +133,7 @@ Adds track containing Source Clips to a tape Source Mob to indicate that the
 AD_XMETHOD7(AddPhysSourceRef,
             [in], objPass, aafRational_t, editrate, Edit rate of track to contain reference.,
             [in], objPass, aafTrackID_t, aMobTrack, TrackID of track to contain reference.,
-            [in], objIn, AAFDataDefinition, mediaKind, Data kind of track to contain reference. The mediaKind parameter
+            [in], objIn, AAFDataDef, mediaKind, Data kind of track to contain reference. The mediaKind parameter
   // requires a data kind valid for a media stream. 
   // @ex Valid data kinds are: | 
   // Picture
@@ -164,7 +164,7 @@ Connects the specified Source Mob with the physical Source Mob that
 AD_XMETHOD_10(AddPulldownRef,
 			  [in], objPass, aafRational_t, editrate, Edit rate of track to contain reference.,
 			  [in], objPass, aafTrackID_t, aMobTrack, TrackID of track to contain reference.,
-			  [in], objIn, AAFDataDefinition, mediaKind,
+			  [in], objIn, AAFDataDef, mediaKind,
 			  Data kind of track to contain reference. The mediaKind parameter
   // requires a data kind valid for a media stream. 
   // @ex Valid data kinds are: |
