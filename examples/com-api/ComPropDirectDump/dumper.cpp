@@ -90,15 +90,17 @@ typedef IAAFSmartPointer<IAAFFile>                 IAAFFileSP;
 typedef IAAFSmartPointer<IAAFHeader>               IAAFHeaderSP;
 typedef IAAFSmartPointer<IEnumAAFProperties>       IEnumAAFPropertiesSP;
 typedef IAAFSmartPointer<IAAFTypeDefCharacter>       IAAFTypeDefCharacterSP;
+typedef IAAFSmartPointer<IEnumAAFPropertyValues>   IEnumAAFPropertyValuesSP;
+typedef IAAFSmartPointer<IAAFTypeDefSet>           IAAFTypeDefSetSP;
 
 
 // convenient error handlers.
-inline void checkResult(HRESULT r)
+/*inline*/ static void checkResult(HRESULT r)
 {
 	if (FAILED(r))
 		throw r;
 }
-inline void checkExpression(bool expression, HRESULT r)
+/*inline*/ static void checkExpression(bool expression, HRESULT r)
 {
 	if (!expression)
 		throw r;
@@ -256,6 +258,15 @@ static HRESULT dumpPropertyValue
 static HRESULT dumpRawStreamPropertyValue
 (
  IAAFPropertyValue * pPVal,
+ IAAFTypeDef *pTD,
+ IAAFDictionary * pDict,  // dictionary for this file
+ int indent,
+ ostream & os
+ );
+
+static HRESULT dumpPropertyValues
+(
+ IEnumAAFPropertyValues* pPVEnum,
  IAAFTypeDef *pTD,
  IAAFDictionary * pDict,  // dictionary for this file
  int indent,
@@ -587,7 +598,7 @@ HRESULT dumpPropertyValue (IAAFPropertyValueSP pPVal,
 				checkResult(pTDVA->GetCount(pPVal, &numElems));
 				
 				os << "Value: variably-sized array[" << numElems << "]:" << endl;
-				
+
 				aafUInt32 i;
 				for (i = 0; i < numElems; i++)
 				{
@@ -600,7 +611,24 @@ HRESULT dumpPropertyValue (IAAFPropertyValueSP pPVal,
 						indent+1,
 						os));
 				}
+				break;
+			}
+			
+		case kAAFTypeCatSet:
+			{
+				// Print out elements of array.
+				IAAFTypeDefSetSP pTDSet;
+				checkResult(pTD->QueryInterface(IID_IAAFTypeDefSet, (void**)&pTDSet));
 				
+				// Get number of elements
+				aafUInt32 numElems;
+				checkResult(pTDSet->GetCount(pPVal, &numElems));
+				
+				os << "Value: set[" << numElems << "]:" << endl;
+
+				IEnumAAFPropertyValuesSP pPVEnum;
+				checkResult(pTDSet->GetElements(pPVal, &pPVEnum));
+				checkResult(dumpPropertyValues(pPVEnum, pTD, pDict, indent, os));
 				break;
 			}
 			
@@ -1062,6 +1090,34 @@ HRESULT dumpRawStreamPropertyValue
 	os << dec << endl;
 	
 	return streamResult;
+}
+
+
+
+HRESULT dumpPropertyValues
+(
+ IEnumAAFPropertyValues* pPVEnum,
+ IAAFTypeDef * /*pTD*/,
+ IAAFDictionary * pDict,  // dictionary for this file
+ int indent,
+ ostream & os
+ )
+{
+	HRESULT result = S_OK;
+	aafUInt32 i = 0;
+	IAAFPropertyValueSP pElemPropVal;
+	while (SUCCEEDED(pPVEnum->NextOne(&pElemPropVal)))
+	{
+		printIndent (indent, os);
+		os << "[" << i << "]: ";
+		result = dumpPropertyValue (pElemPropVal,
+			pDict,
+			indent+1,
+			os);
+		++i;
+	}
+	
+	return result;
 }
 
 
