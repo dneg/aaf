@@ -93,10 +93,6 @@ public:
 
 
 private:
-  // names the given prop val as owner of these bits.  NULL if we own
-  // them.
-  void SetOwner (ImplAAFPropertyValue * pOwner);
-
   // type of this property
   ImplAAFTypeDef * _pType;
 
