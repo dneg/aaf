@@ -43,7 +43,6 @@
 #include "ModuleTest.h"
 #include "AAFDataDefs.h"
 #include "AAFDefUIDs.h"
-#include "AAFUtils.h"
 #include "AAFInterpolatorDefs.h"
 #include "AAFTypeDefUIDs.h"
 

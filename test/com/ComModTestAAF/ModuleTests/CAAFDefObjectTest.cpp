@@ -54,7 +54,6 @@
 #include "ModuleTest.h"
 #include "AAFDefUIDs.h"
 #include "AAFContainerDefs.h"
-#include "AAFUtils.h"
 
 #include "CAAFBuiltinDefs.h"
 

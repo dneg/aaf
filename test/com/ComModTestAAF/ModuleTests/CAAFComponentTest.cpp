@@ -37,7 +37,6 @@
 #include "AAFResult.h"
 #include "ModuleTest.h"
 #include "AAFDataDefs.h"
-#include "AAFUtils.h"
 #include "AAFDefUIDs.h"
 
 #include "CAAFBuiltinDefs.h"
