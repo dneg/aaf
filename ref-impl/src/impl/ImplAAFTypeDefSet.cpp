@@ -25,6 +25,10 @@
  *
  ************************************************************************/
 
+#ifndef __ImplAAFTypeDefSet_h__
+#include "ImplAAFTypeDefSet.h"
+#endif
+
 
 #ifndef __ImplAAFPropertyValue_h__
 #include "ImplAAFPropertyValue.h"
@@ -38,17 +42,21 @@
 
 
 #include "AAFStoredObjectIDs.h"
+#include "AAFPropertyIDs.h"
 
-#ifndef __ImplAAFTypeDefSet_h__
-#include "ImplAAFTypeDefSet.h"
-#endif
 
 #include <assert.h>
 #include <string.h>
 
 
-ImplAAFTypeDefSet::ImplAAFTypeDefSet ()
-{}
+ImplAAFTypeDefSet::ImplAAFTypeDefSet () :
+  _ElementType  ( PID_TypeDefinitionSet_ElementType, 
+                  L"ElementType", 
+                  L"/Dictionary/TypeDefinitions", 
+                  PID_MetaDefinition_Identification)
+{
+  _persistentProperties.put(_ElementType.address());
+}
 
 
 ImplAAFTypeDefSet::~ImplAAFTypeDefSet ()
@@ -56,20 +64,63 @@ ImplAAFTypeDefSet::~ImplAAFTypeDefSet ()
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDefSet::Initialize (
-      const aafUID_t &  /*id*/,
-      ImplAAFTypeDef * /*pTypeDef*/,
-      const aafCharacter *  /*pTypeName*/)
+      const aafUID_t &  id,
+      ImplAAFTypeDef * pTypeDef,
+      const aafCharacter *  pTypeName)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  if (! pTypeName) 
+    return AAFRESULT_NULL_PARAM;
+  if (! pTypeDef)
+    return AAFRESULT_NULL_PARAM;
+
+  //
+  // TBD: Validate that the given type definition exists in the
+  // dictionary.
+  //
+
+  return pvtInitialize(id, pTypeDef, pTypeName);
 }
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFTypeDefSet::pvtInitialize (
+      const aafUID_t &  id,
+      ImplAAFTypeDef * pTypeDef,
+      const aafCharacter *  pTypeName)
+{
+  if (! pTypeName) 
+    return AAFRESULT_NULL_PARAM;
+  if (! pTypeDef)
+    return AAFRESULT_NULL_PARAM;
+
+  AAFRESULT result = ImplAAFMetaDefinition::Initialize(id, pTypeName, NULL);
+  if (AAFRESULT_SUCCEEDED(result))
+  {
+    _ElementType = pTypeDef;
+  }
+
+  return result;
+}
+
 
 
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDefSet::GetType (
-      ImplAAFTypeDef ** /*ppTypeDef*/)
+      ImplAAFTypeDef ** ppTypeDef)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  if (! ppTypeDef)
+    return AAFRESULT_NULL_PARAM;
+
+  if(_ElementType.isVoid())
+    return AAFRESULT_OBJECT_NOT_FOUND;
+
+  *ppTypeDef = _ElementType;
+  assert (*ppTypeDef);
+
+  (*ppTypeDef)->AcquireReference ();
+
+  return AAFRESULT_SUCCESS;
 }
 
 
@@ -167,3 +218,25 @@ bool ImplAAFTypeDefSet::IsVariableArrayable () const
 
 bool ImplAAFTypeDefSet::IsStringable () const
 { return false; }
+
+
+
+
+
+
+// override from OMStorable.
+const OMClassId& ImplAAFTypeDefSet::classId(void) const
+{
+  return (*reinterpret_cast<const OMClassId *>(&AUID_AAFTypeDefSet));
+}
+
+// Override callbacks from OMStorable
+void ImplAAFTypeDefSet::onSave(void* clientContext) const
+{
+  ImplAAFTypeDef::onSave(clientContext);
+}
+
+void ImplAAFTypeDefSet::onRestore(void* clientContext) const
+{
+  ImplAAFTypeDef::onRestore(clientContext);
+}

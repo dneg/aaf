@@ -277,3 +277,25 @@ bool ImplAAFTypeDefRename::IsVariableArrayable () const
 
 bool ImplAAFTypeDefRename::IsStringable () const
 { return BaseType()->IsStringable(); }
+
+
+
+
+
+
+// override from OMStorable.
+const OMClassId& ImplAAFTypeDefRename::classId(void) const
+{
+  return (*reinterpret_cast<const OMClassId *>(&AUID_AAFTypeDefRename));
+}
+
+// Override callbacks from OMStorable
+void ImplAAFTypeDefRename::onSave(void* clientContext) const
+{
+  ImplAAFTypeDef::onSave(clientContext);
+}
+
+void ImplAAFTypeDefRename::onRestore(void* clientContext) const
+{
+  ImplAAFTypeDef::onRestore(clientContext);
+}
