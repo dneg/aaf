@@ -49,13 +49,7 @@
 extern "C" const aafClassID_t CLSID_EnumAAFPropertyDefs;
 
 ImplAAFTaggedValueDefinition::ImplAAFTaggedValueDefinition ()
-  : _parentProperties( PID_TaggedValueDefinition_TaggedValueParentProperties,
-		       L"TaggedValueParentProperties",
-		       L"/MetaDictionary/PropertyDefinitions",
-                       PID_MetaDefinition_Identification )
-{
-  _persistentProperties.put( _parentProperties.address() );
-}
+{}
 
 ImplAAFTaggedValueDefinition::~ImplAAFTaggedValueDefinition ()
 {}
@@ -66,7 +60,7 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFTaggedValueDefinition::AddParentProperty (
       ImplAAFPropertyDef* pParentProperty )
 {
-  return AAFWeakRefSetUtil::Add<ImplAAFPropertyDef>( pParentProperty, this, _parentProperties );
+  return AAFRESULT_NOT_IMPLEMENTED;
 }
 
 
@@ -74,7 +68,7 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFTaggedValueDefinition::GetParentProperties (
       ImplEnumAAFPropertyDefs** ppEnum )
 {
-  return AAFWeakRefSetUtil::Get( ppEnum, CLSID_EnumAAFPropertyDefs, this, _parentProperties );
+  return AAFRESULT_NOT_IMPLEMENTED;
 }
 
 
@@ -82,7 +76,7 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFTaggedValueDefinition::CountParentProperties (
       aafUInt32*  pNumProperties )
 {
-  return AAFWeakRefSetUtil::Count( pNumProperties, _parentProperties );
+  return AAFRESULT_NOT_IMPLEMENTED;
 }
 
 
@@ -90,7 +84,6 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFTaggedValueDefinition::RemoveParentProperty (
       ImplAAFPropertyDef * /*pParentProperty*/)
 {
-  // FIXME - Implement
   return AAFRESULT_NOT_IMPLEMENTED;
 }
 

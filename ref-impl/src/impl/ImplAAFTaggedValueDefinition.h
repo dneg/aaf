@@ -94,9 +94,6 @@ public:
         (ImplAAFPropertyDef * pParentProperty);
 
  private:
-
-  OMWeakReferenceSetProperty<ImplAAFPropertyDef> _parentProperties;
-
 };
 
 #endif // ! __ImplAAFTaggedValueDefinition_h__

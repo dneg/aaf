@@ -54,16 +54,13 @@ extern "C" const aafClassID_t CLSID_EnumAAFPropertyDefs;
 
 ImplAAFKLVDataDefinition::ImplAAFKLVDataDefinition ()
 
-  : _parentProperties( PID_KLVDataDefinition_KLVDataParentProperties,
-		       L"KLVDataParentProperties",
-		       L"/MetaDictionary/PropertyDefinitions",
-                       PID_MetaDefinition_Identification ),
-
-    _klvDataTypeDef(   PID_KLVDataDefinition_KLVDataType,
+  : _klvDataTypeDef(   PID_KLVDataDefinition_KLVDataType,
 	               L"KLVDataType",
 	               L"/MetaDictionary/TypeDefinitions",
 		       PID_MetaDefinition_Identification )
-{}
+{
+  _persistentProperties.put( _klvDataTypeDef.address() );
+}
 
 
 ImplAAFKLVDataDefinition::~ImplAAFKLVDataDefinition ()
@@ -74,7 +71,7 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFKLVDataDefinition::AddParentProperty (
       ImplAAFPropertyDef * pParentProperty )
 {
-  return AAFWeakRefSetUtil::Add<ImplAAFPropertyDef>( pParentProperty, this, _parentProperties );
+  return AAFRESULT_NOT_IMPLEMENTED;
 }
 
 
@@ -82,7 +79,7 @@ AAFRESULT STDMETHODCALLTYPE
 ImplAAFKLVDataDefinition::GetParentProperties (
       ImplEnumAAFPropertyDefs ** ppEnum )
 {
-  return AAFWeakRefSetUtil::Get( ppEnum, CLSID_EnumAAFPropertyDefs, this, _parentProperties );
+  return AAFRESULT_NOT_IMPLEMENTED;
 }
 
 
@@ -90,7 +87,7 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFKLVDataDefinition::CountParentProperties (
       aafUInt32* pNumProperties )
 {
-  return AAFWeakRefSetUtil::Count( pNumProperties, _parentProperties );
+  return AAFRESULT_NOT_IMPLEMENTED;
 }
 
 
@@ -98,7 +95,6 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFKLVDataDefinition::RemoveParentProperty (
       ImplAAFPropertyDef * /*pParentProperty*/)
 {
-  // FIXME - Implement
   return AAFRESULT_NOT_IMPLEMENTED;
 }
 

@@ -113,7 +113,7 @@ public:
         (ImplAAFTypeDef * pTypeDef);
 
  private:
-  OMWeakReferenceSetProperty<ImplAAFPropertyDef> _parentProperties;
+  
   OMWeakReferenceProperty<ImplAAFTypeDef> _klvDataTypeDef;
     
 };
