@@ -26,6 +26,7 @@ const int PID_MOB_CREATE_TIME	= 2;
 const int PID_MOB_MOD_TIME		= 3;
 const int PID_MOB_SLOTS			= 4;
 
+
 class ImplAAFSegment;
 
 class ImplAAFMobSlot;
@@ -340,6 +341,18 @@ public:
 	// Interfaces visible inside the toolkit, but not exposed through the API
 AAFRESULT
     GetNthMobSlot (aafInt32 index /* 0-based*/, ImplAAFMobSlot **ppMobSlot);
+  //****************
+  // AddPhysSourceRef()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    AddPhysSourceRef
+        (aafAppendOption_t  addType,
+		 aafRational_t  editrate,
+		 aafSlotID_t  aMobSlot,
+         aafUID_t * pEssenceKind,
+		aafSourceRef_t  ref,
+        aafLength_t  srcRefLength);
+
 
 virtual AAFRESULT STDMETHODCALLTYPE
     GetMobKind (aafMobKind_t *pMobKind);
