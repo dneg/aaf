@@ -25,6 +25,12 @@
 #ifndef __ImplAAFCloneResolver_h__
 #define __ImplAAFCloneResolver_h__
 
+// Temporary switch to turn ImplAAFCloneResolver
+// functionality on and off.
+// If DISABLE_CLONE_RESOLVER defined, ImplAAFCloneResolver
+// methods and related routins do nothing.
+#define DISABLE_CLONE_RESOLVER
+
 #include "AAFResult.h"
 #include "AAFUtils.h"
 
@@ -145,15 +151,18 @@ class ImplAAFCloneResolver {
   template <class Type>
   void ResolveWeakReference( const OMWeakReferenceProperty<Type>& weakRef )
   {
+#ifndef DISABLE_CLONE_RESOLVER
 	if ( !weakRef.isOptional() || weakRef.isPresent() ) {
 		const Type* obj = weakRef;
 		CloneAndRegister( obj );
 	}
+#endif
   }
 
   template <class Type>
   void ResolveWeakReference( const OMWeakReferenceVectorProperty<Type>& weakRefVec )
   {
+#ifndef DISABLE_CLONE_RESOLVER
 	if ( !weakRefVec.isOptional() || weakRefVec.isPresent() ) {
 		OMWeakReferenceVectorIterator<Type> iterator( weakRefVec );
 		while( ++iterator ) {
@@ -161,11 +170,13 @@ class ImplAAFCloneResolver {
 			CloneAndRegister( obj );
 		}
 	}
+#endif
   }
 
   template <class Type>
   void ResolveWeakReference( const OMWeakReferenceSetProperty<Type>& weakRefSet )
   {
+#ifndef DISABLE_CLONE_RESOLVER
 	if ( !weakRefSet.isOptional() || weakRefSet.isPresent() ) {
 	  OMWeakReferenceSetIterator<Type> iterator( weakRefSet );
 	  while( ++iterator ) {
@@ -173,6 +184,7 @@ class ImplAAFCloneResolver {
 	    CloneAndRegister( obj );
 	  }
 	}
+#endif
   }
 
   // Add a mobID to the list, and get the list.  AddSourceReference
@@ -199,6 +211,7 @@ class ImplAAFCloneResolver {
   template <class Type>
   void CloneAndRegister( const Type* pSrcDef )
   {
+#ifndef DISABLE_CLONE_RESOLVER
     aafUID_t auid;
 
     _AAFCLONE_CHECK_HRESULT( pSrcDef->GetAUID( &auid ) );
@@ -262,6 +275,7 @@ class ImplAAFCloneResolver {
 	  
       _AAFCLONE_CHECK_HRESULT( ImplAAFCloneResolverRegisterDef( _pDstDict, pDstDef ) );
     }
+#endif
   }
 
 private:
