@@ -69,6 +69,14 @@ void OMRootStorable::save(void) const
   store()->save(*nonConstThis);
 }
 
+  // @mfunc Close this <c OMRootStorable>.
+void OMRootStorable::close(void)
+{
+  TRACE("OMRootStorable::close");
+
+  OMStorable::close(); // call base class close() for now
+}
+
   // @mfunc Restore the contents of an <c OMRootStorable>.
 void OMRootStorable::restoreContents(void)
 {

@@ -54,6 +54,9 @@ public:
     // @cmember Save this <c OMRootStorable>.
   virtual void save(void) const;
 
+    // @cmember Close this <c OMRootStorable>.
+  virtual void close(void);
+
     // @cmember Restore the contents of an <c OMRootStorable>.
   virtual void restoreContents(void);
 
