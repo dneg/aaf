@@ -26,19 +26,20 @@
 #
 # pdefs-PPCDarwin.mk
 #
-#	This file contains makefile definitions for the MACOSX platform.
+#	This file contains makefile definitions for the Darwin (Mac OS X)
+#	platform.
 #
 #
 # Uses:
 #	COMPILER, XL, RPATH, CC
-#	
+#
 # Requires:
 #	XL, RPATH, CC
 #
 # Sets:
-#	MIPS_ABI, COMPILER, PLATFORM_CFLAGS, RPATH_OPT, 
+#	COMPILER, PLATFORM_CFLAGS, RPATH_OPT,
 #	LD, LD_STAT_LIB, LD_DYN_LIB, U_OPTS, OBJ, EXE, LIB, DLL, BYTE_ORDER,
-#	UUIDLIB
+#	UUIDLIB, PLATFORMLIBS
 #
 #------------------------------------------------------------------------------
 
@@ -48,43 +49,43 @@
 #------------------------------------------------------------------------------
 include $(AAFBASE)/build/pdefs-Unix.mk
 
+## Now redifine copy so we don't blow out the TOC on static .a libs.
+CP = ditto
 
 #------------------------------------------------------------------------------
 # Compiler-specific definitions
 #------------------------------------------------------------------------------
 COMPILER ?= g++
 include $(AAFBASE)/build/cdefs-$(COMPILER).mk
-CC=c++
+CC = $(COMPILER)
 
 #------------------------------------------------------------------------------
 # Platform specific compiler options
 #------------------------------------------------------------------------------
-PLATFORM_CFLAGS = 
+PLATFORM_CFLAGS = -arch ppc
 
 
 #------------------------------------------------------------------------------
 # Linker command and options
 #------------------------------------------------------------------------------
-RPATH_OPT = $(XL)-rpath $(XL)$(RPATH)
+RPATH_OPT =
 
 # Command to link executable.
-LD = $(CC) -ldl -rdynamic
+LD = $(COMPILER)
 
 # Command to link static library
 ifndef LD_STAT_LIB
-    # Note: CC is invoked here to use IRIX specific 
-    # compiler option -ar.
     LD_STAT_LIB = libtool -static -o
 endif
 
 # Command to link dynamic library
 ifndef LD_DYN_LIB
-    LD_DYN_LIB = $(CC) -shared -r
+    LD_DYN_LIB = $(COMPILER) -dynamiclib
 endif
 
 # UUID library to use
 ifndef UUIDLIB
-    UUIDLIB = 
+    UUIDLIB =
 endif
 
 
@@ -100,15 +101,25 @@ U_OPTS=no_unicode
 # Binary file extensions
 #------------------------------------------------------------------------------
 OBJ ?= .o
-EXE ?= 
+EXE ?=
 LIB ?= .a
-DLL ?= .so
+DLL ?= .dylib
 
 
 #------------------------------------------------------------------------------
 # Intel machines are Little Endian (lower byte first)
-# Mac, HP, SUN, etc. are Big Endian (higher byte first)
+# Mac PPC, HP, SUN, etc. are Big Endian (higher byte first)
 # BYTE_ORDER = -DLITTLEENDIAN=1
 #------------------------------------------------------------------------------
 BYTE_ORDER = -DBIGENDIAN=1
 
+#------------------------------------------------------------------------------
+#  Get OS revision and add version specific libs as needed.
+#------------------------------------------------------------------------------
+DARWIN_REV = $(shell uname -r  | cut -c 1 )
+ifeq ($(DARWIN_REV),6)
+    PLATFORMLIBS = -ldl -lwchar
+else
+    # assuming >6
+    PLATFORMLIBS =
+endif
