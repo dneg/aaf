@@ -116,6 +116,9 @@ public:
 										ImplAAFOperationGroup **effeObject, aafInt32	*nestDepth,
 										ImplAAFComponent **foundObj, aafBool *foundTransition);
 
+	AAFRESULT GetCriteriaSourceClip(
+			aafMediaCriteria_t *criteria,
+			ImplAAFSourceClip		**retSrcClip);
 
 public:
   // Declare this class to be storable.
