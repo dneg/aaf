@@ -40,6 +40,9 @@
 
 #include "ImplAAFContext.h"
 #include "ImplAAFDictionary.h"
+#include "ImplAAFFileDescriptor.h"
+#include "ImplAAFSourceMob.h"
+
 
 #include <assert.h>
 #include <string.h>
@@ -372,21 +375,6 @@ bool ImplAAFPluginManager::FindPluginFromDefintion(
   return (kAAFTrue == found);
 }
 
-
-bool ImplAAFPluginManager::FindPluginFromEssenceDesc(
-  aafUID_constref	essenceDesc,
-  CLSID& clsid)
-{
-	aafBool		found = kAAFFalse;
-
-  if (NULL != _codecDesc)
-	  TableUIDLookupBlock(_codecDesc, essenceDesc, sizeof(CLSID), &clsid, &found);
-
-  return (kAAFTrue == found);
-}
-
-
-
 AAFRESULT ImplAAFPluginManager::CreateInstanceFromDefinition(
 			aafUID_constref		pluginID,
 			IUnknown* pUnkOuter,
@@ -421,24 +409,61 @@ AAFRESULT ImplAAFPluginManager::GetPluginInstance(
 
 
 AAFRESULT ImplAAFPluginManager::MakeCodecFromEssenceDesc(
-			aafUID_t		essenceDescriptor,	// Stored classID
-			IAAFEssenceCodec **codec)
+			ImplAAFSourceMob		*fileMob,	// Stored classID
+			IAAFEssenceStream		*stream,
+			IAAFEssenceCodec		**codec)
 {
-	CLSID		codecCLSID;
-
+	CLSID					codecCLSID;
+	aafUID_t				essenceDescClass;
+	IAAFEssenceCodec		*localCodec;
+	aafBool					found = kAAFFalse;
+	aafSelectInfo_t			selectInfo;
+	ImplAAFFileDescriptor	*fileDescriptor;
+	IUnknown				*iUnk;
+	IAAFSourceMob			*iFileMob;
 
 	XPROTECT()
 	{
-		if(!FindPluginFromEssenceDesc(essenceDescriptor, codecCLSID))
-			return(AAFRESULT_CODEC_INVALID);
-		CHECK(CreateInstance(codecCLSID,
-               NULL, 
-               IID_IAAFEssenceCodec, 
-               (void **)codec));
+		if (NULL != _codecDesc)
+		{
+			aafInt32			numMatches;
+			aafBool				more;
+			aafTableIterate_t	iter;
+			
+			CHECK(fileMob->GetEssenceDescriptor((ImplAAFEssenceDescriptor **)&fileDescriptor));
+
+			numMatches = 0;
+			CHECK(fileDescriptor->GetObjectClass(&essenceDescClass));
+			(TableFirstEntryMatching(_codecDesc, &iter, (void*)&essenceDescClass, &more));
+			while(more)
+			{
+				// Assert that sizeof(clsid) == iter->valueLen
+				memcpy(&codecCLSID, iter.valuePtr, sizeof(codecCLSID));
+				CHECK(CreateInstance(codecCLSID,
+					NULL, 
+					IID_IAAFEssenceCodec, 
+					(void **)&localCodec));
+				iUnk = static_cast<IUnknown *> (fileMob->GetContainer());	// Codec knowns about compFilemob only
+				CHECK(iUnk->QueryInterface(IID_IAAFSourceMob, (void **)&iFileMob));
+				iUnk->Release();
+				iUnk= NULL;
+				CHECK(localCodec->GetSelectInfo (iFileMob, stream, &selectInfo));
+				iFileMob->Release();
+				iFileMob= NULL;
+
+				if(selectInfo.willHandleMDES)
+				{
+					*codec = localCodec;
+					break;
+				}
+				numMatches++;
+				(TableNextEntry(&iter, &more));
+			}
+		}	
 	}
 	XEXCEPT
 	XEND
-
+		
 	return(AAFRESULT_SUCCESS);
 }
 
