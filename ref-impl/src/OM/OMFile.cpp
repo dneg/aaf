@@ -367,7 +367,7 @@ void OMFile::saveFile(void* clientOnSaveContext)
 
   _clientOnSaveContext = clientOnSaveContext;
 
-  if (_mode == modifyMode) {
+  if (isWritable()) {
     _rootStore->save(*this);
   }
 }

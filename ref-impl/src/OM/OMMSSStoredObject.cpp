@@ -300,7 +300,7 @@ void OMMSSStoredObject::close(OMFile& file)
 
   close();
 
-  if (file.accessMode() == OMFile::modifyMode) {
+  if (file.isWritable()) {
     OMFileSignature signature = file.signature();
     OMRawStorage* store = file.rawStorage();
     if (store != 0) {
