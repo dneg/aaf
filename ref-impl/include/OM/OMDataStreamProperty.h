@@ -31,7 +31,9 @@
 
 #include "OMDataTypes.h"
 
-#include "OMProperty.h"
+#include "OMPropertyBase.h"
+
+struct IStream;
 
   // @class Persistent data stream properties supported by the Object
   //        Manager.
