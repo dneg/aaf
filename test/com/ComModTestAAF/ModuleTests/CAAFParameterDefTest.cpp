@@ -158,6 +158,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pOperationDef->SetCategory (TEST_CATEGORY));
 		checkResult(pOperationDef->AddParameterDefs (pParamDef));
 		checkResult(pOperationDef->SetBypass (TEST_BYPASS));
+		// !!!Added circular definitions because we don't have optional properties
+		checkResult(pOperationDef->AppendDegradeToOperations (pOperationDef));
 
 		checkResult(pParamDef->SetDisplayUnits(TEST_PARAM_UNITS));
 		checkResult(pParamDef->QueryInterface(IID_IAAFDefObject, (void **) &pDefObject));
@@ -165,11 +167,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pDefObject->SetDescription (TEST_PARAM_DESC));
 		pDefObject->Release();
 		pDefObject = NULL;
-
-#if 0
-		checkResult(pOperationDef->PrependDegradeToEffects (ImplAAFOperationDef  *pOperationDef));
-		checkResult(pOperationDef->AppendDegradeToEffects (ImplAAFOperationDef  *pOperationDef));
-#endif
 	}
 	catch (HRESULT& rResult)
 	{
