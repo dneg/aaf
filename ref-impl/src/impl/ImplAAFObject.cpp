@@ -33,12 +33,14 @@
 #include "ImplAAFProperty.h"
 #include "ImplAAFPropertyDef.h"
 #include "ImplAAFPropertyValue.h"
+#include "ImplAAFPropValData.h"
 #include "ImplEnumAAFProperties.h"
 
 #include "ImplAAFObjectCreation.h"
 #include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
 #include "OMProperty.h"
+#include "AAFUtils.h"
 
 
 extern "C" const aafClassID_t CLSID_AAFProperty;
@@ -62,7 +64,10 @@ public:
   virtual AAFRESULT
     GetNthElement
         (aafUInt32  index,
-         ImplAAFProperty* * pElem);
+         ImplAAFProperty ** pElem);
+
+  void SetPropertyValue (ImplAAFPropertyDef * pPropDef,
+						 ImplAAFPropertyValue * pNewPropVal);
 
   AAFRESULT
     Initialize (ImplAAFObject * pObj,
@@ -70,14 +75,148 @@ public:
 
 private:
   ImplAAFPropertySP * _pProperties;
-  aafUInt32           _count;
+  aafUInt32           _numUsed;
+  aafUInt32           _numAllocated;
+  OMPropertySet     * _pOMPropSet;
 };
 
 
 
+//
+// 1) See if there is an OMProperty in this OMPropertySet
+//    corresponding to the given OMPropertyId.  If not, it's an
+//    error.  If so, remember that OMProperty.
+//
+// 2) See if there is an existing ImplAAFProperty in _pProperties
+//    corresponding to the given OMPropertyId.  If so, remember it.
+//    If not, create one, and initialize it, and remember it.
+//
+// 3) Set the remembered property to contain the new property value.
+//
+// 4) Set the remembered OMProperty's bits to the new prop value's
+//    bits.
+//
+void ImplPropertyCollection::SetPropertyValue
+(
+ ImplAAFPropertyDef * pPropDef,
+ ImplAAFPropertyValue * pNewPropVal
+)
+{
+  assert (pPropDef);
+  assert (pNewPropVal);
+  assert (_pOMPropSet);
+
+  AAFRESULT hr;
+
+  const OMPropertyId pid = pPropDef->OmPid ();
+
+  //
+  // 1) See if there is an OMProperty in this OMPropertySet
+  //    corresponding to the given OMPropertyId.  If not, it's an
+  //    error.  If so, remember that OMProperty.
+  //
+  const aafUInt32 numPropsDefined = _pOMPropSet->count();
+  size_t omContext = 0;
+  OMProperty * pOmProp = 0;
+  aafUInt32 i;
+  for (i = 0; i < numPropsDefined; i++)
+	{
+	  pOmProp = 0;
+	  _pOMPropSet->iterate (omContext, pOmProp);
+	  assert (pOmProp);
+	  if (pOmProp->propertyId() == pid)
+		{
+		  break;
+		}
+	  else
+		pOmProp = 0;
+	}
+
+  // If pOmProp is still null, that pid wasn't found.  This should
+  // have been detected earlier.
+  assert (pOmProp);
+
+  //
+  // 2) See if there is an existing ImplAAFProperty in _pProperties
+  //    corresponding to the given OMPropertyId.  If so, remember it.
+  //    If not, create one, and initialize it, and remember it.
+  //
+  ImplAAFPropertySP pProp;
+  for (i = 0; i < _numUsed; i++)
+	{
+	  pProp = _pProperties[i];
+	  assert (pProp);
+
+	  ImplAAFPropertyDefSP pTestPropDef;
+	  hr = pProp->GetDefinition (&pTestPropDef);
+	  assert (AAFRESULT_SUCCEEDED (hr));
+	  assert (pTestPropDef);
+	  OMPropertyId testPid = pTestPropDef->OmPid ();
+	  if (testPid == pid)
+		{
+		  // If this pid matches, bail out of the loop with pProp
+		  // pointing to the matching property.
+		  assert (pProp);
+		  break;
+		}
+	  pProp = 0;
+	}
+  if (! pProp)
+	{
+	  // There was no existing property in the collection.  Create and
+	  // append a new one.
+
+	  // We should have allocated enough space for all optional properties.
+	  assert (_numUsed < _numAllocated);
+
+	  ImplAAFProperty * tmp = (ImplAAFProperty*) CreateImpl (CLSID_AAFProperty);
+	  if (! tmp) 
+		throw AAFRESULT_NOMEMORY;
+	  assert (! pProp);
+	  pProp = tmp;
+	  tmp->ReleaseReference ();
+
+	  assert (pPropDef);
+	  assert (pOmProp);
+	  hr = pProp->Initialize (pPropDef, pOmProp);
+	  assert (AAFRESULT_SUCCEEDED (hr));
+	  assert (! _pProperties[_numUsed]);
+	  _pProperties[_numUsed] = pProp;
+	  _numUsed++;
+	}
+
+  //
+  // 3) Set the remembered property to contain the new property value.
+  //
+  assert (pProp);
+  hr = pProp->pvtSetValue (pNewPropVal);
+  assert (AAFRESULT_SUCCEEDED (hr));
+	  
+  //
+  // 4) Set the remembered OMProperty's bits to the new prop value's
+  // bits.
+  //
+  assert (pOmProp);
+  assert (pNewPropVal);
+  ImplAAFPropValData * pvd = dynamic_cast<ImplAAFPropValData*>(pNewPropVal);
+  assert (pvd);
+  aafMemPtr_t bits = 0;
+  aafUInt32 bitsSize;
+  hr = pvd->GetBits (&bits);
+  assert (bits);
+  assert (AAFRESULT_SUCCEEDED (hr));
+  hr = pvd->GetBitsSize (&bitsSize);
+  assert (AAFRESULT_SUCCEEDED (hr));
+  OMSimpleProperty * pSimpleProp = dynamic_cast <OMSimpleProperty*>(pOmProp);
+  assert (pSimpleProp);
+  pSimpleProp->setBits (bits, bitsSize);
+}
+
+
 ImplPropertyCollection::ImplPropertyCollection ()
   : _pProperties (0),
-	_count (0)
+	_numUsed (0),
+	_pOMPropSet (0)
 {}
 
 
@@ -95,6 +234,8 @@ AAFRESULT ImplPropertyCollection::Initialize
 
   if (! pOMPropSet)
 	return AAFRESULT_NULL_PARAM;
+
+  _pOMPropSet = pOMPropSet;
 
   // includes count of props both present and absent
   const aafUInt32 numPropsDefined = pOMPropSet->count();
@@ -114,34 +255,22 @@ AAFRESULT ImplPropertyCollection::Initialize
 		numPropsPresent++;
 	}
 
-  _count = numPropsPresent;
+  _numUsed = numPropsPresent;
 
-  _pProperties = new ImplAAFPropertySP [numPropsPresent];
+  // Allocate enough props for all defined (not just ones present) to
+  // make it easier to set optional properties which are currently not
+  // present.
+  _pProperties = new ImplAAFPropertySP [numPropsDefined];
   if (! _pProperties)
 	return AAFRESULT_NOMEMORY;
+  _numAllocated = numPropsDefined;
 
-  ImplAAFHeaderSP pHead;
   ImplAAFDictionarySP pDict;
   try
 	{
 	  AAFRESULT hr;
 	  assert (pObj);
-	  hr = pObj->MyHeadObject(&pHead);
-	  if (AAFRESULT_OBJECT_NOT_ATTACHED == hr)
-		{
-		  // this must be the head object
-		  pHead = dynamic_cast<ImplAAFHeader*>(pObj);
-		  if (!pHead)
-			throw AAFRESULT_OBJECT_NOT_ATTACHED;
-		  // smart pointers don't require this
-		  // pHead->AcquireReference();
-		}
-	  else
-		{
-		  if (AAFRESULT_FAILED(hr)) throw hr;
-		}
-	  assert (pHead);
-	  hr = (pHead->GetDictionary(&pDict));
+	  hr = pObj->GetDictionary(&pDict);
 	  if (AAFRESULT_FAILED(hr)) throw hr;
 	  assert (pDict);
 
@@ -212,7 +341,7 @@ AAFRESULT ImplPropertyCollection::GetNumElements
 {
   if (! pCount)
 	return AAFRESULT_NULL_PARAM;
-  *pCount = _count;
+  *pCount = _numUsed;
   return AAFRESULT_SUCCESS;
 }
 
@@ -225,7 +354,7 @@ AAFRESULT ImplPropertyCollection::GetNthElement
   if (! pElem)
 	return AAFRESULT_NULL_PARAM;
 
-  if (index >= _count)
+  if (index >= _numUsed)
 	return AAFRESULT_NO_MORE_OBJECTS;
 
   assert (_pProperties);
@@ -240,8 +369,15 @@ AAFRESULT ImplPropertyCollection::GetNthElement
 ImplAAFObject::ImplAAFObject ()
   : _pProperties (0),
 	_cachedDefinition (0),
-	_OMPropsInited (AAFFalse)
-{}
+	_OMPropsInited (AAFFalse),
+	_addedPropCount (0)
+{
+  const aafUID_t null_uid = { 0 };
+  _soid = null_uid;
+
+  for (size_t i = 0; i < kMaxAddedPropCount; i++)
+	_addedProps[i] = 0;
+}
 
 
 ImplAAFObject::~ImplAAFObject ()
@@ -250,6 +386,13 @@ ImplAAFObject::~ImplAAFObject ()
 
   if (_pProperties)
 	delete _pProperties;
+
+  for (size_t i = 0;
+	   i <_addedPropCount;
+	   i++)
+	{
+	  delete _addedProps[i];
+	}
 }
 
 
@@ -407,26 +550,128 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-	ImplAAFObject::GetPropertyValue (ImplAAFPropertyDef * /*pPropDef*/,
-									 ImplAAFPropertyValue ** /*ppPropVal*/)
+	ImplAAFObject::GetPropertyValue (ImplAAFPropertyDef * pPropDef,
+									 ImplAAFPropertyValue ** ppPropVal)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  if (! pPropDef)
+	return AAFRESULT_NULL_PARAM;
+
+  if (! ppPropVal)
+	return AAFRESULT_NULL_PARAM;
+
+  AAFRESULT hr;
+
+  ImplAAFClassDefSP pClass;
+  hr = GetDefinition (&pClass);
+  assert (AAFRESULT_SUCCEEDED (hr));
+
+  const OMPropertyId pid = pPropDef->OmPid ();
+
+  ImplAAFPropertyDefSP pTempProp;
+  hr = pClass->LookupPropertyDefbyOMPid (pid, &pTempProp);
+  // pTempProp is unused
+  if (AAFRESULT_FAILED (hr))
+	return AAFRESULT_BAD_PROP;
+
+  if (! _pProperties)
+	{
+	  hr = InitProperties();
+	  if (AAFRESULT_FAILED (hr))
+		return hr;
+	}
+  assert (_pProperties);
+
+  ImplEnumAAFPropertiesSP pPropEnum;
+  hr = GetProperties (&pPropEnum);
+  assert (AAFRESULT_SUCCEEDED (hr));
+
+  ImplAAFPropertySP pProp;
+  while (AAFRESULT_SUCCEEDED (pPropEnum->NextOne (&pProp)))
+	{
+	  assert (pProp);
+	  ImplAAFPropertyDefSP pTestPropDef;
+	  hr = pProp->GetDefinition (&pTestPropDef);
+	  assert (AAFRESULT_SUCCEEDED (hr));
+
+	  OMPropertyId testPid;
+	  testPid = pTestPropDef->OmPid ();
+
+	  if (pid == testPid)
+		{
+		  assert (ppPropVal);
+		  hr = pProp->GetValue (ppPropVal);
+		  assert (AAFRESULT_SUCCEEDED (hr));
+		  return AAFRESULT_SUCCESS;
+		}
+	  pProp = 0;
+	}
+  return AAFRESULT_PROP_NOT_PRESENT;
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
-	ImplAAFObject::SetPropertyValue (ImplAAFPropertyDef * /*pPropDef*/,
-									 ImplAAFPropertyValue * /*pPropVal*/)
+	ImplAAFObject::SetPropertyValue (ImplAAFPropertyDef * pPropDef,
+									 ImplAAFPropertyValue * pPropVal)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  if (!pPropDef)
+	return AAFRESULT_NULL_PARAM;
+
+  if (!pPropVal)
+	return AAFRESULT_NULL_PARAM;
+
+  AAFRESULT hr;
+
+  ImplAAFClassDefSP pClass;
+  hr = GetDefinition (&pClass);
+  assert (AAFRESULT_SUCCEEDED (hr));
+
+  const OMPropertyId pid = pPropDef->OmPid ();
+
+  ImplAAFPropertyDefSP pTempProp;
+  hr = pClass->LookupPropertyDefbyOMPid (pid, &pTempProp);
+  // pTempProp is unused
+  if (AAFRESULT_FAILED (hr))
+	return AAFRESULT_BAD_PROP;
+
+  if (! _pProperties)
+	{
+	  hr = InitProperties();
+	  if (AAFRESULT_FAILED (hr))
+		return hr;
+	}
+  assert (_pProperties);
+
+  _pProperties->SetPropertyValue (pPropDef, pPropVal);
+  return AAFRESULT_SUCCESS;
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
-	ImplAAFObject::IsPropertyPresent (ImplAAFPropertyDef * /*pPropDef*/,
-									  aafBool * /*pResult*/)
+	ImplAAFObject::IsPropertyPresent (ImplAAFPropertyDef * pPropDef,
+									  aafBool * pResult)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  if (! pPropDef)
+	return AAFRESULT_NULL_PARAM;
+
+  if (! pResult)
+	return AAFRESULT_NULL_PARAM;
+
+  AAFRESULT hr;
+  ImplAAFPropertyValueSP pTempPropVal;
+  hr = GetPropertyValue (pPropDef, &pTempPropVal);
+  // pTempPropVal unused
+
+  if (AAFRESULT_PROP_NOT_PRESENT == hr)
+	{
+	  *pResult = AAFFalse;
+	  return AAFRESULT_SUCCESS;
+	}
+  if (AAFRESULT_SUCCEEDED (hr))
+	{
+	  *pResult = AAFTrue;
+	  return AAFRESULT_SUCCESS;
+	}
+  return hr;
 }
 
 
@@ -586,82 +831,88 @@ void ImplAAFObject::InitOMProperties (void)
   assert (AAFRESULT_SUCCEEDED (hr));
   assert (spDef);
 
-//  propDefPair propDefs[kMaxProps];
-//  memset (propDefs, 0, sizeof (propDefs));
-//  aafUInt32 numPropDefs = 0;
-//  fillPropDefs (spDef, propDefs, numPropDefs);
-//  assert (numPropDefs <= kMaxProps);
-
   OMPropertySet * ps = propertySet();
   assert (ps);
   const size_t propCount = ps->count();
 
-  ImplAAFDictionarySP pDict;
-  hr = GetDictionary(&pDict);
-  assert (AAFRESULT_SUCCEEDED (hr));
-
   // Step 1: look through defined properties and see if there is an OM
   // prop to match each.
-  ImplEnumAAFPropertyDefsSP pdEnumSP;
-
-  ImplAAFPropertyDefSP pdSP;
-#if 0 // BobT hack! comment this out to avoid some time-consuming
-	  // stuff until we can profile and determine the culprit.
-  hr = spDef->GetPropertyDefs (&pdEnumSP);
-  assert (AAFRESULT_SUCCEEDED (hr));
-  assert (pdEnumSP);
-  while (AAFRESULT_SUCCEEDED (pdEnumSP->NextOne (&pdSP)))
+  while (1)
 	{
-	  assert (pdSP);
-	  OMPropertyId defPid = pdSP->OmPid ();
-	  OMPropertyId propPid = defPid + 1; // make sure it's set to
-										 // something different
-	  size_t context = 0;
-	  for (size_t i = 0; i < propCount; i++)
+	  // Loop through this class and all its parents
+	  ImplEnumAAFPropertyDefsSP pdEnumSP;
+	  hr = spDef->GetPropertyDefs (&pdEnumSP);
+	  assert (AAFRESULT_SUCCEEDED (hr));
+
+	  ImplAAFPropertyDefSP propDefSP;
+
+	  while (AAFRESULT_SUCCEEDED (pdEnumSP->NextOne (&propDefSP)))
 		{
-		  OMProperty * pProp = 0;
-		  ps->iterate (context, pProp);
-		  assert (pProp);
-		  propPid = pProp->propertyId ();
-		  if (defPid == propPid)
-			break;
+		  // Loop through all properties of this class
+		  OMPropertyId defPid = propDefSP->OmPid ();
+		  OMPropertyId propPid = defPid + 1; // make sure it's set to
+											 // something different
+		  size_t context = 0;
+		  for (size_t i = 0; i < propCount; i++)
+			{
+			  OMProperty * pProp = 0;
+			  ps->iterate (context, pProp);
+			  assert (pProp);
+			  propPid = pProp->propertyId ();
+			  if (defPid == propPid)
+				break;
+			}
+		  if (defPid != propPid)
+			{
+			  // Defined property wasn't found in OM property set.
+			  // We'll have to install one.
+
+			  // Get type info for the prop to be installed
+			  ImplAAFTypeDefSP ptd;
+			  hr = propDefSP->GetTypeDef (&ptd);
+			  assert (AAFRESULT_SUCCEEDED (hr));
+			  assert (ptd);
+
+			  // Get the property name from the property def.
+			  aafUInt32 wNameLen = 0;
+			  hr = propDefSP->GetNameBufLen (&wNameLen);
+			  assert (AAFRESULT_SUCCEEDED (hr));
+			  assert (wNameLen > 0);
+			  aafCharacter * wNameBuf =
+				(aafCharacter *) new aafUInt8[wNameLen];
+			  assert (wNameBuf);
+			  hr = propDefSP->GetName (wNameBuf, wNameLen);
+			  assert (AAFRESULT_SUCCEEDED (hr));
+
+			  // Create the property with the given name.
+			  OMProperty * pNewProp =
+				ptd->pvtCreateOMProperty (defPid, wNameBuf);
+
+			  // Remember this property so we can delete it later.
+			  _addedProps[_addedPropCount++] = pNewProp;
+			  assert (_addedPropCount <= kMaxAddedPropCount);
+
+			  // Bobt hack! this assertion was removed when optional
+			  // properties were put into service...
+			  //
+			  // assert (pNewProp->bitsSize ());
+			  delete[] wNameBuf;
+
+			  // Add the property to the property set.
+			  ps->put (pNewProp);
+			}
+		  propDefSP = 0;
 		}
-	  if (defPid != propPid)
-		{
-		  // Defined property wasn't found in OM property set.  We'll
-		  // have to install one.
 
-		  // Get type info for the prop to be installed
-		  ImplAAFTypeDefSP ptd;
-		  hr = pdSP->GetTypeDef (&ptd);
-		  assert (AAFRESULT_SUCCEEDED (hr));
-		  assert (ptd);
-
-		  // Get the property name from the property def.
-		  aafUInt32 wNameLen = 0;
-		  hr = pdSP->GetNameBufLen (&wNameLen);
-		  assert (AAFRESULT_SUCCEEDED (hr));
-		  assert (wNameLen > 0);
-		  aafCharacter * wNameBuf =
-			(aafCharacter *) new aafUInt8[wNameLen];
-		  assert (wNameBuf);
-		  hr = pdSP->GetName (wNameBuf, wNameLen);
-		  assert (AAFRESULT_SUCCEEDED (hr));
-
-		  // Create the property with the given name.
-		  OMProperty * pNewProp =
-			ptd->pvtCreateOMProperty (defPid, wNameBuf);
-		  // Bobt hack! this assertion was removed when optional
-		  // properties were put into service...
-		  //
-		  // assert (pNewProp->bitsSize ());
-		  delete[] wNameBuf;
-
-		  // Add the property to the property set.
-		  ps->put (pNewProp);
-		}
+	  // Look at the parent of this class
+	  ImplAAFClassDefSP parentSP;
+	  hr = spDef->GetParent (&parentSP);
+	  assert (AAFRESULT_SUCCEEDED (hr));
+	  if (! parentSP)
+		break;
+	  spDef = parentSP;
 	}
-#endif // 0
+
   // Step 2: look through OM properties.  2a. See if each is defined
   // in the class def.  It's an error if it isn't. 2b. Initialize it
   // with any info we can.
@@ -726,11 +977,30 @@ void ImplAAFObject::InitOMProperties (void)
 						 propName,
 						 ptd,
 						 isOptional ? true : false);
+	  ppd = 0;
 	}
+}
+
+
+void ImplAAFObject::pvtSetSoid (const aafUID_t & id)
+{
+  const aafUID_t null_uid = { 0 };
+
+  // make sure it hasn't been set already
+  assert (!EqualAUID (&id, &null_uid));
+
+  // make sure new one is valid
+  assert (EqualAUID (&_soid, &null_uid));
+  _soid = id;
 }
 
 
 //
 // Define the symbol for the stored object id
 //
-OMDEFINE_STORABLE(ImplAAFObject, AUID_AAFObject)
+const OMClassId& ImplAAFObject::classId(void) const
+{
+  const aafUID_t null_uid = { 0 };
+  assert (! EqualAUID (&_soid, &null_uid));
+  return *reinterpret_cast<const OMClassId* const>(&_soid);
+}

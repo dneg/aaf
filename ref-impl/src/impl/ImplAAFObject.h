@@ -33,8 +33,6 @@ class ImplAAFDictionary;
 #include "ImplAAFSmartPointer.h"
 #endif
 
-
-
 class ImplAAFObject : public OMStorable, public ImplAAFRoot
 {
 public:
@@ -179,9 +177,10 @@ public:
   //
   void InitOMProperties (void);
 
+  void pvtSetSoid (const aafUID_t & id);
 
 public:
-  OMDECLARE_STORABLE(ImplAAFObject)
+  virtual const OMClassId& classId(void) const;
 
 protected:
   void protInitProperty (OMProperty & rPropToInit,
@@ -199,10 +198,18 @@ private:
 
   ImplPropertyCollection * _pProperties;
 
-  ImplAAFClassDef * _cachedDefinition;
+  ImplAAFClassDef *        _cachedDefinition;
 
   aafBool                  _OMPropsInited;
 
+  // stored object ID
+  aafUID_t                 _soid;
+
+  // This is only kept so we can delete added properties when this
+  // object goes away.
+  enum { kMaxAddedPropCount = 100 };
+  OMProperty* _addedProps[kMaxAddedPropCount];
+  size_t _addedPropCount;
 };
 
 //
