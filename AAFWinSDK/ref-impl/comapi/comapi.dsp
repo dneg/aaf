@@ -304,7 +304,7 @@ SOURCE="..\..\..\ref-impl\src\com-api\CAAFParameterDef.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\com-api\CAAFPluginDescriptor.cpp"
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFPluginDef.cpp"
 # End Source File
 # Begin Source File
 
@@ -568,7 +568,7 @@ SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFParameters.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFPluginDescriptors.cpp"
+SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFPluginDefs.cpp"
 # End Source File
 # Begin Source File
 
