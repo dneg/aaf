@@ -54,60 +54,32 @@ static void printName(const char* name);
 
 OMStoredObject::OMStoredObject(struct IStorage* s)
 : _storage(s), _index(0), _indexStream(0), _propertiesStream(0),
-  _offset(0), _open(false)
+  _offset(0), _open(false), _mode(readOnlyMode)
 {
 }
 
-OMStoredObject* OMStoredObject::create(const char* fileName)
+OMStoredObject* OMStoredObject::openRead(const char* fileName)
 {
-  TRACE("OMStoredObject::create");
-  PRECONDITION("Valid file name", validString(fileName));
-
-  OMCHAR omFileName[256];
-  convert(omFileName, 256, fileName);
-
-  HRESULT result;
-  IStorage* storage;
-
-  result = StgCreateDocfile(
-    omFileName,
-    STGM_DIRECT | STGM_READWRITE | STGM_SHARE_EXCLUSIVE | STGM_CREATE,
-    0,
-    &storage);
-  if (!checkFile(result, fileName)) {
-    exit(FAILURE);
-  }
-
-  OMStoredObject* newStoredObject = new OMStoredObject(storage);
-  newStoredObject->create();
+  OMStoredObject* newStoredObject = OMStoredObject::open(fileName,
+                                                         readOnlyMode);
+  newStoredObject->open(readOnlyMode);
 
   return newStoredObject;
 }
 
-OMStoredObject* OMStoredObject::open(const char* fileName)
+OMStoredObject* OMStoredObject::openModify(const char* fileName)
 {
-  TRACE("OMStoredObject::open");
-  PRECONDITION("Valid file name", validString(fileName));
+  OMStoredObject* newStoredObject = OMStoredObject::open(fileName,
+                                                         modifyMode);
+  newStoredObject->open(modifyMode);
 
-  OMCHAR omFileName[256];
-  convert(omFileName, 256, fileName);
+  return newStoredObject;
+}
 
-  HRESULT result;
-  IStorage* storage;
-
-  result = StgOpenStorage(
-    omFileName,
-    0,
-    STGM_DIRECT | STGM_READWRITE | STGM_SHARE_EXCLUSIVE,
-    0,
-    0,
-    &storage);
-  if (!checkFile(result, fileName)) {
-    exit(FAILURE);
-  }
-
-  OMStoredObject* newStoredObject = new OMStoredObject(storage);
-  newStoredObject->open();
+OMStoredObject* OMStoredObject::createModify(const char* fileName)
+{
+  OMStoredObject* newStoredObject = OMStoredObject::create(fileName);
+  newStoredObject->create();
 
   return newStoredObject;
 }
@@ -190,7 +162,6 @@ void OMStoredObject::save(OMStoredPropertySetIndex* index)
     writeToStream(_indexStream, &offset, sizeof(length));
     writeToStream(_indexStream, &length, sizeof(length));
   }
-  index->clearDirty();
 }
 
 OMStoredPropertySetIndex* OMStoredObject::restore(void)
@@ -231,7 +202,6 @@ OMStoredPropertySetIndex* OMStoredObject::restore(void)
     readFromStream(_indexStream, &length, sizeof(length));
     index->insert(pid, type, offset, length);
   }
-  index->clearDirty();
   
   POSTCONDITION("Sorted index", index->isSorted());
   return index;
@@ -260,6 +230,64 @@ void OMStoredObject::restore(OMPropertySet& properties)
   
 }
 
+OMStoredObject* OMStoredObject::open(const char* fileName,
+                                     const OMAccessMode mode)
+{
+  TRACE("OMStoredObject::open");
+  PRECONDITION("Valid file name", validString(fileName));
+  PRECONDITION("Valid mode", (mode == modifyMode) || (mode == readOnlyMode));
+
+  DWORD openMode;
+  if (mode == modifyMode) {
+    openMode = STGM_DIRECT | STGM_READWRITE | STGM_SHARE_EXCLUSIVE;
+  } else if (mode == readOnlyMode) {
+    openMode = STGM_DIRECT | STGM_READ      | STGM_SHARE_EXCLUSIVE;
+  }
+  OMCHAR omFileName[256];
+  convert(omFileName, 256, fileName);
+
+  HRESULT result;
+  IStorage* storage;
+
+  result = StgOpenStorage(
+    omFileName,
+    0,
+    openMode,
+    0,
+    0,
+    &storage);
+  if (!checkFile(result, fileName)) {
+    exit(FAILURE);
+  }
+
+  OMStoredObject* newStoredObject = new OMStoredObject(storage);
+  return newStoredObject;
+}
+
+OMStoredObject* OMStoredObject::create(const char* fileName)
+{
+  TRACE("OMStoredObject::create");
+  PRECONDITION("Valid file name", validString(fileName));
+
+  OMCHAR omFileName[256];
+  convert(omFileName, 256, fileName);
+
+  HRESULT result;
+  IStorage* storage;
+
+  result = StgCreateDocfile(
+    omFileName,
+    STGM_DIRECT | STGM_READWRITE | STGM_SHARE_EXCLUSIVE | STGM_CREATE,
+    0,
+    &storage);
+  if (!checkFile(result, fileName)) {
+    exit(FAILURE);
+  }
+
+  OMStoredObject* newStoredObject = new OMStoredObject(storage);
+  return newStoredObject;
+}
+
 static const char* const propertyIndexStreamName = "property index";
 static const char* const propertyValueStreamName = "property values";
  
@@ -268,17 +296,20 @@ void OMStoredObject::create(void)
   TRACE("OMStoredObject::create");
   PRECONDITION("Not already open", !_open);
 
+  _mode = modifyMode;
   _index = new OMStoredPropertySetIndex(50);
   _indexStream = createStream(_storage, propertyIndexStreamName);
   _propertiesStream = createStream(_storage, propertyValueStreamName);
   _open = true;
 }
 
-void OMStoredObject::open(void)
+void OMStoredObject::open(const OMAccessMode mode)
 {
   TRACE("OMStoredObject::open");
   PRECONDITION("Not already open", !_open);
+  PRECONDITION("Valid mode", (mode == modifyMode) || (mode == readOnlyMode));
 
+  _mode = mode;
   _indexStream = openStream(_storage, propertyIndexStreamName);
   _propertiesStream = openStream(_storage, propertyValueStreamName);
   _open = true;
@@ -290,9 +321,8 @@ void OMStoredObject::close(void)
   TRACE("OMStoredObject::close");
   PRECONDITION("Already open", _open);
 
-  if (_index->isDirty()) {
+  if (_mode == modifyMode) {
     save(_index);
-    _index->clearDirty();
   }
   closeStream(_indexStream);
   closeStream(_propertiesStream);
@@ -354,9 +384,9 @@ OMStoredObject* OMStoredObject::openSubStorage(const char* name)
 {
   TRACE("OMStoredObject::openSubStorage");
 
-  IStorage* newStorage = openStorage(_storage, name);
+  IStorage* newStorage = openStorage(_storage, name, _mode);
   OMStoredObject* result = new OMStoredObject(newStorage);
-  result->open();
+  result->open(_mode);
   return result;
 }
 
@@ -526,11 +556,20 @@ IStorage* OMStoredObject::createStorage(IStorage* storage,
 }
 
 IStorage* OMStoredObject::openStorage(IStorage* storage,
-                                      const char* storageName)
+                                      const char* storageName,
+                                      const OMAccessMode mode)
 {
   TRACE("openStorage");
   PRECONDITION("Valid storage", storage != 0);
   PRECONDITION("Valid storage name", validString(storageName));
+  PRECONDITION("Valid mode", (mode == modifyMode) || (mode == readOnlyMode));
+
+  DWORD openMode;
+  if (mode == modifyMode) {
+    openMode = STGM_DIRECT | STGM_READWRITE | STGM_SHARE_EXCLUSIVE;
+  } else if (mode == readOnlyMode) {
+    openMode = STGM_DIRECT | STGM_READ      | STGM_SHARE_EXCLUSIVE;
+  }
 
   IStorage* newStorage;
   OMCHAR omStorageName[256];
@@ -539,7 +578,7 @@ IStorage* OMStoredObject::openStorage(IStorage* storage,
   HRESULT resultCode = storage->OpenStorage(
     omStorageName,
     0,
-    STGM_DIRECT | STGM_READWRITE | STGM_SHARE_EXCLUSIVE,
+    openMode,
     0,
     0,
     &newStorage);
