@@ -64,3 +64,15 @@ const aafUID_t kAAFMaxSampleBytes = { 0x33F26181, 0xD27F, 0x11d2, { 0x80, 0x99, 
 const aafUID_t kAAFSampleRate = { 0x6AEFC50F, 0x9041, 0x11d2, { 0x80, 0x88, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } }; 
 const aafUID_t kAAFSampleFormat = { 0x6AEFC510, 0x9041, 0x11d2, { 0x80, 0x88, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } }; 
 const aafUID_t kAAFNumChannels = { 0x6AEFC511, 0x9041, 0x11d2, { 0x80, 0x88, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } };
+
+// In the event that the pixel buffer needs to be padded to a platform dependent alignment
+// use the following essence format to specify the padding bytes per row,
+// Typical values are in the range from 0 to 3, with a default is 0. 
+// The declaration type should be aafUInt16.
+const aafUID_t kAAFPadBytesPerRow = { 0xc146bde0, 0x4c0d, 0x11d3, { 0xbf, 0xdc, 0x0, 0x10, 0x4b, 0xc9, 0x15, 0x6d } };
+
+// This is the compression "quality" setting defined by the Independent JPEG Group.
+// Valid values are 25 to 100 with 75 as the default. Less than 25 and the compressed
+// data will be very lossy non-baseline JPEG image. The image quality does not improve
+// much past 95.
+const aafUID_t kAAFCompressionQuality = { 0xc146bde1, 0x4c0d, 0x11d3, { 0xbf, 0xdc, 0x0, 0x10, 0x4b, 0xc9, 0x15, 0x6d } };
