@@ -180,7 +180,7 @@
 .this-module::~.this-module ()
 {
 #ifdef BOB_TEST
-  ImplAAFObject * rep;
+  ImplAAFRoot * rep;
   rep = GetRepObject ();
   assert (rep);
   delete rep;
