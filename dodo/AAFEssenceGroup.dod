@@ -56,6 +56,5 @@ adds the source clip specified in the choice argument as  a choice to the given 
 //		AAFSourceClip			*_stillFrame;
 //		vector<AAFSourceClip *>	_choices;
 
-AD_OVERRIDE(.method-NumRepresentations)
 
 AD_CLASS_END
