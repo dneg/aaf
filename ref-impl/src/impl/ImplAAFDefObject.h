@@ -196,6 +196,7 @@ public:
          // @parm [in] Index of plugin descriptor to be removed
         (aafUInt32 index);
 
+  virtual const OMUniqueObjectIdentification& identification(void) const;
 
 private:
   // friendly name of this definition
