@@ -140,6 +140,8 @@ AAFRESULT STDMETHODCALLTYPE
 		return AAFRESULT_NULL_PARAM;
 	  if ( !ppMemberTypes[i])
 		return AAFRESULT_NULL_PARAM;
+	  if (! ppMemberTypes[i]->IsAggregatable())
+		return AAFRESULT_BAD_TYPE;
 
 	  totalNameSize += (wcslen (pMemberNames[i]) + 1);
 	}
@@ -1018,3 +1020,19 @@ OMProperty * ImplAAFTypeDefRecord::pvtCreateOMPropertyMBS
   assert (result);
   return result;
 }
+
+
+bool ImplAAFTypeDefRecord::IsAggregatable () const
+{ return true; }
+
+bool ImplAAFTypeDefRecord::IsStreamable () const
+{ return true; }
+
+bool ImplAAFTypeDefRecord::IsFixedArrayable () const
+{ return true; }
+
+bool ImplAAFTypeDefRecord::IsVariableArrayable () const
+{ return true; }
+
+bool ImplAAFTypeDefRecord::IsStringable () const
+{ return false; }

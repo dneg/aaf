@@ -69,8 +69,11 @@ AAFRESULT STDMETHODCALLTYPE
 {
   if (! pTypeDef)  return AAFRESULT_NULL_PARAM;
 
-  aafUID_t id;
   assert (pTypeDef);
+  if (! pTypeDef->IsStringable())
+	return AAFRESULT_BAD_TYPE;
+
+  aafUID_t id;
   AAFRESULT hr = pTypeDef->GetAUID(&id);
   if (! AAFRESULT_SUCCEEDED (hr)) return hr;
 
@@ -521,3 +524,17 @@ OMProperty * ImplAAFTypeDefString::pvtCreateOMPropertyMBS
 }
 
 
+bool ImplAAFTypeDefString::IsAggregatable () const
+{ return false; }
+
+bool ImplAAFTypeDefString::IsStreamable () const
+{ return false; }
+
+bool ImplAAFTypeDefString::IsFixedArrayable () const
+{ return false; }
+
+bool ImplAAFTypeDefString::IsVariableArrayable () const
+{ return false; }
+
+bool ImplAAFTypeDefString::IsStringable () const
+{ return false; }
