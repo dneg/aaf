@@ -34,6 +34,12 @@
 #include <stdio.h>
 #include <stddef.h>
 
+// @module OMUtilities | Utility functions including error handling,
+//         obtaining information about the host computer, wide character
+//         string manipulation, property path manipulation and accessing
+//         disk files with wide character names.
+//   @mauthor Tim Bingham | tjb | Avid Technology, Inc.
+
   // @func Set the name of the program to be use in error messages.
   //   @parm The program name.
 void setProgramName(const char* name);
