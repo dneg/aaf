@@ -1129,6 +1129,305 @@ public:
   );
 
 
+  //***********************************************************
+  // METHOD NAME: LookupAuxiliaryDataDef()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFDictionary2 | LookupAuxiliaryDataDef |
+  // Return the Auxiliary Data Definition Object.
+  // 
+  // Succeeds if:
+  // - The ppDataDef pointer is valid.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppDataDef arg is NULL.
+  // @end
+  // 
+  STDMETHOD (LookupAuxiliaryDataDef)
+   (
+    // @parm [out,retval] AAFDataDef | ppDataDef | Data Definition Object
+    IAAFDataDef ** ppDataDef
+  );
+
+  //***********************************************************
+  // METHOD NAME: LookupDescriptiveDataDef()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFDictionary2 | LookupDescriptiveDataDef |
+  // Return the Descriptive Data Definition Object.
+  // 
+  // Succeeds if:
+  // - The ppDataDef pointer is valid.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppDataDef arg is NULL.
+  // @end
+  // 
+  STDMETHOD (LookupDescriptiveDataDef)
+   (
+    // @parm [out,retval] AAFDataDef | ppDataDef | Data Definition Object
+    IAAFDataDef ** ppDataDef
+  );
+
+  //***********************************************************
+  // METHOD NAME: LookupEdgecodeDataDef()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFDictionary2 | LookupEdgecodeDataDef |
+  // Return the Edgecode Data Definition Object.
+  // 
+  // Succeeds if:
+  // - The ppDataDef pointer is valid.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppDataDef arg is NULL.
+  // @end
+  // 
+  STDMETHOD (LookupEdgecodeDataDef)
+   (
+    // @parm [out,retval] AAFDataDef | ppDataDef | Data Definition Object
+    IAAFDataDef ** ppDataDef
+  );
+
+  //***********************************************************
+  // METHOD NAME: LookupLegacyPictureDataDef()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFDictionary2 | LookupLegacyPictureDataDef |
+  // Return the legacy Picture Data Definition Object.
+  // 
+  // Succeeds if:
+  // - The ppDataDef pointer is valid.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppDataDef arg is NULL.
+  // @end
+  // 
+  STDMETHOD (LookupLegacyPictureDataDef)
+   (
+    // @parm [out,retval] AAFDataDef | ppDataDef | Data Definition Object
+    IAAFDataDef ** ppDataDef
+  );
+
+  //***********************************************************
+  // METHOD NAME: LookupLegacySoundDataDef()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFDictionary2 | LookupLegacySoundDataDef |
+  // Return the legacy Sound Data Definition Object.
+  // 
+  // Succeeds if:
+  // - The ppDataDef pointer is valid.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppDataDef arg is NULL.
+  // @end
+  // 
+  STDMETHOD (LookupLegacySoundDataDef)
+   (
+    // @parm [out,retval] AAFDataDef | ppDataDef | Data Definition Object
+    IAAFDataDef ** ppDataDef
+  );
+
+  //***********************************************************
+  // METHOD NAME: LookupLegacyTimecodeDataDef()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFDictionary2 | LookupLegacyTimecodeDataDef |
+  // Return the legacy Timecode Data Definition Object.
+  // 
+  // Succeeds if:
+  // - The ppDataDef pointer is valid.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppDataDef arg is NULL.
+  // @end
+  // 
+  STDMETHOD (LookupLegacyTimecodeDataDef)
+   (
+    // @parm [out,retval] AAFDataDef | ppDataDef | Data Definition Object
+    IAAFDataDef ** ppDataDef
+  );
+
+  //***********************************************************
+  // METHOD NAME: LookupMatteDataDef()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFDictionary2 | LookupMatteDataDef |
+  // Return the Matte Data Definition Object.
+  // 
+  // Succeeds if:
+  // - The ppDataDef pointer is valid.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppDataDef arg is NULL.
+  // @end
+  // 
+  STDMETHOD (LookupMatteDataDef)
+   (
+    // @parm [out,retval] AAFDataDef | ppDataDef | Data Definition Object
+    IAAFDataDef ** ppDataDef
+  );
+
+  //***********************************************************
+  // METHOD NAME: LookupPictureDataDef()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFDictionary2 | LookupPictureDataDef |
+  // Return the Picture Data Definition Object.
+  // 
+  // Succeeds if:
+  // - The ppDataDef pointer is valid.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppDataDef arg is NULL.
+  // @end
+  // 
+  STDMETHOD (LookupPictureDataDef)
+   (
+    // @parm [out,retval] AAFDataDef | ppDataDef | Data Definition Object
+    IAAFDataDef ** ppDataDef
+  );
+
+  //***********************************************************
+  // METHOD NAME: LookupPictureWithMatteDataDef()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFDictionary2 | LookupPictureWithMatteDataDef |
+  // Return the PictureWithMatte Data Definition Object.
+  // 
+  // Succeeds if:
+  // - The ppDataDef pointer is valid.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppDataDef arg is NULL.
+  // @end
+  // 
+  STDMETHOD (LookupPictureWithMatteDataDef)
+   (
+    // @parm [out,retval] AAFDataDef | ppDataDef | Data Definition Object
+    IAAFDataDef ** ppDataDef
+  );
+
+  //***********************************************************
+  // METHOD NAME: LookupSoundDataDef()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFDictionary2 | LookupSoundDataDef |
+  // Return the Sound Data Definition Object.
+  // 
+  // Succeeds if:
+  // - The ppDataDef pointer is valid.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppDataDef arg is NULL.
+  // @end
+  // 
+  STDMETHOD (LookupSoundDataDef)
+   (
+    // @parm [out,retval] AAFDataDef | ppDataDef | Data Definition Object
+    IAAFDataDef ** ppDataDef
+  );
+
+  //***********************************************************
+  // METHOD NAME: LookupTimecodeDataDef()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFDictionary2 | LookupTimecodeDataDef |
+  // Return the Timecode Data Definition Object.
+  // 
+  // Succeeds if:
+  // - The ppDataDef pointer is valid.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppDataDef arg is NULL.
+  // @end
+  // 
+  STDMETHOD (LookupTimecodeDataDef)
+   (
+    // @parm [out,retval] AAFDataDef | ppDataDef | Data Definition Object
+    IAAFDataDef ** ppDataDef
+  );
+
+
+
 
 protected:
   // 

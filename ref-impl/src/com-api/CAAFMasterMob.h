@@ -147,8 +147,8 @@ public:
   STDMETHOD (AddMasterSlot) (
     // Data kind of new slot.  Requires a data kind valid for a media
 	// stream. Valid data kinds are:
-    // - DDEF_Picture
-    // - DDEF_Sound
+    // - Picture
+    // - Sound
     /*[in]*/ IAAFDataDef * pDataDef,
 
     // Slot ID of the Source Mob slot to be added to the Master Mob

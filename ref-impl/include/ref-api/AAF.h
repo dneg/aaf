@@ -5535,6 +5535,19 @@ DECLARE_INTERFACE_(IAAFDictionary, IUnknown)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
   END_INTERFACE
 };
 #endif // __IAAFDictionary_INTERFACE_DEFINED__
@@ -5664,10 +5677,10 @@ DECLARE_INTERFACE_(IAAFOperationDef, IUnknown)
   // Places the DataDefinition object attached to this
   // IAAFOperationDef into the *ppDataDef argument.  The data
   // definition will match one of the AUIDs in the file
-  // AAFDataDefs.h, (which includes DDEF_PICTURE, and
-  // DDEF_SOUND), and indicates what type of data the operation will
+  // AAFDataDefs.h, (which includes kAAFDataDef_Picture, and
+  // kAAFDataDef_Sound), and indicates what type of data the operation will
   // be performed upon.  For example, a video dissolve will have the
-  // data def DEF_VIDEO.  If a data definition is used which is not
+  // data def kAAFDataDef_Picture.  If a data definition is used which is not
   // from AAFDataDefs.h, then the client is responsible for making
   // sure that a data definition object with that ID exists in the
   // dictionary.  The SDK will take care of creating the standard data
@@ -5706,10 +5719,10 @@ DECLARE_INTERFACE_(IAAFOperationDef, IUnknown)
   // Sets the IAAFDataDefinition of this IAAFOperationDef to be the
   // given one.  The
   // data definition will match one of the AUIDs in the file
-  // AAFDataDefs.h, (which includes DDEF_PICTURE, and
-  // DDEF_SOUND), and indicates what type of data the operation will
+  // AAFDataDefs.h, (which includes kAAFDataDef_Picture, and
+  // kAAFDataDef_Sound), and indicates what type of data the operation will
   // be performed upon.  For example, a video dissolve will have the
-  // data def DEF_VIDEO.  If a data definition is used which is not
+  // data def kAAFDataDef_Picture.  If a data definition is used which is not
   // from AAFDataDefs.h, then the client is responsible for making
   // sure that a data definition object with that ID exists in the
   // dictionary.  The SDK will take care of creating the standard data
@@ -12710,8 +12723,8 @@ DECLARE_INTERFACE_(IAAFMasterMob, IUnknown)
   STDMETHOD(AddMasterSlot) (THIS_
     // Data kind of new slot.  Requires a data kind valid for a media
 	// stream. Valid data kinds are:
-    // - DDEF_Picture
-    // - DDEF_Sound
+    // - Picture
+    // - Sound
     /*[in]*/ IAAFDataDef * pDataDef,
 
     // Slot ID of the Source Mob slot to be added to the Master Mob
@@ -14796,8 +14809,8 @@ DECLARE_INTERFACE_(IAAFMobSlot, IUnknown)
   //
   // This method will return the Data Definition object
   // associated with the segment in this Mob Slot.  Common
-  // DataDefinitions are DDEF_Picture, DDEF_Sound, DDEF_Timecode,
-  // and DDEF_Edgecode.
+  // DataDefinitions are kAAFDataDef_Picture, kAAFDataDef_Sound, kAAFDataDef_Timecode,
+  // and kAAFDataDef_Edgecode.
   //
   // Succeeds if all of the following are true:
   // - the ppResult pointer is valid.
@@ -37597,6 +37610,268 @@ DECLARE_INTERFACE_(IAAFDictionary2, IUnknown)
     // Total number of tagged value definition objects
     /*[out, retval]*/ aafUInt32 *  pResult) PURE;
 
+  //***********************************************************
+  //
+  // LookupAuxiliaryDataDef()
+  //
+  // Return the Auxiliary Data Definition Object.
+  // 
+  // Succeeds if:
+  // - The ppDataDef pointer is valid.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppDataDef arg is NULL.
+  //
+  STDMETHOD(LookupAuxiliaryDataDef) (THIS_
+    // Data Definition Object
+    /*[out,retval]*/ IAAFDataDef ** ppDataDef) PURE;
+
+  //***********************************************************
+  //
+  // LookupDescriptiveDataDef()
+  //
+  // Return the Descriptive Data Definition Object.
+  // 
+  // Succeeds if:
+  // - The ppDataDef pointer is valid.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppDataDef arg is NULL.
+  //
+  STDMETHOD(LookupDescriptiveDataDef) (THIS_
+    // Data Definition Object
+    /*[out,retval]*/ IAAFDataDef ** ppDataDef) PURE;
+
+
+  //***********************************************************
+  //
+  // LookupEdgecodeDataDef()
+  //
+  // Return the Edgecode Data Definition Object.
+  // 
+  // Succeeds if:
+  // - The ppDataDef pointer is valid.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppDataDef arg is NULL.
+  //
+  STDMETHOD(LookupEdgecodeDataDef) (THIS_
+    // Data Definition Object
+    /*[out,retval]*/ IAAFDataDef ** ppDataDef) PURE;
+
+
+  //***********************************************************
+  //
+  // LookupLegacyPictureDataDef()
+  //
+  // Return the legacy Picture Data Definition Object.
+  // 
+  // Succeeds if:
+  // - The ppDataDef pointer is valid.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppDataDef arg is NULL.
+  //
+  STDMETHOD(LookupLegacyPictureDataDef) (THIS_
+    // Data Definition Object
+    /*[out,retval]*/ IAAFDataDef ** ppDataDef) PURE;
+
+
+  //***********************************************************
+  //
+  // LookupLegacySoundDataDef()
+  //
+  // Return the legacy Sound Data Definition Object.
+  // 
+  // Succeeds if:
+  // - The ppDataDef pointer is valid.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppDataDef arg is NULL.
+  //
+  STDMETHOD(LookupLegacySoundDataDef) (THIS_
+    // Data Definition Object
+    /*[out,retval]*/ IAAFDataDef ** ppDataDef) PURE;
+
+
+  //***********************************************************
+  //
+  // LookupLegacyTimecodeDataDef()
+  //
+  // Return the legacy Timecode Data Definition Object.
+  // 
+  // Succeeds if:
+  // - The ppDataDef pointer is valid.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppDataDef arg is NULL.
+  //
+  STDMETHOD(LookupLegacyTimecodeDataDef) (THIS_
+    // Data Definition Object
+    /*[out,retval]*/ IAAFDataDef ** ppDataDef) PURE;
+
+
+  //***********************************************************
+  //
+  // LookupMatteDataDef()
+  //
+  // Return the Matte Data Definition Object.
+  // 
+  // Succeeds if:
+  // - The ppDataDef pointer is valid.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppDataDef arg is NULL.
+  //
+  STDMETHOD(LookupMatteDataDef) (THIS_
+    // Data Definition Object
+    /*[out,retval]*/ IAAFDataDef ** ppDataDef) PURE;
+
+
+  //***********************************************************
+  //
+  // LookupPictureDataDef()
+  //
+  // Return the Picture Data Definition Object.
+  // 
+  // Succeeds if:
+  // - The ppDataDef pointer is valid.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppDataDef arg is NULL.
+  //
+  STDMETHOD(LookupPictureDataDef) (THIS_
+    // Data Definition Object
+    /*[out,retval]*/ IAAFDataDef ** ppDataDef) PURE;
+
+
+  //***********************************************************
+  //
+  // LookupPictureWithMatteDataDef()
+  //
+  // Return the PictureWithMatte Data Definition Object.
+  // 
+  // Succeeds if:
+  // - The ppDataDef pointer is valid.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppDataDef arg is NULL.
+  //
+  STDMETHOD(LookupPictureWithMatteDataDef) (THIS_
+    // Data Definition Object
+    /*[out,retval]*/ IAAFDataDef ** ppDataDef) PURE;
+
+
+  //***********************************************************
+  //
+  // LookupSoundDataDef()
+  //
+  // Return the Sound Data Definition Object.
+  // 
+  // Succeeds if:
+  // - The ppDataDef pointer is valid.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppDataDef arg is NULL.
+  //
+  STDMETHOD(LookupSoundDataDef) (THIS_
+    // Data Definition Object
+    /*[out,retval]*/ IAAFDataDef ** ppDataDef) PURE;
+
+
+  //***********************************************************
+  //
+  // LookupTimecodeDataDef()
+  //
+  // Return the Timecode Data Definition Object.
+  // 
+  // Succeeds if:
+  // - The ppDataDef pointer is valid.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppDataDef arg is NULL.
+  //
+  STDMETHOD(LookupTimecodeDataDef) (THIS_
+    // Data Definition Object
+    /*[out,retval]*/ IAAFDataDef ** ppDataDef) PURE;
+
 
 
   END_INTERFACE
@@ -38288,7 +38563,6 @@ DECLARE_INTERFACE_(IAAFDigitalImageDescriptor2, IUnknown)
   //
   // Succeeds if all of the following are true:
   // - pTransferCharacteristic is a valid pointer
-  // - the property is present.
   // 
   // If this method fails, pTransferCharacteristic will not be changed.
   // 
@@ -38337,7 +38611,6 @@ DECLARE_INTERFACE_(IAAFDigitalImageDescriptor2, IUnknown)
   //
   // Succeeds if all of the following are true:
   // - pCodingEquations is a valid pointer
-  // - the property is present.
   // 
   // If this method fails, pCodingEquations will not be changed.
   // 
@@ -38386,7 +38659,6 @@ DECLARE_INTERFACE_(IAAFDigitalImageDescriptor2, IUnknown)
   //
   // Succeeds if all of the following are true:
   // - pColorPrimaries is a valid pointer
-  // - the property is present.
   // 
   // If this method fails, pColorPrimaries will not be changed.
   // 
@@ -38434,7 +38706,6 @@ DECLARE_INTERFACE_(IAAFDigitalImageDescriptor2, IUnknown)
   //
   // Succeeds if all of the following are true:
   // - pFieldStartOffset is a valid pointer
-  // - the property is present.
   // 
   // If this method fails, pFieldStartOffset will not be changed.
   // 
@@ -38482,7 +38753,6 @@ DECLARE_INTERFACE_(IAAFDigitalImageDescriptor2, IUnknown)
   //
   // Succeeds if all of the following are true:
   // - pFieldEndOffset is a valid pointer
-  // - the property is present.
   // 
   // If this method fails, pFieldEndOffset will not be changed.
   // 
@@ -38508,7 +38778,6 @@ DECLARE_INTERFACE_(IAAFDigitalImageDescriptor2, IUnknown)
   // Sets the FieldDominance property.
   //
   // Succeeds if all of the following are true:
-  // - fieldDominance is a value value.
   // 
   // If this method fails, the FieldDominance property will not be
   // changed.
@@ -38534,7 +38803,6 @@ DECLARE_INTERFACE_(IAAFDigitalImageDescriptor2, IUnknown)
   //
   // Succeeds if all of the following are true:
   // - pFieldDominance is a valid pointer
-  // - the property is present.
   // 
   // If this method fails, pFieldDominance will not be changed.
   // 
@@ -38560,7 +38828,6 @@ DECLARE_INTERFACE_(IAAFDigitalImageDescriptor2, IUnknown)
   // Sets the DisplayF2Offset property.
   //
   // Succeeds if all of the following are true:
-  // - displayF2Offset is a value value.
   // 
   // If this method fails, the DisplayF2Offset property will not be
   // changed.
@@ -38586,7 +38853,6 @@ DECLARE_INTERFACE_(IAAFDigitalImageDescriptor2, IUnknown)
   //
   // Succeeds if all of the following are true:
   // - pDisplayF2Offset is a valid pointer
-  // - the property is present.
   // 
   // If this method fails, pDisplayF2Offset will not be changed.
   // 
@@ -38612,7 +38878,6 @@ DECLARE_INTERFACE_(IAAFDigitalImageDescriptor2, IUnknown)
   // Sets the StoredF2Offset property.
   //
   // Succeeds if all of the following are true:
-  // - storedF2Offset is a value value.
   // 
   // If this method fails, the StoredF2Offset property will not be
   // changed.
@@ -38638,7 +38903,6 @@ DECLARE_INTERFACE_(IAAFDigitalImageDescriptor2, IUnknown)
   //
   // Succeeds if all of the following are true:
   // - pStoredF2Offset is a valid pointer
-  // - the property is present.
   // 
   // If this method fails, pStoredF2Offset will not be changed.
   // 
@@ -38686,7 +38950,6 @@ DECLARE_INTERFACE_(IAAFDigitalImageDescriptor2, IUnknown)
   //
   // Succeeds if all of the following are true:
   // - pActiveFormatDescriptor is a valid pointer
-  // - the property is present.
   // 
   // If this method fails, pActiveFormatDescriptor will not be changed.
   // 
@@ -38712,7 +38975,6 @@ DECLARE_INTERFACE_(IAAFDigitalImageDescriptor2, IUnknown)
   // Sets the SignalStandard property.  This property is optional.
   //
   // Succeeds if all of the following are true:
-  // - signalStandard is a value value.
   // 
   // If this method fails, the SignalStandard property will not be
   // changed.
@@ -38738,7 +39000,6 @@ DECLARE_INTERFACE_(IAAFDigitalImageDescriptor2, IUnknown)
   //
   // Succeeds if all of the following are true:
   // - pSignalStandard is a valid pointer
-  // - the property is present.
   // 
   // If this method fails, pSignalStandard not be changed.
   // 
@@ -40441,8 +40702,8 @@ DECLARE_INTERFACE_(IAAFMasterMob2, IUnknown)
   STDMETHOD(AddMasterSlot) (THIS_
     // Data kind of new slot.  Requires a data kind valid for a media
 	// stream. Valid data kinds are:
-    // - DDEF_Picture
-    // - DDEF_Sound
+    // - Picture
+    // - Sound
     /*[in]*/ IAAFDataDef * pDataDef,
 
     // Slot ID of the Source Mob slot to be added to the Master Mob

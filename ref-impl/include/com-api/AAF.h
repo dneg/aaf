@@ -35056,6 +35056,39 @@ EXTERN_C const IID IID_IAAFDictionary2;
         virtual HRESULT STDMETHODCALLTYPE CountTaggedValueDefs( 
             /* [retval][out] */ aafUInt32 __RPC_FAR *pResult) = 0;
         
+        virtual HRESULT STDMETHODCALLTYPE LookupAuxiliaryDataDef( 
+            /* [retval][out] */ IAAFDataDef __RPC_FAR *__RPC_FAR *ppDataDef) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE LookupDescriptiveDataDef( 
+            /* [retval][out] */ IAAFDataDef __RPC_FAR *__RPC_FAR *ppDataDef) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE LookupEdgecodeDataDef( 
+            /* [retval][out] */ IAAFDataDef __RPC_FAR *__RPC_FAR *ppDataDef) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE LookupLegacyPictureDataDef( 
+            /* [retval][out] */ IAAFDataDef __RPC_FAR *__RPC_FAR *ppDataDef) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE LookupLegacySoundDataDef( 
+            /* [retval][out] */ IAAFDataDef __RPC_FAR *__RPC_FAR *ppDataDef) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE LookupLegacyTimecodeDataDef( 
+            /* [retval][out] */ IAAFDataDef __RPC_FAR *__RPC_FAR *ppDataDef) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE LookupMatteDataDef( 
+            /* [retval][out] */ IAAFDataDef __RPC_FAR *__RPC_FAR *ppDataDef) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE LookupPictureDataDef( 
+            /* [retval][out] */ IAAFDataDef __RPC_FAR *__RPC_FAR *ppDataDef) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE LookupPictureWithMatteDataDef( 
+            /* [retval][out] */ IAAFDataDef __RPC_FAR *__RPC_FAR *ppDataDef) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE LookupSoundDataDef( 
+            /* [retval][out] */ IAAFDataDef __RPC_FAR *__RPC_FAR *ppDataDef) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE LookupTimecodeDataDef( 
+            /* [retval][out] */ IAAFDataDef __RPC_FAR *__RPC_FAR *ppDataDef) = 0;
+        
     };
     
 #else 	/* C style interface */
@@ -35305,6 +35338,50 @@ EXTERN_C const IID IID_IAAFDictionary2;
             IAAFDictionary2 __RPC_FAR * This,
             /* [retval][out] */ aafUInt32 __RPC_FAR *pResult);
         
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LookupAuxiliaryDataDef )( 
+            IAAFDictionary2 __RPC_FAR * This,
+            /* [retval][out] */ IAAFDataDef __RPC_FAR *__RPC_FAR *ppDataDef);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LookupDescriptiveDataDef )( 
+            IAAFDictionary2 __RPC_FAR * This,
+            /* [retval][out] */ IAAFDataDef __RPC_FAR *__RPC_FAR *ppDataDef);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LookupEdgecodeDataDef )( 
+            IAAFDictionary2 __RPC_FAR * This,
+            /* [retval][out] */ IAAFDataDef __RPC_FAR *__RPC_FAR *ppDataDef);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LookupLegacyPictureDataDef )( 
+            IAAFDictionary2 __RPC_FAR * This,
+            /* [retval][out] */ IAAFDataDef __RPC_FAR *__RPC_FAR *ppDataDef);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LookupLegacySoundDataDef )( 
+            IAAFDictionary2 __RPC_FAR * This,
+            /* [retval][out] */ IAAFDataDef __RPC_FAR *__RPC_FAR *ppDataDef);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LookupLegacyTimecodeDataDef )( 
+            IAAFDictionary2 __RPC_FAR * This,
+            /* [retval][out] */ IAAFDataDef __RPC_FAR *__RPC_FAR *ppDataDef);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LookupMatteDataDef )( 
+            IAAFDictionary2 __RPC_FAR * This,
+            /* [retval][out] */ IAAFDataDef __RPC_FAR *__RPC_FAR *ppDataDef);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LookupPictureDataDef )( 
+            IAAFDictionary2 __RPC_FAR * This,
+            /* [retval][out] */ IAAFDataDef __RPC_FAR *__RPC_FAR *ppDataDef);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LookupPictureWithMatteDataDef )( 
+            IAAFDictionary2 __RPC_FAR * This,
+            /* [retval][out] */ IAAFDataDef __RPC_FAR *__RPC_FAR *ppDataDef);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LookupSoundDataDef )( 
+            IAAFDictionary2 __RPC_FAR * This,
+            /* [retval][out] */ IAAFDataDef __RPC_FAR *__RPC_FAR *ppDataDef);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LookupTimecodeDataDef )( 
+            IAAFDictionary2 __RPC_FAR * This,
+            /* [retval][out] */ IAAFDataDef __RPC_FAR *__RPC_FAR *ppDataDef);
+        
         END_INTERFACE
     } IAAFDictionary2Vtbl;
 
@@ -35486,6 +35563,39 @@ EXTERN_C const IID IID_IAAFDictionary2;
 
 #define IAAFDictionary2_CountTaggedValueDefs(This,pResult)	\
     (This)->lpVtbl -> CountTaggedValueDefs(This,pResult)
+
+#define IAAFDictionary2_LookupAuxiliaryDataDef(This,ppDataDef)	\
+    (This)->lpVtbl -> LookupAuxiliaryDataDef(This,ppDataDef)
+
+#define IAAFDictionary2_LookupDescriptiveDataDef(This,ppDataDef)	\
+    (This)->lpVtbl -> LookupDescriptiveDataDef(This,ppDataDef)
+
+#define IAAFDictionary2_LookupEdgecodeDataDef(This,ppDataDef)	\
+    (This)->lpVtbl -> LookupEdgecodeDataDef(This,ppDataDef)
+
+#define IAAFDictionary2_LookupLegacyPictureDataDef(This,ppDataDef)	\
+    (This)->lpVtbl -> LookupLegacyPictureDataDef(This,ppDataDef)
+
+#define IAAFDictionary2_LookupLegacySoundDataDef(This,ppDataDef)	\
+    (This)->lpVtbl -> LookupLegacySoundDataDef(This,ppDataDef)
+
+#define IAAFDictionary2_LookupLegacyTimecodeDataDef(This,ppDataDef)	\
+    (This)->lpVtbl -> LookupLegacyTimecodeDataDef(This,ppDataDef)
+
+#define IAAFDictionary2_LookupMatteDataDef(This,ppDataDef)	\
+    (This)->lpVtbl -> LookupMatteDataDef(This,ppDataDef)
+
+#define IAAFDictionary2_LookupPictureDataDef(This,ppDataDef)	\
+    (This)->lpVtbl -> LookupPictureDataDef(This,ppDataDef)
+
+#define IAAFDictionary2_LookupPictureWithMatteDataDef(This,ppDataDef)	\
+    (This)->lpVtbl -> LookupPictureWithMatteDataDef(This,ppDataDef)
+
+#define IAAFDictionary2_LookupSoundDataDef(This,ppDataDef)	\
+    (This)->lpVtbl -> LookupSoundDataDef(This,ppDataDef)
+
+#define IAAFDictionary2_LookupTimecodeDataDef(This,ppDataDef)	\
+    (This)->lpVtbl -> LookupTimecodeDataDef(This,ppDataDef)
 
 #endif /* COBJMACROS */
 
@@ -36142,6 +36252,138 @@ HRESULT STDMETHODCALLTYPE IAAFDictionary2_CountTaggedValueDefs_Proxy(
 
 
 void __RPC_STUB IAAFDictionary2_CountTaggedValueDefs_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFDictionary2_LookupAuxiliaryDataDef_Proxy( 
+    IAAFDictionary2 __RPC_FAR * This,
+    /* [retval][out] */ IAAFDataDef __RPC_FAR *__RPC_FAR *ppDataDef);
+
+
+void __RPC_STUB IAAFDictionary2_LookupAuxiliaryDataDef_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFDictionary2_LookupDescriptiveDataDef_Proxy( 
+    IAAFDictionary2 __RPC_FAR * This,
+    /* [retval][out] */ IAAFDataDef __RPC_FAR *__RPC_FAR *ppDataDef);
+
+
+void __RPC_STUB IAAFDictionary2_LookupDescriptiveDataDef_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFDictionary2_LookupEdgecodeDataDef_Proxy( 
+    IAAFDictionary2 __RPC_FAR * This,
+    /* [retval][out] */ IAAFDataDef __RPC_FAR *__RPC_FAR *ppDataDef);
+
+
+void __RPC_STUB IAAFDictionary2_LookupEdgecodeDataDef_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFDictionary2_LookupLegacyPictureDataDef_Proxy( 
+    IAAFDictionary2 __RPC_FAR * This,
+    /* [retval][out] */ IAAFDataDef __RPC_FAR *__RPC_FAR *ppDataDef);
+
+
+void __RPC_STUB IAAFDictionary2_LookupLegacyPictureDataDef_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFDictionary2_LookupLegacySoundDataDef_Proxy( 
+    IAAFDictionary2 __RPC_FAR * This,
+    /* [retval][out] */ IAAFDataDef __RPC_FAR *__RPC_FAR *ppDataDef);
+
+
+void __RPC_STUB IAAFDictionary2_LookupLegacySoundDataDef_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFDictionary2_LookupLegacyTimecodeDataDef_Proxy( 
+    IAAFDictionary2 __RPC_FAR * This,
+    /* [retval][out] */ IAAFDataDef __RPC_FAR *__RPC_FAR *ppDataDef);
+
+
+void __RPC_STUB IAAFDictionary2_LookupLegacyTimecodeDataDef_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFDictionary2_LookupMatteDataDef_Proxy( 
+    IAAFDictionary2 __RPC_FAR * This,
+    /* [retval][out] */ IAAFDataDef __RPC_FAR *__RPC_FAR *ppDataDef);
+
+
+void __RPC_STUB IAAFDictionary2_LookupMatteDataDef_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFDictionary2_LookupPictureDataDef_Proxy( 
+    IAAFDictionary2 __RPC_FAR * This,
+    /* [retval][out] */ IAAFDataDef __RPC_FAR *__RPC_FAR *ppDataDef);
+
+
+void __RPC_STUB IAAFDictionary2_LookupPictureDataDef_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFDictionary2_LookupPictureWithMatteDataDef_Proxy( 
+    IAAFDictionary2 __RPC_FAR * This,
+    /* [retval][out] */ IAAFDataDef __RPC_FAR *__RPC_FAR *ppDataDef);
+
+
+void __RPC_STUB IAAFDictionary2_LookupPictureWithMatteDataDef_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFDictionary2_LookupSoundDataDef_Proxy( 
+    IAAFDictionary2 __RPC_FAR * This,
+    /* [retval][out] */ IAAFDataDef __RPC_FAR *__RPC_FAR *ppDataDef);
+
+
+void __RPC_STUB IAAFDictionary2_LookupSoundDataDef_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFDictionary2_LookupTimecodeDataDef_Proxy( 
+    IAAFDictionary2 __RPC_FAR * This,
+    /* [retval][out] */ IAAFDataDef __RPC_FAR *__RPC_FAR *ppDataDef);
+
+
+void __RPC_STUB IAAFDictionary2_LookupTimecodeDataDef_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
