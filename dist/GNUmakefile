@@ -33,7 +33,7 @@
 
 # Mac Notes:
 #
-# The top level make target does not currently work under Max (OS 9, OS X).
+# The top level make target does not currently work under Mac OS 9.
 # Instead, run the following from this directory:
 #
 #   mkdir -p ../AAFMacSDK/Dist
@@ -74,8 +74,13 @@ ifeq ($(AAFPLATFORM),Mac)
 RELEASE_FILES_SRC = ./release-files.Mac
 SDK_FILES_SRC = ./sdk-files.mac
 else
+ifeq ($(AAFPLATFORM),PPCDarwin)
+RELEASE_FILES_SRC = ./release-files.darwin
+SDK_FILES_SRC = ./sdk-files.darwin
+else
 RELEASE_FILES_SRC = ./release-files.unix
 SDK_FILES_SRC = ./sdk-files.unix
+endif
 endif
 endif
 
