@@ -36,7 +36,7 @@
 #include "ImplAAFEssenceFormat.h"
 #endif
 
-
+#include "ImplAAFNetworkLocator.h"
 
 
 
@@ -47,6 +47,7 @@
 
 #include <assert.h>
 #include <string.h>
+
 
 #include "AAFPlugin.h"
 #include "AAFPluginManager.h"
@@ -59,22 +60,26 @@
 #include "aafdefuids.h"
 #include "ImplAAFObjectCreation.h"
 #include "ImplAAFSession.h"
+#include "ImplAAFWAVEDescriptor.h"	//!!!
 
 #define DEFAULT_FILE_SLOT	1
 
+extern "C" const aafClassID_t CLSID_AAFNetworkLocator;
 extern "C" const aafClassID_t CLSID_AAFSourceMob;
 extern "C" const aafClassID_t CLSID_AAFEssenceData;
-//extern "C" const CLSID CLSID_AAFEssenceStream = { 0x66FE33B1, 0x946D, 0x11D2, { 0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
+extern "C" const CLSID CLSID_AAFEssenceStream = { 0x66FE33B1, 0x946D, 0x11D2, { 0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
 extern "C" const IID IID_IAAFEssenceStream = { 0x83402902, 0x9146, 0x11d2, { 0x80, 0x88, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
 //extern "C" const CLSID CLSID_AAFEssenceCodec = { 0x74867B41, 0x946E, 0x11D2, { 0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
 extern "C" const IID IID_IAAFEssenceCodec = { 0x74867B42, 0x946E, 0x11D2, { 0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
 extern "C" const CLSID CLSID_AAFDefaultStream;
 
-const CLSID CLSID_AAFObjectStream = { 0x42A63FE1, 0x968A, 0x11d2, { 0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
+const CLSID CLSID_AAFEssenceDataStream = { 0x42A63FE1, 0x968A, 0x11d2, { 0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
+//const IID IID_IAAFEssenceDataStream = { 0x298F2BE2, 0x96C0, 0x11d2, { 0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
+const IID IID_IAAFEssenceDataStream = { 0xCDDB6AB1, 0x98DC, 0x11d2, { 0x80, 0x8a, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
 
 ImplAAFEssenceAccess::ImplAAFEssenceAccess ()
 {
-	_destination = NULL;const CLSID CLSID_AAFObjectStream = { 0x42A63FE1, 0x968A, 0x11d2, { 0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
+	_destination = NULL;
 
 	_fileFormat = kAAFiMedia;
 	_codecID = NoCodec;
@@ -300,18 +305,20 @@ ImplAAFEssenceAccess::Create (ImplAAFMasterMob *masterMob,
 	ImplAAFHeader		*head;
 	AAFPluginManager	*plugins;
 	aafCodecMetaInfo_t	metaInfo;
-	ImplAAFEssenceDescriptor *mdes;
-	ImplAAFEssenceData	*dataObj;
+//!!!	ImplAAFFileDescriptor *mdes;
+	ImplAAFWAVEDescriptor *mdes;
+	IUnknown			*dataObj;
 	
 	XPROTECT()
 	{
+		CHECK(masterMob->MyHeadObject(&head));
+
 		// Can't put raw media inside of an AAF File
 		if(_destination == NULL && _fileFormat != kAAFiMedia)
 			RAISE(AAFRESULT_WRONG_MEDIATYPE);
 		
 		/* Initialize the basic fields of the media handle
 		*/
-		masterMob->MyHeadObject(&head);
 		fileMob = (ImplAAFSourceMob *)CreateImpl(CLSID_AAFSourceMob);
 		CHECK(fileMob->GetMobID(&fileMobUID));
 		
@@ -373,11 +380,44 @@ ImplAAFEssenceAccess::Create (ImplAAFMasterMob *masterMob,
 			CHECK(tmpSlot->SetPhysicalNum(masterSlotID));
 			
 			CHECK(_codec->GetMetaInfo(&metaInfo));
-			mdes = (ImplAAFEssenceDescriptor *)CreateImpl(metaInfo.mdesClassID);
+			mdes = (ImplAAFWAVEDescriptor *)CreateImpl(metaInfo.mdesClassID);
+			ImplAAFNetworkLocator *netl = (ImplAAFNetworkLocator *)CreateImpl(CLSID_AAFNetworkLocator);
+			CHECK(netl->SetPath (L"NULL"));
+			CHECK(mdes->AppendLocator(netl));
+			CHECK(mdes->SetLength (1));	//!!!
+			CHECK(mdes->SetIsInContainer (AAFTrue));
+			aafUID_t	fileType = NilMOBID;//!!!
+			CHECK(mdes->SetContainerFormat (&fileType));	//!!!
+
+			//!!!Move out to the WAVE codec
+			unsigned char	someData[] = { 1, 2, 3, 4, 5, 6 };
+			CHECK(mdes->SetSummary (sizeof(someData), someData));
+
 			CHECK(fileMob->SetEssenceDescriptor(mdes));
+			CHECK(head->AppendMob(fileMob));
 			
 			//!!!Later use  dataClassID instead of hardwiring
-			dataObj = (ImplAAFEssenceData *)CreateImpl(CLSID_AAFEssenceData);
+//!!!			dataObj = (ImplAAFEssenceData *)CreateImpl(metaInfo.dataClassID);
+			CLSID	dataClass;
+			
+			memcpy(&dataClass, &metaInfo.dataClassID, sizeof(dataClass));
+			CoCreateInstance(dataClass,
+				NULL, 
+				CLSCTX_INPROC_SERVER, 
+				IID_IUnknown, 
+				(void **)&dataObj);
+
+			IAAFRoot				*CoObj;
+			ImplAAFRoot				*implRoot;
+			ImplAAFEssenceData		*implData;				
+
+			aafError = dataObj->QueryInterface(IID_IAAFRoot, (void **)&CoObj);
+
+			CoObj->GetImplRep((void **)&implRoot);
+			implData = (ImplAAFEssenceData *)implRoot;
+
+			CHECK(implData->SetFileMob(fileMob));
+			CHECK(head->AppendEssenceData (implData));		
 		}
 		else
 		{
@@ -386,28 +426,35 @@ ImplAAFEssenceAccess::Create (ImplAAFMasterMob *masterMob,
 		
 		
 		//!!! Change to use the corrent Subclass
-		CoCreateInstance(CLSID_AAFObjectStream,
+		aafError = CoCreateInstance(CLSID_AAFEssenceDataStream,
 			NULL, 
 			CLSCTX_INPROC_SERVER, 
 			IID_IAAFEssenceStream, 
 			(void **)&_stream);
 		
+		IAAFEssenceDataStream	*edStream;
+
+		//Assume not raw stream for now!!!
+		aafError = (_stream->QueryInterface(IID_IAAFEssenceDataStream, (void **)&edStream));
+		edStream->Init(dataObj);
+		
 		// We now have a valid media handle, so tell the world so.  Then 
 		// fill in some of the more optional fields.
 		//	
-		CHECK(head->SetModified());		// To NOW
+		fileMob->MyHeadObject(&head);
+//!!!Not yet implemented		CHECK(head->SetModified());		// To NOW
 		
 		// do this now, delay may mess up data contiguity
 		//
-		CHECK(dataObj->SetFileMob(fileMob));
-		CHECK(head->AppendEssenceData(dataObj));
+//!!! Not yet implemented		CHECK(dataObj->SetFileMob(fileMob));
+//!!!not implemented yet		CHECK(head->AppendEssenceData(dataObj));
 		
 		// Call the codec to create the actual media.
 		//
 		if(_codec != NULL)
 		{
 			CHECK(_codec->Create(fileMobUID, _variety, _stream));
-			CHECK(_codec->SetCompression(enable));
+///!!!Not implemented yet			CHECK(_codec->SetCompression(enable));
 			//!!! 			SetVideoLineMap(16, kTopFieldNone);
 		}
 	}
@@ -931,37 +978,22 @@ AAFRESULT STDMETHODCALLTYPE
 
 /****/
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceAccess::WriteRawData (aafInt32  /*nSamples*/,
-                           aafDataBuffer_t  /*buffer*/,
-                           aafInt32  /*sampleSize*/)
+    ImplAAFEssenceAccess::WriteRawData (aafInt32  nSamples,
+                           aafDataBuffer_t  buffer,
+                           aafInt32  sampleSize)
 {
-#if FULL_TOOLKIT
-	aafMultiXfer_t xfer;
+	aafAssert(buffer != NULL, _mainFile, AAFRESULT_BADDATAADDRESS);
+//!!!	aafAssert((_openType == kAAFCreated) ||
+//				(_openType == kAAFAppended), _mainFile,AAFRESULT_MEDIA_OPENMODE);
 
-	aafAssertMediaHdl(this);
-	aafAssertValidFHdl(_mainFile);
-	aafAssertMediaInitComplete(_mainFile);
-	aafAssert(buffer != NULL, _mainFile, OM_ERR_BADDATAADDRESS);
-	aafAssert((_openType == kAAFCreated) ||
-				(_openType == kAAFAppended), _mainFile,OM_ERR_MEDIA_OPENMODE);
-
-	XPROTECT(_mainFile)
+	XPROTECT()
 	{
-		xfer.subTrackNum = 1;
-		xfer.numSamples = nSamples;
-		xfer.buflen = buflen;
-		xfer.buffer = buffer;
-		xfer.bytesXfered = 0;
-
-		CHECK(_codec->codecWriteBlocks(this, leaveInterleaved, 1, &xfer));
+		CHECK(_codec->WriteRawData (buffer, (nSamples * sampleSize)));
 	}
 	XEXCEPT
 	XEND
 	
-	return(OM_ERR_NONE);
-#else
-	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
+	return(AAFRESULT_SUCCESS);
 }
 
 	//@comm A single video frame is ONE sample.
@@ -1070,7 +1102,7 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFEssenceAccess::Close ()
 {
-#if FULL_TOOLKIT
+#if 0
 	AAFFile *       	main;
 	AAFMedia  *tstMedia;
 	aafInt16       	n;
@@ -1082,15 +1114,17 @@ AAFRESULT STDMETHODCALLTYPE
 	aafAssertValidFHdl(_mainFile);
 	aafAssertMediaInitComplete(_mainFile);
 	main = _mainFile;
+#endif
 
-	XPROTECT(main)
+	XPROTECT()
 	{
 		/* Close the _codec-> before creating more objects, in order to keep trailer data
 		 * with the media in the file.
 		 */
-		if(_pvt->codecInfo.rev != 0)		/* A codec was opened */
-			CHECK(_codec->codecClose(this));
+		if(_codec != NULL)		/* A codec was opened */
+			CHECK(_codec->Close());
 
+#if FULL_TOOLKIT
 		if((_openType == kAAFCreated) || (_openType == kAAFAppended))
 		{
 			if(main->isAAFMedia())
@@ -1179,16 +1213,14 @@ AAFRESULT STDMETHODCALLTYPE
 		 * if the client continues to use it.
 		 */
 		_cookie = 0;
+#endif
 	}
 	XEXCEPT
 	{
 	}
 	XEND
 	
-	return(OM_ERR_NONE);
-#else
-	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
+	return(AAFRESULT_SUCCESS);
 }
 
 	//@comm This function should be called whether the essence was opened or created.
