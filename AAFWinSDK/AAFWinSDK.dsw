@@ -408,18 +408,6 @@ Package=<4>
 
 ###############################################################################
 
-Project: "InfoDumper"=".\examples\com-api\InfoDumper\InfoDumper.dsp" - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
 Project: "MakeSDK"=".\MakeSDK.dsp" - Package Owner=<4>
 
 Package=<5>
@@ -511,9 +499,6 @@ Package=<4>
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name ImportAudioExample
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name InfoDumper
     End Project Dependency
 }}}
 
