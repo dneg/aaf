@@ -1,5 +1,5 @@
-<!-- A proposal for a low-level AAF dtd -->
-<!-- Tim Bingham 12/22/99 -->
+<!-- Low-level Object Manager dtd -->
+<!-- Tim Bingham 12/07/00 -->
 
   <!-- object -->
     <!-- An object contains one or more properties. -->
@@ -69,9 +69,9 @@
 <!ATTLIST reference target IDREF #REQUIRED> <!-- name -->
 
   <!-- reference-vector -->
-    <!-- An ordered collection of references to uniquely identified
-         objects. -->
-<!ELEMENT reference-vector (identification+)>
+    <!-- An ordered collection of zero or more references to
+         uniquely identified objects. -->
+<!ELEMENT reference-vector (identification*)>
     <!-- All reference-vectors have an element count. -->
 <!ATTLIST reference-vector count CDATA #REQUIRED> <!-- integer -->
     <!-- All reference-vectors have a target. All references in a given
@@ -79,9 +79,9 @@
 <!ATTLIST reference-vector target IDREF #REQUIRED> <!-- name -->
 
   <!-- reference-set -->
-    <!-- An unordered collection of references to uniquely identified
-         objects. -->
-<!ELEMENT reference-set (identification+)>
+    <!-- An unordered collection of zero or more references to
+         uniquely identified objects. -->
+<!ELEMENT reference-set (identification*)>
     <!-- All reference-sets have an element count. -->
 <!ATTLIST reference-set count CDATA #REQUIRED> <!-- integer -->
     <!-- All reference-sets have a target. All references in a given
@@ -101,7 +101,7 @@
   <!--   example 123456 -->
 
 <!-- name -->
-  <!-- An identifier (using URI escaping mechanism for seocial characters) -->
+  <!-- An identifier (using URI escaping mechanism for special characters) -->
   <!--   example TBS - what do names look like? -->
 
 <!-- data -->
