@@ -280,8 +280,6 @@ public:
 
 public:
 	// Interfaces visible inside the toolkit, but not exposed through the API
-	AAFRESULT AppendDataObject(aafUID_t mobID,      /* IN - Mob ID */
-						  ImplAAFObject *dataObj) ;    /* IN - Input Mob */ 
 
 AAFRESULT SetToolkitRevisionCurrent(void);
 AAFRESULT IsValidHeadObject(void);
@@ -289,7 +287,6 @@ AAFRESULT IsValidHeadObject(void);
 AAFRESULT GetNumIdentifications (aafInt32 * /*pCount*/);
 
 AAFRESULT AddIdentificationObject (aafProductIdentification_t * /*pIdent*/);
-AAFRESULT BuildMediaCache(void);
 AAFRESULT LoadMobTables(void);
 AAFRESULT SetModified(void);		// To NOW
 
