@@ -70,7 +70,7 @@ static HRESULT SetFileBitsTest ()
 	(AAFCreateAAFFileOnRawStorage (pReadStg,
 								   kAAFFileExistence_existing,
 								   kAAFFileAccess_read,
-								   0,
+								   &aafFileKindAafSSBinary,
 								   0,
 								   0,
 								   &pReadFile));
