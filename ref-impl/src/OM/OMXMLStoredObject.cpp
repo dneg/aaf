@@ -307,7 +307,6 @@ void OMXMLStoredObject::save(const OMSimpleProperty& property)
   //   @parm The <c OMDataVector> to save.
 void OMXMLStoredObject::save(const OMDataVector& property)
 {
-#if 0 // tjb - Not yet
   TRACE("OMXMLStoredObject::save(OMDataVector)");
 
   const OMType* propertyType = property.type();
@@ -363,7 +362,6 @@ void OMXMLStoredObject::save(const OMDataVector& property)
   _stream << beginl;
   _stream << "</data-vector>" << endl;
   _stream << outdent;
-#endif
 }
 
 void OMXMLStoredObject::save(const OMDataSet& property)
