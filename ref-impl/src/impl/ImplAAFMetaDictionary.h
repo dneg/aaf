@@ -329,8 +329,8 @@ public:
   // Create and initialize all of the axiomatic definitions.
   AAFRESULT InstantiateAxiomaticDefinitions(void);
 
-  // Merge the builtin dictionary into the file dictionary.
-  AAFRESULT MergeWithFile();
+  // Sync the builtin dictionary and the file dictionary definitions.
+  AAFRESULT SyncMetaDictionaries();
 
   // Create all of the axiomatic classes as uninitialized objects.
   void CreateAxiomaticClasses(void); // throw AAFRESULT
@@ -386,6 +386,10 @@ protected:
   virtual void InitOMProperties (ImplAAFClassDef * pClassDef);
 
 private:
+
+  AAFRESULT PvtMergeBuiltinPropDefsToFile();
+  AAFRESULT PvtMergeBuiltinClassDefsToFile();
+  AAFRESULT PvtMergeFileClassDefsToBuiltin();
 
   //
   // Persistent data members.
