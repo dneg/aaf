@@ -1159,7 +1159,7 @@ static int comparePid(const void* d1, const void* d2)
 {
   PropertyDefinition* def1 = *((PropertyDefinition **)(d1));
   PropertyDefinition* def2 = *((PropertyDefinition **)(d2));
-  return (int)def1->pid() - (int)def2->pid(), sizeof (aafUID_t);
+  return (int)def1->pid() - (int)def2->pid();
 }
 
 
