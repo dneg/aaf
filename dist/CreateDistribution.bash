@@ -67,10 +67,10 @@ echo AAF_BUILD_NUMBER  = $AAF_BUILD_NUMBER
 echo VERSION_STRING = $VERSION_STRING
 echo DIST_FILE_NAME = $DIST_FILE_NAME
 
-case `uname` in
-        Linux ) create_unix_distribution $AAFSDK $DIST_FILE_NAME $DIST_LIST  ;;
-
-	*       ) usage;;
+case ${AAFPLATFORM} in
+        i686Linux ) create_unix_distribution $AAFSDK $DIST_FILE_NAME $DIST_LIST  ;;
+	MipsIrix  ) create_unix_distribution $AAFSDK $DIST_FILE_NAME $DIST_LIST  ;;
+	*         ) usage;;
 esac
 	
 
