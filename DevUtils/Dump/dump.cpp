@@ -40,7 +40,7 @@
 //
 // Usage:
 //
-//  $ dump [-x -r -p -a -s -z <pid> -m <n> -h] files...
+//  $ dump [-x -r -p -a -s -z <pid> -m <n> -l <n> -h] files...
 //
 //    -x       = hex dump, works for any file.
 //    -r       = raw dump, works for any structured storage file.
@@ -50,6 +50,7 @@
 //    -s       = print statistics.
 //    -z <pid> = dump properties with pid <pid> (hex) as all zeroes.
 //    -m <n>   = dump only the first <n> bytes (dec) of media streams. 
+//    -l <n>   = dump only the first <n> bytes (dec) of the file.
 //    -v       = validate the structure of the file
 //    -h       = print help.
 //
@@ -431,8 +432,10 @@ enum optionType {hexadecimal, raw, property, aaf};
 enum optionType option = raw; // default
 bool zFlag = false;
 bool mFlag = false;
+bool lFlag = false;
 bool vFlag = false;
 unsigned long int mLimit = 0;
+unsigned long int lLimit = 0;
 
 // Statistics gathering
 //
@@ -3381,11 +3384,15 @@ void dumpFileHex(char* fileName)
 { 
   FILE* infile;
   int ch;
+  unsigned long byteCount = 0;
 
   infile = fopen(fileName, "rb");
   if (infile != NULL) {
     cout << "Hex dump." << endl;  
     while((ch = fgetc(infile)) != EOF) {
+      if ((lFlag) && (++byteCount > lLimit)) {
+        break;
+      }
       dumper.print((char)ch);
     }
  
@@ -3743,7 +3750,7 @@ static int isAnAAFFile(const wchar_t* fileName,
 void usage(void)
 {
   cerr << programName << ": Usage : "
-       << programName << " [-x -r -p -a -s -z <pid> -m <n> -h] <file...>"
+       << programName << " [-x -r -p -a -s -z <pid> -m <n> -l <n> -h] <file...>"
                       << endl;
   cerr << "-x       = hex dump"
        << " : for any file." << endl;
@@ -3761,6 +3768,9 @@ void usage(void)
   cerr << "-m <n>   = dump only the first <n> bytes (dec) of media streams :"
        << endl
        << "             combine with -p and -a." << endl;
+  cerr << "-l <n>   = dump only the first <n> bytes (dec) of the file :"
+       << endl
+       << "             combine with -x." << endl;
   cerr << "-v       = validate the structure of the file :"
        << endl
        << "             combine with -p and -a." << endl;
@@ -4061,6 +4071,44 @@ int main(int argumentCount, char* argumentVector[])
           exit(EXIT_FAILURE);
         }
         break;
+      case 'l':
+
+        // Does a value follow -l ?
+        //
+        if ((i + 1 < argumentCount) && (*argumentVector[i + 1] != '-' )) {
+
+          lFlag = true;
+
+          // Consume value
+          //
+          flagCount = flagCount + 1;
+          i = i + 1;
+
+          // Convert value
+          //
+          char* bytess = argumentVector[i];
+          char* expectedEnd = &bytess[strlen(bytess)];
+          char* end;
+          int bytes = strtoul(bytess, &end, 10);
+
+          if (end != expectedEnd) { // Some characters not consumed
+            cerr << programName
+                 << ": Error : \""
+                 << bytess
+                 << "\" is not a valid byte count."
+                 << endl;
+            usage();
+            exit(EXIT_FAILURE);
+          }
+          lLimit = bytes;
+        } else {
+          cerr << programName
+               << ": Error : -l must be followed by a byte count."
+               << endl;
+          usage();
+          exit(EXIT_FAILURE);
+        }
+        break;
       case 'v':
         vFlag = true;
         break;
@@ -4112,6 +4160,16 @@ int main(int argumentCount, char* argumentVector[])
     if (vFlag) {
       cerr << programName
            << ": Error : -v not valid with -x or -r."
+           << endl;
+      usage();
+      exit(EXIT_FAILURE);
+    }
+  }
+
+  if (option != hexadecimal) {
+    if (lFlag) {
+      cerr << programName
+           << ": Error : -l not valid with -r, -p or -a."
            << endl;
       usage();
       exit(EXIT_FAILURE);
