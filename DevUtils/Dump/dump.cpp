@@ -402,6 +402,8 @@ static size_t maxSignatureSize = signatureSize();
 //  0.26   : Use 2 byte characters for names in Object Manager meta-data
 //  0.27   : Use a string of pids instead of a string of 2-byte characters
 //           for entries in the referenced properties table.
+//  0.28   : Add stored byte order for data streams (1 byte preceeding
+//           stream name).
 //
 
 // The following may change at run time depending on the file format
@@ -438,7 +440,7 @@ const int OLD_TID_DATA_STREAM                    = 4;
 
 // Highest version of file/index format recognized by this dumper
 //
-const OMUInt32 HIGHVERSION = 27;
+const OMUInt32 HIGHVERSION = 28;
 
 // Output format requested
 //
@@ -617,7 +619,9 @@ static void dumpContainedObjects(IStorage* storage,
                                  bool swapNeeded);
 static void dumpDataStream(IStream* stream,
                            const char* pathName,
-                           const char* streamName);
+                           const char* streamName,
+                           OMUInt32 version,
+                           OMUInt8 byteOrder);
 static void dumpProperties(IStorage* storage,
                            IStream* stream,
                            IndexEntry* index,
@@ -2224,9 +2228,18 @@ void dumpContainedObjects(IStorage* storage,
       break;
 
     case SF_DATA_STREAM: {
+      OMUInt32 nameStart = index[i]._offset;
+      OMUInt32 nameLength = index[i]._length;
+      OMUInt8 byteOrder = 0x55; // unspecified
+      if (version >= 28) {
+        // byte order
+        readUInt8(propertiesStream, &byteOrder);
+        nameStart = nameStart + 1;
+        nameLength = nameLength - 1;
+      }
       char* subStreamName = readName(propertiesStream,
-                                     index[i]._offset,
-                                     index[i]._length,
+                                     nameStart,
+                                     nameLength,
                                      version);
       
       // Compute the pathname for this stream
@@ -2239,7 +2252,7 @@ void dumpContainedObjects(IStorage* storage,
       strcat(thisPathName, subStreamName);
       IStream* stream = 0;
       openStream(storage, subStreamName, &stream);
-      dumpDataStream(stream, thisPathName, subStreamName);
+      dumpDataStream(stream, thisPathName, subStreamName, version, byteOrder);
 
       stream->Release();
       stream = 0;
@@ -2680,7 +2693,9 @@ void dumpContainedObjects(IStorage* storage,
 
 void dumpDataStream(IStream* stream,
                     const char* pathName,
-                    const char* streamName)
+                    const char* streamName,
+                    OMUInt32 version,
+                    OMUInt8 byteOrder)
 {
   cout << endl;
   cout << pathName << endl;
@@ -2706,23 +2721,38 @@ void dumpDataStream(IStream* stream,
       cout << "( Size = "
            << streamBytes
            << ", output limited to "
-           << mLimit
-           << " )"
-           << endl;
+           << mLimit;
     } else {
       cout << "( Size = "
            << streamBytes
            << ", smaller than output limit of "
-           << mLimit
-           << " )"
-           << endl;
+           << mLimit;
     }
   } else {
     cout << "( Size = "
-         << streamBytes
-         << " )"
-         << endl;
+         << streamBytes;
   }
+
+  if (version >= 28) {
+    char* s;
+    switch (byteOrder) {
+	case 'L':
+      s = "little endian";
+      break;
+	case 'B':
+      s = "big endian";
+      break;
+	case 'U':
+      s = "unspecified";
+      break;
+	default:
+      s = "unknown"; // error
+      break;
+    }
+    cout << ", Byte order = " << s;
+  }
+  cout << " )"
+       << endl;
 
   if (streamBytes > 0) {
     for (unsigned long int byteCount = 0;
