@@ -262,7 +262,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	IAAFFile*		pFile = NULL;
 	IAAFHeader*		pHeader = NULL;
 	IEnumAAFMobs*	pMobIter = NULL;
-	IAAFMob*		pMob;
+	IAAFMob*		pMob = NULL;
 	IEnumAAFMobSlots*	pSlotIter = NULL;
 	IAAFMobSlot*		pSlot = NULL;
 	IAAFComponent*		pComp = NULL;
