@@ -299,11 +299,13 @@ int main(void)
       aafBool b = kAAFFalse;
       checkResult(AAFFileIsAAFFile(fileinfo[i].name, &k, &b));
       if (!b) {
-        cerr << "AAFFileIsAAFFile() reports file is not an AAF file." << endl;
+        cerr << "Error : AAFFileIsAAFFile() reports file is not an AAF file."
+             << endl;
         throw AAFRESULT_TEST_FAILED;
       }
       if (memcmp(&k, fileinfo[i].kind, sizeof(aafUID_t)) != 0) {
-        cerr << "Incorrect file kind." << endl;
+        cerr << "Error : Incorrect file kind."
+             << endl;
         throw AAFRESULT_TEST_FAILED;
       }
       // Read the file
@@ -313,7 +315,8 @@ int main(void)
       }
     }
   } catch(HRESULT& r) {
-    cerr << "Caught HRESULT 0x" << hex << r << endl;
+    cerr << "Error : Caught HRESULT 0x" << hex << r
+         << endl;
   }
   return 0;
 }
