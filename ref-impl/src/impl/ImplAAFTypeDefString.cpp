@@ -80,6 +80,10 @@ AAFRESULT STDMETHODCALLTYPE
   if (! pTypeDef->IsStringable())
 	return AAFRESULT_BAD_TYPE;
 
+  // Check if specified type definition is in the dictionary.
+  if( !aafLookupTypeDef( this, pTypeDef ) )
+	return AAFRESULT_TYPE_NOT_FOUND;
+
   return pvtInitialize (id, pTypeDef, pTypeName);
 }
 

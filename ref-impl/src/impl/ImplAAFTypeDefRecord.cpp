@@ -145,6 +145,10 @@ AAFRESULT STDMETHODCALLTYPE
 	  if (! ppMemberTypes[i]->IsAggregatable())
 		return AAFRESULT_BAD_TYPE;
 
+	  // Check if specified type definition is in the dictionary.
+	  if( !aafLookupTypeDef( this, ppMemberTypes[i] ) )
+		return AAFRESULT_TYPE_NOT_FOUND;
+
 	  totalNameSize += (wcslen (pMemberNames[i]) + 1);
 	}
 
