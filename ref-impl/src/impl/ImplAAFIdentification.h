@@ -23,8 +23,7 @@
 #endif
 
 #include "OMProperty.h"
-
-const int CLSID_AAFIDENTIFICATION = 44;
+#include "OMTypes.h"
 
 const int PID_IDENTIFICATION_COMPANYNAME          = 0;
 const int PID_IDENTIFICATION_PRODUCTNAME          = 1;
@@ -45,7 +44,7 @@ public:
   //********
   ~ImplAAFIdentification ();
   
-  ImplAAFIdentification(); // tjb -- this is temporary and should be removed.
+  ImplAAFIdentification();
 
   ImplAAFIdentification(
     const char* companyName,
@@ -59,7 +58,7 @@ public:
     // const AUID* generation
     );
 
-  virtual int classId(void) const;
+  OMDECLARE_STORABLE(AAFIdentification);
 
   //****************
   // GetCompanyName()
