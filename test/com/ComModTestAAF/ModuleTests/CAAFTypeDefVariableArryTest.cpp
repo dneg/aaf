@@ -388,7 +388,7 @@ static HRESULT verifyContents (IAAFHeader* const pHeader, IAAFDictionary* const 
 
 	//Try a NEW Size  array, say 7 elements ....
 
-	const TEST_ELEM_t  newSize_array[7] = {10, -20, 30, -44, 55, -360, 99};
+	const TEST_ELEM_t  newSize_array[7] = {10, -20, 30, -44, 55, 360, 99};
 	aafUInt32 newCount = 7;
 	checkResult(spVA->SetCArray (spPropVal, (aafMemPtr_t) newSize_array,  sizeof(newSize_array)));
 	//the NEW size  should have been set properly at this stage. Lets read it ...
@@ -402,6 +402,50 @@ static HRESULT verifyContents (IAAFHeader* const pHeader, IAAFDictionary* const 
 	for (i=0; i<newCount; i++)
 		checkExpression( check_va2[i] == newSize_array[i], AAFRESULT_TEST_FAILED );	
 
+
+    //IAAFTypeDefArray::CreateValueFromValues ()  ...
+#define		TEST1_C 9
+
+	const TEST_ELEM_t  newsize_array[TEST1_C] = {1, -2, 3, -4, 5, -6, -7, 8, -9};
+
+	aafUInt32 good_count = TEST1_C;
+	IAAFPropertyValue * pSourceValArr[TEST1_C];
+	//setup
+	for (i=0; i<good_count; i++)
+		checkResult(spSomeInt->CreateValue((aafMemPtr_t)&newsize_array[i], 
+						sizeof (some_int), &pSourceValArr[i]));
+	IAAFPropertyValueSP spTargetValArr;
+	checkResult(spVA->CreateValueFromValues(pSourceValArr, good_count, &spTargetValArr ));
+	//done with creating Target ValArr;  release Source ValArr elements
+	for (i=0; i<good_count; i++)
+		pSourceValArr[i]->Release();
+	//verify spPropValArr values
+	TEST_ELEM_t	check2_fa [TEST1_C] = {0};  
+	aafUInt32 small_count = sizeof(TEST_ELEM_t) * (TEST1_C - 2); //say, 2 elements less
+	hr = spVA->GetCArray(spTargetValArr, (aafMemPtr_t) check2_fa, small_count);
+	//should have failed with wrong size
+	checkExpression(AAFRESULT_BAD_SIZE == hr, AAFRESULT_TEST_FAILED);
+	//ok, try again, with good-count size	...
+	checkResult(spVA->GetCArray(spTargetValArr, (aafMemPtr_t) check2_fa, sizeof(check2_fa)));
+	for (i=0; i<good_count; i++)
+		checkExpression( check2_fa[i] == newsize_array[i], AAFRESULT_TEST_FAILED );	
+
+
+	//Test IAAFTypeDefFixedArray::IAAFTypeDefArray::SetElementValue() ....
+
+	some_int = -13;
+	checkResult(spSomeInt->CreateValue((aafMemPtr_t)&some_int, sizeof (some_int), &spSomeVal));
+	//try to set the value out-of-bounds
+	hr = spVA->SetElementValue(spPropVal, 7, spSomeVal); //7 is one elem out of bounds
+	checkExpression( hr == AAFRESULT_BADINDEX, AAFRESULT_TEST_FAILED );
+	//Set the element to last index ...
+	checkResult(spVA->SetElementValue(spPropVal, 6, spSomeVal));  //6 is last index position
+	//Now get back the element ...
+	checkResult(spVA->GetElementValue(spPropVal, 6, &spSomeVal));
+	some_int = 0; //reset value
+	checkResult(spSomeInt->GetInteger(spSomeVal, (aafMemPtr_t)&some_int, sizeof (some_int)));
+	//verify retrieved integer
+	checkExpression( -13 == some_int  , AAFRESULT_TEST_FAILED );
 
 	//Append an element, and retrieve/check the value from the array, etc ...
 
@@ -605,16 +649,7 @@ extern "C" HRESULT CAAFTypeDefVariableArray_test()
 	{
 		hr = CreateAAFFile(	pFileName );
 		if(hr == AAFRESULT_SUCCESS)
-			hr = ReadAAFFile( pFileName );
-
-		if (SUCCEEDED(hr))
-		{
-			hr = AAFRESULT_TEST_PARTIAL_SUCCESS;			
-				
-			cout << "\t  SetElementValue  method is Not Implemented" << endl;
-			cout << "\t  CreateValueFromValues  method is Not Implemented" << endl;
-		}//if
-		
+			hr = ReadAAFFile( pFileName );		
 		
 	}//try
 	catch (...)
@@ -623,7 +658,6 @@ extern "C" HRESULT CAAFTypeDefVariableArray_test()
 			" exception!" << endl; 
 		hr = AAFRESULT_TEST_FAILED;
 	}
-	
 	
 	return hr;
 }
