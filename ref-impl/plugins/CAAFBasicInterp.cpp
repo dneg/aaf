@@ -341,7 +341,7 @@ HRESULT CAAFBasicInterp::FindBoundValues(aafRational_t point,
 						AAFRational *lowerBoundTime, aafMemPtr_t lowerBoundValue,
 						AAFRational *upperBoundTime, aafMemPtr_t upperBoundValue)
 {
-	IAAFConstValue			*pConstValue = NULL;
+	IAAFConstantValue			*pConstValue = NULL;
 	IAAFVaryingValue		*pVaryingValue = NULL;
 	IEnumAAFControlPoints	*theEnum = NULL;
 	IAAFControlPoint		*testPoint = NULL, *prevPoint = NULL;
@@ -355,7 +355,7 @@ HRESULT CAAFBasicInterp::FindBoundValues(aafRational_t point,
 		if(point.denominator == 0)
 			RAISE(AAFRESULT_ZERO_DIVIDE);
 		inputTime = (AAFRational)point;
-		if(_parameter->QueryInterface(IID_IAAFConstValue, (void **)&pConstValue) == AAFRESULT_SUCCESS)
+		if(_parameter->QueryInterface(IID_IAAFConstantValue, (void **)&pConstValue) == AAFRESULT_SUCCESS)
 		{
 			aafUInt32	count;
 			CHECK(pConstValue->GetValue (valueSize, lowerBoundValue, &count));
