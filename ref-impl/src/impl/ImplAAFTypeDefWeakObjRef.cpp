@@ -193,7 +193,9 @@ aafBool ImplAAFTypeDefWeakObjRef::IsFixedSize (void) const
 
 size_t ImplAAFTypeDefWeakObjRef::PropValSize (void) const
 {
-  return BaseType()->PropValSize();
+  // Temp change: currently weak refs are represented as auids.
+  // return BaseType()->PropValSize();
+  return sizeof (aafUID_t);
 }
 
 
@@ -205,7 +207,9 @@ aafBool ImplAAFTypeDefWeakObjRef::IsRegistered (void) const
 
 size_t ImplAAFTypeDefWeakObjRef::NativeSize (void) const
 {
-  return sizeof (ImplAAFObject*);
+  // Temp change: currently weak refs are represented as auids.
+  // return sizeof (ImplAAFObject*);
+  return sizeof (aafUID_t);
 }
 
 
