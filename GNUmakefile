@@ -87,13 +87,13 @@ dist :  release-dist sdk-dist
 
 .PHONY : release-dist
 release-dist :
-	$(MAKE) CFG=Release ref-impl
+	$(MAKE) CFG=Release install
 	cd dist && $(MAKE) release-dist
 
 .PHONY : sdk-dist
 sdk-dist :
-	$(MAKE) CFG=Release everything
-	$(MAKE) CFG=Debug everything
+	$(MAKE) CFG=Release install
+	$(MAKE) CFG=Debug install
 	cd dist && $(MAKE) sdk-dist
 
 # This target simply prints the compiler version.
