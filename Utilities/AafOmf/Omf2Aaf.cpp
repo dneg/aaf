@@ -889,21 +889,21 @@ void Omf2Aaf::ConvertOMFDatakind( omfDDefObj_t datakind,
 	rc = omfiDatakindGetName(OMFFileHdl, datakind, 64, datakindName);
 
 	if (strncmp("omfi:data:Picture", datakindName, strlen(datakindName))== 0)
-		*pDatakind = DDEF_Picture;
+		*pDatakind = kAAFDataDef_Picture;
 	else if (strncmp("omfi:data:Sound", datakindName, strlen(datakindName)) == 0)
-		*pDatakind = DDEF_Sound;
+		*pDatakind = kAAFDataDef_Sound;
 	else if (strncmp("omfi:data:StereoSound", datakindName, strlen(datakindName)) == 0)
-		*pDatakind = DDEF_Sound;
+		*pDatakind = kAAFDataDef_Sound;
 	else if(strncmp("omfi:data:Timecode", datakindName, strlen(datakindName)) == 0)
-		*pDatakind = DDEF_Timecode;
+		*pDatakind = kAAFDataDef_Timecode;
 	else if(strncmp("omfi:data:Edgecode", datakindName, strlen(datakindName)) == 0)
-		*pDatakind = DDEF_Edgecode;
+		*pDatakind = kAAFDataDef_Edgecode;
 	else if(strncmp("omfi:data:PictureWithMatte", datakindName, strlen(datakindName)) == 0)
-		*pDatakind = DDEF_PictureWithMatte;
+		*pDatakind = kAAFDataDef_PictureWithMatte;
 	else
 	{
 		gpGlobals->pLogger->Log( kLogWarn, "Unknown DataDef: %s Found in sequence\n", datakindName);
-		*pDatakind = DDEF_Unknown;
+		*pDatakind = kAAFDataDef_Unknown;
 	}
 
 	return;
@@ -1532,7 +1532,7 @@ void Omf2Aaf::ProcessOMFComponent(omfObject_t OMFSegment, IAAFComponent** ppComp
 
 					IAAFOperationDef*		pEffectDef;
 					GetAAFOperationDefinition("omfi::effectSimpleMonoAudioDissolve", NULL, "Simple Mono Audio Dissolve", "Combines two mono audio streams",
-									(aafUInt32)-1, kAAFFalse, 2, DDEF_Sound, &pEffectDef);
+									(aafUInt32)-1, kAAFFalse, 2, kAAFDataDef_Sound, &pEffectDef);
 					AutoRelease<IAAFOperationDef> peffdef( pEffectDef );
 
 					IAAFParameterDef*		pParameterDef;
@@ -1564,7 +1564,7 @@ void Omf2Aaf::ProcessOMFComponent(omfObject_t OMFSegment, IAAFComponent** ppComp
 					IAAFOperationDef* pEffectDef;
 					GetAAFOperationDefinition("omfi::effectSimpleVideoDissolve", NULL, 
 									"Simple Video Dissolve", "Combines two video streams",
-									(aafUInt32)-1, kAAFFalse, 2, DDEF_PictureWithMatte, &pEffectDef);
+									(aafUInt32)-1, kAAFFalse, 2, kAAFDataDef_PictureWithMatte, &pEffectDef);
 					AutoRelease<IAAFOperationDef> peffdef( pEffectDef );
 
 					IAAFParameterDef* pParameterDef;
@@ -1601,7 +1601,7 @@ void Omf2Aaf::ProcessOMFComponent(omfObject_t OMFSegment, IAAFComponent** ppComp
 					IAAFOperationDef* pEffectDef;
 					GetAAFOperationDefinition("omfi:effect:SMPTEVideoWipe", NULL, 
 									"SMPTE Video Wipe", "Combines two video streams according to SMPTE ",
-									(aafUInt32)-1, kAAFFalse, 2, DDEF_Picture, &pEffectDef);
+									(aafUInt32)-1, kAAFFalse, 2, kAAFDataDef_Picture, &pEffectDef);
 					AutoRelease<IAAFOperationDef> peffdef( pEffectDef );
 
 					rc = pEffect->Initialize(pDataDef, (aafLength_t)OMFLength, pEffectDef);
@@ -3577,58 +3577,58 @@ void Omf2Aaf::ConvertOMFEffectDefinition(omfDDefObj_t	effectDef,
 		(strcmp(effectID, "omfi:effect:MonoAudioDissolve") == 0) )
 	{
 		numberInputs = 2;
-		effectDataDef = DDEF_Sound;
+		effectDataDef = kAAFDataDef_Sound;
 	}
 	else if (strcmp(effectID, "omfi:effect:MonoAudioGain") == 0)
 	{
 		numberInputs = 1;
-		effectDataDef = DDEF_Sound;
+		effectDataDef = kAAFDataDef_Sound;
 	}
 	else if (strcmp(effectID, "omfi:effect:MonoAudioMixdown") == 0)
 	{
 		numberInputs = -1;
-		effectDataDef = DDEF_Sound;
+		effectDataDef = kAAFDataDef_Sound;
 	}
 	else if (strcmp(effectID, "omfi:effect:MonoAudioPan") == 0)
 	{
 		numberInputs = 1;
-		effectDataDef = DDEF_Sound;
+		effectDataDef = kAAFDataDef_Sound;
 	}
 	else if (strcmp(effectID, "omfi:effect:SMPTEVideoWipe") == 0)
 	{	
 		numberInputs = 2;
-		effectDataDef = DDEF_Picture;
+		effectDataDef = kAAFDataDef_Picture;
 	}
 	else if ((strcmp(effectID, "omfi:effect:SimpleVideoDissolve") == 0) ||
 		(strcmp(effectID, "omfi:effect:VideoDissolve") == 0) )
 	{
 		numberInputs = 2;
-		effectDataDef = DDEF_PictureWithMatte;
+		effectDataDef = kAAFDataDef_PictureWithMatte;
 	}
 	else if (strcmp(effectID, "omfi:effect:VideoFadeToBlack") == 0)
 	{
 		numberInputs = 1;
-		effectDataDef = DDEF_PictureWithMatte;
+		effectDataDef = kAAFDataDef_PictureWithMatte;
 	}
 	else if (strcmp(effectID, "omfi:effect:VideoFrameMask") == 0)
 	{
 		numberInputs = 1;
-		effectDataDef = DDEF_PictureWithMatte;
+		effectDataDef = kAAFDataDef_PictureWithMatte;
 	}
 	else if (strcmp(effectID, "omfi:effect:VideoRepeat") == 0)
 	{
 		numberInputs = 1;
-		effectDataDef = DDEF_PictureWithMatte;
+		effectDataDef = kAAFDataDef_PictureWithMatte;
 	}
 	else if (strcmp(effectID, "omfi:effect:VideoSpeedControl") == 0)
 	{
 		numberInputs = 1;
-		effectDataDef = DDEF_PictureWithMatte;
+		effectDataDef = kAAFDataDef_PictureWithMatte;
 	}
 	else
 	{
 		numberInputs = -1;
-		effectDataDef = DDEF_Picture;
+		effectDataDef = kAAFDataDef_Picture;
 	}
 	
 	if(omfsReadString(OMFFileHdl, effect, gpGlobals->pvtEffectIDProp,

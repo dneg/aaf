@@ -464,7 +464,7 @@ static bool addMasterMobForDVFile(
 
 	// Create the source clip for the Video File Source Mob
 	DECLARE_AX( SourceClip, srcclip );
-	srcclip.SetDataDef(dict.LookupDataDef(DDEF_Picture));
+	srcclip.SetDataDef(dict.LookupDataDef(kAAFDataDef_Picture));
 	srcclip.SetLength(cliplength);
 	srcref.sourceID = zerouid;
 	if (p_tapemob)
@@ -479,7 +479,7 @@ static bool addMasterMobForDVFile(
 
 	// Create the sourceclip for the Master Mob
 	DECLARE_AX( SourceClip, msrcclip );
-	msrcclip.SetDataDef(dict.LookupDataDef(DDEF_Picture));
+	msrcclip.SetDataDef(dict.LookupDataDef(kAAFDataDef_Picture));
 	msrcclip.SetLength(cliplength);
 	srcref.sourceID = smob.GetMobID();
 	srcref.sourceSlotID = 1;
@@ -644,7 +644,7 @@ static bool addMasterMobForDVFile(
 
 	// Create the source clip for the Source Mob
 	DECLARE_AX( SourceClip, srcclipA1 );
-	srcclipA1.SetDataDef(dict.LookupDataDef(DDEF_Sound));
+	srcclipA1.SetDataDef(dict.LookupDataDef(kAAFDataDef_Sound));
 
 	aafSourceRef_t srcrefA1;
 	srcrefA1.sourceID = zerouid;
@@ -661,7 +661,7 @@ static bool addMasterMobForDVFile(
 
 	// Create the sourceclip for the Master Mob
 	DECLARE_AX( SourceClip, msrcclipA1 );
-	msrcclipA1.SetDataDef(dict.LookupDataDef(DDEF_Sound));
+	msrcclipA1.SetDataDef(dict.LookupDataDef(kAAFDataDef_Sound));
 	srcrefA1.sourceID = smobA1.GetMobID();
 	srcrefA1.sourceSlotID = 1;
 	srcrefA1.startTime = 0;
@@ -715,7 +715,7 @@ static bool addMasterMobForDVFile(
 
 	// Create the source clip for the Source Mob
 	DECLARE_AX( SourceClip, srcclipA2 );
-	srcclipA2.SetDataDef(dict.LookupDataDef(DDEF_Sound));
+	srcclipA2.SetDataDef(dict.LookupDataDef(kAAFDataDef_Sound));
 	aafSourceRef_t srcrefA2;
 	srcrefA2.sourceID = zerouid;
 	srcrefA1.sourceSlotID = 0;
@@ -729,7 +729,7 @@ static bool addMasterMobForDVFile(
 
 	// Create the sourceclip for the Master Mob
 	DECLARE_AX( SourceClip, msrcclipA2 );
-	msrcclipA2.SetDataDef(dict.LookupDataDef(DDEF_Sound));
+	msrcclipA2.SetDataDef(dict.LookupDataDef(kAAFDataDef_Sound));
 	srcrefA2.sourceID = smobA2.GetMobID();
 	srcrefA2.sourceSlotID = 1;
 	srcrefA2.startTime = 0;
@@ -937,9 +937,9 @@ static bool createAAFFileForEditDecisions(const char *output_aaf_file,
 				// RawStorage with MS SS known to fail for 4k (works with 512)
 				const aafUID_t* pFileKind;
 				if (useSmallSectors)
-					pFileKind = &aafFileKindAaf512Binary;
+					pFileKind = &kAAFFileKind_Aaf512Binary;
 				else
-					pFileKind = &aafFileKindAaf4KBinary; 
+					pFileKind = &kAAFFileKind_Aaf4KBinary; 
 
 				IAAFRawStorage* pRawStorage = 0;
 				CHECK_HRESULT (AAFCreateRawStorageDisk(
@@ -1009,7 +1009,7 @@ static bool createAAFFileForEditDecisions(const char *output_aaf_file,
 			tapeslotvid.SetName(L"V1");
 			DECLARE_AX( Filler, tapefiller );
 			// Video track of Filler for 24 hours
-			tapefiller.Initialize(dict.LookupDataDef(DDEF_Picture), length_24hours);
+			tapefiller.Initialize(dict.LookupDataDef(kAAFDataDef_Picture), length_24hours);
 
 			DECLARE_AX( TimelineMobSlot, tapeslotaud1 );
 			tapeslotaud1.SetSlotID(2);
@@ -1018,7 +1018,7 @@ static bool createAAFFileForEditDecisions(const char *output_aaf_file,
 			tapeslotaud1.SetName(L"A1");
 			DECLARE_AX( Filler, tapefiller_aud1 );
 			// Audio track 1 of Filler for 24 hours
-			tapefiller_aud1.Initialize(dict.LookupDataDef(DDEF_Sound), length_24hours);
+			tapefiller_aud1.Initialize(dict.LookupDataDef(kAAFDataDef_Sound), length_24hours);
 
 			DECLARE_AX( TimelineMobSlot, tapeslotaud2 );
 			tapeslotaud2.SetSlotID(3);
@@ -1027,7 +1027,7 @@ static bool createAAFFileForEditDecisions(const char *output_aaf_file,
 			tapeslotaud2.SetName(L"A2");
 			DECLARE_AX( Filler, tapefiller_aud2 );
 			// Audio track 2 of Filler for 24 hours
-			tapefiller_aud2.Initialize(dict.LookupDataDef(DDEF_Sound), length_24hours);
+			tapefiller_aud2.Initialize(dict.LookupDataDef(kAAFDataDef_Sound), length_24hours);
 
 			DECLARE_AX( TimelineMobSlot, tapeslottc );
 			tapeslottc.SetSlotID(4);
@@ -1049,7 +1049,7 @@ static bool createAAFFileForEditDecisions(const char *output_aaf_file,
 			}
 			tc.startFrame = 0;						// Start time of 0:00:00.00
 			tcseg.Initialize(length_24hours, tc);		// 24 hours
-			tcseg.SetDataDef(dict.LookupDataDef(DDEF_Timecode));
+			tcseg.SetDataDef(dict.LookupDataDef(kAAFDataDef_Timecode));
 
 			tapeslotvid.SetSegment(tapefiller);
 			tapemob.AppendSlot(tapeslotvid);
@@ -1077,7 +1077,7 @@ static bool createAAFFileForEditDecisions(const char *output_aaf_file,
 			throw AxEx(L"Bad codec def!!!");
 		}
 		CHECK_HRESULT(cdciCodec->Initialize(kAAFCodecCDCI, L"CDCI" ,L"CDCI video codec."));
-		CHECK_HRESULT(cdciCodec->AddEssenceKind(dict.LookupDataDef(DDEF_Picture)));
+		CHECK_HRESULT(cdciCodec->AddEssenceKind(dict.LookupDataDef(kAAFDataDef_Picture)));
 		IAAFCDCIDescriptorSP spcdci;
 		CHECK_HRESULT(cdciCodec->SetFileDescriptorClass(dict.LookupClassDef(AxAUID(&*spcdci))));
 
@@ -1088,7 +1088,7 @@ static bool createAAFFileForEditDecisions(const char *output_aaf_file,
 			throw AxEx(L"Bad codec def!!!");
 		}
 		CHECK_HRESULT(wavCodec->Initialize(kAAFCodecWAVE, L"Wave" ,L"Wave audio codec."));
-		CHECK_HRESULT(wavCodec->AddEssenceKind(dict.LookupDataDef(DDEF_Sound)));
+		CHECK_HRESULT(wavCodec->AddEssenceKind(dict.LookupDataDef(kAAFDataDef_Sound)));
 		IAAFWAVEDescriptorSP spwav;
 		CHECK_HRESULT(wavCodec->SetFileDescriptorClass(dict.LookupClassDef(AxAUID(&*spwav))));
 
@@ -1156,15 +1156,15 @@ static bool createAAFFileForEditDecisions(const char *output_aaf_file,
 		// Sequence segments for Composition
 
 		DECLARE_AX( Sequence, sequenceV1 );
-		sequenceV1.SetDataDef(dict.LookupDataDef(DDEF_Picture));
+		sequenceV1.SetDataDef(dict.LookupDataDef(kAAFDataDef_Picture));
 		comp_tlslot_V1.SetSegment(sequenceV1);
 
 		DECLARE_AX( Sequence, sequenceA1 );
-		sequenceA1.SetDataDef(dict.LookupDataDef(DDEF_Sound));
+		sequenceA1.SetDataDef(dict.LookupDataDef(kAAFDataDef_Sound));
 		ctlslotA1.SetSegment(sequenceA1);
 
 		DECLARE_AX( Sequence, sequenceA2 );
-		sequenceA2.SetDataDef(dict.LookupDataDef(DDEF_Sound));
+		sequenceA2.SetDataDef(dict.LookupDataDef(kAAFDataDef_Sound));
 		ctlslotA2.SetSegment(sequenceA2);
 
 		// Loop over the clips, appending SourceClips to the sequence
@@ -1178,7 +1178,7 @@ static bool createAAFFileForEditDecisions(const char *output_aaf_file,
 
 			// Create the source clip for the Composition Mob
 			DECLARE_AX( SourceClip, comsrcclipV1 );
-			comsrcclipV1.SetDataDef(dict.LookupDataDef(DDEF_Picture));
+			comsrcclipV1.SetDataDef(dict.LookupDataDef(kAAFDataDef_Picture));
 			comsrcclipV1.SetLength(length);
 			srcref.sourceID = mobID_by_dvfile[ dvfile_by_idx[ i ] ];
 			srcref.sourceSlotID = 1;
@@ -1189,7 +1189,7 @@ static bool createAAFFileForEditDecisions(const char *output_aaf_file,
 
 			// A1
 			DECLARE_AX( SourceClip, comsrcclipA1 );
-			comsrcclipA1.SetDataDef(dict.LookupDataDef(DDEF_Sound));
+			comsrcclipA1.SetDataDef(dict.LookupDataDef(kAAFDataDef_Sound));
 			comsrcclipA1.SetLength(length);
 			srcref.sourceSlotID = 2;
 			comsrcclipA1.SetSourceReference(srcref);
@@ -1198,7 +1198,7 @@ static bool createAAFFileForEditDecisions(const char *output_aaf_file,
 
 			// A2
 			DECLARE_AX( SourceClip, comsrcclipA2 );
-			comsrcclipA2.SetDataDef(dict.LookupDataDef(DDEF_Sound));
+			comsrcclipA2.SetDataDef(dict.LookupDataDef(kAAFDataDef_Sound));
 			comsrcclipA2.SetLength(length);
 			srcref.sourceSlotID = 3;
 			comsrcclipA2.SetSourceReference(srcref);
@@ -1222,7 +1222,7 @@ static bool createAAFFileForEditDecisions(const char *output_aaf_file,
 		// TODO: make the composition start timecode a command arg.
 		tc.startFrame = 0;							// Start time of 0:00:00.00
 		tcseg.Initialize(comp_length, tc);
-		tcseg.SetDataDef(dict.LookupDataDef(DDEF_Timecode));
+		tcseg.SetDataDef(dict.LookupDataDef(kAAFDataDef_Timecode));
 		comp_tcslot.SetSegment(tcseg);
 
 		cmob.AppendSlot(comp_tcslot);

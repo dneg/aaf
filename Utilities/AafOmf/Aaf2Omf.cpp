@@ -1338,7 +1338,7 @@ void Aaf2Omf::ProcessComponent(IAAFComponent* pComponent,
 				&fadeOutType,
 				&fadeInPresent);
 			
-			if((fadeInPresent || fadeInPresent) && !EqualAUID(&datadef, &DDEF_Sound))
+			if((fadeInPresent || fadeInPresent) && !EqualAUID(&datadef, &kAAFDataDef_Sound))
 			{
 				fadeInPresent = kAAFFalse;
 				fadeOutPresent = kAAFFalse;
@@ -1723,27 +1723,27 @@ void Aaf2Omf::ConvertAAFDatadef(aafUID_t Datadef,
 	omfBool			bFound;
 	char					szAUID[64];
 
-	if ( memcmp((char *)&Datadef, (char *)&DDEF_Picture, sizeof(aafUID_t)) == 0 )
+	if ( memcmp((char *)&Datadef, (char *)&kAAFDataDef_Picture, sizeof(aafUID_t)) == 0 )
 	{
 		strcpy(datakindName, "omfi:data:Picture");
 		bFound = omfiDatakindLookup(OMFFileHdl, datakindName, pDatakind, (omfErr_t *) &rc);
 	}
-	else if ( memcmp((char *)&Datadef, (char *)&DDEF_Sound, sizeof(aafUID_t)) == 0 )
+	else if ( memcmp((char *)&Datadef, (char *)&kAAFDataDef_Sound, sizeof(aafUID_t)) == 0 )
 	{
 		strcpy(datakindName, "omfi:data:Sound");
 		bFound = omfiDatakindLookup(OMFFileHdl, datakindName, pDatakind, (omfErr_t *) &rc);
 	}
-	else if ( memcmp((char *)&Datadef, (char *)&DDEF_Timecode, sizeof(aafUID_t)) == 0 )
+	else if ( memcmp((char *)&Datadef, (char *)&kAAFDataDef_Timecode, sizeof(aafUID_t)) == 0 )
 	{
 		strcpy(datakindName, "omfi:data:Timecode");
 		bFound = omfiDatakindLookup(OMFFileHdl, datakindName, pDatakind, (omfErr_t *) &rc);
 	}
-	else if ( memcmp((char *)&Datadef, (char *)&DDEF_Edgecode, sizeof(aafUID_t)) == 0 )
+	else if ( memcmp((char *)&Datadef, (char *)&kAAFDataDef_Edgecode, sizeof(aafUID_t)) == 0 )
 	{
 		strcpy(datakindName, "omfi:data:Edgecode");
 		bFound = omfiDatakindLookup(OMFFileHdl, datakindName, pDatakind, (omfErr_t *) &rc);
 	}
-	else if ( memcmp((char *)&Datadef, (char *)&DDEF_PictureWithMatte, sizeof(aafUID_t)) == 0 )
+	else if ( memcmp((char *)&Datadef, (char *)&kAAFDataDef_PictureWithMatte, sizeof(aafUID_t)) == 0 )
 	{
 		strcpy(datakindName, "omfi:data:PictureWithMatte");
 		bFound = omfiDatakindLookup(OMFFileHdl, datakindName, pDatakind, (omfErr_t *) &rc);
