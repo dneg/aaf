@@ -107,6 +107,10 @@ SOURCE="..\..\..\ref-impl\src\impl\AAFUtils.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\plugins\CAAFAIFCCodec.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\com-api\com-dll\CAAFClassFactory.cpp"
 # End Source File
 # Begin Source File
