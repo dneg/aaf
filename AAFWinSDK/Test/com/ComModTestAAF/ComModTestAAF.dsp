@@ -401,6 +401,10 @@ SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFTypeDefFixedArrayTest.
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFTypeDefIndirectTest.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFTypeDefIntTest.cpp
 # End Source File
 # Begin Source File
@@ -517,6 +521,10 @@ SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CEnumAAFParameterDefsTest.
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CEnumAAFParametersTest.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CEnumAAFPluginDescTest.cpp
 # End Source File
 # Begin Source File
@@ -619,10 +627,6 @@ SOURCE="..\..\..\..\ref-impl\src\impl\AAFUtils.cpp"
 # Begin Source File
 
 SOURCE=..\..\..\..\test\com\ComModTestAAF\CAAFModuleTest.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CEnumAAFParametersTest.cpp
 # End Source File
 # Begin Source File
 
