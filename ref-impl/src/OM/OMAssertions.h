@@ -38,9 +38,18 @@
 //   @mauthor Tim Bingham | tjb | Avid Technology, Inc.
 
   // @class OMAssertionViolation | Object Manager assertion
-  //        violation. An instance of this opaque class is thrown
+  //        violation. An instance of this class is thrown
   //        when an assertion violation occurs.
-class OMAssertionViolation;
+class OMAssertionViolation {
+public:
+
+  OMAssertionViolation() {}
+
+  ~OMAssertionViolation() {}
+
+  OMAssertionViolation(const OMAssertionViolation&) {}
+
+};
 
   // @func Never define a name. Use to avoid compiler warnings.
   //   @parm The name not to define.

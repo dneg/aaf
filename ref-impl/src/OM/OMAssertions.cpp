@@ -25,17 +25,6 @@
 
 #include "OMAssertions.h"
 
-class OMAssertionViolation {
-public:
-
-  OMAssertionViolation() {}
-
-  ~OMAssertionViolation() {}
-
-  OMAssertionViolation(const OMAssertionViolation&) {}
-
-};
-
 #if defined (OM_ENABLE_DEBUG)
 
 #include <ctype.h>
