@@ -1,16 +1,23 @@
-############################################
-# File: makefile                           #
-#                                          #
-# Copyright (c) 1998 Avid Technology, Inc. #
-#                                          #
-############################################
+#################################################
+# File: makefile                                #
+#                                               #
+# Copyright (c) 1998-2001 Avid Technology, Inc. #
+#                                               #
+#################################################
 dod = {aaf}dodo:
 AAFMacSDK = {aaf}AAFMacSDK:
 DODO = {AAFMacSDK}dodo:tool:dodo
 convertmk = {AAFMacSDK}dodo:tool:ConvertMake
 
 
-all Ä makedodo makesdk
+all Ä start makedodo makesdk finish
+
+start Ä $OutOfDate
+	if "`exists -f dodocompleted.txt`"
+		Rename -y dodocompleted.txt dodocompleted.old
+	end
+	echo "Started  : `date`" > dodocompleted.tmp
+
 
 makesdk Ä makedodo
 	make -f makesdk.mak -d aaf="{aaf}" > makesdk.makeout
@@ -49,3 +56,11 @@ cleanmacdodo Ä
 
 clean Ä cleansdk cleandodo cleanmacdodo
 	delete -i -ay macdodo.make
+	delete -i -ay dodocompleted.txt
+	delete -i -ay dodocompleted.old
+	delete -i -ay dodocompleted.tmp
+
+
+finish Ä
+	echo "Completed: `date`" >> dodocompleted.tmp
+	Rename -y dodocompleted.tmp dodocompleted.txt

@@ -52,12 +52,8 @@
 	  echo "" ; ¶
 	  echo '#endif // __AAF_h__' ; ¶
 	) > "{refh}AAF.h.tmp"
-	if "`exists -f "{refh}AAF.h"`"
-		SetFile -a l "{refh}AAF.h"
-		Delete -i -ay "{refh}AAF.h"
-	end
+	SetFile -t TEXT -c CWIE "{refh}AAF.h.tmp"
 	Rename "{refh}AAF.h.tmp" "AAF.h"
-	SetFile -t TEXT -c CWIE -a L "{refh}AAF.h"
 
 
 "{refh}AAFPrivate.h" Ä "{macdodo}macaafobjects.mk" {GENERATED_PRIVATE_FREFH}
@@ -101,12 +97,8 @@
 	  echo "" ; ¶
 	  echo '#endif // __AAFPrivate_h__' ; ¶
 	) > "{refh}AAFPrivate.h.tmp"
-	if "`exists -f "{refh}AAFPrivate.h"`"
-		SetFile -a l "{refh}AAFPrivate.h"
-		Delete -i -ay "{refh}AAFPrivate.h"
-	end
+	SetFile -t TEXT -c CWIE "{refh}AAFPrivate.h.tmp"
 	Rename "{refh}AAFPrivate.h.tmp" "AAFPrivate.h"
-	SetFile -t TEXT -c CWIE -a L "{refh}AAFPrivate.h"
 
 
 "{refh}AAFPlugin.h" Ä "{macdodo}macaafobjects.mk" {PLUGIN_FREFH_TARGETS}
@@ -154,12 +146,8 @@
 	  echo "" ; ¶
 	  echo '#endif // __AAFPlugin_h__' ; ¶
 	) > "{refh}AAFPlugin.h.tmp"
-	if "`exists -f "{refh}AAFPlugin.h"`"
-		SetFile -a l "{refh}AAFPlugin.h"
-		Delete -i -ay "{refh}AAFPlugin.h"
-	end
+	SetFile -t TEXT -c CWIE "{refh}AAFPlugin.h.tmp"
 	Rename "{refh}AAFPlugin.h.tmp" "AAFPlugin.h"
-	SetFile -t TEXT -c CWIE -a L "{refh}AAFPlugin.h"
 
 
 "{refh}AAF_i.c" Ä "{dod}aafobjects.mk" "{dod}dod2iid.pl" "{macdodo}macaafobjects.mk" {GENERATED_FREFH}
@@ -212,12 +200,8 @@
 	  echo '#endif' ; ¶
 	  echo "" ; ¶
 	) > "{refh}AAF_i.c.tmp"
-	if "`exists -f "{refh}AAF_i.c"`"
-		SetFile -a l "{refh}AAF_i.c"
-		Delete -i -ay "{refh}AAF_i.c"
-	end
+	SetFile -t TEXT -c CWIE "{refh}AAF_i.c.tmp"
 	Rename "{refh}AAF_i.c.tmp" "AAF_i.c"
-	SetFile -t TEXT -c CWIE -a L "{refh}AAF_i.c"
 
 
 "{refh}AAFPlugin_i.c" Ä "{dod}aafobjects.mk" "{dod}dod2iid.pl" "{macdodo}macaafobjects.mk" {PLUGIN_FREFH_TARGETS}
@@ -270,12 +254,8 @@
 	  echo '#endif' ; ¶
 	  echo "" ; ¶
 	) > "{refh}AAFPlugin_i.c.tmp"
-	if "`exists -f "{refh}AAFPlugin_i.c"`"
-		SetFile -a l "{refh}AAFPlugin_i.c"
-		Delete -i -ay "{refh}AAFPlugin_i.c"
-	end
+	SetFile -t TEXT -c CWIE "{refh}AAFPlugin_i.c.tmp"
 	Rename "{refh}AAFPlugin_i.c.tmp" "AAFPlugin_i.c"
-	SetFile -t TEXT -c CWIE -a L "{refh}AAFPlugin_i.c"
 
 
 "{refh}AAFPrivate_i.c" Ä "{dod}aafobjects.mk" "{dod}dod2iid.pl" "{macdodo}macaafobjects.mk" {GENERATED_PRIVATE_FREFH}
@@ -328,12 +308,8 @@
 	  echo '#endif' ; ¶
 	  echo "" ; ¶
 	) > "{refh}AAFPrivate_i.c.tmp"
-	if "`exists -f "{refh}AAFPrivate_i.c"`"
-		SetFile -a l "{refh}AAFPrivate_i.c"
-		Delete -i -ay "{refh}AAFPrivate_i.c"
-	end
+	SetFile -t TEXT -c CWIE "{refh}AAFPrivate_i.c.tmp"
 	Rename "{refh}AAFPrivate_i.c.tmp" "AAFPrivate_i.c"
-	SetFile -t TEXT -c CWIE -a L "{refh}AAFPrivate_i.c"
 
 
 
@@ -368,12 +344,8 @@
 	  echo "" ; ¶
 	  echo '#endif // __AAFClassIDs_h__' ; ¶
 	) > "{impl}AAFClassIDs.h.tmp"
-	if "`exists -f "{impl}AAFClassIDs.h"`"
-		SetFile -a l "{impl}AAFClassIDs.h"
-		Delete -i -ay "{impl}AAFClassIDs.h"
-	end
+	SetFile -t TEXT -c CWIE "{impl}AAFClassIDs.h.tmp"
 	Rename "{impl}AAFClassIDs.h.tmp" "AAFClassIDs.h"
-	SetFile -t TEXT -c CWIE -a L "{impl}AAFClassIDs.h"
 
 
 "{comh}AAFCLSIDs.h" Ä "{dod}aafobjects.mk" "{macdodo}macaafobjects.mk"
@@ -406,12 +378,8 @@
 	  echo "" ; ¶
 	  echo '#endif // __AAFCLSIDs_h__' ; ¶
 	) > "{comh}AAFCLSIDs.h.tmp"
-	if "`exists -f "{comh}AAFCLSIDs.h"`"
-		SetFile -a l "{comh}AAFCLSIDs.h"
-		Delete -i -ay "{comh}AAFCLSIDs.h"
-	end
+	SetFile -t TEXT -c CWIE "{comh}AAFCLSIDs.h.tmp"
 	Rename "{comh}AAFCLSIDs.h.tmp" "AAFCLSIDs.h"
-	SetFile -t TEXT -c CWIE -a L "{comh}AAFCLSIDs.h"
 
 
 
@@ -467,12 +435,8 @@
 	  end ; ¶
 	  echo "AAF_END_OBJECT_MAP()" ; ¶
 	) > "{comh}AAFObjectTable.h.tmp"
-	if "`exists -f "{comh}AAFObjectTable.h"`"
-		SetFile -a l "{comh}AAFObjectTable.h"
-		Delete -i -ay "{comh}AAFObjectTable.h"
-	end
+	SetFile -t TEXT -c CWIE "{comh}AAFObjectTable.h.tmp"
 	rename -y "{comh}AAFObjectTable.h.tmp" "AAFObjectTable.h"
-	SetFile -t TEXT -c CWIE -a L "{comh}AAFObjectTable.h"
 
 
 "{comh}AAFObjectTable_i.cpp" Ä "{dod}aafobjects.mk" "{macdodo}macaafobjects.mk"
@@ -513,12 +477,8 @@
 	  echo "//" ; ¶
 	  echo ¶#include ¶"AAFObjectTable.h¶" ; ¶
 	) > "{comh}AAFObjectTable_i.cpp.tmp"
-	if "`exists -f "{comh}AAFObjectTable_i.cpp"`"
-		SetFile -a l "{comh}AAFObjectTable_i.cpp"
-		Delete -i -ay "{comh}AAFObjectTable_i.cpp"
-	end
+	SetFile -t TEXT -c CWIE "{comh}AAFObjectTable_i.cpp.tmp"
 	rename -y "{comh}AAFObjectTable_i.cpp.tmp" "{comh}AAFObjectTable_i.cpp"
-	SetFile -t TEXT -c CWIE -a L "{comh}AAFObjectTable_i.cpp"
 
  
 "{comh}CAAFEnumValidation.log" ÄÄ "{dod}AAFTypes.dod" "{dod}AAFPluginTypes.dod" "{comh}CAAFEnumValidation.h" "{comh}CAAFEnumValidation.cpp"
@@ -527,18 +487,10 @@
 	perl GenEnumValidation.pl AAFTypes.dod AAFPluginTypes.dod > CAAFEnumValidation.log
 	Set error {Status}
 	if {error} == 0
-		if "`exists -f "{comh}CAAFEnumValidation.h"`"
-			SetFile -a l "{comh}CAAFEnumValidation.h"
-			Delete -i -ay "{comh}CAAFEnumValidation.h"
-		end
+		SetFile -t TEXT -c CWIE CAAFEnumValidation.h
 		move -y CAAFEnumValidation.h "{comh}"
-		SetFile -t TEXT -c CWIE -a L "{comh}CAAFEnumValidation.h"
-		if "`exists -f "{comc}CAAFEnumValidation.cpp"`"
-			SetFile -a l "{comc}CAAFEnumValidation.cpp"
-			Delete -i -ay "{comc}CAAFEnumValidation.cpp"
-		end
+		SetFile -t TEXT -c CWIE CAAFEnumValidation.cpp
 		move -y CAAFEnumValidation.cpp "{comc}"
-		SetFile -t TEXT -c CWIE -a L "{comc}CAAFEnumValidation.cpp"
 		move -y CAAFEnumValidation.log "{comh}CAAFEnumValidation.log"
 	end
 	

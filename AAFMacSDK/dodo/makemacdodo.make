@@ -18,16 +18,17 @@ MAKEFILE     = makemacdodo.make
 
 macaafobjects.mk Ä "{dod}aafobjects.mk"
 	echo 'Creating macaafobjects.mk...'
-	"{convertmk}" < "{dod}aafobjects.mk" > macaafobjects.mk
+	"{convertmk}" < "{dod}aafobjects.mk" > macaafobjects.t00
+	Rename -y macaafobjects.t00 macaafobjects.mk
 	
 
 makemacdodo.mk Ä macaafobjects.mk makemacdodo.mak1
 	echo 'Creating makemacdodo.mk...'
-	Delete -i -ay makemacdodo.mk
-	catenate macaafobjects.mk > makemacdodo.mk
-	echo "" >> makemacdodo.mk
-	echo "" >> makemacdodo.mk
-	catenate makemacdodo.mak1 >> makemacdodo.mk
+	catenate macaafobjects.mk > makemacdodo.t01
+	echo "" >> makemacdodo.t01
+	echo "" >> makemacdodo.t01
+	catenate makemacdodo.mak1 >> makemacdodo.t01
+	Rename -y makemacdodo.t01 makemacdodo.mk
 	
 
 macdodo.mak1  Ä makemacdodo.mk
@@ -37,16 +38,12 @@ macdodo.mak1  Ä makemacdodo.mk
 
 macdodo.make  Ä macdodo.mak1 makemacdodo.mak2
 	echo 'making macdodo.make...'
-	if "`exists -f macdodo.make`"
-		SetFile -a l macdodo.make
-		Delete -i -ay macdodo.make
-	end
-	catenate macdodo.mak1 > macdodo.make
-	echo "" >> macdodo.make
-	echo "" >> macdodo.make
-	echo "" >> macdodo.make
-	catenate makemacdodo.mak2 >> macdodo.make
-	#SetFile -a L macdodo.make
+	catenate macdodo.mak1 > macdodo.t02
+	echo "" >> macdodo.t02
+	echo "" >> macdodo.t02
+	echo "" >> macdodo.t02
+	catenate makemacdodo.mak2 >> macdodo.t02
+	Rename -y macdodo.t02 macdodo.make
 
 
 clean Ä
