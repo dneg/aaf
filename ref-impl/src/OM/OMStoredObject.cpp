@@ -49,7 +49,7 @@
 #include <objbase.h>
 #endif
 
-const OMVersion currentVersion = 23;
+const OMVersion currentVersion = 24;
 
 const size_t indexHeaderSize = sizeof(OMByteOrder) +
                                sizeof(OMVersion) +
@@ -57,7 +57,6 @@ const size_t indexHeaderSize = sizeof(OMByteOrder) +
 
 const size_t indexEntrySize  = sizeof(OMPropertyId) +
                                sizeof(OMStoredForm) +
-                               sizeof(OMUInt32) +     // Offset
                                sizeof(OMPropertySize);
 
 #if defined(_MAC) || defined(macintosh) || \
@@ -324,7 +323,6 @@ void OMStoredObject::save(OMStoredPropertySetIndex* index)
     index->iterate(context, propertyId, type, offset, length);
     writeToStream(_properties, &propertyId, sizeof(propertyId));
     writeToStream(_properties, &type, sizeof(type));
-    writeToStream(_properties, &offset, sizeof(length));
     writeToStream(_properties, &length, sizeof(length));
   }
 
@@ -350,13 +348,13 @@ OMStoredPropertySetIndex* OMStoredObject::restore(void)
   // Read version number.
   //
   OMVersion version;
-  readUInt32FromStream(_properties, version, _reorderBytes);
+  readUInt8FromStream(_properties, version);
   ASSERT("Recognized version number", version == currentVersion);
   
   // Read count of entries.
   //
   OMPropertyCount entries;
-  readUInt32FromStream(_properties, entries, _reorderBytes);
+  readUInt16FromStream(_properties, entries, _reorderBytes);
   OMStoredPropertySetIndex* index = new OMStoredPropertySetIndex(entries);
   ASSERT("Valid heap pointer", index != 0);
 
@@ -364,14 +362,14 @@ OMStoredPropertySetIndex* OMStoredObject::restore(void)
   //
   OMPropertyId propertyId;
   OMStoredForm type;
-  OMUInt32 offset;
+  OMUInt32 offset = indexHeaderSize + (entries * indexEntrySize);
   OMPropertySize length;
   for (size_t i = 0; i < entries; i++) {
-    readUInt32FromStream(_properties, propertyId, _reorderBytes);
-    readUInt32FromStream(_properties, type, _reorderBytes);
-    readUInt32FromStream(_properties, offset, _reorderBytes);
-    readUInt32FromStream(_properties, length, _reorderBytes);
+    readUInt16FromStream(_properties, propertyId, _reorderBytes);
+    readUInt16FromStream(_properties, type, _reorderBytes);
+    readUInt16FromStream(_properties, length, _reorderBytes);
     index->insert(propertyId, type, offset, length);
+    offset = offset + length;
   }
   
   POSTCONDITION("Valid index",
@@ -1095,12 +1093,12 @@ void OMStoredObject::restore(OMStoredSetIndex*& set,
   // Read the key pid.
   //
   OMPropertyId keyPid;
-  readUInt32FromStream(setIndexStream, keyPid, _reorderBytes);
+  readUInt16FromStream(setIndexStream, keyPid, _reorderBytes);
 
   // Read the key size.
   //
   OMKeySize keySize;
-  readUInt32FromStream(setIndexStream, keySize, _reorderBytes);
+  readUInt8FromStream(setIndexStream, keySize);
 
   // Create an index.
   //
@@ -1200,7 +1198,7 @@ void OMStoredObject::restore(OMPropertyTable*& table)
 
   // count of strings
   OMPropertyCount count;
-  readUInt32FromStream(stream, count, reorderBytes);
+  readUInt16FromStream(stream, count, reorderBytes);
   table = new OMPropertyTable();
   ASSERT("Valid heap pointer", table != 0);
  
@@ -1256,9 +1254,9 @@ void OMStoredObject::restore(OMPropertyId propertyId,
   memcpy(&id, p, sizeof(id));
 
   if (byteOrder() != hostByteOrder()) {
-	reorderUInt32(tag); // assumes sizeof(tag) == 4
-	reorderUInt32(keyPropertyId);
-	reorderUInt32(keySize);
+	reorderUInt16(tag); // assumes sizeof(tag) == 2
+	reorderUInt16(keyPropertyId);
+	//reorderUInt32(keySize);
 	reorderUniqueObjectIdentification(id);
   }
 }
@@ -1300,18 +1298,18 @@ void OMStoredObject::restore(OMPropertyId propertyId,
   readUInt32FromStream(indexStream, entries, _reorderBytes);
   count = entries;
 
-  // Read the tag. assumes sizeof(tag) == 4
+  // Read the tag. assumes sizeof(tag) == 2
   //
-  readUInt32FromStream(indexStream, tag, _reorderBytes);
+  readUInt16FromStream(indexStream, tag, _reorderBytes);
 
   // Read the key pid.
   //
-  readUInt32FromStream(indexStream, keyPropertyId, _reorderBytes);
+  readUInt16FromStream(indexStream, keyPropertyId, _reorderBytes);
 
   // Read the key size.
   //
   OMKeySize keySize;
-  readUInt32FromStream(indexStream, keySize, _reorderBytes);
+  readUInt8FromStream(indexStream, keySize);
 
   // Create an index.
   //
