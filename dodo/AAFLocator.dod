@@ -20,6 +20,9 @@ AD_HEAD
 *                                          *
 \******************************************/
 
+AD_CLASS_UUID(e58a8565, 2a3e, 11D2, bf, A4, 00, 60, 97, 11, 62, 12)
+
+AD_DEFAULT_UUID(e58a8565, 2a3e, 11D2, bf, A4, 00, 60, 97, 11, 62, 12)
 AD_CLASS_BEGIN
 
 AD_METHOD1(GetType,
