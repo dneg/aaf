@@ -43,6 +43,7 @@
 // Default testing values for CDCI
 #define kCWTest		8
 #define kHSTest		2
+#define kVSTest		2
 #define kCSTest		kAAFCoSiting
 #define kBRLTest	16
 #define kWRLTest	255
@@ -225,6 +226,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 				  // Add all CDCI properties
 				  hr = pCDCIDesc->SetComponentWidth(kCWTest);
 				  if (SUCCEEDED(hr)) hr = pCDCIDesc->SetHorizontalSubsampling(kHSTest);
+				  if (SUCCEEDED(hr)) hr = pCDCIDesc->SetVerticalSubsampling(kVSTest);
 				  if (SUCCEEDED(hr)) hr = pCDCIDesc->SetColorSiting(kCSTest);
 				  if (SUCCEEDED(hr)) hr = pCDCIDesc->SetBlackReferenceLevel(kBRLTest);
 				  if (SUCCEEDED(hr)) hr = pCDCIDesc->SetWhiteReferenceLevel(kWRLTest);
@@ -333,7 +335,10 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 						if (SUCCEEDED(hr) && val == kCWTest)
 							hr = pCDCIDesc->GetHorizontalSubsampling(&uval);
 
-						if (SUCCEEDED(hr) && uval == kHSTest)
+						if (SUCCEEDED(hr) && val == kHSTest)
+							hr = pCDCIDesc->GetVerticalSubsampling(&uval);
+
+						if (SUCCEEDED(hr) && uval == kVSTest)
 							hr = pCDCIDesc->GetColorSiting(&csval);
 
 						if (SUCCEEDED(hr) && csval == kCSTest)
