@@ -113,7 +113,16 @@
 #include "h/storage.h"
 #endif
 
-#if defined(_WIN32) && defined(UNICODE)
+// Determine whether or not UNICODE versions of the APIs are in use.
+//
+#if defined(OM_OS_WINDOWS) && defined(UNICODE)
+#define OM_UNICODE_APIS
+#endif
+
+// OMCHAR is used for all character arguments to functions whose
+// prototype changes when UNICODE is defined.
+//
+#if defined(OM_UNICODE_APIS)
 typedef wchar_t OMCHAR;
 #else
 typedef char OMCHAR;
@@ -504,15 +513,13 @@ static void printError(const char* prefix,
                        DWORD errorCode);
 static int check(const char* fileName, DWORD resultCode);
 static int checks(DWORD resultCode);
-#if defined(_WIN32) || defined(UNICODE)
+#if defined(OM_UNICODE_APIS)
 static void convert(wchar_t* wcName, size_t length, const char* name);
 static void convert(char* cName, size_t length, const wchar_t* name);
-#endif
-static void convert(char* cName, size_t length, const char* name);
-#if defined (__sgi) || defined(_MAC) || defined(macintosh) \
- || defined(__linux__)
+#else
 static void convert(char* cName, size_t length, const OMCharacter* name);
 #endif
+static void convert(char* cName, size_t length, const char* name);
 static void convertName(char* cName,
                         size_t length,
                         OMCHAR* wideName,
@@ -1059,7 +1066,7 @@ int checks(DWORD resultCode)
   }
 }
 
-#if defined(_WIN32) || defined(UNICODE)
+#if defined(OM_UNICODE_APIS)
 
 void convert(wchar_t* wcName, size_t length, const char* name)
 {
@@ -1076,21 +1083,8 @@ void convert(char* cName, size_t length, const wchar_t* name)
     fatalError("convert", "Conversion failed.");
   }
 }
+#else
 
-#endif
-
-void convert(char* cName, size_t length, const char* name)
-{
-  size_t sourceLength = strlen(name);
-  if (sourceLength < length - 1) {
-    strncpy(cName, name, length);
-  } else {
-    fatalError("convert", "Conversion failed.");
-  }
-}
-
-#if defined (__sgi) || defined(_MAC) || defined(macintosh) \
- || defined(__linux__)
 // For use when wchar_t and OMCharacter are incompatible.
 // e.g. when sizeof(wchar_t) != sizeof(OMCharacter)
 void convert(char* cName, size_t length, const OMCharacter* name)
@@ -1104,6 +1098,16 @@ void convert(char* cName, size_t length, const OMCharacter* name)
   }
 }
 #endif
+
+void convert(char* cName, size_t length, const char* name)
+{
+  size_t sourceLength = strlen(name);
+  if (sourceLength < length - 1) {
+    strncpy(cName, name, length);
+  } else {
+    fatalError("convert", "Conversion failed.");
+  }
+}
 
 void convertName(char* cName, size_t length, OMCHAR* wideName, char** tag)
 {
