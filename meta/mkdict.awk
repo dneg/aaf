@@ -104,7 +104,7 @@ BEGIN {
           printf("AAF_CLASS_END(%s)\n", class);
           parent = $20;
         } else {
-          parent = "0"
+          parent = "Root"
         }
         class = $10;
         printf("\n");
