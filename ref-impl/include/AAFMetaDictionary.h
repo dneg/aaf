@@ -48,8 +48,8 @@
 //
 // AAFMetaDict.csv 
 //
-// This file was generated on Fri May  7 11:54:35 EDT 2004
-// by user jpt on system warbler.localdomain.
+// This file was generated on Fri Jun  4 12:35:19 BST 2004
+// by user phil on system pilot16.
 //
 // Key to macros.
 //
@@ -4007,6 +4007,16 @@ AAF_CLASS(CompositionMob,
       0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x02),
     0x4503,
     AAF_TYPE(Rational),
+    false,
+    false,
+    CompositionMob)
+  AAF_PROPERTY(Rendering,
+    // {06010104-010A-0000-060E-2B3401010108}
+    AAF_LITERAL_AUID(0x06010104,
+      0x010A, 0x0000,
+      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x08),
+    0x4504,
+    AAF_TYPE(MobID),
     false,
     false,
     CompositionMob)
