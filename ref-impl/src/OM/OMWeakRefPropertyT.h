@@ -145,6 +145,23 @@ ReferencedObject* OMWeakReferenceProperty<ReferencedObject>::setValue(
   return result;
 }
 
+  // @mfunc Clear the value of this <c OMWeakReferenceProperty>.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          (contained) object. This type must be a descendant of
+  //          <c OMStorable>.
+  //   @rdesc A pointer to the old <p ReferencedObject>. If lazy
+  //          loading is enabled and the referenced object was never
+  //          loaded the value returned is 0.
+template <typename ReferencedObject>
+ReferencedObject* OMWeakReferenceProperty<ReferencedObject>::clearValue(void)
+{
+  TRACE("OMWeakReferenceProperty<ReferencedObject>::clearValue");
+
+  ReferencedObject* result = _reference.setValue(0);
+
+  return result;
+}
+
   // @mfunc Assignment operator.
   //   @tcarg class | ReferencedObject | The type of the referenced
   //          (pointed to) object. This type must be a descendant of

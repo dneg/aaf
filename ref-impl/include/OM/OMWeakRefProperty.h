@@ -66,6 +66,9 @@ public:
     // @cmember set the value of this <c OMWeakReferenceProperty>.
   virtual ReferencedObject* setValue(const ReferencedObject* object);
 
+    // @cmember Clear the value of this <c OMWeakReferenceProperty>.
+  virtual ReferencedObject* clearValue(void);
+
     // @cmember Assignment operator.
   OMWeakReferenceProperty<ReferencedObject>& operator =
                                               (const ReferencedObject* value);
