@@ -37,6 +37,9 @@
 #startm AD_COM_EXT_CLASS_BEGIN 01
 #endm
 
+#startm AD_COM_EXT2_CLASS_BEGIN 02
+#endm
+
 #startm AD_ROOT_CLASS_BEGIN 00
 #endm
 
