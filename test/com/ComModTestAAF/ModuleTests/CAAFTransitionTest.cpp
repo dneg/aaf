@@ -77,13 +77,13 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFSourceClip*				pSourceClip = NULL;
 	IAAFSourceReference*		pSourceRef = NULL;
 	IAAFTransition*				pTransition = NULL;
-	IAAFEffect*					pEffect = NULL;
+	IAAFOperationGroup*			pOperationGroup = NULL;
 	IAAFSegment*				pSegment = NULL;
 	IAAFSegment*				pEffectFiller = NULL;
 	IAAFComponent*				pComponent = NULL;
 	IAAFFiller*					pFiller = NULL;
 	IAAFSequence*				pSequence = NULL;
-	IAAFEffectDef*				pEffectDef = NULL;
+	IAAFOperationDef*				pOperationDef = NULL;
 	IAAFParameter				*pParm = NULL;
 	IAAFParameterDef*			pParamDef = NULL;
 	IAAFDefObject*				pDefObject = NULL;
@@ -129,28 +129,28 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pHeader->GetDictionary(&pDictionary));
  		
 		// Create the effect and parameter definitions
-		checkResult(pDictionary->CreateInstance(&AUID_AAFEffectDef,
-							  IID_IAAFEffectDef, 
-							  (IUnknown **)&pEffectDef));
+		checkResult(pDictionary->CreateInstance(&AUID_AAFOperationDef,
+							  IID_IAAFOperationDef, 
+							  (IUnknown **)&pOperationDef));
     
 		checkResult(pDictionary->CreateInstance(&AUID_AAFParameterDef,
 							  IID_IAAFParameterDef, 
 							  (IUnknown **)&pParamDef));
 
-		checkResult(pDictionary->RegisterEffectDefinition(pEffectDef));
+		checkResult(pDictionary->RegisterOperationDefinition(pOperationDef));
 		checkResult(pDictionary->RegisterParameterDefinition(pParamDef));
 
-		checkResult(pEffectDef->QueryInterface(IID_IAAFDefObject, (void **) &pDefObject));
+		checkResult(pOperationDef->QueryInterface(IID_IAAFDefObject, (void **) &pDefObject));
 		checkResult(pDefObject->Init (&effectID, TEST_EFFECT_NAME, TEST_EFFECT_DESC));
 		pDefObject->Release();
 		pDefObject = NULL;
 
-		checkResult(pEffectDef->SetDataDefinitionID (&testDataDef));
-		checkResult(pEffectDef->SetIsTimeWarp (AAFFalse));
-		checkResult(pEffectDef->SetNumberInputs (TEST_NUM_INPUTS));
-		checkResult(pEffectDef->SetCategory (TEST_CATEGORY));
-		checkResult(pEffectDef->AddParameterDefs (pParamDef));
-		checkResult(pEffectDef->SetBypass (TEST_BYPASS));
+		checkResult(pOperationDef->SetDataDefinitionID (&testDataDef));
+		checkResult(pOperationDef->SetIsTimeWarp (AAFFalse));
+		checkResult(pOperationDef->SetNumberInputs (TEST_NUM_INPUTS));
+		checkResult(pOperationDef->SetCategory (TEST_CATEGORY));
+		checkResult(pOperationDef->AddParameterDefs (pParamDef));
+		checkResult(pOperationDef->SetBypass (TEST_BYPASS));
 
 		checkResult(pParamDef->SetDisplayUnits(TEST_PARAM_UNITS));
 		checkResult(pParamDef->QueryInterface(IID_IAAFDefObject, (void **) &pDefObject));
@@ -216,28 +216,28 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 												IID_IAAFTransition, 
 												(IUnknown **)&pTransition));
 
-		// Create an empty Effect object !!
-		checkResult(pDictionary->CreateInstance(&AUID_AAFEffect,
-												IID_IAAFEffect,
-												(IUnknown **)&pEffect));
+		// Create an empty EffectGroup object !!
+		checkResult(pDictionary->CreateInstance(&AUID_AAFOperationGroup,
+												IID_IAAFOperationGroup,
+												(IUnknown **)&pOperationGroup));
 
 		checkResult(pDictionary->CreateInstance(&AUID_AAFParameter,
 												IID_IAAFParameter, 
 												(IUnknown **)&pParm));
 		checkResult(pParm->SetParameterDefinition (pParamDef));
  // !!!  ImplAAFParameter::SetTypeDefinition (ImplAAFTypeDef*  pTypeDef)
-		checkResult(pEffect->Initialize(&datadef, transitionLength, pEffectDef));
-		checkResult(pEffect->AddNewParameter (pParm));
+		checkResult(pOperationGroup->Initialize(&datadef, transitionLength, pOperationDef));
+		checkResult(pOperationGroup->AddNewParameter (pParm));
 		checkResult(pDictionary->CreateInstance(&AUID_AAFFiller,
 												IID_IAAFFiller,
 												(IUnknown **) &pEffectFiller));
-		checkResult(pEffect->AppendNewInputSegment (pEffectFiller));
+		checkResult(pOperationGroup->AppendNewInputSegment (pEffectFiller));
 		// release the filler
 		pEffectFiller->Release();
 		pFiller->Release();
 		pFiller = NULL;
 
-		checkResult(pEffect->SetBypassOverride (1));
+		checkResult(pOperationGroup->SetBypassOverride (1));
 		checkResult(pDictionary->CreateInstance(&AUID_AAFSourceClip,
 						  IID_IAAFSourceClip, 
 						  (IUnknown **)&pSourceClip));
@@ -247,9 +247,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		sourceRef.startTime = 0;
 		checkResult(pSourceClip->Initialize (&testDataDef,&effectLen, sourceRef));
 		checkResult(pSourceClip->QueryInterface (IID_IAAFSourceReference, (void **)&pSourceRef));
-		checkResult(pEffect->SetRender (pSourceRef));
+		checkResult(pOperationGroup->SetRender (pSourceRef));
 
-		checkResult(pTransition->Create (&datadef, transitionLength, cutPoint, pEffect));
+		checkResult(pTransition->Create (&datadef, transitionLength, cutPoint, pOperationGroup));
 		checkResult(pTransition->QueryInterface (IID_IAAFComponent, (void **)&pComponent));
 
 		// now append the transition
@@ -292,12 +292,12 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 	if (pFiller)
 		pFiller->Release();
-	if (pEffectDef)
-		pEffectDef->Release();
+	if (pOperationDef)
+		pOperationDef->Release();
 
 
-	if (pEffect)
-		pEffect->Release();
+	if (pOperationGroup)
+		pOperationGroup->Release();
 
 	if (pMob)
 		pMob->Release();
@@ -345,7 +345,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	IAAFTransition*				pTransition = NULL;
 	IAAFComponent*				pComponent = NULL;
 	IAAFFiller*					pFiller = NULL;
-	IAAFEffect*					pEffect = NULL;
+	IAAFOperationGroup*					pOperationGroup = NULL;
 	IEnumAAFComponents*			pCompIter = NULL;
 //	aafUID_t					datadef ;
 	aafLength_t					transitionLength;
@@ -405,7 +405,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 						// This is the transition 
 						checkResult(pTransition->GetCutPoint (&cutPoint));
 						checkResult(pComponent->GetLength(&transitionLength));
-						checkResult(pTransition->GetEffect(&pEffect));
+						checkResult(pTransition->GetOperationGroup(&pOperationGroup));
 						// Check results !!
 						checkExpression(cutPoint == 0, AAFRESULT_TEST_FAILED);
 						checkExpression(transitionLength == 100, AAFRESULT_TEST_FAILED);
@@ -432,8 +432,8 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	if (pTransition)
 		pTransition->Release();
 
-	if (pEffect)
-		pEffect->Release();
+	if (pOperationGroup)
+		pOperationGroup->Release();
 
 	if (pComponent)
 		pComponent->Release();

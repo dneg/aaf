@@ -686,10 +686,10 @@ AAFRESULT STDMETHODCALLTYPE
                            aafPosition_t  offset,
                            aafMobKind_t  mobKind,
                            aafMediaCriteria_t *pMediaCrit,
-                           aafEffectChoice_t *pEffectChoice,
+                           aafOperationChoice_t *pOperationChoice,
                            ImplAAFFindSourceInfo **ppSourceInfo)
 {
-	return(InternalSearchSource(slotID, offset, mobKind, pMediaCrit, pEffectChoice,
+	return(InternalSearchSource(slotID, offset, mobKind, pMediaCrit, pOperationChoice,
 										   ppSourceInfo));
 }
 

@@ -9,8 +9,8 @@
 
 
 
-#ifndef __ImplAAFEffect_h__
-#include "ImplAAFEffect.h"
+#ifndef __ImplAAFOperationGroup_h__
+#include "ImplAAFOperationGroup.h"
 #endif
 
 #ifndef __ImplAAFDataDef_h__
@@ -58,44 +58,44 @@
 
 
 ImplAAFTransition::ImplAAFTransition ():
-_effect( PID_Transition_Effect, "Effect"),
+_operationGroup( PID_Transition_OperationGroup, "OperationGroup"),
 _cutPoint( PID_Transition_CutPoint, "CutPoint")
 {
-	_persistentProperties.put(_effect.address());
+	_persistentProperties.put(_operationGroup.address());
 	_persistentProperties.put(_cutPoint.address());
 }
 
 
 ImplAAFTransition::~ImplAAFTransition ()
 {
-	ImplAAFEffect *effect = _effect.setValue(0);
-	if (effect)
+	ImplAAFOperationGroup *group = _operationGroup.setValue(0);
+	if (group)
 	{
-		effect->ReleaseReference();
+		group->ReleaseReference();
 	}
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
-	ImplAAFTransition::Create (aafUID_t*		pDatadef,
-							   aafLength_t		length,
-							   aafPosition_t	cutPoint,
-							   ImplAAFEffect*	pEffect)
+	ImplAAFTransition::Create (aafUID_t*				pDatadef,
+							   aafLength_t				length,
+							   aafPosition_t			cutPoint,
+							   ImplAAFOperationGroup*	pOperationGroup)
 {
 	HRESULT		rc = AAFRESULT_SUCCESS;
 
-	if (pDatadef == NULL || pEffect == NULL)
+	if (pDatadef == NULL || pOperationGroup == NULL)
 		return AAFRESULT_NULL_PARAM;
 
 	XPROTECT()
 	{
 		CHECK(SetNewProps(length, pDatadef));
 		_cutPoint = cutPoint;
-		if (_effect)
-			_effect->ReleaseReference();
-		_effect = pEffect;
-		if (pEffect)
-			pEffect->AcquireReference();
+		if (_operationGroup)
+			_operationGroup->ReleaseReference();
+		_operationGroup = pOperationGroup;
+		if (pOperationGroup)
+			pOperationGroup->AcquireReference();
 
 	}
 	XEXCEPT
@@ -120,12 +120,12 @@ AAFRESULT STDMETHODCALLTYPE
 	//@comm Replaces part of omfsTransitionGetInfo
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFTransition::GetEffect (ImplAAFEffect ** ppEffObj)
+    ImplAAFTransition::GetOperationGroup (ImplAAFOperationGroup ** ppEffObj)
 {
 	if (ppEffObj == NULL)
 		return AAFRESULT_NULL_PARAM;
 
-	*ppEffObj = _effect;
+	*ppEffObj = _operationGroup;
 	if (*ppEffObj)
 		(*ppEffObj)->AcquireReference();
 
@@ -144,17 +144,17 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFTransition::SetEffect (ImplAAFEffect * pEffObj)
+    ImplAAFTransition::SetOperationGroup (ImplAAFOperationGroup * pEffObj)
 {
 
 	if (pEffObj == NULL)
 		return AAFRESULT_NULL_PARAM;
 	
-	if (_effect)
-		_effect->ReleaseReference();
+	if (_operationGroup)
+		_operationGroup->ReleaseReference();
 
-	_effect = pEffObj;
-	_effect->AcquireReference();
+	_operationGroup = pEffObj;
+	_operationGroup->AcquireReference();
 	return AAFRESULT_SUCCESS; 
 }
 
