@@ -104,7 +104,7 @@ public:
   STDMETHOD (GetEssenceDescriptorID)(aafUID_t *result);
   STDMETHOD (GetEssenceDataID)(aafUID_t *result);
   STDMETHOD (GetIndexedDefinitionObject)(aafUInt32 index, IAAFDictionary *dict, IAAFDefObject **def);
-  STDMETHOD (CreateDescriptor)(IAAFDictionary *dict, IAAFPluginDescriptor **desc);
+  STDMETHOD (CreateDescriptor)(IAAFDictionary *dict, IAAFPluginDef **desc);
 
   STDMETHOD (SetEssenceAccess)
     (/*[in]*/ IAAFEssenceAccess *access); // Set the AAFEssenceAccess used as a factory for AAFEssenceFormat
