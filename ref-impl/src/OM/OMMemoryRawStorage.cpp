@@ -215,7 +215,7 @@ void OMMemoryRawStorage::write(const OMByte* bytes,
   PRECONDITION("Valid buffer", bytes != 0);
   PRECONDITION("Valid byte count", byteCount > 0);
 
-  // TBS - writes that extend
+  // TBS tjb - writes that extend
 
   OMUInt64 firstPage64 = (position() / _pageSize);
   ASSERT("Supported first page", firstPage64 < ~(size_t)0);
@@ -318,8 +318,8 @@ OMUInt64 OMMemoryRawStorage::extent(void) const
 
   PRECONDITION("Positionable", isPositionable());
 
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
-  return 0;
+  // TBS tjb - For now extent and size are the same
+  return size();
 }
 
   // @mfunc Set the size of this <c OMMemoryRawStorage> to <p newSize>
