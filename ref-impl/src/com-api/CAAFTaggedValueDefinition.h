@@ -65,6 +65,21 @@ public:
 
 
 
+  //***********************************************************
+  //
+  // Initialize()
+  //
+  // Init all fields of a definition object.
+  //
+  STDMETHOD (Initialize) (
+    // AUID for new DeObject
+    /*[in, ref]*/ aafUID_constref  id,
+
+    // Name for new DefObject
+    /*[in, string]*/ aafCharacter_constptr  pName,
+
+    // Description for new DefObject
+    /*[in, string]*/ aafCharacter_constptr  pDescription);
 
   //***********************************************************
   //
