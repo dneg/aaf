@@ -1622,9 +1622,15 @@ HRESULT STDMETHODCALLTYPE
 		memset(&param, 0, sizeof(param));
 		checkResult(pFormat->GetIndexedFormatSpecifier (i, 
 			&param.opcode, sizeof(param.operand.expData), param.operand.expData, &param.size));
-		
 
-		if (EqualAUID(&kAAFPixelFormat, &param.opcode))
+		if (EqualAUID(&kAAFCompression, &param.opcode))
+		{	// Validate the in-memory size.
+			checkExpression(param.size == sizeof(param.operand.expUID), AAFRESULT_INVALID_PARM_SIZE);
+
+			memcpy( &_compression, &(param.operand.expUID), 
+			    sizeof(param.operand.expUID) );
+		}
+		else if (EqualAUID(&kAAFPixelFormat, &param.opcode))
 		{	// Validate the in-memory size.
 			checkExpression(param.size == sizeof(param.operand.expColorSpace), AAFRESULT_INVALID_PARM_SIZE);
 
@@ -1908,7 +1914,15 @@ HRESULT STDMETHODCALLTYPE CAAFCDCICodec::GetEssenceFormat(
 		param.operand.expData, &param.size ) );
 
 
-	    if( EqualAUID( &kAAFPixelFormat, &param.opcode ) )
+	    if( EqualAUID( &kAAFCompression, &param.opcode) )
+	    {
+		// Write out current compression ID
+		memcpy( &(param.operand.expUID), &_compression, 
+		    sizeof(param.operand.expUID) );
+		checkResult( ADD_FORMAT_SPECIFIER( 
+		    p_fmt, kAAFCompression, param.operand.expUID ) );
+	    }
+	    else if( EqualAUID( &kAAFPixelFormat, &param.opcode ) )
 	    {
 		// Write out the current pixel format.
 		param.operand.expColorSpace = _pixelFormat;
@@ -2168,6 +2182,12 @@ HRESULT STDMETHODCALLTYPE
 		// Start with an "empty" file format specifier.
 		checkResult( _access->GetEmptyFileFormat( &p_fmt ) );
 		
+
+		// Write out current compression ID
+		memcpy( &(param.operand.expUID), &_compression, 
+		    sizeof(param.operand.expUID) );
+		checkResult( ADD_FORMAT_SPECIFIER( 
+		    p_fmt, kAAFCompression, param.operand.expUID ) );
 
 		// Write out the current pixel format.
 		param.operand.expColorSpace = _pixelFormat;
