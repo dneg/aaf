@@ -18,6 +18,7 @@ AD_HEAD
 *                                          *
 \******************************************/
 AD_FORWARD_DECLARATION(AAFTimecode)
+AD_FORWARD_DECLARATION(AAFComponent)
 
 AD_CLASS_BEGIN
 

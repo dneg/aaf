@@ -6,7 +6,6 @@ AAFEdgecode\
 AAFSegment\
 #endm
 #c
-#import ./AAFUnitTest.exp
 #import ./AAFSegment.exp
 AD_HEAD
 /******************************************\
@@ -18,7 +17,8 @@ AD_HEAD
 *                                          *
 \******************************************/
 
-AD_INCLUDE(AAFTypes)
+AD_CLASS_UUID(38e6f8a2, 2a2c, 11d2, 84, 11, 00, 60, 08, 32, ac, b8)
+AD_DEFAULT_UUID(38e6f8a4, 2a2c, 11d2, 84, 11, 00, 60, 08, 32, ac, b8)
 AD_CLASS_BEGIN
 
 AD_XCONSTRUCTOR2([in],objPass,aafLength_t  ,length  ,Length Property Value,
@@ -37,7 +37,5 @@ AD_METHOD1(GetEdgecode,
   //            omfiMobSlotInfo\\\(file\\\, slotObj\\\, NULL\\\, &segment\\\);
   // would not return the editRate property from a mob slot.
   // Additional functions are provided to return optional properties.)
-
-AD_OVERRIDE(.method-Test)
 
 AD_CLASS_END
