@@ -68,34 +68,35 @@ inline void checkExpression(bool expression, HRESULT r)
 
 static HRESULT CreateAAFFile(aafWChar * pFileName)
 {
-	IAAFFile *					pFile = NULL;
-	bool						bFileOpen = false;
-	IAAFHeader *				pHeader = NULL;
-	IAAFDictionary*				pDictionary = NULL;
-	IAAFCompositionMob*			pCompMob=NULL;
-	IAAFMob						*pMob = NULL;
-	IAAFTimelineMobSlot			*pNewSlot = NULL;
-	IAAFEdgecode				*pEdgecode = NULL;
-	IAAFSegment					*pSeg = NULL;
+  IAAFFile *					pFile = NULL;
+  bool						bFileOpen = false;
+  IAAFHeader *				pHeader = NULL;
+  IAAFDictionary*				pDictionary = NULL;
+  IAAFCompositionMob*			pCompMob=NULL;
+  IAAFMob						*pMob = NULL;
+  IAAFTimelineMobSlot			*pNewSlot = NULL;
+  IAAFEdgecode				*pEdgecode = NULL;
+  IAAFSegment					*pSeg = NULL;
 
-	aafMobID_t					newMobID;
-	aafProductIdentification_t	ProductInfo;
-	HRESULT						hr = S_OK;
-	aafLength_t					zero;
-	aafEdgecode_t				startEC;
+  aafMobID_t					newMobID;
+  aafProductIdentification_t	ProductInfo;
+  HRESULT						hr = S_OK;
+  aafLength_t					zero;
+  aafEdgecode_t				startEC;
 
-	CvtInt32toLength(0, zero);
-	ProductInfo.companyName = L"AAF Developers Desk";
-	ProductInfo.productName = L"AAFEdgecode Test";
-	ProductInfo.productVersion.major = 1;
-	ProductInfo.productVersion.minor = 0;
-	ProductInfo.productVersion.tertiary = 0;
-	ProductInfo.productVersion.patchLevel = 0;
-	ProductInfo.productVersion.type = kAAFVersionUnknown;
-	ProductInfo.productVersionString = NULL;
-	ProductInfo.productID = UnitTestProductID;
-	ProductInfo.platform = NULL;
-
+  CvtInt32toLength(0, zero);
+  aafProductVersion_t v;
+  v.major = 1;
+  v.minor = 0;
+  v.tertiary = 0;
+  v.patchLevel = 0;
+  v.type = kAAFVersionUnknown;
+  ProductInfo.companyName = L"AAF Developers Desk";
+  ProductInfo.productName = L"AAFEdgecode Test";
+  ProductInfo.productVersion = &v;
+  ProductInfo.productVersionString = NULL;
+  ProductInfo.productID = UnitTestProductID;
+  ProductInfo.platform = NULL;
 
   try
   {
@@ -192,32 +193,34 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 static HRESULT ReadAAFFile(aafWChar * pFileName)
 {
-    // IAAFSession *				pSession = NULL;
-	IAAFFile *					pFile = NULL;
-	bool						bFileOpen = false;
-	IAAFHeader *				pHeader = NULL;
-	IAAFDictionary*				pDictionary = NULL;
-	IEnumAAFMobs*				pMobIter = NULL;
-	IEnumAAFMobSlots*			pEnum = NULL;
-	IAAFMob*					pMob = NULL;
-	IAAFMobSlot*				pMobSlot = NULL;
-	IAAFSegment*				pSeg = NULL;
-	IAAFEdgecode*				pEdgecode = NULL;
-	aafEdgecode_t				startEC;
+  // IAAFSession *				pSession = NULL;
+  IAAFFile *					pFile = NULL;
+  bool						bFileOpen = false;
+  IAAFHeader *				pHeader = NULL;
+  IAAFDictionary*				pDictionary = NULL;
+  IEnumAAFMobs*				pMobIter = NULL;
+  IEnumAAFMobSlots*			pEnum = NULL;
+  IAAFMob*					pMob = NULL;
+  IAAFMobSlot*				pMobSlot = NULL;
+  IAAFSegment*				pSeg = NULL;
+  IAAFEdgecode*				pEdgecode = NULL;
+  aafEdgecode_t				startEC;
 
-	aafProductIdentification_t	ProductInfo;
-	aafNumSlots_t				numMobs;
-	HRESULT						hr = S_OK;
+  aafProductIdentification_t	ProductInfo;
+  aafNumSlots_t				numMobs;
+  HRESULT						hr = S_OK;
 
-	ProductInfo.companyName = L"AAF Developers Desk. NOT!";
-	ProductInfo.productName = L"AAFEdgecode Test. NOT!";
-	ProductInfo.productVersion.major = 1;
-	ProductInfo.productVersion.minor = 0;
-	ProductInfo.productVersion.tertiary = 0;
-	ProductInfo.productVersion.patchLevel = 0;
-	ProductInfo.productVersion.type = kAAFVersionUnknown;
-	ProductInfo.productVersionString = NULL;
-	ProductInfo.platform = NULL;
+  aafProductVersion_t v;
+  v.major = 1;
+  v.minor = 0;
+  v.tertiary = 0;
+  v.patchLevel = 0;
+  v.type = kAAFVersionUnknown;
+  ProductInfo.companyName = L"AAF Developers Desk. NOT!";
+  ProductInfo.productName = L"AAFEdgecode Test. NOT!";
+  ProductInfo.productVersion = &v;
+  ProductInfo.productVersionString = NULL;
+  ProductInfo.platform = NULL;
 
 
   try

@@ -86,20 +86,21 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	aafTimecode_t				startTC;
 
 	CvtInt32toLength(0, zero);
+	aafProductVersion_t v;
+	v.major = 1;
+	v.minor = 0;
+	v.tertiary = 0;
+	v.patchLevel = 0;
+	v.type = kAAFVersionUnknown;
 	ProductInfo.companyName = L"AAF Developers Desk";
 	ProductInfo.productName = L"AAFTimecode Test";
-	ProductInfo.productVersion.major = 1;
-	ProductInfo.productVersion.minor = 0;
-	ProductInfo.productVersion.tertiary = 0;
-	ProductInfo.productVersion.patchLevel = 0;
-	ProductInfo.productVersion.type = kAAFVersionUnknown;
+	ProductInfo.productVersion = &v;
 	ProductInfo.productVersionString = NULL;
 	ProductInfo.productID = UnitTestProductID;
 	ProductInfo.platform = NULL;
 
-
-  try
-  {
+	try
+	{
       // Remove the previous test file if any.
       RemoveTestFile(pFileName);
 
@@ -191,32 +192,33 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 static HRESULT ReadAAFFile(aafWChar * pFileName)
 {
-    // IAAFSession *				pSession = NULL;
-	IAAFFile *					pFile = NULL;
-	bool bFileOpen = false;
-	IAAFHeader *				pHeader = NULL;
-	IEnumAAFMobs*				pMobIter = NULL;
-	IEnumAAFMobSlots*			pEnum = NULL;
-	IAAFMob*					pMob = NULL;
-	IAAFMobSlot*				pMobSlot = NULL;
-	IAAFSegment*				pSeg = NULL;
-	IAAFTimecode*				pTimecode = NULL;
-	aafTimecode_t				startTC;
+  // IAAFSession *				pSession = NULL;
+  IAAFFile *					pFile = NULL;
+  bool bFileOpen = false;
+  IAAFHeader *				pHeader = NULL;
+  IEnumAAFMobs*				pMobIter = NULL;
+  IEnumAAFMobSlots*			pEnum = NULL;
+  IAAFMob*					pMob = NULL;
+  IAAFMobSlot*				pMobSlot = NULL;
+  IAAFSegment*				pSeg = NULL;
+  IAAFTimecode*				pTimecode = NULL;
+  aafTimecode_t				startTC;
 
-	aafProductIdentification_t	ProductInfo;
-	aafNumSlots_t				numMobs;
-	HRESULT						hr = S_OK;
+  aafProductIdentification_t	ProductInfo;
+  aafNumSlots_t				numMobs;
+  HRESULT						hr = S_OK;
 
-	ProductInfo.companyName = L"AAF Developers Desk. NOT!";
-	ProductInfo.productName = L"AAFTimecode test. NOT!";
-	ProductInfo.productVersion.major = 1;
-	ProductInfo.productVersion.minor = 0;
-	ProductInfo.productVersion.tertiary = 0;
-	ProductInfo.productVersion.patchLevel = 0;
-	ProductInfo.productVersion.type = kAAFVersionUnknown;
-	ProductInfo.productVersionString = NULL;
-	ProductInfo.platform = NULL;
-
+  aafProductVersion_t v;
+  v.major = 1;
+  v.minor = 0;
+  v.tertiary = 0;
+  v.patchLevel = 0;
+  v.type = kAAFVersionUnknown;
+  ProductInfo.companyName = L"AAF Developers Desk. NOT!";
+  ProductInfo.productName = L"AAFTimecode test. NOT!";
+  ProductInfo.productVersion = &v;
+  ProductInfo.productVersionString = NULL;
+  ProductInfo.platform = NULL;
 
   try
   {
