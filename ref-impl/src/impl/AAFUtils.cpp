@@ -157,7 +157,7 @@
 
 //#include "omPublic.h"
 //#include "omPvt.h" 
-#include "Stubs.h"
+#include "Container.h"
 #include "AAFTypes.h"
 #include "AAFUtils.h"
 #include "AAFFile.h"
