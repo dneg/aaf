@@ -638,7 +638,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 		CHECK(compHead->GetDictionary (&dict));
-		CHECK(dict->LookupPluggableDef (&testFormat, (ImplAAFPluggableDef**)&containerDef));
+		CHECK(dict->LookupContainerDefinition (&testFormat, &containerDef));
 		dict->ReleaseReference();
 		dict = NULL;
 
@@ -1959,11 +1959,11 @@ AAFRESULT
 ImplAAFEssenceAccess::CreateContainerDef (ImplAAFHeader *head)
 {
 	IAAFPlugin					*plug = NULL;
-	IAAFPluggableDef			*pluggableDef = NULL;
 	IAAFDictionary				*dictInterface = NULL;
 	IUnknown					*pUnknown = NULL;
-	ImplAAFPluggableDef			*pluggable = NULL;
-	ImplAAFContainerDef			*containerDef = NULL;
+	IAAFDefObject				*pDef = NULL;
+	IAAFContainerDef			*containerDef = NULL;
+	ImplAAFContainerDef			*implContainerDef = NULL;
 	ImplAAFDictionary			*dict = NULL;
 	ImplAAFPluginManager		*plugins = NULL;
 
@@ -1971,57 +1971,60 @@ ImplAAFEssenceAccess::CreateContainerDef (ImplAAFHeader *head)
 	{
 		plugins = ImplAAFContext::GetInstance()->GetPluginManager();
 		CHECK(head->GetDictionary (&dict));
-		if(dict->LookupPluggableDef (&_fileFormat, (ImplAAFPluggableDef **)&pluggable) != AAFRESULT_SUCCESS)
+		if(dict->LookupContainerDefinition (&_fileFormat, &implContainerDef) != AAFRESULT_SUCCESS)
 		{
 			
 			//!!!This should call into the pluginmanager instead of using if?
 			if(EqualAUID(&_fileFormat, &ContainerAAF))
 			{
-				CHECK(MakeAAFContainerDef(head, &containerDef));
-				CHECK(dict->RegisterPluggableDefinition (containerDef));
+				CHECK(MakeAAFContainerDef(head, &implContainerDef));
+				CHECK(dict->RegisterContainerDefinition (implContainerDef));
 			}
 			else
 			{
-				
 				pUnknown = static_cast<IUnknown *> (dict->GetContainer());
 				CHECK(pUnknown->QueryInterface(IID_IAAFDictionary, (void **)&dictInterface));
+				
 
 				CHECK(plugins->GetPluginInstance(_fileFormat, &plug));
-				CHECK(plug->GetPluggableDefinition (dictInterface, &pluggableDef));
+				CHECK(plug->GetDefinitionObject (dictInterface, &pDef));
+				CHECK(pDef->QueryInterface(IID_IAAFContainerDef, (void **)&containerDef));
 				plug->Release();
 				plug = NULL;
-				CHECK(dictInterface->RegisterPluggableDefinition (pluggableDef));
-				pluggableDef->Release();
-				pluggableDef = NULL;
+				CHECK(dictInterface->RegisterContainerDefinition (containerDef));
+				containerDef->Release();
+				containerDef = NULL;
 				dictInterface->Release();
 				dictInterface = NULL;
+				pDef->Release();
+				pDef = NULL;
 			}
 		}
-		if(pluggable != NULL)
-			pluggable->ReleaseReference();
 		if(containerDef != NULL)
-			containerDef->ReleaseReference();
+			containerDef->Release();
 		if(dict != NULL)
 			dict->ReleaseReference();
 		if(plugins != NULL)
 			plugins->ReleaseReference();
+		if(implContainerDef != NULL)
+			implContainerDef->ReleaseReference();
+		if(pDef != NULL)
+			pDef->Release();
 	}
 	XEXCEPT
 	{
-		if(pluggable != NULL)
-			pluggable->ReleaseReference();
 		if(containerDef != NULL)
-			containerDef->ReleaseReference();
+			containerDef->Release();
 		if(dict != NULL)
 			dict->ReleaseReference();
 		if(plugins != NULL)
 			plugins->ReleaseReference();
 		if(plug != NULL)
 			plug->Release();
-		if(pluggableDef != NULL)
-			pluggableDef->Release();
 		if(dictInterface != NULL)
 			dictInterface->Release();
+		if(implContainerDef != NULL)
+			implContainerDef->ReleaseReference();
 	}
 	XEND
 		
@@ -2032,14 +2035,14 @@ AAFRESULT
 ImplAAFEssenceAccess::CreateCodecDef (ImplAAFHeader *head, aafUID_t codecID, IAAFPluginDescriptor **ppPluginDesc)
 {
 	IAAFPlugin					*plug = NULL;
-	IAAFPluggableDef			*pluggableDef = NULL;
+	ImplAAFCodecDef				*codecImpl = NULL;
+	IAAFDefObject				*def = NULL;
+	IAAFCodecDef				*codecDef = NULL;
 	IAAFDictionary				*dictInterface = NULL;
 	IUnknown					*pUnknown = NULL;
 	IAAFPluginDescriptor		*pluginDesc = NULL;
 	IEnumAAFPluginDescriptors	*descEnum = NULL;
-	IAAFPluggableDef			*pluggableInterface = NULL;
 	IAAFDefObject				*defInterface = NULL;
-	ImplAAFPluggableDef			*pluggable = NULL;
 	ImplAAFDictionary			*dict = NULL;
 	ImplAAFPluginManager		*plugins = NULL;
 	aafBool						found = AAFFalse;
@@ -2049,101 +2052,106 @@ ImplAAFEssenceAccess::CreateCodecDef (ImplAAFHeader *head, aafUID_t codecID, IAA
 	{
 		plugins = ImplAAFContext::GetInstance()->GetPluginManager();
 		CHECK(head->GetDictionary (&dict));	//!!!Only makes essence in the current file?
-		if(dict->LookupPluggableDef (&codecID, (ImplAAFPluggableDef **)&pluggable) != AAFRESULT_SUCCESS)
+		if(dict->LookupCodecDefinition (&codecID, &codecImpl) != AAFRESULT_SUCCESS)
 		{
 			pUnknown = static_cast<IUnknown *> (dict->GetContainer());
 			CHECK(pUnknown->QueryInterface(IID_IAAFDictionary, (void **)&dictInterface));
 			CHECK(_codec->QueryInterface(IID_IAAFPlugin, (void **)&plug));
-			CHECK(plug->GetPluggableDefinition (dictInterface, &pluggableDef));
-			CHECK(dictInterface->RegisterPluggableDefinition (pluggableDef));
-			CHECK(dict->LookupPluggableDef (&codecID, (ImplAAFPluggableDef **)&pluggable));
-
+			CHECK(plug->GetDefinitionObject (dictInterface, &def));
+			CHECK(def->QueryInterface(IID_IAAFCodecDef, (void **)&codecDef));
+			CHECK(dictInterface->RegisterCodecDefinition (codecDef));
+			CHECK(dict->LookupCodecDefinition (&codecID, &codecImpl));
+			
 			plug->Release();
 			plug = NULL;
 			dictInterface->Release();
 			dictInterface = NULL;
-			pluggableDef->Release();
-			pluggableDef = NULL;
+			def->Release();
+			def = NULL;
 		}
 		
-			pUnknown = static_cast<IUnknown *> (dict->GetContainer());
-			CHECK(pUnknown->QueryInterface(IID_IAAFDictionary, (void **)&dictInterface));
-			CHECK(_codec->QueryInterface(IID_IAAFPlugin, (void **)&plug));
-			CHECK(plug->GetPluginDescriptorID(&currentPlugDesc));
-			pUnknown = static_cast<IUnknown *> (pluggable->GetContainer());
-			CHECK(pUnknown->QueryInterface(IID_IAAFPluggableDef, (void **)&pluggableInterface));
-
-			CHECK(pluggableInterface->EnumPluginDescriptors (&descEnum));
-
-			while(descEnum->NextOne(&pluginDesc) == AAFRESULT_SUCCESS)
+		pUnknown = static_cast<IUnknown *> (dict->GetContainer());
+		CHECK(pUnknown->QueryInterface(IID_IAAFDictionary, (void **)&dictInterface));
+		CHECK(_codec->QueryInterface(IID_IAAFPlugin, (void **)&plug));
+		CHECK(plug->GetPluginDescriptorID(&currentPlugDesc));
+		pUnknown = static_cast<IUnknown *> (codecImpl->GetContainer());
+		CHECK(pUnknown->QueryInterface(IID_IAAFDefObject, (void **)&defInterface));
+		
+		CHECK(defInterface->EnumPluginDescriptors (&descEnum));
+		defInterface->Release();
+		defInterface = NULL;
+		
+		while(descEnum->NextOne(&pluginDesc) == AAFRESULT_SUCCESS)
+		{
+			CHECK(pluginDesc->QueryInterface(IID_IAAFDefObject, (void **)&defInterface));
+			CHECK(defInterface->GetAUID(&testAUID));
+			if(EqualAUID(&testAUID, &currentPlugDesc))
 			{
-				CHECK(pluginDesc->QueryInterface(IID_IAAFDefObject, (void **)&defInterface));
-				CHECK(defInterface->GetAUID(&testAUID));
-				if(EqualAUID(&testAUID, &currentPlugDesc))
-				{
-					found = AAFTrue;
-					if(ppPluginDesc != NULL)
-					{
-						pluginDesc->AddRef();	// About to store this 
-						*ppPluginDesc = pluginDesc;
-					}
-				}
-				defInterface->Release();
-				defInterface = NULL;
-				pluginDesc->Release();
-				pluginDesc = NULL;
-			}
-			descEnum->Release();
-			descEnum = NULL;
-						
-			if(found == AAFFalse)	// If pluginDescriptor is not in place
-			{
-				
-				CHECK(plug->GetDescriptor (dictInterface, &pluginDesc));
-				CHECK(pluggableInterface->AppendPluginDescriptor (pluginDesc));
+				found = AAFTrue;
 				if(ppPluginDesc != NULL)
 				{
 					pluginDesc->AddRef();	// About to store this 
 					*ppPluginDesc = pluginDesc;
 				}
-				pluginDesc->Release();
 			}
-
-			pluggableInterface->Release();
-			pluggableInterface = NULL;
-			dictInterface->Release();
-			dictInterface = NULL;
-			plug->Release();
-			plug = NULL;
-			if(pluggable != NULL)
-				pluggable->ReleaseReference();
-			if(dict != NULL)
-				dict->ReleaseReference();
-			if(plugins != NULL)
-				plugins->ReleaseReference();
+			defInterface->Release();
+			defInterface = NULL;
+			pluginDesc->Release();
+			pluginDesc = NULL;
+		}
+		descEnum->Release();
+		descEnum = NULL;
+		
+		if(found == AAFFalse)	// If pluginDescriptor is not in place
+		{
+			
+			CHECK(plug->GetDescriptor (dictInterface, &pluginDesc));
+			CHECK(codecDef->QueryInterface(IID_IAAFDefObject, (void **)&def));
+			CHECK(def->AppendPluginDescriptor (pluginDesc));
+			if(ppPluginDesc != NULL)
+			{
+				pluginDesc->AddRef();	// About to store this 
+				*ppPluginDesc = pluginDesc;
+			}
+			pluginDesc->Release();
+			def->Release();
+		}
+		
+		codecDef->Release();
+		codecDef = NULL;
+		dictInterface->Release();
+		dictInterface = NULL;
+		plug->Release();
+		plug = NULL;
+		if(codecImpl != NULL)
+			codecImpl->ReleaseReference();
+		if(dict != NULL)
+			dict->ReleaseReference();
+		if(plugins != NULL)
+			plugins->ReleaseReference();
 	}
 	XEXCEPT
 	{
-		if(pluggable != NULL)
-			pluggable->ReleaseReference();
+		if(codecImpl != NULL)
+			codecImpl->ReleaseReference();
 		if(dict != NULL)
 			dict->ReleaseReference();
 		if(plugins != NULL)
 			plugins->ReleaseReference();
 		if(plug != NULL)
 			plug->Release();
-		if(pluggableDef != NULL)
-			pluggableDef->Release();
+		if(codecDef != NULL)
+			codecDef->Release();
 		if(dictInterface != NULL)
 			dictInterface->Release();
 //		if(pUnknown != NULL)
 //			pUnknown->Release();
+		if(def != NULL)
+			def->Release();
 		if(pluginDesc != NULL)
 			pluginDesc->Release();
 		if(descEnum != NULL)
 			descEnum->Release();
-		if(pluggableInterface != NULL)
-			pluggableInterface->Release();
 		if(defInterface != NULL)
 			defInterface->Release();
 	}
