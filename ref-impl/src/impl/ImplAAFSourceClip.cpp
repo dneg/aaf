@@ -169,6 +169,9 @@ AAFRESULT STDMETHODCALLTYPE
 		CHECK(GetRef(&sourceRef));
 		CHECK(MyHeadObject(&head));
 		CHECK(head->LookupMob(&sourceRef.sourceID, mob));
+
+		head->ReleaseReference();
+		head = NULL;
 	  } /* XPROTECT */
 
 	XEXCEPT
