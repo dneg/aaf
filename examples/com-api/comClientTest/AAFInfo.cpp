@@ -31,7 +31,6 @@
 #include "AAFTypes.h"
 
 #if defined(_MAC) || defined(macintosh)
-#include <wprintf.h>
 #include <initguid.h> // define all of the AAF guids.
 #include "AAF.h"
 #else
@@ -43,13 +42,8 @@ const CLSID CLSID_AAFSession = { 0xF0C10891, 0x3073, 0x11d2, { 0x80, 0x4A, 0x00,
 static void     FatalErrorCode(HRESULT errcode, int line, char *file)
 {
   printf("Error '%0x' returned at line %d in %s\n", errcode, line, file);
-  exit(1);
-}
-
-static void     FatalError(char *message)
-{
-  printf(message);
-  exit(1);
+  // we don't need to exit on failure
+  //exit(1); 
 }
 
 static HRESULT moduleErrorTmp = S_OK;/* note usage in macro */
@@ -62,94 +56,187 @@ static HRESULT moduleErrorTmp = S_OK;/* note usage in macro */
 #define assert(b, msg) \
   if (!(b)) {fprintf(stderr, "ASSERT: %s\n\n", msg); exit(1);}
 
+
+static void convert(wchar_t* wcName, size_t length, const char* name)
+{
+  assert((name && *name), "Valid input name");
+  assert(wcName != 0, "Valid output buffer");
+  assert(length > 0, "Valid output buffer size");
+  
+  size_t status = mbstowcs(wcName, name, length);
+  if (status == (size_t)-1) {
+    fprintf(stderr, "Error : Failed to convert'%s' to a wide character string.\n\n", name);
+    exit(1);  
+  }
+}
+
+static void convert(char* cName, size_t length, const wchar_t* name)
+{
+  assert((name && *name), "Valid input name");
+  assert(cName != 0, "Valid output buffer");
+  assert(length > 0, "Valid output buffer size");
+
+  size_t status = wcstombs(cName, name, length);
+  if (status == (size_t)-1) {
+    fprintf(stderr, ": Error : Conversion failed.\n\n");
+    exit(1);  
+  }
+}
+
+static void convert(char* cName, size_t length, const char* name)
+{
+  assert((name && *name), "Valid input name");
+  assert(cName != 0, "Valid output buffer");
+  assert(length > 0, "Valid output buffer size");
+
+  size_t sourceLength = strlen(name);
+  if (sourceLength < length - 1) {
+    strncpy(cName, name, length);
+  } else {
+    fprintf(stderr, "Error : Failed to copy '%s'.\n\n", name);
+    exit(1);  
+  }
+}
+
+static void convert(wchar_t* wName, size_t length, const wchar_t* name)
+{
+  assert((name && *name), "Valid input name");
+  assert(wName != 0, "Valid output buffer");
+  assert(length > 0, "Valid output buffer size");
+
+  size_t sourceLength = 0;
+  while (*name)
+    ++sourceLength;
+  if (sourceLength < length - 1) {
+    // Copy the string if there is enough room in the destinition buffer.
+    while (*wName++ = *name++)
+      ;
+  } else {
+    fprintf(stderr, "Error : Failed to copy '%s'.\n\n", name);
+    exit(1);  
+  }
+}
+
+
 static void printIdentification(IAAFIdentification* pIdent)
 {
-    aafWChar companyName[500];
-	check(pIdent->GetCompanyName(companyName, sizeof (companyName)));
-	wprintf(L"CompanyName          = \"%s\"\n", companyName);
+  aafWChar wchName[500];
+  char chName[1000];
+    
+    
+  check(pIdent->GetCompanyName(wchName, sizeof (wchName)));
+  convert(chName, sizeof(chName), wchName);
+  printf("CompanyName          = \"%s\"\n", chName);
 
-	aafWChar productName[500];
-	check(pIdent->GetProductName(productName, sizeof (productName)));
-	wprintf(L"ProductName          = \"%s\"\n", productName);
+  check(pIdent->GetProductName(wchName, sizeof (wchName)));
+  convert(chName, sizeof(chName), wchName);
+  printf("ProductName          = \"%s\"\n", chName);
 
-	aafWChar productVersionString[500];
-	check(pIdent->GetProductVersionString(productVersionString,
-										  sizeof (productVersionString)));
-	wprintf(L"ProductVersionString = \"%s\"\n", productVersionString);
+  check(pIdent->GetProductVersionString(wchName, sizeof (wchName)));
+  convert(chName, sizeof(chName), wchName);
+  printf("ProductVersionString = \"%s\"\n", chName);
 
-	aafWChar platform[500];
-	check(pIdent->GetPlatform(platform, sizeof (platform)));
-	wprintf(L"Platform             = \"%s\"\n", platform);
+  check(pIdent->GetPlatform(wchName, sizeof (wchName)));
+  convert(chName, sizeof(chName), wchName);
+  printf("Platform             = \"%s\"\n", chName);
 }
 
 static void ReadAAFFile(aafWChar * pFileName)
 {
-	IAAFSession *				pSession = NULL;
-	IAAFFile *					pFile = NULL;
-	IAAFHeader *				pHeader = NULL;
-	IAAFIdentification *		pIdent;
-	aafProductIdentification_t	ProductInfo;
-
-	ProductInfo.companyName = L"AAF Developers Desk. NOT!";
-	ProductInfo.productName = L"Make AVR Example. NOT!";
-	ProductInfo.productVersion.major = 1;
-	ProductInfo.productVersion.minor = 0;
-	ProductInfo.productVersion.tertiary = 0;
-	ProductInfo.productVersion.patchLevel = 0;
-	ProductInfo.productVersion.type = kVersionUnknown;
-	ProductInfo.productVersionString = NULL;
-	ProductInfo.productID = -1;
-	ProductInfo.platform = NULL;
+  HRESULT hr = S_OK;
+  IAAFSession * pSession = NULL;
 	  
-	check(CoCreateInstance(CLSID_AAFSession,
-						   NULL, 
-						   CLSCTX_INPROC_SERVER, 
-						   IID_IAAFSession, 
-						   (void **)&pSession));
-	  
-	check(pSession->SetDefaultIdentification(&ProductInfo));
+  hr = CoCreateInstance(CLSID_AAFSession,
+                        NULL, 
+                        CLSCTX_INPROC_SERVER, 
+                        IID_IAAFSession, 
+                        (void **)&pSession);
+  check(hr); // display error message
+  if (SUCCEEDED(hr))
+  {
+    aafProductIdentification_t	ProductInfo;
 
-	check(pSession->OpenReadFile(pFileName, &pFile));
-  
-	check(pFile->GetHeader(&pHeader));
 
-	check(pHeader->GetLastIdentification(&pIdent));
+    ProductInfo.companyName = L"AAF Developers Desk. NOT!";
+    ProductInfo.productName = L"Make AVR Example. NOT!";
+    ProductInfo.productVersion.major = 1;
+    ProductInfo.productVersion.minor = 0;
+    ProductInfo.productVersion.tertiary = 0;
+    ProductInfo.productVersion.patchLevel = 0;
+    ProductInfo.productVersion.type = kVersionUnknown;
+    ProductInfo.productVersionString = NULL;
+    ProductInfo.productID = -1;
+    ProductInfo.platform = NULL;
 
-	fprintf(stdout, "LastIdentification\n");
-	printIdentification(pIdent);
+    hr = pSession->SetDefaultIdentification(&ProductInfo);
+    check(hr); // display error message
+    if (SUCCEEDED(hr))
+    {
+      IAAFFile * pFile = NULL;
+      
+      hr = pSession->OpenReadFile(pFileName, &pFile);
+      check(hr); // display error message
+      if (SUCCEEDED(hr))
+      {
+        IAAFHeader * pHeader = NULL;
 
-	check(pFile->Close());
+        hr = pFile->GetHeader(&pHeader);
+        check(hr); // display error message
+        if (SUCCEEDED(hr))
+        {
+          IAAFIdentification *    pIdent = NULL;
 
-	check(pSession->EndSession());
+          hr = pHeader->GetLastIdentification(&pIdent);
+          check(hr); // display error message
+          if (SUCCEEDED(hr))
+          {
+            fprintf(stdout, "LastIdentification\n");
+            printIdentification(pIdent);
 
-	if (pHeader) pHeader->Release();
-	if (pFile) pFile->Release();
-	if (pSession) pSession->Release();
+            pIdent->Release();
+            pIdent = NULL;
+          }
+          pHeader->Release();
+          pHeader = NULL;
+        }
+        
+        hr = pFile->Close();
+        check(hr);
+      }
+
+      pFile->Release();
+      pFile = NULL;
+    }
+
+    pSession->EndSession(); // obsolete!
+
+    pSession->Release();
+    pSession = NULL;
+  }
 }
 
 // simple helper class to initialize and cleanup COM library.
 struct CComInitialize
 {
-	CComInitialize()
-	{
-		CoInitialize(NULL);
-	}
+  CComInitialize()
+  {
+    CoInitialize(NULL);
+  }
 
-	~CComInitialize()
-	{
-		CoUninitialize();
-	}
+  ~CComInitialize()
+  {
+    CoUninitialize();
+  }
 };
 
 main()
 {
-	CComInitialize comInit;
+  CComInitialize comInit;
 
-	ReadAAFFile(L"Foo.aaf");
+  ReadAAFFile(L"Foo.aaf");
 
-	fprintf(stdout, "Done\n");
+  fprintf(stdout, "Done\n");
 
-
-	return(0);
+  return(0);
 }
 
