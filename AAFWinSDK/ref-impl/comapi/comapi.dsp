@@ -456,6 +456,10 @@ SOURCE="..\..\..\ref-impl\src\com-api\CAAFTypeDefObjectRef.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFTypeDefOpaque.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFTypeDefRecord.cpp"
 # End Source File
 # Begin Source File
