@@ -14,6 +14,7 @@ BEGIN {
   if (date != "") {
 #    printf("[%s]\n", filesandcomments);
     gsub("\t", " ", filesandcomments);
+    filesandcomments = trim(filesandcomments, 3);
     f = split(filesandcomments, fields, ":");
     printf("[%d]\n", f);
     for (i = 1; i <= f; i++) {
@@ -81,4 +82,9 @@ function printTrailer() {
   printf("</TABLE>\n");
 #  printf("</HTML>");
 #  printf("</BODY>");
+}
+
+# Remove first n characters of s
+function trim(s, n) {
+  return substr(s, n + 1, length(s) - n);
 }
