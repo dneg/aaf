@@ -213,8 +213,8 @@ public:
 #include "CAAFUnknown.h"
 #endif
 
-#ifndef __AAFRoot_h__
-#include "AAFRoot.h"
+#ifndef __AAFPrivate_h__
+#include "AAFPrivate.h"
 #endif
 
 //
