@@ -8,72 +8,523 @@ AAFObject\
 #c
 #import ./AAFObject.exp
 AD_HEAD
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
-
-
-
 AD_CLASS_UUID(B1A2137F, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
 
 AD_DEFAULT_UUID(B1A2137E, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
 AD_CLASS_BEGIN
+AD_XMETHOD2(GetCompanyName,
+			[out\, size_is\(bufSize\)\, string],
+			  objPass,
+			  wchar_t *,
+			  pName,
+			  buffer into which name is written,
+			[in],
+			  objPass,
+			  aafInt32,
+			  bufSize,
+			  The size of the pName buffer,
+			Writes the Company name property\, with a trailing null character\,
+  // into the pName buffer.  The buffer is allocated by the
+  // caller.  The size of the buffer is given by bufSize.  If the
+  // property name has not yet been set\, a zero-length string will be
+  // written \(that is\, only the trailing null character\).
+  // 
+  // Caller may call GetCompanyNameBufLen\(\) to determine the required
+  // buffer size.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pName pointer is valid.
+  // - bufSize indicates the buffer is large enough to hold the name.
+  // 
+  // If this method fails nothing will be written to *pName.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pName arg is NULL.
+  //
+  // AAFRESULT_SMALLBUF
+  //   - bufSize indicates the buffer is too small to hold the string.)
 
-AD_METHOD1(GetCompanyName,
-[out\\\,retval], aafString_t *, pCompanyName, The Company Name,
-Return the Company name property.)
 
-AD_METHOD1(GetProductName,
-[out\\\,retval], aafString_t *, pProductName, The Product Name,
-Return the Product name property.)
+AD_XMETHOD1(GetCompanyNameBufLen,
+			[out],
+			objPass,
+			aafInt32 *,
+			pLen,
+			required buffer length,
+			Returns the length of buffer required for the GetCompanyName\(\)
+  // method.  The value is placed into the location specified by pLen.
+  // The value will include space required for the trailing null
+  // character.
+  //
+  // Succeeds if all of the following are true:
+  // - the pLen pointer is valid.
+  //
+  // If this method fails nothing will be written to *pLen.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pLen arg is NULL.)
 
-AD_METHOD1(GetProductVersionString,
-[out\\\,retval], aafString_t *, pProductVersionString, The Product Version String,
-Return the Product Version String property.)
 
-AD_METHOD1(GetProductID,
-[out\\\,retval], aafUID_t *, pProductID, The Product ID,
-Return the Product ID property.)
+AD_XMETHOD1(SetCompanyName,
+			[in\, string],
+			objPass,
+			wchar_t *,
+			pName,
+			The Company Name,
+			Set the Company Name property to the value specified in pName.  A
+  // copy is made of the data so the caller retains ownership of the
+  // *pName buffer and is responsible for de-allocating it.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pName pointer is valid.
+  // 
+  // If this method fails the Company Name property will not be
+  // changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pName arg is NULL.)
 
-AD_METHOD1(GetDate,
-[out\\\,retval], aafTimeStamp_t *, pTimestamp, The date-time stamp,
-Return the Data-time Stamp property. This is a read-only property.)
 
-AD_METHOD1(GetToolkitVersion,
-[out\\\,retval], aafProductVersion_t *, pToolkitVersion, The Toolkit Version,
-Return the Toolkit Version property. This is a read-only property.)
+AD_XMETHOD2(GetProductName,
+		   [out\, size_is\(bufSize\)\, string],
+			  objPass,
+			  wchar_t *,
+			  pName,
+			  buffer into which name is written,			
+		   [in],
+			  objPass,
+			  aafInt32,
+			  bufSize,
+			  The size of the pName buffer,
+			Writes the Product name property\, with a trailing null character\,
+  // into the pName buffer.  The buffer is allocated by the
+  // caller.  The size of the buffer is given by bufSize.  If the
+  // property name has not yet been set\, a zero-length string will be
+  // written \(that is\, only the trailing null character\).
+  // 
+  // Caller may call GetProductNameBufLen\(\) to determine the required
+  // buffer size.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pName pointer is valid.
+  // - bufSize indicates the buffer is large enough to hold the name.
+  // 
+  // If this method fails nothing will be written to *pName.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pName arg is NULL.
+  //
+  // AAFRESULT_SMALLBUF
+  //   - bufSize indicates the buffer is too small to hold the string.)
 
-AD_METHOD1(GetPlatform,
-[out\\\,retval], aafString_t *, pPlatform, The Platform,
-Return the Platform property.)
 
-AD_METHOD1(GetGeneration,
-[out\\\,retval], aafUID_t *, pGeneration, The unique generation,
-Return the unique generation property. This is a read-only property.)
+AD_XMETHOD1(GetProductNameBufLen,
+			[out],
+			objPass,
+			aafInt32 *,
+			pLen,
+			Returned length,
+			Returns the length of buffer required for the GetProductName\(\)
+  // method.  The value is placed into the location specified by pLen.
+  // The value will include space required for the trailing null
+  // character.
+  //
+  // Succeeds if all of the following are true:
+  // - the pLen pointer is valid.
+  //
+  // If this method fails nothing will be written to *pLen.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pLen arg is NULL.)
 
-AD_METHOD1(SetCompanyName,
-[in\\\,ref], aafString_t *, pCompanyName, The Company Name,
-Set the Company name property.)
 
-AD_METHOD1(SetProductName,
-[in\\\,ref], aafString_t *, pProductName, The Product Name,
-Set the Product name property.)
+AD_XMETHOD1(SetProductName,
+			[in\, string],
+			objPass,
+			wchar_t *,
+			pName,
+			The Product Name,
+			Set the Product Name property to the value specified in pName.  A
+  // copy is made of the data so the caller retains ownership of the
+  // *pName buffer and is responsible for de-allocating it.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pName pointer is valid.
+  // 
+  // If this method fails the Product Name property will not be
+  // changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pName arg is NULL.)
 
-AD_METHOD1(SetProductVersion,
-[in\\\,ref], aafProductVersion_t *, pProductVersion, The Product Version,
-Set the Product Version property.)
 
-AD_METHOD1(SetProductVersionString,
-[in\\\,ref], aafString_t *, pProductVersionString, The Product Version String,
-Set the Product Version String property.)
+AD_XMETHOD2(GetProductVersionString,
+			[out\, size_is\(bufSize\)\, string],
+			  objPass,
+			  wchar_t *,
+			  pVersionString,
+			  buffer into which the string is written,
+			[in],
+			  objPass,
+			  aafInt32,
+			  bufSize,
+			  The size of the pVersionString buffer,
+			Writes the product version string property\, with a trailing null
+  // character\, into the pVersionString buffer.  The buffer is
+  // allocated by the caller.  The size of the buffer is given by
+  // bufSize.  If the property name has not yet been set\, a
+  // zero-length string will be written \(that is\, only the trailing
+  // null character\).
+  // 
+  // Caller may call GetProductVersionStringBufLen\(\) to determine the
+  // required buffer size.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pVersionString pointer is valid.
+  // - bufSize indicates the buffer is large enough to hold the name.
+  // 
+  // If this method fails nothing will be written to
+  // *pVersionString.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pVersionString arg is NULL.
+  //
+  // AAFRESULT_SMALLBUF
+  //   - bufSize indicates the buffer is too small to hold the string.)
 
-AD_METHOD1(SetProductID,
-[in\\\,ref], aafUID_t *, pProductID, The Product ID,
-Set the Product ID property.)
-	
+
+AD_XMETHOD1(GetProductVersionStringBufLen,
+			[out],
+			objPass,
+			aafInt32 *,
+			pLen,
+			required buffer length,
+			Returns the length of buffer required for the
+  // GetProductVersionString\(\) method.  The value is placed into the
+  // location specified by pLen. The value will include space required
+  // for the trailing null character.
+  //
+  // Succeeds if all of the following are true:
+  // - the pLen pointer is valid.
+  //
+  // If this method fails nothing will be written to *pLen.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pLen arg is NULL.)
+
+
+AD_XMETHOD1(SetProductVersionString,
+			[in\, string],
+			objPass,
+			wchar_t *,
+			pVersionString,
+			The Product Version String,
+  // Set the Product Version String property to the value specified in
+  // pVersionString.  A copy is made of the data so the caller retains
+  // ownership of the *pVersionString buffer and is responsible for
+  // de-allocating it. 
+  // 
+  // Succeeds if all of the following are true:
+  // - the pVersionString pointer is valid.
+  // 
+  // If this method fails the Product VersionString property will not
+  // be changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pVersionString arg is NULL.)
+
+
+AD_XMETHOD1(SetProductVersion,
+			[in],
+			objPass,
+			aafProductVersion_t *,
+			pVersion,
+			The Product Version,
+			Set the Product Version property to the value specified in
+  // pVersion.  A copy is made of the data so the caller retains
+  // ownership of the *pVersion struct and is responsible for
+  // de-allocating it.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pVersion pointer is valid.
+  // 
+  // If this method fails the Product Version property will not be
+  // changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pVersion arg is NULL.)
+
+
+AD_XMETHOD1(GetProductID,
+			[out],
+			objPass,
+			aafUID_t *,
+			pProductID,
+			The Product ID,
+			Writes the Product ID property into the caller-allocated aafUID_t
+  // specified by the pProductID argument.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pProductID pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pProductID.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pProductID arg is NULL.)
+
+
+AD_XMETHOD1(SetProductID,
+			[in],
+			objPass,
+			aafUID_t *,
+			pProductID,
+			The Product ID,
+			Set the Product ID property to the value specified in pProductID.
+  // A copy is made of the data so the caller retains ownership of the
+  // *pProductID aafUID_t and is responsible for de-allocating it.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pProductID pointer is valid.
+  // 
+  // If this method fails the Product ID property will not be
+  // changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pProductID arg is NULL.)
+
+
+AD_XMETHOD1(GetDate,
+			[out],
+			objPass,
+			aafTimeStamp_t *,
+			pTimestamp,
+			The date-time stamp,
+			Writes the Data-time Stamp property into the caller-allocated
+  // aafTimeStamp_t specified by the pTimeStamp argument.
+  //
+  // Note: This is a read-only property.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pTimeStamp pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pTimeStamp.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pTimeStamp arg is NULL.)
+
+
+AD_XMETHOD1(GetRefImplVersion,
+			[out],
+			objPass,
+			aafProductVersion_t *,
+			pVersion,
+			The Reference Implementation Version,
+			Return the property. This is a
+  // Writes the Reference Implementation Version property into the
+  // caller-allocated aafProductVersion_t specified by the pVersion
+  // argument.
+  //
+  // Note: This is a read-only property.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pVersion pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pVersion.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pVersion arg is NULL.)
+
+
+AD_XMETHOD2(GetPlatform,
+			[out\, size_is\(bufSize\)\, string],
+			  objPass,
+			  wchar_t *,
+			  pPlatform,
+			  The Platform,
+			[in],
+			  objPass,
+			  aafInt32,
+			  bufSize,
+			  The size of the pPlatform buffer,
+			Writes the Platform property\, with a trailing null
+  // character\, into the pPlatform buffer.  The buffer is
+  // allocated by the caller.  The size of the buffer is given by
+  // bufSize.  If the property name has not yet been set\, a
+  // zero-length string will be written \(that is\, only the trailing
+  // null character\).
+  // 
+  // Caller may call GetPlatformBufLen\(\) to determine the
+  // required buffer size.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pPlatform pointer is valid.
+  // - bufSize indicates the buffer is large enough to hold the name.
+  // 
+  // If this method fails nothing will be written to
+  // *pPlatform.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pPlatform arg is NULL.
+  //
+  // AAFRESULT_SMALLBUF
+  //   - bufSize indicates the buffer is too small to hold the string.)
+
+
+AD_XMETHOD1(GetPlatformBufLen,
+			[out],
+			objPass,
+			aafInt32 *,
+			pLen,
+			Returned length,
+			Returns the length of buffer required for the GetPlatform\(\)
+  // method.  The value is placed into the location specified by pLen.
+  // The value will include space required for the trailing null
+  // character.
+  //
+  // Succeeds if all of the following are true:
+  // - the pLen pointer is valid.
+  //
+  // If this method fails nothing will be written to *pLen.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pLen arg is NULL.)
+
+
+AD_XMETHOD1(GetGeneration,
+			[out],
+			objPass,
+			aafUID_t *,
+			pGeneration,
+			The unique generation,
+			Writes the unique generation property into the caller-allocated
+  // aafUID_t specified by the pGeneration argument.
+  // 
+  // Note: This is a read-only property.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pGeneration pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pGeneration.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pGeneration arg is NULL.)
 AD_CLASS_END
