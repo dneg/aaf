@@ -59,7 +59,7 @@ extern "C" const aafClassID_t	CLSID_AAFFiller;
 extern "C" const aafClassID_t	CLSID_AAFEdgecode;
 
 ImplAAFSourceMob::ImplAAFSourceMob ()
-: _essenceDesc(        PID_SourceMob_MediaDescription,          "MediaDescription")
+: _essenceDesc(        PID_SourceMob_EssenceDescription,          "EssenceDescription")
 {
   _persistentProperties.put(_essenceDesc.address());
 }
