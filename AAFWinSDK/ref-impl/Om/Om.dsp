@@ -41,7 +41,7 @@ RSC=rc.exe
 # PROP Intermediate_Dir "Release"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /MD /W3 /WX /GR /GX /O2 /I "../../../ref-impl/src/OM" /I "../../../ref-impl/include/Om" /D "_WIN32" /D "WIN32" /D "_WINDOWS" /D "UNICODE" /D "_UNICODE" /D "NDEBUG" /YX /FD /c
+# ADD CPP /nologo /MD /W3 /WX /GR /GX /O2 /I "../../../ref-impl/src/OM" /I "../../../ref-impl/include/Om" /D "NDEBUG" /D "_WIN32" /D "WIN32" /D "_WINDOWS" /D "UNICODE" /D "_UNICODE" /D "OM_NO_VALIDATE_PROPERTYSETS" /YX /FD /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
@@ -64,7 +64,7 @@ LIB32=link.exe -lib
 # PROP Intermediate_Dir "Debug"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /Z7 /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /MDd /W3 /WX /GR /GX /Z7 /Od /I "../../../ref-impl/src/OM" /I "../../../ref-impl/include/Om" /D "_WIN32" /D "WIN32" /D "_WINDOWS" /D "UNICODE" /D "_UNICODE" /D "_DEBUG" /D "OM_DEBUG" /D "OM_STACK_TRACE_ON_ASSERT" /FR /YX /FD /c
+# ADD CPP /nologo /MDd /W3 /WX /GR /GX /Z7 /Od /I "../../../ref-impl/src/OM" /I "../../../ref-impl/include/Om" /D "_DEBUG" /D "OM_DEBUG" /D "OM_STACK_TRACE_ON_ASSERT" /D "_WIN32" /D "WIN32" /D "_WINDOWS" /D "UNICODE" /D "_UNICODE" /D "OM_NO_VALIDATE_PROPERTYSETS" /FR /YX /FD /c
 # SUBTRACT CPP /X
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
