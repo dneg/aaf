@@ -62,10 +62,6 @@ public:
 
 
 public:
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplAAFPropertyTest.cpp.
-  static AAFRESULT test();
-
   //
   // non-published initialization method
   //

@@ -620,9 +620,13 @@ void ImplAAFHeader::SetByteOrder(const aafInt16 byteOrder)
 
 void ImplAAFHeader::SetDictionary(ImplAAFDictionary *pDictionary)
 {
-	_dictionary = pDictionary;
+  _dictionary = pDictionary;
   if (pDictionary)
     pDictionary->AcquireReference();
+
+  // If this hasn't been done before, make sure the dictionary has had
+  // its properties initialized.
+  _dictionary->pvtInitCriticalBuiltins ();
 }
 
 AAFRESULT ImplAAFHeader::SetToolkitRevisionCurrent()
@@ -645,38 +649,43 @@ AAFRESULT ImplAAFHeader::LoadMobTables(void)
 // 
 ImplAAFContentStorage *ImplAAFHeader::GetContentStorage()
 {
-	ImplAAFContentStorage	*result = _contentStorage;
+  ImplAAFContentStorage	*result = _contentStorage;
 
-	// Create the content storage object if it does not exist.
-	if (NULL == result)
+  // Create the content storage object if it does not exist.
+  if (NULL == result)
   { // Get the dictionary so that we can use the factory
     // method to create the identification.
     ImplAAFDictionary *pDictionary = GetDictionary();
     if (NULL != pDictionary)
-    {
-      pDictionary->CreateInstance(&AUID_AAFContentStorage, (ImplAAFObject **)&result);
-		  _contentStorage = result;
-    }
-	}
+	  {
+		pDictionary->CreateInstance (&AUID_AAFContentStorage,
+									 (ImplAAFObject **)&result);
+		_contentStorage = result;
+	  }
+  }
 
-	return(result);
+  return(result);
 }
 
 // Fill in when dictionary property is supported.
 ImplAAFDictionary *ImplAAFHeader::GetDictionary()
 {
-	ImplAAFDictionary	*result = _dictionary;
+  ImplAAFDictionary	*result = _dictionary;
   assert(result);
 
-	// Make sure that _dictionary member points to the same instance
-	// as the value returned by ImplAAFObject::GetDictionary()!
-	ImplAAFDictionary	*pDictionary = NULL;
-	assert(AAFRESULT_SUCCESS == ImplAAFObject::GetDictionary(&pDictionary));
-  assert(pDictionary);
-	assert(pDictionary == result);
-	assert(0 != pDictionary->ReleaseReference());
+  // If this hasn't been done before, make sure the dictionary has had
+  // its properties initialized.
+  _dictionary->pvtInitCriticalBuiltins ();
 
-	return(result);
+  // Make sure that _dictionary member points to the same instance
+  // as the value returned by ImplAAFObject::GetDictionary()!
+  ImplAAFDictionary	*pDictionary = NULL;
+  assert(AAFRESULT_SUCCESS == ImplAAFObject::GetDictionary(&pDictionary));
+  assert(pDictionary);
+  assert(pDictionary == result);
+  assert(0 != pDictionary->ReleaseReference());
+
+  return(result);
 }
 
 OMDEFINE_STORABLE(ImplAAFHeader, AUID_AAFHeader);

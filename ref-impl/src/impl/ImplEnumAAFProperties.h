@@ -89,10 +89,6 @@ public:
 
 
 public:
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplEnumAAFPropertiesTest.cpp.
-  static AAFRESULT test();
-
   AAFRESULT Initialize (ImplAAFCollection<ImplAAFProperty*> * pProperties);
 
 private:
@@ -101,5 +97,3 @@ private:
 
 
 #endif // ! __ImplEnumAAFProperties_h__
-
-
