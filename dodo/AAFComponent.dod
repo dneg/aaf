@@ -27,35 +27,91 @@ AD_CLASS_BEGIN
 AD_METHOD1(SetLength,
 		   [in],
 		   aafLength_t *,
-		   length,
-		   Length of this object,
-		   sets the length property values on the input component object.)
+		   pLength,
+		   The duration in edit units of this component,
+		   Sets the length property value on this component object.
+  // Succeeds if all of the following are true:
+  // - the pLength pointer is valid.
+  // 
+  // If this method fails the length property will not be
+  // changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\\\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \\\(This is the only code indicating success.\\\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pVersion arg is NULL.)
 
 AD_METHOD1(GetLength,
 		   [retval][out],
 		   aafLength_t *,
-		   length,
+		   pLength,
 		   Length of this component,
-  Gets the starting time and places it into the pStartTime
-  // argument.  This function returns the length of a component.  It
-  // supports both 1.x and 2.x component objects.  Length is not
-  // stored as an implicit property on 1.x objects\\\, so this routine
-  // recursively calculates the length.)
+		   Gets the duration in edit units of this component.
+  //	
+  // Succeeds if all of the following are true:
+  // - the pLength pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pLength.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\\\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \\\(This is the only code indicating success.\\\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pLength arg is NULL.)
 	
 AD_XMETHOD1(SetDataDef,
 			[in],
 			objPass,
 			aafUID_t *,
-			datadef,
+			pDatadef,
 			DataDef of this object,
-			sets the data definition property AUID on the input component object.)
+			sets the data definition property AUID on the input component object.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pDatadef pointer is valid.
+  // 
+  // If this method fails the Data Definition property will not be
+  // changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pDatadef arg is NULL.)
 
 AD_XMETHOD1(GetDataDef,
 			[retval][out],
 			objPass,
 			aafUID_t *,
-			datadef,
+			pDatadef,
 			DataDef of this object,
-			returns data definition object)
+			returns data definition object.
+  // Succeeds if all of the following are true:
+  // - the pDatadef pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pDatadef.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pDatadef arg is NULL.)
 
 AD_CLASS_END
