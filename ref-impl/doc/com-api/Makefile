@@ -50,6 +50,9 @@ COMAPI_PATH = ../../include/com-api
 
 AAF_TAG_FILE = $(AAF_HTML_MAN_DIR)/aaf.tag
 
+AAF_HTML_MAN_TITLE = "AAF COM API"
+PLUGIN_HTML_MAN_TITLE = "AAF Plug-In API"
+
 # The following set is just a collection of output file names
 # and paths.  All are relative to OUTPUT_DIR
 AAF_HTML_MAN_DIR_COMP = aafapiman
@@ -62,7 +65,12 @@ AAF_HTML_MAN_ZIP = $(OUTPUT_DIR)/$(AAF_HTML_MAN_ZIP_FILE)
 AAF_HTML_MAN_TGZ_FILE = aafapiman.tgz
 AAF_HTML_MAN_TGZ = $(OUTPUT_DIR)/$(AAF_HTML_MAN_TGZ_FILE)
 
-AAF_HTML_HELP_MAN = $(OUTPUT_DIR)/aafapi.chm
+AAF_HTML_HELP_DIR = $(OUTPUT_DIR)/aafapichm
+AAF_HTML_HELP_PROJ = $(AAF_HTML_HELP_DIR)/index.hhp
+
+AAF_HTML_HELP_MAN_FILE = aafapi.chm
+AAF_HTML_HELP_MAN = $(OUTPUT_DIR)/$(AAF_HTML_HELP_MAN_FILE)
+
 
 PLUGIN_HTML_MAN_COMP = pluginapiman
 PLUGIN_HTML_MAN_DIR = $(OUTPUT_DIR)/$(PLUGIN_HTML_MAN_COMP)
@@ -74,15 +82,39 @@ PLUGIN_HTML_MAN_TGZ_FILE = pluginapiman.tgz
 PLUGIN_HTML_MAN_TGZ = $(OUTPUT_DIR)/$(PLUGIN_HTML_MAN_TGZ_FILE)
 PLUGIN_HTML_HELP_MAN = $(OUTPUT_DIR)/pluginapi.chm
 
+PLUGIN_HTML_HELP_DIR = $(OUTPUT_DIR)/pluginapichm
+PLUGIN_HTML_HELP_PROJ = $(PLUGIN_HTML_HELP_DIR)/index.hhp
+
+PLUGIN_HTML_HELP_MAN_FILE = pluginapi.chm
+PLUGIN_HTML_HELP_MAN = $(OUTPUT_DIR)/$(PLUGIN_HTML_HELP_MAN_FILE)
+
+
 
 
 #####################################################################
 ## Top-level targets
 
-.PHONY: doc doczip htmldoc dirs clean
+.PHONY: doc doczip htmldoc htmlhelp windoc dirs clean usage
+
+usage:
+	@echo "Documentation Targets:"
+	@echo "    doc		- Creates HTML docs."
+	@echo "    doczip	- Creates HTML docs and zip/tgz's of such."
+	@echo "    windoc	- Creates Microsoft HTML Help (.chm) files."
+	@echo ""
+	@echo "All targets create two sets of docs: AAF COM API and Plug-In API"
 
 doc: dirs htmldoc
 doczip: dirs htmldoczip
+windoc: dirs htmlhelp
+clean:
+	rm -rf $(OUTPUT_DIR)
+
+
+
+#####################################################################
+## Top-level utility targets. Do not call directly
+
 
 htmldoc: $(AAF_HTML_MAN) $(PLUGIN_HTML_MAN) \
          $(AAF_HTML_MAN_DIR)/aafDSlogo.gif \
@@ -91,27 +123,29 @@ htmldoc: $(AAF_HTML_MAN) $(PLUGIN_HTML_MAN) \
 htmldoczip: htmldoc $(AAF_HTML_MAN_ZIP) $(AAF_HTML_MAN_TGZ) \
             $(PLUGIN_HTML_MAN_ZIP) $(PLUGIN_HTML_MAN_TGZ)
 
-clean:
-	rm -rf $(OUTPUT_DIR)
+htmlhelp: $(AAF_HTML_HELP_DIR)/aafDSlogo.gif \
+	$(PLUGIN_HTML_HELP_DIR)/aafDSlogo.gif \
+	$(AAF_HTML_HELP_MAN) $(PLUGIN_HTML_HELP_MAN)
+
+
 
 ##############################################################
 #### Output directory creation targets
 
-dirs: $(OUTPUT_DIR) $(AAF_HTML_MAN_DIR) $(PLUGIN_HTML_MAN_DIR)
+dirs: $(OUTPUT_DIR) $(AAF_HTML_MAN_DIR) $(PLUGIN_HTML_MAN_DIR) \
+	$(AAF_HTML_HELP_DIR) $(PLUGIN_HTML_HELP_DIR)
 
-$(AAF_HTML_MAN_DIR) $(PLUGIN_HTML_MAN_DIR):
+$(AAF_HTML_MAN_DIR) $(PLUGIN_HTML_MAN_DIR) \
+$(AAF_HTML_HELP_DIR) $(PLUGIN_HTML_HELP_DIR) \
+$(OUTPUT_DIR):
 	if [ ! -d $@ ]; then \
 		mkdir -p $@; \
 	fi
 
-$(OUTPUT_DIR) :
-	if [ ! -d $@ ] ; then mkdir -p $@ ; fi
-
-
 
 
 ##############################################################
-####  Main doc generating targets
+####  HTML doc generating targets
 
 
 $(OUTPUT_DIR)/AAF.idl: $(COMAPI_PATH)/AAF.idl
@@ -130,7 +164,7 @@ $(AAF_HTML_MAN): $(OUTPUT_DIR)/AAF.idl \
 	  echo INPUT=$(OUTPUT_DIR)/AAF.idl $(COMAPI_PATH)/AAFTypes.idl ; \
 	  echo OUTPUT_DIRECTORY=$(AAF_HTML_MAN_DIR) ; \
 	  echo GENERATE_TAGFILE=$(AAF_TAG_FILE) ; \
-	  echo PROJECT_NAME=\"AAF COM API\" \
+	  echo PROJECT_NAME=\"$(AAF_HTML_MAN_TITLE)\" \
 	) | $(DOXYGEN) -
 
 
@@ -143,23 +177,55 @@ $(PLUGIN_HTML_MAN): $(COMAPI_PATH)/AAFPlugin.idl \
 	  echo INPUT=$(COMAPI_PATH)/AAFPlugin.idl $(COMAPI_PATH)/AAFPluginTypes.idl ; \
 	  echo OUTPUT_DIRECTORY=$(PLUGIN_HTML_MAN_DIR) ; \
 	  echo TAGFILES=\"$(AAF_TAG_FILE)=../$(AAF_HTML_MAN_DIR_COMP)\" ; \
-	  echo PROJECT_NAME=\"AAF Plug-In API\" \
+	  echo PROJECT_NAME=\"$(PLUGIN_MAN_TITLE)\" \
 	) | $(DOXYGEN) -
 
 
 
-### XXX - Not yet working!
 
-$(HTML_HELP_MAN): $(HTMLHELP_WORKSHOP)/hhc $(HTML_HELP_MAN_PATH) $(HTML_HELP_MAN_PATH)/frontCover.html $(HTML_MAN_PATH)/DigImgAreas.gif AAFTypes.h AAFnospace.idl 
-	# XXX Try generating a file for HTML Help workshop on the fly and run it.
-	- $(GENERATOR) -v refHHDocFromIDL.djt 2> errorsHH.txt
-#   Just echo the Errors from the logfile
-	grep -v Warning errorsHH.txt
-#   Now compile again without CHI file
-	cp $(HTML_HELP_MAN_PATH)/aafapi.hhp $(HTML_HELP_MAN_PATH)/aafapi.tmp
-	sed 's/Create CHI file=yes/Create CHI file=No/' $(HTML_HELP_MAN_PATH)/aafapi.tmp > $(HTML_HELP_MAN_PATH)/aafapi.hhp
-	- $(HTMLHELP_WORKSHOP)/hhc $(HTML_HELP_MAN_PATH)/$(HTML_HELP_MAN)
-	cp $(HTML_HELP_MAN_PATH)/$(HTML_HELP_MAN) $(HTML_HELP_MAN)
+##############################################################
+####  Windows HTML Help doc generating targets
+####  These are largely the same as the HTML equivalents except it does
+####  not do cross-linking of the doc sets (HTML Help doesn't handle this nicely)
+
+$(AAF_HTML_HELP_PROJ): $(OUTPUT_DIR)/AAF.idl \
+                       $(COMAPI_PATH)/AAFTypes.idl \
+                       frontCover.html doxygen.cfg
+	( \
+	  cat doxygen.cfg ; \
+	  echo INPUT=$(OUTPUT_DIR)/AAF.idl $(COMAPI_PATH)/AAFTypes.idl ; \
+	  echo OUTPUT_DIRECTORY=$(AAF_HTML_HELP_DIR) ; \
+	  echo PROJECT_NAME=\"$(AAF_HTML_MAN_TITLE)AAF COM API\" ; \
+	  echo GENERATE_HTMLHELP=YES ; \
+	  echo DISABLE_INDEX=YES ; \
+	  echo CHM_FILE=$(AAF_HTML_HELP_MAN_FILE) \
+	) | $(DOXYGEN) -
+
+$(PLUGIN_HTML_HELP_PROJ): $(COMAPI_PATH)/AAFPlugin.idl \
+                          $(COMAPI_PATH)/AAFPluginTypes.idl \
+                          $(AAF_TAG_FILE) \
+                          doxygen.cfg
+	( \
+	  cat doxygen.cfg ; \
+	  echo INPUT=$(COMAPI_PATH)/AAFPlugin.idl $(COMAPI_PATH)/AAFPluginTypes.idl ; \
+	  echo OUTPUT_DIRECTORY=$(PLUGIN_HTML_HELP_DIR) ; \
+	  echo PROJECT_NAME=\"$(PLUGIN_MAN_TITLE)\" ; \
+	  echo GENERATE_HTMLHELP=YES ; \
+	  echo DISABLE_INDEX=YES ; \
+	  echo CHM_FILE=$(PLUGIN_HTML_HELP_MAN_FILE) \
+	) | $(DOXYGEN) -
+
+$(AAF_HTML_HELP_MAN): $(HTMLHELP_WORKSHOP)/hhc \
+                      $(AAF_HTML_HELP_PROJ)
+	# 'hhc' exits non-zero, so we have to ignore the exit status...
+	-$(HTMLHELP_WORKSHOP)/hhc $(AAF_HTML_HELP_PROJ)
+	mv $(AAF_HTML_HELP_DIR)/$(AAF_HTML_HELP_MAN_FILE) $(AAF_HTML_HELP_MAN)
+
+$(PLUGIN_HTML_HELP_MAN): $(HTMLHELP_WORKSHOP)/hhc \
+                         $(PLUGIN_HTML_HELP_PROJ)
+	# 'hhc' exits non-zero, so we have to ignore the exit status...
+	-$(HTMLHELP_WORKSHOP)/hhc $(PLUGIN_HTML_HELP_PROJ)
+	mv $(PLUGIN_HTML_HELP_DIR)/$(PLUGIN_HTML_HELP_MAN_FILE) $(PLUGIN_HTML_HELP_MAN)
 
 
 
@@ -191,7 +257,9 @@ $(PLUGIN_HTML_MAN_TGZ): $(PLUGIN_HTML_MAN)
 #### Misc. targets
 
 $(AAF_HTML_MAN_DIR)/aafDSlogo.gif \
-$(PLUGIN_HTML_MAN_DIR)/aafDSlogo.gif: aafDSlogo.gif
+$(PLUGIN_HTML_MAN_DIR)/aafDSlogo.gif \
+$(AAF_HTML_HELP_DIR)/aafDSlogo.gif \
+$(PLUGIN_HTML_HELP_DIR)/aafDSlogo.gif: aafDSlogo.gif
 	cp aafDSlogo.gif $@
 	
 
