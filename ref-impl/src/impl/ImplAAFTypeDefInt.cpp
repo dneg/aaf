@@ -642,7 +642,7 @@ void ImplAAFTypeDefInt::internalize(OMByte* externalBytes,
 
 aafBool ImplAAFTypeDefInt::IsFixedSize (void) const
 {
-  return AAFTrue;
+  return kAAFTrue;
 }
 
 
@@ -655,7 +655,7 @@ size_t ImplAAFTypeDefInt::PropValSize (void) const
 aafBool ImplAAFTypeDefInt::IsRegistered (void) const
 {
   // int types are registered by default
-  return AAFTrue;
+  return kAAFTrue;
 }
 
 

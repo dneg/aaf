@@ -58,8 +58,8 @@ ImplAAFTypeDefEnum::ImplAAFTypeDefEnum ()
   : _ElementType   ( PID_TypeDefinitionEnumeration_ElementType,   "ElementType"),
 	_ElementNames  ( PID_TypeDefinitionEnumeration_ElementNames,  "ElementNames"),
 	_ElementValues ( PID_TypeDefinitionEnumeration_ElementValues, "ElementValues"),
-	_isRegistered (AAFFalse),
-	_registrationAttempted (AAFFalse)
+	_isRegistered (kAAFFalse),
+	_registrationAttempted (kAAFFalse)
 {
   _persistentProperties.put(_ElementType.address());
   _persistentProperties.put(_ElementNames.address());
@@ -583,7 +583,7 @@ AAFRESULT STDMETHODCALLTYPE
 ImplAAFTypeDefEnum::RegisterSize (aafUInt32  enumSize)
 {
   _registeredSize = enumSize;
-  _isRegistered = AAFTrue;
+  _isRegistered = kAAFTrue;
   return AAFRESULT_SUCCESS;
 }
 
@@ -796,7 +796,7 @@ void ImplAAFTypeDefEnum::internalize(OMByte* externalBytes,
 
 aafBool ImplAAFTypeDefEnum::IsFixedSize (void) const
 {
-  return AAFTrue;
+  return kAAFTrue;
 }
 
 
@@ -816,10 +816,10 @@ aafBool ImplAAFTypeDefEnum::IsRegistered (void) const
 		  AAFRESULT hr = GetDictionary(&pDict);
 		  assert (AAFRESULT_SUCCEEDED (hr));
 		  pDict->pvtAttemptBuiltinSizeRegistration ((ImplAAFTypeDefEnum*) this);
-		  ((ImplAAFTypeDefEnum*)this)->_registrationAttempted = AAFTrue;
+		  ((ImplAAFTypeDefEnum*)this)->_registrationAttempted = kAAFTrue;
 		}
 	}
-  return (_isRegistered ? AAFTrue : AAFFalse);
+  return (_isRegistered ? kAAFTrue : kAAFFalse);
 }
 
 

@@ -779,12 +779,12 @@ AAFRESULT STDMETHODCALLTYPE
 
   if (AAFRESULT_PROP_NOT_PRESENT == hr)
 	{
-	  *pResult = AAFFalse;
+	  *pResult = kAAFFalse;
 	  return AAFRESULT_SUCCESS;
 	}
   if (AAFRESULT_SUCCEEDED (hr))
 	{
-	  *pResult = AAFTrue;
+	  *pResult = kAAFTrue;
 	  return AAFRESULT_SUCCESS;
 	}
   return hr;
@@ -927,7 +927,7 @@ void ImplAAFObject::pvtSetSoid (const aafUID_t & id)
 void ImplAAFObject::InitOMProperties ()
 {
   assert (! _OMPropInitStarted);
-  _OMPropInitStarted = AAFTrue;
+  _OMPropInitStarted = kAAFTrue;
 
   AAFRESULT hr;
 
