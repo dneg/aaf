@@ -595,15 +595,20 @@ AAFRESULT STDMETHODCALLTYPE
 {
 	size_t	numComments;
 
-	if(!_userComments.isPresent())
-		return AAFRESULT_PROP_NOT_PRESENT;
-
 	if (pNumComments == NULL)
 		return AAFRESULT_NULL_PARAM;
-		
-	_userComments.getSize(numComments);
-		
-	*pNumComments = numComments;
+
+	if(!_userComments.isPresent())
+	{	// If the userComments property is not present then
+		// number of user comments is zero!
+		*pNumComments = 0; //return AAFRESULT_PROP_NOT_PRESENT;
+	}
+	else
+	{
+		_userComments.getSize(numComments);
+
+		*pNumComments = numComments;
+	}
 		
 	return(AAFRESULT_SUCCESS);
 }
