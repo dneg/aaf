@@ -657,16 +657,6 @@ ImplAAFFile::CreateAAFFileOnRawStorage
       if (!OMFile::hasFactory(ENCODING(*pFileKind)))
         return AAFRESULT_FILEKIND_NOT_REGISTERED;
 
-	  // Check to see if signature specifies Binary Structured
-	  // Storage; if so, raw storage must be at least readable, even
-	  // for write-only files.
-	  if (equalUID (*pFileKind, aafFileKindAafSSBinary))
-		{
-		  b = kAAFFalse;
-		  hr = pRawStorage->IsReadable (&b);
-		  if (kAAFFalse == b)
-			return AAFRESULT_NOT_READABLE;
-		}
 	  break;
 	case kAAFFileExistence_existing:
 	  break;
