@@ -72,7 +72,6 @@ public:
 
 private:
   OMWideStringProperty                             _path;
-  aafBool										   _initialized;
 };
 
 #endif // ! __ImplAAFNetworkLocator_h__

@@ -140,7 +140,6 @@ private:
 	OMFixedSizeProperty<aafLength_t>	_length;
 	OMFixedSizeProperty<aafBool>        _isInContainer;
 	OMFixedSizeProperty<aafUID_t>       _containerFmt;
-	aafBool								_initialized;
 };
 
 #endif // ! __ImplAAFFileDescriptor_h__
