@@ -122,6 +122,10 @@ SOURCE="..\..\..\ref-impl\src\OM\OMDataStream.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\OM\OMDataStreamAccess.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\OM\OMDataStreamProperty.cpp"
 # End Source File
 # Begin Source File
@@ -431,6 +435,10 @@ SOURCE="..\..\..\ref-impl\include\OM\OMContainerProperty.h"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\include\OM\OMDataStream.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\include\OM\OMDataStreamAccess.h"
 # End Source File
 # Begin Source File
 
