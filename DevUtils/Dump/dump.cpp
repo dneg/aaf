@@ -216,6 +216,8 @@ const CLSID CLSID_AAFHeader =
 //           was done as a work-around, and should change in the
 //           future.  Stay tuned for a new version when this is
 //           fixed.
+//  0.15   : Change AUIDs for PullDownKindType, StringArray and
+//           PositionArray since these were not unique !
 //
 
 // The following may change at run time depending on the file format
@@ -227,7 +229,7 @@ char* _closeArrayKeySymbol = (char*)closeArrayKeySymbol;
 
 // Highest version of file/index format recognized by this dumper
 //
-const OMUInt32 HIGHVERSION = 14;
+const OMUInt32 HIGHVERSION = 15;
 
 // Output format requested
 //
