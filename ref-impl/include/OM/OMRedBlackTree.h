@@ -63,6 +63,9 @@ public:
 
     // @cmember Insert the <p Value> <p v> into this
     //          <c OMRedBlackTree> and associate it with <p Key> <p k>.
+    //          If this the first instance of an item identified
+    //          by <p Key> <p k> in this <c OMRedBlackTree>, the result
+    //          is true, otherwise the result is false.
   bool insert(const Key k, Value v);
 
     // @cmember Find the item in this <c OMRedBlackTree> identified
