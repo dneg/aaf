@@ -86,34 +86,10 @@ bool extensionRead (const aafCharacter * filename)
   check (pHead->LookupMob ((aafUID_t*) &kMobID_Personnel,
 						   &pMob));
 
-  /*
   cout << "Printing contents of PersonnelMob." << endl;
+  PrintPersonnelResources (pDict, pMob);
 
-  aafUInt32 numPersonnel = 
-	PersonnelMobGetArraySize (pMob);
-  cout << "There are " << numPersonnel << " personnel registered:"
-	   << endl;
-
-  IAAFObject ** personnelArray = 0;
-  personnelArray = new IAAFObject*[numPersonnel];
-  assert (personnelArray);
-  aafUInt32 i;
-  for (i = 0; i < numPersonnel; i++)
-	personnelArray[i] = 0;
-
-  if (numPersonnel)
-	PersonnelMobGetArray (pMob, personnelArray, numPersonnel);
-
-  for (i = 0; i < numPersonnel; i++)
-	{
-	  assert (personnelArray[i]);
-	  cout << endl;
-	  PersonnelResource r =
-		PersonnelRecordGetInfo (personnelArray[i]);
-	  PrintPersonnelResource (pDict, r);
-	}
-  */
-
+  // done.
   pFile->Close ();
 
   return true;
