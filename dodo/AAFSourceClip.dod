@@ -8,6 +8,12 @@ AAFSourceReference\
 #c
 #import ./AAFSourceReference.exp
 AD_HEAD
+AD_IDL(//
+// The SourceClip class represents the content data and identifies the 
+// source of the content data.
+// SourceClip is a subclass of SourceReference.
+// This interface is used with AAFSourceClip objects.
+//)
 
 AD_FORWARD_DECLARATION(AAFDataDef)
 AD_FORWARD_DECLARATION(AAFMob)
@@ -25,12 +31,36 @@ AD_DEFAULT_UUID(38e6f8a7, 2a2c, 11d2, 84, 11, 00, 60, 08, 32, ac, b8)
 AD_CLASS_BEGIN
 
 AD_XMETHOD3(InitializeSourceClip,
-			[in],objIn,AAFDataDef,datadef  ,Data Definition object,
-			[in],objPass,aafLength_t    ,length   ,Length property value,
-			[in],objPass,aafSourceRef_t ,sourceRef,Source Reference,
-			This function creates a new source clip object with
-  // the given required properties.  Optional properties are added
-  // with separate functions.)
+			[in],
+				objIn,
+				AAFDataDef,
+				datadef,
+				Data Definition object,
+			[in],
+				objPass,
+				aafLength_t,
+				length,
+				Length property value,
+			[in],
+				objPass,
+				aafSourceRef_t,
+				sourceRef,Source Reference,
+			This method initializes a source clip object with
+  // the given properties.  Only required properties are set.
+  // Optional properties are added with separate functions.
+  //
+  // this function only fails if any of the arguments is missing.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - any arg is NULL.
+)
 
 AD_METHOD6(GetFade,
 		   [out],aafInt32 *     ,fadeInLen     ,Fade In Length,
@@ -55,18 +85,33 @@ AD_METHOD1(GetRef,
   // startTime\\\).)
 
 AD_METHOD4(SetFade,
-		   [in],aafInt32     ,fadeInLen  ,Fade In Length,
-		   [in],aafFadeType_t,fadeInType ,Fade In Type,
-		   [in],aafInt32     ,fadeOutLen ,Fade Out Length,
-		   [in],aafFadeType_t,fadeOutType,Fade Out Type,
-		   This function sets the optional fade properties on the
+		   [in],
+				aafInt32,
+				fadeInLen,
+				Fade In Length,
+		   [in],
+				aafFadeType_t,
+				fadeInType,
+				Fade In Type,
+		   [in],
+				aafInt32,
+				fadeOutLen,
+				Fade Out Length,
+		   [in],
+				aafFadeType_t,
+				fadeOutType,
+				Fade Out Type,
+				This function sets the optional fade properties on the
   // input source clip object.  The fade properties only apply to a
   // source clip of datakind \\\(or convertible to a datakind\\\) of type
   // Sound. All arguments should be specified.)
 
 AD_METHOD1(SetRef,
-		   [in],aafSourceRef_t,sourceRef,Source Reference,
-		   This function sets the 3 properties on a source Clip that
+		   [in],
+				aafSourceRef_t,
+				sourceRef,
+				Source Reference,
+				This function sets the 3 properties on a source Clip that
   // make up the "source reference" \\\(sourceID\\\, sourceTrackID\\\, and
   // startTime\\\).)
 
