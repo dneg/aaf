@@ -8,31 +8,50 @@
 # Place the object root name is this list if it is a "persistent"
 # aaf object:
 AAFPERSISTENTOBJECTS = \
-	AAFAttribute \
+	AAFAIFCData \
+	AAFAIFCDescriptor \
 	AAFClassDef \
 	AAFDictionary \
+	AAFCommentMarker \
 	AAFConstValue \
-	AAFParameterDef \
 	AAFControlPoint \
 	AAFDataDef \
 	AAFDefObject \
+	AAFDOSLocator \
 	AAFEdgecode \
 	AAFEffectDef \
 	AAFEffectInvocation \
-	AAFIntegerAttribute \
+	AAFEvent \
+	AAFEventMobSlot \
+	AAFGPITrigger \
+	AAFJPEGData \
+	AAFHTMLClip \
+	AAFHTMLData \
+	AAFHTMLDescriptor \
+	AAFImageData \
+	AAFIntraFrameMarker \
 	AAFLocator \
 	AAFMacLocator \
 	AAFMediaFilmDescriptor \
-	AAFMediaGroup  \
+	AAFMediaGroup \
+	AAFMIDIData \
+	AAFMIDIDescriptor \
 	AAFNestedScope\
 	AAFObjectAttribute \
 	AAFParameter \
-	AAFParameterSlot \
+	AAFParameterDef \
 	AAFPulldown \
 	AAFPropertyDef \
 	AAFReferenceValue \
+	AAFRGBADescriptor \
 	AAFScopeReference \
-	AAFStringAttribute \
+	AAFSelector \
+	AAFStaticMobSlot \
+	AAFTaggedValue \
+	AAFTextClip \
+	AAFTextLocator \
+	AAFTIFFData \
+	AAFTIFFDescriptor \
 	AAFTimecodeStream \
 	AAFTimecodeStream12M \
 	AAFTransition \
@@ -46,8 +65,8 @@ AAFPERSISTENTOBJECTS = \
 	AAFTypeDefUInt \
 	AAFUnixLocator \
 	AAFVaryingValue \
+	AAFWAVEData \
 	AAFWindowsLocator
-
 
 
 # These are all of the other non-persistent objects:
@@ -56,9 +75,7 @@ AAFNONPERSISTENTOBJECTS = \
 	AAFEssenceFormat \
 	AAFProperty \
 	AAFPropertyValue \
-	EnumAAFAttributes \
 	EnumAAFClassDefs \
-	EnumAAFParameterDefs \
 	EnumAAFControlPoints \
 	EnumAAFDataDefs \
 	EnumAAFDefs \
@@ -66,7 +83,7 @@ AAFNONPERSISTENTOBJECTS = \
 	EnumAAFIdentifications \
 	EnumAAFMobComments \
 	EnumAAFObjects \
-	EnumAAFParameterSlots \
+	EnumAAFParameterDefs \
 	EnumAAFPropertyDefs \
 	EnumAAFProperties \
 	EnumAAFPropertyValues \
