@@ -105,6 +105,7 @@ void OMSimpleProperty::set(const void* value, size_t valueSize)
 {
   if (valueSize != _size) {
     delete [] _bits;
+    _bits = 0; // for BoundsChecker
     _bits = new unsigned char[valueSize];
     _size = valueSize;
   }
