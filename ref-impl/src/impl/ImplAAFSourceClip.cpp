@@ -187,6 +187,8 @@ AAFRESULT STDMETHODCALLTYPE
 
 	XEXCEPT
 	  {
+		if(head)
+			head->ReleaseReference();
 		return(XCODE());
 	  }
 	XEND;
