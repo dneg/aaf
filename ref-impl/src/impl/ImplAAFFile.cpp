@@ -42,6 +42,8 @@
 #include "ImplAAFBuiltinDefs.h"
 #include "ImplAAFFileSignatures.h"
 
+#include "AAFFileMode.h"
+
 #include "ImplAAFSmartPointer.h"
 typedef ImplAAFSmartPointer<ImplAAFIdentification> ImplAAFIdentificationSP;
 
@@ -77,6 +79,34 @@ inline void checkExpression(bool test, AAFRESULT r)
 {
   if (!test)
     throw r;
+}
+
+
+//
+// Returns true if all flags set are defined flags; returns false if
+// any flags set are *not* defined.
+//
+static bool areAllModeFlagsDefined (aafUInt32 modeFlags)
+{
+  static const aafUInt32 kAllFlags =
+	AAF_FILE_MODE_EAGER_LOADING |
+	AAF_FILE_MODE_REVERTABLE |
+	AAF_FILE_MODE_UNBUFFERED |
+	AAF_FILE_MODE_RECLAIMABLE |
+	AAF_FILE_MODE_USE_LARGE_SS_SECTORS |
+	AAF_FILE_MODE_CLOSE_FAIL_DIRTY |
+	AAF_FILE_MODE_DEBUG0_ON |
+	AAF_FILE_MODE_DEBUG1_ON;
+
+  if (modeFlags & (~kAllFlags))
+	{
+	  // at least one flag is not defined
+	  return false;
+	}
+  else
+	{
+	  return true;
+	}
 }
 
 
@@ -129,12 +159,16 @@ ImplAAFFile::OpenExistingRead (const aafCharacter * pFileName,
 	if (! pFileName)
 		return AAFRESULT_NULL_PARAM;
 
+	if (! areAllModeFlagsDefined (modeFlags))
+	  return AAFRESULT_BAD_FLAGS;
+
 	if (modeFlags)
-		return AAFRESULT_BAD_FLAGS;
-	
+	  return AAFRESULT_NOT_IMPLEMENTED;
 
 	// Save the mode flags for now. They are not currently (2/4/1999) used by the
 	// OM to open the doc file. Why do we return an error if modeFlags != 0?
+	//
+	// Answer: because none of them are implemented yet.
 	_modeFlags = modeFlags;
 
 	try
@@ -238,13 +272,16 @@ ImplAAFFile::OpenExistingModify (const aafCharacter * pFileName,
 	if (! pIdent)
 		return AAFRESULT_NULL_PARAM;
 
+	if (! areAllModeFlagsDefined (modeFlags))
+	  return AAFRESULT_BAD_FLAGS;
+
 	if (modeFlags)
-		return AAFRESULT_BAD_FLAGS;
-
-
+	  return AAFRESULT_NOT_IMPLEMENTED;
 	
 	// Save the mode flags for now. They are not currently (2/4/1999) used by the
 	// OM to open the doc file. Why do we return an error if modeFlags != 0?
+	//
+	// Answer: because none of them are implemented yet.
 	_modeFlags = modeFlags;
 
 	try 
@@ -358,10 +395,11 @@ ImplAAFFile::OpenNewModify (const aafCharacter * pFileName,
 	if (! pIdent)
 		return AAFRESULT_NULL_PARAM;
 
+	if (! areAllModeFlagsDefined (modeFlags))
+	  return AAFRESULT_BAD_FLAGS;
+
 	if (modeFlags)
-		return AAFRESULT_BAD_FLAGS;
-
-
+	  return AAFRESULT_NOT_IMPLEMENTED;
 
 	try
 	{
@@ -548,8 +586,11 @@ ImplAAFFile::SaveAs (const aafCharacter * pFileName,
 	if (!_open)
 		return AAFRESULT_NOT_OPEN;
 
+	if (! areAllModeFlagsDefined (modeFlags))
+	  return AAFRESULT_BAD_FLAGS;
+
 	if (modeFlags)
-		return AAFRESULT_BAD_FLAGS;
+	  return AAFRESULT_NOT_IMPLEMENTED;
 
 	// Assure no registration of def objects in dictionary during
 	// save operation
