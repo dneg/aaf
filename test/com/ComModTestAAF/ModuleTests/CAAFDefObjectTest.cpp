@@ -71,10 +71,6 @@ typedef IAAFSmartPointer<IEnumAAFPluginDefs>		IEnumAAFPluginDescriptorsSP;
 // Some guids
 //
 
-// {005DFB20-7B5B-11d3-844F-00600832ACB8}
-static const aafUID_t kTestTypeId = 
-{ 0x5dfb20, 0x7b5b, 0x11d3, { 0x84, 0x4f, 0x0, 0x60, 0x8, 0x32, 0xac, 0xb8 } };
-
 // {005DFB21-7B5B-11d3-844F-00600832ACB8}
 static const aafUID_t kTestPluginDescID1 = 
 { 0x5dfb21, 0x7b5b, 0x11d3, { 0x84, 0x4f, 0x0, 0x60, 0x8, 0x32, 0xac, 0xb8 } };
