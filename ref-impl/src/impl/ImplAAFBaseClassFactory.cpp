@@ -172,12 +172,8 @@ const aafClassID_t* lookupClassID(const aafUID_t* pAUID)
   return (pClassID);
 }
 
-// Utility function for creating objects. This function hides the type
-// "aafClassID_t" from the OM.
-//
-static OMStorable* createObject(const OMClassId& classId)
+static OMStorable* createObject(const aafUID_t* pAUID)
 {
-  const aafUID_t* pAUID  = reinterpret_cast<const aafUID_t*>(&classId);
 
   // Lookup the code class id for the given stored object id.
   const aafClassID_t* id = lookupClassID(pAUID);
@@ -190,32 +186,10 @@ static OMStorable* createObject(const OMClassId& classId)
 }
 
 
-// Utility function for registering a given class id as legal in a
-// given file.This function hides the type "aafClassID_t" from the OM.
-//
-static void registerClass(OMFile* file, const aafClassID_t& classId)
-{
-  file->classFactory()->add((const OMClassId&)(classId),
-                            createObject);
-}
 
-void ImplAAFBaseClassFactory::RegisterPredefinedClasses(OMFile* file)
-{
-  assert(file);
-
-  // Use the table to register the builtin classes.
-  for (size_t i = 0; kTotalAUIDCount > i; ++i)
-  {
-    registerClass(file, *gAAFObjectTable[i].pAUID);
-  }
-}
-
-
-
-ImplAAFObject* ImplAAFBaseClassFactory::createObject(const aafUID_t* auid) const
+ImplAAFObject* ImplAAFBaseClassFactory::createObject(const aafUID_t* pAUID) const
 {
   // Call the current private static function to create the built-in
   // base class.
-  const OMClassId& classId  = reinterpret_cast<const OMClassId&>(auid);
-  return (ImplAAFObject *)::createObject(classId);
+  return (ImplAAFObject *)::createObject(pAUID);
 }
