@@ -1,3 +1,10 @@
+#
+# Generate an html table from a change log (output of cvs2cl.pl)
+#
+# $ cat ChangeLog | awk -f build/history/cl2html.awk > changelog.html
+#
+# Tim Bingham
+#
 BEGIN {
   date = "";
   printHeader();
