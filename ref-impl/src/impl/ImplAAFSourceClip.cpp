@@ -33,7 +33,8 @@
 
 #include <assert.h>
 #include "aafCvt.h" 
-#include <AAFResult.h>
+#include "AAFResult.h"
+#include "AAFDefUIDs.h"
 
 
 ImplAAFSourceClip::ImplAAFSourceClip ():
@@ -42,7 +43,8 @@ ImplAAFSourceClip::ImplAAFSourceClip ():
 	_fadeInPresent( PID_SOURCECLIP_FADEINPRESENT,	"fadeInPresent"),
 	_fadeOutLen(	PID_SOURCECLIP_FADEOUTLEN,		"fadeOutLen"),
 	_fadeOutType(	PID_SOURCECLIP_FADEOUTTYPE,		"fadeOutType"),
-	_fadeOutPresent(PID_SOURCECLIP_FADEOUTPRESENT,	"fadeOutPresent")
+	_fadeOutPresent(PID_SOURCECLIP_FADEOUTPRESENT,	"fadeOutPresent"),
+	_startTime(		PID_SOURCECLIP_STARTTIME,		"startTime")
 {
 	_persistentProperties.put(		_fadeInLen.address());
 	_persistentProperties.put(		_fadeInType.address());
@@ -50,6 +52,7 @@ ImplAAFSourceClip::ImplAAFSourceClip ():
 	_persistentProperties.put(		_fadeOutLen.address());
 	_persistentProperties.put(		_fadeOutType.address());
 	_persistentProperties.put(		_fadeOutPresent.address());
+	_persistentProperties.put(		_startTime.address());
 
 }
 
@@ -75,6 +78,7 @@ AAFRESULT STDMETHODCALLTYPE
 		SetLength( pLength );
 		SetSourceID( sourceRef.sourceID );
 		SetSourceMobSlotID( sourceRef.sourceSlotID );
+		_startTime = sourceRef.startTime;
 
 		_fadeInLen		= 0;
 		_fadeInType		= kFadeNone;
@@ -198,20 +202,24 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFSourceClip::GetRef (aafSourceRef_t*	pSourceRef)
 {
     AAFRESULT aafError = AAFRESULT_SUCCESS;
+	aafUID_t	sourceID;
+	aafSlotID_t slotID;
 
 	XPROTECT()
-	  {
+	{	
 		if (pSourceRef)
-		  {
-#ifdef FULL_TOOLKIT
-			  *pSourceRef = _srcRef;
-#endif
-		  } /* if sourceRef */
+		{
+			GetSourceID( &sourceID );
+			GetSourceMobSlotID( &slotID );
+			pSourceRef->sourceID = sourceID;
+			pSourceRef->sourceSlotID = slotID;
+			pSourceRef->startTime = _startTime;
+		} /* if sourceRef */
 		else
-		  {
+		{
 			RAISE(AAFRESULT_NULL_PARAM);
-		  }
-	  } /* XPROTECT */
+		}
+	 } /* XPROTECT */
 
 	XEXCEPT
 	  {
@@ -250,40 +258,36 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFSourceClip::SetRef (aafSourceRef_t  /*sourceRef*/)
+    ImplAAFSourceClip::SetRef (aafSourceRef_t  sourceRef)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+    aafInt32	tmp1xSourcePosition = 0;
+	aafInt16	tmp1xTrackNum = 0;
+	AAFRESULT   aafError = AAFRESULT_SUCCESS;
+	
+
+	/* If UID is NUL - make the rest of the fields 0 too. */
+	if( (sourceRef.sourceID.Data1 == NilMOBID.Data1) && 
+		(sourceRef.sourceID.Data2 == NilMOBID.Data2) &&
+		(sourceRef.sourceID.Data3 == NilMOBID.Data3) &&
+		(sourceRef.sourceID.Data4[0] == NilMOBID.Data4[0]) &&
+		(sourceRef.sourceID.Data4[1] == NilMOBID.Data4[1]) &&
+		(sourceRef.sourceID.Data4[2] == NilMOBID.Data4[2]) &&
+		(sourceRef.sourceID.Data4[3] == NilMOBID.Data4[3]) &&
+		(sourceRef.sourceID.Data4[4] == NilMOBID.Data4[4]) &&
+		(sourceRef.sourceID.Data4[5] == NilMOBID.Data4[5]) &&
+		(sourceRef.sourceID.Data4[6] == NilMOBID.Data4[6]) &&
+		(sourceRef.sourceID.Data4[7] == NilMOBID.Data4[7]) 	)
+	{
+		sourceRef.sourceSlotID = 0;
+		CvtInt32toPosition(0, sourceRef.startTime);	
+	}
+	SetSourceID( sourceRef.sourceID );
+	SetSourceMobSlotID( sourceRef.sourceSlotID) ;
+	_startTime = sourceRef.startTime;
+
+	return(aafError);
 }
 
-
-
-  // Override from AAFSourceReference
-  AAFRESULT STDMETHODCALLTYPE
-    ImplAAFSourceClip::GetSourceID (/*[retval][out]*/ aafUID_t *  /*pSourceID*/)
-  {
-    return AAFRESULT_NOT_IMPLEMENTED;
-  }
-
-  // Override from AAFSourceReference
-  AAFRESULT STDMETHODCALLTYPE
-    ImplAAFSourceClip::SetSourceID (/*[in]*/ aafUID_t   /*sourceID*/)
-  {
-    return AAFRESULT_NOT_IMPLEMENTED;
-  }
-
-  // Override from AAFSourceReference
-  AAFRESULT STDMETHODCALLTYPE
-    ImplAAFSourceClip::GetSourceMobSlotID (/*[retval][out]*/ aafSlotID_t *  /*pMobSlotID*/)
-  {
-    return AAFRESULT_NOT_IMPLEMENTED;
-  }
-
-  // Override from AAFSourceReference
-  AAFRESULT STDMETHODCALLTYPE
-    ImplAAFSourceClip::SetSourceMobSlotID (/*[in]*/ aafSlotID_t   /*mobSlotID*/)
-  {
-    return AAFRESULT_NOT_IMPLEMENTED;
-  }
 
 
 
