@@ -73,26 +73,33 @@ function trim(s, n) {
 
 function createColorMap() {
 /* Associative array - yum ! */
+
+  /* Lime green */
   map["ref-impl/src/OM/"]          = "#CCFFCC";
   map["ref-impl/include/OM/"]      = "#CCFFCC";
 
+  /* Pink */
   map["ref-impl/src/impl/"]        = "#FFCCCC";
   map["ref-impl/plugins/"]         = "#FFCCCC";
 
+  /* Grey */
   map["ref-impl/src/com-api/"]     = "#CCCCCC";
   map["ref-impl/include/com-api/"] = "#CCCCCC";
   map["ref-impl/include/ref-api"]  = "#CCCCCC";
   map["AAF"]                       = "#CCCCCC";
   map["dodo/"]                     = "#CCCCCC";
 
+  /* Pale blue */
   map["ref-impl/doc/"]             = "#CCFFFF";
   map["LEGAL/"]                    = "#CCFFFF";
   map["doc/"]                      = "#CCFFFF";
 
+  /* Purple */
   map["test/"]                     = "#FFCCFF";
   map["examples/"]                 = "#FFCCFF";
   map["examples2/"]                = "#FFCCFF";
 
+  /* Yellow */
   map["DevUtils/"]                 = "#FFFFCC";
   map["Utilities/"]                = "#FFFFCC";
   map["OMF/"]                      = "#FFFFCC";
