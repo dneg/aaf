@@ -112,6 +112,7 @@ RM_OPTS = /f /q
 
 
 UPDATE = update.cmd
+# UPDATE = update.bat
 
 #
 # The path to the AAF-toolkit
