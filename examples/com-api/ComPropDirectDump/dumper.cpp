@@ -337,7 +337,6 @@ HRESULT dumpPropertyValue (IAAFPropertyValue * pPVal, int indent)
 		  }
 #endif // 0
 
-#if 0
 		case kAAFTypeCatEnum:
 		  {
 			// Print enum element's text tag as well as int value
@@ -346,22 +345,26 @@ HRESULT dumpPropertyValue (IAAFPropertyValue * pPVal, int indent)
 										   (void**)&pTDE));
 
 			// first, get the int value
-			aafInt32 enumValue;
-			checkResult(pTDE->GetValue(pPVal, &enumValue));
+			aafInt64 enumValue;
+			checkResult(pTDE->GetIntegerValue(pPVal, &enumValue));
 
 			// now, get the text tag for that value.  Start with name
 			// buf len, and allocating a buffer to hold the name
 			wchar_t * nameBuf;
 			aafUInt32 nameBufLen;
-			checkResult(pTDE->GetElemNameBufLen(enumValue, &nameBufLen));
+			checkResult(pTDE->GetNameBufLenFromInteger(enumValue, &nameBufLen));
 			// don't forget NameBufLen is in bytes, not wchar_ts
 			nameBuf = (wchar_t*) new aafUInt8[nameBufLen];
 
 			// and now get the name itself
-			checkResult(pTDE->GetElemName(elemValue, nameBuf, nameBufLen));
+			checkResult(pTDE->GetNameFromInteger(enumValue, nameBuf, nameBufLen));
 
-			// Here you print out nameBuf to indicate enum's value
-
+			// Print the contents
+			char *mbBuf = make_mbstring(nameBufLen, nameBuf); // create an ansi/asci
+			checkExpression(NULL != mbBuf, AAFRESULT_NOMEMORY);
+			cout << "Value: " << mbBuf << "\n";
+			delete[] mbBuf;
+			mbBuf = 0;
 			delete[] nameBuf;
 			nameBuf = 0;
 
@@ -369,7 +372,6 @@ HRESULT dumpPropertyValue (IAAFPropertyValue * pPVal, int indent)
 			pTDE = 0;
 			break;
 		  }
-#endif // 0
 
 		case kAAFTypeCatFixedArray:
 		  {
@@ -606,7 +608,7 @@ struct CAAFInitialize
   {
   	cout << "Attempting to load the AAF dll...\n";
     HRESULT hr = AAFLoad(dllname);
-    cout << (SUCCEEDED(hr)) ? "DONE\n" : "FAILED\n";
+    cout << ((SUCCEEDED(hr)) ? "DONE\n" : "FAILED\n");
   }
 
   ~CAAFInitialize()
