@@ -123,10 +123,9 @@ public:
   aafBool IsRegistered (void) const;
   size_t NativeSize (void) const;
 
-  // Override this one, not the ...MBS() one...
   OMProperty * 
-    pvtCreateOMProperty (OMPropertyId pid,
-						 const aafCharacter * name) const;
+    pvtCreateOMPropertyMBS (OMPropertyId pid,
+							const char * name) const;
 
   //****************
   // GetTypeCategory()
