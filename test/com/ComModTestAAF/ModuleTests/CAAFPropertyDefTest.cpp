@@ -169,23 +169,7 @@ static HRESULT CreateAAFFile(aafWChar *  pFileName )
 				throw hr;
 		}//if Failed hr
 		
-		//SetIsSearchable
-		hr = spPropDef->SetIsSearchable(kAAFTrue);
-		if (FAILED(hr)) 
-		{
-			if (hr == AAFRESULT_NOT_IMPLEMENTED)
-			{
-				//If not implemented, then mark as NI and move on ...
-				//Flag this NI
-				bSetIsSearchable_NI = kAAFTrue;
-				//Reset the hr
-				hr = AAFRESULT_SUCCESS;
-				//Move on
-			}
-			else
-				//If it failed, but was not an NI, then "what the hell is this problem ??!!"
-				throw hr;
-		}//if Failed hr
+
 		
 		
 	}
@@ -311,29 +295,8 @@ static HRESULT  ReadAAFFile(aafWChar *  pFileName )
 		checkResult(spTypeDef2->QueryInterface(IID_IUnknown, (void **)&pUnk2));
 		checkExpression( pUnk1 == pUnk2, AAFRESULT_TEST_FAILED );
 _skip_GetDefaultValue:
-		
-		//GetIsSearchable
-		aafBoolean_t bIsSearchable = kAAFFalse;
-		hr = spPropDef->GetIsSearchable(&bIsSearchable);
-		if (FAILED(hr)) 
-		{
-			if (hr == AAFRESULT_NOT_IMPLEMENTED)
-			{
-				//If not implemented, then mark as NI and move on ...
-				//Flag this NI
-				bGetIsSearchable_NI = kAAFTrue;
-				//Reset the hr
-				hr = AAFRESULT_SUCCESS;
-				//Move on
-				goto _skip_GetIsSearchable;
-			}
-			else
-				//If it failed, but was not an NI, then "what the hell is this problem ??!!"
-				throw hr;
-		}//if Failed hr
-		checkExpression( bIsSearchable == kAAFTrue, AAFRESULT_TEST_FAILED );
-_skip_GetIsSearchable:
 		;
+
 		
 		
 	}//try
