@@ -10,7 +10,7 @@
 ;=--------------------------------------------------------------------------=
 ;
 
-LIBRARY		AAFCOM
+LIBRARY		AAFCOAPI
 
 DESCRIPTION	'AAF COM Library'
 
