@@ -40,6 +40,18 @@
 static aafWChar *slotNames[5] = { L"SLOT1", L"SLOT2", L"SLOT3", L"SLOT4", L"SLOT5" };
 
 
+static aafWChar *mobName = L"MOBTest";
+
+
+static const aafTimeStamp_t creationTimeStamp = { 1941, 12, 7, 5, 31, 12, 1 };
+static const aafTimeStamp_t modificationTimeStamp = { 1941, 12, 7, 5, 31, 12, 2 };
+
+// {21F2083C-B260-11d3-BFFE-00104BC9156D}
+static const aafUID_t MOBTestID = 
+{ 0x21f2083c, 0xb260, 0x11d3, { 0xbf, 0xfe, 0x0, 0x10, 0x4b, 0xc9, 0x15, 0x6d } };
+
+
+
 // Cross-platform utility to delete a file.
 static void RemoveTestFile(const wchar_t* pFileName)
 {
@@ -76,7 +88,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
   IAAFSegment		*seg = NULL;
   IAAFSourceClip	*sclp = NULL;
   aafProductIdentification_t	ProductInfo;
-  aafUID_t					newUID;
   HRESULT						hr = S_OK;
 
   ProductInfo.companyName = L"AAF Developers Desk";
@@ -115,21 +126,11 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 											  IID_IAAFMob, 
 											  (IUnknown **)&pMob));
 
-	  checkResult(CoCreateGuid((GUID *)&newUID));
-	  checkResult(pMob->SetMobID(newUID));
-	  checkResult(pMob->SetName(L"MOBTest"));
+	  checkResult(pMob->SetMobID(MOBTestID));
+	  checkResult(pMob->SetName(mobName));
 	  
-	  // Set a modification time stamp: 7 December, 1941 at 05:13:12.01
-	  aafTimeStamp_t ts;
-	  ts.date.year = 1941;
-	  ts.date.month = 12;
-	  ts.date.day = 7;
-	  ts.time.hour = 5;
-	  ts.time.minute = 31;
-	  ts.time.second = 12;
-	  ts.time.fraction = 1;
-	  checkResult(pMob->SetCreateTime(ts));
-	  checkResult(pMob->SetModTime(ts));
+	  checkResult(pMob->SetCreateTime(creationTimeStamp));
+	  checkResult(pMob->SetModTime(modificationTimeStamp));
 
 	  // Add some slots
 	  for(test = 0; test < 5; test++)
@@ -199,6 +200,18 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
   return hr;
 }
 
+static void checkTimeStampsAreEqual(aafTimeStamp_constref ts1, aafTimeStamp_constref ts2)
+{
+  // Check the time stamp: should be 7 December, 1941 at 05:13:12.01
+  checkExpression (ts1.date.year == ts2.date.year, AAFRESULT_TEST_FAILED);
+  checkExpression (ts1.date.month == ts2.date.month, AAFRESULT_TEST_FAILED);
+  checkExpression (ts1.date.day == ts2.date.day, AAFRESULT_TEST_FAILED);
+  checkExpression (ts1.time.hour == ts2.time.hour, AAFRESULT_TEST_FAILED);
+  checkExpression (ts1.time.minute == ts2.time.minute, AAFRESULT_TEST_FAILED);
+  checkExpression (ts1.time.second == ts2.time.second, AAFRESULT_TEST_FAILED);
+  checkExpression (ts1.time.fraction == ts2.time.fraction, AAFRESULT_TEST_FAILED);
+}
+
 static HRESULT ReadAAFFile(aafWChar * pFileName)
 {
   IAAFFile *					pFile = NULL;
@@ -246,30 +259,35 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		  aafNumSlots_t	numSlots;
 		  aafUID_t		mobID;
 		  aafSlotID_t		trackID;
+      aafInt32 nameBufLen = 0;
 
 		  checkResult(mobIter->NextOne (&aMob));
-		  checkResult(aMob->GetName (name, sizeof(name)));
-		  checkResult(aMob->GetMobID (&mobID));
+      
+      // Check GetNameBufLen and GetName
+      checkResult(aMob->GetNameBufLen(&nameBufLen));
+      checkExpression((aafInt32)((wcslen(mobName) + 1) * sizeof(aafCharacter)) == nameBufLen, AAFRESULT_TEST_FAILED);
+		  checkResult(aMob->GetName (name, nameBufLen));
+		  checkExpression (wcscmp(mobName, name) == 0, AAFRESULT_TEST_FAILED);
 
-		  // Check the modification time stamp: should be 7 December, 1941 at 05:13:12.01
-		  aafTimeStamp_t tsc = { 0 };
-		  checkResult(aMob->GetCreateTime(&tsc));
-		  checkExpression (1941 == tsc.date.year, AAFRESULT_TEST_FAILED);
-		  checkExpression (12 == tsc.date.month, AAFRESULT_TEST_FAILED);
-		  checkExpression (7 == tsc.date.day, AAFRESULT_TEST_FAILED);
-		  checkExpression (5 == tsc.time.hour, AAFRESULT_TEST_FAILED);
-		  checkExpression (31 == tsc.time.minute, AAFRESULT_TEST_FAILED);
-		  checkExpression (12 == tsc.time.second, AAFRESULT_TEST_FAILED);
-		  checkExpression (1 == tsc.time.fraction, AAFRESULT_TEST_FAILED);
-		  aafTimeStamp_t ts = { 0 };
-		  checkResult(aMob->GetModTime(&ts));
-		  checkExpression (1941 == ts.date.year, AAFRESULT_TEST_FAILED);
-		  checkExpression (12 == ts.date.month, AAFRESULT_TEST_FAILED);
-		  checkExpression (7 == ts.date.day, AAFRESULT_TEST_FAILED);
-		  checkExpression (5 == ts.time.hour, AAFRESULT_TEST_FAILED);
-		  checkExpression (31 == ts.time.minute, AAFRESULT_TEST_FAILED);
-		  checkExpression (12 == ts.time.second, AAFRESULT_TEST_FAILED);
-		  checkExpression (1 == ts.time.fraction, AAFRESULT_TEST_FAILED);
+      // Check GetMobID
+		  checkResult(aMob->GetMobID (&mobID));
+		  checkExpression(memcmp(&MOBTestID, &mobID, sizeof(mobID)) == 0, AAFRESULT_TEST_FAILED);
+
+		  // Check the time stamps
+		  aafTimeStamp_t created = { 0 };
+		  checkResult(aMob->GetCreateTime(&created));
+		  checkTimeStampsAreEqual(creationTimeStamp, created);
+		  aafTimeStamp_t modified = { 0 };
+		  checkResult(aMob->GetModTime(&modified));
+		  checkTimeStampsAreEqual(modificationTimeStamp, modified);
+
+      // Check the GetMobInfo data.
+      memset(&created, 0, sizeof(created));
+      memset(&modified, 0, sizeof(modified));
+      checkResult(aMob->GetMobInfo(&modified, &created, name, sizeof(name)));
+		  checkTimeStampsAreEqual(creationTimeStamp, created);
+		  checkTimeStampsAreEqual(modificationTimeStamp, modified);
+			checkExpression (wcscmp(mobName, name) == 0, AAFRESULT_TEST_FAILED);
 
 		  checkResult(aMob->CountSlots (&numSlots));
 		  checkExpression(5 == numSlots, AAFRESULT_TEST_FAILED);
@@ -348,14 +366,12 @@ extern "C" HRESULT CAAFMob_test()
 	if (SUCCEEDED(hr))
 	{
 		cout << "The following AAFMob methods have not been implemented:" << endl; 
-		cout << "     GetNameBufLen" << endl; 
 		cout << "     AppendSlot" << endl; 
 		cout << "     EnumAAFAllMobSlots - needs unit test" << endl; 
 		cout << "     AppendComment - needs unit test" << endl; 
 		cout << "     GetNumComments" << endl; 
 		cout << "     EnumAAFAllMobComments - needs unit test" << endl; 
 		cout << "     AppendNewTimelineSlot" << endl; 
-		cout << "     GetMobInfo - needs unit test" << endl; 
 		cout << "     OffsetToMobTimecode - needs unit test" << endl; 
 		cout << "     ChangeRef - needs unit test" << endl; 
 		cout << "     CloneExternal - needs unit test" << endl; 
