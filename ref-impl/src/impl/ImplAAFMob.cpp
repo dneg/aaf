@@ -303,8 +303,6 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFMob::GetMobID (aafMobID_t *pMobID)
 {
-	AAFRESULT aafError = AAFRESULT_SUCCESS;
-
 	XPROTECT()
 	  {
 		/* This will support both 1.x and 2.x */
@@ -563,7 +561,6 @@ AAFRESULT STDMETHODCALLTYPE
 	aafLength_t length = CvtInt32toLength(0, length);
 	aafLength_t	mobLength = CvtInt32toLength(0, mobLength);
   ImplAAFDictionary *pDictionary = NULL;
-	AAFRESULT aafError = AAFRESULT_SUCCESS;
 
   // Validate input pointers...
   if (NULL == segment || NULL == slotName || NULL == newSlot)
@@ -622,7 +619,6 @@ AAFRESULT STDMETHODCALLTYPE
   ImplAAFDictionary *pDictionary = NULL;
 ///fLength_t length = CvtInt32toLength(0, length);
 ///	aafLength_t	mobLength = CvtInt32toLength(0, mobLength);
-	AAFRESULT aafError = AAFRESULT_SUCCESS;
 
 
   // Validate input pointers...
@@ -968,18 +964,17 @@ AAFRESULT STDMETHODCALLTYPE
                            aafPosition_t *offset,
                            aafTimecode_t *result)
 {
-	ImplAAFMobSlot		*slot = NULL;
-	ImplAAFPulldown		*pdwn = NULL;
-	ImplAAFSegment		*pdwnInput = NULL;
-	ImplEnumAAFMobSlots *iter = NULL;
-	ImplAAFSegment		*seg = NULL;
+//	ImplAAFMobSlot		*slot = NULL;
+//	ImplAAFPulldown		*pdwn = NULL;
+//	ImplAAFSegment		*pdwnInput = NULL;
+//	ImplEnumAAFMobSlots *iter = NULL;
+//	ImplAAFSegment		*seg = NULL;
 //	aafTimecode_t		timecode;
-	aafBool				reverse = kAAFFalse;
+//	aafBool				reverse = kAAFFalse;
 //	aafUInt32			frameOffset;
 //	aafUID_t			dataDefID;
 //	aafPosition_t		newStart;
 //	aafInt32			start32;
-	AAFRESULT			aafError = AAFRESULT_SUCCESS;
 	
 
   // Validate input pointers...
@@ -1142,7 +1137,6 @@ AAFRESULT STDMETHODCALLTYPE
                            aafTimecode_t *  result)
 {
 	ImplAAFTimelineMobSlot	*slot = NULL;
-	ImplAAFComponent		*subSegment = NULL;
 	ImplAAFSegment			*seg = NULL;
 	aafTimecode_t 			timecode;
 	aafMediaCriteria_t		mediaCrit;
@@ -1254,10 +1248,8 @@ AAFRESULT STDMETHODCALLTYPE
 	ImplAAFSegment *seg = NULL;
 	ImplAAFSegment *pdwnInput = NULL;
 	aafPosition_t zero;
-	AAFRESULT	aafError = AAFRESULT_SUCCESS;
 	aafBool found = kAAFFalse;
 	aafRational_t	editRate;
-	aafLength_t	zeroLen;
 	ImplAAFFindSourceInfo	*sourceInfo = NULL;
 	ImplAAFMob	*tapeMob = NULL;
 
@@ -1266,7 +1258,6 @@ AAFRESULT STDMETHODCALLTYPE
     return (AAFRESULT_NULL_PARAM);
 
 	CvtInt32toPosition(0, zero);
-	CvtInt32toLength(0, zeroLen);
 	
 	XPROTECT()
 	{
@@ -1628,9 +1619,8 @@ ImplAAFMob::AddPhysSourceRef (aafAppendOption_t  addType,
 	ImplAAFSequence			*sequence = NULL;
 	ImplAAFMobSlot			*slot = NULL;
 	ImplAAFTimelineMobSlot	*newSlot = NULL;
-	ImplEnumAAFComponents	*compEnum = NULL;
 	aafPosition_t			zeroPos;
-  ImplAAFDictionary *pDictionary = NULL;
+	ImplAAFDictionary *pDictionary = NULL;
 
 	XPROTECT()
 	{
