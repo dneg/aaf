@@ -32,7 +32,7 @@ AD_IDL(//
 AD_CLASS_UUID(7a2f0571, 1ba3, 11D2, bf, aa, 00, 60, 97, 11, 62, 12)
 
 AD_DEFAULT_UUID(7a2f0570, 1ba3, 11D2, bf, aa, 00, 60, 97, 11, 62, 12)
-AD_CLASS_BEGIN
+AD_XCLASS_BEGIN(Abstract, StoredObject)
 AD_METHOD2(SegmentOffsetToTC,				  
 		   [in],
 				aafPosition_t *, 
@@ -98,4 +98,4 @@ AD_METHOD3(SegmentTCToOffset,
   //
   // AAFRESULT_TIMECODE_NOT_FOUND
   //   - the given timecode is not available in this segment.)
-AD_CLASS_END
+AD_XCLASS_END(Abstract, StoredObject)
