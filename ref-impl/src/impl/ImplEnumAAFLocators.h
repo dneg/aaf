@@ -36,6 +36,8 @@ class ImplAAFLocator;
 
 #include "ImplAAFEssenceDescriptor.h"
 
+typedef OMStrongReferenceVectorProperty<ImplAAFLocator> locatorStrongRefArrayProp_t;
+
 class ImplEnumAAFLocators : public ImplAAFRoot
 {
 public:
@@ -102,13 +104,13 @@ public:
 
 public:
 // Internal to the toolkit
-AAFRESULT
-    SetEssenceDesc(ImplAAFEssenceDescriptor *pEDesc);
+  virtual AAFRESULT STDMETHODCALLTYPE
+    SetEnumStrongProperty( ImplAAFObject *pObj, locatorStrongRefArrayProp_t *pProp);
 
 private:
-	aafInt32					_current;
-	ImplAAFEssenceDescriptor	*_cEssenceDesc;
-
+	aafUInt32						_current;
+	ImplAAFObject					*_enumObj;
+	locatorStrongRefArrayProp_t		*_enumStrongProp;
 };
 
 #endif // ! __ImplEnumAAFLocators_h__
