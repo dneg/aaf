@@ -775,7 +775,6 @@ void Omf2Aaf::ConvertOMFMediaDataObject( OMF2::omfObject_t obj, OMF2::omfUID_t i
 		aafUInt32			nBlockSize;
 		aafUInt32			numBytesRead;
 		aafUInt32			numBytesWritten;
-		aafBool				bMore = kAAFFalse;
 		
 
 		// find out how big the data is 
@@ -812,7 +811,6 @@ void Omf2Aaf::ConvertOMFMediaDataObject( OMF2::omfObject_t obj, OMF2::omfUID_t i
 			if (numBytes > (2 * 1048576))
 			{
 				nBlockSize = 2 * 1048576;		// only allocate 2 Meg
-				bMore = kAAFTrue;			// you going to need more than one read/write
 			}
 			else
 			{
@@ -1876,7 +1874,6 @@ void Omf2Aaf::ConvertOMFComponentProperties(OMF2::omfObject_t component,
 	OMF2::omfUniqueName_t	propertyName;
 	OMF2::omfIterHdl_t		propertyIterator = NULL;
 	OMF2::omfType_t			propertyType = OMF2::OMNoType;
-	OMF2::omfDDefObj_t		datakind = NULL;
 
 	IncIndentLevel();
 	OMF2::omfiIteratorAlloc(OMFFileHdl, &propertyIterator);
@@ -2936,12 +2933,10 @@ void Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 	OMFCheck				OMFError;
 
 	OMF2::omfDDefObj_t		effectDatakind;
-	OMF2::omfSegObj_t		effectSegment = NULL;
 	OMF2::omfSegObj_t		inputSegmentA ;
 	OMF2::omfSegObj_t		inputSegmentB ;
 	OMF2::omfSegObj_t		levelSegment;
 	OMF2::omfSegObj_t		renderClip = NULL;
-	OMF2::omfESlotObj_t		effectSlot = NULL;
 	OMF2::omfLength_t		effectLength;
 	OMF2::omfDDefObj_t		effectDef;
 	OMF2::omfInt32			nameSize = 64, idSize = 64;
@@ -2964,7 +2959,6 @@ void Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 	IAAFSegment*			pSegment = NULL;
 	IAAFParameter*			pParameter = NULL;
 	IAAFParameterDef*		pParameterDef = NULL;
-	IAAFTypeDef*			typeDef = NULL;
 	IAAFTypeDef*			pParameterDefType = NULL;
 
 	IAAFDataDefSP  effectDataDef;
