@@ -75,6 +75,21 @@ inline void checkExpression(bool expression, HRESULT r)
 static wchar_t *sName[2] = { L"Test Descriptor Name1", L"Test Descriptor Name2" };
 static wchar_t *sDescription[2] = { L"Test Descriptor Description1", L"Test Descriptor Description2" };
 
+#define TEST_EFFECT_NAME	L"A TestEffect"
+#define TEST_EFFECT_DESC	L"A longer description of the TestEffect"
+
+const aafUID_t kTestEffectID1 = { 0xD15E7611, 0xFE40, 0x11d2, { 0x80, 0xA5, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } };
+const aafUID_t kTestParmID1 = { 0xC7265931, 0xFE57, 0x11d2, { 0x80, 0xA5, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } };
+// {81831633-EDF4-11d3-A353-009027DFCA6A}
+const aafUID_t kTestEffectID2 = 
+{ 0x81831633, 0xedf4, 0x11d3, { 0xa3, 0x53, 0x0, 0x90, 0x27, 0xdf, 0xca, 0x6a } };
+// {81831634-EDF4-11d3-A353-009027DFCA6A}
+const aafUID_t kTestParmID2 = 
+{ 0x81831634, 0xedf4, 0x11d3, { 0xa3, 0x53, 0x0, 0x90, 0x27, 0xdf, 0xca, 0x6a } };
+
+const aafUID_t *effectIDs[] = { &kTestEffectID1, &kTestEffectID2 };
+const aafUID_t *parmIDs[] = { &kTestParmID1, &kTestParmID2 };
+
 static HRESULT OpenAAFFile(aafWChar*			pFileName,
 						   aafMediaOpenMode_t	mode,
 						   IAAFFile**			ppFile,
@@ -160,7 +175,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 					CreateInstance(IID_IAAFParameterDef, 
 								   (IUnknown **)&pParamDef));
 		
+		checkResult(pOperationDef->Initialize (*(effectIDs[n]), TEST_EFFECT_NAME, TEST_EFFECT_DESC));
 		checkResult(pDictionary->RegisterOperationDef(pOperationDef));
+		checkResult(pParamDef->Initialize (*(parmIDs[n]), TEST_PARAM_NAME, TEST_PARAM_DESC));
 		checkResult(pDictionary->RegisterParameterDef(pParamDef));
 		
 		checkResult(pOperationDef->QueryInterface(IID_IAAFDefObject, (void **) &pDef));
