@@ -49,7 +49,6 @@
 
 
 #include "AAFTypes.h"
-//#include "aafCvt.h"
 #include "AAFResult.h"
 #include "AAFDefUIDs.h"
 
@@ -108,3 +107,7 @@ void deleteFile( char* fileName );
 void IncIndentLevel( void );
 void DecIndentLevel( void );
 void AUIDtoString(aafUID_t *uid, char *buf);
+AAFRESULT aafMobIDFromMajorMinor(
+        aafUInt32	major,
+		aafUInt32	minor,
+		aafUID_t *mobID);     /* OUT - Newly created Mob ID */
