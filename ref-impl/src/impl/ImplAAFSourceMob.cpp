@@ -27,6 +27,7 @@
 #include "ImplAAFSegment.h"
 #endif
 
+#include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
 
 
@@ -827,9 +828,6 @@ AAFRESULT ImplAAFSourceMob::ReconcileMobLength(void)
 	return (AAFRESULT_SUCCESS);
 }
 
-//!!! Need a routine to get timecode slotID from physical timecode track
 
-extern "C" const aafClassID_t CLSID_AAFSourceMob;
-
-OMDEFINE_STORABLE(ImplAAFSourceMob, CLSID_AAFSourceMob);
+OMDEFINE_STORABLE(ImplAAFSourceMob, AUID_AAFSourceMob);
 
