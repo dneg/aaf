@@ -22,6 +22,7 @@
 #include "CAAFAdminMob.h"
 
 #include <assert.h>
+#include <string.h>
 #include "AAFResult.h"
 
 #include "AAF.h"

@@ -22,6 +22,7 @@
 #include "CAAFPersonnelResource.h"
 
 #include <assert.h>
+#include <string.h>
 #include "AAFResult.h"
 
 #include "AAF.h"

@@ -33,6 +33,7 @@
 #include <iostream.h>
 #include <stdlib.h>
 #include <wchar.h>
+#include <string.h>
 
 // utility function to set String property value
 static void SetStringProperty (IAAFObject * pObj,
