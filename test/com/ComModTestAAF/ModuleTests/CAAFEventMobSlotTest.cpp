@@ -276,9 +276,8 @@ IAAFEvent *EventMobSlotTest::CreateAnEvent(aafPosition_t* position,
 									(IUnknown **)&pDataDef));
 	  hr = pDataDef->Initialize (DDEF_TEST, L"Test", L"Test data");
 	  hr = _pDictionary->RegisterDataDef (pDataDef);
-    // Create an event (note: this will be replaced by a concrete event in a
-    // later version after such an event is implemented.)
-    checkResult(defs.cdEvent()->
+	// Create a concrete subclass of event
+    checkResult(defs.cdCommentMarker()->
 				CreateInstance(IID_IAAFEvent, 
 							   (IUnknown **)&pEvent));
     checkResult(pEvent->SetPosition(*position));
