@@ -52,6 +52,10 @@
 // Include this for the purpose of timing the data read/write
 #include "UtlConsole.h"
 
+#if defined(macintosh) || defined(_MAC)
+#include <console.h> /* Mac command line window */
+#endif
+
 // This static variables are here so they can be referenced 
 // throughout the whole program.
 
@@ -897,6 +901,14 @@ void usage(void)
 //  NOTE:  defining [0] program name; [1] Number N of wave files
 int main(int argumentCount, char *argumentVector[])
 {
+
+	/* console window for mac */
+
+	#if defined(macintosh) || defined(_MAC)
+	argumentCount = ccommand(&argumentVector);
+	#endif
+
+
 	//  First checking for correct number of arguments 
 
 	if (argumentCount != 2)
