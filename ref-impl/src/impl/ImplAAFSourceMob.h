@@ -50,19 +50,19 @@ public:
 
 
   //****************
-  // GetEssenceDescription()
+  // GetEssenceDescriptor()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetEssenceDescription
+    GetEssenceDescriptor
 		// @parm [out] Returned Essence Descriptor object
         (ImplAAFEssenceDescriptor ** ppMdes);
 
 
   //****************
-  // SetEssenceDescription()
+  // SetEssenceDescriptor()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    SetEssenceDescription
+    SetEssenceDescriptor
 		// @parm [in] Essence Descriptor object
         (ImplAAFEssenceDescriptor * pMdes);
 
