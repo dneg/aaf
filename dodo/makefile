@@ -119,7 +119,7 @@ INCLUDE_DIR = ../ref-impl/include
 	$(SH_PREFIX) $(RM) -f $*.h $(SH_SUFFIX)
 	$(SH_PREFIX) ./tool/$(DODO) -f macros/h.mac < $*.dod > $*.tmp $(SH_SUFFIX)
 	$(SH_PREFIX) mv $*.tmp $*.h $(SH_SUFFIX)
-	$(SH_PREFIX) cp $*.h $(INCLUDE_DIR) $(SH_SUFFIX)
+	$(SH_PREFIX) cp $*.h $(INCLUDE_DIR)/cpp-api/ $(SH_SUFFIX)
 
 .dod.comh :
 	$(SH_PREFIX) $(RM) -f $*.comh $(SH_SUFFIX)
@@ -155,14 +155,19 @@ INCLUDE_DIR = ../ref-impl/include
 	$(SH_PREFIX) $(RM) -f $*.idl $(SH_SUFFIX)
 	$(SH_PREFIX) ./tool/$(DODO) -f macros/idl.mac < $*.dod > $*.tmp $(SH_SUFFIX)
 	$(SH_PREFIX) mv $*.tmp $*.idl $(SH_SUFFIX)
-	$(SH_PREFIX) cp $*.idl $(INCLUDE_DIR) $(SH_SUFFIX)
+	$(SH_PREFIX) cp $*.idl $(INCLUDE_DIR)/com-api/ $(SH_SUFFIX)
 
 clean:
 	$(SH_PREFIX) cd tool ; $(MAKE) clean $(SH_SUFFIX)
 	$(SH_PREFIX) $(RM) -rf *.cpp *.h *.idl *.exp *.comc *.comh *.implc *.implh $(SH_SUFFIX)
 	$(SH_PREFIX) $(RM) -rf $(SRC_DIR)/cpp-api/*.cpp $(SH_SUFFIX)
-	$(SH_PREFIX) $(RM) -rf $(SRC_DIR)/com-api/C*.{cpp,h} $(SH_SUFFIX)
-	$(SH_PREFIX) $(RM) -rf $(SRC_DIR)/impl/Impl*.{cpp,h} $(SH_SUFFIX)
+	$(SH_PREFIX) $(RM) -rf $(SRC_DIR)/com-api/*.h $(SH_SUFFIX)
+	$(SH_PREFIX) $(RM) -rf $(SRC_DIR)/com-api/*.cpp $(SH_SUFFIX)
+	$(SH_PREFIX) $(RM) -rf $(SRC_DIR)/impl/*.h $(SH_SUFFIX)
+	$(SH_PREFIX) $(RM) -rf $(SRC_DIR)/impl/*.cpp $(SH_SUFFIX)
+	$(SH_PREFIX) $(RM) -rf $(INCLUDE_DIR)/com-api/*.h $(SH_SUFFIX)
+	$(SH_PREFIX) $(RM) -rf $(INCLUDE_DIR)/com-api/*.idl $(SH_SUFFIX)
+	$(SH_PREFIX) $(RM) -rf $(INCLUDE_DIR)/cpp-api/*.h $(SH_SUFFIX)
 
 AAFTypes.all : AAFTypes.h
 AAFTypes.all : AAFTypes.exp AAFTypes.idl
