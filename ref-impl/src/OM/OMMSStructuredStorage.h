@@ -140,7 +140,10 @@ static inline ULARGE_INTEGER fromOMUInt64(const OMUInt64& x)
 #ifdef _MSC_VER
 #define UINT64_C(c)	c
 #else
-#define UINT64_C(c) c##LL
+
+#define __STDC_CONSTANT_MACROS	// needed in C++ to enable macros like INT64_C
+#include <inttypes.h>
+
 // Also, provide a replacement Int32x32To64() for non-MSVC compilers
 static inline OMInt64 Int32x32To64 (DWORD multiplier, DWORD multiplicand)
 {
