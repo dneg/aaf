@@ -86,7 +86,19 @@ LINK32=link.exe
 # Name "ComExtensionWrite - Win32 Debug"
 # Begin Source File
 
-SOURCE="..\..\..\..\examples\com-api\ComExtensionWrite\write.cpp"
+SOURCE="..\..\..\..\examples\com-api\ComExtension\extensionRead.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\..\examples\com-api\ComExtension\extensionUtils.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\..\examples\com-api\ComExtension\extensionWrite.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\..\examples\com-api\ComExtension\write.cpp"
 # End Source File
 # End Target
 # End Project

@@ -86,7 +86,15 @@ LINK32=link.exe
 # Name "ComExtensionRead - Win32 Debug"
 # Begin Source File
 
-SOURCE="..\..\..\..\examples\com-api\ComExtensionRead\read.cpp"
+SOURCE="..\..\..\..\examples\com-api\ComExtension\extensionRead.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\..\examples\com-api\ComExtension\extensionUtils.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\..\examples\com-api\ComExtension\read.cpp"
 # End Source File
 # End Target
 # End Project
