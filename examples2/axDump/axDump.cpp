@@ -32,6 +32,7 @@
 #include <AxBaseObjIter.h>
 #include <AxUtil.h>
 #include <AxEx.h>
+#include <AxMacMain.h>
 
 #include <AAFStoredObjectIDs.h>
 #include <AAFTypeDefUIDs.h>
@@ -298,7 +299,7 @@ int renamePeskyOpaques( AxDictionary& axDict,
 
 //=---------------------------------------------------------------------=
 
-int main( int argc, const char** argv )
+int main( int argc, char* argv[] )
 {
 	using namespace std;
 	

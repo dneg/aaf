@@ -92,7 +92,7 @@ const AxString& AxTypeCatMap::getStr( eAAFTypeCategory_t cat ) const
 
 //=---------------------------------------------------------------------=
 
-AxCmdLineArgs::AxCmdLineArgs( int argc, const char** argv )
+AxCmdLineArgs::AxCmdLineArgs( int argc, char** argv )
 :	_argc( argc ),
 	_argv( argv )
 {}

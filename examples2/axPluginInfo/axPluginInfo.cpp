@@ -26,6 +26,7 @@
 #include <AxDictionary.h>
 #include <AxPluginMgr.h>
 #include <AxEssence.h>
+#include <AxMacMain.h>
 
 #include <iostream>
 #include <sstream>
@@ -127,7 +128,7 @@ void ReportPluginInfo( AxDictionary& axDictionary, AxPluginMgr& axPluginMgr )
 
 }
 
-int main ( int argc, const char** argv ){
+int main ( int argc, char* argv[] ){
 	using namespace std;
 
 	try {

@@ -51,7 +51,7 @@ private:
 class AxCmdLineArgs {
 public:
 	
-	AxCmdLineArgs( int argc, const char ** argv );
+	AxCmdLineArgs( int argc, char** argv );
 	~AxCmdLineArgs();
 
 	// Get index of option "opt" at or after argv[n].  True if found.
@@ -62,7 +62,7 @@ public:
 	
 private:
 	int _argc;
-	const char** _argv;
+	char** _argv;
 };
 
 // Useful collection of string processing functions.

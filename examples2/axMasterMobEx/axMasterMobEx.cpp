@@ -30,6 +30,7 @@
 #include <AxComponent.h>
 #include <AxDictionary.h>
 #include <AxEx.h>
+#include <AxMacMain.h>
 
 #include <AAFStoredObjectIDs.h>
 #include <AAFDataDefs.h>
@@ -855,7 +856,7 @@ void open_mastermob_and_read_essence( AxHeader& axHeader,
 
 //============================================================================
 
-int main( int argc, const char** argv )
+int main( int argc, char* argv[] )
 {
 	try {
 

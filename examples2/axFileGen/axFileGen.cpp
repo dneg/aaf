@@ -21,12 +21,9 @@
 #include <AxFile.h>
 #include <AxHeader.h>
 #include <AxDictionary.h>
-
-
 #include <AxInit.h>
 #include <AxUtil.h>
-
-#include <ctype.h>
+#include <AxMacMain.h>
 
 #include <iostream>
 #include <sstream>
@@ -34,6 +31,7 @@
 #include <string>
 #include <exception>
 
+#include <ctype.h>
 
 #if defined(OS_MACOS)
 
