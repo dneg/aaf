@@ -23,8 +23,9 @@ class AAFObject;
 
 #include "AAFTypes.h"
 #include "OMStorable.h"
+#include "ImplAAFRoot.h"
 
-class ImplAAFObject : public OMStorable
+class ImplAAFObject : public OMStorable, public ImplAAFRoot
 {
 public:
   //
