@@ -523,7 +523,7 @@ AAFRESULT aafMobIDNew(
 	aLabel.smpte.MobIDPrefix = 42;		// Means its an OMF Uid
 
 	AAFGetDateTime(&timestamp);
-	aLabel.smpte.MobIDMajor = timestamp.TimeVal;
+	aLabel.smpte.MobIDMajor = (aafUInt32)timestamp.TimeVal;	// Will truncate
 #if defined(_MAC) || defined(macintosh)
 	aLabel.smpte.MobIDMinor = TickCount();
 #else
