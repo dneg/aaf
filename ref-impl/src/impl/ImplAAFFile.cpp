@@ -49,7 +49,6 @@
 #include "ImplAAFObjectCreation.h"
 #include "ImplAAFBuiltinDefs.h"
 #include "ImplAAFOMRawStorage.h"
-#include "ImplAAFCloneResolver.h"
 
 #include "AAFFileMode.h"
 #include "AAFFileKinds.h"
@@ -1230,9 +1229,7 @@ ImplAAFFile::SaveCopyAs (ImplAAFFile * pDestFile)
       
       spDstHeader->SetContentStorage( pNewDstStorage );
 
-      ImplAAFCloneResolver resolver(pDestFile);
-      pNewDstStorage->onCopy(&resolver);
-      spSrcContentStore->deepCopyTo( pNewDstStorable, &resolver );
+      spSrcContentStore->deepCopyTo( pNewDstStorable, 0 );
     }
 
     // Clone the ident list.
@@ -1254,18 +1251,13 @@ ImplAAFFile::SaveCopyAs (ImplAAFFile * pDestFile)
 	
 	checkResult( spDstHeader->AppendIdentification( pNewDstIdent ) );
 
-	ImplAAFCloneResolver resolver(pDestFile);
-	pNewDstIdent->onCopy(&resolver);
-       	spSrcIdent->deepCopyTo( pNewDstIdent, &resolver );
+       	spSrcIdent->deepCopyTo( pNewDstIdent, 0 );
       }
     }
 
   }
   catch( const HRESULT& ex ) {
     return ex;
-  }
-  catch( const ImplAAFCloneResolverEx& ex ) {
-    return ex.GetHResult();
   }
 
   return pDestFile->Save();
