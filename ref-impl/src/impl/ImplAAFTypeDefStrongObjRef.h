@@ -82,7 +82,8 @@ public:
   aafBool IsFixedSize (void);
   size_t PropValSize (void);
 
-  OMWeakReferenceProperty<ImplAAFClassDef> _referencedType;
+  // OMWeakReferenceProperty<ImplAAFClassDef> _referencedType;
+  OMFixedSizeProperty<aafUID_t>           _referencedType;
 };
 
 
