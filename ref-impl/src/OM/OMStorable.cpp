@@ -48,7 +48,8 @@ OMStorable::OMStorable(void)
   _name(0),
   _pathName(0),
   _store(0),
-  _classFactory(0)
+  _classFactory(0),
+  _definition(0)
 {
   TRACE("OMStorable::OMStorable");
   _persistentProperties.setContainer(this);
@@ -68,6 +69,26 @@ OMStorable::~OMStorable(void)
   _name = 0;
   delete [] _pathName;
   _pathName = 0;
+}
+
+  // @mfunc Set the <c OMClassDefinition> defining this <c OMStorable>.
+  //   @parm TBS
+void OMStorable::setDefinition(const OMClassDefinition* definition)
+{
+  TRACE("OMStorable::setDefinition");
+  PRECONDITION("Valid definition", definition != 0);
+  PRECONDITION("No previous definition", _definition == 0);
+  _definition = definition;
+}
+
+  // @mfunc The <c OMClassDefinition> defining this <c OMStorable>.
+  //   @rdesc TBS
+const OMClassDefinition* OMStorable::definition(void) const
+{
+  TRACE("OMStorable::definition");
+  const OMClassDefinition* result = _definition;
+  POSTCONDITION("Valid result", result != 0);
+  return result;
 }
 
   // @mfunc Save this <c OMStorable>.
