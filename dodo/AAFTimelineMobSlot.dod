@@ -1,0 +1,54 @@
+#startm .this-module 0
+AAFTimelineMobSlot\
+#endm
+#c
+#startm .parent-module 0
+AAFMobSlot\
+#endm
+#c
+#import ./AAFUnitTest.exp
+#import ./AAFObject.exp
+#import ./AAFMobSlot.exp
+
+AD_HEAD
+/******************************************\
+*                                          *
+* Advanced Authoring Format                *
+*                                          *
+* Copyright (c) 1998 Avid Technology, Inc. *
+* Copyright (c) 1998 Microsoft Corporation *
+*                                          *
+\******************************************/
+
+
+////////////////////////////////////////////////////////////////////////////////
+// Types required by this module:
+//
+// aafBool,
+// aafRational_t,
+// aafPosition_t,
+// aafTrackID_t,
+
+AD_CLASS_UUID(B1A21379, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
+
+AD_DEFAULT_UUID(B1A21378, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
+AD_CLASS_BEGIN
+
+AD_METHOD1(GetEditRate,
+[out\,retval], aafRational_t *, result, Edit rate property value,
+This method will get the edit rate for this mob slot.)
+
+AD_METHOD1(GetOrigin,
+[out\,retval], aafPosition_t *, result, Origin property value,
+This method will return the origin of this mob slot.)
+
+AD_METHOD1(GetTrackID,
+[out\,retval], aafTrackID_t *, result, Track id of the Mob Slot,
+This method will return the track id of this mob slot.)
+
+
+AD_OVERRIDE(.method-Test)
+
+AD_OVERRIDE(.method-IsATrack)
+
+AD_CLASS_END
