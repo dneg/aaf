@@ -390,7 +390,7 @@ int AxBaseObjRecIter::GetLevel()
 void AxBaseObjRecIter::HandleObjectRecursion( AxObject& obj )
 {
       	auto_ptr< AxBaseObjIterPrtcl > iter( 
-		new AxBaseObjIter<AxPropertyIter, AxProperty, IAAFProperty>( obj.CreatePropertyIter() ) );
+		new AxBaseObjIter<AxPropertyIter, AxProperty, IAAFProperty>( obj.GetProperties() ) );
 
 	Push( iter );
 }
