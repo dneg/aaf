@@ -66,6 +66,16 @@ OMMemoryRawStorage::~OMMemoryRawStorage(void)
   }
 }
 
+  // @mfunc Is it possible to write to this <c OMMemoryRawStorage> ?
+  //  @rdesc True if this <c OMMemoryRawStorage> is writable, false otherwise.
+  //  @this const
+bool OMMemoryRawStorage::isWritable(void) const
+{
+  TRACE("OMMemoryRawStorage::isWritable");
+
+  return true;
+}
+
   // @mfunc Attempt to read the number of bytes given by <p byteCount>
   //        from the current position in this <c OMMemoryRawStorage>
   //        into the buffer at address <p bytes>.
