@@ -1,16 +1,3 @@
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-*                                          *
-\******************************************/
-
-
-
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
 /***********************************************************************
  *
  *              Copyright (c) 1998-1999 Avid Technology, Inc.
@@ -37,6 +24,9 @@
  * LIABILITY.
  *
  ************************************************************************/
+
+/*************************************************************************
+ * 
  * @class AAFNestedScope | an AAFNestedScope object defines a scope that 
  *			contains an ordered set of AAFSegments and produces the value
  *			specified by the last AAFSegement in the ordered set.
