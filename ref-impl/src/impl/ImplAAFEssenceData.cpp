@@ -306,3 +306,12 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 
+const OMMaterialIdentification&
+  ImplAAFEssenceData::identification(void) const
+{
+  return *reinterpret_cast<const OMMaterialIdentification*>(&_fileMobID.reference());
+}
+
+
+
+
