@@ -219,6 +219,22 @@ void printDefinition(const char* type,
   s << string << "\";" << endl;
 }
 
+void printAlias(	 const char* type,
+					 const char* alias,
+                     const char* prefix,
+                     const char* name,
+                     const char* suffix,
+                     ostream& s)
+{
+  s << type;
+  s << " ";
+  s << alias;
+  s << " = ";
+  s << prefix;
+  s << name;
+  s << suffix;
+  s << ";" << endl;
+}
 
 
 // print a macro invocation like this -
