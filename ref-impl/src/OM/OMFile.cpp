@@ -33,6 +33,8 @@
 #include "OMAssertions.h"
 #include "OMStoredObject.h"
 #include "OMMSSStoredObject.h"
+#include "OMXMLStoredObject.h"
+#include "OMKLVStoredObject.h"
 #include "OMClassFactory.h"
 #include "OMObjectDirectory.h"
 #include "OMPropertyTable.h"
@@ -352,10 +354,10 @@ OMFile* OMFile::openExistingRead(OMRawStorage* rawStorage,
     store = OMMSSStoredObject::openRead(rawStorage);
     break;
   case KLVBinaryEncoding:
-  //store = OMKLVStoredObject::openRead(rawStorage);
+    store = OMKLVStoredObject::openRead(rawStorage);
     break;
   case XMLTextEncoding:
-  //store = OMXMLStoredObject::openRead(rawStorage);
+    store = OMXMLStoredObject::openRead(rawStorage);
     break;
   }
   ASSERT("Valid store", store != 0);
@@ -397,10 +399,10 @@ OMFile* OMFile::openExistingModify(OMRawStorage* rawStorage,
     store = OMMSSStoredObject::openModify(rawStorage);
     break;
   case KLVBinaryEncoding:
-  //store = OMKLVStoredObject::openModify(rawStorage);
+    store = OMKLVStoredObject::openModify(rawStorage);
     break;
   case XMLTextEncoding:
-  //store = OMXMLStoredObject::openModify(rawStorage);
+    store = OMXMLStoredObject::openModify(rawStorage);
     break;
   }
   ASSERT("Valid store", store != 0);
@@ -446,10 +448,10 @@ OMFile* OMFile::openNewModify(OMRawStorage* rawStorage,
     store = OMMSSStoredObject::createModify(rawStorage, byteOrder);
     break;
   case KLVBinaryEncoding:
-  //store = OMKLVStoredObject::createModify(rawStorage, byteOrder);
+    store = OMKLVStoredObject::createModify(rawStorage, byteOrder);
     break;
   case XMLTextEncoding:
-  //store = OMXMLStoredObject::createModify(rawStorage, byteOrder);
+    store = OMXMLStoredObject::createModify(rawStorage, byteOrder);
     break;
   }
   ASSERT("Valid store", store != 0);
