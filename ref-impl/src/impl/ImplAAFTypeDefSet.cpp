@@ -71,9 +71,9 @@ ImplAAFTypeDefSet::~ImplAAFTypeDefSet ()
 
 AAFRESULT STDMETHODCALLTYPE
 ImplAAFTypeDefSet::Initialize (
-							   const aafUID_t &  id,
-							   ImplAAFTypeDef * pTypeDef,
-							   const aafCharacter *  pTypeName)
+      aafUID_constref  id,
+      ImplAAFTypeDef * pTypeDef,
+      aafCharacter_constptr  pTypeName)
 {
 	if (! pTypeName) 
 		return AAFRESULT_NULL_PARAM;
@@ -91,9 +91,9 @@ ImplAAFTypeDefSet::Initialize (
 
 AAFRESULT STDMETHODCALLTYPE
 ImplAAFTypeDefSet::pvtInitialize (
-								  const aafUID_t &  id,
+								  aafUID_constref  id,
 								  ImplAAFTypeDef * pTypeDef,
-								  const aafCharacter *  pTypeName)
+								  aafCharacter_constptr  pTypeName)
 {
 	ImplAAFTypeDefObjectRef	*objRef;
 	AAFRESULT				result;
@@ -119,12 +119,36 @@ ImplAAFTypeDefSet::pvtInitialize (
 	return result;
 }
 
+AAFRESULT STDMETHODCALLTYPE
+ImplAAFTypeDefSet::GetElementType (
+							ImplAAFTypeDef ** ppTypeDef)
+{
+	if (! ppTypeDef)
+		return AAFRESULT_NULL_PARAM;
+	
+	if(_ElementType.isVoid())
+		return AAFRESULT_OBJECT_NOT_FOUND;
+	
+	*ppTypeDef = _ElementType;
+	assert (*ppTypeDef);
+	
+	(*ppTypeDef)->AcquireReference ();
+	
+	return AAFRESULT_SUCCESS;
+}
+
 
 AAFRESULT STDMETHODCALLTYPE
 ImplAAFTypeDefSet::AddElement (
-							   ImplAAFPropertyValue *pInPropVal,
-							   ImplAAFPropertyValue *pMemberPropVal)
+      ImplAAFPropertyValue * pSetPropertyValue,
+      ImplAAFPropertyValue * pElementPropertyValue)
 {
+	if (!pSetPropertyValue || !pElementPropertyValue)
+		return AAFRESULT_NULL_PARAM;
+
+  return AAFRESULT_NOT_IMPLEMENTED;
+
+#if 0
 	if (!pInPropVal)
 		return AAFRESULT_NULL_PARAM;
 	if (!pMemberPropVal)
@@ -183,15 +207,22 @@ ImplAAFTypeDefSet::AddElement (
 	
 	delete[] buf;
 	return AAFRESULT_SUCCESS;
+#endif // #if 0
 }
 
 
 
 AAFRESULT STDMETHODCALLTYPE
 ImplAAFTypeDefSet::RemoveElement(
-								 ImplAAFPropertyValue * pInPropVal,
-								 ImplAAFPropertyValue * pMemberPropVal)
+      ImplAAFPropertyValue * pSetPropertyValue,
+      ImplAAFPropertyValue * pElementPropertyValue)
 {
+	if (!pSetPropertyValue || !pElementPropertyValue)
+		return AAFRESULT_NULL_PARAM;
+
+  return AAFRESULT_NOT_IMPLEMENTED;
+
+#if 0
 	if (!pInPropVal)
 		return AAFRESULT_NULL_PARAM;
 	if (!pMemberPropVal)
@@ -269,6 +300,7 @@ ImplAAFTypeDefSet::RemoveElement(
 		return AAFRESULT_SUCCESS;
 	else
 		return AAFRESULT_ELEMENT_NOT_PRESENT;
+#endif // #if 0
 }
 
 //****************
@@ -276,38 +308,29 @@ ImplAAFTypeDefSet::RemoveElement(
 //
 AAFRESULT STDMETHODCALLTYPE
 ImplAAFTypeDefSet::ContainsElement(
-								   ImplAAFPropertyValue * pInPropVal,
-								   ImplAAFPropertyValue * pMemberPropVal,
-								   aafBool * pContains)
+      ImplAAFPropertyValue * pSetPropertyValue,
+      ImplAAFPropertyValue * pElementPropertyValue,
+      aafBoolean_t*  pContainsElement)
 {
-	return AAFRESULT_NOT_IMPLEMENTED;
-}
-
-AAFRESULT STDMETHODCALLTYPE
-ImplAAFTypeDefSet::GetElementType (
-							ImplAAFTypeDef ** ppTypeDef)
-{
-	if (! ppTypeDef)
+	if (!pSetPropertyValue || !pElementPropertyValue || !pContainsElement)
 		return AAFRESULT_NULL_PARAM;
-	
-	if(_ElementType.isVoid())
-		return AAFRESULT_OBJECT_NOT_FOUND;
-	
-	*ppTypeDef = _ElementType;
-	assert (*ppTypeDef);
-	
-	(*ppTypeDef)->AcquireReference ();
-	
-	return AAFRESULT_SUCCESS;
+
+	return AAFRESULT_NOT_IMPLEMENTED;
 }
 
 
 
 AAFRESULT STDMETHODCALLTYPE
 ImplAAFTypeDefSet::GetCount (
-							 ImplAAFPropertyValue *pPropVal,
-							 aafUInt32 *pCount)
+      ImplAAFPropertyValue * pSetPropertyValue,
+      aafUInt32 *  pCount)
 {
+	if (!pSetPropertyValue || !pCount)
+		return AAFRESULT_NULL_PARAM;
+
+	return AAFRESULT_NOT_IMPLEMENTED;
+
+#if 0
 	ImplAAFTypeDefSP ptd;
 	AAFRESULT hr;
 	
@@ -335,6 +358,7 @@ ImplAAFTypeDefSet::GetCount (
 	*pCount = propSize / elemSize;
 	
 	return AAFRESULT_SUCCESS;
+#endif // #if 0
 }
 
 
@@ -343,10 +367,18 @@ ImplAAFTypeDefSet::GetCount (
 // CreateKey()
 //
 AAFRESULT ImplAAFTypeDefSet::CreateKey (
-										aafDataBuffer_t  pKeyPtr,
-										aafUInt32  pLength,
-										ImplAAFPropertyValue ** ppKey)
+      aafDataBuffer_t  pKeyPtr,
+      aafUInt32  length,
+      ImplAAFPropertyValue ** ppKey)
 {
+	if (!pKeyPtr || !ppKey)
+		return AAFRESULT_NULL_PARAM;
+	if (0 == length)
+	  return AAFRESULT_INVALID_PARAM;
+
+	return AAFRESULT_NOT_IMPLEMENTED;
+
+#if 0
 	AAFRESULT	hr;
 	aafMemPtr_t	theBits;
 	
@@ -360,17 +392,21 @@ AAFRESULT ImplAAFTypeDefSet::CreateKey (
 	}
 	
 	return hr;
+#endif // #if 0
 }
 
 
 //***********************************************************
-// LookupKey()
+// LookupElement()
 //
-AAFRESULT ImplAAFTypeDefSet::LookupKey (
-										ImplAAFPropertyValue * pInPropVal,
-										ImplAAFPropertyValue * pKey,
-										ImplAAFPropertyValue ** pOutPropVal)
+AAFRESULT ImplAAFTypeDefSet::LookupElement (
+      ImplAAFPropertyValue * pSetPropertyValue,
+      ImplAAFPropertyValue * pKey,
+      ImplAAFPropertyValue ** ppElementPropertyValue)
 {
+	if (!pSetPropertyValue || !pKey || !ppElementPropertyValue)
+		return AAFRESULT_NULL_PARAM;
+
 	return AAFRESULT_NOT_IMPLEMENTED;
 }
 
@@ -378,47 +414,26 @@ AAFRESULT ImplAAFTypeDefSet::LookupKey (
 // ContainsKey()
 //
 AAFRESULT ImplAAFTypeDefSet::ContainsKey (
-										  ImplAAFPropertyValue * pInPropVal,
-										  ImplAAFPropertyValue * pKey,
-										  ImplAAFPropertyValue ** pOutPropVal)
+      ImplAAFPropertyValue * pSetPropertyValue,
+      ImplAAFPropertyValue * pKey,
+      aafBoolean_t*  pContainsKey)
 {
+	if (!pSetPropertyValue || !pKey || !pContainsKey)
+		return AAFRESULT_NULL_PARAM;
+
 	return AAFRESULT_NOT_IMPLEMENTED;
 }
 
 
 AAFRESULT
 ImplAAFTypeDefSet::GetElements (
-								ImplAAFPropertyValue *pInPropVal,
-								ImplEnumAAFPropertyValues **ppEnum)
+      ImplAAFPropertyValue * pSetPropertyValue,
+      ImplEnumAAFPropertyValues ** ppEnum)
 {
+	if (!pSetPropertyValue || !ppEnum)
+		return AAFRESULT_NULL_PARAM;
+
 	return AAFRESULT_NOT_IMPLEMENTED;
-}
-
-aafBool ImplAAFTypeDefSet::IsFixedSize (void) const
-{
-	assert (0);
-	return kAAFFalse; // Not reached!
-}
-
-
-size_t ImplAAFTypeDefSet::PropValSize (void) const
-{
-	assert (0);
-	return 0; // Not reached!
-}
-
-
-aafBool ImplAAFTypeDefSet::IsRegistered (void) const
-{
-	assert (0);
-	return kAAFFalse; // Not reached!
-}
-
-
-size_t ImplAAFTypeDefSet::NativeSize (void) const
-{
-	assert (0);
-	return 0; // Not reached!
 }
 
 
