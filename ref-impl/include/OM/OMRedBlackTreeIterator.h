@@ -11,7 +11,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 // 
-// The Original Code of this file is Copyright 1998-2001, Licensor of the
+// The Original Code of this file is Copyright 1998-2002, Licensor of the
 // AAF Association.
 // 
 // The Initial Developer of the Original Code of this file and the
@@ -133,8 +133,10 @@ public:
 
 private:
 
+  typedef typename OMRedBlackTree<Key, Value>::Node TreeNode;
+
   const OMRedBlackTree<Key, Value>* _tree;
-  OMRedBlackTree<Key, Value>::Node* _current;
+  TreeNode* _current;
 
 };
 
