@@ -159,7 +159,7 @@ class Impl.this-module;
 
 class .this-module : public .parent-module
 {
-protected:
+public:
 
   //***********************************************************
   // Constructor/destructor
@@ -190,7 +190,7 @@ class Impl.this-module;
 
 class .this-module
 {
-protected:
+public:
 
   //***********************************************************
   // Constructor/destructor
