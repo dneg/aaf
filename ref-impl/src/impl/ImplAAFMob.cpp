@@ -120,6 +120,7 @@ AAFRESULT STDMETHODCALLTYPE
 		return AAFRESULT_NULL_PARAM;
 
 	_slots.appendValue(pSlot);
+	pSlot->AcquireReference();
 	return aafError;
 }
 
