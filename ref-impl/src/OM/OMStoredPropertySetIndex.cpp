@@ -8,7 +8,7 @@ OMStoredPropertySetIndex::OMStoredPropertySetIndex(size_t capacity)
     _table[i]._valid = false;
     _table[i]._pid = 0;
     _table[i]._type = 0;
-  _table[i]._length = 0;
+    _table[i]._length = 0;
     _table[i]._offset = 0;
   }
 }
@@ -32,10 +32,9 @@ void OMStoredPropertySetIndex::insert(int pid,
       entry->_pid = pid;
       entry->_type = type;
       entry->_offset = offset;
-    entry->_length = length;
+      entry->_length = length;
       entry->_valid = true;
-    _entries++;
-    setDirty();
+      _entries++;
     } else {
       // error - no free slots
     }
@@ -88,26 +87,11 @@ void OMStoredPropertySetIndex::iterate(size_t& context,
     pid = entry->_pid;
     type = entry->_type;
     offset = entry->_offset;
-  length = entry->_length;
+    length = entry->_length;
     context = ++found;
   } else {
     context = 0;
   }
-}
-
-bool OMStoredPropertySetIndex::isDirty(void)
-{
-  return _dirty;
-}
-
-void OMStoredPropertySetIndex::setDirty(void)
-{
-  _dirty = true;
-}
-
-void OMStoredPropertySetIndex::clearDirty(void)
-{
-  _dirty = false;
 }
 
 bool OMStoredPropertySetIndex::isSorted(void)

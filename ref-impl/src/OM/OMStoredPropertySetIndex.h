@@ -24,10 +24,6 @@ public:
                size_t& offset,
                size_t& length) const;
 
-  bool isDirty(void);
-  void setDirty(void);
-  void clearDirty(void);
-
   bool isSorted(void);
 
 protected:
