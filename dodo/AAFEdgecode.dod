@@ -29,7 +29,7 @@ AD_METHOD2(Create,
 	[in],aafEdgecode_t,edgecode,Edgecode Value,
 	This function creates a new edgecode clip with the
   // given property values.  The edgecode value is represented with an
-  // omfEdgecode_t struct consisting of startFrame\\\, filmKind\\\, and
+  // aafEdgecode_t struct consisting of startFrame\\\, filmKind\\\, and
   // codeFormat.)
 
 AD_METHOD1(GetEdgecode,
