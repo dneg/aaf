@@ -76,7 +76,7 @@ AD_XMETHOD5(AppendNewPropertyDef,
 
 			[in\, string],
 			objPass,
-			wchar_t *,
+			aafCharacter *,
 			pName,
 			name of the new property,
 
