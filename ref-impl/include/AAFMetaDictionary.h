@@ -17,7 +17,7 @@
 //
 // ../smpte/DictP18.csv 
 //
-// This file was generated on Wed May 12 10:56:43 EDT 1999
+// This file was generated on Wed May 12 12:03:54 EDT 1999
 // by user tbingham on system TBINGHAMPC.
 //
 // Key to macros.
@@ -327,21 +327,21 @@ AAF_CLASS(Filler,
 AAF_CLASS_END(Filler)
 AAF_CLASS_SEPARATOR()
 
-// Effect
+// OperationGroup
 //
-AAF_CLASS(Effect,
+AAF_CLASS(OperationGroup,
   AAF_LITERAL_AUID(0x06414146,
     0x0000, 0x0000,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
   Segment)
-AAF_PROPERTY(EffectDefinition ,
+AAF_PROPERTY(OperationDefinition ,
   AAF_LITERAL_AUID(0x06414146,
     0x0100, 0x0000,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
   0x0b01,
   RefAUID,
   true,
-  Effect)
+  OperationGroup)
 AAF_PROPERTY(InputSegments,
   AAF_LITERAL_AUID(0x06414146,
     0x0200, 0x0000,
@@ -349,7 +349,7 @@ AAF_PROPERTY(InputSegments,
   0x0b02,
   ObjRefArray,
   false,
-  Effect)
+  OperationGroup)
 AAF_PROPERTY(Parameters ,
   AAF_LITERAL_AUID(0x06414146,
     0x0300, 0x0000,
@@ -357,7 +357,7 @@ AAF_PROPERTY(Parameters ,
   0x0b03,
   ObjRefArray,
   false,
-  Effect)
+  OperationGroup)
 AAF_PROPERTY(BypassOverride,
   AAF_LITERAL_AUID(0x06414146,
     0x0400, 0x0000,
@@ -365,7 +365,7 @@ AAF_PROPERTY(BypassOverride,
   0x0b04,
   UInt32,
   false,
-  Effect)
+  OperationGroup)
 AAF_PROPERTY(Rendering,
   AAF_LITERAL_AUID(0x06414146,
     0x0500, 0x0000,
@@ -373,8 +373,8 @@ AAF_PROPERTY(Rendering,
   0x0b05,
   ObjRef,
   false,
-  Effect)
-AAF_CLASS_END(Effect)
+  OperationGroup)
+AAF_CLASS_END(OperationGroup)
 AAF_CLASS_SEPARATOR()
 
 // NestedScope
@@ -712,7 +712,7 @@ AAF_CLASS(Transition,
     0x0000, 0x0000,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
   Component)
-AAF_PROPERTY(Effect,
+AAF_PROPERTY(OperationGroup,
   AAF_LITERAL_AUID(0x06414201,
     0x0000, 0x0000,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
@@ -877,9 +877,9 @@ AAF_CLASS(DataDefinition,
 AAF_CLASS_END(DataDefinition)
 AAF_CLASS_SEPARATOR()
 
-// EffectDefinition
+// OperationDefinition
 //
-AAF_CLASS(EffectDefinition,
+AAF_CLASS(OperationDefinition,
   AAF_LITERAL_AUID(0x06444300,
     0x0000, 0x0000,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
@@ -891,7 +891,7 @@ AAF_PROPERTY(DataDefinition,
   0x1e01,
   RefAUID,
   true,
-  EffectDefinition)
+  OperationDefinition)
 AAF_PROPERTY(IsTimeWarp,
   AAF_LITERAL_AUID(0x06444302,
     0x0000, 0x0000,
@@ -899,7 +899,7 @@ AAF_PROPERTY(IsTimeWarp,
   0x1e02,
   Boolean,
   false,
-  EffectDefinition)
+  OperationDefinition)
 AAF_PROPERTY(DegradeTo,
   AAF_LITERAL_AUID(0x06444303,
     0x0000, 0x0000,
@@ -907,7 +907,7 @@ AAF_PROPERTY(DegradeTo,
   0x1e03,
   RefAUIDArray,
   false,
-  EffectDefinition)
+  OperationDefinition)
 AAF_PROPERTY(ManufacturerID,
   AAF_LITERAL_AUID(0x06444304,
     0x0000, 0x0000,
@@ -915,7 +915,7 @@ AAF_PROPERTY(ManufacturerID,
   0x1e04,
   AUID,
   false,
-  EffectDefinition)
+  OperationDefinition)
 AAF_PROPERTY(PluginLocator,
   AAF_LITERAL_AUID(0x06444305,
     0x0000, 0x0000,
@@ -923,7 +923,7 @@ AAF_PROPERTY(PluginLocator,
   0x1e05,
   ObjRefArray,
   false,
-  EffectDefinition)
+  OperationDefinition)
 AAF_PROPERTY(Category,
   AAF_LITERAL_AUID(0x06444306,
     0x0000, 0x0000,
@@ -931,7 +931,7 @@ AAF_PROPERTY(Category,
   0x1e06,
   String,
   false,
-  EffectDefinition)
+  OperationDefinition)
 AAF_PROPERTY(NumberInputs,
   AAF_LITERAL_AUID(0x06444307,
     0x0000, 0x0000,
@@ -939,7 +939,7 @@ AAF_PROPERTY(NumberInputs,
   0x1e07,
   Int32,
   true,
-  EffectDefinition)
+  OperationDefinition)
 AAF_PROPERTY(Bypass,
   AAF_LITERAL_AUID(0x06444308,
     0x0000, 0x0000,
@@ -947,7 +947,7 @@ AAF_PROPERTY(Bypass,
   0x1e08,
   UInt32,
   false,
-  EffectDefinition)
+  OperationDefinition)
 AAF_PROPERTY(ParametersDefined,
   AAF_LITERAL_AUID(0x06444309,
     0x0000, 0x0000,
@@ -955,8 +955,8 @@ AAF_PROPERTY(ParametersDefined,
   0x1e09,
   RefAUIDArray,
   false,
-  EffectDefinition)
-AAF_CLASS_END(EffectDefinition)
+  OperationDefinition)
+AAF_CLASS_END(OperationDefinition)
 AAF_CLASS_SEPARATOR()
 
 // ParameterDefinition
@@ -1354,7 +1354,7 @@ AAF_PROPERTY(TypeDefinitions,
   ObjRefArray,
   false,
   Dictionary)
-AAF_PROPERTY(EffectDefinitions,
+AAF_PROPERTY(OperationDefinitions,
   AAF_LITERAL_AUID(0x06450300,
     0x0000, 0x0000,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
