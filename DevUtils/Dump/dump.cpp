@@ -2574,12 +2574,10 @@ void dumpContainedObjects(IStorage* storage,
       
       // Compute the pathname for this stream
       //
-      char thisPathName[256];
-      strcpy(thisPathName, pathName);
-      if (!isRoot) {
-        strcat(thisPathName, "/");
-      }
-      strcat(thisPathName, subStreamName);
+      char* thisPathName = makePathName(pathName, subStreamName, isRoot);
+
+      // open the stream
+      //
       IStream* stream = 0;
       openStream(storage, subStreamName, &stream);
       dumpDataStream(stream, thisPathName, subStreamName, version, byteOrder);
@@ -2587,6 +2585,8 @@ void dumpContainedObjects(IStorage* storage,
       stream->Release();
       stream = 0;
 
+      delete [] thisPathName;
+      thisPathName = 0;
       delete [] subStreamName;
       subStreamName = 0;
     }
@@ -2603,12 +2603,7 @@ void dumpContainedObjects(IStorage* storage,
       
       // Compute the pathname for this object
       //
-      char thisPathName[256];
-      strcpy(thisPathName, pathName);
-      if (!isRoot) {
-        strcat(thisPathName, "/");
-      }
-      strcat(thisPathName, subStorageName);
+      char* thisPathName = makePathName(pathName, subStorageName, isRoot);
 
       // open the storage
       //
@@ -2621,6 +2616,8 @@ void dumpContainedObjects(IStorage* storage,
       //
       dumpObject(subStorage, thisPathName, 0, version);
 
+      delete [] thisPathName;
+      thisPathName = 0;
       delete [] subStorageName;
       subStorageName = 0;
 
@@ -2646,12 +2643,7 @@ void dumpContainedObjects(IStorage* storage,
 
       // Compute the pathname for this object
       //
-      char thisPathName[256];
-      strcpy(thisPathName, pathName);
-      if (!isRoot) {
-        strcat(thisPathName, "/");
-      }
-      strcat(thisPathName, vectorName);
+      char* thisPathName = makePathName(pathName, vectorName, isRoot);
 
       // open the vector index stream
       //
@@ -2712,12 +2704,7 @@ void dumpContainedObjects(IStorage* storage,
 
         // Compute the path name for this element
         //
-        char thisPathName[256];
-        strcpy(thisPathName, pathName);
-        if (!isRoot) {
-          strcat(thisPathName, "/");
-        }
-        strcat(thisPathName, subStorageName);
+        char* thisPathName = makePathName(pathName, subStorageName, isRoot);
         
         // open the storage
         //
@@ -2733,6 +2720,9 @@ void dumpContainedObjects(IStorage* storage,
         delete [] elementName;
         elementName = 0;
 
+        delete [] thisPathName;
+        thisPathName = 0;
+
         delete [] subStorageName;
         subStorageName = 0;
 
@@ -2742,6 +2732,9 @@ void dumpContainedObjects(IStorage* storage,
 
       delete [] vectorName;
       vectorName = 0;
+
+      delete [] thisPathName;
+      thisPathName = 0;
 
       delete [] vectorIndexName;
       vectorIndexName = 0;
@@ -2770,12 +2763,7 @@ void dumpContainedObjects(IStorage* storage,
 
       // Compute the pathname for this object
       //
-      char thisPathName[256];
-      strcpy(thisPathName, pathName);
-      if (!isRoot) {
-        strcat(thisPathName, "/");
-      }
-      strcat(thisPathName, setName);
+      char* thisPathName = makePathName(pathName, setName, isRoot);
 
       // open the set index stream
       //
@@ -2888,12 +2876,7 @@ void dumpContainedObjects(IStorage* storage,
 
         // Compute the path name for this element
         //
-        char thisPathName[256];
-        strcpy(thisPathName, pathName);
-        if (!isRoot) {
-          strcat(thisPathName, "/");
-        }
-        strcat(thisPathName, subStorageName);
+        char* thisPathName = makePathName(pathName, subStorageName, isRoot);
         
         // open the storage
         //
@@ -2909,12 +2892,18 @@ void dumpContainedObjects(IStorage* storage,
         delete [] elementName;
         elementName = 0;
 
+        delete [] thisPathName;
+        thisPathName = 0;
+
         delete [] subStorageName;
         subStorageName = 0;
 
         subStorage->Release();
         subStorage = 0;
       }
+
+      delete [] thisPathName;
+      thisPathName = 0;
 
       delete [] setName;
       setName = 0;
@@ -2951,12 +2940,7 @@ void dumpContainedObjects(IStorage* storage,
 
       // Compute the pathname for this object
       //
-      char thisPathName[256];
-      strcpy(thisPathName, pathName);
-      if (!isRoot) {
-        strcat(thisPathName, "/");
-      }
-      strcat(thisPathName, setName);
+      char* thisPathName = makePathName(pathName, setName, isRoot);
 
       // open the index stream
       //
@@ -3014,6 +2998,9 @@ void dumpContainedObjects(IStorage* storage,
       cout << endl;
       cout << thisPathName << endl;
       printWeakCollectionIndex(containerType, collectionIndex, _count, _tag, keyPid, keySize, version);
+
+      delete [] thisPathName;
+      thisPathName = 0;
 
       delete [] setName;
       setName = 0;
