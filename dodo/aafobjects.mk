@@ -41,7 +41,6 @@ AAFPERSISTENTOBJECTS = \
 	AAFParameterDef \
 	AAFPluggableCode \
 	AAFPluginManager \
-	AAFPluginDescriptor \
 	AAFPulldown \
 	AAFPropertyDef \
 	AAFReferenceValue \
@@ -85,7 +84,6 @@ AAFNONPERSISTENTOBJECTS = \
 	EnumAAFMobComments \
 	EnumAAFObjects \
 	EnumAAFParameterDefs \
-	EnumAAFPluginLocators \
 	EnumAAFPropertyDefs \
 	EnumAAFPropertyValues \
 	EnumAAFProperties \
@@ -128,6 +126,7 @@ HUMAN_TYPED_IMPL = \
 	AAFNetworkLocator \
 	AAFObject \
 	AAFPluggableDef \
+	AAFPluginDescriptor \
 	AAFSegment \
 	AAFSelector \
 	AAFSequence \
@@ -147,6 +146,7 @@ HUMAN_TYPED_IMPL = \
 	EnumAAFMobSlots \
 	EnumAAFMobs \
 	EnumAAFPluginDescriptors \
+	EnumAAFPluginLocators \
 	EnumAAFSegments 
 
 # The list of standard dodo targets.
