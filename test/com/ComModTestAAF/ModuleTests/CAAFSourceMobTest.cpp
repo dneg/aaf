@@ -175,7 +175,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	IAAFMobSlot		*slot = NULL;
 	aafProductIdentification_t	ProductInfo;
 	aafNumSlots_t	numMobs, n, s;
-	HRESULT						hr;
+	HRESULT						hr = S_OK;
 
 	ProductInfo.companyName = L"AAF Developers Desk. NOT!";
 	ProductInfo.productName = L"Make AVR Example. NOT!";
@@ -292,8 +292,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 HRESULT CAAFSourceMob::test()
 {
 	HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
-	IAAFSourceMob *pObject = NULL;
- 	aafWChar * pFileName = L"SourceMOBTest.aaf";
+  aafWChar * pFileName = L"SourceMOBTest.aaf";
 
   try
 	{
@@ -307,9 +306,6 @@ HRESULT CAAFSourceMob::test()
 		" exception!" << endl; 
 	}
 
-  // Cleanup our object if it exists.
-  if (pObject)
-	pObject->Release();
 
 	// When all of the functionality of this class is tested, we can return success
 	if(hr == AAFRESULT_SUCCESS)
