@@ -144,7 +144,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFComponent*				aComponent = NULL;
 	IAAFFileDescriptor*			pFileDesc = NULL;
 	IAAFTapeDescriptor*			pTapeDesc = NULL;
-	IAAFMobSlot*				newSlot = NULL;
+	IAAFTimelineMobSlot*		newSlot = NULL;
 	IAAFSegment*				seg = NULL;
 	IAAFSourceClip*				fileSclp = NULL;
 	IAAFSourceClip*				masterSclp = NULL;
@@ -202,7 +202,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	check(pTapeMob->AddNilReference (1,TAPE_LENGTH, DDEF_Picture, videoRate));
 	check(pTapeMob->QueryInterface (IID_IAAFMob, (void **)&pMob));
 	check(pMob->SetName (L"A Tape Mob"));
-	check(pHeader->AppendMob(pMob));
+	check(pHeader->AddMob(pMob));
 	check(pMob->GetMobID (&tapeMobID));
 	pMob->Release();
 	pMob = NULL;
@@ -239,7 +239,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 	check(pFileMob->QueryInterface (IID_IAAFMob, (void **)&pMob));
 	check(pMob->GetMobID (&fileMobID));
-	check(pHeader->AppendMob(pMob));
+	check(pHeader->AddMob(pMob));
 	pMob->Release();
 	pMob = NULL;
 
@@ -255,7 +255,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	check(pMasterMob->QueryInterface (IID_IAAFMob, (void **)&pMob));
 	check(pMob->GetMobID (&masterMobID));
 	check(pMob->SetName (L"A Master Mob"));
-	check(pHeader->AppendMob(pMob));
+	check(pHeader->AddMob(pMob));
 	pMob->Release();
 	pMob = NULL;
 
@@ -273,7 +273,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 	check(aComponent->SetDataDef(DDEF_Picture));
 	check(pCompMob->QueryInterface (IID_IAAFMob, (void **)&pMob));
-	check(pMob->AppendNewSlot (seg, 1, slotName, &newSlot));
+	check(pMob->AppendNewTimelineSlot (videoRate, seg, 1, slotName, 0, &newSlot));
 
 	// This variable is about to be overwritten so we need to 
 
@@ -317,7 +317,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	newSlot->Release();
 	newSlot = NULL;
 
-	check(pHeader->AppendMob(pCompMob));
+	check(pHeader->AddMob(pCompMob));
 
 cleanup:
 	// Cleanup and return
@@ -438,7 +438,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	// often get converted first so that the compositions come in without
 	// forward references.
 	// Get the total number of mobs in the file (should be four)
-	check(pHeader->GetNumMobs(kAllMob, &numMobs));
+	check(pHeader->CountMobs(kAllMob, &numMobs));
 	if (4 != numMobs )
 	{
 		printf("***Wrong number of mobs in the file (was %ld should be %ld)\n",
@@ -447,13 +447,13 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 
 	printf("--------\n");
 	// Get the number of tape mobs in the file (should be one)
-	check(pHeader->GetNumMobs(kTapeMob, &numTapeMobs));
+	check(pHeader->CountMobs(kTapeMob, &numTapeMobs));
 	if (1 == numTapeMobs )
 	{
 		printf("Found %ld Tape Mobs\n", numTapeMobs);
 		criteria.searchTag = kByMobKind;
 		criteria.tags.mobKind = kTapeMob;
-		check(pHeader->EnumAAFAllMobs(&criteria, &pMobIter));
+		check(pHeader->GetMobs(&criteria, &pMobIter));
 		while(AAFRESULT_SUCCESS == pMobIter->NextOne(&pMob))
 		{
 			check(pMob->GetMobID (&mobID));
@@ -479,13 +479,13 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 
 	printf("--------\n");
 	// Get the number of file mobs in the file (should be one)
-	check(pHeader->GetNumMobs(kFileMob, &numFileMobs));
+	check(pHeader->CountMobs(kFileMob, &numFileMobs));
 	if (1 == numFileMobs )
 	{
 		printf("Found %ld File Mobs\n", numFileMobs);
 		criteria.searchTag = kByMobKind;
 		criteria.tags.mobKind = kFileMob;
-		check(pHeader->EnumAAFAllMobs(&criteria, &pMobIter));
+		check(pHeader->GetMobs(&criteria, &pMobIter));
 		while(AAFRESULT_SUCCESS == pMobIter->NextOne(&pMob))
 		{
 			check(pMob->GetMobID (&mobID));
@@ -494,7 +494,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 
 			check(pMob->QueryInterface (IID_IAAFSourceMob, (void **)&pSourceMob));
 			check(pSourceMob->GetEssenceDescriptor (&pEdesc));
-			check(pEdesc->EnumAAFAllLocators(&pLocEnum));
+			check(pEdesc->GetLocators(&pLocEnum));
 
 			// This should read the one real locator
 			if(pLocEnum->NextOne(&pLocator) == AAFRESULT_SUCCESS)
@@ -534,13 +534,13 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 
 	printf("--------\n");
 	// Get the number of master mobs in the file (should be one)
-	check(pHeader->GetNumMobs(kMasterMob, &numMasterMobs));
+	check(pHeader->CountMobs(kMasterMob, &numMasterMobs));
 	if (1 == numMasterMobs )
 	{
 		printf("Found %ld Master Mobs\n", numMasterMobs);
 		criteria.searchTag = kByMobKind;
 		criteria.tags.mobKind = kMasterMob;
-		check(pHeader->EnumAAFAllMobs(&criteria, &pMobIter));
+		check(pHeader->GetMobs(&criteria, &pMobIter));
 		while(AAFRESULT_SUCCESS == pMobIter->NextOne(&pMob))
 		{
 			check(pMob->GetMobID (&mobID));
@@ -566,7 +566,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 
 	printf("--------\n");
 	// Get the number of composition mobs in the file (should be one)
-	check(pHeader->GetNumMobs(kCompMob, &numCompMobs));
+	check(pHeader->CountMobs(kCompMob, &numCompMobs));
 	if (1 == numCompMobs )
 	{
 		printf("Found %ld Composition Mobs\n", numCompMobs);
@@ -574,16 +574,16 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		// Enumerate over all Composition Mobs
 		criteria.searchTag = kByMobKind;
 		criteria.tags.mobKind = kCompMob;
-		check(pHeader->EnumAAFAllMobs(&criteria, &pMobIter));
+		check(pHeader->GetMobs(&criteria, &pMobIter));
 		while (pMobIter && AAFRESULT_SUCCESS == pMobIter->NextOne(&pMob))
 		{
 			check(pMob->GetMobID (&mobID));
 			AUIDtoString(&mobID, bufA);
 			printf("    (mobID %s)\n", bufA);
-			pMob->GetNumSlots(&numSlots);
+			pMob->CountSlots(&numSlots);
 			if (1 == numSlots)
 			{
-				check(pMob->EnumAAFAllMobSlots(&pSlotIter));
+				check(pMob->GetSlots(&pSlotIter));
 				while (pSlotIter && AAFRESULT_SUCCESS == pSlotIter->NextOne(&pSlot))
 				{
 					check(pSlot->GetSegment(&pSegment));
@@ -623,13 +623,13 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 						hr = pSegment->QueryInterface(IID_IAAFSequence, (void **) &pSequence);
 						if(AAFRESULT_SUCCESS == hr)
 						{
-							aafInt32	numComponents, item = 0;
+							aafUInt32	numComponents, item = 0;
 					
-							check(pSequence->GetNumComponents (&numComponents));
+							check(pSequence->CountComponents (&numComponents));
 							printf("    Found Sequence on slot with %ld components\n",
 								numComponents);
 							printf("        It has length %" L64 "d\n", length);
-							check(pSequence->EnumComponents (&pCompIter));
+							check(pSequence->GetComponents (&pCompIter));
 							while (pCompIter && AAFRESULT_SUCCESS == pCompIter->NextOne(&pComponent))
 							{
 								item++;
