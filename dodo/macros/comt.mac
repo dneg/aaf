@@ -1,0 +1,236 @@
+#c /******************************************\
+#c *                                          *
+#c * Advanced Authoring Format                *
+#c *                                          *
+#c * Copyright (c) 1998 Avid Technology, Inc. *
+#c * Copyright (c) 1998 Microsoft Corporation *
+#c *                                          *
+#c \******************************************/
+
+
+
+#ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+#c
+#c AutoDodo macro file for use in generating COM unit test
+#c implementation files.
+#c
+#ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+
+
+#import macros/base.mac
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Goes at the head of the file.
+#c
+#c Arguments: none
+#c
+#startm AD_HEAD 00
+// @doc INTERNAL
+// @com This file implements the module test for CAAFDefinitionObject
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Starts a class definition
+#c
+#c Arguments: none
+#c
+#startm AD_CLASS_BEGIN 00
+#include "C.this-module.h"
+#include "C.this-module.h"
+#ifndef __C.this-module_h__
+#error - improperly defined include guard
+#endif
+
+#include <ostream.h>
+
+HRESULT C.this-module::test()
+{
+  HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
+  I.this-module *pObject = NULL;
+
+  try
+	{
+	  // Attempt to create an .this-module.
+	  hr =  CoCreateInstance(
+							 CLSID_.this-module,
+							 NULL, 
+							 CLSCTX_INPROC_SERVER, 
+							 IID_I.this-module, (void **)&pObject);
+	  if (FAILED(hr))
+		{
+		  cerr << "C.this-module::test...FAILED!";
+		  cerr << hr;
+		  cerr << "\\tCoCreateInstance(&CLSID_.this-module, NULL,"
+			" CLSCTX_INPROC_SERVER, &IID_I.this-module, ...);" <<
+			  endl;
+		  return hr;
+		}
+
+	  // module-specific tests go here
+	  return AAFRESULT_NOT_IMPLEMENTED;
+	}
+  catch (...)
+	{
+	  cerr << "CAAFDefinitionObject::test...Caught general C++"
+		" exception!" << endl; 
+	}
+
+  // Cleanup our object if it exists.
+  if (pObject)
+	pObject->Release();
+
+  return hr;
+}
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Starts a class definition with no parent class
+#c
+#c Arguments: none
+#c
+#startm AD_ROOT_CLASS_BEGIN 00
+#include "C.this-module.h"
+#include "C.this-module.h"
+#ifndef _C.this-module_h_
+#error - improperly defined include guard
+#endif
+
+#include <ostream.h>
+
+HRESULT C.this-module::test()
+{
+  HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
+  I.this-module *pObject = NULL;
+
+  try
+	{
+	  // Attempt to create an .this-module.
+	  hr =  CoCreateInstance(
+							 CLSID_.this-module,
+							 NULL, 
+							 CLSCTX_INPROC_SERVER, 
+							 IID_I.this-module, (void **)&pObject);
+	  if (FAILED(hr))
+		{
+		  cerr << "C.this-module::test...FAILED!";
+		  cerr << hr; 
+		  cerr << "\\tCoCreateInstance(&CLSID_.this-module, NULL,"
+			" CLSCTX_INPROC_SERVER, &IID_I.this-module, ...);" <<
+			  endl;
+		  return hr;
+		}
+
+	  // module-specific tests go here
+	  return AAFRESULT_NOT_IMPLEMENTED;
+	}
+  catch (...)
+	{
+	  cerr << "CAAFDefinitionObject::test...Caught general C++"
+		" exception!" << endl;
+	}
+
+  // Cleanup our object if it exists.
+  if (pObject)
+	pObject->Release();
+
+  return hr;
+}
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Note that most macros are are unused, and simply have null bodies!
+#c
+#startm AD_INCLUDE 01
+#endm
+
+#startm AD_TYPES_BEGIN 11
+#endm
+
+#startm AD_TYPES_END 00
+#endm
+
+#startm AD_AAFTYPES 01
+#endm
+
+#startm AD_DECLARE_FORWARD_AAFTYPES 01
+#endm
+
+#startm AD_CPP_QUOTE 01
+#endm
+
+#startm AD_FORWARD_DECLARATION 01
+#endm
+
+#startm AD_CLASS_UUID 11
+#endm
+
+#startm AD_DEFAULT_UUID 11
+#endm
+
+#startm AD_TYPES_HEAD 00
+#endm
+
+#startm AD_METHOD0 02
+#endm
+
+#startm AD_XMETHOD1 07
+#endm
+
+#startm AD_XMETHOD2 12
+#endm
+
+#startm AD_XMETHOD3 17
+#endm
+
+#startm AD_XMETHOD4 22
+#endm
+
+#startm AD_XMETHOD5 27
+#endm
+
+#startm AD_XMETHOD6 32
+#endm
+
+#startm AD_XMETHOD7 37
+#endm
+
+#startm AD_XMETHOD8 42
+#endm
+
+#startm AD_XMETHOD9 47
+#endm
+
+#startm AD_XMETHOD_10 52
+#endm
+
+#startm AD_XMETHOD_11 57
+#endm
+
+#startm AD_CLASS_END 00
+#endm
+
+#startm AD_ROOT_CLASS_END 00
+#endm
+
+#startm AD_OVERRIDE 01
+#endm
+
+#startm AD_XCONSTRUCTOR1 06
+#endm
+
+#startm AD_XCONSTRUCTOR2 11
+#endm
+
+#startm AD_XCONSTRUCTOR3 16
+#endm
+
+#startm AD_XCONSTRUCTOR4 21
+#endm
