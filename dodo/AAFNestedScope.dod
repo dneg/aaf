@@ -18,6 +18,12 @@ AD_INCLUDE(AAFTypes)
 *                                          *
 \******************************************/
 
+
+/***********************************************\
+*	Stub only.   Implementation not yet added	*
+\***********************************************/
+
+
 /*************************************************************************
  * 
  * @class AAFNestedScope | an AAFNestedScope object defines a scope that 
