@@ -23,7 +23,9 @@ class ImplAAFDataDef;
 
 class ImplAAFFindSourceInfo;
 
+class ImplAAFEssenceAccess;
 
+class ImplAAFLocator;
 
 
 
@@ -262,6 +264,145 @@ public:
          aafLength_t  srcRefLength);
 
 
+  //****************
+  // Create()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    CreateEssence
+        (// @parm [in] 
+         aafSlotID_t  masterSlotID,
+
+         // @parm [in] create essence of this type
+         aafUID_t	mediaKind,
+
+ 		 aafUID_t			codecID,
+		 aafRational_t	editRate,
+		 aafRational_t	sampleRate,
+
+         // @parm [in] optionally compressing it
+         aafCompressEnable_t  Enable,
+		ImplAAFLocator		*destination,
+		aafFileFormat_t		fileFormat,
+		ImplAAFEssenceAccess **result);
+	//@comm Creates a single channel stream of essence.  Convenience functions
+	// exist to create audio or video essence, and a separate call
+	// (MultiCreate) exists to create interleaved audio and
+	// video data.
+	//@comm The essence handle from this call can be used with
+	// WriteDataSamples  and possibly WriteDataLines, but NOT with
+	// WriteMultiSamples.
+	//@comm If you are creating the essence, and then attaching it to a master
+	// mob, then the "masterMob" field may be left NULL.
+	// For video, the sampleRate should be the edit rate of the file mob.
+	// For audio, the sample rate should be the actual samples per second.
+	//@comm Replaces omfmMediaCreate
+	
+/****/
+  //****************
+  // MultiCreate()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    CreateMultiEssence
+        (
+ 							aafUID_t codecID,
+                          aafInt16  /*arrayElemCount*/,
+                           aafmMultiCreate_t *  /*mediaArray*/,
+                           aafCompressEnable_t  /*Enable*/,
+							ImplAAFLocator		*destination,
+							aafFileFormat_t		fileFormat,
+							ImplAAFEssenceAccess **result);
+	//@comm The essence handle from this call can be used with
+	// WriteDataSamples or WriteMultiSamples but NOT with 
+	// or WriteDataLines.
+	//@comm If you are creating the essence, and then attaching it to a master
+	// mob, then the "masterMob" field may be left NULL.
+	//@comm Replaces omfmMediaMultiCreate
+
+    //****************
+  // Open()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    OpenEssence
+        (// @parm [in] On this slot
+         aafSlotID_t  slotID,
+
+         // @parm [in] using this essence criteria
+         aafMediaCriteria_t*  mediaCrit,
+
+         // @parm [in] ReadOnly or Append
+         aafMediaOpenMode_t  openMode,
+
+         // @parm [in] optionally decompressing
+         aafCompressEnable_t  compEnable,
+		ImplAAFEssenceAccess **result);
+	//@comm If the essence is interleaved,
+	// then it will be di-interleaved when samples are read.  This routine
+	// follows the locator, and may call the locator failure callback if
+	// the essence can not be found.  If the failure callback finds the essence,
+	// then this routine will return normally.
+	//@comm The essence handle from this call can be used with
+	// ReadDataSamples  and possibly ReadDataLines, but NOT with
+	// ReadMultiSamples.
+	//@comm Possible Errors:
+	// 	Standard errors (see top of file).
+	// 	OM_ERR_NOMEMORY -- couldn't allocate memory for the essence handle
+	//@comm NOTE: If a locator is followed, then essencePtr may reference ANOTHER file
+	// object, which must be closed on file close.
+	//@comm Replaces omfmMediaOpen*/
+	
+/****/
+  //****************
+  // MultiOpen()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    OpenMultiEssence
+        ( // @parm [in] On this slot
+         aafSlotID_t  slotID,
+
+         // @parm [in] using this essence criteria
+         aafMediaCriteria_t*  mediaCrit,
+
+         // @parm [in] ReadOnly or Append
+         aafMediaOpenMode_t  openMode,
+
+         // @parm [in] optionally decompressing
+         aafCompressEnable_t  compEnable,
+		ImplAAFEssenceAccess **result);
+	//@comm This routine
+	// follows the locator, and may call the locator failure callback if
+	// the essence can not be found.  If the failure callback finds the essence,
+	// then this routine will return normally.
+	//@comm The essence handle from this call can be used with
+	// WriteDataSamples or WriteMultiSamples but NOT with 
+	//  WriteDataLines.
+	//@comm Possible Errors:
+	// 	Standard errors (see top of file).
+	// 	OM_ERR_NOMEMORY -- couldn't allocate memory for the essence handle
+	//@comm Replaces omfmMediaMultiOpen*/
+
+  /****/
+  //****************
+  // GetNumChannels()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetNumChannels
+        (// @parm [in] On this slot
+         aafSlotID_t  slotID,
+
+         // @parm [in] using this essence criteria
+         aafMediaCriteria_t*  mediaCrit,
+
+         // @parm [in] for this essence type
+         ImplAAFDataDef * mediaKind,
+
+         // @parm [out] How many channels?
+         aafInt16*  numCh);
+	//@comm Returns the number of interleaved essence channels of a given type in the essence stream referenced by the given file mob
+	//@comm If the data format is not interleaved, then the answer will
+	// always be zero or one.  This function correctly returns zero
+	// for essence types not handled by a given codec, and handles codecs
+	// which work with multiple essence types.
+	//@comm Replaces omfmGetNumChannels*/
 
 public:
   // Declare this class to be storable.

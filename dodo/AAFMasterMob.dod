@@ -29,6 +29,7 @@ AD_FORWARD_DECLARATION(AAFSourceMob)
 AD_FORWARD_DECLARATION(AAFComponent)
 AD_FORWARD_DECLARATION(AAFDataDef)
 AD_FORWARD_DECLARATION(AAFFindSourceInfo)
+AD_FORWARD_DECLARATION(AAFEssenceAccess)
 AD_CLASS_UUID(b1a21373, 1a7d, 11d2, bf, 78, 00, 10, 4b, c9, 15, 6d)
 
 AD_DEFAULT_UUID(b1a21372, 1a7d, 11d2, bf, 78, 00, 10, 4b, c9, 15, 6d)
@@ -514,5 +515,106 @@ AD_XMETHOD5(NewPhysSourceRef,
   //   - either pEssenceKind or pSourceRefObj is null.
   //
   // \(other codes here.\))
+
+/****/
+AD_XMETHOD9(CreateEssence,
+[in],objPass, aafSlotID_t,masterSlotID,,
+[in],objPass, aafUID_t,mediaKind,create essence of this type,
+[in],objPass, aafUID_t,codecID,using this codec,
+[in],objPass, aafRational_t,editRate,with this edit rate,
+[in],objPass, aafRational_t,samplerate,with this sample rate,
+[in],objPass, aafCompressEnable_t,Enable,optionally compressing it,
+[in],objIn,	  AAFLocator,destination,Optionally create the file HERE.,
+[in],objPass, aafFileFormat_t,fileFormat,with this format,
+[out],objOut, AAFEssenceAccess,access,Return an essence access on the essence.,
+Creates a single channel stream of essence.)
+	//@comm Creates a single channel stream of essence.  Convenience functions
+	// exist to create audio or video essence\, and a separate call
+	// \(MultiCreate\) exists to create interleaved audio and
+	// video data.
+	//@comm The essence handle from this call can be used with
+	// WriteDataSamples  and possibly WriteDataLines\, but NOT with
+	// WriteMultiSamples.
+	//@comm If you are creating the essence\, and then attaching it to a master
+	// mob, then the "masterMob" field may be left NULL.
+	// For video\, the sampleRate should be the edit rate of the file mob.
+	// For audio\, the sample rate should be the actual samples per second.
+	//@comm Replaces omfmMediaCreate
+
+	
+/****/
+AD_XMETHOD7(CreateMultiEssence,
+[in],objPass, aafUID_t,codecID,using this codec,
+[in],objPass, aafInt16,arrayElemCount,this many channels,
+[in\,ref\,size_is\(arrayElemCount\)],objPass, aafmMultiCreate_t *,mediaArray,using these definitions,
+[in],objPass, aafCompressEnable_t,Enable,optionally compressing it,
+[in],objIn,	  AAFLocator,destination,Optionally create the file HERE.,
+[in],objPass, aafFileFormat_t,fileFormat,with this format,
+[out],objOut, AAFEssenceAccess,access,Return an essence access on the essence.,
+Creates a multi-channel interleaved stream of essence.)
+	//@comm The essence handle from this call can be used with
+	// WriteDataSamples or WriteMultiSamples but NOT with 
+	// or WriteDataLines.
+	//@comm If you are creating the essence, and then attaching it to a master
+	// mob, then the "masterMob" field may be left NULL.
+	//@comm Replaces omfmMediaMultiCreate
+
+/****/
+AD_XMETHOD5(OpenEssence,
+[in],objPass, aafSlotID_t,slotID,On this slot,
+[in],objPass, aafMediaCriteria_t*,mediaCrit,using this essence criteria,
+[in],objPass, aafMediaOpenMode_t,openMode,ReadOnly or Append,
+[in],objPass, aafCompressEnable_t,compEnable,optionally decompressing,
+[out],objOut, AAFEssenceAccess,access,Return an essence access on the essence.,
+Opens a single channel of a file mob.)
+	//@comm If the essence is interleaved,
+	// then it will be di-interleaved when samples are read.  This routine
+	// follows the locator, and may call the locator failure callback if
+	// the essence can not be found.  If the failure callback finds the essence,
+	// then this routine will return normally.
+	//@comm The essence handle from this call can be used with
+	// ReadDataSamples  and possibly ReadDataLines, but NOT with
+	// ReadMultiSamples.
+	//@comm Possible Errors:
+	// 	Standard errors (see top of file).
+	// 	OM_ERR_NOMEMORY -- couldn't allocate memory for the essence handle
+	//@comm NOTE: If a locator is followed, then essencePtr may reference ANOTHER file
+	// object, which must be closed on file close.
+	//@comm Replaces omfmMediaOpen*/
+	
+/****/
+AD_XMETHOD5(OpenMultiEssence,
+[in],objPass, aafSlotID_t,slotID,On this slot,
+[in],objPass, aafMediaCriteria_t*,mediaCrit,using this essence criteria,
+[in],objPass, aafMediaOpenMode_t,openMode,ReadOnly or Append,
+[in],objPass, aafCompressEnable_t,compEnable,optionally decompressing,
+[out],objOut, AAFEssenceAccess,access,Return an essence access on the essence.,
+Opens a all channels associated with a file mob.)
+	//@comm This routine
+	// follows the locator, and may call the locator failure callback if
+	// the essence can not be found.  If the failure callback finds the essence,
+	// then this routine will return normally.
+	//@comm The essence handle from this call can be used with
+	// WriteDataSamples or WriteMultiSamples but NOT with 
+	//  WriteDataLines.
+	//@comm Possible Errors:
+	// 	Standard errors (see top of file).
+	// 	OM_ERR_NOMEMORY -- couldn't allocate memory for the essence handle
+	//@comm Replaces omfmMediaMultiOpen*/
+
+/****/
+AD_XMETHOD4(GetNumChannels,
+[in],objPass, aafSlotID_t,slotID,On this slot,
+[in],objPass, aafMediaCriteria_t*,mediaCrit,using this essence criteria,
+[in],objIn, AAFDataDef,mediaKind,for this essence type,
+[out],objPass, aafInt16*,numCh,How many channels?,
+Takes an opaque handle  a master mob reference  and a slot ID so that it may be called before the essence is opened.)
+	//@comm Returns the number of interleaved essence channels of a given type in the essence stream referenced by the given file mob
+	//@comm If the data format is not interleaved, then the answer will
+	// always be zero or one.  This function correctly returns zero
+	// for essence types not handled by a given codec, and handles codecs
+	// which work with multiple essence types.
+	//@comm Replaces omfmGetNumChannels*/
+
 AD_COM_METH(.method-SearchSource)
 AD_XCLASS_END(Concrete, StoredObject)
