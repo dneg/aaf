@@ -42,7 +42,11 @@
 #endif
 
 #ifndef __CODEFRAGMENTS__
+#ifdef _MSC_VER
 #include <codefrag.h>
+#else
+#include <CodeFragments.h>  //trr-19980819: use latest universal header name.
+#endif
 #endif
 
 #if !defined(_MSC_VER)
@@ -668,9 +672,12 @@ typedef enum tagEXTCONN
 #undef  INTERFACE
 #define INTERFACE   IUnknown
 
-#if defined(applec) || defined(__MWERKS__)
+#if defined(applec)
 // MPW declaration to force SI vtable construction.
 DECLARE_INTERFACE_(IUnknown, SingleObject)
+#elif   defined(__MWERKS__)
+// jjo For testing with CW9 with __comobject compiler path from Andreas Hommel 
+DECLARE_INTERFACE_(IUnknown, __comobject)
 #else
 DECLARE_INTERFACE(IUnknown)
 #endif
@@ -950,10 +957,10 @@ STDAPI  CoRevokeClassObject(unsigned long dwRegister);
 
 
 STDAPI	CoGetClassFrag(REFCLSID rclsid, unsigned long dwClsContext, 
-					   ConnectionID *pConnectionID);
+					   CFragConnectionID *pConnectionID);
 
-STDAPI  CoGetFragVersion(ConnectionID connectionID, unsigned long *pdwVersion);
-STDAPI  CoDllMacNativeHandshake(ConnectionID connectionID, unsigned long dwReserved);
+STDAPI  CoGetFragVersion(CFragConnectionID connectionID, unsigned long *pdwVersion);
+STDAPI  CoDllMacNativeHandshake(CFragConnectionID connectionID, unsigned long dwReserved);
 
 STDAPI DllMacNativeHandshake(unsigned long dwReserved);
 STDAPI DllGetVersion(unsigned long *pdwVersion);
