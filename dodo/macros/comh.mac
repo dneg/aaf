@@ -132,7 +132,7 @@ protected:
   //
   // Constructor/destructor
   //
-  C.this-module (IUnknown * pControllingUnknown, aafBool doInit = AAFTrue);
+  C.this-module (IUnknown * pControllingUnknown, aafBool doInit = kAAFTrue);
   virtual ~C.this-module ();
 
 public:
@@ -168,7 +168,7 @@ protected:
   //
   // Constructor/destructor
   //
-  C.this-module (IUnknown * pControllingUnknown, aafBool doInit = AAFTrue);
+  C.this-module (IUnknown * pControllingUnknown, aafBool doInit = kAAFTrue);
   virtual ~C.this-module ();
 
 public:
@@ -204,7 +204,7 @@ protected:
   //
   // Constructor/destructor
   //
-  C.this-module (IUnknown * pControllingUnknown, aafBool doInit = AAFTrue);
+  C.this-module (IUnknown * pControllingUnknown, aafBool doInit = kAAFTrue);
   virtual ~C.this-module ();
 
 public:
@@ -243,7 +243,7 @@ protected:
   //
   // Constructor/destructor
   //
-  C.this-module (IUnknown * pControllingUnknown, aafBool doInit = AAFTrue);
+  C.this-module (IUnknown * pControllingUnknown, aafBool doInit = kAAFTrue);
   virtual ~C.this-module ();
 
 public:

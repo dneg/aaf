@@ -113,7 +113,7 @@ class OMAssertionViolation;
 
 
 C.this-module::C.this-module (IUnknown * pControllingUnknown, aafBool doInit)
-  : C.parent-module (pControllingUnknown, AAFFalse)
+  : C.parent-module (pControllingUnknown, kAAFFalse)
 {
   if (doInit)
     {
@@ -2385,7 +2385,7 @@ HRESULT C.this-module::Extension::QueryInterface(REFIID riid, void **ppvObjOut)
 
 
 C.this-module::C.this-module (IUnknown * pControllingUnknown, aafBool doInit)
-  : C.parent-module (pControllingUnknown, AAFFalse),
+  : C.parent-module (pControllingUnknown, kAAFFalse),
   pExtension(NULL)
 {
   if (doInit)
