@@ -870,6 +870,10 @@ void OMStoredObject::restore(OMStoredVectorIndex*& vector,
   OMStoredVectorIndex* vectorIndex = new OMStoredVectorIndex(entries);
   ASSERT("Valid heap pointer", vectorIndex != 0);
 
+  // Set the high water mark.
+  //
+  vectorIndex->setHighWaterMark(highWaterMark);
+
   // Read the element names, placing them in the index.
   //
   for (size_t i = 0; i < entries; i++) {
@@ -919,6 +923,10 @@ void OMStoredObject::restore(OMStoredSetIndex*& set,
   //
   OMStoredSetIndex* setIndex = new OMStoredSetIndex(entries);
   ASSERT("Valid heap pointer", setIndex != 0);
+
+  // Set the high water mark.
+  //
+  setIndex->setHighWaterMark(highWaterMark);
 
   // Read the element names, counts amd keys, placing them in the index.
   //
