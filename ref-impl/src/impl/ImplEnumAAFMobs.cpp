@@ -39,7 +39,7 @@ AAFRESULT STDMETHODCALLTYPE
 		return(AAFRESULT_NULL_PARAM);
 
 	AAFRESULT ar;
-	ImplAAFMob *pCandidate;
+	ImplAAFMob *pCandidate = NULL;
 	while((ar=ImplAAFEnumerator<ImplAAFMob>::NextOne(&pCandidate))
 		==AAFRESULT_SUCCESS)
 	{
@@ -55,16 +55,22 @@ AAFRESULT STDMETHODCALLTYPE
 				
 			ar = pCandidate->GetMobKind (&kind);
 			if(ar != AAFRESULT_SUCCESS)
+			{
+				pCandidate->ReleaseReference();
 				return ar;
+			}
 			if((kind == _criteria.tags.mobKind) 
 				|| (kAAFAllMob == _criteria.tags.mobKind))
 			{
 				(*ppMob)=pCandidate;
 				return(AAFRESULT_SUCCESS);
 			}
+			pCandidate->ReleaseReference();
+			pCandidate = NULL;
 			break;
 
 		default:
+			pCandidate->ReleaseReference();
 			return(AAFRESULT_NOT_IN_CURRENT_VERSION);
 		};
 	}
@@ -113,6 +119,10 @@ AAFRESULT STDMETHODCALLTYPE
 		// us off of the end
 		ImplAAFMob *pMob;
 		AAFRESULT ar = NextOne(&pMob);
+		if (AAFRESULT_SUCCEEDED(ar))
+		{
+			pMob->ReleaseReference();
+		}
 		if(ar==AAFRESULT_NO_MORE_OBJECTS)
 		{
 			// Off the end, decrement n and iterator back to the starting 
