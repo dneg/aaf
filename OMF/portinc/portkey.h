@@ -209,8 +209,8 @@
 
 #endif
 
-/* Linux Port Definitions */
-#if defined(linux)
+/* Linux/Solaris/Darwin Port Definitions */
+#if defined(__linux) || defined(__sun) || defined(__APPLE__)
 
 #define PORTKEY_CPU_
 #define PORTKEY_OS_UNIX LINUX
