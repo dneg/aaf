@@ -365,8 +365,9 @@ void EssenceDataTest::createFileMob(unsigned int mobid_Index)
   check(_pMob->SetMobID(TEST_MobIDs[mobid_Index]));
   check(_pMob->SetName(L"EssenceDataTest File Mob"));
   
-  check(defs.cdFileDescriptor()->
-		CreateInstance(IID_IAAFEssenceDescriptor, 
+  // instantiate a concrete subclass of FileDescriptor
+  check(defs.cdHTMLDescriptor()->
+		CreateInstance(IID_IAAFFileDescriptor,
 					   (IUnknown **)&_pFileDescriptor));
 
   check(_pFileDescriptor->QueryInterface (IID_IAAFEssenceDescriptor,
