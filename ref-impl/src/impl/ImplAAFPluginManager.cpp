@@ -24,6 +24,7 @@
 #include "AAFDefUIDs.h"
 #include "AAFStoredObjectIDs.h"
 #include "aafErr.h"
+#include "ImplAAFObjectCreation.h"
 
 extern "C" const IID IID_IAAFEssenceStream = { 0x83402902, 0x9146, 0x11d2, { 0x80, 0x88, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
 extern "C" const IID IID_IAAFEssenceCodec = { 0x3631F7A2, 0x9121, 0x11D2, { 0x80, 0x88, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
@@ -34,6 +35,7 @@ extern "C" const IID IID_IAAFEssenceDataStream = {0xCDDB6AB1,0x98DC,0x11d2,{0x80
 
 const CLSID CLSID_AAFWaveCodec = { 0x8D7B04B1, 0x95E1, 0x11d2, { 0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
 const CLSID CLSID_AAFEssenceFileContainer = { 0xa7337030, 0xc103, 0x11d2, { 0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
+extern "C" const aafClassID_t CLSID_EnumAAFLoadedPlugins;
 
 ImplAAFPluginManager::ImplAAFPluginManager ()
 {}
@@ -45,10 +47,26 @@ ImplAAFPluginManager::~ImplAAFPluginManager ()
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFPluginManager::EnumLoadedPlugins (
-      aafUID_t  /*categoryID*/,
-      ImplEnumAAFLoadedPlugins ** /*ppEnum*/)
+      aafUID_t categoryID,
+      ImplEnumAAFLoadedPlugins **ppEnum)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	ImplEnumAAFLoadedPlugins		*theEnum = (ImplEnumAAFLoadedPlugins *)CreateImpl (CLSID_EnumAAFLoadedPlugins);
+		
+	XPROTECT()
+	{
+		CHECK(theEnum->SetCategory(&categoryID));
+		CHECK(theEnum->Reset());
+		*ppEnum = theEnum;
+	}
+	XEXCEPT
+	{
+		if (theEnum)
+			theEnum->ReleaseReference();
+		return(XCODE());
+	}
+	XEND;
+	
+	return(AAFRESULT_SUCCESS);
 }
 
 AAFRESULT ImplAAFPluginManager::Init(void)
@@ -72,6 +90,8 @@ AAFRESULT ImplAAFPluginManager::Init(void)
 
 ImplAAFPluginManager *ImplAAFPluginManager::GetPluginManager()
 {
+	ImplAAFPluginManager	*mgr;
+
 	return(ImplAAFSession::GetInstance()->GetPluginManager());
 }
 
@@ -157,8 +177,8 @@ AAFRESULT ImplAAFPluginManager::RegisterPlugin(CLSID pluginClass)
 	XEXCEPT
 	{
 		if(codec != NULL)
-			plugin->Release();
-		if(codec != NULL)
+			codec->Release();
+		if(plugin != NULL)
 			plugin->Release();
 	}
 	XEND
@@ -166,3 +186,39 @@ AAFRESULT ImplAAFPluginManager::RegisterPlugin(CLSID pluginClass)
 	return AAFRESULT_SUCCESS;
 
 }
+
+// Internal to the toolkit functions
+AAFRESULT
+    ImplAAFPluginManager::GetFirstLoadedPlugin (aafTableIterate_t *iter, ImplAAFPluginDescriptor **ppDesc)
+{
+	aafBool		found;
+	AAFRESULT	status;
+
+	if(ppDesc == NULL || iter == NULL)
+		return(AAFRESULT_NULL_PARAM);
+
+
+	status = TableFirstEntry(_plugins, iter, &found);
+	if(!found)
+		return AAFRESULT_NO_MORE_OBJECTS; // AAFRESULT_BADINDEX ???
+	*ppDesc = (ImplAAFPluginDescriptor *)iter->valuePtr;
+
+	return status;
+}
+AAFRESULT
+    ImplAAFPluginManager::GetNextLoadedPlugin (aafTableIterate_t *iter, ImplAAFPluginDescriptor **ppDesc)
+{
+	aafBool		found;
+	AAFRESULT	status;
+
+	if(ppDesc == NULL || iter == NULL)
+		return(AAFRESULT_NULL_PARAM);
+
+
+	status = TableNextEntry(iter, &found);
+	if(!found)
+		return AAFRESULT_NO_MORE_OBJECTS; // AAFRESULT_BADINDEX ???
+	*ppDesc = (ImplAAFPluginDescriptor *)iter->valuePtr;
+	return status;
+}
+
