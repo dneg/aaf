@@ -85,30 +85,30 @@ generated source files ?</a> regenerating the generated source files.
 
 <P> How do I obtain and build the AAF SDK on Windows NT/Windows 2000 ?</p>
 
-<P>Using the WinCvs client (available from http://www.wincvs.org/)</p>
-<P> Admin -&gt; Preferences ... -&gt; Enter the CVSROOT -&gt;<font color="#FF0000"> 
+Using the WinCvs client (available from http://www.wincvs.org/)
+Admin -&gt; Preferences ... -&gt; Enter the CVSROOT -&gt;<font color="#FF0000"> 
   :pserver:anonymous@cvs.aaf.sourceforge.net:/cvsroot/aaf</font><br>
   Admin -&gt; Preferences ... -&gt; Authentication -&gt; "passwd" file on the 
   cvs server<br>
   Admin -&gt; Login ... -&gt; <font color="#FF0000">&lt;no password - just click 
   OK&gt;<br>
   </font>Create -&gt; Checkout module -&gt; Enter the module name and path on 
-  the server -&gt; <font color="#FF0000">AAFWinSDK</font></p>
-<P>Open AAF/AAFWinSDK/AAFWinSDK.dsw with Visual Studio,<br>
+  the server -&gt; <font color="#FF0000">AAFWinSDK</font>
+Open AAF/AAFWinSDK/AAFWinSDK.dsw with Visual Studio,<br>
   click on the FileView tab in the workspace view then right click on "Everything 
-  files" and select "Build" </p>
+  files" and select "Build".
 
 <P> How do I obtain and build the AAF SDK on Linux ?</p>
 
-<P>$ export CVSROOT=:pserver:anonymous@cvs.aaf.sourceforge.net:/cvsroot/aaf<br>
+  $ export CVSROOT=:pserver:anonymous@cvs.aaf.sourceforge.net:/cvsroot/aaf<br>
   $ cvs login (Logging in to anonymous@cvs.aaf.sourceforge.net) CVS password: 
   <font color="#FF0000">&lt;no password - just hit return&gt;</font><br>
   $ cvs checkout AAFLinuxSDK ...<br>
   $ cd AAF<br>
   $ make ...<br>
-  $ </p>
+  $
 
-<P> How do I obtain and build the AAF SDK on Macintosh
+<P> How do I obtain and build the AAF SDK on Macintosh ?</p>
 
 <!--
 
@@ -118,10 +118,11 @@ use of the MacCVS Pro client, the use of which is suggested elsewhere]
 -->
 
 <br>
-</p>
+
 Use the MacCvsPro client (available from <a href="http://www.maccvs.org">maccvs.org</a>)<br>
 Refer to the AAF web page <a href="http://aaf.sourceforge.net/downMacOS.html">'Download 
 MacOS'</a> 
+
 <hr>
 
 <P>OK, I've built the thing, what do I do now ?</P>
@@ -162,7 +163,9 @@ AAF web pages <a href="http://aaf.sourceforge.net/sshWin32.html">Using
 CVS/ssh on Windows</a> or <a
 href="http://aaf.sourceforge.net/sshMacOS.html">Using CVS/ssh on
 MacOS</a><br> <br>
-<p>Using CVS/ssh on Linux </p>
+
+<p>How do I use CVS/ssh on Linux ? </p>
+
 <br>
 $ export CVSROOT=:ext:<font color="#FF0000">&lt;developer name&gt;</font>@cvs.aaf.sourceforge.net:/cvsroot/aaf 
 <br>
@@ -275,8 +278,8 @@ The AAF engineering committee is responsible for defining this process.
 
 <P> What platforms are supported ?</P>
 
-<p>As of RC1 (the initial sources made available on SourceForge April
-  17, 2001) the supported platforms are (in no particular order) </p>
+As of RC1 (the initial sources made available on SourceForge April 17,
+  2001) the supported platforms are (in no particular order)
 
 <ul>
 
@@ -453,10 +456,8 @@ orginally added as binary have the -kb flag against them.
 <p>I get the error message &quot;Connection refused&quot; from
 Sourceforge ?</p>
 
-<p>usw-pr-cvs.sourceforge.net: Connection refused cvs [history
-  aborted]:end of file from server (consult above messages if any</p>
-  Check you have a <b>CVS_RSH</b> environment variable correctly set
-  to <b>SSH</b>
+Check you have a <b>CVS_RSH</b> environment variable correctly set to
+  <b>SSH</b>
 
 <p>How can I add a MacOS alias (symbolic link or shortcut) to CVS ?<p>
 
@@ -517,12 +518,11 @@ Microsoft.)</li>
   <li>build examples using SDK</li>
 </ul>
 
-<p>These are <b>all</b> of the steps. Step 1 isn't necessary unless
-  you've changed the dodo inputs files. To avoid everyone having to do
-  step 1 the generated files are checked in to CVS. Note that
-  regenerating the source files isn't done (by default) by the
-  projects or makefile.
-</p>
+These are <b>all</b> of the steps. Step 1 isn't necessary unless
+you've changed the dodo inputs files. To avoid everyone having to do
+step 1 the generated files are checked in to CVS. Note that
+regenerating the source files isn't done (by default) by the projects
+or makefile.
 
 <!--
 TBS - more detail on each of the steps
@@ -1002,43 +1002,43 @@ have time to check and edit this.]
 Here's a brief guide to the AAF Source Tree, 
 focusing on where to find useful bits of information. 
 <h4>AAFWinSDK</h4>
-<p>Windows project files and default location for compiles and links (Windows 
-  platform only)</p>
+Windows project files and default location for compiles and links (Windows 
+  platform only)
 <h4>bin</h4>
-<p>Obsolete</p>
+Obsolete
 <h4>DevUtils</h4>
-<p>Utilities useful to AAF Developers.<br> There's only one of these,
-  a low-level dumper that helps diagnose file format problems.</p>
+Utilities useful to AAF Developers.<br> There's only one of these,
+  a low-level dumper that helps diagnose file format problems.
   <h4>doc</h4>
-<p>Currently obsolete, will have doc files </p>
+Currently obsolete, will have doc files
 <h4>dodo</h4>
 
-<p><a href="http://aaf.sourceforge.net/dodo.html">dodo</a> is a tool
+<a href="http://aaf.sourceforge.net/dodo.html">dodo</a> is a tool
   we use to generate our header files.<br> This directory contains the
   dodo input file (*.dod). The dodo input files use macros defined in
   *.mac files in the macros directory. The comments in the *.dod files
   end up in the <a
   href="http://aaf.sourceforge.net/doc/com-api/contentsf.html">API
-  reference document</a>.</p>
+  reference document</a>.
 
 <h4>examples</h4>
 
-<p>Useful examples and some useful dump utilities meta Spreadsheet
+Useful examples and some useful dump utilities meta Spreadsheet
   that defines the AAF object model, used to generate the
   AAFMetaDictionary.h file and the dictionary stored in the AAF
   file. (see ref-impl/src/impl for definitions used by the reference
-  implementation for builtins)</p>
+  implementation for builtins)
 
 <h4>omf</h4>
-<p>OMF toolkit headers and libraries for the OMF converter</p>
+OMF toolkit headers and libraries for the OMF converter
 <h4>ref-impl</h4>
-<p>Sources for the Com interfaces and the implementation code.</p>
+Sources for the Com interfaces and the implementation code.
 <h4>ref-impl/aafiid</h4>
 <h4>ref-impl/aaflib</h4>
 <h4>ref-impl/bld_cfg</h4>
 <h4>ref-impl/include</h4>
 
-<p>Contains the .idl and .h files used by the implementation
+Contains the .idl and .h files used by the implementation
   (including those exported to AAF clients). The top-level include
   directory has the include files that are not generated from .idl
   files.<br> AAFClassDefsUIDs.h defines the macros for defining the
@@ -1047,7 +1047,7 @@ focusing on where to find useful bits of information.
   format kAAFClassID_&lt;class-name&gt; However, the implementation
   code uses some shortened names for these symbols and
   AAFClassDefsUIDs.h defines symbols with the longer name. In general,
-  the following abbreviations are used </p>
+  the following abbreviations are used
 
 <table border="0" cellpadding="6" cellspacing="6">
   <tr> 
@@ -1072,7 +1072,7 @@ focusing on where to find useful bits of information.
   </tr>
 </table>
 
-<p>In addition, there are a few symbols defined for multiple spellings
+In addition, there are a few symbols defined for multiple spellings
   (UNIX and Unix, EdgeCode and Edgecode)<br>
   <b>AAFPropertyDefs.h</b> defines the macros for defining AUIDs for
   property ID and AAFPropertyIDs.h invokes the macros, but neither
@@ -1080,27 +1080,27 @@ focusing on where to find useful bits of information.
   symbol for a property is in the format
   kAAFPropID_&lt;class-name&gt;_&lt;property-name&gt; with the added
   complication that the class-name used is the modified short name
-  used in the code. </p>
+  used in the code.
 
 <h4>ref-impl/include/com-api</h4>
-<p>Contains the .idl files for the Com interfaces.</p>
+Contains the .idl files for the Com interfaces
 
-<p><b>AAF.idl</b> defines the interfaces and methods and AAFTypes.idl
+<b>AAF.idl</b> defines the interfaces and methods and AAFTypes.idl
   defines the types ref-impl/include/om Contains the header files used
-  internally by AAF data manager for the AAF object manager</p>
+  internally by AAF data manager for the AAF object manager
 
 <h4>ref-impl/include/ref-api</h4>
 
-<p>Contains the .h files generated from the .idl files and private .h
-  files used by the AAF data manager</p>
+Contains the .h files generated from the .idl files and private .h
+  files used by the AAF data manager
 
 <h4>ref-impl/libjpeg</h4>
-<p> Contains jpeg source code used by the JPEG codecs with the CDCI format.</p>
+Contains jpeg source code used by the JPEG codecs with the CDCI format.
 <h4>ref-impl/plugins</h4>
 
-<p> Contains the source code used by the plugins provided with the
+Contains the source code used by the plugins provided with the
   reference implementation.  These plugins are AIFC codec, JPEG codec,
-  WAVE codec, Interpolator plugin, Plugin manager code</p>
+  WAVE codec, Interpolator plugin, Plugin manager code
 
 <!--
 
@@ -1110,11 +1110,11 @@ focusing on where to find useful bits of information.
 
 <h4>ref-impl/src</h4>
 
-<p> Contains the source code for the reference implementation</p>
+Contains the source code for the reference implementation
 
 <h4>ref-impl/src/com-api</h4>
 
-<p> Contains the source code for the Com interfaces. The top-level
+Contains the source code for the Com interfaces. The top-level
   directory contains the .cpp and .h file for each Com
   interface. <b>CAAFAIFCDescriptor.cpp</b> contains the source code
   associated with the AAFAIFCDescriptor class. In general the methods
@@ -1126,27 +1126,27 @@ focusing on where to find useful bits of information.
   the stored class and the Com interfaces associated with the parent
   class of the stored class.<br> This is indicated by the lines that
   start the class definition in the .h file.<br> For example, the
-  AAFFiller stored class inherits from the AAFSegment clas</p>
+  AAFFiller stored class inherits from the AAFSegment class
 
-<p> class CAAFFiller : public IAAFFiller, public CAAFSegment</p>
+class CAAFFiller : public IAAFFiller, public CAAFSegment
 
-<p>In addition, some implementation objects support additional
+In addition, some implementation objects support additional
   interfaces.<br> For example, the implementation class associated
   with the <b>AAFMasterMob</b> class also supports the
   <b>IAAFSearchSource</b> interface.<br> This is shown by the
-  following lines in the<b> CAAFMasterMob.h</b> file:</p>
+  following lines in the<b> CAAFMasterMob.h</b> file:
 
-<p>class CAAFMasterMob : public IAAFMasterMob, public IAAFSearchSource, public 
-  CAAFMob</p>
+class CAAFMasterMob : public IAAFMasterMob, public IAAFSearchSource, public 
+  CAAFMob
 
 <h4>ref-impl/src/com-api/com-dll</h4>
 
-<p><!--?? -->Contains the code managing loading the AAF .dll and creating Com 
-  objects.</p>
+<!--?? -->Contains the code managing loading the AAF .dll and creating Com 
+  objects.
 
 <h4>ref-impl/src/impl</h4>
 
-<p>Contains the .cpp and .h files that define the implementation
+Contains the .cpp and .h files that define the implementation
   objects.<br> The <b>Impl&lt;class-name&gt;.cpp</b> contains the body
   of the code.<br> The <b>Impl&lt;lclass-name&gt;.h</b> files contains
   the header and specifies the actual datatypes used by the
@@ -1156,43 +1156,43 @@ focusing on where to find useful bits of information.
   in under the private label.<br> The datatypes are specified in the
   underlying object manager type with the typedef name of the property
   datatype name.<br> For example,<b> ImplAAFPulldown.h</b> specifies
-  the following properties and types:</p>
+  the following properties and types:
 
-<p> OMStrongReferenceProperty&lt;ImplAAFSegment&gt; _inputSegment;<br>
+OMStrongReferenceProperty&lt;ImplAAFSegment&gt; _inputSegment;<br>
   OMFixedSizeProperty&lt;aafPulldownKind_t&gt; _pulldownKind;<br>
   OMFixedSizeProperty&lt;aafPulldownDir_t&gt; _pulldownDirection;<br>
-  OMFixedSizeProperty&lt;aafPhaseFrame_t&gt;_phaseFrame;</p>
-<p>And in <b>ImpleAAFMobSlot.h</b>, the following properties are listed:</p>
-<p>OMWideStringProperty _name;<br>
+  OMFixedSizeProperty&lt;aafPhaseFrame_t&gt;_phaseFrame;
+
+And in <b>ImpleAAFMobSlot.h</b>, the following properties are listed:
+OMWideStringProperty _name;<br>
   OMFixedSizeProperty&lt;aafUInt32&gt; _trackID;<br>
   OMFixedSizeProperty&lt;aafUInt32&gt; _physicalTrackNum;<br>
-  OMStrongReferenceProperty&lt;ImplAAFSegment&gt; _segment; </p>
+  OMStrongReferenceProperty&lt;ImplAAFSegment&gt; _segment;
 <h4>ref-impl/src/om</h4>
-<p>Contains the source for the AAF object manager</p>
+Contains the source for the AAF object manager
 <!-- ReleaseNotes Contains the release notes --> 
 <h4>test</h4>
-<p>Contains the test files</p>
+Contains the test files
 <h4>test/com/ComModTestAAF</h4>
 
-<p>Contains the module tests. This contains the module test test
+Contains the module tests. This contains the module test test
   bed. To run individual module tests, specify the class names as
-  command line parameters.</p>
+  command line parameters.
 
 <h4>test/com/ComMobTestAAF/ModuleTests</h4>
 
-<p>Contains the individual module tests. This contains usage code of
+Contains the individual module tests. This contains usage code of
   the methods in each Com interface.<br> In general, the examples
   directory contains more useful example usage, but if a method is not
   used in any example, the module test provides at least a minimal
-  usage example.</p>
+  usage example.
 
 <h4>test/com/CreateSequence</h4>
-<p>Contains tests of the sequence and composition mob</p>
+Contains tests of the sequence and composition mob
 <h4>test/com/EssenceAccess</h4>
 
-<p>Contains test of the EssenceAccess interfaces Utilities aafOMF
+Contains test of the EssenceAccess interfaces Utilities aafOMF
 conversion utility.
-</p>
 
 <HR>
 
@@ -1379,7 +1379,6 @@ Linux 8.0 I get compilation errors in ref/impl/src/OM/OMUtilities.cpp
 saying that uuid/uid.h can't be found. How can I fix this ?
 </p>
 
-<p>
 Make sure that the package e2fsprogs-devel is installed.
 </p>
 <pre>
@@ -1387,23 +1386,23 @@ $ rpm -q e2fsprogs-devel
 e2fsprogs-devel-1.27-9
 $
 </pre>
-<p>
+
 The Object Manager uses uuid_generate() from this package to create
 uuids.  Alternativley you can build the Object Manger to use a
 built-in uuid generator (define OM_USE_OM_CREATEUUID).
+
 <hr>
 
 <p>Was dodo written specifically for AAF or is it in-house an Avid tool ?</p>
 
-<p>Specifically for AAF. It was originally intended to be thrown away,
-  hence the name, the "dodo" is an extinct flightless bird. </p>
+Specifically for AAF. It was originally intended to be thrown away,
+hence the name, the "dodo" is an extinct flightless bird.
 
 <P> How would you describe "dodo" ?</P>
 
 It' a macro processor. 
 
-<p>
-What is/was the the <i>intended</i> way to EXTEND an interface using dodo ?
+<p> What is/was the the <i>intended</i> way to EXTEND an interface using dodo ?
 <br>
 (and I mean that in the proper legal  COM sense of course)
 </p>
