@@ -808,18 +808,36 @@ AAFRESULT loadWAVEHeader(aafUInt8 *buf,
 	return(AAFRESULT_SUCCESS);
 }
 
-void TestPluginManager(void)
+// Make sure all of our required plugins have been registered.
+static HRESULT RegisterRequiredPlugins(void)
 {
+  HRESULT hr = S_OK;
 	IAAFPluginManager	*mgr = NULL;
 
-//	check(AAFGetPluginManager(&mgr));
+  // Load the plugin manager 
+  check(AAFGetPluginManager(&mgr));
 
-	// BobT 9/15/99: comment out cleanup label because it is only used
-	// in the check macro.  Since the above line is commented out, the
-	// cleanup: label yields a warning in VC++.  Un-comment it when
-	// the above line is un-commented.
-// cleanup:
-	return;
+  // Attempt load and register all of the plugins
+  // in the shared plugin directory.
+  check(mgr->RegisterSharedPlugins());
+
+  // Attempt to register all of the plugin files
+  // in the given directorys:
+  //check(mgr->RegisterPluginDirectory(directory1));
+  //check(mgr->RegisterPluginDirectory(directory2));
+
+
+  // Attempt to register all of the plugins in any
+  // of the given files:
+  //check(mgr->RegisterPluginFile(file1));
+  //check(mgr->RegisterPluginFile(file2));
+  //...
+
+cleanup:
+  if (mgr)
+    mgr->Release();
+
+	return moduleErrorTmp;
 }
 
 main()
@@ -832,6 +850,9 @@ main()
 	aafWChar *	rawData = L"EssenceTestRaw.wav";
 	aafWChar *	externalAAF = L"ExternalAAFEssence.aaf";
 	testDataFile_t	dataFile;
+
+  // Make sure all of our required plugins have been registered.
+  checkFatal(RegisterRequiredPlugins());
 
 	printf("***Creating file %s using writeRawData (Internal Media)\n", pFileName);
 	checkFatal(CreateAAFFile(pwFileName, NULL, testRawCalls));
@@ -869,8 +890,6 @@ main()
 	checkFatal(CreateAAFFile(pwFileName, &dataFile, testStandardCalls));
 	printf("***Re-opening file %s using ReadSamples\n", pFileName);
 	ReadAAFFile(pwFileName, testStandardCalls);
-
-//	TestPluginManager();
 
 	printf("Done\n");
 
