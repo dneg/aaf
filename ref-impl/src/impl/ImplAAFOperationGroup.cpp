@@ -73,11 +73,11 @@ extern "C" const aafClassID_t CLSID_AAFSegment;
 const aafUID_t kNullID = {0};
 
 ImplAAFEffect::ImplAAFEffect ()
-: _effectDefinition( PID_Group_EffectDefinition, "EffectDefinition"),
-  _inputSegments( PID_Group_InputSegments, "InputSegments"),
-  _parameters( PID_Group_Parameters, "Parameters"),
-  _bypassOverride( PID_Group_BypassOverride, "BypassOverride"),
-  _rendering( PID_Group_Rendering, "Rendering")
+: _effectDefinition( PID_Effect_EffectDefinition, "EffectDefinition"),
+  _inputSegments( PID_Effect_InputSegments, "InputSegments"),
+  _parameters( PID_Effect_Parameters, "Parameters"),
+  _bypassOverride( PID_Effect_BypassOverride, "BypassOverride"),
+  _rendering( PID_Effect_Rendering, "Rendering")
 {
 	_persistentProperties.put(_effectDefinition.address());
 	_persistentProperties.put(_inputSegments.address());
@@ -397,6 +397,6 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 
-OMDEFINE_STORABLE(ImplAAFEffect, AUID_AAFGroup);
+OMDEFINE_STORABLE(ImplAAFEffect, AUID_AAFEffect);
 
 
