@@ -35,7 +35,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     GetType
         // @parm [out] type of elements in this array
-        (ImplAAFTypeDef ** ppTypeDef);
+        (ImplAAFTypeDef ** ppTypeDef) const;
 
 
   //****************
@@ -128,9 +128,29 @@ public:
   virtual aafBool IsRegistered (void) const;
   virtual size_t NativeSize (void) const;
 
+  virtual OMProperty * 
+    pvtCreateOMPropertyMBS (OMPropertyId pid,
+							const char * name) const;
+
+
 private:
   // OMWeakReferenceProperty<ImplAAFTypeDef> _ElementType;
   OMFixedSizeProperty<aafUID_t>           _ElementType;
+
+  ImplAAFTypeDefSP _cachedElemType;
+
+  ImplAAFTypeDefSP BaseType (void) const;
 };
+
+//
+// smart pointer
+//
+
+#ifndef __ImplAAFSmartPointer_h__
+// caution! includes assert.h
+#include "ImplAAFSmartPointer.h"
+#endif
+
+typedef ImplAAFSmartPointer<ImplAAFTypeDefVariableArray> ImplAAFTypeDefVariableArraySP;
 
 #endif // ! __ImplAAFTypeDefVariableArray_h__
