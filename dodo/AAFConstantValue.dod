@@ -1,5 +1,5 @@
 #startm .this-module 0
-AAFConstantValue\
+AAFConstValue\
 #endm
 #c
 #startm .parent-module 0
@@ -19,10 +19,9 @@ AD_HEAD
 AD_CLASS_BEGIN
 
 /****/
-AD_METHOD5(AAFConstValue,
-[in],AAFFile*,file,File Handle,
-[in],AAFDataKind *,datakind,Datakind object,
-[in],AAFLength,length,Length property value,
+AD_CONSTRUCTOR4(
+[in],AAFDataDefinition *,datadef,DataDefinition object,
+[in],aafLength_t,length,Length property value,
 [in],aafInt32,valueSize,Size of the value data,
 [in],void *,value,Value data,
 Constructor given starting parameters)
@@ -33,8 +32,8 @@ Constructor given starting parameters)
 	
 /****/
 AD_METHOD3(GetValue,
-[in],omfInt64,valueSize,Size of preallocated buffer,
-[out],omfInt64*,bytesRead,Number of actual bytes read,
+[in],aafInt64,valueSize,Size of preallocated buffer,
+[out],aafInt64*,bytesRead,Number of actual bytes read,
 [out],void *,value,Preallocated buffer to hold value,
 The data value is returned in a preallocated buffer of size valueSize.)
 	//@comm The actual number of bytes read is returned in
@@ -57,7 +56,7 @@ The data value is set from a buffer of size valueSize.)
   //
   // IAAFUnitTest interface method overrides
   //
-.method-Test
+AD_OVERRIDE(.method-Test)
 
 
 AD_CLASS_END
