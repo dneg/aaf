@@ -29,8 +29,15 @@
 #ifndef OMSTRONGREFPROPERTY_H
 #define OMSTRONGREFPROPERTY_H
 
-#include "OMObjectReference.h"
+#if defined (_MSC_VER)
+  // - 'this' : used in base member initializer list
+  //
+#pragma warning(disable:4355) // Gak !
+#endif
+
+#include "OMDataTypes.h"
 #include "OMPropertyBase.h"
+#include "OMObjectReference.h"
 
   // @class Persistent strong reference (contained object)
   //        properties supported by the Object Manager.

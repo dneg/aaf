@@ -29,21 +29,14 @@
 #ifndef OMPROPERTY_H
 #define OMPROPERTY_H
 
-#if defined (_MSC_VER)
-  // - 'identifier' : identifier was truncated to 'number' characters in
-  //   the debug information
-#pragma warning(disable:4786) // Gak !
-  // - 'this' : used in base member initializer list
-  //
-#pragma warning(disable:4355) // Gak !
-#endif
-
 #include "OMPropertyBase.h"
 
 #include "OMStrongRefProperty.h"
+
 #include "OMWeakRefProperty.h"
 
 #include "OMFixedSizeProperty.h"
+
 #include "OMVariableSizeProperty.h"
 
 #include "OMStrongRefVectorProperty.h"
