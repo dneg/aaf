@@ -14,16 +14,11 @@
 
 
 
-#include "CAAFTypeDefRename.h"
-#include "CAAFTypeDefRename.h"
-#ifndef __CAAFTypeDefRename_h__
-#error - improperly defined include guard
-#endif
-
+#include "AAFTypes.h" //Use #include "AAF.h" for functional module test.
 #include "AAFResult.h"
 
 
-HRESULT CAAFTypeDefRename::test()
+extern "C" HRESULT CAAFTypeDefRename_test()
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }

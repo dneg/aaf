@@ -15,16 +15,11 @@
 
 
 
-#include "CAAFTypeDefObjectRef.h"
-#include "CAAFTypeDefObjectRef.h"
-#ifndef __CAAFTypeDefObjectRef_h__
-#error - improperly defined include guard
-#endif
-
+#include "AAFTypes.h" //Use #include "AAF.h" for functional module test.
 #include "AAFResult.h"
 
 
-HRESULT CAAFTypeDefObjectRef::test()
+extern "C" HRESULT CAAFTypeDefObjectRef_test()
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
