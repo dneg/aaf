@@ -28,6 +28,8 @@
 #define __aaflib_h__
 
 #include "AAF.h"
+#include "aafrdli.h"
+
 
 
 
@@ -107,21 +109,24 @@ protected:
 public:
   virtual ~AAFDLL();
 
+	// Factory method.
+	static AAFDLL * MakeAAFDLL();
+
+
   // Return the singleton instance.
   static AAFDLL * GetAAFDLL();
 
 
-  // Abstract method that must be overridden to implement
-  // platform specific initialization of dll and entry points.
-  // NOTE: ALL ENTRY POINTS ARE REQUIRED! If any entry point
-  // cannot be found then the override of of Load MUST FAIL.
-  virtual HRESULT Load(const char *dllname) = 0;
+  // Implement platform specific initialization of dll and 
+	// entry points. NOTE: ALL ENTRY POINTS ARE REQUIRED! 
+	// If any entry point cannot be found then the override 
+	// of of Load MUST FAIL.
+  HRESULT Load(const char *dllname);
   
-  // Abstract method that must be overridden to implement
-  // platform specific cleanup of dll and entry points.
+  // Implement platform specific cleanup of dll and entry points.
   // NOTE: Implementations must be prepared to be called
   // even if their implementation of Load has failed.
-  virtual HRESULT Unload() = 0;
+  HRESULT Unload();
   
   // Resets all entry point function pointers to NULL.
   void ClearEntrypoints();
@@ -161,6 +166,11 @@ protected:
   //
   static AAFDLL *_singleton;
 
+	//
+	// Platform independent (opaque) handle to the loaded dynamic library.
+	//
+	AAFLibraryHandle _libHandle;
+
   //
   // Callback function member data loaded by overridden versions
   // of the Load() method:
@@ -178,11 +188,6 @@ protected:
 extern "C"{
 #endif 
 
-//
-// Global factory function that create an instance of the appropriate platform
-// specific subclass of AAFDLL.
-//
-AAFDLL * MakeAAFDLL();
 
 
 
