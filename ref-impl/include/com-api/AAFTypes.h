@@ -2,7 +2,7 @@
 
 
 /* File created by MIDL compiler version 5.01.0164 */
-/* at Wed Jun 16 09:07:41 2004
+/* at Wed Jul 14 16:53:15 2004
  */
 /* Compiler settings for AAFTypes.idl:
     Os (OptLev=s), W1, Zp8, env=Win32, ms_ext, c_ext
@@ -849,7 +849,10 @@ enum _aafSearchTag_e
 	kAAFByClass	= 4,
 	kAAFByDataDef	= 5,
 	kAAFByMediaCrit	= 6,
-	kAAFByUsageCode	= 7
+	kAAFByUsageCode	= 7,
+	kAAFByMasterMobUsageCode	= 8,
+	kAAFBySourceMobUsageCode	= 9,
+	kAAFByCompositionMobUsageCode	= 10
     }	aafSearchTag_e;
 
 #if 0
