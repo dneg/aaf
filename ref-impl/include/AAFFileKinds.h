@@ -27,38 +27,52 @@
 #endif
 
 // the enum to select DON'T CARE (whatever works)
-const aafUID_t aafFileKindDontCare = {0,0,0,{0,0,0,0,0,0,0,0}};
+#define aafFileKindDontCare_Value \
+{0,0,0,{0,0,0,0,0,0,0,0}};
+const aafUID_t aafFileKindDontCare = aafFileKindDontCare_Value;
 
 // to cause error if used
-const aafUID_t aafFileKindPathalogical = {0xff,0xff,0xff,{0,0,0,0,0,0,0,0}};
+#define aafFileKindPathalogical_Value \
+{0xff,0xff,0xff,{0,0,0,0,0,0,0,0}};
+const aafUID_t aafFileKindPathalogical = aafFileKindPathalogical_Value;
 
 // the enum to select the Microsoft implementation
-const aafUID_t aafFileKindAafMSSBinary = 
-{0x42464141, 0x000d, 0x4d4f, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xff}};
+#define aafFileKindAafMSSBinary_Value \
+{0x42464141, 0x000d, 0x4d4f, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xff}}
+const aafUID_t aafFileKindAafMSSBinary = aafFileKindAafMSSBinary_Value;
+
 
 // the enum to select the SchemaSoft implementation with 512 byte sectors
-const aafUID_t aafFileKindAafSSSBinary = 
-{0x42464141, 0x1205, 0x4d4f, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xff}};
+#define aafFileKindAafSSSBinary_Value \
+{0x42464141, 0x1205, 0x4d4f, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xff}}
+const aafUID_t aafFileKindAafSSSBinary = aafFileKindAafSSSBinary_Value;
 
 // the enum to select the SchemaSoft implementation with 4096 byte sectors
-const aafUID_t aafFileKindAafS4KBinary = 
-{0x42464141, 0x9640, 0x4d4f, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xff}};
+#define aafFileKindAafS4KBinary_Value \
+{0x42464141, 0x9640, 0x4d4f, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xff}}
+const aafUID_t aafFileKindAafS4KBinary = aafFileKindAafS4KBinary_Value;
+
 
 // the enum to select the Microsoft implementation with 4096 byte sectors
-const aafUID_t aafFileKindAafM4KBinary = 
-{0x42464141, 0xa838, 0x4d4f, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xff}};
+#define aafFileKindAafM4KBinary_Value \
+{0x42464141, 0xa838, 0x4d4f, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xff}}
+const aafUID_t aafFileKindAafM4KBinary = aafFileKindAafM4KBinary_Value;
+
 
 // AAF files encoded as XML (text).
 //
 // used in prototype only (TEST/ComFileKindTest)
-const aafUID_t aafFileKindAafXmlText = 
-{0x58464141, 0x000d, 0x4d4f, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xff}};
+#define aafFileKindAafXmlText_Value \
+{0x58464141, 0x000d, 0x4d4f, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xff}}
+const aafUID_t aafFileKindAafXmlText = aafFileKindAafXmlText_Value;
+
 
 // MXF files encoded as SMPTE KLV (binary).
 //
 // not yet in use. this value is incorrect, see SMPTE 377M
-const aafUID_t aafFileKindMxfKlvBinary = 
-{0x4b46584d, 0x000d, 0x4d4f, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xff}};
+#define aafFileKindMxfKlvBinary_Value \
+{0x4b46584d, 0x000d, 0x4d4f, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xff}}
+const aafUID_t aafFileKindMxfKlvBinary = aafFileKindMxfKlvBinary_Value;
 
 
 //note that aafFileKindAafSSAlternate and aafFileKindAaf4KAlternate 
@@ -68,74 +82,72 @@ const aafUID_t aafFileKindMxfKlvBinary =
 // this MUST match what is selected in ImplAAFFile.cpp
 #if defined( OS_WINDOWS )
 // DEFAULT for this build is SchemaSoft 512.
-const aafUID_t aafFileKindAafSSBinary = aafFileKindAafMSSBinary;
-const aafUID_t aafFileKindAafSSAlternate = aafFileKindAafSSSBinary;
+const aafUID_t aafFileKindAafSSBinary = aafFileKindAafMSSBinary_Value;
+const aafUID_t aafFileKindAafSSAlternate = aafFileKindAafSSSBinary_Value;
 
 //NOTE: Add default 4k binary
-const aafUID_t aafFileKindAaf4KBinary = aafFileKindAafM4KBinary;
-const aafUID_t aafFileKindAaf4KAlternate = aafFileKindAafS4KBinary;
+const aafUID_t aafFileKindAaf4KBinary = aafFileKindAafM4KBinary_Value;
+const aafUID_t aafFileKindAaf4KAlternate = aafFileKindAafS4KBinary_Value;
 
 #elif defined( OS_MACOS )
 // DEFAULT is Microsoft 512 (via MacOLE). SchemaSoft not yet ported
-const aafUID_t aafFileKindAafSSBinary = aafFileKindAafMSSBinary;
-const aafUID_t aafFileKindAafSSAlternate = aafFileKindAafMSSBinary;
+const aafUID_t aafFileKindAafSSBinary = aafFileKindAafMSSBinary_Value;
+const aafUID_t aafFileKindAafSSAlternate = aafFileKindAafMSSBinary_Value;
 
-const aafUID_t aafFileKindAaf4KBinary = aafFileKindPathalogical;
-const aafUID_t aafFileKindAaf4KAlternate = aafFileKindPathalogical;
+const aafUID_t aafFileKindAaf4KBinary = aafFileKindPathalogical_Value;
+const aafUID_t aafFileKindAaf4KAlternate = aafFileKindPathalogical_Value;
 
 
 #elif defined( OS_MACOS10 )
 // DEFAULT is Microsoft 512 (via Carbon lib(?). SchemaSoft not yet ported
-const aafUID_t aafFileKindAafSSBinary = aafFileKindAafMSSBinary;
-const aafUID_t aafFileKindAafSSAlternate = aafFileKindAafMSSBinary;
+const aafUID_t aafFileKindAafSSBinary = aafFileKindAafMSSBinary_Value;
+const aafUID_t aafFileKindAafSSAlternate = aafFileKindAafMSSBinary_Value;
 
 //note that aafFileKindAafSSAlternate and aafFileKindAaf4KAlternate 
 //will go away once we have AAFOpenFileModifyEx implmented
 //designed to fail if used
-const aafUID_t aafFileKindAaf4KBinary = aafFileKindPathalogical;
-const aafUID_t aafFileKindAaf4KAlternate = aafFileKindPathalogical;
+const aafUID_t aafFileKindAaf4KBinary = aafFileKindPathalogical_Value;
+const aafUID_t aafFileKindAaf4KAlternate = aafFileKindPathalogical_Value;
 
 
 #elif defined( OS_IRIX )
+
 // DEFAULT is Microsoft 512 (via librefstg). SchemaSoft not yet ported
-const aafUID_t aafFileKindAafSSBinary = aafFileKindAafMSSBinary;
-const aafUID_t aafFileKindAafSSAlternate = aafFileKindAafMSSBinary;
+//NOTE: change to Schemasoft for testing
+const aafUID_t aafFileKindAafSSBinary = aafFileKindAafSSSBinary_Value;
+const aafUID_t aafFileKindAafSSAlternate = aafFileKindAafMSSBinary_Value;
 
-//note that aafFileKindAafSSAlternate and aafFileKindAaf4KAlternate 
-//will go away once we have AAFOpenFileModifyEx implmented
-//designed to fail if used
-const aafUID_t aafFileKindAaf4KBinary = aafFileKindPathalogical;
-const aafUID_t aafFileKindAaf4KAlternate = aafFileKindPathalogical;
-
+const aafUID_t aafFileKindAaf4KBinary = aafFileKindAafS4KBinary_Value;
+const aafUID_t aafFileKindAaf4KAlternate = aafFileKindPathalogical_Value;
 
 #elif defined( OS_LINUX )
 // DEFAULT is Microsoft 512 (via librefstg). SchemaSoft not yet ported
 //NOTE: change to Schemasoft for testing
-const aafUID_t aafFileKindAafSSBinary = aafFileKindAafSSSBinary;
-const aafUID_t aafFileKindAafSSAlternate = aafFileKindAafMSSBinary;
+const aafUID_t aafFileKindAafSSBinary = aafFileKindAafSSSBinary_Value;
+const aafUID_t aafFileKindAafSSAlternate = aafFileKindAafMSSBinary_Value;
 //NOTE: Add default 4k binary
-const aafUID_t aafFileKindAaf4KBinary = aafFileKindAafS4KBinary;
-const aafUID_t aafFileKindAaf4KAlternate = aafFileKindAafS4KBinary;
+const aafUID_t aafFileKindAaf4KBinary = aafFileKindAafS4KBinary_Value;
+const aafUID_t aafFileKindAaf4KAlternate = aafFileKindAafS4KBinary_Value;
 
 #elif defined( OS_FREEBSD )
 // DEFAULT is Microsoft 512 (via librefstg). SchemaSoft not yet ported
-const aafUID_t aafFileKindAafSSBinary = aafFileKindAafMSSBinary;
-const aafUID_t aafFileKindAafSSAlternate = aafFileKindAafMSSBinary;
+const aafUID_t aafFileKindAafSSBinary = aafFileKindAafMSSBinary_Value;
+const aafUID_t aafFileKindAafSSAlternate = aafFileKindAafMSSBinary_Value;
 
 //note that aafFileKindAafSSAlternate and aafFileKindAaf4KAlternate 
 //will go away once we have AAFOpenFileModifyEx implmented
 //designed to fail if used
-const aafUID_t aafFileKindAaf4KBinary = aafFileKindPathalogical;
-const aafUID_t aafFileKindAaf4KAlternate = aafFileKindPathalogical;
+const aafUID_t aafFileKindAaf4KBinary = aafFileKindPathalogical_Value;
+const aafUID_t aafFileKindAaf4KAlternate = aafFileKindPathalogical_Value;
 
 
 #elif defined( OS_SOLARIS )
 // DEFAULT is SSS 512. MSS not available
-const aafUID_t aafFileKindAafSSBinary = aafFileKindAafSSSBinary;
-const aafUID_t aafFileKindAafSSAlternate = aafFileKindAafSSBinary;
+const aafUID_t aafFileKindAafSSBinary = aafFileKindAafSSSBinary_Value;
+const aafUID_t aafFileKindAafSSAlternate = aafFileKindAafSSBinary_Value;
 // default 4k binary
-const aafUID_t aafFileKindAaf4KBinary = aafFileKindAafS4KBinary;
-const aafUID_t aafFileKindAaf4KAlternate = aafFileKindAafS4KBinary;
+const aafUID_t aafFileKindAaf4KBinary = aafFileKindAafS4KBinary_Value;
+const aafUID_t aafFileKindAaf4KAlternate = aafFileKindAafS4KBinary_Value;
 
 #else
 #error Unknown platform
@@ -150,15 +162,17 @@ const aafUID_t aafFileKindAaf4KAlternate = aafFileKindAafS4KBinary;
 //
 // the signature actually stored in all AAF SS (512) files
 // note this is not a properly-formed SMPTE label, but this is legacy
-const aafUID_t aafSignature_Aaf_SSBinary = 
+#define aafSignature_Aaf_SSBinary_Value \
 {0x42464141, 0x000d, 0x4d4f, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xff}};
+const aafUID_t aafSignature_Aaf_SSBinary = aafSignature_Aaf_SSBinary_Value; 
+
 
 // the signature actually stored in all AAF SS (4096) files
 // TO BE CONFIRMED
 // [060e2b34.0401.0105.0d010101.03020000]
-const aafUID_t aafSignature_Aaf_SSBin_4K = 
+#define aafSignature_Aaf_SSBin_4K_Value \
 {0x0101010d, 0x0203, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x05}};
-
+const aafUID_t aafSignature_Aaf_SSBin_4K = aafSignature_Aaf_SSBin_4K_Value;
 
 #endif // ! __AAFFileKinds_h__
 
