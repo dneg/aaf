@@ -283,6 +283,8 @@ AAFRESULT STDMETHODCALLTYPE
 	else
 	{
 		*ppClass = _fileDescClass;
+		if (*ppClass)
+			(*ppClass)->AcquireReference();
 	}
 
 	return status;
@@ -297,6 +299,10 @@ AAFRESULT STDMETHODCALLTYPE
 	if (pClass == NULL)
 	{
 		return AAFRESULT_NULL_PARAM;
+	}
+	else if (!pClass->attached())
+	{
+		return AAFRESULT_OBJECT_NOT_ATTACHED;
 	}
 	else
 	{
