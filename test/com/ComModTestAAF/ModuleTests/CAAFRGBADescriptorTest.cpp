@@ -2,7 +2,7 @@
 // @com This file implements the module test for CAAFRGBADescriptor
 /***********************************************************************
  *
- *              Copyright (c) 1998-1999 Avid Technology, Inc.
+ *              Copyright (c) 1998-2000 Avid Technology, Inc.
  *
  * Permission to use, copy and modify this software and accompanying 
  * documentation, and to distribute and sublicense application software
@@ -253,6 +253,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
   if (pDIDesc)
     pDIDesc->Release();
 
+  if (pRGBADesc)
+    pRGBADesc->Release();
+
   if (pMob)
     pMob->Release();
 
@@ -417,6 +420,9 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
   // Cleanup and return
   if (pEssDesc)
     pEssDesc->Release();
+
+  if (pRGBADesc)
+    pRGBADesc->Release();
 
   if (pDIDesc)
     pDIDesc->Release();

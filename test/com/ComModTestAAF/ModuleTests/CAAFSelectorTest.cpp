@@ -2,7 +2,7 @@
 // @com This file implements the module test for CAAFSelector
 /***********************************************************************
  *
- *              Copyright (c) 1998-1999 Avid Technology, Inc.
+ *              Copyright (c) 1998-2000 Avid Technology, Inc.
  *
  * Permission to use, copy and modify this software and accompanying 
  * documentation, and to distribute and sublicense application software
@@ -240,6 +240,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pSelector->AppendAlternateSegment(pSegment));
 		// Release the intreface so we can reuse the pointer
 		pSegment->Release();
+		pSegment = NULL;
+		pFiller->Release();
+		pFiller = NULL;
 
 		// create another filler, add it as an alternate, count two alternates, 
 		// then delete and check for only one alternate
@@ -249,14 +252,15 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	    checkResult(pFiller->Initialize(defs.ddPicture(), fillerLength));
 		checkResult(pFiller->QueryInterface(IID_IAAFSegment, (void **)&pSegment));
 		checkResult(pSelector->AppendAlternateSegment(pSegment));
-		pSegment->Release();
 		checkResult(pSelector->GetNumAlternateSegments (&numAlternates));
 		checkExpression(2 == numAlternates, AAFRESULT_TEST_FAILED);
 		checkResult(pSelector->RemoveAlternateSegment (pSegment));
 		checkResult(pSelector->GetNumAlternateSegments (&numAlternates));
 		checkExpression(1 == numAlternates, AAFRESULT_TEST_FAILED);
-
-
+		pSegment->Release();
+		pSegment = NULL;
+		pFiller->Release();
+		pFiller = NULL;
 
 
 		checkResult(pSelector->QueryInterface(IID_IAAFSegment, (void **)&pSegment));

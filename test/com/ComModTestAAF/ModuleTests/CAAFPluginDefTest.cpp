@@ -2,7 +2,7 @@
 // @com This file implements the module test for CAAFPluginDef
 /***********************************************************************
  *
- *              Copyright (c) 1998-1999 Avid Technology, Inc.
+ *              Copyright (c) 1998-2000 Avid Technology, Inc.
  *
  * Permission to use, copy and modify this software and accompanying 
  * documentation, and to distribute and sublicense application software
@@ -221,6 +221,10 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	checkResult(pDesc->SetPluginAPI(kAAFEssencePluginAPI));
     checkResult(pDesc->SetPluginAPIMinimumVersion(sampleMinAPIVersion));
     checkResult(pDesc->SetPluginAPIMaximumVersion(sampleMaxAPIVersion));
+    pLoc->Release();
+    pLoc = NULL;
+    pNetLoc->Release();
+    pNetLoc = NULL;
 
 	checkResult(pDictionary->RegisterPluginDef (	pDesc));
 
@@ -234,6 +238,11 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
     checkResult(pDesc->AppendLocator(pLoc));
 	/**/
 	checkResult(pDesc->SetDefinitionObjectID(CODEC_DEF_ID));
+	pLoc->Release();
+	pLoc = NULL;
+	pNetLoc->Release();
+	pNetLoc = NULL;
+
 
 	
 	checkResult(pPlugDef->QueryInterface (IID_IAAFCodecDef,
@@ -253,6 +262,10 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
     checkResult(pDesc->PrependLocator(pLoc));
 	pLoc->Release();
 	pLoc = NULL;
+	pNetLoc->Release();
+	pNetLoc = NULL;
+
+
 	// Create a third locator, check for three locators, then delete it and recheck for two.
 	checkResult(defs.cdNetworkLocator()->
 				CreateInstance(IID_IAAFNetworkLocator, 
@@ -263,6 +276,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
     checkResult(pDesc->AppendLocator(pLoc));
 	pLoc->Release();
 	pLoc = NULL;
+	pNetLoc->Release();
+	pNetLoc = NULL;
+
     checkResult(pDesc->CountLocators (&numLocators));
 	checkExpression(3 == numLocators, AAFRESULT_TEST_FAILED);
     checkResult(pDesc->RemoveLocatorAt(2));
@@ -277,6 +293,10 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
                                           (void **)&pLoc));
 	checkResult(pLoc->SetPath (manuf2URL));
     checkResult(pDesc->InsertLocatorAt(1,pLoc));
+	pLoc->Release();
+	pLoc = NULL;
+	pNetLoc->Release();
+	pNetLoc = NULL;
   }
   catch (HRESULT& rResult)
   {

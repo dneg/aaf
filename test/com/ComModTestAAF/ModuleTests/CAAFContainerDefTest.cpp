@@ -2,7 +2,7 @@
 // @com This file implements the module test for CAAFContainerDef
 /***********************************************************************
  *
- *              Copyright (c) 1998-1999 Avid Technology, Inc.
+ *              Copyright (c) 1998-2000 Avid Technology, Inc.
  *
  * Permission to use, copy and modify this software and accompanying 
  * documentation, and to distribute and sublicense application software
@@ -220,6 +220,10 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 				checkExpression(testBool == kAAFTrue, AAFRESULT_TEST_FAILED);
 				break;
 			}
+			pDef->Release();
+			pDef = NULL;
+			pPlugDef->Release();
+			pPlugDef = NULL;
 		}
 	}
 	catch (HRESULT& rResult)

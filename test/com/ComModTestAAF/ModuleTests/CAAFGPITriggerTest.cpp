@@ -279,8 +279,8 @@ void GPITriggerTest::CreateGPITrigger()
 		checkResult(defs.cdDataDef()->
 					CreateInstance (IID_IAAFDataDef,
 									(IUnknown **)&pDataDef));
-	  hr = pDataDef->Initialize (DDEF_TEST, L"Test", L"Test data");
-	  hr = _pDictionary->RegisterDataDef (pDataDef);
+	  checkResult(pDataDef->Initialize (DDEF_TEST, L"Test", L"Test data"));
+	  checkResult(_pDictionary->RegisterDataDef (pDataDef));
 
 	// Create a GPITrigger
     checkResult(defs.cdGPITrigger()->
@@ -369,6 +369,12 @@ void GPITriggerTest::CreateGPITrigger()
     pSegment = NULL;
   }
 
+  if (pEvent)
+  {
+    pEvent->Release();
+    pEvent = NULL;
+  }
+
   if (pTrigger)
   {
     pTrigger->Release();
@@ -446,6 +452,12 @@ void GPITriggerTest::OpenGPITrigger()
   }
 
   // Cleanup local references
+  if (pTrigger)
+  {
+    pTrigger->Release();
+    pTrigger = NULL;
+  }
+
   if (pEvent)
   {
     pEvent->Release();

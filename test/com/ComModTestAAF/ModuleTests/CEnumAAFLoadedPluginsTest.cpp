@@ -128,14 +128,14 @@ extern "C" HRESULT CEnumAAFLoadedPlugins_test(testMode_t mode)
 {
 	HRESULT hr = AAFRESULT_SUCCESS;
 	IEnumAAFLoadedPlugins	*pEnum = NULL, *pCloneEnum = NULL;
-	IAAFPluginManager		*pMgr;
+	IAAFPluginManager		*pMgr = NULL;
 	aafUID_t				testUID;
 	IAAFFile*		pFile = NULL;
 	bool bFileOpen = false;
 	IAAFHeader *        pHeader = NULL;
 	IAAFDictionary*  pDictionary = NULL;
 	aafWChar * pFileName = L"EnumAAFLoadedPluginsTest.aaf";
-	IAAFDefObject	*pPluginDef;
+	IAAFDefObject	*pPluginDef = NULL;
 	aafInt32		numPlugins, checkNumPlugins;
 
 	try
@@ -146,6 +146,8 @@ extern "C" HRESULT CEnumAAFLoadedPlugins_test(testMode_t mode)
 		// Remove the previous test file if any.
 		RemoveTestFile(pFileName);		
 		
+		checkResult(AAFGetPluginManager (&pMgr));
+
 		// Create the AAF file
 		checkResult(OpenAAFFile(pFileName, kAAFMediaOpenAppend, /*&pSession,*/ &pFile, &pHeader));			
 		bFileOpen = true;
@@ -153,7 +155,6 @@ extern "C" HRESULT CEnumAAFLoadedPlugins_test(testMode_t mode)
 		// Get the AAF Dictionary so that we can create valid AAF objects.
 		checkResult(pHeader->GetDictionary(&pDictionary));
 		
-		checkResult(AAFGetPluginManager (&pMgr));
 		checkResult(pMgr->EnumLoadedPlugins (AUID_AAFCodecDef, &pEnum));
 		numPlugins = 0;
 		while(pEnum->NextOne (&testUID) == AAFRESULT_SUCCESS)
@@ -209,16 +210,22 @@ extern "C" HRESULT CEnumAAFLoadedPlugins_test(testMode_t mode)
 		hr = AAFRESULT_TEST_FAILED;
 	}
 
+	if (pCloneEnum)
+		pCloneEnum->Release();
+
+
+	if (pPluginDef)
+		pPluginDef->Release();
+	
+	if (pEnum)
+		pEnum->Release();
+	
 	if (pDictionary)
 		pDictionary->Release();
 	
 	if (pHeader)
 		pHeader->Release();
-	if (pEnum)
-		pEnum->Release();
-	if (pCloneEnum)
-		pCloneEnum->Release();
-	
+
 	if (pFile)
 	{  // Close file
 		if (bFileOpen)
@@ -228,6 +235,9 @@ extern "C" HRESULT CEnumAAFLoadedPlugins_test(testMode_t mode)
 		}
 		pFile->Release();
 	}
+
+	if (pMgr)
+		pMgr->Release();
 	
 	// When all of the functionality of this class is tested, we can return success.
 	// When a method and its unit test have been implemented, remove it from the list.

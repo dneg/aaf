@@ -3,7 +3,7 @@
 
 /***********************************************************************
 *
-*              Copyright (c) 1998-1999 Avid Technology, Inc.
+*              Copyright (c) 1998-2000 Avid Technology, Inc.
 *
 * Permission to use, copy and modify this software and accompanying 
 * documentation, and to distribute and sublicense application software
@@ -382,6 +382,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 			checkResult(pComponent->SetLength(TEST_EFFECT_LEN));
 			checkResult(pComponent->SetDataDef(defs.ddPicture()));
 			checkResult(pOperationGroup->PrependInputSegment (pFiller));
+			pComponent->Release();
+			pComponent = NULL;
 			pFiller->Release();
 			pFiller = NULL;
 
@@ -393,6 +395,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 			checkResult(pComponent->SetLength(TEST_EFFECT_LEN+1));
 			checkResult(pComponent->SetDataDef(defs.ddPicture()));
 			checkResult(pOperationGroup->InsertInputSegmentAt(1,pFiller));
+			pComponent->Release();
+			pComponent = NULL;
 			pFiller->Release();
 			pFiller = NULL;
 
@@ -558,6 +562,8 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 				pFill=NULL;
 				pComponent->Release();
 				pComponent=NULL;
+				pSeg->Release();
+				pSeg = NULL;
 			}
 
 			checkResult(pOperationGroup->CountParameters(&testNumParam));
@@ -600,8 +606,6 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 			pOperationGroup = NULL;
 			pSlot->Release();
 			pSlot = NULL;
-			pSeg->Release();
-			pSeg = NULL;
 			pSourceRef->Release();
 			pSourceRef = NULL;
 		}
