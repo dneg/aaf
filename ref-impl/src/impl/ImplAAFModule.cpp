@@ -41,6 +41,9 @@
 #include "AAFPrivate.h"
 #include "AAFResult.h"
 
+#include "AAFSDKBuild.h"
+
+
 #include "ImplAAFPluginManager.h"
 #include "ImplAAFFile.h"
 #include "ImplAAFObjectCreation.h"
@@ -1112,6 +1115,12 @@ ImplAAFCreateAAFFileOnRawStorage
   return hr;
 }
 
+
+
+extern const char AAFReferenceImplementationIdent[];
+
+const char AAFReferenceImplementationIdent[] = "@(#) " AAF_SDK_RELEASE; // for Linux and Irix
+const aafProductVersion_t AAFReferenceImplementationVersion = {AAF_MAJOR_VERSION, AAF_MINOR_VERSION, AAF_MAINT_RELEASE, AAF_PATCH_LEVEL, AAF_RELEASE_STAGE};
 
 
 STDAPI

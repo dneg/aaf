@@ -29,6 +29,7 @@
 #include "aafTable.h"
 #include "aafErr.h"
 #include "AAFUtils.h"
+#include "ImplAAFModule.h"
 
 #ifndef __ImplAAFMob_h__
 #include "ImplAAFMob.h"
