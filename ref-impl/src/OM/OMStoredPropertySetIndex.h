@@ -49,11 +49,11 @@ public:
   ~OMStoredPropertySetIndex(void);
 
     // @cmember Insert a new property into this <c OMStoredPropertySetIndex>.
-    //          The new property has id <p propertyId>. The property
-    //          representation is of type <p type>. The property value
+    //          The new property has id <p propertyId>. The stored property
+    //          representation is <p storedForm>. The property value
     //          occupies <p length> bytes starting at offset <p offset>.
   void insert(OMPropertyId propertyId,
-              OMUInt32 type,
+              OMUInt32 storedForm,
               OMUInt32 offset,
               OMUInt32 length);
   
@@ -64,15 +64,15 @@ public:
     //          <c OMStoredPropertySetIndex>.
   void iterate(size_t& context,
                OMPropertyId& propertyId,
-               OMUInt32& type,
+               OMUInt32& storedForm,
                OMUInt32& offset,
                OMUInt32& length) const;
 
     // @cmember Find the property with property id <p propertyId> in this
-    //          <c OMStoredPropertySetIndex>. If found the <p type>,
+    //          <c OMStoredPropertySetIndex>. If found the <p storedForm>,
     //          <p offset> and <p length> of the property are returned.
   bool find(const OMPropertyId& propertyId,
-            OMUInt32& type,
+            OMUInt32& storedForm,
             OMUInt32& offset,
             OMUInt32& length) const;
 
@@ -89,7 +89,7 @@ private:
     
   struct IndexEntry {
     OMPropertyId _propertyId;
-    OMUInt32 _type;
+    OMUInt32 _storedForm;
     OMUInt32 _offset;
     OMUInt32 _length;
     bool _valid;

@@ -41,7 +41,7 @@ OMStoredPropertySetIndex::OMStoredPropertySetIndex(size_t capacity)
   for (size_t i = 0; i < _capacity; i++) {
     _table[i]._valid = false;
     _table[i]._propertyId = 0;
-    _table[i]._type = 0;
+    _table[i]._storedForm = 0;
     _table[i]._length = 0;
     _table[i]._offset = 0;
   }
@@ -56,15 +56,15 @@ OMStoredPropertySetIndex::~OMStoredPropertySetIndex(void)
 }
 
   // @mfunc Insert a new property into this <c OMStoredPropertySetIndex>.
-  //        The new property has id <p propertyId>. The property
-  //        representation is of type <p type>. The property value
+  //        The new property has id <p propertyId>. The stored property
+  //        representation is <p storedForm>. The property value
   //        occupies <p length> bytes starting at offset <p offset>.
   //   @parm The id of the property to insert.
-  //   @parm The type of representation to use for the property.
+  //   @parm The stored form to use for the property.
   //   @parm The offset of the property value in bytes.
   //   @parm The size of the property value in bytes.
 void OMStoredPropertySetIndex::insert(OMPropertyId propertyId,
-                                      OMUInt32 type,
+                                      OMUInt32 storedForm,
                                       OMUInt32 offset,
                                       OMUInt32 length)
 {
@@ -81,7 +81,7 @@ void OMStoredPropertySetIndex::insert(OMPropertyId propertyId,
   ASSERT("Valid index entry", entry != 0);
 
   entry->_propertyId = propertyId;
-  entry->_type = type;
+  entry->_storedForm = storedForm;
   entry->_offset = offset;
   entry->_length = length;
   entry->_valid = true;
@@ -101,13 +101,13 @@ size_t OMStoredPropertySetIndex::entries(void) const
   //   @parm Iteration  context. Set this to 0 to start with the
   //         "first" property.
   //   @parm The id of the "current" property.
-  //   @parm The type of representation used for the "current" property.
+  //   @parm The stored form used for the "current" property.
   //   @parm The offset of the "current" property value in bytes.
   //   @parm The size of the "current" property value in bytes.
   //   @this const
 void OMStoredPropertySetIndex::iterate(size_t& context,
                                        OMPropertyId& propertyId,
-                                       OMUInt32& type,
+                                       OMUInt32& storedForm,
                                        OMUInt32& offset,
                                        OMUInt32& length) const
 {
@@ -126,7 +126,7 @@ void OMStoredPropertySetIndex::iterate(size_t& context,
   }
   if (entry != 0) {
     propertyId = entry->_propertyId;
-    type = entry->_type;
+    storedForm = entry->_storedForm;
     offset = entry->_offset;
     length = entry->_length;
     context = ++found;
@@ -136,16 +136,16 @@ void OMStoredPropertySetIndex::iterate(size_t& context,
 }
 
   // @mfunc Find the property with property id <p propertyId> in this
-  //        <c OMStoredPropertySetIndex>. If found the <p type>,
+  //        <c OMStoredPropertySetIndex>. If found the <p storedForm>,
   //        <p offset> and <p length> of the property are returned.
   //   @parm The id of the property to find.
-  //   @parm The type of representation used for the property.
+  //   @parm The stored form used for the property.
   //   @parm The offset of the property value in bytes.
   //   @parm The size of the property value in bytes.
   //   @rdesc True if a property with the given id was found, false otherwise.
   //   @this const  
 bool OMStoredPropertySetIndex::find(const OMPropertyId& propertyId,
-                                    OMUInt32& type,
+                                    OMUInt32& storedForm,
                                     OMUInt32& offset,
                                     OMUInt32& length) const
 {
@@ -153,7 +153,7 @@ bool OMStoredPropertySetIndex::find(const OMPropertyId& propertyId,
 
   OMStoredPropertySetIndex::IndexEntry* e = find(propertyId);
   if (e != 0) {
-    type = e->_type;
+    storedForm = e->_storedForm;
     offset = e->_offset;
     length = e->_length;
     result = true;
