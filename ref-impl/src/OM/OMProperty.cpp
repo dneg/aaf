@@ -527,9 +527,9 @@ bool OMProperty::isVoid(void) const
 }
 
   // @mfunc Remove this optional <c OMProperty>.
-void OMProperty::remove(void)
+void OMProperty::removeProperty(void)
 {
-  TRACE("OMProperty::remove");
+  TRACE("OMProperty::removeProperty");
   PRECONDITION("Property is optional", isOptional());
   PRECONDITION("Optional property is present", isPresent());
   clearPresent();
