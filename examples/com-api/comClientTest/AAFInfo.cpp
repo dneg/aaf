@@ -209,6 +209,11 @@ static void ReadAAFFile(aafWChar * pFileName)
 
             pIdent->Release();
             pIdent = NULL;
+
+            aafNumSlots_t n;
+            hr = pHeader->GetNumMobs(kAllMob, &n);
+            check(hr);
+            printf("Number of Mobs       = %d\n", n);
           }
           pHeader->Release();
           pHeader = NULL;
