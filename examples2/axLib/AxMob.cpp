@@ -39,9 +39,9 @@ aafNumSlots_t AxMob::CountSlots()
 	return numSlots;
 }
 
-void AxMob::AppendSlot( IAAFMobSlotSP spMob )
+void AxMob::AppendSlot( IAAFMobSlotSP spSlot )
 {
-	CHECK_HRESULT( _spIaafMob->AppendSlot( spMob ) );
+	CHECK_HRESULT( _spIaafMob->AppendSlot( spSlot ) );
 }
 
 aafMobID_t AxMob::GetMobID()
@@ -68,11 +68,11 @@ AxString AxMob::GetName()
 
 	int sizeInChars = sizeInBytes/sizeof( aafCharacter ) + 1;
 
-	std::auto_ptr<aafCharacter> buf( new aafCharacter[ sizeInChars ] );
+	std::vector< aafCharacter > buf( sizeInChars );
 
-	CHECK_HRESULT( _spIaafMob->GetName( buf.get(), sizeInBytes ) );
+	CHECK_HRESULT( _spIaafMob->GetName( &buf[0], sizeInBytes ) );
 
-	return AxString( buf.get() );
+	return AxString( &buf[0] );
 }
 
 void AxMob::SetName( const AxString& name )
@@ -211,6 +211,16 @@ IAAFEssenceAccessSP AxMasterMob::CreateEssence(	aafSlotID_t  masterSlotID,
 							&spIaafEssenceAccess ) );
 
 	return spIaafEssenceAccess;
+}
+	
+void AxMasterMob::AddMasterSlot(
+		IAAFDataDefSP		spDataDef,
+		aafSlotID_t			sourceSlotID,
+		IAAFSourceMobSP		spSourceMob,
+		aafSlotID_t			masterSlotID,
+		const AxString&		slotName )
+{
+	CHECK_HRESULT( _spIaafMasterMob->AddMasterSlot( spDataDef, sourceSlotID, spSourceMob, masterSlotID, slotName.c_str() ) );
 }
 
 //=---------------------------------------------------------------------=

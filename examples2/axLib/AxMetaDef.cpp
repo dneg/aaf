@@ -397,14 +397,13 @@ AxString AxTypeDefRecord::GetMemberName( aafUInt32 index )
 
 	sizeInChars = sizeInBytes / sizeof(aafCharacter) + 1;
 
-	std::auto_ptr<aafCharacter>
-		buf( new aafCharacter[ sizeInChars ] );
+	std::vector< aafCharacter > buf( sizeInChars );
 	
 	CHECK_HRESULT( _spIaafTypeDefRecord->GetMemberName( index,
-							    buf.get(),
+							    &buf[0],
 							    sizeInBytes ) );
 													  
-	return AxString( buf.get() );
+	return AxString( &buf[0] );
 }
 
 IAAFPropertyValueSP AxTypeDefRecord::GetValue( IAAFPropertyValueSP& spRecordPropVal,
@@ -460,14 +459,13 @@ AxString AxTypeDefString::GetElements( IAAFPropertyValueSP& propVal )
 
 	sizeInBytes = sizeof(aafCharacter)*sizeInChars;
 
-	std::auto_ptr< aafCharacter >
-		buf( new aafCharacter[ sizeInChars ] );
+	std::vector< aafCharacter > buf( sizeInChars );
 	
 	CHECK_HRESULT( _spIaafTypeDefString->GetElements( propVal,
-							  reinterpret_cast<aafMemPtr_t>(buf.get()),
+							  reinterpret_cast<aafMemPtr_t>(&buf[0]),
 							  sizeInBytes ) );
-													  
-	return AxString( buf.get() );
+	
+	return AxString( &buf[0] );
 }
 
 //=---------------------------------------------------------------------=
@@ -634,13 +632,12 @@ AxString AxTypeDefEnum::GetElementName( aafUInt32 index )
 	CHECK_HRESULT( _spIaafTypeDefEnum->GetElementNameBufLen( index, &sizeInBytes ) );
 
 	int sizeInChars = (int)( (double)sizeInBytes / sizeof(aafCharacter) + 0.5 );
-	std::auto_ptr< aafCharacter >
-		buf( new aafCharacter[ sizeInChars ] );
+	std::vector< aafCharacter > buf( sizeInChars );
 
-	CHECK_HRESULT( _spIaafTypeDefEnum->GetElementName( index, buf.get(), 
+	CHECK_HRESULT( _spIaafTypeDefEnum->GetElementName( index, &buf[0], 
 		sizeInChars*sizeof(aafCharacter) ) );
 	
-	AxString name( buf.get() );
+	AxString name( &buf[0] );
 
 	return name;
 }
@@ -660,13 +657,12 @@ AxString AxTypeDefEnum::GetNameFromValue( IAAFPropertyValueSP &spPropVal )
 	CHECK_HRESULT( _spIaafTypeDefEnum->GetNameBufLenFromValue( spPropVal, &sizeInBytes ) );
 
 	int sizeInChars = (int)( (double)sizeInBytes / sizeof(aafCharacter) + 0.5 );
-	std::auto_ptr< aafCharacter >
-		buf( new aafCharacter[ sizeInChars ] );
+	std::vector< aafCharacter > buf( sizeInChars );
 
-	CHECK_HRESULT( _spIaafTypeDefEnum->GetNameFromValue( spPropVal, buf.get(), 
+	CHECK_HRESULT( _spIaafTypeDefEnum->GetNameFromValue( spPropVal, &buf[0], 
 		sizeInChars*sizeof(aafCharacter) ) );
 	
-	AxString name( buf.get() );
+	AxString name( &buf[0] );
 
 	return name;
 
@@ -708,13 +704,12 @@ AxString AxTypeDefExtEnum::GetElementName( aafUInt32 index )
 	CHECK_HRESULT( _spIaafTypeDefExtEnum->GetElementNameBufLen( index, &sizeInBytes ) );
 
 	int sizeInChars = (int)( (double)sizeInBytes / sizeof(aafCharacter) + 0.5 );
-	std::auto_ptr< aafCharacter >
-		buf( new aafCharacter[ sizeInChars ] );
+	std::vector< aafCharacter > buf( sizeInChars );
 
-	CHECK_HRESULT( _spIaafTypeDefExtEnum->GetElementName( index, buf.get(), 
+	CHECK_HRESULT( _spIaafTypeDefExtEnum->GetElementName( index, &buf[0], 
 		sizeInChars*sizeof(aafCharacter) ) );
 	
-	AxString name( buf.get() );
+	AxString name( &buf[0] );
 
 	return name;
 }

@@ -113,12 +113,11 @@ AxString AxDefNameToString( IAAFSmartPointer< Type >& sp )
 	// sized aafCharacter array.  Add one to account for possible rounding.
 
 	int sizeInChars = (sizeInBytes /sizeof(aafCharacter)) + 1;
-	std::auto_ptr< aafCharacter >
-		buf( new aafCharacter[ sizeInChars ] );
+	std::vector< aafCharacter > buf( sizeInChars );
 
-	CHECK_HRESULT( spDef->GetName( buf.get(), sizeInChars*sizeof(aafCharacter) ) );
+	CHECK_HRESULT( spDef->GetName( &buf[0], sizeInChars*sizeof(aafCharacter) ) );
 	
-	AxString name( buf.get() );
+	AxString name( &buf[0] );
 
 	return name;
 }
@@ -139,12 +138,11 @@ AxString AxNameToString( IAAFSmartPointer< Type >& sp )
 	// sized aafCharacter array.  Add one to account for possible rounding.
 
 	int sizeInChars = (sizeInBytes /sizeof(aafCharacter)) + 1;
-	std::auto_ptr< aafCharacter >
-		buf( new aafCharacter[ sizeInChars ] );
+	std::vector< aafCharacter > buf( sizeInChars );
 
-	CHECK_HRESULT( sp->GetName( buf.get(), sizeInChars*sizeof(aafCharacter) ) );
+	CHECK_HRESULT( sp->GetName( &buf[0], sizeInChars*sizeof(aafCharacter) ) );
 	
-	AxString name( buf.get() );
+	AxString name( &buf[0] );
 
 	return name;
 }
@@ -164,12 +162,11 @@ AxString AxDescriptionToString( IAAFSmartPointer< Type >& sp )
 	// sized aafCharacter array.  Add one to account for possible rounding.
 
 	int sizeInChars = (sizeInBytes /sizeof(aafCharacter)) + 1;
-	std::auto_ptr< aafCharacter >
-		buf( new aafCharacter[ sizeInChars ] );
+	std::vector< aafCharacter > buf( sizeInChars );
 
-	CHECK_HRESULT( sp->GetDescription( buf.get(), sizeInChars*sizeof(aafCharacter) ) );
+	CHECK_HRESULT( sp->GetDescription( &buf[0], sizeInChars*sizeof(aafCharacter) ) );
 	
-	AxString name( buf.get() );
+	AxString name( &buf[0] );
 
 	return name;
 }
@@ -184,11 +181,9 @@ AxString AxDescriptionToString( IAAFSmartPointer< Type >& sp )
 	aafUInt32 _sizeInBytes = 0; \
 	CHECK_HRESULT( ((POINTER)->GETBUFLEN)( &_sizeInBytes ) ); \
 	int _sizeInChars = (_sizeInBytes /sizeof(aafCharacter)) + 1; \
-	std::auto_ptr< aafCharacter > \
-		_buf( new aafCharacter[ _sizeInChars ] ); \
-    CHECK_HRESULT( ((POINTER)->GETBUF)( _buf.get(), \
-			                              _sizeInChars*sizeof(aafCharacter) ) ); \
-	AxString tmp( _buf.get() ); \
+	std::vector< aafCharacter > _buf( _sizeInChars ); \
+	CHECK_HRESULT( ((POINTER)->GETBUF)( &_buf[0], _sizeInChars*sizeof(aafCharacter) ) ); \
+	AxString tmp( &_buf[0] ); \
 	AXSTRING_RET = tmp; \
 }
 

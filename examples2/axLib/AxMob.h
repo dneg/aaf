@@ -39,7 +39,7 @@ public:
 	
 	aafNumSlots_t CountSlots();
 
-	void AppendSlot( IAAFMobSlotSP spMob );
+	void AppendSlot( IAAFMobSlotSP spSlot );
 
 	IAAFMobSlotSP LookupSlot( aafSlotID_t slotId );
 
@@ -129,6 +129,13 @@ public:
 		aafMediaOpenMode_t	openMode,		// ReadOnly or Append
 		aafCompressEnable_t	compEnable );	// optionally decompressing
 	
+	void AddMasterSlot(
+		IAAFDataDefSP		spDataDef,		// Data kind of new slot. (Probably DDEF_Picture or DDEF_Sound)
+		aafSlotID_t			sourceSlotID,	// Slot ID of the Source Mob slot to be added to the Master Mob
+		IAAFSourceMobSP		spSourceMob,	// Source Mob containing the slot to be added to the Master Mob
+		aafSlotID_t			masterSlotID,	// SlotID assigned to the new Master Mob slot
+		const AxString&		slotName );		// Name to assign to new slot in Master Mob
+
 	inline operator IAAFMasterMobSP ()
 	{ return _spIaafMasterMob; }
 
@@ -205,6 +212,9 @@ public:
 	virtual ~AxCompositionMob();
 	
 	void Initialize( const AxString& name );
+
+	inline operator IAAFCompositionMobSP ()
+	{ return _spIaafCompositionMob; }
 
 private:
 	AxCompositionMob();
