@@ -91,3 +91,77 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFWeakRefSetValue::WriteTo(
 {
   return (ImplAAFRefSetValue::WriteTo(pOmProp));
 }
+
+
+
+
+  
+//
+// ImplAAFRefContainer overrides
+//
+
+// Return the type of object references in the container.
+ImplAAFTypeDefObjectRef * ImplAAFWeakRefSetValue::GetElementType(void) const // the result is NOT reference counted.
+{
+  ImplAAFTypeDefObjectRef * pContainerElementType = NULL;
+  ImplAAFTypeDefSet *pContainerType = NULL;
+  AAFRESULT result = AAFRESULT_SUCCESS;
+  ImplAAFTypeDefSP pType, pElementType;
+  
+  result = GetType(&pType);
+  assert(AAFRESULT_SUCCEEDED(result));
+  if (AAFRESULT_SUCCEEDED(result))
+  {
+    pContainerType = dynamic_cast<ImplAAFTypeDefSet *>((ImplAAFTypeDef *)pType); // extract obj from smartptr
+    assert(NULL != pContainerType);
+    if (NULL != pContainerType)
+    {
+      result = pContainerType->GetElementType(&pElementType);
+      assert(AAFRESULT_SUCCEEDED(result));
+      if (AAFRESULT_SUCCEEDED(result))
+      {
+        pContainerElementType = dynamic_cast<ImplAAFTypeDefWeakObjRef *>((ImplAAFTypeDef *)pElementType); // extract obj from smartptr
+      }
+    }
+  }
+  
+  assert(pContainerElementType);
+  return pContainerElementType;
+}
+
+
+// Perform specialized validation for an object before it is added
+// to a container.
+AAFRESULT ImplAAFWeakRefSetValue::ValidateNewObject(ImplAAFStorable *pNewObject) const
+{
+  assert (isInitialized());
+  if (!isInitialized())
+    return AAFRESULT_NOT_INITIALIZED;
+
+  assert(NULL != pNewObject);
+  if (!pNewObject->attached())
+  {
+    return AAFRESULT_OBJECT_NOT_ATTACHED;
+  }
+ 
+  // Hand off to the OMContainerProperty
+  OMContainerProperty * pContainerProperty = containerProperty();
+
+  // Object refernce containers should only contain a single reference
+  // to an object.
+  if (pContainerProperty->containsObject(pNewObject))
+  {
+    return AAFRESULT_TABLE_DUP_KEY; // Object is already in the set!
+  }
+
+  return AAFRESULT_SUCCESS;
+}
+
+
+// Perform any specialized cleanup of any object after it has been removed
+// from the container.
+bool ImplAAFWeakRefSetValue::usesReferenceCounting(void) const
+{
+  return false;
+}
+  
