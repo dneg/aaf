@@ -2,8 +2,10 @@
 #include "CAAFInProcServer.h"
 #endif
 
-
+#if defined(macintosh) || defined(_MAC)
+// Temporary.
 #include "aafrdli.h"
+#endif
 
 #include <assert.h>
 #include <string.h>
