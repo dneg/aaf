@@ -242,7 +242,6 @@ ImplAAFFile::OpenExistingRead (const aafCharacter * pFileName,
 		// restored, complete the initialization of the
 		// dictionary. We obtain the dictionary via the header
 		// to give the persistence mechanism a chance to work.
-    _factory->InitOMProperties(_factory->GetBuiltinDefs()->cdDictionary());
 		ImplAAFDictionary* dictionary = 0;
 		HRESULT hr = _head->GetDictionary(&dictionary);
 		if (hr != AAFRESULT_SUCCESS)
@@ -498,12 +497,11 @@ ImplAAFFile::OpenNewModify (const aafCharacter * pFileName,
 		// restored, complete the initialization of the
 		// dictionary. We obtain the dictionary via the header
 		// to give the persistence mechanism a chance to work.
+		_factory->InitializeOMStorable (_factory->GetBuiltinDefs()->cdDictionary());
 		ImplAAFDictionary* dictionary = 0;
 		HRESULT hr = _head->GetDictionary(&dictionary);
 		if (hr != AAFRESULT_SUCCESS)
 		  return hr;
-		dictionary->InitOMProperties
-		  (dictionary->GetBuiltinDefs()->cdDictionary());
 		dictionary->InitBuiltins();
 
 		dictionary->ReleaseReference();
@@ -748,8 +746,6 @@ AAFRESULT ImplAAFFile::pvtCreateExistingRead ()
 		// restored, complete the initialization of the
 		// dictionary. We obtain the dictionary via the header
 		// to give the persistence mechanism a chance to work.
-		_factory->InitOMProperties
-		  (_factory->GetBuiltinDefs()->cdDictionary());
 		ImplAAFDictionary* dictionary = 0;
 		HRESULT hr = _head->GetDictionary(&dictionary);
 		if (hr != AAFRESULT_SUCCESS)
@@ -950,12 +946,11 @@ AAFRESULT ImplAAFFile::pvtCreateNewModify
 		// restored, complete the initialization of the
 		// dictionary. We obtain the dictionary via the header
 		// to give the persistence mechanism a chance to work.
+		_factory->InitializeOMStorable (_factory->GetBuiltinDefs()->cdDictionary());
 		ImplAAFDictionary* dictionary = 0;
 		HRESULT hr = _head->GetDictionary(&dictionary);
 		if (hr != AAFRESULT_SUCCESS)
 		  return hr;
-		dictionary->InitOMProperties
-		  (dictionary->GetBuiltinDefs()->cdDictionary());
 		dictionary->InitBuiltins();
 
 		dictionary->ReleaseReference();
