@@ -1,0 +1,35 @@
+#startm .this-module 0
+AAFTIFFData\
+#endm
+#c
+#startm .parent-module 0
+AAFImageData\
+#endm
+#c
+#import ./AAFImageData.exp
+AD_HEAD
+
+
+/******************************************\
+*                                          *
+* Advanced Authoring Format                *
+*                                          *
+* Copyright (c) 1998 Avid Technology, Inc. *
+* Copyright (c) 1998 Microsoft Corporation *
+*                                          *
+\******************************************/
+
+ 
+/***********************************************\
+*  Stub only.   Implementation not yet added    *
+\***********************************************/
+
+
+
+
+AD_CLASS_UUID(e684d779, b935, 11d2, bf, 9d, 00, 10, 4b, c9, 15, 6d)
+
+AD_DEFAULT_UUID(e684d77a, b935, 11d2, bf, 9d, 00, 10, 4b, c9, 15, 6d)
+AD_XCLASS_BEGIN(Concrete, StoredObject)
+
+AD_XCLASS_END(Concrete, StoredObject)
