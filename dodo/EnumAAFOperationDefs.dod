@@ -1,6 +1,9 @@
 #startm .this-module 0
 EnumAAFEffectDefs\
 #endm
+#startm .parent-module 0
+AAFRoot\
+#endm
 #c
 AD_HEAD
 /******************************************\
@@ -18,7 +21,7 @@ AD_FORWARD_DECLARATION(AAFEffectDef)
 AD_CLASS_UUID(92B88022, 2B2B, 11D2, BF, 7E, 00, 10, 4B, C9, 15, 6D)
 
 AD_DEFAULT_UUID(92B88021, 2B2B, 11D2, BF, 7E, 00, 10, 4B, C9, 15, 6D)
-AD_ROOT_CLASS_BEGIN
+AD_CLASS_BEGIN
 
 AD_XMETHOD1(NextOne,
 			[out\,retval],
@@ -65,4 +68,4 @@ AD_XMETHOD1(Clone,
   // at a later time.
   // @comm The caller must release this new enumerator separately from the first enumerator.)
 
-AD_ROOT_CLASS_END
+AD_CLASS_END

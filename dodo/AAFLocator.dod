@@ -8,6 +8,22 @@ AAFObject\
 #c
 #import ./AAFObject.exp
 AD_HEAD
+AD_IDL(//
+// The IAAFLocator interface is implemented by objects that provide
+// information to help find a file that contains the essence.
+//
+// In addition to the specific error results listed for each method\,
+// all methods in this interface may also return one of the following
+// values:
+// 
+// AAFRESULT_NOMEMORY
+//   - insufficient system memory is available to perform the
+//     operation.
+//
+// AAFRESULT_NOT_INITIALIZED
+//   - This object has not yet had Initialize\(\) called on it through
+//     this object's primary interface.
+//)
 AD_CLASS_UUID(e58a8565, 2a3e, 11D2, bf, A4, 00, 60, 97, 11, 62, 12)
 
 AD_DEFAULT_UUID(d4f89061, 69d6, 11d2, 84, 1b, 00, 60, 08, 32, ac, b8)
@@ -15,7 +31,7 @@ AD_CLASS_BEGIN
 AD_XMETHOD2(GetPath,
 			[out\, size_is\(bufSize\)\, string],
 			  objPass,
-			  aafWChar *,
+			  wchar_t *,
 			  pPathBuf,
 			  buffer into which path is written,
 			[in],
@@ -82,7 +98,7 @@ AD_XMETHOD1(GetPathBufLen,
 AD_XMETHOD1(SetPath,
 			[in\, string],
 			objPass,
-			aafWChar *,
+			wchar_t *,
 			pPathBuf,
 			the new path,
 			Set the Path property to the value specified in pPathBuf.  A
