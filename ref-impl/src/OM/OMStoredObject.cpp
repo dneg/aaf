@@ -151,7 +151,7 @@ void OMStoredObject::save(OMProperty* p)
   PRECONDITION("Already open", _open);
   PRECONDITION("Valid property", p != 0);
 
-  p->saveTo(*this);
+  p->save();
 }
 
 void OMStoredObject::save(OMStoredPropertySetIndex* index)
@@ -159,6 +159,7 @@ void OMStoredObject::save(OMStoredPropertySetIndex* index)
   TRACE("OMStoredObject::save(OMStoredPropertySetIndex*)");
   PRECONDITION("Already open", _open);
   PRECONDITION("Sorted index", index->isSorted());
+  PRECONDITION("At start of index stream", streamPosition(_indexStream) == 0);
 
   // Write byte order flag.
   //
@@ -260,6 +261,11 @@ void OMStoredObject::restore(OMPropertySet& properties)
   
 }
 
+void OMStoredObject::saveIndex(void)
+{
+  save(_index);
+}
+
 OMStoredObject* OMStoredObject::open(const wchar_t* fileName,
                                      const OMAccessMode mode)
 {
@@ -352,9 +358,6 @@ void OMStoredObject::close(void)
   TRACE("OMStoredObject::close");
   PRECONDITION("Already open", _open);
 
-  if (_mode == modifyMode) {
-    save(_index);
-  }
   closeStream(_indexStream);
   closeStream(_propertiesStream);
   
