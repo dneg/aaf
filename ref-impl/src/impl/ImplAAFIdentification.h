@@ -24,15 +24,7 @@
 
 #include "OMProperty.h"
 
-const int PID_IDENTIFICATION_COMPANYNAME          = 0;
-const int PID_IDENTIFICATION_PRODUCTNAME          = 1;
-//const int PID_IDENTIFICATION_PRODUCTVERSION       = 2;
-const int PID_IDENTIFICATION_PRODUCTVERSIONSTRING = 2;
-//const int PID_IDENTIFICATION_PRODUCTID            = 4;
-const int PID_IDENTIFICATION_DATE                 = 3;
-//const int PID_IDENTIFICATION_TOOLKITVERSION       = 6;
-const int PID_IDENTIFICATION_PLATFORM             = 4;
-//const int PID_IDENTIFICATION_GENERATION           = 8;
+#include "AAFPropertyIDs.h"
 
 class ImplAAFIdentification : public ImplAAFObject
 {
