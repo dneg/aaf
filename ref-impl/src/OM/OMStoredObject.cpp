@@ -546,12 +546,13 @@ void OMStoredObject::write(OMPropertyId propertyId,
   //        The property value is read into a buffer which occupies
   //        <p size> bytes at the address <p start>. The property id
   //        is <p propertyId>. The property type is <p type>.
-  //   @parm The property id.
-  //   @parm The property type.
-  //   @parm The start address of the buffer to hold the property value.
-  //   @parm The size of the buffer in bytes.
+  //   @parm OMPropertyId | propertyId | The property id.
+  //   @parm int | type | The property type.
+  //   @parm void* | start | The start address of the buffer to hold the
+  //         property value.
+  //   @parm size_t | size | The size of the buffer in bytes.
 void OMStoredObject::read(OMPropertyId propertyId,
-                          int type,
+                          int ANAME(type),
                           void* start,
                           size_t size)
 {

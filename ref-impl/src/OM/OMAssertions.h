@@ -227,6 +227,12 @@ void obsolete(const char* routineName, const char* newRoutineName);
 #define FORALL(index, elementCount, expression) \
         FOREACH(index, 0, elementCount, expression) 
 
+  // @func Define a name only when assertions are enabled. Use to
+  //       avoid compiler warnings.
+  //   @parm The name to (conditionally) define.
+#define ANAME(name) \
+  name
+
 #else
 
 #define TRACE(name)
@@ -246,6 +252,8 @@ void obsolete(const char* routineName, const char* newRoutineName);
 #define FOREACH(index, start, elementCount, expression)
 
 #define FORALL(index, elementCount, expression)
+
+#define ANAME(name)
 
 #endif
 
