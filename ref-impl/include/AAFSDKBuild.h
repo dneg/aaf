@@ -40,12 +40,12 @@
 #define AAF_MINOR_VERSION 1
 #define AAF_MAINT_RELEASE 0
 
-#define AAF_RELEASE_STAGE kAAFVersionBeta
+#define AAF_RELEASE_STAGE kAAFVersionReleased
  
 // these next two lines are monitored/incremented by newbuild.pl
 
 #define AAF_PATCH_LEVEL 0
-#define AAF_CURRENT_YEAR "2004"
+#define AAF_CURRENT_YEAR "2005"
 
 //   The lines below shouldn't normally need to be modified
 //
