@@ -22,7 +22,8 @@ PrintHelp ()
 	echo "-r  = Release"
 	echo "-d  = Debug"
 	echo "\nTo specify which tests to run, add any of the following:"
-	echo "-a  = AafOmf"
+	echo "-a  = Run ALL Tests"
+	echo "-ao = AafOmf"
 	echo "-i  = ComAAFInfo"
 	echo "-cl = ComClientTest"
 	echo "-cu = ComCutsTest"
@@ -50,6 +51,7 @@ fi
 until [ $# = 0 ]
 do
 	case $1 in
+		-a ) ALL=1;;
 		-r ) CHECK_RELEASE=1 ;;
 		-d ) CHECK_DEBUG=1 ;;
 		-e ) ESSENCETEST=1;;
@@ -59,7 +61,7 @@ do
 		-cu ) CUTSTEST=1;;
 		-p ) PROPDIRECTDUMP=1;;
 		-i ) AAFINFO=1;;
-		-a ) AAFOMFTEST=1;;
+		-ao ) AAFOMFTEST=1;;
 		-pp ) PRINTPATH=1;;
 		-s ) SANDBOX=1;;
 		-h ) PrintHelp
