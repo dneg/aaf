@@ -44,7 +44,7 @@ depend.mk : aafobjects.mk
 		echo $$base.all : $$base.cpp $$base.h $$base.cppt >> depend.tmp ; \
 		echo $$base.all : $$base.comc $$base.comh $$base.comt >> depend.tmp ; \
 		echo $$base.all : $$base.implc $$base.implh >> depend.tmp ; \
-		echo $$base.all : $$base.idl >> depend.tmp ; \
+		echo $$base.all : $$base.fidl >> depend.tmp ; \
 		echo $$base.all : $$base.refh >> depend.tmp ; \
 		echo $$base.cpp : macros/cpp.mac macros/base.mac >> depend.tmp ; \
 		echo $$base.h : macros/h.mac macros/base.mac >> depend.tmp ; \
@@ -54,7 +54,7 @@ depend.mk : aafobjects.mk
 		echo $$base.comt : macros/comt.mac macros/base.mac >> depend.tmp ; \
 		echo $$base.implc : macros/implc.mac macros/base.mac >> depend.tmp ; \
 		echo $$base.implh : macros/implh.mac macros/base.mac >> depend.tmp ; \
-		echo $$base.idl : macros/idl.mac macros/base.mac >> depend.tmp ; \
+		echo $$base.fidl : macros/fidl.mac macros/base.mac >> depend.tmp ; \
 		echo $$base.refh : macros/refh.mac macros/base.mac >> depend.tmp ; \
 		echo $$base.exp : macros/exp.mac macros/base.mac >> depend.tmp ; \
 		for import in `grep '^\#import' $$base.dod | sed -e 's,\#import,,' | sed -e 's,.*/,,'` ; do \
@@ -66,7 +66,7 @@ depend.mk : aafobjects.mk
 			echo $$base.comt : $$import >> depend.tmp ; \
 			echo $$base.implc : $$import >> depend.tmp ; \
 			echo $$base.implh : $$import >> depend.tmp ; \
-			echo $$base.idl : $$import >> depend.tmp ; \
+			echo $$base.fidl : $$import >> depend.tmp ; \
 			echo $$base.refh : $$import >> depend.tmp ; \
 			echo $$base.exp : $$import >> depend.tmp ; \
 		done ; \

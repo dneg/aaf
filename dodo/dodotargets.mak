@@ -30,6 +30,13 @@ targets.mk : aafobjects.mk
 		echo '	'$$base.all \\\c>> targets.tmp ; \
 	  done
 	@ echo '' >> targets.tmp
+	@ echo '' >> targets.tmp
+	@ echo FIDL_TARGETS = \\\c >> targets.tmp 
+	@ for base in $(AAFOBJECTS) ;  do \
+		echo '\' >> targets.tmp ; \
+		echo '	'$$base.fidl \\\c>> targets.tmp ; \
+	  done
+	@ echo '' >> targets.tmp
 	@ mv targets.tmp targets.mk
 	@ echo "Done with targets.mk."
 
