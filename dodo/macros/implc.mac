@@ -802,23 +802,6 @@ AAFRESULT STDMETHODCALLTYPE
 #c Arguments: none
 #c
 #startm AD_CLASS_END 00
-
-extern "C" const aafClassID_t CLSID_.this-module;
-
-OMDEFINE_STORABLE(Impl.this-module, CLSID_.this-module);
-
-// Cheat!  We're using this object's CLSID instead of object class...
-AAFRESULT STDMETHODCALLTYPE
-Impl.this-module::GetObjectClass(aafUID_t * pClass)
-{
-  if (! pClass)
-    {
-      return AAFRESULT_NULL_PARAM;
-    }
-  memcpy (pClass, &CLSID_.this-module, sizeof (aafClassID_t));
-  return AAFRESULT_SUCCESS;
-}
-\
 #endm
 
 
@@ -1142,8 +1125,6 @@ AD_CLASS_BEGIN\
 #endm
 
 #startm .end-Abstract-StoredObjectBase 00
-
-OMDEFINE_STORABLE(Impl.this-module, AUID_.this-module);
 #endm
 
 
@@ -1170,7 +1151,6 @@ AD_CLASS_BEGIN\
 #endm
 
 #startm .end-Abstract-StoredObject 00
-OMDEFINE_STORABLE(Impl.this-module, AUID_.this-module);
 #endm
 
 
@@ -1198,8 +1178,6 @@ AD_CLASS_BEGIN\
 #endm
 
 #startm .end-Concrete-StoredObject 00
-
-OMDEFINE_STORABLE(Impl.this-module, AUID_.this-module);
 #endm
 
 
