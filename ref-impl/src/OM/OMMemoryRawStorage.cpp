@@ -166,7 +166,7 @@ void OMMemoryRawStorage::readAt(OMUInt64 position,
 {
   TRACE("OMMemoryRawStorage::readAt");
   PRECONDITION("Readable", isReadable());
-  PRECONDITION("Readable", isPositionable());
+  PRECONDITION("Positionable", isPositionable());
 
   setPosition(position);
   read(bytes, byteCount, bytesRead);
@@ -279,7 +279,7 @@ void OMMemoryRawStorage::writeAt(OMUInt64 position,
   TRACE("OMMemoryRawStorage::writeAt");
 
   PRECONDITION("Writable", isWritable());
-  PRECONDITION("Readable", isPositionable());
+  PRECONDITION("Positionable", isPositionable());
 
   setPosition(position);
   write(bytes, byteCount, bytesWritten);
@@ -443,7 +443,7 @@ void OMMemoryRawStorage::setPosition(OMUInt64 newPosition) const
   TRACE("OMMemoryRawStorage::setPosition");
 
   PRECONDITION("Positionable", isPositionable());
-  PRECONDITION("Valid position", newPosition < _size);
+  PRECONDITION("Valid position", newPosition <= _size);
 
   OMMemoryRawStorage* nonConstThis = const_cast<OMMemoryRawStorage*>(this);
   nonConstThis->_position = newPosition;
