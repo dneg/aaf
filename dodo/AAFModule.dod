@@ -4,7 +4,7 @@ AAFModule\
 #c
 AD_IDL(\  //***********************************************************
   //
-  // Factory functions for AAF files:
+  // Global functions for AAF files:
   // 
   // In addition to the specific error results listed for each function\,
   // all factory functions may also return one of the following
@@ -16,6 +16,37 @@ AD_IDL(\  //***********************************************************
   //)
 
 AD_MODULE_BEGIN(AAF, API)
+
+AD_CPP_QUOTE(\  //***********************************************************)
+AD_CPP_QUOTE(\  // Functions used to dynamically load and unload the AAF dll)
+AD_CPP_QUOTE(\  // without statically linking to the dll's export library.)
+AD_CPP_QUOTE(\  // To use these functions link to the stub library aaf.lib)
+AD_CPP_QUOTE(\  // \(or aafd.lib for the debugging version\). )
+AD_CPP_QUOTE(\  // If the client is statically linking to the AAF dll's export)
+AD_CPP_QUOTE(\  // library then the following functions will always succeed:)
+AD_CPP_QUOTE(\  //***********************************************************)
+
+AD_XFUNCTION1(AAFLoad,
+
+			[in],
+			objPass,
+			const char *,
+			dllname,
+			Pointer to the name of AAF dll to load.
+    // If this pointer is NULL the function will attempt to load the
+    // default AAF dll.,
+
+			Attempts to load the given implementation of AAF into
+  // the processes address space. Only one implementation
+  // of AAF can be active. Note: once AAFUnload has been
+  // called all)
+
+
+AD_FUNCTION0(AAFUnload,
+
+			Attempts to unload the current AAF dll loaded with a
+  // previous call to AAFLoad.)
+
 
 AD_CPP_QUOTE(\  //***********************************************************)
 AD_CPP_QUOTE(\  // Factory functions for AAF files:.)
@@ -304,6 +335,7 @@ AD_XFUNCTION2(AAFFileOpenTransient,
   // AAFRESULT_NULL_PARAM
   //   - the pIdent pointer argument is NULL.)
 
+
   AD_XFUNCTION1(AAFGetPluginManager,
 			[out],
 			objOut,
@@ -313,6 +345,6 @@ AD_XFUNCTION2(AAFFileOpenTransient,
 
 
 			Returns an interface of the plugin manager\, which is used to select
-//			plugins for exporting.)
+  //			plugins for exporting.)
 
 AD_MODULE_END
