@@ -1,9 +1,9 @@
 #c/*************************************************\
-#c*													*
-#c* Advanced Authoring Format						*
-#c*													*
-#c* Copyright (c) 1998-1999 Avid Technology, Inc.	*
-#c*													*
+#c*                                                 *
+#c* Advanced Authoring Format                       *
+#c*                                                 *
+#c* Copyright (c) 1998-1999 Avid Technology, Inc.   *
+#c*                                                 *
 #c\*************************************************/
 #startm .this-module 0
 AAFEssenceContainer\
@@ -34,7 +34,7 @@ AD_XMETHOD3(CreateEssenceStream,
 			
 			[in],
 			objPass,
-			aafUID_constptr,
+			aafMobID_constptr,
 			pMobID,
 			Optional mobID identifying the essence,
 
@@ -71,7 +71,7 @@ AD_XMETHOD3(CreateEssenceStreamWriteOnly,
 			
 			[in],
 			objPass,
-			aafUID_constptr,
+			aafMobID_constptr,
 			pMobID,
 			Optional mobID identifying the essence,
 
@@ -108,7 +108,7 @@ AD_XMETHOD3(OpenEssenceStreamReadOnly,
 			
 			[in],
 			objPass,
-			aafUID_constptr,
+			aafMobID_constptr,
 			pMobID,
 			Optional mobID identifying the essence,
 
@@ -147,7 +147,7 @@ AD_XMETHOD3(OpenEssenceStreamAppend,
 			
 			[in],
 			objPass,
-			aafUID_constptr,
+			aafMobID_constptr,
 			pMobID,
 			Optional mobID identifying the essence,
 

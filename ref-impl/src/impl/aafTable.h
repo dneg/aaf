@@ -245,6 +245,48 @@ void TableUIDLookupBlock(
 
 /************************************************************************
  *
+ * MobID Table Functions
+ *
+ ************************************************************************/
+
+aafErr_t NewMobIDTable(
+			aafInt32 numBuckets,
+			aafTable_t **result);
+			
+aafErr_t TableAddMobID(
+			aafTable_t *table,
+			aafMobID_constref key,
+			void *value,
+			aafTableDuplicate_t dup);
+			
+aafErr_t TableAddMobIDBlock(
+			aafTable_t *table,
+			aafMobID_constref key,
+			void *value,
+			aafInt32 valueLen,
+			aafTableDuplicate_t dup);
+			
+aafErr_t TableRemoveMobID(
+			aafTable_t *table,
+			aafMobID_constref key);
+			
+aafBool TableIncludesMobID(
+			aafTable_t *table,
+			aafMobID_constref key);
+			
+void *TableMobIDLookupPtr(
+			aafTable_t *table,
+			aafMobID_constref key);
+
+void TableMobIDLookupBlock(
+			aafTable_t *table,
+			aafMobID_constref key,
+			aafInt32 valueLen,
+			void *valuePtr,
+			aafBool *found);
+
+/************************************************************************
+ *
  * SlotID Table Functions
  *
  ************************************************************************/

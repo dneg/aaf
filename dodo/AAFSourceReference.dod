@@ -1,9 +1,9 @@
 #c/*************************************************\
-#c*													*
-#c* Advanced Authoring Format						*
-#c*													*
-#c* Copyright (c) 1998-1999 Avid Technology, Inc.	*
-#c*													*
+#c*                                                 *
+#c* Advanced Authoring Format                       *
+#c*                                                 *
+#c* Copyright (c) 1998-1999 Avid Technology, Inc.   *
+#c*                                                 *
 #c\*************************************************/
 #startm .this-module 0
 AAFSourceReference\
@@ -43,7 +43,7 @@ AD_XCLASS_BEGIN(Abstract, StoredObject)
 AD_XMETHOD1(GetSourceID,
 			[retval][out],
 			objPass,
-			aafUID_t *,
+			aafMobID_t *,
 			pSourceID,
 			Place to put source ID,
 
@@ -68,7 +68,7 @@ AD_XMETHOD1(GetSourceID,
 AD_XMETHOD1(SetSourceID,
 			[in],
 			objPass,
-			aafUID_t ,
+			aafMobID_constref ,
 			sourceID,
 			Source ID to set,
 
