@@ -58,6 +58,7 @@
 #define AUID_AAFJPEGImageData AUID_AAFJPEGData
 #define AUID_AAFMIDIFileData AUID_AAFMIDIData
 #define AUID_AAFParameterDefinition AUID_AAFParameterDef
+#define AUID_AAFInterpolationDefinition AUID_AAFInterpolationDef
 #define AUID_AAFPropertyDefinition AUID_AAFPropertyDef
 #define AUID_AAFTypeDefinition AUID_AAFTypeDef
 #define AUID_AAFTypeDefinitionEnumeration AUID_AAFTypeDefEnum
