@@ -789,6 +789,7 @@ AD_XMETHOD1(Clone,
 #ccccccccccccccccccccccccccc
 #c
 #c Shared copyright message for all generated source files.
+#c (Id and Name will be corrected by cvs upon commit of generated file).
 #c
 #ccccccccccccccccccccccccccc
 #c
@@ -824,13 +825,15 @@ AD_XMETHOD1(Clone,
 #ccccccccccccccccccccccccccc
 #c
 #c Shared copyright message for all generated idl files.
-#c
+#c (Id and Name will be corrected by cvs upon commit of generated file).
 #ccccccccccccccccccccccccccc
 #c
 #startm .idl-copyright-message 00
 cpp_quote("//=---------------------------------------------------------------------=")
 cpp_quote("//")
 cpp_quote("// This file was GENERATED for the AAF SDK")
+cpp_quote("//")
+cpp_quote("// $Id$ $Name$")
 cpp_quote("//")
 cpp_quote("// The contents of this file are subject to the AAF SDK Public")
 cpp_quote("// Source License Agreement (the \\"License\\"); You may not use this file")
@@ -843,7 +846,7 @@ cpp_quote("// basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.  S
 cpp_quote("// the License for the specific language governing rights and limitations")
 cpp_quote("// under the License.")
 cpp_quote("//")
-cpp_quote("// The Original Code of this file is Copyright 1998-2001, Licensor of the")
+cpp_quote("// The Original Code of this file is Copyright 1998-2004, Licensor of the")
 cpp_quote("// AAF Association.")
 cpp_quote("//")
 cpp_quote("// The Initial Developer of the Original Code of this file and the")
