@@ -302,7 +302,9 @@ OMStrongReferenceSetProperty<UniqueIdentification,
   SetElement* element = 0;
   bool result = _set.find(identification, &element);
   if (result) {
-    element->setValue(0);
+    UniqueIdentification nullUniqueIdentification;
+    memset(&nullUniqueIdentification, 0, sizeof(UniqueIdentification));
+    element->setValue(&nullUniqueIdentification, 0);
     _set.remove(identification);
   }
 
