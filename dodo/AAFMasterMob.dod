@@ -12,10 +12,22 @@ AAFMob\
 #import ./AAFSearchSource.exp
 AD_HEAD
 AD_IDL(//
-// This interface provides access to Source Mobs and Essence data
-// objects for a Master Mob object.  The Master Mob object is used
-// to provide a level of indirection for accessing Source Mobs from
-// Composition Mobs.
+// The IAAFMasterMob interface is implemented by objects which provide
+// access to the File Source Mobs and EssenceData objects.  The Master
+// Mob object is used to provide a level of indirection for accessing
+// Source Mobs from Composition Mobs.
+//
+// In addition to the specific error results listed for each method\,
+// all methods in this interface may also return one of the following
+// values:
+// 
+// AAFRESULT_NOMEMORY
+//   - insufficient system memory is available to perform the
+//     operation.
+//
+// AAFRESULT_NOT_INITIALIZED
+//   - This object has not yet had Initialize\(\) called on it through
+//     this object's primary interface.
 //)
 AD_FORWARD_DECLARATION(AAFSourceClip)
 AD_FORWARD_DECLARATION(AAFSourceMob)
@@ -31,7 +43,10 @@ AD_XMETHOD5(AddMasterSlot,
 			  objPass,
 			  aafUID_t *,
 			  pDataDef,
-			  Data kind of new slot,
+    // Data kind of new slot.  Requires a data kind valid for a media
+	// stream. Valid data kinds are:
+    // - DDEF_Video
+    // - DDEF_Audio,
 			[in],
 			  objPass,
 			  aafSlotID_t,
@@ -49,7 +64,7 @@ AD_XMETHOD5(AddMasterSlot,
 			  SlotID assigned to the new Master Mob slot,
 			[in\, string],
 			  objPass,
-			  aafWChar *,
+			  wchar_t *,
 			  pSlotName,
 			  Name to assign to new slot in Master Mob,
 			This function adds a slot to the specified Master Mob that
@@ -58,12 +73,6 @@ AD_XMETHOD5(AddMasterSlot,
   // the Source Mob in its source reference properties.  Typically this
   // is done automatically by passing the Master Mob handle to
   // AAFMedia::Create\, but this function allows you to add it later.
-  //
-  // The pDataDef parameter requires a data kind valid for a media
-  // stream. Valid data kinds are:
-  //
-  // - DDEF_Video
-  // - DDEF_Audio
   //
   // Note: If pSlotName is passed in with zero length\, then the
   // slot is not assigned a name.  Slot names are not used by the
@@ -93,8 +102,7 @@ AD_XMETHOD5(AddMasterSlot,
   //   - The specified Source Mob slot was not found.
   //
   // AAFRESULT_SLOT_EXISTS
-  //   - The specified Master slot ID already exists.
-  //)
+  //   - The specified Master slot ID already exists.)
 
 
 AD_XMETHOD3(GetTapeName,
@@ -105,7 +113,7 @@ AD_XMETHOD3(GetTapeName,
 			  SlotID of the Master Mob slot,
 			[out\, size_is\(bufSize\)\, string],
 			  objPass,
-			  aafWChar *,
+			  wchar_t *,
 			  pTapeName,
 			  The returned name,
 			[in],
@@ -147,8 +155,7 @@ AD_XMETHOD3(GetTapeName,
   //   - The specified Master Slot does not contain a Tape MOB.
   //
   // AAFRESULT_SMALLBUF
-  //   - bufSize indicates the buffer is too small to hold the string.
-  //)
+  //   - bufSize indicates the buffer is too small to hold the string.)
 
 
 AD_XMETHOD2(GetTapeNameBufLen,
@@ -186,8 +193,7 @@ AD_XMETHOD2(GetTapeNameBufLen,
   //   - The specified Master Slot was not found.
   //
   // AAFRESULT_NOT_TAPEMOB
-  //   - The specified Master Slot does not contain a Tape MOB.
-  //)
+  //   - The specified Master Slot does not contain a Tape MOB.)
 
 
 AD_XMETHOD2(GetNumRepresentations,
@@ -203,11 +209,12 @@ AD_XMETHOD2(GetNumRepresentations,
 			  number of representations,
   // This function returns the number of media representations
   // available for the specified SlotID on a specified Master
-  // Mob.  This function is meant to work with GetRepresentationSourceClip\,
-  // so that you can iterate through all of the choices yourself.
-  // In most cases\, you can use GetCriteriaSourceClip to handle multiple
-  // representations. This function and GetRepresentationSourceClip are
-  // lower-level functions.
+  // Mob. This function is meant to work with
+  // GetRepresentationSourceClip\, so that you can iterate through
+  // all of the choices yourself.  In most cases\, you can use
+  // GetCriteriaSourceClip to handle multiple
+  // representations.  This function and
+  // GetRepresentationSourceClip are lower-level functions.
   //
   // Succeeds if all of the following are true:
   // - the pNumReps pointer is valid.
@@ -225,8 +232,7 @@ AD_XMETHOD2(GetNumRepresentations,
   //   - pNumReps arg is NULL.
   //
   // AAFRESULT_SLOT_NOTFOUND
-  //   - The specified Master Slot was not found.
-  //)
+  //   - The specified Master Slot was not found.)
 
 
 AD_XMETHOD3(GetRepresentationSourceClip,
@@ -274,8 +280,7 @@ AD_XMETHOD3(GetRepresentationSourceClip,
   //   - The specified Master Slot was not found.
   //
   // AAFRESULT_BADINDEX
-  //   - No Source Mob at specified index.
-  //)
+  //   - No Source Mob at specified index.)
 
 
 AD_XMETHOD3(GetCriteriaSourceClip,
@@ -288,7 +293,24 @@ AD_XMETHOD3(GetCriteriaSourceClip,
 			  objPass,
 			  aafMediaCriteria_t *,
 			  pCriteria,
-			  Index of requested representation,
+			Index of requested representation.  Note: the
+	// aafMediaCriteria_t is defined as the following structure:
+    // typedef struct
+    // {
+    //	aafCriteriaType_t type;
+    //	aafCriteriaProc_t proc;
+    // } aafMediaCriteria_t;
+	//
+    // The type field can have one of the following values:
+    // typedef enum
+    // {
+    //	kAAFAnyRepresentation = 0\,
+    //	kAAFFastestRepresentation\,
+    //	kAAFBestFidelityRepresentation\,
+    //	kAAFSmallestRepresentation\,
+    //	kAAFUseRepresentationProc
+    // } aafCriteriaType_t;,
+
 			[out],
 			  objOut,
 			  AAFSourceClip,
@@ -298,25 +320,6 @@ AD_XMETHOD3(GetCriteriaSourceClip,
   // that references the Source Mob that best meets the specified
   // criteria.  This function will work whether multiple media
   // representations exist or not.
-  //
-  // Note:
-  // The aafMediaCriteria_t is defined as the following structure:
-  // typedef struct
-  // {
-  //	aafCriteriaType_t type;
-  //	aafCriteriaProc_t proc;
-  // } aafMediaCriteria_t;
-  // 
-  // Note:
-  // The type field can have one of the following values: |
-  // typedef enum
-  // {
-  //	kAAFAnyRepresentation = 0\,
-  //	kAAFFastestRepresentation\,
-  //	kAAFBestFidelityRepresentation\,
-  //	kAAFSmallestRepresentation\,
-  //	kAAFUseRepresentationProc
-  // } aafCriteriaType_t;
   //
   // Succeeds if all of the following are true:
   // - the ppSourceClip pointer is valid.
@@ -334,8 +337,7 @@ AD_XMETHOD3(GetCriteriaSourceClip,
   //   - ppSourceClip arg is NULL.
   //
   // AAFRESULT_SLOT_NOTFOUND
-  //   - The specified Master Slot was not found.
-  //)
+  //   - The specified Master Slot was not found.)
 
 
 AD_COM_METH(.method-SearchSource)
