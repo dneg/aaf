@@ -544,11 +544,11 @@ private:
   OMStrongReferenceSetProperty<ImplAAFCodecDef>			   _codecDefinitions;
   OMStrongReferenceSetProperty<ImplAAFContainerDef>        _containerDefinitions;
   OMStrongReferenceVectorProperty<ImplAAFOperationDef>     _operationDefinitions;
-  OMStrongReferenceVectorProperty<ImplAAFParameterDef>     _parameterDefinitions;
+  OMStrongReferenceSetProperty<ImplAAFParameterDef>        _parameterDefinitions;
   OMStrongReferenceSetProperty<ImplAAFTypeDef>			   _typeDefinitions;
   OMStrongReferenceSetProperty<ImplAAFClassDef>		       _classDefinitions;
   OMStrongReferenceVectorProperty<ImplAAFInterpolationDef> _interpolationDefinitions;
-  OMStrongReferenceVectorProperty<ImplAAFDataDef>             _dataDefinitions;
+  OMStrongReferenceSetProperty<ImplAAFDataDef>             _dataDefinitions;
   OMStrongReferenceVectorProperty<ImplAAFPluginDescriptor> _pluginDefinitions;
 
   aafInt32 _lastGeneratedPid;	// must be signed!
