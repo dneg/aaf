@@ -769,8 +769,7 @@ HRESULT dumpPropertyValue (IAAFPropertyValueSP pPVal,
         IAAFTypeDefRenameSP pRenamedType;
 
         checkResult(pDict->LookupTypeDef(kAAFTypeID_UInt8Array, &pBaseType));
-        checkResult(pDict->LookupClassDef(AUID_AAFTypeDefRename, &pRenamedClassDef));
-			  checkResult(pRenamedClassDef->CreateInstance(IID_IAAFTypeDefRename, (IUnknown **)&pRenamedType));
+			  checkResult(pDict->CreateMetaInstance(AUID_AAFTypeDefRename, IID_IAAFTypeDefRename, (IUnknown **)&pRenamedType));
 			  checkResult(pRenamedType->Initialize (opaqueTypeID, pBaseType, L"Opaque Data"));
         checkResult(pRenamedType->QueryInterface(IID_IAAFTypeDef, (void **)&pType));
         checkResult(pDict->RegisterOpaqueTypeDef(pType));
