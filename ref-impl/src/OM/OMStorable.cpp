@@ -113,7 +113,7 @@ OMStorable* OMStorable::restoreFrom(const OMStorable* containingObject,
   OMClassId cid;
   s.restore(cid);
   OMFile* f = containingObject->file();
-  const OMClassFactory* classFactory = f->classFactory();
+  const OMClassFactory* classFactory = containingObject->classFactory();
   OMStorable* object = classFactory->create(cid);
   ASSERT("Registered class id", object != 0);
   ASSERT("Valid class factory", classFactory == object->classFactory());
@@ -413,7 +413,7 @@ void OMStorable::setClassFactory(const OMClassFactory* classFactory)
 {
   TRACE("OMStorable::setClassFactory");
   PRECONDITION("Valid class factory", classFactory != 0);
-  PRECONDITION("No previous valid class factory", _classFactory == 0);
+  //PRECONDITION("No previous valid class factory", _classFactory == 0);
 
   _classFactory = classFactory;
 
