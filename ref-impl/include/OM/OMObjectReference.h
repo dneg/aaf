@@ -49,7 +49,7 @@ public:
   OMObjectReference(const OMObjectReference&);
 
     // @cmember Destructor.
-  ~OMObjectReference(void);
+  virtual ~OMObjectReference(void);
 
     // @cmember Is this <c OMObjectReference> void ?
   virtual bool isVoid(void) const;
@@ -135,7 +135,7 @@ public:
   OMStrongObjectReference(const OMStrongObjectReference&);
 
     // @cmember Destructor.
-  ~OMStrongObjectReference(void);
+  virtual ~OMStrongObjectReference(void);
 
     // @cmember Is this <c OMStrongObjectReference> void ?
   virtual bool isVoid(void) const;
@@ -196,7 +196,7 @@ public:
   OMWeakObjectReference(const OMWeakObjectReference&);
 
     // @cmember Destructor.
-  ~OMWeakObjectReference(void);
+  virtual ~OMWeakObjectReference(void);
 
     // @cmember Is this <c OMWeakObjectReference> void ?
   virtual bool isVoid(void) const;
