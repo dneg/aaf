@@ -1748,7 +1748,7 @@ AAFRESULT ImplAAFMob::MobFindSource(
 
 AAFRESULT ImplAAFMob::ReconcileMobLength(void)
 {
-	return(AAFRESULT_NOT_IMPLEMENTED);	// MUST call one of the subclasses
+	return(AAFRESULT_ABSTRACT_CLASS);	// MUST call one of the subclasses
 }
 
 
