@@ -55,7 +55,7 @@
 extern "C" const aafClassID_t CLSID_AAFPropValData;
 
 ImplAAFTypeDefRecord::ImplAAFTypeDefRecord ()
-  : _memberTypes ( PID_TypeDefinitionRecord_MemberTypes, "MemberTypes"),
+  : _memberTypes ( PID_TypeDefinitionRecord_MemberTypes, "MemberTypes", "/Dictionary/TypeDefinitions", PID_DefinitionObject_Identification),
 	_memberNames ( PID_TypeDefinitionRecord_MemberNames, "MemberNames"),
 	_registeredOffsets (0),
 	_registeredSize (0),
@@ -152,33 +152,34 @@ AAFRESULT STDMETHODCALLTYPE
   aafCharacter * tmpNamePtr = namesBuf;
 
   assert (0 == _memberTypes.count());
-  aafUID_t * buf = new aafUID_t[numMembers];
-  if (!buf)
-  {
-    delete[] namesBuf;
-    return AAFRESULT_NOMEMORY;
-  }
+//  aafUID_t * buf = new aafUID_t[numMembers];
+//  if (!buf)
+//  {
+//    delete[] namesBuf;
+///    return AAFRESULT_NOMEMORY;
+//  }
   for (i = 0; i < numMembers; i++)
 	{
 	  assert (ppMemberTypes[i]);
-	  aafUID_t typeUID;
-	  AAFRESULT hr = ppMemberTypes[i]->GetAUID(&typeUID);
-	  assert (AAFRESULT_SUCCEEDED(hr));
-    if (AAFRESULT_FAILED(hr))
-    {
-      delete[] buf;
-      delete[] namesBuf;
-      return hr;
-    }
-	  buf[i] = typeUID;
+	  _memberTypes.setValueAt(ppMemberTypes[i], i);
+//	  aafUID_t typeUID;
+//	  AAFRESULT hr = ppMemberTypes[i]->GetAUID(&typeUID);
+//	  assert (AAFRESULT_SUCCEEDED(hr));
+//   if (AAFRESULT_FAILED(hr))
+//   {
+//      delete[] buf;
+//    delete[] namesBuf;
+//      return hr;
+//    }
+//	  buf[i] = typeUID;
 
 	  assert (pMemberNames[i]);
 	  wcscpy(tmpNamePtr, pMemberNames[i]);
 	  // +1 to go past embedded null
 	  tmpNamePtr += wcslen (pMemberNames[i]) + 1;
 	}
-  _memberTypes.setValue(buf, numMembers*sizeof(aafUID_t));
-  delete[] buf;
+//  _memberTypes.setValue(buf, numMembers*sizeof(aafUID_t));
+//  delete[] buf;
   _memberNames.setValue (namesBuf, totalNameSize * sizeof(aafCharacter));
   delete[] namesBuf;
 
@@ -190,12 +191,12 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDefRecord::pvtInitialize (
       const aafUID_t & id,
-      aafUID_t ** pMemberTypeIDs,
+      ImplAAFTypeDef ** pMemberTypes,
       aafString_t * pMemberNames,
       aafUInt32 numMembers,
       const aafCharacter * pTypeName)
 {
-  if (!pMemberTypeIDs && !pMemberNames && !pTypeName)
+  if (!pMemberTypes && !pMemberNames && !pTypeName)
     return AAFRESULT_NULL_PARAM;
 
   AAFRESULT hr;
@@ -212,7 +213,7 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 	  if ( !pMemberNames[i])
 		return AAFRESULT_NULL_PARAM;
-	  if ( !pMemberTypeIDs[i])
+	  if ( !pMemberTypes[i])
 		return AAFRESULT_NULL_PARAM;
 
 	  totalNameSize += (wcslen (pMemberNames[i]) + 1);
@@ -226,22 +227,23 @@ AAFRESULT STDMETHODCALLTYPE
   aafCharacter * tmpNamePtr = namesBuf;
 
   assert (0 == _memberTypes.count());
-  aafUID_t * buf = new aafUID_t[numMembers];
-  if (!buf)
-  {
-    delete[] namesBuf;
-    return AAFRESULT_NOMEMORY;
-  }
+//  aafUID_t * buf = new aafUID_t[numMembers];
+//  if (!buf)
+//  {
+ //   delete[] namesBuf;
+ //   return AAFRESULT_NOMEMORY;
+//  }
   for (i = 0; i < numMembers; i++)
 	{
-	  buf[i] = *pMemberTypeIDs[i];
+//	  buf[i] = *pMemberTypeIDs[i];
+	  _memberTypes.setValueAt(pMemberTypes[i], i);
 
 	  wcscpy(tmpNamePtr, pMemberNames[i]);
 	  // +1 to go past embedded null
 	  tmpNamePtr += wcslen (pMemberNames[i]) + 1;
 	}
-  _memberTypes.setValue(buf, numMembers*sizeof(aafUID_t));
-  delete[] buf;
+//  _memberTypes.setValue(buf, numMembers*sizeof(aafUID_t));
+ // delete[] buf;
   _memberNames.setValue (namesBuf, totalNameSize * sizeof(aafCharacter));
   delete[] namesBuf;
 
@@ -257,7 +259,6 @@ AAFRESULT STDMETHODCALLTYPE
 {
   AAFRESULT hr;
   aafUInt32 count;
-  aafUID_t memberUID;
 
   if (!ppTypeDef) return AAFRESULT_NULL_PARAM;
   
@@ -278,15 +279,15 @@ AAFRESULT STDMETHODCALLTYPE
 
   if (! _cachedMemberTypes[index])
 	{
-	  _memberTypes.getValueAt (&memberUID, index);
+	  ImplAAFTypeDef *pMemberType;
+	  _memberTypes.getValueAt (pMemberType, index);
 
-	  ImplAAFDictionarySP pDict;
-	  ImplAAFTypeDefSP pMemberType;
-	  hr = GetDictionary (&pDict);
-	  assert (AAFRESULT_SUCCEEDED(hr));
-	  assert (pDict);
-	  hr = pDict->LookupTypeDef (memberUID, &pMemberType);
-	  assert (AAFRESULT_SUCCEEDED(hr));
+//	  ImplAAFDictionarySP pDict;
+//	  hr = GetDictionary (&pDict);
+//	  assert (AAFRESULT_SUCCEEDED(hr));
+//	  assert (pDict);
+//	  hr = pDict->LookupTypeDef (memberUID, &pMemberType);
+//	  assert (AAFRESULT_SUCCEEDED(hr));
 	  assert (pMemberType);
 	  _cachedMemberTypes[index] = pMemberType;
 	}
