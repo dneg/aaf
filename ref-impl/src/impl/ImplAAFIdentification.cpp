@@ -35,8 +35,7 @@ _productVersionString(PID_IDENTIFICATION_PRODUCTVERSIONSTRING, "productVersionSt
 _date(                PID_IDENTIFICATION_DATE,                 "date"),
 // _toolKitVersion(   PID_IDENTIFICATION_TOOLKITVERSION,       "toolkitVersion"),
 _platform(            PID_IDENTIFICATION_PLATFORM,             "platform"),
-// _generation(       PID_IDENTIFICATION_GENERATION,           "generation"),
-_initialized(AAFFalse)
+// _generation(       PID_IDENTIFICATION_GENERATION,           "generation")
 {
   // Insert the properties into the persistent property set.
   //
@@ -80,8 +79,7 @@ _productVersionString(PID_IDENTIFICATION_PRODUCTVERSIONSTRING, "productVersionSt
 _date(                PID_IDENTIFICATION_DATE,                 "date"),
 // _toolKitVersion(   PID_IDENTIFICATION_TOOLKITVERSION,       "toolkitVersion"),
 _platform(            PID_IDENTIFICATION_PLATFORM,             "platform"),
-// _generation(       PID_IDENTIFICATION_GENERATION,           "generation"),
-_initialized(AAFFalse)
+// _generation(       PID_IDENTIFICATION_GENERATION,           "generation")
 {
   // Insert the properties into the persistent property set.
   //
@@ -118,12 +116,6 @@ OMDEFINE_STORABLE(ImplAAFIdentification, CLSID_AAFIdentification);
 AAFRESULT STDMETHODCALLTYPE
 ImplAAFIdentification::Initialize ()
 {
-  if (_initialized)
-	{
-	  return AAFRESULT_ALREADY_INITIALIZED;
-	}
-  _initialized = AAFTrue;
-
   return AAFRESULT_SUCCESS;
 }
 
@@ -132,11 +124,6 @@ ImplAAFIdentification::Initialize ()
 AAFRESULT STDMETHODCALLTYPE
 ImplAAFIdentification::GetObjectClass(aafUID_t * pClass)
 {
-  if (! _initialized)
-	{
-	  return AAFRESULT_NOT_INITIALIZED;
-	}
-
   if (! pClass)
 	{
 	  return AAFRESULT_NULL_PARAM;
@@ -150,11 +137,6 @@ AAFRESULT STDMETHODCALLTYPE
 										   aafInt32 bufSize)
 {
   bool stat;
-  if (! _initialized)
-	{
-	  return AAFRESULT_NOT_INITIALIZED;
-	}
-
   if (! pName)
 	{
 	  return AAFRESULT_NULL_PARAM;
@@ -171,11 +153,6 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFIdentification::GetCompanyNameBufLen (aafInt32 *  pLen)
 {
-  if (! _initialized)
-	{
-	  return AAFRESULT_NOT_INITIALIZED;
-	}
-
   if (! pLen)
 	{
 	  return AAFRESULT_NULL_PARAM;
@@ -191,11 +168,6 @@ AAFRESULT STDMETHODCALLTYPE
 										   aafInt32 bufSize)
 {
   bool stat;
-  if (! _initialized)
-	{
-	  return AAFRESULT_NOT_INITIALIZED;
-	}
-
   if (! pProductName)
 	{
 	  return AAFRESULT_NULL_PARAM;
@@ -212,11 +184,6 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFIdentification::GetProductNameBufLen (aafInt32 *  pLen)
 {
-  if (! _initialized)
-	{
-	  return AAFRESULT_NOT_INITIALIZED;
-	}
-
   if (! pLen)
 	{
 	  return AAFRESULT_NULL_PARAM;
@@ -230,11 +197,6 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFIdentification::GetProductVersion (aafProductVersion_t * pV)
 {
-  if (! _initialized)
-	{
-	  return AAFRESULT_NOT_INITIALIZED;
-	}
-
   if (! pV)
 	{
 	  return AAFRESULT_NULL_PARAM;
@@ -248,11 +210,6 @@ AAFRESULT STDMETHODCALLTYPE
 													aafInt32 bufSize)
 {
   bool stat;
-  if (! _initialized)
-	{
-	  return AAFRESULT_NOT_INITIALIZED;
-	}
-
   if (! pVS)
 	{
 	  return AAFRESULT_NULL_PARAM;
@@ -269,11 +226,6 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFIdentification::GetProductVersionStringBufLen (aafInt32 *  pLen)
 {
-  if (! _initialized)
-	{
-	  return AAFRESULT_NOT_INITIALIZED;
-	}
-
   if (! pLen)
 	{
 	  return AAFRESULT_NULL_PARAM;
@@ -287,11 +239,6 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFIdentification::GetProductID (aafUID_t * pPID)
 {
-  if (! _initialized)
-	{
-	  return AAFRESULT_NOT_INITIALIZED;
-	}
-
   if (! pPID)
 	{
 	  return AAFRESULT_NULL_PARAM;
@@ -303,11 +250,6 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFIdentification::GetDate (aafTimeStamp_t * pTS)
 {
-  if (! _initialized)
-	{
-	  return AAFRESULT_NOT_INITIALIZED;
-	}
-
   if (! pTS)
 	{
 	  return AAFRESULT_NULL_PARAM;
@@ -319,11 +261,6 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFIdentification::GetRefImplVersion (aafProductVersion_t * pV)
 {
-  if (! _initialized)
-	{
-	  return AAFRESULT_NOT_INITIALIZED;
-	}
-
   if (! pV)
 	{
 	  return AAFRESULT_NULL_PARAM;
@@ -337,11 +274,6 @@ AAFRESULT STDMETHODCALLTYPE
 										aafInt32 bufSize)
 {
   bool stat;
-  if (! _initialized)
-	{
-	  return AAFRESULT_NOT_INITIALIZED;
-	}
-
   if (! pPlatform)
 	{
 	  return AAFRESULT_NULL_PARAM;
@@ -358,11 +290,6 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFIdentification::GetPlatformBufLen (aafInt32 *  pLen)
 {
-  if (! _initialized)
-	{
-	  return AAFRESULT_NOT_INITIALIZED;
-	}
-
   if (! pLen)
 	{
 	  return AAFRESULT_NULL_PARAM;
@@ -375,11 +302,6 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFIdentification::GetGeneration (aafUID_t *  pGen)
 {
-  if (! _initialized)
-	{
-	  return AAFRESULT_NOT_INITIALIZED;
-	}
-
   if (! pGen)
 	{
 	  return AAFRESULT_NULL_PARAM;
@@ -391,11 +313,6 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFIdentification::SetCompanyName (aafWChar *  pName)
 {
-  if (! _initialized)
-	{
-	  return AAFRESULT_NOT_INITIALIZED;
-	}
-
   if (! pName)
 	{
 	  return AAFRESULT_NULL_PARAM;
@@ -410,11 +327,6 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFIdentification::SetProductName (aafWChar *  pName)
 {
-  if (! _initialized)
-	{
-	  return AAFRESULT_NOT_INITIALIZED;
-	}
-
   if (! pName)
 	{
 	  return AAFRESULT_NULL_PARAM;
@@ -429,11 +341,6 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFIdentification::SetProductVersion (aafProductVersion_t * pV)
 {
-  if (! _initialized)
-	{
-	  return AAFRESULT_NOT_INITIALIZED;
-	}
-
   if (! pV)
 	{
 	  return AAFRESULT_NULL_PARAM;
@@ -445,11 +352,6 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFIdentification::SetProductVersionString (aafWChar * pVS)
 {
-  if (! _initialized)
-	{
-	  return AAFRESULT_NOT_INITIALIZED;
-	}
-
   if (! pVS)
 	{
 	  return AAFRESULT_NULL_PARAM;
@@ -464,11 +366,6 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFIdentification::SetProductID (aafUID_t * pPID)
 {
-  if (! _initialized)
-	{
-	  return AAFRESULT_NOT_INITIALIZED;
-	}
-
   if (! pPID)
 	{
 	  return AAFRESULT_NULL_PARAM;
