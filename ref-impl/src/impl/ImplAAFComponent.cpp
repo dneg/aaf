@@ -109,12 +109,13 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFComponent::SetDataDef (ImplAAFDataDef * pDataDef)
 {
   if (! pDataDef)
-	return AAFRESULT_NULL_PARAM;
+    return AAFRESULT_NULL_PARAM;
+  if (!pDataDef->attached())
+    return AAFRESULT_OBJECT_NOT_ATTACHED;
 
-	assert(_dataDef.isVoid());
-	_dataDef = pDataDef;
+  _dataDef = pDataDef;
 
-	return AAFRESULT_SUCCESS;
+  return AAFRESULT_SUCCESS;
 }
 
 
