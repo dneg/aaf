@@ -124,4 +124,55 @@ static inline ULARGE_INTEGER fromOMUInt64(const OMUInt64& x)
 
 #endif
 
+#if defined(OM_DYNAMIC_SS)
+// For dynamic linking to the Structured Storage library redirect
+// the following calls to wrapper functions.
+//
+#define StgCreateDocfile OMStgCreateDocfile
+#define StgCreateDocfileOnILockBytes OMStgCreateDocfileOnILockBytes
+#define StgOpenStorage OMStgOpenStorage
+#define StgOpenStorageOnILockBytes OMStgOpenStorageOnILockBytes
+#define StgIsStorageFile OMStgIsStorageFile
+#endif
+
+OMInt32 OMStgCreateDocfile(const SSCHAR* pwcsName,
+                           OMUInt32 grfMode,
+                           OMUInt32 reserved,
+                           IStorage** ppstgOpen);
+
+OMInt32 OMStgCreateDocfileOnILockBytes(ILockBytes* plkbyt,
+                                       OMUInt32 grfMode,
+                                       OMUInt32 reserved,
+                                       IStorage** ppstgOpen);
+
+OMInt32 OMStgOpenStorage(SSCHAR* pwcsName,
+                         IStorage* pstgPriority,
+                         OMUInt32 grfMode,
+                         SSCHAR** snbExclude,
+                         OMUInt32 reserved,
+                         IStorage** ppstgOpen);
+
+OMInt32 OMStgOpenStorageOnILockBytes(ILockBytes* plkbyt,
+                                     IStorage* pstgPriority,
+                                     OMUInt32 grfMode,
+                                     SSCHAR** snbExclude,
+                                     OMUInt32 reserved,
+                                     IStorage** ppstgOpen);
+
+OMInt32 OMStgIsStorageFile(const SSCHAR* pwcsName);
+
+// The following functions are not currently used -
+//
+// StgIsStorageILockBytes()
+// StgSetTimes()
+
+#if defined(OM_WINDOWS_SS) || defined(OM_MACINTOSH_SS)
+#define CoInitialize OMCoInitialize
+#define CoUninitialize OMCoUninitialize
+#endif
+
+OMInt32 OMCoInitialize(void* pvReserved);
+
+void OMCoUninitialize(void);
+
 #endif
