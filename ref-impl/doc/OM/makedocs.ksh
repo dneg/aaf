@@ -42,5 +42,20 @@ OUTPUT=${OMDOC}/ObjectManager.html
 OMHTML=${OMDOC}/html.fmt
 OMCONT=${OMDOC}/contents.d
 #
+if [ ! -x "${ADEXEC}" ]; then
+  echo "Error : Can't find \"${ADEXEC}\"."
+  exit 1
+fi
+#
+if [ ! -f "${ADHTML}" ]; then
+  echo "Error : Can't find \"${ADHTML}\"."
+  exit 1
+fi
+#
+if [ ! -f "${OMHTML}" ]; then
+  echo "Error : Can't find \"${OMHTML}\"."
+  exit 1
+fi
+#
 "${ADEXEC}" /x "${FLAGS}" /s ${OMHTML} /o ${OUTPUT} /r html /f "${ADHTML}" ${SRC} ${OMCONT}
 #
