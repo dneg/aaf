@@ -131,9 +131,7 @@ public:
 
 		pathStream << _prefix << _counter++ << _suffix;
 		AxNetworkLocator axNetworkLocator(
-			AxCreateInstance<IAAFNetworkLocator>( axDictionary,
-												  AUID_AAFNetworkLocator,
-										     	  IID_IAAFNetworkLocator ) );
+			AxCreateInstance<IAAFNetworkLocator>( axDictionary ) );
 
 
 		axNetworkLocator.Initialize();
@@ -418,11 +416,11 @@ public:
 									    kAAFCompressionDisable ) );
 		
 			return audioSource;
-		
 		}
 		else {
-			assert(0); /* not implemented */
+			throw "Unexpected _souce value.";
 		}
+	
 	}
 
 private:
@@ -646,9 +644,7 @@ void create_mastermob_and_write_essence( AxHeader axHeader,
 	AxDictionary axDictionary( axHeader.GetDictionary() );
 
 	AxMasterMobEx axMasterMobEx(
-		AxCreateInstance<IAAFMasterMobEx>( axDictionary,
-										   AUID_AAFMasterMob,
-										   IID_IAAFMasterMobEx ) );
+		AxCreateInstance<IAAFMasterMobEx>( axDictionary ) );
 	axMasterMobEx.Initialize();
 
 	axHeader.AddMob( axMasterMobEx );
@@ -749,8 +745,7 @@ void open_mastermob_and_read_essence( AxHeader& axHeader,
 	notAtEnd = axMobIter.NextOne( nextMob );
 	assert( notAtEnd );
 	
-	AxMasterMob axMasterMob( AxQueryInterface<IAAFMob,IAAFMasterMob>( 
-			     nextMob, IID_IAAFMasterMob ) );
+	AxMasterMob axMasterMob( AxQueryInterface<IAAFMob,IAAFMasterMob>( nextMob ) );
 
 	wcout << L"MasterMob name: " << axMasterMob.GetName() << endl;
 	wcout << L"Number of Slots: " << axMasterMob.CountSlots() << endl;
