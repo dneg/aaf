@@ -33,6 +33,8 @@
 #include <string.h>
 #if !defined(macintosh)
 #include <assert.h>
+#else
+#include <CursorCtl.h>
 #endif
 
 static void printHelp ()
@@ -180,6 +182,12 @@ void main (int argc, char ** argv)
       usage (command);	// does not return
     }
 
+#if defined(macintosh)
+  // Intialize the MPW cursors so that we can release time 
+  // to the operating system (pre-MacOS X).
+  InitCursorCtl(NULL);
+#endif
+
   TextStream macroText;
   macroText.Append (macrofile,
 		    SourceInfo (macrofilename, 1));
@@ -206,6 +214,10 @@ void main (int argc, char ** argv)
 	{
 #if DEBUG
 	  fprintf (stderr, "Pass %d...\n\n", repeats+1);
+#endif
+#if defined(macintosh)
+    // Release time to the operating system (pre-MacOS X).
+//	SpinCursor(1);
 #endif
 	  output.Clear();
 	  changed = macros.ApplyMacros (input, output);
