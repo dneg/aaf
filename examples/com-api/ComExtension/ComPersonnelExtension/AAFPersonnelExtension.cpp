@@ -64,7 +64,7 @@ typedef struct tagAAFPluginObjectInfo_t
 #define AAF_BEGIN_PLUGIN_MAP(x) static AAFPluginObjectInfo_t x[] = {
 #define AAF_LAST_ENTRY() { NULL, NULL, NULL }
 #define AAF_END_PLUGIN_MAP()  AAF_LAST_ENTRY() };
-#define AAF_PLUGIN_ENTRY(class) { &CLSID_##class, #class, &C##class##::COMCreate },
+#define AAF_PLUGIN_ENTRY(class) { &CLSID_##class, #class, &C##class::COMCreate },
 
 
 class CAAFPluginServer : 
