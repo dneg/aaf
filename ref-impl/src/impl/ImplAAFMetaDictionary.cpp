@@ -282,59 +282,18 @@ ImplAAFDictionary * ImplAAFMetaDictionary::dataDictionary(void) const
 
 
 
-//////////////////////////////
-//
-//////////////////////////////
-
-ImplAAFMetaDictionary::ForwardClassReference::ForwardClassReference()
-{
-}
-
-ImplAAFMetaDictionary::ForwardClassReference::ForwardClassReference(const ImplAAFMetaDictionary::ForwardClassReference& rhs)
-{
-  _classId = rhs._classId;
-}
-
-ImplAAFMetaDictionary::ForwardClassReference::ForwardClassReference(aafUID_constref classId)
-{
-  _classId = classId;
-}
-
-const OMUniqueObjectIdentification 
-  ImplAAFMetaDictionary::ForwardClassReference::identification(void) const
-{
-  return (*reinterpret_cast<const OMUniqueObjectIdentification *>(&_classId));
-}
-
-ImplAAFMetaDictionary::ForwardClassReference& 
-  ImplAAFMetaDictionary::ForwardClassReference::operator= (const ImplAAFMetaDictionary::ForwardClassReference& rhs)
-{
-  _classId = rhs._classId;
-  return *this;
-}
-
-bool ImplAAFMetaDictionary::ForwardClassReference::operator== (const ImplAAFMetaDictionary::ForwardClassReference& rhs)
-{
-  if (&rhs == this)
-    return true;
-  else
-    return (0 == memcmp(&_classId, &rhs._classId, sizeof(_classId)));
-}
-
 bool ImplAAFMetaDictionary::containsForwardClassReference(aafUID_constref classId)
 {
-  // Create a temporary test value and then look for the
-  // corresponding forward class reference in the set.
-  ImplAAFMetaDictionary::ForwardClassReference forwardReference(classId);
-  return (_forwardClassReferences.containsValue(forwardReference));
+  const OMUniqueObjectIdentification* id = reinterpret_cast<const OMUniqueObjectIdentification*>(&classId);
+  return (_forwardClassReferences.contains(*id));
 }
 
 // Remove the give classId from the foward class reference set.
 void ImplAAFMetaDictionary::RemoveForwardClassReference(aafUID_constref classId)
 {
-  ImplAAFMetaDictionary::ForwardClassReference forwardReference(classId);
   assert(containsForwardClassReference(classId)); // classId must already be a forward reference!
-  _forwardClassReferences.removeValue(forwardReference);
+  const OMUniqueObjectIdentification* id = reinterpret_cast<const OMUniqueObjectIdentification*>(&classId);
+  _forwardClassReferences.remove(*id);
 }
 
 //////////////////////////////
@@ -599,16 +558,14 @@ AAFRESULT STDMETHODCALLTYPE
   if (containsForwardClassReference(classId))
     return AAFRESULT_INVALID_PARAM;
 
-  // Create a local forward class reference.
-  ImplAAFMetaDictionary::ForwardClassReference forwardReference(classId);
-
+  const OMUniqueObjectIdentification* id = reinterpret_cast<const OMUniqueObjectIdentification*>(&classId);
   // If the class has already been registed then we cannot
   // create a foward reference!
-  if (_classDefinitions.contains(forwardReference.identification()))
+  if (_classDefinitions.contains(*id))
     return AAFRESULT_INVALID_PARAM;
 
   // It now safe to add the given classId to the set.
-  _forwardClassReferences.append(forwardReference); // the set will copy the value.
+  _forwardClassReferences.insert(*id);
 
   return result;
 }
