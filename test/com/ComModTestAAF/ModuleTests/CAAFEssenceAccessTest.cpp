@@ -51,6 +51,18 @@ using namespace std;
 #include "CAAFBuiltinDefs.h"
 
 
+// convenient error handlers.
+inline void checkResult(HRESULT r)
+{
+	if (FAILED(r))
+		throw r;
+}
+inline void checkExpression(bool expression, HRESULT r)
+{
+	if (!expression)
+		throw r;
+}
+
 
 // This static variables are here so they can be referenced 
 // thru out the whole program.
@@ -188,6 +200,34 @@ static const aafUInt8 compressed422JFIF[] =
   0x28,0x00,0x03,0xFF,0xD9
 };
 
+// When tested with horizontalSubsample=1 need 24 bits per pixel, hence multiply by 3
+static aafUInt8 uncompressUYVY[STD_WIDTH*STD_HEIGHT*3];
+
+static aafUInt8 *initUncompressedVideo(aafUInt32 horizSubSample, aafUInt32 *bufferSize)
+{
+	// fill with grey
+	memset(uncompressUYVY, 0x80, sizeof(uncompressUYVY));
+
+	if (horizSubSample == 2)
+		*bufferSize = sizeof(uncompressUYVY) * 2 / 3;	// 4:2:2 (16 avg bpp)
+	else
+		*bufferSize = sizeof(uncompressUYVY);			// 4:4:4 (24 avg bpp)
+	return uncompressUYVY;
+}
+
+static aafUInt8 *readDVframe(aafUInt32 *bufferSize)
+{
+	*bufferSize = 144000;
+	aafUInt8 *buf = new aafUInt8[*bufferSize];
+
+	// Read in a DV-compressed frame
+	FILE *fp = fopen("../ScaleTest/1frame.dv", "rb");
+
+	checkExpression(fp != NULL, AAFRESULT_TEST_FAILED);
+	checkExpression(fread(buf, *bufferSize, 1, fp) == 1, AAFRESULT_TEST_FAILED);
+	fclose(fp);
+	return buf;
+}
 
 // The URL conversion routines are also in ref-impl/src/impl/AAFUtils.cpp
 // TODO: We need to create a general-purpose library which all tests and
@@ -380,18 +420,6 @@ extern "C" HRESULT CAAFEssenceAccess_test(testMode_t mode);
 
 
 #define TEST_PATH	L"SomeFile.dat"
-
-// convenient error handlers.
-inline void checkResult(HRESULT r)
-{
-	if (FAILED(r))
-		throw r;
-}
-inline void checkExpression(bool expression, HRESULT r)
-{
-	if (!expression)
-		throw r;
-}
 
 
 static void convert(char* cName, size_t length, const wchar_t* name)
@@ -1184,8 +1212,9 @@ static HRESULT CreateVideoAAFFile(
   aafCompressEnable_t compressEnable,
 	aafColorSpace_t colorSpace,
 	aafUInt32 horizontalSubsample,
-	aafUID_t /*codecID*/,
-	testType_t testType)
+	aafUID_t codecID,
+	testType_t testType,
+	aafUID_t compression)
 {
 	HRESULT hr = AAFRESULT_SUCCESS;
 	IAAFFile*					pFile = NULL;
@@ -1237,52 +1266,74 @@ static HRESULT CreateVideoAAFFile(
 			remove(chNameBuffer);
 		}
 
+		aafRect_t rc;
+		rc.xOffset = rc.yOffset = 0;
+		rc.xSize = STD_WIDTH;
+		rc.ySize = STD_HEIGHT;
 
-		if (kAAFColorSpaceYUV == colorSpace && 2 == horizontalSubsample)
+		if (codecID == kAAFCodecJPEG)
 		{
-			compressedBuffer = const_cast<aafDataBuffer_t>(compressed422JFIF);
-			compressedBufferSize = sizeof(compressed422JFIF);
-		}
-		else
-		{
-			compressedBuffer = const_cast<aafDataBuffer_t>(compressedJFIF);
-			compressedBufferSize = sizeof(compressedJFIF);
-		}
-
-
-		if (compressEnable == kAAFCompressionEnable)
-		{
-			if (kAAFColorSpaceYUV == colorSpace)
+			if (kAAFColorSpaceYUV == colorSpace && 2 == horizontalSubsample)
 			{
-				if (2 == horizontalSubsample)
+				compressedBuffer = const_cast<aafDataBuffer_t>(compressed422JFIF);
+				compressedBufferSize = sizeof(compressed422JFIF);
+			}
+			else
+			{
+				compressedBuffer = const_cast<aafDataBuffer_t>(compressedJFIF);
+				compressedBufferSize = sizeof(compressedJFIF);
+			}
+	
+			if (compressEnable == kAAFCompressionEnable)
+			{
+				if (kAAFColorSpaceYUV == colorSpace)
 				{
-					rgbColorBuffer = new aafUInt8[SAMPLE_422_BYTES];
-					checkExpression(NULL != rgbColorBuffer, AAFRESULT_NOMEMORY);
-					FillYCbCr422SampleBufferFromYCbCr(rgbColorBuffer, STD_HEIGHT, STD_WIDTH, yuv_green);
-					writeBufferSize = SAMPLE_422_BYTES;
+					if (2 == horizontalSubsample)
+					{
+						rgbColorBuffer = new aafUInt8[SAMPLE_422_BYTES];
+						checkExpression(NULL != rgbColorBuffer, AAFRESULT_NOMEMORY);
+						FillYCbCr422SampleBufferFromYCbCr(rgbColorBuffer, STD_HEIGHT, STD_WIDTH, yuv_green);
+						writeBufferSize = SAMPLE_422_BYTES;
+					}
+					else
+					{
+						rgbColorBuffer = new aafUInt8[FRAME_BYTES];
+						checkExpression(NULL != rgbColorBuffer, AAFRESULT_NOMEMORY);
+						FillSampleFrameBuffer(rgbColorBuffer, STD_HEIGHT, STD_WIDTH, 0, yuv_green);
+						writeBufferSize = FRAME_BYTES;
+					}
 				}
 				else
 				{
 					rgbColorBuffer = new aafUInt8[FRAME_BYTES];
 					checkExpression(NULL != rgbColorBuffer, AAFRESULT_NOMEMORY);
-					FillSampleFrameBuffer(rgbColorBuffer, STD_HEIGHT, STD_WIDTH, 0, yuv_green);
+					FillSampleFrameBuffer(rgbColorBuffer, STD_HEIGHT, STD_WIDTH, 0, green);
 					writeBufferSize = FRAME_BYTES;
 				}
+	
+				writeBuffer = rgbColorBuffer;
 			}
 			else
 			{
-				rgbColorBuffer = new aafUInt8[FRAME_BYTES];
-				checkExpression(NULL != rgbColorBuffer, AAFRESULT_NOMEMORY);
-				FillSampleFrameBuffer(rgbColorBuffer, STD_HEIGHT, STD_WIDTH, 0, green);
-				writeBufferSize = FRAME_BYTES;
+				writeBuffer = compressedBuffer;
+				writeBufferSize = compressedBufferSize;
 			}
-
-			writeBuffer = rgbColorBuffer;
 		}
-		else
+		else if (compression == kAAFLegacyDV)
 		{
-			writeBuffer = compressedBuffer;
-			writeBufferSize = compressedBufferSize;
+			writeBuffer = readDVframe( &writeBufferSize );
+			rgbColorBuffer = writeBuffer;		// to ensure it is freed
+
+			aafRational_t PAL_rate = {25, 1};
+			editRate = PAL_rate;
+			sampleRate = PAL_rate;
+			rc.xSize = 720;
+			rc.ySize = 576 / 2;
+		}
+		else // codecID is not JPEG Codec
+		{
+			// Uncompressed video
+			writeBuffer = initUncompressedVideo( horizontalSubsample, &writeBufferSize );
 		}
 		
 		aafProductVersion_t v;
@@ -1338,24 +1389,22 @@ static HRESULT CreateVideoAAFFile(
 		// now create the Essence data file
 		checkResult(pMasterMob->CreateEssence(STD_SLOT_ID,				// Slot ID
 			defs.ddPicture(),	// MediaKind
-			kAAFCodecJPEG,		// codecID
+			codecID,		// e.g. kAAFCodecCDCI, kAAFCodecJPEG
 			editRate,		// edit rate
 			sampleRate,		// sample rate
-			compressEnable, // compression
-			pLocator,	// In current file
+			compressEnable, // compression enabled or disabled
+			pLocator,		// In current file
 			testContainer,	// In AAF Format
 			&pEssenceAccess));// Compress disabled
 		
 		// Get and display the current code name.
 		checkResult(pEssenceAccess->GetCodecName(sizeof(wNameBuffer), wNameBuffer));
 		convert(chNameBuffer, sizeof(chNameBuffer), wNameBuffer);
-//		cout << "        Codec:" << chNameBuffer << endl;
 
-    // Get the codecID and validate that it is what we expect.
-    aafUID_t codecID = {0};
-		checkResult(pEssenceAccess->GetCodecID(&codecID));
-		checkExpression(0 == memcmp(&codecID, &kAAFCodecJPEG, sizeof(codecID)), AAFRESULT_TEST_FAILED);
-
+	    // Get the codecID and validate that it is what we expect.
+		aafUID_t expCodecID = {0};
+		checkResult(pEssenceAccess->GetCodecID(&expCodecID));
+		checkExpression(0 == memcmp(&expCodecID, &codecID, sizeof(expCodecID)), AAFRESULT_TEST_FAILED);
 
 		checkResult(pEssenceAccess->GetFileFormatParameterList (&format));
 		checkResult(format->NumFormatSpecifiers (&numSpecifiers));
@@ -1380,10 +1429,6 @@ static HRESULT CreateVideoAAFFile(
 
 
 		// Set the stored rectangle.
-		aafRect_t rc;
-		rc.xOffset = rc.yOffset = 0;
-		rc.xSize = STD_WIDTH;
-		rc.ySize = STD_HEIGHT;
 		checkResult(pFormat->AddFormatSpecifier (kAAFStoredRect, sizeof(rc), (aafDataBuffer_t)&rc));
 		checkResult(pFormat->AddFormatSpecifier (kAAFSampledRect, sizeof(rc), (aafDataBuffer_t)&rc));
 		checkResult(pFormat->AddFormatSpecifier (kAAFDisplayRect, sizeof(rc), (aafDataBuffer_t)&rc));
@@ -1413,6 +1458,27 @@ static HRESULT CreateVideoAAFFile(
 
 
 			checkResult(pTransformFormat->AddFormatSpecifier (kAAFPixelFormat, sizeof(colorSpace), (aafDataBuffer_t)&colorSpace));
+			checkResult(pEssenceAccess->PutFileFormat(pTransformFormat));
+
+			pTransformFormat->Release();
+			pTransformFormat = NULL;
+		}
+
+		if (codecID != kAAFCodecJPEG && compressEnable == kAAFCompressionDisable)
+		{
+			// Set format specifiers needed for uncompressed CDCI video
+			checkResult(pEssenceAccess->GetEmptyFileFormat (&pTransformFormat));
+			checkResult(pTransformFormat->AddFormatSpecifier (kAAFCDCIHorizSubsampling, sizeof(horizontalSubsample), (aafDataBuffer_t)&horizontalSubsample));
+			if (compression == kAAFLegacyDV)
+			{
+				aafUInt32 useLegacyDV = 1;
+				aafInt32 YUV_pixel = kAAFColorSpaceYUV;
+
+				checkResult(pTransformFormat->AddFormatSpecifier(kAAFPixelFormat, 4, (unsigned char *) &YUV_pixel));
+				checkResult(pTransformFormat->AddFormatSpecifier(kAAFStoredRect, 16, (unsigned char *) &rc));
+				checkResult(pTransformFormat->AddFormatSpecifier(kAAFLegacyDV, sizeof(useLegacyDV), (aafDataBuffer_t)&useLegacyDV));
+				
+			}
 			checkResult(pEssenceAccess->PutFileFormat(pTransformFormat));
 
 			pTransformFormat->Release();
@@ -1526,12 +1592,13 @@ static HRESULT CreateVideoAAFFile(
 
 
 static HRESULT ReadVideoAAFFile(
-  aafWChar * pFileName, 
+	aafWChar * pFileName, 
 	aafCompressEnable_t compressEnable,
 	aafColorSpace_t colorSpace,
 	aafUInt32 horizontalSubsample,
-	aafUID_t /*codecID*/,
-  testType_t testType)
+	aafUID_t codecID,
+	testType_t testType,
+	aafUID_t compression)
 {
 	HRESULT hr = AAFRESULT_SUCCESS;
 	IAAFFile *					pFile = NULL;
@@ -1561,52 +1628,75 @@ static HRESULT ReadVideoAAFFile(
 			              (2 == horizontalSubsample && kAAFColorSpaceYUV == colorSpace)),
 										AAFRESULT_TEST_FAILED);
 		
+		// Validate the rectangle values that we originally wrote.
+		aafInt32 bytesRead = 0;
+		aafRect_t std_rc;
+		std_rc.xOffset = std_rc.yOffset = 0;
+		std_rc.xSize = STD_WIDTH;
+		std_rc.ySize = STD_HEIGHT;
 
-		if (compressEnable == kAAFCompressionEnable)
+		if (codecID == kAAFCodecJPEG)
 		{
-			if (kAAFColorSpaceYUV == colorSpace)
+			if (compressEnable == kAAFCompressionEnable)
 			{
-				if (2 == horizontalSubsample)
+				if (kAAFColorSpaceYUV == colorSpace)
 				{
-					checkBuffer = new aafUInt8[SAMPLE_422_BYTES];
-					checkExpression(NULL != checkBuffer, AAFRESULT_NOMEMORY);
-					FillYCbCr422SampleBufferFromYCbCr(checkBuffer, STD_HEIGHT, STD_WIDTH, yuv_green);
-					checkBufferSize = SAMPLE_422_BYTES;
+					if (2 == horizontalSubsample)
+					{
+						checkBuffer = new aafUInt8[SAMPLE_422_BYTES];
+						checkExpression(NULL != checkBuffer, AAFRESULT_NOMEMORY);
+						FillYCbCr422SampleBufferFromYCbCr(checkBuffer, STD_HEIGHT, STD_WIDTH, yuv_green);
+						checkBufferSize = SAMPLE_422_BYTES;
+					}
+					else
+					{
+						checkBuffer = new aafUInt8[FRAME_BYTES];
+						checkExpression(NULL != checkBuffer, AAFRESULT_NOMEMORY);
+						FillSampleFrameBuffer(checkBuffer, STD_HEIGHT, STD_WIDTH, 0, yuv_green);
+						checkBufferSize = FRAME_BYTES;
+					}
 				}
 				else
 				{
 					checkBuffer = new aafUInt8[FRAME_BYTES];
 					checkExpression(NULL != checkBuffer, AAFRESULT_NOMEMORY);
-					FillSampleFrameBuffer(checkBuffer, STD_HEIGHT, STD_WIDTH, 0, yuv_green);
+					FillSampleFrameBuffer(checkBuffer, STD_HEIGHT, STD_WIDTH, 0, green);
 					checkBufferSize = FRAME_BYTES;
 				}
 			}
 			else
 			{
-				checkBuffer = new aafUInt8[FRAME_BYTES];
-				checkExpression(NULL != checkBuffer, AAFRESULT_NOMEMORY);
-				FillSampleFrameBuffer(checkBuffer, STD_HEIGHT, STD_WIDTH, 0, green);
-				checkBufferSize = FRAME_BYTES;
+				if (kAAFColorSpaceYUV == colorSpace && 2 == horizontalSubsample)
+				{
+					compressedBufferSize = sizeof(compressed422JFIF);
+					compressedBuffer = new aafUInt8[compressedBufferSize];
+					checkExpression(NULL != compressedBuffer, AAFRESULT_NOMEMORY);
+					memcpy(compressedBuffer, compressed422JFIF, compressedBufferSize);
+				}
+				else
+				{
+					compressedBufferSize = sizeof(compressedJFIF);
+					compressedBuffer = new aafUInt8[compressedBufferSize];
+					checkExpression(NULL != compressedBuffer, AAFRESULT_NOMEMORY);
+					memcpy(compressedBuffer, compressedJFIF, compressedBufferSize);
+				}
 			}
 		}
-		else
+		else if (compression == kAAFLegacyDV)
 		{
-			if (kAAFColorSpaceYUV == colorSpace && 2 == horizontalSubsample)
-			{
-				compressedBufferSize = sizeof(compressed422JFIF);
-				compressedBuffer = new aafUInt8[compressedBufferSize];
-				checkExpression(NULL != compressedBuffer, AAFRESULT_NOMEMORY);
-				memcpy(compressedBuffer, compressed422JFIF, compressedBufferSize);
-			}
-			else
-			{
-				compressedBufferSize = sizeof(compressedJFIF);
-				compressedBuffer = new aafUInt8[compressedBufferSize];
-				checkExpression(NULL != compressedBuffer, AAFRESULT_NOMEMORY);
-				memcpy(compressedBuffer, compressedJFIF, compressedBufferSize);
-			}
+			compressedBuffer = readDVframe( &compressedBufferSize );
+			std_rc.xSize = 720;
+			std_rc.ySize = 576 / 2;
 		}
+		else // codecID is not JPEG Codec
+		{
+			// Uncompressed video
+			aafUInt8 *video = initUncompressedVideo( horizontalSubsample, &compressedBufferSize );
 
+			compressedBuffer = new aafUInt8[compressedBufferSize];
+			checkExpression(NULL != compressedBuffer, AAFRESULT_NOMEMORY);
+			memcpy(compressedBuffer, video, compressedBufferSize);
+		}
 
 
 		checkResult(AAFFileOpenExistingRead ( pFileName, 0, &pFile));
@@ -1647,11 +1737,11 @@ static HRESULT ReadVideoAAFFile(
 				compressEnable,// Compression
 				&pEssenceAccess));
 
-			aafUID_t codecID = {0};
-			checkResult(pEssenceAccess->GetCodecID(&codecID));
-			if (false && memcmp(&codecID, &kAAFCodecJPEG, sizeof(codecID)))
+			aafUID_t storedCodecID = {0};
+			checkResult(pEssenceAccess->GetCodecID(&storedCodecID));
+			if (memcmp(&storedCodecID, &codecID, sizeof(storedCodecID)))
 			{
-			  cout << "     Warning:GetCodecID did not return CodecJPEG." << endl;
+			  cout << "     Warning:GetCodecID did not return expected CodecID." << endl;
 			}
 
 			// Setup the formats that we want to query.
@@ -1665,13 +1755,6 @@ static HRESULT ReadVideoAAFFile(
 			checkResult(pEssenceAccess->GetFileFormat (fmtTemplate, &pFormat));
 			fmtTemplate->Release();
 			fmtTemplate = NULL;
-
-			// Validate the rectangle values that we originally wrote.
-			aafInt32 bytesRead = 0;
-			aafRect_t std_rc;
-			std_rc.xOffset = std_rc.yOffset = 0;
-			std_rc.xSize = STD_WIDTH;
-			std_rc.ySize = STD_HEIGHT;
 
 			aafRect_t rc;
 			rc.xOffset = rc.yOffset = 0;
@@ -1783,31 +1866,42 @@ static HRESULT ReadVideoAAFFile(
 					pMultiEssence = NULL;
 				}
 				
-				if (kAAFCompressionDisable == compressEnable)
-				{	// If compression is disabled then compare the bytes read to the original
-					// compressedJFIF data buffer.
-					if (compressedBufferSize != AAFBytesRead)
-					{
-						cout << "***Wrong number of bytes read ( was "
-								 << AAFBytesRead
-								 << ", should be "
-								 << sizeof(compressedJFIF)
-								 << ")"
-								 << endl;
-
-						throw HRESULT(AAFRESULT_TEST_FAILED);
+				if (codecID == kAAFCodecJPEG)
+				{
+					if (codecID == kAAFCodecJPEG && kAAFCompressionDisable == compressEnable)
+					{	// If compression is disabled then compare the bytes read to the original
+						// compressedJFIF data buffer.
+						if (compressedBufferSize != AAFBytesRead)
+						{
+							cout << "***Wrong number of bytes read ( was "
+									 << AAFBytesRead
+									 << ", should be "
+									 << sizeof(compressedJFIF)
+									 << ")"
+									 << endl;
+	
+							throw HRESULT(AAFRESULT_TEST_FAILED);
+						}
+						else if (memcmp( compressedBuffer, AAFDataBuf, compressedBufferSize) != 0)
+						{
+							cout << "*** Data Read is different than the data originally written from the JPEG buffer ***" << endl;
+							throw HRESULT(AAFRESULT_TEST_FAILED);
+						}
 					}
-					else if (memcmp( compressedBuffer, AAFDataBuf, compressedBufferSize) != 0)
-					{
-						cout << "*** Data Read is different than the data originally written from the JPEG buffer ***" << endl;
-						throw HRESULT(AAFRESULT_TEST_FAILED);
+					else
+					{ // If compression is enabled then compare the bytes read to the original
+						// uncompressed data buffer. This buffer should be 100% green.
+						checkExpression(checkBufferSize == AAFBytesRead, AAFRESULT_TEST_FAILED);
+						checkExpression(PixelCompare(STD_PIXEL_SLOP, AAFDataBuf, checkBuffer, checkBufferSize), AAFRESULT_TEST_FAILED);
 					}
 				}
 				else
-				{ // If compression is enabled then compare the bytes read to the original
-					// uncompressed data buffer. This buffer should be 100% green.
-					checkExpression(checkBufferSize == AAFBytesRead, AAFRESULT_TEST_FAILED);
-					checkExpression(PixelCompare(STD_PIXEL_SLOP, AAFDataBuf, checkBuffer, checkBufferSize), AAFRESULT_TEST_FAILED);
+				{
+					if (memcmp( compressedBuffer, AAFDataBuf, compressedBufferSize) != 0)
+					{
+						cout << "*** Data Read is different than the data originally written from the CDCI buffer ***" << endl;
+						throw HRESULT(AAFRESULT_TEST_FAILED);
+					}
 				}
 			}
 
@@ -2179,45 +2273,45 @@ HRESULT CAAFEssenceAccess_test(testMode_t mode)
 	{
 		cout << "        WriteSamples (compression disabled, RGB)" << endl;
 		hr = CreateVideoAAFFile(L"EssenceAccessJPEG.aaf",NULL, kAAFCompressionDisable, kAAFColorSpaceRGB, 1, 
-				kAAFCodecJPEG, testStandardCalls);
+				kAAFCodecJPEG, testStandardCalls, NIL_UID);
 	}
 	if (SUCCEEDED(hr))
 	{
 		cout << "        ReadSamples (compression disabled, RGB)" << endl;
 		hr = ReadVideoAAFFile(L"EssenceAccessJPEG.aaf", kAAFCompressionDisable, kAAFColorSpaceRGB, 1,  
-				kAAFCodecJPEG, testStandardCalls);
+				kAAFCodecJPEG, testStandardCalls, NIL_UID);
 	}
 	if (SUCCEEDED(hr))
 	{
 		cout << "        ReadSamples (compression enabled, RGB)" << endl;
 		hr = ReadVideoAAFFile(L"EssenceAccessJPEG.aaf", kAAFCompressionEnable, kAAFColorSpaceRGB, 1,  
-				kAAFCodecJPEG, testStandardCalls);
+				kAAFCodecJPEG, testStandardCalls, NIL_UID);
 	}
 
 	if(hr == AAFRESULT_SUCCESS && mode == kAAFUnitTestReadWrite)
 	{
 		cout << "        WriteSamples (compression enabled, RGB)" << endl;
 		hr = CreateVideoAAFFile(L"EssenceAccessJPEGComp.aaf",NULL, kAAFCompressionEnable, kAAFColorSpaceRGB, 1,  
-				kAAFCodecJPEG, testStandardCalls);
+				kAAFCodecJPEG, testStandardCalls, NIL_UID);
 	}
 	if (SUCCEEDED(hr))
 	{
 		cout << "        ReadSamples (compression disabled, RGB)" << endl;
 		hr = ReadVideoAAFFile(L"EssenceAccessJPEGComp.aaf", kAAFCompressionDisable, kAAFColorSpaceRGB, 1,  
-				kAAFCodecJPEG, testStandardCalls);
+				kAAFCodecJPEG, testStandardCalls, NIL_UID);
 	}
 	if (SUCCEEDED(hr))
 	{
 		cout << "        ReadSamples (compression enabled, RGB)" << endl;
 		hr = ReadVideoAAFFile(L"EssenceAccessJPEGComp.aaf", kAAFCompressionEnable, kAAFColorSpaceRGB, 1,  
-				kAAFCodecJPEG, testStandardCalls);
+				kAAFCodecJPEG, testStandardCalls, NIL_UID);
 	}
 
 	if(hr == AAFRESULT_SUCCESS && mode == kAAFUnitTestReadWrite)
 	{
 		cout << "        WriteMultiSamples (compression disabled, RGB)" << endl;
 		hr = CreateVideoAAFFile(L"EssenceAccessJPEGMulti.aaf",NULL, kAAFCompressionDisable, kAAFColorSpaceRGB, 1, 
-				kAAFCodecJPEG, testMultiCalls);
+				kAAFCodecJPEG, testMultiCalls, NIL_UID);
 		if (AAFRESULT_INVALID_OP_CODEC == hr)
 		{
 		cout << "          Codec does not support interleaved data." << endl;
@@ -2229,13 +2323,13 @@ HRESULT CAAFEssenceAccess_test(testMode_t mode)
 			{
 				cout << "        ReadMultiSamples (compression disabled, RGB)" << endl;
 				hr = ReadVideoAAFFile(L"EssenceAccessJPEGMulti.aaf", kAAFCompressionDisable, kAAFColorSpaceRGB, 1,  
-					kAAFCodecJPEG, testMultiCalls);
+					kAAFCodecJPEG, testMultiCalls, NIL_UID);
 			}
 			if (SUCCEEDED(hr))
 			{
 				cout << "        ReadMultiSamples (compression enabled, RGB)" << endl;
 				hr = ReadVideoAAFFile(L"EssenceAccessJPEGMulti.aaf", kAAFCompressionEnable, kAAFColorSpaceRGB, 1,  
-					kAAFCodecJPEG, testMultiCalls);
+					kAAFCodecJPEG, testMultiCalls, NIL_UID);
 			}
 		}
 	}
@@ -2244,7 +2338,7 @@ HRESULT CAAFEssenceAccess_test(testMode_t mode)
 	{
 		cout << "        WriteMultiSamples (compression enabled, RGB)" << endl;
 		hr = CreateVideoAAFFile(L"EssenceAccessJPEGMultiComp.aaf",NULL, kAAFCompressionEnable, kAAFColorSpaceRGB,1, 
-				kAAFCodecJPEG, testMultiCalls);
+				kAAFCodecJPEG, testMultiCalls, NIL_UID);
 		if (AAFRESULT_INVALID_OP_CODEC == hr)
 		{
 		cout << "          Codec does not support interleaved data." << endl;
@@ -2256,13 +2350,13 @@ HRESULT CAAFEssenceAccess_test(testMode_t mode)
 			{
 				cout << "        ReadMultiSamples (compression disabled, RGB)" << endl;
 				hr = ReadVideoAAFFile(L"EssenceAccessJPEGMultiComp.aaf", kAAFCompressionDisable, kAAFColorSpaceRGB, 1, 
-					kAAFCodecJPEG, testMultiCalls);
+					kAAFCodecJPEG, testMultiCalls, NIL_UID);
 			}
 			if (SUCCEEDED(hr))
 			{
 				cout << "        ReadMultiSamples (compression enabled, RGB)" << endl;
 				hr = ReadVideoAAFFile(L"EssenceAccessJPEGMultiComp.aaf", kAAFCompressionEnable, kAAFColorSpaceRGB, 1, 
-					kAAFCodecJPEG, testMultiCalls);
+					kAAFCodecJPEG, testMultiCalls, NIL_UID);
 			}
 		}
 	}
@@ -2285,25 +2379,25 @@ HRESULT CAAFEssenceAccess_test(testMode_t mode)
 	{
 		cout << "        WriteSamples (compression enabled, YUV)" << endl;
 		hr = CreateVideoAAFFile(L"EssenceAccessJPEGCompYUV.aaf",NULL, kAAFCompressionEnable, kAAFColorSpaceYUV, 1, 
-				kAAFCodecJPEG, testStandardCalls);
+				kAAFCodecJPEG, testStandardCalls, NIL_UID);
 	}
 	if (SUCCEEDED(hr))
 	{
 		cout << "        ReadSamples (compression disabled, YUV)" << endl;
 		hr = ReadVideoAAFFile(L"EssenceAccessJPEGCompYUV.aaf", kAAFCompressionDisable, kAAFColorSpaceYUV, 1, 
-				kAAFCodecJPEG, testStandardCalls);
+				kAAFCodecJPEG, testStandardCalls, NIL_UID);
 	}
 	if (SUCCEEDED(hr))
 	{
 		cout << "        ReadSamples (compression enabled, YUV)" << endl;
 		hr = ReadVideoAAFFile(L"EssenceAccessJPEGCompYUV.aaf", kAAFCompressionEnable, kAAFColorSpaceYUV, 1, 
-				kAAFCodecJPEG, testStandardCalls);
+				kAAFCodecJPEG, testStandardCalls, NIL_UID);
 	}
 	if (SUCCEEDED(hr))
 	{
 		cout << "        ReadSamples (compression enabled, RGB)" << endl;
 		hr = ReadVideoAAFFile(L"EssenceAccessJPEGCompYUV.aaf", kAAFCompressionEnable, kAAFColorSpaceRGB, 1, 
-				kAAFCodecJPEG, testStandardCalls);
+				kAAFCodecJPEG, testStandardCalls, NIL_UID);
 	}
 
 
@@ -2311,26 +2405,28 @@ HRESULT CAAFEssenceAccess_test(testMode_t mode)
 	{
 		cout << "        WriteSamples (compression enabled, YUV 4-2-2)" << endl;
 		hr = CreateVideoAAFFile(L"EssenceAccessJPEGCompYUV422.aaf",NULL, kAAFCompressionEnable, kAAFColorSpaceYUV, 2, 
-				kAAFCodecJPEG, testStandardCalls);
+				kAAFCodecJPEG, testStandardCalls, NIL_UID);
 	}
 	if (SUCCEEDED(hr))
 	{
 		cout << "        ReadSamples (compression disabled, YUV)" << endl;
 		hr = ReadVideoAAFFile(L"EssenceAccessJPEGCompYUV422.aaf", kAAFCompressionDisable, kAAFColorSpaceYUV, 2, 
-				kAAFCodecJPEG, testStandardCalls);
+				kAAFCodecJPEG, testStandardCalls, NIL_UID);
 	}
 	if (SUCCEEDED(hr))
 	{
 		cout << "        ReadSamples (compression enabled, YUV 4-2-2)" << endl;
 		hr = ReadVideoAAFFile(L"EssenceAccessJPEGCompYUV422.aaf", kAAFCompressionEnable, kAAFColorSpaceYUV, 2, 
-				kAAFCodecJPEG, testStandardCalls);
+				kAAFCodecJPEG, testStandardCalls, NIL_UID);
 	}
 	if (SUCCEEDED(hr))
 	{
 		cout << "        ReadSamples (compression enabled, RGB)" << endl;
 	}
 
-#if 0
+	//
+	// CDCI Codec
+	//
 	if (SUCCEEDED(hr))
 	{
 		cout << "    Internal Essence (CDCI):" << endl;
@@ -2339,30 +2435,41 @@ HRESULT CAAFEssenceAccess_test(testMode_t mode)
 	if(hr == AAFRESULT_SUCCESS && mode == kAAFUnitTestReadWrite)
 	{
 		cout << "        WriteSamples (YUV)" << endl;
-		hr = CreateVideoAAFFile(L"EssenceAccessJPEGCompYUV.aaf",NULL, kAAFCompressionEnable, kAAFColorSpaceYUV, 1, 
-			kAAFCodecJPEG, testStandardCalls);
+		hr = CreateVideoAAFFile(L"EssenceAccessCDCICompYUV.aaf",NULL, kAAFCompressionDisable, kAAFColorSpaceYUV, 1, 
+			kAAFCodecCDCI, testStandardCalls, NIL_UID);
 	}
 	if (SUCCEEDED(hr))
 	{
 		cout << "        ReadSamples (YUV)" << endl;
-		hr = ReadVideoAAFFile(L"EssenceAccessJPEGCompYUV.aaf", kAAFCompressionEnable, kAAFColorSpaceYUV, 1, 
-			kAAFCodecJPEG, testStandardCalls);
+		hr = ReadVideoAAFFile(L"EssenceAccessCDCICompYUV.aaf", kAAFCompressionDisable, kAAFColorSpaceYUV, 1, 
+			kAAFCodecCDCI, testStandardCalls, NIL_UID);
 	}
-	
 	
 	if(hr == AAFRESULT_SUCCESS && mode == kAAFUnitTestReadWrite)
 	{
 		cout << "        WriteSamples (YUV 4-2-2)" << endl;
-		hr = CreateVideoAAFFile(L"EssenceAccessJPEGCompYUV422.aaf",NULL, kAAFCompressionEnable, kAAFColorSpaceYUV, 2, 
-			kAAFCodecJPEG, testStandardCalls);
+		hr = CreateVideoAAFFile(L"EssenceAccessCDCICompYUV422.aaf",NULL, kAAFCompressionDisable, kAAFColorSpaceYUV, 2, 
+			kAAFCodecCDCI, testStandardCalls, NIL_UID);
 	}
 	if (SUCCEEDED(hr))
 	{
 		cout << "        ReadSamples (YUV 4-2-2)" << endl;
-		hr = ReadVideoAAFFile(L"EssenceAccessJPEGCompYUV422.aaf", kAAFCompressionEnable, kAAFColorSpaceYUV, 2, 
-			kAAFCodecJPEG, testStandardCalls);
+		hr = ReadVideoAAFFile(L"EssenceAccessCDCICompYUV422.aaf", kAAFCompressionDisable, kAAFColorSpaceYUV, 2, 
+			kAAFCodecCDCI, testStandardCalls, NIL_UID);
 	}
-#endif
+
+	if(hr == AAFRESULT_SUCCESS && mode == kAAFUnitTestReadWrite)
+	{
+		cout << "        WriteSamples (DV CompressionDisable)" << endl;
+		hr = CreateVideoAAFFile(L"EssenceAccessCDCI_DV.aaf",NULL, kAAFCompressionDisable, kAAFColorSpaceYUV, 2, 
+			kAAFCodecCDCI, testStandardCalls, kAAFLegacyDV);
+	}
+	if (SUCCEEDED(hr))
+	{
+		cout << "        ReadSamples (DV CompressionDisable)" << endl;
+		hr = ReadVideoAAFFile(L"EssenceAccessCDCI_DV.aaf", kAAFCompressionDisable, kAAFColorSpaceYUV, 2, 
+			kAAFCodecCDCI, testStandardCalls, kAAFLegacyDV);
+	}
 
 	if(SUCCEEDED(hr))
 	{
