@@ -26,7 +26,7 @@ AD_XMETHOD4(Initialize,
 
 			[in],
 			objPass,
-			aafUInt32,
+			aafUInt8,
 			intSize,
 			the size of this integer type in bytes,
 
