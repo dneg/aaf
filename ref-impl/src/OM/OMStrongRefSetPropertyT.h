@@ -520,6 +520,7 @@ OMStrongReferenceSetProperty<UniqueIdentification,
   ReferencedObject* result = element->getValue();
 
   POSTCONDITION("Valid result", result != 0);
+  POSTCONDITION("Consistent keys", result->identification() == identification);
   return result;
 }
 
@@ -552,6 +553,8 @@ OMStrongReferenceSetProperty<UniqueIdentification,
     object = element->getValue();
   }
 
+  POSTCONDITION("Consistent keys",
+                  IMPLIES(result, object->identification() == identification));
   return result;
 }
 
