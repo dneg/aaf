@@ -243,32 +243,6 @@ OMFile* OMProperty::file(void) const
   return container()->file();
 }
 
-  // @mfunc The persisted value of this property is its name.
-  //        Write the property name and enter it into the property index.
-  //   @this const
-void OMProperty::saveName(void) const
-{
-  TRACE("OMProperty::saveName");
-
-  const wchar_t* name = storedName();
-  store()->writeName(_propertyId, _storedForm, name);
-}
-
-  // @mfunc The persisted value of this property is its name.
-  //        Read (and check) the property name.
-  //   @parm The (expected) size of the property name.
-void OMProperty::restoreName(size_t size)
-{
-  TRACE("OMProperty::restoreName");
-
-  wchar_t* propertyName = store()->readName(_propertyId, _storedForm, size);
-  ASSERT("Consistent property size",
-         size == (lengthOfWideString(storedName()) + 1) * sizeof(OMCharacter));
-  ASSERT("Consistent property name",
-                           compareWideString(propertyName, storedName()) == 0);
-  delete [] propertyName;
-}
-
 const wchar_t* OMProperty::storedName(void) const
 {
   TRACE("OMProperty::storedName");
