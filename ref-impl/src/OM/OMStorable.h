@@ -102,7 +102,7 @@ public:
 
     // @cmember Is this <c OMStorable> the root of the object
     //          containment hierarchy.
-  bool isRoot(void) const;
+  virtual bool isRoot(void) const;
 
     // @cmember The stored representation of this <c OMStorable>.
   OMStoredObject* store(void) const;
