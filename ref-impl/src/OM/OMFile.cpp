@@ -183,11 +183,12 @@ OMFile* OMFile::openNewModify(const wchar_t* fileName,
   //        specified by <p signature> be created successfully on
   //        <p rawStorage> and then accessed successfully in the mode
   //        specified by <p accessMode> ?
-  //   @parm TBS
+  //   @parm const OMRawStorage* | rawStorage | The <c OMRawStorage> on which
+  //         the file is to be created.
   //   @parm TBS
   //   @parm TBS
   //   @rdesc TBS
-bool OMFile::compatibleRawStorage(const OMRawStorage* rawStorage,
+bool OMFile::compatibleRawStorage(const OMRawStorage* ANAME(rawStorage),
                                   const OMAccessMode accessMode,
                                   const OMFileSignature& signature)
 {
