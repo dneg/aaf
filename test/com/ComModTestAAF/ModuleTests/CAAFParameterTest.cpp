@@ -522,8 +522,9 @@ extern "C" HRESULT CAAFParameter_test()
 	}
 	catch (...)
 	{
-    hr = AAFRESULT_UNEXPECTED_EXCEPTION;
-		cerr << "CAAFParameter_test...Caught general C++ exception!" << endl; 
+		cerr << "CAAFParameter_test..."
+			 << "Caught general C++ exception!" << endl; 
+		hr = AAFRESULT_TEST_FAILED;
 	}
 
 

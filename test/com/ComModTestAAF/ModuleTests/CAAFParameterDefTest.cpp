@@ -381,7 +381,9 @@ extern "C" HRESULT CAAFParameterDef_test()
 	}
 	catch (...)
 	{
-		cerr << "CAAFParameterDef_test...Caught general C++ exception!" << endl; 
+		cerr << "CAAFParameterDef_test..."
+			 << "Caught general C++ exception!" << endl; 
+		hr = AAFRESULT_TEST_FAILED;
 	}
 
 	// When all of the functionality of this class is tested, we can return success.

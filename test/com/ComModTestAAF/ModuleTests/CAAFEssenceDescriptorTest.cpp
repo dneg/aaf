@@ -655,7 +655,8 @@ extern "C" HRESULT CAAFEssenceDescriptor_test()
   catch (...)
 	{
 	  cerr << "CAAFEssenceDescriptor_test...Caught general C++"
-		" exception!" << endl; 
+		   << " exception!" << endl; 
+	  hr = AAFRESULT_TEST_FAILED;
 	}
 
 	return hr;

@@ -329,7 +329,7 @@ extern "C" HRESULT CAAFSegment_test()
 	catch (...)
 	{
 	  cerr << "CAAFSegment_test...Caught general C++"
-		" exception!" << endl; 
+		   << " exception!" << endl; 
 	  hr = AAFRESULT_TEST_FAILED;
 	}
 

@@ -433,7 +433,7 @@ extern "C" HRESULT CAAFComponent_test()
 	catch (...)
 	{
 	  cerr << "CAAFComponent_test...Caught general C++"
-		" exception!" << endl; 
+		   << " exception!" << endl; 
 	  hr = AAFRESULT_TEST_FAILED;
 	}
 

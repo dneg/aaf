@@ -493,7 +493,7 @@ extern "C" HRESULT CAAFTimecodeStream12M_test()
 	catch (...)
 	{
 	  cerr << "CAAFTimecodeStream12M::test...Caught general C++"
-		" exception!" << endl; 
+		   << " exception!" << endl; 
 	  hr = AAFRESULT_TEST_FAILED;
 	}
 

@@ -671,8 +671,9 @@ extern "C" HRESULT CAAFVaryingValue_test()
 	}
 	catch (...)
 	{
-		cerr << "CAAFVaryingValue_test...Caught general C++ exception!" << endl; 
-    hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+		cerr << "CAAFVaryingValue_test..."
+			 << "Caught general C++ exception!" << endl; 
+		hr = AAFRESULT_TEST_FAILED;
 	}
 
 	// When all of the functionality of this class is tested, we can return success.
