@@ -261,6 +261,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 								   (IUnknown **)&pAIFCDesc));		
 
 		AIFCSummary summary;
+		memset(&summary, 0, sizeof(summary)); // initialize all of the bytes...
 		
 		strcpy(summary.formChunk.ckID , "FORM");
 		strcpy(summary.formChunk.formType , "AIFC");
