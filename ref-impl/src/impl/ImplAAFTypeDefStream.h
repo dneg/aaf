@@ -42,6 +42,9 @@
 
 #include "OMWeakRefProperty.h"
 
+class ImplAAFPropertyValue;
+
+
 class ImplAAFTypeDefStream : public ImplAAFTypeDef
 {
 public:
