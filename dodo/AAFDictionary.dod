@@ -30,6 +30,7 @@ AAFObject\
 #endm
 #c
 #c #import ./AAFObject.exp
+#import ./AAFDictionary2.exp
 AD_HEAD
 AD_IDL(//
 // This interface is used to access dictionary services in an AAF
@@ -50,12 +51,18 @@ AD_FORWARD_DECLARATION(AAFInterpolationDef)
 AD_FORWARD_DECLARATION(EnumAAFInterpolationDefs)
 AD_FORWARD_DECLARATION(AAFPluginDef)
 AD_FORWARD_DECLARATION(EnumAAFPluginDefs)
+AD_FORWARD_DECLARATION(AAFKLVDataDefinition)
+AD_FORWARD_DECLARATION(EnumAAFKLVDataDefs)
+AD_FORWARD_DECLARATION(AAFTaggedValueDefinition)
+AD_FORWARD_DECLARATION(EnumAAFTaggedValueDefs)
 AD_INCLUDE(AAFObjectModel)
 
 AD_CLASS_UUID(B1A21399, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
 
 AD_DEFAULT_UUID(B1A21398, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
-AD_XCLASS_BEGIN(Concrete, StoredObject)
+
+AD_COM_EXT_CLASS_BEGIN(public IAAFDictionary2)
+
 AD_DICTIONARY_FACTORY(CreateInstance,
 Creates a single uninitialized AAF object of the class associated 
   // with a specified stored object id.)
@@ -790,7 +797,7 @@ AD_XMETHOD1(RegisterPluginDef,
             pPlugDef,
             plugin definition Object,
 
-            Add the Interpolation definition object to the header's list of definitions.)
+            Add the plugin definition object to the header's list of definitions.)
 
 
 AD_XMETHOD2(LookupPluginDef,
@@ -844,4 +851,18 @@ AD_XMETHOD1(CountPluginDefs,
   //
   // AAFRESULT_NULL_PARAM
   //   - pResult is null.)
-AD_XCLASS_END(Concrete, StoredObject)
+
+#c
+#c Dictionary2 methods
+#c
+
+AD_COM_METH(.method-RegisterKLVDataDef)
+AD_COM_METH(.method-LookupKLVDataDef)
+AD_COM_METH(.method-GetKLVDataDefs)
+AD_COM_METH(.method-CountKLVDataDefs)
+AD_COM_METH(.method-RegisterTaggedValueDef)
+AD_COM_METH(.method-LookupTaggedValueDef)
+AD_COM_METH(.method-GetTaggedValueDefs)
+AD_COM_METH(.method-CountTaggedValueDefs)
+
+AD_COM_EXT_CLASS_END(AAFDictionary2)
