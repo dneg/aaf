@@ -87,6 +87,9 @@ static const aafUID_t kTestPluginDescID3 =
 { 0x5dfb23, 0x7b5b, 0x11d3, { 0x84, 0x4f, 0x0, 0x60, 0x8, 0x32, 0xac, 0xb8 } };
 
 
+// {4E84045D-0F29-11d4-A359-009027DFCA6A}
+static const aafUID_t testUID = 
+{ 0x4e84045d, 0xf29, 0x11d4, { 0xa3, 0x59, 0x0, 0x90, 0x27, 0xdf, 0xca, 0x6a } };
 
 // Cross-platform utility to delete a file.
 static void RemoveTestFile(const wchar_t* pFileName)
@@ -199,7 +202,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	checkResult(pContainerDef->QueryInterface (IID_IAAFDefObject,
                                           (void **)&pDef));
 
-	checkResult(pContainerDef->Initialize (ContainerAAF, sName, sDescription));
+	checkResult(pContainerDef->Initialize (testUID, sName, sDescription));
 	checkResult(pDictionary->RegisterContainerDef(pContainerDef));
 
 	//
@@ -301,6 +304,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	IAAFContainerDef*	pContainerDef = NULL;
 	bool				bFileOpen = false;
 	HRESULT				hr = S_OK;
+	aafUID_t			readUID;
 	wchar_t				testString[256];
 
 	try
@@ -312,24 +316,30 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 		checkResult(pHeader->GetDictionary(&pDictionary));
 	
 		checkResult(pDictionary->GetContainerDefs(&pPlug));
-		checkResult(pPlug->NextOne(&pContainerDef));
-		checkResult(pContainerDef->QueryInterface (IID_IAAFDefObject,
-                                          (void **)&pDef));
+		while(pPlug->NextOne (&pContainerDef) == AAFRESULT_SUCCESS)
+		{
+			checkResult(pContainerDef->QueryInterface (IID_IAAFDefObject, (void **)&pDef));
+			checkResult(pDef->GetAUID(&readUID));
+			if(memcmp(&readUID, &testUID, sizeof(aafUID_t)) == 0)
+			{
+				checkResult(pDef->GetName (testString, sizeof(testString)));
+				checkExpression (wcscmp(testString, sName) == 0, AAFRESULT_TEST_FAILED);
 
-		checkResult(pDef->GetName (testString, sizeof(testString)));
-		checkExpression (wcscmp(testString, sName) == 0, AAFRESULT_TEST_FAILED);
-
-		aafUInt32 nameLen;
-		checkResult (pDef->GetNameBufLen (&nameLen));
-		checkExpression (((wcslen (sName)+1) * sizeof (aafCharacter) == nameLen),
+				aafUInt32 nameLen;
+				checkResult (pDef->GetNameBufLen (&nameLen));
+				checkExpression (((wcslen (sName)+1) * sizeof (aafCharacter) == nameLen),
 						 AAFRESULT_TEST_FAILED);
 
-		checkResult(pDef->GetDescription (testString, sizeof(testString)));
-		checkExpression (wcscmp(testString, sDescription) == 0, AAFRESULT_TEST_FAILED);
+				checkResult(pDef->GetDescription (testString, sizeof(testString)));
+				checkExpression (wcscmp(testString, sDescription) == 0, AAFRESULT_TEST_FAILED);
 
-		checkResult (pDef->GetDescriptionBufLen (&nameLen));
-		checkExpression (((wcslen (sDescription)+1) * sizeof (aafCharacter) == nameLen),
+				checkResult (pDef->GetDescriptionBufLen (&nameLen));
+				checkExpression (((wcslen (sDescription)+1) * sizeof (aafCharacter) == nameLen),
 						 AAFRESULT_TEST_FAILED);
+
+				break;
+			}
+		}		checkResult(pPlug->NextOne(&pContainerDef));
 
 		IAAFTypeDefSP pTypeDef;
 		checkResult (pDictionary->LookupTypeDef (kTestTypeId, &pTypeDef));
