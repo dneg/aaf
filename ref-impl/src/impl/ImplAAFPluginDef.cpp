@@ -83,28 +83,21 @@ ImplAAFPluginDescriptor::ImplAAFPluginDescriptor ():
 
 ImplAAFPluginDescriptor::~ImplAAFPluginDescriptor ()
 {
-	ImplAAFLocator *pLocator = NULL;
-	ImplAAFNetworkLocator *pNetLocator = NULL;
-
 	// Release the manufacturer locator
-	pNetLocator  = _manufacturerURL;
+	ImplAAFNetworkLocator *pNetLocator = _manufacturerURL.setValue(0);
 	if (pNetLocator)
 	{
 		pNetLocator->ReleaseReference();
-		pNetLocator = NULL;
-		pNetLocator = NULL;
 	}
 
 	// Release all of the other locator pointers.
 	size_t size = _locators.getSize();
 	for (size_t i = 0; i < size; i++)
 	{
-		_locators.getValueAt(pLocator, i);
+		ImplAAFLocator *pLocator = _locators.setValueAt(0, i);
 		if (pLocator)
 		{
 			pLocator->ReleaseReference();
-			pLocator = NULL;
-			_locators.setValueAt(0, i);
 		}
 	}
 }

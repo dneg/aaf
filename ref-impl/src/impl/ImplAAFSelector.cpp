@@ -43,24 +43,19 @@ ImplAAFSelector::ImplAAFSelector () :
 
 ImplAAFSelector::~ImplAAFSelector ()
 {
-	ImplAAFSegment*		pSegment = NULL;
-	size_t				size;
-
-	if (_selected != NULL)
+	ImplAAFSegment *selected = _selected.setValue(0);
+	if (selected != NULL)
 	{
-		_selected->ReleaseReference();
-		_selected = NULL;
+		selected->ReleaseReference();
 	}
 
-	_alternates.getSize(size);
-	for (size_t i = 0; i <size; i++)
+	size_t size = _alternates.getSize();
+	for (size_t i = 0; i < size; i++)
 	{
-		_alternates.getValueAt(pSegment, i);
+		ImplAAFSegment* pSegment = _alternates.setValueAt(0, i);
 		if (pSegment)
 		{
 			pSegment->ReleaseReference();
-			pSegment = NULL;
-			_alternates.setValueAt(pSegment, i);
 		}
 	}
 }
