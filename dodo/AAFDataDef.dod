@@ -14,14 +14,6 @@ AAFDefObject\
 #endm
 AD_HEAD
 
-/***********************************************\
-*												*
-* Advanced Authoring Format						*
-*												*
-* Copyright (c) 1998-1999 Avid Technology, Inc. *
-*												*
-\***********************************************/
-
 AD_CLASS_UUID(dfbd652A, 1d81, 11d2, bf, 96, 00, 60, 97, 11, 62, 12)
 
 AD_DEFAULT_UUID(dfbd6529, 1d81, 11d2, bf, 96, 00, 60, 97, 11, 62, 12)
