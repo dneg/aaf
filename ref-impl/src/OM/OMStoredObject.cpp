@@ -1558,6 +1558,25 @@ void OMStoredObject::readUniqueObjectIdentificationFromStream(
   }
 }
 
+  // @mfunc Read a UniqueMaterialIdentification from <p stream> into <p id>.
+  //        If <p reorderBytes> is true then the bytes are reordered.
+  //   @parm The stream from which to read.
+  //   @parm The resulting OMUniqueMaterialIdentification.
+  //   @parm If true then reorder the bytes.
+void OMStoredObject::readUniqueMaterialIdentificationFromStream(
+                                            IStream* stream,
+                                            OMUniqueMaterialIdentification& id,
+                                            bool reorderBytes)
+{
+  TRACE("OMStoredObject::UniqueMaterialIdentificationFromStream");
+  PRECONDITION("Valid stream", stream != 0);
+
+  readFromStream(stream, &id, sizeof(OMUniqueMaterialIdentification));
+  if (reorderBytes) {
+    reorderUniqueMaterialIdentification(id);
+  }
+}
+
   // @mfunc Reorder the OMUniqueObjectIdentification <p id>.
   //   @parm The OMUniqueObjectIdentification to reorder.
 void OMStoredObject::reorderUniqueObjectIdentification(
@@ -1569,6 +1588,19 @@ void OMStoredObject::reorderUniqueObjectIdentification(
   reorderUInt16(id.Data2);
   reorderUInt16(id.Data3);
   // no need to swap Data4
+}
+
+  // @mfunc Reorder the OMUniqueMaterialIdentification <p id>.
+  //   @parm The OMUniqueMaterialIdentification to reorder.
+void OMStoredObject::reorderUniqueMaterialIdentification(
+                                            OMUniqueMaterialIdentification& id)
+{
+  TRACE("OMStoredMaterial::reorderUniqueMaterialIdentification");
+
+  // No need to swap
+  // SMPTELabel, length, instanceHigh, instanceMid or instanceLow.
+
+  reorderUniqueObjectIdentification(id.material);
 }
 
 void OMStoredObject::setClass(IStorage* storage, const OMClassId& cid)
