@@ -279,8 +279,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
     checkResult(pConstantValue->QueryInterface (IID_IAAFParameter, (void **)&pParm));
     checkResult(pOperationGroup->AddParameter (pParm));
-    pParm->Release();
-    pParm = NULL;
+//    pParm->Release();
+ //	IAAFSegment*				pSegment = NULL;
+   pParm = NULL;
     pConstantValue->Release();
     pConstantValue = NULL;
 
