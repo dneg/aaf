@@ -48,21 +48,23 @@ ImplAAFTimelineMobSlot::~ImplAAFTimelineMobSlot ()
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTimelineMobSlot::GetEditRate (aafRational_t *editRate)
 {
-    AAFRESULT aafError = AAFRESULT_SUCCESS;
+	if (editRate == NULL)
+		return AAFRESULT_NULL_PARAM;
+
 	*editRate = _editRate;
-	return aafError;
+	return AAFRESULT_SUCCESS;
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTimelineMobSlot::GetOrigin (aafPosition_t *origin)
 {
-    AAFRESULT aafError = AAFRESULT_SUCCESS;
+	if (origin == NULL)
+		return AAFRESULT_NULL_PARAM;
 
-	assert(origin != NULL);
 	*origin = _origin;
 
-	return aafError;
+	return AAFRESULT_SUCCESS;
 }
 
 
@@ -70,7 +72,9 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFTimelineMobSlot::GetSlotID (aafSlotID_t *result)
 {
     AAFRESULT aafError = AAFRESULT_SUCCESS;
-	assert(result != NULL);
+
+	if (result == NULL)
+		return AAFRESULT_NULL_PARAM;
 
 	XPROTECT( )
 	  {
@@ -109,6 +113,9 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTimelineMobSlot::IsATrack (/*[out,retval]*/ aafBool *retval)
 {
+	if (retval == NULL)
+		return AAFRESULT_NULL_PARAM;
+
 	*retval = AAFFalse;
 	if (_trackID != NULL)
 		*retval = AAFTrue;	
