@@ -39,12 +39,6 @@ AD_IDL(//
 // aafUInt32
 // AAFDataDef
 //)
-
-/***********************************************\
-*	Stub only.   Implementation not yet added	*
-\***********************************************/
-
-
 AD_FORWARD_DECLARATION(AAFSegment)
 AD_FORWARD_DECLARATION(AAFDataDef)
 AD_CLASS_UUID(B1A21377, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
