@@ -8,6 +8,9 @@
 # Author : Tim Bingham " Tim_Bingham@avid.com
 #
 
+TOOLNAME=${0##*/}
+TOOLPATH=${0%/${TOOLNAME}}
+
 # tag date time
 
 tagstuff=(\
@@ -66,14 +69,14 @@ do
   #
   if [[ ! -f $clog ]]
   then
-    cat $log | build/history/cvs2cl.pl --stdin --stdout > $clog
+    cat $log | ${TOOLPATH}/cvs2cl.pl --stdin --stdout > $clog
   fi
   #
   # convert the change log to html
   # 
   if [[ ! -f $html ]]
   then
-    cat $clog | awk -f build/history/cl2html.awk > $html
+    cat $clog | awk -f ${TOOLPATH}/cl2html.awk > $html
   fi
   #
   # next tag
