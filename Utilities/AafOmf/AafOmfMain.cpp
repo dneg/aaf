@@ -33,7 +33,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <iostream.h>
-
+#include <memory>
 #ifdef macintosh
 	#include <console.h>
 #endif 
@@ -267,8 +267,6 @@ int main(int argc, char *argv[])
 {
 	HRESULT			hr;
 	CComInitialize	comInit;
-	ExtendedAaf2Omf		AAFMain;
-	ExtendedOmf2Aaf		OMFMain;
 
 #ifdef macintosh
 	argc = ccommand(&argv);	// calls up a command line window
@@ -322,10 +320,14 @@ int main(int argc, char *argv[])
 	try
 	{
 		AAFCheck check;
+		std::auto_ptr<AAFDomainExtensionUtils> aafDomain( new AAFDomainExtensionUtils );
+		std::auto_ptr<OMFDomainExtensionUtils> omfDomain( new OMFDomainExtensionUtils );
+		std::auto_ptr<EffectTranslate> effectTranslate( new EffectTranslate );
 		if (gpGlobals->bConvertAAFFile)
 		{
 			// User indicated input file must be an AAF 
 			// Convert AAF to OMF
+			ExtendedAaf2Omf		AAFMain( aafDomain.get(), omfDomain.get(), effectTranslate.get() );
 			AAFMain.ConvertFile();
 		}
 		else
@@ -333,6 +335,7 @@ int main(int argc, char *argv[])
 			// User indicated Input file must be an OMF file
 			// Conert OMF to AAF
 			check = IsOMFFile(gpGlobals->sInFileName);
+			ExtendedOmf2Aaf		OMFMain ( aafDomain.get(), omfDomain.get(), effectTranslate.get() );
 			OMFMain.ConvertFile();
 		}
 
