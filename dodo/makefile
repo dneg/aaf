@@ -61,6 +61,7 @@ DODO_TARGETS = \
 	AAFObjectAttribute.all \
 	AAFParameter.all \
 	AAFParameterSlot.all \
+	AAFPulldown.all \
 	AAFPropertyDefinition.all \
 	AAFReferenceValue.all \
 	AAFScopeReference.all \
@@ -701,6 +702,19 @@ AAFPropertyDefinition.comc : AAFPropertyDefinition.exp macros/comc.mac macros/ba
 AAFPropertyDefinition.comh : AAFPropertyDefinition.exp macros/comh.mac macros/base.mac
 AAFPropertyDefinition.implc : AAFPropertyDefinition.exp macros/implc.mac macros/base.mac
 AAFPropertyDefinition.implh : AAFPropertyDefinition.exp macros/implh.mac macros/base.mac
+
+AAFPulldown.all : AAFPulldown.cpp AAFPulldown.h
+AAFPulldown.all : AAFPulldown.comc AAFPulldown.comh
+AAFPulldown.all : AAFPulldown.exp AAFPulldown.idl
+AAFPulldown.all : AAFPulldown.implc AAFPulldown.implh
+AAFPulldown.exp : AAFUnitTest.exp AAFSegment.exp macros/exp.mac macros/base.mac
+AAFPulldown.h : AAFPulldown.exp macros/h.mac macros/base.mac
+AAFPulldown.cpp : AAFPulldown.exp macros/cpp.mac macros/base.mac
+AAFPulldown.idl : AAFPulldown.exp macros/idl.mac macros/base.mac
+AAFPulldown.comc : AAFPulldown.exp macros/comc.mac macros/base.mac
+AAFPulldown.comh : AAFPulldown.exp macros/comh.mac macros/base.mac
+AAFPulldown.implc : AAFPulldown.exp macros/implc.mac macros/base.mac
+AAFPulldown.implh : AAFPulldown.exp macros/implh.mac macros/base.mac
 
 AAFReferenceValue.all : AAFReferenceValue.cpp AAFReferenceValue.h
 AAFReferenceValue.all : AAFReferenceValue.comc AAFReferenceValue.comh
