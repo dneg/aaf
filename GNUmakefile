@@ -76,7 +76,7 @@ test : install
 
 .PHONY : check
 check : test
-	cd test/com/ComModTestAAF && $(MAKE) check
+	cd test && $(MAKE) $@
 
 #
 # Binary distributions
