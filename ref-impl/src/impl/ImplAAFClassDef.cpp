@@ -134,26 +134,27 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFClassDef::GetPropertyDefs (
       ImplEnumAAFPropertyDefs ** ppEnum)
 {
-  ImplEnumAAFPropertyDefs * theEnum = NULL;;
+  ImplEnumAAFPropertyDefs * theEnum = 0;
 
   if (NULL == ppEnum)
 	return AAFRESULT_NULL_PARAM;
 
   theEnum = (ImplEnumAAFPropertyDefs *)CreateImpl (CLSID_EnumAAFPropertyDefs);
-	if (NULL == theEnum)
-		return AAFRESULT_NOMEMORY;
-	
-  AAFRESULT hr = AAFRESULT_SUCCESS;
+  if (NULL == theEnum)
+  	return AAFRESULT_NOMEMORY;
+
+  AAFRESULT hr;
   hr = theEnum->SetEnumStrongProperty(this, &_Properties);
   if (AAFRESULT_FAILED (hr))
 	{
 		theEnum->ReleaseReference();
 		theEnum = NULL;
+		return hr;
 	}
 	
-	*ppEnum = theEnum;
+  *ppEnum = theEnum;
 
-  return hr;
+  return AAFRESULT_SUCCESS;
 }
 
 
@@ -161,16 +162,15 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFClassDef::CountPropertyDefs (
       aafUInt32 *  pCount)
 {
-	if (! pCount) return AAFRESULT_NULL_PARAM;
-	
-	assert (pCount);
-	
-	if (!_Properties.isPresent())
-		*pCount = 0;
+  if (! pCount) return AAFRESULT_NULL_PARAM;
 
-	else  *pCount = _Properties.getSize ();
+  assert (pCount);
+  if (!_Properties.isPresent())
+	*pCount = 0;
+
+  else  *pCount = _Properties.getSize ();
 	
-	return AAFRESULT_SUCCESS;
+  return AAFRESULT_SUCCESS;
 }
 
 
@@ -292,8 +292,10 @@ AAFRESULT STDMETHODCALLTYPE
   AAFRESULT hr = GetParent (&parentSP);
   if (AAFRESULT_FAILED (hr))
 	return hr;
-  assert (parentSP);
-  return parentSP->generalLookupPropertyDef (propId, ppPropDef);
+  if (parentSP)
+    return parentSP->generalLookupPropertyDef (propId, ppPropDef);
+  else
+	return AAFRESULT_NO_MORE_OBJECTS;
 }
 
 
@@ -338,11 +340,20 @@ AAFRESULT STDMETHODCALLTYPE
 	  ImplAAFDictionarySP pDict;
 	  AAFRESULT hr;
 
+	  // If no parent, return NULL (and success)
+	  aafUID_t parentClass = _ParentClass;
+	  const aafUID_t null_UID = { 0 };
+	  if (EqualAUID(&parentClass, &null_UID))
+		{
+		  assert (ppClassDef);
+		  *ppClassDef = 0;
+		  return AAFRESULT_SUCCESS;
+		}
+
 	  hr = GetDictionary(&pDict);
 	  if (AAFRESULT_FAILED (hr)) return hr;
 	  assert (pDict);
 
-	  aafUID_t parentClass = _ParentClass;
 	  hr = pDict->LookupClass (&parentClass, &_cachedParentClass);
 	  if (AAFRESULT_FAILED (hr))
 		return hr;
@@ -379,10 +390,15 @@ AAFRESULT STDMETHODCALLTYPE
   OMPropertyId omPid;
   check_result (pDict->GenerateOmPid (*pID, omPid));
 
-  pd = (ImplAAFPropertyDef *)pDict->CreateImplObject (AUID_AAFPropertyDef);
-  if (!pd) return AAFRESULT_NOMEMORY;
+  ImplAAFPropertyDef * tmp =
+	(ImplAAFPropertyDef *)pDict->CreateImplObject (AUID_AAFPropertyDef);
+  if (!tmp) return AAFRESULT_NOMEMORY;
+  pd = tmp;
+  // Bobt: Hack bugfix! SmartPointer operator= will automatically
+  // AddRef; CreateImpl *also* will addref, so we've got one too
+  // many.  Put us back to normal.
+  tmp->ReleaseReference ();
 
-  assert (pd);
   check_result (pd->Initialize (pID,
 								omPid,
 								pName,
@@ -391,10 +407,13 @@ AAFRESULT STDMETHODCALLTYPE
 
   ImplAAFPropertyDef * pdTemp = pd;
   _Properties.appendValue(pdTemp);
+  pdTemp->AcquireReference ();
 
-  assert (ppPropDef);
-  *ppPropDef = pd;
-  (*ppPropDef)->AcquireReference ();
+  if (ppPropDef)
+  {
+	*ppPropDef = pd;
+	(*ppPropDef)->AcquireReference ();
+  }
 
   return AAFRESULT_SUCCESS;
 }
