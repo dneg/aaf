@@ -235,6 +235,21 @@ AAFAttributeArray.comh : AAFAttributeArray.exp macros/comh.mac macros/base.mac
 AAFAttributeArray.implc : AAFAttributeArray.exp macros/implc.mac macros/base.mac
 AAFAttributeArray.implh : AAFAttributeArray.exp macros/implh.mac macros/base.mac
 
+EnumAAFPropertyDefinitions.all : EnumAAFPropertyDefinitions.cpp EnumAAFPropertyDefinitions.h
+EnumAAFPropertyDefinitions.all : EnumAAFPropertyDefinitions.comc EnumAAFPropertyDefinitions.comh
+EnumAAFPropertyDefinitions.all : EnumAAFPropertyDefinitions.exp EnumAAFPropertyDefinitions.idl
+EnumAAFPropertyDefinitions.all : EnumAAFPropertyDefinitions.implc EnumAAFPropertyDefinitions.implh
+EnumAAFPropertyDefinitions.all : EnumAAFPropertyDefinitions.idlh
+EnumAAFPropertyDefinitions.exp : AAFUnitTest.exp macros/exp.mac macros/base.mac
+EnumAAFPropertyDefinitions.h : EnumAAFPropertyDefinitions.exp macros/h.mac macros/base.mac
+EnumAAFPropertyDefinitions.cpp : EnumAAFPropertyDefinitions.exp macros/cpp.mac macros/base.mac
+EnumAAFPropertyDefinitions.idl : EnumAAFPropertyDefinitions.exp macros/idl.mac macros/base.mac
+EnumAAFPropertyDefinitions.comc : EnumAAFPropertyDefinitions.exp macros/comc.mac macros/base.mac
+EnumAAFPropertyDefinitions.comh : EnumAAFPropertyDefinitions.exp macros/comh.mac macros/base.mac
+EnumAAFPropertyDefinitions.implc : EnumAAFPropertyDefinitions.exp macros/implc.mac macros/base.mac
+EnumAAFPropertyDefinitions.implh : EnumAAFPropertyDefinitions.exp macros/implh.mac macros/base.mac
+EnumAAFPropertyDefinitions.idlh : AAFTypes.h EnumAAFPropertyDefinitions.idl
+
 AAFClassDefinition.all : AAFClassDefinition.cpp AAFClassDefinition.h
 AAFClassDefinition.all : AAFClassDefinition.comc AAFClassDefinition.comh
 AAFClassDefinition.all : AAFClassDefinition.exp AAFClassDefinition.idl
@@ -1173,19 +1188,6 @@ EnumAAFParameterSlots.comc : EnumAAFParameterSlots.exp macros/comc.mac macros/ba
 EnumAAFParameterSlots.comh : EnumAAFParameterSlots.exp macros/comh.mac macros/base.mac
 EnumAAFParameterSlots.implc : EnumAAFParameterSlots.exp macros/implc.mac macros/base.mac
 EnumAAFParameterSlots.implh : EnumAAFParameterSlots.exp macros/implh.mac macros/base.mac
-
-EnumAAFPropertyDefinitions.all : EnumAAFPropertyDefinitions.cpp EnumAAFPropertyDefinitions.h
-EnumAAFPropertyDefinitions.all : EnumAAFPropertyDefinitions.comc EnumAAFPropertyDefinitions.comh
-EnumAAFPropertyDefinitions.all : EnumAAFPropertyDefinitions.exp EnumAAFPropertyDefinitions.idl
-EnumAAFPropertyDefinitions.all : EnumAAFPropertyDefinitions.implc EnumAAFPropertyDefinitions.implh
-EnumAAFPropertyDefinitions.exp : AAFUnitTest.exp macros/exp.mac macros/base.mac
-EnumAAFPropertyDefinitions.h : EnumAAFPropertyDefinitions.exp macros/h.mac macros/base.mac
-EnumAAFPropertyDefinitions.cpp : EnumAAFPropertyDefinitions.exp macros/cpp.mac macros/base.mac
-EnumAAFPropertyDefinitions.idl : EnumAAFPropertyDefinitions.exp macros/idl.mac macros/base.mac
-EnumAAFPropertyDefinitions.comc : EnumAAFPropertyDefinitions.exp macros/comc.mac macros/base.mac
-EnumAAFPropertyDefinitions.comh : EnumAAFPropertyDefinitions.exp macros/comh.mac macros/base.mac
-EnumAAFPropertyDefinitions.implc : EnumAAFPropertyDefinitions.exp macros/implc.mac macros/base.mac
-EnumAAFPropertyDefinitions.implh : EnumAAFPropertyDefinitions.exp macros/implh.mac macros/base.mac
 
 EnumAAFReferenceValues.all : EnumAAFReferenceValues.cpp EnumAAFReferenceValues.h
 EnumAAFReferenceValues.all : EnumAAFReferenceValues.comc EnumAAFReferenceValues.comh
