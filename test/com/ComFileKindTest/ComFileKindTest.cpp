@@ -223,7 +223,7 @@ static HRESULT ReadAAFContents(IAAFFile *pFile)
 		mobIter = NULL;
 
 		checkResult(pFile->GetRevision(&testRev));
-		checkExpression(kAAFRev1 == testRev, AAFRESULT_TEST_FAILED);
+		checkExpression(kAAFRev2 == testRev, AAFRESULT_TEST_FAILED);
 
 		checkResult(pFile->Close());
 	}

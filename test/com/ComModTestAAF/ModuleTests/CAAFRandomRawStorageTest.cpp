@@ -980,7 +980,7 @@ static HRESULT ReadAAFFile(fileInfo_t info, wchar_t * filename)
 	  mobIter = NULL;
 
 	  checkResult(pFile->GetRevision(&testRev));
-	  checkExpression(kAAFRev1 == testRev, AAFRESULT_TEST_FAILED);
+	  checkExpression(kAAFRev2 == testRev, AAFRESULT_TEST_FAILED);
 
 	  checkResult(info.closeReadFunc(filename, &pFile));
 	  bFileOpen = false;
