@@ -257,7 +257,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 		// now create the Essence data file
 		check(pMasterMob->CreateEssence(1,				// Slot ID
 									pDdefSound,		// MediaKind
-									CodecWave,		// codecID
+									kAAFCodecWAVE,		// codecID
 									editRate,		// edit rate
 									sampleRate,		// sample rate
 									kAAFCompressionDisable,
