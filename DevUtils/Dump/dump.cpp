@@ -4077,9 +4077,19 @@ void finalizeCOM(void)
 #endif
 }
 
+bool _completed = false;
+
+void _exitHandler(void)
+{
+  if (!_completed) {
+    cerr << programName << ": Dump incomplete because of errors."
+         << endl;
+  }
+}
 
 int main(int argumentCount, char* argumentVector[])
 {
+  atexit(_exitHandler);
   checkSizes();
 
 #if defined(OM_OS_MACOS)
@@ -4245,6 +4255,7 @@ int main(int argumentCount, char* argumentVector[])
       } else if ((strcmp(opt, "-h") == 0) ||
                  (strcmp(opt, "--help") == 0)) {
         usage();
+        _completed = true;
         exit(EXIT_SUCCESS);
       } else {
         cerr << programName
@@ -4400,6 +4411,7 @@ int main(int argumentCount, char* argumentVector[])
   } else {
     result = EXIT_SUCCESS;
   }
+  _completed = true;
   return result;
 }
 
