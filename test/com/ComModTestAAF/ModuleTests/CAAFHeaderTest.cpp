@@ -18,6 +18,8 @@
 #include <stdio.h>
 #include <assert.h>
 #include <string.h>
+
+#include "AAFStoredObjectIDs.h"
 #include "AAFResult.h"
 #include "AAFDefUIDs.h"
 
@@ -42,6 +44,7 @@ struct HeaderTest
   int formatMobName(int itemNumber, wchar_t* mobName);
   void cleanupReferences();
   void check(HRESULT hr);
+  void removeTestFile(const wchar_t* pFileName);
 
   // Shared member data:
   HRESULT _hr;
@@ -49,6 +52,7 @@ struct HeaderTest
   IAAFFile *_pFile;
   bool _bFileOpen;
   IAAFHeader *_pHeader;
+  IAAFDictionary *_pDictionary;
 
   IAAFMob *_pMob;
   IAAFSourceMob *_pSourceMob;
@@ -95,6 +99,7 @@ HeaderTest::HeaderTest():
   _pFile(NULL),
   _bFileOpen(false),
   _pHeader(NULL),
+  _pDictionary(NULL),
   _pMob(NULL),
   _pSourceMob(NULL),
   _pEnumMobs(NULL),
@@ -168,6 +173,11 @@ void HeaderTest::cleanupReferences()
     _pEnumMobs = NULL;
   }
 
+  if (NULL != _pDictionary)
+  {
+    _pDictionary->Release();
+    _pDictionary = NULL;
+  }
 
   if (NULL != _pHeader)
   {
@@ -190,9 +200,25 @@ inline void HeaderTest::check(HRESULT hr)
     throw hr;
 }
 
+// Cross-platform utility to delete a file.
+void HeaderTest::removeTestFile(const wchar_t* pFileName)
+{
+  const size_t kMaxFileName = 512;
+  char cFileName[kMaxFileName];
+
+  size_t status = wcstombs(cFileName, pFileName, kMaxFileName);
+  if (status != (size_t)-1)
+  { // delete the file.
+    remove(cFileName);
+  }
+}
+
 
 void HeaderTest::createFile(wchar_t *pFileName)
 {
+  // Remove the previous test file if any.
+  removeTestFile(pFileName);
+   
   check(CoCreateInstance(CLSID_AAFFile,
                          NULL, 
                          CLSCTX_INPROC_SERVER, 
@@ -202,6 +228,7 @@ void HeaderTest::createFile(wchar_t *pFileName)
   check(_pFile->OpenNewModify(pFileName, 0, &_productInfo));
   _bFileOpen = true;
   check(_pFile->GetHeader(&_pHeader));
+  check(_pHeader->GetDictionary(&_pDictionary));
 
   for (aafUInt32 item = 0; item < gMaxMobCount; ++item)
     createFileMob(item);
@@ -246,7 +273,7 @@ int HeaderTest::formatMobName(int itemNumber, wchar_t* mobName)
 
 void HeaderTest::createFileMob(int itemNumber)
 {
-  assert(_pFile && _pHeader);
+  assert(_pFile && _pHeader && _pDictionary);
   assert(NULL == _pSourceMob);
   assert(NULL == _pMob);
   assert(NULL == _pFileDescriptor);
@@ -259,11 +286,9 @@ void HeaderTest::createFileMob(int itemNumber)
   formatMobName(itemNumber, wcBuffer);
 
   // Create a Mob
-  check(CoCreateInstance(CLSID_AAFSourceMob,
-              NULL, 
-              CLSCTX_INPROC_SERVER, 
-              IID_IAAFSourceMob, 
-              (void **)&_pSourceMob));
+  check(_pDictionary->CreateInstance(&AUID_AAFSourceMob,
+             IID_IAAFSourceMob, 
+             (IUnknown **)&_pSourceMob));
 
   check(_pSourceMob->QueryInterface (IID_IAAFMob, (void **)&_pMob));
   
@@ -271,11 +296,9 @@ void HeaderTest::createFileMob(int itemNumber)
 
   check(_pMob->SetName(wcBuffer));
   
-  check(CoCreateInstance(CLSID_AAFFileDescriptor,
-              NULL, 
-              CLSCTX_INPROC_SERVER, 
+  check(_pDictionary->CreateInstance(&AUID_AAFFileDescriptor,
               IID_IAAFEssenceDescriptor, 
-              (void **)&_pFileDescriptor));
+              (IUnknown **)&_pFileDescriptor));
 
   check(_pFileDescriptor->QueryInterface (IID_IAAFEssenceDescriptor,
                                           (void **)&_pEssenceDescriptor));
@@ -301,17 +324,15 @@ void HeaderTest::createFileMob(int itemNumber)
 
 void HeaderTest::createEssenceData(IAAFSourceMob *pSourceMob)
 {
-  assert(_pFile && _pHeader);
+  assert(_pFile && _pHeader && _pDictionary);
   assert(pSourceMob);
   assert(NULL == _pEssenceData);
 
 
   // Attempt to create an AAFEssenceData.
-  check(CoCreateInstance(CLSID_AAFEssenceData,
-                         NULL, 
-                         CLSCTX_INPROC_SERVER, 
+  check(_pDictionary->CreateInstance(&AUID_AAFEssenceData,
                          IID_IAAFEssenceData,
-                         (void **)&_pEssenceData));
+                         (IUnknown **)&_pEssenceData));
 
   check(_pEssenceData->SetFileMob(pSourceMob));
   check(_pHeader->AppendEssenceData(_pEssenceData));
