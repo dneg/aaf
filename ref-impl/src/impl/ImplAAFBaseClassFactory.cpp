@@ -14,6 +14,8 @@
 
 #include "ImplAAFObjectCreation.h"
 
+#include <assert.h>
+
 OMContainer::OMContainer(void)
   : _file(0)
 {
@@ -21,6 +23,12 @@ OMContainer::OMContainer(void)
 
 OMContainer::~OMContainer(void)
 {
+  // cleanup the file reference if on exists.
+  if (_file)
+  {
+    _file->ReleaseReference();
+    _file = 0;
+  }
 }
 
 // Later: These two functions set a global alignment in the
@@ -52,11 +60,27 @@ void OMContainer::OMLCloseContainer(void)
 {
   _file->save();
   _file->close();
+
+  // cleanup the file reference. We need to do this since
+  // every open of the container creates a new file.
+  if (_file)
+  {
+    _file->ReleaseReference();
+    _file = 0;
+  }
+
 }
 
 // Close without saving the file
 void OMContainer::OMLAbortContainer(void)
 {
+  // cleanup the file reference. We need to do this since
+  // every open of the container creates a new file.
+  if (_file)
+  {
+    _file->ReleaseReference();
+    _file = 0;
+  }
 }
 
 // Utility function for creating objects. This function hides the type
@@ -248,6 +272,7 @@ void OMContainer::OMLOpenContainer(aafWChar* stream,
                                  OMLContainerUseMode useFlags,
                                  ImplAAFHeader*& header)
 {
+  assert(0 ==_file);
   _file = OMFile::openRead(stream);
 
   registerPredefinedClasses(_file);
@@ -271,6 +296,7 @@ void OMContainer::OMLOpenNewContainer(aafWChar* stream,
                                   OMLGeneration generation,
                                   OMLContainerFlags containerFlags, ...)
 {
+  assert(0 ==_file);
   _file = OMFile::createModify(stream, head);
 }
 
