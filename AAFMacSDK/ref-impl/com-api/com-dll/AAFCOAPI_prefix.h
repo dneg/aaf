@@ -25,7 +25,22 @@
 #include <ole2.h>
 #include "dispatch.h"
 #include "wintypes.h"
-#include <olectl.h>
+
+// Mac OLE/ActiveX headers do not define IID, CLSID, GUID in multiple header
+// files so they do not need to have any special include guards to keep
+// the symbols from being multiply defined. For compatibility with other WIN32
+// OLE/COM we need to define the following symbolic include guards to keep
+// the compiler from redefining IID, CLSID and GUID.
+#ifndef __IID_DEFINED__
+#define __IID_DEFINED__
+#endif // __IID_DEFINED__
+#ifndef CLSID_DEFINED
+#define CLSID_DEFINED
+#endif // CLSID_DEFINED
+#ifndef GUID_DEFINED
+#define GUID_DEFINED
+#endif // GUID_DEFINED
+
 
 // Define to enable the module testing of the shared library.
 #define AAF_MODULE_TEST
