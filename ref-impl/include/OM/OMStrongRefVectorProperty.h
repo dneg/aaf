@@ -31,7 +31,7 @@
 
 #include "OMVector.h"
 #include "OMContainerElement.h"
-#include "OMRefVectorProperty.h"
+#include "OMStrongReferenceVector.h"
 
 template <typename ReferencedObject>
 class OMStrongReferenceVectorIterator;
@@ -46,10 +46,10 @@ class OMVectorIterator;
   //   @tcarg class | ReferencedObject | The type of the referenced
   //          (contained) object. This type must be a descendant of
   //          <c OMStorable>.
-  //   @base public | <c OMReferenceVectorProperty>
+  //   @base public | <c OMStrongReferenceVector>
   //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 template <typename ReferencedObject>
-class OMStrongReferenceVectorProperty : public OMReferenceVectorProperty {
+class OMStrongReferenceVectorProperty : public OMStrongReferenceVector {
 public:
   // @access Public members.
 

@@ -46,9 +46,7 @@ OMStrongReferenceSetProperty<UniqueIdentification,
                                               const OMPropertyId propertyId,
                                               const wchar_t* name,
                                               const OMPropertyId keyPropertyId)
-: OMReferenceSetProperty(propertyId,
-                         SF_STRONG_OBJECT_REFERENCE_SET,
-                          name),
+: OMStrongReferenceSet(propertyId, name),
   _keyPropertyId(keyPropertyId)
 {
   TRACE("OMStrongReferenceSetProperty<UniqueIdentification, "
@@ -884,6 +882,38 @@ OMStrongReferenceSetProperty<UniqueIdentification,
     }
   }
   return result;
+}
+
+template <typename UniqueIdentification, typename ReferencedObject>
+OMKeySize OMStrongReferenceSetProperty<UniqueIdentification,
+                                       ReferencedObject>::keySize(void) const
+{
+  TRACE("OMStrongReferenceSetProperty<UniqueIdentification, "
+                                     "ReferencedObject>::keySize");
+  return sizeof(UniqueIdentification);
+}
+
+template <typename UniqueIdentification, typename ReferencedObject>
+OMPropertyId
+OMStrongReferenceSetProperty<UniqueIdentification,
+                             ReferencedObject>::keyPropertyId(void) const
+{
+  TRACE("OMStrongReferenceSetProperty<UniqueIdentification, "
+                                     "ReferencedObject>::keyPropertyId");
+  return _keyPropertyId;
+}
+
+template <typename UniqueIdentification, typename ReferencedObject>
+void
+OMStrongReferenceSetProperty<UniqueIdentification,
+                             ReferencedObject>::find(void* key,
+                                                     OMStorable*& object) const
+{
+  TRACE("OMStrongReferenceSetProperty<UniqueIdentification, "
+                                     "ReferencedObject>::find");
+  ReferencedObject* p = 0;
+  find(*reinterpret_cast<UniqueIdentification*>(key), p);
+  object = p;
 }
 
 #endif

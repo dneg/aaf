@@ -31,7 +31,7 @@
 
 #include "OMDataTypes.h"
 #include "OMProperty.h"
-#include "OMRefProperty.h"
+#include "OMStrongReference.h"
 #include "OMObjectReference.h"
 
   // @class Persistent strong reference (contained object)
@@ -39,10 +39,10 @@
   //   @tcarg class | ReferencedObject | The type of the referenced
   //          (contained) object. This type must be a descendant of
   //          <c OMStorable>.
-  //   @base public | <c OMReferenceProperty>
+  //   @base public | <c OMStrongReference>
   //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 template <typename ReferencedObject>
-class OMStrongReferenceProperty : public OMReferenceProperty {
+class OMStrongReferenceProperty : public OMStrongReference {
 public:
   // @access Public members.
 

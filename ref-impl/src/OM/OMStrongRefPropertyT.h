@@ -37,9 +37,7 @@ template <typename ReferencedObject>
 OMStrongReferenceProperty<ReferencedObject>::OMStrongReferenceProperty(
                                                  const OMPropertyId propertyId,
                                                  const wchar_t* name)
-: OMReferenceProperty(propertyId,
-                      SF_STRONG_OBJECT_REFERENCE,
-                      name),
+: OMStrongReference(propertyId, name),
   _reference()
 {
   TRACE(

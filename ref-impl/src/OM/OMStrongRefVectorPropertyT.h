@@ -42,9 +42,7 @@ template <typename ReferencedObject>
 OMStrongReferenceVectorProperty<ReferencedObject>::
                  OMStrongReferenceVectorProperty(const OMPropertyId propertyId,
                                                  const wchar_t* name)
-: OMReferenceVectorProperty(propertyId,
-                            SF_STRONG_OBJECT_REFERENCE_VECTOR,
-                            name)
+: OMStrongReferenceVector(propertyId, name)
 {
   TRACE("OMStrongReferenceVectorProperty<ReferencedObject>::"
                                             "OMStrongReferenceVectorProperty");
