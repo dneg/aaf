@@ -72,6 +72,8 @@ ImplAAFMob::ImplAAFMob ()
 	_persistentProperties.put(_lastModified.address());
 	_persistentProperties.put(_slots.address());
 	(void)aafMobIDNew(&_mobID);		// Move this out of constructor when we get 2-stage create
+	AAFGetDateTime(&_creationTime);
+	AAFGetDateTime(&_lastModified);
 }
 
 
