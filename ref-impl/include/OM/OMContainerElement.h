@@ -89,6 +89,11 @@ public:
     // @cmember Set the value of this <c OMContainerElement>.
   ReferencedObject* setValue(const ReferencedObject* value);
 
+    // @cmember The value of this <c OMContainerElement> as a pointer.
+    //          This function provides low-level access. If the object exits
+    //          but has not yet been loaded then the value returned is 0.
+  ReferencedObject* pointer(void) const;
+
 protected:
   // @access Protected members.
 

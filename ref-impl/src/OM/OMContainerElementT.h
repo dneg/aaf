@@ -220,6 +220,23 @@ OMContainerElement<ObjectReference, ReferencedObject>::setValue(
   return _reference.setValue(value);
 }
 
+  // @mfunc The value of this <c OMContainerElement> as a pointer.
+  //        This function provides low-level access. If the object exits
+  //        but has not yet been loaded then the value returned is 0.
+  //   @tcarg class | ObjectReference  | The type of the contained object
+  //          reference 
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          object. This type must be a descendant of <c OMStorable>.
+  //   @rdesc A pointer to the <p ReferencedObject>, if loaded.
+template <typename ObjectReference, typename ReferencedObject>
+ReferencedObject*
+OMContainerElement<ObjectReference, ReferencedObject>::pointer(void) const
+{
+  TRACE("OMContainerElement<ObjectReference, ReferencedObject>::pointer");
+
+  return _reference.pointer();
+}
+
 
 // class OMStrongReferenceVectorElement<ReferencedObject>
 
