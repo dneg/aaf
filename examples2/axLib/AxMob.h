@@ -132,8 +132,6 @@ public:
 
 	virtual ~AxMasterMobEx();
 
-	void Initialize();
-
 	IAAFEssenceAccessSP ExtendEssence( 
 		aafSlotID_t			slotID,
 		IAAFDataDefSP		pMediaKind,		// create essence of this type
