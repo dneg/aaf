@@ -119,11 +119,6 @@ public:
   //
   // Returns the OM pid (small integer) identifying this property
 
-public:
-  // Declare this class to be storable.
-  //
-  OMDECLARE_STORABLE(ImplAAFPropertyDef)
-
 private:
 
   // OMWeakReferenceProperty<ImplAAFTypeDef> _Type;
