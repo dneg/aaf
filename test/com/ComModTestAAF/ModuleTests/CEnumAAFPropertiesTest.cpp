@@ -36,6 +36,8 @@
 #include <iostream.h>
 #include <stdio.h>
 #include <assert.h>
+#include <stdlib.h>
+#include <wchar.h>
 
 #include "CAAFBuiltinDefs.h"
 
@@ -82,7 +84,6 @@ static const aafCharacter*		TEST_PROP2_NAME = L"Test Prop2: Name";
 #define TEST_BUF_MAX_SIZE  64
 static aafCharacter  TEST_PROP_NAMES[10][TEST_BUF_MAX_SIZE]; //say, 10 Property Names, each having 64 characters max.
 
-
 // convenient error handlers.
 inline void checkResult(HRESULT r)
 {
@@ -94,7 +95,6 @@ inline void checkExpression(bool expression, HRESULT r)
 	if (!expression)
 		throw r;
 }
-
 
 // i find this convenient to compare the IUNK's of two interfaces :
 template <class T1, class T2>
@@ -176,7 +176,7 @@ static HRESULT verifyContents (IAAFHeader* const pHeader, IAAFDictionary* const 
 			//1.  Get Definition
 			checkResult( pProp->GetDefinition(&pPropDef) );
 			//1.1. Get Name from def
-			checkResult(pPropDef->GetName(TEST_PROP_NAMES[i], TEST_BUF_MAX_SIZE));
+			checkResult(pPropDef->GetName(TEST_PROP_NAMES[i], TEST_BUF_MAX_SIZE*sizeof(aafCharacter)));
 		}
 
 		//try the next one ... it should fail
@@ -246,7 +246,8 @@ static HRESULT verifyContents (IAAFHeader* const pHeader, IAAFDictionary* const 
 			//1.  Get Definition
 			checkResult( pProp->GetDefinition(&pPropDef) );
 			//1.1. Get Name from def
-			checkResult(pPropDef->GetName(TEST_PROP_NAMES[i], 64));
+			checkResult(pPropDef->GetName(TEST_PROP_NAMES[i],
+				TEST_BUF_MAX_SIZE*sizeof(aafCharacter)));
 
 			//2. Get Value
 			checkResult( pProp->GetValue(&pPropVal) );
@@ -276,7 +277,7 @@ static HRESULT verifyContents (IAAFHeader* const pHeader, IAAFDictionary* const 
 				checkResult(spTDInt->GetInteger(pPropVal, (aafMemPtr_t)&the_int, 1 /*1 byte*/));
 
 				aafCharacter buf[128];
-				checkResult(pPropDef->GetName(buf, 128));
+				checkResult(pPropDef->GetName(buf, 128*sizeof(aafCharacter)));
 
 				char buf2[128];
 				wcstombs(buf2, buf, 128);

@@ -31,11 +31,12 @@
 
 
 #include <iostream.h>
+#include <stdlib.h>
 
 #include "AAFTypes.h" //Use #include "AAF.h" for functional module test.
 #include "AAFResult.h"
 #include "AAFStoredObjectIDs.h"
-#include "aafUtils.h"
+#include "AAFUtils.h"
 #include "AAFDefUIDs.h"
 #include "AAF.h"
 #include "AAFPlugin.h"

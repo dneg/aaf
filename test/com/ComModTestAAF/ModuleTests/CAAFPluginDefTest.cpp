@@ -31,9 +31,6 @@
 #include "AAF.h"
 #include "AAFPluginDefs.h"
 
-#include <iostream.h>
-
-
 static wchar_t *manuf1URL = L"www.microsoft.com";
 static wchar_t *manuf2URL = L"www.avid.com";
 static wchar_t *manuf3URL = L"www.softimage.com";
@@ -43,13 +40,14 @@ static wchar_t *manuf3URL = L"www.softimage.com";
 #include <stdio.h>
 #include <assert.h>
 #include <string.h>
+#include <wchar.h>
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFResult.h"
 #include "AAFDataDefs.h"
 #include "AAFDefUIDs.h"
 #include "AAFClassDefUIDs.h"
-#include "aafUtils.h"
+#include "AAFUtils.h"
 
 #include "CAAFBuiltinDefs.h"
 

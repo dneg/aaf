@@ -40,7 +40,7 @@
 #include "AAFResult.h"
 #include "AAFDataDefs.h"
 #include "AAFDefUIDs.h"
-#include "aafUtils.h"
+#include "AAFUtils.h"
 #include "AAFCodecDefs.h"
 
 #include "CAAFBuiltinDefs.h"
@@ -239,14 +239,14 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 
 		// Check with Next()
 		checkResult(pEnum->Reset ());
-		checkResult(pEnum->Next (1, &testFlavour, NULL));
+		checkResult(pEnum->NextOne(&testFlavour));
 		checkExpression (EqualAUID(&testFlavour, &checkFlavour) ? true : false,
 						 AAFRESULT_TEST_FAILED);
 		
 		// Check out clones version
 		checkResult(pEnum->Reset ());
 		checkResult(pEnum->Clone (&pCloneEnum));
-		checkResult(pCloneEnum->Next (1, &testFlavour, NULL));
+		checkResult(pCloneEnum->NextOne(&testFlavour));
 		checkExpression (EqualAUID(&testFlavour, &checkFlavour) ? true : false,
 						 AAFRESULT_TEST_FAILED);
 	}

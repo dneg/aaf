@@ -40,7 +40,7 @@
 
 #include <iostream.h>
 #include <stdio.h>
-
+#include <stdlib.h>
 
 
 static const	aafMobID_t	TEST_MobID = 

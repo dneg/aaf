@@ -34,6 +34,7 @@
 #include <assert.h>
 #include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFResult.h"
@@ -100,7 +101,7 @@ struct ContentStorageTest
 extern "C" HRESULT CAAFContentStorage_test()
 {
 	HRESULT hr = AAFRESULT_SUCCESS;
-	wchar_t fileName[] = L"AAFContentStorageTest.aaf";
+	wchar_t *fileName = L"AAFContentStorageTest.aaf";
 	ContentStorageTest edt;
 	
 	try
@@ -299,14 +300,13 @@ inline void ContentStorageTest::checkExpression(bool expression, HRESULT hr)
 		throw hr;
 }
 
-
 // local conversion utility.
 const char * ContentStorageTest::convert(const wchar_t* pwcName)
 {
 	checkExpression(NULL != pwcName, E_INVALIDARG);
 	const size_t kBufferSize = 256;
 	static char ansiName[kBufferSize];
-	
+
 	size_t convertedBytes = wcstombs(ansiName, pwcName, kBufferSize);
 	checkExpression(0 < convertedBytes, E_INVALIDARG);
 	
