@@ -36,18 +36,13 @@ ImplAAFCompositionMob::ImplAAFCompositionMob ():
 	
 }
 
-
-
-
 ImplAAFCompositionMob::~ImplAAFCompositionMob ()
 {}
 
 
   //@access Public Members
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFCompositionMob::SetInitialValues (aafWChar	*pName,
-											 aafBool	isPrimary
-											 )
+    ImplAAFCompositionMob::SetInitialValues (aafWChar	*pName)
 {
     AAFRESULT aafError = AAFRESULT_SUCCESS;
 	if (pName == NULL)
@@ -57,8 +52,6 @@ AAFRESULT STDMETHODCALLTYPE
 	else
 	{
 		aafError = SetName( pName );
-		if (aafError == AAFRESULT_SUCCESS)
-			aafError = SetPrimary( isPrimary );
 	}
 
 	return aafError;
