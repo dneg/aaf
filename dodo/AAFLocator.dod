@@ -25,8 +25,8 @@ AD_INCLUDE(AAFString)
 AD_CLASS_BEGIN
 
 AD_METHOD1(GetType,
-		   [out],AUID_t*,type,,
-		   Returns the AUID of the locator.)
+		   [out],aafUID_t*,type,,
+		   Returns the aafUID of the locator.)
 	//@comm Replaces part of omfmLocatorGetInfo
 
 AD_GETOBJ_METHOD1(GetPath,
