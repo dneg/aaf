@@ -36,6 +36,8 @@
 #include "ImplAAFEssenceDescriptor.h"
 #endif
 
+#include "ImplAAFContainerDef.h"
+#include "ImplAAFCodecDef.h"
 
 
 class ImplAAFFileDescriptor : public ImplAAFEssenceDescriptor
@@ -80,7 +82,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     SetCodecDef
 		// @parm [in] is this AAF or raw essence
-        (const aafUID_t & pID);
+        (ImplAAFCodecDef *pDef);
 
 
   //****************
@@ -89,7 +91,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     GetCodecDef
 		// @parm [out] is this AAF or raw medi
-        (aafUID_t *pID);
+        (ImplAAFCodecDef **ppDef);
 
 
   //****************
@@ -116,7 +118,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     SetContainerFormat
 		// @parm [in] Identifies the file format
-        (const aafUID_t & format);
+        (ImplAAFContainerDef *pDef);
 
 
   //****************
@@ -125,7 +127,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     GetContainerFormat
 		// @parm [out] Identifies the file format
-        (aafUID_t *  pFormat);
+        (ImplAAFContainerDef **ppDef);
 
 public:
 	// Functions internal to the toolkit
@@ -135,8 +137,8 @@ public:
 private:
 	OMFixedSizeProperty<aafRational_t>	_sampleRate;
 	OMFixedSizeProperty<aafLength_t>	_length;
-	OMFixedSizeProperty<aafUID_t>       _codecDef;
-	OMFixedSizeProperty<aafUID_t>       _containerFmt;
+	OMWeakReferenceProperty<ImplAAFCodecDef> _codecDef;
+	OMWeakReferenceProperty<ImplAAFContainerDef> _containerFmt;
 };
 
 #endif // ! __ImplAAFFileDescriptor_h__
