@@ -901,9 +901,8 @@ AAFRESULT STDMETHODCALLTYPE
 #c Argument1: base name to be converted to output type.
 #c ingnore the input
 #c
-#c TomR:added 980714
-#c
 #startm AD_AAFTYPES 01
+I%01\
 #endm
 
 
@@ -912,11 +911,21 @@ AAFRESULT STDMETHODCALLTYPE
 #c Argument1: base name to be converted to output type.
 #c Ignore input
 #c
-#c TomR:added 980714
-#c
 #startm AD_DECLARE_FORWARD_AAFTYPES 01
 #endm
 
+
+#ccccccccccccccccccccccccccc
+#c
+#c Generate a forward declaration of a class.
+#c
+#c Argument: class name
+#c
+#startm AD_FORWARD_DECLARATION 01
+#ifndef _I%01_h_
+#include "I%01.h"
+#endif
+#endm
 
 #ccccccccccccccccccccccccccc
 #c

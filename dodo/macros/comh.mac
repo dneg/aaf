@@ -822,22 +822,6 @@ private:
 
 #ccccccccccccccccccccccccccc
 #c
-#c Forward declaration of another interface.
-#c
-#c Argument: Base name
-#c
-#c This should not actually be used since the midl compiler will normally generate
-#c the associated com cpp interface file. Included here for completeness and 
-#c testing puposes only.
-#c
-#c TomR:980713: Added
-#c
-#startm AD_FORWARD_DECLARATION 01
-#endm
-
-
-#ccccccccccccccccccccccccccc
-#c
 #c Argument1: text to be quoted.
 #c 
 #c Just pass through the input. 
@@ -881,6 +865,19 @@ I%01 \
 #c TomR:added 980714
 #c
 #startm AD_DECLARE_FORWARD_AAFTYPES 01
+#ifndef __I%01_FWD_DEFINED__
+#define __I%01_FWD_DEFINED__
+typedef interface I%01 I%01;
+#endif 	/* __I%01_FWD_DEFINED__ */
+#endm
+
+#ccccccccccccccccccccccccccc
+#c
+#c Argument1: base name to be converted to output type.
+#c
+#c This is ignored since forward declarations will be created
+#c by the midl generated header.
+#startm AD_FORWARD_DECLARATION 01
 #ifndef __I%01_FWD_DEFINED__
 #define __I%01_FWD_DEFINED__
 typedef interface I%01 I%01;

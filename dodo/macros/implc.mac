@@ -39,6 +39,85 @@
 #startm AD_HEAD 00
 #endm
 
+#ccccccccccccccccccccccccccc
+#c
+#c Types definitions should only be used by idl and c++ & impl headers
+#c 
+#c Argument: Pieces of UUID
+#c
+#c Example:
+#c AD_TYPES_BEGIN(b1a21372, 1a7d, 11d2, bf, 78, 00, 10, 4b, c9, 15, 6d)
+#c
+#startm AD_TYPES_BEGIN 11
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Ends a types definition
+#c
+#c Types definitions should only be used by idl and c++ & impl headers
+#c
+#c Arguments: none
+#c
+#startm AD_TYPES_END 00
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Argument1: base name to be converted to output type.
+#c
+#startm AD_AAFTYPES 01
+Impl%01\
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Argument1: base name to be converted to output type.
+#c
+#startm AD_DECLARE_FORWARD_AAFTYPES 01
+#endm
+
+#ccccccccccccccccccccccccccc
+#c
+#c Argument1: text to be quoted.
+#c 
+#c Ignore input this was already processed in the header file. 
+#c
+#startm AD_CPP_QUOTE 01
+#endm
+
+#ccccccccccccccccccccccccccc
+#c
+#c Generate a forward declaration of a class.
+#c
+#c Argument: class name
+#c
+#startm AD_FORWARD_DECLARATION 01
+#ifndef _Impl%01_h_
+#include "Impl%01.h"
+#endif
+#endm
+
+#ccccccccccccccccccccccccccc
+#c
+#c Class UUID.
+#c
+#c Argument: Pieces of UUID
+#c
+#startm AD_CLASS_UUID 11
+#endm
+
+#ccccccccccccccccccccccccccc
+#c
+#c Default UUID.
+#c
+#c Argument: Pieces of UUID
+#c
+#startm AD_DEFAULT_UUID 11
+#endm
 
 #ccccccccccccccccccccccccccc
 #c
