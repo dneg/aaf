@@ -143,10 +143,17 @@ void scanSwappedWAVEData(aafUInt8 **srcBufHdl, aafInt32 maxsize, void *data);
 AAFRESULT loadWAVEHeader(aafUInt8 *buf,
 										aafUInt16 *bitsPerSample,
 										aafUInt16 *numCh,
+										aafRational_t *sampleRate,
 										aafUInt32 *dataOffset,
 										aafUInt32 *dataLen);
 
-static HRESULT CreateAAFFile(aafWChar * pFileName, testType_t testType)
+typedef struct
+{
+	aafWChar	*dataFilename;
+	aafUID_t	dataFormat;
+} testDataFile_t;
+
+static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, testType_t testType)
 {
 	IAAFFile*					pFile = NULL;
 	IAAFHeader*					pHeader = NULL;
@@ -168,14 +175,20 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testType_t testType)
 	aafUInt16					bitsPerSample, numCh;
 		IAAFEssenceFormat	*format;
 		aafInt32			n, numSpecifiers;
-		aafUID_t			essenceFormatCode;
-
-  
+		aafUID_t			essenceFormatCode, testContainer;
+	IAAFLocator	*pLocator;
+		  
   // delete any previous test file before continuing...
   char chFileName[1000];
   convert(chFileName, sizeof(chFileName), pFileName);
   remove(chFileName);
-
+  if(dataFile != NULL)
+  {
+	// delete any previous test file before continuing...
+	char chFileName[1000];
+	convert(chFileName, sizeof(chFileName), dataFile->dataFilename);
+	remove(chFileName);
+  }
 
 
 	ProductInfo.companyName = L"AAF Developers Desk";
@@ -219,16 +232,21 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testType_t testType)
 
 	// !!!Previous revisions of this file contained code here required to handle external essence
 
-	// now create the Essence data file
-	check(pMasterMob->CreateEssence(1,				// Slot ID
-									DDEF_Audio,		// MediaKind
-									CodecWave,		// codecID
-									editRate,		// edit rate
-									sampleRate,		// sample rate
-									kSDKCompressionDisable,
-									NULL,			// In current file
-									kAAFiMedia,		// In AAF Format
-									&pEssenceAccess));// Compress disabled
+	if(dataFile != NULL)
+	{
+		// Make a locator, and attach it to the EssenceDescriptor
+		check(pDictionary->CreateInstance(&AUID_AAFNetworkLocator,
+								IID_IAAFLocator, 
+								(IUnknown **)&pLocator));		
+		check(pLocator->SetPath (dataFile->dataFilename));
+		testContainer = dataFile->dataFormat;
+	}
+	else
+	{
+		pLocator = NULL;
+		testContainer = ContainerAAF;
+	}
+
 
 	// open the Essence file to be included in this AAF file("Laser.wav")
 	pWavFile = fopen("Laser.wav", "r");
@@ -239,6 +257,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testType_t testType)
 		check(loadWAVEHeader(dataBuff,
 										&bitsPerSample,
 										&numCh,
+										&sampleRate,
 										&dataOffset,
 										&dataLen));
 		if(testType != testRawCalls)
@@ -250,6 +269,17 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testType_t testType)
 			dataPtr = dataBuff;
 			dataLen = bytesRead;
 		}
+
+		// now create the Essence data file
+		check(pMasterMob->CreateEssence(1,				// Slot ID
+									DDEF_Audio,		// MediaKind
+									CodecWave,		// codecID
+									editRate,		// edit rate
+									sampleRate,		// sample rate
+									kSDKCompressionDisable,
+									pLocator,	// In current file
+									testContainer,	// In AAF Format
+									&pEssenceAccess));// Compress disabled
 
 		check(pEssenceAccess->GetFileFormatParameterList (&format));
 		check(format->NumFormatSpecifiers (&numSpecifiers));
@@ -363,6 +393,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 
 	aafNumSlots_t				numMobs, numSlots;
 	aafSearchCrit_t				criteria;
+	aafRational_t				readSampleRate;
 	aafUID_t					mobID;
 	aafWChar					namebuf[1204];
 	unsigned char				AAFDataBuf[4096];
@@ -377,7 +408,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
                NULL, 
                CLSCTX_INPROC_SERVER, 
                IID_IAAFFile, 
-               (void **)&pFile));
+                (void **)&pFile));
 	check(pFile->Initialize());
 	check(pFile->OpenExistingRead(pFileName, 0));
 	check(pFile->GetHeader(&pHeader));
@@ -432,6 +463,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 					check(loadWAVEHeader(WAVDataBuf,
 										&bitsPerSample,
 										&numCh,
+										&readSampleRate,
 										&dataOffset,
 										&dataLen));
 					if(testType != testRawCalls)
@@ -637,6 +669,7 @@ void scanSwappedWAVEData(aafUInt8 **srcBufHdl, aafInt32 maxsize, void *data)
 AAFRESULT loadWAVEHeader(aafUInt8 *buf,
 										aafUInt16 *bitsPerSample,
 										aafUInt16 *numCh,
+										aafRational_t *sampleRate,
 										aafUInt32 *dataOffset,
 										aafUInt32 *dataLen)
 {
@@ -647,7 +680,6 @@ AAFRESULT loadWAVEHeader(aafUInt8 *buf,
 	aafUInt8			chunkID[4];
  	aafInt32			junk32, rate, bytesPerFrame;
 	aafUInt8			*ptr;
-	aafRational_t		sampleRate;
 
 	ptr = buf;
 	scanSwappedWAVEData(&ptr, sizeof(chunkID), &chunkID);	
@@ -675,8 +707,8 @@ AAFRESULT loadWAVEHeader(aafUInt8 *buf,
 	
 			// WAVE field: wSamplesPerSec
 			scanSwappedWAVEData(&ptr, sizeof(aafUInt32), (aafUInt8 *)&rate);
-			sampleRate.numerator = rate;
-			sampleRate.denominator = 1;
+			sampleRate->numerator = rate;
+			sampleRate->denominator = 1;
 	
 			// Skip WAVE field: avgBytesPerSec (4 bytes)
 			scanSwappedWAVEData(&ptr, sizeof(junk32), (aafUInt8 *)&junk32);
@@ -708,29 +740,37 @@ AAFRESULT loadWAVEHeader(aafUInt8 *buf,
 }
 
 
-
 main()
 {
 	CComInitialize comInit;
-	aafWChar * pwFileName = L"EssenceTest.aaf";
-	const char * pFileName = "EssenceTest.aaf";
+	aafWChar *		pwFileName = L"EssenceTest.aaf";
+	const char *	pFileName = "EssenceTest.aaf";
+	aafWChar *	rawData = L"EssenceTestRar.wav";
+	testDataFile_t	dataFile;
 
-	printf("***Creating file %s using writeRawData\n", pFileName);
-	checkFatal(CreateAAFFile(pwFileName, testRawCalls));
+	printf("***Creating file %s using writeRawData (Internal Media)\n", pFileName);
+	checkFatal(CreateAAFFile(pwFileName, NULL, testRawCalls));
 	printf("***Re-opening file %s using readRawData\n", pFileName);
 	ReadAAFFile(pwFileName, testRawCalls);
-	printf("***Creating file %s using WriteSamples\n", pFileName);
-	checkFatal(CreateAAFFile(pwFileName, testStandardCalls));
+	printf("***Creating file %s using WriteSamples (Internal Media)\n", pFileName);
+	checkFatal(CreateAAFFile(pwFileName, NULL, testStandardCalls));
 	printf("***Re-opening file %s using ReadSamples\n", pFileName);
 	ReadAAFFile(pwFileName, testStandardCalls);
-	printf("***Creating file %s using WriteMultiSamples\n", pFileName);
-	checkFatal(CreateAAFFile(pwFileName, testMultiCalls));
+	printf("***Creating file %s using WriteMultiSamples (Internal Media)\n", pFileName);
+	checkFatal(CreateAAFFile(pwFileName, NULL, testMultiCalls));
 	printf("***Re-opening file %s using ReadMultiSamples\n", pFileName);
 	ReadAAFFile(pwFileName, testMultiCalls);
-	printf("***Creating file %s using WriteFractionalSample\n", pFileName);
-	checkFatal(CreateAAFFile(pwFileName, testFractionalCalls));
+	printf("***Creating file %s using WriteFractionalSample (Internal Media)\n", pFileName);
+	checkFatal(CreateAAFFile(pwFileName, NULL, testFractionalCalls));
 	printf("***Re-opening file %s using ReadFractionalSample\n", pFileName);
 	ReadAAFFile(pwFileName, testFractionalCalls);
+	dataFile.dataFilename = rawData;
+	dataFile.dataFormat = ContainerFile;
+	printf("***Creating file %s using WriteSamples (External Raw Media)\n", pFileName);
+	checkFatal(CreateAAFFile(pwFileName, &dataFile, testStandardCalls));
+	printf("***Re-opening file %s using ReadSamples\n", pFileName);
+	ReadAAFFile(pwFileName, testStandardCalls);
+
 
 	printf("Done\n");
 
