@@ -398,10 +398,12 @@ ImplAAFEssenceAccess::Create (ImplAAFMasterMob *masterMob,
 			
 			//!!!Later use  dataClassID instead of hardwiring
 //!!!			dataObj = (ImplAAFEssenceData *)CreateImpl(metaInfo.dataClassID);
+			ImplAAFEssenceData		*implData;				
 			CLSID	dataClass;
 			
 			memcpy(&dataClass, &metaInfo.dataClassID, sizeof(dataClass));
-			CoCreateInstance(dataClass,
+			implData = (ImplAAFEssenceData *)CreateImpl (metaInfo.dataClassID);
+/*			CoCreateInstance(dataClass,
 				NULL, 
 				CLSCTX_INPROC_SERVER, 
 				IID_IUnknown, 
@@ -409,12 +411,13 @@ ImplAAFEssenceAccess::Create (ImplAAFMasterMob *masterMob,
 
 			IAAFRoot				*CoObj;
 			ImplAAFRoot				*implRoot;
-			ImplAAFEssenceData		*implData;				
 
 			aafError = dataObj->QueryInterface(IID_IAAFRoot, (void **)&CoObj);
 
 			CoObj->GetImplRep((void **)&implRoot);
 			implData = (ImplAAFEssenceData *)implRoot;
+*/
+			dataObj = static_cast<IUnknown *> (implData->GetContainer());
 
 			CHECK(implData->SetFileMob(fileMob));
 			CHECK(head->AppendEssenceData (implData));		
