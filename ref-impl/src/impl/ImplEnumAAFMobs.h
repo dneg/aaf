@@ -94,10 +94,13 @@ public:
 // Internal to the toolkit
 AAFRESULT
     SetContentStorage(ImplAAFContentStorage *pCStore);
+AAFRESULT
+    SetCriteria(aafSearchCrit_t *pCriteria);
 
 private:
 	aafInt32				_current;
 	ImplAAFContentStorage	*_cStorage;
+	aafSearchCrit_t			_criteria;
 };
 
 #endif // ! __ImplEnumAAFMobs_h__
