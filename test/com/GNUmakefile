@@ -1,4 +1,7 @@
 
+AAFBASE ?= ../../..
+
+
 .PHONY : all
 all : ComModTestAAF CreateSequence EssenceAccess
 
@@ -19,5 +22,4 @@ clean :
 	cd ComModTestAAF && $(MAKE) clean
 	cd CreateSequence && $(MAKE) clean
 	cd EssenceAccess && $(MAKE) clean
-	$(RMDIR) $(OBJDIR)/*
 
