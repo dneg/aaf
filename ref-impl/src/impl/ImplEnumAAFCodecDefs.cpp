@@ -47,21 +47,19 @@
 extern "C" const aafClassID_t CLSID_EnumAAFCodecDefs;
 
 ImplEnumAAFCodecDefs::ImplEnumAAFCodecDefs ()
+: _enumObj(0), _iterator(0)
 {
-	_current = 0;
-	_enumObj = NULL;
-	_enumProp = NULL;
-	_enumStrongProp = NULL;
 }
 
 
 ImplEnumAAFCodecDefs::~ImplEnumAAFCodecDefs ()
 {
 	if (_enumObj)
-	{
 		_enumObj->ReleaseReference();
-		_enumObj = NULL;
-	}
+	_enumObj = NULL;
+
+	delete _iterator;
+	_iterator = 0;
 }
 
 
@@ -69,67 +67,18 @@ AAFRESULT STDMETHODCALLTYPE
     ImplEnumAAFCodecDefs::NextOne (
       ImplAAFCodecDef **ppCodecDef)
 {
-	aafUInt32			numElem;
-	aafUID_t			value;
-	ImplAAFHeader		*head = NULL;
-	ImplAAFDictionary	*dict = NULL;
-
-	if(_enumProp != NULL)
-		numElem = _enumProp->size() / sizeof(aafUID_t);
-	else if(_enumStrongProp != NULL)
+	AAFRESULT ar = AAFRESULT_NO_MORE_OBJECTS;
+	
+	if (_iterator->before() || _iterator->valid())
 	{
-		size_t	siz;
-		
-		_enumStrongProp->getSize(siz);
-		numElem = siz;
-	}
-	else
-		return(AAFRESULT_INCONSISTANCY);
-
-	if(ppCodecDef == NULL)
-		return(AAFRESULT_NULL_PARAM);
-	if(_current >= numElem)
-		return AAFRESULT_NO_MORE_OBJECTS;
-	XPROTECT()
-	{
-		if(_enumProp != NULL)
+		if (++(*_iterator))
 		{
-			_enumProp->getValueAt(&value, _current);
-			CHECK(_enumObj->MyHeadObject(&head));
-			CHECK(head->GetDictionary (&dict));
-			CHECK(dict->LookupCodecDef (value, ppCodecDef));
-			head->ReleaseReference();
-			head = NULL;
-			dict->ReleaseReference();
-			dict = NULL;
-		}
-		else if(_enumStrongProp != NULL)
-			_enumStrongProp->getValueAt(*ppCodecDef, _current);
-		else
-			RAISE(AAFRESULT_INCONSISTANCY);
-		(*ppCodecDef)->AcquireReference();
-		_current++;
-		if (head) {
-			head->ReleaseReference();
-			head = NULL;
-		}
-		if (dict) {
-			dict->ReleaseReference();
-			dict = NULL;
+			*ppCodecDef = _iterator->value();
+			(*ppCodecDef)->AcquireReference();
+			ar = AAFRESULT_SUCCESS;
 		}
 	}
-	XEXCEPT
-	{
-		if(head)
-		  head->ReleaseReference();
-		head = 0;
-		if(dict)
-		  dict->ReleaseReference();
-		dict = 0;
-	}
-	XEND;
-
-	return(AAFRESULT_SUCCESS); 
+	return ar;
 }
 
 
@@ -150,15 +99,9 @@ AAFRESULT STDMETHODCALLTYPE
 	ppDef = ppCodecDefs;
 	for (numDefs = 0; numDefs < count; numDefs++)
 	{
-		hr = NextOne(ppDef);
+		hr = NextOne(&ppDef[numDefs]);
 		if (FAILED(hr))
 			break;
-
-		// Point at the next component in the array.  This
-		// will increment off the end of the array when
-		// numComps == count-1, but the for loop should
-		// prevent access to this location.
-		ppDef++;
 	}
 	
 	if (pFetched)
@@ -172,42 +115,38 @@ AAFRESULT STDMETHODCALLTYPE
     ImplEnumAAFCodecDefs::Skip (
       aafUInt32 count)
 {
-	AAFRESULT	hr;
-	aafUInt32	newCurrent;
-	aafUInt32	numElem;
-	if(_enumProp != NULL)
-		numElem = _enumProp->size() / sizeof(aafUID_t);
-	else if(_enumStrongProp != NULL)
-	{
-		size_t	siz;
-		
-		_enumStrongProp->getSize(siz);
-		numElem = siz;
-	}
-	else
-		return(AAFRESULT_INCONSISTANCY);
+	AAFRESULT	ar = AAFRESULT_SUCCESS;
+	aafUInt32	n;
+	bool		offEnd;
 
-	newCurrent = _current + count;
-
-	if(newCurrent < numElem)
+	for(n = 1; n <= count; n++)
 	{
-		_current = newCurrent;
-		hr = AAFRESULT_SUCCESS;
-	}
-	else
-	{
-		hr = E_FAIL;
+		// Defined behavior of skip is to NOT advance at all if it would push us off of the end
+		offEnd = ++(*_iterator);
+		if(!offEnd)
+		{
+			// Off the end, increment 'n' to match the iterator, then
+			// decrement both back to the starting position
+			n++;
+			while(n >= 1)
+			{
+				--(*_iterator);
+				n--;
+			}
+			break;
+		}
 	}
 
-	return hr;
+	return ar;
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
     ImplEnumAAFCodecDefs::Reset ()
 {
-	_current = 0;
-	return AAFRESULT_SUCCESS;
+	AAFRESULT ar = AAFRESULT_SUCCESS;
+	_iterator->reset();
+	return ar;
 }
 
 
@@ -215,23 +154,16 @@ AAFRESULT STDMETHODCALLTYPE
     ImplEnumAAFCodecDefs::Clone (
       ImplEnumAAFCodecDefs **ppEnum)
 {
+	AAFRESULT				ar = AAFRESULT_SUCCESS;
 	ImplEnumAAFCodecDefs	*result;
-	AAFRESULT				hr;
 
 	result = (ImplEnumAAFCodecDefs *)CreateImpl(CLSID_EnumAAFCodecDefs);
 	if (result == NULL)
 		return E_FAIL;
 
-	if(_enumProp != NULL)
-		hr = result->SetEnumProperty(_enumObj, _enumProp);
-	else if(_enumStrongProp != NULL)
-		hr = result->SetEnumStrongProperty(_enumObj, _enumStrongProp);
-	else
-		return(AAFRESULT_INCONSISTANCY);
-
-	if (SUCCEEDED(hr))
+    ar = result->SetIterator(_enumObj,_iterator->copy());
+	if (SUCCEEDED(ar))
 	{
-		result->_current = _current;
 		*ppEnum = result;
 	}
 	else
@@ -241,43 +173,25 @@ AAFRESULT STDMETHODCALLTYPE
 	  *ppEnum = NULL;
 	}
 	
-	return hr;
+	return ar;
 }
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplEnumAAFCodecDefs::SetEnumProperty( ImplAAFObject *pObj, codecDefWeakRefArrayProp_t *pProp)
+    ImplEnumAAFCodecDefs::SetIterator(
+                        ImplAAFObject *pObj,
+                        OMReferenceContainerIterator<ImplAAFCodecDef>* iterator)
 {
+	AAFRESULT ar = AAFRESULT_SUCCESS;
+	
 	if (_enumObj)
-	  _enumObj->ReleaseReference();
+		_enumObj->ReleaseReference();
 	_enumObj = 0;
-	_enumObj = pObj;
-
-	if (pObj)
-		pObj->AcquireReference();
-	/**/
-	_enumProp = pProp;				// Don't refcount, same lifetime as the object.
-	_enumStrongProp = NULL;
-
-	return AAFRESULT_SUCCESS;
-}
-
-
-AAFRESULT STDMETHODCALLTYPE
-    ImplEnumAAFCodecDefs::SetEnumStrongProperty( ImplAAFObject *pObj, codecDefStrongRefArrayProp_t *pProp)
-{
-	if (_enumObj)
-	  _enumObj->ReleaseReference();
-	_enumObj = 0;
+	
 	_enumObj = pObj;
 	if (pObj)
 		pObj->AcquireReference();
-	/**/
-	_enumStrongProp = pProp;				// Don't refcount, same lifetime as the object.
-	_enumProp = NULL;
-
-	return AAFRESULT_SUCCESS;
+	
+	delete _iterator;
+	_iterator = iterator;
+	return ar;
 }
-
-
-
-

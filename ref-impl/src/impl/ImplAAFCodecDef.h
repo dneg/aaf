@@ -38,6 +38,7 @@ class ImplEnumAAFCodecFlavours;
 #ifndef __ImplAAFDefObject_h__
 #include "ImplAAFDefObject.h"
 #endif
+#include "OMReferenceContainerIter.h"
 
 #include "ImplEnumAAFDataDefs.h"
 

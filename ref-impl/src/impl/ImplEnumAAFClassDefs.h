@@ -34,10 +34,7 @@ class ImplAAFClassDef;
 #ifndef __ImplAAFObject_h__
 #include "ImplAAFObject.h"
 #endif
-
-
-typedef OMVariableSizeProperty<aafUID_t> classDefWeakRefArrayProp_t;
-typedef OMStrongReferenceVectorProperty<ImplAAFClassDef> classDefStrongRefArrayProp_t;
+#include "OMReferenceContainerIter.h"
 
 
 class ImplEnumAAFClassDefs : public ImplAAFRoot
@@ -103,15 +100,12 @@ public:
 public:
   // SDK Internal 
   virtual AAFRESULT STDMETHODCALLTYPE
-    SetEnumProperty( ImplAAFObject *pObj, classDefWeakRefArrayProp_t *pProp);
-  virtual AAFRESULT STDMETHODCALLTYPE
-    SetEnumStrongProperty( ImplAAFObject *pObj, classDefStrongRefArrayProp_t *pProp);
+	  SetIterator(ImplAAFObject *pObj,
+				OMReferenceContainerIterator<ImplAAFClassDef>* iterator);
 
 private:
-	aafUInt32                      _current;
-	ImplAAFObject                * _enumObj;
-	classDefWeakRefArrayProp_t   * _enumProp;
-	classDefStrongRefArrayProp_t * _enumStrongProp;
+	ImplAAFObject*	_enumObj;
+	OMReferenceContainerIterator<ImplAAFClassDef>*	_iterator;
 };
 
 //
