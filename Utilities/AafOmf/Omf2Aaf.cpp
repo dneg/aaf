@@ -2016,9 +2016,6 @@ void Omf2Aaf::ConvertOMFCDCIDescriptorLocator(OMF2::omfObject_t mediaDescriptor,
 	aafUInt32			colorRange = 0;
 	aafInt16			paddingBits = 0;
 	aafInt32			videoLineMap[2];
-	aafUInt32			compLen;
-	char				*compress = NULL;
-	aafUID_t			AAFCompress;
 						
 	rc = pAAFDescriptor->QueryInterface(IID_IAAFDigitalImageDescriptor, (void **)&pDigImageDesc);
 
@@ -2125,17 +2122,16 @@ void Omf2Aaf::ConvertOMFCDCIDescriptorLocator(OMF2::omfObject_t mediaDescriptor,
 	rc = pDigImageDesc->SetVideoLineMap( (sizeof(videoLineMap)/sizeof(aafInt32)), videoLineMap);
 
 	//
-	compLen = OMF2::omfsLengthString(OMFFileHdl, mediaDescriptor, OMF2::OMDIDDCompression);
-	compress = new char[compLen+1];			
-	OMFError = OMF2::omfsReadString(OMFFileHdl, mediaDescriptor, OMF2::OMDIDDCompression, compress,
-						compLen+1);
-	if(strcmp(compress, "JFIF") == 0)
-		AAFCompress = CodecJPEG;
-	else
-		AAFCompress = NoCodec;
+	aafUID_t AAFCompress = NoCodec;
+	aafUInt32 compLen = OMF2::omfsLengthString(OMFFileHdl, mediaDescriptor, OMF2::OMDIDDCompression);
+	if( compLen > 0 )
+	{
+		char compress[ 64 ] = "";
+		OMFError = OMF2::omfsReadString(OMFFileHdl, mediaDescriptor, OMF2::OMDIDDCompression, compress, compLen+1);
+		if(strcmp(compress, "JFIF") == 0)
+			AAFCompress = CodecJPEG;
+	}
 	rc = pDigImageDesc->SetCompression(AAFCompress);
-	delete [] compress;
-	compress = NULL;
 	pDigImageDesc->Release();
 	pDigImageDesc = NULL;
 
