@@ -162,14 +162,13 @@ const aafUID_t kAAFTypeID_AvidEffUserParam =	{0x8BC42734,0x6BAB,0x11d3,{0x80,0xC
 
 typedef	unsigned long	AvFixed30;
 typedef	unsigned long	AvFixed16;
-typedef bool			Boolean;
 
 typedef struct
 	{
-	u_char 		hue;
-	u_char 		sat;
-	u_char 		lum;
-	u_char		dep;
+	unsigned char 		hue;
+	unsigned char 		sat;
+	unsigned char 		lum;
+	unsigned char		dep;
 	} hsl8Color_t, **hsl8ColorHdl;
 
 typedef	struct
@@ -178,10 +177,10 @@ typedef	struct
 	AvFixed16	left;
 	AvFixed16	bottom;
 	AvFixed16	right;
-	Boolean		Lvl2Xscale;
-	Boolean		Lvl2Yscale;
-	Boolean		Lvl2Xpos;
-	Boolean		Lvl2Ypos;
+	unsigned char		Lvl2Xscale;
+	unsigned char		Lvl2Yscale;
+	unsigned char		Lvl2Xpos;
+	unsigned char		Lvl2Ypos;
 	} OMFIPvtFixedRect;
 
 typedef struct
@@ -233,13 +232,13 @@ typedef struct
 
 typedef struct
 	{
-	long		cookie;
-	long		rev;
-	long		kfCurrent;
-	long		kfSmooth;
-	short		colorItem;
-	short		quality;
-	Boolean		isReversed;
-	Boolean		ScalesDetached;
+	long				cookie;
+	long				rev;
+	long				kfCurrent;
+	long				kfSmooth;
+	short				colorItem;
+	short				quality;
+	unsigned char		isReversed;
+	unsigned char		ScalesDetached;
 	} OMFIPvtGlobalInfo_t;
 
