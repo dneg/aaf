@@ -59,11 +59,16 @@ OMFile::OMFile(const wchar_t* fileName,
                const OMClassFactory* factory,
                OMDictionary* dictionary,
                const OMLoadMode loadMode)
-: _root(0), _rootStore(store),
+: _root(0),
+  _rootStore(store),
   _dictionary(dictionary),
-  _objectDirectory(0), _referencedProperties(0), _mode(mode),
-  _loadMode(loadMode), _fileName(0),
-  _clientOnSaveContext(0), _clientOnRestoreContext(clientOnRestoreContext)
+  _objectDirectory(0),
+  _referencedProperties(0),
+  _mode(mode),
+  _loadMode(loadMode),
+  _fileName(0),
+  _clientOnSaveContext(0),
+  _clientOnRestoreContext(clientOnRestoreContext)
 {
   TRACE("OMFile::OMFile");
 
@@ -92,12 +97,18 @@ OMFile::OMFile(const wchar_t* fileName,
                OMStoredObject* store,
                const OMClassFactory* factory,
                OMDictionary* dictionary,
-               OMStorable* root)
-: _root(root), _rootStore(store),
+               OMRootStorable* root)
+: _root(root),
+  _rootStore(store),
   _dictionary(dictionary),
-  _objectDirectory(0), _referencedProperties(0), _mode(mode),
-  _loadMode(lazyLoad), _fileName(0), _signature(signature),
-  _clientOnSaveContext(0), _clientOnRestoreContext(clientOnRestoreContext)
+  _objectDirectory(0),
+  _referencedProperties(0),
+  _mode(mode),
+  _loadMode(lazyLoad),
+  _fileName(0),
+  _signature(signature),
+  _clientOnSaveContext(0),
+  _clientOnRestoreContext(clientOnRestoreContext)
 {
   TRACE("OMFile::OMFile");
 
@@ -138,6 +149,7 @@ OMFile* OMFile::openExistingRead(const wchar_t* fileName,
                                  OMDictionary* dictionary)
 {
   TRACE("OMFile::openExistingRead");
+
   PRECONDITION("Valid file name", validWideString(fileName));
   PRECONDITION("Valid class factory", factory != 0);
   PRECONDITION("Valid dictionary", dictionary != 0);
@@ -170,6 +182,7 @@ OMFile* OMFile::openExistingModify(const wchar_t* fileName,
                                    OMDictionary* dictionary)
 {
   TRACE("OMFile::openExistingModify");
+
   PRECONDITION("Valid file name", validWideString(fileName));
   PRECONDITION("Valid class factory", factory != 0);
   PRECONDITION("Valid dictionary", dictionary != 0);
@@ -192,7 +205,7 @@ OMFile* OMFile::openExistingModify(const wchar_t* fileName,
   //        <p factory> to create the objects. The file must not already
   //        exist. The byte ordering on the newly created file is given
   //        by <p byteOrder>. The client root <c OMStorable> in the newly
-  //        created file is given by <p root>.
+  //        created file is given by <p clientRoot>.
   //   @parm The name of the file to create.
   //   @parm The factory to use for creating objects.
   //   @parm The byte order to use for the newly created file.
@@ -202,22 +215,23 @@ OMFile* OMFile::openNewModify(const wchar_t* fileName,
                               const OMClassFactory* factory,
                               void* clientOnRestoreContext,
                               const OMByteOrder byteOrder,
-                              OMStorable* root,
+                              OMStorable* clientRoot,
                               const OMFileSignature& signature,
                               OMDictionary* dictionary)
 {
   TRACE("OMFile::openNewModify");
+
   PRECONDITION("Valid file name", validWideString(fileName));
   PRECONDITION("Valid class factory", factory != 0);
   PRECONDITION("Valid byte order",
                     ((byteOrder == littleEndian) || (byteOrder == bigEndian)));
-  PRECONDITION("Valid root", root != 0);
+  PRECONDITION("Valid client root", clientRoot != 0);
   PRECONDITION("Valid signature", validSignature(signature));
   PRECONDITION("Valid dictionary ", dictionary != 0);
 
   OMStoredObject* store = OMStoredObject::createModify(fileName, byteOrder);
-  OMStorable* rt = new OMRootStorable(root, dictionary);
-  ASSERT("Valid heap pointer", rt != 0);
+  OMRootStorable* root = new OMRootStorable(clientRoot, dictionary);
+  ASSERT("Valid heap pointer", root != 0);
 
   OMFile* newFile = new OMFile(fileName,
                                clientOnRestoreContext,
@@ -226,7 +240,7 @@ OMFile* OMFile::openNewModify(const wchar_t* fileName,
                                store,
                                factory,
                                dictionary,
-                               rt);
+                               root);
   ASSERT("Valid heap pointer", newFile != 0);
   return newFile;
 }
@@ -238,6 +252,7 @@ OMFile* OMFile::openNewModify(const wchar_t* fileName,
 bool OMFile::validSignature(const OMFileSignature& signature)
 {
   TRACE("OMFile::validSignature");
+
   bool result;
 
   if (signature.Data3 == 0x4D4F) { // "OM"
@@ -274,6 +289,7 @@ void OMFile::saveFile(void* clientOnSaveContext)
 void OMFile::saveAs(const wchar_t* ANAME(fileName)) const
 {
   TRACE("OMFile::saveAs");
+
   PRECONDITION("Valid file name", validWideString(fileName));
 
   ASSERT("Unimplemented code not reached", false);
@@ -307,7 +323,7 @@ OMStorable* OMFile::restore(void)
 
   _root->restoreContents();
 
-  OMDictionary *metaDictionary = ((OMRootStorable *)_root)->dictionary();
+  OMDictionary *metaDictionary = _root->dictionary();
   ASSERT("Consistent dictionaries", metaDictionary == _dictionary);
   _root->setClassFactory(classFactory());
 
@@ -335,7 +351,7 @@ OMStorable* OMFile::root(void)
   TRACE("OMFile::root");
 
   OMStorable* result;
-  result = ((OMRootStorable*)_root)->clientRoot();
+  result = _root->clientRoot();
   return result;
 }
 
@@ -389,6 +405,7 @@ OMByteOrder OMFile::byteOrder(void) const
 OMFile::OMLoadMode OMFile::loadMode(void) const
 {
   TRACE("OMFile::loadMode");
+
   return _loadMode;
 }
 
@@ -425,6 +442,7 @@ OMFileSignature OMFile::signature(void) const
 OMProperty* OMFile::findPropertyPath(const wchar_t* propertyPathName) const
 {
   TRACE("OMFile::findPropertyPath");
+
   PRECONDITION("Valid property path name", validWideString(propertyPathName));
   PRECONDITION("Path name is absolute", propertyPathName[0] == L'/');
   PRECONDITION("Valid root", _root != 0);
@@ -570,6 +588,7 @@ void* OMFile::clientOnRestoreContext(void)
 void OMFile::writeSignature(const wchar_t* fileName)
 {
   TRACE("OMFile::writeSignature");
+
   OMFileSignature sig = _signature;
 
   // There's no ANSI function to open a file with a wchar_t* name.
@@ -599,6 +618,7 @@ void OMFile::writeSignature(const wchar_t* fileName)
 void OMFile::readSignature(const wchar_t* fileName)
 {
   TRACE("OMFile::readSignature");
+
   OMFileSignature sig;
 
   char cFileName[256];
