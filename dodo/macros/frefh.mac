@@ -1062,6 +1062,15 @@ AD_CLASS_END\
   //
   STDMETHOD(GetImplRep)(THIS_ void **) PURE;
 
+  //
+  // Intialize class extensions. This method is called after the
+  // contained Impl object has been completely initialized. This
+  // allows the aggregated extension object access to all of the
+  // interfaces and property data of its controlling unknown.
+  //
+  STDMETHOD(InitializeExtension)(THIS_ REFCLSID clsid) PURE;
+
+
   END_INTERFACE
 };\
 

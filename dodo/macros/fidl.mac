@@ -1034,6 +1034,14 @@ AD_CLASS_END\
   // object!
   //
   [local] HRESULT GetImplRep([out, retval] void **);
+
+  //
+  // Intialize class extensions. This method is called after the
+  // contained Impl object has been completely initialized. This
+  // allows the aggregated extension object access to all of the
+  // interfaces and property data of its controlling unknown.
+  //
+  [local] HRESULT InitializeExtension(REFCLSID clsid);
 }\
 #endm
 
