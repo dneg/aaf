@@ -17,7 +17,7 @@
 //
 // ../smpte/DictP18.csv 
 //
-// This file was generated on Mon Mar 29 17:11:13 EST 1999
+// This file was generated on Wed Mar 31 09:56:11 EST 1999
 // by user tbingham on system TBINGHAMPC.
 //
 // Key to macros.
@@ -1306,36 +1306,12 @@ AAF_CLASS(PluggableDefinition,
     0x0000, 0x0000,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
   DefinitionObject)
-AAF_PROPERTY(Identification,
-  AAF_LITERAL_AUID(0x06444A01,
-    0x0000, 0x0000,
-    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
-  0x2501,
-  AUID,
-  true,
-  PluggableDefinition)
-AAF_PROPERTY(Name,
-  AAF_LITERAL_AUID(0x06444A02,
-    0x0000, 0x0000,
-    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
-  0x2502,
-  String,
-  true,
-  PluggableDefinition)
-AAF_PROPERTY(Description,
-  AAF_LITERAL_AUID(0x06444A03,
-    0x0000, 0x0000,
-    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
-  0x2503,
-  String,
-  false,
-  PluggableDefinition)
 AAF_PROPERTY(PlugInDefinitions,
   AAF_LITERAL_AUID(0x06444A04,
     0x0000, 0x0000,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
   0x2504,
-  RefAUIDArray,
+  ObjRefArray,
   false,
   PluggableDefinition)
 AAF_CLASS_END(PluggableDefinition)
