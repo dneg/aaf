@@ -82,6 +82,7 @@ namespace OMF2
 
 #include "AAFSmartPointer.h"
 typedef IAAFSmartPointer<IAAFDataDef> IAAFDataDefSP;
+typedef IAAFSmartPointer<IAAFComponent> IAAFComponentSP;
 
 // Include the AAF Stored Object identifiers. These symbols are defined in aaf.lib.
 #include "AAFStoredObjectIDs.h"
@@ -92,7 +93,8 @@ extern AafOmfGlobals* gpGlobals;
 // ============================================================================
 // Constructor
 // ============================================================================
-Omf2Aaf::Omf2Aaf() : pFile(NULL), pHeader(NULL), pDictionary(NULL)
+Omf2Aaf::Omf2Aaf() : pFile(NULL), pHeader(NULL), pDictionary(NULL),
+  pAAF(NULL), pOMF(NULL), pEffectTranslate(NULL)
 {
 	OMFSession = 0;
 	OMFFileHdl = 0;
@@ -111,6 +113,13 @@ Omf2Aaf::Omf2Aaf() : pFile(NULL), pHeader(NULL), pDictionary(NULL)
 // ============================================================================
 Omf2Aaf::~Omf2Aaf()
 {
+	if (pEffectTranslate)
+		delete pEffectTranslate;
+	if (pOMF)
+		delete pOMF;
+	if (pAAF)
+		delete pAAF;
+
 	if (pHeader)
 		pHeader->Release();
 	if (pDictionary)
@@ -907,7 +916,7 @@ void Omf2Aaf::ConvertOMFDataDefType		// Used for parameter types Integer, Ration
   (OMF2::omfDDefObj_t datakind, 
    IAAFTypeDef ** ppTypeDef)
 {
-	IAAFTypeDef				*pTypeDef;
+	IAAFTypeDef				*pTypeDef = NULL; // initialize return value.
 	OMF2::omfUniqueName_t	datakindName;
 	OMFCheck				OMFError;
 
@@ -1050,6 +1059,7 @@ void Omf2Aaf::ConvertOMFCompositionObject(OMF2::omfObject_t obj,
 	aafUID_t	classID = kAAFClassID_CompositionMob;
 
 	hr = pCompMob->QueryInterface(IID_IAAFObject, (void **)&pElement);
+	AutoRelease<IAAFObject> arElement(pElement);
 	ConvertObjectProps(obj, classID, pElement);
 
 	gpGlobals->pLogger->Log( kLogInfo, "Converted OMF Composition MOB to AAF\n");
@@ -1312,7 +1322,8 @@ void Omf2Aaf::ProcessOMFComponent(OMF2::omfObject_t OMFSegment, IAAFComponent** 
 
 	OMF2::omfLength_t		OMFLength;
 	OMF2::omfDDefObj_t	OMFDatakind;
-	IAAFDataDef * pDataDef = 0;
+	IAAFDataDefSP pDataDef;
+	IAAFTypeDef * pParameterDefType = 0;
 
 	*ppComponent = NULL;
 
@@ -1494,7 +1505,9 @@ void Omf2Aaf::ProcessOMFComponent(OMF2::omfObject_t OMFSegment, IAAFComponent** 
 					AutoRelease<IAAFOperationDef> peffdef( pEffectDef );
 
 					IAAFParameterDef*		pParameterDef;
-					GetParameterDefinition((aafUID_t *)&kAAFParameterDefLevel, NULL, 
+					rc = pDictionary->LookupTypeDef(kAAFTypeID_Rational, &pParameterDefType);
+					AutoRelease<IAAFTypeDef> arTypeDef(pParameterDefType);
+					GetParameterDefinition((aafUID_t *)&kAAFParameterDefLevel, pParameterDefType, 
 												L"Level", 
 												L"Level, equal to mix ratio of B/A. Range is 0 to 1. The formula  P = (Level*B)+((1-Level)*A)",
 												L" ",
@@ -1524,7 +1537,9 @@ void Omf2Aaf::ProcessOMFComponent(OMF2::omfObject_t OMFSegment, IAAFComponent** 
 					AutoRelease<IAAFOperationDef> peffdef( pEffectDef );
 
 					IAAFParameterDef* pParameterDef;
-					GetParameterDefinition((aafUID_t *)&kAAFParameterDefLevel, NULL, 
+					rc = pDictionary->LookupTypeDef(kAAFTypeID_Rational, &pParameterDefType);
+					AutoRelease<IAAFTypeDef> arTypeDef(pParameterDefType);
+					GetParameterDefinition((aafUID_t *)&kAAFParameterDefLevel, pParameterDefType, 
 												L"Level", 
 												L"Level, equal to mix ratio of B/A. Range is 0 to 1. The formula  P = (Level*B)+((1-Level)*A)",
 												L" ",
@@ -1563,11 +1578,15 @@ void Omf2Aaf::ProcessOMFComponent(OMF2::omfObject_t OMFSegment, IAAFComponent** 
 
 					// Port over Wipe number
 					IAAFParameterDef* pParameterDef;
-					GetParameterDefinition((aafUID_t *)&kAAFParameterDefSMPTEWipeNumber, NULL, 
+					rc = pDictionary->LookupTypeDef(kAAFTypeID_Int32, &pParameterDefType);
+					{ // Use local block to narrow the scope of the AutoRelease object.
+						AutoRelease<IAAFTypeDef> tdef( pParameterDefType );
+						GetParameterDefinition((aafUID_t *)&kAAFParameterDefSMPTEWipeNumber, pParameterDefType, 
 												L"Wipe Number", 
 												L"SMPTE Wipe Number. No Default",
 												L" ",
 												&pParameterDef);
+					}
 					AutoRelease< IAAFParameterDef > pparamdef( pParameterDef );
 					pEffectDef->AddParameterDef(pParameterDef);
 
@@ -1576,27 +1595,25 @@ void Omf2Aaf::ProcessOMFComponent(OMF2::omfObject_t OMFSegment, IAAFComponent** 
 					  CreateInstance(IID_IAAFConstantValue,
 									 (IUnknown **)&pConstantValue);
 					AutoRelease< IAAFConstantValue > pconstval( pConstantValue );
-					rc = pConstantValue->SetValue(sizeof(wipeNumber), (unsigned char *)&wipeNumber);
+					rc = pConstantValue->Initialize (pParameterDef, sizeof(wipeNumber), (unsigned char *)&wipeNumber);
 
 					IAAFParameter*			pParameter;
 					rc = pConstantValue->QueryInterface(IID_IAAFParameter, (void **)&pParameter);
 					AutoRelease<IAAFParameter>	pparam( pParameter );
 					rc = pEffect->AddParameter(pParameter);
-					rc = pParameter->SetParameterDefinition(pParameterDef);
-
-					IAAFTypeDef*			typeDef;
-					rc = pDictionary->LookupTypeDef(kAAFTypeID_Int32, &typeDef);
-					AutoRelease<IAAFTypeDef> tdef( typeDef );
-					rc = pParameter->SetTypeDefinition(typeDef);
 
 					/*********************************************************************/
 					//Port over reverse flag
 					IAAFParameterDef* pParameterDefRev;
-					GetParameterDefinition((aafUID_t *)&kAAFParameterDefSMPTEReverse, NULL, 
+					rc = pDictionary->LookupTypeDef(kAAFTypeID_Boolean, &pParameterDefType);
+					{ // Use local block to narrow the scope of the AutoRelease object.
+						AutoRelease<IAAFTypeDef> tdef( pParameterDefType );
+						GetParameterDefinition((aafUID_t *)&kAAFParameterDefSMPTEReverse, pParameterDefType, 
 												L"Reverse", 
 												L"Reverse flag. Default FALSE.",
 												L" ",
 												&pParameterDefRev);
+					}
 					AutoRelease< IAAFParameterDef > pparamdefrev( pParameterDefRev );
 					rc = pEffectDef->AddParameterDef(pParameterDefRev);
 
@@ -1606,18 +1623,12 @@ void Omf2Aaf::ProcessOMFComponent(OMF2::omfObject_t OMFSegment, IAAFComponent** 
 									 (IUnknown **)&pConstantValueRev);
 					AutoRelease< IAAFConstantValue > pconstvalrev( pConstantValueRev );
 					unsigned char	reverse = wipeControls.reverse;
-					rc = pConstantValueRev->SetValue(sizeof(reverse), &reverse);
+					rc = pConstantValueRev->Initialize (pParameterDefRev, sizeof(reverse), &reverse);
 
 					IAAFParameter*			pParameterRev;
 					rc = pConstantValueRev->QueryInterface(IID_IAAFParameter, (void **)&pParameterRev);
 					AutoRelease<IAAFParameter>	pparamrev( pParameterRev );
 					rc = pEffect->AddParameter(pParameterRev);
-					rc = pParameterRev->SetParameterDefinition(pParameterDefRev);
-
-					IAAFTypeDef*			typeDefRev;
-					rc = pDictionary->LookupTypeDef(kAAFTypeID_Boolean, &typeDefRev);
-					AutoRelease<IAAFTypeDef> tdefrev( typeDefRev );
-					rc = pParameter->SetTypeDefinition(typeDefRev);
 					/*********************************************************************/
 
 					// !!! Port over the rest of the wipeControls later
@@ -1733,8 +1744,8 @@ void Omf2Aaf::ProcessOMFComponent(OMF2::omfObject_t OMFSegment, IAAFComponent** 
 			rc = defs.cdFiller()->
 			  CreateInstance(IID_IAAFFiller,
 							 (IUnknown **) &pFiller);
-			rc = pFiller->Initialize(pDataDef, (aafLength_t)OMFLength);
 			AutoRelease< IAAFFiller > pfill( pFiller );
+			rc = pFiller->Initialize(pDataDef, (aafLength_t)OMFLength);
 			rc = pFiller->QueryInterface(IID_IAAFComponent, (void **)ppComponent);
 //		}
 	}
@@ -1768,7 +1779,7 @@ void Omf2Aaf::ConvertOMFSequence(OMF2::omfObject_t sequence,
 	OMF2::omfDDefObj_t		datakind = NULL;
 	OMF2::omfLength_t		sequLength = 0;
 	OMFCheck OMFError = OMF2::omfiSequenceGetInfo(OMFFileHdl, sequence, &datakind, &sequLength);
-	IAAFDataDef * pDataDef = 0;
+	IAAFDataDefSP pDataDef;
 	ConvertOMFDataDef(datakind, &pDataDef);
 	rc = pComponent->SetDataDef(pDataDef);
 	pComponent->SetLength(sequLength);
@@ -1798,7 +1809,7 @@ void Omf2Aaf::ConvertOMFSourceClip(OMF2::omfObject_t sourceclip,
 	OMF2::omfFadeType_t		OMFFadeoutType;
 	OMF2::omfBool			fadeinPresent, fadeoutPresent;
 
-	IAAFDataDef * pDataDef = 0;
+	IAAFDataDefSP pDataDef;
 	aafSourceRef_t			sourceRef;
 	aafFadeType_t			fadeinType, fadeoutType;
 	aafInt32				fadeinLen, fadeoutLen;
@@ -2203,6 +2214,7 @@ void Omf2Aaf::ConvertOMFSourceMob(OMF2::omfObject_t obj,
 	aafUID_t	classID = kAAFClassID_SourceMob;
 	
 	rc = pSourceMob->QueryInterface(IID_IAAFObject, (void **)&pElement);
+	AutoRelease<IAAFObject> arElement(pElement);
 	ConvertObjectProps(obj, classID, pElement);
 	
 	OMFError = OMF2::omfmMobGetMediaDescription(OMFFileHdl, obj, &mediaDescriptor);
@@ -2575,7 +2587,7 @@ void Omf2Aaf::ConvertOMFSourceMob(OMF2::omfObject_t obj,
 //
 // ============================================================================
 void Omf2Aaf::ConvertOMFConstValue(OMF2::omfSegObj_t segment,
-									  IAAFConstantValue* pConstValue)
+									  IAAFParameterDef* pParameterDef, IAAFConstantValue* pConstValue)
 {
 	AAFCheck				rc;
 	OMFCheck				OMFError;
@@ -2587,7 +2599,6 @@ void Omf2Aaf::ConvertOMFConstValue(OMF2::omfSegObj_t segment,
 	void *				pcvBuffer = NULL;
 
 	aafUInt32			valueSize;
-	IAAFParameter*		pParameter;
 	IAAFTypeDef*		pTypeDef = NULL;
 
 	OMFError = OMF2::omfiDataValueGetSize(OMFFileHdl, segment, &cvValueSize);
@@ -2595,22 +2606,24 @@ void Omf2Aaf::ConvertOMFConstValue(OMF2::omfSegObj_t segment,
 	if (valueSize > 0)
 	{
 		pcvBuffer = new char[valueSize];
-		rc = pConstValue->QueryInterface(IID_IAAFParameter, (void **)&pParameter);
 		OMFError = OMF2::omfiConstValueGetInfo(OMFFileHdl, segment, 
 							&cvDatakind, &cvLength, cvValueSize, &cvBytesRead, pcvBuffer);
 		gpGlobals->pLogger->Log( kLogInfo, 
 			"%sProcessing Constant Value of length = %ld\n ", gpGlobals->indentLeader, (int)cvLength);
-		rc = pConstValue->SetValue(valueSize, (unsigned char *)pcvBuffer);
-		
+
+		// Constant value should be initialized with a parameter definition. The
+		// parameter definition specifies the type. Someone may want to add validation
+		// and or conversion code to make sure that the type returned from 
+		// ConvertOMFDataDefType is the same type used in the parameter definition
+		// (transdel 2000-MAR-07).
+		rc = pConstValue->Initialize (pParameterDef, valueSize, (aafDataBuffer_t)pcvBuffer);
+
 		ConvertOMFDataDefType(cvDatakind, &pTypeDef);
-		pParameter->SetTypeDefinition(pTypeDef);
 		pTypeDef->Release();
 		pTypeDef = NULL;
 	}
 	if (pcvBuffer)
 		delete [] pcvBuffer;
-	if (pParameter)
-		pParameter->Release();
 }
 // ============================================================================
 // ConvertOMFVaryingValue
@@ -2622,7 +2635,7 @@ void Omf2Aaf::ConvertOMFConstValue(OMF2::omfSegObj_t segment,
 //
 // ============================================================================
 void Omf2Aaf::ConvertOMFVaryingValue(OMF2::omfSegObj_t segment,
-										IAAFVaryingValue* pVaryingValue)
+										IAAFParameterDef* pParameterDef, IAAFVaryingValue* pVaryingValue)
 {
 	AAFCheck				rc;
 	OMFCheck				OMFError;
@@ -2645,7 +2658,6 @@ void Omf2Aaf::ConvertOMFVaryingValue(OMF2::omfSegObj_t segment,
 	IAAFControlPoint*		pControlPoint = NULL;
 	IAAFTypeDef*			pTypeDef = NULL;
 	IAAFInterpolationDef*	pInterp = NULL;
-	IAAFParameter*			pParm = NULL;
 
 	aafRational_t			AAFCPTime;
 	aafEditHint_t			AAFCPEditHint;
@@ -2658,11 +2670,17 @@ void Omf2Aaf::ConvertOMFVaryingValue(OMF2::omfSegObj_t segment,
 	OMFError = OMF2::omfiVaryValueGetInfo(OMFFileHdl, segment, &vvDatakind, &vvLength, &vvInterpolation);
 	// tlk We do NOT know how to handle Interpolations yet !!!
 
+	// Need to translate other interpolators!!!
+	pInterp = pAAF->CreateInterpolationDefinition(pDictionary, LinearInterpolator);
+
+	// The varying value must be initialized with a parameter definition and an
+	// interpolation definition before any of its other interface methods are 
+	// called. Someone may want to add validation and or conversion code to make 
+	// sure that the type returned from ConvertOMFDataDefType is the same type 
+	// used in the parameter definition (transdel 2000-MAR-07).
+	rc = pVaryingValue->Initialize (pParameterDef, pInterp);
+  
 	ConvertOMFDataDefType(vvDatakind, &pTypeDef);
-	rc = pVaryingValue->QueryInterface(IID_IAAFParameter, (void **)&pParm);
-	pParm->SetTypeDefinition(pTypeDef);
-	pParm->Release();
-	pParm = NULL;
 	pTypeDef->Release();
 	pTypeDef = NULL;
 
@@ -2693,11 +2711,6 @@ void Omf2Aaf::ConvertOMFVaryingValue(OMF2::omfSegObj_t segment,
 				OMF2::OMCTLPValue, cpDatakind, pCPBuffer,
 				0, valueSize, &bytesRead);
 			
-			AAFCPTime.numerator = time.numerator;
-			AAFCPTime.denominator = time.denominator;
-			AAFCPEditHint = (aafEditHint_t)editHint;
-			pControlPoint->SetTime(AAFCPTime);
-			pControlPoint->SetEditHint(AAFCPEditHint);
 			if (bytesRead != valueSize)
 			{
 				OMF2::omfUniqueName_t	uniqueName;
@@ -2712,8 +2725,11 @@ void Omf2Aaf::ConvertOMFVaryingValue(OMF2::omfSegObj_t segment,
 				offset = 0;
 				OMFError = OMF2::omfsReadDataValue(OMFFileHdl, control, OMF2::OMCTLPValue, cpDatakind, pCPBuffer, offset,valueSize, &bytesRead);
 			}
-			pControlPoint->SetValue((aafUInt32)valueSize, (unsigned char *)pCPBuffer);
-			pControlPoint->SetTypeDefinition(pTypeDef);
+			AAFCPTime.numerator = time.numerator;
+			AAFCPTime.denominator = time.denominator;
+			rc = pControlPoint->Initialize (pVaryingValue, AAFCPTime, (aafUInt32)valueSize, (unsigned char *)pCPBuffer);
+			AAFCPEditHint = (aafEditHint_t)editHint;
+			rc = pControlPoint->SetEditHint(AAFCPEditHint);
 			pVaryingValue->AddControlPoint(pControlPoint);
 			pControlPoint->Release();
 			pControlPoint = NULL;
@@ -2726,10 +2742,6 @@ void Omf2Aaf::ConvertOMFVaryingValue(OMF2::omfSegObj_t segment,
 		OMF2::omfiIteratorDispose(OMFFileHdl, OMFIterator);
 	}
 	
-	// Need to translate other interpolators!!!
-	pInterp = pAAF->CreateInterpolationDefinition(pDictionary, LinearInterpolator);
-	pVaryingValue->SetInterpolationDefinition(pInterp);
-
 	DecIndentLevel();
 }
 
@@ -2762,6 +2774,7 @@ void Omf2Aaf::ConvertOMFNestedScope(OMF2::omfSegObj_t segment,
 	// Set Nested Scope Component properties.
 	IAAFDataDef * pDataDef = 0;
 	ConvertOMFDataDef(nsDatakind, &pDataDef);
+	AutoRelease<IAAFDataDef> pdatadef( pDataDef );
 	IAAFComponent*			pSegmentComp;
 	AAFCheck rc = pNestedScope->QueryInterface(IID_IAAFComponent, (void **)&pSegmentComp);
 	AutoRelease<IAAFComponent> pseg( pSegmentComp );
@@ -2820,11 +2833,11 @@ void Omf2Aaf::ConvertOMFScopeRef(OMF2::omfSegObj_t segment,
 	gpGlobals->pLogger->Log(kLogInfo,
 		"%sProcessing Scope reference of length = %ld\n ", gpGlobals->indentLeader, (int)srLength);
 	ConvertOMFDataDef(srDatakind, &pDataDef);
-	pScopeRef->QueryInterface(IID_IAAFComponent, (void **)&pSegmentComp);
-	pSegmentComp->SetDataDef(pDataDef);
-	pSegmentComp->SetLength(srLength);
-	pSegmentComp->Release();
-	pSegmentComp = NULL;
+  AutoRelease<IAAFDataDef> arDataDef(pDataDef);
+  rc = pScopeRef->QueryInterface(IID_IAAFComponent, (void **)&pSegmentComp);
+  AutoRelease<IAAFComponent> arSegmentComp(pSegmentComp);
+	rc = pSegmentComp->SetDataDef(pDataDef);
+	rc = pSegmentComp->SetLength(srLength);
 	
 	rc = pScopeRef->Create((aafUInt32)relScope, (aafUInt32)relSlot);
 	
@@ -2927,6 +2940,7 @@ void Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 	IAAFParameter*			pParameter = NULL;
 	IAAFParameterDef*		pParameterDef = NULL;
 	IAAFTypeDef*			typeDef = NULL;
+	IAAFTypeDef*			pParameterDefType = NULL;
 
 	IAAFDataDefSP  effectDataDef;
 	aafUID_t				effectDefAUID ;
@@ -2963,11 +2977,17 @@ void Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 		{
 			//			keyFrameSlot = OMF2_EFFE_PUBLIC_WITH_AVID_PRIVATE_DATA_KEYFRAME_SLOT;
 			//			globalSlot = OMF2_EFFE_PUBLIC_WITH_AVID_PRIVATE_DATA_GLOBAL_SLOT;
-			GetParameterDefinition((aafUID_t *)&kAAFParameterDefSpeedRatio, NULL, 
+			rc = pDictionary->LookupTypeDef(kAAFTypeID_Rational, &pParameterDefType);
+			{ // Use local block to narrow the scope of the AutoRelease object.
+				AutoRelease<IAAFTypeDef> tdef( pParameterDefType );
+				GetParameterDefinition((aafUID_t *)&kAAFParameterDefSpeedRatio, pParameterDefType, 
 				L"Speed Ratio", 
 				L"Defines the ratio of output length to input length. Range is -infinity to +infinity",
 				L" ",
 				&pParameterDef);
+			}
+			AutoRelease< IAAFParameterDef > pparamdef( pParameterDef );
+
 			pEffectDef->AddParameterDef(pParameterDef);
 			OMFError = OMF2::omfeVideoSpeedControlGetInfo(OMFFileHdl, effect, &effectLength, &inputSegmentA, &speedRatio, &phaseOffset);
 			if (inputSegmentA)
@@ -3007,11 +3027,16 @@ void Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 		{
 //			keyFrameSlot = OMF2_EFFE_PUBLIC_WITH_AVID_PRIVATE_DATA_KEYFRAME_SLOT;
 //			globalSlot = OMF2_EFFE_PUBLIC_WITH_AVID_PRIVATE_DATA_GLOBAL_SLOT;
-			GetParameterDefinition((aafUID_t *)&kAAFParameterDefPhaseOffset, NULL, 
+			rc = pDictionary->LookupTypeDef(kAAFTypeID_Int32, &pParameterDefType);
+			{ // Use local block to narrow the scope of the AutoRelease object.
+				AutoRelease<IAAFTypeDef> tdef( pParameterDefType );
+				GetParameterDefinition((aafUID_t *)&kAAFParameterDefPhaseOffset, pParameterDefType, 
 										L"PhaseOffset", 
 										L"Must be a constant Value. Default is 0",
 										L" ",
 										&pParameterDef);
+			}
+			AutoRelease< IAAFParameterDef > pparamdef( pParameterDef );
 			pEffectDef->AddParameterDef(pParameterDef);
 
 			if(OMF2::OM_ERR_NONE == OMF2::omfeVideoRepeatGetInfo(OMFFileHdl, effect, &effectLength, &inputSegmentA, &phaseOffset))
@@ -3036,39 +3061,33 @@ void Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 					rc = defs.cdConstantValue()->
 						CreateInstance(IID_IAAFConstantValue,
 						(IUnknown **)&pConstantValue);
-					pConstantValue->SetValue(sizeof(phaseOffset), (unsigned char *)&phaseOffset);
+					AutoRelease<IAAFConstantValue> arCV(pConstantValue);
+					rc = pConstantValue->Initialize (pParameterDef, sizeof(phaseOffset), (unsigned char *)&phaseOffset);
 					rc = pConstantValue->QueryInterface(IID_IAAFParameter, (void **)&pParameter);
-					pConstantValue->Release();
-					pConstantValue = NULL;
-					if (pParameter)
-					{
-						pParameter->SetParameterDefinition(pParameterDef);
-
-						pDictionary->LookupTypeDef(kAAFTypeID_Int32, &typeDef);
-						pParameter->SetTypeDefinition(typeDef);
-						typeDef->Release();
-						typeDef = NULL;
-
-						pEffect->AddParameter(pParameter);
-						pParameter->Release();
-						pParameter = NULL;
-					}
+					AutoRelease<IAAFParameter> arParam(pParameter);
+					rc = pEffect->AddParameter(pParameter);
 				}
 			}
-			pParameterDef->Release();
-			pParameterDef = NULL;
 		}
 		else if ((strcmp(effectID, "omfi:effect:VideoDissolve") == 0) ||
 				 (strcmp(effectID, "omfi:effect:SimpleVideoDissolve") == 0) )
 		{
 //			keyFrameSlot = OMF2_EFFE_PUBLIC_WITH_AVID_PRIVATE_DATA_KEYFRAME_SLOT;
 //			globalSlot = OMF2_EFFE_PUBLIC_WITH_AVID_PRIVATE_DATA_GLOBAL_SLOT;
-			GetParameterDefinition((aafUID_t *)&kAAFParameterDefLevel, NULL, 
+			// Parameter definition always needs a type definition! This is
+			// a required property. What is the appropriate type for this
+			// "Level" definition? (transdel 2000-MAR-07)
+			rc = pDictionary->LookupTypeDef(kAAFTypeID_Rational, &pParameterDefType);
+			{ // Use local block to narrow the scope of the AutoRelease object.
+				AutoRelease<IAAFTypeDef> tdef( pParameterDefType );
+				GetParameterDefinition((aafUID_t *)&kAAFParameterDefLevel, pParameterDefType, 
 										L"Level", 
 										L"Level, equal to mix ratio of B/A. Range is 0 to 1. The formula  P = (Level*B)+((1-Level)*A)",
 										L" ",
 										&pParameterDef);
-			pEffectDef->AddParameterDef(pParameterDef);
+			}
+			AutoRelease< IAAFParameterDef > pparamdef( pParameterDef );
+			rc = pEffectDef->AddParameterDef(pParameterDef);
 
 			if(OMF2::OM_ERR_NONE == OMF2::omfeVideoDissolveGetInfo(OMFFileHdl, effect,
 				&effectLength, &inputSegmentA, &inputSegmentB, &levelSegment))
@@ -3108,10 +3127,9 @@ void Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 						rc = defs.cdConstantValue()->
 							CreateInstance(IID_IAAFConstantValue,
 							(IUnknown **)&pConstantValue);
-						ConvertOMFConstValue(levelSegment, pConstantValue);
+						AutoRelease<IAAFConstantValue> arCV(pConstantValue);
+						ConvertOMFConstValue(levelSegment, pParameterDef, pConstantValue);
 						rc = pConstantValue->QueryInterface(IID_IAAFParameter, (void **)&pParameter);
-						pConstantValue->Release();
-						pConstantValue = NULL;
 					}
 					else if (OMF2::omfiIsAVaryValue(OMFFileHdl, levelSegment, &testErr))
 					{
@@ -3120,28 +3138,17 @@ void Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 						rc = defs.cdVaryingValue()->
 							CreateInstance(IID_IAAFVaryingValue,
 							(IUnknown **)&pVaryingValue);
-						ConvertOMFVaryingValue(levelSegment, pVaryingValue);
+						AutoRelease<IAAFVaryingValue> arVaryingValue(pVaryingValue);
+						ConvertOMFVaryingValue(levelSegment, pParameterDef, pVaryingValue);
 						rc = pVaryingValue->QueryInterface(IID_IAAFParameter, (void **)&pParameter);
-						pVaryingValue->Release();
-						pVaryingValue = NULL;
 					}
 					if (pParameter)
 					{
-						pParameter->SetParameterDefinition(pParameterDef);
-
-						pDictionary->LookupTypeDef(kAAFTypeID_Rational, &typeDef);
-						pParameter->SetTypeDefinition(typeDef);
-						typeDef->Release();
-						typeDef = NULL;
-						
-						pEffect->AddParameter(pParameter);
-						pParameter->Release();
-						pParameter = NULL;
+						AutoRelease<IAAFParameter> arParam(pParameter);
+						rc = pEffect->AddParameter(pParameter);
 					}
 				}
 			}
-			pParameterDef->Release();
-			pParameterDef = NULL;
 		}
 		else if (strcmp(effectID, "omfi:effect:SMPTEVideoWipe") == 0)
 		{
@@ -3149,68 +3156,60 @@ void Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 			//			globalSlot = OMF2_EFFE_PUBLIC_WITH_AVID_PRIVATE_DATA_GLOBAL_SLOT;
 			wipeNumber = 0;
 			memset(&wipeArgs, 0, sizeof(wipeArgs));
-			GetParameterDefinition((aafUID_t *)&kAAFParameterDefSMPTEWipeNumber, NULL, 
-				L"Wipe Number", 
-				L"SMPTE Wipe Number. No Default",
-				L" ",
-				&pParameterDef);
-			pEffectDef->AddParameterDef(pParameterDef);
-			
-			OMFError = OMF2::omfeSMPTEVideoWipeGetInfo(OMFFileHdl, effect, &effectLength, &inputSegmentA, &inputSegmentB, &levelSegment, &wipeNumber, &wipeArgs);
-			if (wipeNumber)
 			{
-				IAAFConstantValue* pConstantValue = NULL;
+				rc = pDictionary->LookupTypeDef(kAAFTypeID_Int32, &pParameterDefType);
+				{ // Use local block to narrow the scope of the AutoRelease object.
+					AutoRelease<IAAFTypeDef> arTypeDef(pParameterDefType);
+					GetParameterDefinition((aafUID_t *)&kAAFParameterDefSMPTEWipeNumber, pParameterDefType, 
+						L"Wipe Number", 
+						L"SMPTE Wipe Number. No Default",
+						L" ",
+						&pParameterDef);
+				}
+				AutoRelease< IAAFParameterDef > pparamdef( pParameterDef );
+				rc = pEffectDef->AddParameterDef(pParameterDef);
 				
+				OMFError = OMF2::omfeSMPTEVideoWipeGetInfo(OMFFileHdl, effect, &effectLength, &inputSegmentA, &inputSegmentB, &levelSegment, &wipeNumber, &wipeArgs);
+				if (wipeNumber)
+				{
+					IAAFConstantValue* pConstantValue = NULL;
+					
+					rc = defs.cdConstantValue()->
+						CreateInstance(IID_IAAFConstantValue,
+						(IUnknown **)&pConstantValue);
+					AutoRelease<IAAFConstantValue> arCV(pConstantValue);
+					rc = pConstantValue->Initialize (pParameterDef, sizeof(wipeNumber), (unsigned char *)&wipeNumber);
+					rc = pConstantValue->QueryInterface(IID_IAAFParameter, (void **)&pParameter);
+					AutoRelease<IAAFParameter> arParam(pParameter);
+					rc = pEffect->AddParameter(pParameter);
+				}
+			}
+			
+			{
+				//
+				IAAFConstantValue* pConstantValue = NULL;
+				unsigned char	reverse = wipeArgs.reverse;
+
+				rc = pDictionary->LookupTypeDef(kAAFTypeID_Boolean, &pParameterDefType);
+				{ // Use local block to narrow the scope of the AutoRelease object.
+					AutoRelease<IAAFTypeDef> arTypeDef(pParameterDefType);
+					GetParameterDefinition((aafUID_t *)&kAAFParameterDefSMPTEReverse, pParameterDefType, 
+						L"Reverse", 
+						L"SMPTE Reverse. Default FALSE",
+						L" ",
+						&pParameterDef);
+				}
+				AutoRelease< IAAFParameterDef > pparamdef( pParameterDef );
+				pEffectDef->AddParameterDef(pParameterDef);
 				rc = defs.cdConstantValue()->
 					CreateInstance(IID_IAAFConstantValue,
 					(IUnknown **)&pConstantValue);
-				pConstantValue->SetValue(sizeof(wipeNumber), (unsigned char *)&wipeNumber);
+				AutoRelease<IAAFConstantValue> arCV(pConstantValue);
+				rc = pConstantValue->Initialize (pParameterDef, sizeof(reverse), &reverse);
 				rc = pConstantValue->QueryInterface(IID_IAAFParameter, (void **)&pParameter);
-				pEffect->AddParameter(pParameter);
-				pParameter->SetParameterDefinition(pParameterDef);
-				pDictionary->LookupTypeDef(kAAFTypeID_Int32, &typeDef);
-				pParameter->SetTypeDefinition(typeDef);
-				typeDef->Release();
-				typeDef = NULL;
-				
-				pConstantValue->Release();
-				pConstantValue = NULL;
-				
-				
-				pParameter->Release();
-				pParameter = NULL;
+				AutoRelease<IAAFParameter> arParam(pParameter);
+				rc = pEffect->AddParameter(pParameter);
 			}
-			pParameterDef->Release();
-			pParameterDef = NULL;
-			
-			//
-			IAAFConstantValue* pConstantValue = NULL;
-			unsigned char	reverse = wipeArgs.reverse;
-			GetParameterDefinition((aafUID_t *)&kAAFParameterDefSMPTEReverse, NULL, 
-				L"Reverse", 
-				L"SMPTE Reverse. Default FALSE",
-				L" ",
-				&pParameterDef);
-			pEffectDef->AddParameterDef(pParameterDef);
-			rc = defs.cdConstantValue()->
-				CreateInstance(IID_IAAFConstantValue,
-				(IUnknown **)&pConstantValue);
-			pConstantValue->SetValue(sizeof(reverse), &reverse);
-			rc = pConstantValue->QueryInterface(IID_IAAFParameter, (void **)&pParameter);
-			pEffect->AddParameter(pParameter);
-			pParameter->SetParameterDefinition(pParameterDef);
-			pDictionary->LookupTypeDef(kAAFTypeID_Boolean, &typeDef);
-			pParameter->SetTypeDefinition(typeDef);
-			typeDef->Release();
-			typeDef = NULL;
-			
-			pConstantValue->Release();
-			pConstantValue = NULL;
-			
-			pParameter->Release();
-			pParameter = NULL;
-			pParameterDef->Release();
-			pParameterDef = NULL;
 			
 			//
 			// port other wipeArgs over
@@ -3244,6 +3243,18 @@ void Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 			}
 			if (levelSegment)
 			{
+				// Need parameter definition before we create parameters.
+				rc = pDictionary->LookupTypeDef(kAAFTypeID_Rational, &pParameterDefType);
+				{	// Use local block to narrow the scope of the AutoRelease object.
+					AutoRelease<IAAFTypeDef> arTypeDef(pParameterDefType);
+					GetParameterDefinition((aafUID_t *)&kAAFParameterDefLevel, pParameterDefType, 
+						L"Level", 
+						L"Level, equal to mix ratio of B/A. Range is 0 to 1. The formula  P = (Level*B)+((1-Level)*A)",
+						L" ",
+						&pParameterDef);
+				}
+				AutoRelease< IAAFParameterDef > pparamdef( pParameterDef );
+
 				if (OMF2::omfiIsAConstValue(OMFFileHdl, levelSegment, &testErr))
 				{
 					IAAFConstantValue* pConstantValue = NULL;
@@ -3251,10 +3262,9 @@ void Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 					rc = defs.cdConstantValue()->
 						CreateInstance(IID_IAAFConstantValue,
 						(IUnknown **)&pConstantValue);
-					ConvertOMFConstValue(levelSegment, pConstantValue);
+					AutoRelease<IAAFConstantValue> arCV(pConstantValue);
+					ConvertOMFConstValue(levelSegment, pParameterDef, pConstantValue);
 					rc = pConstantValue->QueryInterface(IID_IAAFParameter, (void **)&pParameter);
-					pConstantValue->Release();
-					pConstantValue = NULL;
 				}
 				else if (OMF2::omfiIsAVaryValue(OMFFileHdl, levelSegment, &testErr))
 				{
@@ -3263,29 +3273,17 @@ void Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 					rc = defs.cdVaryingValue()->
 						CreateInstance(IID_IAAFVaryingValue,
 						(IUnknown **)&pVaryingValue);
-					ConvertOMFVaryingValue(levelSegment, pVaryingValue);
+					AutoRelease<IAAFVaryingValue> arVaryingValue(pVaryingValue);
+					ConvertOMFVaryingValue(levelSegment, pParameterDef, pVaryingValue);
 					rc = pVaryingValue->QueryInterface(IID_IAAFParameter, (void **)&pParameter);
-					pVaryingValue->Release();
-					pVaryingValue = NULL;
 				}
-				GetParameterDefinition((aafUID_t *)&kAAFParameterDefLevel, NULL, 
-					L"Level", 
-					L"Level, equal to mix ratio of B/A. Range is 0 to 1. The formula  P = (Level*B)+((1-Level)*A)",
-					L" ",
-					&pParameterDef);
-				pParameter->SetParameterDefinition(pParameterDef);
 				
-				pDictionary->LookupTypeDef(kAAFTypeID_Rational, &typeDef);
-				pParameter->SetTypeDefinition(typeDef);
-				typeDef->Release();
-				typeDef = NULL;
-				
-				pEffect->AddParameter(pParameter);
-				pEffectDef->AddParameterDef(pParameterDef);
-				pParameterDef->Release();
-				pParameterDef = NULL;
-				pParameter->Release();
-				pParameter = NULL;
+				if (pParameter)
+				{
+					AutoRelease<IAAFParameter> arParam(pParameter);
+					rc = pEffect->AddParameter(pParameter);
+					rc = pEffectDef->AddParameterDef(pParameterDef); // Why isn't this called sooner like most of the othe blocks?
+				}
 			}
 		}
 		else if ((strcmp(effectID, "omfi:effect:MonoAudioDissolve") == 0) ||
@@ -3293,12 +3291,17 @@ void Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 		{
 //			keyFrameSlot = OMF2_EFFE_PUBLIC_WITH_AVID_PRIVATE_DATA_KEYFRAME_SLOT;
 //			globalSlot = OMF2_EFFE_PUBLIC_WITH_AVID_PRIVATE_DATA_GLOBAL_SLOT;
-			GetParameterDefinition((aafUID_t *)&kAAFParameterDefLevel, NULL, 
+			rc = pDictionary->LookupTypeDef(kAAFTypeID_Rational, &pParameterDefType);
+			{	// Use local block to narrow the scope of the AutoRelease object.
+				AutoRelease<IAAFTypeDef> arTypeDef(pParameterDefType);
+				GetParameterDefinition((aafUID_t *)&kAAFParameterDefLevel, pParameterDefType, 
 										L"Level", 
 										L"Level, equal to mix ratio of B/A. Range is 0 to 1. The formula  P = (Level*B)+((1-Level)*A)",
 										L" ",
 										&pParameterDef);
-			pEffectDef->AddParameterDef(pParameterDef);
+			}
+			AutoRelease< IAAFParameterDef > pparamdef( pParameterDef );
+			rc = pEffectDef->AddParameterDef(pParameterDef);
 
 			if(OMF2::OM_ERR_NONE == OMF2::omfeMonoAudioDissolveGetInfo(OMFFileHdl, effect, &effectLength, &inputSegmentA, &inputSegmentB, &levelSegment))
 			{
@@ -3337,10 +3340,9 @@ void Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 						rc = defs.cdConstantValue()->
 							CreateInstance(IID_IAAFConstantValue,
 							(IUnknown **)&pConstantValue);
-						ConvertOMFConstValue(levelSegment, pConstantValue);
+						AutoRelease<IAAFConstantValue> arCV(pConstantValue);
+						ConvertOMFConstValue(levelSegment, pParameterDef, pConstantValue);
 						rc = pConstantValue->QueryInterface(IID_IAAFParameter, (void **)&pParameter);
-						pConstantValue->Release();
-						pConstantValue = NULL;
 					}
 					else if (OMF2::omfiIsAVaryValue(OMFFileHdl, levelSegment, &testErr))
 					{
@@ -3349,28 +3351,21 @@ void Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 						rc = defs.cdVaryingValue()->
 							CreateInstance(IID_IAAFVaryingValue,
 							(IUnknown **)&pVaryingValue);
-						ConvertOMFVaryingValue(levelSegment, pVaryingValue);
+						AutoRelease<IAAFVaryingValue> arVaryingValue(pVaryingValue);
+						ConvertOMFVaryingValue(levelSegment, pParameterDef, pVaryingValue);
 						rc = pVaryingValue->QueryInterface(IID_IAAFParameter, (void **)&pParameter);
-						pVaryingValue->Release();
-						pVaryingValue = NULL;
 					}
-					pParameter->SetParameterDefinition(pParameterDef);
 
-					pDictionary->LookupTypeDef(kAAFTypeID_Rational, &typeDef);
-					pParameter->SetTypeDefinition(typeDef);
-					typeDef->Release();
-					typeDef = NULL;
-					
-					pEffect->AddParameter(pParameter);
-					pParameter->Release();
-					pParameter = NULL;
+					if (pParameter)
+					{
+						AutoRelease<IAAFParameter> arParam(pParameter);
+						rc = pEffect->AddParameter(pParameter);
+					}
 				}
 			}
 			else
 				OMFError = OMF2::OM_ERR_NONE;
 
-			pParameterDef->Release();
-			pParameterDef = NULL;
 		}
 		else if (strcmp(effectID, "omfi:effect:MonoAudioGain") == 0)
 //		else if(0 /*processUnknownEffects*/)	// Add a flag to this routine, false when called from a subclass
@@ -3394,13 +3389,17 @@ void Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 			gpGlobals->pLogger->Log( kLogInfo,
 				"%sGeneric OMF Effect = %s\n ", gpGlobals->indentLeader, effectID);
 			// this is just as default parameter definition !!!
-			GetParameterDefinition((aafUID_t *)&kAAFParameterDefLevel, NULL, 
+			rc = pDictionary->LookupTypeDef(kAAFTypeID_Rational, &pParameterDefType);
+			{ // Use local block to narrow the scope of the AutoRelease object.
+				AutoRelease<IAAFTypeDef> tdef( pParameterDefType );
+				GetParameterDefinition((aafUID_t *)&kAAFParameterDefLevel, pParameterDefType, 
 										L"Level", 
 										L"Level, equal to mix ratio of B/A. Range is 0 to 1. The formula  P = (Level*B)+((1-Level)*A)",
 										L" ",
 										&pParameterDef);
-
-			pEffectDef->AddParameterDef(pParameterDef);
+			}
+			AutoRelease< IAAFParameterDef > pparamdef( pParameterDef );
+			rc = pEffectDef->AddParameterDef(pParameterDef);
 		
 			OMFError = OMF2::omfiEffectGetNumSlots(OMFFileHdl, effect, &numSlots);;
 			if (numSlots > 0)
@@ -3419,19 +3418,11 @@ void Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 							rc = defs.cdConstantValue()->
 								CreateInstance(IID_IAAFConstantValue,
 								(IUnknown **)&pConstantValue);
-							ConvertOMFConstValue(argValue, pConstantValue);
+							AutoRelease<IAAFConstantValue> arCV(pConstantValue);
+							ConvertOMFConstValue(argValue, pParameterDef, pConstantValue);
 							rc = pConstantValue->QueryInterface(IID_IAAFParameter, (void **)&pParameter);
-							pConstantValue->Release();
-							pConstantValue = NULL;
-							if (pParameter)
-							{
-								pParameter->SetParameterDefinition(pParameterDef);
-								
-								//!!! Set parameter type (see other parameter)
-								pEffect->AddParameter(pParameter);
-								pParameter->Release();
-								pParameter = NULL;
-							}
+							AutoRelease<IAAFParameter> arParam(pParameter);
+							rc = pEffect->AddParameter(pParameter);
 						}
 						else if (OMF2::omfiIsAVaryValue(OMFFileHdl, argValue, &testErr))
 						{
@@ -3440,18 +3431,11 @@ void Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 							rc = defs.cdVaryingValue()->
 								CreateInstance(IID_IAAFVaryingValue,
 								(IUnknown **)&pVaryingValue);
-							ConvertOMFVaryingValue(argValue, pVaryingValue);
+							AutoRelease<IAAFVaryingValue> arVaryingValue(pVaryingValue);
+							ConvertOMFVaryingValue(argValue, pParameterDef, pVaryingValue);
 							rc = pVaryingValue->QueryInterface(IID_IAAFParameter, (void **)&pParameter);
-							pVaryingValue->Release();
-							pVaryingValue = NULL;
-							if (pParameter)
-							{
-								pParameter->SetParameterDefinition(pParameterDef);
-								//!!! Set parameter type (see other parameter)
-								pEffect->AddParameter(pParameter);
-								pParameter->Release();
-								pParameter = NULL;
-							}
+							AutoRelease<IAAFParameter> arParam(pParameter);
+							rc = pEffect->AddParameter(pParameter);
 						}
 						else
 						{
@@ -3471,8 +3455,6 @@ void Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 				}
 				OMFError = OMF2::omfiIteratorDispose(OMFFileHdl, OMFIterator);
 			}
-			if (pParameterDef)
-				pParameterDef->Release();
 			
 		}
 
@@ -3644,12 +3626,11 @@ void Omf2Aaf::GetParameterDefinition(aafUID_t* pDefUID,
 {
 	AAFCheck				rc;
 
-//	IAAFTypeDef*		ptmpTypeDef = NULL;
 	IAAFParameterDef*	ptmpParameterDef = NULL;
 
 	// Verify that we did not got any NULL pointers
-//	if ( (pDefUID == NULL) || (pTypeDef == NULL) || 
-	if ( (pDefUID == NULL) ||  
+	if ( (pDefUID == NULL) || (pTypeDef == NULL) || // the type definition is a required property for parameter defintions!
+//	if ( (pDefUID == NULL) ||  
 		 (pwName == NULL) || (pwDesc == NULL) ||
 		 (pwDisplayUnits == NULL) || (ppParameterDef == NULL))
 		 rc = AAFRESULT_NULL_PARAM;
@@ -3663,10 +3644,11 @@ void Omf2Aaf::GetParameterDefinition(aafUID_t* pDefUID,
 		defs.cdParameterDef()->
 		  CreateInstance(IID_IAAFParameterDef,
 						 (IUnknown **) &ptmpParameterDef);
-		ptmpParameterDef->Initialize(*pDefUID, pwName, pwDesc);
-		ptmpParameterDef->SetDisplayUnits(pwDisplayUnits);
-//		ptmpParameterDef->SetTypeDef(pTypeDef);
+		AutoRelease<IAAFParameterDef> arPropertyDef( ptmpParameterDef );
+		rc = ptmpParameterDef->Initialize(*pDefUID, pwName, pwDesc, pTypeDef);
+		rc = ptmpParameterDef->SetDisplayUnits(pwDisplayUnits);
 		rc = pDictionary->RegisterParameterDef(ptmpParameterDef);
+		ptmpParameterDef->AddRef (); // bump the refCount to 2 so auto release will reduce it back to one.
 	}
 
 	*ppParameterDef = ptmpParameterDef;
