@@ -563,6 +563,7 @@ void OMFile::close(void)
 {
   TRACE("OMFile::close");
   PRECONDITION("Open", isOpen());
+  PRECONDITION("Valid root", _root != 0);
 
   _root->close();
 
@@ -605,7 +606,7 @@ bool OMFile::isValid(void) const
 OMStorable* OMFile::clientRoot(void)
 {
   TRACE("OMFile::clientRoot");
-
+  PRECONDITION("Valid root", _root != 0);
   OMStorable* result;
   result = _root->clientRoot();
   return result;
@@ -1006,6 +1007,7 @@ OMFile::OMFile(const wchar_t* fileName,
   TRACE("OMFile::OMFile");
 
   PRECONDITION("Valid file name", validWideString(fileName));
+  PRECONDITION("Valid root", _root != 0);
   PRECONDITION("Valid dictionary", _dictionary != 0);
   _fileName = saveWideString(fileName);
   setClassFactory(factory);
@@ -1087,6 +1089,7 @@ OMFile::OMFile(OMRawStorage* rawStorage,
 
   PRECONDITION("Valid dictionary", _dictionary != 0);
   PRECONDITION("Valid raw storage", rawStorage != 0);
+  PRECONDITION("Valid root", _root != 0);
   PRECONDITION("Consistent access modes",
                      IMPLIES(((mode == modifyMode) || (mode == writeOnlyMode)),
                      rawStorage->isWritable()));
@@ -1234,6 +1237,7 @@ void OMFile::createModify(void)
     _rootStore = OMXMLStoredObject::createModify(_rawStorage, _byteOrder);
     break;
   }
+  ASSERT("Valid root", _root != 0);
   ASSERT("Valid store", _rootStore != 0);
   _root->setStore(_rootStore);
 }
@@ -1257,6 +1261,7 @@ void OMFile::createWrite(void)
     _rootStore = OMXMLStoredObject::createWrite(_rawStorage, _byteOrder);
     break;
   }
+  ASSERT("Valid root", _root != 0);
   ASSERT("Valid store", _rootStore != 0);
   _root->setStore(_rootStore);
 }
