@@ -3,7 +3,6 @@
 #ifndef __ImplEnumAAFLocators_h__
 #define __ImplEnumAAFLocators_h__
 
-#include "OMStorable.h"
 
 /******************************************\
 *                                          *
@@ -97,10 +96,6 @@ public:
 
 
 public:
-  // Declare this class to be storable.
-  //
-  OMDECLARE_STORABLE(ImplEnumAAFLocators)
-
   // Declare the module test method. The implementation of the will be be
   // in /test/ImplEnumAAFLocatorsTest.cpp.
   static AAFRESULT test();

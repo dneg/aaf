@@ -289,8 +289,3 @@ AAFRESULT
 
 	return AAFRESULT_SUCCESS;
 }
-
-extern "C" const aafClassID_t CLSID_EnumAAFComponents;
-
-OMDEFINE_STORABLE(ImplEnumAAFComponents, CLSID_EnumAAFComponents);
-

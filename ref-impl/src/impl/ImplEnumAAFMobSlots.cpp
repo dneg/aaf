@@ -179,8 +179,3 @@ AAFRESULT
 
 	return AAFRESULT_SUCCESS;
 }
-
-extern "C" const aafClassID_t CLSID_EnumAAFMobSlots;
-
-OMDEFINE_STORABLE(ImplEnumAAFMobSlots, CLSID_EnumAAFMobSlots);
-

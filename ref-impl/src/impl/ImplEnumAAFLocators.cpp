@@ -137,9 +137,3 @@ AAFRESULT
 		pEDesc->AcquireReference();
 	return AAFRESULT_SUCCESS;
 }
-
-
-extern "C" const aafClassID_t CLSID_EnumAAFLocators;
-
-OMDEFINE_STORABLE(ImplEnumAAFLocators, CLSID_EnumAAFLocators);
-

@@ -3,7 +3,6 @@
 #ifndef __ImplEnumAAFMobs_h__
 #define __ImplEnumAAFMobs_h__
 
-#include "OMStorable.h"
 
 /******************************************\
 *                                          *
@@ -82,10 +81,6 @@ public:
 
 
 public:
-  // Declare this class to be storable.
-  //
-  OMDECLARE_STORABLE(ImplEnumAAFMobs)
-
   // Declare the module test method. The implementation of the will be be
   // in /test/ImplEnumAAFMobsTest.cpp.
   static AAFRESULT test();

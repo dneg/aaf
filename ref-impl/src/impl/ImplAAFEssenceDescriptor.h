@@ -3,7 +3,6 @@
 #ifndef __ImplAAFEssenceDescriptor_h__
 #define __ImplAAFEssenceDescriptor_h__
 
-#include "OMStorable.h"
 
 /******************************************\
 *                                          *
@@ -40,7 +39,6 @@ class ImplEnumAAFLocators;
 #include "ImplAAFLocator.h"
 #endif
 
-#include "OMProperty.h"
 
 
 class ImplAAFEssenceDescriptor : public ImplAAFObject
@@ -112,10 +110,6 @@ public:
   // Declare the module test method. The implementation of the will be be
   // in /test/ImplAAFEssenceDescriptorTest.cpp.
   static AAFRESULT test();
-
-  // Return this object's stored object class.
-  virtual AAFRESULT STDMETHODCALLTYPE
-	GetObjectClass(aafUID_t * pClass);
 
 public:
 	// Functions internal to the toolkit
