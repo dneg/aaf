@@ -354,7 +354,7 @@ void HeaderTest::createFile(wchar_t *pFileName)
   check(_pHeader->GetLastModified(&timeStamp));
 
   // CountIdentifications
-  aafUInt32	numIdents = NULL;
+  aafUInt32	numIdents = 0;
   checkhr(_pHeader->CountIdentifications(NULL), AAFRESULT_NULL_PARAM);
   check(_pHeader->CountIdentifications(&numIdents));
   checkhr(1 == numIdents, true);

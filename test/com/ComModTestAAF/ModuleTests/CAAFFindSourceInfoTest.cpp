@@ -489,8 +489,8 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 				//NOw, simply test the methods on the (final) SourceInfo intf.
 				aafRational_t si_editRate = {-1};
 				aafLength_t  si_length = {-1};
-				aafSourceRef_t  si_sourceRef = {-1};
-				aafMobID_t  si_MobID = {-1};
+				aafSourceRef_t  si_sourceRef = {0};
+				aafMobID_t  si_MobID = {0};
 
 				//Call the methods
 				pSourceInfo->GetEditRate( &si_editRate);

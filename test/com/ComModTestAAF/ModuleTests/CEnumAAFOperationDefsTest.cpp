@@ -88,11 +88,11 @@ inline void resetFoundArray(bool *bFoundArray)
 
 inline void setAUIDtoNULL(aafUID_t *anAUID)
 {		
-	anAUID->Data1 = NULL;
-	anAUID->Data2 = NULL;
-	anAUID->Data3 = NULL;
+	anAUID->Data1 = 0;
+	anAUID->Data2 = 0;
+	anAUID->Data3 = 0;
 	for (int i=0; i < 8; ++i)
-		anAUID->Data4[i] = NULL;
+		anAUID->Data4[i] = 0;
 }
 
 #define TEST_NUM_INPUTS		1
