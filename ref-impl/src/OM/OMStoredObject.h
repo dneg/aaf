@@ -422,6 +422,14 @@ public:
     // @cmember Close <p stream>.
   void closeStream(IStream*& stream);
 
+    // @cmember The persisted value of <p property> is its name.
+    //          Write the property name and enter it into the property index.
+  void saveName(const OMProperty& property, const wchar_t* name);
+
+    // @cmember The persisted value of <p property> is its name.
+    //          Read (and check) the property name.
+  void restoreName(OMProperty& property, const wchar_t* name, size_t size);
+
   static void mapCharacters(wchar_t* name, size_t nameLength);
 
   static void mangleName(const wchar_t* clearName,
