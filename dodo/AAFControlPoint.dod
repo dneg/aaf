@@ -1,0 +1,70 @@
+#startm .this-module 0
+AAFControlPoint\
+#endm
+#c
+#startm .parent-module 0
+AAFObject\
+#endm
+#c
+#import ./AAFUnitTest.exp
+AD_HEAD
+/******************************************\
+*                                          *
+* Advanced Authoring Format                *
+*                                          *
+* Copyright (c) 1998 Avid Technology, Inc. *
+* Copyright (c) 1998 Microsoft Corporation *
+*                                          *
+\******************************************/
+
+AD_CLASS_BEGIN
+
+AD_METHOD1(GetTime,
+		   [retval][out],
+		   aafRational_t *,
+		   pTime,
+		   Pointer to an aafRational_t,
+		   Returns the Time of control point.)
+
+AD_METHOD1(GetEditHint,
+		   [retval][out],
+		   aafEditHint_t *,
+		   pEditHint,
+		   Pointer to an aafEditHint_t,
+		   Returns the edit hint of control point.)
+
+AD_METHOD1(GetDatakind,
+		   [retval][out],
+		   AAFDatakind *,
+		   pDatakind,
+		   Pointer to a Datakind object,
+		   Returns the Datakind object of the control point.)
+
+AD_METHOD3(GetValue,
+		   [in],int32, valueSize, value size,
+		   [retval][out], pBytesRead, Pointer to actual bytes read, 
+		   [retval][out],void *, pValue, Preallocated buffer to hold value,
+		   Returns the data value of the control point.)
+
+AD_METHOD1(SetTime,
+		   [in],  aafRational_t, Time,Control Point time,
+		   Sets the control point time value.)
+
+AD_METHOD1(SetEditHint,
+		   [in],  aafEditHint_t, editHint,Control Point Edit hint,
+		   Sets the control point Edit hint value.)
+
+AD_METHOD1(SetDatakind,
+		   [in],  AAFDatakind *, datakind,Control Point datakind,
+		   Sets the control point datakind value.)
+
+AD_METHOD2(SetValue,
+		   [in],int32, valueSize, value size,
+		   [in],void *, pValue, Preallocated buffer to hold value,
+		   Sets the control point data value.)
+
+AD_OVERRIDE(.method-Test)
+
+
+AD_CLASS_END
+

@@ -1,0 +1,45 @@
+#startm .this-module 0
+AAFVaryingValue\
+#endm
+#c
+#startm .parent-module 0
+AAFParameter\
+#endm
+#c
+#import ./AAFUnitTest.exp
+AD_HEAD
+/******************************************\
+*                                          *
+* Advanced Authoring Format                *
+*                                          *
+* Copyright (c) 1998 Avid Technology, Inc. *
+* Copyright (c) 1998 Microsoft Corporation *
+*                                          *
+\******************************************/
+AD_CLASS_BEGIN
+
+AD_METHOD5(AddPoint,
+		   [in],AAFRational_t, time, time for Control Point,
+		   [in],AAFEditHint_t, editHint, Edit hint,
+		   [in],AAFDatakind *, datakind, pointer to datakind object,
+		   [in],AAFInt32, valueSize, Size of value data,
+		   [in],void *, pValue, Ponter to the value data,
+		   This function adds a control point in time order into a varying
+		   // value object.)
+
+AD_METHOD1(GetInfo,
+		   [retval][out],AAFDatakind *, pDatakind, Number of Control Points,
+		   This function gets the number of control points in the varying
+		   // value object.)
+
+AD_METHOD3(GetNumPoints,
+		   [retval][out],AAFInt32 *, pNumPoints, Datakind definition object,
+		   [out], AAFLength *, pLength, Length of varying value object,
+		   [out], AAFInterpKind_t *, pInterpolation, Interpolation method,
+		   This function returns the required property values for the varying
+		   // value object.)
+
+AD_OVERRIDE(.method-Test)
+
+AD_CLASS_END
+
