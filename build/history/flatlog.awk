@@ -19,7 +19,9 @@
 # $ grep Build-0505 Everything.flog | \ 
 #   sort -r -k 3 -k 4 | \ 
 #   head -n 1 | \ 
-#   awk '{print $3 $4}'
+#   awk '{printf("%s %s %s\n", $7, $3, $4)}'
+# Build-0505 2002/05/29 21:23:58
+# $
 #
 # Functionality : Flattening the log includes -
 #
