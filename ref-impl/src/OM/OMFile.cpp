@@ -279,6 +279,8 @@ OMObjectDirectory* OMFile::objectDirectory(void)
   //   @this const
 OMByteOrder OMFile::byteOrder(void) const
 {
+  TRACE("OMFile::byteOrder");
+
   ASSERT("Valid root", _rootStoredObject != 0);
   return _rootStoredObject->byteOrder();
 }
