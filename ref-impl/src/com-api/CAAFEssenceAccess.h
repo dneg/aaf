@@ -381,13 +381,14 @@ public:
     // @parm [in] aafUInt16 | arrayElemCount | number of elements in the array of transfer operations
     aafUInt16  arrayElemCount,
 
-    // @parm [in,size_is(arrayElemCount)] aafmMultiXfer_t * | xferArray | points to an array of transfer parameters.  All fields in this
+    // @parm [in,size_is(arrayElemCount)] aafmMultiXfer_t * | xferArray | Points to an array of transfer parameters.  All fields in this
     // array except for bytesXferred must be set up before doing the
     // transfer.  Some of the fields in the xferArray structure are
     // status results like bytesXferred and samplesXferred.
     //
     // The multiXfer_t structure has the following fields, which
-	// specify one channel of data: 
+    // specify one channel of data: 
+    //
     //   essenceDef    [IN] -- The essence type definition
     //   physical      [IN] -- The physical input-output channel
     //   numSamples    [IN] -- The number of samples to transfer
@@ -395,8 +396,9 @@ public:
     //   buffer        [IN] -- The buffer for this
     aafmMultiXfer_t *  xferArray,
 
-    // @parm [out,size_is(arrayElemCount)] aafmMultiResult_t * | resultArray | put results into this array.  It has the following fields,
+    // @parm [out,size_is(arrayElemCount)] aafmMultiResult_t * | resultArray | Put results into this array.  It has the following fields,
     // which return result for one channel of data:
+    //
     //   bytesXfered   [OUT] -- The total number of bytes transferred
     //   samplesXfered [OUT] -- The total number of samples transferred
     aafmMultiResult_t *  resultArray
@@ -411,7 +413,8 @@ public:
   // Reads one or more channels from an interleaved data stream.
   // Possible Errors:
   //
-  // Standard errors (see top of file).
+  //   Standard errors (see top of file).
+  //
   //   AAFRESULT_END_OF_ESSENCE -- Hit the end of the essence (like
   //                               EOF) while reading.
   // @end
@@ -423,24 +426,26 @@ public:
 
     // @parm [in, size_is(elemCount)] aafmMultiXfer_t * | xferArray | Points to an array of transfer parameters.  All fields in this
     // array except for bytesXferred must be set up before doing the
-	// transfer.  Some of the fields in the xferArray structure are
-	// status results like bytesXferred and samplesXferred.
+    // transfer.  Some of the fields in the xferArray structure are
+    // status results like bytesXferred and samplesXferred.
     //
     // The multiXfer_t structure has the following fields, which
-	// specify one channel of data:
-    // essenceDef  [IN] -- The essence type definition
-    // physical    [IN] -- The physical input-output channel
-    // numSamples  [IN] -- The number of samples to transfer
-    // buflen      [IN] -- The size of the buffer
-    // buffer      [IN] -- The buffer for this
+    // specify one channel of data:
+    //
+    //     - essenceDef  [IN] -- The essence type definition
+    //     - physical    [IN] -- The physical input-output channel
+    //     - numSamples  [IN] -- The number of samples to transfer
+    //     - buflen      [IN] -- The size of the buffer
+    //     - buffer      [IN] -- The buffer for this
     aafmMultiXfer_t *  xferArray,
 
     // @parm [out, size_is(elemCount)] aafmMultiResult_t * | resultArray | Results go into this array.
     //
     // The aafmMultiResult_t structure has the following fields,
-	// which return result for one channel of data: 
-    // bytesXfered   [OUT] -- The total number of bytes transferred
-    // samplesXfered [OUT] -- The total number of samples transferred
+    // which return result for one channel of data: 
+    //
+    //     - bytesXfered   [OUT] -- The total number of bytes transferred
+    //     - samplesXfered [OUT] -- The total number of samples transferred
     aafmMultiResult_t *  resultArray
   );
 

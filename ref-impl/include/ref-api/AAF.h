@@ -32604,7 +32604,12 @@ DECLARE_INTERFACE_(IAAFTypeDefVariableArrayEx, IUnknown)
   // Attempts to load the given implementation of AAF into
   // the processes address space. Only one implementation
   // of AAF can be active. Note: once AAFUnload has been
-  // called all
+  // called all subsequent access to AAF interfaces will fail
+  //
+  // To use this function link to the stub library aaf.lib
+  // (or aafd.lib for the debugging version). 
+  // If the client is statically linking to the AAF dll's export
+  // library then the function will always succeed.
   // 
   STDAPI AAFLoad (
     // Pointer to the name of AAF dll to load.
@@ -32632,14 +32637,14 @@ DECLARE_INTERFACE_(IAAFTypeDefVariableArrayEx, IUnknown)
   // AAFFileOpenExistingRead()
   //
   // Creates an object associated with with an existing filesystem
-  // file that contains data which is only to be read.  Does the
-  // following:
+  // file that contains data which is only to be read.
+  // Does the following:
+  //
   // - Opens the existing named file in the filesystem for reading.
   // - Associates an object with that filesystem file.
   // - Places the object into the Open-read-only state.
   // - This AAFFile object then can be used as the root of the
-  //   containment tree representing all AAF objects contained within
-  //   the file.
+  //   containment tree representing all AAF objects contained within the file.
   //
   // Succeeds if:
   // - The pFileName argument is valid.
@@ -32648,8 +32653,7 @@ DECLARE_INTERFACE_(IAAFTypeDefVariableArrayEx, IUnknown)
   // - The named file exists in the filesystem.
   // - The named filesystem file is readable.
   // - The named file represents itself as a valid AAF file.  Even if
-  //   this succeeds, it is not guaranteed that the named file is in
-  //   fact a valid AAF file.
+  //   this succeeds, it is not guaranteed that the named file is in fact a valid AAF file.
   //
   // This function will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -32684,6 +32688,7 @@ DECLARE_INTERFACE_(IAAFTypeDefVariableArrayEx, IUnknown)
 
     // File open mode flags.  May be any of the following ORed
     // together.  All other bits must be set to zero.
+    //
     //  - kAAFFileModeUnbuffered - to indicate buffered mode.  Default
     //    is buffered.
     /*[in]*/ aafUInt32  modeFlags,
@@ -32700,13 +32705,13 @@ DECLARE_INTERFACE_(IAAFTypeDefVariableArrayEx, IUnknown)
   // filesystem file that contains data which is to be read and
   // written.  Associates the given identification with it.
   // Does the following:
+  //
   // - Opens the existing named file in the filesystem for reading and
   //   writing.
   // - Associates an object with that filesystem file.
   // - Places the object into the Open-read-write  state.
   // - This AAFFile object then can be used as the root of the
-  //   containment tree representing all AAF objects contained within
-  //   the file.
+  //   containment tree representing all AAF objects contained within the file.
   //
   // Succeeds if:
   // - This object is currently Closed.
@@ -32718,8 +32723,7 @@ DECLARE_INTERFACE_(IAAFTypeDefVariableArrayEx, IUnknown)
   // - The named filesystem file is readable.
   // - The named filesystem file is writable.
   // - The named file represents itself as a valid AAF file.  Even if
-  //   this succeeds, it is not guaranteed that the named file is in
-  //   fact a valid AAF file.
+  //   this succeeds, it is not guaranteed that the named file is in fact a valid AAF file.
   //
   // This function will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -32757,10 +32761,11 @@ DECLARE_INTERFACE_(IAAFTypeDefVariableArrayEx, IUnknown)
 
     // File open mode flags.  May be any of the following ORed together.
     // All other bits must be set to zero.
-    //  - kAAFFileModeUnbuffered - to indicate unbuffered mode.
-    //    Default is buffered.
-    //  - kAAFFileModeRevertable - to indicate that Revert is possible
-    //    on this file (for all changes except those to essence).
+    //
+    //  - kAAFFileModeUnbuffered
+    //    to indicate unbuffered mode. Default is buffered.
+    //  - kAAFFileModeRevertable
+    //    to indicate that Revert is possible on this file (for all changes except those to essence).
     /*[in]*/ aafUInt32  modeFlags,
 
     // Identification of the application which is modifying this file.
@@ -32778,13 +32783,13 @@ DECLARE_INTERFACE_(IAAFTypeDefVariableArrayEx, IUnknown)
   // filesystem file that contains data which is to be read and
   // written.  Associates the given identification with it.
   // Does the following:
+  //
   // - Creates a new file in the filesystem with the given name.
   // - Opens the filesystem file for reading and writing.
   // - Associates this object with that filesystem file.
   // - Places this object into the Open state.
   // - This AAFFile object then can be used as the root of the
-  //   containment tree representing all AAF objects contained within
-  //   the file.
+  //   containment tree representing all AAF objects contained within the file.
   //
   // Succeeds if:
   // - The pFileName argument is valid.
@@ -32825,10 +32830,11 @@ DECLARE_INTERFACE_(IAAFTypeDefVariableArrayEx, IUnknown)
 
     // File open mode flags.  May be any of the following ORed together.
     // All other bits must be set to zero.
-    //  - kAAFFileModeUnbuffered - to indicate unbuffered mode.
-    //    Default is buffered.
-    //  - kAAFFileModeRevertable - to indicate that Revert is possible
-    //    on this file (for all changes except those to essence).
+    //
+    //  - kAAFFileModeUnbuffered
+    //    to indicate unbuffered mode. Default is buffered.
+    //  - kAAFFileModeRevertable
+    //    to indicate that Revert is possible on this file (for all changes except those to essence).
     /*[in]*/ aafUInt32  modeFlags,
 
     // Identification of the application which is creating this file.
@@ -33024,22 +33030,20 @@ DECLARE_INTERFACE_(IAAFTypeDefVariableArrayEx, IUnknown)
   // Note also that only the following combinations of access and
   // existence are legal:
   //
-  // existence   access   Legal?
-  // ---------   ------   ------
-  // existing    read     yes
-  // existing    write    no
-  // existing    modify   yes
-  //   new       read     no
-  //   new       write    yes
-  //   new       modify   yes
+  //          existence   access   Legal?
+  //          ---------   ------   ------
+  //          existing    read     yes
+  //          existing    write    no
+  //          existing    modify   yes
+  //            new       read     no
+  //            new       write    yes
+  //            new       modify   yes
   //
   // This method will succeed if the following are true:
   // - The pRawStorage pointer is valid.
   // - The ppNewFile pointer is valid.
-  // - The accessibility of the specified raw storage matches that of
-  //   the desired AAF File; additionally, if the file kind is
-  //   Structured Storage Binary, the raw storage is also required to
-  //   be at least readable. 
+  // - The accessibility of the specified raw storage matches that of the desired AAF File; additionally, if the file kind is
+  //   Structured Storage Binary, the raw storage is also required to be at least readable. 
   // - A legal combination of existence and access flags is given.
   //
   // This method will return the following codes.  If more than one of
