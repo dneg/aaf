@@ -14,12 +14,12 @@
 \******************************************/
 
 
-#ifndef __ImplAAFPluggableDef_h__
-#include "ImplAAFPluggableDef.h"
+#ifndef __ImplAAFDefObject_h__
+#include "ImplAAFDefObject.h"
 #endif
 
 
-class ImplAAFContainerDef : public ImplAAFPluggableDef
+class ImplAAFContainerDef : public ImplAAFDefObject
 {
 public:
   //
