@@ -82,7 +82,7 @@ extern "C" const aafClassID_t CLSID_AAFPropValData;
 //
 // Base format for property with an indirect type:
 //
-// aafUInt16 (2 bytes) 
+// OMByteOrder (1 byte) 
 // aafUID_t (16 bytes)
 // aafUInt8[] (array of bytes)
 //
@@ -452,9 +452,9 @@ AAFRESULT
       // Cache thse values so that we do not have to re-compute them
       // in multiple OMType methods.
       _internalAUIDSize = sizeof(aafUID_t);
-      _internalIndirectSize = _internalAUIDSize + sizeof(aafUInt16);
+      _internalIndirectSize = _internalAUIDSize + sizeof(OMByteOrder);
       _externalAUIDSize = _typeDefAUID->PropValSize ();
-      _externalIndirectSize = _externalAUIDSize + sizeof(aafUInt16);
+      _externalIndirectSize = _externalAUIDSize + sizeof(OMByteOrder);
 
       _initialized = true; // 
     }
@@ -478,7 +478,7 @@ aafUInt32 ImplAAFTypeDefIndirect::GetIndirectValueOverhead (void) const
   if (_initialized)
     return (_internalIndirectSize);
   else
-    return (sizeof(aafUID_t) + sizeof(aafUInt16));
+    return (sizeof(aafUID_t) + sizeof(OMByteOrder));
 }
 
 
@@ -698,7 +698,7 @@ AAFRESULT STDMETHODCALLTYPE
     return result;
 
   // Copy the current byte order.
-  aafUInt16 originalByteOrder = hostByteOrder();
+  OMByteOrder originalByteOrder = hostByteOrder();
   copy ((OMByte*)&originalByteOrder, (OMByte*)&pIndirectValueDataBits[0], 
         sizeof(originalByteOrder));
 
@@ -811,7 +811,7 @@ AAFRESULT STDMETHODCALLTYPE
     return result;
 
   // Copy the current byte order.
-  aafUInt16 originalByteOrder = hostByteOrder();
+  OMByteOrder originalByteOrder = hostByteOrder();
   copy ((OMByte*)&originalByteOrder, (OMByte*)&pIndirectValueDataBits[0], 
         sizeof(originalByteOrder));
 
@@ -894,7 +894,7 @@ AAFRESULT ImplAAFTypeDefIndirect::GetIndirectValueInfo (
   // Extract the actual type id and the original byte order from the indirect
   // value data bits.
   aafUID_t actualTypeID = {0};
-  aafUInt16 originalByteOrder = 0;
+  OMByteOrder originalByteOrder = 0;
 
   // Copy and validate the original byte order.
   copy ((OMByte*)&pIndirectValueDataBits[0], (OMByte*)&originalByteOrder, sizeof(originalByteOrder));
@@ -1014,7 +1014,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 #else // #if USE_ACTUAL_TYPE
 
-		aafUInt16 originalByteOrder = 0;
+		OMByteOrder originalByteOrder = 0;
 		copy ((OMByte*)&pIndirectValueDataBits[0], (OMByte *)&originalByteOrder, sizeof(originalByteOrder));
 
 		aafUInt32 actualExternalBytesSize = indirectValueSize - _internalIndirectSize;
@@ -1133,7 +1133,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 #else // #if USE_ACTUAL_TYPE
 
-		aafUInt16 originalByteOrder = 0;
+		OMByteOrder originalByteOrder = 0;
 		copy ((OMByte*)&pIndirectValueDataBits[0], (OMByte *)&originalByteOrder, sizeof(originalByteOrder));
 
 		aafUInt32 actualExternalBytesSize = indirectValueSize - _internalIndirectSize;
@@ -1198,7 +1198,7 @@ void ImplAAFTypeDefIndirect::reorder(OMByte* externalBytes,
 
   // Get the auid's external size.
   aafUID_t actualTypeID = {0};
-  aafUInt16 originalByteOrder = 0;
+  OMByteOrder originalByteOrder = 0;
 
 
   // Get the original byte order saved in the property data.
@@ -1259,7 +1259,7 @@ size_t ImplAAFTypeDefIndirect::externalSize(OMByte* internalBytes,
 
   // Get the auid's internal size.
   aafUID_t actualTypeID = {0};
-  aafUInt16 originalByteOrder = 0;
+  OMByteOrder originalByteOrder = 0;
 
 
 
@@ -1321,7 +1321,7 @@ void ImplAAFTypeDefIndirect::externalize(
 
   // Get the auid's internal size.
   aafUID_t actualTypeID = {0};
-  aafUInt16 originalByteOrder = 0;
+  OMByteOrder originalByteOrder = 0;
 
 
   // Get the original byte order.
@@ -1387,7 +1387,7 @@ size_t ImplAAFTypeDefIndirect::internalSize(
 
 
   // Add the external size of the original byte order data.
-  aafUInt16 originalByteOrder = 0;
+  OMByteOrder originalByteOrder = 0;
   internalBytesSize += sizeof(originalByteOrder);
 
   // Add the external size of auid.
@@ -1461,7 +1461,7 @@ void ImplAAFTypeDefIndirect::internalize(
   
 
   // Get the original byte order.
-  aafUInt16 originalByteOrder = 0;
+  OMByteOrder originalByteOrder = 0;
   copy (&externalBytes[0], (OMByte*)&originalByteOrder, sizeof(originalByteOrder));
   ASSERT("Valid byte order",
          (originalByteOrder == littleEndian) || (originalByteOrder == bigEndian));
