@@ -468,6 +468,10 @@ SOURCE="..\..\..\ref-impl\src\com-api\CAAFTypeDefRename.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFTypeDefSet.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFTypeDefStream.cpp"
 # End Source File
 # Begin Source File
