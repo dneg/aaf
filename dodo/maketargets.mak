@@ -24,7 +24,7 @@ run:
 .SUFFIXES: .cpp .h .comc .comh .dod .exp .idl .implc .implh .comt .cppt
 
 # This file contains the list of all of the targets to be built...								   
-include targets.mk
+sinclude targets.mk
 
 
 targets: $(DODO_TARGETS)
@@ -122,18 +122,22 @@ INCLUDE_DIR = ../ref-impl/include
 
 clean:
 	$(SH_PREFIX) cd tool ; $(MAKE) clean $(SH_SUFFIX)
-	$(SH_PREFIX) $(RM) -rf *.cpp *.h *.idl *.exp $(SH_SUFFIX)
-	$(SH_PREFIX) $(RM) -rf *.comc *.comh *.comt $(SH_SUFFIX)
-	$(SH_PREFIX) $(RM) -rf *.implc *.implh $(SH_SUFFIX)
-	$(SH_PREFIX) $(RM) -rf $(SRC_DIR)/cpp-api/*.cpp $(SH_SUFFIX)
-	$(SH_PREFIX) $(RM) -rf $(SRC_DIR)/com-api/*.h $(SH_SUFFIX)
-	$(SH_PREFIX) $(RM) -rf $(SRC_DIR)/com-api/*.cpp $(SH_SUFFIX)
-	$(SH_PREFIX) $(RM) -rf $(SRC_DIR)/impl/*.h $(SH_SUFFIX)
-	$(SH_PREFIX) $(RM) -rf $(SRC_DIR)/impl/*.cpp $(SH_SUFFIX)
-	$(SH_PREFIX) $(RM) -rf $(INCLUDE_DIR)/com-api/*.h $(SH_SUFFIX)
-	$(SH_PREFIX) $(RM) -rf $(INCLUDE_DIR)/com-api/*.idl $(SH_SUFFIX)
-	$(SH_PREFIX) $(RM) -rf $(INCLUDE_DIR)/cpp-api/*.h $(SH_SUFFIX)
+	$(SH_PREFIX) $(RM) -f *.cpp *.cppt *.h *.idl *.exp $(SH_SUFFIX)
+	$(SH_PREFIX) $(RM) -f *.comc *.comh *.comt $(SH_SUFFIX)
+	$(SH_PREFIX) $(RM) -f *.implc *.implh $(SH_SUFFIX)
+	$(SH_PREFIX) $(RM) -f core $(SH_SUFFIX)
+	$(SH_PREFIX) $(RM) -f $(SRC_DIR)/cpp-api/AAF*.cpp $(SH_SUFFIX)
+	$(SH_PREFIX) $(RM) -f $(SRC_DIR)/com-api/CAAF*.h $(SH_SUFFIX)
+	$(SH_PREFIX) $(RM) -f $(SRC_DIR)/com-api/CAAF*.cpp $(SH_SUFFIX)
+	test -z `$(RM) -f $(SRC_DIR)/impl/Impl*.h |& grep "Nothing"`
+	$(SH_PREFIX) $(RM) -f $(SRC_DIR)/impl/Impl*.cpp $(SH_SUFFIX)
+	$(SH_PREFIX) $(RM) -f $(INCLUDE_DIR)/com-api/AAF*.h $(SH_SUFFIX)
+	$(SH_PREFIX) $(RM) -f $(INCLUDE_DIR)/com-api/EnumAAF*.h $(SH_SUFFIX)
+	$(SH_PREFIX) $(RM) -f $(INCLUDE_DIR)/com-api/AAF*.idl $(SH_SUFFIX)
+	$(SH_PREFIX) $(RM) -f $(INCLUDE_DIR)/com-api/EnumAAF*.idl $(SH_SUFFIX)
+	$(SH_PREFIX) $(RM) -f $(INCLUDE_DIR)/cpp-api/AAF*.h $(SH_SUFFIX)
+	$(SH_PREFIX) $(RM) -f $(INCLUDE_DIR)/cpp-api/EnumAAF*.h $(SH_SUFFIX)
 
 
 # This file contains the list of all dependents...
-include depend.mk
+sinclude depend.mk
