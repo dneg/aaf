@@ -85,6 +85,7 @@ void OMProperty::detach(const OMStorable* object, const size_t key)
   TRACE("OMProperty::detach");
 
   PRECONDITION("Valid object", object != 0);
+  PRECONDITION("Valid key", key == 0);
   // nothing to do for most descendants of OMProperty
 }
 
