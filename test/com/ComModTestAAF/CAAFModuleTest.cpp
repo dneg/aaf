@@ -35,6 +35,7 @@
 
 #include <iostream.h>
 #include <iomanip.h>
+#include <time.h>
 #include <string.h>
 
 #include "AAFTypes.h"
@@ -66,8 +67,8 @@ typedef HRESULT (*AAFModuleTestProc)(testMode_t mode);
 
 struct AAFObjectTestInfo
 {
-	LPCSTR pClassName;
-	AAFModuleTestProc pfnTestProc;
+  LPCSTR pClassName;
+  AAFModuleTestProc pfnTestProc;
 
   // Encapsulate the test proc so that we can trap exceptions
   // in one place.
@@ -77,7 +78,7 @@ struct AAFObjectTestInfo
 
 
 #define AAF_BEGIN_OBJECT_MAP(x) static AAFObjectTestInfo x[] = {
-#define AAF_OBJECT_ENTRY(xclass) { #xclass, &C##xclass##_test },
+#define AAF_OBJECT_ENTRY(xclass) { #xclass, &C##xclass##_test},
 #define AAF_END_OBJECT_MAP() { NULL, NULL } };
 
 
@@ -119,163 +120,272 @@ void CAAFModuleTest::List(void)
   while (NULL != AAFObjectMap[index].pClassName)
   {
     cout << AAFObjectMap[index].pClassName << endl;
-    ++index;
+    index++;
   }
 
 }
 
-#define MAX_TEST_COUNT 1000
+// Compute the maximum size of the result array.
+const aafUInt32 MAX_TEST_COUNT = sizeof(AAFObjectMap)/sizeof(AAFObjectTestInfo) - 1;
+
+
+// Utility to find the test entry in the static table.
+static int findObjectTestInfo(const char *pClassName)
+{
+    for (int index = 0; NULL != AAFObjectMap[index].pClassName; index++)
+    {
+      if (0 == strcmp(pClassName, AAFObjectMap[index].pClassName))
+      {
+        return index;
+      }
+    }
+    
+    return -1;
+}
+ 
+// Utility to find the given string in the filter array.
+static bool filterName(const char *pClassName, int count, const char **filterArray)
+{
+    for (int index = 0; index < count; index++)
+    {
+      if (0 == strcmp(pClassName, filterArray[index]))
+      {
+        return true;
+      }
+    }
+    
+    return false;
+} 
+
+static void printName(const char * pClassName)
+{
+  cout << setiosflags(ios::left) << setw(30) << pClassName;
+}
+
+static void printResult(testMode_t  mode, HRESULT hr)
+{
+  if(mode == kAAFUnitTestReadOnly)
+    cout << " (Read Only) ";
+
+  if ( AAFRESULT_SUCCESS == hr )
+    cout << "SUCCEEDED." << endl;
+  else if ( AAFRESULT_TEST_PARTIAL_SUCCESS == hr )
+    cout<< "PARTIAL SUCCESS" << endl;
+  else if (AAFRESULT_NOT_IMPLEMENTED == hr)
+    cout << "NOT IMPLEMENTED!" << endl;
+  else if (AAFRESULT_NOT_IN_CURRENT_VERSION == hr)
+    cout << "SUCCEEDED.  One or more methods not implemented in the current SDK." << endl;        
+  else if (AAFRESULT_UNEXPECTED_EXCEPTION == hr)
+    cout << "FAILED WITH UNEXPECTED EXCEPTION!" << endl;
+  else if (-1 == hr)
+    cout << "Skipped." << endl;
+  else
+    cout << "FAILED!" << endl;
+}
+
+static void printNotFound(void)
+{
+  cout << "# WARNING: NOT FOUND IN MODULE TABLE!" << endl;
+}
 
 HRESULT CAAFModuleTest::Test
 (
-	testMode_t	mode,
-	unsigned char *pClassName
+  testMode_t  mode,
+  bool filter,
+  int count,
+  const char *pClassName[]
 )
 {
-	HRESULT		hr = S_OK;
-	HRESULT		testResults[MAX_TEST_COUNT];	/* table of HR's for all test */
+  HRESULT    hr = S_OK;
+  HRESULT    testResults[MAX_TEST_COUNT];  /* table of HR's for all test */
 
-	aafInt16 	testCount = 0;	/* total number of Mod test objects attemped to find */
-	aafInt16	passCount = 0;	/* number of tests that succeeded */
-	aafInt16	failCount = 0;	/* number of tests that failed */
-	aafInt16	nImplCount = 0;	/* number of tests not implemented */
-	aafInt32	index = 0;		/* General purpose index counter */ 
-	aafInt16	partialSuccessCount = 0;	/*number of tests that partially succeeded */
+  aafInt16   testCount = 0;  /* total number of Mod test objects attemped to find */
+  aafInt16  passCount = 0;  /* number of tests that succeeded */
+  aafInt16  failCount = 0;  /* number of tests that failed */
+  aafInt16  nImplCount = 0;  /* number of tests not implemented */
+  aafInt16  notInCurrentCount = 0;
+  aafInt32  index = 0;    /* General purpose index counter */
+  aafInt32  totalTestCount = 0; 
+  aafInt16  partialSuccessCount = 0;  /*number of tests that partially succeeded */
+  aafInt16  skippedCount = 0;
 
-	testResults[0] = NULL;
+  for (index = 0; index < MAX_TEST_COUNT; index++)
+    testResults[index] = -1;
 
-	// Search the object table for the given class id.
+  // Search the object table for the given class id.
 
-	if (NULL != pClassName)
-	{
-		while (NULL != AAFObjectMap[index].pClassName)
-		{
-			if (0 == strcmp(reinterpret_cast<char *>(pClassName), AAFObjectMap[index].pClassName))
-			{
-				if(mode == kAAFUnitTestReadOnly)
-					cout << "Testing " << AAFObjectMap[index].pClassName << " (Read Only) ...." << endl;
-				else
-					cout << "Testing " << AAFObjectMap[index].pClassName << " ...." << endl;
-
-				hr = AAFObjectMap[index].CallTestProc(mode);
-
-				cout << "Module test for " << setiosflags(ios::left) << setw(38) << AAFObjectMap[index].pClassName;
-				if(mode == kAAFUnitTestReadOnly)
-					cout << " (Read Only) ";
-
-				if ( AAFRESULT_SUCCESS == hr )
-					cout << "SUCCEEDED.\n" << endl;
-				else if ( AAFRESULT_TEST_PARTIAL_SUCCESS == hr )
-					cout<< "PARTIAL SUCCESS\n" << endl;
-				else if (AAFRESULT_NOT_IMPLEMENTED == hr)
-					cout << "NOT IMPLEMENTED!\n" << endl;
-				else if (AAFRESULT_NOT_IN_CURRENT_VERSION == hr)
-					cout << "SUCCEEDED.  One or more methods not implemented in the current SDK.\n" << endl;				
-				else if (AAFRESULT_UNEXPECTED_EXCEPTION == hr)
-					cout << "FAILED WITH UNEXPECTED EXCEPTION!\n" << endl;
-				else
-					cout << "FAILED!\n" << endl;
-					
-			
-					
-
-				return hr;
-			}
-		++index;	
-		}
-		
-		cout<< setiosflags(ios::left) << setw(54) << pClassName << "NOT FOUND IN MODULE TABLE!" << endl;
-	}
-	else
-	{
-		cout<< "Running Module tests .... \n"<< endl;
-
-		while (NULL != AAFObjectMap[testCount].pClassName && MAX_TEST_COUNT > testCount)
-		{
-			cout<< "  "<< AAFObjectMap[testCount].pClassName << endl;
-			testResults[testCount] = AAFObjectMap[testCount].CallTestProc(mode);
-
-			++testCount;
-			if ( MAX_TEST_COUNT <= testCount ) 
-				cout << "\n\nMAX_TEST_COUNT has been reached\n";
-		}
-		cout<< "\n******************************";
-		cout<< "\n*  COM Module Tests Results: *";
-		cout<< "\n******************************\n"<< endl;
-
-		for ( index = 0; index < testCount; ++index )
-			if ( AAFRESULT_SUCCESS == testResults[index] )
-			{
-				cout<< setiosflags(ios::left)<< setw(4)<< ++passCount;  
-				cout<< setw(30) << AAFObjectMap[index].pClassName;
-				if(mode == kAAFUnitTestReadOnly)
-					cout << " (Read Only) ";
-				cout<< "SUCCEEDED." << endl;
-			}
-
-		for ( index = 0; index < testCount; ++index )
-			if ( AAFRESULT_NOT_IN_CURRENT_VERSION == testResults[index] )
-			{
-				cout<< setiosflags(ios::left)<< setw(4)<< ++passCount;  
-				cout<< setw(30) << AAFObjectMap[index].pClassName;
-				if(mode == kAAFUnitTestReadOnly)
-					cout << " (Read Only) ";
-				cout << "SUCCEEDED.  One or more methods will be implemented in a future SDK." << endl;				
-			}
-
-			for ( index = 0; index < testCount; ++index )
-			if ( AAFRESULT_TEST_PARTIAL_SUCCESS == testResults[index] )
-			{
-				cout<< setiosflags(ios::left)<< setw(4)<< ++partialSuccessCount + passCount;  
-				cout<< setw(30) << AAFObjectMap[index].pClassName;
-				if(mode == kAAFUnitTestReadOnly)
-					cout << " (Read Only) ";
-				cout<< "Partial Success." << endl;
-			}
-
-		for ( index = 0; index < testCount; ++index )
-			if ( AAFRESULT_SUCCESS != testResults[index] &&
-				 AAFRESULT_NOT_IMPLEMENTED != testResults[index] &&
-				 AAFRESULT_NOT_IN_CURRENT_VERSION != testResults[index] &&
-				 AAFRESULT_TEST_PARTIAL_SUCCESS != testResults[index] )
-			{
-				cout<< setiosflags(ios::left)<< setw(4)<< ++failCount + partialSuccessCount + passCount;  
-				cout<< setw(30) << AAFObjectMap[index].pClassName;
-				if(mode == kAAFUnitTestReadOnly)
-					cout << " (Read Only) ";
-				cout<< "FAILED" << endl;
-			}
-
-		for ( index = 0; index < testCount; ++index )
-			if ( AAFRESULT_NOT_IMPLEMENTED == testResults[index])
-			{
-				cout<< setiosflags(ios::left)<< setw(4)<< ++nImplCount + failCount + partialSuccessCount + passCount;  
-				cout<< setw(30) << AAFObjectMap[index].pClassName;
-				cout<< "Not Implemented!" << endl;
-			}
+  if (1 == count && NULL != pClassName && !filter)
+  {
+    printName(pClassName[0]);
+    
+    index = findObjectTestInfo(pClassName[0]);
+    if (0 <= index)
+    {
+      hr = AAFObjectMap[index].CallTestProc(mode);
+      printResult(mode, hr);  
+      return hr;
+    }
+    else
+    {
+      printNotFound();
+      return AAFRESULT_TEST_FAILED;
+    }    
+  }
+  else
+  {
+    /* Print Header */
+    cout<< "\n\n"<< endl;
+    cout<< "***************************\n";
+    cout<< "*       COMMODAAF         *\n";
+    cout<< "*   AAF COM Module Test   *\n";
+    cout<< "***************************\n"<< endl;  
 
 
-		cout<< "\n\n";
-		cout<< setw(20)<< "  Tests Run:"<< testCount << endl;
-		cout<< setw(20)<< "  Passed:"<< passCount << endl;
-		cout<< setw(20)<< "  Failed:"<< failCount << endl;
-		cout<< setw(20)<< "  Not Implemented:"<< nImplCount<< endl;
+    /* Get and print start time */
+    time_t s_time;
+    time(&s_time);
+    cout<< ctime(&s_time)<< endl<< endl;
 
-		if (partialSuccessCount > 0 )
-		{
-			cout<< setw(20)<< "  Partial Success:"<< partialSuccessCount<< endl;
-			cout<< "\n  Note: Partial Success means:"<< endl;
-			cout<< "       All currently implemented tests succeed"<< endl;
-			cout<< "       More tests need to be implemented\n"<<endl;
-		}
+    cout<< "Running Module tests .... \n"<< endl;
+    
+    if (1 < count && NULL != pClassName && !filter)
+    {
+      for (int arg = 0; arg < count; ++arg)
+      {
+        index = findObjectTestInfo(pClassName[arg]);
+        cout << "  ";
+        if (0 <= index)
+        {
+          cout << AAFObjectMap[index].pClassName << endl;
+          testResults[index] = AAFObjectMap[index].CallTestProc(mode);
+          ++testCount;
+        }
+        else
+        {  
+          printName(pClassName[arg]);
+          printNotFound();
+        }
+      }
+    }
+    else
+    {
+      for (index = 0; NULL != AAFObjectMap[index].pClassName && MAX_TEST_COUNT > index; ++index)
+      {
+        if (filter && filterName(AAFObjectMap[index].pClassName, count, pClassName))
+          continue;
+          
+        cout << "  " << AAFObjectMap[index].pClassName << endl;
+        testResults[index] = AAFObjectMap[index].CallTestProc(mode);
+        ++testCount;
+      }
+    }
+    
+    
+    cout<< "\n******************************";
+    cout<< "\n*  COM Module Tests Results: *";
+    cout<< "\n******************************\n"<< endl;
+    passCount = 0;
+    for ( index = 0; index < MAX_TEST_COUNT; index++ )
+      if ( AAFRESULT_SUCCESS == testResults[index] )
+      {
+        ++passCount;
+        cout<< setiosflags(ios::left)<< setw(4)<< ++totalTestCount;
+        cout<< setw(30) << AAFObjectMap[index].pClassName;
+        printResult(mode, testResults[index]);
+      }
 
-		if ( 0 < failCount)
-		{
-			hr = AAFRESULT_TEST_FAILED;
-		}
-	}
+    for ( index = 0; index < MAX_TEST_COUNT; index++ )
+      if ( AAFRESULT_NOT_IN_CURRENT_VERSION == testResults[index] )
+      {
+        ++notInCurrentCount;
+        cout<< setiosflags(ios::left)<< setw(4)<< ++totalTestCount;
+        cout<< setw(30) << AAFObjectMap[index].pClassName;
+        printResult(mode, testResults[index]);
+      }
+
+      for ( index = 0; index < MAX_TEST_COUNT; index++ )
+      if ( AAFRESULT_TEST_PARTIAL_SUCCESS == testResults[index] )
+      {
+        ++partialSuccessCount    ;    
+        cout<< setiosflags(ios::left)<< setw(4)<< ++totalTestCount;
+        cout<< setw(30) << AAFObjectMap[index].pClassName;
+        printResult(mode, testResults[index]);
+      }
+
+    for ( index = 0; index < MAX_TEST_COUNT; index++ )
+      if ( AAFRESULT_SUCCESS != testResults[index] &&
+         AAFRESULT_NOT_IMPLEMENTED != testResults[index] &&
+         AAFRESULT_NOT_IN_CURRENT_VERSION != testResults[index] &&
+         AAFRESULT_TEST_PARTIAL_SUCCESS != testResults[index] &&
+         -1 !=  testResults[index])
+      {
+        ++failCount;
+        cout<< setiosflags(ios::left)<< setw(4)<< ++totalTestCount;
+        cout<< setw(30) << AAFObjectMap[index].pClassName;
+        printResult(mode, testResults[index]);
+      }
+
+    for ( index = 0; index < MAX_TEST_COUNT; index++ )
+      if ( AAFRESULT_NOT_IMPLEMENTED == testResults[index])
+      {
+        ++nImplCount;
+        cout<< setiosflags(ios::left)<< setw(4)<< ++totalTestCount;
+        cout<< setw(30) << AAFObjectMap[index].pClassName;
+        printResult(mode, testResults[index]);
+      }
+
+    for ( index = 0; index < MAX_TEST_COUNT; index++ )
+    {
+      if ( -1  == testResults[index])
+      {
+        ++skippedCount;
+        cout<< setiosflags(ios::left)<< setw(4)<< ++totalTestCount;
+        cout<< setw(30) << AAFObjectMap[index].pClassName;
+        printResult(mode, testResults[index]);
+      }
+    }
+
+    cout<< "\n\n";
+    cout<< setw(20)<< "  Tests Run:"<< testCount << endl;
+    cout<< setw(20)<< "  Passed:"<< passCount + notInCurrentCount << endl;
+    cout<< setw(20)<< "  Failed:"<< failCount << endl;
+    cout<< setw(20)<< "  Not Implemented:"<< nImplCount<< endl;
+
+    if (partialSuccessCount > 0 )
+    {
+      cout<< setw(20)<< "  Partial Success:"<< partialSuccessCount<< endl;
+      cout<< "\n  Note: Partial Success means:"<< endl;
+      cout<< "       All currently implemented tests succeed"<< endl;
+      cout<< "       More tests need to be implemented\n"<<endl;
+    }
+
+    if (skippedCount > 0 )
+    {
+      cout<< setw(20)<< "  Skipped:"<< skippedCount<< endl;
+      cout<< "\n  Note: Tests are usually skipped for regression"<< endl;
+      cout<< "       testing with older versions of the toolkit\n"<<endl;
+    }
+
+    if ( 0 < failCount)
+    {
+      hr = AAFRESULT_TEST_FAILED;
+    }
 
 
-	return hr;
+    /* Get and Print finish time  */
+    time_t e_time;
+    time(&e_time);
+    cout<< endl<< ctime(&e_time)<< endl;
+
+    /* Determine and print elapsed time */
+    double elapsed_time = difftime( e_time, s_time );
+    cout<< "COMMODAAF completed in ";
+    cout<< ((long)elapsed_time/3600) <<":"; /* hours */
+    cout<< (((long)elapsed_time%3600)/60) <<":"; /* minutes */
+    cout<< (((long)elapsed_time%3600)%60) <<"\n" <<endl; /* seconds */
+  }
+
+
+  return hr;
 }
 

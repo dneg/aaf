@@ -46,7 +46,10 @@ public:
   //
   // Call  Module test functions.
   //
-  HRESULT Test(testMode_t mode, unsigned char *pClassName = NULL);
+  HRESULT Test(testMode_t mode,
+               bool filter = false, 
+               int argc = 0, 
+               const char **argv = NULL);
 
 };
 

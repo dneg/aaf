@@ -33,7 +33,6 @@
 #include <iostream.h>
 #include <fstream.h>
 #include <stdlib.h>
-#include <time.h>
 #include <string.h>
 
 
@@ -57,11 +56,11 @@
 
 // Make sure we have defined IID_IUnknown and IID_IClassFactory.
 #include <initguid.h>
-#include <coguid.h>	
+#include <coguid.h>  
 #include "DataInput.h"
 
 #if !defined(CDECL) && defined(_MSC_VER)
-#define CDECL	_cdecl
+#define CDECL  _cdecl
 #endif // CDECL
 
 #if !defined(FAR)
@@ -111,7 +110,7 @@ static void formatError(DWORD errorCode)
   }
 #endif // OS_WINDOWS
 
-	cerr << endl;
+  cerr << endl;
 }
 
 static void throwIfError(HRESULT hr)
@@ -120,7 +119,7 @@ static void throwIfError(HRESULT hr)
   {
     formatError(hr);
     throw hr;
-	}
+  }
 }
 
 
@@ -129,14 +128,14 @@ struct CAAFInitialize
 {
   CAAFInitialize(const char *dllname = NULL)
   {
-	  cout << "Attempting to load the AAF dll...";
-	  cout.flush();
+    cout << "Attempting to load the AAF dll...";
+    cout.flush();
     HRESULT hr = AAFLoad(dllname);
     if (S_OK != hr)
-  	{
+    {
       cerr << "FAILED! ";
       throwIfError(hr);
-		}
+    }
     cout << "DONE" << endl;
   }
 
@@ -185,111 +184,84 @@ public:
 
 int main(int argc, char* argv[])
 {
-	int result = SUCCESS;
-	int	startArg = 1;
-	testMode_t	testMode = kAAFUnitTestReadWrite;
+  int result = SUCCESS;
+  int  startArg = 1;
+  testMode_t  testMode = kAAFUnitTestReadWrite;
+  bool skipTests = false;
 
 
-	// Create the module test object.
-	CAAFModuleTest AAFModuleTest;
-	try
-	{
-		HRESULT hr = S_OK;
-
-		/* Check arguments to see if help was requested */
-
-		if ( argc > 1 &&
-			(0 == strncmp(argv[1],"-h",2) ||
-			 0 == strncmp(argv[1],"-H",2) )	)
-		{
-			cout<< "\nCOMMODAAF***********************\n"; 
-			cout<< "No arguments --> To run all tests\n";
-			cout<< "Otherwise any AAF object class name can be typed\n";
-			cout<< "and that objects test method will be executed.\n";
-			cout<< "ex AAFSegment AAFTransition etc\n\n";
-			cout<< "Input can also be read in from a text.\n";
-			cout<< "Just name it \"COMMODAAF (PPC)\"" << endl;
-
-			return(0);
-		}
-
-		/* List the AAF class names, one per line, in the order that the tests will be run. */
-		/* This can be used for more selective automated testing... */
-		if ( argc > 1 &&
-			(0 == strncmp(argv[1],"-l",2) ||
-			 0 == strncmp(argv[1],"-L",2) )	)
-		{
-			AAFModuleTest.List();
-			return(0);
-		}
-
-		if ( argc > 1 &&
-			(0 == strncmp(argv[1],"-r",2) ||
-			 0 == strncmp(argv[1],"-R",2) )	)
-		{
-			testMode = kAAFUnitTestReadOnly;
-			startArg++;
-		}
+  // Create the module test object.
+  CAAFModuleTest AAFModuleTest;
+  try
+  {
+    HRESULT hr = S_OK;
 
 
+    for (startArg = 1; (startArg < argc) && ('-' == argv[startArg][0]); startArg++)
+    {
+      /* List the AAF class names, one per line, in the order that the tests will be run. */
+      /* This can be used for more selective automated testing... */
+      if (0 == strcmp(argv[startArg],"-l") || 0 == strcmp(argv[startArg],"--list"))
+      {
+        AAFModuleTest.List();
+        return(0);
+      }
+      else if (0 == strcmp(argv[startArg],"-r") || 0 == strcmp(argv[startArg],"--readonly"))
+      {
+        testMode = kAAFUnitTestReadOnly;
+       }
+      else if (0 == strcmp(argv[startArg],"-s") || 0 == strcmp(argv[startArg],"--skip"))
+      {
+        skipTests = true;
+      }
+      /* Check arguments to see if help was requested */
+      else
+      {
+        cout<< "\nCOMMODAAF [-l] [-r] [-s] [test1 test2 etc] ***********************\n"; 
+        cout<< " No arguments --> To run all tests\n";
+        cout<< " Otherwise any AAF object class name can be typed\n";
+        cout<< " and that objects test method will be executed.\n";
+        cout<< "ex AAFSegment AAFTransition etc\n\n";
+        cout<< " -l : print list of all tests to stdout\n";
+        cout<< " -r : run read/only tests for regression and cross-platform testing.\n";
+        cout<< " -s : Use with -r to skip tests that were not supported in earlier releases.\n";
+        cout<< endl;        
 
-		// Make sure the dll can be loaded and initialized.
-		CAAFInitialize aafInit;
-
-		// Make sure the shared plugins can be loaded and registered.
-   		CAAFInitializePlugins aafInitPlugins;
-
-		/* Print Header */
-		cout<< "\n\n"<< endl;
-		cout<< "***************************\n";
-		cout<< "*       COMMODAAF         *\n";
-		cout<< "*   AAF COM Module Test   *\n";
-		cout<< "***************************\n"<< endl;	
-
-
-		/* Get and print start time */
-		time_t s_time;
-		time(&s_time);
-		cout<< ctime(&s_time)<< endl<< endl;
-
-		if (startArg >= argc)
-			// Call all Module tests...
-			hr = AAFModuleTest.Test(testMode, NULL);
-		else
-		{
-			// Call only the modules that are named in the command line.
-			int module;
-
-			for (module = startArg; module < argc; module++)
-				hr = AAFModuleTest.Test(testMode, reinterpret_cast<unsigned char *>(argv[module]));
-		}
-
-		/* Get and Print finish time	*/
-		time_t e_time;
-		time(&e_time);
-		cout<< endl<< ctime(&e_time)<< endl;
-
-		/* Determine and print elapsed time */
-		double elapsed_time = difftime( e_time, s_time );
-		cout<< "COMMODAAF completed in ";
-		cout<< ((long)elapsed_time/3600) <<":"; /* hours */
-		cout<< (((long)elapsed_time%3600)/60) <<":"; /* minutes */
-		cout<< (((long)elapsed_time%3600)%60) <<"\n" <<endl; /* seconds */
+        return(0);
+      }
+    }
 
 
-		result = (int)hr;
-	}
-	catch (HRESULT& rhr)
-	{
-		result = rhr;
-	}
-	catch (...)
-	{
-		result = FAILURE;
-	}
-	
+    // Make sure the dll can be loaded and initialized.
+    CAAFInitialize aafInit;
 
-	return result;
+    // Make sure the shared plugins can be loaded and registered.
+     CAAFInitializePlugins aafInitPlugins;
+
+    if (startArg >= argc)
+    {    
+      // Call all Module tests...
+      hr = AAFModuleTest.Test(testMode);
+    }
+    else
+    {
+      // Call only the modules that are named in the command line.
+      hr = AAFModuleTest.Test(testMode, skipTests, argc - startArg, const_cast<const char **>(&argv[startArg]));
+    }
+
+    result = (int)hr;
+  }
+  catch (HRESULT& rhr)
+  {
+    result = rhr;
+  }
+  catch (...)
+  {
+    result = FAILURE;
+  }
+  
+
+  return result;
 }
 
 
