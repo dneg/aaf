@@ -39,7 +39,8 @@ OMProperty* OMPropertySet::get(const OMPropertyId propertyId) const
   TRACE("OMPropertySet::get");
   OMProperty* result;
   PRECONDITION("Valid property id", propertyId >= 0 );
-  PRECONDITION("Property set contains the property", contains(propertyId));
+  PRECONDITION("Property is allowed", isAllowed(propertyId));
+  PRECONDITION("Property is present", isPresent(propertyId));
   OMPropertySetElement* element = find(propertyId);
   ASSERT("Element found", element != 0);
   ASSERT("Valid element", element->_valid);
@@ -58,8 +59,7 @@ void OMPropertySet::put(OMProperty* property)
   // SAVE(_count);
   PRECONDITION("Valid property", property != 0);
   PRECONDITION("Valid property id", property->propertyId() >= 0);
-  PRECONDITION("Property not already installed",
-                                            !contains(property->propertyId()));
+  PRECONDITION("Property is not present", !isPresent(property->propertyId()));
 
   OMPropertyId propertyId = property->propertyId();
   OMPropertySetElement* element = find();
@@ -75,7 +75,7 @@ void OMPropertySet::put(OMProperty* property)
   element->_property->setPropertySet(this);
   _count++;
 
-  POSTCONDITION("Property installed", contains(property->propertyId()));
+  POSTCONDITION("Property installed", isPresent(property->propertyId()));
   POSTCONDITION("Consistent property set",
                 property == find(property->propertyId())->_property);
   // POSTCONDITION("Count increased by one", _count == OLD(_count) + 1);
@@ -113,15 +113,16 @@ void OMPropertySet::iterate(size_t& context, OMProperty*& property) const
   }
 }
 
-  // @mfunc Does this <c OMPropertySet> contain an <c OMProperty>
-  //        with property id <p propertyId> ?
+
+  // @mfunc Is an <c OMProperty> with property id <p propertyId>
+  //        present in this <c OMPropertySet> ?
   //  @rdesc <e bool.true> if an <c OMProperty> with property id
   //         <p propertyId> is present <e bool.false> otherwise.
   //  @parm Property id.
   //  @this const
-bool OMPropertySet::contains(const OMPropertyId propertyId) const
+bool OMPropertySet::isPresent(const OMPropertyId propertyId) const
 {
-  TRACE("OMPropertySet::contains");
+  TRACE("OMPropertySet::isPresent");
 
   OMPropertySetElement* element = find(propertyId);
   if (element != 0) {
@@ -129,6 +130,32 @@ bool OMPropertySet::contains(const OMPropertyId propertyId) const
   } else {
     return false;
   }
+}
+
+  // @mfunc Is an <c OMProperty> with property id <p propertyId>
+  //        allowed in this <c OMPropertySet> ?
+  //  @rdesc <e bool.true> if an <c OMProperty> with property id
+  //         <p propertyId> is allowed <e bool.false> otherwise.
+  //  @parm Property id.
+  //  @this const
+bool OMPropertySet::isAllowed(const OMPropertyId propertyId) const
+{
+  TRACE("OMPropertySet::isAllowed");
+
+  return isPresent(propertyId); // tjb -- no optional properties yet
+}
+
+  // @mfunc Is an <c OMProperty> with property id <p propertyId>
+  //        a required member of this <c OMPropertySet> ?
+  //  @rdesc <e bool.true> if an <c OMProperty> with property id
+  //         <p propertyId> is required <e bool.false> otherwise.
+  //  @parm Property id.
+  //  @this const
+bool OMPropertySet::isRequired(const OMPropertyId propertyId) const
+{
+  TRACE("OMPropertySet::isRequired");
+
+  return isPresent(propertyId); // tjb -- no optional properties yet
 }
 
   // @mfunc The number of <c OMProperty> objects in this
