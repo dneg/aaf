@@ -29,6 +29,8 @@
 #ifndef OMCONTAINERPROPERTY_H
 #define OMCONTAINERPROPERTY_H
 
+#include "OMPropertyBase.h"
+
   // @class Abstract base class for persistent container properties
   //        supported by the Object Manager.
   //   @tcarg class | ReferencedObject | The type of the referenced

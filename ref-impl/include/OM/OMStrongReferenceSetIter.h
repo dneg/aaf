@@ -31,6 +31,7 @@
 
 #include "OMSetIterator.h"
 #include "OMReferenceContainerIter.h"
+#include "OMContainerElement.h"
 
 template <typename UniqueIdentification, typename ReferencedObject>
 class OMStrongReferenceSetProperty;

@@ -31,6 +31,7 @@
 
 #include "OMVectorIterator.h"
 #include "OMReferenceContainerIter.h"
+#include "OMContainerElement.h"
 
 template <typename ReferencedObject>
 class OMStrongReferenceVectorProperty;
