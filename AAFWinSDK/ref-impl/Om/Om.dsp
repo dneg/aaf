@@ -186,6 +186,10 @@ SOURCE="..\..\..\ref-impl\src\OM\OMMSSStoredStream.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\OM\OMMSStructuredStorage.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\OM\OMObjectManager.cpp"
 # End Source File
 # Begin Source File
