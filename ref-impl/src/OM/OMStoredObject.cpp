@@ -44,6 +44,7 @@
 
 #include "OMObjectReference.h"
 #include "OMStrongReference.h"
+#include "OMWeakReference.h"
 
 #include "OMAssertions.h"
 #include "OMUtilities.h"
@@ -391,10 +392,23 @@ void OMStoredObject::save(const OMStrongReferenceSet& /* set */)
   // @mfunc Save the <c OMWeakReference> <p singleton> in this
   //        <c OMStoredObject>.
   //   @parm TBS
-void OMStoredObject::save(const OMWeakReference& /* singleton */)
+void OMStoredObject::save(const OMWeakReference& singleton)
 {
   TRACE("OMStoredObject::save");
-  ASSERT("Unimplemented code not reached", false);
+
+  OMWeakObjectReference& reference = singleton.reference();
+
+  OMPropertyId propertyId = singleton.propertyId();
+  OMStoredForm storedForm = singleton.storedForm();
+  const OMUniqueObjectIdentification& id = reference.identification();
+  OMPropertyTag tag = singleton.targetTag();
+  OMPropertyId keyPid = singleton.keyPropertyId();
+
+  save(propertyId, storedForm, id, tag, keyPid);
+
+  singleton.reference().save();
+
+  singleton.clearTargetTag();
 }
 
   // @mfunc Save the <c OMWeakReferenceVector> <p vector> in this
@@ -604,11 +618,30 @@ void OMStoredObject::restore(OMStrongReferenceSet& /* set */,
   //        <c OMStoredObject>.
   //   @parm TBS
   //   @parm TBS
-void OMStoredObject::restore(OMWeakReference& /* singleton */,
-                             size_t /* externalSize */)
+void OMStoredObject::restore(OMWeakReference& singleton,
+                             size_t externalSize)
 {
   TRACE("OMStoredObject::restore");
-  ASSERT("Unimplemented code not reached", false);
+
+  ASSERT("Sizes match",
+                       (sizeof(OMPropertyTag) +
+                        sizeof(OMPropertyId) +
+                        sizeof(OMKeySize) +
+                        sizeof(OMUniqueObjectIdentification)) == externalSize);
+
+  OMPropertyId propertyId = singleton.propertyId();
+  OMStoredForm storedForm = singleton.storedForm();
+  OMUniqueObjectIdentification id;
+  OMPropertyTag tag;
+  OMPropertyId keyPropertyId;
+  restore(propertyId, storedForm, id, tag, keyPropertyId);
+  ASSERT("Consistent key property ids",
+                                   keyPropertyId == singleton.keyPropertyId());
+
+  OMWeakObjectReference& reference = singleton.reference();
+  singleton.setTargetTag(tag);
+  reference = OMWeakObjectReference(&singleton, id, tag);
+  reference.restore();
 }
 
   // @mfunc Restore the <c OMWeakReferenceVector> <p vector> into this
