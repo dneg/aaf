@@ -173,6 +173,7 @@ interface IAAFDescriptiveFramework;
 interface IAAFDescriptiveMarker;
 interface IAAFDataDef2;
 interface IAAFEndian;
+interface IAAFHeader2;
 interface IAAFSearchSource;
 interface IAAFEssenceDataEx;
 interface IAAFEssenceMultiAccess;
@@ -319,6 +320,7 @@ typedef interface IAAFDescriptiveFramework IAAFDescriptiveFramework;
 typedef interface IAAFDescriptiveMarker IAAFDescriptiveMarker;
 typedef interface IAAFDataDef2 IAAFDataDef2;
 typedef interface IAAFEndian IAAFEndian;
+typedef interface IAAFHeader2 IAAFHeader2;
 typedef interface IAAFSearchSource IAAFSearchSource;
 typedef interface IAAFEssenceDataEx IAAFEssenceDataEx;
 typedef interface IAAFEssenceMultiAccess IAAFEssenceMultiAccess;
@@ -10827,6 +10829,7 @@ DECLARE_INTERFACE_(IAAFGPITrigger, IUnknown)
 
 // IAAFHeader
 
+
 // ************************
 //
 // Interface IAAFHeader
@@ -11514,6 +11517,19 @@ DECLARE_INTERFACE_(IAAFHeader, IUnknown)
   STDMETHOD(GetContentStorage) (THIS_
     // Returned Content Storage object
     /*[out]*/ IAAFContentStorage ** ppStorage) PURE;
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -35222,6 +35238,1105 @@ DECLARE_INTERFACE_(IAAFEndian, IUnknown)
   END_INTERFACE
 };
 #endif // __IAAFEndian_INTERFACE_DEFINED__
+
+
+
+// IAAFHeader2
+
+// ************************
+//
+// Interface IAAFHeader2
+//
+// ************************
+
+
+
+
+
+
+
+
+
+
+#ifndef __IAAFHeader2_INTERFACE_DEFINED__
+#define __IAAFHeader2_INTERFACE_DEFINED__
+
+EXTERN_C const IID IID_IAAFHeader2;
+
+#undef  INTERFACE
+#define INTERFACE   IAAFHeader2
+
+DECLARE_INTERFACE_(IAAFHeader2, IUnknown)
+{
+  BEGIN_INTERFACE
+
+  /* *** IUnknown methods *** */
+  STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppvObj) PURE;
+  STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
+  STDMETHOD_(ULONG,Release) (THIS) PURE;
+
+  /* *** IAAFHeader2 methods *** */
+
+  //***********************************************************
+  //
+  // LookupMob()
+  //
+  // Looks up the Mob that matches the given mob id and puts it into
+  // the ppMob argument.  The returned mob interface is AddRef()ed
+  // before it is returned.
+  // 
+  // Succeeds if all of the following are true:
+  // - the ppMob pointer is valid.
+  // 
+  // If this method fails nothing will be written to *ppMob.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppMob is null
+  //
+  // AAFRESULT_MOB_NOT_FOUND
+  //   - the requested mob wasn't found.
+  //
+  STDMETHOD(LookupMob) (THIS_
+    // The Mob ID
+    /*[in, ref]*/ aafMobID_constref  mobID,
+
+    // Matching Mob
+    /*[out,retval]*/ IAAFMob ** ppMob) PURE;
+
+
+  //***********************************************************
+  //
+  // CountMobs()
+  //
+  // Writes the number of matches for the given mob kind into the
+  // *pNumMobs argument.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pNumMobs pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pNumMobs.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pNumMobs is null.
+  //
+  STDMETHOD(CountMobs) (THIS_
+    // The mob kind to count
+    /*[in]*/ aafMobKind_t  mobKind,
+
+    // Total number of mobs of kind mobKind
+    /*[out, retval]*/ aafNumSlots_t *  pResult) PURE;
+
+
+  //***********************************************************
+  //
+  // GetMobs()
+  //
+  // Places an enumerator for mobs that apply to the criteria into the
+  // *ppEnum argument.  If pSearchCriteria is null, all mobs are
+  // returned.   The searchTag field of pSearchCriteria, and exactly
+  // ONE of the fields in the union (tags.mobID, tags.name, etc. )
+  // must be set.  Only one search criterion may be specified.  The
+  // returned enumerator is AddRef()ed before it is returned.
+  // 
+  // Succeeds if all of the following are true:
+  // - the ppEnum pointer is valid.
+  // 
+  // If this method fails nothing will be written to *ppEnum.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppEnum is null.
+  //
+  STDMETHOD(GetMobs) (THIS_
+    // Search Criteria for enumeration
+    /*[in]*/ aafSearchCrit_t *  pSearchCriteria,
+
+    // Mob Enumeration
+    /*[out, retval]*/ IEnumAAFMobs ** ppEnum) PURE;
+
+
+  //***********************************************************
+  //
+  // AddMob()
+  //
+  // Appends the given mob to the header.  If the given mob is already
+  // contained this method will do nothing and will return success.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pMob pointer is valid.
+  // - the given mob is not already part of this collection.
+  // 
+  // If this method fails no state will be changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pMob is null.
+  //
+  // AAFRESULT_DUPLICATE_MOBID
+  //   - the given mob is already contained.
+  //
+  STDMETHOD(AddMob) (THIS_
+    // Mob to add
+    /*[in]*/ IAAFMob * pMob) PURE;
+
+
+  //***********************************************************
+  //
+  // RemoveMob()
+  //
+  // // Removes the given mob from the header.
+  //
+  // Succeeds if all of the following are true:
+  // - the pMob pointer is valid.
+  // - the given mob is currently in the collection.
+  // 
+  // If this method fails no state will be changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pMob is null.
+  //
+  // AAFRESULT_MOB_NOT_FOUND
+  //   - the given mob is not already contained.
+  //
+  STDMETHOD(RemoveMob) (THIS_
+    // Mob to remove
+    /*[in]*/ IAAFMob * pMob) PURE;
+
+
+  //***********************************************************
+  //
+  // CountEssenceData()
+  //
+  // Writes the total number of essence data into the *pNumEssenceData
+  // argument.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pNumEssenceData pointer is valid.
+  // 
+  // If this method fails nothing will be written to
+  // *pNumEssenceData.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pNumEssenceData is null.
+  //
+  STDMETHOD(CountEssenceData) (THIS_
+    // Total number of essence data
+    /*[out, retval]*/ aafUInt32 *  pResult) PURE;
+
+
+  //***********************************************************
+  //
+  // IsEssenceDataPresent()
+  //
+  // // 
+  // Succeeds if all of the following are true:
+  // - the pResult pointer is valid.
+  // 
+  // If this method fails no state will be changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pResult is null.
+  //
+  STDMETHOD(IsEssenceDataPresent) (THIS_
+    // A Unique File Mob ID
+    /*[in, ref]*/ aafMobID_constref  fileMobID,
+
+    // The Essence File Format
+    /*[in]*/ aafFileFormat_t  fmt,
+
+    // True if the essence is found
+    /*[out,retval]*/ aafBoolean_t *  pResult) PURE;
+
+
+  //***********************************************************
+  //
+  // EnumEssenceData()
+  //
+  // Places an enumerator for essence that applies to the criteria
+  // into the *ppEnum argument.  The returned enumerator is
+  // AddRef()ed before it is returned.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pMediaCriteria pointer is valid.
+  // - the ppEnum pointer is valid.
+  // 
+  // If this method fails nothing will be written to *ppEnum.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - either pMediaCriteria or ppEnum is null.
+  //
+  STDMETHOD(EnumEssenceData) (THIS_
+    // Essence Enumeration
+    /*[out,retval]*/ IEnumAAFEssenceData ** ppEnum) PURE;
+
+
+  //***********************************************************
+  //
+  // AddEssenceData()
+  //
+  // Appends the given essence data object to the header.
+  // 
+  // NOTE! Stub only.   Implementation not yet added.
+  //
+  // Succeeds if all of the following are true:
+  // - the pEssenceData pointer is valid.
+  // 
+  // If this method fails no state will be changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_DUPLICATE_MOBID
+  //   - The given mob has already been added.  The validation is done by comparing
+  //     mobIDs, which should be unique.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pEssenceData is null.
+  //
+  STDMETHOD(AddEssenceData) (THIS_
+    // Essence data object to append
+    /*[in]*/ IAAFEssenceData * pEssenceData) PURE;
+
+  //***********************************************************
+  //
+  // RemoveEssenceData()
+  //
+  // // Removes the given EssenceData from the header.
+  //
+  // Succeeds if all of the following are true:
+  // - the pEssenceData pointer is valid.
+  // - the given EssenceData is currently in the collection.
+  // 
+  // If this method fails no state will be changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pEssenceData is null.
+  //
+  // AAFRESULT_ESSENCE_NOT_FOUND
+  //   - the given EssenceData is not already contained.
+  //
+  STDMETHOD(RemoveEssenceData) (THIS_
+    // EssenceData to remove
+    /*[in]*/ IAAFEssenceData * pEssenceData) PURE;
+
+  //***********************************************************
+  //
+  // LookupEssenceData()
+  //
+  // Looks up the EssenceData that matches the given mob id and puts it into
+  // the ppEssenceData argument.  The returned EssenceData interface is AddRef()ed
+  // before it is returned.
+  // 
+  // Succeeds if all of the following are true:
+  // - the ppEssenceData pointer is valid.
+  // 
+  // If this method fails nothing will be written to *ppEssenceData.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppEssenceData is null
+  //
+  // AAFRESULT_MOB_NOT_FOUND
+  //   - the requested EssenceData wasn't found.
+  //
+  STDMETHOD(LookupEssenceData) (THIS_
+    // The Mob ID
+    /*[in, ref]*/ aafMobID_constref  mobID,
+
+    // Matching EssenceData
+    /*[out,retval]*/ IAAFEssenceData ** ppEssenceData) PURE;
+
+  //***********************************************************
+  //
+  // GetDictionary()
+  //
+  // Places the dictionary that contains all types of aaf definition
+  // objects into the *ppDictionary argument.  The returned dictionary
+  // is AddRef()ed before it is returned.  Note that the dictionary
+  // is automatically created when the header object is created.
+  // 
+  // Succeeds if all of the following are true:
+  // - the ppDictionary pointer is valid.
+  // 
+  // If this method fails no state will be changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppDictionary is null.
+  //
+  STDMETHOD(GetDictionary) (THIS_
+    // The AAF Dictionary
+    /*[out, retval]*/ IAAFDictionary ** ppDictionary) PURE;
+
+
+  //***********************************************************
+  //
+  // GetLastIdentification()
+  //
+  // Places the identification of the last entity that modified the
+  // file into the *ppIdentification argument.  The returned
+  // identification is AddRef()ed before it is returned.
+  // 
+  // Succeeds if all of the following are true:
+  // - the ppIdentification pointer is valid.
+  // 
+  // If this method fails no state will be changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppIdentification is null.
+  //
+  STDMETHOD(GetLastIdentification) (THIS_
+    // Indentification Object
+    /*[out,retval]*/ IAAFIdentification ** ppIdentification) PURE;
+
+
+  //***********************************************************
+  //
+  // LookupIdentification()
+  //
+  // Places the Identification that matches the given generation into
+  // the *ppIdentification argument.  The returned identification is
+  // AddRef()ed before it is returned.
+  // 
+  // Succeeds if all of the following are true:
+  // - the ppIdentification pointer is valid.
+  // - the given generation was found.
+  // 
+  // If this method fails no state will be changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppIdentification is null.
+  //
+  // AAFRESULT_OBJECT_NOT_FOUND
+  //   - the given generation was not found..
+  //
+  STDMETHOD(LookupIdentification) (THIS_
+    // Unique Generation ID
+    /*[in, ref]*/ aafUID_constref  generation,
+
+    // Indentification Object
+    /*[out,retval]*/ IAAFIdentification ** ppIdentification) PURE;
+
+
+  //***********************************************************
+  //
+  // CountIdentifications()
+  //
+  // Writes the number of identification objects into the *pResult
+  // argument.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pResult pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pResult.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pResult is null.
+  //
+  STDMETHOD(CountIdentifications) (THIS_
+    // Total number of identification objects
+    /*[out, retval]*/ aafUInt32 *  pResult) PURE;
+
+
+  //***********************************************************
+  //
+  // GetIdentifications()
+  //
+  // Places an enumerator for all Identifications criteria into	the
+  // *ppEnum argument.  The returned enumerator is AddRef()ed before
+  // it is returned.
+  // 
+  // NOTE! Stub only.   Implementation not yet added.
+  //
+  // Succeeds if all of the following are true:
+  // - the ppEnum pointer is valid.
+  // 
+  // If this method fails nothing will be written to *ppEnum.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppEnum is null.
+  //
+  STDMETHOD(GetIdentifications) (THIS_
+    // Indentification Enumeration
+    /*[out,retval]*/ IEnumAAFIdentifications ** ppEnum) PURE;
+
+
+  //***********************************************************
+  //
+  // AppendIdentification()
+  //
+  // Appends the given Identification class to the header.  This
+  // method does not attempt to identify duplicate identifications, so
+  // it will succeed even if an identical identification has already
+  // been appended.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pIdent pointer is valid.
+  // 
+  // If this method fails no state will be changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pIdent is null.
+  //
+  STDMETHOD(AppendIdentification) (THIS_
+    // Identification to append
+    /*[in]*/ IAAFIdentification * pIdent) PURE;
+
+
+  //***********************************************************
+  //
+  // GetIdentificationAt()
+  //
+  // Retrieves the indexed identification from the header.
+  // 
+  // Succeeds if all of the following are true:
+  // - the ppIdentification pointer is valid.
+  // - index is less than the value returned by CountIdentifications().
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppIdent is null.
+  //
+  // AAFRESULT_BADINDEX
+  //   - index is greater than or equal to result of
+  //     CountIdentifications().
+  //
+  STDMETHOD(GetIdentificationAt) (THIS_
+    // Index of identification to retrieve
+    /*[in]*/ aafUInt32  index,
+
+    // Retrieved identification
+    /*[out, retval]*/ IAAFIdentification ** ppIdentification) PURE;
+
+
+  //***********************************************************
+  //
+  // GetRefImplVersion()
+  //
+  // Return the version of the Reference Implementation currently
+  // running on this machine, which implements these interfaces.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pVersion pointer is valid.
+  // 
+  // If this method fails nothing is written to *pVersion.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pVersion is null.
+  //
+  STDMETHOD(GetRefImplVersion) (THIS_
+    // The Reference Implementation Version
+    /*[out, retval]*/ aafProductVersion_t *  pVersion) PURE;
+
+
+  //***********************************************************
+  //
+  // GetFileRevision()
+  //
+  // Return the File Revision property.
+  // 
+  // NOTE! Stub only.   Implementation not yet added.
+  //
+  // Succeeds if all of the following are true:
+  // - the pRevision pointer is valid.
+  // 
+  // If this method fails nothing is written to *pRevision.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pRevision is null.
+  //
+  STDMETHOD(GetFileRevision) (THIS_
+    // The File Version
+    /*[out, retval]*/ aafVersionType_t *  pRevision) PURE;
+
+
+  //***********************************************************
+  //
+  // GetLastModified()
+  //
+  // Return the Last Modified property.
+  // 
+  // NOTE! Stub only.   Implementation not yet added.
+  //
+  // Succeeds if all of the following are true:
+  // - the pTimeStamp pointer is valid.
+  // 
+  // If this method fails nothing is written to *pTimeStamp.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pTimeStamp is null.
+  //
+  STDMETHOD(GetLastModified) (THIS_
+    // The modification date-time stamp
+    /*[out, retval]*/ aafTimeStamp_t *  pTimeStamp) PURE;
+
+
+  //***********************************************************
+  //
+  // GetContentStorage()
+  //
+  // Places the Content Storage object attached to the header into the
+  // *ppStorage argument.
+  //
+  // The returned content storage object is
+  // AddRef()ed before it is returned.
+  //
+  // Succeeds if all of the following are true:
+  // - the ppStorage pointer is valid.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize() called on it.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppStorage is null.
+  //
+  STDMETHOD(GetContentStorage) (THIS_
+    // Returned Content Storage object
+    /*[out]*/ IAAFContentStorage ** ppStorage) PURE;
+
+
+  //***********************************************************
+  //
+  // GetPrimaryMob()
+  //
+  // Returns this file's primary mob.
+  //
+  // Succeeds if all of the following are true:
+  // - the pPrimaryMob pointer is valid.
+  //
+  // The returned object is AddRef()ed before it is returned.
+  //
+  // If this method fails no state will be changed.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  //
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pPrimaryMob arg is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - property not present.
+  //
+  STDMETHOD(GetPrimaryMob) (THIS_
+    // The primary mob
+    /*[out, retval]*/ IAAFMob ** pPrimaryMob) PURE;
+
+
+  //***********************************************************
+  //
+  // SetPrimaryMob()
+  //
+  // Sets this file's primary mob.
+  //
+  // If this method fails, the property will not be changed.
+  //
+  // This method will return the following codes:
+  //
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pPrimaryMob arg is NULL.
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize() called on it.
+  //
+  STDMETHOD(SetPrimaryMob) (THIS_
+    // The primary mob
+    /*[in]*/ IAAFMob * pPrimaryMob) PURE;
+
+
+  //***********************************************************
+  //
+  // GetOperationalPattern()
+  //
+  // This method returns ID of the operational pattern this
+  // file complies to.
+  //
+  // Succeeds if all of the following are true:
+  // - the pOperationalPatternID pointer is valid.
+  // - the OperationalPattern property is present
+  //
+  // If this method fails nothing will be written to *pOperationalPatternID.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  //
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pOperationalPatternID arg is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - property not present.
+  //
+  STDMETHOD(GetOperationalPattern) (THIS_
+    // Operational pattern ID.
+    /*[out]*/ aafUID_t *  pOperationalPatternID) PURE;
+
+
+  //***********************************************************
+  //
+  // SetOperationalPattern()
+  //
+  // Sets operational pattern this file complies to.
+  //
+  // If this method fails, the property will not be changed.
+  //
+  // This method will return the following codes:
+  //
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize() called on it.
+  //
+  STDMETHOD(SetOperationalPattern) (THIS_
+    // Operational pattern ID.
+    /*[in]*/ aafUID_constref  operationalPatternID) PURE;
+
+
+  //***********************************************************
+  //
+  // UpdateEssenceContainers()
+  //
+  // Ensures that the contents of the EssenceContainers property
+  // is in sync with the file's metadata. If this method succeeds
+  // the property will contain IDs of all ContainerDefinitions referenced
+  // by source mobs in this file.
+  // If the property isn't present it will be created.
+  // This method must be called before any other EssenceContainers
+  // method can be called.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  STDMETHOD(UpdateEssenceContainers) (THIS) PURE;
+
+
+  //***********************************************************
+  //
+  // CountEssenceContainers()
+  //
+  // Gets the total number of essence containers present in the file.
+  //
+  // Succeeds if all of the following are true:
+  // - the pCount pointer is valid.
+  // - the EssenceContainers property is present
+  //
+  // If this method fails nothing will be written to *pCount.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  //
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pCount arg is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - property not present.
+  //
+  STDMETHOD(CountEssenceContainers) (THIS_
+    // Number of essence containers
+    /*[out, retval]*/ aafUInt32*  pCount) PURE;
+
+
+  //***********************************************************
+  //
+  // GetEssenceContainers()
+  //
+  // Gets IDs of essence containers present in the file.
+  //
+  // The values are written to the array specified by pEssenceContainerIDs,
+  // which is of size maxEssenceContainersCount. The required size may be found
+  // by calling CountEssenceContainers().
+  // 
+  // Succeeds if all of the following are true:
+  // - pEssenceContainerIDs is a valid pointer.
+  // - maxEssenceContainersCount indicates the array is large enough to hold the
+  //   data.
+  // - the EssenceContainers property is present
+  // 
+  // If this method fails, the property will not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pEssenceContainerIDs is NULL.
+  //
+  // AAFRESULT_SMALLBUF
+  //   - maxEssenceContainersCount indicates that the array is too small to hold
+  //     the data.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - property not present.
+  //
+  STDMETHOD(GetEssenceContainers) (THIS_
+    // The number of elements in the array
+    /*[in]*/ aafUInt32  maxEssenceContainersCount,
+
+    // Array to hold the essence container IDs
+    /*[out, size_is(maxEssenceContainersCount)]*/ aafUID_t *  pEssenceContainerIDs) PURE;
+
+
+  //***********************************************************
+  //
+  // IsEssenceContainerPresent()
+  //
+  // //
+  // Succeeds if all of the following are true:
+  // - the pIsPresent pointer is valid.
+  // - the EssenceContainers property is present
+  //
+  // If this method fails nothing will be written to *pIsPresent.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  //
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pIsPresent arg is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - property not present.
+  //
+  STDMETHOD(IsEssenceContainerPresent) (THIS_
+    // Essence container ID
+    /*[in, ref]*/ aafUID_constref  essenceContainerID,
+
+    // Is this essence container present
+    /*[out,retval]*/ aafBoolean_t*  pIsPresent) PURE;
+
+
+  //***********************************************************
+  //
+  // CountDescriptiveSchemes()
+  //
+  // Gets the total number of descriptive schemes present in the file.
+  //
+  // Succeeds if all of the following are true:
+  // - the pCount pointer is valid.
+  // - the DescriptiveSchemes property is present
+  //
+  // If this method fails nothing will be written to *pCount.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  //
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pCount arg is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - property not present.
+  //
+  STDMETHOD(CountDescriptiveSchemes) (THIS_
+    // Number of descriptive schemes
+    /*[out, retval]*/ aafUInt32*  pCount) PURE;
+
+
+  //***********************************************************
+  //
+  // GetDescriptiveSchemes()
+  //
+  // Gets IDs of descriptive schemes present in the file.
+  //
+  // The values are written to the array specified by pDescriptiveSchemeIDs,
+  // which is of size maxDescriptiveSchemesCount. The required size may be found
+  // by calling CountDescriptiveSchemes().
+  // 
+  // Succeeds if all of the following are true:
+  // - pDescriptiveSchemeIDs is a valid pointer.
+  // - maxDescriptiveSchemesCount indicates the array is large enough to hold the
+  //   data.
+  // - the DescriptiveSchemes property is present
+  // 
+  // If this method fails, the property will not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pDescriptiveSchemeIDs is NULL.
+  //
+  // AAFRESULT_SMALLBUF
+  //   - maxDescriptiveSchemesCount indicates that the array is too small to hold
+  //     the data.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - property not present.
+  //
+  STDMETHOD(GetDescriptiveSchemes) (THIS_
+    // The number of elements in the array
+    /*[in]*/ aafUInt32  maxDescriptiveSchemesCount,
+
+    // Array to hold the descriptive scheme IDs
+    /*[out, size_is(maxDescriptiveSchemesCount)]*/ aafUID_t *  pDescriptiveSchemeIDs) PURE;
+
+
+  //***********************************************************
+  //
+  // IsDescriptiveSchemePresent()
+  //
+  // //
+  // Succeeds if all of the following are true:
+  // - the pIsPresent pointer is valid;
+  // - the DescriptiveSchemes property is present
+  //
+  // If this method fails nothing will be written to *pIsPresent.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  //
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pIsPresent arg is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - property not present.
+  //
+  STDMETHOD(IsDescriptiveSchemePresent) (THIS_
+    // Descriptive scheme ID
+    /*[in, ref]*/ aafUID_constref  descriptiveSchemeID,
+
+    // Is this descriptive scheme ID present
+    /*[out,retval]*/ aafBoolean_t*  pIsPresent) PURE;
+
+
+  //***********************************************************
+  //
+  // AddDescriptiveScheme()
+  //
+  // Appends the given descriptive scheme ID to the list of
+  // descriptive schemes found in the file.
+  //
+  // Succeeds if all of the following are true:
+  // - the given desriptive scheme ID is not already contained.
+  //
+  // If this method fails, the property will not be changed.
+  //
+  // This method will return the following codes:
+  //
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize() called on it.
+  //
+  // AAFRESULT_INVALID_PARAM
+  //   - The given descriptive scheme ID is already contained.
+  //
+  STDMETHOD(AddDescriptiveScheme) (THIS_
+    // New descriptive scheme ID.
+    /*[in]*/ aafUID_constref  descriptiveSchemeID) PURE;
+
+
+  //***********************************************************
+  //
+  // RemoveDescriptiveScheme()
+  //
+  // Removes the given descriptive scheme ID from
+  // the list of descriptive schemes found in the file.
+  //
+  // Succeeds if all of the following are true:
+  // - the DescriptiveSchemes property is present;
+  // - the given desriptive scheme ID is present in the list
+  //   of descriptive schemes found in the file.
+  //
+  // If this method fails, the property will not be changed.
+  //
+  // This method will return the following codes:
+  //
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - property not present.
+  //
+  // AAFRESULT_INVALID_PARAM
+  //   - The given desriptive scheme ID is present in the list
+  //     of descriptive schemes found in the file.
+  //
+  STDMETHOD(RemoveDescriptiveScheme) (THIS_
+    // Descriptive scheme to remove.
+    /*[in]*/ aafUID_constref  descriptiveSchemeID) PURE;
+
+
+  END_INTERFACE
+};
+#endif // __IAAFHeader2_INTERFACE_DEFINED__
 
 
 

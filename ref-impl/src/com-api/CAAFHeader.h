@@ -1,3 +1,4 @@
+
 //@doc
 //@class    AAFHeader | Implementation class for AAFHeader
 #ifndef __CAAFHeader_h__
@@ -50,10 +51,16 @@
 #include "CAAFObject.h"
 #endif
 
+//
+// Forward declaration
+//
+class ImplAAFHeader;
+
 
 class CAAFHeader
   : public IAAFHeader,
     public IAAFEndian,
+	public IAAFHeader2,
     public CAAFObject
 {
 protected:
@@ -722,6 +729,7 @@ public:
     // Returned Content Storage object 
     /*[out]*/ IAAFContentStorage ** ppStorage);
 
+
   //***********************************************************
   // METHOD NAME: GetStoredByteOrder()
   //
@@ -754,8 +762,6 @@ public:
     eAAFByteOrder_t *  pOrder
   );
 
-
-
   //***********************************************************
   // METHOD NAME: GetNativeByteOrder()
   //
@@ -785,6 +791,438 @@ public:
     // @parm [out] eAAFByteOrder_t * | pOrder | Pointer to place where byte order is to be put
     eAAFByteOrder_t *  pOrder
   );
+
+  //***********************************************************
+  // METHOD NAME: GetPrimaryMob()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFHeader2 | GetPrimaryMob |
+  // Returns this file's primary mob.
+  //
+  // Succeeds if all of the following are true:
+  // - the pPrimaryMob pointer is valid.
+  //
+  // The returned object is AddRef()ed before it is returned.
+  //
+  // If this method fails no state will be changed.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  //
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pPrimaryMob arg is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - property not present.
+  // @end
+  // 
+  STDMETHOD (GetPrimaryMob)
+   (
+    // @parm [out, retval] AAFMob | pPrimaryMob | The primary mob
+    IAAFMob ** pPrimaryMob
+  );
+
+  //***********************************************************
+  // METHOD NAME: SetPrimaryMob()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFHeader2 | SetPrimaryMob |
+  // Sets this file's primary mob.
+  //
+  // If this method fails, the property will not be changed.
+  //
+  // This method will return the following codes:
+  //
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pPrimaryMob arg is NULL.
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize() called on it.
+  // @end
+  // 
+  STDMETHOD (SetPrimaryMob)
+   (
+    // @parm [in] AAFMob | pPrimaryMob | The primary mob
+    IAAFMob * pPrimaryMob
+  );
+
+  //***********************************************************
+  // METHOD NAME: GetOperationalPattern()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFHeader2 | GetOperationalPattern |
+  // This method returns ID of the operational pattern this
+  // file complies to.
+  //
+  // Succeeds if all of the following are true:
+  // - the pOperationalPatternID pointer is valid.
+  // - the OperationalPattern property is present
+  //
+  // If this method fails nothing will be written to *pOperationalPatternID.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  //
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pOperationalPatternID arg is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - property not present.
+  // @end
+  // 
+  STDMETHOD (GetOperationalPattern)
+   (
+    // @parm [out] aafUID_t * | pOperationalPatternID | Operational pattern ID.
+    aafUID_t *  pOperationalPatternID
+  );
+
+  //***********************************************************
+  // METHOD NAME: SetOperationalPattern()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFHeader2 | SetOperationalPattern |
+  // Sets operational pattern this file complies to.
+  //
+  // If this method fails, the property will not be changed.
+  //
+  // This method will return the following codes:
+  //
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize() called on it.
+  // @end
+  // 
+  STDMETHOD (SetOperationalPattern)
+   (
+    // @parm [in] aafUID_constref | operationalPatternID | Operational pattern ID.
+    aafUID_constref  operationalPatternID
+  );
+
+  //***********************************************************
+  // METHOD NAME: UpdateEssenceContainers()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFHeader2 | UpdateEssenceContainers |
+  // Ensures that the contents of the EssenceContainers property
+  // is in sync with the file's metadata. If this method succeeds
+  // the property will contain IDs of all ContainerDefinitions referenced
+  // by source mobs in this file.
+  // If the property isn't present it will be created.
+  // This method must be called before any other EssenceContainers
+  // method can be called.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  // @end
+  STDMETHOD (UpdateEssenceContainers)
+    ();
+
+  //***********************************************************
+  // METHOD NAME: CountEssenceContainers()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFHeader2 | CountEssenceContainers |
+  // Gets the total number of essence containers present in the file.
+  //
+  // Succeeds if all of the following are true:
+  // - the pCount pointer is valid.
+  // - the EssenceContainers property is present
+  //
+  // If this method fails nothing will be written to *pCount.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  //
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pCount arg is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - property not present.
+  // @end
+  // 
+  STDMETHOD (CountEssenceContainers)
+   (
+    // @parm [out, retval] aafUInt32* | pCount | Number of essence containers
+    aafUInt32*  pCount
+  );
+
+  //***********************************************************
+  // METHOD NAME: GetEssenceContainers()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFHeader2 | GetEssenceContainers |
+  // Gets IDs of essence containers present in the file.
+  //
+  // The values are written to the array specified by pEssenceContainerIDs,
+  // which is of size maxEssenceContainersCount. The required size may be found
+  // by calling CountEssenceContainers().
+  // 
+  // Succeeds if all of the following are true:
+  // - pEssenceContainerIDs is a valid pointer.
+  // - maxEssenceContainersCount indicates the array is large enough to hold the
+  //   data.
+  // - the EssenceContainers property is present
+  // 
+  // If this method fails, the property will not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pEssenceContainerIDs is NULL.
+  //
+  // AAFRESULT_SMALLBUF
+  //   - maxEssenceContainersCount indicates that the array is too small to hold
+  //     the data.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - property not present.
+  // @end
+  // 
+  STDMETHOD (GetEssenceContainers)
+   (
+    // @parm [in] aafUInt32 | maxEssenceContainersCount | The number of elements in the array
+    aafUInt32  maxEssenceContainersCount,
+
+    // @parm [out, size_is(maxEssenceContainersCount)] aafUID_t * | pEssenceContainerIDs | Array to hold the essence container IDs
+    aafUID_t *  pEssenceContainerIDs
+  );
+
+  //***********************************************************
+  // METHOD NAME: IsEssenceContainerPresent()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFHeader2 | IsEssenceContainerPresent |
+  // //
+  // Succeeds if all of the following are true:
+  // - the pIsPresent pointer is valid.
+  // - the EssenceContainers property is present
+  //
+  // If this method fails nothing will be written to *pIsPresent.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  //
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pIsPresent arg is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - property not present.
+  // @end
+  // 
+  STDMETHOD (IsEssenceContainerPresent)
+   (
+    // @parm [in, ref] aafUID_constref | essenceContainerID | Essence container ID
+    aafUID_constref  essenceContainerID,
+
+    // @parm [out,retval] aafBoolean_t* | pIsPresent | Is this essence container present
+    aafBoolean_t*  pIsPresent
+  );
+
+  //***********************************************************
+  // METHOD NAME: CountDescriptiveSchemes()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFHeader2 | CountDescriptiveSchemes |
+  // Gets the total number of descriptive schemes present in the file.
+  //
+  // Succeeds if all of the following are true:
+  // - the pCount pointer is valid.
+  // - the DescriptiveSchemes property is present
+  //
+  // If this method fails nothing will be written to *pCount.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  //
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pCount arg is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - property not present.
+  // @end
+  // 
+  STDMETHOD (CountDescriptiveSchemes)
+   (
+    // @parm [out, retval] aafUInt32* | pCount | Number of descriptive schemes
+    aafUInt32*  pCount
+  );
+
+  //***********************************************************
+  // METHOD NAME: GetDescriptiveSchemes()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFHeader2 | GetDescriptiveSchemes |
+  // Gets IDs of descriptive schemes present in the file.
+  //
+  // The values are written to the array specified by pDescriptiveSchemeIDs,
+  // which is of size maxDescriptiveSchemesCount. The required size may be found
+  // by calling CountDescriptiveSchemes().
+  // 
+  // Succeeds if all of the following are true:
+  // - pDescriptiveSchemeIDs is a valid pointer.
+  // - maxDescriptiveSchemesCount indicates the array is large enough to hold the
+  //   data.
+  // - the DescriptiveSchemes property is present
+  // 
+  // If this method fails, the property will not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pDescriptiveSchemeIDs is NULL.
+  //
+  // AAFRESULT_SMALLBUF
+  //   - maxDescriptiveSchemesCount indicates that the array is too small to hold
+  //     the data.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - property not present.
+  // @end
+  // 
+  STDMETHOD (GetDescriptiveSchemes)
+   (
+    // @parm [in] aafUInt32 | maxDescriptiveSchemesCount | The number of elements in the array
+    aafUInt32  maxDescriptiveSchemesCount,
+
+    // @parm [out, size_is(maxDescriptiveSchemesCount)] aafUID_t * | pDescriptiveSchemeIDs | Array to hold the descriptive scheme IDs
+    aafUID_t *  pDescriptiveSchemeIDs
+  );
+
+  //***********************************************************
+  // METHOD NAME: IsDescriptiveSchemePresent()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFHeader2 | IsDescriptiveSchemePresent |
+  // //
+  // Succeeds if all of the following are true:
+  // - the pIsPresent pointer is valid;
+  // - the DescriptiveSchemes property is present
+  //
+  // If this method fails nothing will be written to *pIsPresent.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  //
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pIsPresent arg is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - property not present.
+  // @end
+  // 
+  STDMETHOD (IsDescriptiveSchemePresent)
+   (
+    // @parm [in, ref] aafUID_constref | descriptiveSchemeID | Descriptive scheme ID
+    aafUID_constref  descriptiveSchemeID,
+
+    // @parm [out,retval] aafBoolean_t* | pIsPresent | Is this descriptive scheme ID present
+    aafBoolean_t*  pIsPresent
+  );
+
+  //***********************************************************
+  // METHOD NAME: AddDescriptiveScheme()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFHeader2 | AddDescriptiveScheme |
+  // Appends the given descriptive scheme ID to the list of
+  // descriptive schemes found in the file.
+  //
+  // Succeeds if all of the following are true:
+  // - the given desriptive scheme ID is not already contained.
+  //
+  // If this method fails, the property will not be changed.
+  //
+  // This method will return the following codes:
+  //
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize() called on it.
+  //
+  // AAFRESULT_INVALID_PARAM
+  //   - The given descriptive scheme ID is already contained.
+  // @end
+  // 
+  STDMETHOD (AddDescriptiveScheme)
+   (
+    // @parm [in] aafUID_constref | descriptiveSchemeID | New descriptive scheme ID.
+    aafUID_constref  descriptiveSchemeID
+  );
+
+  //***********************************************************
+  // METHOD NAME: RemoveDescriptiveScheme()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFHeader2 | RemoveDescriptiveScheme |
+  // Removes the given descriptive scheme ID from
+  // the list of descriptive schemes found in the file.
+  //
+  // Succeeds if all of the following are true:
+  // - the DescriptiveSchemes property is present;
+  // - the given desriptive scheme ID is present in the list
+  //   of descriptive schemes found in the file.
+  //
+  // If this method fails, the property will not be changed.
+  //
+  // This method will return the following codes:
+  //
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - property not present.
+  //
+  // AAFRESULT_INVALID_PARAM
+  //   - The given desriptive scheme ID is present in the list
+  //     of descriptive schemes found in the file.
+  // @end
+  // 
+  STDMETHOD (RemoveDescriptiveScheme)
+   (
+    // @parm [in] aafUID_constref | descriptiveSchemeID | Descriptive scheme to remove.
+    aafUID_constref  descriptiveSchemeID
+  );
+
 
 
 protected:
