@@ -55,8 +55,8 @@ void OMDataStreamProperty::restoreFrom(OMStoredObject& s, size_t size)
               _type,
               streamName,
               size);
-  ASSERT("Consistent stream and property names",
-         strcmp(streamName, name()) == 0);
+  ASSERT("Consistent property size", size == strlen(streamName) + 1);
+  ASSERT("Consistent property name",strcmp(streamName, name()) == 0);
   delete [] streamName;
 
   open();
