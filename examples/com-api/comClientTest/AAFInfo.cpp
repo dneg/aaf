@@ -28,19 +28,9 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "AAFTypes.h"
-
-#if defined(_MAC) || defined(macintosh)
-#include <initguid.h> // define all of the AAF guids.
-#include "AAF.h"
-#else
+// Include the AAF interface declarations.
 #include "AAF.h"
 
-// TODO: This should not be here, I added them for now to get a good link.
-// const CLSID CLSID_AAFSession = { 0xF0C10891, 0x3073, 0x11d2, { 0x80, 0x4A, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } };
-const CLSID CLSID_AAFFile = { 0x9346ACD2, 0x2713, 0x11d2, { 0x80, 0x35, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } };
-
-#endif
 
 static void     FatalErrorCode(HRESULT errcode, int line, char *file)
 {
