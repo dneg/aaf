@@ -75,7 +75,7 @@ realclean : clean
 
 .PHONY : check
 check : $(AAFSDKBINDIR)/ComModAAF$(EXE)
-	$(AAFSDKBINDIR)/ComModAAF$(EXE)
+	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/ComModAAF$(EXE)
 
 
 include $(AAFBASE)/build/rules.mk
