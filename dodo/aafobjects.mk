@@ -12,8 +12,7 @@ AAFPERSISTENTOBJECTS = \
 	AAFMIDIFileDescriptor \
 	AAFPluggableCode \
 	AAFReferenceValue \
-	AAFRGBADescriptor \
-	AAFTypeDefSet
+	AAFRGBADescriptor
 
 
 # These are all of the other non-persistent objects:
@@ -116,6 +115,7 @@ HUMAN_TYPED_IMPL = \
 	AAFTypeDefExtEnum \
 	AAFTypeDefFixedArray \
 	AAFTypeDefRecord \
+	AAFTypeDefSet \
 	AAFTypeDefStream \
 	AAFTypeDefString \
 	AAFTypeDefStrongObjRef \
