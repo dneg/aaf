@@ -22,6 +22,8 @@
 #include <wstring.h>
 #endif
 
+const aafUID_t  EXAMPLE_FILE_PLUGIN =	{ 0x914B3AD1, 0xEDE7, 0x11d2, { 0x80, 0x9F, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
+
 
 // CLSID for AAFEssenceFileStream 
 // {a7337030-c103-11d2-8089-006008143e6f}
@@ -121,18 +123,26 @@ HRESULT STDMETHODCALLTYPE
 }
 
 HRESULT STDMETHODCALLTYPE
-    CAAFEssenceFileContainer::GetPluginID (aafUID_t *uid)
+    CAAFEssenceFileContainer::GetPluggableID (aafUID_t *uid)
 {
-	*uid = ContainerFile;		// UID of the "file" container definition
+	*uid = ContainerFile;		// UID of the PluggableDef
 	return AAFRESULT_SUCCESS;
 }
+
+HRESULT STDMETHODCALLTYPE
+    CAAFEssenceFileContainer::GetPluginDescriptorID (aafUID_t *uid)
+{
+	*uid = EXAMPLE_FILE_PLUGIN;		// UID of the PluginDescriptor
+	return AAFRESULT_SUCCESS;
+}
+
 
 HRESULT STDMETHODCALLTYPE
     CAAFEssenceFileContainer::GetPluggableDefinition (IAAFDictionary *dict, IAAFPluggableDef **def)
 {
 	aafUID_t			uid;
-	IAAFContainerDef	*container;
-	IAAFDefObject		*obj;
+	IAAFContainerDef	*container = NULL;
+	IAAFDefObject		*obj = NULL;
 	XPROTECT()
 	{
 		CHECK(dict->CreateInstance(&AUID_AAFContainerDef,
@@ -142,24 +152,96 @@ HRESULT STDMETHODCALLTYPE
 		CHECK(container->SetEssenceIsIdentified(AAFFalse));
 		CHECK(container->QueryInterface(IID_IAAFDefObject, (void **)&obj));
 		CHECK(obj->Init(&uid, L"Raw file Container", L"Essence is in a non-container file."));
+		obj->Release();
+		obj = NULL;
 		CHECK(container->QueryInterface(IID_IAAFPluggableDef, (void **)def));
+		container->Release();
+		container = NULL;
 	}
 	XEXCEPT
+	{
+		if(container != NULL)
+			container->Release();
+		if(obj != NULL)
+			obj->Release();
+	}
 	XEND
 
 	return AAFRESULT_SUCCESS;
 }
 
+
+//!!!Need some real values for the descriptor
+static wchar_t *manufURL = L"http://www.avid.com";
+static wchar_t *downloadURL = L"ftp://ftp.avid.com/pub/";
+const aafUID_t MANUF_JEFFS_PLUGINS = { 0xA6487F21, 0xE78F, 0x11d2, { 0x80, 0x9E, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } };
+static aafVersionType_t samplePluginVersion = { 0, 1 };
+
+static wchar_t *manufName = L"Avid Technology, Inc.";
+static wchar_t *manufRev = L"Rev 0.1";
+
 HRESULT STDMETHODCALLTYPE
-    CAAFEssenceFileContainer::GetDescriptor (IAAFDictionary *dict, IAAFPluginDescriptor **desc)
+    CAAFEssenceFileContainer::GetDescriptor (IAAFDictionary *dict, IAAFPluginDescriptor **descPtr)
 {
+	IAAFPluginDescriptor	*desc = NULL;
+	IAAFLocator				*pLoc = NULL;
+	IAAFNetworkLocator		*pNetLoc = NULL;
+	IAAFDefObject			*defObject = NULL;
+	aafUID_t				category = AUID_AAFPluggableDefinition, manufacturer = MANUF_JEFFS_PLUGINS;
+	aafUID_t				plugID = EXAMPLE_FILE_PLUGIN;
+	
 	XPROTECT()
 	{
 		CHECK(dict->CreateInstance(&AUID_AAFPluginDescriptor,
-							IID_IAAFPluginDescriptor, 
-							(IUnknown **)desc));
+			IID_IAAFPluginDescriptor, 
+			(IUnknown **)&desc));
+		*descPtr = desc;
+		CHECK(desc->QueryInterface(IID_IAAFDefObject, (void **)&defObject));
+		CHECK(defObject->Init(&plugID, L"Essence File Container", L"Handles non-container files."));
+		defObject->Release();
+		defObject = NULL;
+
+		CHECK(desc->SetCategoryClass(&category));
+		CHECK(desc->SetPluginVersionString(manufRev));
+		CHECK(dict->CreateInstance(&AUID_AAFNetworkLocator,
+			IID_IAAFLocator, 
+			(IUnknown **)&pLoc));
+		CHECK(pLoc->SetPath (manufURL));
+		CHECK(pLoc->QueryInterface(IID_IAAFNetworkLocator, (void **)&pNetLoc));
+		CHECK(desc->SetManufacturerInfo(pNetLoc));
+		pNetLoc->Release();
+		pNetLoc = NULL;
+		pLoc->Release();
+		pLoc = NULL;
+
+		CHECK(desc->SetManufacturerID(&manufacturer));
+		CHECK(desc->SetPluginManufacturerName(manufName));
+		CHECK(desc->SetIsSoftwareOnly(AAFTrue));
+		CHECK(desc->SetIsAccelerated(AAFFalse));
+		CHECK(desc->SetSupportsAuthentication(AAFFalse));
+		
+		/**/
+		CHECK(dict->CreateInstance(&AUID_AAFNetworkLocator,
+			IID_IAAFLocator, 
+			(IUnknown **)&pLoc));
+		CHECK(pLoc->SetPath (downloadURL));
+		CHECK(desc->AppendLocator(pLoc));
+		desc->Release();
+		desc = NULL;
+		pLoc->Release();
+		pLoc = NULL;
 	}
 	XEXCEPT
+	{
+		if(desc != NULL)
+			desc->Release();
+		if(pLoc != NULL)
+			pLoc->Release();
+		if(pNetLoc != NULL)
+			pNetLoc->Release();
+		if(defObject != NULL)
+			defObject->Release();
+	}
 	XEND
 
 	return AAFRESULT_SUCCESS;
