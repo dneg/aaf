@@ -2,7 +2,6 @@
 AAFMedia\
 #endm
 #c
-#import ./AAFUnitTest.exp
 #import ./AAFObject.exp
 AD_HEAD
 /******************************************\
@@ -618,7 +617,5 @@ AD_METHOD1(SourceGetVideoSignalType,
 [in],aafVideoSignalType_t*,signalType,,
 Get the video signal type [NTSC/PAL/SECAM].)
 	//@comm Replaces omfmSourceGetVideoSignalType */
-
-AD_OVERRIDE(.method-Test)
 
 AD_ROOT_CLASS_END
