@@ -173,7 +173,6 @@ protected:
 	OMFixedSizeProperty<aafUInt32>			_whiteReferenceLevel;
 	OMFixedSizeProperty<aafUInt32>			_colorRange;
 	OMFixedSizeProperty<aafInt16>			_paddingBits;
-	aafBool									_initialized;
 };
 
 #endif // ! __ImplAAFCDCIDescriptor_h__
