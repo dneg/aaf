@@ -61,6 +61,7 @@
 #define AUID_AAFInterpolationDefinition AUID_AAFInterpolationDef
 #define AUID_AAFPropertyDefinition AUID_AAFPropertyDef
 #define AUID_AAFTypeDefinition AUID_AAFTypeDef
+#define AUID_AAFTypeDefinitionCharacter AUID_AAFTypeDefCharacter
 #define AUID_AAFTypeDefinitionEnumeration AUID_AAFTypeDefEnum
 #define AUID_AAFTypeDefinitionExtendibleEnumeration AUID_AAFTypeDefExtEnum
 #define AUID_AAFTypeDefinitionFixedArray AUID_AAFTypeDefFixedArray
