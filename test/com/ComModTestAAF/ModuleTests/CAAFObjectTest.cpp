@@ -123,6 +123,7 @@ static HRESULT ObjectTest ()
 
   if (pEnum) pEnum->Release();
   if (pCMob) pCMob->Release();
+  if (pMob) pCMob->Release();
   if (pObj) pObj->Release();
   if (pDict) pDict->Release();
   if (pHeader) pHeader->Release();
