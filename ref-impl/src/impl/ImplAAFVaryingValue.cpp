@@ -56,10 +56,21 @@ extern "C" const aafClassID_t CLSID_EnumAAFControlPoints;
 
 ImplAAFVaryingValue::ImplAAFVaryingValue ()
 : _controlPoints(         PID_VaryingValue_PointList,          "PointList"),
-  _interpolation(         PID_VaryingValue_Interpolation,      "Interpolation")
+  _interpolation(         PID_VaryingValue_Interpolation,      "Interpolation"),
+  _value(				PID_VaryingValue_Value,					"Value"),
+  _displayValue(         PID_VaryingValue_DisplayValue,      "DisplayValue"),
+  _significance(         PID_VaryingValue_Significance,      "Significance")
 {
-	  _persistentProperties.put(_interpolation.address());
+	  aafReferenceType_t	ref = kRefLimitMinimum;
+	 aafInt32				zero = 0;
+	 
 	  _persistentProperties.put(_controlPoints.address());
+	  _persistentProperties.put(_interpolation.address());
+	  _persistentProperties.put(_value.address());
+	  _persistentProperties.put(_displayValue.address());
+	  _persistentProperties.put(_significance.address());
+	_value.setValue((unsigned char *)&zero, sizeof(zero));	//!!!
+	_significance = ref;									//!!!
 }
 
 
