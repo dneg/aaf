@@ -218,7 +218,7 @@ void OMStreamProperty<Element>::appendElements(OMUInt32 elementCount,
   PRECONDITION("Valid element count", elementCount > 0);
   PRECONDITION("Valid buffer", elements != 0);
 
-  writeElements(elementCount(), elementCount, elements);
+  writeElements(this->elementCount(), elementCount, elements);
 }
 
   // @mfunc Write a single <p Element> to the end of
