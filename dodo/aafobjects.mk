@@ -70,7 +70,6 @@ HUMAN_TYPED_IMPL="\
 	AAFLocator \
 	AAFMasterMob \
 	AAFMetaDefinition \
-	AAFMetaDictionary \
 	AAFMob  \
 	AAFMobSlot \
 	AAFNestedScope\
@@ -81,7 +80,6 @@ HUMAN_TYPED_IMPL="\
 	AAFProperty \
 	AAFPropertyDef \
 	AAFPropertyValue \
-	AAFPropValData \
 	AAFPluginManager \
 	AAFPulldown \
 	AAFRGBADescriptor \
@@ -93,7 +91,6 @@ HUMAN_TYPED_IMPL="\
 	AAFSourceMob \
 	AAFSourceReference \
 	AAFStaticMobSlot \
-	AAFStreamPropertyValue \
 	AAFTapeDescriptor \
 	AAFTaggedValue \
 	AAFTextClip \
@@ -160,11 +157,18 @@ DODO_TARGET_NAMES="\
 	${HUMAN_TYPED_IMPL} "
 
 
-# Build the list of all objects that need to be built into the COM DLL
+# Build the list of all public objects that need to be built into the COM DLL
 AAFOBJECTS="\
 	${AAFPERSISTENTOBJECTS} \
 	${AAFNONPERSISTENTOBJECTS} \
 	${HUMAN_TYPED_IMPL} "
+
+# Build the list of all private objects that need to be built into the COM DLL
+# These objects will 
+PRIVATE_AAFOBJECTS="\
+	AAFMetaDictionary \
+	AAFPropValData \
+	AAFStreamPropertyValue "
 
 
 # Build the list of all objects that have automatically-generated
