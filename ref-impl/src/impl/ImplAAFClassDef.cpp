@@ -116,11 +116,6 @@ ImplAAFClassDef::ImplAAFClassDef ()
 
 ImplAAFClassDef::~ImplAAFClassDef ()
 {
-  aafUInt32 numProps;
-  AAFRESULT hr = CountPropertyDefs (&numProps);
-  if (AAFRESULT_FAILED (hr))
-	throw hr;
-
 	OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFPropertyDef>propertyDefinitions(_Properties);
 	while(++propertyDefinitions)
 	{
