@@ -506,7 +506,6 @@ union label
 AAFRESULT aafMobIDNew(
         aafUID_t *mobID)     /* OUT - Newly created Mob ID */
 {
-	union label		aLabel;
 	aafUInt32	major, minor;
 	static aafUInt32 last_part2 = 0;		// Get rid of this!!!
 //#ifdef sun
@@ -541,7 +540,7 @@ AAFRESULT aafMobIDNew(
 #endif
 
 	if (last_part2 >= minor)
-	  aLabel.smpte.MobIDMinor = last_part2 + 1;
+	  minor = last_part2 + 1;
 		
 	last_part2 = minor;
 
