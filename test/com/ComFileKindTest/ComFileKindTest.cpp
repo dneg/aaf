@@ -297,11 +297,11 @@ struct {
 } fileinfo[] = {
   {
     &aafFileKindAafSSBinary,
-    L"TestMSS.aaf"
+    L"ComFileKindTest.aaf"
   },
   {
     &aafFileKindAafXmlText,
-    L"TestMSS.xml"
+    L"ComFileKindTest.xml"
   }
 };
 
