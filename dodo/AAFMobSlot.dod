@@ -36,16 +36,6 @@ AD_IDL(//
 // AAFDataDef
 //)
 
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
-
- 
 /***********************************************\
 *	Stub only.   Implementation not yet added	*
 \***********************************************/
@@ -61,10 +51,13 @@ AD_XMETHOD1(GetSegment,
 			[out\,retval],
 			objOut,
 			AAFSegment,
-			pResult,
+			ppResult,
 			Segment property value,
 
-			This method will get the segment for this mob slot.
+			This method will get the segment for this mob slot and place an
+  // interface for it into the **ppResult argument.  If a segment
+  // exists\, the result will be AddRef\(\)ed.  If not\, the result will
+  // be NULL.
   //
   // Succeeds if all of the following are true:
   // - the pResult pointer is valid.
@@ -253,10 +246,10 @@ AD_XMETHOD1(SetSegment,
 			pSegment,
 			Segment property value,
 
-			This method will set the segment for this mob slot.
+			This method will set the segment for this mob slot.  If a segment
+  // already exists for this mob slot\, it will be discarded.
   // 
-  // Succeeds if all of the following are true:
-  // - the pSegment pointer is valid.
+  // Always succeeds.
   // 
   // If this method fails no state will be changed.
   // 
@@ -265,10 +258,7 @@ AD_XMETHOD1(SetSegment,
   // encountered in the order given below:
   // 
   // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pSegment arg is NULL.)
+  //   - succeeded.  \(This is the only code indicating success.\))
 
 
 AD_XMETHOD1(SetName,
