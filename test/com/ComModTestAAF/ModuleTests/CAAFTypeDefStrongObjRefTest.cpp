@@ -422,7 +422,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	  IAAFPropertyValueSP pv1;
 	  checkResult (mobObj->GetPropertyValue (pd1, &pv1));
 	  IAAFObjectSP fillObj1;
-	  checkResult (tdor->GetObject (pv1, &fillObj1));
+	  checkResult (tdor->GetObject (pv1, IID_IAAFObject, (IUnknown **)&fillObj1));
 	  IAAFComponentSP comp1;
 	  checkResult (fillObj1->QueryInterface (IID_IAAFComponent,
 											 (void **)&comp1));
@@ -434,7 +434,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	  IAAFPropertyValueSP pv2;
 	  checkResult (mobObj->GetPropertyValue (pd2, &pv2));
 	  IAAFObjectSP fillObj2;
-	  checkResult (tdor->GetObject (pv2, &fillObj2));
+	  checkResult (tdor->GetObject (pv2, IID_IAAFObject, (IUnknown **)&fillObj2));
 	  IAAFComponentSP comp2;
 	  checkResult (fillObj2->QueryInterface (IID_IAAFComponent,
 											 (void **)&comp2));
@@ -455,8 +455,9 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
   return 	hr;
 }
 
+extern "C" HRESULT CAAFTypeDefStrongObjRef_test();
 
-extern "C" HRESULT CAAFTypeDefStrongObjRef_test()
+HRESULT CAAFTypeDefStrongObjRef_test()
 {
   HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
 
