@@ -126,7 +126,7 @@ AD_METHOD1(IsATimeWarp,
   //   - pIsTimeWarp arg is NULL.)
 
 AD_METHOD1(GetBypassOverride,
-	[out], aafArgIDType_t *, pBypassOverride, Bypass override property value,
+	[out], aafUInt32 *, pBypassOverride, Bypass override property value,
 	Returns the optional bypass override propertyvalue from the input effect object.
   // 
   // Succeeds if all of the following are true:
@@ -275,7 +275,7 @@ AD_XMETHOD1(SetRender,
 	//@comm Replaces omfiEffectSetFinalRender and omfiEffectSetWorkingRender
 
 AD_METHOD1(SetBypassOverride,
-	[in], aafArgIDType_t, bypassOverride, Bypass override,
+	[in], aafUInt32, bypassOverride, Bypass override,
 	This function sets the optional bypass override property on the given effect object.)
   // 
   // This method will return the following codes.  If more than one of
