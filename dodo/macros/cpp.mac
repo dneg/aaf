@@ -61,15 +61,15 @@
 : .parent-module (AAFFalse)
 {
   if (doInit)
-	{
+    {
 #ifdef BOB_TEST
-	  Impl.this-module * newRep;
-	  newRep = new Impl.this-module;
-	  assert (newRep);
-	  InitRep (newRep);
-	  newRep->InitCppParent (this);
+      Impl.this-module * newRep;
+      newRep = new Impl.this-module;
+      assert (newRep);
+      InitRep (newRep);
+      newRep->InitCppParent (this);
 #endif
-	}
+    }
 }
 
 
@@ -106,15 +106,15 @@
 .this-module::.this-module (aafBool doInit)
 {
   if (doInit)
-	{
+    {
 #ifdef BOB_TEST
-	  Impl.this-module * newRep;
-	  newRep = new Impl.this-module;
-	  assert (newRep);
-	  InitRep (newRep);
-	  newRep->InitCppParent (this);
+      Impl.this-module * newRep;
+      newRep = new Impl.this-module;
+      assert (newRep);
+      InitRep (newRep);
+      newRep->InitCppParent (this);
 #endif
-	}
+    }
 }
 
 
@@ -145,7 +145,7 @@ Impl.this-module * .this-module::GetRepObject ()
   assert (_rep);
   return _rep;
 #else
-	return ((Impl.this-module *)NULL);
+    return ((Impl.this-module *)NULL);
 #endif
 }
 #endm
@@ -171,7 +171,7 @@ AAFRESULT STDMETHODCALLTYPE
   assert (ptr);
   return ptr->%01();
 #else
-	return AAFRESULT_NOT_IMPLEMENTED;
+    return AAFRESULT_NOT_IMPLEMENTED;
 #endif
 }
 #endm
@@ -201,7 +201,7 @@ AAFRESULT STDMETHODCALLTYPE
   assert (ptr);
   return ptr->%01 (%04);
 #else
-	return AAFRESULT_NOT_IMPLEMENTED;
+    return AAFRESULT_NOT_IMPLEMENTED;
 #endif
 }
 #endm
@@ -235,7 +235,7 @@ AAFRESULT STDMETHODCALLTYPE
   assert (ptr);
   return ptr->%01 (%04,%08);
 #else
-	return AAFRESULT_NOT_IMPLEMENTED;
+    return AAFRESULT_NOT_IMPLEMENTED;
 #endif
 }
 #endm
@@ -273,7 +273,7 @@ AAFRESULT STDMETHODCALLTYPE
   assert (ptr);
   return ptr->%01 (%04,%08,%12);
 #else
-	return AAFRESULT_NOT_IMPLEMENTED;
+    return AAFRESULT_NOT_IMPLEMENTED;
 #endif
 }
 #endm
@@ -315,7 +315,7 @@ AAFRESULT STDMETHODCALLTYPE
   assert (ptr);
   return ptr->%01 (%04,%08,%12,%16);
 #else
-	return AAFRESULT_NOT_IMPLEMENTED;
+    return AAFRESULT_NOT_IMPLEMENTED;
 #endif
 }
 #endm
@@ -361,7 +361,7 @@ AAFRESULT STDMETHODCALLTYPE
   assert (ptr);
   return ptr->%01 (%04,%08,%12,%16,%20);
 #else
-	return AAFRESULT_NOT_IMPLEMENTED;
+    return AAFRESULT_NOT_IMPLEMENTED;
 #endif
 }
 #endm
@@ -411,7 +411,7 @@ AAFRESULT STDMETHODCALLTYPE
   assert (ptr);
   return ptr->%01 (%04,%08,%12,%16,%20,%24);
 #else
-	return AAFRESULT_NOT_IMPLEMENTED;
+    return AAFRESULT_NOT_IMPLEMENTED;
 #endif
 }
 #endm
@@ -520,8 +520,8 @@ AAFRESULT STDMETHODCALLTYPE
 #c
 #startm AD_CONSTRUCTOR3 13
 .this-module::.this-module (%02 %03,
-							%06 %07,
-							%10 %11)
+                            %06 %07,
+                            %10 %11)
 {
 #ifdef BOB_TEST
   Impl.this-module * newRep;
@@ -558,9 +558,9 @@ AAFRESULT STDMETHODCALLTYPE
 #c
 #startm AD_CONSTRUCTOR4 17
 .this-module::.this-module (%02 %03,
-							%06 %07,
-							%10 %11,
-							%14 %15)
+                            %06 %07,
+                            %10 %11,
+                            %14 %15)
 {
 #ifdef BOB_TEST
   Impl.this-module * newRep;
@@ -605,16 +605,16 @@ AAFRESULT STDMETHODCALLTYPE
 
   stat = pThisO->%01 (&repObj);
   if (FAILED (stat))
-	{
-	  return stat;
-	}
+    {
+      return stat;
+    }
   assert (repObj);
   retObj = repObj->GetCppParent();
   assert (retObj);
   assert (%04);
   *%04 = retObj;
 #else
-	return AAFRESULT_NOT_IMPLEMENTED;
+    return AAFRESULT_NOT_IMPLEMENTED;
 #endif
 }
 #endm
@@ -659,7 +659,7 @@ AAFRESULT STDMETHODCALLTYPE
   stat = pThisO->%01 (repObj);
   return stat;
 #else
-	return AAFRESULT_NOT_IMPLEMENTED;
+    return AAFRESULT_NOT_IMPLEMENTED;
 #endif
 }
 #endm

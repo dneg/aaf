@@ -164,7 +164,7 @@ AAFRESULT STDMETHODCALLTYPE
 #startm AD_METHOD2 10
 AAFRESULT STDMETHODCALLTYPE
     Impl.this-module::%01 (%03 /*%04*/,
-						   %07 /*%08*/)
+                           %07 /*%08*/)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
@@ -193,8 +193,8 @@ AAFRESULT STDMETHODCALLTYPE
 #startm AD_METHOD3 14
 AAFRESULT STDMETHODCALLTYPE
     Impl.this-module::%01 (%03 /*%04*/,
-						   %07 /*%08*/,
-						   %11, /*%12*/)
+                           %07 /*%08*/,
+                           %11, /*%12*/)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
@@ -227,9 +227,9 @@ AAFRESULT STDMETHODCALLTYPE
 #startm AD_METHOD4 18
 AAFRESULT STDMETHODCALLTYPE
     Impl.this-module::%01 (%03 /*%04*/,
-						   %07 /*%08*/,
-						   %11 /*%12*/,
-						   %15 /*%16*/)
+                           %07 /*%08*/,
+                           %11 /*%12*/,
+                           %15 /*%16*/)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
@@ -266,10 +266,10 @@ AAFRESULT STDMETHODCALLTYPE
 #startm AD_METHOD5 22
 AAFRESULT STDMETHODCALLTYPE
     Impl.this-module::%01 (%03 /*%04*/,
-						   %07 /*%08*/,
-						   %11 /*%12*/,
-						   %15 /*%16*/,
-						   %19 /*%20*/)
+                           %07 /*%08*/,
+                           %11 /*%12*/,
+                           %15 /*%16*/,
+                           %19 /*%20*/)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
@@ -310,11 +310,11 @@ AAFRESULT STDMETHODCALLTYPE
 #startm AD_METHOD6 26
 AAFRESULT STDMETHODCALLTYPE
     Impl.this-module::%01 (%03 /*%04*/,
-						   %07 /*%08*/,
-						   %11 /*%12*/,
-						   %15 /*%16*/,
-						   %19 /*%20*/,
-						   %23 /*%24*/)
+                           %07 /*%08*/,
+                           %11 /*%12*/,
+                           %15 /*%16*/,
+                           %19 /*%20*/,
+                           %23 /*%24*/)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
@@ -426,8 +426,8 @@ AAFRESULT STDMETHODCALLTYPE
 #c
 #startm AD_CONSTRUCTOR3 13
     Impl.this-module::.this-module (%02 %03,
-								%06 %07,
-								%10 %11)
+                                %06 %07,
+                                %10 %11)
 {}
 #endm
 
@@ -457,9 +457,9 @@ AAFRESULT STDMETHODCALLTYPE
 #c
 #startm AD_CONSTRUCTOR4 17
     Impl.this-module::.this-module (%02 %03,
-								%06 %07,
-								%10 %11,
-								%14 %15)
+                                %06 %07,
+                                %10 %11,
+                                %14 %15)
 {}
 #endm
 

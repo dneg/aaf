@@ -62,13 +62,13 @@ C.this-module::C.this-module (AAFBool doInit)
 : C.parent-module (AAFFalse)
 {
   if (doInit)
-	{
-	  Impl.this-module * newRep
-	  newRep = new Impl.this-module;
-	  assert (newRep);
-	  InitRep (newRep);
-	  newRep->InitComParent (this);
-	}
+    {
+      Impl.this-module * newRep
+      newRep = new Impl.this-module;
+      assert (newRep);
+      InitRep (newRep);
+      newRep->InitComParent (this);
+    }
 }
 
 
@@ -461,8 +461,8 @@ C.this-module::C.this-module (%02 %03, %06 %07)
 #c
 #startm AD_CONSTRUCTOR3 13
 C.this-module::C.this-module (%02 %03,
-							  %06 %07,
-							  %10 %11)
+                              %06 %07,
+                              %10 %11)
 {
   Impl.this-module * ptr;
   ptr = new Impl.this-module (%03, %07, %11);
@@ -497,9 +497,9 @@ C.this-module::C.this-module (%02 %03,
 #c
 #startm AD_CONSTRUCTOR4 17
 C.this-module::C.this-module (%02 %03,
-							  %06 %07,
-							  %10 %11,
-							  %14 %15)
+                              %06 %07,
+                              %10 %11,
+                              %14 %15)
 {
   Impl.this-module * ptr;
   ptr = new Impl.this-module (%03, %07, %11, %15);
@@ -541,9 +541,9 @@ AAFRESULT STDMETHODCALLTYPE
 
   stat = pThisO->%01 (&repObj);
   if (FAILED (stat))
-	{
-	  return stat;
-	}
+    {
+      return stat;
+    }
   assert (repObj);
   retObj = repObj->GetCOMParent();
   assert (retObj);

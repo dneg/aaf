@@ -38,7 +38,7 @@
 #c
 #startm AD_HEAD 00
 //@doc
-//@class 	.this-module | Implementation class for .this-module
+//@class    .this-module | Implementation class for .this-module
 #ifndef _C.this-module_h_
 #define _C.this-module_h_
 #endm
@@ -294,9 +294,9 @@ public:
   // Class Factory implemented as static functions.
   // 
   static AAFRESULT STDAPICALLTYPE CreateInstance
-	(AD_ARGSPEC([in]) LPUNKNOWN pUnkOuter,
-	 AD_ARGSPEC([in]) REFIID riid, 
-	 AD_ARGSPEC([out]) void **ppObj); 
+    (AD_ARGSPEC([in]) LPUNKNOWN pUnkOuter,
+     AD_ARGSPEC([in]) REFIID riid, 
+     AD_ARGSPEC([out]) void **ppObj); 
   //
   //********
 };
@@ -316,9 +316,9 @@ public:
   // Class Factory implemented as static functions.
   // 
   static AAFRESULT STDAPICALLTYPE CreateInstance
-	(AD_ARGSPEC([in]) LPUNKNOWN pUnkOuter,
-	 AD_ARGSPEC([in]) REFIID riid, 
-	 AD_ARGSPEC([out]) void **pp.this-module); 
+    (AD_ARGSPEC([in]) LPUNKNOWN pUnkOuter,
+     AD_ARGSPEC([in]) REFIID riid, 
+     AD_ARGSPEC([out]) void **pp.this-module); 
   //
   //********
 
@@ -405,8 +405,8 @@ private:
 #c
 #startm AD_CONSTRUCTOR3 13
     C.this-module (%02 %03,
-				   %06 %07,
-				   %10 %11);\
+                   %06 %07,
+                   %10 %11);\
 #endm
 
 
@@ -435,9 +435,9 @@ private:
 #c
 #startm AD_CONSTRUCTOR4 17
     C.this-module (%02 %03,
-				   %06 %07,
-				   %10 %11,
-				   %14 %15);\
+                   %06 %07,
+                   %10 %11,
+                   %14 %15);\
 #endm
 
 
