@@ -602,6 +602,8 @@ AAFRESULT STDMETHODCALLTYPE
 	  return AAFRESULT_PROP_NOT_PRESENT;
 
 	*pDisplayF2Offset = _displayF2Offset;
+
+	return AAFRESULT_SUCCESS;
 }
 
 
@@ -639,6 +641,8 @@ AAFRESULT STDMETHODCALLTYPE
 	  return AAFRESULT_PROP_NOT_PRESENT;
 
 	*pStoredF2Offset = _storedF2Offset;
+
+	return AAFRESULT_SUCCESS;
 }
 
 
@@ -664,6 +668,8 @@ AAFRESULT STDMETHODCALLTYPE
 	  return AAFRESULT_PROP_NOT_PRESENT;
 
 	*pActiveFormatDescriptor = _activeFormatDescriptor;
+
+	return AAFRESULT_SUCCESS;
 }
 
 
