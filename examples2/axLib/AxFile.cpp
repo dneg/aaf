@@ -22,7 +22,6 @@
 
 #include <iostream>
 
-
 //=---------------------------------------------------------------------=
 
 bool AxFile::isAAFFile( const AxString& name )
@@ -39,7 +38,8 @@ AxFile::AxFile()
 {}
 
 AxFile::AxFile( IAAFFileSP spIaafFile )
-: _spIaafFile( spIaafFile )
+: AxBaseObj( AxQueryInterface<IAAFFile, IUnknown>(spIaafFile) ),
+  _spIaafFile( spIaafFile )
 {}
 
 AxFile::AxFile( const AxFile& other )
@@ -74,6 +74,8 @@ void AxFile::OpenNewModify( const AxString& name,
     _spIaafFile = spIaafFile;
     _name       = name;
     _mode	= mode;
+
+	setIUnknown( _spIaafFile );
 }
 
 void AxFile::OpenExistingModify( const AxString& name,
@@ -89,6 +91,8 @@ void AxFile::OpenExistingModify( const AxString& name,
     _spIaafFile = spIaafFile;
     _name       = name;
     _mode	= mode;
+
+	setIUnknown( _spIaafFile );
 }
 
 void AxFile::OpenExistingRead( const AxString& name,
@@ -101,12 +105,32 @@ void AxFile::OpenExistingRead( const AxString& name,
 	_spIaafFile = spIaafFile;
 	_name = name;
 	_mode = mode;
+
+	setIUnknown( _spIaafFile );
 }
 
+void AxFile::OpenTransient( const AxProductIdentification& ident )
+{
+	IAAFFileSP spIaafFile;
+
+	CHECK_HRESULT( AAFFileOpenTransient( const_cast<aafProductIdentification_t*>(ident.getProductId()),
+										 &spIaafFile ) );
+
+	_spIaafFile = spIaafFile;
+	_name = L"unnamed transient";
+	_mode = 0;
+	
+	setIUnknown( spIaafFile );
+}
 
 void AxFile::Save()
 {
 	CHECK_HRESULT( _spIaafFile->Save() );
+}
+
+void AxFile::SaveCopyAs( IAAFFileSP spDstFile )
+{
+	CHECK_HRESULT( _spIaafFile->SaveCopyAs( spDstFile ) );
 }
 
 void AxFile::Close()
@@ -135,7 +159,6 @@ std::wostream& AxFile::dump( std::wostream& os ) const
 
 	os << L"AxFile:" << endl;
 	os << L"\t" << _name << endl;
-	os << L"\tIncomplete implementation." << endl;
 
 	return os;
 }
@@ -145,9 +168,26 @@ void AxFile::init( const AxFile& other )
 	_name = other._name;
 	_mode = other._mode;
 	_spIaafFile = other._spIaafFile;
+
+	setIUnknown( _spIaafFile );
 }
 
 std::wostream& operator<<( std::wostream& os, AxFile& axFile )
 {	
 	return axFile.dump( os );
+}
+
+//=---------------------------------------------------------------------=
+
+AxRandomFile::AxRandomFile( IAAFRandomFileSP spIaafRandomFile )
+:	AxFile( AxQueryInterface<IAAFRandomFile,IAAFFile>(spIaafRandomFile) ),
+	_spIaafRandomFile( spIaafRandomFile )
+{}
+
+AxRandomFile::~AxRandomFile()
+{}
+
+void AxRandomFile::SaveAsFile( IAAFFileSP spIaafFile )
+{
+	CHECK_HRESULT( _spIaafRandomFile->SaveAsFile( spIaafFile ) );
 }

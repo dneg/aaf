@@ -21,8 +21,9 @@
 
 #include "AxTypes.h"
 #include "AxSmartPointer.h"
+#include "AxBaseObj.h"
 
-class AxFile {
+class AxFile : AxBaseObj {
 
  public:
 
@@ -50,7 +51,12 @@ class AxFile {
 	void OpenExistingRead( const AxString& name,
 						   aafUInt32 mode = 0 );
 	
+
+	void OpenTransient( const AxProductIdentification& ident = AxProductIdentification() );
+	
 	void Save();
+
+	void SaveCopyAs( IAAFFileSP spDstFile );
 
 	void Close();
 
@@ -58,7 +64,7 @@ class AxFile {
 
 	IAAFHeaderSP getHeader() const;
 
-	operator IAAFFileSP ()
+	inline operator IAAFFileSP ()
 	{ return _spIaafFile; }
 	
 	std::wostream& dump( std::wostream& os ) const;
@@ -74,5 +80,22 @@ class AxFile {
 };
 
 std::wostream& operator<<( std::wostream& os, const AxFile& file );
+
+
+class AxRandomFile : AxFile {
+public:
+	AxRandomFile( IAAFRandomFileSP spIaafRandomFile );
+	virtual ~AxRandomFile();
+
+	void SaveAsFile( IAAFFileSP spIaafFile );
+
+	inline operator IAAFRandomFileSP ()
+	{ return _spIaafRandomFile; }
+
+private:
+
+	IAAFRandomFileSP _spIaafRandomFile;
+};
+
 
 #endif
