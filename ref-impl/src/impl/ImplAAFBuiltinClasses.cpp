@@ -197,8 +197,8 @@ const /*static*/ aafUID_t * ImplAAFBuiltinClasses::sAxClassIDs[] =
   &AUID_AAFTypeDefSet,
   /*
   &AUID_AAFTypeDefStream,
-  &AUID_AAFTypeDefWeakObjRef,
   */
+  &AUID_AAFTypeDefWeakObjRef,
 
   &AUID_AAFLocator,
   &AUID_AAFNetworkLocator,
@@ -253,11 +253,7 @@ ImplAAFBuiltinClasses::NewBuiltinClassDef (const aafUID_t & rClassID,
 	  if (EqualAUID (sBuiltinClassTable[i].pThisId, &rClassID))
 		{
 		  // We've found the desired class in our table.
-#if 1
 		  ImplAAFClassDef * pcd = (ImplAAFClassDef*)(_dictionary->metaDictionary())->pvtCreateMetaDefinition(AUID_AAFClassDef);
-#else // #if 1
-		  ImplAAFClassDef * pcd = (ImplAAFClassDef*)_dictionary->pvtInstantiate(AUID_AAFClassDef);
-#endif // #else // #if 1
 		  assert (pcd);
       pcd->InitOMProperties(_dictionary->GetBuiltinDefs()->cdClassDef());
 

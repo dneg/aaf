@@ -421,4 +421,14 @@ bool ImplAAFMetaDefinition::dataObject(void) const
 }
 
 
+// Method is called after associated class has been added to MetaDictionary.
+// If this method fails the class is removed from the MetaDictionary and the
+// registration method will fail.
+HRESULT ImplAAFMetaDefinition::CompleteClassRegistration(void)
+{
+  // Default implementation just returns success.
+  return AAFRESULT_SUCCESS;
+}
+
+
 

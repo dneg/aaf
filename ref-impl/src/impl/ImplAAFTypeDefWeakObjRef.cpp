@@ -38,6 +38,10 @@
 #include "ImplAAFTypeDefWeakObjRef.h"
 #endif
 
+#ifndef __ImplAAFWeakRefValue_h__
+#include "ImplAAFWeakRefValue.h"
+#endif
+
 #ifndef __ImplAAFTypeDefWeakObjRef_h__
 #include "ImplAAFTypeDefWeakObjRef.h"
 #endif
@@ -68,6 +72,7 @@
 
 #include "ImplAAFDictionary.h"
 #include "AAFStoredObjectIDs.h"
+#include "AAFPropertyDefs.h"
 #include "AAFPropertyIDs.h"
 
 #include <assert.h>
@@ -76,9 +81,10 @@
 
 // Weak references may not be in v1.0...
 #ifndef ENABLE_WEAK_REFERENCES
-#define ENABLE_WEAK_REFERENCES 0
+#define ENABLE_WEAK_REFERENCES 1
 #endif
 
+extern "C" const aafClassID_t CLSID_AAFWeakRefValue;
 
 ImplAAFTypeDefWeakObjRef::ImplAAFTypeDefWeakObjRef ()
   : _referencedType ( PID_TypeDefinitionWeakObjectReference_ReferencedType, 
@@ -137,10 +143,10 @@ AAFRESULT STDMETHODCALLTYPE
 #if ENABLE_WEAK_REFERENCES
   
   // TEMPORARY (for debugging): Allocate and initialize a weak reference property.
-  if (!_targetPids)
-  {
-    result = const_cast<ImplAAFTypeDefWeakObjRef *>(this)->SyncTargetPidsFromTargetSet();
-  }
+//  if (!_targetPids)
+//  {
+//    result = const_cast<ImplAAFTypeDefWeakObjRef *>(this)->SyncTargetPidsFromTargetSet();
+//  }
 
   return result;
 
@@ -152,6 +158,39 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 
+aafUInt32 ImplAAFTypeDefWeakObjRef::GetTargetPidCount(void) const
+{
+  if (0 == _targetPidCount)
+  {
+    AAFRESULT rc = const_cast<ImplAAFTypeDefWeakObjRef *>(this)->SyncTargetPidsFromTargetSet();
+    if (AAFRESULT_FAILED(rc))
+      return 0;
+  }
+  return _targetPidCount;
+}
+
+const OMPropertyId * ImplAAFTypeDefWeakObjRef::GetTargetPids(void) const
+{
+  if (NULL == _targetPids)
+  {
+    AAFRESULT rc = const_cast<ImplAAFTypeDefWeakObjRef *>(this)->SyncTargetPidsFromTargetSet();
+    if (AAFRESULT_FAILED(rc))
+      return NULL;
+  }
+  return _targetPids;
+}
+
+
+OMPropertyId ImplAAFTypeDefWeakObjRef::GetUniqueIdentifierPid(void) const
+{
+  if (0 == _uniqueIdentifierPid)
+  {
+    AAFRESULT rc = const_cast<ImplAAFTypeDefWeakObjRef *>(this)->SyncTargetPidsFromTargetSet();
+    if (AAFRESULT_FAILED(rc))
+      return 0;
+  }
+  return _uniqueIdentifierPid;
+}
 
 // Override from AAFTypeDefObjectRef
 AAFRESULT STDMETHODCALLTYPE
@@ -170,17 +209,53 @@ AAFRESULT STDMETHODCALLTYPE
 
   _referencedType = pClassDef;
 
+
+  // This instance is now fully initialized.
+
+  setInitialized();
+
+
   return AAFRESULT_SUCCESS;
 }
 
 // Override from AAFTypeDefObjectRef
 AAFRESULT STDMETHODCALLTYPE
-  ImplAAFTypeDefWeakObjRef::CreateValue (/*[in]*/ ImplAAFRoot * /*pObj*/,
-    /*[out]*/ ImplAAFPropertyValue ** /*ppPropVal*/)
+  ImplAAFTypeDefWeakObjRef::CreateValue (/*[in]*/ ImplAAFRoot * pObj,
+    /*[out]*/ ImplAAFPropertyValue ** ppPropVal)
 {
 #if ENABLE_WEAK_REFERENCES
+  if (! pObj)
+	return AAFRESULT_NULL_PARAM;
+  if (! ppPropVal)
+	return AAFRESULT_NULL_PARAM;
+  if (! isInitialized())
+    return AAFRESULT_NOT_INITIALIZED;
 
-  return AAFRESULT_NOT_IMPLEMENTED;
+  ImplAAFWeakRefValue *pWeakRefValue = NULL;
+  pWeakRefValue = (ImplAAFWeakRefValue*) CreateImpl (CLSID_AAFWeakRefValue);
+  if (!pWeakRefValue) 
+    return AAFRESULT_NOMEMORY;
+
+  // Attempt to initialize the strong reference value. This "should" fail if the given 
+  // property is not a valid strong reference property.
+  AAFRESULT result = pWeakRefValue->Initialize (this);//, property());
+  if (AAFRESULT_SUCCEEDED(result))
+  {
+    result = this->SetObject(pWeakRefValue, pObj);
+    if (AAFRESULT_SUCCEEDED(result))
+    {
+    	*ppPropVal = pWeakRefValue; // The reference count is already 1.
+    	pWeakRefValue = NULL;
+    }
+  }
+
+  if (AAFRESULT_FAILED(result))
+  {
+    pWeakRefValue->ReleaseReference();
+    return result;
+  }
+  
+  return result;
 
 #else // #if ENABLE_WEAK_REFERENCES
     
@@ -192,14 +267,31 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDefWeakObjRef::SetObject (ImplAAFPropertyValue * pPropVal,
-										   ImplAAFRoot * pObject)
+										   ImplAAFRoot * pObj)
 {
   if (! pPropVal) return AAFRESULT_NULL_PARAM;
-  if (! pObject) return AAFRESULT_NULL_PARAM;
+  if (! pObj) return AAFRESULT_NULL_PARAM;
 
 #if ENABLE_WEAK_REFERENCES
+  if (! isInitialized())
+    return AAFRESULT_NOT_INITIALIZED;
 
-  return AAFRESULT_NOT_IMPLEMENTED;
+  ImplAAFStorable *pObject = dynamic_cast<ImplAAFStorable*>(pObj);
+  if (NULL == pObject)
+    return AAFRESULT_INVALID_PARAM;
+
+  
+  // If the given property value is a "direct" strong reference property
+  // then just set the object directly.
+  ImplAAFWeakRefValue* pWeakRefValue = dynamic_cast<ImplAAFWeakRefValue*>(pPropVal);
+  if (NULL != pWeakRefValue)
+  {
+    return pWeakRefValue->SetObject(pObject);
+  }
+  else
+  {
+    return AAFRESULT_INVALID_PARAM;
+  }
 
 #else // #if ENABLE_WEAK_REFERENCES
     
@@ -215,10 +307,27 @@ ImplAAFTypeDefWeakObjRef::GetObject (ImplAAFPropertyValue * pPropVal,
 {
   if (! pPropVal) return AAFRESULT_NULL_PARAM;
   if (! ppObject) return AAFRESULT_NULL_PARAM;
+  *ppObject = NULL;
 
 #if ENABLE_WEAK_REFERENCES
-
-  return AAFRESULT_NOT_IMPLEMENTED;
+  if (! isInitialized())
+    return AAFRESULT_NOT_INITIALIZED;
+  
+  // If the given property value is a "direct" strong reference property
+  // then just get the object directly.
+  ImplAAFWeakRefValue* pWeakRefValue = dynamic_cast<ImplAAFWeakRefValue*>(pPropVal);
+  if (NULL != pWeakRefValue)
+  {
+    ImplAAFStorable *pObject = NULL;
+    AAFRESULT hr = pWeakRefValue->GetObject((ImplAAFStorable **)&pObject);
+    if (AAFRESULT_SUCCEEDED(hr))
+      *ppObject = pObject;
+    return hr;
+  }
+  else
+  {
+    return AAFRESULT_INVALID_PARAM;
+  }
 
 #else // #if ENABLE_WEAK_REFERENCES
     
@@ -251,6 +360,65 @@ AAFRESULT STDMETHODCALLTYPE
   if (!pTid) return AAFRESULT_NULL_PARAM;
   *pTid = kAAFTypeCatWeakObjRef;
   return AAFRESULT_SUCCESS;
+}
+
+
+
+
+// Allocate and initialize the correct subclass of ImplAAFPropertyValue 
+// for the given OMProperty.
+AAFRESULT STDMETHODCALLTYPE
+  ImplAAFTypeDefWeakObjRef::CreatePropertyValue(
+    OMProperty *property,
+    ImplAAFPropertyValue ** ppPropertyValue ) const
+{
+  AAFRESULT result = AAFRESULT_SUCCESS;
+  assert (property && ppPropertyValue);
+  if (NULL == property || NULL == ppPropertyValue)
+    return AAFRESULT_NULL_PARAM;
+  *ppPropertyValue = NULL; // initialize out parameter
+  
+  OMReferenceProperty* refProperty = dynamic_cast<OMReferenceProperty*>(property);
+  assert(NULL != refProperty);
+  if (NULL == refProperty)
+    return AAFRESULT_INVALID_PARAM;
+ 
+  ImplAAFWeakRefValue *pWeakRefValue = NULL;
+  pWeakRefValue = (ImplAAFWeakRefValue*) CreateImpl (CLSID_AAFWeakRefValue);
+  if (!pWeakRefValue) 
+    return AAFRESULT_NOMEMORY;
+
+  // Attempt to initialize the strong reference value. This "should" fail if the given 
+  // property is not a valid strong reference property.
+  result = pWeakRefValue->Initialize (this, property);
+
+#if 0
+  if (AAFRESULT_SUCCEEDED (result))
+  {
+    // Bobt hack! This should be removed once we have proper
+    // integration with OM property def support.
+    if (! property->isOptional() || property->isPresent ())
+    {
+      // set the storage in the prop value
+      OMObject* object = refProperty->getObject();
+      assert (NULL != object);
+      ImplAAFStorable* pObject = ImplAAFRefValue::ConvertOMObjectToRoot(object);
+      result = pWeakRefValue->SetObject(pObject);
+    }
+  }
+#endif
+
+
+  if (AAFRESULT_SUCCEEDED(result))
+  {
+  	*ppPropertyValue = pWeakRefValue; // The reference count is already 1.
+  	pWeakRefValue = NULL;
+  }
+  else
+  {
+    pWeakRefValue->ReleaseReference();
+  }
+  return result;
 }
 
 
@@ -451,94 +619,73 @@ AAFRESULT ImplAAFTypeDefWeakObjRef::SyncTargetPidsFromTargetSet(void)
   // Replace with appropriate contants defined by OM:
   const OMPropertyId kOMDictionaryPid = 1;
   const OMPropertyId kOMDataPid = 2;
-  
-  // We need to prepend the OM Pid for the data or dictionary
-  // strong reference.
-  targetPidCount = _targetSet.count() + 1;
-  assert (0 != targetPidCount);
-  targetPids = new OMPropertyId[targetPidCount + 1];
-  if (NULL == targetPids)
-    return AAFRESULT_NOMEMORY;
-  // Initialize the new pid array. NOTE: This will also null terminates the array...
-  for (index = 0; index <= targetPidCount; index++)
-    targetPids[index] = 0;
-    
-  ImplAAFClassDefSP pClassDef;
-  ImplAAFPropertyDefSP pPropertyDef;
 
-  // We need to search the dictionary.
-  index = 0;
   ImplAAFDictionarySP pDictionary;
   result = GetDictionary(&pDictionary);
   if (AAFRESULT_SUCCEEDED(result))
   {
+    targetPidCount = _targetSet.count();
+    assert (0 != targetPidCount);
+    
+    // pid array for OM must be 0 terminated.
+    targetPids = new OMPropertyId[targetPidCount + 1];
+    if (NULL == targetPids)
+      return AAFRESULT_NOMEMORY;
+    // Initialize the new pid array. NOTE: This will also null terminates the array...
+    for (index = 0; index <= targetPidCount; index++)
+      targetPids[index] = 0;
+     
+    ImplAAFClassDefSP pClassDef;
+    ImplAAFPropertyDefSP pPropertyDef;
+
     // First we need to determine if whether the first property
     // definition is in the MetaDictionary or the Header.
     _targetSet.getValueAt(&propertyID, 0);
     
-    result = pDictionary->LookupClassDef(AUID_AAFMetaDictionary, &pClassDef);
-    assert(AAFRESULT_SUCCEEDED(result));
-    if (AAFRESULT_SUCCEEDED(result))
-    {      
-      if (findPropertyDefinition(pClassDef, propertyID, &pPropertyDef))
-      {
-        targetPids[0] = kOMDictionaryPid;
-      }
-      else
-      {
-        result = pDictionary->LookupClassDef(AUID_AAFHeader, &pClassDef);
-        assert(AAFRESULT_SUCCEEDED(result));
-        if (AAFRESULT_SUCCEEDED(result))
-        {
-          if (findPropertyDefinition(pClassDef, propertyID, &pPropertyDef))
-          {
-            targetPids[0] = kOMDataPid;
-          }
-          else
-          {
-            // The pTargetSet argument is not valid!
-            result = AAFRESULT_INVALID_PARAM;
-          }
-        }
-      }
-    }
-  }
-  
-
-  if (AAFRESULT_SUCCEEDED(result))
-  { 
-    for (index = 0; index < (targetPidCount - 1); ++index)
+    if (0 == memcmp(&propertyID, &kAAFPropID_Root_MetaDictionary, sizeof(aafUID_t)))
     {
-      
-      // Find the property definition that corresponds to the current propertyID.
-      if (0 < index)
+      targetPids[0] = kOMDictionaryPid;
+      result = pDictionary->LookupClassDef(AUID_AAFMetaDictionary, &pClassDef);
+    } 
+    else if (0 == memcmp(&propertyID, &kAAFPropID_Root_Header, sizeof(aafUID_t)))
+    {
+      targetPids[0] = kOMDataPid;
+      result = pDictionary->LookupClassDef(AUID_AAFHeader, &pClassDef);
+    }
+    else
+    {
+      result = AAFRESULT_PROPERTY_NOT_FOUND; // ???
+    }
+
+
+    if (AAFRESULT_SUCCEEDED(result))
+    { 
+      for (index = 1; index < targetPidCount; ++index)
       {
+        // Find the property definition that corresponds to the current propertyID.
         _targetSet.getValueAt(&propertyID, index);
         valid = findPropertyDefinition(pClassDef, propertyID, &pPropertyDef);
         if (!valid)
           break;
-      }
-      
-      // The OM requires that the last property definition that defines the target of
-      // a weak reference must be a set that contains a strong reference.
-      if (index < lastIndex)
-        valid = findReferencedClassDefintion(pPropertyDef, &pClassDef, uniqueIdentifierPid, kAAFTypeCatStrongObjRef);
-      else
-#ifdef LAST_ELEMENT_CAN_BE_A_STRONGREFERENCEVECTOR
-        valid = findReferencedClassDefintion(pPropertyDef, &pClassDef, uniqueIdentifierPid, kAAFTypeCatVariableArray);
-#else
-        valid = findReferencedClassDefintion(pPropertyDef, &pClassDef, uniqueIdentifierPid, kAAFTypeCatSet);
-#endif        
-      // Find the next referenced class definition
-      if (!valid)
-        break;
-      
-      // Save the pid
-      targetPids[index + 1] = pPropertyDef->OmPid();
-    }
-    
-  }
+        
+        // The OM requires that the last property definition that defines the target of
+        // a weak reference must be a set that contains a strong reference.
+        if (index < lastIndex)
+          valid = findReferencedClassDefintion(pPropertyDef, &pClassDef, uniqueIdentifierPid, kAAFTypeCatStrongObjRef);
+        else
+          valid = findReferencedClassDefintion(pPropertyDef, &pClassDef, uniqueIdentifierPid, kAAFTypeCatSet);
 
+        // Find the next referenced class definition
+        if (!valid)
+          break;
+        
+        // Save the pid
+        targetPids[index] = pPropertyDef->OmPid();
+      }     
+    }
+  }
+  
+  
   // Remap result...
   if (!valid)
     result = AAFRESULT_INVALID_PARAM;
@@ -583,7 +730,7 @@ aafBool ImplAAFTypeDefWeakObjRef::IsFixedSize (void) const
 
 size_t ImplAAFTypeDefWeakObjRef::PropValSize (void) const
 {
-  return sizeof (ImplAAFRoot*);
+  return sizeof (ImplAAFStorable*);
 }
 
 
@@ -595,7 +742,7 @@ aafBool ImplAAFTypeDefWeakObjRef::IsRegistered (void) const
 
 size_t ImplAAFTypeDefWeakObjRef::NativeSize (void) const
 {
-  return sizeof (ImplAAFRoot*);
+  return sizeof (ImplAAFStorable*);
 }
 
 
@@ -611,15 +758,20 @@ OMProperty * ImplAAFTypeDefWeakObjRef::pvtCreateOMProperty
   OMProperty * result = new OMSimpleProperty (pid, name, elemSize);
   
 #else // #if defined(USE_SIMPLEPROPERTY)
-
-  // Allocate and initialize a weak reference property.
-  if (!_targetPids)
-    const_cast<ImplAAFTypeDefWeakObjRef *>(this)->SyncTargetPidsFromTargetSet();
   
   // TEMPORARY: The following code is obsolete. It only exists temporarily to satisfy the compiler...
   // This code will be updated when there is a non-template contructor for a weak reference.
   // transdel:2000-JUN-23.
   OMProperty * result = NULL;
+
+  // Allocate and initialize a weak reference property.
+  if (!_targetPids)
+  {
+    AAFRESULT rc = const_cast<ImplAAFTypeDefWeakObjRef *>(this)->SyncTargetPidsFromTargetSet();
+    if (AAFRESULT_FAILED(rc))
+      return NULL;
+  }
+  assert (_targetPids);
   
   switch (_uniqueIdentifierPid)
   {
@@ -663,4 +815,19 @@ void ImplAAFTypeDefWeakObjRef::onSave(void* clientContext) const
 void ImplAAFTypeDefWeakObjRef::onRestore(void* clientContext) const
 {
   ImplAAFTypeDefObjectRef::onRestore(clientContext);
+}
+
+// Method is called after associated class has been added to MetaDictionary.
+// If this method fails the class is removed from the MetaDictionary and the
+// registration method will fail.
+HRESULT ImplAAFTypeDefWeakObjRef::CompleteClassRegistration(void)
+{
+  AAFRESULT rc = AAFRESULT_SUCCESS;
+  if (!_targetPids)
+  {
+    rc = SyncTargetPidsFromTargetSet();
+  }
+  assert (_targetPids);
+
+  return rc;
 }

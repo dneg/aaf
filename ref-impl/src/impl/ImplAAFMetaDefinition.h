@@ -5,7 +5,7 @@
 
 /***********************************************************************
  *
- *              Copyright (c) 1998-1999 Avid Technology, Inc.
+ *              Copyright (c) 1998-2000 Avid Technology, Inc.
  *
  * Permission to use, copy and modify this software and accompanying 
  * documentation, and to distribute and sublicense application software
@@ -167,6 +167,11 @@ public:
   
   // Return true is this is a data object (Interchange object).
   virtual bool dataObject(void) const;
+
+  // Method is called after associated class has been added to MetaDictionary.
+  // If this method fails the class is removed from the MetaDictionary and the
+  // registration method will fail.
+  virtual HRESULT CompleteClassRegistration(void);
 
 private:
 

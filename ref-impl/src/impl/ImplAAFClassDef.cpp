@@ -373,12 +373,28 @@ AAFRESULT STDMETHODCALLTYPE
 			return hr;
 		if(isDuplicate)
 			return AAFRESULT_PROPERTY_DUPLICATE;
-	    return pvtRegisterPropertyDef (id,
+	  hr = pvtRegisterPropertyDef (id,
 								 pName,
 								 typeId,
 								 kAAFTrue,
 								 kAAFFalse, /* cannot be a unique identifier */
 								 ppPropDef);
+								 
+		if (AAFRESULT_SUCCEEDED(hr))
+		{
+		  // Check to make sure that the new optional property
+		  // is complete for this class defintion.
+		  hr = (*ppPropDef)->CompleteClassRegistration();
+		  if (AAFRESULT_FAILED(hr))
+		  {
+		    // remove the invalid property definition from the set of properties.
+		    _Properties.removeValue(*ppPropDef);
+		    (*ppPropDef)->ReleaseReference();
+		    *ppPropDef = NULL;
+		  }
+		}
+	  		 
+    return hr;	  
 	}
 }
 
@@ -863,4 +879,28 @@ void ImplAAFClassDef::onSave(void* clientContext) const
 void ImplAAFClassDef::onRestore(void* clientContext) const
 {
   ImplAAFMetaDefinition::onRestore(clientContext);
+}
+
+// Method is called after associated class has been added to MetaDictionary.
+// If this method fails the class is removed from the MetaDictionary and the
+// registration method will fail.
+HRESULT ImplAAFClassDef::CompleteClassRegistration(void)
+{
+  AAFRESULT result = AAFRESULT_SUCCESS;
+
+  // Make sure that all of the registration of properties can be
+  // completed.
+  ImplAAFPropertyDef *pProperty;
+	OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFPropertyDef>propertyDefinitions(_Properties);
+	while(++propertyDefinitions && AAFRESULT_SUCCEEDED(result))
+	{
+		pProperty = propertyDefinitions.value();
+		assert(pProperty); // there should never be a NULL object in a set!
+		if (pProperty)
+		{
+		  result = pProperty->CompleteClassRegistration();
+		}
+	}
+
+  return result;
 }

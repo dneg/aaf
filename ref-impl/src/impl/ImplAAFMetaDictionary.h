@@ -390,6 +390,10 @@ public:
   // Methods private to the SDK
   //
 
+  // Private registration method to add the given class definiion
+  // to the set. 
+  AAFRESULT PvtRegisterClassDef (ImplAAFClassDef * pClassDef);
+
 
   // These are low-level OMSet tests for containment.
   bool containsClass(aafUID_constref classId);
@@ -455,6 +459,11 @@ public:
 
   // Initialize all of the OMProperties for each aximatic definition.
   void InitializeAxiomaticOMProperties(void); // throw AAFRESULT
+  
+  // Complete the registration of the axiomatic class definitions
+  // This must be called AFTER all other aximatic definitions have
+  // been initialized and registered.
+  void CompleteAxiomaticClassRegistration(void); // throw AAFRESULT
 
   // Create all of the axiomatic definitions.
   void CreateAxiomaticDefinitions(void); // throw AAFRESULT

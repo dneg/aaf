@@ -5,7 +5,7 @@
 
 /***********************************************************************
  *
- *              Copyright (c) 1998-1999 Avid Technology, Inc.
+ *              Copyright (c) 1998-2000 Avid Technology, Inc.
  *
  * Permission to use, copy and modify this software and accompanying 
  * documentation, and to distribute and sublicense application software
@@ -296,6 +296,12 @@ public:
   // Override callbacks from OMStorable
   virtual void onSave(void* clientContext) const;
   virtual void onRestore(void* clientContext) const;
+
+
+  // Method is called after associated class has been added to MetaDictionary.
+  // If this method fails the class is removed from the MetaDictionary and the
+  // registration method will fail.
+  virtual HRESULT CompleteClassRegistration(void);
 
 private:
 

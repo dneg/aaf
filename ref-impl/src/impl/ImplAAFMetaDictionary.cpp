@@ -594,26 +594,58 @@ AAFRESULT STDMETHODCALLTYPE
   ImplAAFMetaDictionary::RegisterClassDef(
     ImplAAFClassDef * pClassDef)
 {
-
+  AAFRESULT hr = AAFRESULT_SUCCESS;
   if (NULL == pClassDef)
     return AAFRESULT_NULL_PARAM;
   
   // Get the AUID of the new class to register.
   aafUID_t newAUID;
-  HRESULT hr = pClassDef->GetAUID(&newAUID);
+  hr = pClassDef->GetAUID(&newAUID);
   if (hr != AAFRESULT_SUCCESS)
     return hr;
 
-  // Is this class already registered ?
-  if (!containsClass(newAUID))
-  {
-    if (containsForwardClassReference(newAUID))
+  hr = PvtRegisterClassDef(pClassDef);
+  if (AAFRESULT_SUCCEEDED(hr))
+  {  
+    bool forwardClassReference = containsForwardClassReference(newAUID);
+    if (forwardClassReference)
     {
       // This class is now defined so it can no longer have
       // a forward reference.
       RemoveForwardClassReference(newAUID);
     }
 
+    // Now validate that this classes properties and types
+    // are valid.
+    hr = pClassDef->CompleteClassRegistration();
+    if (AAFRESULT_FAILED(hr))
+    {
+      // Restore the state of the meta dictionary.
+      _classDefinitions.removeValue(pClassDef);
+      pClassDef->ReleaseReference();
+      
+      if (forwardClassReference)
+      {
+        CreateForwardClassReference(newAUID); // ignore error...
+      }
+    }
+  }
+
+  return(hr);
+}
+
+
+// Private registration method to add the given class definiion
+// to the set. 
+AAFRESULT ImplAAFMetaDictionary::PvtRegisterClassDef (
+  ImplAAFClassDef * pClassDef)
+{
+  if (NULL == pClassDef)
+    return AAFRESULT_NULL_PARAM;
+
+  // Is this class already registered ?
+  if (!_classDefinitions.containsValue(pClassDef))
+  {
     // This class is not yet registered, add it to the dictionary.
     _classDefinitions.appendValue(pClassDef);
     pClassDef->AcquireReference();
@@ -1160,6 +1192,29 @@ void ImplAAFMetaDictionary::InitializeAxiomaticOMProperties(void)
 }
 
 
+  
+// Complete the registration of the axiomatic class definitions
+// This must be called AFTER all other aximatic definitions have
+// been initialized and registered.
+void ImplAAFMetaDictionary::CompleteAxiomaticClassRegistration(void) // throw AAFRESULT
+{
+#if USE_AAFOBJECT_MODEL
+  AAFRESULT result = AAFRESULT_SUCCESS;
+  OMReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFClassDef> axiomaticClassDefinitions(_axiomaticClassDefinitions, OMBefore);
+  while(++axiomaticClassDefinitions)
+  {
+    ImplAAFClassDef *pClass = axiomaticClassDefinitions.value();
+    assert (pClass);
+    if (!pClass)
+      throw AAFRESULT_INVALID_OBJ;
+
+    result = pClass->CompleteClassRegistration();
+    if (AAFRESULT_FAILED(result))
+      throw result;
+  }
+#endif // #if USE_AAFOBJECT_MODEL
+}
+
 // Create all of the axiomatic definitions.
 void ImplAAFMetaDictionary::CreateAxiomaticDefinitions(void)
 {
@@ -1177,6 +1232,8 @@ void ImplAAFMetaDictionary::InitializeAxiomaticDefinitions(void)
 
   RegisterAxiomaticProperties();
   InitializeAxiomaticOMProperties();
+  
+  CompleteAxiomaticClassRegistration();
 }
 
 // Create and initialize all of the axiomatic definitions.

@@ -627,7 +627,7 @@ AAFRESULT STDMETHODCALLTYPE
 					 parent->ReleaseReference();
 				  }
 				  (*ppClassDef)->SetBootstrapParent(NULL);
-				  status = RegisterClassDef(*ppClassDef);
+				  status = PvtRegisterClassDef(*ppClassDef);
 				  assert (AAFRESULT_SUCCEEDED (status));
 			  }
 		  }
@@ -667,7 +667,7 @@ AAFRESULT STDMETHODCALLTYPE
 
   // Yup, found it in builtins.  Register it.
   assert (*ppClassDef);
-  status = RegisterClassDef (*ppClassDef);
+  status = PvtRegisterClassDef (*ppClassDef);
   if (AAFRESULT_FAILED (status))
 	return status;
 		  
@@ -695,6 +695,17 @@ AAFRESULT STDMETHODCALLTYPE
   return (metaDictionary()->HasForwardClassReference(classId, pResult));
 }
 
+
+// Private class registration. This version does not perform any
+// initialization that requires other classes, types or properties or
+// types to be in the dictionary...it only adds the given class
+// to the set in the dictionary.
+AAFRESULT ImplAAFDictionary::PvtRegisterClassDef(ImplAAFClassDef * pClassDef)
+{
+  assert (_defRegistrationAllowed);
+  // Defer to the meta dictionary.
+  return (metaDictionary()->PvtRegisterClassDef(pClassDef));
+}
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFDictionary::RegisterClassDef (
@@ -793,7 +804,7 @@ const aafUID_t * ImplAAFDictionary::sAxiomaticTypeGuids[] =
   & kAAFTypeID_DataDefinitionStrongReferenceSet,
   & kAAFTypeID_DataDefinitionWeakReference,
   & kAAFTypeID_DataDefinitionWeakReferenceSet,
-  & kAAFTypeID_DefinitionObjectWeakReference,
+//  & kAAFTypeID_DefinitionObjectWeakReference, // This is not a valid weak reference!
   & kAAFTypeID_InterpolationDefinitionStrongReference,
   & kAAFTypeID_InterpolationDefinitionStrongReferenceSet,
   & kAAFTypeID_LocatorStrongReference,
