@@ -14,7 +14,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -57,14 +57,13 @@ protected:
 
 public:
 
-  // SetAUID()
-  //
   virtual AAFRESULT STDMETHODCALLTYPE
-    Initialize
+    pvtInitialize
         // @parm [in] Pointer to an AUID reference
         (const aafUID_t & id,
 		 const wchar_t *name,
 		 const wchar_t *description);
+
   //****************
   // GetAUID()
   //
