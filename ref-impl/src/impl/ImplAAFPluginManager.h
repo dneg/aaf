@@ -37,10 +37,13 @@ class ImplEnumAAFLoadedPlugins;
 class ImplAAFPluginDef;
 class ImplAAFDictionary;
 class ImplAAFDefObject;
+class ImplAAFSourceMob;
+class ImplAAFEssenceStream;
 
 #ifndef __ImplAAFRoot_h__
 #include "ImplAAFRoot.h"
 #endif
+
 
 #include "AAFPlugin.h"
 #include "aafTable.h"
@@ -98,11 +101,6 @@ bool FindPluginFromDefintion(
   aafUID_constref	pluginID,
   CLSID& clsid);
 
-bool FindPluginFromEssenceDesc(
-  aafUID_constref	essenceDesc,
-  CLSID& clsid);
-
-
 // Create an object contained within one of the loaded plugin files.
 AAFRESULT CreateInstance(
 			REFCLSID rclsid, 
@@ -121,8 +119,9 @@ AAFRESULT GetPluginInstance(
 			IAAFPlugin		**result);
 
 AAFRESULT MakeCodecFromEssenceDesc(
-			aafUID_t		essenceDesc,	// Stored class ID
-			IAAFEssenceCodec **codec);
+			ImplAAFSourceMob		*fileMob,
+			IAAFEssenceStream		*stream,
+			IAAFEssenceCodec		**codec);
 
 // Attempt to register all of the plugin files in the installation directory.
 AAFRESULT RegisterSharedPlugins(void);
