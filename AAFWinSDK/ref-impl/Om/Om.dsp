@@ -94,6 +94,10 @@ SOURCE="..\..\..\ref-impl\src\OM\OMAssertions.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\OM\OMCachedDiskRawStorage.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\OM\OMClassDefinition.cpp"
 # End Source File
 # Begin Source File
@@ -190,6 +194,10 @@ SOURCE="..\..\..\ref-impl\src\OM\OMOStream.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\OM\OMPageCache.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\OM\OMProperty.cpp"
 # End Source File
 # Begin Source File
@@ -255,6 +263,10 @@ SOURCE="..\..\..\ref-impl\src\OM\OMStoredSetIndex.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\OM\OMStoredVectorIndex.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\OM\OMStream.cpp"
 # End Source File
 # Begin Source File
 
@@ -327,6 +339,10 @@ SOURCE="..\..\..\ref-impl\include\OM\OMArrayType.h"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\OM\OMAssertions.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\include\OM\OMCachedDiskRawStorage.h"
 # End Source File
 # Begin Source File
 
@@ -434,6 +450,22 @@ SOURCE="..\..\..\ref-impl\include\OM\OMKLVStoredStream.h"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\include\OM\OMList.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\include\OM\OMListIterator.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\OM\OMListIteratorT.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\OM\OMListT.h"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\include\OM\OMMappedFileRawStorage.h"
 # End Source File
 # Begin Source File
@@ -487,6 +519,10 @@ SOURCE="..\..\..\ref-impl\include\OM\OMObjectVector.h"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\include\OM\OMOStream.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\include\OM\OMPageCache.h"
 # End Source File
 # Begin Source File
 
@@ -647,6 +683,10 @@ SOURCE="..\..\..\ref-impl\include\OM\OMStoredStream.h"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\OM\OMStoredVectorIndex.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\include\OM\OMStream.h"
 # End Source File
 # Begin Source File
 
