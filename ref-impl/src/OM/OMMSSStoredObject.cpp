@@ -48,6 +48,7 @@
 #include "OMDataStream.h"
 
 #include "OMAssertions.h"
+#include "OMExceptions.h"
 #include "OMUtilities.h"
 
 #include "OMMSStructuredStorage.h"
@@ -3206,6 +3207,6 @@ static void check(HRESULT status)
   TRACE("check");
 
   if (FAILED(status)) {
-    // error handling NYI
+    throw OMException(status);
   }
 }
