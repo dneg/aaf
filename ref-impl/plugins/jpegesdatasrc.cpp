@@ -30,6 +30,10 @@ typedef struct {
   struct jpeg_source_mgr pub;	/* public fields */
 
   IAAFEssenceStream * infile;		/* source stream */
+
+	aafUInt32 bufferSize;	/* size of the current buffer */
+	aafUInt32 sampleSize;	/* size of the next sample to be read with fill_input_buffer */
+
   JOCTET * buffer;		/* start of buffer */
   boolean start_of_file;	/* have we gotten any data yet? */
 } my_source_mgr;
@@ -97,7 +101,7 @@ fill_input_buffer (j_decompress_ptr cinfo)
   my_src_ptr src = (my_src_ptr) cinfo->src;
   aafUInt32 nbytes;
 
-  hr = (src->infile)->Read(INPUT_BUF_SIZE, (aafDataBuffer_t)src->buffer, &nbytes);
+  hr = (src->infile)->Read(src->sampleSize, (aafDataBuffer_t)src->buffer, &nbytes);
   if (FAILED(hr))
 		ERREXIT(cinfo, JERR_FILE_READ);
 
@@ -175,7 +179,12 @@ skip_input_data (j_decompress_ptr cinfo, long num_bytes)
 METHODDEF(void)
 term_source (j_decompress_ptr cinfo)
 {
-  /* no work necessary here */
+  /* Clear out buffer pointers */
+  my_src_ptr src = (my_src_ptr)cinfo->src;
+	
+	src->buffer = 0; // freed with jpeg_finish_decompress
+	src->bufferSize = 0;
+	src->sampleSize = 0;
 }
 
 
@@ -186,7 +195,7 @@ term_source (j_decompress_ptr cinfo)
  */
 
 GLOBAL(void)
-jpeg_essencestream_src (j_decompress_ptr cinfo, IAAFEssenceStream * infile)
+jpeg_essencestream_src (j_decompress_ptr cinfo, IAAFEssenceStream * infile, aafUInt32 samplesize)
 {
   my_src_ptr src;
 
@@ -201,13 +210,25 @@ jpeg_essencestream_src (j_decompress_ptr cinfo, IAAFEssenceStream * infile)
     cinfo->src = (struct jpeg_source_mgr *)
       (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_PERMANENT,
 				  SIZEOF(my_source_mgr));
-    src = (my_src_ptr) cinfo->src;
-    src->buffer = (JOCTET *)
-      (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_PERMANENT,
-				  INPUT_BUF_SIZE * SIZEOF(JOCTET));
-  }
 
-  src = (my_src_ptr) cinfo->src;
+		src = (my_src_ptr) cinfo->src;
+		src->infile = NULL;
+		src->buffer = NULL;
+		src->bufferSize = 0;
+		src->sampleSize = 0;
+		src->start_of_file = FALSE;
+  }
+	else
+		src = (my_src_ptr) cinfo->src;
+
+	if (NULL == src->buffer) {
+    src->buffer = (JOCTET *)
+      (*cinfo->mem->alloc_large) ((j_common_ptr) cinfo, JPOOL_IMAGE,
+				  samplesize * SIZEOF(JOCTET));
+		src->bufferSize = samplesize;
+		src->sampleSize = samplesize;
+	}
+
   src->pub.init_source = init_source;
   src->pub.fill_input_buffer = fill_input_buffer;
   src->pub.skip_input_data = skip_input_data;
