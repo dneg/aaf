@@ -282,7 +282,7 @@ public:
          // @parm [in] optionally compressing it
          aafCompressEnable_t  Enable,
 		ImplAAFLocator		*destination,
-		aafFileFormat_t		fileFormat,
+		aafUID_t			fileFormat,
 		ImplAAFEssenceAccess **result);
 	//@comm Creates a single channel stream of essence.  Convenience functions
 	// exist to create audio or video essence, and a separate call
@@ -309,7 +309,7 @@ public:
                            aafmMultiCreate_t *  /*mediaArray*/,
                            aafCompressEnable_t  /*Enable*/,
 							ImplAAFLocator		*destination,
-							aafFileFormat_t		fileFormat,
+							aafUID_t			fileFormat,
 							ImplAAFEssenceAccess **result);
 	//@comm The essence handle from this call can be used with
 	// WriteDataSamples or WriteMultiSamples but NOT with 
