@@ -20,7 +20,13 @@
 #include "ImplAAFTimelineMobSlot.h"
 #endif
 
+#ifndef __ImplAAFTaggedValue_h__
+#include "ImplAAFTaggedValue.h"
+#endif
 
+#ifndef __ImplEnumAAFTaggedValues_h__
+#include "ImplEnumAAFTaggedValues.h"
+#endif
 
 class ImplAAFSegment;
 
@@ -30,14 +36,13 @@ class ImplAAFFile;
 
 class ImplEnumAAFMobSlots;
 
-class ImplEnumAAFMobComments;
+class ImplEnumAAFTaggedValues;
 
 class ImplAAFFindSourceInfo;
 
 class ImplAAFScopeStack;
 
 class ImplAAFOperationGroup;
-
 
 
 
@@ -236,7 +241,7 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     GetNumComments
-        (aafUInt32 *  pEnum);  //@parm [out,retval] Number  of Mob Comments
+        (aafUInt32 *  pNumComments);  //@parm [out,retval] Number  of Mob Comments
 
 
   //****************
@@ -244,7 +249,7 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     EnumAAFAllMobComments
-        (ImplEnumAAFMobComments ** ppEnum);  //@parm [out,retval] Mob Comments
+        (ImplEnumAAFTaggedValues ** ppEnum);  //@parm [out,retval] Mob Comments
 
 
 
@@ -412,6 +417,7 @@ virtual AAFRESULT STDMETHODCALLTYPE
 	OMFixedSizeProperty<aafTimeStamp_t>	_lastModified;
 	private:
     OMStrongReferenceVectorProperty<ImplAAFMobSlot> _slots;
+    OMStrongReferenceVectorProperty<ImplAAFTaggedValue> _userComments;
 };
 
 #endif // ! __ImplAAFMob_h__
