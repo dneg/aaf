@@ -45,7 +45,7 @@
 
 #elif defined( OS_UNIX )
 
-  EXTERN_C STDAPI  DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID FAR* ppv);
+  STDAPI  DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID FAR* ppv);
 
 #  ifndef INITGUID
 #    define DEFINE_GUID(name, l, w1, w2, b1, b2, b3, b4, b5, b6, b7, b8)      \
