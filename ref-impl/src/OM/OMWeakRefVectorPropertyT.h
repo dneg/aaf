@@ -424,13 +424,12 @@ void OMWeakReferenceVectorProperty<ReferencedObject>::insertAt(
   TRACE("OMWeakReferenceVectorProperty<ReferencedObject>::insertAt");
 
   PRECONDITION("Valid index", (index >= 0) && (index <= count()));
-  
-  OMUInt32 localKey = nextLocalKey();
-  char* name = elementName(localKey);
-  VectorElement newElement(this, name, localKey);
+  PRECONDITION("Valid object", object != 0);
+
+  OMUniqueObjectIdentification key = object->identification();
+  VectorElement newElement(this, key, _targetTag);
   newElement.setValue(object);
   _vector.insertAt(newElement, index);
-  delete [] name;
   setPresent();
 
   POSTCONDITION("Object properly inserted",
