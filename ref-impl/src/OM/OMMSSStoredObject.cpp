@@ -492,7 +492,7 @@ void OMMSSStoredObject::save(const OMPropertySet& properties)
     }
   }
 
-#if !defined(OM_NO_VALIDATE_PROPERTYSETS)
+#if defined(OM_VALIDATE_PROPERTYSETS)
   validate(&properties, _index);
 #endif
   streamSetPosition(_properties, 0);
@@ -936,7 +936,7 @@ void OMMSSStoredObject::restore(OMPropertySet& properties)
     p->restore(length);
     ASSERT("Property is present", IMPLIES(p->isOptional(), p->isPresent()));
   }
-#if !defined(OM_NO_VALIDATE_PROPERTYSETS)
+#if defined(OM_VALIDATE_PROPERTYSETS)
   validate(&properties, _index);
 #endif
   streamSetPosition(_properties, 0);
