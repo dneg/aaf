@@ -270,7 +270,7 @@ public:
 private:
 	OMWeakReferenceProperty<ImplAAFOperationDef>		_operationDefinition;
 	OMStrongReferenceVectorProperty<ImplAAFSegment>		_inputSegments;
-	OMStrongReferenceSetProperty<ImplAAFParameter>		_parameters;
+	OMStrongReferenceSetProperty<OMUniqueObjectIdentification, ImplAAFParameter>		_parameters;
 	OMFixedSizeProperty<aafUInt32>						_bypassOverride;
 	OMStrongReferenceProperty<ImplAAFSourceReference>	_rendering;
 };
