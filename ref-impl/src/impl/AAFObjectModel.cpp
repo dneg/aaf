@@ -1469,6 +1469,45 @@ void AAFObjectModel::InitializeTypeDefinitions(void)
   }
 }
 
+void AAFObjectModel::InitializePrivateClassDefinitions(void)
+{
+  // There is only one meta dictionary and it must be internally
+  // created.
+  findClassDefinition(&AUID_AAFMetaDictionary)->makePrivateClass();
+
+  // The class definition of ClassDefinition is axiomatic. Clients
+  // should never be able to create this definition.
+  findClassDefinition(&AUID_AAFClassDefinition)->makePrivateClass();
+
+  // Property definitions are created be the class definition's
+  // factory methods.
+  findClassDefinition(&AUID_AAFPropertyDefinition)->makePrivateClass();
+
+  // There really should only be 8 instances of TypeDefinitionInteger.
+  // Forse all of them to be aximatic.
+  findClassDefinition(&AUID_AAFTypeDefinitionInteger)->makePrivateClass();
+
+  // Other single instance types that are also axiomatic.
+  findClassDefinition(&AUID_AAFTypeDefinitionCharacter)->makePrivateClass();
+  findClassDefinition(&AUID_AAFTypeDefinitionStream)->makePrivateClass();
+  findClassDefinition(&AUID_AAFTypeDefinitionIndirect)->makePrivateClass();
+  findClassDefinition(&AUID_AAFTypeDefinitionOpaque)->makePrivateClass();
+
+  //
+  // Data classes:
+  // 
+  
+  // There can be only a single "data" root in an aaf file.
+  findClassDefinition(&AUID_AAFHeader)->makePrivateClass();
+
+  // There is also only a single public "data" dictionary in an aaf file.
+  findClassDefinition(&AUID_AAFDictionary)->makePrivateClass();
+
+  // There is only a single instance of ContentStorage in an aaf file to
+  // hold ALL mobs.
+  findClassDefinition(&AUID_AAFContentStorage)->makePrivateClass();
+}
+
 void AAFObjectModel::InitializeAxiomaticDefinitions(void)
 {
   // There is only one meta dictionary and it must be internally
@@ -1585,6 +1624,7 @@ void AAFObjectModel::InitializeDefinitions(void)
   InitializePropertyDefinitions();
   InitializeAxiomaticDefinitions();
   InitializeCyclicDefinitions();
+  InitializePrivateClassDefinitions();
 }
 
 
@@ -1991,6 +2031,15 @@ void ClassDefinition::makeAxiomatic (void) const
       propertyDefinitionAt(i)->makeAxiomatic();
   }
 }
+
+void ClassDefinition::makePrivateClass (void) const
+{
+  if (!privateClass())
+  {
+    const_cast<ClassDefinition *>(this)->setPrivateClass(true);
+  }
+}
+
 
 void ClassDefinition::makePropertiesAxiomatic(void) const
 {
