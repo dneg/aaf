@@ -39,6 +39,81 @@ protected:
   virtual ~ImplAAFPluginDescriptor ();
 
 public:
+  // SetAUID()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    Init
+        // @parm [in] Pointer to an AUID reference
+        (aafUID_t *  pAuid, wchar_t *name, wchar_t *description);
+  //****************
+  // GetAUID()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetAUID
+        // @parm [retval,out] Pointer to an AUID reference
+        (aafUID_t *  pAuid);
+
+  //****************
+  // SetAUID()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    SetAUID
+        // @parm [in] Pointer to an AUID reference
+        (aafUID_t *  pAuid);
+
+
+  //****************
+  // SetName()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    SetName
+        (aafWChar *  name);  //@parm [in, ref] Definition Name
+
+
+  //****************
+  // GetName()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetName
+        (// @parm [out, string, size_is(bufSize)] buffer into which Name is to be written
+         wchar_t *  pName,
+
+         // @parm [in] size of *pName buffer in bytes
+         aafUInt32  bufSize);
+
+
+  //****************
+  // GetNameBufLen()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetNameBufLen
+        (aafUInt32 *  nameLen);  //@parm [in,out] Definition Name length
+
+
+  //****************
+  // SetDescription()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    SetDescription
+        (aafWChar *  description);  //@parm [in, ref] Definition description
+
+
+  //****************
+  // GetDescription()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetDescription
+        (aafWChar *  description,  //@parm [in] Definition Description
+		 aafUInt32 bufSize);	  //@parm [in] size of the buffer required to hold Definition Description + terminator
+
+
+  //****************
+  // GetDescriptionBufLen()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetDescriptionBufLen
+        (aafUInt32 *  descriptionLen);  //@parm [in,out] Definition description length
+
 
 
   //****************
@@ -445,6 +520,9 @@ public:
 		 GetNumLocators (aafInt32 *  pCount);
 
 private:
+	OMWideStringProperty          _name;
+	OMWideStringProperty          _description;
+	OMFixedSizeProperty<aafUID_t> _identification;
 	OMFixedSizeProperty<aafUID_t>					_categoryClass;
 	OMFixedSizeProperty<aafVersionType_t>			_pluginVersion;	//!!!StructuredProperty?
 	OMWideStringProperty                            _pluginVersionString;
