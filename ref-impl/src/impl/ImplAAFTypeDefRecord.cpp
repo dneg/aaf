@@ -407,11 +407,49 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDefRecord::CreateValueFromStruct (
-      aafMemPtr_t * /*pInitData*/,
-      aafUInt32 /*initDataSize*/,
-      ImplAAFPropertyValue ** /*ppPropVal*/)
+      aafMemPtr_t pInitData,
+      aafUInt32 initDataSize,
+      ImplAAFPropertyValue ** ppPropVal)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  if (! pInitData)
+	return AAFRESULT_NULL_PARAM;
+  if (! ppPropVal)
+	return AAFRESULT_NULL_PARAM;
+  if (! IsRegistered ())
+	return AAFRESULT_NOT_REGISTERED;
+  if (initDataSize != NativeSize())
+	return AAFRESULT_ILLEGAL_VALUE;
+
+  ImplAAFPropValData * pvd = 0;
+  pvd = (ImplAAFPropValData*) CreateImpl (CLSID_AAFPropValData);
+  if (!pvd) return AAFRESULT_NOMEMORY;
+
+  ImplAAFPropValDataSP spPvd;
+  spPvd = pvd;
+  // Bobt: Hack bugfix! SmartPointer operator= will automatically
+  // AddRef; CreateImpl *also* will addref, so we've got one too
+  // many.  Put us back to normal.
+  pvd->ReleaseReference ();
+  pvd = 0;
+
+  AAFRESULT hr;
+  hr = spPvd->Initialize (this);
+  if (AAFRESULT_FAILED (hr)) return hr;
+
+  aafMemPtr_t pBits = 0;
+  hr = spPvd->AllocateBits (initDataSize, &pBits);
+  if (AAFRESULT_FAILED(hr)) return hr;
+  assert (pBits);
+
+  // Simply copy struct bits into property value.
+  memcpy (pBits, pInitData, initDataSize);
+
+  assert (ppPropVal);
+  *ppPropVal = spPvd;
+  assert (*ppPropVal);
+  (*ppPropVal)->AcquireReference ();
+
+  return AAFRESULT_SUCCESS;
 }
 
 
@@ -491,8 +529,11 @@ AAFRESULT STDMETHODCALLTYPE
 	return AAFRESULT_NULL_PARAM;
   if (! pData)
 	return AAFRESULT_NULL_PARAM;
+  if (! IsRegistered ())
+	return AAFRESULT_NOT_REGISTERED;
+  if (dataSize != NativeSize())
+	return AAFRESULT_ILLEGAL_VALUE;
 
-  // Bobt hack implementation! Not platform-independent!
   aafUInt32 bitsSize = 0;
   ImplAAFPropValData * pvd = 0;
   assert (pPropVal);
@@ -510,8 +551,7 @@ AAFRESULT STDMETHODCALLTYPE
   if (AAFRESULT_FAILED(hr))
 	return hr;
 
-  // Bobt hack!!! should be registered size, not bitsSize.
-  memcpy (pData, pBits, bitsSize);
+  memcpy (pData, pBits, dataSize);
   return AAFRESULT_SUCCESS;
 }
 
@@ -881,6 +921,3 @@ OMProperty * ImplAAFTypeDefRecord::pvtCreateOMPropertyMBS
   assert (result);
   return result;
 }
-
-
-OMDEFINE_STORABLE(ImplAAFTypeDefRecord, AUID_AAFTypeDefRecord);
