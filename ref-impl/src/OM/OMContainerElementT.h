@@ -627,7 +627,7 @@ template <typename UniqueIdentification, typename ReferencedObject>
 OMStrongReferenceSetElement<UniqueIdentification, ReferencedObject>::
                                               OMStrongReferenceSetElement(void)
   : OMStrongReferenceVectorElement<ReferencedObject>(),
-    _referenceCount(1/*tjb*/)
+    _referenceCount(0xffff /* sticky */)
 {
   TRACE("OMStrongReferenceSetElement<UniqueIdentification, ReferencedObject>::"
                                                 "OMStrongReferenceSetElement");
