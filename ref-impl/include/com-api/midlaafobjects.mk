@@ -124,5 +124,8 @@ DODO_TARGET_NAMES = \
 # 
 AAFOBJECTS = \
 	AAFObject \
+	AAFDataDefinition \
 	AAFDefinitionObject \
-	AAFLocator
+	AAFLocator \
+	EnumAAFControlCodeDefinitions \
+
