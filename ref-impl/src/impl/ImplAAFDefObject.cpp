@@ -45,7 +45,7 @@ ImplAAFDefObject::ImplAAFDefObject ()
 : _name           (PID_DefinitionObject_Name,           "Name"),
   _description    (PID_DefinitionObject_Description,    "Description"),
   _identification (PID_DefinitionObject_Identification, "Identification"),
-  _descriptors(    PID_DefinitionObject_PlugInDescriptors, "PluginDescriptors"),
+  _descriptors(    PID_DefinitionObject_PluginDescriptors, "PluginDescriptors"),
   _pDict (0)
 {
   _persistentProperties.put(_name.address());
