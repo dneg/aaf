@@ -616,7 +616,6 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 
-OMDEFINE_STORABLE(ImplAAFMasterMob, AUID_AAFMasterMob);
 
 
 /************************

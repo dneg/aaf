@@ -192,5 +192,4 @@ AAFRESULT ImplAAFSegment::GenerateSequence(ImplAAFSequence **seq)
 }
 
 
-OMDEFINE_STORABLE(ImplAAFSegment, AUID_AAFSegment);
 

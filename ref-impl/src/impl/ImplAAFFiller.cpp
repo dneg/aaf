@@ -59,4 +59,3 @@ AAFRESULT ImplAAFFiller::TraverseToClip(aafLength_t length,
 	return ( AAFRESULT_FILL_FOUND );
 }
 
-OMDEFINE_STORABLE(ImplAAFFiller, AUID_AAFFiller);

@@ -638,6 +638,5 @@ AAFRESULT STDMETHODCALLTYPE
 
   return result;
 }
-OMDEFINE_STORABLE(ImplAAFTimecodeStream, AUID_AAFTimecodeStream);
 
 
