@@ -2,7 +2,7 @@
 AAFTypes\
 #endm
 #c
-AD_HEAD
+AD_TYPES_HEAD
 /******************************************\
 *                                          *
 * Advanced Authoring Format                *
@@ -13,9 +13,9 @@ AD_HEAD
 \******************************************/
 
 
-AD_FORWARD_DECLARATION(AAFMob)
-AD_FORWARD_DECLARATION(AAFPulldown)
-AD_FORWARD_DECLARATION(AAFEffect)
+// AxD_FORWARD_DECLARATION(AAFMob)
+// AxD_FORWARD_DECLARATION(AAFPulldown)
+// AxD_FORWARD_DECLARATION(AAFEffect)
 
 
 AD_TYPES_BEGIN(B1A2137B, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
@@ -106,6 +106,9 @@ typedef struct
 	aafInt32	length;
 	aafWchar	*value;
 } aafString_t;
+
+
+typedef void    		*aafPrivate_t;
 
 
 AD_CPP_QUOTE(/************************************************************)
@@ -515,11 +518,11 @@ typedef struct aafUID
 } aafUID_t;
 
 
-typedef struct
-{
-	aafUID_t        	ID; // shouldn't we declare this as a pointer?
-	AD_AAFTYPES(AAFMob) *	Mob;
-} aafObjIndexElement_t;
+//typedef struct
+//{
+//	aafUID_t        	ID; // shouldn't we declare this as a pointer?
+//	AD_AAFTYPES(AAFMob) *	Mob;
+//} aafObjIndexElement_t;
 
 typedef struct
 {
@@ -647,19 +650,19 @@ typedef struct
 
 // TomR: The following struct needs to be converted into its own non-persistent AAF object
 // (not an AAFObject subclass).
-typedef struct
-{
-  AD_AAFTYPES(AAFMob) *	mob;
-  aafTrackID_t mobTrackID;
-  aafPosition_t position;
-  aafRational_t editrate;
-  aafLength_t minLength;
-  AD_AAFTYPES(AAFPulldown) *		filmTapePdwn;
-  aafInt32			filmTapePhase;
-  AD_AAFTYPES(AAFPulldown) *		tapeFilmPdwn;
-  aafInt32			tapeFilmPhase;
-  AD_AAFTYPES(AAFEffect) *		effeObject;
-} aafFindSourceInfo_t;
+// typedef struct
+// {
+//   AD_AAFTYPES(AAFMob) *	mob;
+//   aafTrackID_t mobTrackID;
+//   aafPosition_t position;
+//   aafRational_t editrate;
+//   aafLength_t minLength;
+//   AD_AAFTYPES(AAFPulldown) *		filmTapePdwn;
+//   aafInt32			filmTapePhase;
+//   AD_AAFTYPES(AAFPulldown) *		tapeFilmPdwn;
+//   aafInt32			tapeFilmPhase;
+//   AD_AAFTYPES(AAFEffect) *		effeObject;
+// } aafFindSourceInfo_t;
 
 typedef struct
 {
