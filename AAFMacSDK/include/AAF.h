@@ -161,6 +161,7 @@ interface IAAFEndian;
 interface IAAFSearchSource;
 interface IAAFEssenceMultiAccess;
 interface IAAFTypeDefVariableArrayEx;
+interface IAAFMasterMobEx;
 #else
 typedef interface IAAFAIFCDescriptor IAAFAIFCDescriptor;
 typedef interface IAAFClassDef IAAFClassDef;
@@ -285,6 +286,7 @@ typedef interface IAAFEndian IAAFEndian;
 typedef interface IAAFSearchSource IAAFSearchSource;
 typedef interface IAAFEssenceMultiAccess IAAFEssenceMultiAccess;
 typedef interface IAAFTypeDefVariableArrayEx IAAFTypeDefVariableArrayEx;
+typedef interface IAAFMasterMobEx IAAFMasterMobEx;
 #endif
 
 // IAAFAIFCDescriptor
@@ -2357,7 +2359,7 @@ DECLARE_INTERFACE_(IAAFContentStorage, IUnknown)
   //
   // AAFRESULT_DUPLICATE_MOBID
   //   - The given mob has already been added.  The validation is done by comparing
-  //		mobIDs, which should be unique.
+  //     mobIDs, which should be unique.
   //
   // AAFRESULT_NULL_PARAM
   //   - pEssenceData is null.
@@ -2839,8 +2841,8 @@ DECLARE_INTERFACE_(IAAFDataDef, IUnknown)
   // DoesDataDefConvertTo()
   //
   // Sets return value to TRUE if the DataDef of the given object
-		   // can be converted to the DataDef specified in the IN 
-		   // parameter with the DataDefName string.
+   // can be converted to the DataDef specified in the IN 
+   // parameter with the DataDefName string.
   //
   STDMETHOD(DoesDataDefConvertTo) (THIS_
     // data def to compare against
@@ -10502,29 +10504,29 @@ DECLARE_INTERFACE_(IAAFOperationGroup, IUnknown)
   // SetRender()
   //
   // This function sets the final rendering for the given operation
-  // group to the input source clip.  Multiple renderings may exist if
+  // group to the input source clip.  (Multiple renderings may exist if
   // the source clip refers to a master mob that contains a Essence
-  // group.
-  //
-  STDMETHOD(SetRender) (THIS_
-    // A segment containing a representation of the rendering
-    /*[in]*/ IAAFSourceReference * ppSourceRef) PURE;
+  // group.)
   // 
   // Succeeds if all of the following are true:
   // - the ppSourceRef pointer is valid.
   // 
   // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
+  // the listed errors is in effect, it will return the first one
   // encountered in the order given below:
   // 
   // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
+  //   - succeeded.  (This is the only code indicating success.)
   //
   // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\(\) called on it.
+  //   - This object has not yet had Initialize() called on it.
   //
   // AAFRESULT_NULL_PARAM
-  //   - ppSourceRef arg is NULL.)
+  //   - ppSourceRef arg is NULL.
+  //
+  STDMETHOD(SetRender) (THIS_
+    // A segment containing a representation of the rendering
+    /*[in]*/ IAAFSourceReference * ppSourceRef) PURE;
 
 
   //***********************************************************
@@ -11060,7 +11062,7 @@ DECLARE_INTERFACE_(IAAFHeader, IUnknown)
   //
   // AAFRESULT_DUPLICATE_MOBID
   //   - The given mob has already been added.  The validation is done by comparing
-  //		mobIDs, which should be unique.
+  //     mobIDs, which should be unique.
   //
   // AAFRESULT_NULL_PARAM
   //   - pEssenceData is null.
@@ -12149,6 +12151,7 @@ DECLARE_INTERFACE_(IAAFKLVData, IUnknown)
   //
   // AAFRESULT_NULL_PARAM
   //   - pTypeDef or pValue arg is NULL.
+  //
   // AAFRESULT_NOT_VALID_KEY
   //   - The  given key must not resolve to a builtin type.  For most purposes, use
   //     IAAFTypeDefRename to rename an existing type.
@@ -13109,6 +13112,8 @@ DECLARE_INTERFACE_(IAAFMasterMob, IUnknown)
 
     // How many channels?
     /*[out]*/ aafUInt16*  numCh) PURE;
+
+
 
 
 
@@ -16704,7 +16709,8 @@ DECLARE_INTERFACE_(IAAFPulldown, IUnknown)
   // GetPulldownDirection()
   //
   // Returns the pulldownDirection field of this pulldown through the
-  // *pPulldownDirection argument.  The valid pulldown directions are:
+  // *pPulldownDirection argument.  The valid
+  // pulldown directions are:
   //    kVideoToFilmSpeed -- The input segment is at videoSpeed, and
   //                         the pulldown object is on a mob slot at
   //                         film edit rate.
@@ -16882,13 +16888,14 @@ DECLARE_INTERFACE_(IAAFRGBADescriptor, IUnknown)
   // Sets the layout and structure of the components in a single pixel.
   // The layout array is an Array of 8 aafRGBAComponent_t.  The 'Code' field of the struct is
   // from the set:
-  //   	kAAFCompNone
-  // 	kAAFCompAlpha
-  // 	kAAFCompBlue
-  // 	kAAFCompFill
-  // 	kAAFCompGreen
-  // 	kAAFCompPalette
-  // 	kAAFCompRed
+  //   	- kAAFCompNone
+  // 	- kAAFCompAlpha
+  // 	- kAAFCompBlue
+  // 	- kAAFCompFill
+  // 	- kAAFCompGreen
+  // 	- kAAFCompPalette
+  // 	- kAAFCompRed
+  //
   // The 'Size' field of the struct is the component size in bits.
   // 
   // If you set less than 8 entries, the remaining entries will be padded with kAAFCompNone and a size of zero.
@@ -16942,13 +16949,13 @@ DECLARE_INTERFACE_(IAAFRGBADescriptor, IUnknown)
   // Gets the layout and structure of the components in a single pixel.
   // The layout array is an Array of 8 aafRGBAComponent_t.  The 'Code' field of the struct is
   // from the set:
-  //   	kAAFCompNone
-  // 	kAAFCompAlpha
-  // 	kAAFCompBlue
-  // 	kAAFCompFill
-  // 	kAAFCompGreen
-  // 	kAAFCompPalette
-  // 	kAAFCompRed
+  //   	- kAAFCompNone
+  // 	- kAAFCompAlpha
+  // 	- kAAFCompBlue
+  // 	- kAAFCompFill
+  // 	- kAAFCompGreen
+  // 	- kAAFCompPalette
+  // 	- kAAFCompRed
   //
   // The 'Size' field of the struct is the component size in bits.
   // 
@@ -17100,13 +17107,14 @@ DECLARE_INTERFACE_(IAAFRGBADescriptor, IUnknown)
   // Sets the layout and structure of the components in a single pixel.
   // The layout array is an Array of 8 aafRGBAComponent_t.  The 'Code' field of the struct is
   // from the set:
-  //   	kAAFCompNone
-  // 	kAAFCompAlpha
-  // 	kAAFCompBlue
-  // 	kAAFCompFill
-  // 	kAAFCompGreen
-  // 	kAAFCompPalette
-  // 	kAAFCompRed
+  //   	- kAAFCompNone
+  // 	- kAAFCompAlpha
+  // 	- kAAFCompBlue
+  // 	- kAAFCompFill
+  // 	- kAAFCompGreen
+  // 	- kAAFCompPalette
+  // 	- kAAFCompRed
+  //
   // The 'Size' field of the struct is the component size in bits.
   // 
   // If you set less than 8 entries, the remaining entries will be padded with kAAFCompNone and a size of zero.
@@ -17130,13 +17138,13 @@ DECLARE_INTERFACE_(IAAFRGBADescriptor, IUnknown)
   //
   // // The layout array is an Array of 8 aafRGBAComponent_t.  The 'Code' field of the struct is
   // from the set:
-  //   	kAAFCompNone
-  // 	kAAFCompAlpha
-  // 	kAAFCompBlue
-  // 	kAAFCompFill
-  // 	kAAFCompGreen
-  // 	kAAFCompPalette
-  // 	kAAFCompRed
+  //   	- kAAFCompNone
+  // 	- kAAFCompAlpha
+  // 	- kAAFCompBlue
+  // 	- kAAFCompFill
+  // 	- kAAFCompGreen
+  // 	- kAAFCompPalette
+  // 	- kAAFCompRed
   //
   // The 'Size' field of the struct is the component size in bits.
   // 
@@ -17234,11 +17242,11 @@ DECLARE_INTERFACE_(IAAFScopeReference, IUnknown)
   // changed.
   // 
   // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
+  // the listed errors is in effect, it will return the first one
   // encountered in the order given below:
   // 
   // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
+  //   - succeeded.  (This is the only code indicating success.)
   //
   STDMETHOD(Initialize) (THIS_
     // Data definition for referenced slot
@@ -18555,7 +18563,7 @@ DECLARE_INTERFACE_(IAAFSourceMob, IUnknown)
   //
   // AAFRESULT_FILMDESC_ONLY
   //   - Valid only for AAFSourceMob referencing an AAFFilmDescriptor
-  //   as EssenceDescriptor.
+  //     as EssenceDescriptor.
   //
   STDMETHOD(AppendEdgecodeSlot) (THIS_
     // Edit rate of the Edgecode slot
@@ -18570,15 +18578,17 @@ DECLARE_INTERFACE_(IAAFSourceMob, IUnknown)
     // Length of the Edgecode component in the slot
     /*[in]*/ aafFrameLength_t  length32,
 
-    // The film kind.  Can be one of:
-	// - kFtNull
+    // The film kind.
+    // Can be one of:
+    // - kFtNull
     // - kFt35MM
     // - kFt16MM
     // - kFt8MM
     // - kFt65MM
     /*[in]*/ aafFilmType_t  filmKind,
 
-    // The code format.  Can be one of:
+    // The code format.
+    // Can be one of:
     // - kEtNull
     // - kEtKeycode
     // - kEtEdgenum4
@@ -18801,7 +18811,7 @@ DECLARE_INTERFACE_(IAAFSourceMob, IUnknown)
     /*[in]*/ aafSlotID_t  aMobSlot,
 
     // Data kind of slot to contain reference.  Requires a data kind
-	// valid for a essence stream.  Valid data kinds are:
+    // valid for a essence stream.  Valid data kinds are:
     // - Picture
     // - Sound
     /*[in]*/ IAAFDataDef * pEssenceKind,
@@ -18813,7 +18823,7 @@ DECLARE_INTERFACE_(IAAFSourceMob, IUnknown)
     /*[in]*/ aafLength_t  srcRefLength,
 
     // Method of conversion.  Possible values are:
-    // - kAAFTwoThreePD   	-- Normal NTSC-20fps pulldown
+    // - kAAFTwoThreePD	    -- Normal NTSC-20fps pulldown
     // - kAAFPALPD
     // - kAAFOneToOneNTSC   -- NTSC recorded as 1 frame == 1 film frame.
     // - kAAFOneToOnePAL    -- PAL recorded as 1 frame == 1 film frame.
@@ -18823,9 +18833,10 @@ DECLARE_INTERFACE_(IAAFSourceMob, IUnknown)
     /*[in]*/ aafPhaseFrame_t  phaseFrame,
 
     // Direction of the pulldown conversion. Possible values are:
-    //	- kAAFTapeToFilmSpeed -- Used to link a file descriptor with a
+    //
+    //  - kAAFTapeToFilmSpeed -- Used to link a file descriptor with a
     //							 tape descriptor.
-    //	- kAAFFilmToTapeSpeed -- Used to link a tape descriptor with a
+    //  - kAAFFilmToTapeSpeed -- Used to link a tape descriptor with a
     //							 film descriptor.
     /*[in]*/ aafPulldownDir_t  direction) PURE;
 
@@ -19337,7 +19348,7 @@ DECLARE_INTERFACE_(IAAFTapeDescriptor, IUnknown)
   // encountered in the order given below:
   // 
   // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
+  //   - succeeded.  (This is the only code indicating success.)
   //
   // AAFRESULT_NOT_INITIALIZED
   //   - This object has not yet had Initialize() called on it.
@@ -21042,7 +21053,7 @@ DECLARE_INTERFACE_(IAAFTypeDef, IUnknown)
   //
   // GetTypeCategory()
   //
-  // Returns the type category to which this type definition	belongs.
+  // Returns the type category to which this type definition belongs.
   // 
   // Succeeds if:
   // - The pTid argument is valid
@@ -22063,7 +22074,7 @@ DECLARE_INTERFACE_(IAAFTypeDefEnum, IUnknown)
     /*[in, ref]*/ aafUID_constref  id,
 
     // Type of values in this enumeration.
-			// Has to be of type Int
+    // Has to be of type Int
     /*[in]*/ IAAFTypeDef * pType,
 
     // array of element values to be represented in this enumerated
@@ -24574,19 +24585,6 @@ DECLARE_INTERFACE_(IAAFTypeDefStream, IUnknown)
   /* *** IAAFTypeDefStream methods *** */
 
 
-
-  // 
-  // All reads/and writes advance the current position
-  //
-
-
-  //
-  // Raw byte stream access
-  //
-
-
-  // Stream size and positioning
-
   //***********************************************************
   //
   // GetSize()
@@ -24715,12 +24713,11 @@ DECLARE_INTERFACE_(IAAFTypeDefStream, IUnknown)
     /*[in]*/ aafInt64  newPosition) PURE;
 
 
-  // Sequential access
-
   //***********************************************************
   //
   // Read()
   //
+  // Sequential access.
   // Copies the data at the position of the stream to the given
   // buffer.
   //
@@ -24761,6 +24758,7 @@ DECLARE_INTERFACE_(IAAFTypeDefStream, IUnknown)
   //
   // Write()
   //
+  // Sequential access.
   // Copies the data in the given buffer into the stream at the 
   // current position of the stream..
   //
@@ -24793,13 +24791,11 @@ DECLARE_INTERFACE_(IAAFTypeDefStream, IUnknown)
     // buffer into which should contain one element to be written to the stream
     /*[in, ref, size_is(dataSize)]*/ aafMemPtr_t  pData) PURE;
 
-
-  // Extending the stream
-
   //***********************************************************
   //
   // Append()
   //
+  // Extending the stream.
   // Copies the data in the given buffer into the stream at the 
   // end of the stream.
   //
@@ -24831,12 +24827,6 @@ DECLARE_INTERFACE_(IAAFTypeDefStream, IUnknown)
 
     // buffer into which should contain one element to be written to the stream
     /*[in, ref, size_is(dataSize)]*/ aafMemPtr_t  pData) PURE;
-
-
-
-  //
-  // Access byte order of the stream
-  //
 
 
   //***********************************************************
@@ -24875,13 +24865,12 @@ DECLARE_INTERFACE_(IAAFTypeDefStream, IUnknown)
   //
   // GetStoredByteOrder()
   //
-  // Returns kAAFTrue if the stream has a stored byte order or 
-  // kAAFFalse otherwise.
+  // Access byte order of the stream.
   //
   // Succeeds if:
   // - Initialize() has already been called on this object.
   // - pStreamPropertyValue is a valid pointer.
-  // - pHasByteOrder is a valid pointer.
+  // - pByteOrder is a valid pointer.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -24964,16 +24953,11 @@ DECLARE_INTERFACE_(IAAFTypeDefStream, IUnknown)
     // stream property value
     /*[in]*/ IAAFPropertyValue * pStreamPropertyValue) PURE;
 
-
-
-  //
-  // Access in typed chunks of Elements
-  //
-
   //***********************************************************
   //
   // ReadElements()
   //
+  // Access in typed chunks of Elements.
   // Copies the data at the current position of the stream to the given
   // buffer. Requires that any structures declared within element 
   // typedef have had their offsets registered with that type.
@@ -25031,6 +25015,7 @@ DECLARE_INTERFACE_(IAAFTypeDefStream, IUnknown)
   //
   // WriteElements()
   //
+  // Access in typed chunks of Elements.
   // Copies the data in the given buffer into the stream at the  
   // current position of the stream. Requires that any structures 
   // declared within element 
@@ -25086,6 +25071,7 @@ DECLARE_INTERFACE_(IAAFTypeDefStream, IUnknown)
   //
   // AppendElements()
   //
+  // Access in typed chunks of Elements.
   // Copies the data in the given buffer onto the end of the stream. 
   // Requires that any structures declared within element 
   // typedef have had their offsets registered with that type..
@@ -25177,6 +25163,7 @@ DECLARE_INTERFACE_(IAAFTypeDefString, IUnknown)
   // Initializes this type def to contain elements of the given type.
   // Note that it is only possible to use certain types as the element
   // type.  Those permissible types include:
+  //
   // - AAFTypeDefInt
   //
   // This method must be called after allocation, and before
@@ -25561,7 +25548,9 @@ DECLARE_INTERFACE_(IAAFTypeDefWeakObjRef, IUnknown)
   // this weak reference.  The AUIDs indicate the containment path to
   // the target property, starting at the root Header object.  For
   // example, if the containment hierarchy is:
+  //
   // Header->A->B->C
+  //
   // then the first AUID corresponds to the Header's property which
   // contains Object A; the second AUID corresponds to Object A's
   // property which contains Object B; and the third AUID corresponds
@@ -26866,7 +26855,7 @@ DECLARE_INTERFACE_(IAAFVaryingValue, IUnknown)
 
     // Preallocated buffer to hold value
     /*[out,
-		   size_is(valueSize),length_is(*bytesRead)]*/ aafDataBuffer_t  pValue,
+   size_is(valueSize),length_is(*bytesRead)]*/ aafDataBuffer_t  pValue,
 
     // Number of actual bytes read
     /*[out]*/ aafInt32 *  bytesRead) PURE;
@@ -32369,13 +32358,14 @@ DECLARE_INTERFACE_(IAAFEssenceMultiAccess, IUnknown)
     // number of elements in the array of transfer operations
     /*[in]*/ aafUInt16  arrayElemCount,
 
-    // points to an array of transfer parameters.  All fields in this
+    // Points to an array of transfer parameters.  All fields in this
     // array except for bytesXferred must be set up before doing the
     // transfer.  Some of the fields in the xferArray structure are
     // status results like bytesXferred and samplesXferred.
     //
     // The multiXfer_t structure has the following fields, which
-	// specify one channel of data: 
+    // specify one channel of data: 
+    //
     //   essenceDef    [IN] -- The essence type definition
     //   physical      [IN] -- The physical input-output channel
     //   numSamples    [IN] -- The number of samples to transfer
@@ -32383,8 +32373,9 @@ DECLARE_INTERFACE_(IAAFEssenceMultiAccess, IUnknown)
     //   buffer        [IN] -- The buffer for this
     /*[in,size_is(arrayElemCount)]*/ aafmMultiXfer_t *  xferArray,
 
-    // put results into this array.  It has the following fields,
+    // Put results into this array.  It has the following fields,
     // which return result for one channel of data:
+    //
     //   bytesXfered   [OUT] -- The total number of bytes transferred
     //   samplesXfered [OUT] -- The total number of samples transferred
     /*[out,size_is(arrayElemCount)]*/ aafmMultiResult_t *  resultArray) PURE;
@@ -32397,7 +32388,8 @@ DECLARE_INTERFACE_(IAAFEssenceMultiAccess, IUnknown)
   // Reads one or more channels from an interleaved data stream.
   // Possible Errors:
   //
-  // Standard errors (see top of file).
+  //   Standard errors (see top of file).
+  //
   //   AAFRESULT_END_OF_ESSENCE -- Hit the end of the essence (like
   //                               EOF) while reading.
   //
@@ -32407,24 +32399,26 @@ DECLARE_INTERFACE_(IAAFEssenceMultiAccess, IUnknown)
 
     // Points to an array of transfer parameters.  All fields in this
     // array except for bytesXferred must be set up before doing the
-	// transfer.  Some of the fields in the xferArray structure are
-	// status results like bytesXferred and samplesXferred.
+    // transfer.  Some of the fields in the xferArray structure are
+    // status results like bytesXferred and samplesXferred.
     //
     // The multiXfer_t structure has the following fields, which
-	// specify one channel of data:
-    // essenceDef  [IN] -- The essence type definition
-    // physical    [IN] -- The physical input-output channel
-    // numSamples  [IN] -- The number of samples to transfer
-    // buflen      [IN] -- The size of the buffer
-    // buffer      [IN] -- The buffer for this
+    // specify one channel of data:
+    //
+    //   essenceDef  [IN] -- The essence type definition
+    //   physical    [IN] -- The physical input-output channel
+    //   numSamples  [IN] -- The number of samples to transfer
+    //   buflen      [IN] -- The size of the buffer
+    //   buffer      [IN] -- The buffer for this
     /*[in, size_is(elemCount)]*/ aafmMultiXfer_t *  xferArray,
 
     // Results go into this array.
     //
     // The aafmMultiResult_t structure has the following fields,
-	// which return result for one channel of data: 
-    // bytesXfered   [OUT] -- The total number of bytes transferred
-    // samplesXfered [OUT] -- The total number of samples transferred
+    // which return result for one channel of data: 
+    //
+    //   bytesXfered   [OUT] -- The total number of bytes transferred
+    //   samplesXfered [OUT] -- The total number of samples transferred
     /*[out, size_is(elemCount)]*/ aafmMultiResult_t *  resultArray) PURE;
 
   END_INTERFACE
@@ -32592,6 +32586,120 @@ DECLARE_INTERFACE_(IAAFTypeDefVariableArrayEx, IUnknown)
 
 
 
+// IAAFMasterMobEx
+
+// ************************
+//
+// Interface IAAFMasterMobEx
+//
+// ************************
+
+
+
+
+
+
+
+#ifndef __IAAFMasterMobEx_INTERFACE_DEFINED__
+#define __IAAFMasterMobEx_INTERFACE_DEFINED__
+
+EXTERN_C const IID IID_IAAFMasterMobEx;
+
+#undef  INTERFACE
+#define INTERFACE   IAAFMasterMobEx
+
+DECLARE_INTERFACE_(IAAFMasterMobEx, IUnknown)
+{
+  BEGIN_INTERFACE
+
+  /* *** IUnknown methods *** */
+  STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppvObj) PURE;
+  STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
+  STDMETHOD_(ULONG,Release) (THIS) PURE;
+
+  /* *** IAAFMasterMobEx methods *** */
+
+
+  //***********************************************************
+  //
+  // ExtendEssence()
+  //
+  // Extends a single stream of essence that was originally created using
+   // IAAFMasterMob::CreateEssence.  Extended essence is represented by
+   // a Sequence of SourceClip objects.  The first call to ExtendEssence will cause the
+   // TimelineMobSlot's SourceClip object to be replaced by a
+   // Sequence.  The initial SourceClip becomes the first
+   // component of the new Sequence.
+  //
+  STDMETHOD(ExtendEssence) (THIS_
+    // 
+    /*[in]*/ aafSlotID_t  masterSlotID,
+
+    // create essence of this type
+    /*[in]*/ IAAFDataDef * pMediaKind,
+
+    // using this codec
+    /*[in, ref]*/ aafUID_constref  codecID,
+
+    // with this edit rate
+    /*[in]*/ aafRational_t  editRate,
+
+    // with this sample rate
+    /*[in]*/ aafRational_t  samplerate,
+
+    // optionally compressing it
+    /*[in]*/ aafCompressEnable_t  Enable,
+
+    // Optionally create the file HERE.
+    /*[in]*/ IAAFLocator * destination,
+
+    // with this format
+    /*[in, ref]*/ aafUID_constref  fileFormat,
+
+    // Return an essence access on the essence.
+    /*[out]*/ IAAFEssenceAccess ** access) PURE;
+
+
+  //***********************************************************
+  //
+  // ExtendMultiEssence()
+  //
+  // Extends a multi-channel interleaved stream of essence that was
+   // originally created using IAAFMasterMob::CreateMultiEssence.
+   // Extended essence is represented by a Sequence of SourceClip objects.
+   // The first call to ExtendEssence will cause the TimelineMobSlot's SourceClip
+   // object to be replaced by a Sequence.  The initial SourceClip becomes the first
+   // component of the new Sequence.
+  //
+  STDMETHOD(ExtendMultiEssence) (THIS_
+    // using this codec
+    /*[in, ref]*/ aafUID_constref  codecID,
+
+    // this many channels
+    /*[in]*/ aafUInt16  arrayElemCount,
+
+    // using these definitions
+    /*[in,ref,size_is(arrayElemCount)]*/ aafmMultiCreate_t *  mediaArray,
+
+    // optionally compressing it
+    /*[in]*/ aafCompressEnable_t  Enable,
+
+    // Optionally create the file HERE.
+    /*[in]*/ IAAFLocator * destination,
+
+    // with this format
+    /*[in, ref]*/ aafUID_constref  fileFormat,
+
+    // Return an essence access on the essence.
+    /*[out]*/ IAAFEssenceMultiAccess**  access) PURE;
+
+
+  END_INTERFACE
+};
+#endif // __IAAFMasterMobEx_INTERFACE_DEFINED__
+
+
+
 
 
 
@@ -32614,7 +32722,12 @@ DECLARE_INTERFACE_(IAAFTypeDefVariableArrayEx, IUnknown)
   // Attempts to load the given implementation of AAF into
   // the processes address space. Only one implementation
   // of AAF can be active. Note: once AAFUnload has been
-  // called all
+  // called all subsequent access to AAF interfaces will fail
+  //
+  // To use this function link to the stub library aaf.lib
+  // (or aafd.lib for the debugging version). 
+  // If the client is statically linking to the AAF dll's export
+  // library then the function will always succeed.
   // 
   STDAPI AAFLoad (
     // Pointer to the name of AAF dll to load.
@@ -32642,14 +32755,14 @@ DECLARE_INTERFACE_(IAAFTypeDefVariableArrayEx, IUnknown)
   // AAFFileOpenExistingRead()
   //
   // Creates an object associated with with an existing filesystem
-  // file that contains data which is only to be read.  Does the
-  // following:
+  // file that contains data which is only to be read.
+  // Does the following:
+  //
   // - Opens the existing named file in the filesystem for reading.
   // - Associates an object with that filesystem file.
   // - Places the object into the Open-read-only state.
   // - This AAFFile object then can be used as the root of the
-  //   containment tree representing all AAF objects contained within
-  //   the file.
+  //   containment tree representing all AAF objects contained within the file.
   //
   // Succeeds if:
   // - The pFileName argument is valid.
@@ -32658,8 +32771,7 @@ DECLARE_INTERFACE_(IAAFTypeDefVariableArrayEx, IUnknown)
   // - The named file exists in the filesystem.
   // - The named filesystem file is readable.
   // - The named file represents itself as a valid AAF file.  Even if
-  //   this succeeds, it is not guaranteed that the named file is in
-  //   fact a valid AAF file.
+  //   this succeeds, it is not guaranteed that the named file is in fact a valid AAF file.
   //
   // This function will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -32694,6 +32806,7 @@ DECLARE_INTERFACE_(IAAFTypeDefVariableArrayEx, IUnknown)
 
     // File open mode flags.  May be any of the following ORed
     // together.  All other bits must be set to zero.
+    //
     //  - kAAFFileModeUnbuffered - to indicate buffered mode.  Default
     //    is buffered.
     /*[in]*/ aafUInt32  modeFlags,
@@ -32710,13 +32823,13 @@ DECLARE_INTERFACE_(IAAFTypeDefVariableArrayEx, IUnknown)
   // filesystem file that contains data which is to be read and
   // written.  Associates the given identification with it.
   // Does the following:
+  //
   // - Opens the existing named file in the filesystem for reading and
   //   writing.
   // - Associates an object with that filesystem file.
   // - Places the object into the Open-read-write  state.
   // - This AAFFile object then can be used as the root of the
-  //   containment tree representing all AAF objects contained within
-  //   the file.
+  //   containment tree representing all AAF objects contained within the file.
   //
   // Succeeds if:
   // - This object is currently Closed.
@@ -32728,8 +32841,7 @@ DECLARE_INTERFACE_(IAAFTypeDefVariableArrayEx, IUnknown)
   // - The named filesystem file is readable.
   // - The named filesystem file is writable.
   // - The named file represents itself as a valid AAF file.  Even if
-  //   this succeeds, it is not guaranteed that the named file is in
-  //   fact a valid AAF file.
+  //   this succeeds, it is not guaranteed that the named file is in fact a valid AAF file.
   //
   // This function will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -32767,10 +32879,11 @@ DECLARE_INTERFACE_(IAAFTypeDefVariableArrayEx, IUnknown)
 
     // File open mode flags.  May be any of the following ORed together.
     // All other bits must be set to zero.
-    //  - kAAFFileModeUnbuffered - to indicate unbuffered mode.
-    //    Default is buffered.
-    //  - kAAFFileModeRevertable - to indicate that Revert is possible
-    //    on this file (for all changes except those to essence).
+    //
+    //  - kAAFFileModeUnbuffered
+    //    to indicate unbuffered mode. Default is buffered.
+    //  - kAAFFileModeRevertable
+    //    to indicate that Revert is possible on this file (for all changes except those to essence).
     /*[in]*/ aafUInt32  modeFlags,
 
     // Identification of the application which is modifying this file.
@@ -32788,13 +32901,13 @@ DECLARE_INTERFACE_(IAAFTypeDefVariableArrayEx, IUnknown)
   // filesystem file that contains data which is to be read and
   // written.  Associates the given identification with it.
   // Does the following:
+  //
   // - Creates a new file in the filesystem with the given name.
   // - Opens the filesystem file for reading and writing.
   // - Associates this object with that filesystem file.
   // - Places this object into the Open state.
   // - This AAFFile object then can be used as the root of the
-  //   containment tree representing all AAF objects contained within
-  //   the file.
+  //   containment tree representing all AAF objects contained within the file.
   //
   // Succeeds if:
   // - The pFileName argument is valid.
@@ -32835,10 +32948,11 @@ DECLARE_INTERFACE_(IAAFTypeDefVariableArrayEx, IUnknown)
 
     // File open mode flags.  May be any of the following ORed together.
     // All other bits must be set to zero.
-    //  - kAAFFileModeUnbuffered - to indicate unbuffered mode.
-    //    Default is buffered.
-    //  - kAAFFileModeRevertable - to indicate that Revert is possible
-    //    on this file (for all changes except those to essence).
+    //
+    //  - kAAFFileModeUnbuffered
+    //    to indicate unbuffered mode. Default is buffered.
+    //  - kAAFFileModeRevertable
+    //    to indicate that Revert is possible on this file (for all changes except those to essence).
     /*[in]*/ aafUInt32  modeFlags,
 
     // Identification of the application which is creating this file.
@@ -33034,22 +33148,20 @@ DECLARE_INTERFACE_(IAAFTypeDefVariableArrayEx, IUnknown)
   // Note also that only the following combinations of access and
   // existence are legal:
   //
-  // existence   access   Legal?
-  // ---------   ------   ------
-  // existing    read     yes
-  // existing    write    no
-  // existing    modify   yes
-  //   new       read     no
-  //   new       write    yes
-  //   new       modify   yes
+  //          existence   access   Legal?
+  //          ---------   ------   ------
+  //          existing    read     yes
+  //          existing    write    no
+  //          existing    modify   yes
+  //            new       read     no
+  //            new       write    yes
+  //            new       modify   yes
   //
   // This method will succeed if the following are true:
   // - The pRawStorage pointer is valid.
   // - The ppNewFile pointer is valid.
-  // - The accessibility of the specified raw storage matches that of
-  //   the desired AAF File; additionally, if the file kind is
-  //   Structured Storage Binary, the raw storage is also required to
-  //   be at least readable. 
+  // - The accessibility of the specified raw storage matches that of the desired AAF File; additionally, if the file kind is
+  //   Structured Storage Binary, the raw storage is also required to be at least readable. 
   // - A legal combination of existence and access flags is given.
   //
   // This method will return the following codes.  If more than one of
