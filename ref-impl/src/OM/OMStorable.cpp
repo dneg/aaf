@@ -231,6 +231,10 @@ OMFile* OMStorable::file(void) const
   return _containingObject->file();
 }
 
+  // @mfunc The path to this <c OMStorable> from the root of
+  //        the <c OMFile> in which this <c OMStorable> resides.
+  //   @rdesc The path name of this <c OMStorable>.
+  //   @this const
 const char* OMStorable::pathName(void) const
 {
   TRACE("OMStorable::pathName");
@@ -241,6 +245,26 @@ const char* OMStorable::pathName(void) const
   }
   ASSERT("Valid path name", validString(_pathName));
   return _pathName;
+}
+
+  // @mfunc Is this <c OMStorable> the root of the object
+  //        containment hierarchy.
+  //   @rdesc True if this is the root object, false otherwise.
+  //   @this const
+bool OMStorable::isRoot(void) const
+{
+  TRACE("OMStorable::isRoot");
+  PRECONDITION("Valid containing object", containingObject() != 0);
+  bool result;
+
+  // By definition the root object is the one contained directly
+  // within the file.
+  if (containingObject() == file()) {
+    result = true;
+  } else {
+    result = false;
+  }
+  return result;
 }
 
   // @mfunc The stored representation of this <c OMStorable>.
@@ -370,47 +394,37 @@ void OMStorable::setClassFactory(const OMClassFactory* classFactory)
 char* OMStorable::makePathName(void)
 {
   TRACE("OMStorable::makePathName");
-  // Don't need to compute path name each time, should save once computed.
 
-  // All objects must have a name.
-  //
   ASSERT("Object has a name", validString(name()));
-
-  // By definition the root object is the one with no container.
-  // Check that the root object is called "/".
-  //
   ASSERT("Root object properly named",
-                   IMPLIES(containingObject() == 0, strcmp(name(), "/") == 0));
-
-  // Only the root object is called "/".
-  // Check that if the object is called "/" it is the root object (has
-  // no container).
-  //
+                                  IMPLIES(isRoot(), strcmp(name(), "/") == 0));
   ASSERT("Non-root object properly named",
-                   IMPLIES(strcmp(name(), "/") == 0, containingObject() == 0));
-  
+                                  IMPLIES(strcmp(name(), "/") == 0, isRoot()));
+  ASSERT("Non-root object has valid container",
+                                  IMPLIES(!isRoot(), containingObject() != 0));
+
   char* result = 0;
-  OMStorable* cont = containingObject();
-  if (cont != 0) {
-    if (cont->containingObject() != 0) {
+  if (isRoot()) {
+    // root
+    result = new char[strlen(name()) + 1];
+    ASSERT("Valid heap pointer", result != 0);
+    strcpy(result, name());
+  } else {
+    OMStorable* cont = containingObject();
+    if (cont->isRoot()) {
+      // child of root
+      result = new char[strlen(cont->pathName()) + strlen(name()) + 1];
+      ASSERT("Valid heap pointer", result != 0);
+      strcpy(result, cont->pathName());
+      strcat(result, name());
+    } else {
       // general case
       result = new char[strlen(cont->pathName()) + strlen(name()) + 1 + 1];
       ASSERT("Valid heap pointer", result != 0);
       strcpy(result, cont->pathName());
       strcat(result, "/");
       strcat(result, name());
-    } else {
-      // child of root
-      result = new char[strlen(cont->pathName()) + strlen(name()) + 1];
-      ASSERT("Valid heap pointer", result != 0);
-      strcpy(result, cont->pathName());
-      strcat(result, name());
-    }
-  } else {
-    // root
-    result = new char[strlen(name()) + 1];
-    ASSERT("Valid heap pointer", result != 0);
-    strcpy(result, name());
+	}
   }
 
   POSTCONDITION("Valid result", validString(result));
