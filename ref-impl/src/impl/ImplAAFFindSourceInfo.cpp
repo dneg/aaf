@@ -16,7 +16,7 @@
 #include <string.h>
 #include "aafCvt.h"
 #include "ImplAAFMob.h"
-#include "ImplAAFEffect.h"
+#include "ImplAAFOperationGroup.h"
 #include "AAFDefUIDs.h"
 
 ImplAAFFindSourceInfo::ImplAAFFindSourceInfo ()
@@ -27,7 +27,7 @@ ImplAAFFindSourceInfo::ImplAAFFindSourceInfo ()
 	_editRate.denominator = 1;
 	CvtInt32toLength(0, _position);
 	CvtInt32toLength(0, _length);
-	_effect = NULL;
+	_operationGroup = NULL;
 }
 
 
@@ -43,10 +43,10 @@ ImplAAFFindSourceInfo::~ImplAAFFindSourceInfo ()
 		_cpnt->ReleaseReference();
 		_cpnt = NULL;
 	}
-	if (_effect)
+	if (_operationGroup)
 	{
-		_effect->ReleaseReference();
-		_effect = NULL;
+		_operationGroup->ReleaseReference();
+		_operationGroup = NULL;
 	}
 }
 
@@ -101,22 +101,22 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFFindSourceInfo::Clear(void)
 //!!!	  (*sourceInfo).effeObject = NULL;
 	CvtInt32toLength(0, _position);
 	CvtInt32toLength(0, _length);
-	if (_effect)
-		_effect->ReleaseReference();
-	_effect = NULL;
+	if (_operationGroup)
+		_operationGroup->ReleaseReference();
+	_operationGroup = NULL;
 
 	return AAFRESULT_SUCCESS;
 }
 
 AAFRESULT STDMETHODCALLTYPE
-ImplAAFFindSourceInfo::SetEffect(
-				ImplAAFEffect *effect)
+ImplAAFFindSourceInfo::SetOperationGroup(
+				ImplAAFOperationGroup *group)
 {
-	if (_effect)
-		_effect->ReleaseReference();
-	_effect = effect;
-	if (effect)
-	  effect->AcquireReference();
+	if (_operationGroup)
+		_operationGroup->ReleaseReference();
+	_operationGroup = group;
+	if (group)
+	  group->AcquireReference();
 	return AAFRESULT_SUCCESS;
 }
 

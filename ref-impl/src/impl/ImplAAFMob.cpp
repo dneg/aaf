@@ -30,8 +30,8 @@
 #include "ImplEnumAAFMobComments.h"
 #endif
 
-#ifndef __ImplAAFEffect_h__
-#include "ImplAAFEffect.h"
+#ifndef __ImplAAFOperationGroup_h__
+#include "ImplAAFOperationGroup.h"
 #endif
 
 
@@ -1363,7 +1363,7 @@ AAFRESULT ImplAAFMob::InternalSearchSource(
 										   aafPosition_t offset,
 										   aafMobKind_t mobKind,
 										   aafMediaCriteria_t *pMediaCrit,
-										   aafEffectChoice_t *pEffectChoice,
+										   aafOperationChoice_t *pOperationChoice,
 										   ImplAAFFindSourceInfo **ppSourceInfo)
 {
 	ImplAAFMobSlot 			*track = NULL;
@@ -1379,7 +1379,7 @@ AAFRESULT ImplAAFMob::InternalSearchSource(
 	aafSlotID_t				nextTrackID;
 	ImplAAFFindSourceInfo	*sourceInfo = NULL ;
 	ImplAAFComponent		*leafObj = NULL;
-	ImplAAFEffect	*effeObject;
+	ImplAAFOperationGroup	*effeObject;
 	
 	if(ppSourceInfo == NULL)
 		return(AAFRESULT_NULL_PARAM);
@@ -1402,7 +1402,7 @@ AAFRESULT ImplAAFMob::InternalSearchSource(
 		
 		/*** Find leaf object in this track that points to the next mob ***/
 		CHECK(MobFindLeaf(track, 
-			pMediaCrit, pEffectChoice,
+			pMediaCrit, pOperationChoice,
 			rootObj, offset, cpntLen,
 			NULL, NULL, 
 			NULL, /* Shouldn't be scopes here */
@@ -1447,7 +1447,7 @@ AAFRESULT ImplAAFMob::InternalSearchSource(
 		
 		/*** Find component at referenced position in new mob ***/
 		CHECK(nextMob->MobFindSource(nextTrackID, nextPos, nextLen,
-			mobKind, pMediaCrit, pEffectChoice,
+			mobKind, pMediaCrit, pOperationChoice,
 			sourceInfo, &sourceFound));
 		if (!sourceFound)
 			RAISE(AAFRESULT_TRAVERSAL_NOT_POSS);
@@ -1464,7 +1464,7 @@ AAFRESULT ImplAAFMob::InternalSearchSource(
 	XEXCEPT
 	{
 		if(XCODE() == AAFRESULT_PARSE_EFFECT_AMBIGUOUS)
-			sourceInfo->SetEffect(effeObject);
+			sourceInfo->SetOperationGroup(effeObject);
 
 		if (nextMob)
 			nextMob->ReleaseReference();
@@ -1486,7 +1486,7 @@ AAFRESULT ImplAAFMob::InternalSearchSource(
 										   										   
 AAFRESULT ImplAAFMob::MobFindLeaf(ImplAAFMobSlot *track,
 								  aafMediaCriteria_t *mediaCrit,
-								  aafEffectChoice_t *effectChoice,
+								  aafOperationChoice_t *operationChoice,
 								  ImplAAFComponent *rootObj,
 								  aafPosition_t rootPos,
 								  aafLength_t rootLen,
@@ -1497,7 +1497,7 @@ AAFRESULT ImplAAFMob::MobFindLeaf(ImplAAFMobSlot *track,
 								  ImplAAFComponent **foundObj,
 								  aafLength_t *minLength,
 								  aafBool *foundTransition,
-								  ImplAAFEffect **effeObject,
+								  ImplAAFOperationGroup **effeObject,
 								  aafInt32	*nestDepth,
 								  aafPosition_t *diffPos)
 {
@@ -1519,7 +1519,7 @@ AAFRESULT ImplAAFMob::MobFindLeaf(ImplAAFMobSlot *track,
 		CHECK(track->GetSlotID(&trackID));
 		
 		CHECK(rootObj->GetMinimumBounds(rootPos, rootLen,this, track, mediaCrit, currentObjPos,
-			effectChoice, prevObject, nextObject, scopeStack,
+			operationChoice, prevObject, nextObject, scopeStack,
 			diffPos, minLength, effeObject, nestDepth,
 			foundObj, foundTransition));
 	} /* XPROTECT */
@@ -1640,7 +1640,7 @@ AAFRESULT ImplAAFMob::MobFindSource(
 									aafLength_t length,   /* expected length of clip */
 									aafMobKind_t mobKind,
 									aafMediaCriteria_t *mediaCrit,
-									aafEffectChoice_t *effectChoice,
+									aafOperationChoice_t *operationChoice,
 									ImplAAFFindSourceInfo *sourceInfo,
 									aafBool *foundSource)
 {
@@ -1648,7 +1648,7 @@ AAFRESULT ImplAAFMob::MobFindSource(
 	ImplAAFPulldown			*pulldownObj = NULL;
 	ImplAAFSegment			*rootObj = NULL;
 	ImplAAFComponent		*leafObj = NULL;
-	ImplAAFEffect	*effeObject = NULL;
+	ImplAAFOperationGroup	*effeObject = NULL;
 	ImplAAFMob				*nextMob = NULL;
 	aafSlotID_t				foundTrackID;
 	aafBool					nextFoundSource = AAFFalse, foundTransition = AAFFalse;
@@ -1720,7 +1720,7 @@ AAFRESULT ImplAAFMob::MobFindSource(
 		* on the master mob and down - so, we shouldn't run into transitions.
 		* So, passing NULL for prevObject and nextObject is probably alright.
 		*/
-		CHECK(MobFindLeaf(track, mediaCrit, effectChoice, 
+		CHECK(MobFindLeaf(track, mediaCrit, operationChoice, 
 			rootObj, offset, tmpLength,
 			NULL, NULL, 
 			NULL, /* Shouldn't be scopes here */
@@ -1766,7 +1766,7 @@ AAFRESULT ImplAAFMob::MobFindSource(
 		/* Find component at referenced position in new mob */
 		CHECK(nextMob->MobFindSource(foundTrackID,
 			foundPos, foundLen,
-			mobKind, mediaCrit, effectChoice,
+			mobKind, mediaCrit, operationChoice,
 			sourceInfo, &nextFoundSource));
 		if (nextFoundSource)
 		{
@@ -1788,7 +1788,7 @@ AAFRESULT ImplAAFMob::MobFindSource(
 	XEXCEPT
 	{
 		if(XCODE() == AAFRESULT_PARSE_EFFECT_AMBIGUOUS)
-			sourceInfo->SetEffect(effeObject);
+			sourceInfo->SetOperationGroup(effeObject);
 
 		if (nextMob)
 			nextMob->ReleaseReference();
