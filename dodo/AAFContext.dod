@@ -1,0 +1,43 @@
+#startm .this-module 0
+AAFSession\
+#endm
+AD_HEAD
+/******************************************\
+*                                          *
+* Advanced Authoring Format                *
+*                                          *
+* Copyright (c) 1998 Avid Technology, Inc. *
+* Copyright (c) 1998 Microsoft Corporation *
+*                                          *
+\******************************************/
+
+AD_INCLUDE(AAFTypes)
+AD_FORWARD_DECLARATION(AAFFile)
+
+AD_CLASS_UUID(F0C10891, 3073, 11d2, 80, 4A, 00, 60, 08, 14, 3E, 6F)
+AD_DEFAULT_UUID(F0C10892, 3073, 11d2, 80, 4A, 00, 60, 08, 14, 3E, 6F)
+
+AD_ROOT_CLASS_BEGIN
+
+AD_BEGIN_SESSION
+
+AD_METHOD0(EndSession,
+			End the session freeing up memory.)
+
+AD_XMETHOD3(CreateFile,
+			[in], objPass,aafDataBuffer_t,filePath, File path [replace with object later],
+			[in], objPass,aafFileRev_t, rev, File revision to create,
+			[out], objOut,AAFFile, file,Current AAF file,
+			Creates an AAF file of the given revision.)
+
+AD_XMETHOD2(OpenReadFile,
+			[in], objPass,aafDataBuffer_t,filePath, File path [replace with object later],
+			[out], objOut,AAFFile, file,Current AAF file,
+			Opens an AAF file for reading.)
+
+AD_XMETHOD2(OpenModifyFile,
+			[in], objPass,aafDataBuffer_t,filePath, File path [replace with object later],
+			[out], objOut,AAFFile, file,Current AAF file,
+			Opens an AAF file for modification.)
+
+AD_ROOT_CLASS_END
