@@ -23,8 +23,6 @@ AAFPERSISTENTOBJECTS = \
 	AAFEffectInvocation \
 	AAFFiller \
 	AAFFindSourceInfo \
-	AAFHeader \
-	AAFIdentification \
 	AAFIntegerAttribute \
 	AAFLocator \
 	AAFMacLocator \
@@ -37,7 +35,6 @@ AAFPERSISTENTOBJECTS = \
 	AAFMob  \
 	AAFMobSlot \
 	AAFNestedScope\
-	AAFObject \
 	AAFObjectAttribute \
 	AAFParameter \
 	AAFParameterSlot \
@@ -47,7 +44,6 @@ AAFPERSISTENTOBJECTS = \
 	AAFScopeReference \
 	AAFSegment \
 	AAFSequence \
-	AAFSession \
 	AAFSourceClip \
 	AAFSourceMob \
 	AAFSourceReference \
@@ -66,7 +62,7 @@ AAFPERSISTENTOBJECTS = \
 
 # These are all of the other non-persistent objects:
 AAFNONPERSISTENTOBJECTS = \
-	AAFFile \
+	AAFRoot \
 	AAFMedia \
 	EnumAAFAttributes \
 	EnumAAFClassDefs \
@@ -89,15 +85,35 @@ AAFNONPERSISTENTOBJECTS = \
 	EnumAAFTypeDefs 
 
 
+# These are the impl files that are typed by humans.  Be sure to
+# remove them from the other list.  As you check each one in, just add
+# its name here and remove it from either list above where it occurs.
+# Do not add the 'Impl'prefix here.
+HUMAN_TYPED_IMPL = \
+	AAFFile \
+	AAFHeader \
+	AAFIdentification \
+	AAFObject \
+	AAFSession
+
+
 # The list of standard dodo targets.
 # AAFTypes have to be handled separately since no object is to be created.
 DODO_TARGET_NAMES = \
 	$(AAFPERSISTENTOBJECTS) \
-	$(AAFNONPERSISTENTOBJECTS)
+	$(AAFNONPERSISTENTOBJECTS) \
+	$(HUMAN_TYPED_IMPL)
 
 
 # Build the list of all objects that need to be built into the COM DLL
 AAFOBJECTS = \
 	$(AAFPERSISTENTOBJECTS) \
-	$(AAFNONPERSISTENTOBJECTS)
+	$(AAFNONPERSISTENTOBJECTS) \
+	$(HUMAN_TYPED_IMPL)
 
+
+# Build the list of all objects that have automatically-generated
+# implementation classes.
+AUTO_GEN_IMPL = \
+	$(AAFPERSISTENTOBJECTS) \
+	$(AAFNONPERSISTENTOBJECTS)
