@@ -66,8 +66,28 @@ const static aafUID_t NULL3_AUID = { 0 };
   sizeof(array) / sizeof(array[0])
 
 
+// Simple helper class to force static counter initialization to occur
+// before post-increment (for g++ under Linux). A long term solution
+// would be to move all of this code out of the static initialization
+// phase...
+class ItemCounter
+{
+public:
+  ItemCounter();
+  
+  aafUInt32 operator++(int); // postfix	(x++)
+private:
+  aafUInt32 _count;
+};
 
+ItemCounter::ItemCounter() :
+  _count(0)
+{}
 
+aafUInt32 ItemCounter::operator++(int /*not used*/)
+{
+  return _count++;
+}
 
 //
 // Create a static table of all predefined extendible enumeration ids.
@@ -125,7 +145,7 @@ static PropertyDefinition sPropertyDefinitions[] = \
 // Create a static table of the properties for each class.
 //
 #define AAF_TABLE_BEGIN() \
-static aafUInt32 sPropertyIndex = 0;
+static ItemCounter sPropertyIndex;
     
 #define AAF_CLASS(name, id, parent, concrete) \
 static PropertyDefinition * s##name##_PropertyDefinitions[] = \
@@ -338,7 +358,7 @@ const aafUInt32 kTypeDefinitionEnumerationMemberCount =
   s##name##_Member
 
 #define AAF_TYPE_TABLE_BEGIN() \
-static aafUInt32 sEnumerationMemberIndex = 0;
+static ItemCounter sEnumerationMemberIndex;
     
 #define AAF_TYPE_DEFINITION_ENUMERATION(name, id, type) \
 static DefinitionEnumerationMember * MY_ENUM_MEMBER_ARRAY(name)[] = \
@@ -484,7 +504,7 @@ const aafUInt32 kTypeDefinitionRecordFieldCount =
   s##name##_Field
 
 #define AAF_TYPE_TABLE_BEGIN() \
-static aafUInt32 sRecordFieldIndex = 0;
+static ItemCounter sRecordFieldIndex;
     
 #define AAF_TYPE_DEFINITION_RECORD(name, id) \
 static DefinitionRecordField * \
@@ -623,7 +643,7 @@ const aafUInt32 kTypeDefinitionExtendibleEnumerationMemberCount =
   sExtensible##name##_Member
 
 #define AAF_TYPE_TABLE_BEGIN() \
-static aafUInt32 sExtensibleEnumerationMemberIndex = 0;
+static ItemCounter sExtensibleEnumerationMemberIndex;
     
 #define AAF_TYPE_DEFINITION_EXTENDIBLE_ENUMERATION(name, id) \
 static DefinitionExtendibleEnumerationMember * \
