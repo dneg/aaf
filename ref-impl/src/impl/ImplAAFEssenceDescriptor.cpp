@@ -52,7 +52,7 @@
 extern "C" const aafClassID_t CLSID_EnumAAFLocators;
 
 ImplAAFEssenceDescriptor::ImplAAFEssenceDescriptor ()
-: _locators(         PID_EssenceDescriptor_Locator,          "Locator")
+: _locators(         PID_EssenceDescriptor_Locator,          L"Locator")
 {
   _persistentProperties.put(_locators.address());
 }

@@ -1,6 +1,6 @@
 /***********************************************************************
 *
-*              Copyright (c) 1998-1999 Avid Technology, Inc.
+*              Copyright (c) 1998-2000 Avid Technology, Inc.
 *
 * Permission to use, copy and modify this software and accompanying
 * documentation, and to distribute and sublicense application software
@@ -34,7 +34,7 @@
 template <typename ReferencedObject>
 OMStrongReferenceProperty<ReferencedObject>::OMStrongReferenceProperty(
                                                  const OMPropertyId propertyId,
-                                                 const char* name)
+                                                 const wchar_t* name)
 : OMReferenceProperty<ReferencedObject>(propertyId,
                                         SF_STRONG_OBJECT_REFERENCE,
                                         name),
@@ -43,7 +43,9 @@ OMStrongReferenceProperty<ReferencedObject>::OMStrongReferenceProperty(
   TRACE(
      "OMStrongReferenceProperty<ReferencedObject>::OMStrongReferenceProperty");
 
-  _reference = OMStrongObjectReference<ReferencedObject>(this, name);
+  char* cName = convertWideString(name);
+  _reference = OMStrongObjectReference<ReferencedObject>(this, cName);
+  delete [] cName;
 }
 
 template <typename ReferencedObject>

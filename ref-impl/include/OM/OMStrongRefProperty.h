@@ -46,7 +46,8 @@ public:
   // @access Public members.
 
     // @cmember Constructor.
-  OMStrongReferenceProperty(const OMPropertyId propertyId, const char* name);
+  OMStrongReferenceProperty(const OMPropertyId propertyId,
+                            const wchar_t* name);
 
     // @cmember Destructor.
   virtual ~OMStrongReferenceProperty(void);

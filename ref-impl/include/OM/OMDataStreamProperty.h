@@ -43,7 +43,7 @@ public:
   // @access Public members.
 
     // @cmember Constructor.
-  OMDataStreamProperty(const OMPropertyId propertyId, const char* name);
+  OMDataStreamProperty(const OMPropertyId propertyId, const wchar_t* name);
 
     // @cmember Destructor.
   virtual ~OMDataStreamProperty(void);

@@ -96,13 +96,13 @@ const aafUID_t NIL_UID = { 0 };
 
 
 ImplAAFHeader::ImplAAFHeader ()
-: _byteOrder(         PID_Header_ByteOrder,          "ByteOrder"),
-  _lastModified(      PID_Header_LastModified,       "LastModified"),
-  _identificationList(PID_Header_IdentificationList, "IdentificationList"),
-  _contentStorage(		PID_Header_Content,	"Content"),
-  _dictionary(PID_Header_Dictionary,	"Dictionary"),
-  _fileRev(PID_Header_Version,		"Version"),
-  _objectModelVersion(PID_Header_ObjectModelVersion, "ObjectModelVersion")
+: _byteOrder(         PID_Header_ByteOrder,          L"ByteOrder"),
+  _lastModified(      PID_Header_LastModified,       L"LastModified"),
+  _identificationList(PID_Header_IdentificationList, L"IdentificationList"),
+  _contentStorage(		PID_Header_Content,	L"Content"),
+  _dictionary(PID_Header_Dictionary,	L"Dictionary"),
+  _fileRev(PID_Header_Version,		L"Version"),
+  _objectModelVersion(PID_Header_ObjectModelVersion, L"ObjectModelVersion")
 {
   _persistentProperties.put(_byteOrder.address());
   _persistentProperties.put(_lastModified.address());
