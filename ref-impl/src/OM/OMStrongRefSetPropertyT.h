@@ -220,7 +220,7 @@ OMStrongReferenceSetProperty<UniqueIdentification,
     wchar_t* name = elementName(localKey);
     SetElement newElement(this, name, localKey, count, key);
     newElement.restore();
-    _set.insert(newElement);
+    _set.insert(key, newElement);
     delete [] name;
     name = 0; // for BoundsChecker
   }
@@ -269,7 +269,7 @@ OMStrongReferenceSetProperty<UniqueIdentification,
 
   SetElement newElement(this, name, localKey, 1/*tjb*/, key);
   newElement.setValue(object);
-  _set.insert(newElement);
+  _set.insert(key, newElement);
   setPresent();
   delete [] name;
 
