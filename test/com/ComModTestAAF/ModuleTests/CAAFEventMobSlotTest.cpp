@@ -264,9 +264,9 @@ IAAFEvent *EventMobSlotTest::CreateAnEvent(aafPosition_t* position,
   {
     // Create an event (note: this will be replaced by a concrete event in a
     // later version after such an event is implemented.)
-    checkResult(_pDictionary->CreateInstance(defs.cdEvent(),
-                                             IID_IAAFEvent, 
-                                             (IUnknown **)&pEvent));
+    checkResult(defs.cdEvent()->
+				CreateInstance(IID_IAAFEvent, 
+							   (IUnknown **)&pEvent));
     checkResult(pEvent->SetPosition(*position));
     checkResult(pEvent->SetComment(L"Event::Comment:This is a test event"));
 
@@ -331,9 +331,9 @@ void EventMobSlotTest::CreateEventMobSlot()
     pEvent = NULL;
 
     // Create and initialize an EventMobSlot
-    checkResult(_pDictionary->CreateInstance(defs.cdEventMobSlot(),
-                                             IID_IAAFEventMobSlot, 
-                                             (IUnknown **)&pEventMobSlot));
+    checkResult(defs.cdEventMobSlot()->
+				CreateInstance(IID_IAAFEventMobSlot, 
+							   (IUnknown **)&pEventMobSlot));
     checkResult(pEventMobSlot->SetEditRate(const_cast<aafRational_t *>(&_editRate)));
 
     // Get the mob slot interface so that we can add the event segment.
@@ -347,9 +347,9 @@ void EventMobSlotTest::CreateEventMobSlot()
     pSegment = NULL;
 
     // Create the mob to hold the new event mob slot.
-    checkResult(_pDictionary->CreateInstance(defs.cdCompositionMob(),
-                                             IID_IAAFMob, 
-                                             (IUnknown **)&pMob));
+    checkResult(defs.cdCompositionMob()->
+				CreateInstance(IID_IAAFMob, 
+							   (IUnknown **)&pMob));
     checkResult(pMob->SetName(L"CompositionMob::Name:Test mob to hold an event mob slot"));
 
     // Append event slot to the composition mob.
@@ -512,9 +512,9 @@ void EventMobSlotTest::CreateEventSequenceMobSlot()
 	CAAFBuiltinDefs defs (_pDictionary);
 
     // Create a sequence to hold our list of events.
-    checkResult(_pDictionary->CreateInstance(defs.cdSequence(),
-                                             IID_IAAFSequence, 
-                                             (IUnknown **)&pSequence));
+    checkResult(defs.cdSequence()->
+				CreateInstance(IID_IAAFSequence, 
+							   (IUnknown **)&pSequence));
      checkResult(pSequence->QueryInterface(IID_IAAFComponent, (void **)&pComponent));
 
 	 checkResult(pComponent->SetDataDef(defs.ddPicture()));	// Give a valid but nonsense kind
@@ -552,9 +552,9 @@ void EventMobSlotTest::CreateEventSequenceMobSlot()
     pSequence = NULL;
 
     // Create and initialize an EventMobSlot
-    checkResult(_pDictionary->CreateInstance(defs.cdEventMobSlot(),
-                                             IID_IAAFEventMobSlot, 
-                                             (IUnknown **)&pEventMobSlot));
+    checkResult(defs.cdEventMobSlot()->
+				CreateInstance(IID_IAAFEventMobSlot, 
+							   (IUnknown **)&pEventMobSlot));
     checkResult(pEventMobSlot->SetEditRate(const_cast<aafRational_t *>(&_editRate)));
 
     // Get the mob slot interface so that we can add the event segment.
@@ -568,9 +568,9 @@ void EventMobSlotTest::CreateEventSequenceMobSlot()
     pSegment = NULL;
 
     // Create the mob to hold the new event mob slot.
-    checkResult(_pDictionary->CreateInstance(defs.cdCompositionMob(),
-                                             IID_IAAFMob, 
-                                             (IUnknown **)&pMob));
+    checkResult(defs.cdCompositionMob()->
+				CreateInstance(IID_IAAFMob, 
+							   (IUnknown **)&pMob));
     checkResult(pMob->SetName(L"CompositionMob::Name:Test mob to hold an event mob slot"));
 
     // Append event slot to the composition mob.
