@@ -3,14 +3,20 @@
 #
 # $ cvs2cl.pl --stdout -rx:y > Changes-x-y.log
 #
-# $ cat Changes-x-y.log | awk -f cl2html.awk > Changes-x-y.html
+# $ cat Changes-x-y.log | awk -f cl2html.awk colormap > Changes-x-y.html
 #
 #
 # Tim Bingham
 #
 BEGIN {
+  if (ARGC != 2) {
+    printf("Error : Usage : %s <colormap>\n", ARGV[0]) | "cat 1>&2";
+    exit 1;
+  }
+  
   entrytext = "";
-  createColorMap();
+  createColorMap(ARGV[1]);
+  delete ARGV[1]; # Otherwise this would be the next input file
   printHeader();
 }
 
@@ -74,45 +80,25 @@ function trim(s, n) {
   return substr(s, n + 1, length(s) - n);
 }
 
-function createColorMap() {
-/* Associative array - yum ! */
-
-  /* Lime green */
-  map["ref-impl/src/OM/"]          = "#CCFFCC";
-  map["ref-impl/include/OM/"]      = "#CCFFCC";
-  map["ref-impl/dtd/"]             = "#CCFFCC";
-
-  /* Pink */
-  map["ref-impl/src/impl/"]        = "#FFCCCC";
-  map["ref-impl/include/"]         = "#FFCCCC";
-  map["ref-impl/plugins/"]         = "#FFCCCC";
-  map["ref-impl/aaflib/"]          = "#FFCCCC";
-
-  /* Grey */
-  map["ref-impl/src/com-api/"]     = "#CCCCCC";
-  map["ref-impl/include/com-api/"] = "#CCCCCC";
-  map["ref-impl/include/ref-api"]  = "#CCCCCC";
-  map["AAF"]                       = "#CCCCCC";
-  map["dodo/"]                     = "#CCCCCC";
-
-  /* Pale blue */
-  map["ref-impl/doc/"]             = "#CCFFFF";
-  map["LEGAL/"]                    = "#CCFFFF";
-  map["doc/"]                      = "#CCFFFF";
-  map["meta/"]                     = "#CCFFFF";
-
-  /* Purple */
-  map["test/"]                     = "#FFCCFF";
-  map["examples/"]                 = "#FFCCFF";
-  map["examples2/"]                = "#FFCCFF";
-
-  /* Yellow */
-  map["DevUtils/"]                 = "#FFFFCC";
-  map["Utilities/"]                = "#FFFFCC";
-  map["OMF/"]                      = "#FFFFCC";
-
-  /* Blue */
-  map["build/"]                    = "#CCCCFF";
+function createColorMap(file) {
+  line = 0;
+  while (getline < file > 0) {
+    line = line + 1;
+    if ($1 != "#") {
+      if (NF != 0) {
+        if (NF == 2) {
+          map[$1] = "#" $2
+        } else {
+          printf("Syntax error : \"%s\", line %s \"%s\"\n",
+                 file, line, $NF) | "cat 1>&2";
+          exit 1;
+        }
+      } # else ignore empty line
+    } # else ignore comment
+  }
+#  for (i in map) {
+#    printf("%s %s\n", i, map[i]);
+#  }
 }
 
 function rowcolor(files) {
