@@ -114,8 +114,8 @@ static inline OMUInt64 toOMUInt64(const ULARGE_INTEGER &x)
 static inline ULARGE_INTEGER fromOMUInt64(const OMUInt64& x)
 {
   ULARGE_INTEGER result;
-  result.HighPart = (unsigned long)(((OMUInt64)x) >> 32);
-  result.LowPart  = (unsigned long) (0x00000000FFFFFFFF & (OMUInt64)x);
+  result.HighPart = (OMUInt32)(((OMUInt64)x) >> 32);
+  result.LowPart  = (OMUInt32) (0x00000000FFFFFFFF & (OMUInt64)x);
   return result;
 }
 

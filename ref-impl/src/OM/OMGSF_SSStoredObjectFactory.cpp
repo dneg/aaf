@@ -172,7 +172,7 @@ OMGSF_SSStoredObjectFactory::createFile (const wchar_t* fileName,
   PRECONDITION("Valid file name", validWideString(fileName));
 
   // choose sector size based on signature from factory
-  unsigned long sectorSize=0;
+  ULONG sectorSize=0;
   if( OMSignature_Aaf512Binary == signature ) sectorSize=512;
   else if( OMSignature_Aaf4KBinary == signature ) sectorSize=4096;
   PRECONDITION("Valid Signature", sectorSize!=0 );

@@ -37,7 +37,7 @@ class OMSSIStorage : public IStorage
 								const TCHAR FAR* in_filename,
 								const OMFile::OMAccessMode in_accessMode,
 								void **out_storage,
-								unsigned long in_sectorSize);
+								ULONG in_sectorSize);
 
 
 	// function to open a compound file
@@ -52,7 +52,7 @@ class OMSSIStorage : public IStorage
 								const OMRawStorage* in_pRaw,
 								const OMFile::OMAccessMode in_accessMode,
 								void** out_storage,
-								unsigned long in_sectorSize);
+								ULONG in_sectorSize);
 
 	// function to open root storage in raw storage
 	static HRESULT STDMETHODCALLTYPE StgOpenStorageInOMRawStorage(

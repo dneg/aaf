@@ -42,7 +42,7 @@ $Date$
 #include "OMFile.h"
 
 // TODO: revisit all these typedefs
-typedef long  HRESULT;
+typedef OMInt32 HRESULT;
 
 typedef enum { GSF_READ, GSF_WRITE, GSF_READWRITE } GsfAccessMode;
 
@@ -60,7 +60,7 @@ class OMGSFIStorage : public IStorage
 								const TCHAR FAR* in_filename,
 								OMFile::OMAccessMode in_accessMode,
 								void **out_storage,
-								unsigned long in_sectorSize);
+								ULONG in_sectorSize);
 
 	// function to open a compound file
 	static HRESULT STDMETHODCALLTYPE StgOpenStorageEx(
@@ -73,7 +73,7 @@ class OMGSFIStorage : public IStorage
 								const OMRawStorage* in_pRaw,
 								OMFile::OMAccessMode in_accessMode,
 								void** out_storage,
-								unsigned long in_sectorSize);
+								ULONG in_sectorSize);
 
 	// function to open root storage in raw storage
 	static HRESULT STDMETHODCALLTYPE StgOpenStorageInOMRawStorage(

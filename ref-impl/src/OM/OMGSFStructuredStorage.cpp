@@ -41,7 +41,7 @@ extern "C" {
 
 typedef struct tag_GSF_GUID
 {
-    unsigned long Data1;
+    unsigned int Data1;
     unsigned short Data2;
     unsigned short Data3;
     unsigned char Data4[8];
@@ -145,7 +145,7 @@ HRESULT STDMETHODCALLTYPE
 OMGSFIStorage::StgCreateStorageEx( const TCHAR FAR* in_filename,
 				OMFile::OMAccessMode in_accessMode,
 				void **out_storage,
-				unsigned long in_sectorSize)
+				ULONG in_sectorSize)
 {
 	TRACE("OMGSFIStorage::StgCreateStorageEx");
 	PRECONDITION("Valid access mode", in_accessMode == OMFile::writeOnlyMode);
@@ -232,7 +232,7 @@ OMGSFIStorage::StgCreateStorageInOMRawStorage(
 				const OMRawStorage* in_pRaw,
 				OMFile::OMAccessMode in_accessMode,
 				void** out_storage,
-				unsigned long in_sectorSize)
+				ULONG in_sectorSize)
 {
 	TRACE("OMGSFIStorage::StgCreateStorageInOMRawStorage");
 	return STG_E_UNIMPLEMENTEDFUNCTION;
@@ -607,7 +607,7 @@ OMGSFIStream::Read(
 	ASSERT ("Reading a ReadOnly GSF Stream", _mode == GSF_READ);
 
 	int result = GSTG_OK;
-	unsigned long bytesToRead = gsf_input_remaining (GSF_INPUT(_stream));
+	OMUInt64 bytesToRead = gsf_input_remaining (GSF_INPUT(_stream));
 	if (bytesToRead > cb)
 		bytesToRead = cb;
 
