@@ -72,7 +72,7 @@ static HRESULT CreateAAFSequence(IAAFSequence** ppSequence)
 
 			pComponent->SetDataDef((aafUID_t*)&DDEF_Audio);
 			pComponent->SetLength(&len);
-			hr = pSequence->AppendCpnt(pComponent);
+			hr = pSequence->AppendComponent(pComponent);
 
 			pComponent->Release();
 
@@ -106,7 +106,7 @@ static HRESULT TestEnumerator(IAAFSequence*	pSequence)
 	HRESULT				hr;
 	aafInt32			numCpnts;
 
-	pSequence->GetNumCpnts(&numCpnts);
+	pSequence->GetNumComponents(&numCpnts);
 	if (numCpnts != kNumComponents)
 		return AAFRESULT_TEST_FAILED;
 
