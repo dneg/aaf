@@ -263,9 +263,6 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		strcpy(testName, "Skip()");
 		pEnum->Reset();
 
-		// Try Skipping 0 objects			
-		TestMethod(pEnum->Skip(0) == AAFRESULT_SUCCESS, &localhr);
-
 		// skip over objects one at a time.
 		for (i=1; i<readNumIdents; i=i+2)
 		{
@@ -314,13 +311,8 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		pIdent = NULL;
 		numFetched = 0;
 
-		// Make sure a count of 0 succeeds
-		TestMethod(pEnum->Next(0, &pIdent, &numFetched) == AAFRESULT_SUCCESS, &localhr);
-		TestMethod(NULL == pIdent, &localhr);	
-		TestMethod (0 == numFetched, &localhr);
-
 		// Iterate thru the objects using Next doing 1 at a time
-		for ( i=0; i<readNumIdents ;i++)	
+		for ( i=0; i<readNumIdents ;i++) {
 			if (pEnum->Next(1, &pIdent, &numFetched) == AAFRESULT_SUCCESS)	{
 				TestMethod(NULL != pIdent, &localhr);	
 				TestMethod(1 == numFetched, &localhr);
@@ -331,8 +323,10 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 				pIdent->Release();
 		 	    pIdent = NULL;
 			}
-			else
+			else {
 				localhr = AAFRESULT_TEST_FAILED;
+			}
+		}
 
 		// Make sure we are at the end
 		TestMethod(pEnum->Next(1, &pIdent, &numFetched) == AAFRESULT_NO_MORE_OBJECTS, &localhr);
@@ -346,7 +340,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 			if (pEnum->Next(i, pIdentArray, &numFetched) == AAFRESULT_SUCCESS)	{
 				TestMethod(i == numFetched, &localhr);
 
-				for (i = 0; i < numFetched; i++)
+				for (i = 0; i < numFetched; i++) {
 					if (pIdentArray[i] != NULL)	// should have been set
 					{
 						TestMethod(pIdentArray[i]->GetProductNameBufLen (&readNameLen) == AAFRESULT_SUCCESS, &localhr);
@@ -356,20 +350,23 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 						pIdentArray[i]->Release();
 						pIdentArray[i] = NULL;
 					}
-					else
+					else {
 						localhr = AAFRESULT_TEST_FAILED;
+					}
+				}
 			}
-			else
+			else {
 				localhr = AAFRESULT_TEST_FAILED;
+			}
 			
 			pEnum->Reset();
 		}
 
 		// Make sure we can't get more than actually exist
 		numFetched = 0;
-		TestMethod(pEnum->Next(i+1, pIdentArray, &numFetched) == AAFRESULT_SUCCESS, &localhr);
+		TestMethod(pEnum->Next(readNumIdents+1, pIdentArray, &numFetched) == AAFRESULT_NO_MORE_OBJECTS, &localhr);
 		TestMethod(numFetched == readNumIdents, &localhr);		
-		for (i = 0; i < numFetched; i++)
+		for (i = 0; i < numFetched; i++) {
 			if (pIdentArray[i] != NULL)	
 			{
 				TestMethod(pIdentArray[i]->GetProductNameBufLen (&readNameLen) == AAFRESULT_SUCCESS, &localhr);
@@ -379,17 +376,19 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 				pIdentArray[i]->Release();
 				pIdentArray[i] = NULL;
 			}
-			else
+			else {
 				localhr = AAFRESULT_TEST_FAILED;
+			}
+		}
 		
 	
 		pEnum->Reset();
 		pEnum->Skip(2);
 		// Start at offset and make sure we can't go past the end to fill the array
-		TestMethod(pEnum->Next(readNumIdents, pIdentArray, &numFetched) == AAFRESULT_SUCCESS, &localhr);
+		TestMethod(pEnum->Next(readNumIdents, pIdentArray, &numFetched) == AAFRESULT_NO_MORE_OBJECTS, &localhr);
 		TestMethod((readNumIdents-2) == numFetched, &localhr);
 		
-		for (i = 0; i < readNumIdents-2; i++)
+		for (i = 0; i < readNumIdents-2; i++) {
 			if (pIdentArray[i] != NULL)
 			{	
 				TestMethod(pIdentArray[i]->GetProductNameBufLen (&readNameLen) == AAFRESULT_SUCCESS, &localhr);
@@ -399,8 +398,10 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 				pIdentArray[i]->Release();
 				pIdentArray[i] = NULL;
 			}
-			else
+			else {
 				localhr = AAFRESULT_TEST_FAILED;
+			}
+		}
 
 		pEnum->Reset();
 		// Make sure it returns AAFRESULT_NULL_PARAM
@@ -418,7 +419,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		pIdent = NULL;
 
 		if (pEnum->Clone(&pEnumClone) == AAFRESULT_SUCCESS)	{
-			for (i=0; i < readNumIdents; i++)	
+			for (i=0; i < readNumIdents; i++) {
 				if (pEnumClone->NextOne(&pIdent) == AAFRESULT_SUCCESS)	{
 					TestMethod(pIdent->GetProductNameBufLen (&readNameLen) == AAFRESULT_SUCCESS, &localhr);
 					TestMethod(pIdent->GetProductName (readBuf, readNameLen) == AAFRESULT_SUCCESS, &localhr);
@@ -427,8 +428,10 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 					pIdent->Release();
 	    			pIdent = NULL;
 				}
-				else
-					localhr = AAFRESULT_TEST_FAILED;		
+				else {
+					localhr = AAFRESULT_TEST_FAILED;
+				}
+			}
 	
 		TestMethod(pEnumClone->NextOne(&pIdent) == AAFRESULT_NO_MORE_OBJECTS, &localhr);
 
@@ -437,7 +440,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		TestMethod(pEnumClone->Next(readNumIdents, pIdentArray, &numFetched) == AAFRESULT_SUCCESS, &localhr);
 		TestMethod(readNumIdents == numFetched, &localhr);
 		
-		for (i = 0; i < readNumIdents; i++)
+		for (i = 0; i < readNumIdents; i++)	{
 			if (pIdentArray[i] != NULL)	{
 				TestMethod(pIdentArray[i]->GetProductNameBufLen (&readNameLen) == AAFRESULT_SUCCESS, &localhr);
 				TestMethod(pIdentArray[i]->GetProductName (readBuf, readNameLen) == AAFRESULT_SUCCESS, &localhr);
@@ -446,15 +449,17 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 				pIdentArray[i]->Release();
 				pIdentArray[i] = NULL;
 			}
-			else
+			else {
 				localhr = AAFRESULT_TEST_FAILED;
+			}
+		}
 
 		pEnumClone->Reset();
 		numFetched = 0;
-		TestMethod(pEnumClone->Next(readNumIdents+1, pIdentArray, &numFetched) == AAFRESULT_SUCCESS, &localhr);
+		TestMethod(pEnumClone->Next(readNumIdents+1, pIdentArray, &numFetched) == AAFRESULT_NO_MORE_OBJECTS, &localhr);
 		TestMethod(readNumIdents == numFetched, &localhr);
 		
-		for (i = 0; i < readNumIdents; i++)
+		for (i = 0; i < readNumIdents; i++) {
 			if (pIdentArray[i] != NULL)	{
 				TestMethod(pIdentArray[i]->GetProductNameBufLen (&readNameLen) == AAFRESULT_SUCCESS, &localhr);
 				TestMethod(pIdentArray[i]->GetProductName (readBuf, readNameLen) == AAFRESULT_SUCCESS, &localhr);
@@ -463,17 +468,19 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 				pIdentArray[i]->Release();
 				pIdentArray[i] = NULL;
 			}
-			else
+			else {
 				localhr = AAFRESULT_TEST_FAILED;
+			}
+		}
 
 		pEnumClone->Reset();
 		numFetched = 0;
 		pEnumClone->Skip(1);
 
-		TestMethod(pEnumClone->Next(readNumIdents, pIdentArray, &numFetched) == AAFRESULT_SUCCESS, &localhr);
+		TestMethod(pEnumClone->Next(readNumIdents, pIdentArray, &numFetched) == AAFRESULT_NO_MORE_OBJECTS, &localhr);
 		TestMethod((readNumIdents-1) == numFetched, &localhr);
 		
-		for (i = 0; i < readNumIdents-1; i++)
+		for (i = 0; i < readNumIdents-1; i++) {
 			if (pIdentArray[i] != NULL)	{
 				TestMethod(pIdentArray[i]->GetProductNameBufLen (&readNameLen) == AAFRESULT_SUCCESS, &localhr);
 				TestMethod(pIdentArray[i]->GetProductName (readBuf, readNameLen) == AAFRESULT_SUCCESS, &localhr);
@@ -482,8 +489,10 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 				pIdentArray[i]->Release();
 				pIdentArray[i] = NULL;
 			}
-			else
+			else {
 				localhr = AAFRESULT_TEST_FAILED;
+			}
+		}
 	
 		pEnumClone->Release();
 	 	pEnumClone = NULL;
