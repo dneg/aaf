@@ -30,7 +30,6 @@
 // name in AAF.
 //
 #define CLSID_AAFClassDefinition CLSID_AAFClassDef
-#define CLSID_AAFConstantValue CLSID_AAFConstValue
 #define CLSID_AAFDataDefinition CLSID_AAFDataDef
 #define CLSID_AAFDefinitionObject CLSID_AAFDefObject
 #define CLSID_AAFEdgeCode CLSID_AAFEdgecode
