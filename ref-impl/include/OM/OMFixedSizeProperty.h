@@ -64,6 +64,10 @@ public:
     // @cmember "Address of" operator.
   PropertyType* operator &(void);
 
+    // @cmember Convert this <c OMFixedSizeProperty> into a const
+    //          reference to a <p PropertyType>.
+  const PropertyType& reference(void) const;
+
     // @cmember Restore this <c OMFixedSizeProperty>, the external
     //          (persisted) size of the <c OMFixedSizeProperty> is
     //          <p externalSize>.
