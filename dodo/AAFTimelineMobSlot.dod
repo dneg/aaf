@@ -42,8 +42,6 @@ AD_METHOD1(GetEditRate,
   // Succeeds if all of the following are true:
   // - the pEditRate pointer is valid.
   // 
-  // If this method fails the value of pEditRate is left unchanged.
-  // 
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect\\\, it will return the first one
   // encountered in the order given below:
@@ -63,8 +61,6 @@ AD_METHOD1(GetOrigin,
   // 
   // Succeeds if all of the following are true:
   // - the pOrigin pointer is valid.
-  // 
-  // If this method fails the value of pOrigin is left unchanged.
   // 
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect\\\, it will return the first one
