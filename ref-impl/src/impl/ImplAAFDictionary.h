@@ -315,11 +315,6 @@ public:
         (ImplEnumAAFPluginDescriptors ** ppEnum);
 
 public:
-  // Declare this class to be storable.
-  //
-  OMDECLARE_STORABLE(ImplAAFDictionary)
-
-public:
 
   //
   // Internal to the SDK
@@ -466,6 +461,8 @@ private:
   OMStrongReferenceVectorProperty<ImplAAFInterpolationDef> _interpolationDefinitions;
   OMStrongReferenceVectorProperty<ImplAAFDataDef>          _dataDefinitions;
   OMStrongReferenceVectorProperty<ImplAAFPluginDescriptor> _pluginDefinitions;
+
+  aafInt32 _lastGeneratedPid;	// must be signed!
 };
 
 //
