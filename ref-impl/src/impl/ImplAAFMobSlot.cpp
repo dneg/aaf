@@ -96,11 +96,15 @@ AAFRESULT STDMETHODCALLTYPE
 	if( value == NULL )
 	    return AAFRESULT_NULL_PARAM;
 
+	if (_segment)
+	{
+	  if( _segment == value )
+		return AAFRESULT_SUCCESS;
+	  _segment->ReleaseReference();
+	}
+
 	if( value->attached() )
 	    return AAFRESULT_OBJECT_ALREADY_ATTACHED;
-
-	if (_segment)
-	  _segment->ReleaseReference();
 
 	_segment = value;
 	_segment->AcquireReference();
