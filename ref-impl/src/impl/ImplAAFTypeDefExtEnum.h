@@ -13,12 +13,7 @@
 *                                          *
 \******************************************/
 
-
 class ImplAAFPropertyValue;
-
-
-
-
 
 #ifndef __ImplAAFTypeDef_h__
 #include "ImplAAFTypeDef.h"
@@ -64,12 +59,13 @@ public:
   // GetElementValues()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetElementValues
-        (// @parm [out, size_is(numElems)] array to hold values
-         aafUID_t *  pValues,
+    GetElementValue
+        (// @parm [in] index of element to retrieve
+         aafUInt32  numElems,
 
-         // @parm [in] number of elements in the pValues array
-         aafUInt32  numElems);
+		 // @parm [out] requested value
+         aafUID_t *  pOutValue);
+
 
 
   //****************
@@ -167,15 +163,31 @@ public:
     GetTypeCategory (/*[out]*/ eAAFTypeCategory_t *  pTid);
 
 
+private:
+  // names of elements in this record; stored as single wchar_t array
+  // with embedded nulls
+  OMVariableSizeProperty<wchar_t>  _ElementNames;
+
+  // array of values for elements.
+  OMVariableSizeProperty<aafUID_t> _ElementValues;
+
+
+  //
+  // private methods
+  //
+  AAFRESULT STDMETHODCALLTYPE
+    GetElementNameBufLen (aafUInt32  index,
+						  aafUInt32 * pLen);
+
+  AAFRESULT STDMETHODCALLTYPE
+    GetElementName (aafUInt32 index,
+					wchar_t * pName,
+					aafUInt32  bufSize);
 
 public:
   // Declare this class to be storable.
   //
   OMDECLARE_STORABLE(ImplAAFTypeDefExtEnum)
-
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplAAFTypeDefExtEnumTest.cpp.
-  static AAFRESULT test();
 };
 
 #endif // ! __ImplAAFTypeDefExtEnum_h__
