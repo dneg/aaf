@@ -195,5 +195,9 @@ AAFRESULT ImplAAFSegment::GenerateSequence(ImplAAFSequence **seq)
 	return(AAFRESULT_SUCCESS);
 }
 
+void ImplAAFSegment::onCopy(void* clientContext) const
+{
+  ImplAAFComponent::onCopy(clientContext);
+}
 
 
