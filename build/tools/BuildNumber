@@ -301,6 +301,18 @@ if [ $BUMP_BUILD_NUMBER -eq 1 ]; then
     fi
 
     # Commit the modified file, and tag the tree.
+    # The file may have been checkout with a tag (e.g. HEAD) so
+    # first, clear that tag.
+    echo cvs update -A $AAFSDKBUILD_H
+    cvs update -A $AAFSDKBUILD_H
+    CVSSTATUS=$?
+    if [ $CVSSTATUS -ne 0 ]; then
+      # Restore the original file.
+      cp ~/tmp/AAFSDKBuild.h.sav $AAFSDKBUILD_H 
+      echo cvs failed with status $CVSSTATUS
+      exit 1
+    fi
+
     echo cvs commit -m \
      \"`basename $0` script automated edit. Changed build number from ${HEADER_BUILD_NUMBER} to ${NEXT_HEADER_BUILD_NUMBER}.\" \
      $AAFSDKBUILD_H
@@ -312,7 +324,7 @@ if [ $BUMP_BUILD_NUMBER -eq 1 ]; then
     CVSSTATUS=$?
     if [ $CVSSTATUS -ne 0 ]; then
       # Restore the original file.
-      cp /tmp/AAFSDKBuild.h.sav $AAFSDKBUILD_H 
+      cp ~/tmp/AAFSDKBuild.h.sav $AAFSDKBUILD_H 
       echo cvs failed with status $CVSSTATUS
       exit 1
     fi
