@@ -1,6 +1,6 @@
 /***********************************************************************
 *
-*              Copyright (c) 1998-1999 Avid Technology, Inc.
+*              Copyright (c) 1998-2000 Avid Technology, Inc.
 *
 * Permission to use, copy and modify this software and accompanying
 * documentation, and to distribute and sublicense application software
@@ -33,6 +33,86 @@
 #include "OMObjectReference.h"
 
 class OMProperty;
+
+  // @class Pointer elements of Object Manager vectors.
+  //   @tcarg class | ReferencedObject | The type of the referenced object.
+template <typename ReferencedObject>
+class OMVectorElement {
+public:
+  // @access Public members.
+
+    // @cmember Constructor.
+  OMVectorElement(void);
+
+    // @cmember Constructor.
+  OMVectorElement(const ReferencedObject* pointer);
+
+    // @cmember Copy constructor.
+  OMVectorElement(const OMVectorElement<ReferencedObject>& rhs);
+
+    // @cmember Destructor.
+  ~OMVectorElement(void);
+
+    // @cmember Assignment.
+    //          This operator provides value semantics for <c OMContainer>.
+  OMVectorElement<ReferencedObject>& operator=(
+                                 const OMVectorElement<ReferencedObject>& rhs);
+
+    // @cmember Equality.
+    //          This operator provides value semantics for <c OMContainer>.
+  bool operator== (const OMVectorElement<ReferencedObject>& rhs) const;
+
+    // @cmember Get the value of this <c OMVectorElement>.
+  ReferencedObject* getValue(void) const;
+
+    // @cmember Set the value of this <c OMVectorElement>.
+  ReferencedObject* setValue(const ReferencedObject* value);
+
+    // @cmember The value of this <c OMVectorElement> as a pointer.
+  ReferencedObject* pointer(void) const;
+
+private:
+
+  ReferencedObject* _pointer;
+
+};
+
+  // @class Pointer elements of Object Manager sets.
+  //   @tcarg class | ReferencedObject | The type of the referenced object.
+template <typename UniqueIdentification, typename ReferencedObject>
+class OMSetElement : public OMVectorElement<ReferencedObject> {
+public:
+public:
+  // @access Public members.
+
+    // @cmember Constructor.
+  OMSetElement(void);
+
+    // @cmember Constructor.
+  OMSetElement(const ReferencedObject* pointer);
+
+    // @cmember Copy constructor.
+  OMSetElement(const OMSetElement<UniqueIdentification,
+                                  ReferencedObject>& rhs);
+
+    // @cmember Destructor.
+  ~OMSetElement(void);
+
+    // @cmember Assignment.
+    //          This operator provides value semantics for <c OMSet>.
+  OMSetElement<UniqueIdentification, ReferencedObject>& operator=(
+                                    const OMSetElement<UniqueIdentification,
+                                                       ReferencedObject>& rhs);
+
+    // @cmember Equality.
+    //          This operator provides value semantics for <c OMSet>.
+  bool operator== (const OMSetElement<UniqueIdentification,
+                                      ReferencedObject>& rhs) const;
+
+    // @cmember The unique key of this <c OMSetElement>.
+  const UniqueIdentification identification(void) const;
+
+};
 
   // @class Elements of Object Manager reference containers.
   //   @tcarg class | ObjectReference  | The type of the contained object
