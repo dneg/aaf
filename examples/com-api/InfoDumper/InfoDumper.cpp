@@ -2950,10 +2950,10 @@ int main(int argc, char* argv[])
 
 	// Last argument should be input aaf filename
 	infilename = argv[argc-1];
-	aafCharacter pwFileName[260];
+	aafCharacter pwFileName[FILENAME_MAX];
 	assert (infilename);
 	assert (os);
-	convert(pwFileName, 260, infilename);
+	convert(pwFileName, FILENAME_MAX, infilename);
 	
 	succeeded = dumpFile (pwFileName, infilename, dumpFlags, *os);
 	
