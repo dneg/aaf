@@ -31,8 +31,8 @@
 #include <string.h>
 
   // @mfunc Constructor.
-  //   @parm TBS
-  //   @parm TBS
+  //   @parm The size of each page in bytes.
+  //   @parm The number of pages.
 OMPageCache::OMPageCache(OMUInt32 pageSize,
                          OMUInt32 pageCount)
 : _pageSize(pageSize),
@@ -60,6 +60,14 @@ OMPageCache::~OMPageCache(void)
   }
 }
 
+  // @mfunc Attempt to read the number of bytes given by <p byteCount>
+  //        from offset <p position> into the buffer at address <p bytes>
+  //        from this <c OMPageCache>.
+  //        The actual number of bytes read is returned in <p bytesRead>.
+  //   @parm TBS.
+  //   @parm TBS.
+  //   @parm TBS.
+  //   @parm TBS.
 void OMPageCache::readCachedAt(OMUInt64 position,
                                OMByte* bytes,
                                OMUInt32 byteCount,
@@ -96,6 +104,15 @@ void OMPageCache::readCachedAt(OMUInt64 position,
   bytesRead = byteCount;
 }
 
+  // @mfunc Attempt to write the number of bytes given by <p byteCount>
+  //        to offset <p position> from the buffer at address <p bytes>
+  //        to this <c OMPageCache>.
+  //        The actual number of bytes written is returned in
+  //        <p bytesWritten>.
+  //   @parm TBS.
+  //   @parm TBS.
+  //   @parm TBS.
+  //   @parm TBS.
 void OMPageCache::writeCachedAt(OMUInt64 position,
                                 const OMByte* bytes,
                                 OMUInt32 byteCount,
@@ -152,7 +169,7 @@ void OMPageCache::flush(void)
   // @mfunc Read a page or partial page using the cache.
   //   @parm The page to be read from.
   //   @parm The starting offset within the page.
-  //   @parm the number of bytes to read.
+  //   @parm The number of bytes to read.
   //   @parm The buffer into which the bytes are to be read.
 void OMPageCache::readCachedPage(OMUInt64 page,
                                  OMUInt32 offset,
@@ -198,6 +215,11 @@ void OMPageCache::writeCachedPage(OMUInt64 page,
   entry->_isDirty = true;
 }
 
+  // @mfunc The <t CacheEntry> for page number <p page>. The entry
+  //        returned is already in use for <p page>, or newly created,
+  //        or previously occupied by the least recently used page.
+  //   @parm The page number.
+  //   @rdesc TBS.
 OMPageCache::CacheEntry* OMPageCache::cacheEntry(OMUInt64 page)
 {
   TRACE("OMPageCache::cacheEntry");
@@ -214,9 +236,10 @@ OMPageCache::CacheEntry* OMPageCache::cacheEntry(OMUInt64 page)
 }
 
   // @mfunc The <t CacheEntry> for page number <p page>, if
-  //        present 0 otherwise.
-  //   @parm TBS
-  //   @rdesc TBS
+  //        present, 0 otherwise.
+  //   @parm The page number.
+  //   @rdesc The <t CacheEntry> for page number <p page>, if
+  //          present, 0 otherwise.
 OMPageCache::CacheEntry* OMPageCache::findEntry(OMUInt64 page)
 {
   TRACE("OMPageCache::findEntry");
@@ -238,8 +261,8 @@ OMPageCache::CacheEntry* OMPageCache::findEntry(OMUInt64 page)
 
   // @mfunc Allocate a <t CacheEntry> for page number <p page> either
   //        by creating a new entry or by replacing an existing entry.
-  //   @parm TBS
-  //   @rdesc TBS
+  //   @parm The page number.
+  //   @rdesc The allocated <t CacheEntry>.
 OMPageCache::CacheEntry* OMPageCache::allocateEntry(OMUInt64 page)
 {
   TRACE("OMPageCache::allocateEntry");
@@ -265,8 +288,8 @@ OMPageCache::CacheEntry* OMPageCache::allocateEntry(OMUInt64 page)
 }
 
   // @mfunc Create a new <t CacheEntry> for page number <p page>.
-  //   @parm TBS
-  //   @rdesc TBS
+  //   @parm The page number.
+  //   @rdesc The newly created <t CacheEntry>.
 OMPageCache::CacheEntry* OMPageCache::newEntry(OMUInt64 page)
 {
   TRACE("OMPageCache::newEntry");
@@ -290,8 +313,8 @@ OMPageCache::CacheEntry* OMPageCache::newEntry(OMUInt64 page)
 
   // @mfunc Allocate a <t CacheEntry> for page number <p page>
   //        by replacing an existing entry.
-  //   @parm TBS
-  //   @rdesc TBS
+  //   @parm The page number.
+  //   @rdesc The allocated <t CacheEntry>.
 OMPageCache::CacheEntry* OMPageCache::replaceEntry(OMUInt64 page)
 {
   TRACE("OMPageCache::replaceEntry");

@@ -92,6 +92,7 @@ private:
 
   struct CacheEntry;
 
+    // O(lg N) map from page number to CacheEntry
   typedef OMSet<OMUInt64, CacheEntry*> Cache;
   typedef OMSetIterator<OMUInt64, CacheEntry*> CacheIterator;
 
@@ -105,10 +106,13 @@ private:
     bool _isDirty;
   };
 
+    // @cmember The <t CacheEntry> for page number <p page>. The entry
+    //          returned is already in use for <p page>, or newly created,
+    //          or previously occupied by the least recently used page.
   virtual CacheEntry* cacheEntry(OMUInt64 page);
 
     // @cmember The <t CacheEntry> for page number <p page>, if
-    //          present 0 otherwise.
+    //          present, 0 otherwise.
   virtual CacheEntry* findEntry(OMUInt64 page);
 
     // @cmember Allocate a <t CacheEntry> for page number <p page> either
