@@ -39,7 +39,7 @@ AAFPERSISTENTOBJECTS = \
 	AAFTypeDef \
 	AAFTypeDefArray \
 	AAFTypeDefInt \
-	AAFTypeDefMedia \
+	AAFTypeDefEssence \
 	AAFTypeDefObject \
 	AAFTypeDefObjectVector \
 	AAFTypeDefStruct \
