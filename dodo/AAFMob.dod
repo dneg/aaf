@@ -39,20 +39,21 @@ AD_HEAD
 // aafDepend_t,			[enumeration]
 // aafIncMedia_t		[enumeration]
 
-// trr We need an AD_FORARD_DECLARATION macro for
-// AD_FORARD_DECLARATION(AAFSegment)
-// AD_FORARD_DECLARATION(AAFMobSlot)
-// 
-// This will allow for a foward declaration in header (and idl) and in include
-// within implementation files.
+
+AD_FOWARD_DECLARATION(AAFSegment)
+AD_FOWARD_DECLARATION(AAFMobSlot)
+AD_FOWARD_DECLARATION(AAFFile)
 
 
+AD_CLASS_UUID(B1A21375, 1A7D, 11d2, BF, 78, 00, 10, 4B, C9, 15, 6D)
+
+AD_DEFAULT_UUID(B1A21374, 1A7D, 11d2, BF, 78, 00, 10, 4B, C9, 15, 6D)
 AD_CLASS_BEGIN
 
 AD_METHOD1(IsAPrimaryMob,
 [retval][out], aafBool *, retval, Set to true if this is a primary mob,
 This method will return true if this mob is a primary mob. If an error occurs
-  \/\/ the retval will be false.)
+  // the retval will be false.)
 
 AD_METHOD1(GetMobID,
 [out], aafUID_t *, pMobID, The unique media object id,
@@ -74,22 +75,22 @@ Iterates through the specified Mob to retrieve the next user\-defined comment.)
 AD_METHOD1(SetModTime,
 [in\, ref], aafTimeStamp_t *, modTime, New Modification Time,
 This method sets the modification time on a mob.  The
-  \/\/ modification time is initially set to the time that the mob
-  \/\/ was created.  The Toolkit does not maintain the modification
-  \/\/ time every time that a mob has been updated.  Therefore\, this
-  \/\/ method should be called explicitly to change the modification
-  \/\/ time.)
+  // modification time is initially set to the time that the mob
+  // was created.  The Toolkit does not maintain the modification
+  // time every time that a mob has been updated.  Therefore\, this
+  // method should be called explicitly to change the modification
+  // time.)
 
 AD_METHOD1(SetPrimary,
 [in], aafBool, isPrimary, Whether or not the mob is a primary mob,
 This method is used to either add a mob to the HEAD Primary Mob
-  \/\/ index or to take it out of the index.)
+  // index or to take it out of the index.)
 
 AD_METHOD1(SetIdentity,
 [in\, ref], aafUID_t *, mobID, New Mob ID,
 When a mob is initially created\, the Toolkit internally creates 
-  \/\/ a mobID for the new mob.  This method should be used to change
-  \/\/ the mob's identity to an explicit mobID.)
+  // a mobID for the new mob.  This method should be used to change
+  // the mob's identity to an explicit mobID.)
 
 AD_METHOD1(SetName,
 [in\, ref], aafString *, name, Mob Name,
@@ -100,9 +101,9 @@ AD_METHOD3(AppendNewSlot,
 [in\, ref], AAFSegment *, segment, Segment to append as slot component,
 [out], AAFMobSlot **, newSlot, Newly created slot,
 This method creates a new mob slot with the given property
-  \/\/ values\, and appends it to the input mob.  Since the Toolkit
-  \/\/ attempts to enforce bottom up creation of mobs\, the slot segment
-  \/\/ must be passed in as an argument.)
+  // values\, and appends it to the input mob.  Since the Toolkit
+  // attempts to enforce bottom up creation of mobs\, the slot segment
+  // must be passed in as an argument.)
 
 AD_METHOD6(AppendNewTrack,
 [in], aafRational_t, editRate, Edit rate property value,
@@ -160,8 +161,8 @@ AD_METHOD3(OffsetToTimecode,
 [in], aafPosition_t *, offset, Offset into the given track,
 [out], aafTimecode_t *, result, The resulting timecode,
 Given a master mob or source mob\, track ID of a track in a mob
-  \/\/ and an offset into the track\, this function searches for the
-  \/\/ tape mob and returns the associated timecode.)
+  // and an offset into the track\, this function searches for the
+  // tape mob and returns the associated timecode.)
 
 // trr: Does this method only work for AAFSourceMobs? If so we should probably move
 // it the AAFSourceMob.dod.
@@ -170,10 +171,10 @@ AD_METHOD3(TimecodeToOffset,
 [in], aafTrackID_t, trackID, Track ID of track in source mob,
 [out], aafFrameOffset_t *, result, Resulting offset in source track,
 This function takes a timecode and source mob and track as input
-  \/\/ and returns the position in the track that corresponds to the
-  \/\/ timecode value.  This is accomplished by searching for the tape
-  \/\/ mob with the timecode and calculating the offset in the given
-  \/\/ source mob.)
+  // and returns the position in the track that corresponds to the
+  // timecode value.  This is accomplished by searching for the tape
+  // mob with the timecode and calculating the offset in the given
+  // source mob.)
 
 AD_METHOD1(SetEditRate,
 [in], aafRational_t, editRate, Edit rate property value,
@@ -186,10 +187,11 @@ This method will get the edit rate for this mob.)
 // skip virtual aafErr_t Verify(char *buf, validateData_t *result);
 // What doe's this do?
 
-AD_METHOD1(IsMobKind,
+AD_METHOD2(IsMobKind,
 [in], aafMobKind_t, mobKind, A valid mob kind.,
+[out\,retval], aafBool *, result, True is matches given mobKind,
 This method returns false by default. This method must be overridden by
-  \/\/ each subclass to return true for the the corresponding input mobKind.)
+  // each subclass to return true for the the corresponding input mobKind.)
 
 // Skipping the following methods
 // virtual aafErr_t ValidateChannels(aafInt32 numVideo, aafInt32 numAudio, char *buf, validateData_t *result);
@@ -215,26 +217,22 @@ This method returns false by default. This method must be overridden by
 
 AD_METHOD2(Copy,
 [in], aafString *, destMobName, Optional Input. The name to be assigned to the new copy of the Mob.
-  \/\/ The destMobName argument is optional. Specify a NULL value if no desti\-
-  \/\/ nation Mob name is desired.,
+  // The destMobName argument is optional. Specify a NULL value if no desti\-
+  // nation Mob name is desired.,
 [out], AAFMob **, destMob, Destination Mob,
-  \/\/ This function copies the specified Mob into a destination Mob in the same
-  \/\/ OMF file. The new Mob is returned through the destMob parameter. The func\-
-  \/\/ tion gives the destination Mob a new MobID and the name specified in the
-  \/\/ destMobName parameter. The function also copies all private data.)
+  // This function copies the specified Mob into a destination Mob in the same
+  // OMF file. The new Mob is returned through the destMob parameter. The func\-
+  // tion gives the destination Mob a new MobID and the name specified in the
+  // destMobName parameter. The function also copies all private data.)
 
 AD_METHOD2(ChangeRef,
 [in\,ref], aafUID_t *, oldMobID, Old Mob ID reference in source clip,
 [in\,ref], aafUID_t *, newMobID, New Mob ID reference in source clip,
 Finds all Source Clips in the specified Mob that refer to the specified old Mob\,
-  \/\/ and changes the references to point to the new Mob.
-  \/\/ @commThis function traverses through the entire structure of the input Mob looking
-  \/\/ for Source Clips\, and changes the sourceID property on all Source Clips with
-  \/\/ oldMobID to newMobID.)
-
-AD_METHOD0(Delete,
-Deletes the entire Mob structure \(the MOBJ object and all its contained objects\)
-  \/\/ and deletes the entry from the Header.)
+  // and changes the references to point to the new Mob.
+  // @commThis function traverses through the entire structure of the input Mob looking
+  // for Source Clips\, and changes the sourceID property on all Source Clips with
+  // oldMobID to newMobID.)
 
 AD_METHOD6(CopyExternal,
 [in], aafDepend_t, resolveDependencies, Whether to copy dependent mobs,
@@ -244,20 +242,20 @@ AD_METHOD6(CopyExternal,
 [out], AAFObject **, destMedia, Destination Media Data,
 [out], AAFMob **, destMob, Destination Mob,
 Copies the specified Mob and optionally all dependent Mobs to an external
-  \/\/ file\, creating a new MobID for the specified Mob but retaining the MobIDs for
-  \/\/ the dependent Mobs.
-  \/\/ @commThis function copies the specified Mob in the source file into a destination Mob
-  \/\/ in the destination file with the specified destMobName. If resolveDependencies is
-  \/\/ kFollowDepend\, the function also clones all Mobs referenced by the speci\-
-  \/\/ fied Source Mob. The function creates a new MobID for the specified Mob\, but
-  \/\/ clones all other dependent Mobs \(they retain the same MobID\).
-  \/\/ If includeMedia is kIncludeMedia\, the function also copies the media data
-  \/\/ associated with the specified Mob. The function returns the destination Mob
-  \/\/ \(and its destination media data object\, if requested\) and copies all private data.
-  \/\/ If the media data is not in the file\, the function does not attempt to find it in
-  \/\/ another file and copy it.
-  \/\/ Both AAF files must be open before you call this function and both must have
-  \/\/ the same AAF Version number.)
+  // file\, creating a new MobID for the specified Mob but retaining the MobIDs for
+  // the dependent Mobs.
+  // @commThis function copies the specified Mob in the source file into a destination Mob
+  // in the destination file with the specified destMobName. If resolveDependencies is
+  // kFollowDepend\, the function also clones all Mobs referenced by the speci\-
+  // fied Source Mob. The function creates a new MobID for the specified Mob\, but
+  // clones all other dependent Mobs \(they retain the same MobID\).
+  // If includeMedia is kIncludeMedia\, the function also copies the media data
+  // associated with the specified Mob. The function returns the destination Mob
+  // \(and its destination media data object\, if requested\) and copies all private data.
+  // If the media data is not in the file\, the function does not attempt to find it in
+  // another file and copy it.
+  // Both AAF files must be open before you call this function and both must have
+  // the same AAF Version number.)
 
 AD_METHOD4(CloneExternal,
 [in], aafDepend_t, resolveDependencies, Whether to clone dependent mobs,
@@ -265,21 +263,24 @@ AD_METHOD4(CloneExternal,
 [in\,ref], AAFFile *, destFile, Destination AAF File,
 [out], AAFMob **, destMob, Destination Mob,
 Clones the specified Source Mob\, and optionally all dependent Mobs\, to an
-  \/\/ external file\, keeping the same MobID.
-  \/\/ @commThis function clones the specified Source Mob in the source file into a destina\-
-  \/\/ tion Mob\, with the same MobID\, in the destination file. If resolveDependencies is
-  \/\/ kFollowDepend\, the function also clones all Mobs referenced by the speci\-
-  \/\/ fied Source Mob.
-  \/\/ If includeMedia is kIncludeMedia\, the function also copies the media data
-  \/\/ associated with the Source Mob\, returns the destination Mob\, and clones all
-  \/\/ private data.
-  \/\/ If the media data is not in the file\, the function does not attempt to find it in
-  \/\/ another file and clone it.
-  \/\/ Both OMF files must be open before you call this function and both must have
-  \/\/ the same OMF Version number.)
-
+  // external file\, keeping the same MobID.
+  // @commThis function clones the specified Source Mob in the source file into a destina\-
+  // tion Mob\, with the same MobID\, in the destination file. If resolveDependencies is
+  // kFollowDepend\, the function also clones all Mobs referenced by the speci\-
+  // fied Source Mob.
+  // If includeMedia is kIncludeMedia\, the function also copies the media data
+  // associated with the Source Mob\, returns the destination Mob\, and clones all
+  // private data.
+  // If the media data is not in the file\, the function does not attempt to find it in
+  // another file and clone it.
+  // Both AAF files must be open before you call this function and both must have
+  // the same AAF Version number.)
 
 AD_OVERRIDE(.method-Test)
+
+AD_OVERRIDE(.method-Delete)
+  // @commDeletes the entire Mob structure \(the MOBJ object and all its contained objects\)
+  // and deletes the entry from the Header.
 
 AD_CLASS_END
 
