@@ -114,8 +114,8 @@ OMXMLStoredObject* OMXMLStoredObject::createModify(OMRawStorage* rawStorage,
 bool OMXMLStoredObject::isRecognized(const wchar_t* /* fileName */,
                                      OMFileSignature& /* signature */)
 {
-  bool result = false;
   TRACE("OMXMLStoredObject::isRecognized");
+  bool result = false;
   ASSERT("Unimplemented code not reached", false);
   return result;
 }
@@ -130,8 +130,8 @@ bool OMXMLStoredObject::isRecognized(const wchar_t* /* fileName */,
 bool OMXMLStoredObject::isRecognized(OMRawStorage* /* rawStorage */,
                                      OMFileSignature& /* signature */)
 {
-  bool result = false;
   TRACE("OMXMLStoredObject::isRecognized");
+  bool result = false;
   ASSERT("Unimplemented code not reached", false);
   return result;
 }
@@ -142,8 +142,8 @@ bool OMXMLStoredObject::isRecognized(OMRawStorage* /* rawStorage */,
   //   @rdesc True if the signature is recognized, false otherwise.
 bool OMXMLStoredObject::isRecognized(const OMFileSignature& /* signature */)
 {
-  bool result = false;
   TRACE("OMXMLStoredObject::isRecognized");
+  bool result = false;
   ASSERT("Unimplemented code not reached", false);
   return result;
 }

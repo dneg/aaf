@@ -360,8 +360,8 @@ bool OMFile::isRecognized(const wchar_t* /* fileName */,
                           OMFileSignature& /* signature */,
                           OMFileEncoding& /* encoding */)
 {
-  bool result = false;
   TRACE("OMFile::isRecognized");
+  bool result = false;
   ASSERT("Unimplemented code not reached", false);
   return result;
 }
@@ -378,8 +378,8 @@ bool OMFile::isRecognized(OMRawStorage* /* rawStorage */,
                           OMFileSignature& /* signature */,
                           OMFileEncoding& /* encoding */)
 {
-  bool result = false;
   TRACE("OMFile::isRecognized");
+  bool result = false;
   ASSERT("Unimplemented code not reached", false);
   return result;
 }
@@ -391,8 +391,8 @@ bool OMFile::isRecognized(OMRawStorage* /* rawStorage */,
 bool OMFile::isRecognized(const OMFileSignature& /* signature */,
                           OMFileEncoding& /* encoding */)
 {
-  bool result = false;
   TRACE("OMFile::isRecognized");
+  bool result = false;
   ASSERT("Unimplemented code not reached", false);
   return result;
 }

@@ -95,8 +95,8 @@ OMKLVStoredObject* OMKLVStoredObject::createModify(OMRawStorage* rawStorage,
 bool OMKLVStoredObject::isRecognized(const wchar_t* /* fileName */,
                                      OMFileSignature& /* signature */)
 {
-  bool result = false;
   TRACE("OMKLVStoredObject::isRecognized");
+  bool result = false;
   ASSERT("Unimplemented code not reached", false);
   return result;
 }
@@ -111,8 +111,8 @@ bool OMKLVStoredObject::isRecognized(const wchar_t* /* fileName */,
 bool OMKLVStoredObject::isRecognized(OMRawStorage* /* rawStorage */,
                                      OMFileSignature& /* signature */)
 {
-  bool result = false;
   TRACE("OMKLVStoredObject::isRecognized");
+  bool result = false;
   ASSERT("Unimplemented code not reached", false);
   return result;
 }
@@ -123,8 +123,8 @@ bool OMKLVStoredObject::isRecognized(OMRawStorage* /* rawStorage */,
   //   @rdesc True if the signature is recognized, false otherwise.
 bool OMKLVStoredObject::isRecognized(const OMFileSignature& /* signature */)
 {
-  bool result = false;
   TRACE("OMKLVStoredObject::isRecognized");
+  bool result = false;
   ASSERT("Unimplemented code not reached", false);
   return result;
 }
