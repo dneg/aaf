@@ -34,7 +34,7 @@
 // Define the AAF_PROPERTY macro to create property GUID definitions.
 // Include the meta dictionary.
 //
-#define AAF_PROPERTY(name, id, tag, type, mandatory, container) \
+#define AAF_PROPERTY(name, id, tag, type, mandatory, uid, container) \
 const aafUID_t kAAFPropID_##container##_##name = id;
 
 #include "AAFMetaDictionary.h"
