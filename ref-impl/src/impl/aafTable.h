@@ -227,31 +227,7 @@ void *TableUIDLookupPtr(
 			aafTable_t *table,
 			aafUID_t key);
 
-/************************************************************************
- *
- * ClassID Table Functions
- *
- ************************************************************************/
 
-#if FULL_TOOLKIT
-aafErr_t NewClassIDTable(
-			AAFFile * file,
-			aafInt32 numBuckets,
-			aafTable_t **result);
-
-aafErr_t TableAddClassID(
-			aafTable_t *table,
-			aafClassIDPtr_t key,
-			void *value,
-			aafInt32 valueLen);
-			
-aafErr_t TableClassIDLookup(
-			aafTable_t *table,
-			aafClassIDPtr_t key,
-			aafInt32 valueLen,
-			void *valuePtr,
-			aafBool *found);
-#endif
 /************************************************************************
  *
  * SlotID Table Functions
@@ -275,81 +251,6 @@ aafErr_t TableSlotIDLookup(
 			void *value,
 			aafInt32 valueLen,
 			aafBool *found);
-
-/************************************************************************
- *
- * aafProperty_t Table Functions
- *
- ************************************************************************/
-
-#if FULL_TOOLKIT
-aafErr_t NewPropertyTable(
-			AAFFile * file,
-			aafInt32 numBuckets,
-			aafTable_t **result);
-			
-aafErr_t TableAddProperty(
-			aafTable_t *table,
-			aafProperty_t key,
-			void *value, 
-			aafInt32 valueLen,
-			aafTableDuplicate_t dup);
-			
-aafErr_t TablePropertyLookup(
-			aafTable_t *table,
-			aafProperty_t key,
-			aafInt32 valueLen,
-			void *valuePtr,
-			aafBool *found);
-#endif
-
-/************************************************************************
- *
- * aafType_t Table Functions
- *
- ************************************************************************/
-
-#if FULL_TOOLKIT
-aafErr_t NewTypeTable(
-			AAFFile * file,
-			aafInt32 numBuckets,
-			aafTable_t **result);
-			
-aafErr_t TableAddType(
-			aafTable_t *table,
-			aafType_t key,
-			void *value,
-			aafInt32 valueLen);
-			
-aafErr_t TableTypeLookup(
-			aafTable_t *table,
-			aafType_t key,
-			aafInt32 valueLen,
-			void *valuePtr,
-			aafBool *found);
-#endif
-
-/************************************************************************
- *
- * Definition (Datakind and EffectDef) Table Functions
- *
- ************************************************************************/
-
-#if FULL_TOOLKIT
-aafErr_t NewDefTable(
-			AAFFile * file,
-			aafInt32 numBuckets,
-			aafTable_t **result);
-			
-aafErr_t TableAddDef(
-			aafTable_t *table,
-			aafUniqueName_t key,
-			void *value);
-			
-void *TableDefLookup(
-			aafTable_t *table,
-			aafUniqueName_t key);
-#endif
 
 #ifdef AAF_SELF_TEST
 void testaafTable(void);
