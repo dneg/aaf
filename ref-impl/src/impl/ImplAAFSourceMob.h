@@ -102,6 +102,16 @@ public:
 		 // @parm [in] Edit rate of the new slot
 		 const aafRational_t & editRate);
 
+ //****************
+ // AddStaticNilReference()
+ //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    AddStaticNilReference
+        (// @parm [in] SlotID to be assigned to the new slot
+		 aafSlotID_t  slotID,
+
+		 // @parm [in] Data kind of the new slot
+         ImplAAFDataDef * pDataDef);
 
   //****************
   // AppendTimecodeSlot()

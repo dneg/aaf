@@ -28,6 +28,7 @@
 #define OMLISTT_H
 
 #include "OMAssertions.h"
+#include "OMContainerIterator.h"
 
 // This implementation was taken from [1].
 //
@@ -287,6 +288,9 @@ void OMList<Element>::clear(void)
     p = p->_next;
     delete q;
   }
+  _nil->_next = _nil;
+  _nil->_previous = _nil;
+  _count = 0;
 }
 
   // @mfunc The number of elements with value <p value>.

@@ -141,6 +141,8 @@ public:
                            size_t internalBytesSize,
                            OMByteOrder byteOrder) const;
 
+  virtual OMType* elementType(void) const;
+
   //****************
   // pvtInitialize()
   //
@@ -201,7 +203,6 @@ public:
   // Override callbacks from OMStorable
   virtual void onSave(void* clientContext) const;
   virtual void onRestore(void* clientContext) const;
-  virtual void onCopy(void* clientContext) const;
 
 private:
   ImplAAFTypeDefSP BaseType (void) const;

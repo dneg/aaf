@@ -32,15 +32,12 @@ typedef enum unitTestMode
 {
 	kAAFUnitTestReadWrite, kAAFUnitTestReadOnly
 } testMode_t;
-#endif
 
 
 
-#ifdef __cplusplus
+#ifdef _cplusplus
 extern "C" {
 #endif
-
-
 
 //
 // Feature support
@@ -72,7 +69,21 @@ bool DR4TestSupported(aafProductVersion_constref toolkitVersion);
 // Return true is greater than DR4 (a.k.a. RC1)
 bool RC1TestSupported(aafProductVersion_constref toolkitVersion);
 
-
-#ifdef __cplusplus
+#ifdef _cplusplus
 }
 #endif
+
+//
+// Comparison operators
+//
+bool operator ==( const aafUID_t uid1, const aafUID_t uid2 );
+bool operator !=( const aafUID_t uid1, const aafUID_t uid2 );
+
+bool operator ==( const aafRational_t& a, const aafRational_t& b );
+bool operator !=( const aafRational_t& a, const aafRational_t& b );
+
+bool operator ==( const aafTimeStamp_t& a, const aafTimeStamp_t& b );
+bool operator !=( const aafTimeStamp_t& a, const aafTimeStamp_t& b );
+
+
+#endif  // MODULE_TEST_COMMON_H

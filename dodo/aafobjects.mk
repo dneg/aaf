@@ -21,26 +21,33 @@
 # All rights reserved.
 #
 ###############################################################################
-AAFPERSISTENTOBJECTS="\
-	 "
-
+AAFPERSISTENTOBJECTS=""
 
 # These are all of the other non-persistent objects:
-AAFNONPERSISTENTOBJECTS="\
-	 "
+AAFNONPERSISTENTOBJECTS=""
 
 
 # These are files which specify COM interfaces, but which are
 # implemented in other objects.
 AAFCOMINTERFACESONLY="\
+	AAFCDCIDescriptor2 \
+	AAFComponent2 \
+	AAFCompositionMob2 \
 	AAFDataDef2 \
+	AAFDictionary2 \
+	AAFDigitalImageDescriptor2 \
 	AAFEndian \
-	AAFSearchSource \
 	AAFEssenceDataEx \
 	AAFEssenceMultiAccess \
-	AAFTypeDefVariableArrayEx \
-	AAFMasterMobEx "
-
+	AAFHeader2 \
+	AAFMasterMob2 \
+	AAFMasterMobEx \
+	AAFMob2 \
+	AAFRGBADescriptor2 \
+	AAFSearchSource \
+	AAFSourceReference2 \
+	AAFTimelineMobSlot2 \
+	AAFTypeDefVariableArrayEx "
 
 # These are the impl files that are typed by humans.  Be sure to
 # remove them from the other list.  As you check each one in, just add
@@ -81,6 +88,7 @@ HUMAN_TYPED_IMPL="\
 	AAFGPITrigger \
 	AAFHeader \
 	AAFIdentification \
+	AAFImportDescriptor \
 	AAFInterpolationDef \
 	AAFKLVData \
 	AAFLocator \
@@ -91,8 +99,10 @@ HUMAN_TYPED_IMPL="\
 	AAFNestedScope\
 	AAFNetworkLocator \
 	AAFObject \
+	AAFPCMDescriptor \
 	AAFParameter \
 	AAFParameterDef \
+	AAFPhysicalDescriptor \
 	AAFProperty \
 	AAFPropertyDef \
 	AAFPropertyValue \
@@ -103,6 +113,7 @@ HUMAN_TYPED_IMPL="\
 	AAFSegment \
 	AAFSelector \
 	AAFSequence \
+	AAFSoundDescriptor \
 	AAFSourceClip \
 	AAFSourceMob \
 	AAFSourceReference \
@@ -165,7 +176,15 @@ HUMAN_TYPED_IMPL="\
 	AAFRandomRawStorage \
 	AAFGetFileBits \
 	AAFSetFileBits \
-	AAFRandomFile "
+	AAFRandomFile \
+	AAFTaggedValueDefinition \
+	AAFKLVDataDefinition \
+	EnumAAFTaggedValueDefs \
+	EnumAAFKLVDataDefs \
+	AAFRecordingDescriptor \
+	AAFAuxiliaryDescriptor \
+	AAFDescriptiveFramework \
+	AAFDescriptiveMarker "
 
 # Defered interfaces
 #	AAFIntraFrameMarker \

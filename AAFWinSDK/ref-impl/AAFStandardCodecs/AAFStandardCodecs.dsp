@@ -165,5 +165,9 @@ SOURCE="..\..\..\ref-impl\plugins\jpegesdatadst.cpp"
 
 SOURCE="..\..\..\ref-impl\plugins\jpegesdatasrc.cpp"
 # End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\plugins\utf8.cpp"
+# End Source File
 # End Target
 # End Project

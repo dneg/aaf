@@ -1135,6 +1135,51 @@ static AAFRESULT CreateNewWeakRefVectorType (const aafUID_t & idToCreate,
 }
 
 
+static AAFRESULT CreateNewSetType (const aafUID_t & idToCreate,
+									   ImplAAFDictionary * pDict,
+									   ImplAAFTypeDef ** ppCreatedTypeDef)
+{
+  assert (pDict);
+  AAFRESULT hr;
+
+  // Go through the Set list, attempting to identify the
+  // requested ID.
+  TypeSet * curElem = s_AAFAllTypeSets;
+  while (curElem->isValid)
+	{
+	  // Check to see if the current ID matches the ID of the type
+	  // def we want to create.
+	  if (! memcmp (&idToCreate, &curElem->typeId, sizeof (aafUID_t)))
+		{		
+		  ImplAAFTypeDefSet* ptd = NULL;
+		  hr = pDict->CreateMetaInstance (AUID_AAFTypeDefSet, (ImplAAFMetaDefinition **) &ptd);
+		  if (AAFRESULT_FAILED (hr))
+				return hr;
+		  assert (ptd);
+		  ImplAAFTypeDefSP pRefdType;
+		  hr = pDict->LookupTypeDef(*curElem->pRefdTypeId, &pRefdType);
+		  assert (AAFRESULT_SUCCEEDED (hr));
+		  assert (pRefdType);
+
+		  AAFRESULT hr = ptd->Initialize (curElem->typeId,
+										  pRefdType,
+										  curElem->typeName);
+		  assert (AAFRESULT_SUCCEEDED (hr));
+
+		  assert (ppCreatedTypeDef);
+		  *ppCreatedTypeDef = ptd;
+		  (*ppCreatedTypeDef)->AcquireReference ();
+		  ptd->ReleaseReference ();
+		  ptd = 0;
+		  return AAFRESULT_SUCCESS;
+		}
+
+	  curElem++;
+	}
+  return AAFRESULT_NO_MORE_OBJECTS;
+}
+
+
 ImplAAFBuiltinTypes::ImplAAFBuiltinTypes (ImplAAFDictionary* dictionary) :
   _dictionary(dictionary)
 {}
@@ -1243,6 +1288,11 @@ AAFRESULT ImplAAFBuiltinTypes::NewBuiltinTypeDef
   if (AAFRESULT_SUCCEEDED (hr))	return hr;
 
   hr = CreateNewWeakRefVectorType (idToCreate,
+								   _dictionary,
+								   ppCreatedTypeDef);
+  if (AAFRESULT_SUCCEEDED (hr))	return hr;
+
+  hr = CreateNewSetType (idToCreate,
 								   _dictionary,
 								   ppCreatedTypeDef);
   if (AAFRESULT_SUCCEEDED (hr))	return hr;

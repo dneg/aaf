@@ -31,6 +31,8 @@ AAFObject\
 #c
 #c #import ./AAFObject.exp
 #import ./AAFEndian.exp
+#import ./AAFHeader2.exp
+
 AD_HEAD
 AD_IDL(//
 // The IAAFHeader interface provides file-wide information and
@@ -58,7 +60,7 @@ AD_FORWARD_DECLARATION(EnumAAFIdentifications)
 AD_CLASS_UUID(B1A21383, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
 
 AD_DEFAULT_UUID(B1A21382, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
-AD_COM_EXT_CLASS_BEGIN(public IAAFEndian)
+AD_COM_EXT2_CLASS_BEGIN(public IAAFEndian, public IAAFHeader2)
 AD_XMETHOD2(LookupMob,
 			[in\, ref],
 			  objPass,
@@ -690,8 +692,21 @@ AD_XMETHOD1(GetContentStorage,
   // AAFRESULT_NULL_PARAM
   //   - ppStorage is null.)
 
+
 AD_COM_METH(.method-GetStoredByteOrder)
-
-
 AD_COM_METH(.method-GetNativeByteOrder)
-AD_COM_EXT_CLASS_END(AAFEndian)
+AD_COM_METH(.method-GetPrimaryMob)
+AD_COM_METH(.method-SetPrimaryMob)
+AD_COM_METH(.method-GetOperationalPattern)
+AD_COM_METH(.method-SetOperationalPattern)
+AD_COM_METH(.method-UpdateEssenceContainers)
+AD_COM_METH(.method-CountEssenceContainers)
+AD_COM_METH(.method-GetEssenceContainers)
+AD_COM_METH(.method-IsEssenceContainerPresent)
+AD_COM_METH(.method-CountDescriptiveSchemes)
+AD_COM_METH(.method-GetDescriptiveSchemes)
+AD_COM_METH(.method-IsDescriptiveSchemePresent)
+AD_COM_METH(.method-AddDescriptiveScheme)
+AD_COM_METH(.method-RemoveDescriptiveScheme)
+
+AD_COM_EXT2_CLASS_END(AAFEndian, AAFHeader2)

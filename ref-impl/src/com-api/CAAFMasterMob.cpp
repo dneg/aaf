@@ -1235,44 +1235,12 @@ HRESULT STDMETHODCALLTYPE
       pinternalppSourceInfo = &internalppSourceInfo;
     }
 
-  try
-    {
-      hr = ptr->SearchSource (slotID,
+  hr = ptr->SearchSource (slotID,
     offset,
     mobKind,
     pMediaCrit,
     pOperationChoice,
     pinternalppSourceInfo);
-    }
-  catch (OMException& e)
-    {
-      // OMExceptions should be handled by the impl code. However, if an
-      // unhandled OMException occurs, control reaches here. We must not
-      // allow the unhandled exception to reach the client code, so we
-      // turn it into a failure status code.
-      //
-      // If the OMException contains an HRESULT, it is returned to the
-      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
-      //
-      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
-    }
-  catch (OMAssertionViolation &)
-    {
-      // Control reaches here if there is a programming error in the
-      // impl code that was detected by an assertion violation.
-      // We must not allow the assertion to reach the client code so
-      // here we turn it into a failure status code.
-      //
-      hr = AAFRESULT_ASSERTION_VIOLATION;
-    }
-  catch (...)
-    {
-      // We CANNOT throw an exception out of a COM interface method!
-      // Return a reasonable exception code.
-      //
-      hr = AAFRESULT_UNEXPECTED_EXCEPTION;
-    }
-
 
 
 
@@ -1298,6 +1266,7 @@ HRESULT STDMETHODCALLTYPE
 
   return hr;
 }
+
 
 
 HRESULT STDMETHODCALLTYPE
@@ -1379,9 +1348,7 @@ HRESULT STDMETHODCALLTYPE
       pinternalaccess = &internalaccess;
     }
 
-  try
-    {
-      hr = ptr->ExtendEssence (masterSlotID,
+  hr = ptr->ExtendEssence (masterSlotID,
     internalpMediaKind,
     codecID,
     editRate,
@@ -1390,36 +1357,6 @@ HRESULT STDMETHODCALLTYPE
     internaldestination,
     fileFormat,
     pinternalaccess);
-    }
-  catch (OMException& e)
-    {
-      // OMExceptions should be handled by the impl code. However, if an
-      // unhandled OMException occurs, control reaches here. We must not
-      // allow the unhandled exception to reach the client code, so we
-      // turn it into a failure status code.
-      //
-      // If the OMException contains an HRESULT, it is returned to the
-      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
-      //
-      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
-    }
-  catch (OMAssertionViolation &)
-    {
-      // Control reaches here if there is a programming error in the
-      // impl code that was detected by an assertion violation.
-      // We must not allow the assertion to reach the client code so
-      // here we turn it into a failure status code.
-      //
-      hr = AAFRESULT_ASSERTION_VIOLATION;
-    }
-  catch (...)
-    {
-      // We CANNOT throw an exception out of a COM interface method!
-      // Return a reasonable exception code.
-      //
-      hr = AAFRESULT_UNEXPECTED_EXCEPTION;
-    }
-
 
   //
   // no cleanup necessary for pMediaKind
@@ -1504,45 +1441,13 @@ HRESULT STDMETHODCALLTYPE
 
 
 
-  try
-    {
-      hr = ptr->ExtendMultiEssence (codecID,
+  hr = ptr->ExtendMultiEssence (codecID,
     arrayElemCount,
     mediaArray,
     Enable,
     internaldestination,
     fileFormat,
     access);
-    }
-  catch (OMException& e)
-    {
-      // OMExceptions should be handled by the impl code. However, if an
-      // unhandled OMException occurs, control reaches here. We must not
-      // allow the unhandled exception to reach the client code, so we
-      // turn it into a failure status code.
-      //
-      // If the OMException contains an HRESULT, it is returned to the
-      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
-      //
-      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
-    }
-  catch (OMAssertionViolation &)
-    {
-      // Control reaches here if there is a programming error in the
-      // impl code that was detected by an assertion violation.
-      // We must not allow the assertion to reach the client code so
-      // here we turn it into a failure status code.
-      //
-      hr = AAFRESULT_ASSERTION_VIOLATION;
-    }
-  catch (...)
-    {
-      // We CANNOT throw an exception out of a COM interface method!
-      // Return a reasonable exception code.
-      //
-      hr = AAFRESULT_UNEXPECTED_EXCEPTION;
-    }
-
 
 
 
@@ -1555,6 +1460,249 @@ HRESULT STDMETHODCALLTYPE
 
   return hr;
 }
+
+
+
+HRESULT STDMETHODCALLTYPE
+    CAAFMasterMob::CreateStaticEssence (aafSlotID_t  masterSlotID,
+        IAAFDataDef * pMediaKind,
+        aafUID_constref  codecID,
+        aafCompressEnable_t  Enable,
+        IAAFLocator * destination,
+        aafUID_constref  fileFormat,
+        IAAFEssenceAccess ** access)
+{
+  HRESULT hr;
+
+  ImplAAFMasterMob * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAAFMasterMob*> (pO);
+  assert (ptr);
+
+
+  //
+  // set up for pMediaKind
+  //
+  ImplAAFDataDef * internalpMediaKind = NULL;
+  if (pMediaKind)
+    {
+      HRESULT hStat;
+      IAAFRoot * iObj;
+      ImplAAFRoot *arg;
+      hStat = pMediaKind->QueryInterface (IID_IAAFRoot, (void **)&iObj);
+      assert (SUCCEEDED (hStat));
+      assert (iObj);
+      hStat = iObj->GetImplRep((void **)&arg);
+      assert (SUCCEEDED (hStat));
+      iObj->Release(); // we are through with this interface pointer.
+      internalpMediaKind = static_cast<ImplAAFDataDef*>(arg);
+      assert (internalpMediaKind);
+    }
+
+
+  //
+  // set up for Enable
+  //
+  if (! Is_aafCompressEnable_t_Valid(Enable))
+    return AAFRESULT_INVALID_ENUM_VALUE;
+
+  //
+  // set up for destination
+  //
+  ImplAAFLocator * internaldestination = NULL;
+  if (destination)
+    {
+      HRESULT hStat;
+      IAAFRoot * iObj;
+      ImplAAFRoot *arg;
+      hStat = destination->QueryInterface (IID_IAAFRoot, (void **)&iObj);
+      assert (SUCCEEDED (hStat));
+      assert (iObj);
+      hStat = iObj->GetImplRep((void **)&arg);
+      assert (SUCCEEDED (hStat));
+      iObj->Release(); // we are through with this interface pointer.
+      internaldestination = static_cast<ImplAAFLocator*>(arg);
+      assert (internaldestination);
+    }
+
+
+  //
+  // set up for access
+  //
+  ImplAAFEssenceAccess * internalaccess = NULL;
+  ImplAAFEssenceAccess ** pinternalaccess = NULL;
+  if (access)
+    {
+      pinternalaccess = &internalaccess;
+    }
+
+  hr = ptr->CreateStaticEssence (masterSlotID,
+    internalpMediaKind,
+    codecID,
+    Enable,
+    internaldestination,
+    fileFormat,
+    pinternalaccess);
+
+  //
+  // no cleanup necessary for pMediaKind
+  //
+
+
+
+  //
+  // no cleanup necessary for destination
+  //
+
+
+  //
+  // cleanup for access
+  //
+  if (SUCCEEDED(hr))
+    {
+      IUnknown *pUnknown;
+      HRESULT hStat;
+
+      if (internalaccess)
+        {
+          pUnknown = static_cast<IUnknown *> (internalaccess->GetContainer());
+          hStat = pUnknown->QueryInterface(IID_IAAFEssenceAccess, (void **)access);
+          assert (SUCCEEDED (hStat));
+          //pUnknown->Release();
+          internalaccess->ReleaseReference(); // We are through with this pointer.
+        }
+    }
+
+  return hr;
+}
+
+
+HRESULT STDMETHODCALLTYPE
+    CAAFMasterMob::CreateEventEssence (aafSlotID_t  masterSlotID,
+        IAAFDataDef * pMediaKind,
+        aafUID_constref  codecID,
+        aafRational_t  editRate,
+        aafRational_t  samplerate,
+        aafCompressEnable_t  Enable,
+        IAAFLocator * destination,
+        aafUID_constref  fileFormat,
+        IAAFEssenceAccess ** access)
+{
+  HRESULT hr;
+
+  ImplAAFMasterMob * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAAFMasterMob*> (pO);
+  assert (ptr);
+
+
+  //
+  // set up for pMediaKind
+  //
+  ImplAAFDataDef * internalpMediaKind = NULL;
+  if (pMediaKind)
+    {
+      HRESULT hStat;
+      IAAFRoot * iObj;
+      ImplAAFRoot *arg;
+      hStat = pMediaKind->QueryInterface (IID_IAAFRoot, (void **)&iObj);
+      assert (SUCCEEDED (hStat));
+      assert (iObj);
+      hStat = iObj->GetImplRep((void **)&arg);
+      assert (SUCCEEDED (hStat));
+      iObj->Release(); // we are through with this interface pointer.
+      internalpMediaKind = static_cast<ImplAAFDataDef*>(arg);
+      assert (internalpMediaKind);
+    }
+
+
+
+
+  //
+  // set up for Enable
+  //
+  if (! Is_aafCompressEnable_t_Valid(Enable))
+    return AAFRESULT_INVALID_ENUM_VALUE;
+
+  //
+  // set up for destination
+  //
+  ImplAAFLocator * internaldestination = NULL;
+  if (destination)
+    {
+      HRESULT hStat;
+      IAAFRoot * iObj;
+      ImplAAFRoot *arg;
+      hStat = destination->QueryInterface (IID_IAAFRoot, (void **)&iObj);
+      assert (SUCCEEDED (hStat));
+      assert (iObj);
+      hStat = iObj->GetImplRep((void **)&arg);
+      assert (SUCCEEDED (hStat));
+      iObj->Release(); // we are through with this interface pointer.
+      internaldestination = static_cast<ImplAAFLocator*>(arg);
+      assert (internaldestination);
+    }
+
+
+  //
+  // set up for access
+  //
+  ImplAAFEssenceAccess * internalaccess = NULL;
+  ImplAAFEssenceAccess ** pinternalaccess = NULL;
+  if (access)
+    {
+      pinternalaccess = &internalaccess;
+    }
+
+  hr = ptr->CreateEventEssence (masterSlotID,
+    internalpMediaKind,
+    codecID,
+    editRate,
+    samplerate,
+    Enable,
+    internaldestination,
+    fileFormat,
+    pinternalaccess);
+
+  //
+  // no cleanup necessary for pMediaKind
+  //
+
+
+
+
+
+  //
+  // no cleanup necessary for destination
+  //
+
+
+  //
+  // cleanup for access
+  //
+  if (SUCCEEDED(hr))
+    {
+      IUnknown *pUnknown;
+      HRESULT hStat;
+
+      if (internalaccess)
+        {
+          pUnknown = static_cast<IUnknown *> (internalaccess->GetContainer());
+          hStat = pUnknown->QueryInterface(IID_IAAFEssenceAccess, (void **)access);
+          assert (SUCCEEDED (hStat));
+          //pUnknown->Release();
+          internalaccess->ReleaseReference(); // We are through with this pointer.
+        }
+    }
+
+  return hr;
+}
+
+
 
 
 //
@@ -1594,6 +1742,12 @@ HRESULT CAAFMasterMob::InternalQueryInterface
         ((IUnknown *)*ppvObj)->AddRef();
         return S_OK;
     }
+    if (EQUAL_UID(riid,IID_IAAFMasterMob2)) 
+    { 
+        *ppvObj = (IAAFMasterMob2 *)this; 
+        ((IUnknown *)*ppvObj)->AddRef();
+        return S_OK;
+    }
 
     // Always delegate back to base implementation.
     return CAAFMob::InternalQueryInterface(riid, ppvObj);
@@ -1603,3 +1757,5 @@ HRESULT CAAFMasterMob::InternalQueryInterface
 // Define the contrete object support implementation.
 // 
 AAF_DEFINE_FACTORY(AAFMasterMob)
+
+

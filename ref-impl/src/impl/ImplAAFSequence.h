@@ -179,6 +179,10 @@ public:
 									  aafLength_t *sclpLen,
 									  aafBool *isMask);
 
+	// Visit this component and its sub-components
+	// with the specified visitor.
+	virtual void Accept(AAFComponentVisitor& visitor);
+	
 private:
 
    // Sequences have two distinct forms: i) a sequence exclusively composed of events,

@@ -51,19 +51,12 @@ OMDataStreamProperty::~OMDataStreamProperty(void)
 {
   TRACE("OMDataStreamProperty::~OMDataStreamProperty");
 
-  try 
-  {
-	if (_stream != 0) {
-		close();
-	}
-  }
-  catch(...)
-  {
-	puts("Caught exception in dataStreamexception");
-	  //close can throw exceptions under limited circustances with schemasoft library.
-	  //This is to ensure that exceptions do not get thrown outside the destructor.
-	  _stream=0;
-	  assert(0); //placed here to be sure to recognise exception being thrwn in destructor in debug builds
+  if (_stream != 0) {
+    try {
+      close();
+    } catch (...) {
+      _stream = 0;
+    }
   }
   POSTCONDITION("Stream closed", _stream == 0);
 }
@@ -159,8 +152,6 @@ OMUInt64 OMDataStreamProperty::position(void) const
   TRACE("OMDataStreamProperty::position");
 
   OMUInt64 result = stream()->position();
-
-  POSTCONDITION("Valid position", result <= size());
   return result;
 }
 
@@ -295,38 +286,53 @@ void OMDataStreamProperty::readTypedElements(const OMType* elementType,
   PRECONDITION("Valid element count", elementCount > 0);
   PRECONDITION("Stream byte order is known", hasByteOrder());
 
-  bool reorder = false;
-  if (byteOrder() != hostByteOrder()) {
-    reorder = true;
+  OMUInt64 currentPosition = position();
+  OMUInt64 streamSize = size();
+
+  OMUInt32 readCount = 0;
+  if (currentPosition < streamSize) {
+    OMUInt64 remaining = (streamSize - currentPosition) / externalElementSize;
+    if (remaining < elementCount) {
+      readCount = static_cast<OMUInt32>(remaining);
+    } else {
+      readCount = elementCount;
+    }
   }
+  if (readCount > 0) {
 
-  // Allocate buffer for one element
-  OMByte* buffer = new OMByte[externalElementSize];
-
-  for (size_t i = 0; i < elementCount; i++) {
-
-    // Read an element of the property value
-    OMUInt32 actualByteCount;
-    read(buffer, externalElementSize, actualByteCount);
-    ASSERT("All bytes read", actualByteCount == externalElementSize);
-
-    // Reorder an element of the property value
-    if (reorder) {
-      elementType->reorder(buffer, externalElementSize);
+    bool reorder = false;
+    if (byteOrder() != hostByteOrder()) {
+      reorder = true;
     }
 
-    // Internalize an element of the property value
-    size_t requiredBytesSize = elementType->internalSize(buffer,
+    // Allocate buffer for one element
+    OMByte* buffer = new OMByte[externalElementSize];
+
+    for (size_t i = 0; i < readCount; i++) {
+
+      // Read an element of the property value
+      OMUInt32 actualByteCount;
+      read(buffer, externalElementSize, actualByteCount);
+      ASSERT("All bytes read", actualByteCount == externalElementSize);
+
+      // Reorder an element of the property value
+      if (reorder) {
+        elementType->reorder(buffer, externalElementSize);
+      }
+
+      // Internalize an element of the property value
+      size_t requiredBytesSize = elementType->internalSize(buffer,
                                                          externalElementSize);
 
-    elementType->internalize(buffer,
+      elementType->internalize(buffer,
                              externalElementSize,
                              &elements[i * requiredBytesSize],
                              requiredBytesSize,
                              hostByteOrder());
+    }
+    delete [] buffer;
   }
-  delete [] buffer;
-  elementsRead = elementCount;
+  elementsRead = readCount;
 }
 
 

@@ -30,7 +30,11 @@
 #include "OMMemoryRawStorage.h"
 
 #include "OMMSSStoredObjectFactory.h"
-#include "OMSSSStoredObjectFactory.h"
+#include "OMMSxMSSStoredObjectFactory.h"
+#ifdef USE_LIBGSF
+#include "OMGSFxMSSStoredObjectFactory.h"
+#endif
+#include "OMSSxMSSStoredObjectFactory.h"
 #include "OMXMLStoredObjectFactory.h"
 #include "OMKLVStoredObjectFactory.h"
 
@@ -45,7 +49,6 @@
 #include "ImplAAFObjectCreation.h"
 #include "ImplAAFBuiltinDefs.h"
 #include "ImplAAFOMRawStorage.h"
-#include "ImplAAFCloneResolver.h"
 
 #include "AAFFileMode.h"
 #include "AAFFileKinds.h"
@@ -74,13 +77,17 @@ static const aafProductIdentification_t kNullIdent = { 0 };
 //    0 : Tue Jan 11 17:08:26 EST 2000
 //        Initial Release version.
 //
-static const aafUInt32 sCurrentAAFObjectModelVersion = 0;
+//    1 : Wed May 19 19:18:00 EST 2004
+//        AAF Version 1.1
+//
+static const aafUInt32 sCurrentAAFObjectModelVersion = 1;
+
 
 // FileKind from the point of view of the OM
 #define ENCODING(x) *reinterpret_cast<const OMStoredObjectEncoding*>(&x)
 
-// this is the installation default. aafFileKindAafSSBinary set to MSS, SSS or other in AAFFileKinds.h
-#define AAFSSEncoding ENCODING(aafFileKindAafSSBinary)
+// this is the installation default. aafFileKindAafSSBin_512 set to MSS, SSS or other in AAFFileKinds.h
+#define AAF512Encoding ENCODING(aafFileKindAaf512Binary)
 //NOTE: add 4k encoding
 #define AAF4KEncoding ENCODING(aafFileKindAaf4KBinary)
 
@@ -114,7 +121,7 @@ static bool areAllModeFlagsDefined (aafUInt32 modeFlags)
 	AAF_FILE_MODE_REVERTABLE |
 	AAF_FILE_MODE_UNBUFFERED |
 	AAF_FILE_MODE_RECLAIMABLE |
-	AAF_FILE_MODE_USE_LARGE_SS_SECTORS |
+	AAF_FILE_MODE_USE_SMALL_SS_SECTORS |
 	AAF_FILE_MODE_CLOSE_FAIL_DIRTY |
 	AAF_FILE_MODE_DEBUG0_ON |
 	AAF_FILE_MODE_DEBUG1_ON;
@@ -138,7 +145,7 @@ static bool areAllModeFlagsSupported (aafUInt32 modeFlags)
 {
 	//NOTE: Lazy loading and large sector support included
   static const aafUInt32 kSupportedFlags =
-	AAF_FILE_MODE_USE_LARGE_SS_SECTORS | AAF_FILE_MODE_LAZY_LOADING;
+	AAF_FILE_MODE_USE_SMALL_SS_SECTORS | AAF_FILE_MODE_LAZY_LOADING;
 
   if (modeFlags & (~kSupportedFlags))
 	{
@@ -232,15 +239,15 @@ ImplAAFFile::OpenExistingRead (const aafCharacter * pFileName,
 	// Answer: because none of them are implemented yet.
 	_modeFlags = modeFlags;
 
-	//NOTE: Depending on LARGE sectors flag check encoding 
-	if (modeFlags & AAF_FILE_MODE_USE_LARGE_SS_SECTORS)
+	//NOTE: Depending on SMALL sectors flag check encoding 
+	if (modeFlags & AAF_FILE_MODE_USE_SMALL_SS_SECTORS)
 	{
-    	if (!OMFile::hasFactory(AAF4KEncoding))
+    	if (!OMFile::hasFactory(AAF512Encoding))
     	  return AAFRESULT_FILEKIND_NOT_REGISTERED;
 	}
 	else
 	{
-    	if (!OMFile::hasFactory(AAFSSEncoding))
+    	if (!OMFile::hasFactory(AAF4KEncoding))
     	  return AAFRESULT_FILEKIND_NOT_REGISTERED;
 	}
 
@@ -372,15 +379,15 @@ ImplAAFFile::OpenExistingModify (const aafCharacter * pFileName,
 	// Answer: because none of them are implemented yet.
 	_modeFlags = modeFlags;
 
-	//NOTE: Depending on LARGE sectors flag set encoding 
-	if (modeFlags & AAF_FILE_MODE_USE_LARGE_SS_SECTORS)
+	//NOTE: Depending on SMALL sectors flag set encoding 
+	if (modeFlags & AAF_FILE_MODE_USE_SMALL_SS_SECTORS)
 	{
-    	if (!OMFile::hasFactory(AAF4KEncoding))
+    	if (!OMFile::hasFactory(AAF512Encoding))
       		return AAFRESULT_FILEKIND_NOT_REGISTERED;
 	}
 	else
 	{
-    	if (!OMFile::hasFactory(AAFSSEncoding))
+    	if (!OMFile::hasFactory(AAF4KEncoding))
       		return AAFRESULT_FILEKIND_NOT_REGISTERED;
 	}
 
@@ -518,15 +525,15 @@ ImplAAFFile::OpenNewModify (const aafCharacter * pFileName,
 	//if( modeFlags )
 	 // return AAFRESULT_NOT_IN_CURRENT_VERSION;
 
-	//NOTE: check LARGE_SECTORS flag
-	if (modeFlags & AAF_FILE_MODE_USE_LARGE_SS_SECTORS)
+	//NOTE: check SMALL_SECTORS flag
+	if (modeFlags & AAF_FILE_MODE_USE_SMALL_SS_SECTORS)
 	{
-    	if (!OMFile::hasFactory(AAF4KEncoding))
+    	if (!OMFile::hasFactory(AAF512Encoding))
     	  return AAFRESULT_FILEKIND_NOT_REGISTERED;
 	}
 	else
 	{
-    	if (!OMFile::hasFactory(AAFSSEncoding))
+    	if (!OMFile::hasFactory(AAF4KEncoding))
     	  return AAFRESULT_FILEKIND_NOT_REGISTERED;
 	}
 
@@ -581,14 +588,14 @@ ImplAAFFile::OpenNewModify (const aafCharacter * pFileName,
 		OMStoredObjectEncoding aafFileEncoding;
 		
 
-		//NOTE: Depending on LARGE sectors flag set encoding 
-		if (modeFlags & AAF_FILE_MODE_USE_LARGE_SS_SECTORS)
+		//NOTE: Depending on SMALL sectors flag set encoding 
+		if (modeFlags & AAF_FILE_MODE_USE_SMALL_SS_SECTORS)
 		{
-			aafFileEncoding	= AAF4KEncoding;
+			aafFileEncoding	= AAF512Encoding;
 		}
 		else
 		{
-			aafFileEncoding	= AAFSSEncoding;
+			aafFileEncoding	= AAF4KEncoding;
 		}
 		
 
@@ -716,7 +723,7 @@ ImplAAFFile::OpenTransient (aafProductIdentification_t * pIdent)
 		pCStore = 0;
 		
 		// Attempt to create the file.
-		const OMStoredObjectEncoding aafFileEncoding = AAFSSEncoding;
+		const OMStoredObjectEncoding aafFileEncoding = AAF512Encoding;
 		  
 		_file = OMFile::openNewModify (pOMRawStg,
 					       _factory,
@@ -1205,6 +1212,14 @@ ImplAAFFile::SaveCopyAs (ImplAAFFile * pDestFile)
     ImplAAFSmartPointer<ImplAAFDictionary> spDstDict;
     checkResult( spDstHeader->GetDictionary(&spDstDict) );
 
+    // Merge the dictionary
+    {
+      ImplAAFSmartPointer<ImplAAFDictionary> spSrcDict;
+      checkResult( GetDictionary(&spSrcDict) );
+
+      checkResult( spSrcDict->MergeTo( spDstDict ) );
+    }
+
     // Clone the content store.
     {
       ImplAAFSmartPointer<ImplAAFContentStorage> spSrcContentStore;
@@ -1218,9 +1233,9 @@ ImplAAFFile::SaveCopyAs (ImplAAFFile * pDestFile)
       
       spDstHeader->SetContentStorage( pNewDstStorage );
 
-      ImplAAFCloneResolver resolver(pDestFile);
-      pNewDstStorage->onCopy(&resolver);
-      spSrcContentStore->deepCopyTo( pNewDstStorable, &resolver );
+      spSrcContentStore->deepCopyTo( pNewDstStorable, 0 );
+      pNewDstStorage->onCopy( 0 );
+
     }
 
     // Clone the ident list.
@@ -1242,18 +1257,15 @@ ImplAAFFile::SaveCopyAs (ImplAAFFile * pDestFile)
 	
 	checkResult( spDstHeader->AppendIdentification( pNewDstIdent ) );
 
-	ImplAAFCloneResolver resolver(pDestFile);
-	pNewDstIdent->onCopy(&resolver);
-       	spSrcIdent->deepCopyTo( pNewDstIdent, &resolver );
+	pNewDstIdent->onCopy( 0 );
+       	spSrcIdent->deepCopyTo( pNewDstIdent, 0 );
+
       }
     }
 
   }
   catch( const HRESULT& ex ) {
     return ex;
-  }
-  catch( const ImplAAFCloneResolverEx& ex ) {
-    return ex.GetHResult();
   }
 
   return pDestFile->Save();
@@ -1479,51 +1491,54 @@ OMRawStorage * ImplAAFFile::RawStorage ()
 
 
 // FileKinds from the point of view of the OM
-#define AAFMSSEncoding ENCODING(aafFileKindAafMSSBinary)
-#define AAFSSSEncoding ENCODING(aafFileKindAafSSSBinary)
+#define AAFM512Encoding ENCODING(aafFileKindAafM512Binary)
+#define AAFS512Encoding ENCODING(aafFileKindAafS512Binary)
+#define AAFG512Encoding ENCODING(aafFileKindAafG512Binary)
 #define AAFS4KEncoding ENCODING(aafFileKindAafS4KBinary)
 #define AAFM4KEncoding ENCODING(aafFileKindAafM4KBinary)
+#define AAFG4KEncoding ENCODING(aafFileKindAafG4KBinary)
 
 // these are only prototype
 #define AAFXMLEncoding ENCODING(aafFileKindAafXmlText)
 #define AAFKLVEncoding ENCODING(aafFileKindAafKlvBinary)
 
 // signatures from the point of view of the OM
-#define Signature_SSBinary ENCODING(aafSignature_Aaf_SSBinary)
+#define Signature_SSBin_512 ENCODING(aafSignature_Aaf_SSBin_512)
 #define Signature_SSBin_4K ENCODING(aafSignature_Aaf_SSBin_4K)
 
 void ImplAAFFile::registerFactories(void)
 {
 	// these are in order of preference for the installation
-
-	// NOTE: the first SS factory must match the installation default
-	//		AAFSSEncoding == ENCODING(aafFileKindAafSSBinary), as specified in AAFFileKinds.h
-	// this is to set default behaviour for old API
-	const aafUID_t DEFAULTFileKind = aafFileKindAafSSBinary;
-	assert( equalUID( DEFAULTFileKind , aafFileKindAafSSBinary ) );
+	// E.g. under MS windows the default 512-byte encoding will be MSS 
+	// encoding since it is the first 512-byte encoding to be installed,
+	// whereas under Linux the default 512-byte encoding is SSS encoding
 
 #if defined( OS_WINDOWS )
 // DEFAULT for this build is Microsoft 512.
 
-	OMFile::registerFactory(ENCODING(DEFAULTFileKind),
-                          new OMMSSStoredObjectFactory(AAFMSSEncoding,
-                                                       Signature_SSBinary,
+	assert( equalUID( aafFileKindAaf512Binary, aafFileKindAafM512Binary));
+
+	OMFile::registerFactory(AAFM512Encoding,
+                          new OMMSxMSSStoredObjectFactory(AAFM512Encoding,
+                                                       Signature_SSBin_512,
                                                        L"AAF-M",
                                                        L"AAF Microsoft SS"));
 
-	OMFile::registerFactory(AAFSSSEncoding,
-                          new OMSSSStoredObjectFactory(AAFSSSEncoding,
-                                                       Signature_SSBinary,
+	OMFile::registerFactory(AAFS512Encoding,
+                          new OMSSxMSSStoredObjectFactory(AAFS512Encoding,
+                                                       Signature_SSBin_512,
                                                        L"AAF-S",
                                                        L"AAF Schemasoft SS"));
 
+	assert( equalUID( aafFileKindAaf4KBinary, aafFileKindAafM4KBinary));
+
 	OMFile::registerFactory(AAFM4KEncoding,
-                          new OMMSSStoredObjectFactory(AAFM4KEncoding,
+                          new OMMSxMSSStoredObjectFactory(AAFM4KEncoding,
                                                        Signature_SSBin_4K,
                                                        L"AAF-M4K",
                                                        L"AAF Microsoft 4K"));
 	OMFile::registerFactory(AAFS4KEncoding,
-                          new OMSSSStoredObjectFactory(AAFS4KEncoding,
+                          new OMSSxMSSStoredObjectFactory(AAFS4KEncoding,
                                                        Signature_SSBin_4K,
                                                        L"AAF-S4K",
                                                        L"AAF Schemasoft 4K"));
@@ -1537,13 +1552,18 @@ void ImplAAFFile::registerFactories(void)
 #elif defined( OS_DARWIN )
 // DEFAULT is SchemaSoft 512.
 
-	OMFile::registerFactory(ENCODING(DEFAULTFileKind),
-                          new OMSSSStoredObjectFactory(AAFSSSEncoding,
-                                                       Signature_SSBinary,
+	assert( equalUID( aafFileKindAaf512Binary, aafFileKindAafS512Binary));
+
+	OMFile::registerFactory(AAFS512Encoding,
+                          new OMSSxMSSStoredObjectFactory(AAFS512Encoding,
+                                                       Signature_SSBin_512,
                                                        L"AAF-S",
                                                        L"AAF Schemasoft SS"));
+
+	assert( equalUID( aafFileKindAaf4KBinary, aafFileKindAafS4KBinary));
+
 	OMFile::registerFactory(AAFS4KEncoding,
-                          new OMSSSStoredObjectFactory(AAFS4KEncoding,
+                          new OMSSxMSSStoredObjectFactory(AAFS4KEncoding,
                                                        Signature_SSBin_4K,
                                                        L"AAF-S4K",
                                                        L"AAF Schemasoft 4K"));
@@ -1551,31 +1571,57 @@ void ImplAAFFile::registerFactories(void)
 #elif defined( OS_IRIX )
 // DEFAULT is SchemaSoft 512.
 
-	OMFile::registerFactory(ENCODING(DEFAULTFileKind),
-                          new OMSSSStoredObjectFactory(AAFSSSEncoding,
-  						    						   Signature_SSBinary,
+	assert( equalUID( aafFileKindAaf512Binary, aafFileKindAafS512Binary));
+
+	OMFile::registerFactory(AAFS512Encoding,
+                          new OMSSxMSSStoredObjectFactory(AAFS512Encoding,
+  						    						   Signature_SSBin_512,
                                                        L"AAF-S",
                                                        L"AAF Schemasoft SS"));
 
+	assert( equalUID( aafFileKindAaf4KBinary, aafFileKindAafS4KBinary));
+
 	OMFile::registerFactory(AAFS4KEncoding,
-                          new OMSSSStoredObjectFactory(AAFS4KEncoding,
+                          new OMSSxMSSStoredObjectFactory(AAFS4KEncoding,
                                                        Signature_SSBin_4K,
                                                        L"AAF-S4K",
                                                        L"AAF Schemasoft 4K"));
 #elif defined( OS_LINUX )
-// DEFAULT is SchemaSoft 512.
 
-	OMFile::registerFactory(ENCODING(DEFAULTFileKind),
-                          new OMSSSStoredObjectFactory(AAFSSSEncoding,
-                                                       Signature_SSBinary,
-                                                       L"AAF-S",
-                                                       L"AAF Schemasoft SS"));
+#ifdef USE_LIBGSF
+	// If LIBGSF support is explicitly requested, GSF SS is the default
+	assert( equalUID( aafFileKindAaf512Binary, aafFileKindAafG512Binary));
+	assert( equalUID( aafFileKindAaf4KBinary, aafFileKindAafG4KBinary));
+
+	OMFile::registerFactory(AAFG512Encoding,
+                          new OMGSFxMSSStoredObjectFactory(AAFG512Encoding,
+                                                       Signature_SSBin_512,
+                                                       L"AAF-G",
+                                                       L"AAF GSF SS"));
+	OMFile::registerFactory(AAFG4KEncoding,
+                          new OMGSFxMSSStoredObjectFactory(AAFG4KEncoding,
+                                                       Signature_SSBin_4K,
+                                                       L"AAF-G4K",
+                                                       L"AAF GSF 4K"));
+#else
+
+// DEFAULT is SchemaSoft 512.
+	assert( equalUID( aafFileKindAaf512Binary, aafFileKindAafS512Binary));
+	assert( equalUID( aafFileKindAaf4KBinary, aafFileKindAafS4KBinary));
+
+#endif
 
 	OMFile::registerFactory(AAFS4KEncoding,
-                          new OMSSSStoredObjectFactory(AAFS4KEncoding,
+                          new OMSSxMSSStoredObjectFactory(AAFS4KEncoding,
                                                        Signature_SSBin_4K,
                                                        L"AAF-S4K",
                                                        L"AAF Schemasoft 4K"));
+	OMFile::registerFactory(AAFS512Encoding, 
+                          new OMSSxMSSStoredObjectFactory(AAFS512Encoding,
+                                                       Signature_SSBin_512,
+                                                       L"AAF-S",
+                                                       L"AAF Schemasoft SS"));
+
 #elif defined( OS_FREEBSD )
 // No SS implementations ported as yet
 #error No SS implementation available on platform
@@ -1583,13 +1629,18 @@ void ImplAAFFile::registerFactories(void)
 #elif defined( OS_SOLARIS )
 // DEFAULT is SSS 512. MSS not available
 
-	OMFile::registerFactory(ENCODING(DEFAULTFileKind),
-                          new OMSSSStoredObjectFactory(AAFSSSEncoding,
-                                                       Signature_SSBinary,
+	assert( equalUID( aafFileKindAaf512Binary, aafFileKindAafS512Binary));
+
+	OMFile::registerFactory(AAFS512Encoding,
+                          new OMSSxMSSStoredObjectFactory(AAFS512Encoding,
+                                                       Signature_SSBin_512,
                                                        L"AAF-S",
                                                        L"AAF Schemasoft SS"));
+
+	assert( equalUID( aafFileKindAaf4KBinary, aafFileKindAafS4KBinary));
+
 	OMFile::registerFactory(AAFS4KEncoding,
-                          new OMSSSStoredObjectFactory(AAFS4KEncoding,
+                          new OMSSxMSSStoredObjectFactory(AAFS4KEncoding,
                                                        Signature_SSBin_4K,
                                                        L"AAF-S4K",
                                                        L"AAF Schemasoft 4K"));

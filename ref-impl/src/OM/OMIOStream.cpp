@@ -206,6 +206,9 @@ OMIOStream& OMIOStream::indent(void)
 
 OMIOStream& OMIOStream::outdent(void)
 {
+  TRACE("OMIOStream::outdent");
+  ASSERT("Can decrease indentation", _level > 0);
+
   _level = _level - 1;
   return *this;
 }

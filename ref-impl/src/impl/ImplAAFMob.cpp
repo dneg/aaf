@@ -72,6 +72,8 @@
 #include "ImplAAFContentStorage.h"
 #include "ImplAAFObjectCreation.h"
 #include "ImplAAFTimelineMobSlot.h"
+#include "ImplAAFStaticMobSlot.h"
+#include "ImplAAFEventMobSlot.h"
 #include "ImplAAFSourceClip.h"
 #include "ImplAAFSequence.h"
 #include "ImplAAFPulldown.h"
@@ -80,14 +82,18 @@
 #include "AAFDataDefs.h"
 #include "ImplEnumAAFMobSlots.h"
 #include "ImplEnumAAFComponents.h"
-#include "ImplAAFCloneResolver.h"
+#include "ImplAAFTaggedValueUtil.h"
 
 #include <assert.h>
 #include <string.h>
 #include <wchar.h>
 #include "AAFResult.h"
+#include "AAFComponentVisitor.h"
 #include "aafCvt.h"
 #include "AAFUtils.h"
+
+#include "OMIdentitySet.h"
+#include "OMIdentitySetIter.h"
 
 #include "ImplAAFBuiltinDefs.h"
 #include "ImplAAFSmartPointer.h"
@@ -100,13 +106,15 @@ extern "C" const aafClassID_t CLSID_AAFTypeDefString;
 extern "C" const aafClassID_t CLSID_EnumAAFKLVData;
 
 ImplAAFMob::ImplAAFMob ()
-: _mobID(			PID_Mob_MobID,			L"MobID"),
-  _name(			PID_Mob_Name,			L"Name"),
-  _creationTime(    PID_Mob_CreationTime,	L"CreationTime"),
-  _lastModified(    PID_Mob_LastModified,	L"LastModified"),
-  _slots(			PID_Mob_Slots,			L"Slots"),
-  _userComments(	PID_Mob_UserComments,	L"UserComments"),
-  _KLVData(			PID_Mob_KLVData,		L"KLVData")
+: _mobID(	 PID_Mob_MobID,	        L"MobID"),
+  _name(	 PID_Mob_Name,	        L"Name"),
+  _creationTime( PID_Mob_CreationTime,  L"CreationTime"),
+  _lastModified( PID_Mob_LastModified,  L"LastModified"),
+  _slots(	 PID_Mob_Slots,	        L"Slots"),
+  _userComments( PID_Mob_UserComments,  L"UserComments"),
+  _KLVData(	 PID_Mob_KLVData,       L"KLVData"),
+  _attributes(   PID_Mob_Attributes,    L"Attributes" ),
+  _usageCode(    PID_Mob_UsageCode,     L"UsageCode" )
 {
 	_persistentProperties.put(_mobID.address());
 	_persistentProperties.put(_name.address());
@@ -115,6 +123,9 @@ ImplAAFMob::ImplAAFMob ()
 	_persistentProperties.put(_slots.address());
 	_persistentProperties.put(_userComments.address());
 	_persistentProperties.put(_KLVData.address());
+	_persistentProperties.put(_attributes.address());
+	_persistentProperties.put(_usageCode.address());
+
 	(void)aafMobIDNew(&_mobID);		// Move this out of constructor when we get 2-stage create
 	AAFGetDateTime(&_creationTime);
 	AAFGetDateTime(&_lastModified);
@@ -522,6 +533,9 @@ AAFRESULT STDMETHODCALLTYPE
 	if(pName == NULL)
 		return(AAFRESULT_NULL_PARAM);
 
+	if(wcslen(pName)*sizeof(OMCharacter) >= OMPROPERTYSIZE_MAX)
+		return(AAFRESULT_BAD_SIZE);
+
 	_name = pName;
 
 	return(AAFRESULT_SUCCESS); 
@@ -660,6 +674,117 @@ AAFRESULT STDMETHODCALLTYPE
 
 	return(AAFRESULT_SUCCESS);
 }
+
+
+AAFRESULT STDMETHODCALLTYPE
+ImplAAFMob::AppendNewStaticSlot (ImplAAFSegment * pSegment,
+								 aafSlotID_t  slotID,
+								 aafCharacter_constptr  pSlotName,
+								 ImplAAFStaticMobSlot ** ppNewSlot)
+{
+	ImplAAFStaticMobSlot	*aSlot = NULL;
+	ImplAAFMobSlot			*tmpSlot = NULL;
+	ImplAAFDictionary *pDictionary = NULL;
+
+	// Validate input pointers...
+	if (NULL == pSegment || NULL == pSlotName || NULL == ppNewSlot)
+		return (AAFRESULT_NULL_PARAM);
+
+	*ppNewSlot = NULL;
+
+	XPROTECT()
+	{
+		CHECK(GetDictionary(&pDictionary));
+		CHECK(pDictionary->GetBuiltinDefs()->cdStaticMobSlot()->
+			CreateInstance ((ImplAAFObject**) &aSlot));
+		pDictionary->ReleaseReference();
+		pDictionary = NULL;
+		CHECK(aSlot->SetSegment(pSegment));
+		CHECK(aSlot->SetSlotID(slotID));
+		CHECK(aSlot->SetName(pSlotName));
+
+		/* Append new slot to mob */
+		tmpSlot = aSlot;
+		_slots.appendValue(tmpSlot);
+
+	} /* XPROTECT */
+
+	XEXCEPT
+	{
+		if (aSlot)
+			aSlot->ReleaseReference();
+		aSlot = 0;
+		if(pDictionary != NULL)
+			pDictionary->ReleaseReference();
+		pDictionary = 0;
+	}
+	XEND;
+
+	*ppNewSlot = aSlot;
+	if (aSlot)
+		aSlot->AcquireReference();
+
+	return(AAFRESULT_SUCCESS);
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+   ImplAAFMob::AppendNewEventSlot (aafRational_t  editRate,
+                           ImplAAFSegment * pSegment,
+                           aafSlotID_t  slotID,
+                           aafCharacter_constptr  pSlotName,
+                           aafPosition_t  origin,
+                           ImplAAFEventMobSlot ** ppNewSlot)
+{
+	ImplAAFEventMobSlot	*aSlot = NULL;
+	ImplAAFMobSlot		*tmpSlot = NULL;
+  ImplAAFDictionary		*pDictionary = NULL;
+
+
+  // Validate input pointers...
+  if (NULL == pSegment || NULL == pSlotName || NULL == ppNewSlot)
+    return (AAFRESULT_NULL_PARAM);
+
+	*ppNewSlot = NULL;
+
+	XPROTECT()
+	  {
+		CHECK(GetDictionary(&pDictionary));
+		CHECK(pDictionary->GetBuiltinDefs()->cdEventMobSlot()->
+			  CreateInstance ((ImplAAFObject**) &aSlot));
+		pDictionary->ReleaseReference();
+		pDictionary = NULL;
+		CHECK(aSlot->SetSegment(pSegment));
+		CHECK(aSlot->SetSlotID(slotID));
+		CHECK(aSlot->SetName(pSlotName));
+		CHECK(aSlot->SetEditRate( &editRate));
+		
+
+		/* Append new slot to mob */
+		tmpSlot = aSlot;
+		_slots.appendValue(tmpSlot);
+
+	  } /* XPROTECT */
+
+	XEXCEPT
+	  {
+		if (aSlot)
+		  aSlot->ReleaseReference();
+		aSlot = 0;
+		if(pDictionary != NULL)
+		  pDictionary->ReleaseReference();
+		pDictionary = 0;
+	  }
+	XEND;
+
+	*ppNewSlot = aSlot;
+	if (aSlot)
+		aSlot->AcquireReference();
+
+	return(AAFRESULT_SUCCESS);
+}
+
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFMob::GetSlots (ImplEnumAAFMobSlots **ppEnum)
@@ -954,6 +1079,54 @@ AAFRESULT STDMETHODCALLTYPE
 	
   return(AAFRESULT_SUCCESS);
 }
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFMob::AppendAttribute (aafCharacter_constptr  pName,
+				 aafCharacter_constptr  pValue )
+{
+  return ImplAAFTaggedValueUtil::AppendNameValuePair( this, _attributes, pName, pValue );
+}
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFMob::CountAttributes (aafUInt32*  pNumAttributes )
+{
+  return ImplAAFTaggedValueUtil::CountEntries( _attributes, pNumAttributes );
+}
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFMob::GetAttributes (ImplEnumAAFTaggedValues ** ppEnum)
+{
+  return ImplAAFTaggedValueUtil::GetEnumerator( this, _attributes, ppEnum );
+}
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFMob::RemoveAttribute (ImplAAFTaggedValue * pAttribute )
+{
+  return ImplAAFTaggedValueUtil::RemoveEntry( _attributes, pAttribute );
+}
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFMob::SetUsageCode (aafUID_constref  usageCode )
+{
+  _usageCode = usageCode;
+
+  return(AAFRESULT_SUCCESS);
+}
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFMob::GetUsageCode (aafUID_t*  pUsageCode )
+{
+  if ( !_usageCode.isPresent() ) {
+    return AAFRESULT_PROP_NOT_PRESENT;
+  }
+
+  *pUsageCode = _usageCode;
+
+  return AAFRESULT_SUCCESS;
+
+}
+
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFMob::OffsetToMobTimecode (ImplAAFSegment *pTcSeg,
@@ -1315,9 +1488,13 @@ AAFRESULT STDMETHODCALLTYPE
 	    	 CHECK( newMob->SetName( destMobName ) );
 		}
 
-		deepCopyTo( newStorable, 0 );
+		ImplAAFSmartPointer<ImplAAFHeader> spHeader;
+		CHECK( MyHeadObject( &spHeader ) );
+		CHECK( spHeader->AddMob(newMob) );
 
-			newMob->AcquireReference();
+		deepCopyTo( newMob, 0 );
+
+ 		newMob->AcquireReference();
 		*destMob = newMob;
 	}
 	XEXCEPT
@@ -1393,8 +1570,31 @@ AAFRESULT STDMETHODCALLTYPE
 			      ImplAAFFile * destFile,
 			      ImplAAFMob ** destMob)
 {
+	if(destFile == NULL)
+        {
+		return AAFRESULT_NULL_PARAM;
+        }
+	if(destMob == NULL)
+        {
+		return AAFRESULT_NULL_PARAM;
+        }
+
+
+	HRESULT hr = AAFRESULT_SUCCESS;
+
 	XPROTECT()
 	{
+		// Merge the dictionary
+		{
+			ImplAAFSmartPointer<ImplAAFDictionary> spSrcDict;
+			CHECK( GetDictionary(&spSrcDict) );
+
+			ImplAAFSmartPointer<ImplAAFDictionary> spDstDict;
+			CHECK( destFile->GetDictionary(&spDstDict) );
+
+			CHECK( spSrcDict->MergeTo( spDstDict ) );
+		}
+
 		//
 		// If includeMedia is true, and essence data exists for this mob,
 		// then copy it.  Essence data only exists for SourceMobs.  We don't
@@ -1407,7 +1607,7 @@ AAFRESULT STDMETHODCALLTYPE
 				CHECK( MyHeadObject( &spHeader ) );
 
 				ImplAAFSmartPointer<ImplAAFEssenceData> spEssenceData;
-				HRESULT hr = spHeader->LookupEssenceData( _mobID, &spEssenceData );
+				hr = spHeader->LookupEssenceData( _mobID, &spEssenceData );
 
 				if ( AAFRESULT_SUCCESS == hr ) {
 
@@ -1416,9 +1616,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 					OMStorable* pNewStorable = spEssenceData->shallowCopy(spDstDict);
 					ImplAAFEssenceData* pNewEssenceData = dynamic_cast<ImplAAFEssenceData*>(pNewStorable);
-					if ( !pNewEssenceData ) {
-						RAISE(AAFRESULT_BAD_TYPE);
-					}
+					assert( pNewEssenceData );
 					
 					ImplAAFSmartPointer<ImplAAFHeader> spDstHeader;
 					CHECK( destFile->GetHeader(&spDstHeader) );
@@ -1430,9 +1628,34 @@ AAFRESULT STDMETHODCALLTYPE
 
 		}
 
+
+		//
+		// Check if the mob is already in the destination file
+		//
+		bool mobPresentInDestinationFile = false;
+		ImplAAFSmartPointer<ImplAAFHeader> spDstHeader;
+		CHECK( destFile->GetHeader( &spDstHeader ) );
+		ImplAAFSmartPointer<ImplAAFMob> spDstMob;
+		hr = spDstHeader->LookupMob( _mobID, &spDstMob );
+		if( hr == AAFRESULT_SUCCESS )
+		{
+			mobPresentInDestinationFile = true;
+			if( resolveDependencies == kAAFNoFollowDepend )
+				hr = AAFRESULT_DUPLICATE_MOBID;
+		}
+		else if( hr == AAFRESULT_MOB_NOT_FOUND )
+		{
+			mobPresentInDestinationFile = false;
+			hr = AAFRESULT_SUCCESS;
+		}
+
+		CHECK( hr );
+
+
 		//
 		// Copy the mob.
 		//
+		if( ! mobPresentInDestinationFile )
 		{
 			ImplAAFSmartPointer<ImplAAFDictionary> spDstDict;
 			CHECK( destFile->GetDictionary(&spDstDict) );
@@ -1440,76 +1663,25 @@ AAFRESULT STDMETHODCALLTYPE
 			OMStorable* pNewStorable = shallowCopy(spDstDict);
 		
 			ImplAAFMob* pNewMob = dynamic_cast<ImplAAFMob*>(pNewStorable);
-			if ( !pNewMob ) {
-				RAISE(AAFRESULT_BAD_TYPE);
-			}
+			assert( pNewMob );
 
 			ImplAAFSmartPointer<ImplAAFHeader> spDstHeader;
 			CHECK( destFile->GetHeader(&spDstHeader) );
 			CHECK( spDstHeader->AddMob(pNewMob) );
 
-			// The resolver takes care of resolving weak references.  It is the
-			// "clientContext" void pointer passed by the OM to onCopy()
-			// implementations. If it  encounters an error (a bad HRESULT) it
-			// will throw ImplAAFCloneResolverEx.  We catch that, and return the 
-			// error.
-			ImplAAFCloneResolver resolver(destFile);
-			try {
-				deepCopyTo( pNewStorable, &resolver );
-			}
-			catch (const ImplAAFCloneResolverEx& ex) {
-				RAISE(ex.GetHResult());
-			}
-
-			if ( resolveDependencies ) {
-
-			  // Foreach mobId in the resolvers's source reference list:
-			  //  - Lookup the mobId in the source file.  If not present,
-			  //    continue.
-			  //  - Lookup the mobId in the destination file.
-			  //  - If it is not found, then contunue.
-			  //  - Clone the mob.
-
-			  ImplAAFSmartPointer<ImplAAFHeader> spDstHeader;
-			  CHECK( destFile->GetHeader( &spDstHeader ) );
-
-			  ImplAAFSmartPointer<ImplAAFHeader> spSrcHeader;
-			  CHECK( MyHeadObject( &spSrcHeader ) );
-
-			  const OMVector<aafMobID_t>& referencedMobs = resolver.GetSourceReferences();
-			  unsigned int i;
-			  for( i = 0; i < referencedMobs.count(); ++i ) {
-
-			    aafMobID_t mobID = referencedMobs.valueAt(i); 
-
-			    ImplAAFSmartPointer<ImplAAFMob> spSrcMob;
-			    AAFRESULT hr;
-			    hr = spSrcHeader->LookupMob( mobID, &spSrcMob );
-			    if ( AAFRESULT_MOB_NOT_FOUND == hr ) {
-			      continue;
-			    }
-			    else if ( AAFRESULT_SUCCESS != hr ) {
-			      RAISE( hr );
-			    }
-
-			    ImplAAFSmartPointer<ImplAAFMob> spDstMob;
-			    hr = spDstHeader->LookupMob( mobID, &spDstMob );
-			    if ( AAFRESULT_SUCCESS == hr ) {
-			      continue;
-			    }
-			    else if ( AAFRESULT_MOB_NOT_FOUND != hr ) {
-			      RAISE( hr );
-			    }
-
-			    CHECK( spSrcMob->CloneExternal( resolveDependencies,
-							    includeMedia,
-							    destFile,
-							    &spDstMob ) );
-			  }
-			}
+			deepCopyTo( pNewStorable, 0 );
 
 			pNewMob->AcquireReference();
 			*destMob = pNewMob;
+		}
+
+		//
+		// Copy the mob's dependencies
+		//
+		if( resolveDependencies == kAAFFollowDepend )
+		{
+			hr = CloneDependencies(includeMedia,
+						destFile);
 		}
 	}
 	XEXCEPT
@@ -1517,7 +1689,7 @@ AAFRESULT STDMETHODCALLTYPE
 	}
 	XEND
 
-	return AAFRESULT_SUCCESS;
+	return hr;
 }
 
 
@@ -2176,6 +2348,123 @@ HRESULT ImplAAFMob::IsClassIDEqual( const aafClassID_t* classId, bool& result ) 
   }
 
   return AAFRESULT_SUCCESS;
+}
+
+bool ImplAAFMob::IsUsageCodeEqual( const aafUID_t* usageCode ) const
+{
+  if ( !_usageCode.isPresent() ) {
+    return false;
+  }
+
+  aafUID_t thisUsageCode = _usageCode;
+
+  if ( ::memcmp( usageCode, &thisUsageCode, sizeof(aafUID_t) ) == 0 ) {
+    return true;
+  }
+  else {
+    return false;
+  }
+
+}
+
+
+
+// Class AAFMobCollectingComponentVisitor declares a visit operation
+// for each SourceClip referenced by the given MobSlot. The operation
+// is to retreive the ID of the mob references by the SourceClip and
+// append it to the list.
+class AAFMobCollectingComponentVisitor : public AAFComponentVisitor
+{
+    public:
+        virtual void VisitSourceClip(ImplAAFSourceClip* pSourceClip);
+        OMIdentitySetIterator<aafMobID_t>*  MobIDs() const;
+
+    private:
+        OMIdentitySet<aafMobID_t>  _referencedMobs;
+};
+
+
+
+void AAFMobCollectingComponentVisitor::VisitSourceClip(
+    ImplAAFSourceClip* pSourceClip)
+{
+    assert(pSourceClip);
+
+    aafMobID_t mobID;
+    pSourceClip->GetSourceID(&mobID);
+    _referencedMobs.ensurePresent(mobID);
+}
+
+
+
+OMIdentitySetIterator<aafMobID_t>*
+AAFMobCollectingComponentVisitor::MobIDs() const
+{
+    return new OMIdentitySetIterator<aafMobID_t>(_referencedMobs,
+                                                 OMBefore);
+}
+
+
+
+AAFRESULT ImplAAFMob::CloneDependencies(
+    aafIncMedia_t  includeMedia,
+    ImplAAFFile * destFile)
+{
+  assert(destFile);
+
+
+  HRESULT hr = AAFRESULT_SUCCESS;
+
+
+  ImplAAFSmartPointer<ImplAAFHeader> spHeader;
+  MyHeadObject( &spHeader );
+
+
+  // For each mob slot find IDs of mobs that it has
+  // references to and clone them
+  aafNumSlots_t slotCount = 0;
+  CountSlots(&slotCount);
+  for( aafNumSlots_t i=0; i<slotCount && hr == AAFRESULT_SUCCESS; i++ )
+  {
+    ImplAAFSmartPointer<ImplAAFMobSlot> spSlot;
+    GetSlotAt(i, &spSlot);
+
+    ImplAAFSmartPointer<ImplAAFSegment> spSegment;
+    spSlot->GetSegment(&spSegment);
+
+    AAFMobCollectingComponentVisitor mobCollector;
+    spSegment->Accept(mobCollector);
+
+
+    // Clone each of the referenced mobs
+    OMIdentitySetIterator<aafMobID_t>*  iter = mobCollector.MobIDs();
+    while( ++(*iter) && hr == AAFRESULT_SUCCESS )
+    {
+      aafMobID_t  mobID = iter->value();
+
+      ImplAAFSmartPointer<ImplAAFMob> spSrcReferencedMob;
+      hr = spHeader->LookupMob(mobID,&spSrcReferencedMob);
+      if( SUCCEEDED(hr) )
+      {
+        ImplAAFSmartPointer<ImplAAFMob> spDstReferencedMob;
+        hr = spSrcReferencedMob->CloneExternal(kAAFFollowDepend,
+                                               includeMedia,
+                                               destFile,
+                                               &spDstReferencedMob);
+      }
+      else if( hr == AAFRESULT_MOB_NOT_FOUND )
+      {
+         // The referenced mob is not in this file
+         hr = AAFRESULT_SUCCESS;
+      }
+    }
+
+    delete iter;
+    iter = 0;
+  }
+
+
+  return hr;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -52,6 +52,11 @@ static const	aafMobID_t	TEST_MobID =
 0x13, 0x00, 0x00, 0x00,
 {0x9269dfa2, 0x0407, 0x11d4, 0x8e, 0x3d, 0x00, 0x90, 0x27, 0xdf, 0xca, 0x7c}};
 
+static const	aafMobID_t	TEST_rendering_mobID = 
+{{0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00},
+0x13, 0x00, 0x00, 0x00,
+{0x9269dfa3, 0x0407, 0x11d4, 0x8e, 0x3d, 0x00, 0x90, 0x27, 0xdf, 0xca, 0x7c}};
+
 
 
 // Cross-platform utility to delete a file.
@@ -88,6 +93,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFDictionary*	pDictionary = NULL;
 
 	IAAFCompositionMob*			pCompMob = NULL;
+	IAAFCompositionMob2*			pCompMob2 = NULL;
 	IAAFMob*					pMob = NULL;
 
 	aafProductIdentification_t	ProductInfo;
@@ -137,6 +143,10 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	  checkResult(pCompMob->Initialize( L"COMPMOB01" ));
 	  checkResult(pCompMob->SetDefaultFade(fadeInLen, fadeInType, fadeInEditUnit));
 
+		// Check the CompositionMob2 Rendering implementation
+		checkResult( pCompMob->QueryInterface( IID_IAAFCompositionMob2, reinterpret_cast<void**>(&pCompMob2) ) );
+		checkResult( pCompMob2->SetRendering( TEST_rendering_mobID ) );
+
 	  // Add the mob to the file.
 	  checkResult(pHeader->AddMob(pMob));
   }
@@ -152,6 +162,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 	if (pCompMob)
 		pCompMob->Release();
+
+	if (pCompMob2)
+		pCompMob2->Release();
 
 	if (pDictionary)
 		pDictionary->Release();
@@ -182,10 +195,12 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
   IEnumAAFMobs*				pMobIter = NULL;
   IAAFMob*					pMob = NULL;
   IAAFCompositionMob*			pCompMob = NULL;
+  IAAFCompositionMob2*			pCompMob2 = NULL;
 
   aafSearchCrit_t				criteria;
   aafDefaultFade_t			defaultFade;
   aafNumSlots_t				numMobs;
+	aafMobID_t	mobID;
   HRESULT						hr = S_OK;
 
   try
@@ -212,6 +227,15 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 				  (memcmp( &( defaultFade.fadeEditUnit), &fadeInEditUnit, sizeof( fadeInEditUnit ))== 0) &&
 				  (defaultFade.valid == kAAFTrue), 
          AAFRESULT_TEST_FAILED);
+
+			// Check the CompositionMob2 Rendering implementation
+			checkResult( pCompMob->QueryInterface( IID_IAAFCompositionMob2, reinterpret_cast<void**>(&pCompMob2) ) );
+			checkResult( pCompMob2->GetRendering( &mobID ) );
+
+			checkExpression( memcmp( &mobID, &TEST_rendering_mobID, sizeof(aafMobID_t)) == 0, AAFRESULT_TEST_FAILED);
+
+			pCompMob2->Release();
+			pCompMob2 = NULL;
 
 			pCompMob->Release();
 			pCompMob = NULL;

@@ -206,6 +206,9 @@ private:
 
   const OMStorable* container(void) const;
 
+  static OMPropertyId destinationId(const OMStorable* destination,
+                                    const OMProperty* property);
+
   const OMStorable* _container;
   wchar_t* _name;
 

@@ -47,6 +47,7 @@
 #include "AAFPropertyIDs.h"
 
 #include <assert.h>
+#include <wchar.h>
 #include "AAFResult.h"
 #include "aafCvt.h"
 #include "aafErr.h"
@@ -156,6 +157,9 @@ ImplAAFMobSlot::GetNameBufLen
 {
 	if(pName == NULL)
 		return(AAFRESULT_NULL_PARAM);
+
+	if(wcslen(pName)*sizeof(OMCharacter) >= OMPROPERTYSIZE_MAX)
+		return(AAFRESULT_BAD_SIZE);
 
 	_name = pName;
 

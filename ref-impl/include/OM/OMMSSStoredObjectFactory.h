@@ -32,10 +32,25 @@
 
 class OMRawStorage;
 
-  // @class Factories for <c OMMSSStoredObject>
+// the following consts duplicate those in AAFFileKinds.h
+// should be abstracted into OMSignatures.h
+
+// AAF files encoded as structured storage (binary).
+// the signature actually stored in all AAF SS (512) files
+// note this is not a properly-formed SMPTE label, but this is legacy
+const OMUniqueObjectIdentification OMSignature_Aaf_SSBin_512 = 
+{0x42464141, 0x000d, 0x4d4f, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xff}};
+
+// the signature actually stored in all AAF SS (4096) files
+// [060e2b34.0302.0101.0d010201.02000000]
+const OMUniqueObjectIdentification OMSignature_Aaf_SSBin_4K = 
+{0x0d010201, 0x0200, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x03, 0x02, 0x01, 0x01}};
+
+// @class Factories for <c OMMSSStoredObject>
   //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 class OMMSSStoredObjectFactory : public OMStoredObjectFactory {
 public:
+  // @data Public members.
   // @access Public members.
 
     // @cmember Constructor.
@@ -48,10 +63,10 @@ public:
   virtual ~OMMSSStoredObjectFactory(void);
 
     // @cmember Initialize this <c OMMSSStoredObjectFactory>.
-  virtual void initialize(void);
+  virtual void initialize(void) = 0;
 
     // @cmember Finalize this <c OMMSSStoredObjectFactory>.
-  virtual void finalize(void);
+  virtual void finalize(void) = 0;
 
     // @cmember Open the root <c OMMSSStoredObject> in the raw storage
     //          <p rawStorage> for reading only.
@@ -118,6 +133,21 @@ public:
     // @cmember Perform any necessary actions when the file
     //          contained in <p rawStorage> is closed.
   virtual void close(OMRawStorage* rawStorage, bool isWritable);
+
+protected:
+  virtual OMStoredObject* openFile (OMRawStorage* rawStorage,
+                                     const OMFile::OMAccessMode mode) = 0;
+
+  virtual OMStoredObject* openFile (const wchar_t* fileName,
+                                     const OMFile::OMAccessMode mode) = 0;
+
+  virtual OMStoredObject* createFile (OMRawStorage* rawStorage,
+                             const OMByteOrder byteOrder,
+							 const OMUniqueObjectIdentification& signature) = 0;
+
+  virtual OMStoredObject* createFile (const wchar_t* fileName,
+                             const OMByteOrder byteOrder,
+							 const OMUniqueObjectIdentification& signature) = 0;
 
 private:
     // @cmember Write the signature to the given raw storage.

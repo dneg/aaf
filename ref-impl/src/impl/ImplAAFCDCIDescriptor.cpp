@@ -41,7 +41,9 @@ ImplAAFCDCIDescriptor::ImplAAFCDCIDescriptor ()
 	_blackReferenceLevel(PID_CDCIDescriptor_BlackReferenceLevel,	L"BlackReferenceLevel"),
 	_whiteReferenceLevel(PID_CDCIDescriptor_WhiteReferenceLevel,	L"WhiteReferenceLevel"),
 	_colorRange(PID_CDCIDescriptor_ColorRange,	L"ColorRange"),
-	_paddingBits(PID_CDCIDescriptor_PaddingBits,	L"PaddingBits")
+	_paddingBits(PID_CDCIDescriptor_PaddingBits,	L"PaddingBits"),
+	_alphaSamplingWidth(PID_CDCIDescriptor_AlphaSamplingWidth,	L"AlphaSamplingWidth"),
+	_reversedByteOrder(PID_CDCIDescriptor_ReversedByteOrder,	L"ReversedByteOrder")
 {
 	_persistentProperties.put(_componentWidth.address());
 	_persistentProperties.put(_horizontalSubsampling.address());
@@ -51,6 +53,8 @@ ImplAAFCDCIDescriptor::ImplAAFCDCIDescriptor ()
 	_persistentProperties.put(_whiteReferenceLevel.address());
 	_persistentProperties.put(_colorRange.address());
 	_persistentProperties.put(_paddingBits.address());
+	_persistentProperties.put(_alphaSamplingWidth.address());
+	_persistentProperties.put(_reversedByteOrder.address());
 
 	// Initialize Required properties
 	_componentWidth = 8;	// valid values are 8, 10, and 16 ?
@@ -66,16 +70,13 @@ AAFRESULT STDMETHODCALLTYPE
 {
 	AAFRESULT	hr;
 
-	switch (ComponentWidth)
+	if (ComponentWidth >= 0)
 	{
-	case 8:
-	case 10:
-	case 16:
 		_componentWidth = ComponentWidth;
 		hr = AAFRESULT_SUCCESS;
-		break;
-
-	default:
+	}
+	else
+	{
 		hr = AAFRESULT_BAD_PROP;
 	}
 
@@ -206,10 +207,10 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFCDCIDescriptor::GetVerticalSubsampling (aafUInt32* pVerticalSubsampling)
 {
 	if (pVerticalSubsampling == NULL)
-	  return AAFRESULT_NULL_PARAM;
+		return AAFRESULT_NULL_PARAM;
 
-	if (!_verticalSubsampling.isPresent())
-	  return AAFRESULT_PROP_NOT_PRESENT;
+	if(!_verticalSubsampling.isPresent())
+		return AAFRESULT_PROP_NOT_PRESENT;
 
 	*pVerticalSubsampling = _verticalSubsampling;
 
@@ -287,6 +288,67 @@ AAFRESULT STDMETHODCALLTYPE
 		return AAFRESULT_PROP_NOT_PRESENT;
 	
 	*pPaddingBits = _paddingBits;
+
+	return AAFRESULT_SUCCESS;
+}
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFCDCIDescriptor::SetAlphaSamplingWidth (
+      aafUInt32 alphaSamplingWidth)
+{
+	AAFRESULT	hr;
+
+	if (alphaSamplingWidth >= 0)
+	{
+		_alphaSamplingWidth = alphaSamplingWidth;
+		hr = AAFRESULT_SUCCESS;
+	}
+	else
+	{
+		hr = AAFRESULT_BAD_PROP;
+	}
+
+	return hr;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFCDCIDescriptor::GetAlphaSamplingWidth (
+      aafUInt32 *pAlphaSamplingWidth)
+{
+	if (pAlphaSamplingWidth == NULL)
+		return AAFRESULT_NULL_PARAM;
+
+	if(!_alphaSamplingWidth.isPresent())
+		return AAFRESULT_PROP_NOT_PRESENT;
+
+	*pAlphaSamplingWidth = _alphaSamplingWidth;
+
+	return AAFRESULT_SUCCESS;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFCDCIDescriptor::SetReversedByteOrder (
+      aafBoolean_t  reversedByteOrder)
+{
+	_reversedByteOrder = reversedByteOrder;
+
+	return AAFRESULT_SUCCESS;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFCDCIDescriptor::GetReversedByteOrder (
+      aafBoolean_t *  pReversedByteOrder)
+{
+	if (pReversedByteOrder == NULL)
+		return AAFRESULT_NULL_PARAM;
+
+	if(!_reversedByteOrder.isPresent())
+		return AAFRESULT_PROP_NOT_PRESENT;
+
+	*pReversedByteOrder = _reversedByteOrder;
 
 	return AAFRESULT_SUCCESS;
 }

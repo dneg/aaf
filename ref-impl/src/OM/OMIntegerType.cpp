@@ -30,6 +30,11 @@
 // class OMIntegerType
 // @author Tim Bingham | tjb | Avid Technology, Inc. | OMIntegerType
 
+bool OMIntegerType::isFixedSize(void) const
+{
+  return true;
+}
+
 void OMIntegerType::reorder(OMByte* externalBytes,
                             size_t ANAME(externalBytesSize)) const
 {
@@ -49,6 +54,11 @@ size_t OMIntegerType::externalSize(const OMByte* ANAME(internalBytes),
   PRECONDITION("Valid internal bytes", internalBytes != 0);
 
   ASSERT("Consistent sizes", internalBytesSize == size());
+  return size();
+}
+
+size_t OMIntegerType::externalSize(void) const
+{
   return size();
 }
 
@@ -79,6 +89,12 @@ size_t OMIntegerType::internalSize(const OMByte* ANAME(externalBytes),
   PRECONDITION("Valid external bytes", externalBytes != 0);
 
   ASSERT("Consistent sizes", externalBytesSize == size());
+  return size();
+}
+
+size_t OMIntegerType::internalSize(void) const
+{
+  TRACE("OMIntegerType::internalSize");
   return size();
 }
 

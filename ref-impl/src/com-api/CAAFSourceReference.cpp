@@ -63,7 +63,6 @@ CAAFSourceReference::~CAAFSourceReference ()
 {
 }
 
-
 HRESULT STDMETHODCALLTYPE
     CAAFSourceReference::GetSourceID (aafMobID_t *  pSourceID)
 {
@@ -270,6 +269,329 @@ HRESULT STDMETHODCALLTYPE
   return hr;
 }
 
+
+
+HRESULT STDMETHODCALLTYPE
+    CAAFSourceReference::SetChannelIDs (aafUInt32  numberElements,
+        aafUInt32*  pChannelIDs)
+{
+  HRESULT hr;
+
+  ImplAAFSourceReference * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAAFSourceReference*> (pO);
+  assert (ptr);
+
+
+
+  try
+    {
+      hr = ptr->SetChannelIDs (numberElements,
+    pChannelIDs);
+    }
+  catch (OMException& e)
+    {
+      // OMExceptions should be handled by the impl code. However, if an
+      // unhandled OMException occurs, control reaches here. We must not
+      // allow the unhandled exception to reach the client code, so we
+      // turn it into a failure status code.
+      //
+      // If the OMException contains an HRESULT, it is returned to the
+      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
+      //
+      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
+    }
+  catch (OMAssertionViolation &)
+    {
+      // Control reaches here if there is a programming error in the
+      // impl code that was detected by an assertion violation.
+      // We must not allow the assertion to reach the client code so
+      // here we turn it into a failure status code.
+      //
+      hr = AAFRESULT_ASSERTION_VIOLATION;
+    }
+  catch (...)
+    {
+      // We CANNOT throw an exception out of a COM interface method!
+      // Return a reasonable exception code.
+      //
+      hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+    }
+
+
+
+  return hr;
+}
+
+
+HRESULT STDMETHODCALLTYPE
+    CAAFSourceReference::GetChannelIDs (aafUInt32  numberElements,
+        aafUInt32*  pChannelIDs)
+{
+  HRESULT hr;
+
+  ImplAAFSourceReference * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAAFSourceReference*> (pO);
+  assert (ptr);
+
+
+
+  try
+    {
+      hr = ptr->GetChannelIDs (numberElements,
+    pChannelIDs);
+    }
+  catch (OMException& e)
+    {
+      // OMExceptions should be handled by the impl code. However, if an
+      // unhandled OMException occurs, control reaches here. We must not
+      // allow the unhandled exception to reach the client code, so we
+      // turn it into a failure status code.
+      //
+      // If the OMException contains an HRESULT, it is returned to the
+      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
+      //
+      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
+    }
+  catch (OMAssertionViolation &)
+    {
+      // Control reaches here if there is a programming error in the
+      // impl code that was detected by an assertion violation.
+      // We must not allow the assertion to reach the client code so
+      // here we turn it into a failure status code.
+      //
+      hr = AAFRESULT_ASSERTION_VIOLATION;
+    }
+  catch (...)
+    {
+      // We CANNOT throw an exception out of a COM interface method!
+      // Return a reasonable exception code.
+      //
+      hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+    }
+
+
+
+  return hr;
+}
+
+
+HRESULT STDMETHODCALLTYPE
+    CAAFSourceReference::GetChannelIDsSize (aafUInt32 *  numberElements)
+{
+  HRESULT hr;
+
+  ImplAAFSourceReference * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAAFSourceReference*> (pO);
+  assert (ptr);
+
+
+  try
+    {
+      hr = ptr->GetChannelIDsSize (numberElements);
+    }
+  catch (OMException& e)
+    {
+      // OMExceptions should be handled by the impl code. However, if an
+      // unhandled OMException occurs, control reaches here. We must not
+      // allow the unhandled exception to reach the client code, so we
+      // turn it into a failure status code.
+      //
+      // If the OMException contains an HRESULT, it is returned to the
+      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
+      //
+      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
+    }
+  catch (OMAssertionViolation &)
+    {
+      // Control reaches here if there is a programming error in the
+      // impl code that was detected by an assertion violation.
+      // We must not allow the assertion to reach the client code so
+      // here we turn it into a failure status code.
+      //
+      hr = AAFRESULT_ASSERTION_VIOLATION;
+    }
+  catch (...)
+    {
+      // We CANNOT throw an exception out of a COM interface method!
+      // Return a reasonable exception code.
+      //
+      hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+    }
+
+
+  return hr;
+}
+
+HRESULT STDMETHODCALLTYPE
+    CAAFSourceReference::SetMonoSourceSlotIDs (aafUInt32  numberElements,
+        aafUInt32*  pMonoSourceSlotIDs)
+{
+  HRESULT hr;
+
+  ImplAAFSourceReference * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAAFSourceReference*> (pO);
+  assert (ptr);
+
+
+
+  try
+    {
+      hr = ptr->SetMonoSourceSlotIDs (numberElements,
+    pMonoSourceSlotIDs);
+    }
+  catch (OMException& e)
+    {
+      // OMExceptions should be handled by the impl code. However, if an
+      // unhandled OMException occurs, control reaches here. We must not
+      // allow the unhandled exception to reach the client code, so we
+      // turn it into a failure status code.
+      //
+      // If the OMException contains an HRESULT, it is returned to the
+      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
+      //
+      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
+    }
+  catch (OMAssertionViolation &)
+    {
+      // Control reaches here if there is a programming error in the
+      // impl code that was detected by an assertion violation.
+      // We must not allow the assertion to reach the client code so
+      // here we turn it into a failure status code.
+      //
+      hr = AAFRESULT_ASSERTION_VIOLATION;
+    }
+  catch (...)
+    {
+      // We CANNOT throw an exception out of a COM interface method!
+      // Return a reasonable exception code.
+      //
+      hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+    }
+
+
+
+  return hr;
+}
+
+
+HRESULT STDMETHODCALLTYPE
+    CAAFSourceReference::GetMonoSourceSlotIDs (aafUInt32  numberElements,
+        aafUInt32*  pMonoSourceSlotIDs)
+{
+  HRESULT hr;
+
+  ImplAAFSourceReference * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAAFSourceReference*> (pO);
+  assert (ptr);
+
+
+
+  try
+    {
+      hr = ptr->GetMonoSourceSlotIDs (numberElements,
+    pMonoSourceSlotIDs);
+    }
+  catch (OMException& e)
+    {
+      // OMExceptions should be handled by the impl code. However, if an
+      // unhandled OMException occurs, control reaches here. We must not
+      // allow the unhandled exception to reach the client code, so we
+      // turn it into a failure status code.
+      //
+      // If the OMException contains an HRESULT, it is returned to the
+      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
+      //
+      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
+    }
+  catch (OMAssertionViolation &)
+    {
+      // Control reaches here if there is a programming error in the
+      // impl code that was detected by an assertion violation.
+      // We must not allow the assertion to reach the client code so
+      // here we turn it into a failure status code.
+      //
+      hr = AAFRESULT_ASSERTION_VIOLATION;
+    }
+  catch (...)
+    {
+      // We CANNOT throw an exception out of a COM interface method!
+      // Return a reasonable exception code.
+      //
+      hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+    }
+
+
+
+  return hr;
+}
+
+
+HRESULT STDMETHODCALLTYPE
+    CAAFSourceReference::GetMonoSourceSlotIDsSize (aafUInt32 *  numberElements)
+{
+  HRESULT hr;
+
+  ImplAAFSourceReference * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAAFSourceReference*> (pO);
+  assert (ptr);
+
+
+  try
+    {
+      hr = ptr->GetMonoSourceSlotIDsSize (numberElements);
+    }
+  catch (OMException& e)
+    {
+      // OMExceptions should be handled by the impl code. However, if an
+      // unhandled OMException occurs, control reaches here. We must not
+      // allow the unhandled exception to reach the client code, so we
+      // turn it into a failure status code.
+      //
+      // If the OMException contains an HRESULT, it is returned to the
+      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
+      //
+      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
+    }
+  catch (OMAssertionViolation &)
+    {
+      // Control reaches here if there is a programming error in the
+      // impl code that was detected by an assertion violation.
+      // We must not allow the assertion to reach the client code so
+      // here we turn it into a failure status code.
+      //
+      hr = AAFRESULT_ASSERTION_VIOLATION;
+    }
+  catch (...)
+    {
+      // We CANNOT throw an exception out of a COM interface method!
+      // Return a reasonable exception code.
+      //
+      hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+    }
+
+
+  return hr;
+}
+
+
 //
 // 
 // 
@@ -282,6 +604,8 @@ HRESULT CAAFSourceReference::InternalQueryInterface
     REFIID riid,
     void **ppvObj)
 {
+    HRESULT hr = S_OK;
+
     if (NULL == ppvObj)
         return E_INVALIDARG;
 
@@ -289,6 +613,13 @@ HRESULT CAAFSourceReference::InternalQueryInterface
     if (EQUAL_UID(riid,IID_IAAFSourceReference)) 
     { 
         *ppvObj = (IAAFSourceReference *)this; 
+        ((IUnknown *)*ppvObj)->AddRef();
+        return S_OK;
+    }
+
+    if (EQUAL_UID(riid,IID_IAAFSourceReference2)) 
+    { 
+        *ppvObj = (IAAFSourceReference2 *)this; 
         ((IUnknown *)*ppvObj)->AddRef();
         return S_OK;
     }
@@ -301,4 +632,3 @@ HRESULT CAAFSourceReference::InternalQueryInterface
 // Define the contrete object support implementation.
 // 
 AAF_DEFINE_FACTORY(AAFSourceReference)
-

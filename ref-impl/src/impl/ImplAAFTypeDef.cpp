@@ -25,6 +25,7 @@
 
 #include "ImplAAFTypeDef.h"
 #include "ImplAAFDictionary.h"
+#include "ImplAAFMetaDictionary.h"
 #include "AAFStoredObjectIDs.h"
 #include "AAFTypeDefUIDs.h"
 
@@ -36,6 +37,7 @@
 
 #include <assert.h>
 #include <string.h>
+
 #include <wchar.h>
 
 extern "C" const aafClassID_t CLSID_AAFPropValData;
@@ -67,6 +69,14 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 
+bool ImplAAFTypeDef::isFixedSize(void) const
+{
+  bool result = false;
+  if (IsFixedSize() == kAAFTrue) {
+    result = true;
+  }
+  return result;
+}
 
 void ImplAAFTypeDef::reorder(OMByte* /*bytes*/,
 							 size_t /*bytesSize*/) const
@@ -84,6 +94,10 @@ size_t ImplAAFTypeDef::externalSize(const OMByte* /*internalBytes*/,
   return 0; // Not reached!
 }
 
+size_t ImplAAFTypeDef::externalSize(void) const
+{
+  return PropValSize();
+}
 
 void ImplAAFTypeDef::externalize(const OMByte* /*internalBytes*/,
 								 size_t /*internalBytesSize*/,
@@ -104,6 +118,10 @@ size_t ImplAAFTypeDef::internalSize(const OMByte* /*externalBytes*/,
   return 0; // Not reached!
 }
 
+size_t ImplAAFTypeDef::internalSize(void) const
+{
+  return NativeSize();
+}
 
 void ImplAAFTypeDef::internalize(const OMByte* /*externalBytes*/,
 								 size_t /*externalBytesSize*/,
@@ -159,6 +177,44 @@ size_t ImplAAFTypeDef::ActualSize (void) const
     return NativeSize();
   else
     return PropValSize();
+}
+
+
+AAFRESULT ImplAAFTypeDef::MergeTo( ImplAAFDictionary* pDstDictionary )
+{
+  assert( pDstDictionary );
+
+
+  AAFRESULT hr = AAFRESULT_SUCCESS;
+
+  aafUID_t  typeID;
+  GetAUID( &typeID );
+
+  ImplAAFTypeDef* pDstTypeDef = 0;
+  if( AAFRESULT_FAILED( pDstDictionary->LookupTypeDef( typeID, &pDstTypeDef ) ) )
+  {
+    OMClassFactory* pDstFactory =
+        dynamic_cast<OMClassFactory*>( pDstDictionary->metaDictionary() );
+    OMStorable* pDstStorable = shallowCopy( pDstFactory );
+    ImplAAFTypeDef* pDstTypeDef =
+        dynamic_cast<ImplAAFTypeDef*>( pDstStorable );
+    assert( pDstTypeDef );
+
+    hr = pDstDictionary->RegisterTypeDef( pDstTypeDef );
+    if( AAFRESULT_SUCCEEDED(hr) )
+    {
+      pDstTypeDef->onCopy( 0 );
+      deepCopyTo( pDstTypeDef, 0 );
+    }
+  }
+  else
+  {
+      pDstTypeDef->ReleaseReference();
+      pDstTypeDef = 0;
+  }
+
+
+  return hr;
 }
 
 
@@ -292,4 +348,24 @@ void ImplAAFTypeDef::onSave(void* clientContext) const
 void ImplAAFTypeDef::onRestore(void* clientContext) const
 {
   ImplAAFMetaDefinition::onRestore(clientContext);
+}
+
+void ImplAAFTypeDef::onCopy(void* clientContext) const
+{
+  ImplAAFMetaDefinition::onCopy(clientContext);
+
+  ImplAAFTypeDef* pNonConstThis = const_cast<ImplAAFTypeDef*>(this);
+  pNonConstThis->setInitialized();
+}
+
+const OMUniqueObjectIdentification& ImplAAFTypeDef::identification(void) const
+{
+  // tjb - to prevent ambiguity
+  return ImplAAFMetaDefinition::identification();
+}
+
+const wchar_t* ImplAAFTypeDef::name(void) const
+{
+  // tjb - to prevent ambiguity
+  return ImplAAFMetaDefinition::name();
 }

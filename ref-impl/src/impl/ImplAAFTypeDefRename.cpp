@@ -38,7 +38,6 @@
 #endif
 
 #include "ImplAAFDictionary.h"
-#include "ImplAAFCloneResolver.h"
 
 #include <assert.h>
 #include <string.h>
@@ -349,14 +348,4 @@ void ImplAAFTypeDefRename::onSave(void* clientContext) const
 void ImplAAFTypeDefRename::onRestore(void* clientContext) const
 {
   ImplAAFTypeDef::onRestore(clientContext);
-}
-
-void ImplAAFTypeDefRename::onCopy(void* clientContext) const
-{
-  ImplAAFTypeDef::onCopy(clientContext);
-
-  if ( clientContext ) {
-    ImplAAFCloneResolver* pResolver = reinterpret_cast<ImplAAFCloneResolver*>(clientContext);
-    pResolver->ResolveWeakReference(_RenamedType);
-  }
 }

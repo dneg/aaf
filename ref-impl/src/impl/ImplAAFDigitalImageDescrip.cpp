@@ -45,10 +45,19 @@ ImplAAFDigitalImageDescriptor::ImplAAFDigitalImageDescriptor ()
 	_displayYOffset(PID_DigitalImageDescriptor_DisplayYOffset,				L"DisplayYOffset"),
 	_frameLayout(PID_DigitalImageDescriptor_FrameLayout,					L"FrameLayout"),
 	_videoLineMap(PID_DigitalImageDescriptor_VideoLineMap,					L"VideoLineMap"),
-	_imageAspectRatio(PID_DigitalImageDescriptor_ImageAspectRatio,			L"ImageAspectRatio"),
-	_alphaTransparency(PID_DigitalImageDescriptor_AlphaTransparency,		L"AlphaTransparency"),
-	_gamma(PID_DigitalImageDescriptor_Gamma,								L"Gamma"),
-	_imageAlignmentFactor(PID_DigitalImageDescriptor_ImageAlignmentFactor,	L"ImageAlignmentFactor")
+	_imageAspectRatio(PID_DigitalImageDescriptor_ImageAspectRatio,				L"ImageAspectRatio"),
+	_alphaTransparency(PID_DigitalImageDescriptor_AlphaTransparency,			L"AlphaTransparency"),
+	_transferCharacteristic(PID_DigitalImageDescriptor_TransferCharacteristic,		L"TransferCharacteristic"),
+	_colorPrimaries(PID_DigitalImageDescriptor_ColorPrimaries,				L"ColorPrimaries"),
+	_codingEquations(PID_DigitalImageDescriptor_CodingEquations,				L"CodingEquations"),
+	_fieldDominance(PID_DigitalImageDescriptor_FieldDominance,				L"FieldDominance"),
+	_fieldStartOffset(PID_DigitalImageDescriptor_FieldStartOffset,				L"FieldStartOffset"),
+	_fieldEndOffset(PID_DigitalImageDescriptor_FieldEndOffset,				L"FieldEndOffset"),
+	_imageAlignmentFactor(PID_DigitalImageDescriptor_ImageAlignmentFactor,			L"ImageAlignmentFactor"),
+	_displayF2Offset(PID_DigitalImageDescriptor_DisplayF2Offset,				L"DisplayF2Offset"),
+	_storedF2Offset(PID_DigitalImageDescriptor_StoredF2Offset,				L"StoredF2Offset"),
+	_activeFormatDescriptor(PID_DigitalImageDescriptor_ActiveFormatDescriptor,				L"ActiveFormatDescriptor"),
+	_signalStandard(PID_DigitalImageDescriptor_SignalStandard,			L"SignalStandard")
 {
 	aafInt32	videoLineMap[2];
 
@@ -67,8 +76,17 @@ ImplAAFDigitalImageDescriptor::ImplAAFDigitalImageDescriptor ()
 	_persistentProperties.put(_videoLineMap.address());
 	_persistentProperties.put(_imageAspectRatio.address());
 	_persistentProperties.put(_alphaTransparency.address());
-	_persistentProperties.put(_gamma.address());
+	_persistentProperties.put(_transferCharacteristic.address());
+	_persistentProperties.put(_colorPrimaries.address());
+	_persistentProperties.put(_codingEquations.address());
+	_persistentProperties.put(_fieldDominance.address());
+	_persistentProperties.put(_fieldStartOffset.address());
+	_persistentProperties.put(_fieldEndOffset.address());
 	_persistentProperties.put(_imageAlignmentFactor.address());
+	_persistentProperties.put(_displayF2Offset.address());
+	_persistentProperties.put(_storedF2Offset.address());
+	_persistentProperties.put(_activeFormatDescriptor.address());
+	_persistentProperties.put(_signalStandard.address());
 
 	aafRational_t	zero;
 	zero.numerator = 0;
@@ -165,6 +183,9 @@ AAFRESULT STDMETHODCALLTYPE
 	if(pVideoLineMap == NULL)
 		return(AAFRESULT_NULL_PARAM);
 
+	if ((numberElements * sizeof(aafInt32)) > OMPROPERTYSIZE_MAX)
+		return(AAFRESULT_BAD_SIZE);
+
 	_videoLineMap.setValue(pVideoLineMap, numberElements * sizeof(aafInt32));
 
 	return AAFRESULT_SUCCESS;
@@ -195,11 +216,9 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFDigitalImageDescriptor::SetGamma (aafUID_t Gamma)
+    ImplAAFDigitalImageDescriptor::SetGamma (aafUID_t gamma)
 {
-	_gamma = Gamma;
-
-	return AAFRESULT_SUCCESS;
+	return SetTransferCharacteristic( gamma );
 }
 
 
@@ -275,7 +294,7 @@ AAFRESULT STDMETHODCALLTYPE
 		return(AAFRESULT_NULL_PARAM);
 	
 	if (!_displayHeight.isPresent()	 || !_displayWidth.isPresent()	 ||
-		!_displayXOffset.isPresent() || !_displayXOffset.isPresent())
+		!_displayXOffset.isPresent() || !_displayYOffset.isPresent())
 		return AAFRESULT_PROP_NOT_PRESENT;
 
 	*pDisplayHeight = _displayHeight;
@@ -356,15 +375,7 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFDigitalImageDescriptor::GetGamma (aafUID_t* pGamma)
 {
-	if (pGamma == NULL)
-		return(AAFRESULT_NULL_PARAM);
-	
-	if (!_gamma.isPresent())
-		return AAFRESULT_PROP_NOT_PRESENT;
-
-	*pGamma = _gamma;
-
-	return AAFRESULT_SUCCESS;
+	return GetTransferCharacteristic( pGamma );
 }
 
 
@@ -383,4 +394,307 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDigitalImageDescriptor::SetTransferCharacteristic (
+      const aafUID_t & transferCharacteristic)
+{
+	_transferCharacteristic = transferCharacteristic;
 
+	return AAFRESULT_SUCCESS;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDigitalImageDescriptor::GetTransferCharacteristic (
+      aafUID_t *pTransferCharacteristic)
+{
+	if (pTransferCharacteristic == NULL)
+	  return AAFRESULT_NULL_PARAM;
+
+	if (!_transferCharacteristic.isPresent())
+	  return AAFRESULT_PROP_NOT_PRESENT;
+
+	*pTransferCharacteristic = _transferCharacteristic;
+
+	return AAFRESULT_SUCCESS;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDigitalImageDescriptor::SetCodingEquations (
+      const aafUID_t & codingEquations)
+{
+	_codingEquations = codingEquations;
+
+	return AAFRESULT_SUCCESS;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDigitalImageDescriptor::GetCodingEquations (
+      aafUID_t *pCodingEquations)
+{
+	if (pCodingEquations == NULL)
+	  return AAFRESULT_NULL_PARAM;
+
+	if (!_codingEquations.isPresent())
+	  return AAFRESULT_PROP_NOT_PRESENT;
+
+	*pCodingEquations = _codingEquations;
+
+	return AAFRESULT_SUCCESS;
+}
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDigitalImageDescriptor::SetColorPrimaries (
+      const aafUID_t & colorPrimaries)
+{
+	_colorPrimaries = colorPrimaries;
+
+	return AAFRESULT_SUCCESS;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDigitalImageDescriptor::GetColorPrimaries (
+      aafUID_t *pColorPrimaries)
+{
+	if (pColorPrimaries == NULL)
+	  return AAFRESULT_NULL_PARAM;
+
+	if (!_colorPrimaries.isPresent())
+	  return AAFRESULT_PROP_NOT_PRESENT;
+
+	*pColorPrimaries = _colorPrimaries;
+
+	return AAFRESULT_SUCCESS;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDigitalImageDescriptor::SetFieldStartOffset (
+      aafUInt32  fieldStartOffset)
+{
+	_fieldStartOffset = fieldStartOffset;
+
+	return AAFRESULT_SUCCESS;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDigitalImageDescriptor::GetFieldStartOffset (
+      aafUInt32 *pFieldStartOffset)
+{
+	if (pFieldStartOffset == NULL)
+		return(AAFRESULT_NULL_PARAM);
+
+	if (!_fieldStartOffset.isPresent())
+		return AAFRESULT_PROP_NOT_PRESENT;
+	
+	*pFieldStartOffset = _fieldStartOffset;
+
+	return AAFRESULT_SUCCESS;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDigitalImageDescriptor::SetFieldEndOffset (
+      aafUInt32 fieldEndOffset)
+{
+	_fieldEndOffset = fieldEndOffset;
+
+	return AAFRESULT_SUCCESS;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDigitalImageDescriptor::GetFieldEndOffset (
+      aafUInt32 *pFieldEndOffset)
+{
+	if (pFieldEndOffset == NULL)
+		return(AAFRESULT_NULL_PARAM);
+
+	if (!_fieldEndOffset.isPresent())
+		return AAFRESULT_PROP_NOT_PRESENT;
+	
+	*pFieldEndOffset = _fieldEndOffset;
+
+	return AAFRESULT_SUCCESS;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDigitalImageDescriptor::SetFieldDominance (
+      aafFieldNumber_t  fieldDominance)
+{
+        AAFRESULT       hr;
+
+        switch (fieldDominance)
+        {
+        case kAAFFieldOne:
+        case kAAFFieldTwo:
+		_fieldDominance = fieldDominance;
+                hr = AAFRESULT_SUCCESS;
+                break;
+
+        default:
+                hr = AAFRESULT_ILLEGAL_VALUE;
+        }
+
+        return hr;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDigitalImageDescriptor::GetFieldDominance (
+      aafFieldNumber_t *pFieldDominance)
+{
+	if (pFieldDominance == NULL)
+		return(AAFRESULT_NULL_PARAM);
+
+	if (!_fieldDominance.isPresent())
+	  return AAFRESULT_PROP_NOT_PRESENT;
+
+	*pFieldDominance = _fieldDominance;
+
+	return AAFRESULT_SUCCESS;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDigitalImageDescriptor::SetDisplayF2Offset (
+      aafInt32  displayF2Offset)
+{
+        AAFRESULT       hr;
+
+        switch (displayF2Offset)
+        {
+        case 0:
+        case 1:
+		_displayF2Offset = displayF2Offset;
+                hr = AAFRESULT_SUCCESS;
+                break;
+
+        default:
+                hr = AAFRESULT_ILLEGAL_VALUE;
+        }
+
+        return hr;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDigitalImageDescriptor::GetDisplayF2Offset (
+      aafInt32 *pDisplayF2Offset)
+{
+	if (pDisplayF2Offset == NULL)
+		return(AAFRESULT_NULL_PARAM);
+
+	if (!_displayF2Offset.isPresent())
+	  return AAFRESULT_PROP_NOT_PRESENT;
+
+	*pDisplayF2Offset = _displayF2Offset;
+
+	return AAFRESULT_SUCCESS;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDigitalImageDescriptor::SetStoredF2Offset (
+      aafInt32  storedF2Offset)
+{
+        AAFRESULT       hr;
+
+        switch (storedF2Offset)
+        {
+        case -1:
+        case 0:
+		_storedF2Offset = storedF2Offset;
+                hr = AAFRESULT_SUCCESS;
+                break;
+
+        default:
+                hr = AAFRESULT_ILLEGAL_VALUE;
+        }
+
+        return hr;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDigitalImageDescriptor::GetStoredF2Offset (
+      aafInt32 *pStoredF2Offset)
+{
+	if (pStoredF2Offset == NULL)
+		return(AAFRESULT_NULL_PARAM);
+
+	if (!_storedF2Offset.isPresent())
+	  return AAFRESULT_PROP_NOT_PRESENT;
+
+	*pStoredF2Offset = _storedF2Offset;
+
+	return AAFRESULT_SUCCESS;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDigitalImageDescriptor::SetActiveFormatDescriptor (
+      aafUInt8  activeFormatDescriptor)
+{
+	_activeFormatDescriptor = activeFormatDescriptor;
+
+	return AAFRESULT_SUCCESS;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDigitalImageDescriptor::GetActiveFormatDescriptor (
+      aafUInt8 *pActiveFormatDescriptor)
+{
+	if (pActiveFormatDescriptor == NULL)
+		return(AAFRESULT_NULL_PARAM);
+
+	if (!_activeFormatDescriptor.isPresent())
+	  return AAFRESULT_PROP_NOT_PRESENT;
+
+	*pActiveFormatDescriptor = _activeFormatDescriptor;
+
+	return AAFRESULT_SUCCESS;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDigitalImageDescriptor::SetSignalStandard (
+      aafSignalStandard_t signalStandard)
+{
+	_signalStandard = signalStandard;
+
+	return AAFRESULT_SUCCESS;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDigitalImageDescriptor::GetSignalStandard (
+      aafSignalStandard_t *pSignalStandard)
+{
+	if (pSignalStandard == NULL)
+	  return AAFRESULT_NULL_PARAM;
+
+	if (!_signalStandard.isPresent())
+	  return AAFRESULT_PROP_NOT_PRESENT;
+
+	*pSignalStandard = _signalStandard;
+
+	return AAFRESULT_SUCCESS;
+}

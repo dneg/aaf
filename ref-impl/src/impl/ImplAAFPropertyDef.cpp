@@ -43,7 +43,6 @@
 #include "ImplAAFPropertyDef.h"
 #endif
 
-#include "ImplAAFCloneResolver.h"
 #include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
 #include "AAFTypeDefUIDs.h"
@@ -427,16 +426,6 @@ void ImplAAFPropertyDef::onRestore(void* clientContext) const
 #undef AAF_PATCH_PROPETY_TYPE
 #undef AAF_END_TYPE_PATCHES
 
-void ImplAAFPropertyDef::onCopy(void *clientContext) const
-{
-  ImplAAFMetaDefinition::onCopy(clientContext);
-
-  if (clientContext) {
-    ImplAAFCloneResolver* pResolver = reinterpret_cast<ImplAAFCloneResolver*>(clientContext);
-    pResolver->AddTypeReference( _Type );
-  }
-}
-
 // Method is called after class has been added to MetaDictionary.
 // If this method fails the class is removed from the MetaDictionary and the
 // registration method will fail.
@@ -451,4 +440,113 @@ HRESULT ImplAAFPropertyDef::CompleteClassRegistration(void)
     hr = pType->CompleteClassRegistration();
   }
   return hr;
+}
+
+
+
+AAFRESULT ImplAAFPropertyDef::MergeTo( ImplAAFClassDef* pDestClassDef )
+{
+    assert( pDestClassDef );
+
+    AAFRESULT hr = AAFRESULT_SUCCESS;
+
+    // This property ID
+    aafUID_t propertyID;
+    GetAUID( &propertyID );
+
+    if( ! pDestClassDef->PvtIsPropertyDefRegistered( propertyID ) )
+    {
+        ImplAAFDictionary* pDestDictionary = NULL;
+        pDestClassDef->GetDictionary( &pDestDictionary );
+
+        aafUInt32  nameBufLen = 0;
+        GetNameBufLen( &nameBufLen );
+        aafUInt8* pName = new aafUInt8[ nameBufLen ];
+        GetName( (aafCharacter*)pName, nameBufLen );
+
+        // Find the property type definition in the destination file
+        ImplAAFTypeDef* pTypeDef = NULL;
+        GetTypeDef( &pTypeDef );
+        aafUID_t  typeID;
+        pTypeDef->GetAUID( &typeID );
+        pTypeDef->MergeTo( pDestDictionary );
+        pTypeDef->ReleaseReference();
+        pTypeDef = NULL;
+
+        ImplAAFTypeDef* pDestTypeDef = NULL;
+        pDestDictionary->LookupTypeDef( typeID, &pDestTypeDef );
+        assert( pDestTypeDef != NULL );
+
+        // Register the property definition.
+        // The property registering method to use depends on whether
+        // this class definition is attached to or detached from
+        // the dictionary.
+        ImplAAFPropertyDef* pDestPropertyDef = NULL;
+        aafUID_t  classID;
+        pDestClassDef->GetAUID( &classID );
+        if( pDestDictionary->PvtIsClassPresent( classID ) )
+        {
+            // This class definition is in the dictionary - only
+            // optional properties can be registered.
+            assert( _IsOptional == kAAFTrue );
+
+            hr = pDestClassDef->RegisterOptionalPropertyDef( propertyID,
+                                                             (aafCharacter*)pName,
+                                                             pDestTypeDef,
+                                                             &pDestPropertyDef );
+        }
+        else
+        {
+            // This class definition is not in the dictionary -
+            // any properties can be registered.
+            aafBoolean_t isUniqueIdentifier = kAAFFalse;
+            if( _IsUniqueIdentifier.isPresent() )
+            {
+                isUniqueIdentifier = _IsUniqueIdentifier;
+            }
+
+            hr = pDestClassDef->RegisterNewPropertyDef( propertyID,
+                                                        (aafCharacter*)pName,
+                                                        pDestTypeDef,
+                                                        _IsOptional,
+                                                        isUniqueIdentifier,
+                                                        &pDestPropertyDef );
+        }
+
+
+        // If present, copy the property definition description.
+        if( AAFRESULT_SUCCEEDED( hr ) )
+        {
+            aafUInt32  descriptionBufLen = 0;
+            GetDescriptionBufLen( &descriptionBufLen );
+            if( descriptionBufLen > 0 )
+            {
+                aafUInt8* pDescription = new aafUInt8[ descriptionBufLen ];
+                GetDescription( (aafCharacter*)pDescription,
+                                descriptionBufLen );
+
+                hr = pDestPropertyDef->SetDescription(
+                        (aafCharacter*)pDescription );
+
+                delete[] pDescription;
+                pDescription = NULL;
+            }
+        }
+
+
+        pDestPropertyDef->ReleaseReference();
+        pDestPropertyDef = NULL;
+
+        pDestTypeDef->ReleaseReference();
+        pDestTypeDef = NULL;
+
+        delete[] pName;
+        pName = NULL;
+
+        pDestDictionary->ReleaseReference();
+        pDestDictionary = NULL;
+    }
+
+
+    return hr;
 }

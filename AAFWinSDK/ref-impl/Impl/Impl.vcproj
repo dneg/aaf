@@ -120,6 +120,9 @@
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFAIFCDescriptor.cpp">
 		</File>
 		<File
+			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFAuxiliaryDescriptor.cpp">
+		</File>
+		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFBaseClassFactory.cpp">
 		</File>
 		<File
@@ -169,6 +172,12 @@
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFDefObject.cpp">
+		</File>
+		<File
+			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFDescriptiveFramework.cpp">
+		</File>
+		<File
+			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFDescriptiveMarker.cpp">
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFDictionary.cpp">
@@ -234,10 +243,16 @@
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFIdentification.cpp">
 		</File>
 		<File
+			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFImportDescriptor.cpp">
+		</File>
+		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFInterpolationDef.cpp">
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFKLVData.cpp">
+		</File>
+		<File
+			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFKLVDataDefinition.cpp">
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFLocator.cpp">
@@ -279,10 +294,16 @@
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFOperationGroup.cpp">
 		</File>
 		<File
+			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFPCMDescriptor.cpp">
+		</File>
+		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFParameter.cpp">
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFParameterDef.cpp">
+		</File>
+		<File
+			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFPhysicalDescriptor.cpp">
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFPluginDef.cpp">
@@ -321,6 +342,9 @@
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFRawStorage.cpp">
 		</File>
 		<File
+			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFRecordingDescriptor.cpp">
+		</File>
+		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFRefArrayValue.cpp">
 		</File>
 		<File
@@ -349,6 +373,9 @@
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFSetFileBits.cpp">
+		</File>
+		<File
+			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFSoundDescriptor.cpp">
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFSourceClip.cpp">
@@ -382,6 +409,12 @@
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFTaggedValue.cpp">
+		</File>
+		<File
+			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFTaggedValueDefinition.cpp">
+		</File>
+		<File
+			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFTaggedValueUtil.cpp">
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFTapeDescriptor.cpp">
@@ -510,6 +543,9 @@
 			RelativePath="..\..\..\ref-impl\src\impl\ImplEnumAAFKLVData.cpp">
 		</File>
 		<File
+			RelativePath="..\..\..\ref-impl\src\impl\ImplEnumAAFKLVDataDefs.cpp">
+		</File>
+		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplEnumAAFLoadedPlugins.cpp">
 		</File>
 		<File
@@ -550,6 +586,9 @@
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplEnumAAFStorablePropVals.cpp">
+		</File>
+		<File
+			RelativePath="..\..\..\ref-impl\src\impl\ImplEnumAAFTaggedValueDefs.cpp">
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplEnumAAFTaggedValues.cpp">

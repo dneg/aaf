@@ -110,6 +110,10 @@ SOURCE="..\..\..\ref-impl\src\com-api\CAAFAIFCDescriptor.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFAuxiliaryDescriptor.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFCDCIDescriptor.cpp"
 # End Source File
 # Begin Source File
@@ -159,6 +163,14 @@ SOURCE="..\..\..\ref-impl\src\com-api\CAAFDataDef.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFDefObject.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFDescriptiveFramework.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFDescriptiveMarker.cpp"
 # End Source File
 # Begin Source File
 
@@ -252,6 +264,10 @@ SOURCE="..\..\..\ref-impl\src\com-api\CAAFIdentification.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFImportDescriptor.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\com-api\com-dll\CAAFInProcServer.cpp"
 # End Source File
 # Begin Source File
@@ -261,6 +277,10 @@ SOURCE="..\..\..\ref-impl\src\com-api\CAAFInterpolationDef.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFKLVData.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFKLVDataDefinition.cpp"
 # End Source File
 # Begin Source File
 
@@ -320,6 +340,14 @@ SOURCE="..\..\..\ref-impl\src\com-api\CAAFParameterDef.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFPCMDescriptor.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFPhysicalDescriptor.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFPluginDef.cpp"
 # End Source File
 # Begin Source File
@@ -360,6 +388,10 @@ SOURCE="..\..\..\ref-impl\src\com-api\CAAFRawStorage.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFRecordingDescriptor.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFRGBADescriptor.cpp"
 # End Source File
 # Begin Source File
@@ -389,6 +421,10 @@ SOURCE="..\..\..\ref-impl\src\com-api\com-dll\CAAFServer.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFSetFileBits.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFSoundDescriptor.cpp"
 # End Source File
 # Begin Source File
 
@@ -425,6 +461,10 @@ SOURCE="..\..\..\ref-impl\src\com-api\CAAFStrongRefValue.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFTaggedValue.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFTaggedValueDefinition.cpp"
 # End Source File
 # Begin Source File
 
@@ -600,6 +640,10 @@ SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFKLVData.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFKLVDataDefs.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFLoadedPlugins.cpp"
 # End Source File
 # Begin Source File
@@ -653,6 +697,10 @@ SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFSegments.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFStorablePropVals.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFTaggedValueDefs.cpp"
 # End Source File
 # Begin Source File
 

@@ -148,6 +148,8 @@ public:
                            size_t internalBytesSize,
                            OMByteOrder byteOrder) const;
 
+  virtual OMType* elementType(void) const;
+
 
   //****************
   // pvtInitialize()
@@ -191,7 +193,6 @@ public:
 	  ImplAAFPropertyValue * pMemberPropVal);
   
   /////////////////////////////////////////////////////////
-
   
 protected:
 	// overrides from ImplAAFTypeDefArray ...
@@ -242,7 +243,6 @@ public:
   // Override callbacks from OMStorable
   virtual void onSave(void* clientContext) const;
   virtual void onRestore(void* clientContext) const;
-  virtual void onCopy(void* clientContext) const;
 
 private:
    OMWeakReferenceProperty<ImplAAFTypeDef> _ElementType;

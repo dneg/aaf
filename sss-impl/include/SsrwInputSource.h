@@ -53,9 +53,6 @@
 * 
 *  Copyright (C) 2002 - 2004 Schema Software, Inc. All rights reserved.
 *
-*  $Revision$
-*  $Date$
-*  
 */
 
 #ifndef SSRWINPUTSOURCE_H_INCLUDED

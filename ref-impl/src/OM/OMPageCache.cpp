@@ -40,7 +40,9 @@ OMPageCache::OMPageCache(OMUInt32 pageSize,
 : _pageSize(pageSize),
   _pageCount(pageCount),
   _validPageCount(0),
-  _mruEntry(0)
+  _mruEntry(0),
+  _cache(),
+  _mruList()
 {
   TRACE("OMPageCache::OMPageCache");
 

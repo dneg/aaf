@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding = "Windows-1252"?>
+<?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="7.00"
+	Version="7.10"
 	Name="AAFStandardCodecs"
 	SccProjectName=""
 	SccLocalPath="">
@@ -71,7 +71,13 @@
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
 				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 		<Configuration
 			Name="Debug|Win32"
@@ -133,18 +139,29 @@
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
 				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 	</Configurations>
+	<References>
+	</References>
 	<Files>
+		<File
+			RelativePath="..\..\..\ref-impl\src\impl\aafCvt.cpp">
+		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\plugins\AAFPluginCOM.cpp">
 		</File>
 		<File
-			RelativePath="..\..\..\ref-impl\src\impl\AAFUtils.cpp">
+			RelativePath="..\..\..\ref-impl\plugins\AafPlugincom.def">
 		</File>
 		<File
-			RelativePath="..\..\..\ref-impl\plugins\AafPlugincom.def">
+			RelativePath="..\..\..\ref-impl\src\impl\AAFUtils.cpp">
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\plugins\CAAFAIFCCodec.cpp">
@@ -186,13 +203,13 @@
 			RelativePath="..\..\..\ref-impl\plugins\CAAFWAVECodec.cpp">
 		</File>
 		<File
-			RelativePath="..\..\..\ref-impl\src\impl\aafCvt.cpp">
-		</File>
-		<File
 			RelativePath="..\..\..\ref-impl\plugins\jpegesdatadst.cpp">
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\plugins\jpegesdatasrc.cpp">
+		</File>
+		<File
+			RelativePath="..\..\..\ref-impl\plugins\utf8.cpp">
 		</File>
 	</Files>
 	<Globals>

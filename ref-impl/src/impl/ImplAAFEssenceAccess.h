@@ -59,6 +59,12 @@ class ImplAAFEssenceSampleIndex;
 #include "OMVectorIterator.h"
 #endif
 
+typedef enum {
+	Timeline,
+	Static,
+	Event
+} aafEnumEssenceTypes;
+
 typedef struct
 {
   aafUID_t mediaKind;
@@ -113,10 +119,39 @@ public:
  //Sets which variety of the codec ID is to be used.)
   virtual AAFRESULT STDMETHODCALLTYPE
 	SetEssenceCodecFlavour(aafUID_t variety);
-
+/*
   //****************
-  // Create()
+  // CreateStatic()
   //
+  virtual AAFRESULT STDMETHODCALLTYPE
+
+	      CreateStatic
+        (ImplAAFMasterMob *masterMob,
+		// @parm [in] 
+		 aafSlotID_t masterSlotID,
+
+         // @parm [in] create essence of this type
+         const aafUID_t & mediaKind,
+
+ 		 const aafUID_t & codecID,
+		 const aafRational_t & editRate,
+		 const aafRational_t & sampleRate,
+
+         // @parm [in] optionally compressing it
+         aafCompressEnable_t  Enable);
+	//@comm Creates a single channel stream of essence.  Convenience functions
+	// exist to create audio or video essence, and a separate call
+	// (MultiCreate) exists to create interleaved audio and
+	// video data.
+	//@comm The essence handle from this call can be used with
+	// WriteDataSamples  and possibly WriteDataLines, but NOT with
+	// WriteMultiSamples.
+	//@comm If you are creating the essence, and then attaching it to a master
+	// mob, then the "masterMob" field may be left NULL.
+	// For video, the sampleRate should be the edit rate of the file mob.
+	// For audio, the sample rate should be the actual samples per second.
+	//@comm Replaces omfmMediaCreate
+*/
   virtual AAFRESULT STDMETHODCALLTYPE
     Create
         (ImplAAFMasterMob *masterMob,
@@ -132,6 +167,35 @@ public:
 
          // @parm [in] optionally compressing it
          aafCompressEnable_t  Enable);
+	//@comm Creates a single channel stream of essence.  Convenience functions
+	// exist to create audio or video essence, and a separate call
+	// (MultiCreate) exists to create interleaved audio and
+	// video data.
+	//@comm The essence handle from this call can be used with
+	// WriteDataSamples  and possibly WriteDataLines, but NOT with
+	// WriteMultiSamples.
+	//@comm If you are creating the essence, and then attaching it to a master
+	// mob, then the "masterMob" field may be left NULL.
+	// For video, the sampleRate should be the edit rate of the file mob.
+	// For audio, the sample rate should be the actual samples per second.
+	//@comm Replaces omfmMediaCreate
+
+   virtual AAFRESULT STDMETHODCALLTYPE
+    CreateEx
+        (ImplAAFMasterMob *masterMob,
+		// @parm [in] 
+		 aafSlotID_t masterSlotID,
+
+         // @parm [in] create essence of this type
+         const aafUID_t & mediaKind,
+
+ 		 const aafUID_t & codecID,
+		 const aafRational_t & editRate,
+		 const aafRational_t & sampleRate,
+
+         // @parm [in] optionally compressing it
+         aafCompressEnable_t  Enable,
+		 aafEnumEssenceTypes  Essencetype);
 	//@comm Creates a single channel stream of essence.  Convenience functions
 	// exist to create audio or video essence, and a separate call
 	// (MultiCreate) exists to create interleaved audio and
@@ -602,6 +666,18 @@ public:
 							 const aafRational_t & editRate,
 							 const aafRational_t & sampleRate,
 							 ImplAAFLocator *addLocator,
+							 ImplAAFSourceMob **result);
+
+	AAFRESULT CreateFileMobEx (ImplAAFHeader *newHead,
+							 aafBool addSlots,
+							 aafSlotID_t slotID,
+							 aafMobID_constptr newMobID, /* optional */
+							 const aafUID_t & mediaKind,
+							 const aafUID_t &	   codecID,
+							 const aafRational_t & editRate,
+							 const aafRational_t & sampleRate,
+							 ImplAAFLocator *addLocator,
+							 aafEnumEssenceTypes  Essencetype,
 							 ImplAAFSourceMob **result);
 
   AAFRESULT InstallEssenceAccessIntoCodec();

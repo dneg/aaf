@@ -47,6 +47,12 @@
 #include "CAAFTimelineMobSlot.h"
 #include "ImplAAFTimelineMobSlot.h"
 
+#include "CAAFEventMobSlot.h"
+#include "ImplAAFEventMobSlot.h"
+
+#include "CAAFStaticMobSlot.h"
+#include "ImplAAFStaticMobSlot.h"
+
 #include "CAAFFile.h"
 #include "ImplAAFFile.h"
 
@@ -66,6 +72,7 @@
 // CLSID for AAFMob 
 // {B1A21375-1A7D-11d2-BF78-00104BC9156D}
 EXTERN_C const CLSID CLSID_AAFMob = { 0xB1A21375, 0x1A7D, 0x11d2, { 0xBF, 0x78, 0x00, 0x10, 0x4B, 0xC9, 0x15, 0x6D } };
+
 
 
 
@@ -2146,6 +2153,591 @@ HRESULT STDMETHODCALLTYPE
   return hr;
 }
 
+
+
+
+
+HRESULT STDMETHODCALLTYPE
+    CAAFMob::AppendAttribute (aafCharacter_constptr  pName,
+        aafCharacter_constptr  pValue)
+{
+  HRESULT hr;
+
+  ImplAAFMob * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAAFMob*> (pO);
+  assert (ptr);
+
+
+
+  try
+    {
+      hr = ptr->AppendAttribute (pName,
+    pValue);
+    }
+  catch (OMException& e)
+    {
+      // OMExceptions should be handled by the impl code. However, if an
+      // unhandled OMException occurs, control reaches here. We must not
+      // allow the unhandled exception to reach the client code, so we
+      // turn it into a failure status code.
+      //
+      // If the OMException contains an HRESULT, it is returned to the
+      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
+      //
+      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
+    }
+  catch (OMAssertionViolation &)
+    {
+      // Control reaches here if there is a programming error in the
+      // impl code that was detected by an assertion violation.
+      // We must not allow the assertion to reach the client code so
+      // here we turn it into a failure status code.
+      //
+      hr = AAFRESULT_ASSERTION_VIOLATION;
+    }
+  catch (...)
+    {
+      // We CANNOT throw an exception out of a COM interface method!
+      // Return a reasonable exception code.
+      //
+      hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+    }
+
+
+
+  return hr;
+}
+
+
+HRESULT STDMETHODCALLTYPE
+    CAAFMob::CountAttributes (aafUInt32*  pNumAttributes)
+{
+  HRESULT hr;
+
+  ImplAAFMob * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAAFMob*> (pO);
+  assert (ptr);
+
+
+  try
+    {
+      hr = ptr->CountAttributes (pNumAttributes);
+    }
+  catch (OMException& e)
+    {
+      // OMExceptions should be handled by the impl code. However, if an
+      // unhandled OMException occurs, control reaches here. We must not
+      // allow the unhandled exception to reach the client code, so we
+      // turn it into a failure status code.
+      //
+      // If the OMException contains an HRESULT, it is returned to the
+      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
+      //
+      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
+    }
+  catch (OMAssertionViolation &)
+    {
+      // Control reaches here if there is a programming error in the
+      // impl code that was detected by an assertion violation.
+      // We must not allow the assertion to reach the client code so
+      // here we turn it into a failure status code.
+      //
+      hr = AAFRESULT_ASSERTION_VIOLATION;
+    }
+  catch (...)
+    {
+      // We CANNOT throw an exception out of a COM interface method!
+      // Return a reasonable exception code.
+      //
+      hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+    }
+
+
+  return hr;
+}
+
+HRESULT STDMETHODCALLTYPE
+    CAAFMob::GetAttributes (IEnumAAFTaggedValues ** ppEnum)
+{
+  HRESULT hr;
+
+  ImplAAFMob * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAAFMob*> (pO);
+  assert (ptr);
+
+  //
+  // set up for ppEnum
+  //
+  ImplEnumAAFTaggedValues * internalppEnum = NULL;
+  ImplEnumAAFTaggedValues ** pinternalppEnum = NULL;
+  if (ppEnum)
+    {
+      pinternalppEnum = &internalppEnum;
+    }
+
+  try
+    {
+      hr = ptr->GetAttributes (pinternalppEnum);
+    }
+  catch (OMException& e)
+    {
+      // OMExceptions should be handled by the impl code. However, if an
+      // unhandled OMException occurs, control reaches here. We must not
+      // allow the unhandled exception to reach the client code, so we
+      // turn it into a failure status code.
+      //
+      // If the OMException contains an HRESULT, it is returned to the
+      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
+      //
+      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
+    }
+  catch (OMAssertionViolation &)
+    {
+      // Control reaches here if there is a programming error in the
+      // impl code that was detected by an assertion violation.
+      // We must not allow the assertion to reach the client code so
+      // here we turn it into a failure status code.
+      //
+      hr = AAFRESULT_ASSERTION_VIOLATION;
+    }
+  catch (...)
+    {
+      // We CANNOT throw an exception out of a COM interface method!
+      // Return a reasonable exception code.
+      //
+      hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+    }
+
+  //
+  // cleanup for ppEnum
+  //
+  if (SUCCEEDED(hr))
+    {
+      IUnknown *pUnknown;
+      HRESULT hStat;
+
+      if (internalppEnum)
+        {
+          pUnknown = static_cast<IUnknown *> (internalppEnum->GetContainer());
+          hStat = pUnknown->QueryInterface(IID_IEnumAAFTaggedValues, (void **)ppEnum);
+          assert (SUCCEEDED (hStat));
+          //pUnknown->Release();
+          internalppEnum->ReleaseReference(); // We are through with this pointer.
+        }
+    }
+
+  return hr;
+}
+
+HRESULT STDMETHODCALLTYPE
+    CAAFMob::RemoveAttribute (IAAFTaggedValue * pAttribute)
+{
+  HRESULT hr;
+
+  ImplAAFMob * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAAFMob*> (pO);
+  assert (ptr);
+
+  //
+  // set up for pAttribute
+  //
+  ImplAAFTaggedValue * internalpAttribute = NULL;
+  if (pAttribute)
+    {
+      HRESULT hStat;
+      IAAFRoot * iObj;
+      ImplAAFRoot *arg;
+      hStat = pAttribute->QueryInterface (IID_IAAFRoot, (void **)&iObj);
+      assert (SUCCEEDED (hStat));
+      assert (iObj);
+      hStat = iObj->GetImplRep((void **)&arg);
+      assert (SUCCEEDED (hStat));
+      iObj->Release(); // we are through with this interface pointer.
+      internalpAttribute = static_cast<ImplAAFTaggedValue*>(arg);
+      assert (internalpAttribute);
+    }
+
+  try
+    {
+      hr = ptr->RemoveAttribute (internalpAttribute);
+    }
+  catch (OMException& e)
+    {
+      // OMExceptions should be handled by the impl code. However, if an
+      // unhandled OMException occurs, control reaches here. We must not
+      // allow the unhandled exception to reach the client code, so we
+      // turn it into a failure status code.
+      //
+      // If the OMException contains an HRESULT, it is returned to the
+      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
+      //
+      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
+    }
+  catch (OMAssertionViolation &)
+    {
+      // Control reaches here if there is a programming error in the
+      // impl code that was detected by an assertion violation.
+      // We must not allow the assertion to reach the client code so
+      // here we turn it into a failure status code.
+      //
+      hr = AAFRESULT_ASSERTION_VIOLATION;
+    }
+  catch (...)
+    {
+      // We CANNOT throw an exception out of a COM interface method!
+      // Return a reasonable exception code.
+      //
+      hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+    }
+
+  //
+  // no cleanup necessary for pAttribute
+  //
+
+  return hr;
+}
+
+HRESULT STDMETHODCALLTYPE
+    CAAFMob::SetUsageCode (aafUID_constref  usageCode)
+{
+  HRESULT hr;
+
+  ImplAAFMob * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAAFMob*> (pO);
+  assert (ptr);
+
+
+  try
+    {
+      hr = ptr->SetUsageCode (usageCode);
+    }
+  catch (OMException& e)
+    {
+      // OMExceptions should be handled by the impl code. However, if an
+      // unhandled OMException occurs, control reaches here. We must not
+      // allow the unhandled exception to reach the client code, so we
+      // turn it into a failure status code.
+      //
+      // If the OMException contains an HRESULT, it is returned to the
+      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
+      //
+      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
+    }
+  catch (OMAssertionViolation &)
+    {
+      // Control reaches here if there is a programming error in the
+      // impl code that was detected by an assertion violation.
+      // We must not allow the assertion to reach the client code so
+      // here we turn it into a failure status code.
+      //
+      hr = AAFRESULT_ASSERTION_VIOLATION;
+    }
+  catch (...)
+    {
+      // We CANNOT throw an exception out of a COM interface method!
+      // Return a reasonable exception code.
+      //
+      hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+    }
+
+
+  return hr;
+}
+
+HRESULT STDMETHODCALLTYPE
+    CAAFMob::GetUsageCode (aafUID_t*  pUsageCode)
+{
+  HRESULT hr;
+
+  ImplAAFMob * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAAFMob*> (pO);
+  assert (ptr);
+
+
+  try
+    {
+      hr = ptr->GetUsageCode (pUsageCode);
+    }
+  catch (OMException& e)
+    {
+      // OMExceptions should be handled by the impl code. However, if an
+      // unhandled OMException occurs, control reaches here. We must not
+      // allow the unhandled exception to reach the client code, so we
+      // turn it into a failure status code.
+      //
+      // If the OMException contains an HRESULT, it is returned to the
+      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
+      //
+      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
+    }
+  catch (OMAssertionViolation &)
+    {
+      // Control reaches here if there is a programming error in the
+      // impl code that was detected by an assertion violation.
+      // We must not allow the assertion to reach the client code so
+      // here we turn it into a failure status code.
+      //
+      hr = AAFRESULT_ASSERTION_VIOLATION;
+    }
+  catch (...)
+    {
+      // We CANNOT throw an exception out of a COM interface method!
+      // Return a reasonable exception code.
+      //
+      hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+    }
+
+
+  return hr;
+}
+
+HRESULT STDMETHODCALLTYPE
+    CAAFMob::AppendNewStaticSlot (IAAFSegment * pSegment,
+        aafSlotID_t  slotID,
+        aafCharacter_constptr  pSlotName,
+        IAAFStaticMobSlot ** ppNewSlot)
+{
+  HRESULT hr;
+
+  ImplAAFMob * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAAFMob*> (pO);
+  assert (ptr);
+
+  //
+  // set up for pSegment
+  //
+  ImplAAFSegment * internalpSegment = NULL;
+  if (pSegment)
+    {
+      HRESULT hStat;
+      IAAFRoot * iObj;
+      ImplAAFRoot *arg;
+      hStat = pSegment->QueryInterface (IID_IAAFRoot, (void **)&iObj);
+      assert (SUCCEEDED (hStat));
+      assert (iObj);
+      hStat = iObj->GetImplRep((void **)&arg);
+      assert (SUCCEEDED (hStat));
+      iObj->Release(); // we are through with this interface pointer.
+      internalpSegment = static_cast<ImplAAFSegment*>(arg);
+      assert (internalpSegment);
+    }
+
+
+
+  //
+  // set up for ppNewSlot
+  //
+  ImplAAFStaticMobSlot * internalppNewSlot = NULL;
+  ImplAAFStaticMobSlot ** pinternalppNewSlot = NULL;
+  if (ppNewSlot)
+    {
+      pinternalppNewSlot = &internalppNewSlot;
+    }
+
+  try
+    {
+      hr = ptr->AppendNewStaticSlot (internalpSegment,
+    slotID,
+    pSlotName,
+    pinternalppNewSlot);
+    }
+  catch (OMException& e)
+    {
+      // OMExceptions should be handled by the impl code. However, if an
+      // unhandled OMException occurs, control reaches here. We must not
+      // allow the unhandled exception to reach the client code, so we
+      // turn it into a failure status code.
+      //
+      // If the OMException contains an HRESULT, it is returned to the
+      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
+      //
+      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
+    }
+  catch (OMAssertionViolation &)
+    {
+      // Control reaches here if there is a programming error in the
+      // impl code that was detected by an assertion violation.
+      // We must not allow the assertion to reach the client code so
+      // here we turn it into a failure status code.
+      //
+      hr = AAFRESULT_ASSERTION_VIOLATION;
+    }
+  catch (...)
+    {
+      // We CANNOT throw an exception out of a COM interface method!
+      // Return a reasonable exception code.
+      //
+      hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+    }
+
+  //
+  // no cleanup necessary for pSegment
+  //
+
+
+
+  //
+  // cleanup for ppNewSlot
+  //
+  if (SUCCEEDED(hr))
+    {
+      IUnknown *pUnknown;
+      HRESULT hStat;
+
+      if (internalppNewSlot)
+        {
+          pUnknown = static_cast<IUnknown *> (internalppNewSlot->GetContainer());
+          hStat = pUnknown->QueryInterface(IID_IAAFStaticMobSlot, (void **)ppNewSlot);
+          assert (SUCCEEDED (hStat));
+          //pUnknown->Release();
+          internalppNewSlot->ReleaseReference(); // We are through with this pointer.
+        }
+    }
+
+  return hr;
+}
+
+
+HRESULT STDMETHODCALLTYPE
+    CAAFMob::AppendNewEventSlot (aafRational_t  editRate,
+        IAAFSegment * pSegment,
+        aafSlotID_t  slotID,
+        aafCharacter_constptr  pSlotName,
+        aafPosition_t  origin,
+        IAAFEventMobSlot ** ppNewSlot)
+{
+  HRESULT hr;
+
+  ImplAAFMob * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAAFMob*> (pO);
+  assert (ptr);
+
+
+  //
+  // set up for pSegment
+  //
+  ImplAAFSegment * internalpSegment = NULL;
+  if (pSegment)
+    {
+      HRESULT hStat;
+      IAAFRoot * iObj;
+      ImplAAFRoot *arg;
+      hStat = pSegment->QueryInterface (IID_IAAFRoot, (void **)&iObj);
+      assert (SUCCEEDED (hStat));
+      assert (iObj);
+      hStat = iObj->GetImplRep((void **)&arg);
+      assert (SUCCEEDED (hStat));
+      iObj->Release(); // we are through with this interface pointer.
+      internalpSegment = static_cast<ImplAAFSegment*>(arg);
+      assert (internalpSegment);
+    }
+
+
+
+
+  //
+  // set up for ppNewSlot
+  //
+  ImplAAFEventMobSlot * internalppNewSlot = NULL;
+  ImplAAFEventMobSlot ** pinternalppNewSlot = NULL;
+  if (ppNewSlot)
+    {
+      pinternalppNewSlot = &internalppNewSlot;
+    }
+
+  try
+    {
+      hr = ptr->AppendNewEventSlot (editRate,
+    internalpSegment,
+    slotID,
+    pSlotName,
+    origin,
+    pinternalppNewSlot);
+    }
+  catch (OMException& e)
+    {
+      // OMExceptions should be handled by the impl code. However, if an
+      // unhandled OMException occurs, control reaches here. We must not
+      // allow the unhandled exception to reach the client code, so we
+      // turn it into a failure status code.
+      //
+      // If the OMException contains an HRESULT, it is returned to the
+      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
+      //
+      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
+    }
+  catch (OMAssertionViolation &)
+    {
+      // Control reaches here if there is a programming error in the
+      // impl code that was detected by an assertion violation.
+      // We must not allow the assertion to reach the client code so
+      // here we turn it into a failure status code.
+      //
+      hr = AAFRESULT_ASSERTION_VIOLATION;
+    }
+  catch (...)
+    {
+      // We CANNOT throw an exception out of a COM interface method!
+      // Return a reasonable exception code.
+      //
+      hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+    }
+
+
+  //
+  // no cleanup necessary for pSegment
+  //
+
+
+
+
+  //
+  // cleanup for ppNewSlot
+  //
+  if (SUCCEEDED(hr))
+    {
+      IUnknown *pUnknown;
+      HRESULT hStat;
+
+      if (internalppNewSlot)
+        {
+          pUnknown = static_cast<IUnknown *> (internalppNewSlot->GetContainer());
+          hStat = pUnknown->QueryInterface(IID_IAAFEventMobSlot, (void **)ppNewSlot);
+          assert (SUCCEEDED (hStat));
+          //pUnknown->Release();
+          internalppNewSlot->ReleaseReference(); // We are through with this pointer.
+        }
+    }
+
+  return hr;
+}
+
+
+
 //
 // 
 // 
@@ -2158,6 +2750,8 @@ HRESULT CAAFMob::InternalQueryInterface
     REFIID riid,
     void **ppvObj)
 {
+    HRESULT hr = S_OK;
+
     if (NULL == ppvObj)
         return E_INVALIDARG;
 
@@ -2165,6 +2759,13 @@ HRESULT CAAFMob::InternalQueryInterface
     if (EQUAL_UID(riid,IID_IAAFMob)) 
     { 
         *ppvObj = (IAAFMob *)this; 
+        ((IUnknown *)*ppvObj)->AddRef();
+        return S_OK;
+    }
+
+    if (EQUAL_UID(riid,IID_IAAFMob2)) 
+    { 
+        *ppvObj = (IAAFMob2 *)this; 
         ((IUnknown *)*ppvObj)->AddRef();
         return S_OK;
     }
@@ -2177,4 +2778,3 @@ HRESULT CAAFMob::InternalQueryInterface
 // Define the contrete object support implementation.
 // 
 AAF_DEFINE_FACTORY(AAFMob)
-

@@ -140,8 +140,9 @@ public:
 					 aafLength_t *sclpLen,
 					 aafBool *isMask);
 
-	// OM deep copy notification
-	virtual void onCopy(void* clientContext) const;
+	// Visit this component and its sub-components
+	// with the specified visitor.
+	virtual void Accept(AAFComponentVisitor& visitor);
 
 private:
 	OMFixedSizeProperty<aafLength_t>	_fadeInLength;

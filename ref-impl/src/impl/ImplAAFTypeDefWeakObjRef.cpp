@@ -67,7 +67,6 @@
 #include "AAFClassDefUIDs.h"
 #endif
 
-#include "ImplAAFCloneResolver.h"
 #include "ImplAAFDictionary.h"
 #include "AAFStoredObjectIDs.h"
 #include "AAFPropertyDefs.h"
@@ -175,7 +174,11 @@ AAFRESULT STDMETHODCALLTYPE
       OMPropertyId * targetPids,
       OMPropertyId uniqueIdentifierPid)
 {
-  if (! pTypeName) return AAFRESULT_NULL_PARAM;
+  if (! pTypeName)
+    return AAFRESULT_NULL_PARAM;
+
+  if (ids * sizeof(aafUID_t) > OMPROPERTYSIZE_MAX)
+    return AAFRESULT_BAD_SIZE;
 
   AAFRESULT hr;
 
@@ -807,14 +810,3 @@ HRESULT ImplAAFTypeDefWeakObjRef::CompleteClassRegistration(void)
 
   return rc;
 }
-
-void ImplAAFTypeDefWeakObjRef::onCopy(void* clientContext) const
-{
-  ImplAAFTypeDefObjectRef::onCopy(clientContext);
-
-  if ( clientContext ) {
-    ImplAAFCloneResolver* pResolver = reinterpret_cast<ImplAAFCloneResolver*>(clientContext);
-    pResolver->ResolveWeakReference(_referencedType);
-  }
-}
-

@@ -88,6 +88,60 @@ public:
     SetOrigin
         (aafPosition_t  value);  //@parm [in] Origin property value
 
+  //***********************************************************
+  // METHOD NAME: SetMarkIn()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+  SetMarkIn (
+    // @parm [in] aafPosition_t | value | MarkIn property value
+    aafPosition_t  value
+  );
+
+  //***********************************************************
+  // METHOD NAME: GetMarkIn()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+  GetMarkIn (
+    // @parm [out,retval] aafPosition_t * | result | MarkIn property value
+    aafPosition_t *  result
+  );
+
+  //***********************************************************
+  // METHOD NAME: SetMarkOut()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+  SetMarkOut (
+    // @parm [in] aafPosition_t | value | MarkOut property value
+    aafPosition_t  value
+  );
+
+  //***********************************************************
+  // METHOD NAME: GetMarkOut()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+  GetMarkOut (
+    // @parm [out,retval] aafPosition_t * | result | MarkOut property value
+    aafPosition_t *  result
+  );
+
+  //***********************************************************
+  // METHOD NAME: SetUserPos()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+  SetUserPos (
+    // @parm [in] aafPosition_t | value | UserPos property value
+    aafPosition_t  value
+  );
+
+  //***********************************************************
+  // METHOD NAME: GetUserPos()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+  GetUserPos (
+    // @parm [out,retval] aafPosition_t * | result | UserPos property value
+    aafPosition_t *  result
+  );
+
 public:
 // Internal to the SDK, but available to other SDK internal code.
 virtual AAFRESULT FindSegment(aafPosition_t offset,
@@ -104,6 +158,9 @@ virtual AAFRESULT FindSegment(aafPosition_t offset,
 protected:
 	OMFixedSizeProperty<aafRational_t>	_editRate;
 	OMFixedSizeProperty<aafPosition_t>	_origin; 
+	OMFixedSizeProperty<aafPosition_t>	_markIn; 
+	OMFixedSizeProperty<aafPosition_t>	_markOut; 
+	OMFixedSizeProperty<aafPosition_t>	_userPos; 
 
 };
 

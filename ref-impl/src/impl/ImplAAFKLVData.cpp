@@ -207,6 +207,9 @@ AAFRESULT STDMETHODCALLTYPE
 	if (!pValue)
 		return AAFRESULT_NULL_PARAM;
 	
+	if (valueSize > OMPROPERTYSIZE_MAX)
+		return AAFRESULT_BAD_SIZE;
+
 	if (!_cachedRenameTypeDef)
 	{
 		// Lookup the type definition from this KLV data. If it fails

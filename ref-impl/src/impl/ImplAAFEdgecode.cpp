@@ -65,6 +65,14 @@ AAFRESULT STDMETHODCALLTYPE
 {
 	HRESULT		rc = AAFRESULT_SUCCESS;
 	
+	// Even though the AAF specification does not limit the size of the
+	// edge code header this reference implementation uses fixed size
+	// header which contains only 8 bytes. The following check,
+	// unneccesary in the current implementation provided for consistancy
+	// with the specification.
+	if (sizeof(edgecode.header) > OMPROPERTYSIZE_MAX)
+		return(AAFRESULT_BAD_SIZE);
+
 	XPROTECT()
 	{
 		ImplAAFDictionarySP pDict;

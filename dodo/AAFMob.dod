@@ -30,8 +30,11 @@ AAFObject\
 #endm
 #c
 #c #import ./AAFObject.exp
+#import ./AAFMob2.exp
 AD_HEAD
 AD_IDL(//
+// IAAFMob is DEPRECATED\,  Please use IAAFMob2.
+//
 // The IAAFMob interface is implemented by objects that specify a
 // Metadata Object\, which can describe a composition\, essence\, or
 // physical media.
@@ -55,6 +58,8 @@ AD_IDL(//
 AD_FORWARD_DECLARATION(AAFSegment)
 AD_FORWARD_DECLARATION(AAFMobSlot)
 AD_FORWARD_DECLARATION(AAFTimelineMobSlot)
+AD_FORWARD_DECLARATION(AAFEventMobSlot)
+AD_FORWARD_DECLARATION(AAFStaticMobSlot)
 AD_FORWARD_DECLARATION(AAFFile)
 AD_FORWARD_DECLARATION(EnumAAFMobSlots)
 AD_FORWARD_DECLARATION(EnumAAFTaggedValues)
@@ -64,7 +69,9 @@ AD_FORWARD_DECLARATION(EnumAAFKLVData)
 AD_CLASS_UUID(B1A21375, 1A7D, 11d2, BF, 78, 00, 10, 4B, C9, 15, 6D)
 
 AD_DEFAULT_UUID(B1A21374, 1A7D, 11d2, BF, 78, 00, 10, 4B, C9, 15, 6D)
-AD_XCLASS_BEGIN(Abstract, StoredObject)
+
+AD_COM_EXT_CLASS_BEGIN(public IAAFMob2)
+
 AD_XMETHOD1(GetMobID,
 			[out],
 			objPass,
@@ -963,4 +970,20 @@ AD_XMETHOD1(RemoveKLVData,
   //
   // AAFRESULT_OBJECT_NOT_FOUND
   //   - the given KLV data object is not in this mob.)
-AD_XCLASS_END(Abstract, StoredObject)
+
+
+#c
+
+#c AAFMob2 methods
+#c
+
+AD_COM_METH(.method-AppendAttribute)
+AD_COM_METH(.method-CountAttributes)
+AD_COM_METH(.method-GetAttributes)
+AD_COM_METH(.method-RemoveAttribute)
+AD_COM_METH(.method-SetUsageCode)
+AD_COM_METH(.method-GetUsageCode)
+AD_COM_METH(.method-AppendNewStaticSlot)
+AD_COM_METH(.method-AppendNewEventSlot)
+
+AD_COM_EXT_CLASS_END(AAFMob2)

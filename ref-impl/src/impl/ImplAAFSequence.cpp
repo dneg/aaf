@@ -656,7 +656,7 @@ AAFRESULT ImplAAFSequence::FindSubSegment(aafPosition_t offset,
 										 aafBool *found)
 {
 	aafLength_t	segLen;
-	aafPosition_t begPos, endPos;
+	aafPosition_t begPos, endPos, zero;
 	aafUInt32 n = 0;
 	ImplAAFSegment* seg = NULL;
 
@@ -664,6 +664,7 @@ AAFRESULT ImplAAFSequence::FindSubSegment(aafPosition_t offset,
 	{
 		CHECK(GetLength(&segLen));
 		CvtInt32toPosition(0, begPos);
+		CvtInt32toPosition(0, zero);
 		endPos = begPos;
 		CHECK(AddInt64toInt64(segLen, &endPos));
 		if (Int64LessEqual(begPos, offset) &&
@@ -696,6 +697,14 @@ AAFRESULT ImplAAFSequence::FindSubSegment(aafPosition_t offset,
 				seg->ReleaseReference();
 				seg = NULL;
 			}
+		}
+		else if (Int64Equal(begPos, endPos) && Int64Equal(offset, zero)) 	//JeffB: Handle zero-length sourceClips
+		{
+			*found = kAAFTrue;
+			*subseg = this;
+			// We are returning a reference to this object so bump the ref count
+			AcquireReference();
+			*sequPosPtr = 0;
 		}
 		else
 		{
@@ -1191,3 +1200,23 @@ AAFRESULT ImplAAFSequence::UpdateSequenceLength( ImplAAFComponent* pComponent )
 
 	return AAFRESULT_SUCCESS;
 }
+
+void ImplAAFSequence::Accept(AAFComponentVisitor& visitor)
+{
+	aafUInt32 count = 0;
+	CountComponents(&count);
+	for(aafUInt32 i=0; i<count; i++)
+	{
+		ImplAAFComponent* pComponent = 0;
+		GetNthComponent(i, &pComponent);
+
+       	        pComponent->Accept(visitor);
+
+		pComponent->ReleaseReference();
+		pComponent = NULL;
+	}
+
+	// TODO
+	// visitor.VisitSequence(this);
+}
+

@@ -175,9 +175,6 @@
 				RelativePath=".\AxObject.cpp">
 			</File>
 			<File
-				RelativePath=".\AxParameter.cpp">
-			</File>
-			<File
 				RelativePath=".\AxPluginMgr.cpp">
 			</File>
 			<File
@@ -255,9 +252,6 @@
 			</File>
 			<File
 				RelativePath=".\AxObject.h">
-			</File>
-			<File
-				RelativePath=".\AxParameter.h">
 			</File>
 			<File
 				RelativePath=".\AxPluginMgr.h">

@@ -39,7 +39,7 @@
 #include "AAFPropertyIDs.h"
 #include "ImplAAFObjectCreation.h"
 #include "ImplAAFDictionary.h"
-#include "ImplAAFCloneResolver.h"
+#include "ImplAAFTaggedValueUtil.h"
 
 #include <assert.h>
 #include "AAFResult.h"
@@ -58,13 +58,18 @@ ImplAAFComponent::ImplAAFComponent ():
   _length( PID_Component_Length,
            L"Length"),
   _KLVData( PID_Component_KLVData,
-            L"KLVData")
+            L"KLVData"),
+  _userComments( PID_Component_UserComments,
+            L"UserComments" ),
+  _attributes( PID_Component_Attributes,
+	       L"Attributes" )
 {
 	_persistentProperties.put(   _dataDef.address());
 	_persistentProperties.put(   _length.address());
 	_persistentProperties.put(   _KLVData.address());
+	_persistentProperties.put(   _userComments.address());
+	_persistentProperties.put(   _attributes.address());
 }
-
 
 ImplAAFComponent::~ImplAAFComponent ()
 {
@@ -207,8 +212,7 @@ AAFRESULT STDMETHODCALLTYPE
 		return AAFRESULT_NULL_PARAM;
 
 	if(!_KLVData.isPresent())
-	{	// If the userComments property is not present then
-		// number of user comments is zero!
+	{
 		*pNumComments = 0; //return AAFRESULT_PROP_NOT_PRESENT;
 	}
 	else
@@ -249,6 +253,58 @@ AAFRESULT STDMETHODCALLTYPE
 	
   return(AAFRESULT_SUCCESS);
 }
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFComponent::AppendComment (aafCharacter_constptr  pName,
+		                     aafCharacter_constptr  pValue)
+{
+  return ImplAAFTaggedValueUtil::AppendNameValuePair( this, _userComments, pName, pValue );
+}
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFComponent::CountComments (aafUInt32* pNumComments )
+{
+  return ImplAAFTaggedValueUtil::CountEntries( _userComments, pNumComments );
+}
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFComponent::GetComments (ImplEnumAAFTaggedValues** ppEnum )
+{
+  return ImplAAFTaggedValueUtil::GetEnumerator( this, _userComments, ppEnum );
+}
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFComponent::RemoveComment (ImplAAFTaggedValue* pComment)
+{
+  return ImplAAFTaggedValueUtil::RemoveEntry( _userComments, pComment );
+}
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFComponent::AppendAttribute (aafCharacter_constptr  pName,
+                                       aafCharacter_constptr  pValue)
+{
+  return ImplAAFTaggedValueUtil::AppendNameValuePair( this, _attributes, pName, pValue );
+}
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFComponent::CountAttributes (aafUInt32* pNumAttributes )
+{
+  return ImplAAFTaggedValueUtil::CountEntries( _attributes, pNumAttributes );
+}
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFComponent::GetAttributes (ImplEnumAAFTaggedValues** ppEnum)
+{
+  return ImplAAFTaggedValueUtil::GetEnumerator( this, _attributes, ppEnum );
+}
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFComponent::RemoveAttribute (ImplAAFTaggedValue* pAttribute)
+{
+  return ImplAAFTaggedValueUtil::RemoveEntry( _attributes, pAttribute );
+}
+
 /*************************************************************************
  * Private Function: SetNewProps()
  *
@@ -345,13 +401,9 @@ AAFRESULT ImplAAFComponent::ChangeContainedReferences(aafMobID_constref /*from*/
 	return AAFRESULT_SUCCESS;
 }
 
-void ImplAAFComponent::onCopy(void* clientContext) const
-{
-  ImplAAFObject::onCopy(clientContext);
 
-  if ( clientContext ) {
-    ImplAAFCloneResolver* pResolver = reinterpret_cast<ImplAAFCloneResolver*>(clientContext);
-    pResolver->ResolveWeakReference(_dataDef);
-  }
+void ImplAAFComponent::Accept(AAFComponentVisitor&)
+{
+	// do nothing
 }
 

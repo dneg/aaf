@@ -38,6 +38,8 @@
 
 #if defined( OS_WINDOWS ) || defined( OS_MACOS )
 #define AAFPERSONNELEXTENSION_DLLNAME L"AAFPersonnelExtension.dll"
+#elif defined( OS_DARWIN )
+#define AAFPERSONNELEXTENSION_DLLNAME L"libAAFPersonnelExtension.dylib"
 #elif defined( OS_UNIX )
 #define AAFPERSONNELEXTENSION_DLLNAME L"libAAFPersonnelExtension.so"
 #else

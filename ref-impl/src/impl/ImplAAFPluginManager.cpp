@@ -56,6 +56,7 @@
 #include "AAFPluginDefs.h"
 #include "aafErr.h"
 #include "ImplAAFObjectCreation.h"
+#include "utf8.h"
 
 #ifndef __AAFPlugin_h__
 #include "AAFPlugin.h"
@@ -587,7 +588,7 @@ static char * NewStringFromAAFString(aafCharacter_constptr wName)
 {
   char * name = NULL;
   int wNameLength = wcslen(wName);
-  int nameLegth = (wNameLength * MB_CUR_MAX) + 1;
+  int nameLegth = wcsu8slen(wName);
   name = new char[nameLegth];
   if (NULL != name)
   {

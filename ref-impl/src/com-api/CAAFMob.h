@@ -48,6 +48,9 @@
 
 
 
+
+
+
 #ifndef __CAAFObject_h__
 #include "CAAFObject.h"
 #endif
@@ -55,6 +58,7 @@
 
 class CAAFMob
   : public IAAFMob,
+    public IAAFMob2,
     public CAAFObject
 {
 protected:
@@ -1037,6 +1041,190 @@ public:
     // KLV data object to remove 
     /*[in]*/ IAAFKLVData * pData);
 
+
+
+
+  //***********************************************************
+  // METHOD NAME: AppendAttribute()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFMob2 | AppendAttribute |
+  // Append and attribute name/value pair to the attribute list. 
+  // @end
+  // 
+  STDMETHOD (AppendAttribute)
+   (
+    // @parm [in] aafCharacter_constptr | pName | The attribute name.
+    aafCharacter_constptr  pName,
+
+    // @parm [in] aafCharacter_constptr | pValue | The attribute value.
+    aafCharacter_constptr  pValue
+  );
+
+  //***********************************************************
+  // METHOD NAME: CountAttributes()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFMob2 | CountAttributes |
+  // Return the number of attributes contained by this mob 
+  // @end
+  // 
+  STDMETHOD (CountAttributes)
+   (
+    // @parm [out] aafUInt32* | pNumAttributes | Pointer to attribute count.
+    aafUInt32*  pNumAttributes
+  );
+
+  //***********************************************************
+  // METHOD NAME: GetAttributes()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFMob2 | GetAttributes |
+  // Return an attribute enumerator for this mob. 
+  // @end
+  // 
+  STDMETHOD (GetAttributes)
+   (
+    // @parm [out] EnumAAFTaggedValues | ppEnum | Pointer to the new enumerator object created by this method.
+    IEnumAAFTaggedValues ** ppEnum
+  );
+
+  //***********************************************************
+  // METHOD NAME: RemoveAttribute()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFMob2 | RemoveAttribute |
+  // Remove an attribute (tagged value).
+  // @end
+  // 
+  STDMETHOD (RemoveAttribute)
+   (
+    // @parm [in] AAFTaggedValue | pAttribute | Pointer to the tagged value attribute.
+    IAAFTaggedValue * pAttribute
+  );
+
+  //***********************************************************
+  // METHOD NAME: SetUsageCode()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFMob2 | SetUsageCode |
+  // Set this mob's usage code. 
+  // @end
+  // 
+  STDMETHOD (SetUsageCode)
+   (
+    // @parm [in] aafUID_constref | usageCode | The usage code value.
+    aafUID_constref  usageCode
+  );
+
+  //***********************************************************
+  // METHOD NAME: GetUsageCode()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFMob2 | GetUsageCode |
+  // Get this mob's usage code. 
+  // @end
+  // 
+  STDMETHOD (GetUsageCode)
+   (
+    // @parm [out] aafUID_t* | pUsageCode | Pointer to usage code.
+    aafUID_t*  pUsageCode
+  );
+
+  //***********************************************************
+  // METHOD NAME: AppendNewStaticSlot()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFMob2 | AppendNewStaticSlot |
+  // This method creates a new static mob slot with the given
+  // property values and appends it to the input mob.
+  // 
+  // The returned mob slot is AddRef()ed before it is returned.
+  //
+  // Succeeds if all of the following are true:
+  // - the pSegment pointer is valid.
+  // - the pSlotName pointer is valid.
+  // - the ppNewSlot pointer is valid.
+  // 
+  // If this method fails no state will be changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - any of pSegment, pSlotName, or ppNewSlot arguments is null.
+  // @end
+  // 
+  STDMETHOD (AppendNewStaticSlot)
+   (
+    // @parm [in] AAFSegment | pSegment | Segment to append as slot component
+    IAAFSegment * pSegment,
+
+    // @parm [in] aafSlotID_t | slotID | new slot ID
+    aafSlotID_t  slotID,
+
+    // @parm [in, string] aafCharacter_constptr | pSlotName | new slot name
+    aafCharacter_constptr  pSlotName,
+
+    // @parm [out] AAFStaticMobSlot | ppNewSlot | Newly created slot
+    IAAFStaticMobSlot ** ppNewSlot
+  );
+
+  //***********************************************************
+  // METHOD NAME: AppendNewEventSlot()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFMob2 | AppendNewEventSlot |
+  // This method creates a new event mob slot with the given
+  // property values and appends it to the input mob.
+  // 
+  // The returned mob slot is AddRef()ed before it is returned.
+  //
+  // Succeeds if all of the following are true:
+  // - the pSegment pointer is valid.
+  // - the pSlotName pointer is valid.
+  // - the ppNewSlot pointer is valid.
+  // 
+  // If this method fails no state will be changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - any of pSegment, pSlotName, or ppNewSlot arguments is null.
+  // @end
+  // 
+  STDMETHOD (AppendNewEventSlot)
+   (
+    // @parm [in] aafRational_t | editRate | Edit rate property value
+    aafRational_t  editRate,
+
+    // @parm [in] AAFSegment | pSegment | Segment to append as slot component
+    IAAFSegment * pSegment,
+
+    // @parm [in] aafSlotID_t | slotID | new slot ID
+    aafSlotID_t  slotID,
+
+    // @parm [in, string] aafCharacter_constptr | pSlotName | new slot name
+    aafCharacter_constptr  pSlotName,
+
+    // @parm [in] aafPosition_t | origin | The slot origin
+    aafPosition_t  origin,
+
+    // @parm [out] AAFEventMobSlot | ppNewSlot | Newly created slot
+    IAAFEventMobSlot ** ppNewSlot
+  );
+
+
+
 protected:
   // 
   // Declare the QI that implements for the interfaces
@@ -1057,5 +1245,4 @@ public:
 };
 
 #endif // ! __CAAFMob_h__
-
 

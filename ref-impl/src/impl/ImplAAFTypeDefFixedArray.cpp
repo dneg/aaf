@@ -48,7 +48,6 @@
 
 #include "AAFPropertyIDs.h"
 #include "ImplAAFObjectCreation.h"
-#include "ImplAAFCloneResolver.h"
 #include "AAFClassIDs.h"
 
 #include <assert.h>
@@ -335,6 +334,14 @@ void ImplAAFTypeDefFixedArray::internalize(const OMByte* externalBytes,
 	}
 }
 
+OMType* ImplAAFTypeDefFixedArray::elementType(void) const
+{
+  ImplAAFTypeDef* result = 0;
+  AAFRESULT hr = GetType(&result);
+  assert(hr == 0);
+  result->ReleaseReference();
+  return result;
+}
 
 aafBool ImplAAFTypeDefFixedArray::IsFixedSize (void) const
 {
@@ -483,14 +490,4 @@ void ImplAAFTypeDefFixedArray::onSave(void* clientContext) const
 void ImplAAFTypeDefFixedArray::onRestore(void* clientContext) const
 {
   ImplAAFTypeDefArray::onRestore(clientContext);
-}
-
-void ImplAAFTypeDefFixedArray::onCopy(void* clientContext) const
-{
-  ImplAAFTypeDefArray::onCopy(clientContext);
-
-  if ( clientContext ) {
-    ImplAAFCloneResolver* pResolver = reinterpret_cast<ImplAAFCloneResolver*>(clientContext);
-    pResolver->ResolveWeakReference(_ElementType);
-  }
 }

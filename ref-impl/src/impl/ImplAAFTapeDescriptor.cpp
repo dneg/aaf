@@ -31,6 +31,7 @@
 #include "AAFPropertyIDs.h"
 
 #include <assert.h>
+#include <wchar.h>
 #include "AAFResult.h"
 
 
@@ -69,6 +70,10 @@ AAFRESULT STDMETHODCALLTYPE
 	if (pName == NULL)
 	{
 		aafError = AAFRESULT_NULL_PARAM;
+	}
+	else if (wcslen(pName)*sizeof(OMCharacter) >= OMPROPERTYSIZE_MAX)
+	{
+		aafError = AAFRESULT_BAD_SIZE;
 	}
 	else
 	{
@@ -131,6 +136,10 @@ AAFRESULT STDMETHODCALLTYPE
 	if (pModelName == NULL)
 	{
 		aafError = AAFRESULT_NULL_PARAM;
+	}
+	else if (wcslen(pModelName)*sizeof(OMCharacter) >= OMPROPERTYSIZE_MAX)
+	{
+		aafError = AAFRESULT_BAD_SIZE;
 	}
 	else
 	{

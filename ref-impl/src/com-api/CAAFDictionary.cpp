@@ -83,11 +83,24 @@
 #include "CEnumAAFPluginDefs.h"
 #include "ImplEnumAAFPluginDefs.h"
 
+#include "CAAFKLVDataDefinition.h"
+#include "ImplAAFKLVDataDefinition.h"
+
+#include "CEnumAAFKLVDataDefs.h"
+#include "ImplEnumAAFKLVDataDefs.h"
+
+#include "CAAFTaggedValueDefinition.h"
+#include "ImplAAFTaggedValueDefinition.h"
+
+#include "CEnumAAFTaggedValueDefs.h"
+#include "ImplEnumAAFTaggedValueDefs.h"
+
 
 
 // CLSID for AAFDictionary 
 // {B1A21399-1A7D-11D2-BF78-00104BC9156D}
 EXTERN_C const CLSID CLSID_AAFDictionary = { 0xB1A21399, 0x1A7D, 0x11D2, { 0xBF, 0x78, 0x00, 0x10, 0x4B, 0xC9, 0x15, 0x6D } };
+
 
 
 
@@ -3248,6 +3261,565 @@ HRESULT STDMETHODCALLTYPE
   return hr;
 }
 
+
+
+HRESULT STDMETHODCALLTYPE
+    CAAFDictionary::RegisterKLVDataDef (IAAFKLVDataDefinition * pDef)
+{
+  HRESULT hr;
+
+  ImplAAFDictionary * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAAFDictionary*> (pO);
+  assert (ptr);
+
+  //
+  // set up for pDef
+  //
+  ImplAAFKLVDataDefinition * internalpDef = NULL;
+  if (pDef)
+    {
+      HRESULT hStat;
+      IAAFRoot * iObj;
+      ImplAAFRoot *arg;
+      hStat = pDef->QueryInterface (IID_IAAFRoot, (void **)&iObj);
+      assert (SUCCEEDED (hStat));
+      assert (iObj);
+      hStat = iObj->GetImplRep((void **)&arg);
+      assert (SUCCEEDED (hStat));
+      iObj->Release(); // we are through with this interface pointer.
+      internalpDef = static_cast<ImplAAFKLVDataDefinition*>(arg);
+      assert (internalpDef);
+    }
+
+  try
+    {
+      hr = ptr->RegisterKLVDataDef (internalpDef);
+    }
+  catch (OMException& e)
+    {
+      // OMExceptions should be handled by the impl code. However, if an
+      // unhandled OMException occurs, control reaches here. We must not
+      // allow the unhandled exception to reach the client code, so we
+      // turn it into a failure status code.
+      //
+      // If the OMException contains an HRESULT, it is returned to the
+      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
+      //
+      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
+    }
+  catch (OMAssertionViolation &)
+    {
+      // Control reaches here if there is a programming error in the
+      // impl code that was detected by an assertion violation.
+      // We must not allow the assertion to reach the client code so
+      // here we turn it into a failure status code.
+      //
+      hr = AAFRESULT_ASSERTION_VIOLATION;
+    }
+  catch (...)
+    {
+      // We CANNOT throw an exception out of a COM interface method!
+      // Return a reasonable exception code.
+      //
+      hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+    }
+
+  //
+  // no cleanup necessary for pDef
+  //
+
+  return hr;
+}
+
+HRESULT STDMETHODCALLTYPE
+    CAAFDictionary::LookupKLVDataDef (aafUID_constref  defId,
+        IAAFKLVDataDefinition ** ppDef)
+{
+  HRESULT hr;
+
+  ImplAAFDictionary * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAAFDictionary*> (pO);
+  assert (ptr);
+
+
+  //
+  // set up for ppDef
+  //
+  ImplAAFKLVDataDefinition * internalppDef = NULL;
+  ImplAAFKLVDataDefinition ** pinternalppDef = NULL;
+  if (ppDef)
+    {
+      pinternalppDef = &internalppDef;
+    }
+
+  try
+    {
+      hr = ptr->LookupKLVDataDef (defId,
+    pinternalppDef);
+    }
+  catch (OMException& e)
+    {
+      // OMExceptions should be handled by the impl code. However, if an
+      // unhandled OMException occurs, control reaches here. We must not
+      // allow the unhandled exception to reach the client code, so we
+      // turn it into a failure status code.
+      //
+      // If the OMException contains an HRESULT, it is returned to the
+      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
+      //
+      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
+    }
+  catch (OMAssertionViolation &)
+    {
+      // Control reaches here if there is a programming error in the
+      // impl code that was detected by an assertion violation.
+      // We must not allow the assertion to reach the client code so
+      // here we turn it into a failure status code.
+      //
+      hr = AAFRESULT_ASSERTION_VIOLATION;
+    }
+  catch (...)
+    {
+      // We CANNOT throw an exception out of a COM interface method!
+      // Return a reasonable exception code.
+      //
+      hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+    }
+
+
+  //
+  // cleanup for ppDef
+  //
+  if (SUCCEEDED(hr))
+    {
+      IUnknown *pUnknown;
+      HRESULT hStat;
+
+      if (internalppDef)
+        {
+          pUnknown = static_cast<IUnknown *> (internalppDef->GetContainer());
+          hStat = pUnknown->QueryInterface(IID_IAAFKLVDataDefinition, (void **)ppDef);
+          assert (SUCCEEDED (hStat));
+          //pUnknown->Release();
+          internalppDef->ReleaseReference(); // We are through with this pointer.
+        }
+    }
+
+  return hr;
+}
+
+
+HRESULT STDMETHODCALLTYPE
+    CAAFDictionary::GetKLVDataDefs (IEnumAAFKLVDataDefs ** ppEnum)
+{
+  HRESULT hr;
+
+  ImplAAFDictionary * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAAFDictionary*> (pO);
+  assert (ptr);
+
+  //
+  // set up for ppEnum
+  //
+  ImplEnumAAFKLVDataDefs * internalppEnum = NULL;
+  ImplEnumAAFKLVDataDefs ** pinternalppEnum = NULL;
+  if (ppEnum)
+    {
+      pinternalppEnum = &internalppEnum;
+    }
+
+  try
+    {
+      hr = ptr->GetKLVDataDefs (pinternalppEnum);
+    }
+  catch (OMException& e)
+    {
+      // OMExceptions should be handled by the impl code. However, if an
+      // unhandled OMException occurs, control reaches here. We must not
+      // allow the unhandled exception to reach the client code, so we
+      // turn it into a failure status code.
+      //
+      // If the OMException contains an HRESULT, it is returned to the
+      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
+      //
+      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
+    }
+  catch (OMAssertionViolation &)
+    {
+      // Control reaches here if there is a programming error in the
+      // impl code that was detected by an assertion violation.
+      // We must not allow the assertion to reach the client code so
+      // here we turn it into a failure status code.
+      //
+      hr = AAFRESULT_ASSERTION_VIOLATION;
+    }
+  catch (...)
+    {
+      // We CANNOT throw an exception out of a COM interface method!
+      // Return a reasonable exception code.
+      //
+      hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+    }
+
+  //
+  // cleanup for ppEnum
+  //
+  if (SUCCEEDED(hr))
+    {
+      IUnknown *pUnknown;
+      HRESULT hStat;
+
+      if (internalppEnum)
+        {
+          pUnknown = static_cast<IUnknown *> (internalppEnum->GetContainer());
+          hStat = pUnknown->QueryInterface(IID_IEnumAAFKLVDataDefs, (void **)ppEnum);
+          assert (SUCCEEDED (hStat));
+          //pUnknown->Release();
+          internalppEnum->ReleaseReference(); // We are through with this pointer.
+        }
+    }
+
+  return hr;
+}
+
+HRESULT STDMETHODCALLTYPE
+    CAAFDictionary::CountKLVDataDefs (aafUInt32 *  pResult)
+{
+  HRESULT hr;
+
+  ImplAAFDictionary * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAAFDictionary*> (pO);
+  assert (ptr);
+
+
+  try
+    {
+      hr = ptr->CountKLVDataDefs (pResult);
+    }
+  catch (OMException& e)
+    {
+      // OMExceptions should be handled by the impl code. However, if an
+      // unhandled OMException occurs, control reaches here. We must not
+      // allow the unhandled exception to reach the client code, so we
+      // turn it into a failure status code.
+      //
+      // If the OMException contains an HRESULT, it is returned to the
+      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
+      //
+      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
+    }
+  catch (OMAssertionViolation &)
+    {
+      // Control reaches here if there is a programming error in the
+      // impl code that was detected by an assertion violation.
+      // We must not allow the assertion to reach the client code so
+      // here we turn it into a failure status code.
+      //
+      hr = AAFRESULT_ASSERTION_VIOLATION;
+    }
+  catch (...)
+    {
+      // We CANNOT throw an exception out of a COM interface method!
+      // Return a reasonable exception code.
+      //
+      hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+    }
+
+
+  return hr;
+}
+
+HRESULT STDMETHODCALLTYPE
+    CAAFDictionary::RegisterTaggedValueDef (IAAFTaggedValueDefinition * pDef)
+{
+  HRESULT hr;
+
+  ImplAAFDictionary * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAAFDictionary*> (pO);
+  assert (ptr);
+
+  //
+  // set up for pDef
+  //
+  ImplAAFTaggedValueDefinition * internalpDef = NULL;
+  if (pDef)
+    {
+      HRESULT hStat;
+      IAAFRoot * iObj;
+      ImplAAFRoot *arg;
+      hStat = pDef->QueryInterface (IID_IAAFRoot, (void **)&iObj);
+      assert (SUCCEEDED (hStat));
+      assert (iObj);
+      hStat = iObj->GetImplRep((void **)&arg);
+      assert (SUCCEEDED (hStat));
+      iObj->Release(); // we are through with this interface pointer.
+      internalpDef = static_cast<ImplAAFTaggedValueDefinition*>(arg);
+      assert (internalpDef);
+    }
+
+  try
+    {
+      hr = ptr->RegisterTaggedValueDef (internalpDef);
+    }
+  catch (OMException& e)
+    {
+      // OMExceptions should be handled by the impl code. However, if an
+      // unhandled OMException occurs, control reaches here. We must not
+      // allow the unhandled exception to reach the client code, so we
+      // turn it into a failure status code.
+      //
+      // If the OMException contains an HRESULT, it is returned to the
+      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
+      //
+      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
+    }
+  catch (OMAssertionViolation &)
+    {
+      // Control reaches here if there is a programming error in the
+      // impl code that was detected by an assertion violation.
+      // We must not allow the assertion to reach the client code so
+      // here we turn it into a failure status code.
+      //
+      hr = AAFRESULT_ASSERTION_VIOLATION;
+    }
+  catch (...)
+    {
+      // We CANNOT throw an exception out of a COM interface method!
+      // Return a reasonable exception code.
+      //
+      hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+    }
+
+  //
+  // no cleanup necessary for pDef
+  //
+
+  return hr;
+}
+
+HRESULT STDMETHODCALLTYPE
+    CAAFDictionary::LookupTaggedValueDef (aafUID_constref  defId,
+        IAAFTaggedValueDefinition ** ppDef)
+{
+  HRESULT hr;
+
+  ImplAAFDictionary * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAAFDictionary*> (pO);
+  assert (ptr);
+
+
+  //
+  // set up for ppDef
+  //
+  ImplAAFTaggedValueDefinition * internalppDef = NULL;
+  ImplAAFTaggedValueDefinition ** pinternalppDef = NULL;
+  if (ppDef)
+    {
+      pinternalppDef = &internalppDef;
+    }
+
+  try
+    {
+      hr = ptr->LookupTaggedValueDef (defId,
+    pinternalppDef);
+    }
+  catch (OMException& e)
+    {
+      // OMExceptions should be handled by the impl code. However, if an
+      // unhandled OMException occurs, control reaches here. We must not
+      // allow the unhandled exception to reach the client code, so we
+      // turn it into a failure status code.
+      //
+      // If the OMException contains an HRESULT, it is returned to the
+      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
+      //
+      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
+    }
+  catch (OMAssertionViolation &)
+    {
+      // Control reaches here if there is a programming error in the
+      // impl code that was detected by an assertion violation.
+      // We must not allow the assertion to reach the client code so
+      // here we turn it into a failure status code.
+      //
+      hr = AAFRESULT_ASSERTION_VIOLATION;
+    }
+  catch (...)
+    {
+      // We CANNOT throw an exception out of a COM interface method!
+      // Return a reasonable exception code.
+      //
+      hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+    }
+
+
+  //
+  // cleanup for ppDef
+  //
+  if (SUCCEEDED(hr))
+    {
+      IUnknown *pUnknown;
+      HRESULT hStat;
+
+      if (internalppDef)
+        {
+          pUnknown = static_cast<IUnknown *> (internalppDef->GetContainer());
+          hStat = pUnknown->QueryInterface(IID_IAAFTaggedValueDefinition, (void **)ppDef);
+          assert (SUCCEEDED (hStat));
+          //pUnknown->Release();
+          internalppDef->ReleaseReference(); // We are through with this pointer.
+        }
+    }
+
+  return hr;
+}
+
+
+HRESULT STDMETHODCALLTYPE
+    CAAFDictionary::GetTaggedValueDefs (IEnumAAFTaggedValueDefs ** ppEnum)
+{
+  HRESULT hr;
+
+  ImplAAFDictionary * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAAFDictionary*> (pO);
+  assert (ptr);
+
+  //
+  // set up for ppEnum
+  //
+  ImplEnumAAFTaggedValueDefs * internalppEnum = NULL;
+  ImplEnumAAFTaggedValueDefs ** pinternalppEnum = NULL;
+  if (ppEnum)
+    {
+      pinternalppEnum = &internalppEnum;
+    }
+
+  try
+    {
+      hr = ptr->GetTaggedValueDefs (pinternalppEnum);
+    }
+  catch (OMException& e)
+    {
+      // OMExceptions should be handled by the impl code. However, if an
+      // unhandled OMException occurs, control reaches here. We must not
+      // allow the unhandled exception to reach the client code, so we
+      // turn it into a failure status code.
+      //
+      // If the OMException contains an HRESULT, it is returned to the
+      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
+      //
+      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
+    }
+  catch (OMAssertionViolation &)
+    {
+      // Control reaches here if there is a programming error in the
+      // impl code that was detected by an assertion violation.
+      // We must not allow the assertion to reach the client code so
+      // here we turn it into a failure status code.
+      //
+      hr = AAFRESULT_ASSERTION_VIOLATION;
+    }
+  catch (...)
+    {
+      // We CANNOT throw an exception out of a COM interface method!
+      // Return a reasonable exception code.
+      //
+      hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+    }
+
+  //
+  // cleanup for ppEnum
+  //
+  if (SUCCEEDED(hr))
+    {
+      IUnknown *pUnknown;
+      HRESULT hStat;
+
+      if (internalppEnum)
+        {
+          pUnknown = static_cast<IUnknown *> (internalppEnum->GetContainer());
+          hStat = pUnknown->QueryInterface(IID_IEnumAAFTaggedValueDefs, (void **)ppEnum);
+          assert (SUCCEEDED (hStat));
+          //pUnknown->Release();
+          internalppEnum->ReleaseReference(); // We are through with this pointer.
+        }
+    }
+
+  return hr;
+}
+
+HRESULT STDMETHODCALLTYPE
+    CAAFDictionary::CountTaggedValueDefs (aafUInt32 *  pResult)
+{
+  HRESULT hr;
+
+  ImplAAFDictionary * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAAFDictionary*> (pO);
+  assert (ptr);
+
+
+  try
+    {
+      hr = ptr->CountTaggedValueDefs (pResult);
+    }
+  catch (OMException& e)
+    {
+      // OMExceptions should be handled by the impl code. However, if an
+      // unhandled OMException occurs, control reaches here. We must not
+      // allow the unhandled exception to reach the client code, so we
+      // turn it into a failure status code.
+      //
+      // If the OMException contains an HRESULT, it is returned to the
+      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
+      //
+      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
+    }
+  catch (OMAssertionViolation &)
+    {
+      // Control reaches here if there is a programming error in the
+      // impl code that was detected by an assertion violation.
+      // We must not allow the assertion to reach the client code so
+      // here we turn it into a failure status code.
+      //
+      hr = AAFRESULT_ASSERTION_VIOLATION;
+    }
+  catch (...)
+    {
+      // We CANNOT throw an exception out of a COM interface method!
+      // Return a reasonable exception code.
+      //
+      hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+    }
+
+
+  return hr;
+}
+
+
 //
 // 
 // 
@@ -3260,6 +3832,8 @@ HRESULT CAAFDictionary::InternalQueryInterface
     REFIID riid,
     void **ppvObj)
 {
+    HRESULT hr = S_OK;
+
     if (NULL == ppvObj)
         return E_INVALIDARG;
 
@@ -3267,6 +3841,13 @@ HRESULT CAAFDictionary::InternalQueryInterface
     if (EQUAL_UID(riid,IID_IAAFDictionary)) 
     { 
         *ppvObj = (IAAFDictionary *)this; 
+        ((IUnknown *)*ppvObj)->AddRef();
+        return S_OK;
+    }
+
+    if (EQUAL_UID(riid,IID_IAAFDictionary2)) 
+    { 
+        *ppvObj = (IAAFDictionary2 *)this; 
         ((IUnknown *)*ppvObj)->AddRef();
         return S_OK;
     }
@@ -3279,4 +3860,3 @@ HRESULT CAAFDictionary::InternalQueryInterface
 // Define the contrete object support implementation.
 // 
 AAF_DEFINE_FACTORY(AAFDictionary)
-

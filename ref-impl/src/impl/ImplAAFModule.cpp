@@ -41,6 +41,9 @@
 #include "AAFPrivate.h"
 #include "AAFResult.h"
 
+#include "AAFSDKBuild.h"
+
+
 #include "ImplAAFPluginManager.h"
 #include "ImplAAFFile.h"
 #include "ImplAAFObjectCreation.h"
@@ -180,11 +183,17 @@ STDAPI ImplAAFFileOpenExistingRead (
 	 &pRawStg);
   if (AAFRESULT_SUCCEEDED (hr))
 	{
+	  const aafUID_t* pFileKind;
+	  if (modeFlags & AAF_FILE_MODE_USE_SMALL_SS_SECTORS)
+	  	pFileKind = &aafFileKindAaf512Binary;
+      else
+	  	pFileKind = &aafFileKindAaf4KBinary;
+
 	  hr = ImplAAFCreateAAFFileOnRawStorage
 		(pRawStg,
 		 kAAFFileExistence_existing,
 		 kAAFFileAccess_read,
-		 &aafFileKindAafSSBinary,
+		 pFileKind,
 		 modeFlags,
 		 0,
 		 ppFile);
@@ -344,13 +353,20 @@ STDAPI ImplAAFFileOpenExistingModify (
 	 kAAFFileExistence_existing,
 	 kAAFFileAccess_modify,
 	 &pRawStg);
+
   if (AAFRESULT_SUCCEEDED (hr))
 	{
+	  const aafUID_t* pFileKind;
+	  if (modeFlags & AAF_FILE_MODE_USE_SMALL_SS_SECTORS)
+	  	pFileKind = &aafFileKindAaf512Binary;
+      else
+	  	pFileKind = &aafFileKindAaf4KBinary;
+
 	  hr = ImplAAFCreateAAFFileOnRawStorage
 		(pRawStg,
 		 kAAFFileExistence_existing,
 		 kAAFFileAccess_modify,
-		 &aafFileKindAafSSBinary,
+		 pFileKind,
 		 modeFlags,
 		 pIdent,
 		 ppFile);
@@ -499,11 +515,17 @@ STDAPI ImplAAFFileOpenNewModify (
 	 &pRawStg);
   if (AAFRESULT_SUCCEEDED (hr))
 	{
+	  const aafUID_t* pFileKind;
+	  if (modeFlags & AAF_FILE_MODE_USE_SMALL_SS_SECTORS)
+	  	pFileKind = &aafFileKindAaf512Binary;
+      else
+	  	pFileKind = &aafFileKindAaf4KBinary;
+
 	  hr = ImplAAFCreateAAFFileOnRawStorage
 		(pRawStg,
 		 kAAFFileExistence_new,
 		 kAAFFileAccess_modify,
-		 &aafFileKindAafSSBinary,
+		 pFileKind,
 		 modeFlags,
 		 pIdent,
 		 ppFile);
@@ -679,11 +701,17 @@ STDAPI ImplAAFFileOpenTransient (
 	 &pRawStg);
   if (AAFRESULT_SUCCEEDED (hr))
 	{
+	  const aafUID_t* pFileKind;
+	  if (modeFlags & AAF_FILE_MODE_USE_SMALL_SS_SECTORS)
+	  	pFileKind = &aafFileKindAaf512Binary;
+      else
+	  	pFileKind = &aafFileKindAaf4KBinary;
+
 	  hr = ImplAAFCreateAAFFileOnRawStorage
 		(pRawStg,
 		 kAAFFileExistence_new,
 		 kAAFFileAccess_modify,
-		 &aafFileKindAafSSBinary,
+		 pFileKind,
 		 0,
 		 pIdent,
 		 ppFile);
@@ -1085,4 +1113,67 @@ ImplAAFCreateAAFFileOnRawStorage
 	}
 
   return hr;
+}
+
+
+
+extern const char AAFReferenceImplementationIdent[];
+
+const char AAFReferenceImplementationIdent[] = "@(#) " AAF_SDK_RELEASE; // for Linux and Irix
+const aafProductVersion_t AAFReferenceImplementationVersion = {AAF_MAJOR_VERSION, AAF_MINOR_VERSION, AAF_MAINT_RELEASE, AAF_PATCH_LEVEL, AAF_RELEASE_STAGE};
+
+
+STDAPI
+ImplAAFGetLibraryVersion
+  (aafProductVersion_t *  pVersion)
+{
+  if (pVersion == 0)
+  {
+    return AAFRESULT_NULL_PARAM;
+  }
+
+
+  HRESULT   hr = AAFRESULT_SUCCESS;
+  *pVersion = AAFReferenceImplementationVersion;
+  return hr;
+}
+
+extern "C" const char * AAFGetLibraryPath();
+
+// The size of a buffer, in bytes, needed to hold s when properly
+// terminated and converted to aafCharacters.
+static size_t bufferByteSize(const char* s)
+{
+  assert(s != 0);
+  size_t result = strlen(s) + 1; // characters needed
+  result = result * sizeof(aafCharacter); // bytes needed
+  return result;
+}
+
+STDAPI ImplAAFGetLibraryPathNameBufLen
+  (aafUInt32 *  pBufSize)
+{
+  if (pBufSize == 0)
+	return AAFRESULT_NULL_PARAM;
+
+  const char* path = AAFGetLibraryPath();
+  assert(path != 0);
+  *pBufSize = bufferByteSize(path);
+  return AAFRESULT_SUCCESS;
+}
+
+STDAPI ImplAAFGetLibraryPathName
+   (aafCharacter *  pLibraryPathName,
+    aafUInt32  bufSize)
+{
+  if (pLibraryPathName == 0)
+	return AAFRESULT_NULL_PARAM;
+
+  const char* path = AAFGetLibraryPath();
+  assert(path != 0);
+  if (bufferByteSize(path) > bufSize)
+	return AAFRESULT_SMALLBUF;
+
+  convertStringToWideString(pLibraryPathName, path, bufSize / sizeof(aafCharacter));
+  return AAFRESULT_SUCCESS;
 }

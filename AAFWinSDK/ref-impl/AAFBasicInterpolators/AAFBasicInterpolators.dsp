@@ -129,5 +129,9 @@ SOURCE="..\..\..\ref-impl\src\com-api\com-dll\CAAFServer.cpp"
 
 SOURCE="..\..\..\ref-impl\src\com-api\com-dll\CAAFUnknown.cpp"
 # End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\com-dll\utf8.cpp"
+# End Source File
 # End Target
 # End Project

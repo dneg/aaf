@@ -3,8 +3,6 @@
 #ifndef __ImplAAFSourceReference_h__
 #define __ImplAAFSourceReference_h__
 
-#include "OMStorable.h"
-
 //=---------------------------------------------------------------------=
 //
 // $Id$ $Name$
@@ -36,6 +34,8 @@
 
 #include "ImplAAFObject.h"
 
+#include "OMArrayProperty.h"
+#include "OMStorable.h"
 
 class ImplAAFSourceReference : public ImplAAFSegment
 {
@@ -81,17 +81,82 @@ public:
 		// @parm [in] Source Mob ID to set
         (aafSlotID_t   mobSlotID);
 
+
+  //****************
+  // SetChannelIDs()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    SetChannelIDs
+        (// @parm [in] Number of elements in the pChannelIDs array
+         aafUInt32  numberElements,
+
+         // @parm [in] Array of channel IDs
+         aafUInt32*  pChannelIDs);
+
+
+  //****************
+  // GetChannelIDs()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetChannelIDs
+        (// @parm [in] Number of elements in the pChannelIDs array
+         aafUInt32  numberElements,
+
+         // @parm [in] Array of channel IDs
+         aafUInt32*  pChannelIDs);
+
+  //****************
+  // GetChannelIDsSize()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetChannelIDsSize
+        // @parm [out] Number of elements in the pChannelIDs array
+        (aafUInt32 *  numberElements);
+
+
+  //****************
+  // SetMonoSourceSlotIDs()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    SetMonoSourceSlotIDs
+        (// @parm [in] Number of elements in the pMonoSourceSlotIDs array
+         aafUInt32  numberElements,
+
+         // @parm [in] Array of slot IDs
+         aafUInt32*  pMonoSourceSlotIDs);
+
+
+  //****************
+  // GetMonoSourceSlotIDs()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetMonoSourceSlotIDs
+        (// @parm [in] Number of elements in the pMonoSourceSlotIDs array
+         aafUInt32  numberElements,
+
+         // @parm [in] Array of channel IDs
+         aafUInt32*  pMonoSourceSlotIDs);
+
+  //****************
+  // GetMonoSourceSlotIDsSize()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetMonoSourceSlotIDsSize
+        // @parm [out] Number of elements in the pMonoSourceSlotIDs array
+        (aafUInt32 *  numberElements);
+
+
 public:
 	//SDK-private
 
 	virtual AAFRESULT ChangeContainedReferences(aafMobID_constref from,
 												aafMobID_constref to);
-	// OM deep copy notification
-	virtual void onCopy(void* clientContext) const;
 
 private:
 	OMFixedSizeProperty<aafMobID_t>	_sourceID;
 	OMFixedSizeProperty<aafInt32>	_sourceMobSlotId;
+	OMArrayProperty<aafUInt32> _channelIDs;
+	OMArrayProperty<aafUInt32> _monoSourceSlotIDs;
 
 };
 

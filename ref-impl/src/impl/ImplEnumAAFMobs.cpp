@@ -25,6 +25,10 @@
 #include "ImplEnumAAFMobs.h"
 #include "AAFUtils.h"
 
+#include "ImplAAFMasterMob.h"
+#include "ImplAAFSourceMob.h"
+#include "ImplAAFCompositionMob.h"
+
 ImplEnumAAFMobs::ImplEnumAAFMobs()
 {
 	_criteria.searchTag = kAAFNoSearch;
@@ -153,6 +157,50 @@ AAFRESULT STDMETHODCALLTYPE
 		    }
 		  }
 
+		  pCandidate->ReleaseReference();
+		  pCandidate = NULL;
+		  break;
+
+		case kAAFByUsageCode:
+
+		  if ( pCandidate->IsUsageCodeEqual( &_criteria.tags.usageCode ) ) {
+		    *ppMob = pCandidate;
+		    return AAFRESULT_SUCCESS;
+		  }
+		  pCandidate->ReleaseReference();
+		  pCandidate = NULL;
+
+		  break;
+
+		case kAAFByMasterMobUsageCode:
+		  
+		  if ( pCandidate->IsUsageCodeEqual( &_criteria.tags.usageCode ) &&
+		       dynamic_cast<ImplAAFMasterMob*>(pCandidate) ) {
+		    *ppMob = pCandidate;
+		    return AAFRESULT_SUCCESS;
+		  }
+		  pCandidate->ReleaseReference();
+		  pCandidate = NULL;
+		  break;
+
+		case kAAFBySourceMobUsageCode:
+
+		  if ( pCandidate->IsUsageCodeEqual( &_criteria.tags.usageCode ) &&
+		       dynamic_cast<ImplAAFSourceMob*>(pCandidate) ) {
+		    *ppMob = pCandidate;
+		    return AAFRESULT_SUCCESS;
+		  }
+		  pCandidate->ReleaseReference();
+		  pCandidate = NULL;
+		  break;
+
+		case kAAFByCompositionMobUsageCode:
+
+		  if ( pCandidate->IsUsageCodeEqual( &_criteria.tags.usageCode ) &&
+		       dynamic_cast<ImplAAFCompositionMob*>(pCandidate) ) {
+		    *ppMob = pCandidate;
+		    return AAFRESULT_SUCCESS;
+		  }
 		  pCandidate->ReleaseReference();
 		  pCandidate = NULL;
 		  break;

@@ -215,6 +215,9 @@ AAFRESULT STDMETHODCALLTYPE
 	if(pSummary == NULL)
 		return AAFRESULT_NULL_PARAM;
 
+	if(size > OMPROPERTYSIZE_MAX)
+		return AAFRESULT_BAD_SIZE;
+
 	_summary.setValue(pSummary, size);
 
 	return AAFRESULT_SUCCESS; 

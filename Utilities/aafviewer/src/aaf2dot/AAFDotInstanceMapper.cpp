@@ -22,7 +22,9 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#ifdef _MSC_VER
 #pragma warning (disable:4786)
+#endif
 
 #include <AxMetaDef.h>
 #include <AxMob.h>
@@ -40,6 +42,13 @@ using namespace std;
 #include <Utilities.h>
 #include <Logging.h>
 
+#ifdef _MSC_VER
+// For printf MSVC gives unpredictable behaviour for the %ll conversion
+// specifier so use the MSVC specific conversion specifier %I64.
+#define INT64FMT "I64"
+#else
+#define INT64FMT "ll"		// ISO C99
+#endif
 
 
 //-----------------------------------------------------------------------------
@@ -1191,15 +1200,15 @@ AAFDotInstanceMapper::GetIntValue( AxTypeDefInt &axTypeDefInt, AxPropertyValue a
       case 8:
 	 if (axTypeDefInt.IsSigned()) {
 	    if (displayHex) {
-	       strSize = sprintf(buffer, "0x%llx", *((aafInt64*)bytes));
+	       strSize = sprintf(buffer, "0x%"INT64FMT"x", *((aafInt64*)bytes));
 	    } else {
-	       strSize = sprintf(buffer, "%lld", *((aafInt64*)bytes));
+	       strSize = sprintf(buffer, "%"INT64FMT"d", *((aafInt64*)bytes));
 	    }
 	 } else {
 	    if (displayHex) {
-	       strSize = sprintf(buffer, "0x%llx", *((aafUInt64*)bytes));
+	       strSize = sprintf(buffer, "0x%"INT64FMT"x", *((aafUInt64*)bytes));
 	    } else {
-	       strSize = sprintf(buffer, "%llu", *((aafUInt64*)bytes));
+	       strSize = sprintf(buffer, "%"INT64FMT"u", *((aafUInt64*)bytes));
 	    }
 	 }
 	 break;

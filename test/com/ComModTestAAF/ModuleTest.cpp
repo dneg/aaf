@@ -135,3 +135,92 @@ HRESULT GetAAFVersions(IAAFHeader * pHeader,
   
   return result;
 }
+
+
+
+bool operator ==( const aafUID_t uid1, const aafUID_t uid2 )
+{
+    bool    are_equal = true;
+    int     i = 0;
+
+    for( i=0; i<8; i++ )
+    {
+        if( uid1.Data4[i] != uid2.Data4[i] )
+        {
+            are_equal = false;
+            break;
+        }
+    }
+
+    if( are_equal == true )
+    {
+        if( uid1.Data1 != uid2.Data1  ||
+            uid1.Data2 != uid2.Data2  ||
+            uid1.Data3 != uid2.Data3 )
+        {
+            are_equal = false;
+        }
+    }
+
+
+    return are_equal;
+}
+
+
+
+bool operator !=( const aafUID_t uid1, const aafUID_t uid2 )
+{
+    return (! operator==( uid1, uid2 ) );
+}
+
+
+
+bool operator ==( const aafRational_t& a, const aafRational_t& b )
+{
+    bool  are_equal = true;
+
+    if( a.numerator != b.numerator  ||  a.denominator != b.denominator )
+    {
+        are_equal = false;
+    }
+
+
+    return are_equal;
+}
+
+
+
+bool operator !=( const aafRational_t& a, const aafRational_t& b )
+{
+    return (! operator==( a, b ) );
+}
+
+
+
+bool operator ==( const aafTimeStamp_t& a, const aafTimeStamp_t& b )
+{
+    bool  are_equal = true;
+
+    if( a.date.year != b.date.year  ||
+        a.date.month != b.date.month  ||
+        a.date.day != b.date.day  ||
+        a.time.hour != b.time.hour  ||
+        a.time.minute != b.time.minute  ||
+        a.time.second != b.time.second  ||
+        a.time.fraction != b.time.fraction )
+    {
+        are_equal = false;
+    }
+
+
+    return are_equal;
+}
+
+
+
+bool operator !=( const aafTimeStamp_t& a, const aafTimeStamp_t& b )
+{
+    return (! operator==( a, b ) );
+}
+
+

@@ -277,6 +277,24 @@ bool Is_aafEditHint_t_Valid(aafEditHint_t param)
   }
 }
 
+bool Is_aafElectroSpatialFormulation_t_Valid(aafElectroSpatialFormulation_t param)
+{
+  switch (param) {
+    case kAAFEsDefault:
+    case kAAFEsTwoChannelMode:
+    case kAAFEsSingleChannelMode:
+    case kAAFEsPrimarySecondaryMode:
+    case kAAFEsStereophonicMode:
+    case kAAFEsSingleChannelDoubleSamplingFrequencyMode:
+    case kAAFEsStereoLeftChannelDoubleSamplingFrequencyMode:
+    case kAAFEsStereoRightChannelDoubleSamplingFrequencyMode:
+    case kAAFEsMultiChannelMode:
+      return true;
+    default:
+      return false;
+  }
+}
+
 bool Is_aafFadeType_t_Valid(aafFadeType_t param)
 {
   switch (param) {
@@ -391,6 +409,7 @@ bool Is_aafFrameLayout_t_Valid(aafFrameLayout_t param)
     case kAAFSeparateFields:
     case kAAFOneField:
     case kAAFMixedFields:
+    case kAAFSegmentedFrame:
       return true;
     default:
       return false;
@@ -578,6 +597,7 @@ bool Is_aafRGBAComponentKind_t_Valid(aafRGBAComponentKind_t param)
     case kAAFCompGreen:
     case kAAFCompPalette:
     case kAAFCompRed:
+    case kAAFCompNull:
       return true;
     default:
       return false;
@@ -592,6 +612,23 @@ bool Is_aafReferenceType_t_Valid(aafReferenceType_t param)
     case kAAFRefMinimum:
     case kAAFRefMaximum:
     case kAAFRefEnumvalue:
+      return true;
+    default:
+      return false;
+  }
+}
+
+bool Is_aafScanningDirection_t_Valid(aafScanningDirection_t param)
+{
+  switch (param) {
+    case kAAFScanningLeftToRightTopToBottom:
+    case kAAFScanningRightToLeftTopToBottom:
+    case kAAFScanningLeftToRightBottomToTop:
+    case kAAFScanningRightToLeftBottomToTop:
+    case kAAFScanningTopToBottomLeftToRight:
+    case kAAFScanningTopToBottomRightToLeft:
+    case kAAFScanningBottomToTopLeftToRight:
+    case kAAFScanningBottomToTopRightToLeft:
       return true;
     default:
       return false;
@@ -623,6 +660,26 @@ bool Is_aafSearchTag_t_Valid(aafSearchTag_t param)
     case kAAFByClass:
     case kAAFByDataDef:
     case kAAFByMediaCrit:
+    case kAAFByUsageCode:
+    case kAAFByMasterMobUsageCode:
+    case kAAFBySourceMobUsageCode:
+    case kAAFByCompositionMobUsageCode:
+      return true;
+    default:
+      return false;
+  }
+}
+
+bool Is_aafSignalStandard_t_Valid(aafSignalStandard_t param)
+{
+  switch (param) {
+    case kAAFSignalNone:
+    case kAAFSignalS125MInterlace:
+    case kAAFSignalS125MProgressive:
+    case kAAFSignalS347M:
+    case kAAFSignalS274M:
+    case kAAFSignalS296M:
+    case kAAFSignalS349M:
       return true;
     default:
       return false;

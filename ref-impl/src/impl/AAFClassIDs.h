@@ -2,6 +2,8 @@
 //
 // This file was GENERATED for the AAF SDK
 //
+// $Id$ $Name$
+//
 // The contents of this file are subject to the AAF SDK Public
 // Source License Agreement (the "License"); You may not use this file
 // except in compliance with the License.  The License is available in
@@ -82,6 +84,7 @@ extern "C" const aafClassID_t CLSID_AAFOperationGroup;
 extern "C" const aafClassID_t CLSID_AAFGPITrigger;
 extern "C" const aafClassID_t CLSID_AAFHeader;
 extern "C" const aafClassID_t CLSID_AAFIdentification;
+extern "C" const aafClassID_t CLSID_AAFImportDescriptor;
 extern "C" const aafClassID_t CLSID_AAFInterpolationDef;
 extern "C" const aafClassID_t CLSID_AAFKLVData;
 extern "C" const aafClassID_t CLSID_AAFLocator;
@@ -92,8 +95,10 @@ extern "C" const aafClassID_t CLSID_AAFMobSlot;
 extern "C" const aafClassID_t CLSID_AAFNestedScope;
 extern "C" const aafClassID_t CLSID_AAFNetworkLocator;
 extern "C" const aafClassID_t CLSID_AAFObject;
+extern "C" const aafClassID_t CLSID_AAFPCMDescriptor;
 extern "C" const aafClassID_t CLSID_AAFParameter;
 extern "C" const aafClassID_t CLSID_AAFParameterDef;
+extern "C" const aafClassID_t CLSID_AAFPhysicalDescriptor;
 extern "C" const aafClassID_t CLSID_AAFProperty;
 extern "C" const aafClassID_t CLSID_AAFPropertyDef;
 extern "C" const aafClassID_t CLSID_AAFPropertyValue;
@@ -104,6 +109,7 @@ extern "C" const aafClassID_t CLSID_AAFScopeReference;
 extern "C" const aafClassID_t CLSID_AAFSegment;
 extern "C" const aafClassID_t CLSID_AAFSelector;
 extern "C" const aafClassID_t CLSID_AAFSequence;
+extern "C" const aafClassID_t CLSID_AAFSoundDescriptor;
 extern "C" const aafClassID_t CLSID_AAFSourceClip;
 extern "C" const aafClassID_t CLSID_AAFSourceMob;
 extern "C" const aafClassID_t CLSID_AAFSourceReference;
@@ -167,5 +173,13 @@ extern "C" const aafClassID_t CLSID_AAFRandomRawStorage;
 extern "C" const aafClassID_t CLSID_AAFGetFileBits;
 extern "C" const aafClassID_t CLSID_AAFSetFileBits;
 extern "C" const aafClassID_t CLSID_AAFRandomFile;
+extern "C" const aafClassID_t CLSID_AAFTaggedValueDefinition;
+extern "C" const aafClassID_t CLSID_AAFKLVDataDefinition;
+extern "C" const aafClassID_t CLSID_EnumAAFTaggedValueDefs;
+extern "C" const aafClassID_t CLSID_EnumAAFKLVDataDefs;
+extern "C" const aafClassID_t CLSID_AAFRecordingDescriptor;
+extern "C" const aafClassID_t CLSID_AAFAuxiliaryDescriptor;
+extern "C" const aafClassID_t CLSID_AAFDescriptiveFramework;
+extern "C" const aafClassID_t CLSID_AAFDescriptiveMarker;
 
 #endif // __AAFClassIDs_h__

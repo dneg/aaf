@@ -2,6 +2,7 @@
 // @com This file implements the module test for CAAFMob
 //=---------------------------------------------------------------------=
 //
+
 // $Id$ $Name$
 //
 // The contents of this file are subject to the AAF SDK Public
@@ -39,14 +40,22 @@ using namespace std;
 #include "AAFResult.h"
 #include "ModuleTest.h"
 #include "AAFDefUIDs.h"
+#include "AAFExtEnum.h"
 
 #include "CAAFBuiltinDefs.h"
 
 typedef IAAFSmartPointer<IAAFMob>					IAAFMobSP;
 typedef IAAFSmartPointer<IAAFFile>					IAAFFileSP;
 
-static aafWChar *slotNames[8] = { L"SLOT1", L"SLOT2", L"SLOT3", L"SLOT4",
-								  L"SLOT5", L"SLOT6", L"SLOT7", L"SLOT8" };
+
+
+// {E6AB4EE8-33F2-4bea-A5AC-A280B93146E9}
+const aafUID_t kClassID_ConcreteEvent = 
+{ 0xe6ab4ee8, 0x33f2, 0x4bea, { 0xa5, 0xac, 0xa2, 0x80, 0xb9, 0x31, 0x46, 0xe9 } };
+
+
+static aafWChar *slotNames[10] = { L"SLOT1", L"SLOT2", L"SLOT3", L"SLOT4",
+								  L"SLOT5", L"SLOT6", L"SLOT7",  L"SLOTSTATIC" , L"SLOTEVENT"  };
 
 static aafWChar *mobName = L"MOBTest";
 
@@ -86,6 +95,12 @@ static const aafMobID_t MOBTestID4 =
 	 0x01, 0x01, 0x04, 0x02, 0x13, 0x00, 0x00, 0x00,
 	0xcc77fbf1, 0x4dfa, 0x11d4, { 0x87, 0xe, 0x0, 0x10, 0x5a, 0x23, 0x45, 0x9 } };
 
+// {C92063EB-FEA6-4fb3-8EB5-A120CB21E3C4}
+static const aafMobID_t MOBTestID_Static = 
+{  0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x01,
+	 0x01, 0x01, 0x04, 0x02, 0x13, 0x00, 0x00, 0x00,
+	0xcc77fbf1, 0x4dfa, 0x11d4,  { 0x8e, 0xb5, 0xa1, 0x20, 0xcb, 0x21, 0xe3, 0xc4 } };
+
 static const char KLVsmiley[] =        /* 16x16 smiley face */
   "      ****      "
   "    ********    "
@@ -121,6 +136,13 @@ static const char KLVfrowney[] =        /* 16x16 frowney face */
   "   **********   "
   "    ********    "
   "      ****     ";
+
+
+
+namespace {
+const aafCharacter* AttributeNames[]  = { L"Attribute A Name", L"Attribute B Name" };
+const aafCharacter* AttributeValues[] = { L"Attribute A Value", L"Attribute B Value" };
+};
 
 
 static aafFrameOffset_t 	TCstartFrame = 108000;	// One hour
@@ -161,10 +183,17 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
   IAAFDictionary*  				pDictionary = NULL;
   IAAFMob						*pMob = NULL;
   IAAFMob						*pMob2 = NULL;
+  IAAFMob2                      *pMobInterface2 = NULL;
   IAAFTimelineMobSlot 			*newSlot = NULL;
+  IAAFStaticMobSlot 			*newStaticSlot=NULL;
+  IAAFEventMobSlot 				*newEventSlot=NULL;
   IAAFSegment					*seg = NULL;
   IAAFSourceClip				*sclp = NULL;
+  IAAFEvent						*event=NULL;
   IAAFComponent*				pComponent = NULL;
+  IAAFClassDef					*pcdEventMeta=NULL;
+  IAAFClassDef					*pcdEvent=NULL;
+  IAAFClassDef					*pcdEventConcrete=NULL;
   aafProductIdentification_t	ProductInfo;
   HRESULT						hr = S_OK;
   aafNumSlots_t					numMobs;
@@ -222,6 +251,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	  checkResult(defs.cdMasterMob()->
 				  CreateInstance(IID_IAAFMob, 
 								 (IUnknown **)&pMob));
+	  checkResult( pMob->QueryInterface(IID_IAAFMob2,(void**)&pMobInterface2));
 
 	  checkResult(pMob->SetMobID(MOBTestID));
       checkExpression(pMob->GetNameBufLen(&bufLen) == AAFRESULT_PROP_NOT_PRESENT, AAFRESULT_TEST_FAILED);
@@ -254,6 +284,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 												   0,
 												   &newSlot));
 
+		
 
 		  if(test == 5)
 		  {
@@ -289,6 +320,10 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		  newSlot->Release();
 		  newSlot = NULL;
 
+		  if(newStaticSlot)
+			newStaticSlot->Release();
+		  newStaticSlot = NULL;
+
 		  seg->Release();
 		  seg = NULL;
 
@@ -301,6 +336,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		  pSourceRef->Release();
 		  pSourceRef = NULL;
 		}
+
+
 
 		// PrependSlot
  		checkResult(defs.cdStaticMobSlot()->
@@ -404,13 +441,86 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		
 		pTimecode->Release();
 		pTimecode = NULL;
+
+
+		//now test AppendNewStaticSlot
+		checkResult(defs.cdSourceClip()->
+			CreateInstance(IID_IAAFSourceClip, 
+			(IUnknown **)&sclp));		
+		checkResult(sclp->QueryInterface(IID_IAAFSourceReference, (void **)&pSourceRef));
+		checkResult(pSourceRef->SetSourceID(MOBTestID_Static));
+
+		checkResult(sclp->QueryInterface(IID_IAAFComponent, (void **)&pComponent));
+		checkResult(pComponent->SetDataDef(defs.ddPicture()));
+
+		checkResult(sclp->QueryInterface (IID_IAAFSegment, (void **)&seg));
+
+		checkResult(pMobInterface2->AppendNewStaticSlot (  seg,
+			8,
+			slotNames[7],
+			&newStaticSlot));
+
+		if(newStaticSlot)
+			newStaticSlot->Release();
+		newStaticSlot = NULL;
+
+
+		seg->Release();
+		seg = NULL;
+
+		sclp->Release();
+		sclp = NULL;
+
+		pComponent->Release();
+		pComponent = NULL;
+
+
+
+		//now test AppendNewEventSlot
+
+		//Create a concrete version of IAAFEvent
+		checkResult (pDictionary->CreateMetaInstance (AUID_AAFClassDef, IID_IAAFClassDef, (IUnknown**) &pcdEventMeta));
+		checkResult (pDictionary->LookupClassDef (AUID_AAFEvent, &pcdEvent));
+		checkResult (pcdEventMeta->Initialize (kClassID_ConcreteEvent, pcdEvent, L"COncreteEvent", kAAFTrue));
+		checkResult (pDictionary->RegisterClassDef (pcdEventMeta));
+
+		//Now instantiate it
+		checkResult(pDictionary->LookupClassDef(kClassID_ConcreteEvent, &pcdEventConcrete));
+		checkResult(pcdEventConcrete->CreateInstance(IID_IAAFEvent, (IUnknown **)&event));
 		
+		//and initialize reqruied properties
+		checkResult(event->QueryInterface(IID_IAAFComponent, (void **)&pComponent));
+		checkResult(pComponent->SetDataDef(defs.ddPicture()));
+		event->SetPosition(1);
+
+		aafRational_t EventeditRate = { 0, 1};
+
+		//get the segment
+		checkResult(event->QueryInterface (IID_IAAFSegment, (void **)&seg));
+		checkResult(pMobInterface2->AppendNewEventSlot (  EventeditRate,
+															seg,
+															9,
+															slotNames[8],
+															0,
+															&newEventSlot));
+
+		if(newEventSlot)
+			newEventSlot->Release();
+		newEventSlot = NULL;
+
+		seg->Release();
+		seg = NULL;
+
+		pComponent->Release();
+		pComponent = NULL;
+
+
 		// Try CountKLVData before any have been attached
 		numFound = 1;
 		checkResult(pMob->CountKLVData(&numFound));
 		checkExpression(numFound == 0, AAFRESULT_TEST_FAILED);
 		checkExpression(pMob->CountKLVData(NULL) == AAFRESULT_NULL_PARAM,
-		  												AAFRESULT_TEST_FAILED);		  
+			AAFRESULT_TEST_FAILED);		  
 		// AppendKLVData - attach some objects
 		checkResult(pDictionary->LookupTypeDef (kAAFTypeID_UInt8Array, &pBaseType));
 		checkResult(pDictionary->RegisterKLVDataKey(TEST_KLV, pBaseType));
@@ -547,6 +657,14 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		enumTaggedVal->Release();
 		enumTaggedVal = NULL;
 		
+
+  	  // Check the Mob2 attribute and usage code implementations.
+ 	  // Need IAAFMob2 for that;
+	 checkResult( pMob->QueryInterface( IID_IAAFMob2, reinterpret_cast<void**>(&pMobInterface2) ) );
+	 checkResult( pMobInterface2->AppendAttribute( AttributeNames[0], AttributeValues[0] ) );
+	 checkResult( pMobInterface2->AppendAttribute( AttributeNames[1], AttributeValues[1] ) );
+	 checkResult( pMobInterface2->SetUsageCode( kAAFUsage_SubClip ) );
+
 	  // Add the mob to the file.
 	  checkResult(pHeader->AddMob(pMob));
 
@@ -577,6 +695,11 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	  const aafCharacter *copy_name = L"Name of Copied Mob";
 	  IAAFMobSP spCopiedMob;
 	  checkResult(pMob->Copy(copy_name, &spCopiedMob));
+	  checkResult(pHeader->CountMobs(kAAFAllMob, &numMobs));
+	  checkExpression(numMobs == 2, AAFRESULT_TEST_FAILED);
+	  checkResult(pHeader->RemoveMob(spCopiedMob));
+	  checkResult(pHeader->CountMobs(kAAFAllMob, &numMobs));
+	  checkExpression(numMobs == 1, AAFRESULT_TEST_FAILED);
 
 	  //try CloneExternal
 	  IAAFMobSP spClonedMob;
@@ -584,6 +707,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	  aafCharacter dest_filename[128];
 	  wcscpy(dest_filename, pFileName);
 	  wcscat(dest_filename, L"_clone");
+
+
 	  // Remove the previous test file if any.
 	  RemoveTestFile(dest_filename);
 	  checkResult(AAFFileOpenNewModify(dest_filename, 0, &ProductInfo, &spDestFile));
@@ -604,6 +729,10 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
   if (newSlot)
     newSlot->Release();
 
+  if (newStaticSlot)
+	newStaticSlot->Release();
+		 
+
   if (seg)
     seg->Release();
 
@@ -619,11 +748,25 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
   if (pMob2)
     pMob2->Release();
 
+  if (pMobInterface2)
+    pMobInterface2->Release();
+
   if (pDictionary)
     pDictionary->Release();
 
   if (pHeader)
     pHeader->Release();
+
+ if(pcdEventMeta)
+	  pcdEventMeta->Release();
+
+ if(pcdEvent)
+	  pcdEvent->Release();
+
+  if(pcdEventConcrete)
+	  pcdEventConcrete->Release();
+ 
+
       
   if (pFile)
 	{  // Close file
@@ -755,7 +898,9 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 
 		  checkExpression(aMob->CountSlots (NULL) == AAFRESULT_NULL_PARAM, AAFRESULT_TEST_FAILED);
 		  checkResult(aMob->CountSlots (&numSlots));
-		  checkExpression(7 == numSlots, AAFRESULT_TEST_FAILED);
+
+		  //seven slots made by IAAFMob and  one static slot and event slot made throught IAAFMOb2
+		  checkExpression((7+1+1) == numSlots, AAFRESULT_TEST_FAILED);
 
 		  checkExpression(aMob->GetSlots(NULL) == AAFRESULT_NULL_PARAM, AAFRESULT_TEST_FAILED);
 		  checkResult(aMob->GetSlots(&slotIter));
@@ -780,7 +925,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 			// GetSlotAt
 			checkExpression(aMob->GetSlotAt(1, NULL) == AAFRESULT_NULL_PARAM,
 														AAFRESULT_TEST_FAILED);
-			checkExpression(aMob->GetSlotAt(7, &slot) == AAFRESULT_BADINDEX,
+			checkExpression(aMob->GetSlotAt(9, &slot) == AAFRESULT_BADINDEX,
 														AAFRESULT_TEST_FAILED);
 			for (s = 0; s < numSlots; ++s)
 			{
@@ -880,7 +1025,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		  slot = NULL;		
 
       
-      checkExpression(aMob->LookupSlot(9, &slot) == AAFRESULT_SLOT_NOT_FOUND,
+      checkExpression(aMob->LookupSlot(10, &slot) == AAFRESULT_SLOT_NOT_FOUND,
 													AAFRESULT_TEST_FAILED);
 
 		  checkExpression(aMob->LookupSlot(0, NULL) == AAFRESULT_NULL_PARAM,
@@ -994,12 +1139,82 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 			taggedVal = NULL;
 		  }		
 
+
+
+		  // Check attributes and usage code.
+		  // Need IAAFMob2 for that;
+		  IAAFMob2* aMobInterface2 = 0;
+		  checkResult( aMob->QueryInterface( IID_IAAFMob2, reinterpret_cast<void**>(&aMobInterface2) ) );
+		  
+		  IEnumAAFTaggedValues* pAttributesEnum = 0;
+		  checkResult( aMobInterface2->GetAttributes( &pAttributesEnum ) );
+
+		  int attributeCount = 0;
+		  HRESULT atthr = AAFRESULT_SUCCESS;
+		  IAAFTaggedValue* pAttribute = 0;
+		  for( atthr = pAttributesEnum->NextOne( &pAttribute );
+		       atthr == AAFRESULT_SUCCESS;
+		       atthr = pAttributesEnum->NextOne( &pAttribute ) ) {
+
+		    aafUInt32 bufLen = 0;
+		    checkResult( pAttribute->GetNameBufLen(&bufLen) );
+
+		    // "name" is 500 chars long... sized more than
+		    // large enough for a simple test.
+		    checkExpression( attributeCount < 2, AAFRESULT_TEST_FAILED );
+		    checkResult( pAttribute->GetName( name, bufLen ) );
+		    checkExpression( wcscmp(name, AttributeNames[attributeCount] ) == 0, AAFRESULT_TEST_FAILED );
+
+
+		    // check the value
+
+		    IAAFTypeDef* pAttributeTypeDef = NULL;
+		    checkResult( pAttribute->GetTypeDefinition( &pAttributeTypeDef ) );
+		    // It should be a string.
+		    IAAFTypeDefString* pTDString = NULL;
+		    checkResult( pAttributeTypeDef->QueryInterface( IID_IAAFTypeDefString, reinterpret_cast<void**>(&pTDString) ) );
+		    checkResult( pAttribute->GetValue( sizeof(name),
+		    			       reinterpret_cast<aafDataBuffer_t>(name), &bufLen ) );
+		    checkExpression( wcscmp( AttributeValues[attributeCount], name ) == 0, AAFRESULT_TEST_FAILED );
+		    
+
+		    pAttributeTypeDef->Release();
+		    pAttributeTypeDef = NULL;
+
+		    pTDString->Release();
+		    pTDString = NULL;
+
+		    pAttribute->Release();
+		    pAttribute = NULL;
+
+
+		    attributeCount++;
+		  }
+
+		  checkExpression( 2 == attributeCount && atthr == AAFRESULT_NO_MORE_OBJECTS,
+				   AAFRESULT_TEST_FAILED );
+
+		  aafUID_t code;
+		  checkResult( aMobInterface2->GetUsageCode( &code ) );
+		  checkExpression( memcmp( &code, &kAAFUsage_SubClip, sizeof(code) ) == 0, AAFRESULT_TEST_FAILED );
+
+
+
+		  pAttributesEnum->Release();
+		  pAttributesEnum = NULL;
+		    
 		  enumTaggedVal->Release();
 		  enumTaggedVal = NULL;
 			
+		  aMobInterface2->Release();
+		  aMobInterface2 = NULL;
 		  aMob->Release();
 		  aMob = NULL;
 		}
+
+
+
+
 	}
   catch (HRESULT& rResult)
 	{

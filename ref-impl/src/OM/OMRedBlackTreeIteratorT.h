@@ -207,7 +207,7 @@ bool OMRedBlackTreeIterator<Key, Value>::operator++()
   POSTCONDITION("Consistent result", IMPLIES( result,  this->valid()));
   POSTCONDITION("Consistent result", IMPLIES(!result, !this->valid()));
   POSTCONDITION("Valid result",
-               IMPLIES(this->valid(), (_current != 0) && (_current != _tree->_nil)));
+         IMPLIES(this->valid(), (_current != 0) && (_current != _tree->_nil)));
   return result;
 }
 
@@ -261,7 +261,7 @@ bool OMRedBlackTreeIterator<Key, Value>::operator--()
   POSTCONDITION("Consistent result", IMPLIES( result,  this->valid()));
   POSTCONDITION("Consistent result", IMPLIES(!result, !this->valid()));
   POSTCONDITION("Valid result",
-               IMPLIES(this->valid(), (_current != 0) && (_current != _tree->_nil)));
+         IMPLIES(this->valid(), (_current != 0) && (_current != _tree->_nil)));
   return result;
 }
 
@@ -320,12 +320,11 @@ Value OMRedBlackTreeIterator<Key, Value>::setValue(const Key ANAME(k),
   //   @rdesc The <p Key> at the current position.
   //   @this const
 template <typename Key, typename Value>
-Key OMRedBlackTreeIterator<Key, Value>::key(void) const
+const Key& OMRedBlackTreeIterator<Key, Value>::key(void) const
 {
   TRACE("OMRedBlackTreeIterator<Key, Value>::key");
 
   PRECONDITION("Valid iterator", this->valid());
 
-  Key result = _current->_key;
-  return result;
+  return _current->_key;
 }

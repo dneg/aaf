@@ -98,17 +98,25 @@ public:
   // size of this type.  If not registered, will PropValSize.
   virtual size_t ActualSize (void) const;
 
+  // Create a copy of this type definition in the destination
+  // dictionary.
+  virtual AAFRESULT MergeTo( ImplAAFDictionary* pDestDictionary );
+
   //*************************************************************
   //
   // Overrides from OMType, via inheritace through ImplAAFTypeDef
   //
   //*************************************************************
 
+  virtual bool isFixedSize(void) const;
+
   virtual void reorder(OMByte* bytes,
                        size_t bytesSize) const;
 
   virtual size_t externalSize(const OMByte* internalBytes,
                               size_t internalBytesSize) const;
+
+  virtual size_t externalSize(void) const;
 
   virtual void externalize(const OMByte* internalBytes,
                            size_t internalBytesSize,
@@ -118,6 +126,8 @@ public:
 
   virtual size_t internalSize(const OMByte* externalBytes,
                               size_t externalSize) const;
+
+  virtual size_t internalSize(void) const;
 
   virtual void internalize(const OMByte* externalBytes,
                            size_t externalBytesSize,
@@ -169,6 +179,11 @@ public:
   // Override callbacks from OMStorable
   virtual void onSave(void* clientContext) const;
   virtual void onRestore(void* clientContext) const;
+  virtual void onCopy(void* clientContext) const;
+
+  // Overrides from OMDefinition
+  virtual const OMUniqueObjectIdentification& identification(void) const;
+  virtual const wchar_t* name(void) const;
 
 protected:
   // Helper function to return the raw type of UInt8Array (if

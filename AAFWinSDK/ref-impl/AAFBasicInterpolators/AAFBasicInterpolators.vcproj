@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding = "Windows-1252"?>
+<?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="7.00"
+	Version="7.10"
 	Name="AAFBasicInterpolators"
 	SccProjectName=""
 	SccLocalPath="">
@@ -71,7 +71,13 @@
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
 				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 		<Configuration
 			Name="Debug|Win32"
@@ -84,7 +90,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../../../ref-impl/src/com-api,../../../ref-impl/plugins,../../../ref-impl/include/com-api/,../../../ref-impl/src/impl,../../../ref-impl/src/Om,../../../ref-impl/include/OM,../../../ref-impl/src/com-api/com-dll,../../../ref-impl/include"
+				AdditionalIncludeDirectories="&quot;../../../ref-impl/src/com-api&quot;;&quot;../../../ref-impl/plugins&quot;;&quot;../../../ref-impl/include/com-api/&quot;;&quot;../../../ref-impl/src/impl&quot;;&quot;../../../ref-impl/src/Om&quot;;&quot;../../../ref-impl/include&quot;;&quot;../../../ref-impl/include/OM&quot;;&quot;../../../ref-impl/src/com-api/com-dll&quot;"
 				PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;WIN32"
 				RuntimeLibrary="3"
 				RuntimeTypeInfo="TRUE"
@@ -133,15 +139,26 @@
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
 				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 	</Configurations>
+	<References>
+	</References>
 	<Files>
 		<File
-			RelativePath="..\..\..\ref-impl\plugins\AAFINTP.DEF">
+			RelativePath="..\..\..\ref-impl\src\impl\aafCvt.cpp">
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\plugins\AAFInterpCOM.cpp">
+		</File>
+		<File
+			RelativePath="..\..\..\ref-impl\plugins\AAFINTP.DEF">
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\plugins\AAFRational.cpp">
@@ -165,7 +182,7 @@
 			RelativePath="..\..\..\ref-impl\src\com-api\com-dll\CAAFUnknown.cpp">
 		</File>
 		<File
-			RelativePath="..\..\..\ref-impl\src\impl\aafCvt.cpp">
+			RelativePath="..\..\..\ref-impl\src\com-api\com-dll\utf8.cpp">
 		</File>
 	</Files>
 	<Globals>

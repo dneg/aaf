@@ -30,8 +30,11 @@ AAFObject\
 #endm
 #c
 #c #import ./AAFObject.exp
+#import ./AAFComponent2.exp
 AD_HEAD
 AD_IDL(//
+// IAAFComponent is DEPRECATED\, please use IAAFComponent2.
+//
 // The component class represents an essence element.  A Component is
 // an abastract class with two subclasses: Segment and Transition.
 // The GetLength and SetLength only aplies to time-varying media and
@@ -61,7 +64,7 @@ AD_FORWARD_DECLARATION(EnumAAFKLVData)
 AD_CLASS_UUID(38e6f8a0, 2a2c, 11d2, 84, 11, 00, 60, 08, 32, ac, b8)
 
 AD_DEFAULT_UUID(38e6f8a1, 2a2c, 11d2, 84, 11, 00, 60, 08, 32, ac, b8)
-AD_XCLASS_BEGIN(Abstract, StoredObject)
+AD_COM_EXT_CLASS_BEGIN(public IAAFComponent2)
 AD_METHOD1(SetLength,
 		   [in],
 		   aafLength_constref,
@@ -268,4 +271,18 @@ AD_XMETHOD1(RemoveKLVData,
   // AAFRESULT_OBJECT_NOT_FOUND
   //   - the given KLV data object is not in this component.)
 
-AD_XCLASS_END(Abstract, StoredObject)
+#c
+#c AAFComponent2 methods
+#c
+
+AD_COM_METH(.method-AppendComment)
+AD_COM_METH(.method-CountComments)
+AD_COM_METH(.method-GetComments)
+AD_COM_METH(.method-RemoveComment)
+AD_COM_METH(.method-AppendAttribute)
+AD_COM_METH(.method-CountAttributes)
+AD_COM_METH(.method-GetAttributes)
+AD_COM_METH(.method-RemoveAttribute)
+
+AD_COM_EXT_CLASS_END(AAFComponent2)
+

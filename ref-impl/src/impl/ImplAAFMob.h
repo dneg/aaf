@@ -38,6 +38,10 @@
 #include "ImplAAFTimelineMobSlot.h"
 #endif
 
+#ifndef __ImplAAFStaticMobSlot_h__
+#include "ImplAAFStaticMobSlot.h"
+#endif
+
 #ifndef __ImplAAFTaggedValue_h__
 #include "ImplAAFTaggedValue.h"
 #endif
@@ -51,6 +55,9 @@
 class ImplAAFSegment;
 
 class ImplAAFMobSlot;
+
+class ImplAAFEventMobSlot;
+class ImplAAFStaticMobSlot;
 
 class ImplAAFFile;
 
@@ -321,6 +328,187 @@ public:
     GetKLVData
         (ImplEnumAAFKLVData ** ppEnum);  //@parm [out,retval] KLVData
 
+  //***********************************************************
+  // METHOD NAME: AppendAttribute()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFMobEx | AppendAttribute |
+  // Append and attribute name/value pair to the attribute list. 
+  // @end
+  // 
+  virtual AAFRESULT STDMETHODCALLTYPE
+  AppendAttribute (
+    // @parm [in] aafCharacter_constptr | pName | The attribute name.
+    aafCharacter_constptr  pName,
+
+    // @parm [in] aafCharacter_constptr | pValue | The attribute value.
+    aafCharacter_constptr  pValue
+  );
+
+  //***********************************************************
+  // METHOD NAME: CountAttributes()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFMobEx | CountAttributes |
+  // Return the number of attributes contained by this mob 
+  // @end
+  // 
+  virtual AAFRESULT STDMETHODCALLTYPE
+  CountAttributes (
+    // @parm [out] aafUInt32* | pNumAttribues | Pointer to attribute count.
+    aafUInt32*  pNumAttributes
+  );
+
+  //***********************************************************
+  // METHOD NAME: GetAttributes()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFMobEx | GetAttributes |
+  // Return an attribute enumerator for this mob. 
+  // @end
+  // 
+  virtual AAFRESULT STDMETHODCALLTYPE
+  GetAttributes (
+    // @parm [out] EnumAAFTaggedValues | ppEnum | Pointer to the new enumerator object created by this method.
+    ImplEnumAAFTaggedValues ** ppEnum
+  );
+
+  //***********************************************************
+  // METHOD NAME: RemoveAttribute()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFMobEx | RemoveAttribute |
+  // Remove and attribute (tagged value).
+  // @end
+  // 
+  virtual AAFRESULT STDMETHODCALLTYPE
+  RemoveAttribute (
+    // @parm [in] AAFTaggedValue | pAttribute | Pointer to the tagged value attribute.
+    ImplAAFTaggedValue * pAttribute
+  );
+
+  //***********************************************************
+  // METHOD NAME: SetUsageCode()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFMobEx | SetUsageCode |
+  // Set this mob's usage code. 
+  // @end
+  // 
+  virtual AAFRESULT STDMETHODCALLTYPE
+  SetUsageCode (
+    // @parm [in] aafUID_constref | usageCode | The usage code value.
+    aafUID_constref  usageCode
+  );
+
+  //***********************************************************
+  // METHOD NAME: GetUsageCode()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFMobEx | GetUsageCode |
+  // Get this mob's usage code. 
+  // @end
+  // 
+  virtual AAFRESULT STDMETHODCALLTYPE
+  GetUsageCode (
+    // @parm [out] aafUID_t* | pUsageCode | Pointer to usage code.
+    aafUID_t*  pUsageCode
+  );
+
+
+  //***********************************************************
+  // METHOD NAME: AppendNewStaticSlot()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFMob2 | AppendNewStaticSlot |
+  // This method creates a new static mob slot with the given
+  // property values and appends it to the input mob.
+  // 
+  // The returned mob slot is AddRef()ed before it is returned.
+  //
+  // Succeeds if all of the following are true:
+  // - the pSegment pointer is valid.
+  // - the pSlotName pointer is valid.
+  // - the ppNewSlot pointer is valid.
+  // 
+  // If this method fails no state will be changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - any of pSegment, pSlotName, or ppNewSlot arguments is null.
+  // @end
+  // 
+  virtual AAFRESULT STDMETHODCALLTYPE
+  AppendNewStaticSlot (
+    // @parm [in] AAFSegment | pSegment | Segment to append as slot component
+    ImplAAFSegment * pSegment,
+
+    // @parm [in] aafSlotID_t | slotID | new slot ID
+    aafSlotID_t  slotID,
+
+    // @parm [in, string] aafCharacter_constptr | pSlotName | new slot name
+    aafCharacter_constptr  pSlotName,
+
+    // @parm [out] AAFStaticMobSlot | ppNewSlot | Newly created slot
+    ImplAAFStaticMobSlot ** ppNewSlot
+  );
+
+  //***********************************************************
+  // METHOD NAME: AppendNewEventSlot()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFMob2 | AppendNewEventSlot |
+  // This method creates a new event mob slot with the given
+  // property values and appends it to the input mob.
+  // 
+  // The returned mob slot is AddRef()ed before it is returned.
+  //
+  // Succeeds if all of the following are true:
+  // - the pSegment pointer is valid.
+  // - the pSlotName pointer is valid.
+  // - the ppNewSlot pointer is valid.
+  // 
+  // If this method fails no state will be changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - any of pSegment, pSlotName, or ppNewSlot arguments is null.
+  // @end
+  // 
+  virtual AAFRESULT STDMETHODCALLTYPE
+  AppendNewEventSlot (
+    // @parm [in] aafRational_t | editRate | Edit rate property value
+    aafRational_t  editRate,
+
+    // @parm [in] AAFSegment | pSegment | Segment to append as slot component
+    ImplAAFSegment * pSegment,
+
+    // @parm [in] aafSlotID_t | slotID | new slot ID
+    aafSlotID_t  slotID,
+
+    // @parm [in, string] aafCharacter_constptr | pSlotName | new slot name
+    aafCharacter_constptr  pSlotName,
+
+    // @parm [in] aafPosition_t | origin | The slot origin
+    aafPosition_t  origin,
+
+    // @parm [out] AAFEventMobSlot | ppNewSlot | Newly created slot
+    ImplAAFEventMobSlot ** ppNewSlot
+  );
+
+
 
   //****************
   // OffsetToMobTimecode()
@@ -474,6 +662,14 @@ virtual AAFRESULT STDMETHODCALLTYPE
   bool IsMobIDEqual( const aafMobID_t* mobID ) const;
   bool IsNameEqual( const aafString_t name ) const;
   HRESULT IsClassIDEqual( const aafClassID_t* id, bool& result ) const;
+  bool IsUsageCodeEqual( const aafUID_t* usageCode ) const;
+
+
+protected:
+
+  AAFRESULT CloneDependencies(aafIncMedia_t  includeMedia,
+                              ImplAAFFile * destFile);
+
 
 	protected:
 	OMFixedSizeProperty<aafMobID_t>		_mobID;
@@ -485,6 +681,9 @@ virtual AAFRESULT STDMETHODCALLTYPE
     OMStrongReferenceVectorProperty<ImplAAFMobSlot> _slots;
     OMStrongReferenceVectorProperty<ImplAAFTaggedValue> _userComments;
     OMStrongReferenceVectorProperty<ImplAAFKLVData> _KLVData;
+
+    OMStrongReferenceVectorProperty<ImplAAFTaggedValue> _attributes;
+    OMFixedSizeProperty<aafUID_t> _usageCode;
 
     aafClassID_t _clsid;
 };

@@ -7,11 +7,14 @@
 #include "ImplAAFDataDef.h"
 #endif
 
+#include "ImplEnumAAFTaggedValues.h"
+
 class ImplAAFMob;
 class ImplAAFMobSlot;
 class ImplAAFOperationDef;
 class ImplAAFOperationGroup;
 class ImplAAFScopeStack;
+class ImplAAFTaggedValue;
 
 //=---------------------------------------------------------------------=
 //
@@ -62,6 +65,8 @@ enum _implCompType_t
 		kSegment	= 1,
 		kComponent	=2
 	} implCompType_t;
+
+class AAFComponentVisitor;
 
 class ImplAAFComponent : public ImplAAFObject
 {
@@ -133,6 +138,127 @@ public:
     GetKLVData
         (ImplEnumAAFKLVData ** ppEnum);  //@parm [out,retval] KLVData
 
+
+
+  //***********************************************************
+  // METHOD NAME: AppendComment()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFComponent2 | AppendComment |
+  // Append and attribute name/value pair to the attribute list. 
+  // @end
+  // 
+  virtual AAFRESULT STDMETHODCALLTYPE
+  AppendComment (
+    // @parm [in] aafCharacter_constptr | pName | The attribute name.
+    aafCharacter_constptr  pName,
+
+    // @parm [in] aafCharacter_constptr | pValue | The attribute value.
+    aafCharacter_constptr  pValue
+  );
+
+  //***********************************************************
+  // METHOD NAME: CountComments()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFComponent2 | CountComments |
+  // Return the number of comments contained by this component 
+  // @end
+  // 
+  virtual AAFRESULT STDMETHODCALLTYPE
+  CountComments (
+    // @parm [out] aafUInt32* | pNumComments | Pointer to comment count.
+    aafUInt32*  pNumComments
+  );
+
+  //***********************************************************
+  // METHOD NAME: GetComments()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFComponent2 | GetComments |
+  // Return a comment enumerator for this component. 
+  // @end
+  // 
+  virtual AAFRESULT STDMETHODCALLTYPE
+  GetComments (
+    // @parm [out] EnumAAFTaggedValues | ppEnum | Pointer to the new enumerator object created by this method.
+    ImplEnumAAFTaggedValues ** ppEnum
+  );
+
+  //***********************************************************
+  // METHOD NAME: RemoveComment()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFComponent2 | RemoveComment |
+  // Remove a comment (tagged value).
+  // @end
+  // 
+  virtual AAFRESULT STDMETHODCALLTYPE
+  RemoveComment (
+    // @parm [in] AAFTaggedValue | pComment | Pointer to the tagged value comment.
+    ImplAAFTaggedValue * pComment
+  );
+
+  //***********************************************************
+  // METHOD NAME: AppendAttribute()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFComponent2 | AppendAttribute |
+  // Append and attribute name/value pair to the attribute list. 
+  // @end
+  // 
+  virtual AAFRESULT STDMETHODCALLTYPE
+  AppendAttribute (
+    // @parm [in] aafCharacter_constptr | pName | The attribute name.
+    aafCharacter_constptr  pName,
+
+    // @parm [in] aafCharacter_constptr | pValue | The attribute value.
+    aafCharacter_constptr  pValue
+  );
+
+  //***********************************************************
+  // METHOD NAME: CountAttributes()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFComponent2 | CountAttributes |
+  // Return the number of attributes contained by this component 
+  // @end
+  // 
+  virtual AAFRESULT STDMETHODCALLTYPE
+  CountAttributes (
+    // @parm [out] aafUInt32* | pNumAttributes | Pointer to attribute count.
+    aafUInt32*  pNumAttributes
+  );
+
+  //***********************************************************
+  // METHOD NAME: GetAttributes()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFComponent2 | GetAttributes |
+  // Return an attribute enumerator for this component. 
+  // @end
+  // 
+  virtual AAFRESULT STDMETHODCALLTYPE
+  GetAttributes (
+    // @parm [out] EnumAAFTaggedValues | ppEnum | Pointer to the new enumerator object created by this method.
+    ImplEnumAAFTaggedValues ** ppEnum
+  );
+
+  //***********************************************************
+  // METHOD NAME: RemoveAttribute()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFComponent2 | RemoveAttribute |
+  // Remove an attribute (tagged value).
+  // @end
+  // 
+  virtual AAFRESULT STDMETHODCALLTYPE
+  RemoveAttribute (
+    // @parm [in] AAFTaggedValue | pAttribute | Pointer to the tagged value attribute.
+    ImplAAFTaggedValue * pAttribute
+  );
+
+
 public:
 	AAFRESULT SetNewProps(
 				aafLength_t length,		// IN - Length  property value
@@ -154,14 +280,18 @@ public:
 	virtual AAFRESULT ChangeContainedReferences(aafMobID_constref from,
 												aafMobID_constref to);
 
+	// Visit this component and its sub-components
+	// with the specified visitor.
+	virtual void Accept(AAFComponentVisitor& visitor);
 
-  // OM deep copy notification
-  virtual void onCopy(void* clientContext) const;
 
 private:
 	OMWeakReferenceProperty<ImplAAFDataDef>		_dataDef;
 	OMFixedSizeProperty<aafLength_t>	_length;
     OMStrongReferenceVectorProperty<ImplAAFKLVData> _KLVData;
+    OMStrongReferenceVectorProperty<ImplAAFTaggedValue> _userComments;
+    OMStrongReferenceVectorProperty<ImplAAFTaggedValue> _attributes;
+
 };
 
 #endif // ! __ImplAAFComponent_h__

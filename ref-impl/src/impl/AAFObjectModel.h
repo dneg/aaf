@@ -774,6 +774,19 @@ private:
 };
 
 //
+// class for all of non-reference sets
+//
+class TypeDefinitionValueSet : public TypeDefinitionSet
+{
+public:
+  TypeDefinitionValueSet(aafCharacter_constptr name, 
+                       aafUID_constptr id,
+                       aafUID_constptr elementTypeId) :
+    TypeDefinitionSet (name, id, elementTypeId, true /*always concrete*/)
+  {}
+};
+
+//
 // class for all of the strong reference type definitions.
 //
 class TypeDefinitionObjectReference : public TypeDefinition

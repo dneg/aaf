@@ -40,6 +40,7 @@
 
 #include <assert.h>
 #include <string.h>
+#include <wchar.h>
 #include "AAFResult.h"
 #include "aafErr.h"
 
@@ -70,8 +71,10 @@ AAFRESULT STDMETHODCALLTYPE
       aafDataBuffer_t pValue)
 {
   AAFRESULT	result = AAFRESULT_SUCCESS;
-	if (!pName || !pType || !pValue)
-		return AAFRESULT_NULL_PARAM;
+  if (!pName || !pType || !pValue)
+    return AAFRESULT_NULL_PARAM;
+  if (wcslen(pName)*sizeof(OMCharacter) >= OMPROPERTYSIZE_MAX)
+    return AAFRESULT_BAD_SIZE;
   if (_initialized)
     return AAFRESULT_ALREADY_INITIALIZED;
 
@@ -208,6 +211,9 @@ AAFRESULT STDMETHODCALLTYPE
 {
 	if (!pValue)
 		return AAFRESULT_NULL_PARAM;
+
+	if (valueSize > OMPROPERTYSIZE_MAX)
+		return(AAFRESULT_BAD_SIZE);
 
 //	_value.setValue(pValue, valueSize);
   if (!_cachedTypeDef)

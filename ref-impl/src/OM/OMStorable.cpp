@@ -474,54 +474,26 @@ OMStorable* OMStorable::shallowCopy(const OMClassFactory* factory) const
   PRECONDITION("Valid class factory", factory != 0);
   
   const OMStoredObjectIdentification& id = classId();
-  OMStorable* object = 0;
-
-  if ( !factory->isRegistered(id) ) {
-    classFactory()->cloneClassDef(id, const_cast<OMClassFactory*>(factory));
-  }
-
-  object = factory->create(id);
+  OMStorable* object = factory->create(id);
   ASSERT("Registered class id", object != 0);
+  ASSERT("Valid class factory", object->classFactory() != 0);
+#if !defined(OM_NO_VALIDATE_DEFINITIONS)
+  ASSERT("Valid class definition", object->definition() != 0);
+#endif
 
   OMPropertySetIterator iterator(_persistentProperties, OMBefore);
   while (++iterator) {
     OMProperty* source = iterator.property();
     ASSERT("Valid property", source != 0);
     if (!source->isOptional() || source->isPresent()) {
-      // compute target pid
       OMPropertyId pid;
       if (source->isPredefined() || (classFactory() == factory)) {
-	// predefined property or extension property to same file
-	// target pid is same as source pid
 	pid = source->propertyId();
       } else {
-	// extension property to different file
-	// target pid not same as source pid
-	
-	// get the property's unique id from the source
-	const OMPropertyDefinition* sourcePropDef = source->definition();
-	ASSERT( "Valid property definition", sourcePropDef );
-	const OMUniqueObjectIdentification& sourcePropUniqId = sourcePropDef->uniqueIdentification();
-	
-	// get the destination class definition, and use that to get the 
-	// destinations local property id
-	const OMClassDefinition* destClassDef = object->definition();
-	ASSERT( "Valid class definition", destClassDef != 0 );
-
-	const OMPropertyDefinition* dstPropDef =
-	  const_cast<OMClassDefinition*>(destClassDef)->propertyDefinition( object, sourcePropDef );
-
-	ASSERT( "Valid property definition", dstPropDef != 0 );
-	
-	pid = dstPropDef->localIdentification();
+        pid = destinationId(object, source);
       }
-      // Copy property
-      OMPropertySet* target = object->propertySet();
-      ASSERT("Valid target property set", target != 0);
-      if (target->isAllowed(pid) && target->isPresent(pid)) {
-	OMProperty* dest = target->get(pid);
+      OMProperty* dest = object->propertySet()->get(pid);
 	source->shallowCopyTo(dest);
-      } // else ignore unknown property
     }
   }
   
@@ -538,7 +510,13 @@ void OMStorable::deepCopyTo(OMStorable* destination,
     OMProperty* source = iterator.property();
     ASSERT("Valid property", source != 0);
     if (!source->isOptional() || source->isPresent()) {
-      OMPropertyId pid = source->propertyId();
+      OMPropertyId pid;
+      OMClassFactory* factory = destination->classFactory();
+      if (source->isPredefined() || (classFactory() == factory)) {
+        pid = source->propertyId();
+      } else {
+        pid = destinationId(destination, source);
+      }
       OMProperty* dest = destination->propertySet()->get(pid);
       source->deepCopyTo(dest, clientContext);
     }
@@ -603,4 +581,23 @@ void OMStorable::onCopy(void*) const
 const OMStorable* OMStorable::container(void) const
 {
   return _container;
+}
+
+OMPropertyId OMStorable::destinationId(const OMStorable* destination,
+                                       const OMProperty* property)
+{
+  TRACE("OMStorable::destinationId");
+
+  PRECONDITION("Valid destination", destination != 0);
+  PRECONDITION("Valid property", property != 0);
+
+  const OMPropertyDefinition* srcPropDef = property->definition();
+  ASSERT("Valid property definition", srcPropDef != 0);
+  OMUniqueObjectIdentification id = srcPropDef->uniqueIdentification();
+  const OMClassDefinition* dstClassDef = destination->definition();
+  ASSERT("Valid class definition", dstClassDef != 0);
+  const OMPropertyDefinition* dstPropDef = dstClassDef->propertyDefinition(id);
+  ASSERT("Valid property definition", dstPropDef != 0);
+  OMPropertyId result = dstPropDef->localIdentification();
+  return result;
 }

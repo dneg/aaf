@@ -45,12 +45,14 @@ typedef ImplAAFEnumerator<ImplAAFIdentification> ImplEnumAAFIdentifications;
 #include "ImplAAFObject.h"
 #endif
 
+#include "OMSetProperty.h"
 #include "OMStrongRefProperty.h"
 #include "OMStrongRefVectorProperty.h"
 
 #include "aafTable.h"
 
 #include "aafErr.h"
+#include "AAFUtils.h"
 #include "ImplAAFObject.h"
 #include "ImplAAFIdentification.h"
 #include "ImplAAFContentStorage.h"
@@ -291,6 +293,112 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
   GetNativeByteOrder (eAAFByteOrder_t * pOrder);
 
+
+  //****************
+  // GetPrimaryMob()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetPrimaryMob (ImplAAFMob** pPrimaryMob);
+
+
+  //****************
+  // SetPrimaryMob()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    SetPrimaryMob (ImplAAFMob* pPrimaryMob);
+
+
+  //****************
+  // GetOperationalPattern()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetOperationalPattern
+        (aafUID_t* pOperationalPattern);
+
+
+  //****************
+  // SetOperationalPattern()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    SetOperationalPattern
+        (const aafUID_t& operationalPatternID);
+
+
+  //****************
+  // UpdateEssenceContainers()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    UpdateEssenceContainers
+        ();
+
+  //****************
+  // CountEssenceContainers()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    CountEssenceContainers
+        (aafUInt32 * pCount);
+
+
+  //****************
+  // GetEssenceContainers()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetEssenceContainers
+        (aafUInt32 maxEssenceContainersCount,
+         aafUID_t* pEssenceContainers);
+
+
+  //****************
+  // IsEssenceContainerPresent()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    IsEssenceContainerPresent
+        (const aafUID_t& essenceContainer,
+         aafBoolean_t* pIsPresent);
+
+
+  //****************
+  // CountDescriptiveSchemes()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    CountDescriptiveSchemes
+        (aafUInt32 * pCount);
+
+
+  //****************
+  // GetDescriptiveSchemes()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetDescriptiveSchemes
+        (aafUInt32 maxDescriptiveSchemesCount,
+         aafUID_t* pDescriptiveSchemes);
+
+
+  //****************
+  // IsDescriptiveSchemePresent()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    IsDescriptiveSchemePresent
+        (const aafUID_t& descriptiveScheme,
+         aafBoolean_t* pIsPresent);
+
+
+  //****************
+  // AddDescriptiveScheme()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    AddDescriptiveScheme
+        (const aafUID_t& descriptiveSchemeID);
+
+
+  //****************
+  // RemoveDescriptiveScheme()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    RemoveDescriptiveScheme
+        (const aafUID_t& descriptiveSchemeID);
+
+
 public:
   // Interfaces visible inside the toolkit, but not exposed through the API
 
@@ -346,7 +454,9 @@ private:
   OMStrongReferenceProperty<ImplAAFDictionary>     _dictionary;
   OMFixedSizeProperty<aafVersionType_t>            _fileRev;
   OMFixedSizeProperty<aafUInt32>                   _objectModelVersion;
-
+  OMFixedSizeProperty<aafUID_t>                    _operationalPattern;
+  OMSetProperty<aafUID_t>                          _essenceContainers;
+  OMSetProperty<aafUID_t>                          _descriptiveSchemes;
 };
 
 //

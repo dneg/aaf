@@ -261,7 +261,21 @@ AAFRESULT ImplAAFNestedScope::ChangeContainedReferences(aafMobID_constref from,
 	return AAFRESULT_SUCCESS;
 }
 
+void ImplAAFNestedScope::Accept(AAFComponentVisitor& visitor)
+{
+	aafUInt32 count = 0;
+	CountSegments(&count);
+	for(aafUInt32 i=0; i<count; i++)
+	{
+		ImplAAFSegment* pSegment = 0;
+		GetSegmentAt(i, &pSegment);
 
+       	        pSegment->Accept(visitor);
 
+		pSegment->ReleaseReference();
+		pSegment = NULL;
+	}
 
-
+	// TODO
+	// visitor.VisitNestedScope(this);
+}

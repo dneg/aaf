@@ -34,6 +34,9 @@ class ImplAAFPropertyValue;
 #include "ImplAAFTypeDef.h"
 #endif
 
+#include "AAFUtils.h"
+#include "OMArrayProperty.h"
+
 
 class ImplAAFTypeDefExtEnum : public ImplAAFTypeDef
 {
@@ -242,7 +245,7 @@ private:
 	OMVariableSizeProperty<wchar_t>  _ElementNames;
 	
 	// array of values for elements.
-	OMVariableSizeProperty<aafUID_t> _ElementValues;
+	OMArrayProperty<aafUID_t> _ElementValues;
 	
 	ImplAAFTypeDefSP _cachedBaseType;
 	

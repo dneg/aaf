@@ -28,6 +28,8 @@
 #include "AAFStoredObjectIDs.h"
 #include "AAFResult.h"
 
+#include <assert.h>
+
 //=---------------------------------------------------------------------=
 
 ImplAAFCloneResolver::ImplAAFCloneResolver( ImplAAFFile* pDstFile )
@@ -44,9 +46,11 @@ ImplAAFCloneResolver::~ImplAAFCloneResolver()
 
 void ImplAAFCloneResolver::AddSourceReference( const aafMobID_t mobID )
 {
+#ifndef DISABLE_CLONE_RESOLVER
   if ( !_sourceIDList.containsValue( mobID ) ) {
     _sourceIDList.insert( mobID );
   }
+#endif
 }
 
 const OMVector<aafMobID_t>& ImplAAFCloneResolver::GetSourceReferences() const
@@ -56,9 +60,11 @@ const OMVector<aafMobID_t>& ImplAAFCloneResolver::GetSourceReferences() const
 
 void ImplAAFCloneResolver::AddTypeReference( const aafUID_t typeID )
 {
+#ifndef DISABLE_CLONE_RESOLVER
   if ( !_typeIDList.containsValue( typeID ) ) {
     _typeIDList.insert( typeID );
   }
+#endif
 }
 
 const OMVector<aafUID_t>& ImplAAFCloneResolver::GetTypeReferences() const
@@ -99,6 +105,7 @@ void ImplAAFCloneResolver::CloneClassDef( const OMClassId& id,
 					  OMClassFactory* pDstFactory,
 					  ImplAAFMetaDictionary* pSrcDict )
 {
+#ifndef DISABLE_CLONE_RESOLVER
   // We may be handed an ImplAAFDictionary, or ImplAAFMetaDictionary.
   // In either case, we need to get to the ImplAAFDictionary.
 
@@ -120,19 +127,7 @@ void ImplAAFCloneResolver::CloneClassDef( const OMClassId& id,
 
   ImplAAFCloneResolver resolver(pDstDict);
   resolver.CloneAndRegister( static_cast<ImplAAFClassDef*>(spClassDef) );
+#endif
 }
 
 //=---------------------------------------------------------------------=
-
-bool operator==( const aafMobID_t& lhs, const aafMobID_t& rhs )
-{
-   return (memcmp( &rhs, &lhs, sizeof(aafMobID_t) ) == 0) ? true : false;
-}
-
-bool operator==( const aafUID_t& lhs, const aafUID_t& rhs )
-{
-   return (memcmp( &rhs, &lhs, sizeof(aafUID_t) ) == 0) ? true : false;
-}
-
-//=---------------------------------------------------------------------=
-

@@ -29,11 +29,12 @@
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
-#include <AAFResult.h>
+#include "AAFResult.h"
 
 
 #include <assert.h>
 #include <string.h>
+#include <wchar.h>
 
 
 ImplAAFEvent::ImplAAFEvent ():
@@ -79,6 +80,9 @@ AAFRESULT STDMETHODCALLTYPE
 {
 	if (NULL == pComment)
 		return (AAFRESULT_NULL_PARAM);
+
+	if (wcslen(pComment)*sizeof(OMCharacter) >= OMPROPERTYSIZE_MAX)
+		return (AAFRESULT_BAD_SIZE);
 	
 	_comment = pComment;
 	

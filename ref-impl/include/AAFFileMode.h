@@ -91,18 +91,18 @@
 
 // Unpublished mode flags
 
-// Control of use of large sector size mode in Structured Storage
+// Control of use of sector size mode in Structured Storage
 // The following applies to:
 //
-// - When set, the bit signifies that large sector size mode will be
+// - When set, the bit signifies that 512-byte sector size mode will be
 //   used in Structured Storage.
-// - When clear (the default), normal-sized sectors will be used in
+// - When clear (the default), 4k-sized sectors will be used in
 //   Structured Storage.
 //
 // - AAFFileOpenExistingModify()
 // - AAFFileOpenExistingWrite()
 // - IAAFFile::SaveAs()
-#define AAF_FILE_MODE_USE_LARGE_SS_SECTORS    (1 << 28)
+#define AAF_FILE_MODE_USE_SMALL_SS_SECTORS    (1 << 28)
 
 // Indicates if Close() should fail when there are dirty objects
 //

@@ -29,6 +29,7 @@
 #include "aafTable.h"
 #include "aafErr.h"
 #include "AAFUtils.h"
+#include "ImplAAFModule.h"
 
 #ifndef __ImplAAFMob_h__
 #include "ImplAAFMob.h"
@@ -60,6 +61,8 @@
 
 #include "ImplAAFFile.h"
 #include "ImplAAFBuiltinDefs.h"
+#include "ImplAAFFileDescriptor.h"
+#include "ImplAAFSourceMob.h"
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
@@ -74,6 +77,7 @@ typedef ImplAAFSmartPointer<ImplEnumAAFIdentifications>
 #include <wchar.h>
 
 #include "ImplAAFObjectCreation.h"
+#include "OMSetPropertyIterator.h"
 
 #define DEFAULT_NUM_MOBS				1000
 #define DEFAULT_NUM_DATAOBJ			200
@@ -92,7 +96,10 @@ ImplAAFHeader::ImplAAFHeader ()
   _contentStorage(		PID_Header_Content,	L"Content"),
   _dictionary(PID_Header_Dictionary,	L"Dictionary"),
   _fileRev(PID_Header_Version,		L"Version"),
-  _objectModelVersion(PID_Header_ObjectModelVersion, L"ObjectModelVersion")
+  _objectModelVersion(PID_Header_ObjectModelVersion, L"ObjectModelVersion"),
+  _operationalPattern(PID_Header_OperationalPattern, L"OperationalPattern"),
+  _essenceContainers(PID_Header_EssenceContainers, L"EssenceContainers"),
+  _descriptiveSchemes(PID_Header_DescriptiveSchemes, L"DescriptiveSchemes")
 {
   _persistentProperties.put(_byteOrder.address());
   _persistentProperties.put(_lastModified.address());
@@ -101,6 +108,9 @@ ImplAAFHeader::ImplAAFHeader ()
   _persistentProperties.put(_dictionary.address());
   _persistentProperties.put(_fileRev.address());
   _persistentProperties.put(_objectModelVersion.address());
+  _persistentProperties.put(_operationalPattern.address());
+  _persistentProperties.put(_essenceContainers.address());
+  _persistentProperties.put(_descriptiveSchemes.address());
 
 	_toolkitRev = AAFReferenceImplementationVersion;
 	_file = NULL;
@@ -815,6 +825,318 @@ AAFRESULT STDMETHODCALLTYPE
 
   return AAFRESULT_SUCCESS;
 }
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFHeader::GetPrimaryMob (ImplAAFMob** /*pPrimaryMob*/)
+{
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFHeader::SetPrimaryMob (ImplAAFMob* /*pPrimaryMob*/)
+{
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+  
+  
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFHeader::GetOperationalPattern (aafUID_t* pOperationalPattern)
+{
+  if (!pOperationalPattern)
+    return AAFRESULT_NULL_PARAM;
+
+  if (!_operationalPattern.isPresent())
+    return AAFRESULT_PROP_NOT_PRESENT;
+
+
+  *pOperationalPattern = _operationalPattern;
+
+
+  return AAFRESULT_SUCCESS;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFHeader::SetOperationalPattern (const aafUID_t& operationalPatternID)
+{
+  _operationalPattern = operationalPatternID;
+
+
+  return AAFRESULT_SUCCESS;
+}
+
+
+
+// Update the contents of _essenceContainers set.
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFHeader::UpdateEssenceContainers ()
+{
+#if 0  // Avid private
+
+  if (_essenceContainers.isPresent())
+  {
+    _essenceContainers.clear();
+    _essenceContainers.removeProperty();
+  }
+
+
+  //
+  // For each ContainerFormat property in the file (which
+  // is an optional property on a FileDescriptor), get its
+  // ID and append to the _essenceContainers set
+  //
+
+  aafSearchCrit_t  searchCrit;
+  searchCrit.searchTag = kAAFByMobKind;
+  searchCrit.tags.mobKind = kAAFFileMob;
+
+  ImplEnumAAFMobs*  pSourceMobs = 0;
+  AAFRESULT  hr = GetMobs( &searchCrit, &pSourceMobs );
+
+  if (AAFRESULT_SUCCEEDED(hr))
+  {
+    ImplAAFMob*  pMob = 0;
+    while (AAFRESULT_SUCCEEDED (pSourceMobs->NextOne (&pMob)))
+    {
+      ImplAAFSourceMob*  pSourceMob = dynamic_cast<ImplAAFSourceMob*>(pMob);
+      assert(pSourceMob);
+
+      ImplAAFEssenceDescriptor*  pDescriptor = 0;
+      pSourceMob->GetEssenceDescriptor( &pDescriptor );
+      ImplAAFFileDescriptor*  pFileDescriptor =
+        dynamic_cast<ImplAAFFileDescriptor*>(pDescriptor);
+
+      if (pFileDescriptor)
+      {
+        ImplAAFContainerDef*  pContainerDef = 0;
+        hr = pFileDescriptor->GetContainerFormat( &pContainerDef );
+        if (AAFRESULT_SUCCEEDED (hr))
+        {
+          aafUID_t  containerDefID;
+          pContainerDef->GetAUID( &containerDefID );
+
+          if (! _essenceContainers.contains(containerDefID))
+          {
+            _essenceContainers.insert(containerDefID);
+          }
+
+          pContainerDef->ReleaseReference();
+          pContainerDef = 0;
+        }
+      }
+
+      pDescriptor->ReleaseReference();
+      pDescriptor = 0;
+
+      pMob->ReleaseReference();
+      pMob = 0;
+    }
+  }
+
+  if (pSourceMobs)
+  {
+    pSourceMobs->ReleaseReference();
+    pSourceMobs = 0;
+  }
+#endif  // Avid private
+
+
+  return AAFRESULT_SUCCESS;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFHeader::CountEssenceContainers (aafUInt32 * pCount)
+{
+  if (!pCount)
+    return AAFRESULT_NULL_PARAM;
+
+  if (!_essenceContainers.isPresent())
+    return AAFRESULT_PROP_NOT_PRESENT;
+
+
+  *pCount = _essenceContainers.count();
+
+
+  return AAFRESULT_SUCCESS;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFHeader::GetEssenceContainers (aafUInt32 maxEssenceContainersCount,
+                                         aafUID_t* pEssenceContainers)
+{
+  if (!pEssenceContainers)
+    return AAFRESULT_NULL_PARAM;
+
+  if (!_essenceContainers.isPresent())
+    return AAFRESULT_PROP_NOT_PRESENT;
+
+  if (_essenceContainers.count() > maxEssenceContainersCount)
+    return AAFRESULT_SMALLBUF;
+
+
+  aafUID_t*  pNextEssenceContainer = pEssenceContainers;
+  OMSetPropertyIterator<aafUID_t> iter( _essenceContainers, OMBefore );
+  while( ++iter )
+  {
+    *pNextEssenceContainer = iter.value();
+    pNextEssenceContainer++;
+  }
+
+
+  return AAFRESULT_SUCCESS;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFHeader::IsEssenceContainerPresent (const aafUID_t& essenceContainer,
+                                              aafBoolean_t* pIsPresent)
+{
+  if (!pIsPresent)
+    return AAFRESULT_NULL_PARAM;
+
+  if (!_essenceContainers.isPresent())
+    return AAFRESULT_PROP_NOT_PRESENT;
+
+
+  if (_essenceContainers.contains( essenceContainer))
+  {
+    *pIsPresent = kAAFTrue;
+  }
+  else
+  {
+    *pIsPresent = kAAFFalse;
+  }
+
+
+  return AAFRESULT_SUCCESS;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+ImplAAFHeader::CountDescriptiveSchemes
+        (aafUInt32 * pCount)
+{
+  if (!pCount)
+    return AAFRESULT_NULL_PARAM;
+
+  if (!_descriptiveSchemes.isPresent())
+    return AAFRESULT_PROP_NOT_PRESENT;
+
+
+  *pCount = _descriptiveSchemes.count();
+
+
+  return AAFRESULT_SUCCESS;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+ImplAAFHeader::GetDescriptiveSchemes
+        (aafUInt32 maxDescriptiveSchemesCount,
+         aafUID_t* pDescriptiveSchemes)
+{
+  if (!pDescriptiveSchemes)
+    return AAFRESULT_NULL_PARAM;
+
+  if (!_descriptiveSchemes.isPresent())
+    return AAFRESULT_PROP_NOT_PRESENT;
+
+  if (_descriptiveSchemes.count() > maxDescriptiveSchemesCount)
+    return AAFRESULT_SMALLBUF;
+
+
+  aafUID_t*  pNextDescriptiveScheme = pDescriptiveSchemes;
+  OMSetPropertyIterator<aafUID_t> iter( _descriptiveSchemes, OMBefore );
+  while( ++iter )
+  {
+    *pNextDescriptiveScheme = iter.value();
+    pNextDescriptiveScheme++;
+  }
+
+
+  return AAFRESULT_SUCCESS;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+ImplAAFHeader::IsDescriptiveSchemePresent
+        (const aafUID_t& descriptiveSchemeID,
+         aafBoolean_t* pIsPresent)
+{
+  if (!pIsPresent)
+    return AAFRESULT_NULL_PARAM;
+
+  if (!_descriptiveSchemes.isPresent())
+    return AAFRESULT_PROP_NOT_PRESENT;
+
+
+  if( _descriptiveSchemes.contains( descriptiveSchemeID ) )
+  {
+    *pIsPresent = kAAFTrue;
+  }
+  else
+  {
+    *pIsPresent = kAAFFalse;
+  }
+
+
+  return AAFRESULT_SUCCESS;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+ImplAAFHeader::AddDescriptiveScheme
+        (const aafUID_t& descriptiveSchemeID)
+{
+  if (_descriptiveSchemes.isPresent())
+  {
+    if (_descriptiveSchemes.contains(descriptiveSchemeID))
+      return AAFRESULT_INVALID_PARAM;
+  }
+
+
+  _descriptiveSchemes.insert(descriptiveSchemeID);
+
+
+  return AAFRESULT_SUCCESS;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+ImplAAFHeader::RemoveDescriptiveScheme
+        (const aafUID_t& descriptiveSchemeID)
+{
+  if (!_descriptiveSchemes.isPresent())
+    return AAFRESULT_PROP_NOT_PRESENT;
+
+  if (! _descriptiveSchemes.contains(descriptiveSchemeID))
+    return AAFRESULT_INVALID_PARAM;
+
+
+  _descriptiveSchemes.remove(descriptiveSchemeID);
+
+  if (_descriptiveSchemes.count() == 0)
+  {
+    _descriptiveSchemes.removeProperty();
+  }
+
+
+  return AAFRESULT_SUCCESS;
+}
+
+
 
 void ImplAAFHeader::SetContentStorage( ImplAAFContentStorage* pNewStorage )
 {

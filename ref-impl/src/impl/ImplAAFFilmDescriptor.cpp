@@ -31,6 +31,7 @@
 
 #include <assert.h>
 #include <string.h>
+#include <wchar.h>
 #include "aafErr.h"
 
 ImplAAFFilmDescriptor::ImplAAFFilmDescriptor ()
@@ -61,6 +62,9 @@ AAFRESULT STDMETHODCALLTYPE
 {
 	if(name == NULL)
 		return(AAFRESULT_NULL_PARAM);
+
+	if(wcslen(name)*sizeof(OMCharacter) >= OMPROPERTYSIZE_MAX)
+		return(AAFRESULT_BAD_SIZE);
 
 	_manufacturer = name;
 
@@ -112,6 +116,9 @@ AAFRESULT STDMETHODCALLTYPE
 {
 	if(name == NULL)
 		return(AAFRESULT_NULL_PARAM);
+
+	if(wcslen(name)*sizeof(OMCharacter) >= OMPROPERTYSIZE_MAX)
+		return(AAFRESULT_BAD_SIZE);
 
 	_model = name;
 

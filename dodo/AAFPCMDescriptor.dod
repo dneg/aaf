@@ -1,0 +1,978 @@
+#c *********************************************************************
+#c
+#c $Id$ $Name$
+#c
+#c The contents of this file are subject to the AAF SDK Public
+#c Source License Agreement (the "License"); You may not use this file
+#c except in compliance with the License.  The License is available in
+#c AAFSDKPSL.TXT, or you may obtain a copy of the License from the AAF
+#c Association or its successor.
+#c
+#c Software distributed under the License is distributed on an "AS IS"
+#c basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.  See
+#c the License for the specific language governing rights and limitations
+#c under the License.
+#c
+#c The Original Code of this file is Copyright 1998-2004, Licensor of the
+#c AAF Association.
+#c
+#c The Initial Developer of the Original Code of this file and the
+#c Licensor of the AAF Association is Avid Technology.
+#c All rights reserved.
+#c
+#c *********************************************************************
+#startm .this-module 0
+AAFPCMDescriptor\
+#endm
+#c
+#startm .parent-module 0
+AAFSoundDescriptor\
+#endm
+#c
+#c #import ./AAFSoundDescriptor.exp
+AD_HEAD
+AD_IDL(//
+// The IAAFPCMDescriptor interface is implemented by objects which
+// describe audio essence.
+//
+// In addition to the specific error results listed for each method\,
+// all methods in this interface may also return one of the following
+// values:
+// 
+// AAFRESULT_NOMEMORY
+//   - insufficient system memory is available to perform the
+//     operation.
+//)
+AD_CLASS_UUID(F17D58D7, 5107, 47e4, 9A, BA, 83, 29, FC, 1B, 2C, 84)
+
+AD_DEFAULT_UUID(F17D58D8, 5107, 47e4, 9A, BA, 83, 29, FC, 1B, 2C, 84)
+AD_XCLASS_BEGIN(Concrete, StoredObject)
+AD_METHOD0(Initialize,
+		   Initializes a newly allocated\, IAAFPCMDescriptor-supporting
+  // object. This method must be called after allocation\, and before
+  // any other method can be called.
+  //
+  // Succeeds if:
+  // - Initialize\(\) has not yet been called on this object.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_ALREADY_INITIALIZED
+  //   - Initialize\(\) has already been called on this object.)
+
+
+AD_XMETHOD1(SetBlockAlign,
+			[in],
+				objPass,
+				aafUInt16,
+				blockAlign,
+			The number of bytes used to store one sample of all channels.,
+
+     Sets the number of bytes used to store one sample of all channels.
+  // This property is required.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // 
+  // If this method fails the BlockAlign property will not be
+  // changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.)
+
+
+AD_XMETHOD1(GetBlockAlign,
+			[out],
+				objPass,
+				aafUInt16 *,
+				pBlockAlign,
+			The number of bytes used to store one sample of all channels.,
+
+     Gets the number of bytes used to store one sample of all channels.
+  // This property is required.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // - the pBlockAlign pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pBlockAlign.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pBlockAlign arg is NULL.)
+
+
+AD_XMETHOD1(SetSequenceOffset,
+			[in],
+				objPass,
+				aafUInt8,
+				offset,
+			Zero-based ordinal frame number of the beginning of
+	// the essence data within a five-frame sequence.,
+
+     Sets the frame number of the beginning of the essence data
+  // within a five-frame sequence. This property is optional.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // 
+  // If this method fails the SequenceOffset property will not be
+  // changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.)
+
+
+AD_XMETHOD1(GetSequenceOffset,
+			[out],
+				objPass,
+				aafUInt8 *,
+				pOffset,
+			Zero-based ordinal frame number of the beginning of
+	// the essence data within a five-frame sequence.,
+
+     Gets the frame number of the beginning of the essence data
+  // within a five-frame sequence. This property is optional.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // - the pOffset pointer is valid.
+  // - the property is present.
+  // 
+  // If this method fails nothing will be written to *pOffset.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pOffset arg is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the property is not present.)
+
+
+AD_XMETHOD1(SetAverageBPS,
+			[in],
+				objPass,
+				aafUInt32,
+				bps,
+			Average bytes per second of the essence stream.,
+
+     Sets the average bytes per second of the essence stream.
+  // This property is required.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // 
+  // If this method fails the AverageBPS property will not be
+  // changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.)
+
+
+AD_XMETHOD1(GetAverageBPS,
+			[out],
+				objPass,
+				aafUInt32 *,
+				pBps,
+			Average bytes per second of the essence stream.,
+
+     Gets the average bytes per second of the essence stream.
+  // This property is required.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // - the pBps pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pBps.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pBps arg is NULL.)
+
+
+AD_XMETHOD1(SetChannelAssignment,
+			[in\, ref],
+				objPass,
+				aafUID_constref,
+				channelAssignment,
+			The channel assignment to use.,
+
+     Sets the channel assignment scheme. This property is optional.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // 
+  // If this method fails the ChannelAssignment property will not be
+  // changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.)
+
+
+AD_XMETHOD1(GetChannelAssignment,
+			[out],
+				objPass,
+				aafUID_t *,
+				pChannelAssignment,
+			The channel assignment in use.,
+
+     Gets the channel assignment scheme. This property is optional.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // - the pChannelAssignment pointer is valid.
+  // - the property is present.
+  // 
+  // If this method fails nothing will be written to *pChannelAssignment.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pChannelAssignment arg is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the property is not present.)
+
+
+AD_XMETHOD1(AreAllPeakEnvelopePropertiesPresent,
+			[out],
+				objPass,
+				aafBoolean_t *,
+				pArePresent,
+			The flag indicating presence of the optional properties
+	// that form peak envelope.,
+
+     Places TRUE into *pArePresent if the following optional
+  // properties are set on the descriptor:
+  //   PeakEnvelopeVersion
+  //   PeakEnvelopeFormat
+  //   PointsPerPeakValue
+  //   PeakEnvelopeBlockSize
+  //   PeakChannels
+  //   PeakFrames
+  //   PeakOfPeaksPosition
+  //   PeakEnvelopeTimestamp
+  //   PeakEnvelopeData
+  //
+  // Succeeds if all of the following are true:
+  // - the pArePresent pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pIsPresent.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pArePresent arg is NULL.)
+
+
+AD_XMETHOD1(SetPeakEnvelopeVersion,
+			[in],
+				objPass,
+				aafUInt32,
+				version,
+			Version of the peak envelope data.,
+
+     Sets the version of the peak envelope data.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // 
+  // If this method fails the version will not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.)
+
+
+AD_XMETHOD1(GetPeakEnvelopeVersion,
+			[out],
+				objPass,
+				aafUInt32 *,
+				pVersion,
+			Version of the peak envelope data.,
+
+     Gets the version of the peak envelope data.
+  // This property is optional.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // - the pVersion pointer is valid.
+  // - the property is present.
+  // 
+  // If this method fails nothing will be written to *pVersion.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pVersion arg is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the property is not present.)
+
+
+AD_XMETHOD1(SetPeakEnvelopeFormat,
+			[in],
+				objPass,
+				aafUInt32,
+				format,
+			Format of the peak point.,
+
+     Sets the format of the peak point.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // 
+  // If this method fails the format will not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.)
+
+
+AD_XMETHOD1(GetPeakEnvelopeFormat,
+			[out],
+				objPass,
+				aafUInt32 *,
+				pFormat,
+			Format of the peak point.,
+
+     Gets the format of the peak point.
+  // This property is optional.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // - the pFormat pointer is valid.
+  // - the property is present.
+  // 
+  // If this method fails nothing will be written to *pFormat.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pFormat arg is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the property is not present.)
+
+
+AD_XMETHOD1(SetPointsPerPeakValue,
+			[in],
+				objPass,
+				aafUInt32,
+				pointCount,
+			The number of peak points per peak value.,
+
+     Sets the number of peak points per peak value.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // 
+  // If this method fails the PointsPerPeakValue property will
+  // not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.)
+
+
+AD_XMETHOD1(GetPointsPerPeakValue,
+			[out],
+				objPass,
+				aafUInt32 *,
+				pPointCount,
+			The number of peak points per peak value.,
+
+     Gets the number of peak points per peak value.
+  // This property is optional.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // - the pPointCount pointer is valid.
+  // - the property is present.
+  // 
+  // If this method fails nothing will be written to *pPointCount.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pPointCount arg is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the property is not present.)
+
+
+AD_XMETHOD1(SetPeakEnvelopeBlockSize,
+			[in],
+				objPass,
+				aafUInt32,
+				blockSize,
+			The number of audio samples used to generate each peak frame.,
+
+       Sets the number of audio samples used to generate each peak frame.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // 
+  // If this method fails the PeakEnvelopeBlockSize property will
+  // not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.)
+
+
+AD_XMETHOD1(GetPeakEnvelopeBlockSize,
+			[out],
+				objPass,
+				aafUInt32 *,
+				pBlockSize,
+			The number of audio samples used to generate each peak frame.,
+
+     Gets the number of audio samples used to generate each peak frame.
+  // This property is optional.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // - the pBlockSize pointer is valid.
+  // - the property is present.
+  // 
+  // If this method fails nothing will be written to *pBlockSize.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pBlockSize arg is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the property is not present.)
+
+
+AD_XMETHOD1(SetPeakChannelCount,
+			[in],
+				objPass,
+				aafUInt32,
+				channelCount,
+			The number of peak channels.,
+
+     Sets the number of peak channels.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // 
+  // If this method fails the channel count will not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.)
+
+
+AD_XMETHOD1(GetPeakChannelCount,
+			[out],
+				objPass,
+				aafUInt32 *,
+				pChannelCount,
+			The number of peak channels.,
+
+     Gets the number of peak channels.
+  // This property is optional.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // - the pChannelCount pointer is valid.
+  // - the property is present.
+  // 
+  // If this method fails nothing will be written to *pChannelCount.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pChannelCount arg is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the property is not present.)
+
+
+AD_XMETHOD1(SetPeakFrameCount,
+			[in],
+				objPass,
+				aafUInt32,
+				frameCount,
+			The number of peak frames.,
+
+     Sets the number of peak frames.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // 
+  // If this method fails the frame count will not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.)
+
+
+AD_XMETHOD1(GetPeakFrameCount,
+			[out],
+				objPass,
+				aafUInt32 *,
+				pFrameCount,
+			The number of peak frames.,
+
+     Gets the number of peak frames.
+  // This property is optional.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // - the pFrameCount pointer is valid.
+  // - the property is present.
+  // 
+  // If this method fails nothing will be written to *pFrameCount.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pFrameCount arg is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the property is not present.)
+
+
+AD_XMETHOD1(SetPeakOfPeaksPosition,
+			[in],
+				objPass,
+				aafPosition_t,
+				position,
+			The offset to peak of peaks,
+
+     Sets the offset to the first audio sample whose absolute
+  // value is the maximum value of the entire audio file.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // 
+  // If this method fails the PeakOfPeaksPosition property will
+  // not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.)
+
+
+AD_XMETHOD1(GetPeakOfPeaksPosition,
+			[out],
+				objPass,
+				aafPosition_t *,
+				pPosition,
+			The offset to peak of peaks.,
+
+     Gets the offset to the first audio sample whose absolute
+  // value is the maximum value of the entire audio file.
+  // This property is optional.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // - the pPosition pointer is valid.
+  // - the property is present.
+  // 
+  // If this method fails nothing will be written to *pPosition.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pPosition arg is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the property is not present.)
+
+
+AD_XMETHOD1(SetPeakEnvelopeTimestamp,
+			[in],
+				objPass,
+				aafTimeStamp_constref,
+				timeStamp,
+			The time stamp of the creation of the peak data.,
+
+     Sets the time stamp of the creation of the peak data.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // 
+  // If this method fails the time stamp will not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.)
+
+
+AD_XMETHOD1(GetPeakEnvelopeTimestamp,
+			[out],
+				objPass,
+				aafTimeStamp_t *,
+				pTimeStamp,
+			The time stamp of the creation of the peak data.,
+
+     Gets the time stamp of the creation of the peak data.
+  // This property is optional.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // - the pTimeStamp pointer is valid.
+  // - the property is present.
+  // 
+  // If this method fails nothing will be written to *pTimeStamp.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pTimeStamp arg is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the property is not present.)
+
+
+AD_XMETHOD1(SetPeakEnvelopeDataPosition,
+			[in],
+				objPass,
+				aafPosition_t,
+				position,
+			Offset from the beginning of peak envelope data.,
+
+     Sets the offset from the beginning of peak envelope data.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // - the object is persistent \(attached to a file\).
+  // 
+  // If this method fails the position will not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.
+  //
+  // AAFRESULT_OBJECT_NOT_PERSISTENT
+  //   - the object is not persistent.)
+
+
+AD_XMETHOD1(GetPeakEnvelopeDataPosition,
+			[out],
+				objPass,
+				aafPosition_t *,
+				pPosition,
+			Offset from the beginning of peak envelope data.,
+
+     Gets the offset from the beginning of peak envelope data.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // - the pPosition pointer is valid.
+  // - the object is persistent \(attached to a file\).
+  // 
+  // If this method fails nothing will be written to *pPosition.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pPosition arg is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the PeakEnvelopeData property is not present.
+  //
+  // AAFRESULT_OBJECT_NOT_PERSISTENT
+  //   - the object is not persistent.)
+
+
+AD_XMETHOD1(GetPeakEnvelopeDataSize,
+			[out],
+				objPass,
+				aafLength_t *,
+				pSize,
+			The size of peak envelope data.,
+
+     Gets the size of peak envelope data.
+  // PeakEnvelopeData is optional property.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // - the pSize pointer is valid.
+  // - the PeakEnvelopeData property is present.
+  // - the object is persistent \(attached to a file\).
+  // 
+  // If this method fails nothing will be written to *pSize.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pSize arg is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the PeakEnvelopeData property is not present.
+  //
+  // AAFRESULT_OBJECT_NOT_PERSISTENT
+  //   - the object is not persistent.)
+
+
+AD_XMETHOD3(WritePeakEnvelopeData,
+			[in],
+				objPass,
+				aafUInt32,
+				bytes,
+			Write this many bytes,
+
+			[out\, size_is\(bytes\)],
+				objPass,
+				aafDataBuffer_t,
+				buffer,
+			Data to write,
+
+			[out\,ref],
+				objPass,
+				aafUInt32 *,
+				pBytesWritten,
+			Number of bytes actually written.,
+
+     Write the specified bytes to the peak envelope data stream.
+  // 
+  // Succeeds if all of the following are true:
+  // - the number of bytes to write is non-zero.
+  // - the buffer pointer is valid.
+  // - the pBytesWritten pointer is valid.
+  // - the object is initialized.
+  // - the object is persistent \(attached to a file\).
+  // 
+  // If this method fails the PeakEnvelopeData property will
+  // not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_INVALID_PARAM
+  //   - bytes arg is larger than zero.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - buffer arg is NULL.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pBytesWritten arg is NULL.
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.
+  //
+  // AAFRESULT_OBJECT_NOT_PERSISTENT
+  //   - the object is not persistent.
+  //
+  // AAFRESULT_CONTAINERWRITE
+  //   - writing failed.)
+
+
+AD_XMETHOD3(ReadPeakEnvelopeData,
+			[in],
+				objPass,
+				aafUInt32,
+				bytes,
+			Read this many bytes,
+
+			[out\, size_is\(bytes\)],
+				objPass,
+				aafDataBuffer_t,
+				buffer,
+			Buffer to read the data to,
+
+			[out\,ref],
+				objPass,
+				aafUInt32 *,
+				pBytesRead,
+			Number of bytes actually read.,
+
+     Read the specified number of bytes from the peak envelope data
+  // stream into buffer.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // - the number of bytes to read is non-zero.
+  // - the buffer pointer is valid.
+  // - the pBytesRead pointer is valid.
+  // - the PeakEnvelopeData property is present.
+  // - the object is persistent \(attached to a file\).
+  // - not yet reached the end of the data stream.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  // 
+  // AAFRESULT_END_OF_DATA
+  //   - trying to read beyond the end of the data stream.
+  // 
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.
+  // 
+  // AAFRESULT_INVALID_PARAM
+  //   - bytes arg is larger than zero.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - buffer arg is NULL.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pBytesRead arg is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the PeakEnvelopeData property is not present.
+  //
+  // AAFRESULT_OBJECT_NOT_PERSISTENT
+  //   - the object is not persistent.)
+AD_XCLASS_END(Concrete, StoredObject)

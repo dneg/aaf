@@ -28,7 +28,7 @@
 #endif
 
 #include <assert.h>
-#include <AAFResult.h>
+#include "AAFResult.h"
 
 #include "aafCvt.h" 
 #include "ImplAAFTimecode.h"
@@ -123,16 +123,25 @@ AAFRESULT ImplAAFSegment::FindSubSegment(aafPosition_t offset,
 										 aafBool *found)
 {
 	aafLength_t	segLen;
-	aafPosition_t begPos, endPos;
+	aafPosition_t begPos, endPos, zero;;
 	
 	XPROTECT( )
 	{
 		CHECK(GetLength(&segLen));
 		CvtInt32toPosition(0, begPos);
+		CvtInt32toPosition(0, zero);
 		endPos = begPos;
 		CHECK(AddInt64toInt64(segLen, &endPos));
 		if (Int64LessEqual(begPos, offset) &&
 			Int64Less(offset, endPos))
+		{
+			*found = kAAFTrue;
+			*subseg = this;
+			// We are returning a reference to this object so bump the ref count
+			AcquireReference();
+			*sequPosPtr = 0;
+		}
+		else if (Int64Equal(begPos, endPos) && Int64Equal(offset, zero))	 //JeffB: Handle zero-length sourceClips
 		{
 			*found = kAAFTrue;
 			*subseg = this;
@@ -197,9 +206,5 @@ AAFRESULT ImplAAFSegment::GenerateSequence(ImplAAFSequence **seq)
 	return(AAFRESULT_SUCCESS);
 }
 
-void ImplAAFSegment::onCopy(void* clientContext) const
-{
-  ImplAAFComponent::onCopy(clientContext);
-}
 
 

@@ -44,7 +44,6 @@
 #include "ImplAAFDataDef.h"
 #include "ImplAAFPluginManager.h"
 #include "ImplAAFDictionary.h"
-#include "ImplAAFCloneResolver.h"
 
 #include <assert.h>
 #include <string.h>
@@ -312,9 +311,6 @@ AAFRESULT STDMETHODCALLTYPE
 
 	XPROTECT()
 	{
-		*ppEnum = (ImplEnumAAFCodecFlavours *)CreateImpl(CLSID_EnumAAFCodecFlavours);
-		if(*ppEnum == NULL)
-			RAISE(AAFRESULT_NOMEMORY);
 		CHECK(GetAUID(&uid));
 		mgr = ImplAAFPluginManager::GetPluginManager();
 		// Only looks at first codec matching
@@ -329,6 +325,9 @@ AAFRESULT STDMETHODCALLTYPE
 		if(!found)
 			RAISE(AAFRESULT_CODEC_INVALID);
 
+		*ppEnum = (ImplEnumAAFCodecFlavours *)CreateImpl(CLSID_EnumAAFCodecFlavours);
+		if(*ppEnum == NULL)
+			RAISE(AAFRESULT_NOMEMORY);
 		(*ppEnum)->SetEnumCodec(pCodec);
 		pPlug->Release();
 		pPlug = NULL;
@@ -388,13 +387,5 @@ AAFRESULT STDMETHODCALLTYPE
 	return(AAFRESULT_SUCCESS);
 }
 
-void ImplAAFCodecDef::onCopy(void* clientContext) const
-{
-  ImplAAFDefObject::onCopy(clientContext);
 
-  if ( clientContext ) {
-    ImplAAFCloneResolver* pResolver = reinterpret_cast<ImplAAFCloneResolver*>(clientContext);
-    pResolver->ResolveWeakReference(_dataDefs);
-    pResolver->ResolveWeakReference(_fileDescClass);
-  }
-}
+

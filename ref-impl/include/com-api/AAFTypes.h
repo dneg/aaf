@@ -332,8 +332,51 @@ enum _aafFrameLayout_e
     {	kAAFFullFrame	= 0,
 	kAAFSeparateFields	= 1,
 	kAAFOneField	= 2,
-	kAAFMixedFields	= 3
+	kAAFMixedFields	= 3,
+	kAAFSegmentedFrame	= 4
     }	aafFrameLayout_e;
+
+typedef aafInt32 aafElectroSpatialFormulation_t;
+
+typedef 
+enum _aafElectroSpatialFormulation_e
+    {	kAAFEsDefault	= 0,
+	kAAFEsTwoChannelMode	= 1,
+	kAAFEsSingleChannelMode	= 2,
+	kAAFEsPrimarySecondaryMode	= 3,
+	kAAFEsStereophonicMode	= 4,
+	kAAFEsSingleChannelDoubleSamplingFrequencyMode	= 7,
+	kAAFEsStereoLeftChannelDoubleSamplingFrequencyMode	= 8,
+	kAAFEsStereoRightChannelDoubleSamplingFrequencyMode	= 9,
+	kAAFEsMultiChannelMode	= 15
+    }	aafElectroSpatialFormulation_e;
+
+typedef aafInt32 aafSignalStandard_t;
+
+typedef 
+enum _aafSignalStandard_e
+    {	kAAFSignalNone	= 0,
+	kAAFSignalS125MInterlace	= 1,
+	kAAFSignalS125MProgressive	= 2,
+	kAAFSignalS347M	= 3,
+	kAAFSignalS274M	= 4,
+	kAAFSignalS296M	= 5,
+	kAAFSignalS349M	= 6
+    }	aafSignalStandard_e;
+
+typedef aafInt32 aafScanningDirection_t;
+
+typedef 
+enum _aafScanningDirection_e
+    {	kAAFScanningLeftToRightTopToBottom	= 0,
+	kAAFScanningRightToLeftTopToBottom	= 1,
+	kAAFScanningLeftToRightBottomToTop	= 2,
+	kAAFScanningRightToLeftBottomToTop	= 3,
+	kAAFScanningTopToBottomLeftToRight	= 4,
+	kAAFScanningTopToBottomRightToLeft	= 5,
+	kAAFScanningBottomToTopLeftToRight	= 6,
+	kAAFScanningBottomToTopRightToLeft	= 7
+    }	aafScanningDirection_e;
 
 typedef aafInt32 aafColorSiting_t;
 
@@ -560,7 +603,8 @@ enum _aafRGBAComponentKind_e
 	kAAFCompFill	= 0x46,
 	kAAFCompGreen	= 0x47,
 	kAAFCompPalette	= 0x50,
-	kAAFCompRed	= 0x52
+	kAAFCompRed	= 0x52,
+	kAAFCompNull	= 0
     }	aafRGBAComponentKind_e;
 
 typedef struct  _aafRGBAComponent_t
@@ -831,7 +875,11 @@ enum _aafSearchTag_e
 	kAAFByName	= 3,
 	kAAFByClass	= 4,
 	kAAFByDataDef	= 5,
-	kAAFByMediaCrit	= 6
+	kAAFByMediaCrit	= 6,
+	kAAFByUsageCode	= 7,
+	kAAFByMasterMobUsageCode	= 8,
+	kAAFBySourceMobUsageCode	= 9,
+	kAAFByCompositionMobUsageCode	= 10
     }	aafSearchTag_e;
 
 #if 0
@@ -863,6 +911,7 @@ typedef struct _aafSearchCrit_t
         aafClassID_t      objClass;	// shouldn't this be a pointer?
         aafUID_t		 datadef;	// shouldn't this be a pointer?
         aafCriteriaType_t mediaCrit;
+        aafUID_t          usageCode;
     } tags;
 } aafSearchCrit_t;
 typedef aafInt32 aafDefinitionKind_t;
@@ -1009,6 +1058,10 @@ typedef aafTimecodeSourceType_t aafTCSource_t;
 typedef aafPulldownDir_t aafPulldownDirectionType_t;
 
 typedef aafPulldownKind_t aafPulldownKindType_t;
+
+typedef aafSignalStandard_t aafSignalStandardType_t;
+
+typedef aafScanningDirection_t aafScanningDirectionType_t;
 
 /**************************/
 #ifndef STDMETHODCALLTYPE

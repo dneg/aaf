@@ -400,3 +400,25 @@ AAFRESULT ImplAAFSelector::ChangeContainedReferences(aafMobID_constref from,
 
 	return AAFRESULT_SUCCESS;
 }
+
+void ImplAAFSelector::Accept(AAFComponentVisitor& visitor)
+{
+	assert(_selected);
+	_selected->Accept(visitor);
+
+	aafInt32 count = 0;
+	GetNumAlternateSegments(&count);
+	for(aafInt32 i=0; i<count; i++)
+	{
+		ImplAAFSegment* pSegment = 0;
+		GetNthSegment(i, &pSegment);
+
+       	        pSegment->Accept(visitor);
+
+		pSegment->ReleaseReference();
+		pSegment = NULL;
+	}
+
+	// TODO
+	// visitor.VisitSelector(this);
+}

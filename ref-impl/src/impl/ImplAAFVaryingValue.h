@@ -166,9 +166,6 @@ public:
 public:
 	// SDK-private methods
 
-  // OM deep copy notification
-  virtual void onCopy(void* clientContext) const;
-
 private:
 	OMWeakReferenceProperty<ImplAAFInterpolationDef>		_interpolation;
   OMStrongReferenceVectorProperty<ImplAAFControlPoint> _controlPoints;

@@ -44,6 +44,7 @@
 #include "AAFUtils.h"
 #include "AAFDefUIDs.h"
 #include "AAFDataDefs.h"
+#include "AAFComponentVisitor.h"
 #include "ImplAAFHeader.h"
 
 #include "ImplAAFSmartPointer.h"
@@ -83,20 +84,7 @@ AAFRESULT STDMETHODCALLTYPE
   SetSourceMobSlotID( sourceRef.sourceSlotID );
   _startTime = sourceRef.startTime;
 
-  aafBool isSound;
-  AAFRESULT hr = pDataDef->IsSoundKind( &isSound );
-  if ( AAFRESULT_SUCCESS != hr ) {
-    return hr;
-  }
 
-  // Only set fade default values if the essence type is sound.
-  if ( isSound ) {
-       _fadeInLength		= 0;
-       _fadeInType		= kAAFFadeNone;
-       
-       _fadeOutLength		= 0;
-       _fadeOutType	        = kAAFFadeNone;
-  };
 
   return AAFRESULT_SUCCESS;
 }
@@ -355,7 +343,8 @@ AAFRESULT ImplAAFSourceClip::TraverseToClip(aafLength_t length,
 }
 
 
-void ImplAAFSourceClip::onCopy(void* clientContext) const
+
+void ImplAAFSourceClip::Accept(AAFComponentVisitor& visitor)
 {
-  ImplAAFSourceReference::onCopy(clientContext);
+	visitor.VisitSourceClip(this);
 }

@@ -2,6 +2,8 @@ cpp_quote("//=------------------------------------------------------------------
 cpp_quote("//")
 cpp_quote("// This file was GENERATED for the AAF SDK")
 cpp_quote("//")
+cpp_quote("// $Id$ $Name$")
+cpp_quote("//")
 cpp_quote("// The contents of this file are subject to the AAF SDK Public")
 cpp_quote("// Source License Agreement (the \"License\"); You may not use this file")
 cpp_quote("// except in compliance with the License.  The License is available in")
@@ -99,8 +101,10 @@ interface IAAFRoot : IUnknown
 // Objects that implement IAAFHTMLClip also implement the following interfaces:
 //  - IAAFTextClip
 //  - IAAFSourceReference
+//  - IAAFSourceReference2
 //  - IAAFSegment
 //  - IAAFComponent
+//  - IAAFComponent2
 //  - IAAFObject
 
 [
@@ -527,8 +531,10 @@ interface IAAFStrongRefValue : IUnknown
 //
 // Objects that implement IAAFTextClip also implement the following interfaces:
 //  - IAAFSourceReference
+//  - IAAFSourceReference2
 //  - IAAFSegment
 //  - IAAFComponent
+//  - IAAFComponent2
 //  - IAAFObject
 
 [

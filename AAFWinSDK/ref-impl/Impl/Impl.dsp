@@ -114,6 +114,10 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFAIFCDescriptor.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFAuxiliaryDescriptor.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFBaseClassFactory.cpp"
 # End Source File
 # Begin Source File
@@ -179,6 +183,14 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFDataDef.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFDefObject.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFDescriptiveFramework.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFDescriptiveMarker.cpp"
 # End Source File
 # Begin Source File
 
@@ -266,11 +278,19 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFIdentification.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFImportDescriptor.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFInterpolationDef.cpp"
 # End Source File
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFKLVData.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFKLVDataDefinition.cpp"
 # End Source File
 # Begin Source File
 
@@ -334,6 +354,14 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFParameterDef.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFPCMDescriptor.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFPhysicalDescriptor.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFPluginDef.cpp"
 # End Source File
 # Begin Source File
@@ -375,6 +403,10 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFRandomRawStorage.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFRawStorage.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFRecordingDescriptor.cpp"
 # End Source File
 # Begin Source File
 
@@ -422,6 +454,10 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFSetFileBits.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFSoundDescriptor.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFSourceClip.cpp"
 # End Source File
 # Begin Source File
@@ -459,6 +495,14 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFStrongRefValue.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFTaggedValue.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFTaggedValueDefinition.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFTaggedValueUtil.cpp"
 # End Source File
 # Begin Source File
 
@@ -634,6 +678,10 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFKLVData.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFKLVDataDefs.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFLoadedPlugins.cpp"
 # End Source File
 # Begin Source File
@@ -687,6 +735,10 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFSegments.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFStorablePropVals.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFTaggedValueDefs.cpp"
 # End Source File
 # Begin Source File
 

@@ -38,9 +38,11 @@ void printBeginGuard(const char* module, ostream& s);
 void printEndGuard(const char* module, ostream& s);
 
 void printCopyright(ostream& s);
+void printCopyright (const char* originator, ostream & s);
 
 // Doesn't return if an error is found.
 void validateArgs(int argc, char** argv, char*& moduleName);
+void validateArgs(int argc, char** argv, char*& moduleName, char*& prefix);
 
 // print a GUID like this -
 //{0x0D010101, 0x0101, 0x0100,
@@ -63,6 +65,13 @@ void printDefinition(const char* type,
                      const char* name,
                      size_t width,
                      int identifier,
+                     ostream& s);
+
+void printDefinition(const char* type,
+                     const char* prefix,
+                     const char* name,
+                     const char* suffix,
+                     const char* string,
                      ostream& s);
 
 // print a macro invocation like this -

@@ -12,8 +12,7 @@
 *  $Date$
 *  
 \******************************************************************************/
-#include "OMRawStorage.h"
-#include "OMSSSStructuredStorage.h"
+#include "OMSSSStorageRWInputSource.h"
 
 
 //Type definitiosn taken from the schemasoft source

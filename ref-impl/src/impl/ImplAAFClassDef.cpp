@@ -62,7 +62,6 @@ typedef ImplAAFSmartPointer<ImplEnumAAFPropertyDefs> ImplEnumAAFPropertyDefsSP;
 #include "AAFPropertyIDs.h"
 #include "ImplAAFObjectCreation.h"
 #include "ImplAAFBuiltinDefs.h"
-#include "ImplAAFCloneResolver.h"
 #include "AAFUtils.h"
 
 #include <assert.h>
@@ -605,11 +604,14 @@ AAFRESULT STDMETHODCALLTYPE
 const OMPropertyDefinition* ImplAAFClassDef::propertyDefinition(
                             const OMUniqueObjectIdentification& id ) const
 {
+  aafUID_t  aafID = *(aafUID_t*)&id;
   ImplAAFPropertyDef* pDef = 0;
+  LookupPropertyDef( aafID, &pDef);
+  assert( pDef );
 
-  // The result bool return value is intentionally ignored. A null
-  // pDef value returned if the find() failed.
-  _Properties.find(id, pDef);
+  // This method does not increment the reference count
+  // of the returned property definition.
+  pDef->ReleaseReference();
 
   return pDef;
 }
@@ -1002,12 +1004,144 @@ HRESULT ImplAAFClassDef::CompleteClassRegistration(void)
   return result;
 }
 
-void ImplAAFClassDef::onCopy(void* clientContext) const
+AAFRESULT ImplAAFClassDef::MergeTo(
+    ImplAAFDictionary* pDestDictionary )
 {
-  ImplAAFMetaDefinition::onCopy(clientContext);
-  
-  if ( clientContext ) {
-    ImplAAFCloneResolver* pResolver = reinterpret_cast<ImplAAFCloneResolver*>(clientContext);
-    pResolver->ResolveWeakReference(_ParentClass);
-  }
+    assert( pDestDictionary );
+
+    AAFRESULT hr = AAFRESULT_SUCCESS;
+
+
+    aafUID_t parentClassID = {0};
+    aafBoolean_t isRoot = kAAFFalse;
+    IsRoot( &isRoot );
+    if( isRoot == kAAFFalse )
+    {
+        ImplAAFClassDef* pSourceParentClassDef = NULL;
+        GetParent( &pSourceParentClassDef );
+        pSourceParentClassDef->GetAUID( &parentClassID );
+
+        hr = pSourceParentClassDef->MergeTo( pDestDictionary );
+
+        pSourceParentClassDef->ReleaseReference();
+        pSourceParentClassDef = NULL;
+    }
+
+
+    aafUID_t classID;
+    GetAUID( &classID );
+
+
+    if( AAFRESULT_SUCCEEDED( hr ) )
+    {
+        ImplAAFClassDef* pDestClassDef = NULL;
+        if( AAFRESULT_FAILED(
+                pDestDictionary->LookupClassDef( classID, &pDestClassDef ) ) )
+        {
+            aafUInt32  nameBufLen = 0;
+            GetNameBufLen( &nameBufLen );
+            aafUInt8* pName = new aafUInt8[ nameBufLen ];
+            GetName( (aafCharacter*)pName, nameBufLen );
+
+
+            ImplAAFClassDef* pDestParentClassDef = NULL;
+            if( isRoot == kAAFFalse )
+            {
+                pDestDictionary->LookupClassDef( parentClassID,
+                                                 &pDestParentClassDef );
+            }
+
+            ImplAAFMetaDefinition* pMetaDefinition = NULL;
+            hr = pDestDictionary->CreateMetaInstance( AUID_AAFClassDef,
+                                                      &pMetaDefinition );
+            if( AAFRESULT_SUCCEEDED( hr ) )
+            {
+                pDestClassDef = dynamic_cast<ImplAAFClassDef*>(pMetaDefinition);
+                assert( pDestClassDef );
+                pDestClassDef->AcquireReference();
+
+                hr = pDestClassDef->Initialize( classID,
+                                                pDestParentClassDef,
+                                                (aafCharacter*)pName,
+                                                _IsConcrete );
+
+                if( AAFRESULT_SUCCEEDED( hr ) )
+                {
+                    hr = MergePropertyDefsTo( pDestClassDef );
+                }
+
+                if( AAFRESULT_SUCCEEDED( hr ) )
+                {
+                    hr = pDestDictionary->RegisterClassDef( pDestClassDef );
+                }
+
+                pMetaDefinition->ReleaseReference();
+                pMetaDefinition = NULL;
+            }
+
+
+            delete[] pName;
+            pName = NULL;
+
+            if( pDestParentClassDef )
+            {
+                pDestParentClassDef->ReleaseReference();
+                pDestParentClassDef = NULL;
+            }
+        }
+        else
+        {
+            // The class definition exists in the destination
+            // dictionary - merge missing property definitions.
+            hr = MergePropertyDefsTo( pDestClassDef );
+        }
+
+
+        pDestClassDef->ReleaseReference();
+        pDestClassDef = NULL;
+    }
+
+
+    return hr;
 }
+
+AAFRESULT ImplAAFClassDef::MergePropertyDefsTo(
+    ImplAAFClassDef* pDestClassDef )
+{
+    assert( pDestClassDef );
+
+    ImplEnumAAFPropertyDefs* pEnumSourcePropertyDefs = NULL;
+    GetPropertyDefs( &pEnumSourcePropertyDefs );
+    assert( pEnumSourcePropertyDefs );
+
+    ImplAAFPropertyDef* pSourcePropertyDef = NULL;
+    while( AAFRESULT_SUCCEEDED(
+               pEnumSourcePropertyDefs->NextOne(&pSourcePropertyDef)) )
+    {
+        aafUID_t propertyID;
+        pSourcePropertyDef->GetAUID( &propertyID );
+
+        ImplAAFPropertyDef* pDestPropertyDef = NULL;
+        if( AAFRESULT_FAILED(
+                pDestClassDef->LookupPropertyDef( propertyID,
+                                                  &pDestPropertyDef ) ) )
+        {
+            pSourcePropertyDef->MergeTo( pDestClassDef );
+        }
+        else
+        {
+            pDestPropertyDef->ReleaseReference();
+            pDestPropertyDef = NULL;
+        }
+
+        pSourcePropertyDef->ReleaseReference();
+        pSourcePropertyDef = NULL;
+    }
+
+    pEnumSourcePropertyDefs->ReleaseReference();
+    pEnumSourcePropertyDefs = NULL;
+
+
+    return AAFRESULT_SUCCESS;
+}
+

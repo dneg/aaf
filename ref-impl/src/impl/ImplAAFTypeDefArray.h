@@ -29,9 +29,11 @@
 #include "ImplAAFTypeDef.h"
 #endif
 
+#include "OMArrayType.h"
+
 class ImplAAFPropertyValue;
 
-class ImplAAFTypeDefArray : public ImplAAFTypeDef
+class ImplAAFTypeDefArray : public ImplAAFTypeDef, public OMArrayType
 {
 public:
   //

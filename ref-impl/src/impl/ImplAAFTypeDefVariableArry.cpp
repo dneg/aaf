@@ -60,11 +60,12 @@
 #include "ImplAAFEssenceData.h"
 #endif
 
-#include "ImplAAFCloneResolver.h"
 #include "ImplEnumAAFPropertyValues.h"
 #include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
 #include "ImplAAFObjectCreation.h"
+
+#include "OMArrayProperty.h"
 
 #include <assert.h>
 #include <string.h>
@@ -519,6 +520,14 @@ void ImplAAFTypeDefVariableArray::internalize(const OMByte* externalBytes,
 	}
 }
 
+OMType* ImplAAFTypeDefVariableArray::elementType(void) const
+{
+  ImplAAFTypeDef* result = 0;
+  AAFRESULT hr = GetType(&result);
+  assert(hr == 0);
+  result->ReleaseReference();
+  return result;
+}
 
 aafUInt32 ImplAAFTypeDefVariableArray::pvtCount
 (
@@ -640,7 +649,27 @@ OMProperty * ImplAAFTypeDefVariableArray::pvtCreateOMProperty
 		
 		// Use a variable sized property so that we can allow a property value
 		// size of 0 (i.e. no elements in the array). (transdel 2000-MAR-14)
-		result = new OMVariableSizeProperty<aafUInt8> (pid, name);
+		aafUInt32 elemSize = ptd->NativeSize();
+		switch (elemSize) {
+		case 1:
+			result = new OMArrayProperty<aafUInt8> (pid, name);
+			break;
+		case 2:
+			result = new OMArrayProperty<aafUInt16> (pid, name);
+			break;
+		case 4:
+			result = new OMArrayProperty<aafUInt32> (pid, name);
+			break;
+		case 8:
+			result = new OMArrayProperty<aafUInt64> (pid, name);
+			break;
+		case 16:
+			result = new OMArrayProperty<aafUID_t> (pid, name);
+			break;
+		default:
+			result = new OMVariableSizeProperty<aafUInt8> (pid, name);
+			break;
+		}
 		
 	}
 	
@@ -1077,12 +1106,3 @@ ImplAAFTypeDefVariableArray::InsertElement(
 	return AAFRESULT_SUCCESS;
 }
 	
-void ImplAAFTypeDefVariableArray::onCopy(void* clientContext) const
-{
-  ImplAAFTypeDefArray::onCopy(clientContext);
-
-  if ( clientContext ) {
-    ImplAAFCloneResolver* pResolver = reinterpret_cast<ImplAAFCloneResolver*>(clientContext);
-    pResolver->ResolveWeakReference(_ElementType);
-  }
-}

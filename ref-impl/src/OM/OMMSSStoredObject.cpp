@@ -52,6 +52,11 @@
 #include "OMWeakReferenceSet.h"
 #include "OMWeakReferenceVector.h"
 #include "OMDataStream.h"
+#include "OMDataVector.h"
+#include "OMDataSet.h"
+#include "OMArrayType.h"
+#include "OMSetType.h"
+#include "OMDataContainerIterator.h"
 
 #include "OMAssertions.h"
 #include "OMExceptions.h"
@@ -64,21 +69,6 @@
 #include "OMBufferedIStream.h"
 
 #include <stdlib.h>
-
-// the following consts duplicate those in AAFFileKinds.h
-// should be abstracted into OMSignatures.h
-
-// AAF files encoded as structured storage (binary).
-// the signature actually stored in all AAF SS (512) files
-// note this is not a properly-formed SMPTE label, but this is legacy
-const OMUniqueObjectIdentification aafSignature_Aaf_SSBinary = 
-{0x42464141, 0x000d, 0x4d4f, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xff}};
-
-// the signature actually stored in all AAF SS (4096) files
-// [060e2b34.0302.0101.0d010201.02000000]
-const OMUniqueObjectIdentification aafSignature_Aaf_SSBin_4K = 
-{0x0d010201, 0x0200, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x03, 0x02, 0x01, 0x01}};
-
 
 const OMVersion currentVersion = 32;
 
@@ -137,165 +127,69 @@ size_t OMMSSStoredObject::_openStreams = 0;
 size_t OMMSSStoredObject::_maxOpenStreams = 0;
 #endif
 
-  // @mfunc Perform Microsoft Structured Storage specific initialization.
-void OMMSSStoredObject::initialize(void)
-{
-  TRACE("OMMSSStoredObject::initialize");
-  OMMSSInitialize();
-}
 
-  // @mfunc Perform Microsoft Structured Storage specific finalization.
-void OMMSSStoredObject::finalize(void)
+  // @mfunc Open the root <c OMMSSStoredObject> using the root storage
+  //        <p in_storage>. <p mode> specifies the mode in which
+  //		to open the root.
+  //   @parm The root storage 
+  //   @parm The access mode of the object.
+  //   @rdesc An <c OMMSSStoredObject> representing the root storage
+OMMSSStoredObject* OMMSSStoredObject::open(IStorage *in_storage, OMFile::OMAccessMode mode)
 {
-  TRACE("OMMSSStoredObject::finalize");
-  OMMSSFinalize();
-}
+  TRACE("OMMSSStoredObject::open");
+  PRECONDITION("Valid root storage", in_storage != 0);
+  PRECONDITION("Valid mode", (mode == OMFile::modifyMode) ||
+                             (mode == OMFile::readOnlyMode));
+  //FIXME: add code to check if the root storage can be accessed using the 
+  //mode specified
+  STATSTG statstg;
+  HRESULT status = in_storage->Stat(&statstg, STATFLAG_NONAME);
+  checkStatus(status);
+  PRECONDITION ("Valid root storage access mode: ", 
+  		((mode == OMFile::modifyMode && (statstg.grfMode & (STGM_READWRITE)) ||
+		(mode == OMFile::readOnlyMode && (statstg.grfMode & STGM_READ) == 0))));
 
-  // @mfunc Open the root <c OMMSSStoredObject> in the disk file
-  //        <p fileName> for reading only.
-  //   @parm The name of the file to open. The file must already exist.
-  //   @rdesc An <c OMMSSStoredObject> representing the root object in
-  //          the disk file.
-OMMSSStoredObject* OMMSSStoredObject::openRead(const wchar_t* fileName)
-{
-  TRACE("OMMSSStoredObject::openRead");
-  PRECONDITION("Valid file name", validWideString(fileName));
+  OMMSSStoredObject* newStore = new OMMSSStoredObject(in_storage);
+  ASSERT("Valid heap pointer", newStore != 0);
 
-  OMMSSStoredObject* newStore = OMMSSStoredObject::openFile(
-                                                         fileName,
-                                                         OMFile::readOnlyMode);
-  newStore->open(OMFile::readOnlyMode);
+#if defined(OM_DEBUG)
+  incrementOpenStorageCount();
+#endif
+
+  newStore->open(mode);
 
   return newStore;
 }
 
-  // @mfunc Open the root <c OMMSSStoredObject> in the disk file
-  //        <p fileName> for modification.
-  //   @parm The name of the file to open. The file must already exist.
-  //   @rdesc An <c OMMSSStoredObject> representing the root object in
-  //          the disk file.
-OMMSSStoredObject* OMMSSStoredObject::openModify(const wchar_t* fileName)
-{
-  TRACE("OMMSSStoredObject::openModify");
-  PRECONDITION("Valid file name", validWideString(fileName));
-
-  OMMSSStoredObject* newStore = OMMSSStoredObject::openFile(
-                                                           fileName,
-                                                           OMFile::modifyMode);
-  newStore->open(OMFile::modifyMode);
-
-  return newStore;
-}
-
-  // @mfunc Create a new root <c OMMSSStoredObject> in the disk file
-  //        <p fileName>. The byte order of the newly created root
+  // @mfunc Open the root <c OMMSSStoredObject> using the root storage
+  //        <p in_storage>. The byte order of the newly created root 
   //        is given by <p byteOrder>.
-  //   @parm The name of the file to create. The file must not exist.
+  //   @parm The root storage
   //   @parm The desired byte ordering for the new file.
-  //   @rdesc An <c OMMSSStoredObject> representing the root object in
-  //          the disk file.
-OMMSSStoredObject* OMMSSStoredObject::createModify(const wchar_t* fileName,
-                                                   const OMByteOrder byteOrder,
- 						   const OMUniqueObjectIdentification& signature)
+  //   @rdesc An <c OMMSSStoredObject> representing the root object 
+OMMSSStoredObject* OMMSSStoredObject::create(IStorage *in_storage,
+                                             const OMByteOrder byteOrder)
 {
-  TRACE("OMMSSStoredObject::createModify");
-  PRECONDITION("Valid file name", validWideString(fileName));
+  TRACE("OMMSSStoredObject::create");
+  PRECONDITION("Valid root storage", in_storage != 0);
+  
+  //FIXME: add code to check if the root storage can be accessed using the 
+  //mode specified
+  STATSTG statstg;
+  HRESULT status = in_storage->Stat(&statstg, STATFLAG_NONAME);
+  checkStatus(status);
+  PRECONDITION ("Valid root storage access mode: ", 
+  	((statstg.grfMode & STGM_READWRITE) || (statstg.grfMode & STGM_WRITE)));
+
   PRECONDITION("Valid byte order",
                       (byteOrder == littleEndian) || (byteOrder == bigEndian));
 
-  OMMSSStoredObject* newStore = OMMSSStoredObject::createFile(fileName,signature);
-  newStore->create(byteOrder);
+  OMMSSStoredObject* newStore = new OMMSSStoredObject(in_storage);
+  ASSERT("Valid heap pointer", newStore != 0);
+#if defined(OM_DEBUG)
+  incrementOpenStorageCount();
+#endif
 
-  return newStore;
-}
-
-  // @mfunc Open the root <c OMMSSStoredObject> in the raw storage
-  //        <p rawStorage> for reading only.
-  //   @parm The raw storage in which to open the file.
-  //   @rdesc An <c OMMSSStoredObject> representing the root object.
-OMMSSStoredObject* OMMSSStoredObject::openRead(OMRawStorage* rawStorage)
-{
-  TRACE("OMMSSStoredObject::openRead");
-  PRECONDITION("Valid raw storage", rawStorage != 0);
-  PRECONDITION("Compatible raw storage access mode", rawStorage->isReadable());
-  PRECONDITION("Compatible raw storage", rawStorage->isPositionable());
-
-  OMMSSStoredObject* newStore = OMMSSStoredObject::openFile(
-                                                         rawStorage,
-                                                         OMFile::readOnlyMode);
-  newStore->open(OMFile::readOnlyMode);
-
-  return newStore;
-}
-
-  // @mfunc Open the root <c OMMSSStoredObject> in the raw storage
-  //        <p rawStorage> for modification.
-  //   @parm The raw storage in which to open the file.
-  //   @rdesc An <c OMMSSStoredObject> representing the root object.
-OMMSSStoredObject* OMMSSStoredObject::openModify(OMRawStorage* rawStorage)
-{
-  TRACE("OMMSSStoredObject::openModify");
-
-  PRECONDITION("Valid raw storage", rawStorage != 0);
-  PRECONDITION("Compatible raw storage access mode",
-                         rawStorage->isReadable() && rawStorage->isWritable());
-  PRECONDITION("Compatible raw storage", rawStorage->isPositionable() &&
-                                         rawStorage->isExtendible());
-
-  OMMSSStoredObject* newStore = OMMSSStoredObject::openFile(
-                                                           rawStorage,
-                                                           OMFile::modifyMode);
-  newStore->open(OMFile::modifyMode);
-
-  return newStore;
-}
-
-  // @mfunc Create a new root <c OMMSSStoredObject> in the raw storage
-  //        <p rawStorage>. The byte order of the newly created root
-  //        is given by <p byteOrder>.
-  //   @parm The raw storage in which to create the file.
-  //   @parm The desired byte ordering for the new file.
-  //   @rdesc An <c OMMSSStoredObject> representing the root object.
-OMMSSStoredObject* OMMSSStoredObject::createWrite(OMRawStorage* rawStorage,
-                                                  const OMByteOrder byteOrder,
-						  const OMUniqueObjectIdentification& signature)
-{
-  TRACE("OMMSSStoredObject::createWrite");
-  PRECONDITION("Valid raw storage", rawStorage != 0);
-  PRECONDITION("Valid byte order",
-                      (byteOrder == littleEndian) || (byteOrder == bigEndian));
-  PRECONDITION("Compatible raw storage access mode",
-                         rawStorage->isWritable() && rawStorage->isReadable());
-  PRECONDITION("Compatible raw storage", rawStorage->isPositionable() &&
-                                         rawStorage->isExtendible());
-
-  OMMSSStoredObject* newStore = OMMSSStoredObject::createFile(rawStorage,signature);
-  newStore->create(byteOrder); // mode == modify
-
-  return newStore;
-}
-
-  // @mfunc Create a new root <c OMMSSStoredObject> in the raw storage
-  //        <p rawStorage>. The byte order of the newly created root
-  //        is given by <p byteOrder>.
-  //   @parm The raw storage in which to create the file.
-  //   @parm The desired byte ordering for the new file.
-  //   @rdesc An <c OMMSSStoredObject> representing the root object.
-OMMSSStoredObject* OMMSSStoredObject::createModify(OMRawStorage* rawStorage,
-                                                   const OMByteOrder byteOrder,
-						   const OMUniqueObjectIdentification& signature)
-{
-  TRACE("OMMSSStoredObject::createModify");
-
-  PRECONDITION("Valid raw storage", rawStorage != 0);
-  PRECONDITION("Valid byte order",
-                      (byteOrder == littleEndian) || (byteOrder == bigEndian));
-  PRECONDITION("Compatible raw storage access mode",
-                         rawStorage->isReadable() && rawStorage->isWritable());
-  PRECONDITION("Compatible raw storage", rawStorage->isPositionable() &&
-                                         rawStorage->isExtendible());
-
-  OMMSSStoredObject* newStore = OMMSSStoredObject::createFile(rawStorage,signature);
   newStore->create(byteOrder);
 
   return newStore;
@@ -495,6 +389,123 @@ void OMMSSStoredObject::save(const OMSimpleProperty& property)
     //
     write(propertyId, storedForm, bits, size);
   }
+}
+
+  // @mfunc Save the <c OMDataVector> <p property> in this
+  //        <c OMMSSStoredObject>.
+  //   @parm TBS
+void OMMSSStoredObject::save(const OMDataVector& property)
+{
+  TRACE("OMMSSStoredObject::save");
+
+  // Save as if this were an OMSimpleProperty
+
+  OMPropertyId propertyId = property.propertyId();
+  OMStoredForm storedForm = SF_DATA; // != property.storedForm() !
+  const OMType* propertyType = property.type();
+  ASSERT("Valid property type", propertyType != 0);
+  const OMArrayType* at = dynamic_cast<const OMArrayType*>(propertyType);
+  ASSERT("Correct type", at != 0);
+  OMType* elementType = at->elementType();
+  ASSERT("Fixed size elements", elementType->isFixedSize());
+  OMUInt32 elementSize = elementType->externalSize();
+  OMUInt32 elementCount = property.count();
+
+    // Allocate buffer for one element
+  OMByte* buffer = new OMByte[elementSize];
+  ASSERT("Valid heap pointer", buffer != 0);
+
+  // size
+  // Doh! 32-bit size and count but 16-bit property size
+  OMUInt64 size = elementSize * elementCount;
+  // ASSERT("Valid size"); // tjb
+  OMPropertySize propertySize = static_cast<OMPropertySize>(size);
+
+  _index->insert(propertyId, storedForm, _offset, propertySize);
+
+  OMDataContainerIterator* it = property.createIterator();
+  while (++(*it)) {
+
+    // Get a pointer to the element
+    const OMByte* bits = it->currentElement();
+
+
+    // Externalize element
+    elementType->externalize(bits,
+                             elementSize,
+                             buffer,
+                             elementSize,
+                             hostByteOrder());
+
+    // Reorder element
+    if (_reorderBytes) {
+      elementType->reorder(buffer, elementSize);
+    }
+
+    // value
+    writeToStream(_properties, buffer, elementSize);
+    _offset += elementSize;
+
+  }
+  delete it;
+  delete [] buffer;
+}
+
+void OMMSSStoredObject::save(const OMDataSet& property)
+{
+  TRACE("OMMSSStoredObject::save(OMDataSet)");
+
+  // Save as if this were an OMSimpleProperty
+
+  OMPropertyId propertyId = property.propertyId();
+  OMStoredForm storedForm = SF_DATA; // != property.storedForm() !
+  const OMType* propertyType = property.type();
+  ASSERT("Valid property type", propertyType != 0);
+  const OMSetType* st = dynamic_cast<const OMSetType*>(propertyType);
+  ASSERT("Correct type", st != 0);
+  OMType* elementType = st->elementType();
+  ASSERT("Fixed size elements", elementType->isFixedSize());
+  OMUInt32 elementSize = elementType->externalSize();
+  OMUInt32 elementCount = property.count();
+
+    // Allocate buffer for one element
+  OMByte* buffer = new OMByte[elementSize];
+  ASSERT("Valid heap pointer", buffer != 0);
+
+  // size
+  // Doh! 32-bit size and count but 16-bit property size
+  OMUInt64 size = elementSize * elementCount;
+  // ASSERT("Valid size"); // tjb
+  OMPropertySize propertySize = static_cast<OMPropertySize>(size);
+
+  _index->insert(propertyId, storedForm, _offset, propertySize);
+
+  OMDataContainerIterator* it = property.createIterator();
+  while (++(*it)) {
+
+    // Get a pointer to the element
+    const OMByte* bits = it->currentElement();
+
+
+    // Externalize element
+    elementType->externalize(bits,
+                             elementSize,
+                             buffer,
+                             elementSize,
+                             hostByteOrder());
+
+    // Reorder element
+    if (_reorderBytes) {
+      elementType->reorder(buffer, elementSize);
+    }
+
+    // value
+    writeToStream(_properties, buffer, elementSize);
+    _offset += elementSize;
+
+  }
+  delete it;
+  delete [] buffer;
 }
 
   // @mfunc Save the <c OMStrongReference> <p singleton> in this
@@ -1002,6 +1013,100 @@ void OMMSSStoredObject::restore(OMSimpleProperty& property,
     bits = property.bits();
     read(propertyId, storedForm, bits, externalSize);
   }
+}
+
+  // @mfunc Restore the <c OMDataVector> <p property> into this
+  //        <c OMMSSStoredObject>.
+  //   @parm TBS
+  //   @parm TBS
+void OMMSSStoredObject::restore(OMDataVector& property,
+                                 size_t externalSize)
+{
+  TRACE("OMMSSStoredObject::restore");
+
+  const OMType* propertyType = property.type();
+  ASSERT("Valid property type", propertyType != 0);
+  const OMArrayType* at = dynamic_cast<const OMArrayType*>(propertyType);
+  ASSERT("Correct type", at != 0);
+  OMType* elementType = at->elementType();
+  ASSERT("Fixed size elements", elementType->isFixedSize());
+  OMUInt32 elementSize = elementType->externalSize();
+  ASSERT("Consistent element size", elementSize = property.elementSize());
+
+  // Allocate buffer for one element
+  OMByte* buffer = new OMByte[elementSize];
+  ASSERT("Valid heap pointer", buffer != 0);
+  OMByte* value = new OMByte[elementSize];
+  ASSERT("Valid heap pointer", value != 0);
+
+  property.clear();
+  OMUInt32 elementCount = externalSize / elementSize;
+
+  for (size_t i = 0; i < elementCount; i++) {
+
+    // Read one element
+    readFromStream(_properties, buffer, elementSize);
+
+    // Reorder one element
+    if (byteOrder() != hostByteOrder()) {
+      elementType->reorder(buffer, elementSize);
+    }
+
+    // Internalize one element
+    elementType->internalize(buffer,
+                             elementSize,
+                             value,
+                             elementSize,
+                             hostByteOrder());
+
+    property.appendValue(value);
+  }
+  delete [] buffer;
+}
+
+void OMMSSStoredObject::restore(OMDataSet& property,
+                                size_t externalSize)
+{
+  TRACE("OMMSSStoredObject::restore(OMDataSet)");
+
+  const OMType* propertyType = property.type();
+  ASSERT("Valid property type", propertyType != 0);
+  const OMSetType* st = dynamic_cast<const OMSetType*>(propertyType);
+  ASSERT("Correct type", st != 0);
+  OMType* elementType = st->elementType();
+  ASSERT("Fixed size elements", elementType->isFixedSize());
+  OMUInt32 elementSize = elementType->externalSize();
+  ASSERT("Consistent element size", elementSize = property.elementSize());
+
+  // Allocate buffer for one element
+  OMByte* buffer = new OMByte[elementSize];
+  ASSERT("Valid heap pointer", buffer != 0);
+  OMByte* value = new OMByte[elementSize];
+  ASSERT("Valid heap pointer", value != 0);
+
+  property.clear();
+  OMUInt32 elementCount = externalSize / elementSize;
+
+  for (size_t i = 0; i < elementCount; i++) {
+
+    // Read one element
+    readFromStream(_properties, buffer, elementSize);
+
+    // Reorder one element
+    if (byteOrder() != hostByteOrder()) {
+      elementType->reorder(buffer, elementSize);
+    }
+
+    // Internalize one element
+    elementType->internalize(buffer,
+                             elementSize,
+                             value,
+                             elementSize,
+                             hostByteOrder());
+
+    property.insert(value);
+  }
+  delete [] buffer;
 }
 
   // @mfunc Restore the <c OMStrongReference> <p singleton> into this
@@ -2731,299 +2836,6 @@ void OMMSSStoredObject::externalizeUInt16Array(const OMUInt16* internalArray,
   for (size_t i = 0; i < elementCount; i++) {
     externalArray[i] = internalArray[i];
   }
-}
-/*
-* MS VC++ versions prior to version 7.0 do not define STGOPTIONS (unless a
-* recent Microsoft platform SDK was installed).  Hence test for STGOPTIONS_VERSION.
-*/
-#ifdef OM_USE_STORAGE_EX
-#ifndef STGOPTIONS_VERSION
-typedef void STGOPTIONS;
-#endif // STGOPTIONS_VERSION
-#endif // OM_USE_STORAGE_EX
-
-OMMSSStoredObject* OMMSSStoredObject::openFile(const wchar_t* fileName,
-                                               const OMFile::OMAccessMode mode)
-{
-  TRACE("OMMSSStoredObject::openFile");
-  PRECONDITION("Valid file name", validWideString(fileName));
-  PRECONDITION("Valid mode", (mode == OMFile::modifyMode) ||
-                             (mode == OMFile::readOnlyMode));
-
-  DWORD openMode;
-  if (mode == OMFile::modifyMode) {
-    openMode = STGM_DIRECT | STGM_READWRITE | STGM_SHARE_EXCLUSIVE;
-  } else if (mode == OMFile::readOnlyMode) {
-    openMode = STGM_DIRECT | STGM_READ      | STGM_SHARE_DENY_WRITE;
-  }
-
-  SSCHAR omFileName[256];
-  convert(omFileName, 256, fileName);
-
-  IStorage* storage = 0;
-
-#ifndef OM_USE_STORAGE_EX
-
-  HRESULT status = StgOpenStorage(
-    omFileName,
-    0,
-    openMode,
-    0,
-    0,
-    &storage);
-  checkStatus(status);
-  ASSERT("StgOpenStorage() succeeded", SUCCEEDED(status));
-#if defined(OM_DEBUG)
-  incrementOpenStorageCount();
-#endif
-
-#else // OM_USE_STORAGE_EX
-
-	OM_STGOPTIONS stgoptions = { 1, 0, 0, NULL };
-
-  HRESULT status = StgOpenStorageEx(
-							omFileName,
-							openMode,
-							STGFMT_DOCFILE,
-							0,
-							(STGOPTIONS *) &stgoptions,	//save to refer to STGOPTIONS here as this code is only used under windows
-							0,
-							IID_IStorage,
-							(void **) &storage);
-
-  checkStatus(status);
-  ASSERT("StgOpenStorageEx() succeeded", SUCCEEDED(status));
-#if defined(OM_DEBUG)
-  incrementOpenStorageCount();
-#endif
-
-#endif //OM_USE_STORAGE_EX
-
-  OMMSSStoredObject* newStoredObject = new OMMSSStoredObject(storage);
-  ASSERT("Valid heap pointer", newStoredObject != 0);
-
-  return newStoredObject;
-}
-
-OMMSSStoredObject* OMMSSStoredObject::createFile(const wchar_t* fileName,
-						 const OMUniqueObjectIdentification& signature)
-{
-  TRACE("OMMSSStoredObject::createFile");
-  PRECONDITION("Valid file name", validWideString(fileName));
-
-	// choose sector size based on signature from factory
-	unsigned long sectorSize=0;
-	if( aafSignature_Aaf_SSBinary == signature ) sectorSize=512;
-	else if( aafSignature_Aaf_SSBin_4K == signature ) sectorSize=4096;
-	PRECONDITION("Valid Signature", sectorSize!=0 );
-
-  SSCHAR omFileName[256];
-  convert(omFileName, 256, fileName);
-
-  IStorage* storage = 0;
-
-#ifndef OM_USE_STORAGE_EX
-
-  HRESULT status = StgCreateDocfile(
-    omFileName,
-    STGM_DIRECT | STGM_READWRITE | STGM_SHARE_EXCLUSIVE | STGM_FAILIFTHERE,
-    0,
-    &storage);
-  checkStatus(status);
-  ASSERT("StgCreateDocfile() succeeded", SUCCEEDED(status));
-#if defined(OM_DEBUG)
-  incrementOpenStorageCount();
-#endif
-
-#else // OM_USE_STORAGE_EX
-
-	OM_STGOPTIONS stgoptions = { 1, 0, 0, NULL };
-	stgoptions.ulSectorSize = sectorSize;
-
-	HRESULT status = StgCreateStorageEx(
-						omFileName,
-						STGM_DIRECT | STGM_READWRITE | STGM_SHARE_EXCLUSIVE ,
-						STGFMT_DOCFILE,
-						0, // or could be FILE_FLAG_NO_BUFFERING
-						(STGOPTIONS *) &stgoptions,	//save to refer to STGOPTIONS here as this code is only used under windows
-						0,
-						IID_IStorage,
-						(void **) &storage);
-
-  checkStatus(status);
-  ASSERT("StgCreateStorageEx() succeeded", SUCCEEDED(status));
-#if defined(OM_DEBUG)
-  incrementOpenStorageCount();
-#endif
-
-#endif //OM_USE_STORAGE_EX
-
-  OMMSSStoredObject* newStoredObject = new OMMSSStoredObject(storage);
-  ASSERT("Valid heap pointer", newStoredObject != 0);
-
-  return newStoredObject;
-}
-
-OMMSSStoredObject* OMMSSStoredObject::openFile(OMRawStorage* rawStorage,
-                                               const OMFile::OMAccessMode mode)
-{
-  TRACE("OMMSSStoredObject::openFile");
-  PRECONDITION("Valid raw storage", rawStorage != 0);
-  PRECONDITION("Valid mode", (mode == OMFile::modifyMode) ||
-                             (mode == OMFile::readOnlyMode));
-
-  ILockBytes* iLockBytes = new OMRawStorageLockBytes(rawStorage);
-  ASSERT("Valid heap pointer", iLockBytes != 0);
-
-  DWORD openMode;
-  if (mode == OMFile::modifyMode) {
-    openMode = STGM_DIRECT | STGM_READWRITE | STGM_SHARE_EXCLUSIVE;
-  } else if (mode == OMFile::readOnlyMode) {
-    openMode = STGM_DIRECT | STGM_READ      | STGM_SHARE_DENY_WRITE;
-  }
-
-  IStorage* storage = 0;
-
-#ifndef OM_USE_STORAGE_EX
-
-  HRESULT status = StgOpenStorageOnILockBytes(
-    iLockBytes,
-    0,
-    openMode,
-    0,
-    0,
-    &storage);
-  checkStatus(status);
-  ASSERT("StgOpenStorageOnILockBytes() succeeded", SUCCEEDED(status));
-#if defined(OM_DEBUG)
-  incrementOpenStorageCount();
-#endif
-
-#else // OM_USE_STORAGE_EX
-
-	OM_STGOPTIONS stgoptions = { 1, 0, 0, NULL };
-
-	// since there is no StgOpenStorageOnILockBytesEx(), try ordinary...expect it to fail interestingly
-  HRESULT status = StgOpenStorageOnILockBytes(
-    iLockBytes,
-    0,
-    openMode,
-    0,
-    0,
-    &storage);
-  checkStatus(status);
-  ASSERT("StgOpenStorageOnILockBytes() succeeded", SUCCEEDED(status));
-#if defined(OM_DEBUG)
-  incrementOpenStorageCount();
-#endif
-
-/* if there *were* StgOpenStorageOnILockBytesEx(), maybe it would be like this...
-
-  HRESULT status = StgOpenStorageOnILockBytesEx(
-    iLockBytes,
-    openMode,
-		STGFMT_DOCFILE,
-		0,
-		(void*) &stgoptions,
-    0,
-		IID_IStorage,
-    (void **) &storage);
-
-  checkStatus(status);
-  ASSERT("StgOpenStorageOnILockBytesEx() succeeded", SUCCEEDED(status));
-#if defined(OM_DEBUG)
-  incrementOpenStorageCount();
-#endif
-
-*/
-
-#endif //OM_USE_STORAGE_EX
-
-  iLockBytes->Release();
-  OMMSSStoredObject* newStoredObject = new OMMSSStoredObject(storage);
-  ASSERT("Valid heap pointer", newStoredObject != 0);
-
-  return newStoredObject;
-}
-
-
-
-OMMSSStoredObject* OMMSSStoredObject::createFile(OMRawStorage* rawStorage,
-						 const OMUniqueObjectIdentification& signature)
-{
-	TRACE("OMMSSStoredObject::createFile");
-	PRECONDITION("Valid raw storage", rawStorage != 0);
-
-	// choose sector size based on signature from factory
-	unsigned long sectorSize=0;
-	if( aafSignature_Aaf_SSBinary == signature ) sectorSize=512;
-	else if( aafSignature_Aaf_SSBin_4K == signature ) sectorSize=4096;
-	PRECONDITION("Valid Signature", sectorSize!=0 );
-
-
-
-	IStorage* storage = 0;
-
-#ifndef OM_USE_STORAGE_EX
-
-	ILockBytes* iLockBytes = new OMRawStorageLockBytes(rawStorage);
-	ASSERT("Valid heap pointer", iLockBytes != 0);
-
-	HRESULT status = StgCreateDocfileOnILockBytes(
-		iLockBytes,
-		STGM_DIRECT | STGM_READWRITE | STGM_SHARE_EXCLUSIVE | STGM_CREATE,
-		0,
-		&storage);
-	checkStatus(status);
-	iLockBytes->Release();
-	ASSERT("StgCreateDocfileOnILockBytes() succeeded", SUCCEEDED(status));
-#if defined(OM_DEBUG)
-	incrementOpenStorageCount();
-#endif
-
-#else // OM_USE_STORAGE_EX
-
-	OM_STGOPTIONS stgoptions = { 1, 0, 0, NULL };
-	stgoptions.ulSectorSize = sectorSize;
-
-	/*
-	The StgOpenStorageOnILockBytes API should work for 4k-sector files.  You
-	can either preload a 12k file (you need 3 sectors for an empty docfile
-	-- the header, FAT, and directory containing the root entry), or you can
-	call StgCreateStorageEx to create and immediately release the root
-	storage and re-open with StgOpenStorageOnILockBytes.
-	*/
-
-	HRESULT status;
-
-	ILockBytes* iLockBytes = new OMRawStorageLockBytes(rawStorage);
-	ASSERT("Valid heap pointer", iLockBytes != 0);
-
-	status = StgCreateDocfileOnILockBytesEx(
-				iLockBytes,
-				STGM_DIRECT | STGM_READWRITE | STGM_SHARE_EXCLUSIVE | STGM_CREATE,
-				STGFMT_DOCFILE,
-				0, // or could be FILE_FLAG_NO_BUFFERING
-				&stgoptions,
-				0,
-				IID_IStorage,
-				(void**)&storage);
-
-
-	ASSERT("StgOpenStorageOnILockBytes() succeeded", SUCCEEDED(status));
-
-
-#if defined(OM_DEBUG)
-	incrementOpenStorageCount();
-#endif
-
-#endif //OM_USE_STORAGE_EX
-
-  
-  OMMSSStoredObject* newStoredObject = new OMMSSStoredObject(storage);
-  ASSERT("Valid heap pointer", newStoredObject != 0);
-
-  return newStoredObject;
 }
 
 void OMMSSStoredObject::create(const OMByteOrder byteOrder)

@@ -32,6 +32,7 @@
 #include "AAFResult.h"
 #include <assert.h>
 #include <string.h>
+#include <wchar.h>
 
 
 ImplAAFTextLocator::ImplAAFTextLocator () :
@@ -91,6 +92,10 @@ AAFRESULT STDMETHODCALLTYPE
 	if (! pNameBuf)
 	{
 		return AAFRESULT_NULL_PARAM;
+	}
+	if (wcslen(pNameBuf)*sizeof(OMCharacter) >= OMPROPERTYSIZE_MAX)
+	{
+		return AAFRESULT_BAD_SIZE;
 	}
 	_name = pNameBuf;
 

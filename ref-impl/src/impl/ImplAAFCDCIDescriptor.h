@@ -173,6 +173,38 @@ public:
 		// @parm [out] Address to store the number of bits.
         (aafInt16 *  pPaddingBits);
 
+  //****************
+  // SetAlphaSamplingWidth()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    SetAlphaSamplingWidth
+        // @parm [in] Optional.
+        (aafUInt32  alphaSamplingWidth);
+
+  //****************
+  // GetAlphaSamplingWidth()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetAlphaSamplingWidth
+        // @parm [out] Optional.
+        (aafUInt32 *  pAlphaSamplingWidth);
+
+  //****************
+  // SetReversedByteOrder()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    SetReversedByteOrder
+        // @parm [in] Optional.
+        (aafBoolean_t  reversedByteOrder);
+
+  //****************
+  // GetReversedByteOrder()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetReversedByteOrder
+        // @parm [out] Optional.
+        (aafBoolean_t *  pReversedByteOrder);
+
 protected:
 	OMFixedSizeProperty<aafInt32>			_componentWidth;
 	OMFixedSizeProperty<aafUInt32>			_horizontalSubsampling;
@@ -182,6 +214,8 @@ protected:
 	OMFixedSizeProperty<aafUInt32>			_whiteReferenceLevel;
 	OMFixedSizeProperty<aafUInt32>			_colorRange;
 	OMFixedSizeProperty<aafInt16>			_paddingBits;
+	OMFixedSizeProperty<aafUInt32>			_alphaSamplingWidth;
+	OMFixedSizeProperty<aafBool>			_reversedByteOrder;
 };
 
 #endif // ! __ImplAAFCDCIDescriptor_h__

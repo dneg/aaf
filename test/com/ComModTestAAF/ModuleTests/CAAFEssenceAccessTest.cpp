@@ -30,6 +30,7 @@
 #include <iostream>
 using namespace std;
 
+#include "AAFPlatform.h"
 
 #include "AAFTypes.h"
 #include "AAFResult.h"
@@ -196,6 +197,8 @@ static const aafUInt8 compressed422JFIF[] =
 #define strncasecmp(s1, s2, n) strnicmp(s1, s2, n)
 #include <direct.h>
 #define getcwd(buf, size) _getcwd(buf, size)
+#else
+#include <unistd.h>		// getcwd
 #endif
 
 static bool acceptable_pchar(unsigned char c)
@@ -510,6 +513,164 @@ typedef IAAFSmartPointer<IAAFEssenceFormat> IAAFEssenceFormatSP;
 const aafUID_t NIL_UID = { 0, 0, 0, { 0, 0, 0, 0, 0, 0, 0, 0 } };
 
 static HRESULT hrSetTransformParameters=0;
+
+static HRESULT CreateStaticEssenceAAFFile(
+	aafWChar * pFileName, 
+	testDataFile_t *dataFile, 
+	testType_t testType,
+	aafUID_t codecID,
+	aafBool bCallSetTransformParameters=kAAFFalse)
+{
+	HRESULT hr = AAFRESULT_SUCCESS;
+	IAAFFile*					pFile = NULL;
+	IAAFHeader*					pHeader = NULL;
+	IAAFDictionary*					pDictionary = NULL;
+	IAAFMob*					pMob = NULL;
+	IAAFMasterMob*				pMasterMob = NULL;
+	IAAFMasterMob2*				pMasterMob2 = NULL;
+	
+	IAAFEssenceAccess*			pEssenceAccess = NULL;
+	IAAFEssenceMultiAccess*		pMultiEssence = NULL;
+	IAAFEssenceFormatSP			pFormat;
+	IAAFEssenceFormat			*format = NULL;
+	IAAFLocator					*pLocator = NULL;
+	// !!!Previous revisions of this file contained variables here required to handle external essence
+	aafMobID_t					masterMobID;
+	aafProductIdentification_t	ProductInfo;
+	aafRational_t				editRate = {44100, 1};
+	aafRational_t				sampleRate = {44100, 1};
+	FILE*						pWavFile = NULL;
+	aafUID_t			 testContainer;
+
+	// delete any previous test file before continuing...
+	char chNameBuffer[1000];
+
+	try
+	{
+
+		convert(chNameBuffer, sizeof(chNameBuffer), pFileName);
+		remove(chNameBuffer);
+		if(dataFile != NULL)
+		{
+			// delete any previous test file before continuing...
+			char chNameBuffer[1000];
+			convert(chNameBuffer, sizeof(chNameBuffer), dataFile->dataFilename);
+			remove(chNameBuffer);
+		}
+		
+		aafProductVersion_t v;
+		v.major = 1;
+		v.minor = 0;
+		v.tertiary = 0;
+		v.patchLevel = 0;
+		v.type = kAAFVersionUnknown;
+		ProductInfo.companyName = L"AAF Developers Desk";
+		ProductInfo.productName = L"Essence Data Test";
+		ProductInfo.productVersion = &v;
+		ProductInfo.productVersionString = NULL;
+		ProductInfo.productID = UnitTestProductID;
+		ProductInfo.platform = NULL;
+		
+		checkResult(AAFFileOpenNewModify (pFileName, 0, &ProductInfo, &pFile));
+		checkResult(pFile->GetHeader(&pHeader));
+
+		// Get the AAF Dictionary so that we can create valid AAF objects.
+		checkResult(pHeader->GetDictionary(&pDictionary));
+		CAAFBuiltinDefs defs (pDictionary);
+		
+		// !!!Previous revisions of this file contained code here required to handle external essence
+		
+		// Get a Master MOB Interface
+		checkResult(defs.cdMasterMob()->
+					CreateInstance(IID_IAAFMasterMob, 
+								   (IUnknown **)&pMasterMob));
+		// Get a Mob interface and set its variables.
+		checkResult(pMasterMob->QueryInterface(IID_IAAFMob, (void **)&pMob));
+		checkResult(pMob->GetMobID(&masterMobID));
+		checkResult(pMob->SetName(L"A Master Mob"));
+		
+		// Add it to the file 
+		checkResult(pHeader->AddMob(pMob));
+		
+		
+			pLocator = NULL;
+			testContainer = ContainerAAF;
+
+
+		
+		checkResult(pMasterMob->QueryInterface(IID_IAAFMasterMob2, (void **)&pMasterMob2));
+		// now create the Essence data file
+
+		checkResult(pMasterMob2->CreateStaticEssence(STD_SLOT_ID+1,				// Slot ID
+			defs.ddPicture(),	// MediaKind
+			kAAFCodecJPEG,		// codecID
+			kAAFCompressionDisable, // compression
+			pLocator,	// In current file
+			testContainer,	// In AAF Format
+			&pEssenceAccess));// Compress disabled
+
+		
+			/// There is no test writing of Static Essence Access
+			/// Although this does not use any different code than other tests to write essence
+		    /// However we do need a static essence codec in the SDK.
+
+	}
+	catch (HRESULT& rhr)
+	{
+		hr = rhr; // return thrown error code.
+	}
+	catch (...)
+	{
+		// We CANNOT throw an exception out of a COM interface method!
+		// Return a reasonable exception code.
+		hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+	}
+
+		
+		
+	// Cleanup and return
+	if (pMultiEssence)
+		pMultiEssence->Release();
+	
+	if(format)
+		format->Release();
+
+	if (pEssenceAccess)
+		pEssenceAccess->Release();
+
+	if (pWavFile)
+		fclose(pWavFile);
+	
+	if(pLocator)
+		pLocator->Release();
+
+	if (pMob)
+		pMob->Release();
+
+	if (pMasterMob)
+		pMasterMob->Release();
+
+	if(pDictionary)
+		pDictionary->Release();
+
+	if(pHeader)
+		pHeader->Release();
+
+	if (pFile)
+	{ // Preserve previous errors...
+		HRESULT local_hr = pFile->Save();
+		if (FAILED(local_hr) && SUCCEEDED(hr))
+			hr = local_hr;
+		local_hr = pFile->Close();
+		if (FAILED(local_hr) && SUCCEEDED(hr))
+			hr = local_hr;
+		pFile->Release();
+	}
+	
+
+	return hr;
+}
+
 
 static HRESULT CreateAudioAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, testType_t testType,
 								  aafUID_t codecID,aafBool bCallSetTransformParameters=kAAFFalse)
@@ -1886,7 +2047,10 @@ HRESULT CAAFEssenceAccess_test(testMode_t mode)
 	aafWChar *	externalWaveAAF = L"EssenceAccessExtWAV.aaf";
 	aafWChar *	externalAifcAAF = L"EssenceAccessExtAIF.aaf";
 	testDataFile_t	dataFile;
-	
+
+	cout << endl << endl;
+
+
   cout << "    Internal Essence (WAVE)" << endl;
   
 	/**/
@@ -2054,54 +2218,67 @@ HRESULT CAAFEssenceAccess_test(testMode_t mode)
 		cout << "        WriteMultiSamples (compression disabled, RGB)" << endl;
 		hr = CreateVideoAAFFile(L"EssenceAccessJPEGMulti.aaf",NULL, kAAFCompressionDisable, kAAFColorSpaceRGB, 1, 
 				kAAFCodecJPEG, testMultiCalls);
-    if (AAFRESULT_INVALID_OP_CODEC == hr)
-    {
-      cout << "          Codec does not support interleaved data." << endl;
-      hr = AAFRESULT_SUCCESS;
-    }
-    else
-    {
-	    if (SUCCEEDED(hr))
-	    {
-		    cout << "        ReadMultiSamples (compression disabled, RGB)" << endl;
-		    hr = ReadVideoAAFFile(L"EssenceAccessJPEGMulti.aaf", kAAFCompressionDisable, kAAFColorSpaceRGB, 1,  
-				kAAFCodecJPEG, testMultiCalls);
-	    }
-	    if (SUCCEEDED(hr))
-	    {
-		    cout << "        ReadMultiSamples (compression enabled, RGB)" << endl;
-		    hr = ReadVideoAAFFile(L"EssenceAccessJPEGMulti.aaf", kAAFCompressionEnable, kAAFColorSpaceRGB, 1,  
-				kAAFCodecJPEG, testMultiCalls);
-	    }
-    }
-  }
+		if (AAFRESULT_INVALID_OP_CODEC == hr)
+		{
+		cout << "          Codec does not support interleaved data." << endl;
+		hr = AAFRESULT_SUCCESS;
+		}
+		else
+		{
+			if (SUCCEEDED(hr))
+			{
+				cout << "        ReadMultiSamples (compression disabled, RGB)" << endl;
+				hr = ReadVideoAAFFile(L"EssenceAccessJPEGMulti.aaf", kAAFCompressionDisable, kAAFColorSpaceRGB, 1,  
+					kAAFCodecJPEG, testMultiCalls);
+			}
+			if (SUCCEEDED(hr))
+			{
+				cout << "        ReadMultiSamples (compression enabled, RGB)" << endl;
+				hr = ReadVideoAAFFile(L"EssenceAccessJPEGMulti.aaf", kAAFCompressionEnable, kAAFColorSpaceRGB, 1,  
+					kAAFCodecJPEG, testMultiCalls);
+			}
+		}
+	}
 
 	if(hr == AAFRESULT_SUCCESS && mode == kAAFUnitTestReadWrite)
 	{
 		cout << "        WriteMultiSamples (compression enabled, RGB)" << endl;
 		hr = CreateVideoAAFFile(L"EssenceAccessJPEGMultiComp.aaf",NULL, kAAFCompressionEnable, kAAFColorSpaceRGB,1, 
 				kAAFCodecJPEG, testMultiCalls);
-    if (AAFRESULT_INVALID_OP_CODEC == hr)
-    {
-      cout << "          Codec does not support interleaved data." << endl;
-      hr = AAFRESULT_SUCCESS;
-    }
-    else
-    {
-	    if (SUCCEEDED(hr))
-	    {
-		    cout << "        ReadMultiSamples (compression disabled, RGB)" << endl;
-		    hr = ReadVideoAAFFile(L"EssenceAccessJPEGMultiComp.aaf", kAAFCompressionDisable, kAAFColorSpaceRGB, 1, 
-				kAAFCodecJPEG, testMultiCalls);
-	    }
-	    if (SUCCEEDED(hr))
-	    {
-		    cout << "        ReadMultiSamples (compression enabled, RGB)" << endl;
-		    hr = ReadVideoAAFFile(L"EssenceAccessJPEGMultiComp.aaf", kAAFCompressionEnable, kAAFColorSpaceRGB, 1, 
-				kAAFCodecJPEG, testMultiCalls);
-	    }
-    }
+		if (AAFRESULT_INVALID_OP_CODEC == hr)
+		{
+		cout << "          Codec does not support interleaved data." << endl;
+		hr = AAFRESULT_SUCCESS;
+		}
+		else
+		{
+			if (SUCCEEDED(hr))
+			{
+				cout << "        ReadMultiSamples (compression disabled, RGB)" << endl;
+				hr = ReadVideoAAFFile(L"EssenceAccessJPEGMultiComp.aaf", kAAFCompressionDisable, kAAFColorSpaceRGB, 1, 
+					kAAFCodecJPEG, testMultiCalls);
+			}
+			if (SUCCEEDED(hr))
+			{
+				cout << "        ReadMultiSamples (compression enabled, RGB)" << endl;
+				hr = ReadVideoAAFFile(L"EssenceAccessJPEGMultiComp.aaf", kAAFCompressionEnable, kAAFColorSpaceRGB, 1, 
+					kAAFCodecJPEG, testMultiCalls);
+			}
+		}
 	}
+
+
+	if (SUCCEEDED(hr))
+	{
+		cout << "    Create Static Essence Slot" << endl;
+ 		/**/
+		if(hr == AAFRESULT_SUCCESS && mode == kAAFUnitTestReadWrite)
+		{
+			cout << "        Write Static Essence" << endl;
+			hr = CreateStaticEssenceAAFFile(L"StaticEssenceAccess.aaf", NULL, testStandardCalls, kAAFCodecWAVE,kAAFTrue);
+		}
+	}
+
 
 
 	if(hr == AAFRESULT_SUCCESS && mode == kAAFUnitTestReadWrite)

@@ -130,6 +130,9 @@ AAFRESULT STDMETHODCALLTYPE
 	if (!pValue)
 		return(AAFRESULT_NULL_PARAM);
 
+	if (valueSize > OMPROPERTYSIZE_MAX)
+		return(AAFRESULT_BAD_SIZE);
+
 //	_value.setValue(pValue, valueSize);
 
   if (!_cachedTypeDef)

@@ -31,10 +31,10 @@
 #endif
 
 #include "ImplAAFDictionary.h"
-#include "ImplAAFCloneResolver.h"
 
 #include <assert.h>
 #include <string.h>
+#include <wchar.h>
 #include "aafErr.h"
 
 ImplAAFParameterDef::ImplAAFParameterDef ()
@@ -158,6 +158,9 @@ AAFRESULT STDMETHODCALLTYPE
 	if(pDisplayUnits == NULL)
 		return(AAFRESULT_NULL_PARAM);
 
+	if(wcslen(pDisplayUnits)*sizeof(OMCharacter) >= OMPROPERTYSIZE_MAX)
+		return AAFRESULT_BAD_SIZE;
+
 	_displayUnits = pDisplayUnits;
 
 	return(AAFRESULT_SUCCESS); 
@@ -165,12 +168,3 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 
-void ImplAAFParameterDef::onCopy(void* clientContext) const
-{
-  ImplAAFDefObject::onCopy(clientContext);
-
-  if ( clientContext ) {
-    ImplAAFCloneResolver* pResolver = reinterpret_cast<ImplAAFCloneResolver*>(clientContext);
-    pResolver->ResolveWeakReference(_typeDef);
-  }
-}

@@ -182,12 +182,8 @@ ImplAAFMetaDictionary *ImplAAFMetaDictionary::CreateMetaDictionary(void)
       // must have a reference to a factory. Since the meta dictionary is not created
       // by the OMClassFactory interface we just set the factory to "itself".
       //
-//
-//      pMetaDictionary->setClassFactory(pMetaDictionary);
 
-      // NOTE: We will probably need to change the previous
-      // line to use a "setMetaClassFactory()" (to be provided by OM)
-      // transdel:2000-APR-11  
+      pMetaDictionary->setClassFactory(pMetaDictionary);
     }
     else
     {
@@ -205,11 +201,6 @@ bool ImplAAFMetaDictionary::isRegistered(const OMClassId& classId ) const
 {
 	assert( sizeof(OMClassId) == sizeof(aafUID_t) );
 	return containsClass( reinterpret_cast<const aafUID_t&>(classId) );
-}
-
-void ImplAAFMetaDictionary::cloneClassDef( const OMClassId& id, OMClassFactory* pDstFactory )
-{
-  ImplAAFCloneResolver::CloneClassDef(id, pDstFactory, this);
 }
 
 //

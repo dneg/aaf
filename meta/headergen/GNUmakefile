@@ -35,7 +35,8 @@ PROGS=classDefUid$(EXE) \
       propertyDefUid$(EXE) \
       propertyId$(EXE) \
       storedObjectUid$(EXE) \
-      typeDefUid$(EXE)
+      typeDefUid$(EXE) \
+      genDefInstances$(EXE)
 
 # main build target
 all : $(PROGS) \
@@ -45,7 +46,14 @@ all : $(PROGS) \
         $(GEN_H_DIR)/AAFPropertyDefs.h \
         $(GEN_H_DIR)/AAFPropertyIDs.h \
         $(GEN_H_DIR)/AAFStoredObjectIDs.h \
-        $(GEN_H_DIR)/AAFTypeDefUIDs.h
+        $(GEN_H_DIR)/AAFTypeDefUIDs.h  \
+        $(GEN_H_DIR)/AAFOperationDefs.h \
+        $(GEN_H_DIR)/AAFParameterDefs.h \
+        $(GEN_H_DIR)/AAFDataDefs.h \
+        $(GEN_H_DIR)/AAFContainerDefs.h \
+        $(GEN_H_DIR)/AAFInterpolatorDefs.h \
+        $(GEN_H_DIR)/AAFOPDefs.h
+
 
 # utilities
 headerGenUtils$(OBJ) : headerGenUtils.cpp headerGenUtils.h
@@ -94,6 +102,13 @@ typeDefUid$(OBJ) : typeDefUid.cpp headerGenUtils.h \
         ../AAFMetaDictionary.h
 	$(COMPILE) $(COMPILEFLAGS) -c $< -o $@
 
+genDefInstances$(EXE) : headerGenUtils$(OBJ) genDefInstances$(OBJ)
+	$(LINK) $^ -o $@
+
+genDefInstances$(OBJ) : genDefInstances.cpp headerGenUtils.h \
+        ../AAFMetaDictionary.h
+	$(COMPILE) $(COMPILEFLAGS) -c $< -o $@
+
 # targets for generated source files
 $(GEN_H_DIR) :
 	mkdir $(GEN_H_DIR)
@@ -116,6 +131,28 @@ $(GEN_H_DIR)/AAFStoredObjectIDs.h : storedObjectUid$(EXE)
 $(GEN_H_DIR)/AAFTypeDefUIDs.h : typeDefUid$(EXE)
 	./typeDefUid AAFTypeDefUIDs > $(GEN_H_DIR)/AAFTypeDefUIDs.h
 
+# targets for generated Definition Object instance header files
+
+###NOTE specification of optional prefix ("kAAF_" or similar)
+
+$(GEN_H_DIR)/AAFOperationDefs.h : genDefInstances$(EXE)
+	./genDefInstances OperationDefinition kAAF_ > $(GEN_H_DIR)/AAFOperationDefs.h
+
+$(GEN_H_DIR)/AAFParameterDefs.h : genDefInstances$(EXE)
+	./genDefInstances ParameterDefinition kAAF_ > $(GEN_H_DIR)/AAFParameterDefs.h
+
+$(GEN_H_DIR)/AAFDataDefs.h : genDefInstances$(EXE)
+	./genDefInstances DataDefinition > $(GEN_H_DIR)/AAFDataDefs.h
+
+$(GEN_H_DIR)/AAFContainerDefs.h : genDefInstances$(EXE)
+	./genDefInstances ContainerDefinition > $(GEN_H_DIR)/AAFContainerDefs.h
+
+$(GEN_H_DIR)/AAFInterpolatorDefs.h : genDefInstances$(EXE)
+	./genDefInstances InterpolationDefinition > $(GEN_H_DIR)/AAFInterpolatorDefs.h
+
+$(GEN_H_DIR)/AAFOPDefs.h : genDefInstances$(EXE)
+	./genDefInstances OPDefinition kAAF_ > $(GEN_H_DIR)/AAFOPDefs.h
+
 
 #install targets
 $(INSTALL_H_DIR)/AAFClassDefUIDs.h : $(GEN_H_DIR)/AAFClassDefUIDs.h
@@ -136,6 +173,25 @@ $(INSTALL_H_DIR)/AAFStoredObjectIDs.h : $(GEN_H_DIR)/AAFStoredObjectIDs.h
 $(INSTALL_H_DIR)/AAFTypeDefUIDs.h : $(GEN_H_DIR)/AAFTypeDefUIDs.h
 	cp $(GEN_H_DIR)/AAFTypeDefUIDs.h $(INSTALL_H_DIR)/AAFTypeDefUIDs.h
 
+# targets for generated Definition Object instance header files
+
+$(INSTALL_H_DIR)/AAFOperationDefs.h : $(GEN_H_DIR)/AAFOperationDefs.h
+	cp $(GEN_H_DIR)/AAFOperationDefs.h kAAF_ $(INSTALL_H_DIR)/AAFOperationDefs.h
+
+$(INSTALL_H_DIR)/AAFParameterDefs.h : $(GEN_H_DIR)/AAFParameterDefs.h
+	cp $(GEN_H_DIR)/AAFParameterDefs.h $(INSTALL_H_DIR)/AAFParameterDefs.h
+
+$(INSTALL_H_DIR)/AAFDataDefs.h : $(GEN_H_DIR)/AAFDataDefs.h
+	cp $(GEN_H_DIR)/AAFDataDefs.h $(INSTALL_H_DIR)/AAFDataDefs.h
+
+$(INSTALL_H_DIR)/AAFContainerDefs.h : $(GEN_H_DIR)/AAFContainerDefs.h
+	cp $(GEN_H_DIR)/AAFContainerDefs.h $(INSTALL_H_DIR)/AAFContainerDefs.h
+
+$(INSTALL_H_DIR)/AAFInterpolatorDefs.h : $(GEN_H_DIR)/AAFInterpolatorDefs.h
+	cp $(GEN_H_DIR)/AAFInterpolatorDefs.h $(INSTALL_H_DIR)/AAFInterpolatorDefs.h
+
+$(INSTALL_H_DIR)/AAFOPDefs.h : $(GEN_H_DIR)/AAFOPDefs.h
+	cp $(GEN_H_DIR)/AAFOPDefs.h $(INSTALL_H_DIR)/AAFOPDefs.h
 
 
 # other targets

@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding = "Windows-1252"?>
+<?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="7.00"
+	Version="7.10"
 	Name="OM"
 	SccProjectName=""
 	SccLocalPath="">
@@ -21,7 +21,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="../../../ref-impl/src/OM,../../../ref-impl/include/Om,../../../sss-impl/include"
+				AdditionalIncludeDirectories="../../../ref-impl/src/OM;../../../ref-impl/include/Om;../../../ref-impl/include;../../../sss-impl/include"
 				PreprocessorDefinitions="NDEBUG,_WIN32,WIN32,_WINDOWS,UNICODE,OM_USE_STORAGE_EX"
 				StringPooling="TRUE"
 				RuntimeLibrary="2"
@@ -55,6 +55,12 @@
 				Culture="1033"/>
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 		<Configuration
 			Name="Debug|Win32"
@@ -67,7 +73,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../../../ref-impl/src/OM,../../../ref-impl/include/Om,../../../sss-impl/include"
+				AdditionalIncludeDirectories="../../../ref-impl/src/OM;../../../ref-impl/include/Om;../../../ref-impl/include;../../../sss-impl/include"
 				PreprocessorDefinitions="_DEBUG,OM_DEBUG,OM_STACK_TRACE_ON_ASSERT,_WIN32,WIN32,_WINDOWS,UNICODE,OM_USE_STORAGE_EX"
 				RuntimeLibrary="3"
 				RuntimeTypeInfo="TRUE"
@@ -101,8 +107,16 @@
 				Culture="1033"/>
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 	</Configurations>
+	<References>
+	</References>
 	<Files>
 		<Filter
 			Name="Source Files"
@@ -162,10 +176,13 @@
 				RelativePath="..\..\..\ref-impl\src\OM\OMFile.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\ref-impl\src\OM\OMIOStream.cpp">
+				RelativePath="..\..\..\ref-impl\src\OM\OMGSFxMSSStoredObjectFactory.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\ref-impl\src\OM\OMIntegerType.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\ref-impl\src\OM\OMIOStream.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\ref-impl\src\OM\OMKLVStoredObject.cpp">
@@ -175,6 +192,12 @@
 			</File>
 			<File
 				RelativePath="..\..\..\ref-impl\src\OM\OMKLVStoredStream.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\ref-impl\src\OM\OMMappedFileRawStorage.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\ref-impl\src\OM\OMMemoryRawStorage.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\ref-impl\src\OM\OMMSSStoredObject.cpp">
@@ -189,13 +212,7 @@
 				RelativePath="..\..\..\ref-impl\src\OM\OMMSStructuredStorage.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\ref-impl\src\OM\OMMappedFileRawStorage.cpp">
-			</File>
-			<File
-				RelativePath="..\..\..\ref-impl\src\OM\OMMemoryRawStorage.cpp">
-			</File>
-			<File
-				RelativePath="..\..\..\ref-impl\src\OM\OMOStream.cpp">
+				RelativePath="..\..\..\ref-impl\src\OM\OMMSxMSSStoredObjectFactory.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\ref-impl\src\OM\OMObjectManager.cpp">
@@ -205,6 +222,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\ref-impl\src\OM\OMObjectReferenceType.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\ref-impl\src\OM\OMOStream.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\ref-impl\src\OM\OMPageCache.cpp">
@@ -249,13 +269,10 @@
 				RelativePath="..\..\..\ref-impl\src\OM\OMSSSStorageRWInputSource.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\ref-impl\src\OM\OMSSSStoredObject.cpp">
+				RelativePath="..\..\..\ref-impl\src\OM\OMSSSStructuredStorage.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\ref-impl\src\OM\OMSSSStoredObjectFactory.cpp">
-			</File>
-			<File
-				RelativePath="..\..\..\ref-impl\src\OM\OMSSSStoredStream.cpp">
+				RelativePath="..\..\..\ref-impl\src\OM\OMSSxMSSStoredObjectFactory.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\ref-impl\src\OM\OMStackTrace.cpp">
@@ -329,21 +346,30 @@
 			<File
 				RelativePath="..\..\..\ref-impl\src\OM\OMXMLStoredStream.cpp">
 			</File>
+			<File
+				RelativePath="..\..\..\ref-impl\src\Om\utf8.cpp">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						WarnAsError="FALSE"/>
+				</FileConfiguration>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
 			Filter="h">
 			<File
-				RelativePath="..\..\..\ref-impl\include\OM\OMAVLTree.h">
-			</File>
-			<File
-				RelativePath="..\..\..\ref-impl\src\OM\OMAVLTreeT.h">
-			</File>
-			<File
 				RelativePath="..\..\..\ref-impl\include\OM\OMArrayType.h">
 			</File>
 			<File
 				RelativePath="..\..\..\ref-impl\src\OM\OMAssertions.h">
+			</File>
+			<File
+				RelativePath="..\..\..\ref-impl\include\OM\OMAVLTree.h">
+			</File>
+			<File
+				RelativePath="..\..\..\ref-impl\src\OM\OMAVLTreeT.h">
 			</File>
 			<File
 				RelativePath="..\..\..\ref-impl\include\OM\OMBufferedIStream.h">
@@ -421,7 +447,7 @@
 				RelativePath="..\..\..\ref-impl\src\OM\OMFixedSizePropertyT.h">
 			</File>
 			<File
-				RelativePath="..\..\..\ref-impl\include\OM\OMIOStream.h">
+				RelativePath="..\..\..\ref-impl\include\OM\OMGSFxMSSStoredObjectFactory.h">
 			</File>
 			<File
 				RelativePath="..\..\..\ref-impl\include\OM\OMIdentitySet.h">
@@ -431,6 +457,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\ref-impl\include\OM\OMIntegerType.h">
+			</File>
+			<File
+				RelativePath="..\..\..\ref-impl\include\OM\OMIOStream.h">
 			</File>
 			<File
 				RelativePath="..\..\..\ref-impl\include\OM\OMKLVStoredObject.h">
@@ -454,6 +483,12 @@
 				RelativePath="..\..\..\ref-impl\src\OM\OMListT.h">
 			</File>
 			<File
+				RelativePath="..\..\..\ref-impl\include\OM\OMMappedFileRawStorage.h">
+			</File>
+			<File
+				RelativePath="..\..\..\ref-impl\include\OM\OMMemoryRawStorage.h">
+			</File>
+			<File
 				RelativePath="..\..\..\ref-impl\include\OM\OMMSSStoredObject.h">
 			</File>
 			<File
@@ -466,13 +501,7 @@
 				RelativePath="..\..\..\ref-impl\src\OM\OMMSStructuredStorage.h">
 			</File>
 			<File
-				RelativePath="..\..\..\ref-impl\include\OM\OMMappedFileRawStorage.h">
-			</File>
-			<File
-				RelativePath="..\..\..\ref-impl\include\OM\OMMemoryRawStorage.h">
-			</File>
-			<File
-				RelativePath="..\..\..\ref-impl\include\OM\OMOStream.h">
+				RelativePath="..\..\..\ref-impl\include\OM\OMMSxMSSStoredObjectFactory.h">
 			</File>
 			<File
 				RelativePath="..\..\..\ref-impl\include\OM\OMObject.h">
@@ -491,6 +520,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\ref-impl\include\OM\OMObjectVector.h">
+			</File>
+			<File
+				RelativePath="..\..\..\ref-impl\include\OM\OMOStream.h">
 			</File>
 			<File
 				RelativePath="..\..\..\ref-impl\include\OM\OMPageCache.h">
@@ -535,15 +567,6 @@
 				RelativePath="..\..\..\ref-impl\src\OM\OMRedBlackTreeT.h">
 			</File>
 			<File
-				RelativePath="..\..\..\ref-impl\include\OM\OMRefProperty.h">
-			</File>
-			<File
-				RelativePath="..\..\..\ref-impl\include\OM\OMRefSetProperty.h">
-			</File>
-			<File
-				RelativePath="..\..\..\ref-impl\include\OM\OMRefVectorProperty.h">
-			</File>
-			<File
 				RelativePath="..\..\..\ref-impl\include\OM\OMReferenceContainer.h">
 			</File>
 			<File
@@ -574,6 +597,15 @@
 				RelativePath="..\..\..\ref-impl\src\OM\OMReferenceVectorT.h">
 			</File>
 			<File
+				RelativePath="..\..\..\ref-impl\include\OM\OMRefProperty.h">
+			</File>
+			<File
+				RelativePath="..\..\..\ref-impl\include\OM\OMRefSetProperty.h">
+			</File>
+			<File
+				RelativePath="..\..\..\ref-impl\include\OM\OMRefVectorProperty.h">
+			</File>
+			<File
 				RelativePath="..\..\..\ref-impl\include\OM\OMRenamedType.h">
 			</File>
 			<File
@@ -596,6 +628,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\ref-impl\src\OM\OMSingletonT.h">
+			</File>
+			<File
+				RelativePath="..\..\..\ref-impl\include\OM\OMSSxMSSStoredObjectFactory.h">
 			</File>
 			<File
 				RelativePath="..\..\..\ref-impl\include\OM\OMStackTrace.h">
@@ -637,24 +672,6 @@
 				RelativePath="..\..\..\ref-impl\include\OM\OMStringType.h">
 			</File>
 			<File
-				RelativePath="..\..\..\ref-impl\include\OM\OMStrongRefProperty.h">
-			</File>
-			<File
-				RelativePath="..\..\..\ref-impl\src\OM\OMStrongRefPropertyT.h">
-			</File>
-			<File
-				RelativePath="..\..\..\ref-impl\include\OM\OMStrongRefSetProperty.h">
-			</File>
-			<File
-				RelativePath="..\..\..\ref-impl\src\OM\OMStrongRefSetPropertyT.h">
-			</File>
-			<File
-				RelativePath="..\..\..\ref-impl\include\OM\OMStrongRefVectorProperty.h">
-			</File>
-			<File
-				RelativePath="..\..\..\ref-impl\src\OM\OMStrongRefVectorPropertyT.h">
-			</File>
-			<File
 				RelativePath="..\..\..\ref-impl\include\OM\OMStrongReference.h">
 			</File>
 			<File
@@ -674,6 +691,24 @@
 			</File>
 			<File
 				RelativePath="..\..\..\ref-impl\src\OM\OMStrongReferenceVectorIterT.h">
+			</File>
+			<File
+				RelativePath="..\..\..\ref-impl\include\OM\OMStrongRefProperty.h">
+			</File>
+			<File
+				RelativePath="..\..\..\ref-impl\src\OM\OMStrongRefPropertyT.h">
+			</File>
+			<File
+				RelativePath="..\..\..\ref-impl\include\OM\OMStrongRefSetProperty.h">
+			</File>
+			<File
+				RelativePath="..\..\..\ref-impl\src\OM\OMStrongRefSetPropertyT.h">
+			</File>
+			<File
+				RelativePath="..\..\..\ref-impl\include\OM\OMStrongRefVectorProperty.h">
+			</File>
+			<File
+				RelativePath="..\..\..\ref-impl\src\OM\OMStrongRefVectorPropertyT.h">
 			</File>
 			<File
 				RelativePath="..\..\..\ref-impl\include\OM\OMType.h">
@@ -706,24 +741,6 @@
 				RelativePath="..\..\..\ref-impl\src\OM\OMVectorT.h">
 			</File>
 			<File
-				RelativePath="..\..\..\ref-impl\include\OM\OMWeakRefProperty.h">
-			</File>
-			<File
-				RelativePath="..\..\..\ref-impl\src\OM\OMWeakRefPropertyT.h">
-			</File>
-			<File
-				RelativePath="..\..\..\ref-impl\include\OM\OMWeakRefSetProperty.h">
-			</File>
-			<File
-				RelativePath="..\..\..\ref-impl\src\OM\OMWeakRefSetPropertyT.h">
-			</File>
-			<File
-				RelativePath="..\..\..\ref-impl\include\OM\OMWeakRefVectorProperty.h">
-			</File>
-			<File
-				RelativePath="..\..\..\ref-impl\src\OM\OMWeakRefVectorPropertyT.h">
-			</File>
-			<File
 				RelativePath="..\..\..\ref-impl\include\OM\OMWeakReference.h">
 			</File>
 			<File
@@ -743,6 +760,24 @@
 			</File>
 			<File
 				RelativePath="..\..\..\ref-impl\src\OM\OMWeakReferenceVectorIterT.h">
+			</File>
+			<File
+				RelativePath="..\..\..\ref-impl\include\OM\OMWeakRefProperty.h">
+			</File>
+			<File
+				RelativePath="..\..\..\ref-impl\src\OM\OMWeakRefPropertyT.h">
+			</File>
+			<File
+				RelativePath="..\..\..\ref-impl\include\OM\OMWeakRefSetProperty.h">
+			</File>
+			<File
+				RelativePath="..\..\..\ref-impl\src\OM\OMWeakRefSetPropertyT.h">
+			</File>
+			<File
+				RelativePath="..\..\..\ref-impl\include\OM\OMWeakRefVectorProperty.h">
+			</File>
+			<File
+				RelativePath="..\..\..\ref-impl\src\OM\OMWeakRefVectorPropertyT.h">
 			</File>
 			<File
 				RelativePath="..\..\..\ref-impl\include\OM\OMWideStringProperty.h">

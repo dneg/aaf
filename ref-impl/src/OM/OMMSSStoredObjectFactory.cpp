@@ -31,8 +31,6 @@
 #include "OMRawStorage.h"
 #include "OMUniqueObjectIdentType.h"
 
-#include <stdio.h>
-
   // @mfunc Constructor.
 OMMSSStoredObjectFactory::OMMSSStoredObjectFactory(
                                  const OMStoredObjectEncoding& encoding,
@@ -56,20 +54,6 @@ OMMSSStoredObjectFactory::~OMMSSStoredObjectFactory(void)
   TRACE("OMMSSStoredObjectFactory::~OMMSSStoredObjectFactory");
 }
 
-  // @mfunc Initialize this <c OMMSSStoredObjectFactory>.
-void OMMSSStoredObjectFactory::initialize(void)
-{
-  TRACE("OMMSSStoredObjectFactory::initialize");
-  OMMSSStoredObject::initialize();
-}
-
-  // @mfunc Finalize this <c OMMSSStoredObjectFactory>.
-void OMMSSStoredObjectFactory::finalize(void)
-{
-  TRACE("OMMSSStoredObjectFactory::finalize");
-  OMMSSStoredObject::finalize();
-}
-
   // @mfunc Open the root <c OMMSSStoredObject> in the raw storage
   //        <p rawStorage> for reading only.
   //   @parm The raw storage in which to open the <c OMMSSStoredObject>.
@@ -78,7 +62,11 @@ OMStoredObject*
 OMMSSStoredObjectFactory::openRead(OMRawStorage* rawStorage)
 {
   TRACE("OMMSSStoredObjectFactory::openRead");
-  return OMMSSStoredObject::openRead(rawStorage);
+  PRECONDITION("Valid raw storage", rawStorage != 0);
+  PRECONDITION("Compatible raw storage access mode", rawStorage->isReadable());
+  PRECONDITION("Compatible raw storage", rawStorage->isPositionable());
+
+  return openFile(rawStorage, OMFile::readOnlyMode);
 }
 
   // @mfunc Open the root <c OMMSSStoredObject> in the raw storage
@@ -90,8 +78,14 @@ OMMSSStoredObjectFactory::openModify(OMRawStorage* rawStorage)
 {
   TRACE("OMMSSStoredObjectFactory::openModify");
 
+  PRECONDITION("Valid raw storage", rawStorage != 0);
+  PRECONDITION("Compatible raw storage access mode",
+                         rawStorage->isReadable() && rawStorage->isWritable());
+  PRECONDITION("Compatible raw storage", rawStorage->isPositionable() &&
+                                         rawStorage->isExtendible());
+
   writeSignature(rawStorage, nullOMUniqueObjectIdentification);
-  return OMMSSStoredObject::openModify(rawStorage);
+  return openFile(rawStorage, OMFile::readOnlyMode);
 }
 
   // @mfunc Create a new root <c OMMSSStoredObject> in the raw storage
@@ -120,7 +114,16 @@ OMMSSStoredObjectFactory::createModify(OMRawStorage* rawStorage,
                                        const OMByteOrder byteOrder)
 {
   TRACE("OMMSSStoredObjectFactory::createModify");
-  return OMMSSStoredObject::createModify(rawStorage, byteOrder, signature());
+
+  PRECONDITION("Valid raw storage", rawStorage != 0);
+  PRECONDITION("Valid byte order",
+                      (byteOrder == littleEndian) || (byteOrder == bigEndian));
+  PRECONDITION("Compatible raw storage access mode",
+                         rawStorage->isReadable() && rawStorage->isWritable());
+  PRECONDITION("Compatible raw storage", rawStorage->isPositionable() &&
+                                         rawStorage->isExtendible());
+
+  return createFile(rawStorage, byteOrder, signature());
 }
 
   // @mfunc Open the root <c OMMSSStoredObject> in the disk file
@@ -132,7 +135,9 @@ OMStoredObject*
 OMMSSStoredObjectFactory::openRead(const wchar_t* fileName)
 {
   TRACE("OMMSSStoredObjectFactory::openRead");
-  return OMMSSStoredObject::openRead(fileName);
+  PRECONDITION("Valid file name", validWideString(fileName));
+
+  return openFile(fileName, OMFile::readOnlyMode);
 }
 
   // @mfunc Open the root <c OMMSSStoredObject> in the disk file
@@ -144,9 +149,10 @@ OMStoredObject*
 OMMSSStoredObjectFactory::openModify(const wchar_t* fileName)
 {
   TRACE("OMMSSStoredObjectFactory::openModify");
+  PRECONDITION("Valid file name", validWideString(fileName));
 
   writeSignature(fileName, nullOMUniqueObjectIdentification);
-  return OMMSSStoredObject::openModify(fileName);
+  return openFile(fileName, OMFile::modifyMode);
 }
 
   // @mfunc Create a new root <c OMMSSStoredObject> in the disk file
@@ -161,7 +167,11 @@ OMMSSStoredObjectFactory::createModify(const wchar_t* fileName,
                                        const OMByteOrder byteOrder)
 {
   TRACE("OMMSSStoredObjectFactory::createModify");
-  return OMMSSStoredObject::createModify(fileName, byteOrder, signature());
+  PRECONDITION("Valid file name", validWideString(fileName));
+  PRECONDITION("Valid byte order",
+                      (byteOrder == littleEndian) || (byteOrder == bigEndian));
+
+  return createFile(fileName, byteOrder, signature());
 }
 
   // @mfunc Create a new root <c OMMSSStoredObject> in the disk file

@@ -979,15 +979,17 @@ void OMStrongReferenceSetProperty<UniqueIdentification,
   OMClassFactory* factory = container->classFactory();
   ASSERT("Valid class factory", factory != 0);
 
-  ASSERT("Destination set is void", dest->isVoid());
   SetIterator iterator(_set, OMBefore);
   while (++iterator) {
     SetElement& element = iterator.value();
-    OMStorable* source = element.getValue();
-    OMStorable* d = source->shallowCopy(factory);
-    dest->insertObject(d);
-    d->onCopy(clientContext);
-    source->deepCopyTo(d, clientContext);
+    void* id = element.identification();
+    if (!dest->contains(id)) {
+      OMStorable* source = element.getValue();
+      OMStorable* d = source->shallowCopy(factory);
+      dest->insertObject(d);
+      d->onCopy(clientContext);
+      source->deepCopyTo(d, clientContext);
+    }
   }
 }
 

@@ -30,10 +30,14 @@ AAFDigitalImageDescriptor\
 #endm
 #c
 #c #import ./AAFDigitalImageDescriptor.exp
+#import ./AAFRGBADescriptor2.exp
 AD_HEAD
 
 
 AD_IDL(//
+// IAAFRGBADescriptor is DEPRECATED.
+// Please use IAAFRGBADescriptor2.
+//
 // The IAAFRGBADescriptor interface is implemented by objects
 // which describe video content data formatted using RGBA formatting.
 //
@@ -64,7 +68,8 @@ AD_IDL(//
 AD_CLASS_UUID(e684d771, b935, 11d2, bf, 9d, 00, 10, 4b, c9, 15, 6d)
 
 AD_DEFAULT_UUID(e684d772, b935, 11d2, bf, 9d, 00, 10, 4b, c9, 15, 6d)
-AD_XCLASS_BEGIN(Concrete, StoredObject)
+
+AD_COM_EXT_CLASS_BEGIN(public IAAFRGBADescriptor2)
 
 AD_XMETHOD2(SetPixelLayout,
 			[in],
@@ -353,5 +358,19 @@ AD_XMETHOD2(GetPaletteLayout,
   // AAFRESULT_SMALLBUF
   //   - numberElements indicates that the array is too small to hold
   //     the data.)
+#c
+#c AAFRGBADescriptor2 methods
+#c
 
-AD_XCLASS_END(Concrete, StoredObject)
+AD_COM_METH(.method-SetComponentMaxRef)
+AD_COM_METH(.method-GetComponentMaxRef)
+AD_COM_METH(.method-SetComponentMinRef)
+AD_COM_METH(.method-GetComponentMinRef)
+AD_COM_METH(.method-SetAlphaMaxRef)
+AD_COM_METH(.method-GetAlphaMaxRef)
+AD_COM_METH(.method-SetAlphaMinRef)
+AD_COM_METH(.method-GetAlphaMinRef)
+AD_COM_METH(.method-SetScanningDirection)
+AD_COM_METH(.method-GetScanningDirection)
+
+AD_COM_EXT_CLASS_END(AAFRGBADescriptor2)

@@ -224,6 +224,23 @@ ImplAAFEssenceAccess::Create (ImplAAFMasterMob *    masterMob,
 							  const aafRational_t & sampleRate,
 							  aafCompressEnable_t   compEnable)
 {
+	return  CreateEx(masterMob, masterSlotID, mediaKind,codecID, editRate, sampleRate,
+					compEnable, Timeline) ;
+}
+
+
+
+/**ImplementationPrivate**/
+AAFRESULT STDMETHODCALLTYPE
+ImplAAFEssenceAccess::CreateEx (ImplAAFMasterMob *    masterMob,
+							  aafSlotID_t		    masterSlotID,
+							  const aafUID_t &      mediaKind,
+							  const aafUID_t &      codecID,
+							  const aafRational_t & editRate,
+							  const aafRational_t & sampleRate,
+							  aafCompressEnable_t   compEnable,
+							  aafEnumEssenceTypes  Essencetype)
+{
 	IUnknown				*dataObj = NULL;
 	IAAFSourceMob			*iFileMob = NULL;
 	IUnknown				*iUnk = NULL;
@@ -291,9 +308,9 @@ ImplAAFEssenceAccess::Create (ImplAAFMasterMob *    masterMob,
  		
     // When we enable the cloneExternal (below) then Don't do this call for creating the
 		// file mob twice
-		CHECK(CreateFileMob(compHead, kAAFTrue, DEFAULT_FILE_SLOT, NULL, mediaKind,
+		CHECK(CreateFileMobEx(compHead, kAAFTrue, DEFAULT_FILE_SLOT, NULL, mediaKind,
 			_codecID, editRate, sampleRate,
-			_destination, &_compFileMob));
+			_destination,Essencetype, &_compFileMob));
 		CHECK(_compFileMob->GetMobID(&fileMobUID));
 		if(compHead != dataHead)
 		{
@@ -3714,7 +3731,6 @@ ImplAAFEssenceAccess::ModifyEssenceFileFromLocator (ImplAAFHeader *srcHead, Impl
 	return AAFRESULT_SUCCESS;
 }
 
-
 AAFRESULT
 ImplAAFEssenceAccess::CreateFileMob (ImplAAFHeader *       newHead,
 									 aafBool			   addSlots,
@@ -3725,6 +3741,25 @@ ImplAAFEssenceAccess::CreateFileMob (ImplAAFHeader *       newHead,
 									 const aafRational_t & editRate,
 									 const aafRational_t & sampleRate,
 									 ImplAAFLocator	*      addLocator,
+									 ImplAAFSourceMob **   result)
+{
+
+		
+	return CreateFileMobEx (newHead,addSlots, slotID,newMobID,  mediaKind,
+				codecID,editRate, sampleRate,addLocator,Timeline, result);
+}
+
+AAFRESULT
+ImplAAFEssenceAccess::CreateFileMobEx (ImplAAFHeader *       newHead,
+									 aafBool			   addSlots,
+									 aafSlotID_t		   slotID,
+									 aafMobID_constptr	   newMobID, /* optional */
+									 const aafUID_t &	   mediaKind,
+									 const aafUID_t &	   codecID,
+									 const aafRational_t & editRate,
+									 const aafRational_t & sampleRate,
+									 ImplAAFLocator	*      addLocator,
+									 aafEnumEssenceTypes  Essencetype,
 									 ImplAAFSourceMob **   result)
 {
 	ImplAAFDictionary	*dict = NULL;
@@ -3757,10 +3792,19 @@ ImplAAFEssenceAccess::CreateFileMob (ImplAAFHeader *       newHead,
 			{
 			    ImplAAFDataDefSP pMediaKind;
 				CHECK(dict->LookupDataDef (mediaKind, &pMediaKind));
-				CHECK(fileMob->AddNilReference(slotID, 
+				if(Essencetype==Static)
+				{
+					CHECK(fileMob->AddStaticNilReference(slotID, 
+											   pMediaKind));
+				}
+				else
+				{
+					CHECK(fileMob->AddNilReference(slotID, 
 											   0,
 											   pMediaKind,
 											   editRate));
+				}
+				
 			}
 			CHECK(fileMob->FindSlotBySlotID(slotID, &tmpSlot));
 			CHECK(tmpSlot->SetPhysicalNum(slotID));

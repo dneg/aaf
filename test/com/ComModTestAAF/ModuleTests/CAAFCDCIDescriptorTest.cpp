@@ -50,6 +50,8 @@ using namespace std;
 #define kWRLTest	255
 #define kCRTest		255
 #define kPBTest		0
+#define kAlphaSamplingWidthTestVal		8
+#define kReversedByteOrderTestVal		kAAFTrue
 
 // default test values for DID
 #define kStoredHeightTestVal			248
@@ -70,8 +72,6 @@ using namespace std;
 #define kDisplayYOffsetTestVal			8
 #define kAlphaTransparencyTestVal		kAAFMaxValueTransparent
 #define kImageAlignmentFactorTestVal	0
-#define kGammaNumTestVal				7
-#define kGammaDenTestVal				8
 
 // our test Mob id 
 static const aafMobID_t	TEST_MobID = 
@@ -91,7 +91,7 @@ static HRESULT SetDigitalImageDescProps(IAAFCDCIDescriptor* pDesc)
 	memset(&compression, 0, sizeof(aafUID_t));
 
 	// TODO: add all DigitalImage properties
-	// Reguired Properties
+	// Required Properties
 	pDIDesc->SetStoredView(kStoredHeightTestVal, kStoredWidthTestVal);
 	pDIDesc->SetFrameLayout(kFrameLayoutTestVal);
 	pDIDesc->SetVideoLineMap(kVideoLineMapSizeTestVal, VideoLineMap);
@@ -106,10 +106,6 @@ static HRESULT SetDigitalImageDescProps(IAAFCDCIDescriptor* pDesc)
 	pDIDesc->SetDisplayView(kDisplayHeightTestVal, kDisplayWidthTestVal, kDisplayXOffsetTestVal, kDisplayYOffsetTestVal);
 	pDIDesc->SetAlphaTransparency(kAlphaTransparencyTestVal);
 	pDIDesc->SetImageAlignmentFactor(kImageAlignmentFactorTestVal);
-
-//	ratio.numerator = kGammaNumTestVal;
-//	ratio.denominator = kGammaDenTestVal;
-//!!!	pDIDesc->SetGamma(ratio);
 
 	pDIDesc->Release();
 
@@ -222,6 +218,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		  if (SUCCEEDED(hr))
 		  {
 			  IAAFCDCIDescriptor*	pCDCIDesc = NULL;
+			  IAAFCDCIDescriptor2*	pCDCIDesc2 = NULL;
 
 			  pMob->SetMobID(TEST_MobID);
 			  pMob->SetName(L"CDCIDescriptorTest");
@@ -240,6 +237,13 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 				  if (SUCCEEDED(hr)) hr = pCDCIDesc->SetColorRange(kCRTest);
 				  if (SUCCEEDED(hr)) hr = pCDCIDesc->SetPaddingBits(kPBTest);
 				  if (SUCCEEDED(hr)) hr = SetDigitalImageDescProps(pCDCIDesc);
+
+			    // Optional Properties accessed using IAAFCDCIDescriptor2
+					if (SUCCEEDED(hr)) hr = pCDCIDesc->QueryInterface (IID_IAAFCDCIDescriptor2, (void **)&pCDCIDesc2);
+				  if (SUCCEEDED(hr)) hr = pCDCIDesc2->SetAlphaSamplingWidth(kAlphaSamplingWidthTestVal);
+				  if (SUCCEEDED(hr)) hr = pCDCIDesc2->SetReversedByteOrder(kReversedByteOrderTestVal);
+				  pCDCIDesc2->Release();
+				  pCDCIDesc2 = NULL;
 
 				  if (SUCCEEDED(hr))
 				  {
@@ -327,41 +331,54 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 				if (SUCCEEDED(hr))
 				{
 					IAAFCDCIDescriptor*	pCDCIDesc = NULL;
+					IAAFCDCIDescriptor2*	pCDCIDesc2 = NULL;
 
 					// if there is an Essence Descriptor then it MUST be an (essence) CDCI Descriptor
 					hr = pEssDesc->QueryInterface(IID_IAAFCDCIDescriptor, (void **) &pCDCIDesc);
 					if (SUCCEEDED(hr))
 					{
-						aafInt16			val16;
-						aafInt32			val;
-						aafUInt32			uval;
-						aafColorSiting_t	csval;
+						aafInt16			val16 = 0;
+						aafInt32			val32 = 0;
+						aafUInt32			uval32 = 0;
+						aafColorSiting_t	csval = 0;
+						aafBoolean_t	boolval = 0;
 
 						// test for expected CDCI properties
-						hr = pCDCIDesc->GetComponentWidth(&val);
-						if (SUCCEEDED(hr) && val == kCWTest)
-							hr = pCDCIDesc->GetHorizontalSubsampling(&uval);
+						hr = pCDCIDesc->GetComponentWidth(&val32);
+						if (SUCCEEDED(hr) && val32 != kCWTest) hr = AAFRESULT_TEST_FAILED;
 
-						if (SUCCEEDED(hr) && val == kHSTest)
-							hr = pCDCIDesc->GetVerticalSubsampling(&uval);
+						if (SUCCEEDED(hr)) hr = pCDCIDesc->GetHorizontalSubsampling(&uval32);
+						if (SUCCEEDED(hr) && uval32 != kHSTest) hr = AAFRESULT_TEST_FAILED;
 
-						if (SUCCEEDED(hr) && uval == kVSTest)
-							hr = pCDCIDesc->GetColorSiting(&csval);
+						if (SUCCEEDED(hr)) hr = pCDCIDesc->GetVerticalSubsampling(&uval32);
+						if (SUCCEEDED(hr) && uval32 != kVSTest) hr = AAFRESULT_TEST_FAILED;
 
-						if (SUCCEEDED(hr) && csval == kCSTest)
-							hr = pCDCIDesc->GetBlackReferenceLevel(&uval);
+						if (SUCCEEDED(hr)) hr = pCDCIDesc->GetColorSiting(&csval);
+						if (SUCCEEDED(hr) && csval != kCSTest) hr = AAFRESULT_TEST_FAILED;
 
-						if (SUCCEEDED(hr) && uval == kBRLTest)
-							hr = pCDCIDesc->GetWhiteReferenceLevel(&uval);
+						if (SUCCEEDED(hr)) hr = pCDCIDesc->GetBlackReferenceLevel(&uval32);
+						if (SUCCEEDED(hr) && uval32 != kBRLTest) hr = AAFRESULT_TEST_FAILED;
 
-						if (SUCCEEDED(hr) && uval == kWRLTest)
-							hr = pCDCIDesc->GetColorRange(&uval);
+						if (SUCCEEDED(hr)) hr = pCDCIDesc->GetWhiteReferenceLevel(&uval32);
+						if (SUCCEEDED(hr) && uval32 != kWRLTest) hr = AAFRESULT_TEST_FAILED;
 
-						if (SUCCEEDED(hr) && uval == kCRTest)
-							hr = pCDCIDesc->GetPaddingBits(&val16);
+						if (SUCCEEDED(hr)) hr = pCDCIDesc->GetColorRange(&uval32);
+						if (SUCCEEDED(hr) && uval32 != kCRTest) hr = AAFRESULT_TEST_FAILED;
 
-						if (FAILED(hr) || val16 != kPBTest)
-							hr = AAFRESULT_TEST_FAILED;
+						if (SUCCEEDED(hr)) hr = pCDCIDesc->GetPaddingBits(&val16);
+						if (SUCCEEDED(hr) && val16 != kPBTest) hr = AAFRESULT_TEST_FAILED;
+
+				    // Optional Properties accessed using IAAFCDCIDescriptor2
+						if (SUCCEEDED(hr)) hr = pCDCIDesc->QueryInterface (IID_IAAFCDCIDescriptor2, (void **)&pCDCIDesc2);
+
+					  if (SUCCEEDED(hr)) hr = pCDCIDesc2->GetAlphaSamplingWidth(&uval32);
+						if (SUCCEEDED(hr) && uval32 != kAlphaSamplingWidthTestVal) hr = AAFRESULT_TEST_FAILED;
+
+					  if (SUCCEEDED(hr)) hr = pCDCIDesc2->GetReversedByteOrder(&boolval);
+						if (SUCCEEDED(hr) && boolval != kReversedByteOrderTestVal) hr = AAFRESULT_TEST_FAILED;
+
+					  pCDCIDesc2->Release();
+					  pCDCIDesc2 = NULL;
 
 						pCDCIDesc->Release();
 						pCDCIDesc = NULL;

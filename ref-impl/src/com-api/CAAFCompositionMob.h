@@ -46,6 +46,7 @@
 
 class CAAFCompositionMob
   : public IAAFCompositionMob,
+    public IAAFCompositionMob2,
     public CAAFMob
 {
 protected:
@@ -58,7 +59,6 @@ protected:
   virtual ~CAAFCompositionMob ();
 
 public:
-
 
   //***********************************************************
   //
@@ -154,6 +154,56 @@ public:
     // default fade edit unit
     /*[in]*/ aafRational_t  fadeEditUnit);
 
+
+  //***********************************************************
+  // METHOD NAME: SetRendering()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFCompositionMob2 | SetRendering |
+  // set the MobID of a rendering of this CompositionMob.
+
+  // This method will return the following codes:
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  // @end
+  // 
+  STDMETHOD (SetRendering)
+   (
+    // @parm [in, ref] aafMobID_constref | mobID | Rendering MobID
+    aafMobID_constref  mobID
+  );
+
+  //***********************************************************
+  // METHOD NAME: GetRendering()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFCompositionMob2 | GetRendering |
+  // return the MobID of a rendering of this CompositionMob.
+
+  // Succeeds if all of the following are true:
+  // - the pMobID pointer is valid.
+  //
+  // If this method fails nothing will be written to *pMobID.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  //
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pMobID arg is NULL.
+  // @end
+  // 
+  STDMETHOD (GetRendering)
+   (
+    // @parm [out] aafMobID_t * | pMobID | Rendering MobID
+    aafMobID_t *  pMobID
+  );
+
+
+
 protected:
   // 
   // Declare the QI that implements for the interfaces
@@ -174,5 +224,4 @@ public:
 };
 
 #endif // ! __CAAFCompositionMob_h__
-
 

@@ -30,8 +30,12 @@ AAFFileDescriptor\
 #endm
 #c
 #c #import ./AAFFileDescriptor.exp
+#import ./AAFDigitalImageDescriptor2.exp
 AD_HEAD
 AD_IDL(//
+// IAAFDigitalImageDescriptor is DEPRECATED.
+// Please use IAAFDigitalImageDescriptor2.
+//
 // The IAAFDigitalImageDescriptor interface is implemented by objects
 // which describe video content data formatted either using RGBA or
 // luminance\/chrominance formatting.
@@ -120,15 +124,16 @@ AD_IDL(//
 AD_CLASS_UUID(44861700,8AEA, 11d2, 81, 3C, 00, 60, 97, 31, 01, 72)
 
 AD_DEFAULT_UUID(44861701, 8AEA, 11d2, 81, 3C, 00, 60, 97, 31, 01, 72)
-AD_XCLASS_BEGIN(Abstract, StoredObject)
+
+AD_COM_EXT_CLASS_BEGIN(public IAAFDigitalImageDescriptor2)
+
 AD_XMETHOD1(SetCompression,
 			[in],
 				objPass,
 				aafUID_constref,
-				codecID,
-			Identifies a Codec definition for the desired compression and
-	// format of compression information.,
-
+				compression,
+				Optional.,
+  //
   // Sets the kind of compression and format of compression
   // information of the video essence data.  This property is
   // optional.  If there is no compression\, the property is omitted.
@@ -147,13 +152,10 @@ AD_XMETHOD1(GetCompression,
 				objPass,
 				aafUID_t *,
 				pCompression,
-			Identifies a Codec definition for the desired compression and
-	// format of compression information.,
-
-			Gets the kind of compression and format of compression
+				Optional.,
+  // Gets the kind of compression and format of compression
   // information of the video essence data.  This property is
-  // optional.  If there is no compression\, the null AUID is
-  // returned.
+  // optional.
   //
   // Succeeds if all of the following are true:
   // - the pCompression pointer is valid.
@@ -704,8 +706,7 @@ AD_XMETHOD1(SetGamma,
 				aafUID_t,
 				Gamma,
 				Optional,
-			Sets the Gamma property.  Specifies the expected output gamma
-  // setting on the video display device.
+			Sets the TransferCharacteristic property.
   //
   // Succeeds if all of the following are true:
   // - 
@@ -725,8 +726,7 @@ AD_XMETHOD1(GetGamma,
 				aafUID_t *,
 				pGamma,
 				Optional.,
-			Gets the Gamma property.  Specifies the expected output gamma
-  // setting on the video display device.
+			Gets the TransferCharacteristic property.
   //
   // Succeeds if all of the following are true:
   // - pGamma is a valid pointer
@@ -791,4 +791,29 @@ AD_XMETHOD1(GetImageAlignmentFactor,
   //
   // AAFRESULT_NULL_PARAM
   //   - pImageAlignmentFactor is NULL.)
-AD_XCLASS_END(Abstract, StoredObject)
+#c
+#c AAFDigitalImageDescriptor2 methods
+#c
+
+AD_COM_METH(.method-SetFieldDominance)
+AD_COM_METH(.method-GetFieldDominance)
+AD_COM_METH(.method-SetFieldStartOffset)
+AD_COM_METH(.method-GetFieldStartOffset)
+AD_COM_METH(.method-SetFieldEndOffset)
+AD_COM_METH(.method-GetFieldEndOffset)
+AD_COM_METH(.method-SetTransferCharacteristic)
+AD_COM_METH(.method-GetTransferCharacteristic)
+AD_COM_METH(.method-SetCodingEquations)
+AD_COM_METH(.method-GetCodingEquations)
+AD_COM_METH(.method-SetColorPrimaries)
+AD_COM_METH(.method-GetColorPrimaries)
+AD_COM_METH(.method-SetDisplayF2Offset)
+AD_COM_METH(.method-GetDisplayF2Offset)
+AD_COM_METH(.method-SetStoredF2Offset)
+AD_COM_METH(.method-GetStoredF2Offset)
+AD_COM_METH(.method-SetActiveFormatDescriptor)
+AD_COM_METH(.method-GetActiveFormatDescriptor)
+AD_COM_METH(.method-SetSignalStandard)
+AD_COM_METH(.method-GetSignalStandard)
+
+AD_COM_EXT_CLASS_END(AAFDigitalImageDescriptor2)

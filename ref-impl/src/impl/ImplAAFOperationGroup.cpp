@@ -64,7 +64,6 @@
 #include "ImplAAFObjectCreation.h"
 #include "ImplAAFDictionary.h"
 #include "ImplEnumAAFParameters.h"
-#include "ImplAAFCloneResolver.h"
 
 #include <assert.h>
 #include <string.h>
@@ -632,12 +631,22 @@ AAFRESULT ImplAAFOperationGroup::ChangeContainedReferences(aafMobID_constref fro
 }
 
 
-void ImplAAFOperationGroup::onCopy( void* clientContext ) const
+void ImplAAFOperationGroup::Accept(AAFComponentVisitor& visitor)
 {
-  ImplAAFSegment::onCopy(clientContext);
+	aafUInt32 count = 0;
+	CountSourceSegments(&count);
+	for(aafUInt32 i=0; i<count; i++)
+	{
+		ImplAAFSegment* pSegment = 0;
+		GetInputSegmentAt(i, &pSegment);
 
-  if (clientContext) {
-    ImplAAFCloneResolver* pResolver = reinterpret_cast<ImplAAFCloneResolver*>(clientContext);
-    pResolver->ResolveWeakReference(_operationDefinition);
-  }
+       	        pSegment->Accept(visitor);
+
+		pSegment->ReleaseReference();
+		pSegment = NULL;
+	}
+
+	// TODO
+	// visitor.VisitOperationGroup(this);
 }
+

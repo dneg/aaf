@@ -29,7 +29,7 @@
 #include "ImplAAFFileDescriptor.h"
 #endif
 
-#include "OMVariableSizeProperty.h"
+#include "OMArrayProperty.h"
 
 class ImplAAFDigitalImageDescriptor : public ImplAAFFileDescriptor
 {
@@ -138,7 +138,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     SetGamma
 		// @parm [in] Optional
-        (aafUID_t  Gamma);
+        (aafUID_t  gamma);
 
   //****************
   // SetImageAlignmentFactor()
@@ -260,6 +260,175 @@ public:
 		// @parm [out] Optional.
         (aafUInt32 *  pImageAlignmentFactor);
 
+  //****************
+  // SetTransferCharacteristic()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    SetTransferCharacteristic
+        // @parm [in] Optional
+        (const aafUID_t & transferCharacteristic);
+
+  //****************
+  // GetTransferCharacteristic()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetTransferCharacteristic
+        // @parm [out] Optional.
+        (aafUID_t *  pTransferCharacteristic);
+
+  //****************
+  // SetCodingEquations()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    SetCodingEquations
+        // @parm [in] Optional
+        (const aafUID_t & codingEquations);
+
+
+  //****************
+  // GetCodingEquations()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetCodingEquations
+        // @parm [out] Optional.
+        (aafUID_t *  pCodingEquations);
+
+  //****************
+  // SetColorPrimaries()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    SetColorPrimaries
+        // @parm [in] Optional
+        (const aafUID_t & colorPrimaries);
+
+
+  //****************
+  // GetColorPrimaries()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetColorPrimaries
+        // @parm [out] Optional.
+        (aafUID_t *  pColorPrimaries);
+
+  //****************
+  // SetFieldStartOffset()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    SetFieldStartOffset
+        // @parm [in] Optional.
+        (aafUInt32  fieldStartOffset);
+
+
+  //****************
+  // GetFieldStartOffset()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetFieldStartOffset
+        // @parm [out] Optional.
+        (aafUInt32 *  pFieldStartOffset);
+
+  //****************
+  // SetFieldEndOffset()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    SetFieldEndOffset
+        // @parm [in] Optional.
+        (aafUInt32  fieldEndOffset);
+
+
+  //****************
+  // GetFieldEndOffset()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetFieldEndOffset
+        // @parm [out] Optional.
+        (aafUInt32 *  pFieldEndOffset);
+
+  //****************
+  // SetFieldDominance()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    SetFieldDominance
+        // @parm [in] Optional.
+        (aafFieldNumber_t  fieldDominance);
+
+
+  //****************
+  // GetFieldDominance()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetFieldDominance
+        // @parm [out] Optional.
+        (aafFieldNumber_t *  pFieldDominance);
+
+  //****************
+  // SetStoredF2Offset()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    SetStoredF2Offset
+        // @parm [in] Optional.
+        (aafInt32  storedF2Offset);
+
+
+  //****************
+  // GetStoredF2Offset()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetStoredF2Offset
+        // @parm [out] Optional.
+        (aafInt32 *  pStoredF2Offset);
+
+  //****************
+  // SetDisplayF2Offset()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    SetDisplayF2Offset
+        // @parm [in] Optional.
+        (aafInt32  displayF2Offset);
+
+
+  //****************
+  // GetDisplayF2Offset()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetDisplayF2Offset
+        // @parm [out] Optional.
+        (aafInt32 *  pDisplayF2Offset);
+
+  //****************
+  // SetActiveFormatDescriptor()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    SetActiveFormatDescriptor
+        // @parm [in] Optional.
+        (aafUInt8  activeFormatDescriptor);
+
+
+  //****************
+  // GetActiveFormatDescriptor()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetActiveFormatDescriptor
+        // @parm [out] Optional.
+        (aafUInt8 *  pActiveFormatDescriptor);
+
+  //****************
+  // SetSignalStandard()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    SetSignalStandard
+        // @parm [in] Optional
+        (aafSignalStandard_t  signalStandard);
+
+
+  //****************
+  // GetSignalStandard()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetSignalStandard
+        // @parm [out] Optional.
+        (aafSignalStandard_t *  pSignalStandard);
+
 protected:
 	OMFixedSizeProperty<aafUID_t>				_compression;
 	OMFixedSizeProperty<aafUInt32>				_storedHeight;
@@ -273,11 +442,20 @@ protected:
 	OMFixedSizeProperty<aafInt32>				_displayXOffset;
 	OMFixedSizeProperty<aafInt32>				_displayYOffset;
 	OMFixedSizeProperty<aafFrameLayout_t>		_frameLayout;
-	OMVariableSizeProperty<aafInt32>			_videoLineMap;
+	OMArrayProperty<aafInt32>			_videoLineMap;
 	OMFixedSizeProperty<aafRational_t>			_imageAspectRatio;
 	OMFixedSizeProperty<aafAlphaTransparency_t>	_alphaTransparency;
-	OMFixedSizeProperty<aafUID_t>				_gamma;
+	OMFixedSizeProperty<aafUID_t>				_transferCharacteristic;
+	OMFixedSizeProperty<aafUID_t>				_codingEquations;
+	OMFixedSizeProperty<aafUID_t>				_colorPrimaries;
 	OMFixedSizeProperty<aafUInt32>				_imageAlignmentFactor;
+	OMFixedSizeProperty<aafFieldNumber_t>				_fieldDominance;
+	OMFixedSizeProperty<aafUInt32>				_fieldStartOffset;
+	OMFixedSizeProperty<aafUInt32>				_fieldEndOffset;
+	OMFixedSizeProperty<aafInt32>				_displayF2Offset;
+	OMFixedSizeProperty<aafInt32>				_storedF2Offset;
+	OMFixedSizeProperty<aafUInt8>				_activeFormatDescriptor;
+	OMFixedSizeProperty<aafSignalStandard_t>		_signalStandard;
 };
 
 #endif // ! __ImplAAFDigitalImageDescriptor_h__

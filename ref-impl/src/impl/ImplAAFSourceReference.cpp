@@ -26,7 +26,6 @@
 #include "ImplAAFSourceReference.h"
 #endif
 
-#include "ImplAAFCloneResolver.h"
 #include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
 
@@ -34,12 +33,18 @@
 #include "AAFResult.h"
 #include "AAFUtils.h"
 
+#include <OMVariableSizeProperty.h>
+
 ImplAAFSourceReference::ImplAAFSourceReference ():
 	_sourceID(			PID_SourceReference_SourceID,		L"SourceID"),
-	_sourceMobSlotId(	PID_SourceReference_SourceMobSlotID,	L"SourceMobSlotID")
+	_sourceMobSlotId(	PID_SourceReference_SourceMobSlotID,	L"SourceMobSlotID"),
+	_channelIDs( PID_SourceReference_ChannelIDs, L"ChannelIDs" ),
+	_monoSourceSlotIDs( PID_SourceReference_MonoSourceSlotIDs, L"MonoSourceSlotIDs" )
 {
-	_persistentProperties.put(		_sourceID.address());
-	_persistentProperties.put(		_sourceMobSlotId.address());
+	_persistentProperties.put( _sourceID.address() );
+	_persistentProperties.put( _sourceMobSlotId.address() );
+	_persistentProperties.put( _channelIDs.address() );
+	_persistentProperties.put( _monoSourceSlotIDs.address() );
 }
 
 
@@ -107,6 +112,127 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFSourceReference::SetChannelIDs (
+      aafUInt32  numberElements,
+      aafUInt32*  pChannelIDs )
+{
+  if( NULL == pChannelIDs ) {
+    return AAFRESULT_NULL_PARAM;
+  }
+  if( (numberElements * sizeof(aafUInt32)) > OMPROPERTYSIZE_MAX ) {
+    return AAFRESULT_BAD_SIZE;
+  }
+
+  _channelIDs.setValue(pChannelIDs, numberElements);
+  
+  return AAFRESULT_SUCCESS;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFSourceReference::GetChannelIDs (
+      aafUInt32 numberElements,
+      aafUInt32* pChannelIDs )
+{
+  if( NULL == pChannelIDs ) {
+    return AAFRESULT_NULL_PARAM;
+  }
+
+  if( !_channelIDs.isPresent() ) {
+    return AAFRESULT_PROP_NOT_PRESENT;
+  }
+
+  if ( _channelIDs.size() > numberElements ) {
+    return AAFRESULT_SMALLBUF;
+  }
+
+  _channelIDs.copyToBuffer( pChannelIDs, numberElements );
+  
+  return AAFRESULT_SUCCESS;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFSourceReference::GetChannelIDsSize (
+      aafUInt32 *  pNumberElements)
+{
+  if ( NULL == pNumberElements ) {
+    return AAFRESULT_NULL_PARAM;
+  }
+
+  if( !_channelIDs.isPresent() ) {
+    *pNumberElements = 0;
+  }
+  else {
+    *pNumberElements = _channelIDs.size();
+  }
+
+  return AAFRESULT_SUCCESS;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFSourceReference::SetMonoSourceSlotIDs (
+      aafUInt32 numberElements,
+      aafUInt32* pMonoSourceSlotIDs)
+{
+  if( NULL == pMonoSourceSlotIDs ) {
+    return AAFRESULT_NULL_PARAM;
+  }
+  if( (numberElements * sizeof(aafUInt32)) > OMPROPERTYSIZE_MAX ) {
+    return AAFRESULT_BAD_SIZE;
+  }
+
+  _monoSourceSlotIDs.setValue(pMonoSourceSlotIDs, numberElements);
+  
+  return AAFRESULT_SUCCESS;
+}
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFSourceReference::GetMonoSourceSlotIDs (
+      aafUInt32  numberElements,
+      aafUInt32*  pMonoSourceSlotIDs )
+{
+  if( NULL == pMonoSourceSlotIDs ) {
+    return AAFRESULT_NULL_PARAM;
+  }
+
+  if( !_monoSourceSlotIDs.isPresent() ) {
+    return AAFRESULT_PROP_NOT_PRESENT;
+  }
+
+  if ( _monoSourceSlotIDs.size() > numberElements ) {
+    return AAFRESULT_SMALLBUF;
+  }
+
+  _monoSourceSlotIDs.copyToBuffer( pMonoSourceSlotIDs, numberElements );
+
+
+  return AAFRESULT_SUCCESS;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFSourceReference::GetMonoSourceSlotIDsSize (
+      aafUInt32 *  pNumberElements )
+{
+  if ( NULL == pNumberElements) {
+    return AAFRESULT_NULL_PARAM;
+  }
+
+  if( !_monoSourceSlotIDs.isPresent() ) {
+    *pNumberElements = 0;
+  }
+  else {
+    *pNumberElements = _monoSourceSlotIDs.size();
+  }
+
+  return AAFRESULT_SUCCESS;
+}
+
+
 AAFRESULT ImplAAFSourceReference::ChangeContainedReferences(aafMobID_constref from,
 															aafMobID_constref to)
 {
@@ -118,12 +244,5 @@ AAFRESULT ImplAAFSourceReference::ChangeContainedReferences(aafMobID_constref fr
 	return AAFRESULT_SUCCESS;
 }
 
-void ImplAAFSourceReference::onCopy(void* clientContext) const
-{
-   ImplAAFSegment::onCopy(clientContext);
-  
-	if (clientContext) {
-		 ImplAAFCloneResolver* pResolver = reinterpret_cast<ImplAAFCloneResolver*>(clientContext);
-		 pResolver->AddSourceReference(_sourceID);
-	}
-}
+
+

@@ -37,6 +37,8 @@
 #include <assert.h>
 #include <string.h>
 
+
+
 // CLSID for AAFDataDef 
 // {dfbd652A-1d81-11d2-bf96-006097116212}
 EXTERN_C const CLSID CLSID_AAFDataDef = { 0xdfbd652A, 0x1d81, 0x11d2, { 0xbf, 0x96, 0x00, 0x60, 0x97, 0x11, 0x62, 0x12 } };
