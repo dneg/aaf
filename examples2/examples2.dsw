@@ -35,6 +35,18 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name axMasterMobEx
     End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name AAFShellExt
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name axLib
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name axPlugin
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name axPluginInfo
+    End Project Dependency
 }}}
 
 ###############################################################################
@@ -91,6 +103,36 @@ Package=<4>
 {{{
     Begin Project Dependency
     Project_Dep_Name axLib
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "axPlugin"=.\axPlugin\axPlugin.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "axPluginInfo"=.\axPluginInfo\axPluginInfo.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name axLib
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name axPlugin
     End Project Dependency
 }}}
 
