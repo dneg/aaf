@@ -36,6 +36,7 @@
 #include "OMPropertyTable.h"
 #include "OMUtilities.h"
 #include "OMStoredObject.h"
+#include "OMStrongReferenceSet.h"
 
   // @mfunc Constructor.
   //   @parm The property id.
