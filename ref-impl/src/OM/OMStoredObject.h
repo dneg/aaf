@@ -439,8 +439,6 @@ public:
   static void externalizeUInt16Array(const OMUInt16* internalArray,
                                      OMUInt16* externalArray,
                                      size_t elementCount);
-protected:
-  // @access Protected members.
 
     // @cmember Constructor.
   OMStoredObject(IStorage* s);
