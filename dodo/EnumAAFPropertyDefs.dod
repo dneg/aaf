@@ -12,14 +12,12 @@ AD_HEAD
 *                                          *
 \******************************************/
 
-AD_INCLUDE(AAFTypes)
-
 AD_FORWARD_DECLARATION(AAFPropertyDefinition)
 
 
-AD_CLASS_UUID(B1A21387, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
+AD_CLASS_UUID(245343C2, 2D59, 11D2, BF, 80, 00, 10, 4B, C9, 15, 6D)
 
-AD_DEFAULT_UUID(B1A21386, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
+AD_DEFAULT_UUID(245343C1, 2D59, 11D2, BF, 80, 00, 10, 4B, C9, 15, 6D)
 AD_ROOT_CLASS_BEGIN
 
 AD_XMETHOD1(NextOne,
