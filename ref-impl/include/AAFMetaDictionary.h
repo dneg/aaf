@@ -17,7 +17,7 @@
 //
 // ../smpte/DictP18.csv 
 //
-// This file was generated on Thu Feb 25 11:55:20 EST 1999
+// This file was generated on Fri Feb 26 16:40:28 EST 1999
 // by user tbingham on system TBINGHAMPC.
 //
 // Key to macros.
@@ -1163,7 +1163,7 @@ AAF_PROPERTY(Data,
     0x0000, 0x0000,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
   0x2302,
-  DataValue,
+  DataStream,
   true,
   EssenceData)
 AAF_CLASS_END(EssenceData)
@@ -1777,7 +1777,7 @@ AAF_PROPERTY(Length,
     0x0000, 0x0000,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
   0x3604,
-  UInt32,
+  Length,
   false,
   TapeDescriptor)
 AAF_PROPERTY(ManufacturerID,
