@@ -17,7 +17,7 @@
 //
 // ../smpte/DictP18.csv 
 //
-// This file was generated on Fri Jun 11 08:49:30 EDT 1999
+// This file was generated on Tue Jun 15 14:45:21 EDT 1999
 // by user tbingham on system TBINGHAMPC.
 //
 // Key to macros.
@@ -288,7 +288,7 @@ AAF_CLASS(GPITrigger,
     0x4200, 0x0000,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
   Event)
-AAF_PROPERTY(ActiveTrigger,
+AAF_PROPERTY(ActiveState,
   AAF_LITERAL_AUID(0x06414144,
     0x4201, 0x0000,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
