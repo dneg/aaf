@@ -39,6 +39,7 @@ AAFCOMINTERFACESONLY="\
 	AAFTypeDefVariableArrayEx \
 	AAFMasterMobEx \
 	AAFMob2 \
+	AAFTimelineMobSlot2 \
 	AAFComponent2 "
 
 

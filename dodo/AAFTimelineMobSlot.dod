@@ -30,8 +30,12 @@ AAFMobSlot\
 #endm
 #c
 #c #import ./AAFMobSlot.exp
+#import ./AAFTimelineMobSlot2.exp
 AD_HEAD
 AD_IDL(//
+//
+// This interface is DEPRECATED\, please use IAAFTimelineMobSlot2.
+//
 // The IAAFTimelineMobSlot interface is implemented by objects which
 // contain time-varying timeline essence.
 //
@@ -53,7 +57,7 @@ AD_IDL(//
 AD_CLASS_UUID(B1A21379, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
 
 AD_DEFAULT_UUID(B1A21378, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
-AD_XCLASS_BEGIN(Concrete, StoredObject)
+AD_COM_EXT_CLASS_BEGIN(public IAAFTimelineMobSlot2)
 AD_METHOD0(Initialize,
 		   Initializes a newly allocated\, empty
   // IAAFTimelineMobSlot-supporting object.  This method must be
@@ -156,4 +160,11 @@ AD_METHOD1(SetOrigin,
   //
   // AAFRESULT_NOT_INITIALIZED
   //   - This object has not yet had Initialize\\\(\\\) called on it.)
-AD_XCLASS_END(Concrete, StoredObject)
+AD_COM_METH(.method-SetMarkIn)
+AD_COM_METH(.method-GetMarkIn)
+AD_COM_METH(.method-SetMarkOut)
+AD_COM_METH(.method-GetMarkOut)
+AD_COM_METH(.method-SetUserPos)
+AD_COM_METH(.method-GetUserPos)
+
+AD_COM_EXT_CLASS_END(AAFTimelineMobSlot2)
