@@ -107,10 +107,10 @@ static HRESULT moduleErrorTmp = S_OK; /* note usage in macro */
 
 static void AUIDtoString(aafUID_t *uid, aafWChar *buf)
 {
-	wsprintf(buf, L"%08lx-%04x-%04x-%02x%02x%02x%02x%02x%02x",
-			uid->Data1, uid->Data2, uid->Data3, uid->Data4[0],
-			uid->Data4[1], uid->Data4[2], uid->Data4[3], uid->Data4[4],
-			uid->Data4[5], uid->Data4[6], uid->Data4[7]);
+	wsprintf(buf, L"%08lx-%04x-%04x-%02x%02x%02x%02x%02x%02x%02x%02x",
+			uid->Data1, uid->Data2, uid->Data3, (int)uid->Data4[0],
+			(int)uid->Data4[1], (int)uid->Data4[2], (int)uid->Data4[3], (int)uid->Data4[4],
+			(int)uid->Data4[5], (int)uid->Data4[6], (int)uid->Data4[7]);
 }
 
 
