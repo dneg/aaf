@@ -35,5 +35,5 @@ OUTPUT=docs/ObjectManager.html
 OMHTML="docs/html.fmt"
 OMCONT="docs/contents.d"
 #
-"${ADEXEC}" /x "${FLAGS}" /s${OMHTML} /o ${OUTPUT} /r html /f"${ADHTML}" ${SRC} ${OMCONT}
+"${ADEXEC}" /x "${FLAGS}" /s ${OMHTML} /o ${OUTPUT} /r html /f "${ADHTML}" ${SRC} ${OMCONT}
 #
