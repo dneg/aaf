@@ -58,7 +58,7 @@
 #endif
 
 #include "AAFStoredObjectIDs.h"
-#include "AAFPropertyIds.h"
+#include "AAFPropertyIDs.h"
 
 #ifndef __ImplAAFOperationGroup_h__
 #include "ImplAAFOperationGroup.h"

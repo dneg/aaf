@@ -49,7 +49,7 @@
 #include <assert.h>
 #include <string.h>
 #include "aafErr.h"
-#include "AafUtils.h"
+#include "AAFUtils.h"
 #include "ImplAAFDictionary.h"
 
 #include "ImplAAFSmartPointer.h"
