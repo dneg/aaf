@@ -153,7 +153,18 @@ VerifyFiles ()
 			CheckExitCode $Stat   "     $File <- This File flunked the dump.exe validation test"
 			mv tempdump.log ${File}Dump.log
 		fi
-			
+#when running the debug version, an exception is thrown requiring user intervention so I an restrcting it to release
+if [ $Target = "Release" ]; then			
+		print -n "running ${File} thru AAFDump.exe...  "
+		RemoveIfExists ${File}AAFDump.log
+		${UtilitiesDir}/AAFDump "$File" > tempdump.log
+		Stat=$?
+		print $Stat
+		if [ $Stat -ne 0 ]; then
+			CheckExitCode $Stat   "     $File <- This File flunked the AAFDump.exe validation test"
+			mv tempdump.log ${File}AAFDump.log
+		fi
+fi
 		print -n "running ${File} thru ComPropDirectDump.exe...  "
 		RemoveIfExists ${File}CPDDump.log
 		${ExamplesDir}/ComPropDirectDump "$File" > tempdump.log
@@ -164,6 +175,7 @@ VerifyFiles ()
 			mv tempdump.log ${File}CPDDump.log
 		fi
 	done
+
 	
 	RemoveIfExists tempdump.log
 }
@@ -188,6 +200,7 @@ RunMainScript ()
 	TargetDir="`PWD`"
 	DumpDir="`PWD`/DevUtils"
 	ExamplesDir="`PWD`/Examples/Com"
+	UtilitiesDir="`PWD`/Utilities"
 
 
 	if [ MODULETEST -eq 1 ] || [ ALL -eq 1 ]; then
