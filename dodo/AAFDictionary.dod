@@ -6,7 +6,7 @@ AAFDictionary\
 AAFObject\
 #endm
 #c
-#import ./AAFObject.exp
+#c #import ./AAFObject.exp
 AD_HEAD
 AD_IDL(//
 // This interface is used to access dictionary services in an AAF
@@ -98,31 +98,23 @@ AD_XMETHOD1(GetClassDefinitions,
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppEnum\))
 
 
-AD_XMETHOD2(RegisterType,
-			[in\, ref],
-			objPass,
-			aafUID_t *,
-			pTypeAuid,
-			ID by which type is to be known,
-
+AD_XMETHOD1(RegisterType,
 			[in],
 			objIn,
 			AAFTypeDef,
 			pTypeDef,
 			Type Definition Object,
 
-     Add the type definition object to the dictionary\, to be
-  // identified by the given auid.
+     Add the type definition object to the dictionary.
   // 
   // Succeeds if:
-  // - The pTypeAuid pointer is valid.
   // - The pTypeDef pointer is valid.
   // - the ID is not already been registered.
   AD_STD_COMMENT_METH_ERR_HEADER
-  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(Either pClassAuid or pClassDef\)
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pClassDef\)
   //
   // AAFRESULT_BAD_PARAM
-  //   - The given ID has already been registered.)
+  //   - The given type has already been registered.)
 
 
 AD_XMETHOD2(LookupType,
