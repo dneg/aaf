@@ -7,8 +7,8 @@
 class ImplAAFDataDef;
 class ImplAAFMob;
 class ImplAAFMobSlot;
-class ImplAAFEffectDef;
-class ImplAAFEffect;
+class ImplAAFOperationDef;
+class ImplAAFOperationGroup;
 class ImplAAFScopeStack;
 
 /******************************************\
@@ -89,12 +89,12 @@ public:
 										ImplAAFMob *mob, ImplAAFMobSlot *track,
 										aafMediaCriteria_t *mediaCrit,
 										aafPosition_t currentObjPos,
-										aafEffectChoice_t *effectChoice,
+										aafOperationChoice_t *effectChoice,
 										ImplAAFComponent	*prevObject,
 										ImplAAFComponent *nextObject,
 										ImplAAFScopeStack *scopeStack,
 										aafPosition_t *diffPos, aafLength_t *minLength,
-										ImplAAFEffect **effeObject, aafInt32	*nestDepth,
+										ImplAAFOperationGroup **groupObject, aafInt32	*nestDepth,
 										ImplAAFComponent **found, aafBool *foundTransition);
 
 	virtual AAFRESULT GetComponentType(implCompType_t* pType) {*pType = kComponent; return AAFRESULT_SUCCESS;}
