@@ -22,7 +22,9 @@ run:
 
 .SUFFIXES: .cpp .$(OBJ) .h
 
-DEPEND_INCLUDES = -I/usr/include/CC -I/usr/include/g++
+INCLUDES = -I../../ref-impl/bld_cfg
+
+DEPEND_INCLUDES = $(INCLUDES) -I/usr/include/CC -I/usr/include/g++
 
 OURCFLAGS = -Dbool=int -Dtrue=1 -Dfalse=0
 
@@ -45,7 +47,7 @@ DODO_SOURCES = DodoMain.cpp TestMain.cpp \
 	MacroSet.cpp MacroSetTest.cpp
 
 .cpp.$(OBJ):
-	$(CC) -c $(OURCFLAGS) -o $*.$(OBJ) $*.cpp
+	$(CC) -c $(OURCFLAGS) $(INCLUDES) -o $*.$(OBJ) $*.cpp
 
 $(DODO): $(DODO_APP_OBJS)
 	$(CC) -o $(DODO) $(LDFLAGS) $(DODO_APP_OBJS)
