@@ -18,12 +18,10 @@ AAFPERSISTENTOBJECTS = \
 	AAFMediaGroup \
 	AAFMIDIData \
 	AAFMIDIFileDescriptor \
-	AAFNestedScope\
 	AAFPluggableCode \
 	AAFPulldown \
 	AAFReferenceValue \
 	AAFRGBADescriptor \
-	AAFScopeReference \
 	AAFTaggedValue \
 	AAFTextLocator \
 	AAFTIFFData \
@@ -98,6 +96,7 @@ HUMAN_TYPED_IMPL = \
 	AAFMasterMob \
 	AAFMob  \
 	AAFMobSlot \
+	AAFNestedScope\
 	AAFNetworkLocator \
 	AAFObject \
 	AAFParameter \
@@ -108,6 +107,7 @@ HUMAN_TYPED_IMPL = \
 	AAFPropValData \
 	AAFPluginDescriptor \
 	AAFPluginManager \
+	AAFScopeReference \
 	AAFSegment \
 	AAFSelector \
 	AAFSequence \
