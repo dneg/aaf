@@ -1,5 +1,5 @@
 //@doc
-//@class    AAFFile | Implementation class for AAFFile
+//@class  AAFFile | Implementation class for AAFFile
 #ifndef __ImplAAFFile_h__
 #define __ImplAAFFile_h__
 
@@ -12,15 +12,18 @@
 *                                          *
 \******************************************/
 
-#include "AAFTypes.h"
 #include "ImplAAFRoot.h"
 
-#include "Container.h"
+
+
+
 
 
 //
 // Forward declaration
 //
+class OMFile;
+class ImplAAFBaseClassFactory;
 class ImplAAFFile;
 class ImplAAFHeader;
 class ImplAAFSession;
@@ -87,55 +90,35 @@ public:
   // in /test/ImplAAFFileTest.cpp.
   static AAFRESULT test();
 
-AAFRESULT Create(
-			aafWChar*		stream, 
-			ImplAAFSession *	session, 
-			aafFileRev_t		rev);
-AAFRESULT OpenRead(
-			aafWChar*		stream, 
-			ImplAAFSession *	session);
-AAFRESULT OpenModify(
-			aafWChar*		stream, 
-			ImplAAFSession *	session);
+
 private:
 
-	AAFRESULT InternOpenFile(aafWChar* stream, 
-								   ImplAAFSession * session,
-								   OMLContainerUseMode useMode, 
-								   openType_t type);
-  
+  // Private state for this file.
+  typedef enum _openType_t
+  {
+    kOmCreate = 0,
+	kOmModify = 1,
+	kOmOpenRead = 2,
+	kOmUndefined = -1
+  } openType_t;
+	
+
   void InternalReleaseObjects();
 
-	aafInt32			_cookie;
-	aafFileFormat_t		_fmt;
-	OMContainer			*_container;
-	aafInt16			_byteOrder;
-	openType_t			_openType;
-	ImplAAFFile			*_prevFile;
-	ImplAAFHeader *     _head;		// Needed by Head object
-#if FULL_TOOLKIT
-		aafCloseMediaPtr _closeMediaProc;
-		aafBool			_customStreamFuncsExist;	//!!!	
-		struct aafCodecStreamFuncs _streamFuncs;	//!!!	
-		aafRawStream_t	*_rawFile;	//!!!	
-		aafLocatorFailureCB _locatorFailureCallback;	//!!!	
-		aafCodecID_t	_rawCodecID;	//!!!	
-		void           	*_rawFileDesc;		//!!!/* If non-omfi file */
-		AAFMedia *   _topMedia;	//!!!
-#endif
-		aafBool         _semanticCheckEnable;	//!!!  /* Used to stop recursion in checks */
-		ImplAAFSession		 *_session;		//!!!  used by file checker
-		ImplAAFDataDef *	_nilKind;// !!!
-		ImplAAFDataDef *	_pictureKind;// !!!
-		ImplAAFDataDef *	_soundKind;// !!!
-#ifdef AAF_ERROR_TRACE
-		char			*_stackTrace;	//!!!	
-		aafInt32		_stackTraceSize;	//!!!	
-#endif
-		aafFileRev_t     _setrev;
-
+  aafInt32			_cookie;
+  OMFile			*_file;
+  ImplAAFBaseClassFactory *_classFactory;
+  aafInt16			_byteOrder;
+  openType_t			_openType;
+  ImplAAFHeader *   _head;		// Needed by Head object
+  aafBool   _semanticCheckEnable;	//!!!  /* Used to stop recursion in checks */
+  ImplAAFDataDef *	_nilKind;// !!!
+  ImplAAFDataDef *	_pictureKind;// !!!
+  ImplAAFDataDef *	_soundKind;// !!!
+  aafFileRev_t   _setrev;
   aafBool _initialized;
   aafBool _open;
+  aafUInt32 _modeFlags;
   aafProductIdentification_t _ident;
 };
 
