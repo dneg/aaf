@@ -47,15 +47,15 @@ END {
 
 function printKey() {
   printf("<h1>Key</h1>\n");
-  printf("<TABLE>\n");
-  printf("<TR><TH>Color</TH><TH>Component</TH></TR>\n");
+  printf("<table>\n");
+  printf("<tr><th>Color</th><th>Component</th></tr>\n");
   for (i in names) {
-    printf("<TR>\n");
-    printf("<TD bgcolor=\"%s\">%s</TD>\n", colors[names[i]], names[i]);
-    printf("<TD>%s</TD>\n", i);
-    printf("</TR>\n");
+    printf("<tr>\n");
+    printf("<td bgcolor=\"%s\">%s</td>\n", colors[names[i]], names[i]);
+    printf("<td>%s</td>\n", i);
+    printf("</tr>\n");
   }
-  printf("</TABLE>\n");
+  printf("</table>\n");
 }
 
 function printHeader() {
@@ -67,28 +67,28 @@ function printHeader() {
   printKey();
   printf("<h1 align=center>Change log</h1>\n");
   printf("\
-<TABLE>\n\
-<TR>\n\
-  <TH>Date</TH>\n\
-  <TH>Developer</TH>\n\
-  <TH>Files</TH>\n\
-  <TH>Checkin comment</TH>\n\
-</TR>\n");
+<table>\n\
+<tr>\n\
+  <th>Date</th>\n\
+  <th>Developer</th>\n\
+  <th>Files</th>\n\
+  <th>Checkin comment</th>\n\
+</tr>\n");
 }
 
 function printRow(date, name, files, comments, color) {
   printf("\
-<TR>\n\
-  <TD>%s</TD>\n\
-  <TD bgcolor=\"%s\">%s</TD>\n\
-  <TD bgcolor=\"%s\">%s</TD>\n\
-  <TD bgcolor=\"%s\">%s</TD>\n\
-</TR>\n",
+<tr>\n\
+  <td>%s</td>\n\
+  <td bgcolor=\"%s\">%s</td>\n\
+  <td bgcolor=\"%s\">%s</td>\n\
+  <td bgcolor=\"%s\">%s</td>\n\
+</tr>\n",
     date, color, name, color, files, color, comments);
 }
 
 function printTrailer() {
-  printf("</TABLE>\n");
+  printf("</table>\n");
 }
 
 # Remove first n characters of s
