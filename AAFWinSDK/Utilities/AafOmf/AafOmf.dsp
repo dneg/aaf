@@ -93,10 +93,6 @@ SOURCE=..\..\..\Utilities\AafOmf\Aaf2Omf.cpp
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\ref-impl\include\comidl\AAF_i.c"
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\..\Utilities\AafOmf\AafOmf.cpp
 # End Source File
 # Begin Source File
