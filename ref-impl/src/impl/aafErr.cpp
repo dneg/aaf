@@ -30,8 +30,6 @@
 #include <string.h>
 
 #include "aafErr.h"
-#include "AAFFile.h"
-#include "AAFSession.h"
 //#include "omPvt.h"
 
 static char    *localErrorStrings[300];
