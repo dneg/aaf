@@ -69,7 +69,7 @@ typedef AxIterator< IAAFSmartPointer<IAAFDataDef>,       IEnumAAFDataDefs >     
 typedef AxIterator< aafUID_t,                            IEnumAAFCodecFlavours >  AxCodecFlavoursIter;
 typedef AxIterator< aafUID_t,                            IEnumAAFLoadedPlugins >  AxLoadedPluginsIter;
 typedef AxIterator< IAAFSmartPointer<IAAFComponent>,	 IEnumAAFComponents >	  AxComponentsIter;
-typedef AxIterator< IAAFSmartPointer<IAAFComponent>,	 IEnumAAFSegments >		  AxSegmentsIter;
+typedef AxIterator< IAAFSmartPointer<IAAFSegment>,	 IEnumAAFSegments >	  AxSegmentsIter;
 typedef AxIterator< IAAFSmartPointer<IAAFClassDef>,      IEnumAAFClassDefs >      AxClassDefIter;
 typedef AxIterator< IAAFSmartPointer<IAAFTypeDef>,       IEnumAAFTypeDefs >       AxTypeDefIter;
 typedef AxIterator< IAAFSmartPointer<IAAFPropertyDef>,   IEnumAAFPropertyDefs >   AxPropertyDefIter;
