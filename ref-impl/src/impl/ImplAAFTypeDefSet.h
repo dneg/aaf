@@ -184,8 +184,14 @@ public:
   virtual size_t PropValSize (void) const;
   virtual aafBool IsRegistered (void) const;
   virtual size_t NativeSize (void) const;
+
+public:
+  // Overrides from ImplAAFTypeDef
+  virtual bool IsAggregatable () const;
+  virtual bool IsStreamable () const;
+  virtual bool IsFixedArrayable () const;
+  virtual bool IsVariableArrayable () const;
+  virtual bool IsStringable () const;
 };
 
 #endif // ! __ImplAAFTypeDefSet_h__
-
-
