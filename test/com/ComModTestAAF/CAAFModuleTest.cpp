@@ -244,13 +244,15 @@ HRESULT CAAFModuleTest::test()
 // object!
 //
 HRESULT STDMETHODCALLTYPE
-    CAAFModuleTest::GetImplRep(unsigned char **ppRep)
+    CAAFModuleTest::GetImplRep(void **ppRep)
 {
 #ifdef BOB_TEST
     if (!ppRep)
         return E_INVALIDARG;
-	*ppRep = static_cast<unsigned char *>(_rep); // GetRepObject();
-	return S_OK;
+//	*ppRep = static_cast<void *>(GetRepObject());
+//	return S_OK;
+	*ppRep = static_cast<void *>(NULL);
+    return AAFRESULT_NOT_IMPLEMENTED;
 #else
     return AAFRESULT_NOT_IMPLEMENTED;
 #endif
