@@ -11,7 +11,6 @@ AAFPERSISTENTOBJECTS = \
 	AAFLocator \
 	AAFMIDIFileDescriptor \
 	AAFPluggableCode \
-	AAFReferenceValue \
 	AAFRGBADescriptor
 
 
@@ -21,8 +20,7 @@ AAFNONPERSISTENTOBJECTS = \
 	EnumAAFDefs \
 	EnumAAFObjects \
 	EnumAAFPropertyDefs \
-	EnumAAFPropertyValues \
-	EnumAAFReferenceValues \
+	EnumAAFPropertyValues
 
 
 # These are files which specify COM interfaces, but which are
