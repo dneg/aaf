@@ -60,10 +60,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     SetInitialValues
 	    (// @parm [in] Mob name [optional]
-         aafWChar *  name,
-
-		 // @parm [in] Whether or not the mob is a primary mob
-		 aafBool  isPrimary);
+         aafWChar *  name);
   //@rdesc Error code [see below].
 
   //****************
