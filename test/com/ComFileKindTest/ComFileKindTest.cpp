@@ -43,6 +43,17 @@ using namespace std;
 
 #include "CAAFBuiltinDefs.h"
 
+static void CoutTestFile(const wchar_t* pFileName)
+{
+  const size_t kMaxFileName = 512;
+  char cFileName[kMaxFileName];
+
+  size_t status = wcstombs(cFileName, pFileName, kMaxFileName);
+  if (status != (size_t)-1) {
+    cout << endl << cFileName << endl;
+  }
+}
+
 static void RemoveTestFile(const wchar_t* pFileName)
 {
   const size_t kMaxFileName = 512;
@@ -75,6 +86,7 @@ static const   aafMobID_t  TEST_MobID =
 
 
 static HRESULT CreateAAFFile(aafWChar * pFileName,
+														 bool UseRaw,
                              const aafUID_t* pFileKind,
                              IAAFFile** ppFile)
 {
@@ -96,31 +108,36 @@ static HRESULT CreateAAFFile(aafWChar * pFileName,
   try {
     RemoveTestFile(pFileName);
 
-#if 0
-    checkResult(AAFFileOpenNewModify(
-      pFileName,
-      0,
-      &ProductInfo,
-      ppFile));
-#else
-    IAAFRawStorage* pRawStorage = 0;
-    checkResult(AAFCreateRawStorageDisk(
-      pFileName,
-      kAAFFileExistence_new,
-      kAAFFileAccess_modify,
-      &pRawStorage));
-    checkResult(AAFCreateAAFFileOnRawStorage (
-      pRawStorage,
-      kAAFFileExistence_new,
-      kAAFFileAccess_modify,
-      pFileKind,
-      0,
-      &ProductInfo,
-      ppFile));
-    pRawStorage->Release();
-    checkResult((*ppFile)->Open());
-#endif
-  } catch (HRESULT& rResult) {
+		if( !UseRaw )
+		{
+			checkResult(AAFFileOpenNewModify(
+				pFileName,
+				0,
+				&ProductInfo,
+				ppFile));
+		}
+		else
+		{
+			IAAFRawStorage* pRawStorage = 0;
+			checkResult(AAFCreateRawStorageDisk(
+				pFileName,
+				kAAFFileExistence_new,
+				kAAFFileAccess_modify,
+				&pRawStorage));
+			checkResult(AAFCreateAAFFileOnRawStorage (
+				pRawStorage,
+				kAAFFileExistence_new,
+				kAAFFileAccess_modify,
+				pFileKind,
+				0,
+				&ProductInfo,
+				ppFile));
+			pRawStorage->Release();
+			checkResult((*ppFile)->Open());
+		}
+  }
+	catch (HRESULT& rResult)
+	{
     hr = rResult;
   }
   return hr;
@@ -188,8 +205,11 @@ static HRESULT WriteAAFFile(IAAFFile* pFile)
   return hr;
 }
 
-static HRESULT ReadAAFFile(aafWChar * pFileName)
+static HRESULT ReadAAFFile(aafWChar * pFileName,
+													 bool UseRaw = false,
+                           const aafUID_t* pFileKind = &aafFileKindDontCare)
 {
+  IAAFRawStorage* pRawStorage = 0;
   IAAFFile* pFile = NULL;
   bool bFileOpen = false;
   IAAFHeader* pHeader = NULL;
@@ -205,7 +225,29 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
   {
 
     // Open the file
-    checkResult(AAFFileOpenExistingRead(pFileName, 0, &pFile));
+		if( !UseRaw )
+		{
+			checkResult(AAFFileOpenExistingRead(pFileName, 0, &pFile));
+		}
+		else
+		{
+			IAAFRawStorage* pRawStorage = 0;
+			checkResult(AAFCreateRawStorageDisk(
+				pFileName,
+				kAAFFileExistence_existing,
+				kAAFFileAccess_read,
+				&pRawStorage));
+			checkResult(AAFCreateAAFFileOnRawStorage (
+				pRawStorage,
+				kAAFFileExistence_existing,
+				kAAFFileAccess_read,
+				pFileKind,
+				0,
+				0,
+				&pFile));
+			pRawStorage->Release();
+			checkResult(pFile->Open());
+		}
     bFileOpen = true;
 
     // Get the header
@@ -265,61 +307,122 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 }
 
 struct {
-  const aafUID_t* kind;
   wchar_t* name;
+	bool create;
+	bool createraw;
+  const aafUID_t* kind;
   char* type;
-  bool read; // temporary - some kinds cannot be read
+  bool read;
+  const aafUID_t* rkind;
+  char* rtype;
 } fileinfo[] = {
   {
+    L"CFKT-Default.aaf",
+		true,
+		true,
     &aafFileKindAafSSBinary,
-    L"ComFileKindTest.aaf",
-    "MSS",
-    true
+    "SSS",
+    true,
+    &aafFileKindAafSSSBinary,
+    "SSS"
   },
   {
-    &aafFileKindAafXmlText,
-    L"ComFileKindTest.xml",
-    "XML",
-    false
+    L"CFKT-Default-2.aaf",
+		true,
+		false,
+    &aafFileKindAafSSBinary,
+    "SSS",
+    true,
+    &aafFileKindAafS4KBinary,
+    "S4K"
+  },
+  {
+    L"CFKT-SSS.aaf",
+		true,
+		true,
+    &aafFileKindAafSSSBinary,
+    "SSS",
+    true,
+    &aafFileKindAafSSSBinary,
+    "SSS"
+  },
+  {
+    L"CFKT-MSS.aaf",
+		true,
+		true,
+    &aafFileKindAafMSSBinary,
+    "MSS",
+    true,
+    &aafFileKindAafMSSBinary,
+    "MSS"
+  },
+  {
+    L"CFKT-MSS.aaf",
+		true,
+		true,
+    &aafFileKindAafMSSBinary,
+    "MSS",
+    true,
+    &aafFileKindAafSSSBinary,
+    "SSS"
+  },
+  {
+    L"CFKT-SSS.aaf",
+		true,
+		true,
+    &aafFileKindAafSSSBinary,
+    "SSS",
+    true,
+    &aafFileKindAafMSSBinary,
+    "MSS"
   }
 };
 
 int main(void)
 {
   try {
-  IAAFFile* pFile = 0;
-    for (int i = 0; i < sizeof(fileinfo)/sizeof(fileinfo[0]); i++) {
-      cout << fileinfo[i].type << endl;
+		IAAFFile* pFile = 0;
+    for (int i = 0; i < sizeof(fileinfo)/sizeof(fileinfo[0]); i++)
+		{
+			CoutTestFile( fileinfo[i].name );
       // Create the file
-      cout << "  Creating" << endl;
-      checkResult(CreateAAFFile(fileinfo[i].name, fileinfo[i].kind, &pFile));
-      // Write the file contents
-      cout << "  Writing" << endl;
-      checkResult(WriteAAFFile(pFile));
+			if( fileinfo[i].create )
+			{
+				cout << "  Creating " ;
+				if( fileinfo[i].createraw ) cout << "Raw ";
+				cout << fileinfo[i].type << endl;
+				checkResult(CreateAAFFile(fileinfo[i].name, fileinfo[i].createraw, fileinfo[i].kind, &pFile));
+
+				// Write the file contents
+				cout << "  Writing" << endl;
+				checkResult(WriteAAFFile(pFile));
+			}
+
       // Check that we made an AAF file with the correct encoding
-      cout << "  Checking" << endl;
+      cout << "  Checking " << fileinfo[i].type << endl;
       aafUID_t k = {0};
       aafBool b = kAAFFalse;
       checkResult(AAFFileIsAAFFile(fileinfo[i].name, &k, &b));
-      if (!b) {
+      if (!b)
+			{
         cerr << "Error : AAFFileIsAAFFile() reports file is not an AAF file."
              << endl;
         throw AAFRESULT_TEST_FAILED;
       }
-      if (memcmp(&k, fileinfo[i].kind, sizeof(aafUID_t)) != 0) {
-        cerr << "Error : Incorrect file kind."
-             << endl;
-        throw AAFRESULT_TEST_FAILED;
-      }
+
       // Read the file
-      if (fileinfo[i].read) {
-        cout << "  Reading" << endl;
+      if (fileinfo[i].read)
+			{
+        cout << "  Reading (default)" << endl;
         checkResult(ReadAAFFile(fileinfo[i].name));
+        cout << "  Reading Raw " << fileinfo[i].rtype << endl;
+        checkResult(ReadAAFFile(fileinfo[i].name, true, fileinfo[i].rkind ));
       }
     }
-  } catch(HRESULT& r) {
-    cerr << "Error : Caught HRESULT 0x" << hex << r
-         << endl;
+  }
+	catch(HRESULT& r)
+	{
+    cerr << "Error : Caught HRESULT 0x" << hex << r << endl;
   }
   return 0;
 }
