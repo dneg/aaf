@@ -102,7 +102,6 @@ protected:
   virtual ReferencedObject* pointer(void) const;
 
   ReferencedObject* _pointer; // The referenced object
-  char* _pathName;  // needed by both strong and weak references ?
 };
 
   // @class Persistent strong reference (contained object)
@@ -187,6 +186,9 @@ public:
     //   @this const
   virtual void getValue(ReferencedObject*& object) const;
 
+    // @cmember set the value of this <c OMWeakReferenceProperty>.
+  virtual void setValue(const ReferencedObject*& object);
+
     // @cmember Assignment operator.
   OMWeakReferenceProperty<ReferencedObject>& operator =
                                               (const ReferencedObject* value);
@@ -207,11 +209,22 @@ public:
     // @this const
   virtual void save(void) const;
 
+    // @cmember close this <c OMWeakReferenceProperty>.
+  virtual void close(void);
+
     // @cmember Restore this <c OMWeakReferenceProperty> from the
     //          <c OMStoredObject> <p s>, the size of the
     //          <c OMWeakReferenceProperty> is <p size>.
   virtual void restoreFrom(OMStoredObject& s, size_t size);
 
+    // @cmember Detach the <c OMStorable> object with the given
+    //          <p key> from this <c OMWeakReferenceProperty>. This
+    //          <c OMWeakReferenceProperty> must no longer attempt
+    //          to access the <c OMStorable> with the given <p key>.
+  virtual void detach(const OMStorable* object, const size_t key);
+
+private:
+  char* _pathName;
 };
 
   // @class Abstract base class for simple (data) persistent
