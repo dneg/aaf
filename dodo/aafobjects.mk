@@ -57,10 +57,13 @@ AAFPERSISTENTOBJECTS = \
 	AAFTypeDefRename \
 	AAFTypeDefEnum \
 	AAFTypeDefFixedArray \
+	AAFTypeDefSet \
 	AAFTypeDefStream \
 	AAFTypeDefString \
 	AAFTypeDefObjectRef \
-	AAFTypeDefComposite \
+	AAFTypeDefStrongObjRef \
+	AAFTypeDefWeakObjRef \
+	AAFTypeDefRecord \
 	AAFUnixLocator \
 	AAFVaryingValue \
 	AAFWAVEData \
