@@ -24,19 +24,31 @@
  * LIABILITY.
  *
  ************************************************************************/
+#ifndef __ImplAAFTypeDefStrongObjRef_h__
+#include "ImplAAFTypeDefStrongObjRef.h"
+#endif
 
 
 #ifndef __ImplAAFPropValData_h__
 #include "ImplAAFPropValData.h"
 #endif
 
+#ifndef __ImplAAFStrongRefValue_h__
+#include "ImplAAFStrongRefValue.h"
+#endif
+
+#ifndef __ImplAAFObject_h__
+#include "ImplAAFObject.h"
+#endif
+
+#ifndef __ImplAAFMetaDefinition_h__
+#include "ImplAAFMetaDefinition.h"
+#endif
+
 #ifndef __ImplAAFClassDef_h__
 #include "ImplAAFClassDef.h"
 #endif
 
-#ifndef __ImplAAFTypeDefStrongObjRef_h__
-#include "ImplAAFTypeDefStrongObjRef.h"
-#endif
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
@@ -49,6 +61,7 @@
 
 
 extern "C" const aafClassID_t CLSID_AAFPropValData;
+extern "C" const aafClassID_t CLSID_AAFStrongRefValue;
 
 ImplAAFTypeDefStrongObjRef::ImplAAFTypeDefStrongObjRef ()
   : _referencedType ( PID_TypeDefinitionStrongObjectReference_ReferencedType,
@@ -72,8 +85,32 @@ AAFRESULT STDMETHODCALLTYPE
 {
   if (! pObjType)  return AAFRESULT_NULL_PARAM;
   if (! pTypeName)  return AAFRESULT_NULL_PARAM;
-
-  return pvtInitialize (id, pObjType, pTypeName);
+  if (isInitialized())
+    return AAFRESULT_ALREADY_INITIALIZED;
+    
+  // The given class definition must be in the directory.
+  aafUID_t classID;
+  AAFRESULT result = pObjType->GetAUID(&classID);
+  if (AAFRESULT_SUCCEEDED(result))
+  {
+    ImplAAFDictionarySP pDictionary;
+    result = GetDictionary(&pDictionary);
+    if (AAFRESULT_SUCCEEDED(result))
+    {
+      ImplAAFClassDefSP pClassDef;
+      result = pDictionary->LookupClassDef(classID, &pClassDef);
+      if (AAFRESULT_SUCCEEDED(result))
+      {
+         result = pvtInitialize (id, pObjType, pTypeName);
+      }
+      else if (AAFRESULT_NO_MORE_OBJECTS == result)
+      {
+        result = AAFRESULT_CLASS_NOT_FOUND;
+      }
+    }
+  }
+  
+  return result;
 }
 
 
@@ -94,6 +131,9 @@ AAFRESULT STDMETHODCALLTYPE
 
   _referencedType = pClassDef;
 
+  // This instance is now fully initialized.
+  setInitialized();
+
   return AAFRESULT_SUCCESS;
 }
 
@@ -105,6 +145,8 @@ AAFRESULT STDMETHODCALLTYPE
 {
   if (! pPropVal) return AAFRESULT_NULL_PARAM;
   if (! pObj) return AAFRESULT_NULL_PARAM;
+  if (! isInitialized())
+    return AAFRESULT_NOT_INITIALIZED;
 
   // Clients can only make strong references to data objects (not type or class definitions!)
   // transdel:2000-JUN-29
@@ -112,6 +154,13 @@ AAFRESULT STDMETHODCALLTYPE
   if (NULL == pObject)
     return AAFRESULT_INVALID_PARAM;
   
+  // If the given property value is a "direct" strong reference property
+  // then just set the object directly.
+  ImplAAFStrongRefValue* pStrongRefValue = dynamic_cast<ImplAAFStrongRefValue*>(pPropVal);
+  if (NULL != pStrongRefValue)
+  {
+    return pStrongRefValue->SetObject(pObject);
+  }
 
   OMStorable ** ppStorable = NULL;
   aafUInt32 bitsSize = 0;
@@ -146,12 +195,27 @@ AAFRESULT STDMETHODCALLTYPE
 ImplAAFTypeDefStrongObjRef::GetObject (ImplAAFPropertyValue * pPropVal,
 									   ImplAAFRoot ** ppObject)
 {
+  AAFRESULT hr = AAFRESULT_SUCCESS;
   if (! pPropVal) return AAFRESULT_NULL_PARAM;
   if (! ppObject) return AAFRESULT_NULL_PARAM;
+  if (! isInitialized())
+    return AAFRESULT_NOT_INITIALIZED;
+  *ppObject = NULL;
+  
+  // If the given property value is a "direct" strong reference property
+  // then just get the object directly.
+  ImplAAFStrongRefValue* pStrongRefValue = dynamic_cast<ImplAAFStrongRefValue*>(pPropVal);
+  if (NULL != pStrongRefValue)
+  {
+    ImplAAFStorable *pObject = NULL;
+    hr = pStrongRefValue->GetObject((ImplAAFStorable **)&pObject);
+    if (AAFRESULT_SUCCEEDED(hr))
+      *ppObject = pObject;
+    return hr;
+  }
 
   OMStorable ** ppStorable = NULL;
   aafUInt32 bitsSize = 0;
-  AAFRESULT hr;
   ImplAAFPropValDataSP pvd;
   pvd = dynamic_cast<ImplAAFPropValData*>(pPropVal);
   assert (pvd);
@@ -178,6 +242,8 @@ AAFRESULT STDMETHODCALLTYPE
 {
   if (! ppObjType)
 	return AAFRESULT_NULL_PARAM;
+  if (! isInitialized())
+    return AAFRESULT_NOT_INITIALIZED;
 
    if(_referencedType.isVoid())
 		return AAFRESULT_OBJECT_NOT_FOUND;
@@ -199,6 +265,39 @@ AAFRESULT STDMETHODCALLTYPE
 	return AAFRESULT_NULL_PARAM;
   if (! ppPropVal)
 	return AAFRESULT_NULL_PARAM;
+  if (! isInitialized())
+    return AAFRESULT_NOT_INITIALIZED;
+
+#if 1
+
+  ImplAAFStrongRefValue *pStrongRefValue = NULL;
+  pStrongRefValue = (ImplAAFStrongRefValue*) CreateImpl (CLSID_AAFStrongRefValue);
+  if (!pStrongRefValue) 
+    return AAFRESULT_NOMEMORY;
+
+  // Attempt to initialize the strong reference value. This "should" fail if the given 
+  // property is not a valid strong reference property.
+  AAFRESULT result = pStrongRefValue->Initialize (this);//, property);
+  if (AAFRESULT_SUCCEEDED(result))
+  {
+    result = this->SetObject(pStrongRefValue, pObj);
+    if (AAFRESULT_SUCCEEDED(result))
+    {
+      
+    	*ppPropVal = pStrongRefValue; // The reference count is already 1.
+    	pStrongRefValue = NULL;
+    }
+  }
+
+  if (AAFRESULT_FAILED(result))
+  {
+    pStrongRefValue->ReleaseReference();
+    return result;
+  }
+  
+  return result;
+
+#else
 
   ImplAAFPropValData * pvd = 0;
   pvd = (ImplAAFPropValData*) CreateImpl (CLSID_AAFPropValData);
@@ -224,6 +323,8 @@ AAFRESULT STDMETHODCALLTYPE
   assert (*ppPropVal);
   (*ppPropVal)->AcquireReference ();
   return AAFRESULT_SUCCESS;
+  
+#endif
 }
 
 
@@ -238,6 +339,60 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 
+
+// Allocate and initialize the correct subclass of ImplAAFPropertyValue 
+// for the given OMProperty.
+AAFRESULT STDMETHODCALLTYPE
+  ImplAAFTypeDefStrongObjRef::CreatePropertyValue(
+    OMProperty *property,
+    ImplAAFPropertyValue ** ppPropertyValue ) const
+{
+  AAFRESULT result = AAFRESULT_SUCCESS;
+  assert (property && ppPropertyValue);
+  if (NULL == property || NULL == ppPropertyValue)
+    return AAFRESULT_NULL_PARAM;
+  *ppPropertyValue = NULL; // initialize out parameter
+  
+  OMReferenceProperty* refProperty = dynamic_cast<OMReferenceProperty*>(property);
+  assert(NULL != refProperty);
+  if (NULL == refProperty)
+    return AAFRESULT_INVALID_PARAM;
+ 
+  ImplAAFStrongRefValue *pStrongRefValue = NULL;
+  pStrongRefValue = (ImplAAFStrongRefValue*) CreateImpl (CLSID_AAFStrongRefValue);
+  if (!pStrongRefValue) 
+    return AAFRESULT_NOMEMORY;
+
+  // Attempt to initialize the strong reference value. This "should" fail if the given 
+  // property is not a valid strong reference property.
+  result = pStrongRefValue->Initialize (this);//, property);
+  if (AAFRESULT_SUCCEEDED (result))
+  {
+    // Bobt hack! This should be removed once we have proper
+    // integration with OM property def support.
+    if (! property->isOptional() || property->isPresent ())
+    {
+      // set the storage in the prop value
+      OMObject* object = refProperty->getObject();
+      assert (NULL != object);
+      ImplAAFStorable* pObject = ImplAAFRefValue::ConvertOMObjectToRoot(object);
+      result = pStrongRefValue->SetObject(pObject);
+    }
+  }
+
+  if (AAFRESULT_SUCCEEDED(result))
+  {
+  	*ppPropertyValue = pStrongRefValue; // The reference count is already 1.
+  	pStrongRefValue = NULL;
+  }
+  else
+  {
+    pStrongRefValue->ReleaseReference();
+  }
+  return result;
+}
+
+
 aafBool ImplAAFTypeDefStrongObjRef::IsFixedSize (void) const
 {
   return kAAFTrue;
@@ -246,7 +401,7 @@ aafBool ImplAAFTypeDefStrongObjRef::IsFixedSize (void) const
 
 size_t ImplAAFTypeDefStrongObjRef::PropValSize (void) const
 {
-  return sizeof (ImplAAFRoot*);
+  return sizeof (ImplAAFObject*);
 }
 
 
@@ -258,7 +413,7 @@ aafBool ImplAAFTypeDefStrongObjRef::IsRegistered (void) const
 
 size_t ImplAAFTypeDefStrongObjRef::NativeSize (void) const
 {
-  return sizeof (ImplAAFRoot*);
+  return sizeof (ImplAAFObject*);
 }
 
 
@@ -267,12 +422,8 @@ OMProperty * ImplAAFTypeDefStrongObjRef::pvtCreateOMProperty
    const wchar_t * name) const
 {
   assert (name);
-  
-  // Clients can only make strong references to data objects (not type or class definitions!)
-  // However, clients should be able to create optional weak references to type and class
-  // definitions. transdel:2000-JUN-29
-  OMProperty * result =
-	new OMStrongReferenceProperty<ImplAAFObject> (pid, name);
+
+  OMProperty * result = new OMStrongReferenceProperty<ImplAAFObject> (pid, name);
   assert (result);
   return result;
 }

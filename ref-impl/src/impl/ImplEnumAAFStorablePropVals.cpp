@@ -25,12 +25,6 @@
 *
 ************************************************************************/
 
-#ifndef USE_NEW_DIRECT_ACCESS
-#define USE_NEW_DIRECT_ACCESS 0
-#endif
-
-#if USE_NEW_DIRECT_ACCESS
-
 #ifndef __ImplEnumAAFStorablePropVals_h__
 #include "ImplEnumAAFStorablePropVals.h"
 #endif
@@ -285,5 +279,3 @@ AAFRESULT STDMETHODCALLTYPE
   
   return result;
 }
-
-#endif // #if USE_NEW_DIRECT_ACCESS
