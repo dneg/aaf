@@ -22,8 +22,7 @@ ImplAAFCDCIDescriptor::ImplAAFCDCIDescriptor ()
 	_blackReferenceLevel(PID_CDCI_DESC_BLACKREFERENCELEVEL,	"Black Reference Level"),
 	_whiteReferenceLevel(PID_CDCI_DESC_WHITEREFERENCELEVEL,	"White Reference Level"),
 	_colorRange(PID_CDCI_DESC_COLORRANGE,	"Color Range"),
-	_paddingBits(PID_CDCI_DESC_PADDINGBITS,	"Padding Bits"),
-	_initialized(AAFFalse)
+	_paddingBits(PID_CDCI_DESC_PADDINGBITS,	"Padding Bits")
 {
 	_persistentProperties.put(_componentWidth.address());
 	_persistentProperties.put(_horizontalSubsampling.address());
@@ -74,12 +73,6 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
 ImplAAFCDCIDescriptor::Initialize ()
 {
-  if (_initialized)
-	{
-	  return AAFRESULT_ALREADY_INITIALIZED;
-	}
-  _initialized = AAFTrue;
-
   return AAFRESULT_SUCCESS;
 }
 
@@ -90,11 +83,6 @@ AAFRESULT STDMETHODCALLTYPE
 	AAFRESULT	hr;
 
   AAFRESULT stat = AAFRESULT_INTERNAL_ERROR;
-
-	if (! _initialized)
-	{
-		return AAFRESULT_NOT_INITIALIZED;
-	}
 
 	switch (HorizontalSubsampling)
 	{
@@ -115,11 +103,6 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFCDCIDescriptor::SetColorSiting (aafColorSiting_t ColorSiting)
 {
-	if (! _initialized)
-	{
-		return AAFRESULT_NOT_INITIALIZED;
-	}
-
 	_colorSiting = ColorSiting;
 
 	return AAFRESULT_SUCCESS;
@@ -129,11 +112,6 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFCDCIDescriptor::SetBlackReferenceLevel (aafUInt32 BlackReferenceLevel)
 {
-	if (! _initialized)
-	{
-		return AAFRESULT_NOT_INITIALIZED;
-	}
-
 	_blackReferenceLevel = BlackReferenceLevel;
 
 	return AAFRESULT_SUCCESS;
@@ -143,11 +121,6 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFCDCIDescriptor::SetWhiteReferenceLevel (aafUInt32 WhiteReferenceLevel)
 {
-	if (! _initialized)
-	{
-		return AAFRESULT_NOT_INITIALIZED;
-	}
-
 	_whiteReferenceLevel = WhiteReferenceLevel;
 
 	return AAFRESULT_SUCCESS;
@@ -157,11 +130,6 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFCDCIDescriptor::SetColorRange (aafUInt32 ColorRange)
 {
-	if (! _initialized)
-	{
-		return AAFRESULT_NOT_INITIALIZED;
-	}
-
 	_colorRange = ColorRange;
 
 	return AAFRESULT_SUCCESS;
@@ -171,11 +139,6 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFCDCIDescriptor::SetPaddingBits (aafInt16 PaddingBits)
 {
-	if (! _initialized)
-	{
-		return AAFRESULT_NOT_INITIALIZED;
-	}
-
 	_paddingBits = PaddingBits;
 
 	return AAFRESULT_SUCCESS;
@@ -185,11 +148,6 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFCDCIDescriptor::GetComponentWidth (aafInt32* pComponentWidth)
 {
-	if (! _initialized)
-	{
-		return AAFRESULT_NOT_INITIALIZED;
-	}
-
 	if (pComponentWidth == NULL)
 		return AAFRESULT_NULL_PARAM;
 
@@ -202,11 +160,6 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFCDCIDescriptor::GetHorizontalSubsampling (aafUInt32* pHorizontalSubsampling)
 {
-	if (! _initialized)
-	{
-		return AAFRESULT_NOT_INITIALIZED;
-	}
-
 	if (pHorizontalSubsampling == NULL)
 		return AAFRESULT_NULL_PARAM;
 
@@ -219,11 +172,6 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFCDCIDescriptor::GetColorSiting (aafColorSiting_t* pColorSiting)
 {
-	if (! _initialized)
-	{
-		return AAFRESULT_NOT_INITIALIZED;
-	}
-
 	if (pColorSiting == NULL)
 		return AAFRESULT_NULL_PARAM;
 
@@ -236,11 +184,6 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFCDCIDescriptor::GetBlackReferenceLevel (aafUInt32* pBlackReferenceLevel)
 {
-	if (! _initialized)
-	{
-		return AAFRESULT_NOT_INITIALIZED;
-	}
-
 	if (pBlackReferenceLevel == NULL)
 		return AAFRESULT_NULL_PARAM;
 
@@ -253,11 +196,6 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFCDCIDescriptor::GetWhiteReferenceLevel (aafUInt32* pWhiteReferenceLevel)
 {
-	if (! _initialized)
-	{
-		return AAFRESULT_NOT_INITIALIZED;
-	}
-
 	if (pWhiteReferenceLevel == NULL)
 		return AAFRESULT_NULL_PARAM;
 
@@ -270,11 +208,6 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFCDCIDescriptor::GetColorRange (aafUInt32* pColorRange)
 {
-	if (! _initialized)
-	{
-		return AAFRESULT_NOT_INITIALIZED;
-	}
-
 	if (pColorRange == NULL)
 		return AAFRESULT_NULL_PARAM;
 
@@ -287,11 +220,6 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFCDCIDescriptor::GetPaddingBits (aafInt16* pPaddingBits)
 {
-	if (! _initialized)
-	{
-		return AAFRESULT_NOT_INITIALIZED;
-	}
-
 	if (pPaddingBits == NULL)
 		return AAFRESULT_NULL_PARAM;
 
@@ -310,11 +238,6 @@ OMDEFINE_STORABLE(ImplAAFCDCIDescriptor, CLSID_AAFCDCIDescriptor);
 AAFRESULT STDMETHODCALLTYPE
 ImplAAFCDCIDescriptor::GetObjectClass(aafUID_t * pClass)
 {
-	if (! _initialized)
-	{
-		return AAFRESULT_NOT_INITIALIZED;
-	}
-
 	if (! pClass)
 	{
 		return AAFRESULT_NULL_PARAM;
