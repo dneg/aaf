@@ -20,7 +20,7 @@ public:
   OMFile& operator << (const OMStorable& o);
 
   static OMClassFactory* classFactory(void);
-  static OMObjectDirectory* OMFile::objectDirectory(void);
+  static OMObjectDirectory* objectDirectory(void);
   
   virtual int classId(void) const;
 
