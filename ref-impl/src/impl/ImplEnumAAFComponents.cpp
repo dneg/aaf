@@ -171,13 +171,21 @@ AAFRESULT STDMETHODCALLTYPE
 {
 	ImplAAFComponent**	ppDef;
 	aafUInt32			numDefs;
-	HRESULT				hr;
+	size_t				siz;
+	HRESULT				hr = AAFRESULT_SUCCESS;
 
-	if ((pFetched == NULL && count != 1) || (pFetched != NULL && count == 1))
-		return E_INVALIDARG;
+	if (pFetched == NULL || ppComponents == NULL)
+		return AAFRESULT_NULL_PARAM;
 
 	// Point at the first component in the array.
 	ppDef = ppComponents;
+
+	// Check our current position
+	_enumStrongProp->getSize(siz);
+	numDefs = siz;
+	if (numDefs == _current)
+		return AAFRESULT_NO_MORE_OBJECTS;
+
 	for (numDefs = 0; numDefs < count; numDefs++)
 	{
 		hr = NextOne(ppDef);
@@ -191,10 +199,10 @@ AAFRESULT STDMETHODCALLTYPE
 		ppDef++;
 	}
 	
-	if (pFetched)
-		*pFetched = numDefs;
+	assert(pFetched);
+	*pFetched = numDefs;
 
-	return hr;
+	return AAFRESULT_SUCCESS;
 }
 
 //***********************************************************
@@ -236,7 +244,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 	newCurrent = _current + count;
 
-	if(newCurrent < numElem)
+	if(newCurrent <= numElem)
 	{
 		_current = newCurrent;
 		hr = AAFRESULT_SUCCESS;
