@@ -246,5 +246,3 @@ ImplAAFSession::BeginSession (
 // CLSID for AAFSession
 // {F0C10891-3073-11D2-804A-006008143E6F
 const aafClassID_t CLSID_AAFSession = { 0xF0C10891, 0x3073, 0x11D2, { 0x80, 0x4A, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } };
-
-OMDEFINE_STORABLE(ImplAAFSession, CLSID_AAFSession);
