@@ -534,6 +534,89 @@ void toString(const OMObjectIdentification& id, char* idString)
   *op = '\0'; 
 }
 
+void fromString(OMUInt8& i, const char* is)
+{
+  OMByte b = *is++;
+  b = b - 0x30;
+  if (b > 9) b = b - 7;
+  i = b;
+  i = i << 4;
+  b = *is;
+  b = b - 0x30;
+  if (b > 9) b = b - 7;
+  i = i + b;
+}
+
+void fromString(OMUInt16& i, const char* is)
+{
+  const char* p = is;
+  OMUInt8 b;
+  fromString(b, p); p = p + 2;
+  i = b;
+  i = i << 8;
+  fromString(b, p);
+  i = i + b;
+}
+
+void fromString(OMUInt32& i, const char* is)
+{
+  const char* p = is;
+  OMUInt16 w;
+  fromString(w, p); p = p + 4;
+  i = w;
+  i = i << 16;
+  fromString(w, p);
+  i = i + w;
+}
+
+void fromString(OMObjectIdentification& id, const char* idString)
+{
+  TRACE("fromString");
+  PRECONDITION("Valid id string", isValidObjectIdentificationString(idString));
+
+  const char* p = idString;
+  ++p; // {
+  // long word
+  fromString(id.Data1, p); p = p + 8;
+  ++p; // -
+  // word
+  fromString(id.Data2, p); p = p + 4;
+  ++p; // -
+  // word
+  fromString(id.Data3, p); p = p + 4;
+  ++p; // -
+  // pseudo-word
+  OMUInt16 x;
+  fromString(x, p); p = p + 4;
+  id.Data4[0] = (OMUInt8)((x & 0xff00) >> 8);
+  id.Data4[1] = (OMUInt8)(x & 0x00ff);
+  ++p; // -
+  // bytes
+  fromString(id.Data4[2], p); p = p + 2;
+  fromString(id.Data4[3], p); p = p + 2;
+  fromString(id.Data4[4], p); p = p + 2;
+  fromString(id.Data4[5], p); p = p + 2;
+  fromString(id.Data4[6], p); p = p + 2;
+  fromString(id.Data4[7], p); p = p + 2;
+  ++p; // }
+  POSTCONDITION("End of string", *p == 0);
+}
+
+bool isValidObjectIdentificationString(const char* idString)
+{
+  TRACE("isValidObjectIdentificationString");
+  PRECONDITION("Non-void string", idString != 0);
+
+  bool result = true;
+  if (!validString(idString)) {
+    result = false;
+  } else if (strlen(idString) != OMObjectIdentificationStringBufferSize - 1) {
+    result = false;
+  }
+
+  return result;
+}
+
 void checkTypes(void)
 {
   TRACE("checkTypes");

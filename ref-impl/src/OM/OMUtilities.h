@@ -222,6 +222,27 @@ const size_t OMUInt16StringBufferSize = 5;
 const size_t OMUInt32StringBufferSize = 9;
 const size_t OMObjectIdentificationStringBufferSize = 39;
 
+  // Conversions from strings
+
+  // Parse an OMUInt8 from a hexadecimal string like this -
+  // XX
+void fromString(OMUInt8& i, const char* is);
+
+  // Parse an OMUInt16 from a hexadecimal string like this -
+  // XXXX
+void fromString(OMUInt16& i, const char* is);
+
+  // Parse an OMUInt23 from a hexadecimal string like this -
+  // XXXXXXXX
+void fromString(OMUInt32& i, const char* is);
+
+  // Parse an OMObjectIdentification from a string like this -
+  //{XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX}
+void fromString(OMObjectIdentification& id, const char* idString);
+
+  // Does idString represent a vaild OMObjectIdentification ?
+bool isValidObjectIdentificationString(const char* idString);
+
   // Check of types
 
 void checkTypes(void);
