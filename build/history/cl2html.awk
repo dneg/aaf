@@ -83,6 +83,10 @@ function rowcolor(files) {
     result = "#CCFFCC";
   } else if (match(ff, "ref-impl/src/impl")) {
     result = "#FFCCCC";
+  } else if (match(ff, "examples/")) {
+    result = "#FFCCFF";
+  } else if (match(ff, "examples2/")) {
+    result = "#FFCCFF";
   }
   return result;
 }
