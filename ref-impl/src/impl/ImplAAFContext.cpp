@@ -141,3 +141,24 @@ ImplAAFSession::SetDefaultIdentification (
 	  _defaultIdent = ident;
 	  return(AAFRESULT_SUCCESS);
   }
+
+
+AAFRESULT STDMETHODCALLTYPE
+ImplAAFSession::GetIdentification (
+    aafProductIdentification_t  *ident)
+{
+  // BobT: this should check for null, and return the appropriate
+  // error code.
+  assert (ident);
+  
+  //
+  // BobT: Horrible hack! We want to return the identification to the
+  // user, but our aafProductIdentification_t struct only contains
+  // pointers!  Fix it later; for now we'll return pointers to
+  // internal data (DANGEROUS!) to the caller...
+  //
+  assert (_defaultIdent);
+  *ident = *_defaultIdent;
+
+  return (AAFRESULT_SUCCESS);
+}
