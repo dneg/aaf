@@ -15,10 +15,31 @@ ALL=0
 PRINTPATH=0
 
 
+PrintHelp ()
+{
+	echo "\nTo run module test and all examples for specified target, use either:"
+	echo "-r  = Release"
+	echo "-d  = Debug"
+	echo "\nTo specify which tests to run, add any of the following:"
+	echo "-a  = AafOmf"
+	echo "-i  = ComAAFInfo"
+	echo "-cl = ComClientTest"
+	echo "-cu = ComCutsTest"
+	echo "-e  = ComEssenceDataTest"
+	echo "-m  = ComModAAF"
+	echo "-p  = ComPropDirectDump"
+	echo "-t  = dump\n\n"
+	echo "-pp = Print PATH variable\n\n"
+}
+
+
 #####################
 # Parse Command Line
 #####################
-if [ $# -eq 1 ]; then
+if [ $# -eq 0 ]; then
+	PrintHelp
+	exit 1
+elif [ $# -eq 1 ]; then
 	if [ $1 = "-d" ] || [ $1 = "-r" ]; then
 		ALL=1;
 	fi
@@ -38,18 +59,8 @@ do
 		-i ) AAFINFO=1;;
 		-a ) AAFOMFTEST=1;;
 		-pp ) PRINTPATH=1;;
-		-h ) echo "\n-r  = Release"
-			 echo "-d  = Debug" 
-			 echo "-e  = ComEssenceDataTest"
-			 echo "-m  = ComModAAF"
-			 echo "-t  = dump"
-			 echo "-cl = ComClientTest"
-			 echo "-cu = ComCutsTest"
-			 echo "-p  = ComPropDirectDump"
-			 echo "-i  = ComAAFInfo"
-			 echo "-a  = AafOmf\n\n"
-			 echo "-pp = Print PATH variable\n\n"
-			exit 1 ;;
+		-h ) PrintHelp
+			 exit 1 ;;
 	esac
 	shift
 done
@@ -61,39 +72,6 @@ RELEASE="AAFWinSDK/Release"
 OLD_PATH=""
 
 Status=0
-
-RegisterTargetDLLs ()
-{	
-	Target=$1
-	Options=$2
-
-	print "Registering $Target $Options AAFPGAPI.dll"
-	if regsvr32 ${Options} ./AAFWINSDK/${Target}/RefImpl/AAFPGAPI.dll
-	then
-		print "    Succeeded"
-	else
-		print "    Failed"
-		exit -1
-	fi
-
-	print "Registering $Target $Options AAFCOAPI.dll"
-	if regsvr32 ${Options} ./AAFWINSDK/${Target}/RefImpl/AAFCOAPI.dll
-	then
-		print "    Succeeded"
-	else
-		print "    Failed"
-		exit -1
-	fi
-
-	print "Registering $Target $Options AAFINTP.dll "
-	if regsvr32 ${Options} ./AAFWINSDK/${Target}/RefImpl/AAFINTP.dll
-	then
-		print "    Succeeded"
-	else
-		print "    Failed"
-		exit -1
-	fi
-}
 
 
 SetPath ()
@@ -135,7 +113,7 @@ RunExamples ()
 
 	if [ MODULETEST -eq 1 ] || [ ALL -eq 1 ]; then
 		cd Test
-		cp ../../Test/Com/Laser.wav .
+		cp ../../Test/Com/ComModTestAAF/Laser.wav .
 		ComModAAF
 
 		PrintSeparator
