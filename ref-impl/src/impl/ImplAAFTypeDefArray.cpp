@@ -401,7 +401,7 @@ ImplAAFTypeDefArray::CreateValueFromCArray (
     // mechanism in place to convert between a buffer pointer and an array
     // of interface pointers; this convertion would not be necessary for
     // arrays of non-objects.
-    return AAFRESULT_NOT_IN_CURRENT_VERSION; // AAFRESULT_INVALID_PARAM;
+    return AAFRESULT_BAD_TYPE;
   }
 
 	ImplAAFPropValDataSP pvd;
@@ -525,7 +525,7 @@ ImplAAFTypeDefArray::GetCArray (
     // mechanism in place to convert between a buffer pointer and an array
     // of interface pointers; this convertion would not be necessary for
     // arrays of non-objects.
-    return AAFRESULT_NOT_IN_CURRENT_VERSION; // AAFRESULT_INVALID_PARAM;
+    return AAFRESULT_BAD_TYPE;
   }
 
 
@@ -682,7 +682,7 @@ ImplAAFTypeDefArray::SetCArray (
     // mechanism in place to convert between a buffer pointer and an array
     // of interface pointers; this convertion would not be necessary for
     // arrays of non-objects.
-    return AAFRESULT_NOT_IN_CURRENT_VERSION; // AAFRESULT_INVALID_PARAM;
+    return AAFRESULT_BAD_TYPE;
   }
 	
 	// Size of individual elements
