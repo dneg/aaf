@@ -263,6 +263,9 @@ AAFRESULT STDMETHODCALLTYPE
 	ImplAAFMob::RemoveSlot
         (ImplAAFMobSlot *  pSlot)  //@parm [in,out] Mob Name length
 {
+	if (NULL == pSlot)
+		return AAFRESULT_NULL_PARAM;
+
   return AAFRESULT_NOT_IN_CURRENT_VERSION;
 }
 
@@ -295,7 +298,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFMob::GetName (aafWChar *pName,
+    ImplAAFMob::GetName (aafCharacter *pName,
 	aafInt32 bufSize)
 {
 	bool stat;
@@ -338,7 +341,10 @@ ImplAAFMob::GetNameBufLen
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFMob::GetModTime (aafTimeStamp_t *lastModified)
 {
-	aafAssert(lastModified != NULL, NULL, AAFRESULT_NULL_PARAM);
+  // Validate input pointer...
+  if (NULL == lastModified)
+    return (AAFRESULT_NULL_PARAM);
+
 	*lastModified = _lastModified;
 	return(AAFRESULT_SUCCESS); 
 }
@@ -347,7 +353,9 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFMob::GetCreateTime (aafTimeStamp_t *creationTime)
 {
-	aafAssert(creationTime != NULL, NULL, AAFRESULT_NULL_PARAM);
+  // Validate input pointer...
+  if (NULL == creationTime)
+    return (AAFRESULT_NULL_PARAM);
 
 	*creationTime = _creationTime;
 
@@ -358,17 +366,27 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFMob::GetMobInfo (aafTimeStamp_t *lastModified,
                            aafTimeStamp_t *creationTime,
-							aafWChar *name,
+							aafCharacter *name,
 							aafInt32 nameLen)
 {
-	aafAssert(creationTime != NULL, NULL, AAFRESULT_NULL_PARAM);
-	aafAssert(creationTime != NULL, NULL, AAFRESULT_NULL_PARAM);
-	aafAssert(creationTime != NULL, NULL, AAFRESULT_NULL_PARAM);
-    XPROTECT()
+  // Validate input pointers...
+  if (NULL == lastModified || NULL == creationTime || NULL == name)
+    return (AAFRESULT_NULL_PARAM);
+
+    
+  XPROTECT()
 	{
-		CHECK(GetCreateTime (creationTime));
-		CHECK(GetModTime (creationTime));
+		// Assign from local copies so that we do not change the
+    // contents of the input parameters if there is a failure.
+    // This is the documented behavior for output parameters.
+    aafTimeStamp_t modified, created;
+
+		CHECK(GetCreateTime (&created));
+		CHECK(GetModTime (&modified));
 		CHECK(GetName(name, nameLen));
+
+		*lastModified = modified;
+		*creationTime = created;
 	}
 	XEXCEPT
 	XEND;
@@ -379,7 +397,11 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFMob::CountSlots (aafNumSlots_t *pNumSlots)
 {
-   size_t numSlots;
+  // Validate input pointer...
+  if (NULL == pNumSlots)
+    return (AAFRESULT_NULL_PARAM);
+
+  size_t numSlots;
 
 	_slots.getSize(numSlots);
 	
@@ -474,7 +496,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFMob::SetName (aafWChar *pName)
+    ImplAAFMob::SetName (aafCharacter *pName)
 {	
 	if(pName == NULL)
 		return(AAFRESULT_NULL_PARAM);
@@ -502,7 +524,7 @@ AAFRESULT STDMETHODCALLTYPE
  AAFRESULT STDMETHODCALLTYPE
    ImplAAFMob::AppendNewSlot (ImplAAFSegment *segment,
                            aafSlotID_t  slotID,
-                           aafWChar *slotName,
+                           aafCharacter *slotName,
                            ImplAAFMobSlot **newSlot)
 {
 	ImplAAFMobSlot * tmpSlot = NULL;
@@ -511,8 +533,11 @@ AAFRESULT STDMETHODCALLTYPE
   ImplAAFDictionary *pDictionary = NULL;
 	AAFRESULT aafError = AAFRESULT_SUCCESS;
 
+  // Validate input pointers...
+  if (NULL == segment || NULL == slotName || NULL == newSlot)
+    return (AAFRESULT_NULL_PARAM);
+
 	*newSlot = NULL;
-	aafAssert((segment != NULL), _file, AAFRESULT_NULL_PARAM);
 
 	XPROTECT()
 	{
@@ -558,7 +583,7 @@ AAFRESULT STDMETHODCALLTYPE
         (const aafRational_t &editRate,   //@parm [in] Edit rate property value
 		 ImplAAFSegment * segment,   //@parm [in] Segment to append as slot component
 		 aafSlotID_t  slotID,   //@parm [in] The Slot ID
-         const aafWChar *  slotName,   //@parm [in] Slot Name (optional)
+         const aafCharacter *  slotName,   //@parm [in] Slot Name (optional)
 		 aafPosition_t  origin,
 		 ImplAAFTimelineMobSlot ** newSlot)  //@parm [out] Newly created slot
 {
@@ -569,8 +594,12 @@ AAFRESULT STDMETHODCALLTYPE
 ///	aafLength_t	mobLength = CvtInt32toLength(0, mobLength);
 	AAFRESULT aafError = AAFRESULT_SUCCESS;
 
+
+  // Validate input pointers...
+  if (NULL == segment || NULL == slotName || NULL == newSlot)
+    return (AAFRESULT_NULL_PARAM);
+
 	*newSlot = NULL;
-	aafAssert((segment != NULL), _file, AAFRESULT_NULL_PARAM);
 
 	XPROTECT()
 	  {
@@ -615,7 +644,12 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFMob::GetSlots (ImplEnumAAFMobSlots **ppEnum)
 {
-	ImplEnumAAFMobSlots		*theEnum = (ImplEnumAAFMobSlots *)CreateImpl (CLSID_EnumAAFMobSlots);
+  // Validate input pointer...
+  if (NULL == ppEnum)
+    return (AAFRESULT_NULL_PARAM);
+
+  
+  ImplEnumAAFMobSlots		*theEnum = (ImplEnumAAFMobSlots *)CreateImpl (CLSID_EnumAAFMobSlots);
 	if(theEnum == NULL)
 		return(E_FAIL);
 
@@ -640,13 +674,13 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFMob::AppendComment ( aafWChar*  pTagName,
-								aafWChar*  pComment)
+    ImplAAFMob::AppendComment ( aafCharacter*  pTagName,
+								aafCharacter*  pComment)
 {
 	ImplAAFTaggedValue*			pTaggedValue = NULL;
 	ImplEnumAAFTaggedValues*	pEnum = NULL;
 	
-	aafWChar					oldTagName[64];
+	aafCharacter					oldTagName[64];
 	aafBool						commentFound = AAFFalse;
 	aafUInt32					numComments = 0;
 	ImplAAFDictionary *pDictionary = NULL;
@@ -680,7 +714,7 @@ AAFRESULT STDMETHODCALLTYPE
 		if (commentFound)
 		{
 			// Update existing comment
-			CHECK(pTaggedValue->SetValue((wcslen(pComment)*sizeof(aafWChar)+2), (aafDataValue_t)pComment));
+			CHECK(pTaggedValue->SetValue((wcslen(pComment)*sizeof(aafCharacter)+2), (aafDataValue_t)pComment));
 			pTaggedValue->ReleaseReference();
 			pTaggedValue = 0;
 		}
@@ -692,7 +726,7 @@ AAFRESULT STDMETHODCALLTYPE
 			pDictionary->ReleaseReference();
 			pDictionary = NULL;
 			CHECK(pTaggedValue->Initialize(pTagName, CLSID_AAFTypeDefString));
-			CHECK(pTaggedValue->SetValue((wcslen(pComment)*sizeof(aafWChar)+2), (aafDataValue_t)pComment));
+			CHECK(pTaggedValue->SetValue((wcslen(pComment)*sizeof(aafCharacter)+2), (aafDataValue_t)pComment));
 			_userComments.appendValue(pTaggedValue);
 		}
 	}
@@ -750,6 +784,10 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFMob::GetComments (ImplEnumAAFTaggedValues** ppEnum)
 {
+  // Validate input pointer...
+  if (NULL == ppEnum)
+    return (AAFRESULT_NULL_PARAM);
+
 	if(!_userComments.isPresent())
 		return AAFRESULT_PROP_NOT_PRESENT;
 		
@@ -793,7 +831,12 @@ AAFRESULT STDMETHODCALLTYPE
 	aafInt32			start32;
 	AAFRESULT			aafError = AAFRESULT_SUCCESS;
 	
-	memset(result, 0, sizeof(aafTimecode_t));
+
+  // Validate input pointers...
+  if (NULL == tcSlotID || NULL == offset || NULL == result)
+    return (AAFRESULT_NULL_PARAM);
+  
+  memset(result, 0, sizeof(aafTimecode_t));
 	memset(&timecode, 0, sizeof(aafTimecode_t));
 	result->startFrame = 0;
 	
@@ -898,7 +941,12 @@ AAFRESULT STDMETHODCALLTYPE
 	ImplAAFMobSlot	*tmpSlot = NULL;
 	aafSlotID_t	tmpSlotID;
 	aafBool			foundSlot = AAFFalse;
+	
 
+  // Validate input pointers...
+  if (NULL == destSlot)
+    return (AAFRESULT_NULL_PARAM);
+  
 	XPROTECT()
 	{
 		*destSlot = NULL;
@@ -944,7 +992,7 @@ AAFRESULT STDMETHODCALLTYPE
 	ImplAAFSegment			*seg = NULL;
 	aafTimecode_t 			timecode;
 	aafMediaCriteria_t		mediaCrit;
-	ImplAAFFindSourceInfo	*sourceInfo;
+	ImplAAFFindSourceInfo	*sourceInfo = NULL;
 	aafRational_t			editRate;
 	aafPosition_t			frameOffset64;
 	aafUID_t				datakind;
@@ -954,7 +1002,11 @@ AAFRESULT STDMETHODCALLTYPE
 	ImplAAFDataDef			*dataDef = NULL;
 	ImplAAFMob				*tapeMob = NULL;
 
-	memset(result, 0, sizeof(aafTimecode_t));
+  // Validate input pointers...
+  if (NULL == slotID || NULL == offset || NULL == result)
+    return (AAFRESULT_NULL_PARAM);
+
+  memset(result, 0, sizeof(aafTimecode_t));
 	memset(&timecode, 0, sizeof(aafTimecode_t));
 	result->startFrame = 0;
 	
@@ -998,6 +1050,7 @@ AAFRESULT STDMETHODCALLTYPE
 		tapeMob = NULL;
 		slotIter->ReleaseReference();
 		slotIter = NULL;
+    sourceInfo->ReleaseReference();
 		dict->ReleaseReference();
 		dict = NULL;
 		
@@ -1018,6 +1071,9 @@ AAFRESULT STDMETHODCALLTYPE
 		if (slot)
 		  slot->ReleaseReference();
 		slot = 0;
+    if (sourceInfo)
+      sourceInfo->ReleaseReference();
+    sourceInfo = NULL;
 		if (dict)
 		  dict->ReleaseReference();
 		dict = 0;
@@ -1050,7 +1106,11 @@ AAFRESULT STDMETHODCALLTYPE
 	aafLength_t	zeroLen;
 	ImplAAFFindSourceInfo	*sourceInfo = NULL;
 	ImplAAFMob	*tapeMob = NULL;
-	
+
+  // Validate input pointer...
+  if (NULL == result)
+    return (AAFRESULT_NULL_PARAM);
+
 	CvtInt32toPosition(0, zero);
 	CvtInt32toLength(0, zeroLen);
 	
@@ -1152,7 +1212,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFMob::Copy (aafWChar *  /*destMobName*/,
+    ImplAAFMob::Copy (aafCharacter *  /*destMobName*/,
                            ImplAAFMob ** /*destMob*/)
 {
 #if FULL_TOOLKIT
@@ -1386,7 +1446,11 @@ AAFRESULT
 {
 	AAFRESULT rc = AAFRESULT_SUCCESS;
 	ImplAAFMobSlot	*obj;
-	_slots.getValueAt(obj, index);
+
+  if (NULL == ppMobSlot)
+		return AAFRESULT_NULL_PARAM;
+  
+  _slots.getValueAt(obj, index);
 	if (obj)
 		obj->AcquireReference();
 	else
