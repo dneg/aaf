@@ -32,6 +32,8 @@ public:
 	AxMetaDefinition( IAAFMetaDefinitionSP spIaafMetaDefinition );
 	virtual ~AxMetaDefinition();
 
+	aafUID_t GetAUID();
+
 private:
 	AxMetaDefinition();
 	AxMetaDefinition( const AxMetaDefinition& );
@@ -65,8 +67,31 @@ public:
 		AxQueryInterface( CreateInstance( iid ), sp, iid );
 	}
 
+	IAAFClassDefSP GetParent();
+	aafBoolean_t IsConcrete();
+
+	IEnumAAFPropertyDefsSP GetPropertyDefs();
+	IAAFPropertyDefSP LookupPropertyDef( const aafUID_t& propertyId );
+
 private:
 	IAAFClassDefSP _spIaafClassDef;
+};
+
+
+//=---------------------------------------------------------------------=
+
+class AxPropertyDef : public AxMetaDefinition {
+public:
+	AxPropertyDef( IAAFPropertyDefSP spIaafPropertyDef );
+	~AxPropertyDef();
+
+//    AxString GetName();
+	aafBoolean_t GetIsOptional();
+	aafBoolean_t GetIsUniqueIdentifier();
+	IAAFTypeDefSP GetTypeDef();
+
+private:
+	IAAFPropertyDefSP _spIaafPropertyDef;
 };
 
 //=---------------------------------------------------------------------=
@@ -279,6 +304,8 @@ public:
 	AxTypeDefSet( IAAFTypeDefSetSP spIaafTypeDefSet );
 	virtual ~AxTypeDefSet();
 
+	IAAFTypeDefSP GetElementType();
+
 	IEnumAAFPropertyValuesSP GetElements( IAAFPropertyValueSP& );
 
 private:
@@ -298,6 +325,8 @@ public:
 
 	virtual IUnknownSP GetObject( IAAFPropertyValueSP& spPropVal,
 			  					  const IID& iid );
+
+	IAAFClassDefSP GetObjectType();
 
 private:
 	AxTypeDefObjRef();

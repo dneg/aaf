@@ -29,6 +29,16 @@ AxMetaDefinition::AxMetaDefinition( IAAFMetaDefinitionSP spIaafMetaDefinition )
 AxMetaDefinition::~AxMetaDefinition()
 {}
 
+
+aafUID_t AxMetaDefinition::GetAUID()
+{
+	aafUID_t auid;
+
+	CHECK_HRESULT( _spIaafMetaDefinition->GetAUID( &auid ) );
+
+	return auid;
+}
+
 //=---------------------------------------------------------------------=
 
 AxClassDef::AxClassDef( IAAFClassDefSP spIaafClassDef )
@@ -47,6 +57,80 @@ IUnknownSP AxClassDef::CreateInstance( const IID& auid )
 
 	return spIUnknown;
 }
+
+IAAFClassDefSP AxClassDef::GetParent()
+{
+	IAAFClassDefSP spClassDef;
+
+	CHECK_HRESULT( _spIaafClassDef->GetParent( &spClassDef ) );
+
+	return spClassDef;
+}
+
+aafBoolean_t AxClassDef::IsConcrete()
+{
+	aafBoolean_t isConcrete;
+
+	CHECK_HRESULT( _spIaafClassDef->IsConcrete( &isConcrete ) );
+
+	return isConcrete;
+}
+
+IEnumAAFPropertyDefsSP AxClassDef::GetPropertyDefs()
+{
+	IEnumAAFPropertyDefsSP spIEnumAAFPropertyDefs;
+
+	CHECK_HRESULT( _spIaafClassDef->GetPropertyDefs( &spIEnumAAFPropertyDefs ) );
+
+	return spIEnumAAFPropertyDefs;
+}
+
+IAAFPropertyDefSP AxClassDef::LookupPropertyDef( aafUID_constref  propertyId )
+{
+	IAAFPropertyDefSP spIaafPropertyDef;
+
+	CHECK_HRESULT( _spIaafClassDef->LookupPropertyDef( propertyId, &spIaafPropertyDef ) );
+
+	return spIaafPropertyDef;
+}
+
+//=---------------------------------------------------------------------=
+
+AxPropertyDef::AxPropertyDef( IAAFPropertyDefSP spIaafPropertyDef )
+:	AxMetaDefinition( AxQueryInterface<IAAFPropertyDef,IAAFMetaDefinition>(spIaafPropertyDef) ),
+	_spIaafPropertyDef( spIaafPropertyDef )
+{}
+
+AxPropertyDef::~AxPropertyDef()
+{}
+
+aafBoolean_t AxPropertyDef::GetIsOptional()
+{
+	aafBoolean_t isOptional;
+
+	CHECK_HRESULT( _spIaafPropertyDef->GetIsOptional( &isOptional ) );
+
+	return isOptional;
+}
+
+aafBoolean_t AxPropertyDef::GetIsUniqueIdentifier()
+{
+	aafBoolean_t isUniqueIdentifier;
+
+	CHECK_HRESULT( _spIaafPropertyDef->GetIsUniqueIdentifier( &isUniqueIdentifier ) );
+
+	return isUniqueIdentifier;
+}
+
+IAAFTypeDefSP AxPropertyDef::GetTypeDef()
+{
+	IAAFTypeDefSP spTypeDef;
+
+	CHECK_HRESULT( _spIaafPropertyDef->GetTypeDef( &spTypeDef ) );
+
+	return spTypeDef;
+}
+
 
 //=---------------------------------------------------------------------=
 
@@ -372,6 +456,17 @@ IEnumAAFPropertyValuesSP AxTypeDefSet::GetElements( IAAFPropertyValueSP& spPropV
 	return spEnum;
 }
 
+IAAFTypeDefSP AxTypeDefSet::GetElementType()
+{
+	IAAFTypeDefSP spIaafTypeDef;
+
+	CHECK_HRESULT( _spIaafTypeDefSet->GetElementType( &spIaafTypeDef ) );
+
+	return spIaafTypeDef;
+}
+
+
+
 //=---------------------------------------------------------------------=
 
 AxTypeDefObjRef::AxTypeDefObjRef( IAAFTypeDefObjectRefSP spIaafTypeDefObjRef )
@@ -394,6 +489,15 @@ IUnknownSP AxTypeDefObjRef::GetObject( IAAFPropertyValueSP& spPropVal,
 	return spIUnknown;
 }
 
+IAAFClassDefSP AxTypeDefObjRef::GetObjectType()
+{
+	IAAFClassDefSP spRefClassDef;
+
+	CHECK_HRESULT( _spIaafTypeDefObjRef->GetObjectType( &spRefClassDef ) );
+
+	return spRefClassDef;
+
+}
 
 //=---------------------------------------------------------------------=
 
