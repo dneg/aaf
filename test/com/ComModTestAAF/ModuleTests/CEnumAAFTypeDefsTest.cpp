@@ -27,26 +27,49 @@
  *
  ************************************************************************/
 
+#include <iostream.h>
+#include <stdio.h>
+#if defined(macintosh) || defined(_MAC)
+#include <wstring.h>
+#endif
 
-
-/***********************************************\
-*	Stub only.   Implementation not yet added	*
-\***********************************************/
-
-
-
-
-
-
-
-
-#include "AAFTypes.h" //Use #include "AAF.h" for functional module test.
+#include "AAF.h"
 #include "AAFResult.h"
 
+#include "CEnumeratorTest.h"
+
+class CEnumAAFTypeDefsTest: public CEnumeratorTest<IEnumAAFTypeDefs,IAAFTypeDef>
+{
+public:
+	HRESULT CountItems(IAAFDictionary *pDictionary,aafUInt32 *piCount)
+	{
+		return(pDictionary->CountTypeDefs(piCount));
+	}
+	HRESULT GetItems(IAAFDictionary *pDictionary,IEnumAAFTypeDefs **ppEnumerator)
+	{
+		return(pDictionary->GetTypeDefs(ppEnumerator));
+	}
+	aafBool ItemIsPresent(IAAFDictionary *pDictionary,aafUID_t& Id)
+	{
+		IAAFSmartPointer<IAAFTypeDef> pTypeDef;
+		return(pDictionary->LookupTypeDef(Id,&pTypeDef)==AAFRESULT_SUCCESS?
+			kAAFTrue:kAAFFalse);
+	}
+};
 
 extern "C" HRESULT CEnumAAFTypeDefs_test()
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	try
+	{
+		CEnumAAFTypeDefsTest Test;
+		Test.Run();
+	}
+	catch(HRESULT& rResult)
+	{
+		return(rResult);
+	}
+
+	return AAFRESULT_SUCCESS;
 }
 
 

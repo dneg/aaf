@@ -27,25 +27,75 @@
  *
  ************************************************************************/
 
-#include "AAFTypes.h" //Use #include "AAF.h" for functional module test.
+#include <iostream.h>
+#include <stdio.h>
+#if defined(macintosh) || defined(_MAC)
+#include <wstring.h>
+#endif
+
+#include "AAF.h"
 #include "AAFResult.h"
 
-// Required function prototype.
-extern "C" HRESULT CEnumAAFPropertyDefs_test(void);
+#include "CEnumeratorTest.h"
 
-HRESULT CEnumAAFPropertyDefs_test()
+class CEnumAAFPropertyDefsTest: public 
+	CEnumeratorTest<IEnumAAFPropertyDefs,IAAFPropertyDef>
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+public:
+	CEnumAAFPropertyDefsTest()
+	{
+		_pKnownClassDef=0;
+	}
+	// Before performing any testing, we loop up a known class definition, so we
+	// can perform our test by enumerating over its properties.
+	void LookupKnownClassDef(IAAFDictionary *pDictionary)
+	{
+		if(!_pKnownClassDef)
+			checkResult(pDictionary->LookupClassDef(AUID_AAFTapeDescriptor,
+			&_pKnownClassDef));
+	}
+	HRESULT CountItems(IAAFDictionary *pDictionary,aafUInt32 *piCount)
+	{
+		LookupKnownClassDef(pDictionary);
+		return(_pKnownClassDef->CountPropertyDefs(piCount));
+	}
+	HRESULT GetItems(IAAFDictionary *pDictionary,
+						IEnumAAFPropertyDefs **ppEnumerator)
+	{
+		LookupKnownClassDef(pDictionary);
+		return(_pKnownClassDef->GetPropertyDefs(ppEnumerator));
+	}
+	aafBool ItemIsPresent(IAAFDictionary *pDictionary,aafUID_t& Id)
+	{
+		LookupKnownClassDef(pDictionary);
+		IAAFSmartPointer<IAAFPropertyDef> pPropertyDef;
+		return(_pKnownClassDef->LookupPropertyDef(Id,&pPropertyDef)
+			==AAFRESULT_SUCCESS?kAAFTrue:kAAFFalse);
+	}
+	~CEnumAAFPropertyDefsTest()
+	{
+		if(_pKnownClassDef)
+			_pKnownClassDef->Release();
+	}
+
+private:
+	IAAFClassDef *_pKnownClassDef;
+};
+
+extern "C" HRESULT CEnumAAFPropertyDefs_test()
+{
+	try
+	{
+		CEnumAAFPropertyDefsTest Test;
+		Test.Run();
+	}
+	catch(HRESULT& rResult)
+	{
+		return(rResult);
+	}
+
+	return AAFRESULT_SUCCESS;
 }
-
-
-
-
-
-
-
-
-
 
 
 
