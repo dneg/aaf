@@ -34,6 +34,8 @@ class ImplAAFSegment;
 
 class ImplAAFDataDef;
 
+class ImplAAFEvent;
+
 template <class T> 
 class ImplAAFEnumerator;
 typedef ImplAAFEnumerator<ImplAAFComponent> ImplEnumAAFComponents;
@@ -174,6 +176,42 @@ public:
 									  aafInt32 *pulldownPhase,
 									  aafLength_t *sclpLen,
 									  aafBool *isMask);
+
+private:
+
+   // Sequences have two distinct forms: i) a sequence exclusively composed of events,
+   // ii) a sequence of non-event components.  The policy that must be
+   // enforced in regards to
+   // valid component types, ordering, position, and length are different.
+   // The component type dependent processing, performed in AppendComponent,
+   // is implemented by these polymorphic routines.  It is the responsibilty of
+   // AppendComponent to attempt the ImplAAFEvent and special case the
+   // calls to these routines should the cast succeed.
+
+   AAFRESULT CheckFirstComponentSematics( ImplAAFComponent* pComponent );
+
+   AAFRESULT CheckTypeSemantics( ImplAAFEvent* pEvent );
+   AAFRESULT CheckPositionSemantics( ImplAAFEvent* pEvent );
+   AAFRESULT CheckLengthSemantics( ImplAAFEvent* pEvent );
+
+   AAFRESULT CheckTypeSemantics( ImplAAFComponent* pComponent );
+   AAFRESULT CheckPositionSemantics( ImplAAFComponent* pComponent );
+   AAFRESULT CheckLengthSemantics( ImplAAFComponent* pComponent );
+
+   // These routines will update the length of an event, or !event, component.
+   // The caller must resolve the type.  Both will work correctly if pComponent
+   // or pEvent is the first component.
+   AAFRESULT UpdateSequenceLength( ImplAAFEvent* pEvent );
+   AAFRESULT UpdateSequenceLength( ImplAAFComponent* pComponent );
+
+   ImplAAFComponent* GetLastComponent();
+   ImplAAFComponent* GetFirstComponent();
+   AAFRESULT GetLastEvent( ImplAAFEvent*& );
+   AAFRESULT GetFirstEvent( ImplAAFEvent*& );
+
+   // Call this when the length property is known to be optional.  It will
+   // set refLenght to zero and return success if the property is not present.
+   static AAFRESULT GetOptionalComponentLength( ImplAAFComponent* pComponent, aafLength_t& refLength );
 
 private:
 	OMStrongReferenceVectorProperty<ImplAAFComponent> _components;
