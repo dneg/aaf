@@ -194,11 +194,6 @@ static const aafUInt8 compressed422JFIF[] =
 extern "C" HRESULT CAAFEssenceAccess_test(testMode_t mode);
 
 
-static aafBool	EqualAUID(aafUID_t *uid1, aafUID_t *uid2)
-{
-	return(memcmp((char *)uid1, (char *)uid2, sizeof(aafUID_t)) == 0 ? kAAFTrue : kAAFFalse);
-}
-
 #define TEST_PATH	L"SomeFile.dat"
 
 // convenient error handlers.
