@@ -9,7 +9,6 @@
 # aaf object:
 AAFPERSISTENTOBJECTS = \
 	AAFAIFCData \
-	AAFAIFCDescriptor \
 	AAFCommentMarker \
 	AAFConstValue \
 	AAFControlPoint \
@@ -84,6 +83,7 @@ AAFCOMINTERFACESONLY = \
 # its name here and remove it from either list above where it occurs.
 # Do not add the 'Impl'prefix here.
 HUMAN_TYPED_IMPL = \
+	AAFAIFCDescriptor \
 	AAFClassDef \
 	AAFCodecDef \
 	AAFComponent \
