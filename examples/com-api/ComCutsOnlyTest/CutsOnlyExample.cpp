@@ -68,10 +68,6 @@ static aafFadeType_t fadeInType = kFadeLinearAmp;
 static aafFadeType_t fadeOutType = kFadeLinearPower;
 static aafSourceRef_t sourceRef; 
 
-static aafBool	EqualAUID(aafUID_t *uid1, aafUID_t *uid2)
-{
-	return(memcmp((char *)uid1, (char *)uid2, sizeof(aafUID_t)) == 0 ? AAFTrue : AAFFalse);
-}
 
 #define TAPE_LENGTH			1L * 60L *60L * 30L
 #define FILE1_LENGTH		60L * 30L
@@ -103,12 +99,12 @@ static HRESULT moduleErrorTmp = S_OK; /* note usage in macro */
      exit(1);\
 }
 
-static void AUIDtoString(aafUID_t *uid, char *buf)
+static void MobIDtoString(aafMobID_constref uid, char *buf)
 {
 	sprintf(buf, "%08lx-%04x-%04x-%02x%02x%02x%02x%02x%02x%02x%02x",
-			uid->Data1, uid->Data2, uid->Data3, (int)uid->Data4[0],
-			(int)uid->Data4[1], (int)uid->Data4[2], (int)uid->Data4[3], (int)uid->Data4[4],
-			(int)uid->Data4[5], (int)uid->Data4[6], (int)uid->Data4[7]);
+			uid.Data1, uid.Data2, uid.Data3, (int)uid.Data4[0],
+			(int)uid.Data4[1], (int)uid.Data4[2], (int)uid.Data4[3], (int)uid.Data4[4],
+			(int)uid.Data4[5], (int)uid.Data4[6], (int)uid.Data4[7]);
 }
 
 
@@ -153,7 +149,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFLocator*				pLocator = NULL;
 	IAAFNetworkLocator*			pNetLocator = NULL;
 	aafRational_t				videoRate = { 30000, 1001 };
-	aafUID_t					tapeMobID, fileMobID, masterMobID;
+	aafMobID_t					tapeMobID, fileMobID, masterMobID;
 	aafTimecode_t				tapeTC = { 108000, kTcNonDrop, 30};
 	aafLength_t					fileLen = FILE1_LENGTH;
 	aafLength_t					fillLen = FILL_LENGTH;
@@ -420,7 +416,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	aafNumSlots_t				numCompMobs;
 	aafNumSlots_t				numTapeMobs, numFileMobs, numMasterMobs;
 	HRESULT						hr = AAFRESULT_SUCCESS;
-	aafUID_t					mobID;
+	aafMobID_t					mobID;
 	aafWChar					bufW[1204];
 	char						bufA[2408];
 	aafLength_t					length;
@@ -460,7 +456,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 			check(pMob->GetName (bufW, sizeof(bufW)));
 			check(convert(bufA, sizeof(bufA), bufW));
 			printf("    TapeName = '%s'\n", bufA);
-			AUIDtoString(&mobID, bufA);
+			MobIDtoString(mobID, bufA);
 			printf("        (mobID %s)\n", bufA);
 
 			pMob->Release();
@@ -489,7 +485,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		while(AAFRESULT_SUCCESS == pMobIter->NextOne(&pMob))
 		{
 			check(pMob->GetMobID (&mobID));
-			AUIDtoString(&mobID, bufA);
+			MobIDtoString(mobID, bufA);
 			printf("    (mobID %s)\n", bufA);
 
 			check(pMob->QueryInterface (IID_IAAFSourceMob, (void **)&pSourceMob));
@@ -547,7 +543,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 			check(pMob->GetName (bufW, sizeof(bufW)));
 			check(convert(bufA, sizeof(bufA), bufW));
 			printf("    MasterMob Name = '%s'\n", bufA);
-			AUIDtoString(&mobID, bufA);
+			MobIDtoString(mobID, bufA);
 			printf("        (mobID %s)\n", bufA);
 			
 
@@ -578,7 +574,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		while (pMobIter && AAFRESULT_SUCCESS == pMobIter->NextOne(&pMob))
 		{
 			check(pMob->GetMobID (&mobID));
-			AUIDtoString(&mobID, bufA);
+			MobIDtoString(mobID, bufA);
 			printf("    (mobID %s)\n", bufA);
 			pMob->CountSlots(&numSlots);
 			if (1 == numSlots)
@@ -607,7 +603,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 							check(pReferencedMob->GetName (bufW, sizeof(bufW)));
 							check(convert(bufA, sizeof(bufA), bufW));
 							printf("        References mob = '%s'\n", bufW);
-							AUIDtoString(&mobID, bufA);
+							MobIDtoString(mobID, bufA);
 							printf("            (mobID %s)\n", bufA);
 
 							pReferencedMob->Release();
@@ -646,7 +642,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 									check(pReferencedMob->GetName (bufW, sizeof(bufW)));
 									check(convert(bufA, sizeof(bufA), bufW));
 									printf("            References mob = '%s'\n", bufA);
-									AUIDtoString(&mobID, bufA);
+									MobIDtoString(mobID, bufA);
 									printf("                (mobID %s)\n", bufA);
 
 									hr = pReferencedMob->QueryInterface(IID_IAAFMasterMob, (void **) &pMasterMob);
