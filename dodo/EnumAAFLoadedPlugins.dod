@@ -33,17 +33,15 @@ AD_IDL(//
 /***********************************************\
 *	Stub only.   Implementation not yet added	*
 \***********************************************/
+AD_CLASS_UUID(AB4D9F13, DD69, 11d2, 80, 9C, 00, 60, 08, 14, 3E, 6F)
 
-
-AD_CLASS_UUID(AD1BB860, DBB2, 11d2, 80, 9C, 00, 60, 08, 14, 3E, 6F)
-
-AD_DEFAULT_UUID(AD1BB861, DBB2, 11d2, 80, 9C, 00, 60, 08, 14, 3E, 6F)
+AD_DEFAULT_UUID(AB4D9F14, DD69, 11d2, 80, 9C, 00, 60, 08, 14, 3E, 6F)
 AD_XCLASS_BEGIN(Concrete, Transient)
 
 AD_XMETHOD1(NextOne,
 			[out\,retval],
 			objOut,
-			AAFPluggableDefinition,
+			AAFPluggableDef,
 			ppAAFPluggableDef,
 			The Next AAFPluggableDef,
 			Enumerates to the next element in the enumerators list. The caller is responsible 
