@@ -62,7 +62,7 @@ public:
                 OMIteratorPosition initialPosition);
 
     // @cmember Destroy this <c OMSetIterator>.
-  ~OMSetIterator(void);
+  virtual ~OMSetIterator(void);
 
     // @cmember Reset this <c OMSetIterator> to the given
     //          <p initialPosition>.

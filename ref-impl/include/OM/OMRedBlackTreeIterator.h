@@ -59,7 +59,7 @@ public:
                          OMIteratorPosition initialPosition);
 
     // @cmember Destroy this <c OMRedBlackTreeIterator>.
-  ~OMRedBlackTreeIterator(void);
+  virtual ~OMRedBlackTreeIterator(void);
 
     // @cmember Reset this <c OMRedBlackTreeIterator> to the given
     //          <p initialPosition>.

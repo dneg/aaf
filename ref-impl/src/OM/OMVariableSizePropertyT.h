@@ -261,9 +261,6 @@ void OMVariableSizeProperty<PropertyType>::restore(size_t externalSize)
 {
   TRACE("OMVariableSizeProperty<PropertyType>::restore");
 
-  OMStoredObject* store = _propertySet->container()->store();
-  ASSERT("Valid store", store != 0);
-
   if (externalSize != _size) {
     delete [] _bits;
     _bits = 0;  // for BoundsChecker
