@@ -146,8 +146,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(mgr->CreatePluginDefinition (CodecWave, pDictionary, &pDef));
 
 		checkResult(pDef->QueryInterface(IID_IAAFCodecDef, (void **)&pCodecDef));
-		checkResult(pCodecDef->AppendEssenceKind (DDEF_Sound));
-		checkResult(pDictionary->RegisterCodecDefinition(pCodecDef));
+		checkResult(pCodecDef->AddEssenceKind (DDEF_Sound));
+		checkResult(pDictionary->RegisterCodecDef(pCodecDef));
 	}
 	catch (HRESULT& rResult)
 	{
@@ -211,7 +211,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 		bFileOpen = true;
 
 		checkResult(pHeader->GetDictionary(&pDictionary));
-		checkResult(pDictionary->LookupCodecDefinition(codecID, &pCodec));
+		checkResult(pDictionary->LookupCodecDef(codecID, &pCodec));
 
 		checkResult(pCodec->IsEssenceKindSupported (testPicture, &testResult));
 		checkExpression (testResult == AAFFalse, AAFRESULT_TEST_FAILED);

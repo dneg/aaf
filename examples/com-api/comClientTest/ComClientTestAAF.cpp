@@ -237,7 +237,7 @@ static void ReadAAFFile(aafWChar * pFileName)
           pIdent = NULL;
         }
 
-        hr = pHeader->GetNumMobs(kAllMob, &numMobs);
+        hr = pHeader->CountMobs(kAllMob, &numMobs);
         check(hr); // display error message
         if (FAILED(hr))
           numMobs = 0;
@@ -250,7 +250,7 @@ static void ReadAAFFile(aafWChar * pFileName)
         {
           //!!!  aafSearchCrit_t    criteria;
           //!!!  criteria.searchTag = kNoSearch;
-          hr = pHeader->EnumAAFAllMobs (NULL, &mobIter);
+          hr = pHeader->GetMobs (NULL, &mobIter);
           check(hr); // display error message
         }
         if (SUCCEEDED(hr)) // EnumAAFAllMobs && GetNumMobs SUCCEEDED
@@ -291,7 +291,7 @@ static void ReadAAFFile(aafWChar * pFileName)
             
               printf("Mob %ld: (ID %s) is named '%s'\n", n, chMobID, chName);
 
-              hr = aMob->GetNumSlots (&numSlots);
+              hr = aMob->CountSlots (&numSlots);
               check(hr); // display error message
               if (FAILED(hr))
                 numSlots = 0;
@@ -302,7 +302,7 @@ static void ReadAAFFile(aafWChar * pFileName)
               if(SUCCEEDED(hr))
               {
                 IAAFEssenceDescriptor  *essenceDesc = NULL;
-                aafInt32 numLocators;
+                aafUInt32 numLocators;
 
 
                 hr = smob->GetEssenceDescriptor(&essenceDesc);
@@ -331,7 +331,7 @@ static void ReadAAFFile(aafWChar * pFileName)
                     printf("    It is a source mob, but not a file source mob\n");
 
                   numLocators = -1;
-                  hr = essenceDesc->GetNumLocators(&numLocators);
+                  hr = essenceDesc->CountLocators(&numLocators);
                   check(hr); // display error message
                   if(SUCCEEDED(hr))
                   {
@@ -355,7 +355,7 @@ static void ReadAAFFile(aafWChar * pFileName)
                 IEnumAAFMobSlots  *slotIter = NULL;
 
 
-                hr = aMob->EnumAAFAllMobSlots(&slotIter);
+                hr = aMob->GetSlots(&slotIter);
                 check(hr); // display error message
                 if(SUCCEEDED(hr))
                 {
@@ -454,7 +454,7 @@ static void CreateAAFFile(aafWChar * pFileName)
   long  test;
   aafWChar    *names[5] = { L"FOOBAR1", L"FOOBAR2", L"FOOBAR3", L"FOOBAR4", L"FOOBAR5" };
   aafRational_t  editRate = { 2997, 100 };
-  IAAFMobSlot    *newSlot = NULL;
+  IAAFTimelineMobSlot    *newSlot = NULL;
   IAAFSegment    *seg = NULL;
   IAAFSourceClip  *sclp = NULL;
   IAAFSourceMob  *smob = NULL;
@@ -505,7 +505,13 @@ static void CreateAAFFile(aafWChar * pFileName)
                IID_IAAFSourceClip, 
                (IUnknown **)&sclp));
       check(sclp->QueryInterface (IID_IAAFSegment, (void **)&seg));
-      check(pMob->AppendNewSlot (seg, testSlot+1, slotNames[testSlot], &newSlot));
+      check(pMob->AppendNewTimelineSlot
+			(editRate,
+			 seg,
+			 testSlot+1,
+			 slotNames[testSlot],
+			 0,
+			 &newSlot));
       
       // Cleanup references...
       newSlot->Release();
@@ -519,7 +525,7 @@ static void CreateAAFFile(aafWChar * pFileName)
     }
     
     // Add the newly created and initialized Mob to the end of the mob index.
-    check(pHeader->AppendMob(pMob));
+    check(pHeader->AddMob(pMob));
     
     
     // Cleanup references...

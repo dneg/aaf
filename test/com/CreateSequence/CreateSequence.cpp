@@ -150,7 +150,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, long int N)
 	IAAFComponent*				aComponent = NULL;
 	IAAFFileDescriptor*			pFileDesc = NULL;
 	IAAFTapeDescriptor*			pTapeDesc = NULL;
-	IAAFMobSlot*				newSlot = NULL;
+	IAAFTimelineMobSlot*		newSlot = NULL;
 	IAAFSegment*				seg = NULL;
 	IAAFSourceClip*				fileSclp = NULL;
 	IAAFSourceClip*				masterSclp = NULL;
@@ -215,7 +215,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, long int N)
 	aComponent = NULL;
 
  	check(pCompMob->QueryInterface (IID_IAAFMob, (void **)&pMob));
-	check(pMob->AppendNewSlot (seg, i, slotName, &newSlot));
+	check(pMob->AppendNewTimelineSlot
+		  (videoRate, seg, i, slotName, 0, &newSlot));
 	pMob->Release();
 	pMob = NULL;
 	newSlot->Release();
@@ -223,7 +224,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, long int N)
 	seg->Release();
 	seg = NULL;
 
-	check(pHeader->AppendMob(pCompMob));
+	check(pHeader->AddMob(pCompMob));
 
 
 	// now looping around the remainder N times to make N components
@@ -259,7 +260,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, long int N)
 		
 		check(pMob->SetName (TapeMobName));
 		
-		check(pHeader->AppendMob(pMob));
+		check(pHeader->AddMob(pMob));
 		check(pMob->GetMobID (&tapeMobID));
 		pMob->Release();
 		pMob = NULL;
@@ -302,7 +303,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, long int N)
 
 		check(pFileMob->QueryInterface (IID_IAAFMob, (void **)&pMob));
 		check(pMob->GetMobID (&fileMobID));
-		check(pHeader->AppendMob(pMob));
+		check(pHeader->AddMob(pMob));
 		pMob->Release();
 		pMob = NULL;
 
@@ -327,7 +328,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, long int N)
 		
 		check(pMob->SetName (MasterMobName));
 
-		check(pHeader->AppendMob(pMob));
+		check(pHeader->AddMob(pMob));
 		pMob->Release();
 		pMob = NULL;
 

@@ -301,7 +301,7 @@ void CommentMarkerTest::CreateEvent()
 		checkResult(pMob->AppendSlot(pMobSlot));
 		
 		// Attach the mob to the header...
-		checkResult(_pHeader->AppendMob(pMob));
+		checkResult(_pHeader->AddMob(pMob));
 		
 		// Save the id of the composition mob that contains our test
 		// event mob slot.
@@ -387,7 +387,7 @@ void CommentMarkerTest::OpenEvent()
 		checkResult(_pHeader->LookupMob(_compositionMobID, &pMob));
 		
 		// Get the first mob slot and check that it is an event mob slot.
-		checkResult(pMob->EnumAAFAllMobSlots(&pEnumSlots));
+		checkResult(pMob->GetSlots(&pEnumSlots));
 		checkResult(pEnumSlots->NextOne(&pMobSlot));
 		checkResult(pMobSlot->QueryInterface(IID_IAAFEventMobSlot, (void **)&pEventMobSlot));
 		checkResult(pEventMobSlot->GetEditRate(&editRate));

@@ -340,7 +340,7 @@ void ContentStorageTest::openFile(wchar_t *pFileName)
 	openEssenceData();
 
 	
-	check(_pHeader->GetNumEssenceData(&readNumEssenceData));
+	check(_pHeader->CountEssenceData(&readNumEssenceData));
 	checkExpression(2 == readNumEssenceData, AAFRESULT_TEST_FAILED);
 	/***/
 	uid = kTestMobID1;
@@ -362,13 +362,13 @@ void ContentStorageTest::openFile(wchar_t *pFileName)
 	uid.Data3 = 0;
 	checkExpression(_pHeader->LookupMob(uid, &testMob) != AAFRESULT_SUCCESS, AAFRESULT_TEST_FAILED);
 	/***/
-	check(_pHeader->GetNumMobs(kFileMob, &readNumMobs));
+	check(_pHeader->CountMobs(kFileMob, &readNumMobs));
 	checkExpression(2 == readNumMobs, AAFRESULT_TEST_FAILED);
-	check(_pHeader->GetNumMobs(kMasterMob, &readNumMobs));
+	check(_pHeader->CountMobs(kMasterMob, &readNumMobs));
 	checkExpression(0 == readNumMobs, AAFRESULT_TEST_FAILED);
 	/***/
 	uid = kTestMobID1;
-	check(_pHeader->EnumAAFAllMobs(NULL, &pEnum));		// !! Add tests for criteria
+	check(_pHeader->GetMobs(NULL, &pEnum));		// !! Add tests for criteria
 	check(pEnum->NextOne(&testMob));
 	check(testMob->GetMobID(&readID));
 	checkExpression(memcmp(&uid, &readID, sizeof(readID)) == 0, AAFRESULT_TEST_FAILED);
@@ -419,7 +419,7 @@ void ContentStorageTest::createFileMob(aafUID_t newMobID)
 		(void **)&_pEssenceDescriptor));
 	check(_pSourceMob->SetEssenceDescriptor (_pEssenceDescriptor));
 	
-	check(_pHeader->AppendMob(_pMob));
+	check(_pHeader->AddMob(_pMob));
 	
 	createEssenceData(_pSourceMob);
 	
@@ -452,7 +452,7 @@ void ContentStorageTest::createEssenceData(IAAFSourceMob *pSourceMob)
 		(IUnknown **)&_pEssenceData));
 	
 	check(_pEssenceData->SetFileMob(pSourceMob));
-	check(_pHeader->AppendEssenceData(_pEssenceData));
+	check(_pHeader->AddEssenceData(_pEssenceData));
 	
 	writeEssenceData(_pEssenceData, (aafDataBuffer_t)_smiley, sizeof(_smiley));
 	writeEssenceData(_pEssenceData, (aafDataBuffer_t)_frowney, sizeof(_frowney));

@@ -509,7 +509,7 @@ void PrintPosition (IAAFDictionary * pDict,
 {
   assert (pDict);
   IAAFTypeDef *ptd=NULL;
-  check (pDict->LookupType (kTypeID_ePosition, &ptd));
+  check (pDict->LookupTypeDef (kTypeID_ePosition, &ptd));
 
   IAAFTypeDefExtEnum *ptde=NULL;
   check (ptd->QueryInterface (IID_IAAFTypeDefExtEnum, (void **)&ptde));
@@ -550,8 +550,8 @@ void AdminMobAppendResource (IAAFDictionary *pDict,
   // Look up the type def for StrongReference-to-PersonnelResource
   // objects.
   IAAFTypeDef *td=NULL;
-  check (pDict->LookupType (kTypeID_PersonnelResourceStrongReference,
-							&td));
+  check (pDict->LookupTypeDef (kTypeID_PersonnelResourceStrongReference,
+							   &td));
   
   // Create the StrongReference-to-PersonnelResource property value
   // through the type def.  This must be done through the
@@ -749,7 +749,7 @@ void CreateAndRegisterPositionEnum (IAAFDictionary * pDict)
 
   IAAFTypeDef *ptd = NULL;
   // Check to see if we are have already been registered.
-  if (SUCCEEDED(pDict->LookupType (kTypeID_ePosition, &ptd)))
+  if (SUCCEEDED(pDict->LookupTypeDef (kTypeID_ePosition, &ptd)))
     return;
 
   // Instantiate a type definition object which will describe ePosition
@@ -773,10 +773,10 @@ void CreateAndRegisterPositionEnum (IAAFDictionary * pDict)
   check (ptde->AppendElement (kPosition_Actor, L"Actor"));
 
   // Register this type definition in the dictionary.  The
-  // dictionary::RegisterType() method expects an IAAFTypeDef pointer,
-  // so we'll QI for that first.
+  // dictionary::RegisterTypeDef() method expects an IAAFTypeDef
+  // pointer, so we'll QI for that first.
   check (ptde->QueryInterface (IID_IAAFTypeDef, (void **)&ptd));
-  check (pDict->RegisterType (ptd));
+  check (pDict->RegisterTypeDef (ptd));
   ptde->Release();
   ptde=NULL;
   ptd->Release();
@@ -794,7 +794,8 @@ void CreateAndRegisterPersonnelResource (IAAFDictionary * pDict)
 
   IAAFClassDef *pcd=NULL;
   // Check to see if we are have already been registered.
-  if (SUCCEEDED(pDict->LookupClass (kClassID_PersonnelResource, &pcd)))
+  if (SUCCEEDED(pDict->LookupClassDef (kClassID_PersonnelResource,
+									   &pcd)))
     return;
 
   // Instantiate a class definition object which will describe
@@ -808,7 +809,7 @@ void CreateAndRegisterPersonnelResource (IAAFDictionary * pDict)
   // inherits directly from AAFObject, look up the AAFObject class
   // definition.
   IAAFClassDef *pcd_Object=NULL;
-  check (pDict->LookupClass (AUID_AAFObject, &pcd_Object));
+  check (pDict->LookupClassDef (AUID_AAFObject, &pcd_Object));
 
   // Now initialize our new PersonnelResource class definition.  We'll
   // specify an AUID with which it will be identified
@@ -839,8 +840,8 @@ void CreateAndRegisterPersonnelResource (IAAFDictionary * pDict)
   // the type definition describing String when we append the prop
   // def.  First, look up the type definition describing String.
   IAAFTypeDef *ptd_String=NULL;
-  check (pDict->LookupType (kAAFTypeID_String,
-							&ptd_String));
+  check (pDict->LookupTypeDef (kAAFTypeID_String,
+							   &ptd_String));
 
   // Now request that a new property def be appended to this class
   // def.  We're specifying an AUID by which this property will be
@@ -848,18 +849,18 @@ void CreateAndRegisterPersonnelResource (IAAFDictionary * pDict)
   // generated), a name, the type of the property, and that the
   // property is mandatory.  The returned property def is ignored
   // since we won't use it in this function.
- check (pcd->AppendNewPropertyDef (kPropID_PersonnelResource_GivenName,
-									L"GivenName",
-									ptd_String,
-									AAFFalse,	// mandatory
-									&pd_unused));
+ check (pcd->RegisterNewPropertyDef (kPropID_PersonnelResource_GivenName,
+									 L"GivenName",
+									 ptd_String,
+									 AAFFalse,	// mandatory
+									 &pd_unused));
   pd_unused->Release();
   pd_unused=NULL;
-  check (pcd->AppendNewPropertyDef (kPropID_PersonnelResource_FamilyName,
-									L"FamilyName",
-									ptd_String,
-									AAFFalse,	// mandatory
-									&pd_unused));
+  check (pcd->RegisterNewPropertyDef (kPropID_PersonnelResource_FamilyName,
+									  L"FamilyName",
+									  ptd_String,
+									  AAFFalse,	// mandatory
+									  &pd_unused));
   pd_unused->Release();
   pd_unused=NULL;
 
@@ -876,12 +877,12 @@ void CreateAndRegisterPersonnelResource (IAAFDictionary * pDict)
   // generated), a name, the type of the property, and that the
   // property is mandatory.  The returned property def is ignored
   // since we won't use it in this function.
-  check (pDict->LookupType (kTypeID_ePosition, &ptd_Position));
-  check (pcd->AppendNewPropertyDef (kPropID_PersonnelResource_Position,
-									L"Position",
-									ptd_Position,
-									AAFFalse,   // mandatory
-									&pd_unused));
+  check (pDict->LookupTypeDef (kTypeID_ePosition, &ptd_Position));
+  check (pcd->RegisterNewPropertyDef (kPropID_PersonnelResource_Position,
+									  L"Position",
+									  ptd_Position,
+									  AAFFalse,   // mandatory
+									  &pd_unused));
   pd_unused->Release();
   pd_unused=NULL;
 
@@ -891,7 +892,7 @@ void CreateAndRegisterPersonnelResource (IAAFDictionary * pDict)
   // we append the prop def.  First, look up the type definition
   // describing UInt32.
   IAAFTypeDef *ptd_ui32=NULL;
-  check (pDict->LookupType (kAAFTypeID_UInt32, &ptd_ui32));
+  check (pDict->LookupTypeDef (kAAFTypeID_UInt32, &ptd_ui32));
 
   // Now request that a new property def be appended to this class
   // def.  We're specifying an AUID by which this property will be
@@ -899,11 +900,11 @@ void CreateAndRegisterPersonnelResource (IAAFDictionary * pDict)
   // generated), a name, the type of the property, and that the
   // property is optional.  The returned property def is ignored
   // since we won't use it in this function.
-  check (pcd->AppendNewPropertyDef (kPropID_PersonnelResource_ContractID,
-									L"ContractID",
-									ptd_ui32,
-									AAFTrue,    // optional
-									&pd_unused));
+  check (pcd->RegisterNewPropertyDef (kPropID_PersonnelResource_ContractID,
+									  L"ContractID",
+									  ptd_ui32,
+									  AAFTrue,    // optional
+									  &pd_unused));
   pd_unused->Release();
   pd_unused=NULL;
 
@@ -913,18 +914,18 @@ void CreateAndRegisterPersonnelResource (IAAFDictionary * pDict)
   // generated), a name, the type of the property, and that the
   // property is optional.  The returned property def is ignored
   // since we won't use it in this function.
-  check (pcd->AppendNewPropertyDef (kPropID_PersonnelResource_Role,
-									L"Role",
-									ptd_String,
-									AAFTrue,    // optional
-									&pd_unused));
+  check (pcd->RegisterNewPropertyDef (kPropID_PersonnelResource_Role,
+									  L"Role",
+									  ptd_String,
+									  AAFTrue,    // optional
+									  &pd_unused));
   pd_unused->Release();
   pd_unused=NULL;
 
   // Now that the class definition describing PersonnelResource is
   // initialized and its properties have been specified, we can
   // register that class definition.
-  check (pDict->RegisterClass (pcd));
+  check (pDict->RegisterClassDef (pcd));
   pcd->Release();
   pcd=NULL;
   pcd_Object->Release();
@@ -951,7 +952,8 @@ CreateAndRegisterPersonnelResourceReference
 
   IAAFTypeDef *ptd=NULL;
   // Check to see if we are have already been registered.
-  if (SUCCEEDED(pDict->LookupType (kTypeID_PersonnelResourceStrongReference, &ptd)))
+  if (SUCCEEDED(pDict->LookupTypeDef
+				(kTypeID_PersonnelResourceStrongReference, &ptd)))
     return;
 
   // When we create the type definition, we'll need to describe which
@@ -960,8 +962,8 @@ CreateAndRegisterPersonnelResourceReference
   // PersonnelResource.  Therefore we'll have to look up the class
   // describing PersonnelResource objects for use below.
   IAAFClassDef *pcd=NULL;
-  check (pDict->LookupClass (kClassID_PersonnelResource,
-							 &pcd));
+  check (pDict->LookupClassDef (kClassID_PersonnelResource,
+								&pcd));
 
   // Instantiate a TypeDefinition for use as a Reference to a
   // PersonnelResource object.  We'll instantiate a
@@ -982,10 +984,10 @@ CreateAndRegisterPersonnelResourceReference
 						   L"PersonnelResourceStrongReference"));
 
   // Register this type definition in the dictionary.  The
-  // dictionary::RegisterType() method expects an IAAFTypeDef pointer,
-  // so we'll QI for that first.
+  // dictionary::RegisterTypeDef() method expects an IAAFTypeDef
+  // pointer, so we'll QI for that first.
   check (ptdr->QueryInterface (IID_IAAFTypeDef, (void **)&ptd));
-  check (pDict->RegisterType (ptd));
+  check (pDict->RegisterTypeDef (ptd));
   pcd->Release();
   pcd=NULL;
   ptdr->Release();
@@ -1007,7 +1009,9 @@ CreateAndRegisterPersonnelResourceReferenceVector
 
   IAAFTypeDef *ptd=NULL;
   // Check to see if we are have already been registered.
-  if (SUCCEEDED(pDict->LookupType (kTypeID_PersonnelResourceStrongReferenceVector, &ptd)))
+  if (SUCCEEDED(pDict->LookupTypeDef
+				(kTypeID_PersonnelResourceStrongReferenceVector,
+				 &ptd)))
     return;
 
   // Instantiate a TypeDefinition for use as a Vector of References to
@@ -1024,8 +1028,8 @@ CreateAndRegisterPersonnelResourceReferenceVector
   // to look up the type describing StrongReferenceToPersonnelRecord
   // for use below.
   IAAFTypeDef *ptdr=NULL;
-  check (pDict->LookupType (kTypeID_PersonnelResourceStrongReference,
-							&ptdr));
+  check (pDict->LookupTypeDef (kTypeID_PersonnelResourceStrongReference,
+							   &ptdr));
 
   // Initialize our new type def, identifying the given AUID by which
   // this type will be known
@@ -1039,10 +1043,10 @@ CreateAndRegisterPersonnelResourceReferenceVector
 						   L"PersonnelResourceStrongReferenceVector"));
 
   // Register this type definition in the dictionary.  The
-  // dictionary::RegisterType() method expects an IAAFTypeDef pointer,
-  // so we'll QI for that first.
+  // dictionary::RegisterTypeDef() method expects an IAAFTypeDef
+  // pointer, so we'll QI for that first.
   check (ptdv->QueryInterface (IID_IAAFTypeDef, (void **)&ptd));
-  check (pDict->RegisterType (ptd));
+  check (pDict->RegisterTypeDef (ptd));
   ptd->Release();
   ptd=NULL;
   ptdr->Release();
@@ -1063,7 +1067,7 @@ void CreateAndRegisterAdminMob (IAAFDictionary * pDict)
 
   IAAFClassDef *pcd=NULL;
   // Check to see if we are have already been registered.
-  if (SUCCEEDED(pDict->LookupClass (kClassID_AdminMob, &pcd)))
+  if (SUCCEEDED(pDict->LookupClassDef (kClassID_AdminMob, &pcd)))
     return;
 
   // Instantiate a class definition object which will describe
@@ -1076,7 +1080,7 @@ void CreateAndRegisterAdminMob (IAAFDictionary * pDict)
   // class, so look it up here.  Since PersonnelResource inherits from
   // AAFMob, look up the AAFMob class definition.
   IAAFClassDef *pcd_Mob=NULL;
-  check (pDict->LookupClass (AUID_AAFMob, &pcd_Mob));
+  check (pDict->LookupClassDef (AUID_AAFMob, &pcd_Mob));
 
   // Now initialize our new AdminMob class definition.  We'll
   // specify an AUID with which it will be identified
@@ -1093,7 +1097,7 @@ void CreateAndRegisterAdminMob (IAAFDictionary * pDict)
   // must be specified at the time the property def is appended.  Note
   // also that this will be a mandatory property; it is required that
   // this be specified *before* the class is registered (using the
-  // AppendNewPropertyDef() method).
+  // RegisterNewPropertyDef() method).
   //
 
   // Appending property defs returns the newly-created property
@@ -1108,8 +1112,8 @@ void CreateAndRegisterAdminMob (IAAFDictionary * pDict)
   // specify the type definition describing that kind of vector when
   // we append the prop def.  First, look up that type definition.
   IAAFTypeDef *ptd_PersonnelVector=NULL;
-  check (pDict->LookupType (kTypeID_PersonnelResourceStrongReferenceVector,
-							&ptd_PersonnelVector));
+  check (pDict->LookupTypeDef (kTypeID_PersonnelResourceStrongReferenceVector,
+							   &ptd_PersonnelVector));
 
   // Now request that a new property def be appended to this class
   // def.  We're specifying an AUID by which this property will be
@@ -1117,18 +1121,18 @@ void CreateAndRegisterAdminMob (IAAFDictionary * pDict)
   // generated), a name, the type of the property, and that the
   // property is mandatory.  The returned property def is ignored
   // since we won't use it in this function.
-  check (pcd->AppendNewPropertyDef (kPropID_AdminMob_Personnel,
-									L"Personnel",
-									ptd_PersonnelVector,
-									AAFFalse,
-									&pd_unused));
+  check (pcd->RegisterNewPropertyDef (kPropID_AdminMob_Personnel,
+									  L"Personnel",
+									  ptd_PersonnelVector,
+									  AAFFalse,
+									  &pd_unused));
   pd_unused->Release();
   pd_unused=NULL;
 
   // Now that the class definition describing AdminMob is
   // initialized and its properties have been specified, we can
   // register that class definition.
-  check (pDict->RegisterClass (pcd));
+  check (pDict->RegisterClassDef (pcd));
   pcd->Release();
   pcd=NULL;
   pcd_Mob->Release();

@@ -151,8 +151,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		uid = CodecWave;
 		checkResult(pDef->Initialize (uid, L"TestCodec", L"TestCodecDescription"));
 
-		checkResult(pPlugDef->AppendEssenceKind (DDEF_Matte));
-		checkResult(pDictionary->RegisterCodecDefinition(pPlugDef));
+		checkResult(pPlugDef->AddEssenceKind (DDEF_Matte));
+		checkResult(pDictionary->RegisterCodecDef(pPlugDef));
 		uid = kAAFClassID_WAVEDescriptor;
 //		checkResult(pDictionary->LookupClass(&uid, &classDef));
 //		checkResult(pPlugDef->SetFileDescriptorClass (classDef));
@@ -216,7 +216,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 		bFileOpen = true;
 
 		checkResult(pHeader->GetDictionary(&pDictionary));
-		checkResult(pDictionary->LookupCodecDefinition(codecID, &pCodec));
+		checkResult(pDictionary->LookupCodecDef(codecID, &pCodec));
 
 		checkResult(pCodec->IsEssenceKindSupported (DDEF_Matte, &testResult));
 		checkExpression (testResult == AAFTrue, AAFRESULT_TEST_FAILED);

@@ -411,7 +411,7 @@ void Omf2Aaf::OMFFileRead()
 			gpGlobals->pLogger->Log( kLogInfo, "Traversing MOB...\n" );
 			TraverseOMFMob( OMFMob, pMob);
 			gpGlobals->pLogger->Log( kLogInfo, "Appending MOB to file...\n" );
-			rc = pHeader->AppendMob(pMob);
+			rc = pHeader->AddMob(pMob);
 			gpGlobals->nNumAAFMobs++;
 		}
 	}
@@ -649,7 +649,7 @@ void Omf2Aaf::ConvertOMFMediaDataObject( OMF2::omfObject_t obj, OMF2::omfUID_t i
 		rc = pTIFFData->QueryInterface(IID_IAAFEssenceData, (void **)&pEssenceData);
 		pEssence = pEssenceData;
 		rc = pEssenceData->SetFileMob(pSourceMob);
-		rc = pHeader->AppendEssenceData(pEssenceData);
+		rc = pHeader->AddEssenceData(pEssenceData);
 
 		if (OMF2::kOmfRev2x == OMFFileRev)
 		{
@@ -677,7 +677,7 @@ void Omf2Aaf::ConvertOMFMediaDataObject( OMF2::omfObject_t obj, OMF2::omfUID_t i
 		rc = pAIFCData->QueryInterface(IID_IAAFEssenceData, (void **)&pEssenceData);
 		pEssence = pEssenceData;
 		rc = pEssenceData->SetFileMob(pSourceMob);
-		rc = pHeader->AppendEssenceData(pEssenceData);
+		rc = pHeader->AddEssenceData(pEssenceData);
 		if (OMF2::kOmfRev2x == OMFFileRev)
 		{
 			OMF2::omfErr_t err;
@@ -703,7 +703,7 @@ void Omf2Aaf::ConvertOMFMediaDataObject( OMF2::omfObject_t obj, OMF2::omfUID_t i
 		rc = pWAVEData->QueryInterface(IID_IAAFEssenceData, (void **)&pEssenceData);
 		pEssence = pEssenceData;
 		rc = pEssenceData->SetFileMob(pSourceMob);
-		rc = pHeader->AppendEssenceData(pEssenceData);
+		rc = pHeader->AddEssenceData(pEssenceData);
 		if (OMF2::kOmfRev2x == OMFFileRev)
 		{
 			OMF2::omfErr_t err;
@@ -729,7 +729,7 @@ void Omf2Aaf::ConvertOMFMediaDataObject( OMF2::omfObject_t obj, OMF2::omfUID_t i
 		rc = pJPEGData->QueryInterface(IID_IAAFEssenceData, (void **)&pEssenceData);
 		pEssence = pEssenceData;
 		rc = pEssenceData->SetFileMob(pSourceMob);
-		rc = pHeader->AppendEssenceData(pEssenceData);
+		rc = pHeader->AddEssenceData(pEssenceData);
 		if (OMF2::kOmfRev2x == OMFFileRev)
 		{
 			OMF2::omfErr_t err;
@@ -1446,7 +1446,7 @@ void Omf2Aaf::ProcessOMFComponent(OMF2::omfObject_t OMFSegment, IAAFComponent** 
 												&pParameterDef);
 					AutoRelease< IAAFParameterDef > pparamdef( pParameterDef );
 
-					rc = pEffectDef->AddParameterDefs(pParameterDef);
+					rc = pEffectDef->AddParameterDef(pParameterDef);
 					rc = pEffect->Initialize(datadef, (aafLength_t)OMFLength, pEffectDef);
 					rc = pEffect->SetBypassOverride(-1);
 					rc = pEffect->QueryInterface(IID_IAAFComponent, (void **)ppComponent);
@@ -1474,7 +1474,7 @@ void Omf2Aaf::ProcessOMFComponent(OMF2::omfObject_t OMFSegment, IAAFComponent** 
 												&pParameterDef);
 					AutoRelease< IAAFParameterDef > pparamdef( pParameterDef );
 
-					rc = pEffectDef->AddParameterDefs(pParameterDef);
+					rc = pEffectDef->AddParameterDef(pParameterDef);
 					rc = pEffect->Initialize(datadef, (aafLength_t)OMFLength, pEffectDef);
 					rc = pEffect->SetBypassOverride(-1);
 					rc = pEffect->QueryInterface(IID_IAAFComponent, (void **)ppComponent);
@@ -1510,7 +1510,7 @@ void Omf2Aaf::ProcessOMFComponent(OMF2::omfObject_t OMFSegment, IAAFComponent** 
 												L" ",
 												&pParameterDef);
 					AutoRelease< IAAFParameterDef > pparamdef( pParameterDef );
-					pEffectDef->AddParameterDefs(pParameterDef);
+					pEffectDef->AddParameterDef(pParameterDef);
 
 					IAAFConstantValue* pConstantValue = NULL;
 					rc = pDictionary->CreateInstance(AUID_AAFConstantValue, IID_IAAFConstantValue, (IUnknown **)&pConstantValue);
@@ -1520,11 +1520,11 @@ void Omf2Aaf::ProcessOMFComponent(OMF2::omfObject_t OMFSegment, IAAFComponent** 
 					IAAFParameter*			pParameter;
 					rc = pConstantValue->QueryInterface(IID_IAAFParameter, (void **)&pParameter);
 					AutoRelease<IAAFParameter>	pparam( pParameter );
-					rc = pEffect->AddNewParameter(pParameter);
+					rc = pEffect->AddParameter(pParameter);
 					rc = pParameter->SetParameterDefinition(pParameterDef);
 
 					IAAFTypeDef*			typeDef;
-					rc = pDictionary->LookupType(kAAFTypeID_Int32, &typeDef);
+					rc = pDictionary->LookupTypeDef(kAAFTypeID_Int32, &typeDef);
 					AutoRelease<IAAFTypeDef> tdef( typeDef );
 					rc = pParameter->SetTypeDefinition(typeDef);
 
@@ -1537,7 +1537,7 @@ void Omf2Aaf::ProcessOMFComponent(OMF2::omfObject_t OMFSegment, IAAFComponent** 
 												L" ",
 												&pParameterDefRev);
 					AutoRelease< IAAFParameterDef > pparamdefrev( pParameterDefRev );
-					rc = pEffectDef->AddParameterDefs(pParameterDefRev);
+					rc = pEffectDef->AddParameterDef(pParameterDefRev);
 
 					IAAFConstantValue* pConstantValueRev = NULL;
 					rc = pDictionary->CreateInstance(AUID_AAFConstantValue, IID_IAAFConstantValue, (IUnknown **)&pConstantValueRev);
@@ -1548,11 +1548,11 @@ void Omf2Aaf::ProcessOMFComponent(OMF2::omfObject_t OMFSegment, IAAFComponent** 
 					IAAFParameter*			pParameterRev;
 					rc = pConstantValueRev->QueryInterface(IID_IAAFParameter, (void **)&pParameterRev);
 					AutoRelease<IAAFParameter>	pparamrev( pParameterRev );
-					rc = pEffect->AddNewParameter(pParameterRev);
+					rc = pEffect->AddParameter(pParameterRev);
 					rc = pParameterRev->SetParameterDefinition(pParameterDefRev);
 
 					IAAFTypeDef*			typeDefRev;
-					rc = pDictionary->LookupType(kAAFTypeID_Boolean, &typeDefRev);
+					rc = pDictionary->LookupTypeDef(kAAFTypeID_Boolean, &typeDefRev);
 					AutoRelease<IAAFTypeDef> tdefrev( typeDefRev );
 					rc = pParameter->SetTypeDefinition(typeDefRev);
 					/*********************************************************************/
@@ -2702,7 +2702,7 @@ HRESULT Omf2Aaf::ConvertOMFVaryingValue(OMF2::omfSegObj_t segment,
 						OMFError = OMF2::omfsReadDataValue(OMFFileHdl, control, OMF2::OMCTLPValue, cpDatakind, pCPBuffer, offset,valueSize, &bytesRead);
 					}
 					pControlPoint->SetValue((aafUInt32)valueSize, (unsigned char *)pCPBuffer);
-					pVaryingValue->AppendPoint(pControlPoint);
+					pVaryingValue->AddControlPoint(pControlPoint);
 					pControlPoint->Release();
 					pControlPoint = NULL;
 			}
@@ -2965,7 +2965,7 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 										L"Defines the ratio of output length to input length. Range is -infinity to +infinity",
 										L" ",
 										&pParameterDef);
-			pEffectDef->AddParameterDefs(pParameterDef);
+			pEffectDef->AddParameterDef(pParameterDef);
 			OMFError = OMF2::omfeVideoSpeedControlGetInfo(OMFFileHdl, effect, &effectLength, &inputSegmentA, &speedRatio, &phaseOffset);
 			if(OMF2::OM_ERR_NONE == OMFError)
 			{
@@ -2975,7 +2975,7 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 					if( pEffectSegment )
 					{
 						pEffectSegment->QueryInterface(IID_IAAFSegment, (void **)&pSegment);
-						pEffect->AppendNewInputSegment(pSegment);
+						pEffect->AppendInputSegment(pSegment);
 						pSegment->Release();
 						pEffectSegment->Release();
 						pSegment = NULL;
@@ -2997,7 +2997,7 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 					if( pEffectSegment )
 					{
 						pEffectSegment->QueryInterface(IID_IAAFSegment, (void **)&pSegment);
-						pEffect->AppendNewInputSegment(pSegment);
+						pEffect->AppendInputSegment(pSegment);
 						pSegment->Release();
 						pEffectSegment->Release();
 						pSegment = NULL;
@@ -3015,7 +3015,7 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 										L"Must be a constant Value. Default is 0",
 										L" ",
 										&pParameterDef);
-			pEffectDef->AddParameterDefs(pParameterDef);
+			pEffectDef->AddParameterDef(pParameterDef);
 
 			OMFError = OMF2::omfeVideoRepeatGetInfo(OMFFileHdl, effect, &effectLength, &inputSegmentA, &phaseOffset);
 			if(OMF2::OM_ERR_NONE == OMFError)
@@ -3026,7 +3026,7 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 					if( pEffectSegment )
 					{
 						pEffectSegment->QueryInterface(IID_IAAFSegment, (void **)&pSegment);
-						pEffect->AppendNewInputSegment(pSegment);
+						pEffect->AppendInputSegment(pSegment);
 						pSegment->Release();
 						pEffectSegment->Release();
 						pSegment = NULL;
@@ -3049,12 +3049,12 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 					{
 						pParameter->SetParameterDefinition(pParameterDef);
 
-						pDictionary->LookupType(kAAFTypeID_Int32, &typeDef);
+						pDictionary->LookupTypeDef(kAAFTypeID_Int32, &typeDef);
 						pParameter->SetTypeDefinition(typeDef);
 						typeDef->Release();
 						typeDef = NULL;
 
-						pEffect->AddNewParameter(pParameter);
+						pEffect->AddParameter(pParameter);
 						pParameter->Release();
 						pParameter = NULL;
 					}
@@ -3073,7 +3073,7 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 										L"Level, equal to mix ratio of B/A. Range is 0 to 1. The formula  P = (Level*B)+((1-Level)*A)",
 										L" ",
 										&pParameterDef);
-			pEffectDef->AddParameterDefs(pParameterDef);
+			pEffectDef->AddParameterDef(pParameterDef);
 			OMFError = OMF2::omfeVideoDissolveGetInfo(OMFFileHdl, effect, &effectLength, &inputSegmentA, &inputSegmentB, &levelSegment);
 			if(OMF2::OM_ERR_NONE == OMFError)
 			{
@@ -3083,7 +3083,7 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 					if( pEffectSegment )
 					{
 						pEffectSegment->QueryInterface(IID_IAAFSegment, (void **)&pSegment);
-						pEffect->AppendNewInputSegment(pSegment);
+						pEffect->AppendInputSegment(pSegment);
 						pSegment->Release();
 						pEffectSegment->Release();
 						pSegment = NULL;
@@ -3096,7 +3096,7 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 					if( pEffectSegment )
 					{
 						pEffectSegment->QueryInterface(IID_IAAFSegment, (void **)&pSegment);
-						pEffect->AppendNewInputSegment(pSegment);
+						pEffect->AppendInputSegment(pSegment);
 						pSegment->Release();
 						pEffectSegment->Release();
 						pSegment = NULL;
@@ -3135,12 +3135,12 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 					{
 						pParameter->SetParameterDefinition(pParameterDef);
 
-						pDictionary->LookupType(kAAFTypeID_Rational, &typeDef);
+						pDictionary->LookupTypeDef(kAAFTypeID_Rational, &typeDef);
 						pParameter->SetTypeDefinition(typeDef);
 						typeDef->Release();
 						typeDef = NULL;
 						
-						pEffect->AddNewParameter(pParameter);
+						pEffect->AddParameter(pParameter);
 						pParameter->Release();
 						pParameter = NULL;
 					}
@@ -3160,7 +3160,7 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 										L"SMPTE Wipe Number. No Default",
 										L" ",
 										&pParameterDef);
-			pEffectDef->AddParameterDefs(pParameterDef);
+			pEffectDef->AddParameterDef(pParameterDef);
 
 			OMFError = OMF2::omfeSMPTEVideoWipeGetInfo(OMFFileHdl, effect, &effectLength, &inputSegmentA, &inputSegmentB, &levelSegment, &wipeNumber, &wipeArgs);
 			if(OMF2::OM_ERR_NONE == OMFError)
@@ -3175,9 +3175,9 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 						pConstantValue->SetValue(sizeof(wipeNumber), (unsigned char *)&wipeNumber);
 					}
 					rc = pConstantValue->QueryInterface(IID_IAAFParameter, (void **)&pParameter);
-					pEffect->AddNewParameter(pParameter);
+					pEffect->AddParameter(pParameter);
 					pParameter->SetParameterDefinition(pParameterDef);
-					pDictionary->LookupType(kAAFTypeID_Int32, &typeDef);
+					pDictionary->LookupTypeDef(kAAFTypeID_Int32, &typeDef);
 					pParameter->SetTypeDefinition(typeDef);
 					typeDef->Release();
 					typeDef = NULL;
@@ -3200,16 +3200,16 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 										L"SMPTE Reverse. Default FALSE",
 										L" ",
 										&pParameterDef);
-				pEffectDef->AddParameterDefs(pParameterDef);
+				pEffectDef->AddParameterDef(pParameterDef);
 				rc = pDictionary->CreateInstance(AUID_AAFConstantValue, IID_IAAFConstantValue, (IUnknown **)&pConstantValue);
 				if (SUCCEEDED(rc))
 				{
 					pConstantValue->SetValue(sizeof(reverse), &reverse);
 				}
 				rc = pConstantValue->QueryInterface(IID_IAAFParameter, (void **)&pParameter);
-				pEffect->AddNewParameter(pParameter);
+				pEffect->AddParameter(pParameter);
 				pParameter->SetParameterDefinition(pParameterDef);
-				pDictionary->LookupType(kAAFTypeID_Boolean, &typeDef);
+				pDictionary->LookupTypeDef(kAAFTypeID_Boolean, &typeDef);
 				pParameter->SetTypeDefinition(typeDef);
 				typeDef->Release();
 				typeDef = NULL;
@@ -3232,7 +3232,7 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 					if( pEffectSegment )
 					{
 						pEffectSegment->QueryInterface(IID_IAAFSegment, (void **)&pSegment);
-						pEffect->AppendNewInputSegment(pSegment);
+						pEffect->AppendInputSegment(pSegment);
 						pSegment->Release();
 						pEffectSegment->Release();
 						pSegment = NULL;
@@ -3245,7 +3245,7 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 					if( pEffectSegment )
 					{
 						pEffectSegment->QueryInterface(IID_IAAFSegment, (void **)&pSegment);
-						pEffect->AppendNewInputSegment(pSegment);
+						pEffect->AppendInputSegment(pSegment);
 						pSegment->Release();
 						pEffectSegment->Release();
 						pSegment = NULL;
@@ -3287,13 +3287,13 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 												&pParameterDef);
 					pParameter->SetParameterDefinition(pParameterDef);
 
-					pDictionary->LookupType(kAAFTypeID_Rational, &typeDef);
+					pDictionary->LookupTypeDef(kAAFTypeID_Rational, &typeDef);
 					pParameter->SetTypeDefinition(typeDef);
 					typeDef->Release();
 					typeDef = NULL;
 					
-					pEffect->AddNewParameter(pParameter);
-					pEffectDef->AddParameterDefs(pParameterDef);
+					pEffect->AddParameter(pParameter);
+					pEffectDef->AddParameterDef(pParameterDef);
 					pParameterDef->Release();
 					pParameterDef = NULL;
 					pParameter->Release();
@@ -3311,7 +3311,7 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 										L"Level, equal to mix ratio of B/A. Range is 0 to 1. The formula  P = (Level*B)+((1-Level)*A)",
 										L" ",
 										&pParameterDef);
-			pEffectDef->AddParameterDefs(pParameterDef);
+			pEffectDef->AddParameterDef(pParameterDef);
 
 			OMFError = OMF2::omfeMonoAudioDissolveGetInfo(OMFFileHdl, effect, &effectLength, &inputSegmentA, &inputSegmentB, &levelSegment);
 			if(OMF2::OM_ERR_NONE == OMFError)
@@ -3322,7 +3322,7 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 					if( pEffectSegment )
 					{
 						pEffectSegment->QueryInterface(IID_IAAFSegment, (void **)&pSegment);
-						pEffect->AppendNewInputSegment(pSegment);
+						pEffect->AppendInputSegment(pSegment);
 						pSegment->Release();
 						pEffectSegment->Release();
 						pSegment = NULL;
@@ -3335,7 +3335,7 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 					if( pEffectSegment )
 					{
 						pEffectSegment->QueryInterface(IID_IAAFSegment, (void **)&pSegment);
-						pEffect->AppendNewInputSegment(pSegment);
+						pEffect->AppendInputSegment(pSegment);
 						pSegment->Release();
 						pEffectSegment->Release();
 						pSegment = NULL;
@@ -3372,12 +3372,12 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 					}
 					pParameter->SetParameterDefinition(pParameterDef);
 
-					pDictionary->LookupType(kAAFTypeID_Rational, &typeDef);
+					pDictionary->LookupTypeDef(kAAFTypeID_Rational, &typeDef);
 					pParameter->SetTypeDefinition(typeDef);
 					typeDef->Release();
 					typeDef = NULL;
 					
-					pEffect->AddNewParameter(pParameter);
+					pEffect->AddParameter(pParameter);
 					pParameter->Release();
 					pParameter = NULL;
 				}
@@ -3414,7 +3414,7 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 										L"Level, equal to mix ratio of B/A. Range is 0 to 1. The formula  P = (Level*B)+((1-Level)*A)",
 										L" ",
 										&pParameterDef);
-			pEffectDef->AddParameterDefs(pParameterDef);
+			pEffectDef->AddParameterDef(pParameterDef);
 		
 			OMFError = OMF2::omfiEffectGetNumSlots(OMFFileHdl, effect, &numSlots);;
 			if (numSlots > 0)
@@ -3442,7 +3442,7 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 									pParameter->SetParameterDefinition(pParameterDef);
 									
 									//!!! Set parameter type (see other parameter)
-									pEffect->AddNewParameter(pParameter);
+									pEffect->AddParameter(pParameter);
 									pParameter->Release();
 									pParameter = NULL;
 								}
@@ -3463,7 +3463,7 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 								{
 									pParameter->SetParameterDefinition(pParameterDef);
 									//!!! Set parameter type (see other parameter)
-									pEffect->AddNewParameter(pParameter);
+									pEffect->AddParameter(pParameter);
 									pParameter->Release();
 									pParameter = NULL;
 								}
@@ -3475,7 +3475,7 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 							if( pEffectSegment )
 							{
 								pEffectSegment->QueryInterface(IID_IAAFSegment, (void **)&pSegment);
-								pEffect->AppendNewInputSegment(pSegment);
+								pEffect->AppendInputSegment(pSegment);
 								pSegment->Release();
 								pEffectSegment->Release();
 								pSegment = NULL;
@@ -3684,7 +3684,7 @@ HRESULT Omf2Aaf::GetParameterDefinition(aafUID_t* pDefUID,
 		 return AAFRESULT_NULL_PARAM;
 
 	// First verify if the Parameter Def exists already !
-	rc = pDictionary->LookupParameterDefinition(*pDefUID, &ptmpParameterDef);
+	rc = pDictionary->LookupParameterDef(*pDefUID, &ptmpParameterDef);
 	if (FAILED(rc))
 	{
 		// Create a new Parameter definition
@@ -3693,7 +3693,7 @@ HRESULT Omf2Aaf::GetParameterDefinition(aafUID_t* pDefUID,
 		pDefObject->Initialize(*pDefUID, pwName, pwDesc);
 		ptmpParameterDef->SetDisplayUnits(pwDisplayUnits);
 //		ptmpParameterDef->SetTypeDef(pTypeDef);
-		rc = pDictionary->RegisterParameterDefinition(ptmpParameterDef);
+		rc = pDictionary->RegisterParameterDef(ptmpParameterDef);
 	}
 
 	*ppParameterDef = ptmpParameterDef;
@@ -3750,7 +3750,7 @@ HRESULT Omf2Aaf::GetAAFOperationDefinition(OMF2::omfUniqueName_t effectID,
 
 	// Look in the dictionary to find if the effect Definition exists
 	// if it exists use it.
-	rc = pDictionary->LookupOperationDefinition(effectDefAUID, ppEffectDef);
+	rc = pDictionary->LookupOperationDef(effectDefAUID, ppEffectDef);
 	if (FAILED(rc))
 	{
 		pDictionary->CreateInstance(AUID_AAFOperationDef, IID_IAAFOperationDef, (IUnknown **) ppEffectDef);
@@ -3758,7 +3758,7 @@ HRESULT Omf2Aaf::GetAAFOperationDefinition(OMF2::omfUniqueName_t effectID,
 		pDefObject->Initialize(effectDefAUID, pwName, pwDesc);
 		pDefObject->Release();
 		pDefObject = NULL;
-		pDictionary->RegisterOperationDefinition(*ppEffectDef);
+		pDictionary->RegisterOperationDef(*ppEffectDef);
 		(*ppEffectDef)->SetIsTimeWarp((aafBool)isTimeWarp);
 		(*ppEffectDef)->SetCategory(pwName);
 		(*ppEffectDef)->SetBypass((aafUInt32 )bypassOverride);

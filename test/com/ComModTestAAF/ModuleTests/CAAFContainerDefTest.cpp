@@ -148,7 +148,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 		checkResult(pContainerDef->SetEssenceIsIdentified (AAFTrue));
 
-		checkResult(pDictionary->RegisterContainerDefinition(pContainerDef));
+		checkResult(pDictionary->RegisterContainerDef(pContainerDef));
 	}
 	catch (HRESULT& rResult)
 	{
@@ -202,7 +202,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 
 		checkResult(pHeader->GetDictionary(&pDictionary));
 	
-		checkResult(pDictionary->GetContainerDefinitions(&pPlug));
+		checkResult(pDictionary->GetContainerDefs(&pPlug));
 		checkResult(pPlug->NextOne (&pPlugDef));
 		checkResult(pPlugDef->QueryInterface (IID_IAAFContainerDef, (void **)&pContainerDef));
 		checkResult(pContainerDef->EssenceIsIdentified (&testBool));

@@ -205,7 +205,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 	check(pMob->SetName(L"A Master Mob"));
 	
 	// Add it to the file 
-	check(pHeader->AppendMob(pMob));
+	check(pHeader->AddMob(pMob));
 
 	// !!!Previous revisions of this file contained code here required to handle external essence
 
@@ -434,13 +434,13 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 
 	// Here we check on the number of mobs in the file. 
 	// Get the number of master mobs in the file (should be one)
-	check(pHeader->GetNumMobs(kMasterMob, &numMobs));
+	check(pHeader->CountMobs(kMasterMob, &numMobs));
 	if (1 == numMobs )
 	{
 		printf("Found %ld Master Mobs\n", numMobs);
 		criteria.searchTag = kByMobKind;
 		criteria.tags.mobKind = kMasterMob;
-		check(pHeader->EnumAAFAllMobs(&criteria, &pMobIter));
+		check(pHeader->GetMobs(&criteria, &pMobIter));
 		while(AAFRESULT_SUCCESS == pMobIter->NextOne(&pMob))
 		{
 			char mobIDstr[256];
@@ -454,7 +454,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 			printf("    MasterMob Name = '%s'\n", mobName);
 			printf("        (mobID %s)\n", mobIDstr);
 			// Make sure we have one slot 
-			check(pMob->GetNumSlots(&numSlots));
+			check(pMob->CountSlots(&numSlots));
 			if (1 == numSlots)
 			{
 				// The essence data is in SlotID 1

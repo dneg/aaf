@@ -102,7 +102,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		// We can't really do anthing in AAF without the header.
 		checkResult(pFile->GetHeader(&pHeader));
 		
-		checkResult(pHeader->GetNumIdents(&readNumIdents));
+		checkResult(pHeader->CountIdentifications(&readNumIdents));
 		checkExpression(1 == readNumIdents, AAFRESULT_TEST_FAILED);
 		checkResult(pHeader->GetLastIdentification (&pIdent));
 		checkResult(pIdent->Initialize());
@@ -165,7 +165,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		
 		// We can't really do anthing in AAF without the header.
 		checkResult(pFile->GetHeader(&pHeader));
-		checkResult(pHeader->GetNumIdents(&readNumIdents));
+		checkResult(pHeader->CountIdentifications(&readNumIdents));
 		checkExpression(1 == readNumIdents, AAFRESULT_TEST_FAILED);
 		checkResult(pHeader->GetLastIdentification (&pIdent));
 		/***/

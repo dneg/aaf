@@ -216,7 +216,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
     checkResult(pSourceMob->SetEssenceDescriptor(pEssDesc));
 
     // Add the MOB to the file
-    checkResult(pHeader->AppendMob(pMob));
+    checkResult(pHeader->AddMob(pMob));
   }
   catch (HRESULT& rResult)
   {
@@ -271,11 +271,11 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	  checkResult(OpenAAFFile(pFileName, kMediaOpenReadOnly, &pFile, &pHeader));
 
     // Make sure there is one a single mob in the file.
-	  checkResult(pHeader->GetNumMobs(kAllMob, &numMobs));
+	  checkResult(pHeader->CountMobs(kAllMob, &numMobs));
 	  checkExpression(1 == numMobs, AAFRESULT_TEST_FAILED);
 
     // Loop to the first mob.
-	  checkResult(pHeader->EnumAAFAllMobs(NULL, &pMobIter));
+	  checkResult(pHeader->GetMobs(NULL, &pMobIter));
 	  checkResult(pMobIter->NextOne(&pMob));
 
 	  checkResult(pMob->QueryInterface(IID_IAAFSourceMob, (void **)&pSourceMob));
