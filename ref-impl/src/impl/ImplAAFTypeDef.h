@@ -31,15 +31,15 @@
  ************************************************************************/
 
 
-#ifndef __ImplAAFDefObject_h__
-#include "ImplAAFDefObject.h"
+#ifndef __ImplAAFMetaDefinition_h__
+#include "ImplAAFMetaDefinition.h"
 #endif
 
 #ifndef OMTYPE_H
 #include "OMType.h"
 #endif
 
-class ImplAAFTypeDef : public ImplAAFDefObject, public OMType
+class ImplAAFTypeDef : public ImplAAFMetaDefinition, public OMType
 {
 public:
   //

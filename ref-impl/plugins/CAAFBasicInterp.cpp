@@ -272,6 +272,7 @@ HRESULT STDMETHODCALLTYPE
 	AAFRational		timeA, timeB;
 	AAFRational		inputTime;
 	IAAFDefObject	*pDef = NULL;
+  IAAFMetaDefinition * pMetaDefinition = NULL;
 	IAAFVaryingValue *pVaryVal = NULL;
 	IAAFInterpolationDef *pInterpDef = NULL;
 	aafUID_t		defID, interpID;
@@ -295,10 +296,10 @@ HRESULT STDMETHODCALLTYPE
 		if(pInputValue->denominator == 0)
 			RAISE(AAFRESULT_ZERO_DIVIDE);
 		inputTime = (AAFRational)*pInputValue;
-		CHECK(_typeDef->QueryInterface(IID_IAAFDefObject, (void **)&pDef));
-		CHECK(pDef->GetAUID (&defID));
-		pDef->Release();
-		pDef = NULL;
+		CHECK(_typeDef->QueryInterface(IID_IAAFMetaDefinition, (void **)&pMetaDefinition));
+		CHECK(pMetaDefinition->GetAUID (&defID));
+		pMetaDefinition->Release();
+		pMetaDefinition = NULL;
 		if(EqualAUID(&defID, &kAAFTypeID_Int32))
 		{
 			if(bufSize < sizeof(aafUInt32))
@@ -347,6 +348,8 @@ HRESULT STDMETHODCALLTYPE
 	{
 		if(pDef)
 			pDef->Release();
+    if (pMetaDefinition)
+      pMetaDefinition->Release();
 		if(pInterpDef)
 			pInterpDef->Release();
  		if(pVaryVal)

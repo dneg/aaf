@@ -430,12 +430,9 @@ AAFRESULT
     return AAFRESULT_ALREADY_INITIALIZED;
 
   // Initialize the type definition with its unique identifier and name.
-  result = SetAUID (id);
-  if (AAFRESULT_FAILED(result))
-    return result;
 
-  result = SetName (pTypeName);
-  if (AAFRESULT_FAILED(result))
+  result = ImplAAFMetaDefinition::Initialize(id, pTypeName, NULL);
+	if (AAFRESULT_FAILED (result))
     return result;
 
   
