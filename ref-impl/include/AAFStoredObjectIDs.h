@@ -44,6 +44,9 @@
 #define AUID_AAFPropertyDefinition AUID_AAFPropertyDef
 #define AUID_AAFTypeDefinition AUID_AAFTypeDef
 #define AUID_AAFUNIXLocator AUID_AAFUnixLocator
+#define AUID_AAFCodecDefinition AUID_AAFCodecDef
+#define AUID_AAFContainerDefinition AUID_AAFContainerDef
+#define AUID_AAFPluggableDefinition AUID_AAFPluggableDef
 
 
 // Include the inside-out macro files that invokes the AAF_CLASS macros.
