@@ -1,12 +1,12 @@
 #startm .this-module 0
-AAFMediaFileDescriptor\
+AAFFileDescriptor\
 #endm
 #c
 #startm .parent-module 0
-AAFMediaDescriptor\
+AAFEssenceDescriptor\
 #endm
 #c
-#import ./AAFMediaDescriptor.exp
+#import ./AAFEssenceDescriptor.exp
 AD_HEAD
 /******************************************\
 *                                          *
@@ -26,32 +26,42 @@ AD_CLASS_BEGIN
 
 /****/
 AD_METHOD1(SetLength,
-[in],aafLength_t,length,,
-Sets the length of the media in samples [not edit units].)
+[in],aafLength_t,length,length of the essence in samples,
+Sets the length of the essence in samples [not edit units].)
 
 /****/
 AD_METHOD1(GetLength,
-[out],aafLength_t *,length,,
-Gets the length of the media in samples [not edit units].)
+[out],aafLength_t *,pLength,returns length of the essence in samples,
+Gets the length of the essence in samples [not edit units].)
 
 /****/
-AD_METHOD1(SetIsAAFMedia,
-[in],aafBool,isOMFI,,
-Set to TRUE if this is AAF-wrapped media FALSE if the media is in an external non-AAF file.)
+AD_METHOD1(SetIsInContainer,
+[in],aafBool,isAAF,is this AAF or raw essence,
+Set to TRUE if this is AAF-wrapped essence FALSE if the essence is in an external non-AAF file.)
 
 /****/
-AD_METHOD1(GetIsAAFMedia,
-[out],aafBool*,isOMFI,,
-Returns TRUE if this is AAF-wrapped media FALSE if the media is in an external non-AAF file.)
+AD_METHOD1(GetIsInContainer,
+[out],aafBool*,pIsAAF,is this AAF or raw medi,
+Returns TRUE if this is AAF-wrapped essence FALSE if the essence is in an external non-AAF file.)
 
 /****/
 AD_METHOD1(SetSampleRate,
-[in],aafRational_t,rate,,
-Sets sample rate of the media as opposed to the edit rate.)
+[in],aafRational_t *,pRate,sample rate of the essence,
+Sets sample rate of the essence as opposed to the edit rate.)
 
 /****/
 AD_METHOD1(GetSampleRate,
-[out],aafRational_t*,rate,,
-Sets sample rate of the media as opposed to the edit rate.)
+[out],aafRational_t*,pRate,sample rate of the essence,
+Sets sample rate of the essence as opposed to the edit rate.)
+
+/****/
+AD_METHOD1(SetContainerFormat,
+[in],aafUID_t *,pFormat,Identifies the file format,
+Optional. Identifies the file format.)
+
+/****/
+AD_METHOD1(GetContainerFormat,
+[out],aafUID_t *,pFormat,Identifies the file format,
+Optional. Identifies the file format.)
 
 AD_CLASS_END
