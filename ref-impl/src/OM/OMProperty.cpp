@@ -7,11 +7,6 @@
 
 // class OMProperty
 
-OMProperty::OMProperty(const OMPropertyId propertyId, const char* name)
-: _propertyId(propertyId), _type(TID_NONE), _name(name)
-{
-}
-
 OMProperty::OMProperty(const OMPropertyId propertyId,
                        const int type,
                        const char* name)
@@ -72,14 +67,14 @@ void OMProperty::detach(const OMStorable* object, const size_t index)
 
 OMSimpleProperty::OMSimpleProperty(const OMPropertyId propertyId,
                                    const char* name)
-: OMProperty(propertyId, name), _size(0), _bits(0)
+: OMProperty(propertyId, TID_DATA, name), _size(0), _bits(0)
 {
 }
 
 OMSimpleProperty::OMSimpleProperty(const OMPropertyId propertyId,
                                    const char* name,
                                    size_t valueSize)
-: OMProperty(propertyId, name),
+: OMProperty(propertyId, TID_DATA, name),
   _size(valueSize),
   _bits(new unsigned char[valueSize])
 {
