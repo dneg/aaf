@@ -36,7 +36,7 @@
 template <typename UniqueIdentification, typename ReferencedObject>
 class OMStrongReferenceSetIterator;
 
-template <typename UniqueIdentification, typename ReferencedObject>
+template <typename UniqueIdentification>
 class OMStrongReferenceSetElement;
 
   // @class Persistent sets of uniquely identified strongly referenced
