@@ -48,7 +48,6 @@ class ImplAAFFile;
 #include "ImplAAFContentStorage.h"
 
 #include "OMProperty.h"
-#include "OMTypes.h"
 
 class AAFDataKind;
 class AAFEffectDef;
