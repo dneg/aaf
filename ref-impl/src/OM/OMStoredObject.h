@@ -169,14 +169,14 @@ public:
   void readUInt16FromStream(IStream* stream, OMUInt16& i, bool reorderBytes);
 
     // @cmember Reorder the OMUInt16 <p i>.
-  void reorderUInt16(OMUInt16& i);
+  static void reorderUInt16(OMUInt16& i);
 
     // @cmember Read an OMUInt32 from <p stream> into <p i>.
     //          If <p reorderBytes> is true then the bytes are reordered.
   void readUInt32FromStream(IStream* stream, OMUInt32& i, bool reorderBytes);
 
     // @cmember Reorder the OMUInt32 <p i>.
-  void reorderUInt32(OMUInt32& i);
+  static void reorderUInt32(OMUInt32& i);
 
     // @cmember Read a UniqueObjectIdentification from <p stream> into <p id>.
     //          If <p reorderBytes> is true then the bytes are reordered.
@@ -186,7 +186,8 @@ public:
                                               bool reorderBytes);
 
     // @cmember Reorder the UniqueObjectIdentification <p id>.
-  void reorderUniqueObjectIdentification(OMUniqueObjectIdentification& id);
+  static void reorderUniqueObjectIdentification(
+                                             OMUniqueObjectIdentification& id);
 
     // @cmember Size of <p stream> in bytes.
   OMUInt64 streamSize(IStream* stream) const;
