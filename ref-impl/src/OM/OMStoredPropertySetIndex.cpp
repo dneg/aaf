@@ -29,18 +29,18 @@
 #include "OMAssertions.h"
 
 OMStoredPropertySetIndex::OMStoredPropertySetIndex(size_t capacity)
-: _capacity(capacity), _table(0), _entries(0)
+: _capacity(capacity), _index(0), _entries(0)
 {
   TRACE("OMStoredPropertySetIndex::OMStoredPropertySetIndex");
 
-  _table = new IndexEntry[_capacity];
-  ASSERT("Valid heap pointer", _table != 0);
+  _index = new IndexEntry[_capacity];
+  ASSERT("Valid heap pointer", _index != 0);
 
   for (size_t i = 0; i < _capacity; i++) {
-    _table[i]._propertyId = 0;
-    _table[i]._storedForm = 0;
-    _table[i]._length = 0;
-    _table[i]._offset = 0;
+    _index[i]._propertyId = 0;
+    _index[i]._storedForm = 0;
+    _index[i]._length = 0;
+    _index[i]._offset = 0;
   }
 }
 
@@ -48,8 +48,8 @@ OMStoredPropertySetIndex::~OMStoredPropertySetIndex(void)
 {
   TRACE("OMStoredPropertySetIndex::~OMStoredPropertySetIndex");
 
-  delete [] _table;
-  _table = 0;
+  delete [] _index;
+  _index = 0;
 }
 
   // @mfunc Insert a new property into this <c OMStoredPropertySetIndex>.
@@ -69,7 +69,7 @@ void OMStoredPropertySetIndex::insert(OMPropertyId propertyId,
 
   ASSERT("Space for new entry", _entries < _capacity);
   _entries++;
-  OMStoredPropertySetIndex::IndexEntry* entry = &_table[_entries - 1];
+  OMStoredPropertySetIndex::IndexEntry* entry = &_index[_entries - 1];
 
   entry->_propertyId = propertyId;
   entry->_storedForm = storedForm;
@@ -104,7 +104,7 @@ void OMStoredPropertySetIndex::iterate(size_t& context,
   TRACE("OMStoredPropertySetIndex::iterate");
 
   PRECONDITION("Valid context", context < _entries);
-  OMStoredPropertySetIndex::IndexEntry* entry = &_table[context];
+  OMStoredPropertySetIndex::IndexEntry* entry = &_index[context];
 
   propertyId = entry->_propertyId;
   storedForm = entry->_storedForm;
@@ -164,8 +164,8 @@ bool OMStoredPropertySetIndex::isValid(OMPropertyOffset baseOffset) const
 
   for (size_t i = 0; i < _capacity; i++) {
     entries++; // count valid entries
-    currentOffset = _table[i]._offset;
-    currentLength = _table[i]._length;
+    currentOffset = _index[i]._offset;
+    currentLength = _index[i]._length;
     if (currentLength == 0) {
       result = false; // entry has invalid length
       break;
@@ -193,8 +193,8 @@ OMStoredPropertySetIndex::IndexEntry* OMStoredPropertySetIndex::find(
   OMStoredPropertySetIndex::IndexEntry* result = 0;
 
   for (size_t i = 0; i < _capacity; i++) {
-    if (_table[i]._propertyId == propertyId) {
-      result = &_table[i];
+    if (_index[i]._propertyId == propertyId) {
+      result = &_index[i];
       break;
     }
   }

@@ -86,7 +86,7 @@ private:
   };
 
   size_t _capacity;
-  IndexEntry* _table;
+  IndexEntry* _index;
   size_t _entries;
 };
 
