@@ -398,7 +398,7 @@ BEGIN {
   printf("//     id        = the auid used to identify the type [*]\n");
   printf("//     type      = the element type [*]\n");
   printf("//\n");
-  printf("//AAF_TYPE_DEFINITION_STRONG_REFERENCE(name, id, type)\n");
+  printf("// AAF_TYPE_DEFINITION_STRONG_REFERENCE(name, id, type)\n");
   printf("//\n");
   printf("//   Define an AAF strong reference type.\n");
   printf("//\n");
@@ -422,7 +422,7 @@ BEGIN {
   printf("//     id        = the auid used to identify the type [*]\n");
   printf("//     type      = the target type [*]\n");
   printf("//\n");
-  printf("//AAF_TYPE_DEFINITION_WEAK_REFERENCE(name, id, type)\n");
+  printf("// AAF_TYPE_DEFINITION_WEAK_REFERENCE(name, id, type)\n");
   printf("//\n");
   printf("//   Define an AAF weak reference type.\n");
   printf("//\n");
@@ -446,7 +446,6 @@ BEGIN {
   printf("//     id        = the auid used to identify the type [*]\n");
   printf("//     type      = the target type [*]\n");
   printf("//\n");
-  printf("//\n");
   printf("// AAF_TYPE_DEFINITION_WEAK_REFERENCE_SET(name, id, type)\n");
   printf("//\n");
   printf("//   Define an AAF weak reference set type.\n");
@@ -463,7 +462,7 @@ BEGIN {
   printf("//     id        = the auid used to identify the type [*]\n");
   printf("//     type      = the target type [*]\n");
   printf("//\n");
-  printf("//AAF_TYPE_DEFINITION_STREAM(name, id)\n");
+  printf("// AAF_TYPE_DEFINITION_STREAM(name, id)\n");
   printf("//\n");
   printf("//   Define an AAF stream type.\n");
   printf("//\n");
@@ -474,6 +473,14 @@ BEGIN {
   printf("//\n");
   printf("//   Separate one AAF type definition from another.\n");
   printf("//\n");
+  printf("// AAF_LITERAL_AUID(l, w1, w2,  b1, b2, b3, b4, b5, b6, b7, b8)\n");
+  printf("//\n");
+  printf("//   Define an AUID.\n");
+  printf("//\n");
+  printf("//     l         = Data1\n");
+  printf("//     w1        = Data2\n");
+  printf("//     w2        = Data3\n");
+  printf("//     b1-b8     = Data4\n");
   printf("//\n");
   printf("\n");
   printf("// Default empty definitions so that you only have to define\n");
@@ -998,6 +1005,8 @@ END {
     printf("#undef AAF_TYPE_DEFINITION_STREAM\n");
     printf("\n");
     printf("#undef AAF_TYPE_SEPARATOR\n");
+    printf("\n");
+    printf("#undef AAF_LITERAL_AUID\n");
     printf("\n");
     printf("//\n");
     printf("// End of automatically generated file.\n");
