@@ -3,7 +3,6 @@
 #ifndef __ImplAAFTypeDefInt_h__
 #define __ImplAAFTypeDefInt_h__
 
-
 /******************************************\
 *                                          *
 * Advanced Authoring Format                *
@@ -14,14 +13,11 @@
 \******************************************/
 
 
-
-
-
-
 #ifndef __ImplAAFTypeDef_h__
 #include "ImplAAFTypeDef.h"
 #endif
 
+class ImplAAFPropertyValue;
 
 class ImplAAFTypeDefInt : public ImplAAFTypeDef
 {
@@ -53,6 +49,17 @@ public:
 
          // @parm [in, string] friendly name of this type definition
          wchar_t *  pTypeName);
+
+
+  //****************
+  // GetTypeCategory()
+  //
+  // (override from ImplAAFTypeDef)
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetTypeCategory
+        // @parm [out] Returned type category
+        (eAAFTypeCategory_t *  pTid);
 
 
   //****************
@@ -127,8 +134,18 @@ public:
   // Declare the module test method. The implementation of the will be be
   // in /test/ImplAAFTypeDefIntTest.cpp.
   static AAFRESULT test();
+
+  // overrides from ImplAAFTypeDef
+  //
+  virtual aafBool IsFixedSize (void);
+  virtual size_t PropValSize (void);
+
+private:
+  // the size of this integer type in bytes
+  OMFixedSizeProperty<aafUInt32> _size;
+
+  // true if this integer type is signed; false for unsigned
+  OMFixedSizeProperty<aafBool>   _isSigned;
 };
 
 #endif // ! __ImplAAFTypeDefInt_h__
-
-

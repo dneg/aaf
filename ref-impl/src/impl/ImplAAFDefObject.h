@@ -3,7 +3,6 @@
 #ifndef __ImplAAFDefObject_h__
 #define __ImplAAFDefObject_h__
 
-
 /******************************************\
 *                                          *
 * Advanced Authoring Format                *
@@ -12,42 +11,10 @@
 * Copyright (c) 1998 Microsoft Corporation *
 *                                          *
 \******************************************/
-
-
 
 #ifndef __AAFTypes_h__
 #include "AAFTypes.h"
 #endif
-
-
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
-
- 
-/***********************************************\
-*	Stub only.   Implementation not yet added	*
-\***********************************************/
-
-
-/*************************************************************************
- * 
- * @module AAFDefObject | AAFDefObject is an abstract class
- *		  that defines an item to be referenced in the AAF file. 
- *		  AAFDefObject specifies the AUID unique identifier.
- *
- * @base public | AAFObject
- *
- *************************************************************************/
-
-
-
-
 
 #ifndef __ImplAAFObject_h__
 #include "ImplAAFObject.h"
@@ -68,8 +35,6 @@ protected:
 
 public:
 
-
-
   //****************
   // GetAUID()
   //
@@ -88,24 +53,40 @@ public:
 
 
   //****************
+  // SetName()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    SetName
+        (aafWChar *  name);  //@parm [in, ref] Definition Name
+
+
+  //****************
   // GetName()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     GetName
-        (aafWChar *  name,  //@parm [in] Definition Name
-		aafInt32 bufSize);	  //@parm [in] size of the buffer required to hold Definition Name + terminator
+        (// @parm [out, string, size_is(bufSize)] buffer into which Name is to be written
+         wchar_t *  pName,
+
+         // @parm [in] size of *pName buffer in bytes
+         aafUInt32  bufSize);
+
+
   //****************
   // GetNameBufLen()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     GetNameBufLen
         (aafInt32 *  nameLen);  //@parm [in,out] Definition Name length
+
+
   //****************
-  // SetName()
+  // SetDescription()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    SetName
-        (aafWChar *  name);  //@parm [in, ref] Definition Name
+    SetDescription
+        (aafWChar *  description);  //@parm [in, ref] Definition description
+
 
   //****************
   // GetDescription()
@@ -113,19 +94,16 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     GetDescription
         (aafWChar *  description,  //@parm [in] Definition Description
-		aafInt32 bufSize);	  //@parm [in] size of the buffer required to hold Definition Description + terminator
+		 aafInt32 bufSize);	  //@parm [in] size of the buffer required to hold Definition Description + terminator
+
+
   //****************
   // GetDescriptionBufLen()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     GetDescriptionBufLen
         (aafInt32 *  descriptionLen);  //@parm [in,out] Definition description length
-  //****************
-  // SetDescription()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    SetDescription
-        (aafWChar *  description);  //@parm [in, ref] Definition description
+
 
 public:
   // Declare this class to be storable.
@@ -137,11 +115,14 @@ public:
   static AAFRESULT test();
 
 private:
-	OMFixedSizeProperty<aafUID_t>		_ID;
-	OMWideStringProperty				_name;
-	OMWideStringProperty				_description;
+  // friendly name of this definition
+  OMWideStringProperty          _name;
+
+  // brief text description of this definition
+  OMWideStringProperty          _description;
+
+  // auid to be used to identify this definition
+  OMFixedSizeProperty<aafUID_t> _identification;
 };
 
 #endif // ! __ImplAAFDefObject_h__
-
-
