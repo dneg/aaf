@@ -26,6 +26,8 @@
 ************************************************************************/
 
 // @doc OMEXTERNAL
+// @author Tim Bingham | tjb | Avid Technology, Inc. | OMFile
+
 #include "OMFile.h"
 
 #include "OMAssertions.h"
