@@ -429,6 +429,14 @@ typedef enum
 	kAAFFilmToTapeSpeed
 }	aafPulldownDir_t;
 
+typedef struct
+{
+	aafString_t * category;
+	aafString_t * comment;
+} aafMobComment_t;
+
+
+
 AD_CPP_QUOTE(/************************************************************)
 AD_CPP_QUOTE(\ *)
 AD_CPP_QUOTE(\ * Effect Types)
