@@ -240,8 +240,11 @@ AAFRESULT STDMETHODCALLTYPE
 	{	
 		if (pSourceRef)
 		{
-			GetSourceID( &sourceID );
-			GetSourceMobSlotID( &slotID );
+			if (! _startTime.isPresent())
+				RAISE(AAFRESULT_PROP_NOT_PRESENT);
+
+			CHECK(GetSourceID( &sourceID ));
+			CHECK(GetSourceMobSlotID( &slotID ));
 			pSourceRef->sourceID = sourceID;
 			pSourceRef->sourceSlotID = slotID;
 			pSourceRef->startTime = _startTime;
