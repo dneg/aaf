@@ -18,7 +18,7 @@
 
 
 ImplAAFGPITrigger::ImplAAFGPITrigger () :
-  _activeState(PID_GPITrigger_ActiveTrigger, "ActiveState")
+  _activeState(PID_GPITrigger_ActiveState, "ActiveState")
 {
   _persistentProperties.put(_activeState.address());
 }
