@@ -71,43 +71,7 @@ void OMStrongReferenceVectorProperty<ReferencedObject>::save(void) const
   PRECONDITION("Optional property is present",
                                            IMPLIES(isOptional(), isPresent()));
 
-  // create a vector index
-  //
-  size_t count = _vector.count();
-  OMStoredVectorIndex* index = new OMStoredVectorIndex(count);
-  ASSERT("Valid heap pointer", index != 0);
-  index->setFirstFreeKey(localKey());
-  size_t position = 0;
-
-  // Iterate over the vector saving each element
-  //
-  VectorIterator iterator(_vector, OMBefore);
-  while (++iterator) {
-
-    VectorElement& element = iterator.value();
-
-    // enter into the index
-    //
-    index->insert(position, element.localKey());
-
-    // save the object
-    //
-    element.save();
-
-    position = position + 1;
-
-  }
-
-  // save the vector index
-  //
-  ASSERT("Valid vector index", index->isValid());
-  store()->save(index, storedName());
-  delete index;
-
-  // make an entry in the property index
-  //
-  saveName();
-
+  store()->save(*this);
 }
 
   // @mfunc Close this <c OMStrongReferenceVectorProperty>.
@@ -153,35 +117,7 @@ void OMStrongReferenceVectorProperty<ReferencedObject>::restore(
 {
   TRACE("OMStrongReferenceVectorProperty<ReferencedObject>::restore");
 
-  // get the name of the vector index stream
-  //
-  restoreName(externalSize);
-
-  // restore the index
-  //
-  OMStoredVectorIndex* vectorIndex = 0;
-  store()->restore(vectorIndex, storedName());
-  ASSERT("Valid vector index", vectorIndex->isValid());
-  setLocalKey(vectorIndex->firstFreeKey());
-
-  // Iterate over the index restoring the elements of the vector
-  //
-  size_t entries = vectorIndex->entries();
-  if (entries > 0) {
-    grow(entries); // Set the vector size
-    size_t context = 0;
-    OMUInt32 localKey;
-    for (size_t i = 0; i < entries; i++) {
-      vectorIndex->iterate(context, localKey);
-      wchar_t* name = elementName(localKey);
-      VectorElement newElement(this, name, localKey);
-      newElement.restore();
-      _vector.setAt(newElement, i);
-      delete [] name;
-      name = 0; // for BoundsChecker
-    }
-  }
-  delete vectorIndex;
+  store()->restore(*this, externalSize);
   setPresent();
 }
 
