@@ -235,6 +235,21 @@ size_t OMPropertySet::count(void) const
   return _count;
 }
 
+size_t OMPropertySet::countPresent(void) const
+{
+  TRACE("OMPropertySet::countPresent");
+  size_t result = 0;
+  for (size_t i = 0; i < _capacity; i++) {
+    if (_propertySet[i]._valid) {
+      OMProperty*p = _propertySet[i]._property;
+      if (!p->isOptional() || p->isPresent()) {
+        result = result + 1;
+      }
+    }
+  }
+  return result;
+}
+
   // @mfunc This <c OMPropertySet> is contained by the given <c
   //        OMStorable> object <p container>. The <c OMProperty> objects
   //        in this <c OMPropertySet> are the properties of the given
