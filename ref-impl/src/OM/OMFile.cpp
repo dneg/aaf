@@ -357,13 +357,29 @@ bool OMFile::validSignature(const OMFileSignature& signature)
   //   @parm If recognized, the file signature.
   //   @parm If recognized, the file encoding.
   //   @rdesc True if the file is recognized, false otherwise.
-bool OMFile::isRecognized(const wchar_t* /* fileName */,
-                          OMFileSignature& /* signature */,
-                          OMFileEncoding& /* encoding */)
+bool OMFile::isRecognized(const wchar_t* fileName,
+                          OMFileSignature& signature,
+                          OMFileEncoding& encoding)
 {
   TRACE("OMFile::isRecognized");
   bool result = false;
-  ASSERT("Unimplemented code not reached", false);
+
+  if (OMMSSStoredObject::isRecognized(fileName, signature)) {
+    result = true;
+    encoding = MSSBinaryEncoding;
+  } else if (OMKLVStoredObject::isRecognized(fileName, signature)) {
+    result = true;
+    encoding = KLVBinaryEncoding;
+  } else if (OMXMLStoredObject::isRecognized(fileName, signature)) {
+    result = true;
+    encoding = XMLTextEncoding;
+  } else {
+    result = false;
+  }
+  POSTCONDITION("Valid encoding", IMPLIES(result,
+                                          (encoding == MSSBinaryEncoding) ||
+                                          (encoding == KLVBinaryEncoding) ||
+                                          (encoding == XMLTextEncoding)));
   return result;
 }
 
@@ -375,13 +391,29 @@ bool OMFile::isRecognized(const wchar_t* /* fileName */,
   //   @parm If recognized, the file encoding.
   //   @rdesc True if the <c OMRawStorage> contains a recognized
   //          file, false otherwise.
-bool OMFile::isRecognized(OMRawStorage* /* rawStorage */,
-                          OMFileSignature& /* signature */,
-                          OMFileEncoding& /* encoding */)
+bool OMFile::isRecognized(OMRawStorage* rawStorage,
+                          OMFileSignature& signature,
+                          OMFileEncoding& encoding)
 {
   TRACE("OMFile::isRecognized");
   bool result = false;
-  ASSERT("Unimplemented code not reached", false);
+
+  if (OMMSSStoredObject::isRecognized(rawStorage, signature)) {
+    result = true;
+    encoding = MSSBinaryEncoding;
+  } else if (OMKLVStoredObject::isRecognized(rawStorage, signature)) {
+    result = true;
+    encoding = KLVBinaryEncoding;
+  } else if (OMXMLStoredObject::isRecognized(rawStorage, signature)) {
+    result = true;
+    encoding = XMLTextEncoding;
+  } else {
+    result = false;
+  }
+  POSTCONDITION("Valid encoding", IMPLIES(result,
+                                          (encoding == MSSBinaryEncoding) ||
+                                          (encoding == KLVBinaryEncoding) ||
+                                          (encoding == XMLTextEncoding)));
   return result;
 }
 
@@ -389,12 +421,28 @@ bool OMFile::isRecognized(OMRawStorage* /* rawStorage */,
   //        If so, the result is true, and the encoding in <p encoding>.
   //   @parm If recognized, the encoding.
   //   @rdesc True if the signature is recognized, false otherwise.
-bool OMFile::isRecognized(const OMFileSignature& /* signature */,
-                          OMFileEncoding& /* encoding */)
+bool OMFile::isRecognized(const OMFileSignature& signature,
+                          OMFileEncoding& encoding)
 {
   TRACE("OMFile::isRecognized");
   bool result = false;
-  ASSERT("Unimplemented code not reached", false);
+
+  if (OMMSSStoredObject::isRecognized(signature)) {
+    result = true;
+    encoding = MSSBinaryEncoding;
+  } else if (OMKLVStoredObject::isRecognized(signature)) {
+    result = true;
+    encoding = KLVBinaryEncoding;
+  } else if (OMXMLStoredObject::isRecognized(signature)) {
+    result = true;
+    encoding = XMLTextEncoding;
+  } else {
+    result = false;
+  }
+  POSTCONDITION("Valid encoding", IMPLIES(result,
+                                          (encoding == MSSBinaryEncoding) ||
+                                          (encoding == KLVBinaryEncoding) ||
+                                          (encoding == XMLTextEncoding)));
   return result;
 }
 
