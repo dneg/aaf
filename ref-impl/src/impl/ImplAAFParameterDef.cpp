@@ -17,7 +17,8 @@
 
 #include <assert.h>
 #include <string.h>
-
+#include "aafErr.h"
+#include "ImplAAFDictionary.h"
 
 ImplAAFParameterDef::ImplAAFParameterDef ()
 : _typeDef(			PID_ParameterDefinition_Type,					"Type"),
@@ -37,10 +38,28 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFParameterDef::GetTypeDef (
       ImplAAFTypeDef **ppTypeDef)
 {
+	aafUID_t			uid;
+	ImplAAFDictionary	*dict = NULL;
+
 	if(ppTypeDef == NULL)
 		return AAFRESULT_NULL_PARAM;
 
-	return AAFRESULT_NOT_IMPLEMENTED;
+	XPROTECT()
+	{
+		uid = _typeDef;
+		CHECK(GetDictionary(&dict));
+		CHECK(dict->LookupType (&uid, ppTypeDef));
+		dict->ReleaseReference();
+		dict = NULL;
+	}
+	XEXCEPT
+	{
+		if(dict != NULL)
+			dict->ReleaseReference();
+	}
+	XEND;
+	
+	return AAFRESULT_SUCCESS;
 }
 
 
@@ -48,10 +67,17 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFParameterDef::SetTypeDef (
       ImplAAFTypeDef * pTypeDef)
 {
+	aafUID_t	uid;
+	AAFRESULT	hr;
+
 	if(pTypeDef == NULL)
 		return AAFRESULT_NULL_PARAM;
 
-	return AAFRESULT_NOT_IMPLEMENTED;
+	hr = pTypeDef->GetAUID(&uid);
+	if(hr == AAFRESULT_SUCCESS)
+		_typeDef = uid;
+
+	return hr;
 }
 
 
