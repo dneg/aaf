@@ -122,6 +122,7 @@ void OMSimpleProperty::set(const void* value, size_t valueSize)
     delete [] _bits;
     _bits = 0; // for BoundsChecker
     _bits = new unsigned char[valueSize];
+    ASSERT("Valid heap pointer", _bits != 0);
     _size = valueSize;
   }
   memcpy(_bits, value, _size);
