@@ -695,7 +695,6 @@ AAFRESULT STDMETHODCALLTYPE
       theEnum->ReleaseReference();
       theEnum = 0;
     }
-    return(XCODE());
   }
   XEND;
   
@@ -824,7 +823,6 @@ AAFRESULT STDMETHODCALLTYPE
       theEnum->ReleaseReference();
       theEnum = 0;
       }
-    return(XCODE());
   }
   XEND;
   
@@ -928,7 +926,6 @@ AAFRESULT STDMETHODCALLTYPE
       theEnum->ReleaseReference();
       theEnum = 0;
       }
-    return(XCODE());
   }
   XEND;
   
