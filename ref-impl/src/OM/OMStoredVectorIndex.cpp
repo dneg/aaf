@@ -29,30 +29,33 @@
 #include "OMStoredVectorIndex.h"
 #include "OMAssertions.h"
 
-OMStoredVectorIndex::OMStoredVectorIndex(size_t size)
-: _highWaterMark(0), _size(size), _entries(0), _keys(0)
+  // @mfunc Constructor.
+  //   @parm The capacity of this <c OMStoredVectorIndex>.
+OMStoredVectorIndex::OMStoredVectorIndex(size_t capacity)
+: _highWaterMark(0), _capacity(capacity), _entries(0), _names(0)
 {
   TRACE("OMStoredVectorIndex::OMStoredVectorIndex");
 
-  _keys = new OMUInt32[_size];
-  ASSERT("Valid heap pointer", _keys != 0);
+  _names = new OMUInt32[_capacity];
+  ASSERT("Valid heap pointer", _names != 0);
 
-  for (size_t i = 0; i < _size; i++) {
-    _keys[i] = 0;
+  for (size_t i = 0; i < _capacity; i++) {
+    _names[i] = 0;
   }
 }
 
+  // @mfunc Destructor.
 OMStoredVectorIndex::~OMStoredVectorIndex(void)
 {
   TRACE("OMStoredVectorIndex::~OMStoredVectorIndex");
 
-  delete [] _keys;
-  _keys = 0;
+  delete [] _names;
+  _names = 0;
 }
 
-  // @mfunc The high water mark in the set of keys assigned to
+  // @mfunc The high water mark in the set of names assigned to
   //        this <c OMStoredVectorIndex>.
-  //   @rdesc The highest previously allocated key.
+  //   @rdesc The highest previously allocated name.
   //   @this const
 OMUInt32 OMStoredVectorIndex::highWaterMark(void) const
 {
@@ -62,17 +65,23 @@ OMUInt32 OMStoredVectorIndex::highWaterMark(void) const
 }
 
   // @mfunc Insert a new element in this <c OMStoredVectorIndex>
-  //        at position <p position> with key <p key>.
+  //        at position <p position> with name <p name>.
+  //        The name of an element is an integer. Names are assigned
+  //        such that the names of existing elements do not have to
+  //        change when other elements are added to or removed from
+  //        the associated <c OMStrongReferenceVector>. The name is
+  //        independent of the element's logical or physical position
+  //        within the associated <c OMStrongReferenceVector>.
   //   @parm The position at which the new element should be inserted.
-  //   @parm The key assigned to the element.
-void OMStoredVectorIndex::insert(size_t position, OMUInt32 key)
+  //   @parm The name assigned to the element.
+void OMStoredVectorIndex::insert(size_t position, OMUInt32 name)
 {
   TRACE("OMStoredVectorIndex::insert");
-  PRECONDITION("Valid position", position < _size);
+  PRECONDITION("Valid position", position < _capacity);
 
   // Assumes sequential insertion.
 
-  _keys[position] = key;
+  _names[position] = name;
   _highWaterMark = _highWaterMark + 1;
   _entries = _entries + 1;
 }
@@ -90,14 +99,14 @@ size_t OMStoredVectorIndex::entries(void) const
   // @mfunc Iterate over the elements in this <c OMStoredVectorIndex>.
   //   @parm Iteration context. Set this to 0 to start with the
   //         "first" element.
-  //   @parm The key of the "current" element.
+  //   @parm The name of the "current" element.
   //   @this const
-void OMStoredVectorIndex::iterate(size_t& context, OMUInt32& key) const
+void OMStoredVectorIndex::iterate(size_t& context, OMUInt32& name) const
 {
   TRACE("OMStoredVectorIndex::iterate");
-  PRECONDITION("Valid context", context < _size);
+  PRECONDITION("Valid context", context < _capacity);
 
-  key = _keys[context];
+  name = _names[context];
   context = context + 1;
 }
 

@@ -41,38 +41,40 @@ public:
   // @access Public members.
 
     // @cmember Constructor.
-  OMStoredVectorIndex(size_t size);
+  OMStoredVectorIndex(size_t capacity);
 
     // @cmember Destructor.
   ~OMStoredVectorIndex(void);
 
-    // @cmember The high water mark in the set of keys assigned to
+    // @cmember The high water mark in the set of names assigned to
     //          this <c OMStoredVectorIndex>.
-    // @this const
   OMUInt32 highWaterMark(void) const;
 
     // @cmember Insert a new element in this <c OMStoredVectorIndex>
-    //          at position <p position> with key <p key>.
-  void insert(size_t position, OMUInt32 key);
+    //          at position <p position> with name <p name>.
+    //          The name of an element is an integer. Names are assigned
+    //          such that the names of existing elements do not have to
+    //          change when other elements are added to or removed from
+    //          the associated <c OMStrongReferenceVector>. The name is
+    //          independent of the element's logical or physical position
+    //          within the associated <c OMStrongReferenceVector>.
+  void insert(size_t position, OMUInt32 name);
 
     // @cmember The number of elements in this <c OMStoredVectorIndex>.
-    // @this const
   size_t entries(void) const;
 
     // @cmember Iterate over the elements in this <c OMStoredVectorIndex>.
-    // @this const
-  void iterate(size_t& context, OMUInt32& key) const;
+  void iterate(size_t& context, OMUInt32& name) const;
 
     // @cmember Is this <c OMStoredVectorIndex> valid ?
-    // @this const
   bool isValid(void) const;
 
 private:
 
   OMUInt32 _highWaterMark;
-  size_t _size;
+  size_t _capacity;
   size_t _entries;
-  OMUInt32* _keys;
+  OMUInt32* _names;
 };
 
 #endif
