@@ -115,7 +115,8 @@ AAFRESULT STDMETHODCALLTYPE
         aMob = NULL;
       }
  		} while(hr == AAFRESULT_SUCCESS);
-
+		if(hr == AAFRESULT_NO_MORE_MOBS)
+			hr = AAFRESULT_SUCCESS;
     if (mobEnum)
       mobEnum->ReleaseRef();
 	}
