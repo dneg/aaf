@@ -13,9 +13,6 @@
 \******************************************/
 
 
-class ImplEnumAAFReferenceValues;
-
-
 #ifndef __ImplAAFDefObject_h__
 #include "ImplAAFDefObject.h"
 #endif
@@ -108,17 +105,6 @@ public:
     SetSwapNeeded
         // @parm [in] Specifies wheter the bytes in this type need to be swapped
         (aafSwapNeeded_t  SwapNeeded);
-
-
-  //****************
-  // GetRefValues()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    GetRefValues
-        // @parm [out,retval] Reference value Enumeration
-        (ImplEnumAAFReferenceValues ** ppEnum);
-
-
 
 public:
   // Declare this class to be storable.

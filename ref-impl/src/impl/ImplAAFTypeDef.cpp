@@ -8,13 +8,6 @@
 \******************************************/
 
 
-#ifndef __ImplEnumAAFReferenceValues_h__
-#include "ImplEnumAAFReferenceValues.h"
-#endif
-
-
-
-
 #include "AAFStoredObjectIDs.h"
 
 #ifndef __ImplAAFTypeDef_h__
@@ -98,15 +91,6 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDef::SetSwapNeeded (
       aafSwapNeeded_t  /*SwapNeeded*/)
-{
-  return AAFRESULT_NOT_IMPLEMENTED;
-}
-
-
-
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFTypeDef::GetRefValues (
-      ImplEnumAAFReferenceValues ** /*ppEnum*/)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
