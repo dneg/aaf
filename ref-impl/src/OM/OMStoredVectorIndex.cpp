@@ -49,3 +49,10 @@ void OMStoredVectorIndex::iterate(size_t& context, OMUInt32& name) const
   name = _names[context];
   context = context + 1;
 }
+
+bool OMStoredVectorIndex::isValid(void) const
+{
+  // No checks yet.
+  // Possible checks include checking that all of the names are unique
+  return true;
+}

@@ -28,7 +28,7 @@ public:
                OMUInt32& offset,
                OMUInt32& length) const;
 
-  bool isSorted(void);
+  bool isValid(void) const;
 
 protected:
     

@@ -12,6 +12,7 @@ public:
   void insert(size_t position, OMUInt32 name);
   size_t entries(void) const;
   void iterate(size_t& context, OMUInt32& name) const;
+  bool isValid(void) const;
 private:
   OMUInt32 _highWaterMark;
   size_t _size;

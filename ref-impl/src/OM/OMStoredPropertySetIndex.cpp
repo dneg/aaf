@@ -94,24 +94,47 @@ void OMStoredPropertySetIndex::iterate(size_t& context,
   }
 }
 
-bool OMStoredPropertySetIndex::isSorted(void)
+bool OMStoredPropertySetIndex::isValid(void) const
 {
   bool result = true;
-  bool haveLastOffset = false;
-  size_t lastOffset;
-  
+    size_t entries = 0;
+  size_t position;
+  bool firstEntry = true;
+  size_t previousOffset;
+  size_t currentOffset;
+  size_t currentLength;
+
   for (size_t i = 0; i < _capacity; i++) {
     if (_table[i]._valid) {
-      if (haveLastOffset) {
-        if (_table[i]._offset <= lastOffset) {
-          result = false;
-          break;
-        }
+      entries++; // count valid entries
+      currentOffset = _table[i]._offset;
+      currentLength = _table[i]._length;
+      if (currentLength <= 0) {
+        result = false; // entry has invalid length
+        break;
+      }
+      if (firstEntry) {
+        previousOffset = currentOffset;
+        position = currentOffset + currentLength;
+        firstEntry = false;
       } else {
-        lastOffset = _table[i]._offset;
-        haveLastOffset = true;
+        if (currentOffset <= previousOffset) {
+          result = false; // entries out of order
+          break;
+        } else if (position > currentOffset) {
+          result = false; // entries overlap
+          break; 
+        } else {
+          // this entry is valid
+          previousOffset = currentOffset;
+          position = position + currentLength;
+        }
       }
     }
+  }
+
+  if (entries != _entries) {
+    result = false;
   }
   
   return result;
