@@ -475,6 +475,19 @@ void OMDataStreamProperty::setStoredByteOrder(OMByteOrder byteOrder)
   _byteOrder = byteOrder;
 }
 
+void OMDataStreamProperty::shallowCopyTo(OMProperty* /* destination */) const
+{
+  TRACE("OMDataStreamProperty::shallowCopyTo");
+  // Nothing to do - this is a shallow copy
+}
+
+void OMDataStreamProperty::deepCopyTo(OMProperty* destination,
+                                      void* clientContext) const
+{
+  TRACE("OMDataStreamProperty::deepCopyTo");
+  ASSERT("Unimplemented code not reached", false); // tjb TBS
+}
+
 const wchar_t* OMDataStreamProperty::storedName(void) const
 {
   TRACE("OMDataStreamProperty::storedName");
