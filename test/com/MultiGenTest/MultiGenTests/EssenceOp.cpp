@@ -230,7 +230,7 @@ void EssenceCreate::RunTest( CmdState& state, int argc, char** argv )
     sampleRate.denominator = MULTI_GEN_VIDEO_RATE_DEN;
   }
   else if ( type == "sound" ) {
-#if AAF_MAJOR_VERSION >= 1 && AAF_MINOR_VERSION >= 0
+#if AAF_MAJOR_VERSION >= 1 && AAF_MINOR_VERSION >= 1
     dataDefId = kAAFDataDef_Sound;
 #elif AAF_MAJOR_VERSION == 1 && AAF_MINOR_VERSION == 0
     dataDefId = DDEF_Sound;
