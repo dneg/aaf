@@ -145,10 +145,10 @@ ImplAAFEssenceAccess::Create (	  ImplAAFMasterMob *masterMob,
 		_channels = (aafSubChannel_t *) new aafSubChannel_t[1];
 		XASSERT((_channels != NULL), AAFRESULT_NOMEMORY);
 		_numChannels = 1;		 
-/*!!!!	_channels[0].mediaKind = mediaKind;
+		_channels[0].mediaKind = mediaKind;
 		_channels[0].trackID = masterSlotID;
 		_channels[0].physicalOutChan = 1;
-*/		
+		
 		//!!! Handle tje other cases of destination and format (raw, no locator not allowed)
 		//	_destination = NULL;
 		//	_fileFormat = kAAFiMedia;
@@ -182,8 +182,6 @@ ImplAAFEssenceAccess::Create (	  ImplAAFMasterMob *masterMob,
 
 			iAccess = static_cast<IUnknown *> (this->GetContainer());
 			CHECK(_codec->SetEssenceAccess(iAccess));
-
-			/* RPS-- back to your regularly scheduled program              */
 			
 			/* JEFF!! Changed masterSlotID to be 1 when creating mono 
 			* audio media, so file mob track will be labeled correctly */
@@ -203,10 +201,6 @@ ImplAAFEssenceAccess::Create (	  ImplAAFMasterMob *masterMob,
 			
 			CHECK(_codec->GetMetaInfo(&metaInfo));
 			mdes = (ImplAAFWAVEDescriptor *)CreateImpl(metaInfo.mdesClassID);
-			ImplAAFNetworkLocator *netl = (ImplAAFNetworkLocator *)CreateImpl(CLSID_AAFNetworkLocator);
-			CHECK(netl->SetPath (L"NULL"));
-			CHECK(mdes->AppendLocator(netl));
-			CHECK(mdes->SetLength (1));	//!!!
 			CHECK(mdes->SetIsInContainer (AAFTrue));
 			aafUID_t	fileType = NilMOBID;//!!!
 			CHECK(mdes->SetContainerFormat (&fileType));	//!!!
@@ -228,19 +222,21 @@ ImplAAFEssenceAccess::Create (	  ImplAAFMasterMob *masterMob,
 		}
 		
 		
-		//!!! Change to use the correct Subclass
-		aafError = CoCreateInstance(CLSID_AAFEssenceDataStream,
-			NULL, 
-			CLSCTX_INPROC_SERVER, 
-			IID_IAAFEssenceStream, 
-			(void **)&_stream);
+		if(_destination == NULL)
+		{
+			IAAFEssenceDataStream	*edStream;
+			CHECK(CoCreateInstance(CLSID_AAFEssenceDataStream,
+				NULL, 
+				CLSCTX_INPROC_SERVER, 
+				IID_IAAFEssenceStream, 
+				(void **)&_stream));
 		
-		IAAFEssenceDataStream	*edStream;
+			CHECK(_stream->QueryInterface(IID_IAAFEssenceDataStream, (void **)&edStream));
+			edStream->Init(dataObj);
+		}
+		else
+			RAISE(AAFRESULT_UNKNOWN_CONTAINER);
 
-		//Assume not raw stream for now!!!
-		aafError = (_stream->QueryInterface(IID_IAAFEssenceDataStream, (void **)&edStream));
-		edStream->Init(dataObj);
-		
 		fileMob->MyHeadObject(&head);
 		CHECK(head->SetModified());		// To NOW
 		
@@ -259,7 +255,6 @@ ImplAAFEssenceAccess::Create (	  ImplAAFMasterMob *masterMob,
 			iFileMob = static_cast<IUnknown *> (fileMob->GetContainer());
 			CHECK(_codec->Create(iFileMob, _variety, _stream, 1, &createBlock));
 			(void)(_codec->SetCompression(enable));
-			//!!! 			SetVideoLineMap(16, kTopFieldNone);
 		}
 	}
 	XEXCEPT
