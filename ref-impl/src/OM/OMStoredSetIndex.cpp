@@ -33,19 +33,19 @@
   //   @parm The capacity of this <c OMStoredSetIndex>.
 OMStoredSetIndex::OMStoredSetIndex(size_t capacity)
 : _highWaterMark(0), _capacity(capacity), _entries(0),
-  _names(0), _referenceCounts(0), _keys(0)
+  _localKeys(0), _referenceCounts(0), _keys(0)
 {
   TRACE("OMStoredSetIndex::OMStoredSetIndex");
 
-  _names = new OMUInt32[_capacity];
-  ASSERT("Valid heap pointer", _names != 0);
+  _localKeys = new OMUInt32[_capacity];
+  ASSERT("Valid heap pointer", _localKeys != 0);
   _referenceCounts = new OMUInt32[_capacity];
   ASSERT("Valid heap pointer", _referenceCounts != 0);
   _keys = new OMUniqueObjectIdentification[_capacity];
   ASSERT("Valid heap pointer", _keys != 0);
 
   for (size_t i = 0; i < _capacity; i++) {
-    _names[i] = 0;
+    _localKeys[i] = 0;
     _referenceCounts[i] = 0;
     memset(&_keys[i], 0, sizeof(_keys[i]));
   }
@@ -56,17 +56,17 @@ OMStoredSetIndex::~OMStoredSetIndex(void)
 {
   TRACE("OMStoredSetIndex::~OMStoredSetIndex");
 
-  delete [] _names;
-  _names = 0;
+  delete [] _localKeys;
+  _localKeys = 0;
   delete [] _referenceCounts;
   _referenceCounts = 0;
   delete [] _keys;
   _keys = 0;
 }
 
-  // @mfunc The high water mark in the set of names assigned to
+  // @mfunc The high water mark in the set of local keys assigned to
   //        this <c OMStoredSetIndex>.
-  //   @rdesc The highest previously allocated key.
+  //   @rdesc The highest previously allocated local key.
   //   @this const
 OMUInt32 OMStoredSetIndex::highWaterMark(void) const
 {
@@ -75,33 +75,42 @@ OMUInt32 OMStoredSetIndex::highWaterMark(void) const
   return _highWaterMark;
 }
 
+  // @mfunc Set the high water mark in the set of local keys assigned to
+  //        this <c OMStoredSetIndex>.
+  //   @parm The highest allocated local key.
+void OMStoredSetIndex::setHighWaterMark(OMUInt32 highWaterMark)
+{
+  TRACE("OMStoredSetIndex::setHighWaterMark");
+
+  _highWaterMark = highWaterMark;
+}
+
   // @mfunc Insert a new element in this <c OMStoredSetIndex>.
-  //        The name of an element is an integer. Names are assigned
+  //        The local key of an element is an integer.
+  //        The local key is used to derive the name of the storage
+  //        on which an element is saved. Local keys are assigned
   //        such that the names of existing elements do not have to
   //        change when other elements are added to or removed from
-  //        the associated <c OMStrongReferenceSet>. The name is
+  //        the associated <c OMStrongReferenceSet>. The local key is
   //        independent of the element's logical or physical position
-  //        within the associated <c OMStrongReferenceSet>. The name is
-  //        also independent of the element's key.
+  //        within the associated <c OMStrongReferenceSet>. The local
+  //        key is also independent of the element's unique key.
   //   @parm The position at which the new element should be inserted.
-  //   @parm The name assigned to the element.
+  //   @parm The local key assigned to the element.
   //   @parm The count of references to the element.
   //   @parm The unique key of the element.
 void OMStoredSetIndex::insert(
                             size_t position,
-                            OMUInt32 name,
+                            OMUInt32 localKey,
                             OMUInt32 referenceCount,
                             const OMUniqueObjectIdentification& key)
 {
   TRACE("OMStoredSetIndex::insert");
   PRECONDITION("Valid position", position < _capacity);
 
-  // Assumes sequential insertion.
-
-  _names[position] = name;
+  _localKeys[position] = localKey;
   _keys[position] = key;
   _referenceCounts[position] = referenceCount;
-  _highWaterMark = _highWaterMark + 1;
   _entries = _entries + 1;
 }
 
@@ -118,19 +127,19 @@ size_t OMStoredSetIndex::entries(void) const
   // @mfunc Iterate over the elements in this <c OMStoredSetIndex>.
   //   @parm Iteration context. Set this to 0 to start with the
   //         "first" element.
-  //   @parm The name of the "current" element.
+  //   @parm The local key of the "current" element.
   //   @parm The count of references to the "current" element.
   //   @parm The unique key of the "current" element.
   //   @this const
 void OMStoredSetIndex::iterate(size_t& context,
-                               OMUInt32& name,
+                               OMUInt32& localKey,
                                OMUInt32& referenceCount,
                                OMUniqueObjectIdentification& key) const
 {
   TRACE("OMStoredSetIndex::iterate");
   PRECONDITION("Valid context", context < _capacity);
 
-  name = _names[context];
+  localKey = _localKeys[context];
   referenceCount = _referenceCounts[context];
   key = _keys[context];
   context = context + 1;
@@ -142,6 +151,7 @@ void OMStoredSetIndex::iterate(size_t& context,
 bool OMStoredSetIndex::isValid(void) const
 {
   // No checks yet.
-  // Possible checks include checking that all of the names are unique
+  // Possible checks include checking that all of the local keys are unique
+  // and that all of the unique keys are in fact unique.
   return true;
 }

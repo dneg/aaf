@@ -46,20 +46,26 @@ public:
     // @cmember Destructor.
   ~OMStoredSetIndex(void);
 
-    // @cmember The high water mark in the set of names assigned to
+    // @cmember The high water mark in the set of local keys assigned to
     //          this <c OMStoredSetIndex>.
   OMUInt32 highWaterMark(void) const;
 
+    // @cmember Set the high water mark in the set of local keys assigned to
+    //          this <c OMStoredSetIndex>.
+  void setHighWaterMark(OMUInt32 highWaterMark);
+
     // @cmember Insert a new element in this <c OMStoredSetIndex>.
-    //          The name of an element is an integer. Names are assigned
+    //          The local key of an element is an integer.
+    //          The local key is used to derive the name of the storage
+    //          on which an element is saved. Local keys are assigned
     //          such that the names of existing elements do not have to
     //          change when other elements are added to or removed from
-    //          the associated <c OMStrongReferenceSet>. The name is
+    //          the associated <c OMStrongReferenceSet>. The local key is
     //          independent of the element's logical or physical position
-    //          within the associated <c OMStrongReferenceSet>. The name is
-    //          also independent of the element's key.
+    //          within the associated <c OMStrongReferenceSet>. The local
+    //          key is also independent of the element's unique key.
   void insert(size_t position,
-              OMUInt32 name,
+              OMUInt32 localKey,
               OMUInt32 referenceCount,
               const OMUniqueObjectIdentification& key);
 
@@ -68,7 +74,7 @@ public:
 
     // @cmember Iterate over the elements in this <c OMStoredSetIndex>.
   void iterate(size_t& context,
-               OMUInt32& name,
+               OMUInt32& localKey,
                OMUInt32& referenceCount,
                OMUniqueObjectIdentification& key) const;
 
@@ -80,7 +86,7 @@ private:
   OMUInt32 _highWaterMark;
   size_t _capacity;
   size_t _entries;
-  OMUInt32* _names;
+  OMUInt32* _localKeys;
   OMUInt32* _referenceCounts;
   OMUniqueObjectIdentification* _keys;
 };

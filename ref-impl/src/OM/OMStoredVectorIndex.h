@@ -46,25 +46,31 @@ public:
     // @cmember Destructor.
   ~OMStoredVectorIndex(void);
 
-    // @cmember The high water mark in the set of names assigned to
+    // @cmember The high water mark in the set of local keys assigned to
     //          this <c OMStoredVectorIndex>.
   OMUInt32 highWaterMark(void) const;
 
+    // @cmember Set the high water mark in the set of local keys assigned to
+    //          this <c OMStoredVectorIndex>.
+  void setHighWaterMark(OMUInt32 highWaterMark);
+
     // @cmember Insert a new element in this <c OMStoredVectorIndex>
-    //          at position <p position> with name <p name>.
-    //          The name of an element is an integer. Names are assigned
+    //          at position <p position> with local key <p localKey>.
+    //          The local key of an element is an integer.
+    //          The local key is used to derive the name of the storage
+    //          on which an element is saved. Local keys are assigned
     //          such that the names of existing elements do not have to
     //          change when other elements are added to or removed from
-    //          the associated <c OMStrongReferenceVector>. The name is
+    //          the associated <c OMStrongReferenceVector>. The local key is
     //          independent of the element's logical or physical position
     //          within the associated <c OMStrongReferenceVector>.
-  void insert(size_t position, OMUInt32 name);
+  void insert(size_t position, OMUInt32 localKey);
 
     // @cmember The number of elements in this <c OMStoredVectorIndex>.
   size_t entries(void) const;
 
     // @cmember Iterate over the elements in this <c OMStoredVectorIndex>.
-  void iterate(size_t& context, OMUInt32& name) const;
+  void iterate(size_t& context, OMUInt32& localKey) const;
 
     // @cmember Is this <c OMStoredVectorIndex> valid ?
   bool isValid(void) const;
@@ -74,7 +80,7 @@ private:
   OMUInt32 _highWaterMark;
   size_t _capacity;
   size_t _entries;
-  OMUInt32* _names;
+  OMUInt32* _localKeys;
 };
 
 #endif
