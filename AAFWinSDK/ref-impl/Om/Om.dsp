@@ -123,6 +123,10 @@ SOURCE="..\..\..\ref-impl\src\OM\OMStoredVectorIndex.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\OM\OMType.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\OM\OMUtilities.cpp"
 # End Source File
 # End Target
