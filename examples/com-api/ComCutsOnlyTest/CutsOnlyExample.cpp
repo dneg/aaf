@@ -268,6 +268,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 			   IID_IAAFSequence, 
 			   (void **)&pSequence));		
 	check(pSequence->QueryInterface (IID_IAAFSegment, (void **)&seg));
+	check(pSequence->QueryInterface(IID_IAAFComponent, (void **)&aComponent));
+	check(aComponent->SetDataDef(&videoDef));
 	check(pCompMob->QueryInterface (IID_IAAFMob, (void **)&pMob));
 	check(pMob->AppendNewSlot (seg, 1, slotName, &newSlot));
 
