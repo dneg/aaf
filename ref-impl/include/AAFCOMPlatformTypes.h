@@ -63,7 +63,9 @@
   typedef long SCODE;
   typedef long HRESULT;
 
+#ifndef BOOL 
   typedef int BOOL;
+#endif
   typedef unsigned char BYTE;
   typedef BYTE * LPBYTE;
   typedef unsigned short WORD;
@@ -154,7 +156,7 @@ typedef LPCSTR    LPCOLESTR;
 # define IID_ICLASSFACTORY
 # endif
 
-const GUID IID_IUnknown = {0x0,0x0,0x0,{0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0}};;
+const GUID IID_IUnknown = {0x0,0x0,0x0,{0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0}};
 
 
   interface IClassFactory : public IUnknown
