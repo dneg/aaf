@@ -72,7 +72,7 @@ struct EssenceDataTest
 extern "C" HRESULT CAAFEssenceData_test()
 {
   HRESULT hr = AAFRESULT_SUCCESS;
-  wchar_t fileName[] = L"EssenceDataTest.aaf";
+  wchar_t fileName[] = L"AAFEssenceDataTest.aaf";
   EssenceDataTest edt;
 
   try

@@ -103,7 +103,7 @@ public:
   // Returns the number of channels which this codec can handle
 			// of the given essence kind
   STDMETHOD (GetNumChannels)
-    (/*[in]*/ IUnknown *fileMob, // Get the number of processable channels on this file mob
+    (/*[in]*/ IAAFSourceMob *fileMob, // Get the number of processable channels on this file mob
      /*[in]*/ aafUID_t  essenceKind, // This is the type of essence to open
 	 IAAFEssenceStream *stream,
      /*[out]*/ aafInt16 *  pNumChannels); // The number of channels present 
@@ -130,7 +130,7 @@ public:
   // Create a media data object, and attach the correct type of
 			//EssenceDescriptor to the fileMob
   STDMETHOD (Create)
-    (/*[in]*/ IUnknown *fileMob, // Create the essence attached to this file mob
+    (/*[in]*/ IAAFSourceMob *fileMob, // Create the essence attached to this file mob
      /*[in]*/ aafUID_t  variant, // which variant of the codec to use
         IAAFEssenceStream * stream,
         aafInt32 numParms,
@@ -138,7 +138,7 @@ public:
 
   // Open a media data object.
   STDMETHOD (Open)
-    (/*[in]*/ IUnknown *fileMob, // Open the essence attached to this file mob
+    (/*[in]*/ IAAFSourceMob *fileMob, // Open the essence attached to this file mob
         aafSlotID_t	slotID,
      /*[in]*/ aafMediaOpenMode_t  openMode, // In this mode
      /*[in]*/ IAAFEssenceStream * stream); // Here is an essence stream with the raw data 

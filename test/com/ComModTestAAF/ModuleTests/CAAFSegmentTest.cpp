@@ -72,7 +72,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	HRESULT						hr = AAFRESULT_SUCCESS;
 
 	ProductInfo.companyName = L"AAF Developers Desk";
-	ProductInfo.productName = L"AAFSourceClip Test";
+	ProductInfo.productName = L"AAFSegment Test";
 	ProductInfo.productVersion.major = 1;
 	ProductInfo.productVersion.minor = 0;
 	ProductInfo.productVersion.tertiary = 0;
@@ -180,7 +180,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	HRESULT						hr = AAFRESULT_SUCCESS;
 
 	ProductInfo.companyName = L"AAF Developers Desk. NOT!";
-	ProductInfo.productName = L"MaAAFSourceClip Test. NOT!";
+	ProductInfo.productName = L"AAFSegment Test. NOT!";
 	ProductInfo.productVersion.major = 1;
 	ProductInfo.productVersion.minor = 0;
 	ProductInfo.productVersion.tertiary = 0;

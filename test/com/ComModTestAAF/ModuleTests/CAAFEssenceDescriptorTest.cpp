@@ -184,7 +184,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	bool bFileOpen = false;
 
 	ProductInfo.companyName = L"AAF Developers Desk. NOT!";
-	ProductInfo.productName = L"Make AVR Example. NOT!";
+	ProductInfo.productName = L"AAFEssenceDescriptor Test. NOT!";
 	ProductInfo.productVersion.major = 1;
 	ProductInfo.productVersion.minor = 0;
 	ProductInfo.productVersion.tertiary = 0;
@@ -296,7 +296,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 extern "C" HRESULT CAAFEssenceDescriptor_test()
 {
   HRESULT hr = AAFRESULT_SUCCESS;
-  aafWChar * pFileName = L"EssenceDescTest.aaf";
+  aafWChar * pFileName = L"AAFEssenceDescriptorTest.aaf";
 
   try
 	{

@@ -200,7 +200,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	aafUID_t					rReferencedMobID;
 
 	ProductInfo.companyName = L"AAF Developers Desk. NOT!";
-	ProductInfo.productName = L"MaAAFSourceClip Test. NOT!";
+	ProductInfo.productName = L"AAFSourceClip Test. NOT!";
 	ProductInfo.productVersion.major = 1;
 	ProductInfo.productVersion.minor = 0;
 	ProductInfo.productVersion.tertiary = 0;
@@ -313,7 +313,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 extern "C" HRESULT CAAFSourceClip_test()
 {
 	HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
- 	aafWChar * pFileName = L"SourceClipTest.aaf";
+ 	aafWChar * pFileName = L"AAFSourceClipTest.aaf";
 
 	try
 	{

@@ -226,7 +226,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 extern "C" HRESULT CAAFFile_test()
 {
 	HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
- 	aafWChar * pFileName = L"FileTest.aaf";
+ 	aafWChar * pFileName = L"AAFFileTest.aaf";
 
 	try
 	{
