@@ -44,7 +44,7 @@
 //
 // DictP18-277-1847BMaster.csv 
 //
-// This file was generated on Sat May 18 16:59:44 EDT 2002
+// This file was generated on Tue May 28 11:00:43 EDT 2002
 // by user tjb on system tjb.avid.com.
 //
 // Key to macros.
@@ -6133,6 +6133,7 @@ AAF_TYPE_TABLE_END()
 
 // Aliases
 //
+AAF_CLASS_ALIAS(ClassDefinition, ClassDef)
 AAF_CLASS_ALIAS(CodecDefinition, CodecDef)
 AAF_CLASS_ALIAS(DataDefinition, DataDef)
 AAF_CLASS_ALIAS(DefinitionObject, DefObject)
