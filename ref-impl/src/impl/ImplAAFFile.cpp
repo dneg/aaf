@@ -18,9 +18,6 @@
 #endif
 
 #include "AAFTypes.h"
-#include "AAFMedia.h"
-#include "AAFDataDef.h"
-#include "AAFSession.h"
 #include "ImplAAFSession.h"
 #include "ImplAAFHeader.h"
 #include "AAFUtils.h"
