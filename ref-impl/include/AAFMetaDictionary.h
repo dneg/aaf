@@ -17,7 +17,7 @@
 //
 // ../smpte/DictP18.csv 
 //
-// This file was generated on Fri Feb 26 16:40:28 EST 1999
+// This file was generated on Fri Mar 19 11:49:51 EST 1999
 // by user tbingham on system TBINGHAMPC.
 //
 // Key to macros.
@@ -1613,7 +1613,7 @@ AAF_CLASS(TIFFDescriptor,
   AAF_LITERAL_AUID(0x06474145,
     0x0000, 0x0000,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
-  FileDescriptor)
+  DigitalImageDescriptor)
 AAF_PROPERTY(IsUniform,
   AAF_LITERAL_AUID(0x06474145,
     0x0100, 0x0000,
