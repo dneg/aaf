@@ -232,8 +232,8 @@ AAFRESULT STDMETHODCALLTYPE
 	if(sourceRef == NULL)
 		return AAFRESULT_NULL_PARAM;
 
-//	if (_rendering.isPresent())
-//	{
+	if (_rendering.isPresent())
+	{
 		if (_rendering)
 		{
 			*sourceRef = _rendering;
@@ -241,9 +241,9 @@ AAFRESULT STDMETHODCALLTYPE
 		}
 		else
 			return AAFRESULT_PROP_NOT_PRESENT;
-//	}
-//	else
-//		return AAFRESULT_PROP_NOT_PRESENT;
+	}
+	else
+		return AAFRESULT_PROP_NOT_PRESENT;
 
 	return AAFRESULT_SUCCESS;
 }
