@@ -115,6 +115,9 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFFileDescriptor::GetContainerFormat (aafUID_t *pFormat)
 {
+	if (!_containerFmt.isPresent())
+		return AAFRESULT_PROP_NOT_PRESENT;	
+	
 	if(pFormat == NULL)
 		return(AAFRESULT_NULL_PARAM);
 	*pFormat = _containerFmt;

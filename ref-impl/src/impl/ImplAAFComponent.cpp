@@ -81,7 +81,7 @@ AAFRESULT STDMETHODCALLTYPE
 
   if (! _length.isPresent())
 	{
-	  return AAFRESULT_BAD_PROP;
+	  return AAFRESULT_PROP_NOT_PRESENT;
 	}
 	
   *pLength = _length;
