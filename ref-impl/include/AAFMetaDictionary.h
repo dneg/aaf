@@ -17,7 +17,7 @@
 //
 // ../smpte/DictP18.csv 
 //
-// This file was generated on Thu Jun  3 18:30:01 EDT 1999
+// This file was generated on Fri Jun  4 15:38:42 EDT 1999
 // by user tbingham on system TBINGHAMPC.
 //
 // Key to macros.
@@ -906,22 +906,6 @@ AAF_PROPERTY(DegradeTo,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
   0x1e03,
   RefAUIDArray,
-  false,
-  OperationDefinition)
-AAF_PROPERTY(ManufacturerID,
-  AAF_LITERAL_AUID(0x06444304,
-    0x0000, 0x0000,
-    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
-  0x1e04,
-  AUID,
-  false,
-  OperationDefinition)
-AAF_PROPERTY(PluginLocator,
-  AAF_LITERAL_AUID(0x06444305,
-    0x0000, 0x0000,
-    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
-  0x1e05,
-  ObjRefArray,
   false,
   OperationDefinition)
 AAF_PROPERTY(Category,
