@@ -1,9 +1,8 @@
-<?xml version="1.0" encoding="Windows-1252"?>
+<?xml version="1.0" encoding = "Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="7.10"
+	Version="7.00"
 	Name="AAFBasicInterpolators"
-	ProjectGUID="{6191EF0A-5599-4F2C-B999-C2513EDAF551}"
 	SccProjectName=""
 	SccLocalPath="">
 	<Platforms>
@@ -21,12 +20,11 @@
 			CharacterSet="1">
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="../../../ref-impl/src/com-api,../../../ref-impl/plugins,../../../ref-impl/include/com-api/,../../../ref-impl/src/impl,../../../ref-impl/src/Om,../../../ref-impl/include/OM,../../../ref-impl/src/com-api/com-dll,../../../ref-impl/include,../../../Utilities/Include"
+				AdditionalIncludeDirectories="../../../ref-impl/src/com-api,../../../ref-impl/plugins,../../../ref-impl/include/com-api/,../../../ref-impl/src/impl,../../../ref-impl/src/Om,../../../ref-impl/include/OM,../../../ref-impl/src/com-api/com-dll,../../../ref-impl/include"
 				PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;WIN32"
 				StringPooling="TRUE"
-				RuntimeLibrary="0"
+				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="TRUE"
 				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="2"
@@ -35,7 +33,7 @@
 				ObjectFile=".\Release/"
 				ProgramDataBaseFileName=".\Release/"
 				WarningLevel="3"
-				WarnAsError="FALSE"
+				WarnAsError="TRUE"
 				SuppressStartupBanner="TRUE"
 				CompileAs="0"/>
 			<Tool
@@ -43,25 +41,23 @@
 			<Tool
 				Name="VCLinkerTool"
 				IgnoreImportLibrary="TRUE"
-				AdditionalDependencies="aaf.lib Aafiid.lib"
+				AdditionalOptions="/MACHINE:I386"
 				OutputFile="../../Release/RefImpl/aafext/AAFINTP.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="..\..\Release/refimpl\"
-				IgnoreDefaultLibraryNames=""
+				AdditionalLibraryDirectories="..\..\Release\aafsdk\lib"
+				IgnoreDefaultLibraryNames="libc.lib,libcmt.lib,libcd.lib,libcmtd.lib,msvcrtd.lib"
 				ModuleDefinitionFile="..\..\..\ref-impl\plugins\AAFINTP.DEF"
 				ProgramDatabaseFile=".\../../Release/RefImpl/AAFINTP.pdb"
 				SubSystem="2"
-				ImportLibrary=".\../../Release/RefImpl/AAFINTP.lib"
-				TargetMachine="1"/>
+				ImportLibrary=".\../../Release/RefImpl/AAFINTP.lib"/>
 			<Tool
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="NDEBUG"
 				MkTypLibCompatible="TRUE"
 				SuppressStartupBanner="TRUE"
 				TargetEnvironment="1"
-				TypeLibraryName=".\../../Release/RefImpl/AAFBasicInterpolators.tlb"
-				HeaderFileName=""/>
+				TypeLibraryName=".\../../Release/RefImpl/AAFBasicInterpolators.tlb"/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
 			<Tool
@@ -75,13 +71,7 @@
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
-				Name="VCXMLDataGeneratorTool"/>
-			<Tool
 				Name="VCWebDeploymentTool"/>
-			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
-			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 		<Configuration
 			Name="Debug|Win32"
@@ -94,9 +84,9 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../../../ref-impl/src/com-api,../../../ref-impl/plugins,../../../ref-impl/include/com-api/,../../../ref-impl/src/impl,../../../ref-impl/src/Om,../../../ref-impl/include/OM,../../../ref-impl/src/com-api/com-dll,../../../ref-impl/include,../../../Utilities/Include"
+				AdditionalIncludeDirectories="../../../ref-impl/src/com-api,../../../ref-impl/plugins,../../../ref-impl/include/com-api/,../../../ref-impl/src/impl,../../../ref-impl/src/Om,../../../ref-impl/include/OM,../../../ref-impl/src/com-api/com-dll,../../../ref-impl/include"
 				PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;WIN32"
-				RuntimeLibrary="1"
+				RuntimeLibrary="3"
 				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderFile=".\Debug/AAFBasicInterpolators.pch"
@@ -104,7 +94,7 @@
 				ObjectFile=".\Debug/"
 				ProgramDataBaseFileName=".\Debug/"
 				WarningLevel="3"
-				WarnAsError="TRUE"
+				WarnAsError="FALSE"
 				SuppressStartupBanner="TRUE"
 				DebugInformationFormat="4"
 				CompileAs="0"/>
@@ -113,26 +103,23 @@
 			<Tool
 				Name="VCLinkerTool"
 				IgnoreImportLibrary="TRUE"
-				AdditionalDependencies="aafd.lib Aafiidd.lib"
+				AdditionalOptions="/MACHINE:I386"
 				OutputFile="../../Debug/RefImpl/aafext/AAFINTP.dll"
-				LinkIncremental="1"
+				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="../../Debug/RefImpl"
-				IgnoreDefaultLibraryNames=""
+				IgnoreDefaultLibraryNames="libc.lib,libcmt.lib,msvcrt.lib,libcd.lib,libcmtd.lib"
 				ModuleDefinitionFile="..\..\..\ref-impl\plugins\AAFINTP.DEF"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile=".\../../Debug/RefImpl/AAFINTP.pdb"
 				SubSystem="2"
-				ImportLibrary=".\../../Debug/RefImpl/AAFINTP.lib"
-				TargetMachine="1"/>
+				ImportLibrary=".\../../Debug/RefImpl/AAFINTP.lib"/>
 			<Tool
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="_DEBUG"
 				MkTypLibCompatible="TRUE"
 				SuppressStartupBanner="TRUE"
 				TargetEnvironment="1"
-				TypeLibraryName=".\../../Debug/RefImpl/AAFBasicInterpolators.tlb"
-				HeaderFileName=""/>
+				TypeLibraryName=".\../../Debug/RefImpl/AAFBasicInterpolators.tlb"/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
 			<Tool
@@ -146,199 +133,39 @@
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
-				Name="VCXMLDataGeneratorTool"/>
-			<Tool
 				Name="VCWebDeploymentTool"/>
-			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
-			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 	</Configurations>
-	<References>
-	</References>
 	<Files>
-		<File
-			RelativePath="..\..\..\ref-impl\src\impl\aafCvt.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"
-					WarnAsError="FALSE"/>
-			</FileConfiguration>
-		</File>
-		<File
-			RelativePath="..\..\..\ref-impl\plugins\AAFInterpCOM.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"/>
-			</FileConfiguration>
-		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\plugins\AAFINTP.DEF">
 		</File>
 		<File
+			RelativePath="..\..\..\ref-impl\plugins\AAFInterpCOM.cpp">
+		</File>
+		<File
 			RelativePath="..\..\..\ref-impl\plugins\AAFRational.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"
-					WarnAsError="FALSE"/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\AAFUtils.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"
-					WarnAsError="FALSE"/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\plugins\CAAFBasicInterp.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"
-					WarnAsError="FALSE"/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\com-dll\CAAFClassFactory.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"
-					WarnAsError="FALSE"/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\com-dll\CAAFInProcServer.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"
-					WarnAsError="FALSE"/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\com-dll\CAAFServer.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"
-					WarnAsError="FALSE"/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\com-dll\CAAFUnknown.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"
-					WarnAsError="FALSE"/>
-			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\..\ref-impl\src\impl\aafCvt.cpp">
 		</File>
 	</Files>
 	<Globals>

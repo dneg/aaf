@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="Windows-1252"?>
+<?xml version="1.0" encoding = "Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="7.10"
+	Version="7.00"
 	Name="ComPersonnelExtension"
 	SccProjectName=""
 	SccLocalPath="">
@@ -10,73 +10,6 @@
 			Name="Win32"/>
 	</Platforms>
 	<Configurations>
-		<Configuration
-			Name="Release|Win32"
-			OutputDirectory=".\Release"
-			IntermediateDirectory=".\Release"
-			ConfigurationType="2"
-			UseOfMFC="0"
-			ATLMinimizesCRunTimeLibraryUsage="FALSE"
-			CharacterSet="1">
-			<Tool
-				Name="VCCLCompilerTool"
-				Optimization="2"
-				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="..\..\..\include,..\..\..\..\examples\com-api\ComExtension,..\..\..\..\ref-impl\src\com-api\com-dll,../../../../Utilities/Include"
-				PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;UNICODE;_USRDLL;COMPERSONNELEXTENSION_EXPORTS"
-				StringPooling="TRUE"
-				RuntimeLibrary="0"
-				EnableFunctionLevelLinking="TRUE"
-				RuntimeTypeInfo="TRUE"
-				PrecompiledHeaderFile=".\Release/ComPersonnelExtension.pch"
-				AssemblerListingLocation=".\Release/"
-				ObjectFile=".\Release/"
-				ProgramDataBaseFileName=".\Release/"
-				WarningLevel="3"
-				SuppressStartupBanner="TRUE"
-				CompileAs="0"/>
-			<Tool
-				Name="VCCustomBuildTool"/>
-			<Tool
-				Name="VCLinkerTool"
-				AdditionalDependencies="aafiid.lib odbc32.lib odbccp32.lib"
-				OutputFile="../../../Release/Examples/Com/AAFPersonnelExtension.dll"
-				LinkIncremental="1"
-				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="..\..\..\lib"
-				ModuleDefinitionFile="..\..\..\..\examples\com-api\ComExtension\ComPersonnelExtension\AAFPersonnelExtension.def"
-				ProgramDatabaseFile=".\Release/AAFPersonnelExtension.pdb"
-				ImportLibrary=".\Release/AAFPersonnelExtension.lib"
-				TargetMachine="1"/>
-			<Tool
-				Name="VCMIDLTool"
-				PreprocessorDefinitions="NDEBUG"
-				MkTypLibCompatible="TRUE"
-				SuppressStartupBanner="TRUE"
-				TargetEnvironment="1"
-				TypeLibraryName=".\Release/ComPersonnelExtension.tlb"
-				HeaderFileName=""/>
-			<Tool
-				Name="VCPostBuildEventTool"/>
-			<Tool
-				Name="VCPreBuildEventTool"/>
-			<Tool
-				Name="VCPreLinkEventTool"/>
-			<Tool
-				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="NDEBUG"
-				Culture="1033"/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"/>
-			<Tool
-				Name="VCWebDeploymentTool"/>
-			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
-			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
-		</Configuration>
 		<Configuration
 			Name="Debug|Win32"
 			OutputDirectory=".\Debug"
@@ -88,10 +21,10 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\include,..\..\..\..\examples\com-api\ComExtension,..\..\..\..\ref-impl\src\com-api\com-dll,../../../../Utilities/Include"
+				AdditionalIncludeDirectories="..\..\..\include,..\..\..\..\examples\com-api\ComExtension,..\..\..\..\ref-impl\src\com-api\com-dll,../../../../ref-impl\src\com-api"
 				PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;UNICODE;_USRDLL;COMPERSONNELEXTENSION_EXPORTS"
 				BasicRuntimeChecks="3"
-				RuntimeLibrary="1"
+				RuntimeLibrary="3"
 				RuntimeTypeInfo="TRUE"
 				PrecompiledHeaderFile=".\Debug/ComPersonnelExtension.pch"
 				AssemblerListingLocation=".\Debug/"
@@ -105,24 +38,23 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalOptions="/MACHINE:I386"
 				AdditionalDependencies="aafiidd.lib odbc32.lib odbccp32.lib"
 				OutputFile="../../../Debug/Examples/Com/AAFPersonnelExtension.dll"
-				LinkIncremental="1"
+				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="..\..\..\lib"
 				ModuleDefinitionFile="..\..\..\..\examples\com-api\ComExtension\ComPersonnelExtension\AAFPersonnelExtension.def"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile=".\Debug/AAFPersonnelExtension.pdb"
-				ImportLibrary=".\Debug/AAFPersonnelExtension.lib"
-				TargetMachine="1"/>
+				ImportLibrary=".\Debug/AAFPersonnelExtension.lib"/>
 			<Tool
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="_DEBUG"
 				MkTypLibCompatible="TRUE"
 				SuppressStartupBanner="TRUE"
 				TargetEnvironment="1"
-				TypeLibraryName=".\Debug/ComPersonnelExtension.tlb"
-				HeaderFileName=""/>
+				TypeLibraryName=".\Debug/ComPersonnelExtension.tlb"/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
 			<Tool
@@ -136,17 +68,68 @@
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
-				Name="VCXMLDataGeneratorTool"/>
+				Name="VCWebDeploymentTool"/>
+		</Configuration>
+		<Configuration
+			Name="Release|Win32"
+			OutputDirectory=".\Release"
+			IntermediateDirectory=".\Release"
+			ConfigurationType="2"
+			UseOfMFC="0"
+			ATLMinimizesCRunTimeLibraryUsage="FALSE"
+			CharacterSet="1">
+			<Tool
+				Name="VCCLCompilerTool"
+				InlineFunctionExpansion="1"
+				AdditionalIncludeDirectories="..\..\..\include,..\..\..\..\examples\com-api\ComExtension,..\..\..\..\ref-impl\src\com-api\com-dll,../../../../ref-impl\src\com-api"
+				PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;UNICODE;_USRDLL;COMPERSONNELEXTENSION_EXPORTS"
+				StringPooling="TRUE"
+				RuntimeLibrary="2"
+				EnableFunctionLevelLinking="TRUE"
+				RuntimeTypeInfo="TRUE"
+				PrecompiledHeaderFile=".\Release/ComPersonnelExtension.pch"
+				AssemblerListingLocation=".\Release/"
+				ObjectFile=".\Release/"
+				ProgramDataBaseFileName=".\Release/"
+				WarningLevel="3"
+				SuppressStartupBanner="TRUE"
+				CompileAs="0"/>
+			<Tool
+				Name="VCCustomBuildTool"/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalOptions="/MACHINE:I386"
+				AdditionalDependencies="aafiid.lib odbc32.lib odbccp32.lib"
+				OutputFile="../../../Release/Examples/Com/AAFPersonnelExtension.dll"
+				LinkIncremental="1"
+				SuppressStartupBanner="TRUE"
+				AdditionalLibraryDirectories="..\..\..\lib"
+				ModuleDefinitionFile="..\..\..\..\examples\com-api\ComExtension\ComPersonnelExtension\AAFPersonnelExtension.def"
+				ProgramDatabaseFile=".\Release/AAFPersonnelExtension.pdb"
+				ImportLibrary=".\Release/AAFPersonnelExtension.lib"/>
+			<Tool
+				Name="VCMIDLTool"
+				PreprocessorDefinitions="NDEBUG"
+				MkTypLibCompatible="TRUE"
+				SuppressStartupBanner="TRUE"
+				TargetEnvironment="1"
+				TypeLibraryName=".\Release/ComPersonnelExtension.tlb"/>
+			<Tool
+				Name="VCPostBuildEventTool"/>
+			<Tool
+				Name="VCPreBuildEventTool"/>
+			<Tool
+				Name="VCPreLinkEventTool"/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="NDEBUG"
+				Culture="1033"/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
 				Name="VCWebDeploymentTool"/>
-			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
-			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 	</Configurations>
-	<References>
-	</References>
 	<Files>
 		<Filter
 			Name="AAF Libraries"
@@ -190,146 +173,27 @@
 		</Filter>
 		<File
 			RelativePath="..\..\..\..\examples\com-api\ComExtension\ComPersonnelExtension\AAFPersonnelExtension.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;UNICODE;_UNICODE;_USRDLL;COMPERSONNELEXTENSION_EXPORTS;$(NoInherit)"/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;UNICODE;_UNICODE;_USRDLL;COMPERSONNELEXTENSION_EXPORTS;$(NoInherit)"
-					BasicRuntimeChecks="3"/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\..\examples\com-api\ComExtension\ComPersonnelExtension\AAFPersonnelExtension.def">
 		</File>
 		<File
 			RelativePath="..\..\..\..\examples\com-api\ComExtension\ComPersonnelExtension\CAAFAdminMob.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;UNICODE;_UNICODE;_USRDLL;COMPERSONNELEXTENSION_EXPORTS;$(NoInherit)"/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;UNICODE;_UNICODE;_USRDLL;COMPERSONNELEXTENSION_EXPORTS;$(NoInherit)"
-					BasicRuntimeChecks="3"/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\..\ref-impl\src\com-api\com-dll\CAAFClassFactory.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;UNICODE;_UNICODE;_USRDLL;COMPERSONNELEXTENSION_EXPORTS;$(NoInherit)"/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;UNICODE;_UNICODE;_USRDLL;COMPERSONNELEXTENSION_EXPORTS;$(NoInherit)"
-					BasicRuntimeChecks="3"/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\..\examples\com-api\ComExtension\ComPersonnelExtension\CAAFPersonnelResource.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;UNICODE;_UNICODE;_USRDLL;COMPERSONNELEXTENSION_EXPORTS;$(NoInherit)"/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;UNICODE;_UNICODE;_USRDLL;COMPERSONNELEXTENSION_EXPORTS;$(NoInherit)"
-					BasicRuntimeChecks="3"/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\..\ref-impl\src\com-api\com-dll\CAAFServer.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;UNICODE;_UNICODE;_USRDLL;COMPERSONNELEXTENSION_EXPORTS;$(NoInherit)"/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;UNICODE;_UNICODE;_USRDLL;COMPERSONNELEXTENSION_EXPORTS;$(NoInherit)"
-					BasicRuntimeChecks="3"/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\..\ref-impl\src\com-api\com-dll\CAAFUnknown.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;UNICODE;_UNICODE;_USRDLL;COMPERSONNELEXTENSION_EXPORTS;$(NoInherit)"/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;UNICODE;_UNICODE;_USRDLL;COMPERSONNELEXTENSION_EXPORTS;$(NoInherit)"
-					BasicRuntimeChecks="3"/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\..\examples\com-api\ComExtension\extensionUtils.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;UNICODE;_UNICODE;_USRDLL;COMPERSONNELEXTENSION_EXPORTS;$(NoInherit)"/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;UNICODE;_UNICODE;_USRDLL;COMPERSONNELEXTENSION_EXPORTS;$(NoInherit)"
-					BasicRuntimeChecks="3"/>
-			</FileConfiguration>
 		</File>
 	</Files>
 	<Globals>

@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="Windows-1252"?>
+<?xml version="1.0" encoding = "Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="7.10"
+	Version="7.00"
 	Name="ExportAudioExample"
 	SccProjectName=""
 	SccLocalPath="">
@@ -22,8 +22,8 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\..\..\..\ref-impl\include,..\..\..\..\ref-impl\include\com-api"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;UNICODE;OM_DEBUG"
-				RuntimeLibrary="1"
+				PreprocessorDefinitions="WIN32,_DEBUG,_WINDOWS,UNICODE,OM_DEBUG"
+				RuntimeLibrary="3"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderFile=".\Debug/ExportAudioExample.pch"
 				AssemblerListingLocation=".\Debug/"
@@ -38,20 +38,19 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalOptions="/MACHINE:I386"
 				AdditionalDependencies="aafd.lib aafiidd.lib"
 				OutputFile="../../../Debug/Examples/Com/ExportAudioExample.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="..\..\..\lib"
-				IgnoreDefaultLibraryNames=""
+				IgnoreDefaultLibraryNames="libc.lib libcmt.lib msvcrt.lib libcd.lib libcmtd.lib,libc.lib,libcmt.lib,msvcrt.lib,libcd.lib,libcmtd.lib"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile=".\Debug/ExportAudioExample.pdb"
-				SubSystem="1"
-				TargetMachine="1"/>
+				SubSystem="1"/>
 			<Tool
 				Name="VCMIDLTool"
-				TypeLibraryName=".\Debug/ExportAudioExample.tlb"
-				HeaderFileName=""/>
+				TypeLibraryName=".\Debug/ExportAudioExample.tlb"/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
 			<Tool
@@ -65,13 +64,7 @@
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
-				Name="VCXMLDataGeneratorTool"/>
-			<Tool
 				Name="VCWebDeploymentTool"/>
-			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
-			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
@@ -83,12 +76,11 @@
 			CharacterSet="1">
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="2"
 				InlineFunctionExpansion="1"
 				AdditionalIncludeDirectories="..\..\..\..\ref-impl\include,..\..\..\..\ref-impl\include\com-api"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;UNICODE"
+				PreprocessorDefinitions="WIN32,NDEBUG,_WINDOWS,UNICODE"
 				StringPooling="TRUE"
-				RuntimeLibrary="0"
+				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="TRUE"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderFile=".\Release/ExportAudioExample.pch"
@@ -102,19 +94,18 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalOptions="/MACHINE:I386"
 				AdditionalDependencies="aaf.lib aafiid.lib"
 				OutputFile="../../../Release/Examples/Com/ExportAudioExample.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="..\..\..\Release\aafsdk\lib,..\..\..\lib"
-				IgnoreDefaultLibraryNames=""
+				IgnoreDefaultLibraryNames="libc.lib,libcmt.lib,libcd.lib,libcmtd.lib,msvcrtd.lib"
 				ProgramDatabaseFile=".\Release/ExportAudioExample.pdb"
-				SubSystem="1"
-				TargetMachine="1"/>
+				SubSystem="1"/>
 			<Tool
 				Name="VCMIDLTool"
-				TypeLibraryName=".\Release/ExportAudioExample.tlb"
-				HeaderFileName=""/>
+				TypeLibraryName=".\Release/ExportAudioExample.tlb"/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
 			<Tool
@@ -128,17 +119,9 @@
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
-				Name="VCXMLDataGeneratorTool"/>
-			<Tool
 				Name="VCWebDeploymentTool"/>
-			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
-			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 	</Configurations>
-	<References>
-	</References>
 	<Files>
 		<Filter
 			Name="AAF Libraries"
@@ -182,22 +165,6 @@
 		</Filter>
 		<File
 			RelativePath="..\..\..\..\examples\com-api\ExportAudioExample\ExportAudioExample.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""/>
-			</FileConfiguration>
 		</File>
 	</Files>
 	<Globals>
