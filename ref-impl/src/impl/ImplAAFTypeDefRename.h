@@ -39,6 +39,9 @@
 
 #include "OMWeakRefProperty.h"
 
+class ImplAAFPropertyValue;
+
+
 class ImplAAFTypeDefRename : public ImplAAFTypeDef
 {
 public:

@@ -10,7 +10,7 @@ AAFMetaDefinition\
 #endm
 #c
 #startm .parent-module 0
-AAFObject\
+AAFRoot\
 #endm
 AD_HEAD
 AD_IDL(//
