@@ -34,12 +34,6 @@
 #include "OMExceptions.h"
 #include "OMRawStorage.h"
 
-#if defined( OM_COMPILER_GCC_SPARC_SUNOS )
-
-typedef off64_t __off64_t;
-
-#endif
-
 
   // @mfunc Create an <c OMStream> object by opening an existing
   //        file for read-only access, the file is named <p fileName>.
@@ -211,9 +205,9 @@ OMUInt64 OMStream::position(void) const
   OMInt64 position = ftell64( _file );
   ASSERT("Successful tell", IMPLIES(position == static_cast<OMInt64>(-1), errno == 0));
 #else
-	// all POSIX-compliant
-  __off64_t position = ftello64( _file );
-  ASSERT("Successful tell", IMPLIES(position == (__off64_t)-1, errno == 0));
+	// all POSIX 1003.1 compliant
+  off_t position = ftello( _file );
+  ASSERT("Successful tell", IMPLIES(position == (off_t)-1, errno == 0));
 #endif
 	
 #elif defined( OM_OS_WINDOWS )
@@ -251,9 +245,9 @@ void OMStream::setPosition(OMUInt64 newPosition)
 	int status = fseek64( _file, position, SEEK_SET );
 
 #else
-	// all POSIX-compliant
-	__off64_t position = newPosition;
-	int status = fseeko64( _file, position, SEEK_SET);
+	// all POSIX 1003.1 compliant
+	off_t position = newPosition;
+	int status = fseeko( _file, position, SEEK_SET);
 #endif
 
 	ASSERT("Successful seek", status == 0);
