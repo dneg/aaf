@@ -88,6 +88,11 @@ struct aafTable
 	
 static aafErr_t DisposeList(aafTable_t *table, aafBool itemsAlso);
 
+aafErr_t NewDefTable(
+			AAFFile * file,
+			aafInt32 numBuckets,
+			aafTable_t **result);
+
 /************************************************************************
  *
  * Root Table Functions (used to implement specializations below)

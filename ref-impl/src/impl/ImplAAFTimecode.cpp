@@ -251,7 +251,7 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 
-aafErr_t ImplAAFTimecode::OffsetToTimecodeClip(aafPosition_t offset, ImplAAFTimecode **result,
+aafErr_t ImplAAFTimecode::OffsetToTimecodeClip(aafPosition_t /* offset !!!*/, ImplAAFTimecode **result,
 												aafPosition_t *tcStartPos)
 {
   	if(result == NULL)

@@ -77,7 +77,7 @@ char *aafGetErrorString(
  *		Standard errors (see top of file).
  */
 void aafRegErr(
-			aafErr_t		msgcode)
+			aafErr_t		/* msgcode */)
 {
 }
 

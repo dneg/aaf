@@ -300,7 +300,7 @@ Value& OMRedBlackTreeIterator<Key, Value>::value(void) const
   //   @parm The new <p Value>.
   //   @rdesc The previous <p Value>.
 template <typename Key, typename Value>
-Value OMRedBlackTreeIterator<Key, Value>::setValue(const Key k,
+Value OMRedBlackTreeIterator<Key, Value>::setValue(const Key ANAME(k),
                                                    Value newValue)
 {
   TRACE("OMRedBlackTreeIterator<Key, Value>::setValue");
