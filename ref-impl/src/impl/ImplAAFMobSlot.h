@@ -4,6 +4,9 @@
 #define __ImplAAFMobSlot_h__
 
 #include "ImplAAFObject.h"
+#ifndef __ImplAAFSegment_h__
+#include "ImplAAFSegment.h"
+#endif
 #include "OMProperty.h"
 
 /******************************************\
@@ -32,9 +35,7 @@ const int PID_MOBSLOT_NAME				= 0;
 const int PID_MOBSLOT_ORIGIN			= 1;
 const int PID_MOBSLOT_TRACKID			= 2;
 const int PID_MOBSLOT_PHYSICAL_TRACK	= 3;
-#if FULL_TOOLKIT
 const int PID_MOBSLOT_SEGMENT			= 4;
-#endif
 
 class ImplAAFSegment;
 
@@ -120,9 +121,7 @@ protected:
 	OMFixedSizeProperty<aafPosition_t>	_origin;
 	OMFixedSizeProperty<aafUInt32>		_trackID;
 	OMFixedSizeProperty<aafUInt32>		_physicalTrackNum;
-#if FULL_TOOLKIT
 	OMStrongReferenceProperty<ImplAAFSegment> _segment;
-#endif
 };
 
 #endif // ! __ImplAAFMobSlot_h__
