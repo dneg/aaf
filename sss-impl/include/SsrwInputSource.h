@@ -1,31 +1,3 @@
-// @doc INTERNAL
-// @com This file implements the module test for CAAFHeader.
-//=---------------------------------------------------------------------=
-//
-// $Id$ $Name$
-//
-// The contents of this file are subject to the AAF SDK Public
-// Source License Agreement (the "License"); You may not use this file
-// except in compliance with the License.  The License is available in
-// AAFSDKPSL.TXT, or you may obtain a copy of the License from the AAF
-// Association or its successor.
-//
-// Software distributed under the License is distributed on an "AS IS"
-// basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.  See
-// the License for the specific language governing rights and limitations
-// under the License.
-//
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
-// AAF Association.
-//
-// The Initial Developer of the Original Code of this file and the
-// Licensor of the AAF Association is Schema Software, Inc.
-// All rights reserved.
-//
-//=---------------------------------------------------------------------=
-
-
-
 /**
 * 
 *  SsrwInputSource.h
@@ -53,18 +25,18 @@
 * 
 *  Copyright (C) 2002 - 2004 Schema Software, Inc. All rights reserved.
 *
+*  $Revision$
+*  $Date$
+*  
 */
 
 #ifndef SSRWINPUTSOURCE_H_INCLUDED
 #define SSRWINPUTSOURCE_H_INCLUDED
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
 #define SSRWIS_SEEK_SET 0
 #define SSRWIS_SEEK_CUR 1
 #define SSRWIS_SEEK_END 2
+#include "Types.h"
 
 typedef struct _SsrwInputSource SSRWIS;
 
@@ -98,21 +70,21 @@ typedef int (*Ssrw_Func_Fclose)(
  */
 typedef int (*Ssrw_Func_Fseek)(
     SSRWIS*     in_pIS,
-    SSRW_INT64  in_lOffset,
+    SINT8       in_lOffset,
     int         in_nWhence);
 
 /**
  * Corresponds to a pointer to the function ftell in the standard C library
  */
-typedef SSRW_INT64 (*Ssrw_Func_Ftell)(
+typedef SINT8 (*Ssrw_Func_Ftell)(
     SSRWIS*     in_pIS);
 
 /**
  * Truncates the file to a given size if possible
  */
-typedef long (*Ssrw_Func_Ftruncate)(
+typedef SINT4 (*Ssrw_Func_Ftruncate)(
     SSRWIS*     in_pIS,
-    SSRW_INT64  in_llNewSIze);
+    SINT8  in_llNewSIze);
 
 /**
  * This structure corresponds to a FILE structure in the standard C library
@@ -179,7 +151,7 @@ int SsrwFclose(
  */
 int SsrwFseek(
     SSRWIS* in_pIS,
-    SSRW_INT64   in_llOffset,
+    SINT8   in_llOffset,
     int     in_whence);
 
 /**
@@ -188,7 +160,7 @@ int SsrwFseek(
  * @param in_pIS - input stream from which to get seek location
  * @return offset from beginning of input source, in bytes
  */
-SSRW_INT64 SsrwFtell(
+SINT8 SsrwFtell(
     SSRWIS* in_pIS);
 
 /**
@@ -199,9 +171,9 @@ SSRW_INT64 SsrwFtell(
  *
  * @return 0 on success, nonzero on error 
  */
-long SsrwFtruncate(
+SINT4  SsrwFtruncate(
     SSRWIS* in_pIS,
-    SSRW_INT64 in_llNewSIze);
+    SINT8  in_llNewSIze);
 
 /**
  * Disconnects an SSRWIS* from whatever it was connected to.
@@ -211,11 +183,5 @@ long SsrwFtruncate(
  * @return 0 on success, nonzero on failure.
  */
 int SsrwDisconnect(SSRWIS* in_pIS);
-
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
-
 
 #endif /* SSRWINPUTSOURCE_H_INCLUDED */

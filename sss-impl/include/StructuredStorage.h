@@ -1,38 +1,14 @@
-//=---------------------------------------------------------------------=
-//
-// $Id$ $Name$
-//
-// The contents of this file are subject to the AAF SDK Public
-// Source License Agreement (the "License"); You may not use this file
-// except in compliance with the License.  The License is available in
-// AAFSDKPSL.TXT, or you may obtain a copy of the License from the AAF
-// Association or its successor.
-//
-// Software distributed under the License is distributed on an "AS IS"
-// basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.  See
-// the License for the specific language governing rights and limitations
-// under the License.
-//
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
-// AAF Association.
-//
-// The Initial Developer of the Original Code of this file and the
-// Licensor of the AAF Association is Schema Software, Inc.
-// All rights reserved.
-//
-//=---------------------------------------------------------------------=
-
-
-
-
 /************************************************************************
 * StructuredStorage.h
 * Public Header file for Structured Storage library
 *
 * (c) Schema Software Inc., 2001-2004
 * Authors: Bob Sabiston, Yuri Khramov, Mark Ambachtsheer
-************************************************************************/
+************************************************************************
 
+$Revision$
+$Date$
+*/
 #ifndef _StructuredStorage_h
 #define _StructuredStorage_h
 
@@ -96,47 +72,47 @@ extern "C" {
     /* Property IDs for for Summary Info
     we do not typedef them on purpose */
     enum
-    {  STG_PIDSI_TITLE = 0x02,           /* Title */
-       STG_PIDSI_SUBJECT =  0x00000003,  /* Subject */
-       STG_PIDSI_AUTHOR = 0x00000004,    /* Author */
-       STG_PIDSI_KEYWORDS = 0x00000005,  /* Keywords */
-       STG_PIDSI_COMMENTS = 0x00000006,  /* Comments */
-       STG_PIDSI_TEMPLATE = 0x00000007,  /* Template */
-       STG_PIDSI_LASTAUTHOR = 0x00000008,   /* Last Saved By */
-       STG_PIDSI_REVNUMBER = 0x00000009, /* Revision Number*/
-       STG_PIDSI_EDITTIME = 0x0000000A,  /* Total Editing Time */
-       STG_PIDSI_LASTPRINTED = 0x0000000B,  /* Last Printed */
-       STG_PIDSI_CREATE_DTM = 0x0000000C,   /* Create Time/Date */
-       STG_PIDSI_LASTSAVE_DTM = 0x0000000D,/* Last saved Time/Date */
-       STG_PIDSI_PAGECOUNT = 0x0000000E,
-       STG_PIDSI_WORDCOUNT = 0x0000000F,
-       STG_PIDSI_CHARCOUNT = 0x00000010,
-       STG_PIDSI_THUMBNAIL = 0x00000011,	/* used for previews by many applications */
-       STG_PIDSI_APPNAME = 0x00000012,      /* Name of Creating Application */
-       STG_PIDSI_SECURITY = 0x00000013
+    {  PIDSI_TITLE = 0x02,           /* Title */
+       PIDSI_SUBJECT =  0x00000003,  /* Subject */
+       PIDSI_AUTHOR = 0x00000004,    /* Author */
+       PIDSI_KEYWORDS = 0x00000005,  /* Keywords */
+       PIDSI_COMMENTS = 0x00000006,  /* Comments */
+       PIDSI_TEMPLATE = 0x00000007,  /* Template */
+       PIDSI_LASTAUTHOR = 0x00000008,   /* Last Saved By */
+       PIDSI_REVNUMBER = 0x00000009, /* Revision Number*/
+       PIDSI_EDITTIME = 0x0000000A,  /* Total Editing Time */
+       PIDSI_LASTPRINTED = 0x0000000B,  /* Last Printed */
+       PIDSI_CREATE_DTM = 0x0000000C,   /* Create Time/Date */
+       PIDSI_LASTSAVE_DTM = 0x0000000D,/* Last saved Time/Date */
+       PIDSI_PAGECOUNT = 0x0000000E,
+       PIDSI_WORDCOUNT = 0x0000000F,
+       PIDSI_CHARCOUNT = 0x00000010,
+       PIDSI_THUMBNAIL = 0x00000011,	/* used for previews by many applications */
+       PIDSI_APPNAME = 0x00000012,      /* Name of Creating Application */
+       PIDSI_SECURITY = 0x00000013
     };
 
     /* Property IDs for for Summary Info
     we do not typedef them on purpose */
     enum
     {
-        STG_PIDDSI_CATEGORY = 0x00000002,
-        STG_PIDDSI_PRESFORMAT = 0x00000003,
-        STG_PIDDSI_BYTECOUNT = 0x00000004,
-        STG_PIDDSI_LINECOUNT = 0x00000005,
-        STG_PIDDSI_PARCOUNT = 0x00000006,
-        STG_PIDDSI_SLIDECOUNT = 0x00000007,
-        STG_PIDDSI_NOTECOUNT = 0x00000008,
-        STG_PIDDSI_HIDDENCOUNT = 0x00000009,
-        STG_PIDDSI_MMCLIPCOUNT = 0x0000000A,
-        STG_PIDDSI_SCALE = 0x0000000B,
+        PIDDSI_CATEGORY = 0x00000002,
+        PIDDSI_PRESFORMAT = 0x00000003,
+        PIDDSI_BYTECOUNT = 0x00000004,
+        PIDDSI_LINECOUNT = 0x00000005,
+        PIDDSI_PARCOUNT = 0x00000006,
+        PIDDSI_SLIDECOUNT = 0x00000007,
+        PIDDSI_NOTECOUNT = 0x00000008,
+        PIDDSI_HIDDENCOUNT = 0x00000009,
+        PIDDSI_MMCLIPCOUNT = 0x0000000A,
+        PIDDSI_SCALE = 0x0000000B,
         /* not supported in this version
            PIDDSI_HEADINGPAIR = 0x0000000C,
            PIDDSI_DOCPARTS = 0x0000000D,
         */
-        STG_PIDDSI_MANAGER = 0x0000000E,
-        STG_PIDDSI_COMPANY = 0x0000000F,
-        STG_PIDDSI_LINKSDIRTY = 0x00000010
+        PIDDSI_MANAGER = 0x0000000E,
+        PIDDSI_COMPANY = 0x0000000F,
+        PIDDSI_LINKSDIRTY = 0x00000010
     };
 
     /* Enumeration of supported property streams */
@@ -174,9 +150,9 @@ extern "C" {
     /* Corresponding structures to Windows GUID, CLSID */
     typedef struct _SSRW_GUID
     {
-        unsigned long data1;
-        unsigned short data2;
-        unsigned short data3;
+        UINT4 data1;
+        UINT2 data2;
+        UINT2 data3;
         unsigned char data4[8];
     }
     SSRW_GUID;
@@ -341,11 +317,11 @@ extern "C" {
 
     extern int readLElong(
             Stream* in_pStream,
-            long* out_plVal );
+            SINT4 * out_plVal );
 
     extern int readLEdword(
             Stream* in_pStream,
-            unsigned long* out_pdwVal);
+            UINT4 * out_pdwVal);
 
     extern int readLEfloat(
             Stream* in_pStream,
@@ -419,7 +395,7 @@ extern "C" {
             SSRWIS* in_pSSRWIS,
             StgMode in_accessMode,
             RootStorage** out_ppRoot,
-            unsigned long in_sectorSize);
+            unsigned int  in_sectorSize);
 
 #ifdef SSTG_PALMOS
 
@@ -507,11 +483,11 @@ extern "C" {
 
     extern int writeLElong(
             Stream* in_pStream,
-            long in_val);
+            SINT4 in_val);
 
     extern int writeLEdword(
             Stream* in_pStream,
-            unsigned long in_val);
+            UINT4 in_val);
 
     extern int writeLEfloat(
             Stream* in_pStream,
