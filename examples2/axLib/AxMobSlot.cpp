@@ -28,6 +28,27 @@ AxMobSlot::AxMobSlot( IAAFMobSlotSP spIaafMobSlot )
 AxMobSlot::~AxMobSlot()
 {}
 
+
+void AxMobSlot::SetName( AxString name )
+{
+	CHECK_HRESULT( _spIaafMobSlot->SetName( name.c_str() ) );
+}
+
+void AxMobSlot::SetSegment( IAAFSegmentSP sp )
+{
+	CHECK_HRESULT( _spIaafMobSlot->SetSegment( sp ) );
+}
+
+void AxMobSlot::SetPhysicalNum( aafUInt32 val )
+{
+	CHECK_HRESULT( _spIaafMobSlot->SetPhysicalNum( val ) );
+}
+
+void AxMobSlot::SetSlotID( aafSlotID_t val )
+{
+	CHECK_HRESULT( _spIaafMobSlot->SetSlotID( val ) );
+}
+
 aafSlotID_t AxMobSlot::GetSlotID()
 {
 	aafSlotID_t id;
@@ -64,6 +85,21 @@ AxTimelineMobSlot::AxTimelineMobSlot( IAAFTimelineMobSlotSP spIaafTimelineMobSlo
 
 AxTimelineMobSlot::~AxTimelineMobSlot()
 {}
+
+void AxTimelineMobSlot::Initialize()
+{
+	CHECK_HRESULT( _spIaafTimelineMobSlot->Initialize() );
+}
+
+void AxTimelineMobSlot::SetOrigin( aafPosition_t origin )
+{
+	CHECK_HRESULT( _spIaafTimelineMobSlot->SetOrigin( origin ) );
+}
+
+void AxTimelineMobSlot::SetEditRate( const aafRational_t& rate )
+{
+	CHECK_HRESULT( _spIaafTimelineMobSlot->SetEditRate( rate ) );
+}
 
 aafPosition_t AxTimelineMobSlot::GetOrigin()
 {

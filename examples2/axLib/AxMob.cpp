@@ -226,6 +226,11 @@ AxCompositionMob::AxCompositionMob( IAAFCompositionMobSP spIaafCompositionMob )
 AxCompositionMob::~AxCompositionMob()
 {}
 
+void AxCompositionMob::Initialize( const AxString& name )
+{
+  CHECK_HRESULT( _spIaafCompositionMob->Initialize( name.c_str() ) );
+}
+
 //=---------------------------------------------------------------------=
 
 
@@ -238,6 +243,16 @@ AxSourceMob::AxSourceMob( IAAFSourceMobSP spIaafSourceMob )
 AxSourceMob::~AxSourceMob()
 {}
 
+void AxSourceMob::Initialize()
+{
+	CHECK_HRESULT( _spIaafSourceMob->Initialize() );
+}
+
+void AxSourceMob::SetEssenceDescriptor( IAAFEssenceDescriptorSP sp )
+{
+	CHECK_HRESULT( _spIaafSourceMob->SetEssenceDescriptor( sp ) );
+}
+
 IAAFEssenceDescriptorSP AxSourceMob::GetEssenceDescriptor()
 {
 	IAAFEssenceDescriptorSP spIaafEssenceDescriptor;
@@ -247,5 +262,12 @@ IAAFEssenceDescriptorSP AxSourceMob::GetEssenceDescriptor()
 	return spIaafEssenceDescriptor;
 }
 
+void AxSourceMob::AddNilReference( aafSlotID_t slotId,
+								   aafLength_t len,
+								   IAAFDataDefSP spDataDef,
+								   const aafRational_t& editRate  )
+{
+	CHECK_HRESULT( _spIaafSourceMob->AddNilReference( slotId, len, spDataDef, editRate ) );
+}
 
 //=---------------------------------------------------------------------=

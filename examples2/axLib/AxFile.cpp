@@ -38,6 +38,10 @@ bool AxFile::isAAFFile( const AxString& name )
 AxFile::AxFile()
 {}
 
+AxFile::AxFile( IAAFFileSP spIaafFile )
+: _spIaafFile( spIaafFile )
+{}
+
 AxFile::AxFile( const AxFile& other )
 {
 	init( other );

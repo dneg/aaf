@@ -71,6 +71,26 @@ private:
 
 //=---------------------------------------------------------------------=
 
+
+template <class Type>
+void AxCreateInstance( AxDictionary& dict,
+	    	           IAAFSmartPointer<Type>& sp )
+{
+	Type* dummy;
+
+	IUnknownSP spIUnknown = dict.CreateInstance( AxAUID(dummy), AxIID(dummy) );
+	AxQueryInterface( spIUnknown, sp );
+}
+
+template <class Type>
+void AxCreateInstance( IAAFDictionarySP spDict,
+	    	           IAAFSmartPointer<Type>& sp )
+{
+	Type* dummy;
+
+	AxCreateInstance( AxDictionary( spDict ), sp );
+}
+
 template <class Type>
 IAAFSmartPointer<Type> AxCreateInstance( AxDictionary& dict )
 {

@@ -143,6 +143,11 @@ void AxSourceClip::Initialize( IAAFDataDefSP spIaafDataDef,
 			spIaafDataDef, length, sourceRef ) );
 }
 
+void AxSourceClip::SetSourceReference( const aafSourceRef_t& ref )
+{
+  CHECK_HRESULT( _spIaafSourceClip->SetSourceReference( ref ) );
+}
+
 //=---------------------------------------------------------------------=
 
 AxOperationGroup::AxOperationGroup( IAAFOperationGroupSP spIaafOperationGroup )

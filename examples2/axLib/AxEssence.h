@@ -329,6 +329,44 @@ private:
 
 //=---------------------------------------------------------------------=
 
+class AxTapeDescriptor : public AxEssenceDescriptor {
+public:
+	AxTapeDescriptor( IAAFTapeDescriptorSP spIaafTapeDescriptor );
+	~AxTapeDescriptor();
+
+	void Initialize();
+
+	void SetTapeManufacturer( const AxString& manufacturer );
+	AxString GetTapeManufacturer();
+
+	void SetTapeModel( const AxString& model );
+	AxString GetTapeModel();
+
+	void SetTapeFormFactor( aafTapeCaseType_t formFactor );
+	aafTapeCaseType_t GetTapeFormFactor();
+
+	void SetSignalType( aafVideoSignalType_t signalType );
+	aafVideoSignalType_t GetSignalType();
+
+	void SetTapeFormat( aafTapeFormatType_t tapeFormat );
+	aafTapeFormatType_t GetTapeFormat();
+
+	void SetTapeLength( aafUInt32 length );
+	aafUInt32 GetTapeLength();
+
+	inline operator IAAFTapeDescriptorSP ()
+	{ return _spIaafTapeDescriptor; }
+
+private:
+	AxTapeDescriptor();
+	AxTapeDescriptor( const AxTapeDescriptor& );
+	AxTapeDescriptor& operator=( const AxTapeDescriptor& );
+
+	IAAFTapeDescriptorSP _spIaafTapeDescriptor;
+};
+
+//=---------------------------------------------------------------------=
+
 // Intentionally not derived from AxBaseObj.  I think it is just a
 // utility interface, not directly tied to any particular object.
 

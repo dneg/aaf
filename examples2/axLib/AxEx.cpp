@@ -43,6 +43,10 @@ AxEx::AxEx( const wchar_t* what )
 : _what( what )
 {}
 
+AxEx::AxEx( const AxString& what )
+: _what( what )
+{}
+
 AxEx::~AxEx()
 {}
 	

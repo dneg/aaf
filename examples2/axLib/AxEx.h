@@ -43,6 +43,7 @@ public:
 
 	AxEx();
 	AxEx( const wchar_t* what );
+	AxEx( const AxString& what );
 	virtual ~AxEx();
 	virtual const wchar_t* what() const;
 

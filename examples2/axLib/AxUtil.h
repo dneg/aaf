@@ -81,6 +81,17 @@ public:
 	static AxString uid2Str(const aafUID_t & uid);
 
 	static AxString mbtowc( const char* cstr ); 
+
+	static std::string wctomb( const AxString& s );
+
+	// Converts using base zero - see the strol man page.
+	// This means that s can be decimal, hex, or octal using
+	// the usual notations.  Throws an exception if conversion
+	// failed.
+	static long strtol( const char* s );
+
+	// This will convert to 8 bit chars, then convert.
+	static long strtol( const AxString& s );
 };
 
 // Function template that will return a type name given a smart
@@ -160,5 +171,24 @@ AxString AxDescriptionToString( IAAFSmartPointer< Type >& sp )
 
 	return name;
 }
+
+// Some of the AAF interfaces (e.g. TapeDescriptor) have
+// a number of  different string values that can be set/get.
+// Each has it's own GetNAMEBufLen/GetNAMEBuf pair.   That
+// can't be handled easily with a template.  Resort
+// to a macro.
+#define AX_ANY_TO_STRING( AXSTRING_RET, POINTER, GETBUFLEN, GETBUF ) \
+{ \
+	aafUInt32 _sizeInBytes = 0; \
+	CHECK_HRESULT( ((POINTER)->GETBUFLEN)( &_sizeInBytes ) ); \
+	int _sizeInChars = (_sizeInBytes /sizeof(aafCharacter)) + 1; \
+	std::auto_ptr< aafCharacter > \
+		_buf( new aafCharacter[ _sizeInChars ] ); \
+    CHECK_HRESULT( ((POINTER)->GETBUF)( _buf.get(), \
+			                              _sizeInChars*sizeof(aafCharacter) ) ); \
+	AxString tmp( _buf.get() ); \
+	AXSTRING_RET = tmp; \
+}
+
 
 #endif

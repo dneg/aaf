@@ -31,6 +31,8 @@ class AxFile {
 	 
 	AxFile();
 
+	AxFile( IAAFFileSP spIaafFile );
+	
 	AxFile( const AxFile& other );
 
 	virtual ~AxFile();
@@ -56,6 +58,9 @@ class AxFile {
 
 	IAAFHeaderSP getHeader() const;
 
+	operator IAAFFileSP ()
+	{ return _spIaafFile; }
+	
 	std::wostream& dump( std::wostream& os ) const;
 
  private:

@@ -99,9 +99,8 @@ public:
 
 	void Initialize();
 
-	// FIXME - Use references.
 	IAAFEssenceAccessSP CreateEssence( 
-		aafSlotID_t			slotID,
+		aafSlotID_t		slotID,
 		IAAFDataDefSP		pMediaKind,		// create essence of this type
 		aafUID_constref		codecID,		// using this codec
 		aafRational_t		editRate,		// with this edit rate
@@ -190,6 +189,8 @@ class AxCompositionMob : public AxMob {
 public:
 	AxCompositionMob( IAAFCompositionMobSP spIaafCompositionMob );
 	virtual ~AxCompositionMob();
+	
+	void Initialize( const AxString& name );
 
 private:
 	AxCompositionMob();
@@ -207,7 +208,16 @@ public:
 	AxSourceMob( IAAFSourceMobSP spIaafSourceMob );
 	virtual ~AxSourceMob();
 
+	void Initialize();
+
+	void SetEssenceDescriptor( IAAFEssenceDescriptorSP sp );
+
 	IAAFEssenceDescriptorSP GetEssenceDescriptor();
+
+	void AddNilReference( aafSlotID_t slotID,
+						  aafLength_t len,
+						  IAAFDataDefSP spDataDef,
+						  const aafRational_t& editRate );
 
 private:
 	AxSourceMob();

@@ -32,6 +32,11 @@ public:
 
 	aafSlotID_t GetSlotID();
 
+	void SetName( AxString name );
+	void SetSegment( IAAFSegmentSP sp );
+	void SetPhysicalNum( aafUInt32 val );
+	void SetSlotID( aafSlotID_t val );
+
 	IAAFSegmentSP GetSegment();
 
 	IAAFDataDefSP GetDataDef();
@@ -57,6 +62,12 @@ class AxTimelineMobSlot : public AxMobSlot {
 public:
 	AxTimelineMobSlot( IAAFTimelineMobSlotSP spIaafTimelineMobSlot );
 	~AxTimelineMobSlot();
+
+	void Initialize();
+
+	void SetOrigin( aafPosition_t origin );
+
+	void SetEditRate( const aafRational_t& rate );
 
 	aafPosition_t GetOrigin();
 	aafRational_t GetEditRate();

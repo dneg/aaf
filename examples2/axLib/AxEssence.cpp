@@ -433,6 +433,112 @@ void AxCDCIDescriptor::SetColorRange( aafUInt32 ColorRange )
 
 //=---------------------------------------------------------------------=
 
+AxTapeDescriptor::AxTapeDescriptor( IAAFTapeDescriptorSP sp )
+:	AxEssenceDescriptor( AxQueryInterface<IAAFTapeDescriptor, IAAFEssenceDescriptor>(sp) ),
+	_spIaafTapeDescriptor( sp )
+{}
+
+AxTapeDescriptor::~AxTapeDescriptor()
+{}
+
+void AxTapeDescriptor::Initialize()
+{
+	// noop
+}
+
+void AxTapeDescriptor::SetTapeManufacturer( const AxString& manufacturer )
+{
+	CHECK_HRESULT(
+		_spIaafTapeDescriptor->SetTapeManufacturer( manufacturer.c_str() )
+    );
+}
+
+AxString AxTapeDescriptor::GetTapeManufacturer()
+{
+	AxString manufacturer;
+
+	AX_ANY_TO_STRING( manufacturer,
+					  _spIaafTapeDescriptor,
+					  GetTapeManufacturerBufLen,
+					  GetTapeManufacturer );
+
+	return manufacturer;
+}
+
+void AxTapeDescriptor::SetTapeModel( const AxString& mode )
+{
+	CHECK_HRESULT(
+		_spIaafTapeDescriptor->SetTapeModel( mode.c_str() )
+    );
+}
+
+AxString AxTapeDescriptor::GetTapeModel()
+{
+	AxString tapeModel;
+
+	AX_ANY_TO_STRING( tapeModel,
+					  _spIaafTapeDescriptor,
+					  GetTapeModelBufLen,
+					  GetTapeModel );
+
+	return tapeModel;
+}
+
+void AxTapeDescriptor::SetTapeFormFactor( aafTapeCaseType_t formFactor )
+{
+	CHECK_HRESULT(
+		_spIaafTapeDescriptor->SetTapeFormFactor( formFactor )
+    );
+}
+
+aafTapeCaseType_t AxTapeDescriptor::GetTapeFormFactor()
+{
+	aafTapeCaseType_t formFactor;
+	CHECK_HRESULT(
+		_spIaafTapeDescriptor->GetTapeFormFactor( &formFactor )	);
+	return formFactor;
+}
+
+void AxTapeDescriptor::SetSignalType( aafVideoSignalType_t signalType )
+{
+	CHECK_HRESULT(
+		_spIaafTapeDescriptor->SetSignalType( signalType )
+	);
+}
+
+aafVideoSignalType_t AxTapeDescriptor::GetSignalType()
+{
+	aafVideoSignalType_t signalType;
+	CHECK_HRESULT( _spIaafTapeDescriptor->GetSignalType( &signalType ) );
+	return signalType;
+}
+
+void AxTapeDescriptor::SetTapeFormat( aafTapeFormatType_t tapeFormat )
+{
+	CHECK_HRESULT( _spIaafTapeDescriptor->SetTapeFormat( tapeFormat ) );
+}
+
+aafTapeFormatType_t AxTapeDescriptor::GetTapeFormat()
+{
+	aafTapeFormatType_t tapeFormat;
+	CHECK_HRESULT( _spIaafTapeDescriptor->GetTapeFormat( &tapeFormat ) );
+	return tapeFormat;
+}
+
+void AxTapeDescriptor::SetTapeLength( aafUInt32 length )
+{
+	CHECK_HRESULT( _spIaafTapeDescriptor->SetTapeLength( length ) );
+}
+
+aafUInt32 AxTapeDescriptor::GetTapeLength()
+{
+	aafUInt32 length;
+	CHECK_HRESULT( _spIaafTapeDescriptor->GetTapeLength( &length ) );
+	return length;
+}
+
+//=---------------------------------------------------------------------=
+
 AxEssenceFormat::AxEssenceFormat( IAAFEssenceFormatSP sp )
 :	_spIaafEssenceFormat( sp )
 {}
