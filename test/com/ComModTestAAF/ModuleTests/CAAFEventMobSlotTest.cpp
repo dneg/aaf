@@ -20,6 +20,7 @@
 #include "AAFStoredObjectIDs.h"
 #include "AAFResult.h"
 #include "AAFDataDefs.h"
+#include "AAFDefUIDs.h"
 
 
 // Cross-platform utility to delete a file.
@@ -100,7 +101,7 @@ extern "C" HRESULT CAAFEventMobSlot_test()
   ProductInfo.productVersion.patchLevel = 0;
   ProductInfo.productVersion.type = kVersionUnknown;
   ProductInfo.productVersionString = NULL;
-  ProductInfo.productID = -1;
+  ProductInfo.productID = UnitTestProductID;
   ProductInfo.platform = NULL;
 
   // Create an instance of our text clip test class and run the
