@@ -112,7 +112,7 @@ AD_XMETHOD1(GetIsInContainer,
 			objPass,
 			aafBool *,
 			pIsAAF,
-			is this AAF or raw medi,
+			is this AAF or raw media,
   // Places TRUE into *pIsAAF if this is AAF-wrapped essence.  Places
   // FALSE into *pIsAAF if the essence is in an external non-AAF file.
   //
@@ -138,12 +138,12 @@ AD_XMETHOD1(SetSampleRate,
 			aafRational_t *,
 			pRate,
 			sample rate of the essence,
-  // Sets sample rate of the essence as opposed to the edit rate.
+			Sets sample rate of the essence as opposed to the edit rate.
   // 
   // Succeeds if all of the following are true:
   // - the pRate pointer is valid.
   // 
-  // If this method fails the Data Definition property will not be
+  // If this method fails the sample rate property will not be
   // changed.
   // 
   // This method will return the following codes.  If more than one of
@@ -163,7 +163,8 @@ AD_XMETHOD1(GetSampleRate,
 			aafRational_t*,
 			pRate,
 			sample rate of the essence,
-  // Sets sample rate of the essence as opposed to the edit rate.
+			Gets sample rate of the essence as opposed to the edit rate. and
+  // writes it into the *pRate argument.
   //
   // Succeeds if all of the following are true:
   // - the pRate pointer is valid.
@@ -186,13 +187,14 @@ AD_XMETHOD1(SetContainerFormat,
 			objPass,
 			aafUID_t *,
 			pFormat,
-			Identifies the file format,
-  // Optional. Identifies the file format.
+			file format,
+			Identifies the file format.  The container format is an optional
+  // property.
   // 
   // Succeeds if all of the following are true:
   // - the pFormat pointer is valid.
   // 
-  // If this method fails the Data Definition property will not be
+  // If this method fails the container format property will not be
   // changed.
   // 
   // This method will return the following codes.  If more than one of
