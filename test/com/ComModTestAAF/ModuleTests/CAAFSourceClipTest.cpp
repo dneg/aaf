@@ -27,6 +27,7 @@
 #include <iostream.h>
 #include "AAFResult.h"
 #include "AAFDefUIDs.h"
+#include "AAFUtils.h"
 
 static aafWChar *slotName = L"SLOT1";
 static aafInt32 fadeInLen  = 1000;
@@ -41,13 +42,14 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFFile*					pFile = NULL;
 	IAAFHeader*					pHeader = NULL;
 	IAAFMob*					pMob = NULL;
+	IAAFMob*					pReferencedMob = NULL;
 	IAAFMobSlot*				newSlot = NULL;
 	IAAFSegment*				seg = NULL;
 	IAAFSourceClip*				sclp = NULL;
 	aafRational_t				audioRate = { 44100, 1 };
 
 	aafProductIdentification_t	ProductInfo;
-	aafUID_t					newMobID;
+	aafUID_t					newMobID, referencedMobID;
 	HRESULT						hr;
 
 	ProductInfo.companyName = L"AAF Developers Desk";
@@ -74,9 +76,20 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		hr = pSession->CreateFile(pFileName, kAAFRev1, &pFile);
 	  	hr = pFile->GetHeader(&pHeader);
 
-		//Make the MOB
+		//Make the MOB to be referenced
+		hr = CoCreateInstance( CLSID_AAFMasterMob,
+							   NULL, 			  
+							   CLSCTX_INPROC_SERVER, 
+							   IID_IAAFMob, 
+							   (void **)&pReferencedMob);
+
+
+		CoCreateGuid((GUID *)&referencedMobID);
+		hr = pReferencedMob->SetMobID(&referencedMobID);
+		hr = pReferencedMob->SetName(L"AAFSourceClipTest::ReferencedMob");
+
 		// Create a Mob
-		hr = CoCreateInstance( CLSID_AAFMob,
+		hr = CoCreateInstance( CLSID_AAFCompositionMob,
 							   NULL, 			  
 							   CLSCTX_INPROC_SERVER, 
 							   IID_IAAFMob, 
@@ -99,14 +112,14 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 			hr = sclp->SetFade( fadeInLen, fadeInType, fadeOutLen, fadeOutType);
 			if (AAFRESULT_SUCCESS == hr)
 			{
-				sourceRef.sourceID = NilMOBID;
+				sourceRef.sourceID = referencedMobID;
 				sourceRef.sourceSlotID = 0;
 				sourceRef.startTime = 0;
 				hr = sclp->SetRef(sourceRef);
-				if (AAFRESULT_SUCCESS != hr)
+				if (AAFRESULT_SUCCESS == hr)
 				{
 					hr = sclp->QueryInterface (IID_IAAFSegment, (void **)&seg);
-					if (AAFRESULT_SUCCESS != hr)
+					if (AAFRESULT_SUCCESS == hr)
 					{
 						hr = pMob->AppendNewSlot (seg, 1, slotName, &newSlot);
 					}
@@ -117,6 +130,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 	if (AAFRESULT_SUCCESS == hr)
 		hr = pHeader->AppendMob(pMob);
+	if (AAFRESULT_SUCCESS == hr)
+		hr = pHeader->AppendMob(pReferencedMob);
 
 	// Cleanup and return
 	if (pFile) 
@@ -156,6 +171,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	IAAFHeader *				pHeader = NULL;
 	IEnumAAFMobs*				pMobIter = NULL;
 	IAAFMob*					pMob = NULL;
+	IAAFMob*					pReferencedMob = NULL;
 	IEnumAAFMobSlots*			pSlotIter = NULL;
 	IAAFMobSlot*				pSlot = NULL;
 	IAAFSegment*				pSegment = NULL;
@@ -172,6 +188,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	aafBool						fadeInPresent;
 	aafBool						fadeOutPresent;
 	HRESULT						hr = AAFRESULT_SUCCESS;
+	aafUID_t					rReferencedMobID;
 
 	ProductInfo.companyName = L"AAF Developers Desk. NOT!";
 	ProductInfo.productName = L"Make AVR Example. NOT!";
@@ -199,7 +216,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 
 		// Get the number of mobs in the file (should be one)
 		hr = pHeader->GetNumMobs(kAllMob, &numMobs);
-		if (1 == numMobs )
+		if (2 == numMobs )
 		{
 			// Enumerate over all Composition Mobs
 			criteria.searchTag = kByMobKind;
@@ -252,6 +269,14 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 							rSourceRef.startTime != sourceRef.startTime)
 						{
 							hr = AAFRESULT_TEST_FAILED;
+						}
+
+						hr = pSourceClip->ResolveRef(&pReferencedMob);
+						if(hr == AAFRESULT_SUCCESS)
+						{
+							pReferencedMob->GetMobID(&rReferencedMobID);
+							if(!EqualAUID(&rReferencedMobID, &sourceRef.sourceID))
+								hr = AAFRESULT_TEST_FAILED;
 						}
 					}
 				}
@@ -328,10 +353,6 @@ HRESULT CAAFSourceClip::test()
   // Cleanup our object if it exists.
   if (pObject)
 	pObject->Release();
-
-  	// When all of the functionality of this class is tested, we can return success
-	if(hr == AAFRESULT_SUCCESS)
-		hr = AAFRESULT_TEST_PARTIAL_SUCCESS;
 
 	return hr;
 }
