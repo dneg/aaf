@@ -73,7 +73,7 @@ OMFLIBDIR=$(AAFBASE)/OMF/IrixLibs
 $(BINTARGET) : $(CXXOBJS2) $(LIBTARGET)
 	$(LD) $(CXXOBJS2) $(RPATH_OPT) -lAAFConverterLib \
 	-L$(OMFLIBDIR) -lAJPG -lOMFI -lbento -ljpeg \
-	-L$(AAFSDKLIBDIR) -laaflib -laafiid -o $@ -lm
+	-L$(AAFSDKLIBDIR) -laaflib -laafiid $(LIBCIO) -o $@ -lm
 
 else
 
