@@ -109,20 +109,22 @@ AAFRESULT STDMETHODCALLTYPE
 
 				pSegment->GetLength(&slotLength);
 				pSegment->GetDataDef(&DataDef);
-				pSegment->ReleaseRef();
+				pSegment->ReleaseReference();
+				pSegment = NULL;
 
 				// Make sure the slot contains the expected media type.
 				if (memcmp(&DataDef, pDataDef, sizeof(aafUID_t)) != 0)
 					hr = AAFRESULT_INVALID_DATAKIND;
 			}
-			pMobSlot->ReleaseRef();
+			pMobSlot->ReleaseReference();
+			pMobSlot = NULL;
 		}
 	}
 
 	// Add the master slot
 	if (SUCCEEDED(hr))
 	{
-		ImplAAFSourceClip*	pSrcClip;
+		ImplAAFSourceClip*	pSrcClip = NULL;
 		aafSourceRef_t		ref;
 		aafPosition_t		zeroPos;
 
@@ -141,9 +143,14 @@ AAFRESULT STDMETHODCALLTYPE
 			{
 				hr = AppendNewSlot(pSrcClip, masterSlotID, pSlotName, &pNewSlot);
 				if (SUCCEEDED(hr))
-					pNewSlot->ReleaseRef();
+				{
+					pNewSlot->ReleaseReference();
+					pNewSlot = NULL;
+				}
 			}
-			pSrcClip->ReleaseRef();
+
+			pSrcClip->ReleaseReference();
+			pSrcClip = NULL;
 		}
 	}
 
@@ -270,7 +277,7 @@ AAFRESULT STDMETHODCALLTYPE
 											 aafNumSlots_t*	pNumReps)
 {
 	ImplAAFMobSlot	*pSlot = NULL;
-   	ImplAAFSegment	*pSegment = NULL;
+  ImplAAFSegment	*pSegment = NULL;
 	HRESULT			hr;
 	
 	if (!pNumReps)
@@ -285,9 +292,11 @@ AAFRESULT STDMETHODCALLTYPE
 		if (SUCCEEDED(hr))
 		{
 			hr = pSegment->NumRepresentations(pNumReps);
-			pSegment->ReleaseRef();
+			pSegment->ReleaseReference();
+			pSegment = NULL;
 		}
-		pSlot->ReleaseRef();
+		pSlot->ReleaseReference();
+		pSlot = NULL;
 	}
 
 	return hr;
