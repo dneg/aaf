@@ -228,7 +228,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 //!!!    checkResult(pDIDesc->SetGamma(ratio));
 
     checkResult(pRGBADesc->SetPixelLayout(NUM_TEST_ELEMENTS, testElements));
-    checkResult(pRGBADesc->SetPallete(sizeof(bogusPalette), bogusPalette));
+    checkResult(pRGBADesc->SetPalette(sizeof(bogusPalette), bogusPalette));
     checkResult(pRGBADesc->SetPaletteLayout(NUM_TEST_ELEMENTS, testElements2));
   
 	// Save the initialized descriptor with the source mob.
