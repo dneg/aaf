@@ -167,7 +167,7 @@
 
 static aafBool  InitCalled = AAFFalse;
 
-const aafProductVersion_t AAFToolkitVersion = {2, 1, 0, 1, kVersionBeta};
+const aafProductVersion_t AAFReferenceImplementationVersion = {1, 0, 0, 1, kVersionBeta};
 
 
 aafBool	EqualAUID(aafUID_t *uid1, aafUID_t *uid2)
