@@ -102,7 +102,7 @@ AD_XMETHOD2(OpenExistingRead,
 			pFileName,
 			Null-terminated string containing name of filesystem file to be
 	// opened for reading.  Filename must be in a form that would be
-	// acceptable to ANSI fopen\(\) for this platform.,
+	// acceptable to StgOpenStorage\(\) for this platform.,
 
 			[in],
 			objPass,
@@ -175,7 +175,7 @@ AD_XMETHOD3(OpenExistingModify,
 			pFileName,
 			Null-terminated string containing name of filesystem file to be
 	// opened for modification.  Filename must be in a form that would
-	// be acceptable to ANSI fopen\(\) for this platform.,
+	// be acceptable to StgOpenStorage\(\) for this platform.,
 
 			[in],
 			objPass,
@@ -263,7 +263,7 @@ AD_XMETHOD3(OpenNewModify,
 			pFileName,
 			Null-terminated string containing name of filesystem file to be
 	// opened for modification.  Filename must be in a form that would
-	// be acceptable to ANSI fopen\(\) for this platform.,
+	// be acceptable to StgOpenStorage\(\) for this platform.,
 
 			[in],
 			objPass,
@@ -468,7 +468,8 @@ AD_XMETHOD2(SaveAs,
 			pFileName,
 			Null-terminated string containing name of filesystem file to
 	// which this file is to be saved.  Filename must be in a form
-	// that would be acceptable to ANSI fopen\(\) for this platform.,
+	// that would be acceptable to StgOpenStorage\(\) for this
+	// platform.,
 
 			[in],
 			objPass,
