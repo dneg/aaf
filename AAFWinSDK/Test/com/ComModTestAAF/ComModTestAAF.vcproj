@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding = "Windows-1252"?>
+<?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="7.00"
+	Version="7.10"
 	Name="ComModTestAAF"
 	SccProjectName=""
 	SccLocalPath="">
@@ -21,7 +21,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\include,../../../../ref-impl/src/impl,..\..\..\..\ref-impl\src\com-api,..\..\..\..\test\com\commodtestaaf"
+				AdditionalIncludeDirectories="..\..\..\include;&quot;../../../../ref-impl/include&quot;;&quot;../../../../ref-impl/src/impl&quot;;&quot;..\..\..\..\ref-impl\src\com-api&quot;;..\..\..\..\test\com\commodtestaaf"
 				PreprocessorDefinitions="WIN32,_DEBUG,_CONSOLE,UNICODE"
 				RuntimeLibrary="3"
 				RuntimeTypeInfo="TRUE"
@@ -67,7 +67,13 @@
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
 				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
@@ -127,9 +133,17 @@
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
 				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 	</Configurations>
+	<References>
+	</References>
 	<Files>
 		<Filter
 			Name="Module Tests"
@@ -231,10 +245,10 @@
 				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFFindSourceInfoTest.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFGPITriggerTest.cpp">
+				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFGetFileBitsTest.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFGetFileBitsTest.cpp">
+				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFGPITriggerTest.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFHeaderTest.cpp">
@@ -288,13 +302,13 @@
 				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFOperationGroupTest.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFPCMDescriptorTest.cpp">
-			</File>
-			<File
 				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFParameterDefTest.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFParameterTest.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFPCMDescriptorTest.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFPhysicalDescriptorTest.cpp">
@@ -318,9 +332,6 @@
 				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFPulldownTest.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFRGBADescriptorTest.cpp">
-			</File>
-			<File
 				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFRandomFileTest.cpp">
 			</File>
 			<File
@@ -331,6 +342,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFRecordingDescriptorTest.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFRGBADescriptorTest.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFScopeReferenceTest.cpp">
@@ -363,9 +377,6 @@
 				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFStaticMobSlotTest.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFTIFFDescriptorTest.cpp">
-			</File>
-			<File
 				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFTaggedValueDefTest.cpp">
 			</File>
 			<File
@@ -376,6 +387,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFTextLocatorTest.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFTIFFDescriptorTest.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFTimecodeStream12MTest.cpp">
@@ -581,6 +595,9 @@
 			RelativePath="..\..\..\include\AAF.h">
 		</File>
 		<File
+			RelativePath="..\..\..\..\ref-impl\src\impl\aafCvt.cpp">
+		</File>
+		<File
 			RelativePath="..\..\..\..\ref-impl\src\impl\AAFUtils.cpp">
 		</File>
 		<File
@@ -588,9 +605,6 @@
 		</File>
 		<File
 			RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTest.cpp">
-		</File>
-		<File
-			RelativePath="..\..\..\..\ref-impl\src\impl\aafCvt.cpp">
 		</File>
 		<File
 			RelativePath=".\stdafx.cpp">
@@ -606,6 +620,9 @@
 					Name="VCCLCompilerTool"
 					UsePrecompiledHeader="1"/>
 			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\..\..\test\com\ComModTestAAF\utf8.cpp">
 		</File>
 	</Files>
 	<Globals>
