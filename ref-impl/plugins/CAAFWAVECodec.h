@@ -55,31 +55,38 @@ public:
   STDMETHOD (Finish)
      (void);
 
-  STDMETHOD (GetPluggableID)(aafUID_t *result);
+  STDMETHOD (GetNumDefinitions)(aafInt32 *pDefCount);
+  STDMETHOD (GetIndexedDefinitionID)(aafInt32 index, aafUID_t *result);
   STDMETHOD (GetPluginDescriptorID)(aafUID_t *result);
   STDMETHOD (GetEssenceDescriptorID)(aafUID_t *result);
   STDMETHOD (GetEssenceDataID)(aafUID_t *result);
-  STDMETHOD (GetDefinitionObject)(IAAFDictionary *dict, IAAFDefObject **def);
-  STDMETHOD (GetDescriptor)(IAAFDictionary *dict, IAAFPluginDescriptor **desc);
+  STDMETHOD (GetIndexedDefinitionObject)(aafInt32 index, IAAFDictionary *dict, IAAFDefObject **def);
+  STDMETHOD (CreateDescriptor)(IAAFDictionary *dict, IAAFPluginDescriptor **desc);
 
   STDMETHOD (SetEssenceAccess)
-    (/*[in]*/ IUnknown *access); // Set the AAFEssenceAccess used as a factory for AAFEssenceFormat
+    (/*[in]*/ IAAFEssenceAccess *access); // Set the AAFEssenceAccess used as a factory for AAFEssenceFormat
 
-  // Some codecs have variants handled by a single codec.
+ STDMETHOD (GetFlavourCount)
+    (/*[in]*/ aafInt32  *pCount);
+
+	// Some codecs have variants handled by a single codec.
 	// (For example, the Avid AVR codec handles multiple AVRs.)
 	// The number of variants is returned by GetMetaInfo, and cached
 	// by the AAFPluginManager.
 	//
-  STDMETHOD (GetIndexedVariantID)
+  STDMETHOD (GetIndexedFlavourID)
     (/*[in]*/ aafInt32  index, // Which variant to get the ID for
      /*[out]*/ aafUID_t *  pVariant); // The returned variant ID 
 
 	
   // Sets a value indicating whether the SDK is handling the compression.
-  STDMETHOD (SetCompression)
-    (/*[in]*/ aafCompressEnable_t  enable); // isCompressionEnabled 
+  STDMETHOD (SetCompressionEnabled)
+    (/*[in]*/ aafBool  enable); // isCompressionEnabled 
 
-  // // All codecs handle at least one kind of media (picture, sound, control)
+  STDMETHOD (GetDataDefinitionCount)
+        (/* [out] */ aafInt32 *pCount);
+
+			// // All codecs handle at least one kind of media (picture, sound, control)
 	// but some handle more than one.  The kind of media is specified by an
 	// AAFDataDefinition.  The numnber of data definitions is returned by
 	// GetMetaInfo, and cached by the AAFPluginManager.
@@ -112,10 +119,11 @@ public:
 			//found with the essence, or the relationship between variables
 			// in the essence descriptor, and any such values contained within
 			// the essence data
-  STDMETHOD (SemanticCheck)
-    (/*[in]*/ IUnknown *fileMob, // Run a check on this file mob
-     /*[in]*/ aafCheckVerbose_t  verbose, // This is the verbosity level of the output
-     /*[out]*/ aafCheckWarnings_t *  warning, // This determines whether the output contains warnings
+  STDMETHOD (ValidateEssence)
+    (/*[in]*/ IAAFSourceMob *fileMob, // Run a check on this file mob
+         IAAFEssenceStream *stream,
+    /*[in]*/ aafCheckVerbose_t  verbose, // This is the verbosity level of the output
+     /*[out]*/ aafCheckWarnings_t warning, // This determines whether the output contains warnings
      /*[in,string]*/ wchar_t *  pName, // Human-readable text describing problems (or lack therof) with the media
      /*[in]*/ aafInt32  bufSize); // length of the buffer to hold variant Name 
 		
@@ -141,13 +149,15 @@ public:
   STDMETHOD (WriteBlocks)
     (/*[in]*/ aafDeinterleave_t  inter, // Whether the material will be de-interleaved on read
      /*[in]*/ aafInt16  xferBlockCount, // How many aafMultiXfer blocks follow
-     /*[in]*/ aafmMultiXfer_t *  xferBlock); // One or more blocks containing buffer pointer and length 
+     /*[in]*/ aafmMultiXfer_t *  xferBlock, // One or more blocks containing buffer pointer and length 
+     /*[in]*/ aafmMultiResult_t *  resultBlock);
 
   // Read blocks into one or more buffers, de-interleaving if needed.
   STDMETHOD (ReadBlocks)
     (/*[in]*/ aafDeinterleave_t  inter, // Whether the material will be de-interleaved on read
      /*[in]*/ aafInt16  xferBlockCount, // How many aafmMultiXfer blocks follow
-     /*[in]*/ aafmMultiXfer_t *  xferBlock); // One or more blocks containing buffer pointer and length 
+     /*[in]*/ aafmMultiXfer_t *  xferBlock, // One or more blocks containing buffer pointer and length 
+     /*[in]*/ aafmMultiResult_t *  resultBlock);
 
   // Seek to a particular sample frame on the media.  The
 			// sample frame is one frame for picture, and one sample
@@ -157,7 +167,7 @@ public:
 
   // Close the media stream, ready to open another or Finish.
   STDMETHOD (CompleteWrite)
-     (IUnknown *unk);
+     (IAAFSourceMob *desc);
 
 		
 
@@ -205,7 +215,7 @@ public:
 			// an AAFEssenceDescriptor to match, with all fields filled in.
   STDMETHOD (CreateDescriptorFromStream)
     (/*[in]*/ IAAFEssenceStream * pStream, // A raw file stream
-     /*[in]*/ IUnknown *fileMob); // Put the finished descriptor on this source mob 
+     /*[in]*/ IAAFSourceMob *fileMob); // Put the finished descriptor on this source mob 
 
 
 
