@@ -34,6 +34,11 @@
   // @class Abstract base class supporting access to the raw bytes of
   //        files supported by the Object Manager.
   //
+  //        Object Manager clients use this interface, after a file has been
+  //        saved and closed, to access the raw bytes of a file, or, before
+  //        a file has been opened, to supply the raw bytes to be used for
+  //        that file.
+  // 
   //        Object Manager clients implement this interface to allow files
   //        to be stored in locations not known to the Object Manager.
   //
@@ -59,43 +64,71 @@ public:
   virtual ~OMRawStorage(void) {}
 
     // @cmember Attempt to read the number of bytes given by <p byteCount>
-    //          from this <c OMRawStorage> at <p offset> into the buffer
-    //          at address <p bytes>. The actual number of bytes read is
-    //          returned in <p bytesRead>. Reading from offsets greater than
-    //          <mf OMRawStorage::size> causes <p bytesRead> to be less than
-    //          <p byteCount>. Reading bytes that have never been written
+    //          from the current position in this <c OMRawStorage>
+    //          into the buffer at address <p bytes>.
+    //          The actual number of bytes read is returned in <p bytesRead>.
+    //          Reading from positions greater than
+    //          <mf OMRawStorage::size> causes <p bytesRead> to be less
+    //          than <p byteCount>. Reading bytes that have never been written
     //          returns undefined data in <p bytes>.
-  virtual void readAt(OMUInt64 offset,
-                      OMByte* bytes,
-                      OMUInt32 byteCount,
-                      OMUInt32& bytesRead) const = 0;
+  virtual void read(OMByte* bytes,
+                    OMUInt32 byteCount,
+                    OMUInt32& bytesRead) const = 0;
 
     // @cmember Attempt to write the number of bytes given by <p byteCount>
-    //          to this <c OMRawStorage> at <p offset> from the buffer
-    //          at address <p bytes>. The actual number of bytes written is
-    //          returned in <p bytesWritten>. Writing to offsets greater than
+    //          to the current position in this <c OMRawStorage>
+    //          from the buffer at address <p bytes>.
+    //          The actual number of bytes written is returned in
+    //          <p bytesWritten>.
+    //          Writing to positions greater than
     //          <mf OMRawStorage::size> causes this <c OMRawStorage>
     //          to be extended, however such extension can fail, causing
     //          <p bytesWritten> to be less than <p byteCount>.
-  virtual void writeAt(OMUInt64 offset,
-                       const OMByte* bytes,
-                       OMUInt32 byteCount,
-                       OMUInt32& bytesWritten) = 0;
+    //   @devnote How is failure to extend indicated ?
+  virtual void write(const OMByte* bytes,
+                     OMUInt32 byteCount,
+                     OMUInt32& bytesWritten) = 0;
+
+    // @cmember May this <c OMRawStorage> be changed in size ?
+    //          An implementation of <c OMRawStorage> for disk files
+    //          would most probably return true. An implemetation
+    //          for network streams would return false. An implementation
+    //          for fixed size contiguous memory files (avoiding copying)
+    //          would return false.
+  virtual bool isSizeable(void) const = 0;
 
     // @cmember The current size of this <c OMRawStorage> in bytes.
-    //   @devnote This method does not make sense for <c OMRawStorage>
-    //            implemented on a stream
+    //          precondition - isSizeable()
   virtual OMUInt64 size(void) const = 0;
 
     // @cmember Set the size of this <c OMRawStorage> to <p newSize> bytes.
     //          If <p newSize> is greater than <mf OMRawStorage::size>
     //          then this <c OMRawStorage> is extended. If <p newSize>
     //          is less than <mf OMRawStorage::size> then this
-    //          <c OMRawStorage> is truncated.
-    //   @devnote This method does not make sense for <c OMRawStorage>
-    //            implemented on a stream.
+    //          <c OMRawStorage> is truncated. Truncation may also result
+    //          in the current position for <f read()> and <f write()>
+    //          being set to <mf OMRawStorage::size>.
+    //          precondition - isSizeable()
     //   @devnote How is failure to extend indicated ?
   virtual void setSize(OMUInt64 newSize) = 0;
+
+    // @cmember May the current position, for <f read()> and <f write()>,
+    //          of this <c OMRawStorage> be changed ?
+    //          An implementation of <c OMRawStorage> for disk files
+    //          would most probably return true. An implemetation
+    //          for network streams would return false. An implementation
+    //          for memory files would return true.
+  virtual bool isPositionable(void) const = 0;
+
+    // @cmember The current position for <f read()> and <f write()>, as an
+    //          offset in bytes from the begining of this <c OMRawStorage>.
+    //          precondition - isPositionable()
+  virtual OMUInt64 position(void) const = 0;
+
+    // @cmember Set the current position for <f read()> and <f write()>, as an
+    //          offset in bytes from the begining of this <c OMRawStorage>.
+    //          precondition - isPositionable()
+  virtual void setPosition(OMUInt64 newPosition) = 0;
 
 };
 

@@ -79,7 +79,7 @@ OMDiskRawStorage::openExistingModify(const wchar_t* fileName)
 
   // @mfunc Create an <c OMDiskRawStorage> object by creating a new
   //        file for modify access, the file is named <p fileName>.
-  //        The file must note already exist.
+  //        The file must not already exist.
   //   @parm The file name.
   //   @rdesc The newly created <c OMDiskRawStorage> object.
 OMDiskRawStorage*
@@ -125,66 +125,81 @@ OMDiskRawStorage::~OMDiskRawStorage(void)
 }
 
   // @mfunc Attempt to read the number of bytes given by <p byteCount>
-  //        from this <c OMDiskRawStorage> at <p offset> into the buffer
-  //        at address <p bytes>. The actual number of bytes read is
-  //        returned in <p bytesRead>. Reading from offsets greater than
-  //        <mf OMRawStorage::size> causes <p bytesRead> to be less than
-  //        <p byteCount>. Reading bytes that have never been written
+  //        from the current position in this <c OMDiskRawStorage>
+  //        into the buffer at address <p bytes>.
+  //        The actual number of bytes read is returned in <p bytesRead>.
+  //        Reading from positions greater than
+  //        <mf OMDiskRawStorage::size> causes <p bytesRead> to be less
+  //        than <p byteCount>. Reading bytes that have never been written
   //        returns undefined data in <p bytes>.
-  //   @parm The offset from which to read.
   //   @parm The buffer into which the bytes are to be read.
   //   @parm The number of bytes to read.
   //   @parm The number of bytes actually read.
   //   @this const
-void OMDiskRawStorage::readAt(OMUInt64 offset,
-                              OMByte* bytes,
-                              OMUInt32 byteCount,
-                              OMUInt32& bytesRead) const
+void OMDiskRawStorage::read(OMByte* bytes,
+                            OMUInt32 byteCount,
+                            OMUInt32& bytesRead) const
 {
-  TRACE("OMDiskRawStorage::readAt");
+  TRACE("OMDiskRawStorage::read");
 
   PRECONDITION("Valid mode", (_mode == OMFile::modifyMode) ||
                              (_mode == OMFile::readOnlyMode));
 
-  setPosition(offset);
   size_t actualByteCount = fread(bytes, 1, byteCount, _file);
 
   bytesRead = actualByteCount;
 }
 
   // @mfunc Attempt to write the number of bytes given by <p byteCount>
-  //        to this <c OMDiskRawStorage> at <p offset> from the buffer
-  //        at address <p bytes>. The actual number of bytes written is
-  //        returned in <p bytesWritten>. Writing to offsets greater than
-  //        <mf OMRawStorage::size> causes this <c OMDiskRawStorage>
+  //        to the current position in this <c OMDiskRawStorage>
+  //        from the buffer at address <p bytes>.
+  //        The actual number of bytes written is returned in
+  //        <p bytesWritten>.
+  //        Writing to positions greater than
+  //        <mf OMDiskRawStorage::size> causes this <c OMDiskRawStorage>
   //        to be extended, however such extension can fail, causing
   //        <p bytesWritten> to be less than <p byteCount>.
-  //   @parm The offset at which to write.
   //   @parm The buffer from which the bytes are to be written.
   //   @parm The number of bytes to write.
   //   @parm The actual number of bytes written.
-void OMDiskRawStorage::writeAt(OMUInt64 offset,
-                               const OMByte* bytes,
-                               OMUInt32 byteCount,
-                               OMUInt32& bytesWritten)
+void OMDiskRawStorage::write(const OMByte* bytes,
+                             OMUInt32 byteCount,
+                             OMUInt32& bytesWritten)
 {
-  TRACE("OMDiskRawStorage::writeAt");
+  TRACE("OMDiskRawStorage::write");
 
   PRECONDITION("Valid mode", (_mode == OMFile::modifyMode) ||
                              (_mode == OMFile::writeOnlyMode));
 
-  setPosition(offset);
   size_t actualByteCount = fwrite(bytes, 1, byteCount, _file);
 
   bytesWritten = actualByteCount;
 }
 
+  // @mfunc May this <c OMDiskRawStorage> be changed in size ?
+  //        An implementation of <c OMDiskRawStorage> for disk files
+  //        would most probably return true. An implemetation
+  //        for network streams would return false. An implementation
+  //        for fixed size contiguous memory files (avoiding copying)
+  //        would return false.
+  //   @rdesc Always <e bool.true>.
+  //   @this const
+bool OMDiskRawStorage::isSizeable(void) const
+{
+  TRACE("OMDiskRawStorage::isSizeable");
+
+  return true;
+}
+
   // @mfunc The current size of this <c OMDiskRawStorage> in bytes.
+  //        precondition - isSizeable()
   //   @rdesc The current size of this <c OMDiskRawSrorage> in bytes.
   //   @this const
 OMUInt64 OMDiskRawStorage::size(void) const
 {
   TRACE("OMDiskRawStorage::size");
+
+  PRECONDITION("Sizeable", isSizeable());
 
   long int seekStatus = fseek(_file, 0, SEEK_END);
   ASSERT("Successful seek", seekStatus == 0); // tjb - error
@@ -198,15 +213,20 @@ OMUInt64 OMDiskRawStorage::size(void) const
 }
 
   // @mfunc Set the size of this <c OMDiskRawStorage> to <p newSize> bytes.
-  //        If <p newSize> is greater than <mf OMRawStorage::size>
+  //        If <p newSize> is greater than <mf OMDiskRawStorage::size>
   //        then this <c OMDiskRawStorage> is extended. If <p newSize>
-  //        is less than <mf OMRawStorage::size> then this
-  //        <c OMDiskRawStorage> is truncated.
+  //        is less than <mf OMDiskRawStorage::size> then this
+  //        <c OMDiskRawStorage> is truncated. Truncation may also result
+  //        in the current position for <f read()> and <f write()>
+  //        being set to <mf OMDiskRawStorage::size>.
+  //        precondition - isSizeable()
   //   @parm The new size of this <c OMDiskRawSrorage> in bytes.
   //   @devnote There is no ISO/ANSI way of truncating a file in place.
 void OMDiskRawStorage::setSize(OMUInt64 newSize)
 {
   TRACE("OMDiskRawStorage::setSize");
+
+  PRECONDITION("Sizeable", isSizeable());
 
   PRECONDITION("Valid mode", (_mode == OMFile::modifyMode) ||
                              (_mode == OMFile::writeOnlyMode));
@@ -220,21 +240,55 @@ void OMDiskRawStorage::setSize(OMUInt64 newSize)
     OMByte nullByte = 0;
     OMUInt32 bytesWritten = 0;
 
-    writeAt(newSize - 1, &nullByte, 1, bytesWritten);
+    setPosition(newSize - 1);
+    write(&nullByte, 1, bytesWritten);
     ASSERT("Successful write", bytesWritten == 1);
     ASSERT("Size properly changed", size() == newSize);
   }
   // else no ISO/ANSI way to truncate the file in place
 }
 
-  // @mfunc Set the position for subsequent reads and writes
-  //        to <p newPosition>.
+  // @mfunc May the current position, for <f read()> and <f write()>,
+  //        of this <c OMDiskRawStorage> be changed ?
+  //        An implementation of <c OMDiskRawStorage> for disk files
+  //        would most probably return true. An implemetation
+  //        for network streams would return false. An implementation
+  //        for memory files would return true.
+  //   @rdesc Always <e bool.true>.
+  //   @this const
+bool OMDiskRawStorage::isPositionable(void) const
+{
+  TRACE("OMDiskRawStorage::isPositionable");
+
+  return true;
+}
+
+  // @mfunc The current position for <f read()> and <f write()>, as an
+  //        offset in bytes from the begining of this <c OMDiskRawStorage>.
+  //        precondition - isPositionable()
+  //   @rdesc The current position for <f read()> and <f write()>.
+  //   @this const
+OMUInt64 OMDiskRawStorage::position(void) const
+{
+  TRACE("OMDiskRawStorage::position");
+
+  PRECONDITION("Positionable", isPositionable());
+
+  // TBS
+  return 0;
+}
+
+  // @mfunc Set the current position for <f read()> and <f write()>, as an
+  //        offset in bytes from the begining of this <c OMDiskRawStorage>.
+  //        precondition - isPositionable()
   //   @parm The new position.
   //   @devnote fseek takes a long int for offset this may not be sufficient
   //            for 64-bit offsets.
-void OMDiskRawStorage::setPosition(OMUInt64 newPosition) const
+void OMDiskRawStorage::setPosition(OMUInt64 newPosition)
 {
   TRACE("OMDiskRawStorage::setPosition");
+
+  PRECONDITION("Positionable", isPositionable());
 
   ASSERT("Supported position", newPosition <= LONG_MAX); // tjb - limit
   long int liNewPosition = static_cast<long int>(newPosition);

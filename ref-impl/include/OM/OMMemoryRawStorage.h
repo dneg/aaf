@@ -57,38 +57,73 @@ public:
   virtual ~OMMemoryRawStorage(void);
 
     // @cmember Attempt to read the number of bytes given by <p byteCount>
-    //          from this <c OMMemoryRawStorage> at <p offset> into the buffer
-    //          at address <p bytes>. The actual number of bytes read is
-    //          returned in <p bytesRead>. Reading from offsets greater than
-    //          <mf OMRawStorage::size> causes <p bytesRead> to be less than
-    //          <p byteCount>. Reading bytes that have never been written
+    //          from the current position in this <c OMMemoryRawStorage>
+    //          into the buffer at address <p bytes>.
+    //          The actual number of bytes read is returned in <p bytesRead>.
+    //          Reading from positions greater than
+    //          <mf OMMemoryRawStorage::size> causes <p bytesRead> to be less
+    //          than <p byteCount>. Reading bytes that have never been written
     //          returns undefined data in <p bytes>.
-  virtual void readAt(OMUInt64 offset,
-                      OMByte* bytes,
-                      OMUInt32 byteCount,
-                      OMUInt32& bytesRead) const;
+  virtual void read(OMByte* bytes,
+                    OMUInt32 byteCount,
+                    OMUInt32& bytesRead) const;
 
     // @cmember Attempt to write the number of bytes given by <p byteCount>
-    //          to this <c OMMemoryRawStorage> at <p offset> from the buffer
-    //          at address <p bytes>. The actual number of bytes written is
-    //          returned in <p bytesWritten>. Writing to offsets greater than
-    //          <mf OMRawStorage::size> causes this <c OMMemoryRawStorage>
+    //          to the current position in this <c OMMemoryRawStorage>
+    //          from the buffer at address <p bytes>.
+    //          The actual number of bytes written is returned in
+    //          <p bytesWritten>.
+    //          Writing to positions greater than
+    //          <mf OMMemoryRawStorage::size> causes this
+    //          <c OMMemoryRawStorage>
     //          to be extended, however such extension can fail, causing
     //          <p bytesWritten> to be less than <p byteCount>.
-  virtual void writeAt(OMUInt64 offset,
-                       const OMByte* bytes,
-                       OMUInt32 byteCount,
-                       OMUInt32& bytesWritten);
+  virtual void write(const OMByte* bytes,
+                     OMUInt32 byteCount,
+                     OMUInt32& bytesWritten);
+
+    // @cmember May this <c OMMemoryRawStorage> be changed in size ?
+    //          An implementation of <c OMMemoryRawStorage> for disk files
+    //          would most probably return true. An implemetation
+    //          for network streams would return false. An implementation
+    //          for fixed size contiguous memory files (avoiding copying)
+    //          would return false.
+  virtual bool isSizeable(void) const;
 
     // @cmember The current size of this <c OMMemoryRawStorage> in bytes.
+    //          precondition - isSizeable()
   virtual OMUInt64 size(void) const;
 
     // @cmember Set the size of this <c OMMemoryRawStorage> to <p newSize>
-    //          bytes. If <p newSize> is greater than <mf OMRawStorage::size>
+    //          bytes.
+    //          If <p newSize> is greater than <mf OMMemoryRawStorage::size>
     //          then this <c OMMemoryRawStorage> is extended. If <p newSize>
-    //          is less than <mf OMRawStorage::size> then this
-    //          <c OMMemoryRawStorage> is truncated.
+    //          is less than <mf OMMemoryRawStorage::size> then this
+    //          <c OMMemoryRawStorage> is truncated. Truncation may also result
+    //          in the current position for <f read()> and <f write()>
+    //          being set to <mf OMMemoryRawStorage::size>.
+    //          precondition - isSizeable()
   virtual void setSize(OMUInt64 newSize);
+
+    // @cmember May the current position, for <f read()> and <f write()>,
+    //          of this <c OMMemoryRawStorage> be changed ?
+    //          An implementation of <c OMMemoryRawStorage> for disk files
+    //          would most probably return true. An implemetation
+    //          for network streams would return false. An implementation
+    //          for memory files would return true.
+  virtual bool isPositionable(void) const;
+
+    // @cmember The current position for <f read()> and <f write()>, as an
+    //          offset in bytes from the begining of this
+    //          <c OMMemoryRawStorage>.
+    //          precondition - isPositionable()
+  virtual OMUInt64 position(void) const;
+
+    // @cmember Set the current position for <f read()> and <f write()>, as an
+    //          offset in bytes from the begining of this
+    //          <c OMMemoryRawStorage>.
+    //          precondition - isPositionable()
+  virtual void setPosition(OMUInt64 newPosition);
 
 private:
   // @access Private members.
