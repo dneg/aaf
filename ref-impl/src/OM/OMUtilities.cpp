@@ -6,10 +6,6 @@
 #include <assert.h>
 #include <string.h>
 
-#if !defined(OMSTANDALONE)
-#include "AAFTypes.h"
-#endif
-
 char* programName = 0;
 
 void setProgramName(const char* name)
@@ -46,31 +42,32 @@ ByteOrder hostByteOrder(void)
   return result;
 }
 
-
-#if !defined(OMSTANDALONE)
-void OMUwc2sb (char * pbString,
-			   const aafWChar * pwString)
+size_t wideStringLength(const wchar_t* string)
 {
-  assert (pwString);
-  assert (pbString);
-  while (*pwString)
-	{
-	  // first make sure this char will fit
-	  assert (0 == (*pwString & ~0xFF));
-	  *pbString++ = (char) *pwString++;
-	}
-  *pbString = (char) *pwString;
+  const wchar_t* p = string;
+  size_t length = 0;
+  while (*p != 0) {
+    ++length;
+    ++p;
+  }
+  return length;
 }
 
-void OMUsb2wc (aafWChar * pwString,
-			   const char * pbString)
+// Same as strncpy(), but for wide characters.
+//
+wchar_t* wideStringCopy(wchar_t* destination,
+                        const wchar_t* source,
+                        const size_t length)
 {
-  assert (pwString);
-  assert (pbString);
-  while (*pbString)
-	{
-	  *pwString++ = (char) *pbString++;
-	}
-  *pwString = (char) *pbString;
+  wchar_t* d = destination;
+  const wchar_t* s = source;
+  size_t i = 0;
+
+  for (i = 0; ((i < length) && (*s != 0)); i++) {
+    *d++ = *s++;
+  }
+  for (i = i; i < length; i++) {
+    *d++ = 0;
+  }
+  return destination;
 }
-#endif
