@@ -36,9 +36,14 @@ AD_XMETHOD1(GetNumDefinitions,
 			pDefCount,
 			The number of definitions associated with this plugin,
 
-			This method returns the number of subclasses of AAFDefObject associated with this plugin.
-	// This value will equal to the number of codecs\, operation groups\, classes\, types\, containers\, etc..
-	// implemented by the current plugin.  This method will be called once at startup by the plugin manager.
+			This method returns the number of subclasses of AAFDefObject associated with this plugin\,
+	// and will be called once at startup by the plugin manager.
+	// A non-zero index is used when a single piece of code implements more than one definition\, which
+	// is not to be confused with multiple plugin interfaces existing in a single plugin file.
+	// An example where an index other than one would be useful is an interpolator which implements
+	// multiple types of interpolation \(ex. linear\, constant\, etc...\)\, but has one entry point
+	// for all types.  Codecs will have only one definition per interface\, but may have many interfaces
+	// clumped together into a single file.
   //
   // If this method fails nothing will be written to *pDefCount.
   // 
@@ -67,6 +72,12 @@ AD_XMETHOD2(GetIndexedDefinitionID,
 			This method returns the unique ID of the AAFDefObject associated with this Plugin. 
  	// This range of indices will be from 0 to one less than the total number of codecs\,
 	// operation groups\, classes\, types\, containers\, etc.. implemented by this plugin.
+	// A non-zero index is used when a single piece of code implements more than one definition\, which
+	// is not to be confused with multiple plugin interfaces existing in a single plugin file.
+	// An example where an index other than one would be useful is an interpolator which implements
+	// multiple types of interpolation \(ex. linear\, constant\, etc...\)\, but has one entry point
+	// for all types.  Codecs will have only one definition per interface\, but may have many interfaces
+	// clumped together into a single file.
  //
   // Succeeds if all of the following are true:
   // - the pPluginID pointer is valid.
@@ -95,6 +106,9 @@ AD_XMETHOD1(GetPluginDescriptorID,
 			The unique media object id,
 
 			This method returns the unique ID of the AAFPluginDescriptor associated with this Plugin.
+  // This method is called by the plugin manager to determine if a particular plugin descriptor
+  // \(indicating a particular plugin\) is already in the current file\, so that the full create
+  // function does not need to be called.
   //
   // Succeeds if all of the following are true:
   // - the pPluginID pointer is valid.
@@ -130,7 +144,17 @@ AD_XMETHOD3(GetIndexedDefinitionObject,
 
 			This method manufactures a definition object of the correct
   // class for this plugin\, and fills in the values.  You must call QueryInterface
-  // on the result in order to find the correct interface.
+  // on the result in order to find the correct interface.  The dictionary supplied
+  // should be for the file where the definition will go\, but the definition will not
+  // be added to the file by this function.  The supplied dictionary also needs no
+  // former knowledge of the new definition.  This function will be called by the plugin
+  // manager in order to add the correct definition objects to a file.
+	// A non-zero index is used when a single piece of code implements more than one definition\, which
+	// is not to be confused with multiple plugin interfaces existing in a single plugin file.
+	// An example where an index other than one would be useful is an interpolator which implements
+	// multiple types of interpolation \(ex. linear\, constant\, etc...\)\, but has one entry point
+	// for all types.  Codecs will have only one definition per interface\, but may have many interfaces
+	// clumped together into a single file.
   //
   // Succeeds if all of the following are true:
   // - the pDefObject pointer is valid.
@@ -161,7 +185,11 @@ AD_XMETHOD2(CreateDescriptor,
 
 			This method manufactures a plugin descriptor of the correct
   // class for this plugin\, and fills in the values.  You must call QueryInterface
-  // on the result in order to find the corret interface.
+  // on the result in order to find the corret interface.  The dictionary supplied
+  // should be for the file where the descriptor will go\, but the descriptor will not
+  // be added to the file by this function.  The supplied dictionary also needs no
+  // former knowledge of the new descriptor.  This function will be called by the plugin
+  // manager in order to add the correct plugin descriptors to a file.
   //
   // Succeeds if all of the following are true:
   // - the pPluginDesc pointer is valid.
