@@ -35,6 +35,7 @@
 #include <memory.h>
 #include <stdlib.h>
 #include <wchar.h>
+#include "AAFDefUIDs.h"
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFResult.h"
@@ -120,7 +121,7 @@ extern "C" HRESULT CAAFEvent_test()
   ProductInfo.productName = L"AAFEvent Test";
   ProductInfo.productVersion = &v;
   ProductInfo.productVersionString = NULL;
-  ProductInfo.productID = NIL_UID;
+  ProductInfo.productID = UnitTestProductID;
   ProductInfo.platform = NULL;
 
   // Create an instance of our text clip test class and run the
