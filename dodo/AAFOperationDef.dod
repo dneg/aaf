@@ -410,7 +410,9 @@ AD_XMETHOD1(AddParameterDefs,
 			Add the Parameter Definition object to the unordered list of parameter definitions.
   // 
   // Succeeds if all of the following are true:
-  // - the pAAFParameterDef pointer is valid.
+  // - the pAAFParameterDef pointer is valid. 
+  // - the given Parameter Definition does not exists in this Operation
+  //   Definition already
   // 
   // If this method fails no state will be changed.
   // 
@@ -422,7 +424,10 @@ AD_XMETHOD1(AddParameterDefs,
   //   - succeeded.  \(This is the only code indicating success.\)
   //
   // AAFRESULT_NULL_PARAM
-  //   - pAAFParameterDef is null.)
+  //   - pAAFParameterDef is null.
+  //
+  // AAFRESULT_OBJECT_ALREADY_ATTACHED
+  //	- pAAFParameterDef is already in this OperationDef)
 
 
 AD_XMETHOD1(GetParameterDefinitions,
