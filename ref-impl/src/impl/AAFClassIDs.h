@@ -173,5 +173,9 @@ extern "C" const aafClassID_t CLSID_AAFRandomRawStorage;
 extern "C" const aafClassID_t CLSID_AAFGetFileBits;
 extern "C" const aafClassID_t CLSID_AAFSetFileBits;
 extern "C" const aafClassID_t CLSID_AAFRandomFile;
+extern "C" const aafClassID_t CLSID_AAFTaggedValueDefinition;
+extern "C" const aafClassID_t CLSID_AAFKLVDataDefinition;
+extern "C" const aafClassID_t CLSID_EnumAAFTaggedValueDefs;
+extern "C" const aafClassID_t CLSID_EnumAAFKLVDataDefs;
 
 #endif // __AAFClassIDs_h__
