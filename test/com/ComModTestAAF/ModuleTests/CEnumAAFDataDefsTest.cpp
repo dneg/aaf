@@ -394,7 +394,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 					numCpnts++;
 					
 					checkResult(pComp->GetDataDef(&dataDef));
-					checkResult(pDictionary->LookupDataDefintion(&dataDef, &pDataDef));
+					checkResult(pDictionary->LookupDataDefinition(&dataDef, &pDataDef));
 					checkResult(pDataDef->IsSoundKind(&testBool));
 					checkExpression(testBool == AAFFalse, AAFRESULT_TEST_FAILED);
 					checkResult(pDataDef->IsMatteKind(&testBool));
