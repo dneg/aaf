@@ -4,7 +4,7 @@
 
 
  /* File created by MIDL compiler version 6.00.0361 */
-/* at Mon Apr 26 14:29:48 2004
+/* at Sat May 01 15:33:03 2004
  */
 /* Compiler settings for AAF.idl:
     Oicf, W1, Zp8, env=Win32 (32b run)
@@ -807,6 +807,18 @@ typedef interface IEnumAAFKLVDataDefs IEnumAAFKLVDataDefs;
 #endif 	/* __IEnumAAFKLVDataDefs_FWD_DEFINED__ */
 
 
+#ifndef __IAAFRecordingDescriptor_FWD_DEFINED__
+#define __IAAFRecordingDescriptor_FWD_DEFINED__
+typedef interface IAAFRecordingDescriptor IAAFRecordingDescriptor;
+#endif 	/* __IAAFRecordingDescriptor_FWD_DEFINED__ */
+
+
+#ifndef __IAAFAuxiliaryDescriptor_FWD_DEFINED__
+#define __IAAFAuxiliaryDescriptor_FWD_DEFINED__
+typedef interface IAAFAuxiliaryDescriptor IAAFAuxiliaryDescriptor;
+#endif 	/* __IAAFAuxiliaryDescriptor_FWD_DEFINED__ */
+
+
 #ifndef __IAAFEndian_FWD_DEFINED__
 #define __IAAFEndian_FWD_DEFINED__
 typedef interface IAAFEndian IAAFEndian;
@@ -861,6 +873,18 @@ typedef interface IAAFDictionary2 IAAFDictionary2;
 #endif 	/* __IAAFDictionary2_FWD_DEFINED__ */
 
 
+#ifndef __IAAFSourceReference2_FWD_DEFINED__
+#define __IAAFSourceReference2_FWD_DEFINED__
+typedef interface IAAFSourceReference2 IAAFSourceReference2;
+#endif 	/* __IAAFSourceReference2_FWD_DEFINED__ */
+
+
+#ifndef __IAAFMasterMob2_FWD_DEFINED__
+#define __IAAFMasterMob2_FWD_DEFINED__
+typedef interface IAAFMasterMob2 IAAFMasterMob2;
+#endif 	/* __IAAFMasterMob2_FWD_DEFINED__ */
+
+
 /* header files for imported files */
 #include "unknwn.h"
 #include "objidl.h"
@@ -905,6 +929,10 @@ void __RPC_USER MIDL_user_free( void * );
 // AAF Interfaces.
 //=--------------------------------------------------------------------------=
 //
+
+
+
+
 
 
 
@@ -32662,6 +32690,318 @@ void __RPC_STUB IEnumAAFKLVDataDefs_Clone_Stub(
 #endif 	/* __IEnumAAFKLVDataDefs_INTERFACE_DEFINED__ */
 
 
+#ifndef __IAAFRecordingDescriptor_INTERFACE_DEFINED__
+#define __IAAFRecordingDescriptor_INTERFACE_DEFINED__
+
+/* interface IAAFRecordingDescriptor */
+/* [unique][helpstring][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IAAFRecordingDescriptor;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("a6542226-19a7-40ee-9650-a3b9c66ccfe7")
+    IAAFRecordingDescriptor : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE Initialize( void) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IAAFRecordingDescriptorVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IAAFRecordingDescriptor * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IAAFRecordingDescriptor * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IAAFRecordingDescriptor * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *Initialize )( 
+            IAAFRecordingDescriptor * This);
+        
+        END_INTERFACE
+    } IAAFRecordingDescriptorVtbl;
+
+    interface IAAFRecordingDescriptor
+    {
+        CONST_VTBL struct IAAFRecordingDescriptorVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IAAFRecordingDescriptor_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IAAFRecordingDescriptor_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IAAFRecordingDescriptor_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IAAFRecordingDescriptor_Initialize(This)	\
+    (This)->lpVtbl -> Initialize(This)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IAAFRecordingDescriptor_Initialize_Proxy( 
+    IAAFRecordingDescriptor * This);
+
+
+void __RPC_STUB IAAFRecordingDescriptor_Initialize_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IAAFRecordingDescriptor_INTERFACE_DEFINED__ */
+
+
+#ifndef __IAAFAuxiliaryDescriptor_INTERFACE_DEFINED__
+#define __IAAFAuxiliaryDescriptor_INTERFACE_DEFINED__
+
+/* interface IAAFAuxiliaryDescriptor */
+/* [unique][helpstring][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IAAFAuxiliaryDescriptor;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("197a9cb2-48de-40a3-b965-59531d3fcf23")
+    IAAFAuxiliaryDescriptor : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE Initialize( void) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetMimeType( 
+            /* [string][in] */ aafCharacter_constptr pMimeType) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetMimeType( 
+            /* [size_is][string][out] */ aafCharacter *pMimeType,
+            /* [in] */ aafUInt32 bufSize) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetMimeTypeBufLen( 
+            /* [out] */ aafUInt32 *pBufSize) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetCharSet( 
+            /* [string][in] */ aafCharacter_constptr pCharSet) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetCharSet( 
+            /* [size_is][string][out] */ aafCharacter *pCharSet,
+            /* [in] */ aafUInt32 bufSize) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetCharSetBufLen( 
+            /* [out] */ aafUInt32 *pBufSize) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IAAFAuxiliaryDescriptorVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IAAFAuxiliaryDescriptor * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IAAFAuxiliaryDescriptor * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IAAFAuxiliaryDescriptor * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *Initialize )( 
+            IAAFAuxiliaryDescriptor * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *SetMimeType )( 
+            IAAFAuxiliaryDescriptor * This,
+            /* [string][in] */ aafCharacter_constptr pMimeType);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetMimeType )( 
+            IAAFAuxiliaryDescriptor * This,
+            /* [size_is][string][out] */ aafCharacter *pMimeType,
+            /* [in] */ aafUInt32 bufSize);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetMimeTypeBufLen )( 
+            IAAFAuxiliaryDescriptor * This,
+            /* [out] */ aafUInt32 *pBufSize);
+        
+        HRESULT ( STDMETHODCALLTYPE *SetCharSet )( 
+            IAAFAuxiliaryDescriptor * This,
+            /* [string][in] */ aafCharacter_constptr pCharSet);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetCharSet )( 
+            IAAFAuxiliaryDescriptor * This,
+            /* [size_is][string][out] */ aafCharacter *pCharSet,
+            /* [in] */ aafUInt32 bufSize);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetCharSetBufLen )( 
+            IAAFAuxiliaryDescriptor * This,
+            /* [out] */ aafUInt32 *pBufSize);
+        
+        END_INTERFACE
+    } IAAFAuxiliaryDescriptorVtbl;
+
+    interface IAAFAuxiliaryDescriptor
+    {
+        CONST_VTBL struct IAAFAuxiliaryDescriptorVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IAAFAuxiliaryDescriptor_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IAAFAuxiliaryDescriptor_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IAAFAuxiliaryDescriptor_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IAAFAuxiliaryDescriptor_Initialize(This)	\
+    (This)->lpVtbl -> Initialize(This)
+
+#define IAAFAuxiliaryDescriptor_SetMimeType(This,pMimeType)	\
+    (This)->lpVtbl -> SetMimeType(This,pMimeType)
+
+#define IAAFAuxiliaryDescriptor_GetMimeType(This,pMimeType,bufSize)	\
+    (This)->lpVtbl -> GetMimeType(This,pMimeType,bufSize)
+
+#define IAAFAuxiliaryDescriptor_GetMimeTypeBufLen(This,pBufSize)	\
+    (This)->lpVtbl -> GetMimeTypeBufLen(This,pBufSize)
+
+#define IAAFAuxiliaryDescriptor_SetCharSet(This,pCharSet)	\
+    (This)->lpVtbl -> SetCharSet(This,pCharSet)
+
+#define IAAFAuxiliaryDescriptor_GetCharSet(This,pCharSet,bufSize)	\
+    (This)->lpVtbl -> GetCharSet(This,pCharSet,bufSize)
+
+#define IAAFAuxiliaryDescriptor_GetCharSetBufLen(This,pBufSize)	\
+    (This)->lpVtbl -> GetCharSetBufLen(This,pBufSize)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IAAFAuxiliaryDescriptor_Initialize_Proxy( 
+    IAAFAuxiliaryDescriptor * This);
+
+
+void __RPC_STUB IAAFAuxiliaryDescriptor_Initialize_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFAuxiliaryDescriptor_SetMimeType_Proxy( 
+    IAAFAuxiliaryDescriptor * This,
+    /* [string][in] */ aafCharacter_constptr pMimeType);
+
+
+void __RPC_STUB IAAFAuxiliaryDescriptor_SetMimeType_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFAuxiliaryDescriptor_GetMimeType_Proxy( 
+    IAAFAuxiliaryDescriptor * This,
+    /* [size_is][string][out] */ aafCharacter *pMimeType,
+    /* [in] */ aafUInt32 bufSize);
+
+
+void __RPC_STUB IAAFAuxiliaryDescriptor_GetMimeType_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFAuxiliaryDescriptor_GetMimeTypeBufLen_Proxy( 
+    IAAFAuxiliaryDescriptor * This,
+    /* [out] */ aafUInt32 *pBufSize);
+
+
+void __RPC_STUB IAAFAuxiliaryDescriptor_GetMimeTypeBufLen_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFAuxiliaryDescriptor_SetCharSet_Proxy( 
+    IAAFAuxiliaryDescriptor * This,
+    /* [string][in] */ aafCharacter_constptr pCharSet);
+
+
+void __RPC_STUB IAAFAuxiliaryDescriptor_SetCharSet_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFAuxiliaryDescriptor_GetCharSet_Proxy( 
+    IAAFAuxiliaryDescriptor * This,
+    /* [size_is][string][out] */ aafCharacter *pCharSet,
+    /* [in] */ aafUInt32 bufSize);
+
+
+void __RPC_STUB IAAFAuxiliaryDescriptor_GetCharSet_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFAuxiliaryDescriptor_GetCharSetBufLen_Proxy( 
+    IAAFAuxiliaryDescriptor * This,
+    /* [out] */ aafUInt32 *pBufSize);
+
+
+void __RPC_STUB IAAFAuxiliaryDescriptor_GetCharSetBufLen_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IAAFAuxiliaryDescriptor_INTERFACE_DEFINED__ */
+
+
 #ifndef __IAAFEndian_INTERFACE_DEFINED__
 #define __IAAFEndian_INTERFACE_DEFINED__
 
@@ -36337,7 +36677,915 @@ void __RPC_STUB IAAFDictionary2_CountTaggedValueDefs_Stub(
 #endif 	/* __IAAFDictionary2_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_AAF_0232 */
+#ifndef __IAAFSourceReference2_INTERFACE_DEFINED__
+#define __IAAFSourceReference2_INTERFACE_DEFINED__
+
+/* interface IAAFSourceReference2 */
+/* [unique][helpstring][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IAAFSourceReference2;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("eb3094c4-f60e-4aa3-b500-ba72c4c791b7")
+    IAAFSourceReference2 : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE GetSourceID( 
+            /* [out][retval] */ aafMobID_t *pSourceID) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetSourceID( 
+            /* [in] */ aafMobID_constref sourceID) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetSourceMobSlotID( 
+            /* [out][retval] */ aafSlotID_t *pMobSlotID) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetSourceMobSlotID( 
+            /* [in] */ aafSlotID_t mobSlotID) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetChannelIDs( 
+            /* [in] */ aafUInt32 numberElements,
+            /* [in] */ aafUInt32 *pChannelIDs) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetChannelIDs( 
+            /* [in] */ aafUInt32 numberElements,
+            /* [in] */ aafUInt32 *pChannelIDs) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetChannelIDsSize( 
+            /* [out] */ aafUInt32 *numberElements) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IAAFSourceReference2Vtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IAAFSourceReference2 * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IAAFSourceReference2 * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IAAFSourceReference2 * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetSourceID )( 
+            IAAFSourceReference2 * This,
+            /* [out][retval] */ aafMobID_t *pSourceID);
+        
+        HRESULT ( STDMETHODCALLTYPE *SetSourceID )( 
+            IAAFSourceReference2 * This,
+            /* [in] */ aafMobID_constref sourceID);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetSourceMobSlotID )( 
+            IAAFSourceReference2 * This,
+            /* [out][retval] */ aafSlotID_t *pMobSlotID);
+        
+        HRESULT ( STDMETHODCALLTYPE *SetSourceMobSlotID )( 
+            IAAFSourceReference2 * This,
+            /* [in] */ aafSlotID_t mobSlotID);
+        
+        HRESULT ( STDMETHODCALLTYPE *SetChannelIDs )( 
+            IAAFSourceReference2 * This,
+            /* [in] */ aafUInt32 numberElements,
+            /* [in] */ aafUInt32 *pChannelIDs);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetChannelIDs )( 
+            IAAFSourceReference2 * This,
+            /* [in] */ aafUInt32 numberElements,
+            /* [in] */ aafUInt32 *pChannelIDs);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetChannelIDsSize )( 
+            IAAFSourceReference2 * This,
+            /* [out] */ aafUInt32 *numberElements);
+        
+        END_INTERFACE
+    } IAAFSourceReference2Vtbl;
+
+    interface IAAFSourceReference2
+    {
+        CONST_VTBL struct IAAFSourceReference2Vtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IAAFSourceReference2_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IAAFSourceReference2_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IAAFSourceReference2_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IAAFSourceReference2_GetSourceID(This,pSourceID)	\
+    (This)->lpVtbl -> GetSourceID(This,pSourceID)
+
+#define IAAFSourceReference2_SetSourceID(This,sourceID)	\
+    (This)->lpVtbl -> SetSourceID(This,sourceID)
+
+#define IAAFSourceReference2_GetSourceMobSlotID(This,pMobSlotID)	\
+    (This)->lpVtbl -> GetSourceMobSlotID(This,pMobSlotID)
+
+#define IAAFSourceReference2_SetSourceMobSlotID(This,mobSlotID)	\
+    (This)->lpVtbl -> SetSourceMobSlotID(This,mobSlotID)
+
+#define IAAFSourceReference2_SetChannelIDs(This,numberElements,pChannelIDs)	\
+    (This)->lpVtbl -> SetChannelIDs(This,numberElements,pChannelIDs)
+
+#define IAAFSourceReference2_GetChannelIDs(This,numberElements,pChannelIDs)	\
+    (This)->lpVtbl -> GetChannelIDs(This,numberElements,pChannelIDs)
+
+#define IAAFSourceReference2_GetChannelIDsSize(This,numberElements)	\
+    (This)->lpVtbl -> GetChannelIDsSize(This,numberElements)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IAAFSourceReference2_GetSourceID_Proxy( 
+    IAAFSourceReference2 * This,
+    /* [out][retval] */ aafMobID_t *pSourceID);
+
+
+void __RPC_STUB IAAFSourceReference2_GetSourceID_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFSourceReference2_SetSourceID_Proxy( 
+    IAAFSourceReference2 * This,
+    /* [in] */ aafMobID_constref sourceID);
+
+
+void __RPC_STUB IAAFSourceReference2_SetSourceID_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFSourceReference2_GetSourceMobSlotID_Proxy( 
+    IAAFSourceReference2 * This,
+    /* [out][retval] */ aafSlotID_t *pMobSlotID);
+
+
+void __RPC_STUB IAAFSourceReference2_GetSourceMobSlotID_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFSourceReference2_SetSourceMobSlotID_Proxy( 
+    IAAFSourceReference2 * This,
+    /* [in] */ aafSlotID_t mobSlotID);
+
+
+void __RPC_STUB IAAFSourceReference2_SetSourceMobSlotID_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFSourceReference2_SetChannelIDs_Proxy( 
+    IAAFSourceReference2 * This,
+    /* [in] */ aafUInt32 numberElements,
+    /* [in] */ aafUInt32 *pChannelIDs);
+
+
+void __RPC_STUB IAAFSourceReference2_SetChannelIDs_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFSourceReference2_GetChannelIDs_Proxy( 
+    IAAFSourceReference2 * This,
+    /* [in] */ aafUInt32 numberElements,
+    /* [in] */ aafUInt32 *pChannelIDs);
+
+
+void __RPC_STUB IAAFSourceReference2_GetChannelIDs_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFSourceReference2_GetChannelIDsSize_Proxy( 
+    IAAFSourceReference2 * This,
+    /* [out] */ aafUInt32 *numberElements);
+
+
+void __RPC_STUB IAAFSourceReference2_GetChannelIDsSize_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IAAFSourceReference2_INTERFACE_DEFINED__ */
+
+
+#ifndef __IAAFMasterMob2_INTERFACE_DEFINED__
+#define __IAAFMasterMob2_INTERFACE_DEFINED__
+
+/* interface IAAFMasterMob2 */
+/* [unique][helpstring][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IAAFMasterMob2;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("afcffd2c-279b-466f-a496-55cbdcc17531")
+    IAAFMasterMob2 : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE Initialize( void) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE AddMasterSlot( 
+            /* [in] */ IAAFDataDef *pDataDef,
+            /* [in] */ aafSlotID_t sourceSlotID,
+            /* [in] */ IAAFSourceMob *pSourceMob,
+            /* [in] */ aafSlotID_t masterSlotID,
+            /* [string][in] */ aafCharacter_constptr pSlotName) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetTapeName( 
+            /* [in] */ aafUInt32 masterSlotID,
+            /* [string][size_is][out] */ aafCharacter *pTapeName,
+            /* [in] */ aafUInt32 bufSize) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetTapeNameBufLen( 
+            /* [in] */ aafUInt32 masterSlotID,
+            /* [out] */ aafUInt32 *pLen) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetNumRepresentations( 
+            /* [in] */ aafSlotID_t slotID,
+            /* [retval][out] */ aafNumSlots_t *pNumReps) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetRepresentation( 
+            /* [in] */ aafSlotID_t slotID,
+            /* [in] */ aafUInt32 index,
+            /* [out] */ IAAFSegment **ppSourceClip) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetCriteriaSegment( 
+            /* [in] */ aafSlotID_t slotID,
+            /* [in] */ aafMediaCriteria_t *pCriteria,
+            /* [out] */ IAAFSegment **ppSegment) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE AppendPhysSourceRef( 
+            /* [in] */ aafRational_t editrate,
+            /* [in] */ aafSlotID_t aMobSlot,
+            /* [in] */ IAAFDataDef *pEssenceKind,
+            /* [in] */ aafSourceRef_t ref,
+            /* [in] */ aafLength_t srcRefLength) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE NewPhysSourceRef( 
+            /* [in] */ aafRational_t editrate,
+            /* [in] */ aafSlotID_t aMobSlot,
+            /* [in] */ IAAFDataDef *pEssenceKind,
+            /* [in] */ aafSourceRef_t ref,
+            /* [in] */ aafLength_t srcRefLength) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE CreateEssence( 
+            /* [in] */ aafSlotID_t masterSlotID,
+            /* [in] */ IAAFDataDef *pMediaKind,
+            /* [ref][in] */ aafUID_constref codecID,
+            /* [in] */ aafRational_t editRate,
+            /* [in] */ aafRational_t samplerate,
+            /* [in] */ aafCompressEnable_t Enable,
+            /* [in] */ IAAFLocator *destination,
+            /* [ref][in] */ aafUID_constref fileFormat,
+            /* [out] */ IAAFEssenceAccess **access) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE CreateMultiEssence( 
+            /* [ref][in] */ aafUID_constref codecID,
+            /* [in] */ aafUInt16 arrayElemCount,
+            /* [size_is][ref][in] */ aafmMultiCreate_t *mediaArray,
+            /* [in] */ aafCompressEnable_t Enable,
+            /* [in] */ IAAFLocator *destination,
+            /* [ref][in] */ aafUID_constref fileFormat,
+            /* [out] */ IAAFEssenceMultiAccess **access) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE OpenEssence( 
+            /* [in] */ aafSlotID_t slotID,
+            /* [in] */ aafMediaCriteria_t *mediaCrit,
+            /* [in] */ aafMediaOpenMode_t openMode,
+            /* [in] */ aafCompressEnable_t compEnable,
+            /* [out] */ IAAFEssenceAccess **access) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE OpenMultiEssence( 
+            /* [in] */ aafSlotID_t slotID,
+            /* [in] */ aafMediaCriteria_t *mediaCrit,
+            /* [in] */ aafMediaOpenMode_t openMode,
+            /* [in] */ aafCompressEnable_t compEnable,
+            /* [out] */ IAAFEssenceMultiAccess **access) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE CountChannels( 
+            /* [in] */ aafSlotID_t slotID,
+            /* [in] */ aafMediaCriteria_t *mediaCrit,
+            /* [in] */ IAAFDataDef *pMediaKind,
+            /* [out] */ aafUInt16 *numCh) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE ExtendEssence( 
+            /* [in] */ aafSlotID_t masterSlotID,
+            /* [in] */ IAAFDataDef *pMediaKind,
+            /* [ref][in] */ aafUID_constref codecID,
+            /* [in] */ aafRational_t editRate,
+            /* [in] */ aafRational_t samplerate,
+            /* [in] */ aafCompressEnable_t Enable,
+            /* [in] */ IAAFLocator *destination,
+            /* [ref][in] */ aafUID_constref fileFormat,
+            /* [out] */ IAAFEssenceAccess **access) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE ExtendMultiEssence( 
+            /* [ref][in] */ aafUID_constref codecID,
+            /* [in] */ aafUInt16 arrayElemCount,
+            /* [size_is][ref][in] */ aafmMultiCreate_t *mediaArray,
+            /* [in] */ aafCompressEnable_t Enable,
+            /* [in] */ IAAFLocator *destination,
+            /* [ref][in] */ aafUID_constref fileFormat,
+            /* [out] */ IAAFEssenceMultiAccess **access) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE CreateStaticEssence( 
+            /* [in] */ aafSlotID_t masterSlotID,
+            /* [in] */ IAAFDataDef *pMediaKind,
+            /* [ref][in] */ aafUID_constref codecID,
+            /* [in] */ aafCompressEnable_t Enable,
+            /* [in] */ IAAFLocator *destination,
+            /* [ref][in] */ aafUID_constref fileFormat,
+            /* [out] */ IAAFEssenceAccess **access) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE CreateEventEssence( 
+            /* [in] */ aafSlotID_t masterSlotID,
+            /* [in] */ IAAFDataDef *pMediaKind,
+            /* [ref][in] */ aafUID_constref codecID,
+            /* [in] */ aafRational_t editRate,
+            /* [in] */ aafRational_t samplerate,
+            /* [in] */ aafCompressEnable_t Enable,
+            /* [in] */ IAAFLocator *destination,
+            /* [ref][in] */ aafUID_constref fileFormat,
+            /* [out] */ IAAFEssenceAccess **access) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IAAFMasterMob2Vtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IAAFMasterMob2 * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IAAFMasterMob2 * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IAAFMasterMob2 * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *Initialize )( 
+            IAAFMasterMob2 * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *AddMasterSlot )( 
+            IAAFMasterMob2 * This,
+            /* [in] */ IAAFDataDef *pDataDef,
+            /* [in] */ aafSlotID_t sourceSlotID,
+            /* [in] */ IAAFSourceMob *pSourceMob,
+            /* [in] */ aafSlotID_t masterSlotID,
+            /* [string][in] */ aafCharacter_constptr pSlotName);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTapeName )( 
+            IAAFMasterMob2 * This,
+            /* [in] */ aafUInt32 masterSlotID,
+            /* [string][size_is][out] */ aafCharacter *pTapeName,
+            /* [in] */ aafUInt32 bufSize);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTapeNameBufLen )( 
+            IAAFMasterMob2 * This,
+            /* [in] */ aafUInt32 masterSlotID,
+            /* [out] */ aafUInt32 *pLen);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetNumRepresentations )( 
+            IAAFMasterMob2 * This,
+            /* [in] */ aafSlotID_t slotID,
+            /* [retval][out] */ aafNumSlots_t *pNumReps);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetRepresentation )( 
+            IAAFMasterMob2 * This,
+            /* [in] */ aafSlotID_t slotID,
+            /* [in] */ aafUInt32 index,
+            /* [out] */ IAAFSegment **ppSourceClip);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetCriteriaSegment )( 
+            IAAFMasterMob2 * This,
+            /* [in] */ aafSlotID_t slotID,
+            /* [in] */ aafMediaCriteria_t *pCriteria,
+            /* [out] */ IAAFSegment **ppSegment);
+        
+        HRESULT ( STDMETHODCALLTYPE *AppendPhysSourceRef )( 
+            IAAFMasterMob2 * This,
+            /* [in] */ aafRational_t editrate,
+            /* [in] */ aafSlotID_t aMobSlot,
+            /* [in] */ IAAFDataDef *pEssenceKind,
+            /* [in] */ aafSourceRef_t ref,
+            /* [in] */ aafLength_t srcRefLength);
+        
+        HRESULT ( STDMETHODCALLTYPE *NewPhysSourceRef )( 
+            IAAFMasterMob2 * This,
+            /* [in] */ aafRational_t editrate,
+            /* [in] */ aafSlotID_t aMobSlot,
+            /* [in] */ IAAFDataDef *pEssenceKind,
+            /* [in] */ aafSourceRef_t ref,
+            /* [in] */ aafLength_t srcRefLength);
+        
+        HRESULT ( STDMETHODCALLTYPE *CreateEssence )( 
+            IAAFMasterMob2 * This,
+            /* [in] */ aafSlotID_t masterSlotID,
+            /* [in] */ IAAFDataDef *pMediaKind,
+            /* [ref][in] */ aafUID_constref codecID,
+            /* [in] */ aafRational_t editRate,
+            /* [in] */ aafRational_t samplerate,
+            /* [in] */ aafCompressEnable_t Enable,
+            /* [in] */ IAAFLocator *destination,
+            /* [ref][in] */ aafUID_constref fileFormat,
+            /* [out] */ IAAFEssenceAccess **access);
+        
+        HRESULT ( STDMETHODCALLTYPE *CreateMultiEssence )( 
+            IAAFMasterMob2 * This,
+            /* [ref][in] */ aafUID_constref codecID,
+            /* [in] */ aafUInt16 arrayElemCount,
+            /* [size_is][ref][in] */ aafmMultiCreate_t *mediaArray,
+            /* [in] */ aafCompressEnable_t Enable,
+            /* [in] */ IAAFLocator *destination,
+            /* [ref][in] */ aafUID_constref fileFormat,
+            /* [out] */ IAAFEssenceMultiAccess **access);
+        
+        HRESULT ( STDMETHODCALLTYPE *OpenEssence )( 
+            IAAFMasterMob2 * This,
+            /* [in] */ aafSlotID_t slotID,
+            /* [in] */ aafMediaCriteria_t *mediaCrit,
+            /* [in] */ aafMediaOpenMode_t openMode,
+            /* [in] */ aafCompressEnable_t compEnable,
+            /* [out] */ IAAFEssenceAccess **access);
+        
+        HRESULT ( STDMETHODCALLTYPE *OpenMultiEssence )( 
+            IAAFMasterMob2 * This,
+            /* [in] */ aafSlotID_t slotID,
+            /* [in] */ aafMediaCriteria_t *mediaCrit,
+            /* [in] */ aafMediaOpenMode_t openMode,
+            /* [in] */ aafCompressEnable_t compEnable,
+            /* [out] */ IAAFEssenceMultiAccess **access);
+        
+        HRESULT ( STDMETHODCALLTYPE *CountChannels )( 
+            IAAFMasterMob2 * This,
+            /* [in] */ aafSlotID_t slotID,
+            /* [in] */ aafMediaCriteria_t *mediaCrit,
+            /* [in] */ IAAFDataDef *pMediaKind,
+            /* [out] */ aafUInt16 *numCh);
+        
+        HRESULT ( STDMETHODCALLTYPE *ExtendEssence )( 
+            IAAFMasterMob2 * This,
+            /* [in] */ aafSlotID_t masterSlotID,
+            /* [in] */ IAAFDataDef *pMediaKind,
+            /* [ref][in] */ aafUID_constref codecID,
+            /* [in] */ aafRational_t editRate,
+            /* [in] */ aafRational_t samplerate,
+            /* [in] */ aafCompressEnable_t Enable,
+            /* [in] */ IAAFLocator *destination,
+            /* [ref][in] */ aafUID_constref fileFormat,
+            /* [out] */ IAAFEssenceAccess **access);
+        
+        HRESULT ( STDMETHODCALLTYPE *ExtendMultiEssence )( 
+            IAAFMasterMob2 * This,
+            /* [ref][in] */ aafUID_constref codecID,
+            /* [in] */ aafUInt16 arrayElemCount,
+            /* [size_is][ref][in] */ aafmMultiCreate_t *mediaArray,
+            /* [in] */ aafCompressEnable_t Enable,
+            /* [in] */ IAAFLocator *destination,
+            /* [ref][in] */ aafUID_constref fileFormat,
+            /* [out] */ IAAFEssenceMultiAccess **access);
+        
+        HRESULT ( STDMETHODCALLTYPE *CreateStaticEssence )( 
+            IAAFMasterMob2 * This,
+            /* [in] */ aafSlotID_t masterSlotID,
+            /* [in] */ IAAFDataDef *pMediaKind,
+            /* [ref][in] */ aafUID_constref codecID,
+            /* [in] */ aafCompressEnable_t Enable,
+            /* [in] */ IAAFLocator *destination,
+            /* [ref][in] */ aafUID_constref fileFormat,
+            /* [out] */ IAAFEssenceAccess **access);
+        
+        HRESULT ( STDMETHODCALLTYPE *CreateEventEssence )( 
+            IAAFMasterMob2 * This,
+            /* [in] */ aafSlotID_t masterSlotID,
+            /* [in] */ IAAFDataDef *pMediaKind,
+            /* [ref][in] */ aafUID_constref codecID,
+            /* [in] */ aafRational_t editRate,
+            /* [in] */ aafRational_t samplerate,
+            /* [in] */ aafCompressEnable_t Enable,
+            /* [in] */ IAAFLocator *destination,
+            /* [ref][in] */ aafUID_constref fileFormat,
+            /* [out] */ IAAFEssenceAccess **access);
+        
+        END_INTERFACE
+    } IAAFMasterMob2Vtbl;
+
+    interface IAAFMasterMob2
+    {
+        CONST_VTBL struct IAAFMasterMob2Vtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IAAFMasterMob2_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IAAFMasterMob2_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IAAFMasterMob2_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IAAFMasterMob2_Initialize(This)	\
+    (This)->lpVtbl -> Initialize(This)
+
+#define IAAFMasterMob2_AddMasterSlot(This,pDataDef,sourceSlotID,pSourceMob,masterSlotID,pSlotName)	\
+    (This)->lpVtbl -> AddMasterSlot(This,pDataDef,sourceSlotID,pSourceMob,masterSlotID,pSlotName)
+
+#define IAAFMasterMob2_GetTapeName(This,masterSlotID,pTapeName,bufSize)	\
+    (This)->lpVtbl -> GetTapeName(This,masterSlotID,pTapeName,bufSize)
+
+#define IAAFMasterMob2_GetTapeNameBufLen(This,masterSlotID,pLen)	\
+    (This)->lpVtbl -> GetTapeNameBufLen(This,masterSlotID,pLen)
+
+#define IAAFMasterMob2_GetNumRepresentations(This,slotID,pNumReps)	\
+    (This)->lpVtbl -> GetNumRepresentations(This,slotID,pNumReps)
+
+#define IAAFMasterMob2_GetRepresentation(This,slotID,index,ppSourceClip)	\
+    (This)->lpVtbl -> GetRepresentation(This,slotID,index,ppSourceClip)
+
+#define IAAFMasterMob2_GetCriteriaSegment(This,slotID,pCriteria,ppSegment)	\
+    (This)->lpVtbl -> GetCriteriaSegment(This,slotID,pCriteria,ppSegment)
+
+#define IAAFMasterMob2_AppendPhysSourceRef(This,editrate,aMobSlot,pEssenceKind,ref,srcRefLength)	\
+    (This)->lpVtbl -> AppendPhysSourceRef(This,editrate,aMobSlot,pEssenceKind,ref,srcRefLength)
+
+#define IAAFMasterMob2_NewPhysSourceRef(This,editrate,aMobSlot,pEssenceKind,ref,srcRefLength)	\
+    (This)->lpVtbl -> NewPhysSourceRef(This,editrate,aMobSlot,pEssenceKind,ref,srcRefLength)
+
+#define IAAFMasterMob2_CreateEssence(This,masterSlotID,pMediaKind,codecID,editRate,samplerate,Enable,destination,fileFormat,access)	\
+    (This)->lpVtbl -> CreateEssence(This,masterSlotID,pMediaKind,codecID,editRate,samplerate,Enable,destination,fileFormat,access)
+
+#define IAAFMasterMob2_CreateMultiEssence(This,codecID,arrayElemCount,mediaArray,Enable,destination,fileFormat,access)	\
+    (This)->lpVtbl -> CreateMultiEssence(This,codecID,arrayElemCount,mediaArray,Enable,destination,fileFormat,access)
+
+#define IAAFMasterMob2_OpenEssence(This,slotID,mediaCrit,openMode,compEnable,access)	\
+    (This)->lpVtbl -> OpenEssence(This,slotID,mediaCrit,openMode,compEnable,access)
+
+#define IAAFMasterMob2_OpenMultiEssence(This,slotID,mediaCrit,openMode,compEnable,access)	\
+    (This)->lpVtbl -> OpenMultiEssence(This,slotID,mediaCrit,openMode,compEnable,access)
+
+#define IAAFMasterMob2_CountChannels(This,slotID,mediaCrit,pMediaKind,numCh)	\
+    (This)->lpVtbl -> CountChannels(This,slotID,mediaCrit,pMediaKind,numCh)
+
+#define IAAFMasterMob2_ExtendEssence(This,masterSlotID,pMediaKind,codecID,editRate,samplerate,Enable,destination,fileFormat,access)	\
+    (This)->lpVtbl -> ExtendEssence(This,masterSlotID,pMediaKind,codecID,editRate,samplerate,Enable,destination,fileFormat,access)
+
+#define IAAFMasterMob2_ExtendMultiEssence(This,codecID,arrayElemCount,mediaArray,Enable,destination,fileFormat,access)	\
+    (This)->lpVtbl -> ExtendMultiEssence(This,codecID,arrayElemCount,mediaArray,Enable,destination,fileFormat,access)
+
+#define IAAFMasterMob2_CreateStaticEssence(This,masterSlotID,pMediaKind,codecID,Enable,destination,fileFormat,access)	\
+    (This)->lpVtbl -> CreateStaticEssence(This,masterSlotID,pMediaKind,codecID,Enable,destination,fileFormat,access)
+
+#define IAAFMasterMob2_CreateEventEssence(This,masterSlotID,pMediaKind,codecID,editRate,samplerate,Enable,destination,fileFormat,access)	\
+    (This)->lpVtbl -> CreateEventEssence(This,masterSlotID,pMediaKind,codecID,editRate,samplerate,Enable,destination,fileFormat,access)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IAAFMasterMob2_Initialize_Proxy( 
+    IAAFMasterMob2 * This);
+
+
+void __RPC_STUB IAAFMasterMob2_Initialize_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFMasterMob2_AddMasterSlot_Proxy( 
+    IAAFMasterMob2 * This,
+    /* [in] */ IAAFDataDef *pDataDef,
+    /* [in] */ aafSlotID_t sourceSlotID,
+    /* [in] */ IAAFSourceMob *pSourceMob,
+    /* [in] */ aafSlotID_t masterSlotID,
+    /* [string][in] */ aafCharacter_constptr pSlotName);
+
+
+void __RPC_STUB IAAFMasterMob2_AddMasterSlot_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFMasterMob2_GetTapeName_Proxy( 
+    IAAFMasterMob2 * This,
+    /* [in] */ aafUInt32 masterSlotID,
+    /* [string][size_is][out] */ aafCharacter *pTapeName,
+    /* [in] */ aafUInt32 bufSize);
+
+
+void __RPC_STUB IAAFMasterMob2_GetTapeName_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFMasterMob2_GetTapeNameBufLen_Proxy( 
+    IAAFMasterMob2 * This,
+    /* [in] */ aafUInt32 masterSlotID,
+    /* [out] */ aafUInt32 *pLen);
+
+
+void __RPC_STUB IAAFMasterMob2_GetTapeNameBufLen_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFMasterMob2_GetNumRepresentations_Proxy( 
+    IAAFMasterMob2 * This,
+    /* [in] */ aafSlotID_t slotID,
+    /* [retval][out] */ aafNumSlots_t *pNumReps);
+
+
+void __RPC_STUB IAAFMasterMob2_GetNumRepresentations_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFMasterMob2_GetRepresentation_Proxy( 
+    IAAFMasterMob2 * This,
+    /* [in] */ aafSlotID_t slotID,
+    /* [in] */ aafUInt32 index,
+    /* [out] */ IAAFSegment **ppSourceClip);
+
+
+void __RPC_STUB IAAFMasterMob2_GetRepresentation_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFMasterMob2_GetCriteriaSegment_Proxy( 
+    IAAFMasterMob2 * This,
+    /* [in] */ aafSlotID_t slotID,
+    /* [in] */ aafMediaCriteria_t *pCriteria,
+    /* [out] */ IAAFSegment **ppSegment);
+
+
+void __RPC_STUB IAAFMasterMob2_GetCriteriaSegment_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFMasterMob2_AppendPhysSourceRef_Proxy( 
+    IAAFMasterMob2 * This,
+    /* [in] */ aafRational_t editrate,
+    /* [in] */ aafSlotID_t aMobSlot,
+    /* [in] */ IAAFDataDef *pEssenceKind,
+    /* [in] */ aafSourceRef_t ref,
+    /* [in] */ aafLength_t srcRefLength);
+
+
+void __RPC_STUB IAAFMasterMob2_AppendPhysSourceRef_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFMasterMob2_NewPhysSourceRef_Proxy( 
+    IAAFMasterMob2 * This,
+    /* [in] */ aafRational_t editrate,
+    /* [in] */ aafSlotID_t aMobSlot,
+    /* [in] */ IAAFDataDef *pEssenceKind,
+    /* [in] */ aafSourceRef_t ref,
+    /* [in] */ aafLength_t srcRefLength);
+
+
+void __RPC_STUB IAAFMasterMob2_NewPhysSourceRef_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFMasterMob2_CreateEssence_Proxy( 
+    IAAFMasterMob2 * This,
+    /* [in] */ aafSlotID_t masterSlotID,
+    /* [in] */ IAAFDataDef *pMediaKind,
+    /* [ref][in] */ aafUID_constref codecID,
+    /* [in] */ aafRational_t editRate,
+    /* [in] */ aafRational_t samplerate,
+    /* [in] */ aafCompressEnable_t Enable,
+    /* [in] */ IAAFLocator *destination,
+    /* [ref][in] */ aafUID_constref fileFormat,
+    /* [out] */ IAAFEssenceAccess **access);
+
+
+void __RPC_STUB IAAFMasterMob2_CreateEssence_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFMasterMob2_CreateMultiEssence_Proxy( 
+    IAAFMasterMob2 * This,
+    /* [ref][in] */ aafUID_constref codecID,
+    /* [in] */ aafUInt16 arrayElemCount,
+    /* [size_is][ref][in] */ aafmMultiCreate_t *mediaArray,
+    /* [in] */ aafCompressEnable_t Enable,
+    /* [in] */ IAAFLocator *destination,
+    /* [ref][in] */ aafUID_constref fileFormat,
+    /* [out] */ IAAFEssenceMultiAccess **access);
+
+
+void __RPC_STUB IAAFMasterMob2_CreateMultiEssence_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFMasterMob2_OpenEssence_Proxy( 
+    IAAFMasterMob2 * This,
+    /* [in] */ aafSlotID_t slotID,
+    /* [in] */ aafMediaCriteria_t *mediaCrit,
+    /* [in] */ aafMediaOpenMode_t openMode,
+    /* [in] */ aafCompressEnable_t compEnable,
+    /* [out] */ IAAFEssenceAccess **access);
+
+
+void __RPC_STUB IAAFMasterMob2_OpenEssence_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFMasterMob2_OpenMultiEssence_Proxy( 
+    IAAFMasterMob2 * This,
+    /* [in] */ aafSlotID_t slotID,
+    /* [in] */ aafMediaCriteria_t *mediaCrit,
+    /* [in] */ aafMediaOpenMode_t openMode,
+    /* [in] */ aafCompressEnable_t compEnable,
+    /* [out] */ IAAFEssenceMultiAccess **access);
+
+
+void __RPC_STUB IAAFMasterMob2_OpenMultiEssence_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFMasterMob2_CountChannels_Proxy( 
+    IAAFMasterMob2 * This,
+    /* [in] */ aafSlotID_t slotID,
+    /* [in] */ aafMediaCriteria_t *mediaCrit,
+    /* [in] */ IAAFDataDef *pMediaKind,
+    /* [out] */ aafUInt16 *numCh);
+
+
+void __RPC_STUB IAAFMasterMob2_CountChannels_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFMasterMob2_ExtendEssence_Proxy( 
+    IAAFMasterMob2 * This,
+    /* [in] */ aafSlotID_t masterSlotID,
+    /* [in] */ IAAFDataDef *pMediaKind,
+    /* [ref][in] */ aafUID_constref codecID,
+    /* [in] */ aafRational_t editRate,
+    /* [in] */ aafRational_t samplerate,
+    /* [in] */ aafCompressEnable_t Enable,
+    /* [in] */ IAAFLocator *destination,
+    /* [ref][in] */ aafUID_constref fileFormat,
+    /* [out] */ IAAFEssenceAccess **access);
+
+
+void __RPC_STUB IAAFMasterMob2_ExtendEssence_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFMasterMob2_ExtendMultiEssence_Proxy( 
+    IAAFMasterMob2 * This,
+    /* [ref][in] */ aafUID_constref codecID,
+    /* [in] */ aafUInt16 arrayElemCount,
+    /* [size_is][ref][in] */ aafmMultiCreate_t *mediaArray,
+    /* [in] */ aafCompressEnable_t Enable,
+    /* [in] */ IAAFLocator *destination,
+    /* [ref][in] */ aafUID_constref fileFormat,
+    /* [out] */ IAAFEssenceMultiAccess **access);
+
+
+void __RPC_STUB IAAFMasterMob2_ExtendMultiEssence_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFMasterMob2_CreateStaticEssence_Proxy( 
+    IAAFMasterMob2 * This,
+    /* [in] */ aafSlotID_t masterSlotID,
+    /* [in] */ IAAFDataDef *pMediaKind,
+    /* [ref][in] */ aafUID_constref codecID,
+    /* [in] */ aafCompressEnable_t Enable,
+    /* [in] */ IAAFLocator *destination,
+    /* [ref][in] */ aafUID_constref fileFormat,
+    /* [out] */ IAAFEssenceAccess **access);
+
+
+void __RPC_STUB IAAFMasterMob2_CreateStaticEssence_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFMasterMob2_CreateEventEssence_Proxy( 
+    IAAFMasterMob2 * This,
+    /* [in] */ aafSlotID_t masterSlotID,
+    /* [in] */ IAAFDataDef *pMediaKind,
+    /* [ref][in] */ aafUID_constref codecID,
+    /* [in] */ aafRational_t editRate,
+    /* [in] */ aafRational_t samplerate,
+    /* [in] */ aafCompressEnable_t Enable,
+    /* [in] */ IAAFLocator *destination,
+    /* [ref][in] */ aafUID_constref fileFormat,
+    /* [out] */ IAAFEssenceAccess **access);
+
+
+void __RPC_STUB IAAFMasterMob2_CreateEventEssence_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IAAFMasterMob2_INTERFACE_DEFINED__ */
+
+
+/* interface __MIDL_itf_AAF_0236 */
 /* [local] */ 
 
   //***********************************************************
@@ -36424,8 +37672,8 @@ STDAPI AAFCreateAAFFileOnRawStorage (
 
 
 
-extern RPC_IF_HANDLE __MIDL_itf_AAF_0232_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_AAF_0232_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_AAF_0236_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_AAF_0236_v0_0_s_ifspec;
 
 /* Additional Prototypes for ALL interfaces */
 
