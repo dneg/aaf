@@ -399,7 +399,9 @@ AAFRDLIRESULT AAFFSpLoadLibraryFile(FSSpec *pSpec, AAFLibraryHandle* pLibHandle)
               
               case kMemoryCFragLocator:        /* Container is already addressable.*/
               case kResourceCFragLocator:      /* Container is in a file's resource fork.*/
+#if defined(__MWERKS__) && defined(__MSL_CPP__) && (__MSL_CPP__ < 0x6007)
               case kByteStreamCFragLocator:    /* ! Reserved for possible future use!*/
+#endif
               case kNamedFragmentCFragLocator: /* ! Reserved for possible future use!*/
                 break;
             }
