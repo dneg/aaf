@@ -866,7 +866,7 @@ typedef enum
 	kNoIdSearch = 0, 
 	kByIdProductID, 
 	kByIdGeneration, 
-	kByIdToolkitVersion, 
+	kByIdToolkitVersion
 } aafIdentificationCritType_t;
 
 typedef struct
