@@ -7,6 +7,7 @@
 #
 BEGIN {
   entrytext = "";
+  createColorMap();
   printHeader();
 }
 
@@ -70,6 +71,33 @@ function trim(s, n) {
   return substr(s, n + 1, length(s) - n);
 }
 
+function createColorMap() {
+/* Associative array - yum ! */
+  map["ref-impl/src/OM/"]          = "#CCFFCC";
+  map["ref-impl/include/OM/"]      = "#CCFFCC";
+
+  map["ref-impl/src/impl/"]        = "#FFCCCC";
+  map["ref-impl/plugins/"]         = "#FFCCCC";
+
+  map["ref-impl/src/com-api/"]     = "#CCCCCC";
+  map["ref-impl/include/com-api/"] = "#CCCCCC";
+  map["AAF"]                       = "#CCCCCC";
+  map["dodo/"]                     = "#CCCCCC";
+
+  map["ref-impl/doc/"]             = "#CCFFFF";
+  map["LEGAL/"]                    = "#CCFFFF";
+  map["ref-impl/include/ref-api"]  = "#CCFFFF";
+  map["doc/"]                      = "#CCFFFF";
+
+  map["test/"]                     = "#FFCCFF";
+  map["examples/"]                 = "#FFCCFF";
+  map["examples2/"]                = "#FFCCFF";
+
+  map["DevUtils/"]                 = "#FFFFCC";
+  map["Utilities/"]                = "#FFFFCC";
+  map["OMF/"]                      = "#FFFFCC";
+}
+
 function rowcolor(files) {
   result = "#FFFFFF";
   /* Get first file */
@@ -77,42 +105,10 @@ function rowcolor(files) {
   ff = fns[1];
 #  printf("<!--[%s]-->\n", ff);
   /* Match directory of file to a color */
-  if (match(ff, "^ref-impl/src/OM/")) {
-    result = "#CCFFCC";
-  } else if (match(ff, "^ref-impl/include/OM/")) {
-    result = "#CCFFCC";
-  } else if (match(ff, "^ref-impl/src/impl/")) {
-    result = "#FFCCCC";
-  } else if (match(ff, "^ref-impl/plugins/")) {
-    result = "#FFCCCC";
-  } else if (match(ff, "^ref-impl/src/com-api/")) {
-    result = "#CCCCCC";
-  } else if (match(ff, "^ref-impl/include/com-api/")) {
-    result = "#CCCCCC";
-  } else if (match(ff, "^AAF")) {
-    result = "#CCCCCC";
-  } else if (match(ff, "^dodo/")) {
-    result = "#CCCCCC";
-  } else if (match(ff, "^ref-impl/doc/")) {
-    result = "#CCFFFF";
-  } else if (match(ff, "^LEGAL/")) {
-    result = "#CCFFFF";
-  } else if (match(ff, "^ref-impl/include/ref-api")) {
-    result = "#CCFFFF";
-  } else if (match(ff, "^doc/")) {
-    result = "#CCFFFF";
-  } else if (match(ff, "^test/")) {
-    result = "#FFCCFF";
-  } else if (match(ff, "^examples/")) {
-    result = "#FFCCFF";
-  } else if (match(ff, "^examples2/")) {
-    result = "#FFCCFF";
-  } else if (match(ff, "^DevUtils/")) {
-    result = "#FFFFCC";
-  } else if (match(ff, "^Utilities/")) {
-    result = "#FFFFCC";
-  } else if (match(ff, "^OMF/")) {
-    result = "#FFFFCC";
+  for (x in map) {
+    if (match(ff, "^" x)) {
+      result = map[x];
+    }
   }
   return result;
 }
