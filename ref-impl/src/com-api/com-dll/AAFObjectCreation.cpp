@@ -2,6 +2,8 @@
 #include "AAF.h"
 #include "ImplAAFRoot.h"
 
+#include <string.h>
+
 // Creates and returns an Impl object based on the given class ID.
 // Will create the appropriate kind of API class and attach it.
 //
@@ -11,13 +13,18 @@
 // 2) Ask the newly created API class for its contained Impl class.
 // 3) Return that Impl class.
 //
-ImplAAFRoot * CreateImpl (const CLSID & rClassID)
+ImplAAFRoot * CreateImpl (const aafClassID_t & rClassID)
 {
 	IAAFRoot	*pIAAFRoot;
 	ImplAAFRoot	*implRoot;
 	HRESULT		hr;
+	CLSID           classID;
 
-	hr = CoCreateInstance(rClassID,
+	// Cast (by bitwise copy) from aafClassID_t to CLSID.
+	//
+	memcpy(&classID, &rClassID, sizeof(CLSID));
+
+	hr = CoCreateInstance(classID,
 				NULL, 
 				CLSCTX_INPROC_SERVER, 
 				IID_IAAFRoot, 
