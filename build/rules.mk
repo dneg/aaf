@@ -66,8 +66,10 @@ $(OBJDIR)/%.d : %.$(CPP_EXTENSION)
 $(OBJDIR):
 	$(MKDIR) $@
 
+ifneq ($(LIBDIR), $(OBJDIR))
 $(LIBDIR):
 	$(MKDIR) $@
+endif
 
 $(BINDIR):
 	$(MKDIR) $@
