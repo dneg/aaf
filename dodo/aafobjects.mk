@@ -37,7 +37,6 @@ AAFPERSISTENTOBJECTS = \
 	AAFMIDIData \
 	AAFMIDIDescriptor \
 	AAFNestedScope\
-	AAFObjectAttribute \
 	AAFParameter \
 	AAFParameterDef \
 	AAFPulldown \
