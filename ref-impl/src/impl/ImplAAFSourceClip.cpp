@@ -291,7 +291,30 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 
-
+AAFRESULT ImplAAFSourceClip::TraverseToClip(aafLength_t length,
+											ImplAAFSegment **sclp,
+											ImplAAFPulldown **pulldownObj,
+											aafInt32 *pulldownPhase,
+											aafLength_t *sclpLen,
+											aafBool *isMask)
+{
+	XPROTECT()
+	{
+		*sclp = this;
+		CHECK((*sclp)->GetLength(sclpLen));
+		if (Int64Less(length, *sclpLen))
+		{
+			*sclpLen = length;
+		}
+	} /* XPROTECT */
+	
+	XEXCEPT
+	{
+	}
+	XEND;
+	
+	return(OM_ERR_NONE);
+}
 
 extern "C" const aafClassID_t CLSID_AAFSourceClip;
 
