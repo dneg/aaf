@@ -63,9 +63,10 @@ private:
 	HRESULT ConvertLocator(IAAFEssenceDescriptor* pEssenceDesc, OMF2::omfMobObj_t*	pOMFSourceMob );
 	HRESULT ConvertEssenceDataObject(IAAFEssenceData* pEssenceData);
 	HRESULT ConvertEffects(IAAFOperationGroup* pEffect, OMF2::omfEffObj_t*	pOMFEffect);
-	HRESULT ConvertParameter(IAAFParameter* pParm, OMF2::omfSegObj_t pOMFEffect, OMF2::omfInt32 slotNum, OMF2::omfLength_t effectLen);
-	HRESULT UpdateKeyFrameVVAL(IAAFControlPoint* controlPoint, OMF2::omfSegObj_t vval, OMF2::omfRational_t time, aafInt32 destValueLen, OMF2::omfEditHint_t editHint, OMF2::omfDDefObj_t dataKind);
-
+	HRESULT ConvertParameter(IAAFParameter* pParm, OMF2::omfSegObj_t pOMFEffect,
+		OMF2::omfInt32 slotNum, aafInt32 kdSlotNum, OMF2::omfLength_t effectLen);
+	HRESULT UpdateKeyFrameVVAL(IAAFControlPoint* controlPoint, aafUID_t& paramID, OMF2::omfSegObj_t vval, OMF2::omfRational_t time, aafInt32 destValueLen, OMF2::omfEditHint_t editHint, OMF2::omfDDefObj_t dataKind);
+	HRESULT GetMCKeyframeKind(OMF2::omfHdl_t file, OMF2::omfObject_t& dataKind);
 private:
 
     OMF2::omfSessionHdl_t	OMFSession;

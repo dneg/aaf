@@ -78,6 +78,7 @@ public:
 	HRESULT GetParameterDefinition(aafUID_t* pDefUID, IAAFTypeDef* pTypeDef,	aafWChar* pwName, aafWChar* pwDesc, aafWChar* pwDisplayUnits, IAAFParameterDef** ppParameterDef);
 	HRESULT	ConvertOMFConstValue(OMF2::omfSegObj_t segment, IAAFConstantValue* pConstValue);
 	HRESULT	ConvertOMFVaryingValue(OMF2::omfSegObj_t segment, IAAFVaryingValue* pVaryingValue);
+	HRESULT	ConvertMCSpecialVaryingValue(OMF2::omfSegObj_t segment, aafUID_t AAFEffectID, IAAFOperationGroup* pEffect);
 	HRESULT	ConvertOMFNestedScope(OMF2::omfSegObj_t segment, IAAFNestedScope* pNestedScope);
 	HRESULT	ConvertOMFScopeRef(OMF2::omfSegObj_t segment, IAAFScopeReference* pScopeRef);
 

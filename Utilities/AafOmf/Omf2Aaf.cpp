@@ -33,11 +33,13 @@
 #include <iostream.h>
 
 // OMF Includes
+#define OMFI_ENABLE_SEMCHECK	1		// Move to project
 namespace OMF2
 {
 #include "omPublic.h"
 #include "omMedia.h"
 #include "omEffect.h"
+#include "omUtils.h"
 }
 
 #include "AAFTypes.h"
@@ -2967,34 +2969,35 @@ HRESULT Omf2Aaf::ConvertOMFVaryingValue(OMF2::omfSegObj_t segment,
 			OMFError = OMF2::omfiVaryValueGetNextPoint(OMFIterator, segment, NULL, &control);
 			if (OMF2::OM_ERR_NONE == OMFError)
 			{
-				pDictionary->CreateInstance(AUID_AAFControlPoint, IID_IAAFControlPoint, (IUnknown **)&pControlPoint);
-				OMFError = OMF2::omfiDataValueGetSize(OMFFileHdl, control, &cpValueSize);
-				OMF2::omfsTruncInt64toUInt32(cpValueSize, &valueSize);
-				pCPBuffer = new char[valueSize];
-				OMFError = OMF2::omfiControlPtGetInfo(OMFFileHdl, control, &time, &editHint, &cpDatakind, 
-										valueSize, (long *)&bytesRead, pCPBuffer);
-				AAFCPTime.numerator = time.numerator;
-				AAFCPTime.denominator = time.denominator;
-				AAFCPEditHint = (aafEditHint_t)editHint;
-				pControlPoint->SetTime(AAFCPTime);
-				pControlPoint->SetEditHint(AAFCPEditHint);
-				if (bytesRead != valueSize)
-				{
-					OMF2::omfUniqueName_t	uniqueName;
-
-					OMFError = OMF2::omfsReadObjRef(OMFFileHdl, control, OMF2::OMCTLPDatakind, &cpDatakind);
-					OMFError = OMF2::omfsReadUniqueName(OMFFileHdl, cpDatakind, OMF2::OMDDEFDatakindID, uniqueName, sizeof(uniqueName));
-					if (strcmp(uniqueName, "omfi:data:Rational") == 0 && (valueSize == 4))
+					pDictionary->CreateInstance(AUID_AAFControlPoint, IID_IAAFControlPoint, (IUnknown **)&pControlPoint);
+					OMFError = OMF2::omfiDataValueGetSize(OMFFileHdl, control, &cpValueSize);
+					OMF2::omfsTruncInt64toUInt32(cpValueSize, &valueSize);
+					pCPBuffer = new char[valueSize];
+					OMFError = OMF2::omfiControlPtGetInfo(OMFFileHdl, control, &time, &editHint, &cpDatakind, 
+						valueSize, (long *)&bytesRead, pCPBuffer);
+					AAFCPTime.numerator = time.numerator;
+					AAFCPTime.denominator = time.denominator;
+					AAFCPEditHint = (aafEditHint_t)editHint;
+					pControlPoint->SetTime(AAFCPTime);
+					pControlPoint->SetEditHint(AAFCPEditHint);
+					if (bytesRead != valueSize)
 					{
-						OMF2::omfiDatakindLookup(OMFFileHdl, (OMF2::omfUniqueNamePtr_t)"omfi:data:Int32", &tmpDatakind, &OMFError);
-						cpDatakind = tmpDatakind;
+						OMF2::omfUniqueName_t	uniqueName;
+						
+						OMFError = OMF2::omfsReadObjRef(OMFFileHdl, control, OMF2::OMCTLPDatakind, &cpDatakind);
+						OMFError = OMF2::omfsReadUniqueName(OMFFileHdl, cpDatakind, OMF2::OMDDEFDatakindID, uniqueName, sizeof(uniqueName));
+						if (strcmp(uniqueName, "omfi:data:Rational") == 0 && (valueSize == 4))
+						{
+							OMF2::omfiDatakindLookup(OMFFileHdl, (OMF2::omfUniqueNamePtr_t)"omfi:data:Int32", &tmpDatakind, &OMFError);
+							cpDatakind = tmpDatakind;
+						}
+						offset = 0;
+						OMFError = OMF2::omfsReadDataValue(OMFFileHdl, control, OMF2::OMCTLPValue, cpDatakind, pCPBuffer, offset,valueSize, &bytesRead);
 					}
-					offset = 0;
-					OMFError = OMF2::omfsReadDataValue(OMFFileHdl, control, OMF2::OMCTLPValue, cpDatakind, pCPBuffer, offset,valueSize, &bytesRead);
-				}
-				pControlPoint->SetValue((aafUInt32)valueSize, (unsigned char *)pCPBuffer);
-				pVaryingValue->AppendPoint(pControlPoint);
-
+					pControlPoint->SetValue((aafUInt32)valueSize, (unsigned char *)pCPBuffer);
+					pVaryingValue->AppendPoint(pControlPoint);
+					pControlPoint->Release();
+					pControlPoint = NULL;
 			}
 			if (pCPBuffer)
 				delete [] pCPBuffer;
@@ -3013,6 +3016,95 @@ HRESULT Omf2Aaf::ConvertOMFVaryingValue(OMF2::omfSegObj_t segment,
 	return rc;
 
 }
+
+// ============================================================================
+// ConvertOMFVaryingValue
+//
+//			This function extracts all the properties of an OMF Varying Value 
+//			segment, and converts it into an AAF Constant Value object.
+//			
+// Returns: AAFRESULT_SUCCESS if MOB object is converted succesfully
+//
+// ============================================================================
+HRESULT Omf2Aaf::ConvertMCSpecialVaryingValue(OMF2::omfSegObj_t segment,
+										aafUID_t	AAFEffectID,
+										IAAFOperationGroup*	pEffect)
+{
+	HRESULT					rc = AAFRESULT_SUCCESS;
+	OMF2::omfErr_t			OMFError = OMF2::OM_ERR_NONE;
+
+	OMF2::omfIterHdl_t		OMFIterator;
+	OMF2::omfInt32			numPoints, n;
+	OMF2::omfDDefObj_t		vvDatakind;
+	OMF2::omfCntlPtObj_t	control;
+	OMF2::omfLength_t		vvLength;
+	OMF2::omfInterpKind_t	vvInterpolation;
+	OMF2::omfInt32			bytesRead = 0;
+	void *					pCPBuffer = NULL;
+	IAAFControlPoint*		pControlPoint = NULL;
+	IAAFTypeDef*			pTypeDef = NULL;
+	IAAFInterpolationDef*	pInterp = NULL;
+	OMFIPvtKFInfo_t			**keyframes;
+	OMF2::omfRational_t		OMFTime;
+	aafRational_t			*times;
+
+	IncIndentLevel();
+	OMFError = OMF2::omfiVaryValueGetInfo(OMFFileHdl, segment, &vvDatakind, &vvLength, &vvInterpolation);
+	// tlk We do NOT know how to handle Interpolations yet !!!
+
+	// Get number of Points 
+	OMFError = OMF2::omfiVaryValueGetNumPoints(OMFFileHdl, segment, &numPoints);
+
+	if (gpGlobals->bVerboseMode)
+	{
+		printf("%sProcessing Varying Value of length = %ld and %ld Control Points\n ", gpGlobals->indentLeader, (int)vvLength, (int)numPoints);
+	}
+//	ConvertOMFDatakind(vvDatakind, &datadef);
+	if (numPoints > 0)
+	{
+		keyframes = new OMFIPvtKFInfo_t*[numPoints];
+		times = new aafRational_t[numPoints];
+		
+		OMF2::omfiIteratorAlloc(OMFFileHdl, &OMFIterator);
+		for (int i = 0; i < numPoints;i++)
+		{
+			OMFError = OMF2::omfiVaryValueGetNextPoint(OMFIterator, segment, NULL, &control);
+			if (OMF2::OM_ERR_NONE == OMFError)
+			{
+				// Fill in one entry in KF and POINTS arrays
+				//!!!Assert write Index in bounds
+				keyframes[i] = new OMFIPvtKFInfo_t;
+				OMFError = OMF2::omfiControlPtGetInfo(OMFFileHdl, control,
+					&OMFTime, NULL, NULL,
+					sizeof(OMFIPvtKFInfo_t), &bytesRead,
+					keyframes[i]);
+				times[i].numerator = OMFTime.numerator;
+				times[i].denominator = OMFTime.denominator;
+			}
+			if (pCPBuffer)
+				delete [] pCPBuffer;
+			if (pControlPoint)
+				pControlPoint->Release();
+			pControlPoint = NULL;
+		}
+		
+		ExportSeparateKeyframeData(AAFEffectID, numPoints, keyframes,
+									times, pDictionary, pEffect);
+		
+		//Delete KF and POINTS arrays here
+		for(n = 0; n < numPoints; n++)
+			delete keyframes[n];
+		delete keyframes;
+		delete times;
+		
+		OMF2::omfiIteratorDispose(OMFFileHdl, OMFIterator);
+	}
+	
+	DecIndentLevel();
+	return rc;
+
+}
+
 // ============================================================================
 // ConvertOMFNestedScope
 //
@@ -3214,6 +3306,9 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 
 	aafUID_t				effectAUID ;
 	aafUID_t				effectDefAUID ;
+//	aafUID_t				AAFEffectID;
+	aafInt32				keyFrameSlot, globalSlot;
+	OMF2::omfSegObj_t		segment;
 
 	IncIndentLevel();
 
@@ -3243,6 +3338,8 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 
 		if (strcmp(effectID, "omfi:effect:VideoSpeedControl") == 0)
 		{
+			keyFrameSlot = OMF2_EFFE_PUBLIC_WITH_AVID_PRIVATE_DATA_KEYFRAME_SLOT;
+			globalSlot = OMF2_EFFE_PUBLIC_WITH_AVID_PRIVATE_DATA_GLOBAL_SLOT;
 			rc = GetParameterDefinition((aafUID_t *)&kAAFParameterDefSpeedRatio, NULL, 
 										L"Speed Ratio", 
 										L"Defines the ratio of output length to input length. Range is -infinity to +infinity",
@@ -3266,6 +3363,8 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 		}
 		else if (strcmp(effectID, "omfi:effect:VideoFrameMask") == 0)
 		{
+			keyFrameSlot = OMF2_EFFE_PUBLIC_WITH_AVID_PRIVATE_DATA_KEYFRAME_SLOT;
+			globalSlot = OMF2_EFFE_PUBLIC_WITH_AVID_PRIVATE_DATA_GLOBAL_SLOT;
 			OMFError = OMF2::omfeVideoFrameMaskGetInfo(OMFFileHdl, effect, &effectLength, &inputSegmentA, &mask, &addOrDrop, &phaseOffset);
 			if(OMF2::OM_ERR_NONE == OMFError)
 			{
@@ -3283,6 +3382,8 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 		}
 		else if (strcmp(effectID, "omfi:effect:VideoRepeat") == 0)
 		{
+			keyFrameSlot = OMF2_EFFE_PUBLIC_WITH_AVID_PRIVATE_DATA_KEYFRAME_SLOT;
+			globalSlot = OMF2_EFFE_PUBLIC_WITH_AVID_PRIVATE_DATA_GLOBAL_SLOT;
 			rc = GetParameterDefinition((aafUID_t *)&kAAFParameterDefPhaseOffset, NULL, 
 										L"PhaseOffset", 
 										L"Must be a constant Value. Default is 0",
@@ -3336,6 +3437,8 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 		else if ((strcmp(effectID, "omfi:effect:VideoDissolve") == 0) ||
 				 (strcmp(effectID, "omfi:effect:SimpleVideoDissolve") == 0) )
 		{
+			keyFrameSlot = OMF2_EFFE_PUBLIC_WITH_AVID_PRIVATE_DATA_KEYFRAME_SLOT;
+			globalSlot = OMF2_EFFE_PUBLIC_WITH_AVID_PRIVATE_DATA_GLOBAL_SLOT;
 			rc = GetParameterDefinition((aafUID_t *)&kAAFParameterDefLevel, NULL, 
 										L"Level", 
 										L"Level, equal to mix ratio of B/A. Range is 0 to 1. The formula  P = (Level*B)+((1-Level)*A)",
@@ -3413,6 +3516,8 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 		}
 		else if (strcmp(effectID, "omfi:effect:SMPTEVideoWipe") == 0)
 		{
+			keyFrameSlot = OMF2_EFFE_PUBLIC_WITH_AVID_PRIVATE_DATA_KEYFRAME_SLOT;
+			globalSlot = OMF2_EFFE_PUBLIC_WITH_AVID_PRIVATE_DATA_GLOBAL_SLOT;
 			wipeNumber = 0;
 			memset(&wipeArgs, 0, sizeof(wipeArgs));
 			rc = GetParameterDefinition((aafUID_t *)&kAAFParameterDefSMPTEWipeNumber, NULL, 
@@ -3523,6 +3628,8 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 		else if ((strcmp(effectID, "omfi:effect:MonoAudioDissolve") == 0) ||
 				 (strcmp(effectID, "omfi:effect:SimpleMonoAudioDissolve") == 0))
 		{
+			keyFrameSlot = OMF2_EFFE_PUBLIC_WITH_AVID_PRIVATE_DATA_KEYFRAME_SLOT;
+			globalSlot = OMF2_EFFE_PUBLIC_WITH_AVID_PRIVATE_DATA_GLOBAL_SLOT;
 			rc = GetParameterDefinition((aafUID_t *)&kAAFParameterDefLevel, NULL, 
 										L"Level", 
 										L"Level, equal to mix ratio of B/A. Range is 0 to 1. The formula  P = (Level*B)+((1-Level)*A)",
@@ -3615,6 +3722,8 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 			OMF2::omfSegObj_t		argValue;
 			OMF2::omfNumSlots_t		numSlots;
 
+			keyFrameSlot = OMF2_EFFE_ALLOTHERS_KEYFRAME_SLOT;
+			globalSlot = OMF2_EFFE_ALLOTHERS_GLOBAL_SLOT;
 			if (gpGlobals->bVerboseMode)
 			{
 				printf("%sGeneric OMF Effect = %s\n ", gpGlobals->indentLeader, effectID);
@@ -3635,7 +3744,7 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 				while(OMFEffectSlot != NULL)
 				{
 					OMFError = OMF2::omfiEffectSlotGetInfo(OMFFileHdl, OMFEffectSlot, &argID, &argValue);
-					if (argValue)
+					if (argValue && (argID != keyFrameSlot))
 					{
 						if (OMF2::omfiIsAConstValue(OMFFileHdl, argValue, &OMFError))
 						{
@@ -3699,6 +3808,104 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 				pParameterDef->Release();
 			
 		}
+
+		OMF2::omfNumSlots_t	numSlots, slotID;
+		OMF2::omfIterHdl_t	slotIter;
+		OMF2::omfESlotObj_t	effectSlot;
+
+		(void)OMF2::omfiEffectGetNumSlots(OMFFileHdl, effect, &numSlots);
+		(void)OMF2::omfiIteratorAlloc(OMFFileHdl, &slotIter);
+		while(OMF2::omfiEffectGetNextSlot(slotIter, effect, NULL, &effectSlot) == OMF2::OM_ERR_NONE)
+		{
+			(void)OMF2::omfiEffectSlotGetInfo(OMFFileHdl, effectSlot, &slotID, &segment);
+			if(slotID == keyFrameSlot)
+			{
+				(void)ConvertMCSpecialVaryingValue(segment, effectDefAUID, pEffect);
+#if 0
+										;---- Keep above this line
+				OMFIPvtKFInfo_t	**keyframes;
+				aafRational_t	*times;
+
+				//!!! Assume varying value
+				(void)omfiVaryValueGetNumPoints(OMFFileHdl, segment, &numPoints);
+
+				keyframes = new (OMFIPvtKFInfo_t *)[numPoints];
+				times = new aafRational_t[numPoints];
+				//!!!Allocate KF and POINTS arrays here
+				(void)omfiIteratorAlloc(OMFFileHdl, &pointIter);
+				writeIndex = 0;
+				while(omfiVaryValueGetNextPoint(pointIter, segment, NULL, &controlPoint) == OMF2::OM_ERR_NONE)
+				{
+					// Fill in one entry in KF and POINTS arrays
+					//!!!Assert write Index in bounds
+					keyframes[writeIndex] = new OMFIPvtKFInfo_t;
+					(void)omfiControlPtGetInfo(OMFFileHdl, controlPoint,
+												(times+writeIndex), NULL, NULL,
+												sizeof(OMFIPvtKFInfo_t), &bytesRead,
+												keyframes[writeIndex]);
+					writeIndex++;
+				}
+				(void)omfiIteratorDispose(OMFFileHdl, pointIter);
+
+				ExportSeparateKeyframeData(AAFEffectID,
+								numPoints,
+								OMFIPvtKFInfo_t **keyframes,
+								aafRational_t *times,
+								pDictionary, pEffect);
+				
+				//Delete KF and POINTS arrays here
+				for(n = 0; n < numPoints; n++)
+					delete keyframes[writeIndex];
+				delete keyframes;
+				delete times;
+;--- delete to marked line above
+#endif
+			}
+			else if(slotID == globalSlot)
+			{
+				OMFIPvtGlobalInfo_t	omfGlobal;
+				OMF2::omfInt64		bytesRead;
+				AAFPvtGlobalInfo_t	aafGlobal;
+				IAAFParameter		*pParm;
+				IAAFParameterDef	*parmDef = NULL;
+				IAAFTypeDef			*typeDef = NULL;
+				OMF2::omfDDefObj_t	datakind;
+				OMF2::omfLength_t	length;
+
+				(void)OMF2::omfiConstValueGetInfo(OMFFileHdl,segment,
+											&datakind,&length,
+											sizeof(OMFIPvtGlobalInfo_t),
+											&bytesRead, &omfGlobal);
+				aafGlobal.cookie = AAF_GLB_COOKIE;
+				aafGlobal.rev = AAF_GLB_REVISION;
+				aafGlobal.kfCurrent = omfGlobal.kfCurrent;
+				aafGlobal.kfSmooth = omfGlobal.kfSmooth;
+				aafGlobal.colorItem = omfGlobal.colorItem;
+				aafGlobal.quality = omfGlobal.quality;
+				aafGlobal.isReversed = omfGlobal.isReversed;
+				aafGlobal.ScalesDetached = omfGlobal.ScalesDetached;
+				pParm = AAFAddConstantVal(pDictionary, sizeof(OMFIPvtGlobalInfo_t), &aafGlobal, pEffect);
+
+				parmDef = CreateParameterDefinition(pDictionary, kAAFParamID_AvidGlobalKF);
+				(void)(pParm->SetParameterDefinition(parmDef));
+				parmDef->Release();
+				parmDef = NULL;
+		
+				typeDef = CreateTypeDefinition(pDictionary, kAAFTypeID_AvidGlobalKF);
+				(void)(pParm->SetTypeDefinition(typeDef));
+				typeDef->Release();
+				typeDef = NULL;
+				pParm->Release();
+				pParm = NULL;
+			}
+		}
+		(void)OMF2::omfiIteratorDispose(OMFFileHdl, slotIter);
+// !!!Look in the following slots
+//#define OMF2_EFFE_PUBLIC_WITH_AVID_PRIVATE_DATA_GLOBAL_SLOT		128
+//#define OMF2_EFFE_PUBLIC_WITH_AVID_PRIVATE_DATA_LEVEL_SLOT		130
+// If not present, then check for others IF the effect is does NOT have an OMF standard ID.
+//#define OMF2_EFFE_ALLOTHERS_GLOBAL_SLOT 1
+//#define OMF2_EFFE_ALLOTHERS_LEVEL_SLOT 3
 	}
 	else
 	{
@@ -3712,6 +3919,7 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 			printf("%sOMF 1.x Effect = %s\n ", gpGlobals->indentLeader, classID);
 		}
 	}
+
 
 	pEffect->Initialize(effectAUID, (aafLength_t)effectLength, pEffectDef);
 	pEffect->SetBypassOverride(bypassOverride);
