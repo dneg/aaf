@@ -201,7 +201,12 @@ ImplAAFSession::SetDefaultIdentification (aafProductIdentification_t * pIdent)
 
   if ((_defaultIdent != 0) && (_defaultIdent->productName != 0))
 	{
-	  setProgramName((const char *)_defaultIdent->productName);
+	  size_t size = wcslen (_defaultIdent->productName) + 1;
+	  char * pbProgramName = new char [size];
+	  assert (pbProgramName);
+	  OMUwc2sb(pbProgramName, _defaultIdent->productName);
+	  setProgramName(pbProgramName);
+	  delete[] pbProgramName;
 	}
   else
 	{
