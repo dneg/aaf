@@ -31,128 +31,87 @@
 //
 #if defined(WIN32) || defined(_WIN32)
 
-
 // Declare the public interface that must be implemented.
-#include "aaflib.h"
+#include "aafrdli.h"
 
+// Win32 specific header files.
+#include "windows.h"
+
+// AAF header files.
 #include "AAFResult.h"
 
 
 
-class Win32AAFDLL : public AAFDLL
+
+AAFRDLIRESULT AAFLoadLibrary(const char* name, AAFLibraryHandle* pLibHandle)
 {
-public:
-  // Constructor and destructor.
-  Win32AAFDLL();
-  ~Win32AAFDLL();
-
-  // Implements Win32 specific initialization of dll and entry points.
-  virtual HRESULT Load(const char *);
-  
-  // Implements Win32 specific cleanup of dll and entry points.
-  virtual HRESULT Unload();
-
-private:
-  // The handle to the dll's module instance.
-  HINSTANCE _hInstance;
-};
+  AAFRDLIRESULT result = AAFRESULT_SUCCESS;
+  HINSTANCE hInstance = NULL;
 
 
+  if (NULL == name || NULL == pLibHandle)
+    return AAFRESULT_NULL_PARAM;
 
-//***********************************************************
-//
-// Factory function just returns an instance of the currect platform
-// dll wrapper object.
-AAFDLL * MakeAAFDLL()
-{
-  return new Win32AAFDLL;
-}
-
-
-
-//***********************************************************
-//
-Win32AAFDLL::Win32AAFDLL()
-{
-  _hInstance = NULL;
-}
-
-
-
-//***********************************************************
-//
-Win32AAFDLL::~Win32AAFDLL()
-{
-}
-
-
-
-//***********************************************************
-//
-HRESULT Win32AAFDLL::Load(const char *dllname)
-{
-  if (NULL == dllname)
-  { // use a realistic default name.
-    dllname = "AAFCOAPI.dll";
-  }
 
   // Attempt to load the library.
-  _hInstance = ::LoadLibraryA(dllname);
+  hInstance = ::LoadLibraryA((LPCSTR)name);
 
-  if (NULL == _hInstance)
-  {
-    return HRESULT_FROM_WIN32(GetLastError());
-  }
+  if (NULL == hInstance)
+    result = HRESULT_FROM_WIN32(GetLastError());
+  else
+    *pLibHandle = (AAFLibraryHandle)hInstance;
 
-  //
-  // Attempt to initialize the entry points...
-  //
-  _pfnOpenExistingRead = (LPFNAAFFILEOPENEXISTINGREAD)
-                         GetProcAddress(_hInstance, "AAFFileOpenExistingRead");
-  if (NULL == _pfnOpenExistingRead)
-    return HRESULT_FROM_WIN32(GetLastError());
-
-  _pfnOpenExistingModify = (LPFNAAFFILEOPENEXISTINGMODIFY)
-                           GetProcAddress(_hInstance, "AAFFileOpenExistingModify");
-  if (NULL == _pfnOpenExistingModify)
-    return HRESULT_FROM_WIN32(GetLastError());
-
-  _pfnOpenNewModify = (LPFNAAFFILEOPENNEWMODIFY)
-                      GetProcAddress(_hInstance, "AAFFileOpenNewModify");
-  if (NULL == _pfnOpenNewModify)
-    return HRESULT_FROM_WIN32(GetLastError());
-
-  _pfnOpenTransient = (LPFNAAFFILEOPENTRANSIENT)
-                         GetProcAddress(_hInstance, "AAFFileOpenTransient");
-  if (NULL == _pfnOpenTransient)
-    return HRESULT_FROM_WIN32(GetLastError());
-
-  _pfnGetPluginManager = (LPFNAAFGETPLUGINMANAGER)
-                         GetProcAddress(_hInstance, "AAFGetPluginManager");
-  if (NULL == _pfnGetPluginManager)
-    return HRESULT_FROM_WIN32(GetLastError());
-
-  return S_OK;
+  return result;
 }
 
-
-
-//***********************************************************
-//
-HRESULT Win32AAFDLL::Unload()
+AAFRDLIRESULT AAFUnloadLibrary(AAFLibraryHandle libHandle)
 {
-  if (_hInstance)
-  {
-    if (!::FreeLibrary(_hInstance))
-      return HRESULT_FROM_WIN32(GetLastError());
+  AAFRDLIRESULT result = AAFRESULT_SUCCESS;
 
-    // Reset the entry point function pointers to NULL.
-    ClearEntrypoints();
 
-    _hInstance = NULL;
-  }
-  
-  return S_OK;
+  if (NULL == libHandle)
+    return AAFRESULT_NULL_PARAM;
+
+  if (!::FreeLibrary((HINSTANCE)libHandle))
+    result = HRESULT_FROM_WIN32(GetLastError());
+
+  return result;
 }
+
+AAFRDLIRESULT AAFFindSymbol(AAFLibraryHandle libHandle, const char* symbolName, AAFSymbolAddr* pSymbol)
+{
+  AAFRDLIRESULT result = AAFRESULT_SUCCESS;
+  FARPROC pfn = NULL;
+
+  
+  if (NULL == libHandle || NULL == symbolName || NULL == pSymbol)
+    return AAFRESULT_NULL_PARAM;
+
+  pfn = ::GetProcAddress((HMODULE)libHandle, (LPCSTR)symbolName);
+  if (NULL == pfn)
+    result = HRESULT_FROM_WIN32(GetLastError());
+  else
+    *pSymbol = (AAFSymbolAddr)pfn;
+  
+  return result;
+}
+
+AAFRDLIRESULT AAFGetLibraryInfo(AAFLibraryHandle libHandle, AAFLibInfo* pLibInfo)
+{
+  AAFRDLIRESULT result = AAFRESULT_SUCCESS;
+  
+  if (NULL == libHandle || NULL == pLibInfo || (NULL != pLibInfo || NULL == pLibInfo->nameBuffer))
+    return AAFRESULT_NULL_PARAM;
+  
+  pLibInfo->actualNameSize = (int)::GetModuleFileNameA(
+                                             (HMODULE)libHandle,
+                                             (LPSTR)pLibInfo->nameBuffer, 
+                                             (DWORD)pLibInfo->nameBufferSize);
+  if (0 == pLibInfo->actualNameSize)
+    result = HRESULT_FROM_WIN32(GetLastError());
+
+  return result;
+}
+
 
 #endif /* #if defined(WIN32) || defined(_WIN32) */
