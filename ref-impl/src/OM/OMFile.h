@@ -226,6 +226,8 @@ public:
     // @cmember Retrieve the root <c OMStorable> from this <c OMFile>.
   OMStorable* root(void);
 
+  OMStoredObject* rootStore(void);
+
   OMDictionary* dictionary(void) const;
 
   const OMClassFactory* classFactory(void) const;

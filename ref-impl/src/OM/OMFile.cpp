@@ -654,6 +654,13 @@ OMStorable* OMFile::root(void)
   return _root;
 }
 
+OMStoredObject* OMFile::rootStore(void)
+{
+  TRACE("OMFile::rootStore");
+
+  return _rootStore;
+}
+
 OMDictionary* OMFile::dictionary(void) const
 {
   TRACE("OMFile::dictionary");
