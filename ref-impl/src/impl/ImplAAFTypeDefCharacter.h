@@ -92,6 +92,17 @@ public:
          // @parm [out] character that is read
          aafCharacter *  pCharacter);
 
+  //****************
+  // GetCharacter()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    SetCharacter
+        (// @parm [in] character property value to modify
+         ImplAAFPropertyValue * pCharacterValue,
+
+         // @parm [in] character that is to be written
+         aafCharacter character);
+
   // Override from AAFTypeDef
   virtual AAFRESULT STDMETHODCALLTYPE
     GetTypeCategory (/*[out]*/ eAAFTypeCategory_t *  pTid);
