@@ -160,6 +160,8 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 		if(sub != NULL)
 			sub->ReleaseReference();
+		if(newSlot != NULL)
+			newSlot->ReleaseReference();
 	}
 	XEND;
 
@@ -786,11 +788,11 @@ AAFRESULT ImplAAFSourceMob::ReconcileMobLength(void)
 {
 	aafInt32					numSlots, loop;
 	aafLength_t					len;
-	ImplAAFTimelineMobSlot		*slot;	//!!! Assuming timeline
-	ImplAAFSegment				*seg;
+	ImplAAFTimelineMobSlot		*slot = NULL;	//!!! Assuming timeline
+	ImplAAFSegment				*seg = NULL;
 	ImplEnumAAFMobSlots			*slotIter = NULL;
 	aafRational_t				srcRate, destRate;
-	ImplAAFFileDescriptor		*physMedia;
+	ImplAAFFileDescriptor		*physMedia = NULL;
 		
 	XPROTECT()
 	{
@@ -803,8 +805,13 @@ AAFRESULT ImplAAFSourceMob::ReconcileMobLength(void)
 				CHECK(slotIter->NextOne((ImplAAFMobSlot **)&slot));	//!!! Assuming timeline
 				CHECK(slot->GetSegment(&seg));
 				CHECK(slot->GetEditRate(&destRate));
+				slot->ReleaseReference();
+				slot = NULL;
 				CHECK(physMedia->GetLength(&len));
 				CHECK(physMedia->GetSampleRate(&srcRate));
+				physMedia->ReleaseReference();
+				physMedia = NULL;
+
 //!!!				CHECK(slot->ConvertToEditRate(len,
 //										aafRational_t destRate,
 //										aafPosition_t *convertPos);
@@ -814,12 +821,24 @@ AAFRESULT ImplAAFSourceMob::ReconcileMobLength(void)
 					CHECK(AAFConvertEditRate(	srcRate, len, destRate, kRoundFloor, &len));
 				}
 				CHECK(seg->SetLength(&len));
+				seg->ReleaseReference();
+				seg = NULL;
 			}			
-//!!!			delete slotIter;
+			slotIter->ReleaseReference();
 			slotIter = NULL;
 		}
 	}
 	XEXCEPT
+	{
+		if (slot)
+			slot->ReleaseReference();
+		if (physMedia)
+			physMedia->ReleaseReference();
+		if (seg)
+			seg->ReleaseReference();
+		if (slotIter)
+			slotIter->ReleaseReference();
+	}
 	XEND
 		
 	return (AAFRESULT_SUCCESS);
