@@ -1143,25 +1143,44 @@ OMWeakReferenceVectorProperty<ReferencedObject>::clearTargetTag(void) const
 
 template <typename ReferencedObject>
 bool
-OMWeakReferenceVectorProperty<ReferencedObject>::isResolved(
-                                                      size_t /* index */) const
+OMWeakReferenceVectorProperty<ReferencedObject>::isResolved(size_t index) const
 {
   TRACE("OMWeakReferenceVectorProperty<ReferencedObject>::isResolved");
+  PRECONDITION("Valid index", index < count());
 
-  ASSERT("Unimplemented code not reached", false);
-  bool result = false;
+  VectorElement& element = _vector.getAt(index);
+
+  bool result;
+  if (element.pointer() != 0) {
+    result = true;
+  } else {
+    result = false;
+  }
   return result;
 }
 
 template <typename ReferencedObject>
 bool
 OMWeakReferenceVectorProperty<ReferencedObject>::isResolvable(
-                                                      size_t /* index */) const
+                                                     size_t ANAME(index)) const
 {
   TRACE("OMWeakReferenceVectorProperty<ReferencedObject>::isResolvable");
+  PRECONDITION("Valid index", index < count());
 
-  ASSERT("Unimplemented code not reached", false);
-  bool result = false;
+  bool result;
+  OMFile* file = propertySet()->container()->file();
+  ASSERT("Valid file", file != 0);
+  if (file->propertyTableExists()) {
+    OMPropertyTable* table = file->referencedProperties();
+    ASSERT("Valid table", table != 0);
+    if (table->isValid(_targetTag)) {
+      result = true;
+    } else {
+      result = false;
+    }
+  } else {
+    result = false;
+  }
   return result;
 }
 
