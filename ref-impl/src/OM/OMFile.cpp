@@ -49,6 +49,7 @@ OMFile* OMFile::openRead(const wchar_t* fileName,
 {
   TRACE("OMFile::openRead");
   PRECONDITION("Valid file name", validWideString(fileName));
+  PRECONDITION("Valid class factory", factory != 0);
 
   OMStoredObject* store = OMStoredObject::openRead(fileName);
   OMFile* newFile = new OMFile(readOnlyMode, store, factory);
@@ -61,6 +62,7 @@ OMFile* OMFile::openModify(const wchar_t* fileName,
 {
   TRACE("OMFile::openModify");
   PRECONDITION("Valid file name", validWideString(fileName));
+  PRECONDITION("Valid class factory", factory != 0);
 
   OMStoredObject* store = OMStoredObject::openModify(fileName);
   OMFile* newFile = new OMFile(modifyMode, store, factory);
@@ -74,6 +76,7 @@ OMFile* OMFile::createWrite(const wchar_t* fileName,
 {
   TRACE("OMFile::createWrite");
   PRECONDITION("Valid file name", validWideString(fileName));
+  PRECONDITION("Valid class factory", factory != 0);
   PRECONDITION("Valid root", root != 0);
 
   // Not yet implemented.
@@ -88,12 +91,25 @@ OMFile* OMFile::createModify(const wchar_t* fileName,
 {
   TRACE("OMFile::createModify");
   PRECONDITION("Valid file name", validWideString(fileName));
+  PRECONDITION("Valid class factory", factory != 0);
   PRECONDITION("Valid root", root != 0);
 
   OMStoredObject* store = OMStoredObject::createModify(fileName);
   OMFile* newFile = new OMFile(modifyMode, store, factory, root);
   ASSERT("Valid heap pointer", newFile != 0);
   return newFile;
+}
+
+OMFile* OMFile::createTransient(const OMClassFactory* factory,
+                                OMStorable* root)
+{
+  TRACE("OMFile::createTransient");
+  PRECONDITION("Valid class factory", factory != 0);
+  PRECONDITION("Valid root", root != 0);
+
+  // Not yet implemented.
+  //
+  return 0;
 }
 
 void OMFile::save(void)
