@@ -228,6 +228,10 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFNestedScope.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFNetworkLocator.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFObject.cpp"
 # End Source File
 # Begin Source File
