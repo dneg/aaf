@@ -33,12 +33,6 @@
 
 using namespace std;
 
-//
-// If defined, the macro enables tests for
-// the Set and GetChannelAssignment() methods.
-//
-#undef TEST_CHANNEL_ASSIGNMENT_FUNCTIONS
-
 
 const aafUInt32  peakEnvelopeDataSize = 16;
 struct CAAFPCMDescriptorTestFixture
@@ -487,13 +481,11 @@ static HRESULT Test_IAAFPCMDescriptor_Uninitialized(
         checkExpression( hr == AAFRESULT_NOT_INITIALIZED, AAFRESULT_TEST_FAILED );
 
 
-#ifdef TEST_CHANNEL_ASSIGNMENT_FUNCTIONS
         aafUID_t  channelAssignment;
         hr = pPCMDesc->SetChannelAssignment( channelAssignment );
         checkExpression( hr == AAFRESULT_NOT_INITIALIZED, AAFRESULT_TEST_FAILED );
         hr = pPCMDesc->GetChannelAssignment( &channelAssignment );
         checkExpression( hr == AAFRESULT_NOT_INITIALIZED, AAFRESULT_TEST_FAILED );
-#endif
 
 
         aafUInt32  peakEnvelopeVersion = 0;
@@ -833,7 +825,6 @@ static HRESULT Test_IAAFPCMDescriptor_ChannelAssignment(
 
     try
     {
-#ifdef TEST_CHANNEL_ASSIGNMENT_FUNCTIONS
         static const aafUID_t bogusChannelAssignmentID =
             { 0x4eb11210, 0x59c3, 0x4b7d,
               { 0x80, 0x50, 0x8a, 0x12, 0x99, 0x2c, 0x96, 0xf1 } };
@@ -874,7 +865,6 @@ static HRESULT Test_IAAFPCMDescriptor_ChannelAssignment(
             checkExpression( channelAssignmentID == gTestData.channelAssignment,
                              AAFRESULT_TEST_FAILED );
         }
-#endif
 
         // If we got to this point none of the tests above
         // failed and the status can be set to 'success'.
