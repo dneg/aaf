@@ -453,18 +453,18 @@ void Aaf2Omf::AAFFileRead()
 	while (pMobIter && (pMobIter->NextOne(&pMob) == AAFRESULT_SUCCESS))
 	{
 		aafUInt32	nameLength = 0;
-		aafWChar*	pwMobName = NULL;
 		aafMobID_t	MobID;
-		char		szMobID[64];
-		char*		pszMobName = NULL;
+		char		szMobID[ sizeof( aafMobID_t ) * sizeof( wchar_t ) ];
 
 		gpGlobals->nNumAAFMobs++;
 		// Get Mob Info
 		pMob->GetNameBufLen(&nameLength);
-		pwMobName = new wchar_t[nameLength/sizeof(wchar_t)];
+		std::auto_ptr<wchar_t> APpwMobName( new wchar_t[nameLength/sizeof(wchar_t)] );
+		wchar_t *pwMobName  = APpwMobName.get();
 		rc = pMob->GetName(pwMobName, nameLength);
 		rc = pMob->GetMobID(&MobID);
-		pszMobName = new char[nameLength/sizeof(wchar_t)];
+		std::auto_ptr<char> APpszMobName( new char[nameLength/sizeof(wchar_t)] );
+		char *pszMobName = APpszMobName.get();
 		wcstombs(pszMobName, pwMobName, nameLength/sizeof(wchar_t));
 		// Is this a composition Mob?
 		if (SUCCEEDED(pMob->QueryInterface(IID_IAAFCompositionMob, (void **)&pCompMob)))
@@ -508,47 +508,56 @@ void Aaf2Omf::AAFFileRead()
 			rc = pMob->CountComments(&numComments);
 			if (numComments > 0)
 			{
-				HRESULT	testRC;
-				
+				gpGlobals->pLogger->Log( kLogInfo, "Processing %ld comments...\n",  (long) numComments );
 				IEnumAAFTaggedValues*	pCommentIterator = NULL;
-				IAAFTaggedValue*		pMobComment = NULL;
-				testRC = pMob->GetComments(&pCommentIterator);
-				while ( (SUCCEEDED(testRC)) && (SUCCEEDED(pCommentIterator->NextOne(&pMobComment))))
-				{
-					char*		pszComment;
-					char*		pszCommName;
-					aafWChar*	pwcComment;
-					aafWChar*	pwcName;
-					aafUInt32	textSize;
-					aafUInt32	bytesRead;
+				HRESULT testRC = pMob->GetComments(&pCommentIterator);
 
-					pMobComment->GetNameBufLen(&textSize);
-					pwcName = new aafWChar [textSize/sizeof(aafWChar)];
-					pMobComment->GetName(pwcName, textSize);
-					pszCommName =  new char[textSize/sizeof(aafWChar)];
-					wcstombs(pszCommName, pwcName, textSize/sizeof(aafWChar));
-					pMobComment->GetValueBufLen((aafUInt32 *)&textSize);
-					pwcComment = new aafWChar[textSize/sizeof(aafWChar)];
-					pMobComment->GetValue((aafUInt32)textSize, (aafDataBuffer_t)pwcComment, &bytesRead);
-					pszComment =  new char[textSize/sizeof(aafWChar)];
-					wcstombs(pszComment, pwcComment, textSize/sizeof(aafWChar));
-					OMFError = OMF2::omfiMobAppendComment(OMFFileHdl, OMFMob, pszCommName, pszComment);
-					delete [] pszCommName;
-					pszCommName = NULL;
-					delete [] pszComment;
-					pszComment = NULL;
-					delete [] pwcName;
-					pwcName = NULL;
-					delete [] pwcComment;
-					pwcComment = NULL;
-					pMobComment->Release();
-					pMobComment = NULL;
+				if( SUCCEEDED(testRC) )
+				{
+					IAAFTaggedValue*		pMobComment = NULL;
+					while( SUCCEEDED(pCommentIterator->NextOne(&pMobComment)) )
+					{
+						aafUInt32	nameSize = 0, textSize = 0, bytesRead;
+				
+						pMobComment->GetNameBufLen(&nameSize);
+						if( nameSize > 0 )
+						{
+							std::auto_ptr<aafWChar> APpwcName (new aafWChar [nameSize/sizeof(aafWChar)] );
+							aafWChar *pwcName = APpwcName.get();
+							pMobComment->GetName(pwcName, nameSize);
+							std::auto_ptr<char> APpszCommName( new char[nameSize/sizeof(aafWChar)] );
+							char *pszCommName =  APpszCommName.get();
+							wcstombs(pszCommName, pwcName, nameSize/sizeof(aafWChar));
+							pMobComment->GetValueBufLen((aafUInt32 *)&textSize);
+							if( textSize > 0 )
+							{
+								std::auto_ptr<aafWChar> APpwcComment( new aafWChar[textSize/sizeof(aafWChar)] );
+								aafWChar* pwcComment = APpwcComment.get();
+								pMobComment->GetValue((aafUInt32)textSize, (aafDataBuffer_t)pwcComment, &bytesRead);
+								std::auto_ptr<char> APpszComment( new char[textSize/sizeof(aafWChar)] );
+								char *pszComment =  APpszComment.get();
+								wcstombs(pszComment, pwcComment, textSize/sizeof(aafWChar));
+								OMFError = OMF2::omfiMobAppendComment(OMFFileHdl, OMFMob, pszCommName, pszComment);
+								gpGlobals->pLogger->Log( kLogInfo, "Comment \"%s\" of length %ld was converted.\n", pszCommName, textSize );
+								gpGlobals->pLogger->Log( kLogInfo, "Comment value = \"%s\".\n", pszComment);
+							}
+							else
+							{
+								gpGlobals->pLogger->Log( kLogError, "Zero length comment value encountered. Comment not converted.\n" );
+							}
+						}
+						else
+						{
+							gpGlobals->pLogger->Log( kLogError, "Zero length comment name encountered. Comment not converted.\n" );
+						}
+						pMobComment->Release();
+						pMobComment = NULL;
+					}
+
+					pCommentIterator->Release();
 				}
-				pCommentIterator->Release();
 			}
 		}
-		delete [] pwMobName;
-		delete [] pszMobName;
 		gpGlobals->nNumOMFMobs++;
 		pMob->Release();
 		pMob = NULL;
