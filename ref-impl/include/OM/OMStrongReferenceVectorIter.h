@@ -59,7 +59,7 @@ public:
                OMIteratorPosition initialPosition);
 
     // @cmember Destroy this <c OMStrongReferenceVectorIterator>.
-  ~OMStrongReferenceVectorIterator(void);
+  virtual ~OMStrongReferenceVectorIterator(void);
 
     // @cmember Reset this <c OMStrongReferenceVectorIterator> to the given
     //          <p initialPosition>.
