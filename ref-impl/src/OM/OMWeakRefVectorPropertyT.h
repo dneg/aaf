@@ -248,37 +248,6 @@ size_t OMWeakReferenceVectorProperty<ReferencedObject>::count(void) const
   return _vector.count();
 }
 
-  // @mfunc Get the size of this <c OMWeakReferenceVectorProperty>.
-  //   @tcarg class | ReferencedObject | The type of the referenced
-  //          (contained) object. This type must be a descendant of
-  //          <c OMStorable>.
-  //     @parm The size of this <c OMWeakReferenceVectorProperty>.
-  //     @this const
-template <typename ReferencedObject>
-void OMWeakReferenceVectorProperty<ReferencedObject>::getSize(
-                                                            size_t& size) const
-{
-  TRACE("OMWeakReferenceVectorProperty<ReferencedObject>::getSize");
-  OBSOLETE("OMWeakReferenceVectorProperty<ReferencedObject>::count");
-
-  size = count();
-}
-
-  // @mfunc Get the size of this <c OMWeakReferenceVectorProperty>.
-  //   @tcarg class | ReferencedObject | The type of the referenced
-  //          (contained) object. This type must be a descendant of
-  //          <c OMStorable>.
-  //     @rdesc The size of this <c OMWeakReferenceVectorProperty>.
-  //     @this const
-template <typename ReferencedObject>
-size_t OMWeakReferenceVectorProperty<ReferencedObject>::getSize(void) const
-{
-  TRACE("OMWeakReferenceVectorProperty<ReferencedObject>::getSize");
-  OBSOLETE("OMWeakReferenceVectorProperty<ReferencedObject>::count");
-
-  return count();
-}
-
   // @mfunc Set the value of this <c OMWeakReferenceVectorProperty>
   //        at position <p index> to <p object>.
   //   @tcarg class | ReferencedObject | The type of the referenced

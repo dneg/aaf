@@ -85,9 +85,6 @@ public:
     //          <c OMWeakReferenceSetProperty>.
   size_t count(void) const;
 
-    // @cmember Get the size of this <c OMWeakReferenceSetProperty>.
-  size_t getSize(void) const;
-
     // @cmember Insert <p object> into this
     //          <c OMWeakReferenceSetProperty>.
   void insert(const ReferencedObject* object);

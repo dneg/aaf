@@ -85,12 +85,6 @@ public:
     //          <c OMWeakReferenceVectorProperty>.
   size_t count(void) const;
 
-    // @cmember Get the size of this <c OMWeakReferenceVectorProperty>.
-  void getSize(size_t& size) const;
-
-    // @cmember Get the size of this <c OMWeakReferenceVectorProperty>.
-  size_t getSize(void) const;
-
     // @cmember Set the value of this <c OMWeakReferenceVectorProperty>
     //          at position <p index> to <p object>.
   ReferencedObject* setValueAt(const ReferencedObject* object,

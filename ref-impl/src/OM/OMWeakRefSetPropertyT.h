@@ -255,21 +255,6 @@ size_t OMWeakReferenceSetProperty<ReferencedObject>::count(void) const
   return _set.count();
 }
 
-  // @mfunc Get the size of this <c OMWeakReferenceSetProperty>.
-  //   @tcarg class | ReferencedObject | The type of the referenced
-  //          (contained) object. This type must be a descendant of
-  //          <c OMStorable>.
-  //     @rdesc The size of this <c OMWeakReferenceSetProperty>.
-  //     @this const
-template <typename ReferencedObject>
-size_t OMWeakReferenceSetProperty<ReferencedObject>::getSize(void) const
-{
-  TRACE("OMWeakReferenceSetProperty<ReferencedObject>::getSize");
-  OBSOLETE("OMWeakReferenceSetProperty<ReferencedObject>::count");
-
-  return count();
-}
-
   // @mfunc Insert <p object> into this
   //        <c OMWeakReferenceSetProperty>.
   //   @tcarg class | ReferencedObject | The type of the referenced
