@@ -173,6 +173,11 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pDictionary->CreateInstance(&AUID_AAFParameterDef,
 							  IID_IAAFParameterDef, 
 							  (IUnknown **)&pParamDef));
+		checkResult(pParamDef->QueryInterface(IID_IAAFDefObject, (void **) &pDefObject));
+		checkResult(pDefObject->Init (&parmID, TEST_PARAM_NAME, TEST_PARAM_DESC));
+		pDefObject->Release();
+		pDefObject = NULL;
+
 		checkResult(pDictionary->CreateInstance(&AUID_AAFTypeDefInt,
 							  IID_IAAFTypeDefInt, 
 							  (IUnknown **)&pIntDef));
@@ -204,10 +209,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pOperationDef->AppendDegradeToOperations (pOperationDef));
 
 		checkResult(pParamDef->SetDisplayUnits(TEST_PARAM_UNITS));
-		checkResult(pParamDef->QueryInterface(IID_IAAFDefObject, (void **) &pDefObject));
-		checkResult(pDefObject->Init (&parmID, TEST_PARAM_NAME, TEST_PARAM_DESC));
-		pDefObject->Release();
-		pDefObject = NULL;
 
 		//Make the first mob
 		long	test;
@@ -532,6 +533,12 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 			checkExpression(checkBypass == TEST_BYPASS, AAFRESULT_TEST_FAILED);
 			checkResult(pOperationDef->GetNumberInputs (&checkNumInputs));
 			checkExpression(checkNumInputs == TEST_NUM_INPUTS, AAFRESULT_TEST_FAILED);
+			checkResult(pOperationDef->GetParameterDefinitions (&pParmDefEnum));
+			checkResult(pParmDefEnum->NextOne(&pParmDef));
+			pParmDefEnum->Release();
+			pParmDefEnum = NULL;
+			pParmDef->Release();
+			pParmDef = NULL;
 			pOperationDef->Release();
 			pOperationDef = NULL;
 			/**/

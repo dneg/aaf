@@ -329,8 +329,6 @@ extern "C" HRESULT CAAFParameterDef_test()
 		cout << "The following IAAFParameterDef methods have not been implemented:" << endl; 
 		cout << "     SetTypeDef" << endl; 
 		cout << "     GetTypeDef" << endl; 
-		cout << "     AddReferenceValue" << endl; 
-		cout << "     GetReferenceValues" << endl; 
 		hr = AAFRESULT_TEST_PARTIAL_SUCCESS;
 	}
 
