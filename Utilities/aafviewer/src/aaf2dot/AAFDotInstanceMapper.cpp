@@ -629,8 +629,7 @@ AAFDotInstanceMapper::MapAAFPropertyValueGeneric( AxTypeDef &axTypeDef,
 	    throw;
 	 }
 
-	 IAAFPropertyValueSP pValue(axPropertyValue);
-	 AxPropertyValueIter elements( axTypeDefFixedArray.GetElements( pValue ) );
+	 AxPropertyValueIter elements( axTypeDefFixedArray.GetElements( propValue ) );
 	 IAAFPropertyValueSP elementValue;
 	 string arrayValue = "";
 	 bool isFirst = true;
@@ -706,8 +705,7 @@ AAFDotInstanceMapper::MapAAFPropertyValueGeneric( AxTypeDef &axTypeDef,
 	    throw;
 	 }
 
-	 IAAFPropertyValueSP pValue(axPropertyValue);
-	 AxPropertyValueIter elements( axTypeDefVariableArray.GetElements( pValue ) );
+	 AxPropertyValueIter elements( axTypeDefVariableArray.GetElements( propValue ) );
 	 IAAFPropertyValueSP elementValue;
 	 string arrayValue = "";
 	 bool isFirst = true;
@@ -784,6 +782,55 @@ AAFDotInstanceMapper::MapAAFPropertyValueGeneric( AxTypeDef &axTypeDef,
 	    axTypeDef ) );
       AxString value = axTypeDefString.GetElements( propValue );
       DotRecordNodeAttribute attribute( pStalker->GetName(), AxStringToString( value ) );
+
+      oStalker->GetNode()->AddAttribute( attribute );
+
+      PushStalker( oStalker );
+      PushStalker( pStalker );
+   }
+
+
+   else if ( axTypeDef.GetTypeCategory() == kAAFTypeCatStream)
+   {
+      PropertyValueStalker *pStalker = dynamic_cast< PropertyValueStalker* > ( PopStalker() );
+      if ( pStalker == 0 )
+      {
+	 cerr << "Error: Property value stalker expected." << endl;
+	 throw;
+      }
+      ObjectStalker *oStalker = dynamic_cast< ObjectStalker* > ( PopStalker() );
+      if ( oStalker == 0 )
+      {
+	 cerr << "Error: Object stalker expected." << endl;
+	 throw;
+      }
+
+      IAAFTypeDefStreamSP spTypeDefStream(
+	 AxQueryInterface< IAAFTypeDef,IAAFTypeDefStream > (
+	    axTypeDef ) );
+
+      aafInt64 size;
+      CHECK_HRESULT(spTypeDefStream->GetSize(propValue, &size));
+      if (size * 2 > _profile.GetMaxAttributeLength()) 
+      {
+	 size = _profile.GetMaxAttributeLength() / 2;
+      }
+
+      aafMemPtr_t buffer = new unsigned char[size];
+      aafUInt32 readSize;
+      CHECK_HRESULT(spTypeDefStream->Read(propValue, size, buffer, &readSize));
+      
+      string streamValue = "0x";
+      for (aafUInt32 i=0; i<readSize; i++)
+      {
+	 char tmp[3];
+	 sprintf(tmp, "%02x", (int)buffer[i]);
+	 streamValue.append(tmp);
+      }
+
+      delete [] buffer;
+
+      DotRecordNodeAttribute attribute( pStalker->GetName(), streamValue );
 
       oStalker->GetNode()->AddAttribute( attribute );
 
