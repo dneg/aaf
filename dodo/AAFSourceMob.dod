@@ -7,229 +7,504 @@ AAFMob\
 #endm
 #c
 #import ./AAFObject.exp
+#import ./AAFComponent.exp
 #import ./AAFMob.exp
-
+#import ./AAFSearchSource.exp
+#import ./AAFMobPrivate.exp
 AD_HEAD
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
-
-
 AD_FORWARD_DECLARATION(AAFMediaDescriptor)
 AD_FORWARD_DECLARATION(AAFDataDef)
 AD_FORWARD_DECLARATION(AAFFindSourceInfo)
 AD_FORWARD_DECLARATION(AAFComponent)
 AD_FORWARD_DECLARATION(AAFSegment)
-
-////////////////////////////////////////////////////////////////////////////////
-// Types required by this module:
-//
-
-
 AD_CLASS_UUID(B1A2137D, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
 
 AD_DEFAULT_UUID(B1A2137C, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
 AD_CLASS_BEGIN
+AD_XMETHOD1(GetMediaDescription,
+			[out],
+			objOut,
+			AAFMediaDescriptor,
+			ppMdes,
+			Returned Media Descriptor object,
+			Places the Media Descriptor object attached to this Mob into the
+  // ppMdes argument.
+  //
+  // Succeeds if all of the following are true:
+  // - the ppMdes pointer is valid.
+  // \(other conditions here\)
+  // 
+  // If this method fails nothing is written to *ppMdes.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppMdes is null.
+  //
+  // \(other codes here.\))
+
+
+AD_XMETHOD1(SetMediaDescription,
+			[in],
+			objIn,
+			AAFMediaDescriptor,
+			pMdes,
+			Media Descriptor object,
+			Sets the Media Descriptor of this Mob to be the given one.
+  //
+  // Succeeds if all of the following are true:
+  // - the pMdes pointer is valid.
+  // \(other conditions here\)
+  // 
+  // If this method fails nothing is written to *pMdes.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pMdes is null.
+  //
+  // \(other codes here.\))
 
 
 AD_XMETHOD2(Setup,
-			[in\,ref], objPass, aafString_t *, name, Name of new Source Mob.,
-			[in\,ref], objPass, aafClassID_t*, mdesClass, ClassID of Media Descriptor.,
-Low\-level function that creates a new Source Mob object for a nonstandard
-  // Mob.
-  // @commThis function creates Source Mobs that are not in the standard set \(that is\, not
-  // File Source Mobs\, tape Source Mobs\, or film Source Mobs\).
-  // The class name of the Media Descriptor must be passed in\, as well as a Mob
-  // type.
-  // This is the function upon which omfmFileMobNew\, omfmTapeMobNew\, and
-  // omfmFilmMobNew are built. If a tape Source Mob or a film Source Mob is
-  // required\, then one of these functions should be used instead.
-  // If you need a type of Source Mob other than those supplied with the Toolkit\,
-  // then a wrapper function should be written that calls this function to build
-  // underlying data structures.
-  // @comm This function has no relation to raw data \(non-AAF\) data files. The word raw
-  // in the function name means that the function creates an incomplete Source
-  // Mob.
-  // @devnote This method is based on the arguments from omfmRawSourceMobNew
-  // @devnote Is the file input parameter really necessary? This may have to be removed.)
+			[in],
+			  objPass,
+			  aafWChar *,
+			  pName,
+			  Name of new Source Mob,
+			[in],
+			  objPass,
+			  aafClassID_t *,
+			  pMdesClass,
+			  ClassID of Media Descriptor,
+			This function creates Source Mobs that are not in the standard
+  // set \(that is\, not File Source Mobs\, tape Source Mobs\, or film
+  // Source Mobs\).  The class name of the Media Descriptor must be
+  // passed in\, as well as a Mob type.  This is the function upon
+  // which omfmFileMobNew\, omfmTapeMobNew\, and omfmFilmMobNew are
+  // built. If a tape Source Mob or a film Source Mob is required\,
+  // then one of these functions should be used instead.  If you need
+  // a type of Source Mob other than those supplied with the Toolkit\,
+  // then a wrapper function should be written that calls this
+  // function to build underlying data structures.
+  // 
+  // This function has no relation to raw data \(non-AAF\) data
+  // files. The word raw in the function name means that the function
+  // creates an incomplete Source Mob.
+  //
+  // Succeeds if all of the following are true:
+  // - the pName pointer is valid.
+  // - the pMdesClass pointer is valid.
+  // \(other conditions here\)
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - either pName or pMdesClass is null.
+  //
+  // \(other codes here.\))
+
 
 AD_XMETHOD4(AddNilReference,
-			[in], objPass, aafTrackID_t, trackID, TrackID to be assigned to the new track.,
-			[in], objPass, aafLength_t, length, Duration of the Source Clip to be added to the new track.,
-			[in], objIn,AAFDataDef, dataDef, Data kind of the new track.,
-			[in], objPass, aafRational_t, editRate, Edit rate of the new track.,
-Adds a track to a Source Mob that describes an original source of media.
-  // @comm This function adds a track containing a Source Clip to a Source Mob. The
-  // Source Clip does not reference another Mob as the source of the media. The
-  // Source Clip specifies a source MobID value of 0.0.0. The examples of Source
-  // Mobs that are not derived from a previous source of media are\: Tape Source
-  // Mobs that were not created from film\; File Source Mobs whose digital media
-  // data was originally generated by computer and was not digitized from videotape.
-  // @devnote based on omfmMobAddNilReference)
+			[in],
+			  objPass,
+			  aafTrackID_t,
+			  trackID,
+			  TrackID to be assigned to the new track,
+			[in],
+			  objPass,
+			  aafLength_t,
+			  length,
+			  Duration of the Source Clip to be added to the new track,
+			[in],
+			  objIn,
+			  AAFDataDef,
+			  dataDef,
+			  Data kind of the new track,
+			[in],
+			  objPass,
+			  aafRational_t,
+			  editRate,
+			  Edit rate of the new track,
+			This function adds a track containing a Source Clip to a Source
+  // Mob. The Source Clip does not reference another Mob as the source
+  // of the media. The Source Clip specifies a source MobID value of
+  // 0.0.0. The examples of Source Mobs that are not derived from a
+  // previous source of media are\: Tape Source Mobs that were not
+  // created from film\; File Source Mobs whose digital media data was
+  // originally generated by computer and was not digitized from
+  // videotape.
+  //
+  // Succeeds if all of the following are true:
+  // \(other conditions here\)
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // \(other codes here.\))
 
-AD_METHOD4(AddTimecodeClip,
-		   [in], aafRational_t, editrate, Edit rate of Timecode track.,
-		   [in], aafInt32, trackID, TrackID of Timecode track.,
-		   [in], aafTimecode_t, startTC, Starting time code for Timecode. The startTC parameter is
-  // expressed in frames since midnight. Use the function
-  // TimecodeToOffset to compute this number.,
-		   [in], aafFrameLength_t,	length32, Duration of Timecode. The length32 parameter can be the value
-  // FULL_RANGE\\\, in which case the length is 24 hours.,
-Adds a Timecode to the specified Timecode track of a Source Mob.
-  // @comm This function adds a Timecode track to a specified tape Mob or film Mob\\\, with
-  // a specified starting timecode\\\, length\\\, and edit rate. Call the function omfm-MobValidateTimecodeRange
-  // following this function to make sure that the
-  // tape Mob has valid Timecode on a specified set of channels.
-  // This function does not add the Filler to any of the other tracks to indicate that
-  // the Timecode is valid for that channel\\\, so you should use omfmMobValida-teTimecodeRange
-  // for that purpose.
-  // @devnote based on omfmMobAddTimecodeClip)
 
-AD_METHOD7(AddEdgecodeClip,
-		   [in], aafRational_t, editrate, Edit rate of the Edgecode track.,
-		   [in], aafInt32, trackID, TrackID to assign to the new Edgecode track.,
-		   [in], aafFrameOffset_t, startEC, Starting Edgecode.,
-		   [in], aafFrameLength_t,	length32, Length of the Edgecode component in the track.,
-		   [in], aafFilmType_t, filmKind, The film kind.
-  // @ex Possible values for an omfFilmType_t are: |
-  // kFtNull
-  // kFt35MM
-  // kFt16MM
-  // kFt8MM
-  // kFt65MM,
-		   [in], aafEdgeType_t, codeFormat, The code format.
-  // @ex Possible values for an omfEdgeType_t are:
-  // kEtNull
-  // kEtKeycode
-  // kEtEdgenum4
-  // kEtEdgenum5,
-		   [in\\\,ref], aafEdgecodeHeader_t, header, The Edgecode's 8-byte header.,
-Adds an Edgecode track and Edgecode to the specified Source Mob.
-  // @comm Adds an Edgecode track to a specified film Mob\\\, with a specified starting
-  // edgecode\\\, length\\\, and edit rate. You must add a media track with a Source
-  // Clip to the Film Source Mob to make the edgecode track valid.
-  // @devnote based on omfmMobAddEdgecodeClip)
+AD_XMETHOD4(AddTimecodeClip,
+			[in],
+			  objPass,
+			  aafRational_t,
+			  editrate,
+			  Edit rate of Timecode track,
+			[in],
+			  objPass,
+			  aafInt32,
+			  trackID,
+			  TrackID of Timecode track,
+		    [in],
+			  objPass,
+			  aafTimecode_t,
+			  startTC,
+			  Starting time code,
+			[in],
+			  objPass,
+			  aafFrameLength_t,
+			  length32,
+			  Duration of Timecode.,
+			This function adds a Timecode track to a specified tape Mob or
+  // film Mob\, with a specified starting timecode\, length\, and edit
+  // rate. Call the function omfm-MobValidateTimecodeRange following
+  // this function to make sure that the tape Mob has valid Timecode
+  // on a specified set of channels.  This function does not add the
+  // Filler to any of the other tracks to indicate that the Timecode
+  // is valid for that channel\, so you should use
+  // omfmMobValida-teTimecodeRange for that purpose.
+  // 
+  // Note: The startTC parameter is expressed in frames since
+  // midnight. Use the function TimecodeToOffset to compute this number.
+  // 
+  // The length32 parameter can be the value FULL_RANGE\, in which
+  // case the length is 24 hours.
+  //
+  // Succeeds if all of the following are true:
+  // \(other conditions here\)
+  // 
+  // If this method fails nothing is written to *ppMdes.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // \(other codes here.\))
+
+
+AD_XMETHOD7(AddEdgecodeClip,
+			[in],
+			  objPass,
+			  aafRational_t,
+			  editrate,
+			  Edit rate of the Edgecode track,
+			[in],
+			  objPass,
+			  aafInt32,
+			  trackID,
+			  TrackID to assign to the new Edgecode track,
+			[in],
+			  objPass,
+			  aafFrameOffset_t,
+			  startEC,
+			  Starting Edgecode,
+			[in],
+			  objPass,
+			  aafFrameLength_t,
+			  length32,
+			  Length of the Edgecode component in the track,
+			[in],
+			  objPass,
+			  aafFilmType_t,
+			  filmKind,
+			  The film kind.,
+			[in],
+			  objPass,
+			  aafEdgeType_t,
+			  codeFormat,
+			  The code format.,
+			[in],
+			  objPass,
+			  aafEdgecodeHeader_t,
+			  header,
+			  The Edgecode\'s 8-byte header,
+  // Adds an Edgecode track to a specified film Mob\, with a specified
+  // starting edgecode\, length\, and edit rate. You must add a media
+  // track with a Source Clip to the Film Source Mob to make the
+  // edgecode track valid.
+  //
+  // Note: Possible values for filmKind argument are:
+  // - kFtNull
+  // - kFt35MM
+  // - kFt16MM
+  // - kFt8MM
+  // - kFt65MM
+  //
+  // Note: Possible values for codeFormat argument are:
+  // - kEtNull
+  // - kEtKeycode
+  // - kEtEdgenum4
+  // - kEtEdgenum5
+  //
+  // Succeeds if all of the following are true:
+  // \(other conditions here\)
+  // 
+  // If this method fails nothing is written to *ppMdes.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // \(other codes here.\))
+
+
 
 AD_XMETHOD5(ValidateTimecodeRange,
-            [in], objIn, AAFDataDef, mediaKind,
-            Data kind for the track to be added. The mediaKind parameter
-  // requires a data kind valid for a media stream. 
-  // @ex Valid data kinds are: |
-  // Picture
-  // Sound,
-            [in], objPass, aafTrackID_t, trackID, TrackID for the track to be added.,
-            [in], objPass, aafRational_t, editrate, Edit rate for the track to be added.,
-            [in], objPass, aafFrameOffset_t, startOffset, Start offset for the track to be added.,
-            [in], objPass, aafFrameLength_t, ength32, Duration of the Source Clip in the track.,
-Adds track containing Source Clips to a tape Source Mob to indicate that the
-  // Timecode is valid for that channel.
-  // @devnote based on omfmMobValidateTimecodeRange)
+			[in],
+			  objIn,
+			  AAFDataDef,
+			  pMediaKind,
+			  Data kind for the track to be added,
+			[in],
+			  objPass,
+			  aafTrackID_t,
+			  trackID,
+			  TrackID for the track to be added,
+			[in],
+			  objPass,
+			  aafRational_t,
+			  editrate,
+			  Edit rate for the track to be added,
+			[in],
+			  objPass,
+			  aafFrameOffset_t,
+			  startOffset,
+			  Start offset for the track to be added,
+			[in],
+			  objPass,
+			  aafFrameLength_t,
+			  length32,
+			  Duration of the Source Clip in the track,
+  // Adds track containing Source Clips to a tape Source Mob to
+  // indicate that the Timecode is valid for that channel.
+  //
+  // Note: The pMediaKind parameter requires a data kind valid for a
+  // media stream.  Valid data kinds are:
+  // - Picture
+  // - Sound
+  //
+  // Succeeds if all of the following are true:
+  // - the pMediaKind pointer is valid.
+  // \(other conditions here\)
+  // 
+  // If this method fails nothing is written to *ppMdes.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pMediaKind is null.
+  //
+  // \(other codes here.\))
+
 
 AD_XMETHOD7(AddPhysSourceRef,
-            [in], objPass, aafRational_t, editrate, Edit rate of track to contain reference.,
-            [in], objPass, aafTrackID_t, aMobTrack, TrackID of track to contain reference.,
-            [in], objIn, AAFDataDef, mediaKind, Data kind of track to contain reference. The mediaKind parameter
-  // requires a data kind valid for a media stream. 
-  // @ex Valid data kinds are: | 
-  // Picture
-  // Sound,
-            [in], objIn, AAFSegment, sourceRefObj,Physical Source Mob that is being referenced. ,
-            [in], objPass, aafPosition_t, srcRefOffset, Offset in the physical Source Mob.,
-            [in], objPass, aafInt32, srcRefTrack,
-            TrackID of the track in the physical Source Mob being referenced.,
-            [in], objPass, aafLength_t, srcRefLength,
-            Length of the Source Clip in the Source Mob referencing the physical
-  // Source Mob.,
-Connects the specified Source Mob with the physical Source Mob that
-  // describes the previous generation of media.
-  // @comm If a physical Source Mob\, such as a File Source Mob or tape Source Mob\, refer-
-  // ences another physical Source Mob as its ancestor\, then this function makes
-  // the connection between the two. This function adds a track containing a
-  // Source Clip to the Source Mob specified by the aSourceMob parameter. This
-  // Source Clip has a source reference to the Physical Source Mob described by the
-  // sourceRefObj parameter. This Physical Source Mob is the ancestor of the
-  // aSourceMob. For example\, a File Source Mob can have a Tape Source Mob as its
-  // ancestor and a Tape Source Mob can have a Film Source Mob as its ancestor.
-  // If aSourceMob contains a track with the TrackID specified by a MobTrackID\, then
-  // this function sets the properties of that track's Source Clip to reference the
-  // physical Source Mob. Otherwise\, this function appends the track and adds a
-  // Source Clip that references the physical Source Mob.
-  // @devnote based on omfmMobAddPhysSourceRef)
+			[in],
+			  objPass,
+			  aafRational_t,
+			  editrate,
+			  Edit rate of track to contain reference,
+			[in],
+			  objPass,
+			  aafTrackID_t,
+			  aMobTrack,
+			  TrackID of track to contain reference,
+			[in],
+			  objIn,
+			  AAFDataDef,
+			  pMediaKind,
+			  Data kind of track to contain reference,
+			[in],
+			  objIn,
+			  AAFSegment,
+			  pSourceRefObj,
+			  Physical Source Mob that is being referenced,
+			[in],
+			  objPass,
+			  aafPosition_t,
+			  srcRefOffset,
+			  Offset in the physical Source Mob,
+			[in],
+			  objPass,
+			  aafInt32,
+			  srcRefTrack,
+			  TrackID of track in physical Source Mob,
+			[in],
+			  objPass,
+			  aafLength_t,
+			  srcRefLength,
+			  Length of the Source Clip,
+  // Connects the specified Source Mob with the physical Source Mob
+  // that describes the previous generation of media.  If a physical
+  // Source Mob\, such as a File Source Mob or tape Source Mob\,
+  // references another physical Source Mob as its ancestor\, then
+  // this function makes the connection between the two. This function
+  // adds a track containing a Source Clip to the Source Mob specified
+  // by the aSourceMob parameter. This Source Clip has a source
+  // reference to the Physical Source Mob described by the
+  // sourceRefObj parameter. This Physical Source Mob is the ancestor
+  // of the aSourceMob. For example\, a File Source Mob can have a
+  // Tape Source Mob as its ancestor and a Tape Source Mob can have a
+  // Film Source Mob as its ancestor.  If aSourceMob contains a track
+  // with the TrackID specified by a MobTrackID\, then this function
+  // sets the properties of that track's Source Clip to reference the
+  // physical Source Mob. Otherwise\, this function appends the track
+  // and adds a Source Clip that references the physical Source Mob.
+  //
+  // Note: The mediaKind parameter requires a data kind valid for a
+  // media stream.  Valid data kinds are:
+  // - Picture
+  // - Sound
+  //
+  // Succeeds if all of the following are true:
+  // - the pMediaKind pointer is valid.
+  // - the pSourceRefObj pointer is valid.
+  // \(other conditions here\)
+  // 
+  // If this method fails nothing is written to *ppMdes.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - either pMediaKind or pSourceRefObj is null.
+  //
+  // \(other codes here.\))
+
 
 AD_XMETHOD_10(AddPulldownRef,
-			  [in], objPass, aafRational_t, editrate, Edit rate of track to contain reference.,
-			  [in], objPass, aafTrackID_t, aMobTrack, TrackID of track to contain reference.,
-			  [in], objIn, AAFDataDef, mediaKind,
-			  Data kind of track to contain reference. The mediaKind parameter
-  // requires a data kind valid for a media stream. 
-  // @ex Valid data kinds are: |
-  // Picture
-  // Sound,
-			  [in], objIn, AAFSegment, sourceRefObj,
-			  Physical Source Mob that is being referenced.,
-			  [in], objPass, aafPosition_t, srcRefOffset, Offset in the physical Source Mob.,
-			  [in], objPass, aafInt32, srcRefTrack,
-			  TrackID of the track in the physical Source Mob being referenced.,
-			  [in], objPass, aafLength_t, srcRefLength,
-			  Length of the Source Clip in the Source Mob referencing the physical Source Mob.,
-			  [in], objPass, aafPulldownKind_t, pulldownKind,
-			  Encoded value that specifies the way the conversion from one
-  // frame rate to another was performed. 
-  // @ex Possible values for aafPulldownKind_t are: |
-  // kOMFTwoThreePD
-  // kOMFPALPD
-  // kOMFOneToOneNTSC
-  // kOMFOneToOnePAL
-  // kOMFVideoTapNTSC,
-			  [in], objPass, aafPhaseFrame_t, phaseFrame,
-			  Integer value that specifies the phase of the first frame that is referenced 
-  // in the previous generation physical Source Mob.,
-			  [in], objPass, aafPulldownDir_t, direction,
-			  Direction of the pulldown conversion. 
-  // @ex Possible values for aaPulldownDir_t are: |
-  // kOMFTapeToFilmSpeed
-  // kOMFFilmToTapeSpeed,
-  // @devnote based on omfmMobAddPulldownRef)
+			  [in],
+				objPass,
+				aafRational_t,
+				editrate,
+				Edit rate of track to contain reference,
+			  [in],
+				objPass,
+				aafTrackID_t,
+				aMobTrack,
+				TrackID of track to contain reference,
+			  [in],
+				objIn,
+				AAFDataDef,
+				pMediaKind,
+				Data kind of track to contain reference,
+			  [in],
+				objIn,
+				AAFSegment,
+				pSourceRefObj,
+				Physical Source Mob that is being referenced,
+			  [in],
+				objPass,
+				aafPosition_t,
+				srcRefOffset,
+				Offset in the physical Source Mob,
+			  [in],
+				objPass,
+				aafInt32,
+				srcRefTrack,
+				TrackID of track in physical Source Mob,
+			  [in],
+				objPass,
+				aafLength_t,
+				srcRefLength,
+				Length of the Source Clip in the Source Mob,
+			  [in],
+				objPass,
+				aafPulldownKind_t,
+				pulldownKind,
+				Method of conversion,
+			  [in],
+				objPass,
+				aafPhaseFrame_t,
+				phaseFrame,
+				phase of first frame,
+			  [in],
+				objPass,
+				aafPulldownDir_t,
+				direction,
+				Direction of the pulldown conversion.,
+  //
+  // Note: The mediaKind parameter requires a data kind valid for a
+  // media stream.  Valid data kinds are:
+  // - Picture
+  // - Sound
+  //
+  // Note: Possible values for pulldownKind are:
+  // - kOMFTwoThreePD
+  // - kOMFPALPD
+  // - kOMFOneToOneNTSC
+  // - kOMFOneToOnePAL
+  // - kOMFVideoTapNTSC
+  //
+  // Note: Possible values for direction are:
+  // - kOMFTapeToFilmSpeed
+  // - kOMFFilmToTapeSpeed
+  //
+  // Succeeds if all of the following are true:
+  // - the pMediaKind pointer is valid.
+  // - the pSourceRefObj pointer is valid.
+  // \(other conditions here\)
+  // 
+  // If this method fails nothing is written to *ppMdes.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - either pMediaKind or pSourceRefObj is null.
+  //
+  // \(other codes here.\))
 
-AD_XMETHOD1(GetMediaDescription,
-			[out], objOut, AAFMediaDescriptor, mdes, Returned Media Descriptor object.,
-			Returns the Media Descriptor object attached to the File Source Mob.
-  // @comm This function takes a File Source Mob and returns a pointer to the Media
-  // Descriptor object attached to the File Source Mob.
-  // @devnote based on omfmMobGetMediaDescription)
 
-AD_XMETHOD7(SearchSource,	
-			[in], objPass, aafTrackID_t, trackID, Track ID of the track \(Mob Slot\) to get information about.,
-			[in], objPass, aafPosition_t, offset, Offset within the track to get information about.,
-			[in], objPass, aafMobKind_t, mobKind, Kind of referenced Mob to get information about. 
-  // @ex Possible values for aafMobKind_t are: |
-  // kCompMob
-  // kMasterMob
-  // kFileMob
-  // kTapeMob
-  // kFilmMob,
-		   [in\,ref], objPass, aafMediaCriteria_t *, mediaCrit, Criteria to use when finding a Source Mob if there is a Media
-  // Group in an intervening Master Mob.,
-		   [in\,ref], objPass, aafEffectChoice_t *, effectChoice, Parameter that is not used in this function. 
-  // @ex Possible values for aafEffectChoice_t are: |
-  // kFindNull,
-		   [out], objOut, AAFComponent, thisCpnt, ,
-		   [out], objOut, AAFFindSourceInfo, sourceInfo, Preallocated buffer to hold source information.,
-Returns source information for a track in a Master Mob or Source Mob.
-  // @comm This function returns the source information for a track in a Master Mob or
-  // Source Mob. It follows the Source Clip references in the specified track until it
-  // encounters the kind of Mob specified in the mobKind parameter.
-  // This function cannot be used on a Composition Mob and is not intended to be
-  // called iteratively; use the omfiMobOpenSearch\, omfiMobGetNextSource\,
-  // omfiMobGetThisSource\, and omfiMobCloseSearch functions for those
-  // purposes.
-  // @devnote based on omfiMobSearchSource)
+AD_COM_METH(.method-SearchSource)
 
-AD_OVERRIDE(.method-IsMobKind)
 
+AD_COM_METH(.method-GetMobKind)
 AD_CLASS_END
