@@ -245,6 +245,11 @@ AAFRESULT STDMETHODCALLTYPE
 												  aafInt32* pSampledXOffset,
 												  aafInt32* pSampledYOffset)
 {
+	
+	if (!_sampledHeight.isPresent()  || !_sampledWidth.isPresent()   || 
+		!_sampledXOffset.isPresent() ||	!_sampledYOffset.isPresent())
+		return AAFRESULT_PROP_NOT_PRESENT;
+		
 	if ((pSampledHeight == NULL) || (pSampledWidth == NULL) ||
 		(pSampledXOffset == NULL) || (pSampledYOffset == NULL))
 		return(AAFRESULT_NULL_PARAM);
@@ -264,7 +269,12 @@ AAFRESULT STDMETHODCALLTYPE
 												  aafInt32*  pDisplayXOffset,
 												  aafInt32* pDisplayYOffset)
 {
-	if ((pDisplayHeight == NULL) || (pDisplayWidth == NULL) ||
+	
+	if (!_displayHeight.isPresent()	 || !_displayWidth.isPresent()	 ||
+		!_displayXOffset.isPresent() || !_displayXOffset.isPresent())
+		return AAFRESULT_PROP_NOT_PRESENT;
+	 
+	if ((pDisplayHeight == NULL)  || (pDisplayWidth == NULL) ||
 		(pDisplayXOffset == NULL) || (pDisplayYOffset == NULL))
 		return(AAFRESULT_NULL_PARAM);
 
@@ -331,6 +341,10 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFDigitalImageDescriptor::GetAlphaTransparency (aafAlphaTransparency_t* pAlphaTransparency)
 {
+	
+	if (!_alphaTransparency.isPresent())
+		return AAFRESULT_PROP_NOT_PRESENT;
+	
 	if (pAlphaTransparency == NULL)
 		return(AAFRESULT_NULL_PARAM);
 	
@@ -352,6 +366,10 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFDigitalImageDescriptor::GetGamma (aafRational_t* pGamma)
 {
+	
+	if (!_gamma.isPresent())
+		return AAFRESULT_PROP_NOT_PRESENT;
+	
 	if (pGamma == NULL)
 		return(AAFRESULT_NULL_PARAM);
 
@@ -364,6 +382,9 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFDigitalImageDescriptor::GetImageAlignmentFactor (aafInt32* pImageAlignmentFactor)
 {
+	if (!_imageAlignmentFactor.isPresent())
+		return AAFRESULT_PROP_NOT_PRESENT;
+	
 	if (pImageAlignmentFactor == NULL)
 		return(AAFRESULT_NULL_PARAM);
 

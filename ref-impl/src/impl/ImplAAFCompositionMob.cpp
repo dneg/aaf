@@ -78,14 +78,21 @@ AAFRESULT STDMETHODCALLTYPE
 	}
 	else
 	{
-		if (_defaultFadeType == kFadeNone)
-			pResult->valid = AAFFalse;
+		if (!_defaultFadeLen.isPresent() ||
+			!_defaultFadeType.isPresent() ||
+			!_defaultFadeEditUnit.isPresent())
+			aafError = AAFRESULT_PROP_NOT_PRESENT;
 		else
 		{
-			pResult->fadeLength = _defaultFadeLen;
-			pResult->fadeType = _defaultFadeType;
-			pResult->fadeEditUnit = _defaultFadeEditUnit;
-			pResult->valid = AAFTrue;
+			if (_defaultFadeType == kFadeNone)
+				pResult->valid = AAFFalse;
+			else
+			{
+				pResult->fadeLength = _defaultFadeLen;
+				pResult->fadeType = _defaultFadeType;
+				pResult->fadeEditUnit = _defaultFadeEditUnit;
+				pResult->valid = AAFTrue;
+			}
 		}
 	}
 	return aafError;
