@@ -1,6 +1,11 @@
 #ifndef __AAFResult_h_
 #define __AAFResult_h_
 
+#if defined(_MAC) || defined(macintosh)
+// Make sure SEVERITY_ERROR and FACILITY_ITF are defined.
+#include <scode.h>
+#endif
+
 /******************************************\
 *                                          *
 * Advanced Authoring Format                *
