@@ -8,7 +8,6 @@
 #startm .this-module 0
 AAFTypes\
 #endm
-#c
 AD_TYPES_HEAD
 
 AD_TYPES_BEGIN(B1A2137B, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
