@@ -142,7 +142,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
     // Get the AAF Dictionary so that we can create valid AAF objects.
     checkResult(pHeader->GetDictionary(&pDictionary));
     
-	checkResult(pDictionary->CreateInstance(&AUID_AAFCodecDef,
+	  checkResult(pDictionary->CreateInstance(&AUID_AAFCodecDef,
 							  IID_IAAFPluggableDef, 
 							  (IUnknown **)&pPlugDef));
     
@@ -168,11 +168,11 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
   if (pFile)
   {  // Close file
     if (bFileOpen)
-	{
-		pFile->Save();
-		pFile->Close();
-	}
-     pFile->Release();
+	  {
+		  pFile->Save();
+		  pFile->Close();
+	  }
+    pFile->Release();
   }
 
   return hr;
@@ -203,9 +203,15 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	}
 
 	// Cleanup and return
+	if (pPlug)
+		pPlug->Release();
+
+	if (pDictionary)
+		pDictionary->Release();
+
 	if (pHeader)
 		pHeader->Release();
-      
+
 	if (pFile)
 	{  // Close file
 		if (bFileOpen)
