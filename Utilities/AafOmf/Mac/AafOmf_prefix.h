@@ -55,3 +55,14 @@
 //#define OM_ENABLE_TRACE
 
 #define BOB_TEST
+
+//OMF Prefix
+#define OMFI_NEED_ULONG 1
+#define OMFI_ENABLE_SEMCHECK	1
+#define OMFI_ERROR_TRACE	1
+#define OMFI_JPEG_CODEC 1
+#define OMFI_ENABLE_STREAM_CACHE 1
+#define NEW_MEMORY_MECHANISM	1
+#define VIRTUAL_BENTO_OBJECTS	1
+
+#include "AAFUtilLibPrecomp.pch"
