@@ -27,7 +27,7 @@
 #
 ###############################################################################
 
-runtest()
+runOneTest()
 {
 	exename=$1	
 	numEss=$2
@@ -51,9 +51,9 @@ runtest()
 	eli2aaf)
 		if [ $arg == "-netloc" ]
 		then
-			cmd="$exename $arg $i512bflag $AAF_DATA_DIR/$numEss.eli $numEss$ext.aaf"
+			cmd="$exename $arg $eli2aafCacheOpts $i512bflag $AAF_DATA_DIR/$numEss.eli $numEss$ext.aaf"
 		else
-			cmd="$exename $i512bflag $AAF_DATA_DIR/$numEss.eli $numEss.aaf"
+			cmd="$exename $eli2aafCacheOpts $i512bflag $AAF_DATA_DIR/$numEss.eli $numEss.aaf"
 		fi
 		;;
 	InfoDumper)
@@ -72,9 +72,9 @@ runtest()
 			fi
 			if [ $arg == "-lazyLoad" ]
 			then
-				cmd="$exename $arg $AAF_TEST_DIR/$filen"
+				cmd="$exename $arg $infoDumperCacheOpts $AAF_TEST_DIR/$filen"
 			else
-				cmd="$exename $AAF_TEST_DIR/$filen"
+				cmd="$exename $infoDumperCacheOpts $AAF_TEST_DIR/$filen"
 			fi
 		fi
 			
@@ -84,7 +84,7 @@ runtest()
 		echo "unknown command $exename"
 		exit
 	esac
-
+	echo $cmd
 	out=`(time -p $cmd) 3>&2 2>&1 1>&3 1>/dev/null`
 	hr=$?
 	if [ $hr -eq 0 ]
@@ -119,7 +119,7 @@ runLoop()
 			fi
 			t=0
 			hr=0;
-			runtest $exename $N $arg $arg2
+			runOneTest $exename $N $arg $arg2
 			k=`expr $k + 1`
 			errstr="OK"
 			if [ $hr -ne 0 ]
@@ -154,17 +154,22 @@ BASEDIR=$HOME
 
 AAF_DATA_DIR=$BASEDIR/aaftestdata  #where the data resides
 
+AAF_TEST_DIR=$AAF_DATA_DIR
+
 if [ -z "$*" ] ; then
 	echo "Usage: $0 operation_list maxcuts"
 	echo "    operation_list  is a space separated list of read|write|bigfile"
-	echo "    512b              set for 512 byte sectors"
+	echo "    512b            set for 512 byte sectors"
 	echo "    maxcuts         is the maximum number of essence elements"
+	echo "    usecache        uses the OM's built in page cache"
 	exit 1
 fi
 
 # parse arguments
 maxcuts=1000000
 i512bflag=""
+eli2aafCacheOpts=""
+infoDumperCacheOpts=""
 for arg in $*
 do
 	if [ $arg == "read" ] ; then
@@ -175,6 +180,9 @@ do
 		bigFile=1
 	elif [ $arg == "512b" ] ; then
 		i512bflag="-smallSectors"
+	elif [ $arg == "usecache" ] ; then
+	        eli2aafCacheOpts="-useraw -omcache"
+                infoDumperCacheOpts="-useomcache"
 	else
 		maxcuts=$arg
 	fi
@@ -213,7 +221,7 @@ if [ -n "$bigFile" ]
 then
 	hr=0
 	echo "eli2aaf $BIG_FILE"
-	runtest "eli2aaf" $BIG_FILE
+	runOneTest "eli2aaf" $BIG_FILE
 	errstr="OK"
 	if [ $hr -ne 0 ]
 	then
@@ -224,7 +232,7 @@ then
 	
 	hr=0
 	echo "eli2aaf $BIG_FILE -netloc"
-	runtest "eli2aaf" $BIG_FILE "-netloc"
+	runOneTest "eli2aaf" $BIG_FILE "-netloc"
 	errstr="OK"
 	if [ $hr -ne 0 ]
 	then
