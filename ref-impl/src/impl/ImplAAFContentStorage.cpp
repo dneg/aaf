@@ -65,33 +65,27 @@ ImplAAFContentStorage::~ImplAAFContentStorage ()
 	_mobIndex = 0;
 
 	// Cleanup the persistent data...
-	ImplAAFEssenceData *pEssenceData = NULL;
-	ImplAAFMob *pMob = NULL;
-	size_t size, i;
 
+	size_t i;
 	// Release the essence data
-	_essenceData.getSize(size);
+	size_t size = _essenceData.getSize();
 	for (i = 0; i < size; i++)
 	{
-		_essenceData.getValueAt(pEssenceData, i);
+		ImplAAFEssenceData *pEssenceData = _essenceData.setValueAt(0, i);
 		if (pEssenceData)
 		{
 		  pEssenceData->ReleaseReference();
-		  // Set value to 0 so OM can perform necessary cleanup.
-		  _essenceData.setValueAt(0, i);
 		}
 	}
 	
 	// Release the mobs
-	_mobs.getSize(size);
+	size = _mobs.getSize();
 	for (i = 0; i < size; i++)
 	{
-		_mobs.getValueAt(pMob, i);
+		ImplAAFMob *pMob = _mobs.setValueAt(0, i);
 		if (pMob)
 		{
 		  pMob->ReleaseReference();
-		  // Set value to 0 so OM can perform necessary cleanup.
-		  _mobs.setValueAt(0, i);
 		}
 	}
 }

@@ -86,16 +86,13 @@ ImplAAFMob::ImplAAFMob ()
 ImplAAFMob::~ImplAAFMob ()
 {
 	// Release all of the mob slot pointers.
-	ImplAAFMobSlot *pSlot = NULL;
 	size_t size = _slots.getSize();
 	for (size_t i = 0; i < size; i++)
 	{
-		_slots.getValueAt(pSlot, i);
+		ImplAAFMobSlot *pSlot = _slots.setValueAt(0, i);
 		if (pSlot)
 		{
 			pSlot->ReleaseReference();
-			pSlot = NULL;
-			_slots.setValueAt(0, i);
 		}
 	}
 }
