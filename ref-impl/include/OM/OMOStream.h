@@ -24,8 +24,6 @@
 #ifndef OMOSTREAM_H
 #define OMOSTREAM_H
 
-#if defined(OM_DEBUG)
-
 #include "OMDataTypes.h"
 
   // @class Simple, platform independent, text output stream
@@ -76,5 +74,4 @@ OMOStream& endl(OMOStream& s);
  //          Debug use only.
 extern OMOStream omlog;
 
-#endif
 #endif

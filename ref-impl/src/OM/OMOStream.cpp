@@ -20,8 +20,6 @@
 //
 //=---------------------------------------------------------------------=
 
-#if defined(OM_DEBUG)
-
 // @doc OMINTERNAL
 // @author Tim Bingham | tjb | Avid Technology, Inc. | OMOStream
 
@@ -119,4 +117,3 @@ OMOStream& OMOStream::putLine(void)
   return *this;
 }
 
-#endif
