@@ -44,6 +44,7 @@ DODO_TARGETS = \
 	AAFParameter.all \
 	AAFTimelineMobSlot.all \
 	AAFObjectAttribute.all \
+	AAFParameterSlot.all \
 	AAFSegment.all \
 	AAFSequence.all \
 	AAFSourceClip.all \
@@ -53,9 +54,9 @@ DODO_TARGETS = \
 	AAFUInt64.all \
 	AAFUnitTest.all \
 	AAFUnixLocator.all \
-	AAFWindowsLocator.all 
-
-#	AAFMedia.all \
+	AAFVaryingValue.all \
+	AAFWindowsLocator.all \
+	AAFMedia.all
 # Jeff hasn't finished with these yet
 #	AAFMediaTapeDescriptor.all \
 #
@@ -391,6 +392,19 @@ AAFParameter.comh : AAFParameter.exp macros/comh.mac
 AAFParameter.implc : AAFParameter.exp macros/implc.mac
 AAFParameter.implh : AAFParameter.exp macros/implh.mac
 
+AAFParameterSlot.all : AAFParameterSlot.cpp AAFParameterSlot.h
+AAFParameterSlot.all : AAFParameterSlot.comc AAFParameterSlot.comh
+AAFParameterSlot.all : AAFParameterSlot.exp AAFParameterSlot.idl
+AAFParameterSlot.all : AAFParameterSlot.implc AAFParameterSlot.implh
+AAFParameterSlot.exp : AAFUnitTest.exp macros/exp.mac
+AAFParameterSlot.h : AAFParameterSlot.exp macros/h.mac
+AAFParameterSlot.cpp : AAFParameterSlot.exp macros/cpp.mac
+AAFParameterSlot.idl : AAFParameterSlot.exp macros/idl.mac
+AAFParameterSlot.comc : AAFParameterSlot.exp macros/comc.mac
+AAFParameterSlot.comh : AAFParameterSlot.exp macros/comh.mac
+AAFParameterSlot.implc : AAFParameterSlot.exp macros/implc.mac
+AAFParameterSlot.implh : AAFParameterSlot.exp macros/implh.mac
+
 AAFSegment.all : AAFSegment.cpp AAFSegment.h
 AAFSegment.all : AAFSegment.comc AAFSegment.comh
 AAFSegment.all : AAFSegment.exp AAFSegment.idl
@@ -507,6 +521,19 @@ AAFUnixLocator.comc : AAFUnixLocator.exp macros/comc.mac
 AAFUnixLocator.comh : AAFUnixLocator.exp macros/comh.mac
 AAFUnixLocator.implc : AAFUnixLocator.exp macros/implc.mac
 AAFUnixLocator.implh : AAFUnixLocator.exp macros/implh.mac
+
+AAFVaryingValue.all : AAFVaryingValue.cpp AAFVaryingValue.h
+AAFVaryingValue.all : AAFVaryingValue.comc AAFVaryingValue.comh
+AAFVaryingValue.all : AAFVaryingValue.exp AAFVaryingValue.idl
+AAFVaryingValue.all : AAFVaryingValue.implc AAFVaryingValue.implh
+AAFVaryingValue.exp : AAFParameter.exp macros/exp.mac
+AAFVaryingValue.h : AAFVaryingValue.exp macros/h.mac
+AAFVaryingValue.cpp : AAFVaryingValue.exp macros/cpp.mac
+AAFVaryingValue.idl : AAFVaryingValue.exp macros/idl.mac
+AAFVaryingValue.comc : AAFVaryingValue.exp macros/comc.mac
+AAFVaryingValue.comh : AAFVaryingValue.exp macros/comh.mac
+AAFVaryingValue.implc : AAFVaryingValue.exp macros/implc.mac
+AAFVaryingValue.implh : AAFVaryingValue.exp macros/implh.mac
 
 AAFWindowsLocator.all : AAFWindowsLocator.cpp AAFWindowsLocator.h
 AAFWindowsLocator.all : AAFWindowsLocator.comc AAFWindowsLocator.comh
