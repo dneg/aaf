@@ -488,8 +488,8 @@ BEGIN {
   printf("\n");
   printf("// Helper definitions\n");
   printf("//\n");
-  printf("#define AAF_LITERAL_AUID(l , w1, w2,  b1, b2, b3 , b4, b5, b6, b7, b8) \\\n");
-  printf("                        {l , w1, w2, {b1, b2, b3 , b4, b5, b6, b7, b8}}\n");
+  printf("#define AAF_LITERAL_AUID(l, w1, w2,  b1, b2, b3, b4, b5, b6, b7, b8) \\\n");
+  printf("                        {l, w1, w2, {b1, b2, b3, b4, b5, b6, b7, b8}}\n");
   printf("\n");
   printf("// AAF Object model\n");
   printf("//\n");
@@ -590,15 +590,15 @@ BEGIN {
       } else if (kind == "array") {
         elementType = $25;
         if ($24 == "varying") {
-          printf("AAF_TYPE_DEFINITION_VARYING_ARRAY(%s, %s, AAF_TYPE(%s))\n", typeName, guid, elementType);
+          printf("AAF_TYPE_DEFINITION_VARYING_ARRAY(%s, %s,\n  AAF_TYPE(%s))\n", typeName, guid, elementType);
         } else if ($24 == "fixed") {
-          printf("AAF_TYPE_DEFINITION_FIXED_ARRAY(%s, %s, AAF_TYPE(%s), %s)\n", typeName, guid, elementType, $26);
+          printf("AAF_TYPE_DEFINITION_FIXED_ARRAY(%s, %s,\n  AAF_TYPE(%s), %s)\n", typeName, guid, elementType, $26);
         } else if ($24 == "strong") {
           # Special cases for strong reference vectors.
-            printf("AAF_TYPE_DEFINITION_STRONG_REFERENCE_VECTOR(\nAAF_REFERENCE_TYPE_NAME(%s, %s), %s, AAF_TYPE(%s))\n", typeName, elementType, guid, elementType);
+            printf("AAF_TYPE_DEFINITION_STRONG_REFERENCE_VECTOR(\n  AAF_REFERENCE_TYPE_NAME(%s, %s), %s,\n  AAF_TYPE(%s))\n", typeName, elementType, guid, elementType);
         } else if ($24 == "weak") {
           # Special cases for weak reference vectors.
-            printf("AAF_TYPE_DEFINITION_WEAK_REFERENCE_VECTOR(\nAAF_REFERENCE_TYPE_NAME(%s, %s), %s, AAF_TYPE(%s))\n", typeName, elementType, guid, elementType);
+            printf("AAF_TYPE_DEFINITION_WEAK_REFERENCE_VECTOR(\n  AAF_REFERENCE_TYPE_NAME(%s, %s), %s,\n  AAF_TYPE(%s))\n", typeName, elementType, guid, elementType);
         } else {
           printError(sprintf("Illegal entry \"%s\" in column X, for type \"%s\".\n", $24, typeName));
           errors++;
@@ -617,18 +617,18 @@ BEGIN {
         elementType = $25;
         # Special cases for strong/weak reference sets.
         if ($24 == "strong") {
-          printf("AAF_TYPE_DEFINITION_STRONG_REFERENCE_SET(\nAAF_REFERENCE_TYPE_NAME(%s, %s), %s, AAF_TYPE(%s))\n", typeName, elementType, guid, elementType);
+          printf("AAF_TYPE_DEFINITION_STRONG_REFERENCE_SET(\n  AAF_REFERENCE_TYPE_NAME(%s, %s), %s,\n  AAF_TYPE(%s))\n", typeName, elementType, guid, elementType);
         } else if ($24 == "weak") {
-          printf("AAF_TYPE_DEFINITION_WEAK_REFERENCE_SET(\nAAF_REFERENCE_TYPE_NAME(%s, %s), %s, AAF_TYPE(%s))\n", typeName, elementType, guid, elementType);
+          printf("AAF_TYPE_DEFINITION_WEAK_REFERENCE_SET(\n  AAF_REFERENCE_TYPE_NAME(%s, %s), %s,\n  AAF_TYPE(%s))\n", typeName, elementType, guid, elementType);
         } else { 
-          printf("AAF_TYPE_DEFINITION_SET(%s, %s, AAF_TYPE(%s))\n", typeName, guid, elementType);
+          printf("AAF_TYPE_DEFINITION_SET(%s, %s,\n  AAF_TYPE(%s))\n", typeName, guid, elementType);
         }
       } else if (kind == "reference") {
         targetType = $25;
         if ($24 == "strong") {
-          printf("AAF_TYPE_DEFINITION_STRONG_REFERENCE(\nAAF_REFERENCE_TYPE_NAME(%s, %s), %s, AAF_TYPE(%s))\n", typeName, targetType, guid, targetType);
+          printf("AAF_TYPE_DEFINITION_STRONG_REFERENCE(\n  AAF_REFERENCE_TYPE_NAME(%s, %s), %s,\n  AAF_TYPE(%s))\n", typeName, targetType, guid, targetType);
         } else if ($24 == "weak" ) {
-          printf("AAF_TYPE_DEFINITION_WEAK_REFERENCE(\nAAF_REFERENCE_TYPE_NAME(%s, %s), %s, AAF_TYPE(%s))\n", typeName, targetType, guid, targetType);
+          printf("AAF_TYPE_DEFINITION_WEAK_REFERENCE(\n  AAF_REFERENCE_TYPE_NAME(%s, %s), %s,\n  AAF_TYPE(%s))\n", typeName, targetType, guid, targetType);
         } else {
           printError(sprintf("Illegal entry \"%s\" in column X, for type \"%s\".\n", $24, typeName));
           errors++;
@@ -642,15 +642,15 @@ BEGIN {
       # a "member" of a type
       memberName = $10;
       if (kind == "enumeration" ) {
-        printf("AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(%s, %s, %s)\n", memberName, $23, parentTypeName);
+        printf("  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(%s,\n    %s, %s)\n", memberName, $23, parentTypeName);
       } else if (kind == "record") {
-        printf("AAF_TYPE_DEFINITION_RECORD_FIELD(%s, AAF_TYPE(%s), %s)\n", memberName, $23, parentTypeName);
+        printf("  AAF_TYPE_DEFINITION_RECORD_FIELD(%s, AAF_TYPE(%s),\n    %s)\n", memberName, $23, parentTypeName);
       } else if (kind == "extendible") {
 #
-      eguid = sprintf("\n  AAF_LITERAL_AUID(0x%s%s%s%s,\n    0x%s%s, 0x%s%s,\n    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x%s)",
+      eguid = sprintf("AAF_LITERAL_AUID(0x%s%s%s%s,\n      0x%s%s, 0x%s%s,\n      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x%s)",
              $2, $3, $4, $5, $6, $7, $8, $9, $1);
 #
-        printf("AAF_TYPE_DEFINITION_EXTENDIBLE_ENUMERATION_MEMBER(%s, %s, %s)\n", memberName, eguid, parentTypeName);
+        printf("  AAF_TYPE_DEFINITION_EXTENDIBLE_ENUMERATION_MEMBER(%s,\n    %s,\n    %s)\n", memberName, eguid, parentTypeName);
       } else {
         # error, what is this a member of ?
       }     
@@ -715,7 +715,7 @@ BEGIN {
         errors++;
       }
       # AAF_PROPERTY(name, id, tag, type, mandatory, container)
-      printf("AAF_PROPERTY(%s,\n  AAF_LITERAL_AUID(0x%s%s%s%s,\n    0x%s%s, 0x%s%s,\n    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x%s),\n  0x%s,\n  %s,\n  %s,\n  %s)\n", $10, $2, $3, $4, $5, $6, $7, $8, $9, $1, $33, type, mandatory, class);
+      printf("  AAF_PROPERTY(%s,\n    AAF_LITERAL_AUID(0x%s%s%s%s,\n      0x%s%s, 0x%s%s,\n      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x%s),\n    0x%s,\n    %s,\n    %s,\n    %s)\n", $10, $2, $3, $4, $5, $6, $7, $8, $9, $1, $33, type, mandatory, class);
     }
   }
 }

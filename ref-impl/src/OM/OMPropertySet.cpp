@@ -346,11 +346,11 @@ void OMPropertySet::grow(const size_t additionalElements)
   //
   size_t oldCapacity = _capacity;
   OMPropertySetElement* oldPropertySet = _propertySet;
-  
+
   // New capacity
   //
   _capacity = _capacity + additionalElements;
-  
+
   // Allocate new property set element array
   //
   _propertySet = new OMPropertySetElement[_capacity];
