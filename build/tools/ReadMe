@@ -139,23 +139,22 @@ compile it.
 configured to access the CVS repository using ssh.  It should execute
 the following command:
 
-	AutoBuild -basedir directory_to_write_AAF_tree -bump -copylogs
-
-	or
-
-	BuildNumber -bump
-	AutoBuild -basedir directory_to_write_AAF_tree --copylogs
+	AutoBuild -basedir directory_to_write_AAF_tree -copylogs -bump 
+	AutoBuild -basedir directory_to_write_AAF_tree -copylogs -nocvsco -release 
 
   That will check out the tip of the tree, bump the build number,
 build the tree, run the regression tests and copy the logs to
-aaf.sourceforge.net.
+aaf.sourceforge.net.  The second AutoBuild execution will use the
+existing source tree (i.e. not checkout the tree again), and build and
+test the release version of the SDK.
 
-  Other machines (on other platforms) can use ssh or pserver to access
-the cvs repository.  However, in all cases ssh is used copy log files
-to aaf.sourceforge.net.  These machines must execute the following
-command:
+  Other machines can use ssh or pserver to access the cvs repository
+(pserver caveats not withstanding).  However, in all cases ssh is used
+copy log files to aaf.sourceforge.net.  These machines must execute
+the following command:
 
-	AutoBuild -basedir directory_to_write_AAF_tee -copylogs
+	AutoBuild -basedir directory_to_write_AAF_tree -copylogs 
+	AutoBuild -basedir directory_to_write_AAF_tree -copylogs -nocvsco -release 
 
   The AutoBuild script always checks out the tip of the tree.  It will
 consult AAFSDKBuild.h to determine the current build tag.  The script
