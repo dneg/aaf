@@ -47,7 +47,7 @@ extern "C" const aafClassID_t CLSID_EnumAAFParameterDefs;
 ImplAAFOperationDef::ImplAAFOperationDef ()
 : _dataDef(			PID_OperationDefinition_DataDefinition,		"DataDefinition"),
   _isTimeWarp(		PID_OperationDefinition_IsTimeWarp,			"IsTimeWarp"),
-//!!!  _degradeTo(	PID_OperationDefinition_DegradeTo,			"DegradeTo"),
+  _degradeTo(		PID_OperationDefinition_DegradeTo,			"DegradeTo"),
   _category(		PID_OperationDefinition_Category,			"Category"),
   _numInputs(		PID_OperationDefinition_NumberInputs,		"NumberInputs"),
   _bypass(			PID_OperationDefinition_Bypass,				"Bypass"),
@@ -55,7 +55,7 @@ ImplAAFOperationDef::ImplAAFOperationDef ()
 {
 	_persistentProperties.put(_dataDef.address());
 	_persistentProperties.put(_isTimeWarp.address());
-//!!!	_persistentProperties.put(_degradeTo.address());
+	_persistentProperties.put(_degradeTo.address());
 	_persistentProperties.put(_category.address());
 	_persistentProperties.put(_numInputs.address());
 	_persistentProperties.put(_bypass.address());
@@ -128,7 +128,6 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFOperationDef::PrependDegradeToOperations (
       ImplAAFOperationDef  *pOperationDef)
 {
-#if 0	//!!!
 	aafUID_t	*tmp = NULL, newUID;
 	aafInt32	oldBufSize;
 	aafInt32	newBufSize;
@@ -163,16 +162,12 @@ AAFRESULT STDMETHODCALLTYPE
 	XEND;
 
 	return AAFRESULT_SUCCESS;
-#else
-	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
 }
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFOperationDef::AppendDegradeToOperations (
       ImplAAFOperationDef  *pOperationDef)
 {
-#if 0	//!!!
 	aafUID_t	*tmp, newUID;
 	aafInt32	oldBufSize;
 	aafInt32	newBufSize;
@@ -202,16 +197,12 @@ AAFRESULT STDMETHODCALLTYPE
 	XEND;
 
 	return AAFRESULT_SUCCESS;
-#else
-	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
 }
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFOperationDef::GetDegradeToOperations (
       ImplEnumAAFOperationDefs  **ppEnum)
 {
-#if 0	//!!!
 	if(ppEnum == NULL)
 		return(AAFRESULT_NULL_PARAM);
 
@@ -221,9 +212,6 @@ AAFRESULT STDMETHODCALLTYPE
 	(*ppEnum)->SetEnumProperty(this, &_degradeTo);
 
 	return(AAFRESULT_SUCCESS);
-#else
-	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
 }
 
 
