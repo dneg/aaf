@@ -20,6 +20,7 @@ AD_HEAD
 *                                          *
 \******************************************/
 
+AD_INCLUDE(AAFTypes)
 
 ////////////////////////////////////////////////////////////////////////////////
 // Types required by this module:
@@ -40,6 +41,8 @@ AD_HEAD
 AD_FORWARD_DECLARATION(AAFSourceClip)
 AD_FORWARD_DECLARATION(AAFSourceMob)
 AD_FORWARD_DECLARATION(AAFComponent)
+AD_FORWARD_DECLARATION(AAFDataDefinition)
+AD_FORWARD_DECLARATION(AAFFindSourceInfo)
 
 AD_CLASS_UUID(b1a21373, 1a7d, 11d2, bf, 78, 00, 10, 4b, c9, 15, 6d)
 
@@ -146,7 +149,7 @@ AD_XMETHOD7(SearchSource,
   // @ex Possible values for omfEffectChoice_t are: |
   //	kFindNull,
 [out], objOut, AAFComponent, component, The current object in the sequence in the specified track and Mob.,
-[out], objPass, aafFindSourceInfo_t *, sourceInfo, Preallocated buffer to hold source information.,
+[out], objOut, AAFFindSourceInfo, sourceInfo, Preallocated buffer to hold source information.,
 Returns source information for a track in a Master Mob or Source Mob.
   // @commThis function returns the source information for a track in a Master Mob or
   // Source Mob. It follows the Source Clip references in the specified track until it
