@@ -259,13 +259,6 @@ public:
     GetLastModified
         (aafTimeStamp_t *  pLastModified);  //@parm [out,retval] The modification date-time stamp
 
-
-
-public:
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplAAFHeaderTest.cpp.
-  static AAFRESULT test();
-
 public:
 	// Interfaces visible inside the toolkit, but not exposed through the API
 

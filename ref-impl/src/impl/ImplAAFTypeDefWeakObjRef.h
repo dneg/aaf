@@ -38,14 +38,6 @@ public:
 
   // Override from AAFTypeDefObjectRef
   virtual AAFRESULT STDMETHODCALLTYPE
-    Initialize
-        (aafUID_t *  pID,
-         ImplAAFClassDef * pObjType,
-         wchar_t *  pTypeName);
-
-
-  // Override from AAFTypeDefObjectRef
-  virtual AAFRESULT STDMETHODCALLTYPE
     SetObject (/*[in]*/ ImplAAFPropertyValue * pPropVal,
       /*[in]*/ ImplAAFObject * ppObject);
 
@@ -77,6 +69,14 @@ public:
   // non-published overrides from AAFTypeDef
   aafBool IsFixedSize (void);
   size_t PropValSize (void);
+
+
+  // Override from AAFTypeDefObjectRef
+  virtual AAFRESULT STDMETHODCALLTYPE
+    Initialize
+        (const aafUID_t *  pID,
+         const aafUID_t * pRefdObjID,
+         wchar_t *  pTypeName);
 
 private:
   // OMWeakReferenceProperty<ImplAAFClassDef> _referencedType;

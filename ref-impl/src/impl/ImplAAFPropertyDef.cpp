@@ -1,15 +1,19 @@
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
+/***********************************************\
+*                                               *
+* Advanced Authoring Format                     *
+*                                               *
+* Copyright (c) 1998-1999 Avid Technology, Inc. *
+* Copyright (c) 1998-1999 Microsoft Corporation *
+*                                               *
+\***********************************************/
 
 
 #ifndef __ImplEnumAAFPropertyValues_h__
 #include "ImplEnumAAFPropertyValues.h"
+#endif
+
+#ifndef __ImplAAFDictionary_h__
+#include "ImplAAFDictionary.h"
 #endif
 
 #ifndef __ImplAAFPropertyValue_h__
@@ -20,105 +24,101 @@
 #include "ImplAAFTypeDef.h"
 #endif
 
- 
-
-
-#include "AAFStoredObjectIDs.h"
-
 #ifndef __ImplAAFPropertyDef_h__
 #include "ImplAAFPropertyDef.h"
 #endif
+
+#include "AAFStoredObjectIDs.h"
+#include "AAFPropertyIDs.h"
 
 #include <assert.h>
 #include <string.h>
 
 
 ImplAAFPropertyDef::ImplAAFPropertyDef ()
-  : _pTypeDef (0)
-{}
+  : _Type(PID_PropertyDefinition_Type, "Type"),
+    _IsOptional(PID_PropertyDefinition_IsOptional, "IsOptional"),
+    _pid(PID_PropertyDefinition_pid, "pid")
+{
+  _persistentProperties.put (_Type.address());
+  _persistentProperties.put (_IsOptional.address());
+  _persistentProperties.put (_pid.address());
+}
 
 
 ImplAAFPropertyDef::~ImplAAFPropertyDef ()
-{
-  if (_pTypeDef)
-	_pTypeDef->ReleaseReference ();
-  _pTypeDef = 0;
-}
+{}
 
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFPropertyDef::Initialize (
-      aafUID_t * pID,
+      const aafUID_t * pPropertyAuid,
+      OMPropertyId omPid,
+      wchar_t * pPropName,
       ImplAAFTypeDef * pTypeDef,
-      wchar_t * pTypeName)
+      aafBool isOptional)
 {
   AAFRESULT hr;
 
-  if (! pID)       return AAFRESULT_NULL_PARAM;
+  if (! pPropertyAuid)       return AAFRESULT_NULL_PARAM;
   if (! pTypeDef)  return AAFRESULT_NULL_PARAM;
-  if (! pTypeName) return AAFRESULT_NULL_PARAM;
+  if (! pPropName) return AAFRESULT_NULL_PARAM;
 
-  hr = SetAUID (pID);
+  hr = SetAUID (pPropertyAuid);
   if (! AAFRESULT_SUCCEEDED (hr)) return hr;
 
-  hr = SetName (pTypeName);
+  hr = SetName (pPropName);
   if (! AAFRESULT_SUCCEEDED (hr)) return hr;
 
-  _pTypeDef = pTypeDef;
-  _pTypeDef->AcquireReference();
+  assert (pTypeDef);
+  aafUID_t typeId;
+  hr = pTypeDef->GetAUID (&typeId);
+  if (! AAFRESULT_SUCCEEDED (hr)) return hr;
+  _Type = typeId;
+
+  _pid = omPid;
+  _IsOptional = isOptional;
 
   return AAFRESULT_SUCCESS;
 }
-
 
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFPropertyDef::GetTypeDef (
-      ImplAAFTypeDef ** ppTypeDef)
+      ImplAAFTypeDef ** ppTypeDef) const
 {
   if (! ppTypeDef) return AAFRESULT_NULL_PARAM;
-  if (! _pTypeDef) return AAFRESULT_NOT_INITIALIZED;
-  assert (_pTypeDef);
+
+  ImplAAFDictionary * pDict = 0;
+  ImplAAFTypeDef * ptd = 0;
+  AAFRESULT hr;
+
+  hr = GetDictionary(&pDict);
+  if (AAFRESULT_FAILED (hr)) return hr;
+  assert (pDict);
+
+  aafUID_t typeId = _Type;
+  hr = pDict->LookupType (&typeId, &ptd);
+  if (AAFRESULT_FAILED (hr))
+    {
+      assert (pDict);
+      pDict->ReleaseReference ();
+      pDict = 0;
+      return hr;
+    }
+  assert (ptd);
   assert (ppTypeDef);
-  *ppTypeDef = _pTypeDef;
-  (*ppTypeDef)->AcquireReference();
+  *ppTypeDef = ptd;
+
+  // release/acquire cancel each other
+  // ptd->ReleaseReference ();
+  // (*ppTypeDef)->AcquireReference ();
+
+  assert (pDict);
+  pDict->ReleaseReference ();
+  pDict = 0;
+
   return AAFRESULT_SUCCESS;
-}
-
-
-
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFPropertyDef::GetMinVersion (
-      aafVersionType_t *  /*pMinVersion*/)
-{
-  return AAFRESULT_NOT_IMPLEMENTED;
-}
-
-
-
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFPropertyDef::SetMinVersion (
-      aafVersionType_t *  /*pMinVersion*/)
-{
-  return AAFRESULT_NOT_IMPLEMENTED;
-}
-
-
-
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFPropertyDef::GetMaxVersion (
-      aafVersionType_t *  /*pMaxVersion*/)
-{
-  return AAFRESULT_NOT_IMPLEMENTED;
-}
-
-
-
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFPropertyDef::SetMaxVersion (
-      aafVersionType_t *  /*pMaxVersion*/)
-{
-  return AAFRESULT_NOT_IMPLEMENTED;
 }
 
 
@@ -159,11 +159,9 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFPropertyDef::GetRefValues (
-      ImplEnumAAFPropertyValues ** /*ppEnum*/)
+OMPropertyId ImplAAFPropertyDef::OmPid (void) const
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  return _pid;
 }
 
 

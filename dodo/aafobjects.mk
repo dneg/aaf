@@ -16,10 +16,8 @@ AAFPERSISTENTOBJECTS = \
 
 # These are all of the other non-persistent objects:
 AAFNONPERSISTENTOBJECTS = \
-	EnumAAFClassDefs \
 	EnumAAFDefs \
 	EnumAAFObjects \
-	EnumAAFPropertyDefs \
 	EnumAAFPropertyValues
 
 
@@ -124,6 +122,7 @@ HUMAN_TYPED_IMPL = \
 	AAFTypeDefVariableArray \
 	AAFVaryingValue \
 	AAFWAVEDescriptor \
+	EnumAAFClassDefs \
 	EnumAAFCodecDefs \
 	EnumAAFCodecFlavours \
 	EnumAAFComponents \
@@ -140,6 +139,7 @@ HUMAN_TYPED_IMPL = \
 	EnumAAFMobs \
 	EnumAAFParameterDefs \
 	EnumAAFProperties \
+	EnumAAFPropertyDefs \
 	EnumAAFPluginDescriptors \
 	EnumAAFPluginLocators \
 	EnumAAFSegments \

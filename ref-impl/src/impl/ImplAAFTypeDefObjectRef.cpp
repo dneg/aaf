@@ -37,8 +37,26 @@ ImplAAFTypeDefObjectRef::~ImplAAFTypeDefObjectRef ()
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDefObjectRef::Initialize (
-      aafUID_t *  pID,
+      const aafUID_t *  pID,
       ImplAAFClassDef * pObjType,
+      wchar_t *  pTypeName)
+{
+  AAFRESULT hr;
+  aafUID_t id;
+
+  if (! pObjType)  return AAFRESULT_NULL_PARAM;
+  hr = pObjType->GetAUID(&id);
+  if (! AAFRESULT_SUCCEEDED (hr)) return hr;
+
+  return pvtInitialize (pID, &id, pTypeName);
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFTypeDefObjectRef::pvtInitialize (
+      const aafUID_t *  pID,
+      const aafUID_t * pRefdObjID,
       wchar_t *  pTypeName)
 {
   return AAFRESULT_NOT_IMPLEMENTED;

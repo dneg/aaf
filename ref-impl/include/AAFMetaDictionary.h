@@ -1039,6 +1039,18 @@ AAF_PROPERTY(DefaultValue,
   AAF_TYPE(DataValue),
   false,
   PropertyDefinition)
+  /*
+   * BobT 1999-06-30: Hand-added the following pid property, with
+   * bogus SOID and PID field values.
+   */
+AAF_PROPERTY(pid,
+  AAF_LITERAL_AUID(0xdcd15151,
+    0x2f4b, 0x11d3,
+    0x84, 0x35, 0x00, 0x60, 0x08, 0x32, 0xac, 0xb8),
+  0xF001,
+  AAF_TYPE(UInt32),
+  false,
+  PropertyDefinition)
 AAF_CLASS_END(PropertyDefinition)
 AAF_CLASS_SEPARATOR()
 
