@@ -138,6 +138,7 @@ public:
 									aafFileFormat_t	fmt);
 	AAFRESULT AppendDataObject(aafUID_t mobID,      /* IN - Mob ID */
 						  AAFObject *dataObj) ;    /* IN - Input Mob */ 
+	AAFRESULT ChangeIndexedMobID (ImplAAFMob *pMob, aafUID_t *newID);
 
 AAFRESULT
     GetNthMob (aafInt32 index, ImplAAFMob **ppEnum);
