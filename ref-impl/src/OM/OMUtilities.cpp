@@ -36,11 +36,11 @@ OMByteOrder hostByteOrder(void)
 {
   TRACE("hostByteOrder");
 
-  OMInt16 word = 0x1234;
-  OMInt8  byte = *((OMInt8*)&word);
+  OMUInt32 longWord = 0x12345678;
+  OMUInt8  byte = *((OMInt8*)&longWord);
   OMByteOrder result;
 
-  ASSERT("Valid byte order", ((byte == 0x12) || (byte == 0x34)));
+  ASSERT("Valid byte order", ((byte == 0x12) || (byte == 0x78)));
 
   if (byte == 0x12) {
     result = bigEndian;
