@@ -34,6 +34,8 @@ AD_HEAD
 AD_FORWARD_DECLARATION(AAFEssenceFormat)
 
 AD_IDL(///
+/// AAFEssenceCodec is DEPRECATED\, please use AAFEssenceCodec2.
+///
 /// The AAFEssenceCodec interface describes the calls of a plugin
 /// which handles encoding media in a particular file format\, with
 /// optional compression.  These methods are used internally by the SDK\,
