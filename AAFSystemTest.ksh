@@ -49,53 +49,83 @@ if [ RELEASE -ne 1 ] && [ DEBUG -ne 1 ] && [ CLEAN -ne 1 ]; then
 fi
 
 
+DirectoryTest ()
+{
+	Directory=$1
+
+	MAKE_DIR_IF_NOT_FOUND=1
+	VERBOSE=1
+	Result=0
+	EMPTY=1
+	NOT_FOUND=2
+	
+	until [ $# = 0 ]
+	do
+		case $1 in
+			-m ) MAKE_DIR_IF_NOT_FOUND=0 ;;
+			-v ) VERBOSE=0;;
+		esac
+		shift
+	done
+	
+	Result=0
+	EMPTY=1
+	NOT_FOUND=2
+	
+	vprint ()
+	{
+		string=$1
+
+		if [ $VERBOSE -eq 0 ]; then print "$string"; fi
+	}
+
+	if [ -d $Directory ]; then
+		
+		LSF="`ls $Directory`"
+
+		if [ -z "$LSF" ]; then
+			Result=$EMPTY
+			vprint "\n\tDirectory is Empty:  $Directory\n"
+		fi
+	else
+		vprint "\n\tDirectory Not Found:  $Directory\n"
+		Result=$NOT_FOUND
+		if [ $MAKE_DIR_IF_NOT_FOUND -eq 0 ]; then
+			if mkdir $Directory; then
+				print "Created $Directory\n"
+				Result=0
+			else
+				print "\n\tAttempt to Create Directory Failed!  $Directory\n"
+			fi
+		fi		
+	fi
+
+	return $Result
+}
+
+
 Clean ()
 {
 	CleanTarget=$1
 
-	print "Checking for ${CleanTarget}TestResults directory"
-	if [ -d ${ROOT_DIR}/${CleanTarget}TestResults ]; then
-		cd ${ROOT_DIR}/${CleanTarget}TestResults
-		print "   Removing all contents of ${CleanTarget}TestResults directory"
-		rm *
-	else
-		print "   ${CleanTarget}TestResults directory does not exist"
+	EMPTY=1
+	NOT_FOUND=2
+
+	print -n "Checking for directory:   ${CleanTarget}TestResults \t"
+
+	DirectoryTest ${ROOT_DIR}/${CleanTarget}TestResults
+	TestResult=$?
+
+	if [ $TestResult -eq 0 ]; then
+		print "Deleted Contents"
+		rm ${ROOT_DIR}/${CleanTarget}TestResults/*
+	elif [ $TestResult -eq $EMPTY ]; then
+		print "Directory is Empty"
+	elif [ $TestResult -eq $NOT_FOUND ]; then
+		print "Directory Not Found"
 	fi
 }
 
-
-RegisterTargetDLLs ()
-{	
-	Target=$1
-	Options=$2
-
-	print "Registering $Target $Options AAFPGAPI.dll"
-	if regsvr32 ${Options} ${ROOT_DIR}/AAFWinSDK/${Target}/RefImpl/AAFPGAPI.dll
-	then
-		print "    Succeeded"
-	else
-		print "    Failed"
-		exit -1
-	fi
-
-	print "Registering $Target $Options AAFCOAPI.dll"
-	if regsvr32 ${Options} ${ROOT_DIR}/AAFWinSDK/${Target}/RefImpl/AAFCOAPI.dll
-	then
-		print "    Succeeded"
-	else
-		print "    Failed"
-		exit -1
-	fi
-
-	print "Registering $Target $Options AAFINTP.dll "
-	if regsvr32 ${Options} ${ROOT_DIR}/AAFWinSDK/${Target}/RefImpl/AAFINTP.dll
-	then
-		print "    Succeeded"
-	else
-		print "    Failed"
-		exit -1
-	fi
-}
 
 
 SetPath ()
@@ -122,9 +152,6 @@ RunThruTimsDump ()
 	FileDir=$2
 
 	STATUS=-1
-
-	##${DUMP_DIR}/dump.exe -a -s ${FileDir}/$AAFFileName > ${AAFFileName}.dmp.log 
-	##if [ $? -eq 0 ]  ## $? is an int in which is stored the exit status returned by last command
 	
 	if ${DUMP_DIR}/dump.exe -a -s ${FileDir}/$AAFFileName > ${AAFFileName}.dmp.log 
 	then
@@ -161,6 +188,7 @@ RunThruValidator ()
 	FileDir=$2
 
 	STATUS=-1
+	cd $OUTPUT_DIR
 
 	if ${UTILS_DIR}/AAFValidate.exe -v -e -E -l -M -p -r -s -S -i ${FileDir}/$AAFFileName > ${AAFFileName}.val.log
 	then
@@ -179,6 +207,7 @@ RunThruGenerator ()
 	FileDir=$2
 
 	STATUS=-1
+	cd $OUTPUT_DIR
 
 	if ${UTILS_DIR}/MakeAAFFile.exe -p -i ${FileDir}/$ScriptFileName -o ${ScriptFileName}.aaf > ${ScriptFileName}.aaf.fg.log
 	then
@@ -197,6 +226,7 @@ RunOMFThruAafOmf ()
 	FileDir=$2
 
 	STATUS=-1
+	cd $OUTPUT_DIR
 
 	if ${UTILS_DIR}/AafOmf.exe  ${FileDir}/${OMFFileName} ${OMFFileName}.aaf > ${OMFFileName}.aaf.AafOmf.log
 	then
@@ -212,6 +242,8 @@ RunOMFThruAafOmf ()
 DiffDumperLogFiles ()
 {
 	DmpFileName=$1
+
+	cd $OUTPUT_DIR
 	
 	DiffFiles ()
 	{
@@ -240,6 +272,99 @@ DiffDumperLogFiles ()
 }
 
 
+RunCreateSequence ()
+{
+	Target=$1
+	RCSLOG="${OUTPUT_DIR}/CreateSequenceOpenClose.log"
+
+	date > $RCSLOG
+
+	let Max=8
+	let Multiplier=2
+
+	print "\n---------------------------------------------------------------------" | tee -a  $LOGFILE
+	print "Creating AAF Files with CreateSequence.ksh\n" | tee -a  $LOGFILE
+
+	let Count=1
+	while [ Count -le $Max ];
+	do
+		print "CreateSequence${Count}.aaf" | tee -a $RCSLOG
+		${ROOT_DIR}/AAFWinSDK/${Target}/Test/CreateSequence $Count ${OUTPUT_DIR}/CreateSequence${Count}.aaf >> $RCSLOG
+
+		let Count=Count*$Multiplier
+	done
+}
+
+
+RunThroughTestSuite ()
+{
+	TITLE=$1
+	FILE_TYPE=$2
+	FILE_LIST_LOCATION=$3
+	SECONDARY_LOCATION=$4
+
+	if [ $# -eq 3 ]; then
+		SECONDARY_LOCATION=$FILE_LIST_LOCATION
+	fi
+
+	print "\n\n\n---------------------------------------------------------------------" | tee -a  $LOGFILE
+	print "Running $TITLE through System Test Suite \n" | tee -a  $LOGFILE
+		
+	DirectoryTest $FILE_LIST_LOCATION -v
+	if [ $? -eq 0 ]; then 
+		cd $FILE_LIST_LOCATION
+		FILE_LIST="`ls ${FILE_TYPE}`"
+		DirectoryTest $SECONDARY_LOCATION -v -m
+	else
+		FILE_LIST=""
+	fi
+
+
+	for File in $FILE_LIST; do
+		print "\n   $File\n" | tee -a $LOGFILE
+
+		## If script file, first run thru generator
+		if echo "$File" | grep -q "\.scrpt$" ; then
+			if RunThruGenerator $File ${FILE_LIST_LOCATION}; then
+				File="${File}.aaf"
+				FILE_LIST_LOCATION=$SECONDARY_LOCATION
+			else
+				return -1
+			fi					
+		## If omf file, first run thru converter
+		elif echo "$File" | grep -q "\.omf$" ; then
+			if RunOMFThruAafOmf $File ${FILE_LIST_LOCATION}; then
+				File="${File}.aaf"
+				FILE_LIST_LOCATION=$SECONDARY_LOCATION
+			else
+				return -1
+			fi
+		fi
+
+		cd ${OUTPUT_DIR}
+
+		## This test suite assumes $File is an AAF file		
+		RunThruTimsDump $File ${FILE_LIST_LOCATION}
+		RunThruValidator $File ${SECONDARY_LOCATION}
+		if RunThruDumper $File ${SECONDARY_LOCATION}; then
+			if RunThruGenerator ${File}.scrpt  ${OUTPUT_DIR}; then
+				RunThruTimsDump ${File}.scrpt.aaf  ${OUTPUT_DIR}
+				RunThruValidator ${File}.scrpt.aaf  ${OUTPUT_DIR}
+				if RunThruDumper ${File}.scrpt.aaf  ${OUTPUT_DIR}; then
+					if RunThruGenerator ${File}.scrpt.aaf.scrpt  ${OUTPUT_DIR}; then
+						RunThruTimsDump ${File}.scrpt.aaf.scrpt.aaf  ${OUTPUT_DIR}
+						RunThruValidator ${File}.scrpt.aaf.scrpt.aaf  ${OUTPUT_DIR}
+						RunThruDumper ${File}.scrpt.aaf.scrpt.aaf  ${OUTPUT_DIR}
+					fi
+				fi
+			fi
+		fi
+
+		DiffDumperLogFiles $AAFfile
+	done
+}
+
+
 RunSystemTest ()
 {
 	TARGET=$1
@@ -251,171 +376,39 @@ RunSystemTest ()
 	DUMP_DIR=${ROOT_DIR}/AAFWinSDK/${TARGET}/DevUtils
 	OUTPUT_DIR="${ROOT_DIR}/${TARGET}TestResults"
 	
-	if [ ! -d $OUTPUT_DIR ]; then
-		if mkdir $OUTPUT_DIR; then
-			print "\n   Created $OUTPUT_DIR\n"
-		else
-			print "\n   Failed to create $OUTPUT_DIR\n"
-			exit -1
-		fi
-	fi
-
 	SetPath $TARGET
 
 
 	#############################################
 	# Get test file lists
 	#############################################
-	cd $AAF_MODTEST_DIR
-	AAFModTestFilesList="`ls *.aaf`"
 
-	cd $AAF_EXAMPLES_DIR
-	AAFExamplesFilesList="`ls *.aaf`"
+	DirectoryTest ${OUTPUT_DIR} -m
 
-	cd $AAF_FILES_DIR
-	TestAAFFilesList="`ls *.aaf`"
-
-	cd $SCRIPT_FILES_DIR
-	TestScriptFilesList="`ls *.scrpt`"
-
-	cd $OMF_FILES_DIR
-	TestOMFFilesList="`ls *.omf`"
-
-
-	cd $OUTPUT_DIR
-
-	print "\n--------------------" | tee -a  $LOGFILE
-	print "Running Module Test AAF Files \n" | tee -a  $LOGFILE
-	for AAFfile in $AAFModTestFilesList; do
-		print "\n   $AAFfile\n" | tee -a $LOGFILE
+	RunCreateSequence $TARGET
 	
-		RunThruTimsDump $AAFfile ${AAF_MODTEST_DIR}
-		RunThruValidator $AAFfile ${AAF_MODTEST_DIR}
-		if RunThruDumper $AAFfile ${AAF_MODTEST_DIR}; then
-			if RunThruGenerator ${AAFfile}.scrpt  ${OUTPUT_DIR}; then
-				RunThruTimsDump ${AAFfile}.scrpt.aaf  ${OUTPUT_DIR}
-				RunThruValidator ${AAFfile}.scrpt.aaf  ${OUTPUT_DIR}
-				if RunThruDumper ${AAFfile}.scrpt.aaf  ${OUTPUT_DIR}; then
-					if RunThruGenerator ${AAFfile}.scrpt.aaf.scrpt  ${OUTPUT_DIR}; then
-						RunThruTimsDump ${AAFfile}.scrpt.aaf.scrpt.aaf  ${OUTPUT_DIR}
-						RunThruValidator ${AAFfile}.scrpt.aaf.scrpt.aaf  ${OUTPUT_DIR}
-						RunThruDumper ${AAFfile}.scrpt.aaf.scrpt.aaf  ${OUTPUT_DIR}
-					fi
-				fi
-			fi
-		fi
-
-		DiffDumperLogFiles $AAFfile
-	done
-
-
-	print "\n--------------------" | tee -a  $LOGFILE
-	print "Running Examples AAF Files \n" | tee -a  $LOGFILE
-	for AAFfile in $AAFExamplesFilesList; do
-		print "\n   $AAFfile\n" | tee -a $LOGFILE
+	RunThroughTestSuite "CreateSequence AAF Files" "CreateSequence*.aaf" $OUTPUT_DIR
 	
-		RunThruTimsDump $AAFfile ${AAF_EXAMPLES_DIR}
-		RunThruValidator $AAFfile ${AAF_EXAMPLES_DIR}
-		if RunThruDumper $AAFfile ${AAF_EXAMPLES_DIR}; then
-			if RunThruGenerator ${AAFfile}.scrpt  ${OUTPUT_DIR}; then
-				RunThruTimsDump ${AAFfile}.scrpt.aaf  ${OUTPUT_DIR}
-				RunThruValidator ${AAFfile}.scrpt.aaf  ${OUTPUT_DIR}
-				if RunThruDumper ${AAFfile}.scrpt.aaf  ${OUTPUT_DIR}; then
-					if RunThruGenerator ${AAFfile}.scrpt.aaf.scrpt  ${OUTPUT_DIR}; then
-						RunThruTimsDump ${AAFfile}.scrpt.aaf.scrpt.aaf  ${OUTPUT_DIR}
-						RunThruValidator ${AAFfile}.scrpt.aaf.scrpt.aaf  ${OUTPUT_DIR}
-						RunThruDumper ${AAFfile}.scrpt.aaf.scrpt.aaf  ${OUTPUT_DIR}
-					fi
-				fi
-			fi
-		fi
-
-		DiffDumperLogFiles $AAFfile
-	done
-
-
-	print "\n--------------------" | tee -a  $LOGFILE
-	print "Running TestAAFFiles \n" | tee -a  $LOGFILE
-	for AAFfile in $TestAAFFilesList; do
-		print "\n   $AAFfile\n" | tee -a $LOGFILE
+	RunThroughTestSuite "Module Test AAF Files" "*.aaf" $AAF_MODTEST_DIR
 	
-		RunThruTimsDump $AAFfile ${AAF_FILES_DIR}
-		RunThruValidator $AAFfile ${AAF_FILES_DIR}
-		if RunThruDumper $AAFfile ${AAF_FILES_DIR}; then
-			if RunThruGenerator ${AAFfile}.scrpt  ${OUTPUT_DIR}; then
-				RunThruTimsDump ${AAFfile}.scrpt.aaf  ${OUTPUT_DIR}
-				RunThruValidator ${AAFfile}.scrpt.aaf  ${OUTPUT_DIR}
-				if RunThruDumper ${AAFfile}.scrpt.aaf  ${OUTPUT_DIR}; then
-					if RunThruGenerator ${AAFfile}.scrpt.aaf.scrpt  ${OUTPUT_DIR}; then
-						RunThruTimsDump ${AAFfile}.scrpt.aaf.scrpt.aaf  ${OUTPUT_DIR}
-						RunThruValidator ${AAFfile}.scrpt.aaf.scrpt.aaf  ${OUTPUT_DIR}
-						RunThruDumper ${AAFfile}.scrpt.aaf.scrpt.aaf  ${OUTPUT_DIR}
-					fi
-				fi
-			fi
-		fi
+	RunThroughTestSuite "Examples AAF Files" "*.aaf" $AAF_EXAMPLE_DIR
 
-		DiffDumperLogFiles $AAFfile
-	done
+	RunThroughTestSuite "TestAAFFiles" "*.aaf" $AAF_FILES_DIR
 
+	RunThroughTestSuite "TestScriptFiles" "*.scrpt" $SCRIPT_FILES_DIR $OUTPUT_DIR
 
-	print "\n----------------------" | tee -a  $LOGFILE
-	print "Running TestScriptFiles \n" | tee -a  $LOGFILE
-	for Scriptfile in $TestScriptFilesList; do
-		print "\n   $Scriptfile\n" | tee -a $LOGFILE
-
-		if RunThruGenerator $Scriptfile ${SCRIPT_FILES_DIR}; then
-			RunThruTimsDump ${Scriptfile}.aaf ${OUTPUT_DIR}
-			RunThruValidator ${Scriptfile}.aaf ${OUTPUT_DIR}
-			if RunThruDumper "${Scriptfile}.aaf" ${OUTPUT_DIR}; then
-				if RunThruGenerator $Scriptfile.aaf.scrpt ${OUTPUT_DIR}; then
-					RunThruTimsDump ${Scriptfile}.aaf.scrpt.aaf ${OUTPUT_DIR}
-					RunThruValidator ${Scriptfile}.aaf.scrpt.aaf ${OUTPUT_DIR}
-					if RunThruDumper "${Scriptfile}.aaf.scrpt.aaf" ${OUTPUT_DIR}; then
-						if RunThruGenerator ${Scriptfile}.aaf.scrpt.aaf.scrpt ${OUTPUT_DIR}; then
-							RunThruTimsDump ${Scriptfile}.aaf.scrpt.aaf.scrpt.aaf ${OUTPUT_DIR}
-							RunThruValidator ${Scriptfile}.aaf.scrpt.aaf.scrpt.aaf ${OUTPUT_DIR}
-							RunThruDumper "${Scriptfile}.aaf.scrpt.aaf.scrpt.aaf" ${OUTPUT_DIR}
-						fi
-					fi
-				fi
-			fi
-		fi
-		
-		DiffDumperLogFiles ${Scriptfile}.aaf
-	done
-
-
-	print "\n--------------------" | tee -a  $LOGFILE
-	print "Running TestOMFFiles \n" | tee -a  $LOGFILE
-	for OMFfile in $TestOMFFilesList; do
-		print "\n   $OMFfile\n" | tee -a $LOGFILE
-
-		if RunOMFThruAafOmf $OMFfile ${OMF_FILES_DIR}; then
-			RunThruTimsDump ${OMFfile}.aaf ${OUTPUT_DIR}
-			RunThruValidator ${OMFfile}.aaf ${OUTPUT_DIR}
-			if RunThruDumper ${OMFfile}.aaf ${OUTPUT_DIR}; then
-				if RunThruGenerator ${OMFfile}.aaf.scrpt ${OUTPUT_DIR}; then
-					RunThruTimsDump ${OMFfile}.aaf.scrpt.aaf ${OUTPUT_DIR}
-					RunThruValidator ${OMFfile}.aaf.scrpt.aaf ${OUTPUT_DIR}
-					if RunThruDumper ${OMFfile}.aaf.scrpt.aaf ${OUTPUT_DIR}; then
-						if RunThruGenerator ${OMFfile}.aaf.scrpt.aaf.scrpt ${OUTPUT_DIR}; then
-							RunThruTimsDump ${OMFfile}.aaf.scrpt.aaf.scrpt.aaf ${OUTPUT_DIR}
-							RunThruValidator ${OMFfile}.aaf.scrpt.aaf.scrpt.aaf ${OUTPUT_DIR}
-							RunThruDumper ${OMFfile}.aaf.scrpt.aaf.scrpt.aaf ${OUTPUT_DIR}
-						fi
-					fi
-				fi
-			fi
-		fi
-
-		DiffDumperLogFiles ${OMFfile}.aaf
-	done
+	RunThroughTestSuite "TestOMFFiles" "*.omf" $OMF_FILES_DIR $OUTPUT_DIR
 
 	print "\n\n\n"
 
 	ResetPath
+
+	cd $ROOT_DIR
+	print "\nGenerating Efficiency and File Size spreadsheet\n"
+	EfficiencyStats $TARGET
+
 }
+
 
 ############################################
 # Check for CLEAN
@@ -446,6 +439,7 @@ date >> $LOGFILE
 
 if [ RELEASE -eq 1 ]; then
 	if [ MODTESTS_AND_EXAMPLES -eq 1 ]; then
+		print "\n\nRunning Script:  RunModTestAndExamples.ksh -r\n\n"
 		RunModTestAndExamples -r
 	fi
 
@@ -454,20 +448,12 @@ fi
 
 if [ DEBUG -eq 1 ]; then
 	if [ MODTESTS_AND_EXAMPLES -eq 1 ]; then
+		print "\n\nRunning Script:  RunModTestAndExamples.ksh -d\n\n"
 		RunModTestAndExamples -d
 	fi
 
 	RunSystemTest Debug
 fi
-
-
-####################################################################
-# Generate reports 
-####################################################################
-cd $ROOT_DIR
-
-print "\nGenerating Efficiency and File Size spreadsheet\n"
-EfficiencyStats $TARGET
 
 
 cd $ROOT_DIR
