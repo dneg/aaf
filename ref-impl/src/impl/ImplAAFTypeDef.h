@@ -97,6 +97,10 @@ public:
   // size of this type.  If not registered, will assert().
   virtual size_t NativeSize (void) const;
 
+  // If this->IsRegistered(), then will return the native in-memory
+  // size of this type.  If not registered, will PropValSize.
+  virtual size_t ActualSize (void) const;
+
   //*************************************************************
   //
   // Overrides from OMType, via inheritace through ImplAAFTypeDef

@@ -153,7 +153,7 @@ AAFRESULT STDMETHODCALLTYPE
   if (AAFRESULT_FAILED(hr)) return hr;
   assert (ptd);
   assert (ptd->IsFixedSize());
-  aafUInt32 elemSize = ptd->NativeSize();
+  aafUInt32 elemSize = ptd->ActualSize();
   aafUInt32 propSize;
   assert (pPropVal);
 
@@ -182,6 +182,9 @@ AAFRESULT STDMETHODCALLTYPE
 
   if (! ppPropVal)
 	return AAFRESULT_NULL_PARAM;
+
+  if (! IsRegistered ())
+	return AAFRESULT_NOT_REGISTERED;
 
   ImplAAFPropValDataSP pvd;
   ImplAAFPropValData * tmp;
@@ -411,6 +414,9 @@ AAFRESULT STDMETHODCALLTYPE
   if (! pInPropVal) return AAFRESULT_NULL_PARAM;
   if (! pBuffer) return AAFRESULT_NULL_PARAM;
 
+  if (! IsRegistered ())
+	return AAFRESULT_NOT_REGISTERED;
+
   // Get the property value's embedded type and 
   // check if it's the same as the base type.
   ImplAAFTypeDefSP pIncomingType;
@@ -493,7 +499,7 @@ size_t ImplAAFTypeDefString::externalSize(OMByte* /*internalBytes*/,
 
   assert (ptd->IsFixedSize ());
   aafUInt32 extElemSize = ptd->PropValSize ();
-  aafUInt32 intElemSize = ptd->NativeSize ();
+  aafUInt32 intElemSize = ptd->ActualSize ();
   // aafUInt32 extElemSize = ptd->externalSize (0, 0);
   // aafUInt32 intElemSize = ptd->internalSize (0, 0);
   assert (intElemSize);
@@ -513,7 +519,7 @@ void ImplAAFTypeDefString::externalize(OMByte* internalBytes,
 
   assert (ptd->IsFixedSize ());
   aafUInt32 extElemSize = ptd->PropValSize ();
-  aafUInt32 intElemSize = ptd->NativeSize ();
+  aafUInt32 intElemSize = ptd->ActualSize ();
   aafUInt32 numElems = internalBytesSize / intElemSize;
   aafInt32 intNumBytesLeft = internalBytesSize;
   aafInt32 extNumBytesLeft = externalBytesSize;
@@ -544,7 +550,7 @@ size_t ImplAAFTypeDefString::internalSize(OMByte* /*externalBytes*/,
 
   assert (ptd->IsFixedSize ());
   aafUInt32 extElemSize = ptd->PropValSize ();
-  aafUInt32 intElemSize = ptd->NativeSize ();
+  aafUInt32 intElemSize = ptd->ActualSize ();
   // aafUInt32 extElemSize = ptd->externalSize (0, 0);
   // aafUInt32 intElemSize = ptd->internalSize (0, 0);
   assert (intElemSize);
@@ -564,7 +570,7 @@ void ImplAAFTypeDefString::internalize(OMByte* externalBytes,
 
   assert (ptd->IsFixedSize ());
   aafUInt32 extElemSize = ptd->PropValSize ();
-  aafUInt32 intElemSize = ptd->NativeSize ();
+  aafUInt32 intElemSize = ptd->ActualSize ();
   // aafUInt32 intElemSize = ptd->internalSize (0, 0);
   // aafUInt32 extElemSize = ptd->externalSize (0, 0);
   aafUInt32 numElems = externalBytesSize / extElemSize;

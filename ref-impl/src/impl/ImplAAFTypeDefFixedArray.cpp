@@ -225,7 +225,7 @@ void ImplAAFTypeDefFixedArray::externalize(OMByte* internalBytes,
   aafUInt32 elem = 0;
 
   ImplAAFTypeDefSP ptd = BaseType ();
-  aafUInt32 internalSize = ptd->NativeSize ();
+  aafUInt32 internalSize = ptd->ActualSize ();
   aafUInt32 externalSize = ptd->PropValSize ();
   if (internalSize == externalSize)
 	{
@@ -262,7 +262,7 @@ size_t ImplAAFTypeDefFixedArray::internalSize(OMByte* /*externalBytes*/,
   ImplAAFTypeDefSP ptd = BaseType ();
   assert (ptd->IsFixedSize ());
   // size_t result = _ElementCount * ptd->internalSize (0, 0);
-  size_t result = _ElementCount * ptd->NativeSize ();
+  size_t result = _ElementCount * ptd->ActualSize ();
   return result;
 }
 
@@ -278,7 +278,7 @@ void ImplAAFTypeDefFixedArray::internalize(OMByte* externalBytes,
 
   ImplAAFTypeDefSP ptd = BaseType ();
   assert (ptd->IsFixedSize ());
-  aafUInt32 internalElemSize = ptd->NativeSize ();
+  aafUInt32 internalElemSize = ptd->ActualSize ();
   aafUInt32 externalElemSize = ptd->PropValSize ();
   if (internalElemSize == externalElemSize)
 	{

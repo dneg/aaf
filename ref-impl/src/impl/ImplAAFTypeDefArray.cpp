@@ -162,6 +162,8 @@ ImplAAFTypeDefArray::ValidateInputParams (
 	ImplAAFTypeDefSP spTargetTD;
 	hr = GetType(&spTargetTD); //gets base elem type
 	if (AAFRESULT_FAILED (hr)) return hr;
+	if (! spTargetTD->IsRegistered ())
+		return AAFRESULT_NOT_REGISTERED;
 	
 	//Get size
 	aafUInt32 targetElemSize = spTargetTD->NativeSize();
@@ -477,8 +479,9 @@ ImplAAFTypeDefArray::GetElementValue (
 	AAFRESULT hr;
 	hr = GetType (&ptd);
 	if (AAFRESULT_FAILED (hr)) return hr;
-	// aafUInt32 elementSize = ptd->PropValSize();
-	aafUInt32 elementSize = ptd->NativeSize();
+
+  // aafUInt32 elementSize = ptd->PropValSize();
+	aafUInt32 elementSize = ptd->ActualSize(); // okay for data not to be registered?
 	
 	assert (pInPropVal);
 	pvd = dynamic_cast<ImplAAFPropValData*> (pInPropVal);
@@ -624,6 +627,10 @@ ImplAAFTypeDefArray::SetElementValue (
 	hr = pMemberPropVal->GetType (&spSourceTD);
 	if (AAFRESULT_FAILED (hr)) 
 		return hr;
+
+ 	if (! spSourceTD->IsRegistered ())
+		return AAFRESULT_NOT_REGISTERED;
+
 	aafUInt32 sourceSize = spSourceTD->NativeSize();
 	
 	//get Base TD and size
@@ -640,7 +647,7 @@ ImplAAFTypeDefArray::SetElementValue (
 	//verify that the target elem size is equal to that of source 
 	if (targetElemSize != sourceSize)
 		return AAFRESULT_BAD_SIZE;
-	
+
 	//// On to data ...
 	
 	//get  Source Data

@@ -156,6 +156,15 @@ size_t ImplAAFTypeDef::NativeSize (void) const
 }
 
 
+size_t ImplAAFTypeDef::ActualSize (void) const
+{
+  if (IsRegistered())
+    return NativeSize();
+  else
+    return PropValSize();
+}
+
+
 OMProperty * ImplAAFTypeDef::pvtCreateOMProperty
   (OMPropertyId /*pid*/,
    const wchar_t * /*name*/) const

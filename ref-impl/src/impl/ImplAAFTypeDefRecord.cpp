@@ -675,7 +675,8 @@ AAFRESULT STDMETHODCALLTYPE
   pvdIn = dynamic_cast<ImplAAFPropValData*>(pInPropVal);
   assert (pvdIn);
 
-  if(IsRegistered())
+
+  if(pActualRecordType->IsRegistered())
   {
 	  hr = pvdOut->AllocateFromPropVal (pvdIn,
 									offset,

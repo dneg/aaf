@@ -785,6 +785,9 @@ AAFRESULT STDMETHODCALLTYPE
   if (!supportedActualType (pActualType))
     return AAFRESULT_INVALID_PARAM;
 
+  // Any padding and offsets must be registered to use this method.
+  if (!pActualType->IsRegistered())
+    return AAFRESULT_NOT_REGISTERED;
 
   // If this type is registered then this type's id will be written into the
   // new indirect type value (*pPropVal).
@@ -1129,6 +1132,11 @@ AAFRESULT STDMETHODCALLTYPE
                                  &pActualType, &actualValueDataSize);
   if (AAFRESULT_FAILED(result))
     return result;
+
+
+  // Any padding and offsets must be registered to use this method.
+  if (!pActualType->IsRegistered())
+    return AAFRESULT_NOT_REGISTERED;
 
   //
   // Now we are ready to copy the bits from remaining bits of the

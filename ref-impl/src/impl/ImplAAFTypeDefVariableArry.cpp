@@ -379,11 +379,7 @@ size_t ImplAAFTypeDefVariableArray::externalSize(OMByte* /*internalBytes*/,
 	
 	assert (ptd->IsFixedSize ());
 	aafUInt32 extElemSize = ptd->PropValSize ();
-	aafUInt32 intElemSize;
-	if (ptd->IsRegistered())
-		intElemSize = ptd->NativeSize ();
-	else
-		intElemSize = extElemSize;
+	aafUInt32 intElemSize = ptd->ActualSize ();
 	
 	// aafUInt32 extElemSize = ptd->externalSize (0, 0);
 	// aafUInt32 intElemSize = ptd->internalSize (0, 0);
@@ -403,7 +399,7 @@ void ImplAAFTypeDefVariableArray::externalize(OMByte* internalBytes,
 	assert (ptd);
 	
 	assert (ptd->IsFixedSize ());
-	aafUInt32 intElemSize = ptd->NativeSize ();
+	aafUInt32 intElemSize = ptd->ActualSize ();
 	aafUInt32 extElemSize = ptd->PropValSize ();
 	// aafUInt32 intElemSize = ptd->internalSize (0, 0);
 	// aafUInt32 extElemSize = ptd->externalSize (0, 0);
@@ -446,11 +442,7 @@ size_t ImplAAFTypeDefVariableArray::internalSize(OMByte* /*externalBytes*/,
 	
 	assert (ptd->IsFixedSize ());
 	aafUInt32 extElemSize = ptd->PropValSize ();
-	aafUInt32 intElemSize;
-	if (ptd->IsRegistered())
-		intElemSize = ptd->NativeSize ();
-	else
-		intElemSize = extElemSize;
+	aafUInt32 intElemSize = ptd->ActualSize ();;
 	
 	// aafUInt32 extElemSize = ptd->externalSize (0, 0);
 	// aafUInt32 intElemSize = ptd->internalSize (0, 0);
@@ -471,7 +463,7 @@ void ImplAAFTypeDefVariableArray::internalize(OMByte* externalBytes,
 	
 	assert (ptd->IsFixedSize ());
 	aafUInt32 extElemSize = ptd->PropValSize ();
-	aafUInt32 intElemSize = ptd->NativeSize ();
+	aafUInt32 intElemSize = ptd->ActualSize ();
 	// aafUInt32 intElemSize = ptd->internalSize (0, 0);
 	// aafUInt32 extElemSize = ptd->externalSize (0, 0);
 	if (intElemSize == extElemSize)
@@ -900,7 +892,7 @@ ImplAAFTypeDefVariableArray::RemoveElement(
 	if (!inPvd)
 		return AAFRESULT_BAD_TYPE;
 	
-	aafUInt32 elemSize = BaseType()->NativeSize();
+	aafUInt32 elemSize = BaseType()->ActualSize();
 	
 	aafUInt32 oldSize = 0;
 	hr = inPvd->GetBitsSize (&oldSize);

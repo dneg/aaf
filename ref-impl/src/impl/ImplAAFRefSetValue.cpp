@@ -104,7 +104,10 @@ AAFRESULT ImplAAFRefSetValue::Initialize (
   _uidType = containerType->GetUIDType((ImplAAFTypeDef *)pElementType, result);
   if (AAFRESULT_FAILED(result))
     return result;
-  
+
+  if (!_uidType->IsRegistered())
+    return AAFRESULT_NOT_REGISTERED;
+
   // Allocate key buffer used for extracting a key value from a property
   // valud for a key.
   _keyBufferSize = _uidType->NativeSize();
