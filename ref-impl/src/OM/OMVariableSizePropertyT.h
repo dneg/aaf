@@ -155,7 +155,7 @@ template<typename PropertyType>
 void OMVariableSizeProperty<PropertyType>::appendValue(
                                                      const PropertyType* value)
 {
-  TRACE("OMVariableSizeProperty<PropertyType>::prependValue");
+  TRACE("OMVariableSizeProperty<PropertyType>::appendValue");
   PRECONDITION("Valid value", value != 0);
 
   size_t oldCount = count();
