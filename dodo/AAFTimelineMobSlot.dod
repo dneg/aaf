@@ -6,7 +6,6 @@ AAFTimelineMobSlot\
 AAFMobSlot\
 #endm
 #c
-#import ./AAFObject.exp
 #import ./AAFMobSlot.exp
 
 AD_HEAD
@@ -34,16 +33,16 @@ AD_DEFAULT_UUID(B1A21378, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
 AD_CLASS_BEGIN
 
 AD_METHOD1(GetEditRate,
-[out\\\,retval], aafRational_t *, result, Edit rate property value,
-This method will get the edit rate for this mob slot.)
+	   [out\\\,retval], aafRational_t *, result, Edit rate property value,
+	   This method will get the edit rate for this mob slot.)
 
 AD_METHOD1(GetOrigin,
-[out\\\,retval], aafPosition_t *, result, Origin property value,
-This method will return the origin of this mob slot.)
+	   [out\\\,retval], aafPosition_t *, result, Origin property value,
+	   This method will return the origin of this mob slot.)
 
 AD_METHOD1(GetTrackID,
-[out\\\,retval], aafTrackID_t *, result, Track id of the Mob Slot,
-This method will return the track id of this mob slot.)
+	   [out\\\,retval], aafTrackID_t *, result, Track id of the Mob Slot,
+	   This method will return the track id of this mob slot.)
 
 AD_OVERRIDE(.method-IsATrack)
 
