@@ -6,10 +6,10 @@
 #include "aafansic.h"
 #include "aafCvt.h"
 
-#include "AAFHeader.h"
+#include "ImplAAFHeader.h"
 #include "OMFile.h"
 #include "OMClassFactory.h"
-#include "AAFIdentification.h"
+#include "ImplAAFIdentification.h"
 
 // Later: These two functions set a global alignment in the
 //file for writing properties.  Used only for media data
@@ -51,17 +51,15 @@ void OMContainer::OMLAbortContainer(void)
 
 OMStorable* makeHeader(void)
 {
-  AAFHeader* newAAFHeader = new AAFHeader;
-  OMStorable* retval = dynamic_cast<OMStorable*>
-    (newAAFHeader->GetRepObject());
+  ImplAAFHeader* newAAFHeader = new ImplAAFHeader;
+  OMStorable* retval = dynamic_cast<OMStorable*> (newAAFHeader);
   return retval;
 }
 
 OMStorable* makeIdentification(void)
 {
-  AAFIdentification* newAAFIdentification = new AAFIdentification;
-  OMStorable* retval = dynamic_cast<OMStorable*>
-    (newAAFIdentification->GetRepObject());
+  ImplAAFIdentification* newAAFIdentification = new ImplAAFIdentification;
+  OMStorable* retval = dynamic_cast<OMStorable*> (newAAFIdentification);
   return retval;
 }
 
