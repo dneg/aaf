@@ -143,18 +143,12 @@ AD_XMETHOD2(LookupPropertyDef,
   //     definition.)
 
 
-AD_XMETHOD2(GetName,
-			[out\, string\, size_is\(bufSize\)],
+AD_XMETHOD1(GetName,
+			[out\, retval],
 			objPass,
-			wchar_t *,
+			aafString_t *,
 			pName,
-			buffer into which name is to be written,
-
-			[in],
-			objPass,
-			aafUInt32,
-			bufSize,
-			size of *pName buffer in bytes,
+			Pointer to name,
 
 			Gets a human-readable name for the class.  This name is not
   // meant to be a way for programs to refer to the class\, as it is
@@ -204,4 +198,20 @@ AD_XMETHOD1(GetParent,
   //
   // AAFRESULT_NULL_PARAM
   //   - pName was null.)
+
+
+AD_XMETHOD1(GetParentAUID,
+			[out\, retval],
+			objPass,
+			aafUID_t *,
+			pAuid,
+			Pointer to an AUID reference,
+			Gets the Parent class AUID for this object.  If there is no
+	// parent\, returns the NULL AUID.  The only class which has no parent
+	// should be AAFObject.
+	//
+	// Returns one of the following:
+	//
+	// AAFRESULT_SUCCESS
+	//   - succeeded.  \(This is the only code indicating success.\))
 AD_XCLASS_END(Concrete, StoredObject)
