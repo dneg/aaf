@@ -49,7 +49,7 @@
 #include <objbase.h>
 #endif
 
-const OMUInt32 currentVersion = 20;
+const OMUInt32 currentVersion = 21;
 
 const size_t indexHeaderSize = sizeof(OMByteOrder) +  // Byte order flag
                                sizeof(OMUInt32) +     // Version number
@@ -139,7 +139,7 @@ static void printName(const wchar_t* name);
   //   @parm The IStorage for the persistent representation of
   //         this <c OMStoredObject>.
 OMStoredObject::OMStoredObject(IStorage* s)
-: _storage(s), _index(0), _indexStream(0), _propertiesStream(0),
+: _storage(s), _index(0), _properties(0),
   _offset(0), _open(false), _mode(OMFile::readOnlyMode),
   _byteOrder(hostByteOrder()), _reorderBytes(false)
 {
@@ -251,7 +251,7 @@ void OMStoredObject::save(const OMPropertySet& properties, void* clientContext)
   TRACE("OMStoredObject::save(OMPropertySet)");
   PRECONDITION("Already open", _open);
   PRECONDITION("At start of value stream",
-                                       streamPosition(_propertiesStream) == 0);
+                                             streamPosition(_properties) == 0);
   PRECONDITION("At start of value stream", _offset == 0);
 
   size_t count = properties.count();
@@ -259,6 +259,10 @@ void OMStoredObject::save(const OMPropertySet& properties, void* clientContext)
   _index = 0; // for BoundsChecker
   _index = new OMStoredPropertySetIndex(count);
   ASSERT("Valid heap pointer", _index != 0);
+  size_t countPresent = properties.countPresent();
+  size_t indexSize = indexHeaderSize + (countPresent * indexEntrySize);
+  streamSetPosition(_properties, indexSize);
+  _offset = indexSize;
   size_t context = 0;
   for (size_t i = 0; i < count; i++) {
     OMProperty* p = 0;
@@ -271,13 +275,14 @@ void OMStoredObject::save(const OMPropertySet& properties, void* clientContext)
 #if !defined(OM_DISABLE_VALIDATE)
   validate(&properties, _index);
 #endif
+  streamSetPosition(_properties, 0);
   save(_index);
   delete _index;
   _index = 0;
   _offset = 0;
-  streamSetPosition(_propertiesStream, 0);
+  streamSetPosition(_properties, 0);
   POSTCONDITION("At start of properties stream",
-                                       streamPosition(_propertiesStream) == 0);
+                                             streamPosition(_properties) == 0);
   POSTCONDITION("At start of value stream", _offset == 0);
 }
 
@@ -286,36 +291,27 @@ void OMStoredObject::save(OMStoredPropertySetIndex* index)
   TRACE("OMStoredObject::save(OMStoredPropertySetIndex*)");
   PRECONDITION("Already open", _open);
   PRECONDITION("Valid index", index != 0);
-  PRECONDITION("At start of index stream", streamPosition(_indexStream) == 0);
-  PRECONDITION("Valid index", index->isValid(0));
+  PRECONDITION("At start of index stream", streamPosition(_properties) == 0);
 
   // The number of entries in the index.
   //
   OMUInt32 entries = index->entries();
-
-  // Compute the size of the index stream.
-  //
-  size_t indexStreamSize = indexHeaderSize + (entries * indexEntrySize);
-
-  // Set the index stream size. This avoids paying the cost of growing
-  // the stream during writes, it also avoids leaving garbage at the
-  // end of the stream if the index has shrunk.
-  //
-  streamSetSize(_indexStream, indexStreamSize);
+  ASSERT("Valid index",
+                 index->isValid(indexHeaderSize + (entries * indexEntrySize)));
 
   // Write byte order flag.
   //
   ASSERT("Index in native byte order", _byteOrder == hostByteOrder());
-  writeToStream(_indexStream, &_byteOrder, sizeof(_byteOrder));
+  writeToStream(_properties, &_byteOrder, sizeof(_byteOrder));
 
   // Write version number.
   //
   OMUInt32 version = currentVersion;
-  writeToStream(_indexStream, &version, sizeof(version));
+  writeToStream(_properties, &version, sizeof(version));
   
   // Write count of entries.
   //
-  writeToStream(_indexStream, &entries, sizeof(entries));
+  writeToStream(_properties, &entries, sizeof(entries));
   
   // Write entries.
   //
@@ -326,27 +322,25 @@ void OMStoredObject::save(OMStoredPropertySetIndex* index)
   size_t context = 0;
   for (size_t i = 0; i < entries; i++) {
     index->iterate(context, propertyId, type, offset, length);
-    writeToStream(_indexStream, &propertyId, sizeof(propertyId));
-    writeToStream(_indexStream, &type, sizeof(type));
-    writeToStream(_indexStream, &offset, sizeof(length));
-    writeToStream(_indexStream, &length, sizeof(length));
+    writeToStream(_properties, &propertyId, sizeof(propertyId));
+    writeToStream(_properties, &type, sizeof(type));
+    writeToStream(_properties, &offset, sizeof(length));
+    writeToStream(_properties, &length, sizeof(length));
   }
 
-  streamSetPosition(_indexStream, 0);
-  POSTCONDITION("At start of index stream", streamPosition(_indexStream) == 0);
-  POSTCONDITION("Consistent index stream size",
-                                  indexStreamSize == streamSize(_indexStream));
+  streamSetPosition(_properties, 0);
+  POSTCONDITION("At start of index stream", streamPosition(_properties) == 0);
 }
 
 OMStoredPropertySetIndex* OMStoredObject::restore(void)
 {
   TRACE("OMStoredObject::restore");
   PRECONDITION("Already open", _open);
-  PRECONDITION("At start of index stream", streamPosition(_indexStream) == 0);
+  PRECONDITION("At start of index stream", streamPosition(_properties) == 0);
 
   // Read byte order flag.
   //
-  readFromStream(_indexStream, &_byteOrder, sizeof(_byteOrder));
+  readFromStream(_properties, &_byteOrder, sizeof(_byteOrder));
   if (_byteOrder == hostByteOrder()) {
     _reorderBytes = false;
   } else {
@@ -356,13 +350,13 @@ OMStoredPropertySetIndex* OMStoredObject::restore(void)
   // Read version number.
   //
   OMUInt32 version;
-  readUInt32FromStream(_indexStream, version, _reorderBytes);
+  readUInt32FromStream(_properties, version, _reorderBytes);
   ASSERT("Recognized version number", version == currentVersion);
   
   // Read count of entries.
   //
   OMUInt32 entries;
-  readUInt32FromStream(_indexStream, entries, _reorderBytes);
+  readUInt32FromStream(_properties, entries, _reorderBytes);
   OMStoredPropertySetIndex* index = new OMStoredPropertySetIndex(entries);
   ASSERT("Valid heap pointer", index != 0);
 
@@ -373,16 +367,15 @@ OMStoredPropertySetIndex* OMStoredObject::restore(void)
   OMUInt32 offset;
   OMUInt32 length;
   for (size_t i = 0; i < entries; i++) {
-    readUInt32FromStream(_indexStream, propertyId, _reorderBytes);
-    readUInt32FromStream(_indexStream, type, _reorderBytes);
-    readUInt32FromStream(_indexStream, offset, _reorderBytes);
-    readUInt32FromStream(_indexStream, length, _reorderBytes);
+    readUInt32FromStream(_properties, propertyId, _reorderBytes);
+    readUInt32FromStream(_properties, type, _reorderBytes);
+    readUInt32FromStream(_properties, offset, _reorderBytes);
+    readUInt32FromStream(_properties, length, _reorderBytes);
     index->insert(propertyId, type, offset, length);
   }
   
-  streamSetPosition(_indexStream, 0);
-  POSTCONDITION("At start of index stream", streamPosition(_indexStream) == 0);
-  POSTCONDITION("Valid index", index->isValid(0));
+  POSTCONDITION("Valid index",
+                 index->isValid(indexHeaderSize + (entries * indexEntrySize)));
   return index;
 }
 
@@ -393,8 +386,6 @@ void OMStoredObject::restore(OMPropertySet& properties)
 {
   TRACE("OMStoredObject::restore");
   PRECONDITION("Already open", _open);
-  PRECONDITION("At start of properties stream",
-                                       streamPosition(_propertiesStream) == 0);
 
   size_t entries = _index->entries();
   
@@ -413,9 +404,9 @@ void OMStoredObject::restore(OMPropertySet& properties)
 #if !defined(OM_DISABLE_VALIDATE)
   validate(&properties, _index);
 #endif
-  streamSetPosition(_propertiesStream, 0);
+  streamSetPosition(_properties, 0);
   POSTCONDITION("At start of properties stream",
-                                       streamPosition(_propertiesStream) == 0);
+                                       streamPosition(_properties) == 0);
 }
 
 OMStoredObject* OMStoredObject::open(const wchar_t* fileName,
@@ -478,8 +469,7 @@ OMStoredObject* OMStoredObject::create(const wchar_t* fileName)
   return newStoredObject;
 }
 
-static const char* const propertyIndexStreamName = "property index";
-static const char* const propertyValueStreamName = "property values";
+static const char* const propertyStreamName = "properties";
  
 void OMStoredObject::create(const OMByteOrder byteOrder)
 {
@@ -490,8 +480,7 @@ void OMStoredObject::create(const OMByteOrder byteOrder)
 
   _byteOrder = byteOrder;
   _mode = OMFile::modifyMode;
-  _indexStream = createStream(_storage, propertyIndexStreamName);
-  _propertiesStream = createStream(_storage, propertyValueStreamName);
+  _properties = createStream(_storage, propertyStreamName);
   _open = true;
 }
 
@@ -503,8 +492,7 @@ void OMStoredObject::open(const OMFile::OMAccessMode mode)
                              (mode == OMFile::readOnlyMode));
 
   _mode = mode;
-  _indexStream = openStream(_storage, propertyIndexStreamName);
-  _propertiesStream = openStream(_storage, propertyValueStreamName);
+  _properties = openStream(_storage, propertyStreamName);
   _open = true;
   _index = restore();
 }
@@ -515,8 +503,7 @@ void OMStoredObject::close(void)
   TRACE("OMStoredObject::close");
   PRECONDITION("Already open", _open);
 
-  closeStream(_indexStream);
-  closeStream(_propertiesStream);
+  closeStream(_properties);
   
   delete _index;
   _index = 0;
@@ -547,7 +534,7 @@ void OMStoredObject::write(OMPropertyId propertyId,
 
   // Write property value.
   //
-  writeToStream(_propertiesStream, start, size);
+  writeToStream(_properties, start, size);
   _offset += size;
 }
 
@@ -592,11 +579,11 @@ void OMStoredObject::read(OMPropertyId propertyId,
   // is synchronized with the index.
   //
   ASSERT("Sequential access",
-         actualOffset == streamPosition(_propertiesStream));
+         actualOffset == streamPosition(_properties));
 
   // Read property value.
   //
-  readFromStream(_propertiesStream, start, size);
+  readFromStream(_properties, start, size);
 }
 
   // @mfunc Size of <p stream> in bytes.
