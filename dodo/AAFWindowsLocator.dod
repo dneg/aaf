@@ -27,12 +27,12 @@ AD_CLASS_BEGIN
 
 AD_METHOD2(GetShortcut,
 		   [in],aafInt32,shortCutLen,Length of the buffer in bytes,
-		   [out],char *  ,shortCutBuf,A Windows shortcut,
+		   [out],aafDataBuffer_t ,shortCutBuf,A Windows shortcut,
 		   Get the windows shortcut.)
 
 AD_METHOD2(SetShortcut,
 		   [in],aafInt32,shortCutLen,Length of the buffer in bytes,
-		   [in],char *  ,shortCutBuf,A Windows shortcut,
+		   [in],aafDataBuffer_t ,shortCutBuf,A Windows shortcut,
 		   Set the windows shortcut.)
 
 AD_CLASS_END
