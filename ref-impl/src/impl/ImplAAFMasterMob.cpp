@@ -25,6 +25,7 @@
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
+#include "ImplAAFEssenceGroup.h"
 
 extern "C" const aafClassID_t CLSID_AAFEssenceAccess;
 
@@ -407,7 +408,40 @@ AAFRESULT STDMETHODCALLTYPE
 												   aafInt32				index,
 												   ImplAAFSourceClip**	ppSourceClip)
 {
-	return AAFRESULT_NOT_IMPLEMENTED;
+	ImplAAFMobSlot	*pSlot = NULL;
+	ImplAAFSegment	*pSegment = NULL;
+	ImplAAFEssenceGroup	*pGroup = NULL;
+	HRESULT			hr;
+	aafNumSlots_t	numReps;
+
+	if (!ppSourceClip)
+		return AAFRESULT_NULL_PARAM;
+
+	numReps = 0;
+	
+	hr = FindSlotBySlotID(slotID, &pSlot);
+	if (SUCCEEDED(hr))
+	{
+		hr = pSlot->GetSegment(&pSegment);
+		if (SUCCEEDED(hr))
+		{
+			hr = pSegment->NumRepresentations(&numReps);
+			if(index < 0 || index >= numReps)
+				return(AAFRESULT_BADINDEX);
+			pGroup = dynamic_cast<ImplAAFEssenceGroup*>(pSegment);
+			if(pGroup == NULL)
+				return(AAFRESULT_INCONSISTANCY);
+			hr = pGroup->GetIndexedChoice (index, ppSourceClip);
+			pGroup->ReleaseReference();
+			pGroup = NULL;
+			pSegment->ReleaseReference();
+			pSegment = NULL;
+		}
+		pSlot->ReleaseReference();
+		pSlot = NULL;
+	}
+
+	return hr;
 }
 
 //***********************************************************
@@ -462,7 +496,38 @@ AAFRESULT STDMETHODCALLTYPE
 											 aafMediaCriteria_t*	pCriteria,
 											 ImplAAFSourceClip**	ppSourceClip)
 {
-	return AAFRESULT_NOT_IMPLEMENTED;
+	ImplAAFMobSlot	*pSlot = NULL;
+	ImplAAFSegment	*pSegment = NULL;
+	ImplAAFEssenceGroup	*pGroup = NULL;
+	HRESULT			hr;
+	aafNumSlots_t	numReps;
+
+	if (!ppSourceClip || !pCriteria)
+		return AAFRESULT_NULL_PARAM;
+
+	numReps = 0;
+	
+	hr = FindSlotBySlotID(slotID, &pSlot);
+	if (SUCCEEDED(hr))
+	{
+		hr = pSlot->GetSegment(&pSegment);
+		if (SUCCEEDED(hr))
+		{
+			hr = pSegment->NumRepresentations(&numReps);
+			pGroup = dynamic_cast<ImplAAFEssenceGroup*>(pSegment);
+			if(pGroup == NULL)
+				return(AAFRESULT_INCONSISTANCY);
+			hr = pGroup->GetCriteriaSourceClip (pCriteria, ppSourceClip);
+			pGroup->ReleaseReference();
+			pGroup = NULL;
+			pSegment->ReleaseReference();
+			pSegment = NULL;
+		}
+		pSlot->ReleaseReference();
+		pSlot = NULL;
+	}
+
+	return hr;
 }
 
 
