@@ -64,21 +64,22 @@ static HRESULT moduleErrorTmp = S_OK;/* note usage in macro */
 
 static void printIdentification(IAAFIdentification* pIdent)
 {
-	aafString_t companyName;
-	check(pIdent->GetCompanyName(&companyName));
-	wprintf(L"CompanyName          = \"%s\"\n", companyName.value);
+    aafWChar companyName[500];
+	check(pIdent->GetCompanyName(companyName, sizeof (companyName)));
+	wprintf(L"CompanyName          = \"%s\"\n", companyName);
 
-	aafString_t productName;
-	check(pIdent->GetProductName(&productName));
-	wprintf(L"ProductName          = \"%s\"\n", productName.value);
+	aafWChar productName[500];
+	check(pIdent->GetProductName(productName, sizeof (productName)));
+	wprintf(L"ProductName          = \"%s\"\n", productName);
 
-	aafString_t productVersionString;
-	check(pIdent->GetProductVersionString(&productVersionString));
-	wprintf(L"ProductVersionString = \"%s\"\n", productVersionString.value);
+	aafWChar productVersionString[500];
+	check(pIdent->GetProductVersionString(productVersionString,
+										  sizeof (productVersionString)));
+	wprintf(L"ProductVersionString = \"%s\"\n", productVersionString);
 
-	aafString_t platform;
-	check(pIdent->GetPlatform(&platform));
-	wprintf(L"Platform             = \"%s\"\n", platform.value);
+	aafWChar platform[500];
+	check(pIdent->GetPlatform(platform, sizeof (platform)));
+	wprintf(L"Platform             = \"%s\"\n", platform);
 }
 
 static void ReadAAFFile(aafWChar * pFileName)
