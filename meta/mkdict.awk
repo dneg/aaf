@@ -177,6 +177,17 @@ BEGIN {
   printf("//\n");
   printf("//   End a table of AAF class and property definitions.\n");
   printf("//\n");
+  printf("// AAF_SYMBOL( symbol, name, alias, description )\n");
+  printf("//\n");
+  printf("//   Define a container for the preferred symbol etc of AAF meta entry\n");
+  printf("//\n");
+  printf("//     symbol      = the syntactically correct symbol of the entry\n");
+  printf("//     name        = the name of the entry\n");
+  printf("//     alias       = the legacy alias name of the entry, if any\n");
+  printf("//     description = the text description of the entry, if any\n");
+  printf("//\n");
+  printf("//   Note: this uses the awkward 2 step approach described by Steve Summit\n");
+  printf("//\n");
   printf("// AAF_CLASS(name, id, parent, concrete)\n");
   printf("//\n");
   printf("//   Define an AAF class.\n");
@@ -554,6 +565,16 @@ BEGIN {
   printf("\n");
   printf("#ifndef AAF_TABLE_END\n");
   printf("#define AAF_TABLE_END()\n");
+  printf("#endif\n");
+  printf("\n");
+  printf("// default definition of AAF_SYM for backwards compatibility\n");
+  printf("#ifndef AAF_SYM\n");
+  printf("#define AAF_SYM( symbol, name, alias, description ) #symbol\n");
+  printf("#endif\n");
+  printf("\n");
+  printf("// why 2 step? see Steve Summit (1996) \"C Programming FAQs: Frequently Asked Questions\" ISBN: 0-201-84519-9\n");
+  printf("#ifndef AAF_SYMBOL\n");
+  printf("#define AAF_SYMBOL( a,b,c,d ) AAF_SYM( a,b,c,d )\n");
   printf("#endif\n");
   printf("\n");
   printf("#ifndef AAF_CLASS\n");
@@ -1291,7 +1312,7 @@ BEGIN {
             # finish previous instance
             if( isym!="" )
             {
-                printf("  AAF_INSTANCE_END(%s, %s, %s)\n", iclass, isym, iid);
+                printf("  AAF_INSTANCE_END(%s, %s, %s)\n", iclass, asym, iid);
             }
 
             # finish previous instance definition group
@@ -1328,7 +1349,7 @@ BEGIN {
             # finish previous instance
             if( isym!="" )
             {
-                printf("  AAF_INSTANCE_END(%s, %s, %s)\n", iclass, isym, iid);
+                printf("  AAF_INSTANCE_END(%s, %s, %s)\n", iclass, asym, iid);
                 printf("  AAF_INSTANCE_SEPARATOR()\n");
             }
 
@@ -1342,7 +1363,9 @@ BEGIN {
             iclass = $C["s_type_sym"];
             idesc = $C["r_detail"];
 
-            printf("  AAF_INSTANCE(%s, %s, %s, %s)\n", iclass, isym, iid, "\"" idesc "\"");
+			asym = "AAF_SYMBOL(" $C["r_sym"] "," $C["r_name"] ",\"" $C["g_alias"] "\",\"" $C["r_detail"] "\")"
+
+            printf("  AAF_INSTANCE(%s, %s, %s, %s)\n", iclass, asym, iid, "\"" idesc "\"");
 
             # basic properties of DefinitionObject
             printf("    AAF_INSTANCE_PROPERTY(%s, %s, %s)\n", "Name", "String", "\"" isym "\"");
@@ -1384,7 +1407,7 @@ END {
             # finish last instance
             if( isym!="" )
             {
-                printf("  AAF_INSTANCE_END(%s, %s, %s)\n", iclass, isym, iid);
+                printf("  AAF_INSTANCE_END(%s, %s, %s)\n", iclass, asym, iid);
             }
 
             # finish last instance definition group
@@ -1408,6 +1431,10 @@ END {
     printf("#undef AAF_TABLE_BEGIN\n");
     printf("\n");
     printf("#undef AAF_TABLE_END\n");
+    printf("\n");
+    printf("#undef AAF_SYM\n");
+    printf("\n");
+    printf("#undef AAF_SYMBOL\n");
     printf("\n");
     printf("#undef AAF_CLASS\n");
     printf("\n");
