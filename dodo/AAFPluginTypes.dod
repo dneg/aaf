@@ -8,7 +8,6 @@
 #startm .this-module 0
 AAFPluginTypes\
 #endm
-#c
 AD_TYPES_HEAD
 AD_INCLUDE(AAFTypes)
 
