@@ -3931,31 +3931,10 @@ void ignore(OMUInt32 pid)
   }
 }
 
-#if defined(__sgi) || defined(__linux__) || defined (__FreeBSD__)
-// stubs
-void CoInitialize(void *)
-{
-}
-
-void CoUninitialize(void)
-{
-}
-
-#endif
-
-// helper class
-struct CComInitialize
-{
-  CComInitialize() { CoInitialize(NULL); }
-  ~CComInitialize() { CoUninitialize(); }
-};
 
 int main(int argumentCount, char* argumentVector[])
 {
   checkSizes();
-
-  // Initialize com library for this process.
-  CComInitialize comInit;
 
 
   programName = baseName(argumentVector[0]);
