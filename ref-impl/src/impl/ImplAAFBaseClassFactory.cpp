@@ -62,7 +62,7 @@
 // Initialize the AUID to CLSID class table.
 typedef struct tagAAFObjectEntry_t
 {
-	LPCOLESTR pClassName;
+	const char * pClassName;
 	const aafUID_t* pAUID;
 	const aafClassID_t* pClassID;
 } AAFObjectEntry_t;
@@ -75,13 +75,11 @@ typedef struct tagAAFObjectEntry_t
 #define AAF_TABLE_BEGIN() static AAFObjectEntry_t gAAFObjectTable[] = {
 
 #define AAF_CLASS(name, id, parent)\
-{ OLESTR(#name), &AUID_AAF##name, &CLSID_AAF##name }
+{ #name, &AUID_AAF##name, &CLSID_AAF##name }
 
 #define AAF_CLASS_SEPARATOR() ,
 
-#define AAF_TABLE_END()\
-,{ NULL, NULL, NULL }};
-
+#define AAF_TABLE_END() };
 //
 // Include the AAF macro invocations.
 // This will define all of the entries in the gAAFObjectTable.
@@ -92,7 +90,50 @@ typedef struct tagAAFObjectEntry_t
 #undef AAF_CLASS_SEPARATOR
 #undef AAF_TABLE_END
 
+// Define a table of pointers to entries on the gAAFObjectTable. We use 
+// this table to sort and search for AUID's in the gAAFObjectTable.
+const size_t kTotalAUIDCount = sizeof(gAAFObjectTable)/sizeof(AAFObjectEntry_t);
+static AAFObjectEntry_t * g_AUIDTable[kTotalAUIDCount] = {0};
 
+
+// Compare proc for sort and search.
+static int CompareTableEntries(const AAFObjectEntry_t **elem1,
+                               const AAFObjectEntry_t **elem2)
+{
+  const aafUID_t &auid1 = *((**elem1).pAUID);
+  const aafUID_t &auid2 = *((**elem2).pAUID);
+
+  // Compare the unsigned long member
+  if (auid1.Data1 < auid2.Data1)
+    return -1;
+  else if (auid1.Data1 > auid2.Data1)
+    return 1;
+  // Compare the first unsigned short member
+  else if (auid1.Data2 < auid2.Data2)
+    return -1;
+  else if (auid1.Data2 > auid2.Data2)
+    return 1;
+  // Compare the second unsigned short member
+  else if (auid1.Data3 < auid2.Data3)
+    return -1;
+  else if (auid1.Data3 > auid2.Data3)
+    return 1;
+  else
+  // Compare the last 8 bytes.
+    return memcmp(auid1.Data4, auid2.Data4, 8);
+}
+
+static void InitializeAUIDTable(void)
+{
+  for (size_t i = 0; kTotalAUIDCount > i; ++i)
+  {
+    g_AUIDTable[i] = &gAAFObjectTable[i];
+  }
+
+  // Now sort the table.
+  qsort(g_AUIDTable, kTotalAUIDCount, sizeof(AAFObjectEntry_t *),
+        (int (*)(const void*, const void*))CompareTableEntries); 
+}
 
 
 //!This file should be merged into other files over time
@@ -100,6 +141,9 @@ typedef struct tagAAFObjectEntry_t
 OMContainer::OMContainer(void)
   : _file(0)
 {
+  // Initialize out lookup table for the built-in base class auids.
+  if (0 == g_AUIDTable[0])
+    InitializeAUIDTable();
 }
 
 OMContainer::~OMContainer(void)
@@ -147,17 +191,24 @@ void OMContainer::OMLAbortContainer(void)
 // auid.
 const aafClassID_t* lookupClassID(const aafUID_t* pAUID)
 {
-  aafInt32 i = 0;
-  
-  // Lookup the class id in the predefined "base class" table.
-  while (gAAFObjectTable[i].pAUID && gAAFObjectTable[i].pClassID)
-  {
-    if (0 == memcmp(pAUID, gAAFObjectTable[i].pAUID, sizeof(aafUID_t)))
-		return gAAFObjectTable[i].pClassID;
-    ++i;
-  }
+  // Return NULL if the given AUID cannot be found.
+  const aafClassID_t *pClassID = NULL;
 
-  return NULL;
+  // Lookup the class id in the predefined "base class" table.
+  AAFObjectEntry_t **ppResult = NULL;
+  AAFObjectEntry_t key = {"KEY", pAUID, NULL};
+  AAFObjectEntry_t *pKey = &key;
+  
+  // Use standard library's binary search routine.
+  ppResult = (AAFObjectEntry_t **)bsearch(&pKey, g_AUIDTable, kTotalAUIDCount,
+               sizeof(AAFObjectEntry_t *),
+               (int (*)(const void*, const void*))CompareTableEntries);
+
+  // Return the corresponding class id.
+  if (NULL != ppResult)
+    pClassID = (**ppResult).pClassID;
+
+  return (pClassID);
 }
 
 // Utility function for creating objects. This function hides the type
@@ -167,11 +218,12 @@ static OMStorable* createObject(const OMClassId& classId)
 {
   const aafUID_t* pAUID  = reinterpret_cast<const aafUID_t*>(&classId);
 
-  // Lookup the 
+  // Lookup the code class id for the given stored object id.
   const aafClassID_t* id = lookupClassID(pAUID);
   if (NULL == id)
     return NULL;
-
+  
+  // Attempt to create the corresponding storable object.
   OMStorable* result = dynamic_cast<OMStorable*>(CreateImpl(*id));
   return result;
 }
@@ -189,15 +241,11 @@ static void registerClass(OMFile* file, const aafClassID_t& classId)
 static void registerPredefinedClasses(OMFile* file)
 {
 #if 1
-  aafInt32 i = 0;
-  
-  // Lookup the class id in the predefined "base class" table.
-  while (gAAFObjectTable[i].pAUID && gAAFObjectTable[i].pClassID)
+  // Use the table to register the builtin classes.
+  for (size_t i = 0; kTotalAUIDCount > i; ++i)
   {
     registerClass(file, *gAAFObjectTable[i].pAUID);
-    ++i;
   }
-
 #else
   registerClass(file, AUID_AAFClassDef);
   registerClass(file, AUID_AAFComponent);
