@@ -186,26 +186,12 @@ public:
     /*[out]*/ aafUInt32 *samplesWritten, // write this many samples
     /*[out]*/ aafUInt32 *bytesWritten);  // size of buffer
 
-  // Write blocks from one or more buffers, interleaving if needed.
-  STDMETHOD (WriteBlocks)
-    (/*[in]*/ aafDeinterleave_t  inter, // Whether the material will be de-interleaved on read
-     /*[in]*/ aafUInt16  xferBlockCount, // How many aafMultiXfer blocks follow
-     /*[in]*/ aafmMultiXfer_t *  xferBlock, // One or more blocks containing buffer pointer and length 
-     /*[in]*/ aafmMultiResult_t *  resultBlock);
-
   STDMETHOD (ReadSamples) (  
     /*[in]*/ aafUInt32  nSamples, // Read this many samples
     /*[in]*/ aafUInt32  buflen, // into a buffer of this size
     /*[out]*/ aafDataBuffer_t  buffer, // The transfer buffer
     /*[out, ref]*/ aafUInt32 *  samplesRead, // The number of samples actually read
     /*[out, ref]*/ aafUInt32 *  bytesRead); // The number of bytes actually read
-
-  // Read blocks into one or more buffers, de-interleaving if needed.
-  STDMETHOD (ReadBlocks)
-    (/*[in]*/ aafDeinterleave_t  inter, // Whether the material will be de-interleaved on read
-     /*[in]*/ aafUInt16  xferBlockCount, // How many aafmMultiXfer blocks follow
-     /*[in]*/ aafmMultiXfer_t *  xferBlock, // One or more blocks containing buffer pointer and length 
-     /*[in]*/ aafmMultiResult_t *  resultBlock);
 
   // Seek to a particular sample frame on the media.  The
 			// sample frame is one frame for picture, and one sample
@@ -218,20 +204,6 @@ public:
      (IAAFSourceMob *desc);
 
 
-  // Write some number of bytes to the stream exactly and with no formatting or compression.
-  STDMETHOD (WriteRawData)
-    (/*[in]*/ aafUInt32 nSamples,	//number of samples to read
-	   /*[in,size_is(buflen)]*/ aafDataBuffer_t  buffer, // to a buffer
-     /*[in]*/ aafUInt32  buflen); // of this size 
-
-  // Read some number of bytes from the stream exactly and with no formatting or compression.
-  STDMETHOD (ReadRawData)
-    (/*[in]*/ aafUInt32 nSamples,	//number of samples to read
-	   /*[in]*/ aafUInt32  buflen, // to a buffer of this size
-     /*[out, size_is(buflen), length_is(*bytesRead)]*/ aafDataBuffer_t  buffer, // here is the buffer
-     /*[out,ref]*/ aafUInt32 *  bytesRead,	// Return bytes actually read 
-     /*[out,ref]*/ aafUInt32 *  samplesRead); // Return samples actually read 
-	
   // Given some raw essence (like a CDCI file), create
 			// an AAFEssenceDescriptor to match, with all fields filled in.
   STDMETHOD (CreateDescriptorFromStream)
@@ -292,45 +264,23 @@ public:
 
 private:
 	void SetEssenceStream(IAAFEssenceStream *stream);
-  void SetCompressionEnabled(aafCompressEnable_t compEnable);
-	void SetNumberOfSamples(const aafLength_t& numberOfSamples);
+  	void SetNumberOfSamples(const aafLength_t& numberOfSamples);
 
-	typedef struct _aafCDCIParams
-	{
-		aafUInt32 imageWidth;
-		aafUInt32 imageHeight;
 
-		aafUInt16 components;
-		aafColorSpace_t colorSpace;
-		aafUInt32 horizontalSubsampling;
-		aafUInt32 verticalSubsampling;
-
-		aafUInt32 blackReferenceLevel;
-		aafUInt32 whiteReferenceLevel;
-		aafUInt32 colorRange;
-
-		int quality; 
-
-		aafUInt32 rowBytes;
-		aafDataBuffer_t buffer;
-		aafUInt32 bufferSize;
-
-	} aafCDCIParams;
-
-	// SampleIndex access methods : may be temporary. We need these methods
-	// to read/write the index because the SampleIndex property in EssenceData
-	// is not implemented. Also, these methods will allow all essence streams
-	// to be treated the sample, whether in an AAF file or not.
-
-	HRESULT ReadNumberOfSamples(IAAFEssenceStream *stream,
-		                         aafLength_t& numberOfSamples);
+	// Helper utility to make sure the current information in the codec is 
+	// synchronized with the given descriptor information . 
+	// Called in Open and Create methods.
+	STDMETHOD( ReadDescriptor )(CAAFCDCIDescriptorHelper& descriptorHelper);
 
 	// Helper utility to make sure the given descriptor information is synchronized
-	// with the current information in the codec. Called in CompleteWrite method.
+	// with the current information in the codec. Called in 
+	// CompleteWrite and Create methods.
 	void UpdateDescriptor (CAAFCDCIDescriptorHelper& descriptorHelper);
 
 	// Routine to keep calculated member data up-to-date.
 	void UpdateCalculatedData(void);
+
+	STDMETHOD( CreateLegacyPropDefs )(IAAFDictionary *p_dict);
 
 private:
 	AAFByteOrder		_nativeByteOrder;
@@ -340,7 +290,6 @@ private:
 
 
 	aafMediaOpenMode_t _openMode; // Either read-only or for append.
-	aafCompressEnable_t _compressEnable;   // if true then should receive and deliver uncompressed data.
 
 
 	// Data from/to FileDescriptor
@@ -349,7 +298,7 @@ private:
 	aafUID_t _containerFormat;	// set by refimpl
 
 	// Data from/to DigitalImageDescriptor
-	aafUID_t _codecID; // always CodecCDCI.
+	aafUID_t _compression;
 
 	aafUInt32 _storedHeight;
 	aafUInt32 _storedWidth;
@@ -373,11 +322,11 @@ private:
 
 	aafRational_t _imageAspectRatio;
 	aafAlphaTransparency_t _alphaTransparency;
-	aafRational_t _gamma;
-	aafInt32 _imageAlignmentFactor; // padding for "sector size" on disk for possibly faster access.
+	aafUID_t _gamma;
+	aafUInt32 _imageAlignmentFactor; // padding for "sector size" on disk for possibly faster access.
 
 	// Data from/to CDCIDescriptor
-	aafInt32 _componentWidth; // should always be 8 (no support for 12 bit data).
+	aafUInt32 _componentWidth; // should always be 8 (no support for 12 bit data).
 	aafUInt32 _horizontalSubsampling;
 	aafUInt32 _verticalSubsampling; // not currently a property (default to 1 in codec).
 	aafColorSiting_t _colorSiting;
@@ -391,16 +340,15 @@ private:
 	aafUInt32 _imageWidth;
 	aafUInt32 _fileBytesPerSample;
 	aafBoolean_t _descriptorFlushed;
-	aafUInt32	_clientFillStart;
-	aafUInt32	_clientFillEnd;
 
 	aafColorSpace_t _pixelFormat;
 	aafCompArray_t _compArray;
 
 	aafFieldDom_t	_fieldDominance;
-	aafInt16 _memBitsPerPixel;
-	aafInt16 _bitsPerPixelAvg;
-	aafInt32 _memBytesPerSample;
+	aafUInt32	_fieldStartOffset;
+	aafUInt32	_fieldEndOffset;
+
+	aafUInt16 _bitsPerPixelAvg;
 	aafUInt32 _bitsPerSample;
 
 	// Copied from WaveCodec...(may be renamed...)

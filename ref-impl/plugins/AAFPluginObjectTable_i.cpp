@@ -33,6 +33,7 @@
 #include "CAAFAIFCCodec.h"
 #include "CAAFWAVECodec.h"
 #include "CAAFJPEGCodec.h"
+#include "CAAFCDCICodec.h"
 
 //
 // Include all objects in the following table:
@@ -43,4 +44,5 @@ AAF_BEGIN_OBJECT_MAP(AAFPluginObjectMap)
 	AAF_OBJECT_ENTRY(AAFAIFCCodec)
 	AAF_OBJECT_ENTRY(AAFWaveCodec)
 	AAF_OBJECT_ENTRY(AAFJPEGCodec)
+	AAF_OBJECT_ENTRY(AAFCDCICodec)
 AAF_END_OBJECT_MAP()

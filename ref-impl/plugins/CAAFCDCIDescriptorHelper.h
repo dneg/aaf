@@ -99,13 +99,21 @@ public:
 	STDMETHOD (GetGamma) (aafUID_t *  pGamma);
 	STDMETHOD (SetImageAlignmentFactor) (aafUInt32  ImageAlignmentFactor);
 	STDMETHOD (GetImageAlignmentFactor) (aafUInt32 *  pImageAlignmentFactor);
-	//
+	STDMETHOD (SetFieldDominance) (aafFieldNumber_t  FieldDominance);
+	STDMETHOD (GetFieldDominance) (aafFieldNumber_t *  pFieldDominance);
+	STDMETHOD (SetFieldStartOffset) (aafUInt32  FieldStartOffset);
+	STDMETHOD (GetFieldStartOffset) (aafUInt32 *  pFieldStartOffset);
+	STDMETHOD (SetFieldEndOffset) (aafUInt32  FieldEndOffset);
+	STDMETHOD (GetFieldEndOffset) (aafUInt32 *  pFieldEndOffset);
+ 	//
 	// CDCIDescriptor methods:
 	//
-	STDMETHOD (SetComponentWidth) (aafInt32  ComponentWidth);
-	STDMETHOD (GetComponentWidth) (aafInt32 *  pComponentWidth);
+	STDMETHOD (SetComponentWidth) (aafUInt32  ComponentWidth);
+	STDMETHOD (GetComponentWidth) (aafUInt32 *  pComponentWidth);
 	STDMETHOD (SetHorizontalSubsampling) (aafUInt32  HorizontalSubsampling);
 	STDMETHOD (GetHorizontalSubsampling) (aafUInt32 *  pHorizontalSubsampling);
+	STDMETHOD (SetVerticalSubsampling) (aafUInt32  VerticalSubsampling);
+	STDMETHOD (GetVerticalSubsampling) (aafUInt32 *  pVerticalSubsampling);
 	STDMETHOD (SetColorSiting) (aafColorSiting_t  ColorSiting);
 	STDMETHOD (GetColorSiting) (aafColorSiting_t *  pColorSiting);
 	STDMETHOD (SetBlackReferenceLevel) (aafUInt32  BlackReferenceLevel);
@@ -117,6 +125,15 @@ public:
 	STDMETHOD (SetPaddingBits) (aafInt16  PaddingBits);
 	STDMETHOD (GetPaddingBits) ( aafInt16 *  pPaddingBits);
 
+
+	STDMETHOD (SetResolutionID) ( aafInt32  resolutionID );
+	STDMETHOD (SetFirstFrameOffset) ( aafInt32  firstFrameOffset );
+	STDMETHOD (SetImageSize) ( aafInt32 imageSize );
+	STDMETHOD (SetFrameSampleSize) ( aafInt32 frameSampleSize );
+	STDMETHOD (SetFrameIndexByteOrder) ( aafInt16	frameIndexByteOrder );
+	STDMETHOD (SetOffsetToFrameIndexes) ( aafInt32	offsetToFrameIndexes );
+	STDMETHOD (SetMCProps) ( aafInt32 resolutionID, 
+				 aafInt32 frameSampleSize );
 
 private:
 	IUnknown *_filemob_unk; // used for equality testing.

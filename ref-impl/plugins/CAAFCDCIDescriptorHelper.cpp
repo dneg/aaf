@@ -30,14 +30,16 @@
 #include "AAFResult.h"
 
 #include "AAF.h"
+#include "AAFTypeDefUIDs.h"
 
-#include "aafUtils.h"
+#include "AAFUtils.h"
 #include "aafCvt.h"
-#include "aafDataDefs.h"
-#include "aafDefUIDs.h"
+#include "AAFDataDefs.h"
+#include "AAFDefUIDs.h"
 #include "AAFStoredObjectIDs.h"
 #include "AAFCodecDefs.h"
 #include "AAFEssenceFormats.h"
+#include "AAFPropertyDefs.h"
 
 
 // local function for simplifying error handling.
@@ -476,7 +478,501 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFCDCIDescriptorHelper::SetComponentWidth (aafInt32  ComponentWidth)
+    CAAFCDCIDescriptorHelper::SetFieldDominance (aafFieldNumber_t   fieldDominance)
+{
+	HRESULT			hr = S_OK;
+	IAAFObject		*p_obj = NULL;
+	IAAFClassDef		*p_classdef = NULL;
+	IAAFPropertyDef		*p_propdef = NULL;
+	IAAFPropertyValue	*p_propval = NULL;
+	IAAFTypeDef		*p_typedef = NULL;
+	IAAFTypeDefEnum		*p_typedef_enum = NULL;
+
+
+	checkAssertion(NULL != _dides);
+
+	try
+	{
+	    checkResult( _dides->QueryInterface( IID_IAAFObject, 
+		(void**)&p_obj ) );
+
+	    checkResult( p_obj->GetDefinition( &p_classdef ) );
+
+	    checkResult( p_classdef->LookupPropertyDef( 
+		kAAFPropID_DigitalImageDescriptor_FieldDominance, &p_propdef));
+
+	    checkResult( p_propdef->GetTypeDef( &p_typedef ) );
+
+	    checkResult( p_typedef->QueryInterface( IID_IAAFTypeDefEnum, 
+		(void**)&p_typedef_enum ) );
+
+	    // Try to get prop value. If it doesn't exist, create it.
+	    hr = p_obj->GetPropertyValue( p_propdef, &p_propval );
+	    if( hr != AAFRESULT_SUCCESS )
+	    {
+		if( hr == AAFRESULT_PROP_NOT_PRESENT )
+		{
+		    aafCharacter    name[ 128 ];
+
+		    checkResult( p_typedef_enum->GetNameFromInteger( 
+			fieldDominance, name, 128 ) );
+		    checkResult( p_typedef_enum->CreateValueFromName(
+			name, &p_propval ) );
+
+		    // At this point hr equals AAFRESULT_PROP_NOT_PRESENT.
+		    // Reset it.
+		    hr = AAFRESULT_SUCCESS;
+		}
+		else
+		    throw hr;
+	    }
+	    else
+	    {
+		// Property value exists, modify it.
+		checkResult( p_typedef_enum->SetIntegerValue ( 
+		    p_propval, static_cast<aafInt64>( fieldDominance ) ) );
+	    }
+
+
+	    checkResult( p_obj->SetPropertyValue( p_propdef, p_propval ) );
+	}
+	catch (HRESULT& rhr)
+	{
+		hr = rhr; // return thrown error code.
+	}
+	catch (...)
+	{
+		// We CANNOT throw an exception out of a COM interface method!
+		// Return a reasonable exception code.
+		hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+	}
+
+
+	// Cleanup
+	if( p_obj != NULL )
+	    p_obj->Release();
+	if( p_classdef != NULL )
+	    p_classdef->Release();
+	if( p_propdef != NULL )
+	    p_propdef->Release();
+	if( p_propval != NULL )
+	    p_propval->Release();
+	if( p_typedef != NULL )
+	    p_typedef->Release();
+	if( p_typedef_enum != NULL )
+	    p_typedef_enum->Release();
+
+
+	return hr;
+}
+
+
+
+HRESULT STDMETHODCALLTYPE
+    CAAFCDCIDescriptorHelper::GetFieldDominance (aafFieldNumber_t *  pFieldDominance)
+{
+	HRESULT			hr = S_OK;
+	IAAFObject		*p_obj = NULL;
+	IAAFClassDef		*p_classdef = NULL;
+	IAAFPropertyDef		*p_propdef = NULL;
+	IAAFPropertyValue	*p_propval = NULL;
+	IAAFTypeDef		*p_typedef = NULL;
+	IAAFTypeDefEnum		*p_typedef_enum = NULL;
+	eAAFTypeCategory_t	type_category;
+	IAAFTypeDefInt		*p_typedef_int = NULL;
+
+
+	checkAssertion(NULL != _dides);
+
+	try
+	{
+	    checkResult( _dides->QueryInterface( IID_IAAFObject, 
+		(void**)&p_obj ) );
+
+	    checkResult( p_obj->GetDefinition( &p_classdef ) );
+
+	    checkResult( p_classdef->LookupPropertyDef( 
+		kAAFPropID_DigitalImageDescriptor_FieldDominance, 
+		&p_propdef));
+
+	    checkResult( p_obj->GetPropertyValue( p_propdef, &p_propval));
+
+	    checkResult( p_propval->GetType( &p_typedef ) );
+
+	    checkResult( p_typedef->GetTypeCategory( &type_category ) );
+
+	    // @@@Warning
+	    // enumTypedef::createValue has a bug in it. Instead of
+	    // creating enum value it creates an integer. That's why here 
+	    // we have to query for integer interface to get around 
+	    // this problem.
+	    if( type_category == kAAFTypeCatInt )
+	    {
+		checkResult( p_typedef->QueryInterface( IID_IAAFTypeDefInt, 
+		    (void**)&p_typedef_int ) );
+
+		checkResult( p_typedef_int->GetInteger( p_propval, 
+		    reinterpret_cast<aafMemPtr_t>(pFieldDominance), 
+		    sizeof(*pFieldDominance) ) );
+	    }
+	    else
+	    {
+		aafInt64	int64_val = 0;
+
+		checkResult( p_typedef->QueryInterface( IID_IAAFTypeDefEnum, 
+		    (void**)&p_typedef_enum ) );
+
+		checkResult( p_typedef_enum->GetIntegerValue( p_propval, 
+		    &int64_val ) );
+		*pFieldDominance = static_cast<aafFieldNumber_t>( int64_val );
+	    }
+	}
+	catch (HRESULT& rhr)
+	{
+		hr = rhr; // return thrown error code.
+	}
+	catch (...)
+	{
+		// We CANNOT throw an exception out of a COM interface method!
+		// Return a reasonable exception code.
+		hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+	}
+
+
+	// Cleanup
+	if( p_obj != NULL )
+	    p_obj->Release();
+	if( p_classdef != NULL )
+	    p_classdef->Release();
+	if( p_propdef != NULL )
+	    p_propdef->Release();
+	if( p_propval != NULL )
+	    p_propval->Release();
+	if( p_typedef != NULL )
+	    p_typedef->Release();
+	if( p_typedef_int != NULL )
+	    p_typedef_int->Release();
+	if( p_typedef_enum != NULL )
+	    p_typedef_enum->Release();
+
+
+	return hr;
+}
+
+
+
+HRESULT STDMETHODCALLTYPE
+    CAAFCDCIDescriptorHelper::SetFieldStartOffset(aafUInt32  fieldStartOffset)
+{
+	HRESULT			hr = S_OK;
+	IAAFObject		*p_obj = NULL;
+	IAAFClassDef		*p_classdef = NULL;
+	IAAFPropertyDef		*p_propdef = NULL;
+	IAAFPropertyValue	*p_propval = NULL;
+	IAAFTypeDef		*p_typedef = NULL;
+	IAAFTypeDefInt		*p_typedef_int = NULL;
+
+
+	checkAssertion(NULL != _dides);
+
+	try
+	{
+	    checkResult( _dides->QueryInterface( IID_IAAFObject, 
+		(void**)&p_obj ) );
+
+	    checkResult( p_obj->GetDefinition( &p_classdef ) );
+
+	    checkResult( p_classdef->LookupPropertyDef( 
+		kAAFPropID_DigitalImageDescriptor_FieldStartOffset, &p_propdef));
+
+	    checkResult( p_propdef->GetTypeDef( &p_typedef ) );
+
+	    checkResult( p_typedef->QueryInterface( IID_IAAFTypeDefInt, 
+		(void**)&p_typedef_int ) );
+
+	    // Try to get prop value. If it doesn't exist, create it.
+	    hr = p_obj->GetPropertyValue( p_propdef, &p_propval );
+	    if( hr != AAFRESULT_SUCCESS )
+	    {
+		if( hr == AAFRESULT_PROP_NOT_PRESENT )
+		{
+		    checkResult( p_typedef_int->CreateValue( 
+			reinterpret_cast<aafMemPtr_t>(&fieldStartOffset), 
+			sizeof(fieldStartOffset), &p_propval ) );
+
+		    // At this point hr equals AAFRESULT_PROP_NOT_PRESENT.
+		    // Reset it.
+		    hr = AAFRESULT_SUCCESS;
+		}
+		else
+		    throw hr;
+	    }
+	    else
+	    {
+		// Property value exists, modify it.
+		checkResult( p_typedef_int->SetInteger( 
+		    p_propval, reinterpret_cast<aafMemPtr_t>(&fieldStartOffset), 
+		    sizeof(fieldStartOffset) ) );
+	    }
+
+	    checkResult( p_obj->SetPropertyValue( p_propdef, p_propval ) );
+	}
+	catch (HRESULT& rhr)
+	{
+		hr = rhr; // return thrown error code.
+	}
+	catch (...)
+	{
+		// We CANNOT throw an exception out of a COM interface method!
+		// Return a reasonable exception code.
+		hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+	}
+
+
+	// Cleanup
+	if( p_obj != NULL )
+	    p_obj->Release();
+	if( p_classdef != NULL )
+	    p_classdef->Release();
+	if( p_propdef != NULL )
+	    p_propdef->Release();
+	if( p_propval != NULL )
+	    p_propval->Release();
+	if( p_typedef != NULL )
+	    p_typedef->Release();
+	if( p_typedef_int != NULL )
+	    p_typedef_int->Release();
+
+
+	return hr;
+}
+
+
+
+HRESULT STDMETHODCALLTYPE
+    CAAFCDCIDescriptorHelper::GetFieldStartOffset(aafUInt32*  pFieldStartOffset)
+{
+	HRESULT			hr = S_OK;
+	IAAFObject		*p_obj = NULL;
+	IAAFClassDef		*p_classdef = NULL;
+	IAAFPropertyDef		*p_propdef = NULL;
+	IAAFPropertyValue	*p_propval = NULL;
+	IAAFTypeDef		*p_typedef = NULL;
+	IAAFTypeDefInt		*p_typedef_int = NULL;
+
+
+	checkAssertion(NULL != _dides);
+
+	try
+	{
+	    checkResult( _dides->QueryInterface( IID_IAAFObject, 
+		(void**)&p_obj ) );
+
+	    checkResult( p_obj->GetDefinition( &p_classdef ) );
+
+	    checkResult( p_classdef->LookupPropertyDef( 
+		kAAFPropID_DigitalImageDescriptor_FieldStartOffset, &p_propdef));
+
+	    checkResult( p_obj->GetPropertyValue( p_propdef, &p_propval ) );
+
+	    checkResult( p_propval->GetType( &p_typedef ) );
+
+	    checkResult( p_typedef->QueryInterface( IID_IAAFTypeDefInt, 
+		(void**)&p_typedef_int ) );
+
+	    checkResult( p_typedef_int->GetInteger( p_propval, 
+		reinterpret_cast<aafMemPtr_t>(pFieldStartOffset), 
+		sizeof(*pFieldStartOffset) ) );
+	}
+	catch (HRESULT& rhr)
+	{
+		hr = rhr; // return thrown error code.
+	}
+	catch (...)
+	{
+		// We CANNOT throw an exception out of a COM interface method!
+		// Return a reasonable exception code.
+		hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+	}
+
+
+	// Cleanup
+	if( p_obj != NULL )
+	    p_obj->Release();
+	if( p_classdef != NULL )
+	    p_classdef->Release();
+	if( p_propdef != NULL )
+	    p_propdef->Release();
+	if( p_propval != NULL )
+	    p_propval->Release();
+	if( p_typedef != NULL )
+	    p_typedef->Release();
+	if( p_typedef_int != NULL )
+	    p_typedef_int->Release();
+
+
+	return hr;
+}
+
+
+
+HRESULT STDMETHODCALLTYPE
+    CAAFCDCIDescriptorHelper::SetFieldEndOffset( aafUInt32  fieldEndOffset )
+{
+	HRESULT			hr = S_OK;
+	IAAFObject		*p_obj = NULL;
+	IAAFClassDef		*p_classdef = NULL;
+	IAAFPropertyDef		*p_propdef = NULL;
+	IAAFPropertyValue	*p_propval = NULL;
+	IAAFTypeDef		*p_typedef = NULL;
+	IAAFTypeDefInt		*p_typedef_int = NULL;
+
+
+	checkAssertion(NULL != _dides);
+
+	try
+	{
+	    checkResult( _dides->QueryInterface( IID_IAAFObject, 
+		(void**)&p_obj ) );
+
+	    checkResult( p_obj->GetDefinition( &p_classdef ) );
+
+	    checkResult( p_classdef->LookupPropertyDef( 
+		kAAFPropID_DigitalImageDescriptor_FieldEndOffset, &p_propdef));
+
+	    checkResult( p_propdef->GetTypeDef( &p_typedef ) );
+
+	    checkResult( p_typedef->QueryInterface( IID_IAAFTypeDefInt, 
+		(void**)&p_typedef_int ) );
+
+	    // Try to get prop value. If it doesn't exist, create it.
+	    hr = p_obj->GetPropertyValue( p_propdef, &p_propval );
+	    if( hr != AAFRESULT_SUCCESS )
+	    {
+		if( hr == AAFRESULT_PROP_NOT_PRESENT )
+		{
+		    checkResult( p_typedef_int->CreateValue( 
+			reinterpret_cast<aafMemPtr_t>(&fieldEndOffset), 
+			sizeof(fieldEndOffset), &p_propval ) );
+
+		    // At this point hr equals AAFRESULT_PROP_NOT_PRESENT.
+		    // Reset it.
+		    hr = AAFRESULT_SUCCESS;
+		}
+		else
+		    throw hr;
+	    }
+	    else
+	    {
+		// Property value exists, modify it.
+		checkResult( p_typedef_int->SetInteger( 
+		    p_propval, reinterpret_cast<aafMemPtr_t>(&fieldEndOffset), 
+		    sizeof(fieldEndOffset) ) );
+	    }
+
+	    checkResult( p_obj->SetPropertyValue( p_propdef, p_propval ) );
+	}
+	catch (HRESULT& rhr)
+	{
+		hr = rhr; // return thrown error code.
+	}
+	catch (...)
+	{
+		// We CANNOT throw an exception out of a COM interface method!
+		// Return a reasonable exception code.
+		hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+	}
+
+
+	// Cleanup
+	if( p_obj != NULL )
+	    p_obj->Release();
+	if( p_classdef != NULL )
+	    p_classdef->Release();
+	if( p_propdef != NULL )
+	    p_propdef->Release();
+	if( p_propval != NULL )
+	    p_propval->Release();
+	if( p_typedef != NULL )
+	    p_typedef->Release();
+	if( p_typedef_int != NULL )
+	    p_typedef_int->Release();
+
+
+	return hr;
+}
+
+
+
+HRESULT STDMETHODCALLTYPE
+    CAAFCDCIDescriptorHelper::GetFieldEndOffset( aafUInt32*  pFieldEndOffset )
+{
+	HRESULT			hr = S_OK;
+	IAAFObject		*p_obj = NULL;
+	IAAFClassDef		*p_classdef = NULL;
+	IAAFPropertyDef		*p_propdef = NULL;
+	IAAFPropertyValue	*p_propval = NULL;
+	IAAFTypeDef		*p_typedef = NULL;
+	IAAFTypeDefInt		*p_typedef_int = NULL;
+
+
+	checkAssertion(NULL != _dides);
+
+	try
+	{
+	    checkResult( _dides->QueryInterface( IID_IAAFObject, 
+		(void**)&p_obj ) );
+
+	    checkResult( p_obj->GetDefinition( &p_classdef ) );
+
+	    checkResult( p_classdef->LookupPropertyDef( 
+		kAAFPropID_DigitalImageDescriptor_FieldEndOffset, &p_propdef));
+
+	    checkResult( p_obj->GetPropertyValue( p_propdef, &p_propval ) );
+
+	    checkResult( p_propval->GetType( &p_typedef ) );
+
+	    checkResult( p_typedef->QueryInterface( IID_IAAFTypeDefInt, 
+		(void**)&p_typedef_int ) );
+
+	    checkResult( p_typedef_int->GetInteger( p_propval, 
+		reinterpret_cast<aafMemPtr_t>(pFieldEndOffset), 
+		sizeof(*pFieldEndOffset) ) );
+	}
+	catch (HRESULT& rhr)
+	{
+		hr = rhr; // return thrown error code.
+	}
+	catch (...)
+	{
+		// We CANNOT throw an exception out of a COM interface method!
+		// Return a reasonable exception code.
+		hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+	}
+
+
+	// Cleanup
+	if( p_obj != NULL )
+	    p_obj->Release();
+	if( p_classdef != NULL )
+	    p_classdef->Release();
+	if( p_propdef != NULL )
+	    p_propdef->Release();
+	if( p_propval != NULL )
+	    p_propval->Release();
+	if( p_typedef != NULL )
+	    p_typedef->Release();
+	if( p_typedef_int != NULL )
+	    p_typedef_int->Release();
+
+
+	return hr;
+}
+
+
+
+HRESULT STDMETHODCALLTYPE
+    CAAFCDCIDescriptorHelper::SetComponentWidth (aafUInt32  ComponentWidth)
 {
 	checkAssertion(NULL != _cdcides);
 	return _cdcides->SetComponentWidth (ComponentWidth);
@@ -485,10 +981,11 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFCDCIDescriptorHelper::GetComponentWidth (aafInt32 *  pComponentWidth)
+    CAAFCDCIDescriptorHelper::GetComponentWidth (aafUInt32 *  pComponentWidth)
 {
 	checkAssertion(NULL != _cdcides);
-	return _cdcides->GetComponentWidth (pComponentWidth);
+	return _cdcides->GetComponentWidth (
+	    reinterpret_cast<aafInt32*>(pComponentWidth));
 }
 
 
@@ -507,6 +1004,24 @@ HRESULT STDMETHODCALLTYPE
 {
 	checkAssertion(NULL != _cdcides);
 	return _cdcides->GetHorizontalSubsampling (pHorizontalSubsampling);
+}
+
+
+
+HRESULT STDMETHODCALLTYPE
+    CAAFCDCIDescriptorHelper::SetVerticalSubsampling (aafUInt32  VerticalSubsampling)
+{
+	checkAssertion(NULL != _cdcides);
+	return _cdcides->SetVerticalSubsampling (VerticalSubsampling);
+}
+
+
+
+HRESULT STDMETHODCALLTYPE
+    CAAFCDCIDescriptorHelper::GetVerticalSubsampling (aafUInt32 *  pVerticalSubsampling)
+{
+	checkAssertion(NULL != _cdcides);
+	return _cdcides->GetVerticalSubsampling (pVerticalSubsampling);
 }
 
 
@@ -598,3 +1113,212 @@ HRESULT STDMETHODCALLTYPE
 	checkAssertion(NULL != _cdcides);
 	return _cdcides->GetPaddingBits (pPaddingBits);
 }
+
+
+
+// MediaComposer property extensions to AAFDigitalImageDescriptor.
+const aafUID_t kAAFPropID_DIDResolutionID = { 0xce2aca4d, 0x51ab, 0x11d3, { 0xa0, 0x24, 0x0, 0x60, 0x94, 0xeb, 0x75, 0xcb } };
+const aafUID_t kAAFPropID_DIDFrameSampleSize = { 0xce2aca50, 0x51ab, 0x11d3, { 0xa0, 0x24, 0x0, 0x60, 0x94, 0xeb, 0x75, 0xcb } };
+
+HRESULT STDMETHODCALLTYPE
+    CAAFCDCIDescriptorHelper::SetResolutionID( aafInt32  resolutionID )
+{
+	HRESULT			hr = S_OK;
+	IAAFObject		*p_obj = NULL;
+	IAAFClassDef		*p_classdef = NULL;
+	IAAFPropertyDef		*p_propdef = NULL;
+	IAAFPropertyValue	*p_propval = NULL;
+	IAAFTypeDef		*p_typedef = NULL;
+	IAAFTypeDefInt		*p_typedef_int = NULL;
+
+
+	checkAssertion(NULL != _dides);
+
+	try
+	{
+	    // Get DigitalImageDescriptor class definition
+	    checkResult( _dides->QueryInterface( IID_IAAFObject, 
+		(void**)&p_obj ) );
+
+	    checkResult( p_obj->GetDefinition( &p_classdef ) );
+
+
+	    // Get ResolutionID property definition
+	    checkResult( p_classdef->LookupPropertyDef( 
+		kAAFPropID_DIDResolutionID, &p_propdef ) );
+
+	    checkResult( p_propdef->GetTypeDef( &p_typedef ) );
+
+	    checkResult( p_typedef->QueryInterface( IID_IAAFTypeDefInt, 
+		(void**)&p_typedef_int ) );
+
+
+	    // Try to get prop value. If it doesn't exist, create it.
+	    hr = p_obj->GetPropertyValue( p_propdef, &p_propval );
+	    if( hr != AAFRESULT_SUCCESS )
+	    {
+		if( hr == AAFRESULT_PROP_NOT_PRESENT )
+		{
+		    checkResult( p_typedef_int->CreateValue( 
+			reinterpret_cast<aafMemPtr_t>(&resolutionID), 
+			sizeof(resolutionID), &p_propval ) );
+
+		    // At this point hr equals AAFRESULT_PROP_NOT_PRESENT.
+		    // Reset it.
+		    hr = AAFRESULT_SUCCESS;
+		}
+		else
+		    throw hr;
+	    }
+	    else
+	    {
+		// Property value exists, modify it.
+		checkResult( p_typedef_int->SetInteger( 
+		    p_propval, reinterpret_cast<aafMemPtr_t>(&resolutionID), 
+		    sizeof(resolutionID) ) );
+	    }
+
+	    // Set modified property value.
+	    checkResult( p_obj->SetPropertyValue( p_propdef, p_propval ) );
+	}
+	catch (HRESULT& rhr)
+	{
+		hr = rhr; // return thrown error code.
+	}
+	catch (...)
+	{
+		// We CANNOT throw an exception out of a COM interface method!
+		// Return a reasonable exception code.
+		hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+	}
+
+
+	// Cleanup
+	if( p_obj != NULL )
+	    p_obj->Release();
+	if( p_classdef != NULL )
+	    p_classdef->Release();
+	if( p_propdef != NULL )
+	    p_propdef->Release();
+	if( p_propval != NULL )
+	    p_propval->Release();
+	if( p_typedef != NULL )
+	    p_typedef->Release();
+	if( p_typedef_int != NULL )
+	    p_typedef_int->Release();
+
+
+	return hr;
+}
+
+
+
+HRESULT STDMETHODCALLTYPE
+    CAAFCDCIDescriptorHelper::SetFrameSampleSize( aafInt32 frameSampleSize )
+{
+	HRESULT			hr = S_OK;
+	IAAFObject		*p_obj = NULL;
+	IAAFClassDef		*p_classdef = NULL;
+	IAAFPropertyDef		*p_propdef = NULL;
+	IAAFPropertyValue	*p_propval = NULL;
+	IAAFTypeDef		*p_typedef = NULL;
+	IAAFTypeDefInt		*p_typedef_int = NULL;
+
+
+	checkAssertion(NULL != _dides);
+
+	try
+	{
+	    checkResult( _dides->QueryInterface( IID_IAAFObject, 
+		(void**)&p_obj ) );
+
+	    checkResult( p_obj->GetDefinition( &p_classdef ) );
+
+	    checkResult( p_classdef->LookupPropertyDef( 
+		kAAFPropID_DIDFrameSampleSize, &p_propdef));
+
+	    checkResult( p_propdef->GetTypeDef( &p_typedef ) );
+
+	    checkResult( p_typedef->QueryInterface( IID_IAAFTypeDefInt, 
+		(void**)&p_typedef_int ) );
+
+	    // Try to get prop value. If it doesn't exist, create it.
+	    hr = p_obj->GetPropertyValue( p_propdef, &p_propval );
+	    if( hr != AAFRESULT_SUCCESS )
+	    {
+		if( hr == AAFRESULT_PROP_NOT_PRESENT )
+		{
+		    checkResult( p_typedef_int->CreateValue( 
+			reinterpret_cast<aafMemPtr_t>(&frameSampleSize), 
+			sizeof(frameSampleSize), &p_propval ) );
+
+		    // At this point hr equals AAFRESULT_PROP_NOT_PRESENT.
+		    // Reset it.
+		    hr = AAFRESULT_SUCCESS;
+		}
+		else
+		    throw hr;
+	    }
+	    else
+	    {
+		checkResult( p_typedef_int->SetInteger( 
+		    p_propval, 
+		    reinterpret_cast<aafMemPtr_t>(&frameSampleSize),
+		    sizeof(frameSampleSize) ) );
+	    }
+
+	    checkResult( p_obj->SetPropertyValue( p_propdef, p_propval ) );
+	}
+	catch (HRESULT& rhr)
+	{
+		hr = rhr; // return thrown error code.
+	}
+	catch (...)
+	{
+		// We CANNOT throw an exception out of a COM interface method!
+		// Return a reasonable exception code.
+		hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+	}
+
+
+	// Cleanup
+	if( p_obj != NULL )
+	    p_obj->Release();
+	if( p_classdef != NULL )
+	    p_classdef->Release();
+	if( p_propdef != NULL )
+	    p_propdef->Release();
+	if( p_propval != NULL )
+	    p_propval->Release();
+	if( p_typedef != NULL )
+	    p_typedef->Release();
+	if( p_typedef_int != NULL )
+	    p_typedef_int->Release();
+
+
+	return hr;
+}
+
+
+
+HRESULT STDMETHODCALLTYPE CAAFCDCIDescriptorHelper::SetMCProps( 
+    aafInt32	resolutionID,
+    aafInt32	frameSampleSize )
+{
+    HRESULT		hr = S_OK;
+
+
+    hr = SetResolutionID( resolutionID );
+
+    if( hr == S_OK )
+	hr = SetFrameSampleSize( frameSampleSize );
+
+    // {EDB35391-6D30-11d3-A036-006094EB75CB}
+    aafUID_t AAF_CMPR_AUNC422 = { 0xedb35391, 0x6d30, 0x11d3, { 0xa0, 0x36, 0x0, 0x60, 0x94, 0xeb, 0x75, 0xcb } };
+
+    if( hr == S_OK )
+	hr = SetCompression( AAF_CMPR_AUNC422 );
+
+    return hr;
+}
+
