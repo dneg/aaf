@@ -49,6 +49,8 @@ const CLSID CLSID_AAFJPEGCodec =
 
 const aafUID_t kAAFPropID_CDCIOffsetToFrameIndexes = { 0x9d15fca3, 0x54c5, 0x11d3, { 0xa0, 0x29, 0x0, 0x60, 0x94, 0xeb, 0x75, 0xcb } };
 const aafUID_t kAAFPropID_DIDFrameIndexByteOrder = { 0xb57e925d, 0x170d, 0x11d4, { 0xa0, 0x8f, 0x0, 0x60, 0x94, 0xeb, 0x75, 0xcb } };
+const aafUID_t kAAFPropID_DIDResolutionID = { 0xce2aca4d, 0x51ab, 0x11d3, { 0xa0, 0x24, 0x0, 0x60, 0x94, 0xeb, 0x75, 0xcb } };
+const aafUID_t kAAFPropID_DIDFrameSampleSize = { 0xce2aca50, 0x51ab, 0x11d3, { 0xa0, 0x24, 0x0, 0x60, 0x94, 0xeb, 0x75, 0xcb } };
 
 // The minimum number of elements added to the current sample index
 // during a resize operation. (value same as in omcJPEG.c)
@@ -313,6 +315,74 @@ HRESULT STDMETHODCALLTYPE
 	return AAFRESULT_SUCCESS;
 }
 
+void CAAFJPEGCodec::CreateLegacyPropDefs(IAAFDictionary *p_dict)
+{
+	IAAFPropertyDef			*pPropertyDef = NULL;
+	IAAFTypeDef				*pTypeDef = NULL;
+	IAAFClassDef            *pcd = 0;
+	checkResult(p_dict->LookupClassDef(AUID_AAFCDCIDescriptor, &pcd));
+	if(pcd->LookupPropertyDef(kAAFPropID_CDCIOffsetToFrameIndexes, &pPropertyDef) != AAFRESULT_SUCCESS)
+	{
+		checkResult(p_dict->LookupTypeDef(kAAFTypeID_Int32, &pTypeDef));
+		checkResult(pcd->RegisterOptionalPropertyDef (kAAFPropID_CDCIOffsetToFrameIndexes,
+			L"OffsetToFrameIndexes",
+			pTypeDef, &pPropertyDef));
+		pTypeDef->Release();
+		pTypeDef = NULL;
+		pPropertyDef->Release();
+		pPropertyDef = NULL;
+	}
+	if(pcd->LookupPropertyDef(kAAFPropID_DIDFrameIndexByteOrder, &pPropertyDef) != AAFRESULT_SUCCESS)
+	{
+		checkResult(p_dict->LookupTypeDef(kAAFTypeID_Int16, &pTypeDef));
+		checkResult(pcd->RegisterOptionalPropertyDef (kAAFPropID_DIDFrameIndexByteOrder,
+			L"FrameIndexByteOrder",
+			pTypeDef, &pPropertyDef));
+		pTypeDef->Release();
+		pTypeDef = NULL;
+		pPropertyDef->Release();
+		pPropertyDef = NULL;
+	}		
+	if(pcd->LookupPropertyDef(kAAFPropID_DIDResolutionID, &pPropertyDef) != AAFRESULT_SUCCESS)
+	{
+		checkResult(p_dict->LookupTypeDef(kAAFTypeID_Int32, &pTypeDef));
+		checkResult(pcd->RegisterOptionalPropertyDef (kAAFPropID_DIDResolutionID,
+			L"ResolutionID",
+			pTypeDef, &pPropertyDef));
+		pTypeDef->Release();
+		pTypeDef = NULL;
+		pPropertyDef->Release();
+		pPropertyDef = NULL;
+	}		
+	if(pcd->LookupPropertyDef(kAAFPropID_DIDFrameSampleSize, &pPropertyDef) != AAFRESULT_SUCCESS)
+	{
+		checkResult(p_dict->LookupTypeDef(kAAFTypeID_Int32, &pTypeDef));
+		checkResult(pcd->RegisterOptionalPropertyDef (kAAFPropID_DIDFrameSampleSize,
+			L"FrameSampleSize",
+			pTypeDef, &pPropertyDef));
+		pTypeDef->Release();
+		pTypeDef = NULL;
+		pPropertyDef->Release();
+		pPropertyDef = NULL;
+	}		
+	if (pcd)
+	{
+		pcd->Release ();
+		pcd = 0;
+	}
+	if (pPropertyDef)
+	{
+		pPropertyDef->Release ();
+		pPropertyDef = 0;
+	}
+	if (pTypeDef)
+	{
+		pTypeDef->Release ();
+		pTypeDef = 0;
+	}
+}
+
+
 HRESULT STDMETHODCALLTYPE
     CAAFJPEGCodec::GetIndexedDefinitionObject (aafUInt32 index, IAAFDictionary *dict, IAAFDefObject **def)
 {
@@ -333,6 +403,7 @@ HRESULT STDMETHODCALLTYPE
 	try
 	{
 		//!!!Later, add in dataDefs supported & filedescriptor class
+		CreateLegacyPropDefs(dict);
 
 		// Create the Codec Definition:
 	    checkResult(dict->LookupClassDef(AUID_AAFCodecDef, &pcd));
@@ -367,48 +438,7 @@ HRESULT STDMETHODCALLTYPE
 		*def = obj; // reference count already incremented, we do not need to call AddRef().
 		obj = NULL;
 		{
-			IAAFPropertyDef			*pPropertyDef = NULL;
-			IAAFTypeDef				*pTypeDef = NULL;
-			IAAFClassDef            *pcd = 0;
-			checkResult(dict->LookupClassDef(AUID_AAFCDCIDescriptor, &pcd));
-			if(pcd->LookupPropertyDef(kAAFPropID_CDCIOffsetToFrameIndexes, &pPropertyDef) != AAFRESULT_SUCCESS)
-			{
-				checkResult(dict->LookupTypeDef(kAAFTypeID_Int32, &pTypeDef));
-				checkResult(pcd->RegisterOptionalPropertyDef (kAAFPropID_CDCIOffsetToFrameIndexes,
-					L"OffsetToFrameIndexes",
-					pTypeDef, &pPropertyDef));
-				pTypeDef->Release();
-				pTypeDef = NULL;
-				pPropertyDef->Release();
-				pPropertyDef = NULL;
-			}
-			if(pcd->LookupPropertyDef(kAAFPropID_DIDFrameIndexByteOrder, &pPropertyDef) != AAFRESULT_SUCCESS)
-			{
-				checkResult(dict->LookupTypeDef(kAAFTypeID_Int16, &pTypeDef));
-				checkResult(pcd->RegisterOptionalPropertyDef (kAAFPropID_DIDFrameIndexByteOrder,
-					L"FrameIndexByteOrder",
-					pTypeDef, &pPropertyDef));
-				pTypeDef->Release();
-				pTypeDef = NULL;
-				pPropertyDef->Release();
-				pPropertyDef = NULL;
-			}		
 			
-			if (pcd)
-			{
-				pcd->Release ();
-				pcd = 0;
-			}
-			if (pPropertyDef)
-			{
-				pPropertyDef->Release ();
-				pPropertyDef = 0;
-			}
-			if (pTypeDef)
-			{
-				pTypeDef->Release ();
-				pTypeDef = 0;
-			}
 			
 		}
 	}
@@ -873,6 +903,7 @@ CAAFJPEGCodec::Create (IAAFSourceMob *unk,
 		checkResult(AddSampleIndexEntry(0));
 		// setupStream()
 
+		checkResult(_descriptorHelper.SetMCProps( 76, _fileBytesPerSample ) );
 	}
 	catch (HRESULT& rhr)
 	{
@@ -1033,7 +1064,7 @@ HRESULT STDMETHODCALLTYPE
 
 		// Attempt to create and load the sample index from the end of the essence stream.
 		// For now just fail if the index cannot be found.
-		aafLength_t samples;
+		aafLength_t samples = 0;
 
 		// Make sure that we have created the sample index.
 		if(ReadNumberOfSamples(_stream, samples) == AAFRESULT_SUCCESS)
@@ -1046,7 +1077,7 @@ HRESULT STDMETHODCALLTYPE
 		{
 			aafUInt32	offset/*, bytesRead*/;
 			aafUInt16	/*localSamples, */fileByteOrder;
-			aafLength_t	streamLength, frameIndexBytes, frameIndexCount;
+			aafLength_t	streamLength, frameIndexBytes;
 
 			checkResult(_descriptorHelper.GetOffsetFrameIndexes(&offset));
 			checkResult(_descriptorHelper.GetFrameIndexByteOrder(&fileByteOrder));
@@ -1059,12 +1090,12 @@ HRESULT STDMETHODCALLTYPE
 //			localSamples--;			// Legacy systems put out len including one extra frame
 			checkResult(_stream->GetLength (&streamLength));
 			frameIndexBytes = streamLength - offset;
-			frameIndexCount = frameIndexBytes / sizeof(aafUInt32);
-			// This number will be too large, because lagacy sstems pad with zeros until
+			samples = frameIndexBytes / sizeof(aafUInt32);
+			// This number will be too large, because legacy systems pad with zeros until
 			// sector boundries, set the number of samples AGAIN when we do the actual import
 			// and find a zero frame offset at a position other than zero in the frame table.
-			checkResult(AllocateSampleIndex(frameIndexCount));
-			SetNumberOfSamples(frameIndexCount);
+			checkResult(AllocateSampleIndex(samples));
+			SetNumberOfSamples(samples);
 			checkResult(ReadSampleIndex32(fileByteOrder));
 		}
 
@@ -1953,6 +1984,7 @@ void CAAFJPEGCodec::UpdateCalculatedData(void)
 	_fileBytesPerSample = (_bitsPerSample + 7) / 8;
 	_memBytesPerSample = _fileBytesPerSample;
 
+	checkResult(_descriptorHelper.SetMCProps( 76, _fileBytesPerSample ) );
 }
 
 
