@@ -342,10 +342,6 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFPulldown.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\impl\ImplAAFReferenceValue.cpp"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFRGBADescriptor.cpp"
 # End Source File
 # Begin Source File
@@ -583,10 +579,6 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFPropertyDefs.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFPropertyValues.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFReferenceValues.cpp"
 # End Source File
 # Begin Source File
 

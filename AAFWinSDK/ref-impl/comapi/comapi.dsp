@@ -354,10 +354,6 @@ SOURCE="..\..\..\ref-impl\src\com-api\CAAFPulldown.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\com-api\CAAFReferenceValue.cpp"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFRGBADescriptor.cpp"
 # End Source File
 # Begin Source File
@@ -603,10 +599,6 @@ SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFPropertyDefs.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFPropertyValues.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFReferenceValues.cpp"
 # End Source File
 # Begin Source File
 
