@@ -1136,154 +1136,81 @@ AAFDotInstanceMapper::GetIntValue( AxTypeDefInt &axTypeDefInt, AxPropertyValue a
 {
    bool fault = false;
    IAAFPropertyValueSP propValue( axPropertyValue.GetValue() );
-   string value;
-   if ( axTypeDefInt.IsSigned() ) {
-      switch ( axTypeDefInt.GetSize() ) {
-	 case sizeof( aafInt8 ) :
-	 { 
-	    aafInt8 i;
-	    axTypeDefInt.GetInteger( propValue, &i );
-	    ostringstream ostrs;
-	    if ( displayHex )
-	    {
-	       ostrs << hex << "0x" << (int)i;
+
+   aafUInt8 bytes[8];
+   axTypeDefInt.GetInteger(propValue, &bytes);
+
+   char buffer[22];
+   int strSize = 0;
+   switch (axTypeDefInt.GetSize()) {
+      case 1:
+	 if (axTypeDefInt.IsSigned()) {
+	    if (displayHex) {
+	       strSize = sprintf(buffer, "0x%x", *((aafInt8*)bytes));
+	    } else {
+	       strSize = sprintf(buffer, "%d", *((aafInt8*)bytes));
 	    }
-	    else
-	    {
-	       ostrs << dec << (int)i;
+	 } else {
+	    if (displayHex) {
+	       strSize = sprintf(buffer, "0x%u", *((aafUInt8*)bytes));
+	    } else {
+	       strSize = sprintf(buffer, "%u", *((aafUInt8*)bytes));
 	    }
-	    value = ostrs.str();
-	    break;
 	 }
-	 case sizeof( aafInt16 ) :
-	 { 
-	    aafInt16 i;
-	    axTypeDefInt.GetInteger( propValue, &i );
-	    ostringstream ostrs;
-	    if ( displayHex )
-	    {
-	       ostrs << hex << "0x" << i;
+	 break;
+      case 2:
+	 if (axTypeDefInt.IsSigned()) {
+	    if (displayHex) {
+	       strSize = sprintf(buffer, "0x%x", *((aafInt16*)bytes));
+	    } else {
+	       strSize = sprintf(buffer, "%d", *((aafInt16*)bytes));
 	    }
-	    else
-	    {
-	       ostrs << dec << i;
+	 } else {
+	    if (displayHex) {
+	       strSize = sprintf(buffer, "0x%x", *((aafUInt16*)bytes));
+	    } else {
+	       strSize = sprintf(buffer, "%u", *((aafUInt16*)bytes));
 	    }
-	    value = ostrs.str();
-	    break;
 	 }
-	 case sizeof( aafInt32 ) :
-	 { 
-	    aafInt32 i;
-	    axTypeDefInt.GetInteger( propValue, &i );
-	    ostringstream ostrs;
-	    if ( displayHex )
-	    {
-	       ostrs << hex << "0x" << i;
+	 break;
+      case 4:
+	 if (axTypeDefInt.IsSigned()) {
+	    if (displayHex) {
+	       strSize = sprintf(buffer, "0x%lx", *((aafInt32*)bytes));
+	    } else {
+	       strSize = sprintf(buffer, "%ld", *((aafInt32*)bytes));
 	    }
-	    else
-	    {
-	       ostrs << dec << i;
+	 } else {
+	    if (displayHex) {
+	       strSize = sprintf(buffer, "0x%lx", *((aafUInt32*)bytes));
+	    } else {
+	       strSize = sprintf(buffer, "%lu", *((aafUInt32*)bytes));
 	    }
-	    value = ostrs.str();
-	    break;
 	 }
-	 case sizeof( aafInt64 ) :
-	 { 
-	    aafInt64 i;
-	    axTypeDefInt.GetInteger( propValue, &i );
-	    ostringstream ostrs;
-	    if ( displayHex )
-	    {
-	       ostrs << hex << "0x" << (long int)i;
+	 break;
+      case 8:
+	 if (axTypeDefInt.IsSigned()) {
+	    if (displayHex) {
+	       strSize = sprintf(buffer, "0x%llx", *((aafInt64*)bytes));
+	    } else {
+	       strSize = sprintf(buffer, "%lld", *((aafInt64*)bytes));
 	    }
-	    else
-	    {
-	       ostrs << dec << (long int)i;
+	 } else {
+	    if (displayHex) {
+	       strSize = sprintf(buffer, "0x%llx", *((aafUInt64*)bytes));
+	    } else {
+	       strSize = sprintf(buffer, "%llu", *((aafUInt64*)bytes));
 	    }
-	    value = ostrs.str();
-	    break;
 	 }
-	 default:
-	    fault = true;
-      }
-   }
-   else {
-      switch ( axTypeDefInt.GetSize() ) {
-	 case sizeof( aafUInt8 ) :
-	 { 
-	    aafUInt8 i;
-	    axTypeDefInt.GetInteger( propValue, &i );
-	    ostringstream ostrs;
-	    if ( displayHex )
-	    {
-	       ostrs << hex << "0x" << (int)i;
-	    }
-	    else
-	    {
-	       ostrs << dec << (int)i;
-	    }
-	    value = ostrs.str();
-	    break;
-	 }
-	 case sizeof( aafUInt16 ) :
-	 { 
-	    aafUInt16 i;
-	    axTypeDefInt.GetInteger( propValue, &i );
-	    ostringstream ostrs;
-	    if ( displayHex )
-	    {
-	       ostrs << hex << "0x" << i;
-	    }
-	    else
-	    {
-	       ostrs << dec << i;
-	    }
-	    value = ostrs.str();
-	    break;
-	 }
-	 case sizeof( aafUInt32 ) :
-	 { 
-	    aafUInt32 i;
-	    axTypeDefInt.GetInteger( propValue, &i );
-	    ostringstream ostrs;
-	    if ( displayHex )
-	    {
-	       ostrs << hex << "0x" << i;
-	    }
-	    else
-	    {
-	       ostrs << dec << i;
-	    }
-	    value = ostrs.str();
-	    break;
-	 }
-	 case sizeof( aafUInt64 ) :
-	 { 
-	    aafUInt64 i;
-	    axTypeDefInt.GetInteger( propValue, &i );
-	    ostringstream ostrs;
-	    if ( displayHex )
-	    {
-	       ostrs << hex << "0x" << (long int)i;
-	    }
-	    else
-	    {
-	       ostrs << dec << (long int)i;
-	    }
-	    value = ostrs.str();
-	    break;
-	 }
-	 default:
-	    fault = true;
-      }
-   }
-	
-   if ( fault ) 
-   {
-      throw;
+	 break;
+      default:
+	 cerr << "Error: Unsupported integer size." << endl;
+	 throw;
    }
 
-   return value;
+   assert(strSize >= 0);
+
+   return buffer;
 }
 
 
