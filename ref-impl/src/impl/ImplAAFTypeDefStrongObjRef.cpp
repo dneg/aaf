@@ -126,11 +126,8 @@ AAFRESULT STDMETHODCALLTYPE
   if (! ppObjType) return AAFRESULT_NULL_PARAM;
 
   *ppObjType = _referencedType;
-  // BobT note: We don't have class defs yet, so don't require
-  // this...
-  // assert (*ppObjType);
-  if (*ppObjType)
-	(*ppObjType)->AcquireReference ();
+  assert (*ppObjType);
+  (*ppObjType)->AcquireReference ();
 
   return AAFRESULT_SUCCESS;
 }
