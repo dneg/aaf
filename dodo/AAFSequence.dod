@@ -8,35 +8,49 @@ AAFSegment\
 #c
 #import ./AAFSegment.exp
 AD_HEAD
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
 AD_FORWARD_DECLARATION(AAFTimecode)
 AD_FORWARD_DECLARATION(AAFComponent)
 AD_FORWARD_DECLARATION(AAFSegment)
 AD_FORWARD_DECLARATION(AAFDataDef)
-
+AD_FORWARD_DECLARATION(EnumAAFComponents)
 AD_CLASS_UUID(66e855f1, 2bc2, 11d2, bf, aa, 00, 60, 97, 11, 62, 12)
 
 AD_DEFAULT_UUID(66e855f0, 2bc2, 11d2, bf, aa, 00, 60, 97, 11, 62, 12)
 AD_CLASS_BEGIN
-
 AD_XMETHOD1(SetInitialValue,
-			[in],objIn, AAFDataDef, datadef, Data Definition object,
-// This function creates a new sequence object with the given
-// property values.  The length of the sequence is initially set to
-// 0.  When components are appended to the sequence with the
-// omfiSequenceAppendCpnt\(\) call\, the length of the appended
-// component is added to the length of the sequence.)
+			[in],
+			objIn,
+			AAFDataDef,
+			pDatadef,
+			Data Definition object,
+			This function creates a new sequence object with the given
+  // property values.  The length of the sequence is initially set to
+  // 0.  When components are appended to the sequence with the
+  // AppendCpnt\(\) call\, the length of the appended component is
+  // added to the length of the sequence.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pDataDef pointer is valid.
+  // 
+  // If this method fails no state is changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pDataDef is null.)
+
 
 AD_XMETHOD1(AppendCpnt,
-			[in],objIn,AAFComponent,component,
-		  Component to append to the sequence,
+			[in],
+			objIn,
+			AAFComponent,
+			pComponent,
+			Component to append to the sequence,
   // This function appends the input component to the given sequence\,
   // enforcing bottom up creation of mobs.  The length of the sequence
   // is incremented by the size of the component\, unless the component
@@ -44,19 +58,99 @@ AD_XMETHOD1(AppendCpnt,
   // that it is not the first object in a transition\, and that it is
   // not neighboring another transition.  It also verifies that there
   // is enough source material on either side of the transition.  The
-  // function also verifies that the datakinds are compatible.)
+  // function also verifies that the datakinds are compatible.
+  // 
+  // Succeeds if all of the following are true:
+  // - the -pComponent pointer is valid.
+  // 
+  // If this method fails no state is changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pComponent is null.)
 
-AD_METHOD1(GetNumCpnts,
-		   [out],aafInt32 *,numCpnts,Number of components in sequence,
-  // This set of functions returns the required property values for
-  // the object identified by XXX.  If a value is not requested\\\, a
-  // NULL should be passed into the parameter corresponding to that
-  // property. For example --
-  //          omfiMobSlotInfo\\\(file\\\, slotObj\\\, NULL\\\, &segment\\\);
-  // would not return the editRate property from a mob slot.
-  // Additional functions are provided to return optional properties.)
+
+AD_XMETHOD1(RemoveCpnt,
+			[in],
+			objIn,
+			AAFComponent,
+			pComponent,
+			Component to append to the sequence,
+			This function removes the input component from the given
+  // sequence\, deleting it from any associated AAF file.  The length
+  // of the sequence is decremented by the size of the component.
+  // 
+  // Succeeds if all of the following are true:
+  // - the -pComponent pointer is valid.
+  // 
+  // If this method fails no state is changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pComponent is null.)
+
+
+AD_XMETHOD1(GetNumCpnts,
+			[out],
+			objPass,
+			aafInt32 *,
+			pNumCpnts,
+			Number of components,
+  // This function returns the number of components in the sequence.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pNumCpnts pointer is valid.
+  // 
+  // If this method fails no state is changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pNumCpnts is null.)
+
+
+AD_XMETHOD1(EnumComponents,
+			[out\, retval],
+			objOut,
+			EnumAAFComponents,
+			ppEnum,
+			Component Enumeration,
+			Places an enumerator for the components contained in the sequence
+  // into the *ppEnum argument.
+  // 
+  // Succeeds if all of the following are true:
+  // - the ppEnum pointer is valid.
+  // 
+  // If this method fails nothing will be written to *ppEnum.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppEnum is null.)
+
 
 AD_OVERRIDE(.method-SegmentOffsetToTC)
 AD_OVERRIDE(.method-SegmentTCToOffset)
-
 AD_CLASS_END
