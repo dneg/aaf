@@ -35,7 +35,7 @@
 #include "aafCvt.h" 
 #include "AAFResult.h"
 #include "AAFDefUIDs.h"
-
+#include "ImplAAFHeader.h"
 
 ImplAAFSourceClip::ImplAAFSourceClip ():
 	_fadeInLen(		PID_SOURCECLIP_FADEINLEN,		"fadeInLen"),
@@ -147,8 +147,8 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFSourceClip::ResolveRef (ImplAAFMob ** mob)
 {
     aafSourceRef_t sourceRef;
-	ImplAAFObject * head = NULL;
 	ImplAAFMob * tmpMob = NULL;
+	ImplAAFHeader *head = NULL;
 	aafInt32 index = 0;
     AAFRESULT aafError = AAFRESULT_SUCCESS;
 
@@ -167,10 +167,8 @@ AAFRESULT STDMETHODCALLTYPE
 		 */
 
 		CHECK(GetRef(&sourceRef));
-
-#ifdef FULL_TOOLKIT
-		CHECK(_file->LookupMob(sourceRef.sourceID, mob));
-#endif
+		CHECK(MyHeadObject(&head));
+		CHECK(head->LookupMob(&sourceRef.sourceID, mob));
 	  } /* XPROTECT */
 
 	XEXCEPT
