@@ -146,6 +146,8 @@ typedef char OMCHAR;
 #else
 #define ios_base_fmtflags long int
 #endif
+#elif defined(__GNUC__) && (__GNUC__ >= 3)
+#define ios_base_fmtflags std::ios_base::fmtflags
 #else
 #define ios_base_fmtflags long int
 #endif
