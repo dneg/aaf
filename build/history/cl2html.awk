@@ -1,9 +1,9 @@
 #
 # Generate an html table from a change log (output of cvs2cl.pl)
 #
-# $  build/history/cvs2cl.pl --stdout -rx:y > Changes-x-y.log
+# $ cvs2cl.pl --stdout -rx:y > Changes-x-y.log
 #
-# $ cat Changes-x-y.log | awk -f build/history/cl2html.awk > Changes-x-y.html
+# $ cat Changes-x-y.log | awk -f cl2html.awk > Changes-x-y.html
 #
 #
 # Tim Bingham

@@ -11,7 +11,7 @@
 # Example :
 #
 # $ cvs log > Everything.log
-# $ cat Everything.log | awk -f build/history/flatlog.awk  > Everything.flog
+# $ cat Everything.log | awk -f flatlog.awk  > Everything.flog
 #
 # The following prints the date and time of the most recent change
 # preceeding application of the Build-0505 tag.
