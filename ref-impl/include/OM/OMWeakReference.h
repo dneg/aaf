@@ -31,6 +31,8 @@
 
 #include "OMRefProperty.h"
 
+class OMWeakObjectReference;
+
   // @class Persistent weak reference (pointer to shared object)
   //        properties supported by the Object Manager.
   //   @base public | <c OMReferenceProperty>
@@ -45,6 +47,8 @@ public:
 
     // @cmember Destructor.
   ~OMWeakReference(void);
+
+  virtual OMWeakObjectReference& reference(void) const = 0;
 
   virtual OMPropertyId keyPropertyId(void) const = 0;
 
