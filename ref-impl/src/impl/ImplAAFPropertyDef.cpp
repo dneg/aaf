@@ -249,7 +249,7 @@ const char* ImplAAFPropertyDef::name(void) const
 }
 
 
-OMPropertyId ImplAAFPropertyDef::identification(void) const
+OMPropertyId ImplAAFPropertyDef::localIdentification(void) const
 {
   return _pid;
 }
