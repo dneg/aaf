@@ -56,6 +56,14 @@
 #include "ImplEnumAAFTaggedValues.h"
 #endif
 
+#ifndef __ImplAAFKLVData_h__
+#include "ImplAAFKLVData.h"
+#endif
+
+#ifndef __ImplEnumAAFKLVData_h__
+#include "ImplEnumAAFKLVData.h"
+#endif
+
 #include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
 
@@ -96,6 +104,7 @@ extern "C" const aafClassID_t CLSID_EnumAAFMobSlots;
 extern "C" const aafClassID_t CLSID_EnumAAFTaggedValues;
 extern "C" const aafClassID_t CLSID_AAFFindSourceInfo;
 extern "C" const aafClassID_t CLSID_AAFTypeDefString;
+extern "C" const aafClassID_t CLSID_EnumAAFKLVData;
 
 ImplAAFMob::ImplAAFMob ()
 : _mobID(			PID_Mob_MobID,			"MobID"),
@@ -103,7 +112,8 @@ ImplAAFMob::ImplAAFMob ()
   _creationTime(    PID_Mob_CreationTime,	"CreationTime"),
   _lastModified(    PID_Mob_LastModified,	"LastModified"),
   _slots(			PID_Mob_Slots,			"Slots"),
-  _userComments(	PID_Mob_UserComments,	"UserComments")
+  _userComments(	PID_Mob_UserComments,	"UserComments"),
+  _KLVData(			PID_Mob_KLVData,		"KLVData")
 {
 	_persistentProperties.put(_mobID.address());
 	_persistentProperties.put(_name.address());
@@ -111,6 +121,7 @@ ImplAAFMob::ImplAAFMob ()
 	_persistentProperties.put(_lastModified.address());
 	_persistentProperties.put(_slots.address());
 	_persistentProperties.put(_userComments.address());
+	_persistentProperties.put(_KLVData.address());
 	(void)aafMobIDNew(&_mobID);		// Move this out of constructor when we get 2-stage create
 	AAFGetDateTime(&_creationTime);
 	AAFGetDateTime(&_lastModified);
@@ -140,6 +151,17 @@ ImplAAFMob::~ImplAAFMob ()
 			if (pTaggedValue)
 			  pTaggedValue->ReleaseReference();
 			pTaggedValue = 0;
+		}
+	}
+	if(_KLVData.isPresent())
+	{
+		size = _KLVData.getSize();
+		for (size_t j = 0; j < size; j++)
+		{
+			ImplAAFKLVData* pKLVData = _KLVData.setValueAt(0, j);
+			if (pKLVData)
+			  pKLVData->ReleaseReference();
+			pKLVData = 0;
 		}
 	}
 }
@@ -849,6 +871,100 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFMob::AppendKLVData (ImplAAFKLVData * pData)
+{
+	if (NULL == pData)
+		return AAFRESULT_NULL_PARAM;
+  if (pData->attached ())
+    return AAFRESULT_OBJECT_ALREADY_ATTACHED;
+
+	_KLVData.appendValue(pData);
+	pData->AcquireReference();
+	return AAFRESULT_SUCCESS;
+}
+
+//****************
+// RemoveKLVData()
+//
+AAFRESULT STDMETHODCALLTYPE
+	ImplAAFMob::RemoveKLVData
+        (ImplAAFKLVData * pData)
+{
+	if (! pData)
+		return AAFRESULT_NULL_PARAM;
+  if (!pData->attached ()) // object could not possibly be in container.
+    return AAFRESULT_OBJECT_NOT_ATTACHED;
+	if(!_KLVData.isPresent())
+		return AAFRESULT_PROP_NOT_PRESENT;
+	
+  size_t index;
+  if (_KLVData.findIndex (pData, index))
+  {
+	  _KLVData.removeAt(index);
+    // We have removed an element from a "stong reference container" so we must
+    // decrement the objects reference count. This will not delete the object
+    // since the caller must have alread acquired a reference. (transdel 2000-MAR-10)
+    pData->ReleaseReference ();
+  }
+  else
+  {
+    return AAFRESULT_OBJECT_NOT_FOUND;
+  }
+
+	return(AAFRESULT_SUCCESS);
+}
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFMob::CountKLVData (aafUInt32*  pNumComments)
+{
+	if (pNumComments == NULL)
+		return AAFRESULT_NULL_PARAM;
+
+	if(!_KLVData.isPresent())
+	{	// If the userComments property is not present then
+		// number of user comments is zero!
+		*pNumComments = 0; //return AAFRESULT_PROP_NOT_PRESENT;
+	}
+	else
+	{
+		*pNumComments = _KLVData.count();
+	}
+		
+	return(AAFRESULT_SUCCESS);
+}
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFMob::GetKLVData (ImplEnumAAFKLVData** ppEnum)
+{
+  if (NULL == ppEnum)
+	return AAFRESULT_NULL_PARAM;
+  *ppEnum = 0;
+	
+  ImplEnumAAFKLVData *theEnum = (ImplEnumAAFKLVData *)CreateImpl (CLSID_EnumAAFKLVData);
+	
+  XPROTECT()
+	{
+		OMStrongReferenceVectorIterator<ImplAAFKLVData>* iter = 
+			new OMStrongReferenceVectorIterator<ImplAAFKLVData>(_KLVData);
+		if(iter == 0)
+			RAISE(AAFRESULT_NOMEMORY);
+		CHECK(theEnum->SetIterator(this, iter));
+	  *ppEnum = theEnum;
+	}
+  XEXCEPT
+	{
+	  if (theEnum)
+		{
+		  theEnum->ReleaseReference();
+		  theEnum = 0;
+		}
+	  return(XCODE());
+	}
+  XEND;
+	
+  return(AAFRESULT_SUCCESS);
+}
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFMob::OffsetToMobTimecode (ImplAAFSegment *tcSlotID,
