@@ -71,7 +71,8 @@ inline void checkExpression(bool expression, HRESULT r)
 }
 
 #define TEST_NUM_INPUTS		1
-#define TEST_CATEGORY		L"Test Parameters"
+static const aafUID_t TEST_CATEGORY = 
+{ 0x9f0e730c, 0xbf8, 0x11d4, { 0xa3, 0x58, 0x0, 0x90, 0x27, 0xdf, 0xca, 0x6a } };
 #define TEST_BYPASS			1
 static const aafUID_t TEST_EFFECT_AUID = 
 { 0x12684769, 0xcd02, 0x11d3, { 0xa3, 0xf4, 0x0, 0x4, 0xac, 0x96, 0xa9, 0x37 } };
@@ -241,11 +242,11 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	IAAFDefObject*		pDefObject = NULL;
 	bool				bFileOpen = false;
 	aafBool				readIsTimeWarp;
-	aafUInt32			catLen;
 	aafInt32			checkNumInputs;
-	aafUInt32			checkBypass, testLen;
+	aafUInt32			checkBypass;
 	HRESULT				hr = S_OK;
-	wchar_t				checkCat[256], checkName[256];
+	wchar_t				checkName[256];
+	aafUID_t			checkCat;
 	wchar_t				testString[256];
 	aafUInt32			resultCount;
 	IAAFDataDefSP		pReadDataDef;
@@ -276,11 +277,8 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 		checkExpression(bResult == kAAFTrue, AAFRESULT_TEST_FAILED);
 		checkResult(pOperationDef->IsTimeWarp (&readIsTimeWarp));
 		checkExpression(readIsTimeWarp == kAAFFalse, AAFRESULT_TEST_FAILED);
-		checkResult(pOperationDef->GetCategoryBufLen (&catLen));
-		testLen = wcslen(TEST_CATEGORY);
-		checkResult(pOperationDef->GetCategory (checkCat, sizeof(checkCat)));
-		checkExpression(wcscmp(checkCat, TEST_CATEGORY) == 0, AAFRESULT_TEST_FAILED);
-		checkExpression(testLen == wcslen(checkCat), AAFRESULT_TEST_FAILED);
+		checkResult(pOperationDef->GetCategory (&checkCat));
+		checkExpression(memcmp(&checkCat, &TEST_CATEGORY, sizeof(aafUID_t)) == 0, AAFRESULT_TEST_FAILED);
 		checkResult(pOperationDef->GetBypass (&checkBypass));
 		checkExpression(checkBypass == TEST_BYPASS, AAFRESULT_TEST_FAILED);
 		checkResult(pOperationDef->GetNumberInputs (&checkNumInputs));
