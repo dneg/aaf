@@ -141,12 +141,10 @@ const aafUID_t aafFileKindAaf4KBinary = aafFileKindAafS4KBinary_Value;
 {0x42464141, 0x000d, 0x4d4f, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xff}};
 const aafUID_t aafSignature_Aaf_SSBinary = aafSignature_Aaf_SSBinary_Value; 
 
-
 // the signature actually stored in all AAF SS (4096) files
-// TO BE CONFIRMED
-// [060e2b34.0401.0105.0d010101.03020000]
+// [060e2b34.0302.0101.0d010201.02000000]
 #define aafSignature_Aaf_SSBin_4K_Value \
-{0x0101010d, 0x0203, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x05}};
+{0x0d010201, 0x0200, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x03, 0x02, 0x01, 0x01}};
 const aafUID_t aafSignature_Aaf_SSBin_4K = aafSignature_Aaf_SSBin_4K_Value;
 
 #endif // ! __AAFFileKinds_h__
