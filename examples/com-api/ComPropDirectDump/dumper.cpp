@@ -35,6 +35,7 @@
 
 #include "AAF.h"
 #include "AAFResult.h"
+#include "AAFStoredObjectIDs.h"
 #include "AAFTypeDefUIDs.h"
 #include <assert.h>
 #include <iostream.h>
@@ -59,6 +60,7 @@ typedef IAAFSmartPointer<IAAFDefObject>            IAAFDefObjectSP;
 typedef IAAFSmartPointer<IAAFDictionary>           IAAFDictionarySP;
 typedef IAAFSmartPointer<IAAFTypeDefCharacter>     IAAFTypeDefCharacterSP;
 typedef IAAFSmartPointer<IAAFTypeDefIndirect>      IAAFTypeDefIndirectSP;
+typedef IAAFSmartPointer<IAAFTypeDefOpaque>        IAAFTypeDefOpaqueSP;
 typedef IAAFSmartPointer<IAAFTypeDefInt>           IAAFTypeDefIntSP;
 typedef IAAFSmartPointer<IAAFTypeDefObjectRef>     IAAFTypeDefObjectRefSP;
 typedef IAAFSmartPointer<IAAFClassDef>             IAAFClassDefSP;
@@ -726,7 +728,7 @@ HRESULT dumpPropertyValue (IAAFPropertyValueSP pPVal,
 
 		case kAAFTypeCatIndirect:
 		  {
-			// Print out elements of array.
+			// Print out the actual value of the indirect type.
 			IAAFTypeDefIndirectSP pIndirectType;
 			checkResult(pTD->QueryInterface(IID_IAAFTypeDefIndirect,
 											(void**)&pIndirectType));
@@ -743,6 +745,54 @@ HRESULT dumpPropertyValue (IAAFPropertyValueSP pPVal,
 											os));
 			break;
 		  }
+
+    case kAAFTypeCatOpaque:
+      {
+			// Print out the actual value of the opaque type.
+			IAAFTypeDefOpaqueSP pOpaqueType;
+			checkResult(pTD->QueryInterface(IID_IAAFTypeDefOpaque,
+											(void**)&pOpaqueType));
+
+			os << "Value [opaque]:" << endl;
+
+      // Get the opaque type id
+      aafUID_t opaqueTypeID = {0};
+      checkResult(pOpaqueType->GetActualTypeID(pPVal, &opaqueTypeID));
+
+      // If not then register a corresponding opaque type in the
+      // dictionary that is a rename of UInt8Array.      
+      IAAFTypeDefSP pType;
+      if (FAILED(pDict->LookupTypeDef(opaqueTypeID, &pType)))
+      {
+        IAAFTypeDefSP pBaseType;
+        IAAFClassDefSP pRenamedClassDef;
+        IAAFTypeDefRenameSP pRenamedType;
+
+        checkResult(pDict->LookupTypeDef(kAAFTypeID_UInt8Array, &pBaseType));
+        checkResult(pDict->LookupClassDef(AUID_AAFTypeDefRename, &pRenamedClassDef));
+			  checkResult(pRenamedClassDef->CreateInstance(IID_IAAFTypeDefRename, (IUnknown **)&pRenamedType));
+			  checkResult(pRenamedType->Initialize (opaqueTypeID, pBaseType, L"Opaque Data"));
+        checkResult(pRenamedType->QueryInterface(IID_IAAFTypeDef, (void **)&pType));
+        checkResult(pDict->RegisterOpaqueTypeDef(pType));
+      }
+
+      // Opaque types objects also implement the indirect type interface
+      // to access the actual value data when the type is "known" either
+      // public or opaque.
+			IAAFTypeDefIndirectSP pIndirectType;
+			checkResult(pTD->QueryInterface(IID_IAAFTypeDefIndirect,
+											(void**)&pIndirectType));
+
+			// Get the actual value
+			IAAFPropertyValueSP pActualValue;
+			checkResult(pIndirectType->GetActualValue(pPVal, &pActualValue));
+			// recursively dump prop value
+			checkResult (dumpPropertyValue (pActualValue,
+											pDict,
+											indent+1,
+											os));
+      break;
+      }
 
 
 		default:
