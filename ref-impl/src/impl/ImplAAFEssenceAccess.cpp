@@ -110,7 +110,7 @@ ImplAAFEssenceAccess::Create (	  ImplAAFMasterMob *masterMob,
 	aafUID_t			fileMobUID, audioDDEF = DDEF_Audio;
 	aafLength_t			oneLength = CvtInt32toLength(1, oneLength);
 	aafRational_t		audioRate = { 44100, 1 };
-	AAFRESULT			aafError = OM_ERR_NONE;
+	AAFRESULT			aafError = AAFRESULT_SUCCESS;
 	ImplAAFSourceMob	*fileMob;
 	ImplAAFMobSlot		*tmpSlot;
 	ImplAAFHeader		*head;
@@ -142,16 +142,11 @@ ImplAAFEssenceAccess::Create (	  ImplAAFMasterMob *masterMob,
 		_masterMob = masterMob;
 		_fileMob = fileMob;
 		_channels = (aafSubChannel_t *) new aafSubChannel_t[1];
-		XASSERT((_channels != NULL), OM_ERR_NOMEMORY);
+		XASSERT((_channels != NULL), AAFRESULT_NOMEMORY);
 		_numChannels = 1;		 
-		CvtInt32toPosition(0, _dataStart);
-/*!!!!		CvtInt32toLength(0, _channels[0].numSamples);
-		_channels[0].dataOffset = _dataStart;
-		_channels[0].mediaKind = mediaKind;
+/*!!!!	_channels[0].mediaKind = mediaKind;
 		_channels[0].trackID = masterSlotID;
 		_channels[0].physicalOutChan = 1;
-		_channels[0].sampleRate = sampleRate;
-		CvtInt32toLength(0, _channels[0].numSamples);
 */		
 		//!!! Handle tje other cases of destination and format (raw, no locator not allowed)
 		//	_destination = NULL;
@@ -303,7 +298,7 @@ AAFRESULT STDMETHODCALLTYPE
 	aafAssertMediaInitComplete(_mainFile);
 	if (_mainFile->isAAFMedia())
 	{
-	   aafAssert(fileMob != NULL, _mainFile, OM_ERR_INVALID_FILE_MOB);
+	   aafAssert(fileMob != NULL, _mainFile, AAFRESULT_INVALID_FILE_MOB);
 	}
 	XPROTECT(_mainFile)
 	{
@@ -326,7 +321,7 @@ AAFRESULT STDMETHODCALLTYPE
 			  /* My fix to Roger's change */
 			  /* */
 			  if(_mdes->ReadString(OMMDESCodecID, codecIDString, 
-											OMUNIQUENAME_SIZE) == OM_ERR_NONE)
+											OMUNIQUENAME_SIZE) == AAFRESULT_SUCCESS)
 				{
 					variety = strchr(codecIDString, ':');
 					if(variety != NULL)
@@ -355,12 +350,12 @@ AAFRESULT STDMETHODCALLTYPE
 							 sizeof(_pvt->codecInfo), &_pvt->codecInfo, &found);
 		  }
 		 if(!found)
-			     RAISE(OM_ERR_CODEC_INVALID); 
+			     RAISE(AAFRESULT_CODEC_INVALID); 
 
 		_numChannels = arrayElemCount;
 		_channels = (aafSubChannel_t *)
 			_mainFile->omOptMalloc(sizeof(aafSubChannel_t) * _numChannels);
-		XASSERT((_channels != NULL), OM_ERR_NOMEMORY);
+		XASSERT((_channels != NULL), AAFRESULT_NOMEMORY);
 		
 
 		for (n = 0; n < arrayElemCount; n++)
@@ -371,7 +366,7 @@ AAFRESULT STDMETHODCALLTYPE
          {
 				/* JeffB: Handle the case where an existing file=>tape mob connection exists
 				 */
-				if(fileMob->FindTrackByTrackID(initPtr->trackID, &tmpTrack) == OM_ERR_TRACK_NOT_FOUND)
+				if(fileMob->FindTrackByTrackID(initPtr->trackID, &tmpTrack) == AAFRESULT_TRACK_NOT_FOUND)
 				{
 				 	CHECK(fileMob->AddNilReference(
 					  initPtr->trackID, oneLength, initPtr->mediaKind, editRate));
@@ -383,10 +378,8 @@ AAFRESULT STDMETHODCALLTYPE
 			destPtr->trackID = initPtr->trackID;
 			destPtr->physicalOutChan = initPtr->subTrackNum;
 			CvtInt32toPosition(0, destPtr->dataOffset);
-			destPtr->dataOffset = _dataStart;
 			CvtInt32toLength(0, destPtr->numSamples);
 			destPtr->sampleRate = initPtr->sampleRate;
-			CvtInt32toLength(0, destPtr->numSamples);
 		}
 	
 		_openType = kAAFCreated;
@@ -396,8 +389,7 @@ AAFRESULT STDMETHODCALLTYPE
 			/* Initialize the fields which are derived from information in
 			 * the _mainFile mob or media descriptor.
 			 */
-			CHECK(_mdes->WriteRational(OMMDFLSampleRate,
-					_channels[0].sampleRate));
+			CHECK(_mdes->WriteRational(OMMDFLSampleRate, mediaArray[0].sampleRate));
 
 			CHECK(_codec->codecGetMetaInfo(_mainFile->_session, &_pvt->codecInfo,_codecVariety,NULL, 0,
 											&info));
@@ -426,7 +418,7 @@ AAFRESULT STDMETHODCALLTYPE
 	XEXCEPT
 	XEND
 	
-	return (OM_ERR_NONE);
+	return (AAFRESULT_SUCCESS);
 #else
 	return AAFRESULT_NOT_IMPLEMENTED;
 #endif
@@ -499,7 +491,7 @@ AAFRESULT STDMETHODCALLTYPE
 		
 //!!!		CHECK(fileMob->LocateMediaFile(&_dataFile, &isAAF));
 //!!!		if(_dataFile == NULL)
-//			RAISE(OM_ERR_MEDIA_NOT_FOUND);
+//			RAISE(AAFRESULT_MEDIA_NOT_FOUND);
 		
 //!!!		_rawFile = _dataFile->_rawFile;			/* If non-omfi file */
 //!!!		CHECK(_mdes->FindCodecForMedia(&_pvt->codecInfo));
@@ -555,19 +547,17 @@ AAFRESULT STDMETHODCALLTYPE
 
 		_channels = (aafSubChannel_t *) new aafSubChannel_t[1];
 		if(_channels == NULL)
-			RAISE(OM_ERR_NOMEMORY);
+			RAISE(AAFRESULT_NOMEMORY);
 		_numChannels = numCh;
 		for(n = 0; n < numCh; n++)
 		{
-/* !!!			CvtInt32toLength(0, _channels[n].numSamples); 
-			_channels[n].dataOffset = _dataStart;*/
 			_channels[n].mediaKind = mediaKind;
 			_channels[n].physicalOutChan = n+1;
 			_channels[n].trackID = slotID+n;
 		}
 
 		iFileMob = static_cast<IUnknown *> (fileMob->GetContainer());
-		CHECK(_codec->Open(iFileMob, openMode, _stream));
+		CHECK(_codec->Open(iFileMob, slotID, openMode, _stream));
 
 
 //!!!		if(openMode == kMediaOpenAppend)
@@ -586,7 +576,7 @@ AAFRESULT STDMETHODCALLTYPE
 	}
 	XEND
 	
-	return (OM_ERR_NONE);
+	return (AAFRESULT_SUCCESS);
 }
 
 	//@comm If the essence is interleaved,
@@ -599,7 +589,7 @@ AAFRESULT STDMETHODCALLTYPE
 	// ReadMultiSamples.
 	//@comm Possible Errors:
 	// 	Standard errors (see top of file).
-	// 	OM_ERR_NOMEMORY -- couldn't allocate memory for the essence handle
+	// 	AAFRESULT_NOMEMORY -- couldn't allocate memory for the essence handle
 	//@comm NOTE: If a locator is followed, then essencePtr may reference ANOTHER file
 	// object, which must be closed on file close.
 	//@comm Replaces omfmMediaOpen*/
@@ -639,7 +629,7 @@ aafErr_t AAFMedia::MultiOpenFromFileMob(
 	aafAssertValidFHdl(_mainFile);
 	aafAssertMediaInitComplete(_mainFile);
 	
-	aafAssert(fileMob != NULL, _mainFile, OM_ERR_INVALID_FILE_MOB);
+	aafAssert(fileMob != NULL, _mainFile, AAFRESULT_INVALID_FILE_MOB);
 
 	XPROTECT(_mainFile)
 	{
@@ -659,11 +649,11 @@ aafErr_t AAFMedia::MultiOpenFromFileMob(
 		_numChannels = numVideo + numAudio + numOther;
 		_channels = (aafSubChannel_t *)
 			_mainFile->omOptMalloc(sizeof(aafSubChannel_t) * _numChannels);
-		XASSERT((_channels != NULL), OM_ERR_NOMEMORY);
+		XASSERT((_channels != NULL), AAFRESULT_NOMEMORY);
 
 		CHECK(_fileMob->LocateMediaFile(&_dataFile, &isAAF));
 		if(_dataFile == NULL)
-			RAISE(OM_ERR_MEDIA_NOT_FOUND);
+			RAISE(AAFRESULT_MEDIA_NOT_FOUND);
 
 		_rawFile = _dataFile->_rawFile;			/* If non-omfi file */
 		CHECK(_mdes->FindCodecForMedia(&_pvt->codecInfo));
@@ -688,9 +678,6 @@ aafErr_t AAFMedia::MultiOpenFromFileMob(
 				_channels[n].physicalOutChan = n + 1 - (numVideo);
 				_channels[n].trackID = trackID + n;
 			}
-
-			CvtInt32toPosition(0, _channels[0].dataOffset);
-			_channels[n].dataOffset = _dataStart;
 		}
 		CHECK(_codec->codecOpen(this));
 		if(openMode == kMediaOpenAppend)
@@ -703,13 +690,13 @@ aafErr_t AAFMedia::MultiOpenFromFileMob(
 	XEXCEPT
 	XEND
 	
-	return (OM_ERR_NONE);
+	return (AAFRESULT_SUCCESS);
 }
 	}
 	XEXCEPT
 	XEND
 	
-	return (OM_ERR_NONE);
+	return (AAFRESULT_SUCCESS);
 #else
 	return AAFRESULT_NOT_IMPLEMENTED;
 #endif
@@ -724,7 +711,7 @@ aafErr_t AAFMedia::MultiOpenFromFileMob(
 	//  WriteDataLines.
 	//@comm Possible Errors:
 	// 	Standard errors (see top of file).
-	// 	OM_ERR_NOMEMORY -- couldn't allocate memory for the essence handle
+	// 	AAFRESULT_NOMEMORY -- couldn't allocate memory for the essence handle
 	//@comm Replaces omfmMediaMultiOpen*/
 
 AAFRESULT ImplAAFEssenceAccess::SetEssenceDestination(
@@ -760,10 +747,10 @@ AAFRESULT STDMETHODCALLTYPE
 	aafAssertMediaHdl(this);
 	aafAssertValidFHdl(_mainFile);
 	aafAssertMediaInitComplete(_mainFile);
-	aafAssert(numBytes >= 0, _mainFile, OM_ERR_BLOCKING_SIZE);
+	aafAssert(numBytes >= 0, _mainFile, AAFRESULT_BLOCKING_SIZE);
 
 	_stream->SetBlockingSize(numBytes);
-	return(OM_ERR_NONE);
+	return(AAFRESULT_SUCCESS);
 #else
 	return AAFRESULT_NOT_IMPLEMENTED;
 #endif
@@ -781,43 +768,21 @@ AAFRESULT STDMETHODCALLTYPE
 	
 /****/
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceAccess::WriteMultiSamples (aafInt16  /*arrayElemCount*/,
-                           aafmMultiXfer_t *  /*xferArray*/)
+    ImplAAFEssenceAccess::WriteMultiSamples (aafInt16  arrayElemCount,
+                           aafmMultiXfer_t *xferArray)
 {
-#if FULL_TOOLKIT
-	aafMultiXfer_t xfer;
 
-	aafAssertMediaHdl(this);
-	aafAssertValidFHdl(_mainFile);
-	aafAssertMediaInitComplete(_mainFile);
-	aafAssert(_numChannels == 1, _mainFile,
-		OM_ERR_SINGLE_CHANNEL_OP);
-	aafAssert(buffer != NULL, _mainFile, OM_ERR_BADDATAADDRESS);
 	aafAssert((_openType == kAAFCreated) ||
-				(_openType == kAAFAppended), _mainFile, OM_ERR_MEDIA_OPENMODE);
+			  (_openType == kAAFAppended), _mainFile, AAFRESULT_MEDIA_OPENMODE);
 	
-	XPROTECT(_mainFile)
+	XPROTECT()
 	{
-		xfer.subTrackNum = _channels[0].physicalOutChan;
-		xfer.numSamples = nSamples;
-		xfer.buflen = buflen;
-		xfer.buffer = buffer;
-		xfer.bytesXfered = 0;
-	
-		CHECK (_codec->codecWriteBlocks(this, deinterleave, 1, &xfer));
-
-		//!!!Move this into a loop when this routine is finished
-		// Do this here and not in the codec any more
-		CHECK(omfsAddInt32toInt64(xfer->numSamples, &_channels[0].numSamples));
-
+		CHECK (_codec->WriteBlocks(deinterleave, arrayElemCount, xferArray));
 	}
 	XEXCEPT
 	XEND
 	
-	return(OM_ERR_NONE);
-#else
-	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
+	return(AAFRESULT_SUCCESS);
 }
 
 	//@comm arrayElemCount is the size of the array or transfer operations.
@@ -835,10 +800,10 @@ AAFRESULT STDMETHODCALLTYPE
 	aafmMultiXfer_t xfer;
 
 	aafAssert(_numChannels == 1, _mainFile,
-		OM_ERR_SINGLE_CHANNEL_OP);
-	aafAssert(buffer != NULL, _mainFile, OM_ERR_BADDATAADDRESS);
+		AAFRESULT_SINGLE_CHANNEL_OP);
+	aafAssert(buffer != NULL, _mainFile, AAFRESULT_BADDATAADDRESS);
 	aafAssert((_openType == kAAFCreated) ||
-				(_openType == kAAFAppended), _mainFile, OM_ERR_MEDIA_OPENMODE);
+				(_openType == kAAFAppended), _mainFile, AAFRESULT_MEDIA_OPENMODE);
 	
 	XPROTECT()
 	{
@@ -849,10 +814,7 @@ AAFRESULT STDMETHODCALLTYPE
 		xfer.bytesXfered = 0;
 	
 		CHECK (_codec->WriteBlocks(deinterleave, 1, &xfer));
-
-		// Do this here and not in the codec any more
-//!!!		CHECK(AddInt32toInt64(xfer.numSamples, &_channels[0].numSamples));
-}
+	}
 	XEXCEPT
 	XEND
 	
@@ -864,8 +826,8 @@ AAFRESULT STDMETHODCALLTYPE
 	// Buflen must be large enough to hold nSamples * the maximum sample size.
 	//@comm Possible Errors:
 	// Standard errors (see top of file).
-	// OM_ERR_SINGLE_CHANNEL_OP -- Tried to write to an interleaved stream.
-	// OM_ERR_BADDATAADDRESS -- The buffer must not be a NULL pointer.
+	// AAFRESULT_SINGLE_CHANNEL_OP -- Tried to write to an interleaved stream.
+	// AAFRESULT_BADDATAADDRESS -- The buffer must not be a NULL pointer.
 	//@comm Replaces omfmWriteDataSamples
 
 /****/
@@ -896,7 +858,7 @@ AAFRESULT STDMETHODCALLTYPE
 	// nSamples * the maximum sample size.
 	//@comm Possible Errors:
 	// Standard errors (see top of file).
-	// OM_ERR_BADDATAADDRESS -- The buffer must not be a NULL pointer.
+	// AAFRESULT_BADDATAADDRESS -- The buffer must not be a NULL pointer.
 	//@comm Replaces omfmWriteRawData
 	
 /****/
@@ -904,12 +866,12 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFEssenceAccess::ReadRawData (aafUInt32  nSamples,
                            aafUInt32  buflen,
                            aafDataBuffer_t  buffer,
-                           aafUInt32 *bytesRead,
-                           aafUInt32 *samplesRead)
+                           aafUInt32 *samplesRead,
+                           aafUInt32 *bytesRead)
 {
 	IAAFEssenceSampleStream	*pSamples;
 
-	aafAssert(buffer != NULL, _mainFile, OM_ERR_BADDATAADDRESS);
+	aafAssert(buffer != NULL, _mainFile, AAFRESULT_BADDATAADDRESS);
 	XPROTECT()
 	{
 		CHECK(_codec->QueryInterface(IID_IAAFEssenceSampleStream, (void **)&pSamples));
@@ -927,41 +889,22 @@ AAFRESULT STDMETHODCALLTYPE
 	//@comm Buflen must be large enough to hold nSamples * the maximum sample size.
 	//@comm Possible Errors:
 	// Standard errors (see top of file).
-	// OM_ERR_BADDATAADDRESS -- The buffer must not be a NULL pointer.
+	// AAFRESULT_BADDATAADDRESS -- The buffer must not be a NULL pointer.
 	//@comm Replaces omfmReadRawData
 	
 /****/
  AAFRESULT STDMETHODCALLTYPE
    ImplAAFEssenceAccess::WriteFractionalSample (
-                           aafUInt32  /*nBytes*/,
-                           aafDataBuffer_t  /*buffer*/,
-                           aafUInt32 *  /*bytesWritten*/)
+                           aafUInt32 nBytes,
+                           aafDataBuffer_t  buffer,
+                           aafUInt32 *bytesWritten)
 {
-#if FULL_TOOLKIT
-	aafInt16		numVideo;
-	
-	aafAssertMediaHdl(this);
-	aafAssertValidFHdl(_mainFile);
-	aafAssertMediaInitComplete(_mainFile);
 	aafAssert((_openType == kAAFCreated) ||
-				(_openType == kAAFAppended), _mainFile, OM_ERR_MEDIA_OPENMODE);
+				(_openType == kAAFAppended), _mainFile, AAFRESULT_MEDIA_OPENMODE);
 	
-	XPROTECT(_mainFile)
-	{
-		CHECK(_codec->codecGetNumChannels(_mainFile, _fileMob,
-											_pictureKind, &numVideo));
-		if(numVideo <= 0)
-			RAISE(OM_ERR_BADRWLINES);
-		CHECK (_codec->codecWriteLines(this, nLines, buffer, bytesWritten));
-	}
-	XEXCEPT
-	XEND
-	
-	return(OM_ERR_NONE);
-#else
-	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
-}
+	//!!!Pass bytesWritten doen through the codec interface
+	return(_codec->WriteFractionalSample(buffer, nBytes));
+ }
 
 	//@comm Writes single lines of video to a file.  This function allows writing
 	// video frames in pieces, for low-memory situations.  When enough lines
@@ -971,7 +914,7 @@ AAFRESULT STDMETHODCALLTYPE
 	//@comm The buffer must be large enough to hold an entire line of video. 
 	//@comm Possible Errors:
 	// Standard errors (see top of file).
-	// OM_ERR_BADRWLINES -- This function only works for video essence.
+	// AAFRESULT_BADRWLINES -- This function only works for video essence.
 	//@comm Replaces omfmWriteDataLines
 	//@devnote Previous version did not have nBytesPerLine, otherwise the actual size
 	// of the buffer cannot be known.
@@ -986,7 +929,7 @@ AAFRESULT STDMETHODCALLTYPE
 	aafInt16       	n;
 	aafTrackID_t	trackID;
 	aafTrackID_t   	fileTrackID;
-	aafErr_t		aafError = OM_ERR_NONE;
+	aafErr_t		aafError = AAFRESULT_SUCCESS;
 	
 	aafAssertMediaInitComplete(_mainFile);
 	main = _mainFile;
@@ -1129,7 +1072,7 @@ AAFRESULT STDMETHODCALLTYPE
 	aafAssertValidFHdl(_mainFile);
 	aafAssertMediaInitComplete(_mainFile);
 
-	aafAssert(numCh != NULL, _mainFile, OM_ERR_NULL_PARAM);
+	aafAssert(numCh != NULL, _mainFile, AAFRESULT_NULL_PARAM);
 	XPROTECT(_mainFile)
 	{
 		CvtInt32toPosition(0, zeroPos);	
@@ -1147,7 +1090,7 @@ AAFRESULT STDMETHODCALLTYPE
 	XEXCEPT
 	XEND
 	
-	return(OM_ERR_NONE);
+	return(AAFRESULT_SUCCESS);
 #else
 	return AAFRESULT_NOT_IMPLEMENTED;
 #endif
@@ -1174,7 +1117,7 @@ AAFRESULT STDMETHODCALLTYPE
 	aafAssertValidFHdl(main);
 	aafAssertMediaInitComplete(main);
 
-	aafAssert(maxSize != NULL, main, OM_ERR_NULL_PARAM);
+	aafAssert(maxSize != NULL, main, AAFRESULT_NULL_PARAM);
 	*maxSize = 0;
 	XPROTECT(main)
 	{
@@ -1186,7 +1129,7 @@ AAFRESULT STDMETHODCALLTYPE
 	XEXCEPT
 	XEND
 	
-	return(OM_ERR_NONE);
+	return(AAFRESULT_SUCCESS);
 #else
 	return AAFRESULT_NOT_IMPLEMENTED;
 #endif
@@ -1200,33 +1143,27 @@ AAFRESULT STDMETHODCALLTYPE
 
 /****/
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceAccess::GetSampleFrameSize (ImplAAFDataDef * /*mediaKind*/,
-                           aafPosition_t  /*frameNum*/,
-                           aafLength_t*  /*frameSize*/)
+    ImplAAFEssenceAccess::GetSampleFrameSize (ImplAAFDataDef *mediaKind,
+                           aafPosition_t frameNum,
+                           aafLength_t* frameSize)
 {
 #if FULL_TOOLKIT
 	aafFrameSizeParms_t	parms;
-	AAFFile *			main;
-	
-	aafAssertMediaHdl(this);
-	main = _mainFile;
-	aafAssertValidFHdl(main);
-	aafAssertMediaInitComplete(main);
 
-	aafAssert(frameSize != NULL, main, OM_ERR_NULL_PARAM);
+	aafAssert(frameSize != NULL, main, AAFRESULT_NULL_PARAM);
 	CvtInt32toInt64(0, frameSize);
 	XPROTECT(main)
 	{
 		parms.mediaKind = mediaKind;
 		parms.frameNum = frameNum;
-		CHECK(_codec->codecGetInfo(this, kSampleSize, mediaKind, sizeof(parms),
+		CHECK(_codec->xxx(this, kSampleSize, mediaKind, sizeof(parms),
 								&parms));
 		*frameSize = parms.frameSize;
 	}
 	XEXCEPT
 	XEND
 	
-	return(OM_ERR_NONE);
+	return(AAFRESULT_SUCCESS);
 #else
 	return AAFRESULT_NOT_IMPLEMENTED;
 #endif
@@ -1238,7 +1175,7 @@ AAFRESULT STDMETHODCALLTYPE
 	// interleaved essence types.
 	//@comm Possible Errors:
 	// 	Standard errors (see top of file).
-	// 	OM_ERR_NULL_PARAM -- A return parameter was NULL.
+	// 	AAFRESULT_NULL_PARAM -- A return parameter was NULL.
 	//@comm Replaces omfmGetSampleFrameSize*/
 
 
@@ -1263,8 +1200,8 @@ AAFRESULT STDMETHODCALLTYPE
 
 	//@comm Takes a essence handle, so the essence must have been opened or created.
 	//@comm Possible Errors:<nl>
-	//   OM_ERR_NULL_PARAM -- A NULL rectangle pointer.<nl>
-	//   OM_ERR_INVALID_OP_CODEC -- This codec doesn't support display rect<nl>
+	//   AAFRESULT_NULL_PARAM -- A NULL rectangle pointer.<nl>
+	//   AAFRESULT_INVALID_OP_CODEC -- This codec doesn't support display rect<nl>
 	//   							(may not be video essence)
  	//@comm Replaces omfmGetSampledRect
 
@@ -1272,31 +1209,21 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFEssenceAccess::GetSampleCount (
          ImplAAFDataDef * mediaKind,
-        aafLength_t *  /*result*/)
+        aafLength_t *result)
 {
-#if FULL_TOOLKIT
-	aafInt64		one;
+//!!!	aafInt64		one;
 	
-	aafAssertMediaHdl(this);
-	aafAssertValidFHdl(_mainFile);
-	aafAssertMediaInitComplete(_mainFile);
-	aafAssert(result != NULL, _mainFile, OM_ERR_NULL_PARAM);
+	aafAssert(result != NULL, _mainFile, AAFRESULT_NULL_PARAM);
 
-	CvtInt32toInt64(0, result);
-	CvtInt32toInt64(1, &one);
+//!!!	CvtInt32toInt64(1, &one);
 	
-   if(Int64Greater(_pvt->repeatCount, one))
-	{
-	  *result = _pvt->repeatCount;
-	  return(OM_ERR_NONE);
-	}
+//!!!   if(Int64Greater(_pvt->repeatCount, one))
+//	{
+//	  *result = _pvt->repeatCount;
+//	  return(AAFRESULT_SUCCESS);
+//	}
 
-	AddInt64toInt64(_channels[0].numSamples, result);
-		
-	return (OM_ERR_NONE);
-#else
-	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
+	return(_codec->GetNumSamples(DDEF_Audio/*!!!*/, result));
 }
 
 	//@comm A video sample is one frame.
@@ -1313,8 +1240,8 @@ AAFRESULT STDMETHODCALLTYPE
 	aafmMultiXfer_t xfer;
 //!!!	aafInt64		one;
 	
-	aafAssert(buffer != NULL, _mainFile, OM_ERR_NULL_PARAM);
-	aafAssert(bytesRead != NULL, _mainFile, OM_ERR_NULL_PARAM);
+	aafAssert(buffer != NULL, _mainFile, AAFRESULT_NULL_PARAM);
+	aafAssert(bytesRead != NULL, _mainFile, AAFRESULT_NULL_PARAM);
 
 //!!!	CvtInt32toInt64(1, &one);
 //!!!	if(Int64Greater(_pvt->repeatCount, one))
@@ -1350,19 +1277,12 @@ AAFRESULT STDMETHODCALLTYPE
 
 /****/
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceAccess::ReadMultiSamples (aafInt16  /*elemCount*/,
-                           aafmMultiXfer_t *  /*xferArray*/)
+    ImplAAFEssenceAccess::ReadMultiSamples (aafInt16  elemCount,
+                           aafmMultiXfer_t *xferArray)
 {
-#if FULL_TOOLKIT
-	aafAssertMediaHdl(this);
-	aafAssertValidFHdl(_mainFile);
-	aafAssertMediaInitComplete(_mainFile);
-	aafAssert(xferArray != NULL, _mainFile, OM_ERR_NULL_PARAM);
+	aafAssert(xferArray != NULL, _mainFile, AAFRESULT_NULL_PARAM);
 
-	return (_codec->codecReadBlocks(this, deinterleave, elemCount, xferArray));
-#else
-	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
+	return (_codec->ReadBlocks(deinterleave, elemCount, xferArray));
 }
 
 	//@comm arrayElemCount is the size of the array or transfer operations.
@@ -1375,20 +1295,14 @@ AAFRESULT STDMETHODCALLTYPE
  AAFRESULT STDMETHODCALLTYPE
    ImplAAFEssenceAccess::ReadFractionalSample (
                            aafUInt32 nBytes,
-						   aafUInt32  /*bufLen*/,
-                           aafDataBuffer_t  /*buffer*/,
-                           aafUInt32*  /*bytesRead*/)
+						   aafUInt32 bufLen,
+                           aafDataBuffer_t  buffer,
+                           aafUInt32*  bytesRead)
 {
-#if FULL_TOOLKIT
-	aafAssertMediaHdl(this);
-	aafAssertValidFHdl(_mainFile);
-	aafAssertMediaInitComplete(_mainFile);
-	aafAssert(buffer != NULL, _mainFile, OM_ERR_NULL_PARAM);
+	aafAssert(buffer != NULL, _mainFile, AAFRESULT_NULL_PARAM);
+	aafAssert(nBytes <= bufLen, _mainFile, AAFRESULT_SMALLBUF);
 
-	return (_codec->codecReadLines(this, nLines, bufLen, buffer, bytesRead));
-#else
-	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
+	return (_codec->ReadFractionalSample(nBytes, buffer, bytesRead));
 }
 
 	//@comm This function allows reading
@@ -1432,37 +1346,41 @@ AAFRESULT STDMETHODCALLTYPE
 			
 /****/
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceAccess::GetFileFormat (ImplAAFEssenceFormat ** /*ops*/)
+    ImplAAFEssenceAccess::GetFileFormat(ImplAAFEssenceFormat * opsTemplate,
+         ImplAAFEssenceFormat ** opsResult)
+{
+	ImplAAFEssenceFormat	*ops = opsTemplate;		//!!!Copy here?
+	AAFRESULT				result;
+
+	result = _codec->GetEssenceFormat((IAAFEssenceFormat *)ops->GetContainer());	// !!!COM Dependency
+	*opsResult = ops;
+	return result;
+}
+
+	//@comm Replaces omfmGetVideoInfoArray */
+/****/
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFEssenceAccess::GetFileFormatParameterList (ImplAAFEssenceFormat **ops)
 {
 #if FULL_TOOLKIT
-		return(_codec->codecGetVideoInfo(this, ops));
 #else
 	return AAFRESULT_NOT_IMPLEMENTED;
 #endif
 }
 
 	//@comm Replaces omfmGetVideoInfoArray */
-/****/
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceAccess::GetFileFormatParameterList (ImplAAFEssenceFormat ** /*ops*/)
-{
-#if FULL_TOOLKIT
-#else
-	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
-}
-
-	//@comm Replaces omfmGetVideoInfoArray */
 
 /****/
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceAccess::PutFileFormat (ImplAAFEssenceFormat * /*ops*/)
+    ImplAAFEssenceAccess::PutFileFormat (ImplAAFEssenceFormat *ops)
 {
-#if FULL_TOOLKIT
-		return(_codec->codecPutVideoInfo(this, ops));
-#else
-	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
+	IAAFEssenceFormat	*iFormat;
+	IUnknown			*iUnknown;
+	AAFRESULT			aafError;
+
+	iUnknown = static_cast<IUnknown *>(ops->GetContainer());
+	aafError = (iUnknown->QueryInterface(IID_IAAFEssenceFormat, (void **)&iFormat));
+	return(_codec->PutEssenceFormat(iFormat));	// COM Dependency
 }
 
 	//@comm Replaces omfmPutVideoInfoArray */
@@ -1482,7 +1400,7 @@ AAFRESULT STDMETHODCALLTYPE
 	
 	aafAssertValidFHdl(_mainFile);
 	aafAssertMediaInitComplete(_mainFile);
-	aafAssert(result != NULL, _mainFile, OM_ERR_NULL_PARAM);
+	aafAssert(result != NULL, _mainFile, AAFRESULT_NULL_PARAM);
 
 	*result = FALSE;
 	XPROTECT(_mainFile)
@@ -1490,19 +1408,19 @@ AAFRESULT STDMETHODCALLTYPE
 		TableLookupBlock(_mainFile->_session->_codecID, codecID,
 									sizeof(codec_data), &codec_data, &found);
 		if(!found)
-			RAISE(OM_ERR_CODEC_INVALID);
+			RAISE(AAFRESULT_CODEC_INVALID);
 	
 		CHECK(_codec->codecGetSelectInfo(_mainFile, &codec_data, mdes, &select));
 		*result = select.hwAssisted;
 	}
 	XEXCEPT
 	{
-		if(XCODE() == OM_ERR_INVALID_OP_CODEC)
+		if(XCODE() == AAFRESULT_INVALID_OP_CODEC)
 			NO_PROPAGATE();
 	}
 	XEND
 	
-	return (OM_ERR_NONE);
+	return (AAFRESULT_SUCCESS);
 #else
 	return AAFRESULT_NOT_IMPLEMENTED;
 #endif
@@ -1530,7 +1448,7 @@ AAFRESULT STDMETHODCALLTYPE
 	
 	aafAssertValidFHdl(_mainFile);
 	aafAssertMediaInitComplete(_mainFile);
-	aafAssert(name != NULL, _mainFile, OM_ERR_NULL_PARAM);
+	aafAssert(name != NULL, _mainFile, AAFRESULT_NULL_PARAM);
 	session = _mainFile->_session;
 	
 	XPROTECT(_mainFile)
@@ -1538,13 +1456,13 @@ AAFRESULT STDMETHODCALLTYPE
 		TableLookupBlock(session->_codecID, codecID, sizeof(codec_data),
 									&codec_data, &found);
 		if(!found)
-			RAISE(OM_ERR_CODEC_INVALID);
+			RAISE(AAFRESULT_CODEC_INVALID);
 		
 		CHECK(_codec->codecGetMetaInfo(session, &codec_data, NULL, name, namelen, &meta));
 	}
 	XEXCEPT
 	{
-		if(XCODE() == OM_ERR_INVALID_OP_CODEC)
+		if(XCODE() == AAFRESULT_INVALID_OP_CODEC)
 		{
 			strncpy(name, "<none supplied>", namelen);
 			NO_PROPAGATE();
@@ -1552,7 +1470,7 @@ AAFRESULT STDMETHODCALLTYPE
 	}
 	XEND
 	
-	return (OM_ERR_NONE);
+	return (AAFRESULT_SUCCESS);
 #else
 	return AAFRESULT_NOT_IMPLEMENTED;
 #endif
@@ -1562,7 +1480,7 @@ AAFRESULT STDMETHODCALLTYPE
 	//@comm The name will be truncated to fit within "buflen" bytes.
 	//@comm Possible Errors:<nl>
 	// 	Standard errors (see top of file).<nl>
-	//	OM_ERR_CODEC_INVALID - The given codec ID is not loaded.
+	//	AAFRESULT_CODEC_INVALID - The given codec ID is not loaded.
 	//@comm Replaces omfmCodecGetName */
 	//@devnote Shouldn't we use a unicode aafString_t since AAF's public interface for
 	// strings is supposed to be unicode?(TomR)
@@ -1588,7 +1506,7 @@ AAFRESULT STDMETHODCALLTYPE
 	XEXCEPT
 	XEND
 	
-	return (OM_ERR_NONE);
+	return (AAFRESULT_SUCCESS);
 #else
 	return AAFRESULT_NOT_IMPLEMENTED;
 #endif
@@ -1613,8 +1531,8 @@ AAFRESULT STDMETHODCALLTYPE
 	//the reference implementation in an uncompressed format.
 	//@comm Possible Errors:<nl>
 	//	Standard errors (see top of file).<nl>
-	//	OM_ERR_INVALID_OP_CODEC -- This kind of essence doesn't have a frame index<nl>
-	//	OM_ERR_MEDIA_OPENMODE -- The essence is open for read-only.
+	//	AAFRESULT_INVALID_OP_CODEC -- This kind of essence doesn't have a frame index<nl>
+	//	AAFRESULT_MEDIA_OPENMODE -- The essence is open for read-only.
 	//@comm Replaces omfmAddFrameIndexEntry */
 
 /****/
@@ -1646,18 +1564,6 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFEssenceAccess::GetNativeByteOrder (eAAFByteOrder_t *  /*pOrder*/)
 {
 #if FULL_TOOLKIT
-#else
-	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
-}
-
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceAccess::GetEssenceSampleStream
-         (ImplAAFEssenceSampleStream  **theStream)
-{
-#if FULL_TOOLKIT
-	*theStream = _stream;
-	return AAFRESULT_SUCCESS;
 #else
 	return AAFRESULT_NOT_IMPLEMENTED;
 #endif
@@ -1704,7 +1610,6 @@ aafErr_t AAFMedia::InitMediaHandle(
 		_dataObj = NULL;
 		_userData = NULL;
 		_numChannels = 0;
-		CvtInt32toPosition(0, _dataStart);
 		_codecVariety = NULL;
 		_compEnable = kToolkitCompressionEnable;
 		_dataFile = NULL;
@@ -1731,7 +1636,7 @@ aafErr_t AAFMedia::InitMediaHandle(
 	XEXCEPT
 	XEND
 	
-	return (OM_ERR_NONE);
+	return (AAFRESULT_SUCCESS);
 }
 
 
@@ -1853,7 +1758,7 @@ aafErr_t     AAFMedia::LocateMediaFile(
 	if(!found)
 		*dataFile = NULL;
 		
-	return (OM_ERR_NONE);
+	return (AAFRESULT_SUCCESS);
 }
 
 
@@ -1924,8 +1829,8 @@ aafInt32 AAFMedia::VideoOpCount(
  *		Error code (see below).
  *
  * Possible Errors:
- *		OM_ERR_NONE
- *		OM_ERR_NULL_PARAM
+ *		AAFRESULT_SUCCESS
+ *		AAFRESULT_NULL_PARAM
  */
  
 aafErr_t AAFMedia::VideoOpInit(
@@ -1934,11 +1839,11 @@ aafErr_t AAFMedia::VideoOpInit(
 	aafInt32 count = 0;
 
 	aafAssertValidFHdl(_mainFile);
-	aafAssert(list, _mainFile, OM_ERR_NULL_PARAM);
+	aafAssert(list, _mainFile, AAFRESULT_NULL_PARAM);
 
 	list->opcode = kAAFVFmtEnd;
 	
-	return(OM_ERR_NONE);
+	return(AAFRESULT_SUCCESS);
 }
 
 /************************
@@ -1960,9 +1865,9 @@ aafErr_t AAFMedia::VideoOpInit(
  *		Error code (see below).
  *
  * Possible Errors:
- *		OM_ERR_NONE
- *		OM_ERR_NULL_PARAM
- *		OM_ERR_OPLIST_OVERFLOW
+ *		AAFRESULT_SUCCESS
+ *		AAFRESULT_NULL_PARAM
+ *		AAFRESULT_OPLIST_OVERFLOW
  */
  
 aafErr_t AAFMedia::VideoOpAppend(
@@ -1975,7 +1880,7 @@ aafErr_t AAFMedia::VideoOpAppend(
 	aafInt32 count = 0;
 
 	aafAssertValidFHdl(_mainFile);
-	aafAssert(list, _mainFile, OM_ERR_NULL_PARAM);
+	aafAssert(list, _mainFile, AAFRESULT_NULL_PARAM);
 
 	while (list->opcode != kAAFVFmtEnd &&
 		   list->opcode != item.opcode)
@@ -1994,7 +1899,7 @@ aafErr_t AAFMedia::VideoOpAppend(
 	*/
 	
 	if ((count + 1) >= maxLength)
-		return(OM_ERR_OPLIST_OVERFLOW);
+		return(AAFRESULT_OPLIST_OVERFLOW);
 	
 	savedOpcode = list->opcode; /* why did the loop terminate? */
 	
@@ -2020,7 +1925,7 @@ aafErr_t AAFMedia::VideoOpAppend(
 		list->opcode = kAAFVFmtEnd;
 
 	
-	return(OM_ERR_NONE);
+	return(AAFRESULT_SUCCESS);
 }
 	
 /************************
@@ -2048,9 +1953,9 @@ aafErr_t AAFMedia::VideoOpAppend(
  *		The function returns an error code (see below).
  *
  * Possible Errors:
- *		OM_ERR_NONE
- *		OM_ERR_NULL_PARAM
- *		OM_ERR_OPLIST_OVERFLOW
+ *		AAFRESULT_SUCCESS
+ *		AAFRESULT_NULL_PARAM
+ *		AAFRESULT_OPLIST_OVERFLOW
  */
  
 aafErr_t AAFMedia::VideoOpMerge(
@@ -2066,8 +1971,8 @@ aafErr_t AAFMedia::VideoOpMerge(
 	   one at a time into the destination, passing along 'force'. */
 	   
 	aafAssertValidFHdl(_mainFile);
-	aafAssert(source, _mainFile, OM_ERR_NULL_PARAM);
-	aafAssert(destination, _mainFile, OM_ERR_NULL_PARAM);
+	aafAssert(source, _mainFile, AAFRESULT_NULL_PARAM);
+	aafAssert(destination, _mainFile, AAFRESULT_NULL_PARAM);
 
 	XPROTECT(_mainFile)
 	{
@@ -2081,7 +1986,7 @@ aafErr_t AAFMedia::VideoOpMerge(
 	XEXCEPT
 	XEND
 	
-	return(OM_ERR_NONE);
+	return(AAFRESULT_SUCCESS);
 }
 	
 /************************
@@ -2098,14 +2003,14 @@ aafErr_t AAFMedia::VideoOpMerge(
  *
  * Possible Errors:
  *		Standard errors (see top of file).
- *		OM_ERR_INVALID_CACHE_SIZE -- Cache size must be >= 0.
+ *		AAFRESULT_INVALID_CACHE_SIZE -- Cache size must be >= 0.
  */
 aafErr_t AAFMedia::SetStreamCacheSize(
 			aafUInt32			cacheSize)		/* make the cache this big */
 {
 	
 	aafAssertMediaHdl(this);
-	aafAssert(cacheSize >= 0, _mainFile, OM_ERR_INVALID_CACHE_SIZE);
+	aafAssert(cacheSize >= 0, _mainFile, AAFRESULT_INVALID_CACHE_SIZE);
 	
 	XPROTECT(_mainFile)
 	{
@@ -2121,7 +2026,7 @@ aafErr_t AAFMedia::SetStreamCacheSize(
 			else
 			{
 				_stream->_cachePhysSize = 0;
-				RAISE(OM_ERR_NOMEMORY);
+				RAISE(AAFRESULT_NOMEMORY);
 			}
 		}
 #endif
@@ -2129,7 +2034,7 @@ aafErr_t AAFMedia::SetStreamCacheSize(
 	XEXCEPT
 	XEND
 
-	return(OM_ERR_NONE);
+	return(AAFRESULT_SUCCESS);
 }
 
 /************************
@@ -2156,7 +2061,7 @@ aafErr_t AAFMedia::SourceGetVideoSignalType(aafVideoSignalType_t *signalType)
 	aafSearchCrit_t searchCrit;
 	aafRational_t editRate;
 	double editRateFloat;
-	aafErr_t aafError = OM_ERR_NONE;
+	aafErr_t aafError = AAFRESULT_SUCCESS;
 	aafInt32 trackID = -1;
 	aafInt16 i = 0;
 	AAFDataDef *pictureKind = NULL;
@@ -2187,13 +2092,13 @@ aafErr_t AAFMedia::SourceGetVideoSignalType(aafVideoSignalType_t *signalType)
 		}
 		
 
-		if (aafError == OM_ERR_NONE && sourceInfo.mob != NULL)
+		if (aafError == AAFRESULT_SUCCESS && sourceInfo.mob != NULL)
 		{
 			aafError = ((AAFTapeMob *)sourceInfo.mob)->GetSignalType(&tmpSignalType);
-			if (aafError == OM_ERR_NONE && tmpSignalType != kVideoSignalNull)
+			if (aafError == AAFRESULT_SUCCESS && tmpSignalType != kVideoSignalNull)
 			{
 				*signalType = tmpSignalType;
-				return(OM_ERR_NONE);
+				return(AAFRESULT_SUCCESS);
 			}
 			else /* no tape descriptor with signal tape, check editRate */
 			{
@@ -2219,7 +2124,7 @@ aafErr_t AAFMedia::SourceGetVideoSignalType(aafVideoSignalType_t *signalType)
 					if (tmpSignalType != kVideoSignalNull)
 					{
 						*signalType = tmpSignalType;
-						return(OM_ERR_NONE);
+						return(AAFRESULT_SUCCESS);
 					}
 				}
 			}
@@ -2236,7 +2141,7 @@ aafErr_t AAFMedia::SourceGetVideoSignalType(aafVideoSignalType_t *signalType)
 		else
 			*signalType = kVideoSignalNull;
 
-		return(OM_ERR_NONE);
+		return(AAFRESULT_SUCCESS);
  
 	}
 	XEXCEPT
@@ -2248,7 +2153,7 @@ aafErr_t AAFMedia::SourceGetVideoSignalType(aafVideoSignalType_t *signalType)
 	XEND
 	
 	*signalType = kVideoSignalNull;
-	return(OM_ERR_NONE);
+	return(AAFRESULT_SUCCESS);
 }
 
 /************************
@@ -2290,7 +2195,7 @@ aafErr_t DisposeCodecPersist(AAFSession *sess)
 	XEXCEPT
 	XEND
 	
-	return(OM_ERR_NONE);
+	return(AAFRESULT_SUCCESS);
 }
 
 /************************
@@ -2317,7 +2222,7 @@ aafErr_t DisposeCodecPersist(AAFSession *sess)
  */
 aafErr_t PerFileMediaInit(AAFFile *file)
 {	
-	return(OM_ERR_NONE);
+	return(AAFRESULT_SUCCESS);
 }
 
 AAFFile *AAFMedia::itsMainFile(void)
