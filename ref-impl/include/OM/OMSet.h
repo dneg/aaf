@@ -45,7 +45,7 @@ class OMSetIterator;
   //          value of type <p Key> to identify themselves through a
   //          function with the signature
   //          const Key Element::identification(void) const.
-  //   @tcarg class | Key  | The type of the unique key used to identify
+  //   @tcarg class | Key | The type of the unique key used to identify
   //          elements. This type must support operator =, operator !=
   //          and operator <lt>.
   //   @base public | <c OMContainer>

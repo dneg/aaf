@@ -193,7 +193,7 @@ bool OMDiskRawStorage::isSizeable(void) const
 
   // @mfunc The current size of this <c OMDiskRawStorage> in bytes.
   //        precondition - isSizeable()
-  //   @rdesc The current size of this <c OMDiskRawSrorage> in bytes.
+  //   @rdesc The current size of this <c OMDiskRawStorage> in bytes.
   //   @this const
 OMUInt64 OMDiskRawStorage::size(void) const
 {
@@ -220,7 +220,7 @@ OMUInt64 OMDiskRawStorage::size(void) const
   //        in the current position for <f read()> and <f write()>
   //        being set to <mf OMDiskRawStorage::size>.
   //        precondition - isSizeable()
-  //   @parm The new size of this <c OMDiskRawSrorage> in bytes.
+  //   @parm The new size of this <c OMDiskRawStorage> in bytes.
   //   @devnote There is no ISO/ANSI way of truncating a file in place.
 void OMDiskRawStorage::setSize(OMUInt64 newSize)
 {
@@ -264,7 +264,8 @@ bool OMDiskRawStorage::isPositionable(void) const
 }
 
   // @mfunc The current position for <f read()> and <f write()>, as an
-  //        offset in bytes from the begining of this <c OMDiskRawStorage>.
+  //        offset in bytes from the beginning of this
+  //        <c OMDiskRawStorage>.
   //        precondition - isPositionable()
   //   @rdesc The current position for <f read()> and <f write()>.
   //   @this const
@@ -279,7 +280,8 @@ OMUInt64 OMDiskRawStorage::position(void) const
 }
 
   // @mfunc Set the current position for <f read()> and <f write()>, as an
-  //        offset in bytes from the begining of this <c OMDiskRawStorage>.
+  //        offset in bytes from the beginning of this
+  //        <c OMDiskRawStorage>.
   //        precondition - isPositionable()
   //   @parm The new position.
   //   @devnote fseek takes a long int for offset this may not be sufficient

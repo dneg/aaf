@@ -45,7 +45,7 @@ class OMRedBlackTreeIterator;
   //        balanced binary search tree providing O(lg N) performance
   //        for the dynamic set operations. Items in the tree are
   //        uniquely identified by key and carry an associated value.
-  //   @tcarg class | Key  | The type of the unique key used to identify
+  //   @tcarg class | Key | The type of the unique key used to identify
   //          elements. This type must support operator =, operator !=
   //          and operator <lt>.
   //   @tcarg class | Value | The type of the value carried in an
