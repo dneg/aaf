@@ -32,6 +32,7 @@ AD_IDL(//
 \***********************************************/ 
 
 AD_FORWARD_DECLARATION(AAFDataDef)
+AD_FORWARD_DECLARATION(AAFTypeDef)
 
 AD_CLASS_UUID(86192db2, 2a23, 11D2, BF, a3, 00, 60, 97, 11, 62, 12)
 
@@ -95,35 +96,6 @@ AD_METHOD1(GetEditHint,
   //
   // AAFRESULT_NULL_PARAM
   //   - pEditHint arg is NULL.)
-
-AD_XMETHOD1(GetDataDefID,
-			[out\,retval],
-			objPass,
-			aafUID_t *,
-			pDatadefID,
-			Pointer to a Data Definition ID,
-			Returns the Data Definition ID of the control point.
-  //
-  // Succeeds if all of the following are true:
-  // - the pDatadefID pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pDatadefID.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\(\) called on it.
-  //
-  // AAFRESULT_PROP_NOT_PRESENT
-  //   - This property does not exist in the file.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pDatadefID arg is NULL.)
 
 AD_XMETHOD1(GetValueBufLen,
 			[out],
@@ -209,22 +181,51 @@ AD_METHOD1(SetEditHint,
   // AAFRESULT_NOT_INITIALIZED
   //   - This object has not yet had Initialize\\\(\\\) called on it.)
 
-AD_METHOD1(SetDataDefID,
-			[in], aafUID_t *, pDatadefID,Control Point data definition ID,
-			Sets the control point Data Definition ID.
+AD_XMETHOD1(SetTypeDefinition,
+			[in],
+			objIn,
+			AAFTypeDef,
+			pTypeDef,
+			Type Definition of the dataval inside of this object,
+			Sets the IAAFTypeDefinition of the dataval inside this parameter to be the given one.
   //
+  // Succeeds if all of the following are true:
+  // - the pTypeDef pointer is valid.
+  // 
   // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\\\, it will return the first one
+  // the listed errors is in effect\, it will return the first one
   // encountered in the order given below:
   // 
   // AAFRESULT_SUCCESS
-  //   - succeeded.  \\\(This is the only code indicating success.\\\)
+  //   - succeeded.  \(This is the only code indicating success.\)
   //
   // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\\\(\\\) called on it.
+  //   - This object has not yet had Initialize\(\) called on it.
   //
   // AAFRESULT_NULL_PARAM
-  //   - pDatadefID arg is NULL.)
+  //   - pTypeDef is null.)
+
+AD_XMETHOD1(GetTypeDefinition,
+			[out\,retval],
+			objOut,
+			AAFTypeDef,
+			ppTypeDef,
+			Type Definition of the dataval inside of this object,
+			Places the IAAFTypeDefinition of the dataval inside this parameter into the
+  // *ppTypeDef argument.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppTypeDef is null.)
 
 AD_METHOD2(SetValue,
 			[in],aafUInt32,valueSize, Size of preallocated buffer,
