@@ -58,7 +58,7 @@ AAFRESULT STDMETHODCALLTYPE
   if (! pTypeDef)  return AAFRESULT_NULL_PARAM;
   if (! pTypeName) return AAFRESULT_NULL_PARAM;
 
-  hr = SetIdentification (pID);
+  hr = SetAUID (pID);
   if (! AAFRESULT_SUCCEEDED (hr)) return hr;
 
   hr = SetName (pTypeName);
