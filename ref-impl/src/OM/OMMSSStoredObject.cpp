@@ -2831,23 +2831,15 @@ void OMMSSStoredObject::writeSignature(const wchar_t* fileName,
 
   OMFileSignature sig = signature;
 
-  // There's no ANSI function to open a file with a wchar_t* name.
-  // for now convert the name. In future add 
-  // FILE* fopen(const wchar_t* fileName, const wchar_t* mode);
-  //
-  char cFileName[256];
-  size_t status = wcstombs(cFileName, fileName, 256);
-  ASSERT("Convert succeeded", status != (size_t)-1);
-
   if (hostByteOrder() != littleEndian) {
     OMByte* s = reinterpret_cast<OMByte*>(&sig);
     size_t size = sizeof(OMUniqueObjectIdentification);
     OMUniqueObjectIdentificationType::instance()->reorder(s, size);
   }
 
-  FILE* f = fopen(cFileName, "rb+");
+  FILE* f = wfopen(fileName, L"rb+");
   ASSERT("File exists", f != 0);
-  status = fseek(f, 8, SEEK_SET);
+  size_t status = fseek(f, 8, SEEK_SET);
   ASSERT("Seek succeeded", status == 0);
   status = fwrite(&sig, sizeof(sig), 1, f);
   ASSERT("Write succeeded", status == 1);
