@@ -136,10 +136,10 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     GetFileMobID
 		// @parm [out] the file mob id associated with essence
-        (aafUID_t *  pFileMobID);
+        (aafMobID_t *  pFileMobID);
 
 private:
-  OMFixedSizeProperty<aafUID_t> _fileMobID;
+  OMFixedSizeProperty<aafMobID_t> _fileMobID;
   OMDataStreamProperty _mediaData;
 };
 

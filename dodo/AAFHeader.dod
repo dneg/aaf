@@ -1,9 +1,9 @@
 #c/*************************************************\
-#c*													*
-#c* Advanced Authoring Format						*
-#c*													*
-#c* Copyright (c) 1998-1999 Avid Technology, Inc.	*
-#c*													*
+#c*                                                 *
+#c* Advanced Authoring Format                       *
+#c*                                                 *
+#c* Copyright (c) 1998-1999 Avid Technology, Inc.   *
+#c*                                                 *
 #c\*************************************************/
 #startm .this-module 0
 AAFHeader\
@@ -46,7 +46,7 @@ AD_COM_EXT_CLASS_BEGIN(public IAAFEndian)
 AD_XMETHOD2(LookupMob,
 			[in\, ref],
 			  objPass,
-			  aafUID_constref,
+			  aafMobID_constref,
 			  mobID,
 			  The Mob ID,
 			[out\,retval],
@@ -226,7 +226,7 @@ AD_XMETHOD1(CountEssenceData,
 AD_XMETHOD3(IsEssenceDataPresent,
 			[in\, ref],
 			  objPass,
-			  aafUID_constref,
+			  aafMobID_constref,
 			  fileMobID,
 			  A Unique File Mob ID,
 			[in],

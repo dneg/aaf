@@ -126,7 +126,7 @@ Associates a weak reference to the given file mob with the essence data.
 
 /****/
 AD_METHOD1(GetFileMobID,
-[out], aafUID_t *, pFileMobID, the file mob id associated with essence,
+[out], aafMobID_t *, pFileMobID, the file mob id associated with essence,
 Return the mob id used to find the file mob associated with this essence.
   // The file mob must exist in the same file as this essence data.)
 

@@ -140,8 +140,8 @@ public:
 public:
 	// SDK-internal
 
-	virtual AAFRESULT ChangeContainedReferences(const aafUID_t & from,
-												const aafUID_t & to);
+	virtual AAFRESULT ChangeContainedReferences(aafMobID_constref from,
+												aafMobID_constref to);
 
 
 private:

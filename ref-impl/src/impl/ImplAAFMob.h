@@ -86,7 +86,7 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     GetMobID
-        (aafUID_t *  pMobID);  //@parm [out] The unique media object id
+        (aafMobID_t *  pMobID);  //@parm [out] The unique media object id
 
 
   //****************
@@ -207,7 +207,7 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     SetMobID
-        (const aafUID_t &  mobID);  //@parm [in, ref] New Mob ID
+        (aafMobID_constref  mobID);  //@parm [in, ref] New Mob ID
 
 
   //****************
@@ -348,8 +348,8 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     ChangeRef
-        (const aafUID_t & oldMobID,   //@parm [in,ref] Old Mob ID reference in source clip
-		 const aafUID_t & newMobID);  //@parm [in,ref] New Mob ID reference in source clip
+        (aafMobID_constref oldMobID,   //@parm [in,ref] Old Mob ID reference in source clip
+		 aafMobID_constref newMobID);  //@parm [in,ref] New Mob ID reference in source clip
 
 
 
@@ -435,7 +435,7 @@ virtual AAFRESULT STDMETHODCALLTYPE
   virtual AAFRESULT ReconcileMobLength(void);
 
 	protected:
-	OMFixedSizeProperty<aafUID_t>		_mobID;
+	OMFixedSizeProperty<aafMobID_t>		_mobID;
 	OMWideStringProperty				_name;
 //!!! Creation time and last modified should be OMStructuredProperty
 	OMFixedSizeProperty<aafTimeStamp_t>	_creationTime;

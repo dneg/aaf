@@ -672,7 +672,7 @@ public:
 	AAFRESULT CreateFileMob (ImplAAFHeader *newHead,
 							 aafBool addSlots,
 							 aafSlotID_t slotID,
-							 const aafUID_t * newMobID,
+							 aafMobID_constptr newMobID, /* optional */
 							 const aafUID_t & mediaKind,
 							 const aafRational_t & editRate,
 							 const aafRational_t & sampleRate,
