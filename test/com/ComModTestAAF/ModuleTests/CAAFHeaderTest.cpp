@@ -149,7 +149,7 @@ HeaderTest::HeaderTest():
   _productInfo.productVersion.minor = 0;
   _productInfo.productVersion.tertiary = 0;
   _productInfo.productVersion.patchLevel = 0;
-  _productInfo.productVersion.type = kVersionUnknown;
+  _productInfo.productVersion.type = kAAFVersionUnknown;
   _productInfo.productVersionString = NULL;
   _productInfo.productID = UnitTestProductID;
   _productInfo.platform = NULL;
@@ -377,7 +377,7 @@ void HeaderTest::openMobs()
 
 
   aafNumSlots_t mobCount = 0;
-  check(_pHeader->CountMobs(kAllMob, &mobCount));
+  check(_pHeader->CountMobs(kAAFAllMob, &mobCount));
   if (gMaxMobCount != mobCount)
     check(AAFRESULT_TEST_FAILED);
  

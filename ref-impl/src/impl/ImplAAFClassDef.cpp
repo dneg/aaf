@@ -293,7 +293,7 @@ AAFRESULT STDMETHODCALLTYPE
   return pvtRegisterPropertyDef (id,
 								 pName,
 								 typeId,
-								 AAFTrue,
+								 kAAFTrue,
 								 ppPropDef);
 }
 
@@ -522,7 +522,7 @@ aafBool ImplAAFClassDef::pvtPropertyIdentifierOMPid:: DoesMatch
   OMPropertyId testPid;
   assert (pTestPropDef);
   testPid = pTestPropDef->OmPid ();
-  return (_id == testPid) ? AAFTrue : AAFFalse;
+  return (_id == testPid) ? kAAFTrue : kAAFFalse;
 }
 
 aafBool ImplAAFClassDef::pvtPropertyIdentifierAUID::DoesMatch
@@ -532,7 +532,7 @@ aafBool ImplAAFClassDef::pvtPropertyIdentifierAUID::DoesMatch
   assert (pTestPropDef);
   AAFRESULT hr = pTestPropDef->GetAUID (&testUID);
   assert (AAFRESULT_SUCCEEDED (hr));
-  return (EqualAUID (&_id, &testUID) ? AAFTrue : AAFFalse);
+  return (EqualAUID (&_id, &testUID) ? kAAFTrue : kAAFFalse);
 }
 
 

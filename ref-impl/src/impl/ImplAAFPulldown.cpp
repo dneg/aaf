@@ -212,7 +212,7 @@ AAFRESULT STDMETHODCALLTYPE
 		if((offset < 0) || (offset >= length))
 			RAISE(AAFRESULT_TIMECODE_NOT_FOUND);
 
-		CHECK(MapOffset(offset, AAFTrue, pOffset, NULL));
+		CHECK(MapOffset(offset, kAAFTrue, pOffset, NULL));
     }
 	XEXCEPT
     {
@@ -243,7 +243,7 @@ AAFRESULT ImplAAFPulldown::MapOffset(aafPosition_t offset,
 		{
 			phaseOffset = (aafUInt32)_phaseFrame;
 			
-			drop = (_pulldownDirection == kAAFTapeToFilmSpeed ? AAFTrue : AAFFalse);
+			drop = (_pulldownDirection == kAAFTapeToFilmSpeed ? kAAFTrue : kAAFFalse);
 			CHECK(aafPvtGetPulldownMask(_pulldownKind, &maskBits, &maskLen, &oneToOne));
 		}
 
@@ -255,7 +255,7 @@ AAFRESULT ImplAAFPulldown::MapOffset(aafPosition_t offset,
 	  else
 	  {		
 		  if (reverse)
-			  drop = (drop ? AAFFalse : AAFTrue);
+			  drop = (drop ? kAAFFalse : kAAFTrue);
 
 		  CvtInt32toPosition(0, zeroPos);
 		  if (Int64Less(offset, zeroPos))
@@ -417,7 +417,7 @@ AAFRESULT ImplAAFPulldown::aafPvtGetPulldownMask(
 		case kAAFTwoThreePD:
 			*outMask = 0xD8000000;	/* 3623878656 decimal */
 			*maskLen = 5;
-			*isOneToOne = AAFFalse;
+			*isOneToOne = kAAFFalse;
 			break;
 		/* PAL pullown pattern is:
 		 *		AA BB CC DD EE FF GG HH II JJ KK LL MM MN NO OP PQ QR RS ST TU UV VW WX XY YY
@@ -427,12 +427,12 @@ AAFRESULT ImplAAFPulldown::aafPvtGetPulldownMask(
 		case kAAFPALPD:
 			*outMask = 0xFFF7FF80;
 			*maskLen = 25;
-			*isOneToOne = AAFFalse;
+			*isOneToOne = kAAFFalse;
 			break;
 			
 		case kAAFOneToOneNTSC:
 		case kAAFOneToOnePAL:
-			*isOneToOne = AAFTrue;
+			*isOneToOne = kAAFTrue;
 			
 		default:
 			return(AAFRESULT_PULLDOWN_KIND);
@@ -451,8 +451,8 @@ AAFRESULT ImplAAFPulldown::intSegmentOffsetToTC(aafPosition_t offset, aafTimecod
     {
 		pdwnInput = _inputSegment;
 		CHECK(((ImplAAFTimecode *)pdwnInput)->GetTimecode(tc));
-		*found = AAFTrue;
-		  CHECK(MapOffset(offset, AAFFalse, &newStart, NULL));
+		*found = kAAFTrue;
+		  CHECK(MapOffset(offset, kAAFFalse, &newStart, NULL));
 		  CHECK(TruncInt64toInt32(newStart, &start32));
 		  tc->startFrame += start32;
     }
@@ -477,7 +477,7 @@ AAFRESULT ImplAAFPulldown::TraverseToClip(aafLength_t length,
   
   XPROTECT()
     {
-	  *isMask = AAFTrue;
+	  *isMask = kAAFTrue;
 	  /* Get the (assumed) source clip out of the mask */
 	  *sclp = _inputSegment;
 //!!!	  if (!(*sclp)->IsTypeOf("SCLP", &aafError));
@@ -486,7 +486,7 @@ AAFRESULT ImplAAFPulldown::TraverseToClip(aafLength_t length,
 //		}
 	  tmpLen = length;
 	  CHECK((*sclp)->GetLength(sclpLen));
-	  CHECK(MapOffset(tmpLen, AAFFalse, &length, &phase));
+	  CHECK(MapOffset(tmpLen, kAAFFalse, &length, &phase));
 	  if(pulldownObj != NULL)
 	  	*pulldownObj = (ImplAAFPulldown *)this;
 	  if(pulldownPhase != NULL)

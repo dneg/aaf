@@ -236,7 +236,7 @@ private:
   class pvtPropertyIdentifier
   {
   public:
-	// Returns AAFTrue if this property identifier matches the given
+	// Returns kAAFTrue if this property identifier matches the given
 	// property definition.
 	virtual aafBool DoesMatch
     (const ImplAAFPropertyDef * pTestPropDef) const = 0;

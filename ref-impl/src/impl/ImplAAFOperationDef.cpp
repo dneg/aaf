@@ -413,7 +413,7 @@ AAFRESULT STDMETHODCALLTYPE
 	aafInt32					newCount;
 	ImplAAFParameterDef*		pParmDef = NULL;
 	ImplEnumAAFParameterDefs*	pEnum = NULL;
-	aafBool						parmDefFound = AAFFalse;
+	aafBool						parmDefFound = kAAFFalse;
 
 	tmp = NULL;
 
@@ -430,7 +430,7 @@ AAFRESULT STDMETHODCALLTYPE
 			CHECK(pParmDef->GetAUID(&oldUID));
 			if ( memcmp(&newUID, &oldUID, sizeof(aafUID_t)) == 0)
 			{
-				parmDefFound = AAFTrue;
+				parmDefFound = kAAFTrue;
 				break;
 			}
 			pParmDef->ReleaseReference();

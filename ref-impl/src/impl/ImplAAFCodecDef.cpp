@@ -98,7 +98,7 @@ AAFRESULT STDMETHODCALLTYPE
 {
 	ImplEnumAAFDataDefs	*dataEnum = NULL;
 	ImplAAFDataDef		*aVal = NULL;
-	aafBool				result = AAFFalse;
+	aafBool				result = kAAFFalse;
 
 	if (! pEssenceKind)
 	  return AAFRESULT_NULL_PARAM;
@@ -110,7 +110,7 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 		CHECK(GetEssenceKinds (&dataEnum));
 		while((dataEnum->NextOne(&aVal) == AAFRESULT_SUCCESS)
-		   && (result == AAFFalse))
+		   && (result == kAAFFalse))
 		{
 			CHECK(aVal->IsDataDefOf(pEssenceKind, &result));
 			aVal->ReleaseReference();
@@ -219,19 +219,19 @@ AAFRESULT STDMETHODCALLTYPE
 		CHECK(GetAUID(&uid));
 		mgr = ImplAAFPluginManager::GetPluginManager();
 		// Only looks at first codec matching
-		found = AAFFalse;
+		found = kAAFFalse;
 		if(mgr->GetPluginInstance(uid, &pPlug) == AAFRESULT_SUCCESS)
 		{
 			if(pPlug->QueryInterface(IID_IAAFEssenceCodec, (void **)&pCodec) == AAFRESULT_SUCCESS)
 			{
-				found = AAFTrue;
+				found = kAAFTrue;
 			}
 		}
 		if(!found)
 			RAISE(AAFRESULT_CODEC_INVALID);
 
 		CHECK(pCodec->GetFlavourCount(&flavourCount));
-		*pResult = (flavourCount >= 2 ? AAFTrue : AAFFalse);
+		*pResult = (flavourCount >= 2 ? kAAFTrue : kAAFFalse);
 		pPlug->Release();
 		pPlug = NULL;
 		pCodec->Release();
@@ -324,12 +324,12 @@ AAFRESULT STDMETHODCALLTYPE
 		CHECK(GetAUID(&uid));
 		mgr = ImplAAFPluginManager::GetPluginManager();
 		// Only looks at first codec matching
-		found = AAFFalse;
+		found = kAAFFalse;
 		if(mgr->GetPluginInstance(uid, &pPlug) == AAFRESULT_SUCCESS)
 		{
 			if(pPlug->QueryInterface(IID_IAAFEssenceCodec, (void **)&pCodec) == AAFRESULT_SUCCESS)
 			{
-				found = AAFTrue;
+				found = kAAFTrue;
 			}
 		}
 		if(!found)

@@ -144,7 +144,7 @@ AAFRESULT STDMETHODCALLTYPE
 {
 	if(pMobKind  == NULL)
 		return(AAFRESULT_NULL_PARAM);
-	*pMobKind = kFileMob;
+	*pMobKind = kAAFFileMob;
 	return(AAFRESULT_SUCCESS);
 }
 

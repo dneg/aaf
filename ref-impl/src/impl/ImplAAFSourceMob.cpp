@@ -219,17 +219,17 @@ AAFRESULT STDMETHODCALLTYPE
 	aafPosition_t	zeroPos;
 	aafLength_t		length, zeroLen;
 	ImplAAFTimelineMobSlot *	newSlot = NULL, *mobSlot = NULL;
-	aafBool			fullLength = AAFFalse;
+	aafBool			fullLength = kAAFFalse;
 	ImplAAFDictionary *pDictionary = NULL;
 
 	//!!!Validate tape mobs only, return AAFRESULT_TAPE_DESC_ONLY
 	if(length32 == FULL_LENGTH)
 	  {
-		 fullLength = AAFTrue;
+		 fullLength = kAAFTrue;
 		 length32 = 1;
 	  }
 	else
-	  fullLength = AAFFalse;
+	  fullLength = kAAFFalse;
 	
 	CvtInt32toPosition(0, zeroPos);
 	CvtInt32toLength(0, zeroLen);
@@ -724,7 +724,7 @@ AAFRESULT STDMETHODCALLTYPE
 				/* Remember, this routine is given the OUTPUT length, and must determine
 				 * the input length (so the ratios look backwards)
 				 */
-				CHECK(pdwn->MapOffset(srcRefLength, AAFTrue, &outLength, NULL));
+				CHECK(pdwn->MapOffset(srcRefLength, kAAFTrue, &outLength, NULL));
 				CHECK(pdwn->SetLength(outLength));
 			}
 		}
@@ -853,7 +853,7 @@ AAFRESULT STDMETHODCALLTYPE
 			edesc = 0;
 		}
 		else
-			*pMobKind = kAllMob;
+			*pMobKind = kAAFAllMob;
 	}
 	XEXCEPT
 	{
@@ -883,7 +883,7 @@ AAFRESULT ImplAAFSourceMob::FindTimecodeClip(
 	aafPosition_t			sequPos;
 	ImplAAFMobSlot			*slot = NULL;
  	ImplEnumAAFMobSlots		*slotIter = NULL;
-  	aafBool					found = AAFFalse;
+  	aafBool					found = kAAFFalse;
 	aafUInt32				phys;
 
 	XPROTECT()
@@ -893,7 +893,7 @@ AAFRESULT ImplAAFSourceMob::FindTimecodeClip(
 		*tcStartPos = 0;
 		*result = NULL;
 		CHECK(GetSlots (&slotIter));
-		while((found != AAFTrue) && slotIter->NextOne(&slot) == AAFRESULT_SUCCESS)
+		while((found != kAAFTrue) && slotIter->NextOne(&slot) == AAFRESULT_SUCCESS)
 		{
 		  ImplAAFDataDefSP pDataDef;
 		  CHECK(slot->GetDataDef (&pDataDef));
@@ -903,10 +903,10 @@ AAFRESULT ImplAAFSourceMob::FindTimecodeClip(
 			{
 			  CHECK(slot->GetPhysicalNum (&phys));
 			  if((phys == 0) || (phys == 1))
-				found = AAFTrue;
+				found = kAAFTrue;
 			}
 		}
-		if(found != AAFTrue)
+		if(found != kAAFTrue)
 			RAISE(AAFRESULT_MISSING_TRACKID);
 		CHECK(slot->GetSegment(&seg));
 		CHECK(seg->GetLength(tcSlotLen));

@@ -178,7 +178,7 @@ ImplAAFTypeDefSP ImplAAFTypeDefWeakObjRef::BaseType () const
 
 aafBool ImplAAFTypeDefWeakObjRef::IsFixedSize (void) const
 {
-  return AAFTrue;
+  return kAAFTrue;
 }
 
 

@@ -111,7 +111,7 @@ ImplAAFHeader::ImplAAFHeader ()
 	_toolkitRev.major = 0;
 	_toolkitRev.minor = 0;
 	_toolkitRev.tertiary = 0;
-	_toolkitRev.type = kVersionUnknown;
+	_toolkitRev.type = kAAFVersionUnknown;
 	_toolkitRev.patchLevel = 0;
 //!!!	_byteOrder;
 //!!!	_lastModified;
@@ -529,7 +529,7 @@ AAFRESULT
 {
 	ImplAAFIdentification *		identObj;
 	aafProductIdentification_t	fiction;
-	aafBool						dummyIDNT = AAFFalse;
+	aafBool						dummyIDNT = kAAFFalse;
 	aafProductVersion_t			dummyVersion;
 	
 	XPROTECT()
@@ -545,9 +545,9 @@ AAFRESULT
 			fiction.productVersion.minor = 0;
 			fiction.productVersion.tertiary = 0;
 			fiction.productVersion.patchLevel = 0;
-			fiction.productVersion.type = kVersionUnknown;
+			fiction.productVersion.type = kAAFVersionUnknown;
 			pIdent = &fiction;
-			dummyIDNT = AAFTrue;
+			dummyIDNT = kAAFTrue;
 		}
 		
 	XASSERT(pIdent != NULL, AAFRESULT_NEED_PRODUCT_IDENT);

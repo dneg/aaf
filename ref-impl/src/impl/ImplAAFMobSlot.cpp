@@ -224,7 +224,7 @@ AAFRESULT ImplAAFMobSlot::FindSegment(aafPosition_t offset,
 {
 	ImplAAFSegment	*tmpSegment = NULL;
 	aafPosition_t begPos = CvtInt32toPosition(0, begPos);
-	aafBool					foundClip = AAFFalse;
+	aafBool					foundClip = kAAFFalse;
 
 	if(diffPos == NULL || segment == NULL || srcRate == NULL)
 		return(AAFRESULT_NULL_PARAM);

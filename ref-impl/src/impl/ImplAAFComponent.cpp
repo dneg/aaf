@@ -208,7 +208,7 @@ AAFRESULT ImplAAFComponent::GetMinimumBounds(aafPosition_t rootPos, aafLength_t 
 	
 	XPROTECT()
 	{
-		*foundTransition = AAFFalse;
+		*foundTransition = kAAFFalse;
 		*found = this;
 		CHECK(GetLength(&tmpMinLen));
 		if (Int64Less(tmpMinLen, rootLen))

@@ -120,7 +120,7 @@ AAFRESULT STDMETHODCALLTYPE
 		pDef->ReleaseReference();
 		pDef = NULL;
 
-		if (willConvert == AAFFalse)
+		if (willConvert == kAAFFalse)
 			RAISE(AAFRESULT_INVALID_DATADEF);
 		
 		/* Verify that length of still frame is 1 */
@@ -210,7 +210,7 @@ AAFRESULT STDMETHODCALLTYPE
 		// pDef->ReleaseReference();
 		// pDef = NULL;
 
-		if (willConvert == AAFFalse)
+		if (willConvert == kAAFFalse)
 			RAISE(AAFRESULT_INVALID_DATADEF);
 		
 		/* Verify that length of choice matches length of group */

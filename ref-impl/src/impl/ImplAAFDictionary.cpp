@@ -528,13 +528,13 @@ AAFRESULT ImplAAFDictionary::dictLookupClassDef (
 	{
 	  CHECK(GetClassDefs (&classEnum));
 	  status = classEnum->NextOne (&classDef);
-	  defFound = AAFFalse;
+	  defFound = kAAFFalse;
 	  while(status == AAFRESULT_SUCCESS && !defFound)
 		{
 		  CHECK(classDef->GetAUID (&testAUID));
 		  if(EqualAUID(&classID, &testAUID))
 			{
-			  defFound = AAFTrue;
+			  defFound = kAAFTrue;
 			  *ppClassDef = classDef;
 			  classDef->AcquireReference();
 			  break;
@@ -810,13 +810,13 @@ AAFRESULT ImplAAFDictionary::dictLookupTypeDef (
 	{
 	  CHECK(GetTypeDefs (&typeEnum));
 	  status = typeEnum->NextOne (&typeDef);
-	  defFound = AAFFalse;
+	  defFound = kAAFFalse;
 	  while(status == AAFRESULT_SUCCESS && !defFound)
 		{
 		  CHECK(typeDef->GetAUID (&testAUID));
 		  if(EqualAUID(&typeID, &testAUID))
 			{
-			  defFound = AAFTrue;
+			  defFound = kAAFTrue;
 			  *ppTypeDef = typeDef;
 			  typeDef->AcquireReference();
 			  break;
@@ -1137,13 +1137,13 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 		CHECK(GetDataDefs (&dataEnum));
 		status = dataEnum->NextOne (&dataDef);
-		defFound = AAFFalse;
+		defFound = kAAFFalse;
 		while(status == AAFRESULT_SUCCESS && !defFound)
 		{
 			CHECK(dataDef->GetAUID (&testAUID));
 			if(EqualAUID(&dataDefinitionID, &testAUID))
 			{
-				defFound = AAFTrue;
+				defFound = kAAFTrue;
 				*ppDataDef = dataDef;
 				dataDef->AcquireReference();
 				break;
@@ -1256,13 +1256,13 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 		CHECK(GetOperationDefs (&effectEnum));
 		status = effectEnum->NextOne (&effectDef);
-		defFound = AAFFalse;
+		defFound = kAAFFalse;
 		while(status == AAFRESULT_SUCCESS && !defFound)
 		{
 			CHECK(effectDef->GetAUID (&testAUID));
 			if(EqualAUID(&effectID, &testAUID))
 			{
-				defFound = AAFTrue;
+				defFound = kAAFTrue;
 				*ppOperationDef = effectDef;
 				effectDef->AcquireReference();
 				break;
@@ -1373,13 +1373,13 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 		CHECK(GetParameterDefs (&parameterEnum));
 		status = parameterEnum->NextOne (&parameterDef);
-		defFound = AAFFalse;
+		defFound = kAAFFalse;
 		while(status == AAFRESULT_SUCCESS && !defFound)
 		{
 			CHECK(parameterDef->GetAUID (&testAUID));
 			if(EqualAUID(&parameterID, &testAUID))
 			{
-				defFound = AAFTrue;
+				defFound = kAAFTrue;
 				*ppParameterDef = parameterDef;
 				parameterDef->AcquireReference();
 				break;
@@ -1522,14 +1522,14 @@ AAFRESULT ImplAAFDictionary::LookupCodecDef
 	{
 		*result = NULL;
 		CHECK(GetNumCodecDefs(&numCodecs));
-		defFound = AAFFalse;
+		defFound = kAAFFalse;
 		for(n = 0; n < numCodecs && !defFound; n++)
 		{
 			CHECK(GetNthCodecDef (n, &codec));
 			CHECK(codec->GetAUID (&testAUID));
 			if(EqualAUID(&defID, &testAUID))
 			{
-				defFound = AAFTrue;
+				defFound = kAAFTrue;
 				*result = codec;
 				codec->AcquireReference();
 				break;
@@ -1631,14 +1631,14 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 		*result = NULL;
 		CHECK(GetNumContainerDefs(&numContainers));
-		defFound = AAFFalse;
+		defFound = kAAFFalse;
 		for(n = 0; n < numContainers && !defFound; n++)
 		{
 			CHECK(GetNthContainerDef (n, &container));
 			CHECK(container->GetAUID (&testAUID));
 			if(EqualAUID(&defID, &testAUID))
 			{
-				defFound = AAFTrue;
+				defFound = kAAFTrue;
 				*result = container;
 				container->AcquireReference();
 				break;
@@ -1879,13 +1879,13 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 		CHECK(GetInterpolationDefs (&InterpolationEnum));
 		status = InterpolationEnum->NextOne (&InterpolationDef);
-		defFound = AAFFalse;
+		defFound = kAAFFalse;
 		while(status == AAFRESULT_SUCCESS && !defFound)
 		{
 			CHECK(InterpolationDef->GetAUID (&testAUID));
 			if(EqualAUID(&interpolationID, &testAUID))
 			{
-				defFound = AAFTrue;
+				defFound = kAAFTrue;
 				*ppInterpolationDef = InterpolationDef;
 				InterpolationDef->AcquireReference();
 				break;
@@ -1996,13 +1996,13 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 		CHECK(GetPluginDefs (&pEnum));
 		status = pEnum->NextOne (&pDesc);
-		defFound = AAFFalse;
+		defFound = kAAFFalse;
 		while(status == AAFRESULT_SUCCESS && !defFound)
 		{
 			CHECK(pDesc->GetAUID (&testAUID));
 			if(EqualAUID(&interpolationID, &testAUID))
 			{
-				defFound = AAFTrue;
+				defFound = kAAFTrue;
 				*ppPluginDesc = pDesc;
 				pDesc->AcquireReference();
 				break;

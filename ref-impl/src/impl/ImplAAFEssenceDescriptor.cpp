@@ -218,7 +218,7 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFEssenceDescriptor::GetOwningMobKind (aafMobKind_t *pMobKind)
 {
-	*pMobKind = kAllMob;		// Abstract superclass, only match "all"
+	*pMobKind = kAAFAllMob;		// Abstract superclass, only match "all"
 	return(AAFRESULT_SUCCESS);
 }
 

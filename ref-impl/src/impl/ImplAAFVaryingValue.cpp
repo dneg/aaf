@@ -60,7 +60,7 @@ ImplAAFVaryingValue::ImplAAFVaryingValue ()
   _displayValue(         PID_VaryingValue_DisplayValue,      "DisplayValue"),
   _significance(         PID_VaryingValue_Significance,      "Significance")
 {
-	  aafReferenceType_t	ref = kRefLimitMinimum;
+	  aafReferenceType_t	ref = kAAFRefLimitMinimum;
 	 aafInt32				zero = 0;
 	 
 	  _persistentProperties.put(_controlPoints.address());

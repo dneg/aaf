@@ -96,7 +96,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	ProductInfo.productVersion.minor = 0;
 	ProductInfo.productVersion.tertiary = 0;
 	ProductInfo.productVersion.patchLevel = 0;
-	ProductInfo.productVersion.type = kVersionUnknown;
+	ProductInfo.productVersion.type = kAAFVersionUnknown;
 	ProductInfo.productVersionString = NULL;
 	ProductInfo.productID = UnitTestProductID;
 	ProductInfo.platform = NULL;
@@ -223,7 +223,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	ProductInfo.productVersion.minor = 0;
 	ProductInfo.productVersion.tertiary = 0;
 	ProductInfo.productVersion.patchLevel = 0;
-	ProductInfo.productVersion.type = kVersionUnknown;
+	ProductInfo.productVersion.type = kAAFVersionUnknown;
 	ProductInfo.productVersionString = NULL;
 	ProductInfo.platform = NULL;
 	
@@ -238,7 +238,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		checkResult(pFile->GetHeader(&pHeader));
 		
 		// Get the number of mobs in the file (should be one)
-		checkResult(pHeader->CountMobs(kAllMob, &numMobs));
+		checkResult(pHeader->CountMobs(kAAFAllMob, &numMobs));
 		checkExpression(1 == numMobs, AAFRESULT_TEST_FAILED);
 		
 		checkResult(pHeader->GetMobs( NULL, &pMobIter));

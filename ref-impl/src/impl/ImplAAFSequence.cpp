@@ -159,7 +159,7 @@ AAFRESULT STDMETHODCALLTYPE
 	size_t			numCpnts;
 	aafLength_t		sequLen, cpntLen, prevLen;
 	ImplAAFDataDefSP sequDataDef, cpntDataDef;
-	aafBool			isPrevTran = AAFFalse, willConvert;
+	aafBool			isPrevTran = kAAFFalse, willConvert;
 	aafErr_t		aafError = AAFRESULT_SUCCESS;
 	implCompType_t	type;
 	ImplAAFDictionary	*pDict = NULL;
@@ -178,7 +178,7 @@ AAFRESULT STDMETHODCALLTYPE
 		pComponent->GetDataDef(&cpntDataDef);
 		CHECK(cpntDataDef->DoesDataDefConvertTo(sequDataDef, &willConvert));
 		
-		if (willConvert == AAFFalse)
+		if (willConvert == kAAFFalse)
 			RAISE(AAFRESULT_INVALID_DATADEF);
 		
 		status = GetLength(&sequLen);
@@ -220,7 +220,7 @@ AAFRESULT STDMETHODCALLTYPE
 				CHECK(pPrevCpnt->GetLength(&prevLen));
 				pPrevCpnt->GetComponentType(&type);
 				if (type == kTransition)
-					isPrevTran = AAFTrue;
+					isPrevTran = kAAFTrue;
 			}
 			
 			// Is the newly appended component a transition?
@@ -539,7 +539,7 @@ ImplAAFSequence::SegmentTCToOffset (aafTimecode_t*		pTimecode,
 	ImplAAFTimecode*	pTC;
 	aafFrameOffset_t	begPos, endPos;
 	aafPosition_t		sequPos;
-	aafBool				found = AAFFalse;
+	aafBool				found = kAAFFalse;
 	aafLength_t			junk;
 
 	if (pOffset == NULL || pTimecode == NULL || pEditRate == NULL)
@@ -585,7 +585,7 @@ ImplAAFSequence::SegmentTCToOffset (aafTimecode_t*		pTimecode,
 					pComponent->AccumulateLength(&sequPos);
   					TruncInt64toInt32(sequPos, &segStart);	// OK FRAMEOFFSET
 					pTC->GetLength(&tcLen);
-					found = AAFTrue;
+					found = kAAFTrue;
 					break;
 				}
 			}

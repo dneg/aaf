@@ -332,7 +332,7 @@ AAFRESULT STDMETHODCALLTYPE
 			RAISE(AAFRESULT_NULL_PARAM);
 		CHECK(GetOperationDefinition(&def));
 		CHECK(def->GetNumberInputs (&numInputs));
-		*validTransition = (numInputs == 2 ? AAFTrue : AAFFalse);
+		*validTransition = (numInputs == 2 ? kAAFTrue : kAAFFalse);
 		//!!!Must also have a "level" parameter (Need definition for this!)
 		def->ReleaseReference();
 		def = NULL;
@@ -436,7 +436,7 @@ AAFRESULT STDMETHODCALLTYPE
 		if(ppParameter == NULL)
 			RAISE(AAFRESULT_NULL_PARAM);
 	
-		found = AAFFalse;
+		found = kAAFFalse;
 		CHECK(CountParameters (&numParm))
 		for(n = 0; n < numParm; n++)
 		{
@@ -451,7 +451,7 @@ AAFRESULT STDMETHODCALLTYPE
 				{
 					parm->AcquireReference();
 					*ppParameter = parm;
-					found = AAFTrue;
+					found = kAAFTrue;
 					break;
 				}
 
