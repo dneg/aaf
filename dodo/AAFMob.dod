@@ -433,35 +433,6 @@ AD_XMETHOD1(EnumAAFAllMobComments,
   // AAFRESULT_NULL_PARAM
   //   - ppEnum is null.)
 
-
-AD_XMETHOD1(IsAPrimaryMob,
-			[out],
-			objPass,
-			aafBool *,
-			pRetval,
-			Set to true if this is a primary mob,
-
-			This method will return true if this mob is a primary mob. If an
-  // error occurs the retval will be false.
-  //
-  // NOTE! Stub only.   Implementation not yet added.
-  //
-  // Succeeds if all of the following are true:
-  // - the pRetval pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pRetval.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pRetval arg is NULL.)
-
-
 AD_XMETHOD4(AppendNewSlot,
 			[in],
 			objIn,
@@ -624,7 +595,7 @@ AD_XMETHOD4(GetMobInfo,
   //   - bufSize indicates the buffer is too small to hold the string.)
 
 
-AD_XMETHOD3(SetNewProps,
+AD_XMETHOD2(SetNewProps,
 			[in],
 			objPass,
 			aafBool,
@@ -636,12 +607,6 @@ AD_XMETHOD3(SetNewProps,
 			aafCharacter *,
 			pName,
 			Mob Name \(optional\),
-
-			[in],
-			objPass,
-			aafBool,
-			isPrimary,
-			Whether or not this is a primary mob,
 
 			This method is called to create the new properties on a mob.
   // 
@@ -661,29 +626,6 @@ AD_XMETHOD3(SetNewProps,
   //
   // AAFRESULT_NULL_PARAM
   //   - pName arg is NULL.)
-
-
-AD_XMETHOD1(SetPrimary,
-			[in],
-			objPass,
-			aafBool,
-			isPrimary,
-			Whether or not the mob is a primary mob,
-
-			This method is used to either add a mob to the HEAD Primary Mob
-  // index or to take it out of the index.
-  // 
-  // NOTE! Stub only.   Implementation not yet added.
-  //
-  // Always succeeds.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\))
-
 
 AD_XMETHOD3(OffsetToMobTimecode,
 			[in],
