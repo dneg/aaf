@@ -39,6 +39,8 @@ public:
 	
 	aafNumSlots_t CountSlots();
 
+	void AppendSlot( IAAFMobSlotSP spMob );
+
 	IAAFMobSlotSP LookupSlot( aafSlotID_t slotId );
 
 	void AppendComment( const AxString& category,

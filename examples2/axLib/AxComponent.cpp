@@ -136,6 +136,11 @@ aafMobID_t AxSourceReference::GetSourceID()
 	return uid;
 }
 
+void AxSourceReference::SetSourceID( const aafMobID_t& id )
+{
+	CHECK_HRESULT( _spIaafSourceReference->SetSourceID( id ) );
+}
+
 aafSlotID_t AxSourceReference::GetSourceMobSlotID()
 {
 	aafSlotID_t slotid;
@@ -143,6 +148,11 @@ aafSlotID_t AxSourceReference::GetSourceMobSlotID()
 	CHECK_HRESULT( _spIaafSourceReference->GetSourceMobSlotID( &slotid ) );
 
 	return slotid;
+}
+
+void AxSourceReference::SetSourceMobSlotID( const aafSlotID_t& slotid )
+{
+	CHECK_HRESULT( _spIaafSourceReference->SetSourceMobSlotID( slotid ) );
 }
 
 //=---------------------------------------------------------------------=
@@ -192,5 +202,68 @@ void AxOperationGroup::AppendInputSegment( IAAFSegmentSP spIaafSegment )
 	CHECK_HRESULT( _spIaafOperationGroup->AppendInputSegment( spIaafSegment ) );
 }
 
+
+//=---------------------------------------------------------------------=
+
+AxEvent::AxEvent( IAAFEventSP spIaafEvent )
+:	AxSegment( AxQueryInterface<IAAFEvent, IAAFSegment>(spIaafEvent) ),
+	_spIaafEvent( spIaafEvent )
+{}
+
+AxEvent::~AxEvent()
+{}
+
+aafPosition_t AxEvent::GetPosition()
+{
+	aafPosition_t pos;
+
+	CHECK_HRESULT( _spIaafEvent->GetPosition( &pos ) );
+
+	return pos;
+}
+
+void AxEvent::SetPosition( aafPosition_t pos )
+{
+	CHECK_HRESULT( _spIaafEvent->SetPosition( pos ) );
+}
+
+void AxEvent::SetComment( const AxString& comment )
+{
+	CHECK_HRESULT( _spIaafEvent->SetComment( comment.c_str() ) );
+}
+
+AxString AxEvent::GetComment()
+{
+	AxString comment;
+
+	// Yet another get string method with a "custom" name.
+	AX_ANY_TO_STRING( comment, _spIaafEvent, GetCommentBufLen, GetComment );
+
+	return comment;
+}
+
+//=---------------------------------------------------------------------=
+
+AxCommentMarker::AxCommentMarker( IAAFCommentMarkerSP spIaafCommentMarker )
+:	AxEvent( AxQueryInterface<IAAFCommentMarker, IAAFEvent>(spIaafCommentMarker) ),
+	_spIaafCommentMarker( spIaafCommentMarker )
+{}
+
+AxCommentMarker::~AxCommentMarker()
+{}
+
+IAAFSourceReferenceSP AxCommentMarker::GetAnnotation()
+{
+	IAAFSourceReferenceSP spRef;
+
+	CHECK_HRESULT( _spIaafCommentMarker->GetAnnotation( &spRef ) );
+
+	return spRef;
+}
+
+void AxCommentMarker::SetAnnotation( IAAFSourceReferenceSP spIaafSourceReference )
+{
+	CHECK_HRESULT( _spIaafCommentMarker->SetAnnotation( spIaafSourceReference ) );
+}
 
 //=---------------------------------------------------------------------=

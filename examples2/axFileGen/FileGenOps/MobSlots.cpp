@@ -16,6 +16,8 @@
 // 
 //=---------------------------------------------------------------------=
 
+#include "Rate.h"
+
 #include <axFileGen.h>
 
 #include <axDictionary.h>
@@ -73,10 +75,10 @@ AXFG_OP(
   TimeLineMobSlot,           
   L"TimeLineMobSlot",
   L"Creates a TimeLineMobSlot.",
-  L"FileName SlotName origin edit_rate_num edit_rate_den",
-  L"The origin and edit rates are integers.",
-  6,
-  6 ) 
+  L"FileName SlotName origin RateName.",
+  L"The origin is an integer.  The RateName is a reference to a Rate object. SlotName is the name of the object - not the AAF slot name.",
+  5,
+  5 ) 
 
 TimeLineMobSlot::~TimeLineMobSlot()
 {}
@@ -86,8 +88,7 @@ void TimeLineMobSlot::Execute( const std::vector<AxString>& argv )
 	AxString fileName = argv[1];
 	AxString slotName = argv[2];
 	AxString origin   = argv[3];
-	AxString rateNum  = argv[4];
-	AxString rateDen  = argv[5];
+	AxString rateName = argv[4];
 
 	AxDictionary axDict( DictionaryFromFileOp( fileName ) );
 	IAAFTimelineMobSlotSP spSlot;
@@ -96,28 +97,56 @@ void TimeLineMobSlot::Execute( const std::vector<AxString>& argv )
 
 	axSlot.Initialize();
 
-	aafPosition_t originVal = AxStringUtil::strtol( origin );
-	axSlot.SetOrigin( originVal );
+	axSlot.SetOrigin( AxStringUtil::strtol( origin ) );
 
-	aafRational_t editRateVal = { AxStringUtil::strtol( rateNum ),
-								  AxStringUtil::strtol( rateDen ) };
-	axSlot.SetEditRate( editRateVal );
+	axSlot.SetEditRate( RateOpToRational( GetInstance( rateName ) ) );
 
 	SetCOM( spSlot );
 	RegisterInstance( slotName );
 }
 
+//=---------------------------------------------------------------------=
+
+AXFG_OP(
+  EventMobSlot,           
+  L"EventMobSlot",
+  L"Creates a EventMobSlot.",
+  L"FileName SlotName",
+  L"SlotName is the name of the reference to this object - not the AAF slot name.",
+  3,
+  3 )
+
+EventMobSlot::~EventMobSlot()
+{}
+
+void EventMobSlot::Execute( const std::vector<AxString>& argv )
+{
+	AxString fileName = argv[1];
+	AxString slotName = argv[2];
+
+	AxDictionary axDict( DictionaryFromFileOp( fileName ) );
+
+	IAAFEventMobSlotSP spSlot;
+	AxCreateInstance( axDict, spSlot );
+
+	// FIXME - Why does IAAFEventMobSlot have no Initialize() method?
+	// (IAAFMob does not have one either.)
+	// axSlot.Initialize();
+
+	SetCOM( spSlot );
+	RegisterInstance( slotName );
+}
 
 //=---------------------------------------------------------------------=
 
 AXFG_OP(
-  GetMobSlot,           
+  GetMobSlot,
   L"GetMobSlot",
-  L"Fetches a mob slot from a mob..",
+  L"Fetches a mob slot from a mob.",
   L"MobName slot_id SlotName",
   L"The fetched slot is reference using SlotName.",
   4,
-  4 ) 
+  4 )
 
 GetMobSlot::~GetMobSlot()
 {}
@@ -183,6 +212,33 @@ void GetSlotSegment::Execute( const std::vector<AxString>& argv )
 	RegisterInstance( segName );
 }
 
+//=---------------------------------------------------------------------=
+
+AXFG_OP(
+  SetSlotSegment,
+  L"SetSlotSegment",
+  L"Set a Segment on a MobSlot.",
+  L"SlotName SegmentName",
+  L"",
+  3,
+  3 )
+
+SetSlotSegment::~SetSlotSegment()
+{}
+
+void SetSlotSegment::Execute( const std::vector<AxString>& argv )
+{
+	AxString slotName = argv[1];
+	AxString segName = argv[2];
+
+	IAAFMobSlotSP spSlot;
+	GetInstance( slotName ).GetCOM( spSlot );
+	AxMobSlot axSlot( spSlot );
+
+	IAAFSegmentSP spSeg;
+	GetInstance( segName ).GetCOM( spSeg );
+	axSlot.SetSegment( spSeg);
+}
 
 } // end of namespace
 

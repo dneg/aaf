@@ -29,7 +29,7 @@ class AxComponent : public AxObject {
 
 public:
 	AxComponent( IAAFComponentSP spIaafComponent );
-	~AxComponent();
+	virtual ~AxComponent();
 
 	aafLength_t GetLength();
 	void SetLength( const aafLength_t& len );
@@ -55,7 +55,7 @@ class AxSegment : public AxComponent {
 
 public:
 	AxSegment( IAAFSegmentSP spIaafSegment );
-	~AxSegment();
+	virtual ~AxSegment();
 
 	operator IAAFSegmentSP ()
 	{ return _spIaafSegment; }
@@ -74,7 +74,7 @@ class AxTransition : public AxComponent {
 
 public:
 	AxTransition( IAAFTransitionSP spIaafTransition );
-	~AxTransition();
+	virtual ~AxTransition();
 
 	void Initialize( IAAFDataDefSP, aafLength_t, aafPosition_t, IAAFOperationGroupSP);
 
@@ -95,7 +95,7 @@ class AxSequence : public AxSegment {
 
 public:
 	AxSequence( IAAFSequenceSP spIaafSequence );
-	~AxSequence();
+	virtual ~AxSequence();
 
 	void Initialize( IAAFDataDefSP spIaafDataDef );
 	
@@ -118,12 +118,13 @@ class AxSourceReference : public AxSegment {
 
 public:
 	AxSourceReference( IAAFSourceReferenceSP spIaafSourceReference );
-	~AxSourceReference();
+	virtual ~AxSourceReference();
 
-	// FIXME - Too large to return by value?
 	aafMobID_t GetSourceID();
+	void SetSourceID( const aafMobID_t& id );
 
 	aafSlotID_t GetSourceMobSlotID();
+	void SetSourceMobSlotID( const aafSlotID_t& slotid );
 
 private:
 	AxSourceReference();
@@ -139,7 +140,7 @@ class AxSourceClip : public AxSourceReference {
 
 public:
 	AxSourceClip( IAAFSourceClipSP spIaafSourceClip );
-	~AxSourceClip();
+	virtual ~AxSourceClip();
 
 	void Initialize( IAAFDataDefSP, const aafLength_t&, const aafSourceRef_t& );
 
@@ -162,7 +163,7 @@ class AxOperationGroup : public AxSegment {
 
 public:
 	AxOperationGroup( IAAFOperationGroupSP spIaafOperationGroup );
-	~AxOperationGroup();
+	virtual ~AxOperationGroup();
 
 	void Initialize( IAAFDataDefSP, aafLength_t, IAAFOperationDefSP );
 
@@ -179,6 +180,47 @@ private:
 	IAAFOperationGroupSP _spIaafOperationGroup;
 };
 
+//=---------------------------------------------------------------------=
+
+class AxEvent : public AxSegment {
+
+public:
+	AxEvent( IAAFEventSP spIaafEvent );
+	virtual ~AxEvent();
+
+	aafPosition_t GetPosition();
+	void SetPosition( aafPosition_t pos );
+
+	void SetComment( const AxString& comment );
+	AxString GetComment();
+
+private:
+	AxEvent();
+	AxEvent( const AxEvent& );
+	AxEvent& operator=( const AxEvent& );
+
+	IAAFEventSP _spIaafEvent;
+};
+
+//=---------------------------------------------------------------------=
+
+class AxCommentMarker : public AxEvent {
+
+public:
+	AxCommentMarker( IAAFCommentMarkerSP spIaafCommentMarker );
+	virtual ~AxCommentMarker();
+
+	IAAFSourceReferenceSP GetAnnotation();
+
+	void SetAnnotation( IAAFSourceReferenceSP spIaafSourceReference );
+
+private:
+	AxCommentMarker();
+	AxCommentMarker( const AxEvent& );
+	AxCommentMarker& operator=( const AxCommentMarker& );
+
+	IAAFCommentMarkerSP _spIaafCommentMarker;
+};
 
 //=---------------------------------------------------------------------=
 

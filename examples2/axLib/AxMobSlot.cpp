@@ -128,6 +128,12 @@ AxEventMobSlot::AxEventMobSlot( IAAFEventMobSlotSP spIaafEventMobSlot )
 AxEventMobSlot::~AxEventMobSlot()
 {}
 
+void AxEventMobSlot::SetEditRate( aafRational_t rate )
+{
+	CHECK_HRESULT( _spIaafEventMobSlot->SetEditRate( &rate ) );
+}
+
+
 aafRational_t AxEventMobSlot::GetEditRate()
 {
 	aafRational_t rate;

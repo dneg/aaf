@@ -90,6 +90,8 @@ public:
 	AxEventMobSlot( IAAFEventMobSlotSP spIaafEventMobSlot );
 	~AxEventMobSlot();
 
+	void SetEditRate( aafRational_t rate );
+
 	aafRational_t GetEditRate();
 
 	operator IAAFEventMobSlotSP ()

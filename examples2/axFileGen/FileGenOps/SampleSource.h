@@ -110,7 +110,7 @@ public:
 // You can do it yourself if you want:  dynamic_cast<SampleSource&>(op)
 SampleSource& GetSampleSource( AxFGOp& op );
 
-// In this case, op is the operation that want to get at a SampleSource
+// In this case, op is the operation that wants to get at a SampleSource
 // referenced by name.  "op" in this case is *not* the AxFGOp that is
-// expected to implement SampleSource - it is any old op implementation.
+// expected to implement SampleSource - it is the caller. 
 SampleSource& GetSampleSource( AxFGOp& op, const AxString& name );

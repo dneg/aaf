@@ -172,7 +172,7 @@ AxString AxDescriptionToString( IAAFSmartPointer< Type >& sp )
 	return name;
 }
 
-// Some of the AAF interfaces (e.g. TapeDescriptor) have
+// Some of the AAF interfaces (e.g. TapeDescriptor, Event) have
 // a number of  different string values that can be set/get.
 // Each has it's own GetNAMEBufLen/GetNAMEBuf pair.   That
 // can't be handled easily with a template.  Resort

@@ -134,35 +134,6 @@ void SetSourceRef::Execute( const std::vector<AxString>& argv )
 	axSrcClip.SetSourceReference( srcRef );
 }
 
-//=---------------------------------------------------------------------=
-#if 0
-AXFG_OP(
-  GetReferencedSegment,
-  L"GetReferencedSegment",
-  L"Get the segment referenced by a source clip.",
-  L"SourceClipName NextSourceClipName",
-  L"The segment is normally the next source clip in a mob chain.",
-  3,
-  3 )
-
-GetReferencedSegment::~GetReferencedSegment()
-{}
-
-void GetReferencedSegment::Execute( const std::vector<AxString>& argv )
-{
-	AxString srcClipName = argv[1];
-	AxString segName     = argv[2];
-
-	IAAFSourceClipSP spSrcClip;
-	GetInstance( srcClipName ).GetCOM( spSrcClip );
-	AxSourceClip axSrcClip( spSrcClip );
-
-	IAAFSegmentSP spSegment = spSegment = axSrcClip.GetSegment();
-	SetCOM( spSegment );
-	RegisterInstance( segName );
-
-#endif
-
 } // end of namespace
 
 

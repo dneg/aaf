@@ -39,6 +39,10 @@ aafNumSlots_t AxMob::CountSlots()
 	return numSlots;
 }
 
+void AxMob::AppendSlot( IAAFMobSlotSP spMob )
+{
+	CHECK_HRESULT( _spIaafMob->AppendSlot( spMob ) );
+}
 
 aafMobID_t AxMob::GetMobID()
 {

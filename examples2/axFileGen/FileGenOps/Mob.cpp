@@ -21,6 +21,7 @@
 #include <axFileGen.h>
 
 #include <AxMob.h>
+#include <AxMobSlot.h>
 #include <AxComponent.h>
 #include <AxDictionary.h>
 #include <AxHeader.h>
@@ -104,6 +105,37 @@ void LookupSourceID::Execute( const std::vector<AxString>& argv )
 	SetCOM( axContent.LookupMob( axSourceClip.GetSourceID() ) );
 	RegisterInstance( mobName );
 }
+
+//=---------------------------------------------------------------------=
+
+AXFG_OP(
+  AppendSlot,           
+  L"AppendSlot",
+  L"Append a mob slot to a mob.",
+  L"MobName SlotName",
+  L"",
+  3,
+  3 ) 
+
+AppendSlot::~AppendSlot()
+{}
+
+void AppendSlot::Execute( const std::vector<AxString>& argv )
+{
+	AxString mobName  = argv[1];
+	AxString slotName = argv[2];
+
+	IAAFMobSP spMob;
+	GetInstance( mobName ).GetCOM( spMob );
+	AxMob axMob(spMob);
+
+	IAAFMobSlotSP spSlot;
+	GetInstance( slotName ).GetCOM( spSlot );
+	AxMobSlot axSlot( spSlot );
+
+	axMob.AppendSlot( spSlot );
+}
+
 
 //=---------------------------------------------------------------------=
 
