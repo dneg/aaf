@@ -5,9 +5,9 @@
 
 
 /* File created by MIDL compiler version 5.01.0164 */
-/* at TIMESTAMP REMOVED
+/* at Fri Dec 14 12:01:07 2001
  */
-/* Compiler settings for ../ref-impl/include/com-api/AAF.idl:
+/* Compiler settings for AAF.idl:
     Os (OptLev=s), W1, Zp8, env=Win32, ms_ext, c_ext
     error checks: allocation ref bounds_check enum stub_data 
 */
@@ -402,6 +402,9 @@ const IID IID_IAAFEssenceMultiAccess = {0xD815E2B4,0x2425,0x11d3,{0x80,0xAD,0x00
 
 
 const IID IID_IAAFTypeDefVariableArrayEx = {0x7f73d4b3,0x6f9a,0x11d4,{0x8e,0x59,0x00,0x90,0x27,0xdf,0xcc,0x26}};
+
+
+const IID IID_IAAFMasterMobEx = {0xb1a21370,0x1a7d,0x11d2,{0xbf,0x78,0x00,0x10,0x4b,0xc9,0x15,0x6d}};
 
 
 #ifdef __cplusplus
