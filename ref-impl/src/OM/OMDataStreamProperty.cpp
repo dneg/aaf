@@ -50,6 +50,7 @@ void OMDataStreamProperty::restoreFrom(OMStoredObject& s, size_t size)
 
   OMStoredObject* store = _propertySet->container()->store();
   char* streamName = new char[size];
+  ASSERT("Valid heap pointer", streamName != 0);
   store->read(_propertyId,
               _type,
               streamName,

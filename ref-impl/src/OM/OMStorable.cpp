@@ -185,6 +185,7 @@ void OMStorable::setName(const char* name)
   delete [] _name;
   _name = 0; // for BoundsChecker
   _name = new char[strlen(name) + 1];
+  ASSERT("Valid heap pointer", _name != 0);
   strcpy(_name, name);
   delete [] _pathName;
   _pathName = 0;
@@ -328,18 +329,21 @@ char* OMStorable::makePathName(void)
     if (cont->containingObject() != 0) {
       // general case
       result = new char[strlen(cont->pathName()) + strlen(name()) + 1 + 1];
+      ASSERT("Valid heap pointer", result != 0);
       strcpy(result, cont->pathName());
       strcat(result, "/");
       strcat(result, name());
     } else {
       // child of root
       result = new char[strlen(cont->pathName()) + strlen(name()) + 1];
+      ASSERT("Valid heap pointer", result != 0);
       strcpy(result, cont->pathName());
       strcat(result, name());
     }
   } else {
     // root
     result = new char[strlen(name()) + 1];
+    ASSERT("Valid heap pointer", result != 0);
     strcpy(result, name());
   }
 
