@@ -464,13 +464,18 @@ AAFRESULT STDMETHODCALLTYPE
 			if(index < 0 || index >= numReps)
 				return(AAFRESULT_BADINDEX);
 			pGroup = dynamic_cast<ImplAAFEssenceGroup*>(pSegment);
-			if(pGroup == NULL)
+			if(pGroup != NULL)
+			{
+				hr = pGroup->GetChoiceAt (index, ppSegment);
+				pGroup->ReleaseReference();
+				pGroup = NULL;
+				pSegment->ReleaseReference();
+				pSegment = NULL;
+			}
+			else if(index == 0)
+				*ppSegment = pSegment;
+			else
 				return(AAFRESULT_INCONSISTANCY);
-			hr = pGroup->GetChoiceAt (index, ppSegment);
-			pGroup->ReleaseReference();
-			pGroup = NULL;
-			pSegment->ReleaseReference();
-			pSegment = NULL;
 		}
 		pSlot->ReleaseReference();
 		pSlot = NULL;
@@ -550,13 +555,16 @@ AAFRESULT STDMETHODCALLTYPE
 		{
 			hr = pSegment->NumRepresentations(&numReps);
 			pGroup = dynamic_cast<ImplAAFEssenceGroup*>(pSegment);
-			if(pGroup == NULL)
-				return(AAFRESULT_INCONSISTANCY);
-			hr = pGroup->GetCriteriaSegment (pCriteria, ppSourceClip);
-			pGroup->ReleaseReference();
-			pGroup = NULL;
-			pSegment->ReleaseReference();
-			pSegment = NULL;
+			if(pGroup != NULL)
+			{
+				hr = pGroup->GetCriteriaSegment (pCriteria, ppSourceClip);
+				pGroup->ReleaseReference();
+				pGroup = NULL;
+				pSegment->ReleaseReference();
+				pSegment = NULL;
+			}
+			else
+				*ppSourceClip = pSegment;
 		}
 		pSlot->ReleaseReference();
 		pSlot = NULL;
