@@ -153,6 +153,9 @@ AAFRESULT STDMETHODCALLTYPE
 	  totalNameSize += (wcslen (pMemberNames[i]) + 1);
 	}
 
+  if ((totalNameSize * sizeof(aafCharacter)) > OMPROPERTYSIZE_MAX)
+	return AAFRESULT_BAD_SIZE;
+
   aafCharacter * namesBuf = new aafCharacter[totalNameSize];
   if (!namesBuf)
 	return AAFRESULT_NOMEMORY;

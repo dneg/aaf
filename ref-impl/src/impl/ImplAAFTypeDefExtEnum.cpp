@@ -468,8 +468,17 @@ ImplAAFTypeDefExtEnum::AppendElement (
 		// Copy newly-appended name and value buffers out.  Do these
 		// together, last so that if any errors occurred during the
 		// calculations we won't leave the property half-appended.
-		_ElementNames.setValue (namesBuf, newNameCharCount*sizeof(aafWChar));
-		_ElementValues.setValue (valsBuf, (origNumElems+1)*sizeof (aafUID_t));
+		// Before appending make sure that the new values fit.
+		if ((newNameCharCount*sizeof(aafWChar)) <= OMPROPERTYSIZE_MAX &&
+                    ((origNumElems+1)*sizeof (aafUID_t)) <= OMPROPERTYSIZE_MAX)
+		{
+			_ElementNames.setValue (namesBuf, newNameCharCount*sizeof(aafWChar));
+			_ElementValues.setValue (valsBuf, (origNumElems+1)*sizeof (aafUID_t));
+		}
+		else
+		{
+			rReturned = AAFRESULT_BAD_SIZE;
+		}
 	}
 	catch (AAFRESULT &rCaught)
 	{

@@ -140,6 +140,9 @@ AAFRESULT STDMETHODCALLTYPE
 	if(pPalette == NULL)
 		return(AAFRESULT_NULL_PARAM);
 
+	if ((numberElements * sizeof(aafUInt8)) > OMPROPERTYSIZE_MAX)
+		return(AAFRESULT_BAD_SIZE);
+
 	_palette.setValue(pPalette, numberElements * sizeof(aafUInt8));
 
 	return AAFRESULT_SUCCESS;

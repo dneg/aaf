@@ -43,6 +43,7 @@
 
 #include <assert.h>
 #include <string.h>
+#include <wchar.h>
 #include "aafErr.h"
 #include "ImplAAFObjectCreation.h"
 #include "ImplAAFDictionary.h"
@@ -239,6 +240,9 @@ AAFRESULT STDMETHODCALLTYPE
 	if(pVersionString == NULL)
 		return(AAFRESULT_NULL_PARAM);
 
+	if(wcslen(pVersionString)*sizeof(OMCharacter) >= OMPROPERTYSIZE_MAX)
+		return AAFRESULT_BAD_SIZE;
+
 	_pluginVersionString = pVersionString;
 
 	return(AAFRESULT_SUCCESS); 
@@ -290,6 +294,9 @@ AAFRESULT STDMETHODCALLTYPE
 {
 	if(pManufacturerName == NULL)
 		return(AAFRESULT_NULL_PARAM);
+
+	if(wcslen(pManufacturerName)*sizeof(OMCharacter) >= OMPROPERTYSIZE_MAX)
+		return AAFRESULT_BAD_SIZE;
 
 	_pluginManufacturerName = pManufacturerName;
 

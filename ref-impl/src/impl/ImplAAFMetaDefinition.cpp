@@ -63,6 +63,7 @@ typedef ImplAAFSmartPointer<ImplEnumAAFPropertyDefs> ImplEnumAAFPropertyDefsSP;
 
 #include <assert.h>
 #include <string.h>
+#include <wchar.h>
 
 
 ImplAAFMetaDefinition::ImplAAFMetaDefinition ()
@@ -137,6 +138,11 @@ AAFRESULT STDMETHODCALLTYPE
 	  return AAFRESULT_NULL_PARAM;
 	}
 
+  if (wcslen(pName)*sizeof(OMCharacter) >= OMPROPERTYSIZE_MAX)
+	{
+	  return AAFRESULT_BAD_SIZE;
+	}
+
   _name = pName;
 
   return AAFRESULT_SUCCESS;
@@ -183,6 +189,11 @@ AAFRESULT STDMETHODCALLTYPE
   if (! pDescription)
 	{
 	  return AAFRESULT_NULL_PARAM;
+	}
+
+  if (wcslen(pDescription)*sizeof(OMCharacter) >= OMPROPERTYSIZE_MAX)
+	{
+	  return AAFRESULT_BAD_SIZE;
 	}
 
   _description = pDescription;

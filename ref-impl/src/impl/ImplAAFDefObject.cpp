@@ -50,6 +50,7 @@
 
 #include <assert.h>
 #include <string.h>
+#include <wchar.h>
 #include "ImplAAFObjectCreation.h"
 #include "aafErr.h"
 #include "ImplAAFPluginDef.h"
@@ -84,12 +85,19 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 		return AAFRESULT_NULL_PARAM;
 	}
-	else
+	if (wcslen(pName)*sizeof(OMCharacter) >= OMPROPERTYSIZE_MAX)
 	{
-		_identification = id;
-		_name = pName;
-		_description = pDesc;
+		return AAFRESULT_BAD_SIZE;
 	}
+	if (wcslen(pDesc)*sizeof(OMCharacter) >= OMPROPERTYSIZE_MAX)
+	{
+		return AAFRESULT_BAD_SIZE;
+	}
+
+	_identification = id;
+	_name = pName;
+	_description = pDesc;
+
 	return AAFRESULT_SUCCESS;
 }
 
@@ -104,12 +112,27 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 		return AAFRESULT_NULL_PARAM;
 	}
+	if (wcslen(pName)*sizeof(OMCharacter) >= OMPROPERTYSIZE_MAX)
+	{
+		return AAFRESULT_BAD_SIZE;
+	}
+
+        // Validate pDesc
+	if (pDesc != NULL)
+	{
+		if (wcslen(pDesc)*sizeof(OMCharacter) >= OMPROPERTYSIZE_MAX)
+		{
+			return AAFRESULT_BAD_SIZE;
+		}
+	}
 
 	_identification = id;
 	_name = pName;
 	
 	if (pDesc != NULL)
+	{
 		_description = pDesc;
+	}
 
 	return AAFRESULT_SUCCESS;
 }
@@ -122,6 +145,10 @@ AAFRESULT STDMETHODCALLTYPE
   if (! pName)
 	{
 	  return AAFRESULT_NULL_PARAM;
+	}
+  if (wcslen(pName)*sizeof(OMCharacter) >= OMPROPERTYSIZE_MAX)
+	{
+	  return AAFRESULT_BAD_SIZE;
 	}
 
   _name = pName;
@@ -170,6 +197,10 @@ AAFRESULT STDMETHODCALLTYPE
   if (! pDescription)
 	{
 	  return AAFRESULT_NULL_PARAM;
+	}
+  if (wcslen(pDescription)*sizeof(OMCharacter) >= OMPROPERTYSIZE_MAX)
+	{
+	  return AAFRESULT_BAD_SIZE;
 	}
 
   _description = pDescription;

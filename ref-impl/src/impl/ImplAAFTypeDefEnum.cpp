@@ -124,6 +124,9 @@ ImplAAFTypeDefEnum::pvtInitialize (
 	if (!pTypeName)
 		return AAFRESULT_NULL_PARAM;
 	
+	if ((numElements*sizeof(aafInt64)) > OMPROPERTYSIZE_MAX)
+		return(AAFRESULT_BAD_SIZE);
+
 	AAFRESULT hr;
 	
 	hr = ImplAAFMetaDefinition::Initialize(id, pTypeName, NULL);
@@ -140,6 +143,10 @@ ImplAAFTypeDefEnum::pvtInitialize (
 		totalNameSize += (wcslen (pElementNames[i]) + 1);
 	}
 	
+	if ((totalNameSize * sizeof(OMCharacter)) > OMPROPERTYSIZE_MAX)
+		return(AAFRESULT_BAD_SIZE);
+
+
 	wchar_t * namesBuf = new wchar_t[totalNameSize];
 	if (!namesBuf)
 		return AAFRESULT_NOMEMORY;

@@ -35,6 +35,7 @@
 #include "AAFResult.h"
 
 #include <assert.h>
+#include <wchar.h>
 
 
 ImplAAFNetworkLocator::ImplAAFNetworkLocator ()
@@ -97,6 +98,11 @@ ImplAAFNetworkLocator::SetPath (const aafCharacter *  pPathBuf)
   if (! pPathBuf)
 	{
 	  return AAFRESULT_NULL_PARAM;
+	}
+
+  if (wcslen(pPathBuf)*sizeof(OMCharacter) >= OMPROPERTYSIZE_MAX)
+	{
+	  return AAFRESULT_BAD_SIZE;
 	}
 
 	_path = pPathBuf;

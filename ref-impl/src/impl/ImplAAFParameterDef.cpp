@@ -34,6 +34,7 @@
 
 #include <assert.h>
 #include <string.h>
+#include <wchar.h>
 #include "aafErr.h"
 
 ImplAAFParameterDef::ImplAAFParameterDef ()
@@ -156,6 +157,9 @@ AAFRESULT STDMETHODCALLTYPE
 {
 	if(pDisplayUnits == NULL)
 		return(AAFRESULT_NULL_PARAM);
+
+	if(wcslen(pDisplayUnits)*sizeof(OMCharacter) >= OMPROPERTYSIZE_MAX)
+		return AAFRESULT_BAD_SIZE;
 
 	_displayUnits = pDisplayUnits;
 

@@ -174,7 +174,11 @@ AAFRESULT STDMETHODCALLTYPE
       OMPropertyId * targetPids,
       OMPropertyId uniqueIdentifierPid)
 {
-  if (! pTypeName) return AAFRESULT_NULL_PARAM;
+  if (! pTypeName)
+    return AAFRESULT_NULL_PARAM;
+
+  if (ids * sizeof(aafUID_t) > OMPROPERTYSIZE_MAX)
+    return AAFRESULT_BAD_SIZE;
 
   AAFRESULT hr;
 

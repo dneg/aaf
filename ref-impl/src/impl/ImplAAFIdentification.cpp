@@ -36,6 +36,7 @@
 #include "AAFPropertyIDs.h"
 
 #include <assert.h>
+#include <wchar.h>
 
 
 ImplAAFIdentification::~ImplAAFIdentification ()
@@ -364,6 +365,11 @@ AAFRESULT STDMETHODCALLTYPE
 	  return AAFRESULT_NULL_PARAM;
 	}
 
+  if (wcslen(pName)*sizeof(OMCharacter) >= OMPROPERTYSIZE_MAX)
+	{
+	  return AAFRESULT_BAD_SIZE;
+	}
+
   _companyName = pName;
 
   return AAFRESULT_SUCCESS;
@@ -376,6 +382,11 @@ AAFRESULT STDMETHODCALLTYPE
   if (! pName)
 	{
 	  return AAFRESULT_NULL_PARAM;
+	}
+
+  if (wcslen(pName)*sizeof(OMCharacter) >= OMPROPERTYSIZE_MAX)
+	{
+	  return AAFRESULT_BAD_SIZE;
 	}
 
   _productName = pName;
@@ -403,6 +414,11 @@ AAFRESULT STDMETHODCALLTYPE
 		return AAFRESULT_NULL_PARAM;
 	}
 	
+	if (wcslen(pVS)*sizeof(OMCharacter) >= OMPROPERTYSIZE_MAX)
+	{
+		return AAFRESULT_BAD_SIZE;
+	}
+
 	_productVersionString = pVS;
 	
 	return AAFRESULT_SUCCESS;

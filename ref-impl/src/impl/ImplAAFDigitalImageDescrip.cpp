@@ -165,6 +165,9 @@ AAFRESULT STDMETHODCALLTYPE
 	if(pVideoLineMap == NULL)
 		return(AAFRESULT_NULL_PARAM);
 
+	if ((numberElements * sizeof(aafInt32)) > OMPROPERTYSIZE_MAX)
+		return(AAFRESULT_BAD_SIZE);
+
 	_videoLineMap.setValue(pVideoLineMap, numberElements * sizeof(aafInt32));
 
 	return AAFRESULT_SUCCESS;

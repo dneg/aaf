@@ -533,6 +533,9 @@ AAFRESULT STDMETHODCALLTYPE
 	if(pName == NULL)
 		return(AAFRESULT_NULL_PARAM);
 
+	if(wcslen(pName)*sizeof(OMCharacter) >= OMPROPERTYSIZE_MAX)
+		return(AAFRESULT_BAD_SIZE);
+
 	_name = pName;
 
 	return(AAFRESULT_SUCCESS); 

@@ -32,6 +32,7 @@
 
 #include <assert.h>
 #include <string.h>
+#include <wchar.h>
 
 
 ImplAAFHTMLClip::ImplAAFHTMLClip () :
@@ -86,6 +87,9 @@ ImplAAFHTMLClip::SetBeginAnchor (const aafCharacter *  pName)
 	if (NULL == pName)
 		return(AAFRESULT_NULL_PARAM);
 	
+	if (wcslen(pName)*sizeof(OMCharacter) >= OMPROPERTYSIZE_MAX)
+		return(AAFRESULT_BAD_SIZE);
+
 	_beginAnchor = pName;
 	
 	return (AAFRESULT_SUCCESS); 
@@ -133,6 +137,9 @@ ImplAAFHTMLClip::SetEndAnchor (const aafCharacter *  pName)
 	if (NULL == pName)
 		return(AAFRESULT_NULL_PARAM);
 	
+	if (wcslen(pName)*sizeof(OMCharacter) >= OMPROPERTYSIZE_MAX)
+		return(AAFRESULT_BAD_SIZE);
+
 	_endAnchor = pName;
 	
 	return (AAFRESULT_SUCCESS); 
