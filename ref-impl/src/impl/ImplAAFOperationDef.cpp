@@ -42,6 +42,7 @@
 #include "ImplAAFReferenceValue.h"
 
 extern "C" const aafClassID_t CLSID_EnumAAFEffectDefs;
+extern "C" const aafClassID_t CLSID_EnumAAFParameterDefs;
  
 ImplAAFEffectDef::ImplAAFEffectDef ()
 : _dataDef(			PID_EffectDefinition_DataDefinition,	"DataDefinition"),
@@ -68,7 +69,6 @@ ImplAAFEffectDef::~ImplAAFEffectDef ()
 
 //	ImplAAFEssenceDescriptor *dataDef = _dataDef.setValue(nilUID);
 //	ImplAAFEssenceDescriptor *degradeTo = _degradeTo.setValue(0,0);
-//	ImplAAFEssenceDescriptor *paramDefined = _paramDefined.setValue(0);
 //	if (dataDef)
 //	{
 //		dataDef->ReleaseReference();
@@ -76,10 +76,6 @@ ImplAAFEffectDef::~ImplAAFEffectDef ()
 //	if (degradeTo)
 //	{
 //		degradeTo->ReleaseReference();
-//	}
-//	if (paramDefined)
-//	{
-//		paramDefined->ReleaseReference();
 //	}
 }
 
@@ -144,7 +140,7 @@ AAFRESULT STDMETHODCALLTYPE
 	XPROTECT()
 	{
 		oldBufSize = _degradeTo.size();
-		newBufSize = oldBufSize + 1;
+		newBufSize = oldBufSize + sizeof(aafUID_t);
 		CHECK(pEffectDef->GetAUID(&newUID));
 		tmp = new aafUID_t[newBufSize];
 		if(tmp == NULL)
@@ -187,7 +183,7 @@ AAFRESULT STDMETHODCALLTYPE
 	XPROTECT()
 	{
 		oldBufSize = _degradeTo.size();
-		newBufSize = oldBufSize + 1;
+		newBufSize = oldBufSize + sizeof(aafUID_t);
 		CHECK(pEffectDef->GetAUID(&newUID));
 		tmp = new aafUID_t[newBufSize];
 		if(tmp == NULL)
@@ -333,7 +329,7 @@ AAFRESULT STDMETHODCALLTYPE
 	XPROTECT()
 	{
 		oldBufSize = _paramDefined.size();
-		newBufSize = oldBufSize + 1;
+		newBufSize = oldBufSize + sizeof(aafUID_t);
 		CHECK(pAAFParameterDef->GetAUID(&newUID));
 		tmp = new aafUID_t[newBufSize];
 		if(tmp == NULL)
@@ -358,7 +354,15 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFEffectDef::GetParameterDefinitions (
       ImplEnumAAFParameterDefs **ppEnum)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	if(ppEnum == NULL)
+		return(AAFRESULT_NULL_PARAM);
+
+	*ppEnum = (ImplEnumAAFParameterDefs *)CreateImpl(CLSID_EnumAAFParameterDefs);
+	if(*ppEnum == NULL)
+		return(AAFRESULT_NOMEMORY);
+	(*ppEnum)->SetEnumProperty(this, &_paramDefined);
+
+	return(AAFRESULT_SUCCESS);
 }
 
 

@@ -29,40 +29,48 @@
 
 
 ImplAAFParameterDef::ImplAAFParameterDef ()
-: _dataDef(			PID_ParameterDefinition_Type,					"Type"),
+: _typeDef(			PID_ParameterDefinition_Type,					"Type"),
   _refVal(			PID_ParameterDefinition_ReferenceValues,		"ReferenceValues"),
   _displayUnits(	PID_ParameterDefinition_DisplayUnits,			"DisplayUnits")
 {
-	_persistentProperties.put(_dataDef.address());
+	_persistentProperties.put(_typeDef.address());
 	_persistentProperties.put(_refVal.address());
 	_persistentProperties.put(_displayUnits.address());
 }
 
 
 ImplAAFParameterDef::~ImplAAFParameterDef ()
-{}
-
-
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFParameterDef::GetParameterDataDefID (
-      aafUID_t *pParameterDataDefID)
 {
-	if(pParameterDataDefID == NULL)
-		return AAFRESULT_NULL_PARAM;
-	
-	*pParameterDataDefID = _dataDef;
+	size_t size = _refVal.getSize();
+	for (size_t i = 0; i < size; i++) {
+		ImplAAFReferenceValue *pRefVal = _refVal.setValueAt(0, i);
 
-	return AAFRESULT_SUCCESS;
+		if (pRefVal) {
+			pRefVal->ReleaseReference();
+		}
+	}
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFParameterDef::SetParameterDataDefID (
-      aafUID_t ParameterDataDefID)
+    ImplAAFParameterDef::GetTypeDef (
+      ImplAAFTypeDef **ppTypeDef)
 {
-	_dataDef = ParameterDataDefID;
+	if(ppTypeDef == NULL)
+		return AAFRESULT_NULL_PARAM;
 
-	return AAFRESULT_SUCCESS;
+	return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFParameterDef::SetTypeDef (
+      ImplAAFTypeDef * pTypeDef)
+{
+	if(pTypeDef == NULL)
+		return AAFRESULT_NULL_PARAM;
+
+	return AAFRESULT_NOT_IMPLEMENTED;
 }
 
 

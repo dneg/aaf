@@ -202,6 +202,33 @@ public:
         (ImplEnumAAFEffectDefs ** ppEnum);
 
   //****************
+  // RegisterParameterDefinition()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    RegisterParameterDefinition
+        // @parm [in] Parameter Definition Object
+        (ImplAAFParameterDef * pParameterDef);
+
+  //****************
+  // LookupParameterDefinition()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    LookupParameterDefinition
+        (// @parm [in,ref] Parameter Unique ID
+         aafUID_t *  ParameterID,
+
+         // @parm [out,retval] Parameter definition object
+         ImplAAFParameterDef ** ppParameterDef);
+
+  //****************
+  // GetParameterDefinitions()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetParameterDefinitions
+        // @parm [out,retval] Definition Enumeration
+        (ImplEnumAAFParameterDefs ** ppEnum);
+
+  //****************
   // RegisterPluggableDefinitions()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
@@ -242,8 +269,9 @@ public:
   	AAFRESULT LookupPluggableDef(aafUID_t *containerID, ImplAAFPluggableDef **result);
 
 private:
-    OMStrongReferenceVectorProperty<ImplAAFPluggableDef> _pluginDefinitions;
-    OMStrongReferenceVectorProperty<ImplAAFEffectDef>	 _effectDefinitions;
+    OMStrongReferenceVectorProperty<ImplAAFPluggableDef>	_pluginDefinitions;
+    OMStrongReferenceVectorProperty<ImplAAFEffectDef>		_effectDefinitions;
+    OMStrongReferenceVectorProperty<ImplAAFParameterDef>	 _parameterDefinitions;
 };
 
 #endif // ! __ImplAAFDictionary_h__
