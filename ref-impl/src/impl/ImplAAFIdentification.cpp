@@ -38,7 +38,19 @@ _date(                PID_IDENTIFICATION_DATE,                 "date"),
 // _toolKitVersion(   PID_IDENTIFICATION_TOOLKITVERSION,       "toolkitVersion"),
 _platform(            PID_IDENTIFICATION_PLATFORM,             "platform")
 // _generation(       PID_IDENTIFICATION_GENERATION,           "generation")
-{}
+{
+  // Insert the properties into the persistent property set.
+  //
+  _persistentProperties.put(   _companyName.address());
+  _persistentProperties.put(   _productName.address());
+  // _persistentProperties.put(_productVersion.address());
+  _persistentProperties.put(   _productVersionString.address());
+  // _persistentProperties.put(_productId.address());
+  _persistentProperties.put(   _date.address());
+  // _persistentProperties.put(_toolKitVersion.address());
+  _persistentProperties.put(   _platform.address());
+  // _persistentProperties.put(_generation.address());
+}
 
 ImplAAFIdentification::ImplAAFIdentification(
                                      const char* companyName,
