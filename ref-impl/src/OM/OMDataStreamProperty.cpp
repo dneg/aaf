@@ -168,7 +168,7 @@ OMUInt64 OMDataStreamProperty::position(void) const
   //         write() on this stream. The position is specified as an
   //         offset in bytes from the begining of the data stream.
   //   @this const
-void OMDataStreamProperty::setPosition(const OMUInt64 offset)
+void OMDataStreamProperty::setPosition(const OMUInt64 offset) const
 {
   TRACE("OMDataStreamProperty::setPosition");
 
