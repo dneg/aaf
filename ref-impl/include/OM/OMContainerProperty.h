@@ -82,6 +82,8 @@ protected:
     //          local key assignment.
   void setLocalKey(OMUInt32 newLocalKey);
 
+  virtual const wchar_t* storedName(void) const;
+
 private:
   // @access Private members.
 
