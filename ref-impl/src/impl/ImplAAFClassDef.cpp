@@ -320,6 +320,8 @@ AAFRESULT STDMETHODCALLTYPE
       ImplAAFPropertyDef ** ppPropDef)
 {
   AAFRESULT hr;
+  if (ppPropDef)
+    *ppPropDef = NULL;
   if (! pTypeDef)
 	return AAFRESULT_NULL_PARAM;
 
@@ -373,24 +375,32 @@ AAFRESULT STDMETHODCALLTYPE
 			return hr;
 		if(isDuplicate)
 			return AAFRESULT_PROPERTY_DUPLICATE;
+		ImplAAFPropertyDefSP pNewPropertyDef;
 	  hr = pvtRegisterPropertyDef (id,
 								 pName,
 								 typeId,
 								 kAAFTrue,
 								 kAAFFalse, /* cannot be a unique identifier */
-								 ppPropDef);
+								 &pNewPropertyDef);
 								 
 		if (AAFRESULT_SUCCEEDED(hr))
 		{
 		  // Check to make sure that the new optional property
 		  // is complete for this class defintion.
-		  hr = (*ppPropDef)->CompleteClassRegistration();
+		  hr = pNewPropertyDef->CompleteClassRegistration();
 		  if (AAFRESULT_FAILED(hr))
 		  {
 		    // remove the invalid property definition from the set of properties.
-		    _Properties.removeValue(*ppPropDef);
-		    (*ppPropDef)->ReleaseReference();
-		    *ppPropDef = NULL;
+		    _Properties.removeValue(pNewPropertyDef);
+		    pNewPropertyDef->ReleaseReference(); // remove the reference from the set.
+		  }
+		  else
+		  {
+		    if (ppPropDef)
+		    {
+		      *ppPropDef = pNewPropertyDef;
+		      (*ppPropDef)->AcquireReference();
+		    }
 		  }
 		}
 	  		 
