@@ -85,13 +85,6 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFRandomFile::Revert ()
-{
-  return AAFRESULT_NOT_IMPLEMENTED;
-}
-
-
-AAFRESULT STDMETHODCALLTYPE
     ImplAAFRandomFile::SaveAsFile (
       ImplAAFFile * /*pDestFile*/)
 {
