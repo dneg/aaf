@@ -1,16 +1,40 @@
-DocJet Procedures:
-0. Checkin Tom's changes to do the stored class inheritance stuff
+Instructions for building an API Ref manual from the IDL with DocJet
 
-1. Copyout files and do a clearmake
+Original - Joshua Goldman, Avid
+Updated  - Simon Carter, AAF Assoc Dev Support
 
-2. Open the Visual C++ workspace and build the project to generate the AAF.idl and 
-    AAFTypes.h files you'll need in the following steps. 
 
-3. User perl scripts to convert AAF.idl and save as
-   AAFWinSDK/include/AAFnoSpace.idl. Use idlcleanup.perl and
-   idlblankcomfix.perl to produce it.
+Requirements:
 
-# perl idlcleanup.perl AAF.idl |perl idlblankcomfix.perl > AAFNoSpace.idl
+Windows NT4, 2K
+DocJet from Talltree Software http://www.talltree.com/docjet/  (currently 4.0build7)
+DocJet 'team' licence (there are more than 1000 objects) $550
+Hacked DocJet 'Summary Hook' parser - to spilt Description at first sentence
+HTMLHelp SDK/Compiler from Microsoft
+Cygwin or equivalent for cvs, GnuMake, perl
+
+Steps
+
+1. do a CVS update on your workspace to make sure the dodo files and headers are up to date
+
+2. From a cygwin shell (or equivalent) run Make in this directory (AAF/ref-impl/doc/com-api)
+   The first step will be to copy CVS based files from this  directory into the DocJet destination dirs.
+   This includes the Summary Hook extension which has been tweaked (See SummaryHook.cpp and diff with
+   DocJet distribution) to allow the first sentence of a Comment to be isolated as the 'Summary'
+   (quick one line description) and the remainder be passed as the 'Remarks' section.
+   The original Summary Hook can only handle an initial sentence or paragraph one line long and
+   it repeats the first sentence in the remarks.
+   There are two targets, regular HTML and Microsoft HtmlHelp which will be generated in
+   Documemtation\New Standard HTML  and Documemtation\New Standard HTMLHelp subdirectories
+   Perl scripts idlcleanup.perl and idlblanlkcomfix.perl are used to preprocess and tidy up the IDL
+   to run under Cygwin with CRLF line endings the CR's had to be stripped out with 'tr' first.
+   With these scripts AAF/ref-impl/include/com-api/AAF.idl yields AAFnospace.idl
+   DocJet is run on this IDL file using the refDocFromIDL.djt and refHHDocFromIDL.djt configuration files.
+   The output is redirected to the file errors.txt, it is worth examining this file,
+   There will be loads of Warnings for missing sections but there should not be
+   any major parsing 'Error D11042' could not decipher... or stuff gets left out of the HTML.
+   
+**** FIXME Extra steps not yet being performed !
 
 4. Fix AAFGlobals.h if these interfaces have changed.
 Global functions not in AAF.idl. Global functions in AAF.h but
@@ -35,8 +59,9 @@ AAFglobal.h
 
 To edit the DocJet settings, double click on:
 
-   REF DOC FROM AAF IDL.DJT
+   RefDocFRomIDL.djt
 
+Basic mods to generic settings:
 Sources tab
 I've specified the Sources files listed above.
 
@@ -59,22 +84,13 @@ web link
 Automatics and Comment Sections tabs
 didn't do anything here
 
-6. Set project to "Ref doc from aaf idl" and build.
-
-[Need to add doc about paragraph sign to put types, interfaces in lower-left box. 
-Why are the types not defined in main box but are in lower-left?]
-
-7,8,9 deleted
-
-10. Update DocStatus.txt for release notes
-
 11. Copy mhelp.chm to projects directory
 
-12. Zip NewStandard HTML directory, copy to Eng:/web_site/AAF/specs/aafapinew
+12. scp man.zip to aaf.sourceforge.net:/home/groups/a/aa/aaf/htdocs/docs/
 
-13. Unzip on Unix using unzip.
+13. Unzip on Unix into com-api-new directory using unzip.
 
-14. Remove old aafapi and rename new.
+14. Remove old com-api directory and rename new.
 
 15. Fixes to source
     Get rid of incorrect stub only
@@ -98,20 +114,15 @@ D:\aafview\coresw\AAF-toolkit\AAFWinSDK\Ref doc from aaf idl\..\include\AAFnoSpa
 D:\aafview\coresw\AAF-toolkit\AAFWinSDK\Ref doc from aaf idl\..\include\AAFnoSpace.idl(27962) : Warning D2000: Undocumented object, 'IEnumAAFTaggedValues'
 D:\aafview\coresw\AAF-toolkit\AAFWinSDK\Ref doc from aaf idl\..\include\AAFnoSpace.idl(28110) : Warning D2000: Undocumented object, 'IEnumAAFTypeDefs'
 
-Fix text illustration in IAAFDigitalImageDescriptor
+Ascii Art Text illustration in IAAFDigitalImageDescriptor is in CVS as ImgDescArea.gif and .bmp for HTMLHelp
 
 -----------
 
 <SMC>
 how to generate HTMLHelp .chm file
 
-In DocJect configuration select output as Standard/HTMLHelp and make the files
+In DocJet configuration select output as Standard/HTMLHelp and make the files
 Should also run HTMLHelp complier
 Select the mhelp.hhp file and double click it to launch HTML Help workshop and hit the compile button
 
-This should give you a 
-
-
-
-
-
+This should give you a .chm and .chi file which need to be zipped together and uploaded.
