@@ -119,10 +119,10 @@ public:
 	STDMETHOD (GetOffsetFrameIndexes) (aafUInt32 * pOffset);
 	STDMETHOD (GetFrameIndexByteOrder) (aafUInt16 *byteOrder);
 	STDMETHOD (PutFrameIndexProperties) (aafUInt32 offset, aafUInt16 byteOrder);
+	STDMETHOD (GetResolutionID) ( aafInt32 *p_resid );
 	STDMETHOD (SetResolutionID) ( aafInt32  resolutionID );
+	STDMETHOD (SetFirstFrameOffset) ( aafInt32  firstFrameOffset );
 	STDMETHOD (SetFrameSampleSize) ( aafInt32 frameSampleSize );
-	STDMETHOD (SetMCProps) ( aafInt32 resolutionID, 
-				 aafInt32 frameSampleSize );
 
 private:
 	IUnknown *_filemob_unk; // used for equality testing.

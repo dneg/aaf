@@ -382,6 +382,8 @@ private:
 	aafUID_t _containerFormat;	// set by refimpl
 
 	// Data from/to DigitalImageDescriptor
+	aafUID_t _compression;
+
 	aafUID_t _codecID; // always CodecJPEG.
 
 	aafUInt32 _storedHeight;
@@ -445,6 +447,7 @@ private:
 
 	aafUInt16 _padBytesPerRow;
 	aafUInt32 _compression_IJG_Quality;
+	aafInt32 _resolutionID;
 
 
 	// Data do define and hold the sample image buffer used for raw sub-sampled
