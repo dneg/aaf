@@ -31,6 +31,7 @@
 
 #include "OMPortability.h"
 #include "OMDataTypes.h"
+#include "OMRedBlackTree.h"
 
 #include <stddef.h>
 
@@ -58,10 +59,6 @@ public:
     // @cmember Insert the <c OMProperty> <p property> into this
     //          <c OMPropertySet>.
   void put(OMProperty* property);
-
-    // @cmember Iterate over the <c OMProperty> objects in this
-    //          <c OMPropertySet>.
-  void iterate(size_t& context, OMProperty*& property) const;
 
     // @cmember Is an <c OMProperty> with property id <p propertyId>
     //          present in this <c OMPropertySet> ?
@@ -95,37 +92,18 @@ public:
     //          <c OMPropertySet>.
   OMStorable* container(void) const;
 
-protected:
-  static bool equal(const OMPropertyId& propertyIda,
-                    const OMPropertyId& propertyIdb);
-
 private:
 
-  struct OMPropertySetElement;
+  friend class OMPropertySetIterator;
 
-  // OMPropertySetElement for 'propertyId' or null if not found.
+  typedef OMRedBlackTreeIterator<OMPropertyId, OMProperty*> SetIterator;
+  typedef OMRedBlackTree<OMPropertyId, OMProperty*> Set;
+
+  // OMProperty with 'propertyName' or null if not found.
   //
-  OMPropertySetElement* find(const OMPropertyId propertyId) const;
+  OMProperty* find(const wchar_t* propertyName) const;
 
-  // OMPropertySetElement for 'propertyName' or null if not found.
-  //
-  OMPropertySetElement* find(const wchar_t* propertyName) const;
-
-  // First free entry or null if full.
-  //
-  OMPropertySetElement* find(void) const;
-
-  void grow(const size_t additionalElements);
-
-  struct OMPropertySetElement {
-    OMPropertyId _propertyId;
-    OMProperty* _property;
-    bool _valid;
-  };
-  OMPropertySetElement* _propertySet;  // Representation
-  size_t _capacity;                    // Number of potential elements
-  size_t _count;                       // Number of usable elements
-
+  Set _set;
   const OMStorable* _container;
 };
 
