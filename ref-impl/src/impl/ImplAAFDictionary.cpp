@@ -540,6 +540,14 @@ AAFRESULT ImplAAFDictionary::dictLookupClass (
 
 
 bool
+ImplAAFDictionary::IsAxiomaticClass (const aafUID_t &classID) const
+{
+  assert (_pBuiltinClasses);
+  return _pBuiltinClasses->IsAxiomaticClass (classID);
+}
+
+
+bool
 ImplAAFDictionary::pvtLookupAxiomaticClass (const aafUID_t &classID,
 										   ImplAAFClassDef **
 										   ppClassDef)
@@ -1978,10 +1986,14 @@ AAFRESULT ImplAAFDictionary::GenerateOmPid
 	  // properties to determine what user PIDs have already been
 	  // allocated.
 	  //
-	  if (0 >= _lastGeneratedPid)
+
+	  // _lastGeneratedPid cannot be positive!
+	  assert (0 >= _lastGeneratedPid);
+
+	  if (!_lastGeneratedPid)
 		{
-		  // _lastGeneratedPid cannot be positive!
-		  assert (0 == _lastGeneratedPid);
+		  // We haven't yet cached the user pids used in this file.  Do it now!
+		  assert (! _lastGeneratedPid);
 
 		  // must be signed!
 		  aafInt32 tmpUserPid = 0;
