@@ -146,10 +146,9 @@ static const aafUID_t kMobID_Personnel =
 // macro for checking HRESULT return values
 //
 // argument 'r' will probably have side effects, so make sure it is
-// evaluated once and only once, and outside of the assert() macro
-// (since assertions may be turned off).
+// evaluated once and only once.
 //
-#define check(r) {if (FAILED (r)) assert(0); }
+#define check(r) {if (FAILED (r)) throw r; }
 
 
 
@@ -164,29 +163,29 @@ typedef aafUInt32 contractID_t;
 
 
 static void SetStringProperty (IAAFObject * pObj,
-						const aafUID_t propertyID,
-						const aafCharacter * strValue);
+						aafUID_constref propertyID,
+						aafCharacter_constptr strValue);
 
 bool classDefinitionIsA ( IAAFClassDef *pClassDefQuery,
-							   const aafUID_t targetAUID);
+							   aafUID_constref targetAUID);
 
 
 // Main functions for PersonnelResource
 void PersonnelResourceSetFamilyName(IAAFObject *pResource,
-							   aafCharacter *familyName);
+							   aafCharacter_constptr familyName);
 
 void PersonnelResourceSetGivenName(IAAFObject *pResource,
-							   aafCharacter *givenName);
+							   aafCharacter_constptr givenName);
 void PersonnelResourceSetPosition(IAAFObject *pResource,
-							   ePosition position);
+							   const ePosition& position);
 void PersonnelResourceSetActorRole (IAAFObject *pResource,
-								  aafCharacter *role);
+								  aafCharacter_constptr role);
 void PersonnelResourceSetContractID (IAAFObject * pObj,
 								   contractID_t cid);
 void PersonnelResourceInitialize(IAAFObject *pResource,
-							   aafCharacter *familyName,
-							   aafCharacter *givenName,
-							   ePosition position);
+							   aafCharacter_constptr familyName,
+							   aafCharacter_constptr givenName,
+							   const ePosition& position);
 void PersonnelResourceGetGivenNameBufLen (IAAFObject * pObj, aafUInt32 *bufLen);
 
 
@@ -232,6 +231,7 @@ void CreateAndRegisterPersonnelResourceReference(IAAFDictionary * pDict);
 void CreateAndRegisterPersonnelResourceReferenceVector(IAAFDictionary * pDict);
 void CreateAndRegisterAdminMob (IAAFDictionary * pDict);
 void DefineResourceClassExtensions(IAAFDictionary *pDict);
+void VerifyResourceClassExtensions(IAAFDictionary *pDict);
 
 
 
@@ -244,7 +244,7 @@ bool ArePositionsEqual (const ePosition & positionA, const ePosition & positionB
 // Prints the given ePosition.
 //
 void PrintPosition (IAAFDictionary * pDict,
-				const ePosition position);
+				const ePosition & position);
 
 
 
@@ -253,7 +253,7 @@ void PrintPosition (IAAFDictionary * pDict,
 // Prints the given string.
 //
 ostream& operator<< (ostream& s,
-					 const aafCharacter * wstring);
+					 aafCharacter_constptr wstring);
 
 
 #endif // ! __extensionUtils_h__
