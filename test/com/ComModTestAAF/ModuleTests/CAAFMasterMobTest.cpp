@@ -386,7 +386,8 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 					pTapeName = new aafWChar [bufSize];
 					checkExpression(NULL != pTapeName, E_OUTOFMEMORY);
 
-          checkResult(pMasterMob->GetTapeName(slotID, pTapeName, bufSize));
+					checkResult(pMasterMob->GetTapeName(slotID, pTapeName, bufSize));
+					delete [] pTapeName;
 				}
 
 				checkResult(pMasterMob->GetNumRepresentations(slotID, &numReps));
@@ -413,8 +414,8 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 
 
   // Cleanup and return
-  if (pTapeName)
-		delete [] pTapeName;
+//  if (pTapeName)
+//		delete [] pTapeName;
 
   if (pSlot)
     pSlot->Release();

@@ -311,7 +311,6 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 				// Enumerate slots
 				checkResult(pPulldown->GetInputSegment(&pSegment));
 				checkResult(pSegment->QueryInterface(IID_IAAFSourceClip, (void **)&pSourceClip));
-				checkResult(pPulldown->GetInputSegment(&pSegment));
 				pSourceClip->Release();
 				pSourceClip = NULL;
 				checkResult(pPulldown->GetPulldownKind(&readPulldownKind));
