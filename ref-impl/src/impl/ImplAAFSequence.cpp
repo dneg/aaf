@@ -31,7 +31,22 @@ ImplAAFSequence::ImplAAFSequence ()
 }
 
 ImplAAFSequence::~ImplAAFSequence ()
-{}
+{
+	ImplAAFComponent *pComp = NULL;
+	size_t size;
+
+	_components.getSize(size);
+	for (size_t i = 0; i < size; i++) {
+		_components.getValueAt(pComp, i);
+
+		if (pComp) {
+			pComp->ReleaseReference();
+			// Set value to 0 so the OM can perform any necessary cleanup.
+			pComp = 0;
+			_components.setValueAt(pComp, i);
+		}
+	}
+}
 
 //***********************************************************
 //
