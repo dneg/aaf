@@ -9,7 +9,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -43,9 +43,6 @@
 
 #include "ImplAAFNetworkLocator.h"
 
-
-
-
 #ifndef __ImplAAFEssenceAccess_h__
 #include "ImplAAFEssenceAccess.h"
 #endif
@@ -56,6 +53,11 @@
 #include "ImplAAFContainerDef.h"
 #include "ImplEnumAAFPluginDescriptors.h"
 #include "ImplAAFDictionary.h"
+#include "ImplAAFDataDef.h"
+
+#include "ImplAAFBuiltinDefs.h"
+#include "ImplAAFSmartPointer.h"
+typedef ImplAAFSmartPointer<ImplAAFDataDef> ImplAAFDataDefSP;
 
 #include <assert.h>
 #include <string.h>
@@ -196,7 +198,7 @@ ImplAAFEssenceAccess::Create (ImplAAFMasterMob *    masterMob,
 	ImplAAFEssenceData	*implData = NULL;
 	aafmMultiCreate_t	createBlock;
 	wchar_t				*nameBuf = NULL;
-	aafInt32			buflen;
+	aafUInt32			buflen;
 	aafUID_t			aafFormat = ContainerAAF;
 
 	XPROTECT()
@@ -216,6 +218,8 @@ ImplAAFEssenceAccess::Create (ImplAAFMasterMob *    masterMob,
 			CHECK(masterMob->MyHeadObject(&dataHead));
 		}
 		
+		CHECK(dataHead->GetDictionary(&dataDict));
+
 		// Can't put raw media inside of an AAF File
 		if(_destination == NULL && !EqualAUID(&_fileFormat, &aafFormat))
 			RAISE(AAFRESULT_WRONG_MEDIATYPE);
@@ -270,7 +274,9 @@ ImplAAFEssenceAccess::Create (ImplAAFMasterMob *    masterMob,
 		else
 			_dataFileMob = NULL;
 		
-		CHECK(masterMob->AddMasterSlot (mediaKind, DEFAULT_FILE_SLOT, _compFileMob, masterSlotID, L"A Slot"));	// Should be NULL or something useful!!!
+		ImplAAFDataDefSP pMediaKind;
+		CHECK (dataDict->LookupDataDef (mediaKind, &pMediaKind));
+		CHECK(masterMob->AddMasterSlot (pMediaKind, DEFAULT_FILE_SLOT, _compFileMob, masterSlotID, L"A Slot"));	// Should be NULL or something useful!!!
 		if(_destination != NULL)
 		{
 			if(EqualAUID(&_fileFormat, &aafFormat))
@@ -296,10 +302,10 @@ ImplAAFEssenceAccess::Create (ImplAAFMasterMob *    masterMob,
 		if(EqualAUID(&_fileFormat, &aafFormat))
 		{
 			aafUID_t	essenceDataID;
-			
 			CHECK(_codec->GetEssenceDataID(&essenceDataID));
-			CHECK(dataHead->GetDictionary(&dataDict));
-			CHECK(dataDict->CreateInstance(essenceDataID, (ImplAAFObject **)&implData));
+			ImplAAFClassDefSP pEssenceDataClass;
+			CHECK(dataDict->LookupClassDef (essenceDataID, &pEssenceDataClass));
+			CHECK(dataDict->CreateInstance(pEssenceDataClass, (ImplAAFObject **)&implData));
 			dataObj = static_cast<IUnknown *> (implData->GetContainer());
 			
 			CHECK(implData->SetFileMob(_dataFileMob == NULL ? _compFileMob : _dataFileMob));
@@ -468,7 +474,8 @@ AAFRESULT STDMETHODCALLTYPE
 	ImplAAFSourceMob		*fileMob = NULL;
 	aafSubChannel_t			*destPtr;
 	wchar_t					*nameBuf = NULL;
-	aafInt32				buflen, n;
+	aafUInt32				buflen;
+	aafInt32				n;
 	aafUID_t				aafFormat = ContainerAAF;
 	aafmMultiCreate_t		*initPtr;
 	aafRational_t			sampleRate;
@@ -532,8 +539,13 @@ AAFRESULT STDMETHODCALLTYPE
 				if(fileMob->FindSlotBySlotID(initPtr->slotID, &tmpTrack) == AAFRESULT_SLOT_NOT_FOUND)
 				{
 					// !!! Assumes that the sampleRate == editRate
-					CHECK(fileMob->AddNilReference(
-						initPtr->slotID, oneLength, *initPtr->mediaKind, initPtr->sampleRate));
+				    ImplAAFDataDefSP pInitMediaKind;
+					CHECK(dataDict->LookupDataDef (*initPtr->mediaKind,
+												   &pInitMediaKind));
+					CHECK(fileMob->AddNilReference(initPtr->slotID,
+												   oneLength,
+												   pInitMediaKind,
+												   initPtr->sampleRate));
 					tmpTrack->ReleaseReference();
 					tmpTrack = NULL;
 				}
@@ -543,7 +555,9 @@ AAFRESULT STDMETHODCALLTYPE
 			destPtr->mediaKind = *(initPtr->mediaKind);
 			destPtr->trackID = initPtr->slotID;
 			destPtr->physicalOutChan = initPtr->subTrackNum;
-			CHECK(masterMob->AddMasterSlot (essenceKind, initPtr->slotID, _compFileMob, initPtr->slotID, L"A Slot"));	// Should be NULL or something useful!!!
+			ImplAAFDataDefSP pEssenceKind;
+			CHECK(dataDict->LookupDataDef (essenceKind, &pEssenceKind));
+			CHECK(masterMob->AddMasterSlot (pEssenceKind, initPtr->slotID, _compFileMob, initPtr->slotID, L"A Slot"));	// Should be NULL or something useful!!!
 //!!!			CvtInt32toPosition(0, destPtr->dataOffset);
 //!!!			CvtInt32toLength(0, destPtr->numSamples);
 //!!!			destPtr->sampleRate = initPtr->sampleRate;
@@ -598,7 +612,9 @@ AAFRESULT STDMETHODCALLTYPE
 				
 				CHECK(_codec->GetEssenceDataID(&essenceDataID));
 				CHECK(dataHead->GetDictionary(&dataDict));
-				CHECK(dataDict->CreateInstance(essenceDataID, (ImplAAFObject **)&implData));
+				ImplAAFClassDefSP pEssenceDataClass;
+				CHECK(dataDict->LookupClassDef(essenceDataID, &pEssenceDataClass));
+				CHECK(dataDict->CreateInstance(pEssenceDataClass, (ImplAAFObject **)&implData));
 				dataObj = static_cast<IUnknown *> (implData->GetContainer());
 				
 				CHECK(implData->SetFileMob(_dataFileMob == NULL ? _compFileMob : _dataFileMob));
@@ -763,7 +779,7 @@ AAFRESULT STDMETHODCALLTYPE
 	aafSourceRef_t	fileRef;
 	aafInt16		numCh;
 	wchar_t				*nameBuf = NULL;
-	aafInt32			buflen;
+	aafUInt32			buflen;
 	aafUID_t			essenceDescClass;
 	aafBool					found = AAFFalse, isIdentified;
 	aafUID_t				testFormat;
@@ -786,7 +802,9 @@ AAFRESULT STDMETHODCALLTYPE
 		slot->ReleaseReference();
 		slot = NULL;
 
-		CHECK(seg->GetDataDef(&mediaKind));
+		ImplAAFDataDefSP pDataDef;
+		CHECK(seg->GetDataDef(&pDataDef));
+		CHECK(pDataDef->GetAUID(&mediaKind));
 		CHECK(seg->GetLength(&masterMobLength));
 		seg->ReleaseReference();
 		seg = NULL;
@@ -1102,7 +1120,7 @@ AAFRESULT STDMETHODCALLTYPE
 	aafSourceRef_t	fileRef;
 	aafInt16		numCh;
 	wchar_t				*nameBuf = NULL;
-	aafInt32			buflen;
+	aafUInt32			buflen;
 	aafUID_t			essenceDescClass;
 	aafBool					found = AAFFalse, isIdentified;
 	aafUID_t				testFormat;
@@ -1125,7 +1143,9 @@ AAFRESULT STDMETHODCALLTYPE
 		slot->ReleaseReference();
 		slot = NULL;
 
-		CHECK(seg->GetDataDef(&mediaKind));
+		ImplAAFDataDefSP pDataDef;
+		CHECK(seg->GetDataDef(&pDataDef));
+		CHECK(pDataDef->GetAUID(&mediaKind));
 		CHECK(seg->GetLength(&masterMobLength));
 		seg->ReleaseReference();
 		seg = NULL;
@@ -1775,12 +1795,17 @@ AAFRESULT STDMETHODCALLTYPE
 
 /****/
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceAccess::GetLargestSampleSize (aafUID_t mediaKind,
-                           aafLength_t *maxSize)
+    ImplAAFEssenceAccess::GetLargestSampleSize
+      (ImplAAFDataDef * pMediaKind,
+	   aafLength_t *maxSize)
 {
+	aafAssert(pMediaKind != NULL, main, AAFRESULT_NULL_PARAM);
 	aafAssert(maxSize != NULL, main, AAFRESULT_NULL_PARAM);
+
 	XPROTECT()
 	{
+		aafUID_t mediaKind;
+		CHECK(pMediaKind->GetAUID(&mediaKind));
 		CHECK(_codec->GetLargestSampleSize(mediaKind, maxSize));
 	}
 	XEXCEPT
@@ -1797,14 +1822,21 @@ AAFRESULT STDMETHODCALLTYPE
 
 /****/
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceAccess::GetSampleFrameSize (aafUID_t mediaKind,
+    ImplAAFEssenceAccess::GetSampleFrameSize (
+                           ImplAAFDataDef * pMediaKind,
                            aafPosition_t frameNum,
                            aafLength_t* frameSize)
 {
+	aafAssert(pMediaKind != NULL, main, AAFRESULT_NULL_PARAM);
 	aafAssert(frameSize != NULL, main, AAFRESULT_NULL_PARAM);
+
 	XPROTECT()
 	{
-		CHECK(_codec->GetIndexedSampleSize(mediaKind, frameNum, frameSize));
+		aafUID_t mediaKind;
+		CHECK(pMediaKind->GetAUID(&mediaKind));
+		CHECK(_codec->GetIndexedSampleSize(mediaKind,
+										   frameNum,
+										   frameSize));
 	}
 	XEXCEPT
 	XEND
@@ -1842,11 +1874,12 @@ AAFRESULT STDMETHODCALLTYPE
 /****/
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFEssenceAccess::GetSampleCount (
-         aafUID_t mediaKind,
+		ImplAAFDataDef * pMediaKind,
         aafLength_t *result)
 {
 //!!!	aafInt64		one;
 	
+	aafAssert(pMediaKind != NULL, _mainFile, AAFRESULT_NULL_PARAM);
 	aafAssert(result != NULL, _mainFile, AAFRESULT_NULL_PARAM);
 
 //!!!	CvtInt32toInt64(1, &one);
@@ -1857,6 +1890,10 @@ AAFRESULT STDMETHODCALLTYPE
 //	  return(AAFRESULT_SUCCESS);
 //	}
 
+	aafUID_t mediaKind;
+	AAFRESULT hr = pMediaKind->GetAUID(&mediaKind);
+	if (AAFRESULT_FAILED (hr))
+	  return hr;
 	return(_codec->GetNumSamples(mediaKind, result));
 }
 
@@ -2243,7 +2280,8 @@ AAFRESULT ImplAAFEssenceAccess::MakeAAFContainerDef(ImplAAFHeader *head, ImplAAF
 	XPROTECT()
 	{
 		CHECK(head->GetDictionary (&dict));
-		CHECK(dict->CreateInstance(AUID_AAFContainerDef, (ImplAAFObject **)&obj));
+		CHECK(dict->CreateInstance(dict->GetBuiltinDefs()->cdContainerDef(),
+								   (ImplAAFObject **)&obj));
 		if(obj == NULL)
 			RAISE(AAFRESULT_NOMEMORY);
 		uid = ContainerAAF;
@@ -2494,7 +2532,7 @@ ImplAAFEssenceAccess::CreateEssenceFileFromLocator (ImplAAFHeader *srcHead, Impl
 	ImplAAFIdentification			*xferIdent = NULL;
 	aafProductIdentification_t		identSetup = { 0 };
 	aafUInt32						length;
-	aafInt32						buflen;
+	aafUInt32						buflen;
 	wchar_t							*nameBuf = NULL;
 	ImplAAFFile						*theFile = NULL;
 	aafUID_t						myFileCLSID;
@@ -2584,7 +2622,7 @@ ImplAAFEssenceAccess::ModifyEssenceFileFromLocator (ImplAAFHeader *srcHead, Impl
 	ImplAAFIdentification			*xferIdent;
 	aafProductIdentification_t		identSetup;
 	aafUInt32						length;
-	aafInt32						buflen;
+	aafUInt32						buflen;
 	wchar_t							*nameBuf = NULL;
 	ImplAAFFile						*theFile;
 	aafUID_t						myFileCLSID;
@@ -2690,7 +2728,8 @@ ImplAAFEssenceAccess::CreateFileMob (ImplAAFHeader *       newHead,
 		CHECK(newHead->GetDictionary (&dict));
 		/* Initialize the basic fields of the media handle
 		 */
-		CHECK(dict->CreateInstance(AUID_AAFSourceMob, (ImplAAFObject **)&fileMob));
+		CHECK(dict->CreateInstance(dict->GetBuiltinDefs()->cdSourceMob(),
+								   (ImplAAFObject **)&fileMob));
 		if(newMobID != NULL)
 		{
 			fileMob->SetMobID(*newMobID);
@@ -2704,15 +2743,21 @@ ImplAAFEssenceAccess::CreateFileMob (ImplAAFHeader *       newHead,
 			 */
 			if(fileMob->FindSlotBySlotID(slotID, &tmpSlot) == AAFRESULT_SLOT_NOT_FOUND)
 			{
+			    ImplAAFDataDefSP pMediaKind;
+				CHECK(dict->LookupDataDef (mediaKind, &pMediaKind));
 				CHECK(fileMob->AddNilReference(slotID, 
-					0, mediaKind, editRate));
+											   0,
+											   pMediaKind,
+											   editRate));
 			}
 			CHECK(fileMob->FindSlotBySlotID(slotID, &tmpSlot));
 			CHECK(tmpSlot->SetPhysicalNum(slotID));
 		}
 //		CHECK(newHead->GetDictionary (&dict));
 		CHECK(_codec->GetEssenceDescriptorID(&essenceDescriptorID));
-		CHECK(dict->CreateInstance(essenceDescriptorID, (ImplAAFObject **)&mdes));
+		ImplAAFClassDefSP pClassDef;
+		CHECK(dict->LookupClassDef (essenceDescriptorID, &pClassDef));
+		CHECK(dict->CreateInstance(pClassDef, (ImplAAFObject **)&mdes));
 		CHECK(mdes->SetIsInContainer (_destination == NULL ? AAFTrue : AAFFalse));
 		CHECK(mdes->SetContainerFormat (_fileFormat));
 		CHECK(mdes->SetSampleRate(sampleRate));

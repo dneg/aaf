@@ -44,6 +44,8 @@
 #include "AAFDefUIDs.h"
 #include "AAFTypeDefUIDs.h"
 
+#include "CAAFBuiltinDefs.h"
+
 // Cross-platform utility to delete a file.
 static void RemoveTestFile(const wchar_t* pFileName)
 {
@@ -137,7 +139,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFTypeDef*		pTypeDef = NULL;
 	bool				bFileOpen = false;
 	HRESULT				hr = S_OK;
-	aafUID_t			testDataDef = DDEF_Picture;
 /*	long				test;
 */
 
@@ -153,12 +154,13 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 		// Get the AAF Dictionary so that we can create valid AAF objects.
 		checkResult(pHeader->GetDictionary(&pDictionary));
+		CAAFBuiltinDefs defs (pDictionary);
     
-		checkResult(pDictionary->CreateInstance(AUID_AAFOperationDef,
+		checkResult(pDictionary->CreateInstance(defs.cdOperationDef(),
 							  IID_IAAFOperationDef, 
 							  (IUnknown **)&pOperationDef));
     
-		checkResult(pDictionary->CreateInstance(AUID_AAFParameterDef,
+		checkResult(pDictionary->CreateInstance(defs.cdParameterDef(),
 							  IID_IAAFParameterDef, 
 							  (IUnknown **)&pParamDef));
 
@@ -172,7 +174,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		pDefObject = NULL;
 
 //!!!Not testing the Init() on AAFDefObject
-		checkResult(pOperationDef->SetDataDefinitionID (testDataDef));
+		checkResult(pOperationDef->SetDataDef (defs.ddPicture()));
 		checkResult(pOperationDef->SetIsTimeWarp (AAFFalse));
 		checkResult(pOperationDef->SetNumberInputs (TEST_NUM_INPUTS));
 		checkResult(pOperationDef->SetCategory (TEST_CATEGORY));
@@ -242,13 +244,14 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	IAAFDefObject*		pDefObject = NULL;
 	IAAFTypeDef*		pTypeDef = NULL;
 	bool				bFileOpen = false;
-	aafUID_t			readDataDef, checkDataDef = DDEF_Picture;
 	aafBool				readIsTimeWarp;
-	aafInt32			catLen, checkNumInputs;
+	aafUInt32			catLen;
+	aafInt32			checkNumInputs;
 	aafUInt32			checkBypass, testLen;
 	HRESULT				hr = S_OK;
 	wchar_t				checkCat[256], checkName[256];
 	aafUID_t			testAUID;
+	IAAFDataDefSP		pReadDataDef;
 
 	try
 	{
@@ -257,10 +260,11 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 		bFileOpen = true;
 
 		checkResult(pHeader->GetDictionary(&pDictionary));
+		CAAFBuiltinDefs defs (pDictionary);
 	
 		checkResult(pDictionary->GetOperationDefs(&pEffectEnum));
 		checkResult(pEffectEnum->NextOne (&pOperationDef));
-		checkResult(pOperationDef->GetDataDefinitionID(&readDataDef));
+		checkResult(pOperationDef->GetDataDef(&pReadDataDef));
 
 		checkResult(pOperationDef->QueryInterface(IID_IAAFDefObject, (void **) &pDefObject));
 		checkResult(pDefObject->GetName (checkName, sizeof(checkName)));
@@ -270,7 +274,9 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 		pDefObject->Release();
 		pDefObject = NULL;
 		
-		checkExpression(EqualAUID(&readDataDef, &checkDataDef) == AAFTrue, AAFRESULT_TEST_FAILED);
+		aafBool bResult = AAFFalse;
+		checkResult (pReadDataDef->IsDataDefOf(defs.ddPicture(), &bResult));
+		checkExpression(bResult == AAFTrue, AAFRESULT_TEST_FAILED);
 		checkResult(pOperationDef->IsTimeWarp (&readIsTimeWarp));
 		checkExpression(readIsTimeWarp == AAFFalse, AAFRESULT_TEST_FAILED);
 		checkResult(pOperationDef->GetCategoryBufLen (&catLen));
@@ -376,77 +382,3 @@ extern "C" HRESULT CAAFParameterDef_test()
 
 	return hr;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -40,6 +40,7 @@
 #include "AAFStoredObjectIDs.h"
 #include "AAFClassIDs.h"
 #include "ImplAAFDictionary.h"
+#include "ImplAAFBuiltinDefs.h"
 
 
 ImplAAFSegment::ImplAAFSegment ()
@@ -177,7 +178,8 @@ AAFRESULT ImplAAFSegment::GenerateSequence(ImplAAFSequence **seq)
 	{
 // ***	CHECK(GetDatakind(&datakind));
     CHECK(GetDictionary(&pDictionary));
-    tmp = (ImplAAFSequence *)pDictionary->CreateImplObject(AUID_AAFSequence);
+    tmp = (ImplAAFSequence *)pDictionary->CreateImplObject
+	  (pDictionary->GetBuiltinDefs()->cdSequence());
     if (NULL == tmp)
       RAISE(AAFRESULT_NOMEMORY);
     pDictionary->ReleaseReference();

@@ -40,6 +40,8 @@
 #include "AAFDefUIDs.h"
 #include "AAFEssenceFormats.h"
 
+#include "CAAFBuiltinDefs.h"
+
 #define	MobName			L"MasterMOBTest"
 //#define	NumMobSlots		3
 
@@ -165,10 +167,10 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		
 		// Get the AAF Dictionary so that we can create valid AAF objects.
 		checkResult(pHeader->GetDictionary(&pDictionary));
-		
-		
+		CAAFBuiltinDefs defs (pDictionary);
+				
 		// Create a Master Mob
-		checkResult(pDictionary->CreateInstance(AUID_AAFMasterMob,
+		checkResult(pDictionary->CreateInstance(defs.cdMasterMob(),
 			IID_IAAFMob, 
 			(IUnknown **)&pMob));
 		
@@ -182,8 +184,15 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pMob->QueryInterface(IID_IAAFMasterMob, (void **) &pMasterMob));
 		// Add the master mob to the file BEFORE creating the essence
 		checkResult(pHeader->AddMob(pMob));
-		checkResult(pMasterMob->CreateEssence (1, DDEF_Sound, CodecWave, rate, rate,
-												kSDKCompressionDisable, NULL, ContainerAAF, &pAccess));
+		checkResult(pMasterMob->CreateEssence (1,
+											   defs.ddSound(),
+											   CodecWave,
+											   rate,
+											   rate,
+											   kSDKCompressionDisable,
+											   NULL,
+											   ContainerAAF,
+											   &pAccess));
 		
 		// Fianlly! Get an essence format to test
 		checkResult(pAccess->GetEmptyFileFormat(&pFormat));

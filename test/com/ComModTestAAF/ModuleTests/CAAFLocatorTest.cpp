@@ -39,6 +39,8 @@
 #include "AAFResult.h"
 #include "AAFDefUIDs.h"
 
+#include "CAAFBuiltinDefs.h"
+
 #define TEST_PATH	L"AnotherFile.aaf"
 
 
@@ -101,23 +103,25 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 	try
 	{
-    // Remove the previous test file if any.
-    RemoveTestFile(pFileName);
+	    // Remove the previous test file if any.
+	    RemoveTestFile(pFileName);
 
 
-    // Create the file.
+		// Create the file.
 		checkResult(AAFFileOpenNewModify(pFileName, 0, &ProductInfo, &pFile));
 		bFileOpen = true;
  
-    // We can't really do anthing in AAF without the header.
+		// We can't really do anthing in AAF without the header.
 		checkResult(pFile->GetHeader(&pHeader));
 
-    // Get the AAF Dictionary so that we can create valid AAF objects.
-    checkResult(pHeader->GetDictionary(&pDictionary));
+		// Get the AAF Dictionary so that we can create valid AAF objects.
+		checkResult(pHeader->GetDictionary(&pDictionary));
  		
-	  //Make the first mob
+		CAAFBuiltinDefs defs (pDictionary);
+
+		//Make the first mob
 		// Create a Mob
-		checkResult(pDictionary->CreateInstance(AUID_AAFSourceMob,
+		checkResult(pDictionary->CreateInstance(defs.cdSourceMob(),
 								IID_IAAFSourceMob, 
 								(IUnknown **)&pSourceMob));
 
@@ -126,7 +130,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pMob->SetMobID(newMobID));
 		checkResult(pMob->SetName(L"SourceMOBTest"));
 		
-		checkResult(pDictionary->CreateInstance(AUID_AAFEssenceDescriptor,
+		checkResult(pDictionary->CreateInstance(defs.cdEssenceDescriptor(),
 								IID_IAAFEssenceDescriptor, 
 								(IUnknown **)&edesc));
 										
@@ -138,7 +142,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
   
 		// Make a locator, and attach it to the EssenceDescriptor
-		checkResult(pDictionary->CreateInstance(AUID_AAFNetworkLocator,
+		checkResult(pDictionary->CreateInstance(defs.cdNetworkLocator(),
 								IID_IAAFNetworkLocator, 
 								(IUnknown **)&pNetLocator));		
 		checkResult(pNetLocator->QueryInterface (IID_IAAFLocator, (void **)&pLocator));
@@ -214,7 +218,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	IEnumAAFMobs *mobIter = NULL;
 	IAAFMob			*aMob = NULL;
 	aafUInt32					numLocators;
-	aafInt32					readLen;
+	aafUInt32					readLen;
 	aafProductIdentification_t	ProductInfo;
 	aafNumSlots_t	numMobs, n;
 	HRESULT						hr = AAFRESULT_SUCCESS;

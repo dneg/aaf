@@ -40,6 +40,8 @@
 #include "AAFDataDefs.h"
 #include "AAFDefUIDs.h"
 
+#include "CAAFBuiltinDefs.h"
+
 // Cross-platform utility to delete a file.
 static void RemoveTestFile(const wchar_t* pFileName)
 {
@@ -122,18 +124,15 @@ static HRESULT OpenAAFFile(aafWChar*			pFileName,
 
 static HRESULT CreateAAFFile(aafWChar * pFileName)
 {
-	IAAFFile*			pFile = NULL;
-	IAAFHeader *		pHeader = NULL;
-	IAAFDictionary*		pDictionary = NULL;
-	IAAFDefObject*		pDef = NULL;
-	IAAFOperationDef*	pOperationDef = NULL;
-	IAAFParameterDef*	pParamDef = NULL;
-	bool				bFileOpen = false;
-	HRESULT				hr = S_OK;
-	long				n;
-	aafUID_t			testDataDef = DDEF_Picture;
-/*	long				test;
-*/
+  IAAFFile*			pFile = NULL;
+  IAAFHeader *		pHeader = NULL;
+  IAAFDictionary*		pDictionary = NULL;
+  IAAFDefObject*		pDef = NULL;
+  IAAFOperationDef*	pOperationDef = NULL;
+  IAAFParameterDef*	pParamDef = NULL;
+  bool				bFileOpen = false;
+  HRESULT				hr = S_OK;
+  long				n;
 
   try
   {
@@ -142,18 +141,22 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 
 	// Create the AAF file
-	checkResult(OpenAAFFile(pFileName, kMediaOpenAppend, /*&pSession,*/ &pFile, &pHeader));
+	checkResult(OpenAAFFile(pFileName,
+							kMediaOpenAppend,
+							&pFile,
+							&pHeader));
     bFileOpen = true;
 
     // Get the AAF Dictionary so that we can create valid AAF objects.
     checkResult(pHeader->GetDictionary(&pDictionary));
+	CAAFBuiltinDefs defs (pDictionary);
     
 	for(n = 0; n < 2; n++)
 	{
-		checkResult(pDictionary->CreateInstance(AUID_AAFOperationDef,
+		checkResult(pDictionary->CreateInstance(defs.cdOperationDef(),
 			IID_IAAFOperationDef, 
 			(IUnknown **)&pOperationDef));    
-				checkResult(pDictionary->CreateInstance(AUID_AAFParameterDef,
+				checkResult(pDictionary->CreateInstance(defs.cdParameterDef(),
 									  IID_IAAFParameterDef, 
 									  (IUnknown **)&pParamDef));
 		
@@ -167,7 +170,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		pDef = NULL;
 		
 		//!!!Not testing the INIT on AAFDefObject
-		checkResult(pOperationDef->SetDataDefinitionID (testDataDef));
+		checkResult(pOperationDef->SetDataDef (defs.ddPicture()));
 		checkResult(pOperationDef->SetIsTimeWarp (AAFFalse));
 		checkResult(pOperationDef->SetNumberInputs (TEST_NUM_INPUTS));
 		checkResult(pOperationDef->SetCategory (TEST_CATEGORY));

@@ -41,6 +41,8 @@
 #include "AAFResult.h"
 #include "AAFDefUIDs.h"
 
+#include "CAAFBuiltinDefs.h"
+
 
 // Utility class to implement the test.
 struct EnumEssenceDataTest
@@ -265,8 +267,9 @@ void EnumEssenceDataTest::createFileMob(int itemNumber)
     check(AAFRESULT_INTERNAL_ERROR);
 
 
+  CAAFBuiltinDefs defs (_pDictionary);
   // Create a Mob
-  check(_pDictionary->CreateInstance(AUID_AAFSourceMob,
+  check(_pDictionary->CreateInstance(defs.cdSourceMob(),
               IID_IAAFSourceMob, 
               (IUnknown **)&_pSourceMob));
 
@@ -277,7 +280,7 @@ void EnumEssenceDataTest::createFileMob(int itemNumber)
   check(_pMob->SetMobID(newMobID));
   check(_pMob->SetName(wcBuffer));
   
-  check(_pDictionary->CreateInstance(AUID_AAFFileDescriptor,
+  check(_pDictionary->CreateInstance(defs.cdFileDescriptor(),
               IID_IAAFEssenceDescriptor, 
               (IUnknown **)&_pFileDescriptor));
 
@@ -309,9 +312,10 @@ void EnumEssenceDataTest::createEssenceData(IAAFSourceMob *pSourceMob)
   assert(pSourceMob);
   assert(NULL == _pEssenceData);
 
+  CAAFBuiltinDefs defs (_pDictionary);
 
   // Attempt to create an AAFEssenceData.
-  check(_pDictionary->CreateInstance(AUID_AAFEssenceData,
+  check(_pDictionary->CreateInstance(defs.cdEssenceData(),
                          IID_IAAFEssenceData,
                          (IUnknown **)&_pEssenceData));
 

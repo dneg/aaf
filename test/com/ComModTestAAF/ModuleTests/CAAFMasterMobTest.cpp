@@ -37,6 +37,11 @@
 #include "AAFDataDefs.h"
 #include "AAFDefUIDs.h"
 
+#include "CAAFBuiltinDefs.h"
+
+#include "AAFSmartPointer.h"
+typedef IAAFSmartPointer<IAAFDataDef> IAAFDataDefSP;
+
 #define	MobName			L"MasterMOBTest"
 #define	NumMobSlots		3
 
@@ -169,10 +174,11 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		
 		// Get the AAF Dictionary so that we can create valid AAF objects.
 		checkResult(pHeader->GetDictionary(&pDictionary));
-		
-		
+
+		CAAFBuiltinDefs defs (pDictionary);
+				
 		// Create a Master Mob
-		checkResult(pDictionary->CreateInstance(AUID_AAFMasterMob,
+		checkResult(pDictionary->CreateInstance(defs.cdMasterMob(),
 			IID_IAAFMob, 
 			(IUnknown **)&pMob));
 		
@@ -186,12 +192,12 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pMob->QueryInterface(IID_IAAFMasterMob, (void **) &pMasterMob));
 		
 		// Create source mob to associate with our MasterMob.
-		checkResult(pDictionary->CreateInstance(AUID_AAFSourceMob,
+		checkResult(pDictionary->CreateInstance(defs.cdSourceMob(),
 			IID_IAAFSourceMob, 
 			(IUnknown **)&pTapeMob));		
-		hr = pDictionary->CreateInstance(AUID_AAFTapeDescriptor,
-												IID_IAAFTapeDescriptor, 
-												(IUnknown **)&pTapeDesc);		
+		hr = pDictionary->CreateInstance(defs.cdTapeDescriptor(),
+										 IID_IAAFTapeDescriptor, 
+										 (IUnknown **)&pTapeDesc);		
 		if (AAFRESULT_SUCCESS == hr)
 		{
 			hr = pTapeDesc->QueryInterface(IID_IAAFEssenceDescriptor, (void **)&pEssDesc);
@@ -228,7 +234,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		}
 		for (test = 0; test < NumMobSlots; test++)
 		{
-			checkResult(pTapeMob->AddNilReference (test, TAPE_MOB_LENGTH, *slotDDefs[test], slotRates[test]));
+		  IAAFDataDefSP pDataDef;
+		  checkResult (pDictionary->LookupDataDef (*slotDDefs[test], &pDataDef));
+		  checkResult(pTapeMob->AddNilReference (test, TAPE_MOB_LENGTH, pDataDef, slotRates[test]));
 		}
 		checkResult(pTapeMob->QueryInterface(IID_IAAFMob, (void **) &pTempMob));
 		checkResult(pTempMob->SetName(TAPE_MOB_NAME));
@@ -241,17 +249,22 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		for (test = 0; test < NumMobSlots; test++)
 		{
 			// Create source mob to associate with our MasterMob.
-			checkResult(pDictionary->CreateInstance(AUID_AAFSourceMob,
+			checkResult(pDictionary->CreateInstance(defs.cdSourceMob(),
 				IID_IAAFSourceMob, 
 				(IUnknown **)&pSrcMob));		
 			
 			ref.sourceID = tapeMobID;
 			ref.sourceSlotID = test;
 			ref.startTime = TAPE_MOB_OFFSET;
-			checkResult(pSrcMob->AppendPhysSourceRef (slotRates[test], test,
-				*slotDDefs[test], ref, TAPE_MOB_LENGTH));
+			IAAFDataDefSP pDDef;
+			checkResult(pDictionary->LookupDataDef(*slotDDefs[test], &pDDef));
+			checkResult(pSrcMob->AppendPhysSourceRef (slotRates[test],
+													  test,
+													  pDDef,
+													  ref,
+													  TAPE_MOB_LENGTH));
 			
-			checkResult(pDictionary->CreateInstance(AUID_AAFEssenceDescriptor,
+			checkResult(pDictionary->CreateInstance(defs.cdEssenceDescriptor(),
 				IID_IAAFEssenceDescriptor, 
 				(IUnknown **)&pDesc));		
 			checkResult(pSrcMob->SetEssenceDescriptor(pDesc));
@@ -269,7 +282,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 			pTempMob->Release();
 			pTempMob = NULL;
 			
-			checkResult(pMasterMob->AddMasterSlot(*slotDDefs[test], test, pSrcMob, test+1, slotNames[test]));
+			IAAFDataDefSP pDataDef;
+			checkResult (pDictionary->LookupDataDef (*slotDDefs[test], &pDataDef));
+			checkResult(pMasterMob->AddMasterSlot(pDataDef, test, pSrcMob, test+1, slotNames[test]));
 			
 			pSrcMob->Release();
 			pSrcMob = NULL;
@@ -390,7 +405,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 				aafWChar			slotName[500];
 				aafSlotID_t			slotID;
 				aafNumSlots_t		numReps;
-				aafInt32			bufSize = 0;
+				aafUInt32			bufSize = 0;
 
         // Validate the slot name
 				checkResult(pSlot->GetName(slotName, sizeof(slotName)));

@@ -37,7 +37,7 @@
 #include "aafDefUIDs.h"
 #include "AAFStoredObjectIDs.h"
 
-
+#include "CAAFBuiltinDefs.h"
 
 
 
@@ -423,7 +423,9 @@ HRESULT STDMETHODCALLTYPE
 
 	try
 	{
-		checkResult(dict->CreateInstance(AUID_AAFPluginDescriptor,
+	    CAAFBuiltinDefs defs (dict);
+
+		checkResult(dict->CreateInstance(defs.cdPluginDescriptor(),
 			IID_IAAFPluginDescriptor, 
 			(IUnknown **)&desc));
 
@@ -439,7 +441,7 @@ HRESULT STDMETHODCALLTYPE
 		checkResult(desc->SetSupportsAuthentication(AAFFalse));
 
 		// Create the network locator for the Manufacturer's web site: 
-		checkResult(dict->CreateInstance(AUID_AAFNetworkLocator,
+		checkResult(dict->CreateInstance(defs.cdNetworkLocator(),
 			IID_IAAFLocator, 
 			(IUnknown **)&pLoc));
 		checkResult(pLoc->SetPath (kManufURL));
@@ -452,7 +454,7 @@ HRESULT STDMETHODCALLTYPE
 
 		
 		// Create a Network locator to point to our default download site.
-		checkResult(dict->CreateInstance(AUID_AAFNetworkLocator,
+		checkResult(dict->CreateInstance(defs.cdNetworkLocator(),
 			IID_IAAFLocator, 
 			(IUnknown **)&pLoc));
 		checkResult(pLoc->SetPath (kDownloadURL));

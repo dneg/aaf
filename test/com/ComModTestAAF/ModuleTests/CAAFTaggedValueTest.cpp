@@ -39,6 +39,11 @@
 #include "AAFDataDefs.h"
 #include "AAFDefUIDs.h"
 
+#include "CAAFBuiltinDefs.h"
+
+#include "AAFSmartPointer.h"
+typedef IAAFSmartPointer<IAAFDataDef> IAAFDataDefSP;
+
 static aafWChar *slotNames[5] = { L"SLOT1", L"SLOT2", L"SLOT3", L"SLOT4", L"SLOT5" };
 static const aafUID_t *	slotDDefs[5] = {&DDEF_Picture, &DDEF_Sound, &DDEF_Sound, &DDEF_Picture, &DDEF_Picture};
 static aafLength_t	slotsLength[5] = { 297, 44100, 44100, 44100, 44100};
@@ -120,13 +125,14 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 		// Get the AAF Dictionary so that we can create valid AAF objects.
 		checkResult(pHeader->GetDictionary(&pDictionary));
+		CAAFBuiltinDefs defs (pDictionary);
  		
 		//Make the first mob
 		long	test;
 		aafRational_t	audioRate = { 44100, 1 };
 
 		// Create a  Composition Mob
-		checkResult(pDictionary->CreateInstance(AUID_AAFCompositionMob,
+		checkResult(pDictionary->CreateInstance(defs.cdCompositionMob(),
 								  IID_IAAFCompositionMob, 
 								  (IUnknown **)&pCompMob));
 
@@ -141,7 +147,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pMob->AppendComment(TagNames, AltComment));
 
 		// Create a master mob to be referenced
-		checkResult(pDictionary->CreateInstance(AUID_AAFMasterMob,
+		checkResult(pDictionary->CreateInstance(defs.cdMasterMob(),
 								 IID_IAAFMasterMob, 
 								 (IUnknown **)&pReferencedMob));
 
@@ -153,14 +159,16 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		// Add some slots
 		for(test = 0; test < 5; test++)
 		{
- 			checkResult(pDictionary->CreateInstance(AUID_AAFSourceClip,
+ 			checkResult(pDictionary->CreateInstance(defs.cdSourceClip(),
 								     IID_IAAFSourceClip, 
 								     (IUnknown **)&sclp));		
 			// Set the properties for the SourceClip
 			sourceRef.sourceID = referencedMobID;
 			sourceRef.sourceSlotID = 0;
 			sourceRef.startTime = 0;
-			checkResult(sclp->Initialize(*slotDDefs[test], slotsLength[test], sourceRef));
+			IAAFDataDefSP pDataDef;
+			checkResult(pDictionary->LookupDataDef(*slotDDefs[test], &pDataDef));
+			checkResult(sclp->Initialize(pDataDef, slotsLength[test], sourceRef));
 			checkResult(sclp->SetFade( fadeInLen, fadeInType, fadeOutLen, fadeOutType));
 
 			checkResult(sclp->QueryInterface (IID_IAAFSegment, (void **)&seg));

@@ -14,7 +14,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -109,22 +109,22 @@ public:
 	// GetMetaInfo, and cached by the AAFPluginManager.
   STDMETHOD (GetIndexedDataDefinition)
     (/*[in]*/ aafInt32  index, // Which data definition to get the ID for
-     /*[out]*/ aafUID_t *  pVariant); // The returned dataDefinition 
+     /*[out]*/ aafUID_t * pVariant); // The returned dataDefinition 
 
   STDMETHOD (GetMaxCodecDisplayNameLength)
-    (aafInt32  *bufSize);
+    (aafUInt32  *bufSize);
 
 	// Given a variant ID, return the human readable name
   STDMETHOD (GetCodecDisplayName)
-    (/*[in]*/ aafUID_t  variant, // which variant of the codec to use
-     /*[in,string]*/ wchar_t *  pName, // Human-readable name of the variant
-     /*[in]*/ aafInt32  bufSize); // length of the buffer to hold variant Name 
+    (/*[in]*/ aafUID_constref variant, // which variant of the codec to use
+     /*[in,string]*/ aafCharacter *  pName, // Human-readable name of the variant
+     /*[in]*/ aafUInt32  bufSize); // length of the buffer to hold variant Name 
 	
   // Returns the number of channels which this codec can handle
 			// of the given essence kind
   STDMETHOD (GetNumChannels)
     (/*[in]*/ IAAFSourceMob *fileMob, // Get the number of processable channels on this file mob
-     /*[in]*/ aafUID_t  essenceKind, // This is the type of essence to open
+     /*[in]*/ aafUID_constref essenceKind, // This is the type of essence to open
 	 IAAFEssenceStream *stream,
      /*[out]*/ aafInt16 *  pNumChannels); // The number of channels present 
 
@@ -136,7 +136,7 @@ public:
   // Returns the number of samples which this codec can find on the
 			// given slot.
   STDMETHOD (GetNumSamples)
-     (/*[in]*/ aafUID_t  essenceKind, // This is the type of essence to check
+     (/*[in]*/ aafUID_constref essenceKind, // This is the type of essence to check
 	/*[out]*/ aafLength_t *  pNumSamples); // The number of samples present of that type
 
 	 
@@ -157,7 +157,7 @@ public:
 			//EssenceDescriptor to the fileMob
   STDMETHOD (Create)
     (/*[in]*/ IAAFSourceMob *fileMob, // Create the essence attached to this file mob
-     /*[in]*/ aafUID_t  variant, // which variant of the codec to use
+     /*[in]*/ aafUID_constref variant, // which variant of the codec to use
         IAAFEssenceStream * stream,
         aafInt32 numParms,
         aafmMultiCreate_t *createParms);
@@ -263,9 +263,14 @@ public:
     (/*[out]*/ IAAFEssenceFormat **pFormat); // An essence format result object 
 
   STDMETHOD (GetIndexedSampleSize)
-    (aafUID_t dataDefID, aafPosition_t pos, aafLength_t *pResult);
+    (aafUID_constref dataDefID,
+	 aafPosition_t pos,
+	 aafLength_t *pResult);
+
   STDMETHOD (GetLargestSampleSize)
-    (aafUID_t dataDefID, aafLength_t *pResult);
+    (aafUID_constref dataDefID,
+	 aafLength_t *pResult);
+
   STDMETHOD (AddSampleIndexEntry)
     (aafPosition_t pos);
 

@@ -37,6 +37,8 @@
 #include "AAFResult.h"
 #include "AAFDefUIDs.h"
 
+#include "CAAFBuiltinDefs.h"
+
 static aafWChar *slotNames[5] = { L"SLOT1", L"SLOT2", L"SLOT3", L"SLOT4", L"SLOT5" };
 
 
@@ -105,13 +107,14 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		
 		// Get the AAF Dictionary so that we can create valid AAF objects.
 		checkResult(pHeader->GetDictionary(&pDictionary));
+		CAAFBuiltinDefs defs (pDictionary);
 		
 		//Make the first mob
 		long	test;
 		aafRational_t	audioRate = { 44100, 1 };
 		
 		// Create a Mob
-		checkResult(pDictionary->CreateInstance(AUID_AAFMob,
+		checkResult(pDictionary->CreateInstance(defs.cdMob(),
 			IID_IAAFMob, 
 			(IUnknown **)&pMob));
 		
@@ -122,7 +125,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		// Add some slots
 		for(test = 0; test < 5; test++)
 		{
-			checkResult(pDictionary->CreateInstance(AUID_AAFSourceClip,
+			checkResult(pDictionary->CreateInstance(defs.cdSourceClip(),
 				IID_IAAFSourceClip, 
 				(IUnknown **)&sclp));		
 			

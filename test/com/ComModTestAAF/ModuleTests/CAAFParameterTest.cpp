@@ -44,6 +44,8 @@
 #include "AAFDefUIDs.h"
 #include "AAFTypeDefUIDs.h"
 
+#include "CAAFBuiltinDefs.h"
+
 static aafMobID_t	zeroMobID = { 0 };
 static aafWChar *slotNames[5] = { L"SLOT1", L"SLOT2", L"SLOT3", L"SLOT4", L"SLOT5" };
 
@@ -155,7 +157,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFTypeDef			*pTypeDef = NULL;
 	bool				bFileOpen = false;
 	HRESULT				hr = S_OK;
-	aafUID_t			testDataDef = DDEF_Picture;
 	aafLength_t			effectLen = TEST_EFFECT_LEN;
 	aafUID_t			effectID = kTestEffectID;
 	aafUID_t			parmID = kTestParmID;
@@ -176,12 +177,13 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 		// Get the AAF Dictionary so that we can create valid AAF objects.
 		checkResult(pHeader->GetDictionary(&pDictionary));
+		CAAFBuiltinDefs defs (pDictionary);
     
-		checkResult(pDictionary->CreateInstance(AUID_AAFOperationDef,
+		checkResult(pDictionary->CreateInstance(defs.cdOperationDef(),
 							  IID_IAAFOperationDef, 
 							  (IUnknown **)&pOperationDef));
     
-		checkResult(pDictionary->CreateInstance(AUID_AAFParameterDef,
+		checkResult(pDictionary->CreateInstance(defs.cdParameterDef(),
 							  IID_IAAFParameterDef, 
 							  (IUnknown **)&pParamDef));
 
@@ -193,7 +195,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		pDefObject->Release();
 		pDefObject = NULL;
 
-		checkResult(pOperationDef->SetDataDefinitionID (testDataDef));
+		checkResult(pOperationDef->SetDataDef (defs.ddPicture()));
 		checkResult(pOperationDef->SetIsTimeWarp (AAFFalse));
 		checkResult(pOperationDef->SetNumberInputs (TEST_NUM_INPUTS));
 		checkResult(pOperationDef->SetCategory (TEST_CATEGORY));
@@ -214,7 +216,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		aafRational_t	videoRate = { 2997, 100 };
 
 		// Create a Mob
-		checkResult(pDictionary->CreateInstance(AUID_AAFCompositionMob,
+		checkResult(pDictionary->CreateInstance(defs.cdCompositionMob(),
 							  IID_IAAFMob, 
 							  (IUnknown **)&pMob));
 
@@ -225,19 +227,22 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		// Add some slots
 		for(test = 0; test < 2; test++)
 		{
- 			checkResult(pDictionary->CreateInstance(AUID_AAFOperationGroup,
+ 			checkResult(pDictionary->CreateInstance(defs.cdOperationGroup(),
 							     IID_IAAFOperationGroup, 
 							     (IUnknown **)&pOperationGroup));
 			
-			checkResult(pDictionary->CreateInstance(AUID_AAFFiller,
+			checkResult(pDictionary->CreateInstance(defs.cdFiller(),
 							     IID_IAAFSegment, 
 							     (IUnknown **)&pFiller));
 			checkResult(pFiller->QueryInterface (IID_IAAFComponent, (void **)&pComponent));
 			checkResult(pComponent->SetLength(effectLen));
-			checkResult(pComponent->SetDataDef(testDataDef));
- 			checkResult(pOperationGroup->Initialize(testDataDef, TEST_EFFECT_LEN, pOperationDef));
+			CAAFBuiltinDefs defs (pDictionary);
+			checkResult(pComponent->SetDataDef(defs.ddPicture()));
+ 			checkResult(pOperationGroup->Initialize(defs.ddPicture(),
+													TEST_EFFECT_LEN,
+													pOperationDef));
 
-			checkResult(pDictionary->CreateInstance(AUID_AAFConstantValue,
+			checkResult(pDictionary->CreateInstance(defs.cdConstantValue(),
 							  IID_IAAFConstantValue, 
 							  (IUnknown **)&pConstValue));
 			checkResult(pConstValue->SetValue(sizeof(testLevel), (aafDataBuffer_t)&testLevel));
@@ -251,14 +256,16 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 			pFiller = NULL;
 
 			checkResult(pOperationGroup->SetBypassOverride (1));
-			checkResult(pDictionary->CreateInstance(AUID_AAFSourceClip,
+			checkResult(pDictionary->CreateInstance(defs.cdSourceClip(),
 							  IID_IAAFSourceClip, 
 							  (IUnknown **)&pSourceClip));
 			aafSourceRef_t	sourceRef;
 			sourceRef.sourceID = zeroMobID;
 			sourceRef.sourceSlotID = 0;
 			sourceRef.startTime = 0;
-			checkResult(pSourceClip->Initialize (testDataDef, effectLen, sourceRef));
+			checkResult(pSourceClip->Initialize (defs.ddPicture(),
+												 effectLen,
+												 sourceRef));
 			checkResult(pSourceClip->QueryInterface (IID_IAAFSourceReference, (void **)&pSourceRef));
 			checkResult(pOperationGroup->SetRender (pSourceRef));
 			checkResult(pOperationGroup->QueryInterface (IID_IAAFSegment, (void **)&pSeg));

@@ -33,6 +33,8 @@
 #include "AAFStoredObjectIDs.h"
 #include "AAFDefUIDs.h"
 
+#include "CAAFBuiltinDefs.h"
+
 #include <iostream.h>
 #include <stdio.h>
 
@@ -115,9 +117,10 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		
 		// Get the AAF Dictionary so that we can create valid AAF objects.
 		checkResult(pHeader->GetDictionary(&pDictionary));
+		CAAFBuiltinDefs defs (pDictionary);
 		
 		// Create a CompositionMob
-		checkResult(pDictionary->CreateInstance(AUID_AAFCompositionMob,
+		checkResult(pDictionary->CreateInstance(defs.cdCompositionMob(),
 			IID_IAAFCompositionMob, 
 			(IUnknown **)&pCompMob));
 		
@@ -128,7 +131,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		
 		checkResult(pCompMob->Initialize(L"COMPMOB01"));
 		
-		checkResult(pDictionary->CreateInstance(AUID_AAFTimecodeStream12M,
+		checkResult(pDictionary->CreateInstance(defs.cdTimecodeStream12M(),
 			IID_IAAFTimecodeStream12M, 
 			(IUnknown **)&pTimecodeStream12M));		
 		 

@@ -37,6 +37,8 @@
 #include <stdio.h>
 #include "AAFDefUIDs.h"
 
+#include "CAAFBuiltinDefs.h"
+
 // Temporarily necessary global declarations.
 extern "C" const CLSID CLSID_AAFTypeDefInt; // generated
 
@@ -116,7 +118,9 @@ static HRESULT CreateOneTypeDef (IAAFDictionary *  pDict,
   HRESULT hr = E_FAIL;
   IAAFTypeDefInt * pTD = NULL;
 
-  checkResult (pDict->CreateInstance (AUID_AAFTypeDefInt,
+  CAAFBuiltinDefs defs (pDict);
+
+  checkResult (pDict->CreateInstance (defs.cdTypeDefInt(),
 									  IID_IAAFTypeDefInt,
 									  (IUnknown **) &pTD));
   assert (pTD);

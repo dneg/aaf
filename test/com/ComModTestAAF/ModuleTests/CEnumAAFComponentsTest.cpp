@@ -38,6 +38,8 @@
 #include "AAFStoredObjectIDs.h"
 #include "AAFDefUIDs.h"
 
+#include "CAAFBuiltinDefs.h"
+
 #define kNumComponents	5
 
 
@@ -74,12 +76,14 @@ static HRESULT CreateAAFSequence(IAAFDictionary *pDictionary,
 	HRESULT			hr = S_OK;
 	aafUInt32		i;
 
- 	hr = pDictionary->CreateInstance(AUID_AAFSequence,
+	CAAFBuiltinDefs defs (pDictionary);
+
+ 	hr = pDictionary->CreateInstance(defs.cdSequence(),
 						   IID_IAAFSequence, 
 						   (IUnknown **)&pSequence);		
  	if (SUCCEEDED(hr))
 	{
-		pSequence->Initialize(DDEF_Sound);
+		pSequence->Initialize(defs.ddSound());
 
 		//
 		//	Add some segments.  Need to test failure conditions
@@ -91,13 +95,13 @@ static HRESULT CreateAAFSequence(IAAFDictionary *pDictionary,
 	    IAAFComponent*	pComponent = NULL;
 			aafLength_t		len = 10;
 
-			hr = pDictionary->CreateInstance(AUID_AAFFiller,
+			hr = pDictionary->CreateInstance(defs.cdFiller(),
 									IID_IAAFComponent, 
 									(IUnknown **)&pComponent);
  			if (FAILED(hr))
 				break;
 
-			pComponent->SetDataDef(DDEF_Sound);
+			pComponent->SetDataDef(defs.ddSound());
 			pComponent->SetLength(len);
 			hr = pSequence->AppendComponent(pComponent);
 

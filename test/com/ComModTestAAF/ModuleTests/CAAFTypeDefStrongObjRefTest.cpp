@@ -51,6 +51,7 @@ typedef IAAFSmartPointer<IAAFTypeDef>          IAAFTypeDefSP;
 typedef IAAFSmartPointer<IAAFTypeDefObjectRef> IAAFTypeDefObjectRefSP;
 typedef IAAFSmartPointer<IEnumAAFMobs>         IEnumAAFMobsSP;
 
+#include "CAAFBuiltinDefs.h"
 
 //
 // TypeID for our new component obj ref typedef
@@ -186,6 +187,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	  // Get the AAF Dictionary so that we can create valid AAF objects.
 	  IAAFDictionarySP pDictionary;
 	  checkResult (pHeader->GetDictionary(&pDictionary));
+	  CAAFBuiltinDefs defs (pDictionary);
 
 	  //
 	  // Create a type def describing a strong object ref to
@@ -197,7 +199,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 	  // create
 	  IAAFTypeDefObjectRefSP tdor;
-	  checkResult (pDictionary->CreateInstance(AUID_AAFTypeDefStrongObjRef,
+	  checkResult (pDictionary->CreateInstance(defs.cdTypeDefStrongObjRef(),
 											   IID_IAAFTypeDefObjectRef,
 											   (IUnknown**)&tdor));
 
@@ -248,7 +250,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 	  // Create a Composition Mob
 	  IAAFMobSP pMob;
-	  checkResult(pDictionary->CreateInstance(AUID_AAFCompositionMob,
+	  checkResult(pDictionary->CreateInstance(defs.cdCompositionMob(),
 											  IID_IAAFMob, 
 											  (IUnknown **)&pMob));
 	  aafMobID_t mobID;
@@ -262,15 +264,15 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	  // different lengths (13 for #1, 26 for #2).
 	  //
 	  IAAFFillerSP fill1;
-	  checkResult (pDictionary->CreateInstance(AUID_AAFFiller,
+	  checkResult (pDictionary->CreateInstance(defs.cdFiller(),
 											   IID_IAAFFiller,
 											   (IUnknown **)&fill1));
-	  checkResult (fill1->Initialize (DDEF_PictureWithMatte, 13));
+	  checkResult (fill1->Initialize (defs.ddPictureWithMatte(), 13));
 	  IAAFFillerSP fill2;
-	  checkResult (pDictionary->CreateInstance(AUID_AAFFiller,
+	  checkResult (pDictionary->CreateInstance(defs.cdFiller(),
 											   IID_IAAFFiller,
 											   (IUnknown **)&fill2));
-	  checkResult (fill2->Initialize (DDEF_PictureWithMatte, 26));
+	  checkResult (fill2->Initialize (defs.ddPictureWithMatte(), 26));
 
 	  // get the AAFObject interfaces
 	  IAAFObjectSP fillObj1;

@@ -36,6 +36,8 @@
 #include "AAFResult.h"
 #include "AAFDefUIDs.h"
 
+#include "CAAFBuiltinDefs.h"
+
 static aafWChar* Manufacturer = L"Sony";
 static aafWChar* Model = L"MyModel";
 static aafFilmType_t FilmFormat = kFt35MM;
@@ -102,16 +104,17 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	checkResult(AAFFileOpenNewModify(pFileName, 0, &ProductInfo, &pFile));
 	checkResult(pFile->GetHeader(&pHeader));
 	checkResult(pHeader->GetDictionary(&pDictionary));
+	CAAFBuiltinDefs defs (pDictionary);
 
 	// Create a film mob
-	checkResult(pDictionary->CreateInstance(AUID_AAFSourceMob,
+	checkResult(pDictionary->CreateInstance(defs.cdSourceMob(),
 					IID_IAAFSourceMob, 
 					(IUnknown **)&pSourceMob));
 	checkResult(pSourceMob->QueryInterface(IID_IAAFMob, (void **)&pMob));
 	CoCreateGuid((GUID *)&newMobID);
 	pMob->SetMobID(newMobID);
 	pMob->SetName(L"FilmDescriptorTest");
-	checkResult(pDictionary->CreateInstance(AUID_AAFFilmDescriptor,
+	checkResult(pDictionary->CreateInstance(defs.cdFilmDescriptor(),
 							IID_IAAFFilmDescriptor, 
 							(IUnknown **)&pFilmDesc));		
 	checkResult(pFilmDesc->QueryInterface(IID_IAAFEssenceDescriptor, (void **)&pEssDesc));
@@ -168,7 +171,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	aafUInt32					readFrameRate;
 	aafUInt8					readPerfPerFrame;
 	aafRational_t				readAspectRatio;
-	aafInt32					length;
+	aafUInt32					length;
 
 	HRESULT						hr = AAFRESULT_SUCCESS;
 	

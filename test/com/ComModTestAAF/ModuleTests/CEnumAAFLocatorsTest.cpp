@@ -36,6 +36,8 @@
 #include "AAFResult.h"
 #include "AAFDefUIDs.h"
 
+#include "CAAFBuiltinDefs.h"
+
 
 // Cross-platform utility to delete a file.
 static void RemoveTestFile(const wchar_t* pFileName)
@@ -110,10 +112,11 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
     // Get the AAF Dictionary so that we can create valid AAF objects.
     checkResult(pHeader->GetDictionary(&pDictionary));
+	CAAFBuiltinDefs defs (pDictionary);
  		
 		//Make the first mob
 		// Create a Mob
-		checkResult(pDictionary->CreateInstance(AUID_AAFSourceMob,
+		checkResult(pDictionary->CreateInstance(defs.cdSourceMob(),
 								IID_IAAFSourceMob, 
 								(IUnknown **)&pSourceMob));
 		
@@ -124,7 +127,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pMob->SetName(L"EssenceDescriptorTest"));
 		
 		// Create the descriptor:
-		checkResult(pDictionary->CreateInstance(AUID_AAFEssenceDescriptor,
+		checkResult(pDictionary->CreateInstance(defs.cdEssenceDescriptor(),
 								IID_IAAFEssenceDescriptor, 
 								(IUnknown **)&edesc));		
  		checkResult(pSourceMob->SetEssenceDescriptor (edesc));
@@ -135,7 +138,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
   
 		// Make a locator, and attach it to the EssenceDescriptor
-		checkResult(pDictionary->CreateInstance(AUID_AAFNetworkLocator,
+		checkResult(pDictionary->CreateInstance(defs.cdNetworkLocator(),
 								IID_IAAFLocator, 
 								(IUnknown **)&pLocator));		
 		checkResult(pLocator->SetPath (locator1));
@@ -148,7 +151,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkExpression(1 == numLocators, AAFRESULT_TEST_FAILED);
 
 		// Make a second ocator, and attach it to the EssenceDescriptor
-		checkResult(pDictionary->CreateInstance(AUID_AAFNetworkLocator,
+		checkResult(pDictionary->CreateInstance(defs.cdNetworkLocator(),
 								IID_IAAFLocator, 
 								(IUnknown **)&pLocator));		
 		checkResult(pLocator->SetPath (locator2));

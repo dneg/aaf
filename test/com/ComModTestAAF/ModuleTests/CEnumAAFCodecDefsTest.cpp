@@ -41,6 +41,8 @@
 #include "AAFDefUIDs.h"
 #include "AAFCodecDefs.h"
 
+#include "CAAFBuiltinDefs.h"
+
 // Cross-platform utility to delete a file.
 static void RemoveTestFile(const wchar_t* pFileName)
 {
@@ -144,15 +146,16 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
     // Get the AAF Dictionary so that we can create valid AAF objects.
     checkResult(pHeader->GetDictionary(&pDictionary));
+	CAAFBuiltinDefs defs (pDictionary);
     
-	checkResult(pDictionary->CreateInstance(AUID_AAFCodecDef,
+	checkResult(pDictionary->CreateInstance(defs.cdCodecDef(),
 							  IID_IAAFCodecDef, 
 							  (IUnknown **)&pCodecDef));
     
 	checkResult(pCodecDef->QueryInterface (IID_IAAFDefObject,
                                           (void **)&pDef));
 
-	checkResult(pCodecDef->AddEssenceKind (DDEF_Matte));
+	checkResult(pCodecDef->AddEssenceKind (defs.ddMatte()));
 	uid = NoCodec;
 	checkResult(pDef->Initialize (uid, sName1, sDescription1));
 	checkResult(pDictionary->RegisterCodecDef(pCodecDef));
@@ -160,13 +163,13 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	pDef = NULL;
 	pCodecDef->Release();
 	pCodecDef = NULL;
-	checkResult(pDictionary->CreateInstance(AUID_AAFCodecDef,
+	checkResult(pDictionary->CreateInstance(defs.cdCodecDef(),
 							  IID_IAAFCodecDef, 
 							  (IUnknown **)&pCodecDef));
     
 	checkResult(pCodecDef->QueryInterface (IID_IAAFDefObject,
                                           (void **)&pDef));
-	checkResult(pCodecDef->AddEssenceKind (DDEF_Matte));
+	checkResult(pCodecDef->AddEssenceKind (defs.ddMatte()));
 	uid = NoCodec;
 	checkResult(pDef->Initialize (uid, sName2, sDescription2));
 

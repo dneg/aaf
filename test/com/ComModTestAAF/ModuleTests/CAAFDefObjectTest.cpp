@@ -53,6 +53,8 @@
 #include "AAFDefUIDs.h"
 #include "aafUtils.h"
 
+#include "CAAFBuiltinDefs.h"
+
 // Some handy smart pointers
 #include "AAFSmartPointer.h"
 typedef IAAFSmartPointer<IAAFDefObject>             IAAFDefObjectSP;
@@ -184,8 +186,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
     // Get the AAF Dictionary so that we can create valid AAF objects.
     checkResult(pHeader->GetDictionary(&pDictionary));
-    
-	checkResult(pDictionary->CreateInstance(AUID_AAFContainerDef,
+	CAAFBuiltinDefs defs (pDictionary);
+
+	checkResult(pDictionary->CreateInstance(defs.cdContainerDef(),
 							  IID_IAAFContainerDef, 
 							  (IUnknown **)&pContainerDef));
     
@@ -201,7 +204,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	// Test GetAUID() using a type def
 	//
 	IAAFTypeDefIntSP pTypeDef;
-	checkResult (pDictionary->CreateInstance (AUID_AAFTypeDefInt,
+	checkResult (pDictionary->CreateInstance (defs.cdTypeDefInt(),
 											  IID_IAAFTypeDefInt,
 											  (IUnknown **)&pTypeDef));
 	checkResult (pTypeDef->Initialize (kTestTypeId,
@@ -213,7 +216,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	// test Append, Prepend, and enum plugin descriptor using same type def
 	//
 	IAAFPluginDescriptorSP pd1;
-	checkResult (pDictionary->CreateInstance (AUID_AAFPluginDescriptor,
+	checkResult (pDictionary->CreateInstance (defs.cdPluginDescriptor(),
 											  IID_IAAFPluginDescriptor,
 											  (IUnknown **)&pd1));
 	checkResult (pd1->Initialize (kTestPluginDescID1,
@@ -222,7 +225,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	checkResult (pDictionary->RegisterPluginDef (pd1));
 
 	IAAFPluginDescriptorSP pd2;
-	checkResult (pDictionary->CreateInstance (AUID_AAFPluginDescriptor,
+	checkResult (pDictionary->CreateInstance (defs.cdPluginDescriptor(),
 											  IID_IAAFPluginDescriptor,
 											  (IUnknown **)&pd2));
 	checkResult (pd2->Initialize (kTestPluginDescID2,
@@ -231,7 +234,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	checkResult (pDictionary->RegisterPluginDef (pd2));
 
 	IAAFPluginDescriptorSP pd3;
-	checkResult (pDictionary->CreateInstance (AUID_AAFPluginDescriptor,
+	checkResult (pDictionary->CreateInstance (defs.cdPluginDescriptor(),
 											  IID_IAAFPluginDescriptor,
 											  (IUnknown **)&pd3));
 	checkResult (pd3->Initialize (kTestPluginDescID3,

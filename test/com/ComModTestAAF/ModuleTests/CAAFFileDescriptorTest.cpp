@@ -38,6 +38,8 @@
 #include "AAFDefUIDs.h"
 #include "AAFContainerDefs.h"
 
+#include "CAAFBuiltinDefs.h"
+
 static aafWChar *slotNames[5] = { L"SLOT1", L"SLOT2", L"SLOT3", L"SLOT4", L"SLOT5" };
 
 static aafRational_t	checkSampleRate = { 2997, 100 };
@@ -112,13 +114,14 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		
 		// Get the AAF Dictionary so that we can create valid AAF objects.
 		checkResult(pHeader->GetDictionary(&pDictionary));
-		
+		CAAFBuiltinDefs defs (pDictionary);
+
 		//Make the first mob
 		long			test;
 		aafRational_t	audioRate = { 44100, 1 };
 		
 		// Create a Mob
-		checkResult(pDictionary->CreateInstance(AUID_AAFSourceMob,
+		checkResult(pDictionary->CreateInstance(defs.cdSourceMob(),
 			IID_IAAFSourceMob, 
 			(IUnknown **)&pSourceMob));
 		
@@ -131,10 +134,10 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		// Add some slots
 		for(test = 0; test < 2; test++)
 		{
-			checkResult(pSourceMob->AddNilReference (test+1, 0, DDEF_Sound, audioRate));
+			checkResult(pSourceMob->AddNilReference (test+1, 0, defs.ddSound(), audioRate));
 		}
 		
-		checkResult(pDictionary->CreateInstance(AUID_AAFFileDescriptor,
+		checkResult(pDictionary->CreateInstance(defs.cdFileDescriptor(),
 			IID_IAAFEssenceDescriptor, 
 			(IUnknown **)&edesc));		
 		checkResult(edesc->QueryInterface(IID_IAAFFileDescriptor, (void **) &pFileDesc));

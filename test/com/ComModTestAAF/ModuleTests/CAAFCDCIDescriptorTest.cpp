@@ -11,7 +11,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -44,6 +44,8 @@
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFDefUIDs.h"
+#include "CAAFBuiltinDefs.h"
+
 
 // Default testing values for CDCI
 #define kCWTest		8
@@ -205,8 +207,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
   hr = pHeader->GetDictionary(&pDictionary);
 	if (SUCCEEDED(hr))
   {
+	  CAAFBuiltinDefs defs (pDictionary);
 	  // Create a source mob
-	  hr = pDictionary->CreateInstance(AUID_AAFSourceMob,
+	  hr = pDictionary->CreateInstance(defs.cdSourceMob(),
 						  IID_IAAFSourceMob, 
 						  (IUnknown **)&pSourceMob);
 	  if (SUCCEEDED(hr))
@@ -221,7 +224,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 			  CoCreateGuid((GUID *)&newMobID);
 			  pMob->SetMobID(newMobID);
 			  pMob->SetName(L"CDCIDescriptorTest");
-			  hr = pDictionary->CreateInstance(AUID_AAFCDCIDescriptor,
+			  hr = pDictionary->CreateInstance(defs.cdCDCIDescriptor(),
 									  IID_IAAFCDCIDescriptor, 
 									  (IUnknown **)&pCDCIDesc);		
 			  if (SUCCEEDED(hr))

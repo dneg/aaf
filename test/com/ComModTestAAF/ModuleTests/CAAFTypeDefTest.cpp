@@ -37,6 +37,8 @@
 #include <assert.h>
 #include <stdio.h>
 
+#include "CAAFBuiltinDefs.h"
+
 #include "AAFSmartPointer.h"
 typedef IAAFSmartPointer<IAAFDictionary> IAAFDictionarySP;
 typedef IAAFSmartPointer<IAAFFile>       IAAFFileSP;
@@ -98,9 +100,11 @@ static HRESULT TestTypeDef ()
   if (! SUCCEEDED (hr)) return hr;
   assert (pDict);
 
+  CAAFBuiltinDefs defs (pDict);
+
   // Let's try to do something interesting with a type definition
   IAAFTypeDefIntSP pTypeDefInt;
-  hr = pDict->CreateInstance (AUID_AAFTypeDefInt,
+  hr = pDict->CreateInstance (defs.cdTypeDefInt(),
 							  IID_IAAFTypeDefInt,
 							  (IUnknown **) &pTypeDefInt);
   if (! SUCCEEDED (hr)) return hr;

@@ -40,6 +40,8 @@
 #include "AAFResult.h"
 #include "AAFDefUIDs.h"
 
+#include "CAAFBuiltinDefs.h"
+
 // Temporarily necessary global declarations.
 extern "C" const CLSID CLSID_AAFInterpolationDef; // generated
 
@@ -139,7 +141,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		// Get the AAF Dictionary so that we can create valid AAF objects.
 		checkResult(pHeader->GetDictionary(&pDictionary));
     
-		checkResult(pDictionary->CreateInstance(AUID_AAFInterpolationDefinition,
+		CAAFBuiltinDefs defs (pDictionary);
+		checkResult(pDictionary->CreateInstance(defs.cdInterpolationDefinition(),
 							  IID_IAAFInterpolationDef, 
 							  (IUnknown **)&pInterpolationDef));
     

@@ -11,7 +11,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -37,6 +37,8 @@
 #include "AAFDataDefs.h"
 #include "AAFUtils.h"
 #include "AAFDefUIDs.h"
+
+#include "CAAFBuiltinDefs.h"
 
 static aafWChar *slotName = L"SLOT1";
 
@@ -80,6 +82,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFTimelineMobSlot*		newSlot = NULL;
 	IAAFComponent*				comp = NULL;
 	IAAFSegment*				seg = NULL;
+	IAAFDataDef *               pDataDef = 0;
 	aafRational_t				audioRate = { 44100, 1 };
 	aafLength_t					testLength = TEST_LENGTH;
 	bool bFileOpen = false;
@@ -101,21 +104,23 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 	try
 	{
-    // Remove the previous test file if any.
-    RemoveTestFile(pFileName);
+	    // Remove the previous test file if any.
+	    RemoveTestFile(pFileName);
 
-    // Create the file
+		// Create the file
 		checkResult(AAFFileOpenNewModify(pFileName, 0, &ProductInfo, &pFile));
 		bFileOpen = true;
  
-    // We can't really do anthing in AAF without the header.
+		// We can't really do anthing in AAF without the header.
 		checkResult(pFile->GetHeader(&pHeader));
 
-    // Get the AAF Dictionary so that we can create valid AAF objects.
-    checkResult(pHeader->GetDictionary(&pDictionary));
+		// Get the AAF Dictionary so that we can create valid AAF objects.
+		checkResult(pHeader->GetDictionary(&pDictionary));
  		
+		CAAFBuiltinDefs defs (pDictionary);
+
 		//Make the MOB to be referenced
-		checkResult(pDictionary->CreateInstance(AUID_AAFMasterMob,
+		checkResult(pDictionary->CreateInstance(defs.cdMasterMob(),
 								 IID_IAAFMob, 
 								 (IUnknown **)&pReferencedMob));
 		checkResult(CoCreateGuid((GUID *)&referencedMobID));
@@ -123,7 +128,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pReferencedMob->SetName(L"AAFSourceClipTest::ReferencedMob"));
 
 		// Create a Mob
-		checkResult(pDictionary->CreateInstance(AUID_AAFCompositionMob,
+		checkResult(pDictionary->CreateInstance(defs.cdCompositionMob(),
 								 IID_IAAFMob, 
 								 (IUnknown **)&pMob));
 		checkResult(CoCreateGuid((GUID *)&newMobID));
@@ -131,12 +136,15 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pMob->SetName(L"AAFSourceClipTest"));
 
 		// Create a SourceClip
-		checkResult(pDictionary->CreateInstance(AUID_AAFSourceClip,
+		checkResult(pDictionary->CreateInstance(defs.cdSourceClip(),
 								 IID_IAAFSegment, 
 								 (IUnknown **)&seg));
 		checkResult(seg->QueryInterface (IID_IAAFComponent,
                                           (void **)&comp));
-		checkResult(comp->SetDataDef (dataDef));
+		checkResult(pDictionary->LookupDataDef(dataDef, &pDataDef));
+		checkResult(comp->SetDataDef (pDataDef));
+		pDataDef->Release ();
+		pDataDef = 0;
 		checkResult(comp->SetLength (testLength));
 		comp->Release();
 		comp = NULL;
@@ -159,25 +167,52 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
   // Cleanup and return
 	if (newSlot)
+	  {
 		newSlot->Release();
+		newSlot = 0;
+	  }
 
 	if (seg)
+	  {
 		seg->Release();
+		seg = 0;
+	  }
 
 	if (comp)
+	  {
 		comp->Release();
+		comp = 0;
+	  }
 
 	if (pMob)
+	  {
 		pMob->Release();
+		pMob = 0;
+	  }
 
 	if (pReferencedMob)
+	  {
 		pReferencedMob->Release();
+		pReferencedMob = 0;
+	  }
 
 	if (pDictionary)
+	  {
 		pDictionary->Release();
+		pDictionary = 0;
+	  }
 
 	if (pHeader)
+	  {
 		pHeader->Release();
+		pHeader = 0;
+	  }
+
+	if (pDataDef)
+	  {
+		pDataDef->Release ();
+		pDataDef = 0;
+	  }
 
 	if (pFile) 
 	{
@@ -187,6 +222,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 			pFile->Close();
 		  }
 		pFile->Release();
+		pFile = 0;
 	}
 
 
@@ -206,6 +242,8 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	IAAFSegment*				pSegment = NULL;
 	IAAFComponent*				comp = NULL;
 	IAAFSourceClip*				pSourceClip = NULL;
+	IAAFDataDef *               pDataDef = 0;
+	IAAFDefObject *             pDefObj = 0;
 	aafLength_t					testLength;
 	aafUID_t					testUID, checkUID = TEST_DDEF;
 	bool bFileOpen = false;
@@ -254,7 +292,14 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 				checkResult(pSlot->GetSegment(&pSegment));
 				checkResult(pSegment->QueryInterface (IID_IAAFComponent,
                                           (void **)&comp));
-				checkResult(comp->GetDataDef (&testUID));
+				checkResult(comp->GetDataDef (&pDataDef));
+				checkResult(pDataDef->QueryInterface (IID_IAAFDefObject,
+                                          (void **)&pDefObj));
+				checkResult(pDefObj->GetAUID (&testUID));
+				pDataDef->Release ();
+				pDataDef = 0;
+				pDefObj->Release ();
+				pDefObj = 0;
 				checkExpression(memcmp(&testUID, &checkUID, sizeof(testUID)) == 0, AAFRESULT_TEST_FAILED);
 				checkResult(comp->GetLength (&testLength));
 				checkExpression(TEST_LENGTH == testLength, AAFRESULT_TEST_FAILED);
@@ -279,37 +324,77 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 
 	// Cleanup and return
 	if (pReferencedMob)
+	  {
 		pReferencedMob->Release();
+		pReferencedMob = 0;
+	  }
 
 	if (pSourceClip)
+	  {
 		pSourceClip->Release();
+		pSourceClip = 0;
+	  }
 
 	if (comp)
+	  {
 		comp->Release();
+		comp = 0;
+	  }
 
 	if (pSegment)
+	  {
 		pSegment->Release();
+		pSegment = 0;
+	  }
 
 	if (pSlot)
+	  {
 		pSlot->Release();
+		pSlot = 0;
+	  }
 
 	if (pSlotIter)
+	  {
 		pSlotIter->Release();
+		pSlotIter = 0;
+	  }
 
 	if (pMob)
+	  {
 		pMob->Release();
+		pMob = 0;
+	  }
 
 	if (pMobIter)
+	  {
 		pMobIter->Release();
+		pMobIter = 0;
+	  }
 
 	if (pHeader)
+	  {
 		pHeader->Release();
+		pHeader = 0;
+	  }
+
+	if (pDataDef)
+	  {
+		pDataDef->Release ();
+		pDataDef = 0;
+	  }
+
+	if (pDefObj)
+	  {
+		pDefObj->Release ();
+		pDefObj = 0;
+	  }
 
 	if (pFile) 
 	{
 		if (bFileOpen)
 			pFile->Close();
 		pFile->Release();
+		pFile = 0;
 	}
 
 	return hr;

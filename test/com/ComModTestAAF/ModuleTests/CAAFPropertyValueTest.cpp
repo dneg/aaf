@@ -33,6 +33,8 @@
 #include "AAFStoredObjectIDs.h"
 #include "AAFDefUIDs.h"
 
+#include "CAAFBuiltinDefs.h"
+
 #include <iostream.h>
 #include <assert.h>
 #include <stdio.h>
@@ -106,9 +108,11 @@ static HRESULT TestPropertyValue ()
   if (! SUCCEEDED (hr)) return hr;
   assert (pDict);
 
+  CAAFBuiltinDefs defs (pDict);
+
   // Let's try to do something interesting with a type definition
   IAAFTypeDefInt * pTypeDef = NULL;
-  hr = pDict->CreateInstance (AUID_AAFTypeDefInt,
+  hr = pDict->CreateInstance (defs.cdTypeDefInt(),
 							  IID_IAAFTypeDefInt,
 							  (IUnknown **) &pTypeDef);
   if (! SUCCEEDED (hr)) return hr;

@@ -38,6 +38,8 @@
 #include "AAFResult.h"
 #include "AAFDefUIDs.h"
 
+#include "CAAFBuiltinDefs.h"
+
 static aafMobID_t		newMobID;
 
 
@@ -96,44 +98,45 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
   try 
   {
-    // Remove the previous test file if any.
-    RemoveTestFile(pFileName);
+      // Remove the previous test file if any.
+      RemoveTestFile(pFileName);
 
 
-    // Create the file.
-		checkResult(AAFFileOpenNewModify(pFileName, 0, &ProductInfo, &pFile));
+	  // Create the file.
+	  checkResult(AAFFileOpenNewModify(pFileName, 0, &ProductInfo, &pFile));
 	  bFileOpen = true;
   
-    // We can't really do anthing in AAF without the header.
-		checkResult(pFile->GetHeader(&pHeader));
+	  // We can't really do anthing in AAF without the header.
+	  checkResult(pFile->GetHeader(&pHeader));
 
-    // Get the AAF Dictionary so that we can create valid AAF objects.
-    checkResult(pHeader->GetDictionary(&pDictionary));
- 		
+	  // Get the AAF Dictionary so that we can create valid AAF objects.
+	  checkResult(pHeader->GetDictionary(&pDictionary));
+
+	  CAAFBuiltinDefs defs (pDictionary);
  	  
 	  // Create a Mob
-	  checkResult(pDictionary->CreateInstance(AUID_AAFMob,
+	  checkResult(pDictionary->CreateInstance(defs.cdMob(),
 							  IID_IAAFMob, 
 							  (IUnknown **)&pMob));
     
-    // Initialize the Mob properties
-		checkResult(CoCreateGuid((GUID *)&newMobID));
-		checkResult(pMob->SetMobID(newMobID));
+	  // Initialize the Mob properties
+	  checkResult(CoCreateGuid((GUID *)&newMobID));
+	  checkResult(pMob->SetMobID(newMobID));
 	  checkResult(pMob->SetName(MOB_NAME_TEST));
 
-		// Add the source mob into the tree
-		checkResult(pHeader->AddMob(pMob));
+	  // Add the source mob into the tree
+	  checkResult(pHeader->AddMob(pMob));
 
-		// Attempt to save the file.
-		checkResult(pFile->Save());
+	  // Attempt to save the file.
+	  checkResult(pFile->Save());
 
-    // Attempt to close the file.
+	  // Attempt to close the file.
 	  checkResult(pFile->Close());
 	  bFileOpen = false;
-  }
-	catch (HRESULT& rResult)
+    }
+  catch (HRESULT& rResult)
 	{
-    hr = rResult;
+	  hr = rResult;
 	}
 
 

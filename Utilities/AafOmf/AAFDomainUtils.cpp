@@ -45,6 +45,8 @@ namespace OMF2
 #include "AAFException.h"
 #include "AutoRelease.h"
 
+#include "CAAFBuiltinDefs.h"
+
 #define CHECKAAF
 
 
@@ -72,13 +74,15 @@ IAAFInterpolationDef *AAFDomainUtils::CreateInterpolationDefinition(IAAFDictiona
 	IAAFDefObject			*defObject;
 	AAFRESULT				rc;
 
+	CAAFBuiltinDefs defs (dict);
+
 	rc = dict->LookupInterpolationDef(interpolationDefID,&interpDef);
 	if(rc == AAFRESULT_SUCCESS && interpDef != NULL)
 		return interpDef;
 
 //	dprintf("AEffect::CreateInterpolationDefinition()\n");	//JeffB:
 
-	(void)(dict->CreateInstance(kAAFClassID_InterpolationDefinition,
+	(void)(dict->CreateInstance(defs.cdInterpolationDefinition(),
 			IID_IAAFInterpolationDef,
 			(IUnknown **)&interpDef));
 	(void)(interpDef->QueryInterface(IID_IAAFDefObject, (void **) &defObject));
@@ -105,12 +109,14 @@ IAAFTypeDef *AAFDomainUtils::CreateTypeDefinition(IAAFDictionary *pDict, aafUID_
 	IAAFDefObject	*defObject;
 	AAFRESULT		rc;
 
+	CAAFBuiltinDefs defs (pDict);
+
 //	dprintf("AEffect::CreateTypeDefinition()\n");	//JeffB:
 	rc = pDict->LookupTypeDef(typeDefID,&typeDef);
 	if(rc == AAFRESULT_SUCCESS && typeDef != NULL)
 		return typeDef;
 
-	CHECKAAF(pDict->CreateInstance(kAAFClassID_TypeDefinition,
+	CHECKAAF(pDict->CreateInstance(defs.cdTypeDef(),
 			IID_IAAFTypeDef,
 			(IUnknown **)&typeDef));
 	CHECKAAF(typeDef->QueryInterface(IID_IAAFDefObject, (void **) &defObject));
@@ -142,7 +148,9 @@ void AAFDomainUtils::AAFAddOnePoint(IAAFDictionary *dict, aafRational_t percentT
 	IAAFControlPoint	*pPoint = NULL;
 //	AAFRESULT			rc;
 
-	CHECKAAF(dict->CreateInstance(kAAFClassID_ControlPoint,
+	CAAFBuiltinDefs defs (dict);
+
+	CHECKAAF(dict->CreateInstance(defs.cdControlPoint(),
 		IID_IAAFControlPoint,
 		(IUnknown **)&pPoint));
 		
@@ -161,7 +169,9 @@ IAAFParameter *AAFDomainUtils::AAFAddConstantVal(IAAFDictionary *dict, long bufl
 	IAAFParameter		*pParm = NULL;
 //	AAFRESULT			rc;
 
-	CHECKAAF(dict->CreateInstance(kAAFClassID_ConstantValue,
+	CAAFBuiltinDefs defs (dict);
+
+	CHECKAAF(dict->CreateInstance(defs.cdConstantValue(),
 		IID_IAAFConstantValue,
 		(IUnknown **)&pCVal));
 	CHECKAAF(pCVal->SetValue(buflen, (unsigned char *)buf));
@@ -180,7 +190,9 @@ IAAFVaryingValue *AAFDomainUtils::AAFAddEmptyVaryingVal(IAAFDictionary *dict, IA
 	IAAFParameter		*pParm = NULL;
 //	AAFRESULT			rc;
 
-	CHECKAAF(dict->CreateInstance(kAAFClassID_VaryingValue,
+	CAAFBuiltinDefs defs (dict);
+
+	CHECKAAF(dict->CreateInstance(defs.cdVaryingValue(),
 		IID_IAAFVaryingValue,
 		(IUnknown **)&pVVal));
 	CHECKAAF(pVVal->SetInterpolationDefinition(CreateInterpolationDefinition(
@@ -208,7 +220,9 @@ IAAFParameterDef *AAFDomainUtils::CreateParameterDefinition(IAAFDictionary *pDic
 	if(rc == AAFRESULT_SUCCESS && parmDef != NULL)
 		return parmDef;
 
-	CHECKAAF(pDict->CreateInstance(kAAFClassID_ParameterDefinition,
+	CAAFBuiltinDefs defs (pDict);
+
+	CHECKAAF(pDict->CreateInstance(defs.cdParameterDef(),
 			IID_IAAFParameterDef,
 			(IUnknown **)&parmDef));
 	CHECKAAF(parmDef->QueryInterface(IID_IAAFDefObject, (void **) &defObject));

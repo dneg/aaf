@@ -37,6 +37,8 @@
 #include "AAFDataDefs.h"
 #include "AAFDefUIDs.h"
 
+#include "CAAFBuiltinDefs.h"
+
 #define kNumComponents	5
 
 
@@ -152,8 +154,10 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		// Get the AAF Dictionary so that we can create valid AAF objects.
 		checkResult(pHeader->GetDictionary(&pDictionary));
 		
+		CAAFBuiltinDefs defs (pDictionary);
+
 		// Create a Composition Mob
-		checkResult(pDictionary->CreateInstance(AUID_AAFCompositionMob,
+		checkResult(pDictionary->CreateInstance(defs.cdCompositionMob(),
 			IID_IAAFMob, 
 			(IUnknown **)&pMob));
 		
@@ -162,10 +166,10 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pMob->SetName(L"AAFDataDefTest"));
 		
 		// Add mob slot w/ Sequence
-		checkResult(pDictionary->CreateInstance(AUID_AAFSequence,
+		checkResult(pDictionary->CreateInstance(defs.cdSequence(),
 			IID_IAAFSequence, 
 			(IUnknown **)&pSequence));		
-		checkResult(pSequence->Initialize(DDEF_Picture));
+		checkResult(pSequence->Initialize(defs.ddPicture()));
 		
 		//
 		//	Add some segments.  Need to test failure conditions
@@ -176,19 +180,18 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		{
 			aafLength_t		len = 10;
 			
-			checkResult(pDictionary->CreateInstance(AUID_AAFFiller,
+			checkResult(pDictionary->CreateInstance(defs.cdFiller(),
 				IID_IAAFComponent, 
 				(IUnknown **)&pComponent));
 			
 			if(i == 0)
 			{
-				checkResult(pComponent->SetDataDef(DDEF_PictureWithMatte));
+				checkResult(pComponent->SetDataDef(defs.ddPictureWithMatte()));
 			}
 			else
 			{
-				checkResult(pComponent->SetDataDef(DDEF_Picture));
+				checkResult(pComponent->SetDataDef(defs.ddPicture()));
 			}
-
 			checkResult(pComponent->SetLength(len));
 			checkResult(pSequence->AppendComponent(pComponent));
 			
@@ -286,6 +289,8 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 		// Get the AAF Dictionary so that we can create valid AAF objects.
 		checkResult(pHeader->GetDictionary(&pDictionary));
 		
+		CAAFBuiltinDefs defs (pDictionary);
+
 		// Enumerate over Composition MOBs
 		criteria.searchTag = kByMobKind;
 		criteria.tags.mobKind = kCompMob;
@@ -314,13 +319,11 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 				index = 0;
 				while (pCompIter && pCompIter->NextOne(&pComp) == AAFRESULT_SUCCESS)
 				{
-					aafUID_t	dataDef;
 					aafBool		testBool;
 
 					numCpnts++;
 					
-					checkResult(pComp->GetDataDef(&dataDef));
-					checkResult(pDictionary->LookupDataDef (dataDef, &pDataDef));
+					checkResult(pComp->GetDataDef(&pDataDef));
 					checkResult(pDataDef->IsSoundKind(&testBool));
 					checkExpression(testBool == AAFFalse, AAFRESULT_TEST_FAILED);
 					checkResult(pDataDef->IsMatteKind(&testBool));
@@ -328,29 +331,30 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 
 					if(index == 0)	// First segment is Picture with Matte, converts to picture
 					{
-						checkResult(pDataDef->IsDataDefOf(DDEF_PictureWithMatte, &testBool));
+						checkResult(pDataDef->IsDataDefOf(defs.ddPictureWithMatte(), &testBool));
 						checkExpression(testBool == AAFTrue, AAFRESULT_TEST_FAILED);
 						checkResult(pDataDef->IsPictureKind(&testBool));
 						checkExpression(testBool == AAFFalse, AAFRESULT_TEST_FAILED);
 						checkResult(pDataDef->IsPictureWithMatteKind(&testBool));
 						checkExpression(testBool == AAFTrue, AAFRESULT_TEST_FAILED);
-						checkResult(pDataDef->DoesDataDefConvertTo (DDEF_Picture, &testBool));
+						checkResult(pDataDef->DoesDataDefConvertTo (defs.ddPicture(),
+																	&testBool));
 						checkExpression(testBool == AAFTrue, AAFRESULT_TEST_FAILED);
 					}
 					else		// First segment is Picture, converts from picture with Matte
 					{
-						checkResult(pDataDef->IsDataDefOf(DDEF_Picture, &testBool));
+						checkResult(pDataDef->IsDataDefOf(defs.ddPicture(), &testBool));
 						checkExpression(testBool == AAFTrue, AAFRESULT_TEST_FAILED);
 						checkResult(pDataDef->IsPictureKind(&testBool));
 						checkExpression(testBool == AAFTrue, AAFRESULT_TEST_FAILED);
 						checkResult(pDataDef->IsPictureWithMatteKind(&testBool));
 						checkExpression(testBool == AAFFalse, AAFRESULT_TEST_FAILED);
-						checkResult(pDataDef->DoesDataDefConvertFrom (DDEF_PictureWithMatte, &testBool));
+						checkResult(pDataDef->DoesDataDefConvertFrom (defs.ddPictureWithMatte(), &testBool));
 						checkExpression(testBool == AAFTrue, AAFRESULT_TEST_FAILED);
 					}
-					checkResult(pDataDef->DoesDataDefConvertTo (DDEF_Sound, &testBool));
+					checkResult(pDataDef->DoesDataDefConvertTo (defs.ddSound(), &testBool));
 					checkExpression(testBool == AAFFalse, AAFRESULT_TEST_FAILED);
-					checkResult(pDataDef->DoesDataDefConvertFrom (DDEF_Sound, &testBool));
+					checkResult(pDataDef->DoesDataDefConvertFrom (defs.ddSound(), &testBool));
 					checkExpression(testBool == AAFFalse, AAFRESULT_TEST_FAILED);
 					
 					pComp->Release();

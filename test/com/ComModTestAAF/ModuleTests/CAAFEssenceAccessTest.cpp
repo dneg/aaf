@@ -49,6 +49,7 @@
 // Include the AAF Stored Object identifiers. These symbols are defined in aaf.lib.
 #include "AAFStoredObjectIDs.h"
 
+#include "CAAFBuiltinDefs.h"
 
 
 
@@ -378,11 +379,12 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 		
 		// Get the AAF Dictionary so that we can create valid AAF objects.
 		checkResult(pHeader->GetDictionary(&pDictionary));
+		CAAFBuiltinDefs defs (pDictionary);
 		
 		// !!!Previous revisions of this file contained code here required to handle external essence
 		
 		// Get a Master MOB Interface
-		checkResult(pDictionary->CreateInstance(AUID_AAFMasterMob,
+		checkResult(pDictionary->CreateInstance(defs.cdMasterMob(),
 			IID_IAAFMasterMob, 
 			(IUnknown **)&pMasterMob));
 		// Get a Mob interface and set its variables.
@@ -398,7 +400,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 		if(dataFile != NULL)
 		{
 			// Make a locator, and attach it to the EssenceDescriptor
-			checkResult(pDictionary->CreateInstance(AUID_AAFNetworkLocator,
+			checkResult(pDictionary->CreateInstance(defs.cdNetworkLocator(),
 				IID_IAAFLocator, 
 				(IUnknown **)&pLocator));		
 			checkResult(pLocator->SetPath (dataFile->dataFilename));
@@ -434,7 +436,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 		
 		// now create the Essence data file
 		checkResult(pMasterMob->CreateEssence(1,				// Slot ID
-			DDEF_Sound,		// MediaKind
+			defs.ddSound(),	// MediaKind
 			CodecWave,		// codecID
 			editRate,		// edit rate
 			sampleRate,		// sample rate
@@ -971,10 +973,10 @@ static HRESULT CreateJPEGAAFFile(
 		
 		// Get the AAF Dictionary so that we can create valid AAF objects.
 		checkResult(pHeader->GetDictionary(&pDictionary));
-		
+		CAAFBuiltinDefs defs (pDictionary);
 		
 		// Get a Master MOB Interface
-		checkResult(pDictionary->CreateInstance(AUID_AAFMasterMob,
+		checkResult(pDictionary->CreateInstance(defs.cdMasterMob(),
 			IID_IAAFMasterMob, 
 			(IUnknown **)&pMasterMob));
 		// Get a Mob interface and set its variables.
@@ -990,7 +992,7 @@ static HRESULT CreateJPEGAAFFile(
 		if(dataFile != NULL)
 		{
 			// Make a locator, and attach it to the EssenceDescriptor
-			checkResult(pDictionary->CreateInstance(AUID_AAFNetworkLocator,
+			checkResult(pDictionary->CreateInstance(defs.cdNetworkLocator(),
 				IID_IAAFLocator, 
 				(IUnknown **)&pLocator));		
 			checkResult(pLocator->SetPath (dataFile->dataFilename));
@@ -1005,7 +1007,7 @@ static HRESULT CreateJPEGAAFFile(
 		
 		// now create the Essence data file
 		checkResult(pMasterMob->CreateEssence(STD_SLOT_ID,				// Slot ID
-			DDEF_Picture,		// MediaKind
+			defs.ddPicture(),	// MediaKind
 			CodecJPEG,		// codecID
 			editRate,		// edit rate
 			sampleRate,		// sample rate
@@ -1307,7 +1309,7 @@ static HRESULT ReadJPEGAAFFile(
 		
 		// Get the AAF Dictionary so that we can create valid AAF objects.
 		checkResult(pHeader->GetDictionary(&pDictionary));
-		
+		CAAFBuiltinDefs defs (pDictionary);
 		
 		// Here we checkResult on the number of mobs in the file. 
 		// Get the number of master mobs in the file (should be one)
@@ -1408,7 +1410,7 @@ static HRESULT ReadJPEGAAFFile(
 //			cout << "        Codec:" << chNameBuffer << endl;
 
 			aafLength_t maxSampleSize = 0;
-			checkResult(pEssenceAccess->GetLargestSampleSize(DDEF_Picture, &maxSampleSize));
+			checkResult(pEssenceAccess->GetLargestSampleSize(defs.ddPicture(), &maxSampleSize));
 			aafUInt32 sampleBufferSize = static_cast<aafUInt32>(maxSampleSize);
 
 
@@ -1430,14 +1432,14 @@ static HRESULT ReadJPEGAAFFile(
 			checkExpression(NULL != AAFDataBuf, AAFRESULT_NOMEMORY);
 
 			aafLength_t sampleCount = 0;
-			checkResult(pEssenceAccess->GetSampleCount(DDEF_Picture, &sampleCount));
+			checkResult(pEssenceAccess->GetSampleCount(defs.ddPicture(), &sampleCount));
 			checkExpression(MAX_SAMPLE_COUNT == sampleCount, AAFRESULT_TEST_FAILED);
 
 			aafUInt32 index;
 			for (index = 0; index < sampleCount; ++index)
 			{
 				aafLength_t sampleSize;
-				checkResult(pEssenceAccess->GetSampleFrameSize(DDEF_Picture, index, &sampleSize));
+				checkResult(pEssenceAccess->GetSampleFrameSize(defs.ddPicture(), index, &sampleSize));
 				if (kSDKCompressionDisable == compressEnable)
 					checkExpression(compressedBufferSize == sampleSize, AAFRESULT_TEST_FAILED);
 				else
@@ -2023,4 +2025,3 @@ HRESULT CAAFEssenceAccess_test()
 	
 	return(hr);
 }
-	

@@ -38,6 +38,8 @@
 #include "AAFDefUIDs.h"
 #include "AAFDataDefs.h"
 
+#include "CAAFBuiltinDefs.h"
+
 static aafWChar *slotNames[5] = { L"SLOT1", L"SLOT2", L"SLOT3", L"SLOT4", L"SLOT5" };
 
 
@@ -79,7 +81,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFComponent	*pComp = NULL;
 	aafProductIdentification_t	ProductInfo;
 	aafMobID_t					newMobID;
-  aafUID_t  typeUID = DDEF_Picture;
 	HRESULT						hr = S_OK;
 	
 	ProductInfo.companyName = L"AAF Developers Desk";
@@ -108,13 +109,14 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		
 		// Get the AAF Dictionary so that we can create valid AAF objects.
 		checkResult(pHeader->GetDictionary(&pDictionary));
+		CAAFBuiltinDefs defs (pDictionary);
 		
 		//Make the first mob
 		long	test;
 		aafRational_t	audioRate = { 44100, 1 };
 		
 		// Create a Mob
-		checkResult(pDictionary->CreateInstance(AUID_AAFMob,
+		checkResult(pDictionary->CreateInstance(defs.cdMob(),
 			IID_IAAFMob, 
 			(IUnknown **)&pMob));
 		
@@ -125,17 +127,17 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		// Add some slots
 		for(test = 0; test < 5; test++)
 		{
-			checkResult(pDictionary->CreateInstance(AUID_AAFSourceClip,
+			checkResult(pDictionary->CreateInstance(defs.cdSourceClip(),
 				IID_IAAFSourceClip, 
 				(IUnknown **)&sclp));		
 			
 			checkResult(sclp->QueryInterface (IID_IAAFComponent, (void **)&pComp));
-			checkResult(pComp->SetDataDef (typeUID));
+			checkResult(pComp->SetDataDef (defs.ddPicture()));
 			pComp->Release();
 			pComp = NULL;
 			checkResult(sclp->QueryInterface (IID_IAAFSegment, (void **)&seg));
 			
-			checkResult(pDictionary->CreateInstance( AUID_AAFMobSlot,
+			checkResult(pDictionary->CreateInstance( defs.cdMobSlot(),
 				IID_IAAFMobSlot, 
 				(IUnknown **)&newSlot));		
 			
@@ -210,10 +212,12 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	IAAFMobSlot				*slot = NULL;
 	IAAFSegment				*pSeg = NULL;
 	IAAFSourceClip			*pSourceClip = NULL;
+	IAAFDataDef *            pDataDef = 0;
+	IAAFDefObject *          pDefObj = 0;
 	aafProductIdentification_t	ProductInfo;
 	aafNumSlots_t			numMobs, n;
 	aafSlotID_t				s;
-	aafInt32				length;
+	aafUInt32				length;
 	HRESULT					hr = S_OK;
 	aafUID_t				readUID, typeUID = DDEF_Picture;
 	
@@ -272,10 +276,16 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 				checkResult(slot->GetPhysicalNum(&trackID));
 				checkExpression (trackID == s+2, AAFRESULT_TEST_FAILED);
 				checkResult(slot->GetPhysicalNum(&trackID));
-				checkResult(slot->GetDataDef(&readUID));
+				checkResult(slot->GetDataDef(&pDataDef));
+				checkResult(pDataDef->QueryInterface (IID_IAAFDefObject, (void **)&pDefObj));
+				checkResult(pDefObj->GetAUID(&readUID));
 				checkExpression (memcmp(&typeUID, &readUID, sizeof(typeUID)) == 0, AAFRESULT_TEST_FAILED);
 				checkResult(slot->GetSegment(&pSeg));
 				checkResult(pSeg->QueryInterface (IID_IAAFSourceClip, (void **)&pSourceClip));
+				pDataDef->Release();
+				pDataDef = 0;
+				pDefObj->Release ();
+				pDefObj = 0;
 				pSourceClip->Release();
 				pSourceClip = NULL;
 				pSeg->Release();
@@ -295,31 +305,65 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	
 	// Cleanup object references
 	if (slot)
+	  {
 		slot->Release();
+		slot = 0;
+	  }
 	
 	if (pSeg)
+	  {
 		pSeg->Release();
+		pSeg = 0;
+	  }
 	
 	if (pSourceClip)
+	  {
 		pSourceClip->Release();
+		pSourceClip = 0;
+	  }
 	
 	if (slotIter)
+	  {
 		slotIter->Release();
+		slotIter = 0;
+	  }
 	
 	if (aMob)
+	  {
 		aMob->Release();
+		aMob = 0;
+	  }
 	
 	if (mobIter)
+	  {
 		mobIter->Release();
+		mobIter = 0;
+	  }
 	
 	if (pHeader)
+	  {
 		pHeader->Release();
+		pHeader = 0;
+	  }
 	
+	if (pDataDef)	
+	  {
+		pDataDef->Release();
+		pDataDef = 0;
+	  }
+
+	if (pDefObj)
+	  {
+		pDefObj->Release ();
+		pDefObj = 0;
+	  }
+
 	if (pFile)
 	{  // Close file
 		if (bFileOpen)
 			pFile->Close();
 		pFile->Release();
+		pFile = 0;
 	}
 	
 	return hr;

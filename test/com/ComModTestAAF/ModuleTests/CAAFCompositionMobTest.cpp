@@ -39,6 +39,8 @@
 #include "AAFResult.h"
 #include "AAFDefUIDs.h"
 
+#include "CAAFBuiltinDefs.h"
+
 
 static aafInt32 fadeInLen  = 1000;
 static aafFadeType_t fadeInType = kFadeLinearAmp;
@@ -87,8 +89,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
   try
   {
-    // Remove the previous test file if any.
-    RemoveTestFile(pFileName);
+      // Remove the previous test file if any.
+      RemoveTestFile(pFileName);
 
 	  ProductInfo.companyName = L"AAF Developers Desk";
 	  ProductInfo.productName = L"AAFCompositionMobTest";
@@ -104,31 +106,32 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
     
 		// Create the new AAF file.
 	  checkResult(AAFFileOpenNewModify(pFileName, 0, &ProductInfo, &pFile));
-    bFileOpen = true;
+	  bFileOpen = true;
 
-    // We can't really do anthing in AAF without the header.
+	  // We can't really do anthing in AAF without the header.
 	  checkResult(pFile->GetHeader(&pHeader));
 
-    // Get the AAF Dictionary so that we can create valid AAF objects.
+	  // Get the AAF Dictionary so that we can create valid AAF objects.
 	  checkResult(pHeader->GetDictionary(&pDictionary));
 
-		// Create a CompositionMob
-		checkResult(pDictionary->CreateInstance(AUID_AAFCompositionMob,
+	  CAAFBuiltinDefs defs (pDictionary);
+	  // Create a CompositionMob
+	  checkResult(pDictionary->CreateInstance(defs.cdCompositionMob(),
 								IID_IAAFCompositionMob, 
 								(IUnknown **)&pCompMob));
-		// Get a MOB Interface 
-		checkResult(pCompMob->QueryInterface (IID_IAAFMob, (void **)&pMob));
+	  // Get a MOB Interface 
+	  checkResult(pCompMob->QueryInterface (IID_IAAFMob, (void **)&pMob));
 		
-    // Assign the mob a new id.
-    checkResult(CoCreateGuid((GUID *)&newMobID));
-		checkResult(pMob->SetMobID(newMobID));
+	  // Assign the mob a new id.
+	  checkResult(CoCreateGuid((GUID *)&newMobID));
+	  checkResult(pMob->SetMobID(newMobID));
     
-    // Initialize the composition mob.
-		checkResult(pCompMob->Initialize( L"COMPMOB01" ));
-		checkResult(pCompMob->SetDefaultFade(fadeInLen, fadeInType, fadeInEditUnit));
+	  // Initialize the composition mob.
+	  checkResult(pCompMob->Initialize( L"COMPMOB01" ));
+	  checkResult(pCompMob->SetDefaultFade(fadeInLen, fadeInType, fadeInEditUnit));
 
-    // Add the mob to the file.
-    checkResult(pHeader->AddMob(pMob));
+	  // Add the mob to the file.
+	  checkResult(pHeader->AddMob(pMob));
   }
   catch (HRESULT& rResult)
   {

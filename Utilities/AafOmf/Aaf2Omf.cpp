@@ -505,7 +505,7 @@ HRESULT Aaf2Omf::AAFFileRead()
 	rc = pHeader->GetMobs(&criteria, &pMobIter);
 	while (pMobIter && (pMobIter->NextOne(&pMob) == AAFRESULT_SUCCESS))
 	{
-		aafInt32	nameLength = 0;
+		aafUInt32	nameLength = 0;
 		aafWChar*	pwMobName = NULL;
 		aafMobID_t	MobID;
 		char		szMobID[64];
@@ -576,7 +576,7 @@ HRESULT Aaf2Omf::AAFFileRead()
 						char*		pszCommName;
 						aafWChar*	pwcComment;
 						aafWChar*	pwcName;
-						aafInt32	textSize;
+						aafUInt32	textSize;
 						aafUInt32	bytesRead;
 
 						pMobComment->GetNameBufLen(&textSize);
@@ -812,7 +812,7 @@ HRESULT Aaf2Omf::ConvertSourceMob(IAAFSourceMob* pSourceMob,
 		char*				pszManufacturer = NULL;
 		aafWChar*			pwModel = NULL;
 		char*				pszModel = NULL;
-		aafInt32			textSize;
+		aafUInt32			textSize;
 		aafTapeCaseType_t	formFactor;
 		aafTapeFormatType_t	tapeFormat;
 		aafLength_t			tapeLength;
@@ -826,7 +826,7 @@ HRESULT Aaf2Omf::ConvertSourceMob(IAAFSourceMob* pSourceMob,
 			pTapeDesc->GetSignalType(&videoSignal);
 			pTapeDesc->GetTapeFormat(&tapeFormat);
 			pTapeDesc->GetTapeLength(&tapeLength);
-			pTapeDesc->GetTapeManBufLen(&textSize);
+			pTapeDesc->GetTapeManufacturerBufLen(&textSize);
 			if (textSize > 0)
 			{
 				pwManufacturer = new aafWChar[textSize/sizeof(aafWChar)];
@@ -1239,7 +1239,7 @@ HRESULT Aaf2Omf::TraverseMob(IAAFMob* pMob,
 	IEnumAAFMobSlots*		pSlotIter = NULL;
 	aafNumSlots_t			numSlots;
 //	aafSearchCrit_t			criteria;
-	aafInt32				textSize;
+	aafUInt32				textSize;
 
 	rc = pMob->CountSlots(&numSlots);
 	if (FAILED(rc))
@@ -1369,15 +1369,28 @@ HRESULT Aaf2Omf::ProcessComponent(IAAFComponent* pComponent,
 	IAAFSelector*			pSelector = NULL;
 	IAAFOperationGroup*		pEffect = NULL;
 	IAAFScopeReference*		pScopeRef = NULL;
+	IAAFDataDef*            pDataDef = 0;
+	IAAFDefObject*          pDefObj = 0;
 
 	aafUID_t				datadef;
 	aafLength_t				length;
 
 	IncIndentLevel();
 	
-	rc = pComponent->GetDataDef(&datadef);
+
+	rc = pComponent->GetDataDef(&pDataDef);
 	if (FAILED(rc))
 		return rc;
+	rc = pDataDef->QueryInterface(IID_IAAFDefObject, (void **)&pDefObj);
+	if (FAILED(rc))
+		return rc;
+	pDataDef->Release();
+	pDataDef = 0;
+	rc = pDefObj->GetAUID(&datadef);
+	if (FAILED(rc))
+		return rc;
+	pDefObj->Release();
+	pDefObj = 0;
 	
 	rc = ConvertAAFDatadef(datadef, &OMFDatakind);
 	if (FAILED(rc))
@@ -1632,28 +1645,64 @@ HRESULT Aaf2Omf::ProcessComponent(IAAFComponent* pComponent,
 cleanup:
 
 	if (pScopeRef)
+	  {
 		pScopeRef->Release();
+		pScopeRef = 0;
+	  }
 	
 	if (pSequence)
+	  {
 		pSequence->Release();
+		pSequence = 0;
+	  }
 	
 	if (pSourceClip)
+	  {
 		pSourceClip->Release();
+		pSourceClip = 0;
+	  }
 	
 	if (pTimecode)
+	  {
 		pTimecode->Release();
+		pTimecode = 0;
+	  }
 
 	if (pFiller)
+	  {
 		pFiller->Release();
+		pFiller = 0;
+	  }
 	
 	if (pEdgecode)
+	  {
 		pEdgecode->Release();
+		pEdgecode = 0;
+	  }
 
 	if (pTransition)
+	  {
 		pTransition->Release();
+		pTransition = 0;
+	  }
 
 	if (pSelector)
+	  {
 		pSelector->Release();
+		pSelector = 0;
+	  }
+
+	if (pDataDef)
+	  {
+		pDataDef->Release();
+		pDataDef = 0;
+	  }
+
+	if (pDefObj)
+	  {
+		pDefObj->Release();
+		pDefObj = 0;
+	  }
 
 	DecIndentLevel();
 	if (OMFError != OMF2::OM_ERR_NONE)
@@ -1907,7 +1956,7 @@ HRESULT Aaf2Omf::ConvertLocator(IAAFEssenceDescriptor* pEssenceDesc,
     aafWChar*				pwLocatorPath = NULL;
 	aafWChar*				pwName = NULL;
 
-	aafInt32				pathSize = 0;
+	aafUInt32				pathSize = 0;
 	aafUInt32				textSize = 0;
 
 	rc = pEssenceDesc->CountLocators(&numLocators);
@@ -1919,7 +1968,7 @@ HRESULT Aaf2Omf::ConvertLocator(IAAFEssenceDescriptor* pEssenceDesc,
 			rc = pLocator->QueryInterface(IID_IAAFTextLocator, (void **)&pTextLocator);
 			if (SUCCEEDED(rc))
 			{
-				rc = pTextLocator->GetNameBufLen((aafInt32 *)&textSize);
+				rc = pTextLocator->GetNameBufLen(&textSize);
 				pwName = new wchar_t[textSize/sizeof(wchar_t)];
 				rc = pTextLocator->GetName(pwName, textSize);
 				if (SUCCEEDED(rc))
@@ -2272,15 +2321,16 @@ HRESULT Aaf2Omf::ConvertEffects(IAAFOperationGroup* pEffect,
 	IAAFParameter*			pParameter = NULL;
 	IAAFDefObject*			pDefObject = NULL;
 	IAAFSegment*			pSegment = NULL;
-	IAAFSourceReference*	pSourceRef= NULL;
+	IAAFSourceReference*		pSourceRef= NULL;
 	IAAFFiller*				pFiller = NULL;
 	IAAFComponent*			pComponent = NULL;
 	IAAFSourceClip*			pSourceClip = NULL;
+	IAAFDataDef*			pDataDef = 0;
+	IAAFDefObject* 			pDefObj = 0;
 	IAAFConstantValue*		pConstantValue = NULL;
 
 	aafUID_t				effectAUID;
 	aafUID_t				effectDefAUID;
-	aafUID_t				datadefAUID;
 	aafLength_t				length;
 	aafUInt32				byPass, bypassOverride, *byPassPtr;
 	aafUInt32				textSize;
@@ -2300,13 +2350,19 @@ HRESULT Aaf2Omf::ConvertEffects(IAAFOperationGroup* pEffect,
 	if (SUCCEEDED(rc))
 	{
 		pComponent->GetLength(&length);
-		pComponent->GetDataDef(&effectAUID);
+		checkAAF(pComponent->GetDataDef(&pDataDef));
+		checkAAF(pDataDef->QueryInterface(IID_IAAFDataDef, (void **)&pDefObj));
+		pDataDef->Release ();
+		pDataDef = 0;
+		checkAAF(pDefObj->GetAUID(&effectAUID));
+		pDefObj->Release ();
+		pDefObj = 0;
 		ConvertAAFDatadef(effectAUID, &effectDatakind);
 		pEffect->IsATimeWarp(&isATimeWarp);
 		pEffect->CountSourceSegments(&numSources);
 		pEffect->CountParameters(&numParameters);
 		rc = pEffect->GetOperationDefinition(&pEffectDef);
-		pEffectDef->GetDataDefinitionID(&datadefAUID);
+		// pEffectDef->GetDataDefinitionID(&datadefAUID);
 		checkAAF(pEffectDef->QueryInterface(IID_IAAFDefObject, (void **) &pDefObject));
 		pDefObject->GetAUID(&effectDefAUID);
 		pDefObject->GetNameBufLen(&textSize);
@@ -2547,32 +2603,94 @@ HRESULT Aaf2Omf::ConvertEffects(IAAFOperationGroup* pEffect,
 cleanup:
 	DecIndentLevel();
 	if (pwName)
+	  {
 		delete [] pwName;
+		pwName = 0;
+	  }
+
 	if (pwDesc)
+	  {
 		delete [] pwDesc;
+		pwDesc = 0;
+	  }
+
 	if (pszName)
+	  {
 		delete [] pszName;
+		pszName = 0;
+	  }
+
 	if (pszDesc)
+	  {
 		delete [] pszDesc;
+		pszDesc = 0;
+	  }
 
 	if (pEffectDef)
+	  {
 		pEffectDef->Release();
+		pEffectDef = 0;
+	  }
+
 	if (pParameterDef)
+	  {
 		pParameterDef->Release();
+		pParameterDef = 0;
+	  }
+
 	if (pParameter)
+	  {
 		pParameter->Release();
+		pParameter = 0;
+	  }
+
 	if (pDefObject)
+	  {
 		pDefObject->Release();
+		pDefObject = 0;
+	  }
+
 //	if (pSegment)
-//		pSegment->Release();
+//	{
+//	  pSegment->Release();
+//	  pSegment = 0;
+//	}
+
 	if (pSourceRef)
+	  {
 		pSourceRef->Release();
+		pSourceRef = 0;
+	  }
+
 	if (pFiller)
+	  {
 		pFiller->Release();
+		pFiller = 0;
+	  }
+
 	if (pComponent)
+	  {
 		pComponent->Release();
+		pComponent = 0;
+	  }
+
 	if (pSourceClip)
+	  {
 		pSourceClip->Release();
+		pSourceClip = 0;
+	  }
+
+	if (pDataDef)
+	  {
+		pDataDef->Release ();
+		pDataDef = 0;
+	  }
+
+	if (pDefObj)
+	  {
+		pDefObj->Release ();
+		pDefObj = 0;
+	  }
 
 	return rc;
 }
