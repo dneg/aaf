@@ -38,8 +38,14 @@ class ImplAAFTypeDef;
 #include "ImplAAFDefObject.h"
 #endif
 
+#include "OMPropertyDefinition.h"
 
-class ImplAAFPropertyDef : public ImplAAFDefObject
+typedef OMProperty* (*ImplAAFOMPropertyCreateFunc_t)
+  (OMPropertyId pid,
+   const char * name);
+
+class ImplAAFPropertyDef : public ImplAAFDefObject,
+						   public OMPropertyDefinition
 {
 public:
   //
@@ -127,7 +133,7 @@ public:
 	    wchar_t * pPropName,
 	
         // @parm [in] Type definition of this property definition,
-	    ImplAAFTypeDef * pTypeDef,
+	    const aafUID_t * pTypeID,
 
         // @parm [in] Is this property optional? (mandatory, if not)
 		aafBool isOptional);
@@ -137,6 +143,22 @@ public:
   OMPropertyId OmPid (void) const;
   //
   // Returns the OM pid (small integer) identifying this property
+
+  //
+  // Overrides from OMPropertyDefinition
+  //
+  const OMType* type(void) const;
+  const char* name(void) const;
+  OMPropertyId identification(void) const;
+  bool isOptional(void) const;
+
+  // Allocates and returns an OMProperty which can represent this
+  // property.  
+  OMProperty * CreateOMProperty () const;
+
+  // Sets the function which creates OMProperties useful for these
+  // properties.
+  void SetOMPropCreateFunc (ImplAAFOMPropertyCreateFunc_t pFunc);
 
 private:
 
@@ -148,6 +170,11 @@ private:
   OMFixedSizeProperty<OMPropertyId>          _pid;
 
   ImplAAFTypeDef *                           _cachedType;
+
+  char * _bname;  // name in byte-sized characters
+
+  ImplAAFOMPropertyCreateFunc_t              _OMPropCreateFunc;
+
 };
 
 //
