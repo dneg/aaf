@@ -123,9 +123,7 @@ public:
             OMPropertyId keyPropertyId);
 
     // @cmember Save a collection (vector/set) of weak references.
-  void save(OMPropertyId propertyId,
-            OMStoredForm storedForm,
-            const char* collectionName,
+  void save(const char* collectionName,
             const OMUniqueObjectIdentification* index,
             size_t count,
             OMPropertyTag tag,
@@ -150,10 +148,7 @@ public:
                OMPropertyId& keyPropertyId);
 
     // @cmember Restore a collection (vector/set) of weak references.
-  void restore(OMPropertyId propertyId,
-               OMStoredForm storedForm,
-               const char* collectionName,
-               size_t nameSize,
+  void restore(const char* collectionName,
                const OMUniqueObjectIdentification*& index,
                size_t &count,
                OMPropertyTag& tag,
