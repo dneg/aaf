@@ -93,16 +93,7 @@ public:
   );
 
 
-  // tjb - this is temporary and should be removed
-  virtual const OMClassId& classId(void) const
-  {
-    // This function must be overidden by subclasses. It is pure
-    // virtual on OMStorable. It is defined here since some dodo
-    // generated code attempts to instantiate this class.
-    //
-    assert(!"This code should not be reached.");
-    return nullOMClassId;
-  }
+  OMDECLARE_STORABLE(AAFObject)
  
 
 public:
