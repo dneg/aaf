@@ -51,6 +51,21 @@ CXXFILES_TMP = $(wildcard com-dll/*.$(CPP_EXTENSION)) $(wildcard com-dll/*.c)
 CXXFILES2 = $(CXXFILES_TMP:com-dll/%=%)
 
 
+#/AAFSunSunOSSDK/g++/sss-impl/debug/libSSRW2C.a
+# $(AAFBUILDDIR)/ss-impl/$(AAFTARGETDIR)/librefstg$(LIB)
+
+ifeq ($(wildcard $(AAFBUILDDIR)/sss-impl/$(AAFTARGETDIR)/libSSRW2C$(LIB)),$(AAFBUILDDIR)/sss-impl/$(AAFTARGETDIR)/libSSRW2C$(LIB))
+STORAGE_LIBS=$(AAFBUILDDIR)/sss-impl/$(AAFTARGETDIR)/libSSRW2C$(LIB)
+else
+STORAGE_LIBS=
+endif
+
+ifeq ($(wildcard $(AAFBUILDDIR)/ss-impl/$(AAFTARGETDIR)/librefstg$(LIB)),$(AAFBUILDDIR)/ss-impl/$(AAFTARGETDIR)/librefstg$(LIB))
+STORAGE_LIBS+=$(AAFBUILDDIR)/ss-impl/$(AAFTARGETDIR)/librefstg$(LIB)
+endif
+
+
+
 .PHONY : all
 all : com-api
 
@@ -64,11 +79,12 @@ com-dll :
 	cd com-dll && $(MAKE)
 
 
-$(LIBTARGET) : $(CXXOBJS) $(CXXOBJS2) $(AAFBUILDDIR)/ref-impl/$(AAFTARGETDIR)/libimpl$(LIB) $(AAFBUILDDIR)/OM/$(AAFTARGETDIR)/libom$(LIB) $(AAFBUILDDIR)/ss-impl/$(AAFTARGETDIR)/librefstg$(LIB)
+$(LIBTARGET) : $(CXXOBJS) $(CXXOBJS2) $(AAFBUILDDIR)/ref-impl/$(AAFTARGETDIR)/libimpl$(LIB) $(AAFBUILDDIR)/OM/$(AAFTARGETDIR)/libom$(LIB) $(STORAGE_LIBS)
 	$(LD_DYN_LIB) $(CXXOBJS) $(CXXOBJS2) -o $@ \
 	$(AAFBUILDDIR)/ref-impl/$(AAFTARGETDIR)/libimpl$(LIB) \
 	$(AAFBUILDDIR)/OM/$(AAFTARGETDIR)/libom$(LIB) \
-	$(AAFBUILDDIR)/ss-impl/$(AAFTARGETDIR)/librefstg$(LIB) \
+	$(STORAGE_LIBS) \
+	$(AAFBUILDDIR)/aaflib/$(AAFTARGETDIR)/libaaflib$(LIB) \
 	-lm $(UUIDLIB)
 
 

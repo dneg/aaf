@@ -139,6 +139,7 @@ OMFile* OMFile::openExistingModify(const wchar_t* fileName,
     ASSERT("Valid raw storage", store != 0);
     newFile = new OMFile(store,
                          clientOnRestoreContext,
+												 nullOMStoredObjectEncoding, // don't care 
                          modifyMode,
                          factory,
                          dictionary,
@@ -295,6 +296,7 @@ OMFile* OMFile::openExistingRead(OMRawStorage* rawStorage,
                                  const OMClassFactory* factory,
                                  void* clientOnRestoreContext,
                                  const OMLoadMode loadMode,
+																 const OMStoredObjectEncoding& encoding,
                                  OMDictionary* dictionary)
 {
   TRACE("OMFile::openExistingRead");
@@ -306,6 +308,7 @@ OMFile* OMFile::openExistingRead(OMRawStorage* rawStorage,
 
   OMFile* newFile = new OMFile(rawStorage,
                                clientOnRestoreContext,
+															 encoding,
                                readOnlyMode,
                                factory,
                                dictionary,
@@ -318,6 +321,7 @@ OMFile* OMFile::openExistingModify(OMRawStorage* rawStorage,
                                    const OMClassFactory* factory,
                                    void* clientOnRestoreContext,
                                    const OMLoadMode loadMode,
+																	 const OMStoredObjectEncoding& encoding,
                                    OMDictionary* dictionary)
 {
   TRACE("OMFile::openExistingModify");
@@ -329,6 +333,7 @@ OMFile* OMFile::openExistingModify(OMRawStorage* rawStorage,
 
   OMFile* newFile = new OMFile(rawStorage,
                                clientOnRestoreContext,
+															 encoding,
                                modifyMode,
                                factory,
                                dictionary,
@@ -421,14 +426,29 @@ bool OMFile::isRecognized(const wchar_t* fileName,
   bool result = false;
 
   ASSERT("Valid factory", _factory != 0);
+	// first, search for preferred factories
   FactorySetIterator iterator(*_factory, OMBefore);
   while (++iterator) {
-    if (iterator.value()->isRecognized(fileName)) {
+    if ( !iterator.value()->better()
+			 && iterator.value()->isRecognized(fileName)) {
       result = true;
       encoding = iterator.key();
       break;
     }
   }
+	// second, search for other factories
+	if( !result ) {
+		FactorySetIterator iterator2(*_factory, OMBefore);
+		while (++iterator) {
+			if ( iterator2.value()->better()
+				 && iterator2.value()->isRecognized(fileName)) {
+				result = true;
+				encoding = iterator2.key();
+				break;
+			}
+		}
+	}
+
   return result;
 }
 
@@ -448,15 +468,32 @@ bool OMFile::isRecognized(OMRawStorage* rawStorage,
   ASSERT("Valid factory", _factory != 0);
   ASSERT("Positionable raw storage", rawStorage->isPositionable());
   rawStorage->setPosition(0);
+
+	// first, search for preferred factories
   FactorySetIterator iterator(*_factory, OMBefore);
   while (++iterator) {
     ASSERT("Properly positioned raw storage", rawStorage->position() == 0);
-    if (iterator.value()->isRecognized(rawStorage)) {
+    if ( !iterator.value()->better()
+			 && iterator.value()->isRecognized(rawStorage)) {
       result = true;
       encoding = iterator.key();
       break;
     }
   }
+	// second, search for other factories
+	if( !result ) {
+		FactorySetIterator iterator2(*_factory, OMBefore);
+		while (++iterator) {
+			ASSERT("Properly positioned raw storage", rawStorage->position() == 0);
+			if ( iterator2.value()->better()
+				 && iterator2.value()->isRecognized(rawStorage)) {
+				result = true;
+				encoding = iterator2.key();
+				break;
+			}
+		}
+	}
+
   ASSERT("Properly positioned raw storage", rawStorage->position() == 0);
   return result;
 }
@@ -490,6 +527,19 @@ void OMFile::registerFactory(const OMStoredObjectEncoding& encoding,
   PRECONDITION("Unique name", !hasFactory(factory->name()));
 
   ASSERT("Valid factory", _factory != 0);
+
+	// if _factory already has any registered which do the same signature
+	// set factory._better to point to the first one found
+	OMStoredObjectFactory* better = 0;
+  FactorySetIterator iterator(*_factory, OMBefore);
+  while (++iterator) {
+    if( iterator.value()->signature() == factory->signature() ){
+      better = iterator.value();
+			factory->setBetter( better );
+      break;
+    }
+  }
+
   _factory->insert(encoding, factory);
   factory->initialize();
 }
@@ -546,6 +596,15 @@ void OMFile::removeFactory(const OMStoredObjectEncoding& encoding)
 
   OMStoredObjectFactory* factory = 0;
   _factory->find(encoding, factory);
+
+	// if any other _factory thought this one was better, reeducate them
+  FactorySetIterator iterator(*_factory, OMBefore);
+  while (++iterator) {
+    if( iterator.value()->signature() == factory->signature() ){
+      iterator.value()->setBetter( 0 );
+    }
+  }
+
   _factory->remove(encoding);
   ASSERT("Valid factory", factory != 0);
   factory->finalize();
@@ -1097,6 +1156,7 @@ OMFile::OMFile(const wchar_t* fileName,
   //        an existing external file on the given <c OMRawStorage>.
 OMFile::OMFile(OMRawStorage* rawStorage,
                void* clientOnRestoreContext,
+							 OMStoredObjectEncoding encoding,
                const OMAccessMode mode,
                const OMClassFactory* factory,
                OMDictionary* dictionary,
@@ -1109,7 +1169,7 @@ OMFile::OMFile(OMRawStorage* rawStorage,
   _mode(mode),
   _loadMode(loadMode),
   _fileName(0),
-  _encoding(nullOMStoredObjectEncoding),
+  _encoding(encoding),
   _clientOnSaveContext(0),
   _clientOnRestoreContext(clientOnRestoreContext),
   _rawStorage(rawStorage),
@@ -1175,11 +1235,24 @@ void OMFile::openRead(void)
 {
   TRACE("OMFile::openRead");
 
-  bool result = isRecognized(_rawStorage, _encoding);
-  ASSERT("Recognized file", result);
+	OMStoredObjectFactory* factory = 0;
+	// if client said DontCare, get from isRecognized(_rawStorage, _encoding)
+	if( nullOMStoredObjectEncoding != _encoding )
+	{
+		bool result = isRecognized(_rawStorage, _encoding);
+		ASSERT("Recognized file", result);
+		factory = findFactory(_encoding);
+		ASSERT("Recognized file encoding", factory != 0);
+	}
+	else
+	{
+		// else get exact:  findfactory->isRecognized(_rawStorage)
+		factory = findFactory(_encoding);
+		ASSERT("Recognized file encoding", factory != 0);
+		bool result = factory->isRecognized(_rawStorage);
+		ASSERT("Recognized file", result);
+	}
 
-  OMStoredObjectFactory* factory = findFactory(_encoding);
-  ASSERT("Recognized file encoding", factory != 0);
   _rootStore = factory->openRead(_rawStorage);
   POSTCONDITION("Valid store", _rootStore != 0);
 }
@@ -1188,11 +1261,24 @@ void OMFile::openModify(void)
 {
   TRACE("OMFile::openModify");
 
-  bool result = isRecognized(_rawStorage, _encoding);
-  ASSERT("Recognized file", result);
+	OMStoredObjectFactory* factory = 0;
+	// if client said DontCare, get from isRecognized(_rawStorage, _encoding)
+	if( nullOMStoredObjectEncoding != _encoding )
+	{
+		bool result = isRecognized(_rawStorage, _encoding);
+		ASSERT("Recognized file", result);
+		factory = findFactory(_encoding);
+		ASSERT("Recognized file encoding", factory != 0);
+	}
+	else
+	{
+		// else get exact:  findfactory->isRecognized(_rawStorage)
+		factory = findFactory(_encoding);
+		ASSERT("Recognized file encoding", factory != 0);
+		bool result = factory->isRecognized(_rawStorage);
+		ASSERT("Recognized file", result);
+	}
 
-  OMStoredObjectFactory* factory = findFactory(_encoding);
-  ASSERT("Recognized file encoding", factory != 0);
   _rootStore = factory->openModify(_rawStorage);
   ASSERT("Valid store", _rootStore != 0);
 }
