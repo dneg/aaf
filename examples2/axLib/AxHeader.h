@@ -46,6 +46,9 @@ public:
 	std::vector< IAAFIdentificationSP > LookupIdentifications();
 #endif
 
+	operator IAAFHeaderSP ()
+	{ return _spIaafHeader; }
+
 	std::wostream& dump( std::wostream& os ) const;
 
 private:
