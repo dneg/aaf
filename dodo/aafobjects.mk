@@ -32,7 +32,6 @@ AAFPERSISTENTOBJECTS = \
 	AAFMediaFilmDescriptor \
 	AAFMediaGroup  \
 	AAFMediaTapeDescriptor \
-	AAFMob  \
 	AAFMobSlot \
 	AAFNestedScope\
 	AAFObjectAttribute \
@@ -94,6 +93,7 @@ HUMAN_TYPED_IMPL = \
 	AAFHeader \
 	AAFIdentification \
 	AAFObject \
+	AAFMob  \
 	AAFSession
 
 
