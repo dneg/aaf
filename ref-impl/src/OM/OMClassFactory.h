@@ -2,6 +2,7 @@
 #define OMCLASSFACTORY_H
 
 #include "OMPortability.h"
+#include "OMTypes.h"
 
 class OMStorable;
 
@@ -14,15 +15,15 @@ public:
 
   // Register a class id and its associated creation function.
   //
-  void add(int classId, OMStorable* (*create)(void));
+  void add(const OMClassId& classId, OMStorable* (*create)(const OMClassId&));
 
   // Deregister a class id.
   //
-  void remove(int classId);
+  void remove(const OMClassId& classId);
 
   // Create an instance of the appropriate derived class, given the class id.
   //
-  OMStorable* create(int classId) const;
+  OMStorable* create(const OMClassId& classId) const;
 
 protected:
 
@@ -30,17 +31,19 @@ protected:
 
   // FactoryEntry for `classId' or null if not found.
   //
-  FactoryEntry* find(int classId) const;
+  FactoryEntry* find(const OMClassId& classId) const;
 
   // First free entry or null if full.
   //
   FactoryEntry* find(void) const;
 
+  static bool equal(const OMClassId& ida, const OMClassId& idb);
+
 private:
 
   struct FactoryEntry {
-    int _classId;
-    OMStorable* (*_creationFunction)(void);
+    OMClassId _classId;
+    OMStorable* (*_creationFunction)(const OMClassId&);
     int _valid;
   };
 
