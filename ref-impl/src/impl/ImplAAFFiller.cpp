@@ -64,3 +64,15 @@ extern "C" const aafClassID_t CLSID_AAFFiller;
 
 OMDEFINE_STORABLE(ImplAAFFiller, CLSID_AAFFiller);
 
+// Cheat!  We're using this object's CLSID instead of object class...
+AAFRESULT STDMETHODCALLTYPE
+ImplAAFFiller::GetObjectClass(aafUID_t * pClass)
+{
+  if (! pClass)
+	{
+	  return AAFRESULT_NULL_PARAM;
+	}
+  memcpy (pClass, &CLSID_AAFFiller, sizeof aafClassID_t);
+  return AAFRESULT_SUCCESS;
+}
+
