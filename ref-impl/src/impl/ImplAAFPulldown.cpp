@@ -483,6 +483,7 @@ AAFRESULT ImplAAFPulldown::TraverseToClip(aafLength_t length,
 	  *isMask = kAAFTrue;
 	  /* Get the (assumed) source clip out of the mask */
 	  *sclp = _inputSegment;
+	  (*sclp)->AcquireReference();
 //!!!	  if (!(*sclp)->IsTypeOf("SCLP", &aafError));
 ////		{
 //		  RAISE(OM_ERR_NO_MORE_MOBS);
@@ -502,7 +503,9 @@ AAFRESULT ImplAAFPulldown::TraverseToClip(aafLength_t length,
 
   XEXCEPT
     {
-    }
+		if ( *sclp )
+			(*sclp)->ReleaseReference();
+	}
   XEND;
 
   return(AAFRESULT_SUCCESS);
