@@ -17,6 +17,7 @@ public:
 
 #include <iostream.h>
 #include <stdlib.h>
+#include <ctype.h>
 
 #include "OMUtilities.h"
 
@@ -56,7 +57,29 @@ void reportAssertionViolation(char* assertionKind,
 
 bool validString(const char* string)
 {
-  return ((string != 0) && (strlen(string) > 0));
+  bool result = true;
+
+  if (string == 0) {
+    // bad pointer
+    result = false;
+  } else {
+    size_t length = strlen(string);
+    if (length == 0) {
+	  // bad length
+      result = false;
+    } else {
+      for (size_t i = 0; i < length; i++) {
+        int c = (unsigned char)string[i];
+        if (!isprint(c)) {
+          // bad character
+          result = false;
+          break;
+        }
+      }
+	}
+  }
+
+  return result;
 }
 
 bool validWideString(const wchar_t* string)
