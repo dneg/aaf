@@ -94,7 +94,10 @@ public:
     (/*[in]*/ aafInt32  index, // Which data definition to get the ID for
      /*[out]*/ aafUID_t *  pVariant); // The returned dataDefinition 
 
-  // Given a variant ID, return the human readable name
+  STDMETHOD (GetMaxCodecDisplayNameLength)
+    (aafInt32  *bufSize);
+
+	// Given a variant ID, return the human readable name
   STDMETHOD (GetCodecDisplayName)
     (/*[in]*/ aafUID_t  variant, // which variant of the codec to use
      /*[in,string]*/ wchar_t *  pName, // Human-readable name of the variant
@@ -124,8 +127,9 @@ public:
          IAAFEssenceStream *stream,
     /*[in]*/ aafCheckVerbose_t  verbose, // This is the verbosity level of the output
      /*[out]*/ aafCheckWarnings_t warning, // This determines whether the output contains warnings
-     /*[in,string]*/ wchar_t *  pName, // Human-readable text describing problems (or lack therof) with the media
-     /*[in]*/ aafInt32  bufSize); // length of the buffer to hold variant Name 
+         aafInt32  bufSize,
+		wchar_t *  pName,
+        aafInt32  *bytesWritten);
 		
   // Create a media data object, and attach the correct type of
 			//EssenceDescriptor to the fileMob
@@ -233,7 +237,7 @@ public:
     (/*[in]*/ IAAFEssenceFormat *pTemplate, // An essence format template object 
     /*[out]*/ IAAFEssenceFormat **pResult); // An essence format result object 
 
-  STDMETHOD (GetEssenceFormatList)
+  STDMETHOD (GetDefaultEssenceFormat)
     (/*[out]*/ IAAFEssenceFormat **pFormat); // An essence format result object 
 
   STDMETHOD (GetIndexedSampleSize)
