@@ -197,7 +197,6 @@ AAFRESULT STDMETHODCALLTYPE
   if( !aafLookupOperationDef( this, OperationDef ) )
     return AAFRESULT_INVALID_OBJ;
 
-	assert(_operationDefinition.isVoid());
 	_operationDefinition = OperationDef;
 
 	return AAFRESULT_SUCCESS;
