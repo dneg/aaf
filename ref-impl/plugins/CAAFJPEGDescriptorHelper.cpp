@@ -621,11 +621,16 @@ HRESULT STDMETHODCALLTYPE
 		checkResult(_dides->QueryInterface(IID_IAAFObject, (void **)&pObj));
 		checkResult(pObj->GetDefinition (&pClassDef));
 		checkResult(pClassDef->LookupPropertyDef(kAAFPropID_CDCIOffsetToFrameIndexes, &pPropertyDef));
-		checkResult(pObj->GetPropertyValue (pPropertyDef, &pPropValue));
-		checkResult(pPropValue->GetType(&pTypeDef));
-		checkResult(pTypeDef->QueryInterface(IID_IAAFTypeDefInt, (void**)&pTypeDefInt));
-		checkResult(pTypeDefInt->GetInteger(pPropValue, (aafMemPtr_t) &val, sizeof (val)));
-		*pOffset  = val;
+		aafBoolean_t present;
+		checkResult(pObj->IsPropertyPresent(pPropertyDef, &present));
+		if (present)
+		{
+			checkResult(pObj->GetPropertyValue (pPropertyDef, &pPropValue));
+			checkResult(pPropValue->GetType(&pTypeDef));
+			checkResult(pTypeDef->QueryInterface(IID_IAAFTypeDefInt, (void**)&pTypeDefInt));
+			checkResult(pTypeDefInt->GetInteger(pPropValue, (aafMemPtr_t) &val, sizeof (val)));
+			*pOffset  = val;
+		}
 	}
 	catch (HRESULT& rhr)
 	{
@@ -829,11 +834,16 @@ HRESULT STDMETHODCALLTYPE
 		checkResult(_dides->QueryInterface(IID_IAAFObject, (void **)&pObj));
 		checkResult(pObj->GetDefinition (&pClassDef));
 		checkResult(pClassDef->LookupPropertyDef(kAAFPropID_DIDResolutionID, &pPropertyDef));
-		checkResult(pObj->GetPropertyValue (pPropertyDef, &pPropValue));
-		checkResult(pPropValue->GetType(&pTypeDef));
-		checkResult(pTypeDef->QueryInterface(IID_IAAFTypeDefInt, (void**)&pTypeDefInt));
-		checkResult(pTypeDefInt->GetInteger(pPropValue, (aafMemPtr_t) &val, sizeof (val)));
-		*p_resid  = val;
+		aafBoolean_t present;
+		checkResult(pObj->IsPropertyPresent(pPropertyDef, &present));
+		if (present)
+		{
+			checkResult(pObj->GetPropertyValue (pPropertyDef, &pPropValue));
+			checkResult(pPropValue->GetType(&pTypeDef));
+			checkResult(pTypeDef->QueryInterface(IID_IAAFTypeDefInt, (void**)&pTypeDefInt));
+			checkResult(pTypeDefInt->GetInteger(pPropValue, (aafMemPtr_t) &val, sizeof (val)));
+			*p_resid  = val;
+		}
 	}
 	catch (HRESULT& rhr)
 	{
