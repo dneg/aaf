@@ -109,7 +109,6 @@ HUMAN_TYPED_IMPL = \
 	AAFPropertyDef \
 	AAFPropertyValue \
 	AAFPropValData \
-	AAFPluggableDef \
 	AAFPluginDescriptor \
 	AAFPluginManager \
 	AAFSegment \
@@ -139,7 +138,9 @@ HUMAN_TYPED_IMPL = \
 	AAFTypeDefVariableArray \
 	AAFVaryingValue \
 	AAFWAVEDescriptor \
+	EnumAAFCodecDefs \
 	EnumAAFComponents \
+	EnumAAFContainerDefs \
 	EnumAAFEffectDefs \
 	EnumAAFEssenceData \
 	EnumAAFLoadedPlugins \
@@ -148,7 +149,6 @@ HUMAN_TYPED_IMPL = \
 	EnumAAFMobs \
 	EnumAAFParameterDefs \
 	EnumAAFProperties \
-	EnumAAFPluggableDefs \
 	EnumAAFPluginDescriptors \
 	EnumAAFPluginLocators \
 	EnumAAFSegments \
