@@ -241,9 +241,9 @@ void TextClipTest::CreateTextClip()
 	CAAFBuiltinDefs defs (_pDictionary);
 
 	//Make the MOB to be referenced
-	checkResult(_pDictionary->CreateInstance(defs.cdMasterMob(),
-					  IID_IAAFMasterMob, 
-					  (IUnknown **)&pMasterMob));
+	checkResult(defs.cdMasterMob()->
+				CreateInstance(IID_IAAFMasterMob, 
+							   (IUnknown **)&pMasterMob));
   
   checkResult(pMasterMob->QueryInterface(IID_IAAFMob, (void **)&pReferencedMob));
   checkResult(pReferencedMob->GetMobID(&_referencedMobID));
@@ -259,9 +259,9 @@ void TextClipTest::CreateTextClip()
 
 
   // Create a TextClip
-  checkResult(_pDictionary->CreateInstance(defs.cdTextClip(),
-					  IID_IAAFTextClip, 
-					  (IUnknown **)&pTextClip));
+  checkResult(defs.cdTextClip()->
+			  CreateInstance(IID_IAAFTextClip, 
+							 (IUnknown **)&pTextClip));
 
   // Initialize the source reference data.
   checkResult(pTextClip->QueryInterface(IID_IAAFSourceReference, (void **)&pSourceReference));
@@ -269,9 +269,9 @@ void TextClipTest::CreateTextClip()
   checkResult(pSourceReference->SetSourceMobSlotID(0));
 
   // Create a composition mob to hold the text clip.
-  checkResult(_pDictionary->CreateInstance(defs.cdCompositionMob(),
-					  IID_IAAFCompositionMob, 
-					  (IUnknown **)&pCompositionMob));
+  checkResult(defs.cdCompositionMob()->
+			  CreateInstance(IID_IAAFCompositionMob, 
+							 (IUnknown **)&pCompositionMob));
   checkResult(pCompositionMob->QueryInterface(IID_IAAFMob, (void **)&pReferencingMob));
   checkResult(pReferencingMob->SetName(L"CompositionMob_TextClipTest"));
  
