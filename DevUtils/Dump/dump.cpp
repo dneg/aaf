@@ -1023,33 +1023,70 @@ const char* byteOrder(ByteOrder bo)
   return result;
 }
 
+#if defined(OM_OS_WINDOWS)
+
+#include <windows.h>
+
+typedef enum WindowsKind {
+  wkError,       // error/unknown
+  wk3_1,         // Win32s
+  wkConsumer,    // Windows 95/98/Me
+  wkProfessional // Windows NT/2000/XP
+} WindowsKind;
+
+static WindowsKind getWindowsKind(void)
+{
+  WindowsKind result = wkError;
+
+  DWORD version = GetVersion();
+  BYTE majorVersion = (BYTE)(version        & 0x000000ff);
+  BYTE minorVersion = (BYTE)((version >> 8) & 0x000000ff);
+  if (version < 0x80000000) {
+    result = wkProfessional;
+  } else if (majorVersion < 4) {
+    result = wk3_1;
+  } else {
+    result = wkConsumer;
+  }
+  return result;
+}
+
+#endif
+
 void formatError(DWORD errorCode)
 {
 #if defined(OM_OS_WINDOWS)
-#if !defined(NO_W32_WFUNCS)
-  OMCHAR buffer[256];
-  int status = FormatMessage(
-    FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
-    NULL,
-    errorCode,
-    LANG_SYSTEM_DEFAULT,
-    buffer,
-    sizeof(buffer)/sizeof(buffer[0]),
-    NULL);
-#else
-  char buffer[256];
-  int status = FormatMessageA(
-    FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
-    NULL,
-    errorCode,
-    LANG_SYSTEM_DEFAULT,
-    buffer,
-    sizeof(buffer)/sizeof(buffer[0]),
-    NULL);
-#endif
+  char message[256];
+  int status;
+  if (getWindowsKind() == wkProfessional) {
+    OMCHAR buffer[256];
+    status = FormatMessage(
+      FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+      NULL,
+      errorCode,
+      LANG_SYSTEM_DEFAULT,
+      buffer,
+      sizeof(buffer)/sizeof(buffer[0]),
+      NULL);
+    if (status != 0) {
+      convert(message, 256, buffer);
+    }
+  } else {
+    char buffer[256];
+    status = FormatMessageA(
+      FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+      NULL,
+      errorCode,
+      LANG_SYSTEM_DEFAULT,
+      buffer,
+      sizeof(buffer)/sizeof(buffer[0]),
+      NULL);
+    if (status != 0) {
+      convert(message, 256, buffer);
+    }
+  }
+
   if (status != 0) {
-    char message[256];
-    convert(message, 256, buffer);
     int length = strlen(message);
     if (length >= 2) {
       message[length - 2] = '\0';
@@ -3873,35 +3910,35 @@ static void dumpReferencedProperties(IStorage* root, OMUInt16 version)
   }    // version  0 - 18 no referenced properties table
 }
 
-// _wfopen() and _wremove are in the W32 API on Windows 95, 98 and ME
-// but with an implementation that always fails. By default we use
-// _wfopen() when compiled on/for the W32 API, this can be overridden
-// by defining NO_W32_WFUNCS.
+// _wfopen() and _wremove() are in the W32 API on Windows 95, 98 and
+// ME but with an implementation that always fails. So we only call
+// them if getWindowsKind() == wkProfessional.
 
-#if !defined(NO_W32_WFUNCS)
-#if defined(_WIN32) || defined(WIN32)
-#define W32_WFOPEN
-#define W32_WREMOVE
-#endif
-#endif
-
-// Just like fopen() except for wchar_t* file names.
+// Just like ANSI fopen() except for wchar_t* file names and modes.
 //
 FILE* wfopen(const wchar_t* fileName, const wchar_t* mode)
 {
+  //TRACE("wfopen");
+  ASSERT("Valid file name", fileName != 0);
+  ASSERT("Valid mode", mode != 0);
+
   FILE* result = 0;
-#if defined(W32_WFOPEN)
-  result = _wfopen(fileName, mode);
-#else
-  char cFileName[FILENAME_MAX];
-  size_t status = wcstombs(cFileName, fileName, FILENAME_MAX);
-  ASSERT("Convert succeeded", status != (size_t)-1);
+#if defined(OM_OS_WINDOWS)
+  if (getWindowsKind() == wkProfessional) {
+    result = _wfopen(fileName, mode);
+  } else {
+#endif
+    char cFileName[FILENAME_MAX];
+    size_t status = wcstombs(cFileName, fileName, FILENAME_MAX);
+    ASSERT("Convert succeeded", status != (size_t)-1);
 
-  char cMode[FILENAME_MAX];
-  status = wcstombs(cMode, mode, FILENAME_MAX);
-  ASSERT("Convert succeeded", status != (size_t)-1);
+    char cMode[FILENAME_MAX];
+    status = wcstombs(cMode, mode, FILENAME_MAX);
+    ASSERT("Convert succeeded", status != (size_t)-1);
 
-  result = fopen(cFileName, cMode);
+    result = fopen(cFileName, cMode);
+#if defined(OM_OS_WINDOWS)
+  }
 #endif
   return result;
 }
