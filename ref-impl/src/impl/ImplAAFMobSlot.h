@@ -29,8 +29,6 @@
 // aafUInt32,
 // AAFDataDef
 
-const int CLSID_AAFMOBSLOT = 129;
-
 const int PID_MOBSLOT_NAME				= 0;
 const int PID_MOBSLOT_ORIGIN			= 1;
 const int PID_MOBSLOT_TRACKID			= 2;
@@ -62,6 +60,7 @@ public:
   ImplAAFMobSlot ();
   ~ImplAAFMobSlot ();
 
+  OMDECLARE_STORABLE(AAFMobSlot);
 
   //****************
   // IsATrack()

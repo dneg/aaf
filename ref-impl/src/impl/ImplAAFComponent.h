@@ -30,8 +30,6 @@ class ImplAAFEffectDef;
 
 #include "OMProperty.h"
 
-const int CLSID_AAFCOMPONENT = 45;
-
 const int PID_IDENTIFICATION_DATADEF           = 0;
 const int PID_IDENTIFICATION_LENGTH            = 1;
 
@@ -45,6 +43,7 @@ public:
   ImplAAFComponent ();
   ~ImplAAFComponent ();
 
+  OMDECLARE_STORABLE(AAFComponent);
 
   //****************
   // SetLength()
