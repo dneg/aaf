@@ -260,7 +260,35 @@ AAFRESULT STDMETHODCALLTYPE
 	}
   else
 	{
-	  *pAuid = _identification;
+		aafUID_t id = _identification;
+
+#ifdef PATCH_DDEF_GETAUID
+		const aafUID_t DDEF_Picture_v1 = { 0x6F3C8CE1, 0x6CEF, 0x11D2, { 0x80, 0x7D, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } };
+		const aafUID_t DDEF_Sound_v1 = { 0x78E1EBE1, 0x6CEF, 0x11D2, { 0x80, 0x7D, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } };
+		const aafUID_t DDEF_Timecode_v1 = { 0x7F275E81, 0x77E5, 0x11D2, { 0x80, 0x7F, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } };
+		const aafUID_t DDEF_Picture_v11 =  { 0x01030202, 0x0100, 0x0000, { 0x6, 0xe, 0x2b, 0x34, 0x4, 0x1, 0x1, 0x1 } };
+		const aafUID_t DDEF_Sound_v11 = { 0x01030202, 0x0200, 0x0000, { 0x6, 0xe, 0x2b, 0x34, 0x4, 0x1, 0x1, 0x1 } }; 
+		const aafUID_t DDEF_Timecode_v11 = { 0x01030201, 0x0100, 0x0000, { 0x6, 0xe, 0x2b, 0x34, 0x4, 0x1, 0x1, 0x1 } };
+#ifdef USE_V1_DDEFS
+		// using v1.0 datadefs, map any v1.1 to v1.0
+		if (memcmp(&id, &DDEF_Picture_v11, sizeof(id)) == 0)
+			id = DDEF_Picture_v1;
+		else if (memcmp(&id, &DDEF_Sound_v11, sizeof(id)) == 0)
+			id = DDEF_Sound_v1;
+		else if (memcmp(&id, &DDEF_Timecode_v11, sizeof(id)) == 0)
+			id = DDEF_Timecode_v1;
+#else
+		// using v1.1 datadefs, map any v1.0 to v1.1
+		if (memcmp(&id, &DDEF_Picture_v1, sizeof(id)) == 0)
+			id = DDEF_Picture_v11;
+		else if (memcmp(&id, &DDEF_Sound_v1, sizeof(id)) == 0)
+			id = DDEF_Sound_v11;
+		else if (memcmp(&id, &DDEF_Timecode_v1, sizeof(id)) == 0)
+			id = DDEF_Timecode_v11;
+#endif
+#endif
+
+	  *pAuid = id;
 	}
 
   return AAFRESULT_SUCCESS;
