@@ -205,7 +205,7 @@ static int deshuffle_audio_block(const unsigned char *inbuf, int dif_seq, int ch
 	for (int bp = 8; bp < 80; bp+=2)
 	{
 		int i = i_base + (bp - 8)/2 * (6 * 9);
-		outbufs[i] = ((int16_t)inbuf[bp] << 8) | inbuf[bp+1];
+		outbufs[i] = (inbuf[bp] << 8) | inbuf[bp+1];
 	}
 
 	return 0 ;
@@ -801,7 +801,8 @@ static bool createAAFFileForEditDecisions(const char *output_aaf_file,
 		// This set will be used to create one MasterMob + SourceClip + EssenceData
 		// for each unique DV file
 		map<string, aafMobID_t> mobID_by_dvfile;
-		for (size_t i = 0; i < dvfile_by_idx.size(); i++)
+		size_t i;
+		for (i = 0; i < dvfile_by_idx.size(); i++)
 		{
 			mobID_by_dvfile[ dvfile_by_idx[i] ] = zerouid;
 		}
@@ -856,7 +857,7 @@ static bool createAAFFileForEditDecisions(const char *output_aaf_file,
 		ctlslotA2.SetSegment(sequenceA2);
 
 		// Loop over the clips, appending SourceClips to the sequence
-		for (size_t i = 0; i < start_by_idx.size(); i++)
+		for (i = 0; i < start_by_idx.size(); i++)
 		{
 			// In ELI format, the end index is last included frame,
 			// so add 1 when calculating the length
@@ -891,7 +892,6 @@ static bool createAAFFileForEditDecisions(const char *output_aaf_file,
 
 			sequenceA2.AppendComponent(comsrcclip1A2);
 		}
-
 		cmob.AppendSlot(comp_tlslot_V1);
 		cmob.AppendSlot(ctlslotA1);
 		cmob.AppendSlot(ctlslotA2);
