@@ -45,7 +45,13 @@ Package=<4>
     Project_Dep_Name AAFIID
     End Project Dependency
     Begin Project Dependency
+    Project_Dep_Name AAFLIB
+    End Project Dependency
+    Begin Project Dependency
     Project_Dep_Name COMIDL
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name MakeSDK
     End Project Dependency
 }}}
 
@@ -60,13 +66,16 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name comapi
-    End Project Dependency
-    Begin Project Dependency
     Project_Dep_Name COMIDL
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name UtilLib
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name AAFLIB
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name MakeSDK
     End Project Dependency
 }}}
 
@@ -93,6 +102,15 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
+    Project_Dep_Name AAFIID
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name AAFLIB
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name COMIDL
+    End Project Dependency
+    Begin Project Dependency
     Project_Dep_Name MakeSDK
     End Project Dependency
 }}}
@@ -107,6 +125,15 @@ Package=<5>
 
 Package=<4>
 {{{
+    Begin Project Dependency
+    Project_Dep_Name AAFIID
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name AAFLIB
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name COMIDL
+    End Project Dependency
     Begin Project Dependency
     Project_Dep_Name MakeSDK
     End Project Dependency
@@ -123,6 +150,15 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
+    Project_Dep_Name AAFIID
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name AAFLIB
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name COMIDL
+    End Project Dependency
+    Begin Project Dependency
     Project_Dep_Name MakeSDK
     End Project Dependency
 }}}
@@ -138,6 +174,15 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
+    Project_Dep_Name AAFIID
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name AAFLIB
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name COMIDL
+    End Project Dependency
+    Begin Project Dependency
     Project_Dep_Name MakeSDK
     End Project Dependency
 }}}
@@ -152,6 +197,12 @@ Package=<5>
 
 Package=<4>
 {{{
+    Begin Project Dependency
+    Project_Dep_Name COMIDL
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name MakeSDK
+    End Project Dependency
 }}}
 
 ###############################################################################
@@ -164,6 +215,15 @@ Package=<5>
 
 Package=<4>
 {{{
+    Begin Project Dependency
+    Project_Dep_Name AAFIID
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name AAFLIB
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name COMIDL
+    End Project Dependency
     Begin Project Dependency
     Project_Dep_Name MakeSDK
     End Project Dependency
@@ -192,13 +252,7 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name AAFCPPTST
-    End Project Dependency
-    Begin Project Dependency
     Project_Dep_Name dump
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name MakeSDK
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name MakeSDKExamples
@@ -207,7 +261,7 @@ Package=<4>
     Project_Dep_Name AafOmf
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name ComModTestAAF
+    Project_Dep_Name MakeSDK
     End Project Dependency
 }}}
 
@@ -243,10 +297,10 @@ Package=<4>
     Project_Dep_Name AAFIID
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name comapi
+    Project_Dep_Name AAFLIB
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name AAFLIB
+    Project_Dep_Name comapi
     End Project Dependency
 }}}
 
@@ -274,6 +328,12 @@ Package=<4>
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name ComPropDirectDump
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name AAFStandardCodecs
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name ComModTestAAF
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name MakeSDK
