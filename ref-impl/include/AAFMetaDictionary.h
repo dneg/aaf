@@ -49,8 +49,8 @@
 //
 // DictP18-277-1847BMaster.csv 
 //
-// This file was generated on Fri Apr  7 21:45:47 EDT 2000
-// by user transdel on system TRANSDEL.
+// This file was generated on Sun Apr  9 18:35:37 EDT 2000
+// by user tbingham on system TBINGHAMPC.
 //
 // Key to macros.
 //
@@ -1388,7 +1388,7 @@ AAF_CLASS(PropertyDefinition,
       0x0000, 0x0000,
       0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
     0x2007,
-    AAF_TYPE(UInt32),
+    AAF_TYPE(UInt16),
     true,
     PropertyDefinition)
 AAF_CLASS_END(PropertyDefinition)
