@@ -31,6 +31,8 @@
 
 #include "OMStreamProperty.h"
 
+#include "OMAssertions.h"
+
   // @mfunc Constructor.
   //   @tcarg class | Element | The type of an <c OMStreamProperty> element.
   //   @parm The property id.
