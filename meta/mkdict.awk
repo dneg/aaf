@@ -45,10 +45,10 @@
 # r_nest				  => whether this line will be a Node L:eaf or Child in SMPTE
 # ul_1..ul_16             => AUID (with appropriate reordering).
 # r_sym                   => class/property/type/member/label/alias name.
-# s_type_sym              => if this field == "class" then the entity is a
+# s_type_sym              => if this field == "AAFClass" then the entity is a
 #                            class, otherwise it is a property and this field
 #                            denotes the type of the property. When this
-#                            field == "class" this row is taken to be the
+#                            field == "AAFClass" this row is taken to be the
 #                            start of a class definition. All the following
 #                            rows (until the start of the next class) are
 #                            taken to be properties of this class.
@@ -70,7 +70,7 @@
 #                            ($C["s_type_sym"]) is a reference then this field is
 #                            the type (class) of the referenced object,
 #                            Otherwise this field should be empty.
-# r_minOccurs             => if this field == "M" then this is a required
+# r_minOccurs             => if this field == "1" then this is a required
 #                            property. If this field is "O" then this is an
 #                            optional property.
 # r_isAbstract            => if this entity is a class and the class is
@@ -702,7 +702,7 @@ BEGIN {
   # Groups Register (SMPTE name for Classes)
   if( $C["r_reg"] == "Groups" ){
 
-    if ($C["s_type_sym"] == "Class") { # This item is a class
+    if ($C["s_type_sym"] == "Class" || $C["s_type_sym"] == "AAFClass") { # This item is a class
 
 	  # assert( $C["r_nest"] == "Leaf" )
       if ($C["r_sym"] != class) { # This is a new class
@@ -748,26 +748,28 @@ BEGIN {
 	  # assert( $C["r_nest"] == "Child" )
       type = $C["s_type_sym"];
 
-      if        (type == "WeakReference") {
-        reftype = "WEAK_REFERENCE";
-      } else if (type == "WeakReferenceVector") {
+      # match reference types and separate out the target type
+	  if        ( 1==match(type,"(WeakReferenceVector)(.*)", typebits) ) {
         reftype = "WEAK_REFERENCE_VECTOR";
-      } else if (type == "WeakReferenceSet") {
+      } else if ( 1==match(type,"(WeakReferenceSet)(.*)", typebits) ) {
         reftype = "WEAK_REFERENCE_SET";
-      } else if (type == "StrongReference") {
-        reftype = "STRONG_REFERENCE";
-      } else if (type == "StrongReferenceVector") {
+      } else if ( 1==match(type,"(WeakReference)(.*)", typebits) ) {
+        reftype = "WEAK_REFERENCE";
+      } else if ( 1==match(type,"(StrongReferenceVector)(.*)", typebits) ) {
         reftype = "STRONG_REFERENCE_VECTOR";
-      } else if (type == "StrongReferenceSet") {
+      } else if ( 1==match(type,"(StrongReferenceSet)(.*)", typebits) ) {
         reftype = "STRONG_REFERENCE_SET";
+      } else if ( 1==match(type,"(StrongReference)(.*)", typebits) ) {
+        reftype = "STRONG_REFERENCE";
       } else {
         reftype="";
       }
 
       if (reftype != "") {
-        if ($C["s_target_sym"] != "") {
-          # type = sprintf("AAF_%s(%s, %s)", reftype, type, $C["s_target_sym"]);
-          type = sprintf("AAF_REFERENCE_TYPE(%s, %s)", type, $C["s_target_sym"]);
+        if ($C["s_target_sym"] == "" || $C["s_target_sym"] == typebits[2]) {
+          type = sprintf("AAF_REFERENCE_TYPE(%s, %s)", typebits[1], typebits[2]);
+	    } else if (typebits[2]=="" && $C["s_target_sym"] != "") {
+          type = sprintf("AAF_REFERENCE_TYPE(%s, %s)", typebits[1], $C["s_target_sym"]);
         } else {
           propertyError($C["r_sym"], class, C["s_target_sym"])
           errors++;
@@ -781,9 +783,9 @@ BEGIN {
         }
       }
 
-      if ($C["r_minOccurs"] == "M") {
+      if ($C["r_minOccurs"] == "1") {
         mandatory = "true";
-      } else if ($C["r_minOccurs"] == "O") {
+      } else if ($C["r_minOccurs"] == "0") {
         mandatory = "false";
       } else {
         propertyError($C["r_sym"], class, C["r_minOccurs"]);
