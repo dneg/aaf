@@ -20,9 +20,9 @@
 
 // Define the AAF_CLASS macro to produce the const stored object AUID's
 #ifndef INIT_AUID 
-#define AAF_CLASS(name, dataid, parent) extern "C" aafUID_t AUID_AAF##name;
+#define AAF_CLASS(name, dataid, parent, concrete) extern "C" aafUID_t AUID_AAF##name;
 #else
-#define AAF_CLASS(name, dataid, parent) extern "C" aafUID_t AUID_AAF##name = dataid;
+#define AAF_CLASS(name, dataid, parent, concrete) extern "C" aafUID_t AUID_AAF##name = dataid;
 #endif
 // The AAF reference implementation is still not quite in sync with SMPTE
 // so we have to alias some of the SMPTE names to their corresponding
