@@ -183,6 +183,42 @@ public:
         (aafUInt32 * pResult);
 
   //****************
+  // RegisterOpaqueTypeDef()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    RegisterOpaqueTypeDef
+        (// @parm [in] Type Definition Object
+         ImplAAFTypeDef * pOpaqueTypeDef);
+
+  //****************
+  // LookupOpaqueTypeDef()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    LookupOpaqueTypeDef
+        (// @parm [in,ref] Type Unique ID
+         const aafUID_t & typeID,
+
+         // @parm [out,retval] Type Definition Object
+         ImplAAFTypeDef ** ppOpaqueTypeDef);
+
+  //****************
+  // GetOpaqueTypeDefs()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetOpaqueTypeDefs
+        // @parm [out,retval] Type Def Enumeration
+        (ImplEnumAAFTypeDefs ** ppEnum);
+
+
+  //****************
+  // CountOpaqueTypeDefs()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    CountOpaqueTypeDefs
+        // @parm [out, retval] Total number of type definition objects
+        (aafUInt32 * pResult);
+
+  //****************
   // RegisterDataDef()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
@@ -568,6 +604,8 @@ private:
   OMStrongReferenceSetProperty<ImplAAFInterpolationDef>		_interpolationDefinitions;
   OMStrongReferenceSetProperty<ImplAAFDataDef>				_dataDefinitions;
   OMStrongReferenceSetProperty<ImplAAFPluginDescriptor>		_pluginDefinitions;
+
+	ImplAAFTypeDef **_opaqueTypeDefinitions;
 
   aafInt32 _lastGeneratedPid;	// must be signed!
 
