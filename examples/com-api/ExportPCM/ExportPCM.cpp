@@ -21,6 +21,9 @@
 // Licensor of the AAF Association is Avid Technology.
 // All rights reserved.
 //
+// Portions created by British Broadcasting Corporation are
+// Copyright 2004, British Broadcasting Corporation.  All rights reserved.
+//
 //=---------------------------------------------------------------------=
 
 #include <stdio.h>
@@ -186,7 +189,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, aafUID_t container)
 	dataPtr = buf;
 
 	/* Create the Essence Data specifying the codec, container, edit rate and sample rate */
-	printf("ExportPCM: CreateEssence(...)\n");
 	check(pMasterMob->CreateEssence(1,			// Slot ID within MasterMob
 						pSoundDef,				// MediaKind
 						kAAFCodecPCM,			// codecID
@@ -197,7 +199,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, aafUID_t container)
 						container,				// Container
 						&pEssenceAccess));		//
 
-	printf("ExportPCM: pEssenceAccess->SetEssenceCodecFlavour(...)\n");
 	pEssenceAccess->SetEssenceCodecFlavour( kAAFNilCodecFlavour );
 
 	// Set Format specifiers that describe the essence data
@@ -205,12 +206,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, aafUID_t container)
 	aafUInt32 sampleBits = 8;
 	aafUInt32 numChannels = 1;
 
-	printf("ExportPCM: pEssenceAccess->GetEmptyFileFormat(...)\n");
 	check(pEssenceAccess->GetEmptyFileFormat(&pFormat));
-	printf("ExportPCM: pFormat->AddFormatSpecifier(...)\n");
 	check(pFormat->AddFormatSpecifier(kAAFAudioSampleBits, sizeof(sampleBits), (aafUInt8 *)&sampleBits));
 	check(pFormat->AddFormatSpecifier(kAAFNumChannels, sizeof(numChannels), (aafUInt8 *)&numChannels));
-	printf("ExportPCM: pEssenceAccess->PutFileFormat(...)\n");
 	check(pEssenceAccess->PutFileFormat(pFormat));
 
 	pFormat->Release();
@@ -221,7 +219,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, aafUID_t container)
 	{
 		for (int i = 0; i < 1793; i++)		// Laser example has 1793 samples
 		{
-			printf("ExportPCM: pEssenceAccess->WriteSamples(...)\n");
 			check(pEssenceAccess->WriteSamples(
 						1,					//
 						sizeof(buf),		// buffer size
@@ -234,10 +231,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, aafUID_t container)
 	printf("Wrote %d samples\n", total_samples);
 
 	/* Set the essence to indicate that you have finished writing the samples */
-	printf("ExportPCM: pEssenceAccess->CompleteWrite(...)\n");
 	check(pEssenceAccess->CompleteWrite());
 
-	printf("ExportPCM: pEssenceAccess->Release(...)\n");
 	pEssenceAccess->Release();
 	pEssenceAccess = NULL;
 
@@ -352,8 +347,6 @@ extern int main(int argc, char *argv[])
 
 
 	checkFatal(CreateAAFFile(pwFileName, container));
-
-	printf("DONE\n");
 
 	return(0);
 }

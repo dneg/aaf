@@ -21,6 +21,9 @@
 // Licensor of the AAF Association is Avid Technology.
 // All rights reserved.
 //
+// Portions created by British Broadcasting Corporation are
+// Copyright 2004, British Broadcasting Corporation.  All rights reserved.
+//
 //=---------------------------------------------------------------------=
 
 #include <stdio.h>
@@ -395,8 +398,6 @@ int main(int argc, char *argv[])
 	checkFatal(RegisterRequiredPlugins());
 
 	checkFatal(OpenAAFFile(pwFileName));
-
-	printf("DONE\n\n");
 
 	return 0;
 }
