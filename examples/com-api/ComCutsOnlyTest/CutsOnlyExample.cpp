@@ -134,8 +134,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFSourceClip*				masterSclp = NULL;
 	IAAFSourceClip*				compSclp = NULL;
 	IAAFComponent*				compFill = NULL;
-	IAAFLocator*				pLocator;
-	IAAFNetworkLocator*			pNetLocator;
+	IAAFLocator*				pLocator = NULL;
+	IAAFNetworkLocator*			pNetLocator = NULL;
 	aafRational_t				videoRate = { 30000, 1001 };
 	aafUID_t					videoDef = DDEF_Video;
 	aafUID_t					tapeMobID, fileMobID, masterMobID;
@@ -168,7 +168,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 	check(pFile->Initialize());
 	check(pFile->OpenNewModify(pFileName, 0, &ProductInfo));
-  	check(pFile->GetHeader(&pHeader));
+  check(pFile->GetHeader(&pHeader));
 
 	//Make the Tape MOB
 	check(CoCreateInstance( CLSID_AAFSourceMob,
@@ -281,7 +281,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	sourceRef.sourceID = masterMobID;
 	sourceRef.sourceSlotID = 1;
 	sourceRef.startTime = 0;
-	check(compSclp->SetSourceReference(sourceRef));
+	check(compSclp->SetSourceReference (sourceRef));
 	check(compSclp->QueryInterface (IID_IAAFComponent, (void **)&aComponent));
 
 	check(aComponent->SetLength (&segLen));
@@ -310,68 +310,68 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 cleanup:
 	// Cleanup and return
+	if (pNetLocator)
+		pNetLocator->Release();
+
+	if (pLocator)
+		pLocator->Release();
+
+	if (compFill)
+		compFill->Release();
+
+	if (compSclp)
+		compSclp->Release();
+
+	if (masterSclp)
+		masterSclp->Release();
+
+	if (fileSclp)
+		fileSclp->Release();
+
+	if (pTapeDesc)
+		pTapeDesc->Release();
+
+	if (pFileDesc)
+		pFileDesc->Release();
+
+	if (aComponent)
+		aComponent->Release();
+
+	if (pSequence)
+		pSequence->Release();
+
+	if (pTapeMob)
+		pTapeMob->Release();
+
+	if (pFileMob)
+		pFileMob->Release();
+
+	if (pMasterMob)
+		pMasterMob->Release();
+
+	if (aDesc)
+		aDesc->Release();
+
+	if (pCompMob)
+		pCompMob->Release();
+
+	if (seg)
+		seg->Release();
+
+	if (newSlot)
+		newSlot->Release();
+
+	if (pMob)
+		pMob->Release();
+
+	if (pHeader)
+		pHeader->Release();
+
 	if (pFile) 
 	{
 		pFile->Close();
 		pFile->Release();
 	}
-
-	if (pHeader)
-		pHeader->Release();
-
-	if (pMob)
-		pMob->Release();
-
-	if (newSlot)
-		newSlot->Release();
-
-	if (seg)
-		seg->Release();
-
-	if (pCompMob)
-		pCompMob->Release();
-
-	if (aDesc)
-		aDesc->Release();
-
-	if (pMasterMob)
-		pMasterMob->Release();
-
-	if (pFileMob)
-		pFileMob->Release();
-
-	if (pTapeMob)
-		pTapeMob->Release();
-
-	if (pSequence)
-		pSequence->Release();
-
-	if (aComponent)
-		aComponent->Release();
-
-	if (pFileDesc)
-		pFileDesc->Release();
-
-	if (pTapeDesc)
-		pTapeDesc->Release();
-
-	if (fileSclp)
-		fileSclp->Release();
-
-	if (masterSclp)
-		masterSclp->Release();
-
-	if (compSclp)
-		compSclp->Release();
-
-	if (compFill)
-		compFill->Release();
-
-	if (pLocator)
-		pLocator->Release();
-
-	if (pNetLocator)
-		pNetLocator->Release();
 
 	
 	return moduleErrorTmp;
@@ -437,8 +437,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		criteria.searchTag = kByMobKind;
 		criteria.tags.mobKind = kTapeMob;
 		check(pHeader->EnumAAFAllMobs(&criteria, &pMobIter));
-		hr = pMobIter->NextOne(&pMob);
-		while(AAFRESULT_SUCCESS == hr && pMobIter != NULL)
+		while(AAFRESULT_SUCCESS == pMobIter->NextOne(&pMob))
 		{
 			aafWChar	buf[256];
 
@@ -447,8 +446,13 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 			AUIDtoString(&mobID, buf);
 			wprintf(L"    TapeName = '%s'\n", namebuf);
 			wprintf(L"        (mobID %s)\n", buf);
-			hr = pMobIter->NextOne(&pMob);
+
+			pMob->Release();
+			pMob = NULL;
 		}
+
+		pMobIter->Release();
+		pMobIter = NULL;
 	}
 	else
 	{
@@ -466,8 +470,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		criteria.searchTag = kByMobKind;
 		criteria.tags.mobKind = kFileMob;
 		check(pHeader->EnumAAFAllMobs(&criteria, &pMobIter));
-		hr = pMobIter->NextOne(&pMob);
-		while(AAFRESULT_SUCCESS == hr && pMobIter != NULL)
+		while(AAFRESULT_SUCCESS == pMobIter->NextOne(&pMob))
 		{
 			aafWChar	buf[256];
 
@@ -484,12 +487,29 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 			{
 				check(pLocator->GetPath (buf, sizeof(buf)));
 				wprintf(L"        There is one locator pointing to '%s'\n", buf);
+
+				pLocator->Release();
+				pLocator = NULL;
 			}
 			else
 				wprintf(L"        There are no locators on this file mob.\n");
 
-			hr = pMobIter->NextOne(&pMob);
+
+			pLocEnum->Release();
+			pLocEnum = NULL;
+
+			pEdesc->Release();
+			pEdesc = NULL;
+
+			pSourceMob->Release();
+			pSourceMob = NULL;
+
+			pMob->Release();
+			pMob = NULL;
 		}
+
+		pMobIter->Release();
+		pMobIter = NULL;
 	}
 	else
 	{
@@ -506,8 +526,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		criteria.searchTag = kByMobKind;
 		criteria.tags.mobKind = kMasterMob;
 		check(pHeader->EnumAAFAllMobs(&criteria, &pMobIter));
-		hr = pMobIter->NextOne(&pMob);
-		while(AAFRESULT_SUCCESS == hr && pMobIter != NULL)
+		while(AAFRESULT_SUCCESS == pMobIter->NextOne(&pMob))
 		{
 			aafWChar	buf[256];
 
@@ -516,8 +535,14 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 			AUIDtoString(&mobID, buf);
 			wprintf(L"    MasterMob Name = '%s'\n", namebuf);
 			wprintf(L"        (mobID %s)\n", buf);
-			hr = pMobIter->NextOne(&pMob);
+			
+
+			pMob->Release();
+			pMob = NULL;
 		}
+
+		pMobIter->Release();
+		pMobIter = NULL;
 	}
 	else
 	{
@@ -527,7 +552,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 
 	wprintf(L"--------\n");
 	// Get the number of composition mobs in the file (should be one)
-	hr = pHeader->GetNumMobs(kCompMob, &numCompMobs);
+	check(pHeader->GetNumMobs(kCompMob, &numCompMobs));
 	if (1 == numCompMobs )
 	{
 		printf("Found %ld Composition Mobs\n", numCompMobs);
@@ -536,7 +561,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		criteria.searchTag = kByMobKind;
 		criteria.tags.mobKind = kCompMob;
 		check(pHeader->EnumAAFAllMobs(&criteria, &pMobIter));
-		while (pMobIter && pMobIter->NextOne(&pMob) !=AAFRESULT_NO_MORE_MOBS)
+		while (pMobIter && AAFRESULT_SUCCESS == pMobIter->NextOne(&pMob))
 		{
 			aafWChar	buf[256];
 
@@ -547,11 +572,15 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 			if (1 == numSlots)
 			{
 				check(pMob->EnumAAFAllMobSlots(&pSlotIter));
-				while (pSlotIter && pSlotIter->NextOne(&pSlot) != AAFRESULT_NO_MORE_OBJECTS)
+				while (pSlotIter && AAFRESULT_SUCCESS == pSlotIter->NextOne(&pSlot))
 				{
 					check(pSlot->GetSegment(&pSegment));
+
+					// Get the length of the segment: access through the component interface.
 					check(pSegment->QueryInterface(IID_IAAFComponent, (void **) &pComponent));
 					check(pComponent->GetLength (&length));
+					pComponent->Release();
+					pComponent = NULL;
 
 					hr = pSegment->QueryInterface(IID_IAAFSourceClip, (void **) &pSourceClip);
 					if(AAFRESULT_SUCCESS == hr)
@@ -568,7 +597,14 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 							AUIDtoString(&mobID, buf);
 							wprintf(L"        References mob = '%s'\n", namebuf);
 							wprintf(L"            (mobID %s)\n", buf);
+
+							pReferencedMob->Release();
+							pReferencedMob = NULL;
 						}
+
+
+						pSourceClip->Release();
+						pSourceClip = NULL;
 					}
 					else
 					{
@@ -582,7 +618,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 								numComponents);
 							wprintf(L"        It has length %ld\n", length);
 							check(pSequence->EnumComponents (&pCompIter));
-							while (pCompIter && pCompIter->NextOne(&pComponent) != AAFRESULT_NO_MORE_OBJECTS)
+							while (pCompIter && AAFRESULT_SUCCESS == pCompIter->NextOne(&pComponent))
 							{
 								item++;
 								check(pComponent->GetLength (&length));
@@ -598,27 +634,58 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 									AUIDtoString(&mobID, buf);
 									wprintf(L"            References mob = '%s'\n", namebuf);
 									wprintf(L"                (mobID %s)\n", buf);
+
+									pSourceClip->Release();
+									pSourceClip = NULL;
 								}
 								hr = pComponent->QueryInterface(IID_IAAFFiller, (void **) &pFiller);
 								if(AAFRESULT_SUCCESS == hr)
 								{
 									wprintf(L"        %ld) A length %ld filler\n", item, length);
+
+									pFiller->Release();
+									pFiller = NULL;
 								}
+
+								pComponent->Release();
+								pComponent = NULL;
 							}
+
+							pCompIter->Release();
+							pCompIter = NULL;
+
+							pSequence->Release();
+							pSequence = NULL;
 						}
 						else
 						{
 							wprintf(L"    Found unknown segment on slot\n");
 						}
 					}
+
+					pSegment->Release();
+					pSegment = NULL;
+
+					pSlot->Release();
+					pSlot = NULL;
 				}
+
+				pSlotIter->Release();
+				pSlotIter = NULL;
 			}
 			else
 			{
 				printf("***Wrong number of slots in the composition mob (was %ld should be %ld)\n",
 					numSlots, 1L);
 			}
+
+			pMob->Release();
+			pMob = NULL;
 		}
+
+		pMobIter->Release();
+		pMobIter = NULL;
+
 	}
 	else
 	{
@@ -626,61 +693,63 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 			numCompMobs, 1L);
 	}
 
+
+
 cleanup:
 	// Cleanup and return
+	if(pSourceMob)
+		pSourceMob->Release();
+
+	if(pEdesc)
+		pEdesc->Release();
+	
+	if(pLocator)
+		pLocator->Release();
+	
+	if(pLocEnum)
+		pLocEnum->Release();
+	
+	if (pFiller)
+		pFiller->Release();
+
+	if (pCompIter)
+		pCompIter->Release();
+
+	if (pComponent)
+		pComponent->Release();
+
+	if (pSequence)
+		pSequence->Release();
+
+	if (pReferencedMob)
+		pReferencedMob->Release();
+
+	if (pSourceClip)
+		pSourceClip->Release();
+
+	if (pSegment)
+		pSegment->Release();
+
+	if (pSlot)
+		pSlot->Release();
+
+	if (pSlotIter)
+		pSlotIter->Release();
+
+	if (pMob)
+		pMob->Release();
+
+	if (pMobIter)
+		pMobIter->Release();
+
+	if (pHeader)
+		pHeader->Release();
+
 	if (pFile) 
 	{
 		pFile->Close();
 		pFile->Release();
 	}
-
-	if (pHeader)
-		pHeader->Release();
-
-	if (pMob)
-		pMob->Release();
-
-	if (pSlot)
-		pSlot->Release();
-
-	if (pSegment)
-		pSegment->Release();
-
-	if (pSourceClip)
-		pSourceClip->Release();
-
-	if (pMobIter)
-		pMobIter->Release();
-
-	if (pSlotIter)
-		pSlotIter->Release();
-
-	if (pReferencedMob)
-		pReferencedMob->Release();
-
-	if (pSequence)
-		pSequence->Release();
-
-	if (pComponent)
-		pComponent->Release();
-
-	if (pCompIter)
-		pCompIter->Release();
-
-	if (pFiller)
-		pFiller->Release();
-
-	if(pLocEnum)
-		pLocEnum->Release();
-	
-	if(pLocator)
-		pLocator->Release();
-	
-	if(pEdesc)
-		pEdesc->Release();
-	
-	if(pSourceMob)
-		pSourceMob->Release();
 	
 	return moduleErrorTmp;
 }
@@ -715,3 +784,22 @@ main()
 
   return(0);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
