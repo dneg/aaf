@@ -590,6 +590,10 @@ static HRESULT TestTypeDefInt ()
   ptdu64->Release();
   pDict->Release();
   pHeader->Release();
+  hr = pFile->Save();
+  if (! SUCCEEDED (hr)) return hr;
+  hr = pFile->Close();
+  if (! SUCCEEDED (hr)) return hr;
   pFile->Release();
 
   return AAFRESULT_SUCCESS;
