@@ -2,7 +2,7 @@
 #c*													*
 #c* Advanced Authoring Format						*
 #c*													*
-#c* Copyright (c) 1998-1999 Avid Technology, Inc.	*
+#c* Copyright (c) 1998-2000 Avid Technology, Inc.	*
 #c*													*
 #c\*************************************************/
 #startm .this-module 0
@@ -341,6 +341,7 @@ AD_XFUNCTION2(AAFFileOpenTransient,
   // AAFRESULT_NULL_PARAM
   //   - the pIdent pointer argument is NULL.)
 
+
 AD_XFUNCTION3(AAFFileIsAAFFile,
 
 			[in\, string],
@@ -389,7 +390,132 @@ AD_XFUNCTION1(AAFGetPluginManager,
 			Pointer to the interface of the plugin manager.,
 
 
-			Returns an interface of the plugin manager\, which is used to select
-  //			plugins for exporting.)
+     Returns an interface of the plugin manager\, which is used to
+  // select plugins for exporting.)
 
+
+AD_XFUNCTION2(AAFCreateRawStorageMemory,
+
+			  [in],
+			  objPass,
+			  aafFileAccess_e,
+			  access,
+			  Governs whether stream may be read from and/or written
+    // to.,
+
+			  [out],
+			  objOut,
+			  AAFRawStorage,
+			  ppNewRawStorage,
+			  Newly created storage,
+
+     Create a raw storage providing a built-in implementation of
+  // IAAFRawStorage on memory.
+  //
+  // This is considered a value-added function since clients could
+  // actually create their own.
+  //
+  // Succeeds if:
+  // - The ppNewRawStorage pointer is valid.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppNewRawStorage\))
+
+
+AD_XFUNCTION4(AAFCreateRawStorageDisk,
+
+			  [in],
+			  objPass,
+			  aafCharacter_constptr,
+			  pFilename,
+			  Name of file to be associated with this storage,
+
+			  [in],
+			  objPass,
+			  aafFileExistence_e,
+			  existence,
+			  Governs whether storage is on pre-existing data\, or is
+    //  newly created.,
+
+			  [in],
+			  objPass,
+			  aafFileAccess_e,
+			  access,
+			  Governs whether stream may be read from and/or written
+    //  to.,
+
+			  [out],
+			  objOut,
+			  AAFRawStorage,
+			  ppNewRawStorage,
+			  Newly created storage,
+
+     Create a raw storage providing a built-in implementation of
+  // IAAFRawStorage on a file on disk.
+  //
+  // Note that it is illegal to specify existence and access as "New"
+  // "Read".
+  //
+  // This is considered a value-added function since clients could
+  // actually create their own.
+  //
+  // Succeeds if:
+  // - The pFilename pointer is valid.
+  // - The ppNewRawStorage pointer is valid.
+  // - If the open mode is one of read\, write\, or modify.
+  // - If the file existence is one of new or existing.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pFilename or ppNewRawStorage\)
+  //
+  // AAFRESULT_WRONG_OPENMODE
+  // - If none of read\, modify\, or write are specified as open
+  //   mode\, or if neither new or existing is specified for the
+  //   existence.)
+
+
+AD_XFUNCTION5(AAFCreateAAFFileOnRawStorage,
+
+			  [in],
+			  objPass,
+			  IAAFRawStorage *,
+			  pRawStorage,
+			  storage to be associated with this file,
+
+			  [in],
+			  objPass,
+			  aafUID_constptr,
+			  pFileKind,
+			  kind of file to be created; only used for new files,
+
+			  [in],
+			  objPass,
+			  aafUInt32,
+			  modeFlags,
+			  File mode flags,
+
+			  [in],
+			  objPass,
+			  aafProductIdentification_constptr,
+			  pIdent,
+			  Identification to be associated with this file; only
+    //  used for new files,
+
+			  [out],
+			  objOut,
+			  AAFFile,
+			  ppNewFile,
+			  newly-created file,
+
+     Given an IAAFRawStorage\, create an IAAFFile.  If pRawStorage is
+  // actually an IAAFRandomRawStorage\, the created file will be an
+  // IAAFRandomFile.
+  //
+  // This method will succeed if the following are true:
+  // - The pRawStorage pointer is valid.
+  // - The ppNewFile pointer is valid.
+  // - The specified raw storage is readable\, writeable\, or both.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pRawStorage or ppNewFile\)
+  //
+  // AAFRESULT_INVALID_PARAM
+  // - The specified raw storage is neither readable nor writeable.)
 AD_MODULE_END
