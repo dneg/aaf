@@ -59,7 +59,7 @@ extern "C" const aafClassID_t CLSID_AAFPropertyValue;
 ImplAAFTypeDefFixedArray::ImplAAFTypeDefFixedArray ()
   : _ElementType  ( PID_TypeDefinitionFixedArray_ElementType,  
                     L"ElementType", 
-                    L"/Dictionary/TypeDefinitions", 
+                    L"/MetaDictionary/TypeDefinitions", 
                     PID_MetaDefinition_Identification),
     _ElementCount ( PID_TypeDefinitionFixedArray_ElementCount, 
                     L"ElementCount")

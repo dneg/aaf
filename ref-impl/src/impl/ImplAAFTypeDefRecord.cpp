@@ -57,7 +57,7 @@ extern "C" const aafClassID_t CLSID_AAFPropValData;
 ImplAAFTypeDefRecord::ImplAAFTypeDefRecord ()
   : _memberTypes ( PID_TypeDefinitionRecord_MemberTypes, 
                    L"MemberTypes", 
-                   L"/Dictionary/TypeDefinitions", 
+                   L"/MetaDictionary/TypeDefinitions", 
                    PID_MetaDefinition_Identification),
     _memberNames ( PID_TypeDefinitionRecord_MemberNames, 
                    L"MemberNames"),
