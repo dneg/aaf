@@ -5,7 +5,7 @@
 
 /***********************************************************************
  *
- *              Copyright (c) 1998-1999 Avid Technology, Inc.
+ *              Copyright (c) 1998-2000 Avid Technology, Inc.
  *
  * Permission to use, copy and modify this software and accompanying 
  * documentation, and to distribute and sublicense application software
@@ -69,12 +69,12 @@ public:
          // @parm [in, string] friendly name of this type definition
          const aafCharacter * pTypeName,
 
-		 // List of property definition IDs indicating the property where
-		 // the target is to be found.
-		 aafUID_t * pTargetHint,
+         // @parm [in] Number of property def IDs in pTargetSet
+         aafUInt32  ids,
 
-		 // Number of property def IDs in pTargetHint
-		 aafUInt32 targetHintCount);
+         // @parm [in, size_is(ids)] List of property definition IDs indicating the property where
+         // the target is to be found.
+         aafUID_constptr  pTargetSet);
 
   // Override from AAFTypeDefObjectRef
   virtual AAFRESULT STDMETHODCALLTYPE
@@ -100,8 +100,15 @@ public:
     GetTypeCategory (/*[out]*/ eAAFTypeCategory_t *  pTid);
 
 
+private:
+  // Synchronize the array of OM pids with the current TargetSet property.
+  AAFRESULT SyncTargetPidsFromTargetSet(void);
+  
+  // Synchronize the TargetSet property from the current targetPids OM pid array.
+  AAFRESULT SyncTargetSetFromTargetPids(void);
 
 public:
+
 
   // Override from AAFTypeDefObjectRef
   virtual AAFRESULT STDMETHODCALLTYPE
@@ -131,11 +138,14 @@ public:
   virtual void onRestore(void* clientContext) const;
 
 private:
+  // Persistent member properties
   OMWeakReferenceProperty<ImplAAFClassDef> _referencedType;
-
-  ImplAAFTypeDefSP                     _cachedAuidType;
-
-  ImplAAFTypeDefSP BaseType (void) const;
+  OMVariableSizeProperty<aafUID_t> _targetSet; // array of property definition ids
+  
+  // Transient members
+  OMPropertyId * _targetPids;
+  aafUInt32 _targetPidCount;
+  OMPropertyId _uniqueIdentifierPid;
 };
 
 
