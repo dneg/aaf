@@ -623,11 +623,11 @@ bool PvtIsTypePresent (
 
   ImplAAFBuiltinDefs * GetBuiltinDefs ();
   void SetBuiltinClasses(ImplAAFBuiltinClasses *pBuiltinClasses) { _pBuiltinClasses = pBuiltinClasses; };
-
-private:
   bool pvtLookupAxiomaticTypeDef (const aafUID_t & typeID,
 							   ImplAAFTypeDef ** ppTypeDef);
 
+
+private:
   bool pvtLookupAxiomaticClassDef (const aafUID_t & classID,
 								   ImplAAFClassDef ** ppClassDef);
 
