@@ -83,7 +83,7 @@ public:
          ImplAAFPropertyValue * pInPropVal,
 
          // @parm [in, size_is(numElements)] values to be appended to this stream
-         ImplAAFPropertyValue * pMemberPropVals,
+         ImplAAFPropertyValue ** ppMemberPropVals,
 
          // @parm [in] number of values to be appended
          aafUInt32  numElements);
@@ -110,7 +110,7 @@ public:
          aafInt64  startElement,
 
          // @parm [out, size_is(numElements)] array of values that are read
-         ImplAAFPropertyValue ** pOutPropVals),
+         ImplAAFPropertyValue ** pOutPropVals,
 
          // @parm [in] number of elements to get
          aafUInt32  numElements);
