@@ -1694,7 +1694,7 @@ AAFRESULT ImplAAFMob::MobFindSource(
 			*foundSource = AAFTrue;
 		else
 		{
-			RAISE(OM_ERR_INVALID_MOBTYPE);
+			RAISE(AAFRESULT_INVALID_MOBTYPE);
 		}
 		
 		if (*foundSource)
@@ -1705,7 +1705,7 @@ AAFRESULT ImplAAFMob::MobFindSource(
 				
 			rootObj->ReleaseReference();
 			track->ReleaseReference();
-			return(OM_ERR_NONE);
+			return(AAFRESULT_SUCCESS);
 		}
 		
 		/* 2) If not right mob type, find component at referenced position 
@@ -1776,7 +1776,7 @@ AAFRESULT ImplAAFMob::MobFindSource(
 		}
 		else /* Failure - null  out return values */
 		{
-			RAISE(OM_ERR_TRAVERSAL_NOT_POSS);
+			RAISE(AAFRESULT_TRAVERSAL_NOT_POSS);
 		}
 		
 		nextMob->ReleaseReference();
@@ -1805,7 +1805,7 @@ AAFRESULT ImplAAFMob::MobFindSource(
 	}
 	XEND;
 	
-	return(OM_ERR_NONE);
+	return(AAFRESULT_SUCCESS);
 }
 
 AAFRESULT ImplAAFMob::ReconcileMobLength(void)
