@@ -617,6 +617,58 @@ AAFRESULT aafMobIDFromMajorMinor(
 	return(AAFRESULT_SUCCESS);
 }
 
+#if defined(_MAC) || defined(macintosh)
+// For some reason the CoCreateGuid() function is not implemented in the 
+// Microsoft Component Library...so we define something that should be
+// fairly unique on the mac.
+
+#include <Events.h>
+#include <time.h>
+
+static void pvtMacCreateAuid(aafUID_t  *pauid)
+{
+  // {1994bd00-69de-11d2-b6bc-fcab70ff7331}
+  static GUID sTemplate = 
+    { 0x1994bd00,
+		0x69de,
+		0x11d2,
+		{ 0xb6, 0xbc, 0xfc, 0xab, 0x70, 0xff, 0x73, 0x31 } };
+  static bool sInitializedTemplate = false;
+  
+  assert (pauid)
+  if (!sInitializedTemplate)
+  {
+    time_t timer = time(NULL);
+    UInt32 ticks = TickCount();
+    sTemplate.Data1 += timer + ticks;
+    sInitializedTemplate = true;
+  }
+  
+  // Just bump the first member of the guid to emulate GUIDGEN behavior.
+  ++sTemplate.Data1;
+  *pauid = sTemplate;
+}
+#endif
+
+
+// Initializes a new auid
+AAFRESULT aafAUIDNew(aafUID_t * auid)
+{
+  if (! auid)
+	 return AAFRESULT_NULL_PARAM;
+#if defined(_MAC) || defined(macintosh)
+  pvtMacCreateAuid (auid);
+#else
+  GUID guid;
+  HRESULT hr = CoCreateGuid (&guid);
+  if (FAILED (hr))
+	 return hr;
+  memcpy (auid, &guid, sizeof (guid));
+#endif
+  return AAFRESULT_SUCCESS;
+}
+
+
 typedef struct
 	{
 	aafUInt32	fpMinute;
