@@ -15,9 +15,10 @@ AAFDefObject\
 #c
 AD_HEAD
 AD_IDL(//
-// The IAAFOperationDef interface is implemented by objects that specify an
-// operation definition.  Operation definitions specify which parameters are possible
-// on an operation\, while an AAFOperationGroup specifies specific parameters and input segments
+// The IAAFOperationDef interface is implemented by objects that
+// specify an operation definition.  Operation definitions specify
+// which parameters are possible on an operation\, while an
+// AAFOperationGroup specifies specific parameters and input segments
 // for a particular operation invocation.
 //
 // In addition to the specific error results listed for each method\,
