@@ -31,6 +31,8 @@
 #include "ImplAAFSourceClip.h"
 #endif
 
+#include "AAFPropertyIDs.h"
+
 #include <assert.h>
 #include "aafCvt.h" 
 #include "AAFResult.h"
