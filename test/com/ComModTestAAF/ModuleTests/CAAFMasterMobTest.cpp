@@ -96,7 +96,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFSession*	pSession = NULL;
 	IAAFFile*		pFile = NULL;
 	IAAFHeader*		pHeader = NULL;
-	IAAFMob*		pMob;
+	IAAFMob*		pMob = NULL;
 	IAAFMasterMob*	pMasterMob = NULL;
 	HRESULT			hr;
 	long			test;
@@ -104,7 +104,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	// Create the AAF file
 	hr = OpenAAFFile(pFileName, kMediaOpenAppend, &pSession, &pFile, &pHeader);
 	if (!SUCCEEDED(hr))
-		goto Cleanup;
+		return hr;
 
 	// Create a Master Mob
 	hr = CoCreateInstance(CLSID_AAFMasterMob,
@@ -166,18 +166,11 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 	// Add the master mob to the file and cleanup
 	hr = pHeader->AppendMob(pMob);
-	if (!SUCCEEDED(hr))
-		goto Cleanup;
-
-	hr = pFile->Close();
-	if (!SUCCEEDED(hr))
-		goto Cleanup;
-
-	hr = pSession->EndSession();
-	if (!SUCCEEDED(hr))
-		goto Cleanup;
 
 Cleanup:
+	pFile->Close();
+	pSession->EndSession();
+
 	if (pMob) pMob->Release();
 	if (pHeader) pHeader->Release();
 	if (pFile) pFile->Release();
@@ -200,7 +193,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	// Open the AAF file
 	hr = OpenAAFFile(pFileName, kMediaOpenReadOnly, &pSession, &pFile, &pHeader);
 	if (!SUCCEEDED(hr))
-		goto Cleanup;
+		return hr;
 
 	pHeader->GetNumMobs(kAllMob, &numMobs);
 	if (1 != numMobs )
@@ -279,10 +272,10 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 
 	if (pMobIter) pMobIter->Release();
 
+Cleanup:
 	pFile->Close();
 	pSession->EndSession();
 
-Cleanup:
 	if (pHeader) pHeader->Release();
 	if (pFile) pFile->Release();
 	if (pSession) pSession->Release();
