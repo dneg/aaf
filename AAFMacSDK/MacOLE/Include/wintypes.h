@@ -27,6 +27,18 @@
 #define TRUE                1
 #endif
 
+#ifndef IN
+#define IN
+#endif
+
+#ifndef OUT
+#define OUT
+#endif
+
+#ifndef OPTIONAL
+#define OPTIONAL
+#endif
+
 /*
  * BASETYPES is defined in ntdef.h if these types are already defined
  */
@@ -47,7 +59,7 @@ typedef char *PSZ;
  */
 
 #ifndef _WINDEF_
-
+#define _WINDEF_
 typedef	unsigned short		WCHAR;
 typedef	WCHAR				*LPWSTR;
 typedef	char*				LPCSTR;
@@ -55,15 +67,7 @@ typedef	char*				LPSTR;
 typedef short				SHORT;
 typedef long                LONG;
 typedef unsigned long       DWORD;
-#if defined(_WIN32) // trr 19980824 - Need to use the "same" declaration for BOOL as OLEBOOL
-#include <limits.h>
-#if UINT_MAX != ULONG_MAX
-#pragma message("### warning: sizeof(int) != sizeof(long)!")
-#endif
 typedef int                 BOOL;
-#else
-typedef unsigned long		BOOL;
-#endif
 typedef unsigned char       BYTE;
 typedef unsigned short      WORD;
 typedef BOOL                *LPBOOL;
