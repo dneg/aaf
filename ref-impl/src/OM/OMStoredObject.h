@@ -103,7 +103,21 @@ public:
   void writeToStream(IStream* stream, void* data, size_t size);
 
     // @cmember Size of <p stream> in bytes.
-  size_t sizeOfStream(IStream* stream) const;
+  OMUInt64 streamSize(IStream* stream) const;
+
+    // @cmember Set the size, in bytes, of <p stream>
+  void streamSetSize(IStream* stream, const OMUInt64 newSize);
+
+    // @cmember The current position for <f readFromStream()> and
+    //          <f writeToStream()>, as an offset in bytes from the
+    //          begining of the data stream.
+    // @this const
+  OMUInt64 streamPosition(IStream* stream) const;
+
+    // @cmember Set the current position for <f readFromStream()> and
+    //          <f writeToStream()>, as an offset in bytes from the
+    //          begining of the data stream.
+  void streamSetPosition(IStream* stream, const OMUInt64 offset);
 
     // @cmember Close <p stream>.
   void closeStream(IStream*& stream);
@@ -130,8 +144,6 @@ private:
                         const char* storageName,
                         const OMAccessMode mode);
   void closeStorage(IStorage*& storage);
-  size_t streamOffset(IStream* stream);
-  void streamSeek(IStream* stream, size_t offset);
 
   void setClass(IStorage* storage, const OMClassId& cid);
   void getClass(IStorage* storage, OMClassId& cid);
