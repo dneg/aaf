@@ -43,7 +43,7 @@
 // Tom Ransdell 28-Sept-1998 Tom_Ransdell@avid.com
 //              Adapt to building on the Macintosh with CodeWarrior Pro3
 //              24-Jan-2000
-//              Added new conditional macro IOS_FMT_FLAGS for CodeWarrior Pro5.
+//              Added new conditional macro ios_base_fmtflags for CW Pro 5.
 //
 // Terry Skotz 4-27-2000 Terry_Skotz@avid.com
 //             added support for DataInput.h so dump can get input from text
@@ -142,12 +142,12 @@ typedef char OMCHAR;
 // CodeWarrior Pro 5 MSL changes.
 #if defined(__MWERKS__)
 #if defined(__MSL_CPP__) && (__MSL_CPP__ >= 0x5300)
-#define IOS_FMT_FLAGS ios_base::fmtflags
+#define ios_base_fmtflags ios_base::fmtflags
 #else
-#define IOS_FMT_FLAGS long int
+#define ios_base_fmtflags long int
 #endif
 #else
-#define IOS_FMT_FLAGS long int
+#define ios_base_fmtflags long int
 #endif
 
 // Stored forms
@@ -862,7 +862,7 @@ void Dumper::output(void)
   spaces(LEADINGSPACES);
   _line++;
   
-  IOS_FMT_FLAGS savedFlags = cout.setf(ios::basefield);
+  ios_base_fmtflags savedFlags = cout.setf(ios::basefield);
   char savedFill = cout.fill();
   
   for (i = 0; i < _count; i++) {
@@ -1277,7 +1277,7 @@ void printClsid(const CLSID& clsid, ostream& stream)
 
 void printRawKey(OMByte* key, size_t keySize)
 {
-  IOS_FMT_FLAGS savedFlags = cout.setf(ios::basefield);
+  ios_base_fmtflags savedFlags = cout.setf(ios::basefield);
   char savedFill = cout.fill();
 
   for (OMUInt32 j = 0; j < keySize; j++) {
@@ -1289,7 +1289,7 @@ void printRawKey(OMByte* key, size_t keySize)
 
 void printUMID(const UMID& umid)
 {
-  IOS_FMT_FLAGS savedFlags = cout.setf(ios::basefield);
+  ios_base_fmtflags savedFlags = cout.setf(ios::basefield);
   char savedFill = cout.fill();
   cout << "{";
   for (size_t i = 0; i < sizeof(umid.SMPTELabel); i++) {
@@ -1705,7 +1705,7 @@ void readPidString(IStream* stream,
 
 void printPidString(const OMPropertyId* string)
 {
-  IOS_FMT_FLAGS savedFlags = cout.setf(ios::basefield);
+  ios_base_fmtflags savedFlags = cout.setf(ios::basefield);
   char savedFill = cout.fill();
 
   const OMPropertyId* p = string;
@@ -3214,7 +3214,7 @@ void dumpProperties(IStorage* storage,
     bool ignore = ignoring(index[i]._pid);
 
     cout << endl;
-    IOS_FMT_FLAGS savedFlags = cout.setf(ios::basefield);
+    ios_base_fmtflags savedFlags = cout.setf(ios::basefield);
     char savedFill = cout.fill();
     cout << "property " << i << " "
          << "( pid = "
@@ -3641,7 +3641,7 @@ void printHeader(StructuredStorageHeader& header)
 
   // Structured storage signature
   //
-  IOS_FMT_FLAGS savedFlags = cout.setf(ios::basefield);
+  ios_base_fmtflags savedFlags = cout.setf(ios::basefield);
   char savedFill = cout.fill();
   cout.setf(ios::uppercase);
 
@@ -4052,7 +4052,7 @@ void printInteger(const size_t value, char* label)
 
 void printFixed(const double value, char* label)
 {
-    IOS_FMT_FLAGS oldFlags = cout.flags(ios::right | ios::fixed);
+    ios_base_fmtflags oldFlags = cout.flags(ios::right | ios::fixed);
     cout << label
          << setw(8)
          << setprecision(2)
@@ -4063,7 +4063,7 @@ void printFixed(const double value, char* label)
 
 void printFixedPercent(const double value, char* label)
 {
-    IOS_FMT_FLAGS oldFlags = cout.flags(ios::right | ios::fixed);
+    ios_base_fmtflags oldFlags = cout.flags(ios::right | ios::fixed);
     cout << label
          << setw(8)
          << setprecision(2)
