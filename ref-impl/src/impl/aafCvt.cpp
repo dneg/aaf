@@ -82,7 +82,7 @@
 #include "AAFTypes.h"
 #include "aafCvt.h" 
 //#include "omPvt.h" 
-#include "AAFPrivate.h"
+//#include "AAFPrivate.h"
 #include "AAFUtils.h"
 
 /* Moved math.h down here to make NEXT's compiler happy */
