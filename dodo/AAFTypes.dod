@@ -514,13 +514,22 @@ typedef struct _aafProductVersion_t
 	aafProductReleaseType_t	type;
 } aafProductVersion_t;
 
+typedef struct _aafUID_t
+{
+//	aafUInt32           value[4]; // binary compatibility with GUID/CLSID and IID structures.
+    aafUInt32 Data1;
+    aafUInt16 Data2;
+    aafUInt16 Data3;
+    aafUInt8  Data4[8];
+} aafUID_t;
+
 typedef struct _aafProductIdentification_t
 {
-	aafCharacter				*companyName;
-	aafCharacter				*productName;
-	aafCharacter				*productVersionString;
-	aafInt32			productID;
-	aafCharacter				*platform;
+	aafCharacter			*companyName;
+	aafCharacter			*productName;
+	aafCharacter			*productVersionString;
+	aafUID_t				productID;
+	aafCharacter			*platform;
 	aafProductVersion_t	productVersion;
 } aafProductIdentification_t;
 
@@ -538,14 +547,7 @@ typedef struct _aafTimeStamp_t
 	aafInt8            	IsGMT;
 } aafTimeStamp_t;
 
-typedef struct _aafUID_t
-{
-//	aafUInt32           value[4]; // binary compatibility with GUID/CLSID and IID structures.
-    aafUInt32 Data1;
-    aafUInt16 Data2;
-    aafUInt16 Data3;
-    aafUInt8  Data4[8];
-} aafUID_t;
+
 
 
 
