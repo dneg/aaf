@@ -41,12 +41,16 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "AAFRoot.h"
+#include "AAFPrivate.h"
 #include "AAFResult.h"
 #include "ImplAAFPluginManager.h"
 #include "ImplAAFFile.h"
-#include "ImplAAFObjectCreation.h"
+//#include "ImplAAFObjectCreation.h"
 
+#include "AAFTypes.h"
+
+class ImplAAFFile;
+class ImplAAFPluginManager;
 
 //***********************************************************
 //

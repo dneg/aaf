@@ -43,7 +43,7 @@
 
 #include "ImplAAFModule.h"
 
-#include "AAFRoot.h"
+#include "AAFPrivate.h"
 #include "AAFResult.h"
 #include "ImplAAFPluginManager.h"
 #include "ImplAAFFile.h"
