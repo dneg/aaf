@@ -535,13 +535,13 @@ OMDEFINE_STORABLE(ImplAAFMasterMob, AUID_AAFMasterMob);
  */
 AAFRESULT ImplAAFMasterMob::ReconcileMobLength(void)
 {
-	ImplAAFMob			*fileMob;
+	ImplAAFMob			*fileMob = NULL;
+	ImplEnumAAFMobSlots	*slotIter = NULL, *fileSlotIter = NULL;
+	ImplAAFMobSlot		*fileSlot = NULL, *slot = NULL;
+	ImplAAFSegment		*fileSeg = NULL, *seg = NULL;
 	aafInt32			loop;
 	aafInt32			numSlots, fileNumSlots;
 	aafPosition_t		endPos;
-	ImplEnumAAFMobSlots	*slotIter = NULL, *fileSlotIter = NULL;
-	ImplAAFMobSlot		*fileSlot, *slot;
-	ImplAAFSegment		*fileSeg, *seg;
 
 	XPROTECT()
 	{
@@ -554,24 +554,55 @@ AAFRESULT ImplAAFMasterMob::ReconcileMobLength(void)
 		{
 			CHECK(slotIter->NextOne(&slot));
 			CHECK(slot->GetSegment(&seg));
-			CHECK(((ImplAAFSourceClip *)seg)->ResolveRef( &fileMob));	//!!!
+			CHECK(((ImplAAFSourceClip *)seg)->ResolveRef( &fileMob));
 			CHECK(fileMob->GetNumSlots(&fileNumSlots));
 			if(fileNumSlots >= 1)
 			{
-				CHECK(fileMob->EnumAAFAllMobSlots (&slotIter));
-				CHECK(slotIter->NextOne(&fileSlot));
+				CHECK(fileMob->EnumAAFAllMobSlots (&fileSlotIter));
+				CHECK(fileSlotIter->NextOne(&fileSlot));
 				CHECK(fileSlot->GetSegment(&fileSeg));
 				CHECK(fileSeg->GetLength(&endPos));
-				delete fileSlotIter;
+				fileSeg->ReleaseReference();
+				fileSeg = NULL;
+				fileSlotIter->ReleaseReference();
+				fileSlotIter = NULL;
 			}
-			
+			else
+				fileSlot = NULL;
+			fileMob->ReleaseReference();
+			fileMob = NULL;
 			CHECK(slot->ConvertToMyRate(endPos, fileSlot, &endPos));
+			if(fileSlot != NULL)
+			{
+				fileSlot->ReleaseReference();
+				fileSlot = NULL;
+			}
+			slot->ReleaseReference();
+			slot = NULL;
 			CHECK(seg->SetLength(&endPos));
+			seg->ReleaseReference();
+			seg = NULL;
 		}			
-//!!!			delete slotIter;
-//!!!			slotIter = NULL;
+		slotIter->ReleaseReference();
+		slotIter = NULL;
 	}
 	XEXCEPT
+	{
+		if(slotIter != NULL)
+			slotIter->ReleaseReference();
+		if(fileSlotIter != NULL)
+			fileSlotIter->ReleaseReference();
+		if(fileSlot != NULL)
+			fileSlot->ReleaseReference();
+		if(slot != NULL)
+			slot->ReleaseReference();
+		if(fileSeg != NULL)
+			fileSeg->ReleaseReference();
+		if(seg != NULL)
+			seg->ReleaseReference();
+		if(fileMob != NULL)
+			fileMob->ReleaseReference();
+	}
 	XEND
 		
 	return (AAFRESULT_SUCCESS);
