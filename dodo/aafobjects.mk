@@ -134,6 +134,7 @@ HUMAN_TYPED_IMPL = \
 	EnumAAFMobSlots \
 	EnumAAFMobs \
 	EnumAAFParameterDefs \
+	EnumAAFParameters \
 	EnumAAFProperties \
 	EnumAAFPropertyDefs \
 	EnumAAFPluginDescriptors \
