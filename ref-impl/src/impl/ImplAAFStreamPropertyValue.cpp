@@ -45,10 +45,7 @@
 
 ImplAAFStreamPropertyValue::ImplAAFStreamPropertyValue () :
   _streamProperty(NULL),
-  _streamElementType(NULL),
-  _propertyContainer(NULL),
-  _externalElementSize(0),
-  _internalElemeentSize(0)
+  _propertyContainer(NULL)
 {}
 
 
@@ -60,357 +57,7 @@ ImplAAFStreamPropertyValue::~ImplAAFStreamPropertyValue ()
     _propertyContainer = NULL;
   }
 }
-
-
-
-// special accessor
-aafUInt32 ImplAAFStreamPropertyValue::internalElementSize(void) const
-{
-  if (0 == _internalElemeentSize)
-  {
-    // The stream element type was not registered when this object was initialized.
-    // Update the internal size and preserve conceptual const-ness.
-    const_cast<ImplAAFStreamPropertyValue *>(this)->_internalElemeentSize = _streamElementType->NativeSize();
-  }
-  
-  return _internalElemeentSize;
-}
  
-
-
-
-
-
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFStreamPropertyValue::GetElementCount (
-      aafInt64 *  pElementCount)
-{
-  if (!isInitialized())
-    return AAFRESULT_NOT_INITIALIZED;
-  if (NULL == pElementCount)
-    return AAFRESULT_NULL_PARAM;
-
-  // Compute the number of externalized elements in the stream.
-  *pElementCount = (aafInt64)(_streamProperty->size() /  _externalElementSize); 
-    
-  return AAFRESULT_SUCCESS;
-}
-
-
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFStreamPropertyValue::SetElementCount (
-      aafInt64  newElementCount)
-{
-  if (!isInitialized())
-    return AAFRESULT_NOT_INITIALIZED;
-  if (0 > newElementCount) // TEMP: need unsigned aafUInt64!
-    return AAFRESULT_INVALID_PARAM;
-
-  // Compute the new size of the stream
-  OMUInt64 newSize = (OMUInt64)newElementCount * _externalElementSize;
-  
-  // Set the new size of the data stream.
-  _streamProperty->setSize(newSize); // What happens if this call fails?
-    
-  return AAFRESULT_SUCCESS;
-}
-
-
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFStreamPropertyValue::GetElementIndex (
-      aafInt64 *  pIndex)
-{
-  if (!isInitialized())
-    return AAFRESULT_NOT_INITIALIZED;
-  if (NULL == pIndex)
-    return AAFRESULT_NULL_PARAM;
-    
-  OMUInt64 offset = _streamProperty->position();
-  *pIndex = (aafInt64)(offset / _externalElementSize);
-    
-  return AAFRESULT_SUCCESS;
-}
-
-
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFStreamPropertyValue::SetElementIndex (
-      aafInt64  newElementIndex)
-{
-  if (!isInitialized())
-    return AAFRESULT_NOT_INITIALIZED;
-  if (0 > newElementIndex) // TEMP: need unsigned aafUInt64!
-    return AAFRESULT_INVALID_PARAM;
-
-  // Compute the new position of the stream
-  OMUInt64 newPosition = (OMUInt64)newElementIndex * _externalElementSize;
-  
-  // Set the new size of the data stream.
-  _streamProperty->setPosition(newPosition); // What happens if this call fails?
-    
-  return AAFRESULT_SUCCESS;
-}
-
-
-
-
-
- AAFRESULT STDMETHODCALLTYPE
-   ImplAAFStreamPropertyValue::ReadElements (
-      aafUInt32  dataSize,
-      aafMemPtr_t  pData,
-      aafUInt32 *  bytesRead)
-{
-  if (!isInitialized())
-    return AAFRESULT_NOT_INITIALIZED;
-  if (NULL == pData || NULL == bytesRead)
-    return AAFRESULT_NULL_PARAM;    
-  
-  // Element access methods need to fail if the stream element type
-  // offsets have not been registered. 
-  if (!_streamElementType->IsRegistered())
-    return AAFRESULT_NOT_REGISTERED;
-  
-  OMUInt32 elementSize = internalElementSize(); 
-  if (0 == elementSize)
-     return AAFRESULT_INVALID_PARAM; 
-
-  // Make sure that the given dataSize is an integral number of stream elements.
-  OMUInt32 elementCount = dataSize / elementSize;
-  if (dataSize != (elementCount * elementSize))
-    return AAFRESULT_INVALID_PARAM;
-  
-  // Read the elements from the data stream.
-  OMUInt32 elementsRead;
-  _streamProperty->readTypedElements(_streamElementType,
-                                     _externalElementSize,
-                                     pData,
-                                     elementCount,
-                                     elementsRead);
-  *bytesRead = elementsRead * elementCount;
-  
-  if (0 < dataSize && 0 == *bytesRead)
-    return AAFRESULT_END_OF_DATA;
-  
-  assert(elementCount == elementsRead);  
-  return AAFRESULT_SUCCESS;
-}
-
-
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFStreamPropertyValue::WriteElements (
-      aafUInt32  dataSize,
-      aafMemPtr_t  pData)
-{
-  if (!isInitialized())
-    return AAFRESULT_NOT_INITIALIZED;
-  if (NULL == pData)
-    return AAFRESULT_NULL_PARAM;    
-  
-  // Element access methods need to fail if the stream element type
-  // offsets have not been registered. 
-  if (!_streamElementType->IsRegistered())
-    return AAFRESULT_NOT_REGISTERED;
-  
-  OMUInt32 elementSize = internalElementSize(); 
-  if (0 == elementSize)
-     return AAFRESULT_INVALID_PARAM; 
-
-  // Make sure that the given dataSize is an integral number of stream elements.
-  OMUInt32 elementCount = dataSize / elementSize;
-  if (dataSize != (elementCount * elementSize))
-    return AAFRESULT_INVALID_PARAM;
-  
-   
-  // Write the elements to the data stream.
-  OMUInt32 elementsWritten;
-  _streamProperty->writeTypedElements(_streamElementType,
-                                     _externalElementSize,
-                                     pData,
-                                     elementCount,
-                                     elementsWritten);
-  
-  if (0 < dataSize && 0 == elementsWritten)
-    return AAFRESULT_CONTAINERWRITE; 
-    
-  assert(elementCount == elementsWritten); 
-  return AAFRESULT_SUCCESS;
-}
-
-
-
-
-
- AAFRESULT STDMETHODCALLTYPE
-   ImplAAFStreamPropertyValue::ReadElement (
-      aafUInt32  dataSize,
-      aafMemPtr_t  pData,
-      aafUInt32 *  bytesRead)
-{
-  if (!isInitialized())
-    return AAFRESULT_NOT_INITIALIZED;
-  if (NULL == pData || NULL == bytesRead)
-    return AAFRESULT_NULL_PARAM;    
-  
-  // Element access methods need to fail if the stream element type
-  // offsets have not been registered. 
-  if (!_streamElementType->IsRegistered())
-    return AAFRESULT_NOT_REGISTERED;
-  
-  OMUInt32 elementSize = internalElementSize(); 
-  if (0 == elementSize)
-     return AAFRESULT_INVALID_PARAM; 
-
-  // Make sure that the given dataSize must be equal to the stream element size.
-  if (dataSize !=  elementSize)
-    return AAFRESULT_INVALID_PARAM;
-  
-  // Write the elements to the data stream.
-  OMUInt32 elementsRead;
-  _streamProperty->readTypedElements(_streamElementType,
-                                     _externalElementSize,
-                                     pData,
-                                     1,
-                                     elementsRead);
-  *bytesRead = elementsRead * 1;
-  
-  if (0 < dataSize && 0 == *bytesRead)
-    return AAFRESULT_END_OF_DATA;
-  
-  assert (1 == elementsRead);  
-  return AAFRESULT_SUCCESS;
-}
-
-
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFStreamPropertyValue::WriteElement (
-      aafUInt32  dataSize,
-      aafMemPtr_t  pData)
-{
-  if (!isInitialized())
-    return AAFRESULT_NOT_INITIALIZED;
-  if (NULL == pData)
-    return AAFRESULT_NULL_PARAM;    
-  
-  // Element access methods need to fail if the stream element type
-  // offsets have not been registered. 
-  if (!_streamElementType->IsRegistered())
-    return AAFRESULT_NOT_REGISTERED;
-  
-  OMUInt32 elementSize = internalElementSize(); 
-  if (0 == elementSize)
-     return AAFRESULT_INVALID_PARAM; 
-
-  // Make sure that the given dataSize must be equal to the stream element size.
-  if (dataSize != elementSize)
-    return AAFRESULT_INVALID_PARAM;
-  
-   
-  // Write the elements to the data stream.
-  OMUInt32 elementsWritten;
-  _streamProperty->writeTypedElements(_streamElementType,
-                                      _externalElementSize,
-                                      pData,
-                                      1,
-                                      elementsWritten);
-  
-  if (0 < dataSize && 0 == elementsWritten)
-    return AAFRESULT_CONTAINERWRITE;
-    
-  assert (1 == elementsWritten); 
-  return AAFRESULT_SUCCESS;
-}
-
-
-
-
-
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFStreamPropertyValue::AppendElements (
-      aafUInt32  dataSize,
-      aafMemPtr_t  pData)
-{
-  if (!isInitialized())
-    return AAFRESULT_NOT_INITIALIZED;
-  if (NULL == pData)
-    return AAFRESULT_NULL_PARAM;    
-  
-  // Element access methods need to fail if the stream element type
-  // offsets have not been registered. 
-  if (!_streamElementType->IsRegistered())
-    return AAFRESULT_NOT_REGISTERED;
-  
-  OMUInt32 elementSize = internalElementSize(); 
-  if (0 == elementSize)
-     return AAFRESULT_INVALID_PARAM; 
-
-  // Make sure that the given dataSize is an integral number of stream elements.
-  OMUInt32 elementCount = dataSize / elementSize;
-  if (dataSize != (elementCount * elementSize))
-    return AAFRESULT_INVALID_PARAM;
-    
-  // Set the position to the size of the stream.
-  _streamProperty->setPosition(_streamProperty->size());
-   
-  // Write the elements to the data stream.
-  OMUInt32 elementsWritten;
-  _streamProperty->writeTypedElements(_streamElementType,
-                                      _externalElementSize,
-                                      pData,
-                                      elementCount,
-                                      elementsWritten);
-  
-  if (0 < dataSize && 0 == elementsWritten)
-    return AAFRESULT_CONTAINERWRITE; 
-    
-  assert(elementCount == elementsWritten); 
-  return AAFRESULT_SUCCESS;
-}
-
-
-
-
-
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFStreamPropertyValue::AppendElement (
-      aafUInt32  dataSize,
-      aafMemPtr_t  pData)
-{
-  if (!isInitialized())
-    return AAFRESULT_NOT_INITIALIZED;
-  if (NULL == pData)
-    return AAFRESULT_NULL_PARAM;    
-  
-  // Element access methods need to fail if the stream element type
-  // offsets have not been registered. 
-  if (!_streamElementType->IsRegistered())
-    return AAFRESULT_NOT_REGISTERED;
-  
-  OMUInt32 elementSize = internalElementSize(); 
-  if (0 == elementSize)
-     return AAFRESULT_INVALID_PARAM; 
-
-  // Make sure that the given dataSize must be equal to the stream element size.
-  if (dataSize != elementSize)
-    return AAFRESULT_INVALID_PARAM;
-      
-  // Set the position to the size of the stream.
-  _streamProperty->setPosition(_streamProperty->size());
-   
-  // Write the elements to the data stream.
-  OMUInt32 elementsWritten;
-  _streamProperty->writeTypedElements(_streamElementType,
-                                      _externalElementSize,
-                                      pData,
-                                      1,
-                                      elementsWritten);
-  
-  if (0 < dataSize && 0 == elementsWritten)
-    return AAFRESULT_CONTAINERWRITE;
-    
-  assert (1 == elementsWritten); 
-  return AAFRESULT_SUCCESS;
-}
-
 
 
 
@@ -531,9 +178,6 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 
-
-
-
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFStreamPropertyValue::Append (
       aafUInt32  dataSize,
@@ -566,6 +210,187 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFStreamPropertyValue::HasStoredByteOrder (
+      aafBoolean_t *  /*pHasByteOrder*/)
+{
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFStreamPropertyValue::GetStoredByteOrder (
+      eAAFByteOrder_t *  /*pByteOrder*/)
+{
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFStreamPropertyValue::SetStoredByteOrder (
+      eAAFByteOrder_t  /*byteOrder*/)
+{
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFStreamPropertyValue::ClearStoredByteOrder (void)
+{
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+
+
+ AAFRESULT STDMETHODCALLTYPE
+   ImplAAFStreamPropertyValue::ReadElements (
+      ImplAAFTypeDef * pElementType,
+      aafUInt32  dataSize,
+      aafMemPtr_t  pData,
+      aafUInt32 *  bytesRead)
+{
+  if (!isInitialized())
+    return AAFRESULT_NOT_INITIALIZED;
+  if (NULL == pElementType || NULL == pData || NULL == bytesRead)
+    return AAFRESULT_NULL_PARAM;    
+  
+  // Element access methods need to fail if the stream element type
+  // offsets have not been registered. 
+  if (!pElementType->IsRegistered())
+    return AAFRESULT_NOT_REGISTERED;
+  
+  OMUInt32 internalElementSize = pElementType->NativeSize();
+  assert (0 < internalElementSize);
+  if (0 == internalElementSize)
+     return AAFRESULT_INVALID_PARAM; 
+
+  // Make sure that the given dataSize is an integral number of stream elements.
+  OMUInt32 elementCount = dataSize / internalElementSize;
+  if (dataSize != (elementCount * internalElementSize))
+    return AAFRESULT_INVALID_PARAM;
+  
+  // Get the external size of an element from the type.  
+  OMUInt32 externalElementSize = pElementType->PropValSize();
+  assert (0 < externalElementSize);
+  if (0 == externalElementSize)
+     return AAFRESULT_INVALID_PARAM; 
+  
+  // Read the elements from the data stream.
+  OMUInt32 elementsRead;
+  _streamProperty->readTypedElements(pElementType,
+                                     externalElementSize,
+                                     pData,
+                                     elementCount,
+                                     elementsRead);
+  *bytesRead = elementsRead * elementCount;
+  
+  if (0 < dataSize && 0 == *bytesRead)
+    return AAFRESULT_END_OF_DATA;
+  
+  assert(elementCount == elementsRead);  
+  return AAFRESULT_SUCCESS;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFStreamPropertyValue::WriteElements (
+      ImplAAFTypeDef * pElementType,
+      aafUInt32  dataSize,
+      aafMemPtr_t  pData)
+{
+  if (!isInitialized())
+    return AAFRESULT_NOT_INITIALIZED;
+  if (NULL == pElementType || NULL == pData)
+    return AAFRESULT_NULL_PARAM;    
+  
+  // Element access methods need to fail if the stream element type
+  // offsets have not been registered. 
+  if (!pElementType->IsRegistered())
+    return AAFRESULT_NOT_REGISTERED;
+  
+  OMUInt32 internalElementSize = pElementType->NativeSize(); 
+  assert (0 < internalElementSize);
+  if (0 == internalElementSize)
+     return AAFRESULT_INVALID_PARAM; 
+
+  // Make sure that the given dataSize is an integral number of stream elements.
+  OMUInt32 elementCount = dataSize / internalElementSize;
+  if (dataSize != (elementCount * internalElementSize))
+    return AAFRESULT_INVALID_PARAM;
+  
+  // Get the external size of an element from the type.  
+  OMUInt32 externalElementSize = pElementType->PropValSize();
+  assert (0 < externalElementSize);
+  if (0 == externalElementSize)
+     return AAFRESULT_INVALID_PARAM; 
+  
+  // Write the elements to the data stream.
+  OMUInt32 elementsWritten;
+  _streamProperty->writeTypedElements(pElementType,
+                                     externalElementSize,
+                                     pData,
+                                     elementCount,
+                                     elementsWritten);
+  
+  if (0 < dataSize && 0 == elementsWritten)
+    return AAFRESULT_CONTAINERWRITE; 
+    
+  assert(elementCount == elementsWritten); 
+  return AAFRESULT_SUCCESS;
+}
+
+
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFStreamPropertyValue::AppendElements (
+      ImplAAFTypeDef * pElementType,
+      aafUInt32  dataSize,
+      aafMemPtr_t  pData)
+{
+  if (!isInitialized())
+    return AAFRESULT_NOT_INITIALIZED;
+  if (NULL == pElementType || NULL == pData)
+    return AAFRESULT_NULL_PARAM;    
+  
+  // Element access methods need to fail if the stream element type
+  // offsets have not been registered. 
+  if (!pElementType->IsRegistered())
+    return AAFRESULT_NOT_REGISTERED;
+  
+  OMUInt32 internalElementSize = pElementType->NativeSize(); 
+  if (0 == internalElementSize)
+     return AAFRESULT_INVALID_PARAM; 
+
+  // Make sure that the given dataSize is an integral number of stream elements.
+  OMUInt32 elementCount = dataSize / internalElementSize;
+  if (dataSize != (elementCount * internalElementSize))
+    return AAFRESULT_INVALID_PARAM;
+  
+  // Get the external size of an element from the type.  
+  OMUInt32 externalElementSize = pElementType->PropValSize();
+  assert (0 < externalElementSize);
+  if (0 == externalElementSize)
+     return AAFRESULT_INVALID_PARAM; 
+  
+  // Set the position to the size of the stream.
+  _streamProperty->setPosition(_streamProperty->size());
+   
+  // Write the elements to the data stream.
+  OMUInt32 elementsWritten;
+  _streamProperty->writeTypedElements(pElementType,
+                                      externalElementSize,
+                                      pData,
+                                      elementCount,
+                                      elementsWritten);
+  
+  if (0 < dataSize && 0 == elementsWritten)
+    return AAFRESULT_CONTAINERWRITE; 
+    
+  assert(elementCount == elementsWritten); 
+  return AAFRESULT_SUCCESS;
+}
 
 
 
@@ -590,21 +415,6 @@ AAFRESULT ImplAAFStreamPropertyValue::Initialize (
     return AAFRESULT_INVALID_PARAM;
   const OMType *type = property->definition()->type();
   assert (type);
-//  ImplAAFTypeDefStream *streamType = const_cast<ImplAAFTypeDefStream *>
-//                          (dynamic_cast<const ImplAAFTypeDefStream *>(type));
-//  assert (streamType);
-//  if (NULL == streamType)
-//    return AAFRESULT_INVALID_PARAM;
-    
-  ImplAAFTypeDefSP streamElementType;
-  result = streamType->GetElementType(&streamElementType);
-  if (AAFRESULT_FAILED(result))
-    return result;
-    
-  aafUInt32 externalElementSize = streamElementType->PropValSize();
-  assert (0 != externalElementSize);
-  if (0 == externalElementSize)
-     return AAFRESULT_INVALID_PARAM;
   
   // The given property must be an OM stream property.  
   OMDataStreamProperty *streamProperty = dynamic_cast<OMDataStreamProperty *>(property);
@@ -624,13 +434,8 @@ AAFRESULT ImplAAFStreamPropertyValue::Initialize (
   // Save our initialized member data.
   SetType(const_cast<ImplAAFTypeDefStream *>(streamType));
   _streamProperty = streamProperty;
-  _streamElementType = streamElementType;
   _propertyContainer = propertyContainer;
   _propertyContainer->AcquireReference();
- 
-  _externalElementSize = externalElementSize;
-  if (_streamElementType->IsRegistered())
-    _internalElemeentSize = _streamElementType->NativeSize();
   
  
   // This instance is now fully initialized.
