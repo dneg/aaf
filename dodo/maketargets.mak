@@ -71,14 +71,16 @@ INCLUDE_DIR = ../ref-impl/include
 .dod.implh :
 	@ result=`cleartool ls -vob $(SRC_DIR)/impl/Impl$*.h` ; \
 	if test -z "$$result" ; then \
-		echo $(RM) -f $*.implh ; \
-		$(RM) -f $*.implh ; \
-		echo ./tool/$(DODO) -f macros/implh.mac < $*.dod > $*.tmp ; \
-		./tool/$(DODO) -f macros/implh.mac < $*.dod > $*.tmp ; \
-		echo mv $*.tmp $*.implh ; \
-		mv $*.tmp $*.implh ; \
-		echo cp $*.implh $(SRC_DIR)/impl/Impl$*.h ; \
-		cp $*.implh $(SRC_DIR)/impl/Impl$*.h ; \
+		if ! test -r $(SRC_DIR)/impl/Impl$*.h || test -w $(SRC_DIR)/impl/Impl$*.h ; then \
+			echo $(RM) -f $*.implh ; \
+			$(RM) -f $*.implh ; \
+			echo ./tool/$(DODO) -f macros/implh.mac < $*.dod > $*.tmp ; \
+			./tool/$(DODO) -f macros/implh.mac < $*.dod > $*.tmp ; \
+			echo mv $*.tmp $*.implh ; \
+			mv $*.tmp $*.implh ; \
+			echo cp $*.implh $(SRC_DIR)/impl/Impl$*.h ; \
+			cp $*.implh $(SRC_DIR)/impl/Impl$*.h ; \
+		fi ; \
 	else \
 		if echo $$result | grep "\[eclipsed\]" ; then \
 			echo Renaming old dodo file Impl$*.h to Impl$*.h.dodo ; \
@@ -90,14 +92,16 @@ INCLUDE_DIR = ../ref-impl/include
 .dod.implc :
 	@ result=`cleartool ls -vob $(SRC_DIR)/impl/Impl$*.cpp` ; \
 	if test -z "$$result" ; then \
-		echo $(RM) -f $*.implc ; \
-		$(RM) -f $*.implc ; \
-		echo ./tool/$(DODO) -f macros/implc.mac < $*.dod > $*.tmp ; \
-		./tool/$(DODO) -f macros/implc.mac < $*.dod > $*.tmp ; \
-		echo mv $*.tmp $*.implc ; \
-		mv $*.tmp $*.implc ; \
-		echo cp $*.implc $(SRC_DIR)/impl/Impl$*.cpp ; \
-		cp $*.implc $(SRC_DIR)/impl/Impl$*.cpp ; \
+		if ! test -r $(SRC_DIR)/impl/Impl$*.h || test -w $(SRC_DIR)/impl/Impl$*.cpp ; then \
+			echo $(RM) -f $*.implc ; \
+			$(RM) -f $*.implc ; \
+			echo ./tool/$(DODO) -f macros/implc.mac < $*.dod > $*.tmp ; \
+			./tool/$(DODO) -f macros/implc.mac < $*.dod > $*.tmp ; \
+			echo mv $*.tmp $*.implc ; \
+			mv $*.tmp $*.implc ; \
+			echo cp $*.implc $(SRC_DIR)/impl/Impl$*.cpp ; \
+			cp $*.implc $(SRC_DIR)/impl/Impl$*.cpp ; \
+		fi ; \
 	else \
 		if echo $$result | grep "\[eclipsed\]" ; then \
 			echo Renaming old dodo file Impl$*.cpp to Impl$*.cpp.dodo ; \
