@@ -44,13 +44,53 @@ AD_CLASS_UUID(B1A2137F, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
 
 AD_DEFAULT_UUID(B1A2137E, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
 AD_XCLASS_BEGIN(Concrete, StoredObject)
-AD_METHOD0(Initialize,
-     Initializes a newly allocated\, empty
-  // IAAFIdentification-supporting object.  This method must be called
-  // after allocation\, and before any other method can be called.
+AD_XMETHOD4(Initialize,
+			[in],
+			objPass,
+			aafCharacter_constptr,
+			companyName,
+			company name string,
+
+			[in],
+			objPass,
+			aafCharacter_constptr,
+			productName,
+			product name string,
+
+			[in],
+			objPass,
+			aafCharacter_constptr,
+			productVersionString,
+			product version string,
+
+			[in],
+			objPass,
+			aafUID_constref,
+			productID,
+			product identification,
+
+     Initializes a newly allocated IAAFIdentification-supporting
+  // object.  This method must be called after allocation\, and before
+  // any other method can be called.
+  //
+  // This method fills in the mandatory properties of the object.  The
+  // values of the following required properties are set based on the
+  // information given in arguments to this method:
+  // - companyName
+  // - productname
+  // - productVersionString
+  // - productID
+  // 
+  // The following mandatory properties will be filled in
+  // automatically by the reference implementation:
+  // - date
+  // - generationAUID
   //
   // Succeeds if:
   // - Initialize\(\) has not yet been called on this object.
+  // - companyName is a valid pointer
+  // - productName is a valid pointer
+  // - productVersionString is a valid pointer
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect\, it will return the first one
@@ -60,18 +100,21 @@ AD_METHOD0(Initialize,
   //   - succeeded.  \(This is the only code indicating success.\)
   //
   // AAFRESULT_ALREADY_INITIALIZED
-  //   - Initialize\(\) has already been called on this object.)
+  //   - Initialize\(\) has already been called on this object.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - companyName\, productName\, or productVersionString is NULL.)
 
 
-AD_STD_METHOD_STRING_MULTI_SET_GET_SIZE(CompanyName,
+AD_STD_METHOD_STRING_GET_AND_SIZE(CompanyName,
      the Company Name string property.)
 
 
-AD_STD_METHOD_STRING_MULTI_SET_GET_SIZE(ProductName,
+AD_STD_METHOD_STRING_GET_AND_SIZE(ProductName,
      the Product Name string property.)
 
 
-AD_STD_METHOD_STRING_MULTI_SET_GET_SIZE(ProductVersionString,
+AD_STD_METHOD_STRING_GET_AND_SIZE(ProductVersionString,
      the Product Version string property.)
 
 
@@ -84,8 +127,6 @@ AD_XMETHOD1(GetProductVersion,
      Gets the Product Version property associated with this
   // identification object and places it into *pVersion.
   // 
-  // NOTE! Stub only.   Implementation not yet added.
-  //
   // Succeeds if all of the following are true:
   // - the pVersion pointer is valid.
   // 
@@ -108,18 +149,13 @@ AD_XMETHOD1(GetProductVersion,
 AD_XMETHOD1(SetProductVersion,
 			[in],
 			objPass,
-			aafProductVersion_t *,
-			pVersion,
+			aafProductVersion_constref,
+			version,
 			The Product Version,
      Set the Product Version property to the value specified in
   // pVersion.  A copy is made of the data so the caller retains
   // ownership of the *pVersion struct and is responsible for
   // de-allocating it.
-  // 
-  // NOTE! Stub only.   Implementation not yet added.
-  //
-  // Succeeds if all of the following are true:
-  // - the pVersion pointer is valid.
   // 
   // If this method fails the Product Version property will not be
   // changed.
@@ -132,10 +168,7 @@ AD_XMETHOD1(SetProductVersion,
   //   - succeeded.  \(This is the only code indicating success.\)
   //
   // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\(\) called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pVersion arg is NULL.)
+  //   - This object has not yet had Initialize\(\) called on it.)
 
 
 AD_XMETHOD1(GetProductID,
@@ -150,8 +183,6 @@ AD_XMETHOD1(GetProductID,
   // the caller-allocated aafUID_t specified by the pProductID
   // argument.
   // 
-  // NOTE! Stub only.   Implementation not yet added.
-  //
   // Succeeds if all of the following are true:
   // - the pProductID pointer is valid.
   // 
@@ -171,30 +202,6 @@ AD_XMETHOD1(GetProductID,
   //   - pProductID arg is NULL.)
 
 
-AD_XMETHOD1(SetProductID,
-			[in\, ref],
-			objPass,
-			aafUID_constref,
-			productID,
-			The Product ID,
-     Set the Product ID property to the value specified in productID.
-  // 
-  // NOTE! Stub only.   Implementation not yet added.
-  //
-  // If this method fails the Product ID property will not be
-  // changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\(\) called on it.)
-
-
 AD_XMETHOD1(GetDate,
 			[out],
 			objPass,
@@ -206,8 +213,6 @@ AD_XMETHOD1(GetDate,
   // date-time stamp recorded in this object corresponds to the time
   // that this file was created or modified upon the occasion that
   // this object was added to the file.
-  //
-  // NOTE! Stub only.   Implementation not yet added.
   //
   // Note: This is a read-only property.
   // 
@@ -240,8 +245,6 @@ AD_XMETHOD1(GetRefImplVersion,
   // created this identification object and writes it into the
   // caller-allocated aafProductVersion_t specified by the pVersion
   // argument.
-  //
-  // NOTE! Stub only.   Implementation not yet added.
   //
   // Note: This is a read-only property.
   // 
@@ -290,8 +293,6 @@ AD_XMETHOD1(GetGeneration,
   // written into the caller-allocated aafUID_t specified by the
   // pGeneration argument.
   // 
-  // NOTE! Stub only.   Implementation not yet added.
-  //
   // Note: This is a read-only property.
   // 
   // Succeeds if all of the following are true:
