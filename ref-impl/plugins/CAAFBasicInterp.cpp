@@ -74,10 +74,11 @@ HRESULT STDMETHODCALLTYPE
 	IAAFDefObject	*obj = NULL;
 	aafUID_t		uid;
 	
-	//!!!Add error checking
+	if((dict == NULL) || (def == NULL))
+		return AAFRESULT_NULL_PARAM;
+	
 	XPROTECT()
 	{
-		//!!!Later, add in dataDefs supported & filedescriptor class
 		CHECK(dict->CreateInstance(&AUID_AAFInterpolationDefinition,
 							IID_IAAFInterpolationDef, 
 							(IUnknown **)&interpDef));
@@ -98,7 +99,6 @@ HRESULT STDMETHODCALLTYPE
 	return AAFRESULT_SUCCESS;
 }
 
-//!!!Need some real values for the descriptor
 static wchar_t *manufURL = L"http://www.avid.com";
 static wchar_t *downloadURL = L"ftp://ftp.avid.com/pub/";
 const aafUID_t MANUF_AVID_TECH = { 0xA6487F21, 0xE78F, 0x11d2, { 0x80, 0x9E, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } };
@@ -262,17 +262,33 @@ HRESULT STDMETHODCALLTYPE
 	AAFRational		timeA, timeB;
 	AAFRational		inputTime;
 	IAAFDefObject	*pDef = NULL;
-	aafUID_t		defID;
+	IAAFVaryingValue *pVaryVal = NULL;
+	IAAFInterpolationDef *pInterpDef = NULL;
+	aafUID_t		defID, interpID;
 	
 	if(pInputValue == NULL || pOutputValue == NULL)
 		return AAFRESULT_NULL_PARAM;
 	XPROTECT()
 	{
-		CHECK(_typeDef->QueryInterface(IID_IAAFDefObject, (void **)&pDef));
+		if(_parameter->QueryInterface(IID_IAAFVaryingValue, (void **)&pVaryVal) == AAFRESULT_SUCCESS)
+		{
+			CHECK(pVaryVal->GetInterpolationDefinition (&pInterpDef));
+ 			CHECK(pInterpDef->QueryInterface(IID_IAAFDefObject, (void **)&pDef));
+			pDef->GetAUID(&interpID);
+			pDef->Release();
+			pDef = NULL;
+			pInterpDef->Release();
+			pInterpDef = NULL;
+ 			pVaryVal->Release();
+			pVaryVal = NULL;
+		}
 		if(pInputValue->denominator == 0)
 			RAISE(AAFRESULT_ZERO_DIVIDE);
 		inputTime = (AAFRational)*pInputValue;
+		CHECK(_typeDef->QueryInterface(IID_IAAFDefObject, (void **)&pDef));
 		CHECK(pDef->GetAUID (&defID));
+		pDef->Release();
+		pDef = NULL;
 		if(EqualAUID(&defID, &kAAFExpLong))
 		{
 			if(bufSize < sizeof(aafUInt32))
@@ -281,36 +297,50 @@ HRESULT STDMETHODCALLTYPE
 			aafInt32	lowerBound, upperBound;
 			CHECK(FindBoundValues(*pInputValue, sizeof(aafInt32), &timeA, (aafMemPtr_t)&lowerBound,
 				&timeB, (aafMemPtr_t)&upperBound));
-			*result = (aafInt32)(((inputTime - timeA) / (timeB - timeA)) * (upperBound - lowerBound)) + lowerBound;
+			if(EqualAUID(&interpID, &LinearInterpolator))
+				*result = (aafInt32)(((inputTime - timeA) / (timeB - timeA)) * (upperBound - lowerBound)) + lowerBound;
+			else if(EqualAUID(&interpID, &ConstantInterpolator))
+				*result = lowerBound;
+			else
+				RAISE(AAFRESULT_INVALID_INTERPKIND);
+				
 			*bytesRead = sizeof(aafUInt32);
 		}
 		else if(EqualAUID(&defID, &kAAFExpRational))
 		{
 			aafRational_t	*result = (aafRational_t *)pOutputValue;
-			AAFRational		lowerBound, upperBound, subResult, timeDelta;
+			AAFRational		lowerBound, upperBound, subResult, timeDelta, num, denom;
 
 			if(bufSize < sizeof(aafUInt32))
 				RAISE(AAFRESULT_SMALLBUF);
 			CHECK(FindBoundValues(*pInputValue, sizeof(aafRational_t), &timeA, (aafMemPtr_t)&lowerBound,
 				&timeB, (aafMemPtr_t)&upperBound));
-//!!!			if(lowerBound.denominator == 0 || upperBound.denominator == 0)
-//				RAISE(AAFRESULT_ZERO_DIVIDE);
-			timeDelta = ((inputTime - timeA) / (timeB - timeA));
+			num = inputTime - timeA;
+			denom = timeB - timeA;
+			if(denom == 0)
+				RAISE(AAFRESULT_ZERO_DIVIDE);
+			timeDelta = num / denom;
 			subResult = upperBound - lowerBound;
-			// Find common denominator
-			//
-			*result = (aafRational_t)((timeDelta * subResult) + lowerBound);
+
+			if(EqualAUID(&interpID, &LinearInterpolator))
+				*result = (aafRational_t)((timeDelta * subResult) + lowerBound);
+			else if(EqualAUID(&interpID, &ConstantInterpolator))
+				*result = lowerBound;
+			else
+				RAISE(AAFRESULT_INVALID_INTERPKIND);
 			*bytesRead = sizeof(aafRational_t);
 		}
 		else
 			RAISE(AAFRESULT_BAD_TYPE);
-		pDef->Release();
-		pDef = NULL;
 	}
 	XEXCEPT
 	{
 		if(pDef)
 			pDef->Release();
+		if(pInterpDef)
+			pInterpDef->Release();
+ 		if(pVaryVal)
+			pVaryVal->Release();
 	}
 	XEND;
 	return(AAFRESULT_SUCCESS);
@@ -352,7 +382,8 @@ HRESULT CAAFBasicInterp::FindBoundValues(aafRational_t point,
 		{
 			aafUInt32	count;
 			CHECK(pConstValue->GetValue (valueSize, lowerBoundValue, &count));
-			///!!!Assert count == sizeof(val)
+			if(count != valueSize)
+				RAISE(AAFRESULT_WRONG_SIZE);
 			memcpy(upperBoundValue, lowerBoundValue, valueSize);
 			*lowerBoundTime = zero;
 			*upperBoundTime = zero;
@@ -374,8 +405,8 @@ HRESULT CAAFBasicInterp::FindBoundValues(aafRational_t point,
 				CHECK(testPoint->GetTime(&testRat));
 				testTime = (AAFRational)testRat;
 
-//!!!				if(testRat.denominator == 0)
-//					RAISE(AAFRESULT_ZERO_DIVIDE);
+				if(testRat.denominator == 0)
+					RAISE(AAFRESULT_ZERO_DIVIDE);
 				found = (testTime > inputTime);
 				if(!found)
 				{
@@ -391,13 +422,18 @@ HRESULT CAAFBasicInterp::FindBoundValues(aafRational_t point,
 			theEnum->Release();
 			theEnum = NULL;
 			
-			//!!!Assert if prevPoint and testPoint are both NULL
+			if((prevPoint== NULL) && (testPoint == NULL))
+				RAISE(AAFRESULT_INCONSISTANCY);
+			
 			if(prevPoint != NULL && testPoint != NULL)		// Real interpolation
 			{
-				//!!! Fail if prevPoint also is NULL
 				CHECK(prevPoint->GetValue (valueSize, lowerBoundValue, &count));
+				if(count != valueSize)
+					RAISE(AAFRESULT_WRONG_SIZE);
 				CHECK(testPoint->GetValue (valueSize, upperBoundValue, &count));
-				///!!!Assert count == sizeof(val)
+				if(count != valueSize)
+					RAISE(AAFRESULT_WRONG_SIZE);
+
 				*lowerBoundTime = prevTime;
 				*upperBoundTime = testTime;
 				testPoint->Release();
@@ -408,7 +444,9 @@ HRESULT CAAFBasicInterp::FindBoundValues(aafRational_t point,
 			else if(prevPoint == NULL)						// Off the begining
 			{
 				CHECK(testPoint->GetValue (valueSize, lowerBoundValue, &count));
-				///!!!Assert count == sizeof(val)
+				if(count != valueSize)
+					RAISE(AAFRESULT_WRONG_SIZE);
+
 				memcpy(upperBoundValue, lowerBoundValue, valueSize);
 				*lowerBoundTime = testTime;
 				*upperBoundTime = testTime;
@@ -418,7 +456,9 @@ HRESULT CAAFBasicInterp::FindBoundValues(aafRational_t point,
 			else											// Off of the end
 			{
 				CHECK(prevPoint->GetValue (valueSize, lowerBoundValue, &count));
-				///!!!Assert count == sizeof(val)
+				if(count != valueSize)
+					RAISE(AAFRESULT_WRONG_SIZE);
+
 				memcpy(upperBoundValue, lowerBoundValue, valueSize);
 				*lowerBoundTime = prevTime;
 				*upperBoundTime = prevTime;
@@ -428,7 +468,8 @@ HRESULT CAAFBasicInterp::FindBoundValues(aafRational_t point,
 			pVaryingValue->Release();
 			pVaryingValue = NULL;
 		}
-		// else assert bad parameter type!!!
+		else
+			RAISE(AAFRESULT_UNKNOWN_PARAMETER_CLASS);
 	}
 	XEXCEPT
 	{
