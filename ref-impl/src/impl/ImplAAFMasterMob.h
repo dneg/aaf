@@ -272,6 +272,10 @@ public:
   // Return this objects stored object class.
   virtual AAFRESULT STDMETHODCALLTYPE
 	GetObjectClass(aafUID_t * pClass);
+
+  // Internal to the SDK
+  virtual AAFRESULT ReconcileMobLength(void);
+
 };
 
 #endif // ! __ImplAAFMasterMob_h__
