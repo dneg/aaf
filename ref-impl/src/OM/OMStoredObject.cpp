@@ -421,6 +421,301 @@ void OMStoredObject::save(const OMDataStream& stream)
   ASSERT("Unimplemented code not reached", false);
 }
 
+  // @mfunc Restore the <c OMStoredObjectIdentification>
+  //        of this <c OMStoredObject> into <p id>.
+  //   @parm The <c OMStoredObjectIdentification> of this <c OMStoredObject>.
+void OMStoredObject::restore(OMStoredObjectIdentification& id)
+{
+  TRACE("OMStoredObject::restore");
+
+  getClass(_storage, id);
+}
+
+  // @mfunc Restore the <c OMPropertySet> <p properties> into
+  //        this <c OMStoredObject>.
+  //   @parm The <c OMPropertySet> to restore.
+void OMStoredObject::restore(OMPropertySet& properties)
+{
+  TRACE("OMStoredObject::restore");
+  PRECONDITION("Already open", _open);
+
+  size_t entries = _index->entries();
+
+  OMPropertyId propertyId;
+  OMStoredForm type;
+  OMUInt32 offset;
+  OMPropertySize length;
+  size_t context = 0;
+  for (size_t i = 0; i < entries; i++) {
+    _index->iterate(context, propertyId, type, offset, length);
+    OMProperty* p = properties.get(propertyId);
+    ASSERT("Valid property", p != 0);
+    p->restore(length);
+    ASSERT("Property is present", IMPLIES(p->isOptional(), p->isPresent()));
+  }
+#if !defined(OM_DISABLE_VALIDATE)
+  validate(&properties, _index);
+#endif
+  streamSetPosition(_properties, 0);
+  POSTCONDITION("At start of properties stream",
+                                       streamPosition(_properties) == 0);
+}
+
+  // @mfunc Restore the <c OMSimpleProperty> <p property> into this
+  //        <c OMStoredObject>.
+  //   @parm TBS
+  //   @parm TBS
+void OMStoredObject::restore(OMSimpleProperty& property, size_t externalSize)
+{
+  TRACE("OMStoredObject::restore");
+  ASSERT("Unimplemented code not reached", false);
+}
+
+  // @mfunc Restore the <c OMStrongReference> <p singleton> into this
+  //        <c OMStoredObject>.
+  //   @parm TBS
+  //   @parm TBS
+void OMStoredObject::restore(OMStrongReference& singleton, size_t externalSize)
+{
+  TRACE("OMStoredObject::restore");
+  ASSERT("Unimplemented code not reached", false);
+}
+
+  // @mfunc Restore the <c OMStrongReferenceVector> <p vector> into this
+  //        <c OMStoredObject>.
+  //   @parm TBS
+  //   @parm TBS
+void OMStoredObject::restore(OMStrongReferenceVector& vector,
+                             size_t externalSize)
+{
+  TRACE("OMStoredObject::restore");
+  ASSERT("Unimplemented code not reached", false);
+}
+
+  // @mfunc Restore the <c OMStrongReferenceSet> <p set> into this
+  //        <c OMStoredObject>.
+  //   @parm TBS
+  //   @parm TBS
+void OMStoredObject::restore(OMStrongReferenceSet& set, size_t externalSize)
+{
+  TRACE("OMStoredObject::restore");
+  ASSERT("Unimplemented code not reached", false);
+}
+
+  // @mfunc Restore the <c OMWeakReference> <p singleton> into this
+  //        <c OMStoredObject>.
+  //   @parm TBS
+  //   @parm TBS
+void OMStoredObject::restore(OMWeakReference& singleton, size_t externalSize)
+{
+  TRACE("OMStoredObject::restore");
+  ASSERT("Unimplemented code not reached", false);
+}
+
+  // @mfunc Restore the <c OMWeakReferenceVector> <p vector> into this
+  //        <c OMStoredObject>.
+  //   @parm TBS
+  //   @parm TBS
+void OMStoredObject::restore(OMWeakReferenceVector& vector,
+                             size_t externalSize)
+{
+  TRACE("OMStoredObject::restore");
+  ASSERT("Unimplemented code not reached", false);
+}
+
+  // @mfunc Restore the <c OMWeakReferenceSet> <p set> into this
+  //        <c OMStoredObject>.
+  //   @parm TBS
+  //   @parm TBS
+void OMStoredObject::restore(OMWeakReferenceSet& set, size_t externalSize)
+{
+  TRACE("OMStoredObject::restore");
+  ASSERT("Unimplemented code not reached", false);
+}
+
+  // @mfunc Restore the <c OMPropertyTable> in this <c OMStoredObject>.
+  //   @parm A pointer to the newly restored <c OMPropertyTable> by reference.
+void OMStoredObject::restore(OMPropertyTable*& table)
+{
+  TRACE("OMStoredObject::restore");
+
+  IStream* stream = openStream(L"referenced properties");
+
+  // byte order
+  OMByteOrder byteOrder;
+  readFromStream(stream, &byteOrder, sizeof(byteOrder));
+  bool reorderBytes;
+  if (byteOrder == hostByteOrder()) {
+    reorderBytes = false;
+  } else {
+    reorderBytes = true;
+  }
+
+  // count of paths
+  OMPropertyCount count;
+  readUInt16FromStream(stream, count, reorderBytes);
+  table = new OMPropertyTable();
+  ASSERT("Valid heap pointer", table != 0);
+
+  if (count > 0) {
+    // count of property ids
+    OMUInt32 totalPids;
+    readUInt32FromStream(stream, totalPids, reorderBytes);
+
+    // sequence of null terminated pids
+    OMPropertyId* buffer = new OMPropertyId[totalPids];
+    ASSERT("Valid heap pointer", buffer != 0);
+    OMUInt32 totalBytes = totalPids * sizeof(OMPropertyId);
+    readFromStream(stream, buffer, totalBytes);
+    OMPropertyId* externalName = buffer;
+    for (size_t i = 0; i < count; i++) {
+      size_t pidCount = lengthOfPropertyPath(externalName);
+      OMPropertyId* internalName = new OMPropertyId[pidCount + 1];
+      ASSERT("Valid heap pointer", internalName != 0);
+      if (reorderBytes) {
+        reorderUInt16Array(externalName, pidCount + 1);
+      }
+      internalizeUInt16Array(externalName, internalName, pidCount + 1);
+      table->insert(internalName);
+      delete [] internalName;
+      internalName = 0; // for BoundsChecker
+      externalName = externalName + pidCount + 1;
+    }
+    delete [] buffer;
+  }
+
+  closeStream(stream);
+}
+
+  // @mfunc Restore the <c OMDataStream> <p stream> into this
+  //        <c OMStoredObject>.
+  //   @parm TBS
+  //   @parm TBS
+void OMStoredObject::restore(OMDataStream& stream, size_t externalSize)
+{
+  TRACE("OMStoredObject::restore");
+  ASSERT("Unimplemented code not reached", false);
+}
+
+wchar_t* OMStoredObject::streamName(const wchar_t* propertyName,
+                                    OMPropertyId pid)
+{
+  return referenceName(propertyName, pid);
+}
+
+wchar_t* OMStoredObject::referenceName(const wchar_t* propertyName,
+                                       OMPropertyId pid)
+{
+  TRACE("OMStoredObject::referenceName");
+
+  wchar_t* result = new wchar_t[32];
+  ASSERT("Valid heap pointer", result != 0);
+
+  mangleName(propertyName, pid, result, 32);
+
+  return result;
+}
+
+wchar_t* OMStoredObject::collectionName(const wchar_t* propertyName,
+                                        OMPropertyId pid)
+{
+  TRACE("OMStoredObject::collectionName");
+
+  wchar_t* result = new wchar_t[32];
+  ASSERT("Valid heap pointer", result != 0);
+
+  mangleName(propertyName, pid, result, 32 - 10);
+
+  return result;
+}
+
+wchar_t* OMStoredObject::elementName(const wchar_t* propertyName,
+                                     OMPropertyId pid,
+                                     OMUInt32 localKey)
+{
+  TRACE("OMStoredObject::elementName");
+
+  wchar_t* result = new wchar_t[32];
+  ASSERT("Valid heap pointer", result != 0);
+
+  mangleName(propertyName, pid, result, 32 - 10);
+
+  size_t newSize = lengthOfWideString(result);
+  concatenateWideString(result, L"{", 1);
+  size_t keySize;
+  if (localKey != 0) {
+    keySize = stringSize(localKey);
+    toWideString(localKey, &result[newSize + 1], keySize);
+  } else {
+    keySize = 1;
+    concatenateWideString(result, L"0", 1);
+  }
+  concatenateWideString(result, L"}", 1);
+
+  return result;
+}
+
+  // @mfunc Constructor.
+  //   @parm The IStorage for the persistent representation of
+  //         this <c OMStoredObject>.
+OMStoredObject::OMStoredObject(IStorage* s)
+: _storage(s), _index(0), _properties(0),
+  _offset(0), _open(false), _mode(OMFile::readOnlyMode),
+  _byteOrder(hostByteOrder()), _reorderBytes(false)
+{
+  TRACE("OMStoredObject::OMStoredObject");
+}
+
+  // @mfunc Check that the <c OMPropertySet> <p propertySet> is
+  //        consistent with the <c OMStoredPropertySetIndex>
+  //        propertySetIndex.
+  //   @parm The <c OMPropertySet> to validate.
+  //   @parm The <c OMStoredPropertySetIndex> to validate.
+void OMStoredObject::validate(
+                        const OMPropertySet* propertySet,
+                        const OMStoredPropertySetIndex* propertySetIndex) const
+{
+  TRACE("OMStoredObject::validate");
+  PRECONDITION("Valid property set", propertySet != 0);
+  PRECONDITION("Valid property set index", propertySetIndex != 0);
+
+  OMPropertyId propertyId;
+  OMStoredForm type;
+  OMUInt32 offset;
+  OMPropertySize length;
+  size_t context;
+
+  // Check that all required properties are present.
+  //
+  OMPropertySetIterator iterator(*propertySet, OMBefore);
+  while (++iterator) {
+    OMProperty* p = iterator.property();
+    ASSERT("Valid property", p != 0);
+    propertyId = p->propertyId();
+    if (!p->isOptional()) {
+      bool found = propertySetIndex->find(propertyId, type, offset, length);
+      ASSERT("Required property present", found);
+      if (!found) {
+        // error required property missing
+      }
+    }
+  }
+
+  // Check that there are no spurious properties.
+  //
+  OMPropertyCount entries = propertySetIndex->entries();
+  context = 0;
+  for (size_t k = 0; k < entries; k++) {
+    propertySetIndex->iterate(context, propertyId, type, offset, length);
+    bool allowed = propertySet->isAllowed(propertyId);
+    ASSERT("Property allowed", allowed);
+    if (!allowed) {
+      // error illegal property for this object
+    }
+  }
+
+}
+
   // @mfunc  Save the <c OMStoredVectorIndex> <p vector> in this
   //         <c OMStoredObject>, the vector is named <p vectorName>.
   //   @parm The <c OMStoredVectorIndex> to save.
@@ -657,182 +952,6 @@ void OMStoredObject::saveStream(OMPropertyId pid,
   OMPropertySize size = byteCount + 1;
   _index->insert(pid, storedForm, _offset, size);
   _offset += size;
-}
-
-  // @mfunc Restore the <c OMStoredObjectIdentification>
-  //        of this <c OMStoredObject> into <p id>.
-  //   @parm The <c OMStoredObjectIdentification> of this <c OMStoredObject>.
-void OMStoredObject::restore(OMStoredObjectIdentification& id)
-{
-  TRACE("OMStoredObject::restore");
-
-  getClass(_storage, id);
-}
-
-  // @mfunc Restore the <c OMPropertySet> <p properties> into
-  //        this <c OMStoredObject>.
-  //   @parm The <c OMPropertySet> to restore.
-void OMStoredObject::restore(OMPropertySet& properties)
-{
-  TRACE("OMStoredObject::restore");
-  PRECONDITION("Already open", _open);
-
-  size_t entries = _index->entries();
-
-  OMPropertyId propertyId;
-  OMStoredForm type;
-  OMUInt32 offset;
-  OMPropertySize length;
-  size_t context = 0;
-  for (size_t i = 0; i < entries; i++) {
-    _index->iterate(context, propertyId, type, offset, length);
-    OMProperty* p = properties.get(propertyId);
-    ASSERT("Valid property", p != 0);
-    p->restore(length);
-    ASSERT("Property is present", IMPLIES(p->isOptional(), p->isPresent()));
-  }
-#if !defined(OM_DISABLE_VALIDATE)
-  validate(&properties, _index);
-#endif
-  streamSetPosition(_properties, 0);
-  POSTCONDITION("At start of properties stream",
-                                       streamPosition(_properties) == 0);
-}
-
-  // @mfunc Restore the <c OMSimpleProperty> <p property> into this
-  //        <c OMStoredObject>.
-  //   @parm TBS
-  //   @parm TBS
-void OMStoredObject::restore(OMSimpleProperty& property, size_t externalSize)
-{
-  TRACE("OMStoredObject::restore");
-  ASSERT("Unimplemented code not reached", false);
-}
-
-  // @mfunc Restore the <c OMStrongReference> <p singleton> into this
-  //        <c OMStoredObject>.
-  //   @parm TBS
-  //   @parm TBS
-void OMStoredObject::restore(OMStrongReference& singleton, size_t externalSize)
-{
-  TRACE("OMStoredObject::restore");
-  ASSERT("Unimplemented code not reached", false);
-}
-
-  // @mfunc Restore the <c OMStrongReferenceVector> <p vector> into this
-  //        <c OMStoredObject>.
-  //   @parm TBS
-  //   @parm TBS
-void OMStoredObject::restore(OMStrongReferenceVector& vector,
-                             size_t externalSize)
-{
-  TRACE("OMStoredObject::restore");
-  ASSERT("Unimplemented code not reached", false);
-}
-
-  // @mfunc Restore the <c OMStrongReferenceSet> <p set> into this
-  //        <c OMStoredObject>.
-  //   @parm TBS
-  //   @parm TBS
-void OMStoredObject::restore(OMStrongReferenceSet& set, size_t externalSize)
-{
-  TRACE("OMStoredObject::restore");
-  ASSERT("Unimplemented code not reached", false);
-}
-
-  // @mfunc Restore the <c OMWeakReference> <p singleton> into this
-  //        <c OMStoredObject>.
-  //   @parm TBS
-  //   @parm TBS
-void OMStoredObject::restore(OMWeakReference& singleton, size_t externalSize)
-{
-  TRACE("OMStoredObject::restore");
-  ASSERT("Unimplemented code not reached", false);
-}
-
-  // @mfunc Restore the <c OMWeakReferenceVector> <p vector> into this
-  //        <c OMStoredObject>.
-  //   @parm TBS
-  //   @parm TBS
-void OMStoredObject::restore(OMWeakReferenceVector& vector,
-                             size_t externalSize)
-{
-  TRACE("OMStoredObject::restore");
-  ASSERT("Unimplemented code not reached", false);
-}
-
-  // @mfunc Restore the <c OMWeakReferenceSet> <p set> into this
-  //        <c OMStoredObject>.
-  //   @parm TBS
-  //   @parm TBS
-void OMStoredObject::restore(OMWeakReferenceSet& set, size_t externalSize)
-{
-  TRACE("OMStoredObject::restore");
-  ASSERT("Unimplemented code not reached", false);
-}
-
-  // @mfunc Restore the <c OMPropertyTable> in this <c OMStoredObject>.
-  //   @parm A pointer to the newly restored <c OMPropertyTable> by reference.
-void OMStoredObject::restore(OMPropertyTable*& table)
-{
-  TRACE("OMStoredObject::restore");
-
-  IStream* stream = openStream(L"referenced properties");
-
-  // byte order
-  OMByteOrder byteOrder;
-  readFromStream(stream, &byteOrder, sizeof(byteOrder));
-  bool reorderBytes;
-  if (byteOrder == hostByteOrder()) {
-    reorderBytes = false;
-  } else {
-    reorderBytes = true;
-  }
-
-  // count of paths
-  OMPropertyCount count;
-  readUInt16FromStream(stream, count, reorderBytes);
-  table = new OMPropertyTable();
-  ASSERT("Valid heap pointer", table != 0);
-
-  if (count > 0) {
-    // count of property ids
-    OMUInt32 totalPids;
-    readUInt32FromStream(stream, totalPids, reorderBytes);
-
-    // sequence of null terminated pids
-    OMPropertyId* buffer = new OMPropertyId[totalPids];
-    ASSERT("Valid heap pointer", buffer != 0);
-    OMUInt32 totalBytes = totalPids * sizeof(OMPropertyId);
-    readFromStream(stream, buffer, totalBytes);
-    OMPropertyId* externalName = buffer;
-    for (size_t i = 0; i < count; i++) {
-      size_t pidCount = lengthOfPropertyPath(externalName);
-      OMPropertyId* internalName = new OMPropertyId[pidCount + 1];
-      ASSERT("Valid heap pointer", internalName != 0);
-      if (reorderBytes) {
-        reorderUInt16Array(externalName, pidCount + 1);
-      }
-      internalizeUInt16Array(externalName, internalName, pidCount + 1);
-      table->insert(internalName);
-      delete [] internalName;
-      internalName = 0; // for BoundsChecker
-      externalName = externalName + pidCount + 1;
-    }
-    delete [] buffer;
-  }
-
-  closeStream(stream);
-}
-
-  // @mfunc Restore the <c OMDataStream> <p stream> into this
-  //        <c OMStoredObject>.
-  //   @parm TBS
-  //   @parm TBS
-void OMStoredObject::restore(OMDataStream& stream, size_t externalSize)
-{
-  TRACE("OMStoredObject::restore");
-  ASSERT("Unimplemented code not reached", false);
 }
 
   // @mfunc Restore the vector named <p vectorName> into this
@@ -1578,64 +1697,6 @@ void OMStoredObject::mangleName(const wchar_t* clearName,
   toWideString(pid, &mangledName[newSize+1], stringSize(pid));
 }
 
-wchar_t* OMStoredObject::streamName(const wchar_t* propertyName,
-                                    OMPropertyId pid)
-{
-  return referenceName(propertyName, pid);
-}
-
-wchar_t* OMStoredObject::referenceName(const wchar_t* propertyName,
-                                       OMPropertyId pid)
-{
-  TRACE("OMStoredObject::referenceName");
-
-  wchar_t* result = new wchar_t[32];
-  ASSERT("Valid heap pointer", result != 0);
-
-  mangleName(propertyName, pid, result, 32);
-
-  return result;
-}
-
-wchar_t* OMStoredObject::collectionName(const wchar_t* propertyName,
-                                        OMPropertyId pid)
-{
-  TRACE("OMStoredObject::collectionName");
-
-  wchar_t* result = new wchar_t[32];
-  ASSERT("Valid heap pointer", result != 0);
-
-  mangleName(propertyName, pid, result, 32 - 10);
-
-  return result;
-}
-
-wchar_t* OMStoredObject::elementName(const wchar_t* propertyName,
-                                     OMPropertyId pid,
-                                     OMUInt32 localKey)
-{
-  TRACE("OMStoredObject::elementName");
-
-  wchar_t* result = new wchar_t[32];
-  ASSERT("Valid heap pointer", result != 0);
-
-  mangleName(propertyName, pid, result, 32 - 10);
-
-  size_t newSize = lengthOfWideString(result);
-  concatenateWideString(result, L"{", 1);
-  size_t keySize;
-  if (localKey != 0) {
-    keySize = stringSize(localKey);
-    toWideString(localKey, &result[newSize + 1], keySize);
-  } else {
-    keySize = 1;
-    concatenateWideString(result, L"0", 1);
-  }
-  concatenateWideString(result, L"}", 1);
-
-  return result;
-}
-
 void OMStoredObject::writeName(OMPropertyId pid,
                                OMStoredForm storedForm,
                                const wchar_t* name)
@@ -1734,67 +1795,6 @@ void OMStoredObject::externalizeUInt16Array(const OMUInt16* internalArray,
   for (size_t i = 0; i < elementCount; i++) {
     externalArray[i] = internalArray[i];
   }
-}
-
-  // @mfunc Constructor.
-  //   @parm The IStorage for the persistent representation of
-  //         this <c OMStoredObject>.
-OMStoredObject::OMStoredObject(IStorage* s)
-: _storage(s), _index(0), _properties(0),
-  _offset(0), _open(false), _mode(OMFile::readOnlyMode),
-  _byteOrder(hostByteOrder()), _reorderBytes(false)
-{
-  TRACE("OMStoredObject::OMStoredObject");
-}
-
-  // @mfunc Check that the <c OMPropertySet> <p propertySet> is
-  //        consistent with the <c OMStoredPropertySetIndex>
-  //        propertySetIndex.
-  //   @parm The <c OMPropertySet> to validate.
-  //   @parm The <c OMStoredPropertySetIndex> to validate.
-void OMStoredObject::validate(
-                        const OMPropertySet* propertySet,
-                        const OMStoredPropertySetIndex* propertySetIndex) const
-{
-  TRACE("OMStoredObject::validate");
-  PRECONDITION("Valid property set", propertySet != 0);
-  PRECONDITION("Valid property set index", propertySetIndex != 0);
-
-  OMPropertyId propertyId;
-  OMStoredForm type;
-  OMUInt32 offset;
-  OMPropertySize length;
-  size_t context;
-
-  // Check that all required properties are present.
-  //
-  OMPropertySetIterator iterator(*propertySet, OMBefore);
-  while (++iterator) {
-    OMProperty* p = iterator.property();
-    ASSERT("Valid property", p != 0);
-    propertyId = p->propertyId();
-    if (!p->isOptional()) {
-      bool found = propertySetIndex->find(propertyId, type, offset, length);
-      ASSERT("Required property present", found);
-      if (!found) {
-        // error required property missing
-      }
-    }
-  }
-
-  // Check that there are no spurious properties.
-  //
-  OMPropertyCount entries = propertySetIndex->entries();
-  context = 0;
-  for (size_t k = 0; k < entries; k++) {
-    propertySetIndex->iterate(context, propertyId, type, offset, length);
-    bool allowed = propertySet->isAllowed(propertyId);
-    ASSERT("Property allowed", allowed);
-    if (!allowed) {
-      // error illegal property for this object
-    }
-  }
-
 }
 
 OMStoredObject* OMStoredObject::openFile(const wchar_t* fileName,
