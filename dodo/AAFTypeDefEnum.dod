@@ -14,56 +14,36 @@ AD_IDL(//
 //
 AD_STD_COMMENT_IFC_HEADER
 AD_STD_COMMENT_IFC_STUB)
-
-AD_CPP_QUOTE(#if 0)
-typedef struct _aafTypeDefEnumElementPair_t
-{
-  [string, size_is(nameSize)] wchar_t * pName;
-  IAAFPropertyValue * pValue;
-  aafUInt32 nameSize;
-} aafTypeDefEnumElementPair_t;
-AD_CPP_QUOTE(#endif)
-AD_CPP_QUOTE(//)
-AD_CPP_QUOTE(typedef struct _aafTypeDefEnumElementPair_t)
-AD_CPP_QUOTE({)
-AD_CPP_QUOTE(\  wchar_t * pName;)
-AD_CPP_QUOTE(\  IAAFPropertyValue * pValue;)
-AD_CPP_QUOTE(\  aafUInt32 nameSize;)
-AD_CPP_QUOTE(} aafTypeDefEnumElementPair_t;)
-
+AD_FORWARD_DECLARATION(AAFPropertyValue)
 AD_CLASS_UUID(307e9e62, dcb2, 11d2, 84, 29, 00, 60, 08, 32, ac, b8)
 
 AD_DEFAULT_UUID(307e9e64, dcb2, 11d2, 84, 29, 00, 60, 08, 32, ac, b8)
 AD_XCLASS_BEGIN(Concrete, StoredObject)
-AD_X2METHOD4(Initialize,
+AD_XMETHOD4(Initialize,
 			 [in],
 			 objPass,
 			 aafUID_t *,
 			 pID,
 			 auid to be used to identify this type,
-			 ,
 
 			 [in],
 			 objIn,
 			 AAFTypeDef,
 			 pType,
 			 Type of values in this enumeration,
-			 ,
 
 			 [in\, size_is\(numElems\)],
-			 objInArrayCustom,
-			 aafTypeDefEnumElementPair_t **,
+			 objPass,
+			 aafMemPtr_t,
 			 pElements,
        array of element name/value pairs to be represented in this
 	// enumerated type,
-			 objInArray,
 
 			 [in],
 			 objPass,
 			 aafUInt32,
 			 numElems,
 			 number of elements in pElements array,
-			 ,
 
      Initializes this type def to be identified by the given guid\, to
   // be implemented as the given data type\, and to contain the given
