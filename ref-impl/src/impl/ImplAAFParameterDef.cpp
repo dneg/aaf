@@ -8,15 +8,6 @@
 \***********************************************/
 
 
-#ifndef __ImplAAFReferenceValue_h__
-#include "ImplAAFReferenceValue.h"
-#endif
-
-#ifndef __ImplEnumAAFReferenceValues_h__
-#include "ImplEnumAAFReferenceValues.h"
-#endif
-
-
 #include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
 
@@ -30,25 +21,15 @@
 
 ImplAAFParameterDef::ImplAAFParameterDef ()
 : _typeDef(			PID_ParameterDefinition_Type,					"Type"),
-  _refVal(			PID_ParameterDefinition_ReferenceValues,		"ReferenceValues"),
   _displayUnits(	PID_ParameterDefinition_DisplayUnits,			"DisplayUnits")
 {
 	_persistentProperties.put(_typeDef.address());
-	_persistentProperties.put(_refVal.address());
 	_persistentProperties.put(_displayUnits.address());
 }
 
 
 ImplAAFParameterDef::~ImplAAFParameterDef ()
 {
-	size_t size = _refVal.getSize();
-	for (size_t i = 0; i < size; i++) {
-		ImplAAFReferenceValue *pRefVal = _refVal.setValueAt(0, i);
-
-		if (pRefVal) {
-			pRefVal->ReleaseReference();
-		}
-	}
 }
 
 
@@ -118,24 +99,6 @@ AAFRESULT STDMETHODCALLTYPE
 
 	return(AAFRESULT_SUCCESS); 
 }
-
-
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFParameterDef::AddReferenceValue (
-      ImplAAFReferenceValue * /*pReferenceValue*/)
-{
-  return AAFRESULT_NOT_IMPLEMENTED;
-}
-
-
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFParameterDef::GetRefValues (
-      ImplEnumAAFReferenceValues ** /*ppEnum*/)
-{
-  return AAFRESULT_NOT_IMPLEMENTED;
-}
-
-
 
 OMDEFINE_STORABLE(ImplAAFParameterDef, AUID_AAFParameterDef);
 

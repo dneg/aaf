@@ -39,7 +39,6 @@
 #include <string.h>
 #include "AAFResult.h"
 #include "aafErr.h"
-#include "ImplAAFReferenceValue.h"
 
 extern "C" const aafClassID_t CLSID_EnumAAFOperationDefs;
 extern "C" const aafClassID_t CLSID_EnumAAFParameterDefs;
