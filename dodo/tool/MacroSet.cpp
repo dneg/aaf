@@ -20,6 +20,8 @@
 #include <string.h>
 
 
+template class Vector<MacroDef>;
+
 void MacroSet::Append
 (const MacroDef & src)
 {
