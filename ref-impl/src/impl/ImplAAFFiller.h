@@ -65,7 +65,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     Initialize
 	    (// @parm [in] Data Definition Object
-         aafUID_t * pDataDef,
+         const aafUID_t & dataDef,
 
 		 // @parm [in] Length Property Value
 		 aafLength_t  length);
