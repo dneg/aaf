@@ -71,6 +71,13 @@ depend.mk : aafobjects.mk
 			echo $$base.exp : $$import >> depend.tmp ; \
 		done ; \
 	  done
+	@ for base in $(AAFCOMINTERFACESONLY) ; do \
+		echo $$base.all... ; \
+		echo "" >> depend.tmp ; \
+		echo $$base.all : $$base.fidl $$base.exp >> depend.tmp ; \
+		echo $$base.fidl : macros/fidl.mac macros/base.mac >> depend.tmp ; \
+		echo $$base.exp : macros/exp.mac macros/base.mac >> depend.tmp ; \
+      done
 	@ echo "" >> depend.tmp
 	for file in $(HUMAN_TYPED_IMPL) ; do \
 		grep -v $$file\.impl depend.tmp > depend.tmp2 ; \
