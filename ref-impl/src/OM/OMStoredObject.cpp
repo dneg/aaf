@@ -37,11 +37,13 @@ static void convert(char* cName, size_t length, const wchar_t* name);
 
 static void convert(char* cName, size_t length, const char* name);
 
+static void convert(wchar_t* wcName, size_t length, const wchar_t* name);
+
 static void formatError(DWORD errorCode);
 
 static int check(HRESULT resultCode);
 
-static int checkFile(HRESULT resultCode, const char* fileName);
+static int checkFile(HRESULT resultCode, const wchar_t* fileName);
 
 static int checkStream(HRESULT resultCode, const char* streamName);
 
@@ -51,6 +53,7 @@ static void printError(const char* prefix, const char* type);
 
 static void printName(const char* name);
 
+static void printName(const wchar_t* name);
 
 OMStoredObject::OMStoredObject(IStorage* s)
 : _storage(s), _index(0), _indexStream(0), _propertiesStream(0),
@@ -62,7 +65,7 @@ OMStoredObject::~OMStoredObject(void)
 {
 }
 
-OMStoredObject* OMStoredObject::openRead(const char* fileName)
+OMStoredObject* OMStoredObject::openRead(const wchar_t* fileName)
 {
   OMStoredObject* newStoredObject = OMStoredObject::open(fileName,
                                                          readOnlyMode);
@@ -71,7 +74,7 @@ OMStoredObject* OMStoredObject::openRead(const char* fileName)
   return newStoredObject;
 }
 
-OMStoredObject* OMStoredObject::openModify(const char* fileName)
+OMStoredObject* OMStoredObject::openModify(const wchar_t* fileName)
 {
   OMStoredObject* newStoredObject = OMStoredObject::open(fileName,
                                                          modifyMode);
@@ -80,7 +83,7 @@ OMStoredObject* OMStoredObject::openModify(const char* fileName)
   return newStoredObject;
 }
 
-OMStoredObject* OMStoredObject::createModify(const char* fileName)
+OMStoredObject* OMStoredObject::createModify(const wchar_t* fileName)
 {
   OMStoredObject* newStoredObject = OMStoredObject::create(fileName);
   newStoredObject->create();
@@ -234,11 +237,11 @@ void OMStoredObject::restore(OMPropertySet& properties)
   
 }
 
-OMStoredObject* OMStoredObject::open(const char* fileName,
+OMStoredObject* OMStoredObject::open(const wchar_t* fileName,
                                      const OMAccessMode mode)
 {
   TRACE("OMStoredObject::open");
-  PRECONDITION("Valid file name", validString(fileName));
+  PRECONDITION("Valid file name", validWideString(fileName));
   PRECONDITION("Valid mode", (mode == modifyMode) || (mode == readOnlyMode));
 
   DWORD openMode;
@@ -268,10 +271,10 @@ OMStoredObject* OMStoredObject::open(const char* fileName,
   return newStoredObject;
 }
 
-OMStoredObject* OMStoredObject::create(const char* fileName)
+OMStoredObject* OMStoredObject::create(const wchar_t* fileName)
 {
   TRACE("OMStoredObject::create");
-  PRECONDITION("Valid file name", validString(fileName));
+  PRECONDITION("Valid file name", validWideString(fileName));
 
   OMCHAR omFileName[256];
   convert(omFileName, 256, fileName);
@@ -733,8 +736,26 @@ static void convert(char* cName, size_t length, const char* name)
   PRECONDITION("Valid output buffer size", length > 0);
 
   size_t sourceLength = strlen(name);
-  if (sourceLength < length - 1) {
-    strncpy(cName, name, length);
+  if (sourceLength + 1 < length) {
+    strncpy(cName, name, sourceLength + 1);
+  } else {
+    cerr << getProgramName()
+      << ": Error : Conversion failed."
+      << endl;
+    exit(FAILURE);  
+  }
+}
+
+static void convert(wchar_t* wcName, size_t length, const wchar_t* name)
+{
+  TRACE("convert");
+  PRECONDITION("Valid input name", validWideString(name));
+  PRECONDITION("Valid output buffer", wcName != 0);
+  PRECONDITION("Valid output buffer size", length > 0);
+
+  size_t sourceLength = wideStringLength(name);
+  if (sourceLength + 1 < length) {
+    wideStringCopy(wcName, name, sourceLength + 1);
   } else {
     cerr << getProgramName()
       << ": Error : Conversion failed."
@@ -790,10 +811,10 @@ static int check(HRESULT resultCode)
   }
 }
 
-static int checkFile(HRESULT resultCode, const char* fileName)
+static int checkFile(HRESULT resultCode, const wchar_t* fileName)
 {
   TRACE("checkFile");
-  PRECONDITION("Valid file name", validString(fileName));
+  PRECONDITION("Valid file name", validWideString(fileName));
 
   ASSERT("Valid program name", validString(getProgramName()));
 
@@ -851,4 +872,10 @@ static void printError(const char* prefix, const char* type)
 static void printName(const char* name)
 {
   cerr << "\"" << name << "\": ";
+}
+
+static void printName(const wchar_t* name)
+{
+  TRACE("printName");
+  ASSERT("Code not reached", false);
 }

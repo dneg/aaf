@@ -17,8 +17,6 @@
 #include "ImplAAFSession.h"
 #endif
 
-#include "OMUtilities.h"
-
 #include "ImplAAFObjectCreation.h"
 #include "ImplAAFFile.h"
 #include "AAFResult.h"
@@ -54,7 +52,6 @@ ImplAAFSession::CreateFile (aafWChar *  pwFilePath,
 							ImplAAFFile ** ppFile)
 {
   ImplAAFRoot	*pRoot;
-  char *  pbFilePath;
 
   if (! pwFilePath)
 	{
@@ -73,13 +70,7 @@ ImplAAFSession::CreateFile (aafWChar *  pwFilePath,
 	}
 
   *ppFile = static_cast<ImplAAFFile*>(pRoot);
-
-  assert (pwFilePath);
-  pbFilePath = new char [wcslen (pwFilePath) + 1];
-  assert (pbFilePath);
-  OMUwc2sb(pbFilePath, pwFilePath);
-  (*ppFile)->Create((unsigned char *) pbFilePath, this, rev);
-  delete[] pbFilePath;
+  (*ppFile)->Create(pwFilePath, this, rev);
 
   return(AAFRESULT_SUCCESS);
 }
@@ -93,7 +84,6 @@ ImplAAFSession::OpenReadFile(aafWChar *  pwFilePath,
 							 ImplAAFFile ** ppFile)
 {
   ImplAAFRoot	*pRoot;
-  char *  pbFilePath;
 
   if (! pwFilePath)
 	{
@@ -111,13 +101,8 @@ ImplAAFSession::OpenReadFile(aafWChar *  pwFilePath,
 	  return(0x80004005L);	// TODO: change this to AAFRESULT_FAILED
 	}
 
-  assert (pwFilePath);
   *ppFile = static_cast<ImplAAFFile*>(pRoot);
-  pbFilePath = new char [wcslen (pwFilePath) + 1];
-  assert (pbFilePath);
-  OMUwc2sb(pbFilePath, pwFilePath);
-  (*ppFile)->OpenRead((unsigned char *) pbFilePath, this);
-  delete[] pbFilePath;
+  (*ppFile)->OpenRead(pwFilePath, this);
 
   return(AAFRESULT_SUCCESS);
 }
@@ -132,7 +117,6 @@ ImplAAFSession::OpenModifyFile (aafWChar *  pwFilePath,
 {
   AAFRESULT hr;
   ImplAAFRoot	*pRoot;
-  char *  pbFilePath;
 
   if (! pwFilePath)
 	{
@@ -151,12 +135,7 @@ ImplAAFSession::OpenModifyFile (aafWChar *  pwFilePath,
 	}
 
   *ppFile = static_cast<ImplAAFFile*>(pRoot);
-  assert (pwFilePath);
-  pbFilePath = new char [wcslen (pwFilePath) + 1];
-  assert (pbFilePath);
-  OMUwc2sb(pbFilePath, pwFilePath);
-  hr = (*ppFile)->OpenModify((unsigned char *) pbFilePath, this);
-  delete[] pbFilePath;
+  hr = (*ppFile)->OpenModify(pwFilePath, this);
 
   return(hr);
 }
@@ -198,20 +177,6 @@ ImplAAFSession::SetDefaultIdentification (aafProductIdentification_t * pIdent)
 	}
 
   _defaultIdent = pIdent;
-
-  if ((_defaultIdent != 0) && (_defaultIdent->productName != 0))
-	{
-	  size_t size = wcslen (_defaultIdent->productName) + 1;
-	  char * pbProgramName = new char [size];
-	  assert (pbProgramName);
-	  OMUwc2sb(pbProgramName, _defaultIdent->productName);
-	  setProgramName(pbProgramName);
-	  delete[] pbProgramName;
-	}
-  else
-	{
-	  setProgramName("Unknown");
-	}
 
   return(AAFRESULT_SUCCESS);
 }

@@ -3,6 +3,8 @@
 
 #include "OMPortability.h"
 
+#include <stddef.h>
+
 #define SUCCESS (1)
 #define FAILURE (2)
 
@@ -68,5 +70,7 @@ void reportAssertionFailure(char* kind,
 #endif
 
 bool validString(const char* string);
+
+bool validWideString(const wchar_t* string);
 
 #endif

@@ -4,6 +4,8 @@
 #include "OMPortability.h"
 #include "OMTypes.h"
 
+#include <stddef.h>
+
 struct IStorage;
 struct IStream;
 
@@ -19,9 +21,9 @@ public:
 
   ~OMStoredObject(void);
 
-  static OMStoredObject* openRead(const char* fileName);
-  static OMStoredObject* openModify(const char* fileName);
-  static OMStoredObject* createModify(const char* fileName);
+  static OMStoredObject* openRead(const wchar_t* fileName);
+  static OMStoredObject* openModify(const wchar_t* fileName);
+  static OMStoredObject* createModify(const wchar_t* fileName);
 
   OMStoredObject* openStoragePath(const char* storagePathName);
 
@@ -38,8 +40,9 @@ public:
   OMStoredVectorIndex* restore(const char* vectorName);
 private:
 
-  static OMStoredObject* open(const char* fileName, const OMAccessMode mode);
-  static OMStoredObject* create(const char* fileName);
+  static OMStoredObject* open(const wchar_t* fileName,
+                              const OMAccessMode mode);
+  static OMStoredObject* create(const wchar_t* fileName);
 
   void create(void);
   void open(const OMAccessMode mode);
