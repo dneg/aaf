@@ -50,10 +50,10 @@ public:
   virtual ~OMContainerProperty(void);
 
     // @cmember Insert <p object> into this <c OMContainerProperty>.
-  virtual void insert(const OMObject* object) = 0;
+  virtual void insertObject(const OMObject* object) = 0;
 
     // @cmember Does this <c OMContainerProperty> contain <p object> ?
-  virtual bool containsValue(const OMObject* object) const = 0;
+  virtual bool containsObject(const OMObject* object) const = 0;
 
     // @cmember The number of <p OMObject>s in this
     //          <c OMContainerProperty>. <mf OMContainerProperty::count>
@@ -62,7 +62,7 @@ public:
   virtual size_t count(void) const = 0;
 
     // @cmember Remove <p object> from this <c OMContainerProperty>.
-  virtual void removeValue(const OMObject* object) = 0;
+  virtual void removeObject(const OMObject* object) = 0;
 
     // @cmember Create an <c OMReferenceContainerIterator> over this
     //          <c OMContainerProperty>.
