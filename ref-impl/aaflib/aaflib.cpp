@@ -599,6 +599,92 @@ STDAPI AAFGetPluginManager (
 
 
 
+STDAPI
+AAFGetLibraryVersion
+  (aafProductVersion_t *  pVersion)
+{
+  HRESULT hr = S_OK;
+  AAFDLL *pAAFDLL = NULL;
+
+  // Get the dll wrapper
+  hr = LoadIfNecessary(&pAAFDLL);
+  if (FAILED(hr))
+    return hr;
+  
+  try
+  {
+    // Attempt to call the dll's exported function...
+    hr = pAAFDLL->GetLibraryVersion
+	  (pVersion);
+  }
+  catch (...)
+  {
+    // Return a reasonable exception code.
+    //
+    hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+  }
+
+  return hr;
+}
+
+STDAPI AAFGetLibraryPathNameBufLen
+  (aafUInt32 *  pBufSize)
+{
+  HRESULT hr = S_OK;
+  AAFDLL *pAAFDLL = NULL;
+
+  // Get the dll wrapper
+  hr = LoadIfNecessary(&pAAFDLL);
+  if (FAILED(hr))
+    return hr;
+  
+  try
+  {
+    // Attempt to call the dll's exported function...
+    hr = pAAFDLL->GetLibraryPathNameBufLen
+	  (pBufSize);
+  }
+  catch (...)
+  {
+    // Return a reasonable exception code.
+    //
+    hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+  }
+
+  return hr;
+}
+
+STDAPI AAFGetLibraryPathName
+  (aafCharacter *  pLibraryPathName,
+   aafUInt32  bufSize)
+{
+  HRESULT hr = S_OK;
+  AAFDLL *pAAFDLL = NULL;
+
+  // Get the dll wrapper
+  hr = LoadIfNecessary(&pAAFDLL);
+  if (FAILED(hr))
+    return hr;
+  
+  try
+  {
+    // Attempt to call the dll's exported function...
+    hr = pAAFDLL->GetLibraryPathName
+	  (pLibraryPathName,
+       bufSize);
+  }
+  catch (...)
+  {
+    // Return a reasonable exception code.
+    //
+    hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+  }
+
+  return hr;
+}
+
+
+
 //***********************************************************
 //
 // Constructor for the base class
@@ -729,6 +815,18 @@ HRESULT AAFDLL::Load(const char *dllname)
   					   (AAFSymbolAddr *)&_pfnCreateRawStorageCachedDisk);
   // Ignore failure
 
+  rc = ::AAFFindSymbol(_libHandle,
+					   "AAFGetLibraryVersion",
+  					   (AAFSymbolAddr *)&_pfnGetLibraryVersion);
+
+  rc = ::AAFFindSymbol(_libHandle,
+					   "AAFGetLibraryPathNameBufLen",
+  					   (AAFSymbolAddr *)&_pfnGetLibraryPathNameBufLen);
+
+  rc = ::AAFFindSymbol(_libHandle,
+					   "AAFGetLibraryPathName",
+  					   (AAFSymbolAddr *)&_pfnGetLibraryPathName);
+
   return AAFRESULT_SUCCESS;
 }
 
@@ -774,6 +872,9 @@ void AAFDLL::ClearEntrypoints()
   _pfnCreateRawStorageDisk = 0;
   _pfnCreateRawStorageCachedDisk = 0;
   _pfnCreateAAFFileOnRawStorage = 0;
+  _pfnGetLibraryVersion = 0;
+  _pfnGetLibraryPathNameBufLen = 0;
+  _pfnGetLibraryPathName = 0;
 }
 
 
@@ -945,6 +1046,41 @@ HRESULT AAFDLL::CreateAAFFileOnRawStorage (
 	 modeFlags,
 	 pIdent,
 	 ppNewFile);
+}
+
+HRESULT AAFDLL::GetLibraryVersion
+  (aafProductVersion_t *  pVersion)
+{
+  // This callback did not exist earlier toolkits.
+  if (NULL == _pfnGetLibraryVersion)
+    return AAFRESULT_DLL_SYMBOL_NOT_FOUND;
+    
+  return _pfnGetLibraryVersion
+	(pVersion);
+}
+
+HRESULT AAFDLL::GetLibraryPathNameBufLen
+  (aafUInt32 *  pBufSize)
+{
+  // This callback did not exist earlier toolkits.
+  if (NULL == _pfnGetLibraryPathNameBufLen)
+    return AAFRESULT_DLL_SYMBOL_NOT_FOUND;
+    
+  return _pfnGetLibraryPathNameBufLen
+	(pBufSize);
+}
+
+HRESULT AAFDLL::GetLibraryPathName
+  (aafCharacter *  pLibraryPathName,
+   aafUInt32  bufSize)
+{
+  // This callback did not exist earlier toolkits.
+  if (NULL == _pfnGetLibraryPathName)
+    return AAFRESULT_DLL_SYMBOL_NOT_FOUND;
+    
+  return _pfnGetLibraryPathName
+	(pLibraryPathName,
+     bufSize);
 }
 
 #else

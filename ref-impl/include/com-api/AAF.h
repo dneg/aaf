@@ -38979,6 +38979,14 @@ STDAPI AAFCreateAAFFileOnRawStorage (
           aafProductIdentification_constptr  pIdent,
           IAAFFile ** ppNewFile);
 
+STDAPI AAFGetLibraryVersion (aafProductVersion_t *  pVersion);
+
+STDAPI AAFGetLibraryPathNameBufLen (aafUInt32 *  pBufSize);
+
+STDAPI AAFGetLibraryPathName (
+          aafCharacter *  pLibraryPathName,
+          aafUInt32  bufSize);
+
 
 
 extern RPC_IF_HANDLE __MIDL_itf_AAF_0222_v0_0_c_ifspec;

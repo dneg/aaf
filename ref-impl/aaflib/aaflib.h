@@ -110,6 +110,16 @@ typedef STDAPICALLTYPE HRESULT (* LPFNAAFCREATEAAFFILEONRAWSTORAGE)(
 	aafProductIdentification_constptr  pIdent,
 	IAAFFile ** ppNewFile);
 
+typedef STDAPICALLTYPE HRESULT (* LPFNAAFGETLIBRARYVERSION)(
+    aafProductVersion_t *  pVersion);
+
+typedef STDAPICALLTYPE HRESULT (* LPFNAAFGETLIBRARYPATHNAMEBUFLEN)(
+    aafUInt32 *  pBufSize);
+
+typedef STDAPICALLTYPE HRESULT (* LPFNAAFGETLIBRARYPATHNAME)(
+    aafCharacter *  pLibraryPathName,
+    aafUInt32  bufSize);
+
 #else
 //
 // MS Visual C++ compiler
@@ -182,6 +192,16 @@ typedef HRESULT (STDAPICALLTYPE * LPFNAAFCREATEAAFFILEONRAWSTORAGE)(
 	aafUInt32  modeFlags,
 	aafProductIdentification_constptr  pIdent,
 	IAAFFile ** ppNewFile);
+
+typedef HRESULT (STDAPICALLTYPE * LPFNAAFGETLIBRARYVERSION)(
+    aafProductVersion_t *  pVersion);
+
+typedef HRESULT (STDAPICALLTYPE * LPFNAAFGETLIBRARYPATHNAMEBUFLEN)(
+    aafUInt32 *  pBufSize);
+
+typedef HRESULT (STDAPICALLTYPE * LPFNAAFGETLIBRARYPATHNAME)(
+    aafCharacter *  pLibraryPathName,
+    aafUInt32  bufSize);
 
 #endif
 
@@ -297,6 +317,16 @@ public:
 	aafProductIdentification_constptr  pIdent,
 	IAAFFile ** ppNewFile);
 
+  HRESULT GetLibraryVersion (
+    aafProductVersion_t *  pVersion);
+
+  HRESULT GetLibraryPathNameBufLen (
+    aafUInt32 *  pBufSize);
+
+  HRESULT GetLibraryPathName (
+    aafCharacter *  pLibraryPathName,
+    aafUInt32  bufSize);
+
 protected:
   //
   // The single instance of the dll wrapper.
@@ -324,6 +354,9 @@ protected:
   LPFNAAFCREATERAWSTORAGEDISK      _pfnCreateRawStorageDisk;
   LPFNAAFCREATERAWSTORAGECACHEDDISK _pfnCreateRawStorageCachedDisk;
   LPFNAAFCREATEAAFFILEONRAWSTORAGE _pfnCreateAAFFileOnRawStorage;
+  LPFNAAFGETLIBRARYVERSION         _pfnGetLibraryVersion;
+  LPFNAAFGETLIBRARYPATHNAMEBUFLEN  _pfnGetLibraryPathNameBufLen;
+  LPFNAAFGETLIBRARYPATHNAME        _pfnGetLibraryPathName;
 };
 
 #endif /* __aaflib_h__ */
