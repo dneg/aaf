@@ -93,14 +93,19 @@ ResetPath ()
 
 PrintSeparator ()
 {
+	TEXT=$1
 	print "\n\n"
 	print "****************************************************************************"
+	print "$TEXT"
 	print "****************************************************************************\n\n"
 }
 
-RunExamples ()
+RunMainScript ()
 {
 	Target=$1
+	print "\n\nTarget:  $Target"
+	SetPath "$Target"
+
 
 	if [ PRINTPATH -eq 1 ]; then 
 		print "PATH = $PATH" 
@@ -116,81 +121,70 @@ RunExamples ()
 		cp ../../Test/Com/ComModTestAAF/Laser.wav .
 		ComModAAF
 
-		PrintSeparator
 		cd ..
 	fi
-
-	if [ TIMDUMP -eq 1 ] || [ ALL -eq 1 ]; then
-		cd DevUtils
-		cp ../Test/AAFSequenceTest.aaf .
-		dump AAFSequenceTest.aaf
-
-		PrintSeparator
-		cd ..
-	fi
-
-
-	cd Examples/com
-	if [ CLIENTTEST -eq 1 ] || [ ALL -eq 1 ]; then
-		COMClientAAF
-		PrintSeparator
-	fi
-
-	if [ CUTSTEST -eq 1 ] || [ ALL -eq 1 ]; then
-		ComCutsTestAAF
-		PrintSeparator
-	fi
-
-	if [ ESSENCETEST -eq 1 ] || [ ALL -eq 1 ]; then
-		cp ../../../examples/com-api/ComEssenceDataTest/Laser.wav .
-		ComEssenceDataTest
-		PrintSeparator
-	fi
-	
-	if [ PROPDIRECTDUMP -eq 1 ] || [ ALL -eq 1 ]; then
-		ComPropDirectDump EssenceTest.aaf
-		PrintSeparator
-	fi
-
-	if [ AAFINFO -eq 1 ] || [ ALL -eq 1 ]; then
-		ComAAFInfo EssenceTest.aaf
-		PrintSeparator
-	fi
-	cd ../..
-
 
 	if [ AAFOMFTEST -eq 1 ] || [ ALL -eq 1 ]; then
+		PrintSeparator "AafOmf Convertor Test 1 -  AAF -> OMF"
 		cd Utilities
 		cp ../Test/AAFSequenceTest.aaf .
 		AafOmf -omf AAFSequenceTest.aaf
 
-		PrintSeparator
-
+		PrintSeparator "AafOmf Convertor Test 2 -  OMF -> AAF"
 		cp D:/views/Complx2x.omf .
 		AafOmf Complx2x.omf
 		cd ..
+	fi
 
-		PrintSeparator
+	cd Examples/com
+	if [ CLIENTTEST -eq 1 ] || [ ALL -eq 1 ]; then
+		PrintSeparator "Running COMClientAAF"
+		COMClientAAF
+	fi
+
+	if [ CUTSTEST -eq 1 ] || [ ALL -eq 1 ]; then
+		PrintSeparator "Running ComCutsTestAAF"
+		ComCutsTestAAF
+	fi
+
+	if [ ESSENCETEST -eq 1 ] || [ ALL -eq 1 ]; then
+		cp ../../../examples/com-api/ComEssenceDataTest/Laser.wav .
+		PrintSeparator "Running ComEssenceDataTest"
+		ComEssenceDataTest
+	fi
+
+	if [ AAFINFO -eq 1 ] || [ ALL -eq 1 ]; then
+		PrintSeparator "Running ComAAFInfo on EssenceTest.aaf"
+		ComAAFInfo EssenceTest.aaf
+	fi
+	
+	if [ PROPDIRECTDUMP -eq 1 ] || [ ALL -eq 1 ]; then
+		PrintSeparator "Running ComPropDirectDump on EssenceTest.aaf"
+		ComPropDirectDump EssenceTest.aaf
+	fi
+	cd ../..
+
+	if [ TIMDUMP -eq 1 ] || [ ALL -eq 1 ]; then
+		PrintSeparator "Running dump on AAFSequenceTest.aaf"
+		cd DevUtils
+		cp ../Test/AAFSequenceTest.aaf .
+		dump AAFSequenceTest.aaf
+
+		cd ..
 	fi
 
 	cd $START_DIR
+
+	ResetPath
 }
 
 
 
 if [ CHECK_DEBUG -eq 1 ]; then
-	SetPath "Debug"
-
-	RunExamples "Debug"
-
-	ResetPath
+	RunMainScript "Debug"
 fi
 
 
 if [ CHECK_RELEASE -eq 1 ]; then
-	SetPath "Release"
-
-	RunExamples "Release"
-
-	ResetPath
+	RunMainScript "Release"
 fi
