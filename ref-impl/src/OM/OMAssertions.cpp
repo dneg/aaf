@@ -1,5 +1,16 @@
 #include "OMAssertions.h"
 
+class OMAssertionViolation {
+public:
+
+  OMAssertionViolation() {}
+
+  ~OMAssertionViolation() {}
+
+  OMAssertionViolation(const OMAssertionViolation&) {}
+
+};
+
 #if defined (OM_ENABLE_DEBUG)
 
 #include <string.h>
@@ -32,10 +43,12 @@ void reportAssertionViolation(char* assertionKind,
   printStackTrace(cerr);
 #endif
 
-#if defined(OM_ENABLE_ABORT)
+#if defined(OM_EXIT_ON_ASSERT)
+  exit(EXIT_FAILURE);
+#elif defined(OM_ABORT_ON_ASSERT)
   abort();
 #else
-  exit(EXIT_FAILURE);
+  throw OMAssertionViolation();
 #endif
 }
 

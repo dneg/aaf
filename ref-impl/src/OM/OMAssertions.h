@@ -6,6 +6,11 @@
 
 #include <stddef.h>
 
+  // @class OMAssertionViolation | Object Manager assertion
+  //        violation. An instance of this opaque class is thrown
+  //        when an assertion violation occurs.
+class OMAssertionViolation;
+
 #if defined (OM_ENABLE_DEBUG)
 
 #include "OMDataTypes.h"
