@@ -491,7 +491,7 @@ size_t totalProperties;
 size_t totalStreamBytes;
 size_t totalFileBytes;
 
-// Validity chacking
+// Validity checking
 //
 size_t warningCount = 0;
 
@@ -1083,6 +1083,7 @@ void convert(char* cName, size_t length, const wchar_t* name)
     fatalError("convert", "Conversion failed.");
   }
 }
+
 #else
 
 // For use when wchar_t and OMCharacter are incompatible.
