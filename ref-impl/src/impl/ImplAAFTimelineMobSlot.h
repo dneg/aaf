@@ -78,29 +78,10 @@ public:
     SetOrigin
         (aafPosition_t  value);  //@parm [in] Origin property value
 
-
-  //****************
-  // GetSlotID()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    GetSlotID
-        (aafSlotID_t *  result);  //@parm [out,retval] Slot id of the Mob Slot
-
-
-  // Override from AAFMobSlot
-  virtual AAFRESULT STDMETHODCALLTYPE
-    IsATrack (/*[out,retval]*/ aafBool *  retval);
-
-
 public:
   // Declare the module test method. The implementation of the will be be
   // in /test/ImplAAFTimelineMobSlotTest.cpp.
 	static AAFRESULT test();
-
-	AAFRESULT GetTrackDesc(aafInt32 nameSize,		// IN - Size of name buffer
-							aafWChar *name,			// IN/OUT preallocated buffer to return name
-							aafPosition_t *origin,	// OUT - Origin property value
-							aafSlotID_t *trackID);	// OUT - ttrack id property value
 
 protected:
 	OMFixedSizeProperty<aafRational_t>	_editRate;
