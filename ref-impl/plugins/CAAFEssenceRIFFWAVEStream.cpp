@@ -65,7 +65,7 @@ typedef long _off_t;
 #define _OFF_T_DEFINED
 
 #define fseeko(fp, off, whence) fsetpos(fp, &off)
-off_t ftello (FILE* fp)
+static off_t ftello (FILE* fp)
 {
 off_t position;
 
