@@ -1,0 +1,650 @@
+cpp_quote("//=---------------------------------------------------------------------=")
+cpp_quote("//")
+cpp_quote("// This file was GENERATED for the AAF SDK")
+cpp_quote("//")
+cpp_quote("// The contents of this file are subject to the AAF SDK Public")
+cpp_quote("// Source License Agreement (the \"License\"); You may not use this file")
+cpp_quote("// except in compliance with the License.  The License is available in")
+cpp_quote("// AAFSDKPSL.TXT, or you may obtain a copy of the License from the AAF")
+cpp_quote("// Association or its successor.")
+cpp_quote("//")
+cpp_quote("// Software distributed under the License is distributed on an \"AS IS\"")
+cpp_quote("// basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.  See")
+cpp_quote("// the License for the specific language governing rights and limitations")
+cpp_quote("// under the License.")
+cpp_quote("//")
+cpp_quote("// The Original Code of this file is Copyright 1998-2001, Licensor of the")
+cpp_quote("// AAF Association.")
+cpp_quote("//")
+cpp_quote("// The Initial Developer of the Original Code of this file and the")
+cpp_quote("// Licensor of the AAF Association is Avid Technology.")
+cpp_quote("// All rights reserved.")
+cpp_quote("//")
+cpp_quote("//=---------------------------------------------------------------------=")
+
+cpp_quote("//=--------------------------------------------------------------------------=")
+cpp_quote("// Private AAF Interfaces.")
+cpp_quote("//=--------------------------------------------------------------------------=")
+cpp_quote("//")
+
+
+import "AAF.idl";
+
+interface IAAFRoot;
+interface IAAFHTMLClip;
+interface IAAFHTMLDescriptor;
+interface IAAFMetaDictionary;
+interface IAAFPropValData;
+interface IAAFStreamPropertyValue;
+interface IAAFStrongRefArrayValue;
+interface IAAFStrongRefSetValue;
+interface IAAFStrongRefValue;
+interface IAAFTextClip;
+interface IAAFWeakRefArrayValue;
+interface IAAFWeakRefSetValue;
+interface IAAFWeakRefValue;
+interface IEnumAAFStorablePropVals;
+
+
+// ************************
+//
+// Interface IAAFRoot
+//
+// ************************
+
+
+[
+    object,
+    uuid(7C3712C2-390D-11D2-841B-00600832ACB8),
+    helpstring("IAAFRoot Interface"),
+    pointer_default(unique)
+]
+interface IAAFRoot : IUnknown
+{
+
+  //
+  // Return private implementation pointer for delegation.
+  // NOTE: This is NOT the pointer to the COM object's implementation
+  // object!
+  //
+  [local] HRESULT GetImplRep([out, retval] void **);
+
+  //
+  // Intialize class extensions. This method is called after the
+  // contained Impl object has been completely initialized. This
+  // allows the aggregated extension object access to all of the
+  // interfaces and property data of its controlling unknown.
+  //
+  [local] HRESULT InitializeExtension(REFCLSID clsid);
+}
+
+
+
+// ************************
+//
+// Interface IAAFHTMLClip
+//
+// ************************
+//
+// An HTMLClip is a reference to HTML text essence.
+//
+// Typically an HTMLClip is in a StaticMobSlot and defines a section
+// of HTML text that is associated with the essence data in a parallel
+// TimelineMobSlot. The duration, accessed through IAAFComponent,
+// defines the extent of the association with the parallel Mob Slot.
+//
+
+
+//
+// Objects that implement IAAFHTMLClip also implement the following interfaces:
+//  - IAAFTextClip
+//  - IAAFSourceReference
+//  - IAAFSegment
+//  - IAAFComponent
+//  - IAAFObject
+
+[
+    object,
+    uuid(e684d784-b935-11d2-bf9d-00104bc9156d),
+    helpstring("IAAFHTMLClip Interface"),
+    pointer_default(unique)
+]
+interface IAAFHTMLClip : IUnknown
+{
+
+  //***********************************************************
+  //
+  // SetBeginAnchor()
+  //
+  // Sets the Begin Anchor string property.
+  //
+  // Set the BeginAnchor property to the value specified in
+  // pBeginAnchor.  A copy is made of the data so the caller
+  // retains ownership of the *pBeginAnchor buffer and is
+  // responsible for de-allocating it.  There is no pre-set limit to
+  // the length of the name, other than available system memory or
+  // disk space.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pBeginAnchor pointer is valid.
+  // 
+  // If this method fails the BeginAnchor property will not be
+  // changed.
+  // 
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pBeginAnchor arg is NULL.
+  // 
+  HRESULT SetBeginAnchor (
+    // buffer from which BeginAnchor is to be read
+    [in, string] aafCharacter_constptr  pBeginAnchor);
+
+
+  //***********************************************************
+  //
+  // GetBeginAnchor()
+  //
+  // Gets the Begin Anchor string property.
+  // 
+  // Writes the BeginAnchor property, with a trailing null
+  // character, into the pBeginAnchor buffer.  The
+  // buffer is allocated by the caller.  The size of the buffer is
+  // given by bufSize.  If the BeginAnchor property has not yet
+  // been set, a zero-length string will be written (that is,
+  // only the trailing null character). 
+  // 
+  // Caller may call GetBeginAnchorBufLen() to determine the
+  // required buffer size.
+  // 
+  // If this method fails nothing will be written to
+  // *pBeginAnchor.
+  // 
+  // Succeeds if:
+  // - The pBeginAnchor pointer is valid.
+  // - bufSize indicates that the buffer is large enough to hold
+  //   BeginAnchor.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pBeginAnchor arg is NULL.
+  //
+  // AAFRESULT_SMALL_BUF
+  //   - bufSize indicates that the allocated buffer is not large
+  //     enough to hold BeginAnchor.
+  // 
+  HRESULT GetBeginAnchor (
+    // buffer into which BeginAnchor is to be written
+    [out, string, size_is(bufSize)] aafCharacter *  pBeginAnchor,
+
+    // size of *pBeginAnchor buffer in bytes
+    [in] aafUInt32  bufSize);
+
+
+  //***********************************************************
+  //
+  // GetBeginAnchorBufLen()
+  //
+  // Returns size of buffer (in bytes) required for GetBeginAnchor().
+  // 
+  // Succeeds if:
+  // - The pBufSize pointer is valid.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pBufSize arg is NULL.
+  // 
+  HRESULT GetBeginAnchorBufLen (
+    // size of required buffer, in bytes
+    [out] aafUInt32 *  pBufSize);
+
+
+  //***********************************************************
+  //
+  // SetEndAnchor()
+  //
+  // Sets the End Anchor string property.
+  //
+  // Set the EndAnchor property to the value specified in
+  // pEndAnchor.  A copy is made of the data so the caller
+  // retains ownership of the *pEndAnchor buffer and is
+  // responsible for de-allocating it.  There is no pre-set limit to
+  // the length of the name, other than available system memory or
+  // disk space.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pEndAnchor pointer is valid.
+  // 
+  // If this method fails the EndAnchor property will not be
+  // changed.
+  // 
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pEndAnchor arg is NULL.
+  // 
+  HRESULT SetEndAnchor (
+    // buffer from which EndAnchor is to be read
+    [in, string] aafCharacter_constptr  pEndAnchor);
+
+
+  //***********************************************************
+  //
+  // GetEndAnchor()
+  //
+  // Gets the End Anchor string property.
+  // 
+  // Writes the EndAnchor property, with a trailing null
+  // character, into the pEndAnchor buffer.  The
+  // buffer is allocated by the caller.  The size of the buffer is
+  // given by bufSize.  If the EndAnchor property has not yet
+  // been set, a zero-length string will be written (that is,
+  // only the trailing null character). 
+  // 
+  // Caller may call GetEndAnchorBufLen() to determine the
+  // required buffer size.
+  // 
+  // If this method fails nothing will be written to
+  // *pEndAnchor.
+  // 
+  // Succeeds if:
+  // - The pEndAnchor pointer is valid.
+  // - bufSize indicates that the buffer is large enough to hold
+  //   EndAnchor.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pEndAnchor arg is NULL.
+  //
+  // AAFRESULT_SMALL_BUF
+  //   - bufSize indicates that the allocated buffer is not large
+  //     enough to hold EndAnchor.
+  // 
+  HRESULT GetEndAnchor (
+    // buffer into which EndAnchor is to be written
+    [out, string, size_is(bufSize)] aafCharacter *  pEndAnchor,
+
+    // size of *pEndAnchor buffer in bytes
+    [in] aafUInt32  bufSize);
+
+
+  //***********************************************************
+  //
+  // GetEndAnchorBufLen()
+  //
+  // Returns size of buffer (in bytes) required for GetEndAnchor().
+  // 
+  // Succeeds if:
+  // - The pBufSize pointer is valid.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pBufSize arg is NULL.
+  // 
+  HRESULT GetEndAnchorBufLen (
+    // size of required buffer, in bytes
+    [out] aafUInt32 *  pBufSize);
+}
+
+
+
+// ************************
+//
+// Interface IAAFHTMLDescriptor
+//
+// ************************
+
+//
+// The IAAFHTMLDescriptor specifies that the file source mob 
+// describes an HTML essence data object, which contains text
+// formatted according to the HTML standard.
+//
+
+
+//
+// Objects that implement IAAFHTMLDescriptor also implement the following interfaces:
+//  - IAAFFileDescriptor
+//  - IAAFEssenceDescriptor
+//  - IAAFObject
+
+[
+    object,
+    uuid(e684d770-b935-11d2-bf9d-00104bc9156d),
+    helpstring("IAAFHTMLDescriptor Interface"),
+    pointer_default(unique)
+]
+interface IAAFHTMLDescriptor : IUnknown
+{
+
+
+}
+
+
+
+// ************************
+//
+// Interface IAAFMetaDictionary
+//
+// ************************
+
+
+[
+    object,
+    uuid(e1085eeb-0cc3-11d4-8014-00104bc9156d),
+    helpstring("IAAFMetaDictionary Interface"),
+    pointer_default(unique)
+]
+interface IAAFMetaDictionary : IUnknown
+{
+
+}
+
+
+
+// ************************
+//
+// Interface IAAFPropValData
+//
+// ************************
+//
+// Stub interface for an implementation class with no separate
+// published interface.
+
+
+//
+// Objects that implement IAAFPropValData also implement the following interfaces:
+//  - IAAFPropertyValue
+
+[
+    object,
+    uuid(106bb6e2-f0c1-11d2-842c-00600832acb8),
+    helpstring("IAAFPropValData Interface"),
+    pointer_default(unique)
+]
+interface IAAFPropValData : IUnknown
+{
+
+}
+
+
+
+// ************************
+//
+// Interface IAAFStreamPropertyValue
+//
+// ************************
+//
+// Stub interface for an implementation class with no separate
+// published interface.
+
+
+//
+// Objects that implement IAAFStreamPropertyValue also implement the following interfaces:
+//  - IAAFPropertyValue
+
+[
+    object,
+    uuid(F06bb6e2-f0c1-11d2-842c-00600832acb8),
+    helpstring("IAAFStreamPropertyValue Interface"),
+    pointer_default(unique)
+]
+interface IAAFStreamPropertyValue : IUnknown
+{
+
+}
+
+
+
+// ************************
+//
+// Interface IAAFStrongRefArrayValue
+//
+// ************************
+//
+// Stub interface for an implementation class with no separate
+// published interface.
+
+
+//
+// Objects that implement IAAFStrongRefArrayValue also implement the following interfaces:
+//  - IAAFPropertyValue
+
+[
+    object,
+    uuid(f2973a82-6895-11d4-a812-8f71e157e3f3),
+    helpstring("IAAFStrongRefArrayValue Interface"),
+    pointer_default(unique)
+]
+interface IAAFStrongRefArrayValue : IUnknown
+{
+
+}
+
+
+
+// ************************
+//
+// Interface IAAFStrongRefSetValue
+//
+// ************************
+//
+// Stub interface for an implementation class with no separate
+// published interface.
+
+
+//
+// Objects that implement IAAFStrongRefSetValue also implement the following interfaces:
+//  - IAAFPropertyValue
+
+[
+    object,
+    uuid(84537782-6897-11d4-a812-8f71e157e3f3),
+    helpstring("IAAFStrongRefSetValue Interface"),
+    pointer_default(unique)
+]
+interface IAAFStrongRefSetValue : IUnknown
+{
+
+}
+
+
+
+// ************************
+//
+// Interface IAAFStrongRefValue
+//
+// ************************
+//
+// Stub interface for an implementation class with no separate
+// published interface.
+
+
+//
+// Objects that implement IAAFStrongRefValue also implement the following interfaces:
+//  - IAAFPropertyValue
+
+[
+    object,
+    uuid(4142d582-6892-11d4-a812-8f71e157e3f3),
+    helpstring("IAAFStrongRefValue Interface"),
+    pointer_default(unique)
+]
+interface IAAFStrongRefValue : IUnknown
+{
+
+}
+
+
+
+// ************************
+//
+// Interface IAAFTextClip
+//
+// ************************
+
+//
+// A TextClip is an abstract class of SourceReference. Implementations
+// of TextClip reference a Mob Slot containing text essence data.
+//
+
+
+//
+// Objects that implement IAAFTextClip also implement the following interfaces:
+//  - IAAFSourceReference
+//  - IAAFSegment
+//  - IAAFComponent
+//  - IAAFObject
+
+[
+    object,
+    uuid(e684d786-b935-11d2-bf9d-00104bc9156d),
+    helpstring("IAAFTextClip Interface"),
+    pointer_default(unique)
+]
+interface IAAFTextClip : IUnknown
+{
+
+
+}
+
+
+
+// ************************
+//
+// Interface IAAFWeakRefArrayValue
+//
+// ************************
+//
+// Stub interface for an implementation class with no separate
+// published interface.
+
+
+//
+// Objects that implement IAAFWeakRefArrayValue also implement the following interfaces:
+//  - IAAFPropertyValue
+
+[
+    object,
+    uuid(02fbe502-6897-11d4-a812-8f71e157e3e3),
+    helpstring("IAAFWeakRefArrayValue Interface"),
+    pointer_default(unique)
+]
+interface IAAFWeakRefArrayValue : IUnknown
+{
+
+}
+
+
+
+// ************************
+//
+// Interface IAAFWeakRefSetValue
+//
+// ************************
+//
+// Stub interface for an implementation class with no separate
+// published interface.
+
+
+//
+// Objects that implement IAAFWeakRefSetValue also implement the following interfaces:
+//  - IAAFPropertyValue
+
+[
+    object,
+    uuid(b1078f02-6897-11d4-a812-8f71e157e3e3),
+    helpstring("IAAFWeakRefSetValue Interface"),
+    pointer_default(unique)
+]
+interface IAAFWeakRefSetValue : IUnknown
+{
+
+}
+
+
+
+// ************************
+//
+// Interface IAAFWeakRefValue
+//
+// ************************
+//
+// Stub interface for an implementation class with no separate
+// published interface.
+
+
+//
+// Objects that implement IAAFWeakRefValue also implement the following interfaces:
+//  - IAAFPropertyValue
+
+[
+    object,
+    uuid(32a8ee02-6893-11d4-a812-8f71e157e3e3),
+    helpstring("IAAFWeakRefValue Interface"),
+    pointer_default(unique)
+]
+interface IAAFWeakRefValue : IUnknown
+{
+
+}
+
+
+
+// ************************
+//
+// Interface IEnumAAFStorablePropVals
+//
+// ************************
+
+
+//
+// Objects that implement IEnumAAFStorablePropVals also implement the following interfaces:
+//  - IEnumAAFPropertyValues
+
+[
+    object,
+    uuid(5096c202-831b-11d4-a812-8a70df17ed53),
+    helpstring("IEnumAAFStorablePropVals Interface"),
+    pointer_default(unique)
+]
+interface IEnumAAFStorablePropVals : IUnknown
+{
+
+}
+

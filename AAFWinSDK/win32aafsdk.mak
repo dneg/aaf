@@ -1,4 +1,26 @@
 ###############################################################################
+#
+# The contents of this file are subject to the AAF SDK Public
+# Source License Agreement (the "License"); You may not use this file
+# except in compliance with the License.  The License is available in
+# AAFSDKPSL.TXT, or you may obtain a copy of the License from the AAF
+# Association or its successor.
+# 
+# Software distributed under the License is distributed on an "AS IS"
+# basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.  See
+# the License for the specific language governing rights and limitations
+# under the License.
+# 
+# The Original Code of this file is Copyright 1998-2001, Licensor of the
+# AAF Association.
+# 
+# The Initial Developer of the Original Code of this file and the
+# Licensor of the AAF Association is Avid Technology.
+# All rights reserved.
+#
+###############################################################################
+
+###############################################################################
 #                                                                             #
 # File: win32aafsdk.mak                                                       #
 #                                                                             #
@@ -40,8 +62,6 @@
 #      if one exists it will be deleted.                                      #
 #                                                                             #
 #                                                                             #
-# Copyright (c) 1998 Avid Technology, Inc.                                    #
-#                                                                             #
 ###############################################################################
 # History:                                                                    #
 # 08-APR-1999 : created by transdel avid                                      #
@@ -65,6 +85,7 @@
 # 20-OCT-2000 : transdel added new platform type include                      #
 # 16-FEB-2001 : transdel added missing AAFExtEnum.h and AAFFileSignatures.h   #
 # 07-MAR-2001 : tjb copy OMF toolkit DLL once only.                           #
+# 19-MAR-2001 : akharkev Use update.cmd when copying over checked in files.   #
 ###############################################################################
 
 
@@ -88,6 +109,8 @@ CP_OPTS = /v /b
 RM = del
 RM_OPTS = /f /q
 
+
+UPDATE = update.cmd
 
 #
 # The path to the AAF-toolkit
@@ -457,123 +480,123 @@ $(AAFSDK_LIB) :
 # Dependency and build rules for the Header targets.
 #
 $(AAFSDK_INCLUDE)\AAFClassDefUIDs.h : $(TOOLKIT_INCLUDE)\AAFClassDefUIDs.h
-	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFClassDefUIDs.h $(AAFSDK_INCLUDE)\
+    $(UPDATE) $(TOOLKIT_INCLUDE)\AAFClassDefUIDs.h $@
 
 $(AAFSDK_INCLUDE)\AAFCodecDefs.h : $(TOOLKIT_INCLUDE)\AAFCodecDefs.h
-	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFCodecDefs.h $(AAFSDK_INCLUDE)\
+	$(UPDATE) $(TOOLKIT_INCLUDE)\AAFCodecDefs.h $@
 
 $(AAFSDK_INCLUDE)\AAFCOMPlatform.h : $(TOOLKIT_INCLUDE)\AAFCOMPlatform.h
-	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFCOMPlatform.h $(AAFSDK_INCLUDE)\
+	$(UPDATE) $(TOOLKIT_INCLUDE)\AAFCOMPlatform.h $@
 
 $(AAFSDK_INCLUDE)\AAFCOMPlatformTypes.h : $(TOOLKIT_INCLUDE)\AAFCOMPlatformTypes.h
-	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFCOMPlatformTypes.h $(AAFSDK_INCLUDE)\
+	$(UPDATE) $(TOOLKIT_INCLUDE)\AAFCOMPlatformTypes.h $@
 
 $(AAFSDK_INCLUDE)\AAFContainerDefs.h : $(TOOLKIT_INCLUDE)\AAFContainerDefs.h
-	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFContainerDefs.h $(AAFSDK_INCLUDE)\
+	$(UPDATE) $(TOOLKIT_INCLUDE)\AAFContainerDefs.h $@
 
 $(AAFSDK_INCLUDE)\AAFDataDefs.h : $(TOOLKIT_INCLUDE)\AAFDataDefs.h
-	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFDataDefs.h $(AAFSDK_INCLUDE)\
+	$(UPDATE) $(TOOLKIT_INCLUDE)\AAFDataDefs.h $@
 
 $(AAFSDK_INCLUDE)\AAFDefUIDs.h : $(TOOLKIT_INCLUDE)\AAFDefUIDs.h
-	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFDefUIDs.h $(AAFSDK_INCLUDE)\
+	$(UPDATE) $(TOOLKIT_INCLUDE)\AAFDefUIDs.h $@
 
 $(AAFSDK_INCLUDE)\AAFEssenceFormats.h : $(TOOLKIT_INCLUDE)\AAFEssenceFormats.h
-	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFEssenceFormats.h $(AAFSDK_INCLUDE)\
+	$(UPDATE) $(TOOLKIT_INCLUDE)\AAFEssenceFormats.h $@
 
 $(AAFSDK_INCLUDE)\AAFExtEnum.h : $(TOOLKIT_INCLUDE)\AAFExtEnum.h
-	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFExtEnum.h $(AAFSDK_INCLUDE)\
+	$(UPDATE) $(TOOLKIT_INCLUDE)\AAFExtEnum.h $@
 
 $(AAFSDK_INCLUDE)\AAFFileKinds.h : $(TOOLKIT_INCLUDE)\AAFFileKinds.h
-	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFFileKinds.h $(AAFSDK_INCLUDE)\
+	$(UPDATE) $(TOOLKIT_INCLUDE)\AAFFileKinds.h $@
 
 $(AAFSDK_INCLUDE)\AAFFileMode.h : $(TOOLKIT_INCLUDE)\AAFFileMode.h
-	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFFileMode.h $(AAFSDK_INCLUDE)\
+	$(UPDATE) $(TOOLKIT_INCLUDE)\AAFFileMode.h $@
 
 $(AAFSDK_INCLUDE)\AAFFileSignatures.h : $(TOOLKIT_INCLUDE)\AAFFileSignatures.h
-	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFFileSignatures.h $(AAFSDK_INCLUDE)\
+	$(UPDATE) $(TOOLKIT_INCLUDE)\AAFFileSignatures.h $@
 
 $(AAFSDK_INCLUDE)\AAFInterpolatorDefs.h : $(TOOLKIT_INCLUDE)\AAFInterpolatorDefs.h
-	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFInterpolatorDefs.h $(AAFSDK_INCLUDE)\
+	$(UPDATE) $(TOOLKIT_INCLUDE)\AAFInterpolatorDefs.h $@
 
 $(AAFSDK_INCLUDE)\AAFMetaDictionary.h : $(TOOLKIT_INCLUDE)\AAFMetaDictionary.h
-	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFMetaDictionary.h $(AAFSDK_INCLUDE)\
+	$(UPDATE) $(TOOLKIT_INCLUDE)\AAFMetaDictionary.h $@
 
 $(AAFSDK_INCLUDE)\AAFOperationCategories.h : $(TOOLKIT_INCLUDE)\AAFOperationCategories.h
-	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFOperationCategories.h $(AAFSDK_INCLUDE)\
+	$(UPDATE) $(TOOLKIT_INCLUDE)\AAFOperationCategories.h $@
 
 $(AAFSDK_INCLUDE)\AAFOperationDefs.h : $(TOOLKIT_INCLUDE)\AAFOperationDefs.h
-	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFOperationDefs.h $(AAFSDK_INCLUDE)\
+	$(UPDATE) $(TOOLKIT_INCLUDE)\AAFOperationDefs.h $@
 
 $(AAFSDK_INCLUDE)\AAFParameterDefs.h : $(TOOLKIT_INCLUDE)\AAFParameterDefs.h
-	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFParameterDefs.h $(AAFSDK_INCLUDE)\
+	$(UPDATE) $(TOOLKIT_INCLUDE)\AAFParameterDefs.h $@
 
 $(AAFSDK_INCLUDE)\AAFPlatform.h : $(TOOLKIT_INCLUDE)\AAFPlatform.h
-	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFPlatform.h $(AAFSDK_INCLUDE)\
+	$(UPDATE) $(TOOLKIT_INCLUDE)\AAFPlatform.h $@
 
 $(AAFSDK_INCLUDE)\AAFPluginDefs.h : $(TOOLKIT_INCLUDE)\AAFPluginDefs.h
-	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFPluginDefs.h $(AAFSDK_INCLUDE)\
+	$(UPDATE) $(TOOLKIT_INCLUDE)\AAFPluginDefs.h $@
 
 $(AAFSDK_INCLUDE)\AAFPropertyDefs.h : $(TOOLKIT_INCLUDE)\AAFPropertyDefs.h
-	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFPropertyDefs.h $(AAFSDK_INCLUDE)\
+	$(UPDATE) $(TOOLKIT_INCLUDE)\AAFPropertyDefs.h $@
 
 $(AAFSDK_INCLUDE)\AAFPropertyIDs.h : $(TOOLKIT_INCLUDE)\AAFPropertyIDs.h
-	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFPropertyIDs.h $(AAFSDK_INCLUDE)\
+	$(UPDATE) $(TOOLKIT_INCLUDE)\AAFPropertyIDs.h $@
 
 $(AAFSDK_INCLUDE)\AAFResult.h : $(TOOLKIT_INCLUDE)\AAFResult.h
-	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFResult.h $(AAFSDK_INCLUDE)\
+	$(UPDATE) $(TOOLKIT_INCLUDE)\AAFResult.h $@
 
 $(AAFSDK_INCLUDE)\AAFSmartPointerBase.h : $(TOOLKIT_INCLUDE)\AAFSmartPointerBase.h
-	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFSmartPointerBase.h $(AAFSDK_INCLUDE)\
+	$(UPDATE) $(TOOLKIT_INCLUDE)\AAFSmartPointerBase.h $@
 
-$(AAFSDK_INCLUDE)\AAFSmartPointer.h : $(TOOLKIT_INCLUDE)\com-api\AAFSmartPointer.h
-	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\com-api\AAFSmartPointer.h $(AAFSDK_INCLUDE)\
+$(AAFSDK_INCLUDE)\AAFSmartPointer.h : $(TOOLKIT_INCLUDE)\AAFSmartPointer.h
+	$(UPDATE) $(TOOLKIT_INCLUDE)\AAFSmartPointer.h $@
 
 $(AAFSDK_INCLUDE)\AAFStoredObjectIDs.h : $(TOOLKIT_INCLUDE)\AAFStoredObjectIDs.h
-	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFStoredObjectIDs.h $(AAFSDK_INCLUDE)\
+	$(UPDATE) $(TOOLKIT_INCLUDE)\AAFStoredObjectIDs.h $@
 
 $(AAFSDK_INCLUDE)\AAFTypeDefUIDs.h : $(TOOLKIT_INCLUDE)\AAFTypeDefUIDs.h
-	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFTypeDefUIDs.h $(AAFSDK_INCLUDE)\
+	$(UPDATE) $(TOOLKIT_INCLUDE)\AAFTypeDefUIDs.h $@
 
 
 #
 # Dependency and build rules for the IDL targets.
 #
 $(AAFSDK_INCLUDE)\AAFTypes.idl : $(TOOLKIT_INCLUDE_COMAPI)\AAFTypes.idl
-	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE_COMAPI)\AAFTypes.idl $(AAFSDK_INCLUDE)\
+	$(UPDATE) $(TOOLKIT_INCLUDE_COMAPI)\AAFTypes.idl $@
 
 $(AAFSDK_INCLUDE)\AAF.idl : $(TOOLKIT_INCLUDE_COMAPI)\AAF.idl
-	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE_COMAPI)\AAF.idl $(AAFSDK_INCLUDE)\
+	$(UPDATE) $(TOOLKIT_INCLUDE_COMAPI)\AAF.idl $@
 
 $(AAFSDK_INCLUDE)\AAFModuleTest.idl : $(TOOLKIT_INCLUDE_COMAPI)\AAFModuleTest.idl
-	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE_COMAPI)\AAFModuleTest.idl $(AAFSDK_INCLUDE)\
+	$(UPDATE) $(TOOLKIT_INCLUDE_COMAPI)\AAFModuleTest.idl $@
 
 $(AAFSDK_INCLUDE)\AAFPluginTypes.idl : $(TOOLKIT_INCLUDE_COMAPI)\AAFPluginTypes.idl
-	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE_COMAPI)\AAFPluginTypes.idl $(AAFSDK_INCLUDE)\
+	$(UPDATE) $(TOOLKIT_INCLUDE_COMAPI)\AAFPluginTypes.idl $@
 
 $(AAFSDK_INCLUDE)\AAFPlugin.idl : $(TOOLKIT_INCLUDE_COMAPI)\AAFPlugin.idl
-	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE_COMAPI)\AAFPlugin.idl $(AAFSDK_INCLUDE)\
+	$(UPDATE) $(TOOLKIT_INCLUDE_COMAPI)\AAFPlugin.idl $@
 
 
 #
 # Dependency and build rules for the MIDL generated targets.
 #
 $(AAFSDK_INCLUDE)\AAFTypes.h : $(TOOLKIT_INCLUDE_COMAPI)\AAFTypes.h
-	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE_COMAPI)\AAFTypes.h $(AAFSDK_INCLUDE)\
+	$(UPDATE) $(TOOLKIT_INCLUDE_COMAPI)\AAFTypes.h $@
 
 $(AAFSDK_INCLUDE)\AAF.h : $(TOOLKIT_INCLUDE_COMAPI)\AAF.h
-	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE_COMAPI)\AAF.h $(AAFSDK_INCLUDE)\
+	$(UPDATE) $(TOOLKIT_INCLUDE_COMAPI)\AAF.h $@
 
 $(AAFSDK_INCLUDE)\AAF_i.c : $(TOOLKIT_INCLUDE_COMAPI)\AAF_i.c
-	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE_COMAPI)\AAF_i.c $(AAFSDK_INCLUDE)\
+	$(UPDATE) $(TOOLKIT_INCLUDE_COMAPI)\AAF_i.c $@
 
 $(AAFSDK_INCLUDE)\AAFPluginTypes.h : $(TOOLKIT_INCLUDE_COMAPI)\AAFPluginTypes.h
-	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE_COMAPI)\AAFPluginTypes.h $(AAFSDK_INCLUDE)\
+	$(UPDATE) $(TOOLKIT_INCLUDE_COMAPI)\AAFPluginTypes.h $@
 
 $(AAFSDK_INCLUDE)\AAFPlugin.h : $(TOOLKIT_INCLUDE_COMAPI)\AAFPlugin.h
-	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE_COMAPI)\AAFPlugin.h $(AAFSDK_INCLUDE)\
+	$(UPDATE) $(TOOLKIT_INCLUDE_COMAPI)\AAFPlugin.h $@
 
 $(AAFSDK_INCLUDE)\AAFPlugin_i.c : $(TOOLKIT_INCLUDE_COMAPI)\AAFPlugin_i.c
-	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE_COMAPI)\AAFPlugin_i.c $(AAFSDK_INCLUDE)\
+	$(UPDATE) $(TOOLKIT_INCLUDE_COMAPI)\AAFPlugin_i.c $@
 
 
 #
@@ -626,6 +649,7 @@ $(AAFSDK_DEBUG_EXT)\aafpgapi.dll : $(TOOLKIT_DEBUG_REFIMPL_EXT)\aafpgapi.dll
 
 $(AAFSDK_DEBUG)\omfToolkitd.dll : $(OMF_LIBS)\omfToolkitd.dll
 	$(CP) $(CP_OPTS) $(OMF_LIBS)\omfToolkitd.dll $(AAFSDK_DEBUG)\
+
 
 #
 # Clean out all files that are specific to a particular configuration.

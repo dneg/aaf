@@ -1,3 +1,25 @@
+###############################################################################
+#
+# The contents of this file are subject to the AAF SDK Public
+# Source License Agreement (the "License"); You may not use this file
+# except in compliance with the License.  The License is available in
+# AAFSDKPSL.TXT, or you may obtain a copy of the License from the AAF
+# Association or its successor.
+# 
+# Software distributed under the License is distributed on an "AS IS"
+# basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.  See
+# the License for the specific language governing rights and limitations
+# under the License.
+# 
+# The Original Code of this file is Copyright 1998-2001, Licensor of the
+# AAF Association.
+# 
+# The Initial Developer of the Original Code of this file and the
+# Licensor of the AAF Association is Avid Technology.
+# All rights reserved.
+#
+###############################################################################
+
 PACKAGE = DevUtils
 
 AAFBASE ?= ../..
@@ -8,25 +30,23 @@ include $(AAFBASE)/build/common.mk
 
 
 # Include directories
-INCLUDES = -I../../ref-impl/include \
-	   -I../../ref-impl/include/ref-api \
-	   -I../../ref-impl/include/com-api \
-	   -I../../Utilities/Include \
+INCLUDES = -I$(AAFSDKINCLUDEDIR) \
 	   -I../../ss-impl/ref/h
 
 
 .PHONY : all
-all : $(BINDIR)/dump$(EXE)
+all : $(OBJDIR) $(AAFSDKBINDIR)/dump$(EXE)
 
 
-$(BINDIR)/dump$(EXE) : $(BINDIR) $(OBJDIR) $(CXXOBJS)
-	$(LD) $(CXXOBJS) $(RPATH_OPT) -L$(LIBDIR) -lrefstg -o $@
+$(AAFSDKBINDIR)/dump$(EXE) : $(CXXOBJS)
+	$(LD) $(CXXOBJS) $(RPATH_OPT) -L$(AAFSDKLIBDIR) -o $@ \
+	$(AAFBUILDDIR)/ss-impl/$(AAFTARGETDIR)/librefstg$(LIB)
 
 
 .PHONY : clean
 clean :
 	@$(RM) $(CXXOBJS)
-	@$(RM) $(BINDIR)/dump$(EXE)
+	@$(RM) $(AAFSDKBINDIR)/dump$(EXE)
 	@$(RMDIR) $(OBJDIR)/ii_files
 
 

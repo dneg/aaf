@@ -1,9 +1,26 @@
-#################################################
-# File: makesdk.mak                             #
-#                                               #
-# Copyright (c) 2000-2001 Avid Technology, Inc. #
-#                                               #
-#################################################
+########################################################################
+#
+# The contents of this file are subject to the AAF SDK Public
+# Source License Agreement (the "License"); You may not use this file
+# except in compliance with the License.  The License is available in
+# AAFSDKPSL.TXT, or you may obtain a copy of the License from the AAF
+# Association or its successor.
+#
+# Software distributed under the License is distributed on an "AS IS"
+# basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.  See
+# the License for the specific language governing rights and limitations
+# under the License.
+#
+# The Original Code of this file is Copyright 1998-2001, Licensor of the
+# AAF Association.
+#
+# The Initial Developer of the Original Code of this file and the
+# Licensor of the AAF Association is Avid Technology.
+# All rights reserved.
+#
+########################################################################
+
+dod = {aaf}dodo:
 AAFMacSDK = "{aaf}AAFMacSDK:"
 incl = "{AAFMacSDK}include:"
 refi = "{aaf}ref-impl:include:"
@@ -22,15 +39,7 @@ all Ä  makesdk
 
 make_makesdk Ä $OutOfDate makesdk.mak
 	(
-		echo '#################################################'
-		echo '# File: makesdk.make                            #'
-		echo '#                                               #'
-		echo '# This file was GENERATED for the AAF SDK       #'
-		echo '#                                               #'
-		echo '# (C) Copyright 2001 Avid Technology.           #'
-		echo '#                                               #'
-		echo '#################################################'
-		echo ""
+		perl "{dod}sync_copyright.pl" --copyright "{dod}CopyrightMessage.txt" --shell_style
 		echo ""
 		echo 'AAFMacSDK = {aaf}AAFMacSDK:'
 		echo 'incl = {AAFMacSDK}include:'
@@ -52,7 +61,6 @@ make_makesdk Ä $OutOfDate makesdk.mak
 		for item in {refapi}
 			echo '	"{incl}'{item}'" ¶'
 		end
-		echo '	"{incl}AAFSmartPointer.h"'
 		echo ""
 		echo ""
 		echo 'all Ä checkDirectories {targetIncludes}'
@@ -96,8 +104,6 @@ make_makesdk Ä $OutOfDate makesdk.mak
 			echo ""
 			echo ""
 		end
-		echo '"{incl}AAFSmartPointer.h" Ä "{comh}AAFSmartPointer.h"'
-		echo '	copy_if_diff -p "{comh}AAFSmartPointer.h" "{incl}AAFSmartPointer.h"'
 		echo ""
 		echo ""
 		echo "clean Ä"
@@ -114,7 +120,7 @@ make_makesdk Ä $OutOfDate makesdk.mak
 	rm -f makesdk.tmp
 
 
-makesdk.make Ä make_makesdk
+makesdk.make Ä "{dod}CopyrightMessage.txt" "{dod}sync_copyright.pl" make_makesdk
 
 
 makesdk Ä makesdk.make

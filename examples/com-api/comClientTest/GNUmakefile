@@ -1,3 +1,25 @@
+###############################################################################
+#
+# The contents of this file are subject to the AAF SDK Public
+# Source License Agreement (the "License"); You may not use this file
+# except in compliance with the License.  The License is available in
+# AAFSDKPSL.TXT, or you may obtain a copy of the License from the AAF
+# Association or its successor.
+# 
+# Software distributed under the License is distributed on an "AS IS"
+# basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.  See
+# the License for the specific language governing rights and limitations
+# under the License.
+# 
+# The Original Code of this file is Copyright 1998-2001, Licensor of the
+# AAF Association.
+# 
+# The Initial Developer of the Original Code of this file and the
+# Licensor of the AAF Association is Avid Technology.
+# All rights reserved.
+#
+###############################################################################
+
 PACKAGE = Examples
 
 AAFBASE ?= ../../..
@@ -8,28 +30,26 @@ include $(AAFBASE)/build/common.mk
 
 
 # Include directories
-INCLUDES = -I../../../ref-impl/include \
-	   -I../../../ref-impl/include/ref-api \
-	   -I../../../ref-impl/include/com-api \
+INCLUDES = -I$(AAFSDKINCLUDEDIR) \
 	   -I../../../Utilities/Include
 
 
 .PHONY : all
-all : $(BINDIR)/ComAAFInfo$(EXE) $(BINDIR)/ComClientAAF$(EXE)
+all : $(OBJDIR) $(AAFSDKBINDIR)/ComAAFInfo$(EXE) $(AAFSDKBINDIR)/ComClientAAF$(EXE)
 
 
 CXXFILES = AAFInfo.cpp
 
 
-$(BINDIR)/ComAAFInfo$(EXE) : $(BINDIR) $(OBJDIR) $(CXXOBJS)
-	$(LD) $(CXXOBJS) -L$(LIBDIR) -laaflib -laafiid -o $@
+$(AAFSDKBINDIR)/ComAAFInfo$(EXE) : $(CXXOBJS)
+	$(LD) $(CXXOBJS) -L$(AAFSDKLIBDIR) -laaflib -laafiid -o $@
 
 
 CXXFILES2 = ComClientTestAAF.cpp
 
 
-$(BINDIR)/ComClientAAF$(EXE) : $(BINDIR) $(OBJDIR) $(CXXOBJS2)
-	$(LD) $(CXXOBJS2) -L$(LIBDIR) -laaflib -laafiid -o $@
+$(AAFSDKBINDIR)/ComClientAAF$(EXE) : $(CXXOBJS2)
+	$(LD) $(CXXOBJS2) -L$(AAFSDKLIBDIR) -laaflib -laafiid -o $@
 
 
 .PHONY : clean
@@ -37,8 +57,8 @@ clean :
 	@$(RM) $(CXXOBJS)
 	@$(RM) $(CXXOBJS2)
 	@$(RM) $(DEPS)
-	@$(RM) $(BINDIR)/ComAAFInfo$(EXE)
-	@$(RM) $(BINDIR)/ComClientAAF$(EXE)
+	@$(RM) $(AAFSDKBINDIR)/ComAAFInfo$(EXE)
+	@$(RM) $(AAFSDKBINDIR)/ComClientAAF$(EXE)
 	@$(RMDIR) $(OBJDIR)/ii_files
 
 

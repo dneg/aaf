@@ -1,23 +1,45 @@
+###############################################################################
+#
+# The contents of this file are subject to the AAF SDK Public
+# Source License Agreement (the "License"); You may not use this file
+# except in compliance with the License.  The License is available in
+# AAFSDKPSL.TXT, or you may obtain a copy of the License from the AAF
+# Association or its successor.
+# 
+# Software distributed under the License is distributed on an "AS IS"
+# basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.  See
+# the License for the specific language governing rights and limitations
+# under the License.
+# 
+# The Original Code of this file is Copyright 1998-2001, Licensor of the
+# AAF Association.
+# 
+# The Initial Developer of the Original Code of this file and the
+# Licensor of the AAF Association is Avid Technology.
+# All rights reserved.
+#
+###############################################################################
+
 
 #----------------------------------------------------------
 # Determine the platform we're building on and include
 # platfrom specific definitions.
 #----------------------------------------------------------
 ifndef AAFPLATFORM
-    AAFPLATFORM = $(shell $(AAFBASE)/build/aafplatform)
+    AAFPLATFORM = $(shell $(AAFBASE)/build/aafplatform.sh)
 endif
 
 include $(AAFBASE)/build/pdefs-$(AAFPLATFORM).mk
 
 
 #----------------------------------------------------------
-# AAFSDK is the directory where all the binaries will 
+# AAFBUILDDIR is the directory where all the binaries will 
 # be placed. It's located in AAF toolkit directory and has
 # two components: platform name generated above and 
 # compiler name defined in the platfrom specific 
 # definitions file.
 #----------------------------------------------------------
-AAFSDK = $(AAFBASE)/AAF$(AAFPLATFORM)SDK/$(COMPILER)
+AAFBUILDDIR = $(AAFBASE)/AAF$(AAFPLATFORM)SDK/$(COMPILER)
 
 
 #----------------------------------------------------------
@@ -44,15 +66,29 @@ endif
 # Update DBG_FLAGS depending on build target.
 ifeq ($(AAFTARGET), Debug)
     ifneq ($(findstring -D_DEBUG, $(DBG_FLAGS)), -D_DEBUG)
-	DBG_FLAGS += -D_DEBUG
+        DBG_FLAGS += -D_DEBUG
     endif
 else
 ifeq ($(AAFTARGET), Release)
     ifneq ($(findstring -DNDEBUG, $(DBG_FLAGS)), -DNDEBUG)
-	DBG_FLAGS = -DNDEBUG
+        DBG_FLAGS = -DNDEBUG
     endif
 endif
 endif
+
+
+#----------------------------------------------------------
+# AAFSDK is the directories where SDK libraries and 
+# includes will be copied and applications (tests,examples,
+# utils) will be built.
+# The default setting is the AAF tollkit build directory.
+#----------------------------------------------------------
+ifndef AAFSDK
+    AAFSDK = $(AAFBUILDDIR)
+endif
+AAFSDKINCLUDEDIR  = $(AAFSDK)/include
+AAFSDKBINDIR      = $(AAFSDK)/bin/$(AAFTARGETDIR)
+AAFSDKLIBDIR      = $(AAFSDK)/lib/$(AAFTARGETDIR)
 
 
 #----------------------------------------------------------
@@ -99,10 +135,9 @@ ifndef GENDEPS
 endif
 
 
-PACKDIR := $(AAFSDK)/$(PACKAGE)
+PACKDIR := $(AAFBUILDDIR)/$(PACKAGE)
 OBJDIR := $(PACKDIR)/$(AAFTARGETDIR)
-LIBDIR := $(AAFSDK)/lib/$(AAFTARGETDIR)
-BINDIR := $(AAFSDK)/bin/$(AAFTARGETDIR)
+LIBDIR := $(OBJDIR)
 
 CPP_EXTENSION ?= cpp
 

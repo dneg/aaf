@@ -1,14 +1,111 @@
+########################################################################
+#
+# The contents of this file are subject to the AAF SDK Public
+# Source License Agreement (the "License"); You may not use this file
+# except in compliance with the License.  The License is available in
+# AAFSDKPSL.TXT, or you may obtain a copy of the License from the AAF
+# Association or its successor.
+#
+# Software distributed under the License is distributed on an "AS IS"
+# basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.  See
+# the License for the specific language governing rights and limitations
+# under the License.
+#
+# The Original Code of this file is Copyright 1998-2001, Licensor of the
+# AAF Association.
+#
+# The Initial Developer of the Original Code of this file and the
+# Licensor of the AAF Association is Avid Technology.
+# All rights reserved.
+#
+########################################################################
+
+
 # This partial make file is to be included by makemacdodo.mak1
 #   File:       makemacdodo.mak2
 #   Target:     {refh}AAF.h, {refh}AAFPlugin.h, {refh}AAF_i.c, {refh}AAFPlugin_i.c
 #   Sources:    all frefh files
 #
 
-MAKEMACDODO2 = #"{macdodo}makemacdodo.mak2"
+MAKEMACDODO2 = #{macdodo}makemacdodo.mak2
 
-"{dod}AAF.refh" Ä "{macdodo}macaafobjects.mk" "{MAKEMACDODO2}" "{dod}CopyrightMessage.txt" {GENERATED_FREFH}
-	( echo "//=--------------------------------------------------------------------------=" ; ¶
-	  catenate "{dod}CopyrightMessage.txt" ; ¶
+
+# Default rules for directories:
+"{dod}" Ä "{dod}"
+
+
+#
+# Default rules for low-level intermediate files
+#
+
+
+
+# Default rule to build a complete include file.
+.refh Ä .dod
+	echo {TargDir}{Default}.refh
+	"{DODO}" -f "{macros}refh.mac" < {DepDir}{Default}.dod > {TargDir}{Default}.t01
+	SetFile -t TEXT -c CWIE {TargDir}{Default}.t01
+	Rename -y {TargDir}{Default}.t01 {TargDir}{Default}.refh
+
+
+# Default rule to build export files imported by other .dod files.
+.exp Ä .dod
+	echo {TargDir}{Default}.exp
+	"{DODO}" -f "{macros}exp.mac" < {DepDir}{Default}.dod > {TargDir}{Default}.t02
+	Rename -y {TargDir}{Default}.t02 {TargDir}{Default}.exp
+
+
+# Default rule to build fragments of an include file.
+.frefh Ä .dod
+	echo {TargDir}{Default}.frefh
+	"{DODO}" -f "{macros}frefh.mac" < {DepDir}{Default}.dod > {TargDir}{Default}.t03
+	SetFile -t TEXT -c CWIE {TargDir}{Default}.t03
+	Rename -y  {TargDir}{Default}.t03 {TargDir}{Default}.frefh
+
+
+# Default rule to build the com coclass header file.
+.comh Ä .dod
+	"{DODO}" -f "{macros}comh.mac" < {DepDir}{Default}.dod > {TargDir}{Default}.t04
+	SetFile -t TEXT -c CWIE {TargDir}{Default}.t04
+	Rename -y {TargDir}{Default}.t04 {TargDir}{Default}.comh
+
+
+# Default rule to build the com coclass implementation file.
+.comc Ä .dod
+	"{DODO}" -f "{macros}comc.mac" < {DepDir}{Default}.dod > {TargDir}{Default}.t05
+	SetFile -t TEXT -c CWIE {TargDir}{Default}.t05
+	Rename -y {TargDir}{Default}.t05 {TargDir}{Default}.comc
+
+
+# Default rule to build common C++ implementation header file.
+.implh Ä .dod
+	"{DODO}" -f "{macros}implh.mac" < {DepDir}{Default}.dod > {TargDir}{Default}.t06
+	SetFile -t TEXT -c CWIE {TargDir}{Default}.t06
+	Rename -y {TargDir}{Default}.t06 {TargDir}{Default}.implh
+
+
+# Default rule to build common C++ stub implementation file.
+.implc Ä .dod
+	"{DODO}" -f "{macros}implc.mac" < {DepDir}{Default}.dod > {TargDir}{Default}.t07
+	SetFile -t TEXT -c CWIE "{dod}AAFRoot.t07"
+	Rename -y {TargDir}{Default}.t07 {TargDir}{Default}.implc
+
+
+# Default rule to build the com module test stub file.
+.comt Ä .dod
+	"{DODO}" -f "{macros}comt.mac" < {DepDir}{Default}.dod > {TargDir}{Default}.t08
+	SetFile -t TEXT -c CWIE {TargDir}{Default}.t08
+	Rename -y {TargDir}{Default}.t08 {TargDir}{Default}.comt
+
+
+# Rule to build the copyright text for C++ files.
+"{dod}CopyrightMessage.cpp" Ä "{dod}CopyrightMessage.txt" "{dod}sync_copyright.pl"
+	perl sync_copyright.pl --copyright CopyrightMessage.txt --cpp_style > CopyrightMessage.cpp
+
+	
+# Override of default rule for .refh to build the intermediate target for {refh}AAF.h.
+"{dod}AAF.refh" Ä "{MAKEMACDODO2}" "{macdodo}macaafobjects.mk" "{macros}frefh.mac" "{macros}exp.mac" "{macros}base.mac" "{dod}CopyrightMessage.cpp" {GENERATED_FREFH}
+	( catenate "{dod}CopyrightMessage.cpp" ; ¶
 	  echo "//=--------------------------------------------------------------------------=" ; ¶
 	  echo "// AAF Interfaces." ; ¶
 	  echo "//=--------------------------------------------------------------------------=" ; ¶
@@ -49,13 +146,14 @@ MAKEMACDODO2 = #"{macdodo}makemacdodo.mak2"
 	SetFile -t TEXT -c CWIE "{dod}AAF.h.tmp"
 	Rename -y "{dod}AAF.h.tmp" "{dod}AAF.refh"
 
-"{refh}AAF.h" Ä "{dod}AAF.refh"
+"{refh}AAF.h" Ä "{dod}aafobjects.mk" "{macros}frefh.mac" "{macros}exp.mac" "{macros}base.mac" "{MAKEMACDODO2}" {FREFH_DOD} "{dod}CopyrightMessage.txt" "{dod}sync_copyright.pl"
+	make "{dod}AAF.refh" -f {MAKEFILE} > "{MacDodo}make.refh.out"
+	"{MacDodo}make.refh.out"
 	copy_if_diff -p "{dod}AAF.refh" "{refh}AAF.h"
 	
 
-"{dod}AAFPrivate.refh" Ä "{macdodo}macaafobjects.mk" "{MAKEMACDODO2}" "{dod}CopyrightMessage.txt" {GENERATED_PRIVATE_FREFH}
-	( echo "//=--------------------------------------------------------------------------=" ; ¶
-	  catenate "{dod}CopyrightMessage.txt" ; ¶
+"{dod}AAFPrivate.refh" Ä "{MAKEMACDODO2}" "{macdodo}macaafobjects.mk" "{macros}frefh.mac" "{macros}exp.mac" "{macros}base.mac" "{dod}CopyrightMessage.cpp" {GENERATED_PRIVATE_FREFH}
+	( catenate "{dod}CopyrightMessage.cpp" ; ¶
 	  echo "//=--------------------------------------------------------------------------=" ; ¶
 	  echo "// Private AAF Interfaces." ; ¶
 	  echo "//=--------------------------------------------------------------------------=" ; ¶
@@ -88,13 +186,14 @@ MAKEMACDODO2 = #"{macdodo}makemacdodo.mak2"
 	SetFile -t TEXT -c CWIE "{dod}AAFPrivate.h.tmp"
 	Rename -y "{dod}AAFPrivate.h.tmp" "{dod}AAFPrivate.refh"
 
-"{refh}AAFPrivate.h" Ä "{dod}AAFPrivate.refh"
+"{refh}AAFPrivate.h" Ä "{dod}aafobjects.mk" "{macros}frefh.mac" "{macros}exp.mac" "{macros}base.mac" "{MAKEMACDODO2}" {PRIVATE_FREFH_DOD} "{dod}CopyrightMessage.txt" "{dod}sync_copyright.pl"
+	make "{dod}AAFPrivate.refh" -f {MAKEFILE} > "{MacDodo}make.refh.out"
+	"{MacDodo}make.refh.out"
 	copy_if_diff -p "{dod}AAFPrivate.refh" "{refh}AAFPrivate.h"
 
 
-"{dod}AAFPlugin.refh" Ä "{macdodo}macaafobjects.mk" "{MAKEMACDODO2}" "{dod}CopyrightMessage.txt" {PLUGIN_FREFH_TARGETS}
-	( echo "//=--------------------------------------------------------------------------=" ; ¶
-	  catenate "{dod}CopyrightMessage.txt" ; ¶
+"{dod}AAFPlugin.refh" Ä "{MAKEMACDODO2}" "{macdodo}macaafobjects.mk" "{macros}frefh.mac" "{macros}exp.mac" "{macros}base.mac" "{dod}CopyrightMessage.cpp" {PLUGIN_FREFH_TARGETS}
+	( catenate "{dod}CopyrightMessage.cpp" ; ¶
 	  echo "//=--------------------------------------------------------------------------=" ; ¶
 	  echo "// AAF Plugin Interfaces." ; ¶
 	  echo "//=--------------------------------------------------------------------------=" ; ¶
@@ -131,17 +230,18 @@ MAKEMACDODO2 = #"{macdodo}makemacdodo.mak2"
 	SetFile -t TEXT -c CWIE "{dod}AAFPlugin.h.tmp"
 	Rename -y "{dod}AAFPlugin.h.tmp" "{dod}AAFPlugin.refh"
 
-"{refh}AAFPlugin.h" Ä "{dod}AAFPlugin.refh"
+"{refh}AAFPlugin.h" Ä "{dod}aafobjects.mk" "{macros}frefh.mac" "{macros}exp.mac" "{macros}base.mac" "{MAKEMACDODO2}" {PLUGIN_FREFH_DOD} "{dod}CopyrightMessage.txt" "{dod}sync_copyright.pl"
+	make "{dod}AAFPlugin.refh" -f {MAKEFILE} > "{MacDodo}make.refh.out"
+	"{MacDodo}make.refh.out"
 	copy_if_diff -p "{dod}AAFPlugin.refh" "{refh}AAFPlugin.h"
 
 
-"{dod}AAF_i.refh" Ä "{dod}dod2iid.pl" "{macdodo}macaafobjects.mk" "{MAKEMACDODO2}" "{dod}CopyrightMessage.txt" {GENERATED_FREFH}
-	( echo "/* this file contains the actual definitions of */" ; ¶
+"{dod}AAF_i.refh" Ä "{MAKEMACDODO2}" "{dod}dod2iid.pl" "{macdodo}macaafobjects.mk" "{dod}CopyrightMessage.cpp" {GENERATED_FREFH}
+	( catenate "{dod}CopyrightMessage.cpp" ; ¶
+	  echo "/* this file contains the actual definitions of */" ; ¶
 	  echo "/* the IIDs and CLSIDs */" ; ¶
 	  echo "" ; ¶
 	  echo "/* link this file in with the server and any clients */" ; ¶
-	  echo "//=--------------------------------------------------------------------------=" ; ¶
-	  catenate "{dod}CopyrightMessage.txt" ; ¶
 	  echo "//=--------------------------------------------------------------------------=" ; ¶
 	  echo "// Definitions for all of the public IID needed by an AAF SDK client" ; ¶
 	  echo "//=--------------------------------------------------------------------------=" ; ¶
@@ -179,17 +279,18 @@ MAKEMACDODO2 = #"{macdodo}makemacdodo.mak2"
 	SetFile -t TEXT -c CWIE "{dod}AAF_i.c.tmp"
 	Rename -y "{dod}AAF_i.c.tmp" "{dod}AAF_i.refh"
 
-"{refh}AAF_i.c" Ä "{dod}AAF_i.refh"
+"{refh}AAF_i.c" Ä "{dod}dod2iid.pl" "{dod}aafobjects.mk" "{MAKEMACDODO2}" {FREFH_DOD} "{dod}CopyrightMessage.txt" "{dod}sync_copyright.pl"
+	make "{dod}AAF_i.refh" -f {MAKEFILE} > "{MacDodo}make.refh.out"
+	"{MacDodo}make.refh.out"
 	copy_if_diff -p "{dod}AAF_i.refh" "{refh}AAF_i.c"
 
 
-"{dod}AAFPlugin_i.refh" Ä "{dod}dod2iid.pl" "{macdodo}macaafobjects.mk" "{MAKEMACDODO2}" "{dod}CopyrightMessage.txt" {PLUGIN_FREFH_TARGETS}
-	( echo "/* this file contains the actual definitions of */" ; ¶
+"{dod}AAFPlugin_i.refh" Ä "{MAKEMACDODO2}" "{dod}dod2iid.pl" "{macdodo}macaafobjects.mk" "{dod}CopyrightMessage.cpp" {PLUGIN_FREFH_TARGETS}
+	( catenate "{dod}CopyrightMessage.cpp" ; ¶
+	  echo "/* this file contains the actual definitions of */" ; ¶
 	  echo "/* the IIDs and CLSIDs */" ; ¶
 	  echo "" ; ¶
 	  echo "/* link this file in with the server and any clients */" ; ¶
-	  echo "//=--------------------------------------------------------------------------=" ; ¶
-	  catenate "{dod}CopyrightMessage.txt" ; ¶
 	  echo "//=--------------------------------------------------------------------------=" ; ¶
 	  echo "// Definitions for all public IID's needed by an AAF SDK Plugin author" ; ¶
 	  echo "//=--------------------------------------------------------------------------=" ; ¶
@@ -227,17 +328,18 @@ MAKEMACDODO2 = #"{macdodo}makemacdodo.mak2"
 	SetFile -t TEXT -c CWIE "{dod}AAFPlugin_i.c.tmp"
 	Rename -y "{dod}AAFPlugin_i.c.tmp" "{dod}AAFPlugin_i.refh"
 
-"{refh}AAFPlugin_i.c" Ä "{dod}AAFPlugin_i.refh"
+"{refh}AAFPlugin_i.c" Ä "{dod}dod2iid.pl" "{dod}aafobjects.mk" "{MAKEMACDODO2}" {PLUGIN_FREFH_DOD} "{dod}CopyrightMessage.txt" "{dod}sync_copyright.pl"
+	make "{dod}AAFPlugin_i.refh" -f {MAKEFILE} > "{MacDodo}make.refh.out"
+	"{MacDodo}make.refh.out"
 	copy_if_diff -p "{dod}AAFPlugin_i.refh" "{refh}AAFPlugin_i.c"
 
 
-"{dod}AAFPrivate_i.refh" Ä "{dod}dod2iid.pl" "{macdodo}macaafobjects.mk" "{MAKEMACDODO2}" "{dod}CopyrightMessage.txt" {GENERATED_PRIVATE_FREFH}
-	( echo "/* this file contains the actual definitions of */" ; ¶
+"{dod}AAFPrivate_i.refh" Ä "{MAKEMACDODO2}" "{dod}dod2iid.pl" "{macdodo}macaafobjects.mk" "{dod}CopyrightMessage.cpp" {GENERATED_PRIVATE_FREFH}
+	( catenate "{dod}CopyrightMessage.cpp" ; ¶
+	  echo "/* this file contains the actual definitions of */" ; ¶
 	  echo "/* the IIDs and CLSIDs */" ; ¶
 	  echo "" ; ¶
 	  echo "/* link this file in with the server and any clients */" ; ¶
-	  echo "//=--------------------------------------------------------------------------=" ; ¶
-	  catenate "{dod}CopyrightMessage.txt" ; ¶
 	  echo "//=--------------------------------------------------------------------------=" ; ¶
 	  echo "// Definitions for all public IID's needed by an AAF SDK Plugin author" ; ¶
 	  echo "//=--------------------------------------------------------------------------=" ; ¶
@@ -275,13 +377,14 @@ MAKEMACDODO2 = #"{macdodo}makemacdodo.mak2"
 	SetFile -t TEXT -c CWIE "{dod}AAFPrivate_i.c.tmp"
 	Rename -y "{dod}AAFPrivate_i.c.tmp" "{dod}AAFPrivate_i.refh"
 
-"{refh}AAFPrivate_i.c" Ä "{dod}AAFPrivate_i.refh"
+"{refh}AAFPrivate_i.c" Ä "{dod}dod2iid.pl" "{dod}aafobjects.mk" "{MAKEMACDODO2}" {PRIVATE_FREFH_DOD} "{dod}CopyrightMessage.txt" "{dod}sync_copyright.pl"
+	make "{dod}AAFPrivate_i.refh" -f {MAKEFILE} > "{MacDodo}make.refh.out"
+	"{MacDodo}make.refh.out"
 	copy_if_diff -p "{dod}AAFPrivate_i.refh" "{refh}AAFPrivate_i.c"
 
 
-"{dod}AAFClassIDs.implh" Ä "{macdodo}macaafobjects.mk" "{MAKEMACDODO2}" "{dod}CopyrightMessage.txt"
-	( echo "//=--------------------------------------------------------------------------=" ; ¶
-	  catenate "{dod}CopyrightMessage.txt" ; ¶
+"{dod}AAFClassIDs.implh" Ä "{MAKEMACDODO2}" "{macdodo}macaafobjects.mk" "{dod}CopyrightMessage.cpp"
+	( catenate "{dod}CopyrightMessage.cpp" ; ¶
 	  echo "//=--------------------------------------------------------------------------=" ; ¶
 	  echo "// Declarations for all of the private AAF code class ids" ; ¶
 	  echo "// This file is private to the AAF Reference Implementation." ; ¶
@@ -304,13 +407,14 @@ MAKEMACDODO2 = #"{macdodo}makemacdodo.mak2"
 	SetFile -t TEXT -c CWIE "{dod}AAFClassIDs.h.tmp"
 	Rename -y "{dod}AAFClassIDs.h.tmp" "{dod}AAFClassIDs.implh"
 
-"{impl}AAFClassIDs.h" Ä "{dod}AAFClassIDs.implh"
+"{impl}AAFClassIDs.h" Ä "{dod}aafobjects.mk" "{MAKEMACDODO2}" "{dod}CopyrightMessage.txt" "{dod}sync_copyright.pl"
+	make "{dod}AAFClassIDs.implh" -f {MAKEFILE} > "{MacDodo}make.implh.out"
+	"{MacDodo}make.implh.out"
 	copy_if_diff -p "{dod}AAFClassIDs.implh" "{impl}AAFClassIDs.h"
 
 
-"{dod}AAFCLSIDs.comh" Ä "{macdodo}macaafobjects.mk" "{MAKEMACDODO2}" "{dod}CopyrightMessage.txt" 
-	( echo "//=--------------------------------------------------------------------------=" ; ¶
-	  catenate "{dod}CopyrightMessage.txt" ; ¶
+"{dod}AAFCLSIDs.comh" Ä "{MAKEMACDODO2}" "{macdodo}macaafobjects.mk" "{dod}CopyrightMessage.cpp" 
+	( catenate "{dod}CopyrightMessage.cpp" ; ¶
 	  echo "//=--------------------------------------------------------------------------=" ; ¶
 	  echo "// Declarations for all of the private AAF code class ids" ; ¶
 	  echo "// This file is private to the AAF Reference Implementation." ; ¶
@@ -332,20 +436,20 @@ MAKEMACDODO2 = #"{macdodo}makemacdodo.mak2"
 	SetFile -t TEXT -c CWIE "{dod}AAFCLSIDs.h.tmp"
 	Rename -y "{dod}AAFCLSIDs.h.tmp" "{dod}AAFCLSIDs.comh"
 
-"{comh}AAFCLSIDs.h" Ä "{dod}AAFCLSIDs.comh"
+"{comh}AAFCLSIDs.h" Ä "{dod}aafobjects.mk" "{MAKEMACDODO2}" "{dod}CopyrightMessage.txt" "{dod}sync_copyright.pl"
+	make "{dod}AAFCLSIDs.comh" -f {MAKEFILE} > "{MacDodo}make.comh.out"
+	"{MacDodo}make.comh.out"
 	copy_if_diff -p "{dod}AAFCLSIDs.comh" "{comh}AAFCLSIDs.h"
 
 
-"{dod}AAFObjectTable.comh" Ä "{macdodo}macaafobjects.mk" "{MAKEMACDODO2}" "{dod}CopyrightMessage.txt" 
-	( echo "//=--------------------------------------------------------------------------=" ; ¶
-	  catenate "{dod}CopyrightMessage.txt" ; ¶
-	  echo "//=--------------------------------------------------------------------------=" ; ¶
+"{dod}AAFObjectTable.comh" Ä "{MAKEMACDODO2}" "{macdodo}macaafobjects.mk" "{dod}CopyrightMessage.cpp" 
+	( catenate "{dod}CopyrightMessage.cpp" ; ¶
 	  echo "// This file contains invocations of the macros described below." ; ¶
 	  echo "//" ; ¶
 	  echo "// To use this file -" ; ¶
-	  echo "//   1. #define the macros to suit your usage" ; ¶
-	  echo "//   2. #include this file" ; ¶
-	  echo "//   3. #undef the macros" ; ¶
+	  echo "//   1) #define the macros to suit your usage" ; ¶
+	  echo "//   2) #include this file" ; ¶
+	  echo "//   3) #undef the macros" ; ¶
 	  echo "" ; ¶
 	  echo "// Default empty definitions so that you only have to define" ; ¶
 	  echo "// those macros you actually want to use." ; ¶
@@ -382,14 +486,14 @@ MAKEMACDODO2 = #"{macdodo}makemacdodo.mak2"
 	SetFile -t TEXT -c CWIE "{dod}AAFObjectTable.h.tmp"
 	Rename -y "{dod}AAFObjectTable.h.tmp" "{dod}AAFObjectTable.comh"
 
-"{comh}AAFObjectTable.h" Ä "{dod}AAFObjectTable.comh"
+"{comh}AAFObjectTable.h" Ä "{dod}aafobjects.mk" "{MAKEMACDODO2}" "{dod}CopyrightMessage.txt" "{dod}sync_copyright.pl"
+	make "{dod}AAFObjectTable.comh" -f {MAKEFILE} > "{MacDodo}make.comh.out"
+	"{MacDodo}make.comh.out"
 	copy_if_diff -p "{dod}AAFObjectTable.comh" "{comh}AAFObjectTable.h"
 
 
-"{dod}AAFObjectTable_i.comh" Ä "{macdodo}macaafobjects.mk" "{MAKEMACDODO2}" "{dod}CopyrightMessage.txt" 
-	( echo "//=--------------------------------------------------------------------------=" ; ¶
-	  catenate "{dod}CopyrightMessage.txt" ; ¶
-	  echo "//=--------------------------------------------------------------------------=" ; ¶
+"{dod}AAFObjectTable_i.comh" Ä "{MAKEMACDODO2}" "{macdodo}macaafobjects.mk" "{dod}CopyrightMessage.cpp" 
+	( catenate "{dod}CopyrightMessage.cpp" ; ¶
 	  echo "" ; ¶
 	  echo "//" ; ¶
 	  echo "// Include the CLSID declarations..." ; ¶
@@ -410,6 +514,7 @@ MAKEMACDODO2 = #"{macdodo}makemacdodo.mak2"
 	  echo "// Include Private AAF Objects Table:" ; ¶
 	  echo "//" ; ¶
 	  echo '#define AAF_PRIVATE_OBJECT_ENTRY(name) AAF_OBJECT_ENTRY(name)' ; ¶
+	  echo "" ; ¶
 	  echo "//" ; ¶
 	  echo "// Include AAF Object Table:" ; ¶
 	  echo "//" ; ¶
@@ -418,25 +523,38 @@ MAKEMACDODO2 = #"{macdodo}makemacdodo.mak2"
 	SetFile -t TEXT -c CWIE "{dod}AAFObjectTable_i.cpp.tmp"
 	Rename -y "{dod}AAFObjectTable_i.cpp.tmp" "{dod}AAFObjectTable_i.comh"
 
-"{comh}AAFObjectTable_i.cpp" Ä "{dod}AAFObjectTable_i.comh"
+"{comh}AAFObjectTable_i.cpp" Ä "{MAKEMACDODO2}" "{dod}aafobjects.mk" "{MAKEMACDODO2}" "{dod}CopyrightMessage.txt" "{dod}sync_copyright.pl"
+	make "{dod}AAFObjectTable_i.comh" -f {MAKEFILE} > "{MacDodo}make.comh.out"
+	"{MacDodo}make.comh.out"
 	copy_if_diff -p "{dod}AAFObjectTable_i.comh" "{comh}AAFObjectTable_i.cpp"
+	
 
- 
-"{dod}CAAFEnumValidation.log" ÄÄ "{dod}AAFTypes.dod" "{dod}AAFPluginTypes.dod" "{dod}CAAFEnumValidation.h" "{dod}CAAFEnumValidation.cpp"
-	perl GenEnumValidation.pl AAFTypes.dod AAFPluginTypes.dod > CAAFEnumValidation.log
+"{comh}CAAFEnumValidation.h" Ä "{MAKEMACDODO2}" "{dod}GenEnumValidation.pl" "{dod}AAFTypes.dod" "{dod}AAFPluginTypes.dod" "{dod}CopyrightMessage.txt" "{dod}sync_copyright.pl"
+	make "{dod}CAAFEnumValidation.h.tmp" -f {MAKEFILE} > "{MacDodo}make.enum.out"
+	"{MacDodo}make.enum.out"
+	copy_if_diff -p "{dod}CAAFEnumValidation.h.tmp" "{comh}CAAFEnumValidation.h"
+
+"{dod}CAAFEnumValidation.h.tmp" Ä "{MAKEMACDODO2}" "{dod}GenEnumValidation.pl" "{dod}AAFTypes.dod" "{dod}AAFPluginTypes.dod" "{dod}CopyrightMessage.txt" "{dod}sync_copyright.pl" "{dod}CopyrightMessage.cpp"
+	perl GenEnumValidation.pl --include AAFTypes.dod AAFPluginTypes.dod > CAAFEnumValidation.h.log
 	Set error {Status}
 	if {error} == 0
-		SetFile -t TEXT -c CWIE CAAFEnumValidation.h
-		SetFile -t TEXT -c CWIE CAAFEnumValidation.cpp
+		catenate CopyrightMessage.cpp > CAAFEnumValidation.h.tmp
+		catenate CAAFEnumValidation.h >> CAAFEnumValidation.h.tmp
+		SetFile -t TEXT -c CWIE CAAFEnumValidation.h.tmp
 	end
-	
-"{dod}CAAFEnumValidation.h" ÄÄ "{dod}CAAFEnumValidation.log"
 
-"{dod}CAAFEnumValidation.cpp" ÄÄ "{dod}CAAFEnumValidation.log"
-
-"{comh}CAAFEnumValidation.h" Ä "{dod}CAAFEnumValidation.h"
-	copy_if_diff -p "{dod}CAAFEnumValidation.h" "{comh}CAAFEnumValidation.h"
 	
-"{comc}CAAFEnumValidation.cpp" Ä "{dod}CAAFEnumValidation.cpp"
-	copy_if_diff -p "{dod}CAAFEnumValidation.cpp" "{comc}CAAFEnumValidation.cpp"
+"{comc}CAAFEnumValidation.cpp" Ä "{MAKEMACDODO2}" "{dod}GenEnumValidation.pl" "{dod}AAFTypes.dod" "{dod}AAFPluginTypes.dod" "{dod}CopyrightMessage.txt" "{dod}sync_copyright.pl"
+	make "{dod}CAAFEnumValidation.cpp.tmp" -f {MAKEFILE} > "{MacDodo}make.enum.out"
+	"{MacDodo}make.enum.out"
+	copy_if_diff -p "{dod}CAAFEnumValidation.cpp.tmp" "{comc}CAAFEnumValidation.cpp"
+
+"{dod}CAAFEnumValidation.cpp.tmp" Ä "{MAKEMACDODO2}" "{dod}GenEnumValidation.pl" "{dod}AAFTypes.dod" "{dod}AAFPluginTypes.dod" "{dod}CopyrightMessage.txt" "{dod}sync_copyright.pl" "{dod}CopyrightMessage.cpp"
+	perl GenEnumValidation.pl --source AAFTypes.dod AAFPluginTypes.dod > CAAFEnumValidation.cpp.log
+	Set error {Status}
+	if {error} == 0
+		catenate CopyrightMessage.cpp > CAAFEnumValidation.cpp.tmp
+		catenate CAAFEnumValidation.cpp >> CAAFEnumValidation.cpp.tmp
+		SetFile -t TEXT -c CWIE CAAFEnumValidation.cpp.tmp
+	end
 

@@ -1,3 +1,25 @@
+###############################################################################
+#
+# The contents of this file are subject to the AAF SDK Public
+# Source License Agreement (the "License"); You may not use this file
+# except in compliance with the License.  The License is available in
+# AAFSDKPSL.TXT, or you may obtain a copy of the License from the AAF
+# Association or its successor.
+# 
+# Software distributed under the License is distributed on an "AS IS"
+# basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.  See
+# the License for the specific language governing rights and limitations
+# under the License.
+# 
+# The Original Code of this file is Copyright 1998-2001, Licensor of the
+# AAF Association.
+# 
+# The Initial Developer of the Original Code of this file and the
+# Licensor of the AAF Association is Avid Technology.
+# All rights reserved.
+#
+###############################################################################
+
 #------------------------------------------------------------------------------
 #
 #
@@ -15,9 +37,7 @@ include $(AAFBASE)/build/common.mk
 INCLUDES = -I../Include \
 	   -I../../OMF/Include \
 	   -I../../OMF/portinc \
-	   -I../../ref-impl/include/ref-api \
-	   -I../../ref-impl/include \
-	   -I../../ref-impl/include/com-api
+	   -I$(AAFSDKINCLUDEDIR)
 
 
 # CXXOBJS2 is the list of files used to create the executable.
@@ -30,26 +50,26 @@ CXXFILES2 = AafOmfMain.$(CPP_EXTENSION)
 LIBCXXOBJS = $(filter-out $(OBJDIR)/AafOmfMain$(OBJ), $(CXXOBJS))
 
 
-LIBTARGET = $(LIBDIR)/libAAFConverterLib$(LIB)
-BINTARGET = $(BINDIR)/AafOmf$(EXE)
+LIBTARGET = $(AAFSDKLIBDIR)/libAAFConverterLib$(LIB)
+BINTARGET = $(AAFSDKBINDIR)/AafOmf$(EXE)
 
 
 
 .PHONY : all
-all : $(LIBTARGET) $(BINTARGET)
+all : $(OBJDIR) $(LIBTARGET) $(BINTARGET)
 
 
 # Build the library. Note that we use LIBCXXOBJS to not link
 # files containing main() function.
-$(LIBTARGET) : $(LIBDIR) $(OBJDIR) $(LIBCXXOBJS)
+$(LIBTARGET) : $(LIBCXXOBJS)
 	$(LD_STAT_LIB) $@ $(LIBCXXOBJS)
 
 
 # Build executable. Note that CXXOBJS2 is used instead of CXXOBJS.
-$(BINTARGET) : $(BINDIR) $(OBJDIR) $(CXXOBJS2) $(LIBTARGET)
+$(BINTARGET) : $(CXXOBJS2) $(LIBTARGET)
 	$(LD) $(CXXOBJS2) $(RPATH_OPT) -lAAFConverterLib \
 	-L$(AAFBASE)/OMF/IrixLibs -lAJPG -lOMFI -lbento -ljpeg \
-	-L$(LIBDIR) -laaflib -laafiid -o $@ -lm
+	-L$(AAFSDKLIBDIR) -laaflib -laafiid -o $@ -lm
 
 
 .PHONY : clean

@@ -1,3 +1,26 @@
+###############################################################################
+#
+# The contents of this file are subject to the AAF SDK Public
+# Source License Agreement (the "License"); You may not use this file
+# except in compliance with the License.  The License is available in
+# AAFSDKPSL.TXT, or you may obtain a copy of the License from the AAF
+# Association or its successor.
+# 
+# Software distributed under the License is distributed on an "AS IS"
+# basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.  See
+# the License for the specific language governing rights and limitations
+# under the License.
+# 
+# The Original Code of this file is Copyright 1998-2001, Licensor of the
+# AAF Association.
+# 
+# The Initial Developer of the Original Code of this file and the
+# Licensor of the AAF Association is Avid Technology.
+# All rights reserved.
+#
+###############################################################################
+
+###############################################################################
 #
 # File: GenEnumValidation.pl
 #
@@ -17,10 +40,24 @@
 # CAAFEnumValidation.h and
 # enumValidationLog.txt
 #
+# perl GenEnumValidation.pl --source AAFTypes.dod AAFPluginTypes.dod > enumValidationLog.txt
+# will generate two files:
+# CAAFEnumValidation.cpp and
+# enumValidationLog.txt
+#
+#
+# perl GenEnumValidation.pl --include AAFTypes.dod AAFPluginTypes.dod > enumValidationLog.txt
+# will generate two files:
+# CAAFEnumValidation.h and
+# enumValidationLog.txt
+#
+###############################################################################
 
 require 5.002;
 
+use Getopt::Long;
 use Class::Struct;
+
 
 #
 # Define a structure to represent an enum.
@@ -35,6 +72,28 @@ struct(EnumMemberStruct => [name => '$', value => '$']);
 
 
 printf "Running GenEnumValidation.pl...\n";
+
+
+# Command line options that control the type of the output.
+my $include = 0; # 'CAAFEnumValidation.h';
+my $source = 0; #'CAAFEnumValidation.cpp';
+
+# Setup option tags and local variable assignment.
+my %optctl = (
+  "debug" => \$debug,
+  "include" => \$include,
+  "source" => \$source
+);
+
+# Get the options
+my $result = GetOptions (\%optctl, "debug", "include", "source");
+exit 1 if (!$result);
+
+# Default to creating both the source and the include files.
+if (!$include && !$source) {
+ $include = 1;
+ $source = 1;
+}
 
 # Variable to hold the list of processed files.
 my @fileList = ();
@@ -59,6 +118,7 @@ my %enums = ();
 # State variable that holds a reference to the current line
 # matching subroutine.
 my $processLine;
+
 
 
 #
@@ -98,8 +158,8 @@ LINE: while (<DODOFILE>) {
 
 
 # Write out a function prototype to validate each enum.
-&make_validateHeader;
-&make_validateSource;
+&make_validateHeader if ($include);
+&make_validateSource if ($source);
 
 
 
@@ -207,24 +267,6 @@ sub find_end_of_enum
 }
 
 
-# Subroutine to emit the AAF copywrite notice
-sub printCopywrite
-{
-  local (*THEFILE) = @_;  # Filehandle
-
-  printf THEFILE "//=--------------------------------------------------------------------------=\n";
-  printf THEFILE "// (C) Copyright 1998-2000 Avid Technology.\n";
-  printf THEFILE "//\n";
-  printf THEFILE "// This file was GENERATED for the AAF SDK\n";
-  printf THEFILE "//\n";
-  printf THEFILE "// THIS CODE AND INFORMATION IS PROVIDED 'AS IS' WITHOUT WARRANTY OF\n";
-  printf THEFILE "// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO\n";
-  printf THEFILE "// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A\n";
-  printf THEFILE "// PARTICULAR PURPOSE.\n";
-  printf THEFILE "//=--------------------------------------------------------------------------=\n";
-  printf THEFILE "\n\n";
-}
-
 # Subroutine to print the validation function declaration.
 # This is shared by both make_validateHeader and 
 # make_validateSource.
@@ -247,9 +289,9 @@ sub printFunctionDeclaration
 # with a function prototype for each enum.
 sub make_validateHeader
 {
-  open(HEADER, ">CAAFEnumValidation.h") || die "Count not create validateEnums.h\n";
+  open(HEADER, ">CAAFEnumValidation.h") or die "Count not create enum validation header file.\n";
 
-  printCopywrite(*HEADER);
+  print HEADER "\n";
   
   # Include order is important. For now we assume that the files
   # are being processing in dependency order. For example:
@@ -290,9 +332,9 @@ sub make_validateHeader
 # with a function prototype for each enum.
 sub make_validateSource
 {
-  open(SOURCE, ">CAAFEnumValidation.cpp") || die "Count not create validateEnums.cpp\n";
+  open(SOURCE, ">CAAFEnumValidation.cpp") or die "Count not create enum validation source file.\n";
 
-  printCopywrite(*SOURCE);
+  print SOURCE "\n";
   print SOURCE '#include "CAAFEnumValidation.h"', "\n\n";
 
   foreach $enumName (sort keys %enums) {
@@ -314,5 +356,3 @@ sub make_validateSource
 
   close(SOURCE);
 }
-
-

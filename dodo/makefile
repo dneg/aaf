@@ -1,84 +1,73 @@
-#################################################
-#                                               #
-# Copyright (c) 1998-1999 Avid Technology, Inc. #
-#                                               #
-#################################################
+###############################################################################
+#
+# The contents of this file are subject to the AAF SDK Public
+# Source License Agreement (the "License"); You may not use this file
+# except in compliance with the License.  The License is available in
+# AAFSDKPSL.TXT, or you may obtain a copy of the License from the AAF
+# Association or its successor.
+# 
+# Software distributed under the License is distributed on an "AS IS"
+# basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.  See
+# the License for the specific language governing rights and limitations
+# under the License.
+# 
+# The Original Code of this file is Copyright 1998-2001, Licensor of the
+# AAF Association.
+# 
+# The Initial Developer of the Original Code of this file and the
+# Licensor of the AAF Association is Avid Technology.
+# All rights reserved.
+#
+###############################################################################
 
-all : dodo-app aafobjects.all targets.mk depend.mk targets
+UPDATE = ../update.ksh
+
+all : dodo-app macros/base.mac targets.mk depend.mk targets
 
 BLD_CFG_DIR = ../ref-impl/bld_cfg
 
-SRC_DIR = ../ref-impl/src
-
-INCLUDE_DIR = ../ref-impl/include
-
-
 include $(BLD_CFG_DIR)/common.mk
 
-DODO = dodo.$(EXE)
+dodo-app :
+	@$(ECHO) "\n======== [ dodo/tool ] \n"
+	cd tool && $(MAKE) -f makefile
 
-dodo-app:
-	@$(ECHO) "\n======== [ /coresw/AAF-toolkit/dodo/tool ] \n"
-	cd tool ;  $(MAKE) $(RELENG_MAKEFLAGS)
+test_only :
+	cd tool && $(MAKE) -f makefile test_only
+	$(MAKE) -f dodotargets.mak
+	$(MAKE) -f dododepend.mak
+	$(MAKE) -f maketargets.mak
 
-test_only:
-	cd tool ; $(MAKE) $(RELENG_MAKEFLAGS) test_only
-	$(MAKE) -f dodotargets.mak $(RELENG_MAKEFLAGS)
-	$(MAKE) -f dododepend.mak $(RELENG_MAKEFLAGS)
-	$(MAKE) -f maketargets.mak $(RELENG_MAKEFLAGS)
+run :
+	$(MAKE) -f dodotargets.mak
+	$(MAKE) -f dododepend.mak
+	$(MAKE) -f maketargets.mak
+	cd tool && $(MAKE) -f makefile run
 
-run:
-	$(MAKE) -f dodotargets.mak $(RELENG_MAKEFLAGS)
-	$(MAKE) -f dododepend.mak $(RELENG_MAKEFLAGS)
-	$(MAKE) -f maketargets.mak $(RELENG_MAKEFLAGS)
-	cd tool ; $(MAKE) $(RELENG_MAKEFLAGS) run
+macros/base.mac : CopyrightMessage.txt sync_copyright.pl
+	@perl sync_copyright.pl -macro macros/base.mac -copyright CopyrightMessage.txt > base.mac.tmp
+	$(UPDATE) base.mac.tmp macros/base.mac
+	@rm -f base.mac.tmp
 
+targets.mk : aafobjects.mk GenTargets.sh
+	@$(ECHO) "\n======== [ dodo ] \"Building targets.mk\"\n"
+	$(MAKE) -f dodotargets.mak
 
+depend.mk : aafobjects.mk GenDepend.sh GenDepend2.sh
+	@$(ECHO) "\n======== [ dodo ] \"Building depend.mk\"\n"
+	$(MAKE) -f dododepend.mak
 
-# Make sure our list of objects in the include src directories is up-to-date.
-# (TomR) We should probably move aafobjects.mk and the following behavior to 
-# the ref-impl make file...
-aafobjects.all : \
-	$(INCLUDE_DIR)/com-api/aafobjects.mk \
-	$(SRC_DIR)/com-api/aafobjects.mk 
-
-$(INCLUDE_DIR)/com-api/aafobjects.mk : aafobjects.mk
-	@$(ECHO) "\n======== [ /coresw/AAF-toolkit/dodo ] \"Building $(INCLUDE_DIR)/com-api/aafobjects.mk\"\n"
-	$(RM) -f $(INCLUDE_DIR)/com-api/aafobjects.mk
-	$(CP) aafobjects.mk $(INCLUDE_DIR)/com-api
-
-$(SRC_DIR)/com-api/aafobjects.mk : aafobjects.mk
-	@$(ECHO) "\n======== [ /coresw/AAF-toolkit/dodo ] \"Building $(SRC_DIR)/com-api/aafobjects.mk\"\n"
-	$(RM) -f $(SRC_DIR)/com-api/aafobjects.mk
-	$(CP) aafobjects.mk $(SRC_DIR)/com-api
+targets : targets.mk depend.mk
+	@$(ECHO) "\n======== [ dodo ] \"Building targets\"\n"
+	$(MAKE) -f maketargets.mak CCASE_MAKE_COMPAT=gnu
 
 
 
-
-
-#targets: aafobjects.mk targets.mk depend.mk
-
-targets: targets.mk depend.mk
-	@$(ECHO) "\n======== [ /coresw/AAF-toolkit/dodo ] \"Building targets\"\n"
-	$(MAKE) -f maketargets.mak $(RELENG_MAKEFLAGS)
-
-
-targets.mk : aafobjects.mk
-	@$(ECHO) "\n======== [ /coresw/AAF-toolkit/dodo ] \"Building targets.mk\"\n"
-	$(MAKE) -f dodotargets.mak $(RELENG_MAKEFLAGS)
-
-depend.mk : aafobjects.mk
-	@$(ECHO) "\n======== [ /coresw/AAF-toolkit/dodo ] \"Building depend.mk\"\n"
-	$(MAKE) -f dododepend.mak $(RELENG_MAKEFLAGS)
-
-depend : targets.mk depend.mk
-
-
-clean:
-	cd tool ; $(MAKE) clean
+clean :
+	cd tool && $(MAKE) -f makefile GENDEPS=0 clean
 	$(MAKE) -f dodotargets.mak clean
 	$(MAKE) -f dododepend.mak clean
-	$(TOUCH) targets.mk depend.mk
+	$(TOUCH) -t 198101011000 targets.mk depend.mk
 	$(MAKE) -f maketargets.mak clean
 
 realclean : clean

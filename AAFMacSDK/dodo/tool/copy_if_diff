@@ -1,3 +1,25 @@
+########################################################################
+#
+# The contents of this file are subject to the AAF SDK Public
+# Source License Agreement (the "License"); You may not use this file
+# except in compliance with the License.  The License is available in
+# AAFSDKPSL.TXT, or you may obtain a copy of the License from the AAF
+# Association or its successor.
+#
+# Software distributed under the License is distributed on an "AS IS"
+# basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.  See
+# the License for the specific language governing rights and limitations
+# under the License.
+#
+# The Original Code of this file is Copyright 1998-2001, Licensor of the
+# AAF Association.
+#
+# The Initial Developer of the Original Code of this file and the
+# Licensor of the AAF Association is Avid Technology.
+# All rights reserved.
+#
+########################################################################
+
 # MPW Script: copy_if_diff
 # AUTHOR: Tom Ransdell
 # Created: 01-MAR-2001
@@ -103,6 +125,7 @@ if "{SRCFILE}" == "{DSTFILE}"
   exit 0 # succeed
 end
 
+set OLDEXIT {EXIT}
 
 if "" ­ "`exists -f "{DSTFILE}"`"
   #compare -n -m "{DSTFILE}" "{SRCFILE}" > dev:null ³ dev:null # compare only works for TEXT files!
@@ -113,17 +136,30 @@ if "" ­ "`exists -f "{DSTFILE}"`"
     if {PROGRESS}
       echo '"'{DSTFILE}'" did not change.'
     end
+		# Touch the file to make sure that we don't see this message once.
+		SetFile -m . "{DSTFILE}"
   else
     # The source and destination
     # Copy to a temporary file in the destination directory.
     duplicate -y "{SRCFILE}" "{DSTDIR}copy_if_diff.tmp"
+    SetFile -a l "{DSTDIR}copy_if_diff.tmp"
+    set PROJECTINFO_TEXT "`ProjectInfo -s "{DSTDIR}copy_if_diff.tmp" ³ Dev:Null`"
+    if "" ­ "{PROJECTINFO_TEXT}"
+      set PROJECTINFO_TEXT "`ProjectInfo -m "{DSTDIR}copy_if_diff.tmp" ³ Dev:Null`"
+      if "" == "{PROJECTINFO_TEXT}"
+        OrphanFiles "{DSTDIR}copy_if_diff.tmp"
+			end
+    end
     # Make sure the file can be replaced.
     SetFile -a l "{DSTFILE}"
-    set PROJECTINFO_TEXT "`ProjectInfo -s "{DSTFILE}"`"
+    set PROJECTINFO_TEXT "`ProjectInfo -s "{DSTFILE}" ³ Dev:Null`"
     if "" ­ "{PROJECTINFO_TEXT}"
       # If the old file has a Projector 'ckid' resource then we need to 
       # properly transfer this infomation to the newly generated file.
-      ModifyReadOnly "{DSTFILE}"
+      set PROJECTINFO_TEXT "`ProjectInfo -m "{DSTFILE}" ³ Dev:Null`"
+      if "" == "{PROJECTINFO_TEXT}"
+        ModifyReadOnly "{DSTFILE}"
+			end
       TransferCKID "{DSTFILE}" "{DSTDIR}copy_if_diff.tmp"
     end
     # We are finished updating the temporary file.
@@ -135,15 +171,19 @@ if "" ­ "`exists -f "{DSTFILE}"`"
 else
   # Destination file did not exist so just copy the source file.
   duplicate "{SRCFILE}" "{DSTFILE}"
+  # Cleanup the new file and make sure that it can easily be
+  # checked into a VCS.
+  SetFile -a l "{DSTFILE}"
+  set PROJECTINFO_TEXT "`ProjectInfo -s "{DSTFILE}" ³ Dev:Null`"
+  if "" ­ "{PROJECTINFO_TEXT}"
+    set PROJECTINFO_TEXT "`ProjectInfo -m "{DSTFILE}" ³ Dev:Null`"
+    if "" == "{PROJECTINFO_TEXT}"
+	    OrphanFiles "{DSTFILE}"
+		end
+  end
   if {PROGRESS}
     echo '"'{DSTFILE}'" copied.'
   end
 end
 
-# Cleanup the new file and make sure that it can easily be
-# checked into a VCS.
-SetFile -a l "{DSTFILE}"
-set PROJECTINFO_TEXT "`ProjectInfo -s "{DSTFILE}"`"
-if "" ­ "{PROJECTINFO_TEXT}"
-	OrphanFiles "{DSTFILE}"
-end
+set EXIT {OLDEXIT}

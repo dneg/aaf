@@ -62,10 +62,10 @@ all : jpeg
 
 
 .PHONY : jpeg
-jpeg : $(LIBDIR)/libjpeg$(LIB)
+jpeg : $(OBJDIR) $(LIBDIR) $(LIBDIR)/libjpeg$(LIB)
 
 
-$(LIBDIR)/libjpeg$(LIB) :  $(OBJDIR) $(LIBDIR) $(CXXOBJS)
+$(LIBDIR)/libjpeg$(LIB) :  $(CXXOBJS)
 	$(LD_STAT_LIB) $@ $(CXXOBJS)
 
 
