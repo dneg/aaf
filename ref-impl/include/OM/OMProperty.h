@@ -65,14 +65,14 @@ public:
              const char* name);
 
     // @cmember Temporary pseudo-constructor for clients which provide
-	//          a type definition.
+    //          a type definition.
   void initialize(const OMPropertyId propertyId,
                   const char* name,
                   OMType* type,
                   const bool isOptional = false);
 
     // @cmember Temporary pseudo-constructor for clients which provide
-	//          a property definition.
+    //          a property definition.
   void initialize(const OMPropertyDefinition* definition);
 
     // @cmember Destructor.
@@ -88,6 +88,10 @@ public:
     // @cmember Restore this <c OMProperty>, the external (persisted)
     //          size of the <c OMProperty> is <p externalSize>.
   virtual void restore(size_t externalSize) = 0;
+
+    // @cmember The <c OMPropertyDefinition> defining this <c OMProperty>.
+    // @this const 
+  const OMPropertyDefinition* definition(void) const;
 
     // @cmember The name of this <c OMProperty>.
     // @this const 
@@ -535,7 +539,7 @@ public:
     //          <c OMVariableSizeProperty> at position <p index>.
   void setValueAt(const PropertyType* value, const size_t index);
 
-    // @cmember Get the value of this <c OMvariableSizeProperty>.  The
+    // @cmember Get the value of this <c OMVariableSizeProperty>.  The
     //          value is obtained by copying the value from the
     //          <c OMVariableSizeProperty>. The buffer is at address
     //          <p buffer> and is <p bufferSize> bytes in size.
@@ -609,19 +613,19 @@ public:
     //   @this const
   size_t getSize(void) const;
 
-    // @cmember Set the value of the <p OMReferencedObject> at
+    // @cmember Set the value of the <p ReferencedObject> at
     //          position <p index> in this
     //          <c OMStrongReferenceVectorProperty>.
   ReferencedObject* setValueAt(const ReferencedObject* value,
                                const size_t index);
 
-    // @cmember Get the value of the <p OMReferencedObject> at
+    // @cmember Get the value of the <p ReferencedObject> at
     //          position <p index> in this
     //          <c OMStrongReferenceVectorProperty>.
     //   @this const
   void getValueAt(ReferencedObject*& value, const size_t index) const;
 
-    // @cmember Appened the given <p OMReferencedObject> <p value> to
+    // @cmember Append the given <p ReferencedObject> <p value> to
     //          this <c OMStrongReferenceVectorProperty>.
   void appendValue(const ReferencedObject*& value);
 
