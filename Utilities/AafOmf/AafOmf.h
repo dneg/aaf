@@ -48,8 +48,12 @@
 #include "AAFParameterDefs.h"
 #include "AAFInterpolatorDefs.h"
 #include "AAFTypeDefUIDs.h"
+#include "StreamLogger.h"
 
 const int MAX_INDENT = 8;
+const unsigned	kLogError = 0; 	// Error level.
+const unsigned	kLogWarn 	= 1;  // Warning level.
+const unsigned	kLogInfo  = 2; 	// Informational level.
 
 // ============================================================================
 // simple helper class to initialize and cleanup COM library.
@@ -100,6 +104,7 @@ typedef struct _AafOmfGlobals
 	char			sOutFileName[256];
 	char			sLogFileName[256];
 	char*			pProgramName;
+	StreamLogger*		pLogger;
 
 	// MC Private Properties
 	OMF2::omfProperty_t		pvtEffectIDProp;
@@ -136,3 +141,4 @@ HRESULT GetIntegerPropFromObject(IAAFObject* pObj, const aafUID_t* pClassID, aaf
 #define COMMON_ERR_BASE		(AAFRESULT)0xE0000000
 #define AAF2OMF_ERR_BASE	(AAFRESULT)0xE0001000
 #define OMF2AAF_ERR_BASE	(AAFRESULT)0xE0006000
+#define AAFRESULT_FILE_NOT_OMF (OMF2AAF_ERR_BASE + 1)

@@ -58,6 +58,8 @@ AAFRESULT aafMobIDFromMajorMinor(
 #include "AafOmf.h"
 #include "omf2aaf.h"
 #include "EffectTranslate.h"
+#include "AAFException.h"
+#include "OMFException.h"
 
 // Include the AAF Stored Object identifiers. These symbols are defined in aaf.lib.
 #include "AAFStoredObjectIDs.h"
@@ -136,8 +138,6 @@ HRESULT Omf2Aaf::ConvertFile ()
 // ============================================================================
 HRESULT Omf2Aaf::OpenOutputFile ()
 {
-	HRESULT		rc = AAFRESULT_SUCCESS;
-
 	if (strlen(gpGlobals->sOutFileName) == 0)
 	{
 		char*	pExt;
@@ -148,17 +148,14 @@ HRESULT Omf2Aaf::OpenOutputFile ()
 	
 	if (gpGlobals->bDeleteOutput)
 	{
-		rc = deleteFile(gpGlobals->sOutFileName);
-		if (rc == AAFRESULT_SUCCESS)
-			printf("Output file: %s will be overwritten\n", gpGlobals->sOutFileName);
-		else
-			printf("Output file: %s will be created\n", gpGlobals->sOutFileName);
-
+		HRESULT rc = deleteFile(gpGlobals->sOutFileName);
+		gpGlobals->pLogger->Log(kLogWarn, 
+			"Output file: %s will be %s\n", gpGlobals->sOutFileName, 
+			rc == AAFRESULT_SUCCESS ? "overwritten" : "created");
 	}
 
-	rc = AAFFileOpen(gpGlobals->sOutFileName);
-
-	return rc;
+	AAFCheck check = AAFFileOpen(gpGlobals->sOutFileName);
+	return AAFRESULT_SUCCESS;
 }
 // ============================================================================
 // OMFFileOpen
@@ -168,27 +165,25 @@ HRESULT Omf2Aaf::OpenOutputFile ()
 // ============================================================================
 HRESULT Omf2Aaf::OMFFileOpen(char * pFileName)
 {
-	HRESULT				rc = AAFRESULT_SUCCESS;
 	aafBool				bSessionStarted = AAFFalse;
 	char				szFileVersion[5];
 
-	if (OMF2::OM_ERR_NONE == OMF2::omfsBeginSession(0, &OMFSession))
+	gpGlobals->pLogger->Log( kLogInfo,"Opening OMF file \"%s\"\n", pFileName);
+	try
 	{
+		OMFCheck ret = OMF2::omfsBeginSession(0, &OMFSession);
 		bSessionStarted = AAFTrue;
-		if (OMF2::OM_ERR_NONE == OMF2::omfmInit(OMFSession))
-		{
-			rc = OMF2::omfsOpenFile((OMF2::fileHandleType)pFileName, OMFSession, &OMFFileHdl);
-
-		}
-		else
-			rc = AAFRESULT_BADOPEN;
+		ret = OMF2::omfmInit(OMFSession);
+		ret = OMF2::omfsOpenFile((OMF2::fileHandleType)pFileName, OMFSession, &OMFFileHdl);
+		gpGlobals->bOMFFileOpen = AAFTrue;
 	}
-	else 
+	catch( ExceptionBase )
 	{
 		if (bSessionStarted)
+		{
 			OMF2::omfsEndSession(OMFSession);
-
-		rc = AAFRESULT_BAD_SESSION;
+		}
+		throw;
 	}
 
 	RegisterCodecProperties(gpGlobals, OMFSession);
@@ -203,13 +198,12 @@ HRESULT Omf2Aaf::OMFFileOpen(char * pFileName)
 	{
 		strcpy(szFileVersion, "1.0");
 	}
-	gpGlobals->bOMFFileOpen = AAFTrue;
-	if (gpGlobals->bVerboseMode)
-	{
-		printf("OMF File: %s opened succesfully\n", pFileName);
-		printf("          File Revision %s \n", szFileVersion);
-	}
-	return rc;
+
+	gpGlobals->pLogger->Log( kLogInfo, 
+		"OMF file \"%s\" opened succesfully.\nFile Revision %s\n", 
+		pFileName, szFileVersion);
+
+	return AAFRESULT_SUCCESS;
 }
 
 // ============================================================================
@@ -302,7 +296,7 @@ HRESULT Omf2Aaf::AAFFileOpen( char* pFileName)
 		ProductInfo.productVersionString = NULL;
 		ProductInfo.productID = ProductID;
 		ProductInfo.platform = NULL;
-		rc = AAFFileOpenNewModify(pwFileName, 0, &ProductInfo, &pFile);
+		AAFCheck rc = AAFFileOpenNewModify(pwFileName, 0, &ProductInfo, &pFile);
 	}
 
 	gpGlobals->bAAFFileOpen = AAFTrue;
@@ -341,8 +335,7 @@ HRESULT Omf2Aaf::AAFFileOpen( char* pFileName)
 	else
 		rc = AAFRESULT_INTERNAL_ERROR;
 
-	if (gpGlobals->bVerboseMode)
-		printf("AAF File: %s Created succesfully\n", pFileName);
+	gpGlobals->pLogger->Log(kLogInfo, "AAF File: %s Created succesfully\n", pFileName);
 
 	// Clean up all allocated memory and return
 	if(pwFileName)
