@@ -16,12 +16,15 @@
 //
 // Forward declarations
 //
-class AAFObject;
+//class AAFObject;
 class ImplEnumAAFProperties;
 
 
 #include "AAFTypes.h"
+
 #include "OMStorable.h"
+#include "OMProperty.h"
+
 #include "ImplAAFRoot.h"
 
 class ImplAAFObject : public OMStorable, public ImplAAFRoot
