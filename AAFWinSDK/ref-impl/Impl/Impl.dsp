@@ -156,6 +156,14 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFEffectInvocation.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFEssenceAccess.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFEssenceData.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFEssenceDescriptor.cpp"
 # End Source File
 # Begin Source File
@@ -197,10 +205,6 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFMacLocator.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFMasterMob.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\impl\ImplAAFMedia.cpp"
 # End Source File
 # Begin Source File
 
@@ -364,15 +368,15 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFEffectDefs.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFEssenceData.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFIdentifications.cpp"
 # End Source File
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFLocators.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFMedia.cpp"
 # End Source File
 # Begin Source File
 

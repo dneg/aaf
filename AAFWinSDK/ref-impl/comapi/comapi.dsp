@@ -229,6 +229,22 @@ SOURCE="..\..\..\ref-impl\src\com-api\CAAFEndian.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFEssenceAccess.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFEssenceAccessTest.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFEssenceData.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFEssenceDataTest.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFEssenceDescriptor.cpp"
 # End Source File
 # Begin Source File
@@ -321,10 +337,6 @@ SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFMasterMobTest.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\com-api\CAAFMedia.cpp"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFMediaFilmDescriptor.cpp"
 # End Source File
 # Begin Source File
@@ -338,10 +350,6 @@ SOURCE="..\..\..\ref-impl\src\com-api\CAAFMediaGroup.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFMediaGroupTest.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFMediaTest.cpp"
 # End Source File
 # Begin Source File
 
@@ -653,6 +661,14 @@ SOURCE="..\..\..\ref-impl\src\com-api\test\CEnumAAFEffectDefsTest.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFEssenceData.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\test\CEnumAAFEssenceDataTest.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFIdentifications.cpp"
 # End Source File
 # Begin Source File
@@ -666,14 +682,6 @@ SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFLocators.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\com-api\test\CEnumAAFLocatorsTest.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFMedia.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\com-api\test\CEnumAAFMediaTest.cpp"
 # End Source File
 # Begin Source File
 
@@ -746,6 +754,18 @@ SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFTypeDefs.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\com-api\test\CEnumAAFTypeDefsTest.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFEssenceAccess.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFEssenceData.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFEssenceData.cpp"
 # End Source File
 # End Target
 # End Project
