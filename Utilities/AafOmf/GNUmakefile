@@ -86,6 +86,7 @@ endif
 clean :
 	@$(RM) $(LIBCXXOBJS)
 	@$(RM) $(CXXOBJS2)
+	@$(RM) $(DEPS)
 	@$(RM) $(LIBTARGET)
 	@$(RM) $(BINTARGET)
 	@$(RMDIR) $(OBJDIR)/ii_files
