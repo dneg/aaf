@@ -117,6 +117,11 @@ public:
          const ImplAAFClassDef *pType,
          const aafCharacter * pTypeName);
 
+  aafUInt32 GetTargetPidCount(void) const;
+  const OMPropertyId * GetTargetPids(void) const;
+  OMPropertyId GetUniqueIdentifierPid(void) const;
+
+
   // overrides from ImplAAFTypeDef
   //
   aafBool IsFixedSize (void) const;
@@ -128,6 +133,11 @@ public:
     pvtCreateOMProperty (OMPropertyId pid,
 							const wchar_t * name) const;
 
+  // Allocate and initialize the correct subclass of ImplAAFPropertyValue 
+  // for the given OMProperty.
+  virtual AAFRESULT STDMETHODCALLTYPE
+    CreatePropertyValue(OMProperty *property, 
+                        ImplAAFPropertyValue ** pPropertyValue) const;
 
 
   // override from OMStorable.
@@ -136,6 +146,11 @@ public:
   // Override callbacks from OMStorable
   virtual void onSave(void* clientContext) const;
   virtual void onRestore(void* clientContext) const;
+
+  // Method is called after class has been added to MetaDictionary.
+  // If this method fails the class is removed from the MetaDictionary and the
+  // registration method will fail.
+  virtual HRESULT CompleteClassRegistration(void);
 
 private:
   // Persistent member properties

@@ -383,6 +383,23 @@ void ImplAAFPropertyDef::onRestore(void* clientContext) const
     AAF_PATCH_PROPETY_TYPE(PID_Dictionary_InterpolationDefinitions, kAAFTypeID_InterpolationDefinitionStrongReferenceSet)
     AAF_PATCH_PROPETY_TYPE(PID_MetaDictionary_ClassDefinitions, kAAFTypeID_ClassDefinitionStrongReferenceSet)
     AAF_PATCH_PROPETY_TYPE(PID_MetaDictionary_TypeDefinitions, kAAFTypeID_TypeDefinitionStrongReferenceSet)
+    AAF_PATCH_PROPETY_TYPE(PID_OperationDefinition_ParametersDefined, kAAFTypeID_ParameterDefinitionWeakReferenceSet)
+  
+    // The DataDefinitions property is implemented as a weak reference vector. The object model for 
+    // DR4, AAFMetaDictionary.h, and earlier incorrectly described this type as a weak reference set.
+    AAF_PATCH_PROPETY_TYPE(PID_CodecDefinition_DataDefinitions, kAAFTypeID_DataDefinitionWeakReferenceVector)    
+   
+    // The Definition property was incorrectly implemented as an AUID. The object model for 
+    // DR4, AAFMetaDictionary.h, and earlier correctly described this type as a weak reference.
+    // Since the file format if "frozen" the new AAFMetaDictionary describes this property
+    // as an AUID to be consistent with the implementation.
+    AAF_PATCH_PROPETY_TYPE(PID_Parameter_Definition, kAAFTypeID_AUID)
+   
+    // The Type property was incorrectly implemented as an AUID. The object model for 
+    // DR4, AAFMetaDictionary.h, and earlier correctly described this type as a weak reference.
+    // Since the file format if "frozen" the new AAFMetaDictionary describes this property
+    // as an AUID to be consistent with the implementation.
+    AAF_PATCH_PROPETY_TYPE(PID_PropertyDefinition_Type, kAAFTypeID_AUID)
 
   AAF_END_TYPE_PATCHES()
 
@@ -394,3 +411,21 @@ void ImplAAFPropertyDef::onRestore(void* clientContext) const
 #undef AAF_BEGIN_TYPE_PATCHES
 #undef AAF_PATCH_PROPETY_TYPE
 #undef AAF_END_TYPE_PATCHES
+
+
+
+// Method is called after class has been added to MetaDictionary.
+// If this method fails the class is removed from the MetaDictionary and the
+// registration method will fail.
+HRESULT ImplAAFPropertyDef::CompleteClassRegistration(void)
+{
+  // Make sure the associated type definition can complete.
+  //
+  ImplAAFTypeDefSP pType;
+  AAFRESULT hr = GetTypeDef (&pType);
+  if (AAFRESULT_SUCCEEDED(hr))
+  {
+    hr = pType->CompleteClassRegistration();
+  }
+  return hr;
+}

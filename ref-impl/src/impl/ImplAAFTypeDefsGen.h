@@ -35,6 +35,7 @@
 // Get guids for types we'll use
 // #define TYPE_GUID_NAME(type) kAAFTypeID_##type
 #include "AAFTypeDefUIDs.h"
+#include "AAFPropertyDefs.h"
 
 //
 // Pass 1:  Do stuff for integers.
@@ -489,31 +490,67 @@ static TypeStrongRefVector s_AAFAllTypeStrongRefVectors [] = {
 
 #include "AAFMetaDictionary.h"
 
+// AAF_TYPE_DEFINITION_WEAK_REFERENCE_MEMBER(name, parent, container)
+
 //
-// Pass 17:  Do stuff for weak ref types.
+// Pass 17a:  Do stuff for weak ref types.
 //
 #define AAF_TYPE_TABLE_BEGIN()  \
+struct TypeWeakRefMember        \
+{                               \
+  const aafUID_t * propertyId;  \
+};                              \
+                                \
 struct TypeWeakRef              \
 {                               \
   const wchar_t *  typeName;    \
   aafUID_t         typeId;      \
   const aafUID_t * pRefdTypeId; \
   int              isValid;     \
+  size_t           size;        \
+  const TypeWeakRefMember * members; \
 };                              \
-                                \
+
+#define AAF_TYPE(name) name
+#define AAF_REFERENCE_TYPE(type, target) AAF_TYPE(target##type)
+#define AAF_REFERENCE_TYPE_NAME(type, target) AAF_TYPE(target##type)
+#define MY_PROPERTY_ID(name, parent) &kAAFPropID_##parent##_##name
+#define MY_ARRAY_NAME(name) s_TypeWeakRefMember_##name
+
+#define AAF_TYPE_DEFINITION_WEAK_REFERENCE(name, id, type) \
+static const TypeWeakRefMember MY_ARRAY_NAME(name)[] = \
+{ \
+
+#define AAF_TYPE_DEFINITION_WEAK_REFERENCE_MEMBER(name, parent, container) \
+  MY_PROPERTY_ID(name, parent),
+  
+#define AAF_TYPE_DEFINITION_WEAK_REFERENCE_END(name) \
+};
+
+#include "AAFMetaDictionary.h"
+#undef MY_PROPERTY_ID
+
+
+//
+// Pass 17b:  Do stuff for weak ref types.
+//
+                                
+#define AAF_TYPE_TABLE_BEGIN()  \
 static TypeWeakRef s_AAFAllTypeWeakRefs [] = {
 
 #define AAF_TYPE(x) AUID_AAF##x
 #define AAF_REFERENCE_TYPE(type, target) kAAFTypeID_target##type
-#define AAF_REFERENCE_TYPE_NAME(type, target)  L"kAAFTypeID_" L###target L###type
+#define AAF_REFERENCE_TYPE_NAME(type, target)  target##type
+#define MY_TYPE_NAME(name) L###name
 
 #define AAF_TYPE_DEFINITION_WEAK_REFERENCE(name, id, type) \
-  {name, id, (aafUID_t *)& type, 1},
+  {MY_TYPE_NAME(name), id, (aafUID_t *)& type, 1, sizeof(MY_ARRAY_NAME(name))/sizeof(TypeWeakRefMember), MY_ARRAY_NAME(name)},
 
 #define AAF_TYPE_TABLE_END()  \
 0 };
 
 #include "AAFMetaDictionary.h"
+#undef MY_ARRAY_NAME
 
 //
 // Pass 18:  Do stuff for weak ref set types.

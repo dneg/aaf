@@ -432,6 +432,21 @@ BEGIN {
   printf("//     id        = the auid used to identify the type [*]\n");
   printf("//     type      = the target type [*]\n");
   printf("//\n");
+  printf("// AAF_TYPE_DEFINITION_WEAK_REFERENCE_MEMBER(name, parent, container)\n");
+  printf("//\n");
+  printf("//   Define a member of an AAF extendible enumerated type.\n");
+  printf("//\n");
+  printf("//     name      = the name of the type\n");
+  printf("//     parent    = the parent property for member [*]\n");
+  printf("//     container = the name of the containing weak reference type\n");
+  printf("//\n");
+  printf("// AAF_TYPE_DEFINITION_WEAK_REFERENCE_END(name)\n");
+  printf("//\n");
+  printf("//   End an AAF extendible enumerated type definition.\n");
+  printf("//\n");
+  printf("//     name      = the name of the type\n");
+  printf("//\n");
+  printf("//\n");
   printf("// AAF_TYPE_DEFINITION_WEAK_REFERENCE_SET(name, id, type)\n");
   printf("//\n");
   printf("//   Define an AAF weak reference set type.\n");
@@ -596,6 +611,14 @@ BEGIN {
   printf("#define AAF_TYPE_DEFINITION_WEAK_REFERENCE(name, id, type)\n");
   printf("#endif\n");
   printf("\n");
+  printf("#ifndef AAF_TYPE_DEFINITION_WEAK_REFERENCE_MEMBER\n");
+  printf("#define AAF_TYPE_DEFINITION_WEAK_REFERENCE_MEMBER(name, parent, container)\n");
+  printf("#endif\n");
+  printf("\n");
+  printf("#ifndef AAF_TYPE_DEFINITION_WEAK_REFERENCE_END\n");
+  printf("#define AAF_TYPE_DEFINITION_WEAK_REFERENCE_END(name)\n");
+  printf("#endif\n");
+  printf("\n");
   printf("#ifndef AAF_TYPE_DEFINITION_WEAK_REFERENCE_SET\n");
   printf("#define AAF_TYPE_DEFINITION_WEAK_REFERENCE_SET(name, id, type)\n");
   printf("#endif\n");
@@ -695,6 +718,8 @@ BEGIN {
           printf("AAF_TYPE_DEFINITION_RECORD_END(%s)\n", typeName);
         } else if (kind == "extendible") {
           printf("AAF_TYPE_DEFINITION_EXTENDIBLE_ENUMERATION_END(%s)\n", typeName);
+        } else if ((kind == "reference") && (qualif == "weak")) {
+          printf("AAF_TYPE_DEFINITION_WEAK_REFERENCE_END(AAF_REFERENCE_TYPE_NAME(%s, %s))\n", typeName, targetType);
         }
         printf("AAF_TYPE_SEPARATOR()\n");
       }
@@ -715,6 +740,7 @@ BEGIN {
       }
       printf("//\n");
       kind = $kindC;
+      qualif = $qualifC;
       if        (kind == "integer") {
         printf("AAF_TYPE_DEFINITION_INTEGER(%s, %s, %s, %s)\n", typeName, guid, $qualifC, $elementTypeC);
       } else if (kind == "enumeration" ) {
@@ -789,6 +815,8 @@ BEGIN {
                          $SLO12C, $SLO13C, $SLO14C, $SLO15C, "    ");
 #
         printf("  AAF_TYPE_DEFINITION_EXTENDIBLE_ENUMERATION_MEMBER(%s,%s,\n    %s)\n", memberName, eguid, parentTypeName);
+      } else if ((kind == "reference") && (qualif == "weak")) {
+        printf("  AAF_TYPE_DEFINITION_WEAK_REFERENCE_MEMBER(%s, %s,\n    AAF_REFERENCE_TYPE_NAME(%s, %s))\n", memberName, $parentC, typeName, targetType);
       } else {
         # error, what is this a member of ?
       }     
@@ -880,6 +908,8 @@ END {
       printf("AAF_TYPE_DEFINITION_RECORD_END(%s)\n", typeName);
     } else if (kind == "extendible") {
       printf("AAF_TYPE_DEFINITION_EXTENDIBLE_ENUMERATION_END(%s)\n", typeName);
+    } else if ((kind == "reference") && (qualif == "weak")) {
+      printf("AAF_TYPE_DEFINITION_WEAK_REFERENCE_END(AAF_REFERENCE_TYPE_NAME(%s, %s))\n", typeName, targetType);
     }
     printf("\n");
     printf("AAF_TYPE_TABLE_END()\n");
@@ -954,6 +984,10 @@ END {
     printf("\n");
     printf("#undef AAF_TYPE_DEFINITION_WEAK_REFERENCE\n");
     printf("\n");
+    printf("#undef AAF_TYPE_DEFINITION_WEAK_REFERENCE_MEMBER\n");
+    printf("\n");
+    printf("#undef AAF_TYPE_DEFINITION_WEAK_REFERENCE_END\n");
+    printf("\n");
     printf("#undef AAF_TYPE_DEFINITION_WEAK_REFERENCE_SET\n");
     printf("\n");
     printf("#undef AAF_TYPE_DEFINITION_WEAK_REFERENCE_VECTOR\n");
@@ -1007,3 +1041,4 @@ function propertyError(property, class, column)
 {
   elementError(column, sprintf("property \"%s\" of class \"%s\"", property, class));
 }
+
