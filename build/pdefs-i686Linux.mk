@@ -43,8 +43,8 @@
 
 
 #------------------------------------------------------------------------------
-# Include common Unix definitions.
+# Include common linux-x86 definitions.
 #------------------------------------------------------------------------------
 include $(AAFBASE)/build/pdefs-i586Linux.mk
 
-
+PLATFORM_CFLAGS += -march=i686
