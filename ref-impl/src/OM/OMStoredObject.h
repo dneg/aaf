@@ -29,7 +29,6 @@
 #ifndef OMSTOREDOBJECT_H
 #define OMSTOREDOBJECT_H
 
-#include "OMPortability.h"
 #include "OMDataTypes.h"
 #include "OMFile.h"
 

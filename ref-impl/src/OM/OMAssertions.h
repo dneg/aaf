@@ -29,7 +29,6 @@
 #ifndef OMASSERTIONS_H
 #define OMASSERTIONS_H
 
-#include "OMPortability.h"
 
 #include <stddef.h>
 
