@@ -77,7 +77,7 @@ public:
             OMUInt32& length) const;
 
     // @cmember Is this <c OMStoredPropertySetIndex> valid ?
-  bool isValid(void) const;
+  bool isValid(OMUInt32 baseOffset) const;
 
 protected:
 

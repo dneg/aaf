@@ -167,7 +167,7 @@ bool OMStoredPropertySetIndex::find(const OMPropertyId& propertyId,
   //   @rdesc True if this <c OMStoredPropertySetIndex> is valid,
   //          false otherwise.
   //   @this const
-bool OMStoredPropertySetIndex::isValid(void) const
+bool OMStoredPropertySetIndex::isValid(OMUInt32 baseOffset) const
 {
   TRACE("OMStoredPropertySetIndex::isValid");
 
@@ -181,7 +181,7 @@ bool OMStoredPropertySetIndex::isValid(void) const
   size_t entries = 0;
   size_t currentOffset;
   size_t currentLength;
-  size_t position = 0;
+  size_t position = baseOffset;
 
   for (size_t i = 0; i < _capacity; i++) {
     if (_table[i]._valid) {
