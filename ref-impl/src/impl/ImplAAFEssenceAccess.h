@@ -674,7 +674,6 @@ public:
 public:
 	//Toolkit private functions
 	AAFRESULT MakeAAFContainerDef(ImplAAFContainerDef **result);
-	AAFRESULT MakeFileContainerDef(ImplAAFContainerDef **result);
 
 private:
 	aafUID_t			_codecID;
