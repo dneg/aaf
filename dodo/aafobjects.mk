@@ -9,18 +9,11 @@
 # aaf object:
 AAFPERSISTENTOBJECTS = \
 	AAFAIFCData \
-	AAFCommentMarker \
 	AAFDataDef \
 	AAFDOSLocator \
-	AAFEvent \
-	AAFEventMobSlot \
-	AAFGPITrigger \
 	AAFJPEGData \
-	AAFHTMLClip \
 	AAFHTMLData \
-	AAFHTMLDescriptor \
 	AAFImageData \
-	AAFIntraFrameMarker \
 	AAFLocator \
 	AAFMacLocator \
 	AAFMediaFilmDescriptor \
@@ -33,9 +26,7 @@ AAFPERSISTENTOBJECTS = \
 	AAFReferenceValue \
 	AAFRGBADescriptor \
 	AAFScopeReference \
-	AAFStaticMobSlot \
 	AAFTaggedValue \
-	AAFTextClip \
 	AAFTextLocator \
 	AAFTIFFData \
 	AAFTimecodeStream \
@@ -78,6 +69,7 @@ HUMAN_TYPED_IMPL = \
 	AAFAIFCDescriptor \
 	AAFClassDef \
 	AAFCodecDef \
+	AAFCommentMarker \
 	AAFComponent \
 	AAFCompositionMob \
 	AAFConstValue \
@@ -92,6 +84,8 @@ HUMAN_TYPED_IMPL = \
 	AAFEssenceData \
 	AAFEssenceDescriptor \
 	AAFEssencePlugin \
+	AAFEvent \
+	AAFEventMobSlot \
 	AAFFile \
 	AAFFileDescriptor \
 	AAFDigitalImageDescriptor \
@@ -100,8 +94,12 @@ HUMAN_TYPED_IMPL = \
 	AAFFiller \
 	AAFFindSourceInfo \
 	AAFEffect \
+	AAFGPITrigger \
 	AAFHeader \
+	AAFHTMLClip \
+	AAFHTMLDescriptor \
 	AAFIdentification \
+	AAFIntraFrameMarker \
 	AAFMasterMob \
 	AAFMob  \
 	AAFMobSlot \
@@ -122,9 +120,11 @@ HUMAN_TYPED_IMPL = \
 	AAFSourceClip \
 	AAFSourceMob \
 	AAFSourceReference \
+	AAFStaticMobSlot \
 	AAFTimecode \
 	AAFTimelineMobSlot \
 	AAFTapeDescriptor \
+	AAFTextClip \
 	AAFTransition \
 	AAFTIFFDescriptor \
 	AAFTypeDef \
