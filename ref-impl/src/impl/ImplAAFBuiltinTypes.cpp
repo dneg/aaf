@@ -62,6 +62,10 @@
 #include "ImplAAFTypeDefString.h"
 #endif
 
+#ifndef __ImplAAFTypeDefIndirect_h__
+#include "ImplAAFTypeDefIndirect.h"
+#endif
+
 #ifndef __ImplAAFTypeDefStrongObjRef_h__
 #include "ImplAAFTypeDefStrongObjRef.h"
 #endif
@@ -641,6 +645,48 @@ static AAFRESULT CreateNewCharacterType (const aafUID_t & idToCreate,
 }
 
 
+static AAFRESULT CreateNewIndirectType (const aafUID_t & idToCreate,
+									ImplAAFDictionary * pDict,
+									ImplAAFTypeDef ** ppCreatedTypeDef)
+{
+  assert (pDict);
+  AAFRESULT hr;
+
+  // Go through the character list, attempting to identify the requested
+  // ID.
+  TypeIndirect * curIndirect = s_AAFAllTypeIndirects;
+  while (curIndirect->isValid)
+	{
+	  // Check to see if the current ID matches the ID of the type
+	  // def we want to create.
+	  if (! memcmp (&idToCreate, &curIndirect->typeID, sizeof (aafUID_t)))
+		{		
+		  // Yes, this is the one.
+		  // Create an impl typedefinteger object (as yet uninitialized)
+		  ImplAAFTypeDefIndirect * ptd = 0;
+		  hr = pDict->GetBuiltinDefs()->cdTypeDefIndirect()->
+			CreateInstance ((ImplAAFObject**) &ptd);
+		  assert (AAFRESULT_SUCCEEDED (hr));
+		  assert (ptd);
+
+		  AAFRESULT hr = ptd->pvtInitialize (curIndirect->typeID,
+										  curIndirect->typeName);
+		  assert (AAFRESULT_SUCCEEDED (hr));
+
+		  assert (ppCreatedTypeDef);
+		  *ppCreatedTypeDef = ptd;
+		  (*ppCreatedTypeDef)->AcquireReference ();
+		  ptd->ReleaseReference ();
+		  ptd = 0;
+		  return AAFRESULT_SUCCESS;
+		}
+
+	  curIndirect++;
+	}
+  return AAFRESULT_NO_MORE_OBJECTS;
+}
+
+
 static AAFRESULT CreateNewStrongRefType (const aafUID_t & idToCreate,
 									ImplAAFDictionary * pDict,
 									ImplAAFTypeDef ** ppCreatedTypeDef)
@@ -1018,6 +1064,11 @@ AAFRESULT ImplAAFBuiltinTypes::NewBuiltinTypeDef
   if (AAFRESULT_SUCCEEDED (hr))	return hr;
 
   hr = CreateNewCharacterType (idToCreate,
+							   _dictionary,
+							   ppCreatedTypeDef);
+  if (AAFRESULT_SUCCEEDED (hr))	return hr;
+
+  hr = CreateNewIndirectType (idToCreate,
 							   _dictionary,
 							   ppCreatedTypeDef);
   if (AAFRESULT_SUCCEEDED (hr))	return hr;

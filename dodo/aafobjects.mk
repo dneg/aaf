@@ -8,7 +8,7 @@
 # Place the object root name is this list if it is a "persistent"
 # aaf object:
 AAFPERSISTENTOBJECTS="\
-	AAFMIDIFileDescriptor"
+	AAFMIDIFileDescriptor "
 
 
 # These are all of the other non-persistent objects:
@@ -103,6 +103,7 @@ HUMAN_TYPED_IMPL="\
 	AAFTimecodeStream \
 	AAFTimecodeStream12M \
 	AAFTypeDef \
+	AAFTypeDefIndirect \
 	AAFTypeDefInt \
 	AAFTypeDefRename \
 	AAFTypeDefEnum \
