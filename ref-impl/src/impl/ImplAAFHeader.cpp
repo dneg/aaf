@@ -117,7 +117,7 @@ ImplAAFHeader::~ImplAAFHeader ()
 	ImplAAFIdentification *pIdent = NULL;
   size_t size;
   _identificationList.getSize(size);
-	for (size_t i; i < size; i++) {
+	for (size_t i = 0; i < size; i++) {
 		_identificationList.getValueAt(pIdent, i);
 
 		if (pIdent) {
