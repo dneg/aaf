@@ -45,6 +45,10 @@ public:
 
   static OMPropertyDefinition* remove(const OMPropertyId propertyId);
 
+  static void initialize(void);
+
+  static void finalize(void);
+
 private:
 
   typedef OMRedBlackTree<OMPropertyId,

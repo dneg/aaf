@@ -84,4 +84,14 @@ OMPropertyDefinition* OMDictionary::remove(const OMPropertyId propertyId)
   return result;
 }
 
+void OMDictionary::initialize(void)
+{
+  TRACE("OMDictionary::initialize");
+  ASSERT("Unimplemented code not reached", false);
+}
 
+void OMDictionary::finalize(void)
+{
+  TRACE("OMDictionary::initialize");
+  ASSERT("Unimplemented code not reached", false);
+}
