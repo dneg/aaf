@@ -43,7 +43,14 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFSegment::SegmentOffsetToTC (aafPosition_t *pOffset,
                            aafTimecode_t *pTimecode)
 {
-    AAFRESULT aafError = AAFRESULT_TIMECODE_NOT_FOUND;
+	AAFRESULT aafError = AAFRESULT_SUCCESS;
+
+	if (pOffset == NULL ||
+		pTimecode == NULL)
+		aafError = AAFRESULT_NULL_PARAM;
+	else
+		aafError = AAFRESULT_TIMECODE_NOT_FOUND;
+
 	return aafError;
 }
 
@@ -53,13 +60,19 @@ AAFRESULT STDMETHODCALLTYPE
                            aafRational_t *pEditRate,
                            aafFrameOffset_t *pOffset)
 {
-    AAFRESULT aafError = AAFRESULT_TIMECODE_NOT_FOUND;
+	AAFRESULT aafError = AAFRESULT_SUCCESS;
+
+	if (pOffset == NULL ||
+		pTimecode == NULL)
+		aafError = AAFRESULT_NULL_PARAM;
+	else
+		aafError = AAFRESULT_TIMECODE_NOT_FOUND;
+
 	return aafError;
 }
 
 
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFSegment::NumRepresentations (aafInt32 *pCount)
+AAFRESULT ImplAAFSegment::NumRepresentations (aafInt32 *pCount)
 {
     AAFRESULT aafError = AAFRESULT_SUCCESS;
 
