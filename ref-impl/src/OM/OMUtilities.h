@@ -2,7 +2,6 @@
 #define OMUTILITIES_H
 
 #include <stdlib.h>
-#include <windows.h>
 
 #include "OMPortability.h"
 
