@@ -176,7 +176,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
   IEnumAAFTaggedValues 			*enumTaggedVal = NULL;
   IAAFTaggedValue				*taggedVal = NULL;
   IAAFMobSlot 					*mSlot = NULL;
-  aafNumSlots_t 				numSlots = 0;
   IAAFFiller 					*filler = NULL;
   IAAFKLVData					*pKLVData = NULL;
   IAAFTypeDef*					pBaseType = NULL;
@@ -217,7 +216,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 	  //Make the first mob
 	  long	test;
-	  aafRational_t	audioRate = { 44100, 1 };
 
 	  // Create a concrete subclass of Mob
 	  checkResult(defs.cdMasterMob()->
