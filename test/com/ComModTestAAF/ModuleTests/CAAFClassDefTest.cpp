@@ -290,7 +290,7 @@ static void VerifyAAFFile(CAAFClassDefTestLog& Log,IAAFFileSP pFile)
 	checkExpression(pNewClass!=0);
 
 	// CountPropertyDefs() should now return 2
-	aafUInt32 iPropertyDefs=-1;
+	aafUInt32 iPropertyDefs=0;
 	if(pNewClass->CountPropertyDefs(&iPropertyDefs)!=S_OK)
 		Log.MarkTestFailed(COUNT_PROPERTY_DEFS);
 	if(iPropertyDefs!=2)
@@ -331,7 +331,7 @@ static void VerifyAAFFile(CAAFClassDefTestLog& Log,IAAFFileSP pFile)
 	}
 
 	// Make sure GetName() and GetNameBufLen() return correct values
-	aafUInt32 iNameBufLen=-1;
+	aafUInt32 iNameBufLen=0;
 	if(pNewClass->GetNameBufLen(&iNameBufLen)!=S_OK)
 		Log.MarkTestFailed(GET_NAME_BUF_LEN);
 	if(iNameBufLen!=sizeof(wchar_t)*(wcslen(pNewClassName)+1))
@@ -490,7 +490,7 @@ static void CreateAAFFile(CAAFClassDefTestLog& Log)
 		Log.MarkTestFailed(GET_PARENT);
 
 	// CountPropertyDefs() should return 0 for new class definition
-	aafUInt32 iPropertyDefs=-1;
+	aafUInt32 iPropertyDefs=0;
 	if(pNewClass->CountPropertyDefs(&iPropertyDefs)!=S_OK)
 		Log.MarkTestFailed(COUNT_PROPERTY_DEFS);
 	if(iPropertyDefs!=0)
@@ -517,7 +517,7 @@ static void CreateAAFFile(CAAFClassDefTestLog& Log)
 		Log.MarkTestFailed(REGISTER_NEW_PROPERTY_DEF);
 
 	// CountPropertyDefs() should now return 1
-	iPropertyDefs=-1;
+	iPropertyDefs=0;
 	if(pNewClass->CountPropertyDefs(&iPropertyDefs)!=S_OK)
 		Log.MarkTestFailed(COUNT_PROPERTY_DEFS);
 	if(iPropertyDefs!=1)
