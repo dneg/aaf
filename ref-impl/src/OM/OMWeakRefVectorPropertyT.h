@@ -1107,7 +1107,30 @@ void OMWeakReferenceVectorProperty<ReferencedObject>::shallowCopyTo(
                                                  OMProperty* destination) const
 {
   TRACE("OMWeakReferenceVectorProperty<ReferencedObject>::shallowCopyTo");
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
+  PRECONDITION("Valid destination", destination != 0);
+
+  typedef OMWeakReferenceVectorProperty Property;
+  Property* dest = dynamic_cast<Property*>(destination);
+  ASSERT("Destination is correct type", dest != 0);
+  ASSERT("Valid destination", dest != this);
+
+  ASSERT("Destination vector is void", dest->isVoid());
+  VectorIterator iterator(_vector, OMBefore);
+  while (++iterator) {
+    VectorElement& element = iterator.value();
+    dest->_vector.insert(element);
+  }
+
+  dest->_targetTag = _targetTag;
+  dest->_targetName = _targetName;
+  delete [] dest->_targetPropertyPath;
+  dest->_targetPropertyPath = 0; // for BoundsChecker
+  if (_targetPropertyPath != 0) {
+    dest->_targetPropertyPath = savePropertyPath(_targetPropertyPath);
+  } else {
+    dest->_targetPropertyPath = 0;
+  }
+  dest->_keyPropertyId = _keyPropertyId;
 }
 
 template <typename ReferencedObject>

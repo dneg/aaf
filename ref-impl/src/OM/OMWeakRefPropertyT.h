@@ -471,7 +471,24 @@ void OMWeakReferenceProperty<ReferencedObject>::shallowCopyTo(
                                                  OMProperty* destination) const
 {
   TRACE("OMWeakReferenceProperty<ReferencedObject>::shallowCopyTo");
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
+  PRECONDITION("Valid destination", destination != 0);
+
+  typedef OMWeakReferenceProperty Property;
+  Property* dest = dynamic_cast<Property*>(destination);
+  ASSERT("Destination is correct type", dest != 0);
+  ASSERT("Valid destination", dest != this);
+
+  dest->_reference = _reference;
+  dest->_targetTag = _targetTag;
+  dest->_targetName = _targetName;
+  delete [] dest->_targetPropertyPath;
+  dest->_targetPropertyPath = 0; // for BoundsChecker
+  if (_targetPropertyPath != 0) {
+    dest->_targetPropertyPath = savePropertyPath(_targetPropertyPath);
+  } else {
+    dest->_targetPropertyPath = 0;
+  }
+  dest->_keyPropertyId = _keyPropertyId;
 }
 
 template <typename ReferencedObject>
