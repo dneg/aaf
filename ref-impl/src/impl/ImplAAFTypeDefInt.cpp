@@ -21,6 +21,10 @@
 #include "ImplAAFPropValData.h"
 #endif
 
+#ifndef __AAFTypeDefUIDs_h__
+#include "AAFTypeDefUIDs.h"
+#endif
+
 #include <assert.h>
 #include <string.h>
 
@@ -180,7 +184,7 @@ static void pvtZeroFill (const aafMemPtr_t inVal,
 
 ImplAAFTypeDefInt::ImplAAFTypeDefInt ()
   : _size     ( PID_TypeDefinitionInteger_Size,     "Size"),
-	_isSigned ( PID_TypeDefinitionInteger_IsSigned, "IsSigned")
+    _isSigned ( PID_TypeDefinitionInteger_IsSigned, "IsSigned")
 {
   _persistentProperties.put(_size.address());
   _persistentProperties.put(_isSigned.address());
@@ -193,7 +197,7 @@ ImplAAFTypeDefInt::~ImplAAFTypeDefInt ()
 
 AAFRESULT STDMETHODCALLTYPE
    ImplAAFTypeDefInt::Initialize (
-      aafUID_t *  pID,
+      const aafUID_t *  pID,
       aafUInt8  intSize,
       aafBool  isSigned,
       wchar_t *  pTypeName)
@@ -329,13 +333,14 @@ AAFRESULT STDMETHODCALLTYPE
   if (!pvd) return AAFRESULT_BAD_TYPE;
 
   // get the property value's embedded type
-  ImplAAFTypeDef * pPropType;
+  ImplAAFTypeDef * pPropType = 0;
   AAFRESULT hr;
   hr = pvd->GetType (&pPropType);
   if (! AAFRESULT_SUCCEEDED (hr))
 	{
 	  return hr;
 	}
+  assert (pPropType);
 
   // determine if the property value's embedded type is compatible
   // with this one for reading.  For now, we'll only allow integral
@@ -348,6 +353,9 @@ AAFRESULT STDMETHODCALLTYPE
   //	{
   //	  return AAFRESULT_BAD_TYPE;
   //	}
+  assert (pPropType);
+  pPropType->ReleaseReference ();
+  pPropType = 0;
 
   // current impl only allows 1, 2, 4, and 8-bit ints.
   if ((1 != valSize) &&
@@ -421,7 +429,7 @@ AAFRESULT STDMETHODCALLTYPE
   if (!pvd) return AAFRESULT_BAD_TYPE;
 
   // get the property value's embedded type
-  ImplAAFTypeDef * pPropType;
+  ImplAAFTypeDef * pPropType = 0;
   AAFRESULT hr;
   hr = pvd->GetType (&pPropType);
   if (! AAFRESULT_SUCCEEDED (hr))
@@ -437,6 +445,9 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 	  return AAFRESULT_BAD_TYPE;
 	}
+  assert (pPropType);
+  pPropType->ReleaseReference ();
+  pPropType = 0;
 
   // current impl only allows 1, 2, 4, and 8-bit ints.
   if ((1 != valSize) &&
@@ -527,14 +538,41 @@ void ImplAAFTypeDefInt::externalize(OMByte* internalBytes,
 									size_t internalBytesSize,
 									OMByte* externalBytes,
 									size_t externalBytesSize,
-									OMByteOrder /*byteOrder*/) const
+									OMByteOrder byteOrder) const
 {
   assert (internalBytes);
   assert (externalBytes);
-  assert (internalBytesSize == externalBytesSize);
-  assert (externalBytesSize == PropValSize ());
+  // assert (internalBytesSize == externalBytesSize);
+  const size_t thisPropValSize = PropValSize ();
+  assert (externalBytesSize == thisPropValSize);
 
-  memcpy (externalBytes, internalBytes, externalBytesSize);
+  if (internalBytesSize > externalBytesSize)
+	{
+	  // contracting
+	  contract (internalBytes,
+				internalBytesSize,
+				externalBytes,
+				externalBytesSize,
+				byteOrder);
+	}
+
+  else if (internalBytesSize < externalBytesSize)
+	{
+	  // expanding
+	  expand (internalBytes,
+				internalBytesSize,
+				externalBytes,
+				externalBytesSize,
+				byteOrder);
+	}
+
+  else
+	{
+	  // size remains the same
+	  copy (internalBytes,
+			externalBytes,
+			externalBytesSize);
+	}
 }
 
 
@@ -553,10 +591,37 @@ void ImplAAFTypeDefInt::internalize(OMByte* externalBytes,
 {
   assert (externalBytes);
   assert (internalBytes);
-  assert (internalBytesSize == externalBytesSize);
-  assert (internalBytesSize == NativeSize ());
+  // assert (internalBytesSize == externalBytesSize);
+  const size_t thisNativeSize = NativeSize ();
+  assert (internalBytesSize == thisNativeSize);
 
-  memcpy (internalBytes, externalBytes, internalBytesSize);
+  if (externalBytesSize > internalBytesSize)
+	{
+	  // contracting
+	  contract (externalBytes,
+				externalBytesSize,
+				internalBytes,
+				internalBytesSize,
+				byteOrder);
+	}
+
+  else if (externalBytesSize < internalBytesSize)
+	{
+	  // expanding
+	  expand (externalBytes,
+				externalBytesSize,
+				internalBytes,
+				internalBytesSize,
+				byteOrder);
+	}
+
+  else
+	{
+	  // size remains the same
+	  copy (externalBytes,
+			internalBytes,
+			internalBytesSize);
+	}
 }
 
 

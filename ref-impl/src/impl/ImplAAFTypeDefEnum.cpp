@@ -53,7 +53,7 @@ ImplAAFTypeDefEnum::~ImplAAFTypeDefEnum ()
 
 AAFRESULT STDMETHODCALLTYPE
 ImplAAFTypeDefEnum::Initialize (
-      aafUID_t * pID,
+      const aafUID_t * pID,
       ImplAAFTypeDef * pType,
       aafInt64 * pElementValues,
       aafString_t * pElementNames,

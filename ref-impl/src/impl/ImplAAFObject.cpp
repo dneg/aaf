@@ -31,7 +31,6 @@
 #include "ImplAAFPropertyDef.h"
 #include "ImplAAFPropertyValue.h"
 #include "ImplEnumAAFProperties.h"
-#include "ImplAAFBuiltins.h"
 
 #include "ImplAAFObjectCreation.h"
 #include "AAFStoredObjectIDs.h"
@@ -156,7 +155,7 @@ AAFRESULT ImplPropertyCollection::Initialize
 		  assert (pOmProp);
 		  OMPropertyId opid = pOmProp->propertyId ();
 		  assert (pDict);
-		  AAFRESULT hr = pDict->LookupPropDef (opid, &pPropDef);
+		  AAFRESULT hr = pDict->LookupPropDefByOMPid (opid, &pPropDef);
 		  if (AAFRESULT_FAILED (hr)) throw hr;
 		  assert (pPropDef);
 		  hr = _pProperties[i]->Initialize (pPropDef, pOmProp);
@@ -248,7 +247,8 @@ AAFRESULT ImplPropertyCollection::GetNthElement
 
 
 ImplAAFObject::ImplAAFObject ()
-  : _pProperties (0)
+  : _pProperties (0),
+	_OMPropsInited (AAFFalse)
 {}
 
 
@@ -466,7 +466,7 @@ AAFRESULT ImplAAFObject::MyHeadObject
 
 // Gets the dictionary used to create this instance.
 AAFRESULT STDMETHODCALLTYPE
-ImplAAFObject::GetDictionary(ImplAAFDictionary **ppDictionary)
+ImplAAFObject::GetDictionary(ImplAAFDictionary **ppDictionary) const
 {
   if(NULL == ppDictionary)
     return AAFRESULT_NULL_PARAM;
@@ -480,6 +480,79 @@ ImplAAFObject::GetDictionary(ImplAAFDictionary **ppDictionary)
   (*ppDictionary)->AcquireReference();
   
   return AAFRESULT_SUCCESS;
+}
+
+
+void ImplAAFObject::InitOMProperties (void)
+{
+  if (_OMPropsInited)
+	return;
+
+  // Set this first to prevent calls below from re-attempting this
+  // method.
+  _OMPropsInited = AAFTrue;
+
+  //
+  // iterate across the properties, calling initialialize on each.
+  //
+  AAFRESULT hr;
+  ImplAAFDictionary * pDict = 0;
+
+  hr = GetDictionary(&pDict);
+  assert (AAFRESULT_SUCCEEDED (hr));
+  assert (pDict);
+
+  OMPropertySet * ps = propertySet();
+  assert (ps);
+
+  const size_t propCount = ps->count();
+  size_t context = 0;
+  for (size_t i = 0; i < propCount; i++)
+	{
+	  OMProperty * pProp;
+	  pProp = 0;
+	  ps->iterate (context, pProp);
+	  assert (pProp);
+	  OMPropertyId opid = pProp->propertyId ();
+
+	  /*
+	  ImplAAFPropertyDef * pPropDef = 0;
+	  hr = pDict->LookupPropDefByOMPid (opid, &pPropDef);
+	  assert (AAFRESULT_SUCCEEDED (hr));
+	  assert (pPropDef);
+	  */
+
+	  ImplAAFTypeDef * ptd = 0;
+	  hr = pDict->LookupComplexPropTypeByOMPid (opid, &ptd);
+
+	  /*
+	  assert (! ptd);
+	  hr = pPropDef->GetTypeDef (&ptd);
+	  */
+	  assert (AAFRESULT_SUCCEEDED (hr));
+	  // Not necessarily non-null; will be null if this is a
+	  // non-complex type (that is, a strong object reference).
+	  // assert (ptd);
+
+	  /*
+	  pPropDef->ReleaseReference ();
+	  pPropDef = 0;
+	  */
+
+	  assert (pProp);
+	  const char * propName = pProp->name ();
+	  assert (propName);
+	  pProp->initialize (opid, propName, ptd);
+
+	  if (ptd)
+	  {
+		ptd->ReleaseReference ();
+		ptd = 0;
+	  }
+	}
+  assert (pDict);
+  pDict->ReleaseReference ();
+  pDict = 0;
 }
 
 

@@ -3,14 +3,14 @@
 #ifndef __ImplAAFObject_h__
 #define __ImplAAFObject_h__
 
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
+/***********************************************\
+*                                               *
+* Advanced Authoring Format                     *
+*                                               *
+* Copyright (c) 1998-1999 Avid Technology, Inc. *
+* Copyright (c) 1998-1999 Microsoft Corporation *
+*                                               *
+\***********************************************/
 
 
 //
@@ -168,21 +168,33 @@ public:
 
   // Gets the dictionary used to create this instance.
   virtual AAFRESULT STDMETHODCALLTYPE 
-    GetDictionary(ImplAAFDictionary **ppDictionary);
+    GetDictionary(ImplAAFDictionary **ppDictionary) const;
+
+
+  // iterate across the properties, calling initialialize on each.
+  //
+  void InitOMProperties (void);
 
 
 public:
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplAAFObjectTest.cpp.
-  static AAFRESULT test();
-
   OMDECLARE_STORABLE(ImplAAFObject)
+
+protected:
+  void protInitProperty (OMProperty & rPropToInit,
+						 const OMPropertyId propertyId,
+						 const char* name,
+						 const aafUID_t & rTypeID,
+						 const bool isOptional = false) const;
+  //
+  // Initializes the given OM property.
 
 private:
   // private method
   AAFRESULT InitProperties ();
 
   ImplPropertyCollection * _pProperties;
+
+  aafBool                  _OMPropsInited;
 };
 
 
