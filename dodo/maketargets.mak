@@ -386,7 +386,7 @@ $(IMPL_DIR)/AAFClassIDs.h : aafobjects.mk
 	    echo \#endif ; \
 	    echo "" ; \
 	    echo "" ; \
-	    for class in $(AAFOBJECTS) AAFModuleTest ; do \
+	    for class in $(AAFOBJECTS) ; do \
 	    	echo "extern \"C\" const aafClassID_t CLSID_$$class;"; \
 	    done ; \
 	    echo "" ; \
@@ -421,7 +421,7 @@ $(COMAPI_DIR)/AAFCLSIDs.h : aafobjects.mk
 	    echo \#include \"AAFCOMPlatformTypes.h\" ; \
 	    echo \#endif ; \
 	    echo "" ; \
-	    for class in $(AAFOBJECTS) AAFModuleTest ; do \
+	    for class in $(AAFOBJECTS) ; do \
 	    	echo "EXTERN_C const CLSID CLSID_$$class;"; \
 	    done ; \
 	    echo "" ; \
@@ -650,14 +650,11 @@ clean:
 	$(RM) -f $(INCLUDE_DIR)/com-api/AAF.h
 	$(RM) -f $(INCLUDE_DIR)/com-api/AAFTypes.h
 	$(RM) -f $(INCLUDE_DIR)/com-api/AAFPluginTypes.h
-	$(RM) -f $(INCLUDE_DIR)/com-api/AAFModuleTest.h
 	$(RM) -f $(INCLUDE_DIR)/com-api/AAF.idl
 	$(RM) -f $(INCLUDE_DIR)/com-api/AAFTypes.idl
 	$(RM) -f $(INCLUDE_DIR)/com-api/AAFPluginTypes.idl
-	$(RM) -f $(INCLUDE_DIR)/com-api/AAFModuleTest.idl
 	$(RM) -f $(INCLUDE_DIR)/ref-api/AAF.h
 	$(RM) -f $(INCLUDE_DIR)/ref-api/AAFTypes.h
-	$(RM) -f $(INCLUDE_DIR)/ref-api/AAFModuleTest.h
 	$(RM) -f $(INCLUDE_DIR)/ref-api/AAFPluginTypes.h
 	$(RM) -f $(INCLUDE_DIR)/ref-api/AAFPlugin.h
 	$(RM) -f $(IMPL_DIR)/AAFClassIDs.h
