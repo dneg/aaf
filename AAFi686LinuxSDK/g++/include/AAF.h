@@ -33132,6 +33132,7 @@ DECLARE_INTERFACE_(IAAFMasterMobEx, IUnknown)
     // Newly created storage
     /*[out]*/ IAAFRawStorage ** ppNewRawStorage);
 
+
   //***********************************************************
   //
   // AAFCreateRawStorageCachedDisk()
