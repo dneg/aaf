@@ -133,29 +133,29 @@ static void ReadAAFFile(aafWChar * pFileName)
 	for(n = 0; n < numMobs; n++)
 	{
 		IAAFMob			*aMob;
-		aafString_t		name, slotName;
+		aafWChar		name[500], slotName[500];
 		aafNumSlots_t	numSlots;
 		IEnumAAFMobSlots	*slotIter;
 		IAAFMobSlot		*slot;
 		aafUID_t		mobID;
-		aafTrackID_t	trackID;
+		aafSlotID_t	trackID;
 
 		check(mobIter->NextOne (&aMob));
-		check(aMob->GetName (&name));
+		check(aMob->GetName (name));
 		check(aMob->GetMobID (&mobID));
-		wprintf(L"Mob %ld: (ID %ld) is named '%s'\n", n, mobID.Data1, name.value);
+		wprintf(L"Mob %ld: (ID %ld) is named '%s'\n", n, mobID.Data1, name);
 	    check(aMob->GetNumSlots (&numSlots));
 		printf("Found %ld slots\n", numSlots);
 		if(numSlots != 0)
 		{
-			check(aMob->GetAllMobSlots(&slotIter));
+			check(aMob->EnumAAFAllMobSlots(&slotIter));
 			for(s = 0; s < numSlots; s++)
 			{
 				check(slotIter->NextOne (&slot));
-				check(slot->GetName (&slotName));
-				check(slot->GetTrackID(&trackID));
+				check(slot->GetName (slotName));
+				check(slot->GetSlotID(&trackID));
 				wprintf(L"    Slot %ld: (ID %ld), is named '%s'\n",
-							s, trackID, slotName.value);
+							s, trackID, slotName);
 			}
 		}
 	}
@@ -176,7 +176,6 @@ static void CreateAAFFile(aafWChar * pFileName)
 	IAAFFile *					pFile = NULL;
 	IAAFHeader *				pHeader = NULL;
 	aafProductIdentification_t	ProductInfo;
-	aafString_t					newName;
 	aafUID_t					newUID;
 
 	ProductInfo.companyName = (unsigned char *)"AAF Developers Desk";
@@ -208,7 +207,6 @@ static void CreateAAFFile(aafWChar * pFileName)
 	aafWChar		*names[5] = { L"FOOBAR1", L"FOOBAR2", L"FOOBAR3", L"FOOBAR4", L"FOOBAR5" };
 	aafRational_t	editRate = { 2997, 100 };
 	IAAFMobSlot		*newSlot;
-	aafString_t		slotName;
 	IAAFSegment		*seg;
 	aafInt32		testSlot;
 	aafWChar		*slotNames[5] = { L"SLOT1", L"SLOT2", L"SLOT3", L"SLOT4", L"SLOT5" };
@@ -222,10 +220,8 @@ static void CreateAAFFile(aafWChar * pFileName)
 						   IID_IAAFMob, 
 						   (void **)&pMob));
 		newUID.Data1 = test;
-		check(pMob->SetIdentity(&newUID));
-		newName.length = 7;
-		newName.value = names[test];
-		check(pMob->SetName(&newName));
+		check(pMob->SetMobID(&newUID));
+		check(pMob->SetName(names[test]));
 
 		for(testSlot = 0; testSlot < 3; testSlot++)
 		{
@@ -234,10 +230,7 @@ static void CreateAAFFile(aafWChar * pFileName)
 						   CLSCTX_INPROC_SERVER, 
 						   IID_IAAFSegment, 
 						   (void **)&seg));		//!!!Temp, abstract superclass
-			slotName.length = 6;
-			slotName.value = slotNames[testSlot];
-	
-			check(pMob->AppendNewSlot (editRate, seg, testSlot+1, &slotName, &newSlot));
+			check(pMob->AppendNewSlot (seg, testSlot+1, slotNames[testSlot], &newSlot));
 //			seg->Release();
 //			newSlot->Release();
 		}
