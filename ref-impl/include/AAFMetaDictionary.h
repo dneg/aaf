@@ -48,8 +48,8 @@
 //
 // AAFMetaDict.csv 
 //
-// This file was generated on Mon Jul  5 15:23:18 BST 2004
-// by user phil on system pilot16.
+// This file was generated on Mon Aug  9 18:32:25 EDT 2004
+// by user akharkevakharkev on system akharkevichxp.
 //
 // Key to macros.
 //
@@ -5566,6 +5566,16 @@ AAF_TYPE_SEPARATOR()
 AAF_TYPE_DEFINITION_VARYING_ARRAY(AUIDArray, 
   // {04010600-0000-0000-060E-2B3401040101}
   AAF_LITERAL_AUID(0x04010600,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x04, 0x01, 0x01),
+  AAF_TYPE(AUID))
+AAF_TYPE_SEPARATOR()
+
+// AUIDSet
+//
+AAF_TYPE_DEFINITION_SET(AUIDSet, 
+  // {04030100-0000-0000-060E-2B3401040101}
+  AAF_LITERAL_AUID(0x04030100,
     0x0000, 0x0000,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x04, 0x01, 0x01),
   AAF_TYPE(AUID))
