@@ -31,6 +31,7 @@
 #include "OMStorable.h"
 #include "OMType.h"
 #include "OMUtilities.h"
+#include "OMPropertyDefinition.h"
 
 #include <memory.h>
 
@@ -40,6 +41,7 @@ OMProperty::OMProperty(const OMPropertyId propertyId,
                        const int storedForm,
                        const char* name)
 : _propertyId(propertyId), _storedForm(storedForm), _name(name), _type(0),
+  _definition(0),
   // _isOptional(false),
   // BobT: make optional by default, to hack around problem where
   // props may be restored before they're initialized by DM.
@@ -64,9 +66,27 @@ void OMProperty::initialize(const OMPropertyId propertyId,
   // Temporary consistency checks
   ASSERT("Consistent property id", propertyId == OMProperty::propertyId());
   ASSERT("Consistent property name", strcmp(name, OMProperty::name()) == 0);
+  ASSERT("Not initialized by property definition", _definition == 0);
 
   _type = type;
   _isOptional = isOptional;
+}
+
+void OMProperty::initialize(const OMPropertyDefinition* definition)
+{
+  TRACE("OMProperty::initialize");
+
+  PRECONDITION("Valid property definition", definition != 0);
+  _definition = definition;
+
+  // Temporary consistency checks
+  ASSERT("Consistent property id",
+                                 _propertyId == _definition->identification());
+  ASSERT("Consistent property name", strcmp(_name, _definition->name()) == 0);
+  // ASSERT("Consistent property optionality",
+  //                                 _isOptional == _definition->isOptional());
+  ASSERT("Not initialized by type", _type == 0);
+  _isOptional = _definition->isOptional();
 }
 
 OMProperty::~OMProperty(void)
@@ -167,26 +187,35 @@ void OMProperty::write(OMPropertyId propertyId,
   OMStoredObject* store = container->store();
   ASSERT("Valid stored object", store != 0);
 
-  if (_type != 0) { // tjb - temporary, should be PRECONDITION below
+  // BobT: temporarily remove this precondition to allow either
+  // _definition or _type to be set (but not both).
+  // PRECONDITION("Valid property definition", _definition != 0);
 
-    PRECONDITION("Valid property type", _type != 0);
+  const OMType* type = _type;
+  if (_definition != 0) {
+	type = _definition->type();
+	PRECONDITION("Both _type and _definition not set", _type == 0);
+  }
+  if (type != 0) { // tjb - temporary, should be ASSERTION below
 
+    ASSERT("Valid property type", type != 0);
+ 
     // Allocate buffer for property value
-    size_t externalBytesSize = _type->externalSize(internalBytes,
-                                                   internalBytesSize);
+    size_t externalBytesSize = type->externalSize(internalBytes,
+                                                  internalBytesSize);
     OMByte* buffer = new OMByte[externalBytesSize];
     ASSERT("Valid heap pointer", buffer != 0);
 
     // Externalize property value
-    _type->externalize(internalBytes,
-                       internalBytesSize,
-                       buffer,
-                       externalBytesSize,
-                       store->byteOrder());
+    type->externalize(internalBytes,
+                      internalBytesSize,
+                      buffer,
+                      externalBytesSize,
+                      store->byteOrder());
   
     // Reorder property value
     if (store->byteOrder() != hostByteOrder()) {
-      _type->reorder(buffer, externalBytesSize);
+      type->reorder(buffer, externalBytesSize);
     }
 
     // Write property value
@@ -226,9 +255,19 @@ void OMProperty::read(OMPropertyId propertyId,
   OMStoredObject* store = _propertySet->container()->store();
   ASSERT("Valid store", store != 0);
 
-  if (_type != 0) { // tjb - temporary, should be PRECONDITION below
+  // BobT: temporarily remove this precondition to allow either
+  // _definition or _type to be set (but not both).
+  // PRECONDITION("Valid property definition", _definition != 0);
 
-    PRECONDITION("Valid property type", _type != 0);
+  const OMType* type = _type;
+  if (_definition != 0) {
+	type = _definition->type();
+	PRECONDITION("Both _type and _definition not set", _type == 0);
+  }
+
+  if (type != 0) { // tjb - temporary, should be ASSERTION below
+
+    ASSERT("Valid property type", type != 0);
 
     // Allocate buffer for property value
     OMByte* buffer = new OMByte[externalBytesSize];
@@ -239,19 +278,19 @@ void OMProperty::read(OMPropertyId propertyId,
 
     // Reorder property value
     if (store->byteOrder() != hostByteOrder()) {
-      _type->reorder(buffer, externalBytesSize);
+      type->reorder(buffer, externalBytesSize);
     }
 
     // Internalize property value
-    size_t requiredBytesSize = _type->internalSize(buffer, externalBytesSize);
+    size_t requiredBytesSize = type->internalSize(buffer, externalBytesSize);
     ASSERT("Property value buffer large enough",
                                        internalBytesSize >= requiredBytesSize);
 
-    _type->internalize(buffer,
-                       externalBytesSize,
-                       internalBytes,
-                       requiredBytesSize,
-                       hostByteOrder());
+    type->internalize(buffer,
+                      externalBytesSize,
+                      internalBytes,
+                      requiredBytesSize,
+                      hostByteOrder());
     delete [] buffer;
   } else {
     // tjb - temporary, no type information, do it the old way
