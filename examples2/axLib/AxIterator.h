@@ -75,6 +75,7 @@ typedef AxIterator< IAAFSmartPointer<IAAFComponent>,	 IEnumAAFSegments >		  AxSe
 typedef AxIterator< IAAFSmartPointer<IAAFClassDef>,      IEnumAAFClassDefs >      AxClassDefIter;
 typedef AxIterator< IAAFSmartPointer<IAAFTypeDef>,       IEnumAAFTypeDefs >       AxTypeDefIter;
 typedef AxIterator< IAAFSmartPointer<IAAFPropertyDef>,   IEnumAAFPropertyDefs >   AxPropertyDefIter;
+typedef AxIterator< IAAFSmartPointer<IAAFLocator>,       IEnumAAFLocators >       AxLocatorIter;
 
 // Records contain a set of named values that must be iterated over as well,
 // but don't have any sort of native iterator.  This wrapper presents

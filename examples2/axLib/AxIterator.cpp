@@ -242,11 +242,12 @@ template class AxIterator< IAAFSmartPointer<IAAFOperationDef>,  IEnumAAFOperatio
 template class AxIterator< IAAFSmartPointer<IAAFParameterDef>,  IEnumAAFParameterDefs >;
 template class AxIterator< aafUID_t,                            IEnumAAFCodecFlavours >;
 template class AxIterator< aafUID_t,                            IEnumAAFLoadedPlugins >;
-template class AxIterator< IAAFSmartPointer<IAAFComponent>,		IEnumAAFComponents >;
-template class AxIterator< IAAFSmartPointer<IAAFSegment>,		IEnumAAFSegments >;
+template class AxIterator< IAAFSmartPointer<IAAFComponent>,     IEnumAAFComponents >;
+template class AxIterator< IAAFSmartPointer<IAAFSegment>,       IEnumAAFSegments >;
 template class AxIterator< IAAFSmartPointer<IAAFClassDef>,      IEnumAAFClassDefs >;
 template class AxIterator< IAAFSmartPointer<IAAFTypeDef>,       IEnumAAFTypeDefs >;
 template class AxIterator< IAAFSmartPointer<IAAFPropertyDef>,   IEnumAAFPropertyDefs >;
+template class AxIterator< IAAFSmartPointer<IAAFLocator>,       IEnumAAFLocators >;
 
 
 template class AxArrayIterator< IAAFTypeDefFixedArray >;
