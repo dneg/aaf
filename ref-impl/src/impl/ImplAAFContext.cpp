@@ -28,7 +28,7 @@
 #include <wstring.h>	// include wcslen declaration.
 #endif
 
-extern "C" const aafClassID_t CLSID_AAFFile;
+//extern "C" const aafClassID_t CLSID_AAFFile;
 
 // single instance of this class; initialized by first call to GetInstance().
 /*static*/ ImplAAFSession * ImplAAFSession::_singleton; // = 0;
