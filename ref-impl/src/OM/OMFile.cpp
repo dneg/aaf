@@ -32,6 +32,7 @@
 #include "OMStoredObject.h"
 #include "OMClassFactory.h"
 #include "OMObjectDirectory.h"
+#include "OMPropertyTable.h"
 #include "OMUtilities.h"
 
 #include <string.h>
@@ -55,7 +56,8 @@ OMFile::OMFile(const wchar_t* fileName,
                const OMClassFactory* factory,
                const OMLoadMode loadMode)
 : _root(0), _rootStoredObject(store), _classFactory(factory),
-  _objectDirectory(0), _mode(mode), _loadMode(loadMode), _fileName(0)
+  _objectDirectory(0), _referencedProperties(0), _mode(mode),
+  _loadMode(loadMode), _fileName(0)
 {
   TRACE("OMFile::OMFile");
 
@@ -82,8 +84,8 @@ OMFile::OMFile(const wchar_t* fileName,
                const OMClassFactory* factory,
                OMStorable* root)
 : _root(root), _rootStoredObject(store), _classFactory(factory),
-  _objectDirectory(0), _mode(mode), _loadMode(lazyLoad), _fileName(0),
-  _signature(signature)
+  _objectDirectory(0), _referencedProperties(0), _mode(mode),
+  _loadMode(lazyLoad), _fileName(0), _signature(signature)
 {
   TRACE("OMFile::OMFile");
 
@@ -102,6 +104,8 @@ OMFile::~OMFile(void)
   _classFactory = 0;
   delete _objectDirectory;
   _objectDirectory = 0;
+  delete _referencedProperties;
+  _referencedProperties = 0;
   delete _fileName;
   _fileName = 0;
 }
@@ -286,6 +290,7 @@ void OMFile::save(void* clientContext)
   if (_mode == modifyMode) {
     _root->onSave(clientContext);
     _root->save(clientContext);
+    _rootStoredObject->save(referencedProperties());
   }
 }
 
@@ -319,6 +324,7 @@ OMStorable* OMFile::restore(void)
 {
   TRACE("OMFile::restore");
 
+  _rootStoredObject->restore(_referencedProperties);
   _root = OMStorable::restoreFrom(this, "/", *rootStoredObject());
   return root();
 }
@@ -361,6 +367,19 @@ const OMClassFactory* OMFile::classFactory(void) const
   TRACE("OMFile::classFactory");
 
   return _classFactory;
+}
+
+  // @mfunc Retrieve the <c OMPropertyTable> from this <c OMFile>.
+  //   @rdesc The table of referenced properties.
+OMPropertyTable* OMFile::referencedProperties(void)
+{
+  TRACE("OMFile::referencedProperties");
+
+  if (_referencedProperties == 0) {
+    _referencedProperties = new OMPropertyTable();
+    ASSERT("Valid heap pointer", _referencedProperties != 0);
+  }
+  return _referencedProperties;
 }
 
   // @mfunc Retrieve the <c OMObjectDirectory> from this <c OMFile>.
@@ -419,6 +438,48 @@ bool OMFile::isOMFile(void) const
 OMFileSignature OMFile::signature(void) const
 {
   return _signature;
+}
+
+  // @mfunc Find the property instance in this <c OMFile>
+  //        named by <p propertyPathName>.
+  //   @parm The pathname to the desired property.
+  //   @rdesc The property instance.
+  //   @this const
+OMProperty* OMFile::findPropertyPath(const char* propertyPathName) const
+{
+  TRACE("OMFile::findPropertyPath");
+  PRECONDITION("Valid property path name", validString(propertyPathName));
+  PRECONDITION("Path name is absolute", propertyPathName[0] == '/');
+  PRECONDITION("Valid root", _root != 0);
+
+  char* path = new char[strlen(propertyPathName) + 1];
+  ASSERT("Valid heap pointer", path != 0);
+  strcpy(path, propertyPathName);
+  
+  char* element = path;
+  element++; // skip first '/'
+
+  const OMStorable* storable = _root;
+  OMProperty* result = 0;
+
+  char* end = strchr(element, '/');
+  
+  while (end != 0) {
+    *end = 0;
+    storable = storable->find(element);
+    ASSERT("Valid storable pointer", storable != 0);
+    element = ++end;
+    end = strchr(element, '/');
+  }
+
+  if ((element != 0) && (strlen(element) > 0)) {
+    result = storable->findProperty(element);
+  } else {
+    result = 0;
+  }
+
+  delete [] path;
+  return result;
 }
 
 const OMClassId& OMFile::classId(void) const
