@@ -51,22 +51,37 @@ void OMContainer::OMLAbortContainer(void)
 {
 }
 
-extern "C" const aafClassID_t CLSID_AAFHeader;
-
-OMStorable* makeHeader(void)
+// Utility function for creating objects. This function hides the type
+// "aafClassID_t" from the OM.
+//
+static OMStorable* createObject(const OMClassId& classId)
 {
-  ImplAAFHeader* newAAFHeader = dynamic_cast<ImplAAFHeader*>(CreateImpl(CLSID_AAFHeader));
-  OMStorable* retval = newAAFHeader;
-  return retval;
+  const aafClassID_t* id = reinterpret_cast<const aafClassID_t*>(&classId);
+
+  OMStorable* result = dynamic_cast<OMStorable*>(CreateImpl(*id));
+  return result;
 }
 
+// Class ids
+//
+extern "C" const aafClassID_t CLSID_AAFHeader;
 extern "C" const aafClassID_t CLSID_AAFIdentification;
+extern "C" const aafClassID_t CLSID_AAFFile;
+extern "C" const aafClassID_t CLSID_AAFSession;
+extern "C" const aafClassID_t CLSID_AAFHeader;
+extern "C" const aafClassID_t CLSID_AAFIdentification;
+extern "C" const aafClassID_t CLSID_AAFComponent;
+extern "C" const aafClassID_t CLSID_AAFMob;
+extern "C" const aafClassID_t CLSID_AAFSegment;
+extern "C" const aafClassID_t CLSID_AAFMobSlot;
 
-OMStorable* makeIdentification(void)
+// Utility function for registering a given class id as legal in a
+// given file.This function hides the type "aafClassID_t" from the OM.
+//
+static void registerClass(OMFile* file, const aafClassID_t classId)
 {
-  ImplAAFIdentification* newAAFIdentification = dynamic_cast<ImplAAFIdentification*>(CreateImpl(CLSID_AAFIdentification));
-  OMStorable* retval = newAAFIdentification;
-  return retval;
+  file->classFactory()->add(reinterpret_cast<const OMClassId&>(classId),
+                            createObject);
 }
 
 // Open a file
@@ -77,11 +92,19 @@ void OMContainer::OMLOpenContainer(OMLSession sessionData,
                                  ImplAAFHeader*& header)
 {
   _mode = readMode;
-	char *pathname = GetFileName(attributes);
+  char *pathname = GetFileName(attributes);
   _file = OMFile::open(pathname);
 
-  OMFile::classFactory()->add(CLSID_AAFHEADER, makeHeader);
-  OMFile::classFactory()->add(CLSID_AAFIDENTIFICATION, makeIdentification);
+  registerClass(_file, CLSID_AAFHeader);
+  registerClass(_file, CLSID_AAFIdentification);
+  registerClass(_file, CLSID_AAFFile);
+  registerClass(_file, CLSID_AAFSession);
+  registerClass(_file, CLSID_AAFHeader);
+  registerClass(_file, CLSID_AAFIdentification);
+  registerClass(_file, CLSID_AAFComponent);
+  registerClass(_file, CLSID_AAFMob);
+  registerClass(_file, CLSID_AAFSegment);
+  registerClass(_file, CLSID_AAFMobSlot);
 
   OMStorable* head = OMStorable::restoreFrom(_file, "head", *(_file->root()));
   header = dynamic_cast<ImplAAFHeader *>(head);
