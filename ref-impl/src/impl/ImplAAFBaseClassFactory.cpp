@@ -13,7 +13,87 @@
 
 #include "ImplAAFObjectCreation.h"
 
+
 #include <assert.h>
+
+
+//
+// Initialize the AUID's.
+#define INIT_AUID
+#include "AAFStoredObjectIDs.h"
+#undef INIT_AUID
+
+//
+// Declare the corresponding CLSID's external.
+#define AAF_CLASS(name, dataid, parent)\
+  extern "C" aafClassID_t CLSID_AAF##name;
+
+// The AAF reference implementation is still not quite in sync with SMPTE
+// so we have to alias some of the SMPTE names to their corresponding
+// name in AAF.
+//
+#define CLSID_AAFClassDefinition CLSID_AAFClassDef
+#define CLSID_AAFConstantValue CLSID_AAFConstValue
+#define CLSID_AAFDataDefinition CLSID_AAFDataDef
+#define CLSID_AAFDefinitionObject CLSID_AAFDefObject
+#define CLSID_AAFEdgeCode CLSID_AAFEdgecode
+#define CLSID_AAFEffectDefinition CLSID_AAFEffectDef
+#define CLSID_AAFEssenceGroup CLSID_AAFMediaGroup
+#define CLSID_AAFFilmDescriptor CLSID_AAFMediaFilmDescriptor
+#define CLSID_AAFGroup CLSID_AAFEffectInvocation
+#define CLSID_AAFInterchangeObject CLSID_AAFObject
+#define CLSID_AAFJPEGImageData CLSID_AAFJPEGData
+#define CLSID_AAFMIDIFileData CLSID_AAFMIDIData
+#define CLSID_AAFMIDIFileDescriptor CLSID_AAFMIDIDescriptor
+#define CLSID_AAFParameterDefinition CLSID_AAFParameterDef
+#define CLSID_AAFPropertyDefinition CLSID_AAFPropertyDef
+#define CLSID_AAFTypeDefinition CLSID_AAFTypeDef
+#define CLSID_AAFUNIXLocator CLSID_AAFUnixLocator
+
+//
+// Include the AAF macro invocations.
+#include "AAFMetaDictionary.h"
+// cleanup symbols.
+#undef AAF_CLASS
+
+
+
+//
+// Initialize the AUID to CLSID class table.
+typedef struct tagAAFObjectEntry_t
+{
+	LPCOLESTR pClassName;
+	const aafUID_t* pAUID;
+	const aafClassID_t* pClassID;
+} AAFObjectEntry_t;
+
+// cleanup symbols.
+#undef AAF_TABLE_BEGIN
+#undef AAF_CLASS
+#undef AAF_CLASS_SEPARATOR
+#undef AAF_TABLE_END
+#define AAF_TABLE_BEGIN() static AAFObjectEntry_t gAAFObjectTable[] = {
+
+#define AAF_CLASS(name, id, parent)\
+{ OLESTR(#name), &AUID_AAF##name, &CLSID_AAF##name }
+
+#define AAF_CLASS_SEPARATOR() ,
+
+#define AAF_TABLE_END()\
+,{ NULL, NULL, NULL }};
+
+//
+// Include the AAF macro invocations.
+// This will define all of the entries in the gAAFObjectTable.
+#include "AAFMetaDictionary.h"
+// cleanup symbols.
+#undef AAF_TABLE_BEGIN
+#undef AAF_CLASS
+#undef AAF_CLASS_SEPARATOR
+#undef AAF_TABLE_END
+
+
+
 
 //!This file should be merged into other files over time
 
@@ -63,100 +143,39 @@ void OMContainer::OMLAbortContainer(void)
   }
 }
 
+// Temporary function that looksup the code class id for the corresponding
+// auid.
+const aafClassID_t* lookupClassID(const aafUID_t* pAUID)
+{
+  aafInt32 i = 0;
+  
+  // Lookup the class id in the predefined "base class" table.
+  while (gAAFObjectTable[i].pAUID && gAAFObjectTable[i].pClassID)
+  {
+    if (0 == memcmp(pAUID, gAAFObjectTable[i].pAUID, sizeof(aafUID_t)))
+		return gAAFObjectTable[i].pClassID;
+    ++i;
+  }
+
+  return NULL;
+}
+
 // Utility function for creating objects. This function hides the type
 // "aafClassID_t" from the OM.
 //
 static OMStorable* createObject(const OMClassId& classId)
 {
-  const aafClassID_t* id = reinterpret_cast<const aafClassID_t*>(&classId);
+  const aafUID_t* pAUID  = reinterpret_cast<const aafUID_t*>(&classId);
+
+  // Lookup the 
+  const aafClassID_t* id = lookupClassID(pAUID);
+  if (NULL == id)
+    return NULL;
 
   OMStorable* result = dynamic_cast<OMStorable*>(CreateImpl(*id));
   return result;
 }
 
-// Class ids
-//
-extern "C" const aafClassID_t CLSID_AAFAttribute;
-extern "C" const aafClassID_t CLSID_AAFClassDef;
-extern "C" const aafClassID_t CLSID_AAFComponent;
-extern "C" const aafClassID_t CLSID_AAFCompositionMob;
-extern "C" const aafClassID_t CLSID_AAFConstValue;
-extern "C" const aafClassID_t CLSID_AAFContentStorage;
-extern "C" const aafClassID_t CLSID_AAFParameterDef;
-extern "C" const aafClassID_t CLSID_AAFControlPoint;
-extern "C" const aafClassID_t CLSID_AAFDataDef;
-extern "C" const aafClassID_t CLSID_AAFDefObject;
-extern "C" const aafClassID_t CLSID_AAFDictionary;
-extern "C" const aafClassID_t CLSID_AAFEdgecode;
-extern "C" const aafClassID_t CLSID_AAFEffectDef;
-extern "C" const aafClassID_t CLSID_AAFEffectInvocation;
-extern "C" const aafClassID_t CLSID_AAFEssenceData;
-extern "C" const aafClassID_t CLSID_AAFEssenceDescriptor;
-extern "C" const aafClassID_t CLSID_AAFFile;
-extern "C" const aafClassID_t CLSID_AAFFileDescriptor;
-extern "C" const aafClassID_t CLSID_AAFFiller;
-extern "C" const aafClassID_t CLSID_AAFFindSourceInfo;
-extern "C" const aafClassID_t CLSID_AAFHeader;
-extern "C" const aafClassID_t CLSID_AAFIdentification;
-extern "C" const aafClassID_t CLSID_AAFIntegerAttribute;
-extern "C" const aafClassID_t CLSID_AAFLocator;
-extern "C" const aafClassID_t CLSID_AAFMacLocator;
-extern "C" const aafClassID_t CLSID_AAFMasterMob;
-extern "C" const aafClassID_t CLSID_AAFEssenceAccess;
-extern "C" const aafClassID_t CLSID_AAFMediaFilmDescriptor;
-extern "C" const aafClassID_t CLSID_AAFMediaGroup;
-extern "C" const aafClassID_t CLSID_AAFTapeDescriptor;
-extern "C" const aafClassID_t CLSID_AAFWAVEDescriptor;
-extern "C" const aafClassID_t CLSID_AAFDigitalImageDescriptor;
-extern "C" const aafClassID_t CLSID_AAFCDCIDescriptor;
-extern "C" const aafClassID_t CLSID_AAFMob;
-extern "C" const aafClassID_t CLSID_AAFMobSlot;
-extern "C" const aafClassID_t CLSID_AAFNestedScope;
-extern "C" const aafClassID_t CLSID_AAFNetworkLocator;
-extern "C" const aafClassID_t CLSID_AAFObject;
-extern "C" const aafClassID_t CLSID_AAFObjectAttribute;
-extern "C" const aafClassID_t CLSID_AAFParameter;
-extern "C" const aafClassID_t CLSID_AAFParameterSlot;
-extern "C" const aafClassID_t CLSID_AAFPropertyDef;
-extern "C" const aafClassID_t CLSID_AAFPulldown;
-extern "C" const aafClassID_t CLSID_AAFReferenceValue;
-extern "C" const aafClassID_t CLSID_AAFRoot;
-extern "C" const aafClassID_t CLSID_AAFScopeReference;
-extern "C" const aafClassID_t CLSID_AAFSegment;
-extern "C" const aafClassID_t CLSID_AAFSequence;
-extern "C" const aafClassID_t CLSID_AAFSourceClip;
-extern "C" const aafClassID_t CLSID_AAFSourceMob;
-extern "C" const aafClassID_t CLSID_AAFSourceReference;
-extern "C" const aafClassID_t CLSID_AAFStringAttribute;
-extern "C" const aafClassID_t CLSID_AAFTimecode;
-extern "C" const aafClassID_t CLSID_AAFTimecodeStream12M;
-extern "C" const aafClassID_t CLSID_AAFTimecodeStream;
-extern "C" const aafClassID_t CLSID_AAFTimelineMobSlot;
-extern "C" const aafClassID_t CLSID_AAFTransition;
-extern "C" const aafClassID_t CLSID_AAFTypeDef;
-extern "C" const aafClassID_t CLSID_AAFUnixLocator;
-extern "C" const aafClassID_t CLSID_AAFVaryingValue;
-extern "C" const aafClassID_t CLSID_AAFWindowsLocator;
-extern "C" const aafClassID_t CLSID_EnumAAFAttributes;
-extern "C" const aafClassID_t CLSID_EnumAAFClassDefs;
-extern "C" const aafClassID_t CLSID_EnumAAFComponents;
-extern "C" const aafClassID_t CLSID_EnumAAFParameterDefs;
-extern "C" const aafClassID_t CLSID_EnumAAFControlPoints;
-extern "C" const aafClassID_t CLSID_EnumAAFDataDefs;
-extern "C" const aafClassID_t CLSID_EnumAAFDefs;
-extern "C" const aafClassID_t CLSID_EnumAAFEffectDefs;
-extern "C" const aafClassID_t CLSID_EnumAAFIdentifications;
-extern "C" const aafClassID_t CLSID_EnumAAFLocators;
-extern "C" const aafClassID_t CLSID_EnumAAFEssenceData;
-extern "C" const aafClassID_t CLSID_EnumAAFMobComments;
-extern "C" const aafClassID_t CLSID_EnumAAFMobSlots;
-extern "C" const aafClassID_t CLSID_EnumAAFMobs;
-extern "C" const aafClassID_t CLSID_EnumAAFParameterSlots;
-extern "C" const aafClassID_t CLSID_EnumAAFPropertyDefs;
-extern "C" const aafClassID_t CLSID_EnumAAFProperties;
-extern "C" const aafClassID_t CLSID_EnumAAFReferenceValues;
-extern "C" const aafClassID_t CLSID_EnumAAFSegments;
-extern "C" const aafClassID_t CLSID_EnumAAFTypeDefs;
 
 // Utility function for registering a given class id as legal in a
 // given file.This function hides the type "aafClassID_t" from the OM.
@@ -167,89 +186,72 @@ static void registerClass(OMFile* file, const aafClassID_t& classId)
                             createObject);
 }
 
-void registerPredefinedClasses(OMFile* file)
+static void registerPredefinedClasses(OMFile* file)
 {
-  registerClass(file, CLSID_AAFAttribute);
-  registerClass(file, CLSID_AAFClassDef);
-  registerClass(file, CLSID_AAFComponent);
-  registerClass(file, CLSID_AAFCompositionMob);
-  registerClass(file, CLSID_AAFConstValue);
-  registerClass(file, CLSID_AAFContentStorage);
-  registerClass(file, CLSID_AAFParameterDef);
-  registerClass(file, CLSID_AAFControlPoint);
-  registerClass(file, CLSID_AAFDataDef);
-  registerClass(file, CLSID_AAFDefObject);
-  registerClass(file, CLSID_AAFDictionary);
-  registerClass(file, CLSID_AAFEdgecode);
-  registerClass(file, CLSID_AAFEffectDef);
-  registerClass(file, CLSID_AAFEffectInvocation);
-  registerClass(file, CLSID_AAFEssenceData);
-  registerClass(file, CLSID_AAFEssenceDescriptor);
-  registerClass(file, CLSID_AAFFile);
-  registerClass(file, CLSID_AAFFileDescriptor);
-  registerClass(file, CLSID_AAFFiller);
-  registerClass(file, CLSID_AAFFindSourceInfo);
-  registerClass(file, CLSID_AAFHeader);
-  registerClass(file, CLSID_AAFIdentification);
-  registerClass(file, CLSID_AAFIntegerAttribute);
-  registerClass(file, CLSID_AAFLocator);
-  registerClass(file, CLSID_AAFMacLocator);
-  registerClass(file, CLSID_AAFMasterMob);
-  registerClass(file, CLSID_AAFEssenceAccess);
-  registerClass(file, CLSID_AAFMediaFilmDescriptor);
-  registerClass(file, CLSID_AAFMediaGroup);
-  registerClass(file, CLSID_AAFTapeDescriptor);
-  registerClass(file, CLSID_AAFWAVEDescriptor);
-  registerClass(file, CLSID_AAFDigitalImageDescriptor);
-  registerClass(file, CLSID_AAFCDCIDescriptor);
-  registerClass(file, CLSID_AAFMob);
-  registerClass(file, CLSID_AAFMobSlot);
-  registerClass(file, CLSID_AAFNestedScope);
-  registerClass(file, CLSID_AAFNetworkLocator);
-  registerClass(file, CLSID_AAFObject);
-  registerClass(file, CLSID_AAFObjectAttribute);
-  registerClass(file, CLSID_AAFParameter);
-  registerClass(file, CLSID_AAFParameterSlot);
-  registerClass(file, CLSID_AAFPropertyDef);
-  registerClass(file, CLSID_AAFPulldown);
-  registerClass(file, CLSID_AAFReferenceValue);
-  registerClass(file, CLSID_AAFRoot);
-  registerClass(file, CLSID_AAFScopeReference);
-  registerClass(file, CLSID_AAFSegment);
-  registerClass(file, CLSID_AAFSequence);
-  registerClass(file, CLSID_AAFSourceClip);
-  registerClass(file, CLSID_AAFSourceMob);
-  registerClass(file, CLSID_AAFSourceReference);
-  registerClass(file, CLSID_AAFStringAttribute);
-  registerClass(file, CLSID_AAFTimecode);
-  registerClass(file, CLSID_AAFTimecodeStream);
-  registerClass(file, CLSID_AAFTimecodeStream12M);
-  registerClass(file, CLSID_AAFTimelineMobSlot);
-  registerClass(file, CLSID_AAFTransition);
-  registerClass(file, CLSID_AAFTypeDef);
-  registerClass(file, CLSID_AAFUnixLocator);
-  registerClass(file, CLSID_AAFVaryingValue);
-  registerClass(file, CLSID_AAFWindowsLocator);
-  registerClass(file, CLSID_EnumAAFAttributes);
-  registerClass(file, CLSID_EnumAAFClassDefs);
-  registerClass(file, CLSID_EnumAAFComponents);
-  registerClass(file, CLSID_EnumAAFParameterDefs);
-  registerClass(file, CLSID_EnumAAFControlPoints);
-  registerClass(file, CLSID_EnumAAFDataDefs);
-  registerClass(file, CLSID_EnumAAFDefs);
-  registerClass(file, CLSID_EnumAAFEffectDefs);
-  registerClass(file, CLSID_EnumAAFIdentifications);
-  registerClass(file, CLSID_EnumAAFLocators);
-  registerClass(file, CLSID_EnumAAFEssenceData);
-  registerClass(file, CLSID_EnumAAFMobComments);
-  registerClass(file, CLSID_EnumAAFMobSlots);
-  registerClass(file, CLSID_EnumAAFMobs);
-  registerClass(file, CLSID_EnumAAFParameterSlots);
-  registerClass(file, CLSID_EnumAAFPropertyDefs);
-  registerClass(file, CLSID_EnumAAFProperties);
-  registerClass(file, CLSID_EnumAAFReferenceValues);
-  registerClass(file, CLSID_EnumAAFSegments);
-  registerClass(file, CLSID_EnumAAFTypeDefs);
+#if 1
+  aafInt32 i = 0;
+  
+  // Lookup the class id in the predefined "base class" table.
+  while (gAAFObjectTable[i].pAUID && gAAFObjectTable[i].pClassID)
+  {
+    registerClass(file, *gAAFObjectTable[i].pAUID);
+    ++i;
+  }
+
+#else
+  registerClass(file, AUID_AAFClassDef);
+  registerClass(file, AUID_AAFComponent);
+  registerClass(file, AUID_AAFCompositionMob);
+  registerClass(file, AUID_AAFConstValue);
+  registerClass(file, AUID_AAFContentStorage);
+  registerClass(file, AUID_AAFControlPoint);
+  registerClass(file, AUID_AAFDataDef);
+  registerClass(file, AUID_AAFDefObject);
+  registerClass(file, AUID_AAFDictionary);
+  registerClass(file, AUID_AAFEdgecode);
+  registerClass(file, AUID_AAFEffectDef);
+  registerClass(file, AUID_AAFEffectInvocation);
+  registerClass(file, AUID_AAFEssenceData);
+  registerClass(file, AUID_AAFEssenceDescriptor);
+  registerClass(file, AUID_AAFFileDescriptor);
+  registerClass(file, AUID_AAFFiller);
+  registerClass(file, AUID_AAFHeader);
+  registerClass(file, AUID_AAFIdentification);
+  registerClass(file, AUID_AAFLocator);
+  registerClass(file, AUID_AAFMacLocator);
+  registerClass(file, AUID_AAFMasterMob);
+  registerClass(file, AUID_AAFMediaFilmDescriptor);
+  registerClass(file, AUID_AAFMediaGroup);
+  registerClass(file, AUID_AAFTapeDescriptor);
+  registerClass(file, AUID_AAFWAVEDescriptor);
+  registerClass(file, AUID_AAFDigitalImageDescriptor);
+  registerClass(file, AUID_AAFCDCIDescriptor);
+  registerClass(file, AUID_AAFMob);
+  registerClass(file, AUID_AAFMobSlot);
+  registerClass(file, AUID_AAFNestedScope);
+  registerClass(file, AUID_AAFNetworkLocator);
+  registerClass(file, AUID_AAFObject);
+  registerClass(file, AUID_AAFParameter);
+  registerClass(file, AUID_AAFParameterDef);
+  registerClass(file, AUID_AAFPropertyDef);
+  registerClass(file, AUID_AAFPulldown);
+  registerClass(file, AUID_AAFReferenceValue);
+  registerClass(file, AUID_AAFScopeReference);
+  registerClass(file, AUID_AAFSegment);
+  registerClass(file, AUID_AAFSequence);
+  registerClass(file, AUID_AAFSourceClip);
+  registerClass(file, AUID_AAFSourceMob);
+  registerClass(file, AUID_AAFSourceReference);
+  registerClass(file, AUID_AAFTimecode);
+  registerClass(file, AUID_AAFTimecodeStream);
+  registerClass(file, AUID_AAFTimecodeStream12M);
+  registerClass(file, AUID_AAFTimelineMobSlot);
+  registerClass(file, AUID_AAFTransition);
+  registerClass(file, AUID_AAFTypeDef);
+  registerClass(file, AUID_AAFUnixLocator);
+  registerClass(file, AUID_AAFVaryingValue);
+  registerClass(file, AUID_AAFWindowsLocator);
+#endif
 }
 
 // Open a file
