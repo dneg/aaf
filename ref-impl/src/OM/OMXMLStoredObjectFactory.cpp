@@ -26,6 +26,8 @@
 #include "OMXMLStoredObject.h"
 #include "OMUtilities.h"
 #include "OMAssertions.h"
+#include "OMRawStorage.h"
+#include "OMDiskRawStorage.h"
 
   // @mfunc Constructor.
 OMXMLStoredObjectFactory::OMXMLStoredObjectFactory(
@@ -143,13 +145,14 @@ OMXMLStoredObjectFactory::openModify(const wchar_t* /* fileName */)
   //   @rdesc An <c OMXMLStoredObject> representing the root object in
   //          the disk file.
 OMStoredObject*
-OMXMLStoredObjectFactory::createModify(const wchar_t* /* fileName */,
-                                       const OMByteOrder /* byteOrder */)
+OMXMLStoredObjectFactory::createModify(const wchar_t* fileName,
+                                       const OMByteOrder byteOrder)
 {
-  TRACE("OMXMLStoredObjectFactory::creatModify");
-  ASSERT("Unimplemented code not reached", false);
-//return OMXMLStoredObject::createModify(fileName, byteOrder);
-  return 0;
+  TRACE("OMXMLStoredObjectFactory::createModify");
+  OMRawStorage* rawStorage = OMDiskRawStorage::openNewModify(fileName);
+  OMStoredObject* result = OMXMLStoredObject::createModify(rawStorage,
+                                                           byteOrder);
+  return result;
 }
 
   // @mfunc Create a new root <c OMXMLStoredObject> in the disk file
@@ -215,14 +218,12 @@ bool OMXMLStoredObjectFactory::compatibleRawStorage(
   //   @parm The <t OMAccessMode>.
   //   @rdesc True if the file can be created, false otherwise.
 bool OMXMLStoredObjectFactory::compatibleNamedFile(
-                                   const OMFile::OMAccessMode /* accessMode */)
+                                  const OMFile::OMAccessMode NNAME(accessMode))
 {
   TRACE("OMXMLStoredObjectFactory::compatibleNamedFile");
 
-  // Directly accessed named files are not supported regardless of the
-  // access mode. Named files are supported via a disk file based
-  // implementation of OMRawStorage.
-  bool result = false;
+  // tjb -- missing checks ?
+  bool result = true;
   return result;
 }
 
