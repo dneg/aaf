@@ -867,6 +867,10 @@ SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFCodecFlavours.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\com-api\test\CEnumAAFCodecFlavoursTest.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFComponents.cpp"
 # End Source File
 # Begin Source File
@@ -927,6 +931,10 @@ SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFLoadedPlugins.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\com-api\test\CEnumAAFLoadedPluginsTest.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFLocators.cpp"
 # End Source File
 # Begin Source File
@@ -976,6 +984,10 @@ SOURCE="..\..\..\ref-impl\src\com-api\test\CEnumAAFPluginDescTest.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFPluginLocators.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\test\CEnumAAFPluginLocatorsTest.cpp"
 # End Source File
 # Begin Source File
 
