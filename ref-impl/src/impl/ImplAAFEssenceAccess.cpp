@@ -1667,6 +1667,7 @@ AAFRESULT STDMETHODCALLTYPE
 	ImplAAFHeader			*compHead = NULL;
 	ImplEnumAAFLocators		*enumLocate = NULL;
 	ImplAAFLocator			*pLoc = NULL;
+	ImplAAFStaticMobSlot  *pStaticMobSlot=NULL;
 	aafPosition_t	Pos;
 	aafUInt16		channelIndex;
 	aafUID_t		 mediaKind, myFileCLSID;
@@ -1679,6 +1680,7 @@ AAFRESULT STDMETHODCALLTYPE
 	aafBool					found = kAAFFalse, isIdentified;
 	aafUID_t				testFormat;
 	aafRational_t 		mmobRate;
+	bool isStatic=false;
 
 	
 	XPROTECT()
@@ -1686,7 +1688,15 @@ AAFRESULT STDMETHODCALLTYPE
 		CHECK(masterMob->MyHeadObject(&compHead));
 		CHECK(masterMob->FindSlotBySlotID (slotID,&slot));
 		CHECK(slot->GetSegment(&seg));
-		CHECK(((ImplAAFTimelineMobSlot*)slot)->GetEditRate(&mmobRate));
+		// check if we have static or dynamic essence
+		pStaticMobSlot = dynamic_cast<ImplAAFStaticMobSlot *>(slot);
+		if(pStaticMobSlot==NULL)
+			isStatic=false;
+		else
+			isStatic=true;
+
+		if(!isStatic)
+			CHECK(((ImplAAFTimelineMobSlot*)slot)->GetEditRate(&mmobRate));
 		slot->ReleaseReference();
 		slot = NULL;
 
@@ -1701,7 +1711,8 @@ AAFRESULT STDMETHODCALLTYPE
 		CvtInt32toPosition(0, Pos);	
 
 		// comparison performed in units of Master mob edit rate
-		while (Pos < masterMobLength) 
+		//Ian/Oct 2004 If there is static essence we only go round this oloop once. A break at the bottom exits the loop
+		while (Pos < masterMobLength || (isStatic)) 
 		{
 			aafAccessor_t access;
 			::memset(&access, 0x00, sizeof(aafAccessor_t));
@@ -1929,6 +1940,8 @@ AAFRESULT STDMETHODCALLTYPE
 		
 			CHECK(access.codec->Open(iFileMob, openMode, access.stream, compEnable));
 		
+			if(!isStatic)
+			{
 			// Samples in Source mob are in Sample Rate which might be different
 			// to the Master mob edit rate. So we need to convert the samples
 			// into units of Master mob edit rate to check Pos against 
@@ -1938,11 +1951,16 @@ AAFRESULT STDMETHODCALLTYPE
 			aafPosition_t curPos;
 			CHECK(AAFConvertEditRate(smobRate, access.length, mmobRate, kRoundCeiling, &curPos));
 			Pos += curPos;
+			}
 
 			_codecList.append(access);
 
 			iFileMob->Release();
 			iFileMob = NULL;
+
+			//assume that all the satic essence is available from one pass
+			if(isStatic)
+				break;
 		
 		}	 
 
@@ -2005,6 +2023,7 @@ AAFRESULT STDMETHODCALLTYPE
 		slot = 0;
 		if(seg != NULL)
 		  seg->ReleaseReference();
+
 		seg = 0;
 		if(sourceInfo != NULL)
 		  sourceInfo->ReleaseReference();
