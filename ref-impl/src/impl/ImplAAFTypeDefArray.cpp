@@ -145,6 +145,10 @@ AAFRESULT STDMETHODCALLTYPE
   assert (1 == refCount);
 
   AAFRESULT hr;
+  hr = pvd->Initialize(this);
+  if (! AAFRESULT_SUCCEEDED (hr))
+	return hr;
+
   hr = SetCArray (pvd, pInitData, initDataSize);
   if (AAFRESULT_FAILED (hr))
 	return hr;
