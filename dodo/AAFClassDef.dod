@@ -8,6 +8,11 @@ AAFDefinitionObject\
 #c
 #import ./AAFUnitTest.exp
 AD_HEAD
+
+AD_INCLUDE(AAFTypes)
+
+AD_FORWARD_DECLARATION(EnumAAFPropertyDefinitions)
+
 /******************************************\
 *                                          *
 * Advanced Authoring Format                *
@@ -27,11 +32,14 @@ AD_HEAD
  *
  *************************************************************************/
 
+AD_CLASS_UUID(dfbd6526, 1d81, 11d2, bf, 96, 00, 60, 97, 11, 62, 12)
+
+AD_DEFAULT_UUID(dfbd6525, 1d81, 11d2, bf, 96, 00, 60, 97, 11, 62, 12)
 AD_CLASS_BEGIN
 
 AD_CONSTRUCTOR2([in],aafAuid_t,Auid,auid for this definition object,
 				[in],aafString_t, Name, Unique name of this Data definition,
-				Constructs and sets the AUID ad Name of this DataDefinition object.)
+				Constructs and sets the AUID ad Name of this ClassDefinition object.)
 
 AD_METHOD1(GetName,
 		   [retval][out],
@@ -53,6 +61,28 @@ AD_METHOD1(SetParentAUID,
 		   ParentAuid,
 		   Parent class AUID,
 		   Sets the Parent's AUID.)
+
+AD_METHOD1(AppendPropertyDef,
+		   [in\,ref],
+		   AD_AAFTYPES\(AAFPropertyDefintion\) *,
+		   pPropertyDef, 
+		   Property Definition to be added,
+		   Add the Property Definition to the class definition.)
+
+AD_METHOD1(RemovePropertyDef,
+		   [in\,ref],
+		   AD_AAFTYPES\(AAFPropertyDefinition\) *,
+		   pPropertyDef, 
+		   Property Definition to be removed,
+		   Remove Property Definition from the class definition.)
+
+AD_METHOD1(GetPropertyDefinitions,
+		   [retval][out],
+		   AD_AAFTYPES\{EnumAAFPropertyDefinitions\} **,
+		   ppEnum,
+		   Property Definition enumeration,
+		   Returns an enumerator for aaf property definitions.)
+		    		
 
 AD_OVERRIDE(.method-Test)
 
