@@ -60,6 +60,7 @@ AAFNONPERSISTENTOBJECTS = \
 	EnumAAFMobComments \
 	EnumAAFParameterSlots \
 	EnumAAFPropertyDefs \
+	EnumAAFProperties \
 	EnumAAFReferenceValues \
 	EnumAAFSegments \
 	EnumAAFTypeDefs 
@@ -93,7 +94,6 @@ HUMAN_TYPED_IMPL = \
 	AAFObject \
 	AAFSegment \
 	AAFSequence \
-	AAFSession \
 	AAFSourceClip \
 	AAFSourceMob \
 	AAFSourceReference \
