@@ -44,7 +44,7 @@ WaveHeader::WaveHeader( std::pair<int, std::auto_ptr<aafUInt8> > buf )
 
 	_bytesPerSample = GetInt32( BYTE_RATE_IDX ) / _numChannels / _sampleRate;
 
-	_numSamples = GetInt32( SUB_CHUNK2_ID_SIZE_IDX ) / _numChannels * _bytesPerSample;
+	_numSamples = GetInt32( SUB_CHUNK2_ID_SIZE_IDX ) / _numChannels / _bytesPerSample;
 }
 
 WaveHeader::WaveHeader( int sampleRate,
