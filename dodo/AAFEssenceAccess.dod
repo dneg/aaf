@@ -6,20 +6,30 @@ AAFRoot\
 #endm
 #c
 #import ./AAFObject.exp
-#import ./AAFEndian.exp
 AD_HEAD
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
+/************************************************\
+*											    *
+* Advanced Authoring Format					    *
+*										        *
+* Copyright (c) 1998-1999 Avid Technology, Inc. *
+* Copyright (c) 1998-1999 Microsoft Corporation *
+*										        *
+\************************************************/
 
+// AAFEssenceAccess is an interace which provides streaming access over essence data.  This
+// interfaces deals with essence data which is in an uncompressed form, and handles compression
+// or decompression of the data if required.  For access to data in raw form, call the
+// GetEssenceSampleStream method on this interface, which gives access to the underlying stream
+// used by the essence codecs and AAFEssenceAccess.
+//
+// You should call the CreateEssence or OpenEssence calls on AAFMasterMob in order to get an
+// interface pointer to AAFEssenceAccess, as there is no public create or open method in the interface.
+//
+// A number of errors can be returned from most method calls.  These are:
+//		AAFRESULT_NOMEMORY -- The system ran out of memory processing the method
+//		AAFRESULT_NULL_PARAM -- A NULL parameter was passed in which was required.
 
 AD_FORWARD_DECLARATION(AAFDataDef)
-AD_FORWARD_DECLARATION(AAFMasterMob)
 AD_FORWARD_DECLARATION(AAFSourceMob)
 AD_FORWARD_DECLARATION(AAFSourceClip)
 AD_FORWARD_DECLARATION(AAFEssenceFormat)
@@ -30,316 +40,59 @@ AD_CLASS_UUID(aed97eb1, 2bc8, 11D2, bf, aa, 00, 60, 97, 11, 62, 12)
 AD_DEFAULT_UUID(aed97eb0, 2bc8, 11D2, bf, aa, 00, 60, 97, 11, 62, 12)
 AD_XCLASS_BEGIN(Concrete, Transient)
 
-/****/
-AD_XMETHOD7(CreateAudioEssence,
-[in],objIn, AAFMasterMob,masterMob,on this master mob,
-[in],objPass, aafSlotID_t,masterSlotID,,
-[in],objIn, AAFSourceMob,fileMob,and this file mob create audio,
-[in],objPass, aafRational_t,samplerate,with this sample rate,
-[in],objPass, aafCompressEnable_t,Enable,optionally compressing it,
-[in],objPass, aafInt16,sampleSize,with this sample size,
-[in],objPass, aafInt16,obj,and this many channels,
-Initializes an audio essence stream.)
-//@comm Creates either a single stream of audio essence, or interleaved
-// audio-only data.  A separate call \(MediaMultiCreate\) exists 
-// in order to create interleaved audio and video data.
-// 
-//@comm The essence object initialized from this call can be used with
-// WriteDataSamples or WriteMultiSamples but NOT with 
-// or WriteDataLines.
-// 
-// Argument Notes:
-//@comm If you are creating the essence\, and then attaching it to a master
-// mob, then the "masterMob" field may be left NULL.
-// 
-//@comm The numChannels field refers to the number of interleaved
-// channels on a single data stream.  
-// 
-//@comm The sample rate should be the actual samples per second\, not the
-// edit rate.
-//@comm omfmAudioMediaCreate
-
-/****/
-AD_XMETHOD9(VideoMediaCreate,
-[in],objIn, AAFMasterMob,masterMob,on this master mob,
-[in],objPass, aafSlotID_t,masterSlotID,masterSlotID,
-[in],objIn, AAFSourceMob,fileMob,and this file mob create video,
-[in],objPass, aafCompressEnable_t,Enable,optionally compressing it,
-[in],objPass, aafRational_t,editrate,editrate,
-[in],objPass, aafUInt32,StoredHeight,with this height,
-[in],objPass, aafUInt32,StoredWidth,and this width,
-[in],objPass, aafFrameLayout_t,layout,and this frame layout.,
-[in],objPass, aafRational_t,ratio,image aspect ratio,
-Creates an audio essence stream.)
-//@comm Creates a single stream of video essence.  A separate call
-// \(MediaMultiCreate\) exists to create interleaved audio and
-// video data.
-//@comm The essence object initialized from this call can be used with
-// WriteDataSamples or WriteDataLines\, but NOT with
-// WriteMultiSamples.
-//@comm If you are creating the essence\, and then attaching it to a master
-// mob, then the "masterMob" field may be left NULL.
-//@comm The storedHeight and storedWidth are the dimensions of the frame
-// as stored on disk \(or as it should be restored by the codec.  The
-// displayRect and sampledRect are set to:
-// 	\(0\,0 @ sampledWidth\, sampledHeight\).
-//@comm If the displayed rectangle is not the same as the stored rectangle
-// \(as with the old leadingLines and trailingLines\)\, then you should
-// call SetDisplayRect\(\).
-//@comm The frame layout contains the number of fields and whether they are
-// interlaced\, but does not specify field dominance.
-//@comm Replaces omfmVideoMediaCreate
-
-AD_XMETHOD2(SetEssenceDestination,
-[in],objIn,	  AAFLocator,destination,Optionally create the file HERE.,
-[in],objPass, aafFileFormat_t,fileFormat,with this format,
-Sets where the essence created by create\(\) will be created.)
-
 AD_XMETHOD1(SetEssenceCodecVariety,
 [in],objPass, aafUID_t,variety,and this sub-variety,
-Sets which variety of the codec ID is to be used.)
+Sets which variety of the codec ID is to be used. )
+	//@comm An example of a variety would be a number of standard starting JPEG tables.
 
 /****/
-AD_XMETHOD7(Create,
-[in],objIn,   AAFMasterMob,masterMob,on this master mob,
-[in],objPass, aafSlotID_t,masterSlotID,,
-[in],objPass, aafUID_t,mediaKind,create essence of this type,
-[in],objPass, aafUID_t,codecID,using this codec,
-[in],objPass, aafRational_t,editRate,with this edit rate,
-[in],objPass, aafRational_t,samplerate,with this sample rate,
-[in],objPass, aafCompressEnable_t,Enable,optionally compressing it,
-Creates a single channel stream of essence.)
-	//@comm Creates a single channel stream of essence.  Convenience functions
-	// exist to create audio or video essence\, and a separate call
-	// \(MultiCreate\) exists to create interleaved audio and
-	// video data.
-	//@comm The essence handle from this call can be used with
-	// WriteDataSamples  and possibly WriteDataLines\, but NOT with
-	// WriteMultiSamples.
-	//@comm If you are creating the essence\, and then attaching it to a master
-	// mob, then the "masterMob" field may be left NULL.
-	// For video\, the sampleRate should be the edit rate of the file mob.
-	// For audio\, the sample rate should be the actual samples per second.
-	//@comm Replaces omfmMediaCreate
-
-	
-/****/
-AD_XMETHOD5(MultiCreate,
-[in],objIn, AAFMasterMob,masterMob,on this master mob,
-[in],objPass, aafUID_t,codecID,using this codec,
-[in],objPass, aafInt16,arrayElemCount,this many channels,
-[in\,ref\,size_is\(arrayElemCount\)],objPass, aafmMultiCreate_t *,mediaArray,using these definitions,
-[in],objPass, aafCompressEnable_t,Enable,optionally compressing it,
-Creates a multi-channel interleaved stream of essence.)
-	//@comm The essence handle from this call can be used with
-	// WriteDataSamples or WriteMultiSamples but NOT with 
-	// or WriteDataLines.
-	//@comm If you are creating the essence, and then attaching it to a master
-	// mob, then the "masterMob" field may be left NULL.
-	//@comm Replaces omfmMediaMultiCreate
-	
-/****/
-AD_METHOD1(SetBlockingSize,
-[in],aafInt32,numBytes,Preallocate this many bytes,
-Sets the size of chunks allocated on disk during writes [only].)
-	//@comm Allocating the space in this fashion ensures that the data will be
-	// contiguous on disk (for at least numBytes bytes) even if other
-	// disk operations allocate space on the disk.  If the data written
-	// exceeds numBytes, then another disk block of numBytes size will be
-	// allocated.
-	//@comm Takes a essence handle, so the essence must have been opened or created.
-	// The space is allocated in terms of bytes.
-	//@comm Replaces omfmSetBlockingSize
-
-/****/
-AD_METHOD2(SetVideoLineMap,
-[in],aafInt16,startLine,set this starting video line,
-[in],aafFieldTop_t,type,and this top field,
-Sets the video line map structure used by the codecs to deinterlace fields.)
-	//@comm Takes a essence handle, so the essence must have been opened or created.
-	//@comm Replaces omfmSetVideoLineMap.
-
-/****/
-AD_METHOD1(GetVideoTopField,
-[out],aafFieldTop_t *,type,and this top field,
-Gets the top video field used by the codecs to deinterlace fields.)
-	//@comm Takes a essence handle, so the essence must have been opened or created.
-	//@comm Replaces omfmGetVideoTopField
-	
-/****/
-AD_METHOD1(SetDisplayRect,
-[in\\\,ref],aafRect_t *,DisplayRect,set display rectangle,
-Handles the case where the displayed rectangle is not the same as the stored rectangle [as with the old leadingLines and trailingLines])
-	//@comm Handles the case where the displayed rectangle is not the same as
-	// the stored rectangle (as with the old leadingLines and trailingLines).
-	// A positive "leadingLines" (from 1.5) becomes a positive yOffset, and
-	// decreases the display height.
-	// A positive "trailingLines" (from 1.5) also decreases the display height.
-	//@comm Takes a essence handle, so the essence must have been opened or created.
-	//@comm Replaces  omfmSetDisplayRect
-
-/****/
-AD_METHOD1(SetSampledRect,
-[in\\\,ref],aafRect_t *,SampledRect,set sampled rectangle,
-Handles the case where the sampled rectangle is not the same as the stored rectangle.)
-	//@comm Takes a essence handle, so the essence must have been opened or created
-	//@comm Replaces omfmSetSampledRect
-	
-/****/
-AD_METHOD2(WriteMultiSamples,
-[in],aafInt16,arrayElemCount,Do this many transfers,
-[out\\\,size_is\\\(arrayElemCount\\\)],aafmMultiXfer_t *,xferArray,referencing this array,
-Writes multiple channels worth of sample data to an interleaved data stream in the natural order for the CODEC.)
-	//@comm arrayElemCount is the size of the array or transfer operations.
-	// xferArray points to an array of transfer parameters.  All fields
-	// in this array except for bytesXferred must be set up before
-	// doing the transfer.
-	//@comm Replaces omfmWriteMultiSamples
-
-/****/
-AD_METHOD3(WriteDataSamples,
-[in],aafInt32,nSamples,write this many samples,
+AD_METHOD3(WriteSamples,
+[in],aafUInt32,nSamples,write this many samples,
 [in\\\,size_is\\\(buflen\\\)],aafDataBuffer_t,buffer,to a buffer,
-[in],aafInt32,buflen,of this size,
+[in],aafUInt32,buflen,of this size,
 Writes data to a single-channel essence stream.)
 	//@comm Takes a essence handle, so the essence must have been opened or created.
 	// A single video frame is ONE sample.
-	// Buflen must be large enough to hold nSamples * the maximum sample size.
+	// Buflen must be large enough to hold the total sample size.
 	//@comm Possible Errors:
 	// Standard errors (see top of file).
-	// OM_ERR_SINGLE_CHANNEL_OP -- Tried to write to an interleaved stream.
-	// OM_ERR_BADDATAADDRESS -- The buffer must not be a NULL pointer.
-	//@comm Replaces omfmWriteDataSamples
+	// AAFRESULT_SINGLE_CHANNEL_OP -- Tried to write to an interleaved stream.
+	// AAFRESULT_BADDATAADDRESS -- The buffer must not be a NULL pointer.
 
 /****/
-AD_METHOD3(WriteRawData,
-[in],aafInt32,nSamples,write this many samples,
-[in\\\, size_is\\\(nSamples * sampleSize\\\)],aafDataBuffer_t,buffer,to a buffer,
-[in],aafInt32, sampleSize,of this size,
-Writes pre-interleaved data to a essence stream.)
-	//@comm A single video frame is ONE sample.
-	//@comm Buflen must be large enough to hold
-	// nSamples * the maximum sample size.
+AD_METHOD2(WriteMultiSamples,
+[in],aafUInt16,arrayElemCount,Do this many transfers,
+[out\\\,size_is\\\(arrayElemCount\\\)],aafmMultiXfer_t *,xferArray,referencing this array,
+Writes multiple channels worth of sample data to an interleaved data stream in the natural order for the CODEC.)
+	//@comm arrayElemCount is the number of elementss in the array of transfer operations.
+	// xferArray points to an array of transfer parameters.  All fields
+	// in this array except for bytesXferred must be set up before
+	// doing the transfer.  Some of the fields in the xferArray structure are status results
+	// like bytesXferred and samplesXferred.
+
+/****/
+AD_METHOD3(WriteFractionalSample,
+[in], aafUInt32, nBytes, Write this many bytes,
+[in\\\, size_is\\\(nBytes\\\)],aafDataBuffer_t,buffer,from a buffer,
+[out\\\,ref],aafUInt32 *,bytesWritten,Returns the number of bytes actualy written,
+Writes partual samples of essence to a stream.)
+	//@comm Writes fractional samples of essence to the stream. When enough bytes
+	// have been written to constitute one sample, then the number of samples will
+	// be incremented by one. This function is useful in low-memory situations.  
+	//@comm The buffer must be large enough to hold the number of bytes specified. 
 	//@comm Possible Errors:
 	// Standard errors (see top of file).
-	// OM_ERR_BADDATAADDRESS -- The buffer must not be a NULL pointer.
-	//@comm Replaces omfmWriteRawData
+	// AAFRESULT_BADRWLINES -- This function only works for video essence.
 	
-/****/
-AD_METHOD5(ReadRawData,
-[in],aafInt32,nSamples,write this many samples,
-[in],aafUInt32,buflen,to a buffer of this size,
-[out\\\, size_is\\\(buflen\\\)\\\, length_is\\\(*bytesRead\\\)],aafDataBuffer_t,buffer,here is the buffer,
-[out\\\,ref],aafUInt32 *,bytesRead,,
-[out\\\,ref],aafUInt32 *,samplesRead,,
-Read pre-interleaved data from a essence stream.)
-	//@comm A single video frame is ONE sample.
-	//@comm Buflen must be large enough to hold nSamples * the maximum sample size.
-	//@comm Possible Errors:
-	// Standard errors (see top of file).
-	// OM_ERR_BADDATAADDRESS -- The buffer must not be a NULL pointer.
-	//@comm Replaces omfmReadRawData
-	
-/****/
-AD_METHOD4(WriteDataLines,
-[in],aafUInt32,nLines,write this many lines on video,
-[in], aafUInt32, nBytesPerLine, ,
-[in\\\, size_is\\\(nLines * nBytesPerLine\\\)],aafDataBuffer_t,buffer,from a buffer,
-[out\\\,ref],aafInt32 *,bytesWritten,of this size,
-Writes single lines of video to a file.)
-	//@comm Writes single lines of video to a file.  This function allows writing
-	// video frames in pieces, for low-memory situations.  When enough lines
-	// have been written to constitute a frame, then the number of samples will
-	// be incremented by one.
-	//@comm This function works only for video essence.
-	//@comm The buffer must be large enough to hold an entire line of video. 
-	//@comm Possible Errors:
-	// Standard errors (see top of file).
-	// OM_ERR_BADRWLINES -- This function only works for video essence.
-	//@comm Replaces omfmWriteDataLines
-	//@devnote Previous version did not have nBytesPerLine, otherwise the actual size
-	// of the buffer cannot be known.
-	
-/****/
-AD_METHOD0(Close,Finish operations on essence data and close any external files opened or created to hold the essence..)
-	//@comm This function should be called whether the essence was opened or created.
-	//@comm Replaces omfmMediaClose
-
-/****/
-AD_METHOD7(SetJPEGTables,
-[in],aafJPEGcomponent_t,JPEGcomp,change this component,
-[in],aafUInt8 *,QTables,to have these Q-tables,
-[in],aafUInt8 *,ACTables,and these AC-tables,
-[in],aafUInt8 *,DCTables,and these DC-tables,
-[in],aafInt16,QTableSize,size in bytes,
-[in],aafInt16,ACTableSize,size in bytes,
-[in],aafInt16,DCTableSize,size in bytes,
-Sets the Q  AC and DC tables for the next frame to be compressed.)
-	//@comm This function needs to be called once for each component of the video.
-	//@comm Replaces omfmSetJPEGTables
-	
-/****/
-AD_METHOD1(SetAudioBlockLength,
-[in],aafInt16,blockLength,the block length,
-Set common audio compression parms.)
-	//@comm Replaces omfmSetAudioCompressParms
-/****/
-AD_METHOD1(GetAudioBlockLength,
-[out],aafInt16*,blockLength,the block length,
-Get common audio compression parms.)
-	//@comm Replaces omfmGetAudioCompressParms
-	
-/****/
-AD_METHOD2(SetPrivateMediaData,
-[in],aafUInt32,parmBlockSize,a block of this size,
-[in\\\,size_is\\\(parmBlockSize\\\)], aafDataBuffer_t,ParameterBlock,with these values,
-Sends a parameter block of private information to the CODEC for this essence.)
-	//@parm IN -- .
-	//@comm The parameter block should be defined in the
-	// "h" file of the codec, and must be included by the application in
-	// order to use this call.
-	//@comm NOTE: All CODECs should default to reasonable parameters,
-	// in case the application doesn't know about a given codec.
-	//@comm Replaces omfmCodecSendPrivateData*/
-
-/****/
-AD_METHOD2(GetPrivateMediaData,
-[in],aafUInt32,blocksize,,
-[out\\\, size_is\\\(blocksize\\\)], aafDataBuffer_t, buffer,,
-Gets a parameter block of private information from the CODEC for this essence.)
-	//@comm The parameter block should be defined in the
-	// "h" file of the codec, and must be included by the application in
-	// order to use this call.
-	//@comm NOTE: All CODECs should default to reasonable parameters,
-	// in case the application doesn't know about a given codec.
-	//@comm Replaces omfmGetPrivateMediaData*/
-	//@devnote Added bytesRead 
-
-/****/
-AD_XMETHOD5(GetNumChannels,
-[in],objIn, AAFMasterMob,masterMob,In this master mob,
-[in],objPass, aafSlotID_t,slotID,On this slot,
-[in],objPass, aafMediaCriteria_t*,mediaCrit,using this essence criteria,
-[in],objIn, AAFDataDef,mediaKind,for this essence type,
-[out],objPass, aafInt16*,numCh,How many channels?,
-Takes an opaque handle  a master mob reference  and a slot ID so that it may be called before the essence is opened.)
-	//@comm Returns the number of interleaved essence channels of a given type in the essence stream referenced by the given file mob
-	//@comm If the data format is not interleaved, then the answer will
-	// always be zero or one.  This function correctly returns zero
-	// for essence types not handled by a given codec, and handles codecs
-	// which work with multiple essence types.
-	//@comm Replaces omfmGetNumChannels*/
-
 /****/
 AD_XMETHOD2(GetLargestSampleSize,
 [in],objIn, AAFDataDef,mediaKind,and this essence type,
-[out],objPass, aafInt32*,maxSize,the largest sample size,
+[out],objPass, aafUInt32*,maxSize,the largest sample size,
 Returns the size in bytes of the largest sample for a given essence type.)
 	//@comm For uncompressed data, or the output of the software codec,
 	// the sample size will propably be a constant.
 	//@comm The essence type parameter exists to support codecs with multiple
 	// interleaved essence types.
-	//@comm Replaces omfmGetLargestSampleSize*/
 
 /****/
 AD_XMETHOD3(GetSampleFrameSize,
@@ -353,295 +106,175 @@ Returns the size in bytes of the given sample for a given essence type.)
 	// interleaved essence types.
 	//@comm Possible Errors:
 	// 	Standard errors (see top of file).
-	// 	OM_ERR_NULL_PARAM -- A return parameter was NULL.
-	//@comm Replaces omfmGetSampleFrameSize*/
+	// 	AAFRESULT_NULL_PARAM -- A return parameter was NULL.
 
 /****/
-AD_XMETHOD5(Open,
-[in],objIn, AAFMasterMob,masterMob,In this master mob,
-[in],objPass, aafSlotID_t,slotID,On this slot,
-[in],objPass, aafMediaCriteria_t*,mediaCrit,using this essence criteria,
-[in],objPass, aafMediaOpenMode_t,openMode,ReadOnly or Append,
-[in],objPass, aafCompressEnable_t,compEnable,optionally decompressing,
-Opens a single channel of a file mob.)
-	//@comm If the essence is interleaved,
-	// then it will be di-interleaved when samples are read.  This routine
-	// follows the locator, and may call the locator failure callback if
-	// the essence can not be found.  If the failure callback finds the essence,
-	// then this routine will return normally.
-	//@comm The essence handle from this call can be used with
-	// ReadDataSamples  and possibly ReadDataLines, but NOT with
-	// ReadMultiSamples.
-	//@comm Possible Errors:
-	// 	Standard errors (see top of file).
-	// 	OM_ERR_NOMEMORY -- couldn't allocate memory for the essence handle
-	//@comm NOTE: If a locator is followed, then essencePtr may reference ANOTHER file
-	// object, which must be closed on file close.
-	//@comm Replaces omfmMediaOpen*/
-	
-/****/
-AD_XMETHOD5(MultiOpen,
-[in],objIn, AAFMasterMob,masterMob,In this master mob,
-[in],objPass, aafSlotID_t,slotID,On this slot,
-[in],objPass, aafMediaCriteria_t*,mediaCrit,using this essence criteria,
-[in],objPass, aafMediaOpenMode_t,openMode,ReadOnly or Append,
-[in],objPass, aafCompressEnable_t,compEnable,optionally decompressing,
-Opens a all channels associated with a file mob.)
-	//@comm This routine
-	// follows the locator, and may call the locator failure callback if
-	// the essence can not be found.  If the failure callback finds the essence,
-	// then this routine will return normally.
-	//@comm The essence handle from this call can be used with
-	// WriteDataSamples or WriteMultiSamples but NOT with 
-	//  WriteDataLines.
-	//@comm Possible Errors:
-	// 	Standard errors (see top of file).
-	// 	OM_ERR_NOMEMORY -- couldn't allocate memory for the essence handle
-	//@comm Replaces omfmMediaMultiOpen*/
-
-/****/
-AD_XMETHOD1(SetVideoMemFormat,
-[in],objIn,AAFEssenceFormat,op,,
-Sets the video memory format and layout expected in memory.)
+AD_XMETHOD1(SetTransformParameters,
+[in],objIn,AAFEssenceFormat,op,A set of transforms to apply to the essence if required,
+Sets a series of format objects which will be used to describe the in-memory format.)
 	//@comm This is the format expected on writes and produced on reads.
 	//@comm On writes, the data will be written in this format, except
 	// where a software codec may be used.
 	// On reads, the data will be translated to this format.
-	//@comm The current CODECs should support rgb888 and YUV as formats
-	// and all of the standard layouts.  A special format of
-	// kVmFmtStd says to use the file's native format & layout.
-	//@comm Replaces omfmSetVideoMemFormat*/
-
+	//@comm The order of the parameters does matter, as transformations will be applied in
+	// that order to get from the on-disk format to the in-memory format.
+	 
 /****/
-AD_XMETHOD1(SetAudioMemFormat,
-[in],objIn,AAFEssenceFormat,op,,
-Sets the audio memory format expected in memory.)
-	//@comm This is the format expected on writes and produced on reads.
-	//@comm On writes, the data will be written in this format, except
-	// where a software codec may be used.
-	// On reads, the data will be translated to this format.
-	//@comm The current CODECs should support different sample sizes and rates
-	// A special format of kAmFmtStd says to use the file's native
-	// size and rate.
- 	//@comm Replaces omfmSetAudioMemFormat
-
-/****/
-AD_METHOD1(GetDisplayRect,
-[out],aafRect_t*,result,Get the display rectangle,
-Returns the display rectangle for the current video essence.)
-	//@comm Handles the case where the displayed rectangle is not the same as
-	// the stored rectangle (as with the old leadingLines and
-	// trailingLines).<nl>
-	// A positive "leadingLines" (from 1.5) becomes a positive yOffset, and
-	// decreases the display height.<nl>
-	// A positive "trailingLines" (from 1.5) also decreases the display
-	// height.
-	//@comm Takes a essence handle, so the essence must have been opened or
-	// created.
-	//@comm Possible Errors:
-	// Standard errors (see top of file).
-	//   OM_ERR_NULL_PARAM -- A NULL rectangle pointer.
-	//   OM_ERR_INVALID_OP_CODEC -- This codec doesn't support display rect
-	//								(may not be video essence)
- 	//@comm Replaces omfmGetDisplayRect
-
-/****/
-AD_METHOD1(GetSampledRect,
-[out],aafRect_t*,result,Get the sampled rectangle,
-Returns the sampled rectangle for the current video essence.)
-	//@comm Takes a essence handle, so the essence must have been opened or created.
-	//@comm Possible Errors:<nl>
-	//   OM_ERR_NULL_PARAM -- A NULL rectangle pointer.<nl>
-	//   OM_ERR_INVALID_OP_CODEC -- This codec doesn't support display rect<nl>
-	//   							(may not be video essence)
- 	//@comm Replaces omfmGetSampledRect
-
-/****/
-AD_METHOD1(GetSampleCount,
-[out],aafLength_t *,result,,
-Returns the number of samples on the given essence stream.)
+AD_XMETHOD2(GetSampleCount,
+[in],objIn, AAFDataDef,mediaKind,For this essence type,
+[out],objPass,aafLength_t *,result,find out how many samples are present,
+Returns the number of samples of the given essence type on the given essence stream.)
 	//@comm A video sample is one frame.
-	//@comm Replaces omfmGetSampleCount
 
 /****/
-AD_METHOD4(ReadDataSamples,
-[in],aafInt32,nSamples,,
-[in],aafInt32,buflen,,
-[out\\\, size_is\\\(buflen\\\)\\\,length_is\\\(*bytesRead\\\)],aafDataBuffer_t,buffer,,
-[out\\\,ref],aafUInt32*,bytesRead,,
+AD_METHOD5(ReadSamples,
+[in],aafUInt32,nSamples,Read this many samples,
+[in],aafUInt32,buflen,into a buffer of this size,
+[out\\\, size_is\\\(buflen\\\)\\\,length_is\\\(*bytesRead\\\)],aafDataBuffer_t,buffer,The transfer buffer,
+[out\\\,ref],aafUInt32*,samplesRead,The number of samples actually read,
+[out\\\,ref],aafUInt32*,bytesRead,The number of bytes actually read,
 Read a given number of samples from an opened essence stream.)
 	//@comm This call will only return a single channel of essence from an interleaved
 	// stream.
 	//@comm A video sample is a frame.
 	// Buflen is in bytes, and should be large enough to hold the samples
-	// in the requested memory format.
-	//@comm Replaces omfmReadDataSamples
-
+	// after the requested transforms have been applied.
+	//@comm Possible Errors:
+	// 	Standard errors (see top of file).
+	// 	AAFRESULT_END_OF_ESSENCE -- Hit the end of the essence (like EOF) while reading.
 /****/
 AD_METHOD2(ReadMultiSamples,
-[in],aafInt16,elemCount,,
-[out\\\, size_is\\\(elemCount\\\)],aafmMultiXfer_t *,xferArray,,
+[in],aafUInt16,elemCount,Do this many transfers,
+[out\\\, size_is\\\(elemCount\\\)],aafmMultiXfer_t *,xferArray,referencing this array,
 Reads one or more channels from an interleaved data stream)
 	//@comm arrayElemCount is the size of the array or transfer operations.
 	// xferArray points to an array of transfer parameters.  All fields
 	// in this array except for bytesXferred must be set up before
-	// doing the transfer.
-	//@comm Replaces omfmReadMultiSamples
+	// doing the transfer.  Some of the fields in the xferArray structure are status results
+	// like bytesXferred and samplesXferred.
+	//@comm Possible Errors:
+	// 	Standard errors (see top of file).
+	// 	AAFRESULT_END_OF_ESSENCE -- Hit the end of the essence (like EOF) while reading.
 	
 /****/
-AD_METHOD4(ReadDataLines,
-[in],aafInt32,nLines,,
-[in],aafInt32,bufLen,,
-[out\\\, size_is\\\(bufLen\\\)\\\,length_is\\\(*bytesRead\\\)],aafDataBuffer_t,buffer,,
-[out\\\,ref],aafInt32*,bytesRead,,
-Reads single lines of video from a file.)
+AD_METHOD4(ReadFractionalSample,
+[in],aafUInt32,nBytes,Read this many bytes,
+[in],aafUInt32,bufLen,into a buffer of this size,
+[out\\\, size_is\\\(bufLen\\\)\\\,length_is\\\(*bytesRead\\\)],aafDataBuffer_t,buffer,transfer into this buffer,
+[out\\\,ref],aafUInt32*,bytesRead,The number of bytes actuall transferred,
+Reads fractional samples from a file.)
 	//@comm This function allows reading
 	// video frames in pieces, for low-memory situations.  When enough lines
 	// have been read to constitute a frame, then the number of samples read
 	// be incremented by one.
-	//@comm The buffer must be large enough to hold an entire line of video.
-	//@comm This function works only for video essence.
-	//@comm Replaces omfmReadDataLines
+	//@comm The buffer must be large enough to hold the specified number of bytes.
+	//@comm Possible Errors:
+	// 	Standard errors (see top of file).
+	// 	AAFRESULT_END_OF_ESSENCE -- Hit the end of the essence (like EOF) while reading.
 
 /****/
-AD_METHOD1(GotoFrameNumber,
-[in],aafInt64,frameNum,,
+AD_METHOD1(SeektoEditFrame,
+[in],aafPosition_t,sampleFrameNum,A 0-based offset in units of the slot edit rate to seek to.,
 The seek function for essence.)
-	//@comm Useful only on reading, you
-	// can't seek aound while writing essence.
-	//@comm An audio frame is one sample across all open channels.
-	//@comm Replaces omfmGotoFrameNumber
+	//@comm Useful only on reading, you can't seek aound while writing essence.
+	//@comm An audio frame is one sample across all channels.
 
 /****/
-AD_METHOD6(GetVideoInfo,
-[out],aafFrameLayout_t *,layout,,
-[out],aafInt32 *,fieldWidth,,
-[out],aafInt32 *,fieldHeight,,
-[out],aafRational_t *,editrate,,
-[out],aafInt16 *,bitsPerPixel,,
-[out],aafPixelFormat_t *,defaultPixelFmt,,
-Get video-related information about a given piece of essence data.)
-	//@comm Any parameters not required may have the pointers set to NULL.
-	//@comm Possible Errors:<nl>
-	// Standard errors (see top of file).<nl>
-	// OM_ERR_WRONG_MEDIATYPE -- Not video essence.<nl>
-	//@comm Replaces omfmGetVideoInfo */
-			
-			
-/****/
-AD_XMETHOD1(GetVideoInfoArray,
-[out],objOut,AAFEssenceFormat,ops,,
-Given an array of video format blocks  read the opcodes and fill in the operands from the file format.)
-	//@comm Replaces omfmGetVideoInfoArray */
+AD_XMETHOD1(GetFileFormat,
+[out],objOut,AAFEssenceFormat,ops,An AAFEssenceFormat with parameter codes set but no values,
+Given an AAFEssenceFormat\, read the essence parameters inside and set the values from the file format.)
 
 /****/
-AD_XMETHOD1(PutVideoInfoArray,
-[in],objIn,AAFEssenceFormat,ops,,
-Given an array of video format blocks  read the opcodes and operands and change the file format.)
-	//@comm Replaces omfmPutVideoInfoArray */
+AD_XMETHOD1(GetFileFormatParameterList,
+[out],objOut,AAFEssenceFormat,ops,An ampty AAFEssenceFormat object,
+Returns an AAFEssenceFormat containing a list of all parameters supported by the current codec.)
+	//@comm Any pre-existing parameters inside of the AAFEssenceFormat will be deleted.
 
 /****/
-AD_XMETHOD3(GetNumRepresentations,
-[in],objIn, AAFMasterMob,masterMob,,
-[in],objPass, aafSlotID_t,slotID,,
-[out],objPass, aafInt32*,numReps,,
-Find out how many essence representations [high/low res] exist for a particular slot on this master mob.)
-	//@comm Replaces omfmGetNumRepresentations */
+AD_XMETHOD1(PutFileFormat,
+[in],objIn,AAFEssenceFormat,ops,An AAFEssenceFormat with one or more parameter/value pairs,
+Given an AAFEssenceFormat\, read the essence parameters inside and change the file format.)
 
-/****/
-AD_XMETHOD4(GetRepresentationSourceClip,
-[in],objIn, AAFMasterMob,masterMob,,
-[in],objPass, aafSlotID_t,slotID,,
-[in],objPass, aafInt32,index,,
-[out],objOut, AAFSourceClip,sourceClip,,
-Get the indexed [1-based] representation for a particular slot on this master mob.)
-	//@comm Replaces omfmGetRepresentationSourceClip */
 
-/****/
-AD_METHOD3(GetAudioInfo,
-[out],aafRational_t*,rate,,
-[out],aafInt32*,sampleSize,,
-[out],aafInt32*,numChannels,,
-Get audio-related information about a given piece of essence data.)
-	//@comm Any parameters not required may have the pointers set to NULL.
-	//@comm Possible Errors:<nl>
-	//	Standard errors (see top of file).<nl>
-	//	OM_ERR_WRONG_MEDIATYPE -- Not video essence.
-	//@comm Replaces omfmGetAudioInfo */
 
 
 /****/
-AD_XMETHOD1(GetAudioInfoArray,
-[out],objOut,AAFEssenceFormat,ops,,
-Given an array of audio format blocks read the opcodes and fill in the operands from the file format.)
-	//@comm Replaces omfmGetAudioInfoArray */
-
-/****/
-AD_XMETHOD1(PutAudioInfoArray,
-[in],objIn,AAFEssenceFormat,ops,,
-Given an array of audio format blocks read the opcodes and operands and change the file format.)
-
-/****/
-AD_XMETHOD3(IsHardwareAssistedCodec,
-[in],objPass, aafCodecID_t,codecID,,
-[in],objIn, AAFSourceMob,mob,,
-[out],objPass, aafBool*,result,,
-Tells if the given codec is hardware-assisted.)
-	//@comm That is, does
-	// it contain calls to a particular hardware device which speeds
-	// up transfer and compression/decompression.
-	//@comm If the hardware is not present in the system, this call should
-	// return FALSE.
-	//@comm If the parameters in the essence descriptor are out-of-bounds
-	// for the hardware, then this call will return FALSE.
-	//@comm Replaces omfmIsHardwareAssistedCodec */
-
-/****/
-AD_METHOD3(GetCodecName,
-[in],aafCodecID_t,codecID,,
-[in],aafInt32,namelen,,
-[out\\\,size_is\\\(namelen\\\)],aafUInt8 *,name,,
+AD_METHOD2(GetCodecName,
+[in],aafUInt32,namelen,The size of the name buffer to be filled,
+[out\\\,size_is\\\(namelen\\\)],wchar_t *,name,The buffer to fill,
 Returns the full name of the given codec expanded for human consumption.)
 	//@comm No other call uses this name, so it may be fully descriptive, esp. of limitations.
 	//@comm The name will be truncated to fit within "buflen" bytes.
 	//@comm Possible Errors:<nl>
 	// 	Standard errors (see top of file).<nl>
-	//	OM_ERR_CODEC_INVALID - The given codec ID is not loaded.
-	//@comm Replaces omfmCodecGetName */
-	//@devnote Shouldn't we use a unicode aafString_t since AAF's public interface for
-	// strings is supposed to be unicode?(TomR)
+	//	AAFRESULT_CODEC_INVALID - The given codec ID is not loaded.
 
 /****/
 AD_METHOD1(GetCodecID,
-[out],aafCodecID_t*,codecID,,
+[out],aafCodecID_t*,codecID,Returns the current codec ID,
 Returns the codec ID being used to handle the specified essence.)
 	//@comm This will be required in order to send private data to the codec.
 	//@comm The name will be truncated to fit within "buflen" bytes.
-	//@comm Replaces omfmMediaGetCodecID */
 
 /****/
 AD_METHOD1(AddFrameIndexEntry,
-[in],aafInt64,frameOffset,add a frame offset to it's frame index,
+[in],aafPosition_t,frameOffset,add a frame offset to it's frame index,
 Adds a frame index entry for essence which was added precompressed.)
 	//@comm This function should NOT be called when essence is passed to
 	//the reference implementation in an uncompressed format.
 	//@comm Possible Errors:<nl>
 	//	Standard errors (see top of file).<nl>
-	//	OM_ERR_INVALID_OP_CODEC -- This kind of essence doesn't have a frame index<nl>
-	//	OM_ERR_MEDIA_OPENMODE -- The essence is open for read-only.
-	//@comm Replaces omfmAddFrameIndexEntry */
+	//	AAFRESULT_INVALID_OP_CODEC -- This kind of essence doesn't have a frame index<nl>
+	//	AAFRESULT_MEDIA_OPENMODE -- The essence is open for read-only.
 
 /****/
 AD_METHOD1(SetStreamCacheSize,
 [in],aafUInt32,cacheSize,make the cache this many bytes long,
 Set the size of the cache buffer used for essence transfers.)
-	//@comm Replaces omfmSetStreamCacheSize */
 
 /****/
-AD_METHOD1(SourceGetVideoSignalType,
-[out],aafVideoSignalType_t*,signalType,,
-Get the video signal type [NTSC/PAL/SECAM].)
-	//@comm Replaces omfmSourceGetVideoSignalType */
+AD_METHOD1(SetBlockingSize,
+[in],aafUInt32,numBytes,Preallocate this many bytes,
+Sets the size of chunks allocated on disk during writes [only].)
+	//@comm Allocating the space in this fashion ensures that the data will be
+	// contiguous on disk (for at least numBytes bytes) even if other
+	// disk operations allocate space on the disk.  If the data written
+	// exceeds numBytes, then another disk block of numBytes size will be
+	// allocated.
+	//@comm Takes a essence handle, so the essence must have been opened or created.
+	// The space is allocated in terms of bytes.
 
+/****/
+AD_METHOD3(WriteRawData,
+[in],aafUInt32,nSamples,write this many samples,
+[in\\\, size_is\\\(nSamples * sampleSize\\\)],aafDataBuffer_t,buffer,to a buffer,
+[in],aafUInt32, sampleSize,of this size,
+Writes pre-interleaved data to a essence stream.)
+	//@comm A single video frame is ONE sample.
+	//@comm Buflen must be large enough to hold
+	// nSamples * the maximum sample size.
+	//@comm Possible Errors:
+	// Standard errors (see top of file).
+	// OM_ERR_BADDATAADDRESS -- The buffer must not be a NULL pointer.
+	
+/****/
+AD_METHOD5(ReadRawData,
+[in],aafUInt32,nSamples,write this many samples,
+[in],aafUInt32,buflen,to a buffer of this size,
+[out\\\, size_is\\\(buflen\\\)\\\, length_is\\\(*bytesRead\\\)],aafDataBuffer_t,buffer,here is the buffer,
+[out\\\,ref],aafUInt32 *,bytesRead,,
+[out\\\,ref],aafUInt32 *,samplesRead,,
+Read pre-interleaved data from a essence stream.)
+	//@comm A single video frame is ONE sample.
+	//@comm Buflen must be large enough to hold nSamples * the maximum sample size.
+	//@comm Possible Errors:
+	// Standard errors (see top of file).
+	// OM_ERR_BADDATAADDRESS -- The buffer must not be a NULL pointer.
+
+/****/
+AD_METHOD0(CompleteWrite,
+Handle any format related writing at the end and adjust mob lengths.)
+	//@comm Must be called before releasing a write essence access.
+	// Standard errors (see top of file).
 
 AD_XCLASS_END(Concrete, Transient)
