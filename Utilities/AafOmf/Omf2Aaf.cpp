@@ -2016,7 +2016,6 @@ void Omf2Aaf::ConvertOMFCDCIDescriptorLocator(OMF2::omfObject_t mediaDescriptor,
 	aafInt32			alignmentFactor;
 
 	aafFrameLayout_t	AAFFrameLayout;
-	aafRational_t		gamma;
 	aafRational_t		aspectRatio;
 
 	aafInt32			componentWidth = 0;
@@ -2102,12 +2101,12 @@ void Omf2Aaf::ConvertOMFCDCIDescriptorLocator(OMF2::omfObject_t mediaDescriptor,
 		alphaTransparency = 0;
 	rc = pDigImageDesc->SetAlphaTransparency((aafAlphaTransparency_t)alphaTransparency);
 
-	if (OMF2::omfsReadRational(OMFFileHdl, mediaDescriptor, OMF2::OMDIDDGamma, (OMF2::omfRational_t *)&gamma) != OMF2::OM_ERR_NONE)
-	{
-		gamma.numerator = 0;
-		gamma.denominator = 1;
-	}
-	rc = pDigImageDesc->SetGamma(gamma);
+//!!!	if (OMF2::omfsReadRational(OMFFileHdl, mediaDescriptor, OMF2::OMDIDDGamma, (OMF2::omfRational_t *)&gamma) != OMF2::OM_ERR_NONE)
+//	{
+//		gamma.numerator = 0;
+//		gamma.denominator = 1;
+//	}
+//	rc = pDigImageDesc->SetGamma(gamma);
 
 	if (OMF2::omfsReadRational(OMFFileHdl, mediaDescriptor, OMF2::OMDIDDImageAspectRatio, (OMF2::omfRational_t *)&aspectRatio) != OMF2::OM_ERR_NONE)
 	{
@@ -3705,7 +3704,7 @@ void Omf2Aaf::GetAAFOperationDefinition(OMF2::omfUniqueName_t effectID,
 		(*ppEffectDef)->Initialize(effectDefAUID, pwName, pwDesc);
 		pDictionary->RegisterOperationDef(*ppEffectDef);
 		(*ppEffectDef)->SetIsTimeWarp((aafBool)isTimeWarp);
-		(*ppEffectDef)->SetCategory(pwName);
+//!!!		(*ppEffectDef)->SetCategory(pwName);
 		(*ppEffectDef)->SetBypass((aafUInt32 )bypassOverride);
 		// Set degradeTo to itself for now because we do not have optional properties !!!
 // 		(*ppEffectDef)->AppendDegradeToOperations(*ppEffectDef);
