@@ -25,6 +25,9 @@ SF_SHELL_HOST=shell.sourceforge.net
 SF_LOG_DIR=/home/groups/a/aa/aaf/htdocs/build/AutoMake.logs
 SF_LOG_SCP_DST=${SF_SHELL_HOST}:${SF_LOG_DIR}
 
+TMPCODIR=AAFSDKBuild
+AAFSDKBUILD_H=ref-impl/include/AAFSDKBuild.h
+
 short_usage()
 {
     echo "Usage `basename $0` [-basedir] [-bump] [-copylogs] [-release] [-update]"
@@ -61,6 +64,8 @@ usage()
     echo ""
     echo "-update"
     echo "	Update an existing cvs sandbox rather than performing a checkout."
+    echo "      There is little reason to use this. It was useful when the script"
+    echo "      was under development, and is now deprecated."
     echo ""
     echo "-noregtests"
     echo "      Do not run regression tests."
@@ -154,6 +159,46 @@ export CVSROOT
 # Create the required ~/tmp directory.
 #
 mkdir -p ~/tmp
+if [ $? -ne 0 ]; then
+    echo Failed to change to mkdir: ~/tmp
+    exit 1
+fi
+
+# If we are bumping the build number, then checkout the head of the
+# source tree.  If we are not bumping the build number, then determine
+# the build number by first, checking out *only* AAFSDKBuild.h.
+
+if [ $BUMP_BUILD_TAG -eq 1 ] && [ $CVS_RUN_CO_COMMAND -eq 1 ]; then
+    BUILD_TAG_CO=HEAD
+else
+
+    mkdir -p $TMPCODIR
+    if [ $? -ne 0 ]; then
+	echo Failed to change to mkdir: ${TMPCODIR}
+	exit 1
+    fi
+
+    cd $TMP_CO_DIR
+    if [ $? -ne 0 ]; then
+	echo Failed to change to directory: $TMP_CO_DIR
+	exit 1
+    fi
+
+    # -f never fails, no need to check return code
+    rm -rf AAF
+
+    # co AAFSDKBuild.h
+    cvs -z3 co AAF/${AAFSDKBUILD_H}
+    RepeatUntil 0 100 cvs -z3 co AAF/${AAFSDKBUILD_H}
+    CVS_STATUS=$?
+    if [ $CVS_STATUS -ne 0 ]; then
+	echo cvs failed with exit status $CVS_STATUS
+	exit $CVS_STATUS
+    fi
+
+    AAF_BUILD_NUMBER_CO=`grep "define AAF_BUILD_NUMBER" AAF/${AAFSDKBUILD_H} | awk '{print $3}'`;
+    BUILD_TAG_CO=`printf "Build-%04d" $AAF_BUILD_NUMBER_CO`
+fi
 
 # Check out or update the source tree.
 
@@ -171,10 +216,10 @@ if [ $CVS_RUN_CO_COMMAND -eq 1 ]; then
 		cd ..
 	else
 
-		echo cvs -z3 co AAF
+		echo cvs -z3 co -r${BUILD_TAG_CO} AAF
 	        echo CVSROOT = $CVSROOT
 		echo cvs log file is: $CVS_CO_LOG_FILENAME
-		RepeatUntil 0 100 cvs -z3 co AAF > $CVS_CO_LOG_FILENAME 2>&1
+		RepeatUntil 0 100 cvs -z3 co -r${BUILD_TAG_CO} AAF > $CVS_CO_LOG_FILENAME 2>&1
 		CVS_STATUS=$?
 
 	fi
@@ -212,8 +257,6 @@ fi
 # Fetch the current version info.  Report when the build tag was
 # applied, and the current date.
 #
-
-AAFSDKBUILD_H=ref-impl/include/AAFSDKBuild.h
 AAF_BUILD_NUMBER=`grep "define AAF_BUILD_NUMBER" ${AAFSDKBUILD_H} | awk '{print $3}'`;
 BUILD_TAG=`printf "Build-%04d" $AAF_BUILD_NUMBER`
 
