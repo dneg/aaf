@@ -52,7 +52,7 @@
 #define NEW_MEMORY_MECHANISM	1
 #define VIRTUAL_BENTO_OBJECTS	1
 
-
+#define NO_CONTAINER_EXPORTS 1  // support new 2.2
 
 // Cannot include more than a single pre-compiled header (MacHeaders already included.
 // There is a conflict with the omf portkey.h file because one of its symbols is
