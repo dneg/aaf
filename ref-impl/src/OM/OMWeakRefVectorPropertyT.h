@@ -124,6 +124,14 @@ void OMWeakReferenceVectorProperty<ReferencedObject>::save(void) const
                 tag,
                 _keyPropertyId);
   delete [] index;
+
+  // make an entry in the property index
+  //
+  store()->write(_propertyId,
+                 _storedForm,
+                 (void *)propertyName,
+                 strlen(propertyName) + 1);
+
 }
 
   // @mfunc Close this <c OMWeakReferenceVectorProperty>.
@@ -176,6 +184,9 @@ void OMWeakReferenceVectorProperty<ReferencedObject>::restore(
   char* propertyName = new char[externalSize];
   ASSERT("Valid heap pointer", propertyName != 0);
 
+  store()->read(_propertyId, _storedForm, propertyName, externalSize);
+  ASSERT("Consistent property name", strcmp(propertyName, name()) == 0);
+
   // restore the index
   //
   OMUniqueObjectIdentification* vectorIndex = 0;
@@ -194,7 +205,6 @@ void OMWeakReferenceVectorProperty<ReferencedObject>::restore(
   ASSERT("Valid vector index", IMPLIES(entries != 0, vectorIndex != 0));
   ASSERT("Valid vector index", IMPLIES(entries == 0, vectorIndex == 0));
   ASSERT("Consistent key property ids", keyPropertyId == _keyPropertyId);
-  ASSERT("Consistent property name", strcmp(propertyName, name()) == 0);
   _targetTag = tag;
   delete [] propertyName;
 
