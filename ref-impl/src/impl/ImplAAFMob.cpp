@@ -56,6 +56,10 @@
 #include "ImplAAFPulldown.h"
 #include "ImplAAFFindSourceInfo.h"
 
+#if defined(_MAC) || defined(macintosh)
+#include <wstring.h>
+#endif
+
 #include <assert.h>
 #include "AAFResult.h"
 #include "aafCvt.h"
