@@ -1929,6 +1929,51 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 
+AAFRESULT ImplAAFDictionary::PvtIsPropertyDefDuplicate(
+							aafUID_t propertyDefID,
+							ImplAAFClassDef *correctClass,
+							bool	*isDuplicate)
+{
+	ImplEnumAAFClassDefs	*classEnum = NULL;
+	ImplAAFClassDef			*pClassDef = NULL;
+	aafUID_t				testClassID, correctClassID;
+	bool					foundDup = false;
+
+	if (NULL == correctClass)
+		return AAFRESULT_NULL_PARAM;
+	if (NULL == isDuplicate)
+		return AAFRESULT_NULL_PARAM;
+
+	XPROTECT()
+	{
+		CHECK(correctClass->GetAUID(&correctClassID));
+		CHECK(GetClassDefs(&classEnum));
+		while((foundDup == false) && classEnum->NextOne(&pClassDef) == AAFRESULT_SUCCESS)
+		{
+			CHECK(pClassDef->GetAUID(&correctClassID));
+			if(memcmp(&testClassID, &correctClassID, sizeof(aafUID_t)) != 0)
+			{
+				foundDup = pClassDef->PvtIsPropertyDefRegistered(propertyDefID);
+			}
+			pClassDef->ReleaseReference();
+			pClassDef = NULL;
+		}
+	}
+	XEXCEPT
+	{
+		if (classEnum)
+		  {
+			classEnum->ReleaseReference();
+			classEnum = 0;
+		  }
+		return(XCODE());
+	}
+	XEND;
+
+	*isDuplicate = foundDup;
+	
+	return(AAFRESULT_SUCCESS);
+}
 
 AAFRESULT ImplAAFDictionary::GenerateOmPid
 (

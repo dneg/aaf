@@ -257,13 +257,25 @@ AAFRESULT STDMETHODCALLTYPE
       return AAFRESULT_ALREADY_UNIQUELY_IDENTIFIED;
   }
 
-  return pvtRegisterPropertyDef (id,
-								 pName,
-								 typeId,
-								 isOptional,
-                 isIsUniqueIdentifier,
-								 ppPropDef);
-}
+	if(PvtIsPropertyDefRegistered(id))
+		return AAFRESULT_SUCCESS;
+	else
+	{
+		bool	isDuplicate;
+		
+		hr = pDict->PvtIsPropertyDefDuplicate(id, this, &isDuplicate);
+		if (AAFRESULT_FAILED(hr))
+			return hr;
+		if(isDuplicate)
+			return AAFRESULT_PROPERTY_DUPLICATE;
+		return pvtRegisterPropertyDef (id,
+									pName,
+									typeId,
+									isOptional,
+									isIsUniqueIdentifier,
+									ppPropDef);
+	}
+}	
 
 
 AAFRESULT STDMETHODCALLTYPE
@@ -295,12 +307,24 @@ AAFRESULT STDMETHODCALLTYPE
   if (AAFRESULT_FAILED (hr))
 	return hr;
 
-  return pvtRegisterPropertyDef (id,
+	if(PvtIsPropertyDefRegistered(id))
+		return AAFRESULT_SUCCESS;
+	else
+	{
+		bool	isDuplicate;
+		
+		hr = pDict->PvtIsPropertyDefDuplicate(id, this, &isDuplicate);
+		if (AAFRESULT_FAILED(hr))
+			return hr;
+		if(isDuplicate)
+			return AAFRESULT_PROPERTY_DUPLICATE;
+	    return pvtRegisterPropertyDef (id,
 								 pName,
 								 typeId,
 								 kAAFTrue,
-                 kAAFFalse, /* cannot be a unique identifier */
+								 kAAFFalse, /* cannot be a unique identifier */
 								 ppPropDef);
+	}
 }
 
 
@@ -329,6 +353,17 @@ AAFRESULT
 	}
 
 	return (result);
+}
+
+/******/
+bool
+    ImplAAFClassDef::PvtIsPropertyDefRegistered (
+      aafUID_constref propId)
+{
+  // NOTE: The following type cast is temporary. It should be removed as soon
+	// as the OM has a declarative sytax to include the type
+	// of the key used in the set. (trr:2000-MAR-11)
+	return (_Properties.contains((*reinterpret_cast<const OMObjectIdentification *>(&propId))));
 }
 
 AAFRESULT /*STDMETHODCALLTYPE*/

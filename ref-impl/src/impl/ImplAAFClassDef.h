@@ -185,6 +185,10 @@ public:
 
 public:
 
+	bool
+    PvtIsPropertyDefRegistered (
+      aafUID_constref propId);
+
   //****************
   // SetParent()
   //
