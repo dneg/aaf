@@ -55,7 +55,8 @@ AAF_BUILD_CONFIG_EXTERN_C_TRAILER
  */
 
 
-#if (__GNUC__ >= 2)
+/* so far only the SGI compiler does _not_ have built-in bool */
+#if ! (__sgi)
   #define AAF_BUILD_CONFIG_BUILTIN_BOOL	1
 #endif
 
