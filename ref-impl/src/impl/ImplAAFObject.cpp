@@ -15,7 +15,10 @@
 #endif
 
 #include <assert.h>
-
+#include "aafErr.h"
+#include "AAFResult.h"
+#include "OMFile.h"
+#include "ImplAAFHeader.h"
 
 ImplAAFObject::ImplAAFObject ()
 {}
@@ -91,7 +94,36 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT ImplAAFObject::MyHeadObject
 	(ImplAAFHeader **header)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	OMFile			*myFile;
+	OMStorable		*theRoot;
+	ImplAAFHeader	*theHeader;
+
+	XPROTECT()
+	{
+		if(header == NULL)
+			RAISE(AAFRESULT_NULL_PARAM);
+
+		if(containingObject() == NULL)
+			RAISE(AAFRESULT_NOT_IN_FILE); 
+
+		myFile = file();
+		if(myFile == NULL)
+			RAISE(AAFRESULT_NOT_IN_FILE);
+
+		theRoot = myFile->root();
+		if(theRoot == NULL)
+			RAISE(AAFRESULT_BADHEAD);
+
+		theHeader = dynamic_cast<ImplAAFHeader*>(theRoot);
+		if(theRoot == NULL)
+			RAISE(AAFRESULT_BADHEAD);
+
+		*header = theHeader;
+	}
+	XEXCEPT
+	XEND;
+
+	return(AAFRESULT_SUCCESS);
 }
 
 
