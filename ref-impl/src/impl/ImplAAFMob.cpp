@@ -474,8 +474,9 @@ AAFRESULT STDMETHODCALLTYPE
 				}	
 				else if(hr== AAFRESULT_MOB_NOT_FOUND)
 				{
+				    CHECK(cstore->RemoveMob(this));
 					_mobID = newMobID;
-					CHECK(cstore->ChangeIndexedMobID (this, newMobID));
+					CHECK(cstore->AddMob(this));
 				}
 				else
 					RAISE(hr);
@@ -489,7 +490,7 @@ AAFRESULT STDMETHODCALLTYPE
 		}
 		else
 			RAISE(hr);
-	  }
+	}
     else
 		 _mobID = newMobID;
 

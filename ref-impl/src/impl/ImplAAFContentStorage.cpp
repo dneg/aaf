@@ -279,25 +279,6 @@ AAFRESULT STDMETHODCALLTYPE
 	return(AAFRESULT_SUCCESS);
 }
 
-AAFRESULT
-    ImplAAFContentStorage::ChangeIndexedMobID (ImplAAFMob *pMob, aafMobID_constref /*newID*/)
-{
-	aafMobID_t	mobID;
-	if (NULL == pMob)
-		return AAFRESULT_NULL_PARAM;
-
-	XPROTECT()
-	{
-		CHECK(pMob->GetMobID(&mobID));
-	} /* XPROTECT */
-	XEXCEPT
-	{
-	}
-	XEND;
-	
-	return(AAFRESULT_NOT_IN_CURRENT_VERSION);
-}
-
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFContentStorage::CountEssenceData(aafUInt32 *  pNumEssenceData)
 {

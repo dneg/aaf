@@ -161,7 +161,6 @@ public:
 
 	// Interfaces visible inside the toolkit, but not exposed through the API
 	AAFRESULT LookupEssenceData (aafMobID_constref fileMobID, ImplAAFEssenceData **ppEssence);
-	AAFRESULT ChangeIndexedMobID (ImplAAFMob *pMob, aafMobID_constref newID);
 
 private:
     OMStrongReferenceSetProperty<OMUniqueMaterialIdentification, ImplAAFMob> _mobs;
