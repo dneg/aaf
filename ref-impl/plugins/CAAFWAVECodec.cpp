@@ -33,6 +33,7 @@ const CLSID CLSID_AAFWaveCodec = { 0x8D7B04B1, 0x95E1, 0x11d2, { 0x80, 0x89, 0x0
 const IID IID_IAAFSourceMob = { 0xB1A2137C, 0x1A7D, 0x11D2, { 0xBF, 0x78, 0x00, 0x10, 0x4B, 0xC9, 0x15, 0x6D } };
 const IID IID_IAAFWAVEDescriptor = { 0x4c2e1692, 0x8ae6, 0x11d2, { 0x81, 0x3c, 0x00, 0x60, 0x97, 0x31, 0x01, 0x72 } };
 const IID IID_IAAFFileDescriptor = { 0xe58a8561, 0x2a3e, 0x11D2, { 0xbf, 0xa4, 0x00, 0x60, 0x97, 0x11, 0x62, 0x12 } };
+const IID IID_IAAFEssenceAccess = {0xaed97eb0,0x2bc8,0x11D2,{0xbf,0xaa,0x00,0x60,0x97,0x11,0x62,0x12}};
 
 HRESULT STDMETHODCALLTYPE
     CAAFWaveCodec::Start (void)
@@ -74,7 +75,11 @@ CAAFWaveCodec::~CAAFWaveCodec ()
 }
 
 
-
+HRESULT STDMETHODCALLTYPE
+    CAAFWaveCodec::SetEssenceAccess(IUnknown *unk)
+{
+	return(unk->QueryInterface(IID_IAAFEssenceAccess, (void **)&_access));
+}
 
 HRESULT STDMETHODCALLTYPE
     CAAFWaveCodec::GetIndexedVariantID (aafInt32  index,
@@ -931,7 +936,7 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFWaveCodec::GetEssenceFormat (IAAFEssenceFormat *pFormat)
+    CAAFWaveCodec::GetEssenceFormat (IAAFEssenceFormat *pTemplate, IAAFEssenceFormat **pResult)
 {
 	aafInt32		numSpecifiers, n, bytesRead;
 	aafUInt32		valueUInt32;
@@ -939,44 +944,48 @@ HRESULT STDMETHODCALLTYPE
 	aafUID_t		opcode;
 	aafUInt8		buf[256];
 	aafUInt8		header[STD_HDRSIZE_NODATA];
+	IAAFEssenceFormat *fmt;
 
 	XPROTECT()
 	{
-		CHECK(pFormat->NumFormatSpecifiers (&numSpecifiers));
+		CHECK(_access->GetEmptyFileFormat(&fmt));
+		*pResult = fmt;
+
+		CHECK(pTemplate->NumFormatSpecifiers (&numSpecifiers));
 
 		for(n = 0; n < numSpecifiers; n++)
 		{
-			CHECK(pFormat->GetIndexedFormatSpecifier (n, &opcode, sizeof(buf), buf, &bytesRead));
+			CHECK(pTemplate->GetIndexedFormatSpecifier (n, &opcode, sizeof(buf), buf, &bytesRead));
 
 			if(EqualAUID(&kAAFAudioSampleBits, &opcode))
 			{
 				valueUInt32 = _bitsPerSample;
 				memcpy(buf, &valueUInt32, sizeof(valueUInt32));
-				CHECK(pFormat->AddFormatSpecifier (kAAFAudioSampleBits, sizeof(valueUInt32), buf));
+				CHECK(fmt->AddFormatSpecifier (kAAFAudioSampleBits, sizeof(valueUInt32), buf));
 			}
 			else if(EqualAUID(&kAAFSampleRate, &opcode))
 			{
 				valueRat = _sampleRate;
 				memcpy(buf, &valueRat, sizeof(valueRat));
-				CHECK(pFormat->AddFormatSpecifier (kAAFSampleRate, sizeof(valueRat), buf));
+				CHECK(fmt->AddFormatSpecifier (kAAFSampleRate, sizeof(valueRat), buf));
 			}
 			else if(EqualAUID(&kAAFSampleFormat, &opcode))
 			{
 				valueUInt32 = kAAFSignedMagnitude;
 				memcpy(buf, &valueUInt32, sizeof(valueUInt32));
-				CHECK(pFormat->AddFormatSpecifier (kAAFSampleFormat, sizeof(valueUInt32), buf));
+				CHECK(fmt->AddFormatSpecifier (kAAFSampleFormat, sizeof(valueUInt32), buf));
 			}
 			else if(EqualAUID(&kAAFNumChannels, &opcode))
 			{
 				valueUInt32 = _numCh;
 				memcpy(buf, &valueUInt32, sizeof(valueUInt32));
-				CHECK(pFormat->AddFormatSpecifier (kAAFNumChannels, sizeof(valueUInt32), buf));
+				CHECK(fmt->AddFormatSpecifier (kAAFNumChannels, sizeof(valueUInt32), buf));
 			}
 			else if(EqualAUID(&kAAFMaxSampleBytes, &opcode))
 			{
 				valueUInt32 = (_bitsPerSample + 7)/ 8;
 				memcpy(buf, &valueUInt32, sizeof(valueUInt32));
-				CHECK(pFormat->AddFormatSpecifier (kAAFMaxSampleBytes, sizeof(valueUInt32), buf));
+				CHECK(fmt->AddFormatSpecifier (kAAFMaxSampleBytes, sizeof(valueUInt32), buf));
 			}
 			else
 				RAISE(AAFRESULT_INVALID_OP_CODEC);
@@ -987,6 +996,28 @@ HRESULT STDMETHODCALLTYPE
 		
 		// This will output the header on the next non-raw write
 		_sampleDataHeaderWritten = AAFFalse;
+	}
+	XEXCEPT
+	XEND
+
+	return (AAFRESULT_SUCCESS);
+}
+
+HRESULT STDMETHODCALLTYPE
+    CAAFWaveCodec::GetEssenceFormatList (IAAFEssenceFormat **pResult)
+{
+	IAAFEssenceFormat *fmt;
+
+	XPROTECT()
+	{
+		CHECK(_access->GetEmptyFileFormat(&fmt));
+		*pResult = fmt;
+
+		CHECK(fmt->AddFormatSpecifier (kAAFAudioSampleBits, 0, NULL));
+		CHECK(fmt->AddFormatSpecifier (kAAFSampleRate, 0, NULL));
+		CHECK(fmt->AddFormatSpecifier (kAAFSampleFormat, 0, NULL));
+		CHECK(fmt->AddFormatSpecifier (kAAFNumChannels, 0, NULL));
+		CHECK(fmt->AddFormatSpecifier (kAAFMaxSampleBytes, 0, NULL));
 	}
 	XEXCEPT
 	XEND
