@@ -3,11 +3,11 @@
 #   Target:     {refh}AAF.h, {refh}AAFPlugin.h, {refh}AAF_i.c, {refh}AAFPlugin_i.c
 #   Sources:    all frefh files
 #
-{refh}AAF.h Ä {GENERATED_FREFH}
-	echo {refh}AAF.h
-	if "`exists -f {refh}AAF.h`"
-		SetFile -a l {refh}AAF.h
-		Delete -i -ay {refh}AAF.h
+"{refh}AAF.h" Ä {GENERATED_FREFH}
+	echo "{refh}AAF.h"
+	if `exists -f "{refh}AAF.h"`
+		SetFile -a l "{refh}AAF.h"
+		Delete -i -ay "{refh}AAF.h"
 	end
 	( echo "//=--------------------------------------------------------------------------=" ; ¶
 	  echo "// (C) Copyright 1998-1999 Avid Technology." ; ¶
@@ -56,15 +56,15 @@
 	  catenate AAFModule.frefh; ¶
 	  echo "" ; ¶
 	  echo '#endif // __AAF_h__' ; ¶
-	) > {refh}AAF.h
-	SetFile -t TEXT -c CWIE -a L {refh}AAF.h
+	) > "{refh}AAF.h"
+	SetFile -t TEXT -c CWIE -a L "{refh}AAF.h"
 
 
-{refh}AAFPlugin.h Ä {PLUGIN_FREFH_TARGETS}
-	echo {refh}AAFPlugin.h
-	if "`exists -f {refh}AAFPlugin.h`"
-		SetFile -a l {refh}AAFPlugin.h
-		Delete -i -ay {refh}AAFPlugin.h
+"{refh}AAFPlugin.h" Ä {PLUGIN_FREFH_TARGETS}
+	echo "{refh}AAFPlugin.h"
+	if `exists -f "{refh}AAFPlugin.h"`
+		SetFile -a l "{refh}AAFPlugin.h"
+		Delete -i -ay "{refh}AAFPlugin.h"
 	end
 	( echo "//=--------------------------------------------------------------------------=" ; ¶
 	  echo "// (C) Copyright 1998-1999 Avid Technology." ; ¶
@@ -109,15 +109,15 @@
 	  end ; ¶
 	  echo "" ; ¶
 	  echo '#endif // __AAFPlugin_h__' ; ¶
-	) > {refh}AAFPlugin.h
-	SetFile -t TEXT -c CWIE -a L {refh}AAFPlugin.h
+	) > "{refh}AAFPlugin.h"
+	SetFile -t TEXT -c CWIE -a L "{refh}AAFPlugin.h"
 
 
-{refh}AAF_i.c Ä {dod}aafobjects.mk {dod}dod2iid.awk {macdodo}macaafobjects.mk
-	echo {refh}AAF_i.c
-	if "`exists -f {refh}AAF_i.c`"
-		SetFile -a l {refh}AAF_i.c
-		Delete -i -ay {refh}AAF_i.c
+"{refh}AAF_i.c" Ä "{dod}aafobjects.mk" "{dod}dod2iid.awk" "{macdodo}macaafobjects.mk"
+	echo "{refh}AAF_i.c"
+	if `exists -f "{refh}AAF_i.c"`
+		SetFile -a l "{refh}AAF_i.c"
+		Delete -i -ay "{refh}AAF_i.c"
 	end
 	( echo "/* this file contains the actual definitions of */" ; ¶
 	  echo "/* the IIDs and CLSIDs */" ; ¶
@@ -163,7 +163,7 @@
 	  echo '#endif // CLSID_DEFINED' ; ¶
 	  echo "" ; ¶
 	  for class in {AAFOBJECTS} {AAFCOMINTERFACESONLY} ; ¶
-	      {DODO} -f :macros:dod2iid.mac < {class}.dod > dod2iid.tmp ; ¶
+	      "{DODO}" -f :macros:dod2iid.mac < {class}.dod > dod2iid.tmp ; ¶
 	      Search -q /¥const IID IID_/ dod2iid.tmp ; ¶
 	      echo "" ; ¶
 	      echo "" ; ¶
@@ -173,15 +173,15 @@
 	  echo "}" ; ¶
 	  echo '#endif' ; ¶
 	  echo "" ; ¶
-	) > {refh}AAF_i.c
-	SetFile -t TEXT -c CWIE -a L {refh}AAF_i.c
+	) > "{refh}AAF_i.c"
+	SetFile -t TEXT -c CWIE -a L "{refh}AAF_i.c"
 
 
-{refh}AAFPlugin_i.c Ä {dod}aafobjects.mk {dod}dod2iid.awk {macdodo}macaafobjects.mk
-	echo {refh}AAFPlugin_i.c
-	if "`exists -f {refh}AAFPlugin_i.c`"
-		SetFile -a l {refh}AAFPlugin_i.c
-		Delete -i -ay {refh}AAFPlugin_i.c
+"{refh}AAFPlugin_i.c" Ä "{dod}aafobjects.mk" "{dod}dod2iid.awk" "{macdodo}macaafobjects.mk"
+	echo "{refh}AAFPlugin_i.c"
+	if `exists -f "{refh}AAFPlugin_i.c"`
+		SetFile -a l "{refh}AAFPlugin_i.c"
+		Delete -i -ay "{refh}AAFPlugin_i.c"
 	end
 	( echo "/* this file contains the actual definitions of */" ; ¶
 	  echo "/* the IIDs and CLSIDs */" ; ¶
@@ -227,7 +227,7 @@
 	  echo '#endif // CLSID_DEFINED' ; ¶
 	  echo "" ; ¶
 	  for class in {PLUGIN_OBJECTS} ; ¶
-	      {DODO} -f :macros:dod2iid.mac < {class}.dod > dod2iid.tmp ; ¶
+	      "{DODO}" -f :macros:dod2iid.mac < {class}.dod > dod2iid.tmp ; ¶
 	      Search -q /¥const IID IID_/ dod2iid.tmp ; ¶
 	      echo "" ; ¶
 	      echo "" ; ¶
@@ -237,15 +237,15 @@
 	  echo "}" ; ¶
 	  echo '#endif' ; ¶
 	  echo "" ; ¶
-	) > {refh}AAFPlugin_i.c
-	SetFile -t TEXT -c CWIE -a L {refh}AAFPlugin_i.c
+	) > "{refh}AAFPlugin_i.c"
+	SetFile -t TEXT -c CWIE -a L "{refh}AAFPlugin_i.c"
 
 
-{refh}AAFRoot_i.c Ä {dod}aafobjects.mk {dod}dod2iid.awk {macdodo}macaafobjects.mk
-	echo {refh}AAFRoot_i.c
-	if "`exists -f {refh}AAFRoot_i.c`"
-		SetFile -a l {refh}AAFRoot_i.c
-		Delete -i -ay {refh}AAFRoot_i.c
+"{refh}AAFRoot_i.c" Ä "{dod}aafobjects.mk" "{dod}dod2iid.awk" "{macdodo}macaafobjects.mk"
+	echo "{refh}AAFRoot_i.c"
+	if `exists -f "{refh}AAFRoot_i.c"`
+		SetFile -a l "{refh}AAFRoot_i.c"
+		Delete -i -ay "{refh}AAFRoot_i.c"
 	end
 	( echo "/* this file contains the actual definitions of */" ; ¶
 	  echo "/* the IIDs and CLSIDs */" ; ¶
@@ -291,7 +291,7 @@
 	  echo '#endif // CLSID_DEFINED' ; ¶
 	  echo "" ; ¶
 	  for class in AAFRoot ; ¶
-	      {DODO} -f :macros:dod2iid.mac < {class}.dod > dod2iid.tmp ; ¶
+	      "{DODO}" -f :macros:dod2iid.mac < {class}.dod > dod2iid.tmp ; ¶
 	      Search -q /¥const IID IID_/ dod2iid.tmp ; ¶
 	      echo "" ; ¶
 	      echo "" ; ¶
@@ -301,16 +301,16 @@
 	  echo "}" ; ¶
 	  echo '#endif' ; ¶
 	  echo "" ; ¶
-	) > {refh}AAFRoot_i.c
-	SetFile -t TEXT -c CWIE -a L {refh}AAFRoot_i.c
+	) > "{refh}AAFRoot_i.c"
+	SetFile -t TEXT -c CWIE -a L "{refh}AAFRoot_i.c"
 
 
 
-{impl}AAFClassIDs.h Ä {dod}aafobjects.mk {macdodo}macaafobjects.mk
-	echo {impl}AAFClassIDs.h
-	if "`exists -f {impl}AAFClassIDs.h`"
-		SetFile -a l {impl}AAFClassIDs.h
-		Delete -i -ay {impl}AAFClassIDs.h
+"{impl}AAFClassIDs.h" Ä "{dod}aafobjects.mk" "{macdodo}macaafobjects.mk"
+	echo "{impl}AAFClassIDs.h"
+	if `exists -f "{impl}AAFClassIDs.h"`
+		SetFile -a l "{impl}AAFClassIDs.h"
+		Delete -i -ay "{impl}AAFClassIDs.h"
 	end
 	( echo "//=--------------------------------------------------------------------------=" ; ¶
 	  echo "// (C) Copyright 1998 Avid Technology." ; ¶
@@ -341,15 +341,15 @@
 	  end ; ¶
 	  echo "" ; ¶
 	  echo '#endif // __AAFClassIDs_h__' ; ¶
-	) > {impl}AAFClassIDs.h
-	SetFile -t TEXT -c CWIE -a L {impl}AAFClassIDs.h
+	) > "{impl}AAFClassIDs.h"
+	SetFile -t TEXT -c CWIE -a L "{impl}AAFClassIDs.h"
 
 
-{comh}AAFCLSIDs.h Ä {dod}aafobjects.mk {macdodo}macaafobjects.mk
-	echo {comh}AAFCLSIDs.h
-	if "`exists -f {comh}AAFCLSIDs.h`"
-		SetFile -a l {comh}AAFCLSIDs.h
-		Delete -i -ay {comh}AAFCLSIDs.h
+"{comh}AAFCLSIDs.h" Ä "{dod}aafobjects.mk" "{macdodo}macaafobjects.mk"
+	echo "{comh}AAFCLSIDs.h"
+	if `exists -f "{comh}AAFCLSIDs.h"`
+		SetFile -a l "{comh}AAFCLSIDs.h"
+		Delete -i -ay "{comh}AAFCLSIDs.h"
 	end
 	( echo "//=--------------------------------------------------------------------------=" ; ¶
 	  echo "// (C) Copyright 1998 Avid Technology." ; ¶
@@ -379,14 +379,14 @@
 	  end ; ¶
 	  echo "" ; ¶
 	  echo '#endif // __AAFCLSIDs_h__' ; ¶
-	) > {comh}AAFCLSIDs.h
-	SetFile -t TEXT -c CWIE -a L {comh}AAFCLSIDs.h
+	) > "{comh}AAFCLSIDs.h"
+	SetFile -t TEXT -c CWIE -a L "{comh}AAFCLSIDs.h"
 
 
 
-{comh}AAFObjectTable.h Ä {dod}aafobjects.mk {macdodo}macaafobjects.mk
-	echo {comh}AAFObjectTable.h
-	Delete -i -ay {comh}AAFObjectTable.tmp
+"{comh}AAFObjectTable.h" Ä "{dod}aafobjects.mk" "{macdodo}macaafobjects.mk"
+	echo "{comh}AAFObjectTable.h"
+	Delete -i -ay "{comh}AAFObjectTable.tmp"
 	( echo "//=--------------------------------------------------------------------------=" ; ¶
 	  echo "// (C) Copyright 1998-1999 Avid Technology." ; ¶
 	  echo "// (C) Copyright 1998-1999 Microsoft Corporation." ; ¶
@@ -430,18 +430,18 @@
 	      echo '	AAF_OBJECT_ENTRY('{class}')'; ¶
 	  end ; ¶
 	  echo "AAF_END_OBJECT_MAP()" ; ¶
-	) > {comh}AAFObjectTable.tmp
-	if "`exists -f {comh}AAFObjectTable.h`"
-		SetFile -a l {comh}AAFObjectTable.h
-		Delete -i -ay {comh}AAFObjectTable.h
+	) > "{comh}AAFObjectTable.tmp"
+	if `exists -f "{comh}AAFObjectTable.h"`
+		SetFile -a l "{comh}AAFObjectTable.h"
+		Delete -i -ay "{comh}AAFObjectTable.h"
 	end
-	rename -y {comh}AAFObjectTable.tmp {comh}AAFObjectTable.h
-	SetFile -t TEXT -c CWIE -a L {comh}AAFObjectTable.h
+	rename -y "{comh}AAFObjectTable.tmp" "{comh}AAFObjectTable.h"
+	SetFile -t TEXT -c CWIE -a L "{comh}AAFObjectTable.h"
 
 
-{comh}AAFObjectTable_i.cpp Ä {dod}aafobjects.mk {macdodo}macaafobjects.mk
-	echo {comh}AAFObjectTable_i.cpp
-	Delete -i -ay {comh}AAFObjectTable.tmp
+"{comh}AAFObjectTable_i.cpp" Ä "{dod}aafobjects.mk" "{macdodo}macaafobjects.mk"
+	echo "{comh}AAFObjectTable_i.cpp"
+	Delete -i -ay "{comh}AAFObjectTable.tmp"
 	( echo "//=--------------------------------------------------------------------------=" ; ¶
 	  echo "// (C) Copyright 1998-1999 Avid Technology." ; ¶
 	  echo "// (C) Copyright 1998-1999 Microsoft Corporation." ; ¶
@@ -474,10 +474,10 @@
 	  echo "// Include AAF Object Table:" ; ¶
 	  echo "//" ; ¶
 	  echo ¶#include ¶"AAFObjectTable.h¶" ; ¶
-	) > {comh}AAFObjectTable.tmp
-	if "`exists -f {comh}AAFObjectTable_i.cpp`"
-		SetFile -a l {comh}AAFObjectTable_i.cpp
-		Delete -i -ay {comh}AAFObjectTable_i.cpp
+	) > "{comh}AAFObjectTable.tmp"
+	if `exists -f "{comh}AAFObjectTable_i.cpp"`
+		SetFile -a l "{comh}AAFObjectTable_i.cpp"
+		Delete -i -ay "{comh}AAFObjectTable_i.cpp"
 	end
-	rename -y {comh}AAFObjectTable.tmp {comh}AAFObjectTable_i.cpp
-	SetFile -t TEXT -c CWIE -a L {comh}AAFObjectTable_i.cpp
+	rename -y "{comh}AAFObjectTable.tmp" "{comh}AAFObjectTable_i.cpp"
+	SetFile -t TEXT -c CWIE -a L "{comh}AAFObjectTable_i.cpp"

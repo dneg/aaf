@@ -4,10 +4,10 @@
 # Copyright (c) 1998 Avid Technology, Inc. #
 #                                          #
 ############################################
-dod = "{aaf}dodo:"
-AAFMacSDK = "{aaf}AAFMacSDK:"
-DODO = "{AAFMacSDK}dodo:tool:dodo"
-convertmk = "{AAFMacSDK}dodo:tool:ConvertMake"
+dod = {aaf}dodo:
+AAFMacSDK = {aaf}AAFMacSDK:
+DODO = {AAFMacSDK}dodo:tool:dodo
+convertmk = {AAFMacSDK}dodo:tool:ConvertMake
 
 
 all Ä macdodo.make
@@ -16,9 +16,9 @@ all Ä macdodo.make
 MAKEFILE     = makemacdodo.make
 
 
-macaafobjects.mk Ä {dod}aafobjects.mk
+macaafobjects.mk Ä "{dod}aafobjects.mk"
 	echo 'Creating macaafobjects.mk...'
-	{convertmk} < {dod}aafobjects.mk > macaafobjects.mk
+	"{convertmk}" < "{dod}aafobjects.mk" > macaafobjects.mk
 	
 
 makemacdodo.mk Ä macaafobjects.mk makemacdodo.mak1
@@ -31,7 +31,7 @@ makemacdodo.mk Ä macaafobjects.mk makemacdodo.mak1
 	
 
 macdodo.mak1  Ä makemacdodo.mk
-	make -f makemacdodo.mk -d aaf={aaf} > makemacdodo.output
+	make -f makemacdodo.mk -d aaf="{aaf}" > makemacdodo.output
 	makemacdodo.output
 
 
@@ -51,7 +51,7 @@ macdodo.make  Ä macdodo.mak1 makemacdodo.mak2
 
 clean Ä
 	if "`exists -f makemacdodo.mk`"
-		make clean -f makemacdodo.mk -d aaf={aaf} > makemacdodo.output
+		make clean -f makemacdodo.mk -d aaf="{aaf}" > makemacdodo.output
 		Delete -i -ay makemacdodo.mk
 		Delete -i -ay makemacdodo.output
 	end
