@@ -157,7 +157,7 @@ public:
 
   // Close the media stream, ready to open another or Finish.
   STDMETHOD (CompleteWrite)
-     ();
+     (IUnknown *unk);
 
 		
 
