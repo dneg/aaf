@@ -3,7 +3,6 @@
 #ifndef __ImplAAFEssenceAccess_h__
 #define __ImplAAFEssenceAccess_h__
 
-#include "OMStorable.h"
 
 /******************************************\
 *                                          *
@@ -1106,17 +1105,10 @@ public:
 
 
 public:
-  // Declare this class to be storable.
-  //
-  OMDECLARE_STORABLE(ImplAAFEssenceAccess)
-
   // Declare the module test method. The implementation of the will be be
   // in /test/ImplAAFEssenceAccessTest.cpp.
   static AAFRESULT test();
 
-  // Return this objects stored object class.
-  virtual AAFRESULT STDMETHODCALLTYPE
-    GetObjectClass(aafUID_t * pClass);
 private:
 	aafUID_t			_codecID;
 	aafUID_t			_variety;
