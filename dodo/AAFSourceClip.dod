@@ -1,0 +1,106 @@
+#startm .this-module 0
+AAFSourceClip\
+#endm
+#c
+#startm .parent-module 0
+AAFSourceReference\
+#endm
+#c
+#import ./AAFUnitTest.exp
+#import ./AAFSourceReference.exp
+/******************************************\
+*                                          *
+* Advanced Authoring Format                *
+*                                          *
+* Copyright (c) 1998 Avid Technology, Inc. *
+* Copyright (c) 1998 Microsoft Corporation *
+*                                          *
+\******************************************/
+AD_CLASS_BEGIN
+
+AD_METHOD1(GetStartTime,
+		   [retval][out],
+		   AAFPosition *,
+		   pStartTime,
+		   Place to put start time,
+		   Gets the starting time and places it into the pStartTime argument.)
+
+AD_METHOD1(SetStartTime,
+		   [in],
+		   AAFPosition,
+		   startTime,
+		   start time to set,
+		   Sets the starting time using the startTime argument.)
+
+AD_METHOD1(GetFadeInLength,
+		   [retval][out],
+		   AAFLength *,
+		   pFadeInLength,
+		   Place to put Fade In Length,
+		   Gets the fade in length and places it into the pFadeInLength argument.)
+
+AD_METHOD1(SetFadeInLength,
+		   [in],
+		   AAFLength,
+		   fadeInLength,
+		   Fade In Length to set,
+		   Sets the fade in length using the fadeInLength argument.)
+
+AD_METHOD1(GetFadeInType,
+		   [retval][out],
+		   AAFFadeType *,
+		   pFadeInType,
+		   Place to put Fade In Type,
+		   Gets the fade in type and places it into the pFadeInType argument.)
+
+AD_METHOD1(SetFadeInType,
+		   [in],
+		   AAFFadeType,
+		   fadeInType,
+		   Fade In Type to set,
+		   Sets the fade in type using the fadeInType argument.)
+
+AD_METHOD1(GetFadeOutLength,
+		   [retval][out],
+		   AAFLength *,
+		   pFadeOutLength,
+		   Place to put Fade Out Length,
+		   Gets the fade out length and places it into the pFadeOutLength argument.)
+
+AD_METHOD1(SetFadeOutLength,
+		   [in],
+		   AAFLength,
+		   fadeOutLength,
+		   Fade Out Length to set,
+		   Sets the fade out length using the fadeOutLength argument.)
+
+AD_METHOD1(GetFadeOutType,
+		   [retval][out],
+		   AAFFadeType *,
+		   pFadeOutType,
+		   Place to put Fade Out Type,
+		   Gets the fade out type and places it into the pFadeOutType argument.)
+
+AD_METHOD1(SetFadeOutType,
+		   [in],
+		   AAFFadeType,
+		   fadeOutType,
+		   Fade Out Type to set,
+		   Sets the fade out type using the fadeOutType argument.)
+
+  //
+  // IAAFUnitTest interface method overrides
+  //
+.method-Test
+
+
+  //
+  // AAFSourceReference method overrides
+  //
+.method-GetSourceID
+.method-SetSourceID
+.method-GetSourceMobSlotID
+.method-SetSourceMobSlotID
+
+
+AD_CLASS_END
