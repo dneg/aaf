@@ -18,6 +18,7 @@
 
 #include "AxPropertyValueDump.h"
 
+#include "AxIterator.h"
 #include "AxProperty.h"
 #include "AxMetaDef.h"
 #include "AxUtil.h"
@@ -319,7 +320,7 @@ void AxPropertyValueDump::process( IAAFPropertyValueSP& spPropVal,
 		_os << L"to object of class " << axObj.GetClassName() << L" named \"";
 
 		// Pluck out the value of the Name property.
-		AxPropertyIter axPropIter( axObj.CreatePropertyIter() );
+		AxPropertyIter axPropIter( axObj.GetProperties() );
 		IAAFPropertySP nextProp;
 		bool notAtEnd;
 		for ( notAtEnd = axPropIter.NextOne( nextProp );
