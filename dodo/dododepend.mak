@@ -80,6 +80,15 @@ depend.mk : aafobjects.mk
 		echo $$base.comcx : macros/comcx.mac macros/base.mac >> depend.tmp ; \
 		echo $$base.exp : macros/exp.mac macros/base.mac >> depend.tmp ; \
 	  done
+	@ echo AAFPluginTypes.all...
+	@ echo "" >> depend.tmp
+	@ echo AAFPluginTypes.all : AAFPluginTypes.h >> depend.tmp
+	@ echo AAFPluginTypes.all : AAFPluginTypes.idl >> depend.tmp
+	@ echo AAFPluginTypes.all : AAFPluginTypes.refh >> depend.tmp
+	@ echo AAFPluginTypes.h : macros/h.mac macros/base.mac >> depend.tmp
+	@ echo AAFPluginTypes.idl : macros/idl.mac macros/base.mac >> depend.tmp
+	@ echo AAFPluginTypes.refh : macros/refh.mac macros/base.mac >> depend.tmp
+	@ echo "" >> depend.tmp
 	@ for base in $(PLUGIN_OBJECTS) ; do \
 		echo $$base.all... ; \
 		echo "" >> depend.tmp ; \

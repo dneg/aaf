@@ -47,6 +47,7 @@ targets.mk : aafobjects.mk
 	@ echo '' >> targets.tmp
 	@ echo PLUGIN_TARGETS = '\' >> targets.tmp 
 	@ echo '	'AAFTypes.all' \' >> targets.tmp 
+	@ echo '	'AAFPluginTypes.all' \' >> targets.tmp 
 	@ echo '	'AAFModuleTest.all \\\c>> targets.tmp 
 	@ for base in $(PLUGIN_OBJECTS) ;  do \
 		echo '\' >> targets.tmp ; \
