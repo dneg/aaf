@@ -213,8 +213,11 @@ static void printTimeStamp (const aafTimeStamp_t & ts,
 	}
 	else
 	{
+		// I replaced assert(month_index >= 0) 2 lines below
+		// with this one because the value is unsigned and will
+		// never be negative. - Alex, 11-Sep-00
+		assert (ts.date.month > 0 );
 		aafUInt8 month_index = ts.date.month-1;
-		assert (month_index >= 0);
 		assert (month_index < (sizeof (monthNames) / sizeof (monthNames[0])));
 		strcpy (monthNameBuf, monthNames[month_index]);
 	}
