@@ -6,12 +6,12 @@
 # Tim Bingham
 #
 BEGIN {
-  date = "";
+  entrytext = "";
   printHeader();
 }
 
 /^[0-9]+-[0-9]+-[0-9]+/ {
-  if (date != "") {
+  if (entrytext != "") {
 #    printf("<!--[%s]-->\n", entrytext);
     gsub("\t", " ", entrytext);
     entrytext = trim(entrytext, 3);
