@@ -225,17 +225,17 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		CAAFBuiltinDefs defs (pDictionary);
  		
 		// Create a source mob
-		checkResult(pDictionary->CreateInstance(defs.cdSourceMob(),
-							IID_IAAFSourceMob, 
-							(IUnknown **)&pSourceMob));
+		checkResult(defs.cdSourceMob()->
+					CreateInstance(IID_IAAFSourceMob, 
+								   (IUnknown **)&pSourceMob));
 		checkResult(pSourceMob->QueryInterface(IID_IAAFMob, (void **)&pMob));
 
 		checkResult(CoCreateGuid((GUID *)&newMobID));
 		checkResult(pMob->SetMobID(newMobID));
 		checkResult(pMob->SetName(L"TIFFDescriptorTest"));
-		checkResult(pDictionary->CreateInstance(defs.cdTIFFDescriptor(),
-									  IID_IAAFTIFFDescriptor, 
-									  (IUnknown **)&pTIFFDesc));		
+		checkResult(defs.cdTIFFDescriptor()->
+					CreateInstance(IID_IAAFTIFFDescriptor, 
+								   (IUnknown **)&pTIFFDesc));		
 		checkResult(pTIFFDesc->QueryInterface(IID_IAAFEssenceDescriptor, (void **)&pEssDesc));
 		checkResult(pTIFFDesc->SetIsUniform(AAFFalse));
 		checkResult(pTIFFDesc->SetIsContiguous(AAFTrue));

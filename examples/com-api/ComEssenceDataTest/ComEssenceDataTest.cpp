@@ -202,9 +202,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 	// !!!Previous revisions of this file contained code here required to handle external essence
 
   // Get a Master MOB Interface
-	check(pDictionary->CreateInstance( pCDMasterMob,
-						   IID_IAAFMasterMob, 
-						   (IUnknown **)&pMasterMob));
+	check(pCDMasterMob->
+		  CreateInstance(IID_IAAFMasterMob, 
+						 (IUnknown **)&pMasterMob));
 	// Get a Mob interface and set its variables.
 	check(pMasterMob->QueryInterface(IID_IAAFMob, (void **)&pMob));
 	check(pMob->GetMobID(&masterMobID));
@@ -218,9 +218,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 	if(dataFile != NULL)
 	{
 		// Make a locator, and attach it to the EssenceDescriptor
-		check(pDictionary->CreateInstance(pCDNetworkLocator,
-								IID_IAAFLocator, 
-								(IUnknown **)&pLocator));		
+		check(pCDNetworkLocator->
+			  CreateInstance(IID_IAAFLocator, 
+							 (IUnknown **)&pLocator));		
 		check(pLocator->SetPath (dataFile->dataFilename));
 		testContainer = dataFile->dataFormat;
 	}

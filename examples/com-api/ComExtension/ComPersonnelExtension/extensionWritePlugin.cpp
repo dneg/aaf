@@ -9,7 +9,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -192,9 +192,8 @@ HRESULT extensionWritePlugin (const aafCharacter * filename)
  
     // Instantiate a AdministrativeMob object.
 	check (pDict->LookupClassDef (kClassID_AdminMob, &pcd))
-    check (pDict->CreateInstance (pcd,
-								  IID_IAAFMob,
-								  (IUnknown**) &pMob));
+    check (pcd->CreateInstance (IID_IAAFMob,
+								(IUnknown**) &pMob));
 	pcd->Release ();
 	pcd = 0;
 
@@ -207,9 +206,8 @@ HRESULT extensionWritePlugin (const aafCharacter * filename)
     // Add several PersonnelResource objects to the AdminMob.
     // Instantiate the PersonnelResource object.
 	check (pDict->LookupClassDef (kClassID_PersonnelResource, &pcd));
-    check (pDict->CreateInstance (pcd,
-								  IID_IAAFPersonnelResource,
-								  (IUnknown**) &pPersResource));
+    check (pcd->CreateInstance (IID_IAAFPersonnelResource,
+								(IUnknown**) &pPersResource));
 	pcd->Release ();
 	pcd = 0;
 
@@ -223,9 +221,8 @@ HRESULT extensionWritePlugin (const aafCharacter * filename)
 
   // Instantiate the PersonnelResource object.
 	check (pDict->LookupClassDef (kClassID_PersonnelResource, &pcd));
-    check (pDict->CreateInstance (pcd,
-								  IID_IAAFPersonnelResource,
-								  (IUnknown**) &pPersResource));
+    check (pcd->CreateInstance (IID_IAAFPersonnelResource,
+								(IUnknown**) &pPersResource));
 	pcd->Release ();
 	pcd = 0;
 
@@ -240,9 +237,8 @@ HRESULT extensionWritePlugin (const aafCharacter * filename)
     pPersResource=NULL;
   // Instantiate the PersonnelResource object.
     check (pDict->LookupClassDef (kClassID_PersonnelResource, &pcd));
-    check (pDict->CreateInstance (pcd,
-								  IID_IAAFPersonnelResource,
-								  (IUnknown**) &pPersResource));
+    check (pcd->CreateInstance (IID_IAAFPersonnelResource,
+								(IUnknown**) &pPersResource));
 	pcd->Release ();
 	pcd = 0;
 

@@ -77,6 +77,7 @@ ImplAAFIdentification::ImplAAFIdentification():
 
 }
 
+/*
 ImplAAFIdentification::ImplAAFIdentification(
                                      const wchar_t* companyName,
                                      const wchar_t* productName,
@@ -123,7 +124,7 @@ ImplAAFIdentification::ImplAAFIdentification(
   // _generation.???;
 
 };
-
+*/
 
 
 

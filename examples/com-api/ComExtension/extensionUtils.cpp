@@ -9,7 +9,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -1051,9 +1051,9 @@ void CreateAndRegisterPositionEnum (IAAFDictionary * pDict)
   {
     // Instantiate a type definition object which will describe ePosition
     // extensible enumerations.
-    check (pDict->CreateInstance (defs.cdTypeDefExtEnum(),
-								  IID_IAAFTypeDefExtEnum,
-								  (IUnknown**) &ptde));
+    check (defs.cdTypeDefExtEnum()->
+		   CreateInstance (IID_IAAFTypeDefExtEnum,
+						   (IUnknown**) &ptde));
 
     // Initialize the type definition object with the given name, and to
     // be represented by the given AUID.  We've already generated an
@@ -1121,9 +1121,9 @@ void CreateAndRegisterPersonnelResource (IAAFDictionary * pDict)
   {
     // Instantiate a class definition object which will describe
     // PersonnelResource objects.
-    check (pDict->CreateInstance (defs.cdClassDef(),
-								  IID_IAAFClassDef,
-								  (IUnknown**) &pcd));
+    check (defs.cdClassDef()->
+		   CreateInstance (IID_IAAFClassDef,
+						   (IUnknown**) &pcd));
 
     // We'll have to specify the PersonnelResource class definition's
     // parent class, so look it up here.  Since PersonnelResource
@@ -1313,9 +1313,9 @@ CreateAndRegisterPersonnelResourceReference
     // Instantiate a TypeDefinition for use as a Reference to a
     // PersonnelResource object.  We'll instantiate a
     // TypeDefinitionStrongObjectReference.
-    check (pDict->CreateInstance (defs.cdTypeDefStrongObjRef(),
-								  IID_IAAFTypeDefObjectRef,
-								  (IUnknown**) &ptdr));
+    check (defs.cdTypeDefStrongObjRef()->
+		   CreateInstance (IID_IAAFTypeDefObjectRef,
+						   (IUnknown**) &ptdr));
 
     // Initialize our new type def, identifying the given AUID by which
     // this type will be known
@@ -1386,9 +1386,9 @@ CreateAndRegisterPersonnelResourceReferenceVector
     // Instantiate a TypeDefinition for use as a Vector of References to
     // PersonnelResource objects.  We'll instantiate a
     // TypeDefinitionVariableArray.
-    check (pDict->CreateInstance (defs.cdTypeDefVariableArray(),
-								  IID_IAAFTypeDefVariableArray,
-								  (IUnknown**) &ptdv));
+    check (defs.cdTypeDefVariableArray()->
+		   CreateInstance (IID_IAAFTypeDefVariableArray,
+						   (IUnknown**) &ptdv));
 
     // We'll need to describe the type of each element in this vector.
     // In this case, we want to specify that elements are
@@ -1465,9 +1465,9 @@ void CreateAndRegisterAdminMob (IAAFDictionary * pDict)
   {
     // Instantiate a class definition object which will describe
     // AdminMob objects.
-    check (pDict->CreateInstance (defs.cdClassDef(),
-								  IID_IAAFClassDef,
-								  (IUnknown**) &pcd));
+    check (defs.cdClassDef()->
+		   CreateInstance (IID_IAAFClassDef,
+						   (IUnknown**) &pcd));
 
     // We'll have to specify the AdminMob class definition's parent
     // class, so look it up here.  Since PersonnelResource inherits from
