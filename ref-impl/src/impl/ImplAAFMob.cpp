@@ -47,6 +47,7 @@
 #include <assert.h>
 #include "AAFResult.h"
 #include "aafCvt.h"
+#include "AAFUtils.h"
 
 extern "C" const aafClassID_t CLSID_AAFMobSlot;
 extern "C" const aafClassID_t CLSID_AAFTimelineMobSlot;
@@ -64,6 +65,7 @@ ImplAAFMob::ImplAAFMob ()
 	_persistentProperties.put(_creationTime.address());
 	_persistentProperties.put(_lastModified.address());
 	_persistentProperties.put(_slots.address());
+	(void)aafMobIDNew(&_mobID);		// Move this out of constructor when we get 2-stage create
 }
 
 
