@@ -143,6 +143,19 @@ AD_XMETHOD4(GetNumChannels,
 			Returns the number of channels which this codec can handle
 			// of the given essence kind)
 
+AD_XMETHOD2(GetNumSamples,
+		    [in],
+		    objPass,
+		    aafUID_t,
+		    essenceKind,
+			Tell how many samples of this type are on the mob,
+			[out],
+			objPass,
+			aafLength_t *,
+			pNumSamples,
+			The number of samples present on this track,
+			Return the number of samples present on a given track of the essence.)
+
 AD_XMETHOD5(SemanticCheck,
 		   [in],
 			objIn,
@@ -203,12 +216,17 @@ AD_XMETHOD5(Create,
 			Create a media data object\, and attach the correct type of
 			//EssenceDescriptor to the fileMob)
 
-AD_XMETHOD3(Open,
+AD_XMETHOD4(Open,
 			[in],
 			objIn,
 			Unknown,
 			fileMob,
 			Open the essence attached to this file mob,
+			[in],
+			objPass,
+			aafSlotID_t,
+			slotID,
+			The essence is on this slotID,
 			[in],
 			objPass,
 			aafMediaOpenMode_t,
@@ -397,9 +415,9 @@ AD_XMETHOD1(PutEssenceFormat,
 
 AD_XMETHOD1(GetEssenceFormat,
 			[in\,out],
-			objOut,
+			objIn,
 			AAFEssenceFormat,
-			ppFormat,
+			pFormat,
 			An essence format object,
 			Supply an essence format object specifying what data is
 			// required\, and it is filled in with the data values.)
