@@ -17,8 +17,8 @@
 #include "aafErr.h"
 #include "aafUtils.h"
 #include "aafCvt.h"
+#include "aafDataDefs.h"
 #include "aafDefUIDs.h"
-#include "AAFDataDefs.h"
 #include "AAFStoredObjectIDs.h"
 
 #define STD_HDRSIZE_DATA		42
@@ -49,7 +49,9 @@ HRESULT STDMETHODCALLTYPE
 HRESULT STDMETHODCALLTYPE
     CAAFWaveCodec::GetNumDefinitions (aafInt32 *pDefCount)
 {
-	//!!!Add error checking
+	if(pDefCount == NULL)
+		return AAFRESULT_NULL_PARAM;
+
 	*pDefCount = 1;
 	return AAFRESULT_SUCCESS;
 }
@@ -57,7 +59,9 @@ HRESULT STDMETHODCALLTYPE
 HRESULT STDMETHODCALLTYPE
     CAAFWaveCodec::GetIndexedDefinitionID (aafInt32 index, aafUID_t *uid)
 {
-	//!!!Add error checking
+	if(uid == NULL)
+		return AAFRESULT_NULL_PARAM;
+
 	*uid = CodecWave;		// UID of the WAVE codec definition
 	return AAFRESULT_SUCCESS;
 }
@@ -90,7 +94,9 @@ HRESULT STDMETHODCALLTYPE
 	IAAFDefObject	*obj = NULL;
 	aafUID_t		uid;
 	
-	//!!!Add error checking
+	if((dict == NULL) || (def == NULL))
+		return AAFRESULT_NULL_PARAM;
+
 	XPROTECT()
 	{
 		//!!!Later, add in dataDefs supported & filedescriptor class
@@ -100,6 +106,8 @@ HRESULT STDMETHODCALLTYPE
 		uid = CodecWave;
 		CHECK(codecDef->QueryInterface(IID_IAAFDefObject, (void **)&obj));
 		CHECK(obj->Init(&uid, L"WAVE Codec", L"Handles RIFF WAVE data."));
+		uid = DDEF_Sound;
+		CHECK(codecDef->AppendEssenceKind (&uid));
 		*def = obj;
 		codecDef->Release();
 		codecDef = NULL;
@@ -116,7 +124,6 @@ HRESULT STDMETHODCALLTYPE
 	return AAFRESULT_SUCCESS;
 }
 
-//!!!Need some real values for the descriptor
 static wchar_t *manufURL = L"http://www.avid.com";
 static wchar_t *downloadURL = L"ftp://ftp.avid.com/pub/";
 const aafUID_t MANUF_JEFFS_PLUGINS = { 0xA6487F21, 0xE78F, 0x11d2, { 0x80, 0x9E, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } };
@@ -345,76 +352,7 @@ HRESULT STDMETHODCALLTYPE
         wchar_t *  pName,
         aafInt32  bufSize)
 {
-#if FULL_TOOLKIT
-	omfHdl_t			file;
-	omfCodecStream_t	streamData;
-	omfType_t			dataType = (parmblk->fileRev == kOmfRev2x ? OMDataValue : OMVarLenBytes);
-	omfDDefObj_t		dataKind;
-	aafInt16			mdesNumCh, dataNumCh;
-	omfObject_t			mdes, dataObj;
-	userDataWAVE_t		mdesPD, dataPD;
-	AAFRESULT			status;
-	aafBool				getWarnings;
-	
-#ifdef OMFI_ENABLE_STREAM_CACHE
-	streamData.cachePtr = NULL;
-#endif
-	streamData.procData = NULL;
-
-	mdes = parmblk->spc.semCheck.mdes;
-	dataObj = parmblk->spc.semCheck.dataObj;
-	
-	/* There is nothing to semantic check if just a media descriptor is poresent
-	 */
-	if(dataObj == NULL)
-		return(AAFRESULT_SUCCESS);
-		
-	file = parmblk->spc.semCheck.file;
-	parmblk->spc.semCheck.message = NULL;
-	getWarnings = (parmblk->spc.semCheck.warn == kCheckPrintWarnings);
-	XPROTECT(file)
-	{
-		omfiDatakindLookup(file, SOUNDKIND, &dataKind, &status);
-		CHECK(status);
-		/* First read the metadata out of the MDES Summary */
-		CHECK(omcOpenStream(file, file, &streamData, mdes,
-							OMWAVDSummary, dataType));
-		CHECK(setupStream(&streamData, dataKind, &mdesPD));
-		CHECK(loadWAVEHeader(file, &streamData, dataKind, &mdesPD,
-							NULL, &mdesNumCh, NULL, NULL));
-		CHECK(omcCloseStream(&streamData));
-		/* Next read the metadata out of the dataObject */
-		CHECK(omcOpenStream(file, file, &streamData, dataObj,
-							OMWAVEData, dataType));
-		CHECK(setupStream(&streamData, dataKind, &dataPD));
-		CHECK(loadWAVEHeader(file, &streamData, dataKind, &dataPD,
-							NULL, &dataNumCh, NULL, NULL));
-		CHECK(omcCloseStream(&streamData));
-		/* Finally, make sure that the data agrees */
-		if(mdesNumCh != dataNumCh)
-		{
-			parmblk->spc.semCheck.message = "Number of channels";
-			RAISE(AAFRESULT_DATA_MDES_DISAGREE);
-		}
-		if(mdesPD.fileBitsPerSample != dataPD.fileBitsPerSample)
-		{
-			parmblk->spc.semCheck.message = "Bits Per Sample";
-			RAISE(AAFRESULT_DATA_MDES_DISAGREE);
-		}
-		if((mdesPD.fileRate.numerator != dataPD.fileRate.numerator) ||
-		   (mdesPD.fileRate.denominator != dataPD.fileRate.denominator))
-		{
-			parmblk->spc.semCheck.message = "Frame Rate";
-			RAISE(AAFRESULT_DATA_MDES_DISAGREE);
-		}
-	}
-	XEXCEPT
-	XEND
-	
-	return(AAFRESULT_SUCCESS);
-#else
 	return HRESULT_NOT_IMPLEMENTED;
-#endif
 }
 
 		
@@ -1019,59 +957,7 @@ HRESULT STDMETHODCALLTYPE
     CAAFWaveCodec::CreateDescriptorFromStream (IAAFEssenceStream * pStream,
         IAAFSourceMob *fileMob)
 {
-#if FULL_TOOLKIT
-{
-	omfHdl_t				file, rawFile;
-	omfCodecStream_t	readStream, writeStream;
-	omfType_t			dataType = (parmblk->fileRev == kOmfRev2x ? OMDataValue : OMVarLenBytes);
-	userDataWAVE_t		pdataBlock;
-	aafInt16			numCh;
-	omfUInt16			bytesPerFrame;
-	aafInt64			sampleFrames;
-	omfObject_t			mdes;
-	AAFRESULT				status;
-	omfDDefObj_t			dataKind;
-	
-	file = parmblk->spc.rawImportInfo.main;
-	rawFile = parmblk->spc.rawImportInfo.rawFile;
-	
-	XPROTECT(file)
-	{
-		omfiDatakindLookup(parmblk->spc.getChannels.file, SOUNDKIND, &dataKind, &status);
-		CHECK(status);
-
-		CHECK(omcOpenStream(file, rawFile, &readStream, NULL,
-							OMNoProperty, OMNoType));
-		CHECK(setupStream(&readStream, dataKind, &pdataBlock)); 
-		CHECK(loadWAVEHeader(parmblk->spc.getChannels.file, &readStream,
-							dataKind, &pdataBlock, NULL, &numCh, &sampleFrames,
-							&bytesPerFrame));
-		CHECK(omcCloseStream(&readStream));
-		
-		if(parmblk->fileRev == kOmfRev2x)
-		{
-			CHECK(omfsReadObjRef(file, parmblk->spc.rawImportInfo.fileMob,
-										OMSMOBMediaDescription, &mdes));
-		}
-		else
-		{
-			CHECK(omfsReadObjRef(file, parmblk->spc.rawImportInfo.fileMob,
-										OMMOBJPhysicalMedia, &mdes));
-		}
-
-		CHECK(omcOpenStream(file, file, &writeStream,  mdes, OMWAVDSummary, dataType));
-		CHECK(setupStream(&writeStream, dataKind, &pdataBlock)); 
-		CHECK(CreateWAVEheader(file, &writeStream, &pdataBlock, numCh, FALSE));
-		CHECK(omcCloseStream(&writeStream));
-	}
-	XEXCEPT
-	XEND
-	
-	return(AAFRESULT_SUCCESS);
-}
-#else
-	return HRESULT_NOT_IMPLEMENTED;
-#endif
+	return(AAFRESULT_NOT_IMPLEMENTED);
 }
 
 
@@ -1419,14 +1305,9 @@ AAFRESULT CAAFWaveCodec::loadWAVEHeader(void)
 
 	if(_headerLoaded)
 		return AAFRESULT_SUCCESS;
-//!!!	pdata->fmtOps[0].opcode = kOmfAFmtEnd;
-//!!!	_interleaveBuf = NULL;
 	
 	XPROTECT()
 	{
-//!!!		CvtInt32toInt64(0, &pdata->formSizeOffset);
-//!!!		CvtInt32toInt64(0, &pdata->dataSizeOffset);
-//!!!		CvtInt32toInt64(0, &pdata->numSamplesOffset);
 		CHECK(_stream->GetPosition (&savePos));
 	
 #if DEBUG_READ
