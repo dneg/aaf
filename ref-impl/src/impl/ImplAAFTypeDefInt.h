@@ -42,7 +42,7 @@ public:
          aafUID_t *  pID,
 
          // @parm [in] the size of this integer type in bytes
-         aafUInt32  intSize,
+         aafUInt8  intSize,
 
          // @parm [in] true if this integer type is signed; false for unsigned
          aafBool  isSigned,
@@ -126,21 +126,45 @@ public:
         (aafBool *  pSigned);
 
 
+  //*************************************************************
+  //
+  // Overrides from OMType, via inheritace through ImplAAFTypeDef
+  //
+  //*************************************************************
+
+  virtual void reorder(OMByte* bytes,
+                       size_t bytesSize) const;
+
+  virtual size_t externalSize(OMByte* internalBytes,
+                              size_t internalBytesSize) const;
+
+  virtual void externalize(OMByte* internalBytes,
+                           size_t internalBytesSize,
+                           OMByte* externalBytes,
+                           size_t externalBytesSize,
+                           OMByteOrder byteOrder) const;
+
+  virtual size_t internalSize(OMByte* externalBytes,
+                              size_t externalSize) const;
+
+  virtual void internalize(OMByte* externalBytes,
+                           size_t externalBytesSize,
+                           OMByte* internalBytes,
+                           size_t internalBytesSize,
+                           OMByteOrder byteOrder) const;
+
+
 public:
   // Declare this class to be storable.
   //
   OMDECLARE_STORABLE(ImplAAFTypeDefInt)
 
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplAAFTypeDefIntTest.cpp.
-  static AAFRESULT test();
-
   // overrides from ImplAAFTypeDef
   //
-  aafBool IsFixedSize (void);
-  size_t PropValSize (void);
-  aafBool IsRegistered (void);
-  size_t NativeSize (void);
+  aafBool IsFixedSize (void) const;
+  size_t PropValSize (void) const;
+  aafBool IsRegistered (void) const;
+  size_t NativeSize (void) const;
 
 private:
   // the size of this integer type in bytes

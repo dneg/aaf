@@ -152,15 +152,6 @@ public:
 public:
 	// Functions internal to the toolkit
 
-  // non-published method to set the containing dictionary for this
-  // object.
-  void SetDict (ImplAAFDictionary * pDict);
-
-protected:
-  // Returns a pointer to the dictionary containing this object.  Will
-  // assert() if not yet set.
-  ImplAAFDictionary * GetDict ();
-
 private:
   // friendly name of this definition
   OMWideStringProperty          _name;
@@ -171,9 +162,6 @@ private:
   // auid to be used to identify this definition
   OMFixedSizeProperty<aafUID_t> _identification;
   OMVariableSizeProperty<aafUID_t> _descriptors;
-
-  // pointer to dict containing this object
-  ImplAAFDictionary *           _pDict;
 };
 
 #endif // ! __ImplAAFDefObject_h__

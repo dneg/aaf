@@ -203,7 +203,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     GetCount
         // @parm [out] count of members in this record type
-        (aafUInt32 *  pCount);
+        (aafUInt32 *  pCount) const;
 
 
   //****************
@@ -226,6 +226,34 @@ public:
     GetTypeCategory (/*[out]*/ eAAFTypeCategory_t *  pTid);
 
 
+  //*************************************************************
+  //
+  // Overrides from OMType, via inheritace through ImplAAFTypeDef
+  //
+  //*************************************************************
+
+  virtual void reorder(OMByte* bytes,
+                       size_t bytesSize) const;
+
+  virtual size_t externalSize(OMByte* internalBytes,
+							  size_t internalBytesSize) const;
+
+  virtual void externalize(OMByte* internalBytes,
+                           size_t internalBytesSize,
+                           OMByte* externalBytes,
+                           size_t externalBytesSize,
+                           OMByteOrder byteOrder) const;
+
+  virtual size_t internalSize(OMByte* externalBytes,
+							  size_t externalSize) const;
+
+  virtual void internalize(OMByte* externalBytes,
+                           size_t externalBytesSize,
+                           OMByte* internalBytes,
+                           size_t internalBytesSize,
+                           OMByteOrder byteOrder) const;
+
+
 private:
   // types of members in this record
   //
@@ -243,27 +271,16 @@ private:
   aafUInt32 _registeredSize;
 
 public:
-  //
-  // non-published methods
-  //
-
-  // Returns true if property values of this type are of a fixed size.
-  virtual aafBool IsFixedSize (void);
-
-  // If this->IsFixedSize(), then will return the size of property
-  // values of this type.  If not fixed size, will assert().
-  virtual size_t PropValSize (void);
-
-  // Returns true if offsets have been registered for this type def.
-  aafBool IsRegistered (void);
-
-  // If this->IsRegistered(), then will return the native size of
-  // this type.  If not registered, will assert().
-  size_t NativeSize (void);
-
   // Declare this class to be storable.
   //
   OMDECLARE_STORABLE(ImplAAFTypeDefRecord)
+
+  // overrides from ImplAAFTypeDef
+  //
+  virtual aafBool IsFixedSize (void) const;
+  virtual size_t PropValSize (void) const;
+  aafBool IsRegistered (void) const;
+  size_t NativeSize (void) const;
 };
 
 #endif // ! __ImplAAFTypeDefRecord_h__
