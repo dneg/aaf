@@ -476,8 +476,8 @@ void ImplAAFTypeDefVariableArray::internalize(OMByte* externalBytes,
 	else
 	{
 		aafUInt32 numElems = externalBytesSize / extElemSize;
-		aafInt32 intNumBytesLeft = externalBytesSize;
-		aafInt32 extNumBytesLeft = internalBytesSize;
+		aafInt32 intNumBytesLeft = internalBytesSize;
+		aafInt32 extNumBytesLeft = externalBytesSize;
 		aafUInt32 elem = 0;
 		
 		for (elem = 0; elem < numElems; elem++)
