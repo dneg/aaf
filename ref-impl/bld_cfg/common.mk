@@ -38,8 +38,10 @@ RM = rm
 baseclean:
 	${RM} -f *.o *.o86 *.oix *.ont *.obj
 	${RM} -f *.a *.a86 *.aix *.ant *.lib
+	${RM} -f *.dll *.ilk *.pdb *.exp
 	${RM} -f vc50.*
 	${RM} -f *~ .*~
 	${RM} -f .depend.mk*
 	${RM} -f .objects.*.txt .testobjs.*.txt
+	${RM} -f .comtestobjs.*.txt
 	${RM} -f .cmake.state *.core core
