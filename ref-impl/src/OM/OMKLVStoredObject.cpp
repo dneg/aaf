@@ -86,6 +86,49 @@ OMKLVStoredObject* OMKLVStoredObject::createModify(OMRawStorage* rawStorage,
   return result;
 }
 
+  // @mfunc Is the file named <p fileName> a recognized file ?
+  //        If so, the result is true, and the signature is returned
+  //        in <p signature>.
+  //   @parm The name of the file to check.
+  //   @parm If recognized, the file signature.
+  //   @rdesc True if the file is recognized, false otherwise.
+bool OMKLVStoredObject::isRecognized(const wchar_t* /* fileName */,
+                                     OMFileSignature& /* signature */)
+{
+  bool result = false;
+  TRACE("OMKLVStoredObject::isRecognized");
+  ASSERT("Unimplemented code not reached", false);
+  return result;
+}
+
+  // @mfunc Does <p rawStorage> contain a recognized file ?
+  //        If so, the result is true, and the signature is returned
+  //        in <p signature>.
+  //   @parm The <c OMRawStorage> to check.
+  //   @parm If recognized, the file signature.
+  //   @rdesc True if the <c OMRawStorage> contains a recognized
+  //          file, false otherwise.
+bool OMKLVStoredObject::isRecognized(OMRawStorage* /* rawStorage */,
+                                     OMFileSignature& /* signature */)
+{
+  bool result = false;
+  TRACE("OMKLVStoredObject::isRecognized");
+  ASSERT("Unimplemented code not reached", false);
+  return result;
+}
+
+  // @mfunc Is <p signature> recognized ?
+  //        If so, the result is true, and the encoding in <p encoding>.
+  //   @parm The signature to check.
+  //   @rdesc True if the signature is recognized, false otherwise.
+bool OMKLVStoredObject::isRecognized(const OMFileSignature& /* signature */)
+{
+  bool result = false;
+  TRACE("OMKLVStoredObject::isRecognized");
+  ASSERT("Unimplemented code not reached", false);
+  return result;
+}
+
   // @mfunc Destructor.
 OMKLVStoredObject::~OMKLVStoredObject(void)
 {

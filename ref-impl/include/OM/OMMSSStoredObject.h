@@ -84,6 +84,21 @@ public:
   static OMMSSStoredObject* createModify(OMRawStorage* rawStorage,
                                          const OMByteOrder byteOrder);
 
+     // @cmember Is the file named <p fileName> a recognized file ?
+     //          If so, the result is true, and the signature is returned
+     //          in <p signature>.
+  static bool isRecognized(const wchar_t* fileName,
+                           OMFileSignature& signature);
+
+     // @cmember Does <p rawStorage> contain a recognized file ?
+     //          If so, the result is true, and the signature is returned
+     //          in <p signature>.
+  static bool isRecognized(OMRawStorage* rawStorage,
+                           OMFileSignature& signature);
+
+     // @cmember Is <p signature> recognized ?
+  static bool isRecognized(const OMFileSignature& signature);
+
   // @access Public members.
 
     // @cmember Destructor.
