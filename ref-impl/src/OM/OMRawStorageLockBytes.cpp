@@ -33,6 +33,10 @@
 
 #include "OMRawStorage.h"
 
+// The Object Manager expects only one thread per file.
+// This implementation of the ILockBytes interface is designed for
+// single process (aka in proc) and single thread use only.
+
 HRESULT STDMETHODCALLTYPE
 OMRawStorageLockBytes::QueryInterface(REFIID /* riid */,
                                       void** ppvObject)
