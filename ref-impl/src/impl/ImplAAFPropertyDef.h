@@ -45,6 +45,15 @@ public:
 
 
   //****************
+  // IsOptional()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetIsOptional
+      (// @parm [out] pointer to the result
+       aafBool * pIsOptional) const;
+
+
+  //****************
   // GetIsSearchable()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
@@ -124,6 +133,20 @@ private:
   OMFixedSizeProperty<aafBool>               _IsOptional;
 
   OMFixedSizeProperty<OMPropertyId>          _pid;
+
+  // don't use shortcut in an attempt to avoid including typeDef header
+  ImplAAFSmartPointer<ImplAAFTypeDef> _cachedType;
 };
+
+//
+// smart pointer
+//
+
+#ifndef __ImplAAFSmartPointer_h__
+// caution! includes assert.h
+#include "ImplAAFSmartPointer.h"
+#endif
+
+typedef ImplAAFSmartPointer<ImplAAFPropertyDef> ImplAAFPropertyDefSP;
 
 #endif // ! __ImplAAFPropertyDef_h__
