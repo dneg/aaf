@@ -45,6 +45,9 @@ public:
     // @cmember Constructor.
   OMObjectReference(OMProperty* property, const char* name);
 
+    // @cmember Copy constructor.
+  OMObjectReference(const OMObjectReference&);
+
     // @cmember Destructor.
   ~OMObjectReference(void);
 
@@ -109,8 +112,7 @@ protected:
   bool _isLoaded;
 
     // @cmember The name of this <c OMObjectReference>.
-    // tjb - why is there a name here and in OMContainerElement ?
-  const char* _name;
+  char* _name;
 
 };
 
@@ -128,6 +130,9 @@ public:
 
     // @cmember Constructor.
   OMStrongObjectReference(OMProperty* property, const char* name);
+
+    // @cmember Copy constructor.
+  OMStrongObjectReference(const OMStrongObjectReference&);
 
     // @cmember Destructor.
   ~OMStrongObjectReference(void);
@@ -186,6 +191,9 @@ public:
 
     // @cmember Constructor.
   OMWeakObjectReference(OMProperty* property, const char* name);
+
+    // @cmember Copy constructor.
+  OMWeakObjectReference(const OMWeakObjectReference&);
 
     // @cmember Destructor.
   ~OMWeakObjectReference(void);
