@@ -64,18 +64,6 @@ AD_METHOD1(NumRepresentations,
 		   [out],aafInt32 *,count,,
 		   )
 
-AD_GETOBJ_METHOD1(GenerateSequence,
-				  [out],AAFSequence,seq,,
-				  )
-
-AD_METHOD1(Load,
-		   [in],AAFFile *,file,,
-		   )
-
-AD_METHOD1(Save,
-		   [in],AAFFile *,file,,
-		   )
-
 AD_OVERRIDE(.method-Test)
 
 AD_CLASS_END
