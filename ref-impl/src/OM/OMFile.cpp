@@ -668,3 +668,27 @@ void OMFile::readSignature(const wchar_t* fileName,
     OMStoredObject::reorderUniqueObjectIdentification(signature);
   }
 }
+
+OMFile::OMFileEncoding OMFile::encodingOf(const OMFileSignature& signature)
+{
+  TRACE("OMFile::encodingOf");
+  
+  OMFileEncoding result;
+  const char* p = reinterpret_cast<const char *>(&signature);
+  char tag = p[3];
+  switch (tag) {
+  case 'B': // structured storage (binary)
+    result = MSSBinaryEncoding;
+    break;
+  case 'K': // SMPTE KLV (binary)
+    result = KLVBinaryEncoding;
+    break;
+  case 'X': // XML (text)
+    result = XMLTextEncoding;
+    break;
+  default:
+    ASSERT("Recognized encoding", false);
+    break;
+  }
+  return result;
+}
