@@ -33,6 +33,7 @@
 
 #include "AAFTypes.h"
 #include "AAFResult.h"
+#include "AAFUtils.h"
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
@@ -79,8 +80,36 @@ ImplAAFIdentification::ImplAAFIdentification():
 
 
 AAFRESULT STDMETHODCALLTYPE
-ImplAAFIdentification::Initialize ()
+ImplAAFIdentification::Initialize
+ (aafCharacter_constptr companyName,
+  aafCharacter_constptr productName,
+  aafCharacter_constptr productVersionString,
+  aafUID_constref productID)
 {
+  if (! companyName)          return AAFRESULT_NULL_PARAM;
+  if (! productName)          return AAFRESULT_NULL_PARAM;
+  if (! productVersionString) return AAFRESULT_NULL_PARAM;
+
+  AAFRESULT hr;
+
+  hr = SetCompanyName (companyName);
+  if (AAFRESULT_FAILED (hr)) return hr;
+  hr = SetProductName (productName);
+  if (AAFRESULT_FAILED (hr)) return hr;
+  hr = SetProductVersionString (productVersionString);
+  if (AAFRESULT_FAILED (hr)) return hr;
+  hr = SetProductID (productID);
+  if (AAFRESULT_FAILED (hr)) return hr;
+
+  aafUID_t gen;
+  hr = aafAUIDNew (&gen);
+  if (AAFRESULT_FAILED (hr)) return hr;
+  _generation = gen;
+
+  aafTimeStamp_t timestamp;
+  AAFGetDateTime (&timestamp);
+  _date = timestamp;
+
   return AAFRESULT_SUCCESS;
 }
 
@@ -290,7 +319,9 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 	  return AAFRESULT_NULL_PARAM;
 	}
-  return AAFRESULT_NOT_IMPLEMENTED;
+
+  *pGen = _generation;
+  return AAFRESULT_SUCCESS;
 }
 
 
@@ -323,15 +354,10 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFIdentification::SetProductVersion (aafProductVersion_t* productVersion)
+    ImplAAFIdentification::SetProductVersion (aafProductVersion_constref productVersion)
 {
 	
-	if (! productVersion)
-	{
-		return AAFRESULT_NULL_PARAM;
-	}
-
-	_productVersion = *productVersion;
+	_productVersion = productVersion;
 
 	return AAFRESULT_SUCCESS;
 }
