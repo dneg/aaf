@@ -27,7 +27,7 @@
 //
 // When an API call asks for a operation definition UID, store it into a local UID variable, and then pass
 // in the address of the variable, as in:
-//		aafUID_t	uid = DDEF_Picture;
+//		aafUID_t	uid = kAAFEffect_VideoDissolve;
 //
 // When you need an IAAFOperationDef *, then do the following (where pDictionary is a pointer to the
 // dictionary object in the current file.)
