@@ -59,13 +59,6 @@ extern "C" const aafClassID_t CLSID_AAFRandomRawStorage;
 #include <assert.h>
 
 
-// The first release of AAF (v1.0) does not fully support read/modify/write
-// (a.k.a. edit-in-place).
-#ifndef READMODIFYWRITE_SUPPORTED
-#define READMODIFYWRITE_SUPPORTED 0
-#endif
-
-
 // Define this to 1 to use raw storage implementations of the
 // traditional AAFFileOpenXXX(filename) methods.
 #ifndef USE_RAW_STORAGE
@@ -308,7 +301,7 @@ STDAPI ImplAAFFileOpenExistingRead (
 //   - The named file is not a valid AAF file.
 // 
 
-#if ! READMODIFYWRITE_SUPPORTED
+#if defined(READMODIFYWRITE_NOT_SUPPORTED)
 	
 STDAPI ImplAAFFileOpenExistingModify (
   const aafCharacter *,
@@ -319,7 +312,7 @@ STDAPI ImplAAFFileOpenExistingModify (
 	return AAFRESULT_NOT_IN_CURRENT_VERSION;
 }
 
-#else // #if ! READMODIFYWRITE_SUPPORTED	
+#else // #if defined(READMODIFYWRITE_NOT_SUPPORTED)	
 
 STDAPI ImplAAFFileOpenExistingModify (
   // Null-terminated string containing name of filesystem file to be
@@ -417,7 +410,7 @@ STDAPI ImplAAFFileOpenExistingModify (
 #endif // USE_RAW_STORAGE
 }
 
-#endif // #else // #if ! READMODIFYWRITE_SUPPORTED	
+#endif // #else // #if defined(READMODIFYWRITE_NOT_SUPPORTED)	
 
 
 
@@ -860,7 +853,7 @@ ImplAAFCreateAAFFileOnRawStorage
   if (! ppNewFile)
 	return AAFRESULT_NULL_PARAM;
 
-#if ! READMODIFYWRITE_SUPPORTED
+#if defined(READMODIFYWRITE_NOT_SUPPORTED)
 
   if ((kAAFFileExistence_existing == existence) &&
       (kAAFFileAccess_modify == access))
