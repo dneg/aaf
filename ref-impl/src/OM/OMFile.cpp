@@ -39,6 +39,7 @@
 #include "OMDictionary.h"
 #include "OMRootStorable.h"
 #include "OMRawStorage.h"
+#include "OMUniqueObjectIdentType.h"
 
 #include <string.h>
 #include <stdio.h>
@@ -858,7 +859,9 @@ void OMFile::writeSignature(const wchar_t* fileName,
   ASSERT("Convert succeeded", status != (size_t)-1);
 
   if (hostByteOrder() != littleEndian) {
-    OMStoredObject::reorderUniqueObjectIdentification(sig);
+    OMByte* s = reinterpret_cast<OMByte*>(&sig);
+    size_t size = sizeof(OMUniqueObjectIdentification);
+    OMUniqueObjectIdentificationType::instance()->reorder(s, size);
   }
 
   FILE* f = fopen(cFileName, "rb+");
@@ -895,7 +898,9 @@ void OMFile::readSignature(const wchar_t* fileName,
   fclose(f);
 
   if (hostByteOrder() != littleEndian) {
-    OMStoredObject::reorderUniqueObjectIdentification(signature);
+    OMByte* s = reinterpret_cast<OMByte*>(&signature);
+    size_t size = sizeof(OMUniqueObjectIdentification);
+    OMUniqueObjectIdentificationType::instance()->reorder(s, size);
   }
 }
 
@@ -909,7 +914,9 @@ void OMFile::writeSignature(OMRawStorage* rawStorage,
 
   OMFileSignature sig = signature;
   if (hostByteOrder() != littleEndian) {
-    OMStoredObject::reorderUniqueObjectIdentification(sig);
+    OMByte* s = reinterpret_cast<OMByte*>(&sig);
+    size_t size = sizeof(OMUniqueObjectIdentification);
+    OMUniqueObjectIdentificationType::instance()->reorder(s, size);
   }
 
   OMUInt32 count;
@@ -938,7 +945,9 @@ void OMFile::readSignature(OMRawStorage* rawStorage,
   ASSERT("All bytes read", count == sizeof(signature));
 
   if (hostByteOrder() != littleEndian) {
-    OMStoredObject::reorderUniqueObjectIdentification(signature);
+    OMByte* s = reinterpret_cast<OMByte*>(&signature);
+    size_t size = sizeof(OMUniqueObjectIdentification);
+    OMUniqueObjectIdentificationType::instance()->reorder(s, size);
   }
 }
 
