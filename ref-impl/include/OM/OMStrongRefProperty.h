@@ -58,6 +58,9 @@ public:
     // @cmember Set the value of this <c OMStrongReferenceProperty>.
   virtual ReferencedObject* setValue(const ReferencedObject* object);
 
+    // @cmember Clear the value of this <c OMStrongReferenceProperty>.
+  virtual ReferencedObject* clearValue(void);
+
     // @cmember Assignment operator.
   OMStrongReferenceProperty<ReferencedObject>& operator =
                                               (const ReferencedObject* value);
