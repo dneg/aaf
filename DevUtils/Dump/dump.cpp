@@ -37,47 +37,6 @@
 //             added support for DataInput.h so dump can get input from text
 //             file.
 //
-// Usage:
-//
-// $ dump OPTIONS <file...>
-//
-//   --help            = help (-h) : print this message and exit.
-//
-//   --hex-dump        = hex dump (-x)      : any file.
-//   --raw-dump        = raw dump (-r)      : any structured storage file
-//                                            (default).
-//   --property-dump   = property dump (-p) : any file using the AAF stored
-//                                            format.
-//   --aaf-dump        = AAF file dump (-a) : any AAF file.
-//
-//   Use the following with --raw-dump, --property-dump and --aaf-dump.
-//
-//     --statistics      = print statistics (-s)
-//
-//   Use the following with --property-dump and --aaf-dump.
-//
-//     --raw-counts      = print raw reference counts (-c)
-//     --zero-out <pid>  = dump properties with pid <pid> (hex) as
-//                         all zeros (-z)
-//     --media-bytes <n> = dump only the first <n> bytes (dec) of
-//                         media streams (-m)
-//     --validate        = validate the structure of the file (-v)
-//
-//   Use the following with --hex-dump.
-//
-//     --file-bytes <n>  = dump only the first <n> bytes (dec) of the file (-l)
-//
-//  Notes:
-//
-//    1) -x, -r, -p and -a are mutually exclusive.
-//    2) -s is valid with -r, -p and -a. When combined with either -p or -a
-//       statistics on objects and properties are displayed, when combined
-//       with -r statistics on IStorages, IStreams and bytes are displayed.
-//    3) -z is not valid with -r. Multiple -z flags may be supplied.
-//    4) <pid> must be specified in hex. Examples are 1a00 0x1a00 0x1A00 
-//    5) -m is not valid with -r.
-//    6) -v is only valid with -p or -a, it is not valid with -x or -r
-//
 
 #include <iostream.h>
 #include <iomanip.h>
@@ -3858,42 +3817,44 @@ void usage(void)
   cerr << programName << ": Usage : " << programName
        << " OPTIONS <file...>"
        << endl;
-  cerr << "--help            = help (-h) : print this message and exit."
+  cerr << "--help              = help (-h)          :"
+       << "print this message and exit"
        << endl;
   cerr << endl;
-  cerr << "--hex-dump        = hex dump (-x)      : "
-       <<"any file."
+  cerr << "--hex-dump          = hex dump (-x)      :"
+       <<"any file"
        << endl;
-  cerr << "--raw-dump        = raw dump (-r)      : "
-       << "any structured storage file (default)."
+  cerr << "--raw-dump          = raw dump (-r)      :"
+       << "any structured storage file (default)"
        << endl;
-  cerr << "--property-dump   = property dump (-p) : "
-       << "any file using the AAF stored format."
+  cerr << "--property-dump     = property dump (-p) :"
+       << "any file using the AAF stored format"
        << endl;
-  cerr << "--aaf-dump        = AAF file dump (-a) : any AAF file."
-       << endl;
-  cerr << endl;
-  cerr << "Use the following with --raw-dump, --property-dump and --aaf-dump."
-       << endl;
-  cerr << "--statistics      = print statistics (-s)"
+  cerr << "--aaf-dump          = AAF file dump (-a) :"
+       << "any AAF file"
        << endl;
   cerr << endl;
-  cerr << "Use the following with --property-dump and --aaf-dump."
+  cerr << "Use the following with --raw-dump, --property-dump and --aaf-dump"
        << endl;
-  cerr << "--raw-counts      = print raw reference counts (-c)"
+  cerr << "  --statistics      = print statistics (-s)"
        << endl;
-  cerr << "--zero-out <pid>  = "
+  cerr << endl;
+  cerr << "Use the following with --property-dump and --aaf-dump"
+       << endl;
+  cerr << "  --raw-counts      = print raw reference counts (-c)"
+       << endl;
+  cerr << "  --zero-out <pid>  = "
        << "dump properties with pid <pid> (hex) as all zeros (-z)"
        << endl;
-  cerr << "--media-bytes <n> = "
+  cerr << "  --media-bytes <n> = "
        << "dump only the first <n> bytes (dec) of media streams (-m)"
        << endl;
-  cerr << "--validate        = validate the structure of the file (-v)"
+  cerr << "  --validate        = validate the structure of the file (-v)"
        << endl;
   cerr << endl;
-  cerr << "Use the following with --hex-dump."
+  cerr << "Use the following with --hex-dump"
        << endl;
-  cerr << "--file-bytes <n>  = "
+  cerr << "  --file-bytes <n>  = "
        << "dump only the first <n> bytes (dec) of the file (-l)"
        << endl;
 }
