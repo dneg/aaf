@@ -35,11 +35,11 @@ AD_DEFAULT_UUID(B1A2137C, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
 AD_CLASS_BEGIN
 
 
-AD_METHOD4(Setup,
-[in\,ref], AD_AAFTYPES\(AAFFile *\), file, File for source mob,
-[in\,ref], aafString_t *, name, Name of new Source Mob.,
-[in\,ref], aafClassIDPtr_t, mdesClass, ClassID of Media Descriptor.,
-[in], aafPhysicalMobType_t, mobType, Mob type.
+AD_XMETHOD4(Setup,
+			[in\,ref], objIn, AAFFile, file, File for source mob,
+			[in\,ref], objPass, aafString_t *, name, Name of new Source Mob.,
+			[in\,ref], objPass, aafClassIDPtr_t, mdesClass, ClassID of Media Descriptor.,
+			[in], objPass, aafPhysicalMobType_t, mobType, Mob type.
   // @ex Possible values for an aafPhysicalMobType_t are: |
   // PT_NULL
   // PT_FILE_MOB
@@ -64,11 +64,11 @@ Low\-level function that creates a new Source Mob object for a nonstandard
   // @devnote This method is based on the arguments from omfmRawSourceMobNew
   // @devnote Is the file input parameter really necessary? This may have to be removed.)
 
-AD_METHOD4(AddNilReference,
-[in], aafTrackID_t, trackID, TrackID to be assigned to the new track.,
-[in], aafLength_t, length, Duration of the Source Clip to be added to the new track.,
-[in\,ref], AD_AAFTYPES\(AAFDataDefinition\) *, dataKind, Data kind of the new track.,
-[in], aafRational_t, editRate, Edit rate of the new track.,
+AD_XMETHOD4(AddNilReference,
+			[in], objPass, aafTrackID_t, trackID, TrackID to be assigned to the new track.,
+			[in], objPass, aafLength_t, length, Duration of the Source Clip to be added to the new track.,
+			[in\,ref], objIn,AAFDataDefinition, dataKind, Data kind of the new track.,
+			[in], objPass, aafRational_t, editRate, Edit rate of the new track.,
 Adds a track to a Source Mob that describes an original source of media.
   // @comm This function adds a track containing a Source Clip to a Source Mob. The
   // Source Clip does not reference another Mob as the source of the media. The
@@ -79,12 +79,12 @@ Adds a track to a Source Mob that describes an original source of media.
   // @devnote based on omfmMobAddNilReference)
 
 AD_METHOD4(AddTimecodeClip,
-[in], aafRational_t, editrate, Edit rate of Timecode track.,
-[in], aafInt32, trackID, TrackID of Timecode track.,
-[in], aafTimecode_t, startTC, Starting time code for Timecode. The startTC parameter is
+		   [in], aafRational_t, editrate, Edit rate of Timecode track.,
+		   [in], aafInt32, trackID, TrackID of Timecode track.,
+		   [in], aafTimecode_t, startTC, Starting time code for Timecode. The startTC parameter is
   // expressed in frames since midnight. Use the function
   // TimecodeToOffset to compute this number.,
-[in], aafFrameLength_t,	length32, Duration of Timecode. The length32 parameter can be the value
+		   [in], aafFrameLength_t,	length32, Duration of Timecode. The length32 parameter can be the value
   // FULL_RANGE\, in which case the length is 24 hours.,
 Adds a Timecode to the specified Timecode track of a Source Mob.
   // @comm This function adds a Timecode track to a specified tape Mob or film Mob\, with
@@ -97,24 +97,24 @@ Adds a Timecode to the specified Timecode track of a Source Mob.
   // @devnote based on omfmMobAddTimecodeClip)
 
 AD_METHOD7(AddEdgecodeClip,
-[in], aafRational_t, editrate, Edit rate of the Edgecode track.,
-[in], aafInt32, trackID, TrackID to assign to the new Edgecode track.,
-[in], aafFrameOffset_t, startEC, Starting Edgecode.,
-[in], aafFrameLength_t,	length32, Length of the Edgecode component in the track.,
-[in], aafFilmType_t, filmKind, The film kind.
+		   [in], aafRational_t, editrate, Edit rate of the Edgecode track.,
+		   [in], aafInt32, trackID, TrackID to assign to the new Edgecode track.,
+		   [in], aafFrameOffset_t, startEC, Starting Edgecode.,
+		   [in], aafFrameLength_t,	length32, Length of the Edgecode component in the track.,
+		   [in], aafFilmType_t, filmKind, The film kind.
   // @ex Possible values for an omfFilmType_t are: |
   // kFtNull
   // kFt35MM
   // kFt16MM
   // kFt8MM
   // kFt65MM,
-[in], aafEdgeType_t, codeFormat, The code format.
+		   [in], aafEdgeType_t, codeFormat, The code format.
   // @ex Possible values for an omfEdgeType_t are:
   // kEtNull
   // kEtKeycode
   // kEtEdgenum4
   // kEtEdgenum5,
-[in\,ref], char *, header, The Edgecode's 8-byte header.,
+		   [in\,ref], char *, header, The Edgecode's 8-byte header.,
 Adds an Edgecode track and Edgecode to the specified Source Mob.
   // @comm Adds an Edgecode track to a specified film Mob\, with a specified starting
   // edgecode\, length\, and edit rate. You must add a media track with a Source
@@ -122,31 +122,34 @@ Adds an Edgecode track and Edgecode to the specified Source Mob.
   // @devnote based on omfmMobAddEdgecodeClip)
 
 AD_METHOD5(ValidateTimecodeRange,
-[in\,ref], AD_AAFTYPES\(AAFDataDefinition\) *, mediaKind, Data kind for the track to be added. The mediaKind parameter
+           [in\,ref], objIn, AAFDataDefinition, mediaKind,
+           Data kind for the track to be added. The mediaKind parameter
   // requires a data kind valid for a media stream. 
   // @ex Valid data kinds are: |
   // Picture
   // Sound,
-[in], aafTrackID_t, trackID, TrackID for the track to be added.,
-[in], aafRational_t, editrate, Edit rate for the track to be added.,
-[in], aafFrameOffset_t, startOffset, Start offset for the track to be added.,
-[in], aafFrameLength_t, ength32, Duration of the Source Clip in the track.,
+           [in], objPass, aafTrackID_t, trackID, TrackID for the track to be added.,
+           [in], objPass, aafRational_t, editrate, Edit rate for the track to be added.,
+           [in], objPass, aafFrameOffset_t, startOffset, Start offset for the track to be added.,
+           [in], objPass, aafFrameLength_t, ength32, Duration of the Source Clip in the track.,
 Adds track containing Source Clips to a tape Source Mob to indicate that the
   // Timecode is valid for that channel.
   // @devnote based on omfmMobValidateTimecodeRange)
 
-AD_METHOD7(AddPhysSourceRef,
-[in], aafRational_t, editrate, Edit rate of track to contain reference.,
-[in], aafTrackID_t, aMobTrack, TrackID of track to contain reference.,
-[in\,ref], AD_AAFTYPES\(AAFDataDefinition\) *, mediaKind, Data kind of track to contain reference. The mediaKind parameter
+AD_XMETHOD7(AddPhysSourceRef,
+            [in], objPass, aafRational_t, editrate, Edit rate of track to contain reference.,
+            [in], objPass, aafTrackID_t, aMobTrack, TrackID of track to contain reference.,
+            [in\,ref], objIn, AAFDataDefinition, mediaKind, Data kind of track to contain reference. The mediaKind parameter
   // requires a data kind valid for a media stream. 
   // @ex Valid data kinds are: | 
   // Picture
   // Sound,
-[in\,ref], AD_AAFTYPES\(AAFSegment\) *, sourceRefObj,Physical Source Mob that is being referenced. ,
-[in], aafPosition_t, srcRefOffset, Offset in the physical Source Mob.,
-[in], aafInt32, srcRefTrack, TrackID of the track in the physical Source Mob being referenced.,
-[in], aafLength_t, srcRefLength, Length of the Source Clip in the Source Mob referencing the physical
+            [in\,ref], objIn, AAFSegment, sourceRefObj,Physical Source Mob that is being referenced. ,
+            [in], objPass, aafPosition_t, srcRefOffset, Offset in the physical Source Mob.,
+            [in], objPass, aafInt32, srcRefTrack,
+            TrackID of the track in the physical Source Mob being referenced.,
+            [in], objPass, aafLength_t, srcRefLength,
+            Length of the Source Clip in the Source Mob referencing the physical
   // Source Mob.,
 Connects the specified Source Mob with the physical Source Mob that
   // describes the previous generation of media.
@@ -164,19 +167,24 @@ Connects the specified Source Mob with the physical Source Mob that
   // Source Clip that references the physical Source Mob.
   // @devnote based on omfmMobAddPhysSourceRef)
 
-AD_METHOD_10(AddPulldownRef,
-[in], aafRational_t, editrate, Edit rate of track to contain reference.,
-[in], aafTrackID_t, aMobTrack, TrackID of track to contain reference.,
-[in\,ref], AD_AAFTYPES\(AAFDataKind\) *, mediaKind, Data kind of track to contain reference. The mediaKind parameter
+AD_XMETHOD_10(AddPulldownRef,
+			  [in], objPass, aafRational_t, editrate, Edit rate of track to contain reference.,
+			  [in], objPass, aafTrackID_t, aMobTrack, TrackID of track to contain reference.,
+			  [in\,ref], objIn, AAFDataKind, mediaKind,
+			  Data kind of track to contain reference. The mediaKind parameter
   // requires a data kind valid for a media stream. 
   // @ex Valid data kinds are: |
   // Picture
   // Sound,
-[in\,ref], AD_AAFTYPES\(AAFSegment\) *, sourceRefObj, Physical Source Mob that is being referenced.,
-[in], aafPosition_t, srcRefOffset, Offset in the physical Source Mob.,
-[in], aafInt32, srcRefTrack, TrackID of the track in the physical Source Mob being referenced.,
-[in], aafLength_t, srcRefLength, Length of the Source Clip in the Source Mob referencing the physical Source Mob.,
-[in], aafPulldownKind_t, pulldownKind, Encoded value that specifies the way the conversion from one
+			  [in\,ref], objIn, AAFSegment, sourceRefObj,
+			  Physical Source Mob that is being referenced.,
+			  [in], objPass, aafPosition_t, srcRefOffset, Offset in the physical Source Mob.,
+			  [in], objPass, aafInt32, srcRefTrack,
+			  TrackID of the track in the physical Source Mob being referenced.,
+			  [in], objPass, aafLength_t, srcRefLength,
+			  Length of the Source Clip in the Source Mob referencing the physical Source Mob.,
+			  [in], objPass, aafPulldownKind_t, pulldownKind,
+			  Encoded value that specifies the way the conversion from one
   // frame rate to another was performed. 
   // @ex Possible values for aafPulldownKind_t are: |
   // kOMFTwoThreePD
@@ -184,38 +192,40 @@ AD_METHOD_10(AddPulldownRef,
   // kOMFOneToOneNTSC
   // kOMFOneToOnePAL
   // kOMFVideoTapNTSC,
-[in], aafPhaseFrame_t, phaseFrame, Integer value that specifies the phase of the first frame that is referenced 
+			  [in], objPass, aafPhaseFrame_t, phaseFrame,
+			  Integer value that specifies the phase of the first frame that is referenced 
   // in the previous generation physical Source Mob.,
-[in], aafPulldownDir_t, direction, Direction of the pulldown conversion. 
+			  [in], objPass, aafPulldownDir_t, direction,
+			  Direction of the pulldown conversion. 
   // @ex Possible values for aaPulldownDir_t are: |
   // kOMFTapeToFilmSpeed
   // kOMFFilmToTapeSpeed,
   // @devnote based on omfmMobAddPulldownRef)
 
-AD_METHOD1(GetMediaDescription,
-[out], AD_AAFTYPES\(AAFMediaDescriptor\) **, mdes, Returned Media Descriptor object.,
-Returns the Media Descriptor object attached to the File Source Mob.
+AD_XMETHOD1(GetMediaDescription,
+			[out], objOut, AAFMediaDescriptor, mdes, Returned Media Descriptor object.,
+			Returns the Media Descriptor object attached to the File Source Mob.
   // @comm This function takes a File Source Mob and returns a pointer to the Media
   // Descriptor object attached to the File Source Mob.
   // @devnote based on omfmMobGetMediaDescription)
 
-AD_METHOD7(SearchSource,	
-[in], aafTrackID_t, trackID, Track ID of the track \(Mob Slot\) to get information about.,
-[in], aafPosition_t, offset, Offset within the track to get information about.,
-[in], aafMobKind_t, mobKind, Kind of referenced Mob to get information about. 
+AD_XMETHOD7(SearchSource,	
+			[in], objPass, aafTrackID_t, trackID, Track ID of the track \(Mob Slot\) to get information about.,
+			[in], objPass, aafPosition_t, offset, Offset within the track to get information about.,
+			[in], objPass, aafMobKind_t, mobKind, Kind of referenced Mob to get information about. 
   // @ex Possible values for aafMobKind_t are: |
   // kCompMob
   // kMasterMob
   // kFileMob
   // kTapeMob
   // kFilmMob,
-[in\,ref], aafMediaCriteria_t *, mediaCrit, Criteria to use when finding a Source Mob if there is a Media
+		   [in\,ref], objPass, aafMediaCriteria_t *, mediaCrit, Criteria to use when finding a Source Mob if there is a Media
   // Group in an intervening Master Mob.,
-[in\,ref], aafEffectChoice_t *, effectChoice, Parameter that is not used in this function. 
+		   [in\,ref], objPass, aafEffectChoice_t *, effectChoice, Parameter that is not used in this function. 
   // @ex Possible values for aafEffectChoice_t are: |
   // kFindNull,
-[out], AD_AAFTYPES\(AAFComponent\) **, thisCpnt, ,
-[out], aafFindSourceInfo_t *, sourceInfo, Preallocated buffer to hold source information.,
+		   [out], objOut, AAFComponent, thisCpnt, ,
+		   [out], objPass, aafFindSourceInfo_t *, sourceInfo, Preallocated buffer to hold source information.,
 Returns source information for a track in a Master Mob or Source Mob.
   // @comm This function returns the source information for a track in a Master Mob or
   // Source Mob. It follows the Source Clip references in the specified track until it
