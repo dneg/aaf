@@ -17,7 +17,7 @@ AAFLocator\
 *                                          *
 \******************************************/
 
-AD_CLASS_BEGIN()
+AD_CLASS_BEGIN
 
 /****/
 AD_METHOD1(GetVolumeName,

@@ -7,7 +7,6 @@ AAFLocator\
 #endm
 #c
 #import ./AAFUnitTest.exp
-
 /******************************************\
 *                                          *
 * Advanced Authoring Format                *
@@ -17,12 +16,8 @@ AAFLocator\
 *                                          *
 \******************************************/
 
-AD_CLASS_BEGIN()
-  //
-  // IAAFUnitTest interface method overrides
-  //
-.method-Test
+AD_CLASS_BEGIN
 
+AD_OVERRIDE(.method-Test)
 
 AD_CLASS_END
-

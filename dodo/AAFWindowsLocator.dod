@@ -7,7 +7,6 @@ AAFLocator\
 #endm
 #c
 #import ./AAFUnitTest.exp
-
 /******************************************\
 *                                          *
 * Advanced Authoring Format                *
@@ -17,25 +16,20 @@ AAFLocator\
 *                                          *
 \******************************************/
 
-AD_CLASS_BEGIN()
+AD_CLASS_BEGIN
 
-//@access Public Members
-/****/
+  //@access Public Members
+
 AD_METHOD2(GetShortcut,
-[in],aafInt32,shortCutLen,Length of the buffer in bytes,
-[out],char*,shortCutBuf,A Windows shortcut,
-Get the windows shortcut.)
+		   [in],aafInt32,shortCutLen,Length of the buffer in bytes,
+		   [out],char *  ,shortCutBuf,A Windows shortcut,
+		   Get the windows shortcut.)
 
-/****/
 AD_METHOD2(SetShortcut,
-[in],aafInt32,shortCutLen,Length of the buffer in bytes,
-[in],char*,shortCutBuf,A Windows shortcut,
-Set the windows shortcut.)
+		   [in],aafInt32,shortCutLen,Length of the buffer in bytes,
+		   [in],char *  ,shortCutBuf,A Windows shortcut,
+		   Set the windows shortcut.)
 
-  //
-  // IAAFUnitTest interface method overrides
-  //
-.method-Test
-
+AD_OVERRIDE(.method-Test)
 
 AD_CLASS_END
