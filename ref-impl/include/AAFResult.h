@@ -35,7 +35,7 @@
 
 #ifndef MAKE_HRESULT
 #define MAKE_HRESULT(sev,fac,code) \
-    ((HRESULT) (((unsigned long)(sev)<<31) | ((unsigned long)(fac)<<16) | ((unsigned long)(code))) )
+    ((HRESULT) (((unsigned int)(sev)<<31) | ((unsigned int)(fac)<<16) | ((unsigned int)(code))) )
 #endif
 
 // #define _FACILITY_AAF    FACILITY_ITF
