@@ -162,7 +162,7 @@ public:
          const aafUID_t & id,
 
          // @parm [in] type of each element to be contained in this array
-         const aafUID_t & typeID,
+         const ImplAAFTypeDef *pType,
 
          // @parm [in] friendly name of this type definition
          const aafCharacter * pTypeName);
@@ -199,10 +199,7 @@ public:
   virtual bool IsStringable () const;
 
 private:
-  // OMWeakReferenceProperty<ImplAAFTypeDef> _ElementType;
-  OMFixedSizeProperty<aafUID_t>           _ElementType;
-
-  ImplAAFTypeDefSP _cachedElemType;
+   OMWeakReferenceProperty<ImplAAFTypeDef> _ElementType;
 
   ImplAAFTypeDefSP BaseType (void) const;
 };

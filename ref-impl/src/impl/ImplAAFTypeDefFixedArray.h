@@ -138,7 +138,7 @@ public:
          const aafUID_t & id,
 
          // @parm [in] type of each element to be contained in this array
-         const aafUID_t & typeID,
+         const ImplAAFTypeDef * pTypeDef,
 
          // @parm [in] number of elements to be in this array
          aafUInt32  nElements,
@@ -180,11 +180,8 @@ public:
 private:
   ImplAAFTypeDefSP BaseType (void) const;
 
-  // OMWeakReferenceProperty<ImplAAFTypeDef> _ElementType;
-  OMFixedSizeProperty<aafUID_t>           _ElementType;
+  OMWeakReferenceProperty<ImplAAFTypeDef> _ElementType;
   OMFixedSizeProperty<aafUInt32>          _ElementCount;
-
-  ImplAAFTypeDefSP _cachedBaseType;
 };
 
 //
