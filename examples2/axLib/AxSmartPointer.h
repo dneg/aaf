@@ -272,30 +272,4 @@ inline bool AxIsA( IUnknownSP sp, IAAFSmartPointer<TypeDst>& spDst )
 }
 
 
-// AxIsA() - A test to check that calling query interface to make a
-// conversion will work. Requires explicit template instantiation ie:
-// if(AxIsA<IAAFMasterMob>(mob) - This function is only a test and does
-// not return the converted type.
-/* I have found that it doesn't work at the moment. I will fix and then
-put the function back in as soon as I work out why it is broken.
-template <class TypeDst>
-inline bool AxIsA( IUnknownSP sp)
-{
-	HRESULT hr;
-	TypeDst * dummy;
-	hr = sp->QueryInterface( AxIID( dummy ),reinterpret_cast<void**>(&dummy));
-
-	if ( SUCCEEDED(hr) ) {
-		return true;
-	}
-	else if ( hr == E_NOINTERFACE ) {
-		return false;
-	}
-
-	CHECK_HRESULT( hr );
-
-	// Never reached;
-	return false;
-}
-*/
 #endif
