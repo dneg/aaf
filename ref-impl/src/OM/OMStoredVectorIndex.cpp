@@ -32,7 +32,7 @@
   // @mfunc Constructor.
   //   @parm The capacity of this <c OMStoredVectorIndex>.
 OMStoredVectorIndex::OMStoredVectorIndex(size_t capacity)
-: _highWaterMark(0), _capacity(capacity), _entries(0), _localKeys(0)
+: _firstFreeKey(0), _capacity(capacity), _entries(0), _localKeys(0)
 {
   TRACE("OMStoredVectorIndex::OMStoredVectorIndex");
 
@@ -53,25 +53,25 @@ OMStoredVectorIndex::~OMStoredVectorIndex(void)
   _localKeys = 0;
 }
 
-  // @mfunc The high water mark in the set of local keys assigned to
+  // @mfunc The first free key in the set of local keys assigned to
   //        this <c OMStoredVectorIndex>.
   //   @rdesc The highest previously allocated local key.
   //   @this const
-OMUInt32 OMStoredVectorIndex::highWaterMark(void) const
+OMUInt32 OMStoredVectorIndex::firstFreeKey(void) const
 {
-  TRACE("OMStoredVectorIndex::highWaterMark");
+  TRACE("OMStoredVectorIndex::firstFreeKey");
 
-  return _highWaterMark;
+  return _firstFreeKey;
 }
 
-  // @mfunc Set the high water mark in the set of local keys assigned to
+  // @mfunc Set the first free key in the set of local keys assigned to
   //        this <c OMStoredVectorIndex>.
   //   @parm The highest allocated local key.
-void OMStoredVectorIndex::setHighWaterMark(OMUInt32 highWaterMark)
+void OMStoredVectorIndex::setFirstFreeKey(OMUInt32 firstFreeKey)
 {
-  TRACE("OMStoredVectorIndex::setHighWaterMark");
+  TRACE("OMStoredVectorIndex::setFirstFreeKey");
 
-  _highWaterMark = highWaterMark;
+  _firstFreeKey = firstFreeKey;
 }
 
   // @mfunc Insert a new element in this <c OMStoredVectorIndex>

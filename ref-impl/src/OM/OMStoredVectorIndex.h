@@ -46,13 +46,13 @@ public:
     // @cmember Destructor.
   ~OMStoredVectorIndex(void);
 
-    // @cmember The high water mark in the set of local keys assigned to
+    // @cmember The first free key in the set of local keys assigned to
     //          this <c OMStoredVectorIndex>.
-  OMUInt32 highWaterMark(void) const;
+  OMUInt32 firstFreeKey(void) const;
 
-    // @cmember Set the high water mark in the set of local keys assigned to
+    // @cmember Set the first free key in the set of local keys assigned to
     //          this <c OMStoredVectorIndex>.
-  void setHighWaterMark(OMUInt32 highWaterMark);
+  void setFirstFreeKey(OMUInt32 firstFreeKey);
 
     // @cmember Insert a new element in this <c OMStoredVectorIndex>
     //          at position <p position> with local key <p localKey>.
@@ -77,7 +77,7 @@ public:
 
 private:
 
-  OMUInt32 _highWaterMark;
+  OMUInt32 _firstFreeKey;
   size_t _capacity;
   size_t _entries;
   OMUInt32* _localKeys;

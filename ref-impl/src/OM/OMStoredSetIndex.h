@@ -46,13 +46,13 @@ public:
     // @cmember Destructor.
   ~OMStoredSetIndex(void);
 
-    // @cmember The high water mark in the set of local keys assigned to
+    // @cmember The first free key in the set of local keys assigned to
     //          this <c OMStoredSetIndex>.
-  OMUInt32 highWaterMark(void) const;
+  OMUInt32 firstFreeKey(void) const;
 
-    // @cmember Set the high water mark in the set of local keys assigned to
+    // @cmember Set the first free key in the set of local keys assigned to
     //          this <c OMStoredSetIndex>.
-  void setHighWaterMark(OMUInt32 highWaterMark);
+  void setFirstFreeKey(OMUInt32 firstFreeKey);
 
   size_t keySize(void) const;
 
@@ -87,7 +87,7 @@ public:
 
 private:
 
-  OMUInt32 _highWaterMark;
+  OMUInt32 _firstFreeKey;
   size_t _capacity;
   size_t _entries;
   OMPropertyId _keyPropertyId; // Id of property that is the key

@@ -34,7 +34,7 @@
 OMStoredSetIndex::OMStoredSetIndex(size_t capacity,
                                    OMUInt32 keyPid,
                                    OMUInt32 keySize)
-: _highWaterMark(0), _capacity(capacity), _entries(0),
+: _firstFreeKey(0), _capacity(capacity), _entries(0),
   _keyPropertyId(keyPid), _keySize(keySize),
   _localKeys(0), _referenceCounts(0), _keys(0)
 {
@@ -67,25 +67,25 @@ OMStoredSetIndex::~OMStoredSetIndex(void)
   _keys = 0;
 }
 
-  // @mfunc The high water mark in the set of local keys assigned to
+  // @mfunc The first free key in the set of local keys assigned to
   //        this <c OMStoredSetIndex>.
   //   @rdesc The highest previously allocated local key.
   //   @this const
-OMUInt32 OMStoredSetIndex::highWaterMark(void) const
+OMUInt32 OMStoredSetIndex::firstFreeKey(void) const
 {
-  TRACE("OMStoredSetIndex::highWaterMark");
+  TRACE("OMStoredSetIndex::firstFreeKey");
 
-  return _highWaterMark;
+  return _firstFreeKey;
 }
 
-  // @mfunc Set the high water mark in the set of local keys assigned to
+  // @mfunc Set the first free key in the set of local keys assigned to
   //        this <c OMStoredSetIndex>.
   //   @parm The highest allocated local key.
-void OMStoredSetIndex::setHighWaterMark(OMUInt32 highWaterMark)
+void OMStoredSetIndex::setFirstFreeKey(OMUInt32 firstFreeKey)
 {
-  TRACE("OMStoredSetIndex::setHighWaterMark");
+  TRACE("OMStoredSetIndex::setFirstFreeKey");
 
-  _highWaterMark = highWaterMark;
+  _firstFreeKey = firstFreeKey;
 }
 
 size_t OMStoredSetIndex::keySize(void) const
