@@ -32,7 +32,7 @@
 static aafWChar *slotNames[5] = { L"SLOT1", L"SLOT2", L"SLOT3", L"SLOT4", L"SLOT5" };
 static aafWChar* TagNames =  L"TAG01";
 static aafWChar* Comments =  L"Comment 1";	
-
+static aafWChar* AltComment = L"Alternate Comment";
 // Cross-platform utility to delete a file.
 static void RemoveTestFile(const wchar_t* pFileName)
 {
@@ -116,6 +116,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		// append a comment to this mob !!
 		checkResult(pMob->AppendComment(TagNames, Comments));
 	  
+		checkResult(pMob->AppendComment(TagNames, AltComment));
+
 		// Add some slots
 		for(test = 0; test < 5; test++)
 		{
@@ -247,7 +249,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 				checkResult(pComment->GetName(tag, sizeof(tag)));
 				checkResult(pComment->GetValue( sizeof(Value), (unsigned char *)Value, &bytesRead));
 				checkExpression(wcscmp(tag, TagNames)== 0, AAFRESULT_TEST_FAILED);
-				checkExpression(wcscmp(Value, Comments)== 0, AAFRESULT_TEST_FAILED);
+				checkExpression(wcscmp(Value, AltComment)== 0, AAFRESULT_TEST_FAILED);
 				pComment->Release();
 			}
 			pCommentIterator->Release();
