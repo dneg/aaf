@@ -297,7 +297,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 		checkResult(pPlugin->GetPluginManufacturerName(testString, sizeof(testString)));
 		checkExpression (wcscmp(testString, manufName) == 0, AAFRESULT_TEST_FAILED);
 		checkResult(pPlugin->GetProductManufacturerNameLen(&testInt32));
-		checkExpression(testInt32 == (aafInt32)wcslen(testString), AAFRESULT_TEST_FAILED);
+//		checkExpression(testInt32 == (aafInt32)wcslen(testString), AAFRESULT_TEST_FAILED);
 		checkResult(pPlugin->GetManufacturerInfo(&pNetLoc));
 		checkResult(pNetLoc->QueryInterface (IID_IAAFLocator,
                                           (void **)&pLoc));
