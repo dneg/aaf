@@ -31,47 +31,47 @@ AD_CLASS_UUID(20045fa2, 1d87, 11d2, bf, 96, 00, 60, 97, 11, 62, 12)
 AD_DEFAULT_UUID(20045fa1, 1d87, 11d2, bf, 96, 00, 60, 97, 11, 62, 12)
 AD_CLASS_BEGIN
 
-AD_METHOD1(GetControlDatakindID,
+AD_METHOD1(GetParameterDataDefID,
 		   [retval][out],
 		   aafUID_t *,
-		   pControlDatakindID,
+		   pParameterDataDefID,
 		   Pointer to an AUID reference,
-		   Gets the datakind AUID for this control code definition.)
+		   Gets the DataDef AUID for this parameter definition.)
 
-AD_METHOD1(SetControlDatakindID,
+AD_METHOD1(SetParameterDataDefID,
 		   [in],
 		   aafUID_t,
-		   ControlDatakindID,
+		   ParameterDataDefID,
 		   an AUID reference,
-		   Sets the datakind AUID for this control code definition.)
+		   Sets the DataDef AUID for this parameter definition.)
 
 AD_METHOD1(GetDescription,
 		   [retval][out],
 		   aafString_t *,
 		   pstrDescription,
 		   Pointer to description,
-		   Gets the description of the control code definition.)
+		   Gets the description of the parameter definition.)
 
 AD_METHOD1(SetDescription,
 		   [in],
 		   aafString_t,
 		   strDescription,
 		   description,
-		   Sets the description of the control code definition.)
+		   Sets the description of the parameter definition.)
 
 AD_METHOD1(GetDisplayUnits,
 		   [retval][out],
 		   aafString_t *,
 		   pstrDisplayUnits,
 		   Pointer to Display Units,
-		   Gets the display units of the control code definition.)
+		   Gets the display units of the parameter definition.)
 
 AD_METHOD1(SetDisplayUnits,
 		   [in],
 		   aafString_t,
 		   strDisplayUnits,
 		   Display Units,
-		   Sets the display units of the control code definition.)
+		   Sets the display units of the parameter definition.)
 
 AD_XMETHOD1(AppendRefValue,
 			[in],
