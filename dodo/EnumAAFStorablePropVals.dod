@@ -1,0 +1,21 @@
+#c/*************************************************\
+#c*                                                 *
+#c* Advanced Authoring Format                       *
+#c*                                                 *
+#c* Copyright (c) 1998-1999 Avid Technology, Inc.   *
+#c*                                                 *
+#c\*************************************************/
+#startm .this-module 0
+EnumAAFStorablePropVals\
+#endm
+#startm .parent-module 0
+EnumAAFPropertyValues\
+#endm
+#c
+AD_HEAD
+
+AD_CLASS_UUID(5096c201, 831b, 11d4, a8, 12, 8a, 70, df, 17, ed, 53)
+
+AD_DEFAULT_UUID(5096c202, 831b, 11d4, a8, 12, 8a, 70, df, 17, ed, 53)
+AD_XCLASS_BEGIN(Concrete, Transient)
+AD_XCLASS_END(Concrete, Transient)
