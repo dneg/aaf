@@ -9,24 +9,14 @@
 // instead we persist a PID.
 //
 
-// Define the AAF_PROPERTY macros to create PID definitions and then
-// include the meta dictionary.
+// Define the AAF_PROPERTY macros to create PID definitions.
+// Include the meta dictionary.
 //
 #define AAF_PROPERTY(name, id, tag, type, mandatory, container) \
 const int PID_##container##_##name = tag;
-#include "AAFMetaDictionary.h"
-#undef AAF_PROPERTY
 
-// Missing PIDs.
-//
-// Please don't add anything to this list. All PIDS should come from
-// AAFMetaDictionary.h, these few are currently used in the reference
-// implemetation but not defined in AAFMetaDictionary.h
-//
-const int PID_SOURCECLIP_FADEINPRESENT  = 0x12fe;
-const int PID_SOURCECLIP_FADEOUTPRESENT = 0x12ff;
-const int PID_TIMELINEMOBSLOT_ORIGIN    = 0x47ff;
-const int PID_TIMECODE_TC               = 0x15ff;
-const int PID_ESSENCEDATA_MEDIADATA     = 0x23ff;
+#include "AAFMetaDictionary.h"
+
+#undef AAF_PROPERTY
 
 #endif
