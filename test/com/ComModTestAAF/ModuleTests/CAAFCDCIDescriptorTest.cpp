@@ -18,11 +18,8 @@
 
 
 
-#include "CAAFCDCIDescriptor.h"
-#include "CAAFCDCIDescriptor.h"
-#ifndef __CAAFCDCIDescriptor_h__
-#error - improperly defined include guard
-#endif
+#include "AAF.h"
+#include "AAFResult.h"
 
 #include <iostream.h>
 #include <stdio.h>
@@ -372,7 +369,7 @@ Cleanup:
 	return hr;
 }
 
-HRESULT CAAFCDCIDescriptor::test()
+extern "C" HRESULT CAAFCDCIDescriptor_test()
 {
 	aafWChar*	pFileName = L"AAFCDCIDescriptorTest.aaf";
 	HRESULT		hr = AAFRESULT_NOT_IMPLEMENTED;
@@ -385,7 +382,7 @@ HRESULT CAAFCDCIDescriptor::test()
 	}
 	catch (...)
 	{
-		cerr << "CAAFCDCIDescriptor::test...Caught general C++ exception!" << endl; 
+		cerr << "CAAFCDCIDescriptor_test...Caught general C++ exception!" << endl; 
 	}
 
 	return hr;

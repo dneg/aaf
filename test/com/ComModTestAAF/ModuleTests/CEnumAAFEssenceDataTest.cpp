@@ -11,11 +11,7 @@
 
 
 
-#include "CEnumAAFEssenceData.h"
-#include "CEnumAAFEssenceData.h"
-#ifndef __CEnumAAFEssenceData_h__
-#error - improperly defined include guard
-#endif
+#include "AAF.h"
 
 #include <iostream.h>
 #include <stdlib.h>
@@ -24,6 +20,7 @@
 #include <string.h>
 
 #include "AAFStoredObjectIDs.h"
+#include "AAFResult.h"
 
 
 // Utility class to implement the test.
@@ -61,7 +58,7 @@ struct EnumEssenceDataTest
   static const aafUInt32 _maxMobCount;
 };
 
-HRESULT CEnumAAFEssenceData::test()
+extern "C" HRESULT CEnumAAFEssenceData_test()
 {
   HRESULT hr = AAFRESULT_SUCCESS;
   wchar_t fileName[] = L"EnumEssenceDataTest.aaf";
@@ -74,12 +71,12 @@ HRESULT CEnumAAFEssenceData::test()
   }
   catch (HRESULT& ehr)
   {
-    // thrown by EnumEssenceDataTest::check() method.
+    // thrown by EnumEssenceDataTest_check() method.
     hr = ehr;
   }
   catch (...)
   {
-    cerr << "CAAFEssenceData::test...Caught general C++"
+    cerr << "CAAFEssenceData_test...Caught general C++"
     " exception!" << endl; 
   }
 

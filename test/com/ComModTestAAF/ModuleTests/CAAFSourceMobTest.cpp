@@ -1,5 +1,5 @@
 // @doc INTERNAL
-// @com This file implements the module test for CAAFDefinitionObject
+// @com This file implements the module test for CAAFSourceMob
 /******************************************\
 *                                          *
 * Advanced Authoring Format                *
@@ -9,11 +9,7 @@
 *                                          *
 \******************************************/
 
-#include "CAAFSourceMob.h"
-#include "CAAFSourceMob.h"
-#ifndef __CAAFSourceMob_h__
-#error - improperly defined include guard
-#endif
+#include "AAF.h"
 
 #include <stdio.h>
 #include <iostream.h>
@@ -280,7 +276,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	return hr;
 }
  
-HRESULT CAAFSourceMob::test()
+extern "C" HRESULT CAAFSourceMob_test()
 {
 	HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
   aafWChar * pFileName = L"SourceMOBTest.aaf";
@@ -293,7 +289,7 @@ HRESULT CAAFSourceMob::test()
 	}
   catch (...)
 	{
-	  cerr << "CAAFSourceMob::test...Caught general C++"
+	  cerr << "CAAFSourceMob_test...Caught general C++"
 		" exception!" << endl; 
 	}
 

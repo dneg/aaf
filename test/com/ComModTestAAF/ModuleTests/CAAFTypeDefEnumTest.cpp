@@ -14,16 +14,11 @@
 
 
 
-#include "CAAFTypeDefEnum.h"
-#include "CAAFTypeDefEnum.h"
-#ifndef __CAAFTypeDefEnum_h__
-#error - improperly defined include guard
-#endif
-
+#include "AAFTypes.h" //Use #include "AAF.h" for functional module test.
 #include "AAFResult.h"
 
 
-HRESULT CAAFTypeDefEnum::test()
+extern "C" HRESULT CAAFTypeDefEnum_test()
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }

@@ -1,5 +1,5 @@
 // @doc INTERNAL
-// @com This file implements the module test for CAAFDefinitionObject
+// @com This file implements the module test for CAAFInterpolationDef
 /***********************************************\
 *												*
 * Advanced Authoring Format						*
@@ -9,11 +9,7 @@
 *												*
 \***********************************************/
 
-#include "CAAFInterpolationDef.h"
-#include "CAAFInterpolationDef.h"
-#ifndef __CAAFInterpolationDef_h__
-#error - improperly defined include guard
-#endif
+#include "AAF.h"
 
 
 #include <iostream.h>
@@ -212,7 +208,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 }
  
 
-HRESULT CAAFInterpolationDef::test()
+extern "C" HRESULT CAAFInterpolationDef_test()
 {
 	HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
 	aafWChar * pFileName = L"InterpolationDefTest.aaf";
@@ -225,7 +221,7 @@ HRESULT CAAFInterpolationDef::test()
 	}
 	catch (...)
 	{
-		cerr << "CAAFInterpolationDef::test...Caught general C++ exception!" << endl; 
+		cerr << "CAAFInterpolationDef_test...Caught general C++ exception!" << endl; 
 	}
 
 	return hr;

@@ -1,5 +1,5 @@
 // @doc INTERNAL
-// @com This file implements the module test for CAAFDefinitionObject
+// @com This file implements the module test for CAAFNetworkLocator
 /******************************************\
 *                                          *
 * Advanced Authoring Format                *
@@ -12,11 +12,7 @@
 
 
 
-#include "CAAFNetworkLocator.h"
-#include "CAAFNetworkLocator.h"
-#ifndef __CAAFNetworkLocator_h__
-#error - improperly defined include guard
-#endif
+#include "AAF.h"
 
 #include <iostream.h>
 #include <stdio.h>
@@ -317,7 +313,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	return 	hr;
 }
  
-HRESULT CAAFNetworkLocator::test()
+extern "C" HRESULT CAAFNetworkLocator_test()
 {
   HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
   aafWChar * pFileName = L"NetworkLocatorTest.aaf";
@@ -331,7 +327,7 @@ HRESULT CAAFNetworkLocator::test()
 	}
   catch (...)
 	{
-	  cerr << "CAAFNetworkLocator::test...Caught general C++"
+	  cerr << "CAAFNetworkLocator_test...Caught general C++"
 		" exception!" << endl; 
 	}
 

@@ -1,5 +1,5 @@
 // @doc INTERNAL
-// @com This file implements the module test for CAAFDefinitionObject
+// @com This file implements the module test for CAAFSequence
 /******************************************\
 *                                          *
 * Advanced Authoring Format                *
@@ -10,18 +10,7 @@
 \******************************************/
 
 
-
-
-
-
-
-
-
-#include "CAAFSequence.h"
-#include "CAAFSequence.h"
-#ifndef __CAAFSequence_h__
-#error - improperly defined include guard
-#endif
+#include "AAF.h"
 
 #include <iostream.h>
 #include <stdio.h>
@@ -365,7 +354,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	return 	hr;
 }
 
-HRESULT CAAFSequence::test()
+extern "C" HRESULT CAAFSequence_test()
 {
 	HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
 	aafWChar * pFileName = L"AAFSequenceTest.aaf";
@@ -378,7 +367,7 @@ HRESULT CAAFSequence::test()
 	}
 	catch (...)
 	{
-		cerr << "CAAFSequence::test...Caught general C++ exception!" << endl; 
+		cerr << "CAAFSequence_test...Caught general C++ exception!" << endl; 
 	}
 
 	// When all of the functionality of this class is tested, we can return success.

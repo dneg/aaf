@@ -13,16 +13,11 @@
 
 
 
-#include "CAAFEssenceFormat.h"
-#include "CAAFEssenceFormat.h"
-#ifndef __CAAFEssenceFormat_h__
-#error - improperly defined include guard
-#endif
-
+#include "AAFTypes.h" //Use #include "AAF.h" for functional module test.
 #include "AAFResult.h"
 
 
-HRESULT CAAFEssenceFormat::test()
+extern "C" HRESULT CAAFEssenceFormat_test()
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }

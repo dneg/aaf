@@ -28,16 +28,11 @@
 
 
 
-#include "CAAFFindSourceInfo.h"
-#include "CAAFFindSourceInfo.h"
-#ifndef __CAAFFindSourceInfo_h__
-#error - improperly defined include guard
-#endif
-
+#include "AAFTypes.h" //Use #include "AAF.h" for functional module test.
 #include "AAFResult.h"
 
 
-HRESULT CAAFFindSourceInfo::test()
+extern "C" HRESULT CAAFFindSourceInfo_test()
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }

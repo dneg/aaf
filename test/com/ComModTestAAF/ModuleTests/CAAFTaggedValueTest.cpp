@@ -1,5 +1,5 @@
 // @doc INTERNAL
-// @com This file implements the module test for CAAFDefinitionObject
+// @com This file implements the module test for CAAFTaggedValue
 /******************************************\
 *                                          *
 * Advanced Authoring Format                *
@@ -10,17 +10,7 @@
 \******************************************/
 
 
-#ifndef __CAAFMob_h__
-#include "CAAFMob.h"
-#endif
-
-#ifndef __CAAFTaggedValue_h__
-#include "CAAFTaggedValue.h"
-#endif
-
-#ifndef __CEnumAAFTaggedValues_h__
-#include "CEnumAAFTaggedValues.h"
-#endif
+#include "AAF.h"
 
 #include <iostream.h>
 #include <stdio.h>
@@ -306,7 +296,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 }
  
 
-HRESULT CAAFTaggedValue::test()
+extern "C" HRESULT CAAFTaggedValue_test()
 {
 	HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
  	aafWChar * pFileName = L"TaggedValuesTest.aaf";
@@ -319,7 +309,7 @@ HRESULT CAAFTaggedValue::test()
 	}
 	catch (...)
 	{
-	  cerr << "CTaggedValues::test...Caught general C++"
+	  cerr << "CTaggedValues_test...Caught general C++"
 		" exception!" << endl; 
 	  hr = AAFRESULT_TEST_FAILED;
 	}

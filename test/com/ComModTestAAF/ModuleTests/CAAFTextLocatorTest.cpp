@@ -1,11 +1,3 @@
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
 // @doc INTERNAL
 // @com This file implements the module test for CAAFTextLocator interface
 /************************************************\
@@ -13,13 +5,11 @@
 * Advanced Authoring Format                      * 
 *                                                *
 * Copyright (c) 1998-1999 Avid Technology, Inc.  *
-* Copyright (c) 1998-19999 Microsoft Corporation * 
+* Copyright (c) 1998-1999 Microsoft Corporation  * 
 *                                                *
 \************************************************/
 
-#ifndef __CAAFTextLocator_h__
-#include "CAAFTextLocator.h"
-#endif
+#include "AAF.h"
 
 #include <iostream.h>
 #include <stdio.h>
@@ -335,7 +325,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	return 	hr;
 }
  
-HRESULT CAAFTextLocator::test()
+extern "C" HRESULT CAAFTextLocator_test()
 {
   HRESULT	hr = AAFRESULT_NOT_IMPLEMENTED;
   aafWChar*	pFileName = L"TextLocatorTest.aaf";
@@ -349,7 +339,7 @@ HRESULT CAAFTextLocator::test()
 	}
   catch (...)
 	{
-	  cerr << "CAAFTextLocator::test...Caught general C++"
+	  cerr << "CAAFTextLocator_test...Caught general C++"
 		" exception!" << endl; 
 	}
 

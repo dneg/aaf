@@ -1,5 +1,5 @@
 // @doc INTERNAL
-// @com This file implements the module test for CAAFDefinitionObject
+// @com This file implements the module test for CAAFFiller
 /******************************************\
 *                                          *
 * Advanced Authoring Format                *
@@ -9,20 +9,10 @@
 *                                          *
 \******************************************/
 
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
 
 
 
-#ifndef __CAAFFiller_h__
-#include "CAAFFiller.h"
-#endif
+#include "AAF.h"
 
 #include <iostream.h>
 #include <stdio.h>
@@ -305,7 +295,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
   return hr;
 }
 
-HRESULT CAAFFiller::test()
+extern "C" HRESULT CAAFFiller_test()
 {
   HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
   aafWChar * pFileName = L"FillerTest.aaf";
@@ -318,7 +308,7 @@ HRESULT CAAFFiller::test()
   }
   catch (...)
   {
-    cerr << "CAAFFiller::test...Caught general C++"
+    cerr << "CAAFFiller_test...Caught general C++"
     " exception!" << endl; 
   }
 

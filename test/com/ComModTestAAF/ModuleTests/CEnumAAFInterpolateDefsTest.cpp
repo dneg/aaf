@@ -9,11 +9,7 @@
 *												*
 \************************************************/
 
-#include "CEnumAAFInterpolationDefs.h"
-#include "CEnumAAFInterpolationDefs.h"
-#ifndef __CEnumAAFInterpolationDefs_h__
-#error - improperly defined include guard
-#endif
+#include "AAF.h"
 
 #include <iostream.h>
 #include <stdlib.h>
@@ -328,7 +324,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 }
  
 
-HRESULT CEnumAAFInterpolationDefs::test()
+extern "C" HRESULT CEnumAAFInterpolationDefs_test()
 {
 	HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
 	aafWChar * pFileName = L"EnumAAFInterpolateDefsTest.aaf";
@@ -341,7 +337,7 @@ HRESULT CEnumAAFInterpolationDefs::test()
 	}
 	catch (...)
 	{
-		cerr << "CEnumAAFInterpolationDefs::test...Caught general C++ exception!" << endl; 
+		cerr << "CEnumAAFInterpolationDefs_test...Caught general C++ exception!" << endl; 
 	}
 	return hr;
 }

@@ -14,16 +14,11 @@
 
 
 
-#include "CEnumAAFLocators.h"
-#include "CEnumAAFLocators.h"
-#ifndef __CEnumAAFLocators_h__
-#error - improperly defined include guard
-#endif
-
+#include "AAFTypes.h" //Use #include "AAF.h" for functional module test.
 #include "AAFResult.h"
 
 
-HRESULT CEnumAAFLocators::test()
+extern "C" HRESULT CEnumAAFLocators_test()
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }

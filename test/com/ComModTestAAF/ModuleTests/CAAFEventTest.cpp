@@ -15,11 +15,7 @@
 
 
 
-#include "CAAFEvent.h"
-#include "CAAFEvent.h"
-#ifndef __CAAFEvent_h__
-#error - improperly defined include guard
-#endif
+#include "AAF.h"
 
 
 #include <iostream.h>
@@ -92,7 +88,7 @@ private:
 };
 
 
-HRESULT CAAFEvent::test()
+extern "C" HRESULT CAAFEvent_test()
 {
   HRESULT hr = S_OK;
   aafProductIdentification_t	ProductInfo = {0};
@@ -128,7 +124,7 @@ HRESULT CAAFEvent::test()
   }
   catch (...)
   {
-    cerr << "CAAFEventMobSlot::test...Caught general C++ exception!" << endl;
+    cerr << "CAAFEventMobSlot_test...Caught general C++ exception!" << endl;
     hr = AAFRESULT_TEST_FAILED;
   }
 

@@ -1,5 +1,5 @@
 // @doc INTERNAL
-// @com This file implements the module test for CAAFDefinitionObject
+// @com This file implements the module test for CAAFTapeDescriptor
 /******************************************\
 *                                          *
 * Advanced Authoring Format                *
@@ -9,9 +9,7 @@
 *                                          *
 \******************************************/
 
-#ifndef __CAAFTapeDescriptor_h__
-#include "CAAFTapeDescriptor.h"
-#endif
+#include "AAF.h"
 
 #include <iostream.h>
 #include <stdio.h>
@@ -305,7 +303,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	return hr;
 }
 
-HRESULT CAAFTapeDescriptor::test()
+extern "C" HRESULT CAAFTapeDescriptor_test()
 {
 	HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
 	aafWChar * pFileName = L"TapeDescTest.aaf";
@@ -318,7 +316,7 @@ HRESULT CAAFTapeDescriptor::test()
 	}
 	catch (...)
 	{
-		cerr << "CAAFTapeDescriptor::test...Caught general C++"
+		cerr << "CAAFTapeDescriptor_test...Caught general C++"
 			" exception!" << endl; 
 	}
 

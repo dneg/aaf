@@ -1,5 +1,5 @@
 // @doc INTERNAL
-// @com This file implements the module test for CAAFDefinitionObject
+// @com This file implements the module test for CAAFProperty
 /******************************************\
 *                                          *
 * Advanced Authoring Format                *
@@ -9,12 +9,9 @@
 *                                          *
 \******************************************/
 
-#include "CAAFProperty.h"
-#include "CAAFProperty.h"
-#ifndef __CAAFProperty_h__
-#error - improperly defined include guard
-#endif
+#include "AAF.h"
 
+#include "AAFResult.h"
 #include "AAFStoredObjectIDs.h"
 #include "AAFDefUIDs.h"
 
@@ -141,7 +138,7 @@ static HRESULT ObjectTest ()
 }
 #endif // 0
 
-HRESULT CAAFProperty::test()
+extern "C" HRESULT CAAFProperty_test()
 {
   HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
 
@@ -151,7 +148,7 @@ HRESULT CAAFProperty::test()
 
       // if (FAILED(hr))
       // {
-      //  cerr << "CAAFProperty::test...FAILED!";
+      //  cerr << "CAAFProperty_test...FAILED!";
       //  return hr;
       // }
 
@@ -160,7 +157,7 @@ HRESULT CAAFProperty::test()
     }
   catch (...)
     {
-      cerr << "CAAFProperty::test...Caught general C++"
+      cerr << "CAAFProperty_test...Caught general C++"
         " exception!" << endl; 
     }
 

@@ -1,5 +1,5 @@
 // @doc INTERNAL
-// @com This file implements the module test for CAAFDefinitionObject
+// @com This file implements the module test for CEnumAAFTaggedValues
 /******************************************\
 *                                          *
 * Advanced Authoring Format                *
@@ -9,27 +9,9 @@
 *                                          *
 \******************************************/
 
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
 
+#include "AAF.h"
 
-#ifndef __CAAFMob_h__
-#include "CAAFMob.h"
-#endif
-
-#ifndef __CAAFTaggedValue_h__
-#include "CAAFTaggedValue.h"
-#endif
-
-#ifndef __CEnumAAFTaggedValues_h__
-#include "CEnumAAFTaggedValues.h"
-#endif
 
 #include <iostream.h>
 #include <stdio.h>
@@ -342,7 +324,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 }
  
 	    
-HRESULT CEnumAAFTaggedValues::test()
+extern "C" HRESULT CEnumAAFTaggedValues_test()
 {
 	HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
  	aafWChar * pFileName = L"EnumTaggedValuesTest.aaf";
@@ -355,7 +337,7 @@ HRESULT CEnumAAFTaggedValues::test()
 	}
 	catch (...)
 	{
-	  cerr << "CEnumAAFTaggedValues::test...Caught general C++"
+	  cerr << "CEnumAAFTaggedValues_test...Caught general C++"
 		" exception!" << endl; 
 	  hr = AAFRESULT_TEST_FAILED;
 	}

@@ -1,5 +1,5 @@
 // @doc INTERNAL
-// @com This file implements the module test for CAAFDefinitionObject
+// @com This file implements the module test for CEnumAAFSegments
 /******************************************\
 *                                          *
 * Advanced Authoring Format                *
@@ -9,9 +9,7 @@
 *                                          *
 \******************************************/
 
-#ifndef __CEnumAAFSegments_h__
-#include "CEnumAAFSegments.h"
-#endif
+#include "AAF.h"
 
 #include "AAFResult.h"
 #include "AAFDefUIDs.h"
@@ -385,7 +383,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	return 	hr;
 }
 
-HRESULT CEnumAAFSegments::test()
+extern "C" HRESULT CEnumAAFSegments_test()
 {
 	HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
  	aafWChar * pFileName = L"EnumAAFSegmentsTest.aaf";
@@ -398,7 +396,7 @@ HRESULT CEnumAAFSegments::test()
 	}
 	catch (...)
 	{
-	  cerr << "CEnumAAFSegments::test...Caught general C++"
+	  cerr << "CEnumAAFSegments_test...Caught general C++"
 		" exception!" << endl; 
 	  hr = AAFRESULT_TEST_FAILED;
 	}

@@ -14,16 +14,11 @@
 
 
 
-#include "CEnumAAFMobSlots.h"
-#include "CEnumAAFMobSlots.h"
-#ifndef __CEnumAAFMobSlots_h__
-#error - improperly defined include guard
-#endif
-
+#include "AAFTypes.h" //Use #include "AAF.h" for functional module test.
 #include "AAFResult.h"
 
 
-HRESULT CEnumAAFMobSlots::test()
+extern "C" HRESULT CEnumAAFMobSlots_test()
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }

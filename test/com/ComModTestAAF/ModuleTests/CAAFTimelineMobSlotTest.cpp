@@ -13,16 +13,11 @@
 
 
 
-#include "CAAFTimelineMobSlot.h"
-#include "CAAFTimelineMobSlot.h"
-#ifndef __CAAFTimelineMobSlot_h__
-#error - improperly defined include guard
-#endif
-
+#include "AAFTypes.h" //Use #include "AAF.h" for functional module test.
 #include "AAFResult.h"
 
 
-HRESULT CAAFTimelineMobSlot::test()
+extern "C" HRESULT CAAFTimelineMobSlot_test()
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }

@@ -23,16 +23,11 @@
 
 
 
-#include "CAAFPulldown.h"
-#include "CAAFPulldown.h"
-#ifndef __CAAFPulldown_h__
-#error - improperly defined include guard
-#endif
-
+#include "AAFTypes.h" //Use #include "AAF.h" for functional module test.
 #include "AAFResult.h"
 
 
-HRESULT CAAFPulldown::test()
+extern "C" HRESULT CAAFPulldown_test()
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }

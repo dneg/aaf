@@ -1,5 +1,5 @@
 // @doc INTERNAL
-// @com This file implements the module test for CAAFDefinitionObject
+// @com This file implements the module test for CAAFSourceReference
 /******************************************\
 *                                          *
 * Advanced Authoring Format                *
@@ -10,9 +10,7 @@
 \******************************************/
 
 
-#ifndef __CAAFSourceReference_h__
-#include "CAAFSourceReference.h"
-#endif
+#include "AAF.h"
 
 #include <iostream.h>
 #include <stdio.h>
@@ -185,7 +183,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 }
  
 
-HRESULT CAAFSourceReference::test()
+extern "C" HRESULT CAAFSourceReference_test()
 {
 	HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
  	aafWChar * pFileName = L"SourceReferenceTest.aaf";
@@ -198,7 +196,7 @@ HRESULT CAAFSourceReference::test()
 	}
 	catch (...)
 	{
-	  cerr << "CSourceReferences::test...Caught general C++"
+	  cerr << "CSourceReferences_test...Caught general C++"
 		" exception!" << endl; 
 	  hr = AAFRESULT_TEST_FAILED;
 	}

@@ -30,16 +30,11 @@
 
 
 
-#include "CEnumAAFTypeDefs.h"
-#include "CEnumAAFTypeDefs.h"
-#ifndef __CEnumAAFTypeDefs_h__
-#error - improperly defined include guard
-#endif
-
+#include "AAFTypes.h" //Use #include "AAF.h" for functional module test.
 #include "AAFResult.h"
 
 
-HRESULT CEnumAAFTypeDefs::test()
+extern "C" HRESULT CEnumAAFTypeDefs_test()
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }

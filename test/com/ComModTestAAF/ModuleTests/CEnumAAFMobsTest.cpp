@@ -1,5 +1,5 @@
 // @doc INTERNAL
-// @com This file implements the module test for CAAFDefinitionObject
+// @com This file implements the module test for CEnumAAFMobs
 /******************************************\
 *                                          *
 * Advanced Authoring Format                *
@@ -9,11 +9,7 @@
 *                                          *
 \******************************************/
 
-#include "CEnumAAFMobs.h"
-#include "CEnumAAFMobs.h"
-#ifndef __CEnumAAFMobs_h__
-#error - improperly defined include guard
-#endif
+#include "AAF.h"
 
 #include <iostream.h>
 #include <stdio.h>
@@ -244,7 +240,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	return hr;
 }
  
-HRESULT CEnumAAFMobs::test()
+extern "C" HRESULT CEnumAAFMobs_test()
 {
 	HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
  	aafWChar * pFileName = L"EnumMOBTest.aaf";
@@ -257,7 +253,7 @@ HRESULT CEnumAAFMobs::test()
 	}
   catch (...)
 	{
-	  cerr << "CAAFSourceMob::test...Caught general C++"
+	  cerr << "CAAFSourceMob_test...Caught general C++"
 		" exception!" << endl; 
 	}
 

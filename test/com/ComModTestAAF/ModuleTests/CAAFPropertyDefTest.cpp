@@ -16,16 +16,11 @@
  
 
 
-#include "CAAFPropertyDef.h"
-#include "CAAFPropertyDef.h"
-#ifndef __CAAFPropertyDef_h__
-#error - improperly defined include guard
-#endif
-
+#include "AAFTypes.h" //Use #include "AAF.h" for functional module test.
 #include "AAFResult.h"
 
 
-HRESULT CAAFPropertyDef::test()
+extern "C" HRESULT CAAFPropertyDef_test()
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }

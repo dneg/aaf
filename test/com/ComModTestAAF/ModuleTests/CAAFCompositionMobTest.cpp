@@ -20,9 +20,7 @@
 
 
 
-#ifndef __CAAFCompositionMob_h__
-#include "CAAFCompositionMob.h"
-#endif
+#include "AAF.h"
 
 #include <iostream.h>
 #include <stdio.h>
@@ -244,7 +242,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	return hr;
 }
 
-HRESULT CAAFCompositionMob::test()
+extern "C" HRESULT CAAFCompositionMob_test()
 {
 	HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
 	aafWChar * pFileName = L"CompMobTest.aaf";
@@ -257,7 +255,7 @@ HRESULT CAAFCompositionMob::test()
 	}
 	catch (...)
 	{
-	  cerr << "CAAFCompositionMob::test...Caught general C++"
+	  cerr << "CAAFCompositionMob_test...Caught general C++"
 		" exception!" << endl; 
 	  hr = AAFRESULT_TEST_FAILED;
 	}

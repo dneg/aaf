@@ -1,5 +1,5 @@
 // @doc INTERNAL
-// @com This file implements the module test for CAAFDefinitionObject
+// @com This file implements the module test for CEnumAAFComponents
 /******************************************\
 *                                          *
 * Advanced Authoring Format                *
@@ -9,27 +9,8 @@
 *                                          *
 \******************************************/
 
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
 
-
-
-
-
-
-
-
-#include "CEnumAAFComponents.h"
-#include "CEnumAAFComponents.h"
-#ifndef __CEnumAAFComponents_h__
-#error - improperly defined include guard
-#endif
+#include "AAF.h"
 
 #include "AAFResult.h"
 #include "AAFDefUIDs.h"
@@ -411,7 +392,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	return hr;
 }
 
-HRESULT CEnumAAFComponents::test()
+extern "C" HRESULT CEnumAAFComponents_test()
 {
 	HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
  	aafWChar * pFileName = L"EnumAAFComponentsTest.aaf";
@@ -424,7 +405,7 @@ HRESULT CEnumAAFComponents::test()
 	}
 	catch (...)
 	{
-	  cerr << "CEnumAAFComponents::test...Caught general C++"
+	  cerr << "CEnumAAFComponents_test...Caught general C++"
 		" exception!" << endl; 
 	  hr = AAFRESULT_TEST_FAILED;
 	}

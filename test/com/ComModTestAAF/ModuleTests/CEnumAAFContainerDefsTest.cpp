@@ -9,11 +9,7 @@
 *												*
 \************************************************/
 
-#include "CEnumAAFContainerDefs.h"
-#include "CEnumAAFContainerDefs.h"
-#ifndef __CEnumAAFContainerDefs_h__
-#error - improperly defined include guard
-#endif
+#include "AAF.h"
 
 #include <iostream.h>
 #include <stdlib.h>
@@ -325,7 +321,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 }
  
 
-HRESULT CEnumAAFContainerDefs::test()
+extern "C" HRESULT CEnumAAFContainerDefs_test()
 {
 	HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
 	aafWChar * pFileName = L"EnumAAFContainerDefsTest.aaf";
@@ -338,7 +334,7 @@ HRESULT CEnumAAFContainerDefs::test()
 	}
 	catch (...)
 	{
-		cerr << "CEnumAAFContainerDefs::test...Caught general C++ exception!" << endl; 
+		cerr << "CEnumAAFContainerDefs_test...Caught general C++ exception!" << endl; 
 	}
 	return hr;
 }

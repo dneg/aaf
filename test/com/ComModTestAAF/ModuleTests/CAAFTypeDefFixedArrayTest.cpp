@@ -14,16 +14,11 @@
 
 
 
-#include "CAAFTypeDefFixedArray.h"
-#include "CAAFTypeDefFixedArray.h"
-#ifndef __CAAFTypeDefFixedArray_h__
-#error - improperly defined include guard
-#endif
-
+#include "AAFTypes.h" //Use #include "AAF.h" for functional module test.
 #include "AAFResult.h"
 
 
-HRESULT CAAFTypeDefFixedArray::test()
+extern "C" HRESULT CAAFTypeDefFixedArray_test()
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }

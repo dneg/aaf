@@ -23,16 +23,11 @@
 
 
 
-#include "CAAFEssencePlugin.h"
-#include "CAAFEssencePlugin.h"
-#ifndef __CAAFEssencePlugin_h__
-#error - improperly defined include guard
-#endif
-
+#include "AAFTypes.h" //Use #include "AAF.h" for functional module test.
 #include "AAFResult.h"
 
 
-HRESULT CAAFEssencePlugin::test()
+extern "C" HRESULT CAAFEssencePlugin_test()
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }

@@ -37,16 +37,11 @@
 
 
 
-#include "CAAFScopeReference.h"
-#include "CAAFScopeReference.h"
-#ifndef __CAAFScopeReference_h__
-#error - improperly defined include guard
-#endif
-
+#include "AAFTypes.h" //Use #include "AAF.h" for functional module test.
 #include "AAFResult.h"
 
 
-HRESULT CAAFScopeReference::test()
+extern "C" HRESULT CAAFScopeReference_test()
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }

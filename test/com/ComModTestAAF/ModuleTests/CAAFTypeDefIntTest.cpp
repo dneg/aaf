@@ -1,5 +1,5 @@
 // @doc INTERNAL
-// @com This file implements the module test for CAAFDefinitionObject
+// @com This file implements the module test for CAAFTypeDefInt
 /******************************************\
 *                                          *
 * Advanced Authoring Format                *
@@ -9,11 +9,7 @@
 *                                          *
 \******************************************/
 
-#include "CAAFTypeDefInt.h"
-#include "CAAFTypeDefInt.h"
-#ifndef __CAAFTypeDefInt_h__
-#error - improperly defined include guard
-#endif
+#include "AAF.h"
 
 #include "AAFResult.h"
 #include "AAFStoredObjectIDs.h"
@@ -600,7 +596,7 @@ static HRESULT TestTypeDefInt ()
 }
 
 
-HRESULT CAAFTypeDefInt::test()
+extern "C" HRESULT CAAFTypeDefInt_test()
 {
   HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
 
@@ -610,7 +606,7 @@ HRESULT CAAFTypeDefInt::test()
 	}
   catch (...)
     {
-      cerr << "CAAFTypeDefInt::test...Caught general C++"
+      cerr << "CAAFTypeDefInt_test...Caught general C++"
         " exception!" << endl; 
     }
   return hr;
