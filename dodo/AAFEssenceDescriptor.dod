@@ -96,7 +96,7 @@ AD_XMETHOD1(PrependLocator,
 			pLocator,
 			Locator to append,
 
-			Append another locator to this essence descriptor.  Use this
+			Prepend another locator to this essence descriptor.  Use this
   // function to add a locator to be scanned first when searching for
   // the essence \(a new primary location for the essence\).
   // 

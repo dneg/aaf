@@ -40,10 +40,19 @@ AD_XCLASS_BEGIN(Abstract, Transient)
 
 /****/
 AD_METHOD3(WriteMultiSamples,
-[in],aafUInt16,arrayElemCount,Do this many transfers,
-[in\\\,size_is\\\(arrayElemCount\\\)],aafmMultiXfer_t *,xferArray,referencing this array,
-[out\\\,size_is\\\(arrayElemCount\\\)],aafmMultiResult_t *,resultArray,putting results into this array,
-Writes multiple channels worth of sample data to an interleaved data stream in the natural order for the CODEC.
+	[in],
+	aafUInt16,
+	arrayElemCount,
+	Do this many transfers,
+	[in\\\,size_is\\\(arrayElemCount\\\)],
+	aafmMultiXfer_t *,
+	xferArray,
+	referencing this array,
+	[out\\\,size_is\\\(arrayElemCount\\\)],
+	aafmMultiResult_t *,
+	resultArray,
+	putting results into this array,
+	Writes multiple channels worth of sample data to an interleaved data stream in the natural order for the CODEC.
 // The multiXfer_t structure has the following fields\\\, which specify one channel of data:
 //		essenceDef		[IN] -- The essence type definition
 //		physical		[IN] - The physical input-output channel
@@ -62,10 +71,22 @@ Writes multiple channels worth of sample data to an interleaved data stream in t
 
 /****/
 AD_XMETHOD3(ReadMultiSamples,
-[in],objPass,aafUInt16,elemCount,Do this many transfers,
-[in\, size_is\(elemCount\)],objPass,aafmMultiXfer_t *,xferArray,referencing this array,
-[out\, size_is\(elemCount\)],objPass,aafmMultiResult_t *,resultArray,putting results into this array,
-Reads one or more channels from an interleaved data stream.)
+	[in],
+	objPass,
+	aafUInt16,
+	elemCount,
+	Do this many transfers,
+	[in\, size_is\(elemCount\)],
+	objPass,
+	aafmMultiXfer_t *,
+	xferArray,
+	referencing this array,
+	[out\, size_is\(elemCount\)],
+	objPass,
+	aafmMultiResult_t *,
+	resultArray,
+	putting results into this array,
+	Reads one or more channels from an interleaved data stream.)
 // The multiXfer_t structure has the following fields\, which specify one channel of data:
 //		essenceDef		[IN] -- The essence type definition
 //		physical		[IN] - The physical input-output channel

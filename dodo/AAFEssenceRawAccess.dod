@@ -37,9 +37,14 @@ AD_DEFAULT_UUID(D815E2B2, 2425, 11d3, 80, AD, 00, 60, 08, 14, 3E, 6F)
 AD_XCLASS_BEGIN(Abstract, Transient)
 
 /****/
-AD_METHOD1(AddFrameIndexEntry,
-[in],aafPosition_t,frameOffset,add a frame offset to it's frame index,
-Adds a frame index entry for essence which was added precompressed.)
+AD_METHOD1(AddSampleIndexEntry,
+	[in],
+	aafPosition_t,
+	frameOffset,
+	add a frame offset to it's frame index,
+	Adds the byte offset to the end of the sample index table \\\(if any\\\).
+	// For formats with fixed sample sizes \\\(without a sample offset table\\\)\\\,
+	// this method will return AAFRESULT_SUCCESS.)
 	//@comm This function should NOT be called when essence is passed to
 	//the reference implementation in an uncompressed format.
 	//@comm Possible Errors:<nl>
@@ -49,10 +54,19 @@ Adds a frame index entry for essence which was added precompressed.)
 
 /****/
 AD_METHOD3(WriteRawData,
-[in],aafUInt32,nSamples,write this many samples,
-[in\\\, size_is\\\(nSamples * sampleSize\\\)],aafDataBuffer_t,buffer,to a buffer,
-[in],aafUInt32, sampleSize,of this size,
-Writes pre-interleaved data to a essence stream.)
+	[in],
+	aafUInt32,
+	nSamples,
+	write this many samples,
+	[in\\\, size_is\\\(nSamples * sampleSize\\\)],
+	aafDataBuffer_t,
+	buffer,
+	to a buffer,
+	[in],
+	aafUInt32,
+	sampleSize,
+	of this size,
+	Writes pre-interleaved data to a essence stream.)
 	//@comm A single video frame is ONE sample.
 	//@comm Buflen must be large enough to hold
 	// nSamples * the maximum sample size.
@@ -62,12 +76,27 @@ Writes pre-interleaved data to a essence stream.)
 	
 /****/
 AD_METHOD5(ReadRawData,
-[in],aafUInt32,nSamples,write this many samples,
-[in],aafUInt32,buflen,to a buffer of this size,
-[out\\\, size_is\\\(buflen\\\)\\\, length_is\\\(*bytesRead\\\)],aafDataBuffer_t,buffer,here is the buffer,
-[out\\\,ref],aafUInt32 *,samplesRead,,
-[out\\\,ref],aafUInt32 *,bytesRead,,
-Read pre-interleaved data from a essence stream.)
+	[in],
+	aafUInt32,
+	nSamples,
+	write this many samples,
+	[in],
+	aafUInt32,
+	buflen,
+	to a buffer of this size,
+	[out\\\, size_is\\\(buflen\\\)\\\, length_is\\\(*bytesRead\\\)],
+	aafDataBuffer_t,
+	buffer,
+	here is the buffer,
+	[out\\\,ref],
+	aafUInt32 *,
+	samplesRead,
+	,
+	[out\\\,ref],
+	aafUInt32 *,
+	bytesRead,
+	,
+	Read pre-interleaved data from a essence stream.)
 	//@comm A single video frame is ONE sample.
 	//@comm Buflen must be large enough to hold nSamples * the maximum sample size.
 	//@comm Possible Errors:
