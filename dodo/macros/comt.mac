@@ -50,8 +50,10 @@
 #include "AAFTypes.h" //Use #include "AAF.h" for functional module test.
 #include "AAFResult.h"
 
+// Required function prototype.
+extern "C" HRESULT C.this-module_test(void);
 
-extern "C" HRESULT C.this-module_test()
+HRESULT C.this-module_test()
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }\
@@ -80,8 +82,10 @@ AD_CLASS_BEGIN\
 #include "AAFTypes.h" //Use #include "AAF.h" for functional module test.
 #include "AAFResult.h"
 
+// Required function prototype.
+extern "C" HRESULT C.this-module_test(void);
 
-extern "C" HRESULT C.this-module_test()
+HRESULT C.this-module_test()
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }\
