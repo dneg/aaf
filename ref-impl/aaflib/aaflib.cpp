@@ -27,13 +27,6 @@
 
 
 
-// Define this to 1 to use raw storage implementations of the
-// traditional AAFFileOpenXXX(filename) methods.
-#ifndef USE_RAW_STORAGE
-#define USE_RAW_STORAGE 0
-#endif // ! USE_RAW_STORAGE
-
-
 // Declare the public interface that must be implemented.
 #include "aaflib.h"
 
@@ -248,38 +241,8 @@ STDAPI AAFFileOpenExistingRead (
  
   try
   {
-#if USE_RAW_STORAGE
-	IAAFRawStorage * pRawStg = 0;
-	hr = AAFCreateRawStorageDisk
-	  (pFileName,
-	   kAAFFileExistence_existing,
-	   kAAFFileAccess_read,
-	   &pRawStg);
-	if (AAFRESULT_SUCCEEDED (hr))
-	  {
-		hr = AAFCreateAAFFileOnRawStorage
-		  (pRawStg,
-		   kAAFFileExistence_existing,
-		   kAAFFileAccess_read,
-		   &aafFileKindAafSSBinary,
-		   modeFlags,
-		   0,
-		   ppFile);
-		if (AAFRESULT_SUCCEEDED (hr))
-		  {
-			ASSERT ("Valid ppFile pointer", ppFile);
-			ASSERT ("Valid *ppFile", *ppFile);
-			hr = (*ppFile)->Open ();
-		  }
-	  }
-	if (pRawStg)
-	  {
-		pRawStg->Release ();
-	  }
-#else // ! USE_RAW_STORAGE
     // Attempt to call the dll's exported function...
     hr = pAAFDLL->OpenExistingRead(pFileName, modeFlags, ppFile);
-#endif // USE_RAW_STORAGE
   }
   catch (...)
   {
@@ -323,38 +286,8 @@ STDAPI AAFFileOpenExistingModify (
   
   try
   {
-#if USE_RAW_STORAGE
-	IAAFRawStorage * pRawStg = 0;
-	hr = AAFCreateRawStorageDisk
-	  (pFileName,
-	   kAAFFileExistence_existing,
-	   kAAFFileAccess_modify,
-	   &pRawStg);
-	if (AAFRESULT_SUCCEEDED (hr))
-	  {
-		hr = AAFCreateAAFFileOnRawStorage
-		  (pRawStg,
-		   kAAFFileExistence_existing,
-		   kAAFFileAccess_modify,
-		   &aafFileKindAafSSBinary,
-		   modeFlags,
-		   pIdent,
-		   ppFile);
-		if (AAFRESULT_SUCCEEDED (hr))
-		  {
-			ASSERT ("Valid ppFile pointer", ppFile);
-			ASSERT ("Valid *ppFile", *ppFile);
-			hr = (*ppFile)->Open ();
-		  }
-	  }
-	if (pRawStg)
-	  {
-		pRawStg->Release ();
-	  }
-#else // ! USE_RAW_STORAGE
     // Attempt to call the dll's exported function...
     hr = pAAFDLL->OpenExistingModify(pFileName, modeFlags, pIdent, ppFile);
-#endif // USE_RAW_STORAGE
   }
   catch (...)
   {
@@ -390,38 +323,8 @@ STDAPI AAFFileOpenNewModify (
   
   try
   {
-#if USE_RAW_STORAGE
-	IAAFRawStorage * pRawStg = 0;
-	hr = AAFCreateRawStorageDisk
-	  (pFileName,
-	   kAAFFileExistence_new,
-	   kAAFFileAccess_modify,
-	   &pRawStg);
-	if (AAFRESULT_SUCCEEDED (hr))
-	  {
-		hr = AAFCreateAAFFileOnRawStorage
-		  (pRawStg,
-		   kAAFFileExistence_new,
-		   kAAFFileAccess_modify,
-		   &aafFileKindAafSSBinary,
-		   modeFlags,
-		   pIdent,
-		   ppFile);
-		if (AAFRESULT_SUCCEEDED (hr))
-		  {
-			ASSERT ("Valid ppFile pointer", ppFile);
-			ASSERT ("Valid *ppFile", *ppFile);
-			hr = (*ppFile)->Open ();
-		  }
-	  }
-	if (pRawStg)
-	  {
-		pRawStg->Release ();
-	  }
-#else // ! USE_RAW_STORAGE
     // Attempt to call the dll's exported function...
     hr = pAAFDLL->OpenNewModify(pFileName, modeFlags, pIdent, ppFile);
-#endif // USE_RAW_STORAGE
   }
   catch (...)
   {
@@ -454,36 +357,8 @@ STDAPI AAFFileOpenTransient (
   
   try
   {
-#if USE_RAW_STORAGE
-	IAAFRawStorage * pRawStg = 0;
-	hr = AAFCreateRawStorageMemory
-	  (kAAFFileAccess_modify,
-	   &pRawStg);
-	if (AAFRESULT_SUCCEEDED (hr))
-	  {
-		hr = AAFCreateAAFFileOnRawStorage
-		  (pRawStg,
-		   kAAFFileExistence_new,
-		   kAAFFileAccess_modify,
-		   &aafFileKindAafSSBinary,
-		   0,
-		   pIdent,
-		   ppFile);
-		if (AAFRESULT_SUCCEEDED (hr))
-		  {
-			ASSERT ("Valid ppFile pointer", ppFile);
-			ASSERT ("Valid *ppFile", *ppFile);
-			hr = (*ppFile)->Open ();
-		  }
-	  }
-	if (pRawStg)
-	  {
-		pRawStg->Release ();
-	  }
-#else // ! USE_RAW_STORAGE
     // Attempt to call the dll's exported function...
     hr = pAAFDLL->OpenTransient(pIdent, ppFile);
-#endif // USE_RAW_STORAGE
   }
   catch (...)
   {
