@@ -1040,7 +1040,7 @@ HRESULT Omf2Aaf::ConvertOMFDatakind( OMF2::omfDDefObj_t datakind,
 HRESULT Omf2Aaf::ConvertOMFMOBObject( OMF2::omfObject_t obj, IAAFMob* pMob )
 {
 	HRESULT					rc = AAFRESULT_SUCCESS;
-	char					sMobName[32];
+	char					sMobName[64];
 	aafWChar*				pwMobName = NULL;
 	aafInt32				numComments;
 	aafInt32				times;
@@ -1051,7 +1051,7 @@ HRESULT Omf2Aaf::ConvertOMFMOBObject( OMF2::omfObject_t obj, IAAFMob* pMob )
 	aafUID_t				AAFMobUID;
 
 	IncIndentLevel();
-	rc = OMF2::omfiMobGetInfo(OMFFileHdl, obj, &OMFMobID, 32, sMobName, NULL, NULL);
+	rc = OMF2::omfiMobGetInfo(OMFFileHdl, obj, &OMFMobID, sizeof(sMobName), sMobName, NULL, NULL);
 	if (OMF2::OM_ERR_NONE == rc)
 		UTLStrAToStrW(sMobName, &pwMobName);
 	else
@@ -1270,11 +1270,13 @@ HRESULT Omf2Aaf::TraverseOMFMob( OMF2::omfObject_t obj, IAAFMob* pMob )
 						UTLMemoryFree(pwTrackName);
 						pwTrackName = NULL;
 						DecIndentLevel();
-					}
-					if (pSegment)
-					{
 						pSegment->Release();
 						pSegment = NULL;
+					}
+					if (pComponent)
+					{
+						pComponent->Release();
+						pComponent = NULL;
 					}
 				}
 			}
@@ -1750,6 +1752,7 @@ HRESULT Omf2Aaf::ConvertOMFSourceClip(OMF2::omfObject_t sourceclip,
 									 IAAFSourceClip* pSourceClip )
 {
 	HRESULT					rc = AAFRESULT_SUCCESS;
+	OMF2::omfErr_t			OMFError = OMF2::OM_ERR_NONE;
 
 	OMF2::omfDDefObj_t		datakind = NULL;
 	OMF2::omfLength_t		clipLength = 0;
@@ -1764,13 +1767,16 @@ HRESULT Omf2Aaf::ConvertOMFSourceClip(OMF2::omfObject_t sourceclip,
 	aafInt32				fadeinLen, fadeoutLen;
 
 
-	rc = OMF2::omfiSourceClipGetInfo(OMFFileHdl, sourceclip, &datakind, &clipLength, &OMFSourceRef);
-	if (OMF2::OM_ERR_NONE != rc)
+	OMFError = OMF2::omfiSourceClipGetInfo(OMFFileHdl, sourceclip, &datakind, &clipLength, &OMFSourceRef);
+	if (OMF2::OM_ERR_NONE != OMFError)
+	{
+		rc = AAFRESULT_INTERNAL_ERROR;
 		return rc;
-	rc = OMF2::omfiSourceClipGetFade(OMFFileHdl, sourceclip, 
+	}
+	OMFError = OMF2::omfiSourceClipGetFade(OMFFileHdl, sourceclip, 
 									 &fadeinLen, &OMFFadeinType, &fadeinPresent,
 									 &fadeoutLen, &OMFFadeoutType, &fadeoutPresent);
-	if (OMF2::OM_ERR_NONE == rc)
+	if (OMF2::OM_ERR_NONE == OMFError)
 	{
 		ConvertOMFDatakind(datakind, &datadef);
 		rc = aafMobIDFromMajorMinor(OMFSourceRef.sourceID.major,
@@ -1784,6 +1790,10 @@ HRESULT Omf2Aaf::ConvertOMFSourceClip(OMF2::omfObject_t sourceclip,
 		if (fadeinPresent || fadeoutPresent)
 			rc = pSourceClip->SetFade(fadeinLen, fadeinType, fadeoutLen, fadeoutType);
 	}	
+
+	if (OMF2::OM_ERR_NONE != OMFError)
+		rc = AAFRESULT_INTERNAL_ERROR;
+
 	return rc;
 }
 // ============================================================================
@@ -1853,7 +1863,7 @@ HRESULT Omf2Aaf::TraverseOMFSequence(OMF2::omfObject_t sequence, IAAFSequence* p
 
 	OMF2::omfIterHdl_t		componentIterator = NULL;
 	OMF2::omfPosition_t		sequPos;
-	OMF2::omfCpntObj_t		sequComponent;
+	OMF2::omfCpntObj_t		sequComponent = NULL;
 
 	IAAFComponent*			pComponent = NULL;
 
