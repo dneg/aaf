@@ -571,31 +571,53 @@ public:
 
 };
 
-  // @class Abstract base class for persistent collection properties
+  // @class Abstract base class for persistent container properties
   //        supported by the Object Manager.
   //   @base public | <c OMProperty>
-class OMCollectionProperty : public OMProperty {
+class OMContainerProperty : public OMProperty {
 public:
   // @access Public members.
 
     // @cmember Constructor.
-  OMCollectionProperty(const OMPropertyId propertyId,
-                       const int storedForm,
-                       const char* name);
+  OMContainerProperty(const OMPropertyId propertyId,
+                      const int storedForm,
+                      const char* name);
 
     // @cmember Destructor.
-  virtual ~OMCollectionProperty(void);
+  virtual ~OMContainerProperty(void);
+
+protected:
+  // @access Protected members.
+
+    // @cmember Compute the name of an element in this <c OMContainter>
+    //          given the name of the <p containerName> and the <p elementKey>.
+  static char* elementName(const char* containerName, size_t elementKey);
+
+    // @cmember Obtain the next available element key.
+  OMUInt32 nextKey(void);
+
+    // @cmember The name of the index describing the persisted
+    //          representation of the container. Also the prefix for
+    //          the storages containing the persisted representation
+    //          of the objects within the container.
+  char* _propertyName;
+
+private:
+
+    // The next avaliable key.
+    //
+  OMUInt32 _key;
 
 };
 
-  // @class Persistent collections of strong reference (contained object)
+  // @class Persistent containers of strong reference (contained object)
   //        properties supported by the Object Manager.
   //   @tcarg class | ReferencedObject | The type of the referenced
   //          (contained) object. This type must be a descendant of
   //          <c OMStorable>.
-  //   @base public | <c OMCollectionProperty>
+  //   @base public | <c OMContainerProperty>
 template <typename ReferencedObject>
-class OMStrongReferenceVectorProperty : public OMCollectionProperty {
+class OMStrongReferenceVectorProperty : public OMContainerProperty {
 public:
   // @access Public members.
 
@@ -712,8 +734,6 @@ private:
 
   void grow(size_t additionalElements);
 
-  static char* elementName(const char* vectorPropertyName, size_t vectorIndex);
-
   const ReferencedObject** _vector;
   size_t _sizeOfVector; // Actual size
   size_t _size;         // Number of elements in use
@@ -726,12 +746,6 @@ private:
     // _keys[i] is the key for _vector[i].
     //
   OMUInt32* _keys;
-
-    // The name of the index describing the persisted representation
-    // of _vector. Also the prefix for the storages containing the
-    // persisted representation of the objects within _vector.
-    //
-  char* _propertyName;
 
 };
 
