@@ -65,9 +65,11 @@ CAAFUnknown::CAAFUnknown
 (
  IUnknown *pUnkOuter	// @parm Controlling unknown from <om IClassFactory.CreateInstance>, 
 						//		  may be null.
-) 
-	: m_pUnkOuter((pUnkOuter) ? pUnkOuter : &m_UnkPrivate)
+) : 
+	m_cRef(0), 
+	m_pUnkOuter(NULL)
 {
+	m_pUnkOuter = (pUnkOuter) ? pUnkOuter : GetPrivateUnknown();
 	g_pAAFServer->IncrementActiveObjects();
 }
 
@@ -84,124 +86,6 @@ CAAFUnknown::~CAAFUnknown()
 {
 	g_pAAFServer->DecrementActiveObjects();
 }
-
-
-
-//=--------------------------------------------------------------------------=
-// CAAFUnknown::CAAFPrivateUnknown::This()
-//=--------------------------------------------------------------------------=
-// @mfunc CAAFUnknown::CAAFPrivateUnknown::This() |
-// Return pointer to outer object's this pointer.
-//
-// @comm
-// This method is used when we're sitting in the private unknown object, and we 
-// need to get at the pointer for the main unknown. It is slightly better to do 
-// this pointer arithmetic than have to store a pointer to the parent.
-//
-inline CAAFUnknown *CAAFUnknown::CAAFPrivateUnknown::This
-(
-    void
-)
-{
-    return (CAAFUnknown *)((LPBYTE)this - offsetof(CAAFUnknown, m_UnkPrivate));
-}
-
-//=--------------------------------------------------------------------------=
-// CAAFUnknown::CAAFPrivateUnknown::QueryInterface
-//=--------------------------------------------------------------------------=
-// @mfunc
-// This is the non-delegating internal QI routine.
-//
-// @rdesc
-// Returns one of the following values:
-//
-// @flag S_OK |
-// If objects supports the requested interface.
-//
-// @flag E_NOINTERFACE  | 
-// If object does not implement the requeste interface.
-//
-// @comm
-// Since <c CAAFPrivateUnknown> only implements <i IUnknown> methods all other 
-// interface requests are delegated to the virtual method <mf CAAFUnknown::InternalQueryInteface> 
-// which must be overridden by every derived that implements a new interface. 
-//
-// @devnote
-// Remember to call the base class's implementation of InternalQueryInterface.	
-//
-STDMETHODIMP CAAFUnknown::CAAFPrivateUnknown::QueryInterface
-(
-    REFIID riid,			// @parm [in] interface they want
-    void **ppvObjOut		// @parm [out] where they want to put the resulting object ptr.
-)
-{
-    if (NULL == ppvObjOut)
-		return E_INVALIDARG;
-
-    // if they're asking for IUnknown, then we have to pass them ourselves.
-    // otherwise defer to the inheriting object's InternalQueryInterface
-    //
-    if (IsEqualIID(riid, IID_IUnknown))
-	{
-        AddRef();
-        *ppvObjOut = (IUnknown *)this;
-        return S_OK;
-    } 
-	else
-	{
-        return This()->InternalQueryInterface(riid, ppvObjOut);
-	}
-
-    // dead code    
-}
-
-//=--------------------------------------------------------------------------=
-// CAAFUnknown::CAAFPrivateUnknown::AddRef
-//=--------------------------------------------------------------------------=
-// @mfunc
-// Adds a tick to the current reference count.
-//
-// @rdesc
-// The new reference count
-//
-ULONG CAAFUnknown::CAAFPrivateUnknown::AddRef
-(
-	void
-)
-{
-    return CAAFServer::InterlockedIncrement(&m_cRef);
-}
-
-//=--------------------------------------------------------------------------=
-// CAAFUnknown::CAAFPrivateUnknown::Release
-//=--------------------------------------------------------------------------=
-// @mfunc
-// Removes a tick from the count, and delets the object if necessary
-//
-// @rdesc
-// Remaining refs
-//
-// Notes:
-//
-ULONG CAAFUnknown::CAAFPrivateUnknown::Release
-(
-    void
-)
-{
-    ULONG cRef = CAAFServer::InterlockedDecrement(&m_cRef);
-#if !defined(DONT_DELETE_LAST_REFERENCE)
-    if (0 == m_cRef)
-        delete This();
-#else
-    if (0 > (long)m_cRef)
-    {
-      cerr << This() << " Error: Releasing an object with reference count:" << (long)(m_cRef) << endl;
-    }
-#endif
-
-    return cRef;
-}
-
 
 //=--------------------------------------------------------------------------=
 // CAAFUnknown::InternalQueryInterface
@@ -221,12 +105,79 @@ ULONG CAAFUnknown::CAAFPrivateUnknown::Release
 //
 HRESULT CAAFUnknown::InternalQueryInterface
 (
-    REFIID  /*riid*/,			// @parm [in] interface they want
+    REFIID  riid,			// @parm [in] interface they want
     void  **ppvObjOut		// @parm [out] where they want to put the resulting object ptr.
 )
 {
     *ppvObjOut = NULL;
 
+    // We only support the IID_IUnknown interface 
+    if (riid == IID_IUnknown) 
+    { 
+        *ppvObjOut = static_cast<IUnknown *>(GetPrivateUnknown()); 
+        ((IUnknown *)*ppvObjOut)->AddRef();
+        return S_OK;
+    }
+
     return E_NOINTERFACE;
+}
+
+
+//=--------------------------------------------------------------------------=
+// CAAFUnknown::InternalAddRef
+//=--------------------------------------------------------------------------=
+// @mfunc
+// Adds a tick to the current reference count.
+//
+// @rdesc
+// The new reference count
+//
+ULONG CAAFUnknown::InternalAddRef
+(
+	void
+)
+{
+    return CAAFServer::InterlockedIncrement(&m_cRef);
+}
+
+//=--------------------------------------------------------------------------=
+// CAAFUnknown::InternalRelease
+//=--------------------------------------------------------------------------=
+// @mfunc
+// Removes a tick from the count, and delets the object if necessary
+//
+// @rdesc
+// Remaining refs
+//
+// Notes:
+//
+ULONG CAAFUnknown::InternalRelease
+(
+    void
+)
+{
+    ULONG cRef = CAAFServer::InterlockedDecrement(&m_cRef);
+    if (0 == m_cRef)
+        delete this;
+    return cRef;
+}
+
+//=--------------------------------------------------------------------------=
+// CAAFUnknown::CAAFPrivateUnknown::This()
+//=--------------------------------------------------------------------------=
+// @mfunc CAAFUnknown::CAAFPrivateUnknown::This() |
+// Return pointer to outer object's this pointer.
+//
+// @comm
+// This method is used when we're sitting in the private unknown object, and we 
+// need to get at the pointer for the main unknown. It is slightly better to do 
+// this pointer arithmetic than have to store a pointer to the parent.
+//
+inline CAAFUnknown *CAAFUnknown::CAAFPrivateUnknown::This
+(
+    void
+)
+{
+    return (CAAFUnknown *)((LPBYTE)this - offsetof(CAAFUnknown, m_UnkPrivate));
 }
 
