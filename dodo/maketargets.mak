@@ -90,9 +90,6 @@ $(INCLUDE_DIR)/com-api/AAF.idl : $(FIDL_TARGETS)
 	    echo "" ; \
 	    cat AAFModule.fidl; \
 	    echo "" ; \
-	    echo "cpp_quote(\"// OBSOLETE---Temporarily provided for backwards compatibility.\")" ; \
-	    echo "cpp_quote(\"EXTERN_C const CLSID CLSID_AAFFile;\")" ; \
-	    echo "" ; \
 	) > $(INCLUDE_DIR)/com-api/AAF.idl
 	chmod -w $(INCLUDE_DIR)/com-api/AAF.idl
 
@@ -190,9 +187,6 @@ $(INCLUDE_DIR)/ref-api/AAF.h : $(FREFH_TARGETS)
 	    echo "" ; \
 	    echo "" ; \
 	    cat AAFModule.frefh; \
-	    echo "" ; \
-	    echo "" ; \
-	    echo "EXTERN_C const CLSID CLSID_AAFFile;" ; \
 	    echo "" ; \
 	    echo \#endif // __AAF_h__ ; \
 	) > $(INCLUDE_DIR)/ref-api/AAF.h
