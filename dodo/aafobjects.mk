@@ -22,7 +22,6 @@ AAFPERSISTENTOBJECTS = \
 	AAFEvent \
 	AAFEventMobSlot \
 	AAFGPITrigger \
-	AAFGroup \
 	AAFJPEGData \
 	AAFHTMLClip \
 	AAFHTMLData \
@@ -114,6 +113,7 @@ HUMAN_TYPED_IMPL = \
 	AAFCDCIDescriptor \
 	AAFFiller \
 	AAFFindSourceInfo \
+	AAFGroup \
 	AAFHeader \
 	AAFIdentification \
 	AAFMasterMob \
