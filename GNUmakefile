@@ -56,12 +56,16 @@ install : ref-impl
 examples : install
 	cd examples && $(MAKE) 
 
+.PHONY : examples2
+examples2 : install
+	cd examples2 && $(MAKE) 
+
 .PHONY : devutils
 devutils : install
 	cd DevUtils && $(MAKE)
 
 .PHONY : utilities
-utilities : install
+utilities : install examples2
 	cd Utilities && $(MAKE)
 
 .PHONY : test
@@ -113,6 +117,7 @@ realclean : uninstall
 	cd DevUtils && $(MAKE) $@
 	cd Utilities && $(MAKE) $@
 	cd examples && $(MAKE) $@
+	cd examples2 && $(MAKE) $@
 	cd test && $(MAKE) $@
 	cd dist && $(MAKE) $@
 
