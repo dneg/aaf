@@ -123,11 +123,14 @@ AAFRESULT ImplAAFObject::MyHeadObject
 			RAISE(AAFRESULT_NULL_PARAM);
 
 		if(!attached())
-			RAISE(AAFRESULT_NOT_IN_FILE); 
+			RAISE(AAFRESULT_OBJECT_NOT_ATTACHED); 
+
+                if(!inFile())
+			RAISE(AAFRESULT_OBJECT_NOT_IN_FILE); 
 
 		myFile = file();
 		if(myFile == NULL)
-			RAISE(AAFRESULT_NOT_IN_FILE);
+			RAISE(AAFRESULT_OBJECT_NOT_IN_FILE);
 
 		theRoot = myFile->root();
 		if(theRoot == NULL)
