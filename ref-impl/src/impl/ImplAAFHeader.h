@@ -299,6 +299,7 @@ AAFRESULT GetNumIdentifications (aafInt32 * /*pCount*/);
 AAFRESULT AddIdentificationObject (aafProductIdentification_t * /*pIdent*/);
 AAFRESULT BuildMediaCache(void);
 AAFRESULT LoadMobTables(void);
+AAFRESULT SetModified(void);		// To NOW
 
 private:
 	// These are private accessor methods.
