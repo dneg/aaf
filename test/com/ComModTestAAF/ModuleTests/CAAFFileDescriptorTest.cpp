@@ -143,7 +143,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 			checkResult(pSourceMob->AddNilReference (test+1, 0, defs.ddSound(), audioRate));
 		}
 		
-		checkResult(defs.cdFileDescriptor()->
+		// Create a concrete subclass of FileDescriptor
+		checkResult(defs.cdHTMLDescriptor()->
 					CreateInstance(IID_IAAFEssenceDescriptor, 
 								   (IUnknown **)&edesc));		
 		checkResult(edesc->QueryInterface(IID_IAAFFileDescriptor, (void **) &pFileDesc));

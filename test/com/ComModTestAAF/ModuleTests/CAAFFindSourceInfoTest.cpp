@@ -296,7 +296,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 				ref,
 				TAPE_MOB_LENGTH_ARR[test]));
 			
-			checkResult(defs.cdEssenceDescriptor()->
+			// Create a concrete subclass of EssenceDescriptor
+			checkResult(defs.cdHTMLDescriptor()->
 				CreateInstance(IID_IAAFEssenceDescriptor, 
 				(IUnknown **)&pDesc));	
 			checkResult(pSrcMob->SetEssenceDescriptor(pDesc));

@@ -120,8 +120,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		long	test;
 		aafRational_t	audioRate = { 44100, 1 };
 		
-		// Create a Mob
-		checkResult(defs.cdMob()->
+		// Create a concrete subclass of Mob
+		checkResult(defs.cdMasterMob()->
 					CreateInstance(IID_IAAFMob, 
 								   (IUnknown **)&pMob));
 		
@@ -141,7 +141,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 			pComp = NULL;
 			checkResult(sclp->QueryInterface (IID_IAAFSegment, (void **)&seg));
 			
-			checkResult(defs.cdMobSlot()->
+			// Create a concrete subclass of MobSlot
+			checkResult(defs.cdStaticMobSlot()->
 						CreateInstance(IID_IAAFMobSlot, 
 									   (IUnknown **)&newSlot));		
 			

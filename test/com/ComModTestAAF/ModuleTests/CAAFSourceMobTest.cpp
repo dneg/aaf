@@ -138,7 +138,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		  checkResult(pSourceMob->AddNilReference (test+1, 0, defs.ddSound(), audioRate));
 	  }
 
- 	  checkResult(defs.cdEssenceDescriptor()->
+	  // Create a concrete subclass of EssenceDescriptor
+ 	  checkResult(defs.cdHTMLDescriptor()->
 				  CreateInstance(IID_IAAFEssenceDescriptor, 
 								 (IUnknown **)&edesc));		
  	  checkResult(pSourceMob->SetEssenceDescriptor (edesc));

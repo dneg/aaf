@@ -115,8 +115,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pHeader->GetDictionary(&pDictionary));
 		CAAFBuiltinDefs defs (pDictionary);
 
-		// Create an Abstract SourceReference
-		checkResult(defs.cdSourceReference()->
+		// Create a concrete subclass of an Abstract SourceReference
+		checkResult(defs.cdSourceClip()->
 					CreateInstance(IID_IAAFSourceReference, 
 								   (IUnknown **)&pSourceReference));
 
