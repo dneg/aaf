@@ -14,7 +14,7 @@
 #include <assert.h>
 
 
-template class Vector<MacroDef>;
+// template class Vector<ArgDef>;
 
 void ArgSet::AppendArg (const ArgDef & src)
 {
