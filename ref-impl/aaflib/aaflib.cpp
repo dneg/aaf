@@ -932,13 +932,12 @@ HRESULT AAFDLL::RawStorageIsAAFFile (
     aafBool *  pRawStorageIsAAFFile)
 {
   TRACE("AAFDLL::RawStorageIsAAFFile");
+
+  // This entry point is not present in some versions of the DLL
   if (NULL == _pfnRawStorageIsAAFFile)
     return AAFRESULT_DLL_SYMBOL_NOT_FOUND;
 
-  HRESULT hr = _pfnRawStorageIsAAFFile( pStorage, pAAFFileKind, pRawStorageIsAAFFile);
-  if (hr == AAFRESULT_NOT_IMPLEMENTED)
-    hr = AAFRESULT_DLL_SYMBOL_NOT_FOUND;
-  return hr;
+  return _pfnRawStorageIsAAFFile( pStorage, pAAFFileKind, pRawStorageIsAAFFile);
 }
 
 HRESULT AAFDLL::CreateRawStorageMemory (
