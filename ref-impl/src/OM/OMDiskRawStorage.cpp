@@ -165,7 +165,7 @@ void OMDiskRawStorage::readAt(OMUInt64 position,
 {
   TRACE("OMDiskRawStorage::readAt");
   PRECONDITION("Readable", isReadable());
-  PRECONDITION("Readable", isPositionable());
+  PRECONDITION("Positionable", isPositionable());
 
   setPosition(position);
   read(bytes, byteCount, bytesRead);
@@ -231,7 +231,7 @@ void OMDiskRawStorage::writeAt(OMUInt64 position,
   TRACE("OMDiskRawStorage::writeAt");
 
   PRECONDITION("Writable", isWritable());
-  PRECONDITION("Readable", isPositionable());
+  PRECONDITION("Positionable", isPositionable());
 
   setPosition(position);
   write(bytes, byteCount, bytesWritten);
