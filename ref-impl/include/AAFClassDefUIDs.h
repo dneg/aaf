@@ -16,7 +16,7 @@
 // Define the AAF_CLASS macro to create class GUID definitions.
 // Include the meta dictionary.
 //
-#define AAF_CLASS(name, id, parent) \
+#define AAF_CLASS(name, id, parent, concrete) \
 const aafUID_t kAAFClassID_##name = \
 id;
 
@@ -53,7 +53,5 @@ id;
 #define kAAFClassID_PluggableDefinition kAAFClassID_PluggableDef
 
 #include "AAFMetaDictionary.h"
-
-#undef AAF_CLASS
 
 #endif // ! __AAFClassDefUIDs_h__

@@ -22,7 +22,7 @@
 
 //
 // Declare the corresponding CLSID's external.
-#define AAF_CLASS(name, dataid, parent)\
+#define AAF_CLASS(name, dataid, parent, concrete)\
   extern "C" aafClassID_t CLSID_AAF##name;
 
 // The AAF reference implementation is still not quite in sync with SMPTE
@@ -74,7 +74,7 @@ typedef struct tagAAFObjectEntry_t
 
 #define AAF_TABLE_BEGIN() static AAFObjectEntry_t gAAFObjectTable[] = {
 
-#define AAF_CLASS(name, id, parent)\
+#define AAF_CLASS(name, id, parent, concrete)\
 { #name, &AUID_AAF##name, &CLSID_AAF##name }
 
 #define AAF_CLASS_SEPARATOR() ,
