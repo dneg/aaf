@@ -46,6 +46,9 @@ class ImplAAFFile;
 #include "ImplAAFObject.h"
 #endif
 
+#include "OMStrongRefProperty.h"
+#include "OMStrongRefVectorProperty.h"
+
 #include "aafTable.h"
 
 #include "aafErr.h"

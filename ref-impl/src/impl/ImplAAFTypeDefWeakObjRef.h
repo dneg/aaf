@@ -38,6 +38,7 @@ class ImplAAFClassDef;
 #ifndef __ImplAAFTypeDefObjectRef_h__
 #include "ImplAAFTypeDefObjectRef.h"
 #endif
+#include "OMWeakRefProperty.h"
 
 
 class ImplAAFTypeDefWeakObjRef : public ImplAAFTypeDefObjectRef

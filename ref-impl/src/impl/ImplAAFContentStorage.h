@@ -58,7 +58,7 @@ class ImplAAFFile;
 #include "ImplAAFMob.h"
 #include "ImplAAFEssenceData.h"
 
-#include "OMProperty.h"
+#include "OMStrongRefSetProperty.h"
 #include "OMDataTypes.h"
 
 class AAFDataKind;

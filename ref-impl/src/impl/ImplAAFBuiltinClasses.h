@@ -33,7 +33,6 @@
 //
 
 #include "AAFTypes.h"
-#include "OMProperty.h"
 #include "AAFUtils.h"
 
 #ifndef __ImplAAFSearchableStack_h__
