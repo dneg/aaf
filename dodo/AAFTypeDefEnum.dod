@@ -14,6 +14,23 @@ AD_IDL(//
 //
 AD_STD_COMMENT_IFC_HEADER
 AD_STD_COMMENT_IFC_STUB)
+
+AD_CPP_QUOTE(#if 0)
+typedef struct _aafTypeDefEnumElementPair_t
+{
+  [string, size_is(nameSize)] wchar_t * pName;
+  IAAFPropertyValue * pValue;
+  aafUInt32 nameSize;
+} aafTypeDefEnumElementPair_t;
+AD_CPP_QUOTE(#endif)
+AD_CPP_QUOTE(//)
+AD_CPP_QUOTE(typedef struct _aafTypeDefEnumElementPair_t)
+AD_CPP_QUOTE({)
+AD_CPP_QUOTE(\  wchar_t * pName;)
+AD_CPP_QUOTE(\  IAAFPropertyValue * pValue;)
+AD_CPP_QUOTE(\  aafUInt32 nameSize;)
+AD_CPP_QUOTE(} aafTypeDefEnumElementPair_t;)
+
 AD_CLASS_UUID(307e9e62, dcb2, 11d2, 84, 29, 00, 60, 08, 32, ac, b8)
 
 AD_DEFAULT_UUID(307e9e64, dcb2, 11d2, 84, 29, 00, 60, 08, 32, ac, b8)
