@@ -1380,6 +1380,141 @@ OMByteOrder OMStoredObject::byteOrder(void) const
   return _byteOrder;
 }
 
+void OMStoredObject::mapCharacters(wchar_t* /* name */, size_t /* nameLength */)
+{
+  TRACE("OMStoredObject::mapCharacters");
+
+#if 0
+  for (size_t i = 0; i < nameLength; i++) {
+    name[i] = map[name[i] & 0x7f];
+  }
+#endif
+}
+
+void OMStoredObject::mangleName(const wchar_t* clearName,
+                                OMPropertyId pid,
+                                wchar_t* mangledName,
+                                size_t mangledNameSize)
+{
+  TRACE("OMStoredObject::mangleName");
+
+  PRECONDITION("Valid pid", pid > 0);
+
+  // Squeeze name to accommodate the pid as "-<pid>"
+  //
+  size_t maxSize = mangledNameSize - stringSize(pid) - 1 - 1;
+  size_t newSize = squeezeWideString(clearName,
+                                     lengthOfWideString(clearName),
+                                     mangledName,
+                                     maxSize);
+  ASSERT("Consistent length", newSize == lengthOfWideString(mangledName));
+  ASSERT("Consistent length",
+                            lengthOfWideString(mangledName) < mangledNameSize);
+
+  // Map out any illegal characters
+  //
+  mapCharacters(mangledName, newSize);
+
+  // Append "-<pid>"
+  //
+  mangledName[newSize] = L'-';
+  toWideString(pid, &mangledName[newSize+1], stringSize(pid));
+}
+
+wchar_t* OMStoredObject::streamName(const wchar_t* propertyName,
+                                    OMPropertyId pid)
+{
+  return referenceName(propertyName, pid);
+}
+
+wchar_t* OMStoredObject::referenceName(const wchar_t* propertyName,
+                                       OMPropertyId pid)
+{
+  TRACE("OMStoredObject::referenceName");
+
+  wchar_t* result = new wchar_t[32];
+  ASSERT("Valid heap pointer", result != 0);
+
+  mangleName(propertyName, pid, result, 32);
+
+  return result;
+}
+
+wchar_t* OMStoredObject::collectionName(const wchar_t* propertyName,
+                                        OMPropertyId pid)
+{
+  TRACE("OMStoredObject::collectionName");
+
+  wchar_t* result = new wchar_t[32];
+  ASSERT("Valid heap pointer", result != 0);
+
+  mangleName(propertyName, pid, result, 32 - 10);
+
+  return result;
+}
+
+wchar_t* OMStoredObject::elementName(const wchar_t* propertyName,
+                                     OMPropertyId pid,
+                                     OMUInt32 localKey)
+{
+  TRACE("OMStoredObject::elementName");
+
+  wchar_t* result = new wchar_t[32];
+  ASSERT("Valid heap pointer", result != 0);
+
+  mangleName(propertyName, pid, result, 32 - 10);
+
+  size_t newSize = lengthOfWideString(result);
+  concatenateWideString(result, L"{", 1);
+  size_t keySize;
+  if (localKey != 0) {
+    keySize = stringSize(localKey);
+    toWideString(localKey, &result[newSize + 1], keySize);
+  } else {
+    keySize = 1;
+    concatenateWideString(result, L"0", 1);
+  }
+  concatenateWideString(result, L"}", 1);
+
+  return result;
+}
+
+void OMStoredObject::writeName(OMPropertyId pid,
+                               OMStoredForm storedForm,
+                               const wchar_t* name)
+{
+  TRACE("OMStoredObject::writeName");
+
+  size_t characterCount = lengthOfWideString(name) + 1;
+  OMCharacter* buffer = new OMCharacter[characterCount];
+  ASSERT("Valid heap pointer", buffer != 0);
+  externalizeString(name, buffer, characterCount);
+  ASSERT("Native byte order", _byteOrder == hostByteOrder());
+  size_t byteCount = characterCount * sizeof(OMCharacter);
+  write(pid, storedForm, buffer, byteCount);
+  delete [] buffer;
+}
+
+wchar_t* OMStoredObject::readName(OMPropertyId pid,
+                                  OMStoredForm storedForm,
+                                  size_t size)
+{
+  TRACE("OMStoredObject::readName");
+
+  OMCharacter* propertyName = new OMCharacter[size];
+  ASSERT("Valid heap pointer", propertyName != 0);
+  read(pid, storedForm, propertyName, size);
+  size_t characterCount = size / sizeof(OMCharacter);
+  if (_reorderBytes) {
+    reorderString(propertyName, characterCount);
+  }
+  wchar_t* result = new wchar_t[characterCount];
+  ASSERT("Valid heap pointer", result!= 0);
+  internalizeString(propertyName, result, characterCount);
+  delete [] propertyName;
+  return result;
+}
+
 void OMStoredObject::reorderString(OMCharacter* string,
                                    size_t characterCount)
 {
