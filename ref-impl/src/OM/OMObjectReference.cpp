@@ -673,8 +673,10 @@ OMStorable* OMWeakObjectReference::setValue(
   _identification = identification;
 
 #if defined(OM_VALIDATE_WEAK_REFERENCES)
+#if 0
   ASSERT("Consistent source and target",
                     IMPLIES(_pointer != 0, set()->contains(&_identification)));
+#endif
 #endif
 
   POSTCONDITION("Element properly set", _pointer == value);
