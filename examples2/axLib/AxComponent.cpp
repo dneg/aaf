@@ -489,11 +489,6 @@ aafUInt32 AxOperationGroup::CountParameters()
 	return numParams;
 }
 
-void AxOperationGroup::AddParameter( IAAFParameterSP spIaafParameter )
-{
-  CHECK_HRESULT( _spIaafOperationGroup->AddParameter(spIaafParameter));
-}
-
 IEnumAAFParametersSP AxOperationGroup::GetParameters()
 {
 	IEnumAAFParametersSP spIaafParameters;
