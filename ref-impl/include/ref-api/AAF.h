@@ -184,6 +184,7 @@ interface IAAFHeader2;
 interface IAAFMasterMob2;
 interface IAAFMasterMobEx;
 interface IAAFMob2;
+interface IAAFRGBADescriptor2;
 interface IAAFSearchSource;
 interface IAAFSourceReference2;
 interface IAAFTimelineMobSlot2;
@@ -333,6 +334,7 @@ typedef interface IAAFHeader2 IAAFHeader2;
 typedef interface IAAFMasterMob2 IAAFMasterMob2;
 typedef interface IAAFMasterMobEx IAAFMasterMobEx;
 typedef interface IAAFMob2 IAAFMob2;
+typedef interface IAAFRGBADescriptor2 IAAFRGBADescriptor2;
 typedef interface IAAFSearchSource IAAFSearchSource;
 typedef interface IAAFSourceReference2 IAAFSourceReference2;
 typedef interface IAAFTimelineMobSlot2 IAAFTimelineMobSlot2;
@@ -9558,6 +9560,8 @@ DECLARE_INTERFACE_(IAAFCDCIDescriptor, IUnknown)
 
 
 
+
+
   END_INTERFACE
 };
 #endif // __IAAFCDCIDescriptor_INTERFACE_DEFINED__
@@ -18037,6 +18041,7 @@ DECLARE_INTERFACE_(IAAFPulldown, IUnknown)
 
 EXTERN_C const IID IID_IAAFRGBADescriptor;
 
+
 #undef  INTERFACE
 #define INTERFACE   IAAFRGBADescriptor
 
@@ -18050,7 +18055,6 @@ DECLARE_INTERFACE_(IAAFRGBADescriptor, IUnknown)
   STDMETHOD_(ULONG,Release) (THIS) PURE;
 
   /* *** IAAFRGBADescriptor methods *** */
-
 
   //***********************************************************
   //
@@ -18343,10 +18347,20 @@ DECLARE_INTERFACE_(IAAFRGBADescriptor, IUnknown)
     /*[out, size_is(numberElements)]*/ aafRGBAComponent_t*  PaletteLayoutArray) PURE;
 
 
+
+
+
+
+
+
+
+
+
+
+
   END_INTERFACE
 };
 #endif // __IAAFRGBADescriptor_INTERFACE_DEFINED__
-
 
 
 // IAAFScopeReference
@@ -35613,7 +35627,7 @@ DECLARE_INTERFACE_(IAAFCDCIDescriptor2, IUnknown)
   //
   // Succeeds if all of the following are true:
   //
-  // If this method fails, the FieldStartOffset property will not be
+  // If this method fails, the AlphaSamplingWidth property will not be
   // changed.
   //
   // This method will return the following codes:
@@ -35633,6 +35647,7 @@ DECLARE_INTERFACE_(IAAFCDCIDescriptor2, IUnknown)
   //
   // Succeeds if all of the following are true:
   // - pAlphaSamplingWidth is a valid pointer
+  // - the property is present.
   //
   // If this method fails, pAlphaSamplingWidth will not be changed.
   //
@@ -35650,6 +35665,53 @@ DECLARE_INTERFACE_(IAAFCDCIDescriptor2, IUnknown)
   STDMETHOD(GetAlphaSamplingWidth) (THIS_
     // Optional.
     /*[out]*/ aafUInt32 *  pAlphaSamplingWidth) PURE;
+
+  //***********************************************************
+  //
+  // SetReversedByteOrder()
+  //
+  // Sets the ReversedByteOrder property.
+  //
+  // Succeeds if all of the following are true:
+  //
+  // If this method fails, the ReversedByteOrder property will not be
+  // changed.
+  //
+  // This method will return the following codes:
+  //
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  STDMETHOD(SetReversedByteOrder) (THIS_
+    // Optional.
+    /*[in]*/ aafBoolean_t  reversedByteOrder) PURE;
+
+  //***********************************************************
+  //
+  // GetReversedByteOrder()
+  //
+  // Gets the ReversedByteOrder property.
+  //
+  // Succeeds if all of the following are true:
+  // - pReversedByteOrder is a valid pointer
+  // - the property is present.
+  //
+  // If this method fails, pReversedByteOrder will not be changed.
+  //
+  // This method will return the following codes:
+  //
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pReversedByteOrder is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the property is not present.
+  //
+  STDMETHOD(GetReversedByteOrder) (THIS_
+    // Optional.
+    /*[out]*/ aafBoolean_t *  pReversedByteOrder) PURE;
 
 
 
@@ -38226,6 +38288,7 @@ DECLARE_INTERFACE_(IAAFDigitalImageDescriptor2, IUnknown)
   //
   // Succeeds if all of the following are true:
   // - pTransferCharacteristic is a valid pointer
+  // - the property is present.
   // 
   // If this method fails, pTransferCharacteristic will not be changed.
   // 
@@ -38274,6 +38337,7 @@ DECLARE_INTERFACE_(IAAFDigitalImageDescriptor2, IUnknown)
   //
   // Succeeds if all of the following are true:
   // - pCodingEquations is a valid pointer
+  // - the property is present.
   // 
   // If this method fails, pCodingEquations will not be changed.
   // 
@@ -38322,6 +38386,7 @@ DECLARE_INTERFACE_(IAAFDigitalImageDescriptor2, IUnknown)
   //
   // Succeeds if all of the following are true:
   // - pColorPrimaries is a valid pointer
+  // - the property is present.
   // 
   // If this method fails, pColorPrimaries will not be changed.
   // 
@@ -38369,6 +38434,7 @@ DECLARE_INTERFACE_(IAAFDigitalImageDescriptor2, IUnknown)
   //
   // Succeeds if all of the following are true:
   // - pFieldStartOffset is a valid pointer
+  // - the property is present.
   // 
   // If this method fails, pFieldStartOffset will not be changed.
   // 
@@ -38416,6 +38482,7 @@ DECLARE_INTERFACE_(IAAFDigitalImageDescriptor2, IUnknown)
   //
   // Succeeds if all of the following are true:
   // - pFieldEndOffset is a valid pointer
+  // - the property is present.
   // 
   // If this method fails, pFieldEndOffset will not be changed.
   // 
@@ -38441,6 +38508,7 @@ DECLARE_INTERFACE_(IAAFDigitalImageDescriptor2, IUnknown)
   // Sets the FieldDominance property.
   //
   // Succeeds if all of the following are true:
+  // - fieldDominance is a value value.
   // 
   // If this method fails, the FieldDominance property will not be
   // changed.
@@ -38466,6 +38534,7 @@ DECLARE_INTERFACE_(IAAFDigitalImageDescriptor2, IUnknown)
   //
   // Succeeds if all of the following are true:
   // - pFieldDominance is a valid pointer
+  // - the property is present.
   // 
   // If this method fails, pFieldDominance will not be changed.
   // 
@@ -38491,6 +38560,7 @@ DECLARE_INTERFACE_(IAAFDigitalImageDescriptor2, IUnknown)
   // Sets the DisplayF2Offset property.
   //
   // Succeeds if all of the following are true:
+  // - displayF2Offset is a value value.
   // 
   // If this method fails, the DisplayF2Offset property will not be
   // changed.
@@ -38516,6 +38586,7 @@ DECLARE_INTERFACE_(IAAFDigitalImageDescriptor2, IUnknown)
   //
   // Succeeds if all of the following are true:
   // - pDisplayF2Offset is a valid pointer
+  // - the property is present.
   // 
   // If this method fails, pDisplayF2Offset will not be changed.
   // 
@@ -38541,6 +38612,7 @@ DECLARE_INTERFACE_(IAAFDigitalImageDescriptor2, IUnknown)
   // Sets the StoredF2Offset property.
   //
   // Succeeds if all of the following are true:
+  // - storedF2Offset is a value value.
   // 
   // If this method fails, the StoredF2Offset property will not be
   // changed.
@@ -38566,6 +38638,7 @@ DECLARE_INTERFACE_(IAAFDigitalImageDescriptor2, IUnknown)
   //
   // Succeeds if all of the following are true:
   // - pStoredF2Offset is a valid pointer
+  // - the property is present.
   // 
   // If this method fails, pStoredF2Offset will not be changed.
   // 
@@ -38613,6 +38686,7 @@ DECLARE_INTERFACE_(IAAFDigitalImageDescriptor2, IUnknown)
   //
   // Succeeds if all of the following are true:
   // - pActiveFormatDescriptor is a valid pointer
+  // - the property is present.
   // 
   // If this method fails, pActiveFormatDescriptor will not be changed.
   // 
@@ -38638,6 +38712,7 @@ DECLARE_INTERFACE_(IAAFDigitalImageDescriptor2, IUnknown)
   // Sets the SignalStandard property.  This property is optional.
   //
   // Succeeds if all of the following are true:
+  // - signalStandard is a value value.
   // 
   // If this method fails, the SignalStandard property will not be
   // changed.
@@ -38663,6 +38738,7 @@ DECLARE_INTERFACE_(IAAFDigitalImageDescriptor2, IUnknown)
   //
   // Succeeds if all of the following are true:
   // - pSignalStandard is a valid pointer
+  // - the property is present.
   // 
   // If this method fails, pSignalStandard not be changed.
   // 
@@ -42449,6 +42525,587 @@ DECLARE_INTERFACE_(IAAFMob2, IUnknown)
   END_INTERFACE
 };
 #endif // __IAAFMob2_INTERFACE_DEFINED__
+
+
+
+// IAAFRGBADescriptor2
+
+// ************************
+//
+// Interface IAAFRGBADescriptor2
+//
+// ************************
+
+
+
+
+
+
+
+#ifndef __IAAFRGBADescriptor2_INTERFACE_DEFINED__
+#define __IAAFRGBADescriptor2_INTERFACE_DEFINED__
+
+EXTERN_C const IID IID_IAAFRGBADescriptor2;
+
+#undef  INTERFACE
+#define INTERFACE   IAAFRGBADescriptor2
+
+DECLARE_INTERFACE_(IAAFRGBADescriptor2, IUnknown)
+{
+  BEGIN_INTERFACE
+
+  /* *** IUnknown methods *** */
+  STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppvObj) PURE;
+  STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
+  STDMETHOD_(ULONG,Release) (THIS) PURE;
+
+  /* *** IAAFRGBADescriptor2 methods *** */
+
+
+  //***********************************************************
+  //
+  // SetPixelLayout()
+  //
+  // Sets the layout and structure of the components in a single pixel.
+  // The layout array is an Array of 8 aafRGBAComponent_t.  The 'Code' field of the struct is
+  // from the set:
+  //   	- kAAFCompNone
+  // 	- kAAFCompAlpha
+  // 	- kAAFCompBlue
+  // 	- kAAFCompFill
+  // 	- kAAFCompGreen
+  // 	- kAAFCompPalette
+  // 	- kAAFCompRed
+  //
+  // The 'Size' field of the struct is the component size in bits.
+  // 
+  // If you set less than 8 entries, the remaining entries will be padded with kAAFCompNone and a size of zero.
+  // If this method fails the PixelLayout property will not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  STDMETHOD(SetPixelLayout) (THIS_
+    // The number of elements in each array
+    /*[in]*/ aafUInt32  numberElements,
+
+    // Array of up to 8 aafRGBAComponent_t indicating component order and size.
+    /*[in]*/ aafRGBAComponent_t*  PixelLayoutArray) PURE;
+
+  //***********************************************************
+  //
+  // CountPixelLayoutElements()
+  //
+  // This function returns the number of components in a pixel.
+  // 
+  // Succeeds if all of the following are true:
+  // - this object has already been initialized.
+  // - the pResult pointer is valid.
+  // 
+  // If this method fails no state is changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - Initialize() has already been called on this object.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pResult is null.
+  //
+  STDMETHOD(CountPixelLayoutElements) (THIS_
+    // Number of components
+    /*[out]*/ aafUInt32 *  pResult) PURE;
+
+  //***********************************************************
+  //
+  // GetPixelLayout()
+  //
+  // Gets the layout and structure of the components in a single pixel.
+  // The layout array is an Array of 8 aafRGBAComponent_t.  The 'Code' field of the struct is
+  // from the set:
+  //   	- kAAFCompNone
+  // 	- kAAFCompAlpha
+  // 	- kAAFCompBlue
+  // 	- kAAFCompFill
+  // 	- kAAFCompGreen
+  // 	- kAAFCompPalette
+  // 	- kAAFCompRed
+  //
+  // The 'Size' field of the struct is the component size in bits.
+  // 
+  // If you Get more entries than were set, the extra entries will be padded with kAAFCompNone and a size of zero.
+  //
+  // If this method fails, PixelLayoutArray will not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pNumberElements or PixelLayoutArray or PixelStructureArray is NULL.
+  //
+  // AAFRESULT_SMALLBUF
+  //   - numberElements indicates that the array is too small to hold
+  //     the data.
+  //
+  STDMETHOD(GetPixelLayout) (THIS_
+    // The number of elements in the array
+    /*[in]*/ aafUInt32  numberElements,
+
+    // Array to hold up to 8 aafRGBAComponent_t indicating component order and size.
+    /*[out, size_is(numberElements)]*/ aafRGBAComponent_t*  PixelLayoutArray) PURE;
+
+  //***********************************************************
+  //
+  // SetPalette()
+  //
+  // Sets the palette property.  The palette must be in the form specified
+  // by the palette layout and palette structure parameters.
+  // 
+  // Succeeds if all of the following are true:
+  // - pPalette is a valid pointer
+  // 
+  // If this method fails, the palette property will not be
+  // changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pPalette is NULL.
+  //
+  STDMETHOD(SetPalette) (THIS_
+    // The number of bytes in the array
+    /*[in]*/ aafUInt32  numberElements,
+
+    // Array to hold the palette information
+    /*[in, size_is(numberElements)]*/ aafUInt8*  pPalette) PURE;
+
+
+  //***********************************************************
+  //
+  // GetPalette()
+  //
+  // Sets the palette property.  The palette must be in the form specified
+  // by the palette layout and palette structure parameters.
+  // The values are written to the array specified by pPalette,
+  // which is of size numberElements.  The required size may be found
+  // by calling GetPaletteSize().
+  // 
+  // Succeeds if all of the following are true:
+  // - pPalette is a valid pointer.
+  // - numberElements indicates the array is large enough to hold the
+  //   data.
+  // 
+  // If this method fails, pPalette will not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pNumberElements is NULL.
+  //
+  // AAFRESULT_SMALLBUF
+  //   - numberElements indicates that the array is too small to hold
+  //     the data.
+  //
+  STDMETHOD(GetPalette) (THIS_
+    // The number of bytes in the array
+    /*[in]*/ aafUInt32  numberRecords,
+
+    // Array to hold the palette information
+    /*[out, size_is(numberRecords)]*/ aafUInt8*  pPalette) PURE;
+
+
+  //***********************************************************
+  //
+  // GetPaletteSize()
+  //
+  // Get the number of bytes in the VideoLineMap property array.
+  // 
+  // Succeeds if all of the following are true:
+  // - pNumberBytes is a valid pointer
+  // 
+  // If this method fails, *pNumberBytes will not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pNumberBytes is NULL.
+  //
+  STDMETHOD(GetPaletteSize) (THIS_
+    // The number of bytes in the array
+    /*[out]*/ aafUInt32 *  pNumberBytes) PURE;
+
+  //***********************************************************
+  //
+  // CountPaletteLayoutElements()
+  //
+  // This function returns the number of components in a pixel.
+  // 
+  // Succeeds if all of the following are true:
+  // - this object has already been initialized.
+  // - the pResult pointer is valid.
+  // 
+  // If this method fails no state is changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - Initialize() has already been called on this object.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pResult is null.
+  //
+  STDMETHOD(CountPaletteLayoutElements) (THIS_
+    // Number of components
+    /*[out]*/ aafUInt32 *  pResult) PURE;
+
+  //***********************************************************
+  //
+  // SetPaletteLayout()
+  //
+  // Sets the layout and structure of the components in a single pixel.
+  // The layout array is an Array of 8 aafRGBAComponent_t.  The 'Code' field of the struct is
+  // from the set:
+  //   	- kAAFCompNone
+  // 	- kAAFCompAlpha
+  // 	- kAAFCompBlue
+  // 	- kAAFCompFill
+  // 	- kAAFCompGreen
+  // 	- kAAFCompPalette
+  // 	- kAAFCompRed
+  //
+  // The 'Size' field of the struct is the component size in bits.
+  // 
+  // If you set less than 8 entries, the remaining entries will be padded with kAAFCompNone and a size of zero.
+  // If this method fails the PaletteLayout property will not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  STDMETHOD(SetPaletteLayout) (THIS_
+    // The number of elements in the array
+    /*[in]*/ aafUInt32  numberElements,
+
+    // Array of up to 8 bytes indicating component size, matching layout, and terminated by a zero byte.
+    /*[in]*/ aafRGBAComponent_t*  PaletteLayoutArray) PURE;
+
+  //***********************************************************
+  //
+  // GetPaletteLayout()
+  //
+  // // The layout array is an Array of 8 aafRGBAComponent_t.  The 'Code' field of the struct is
+  // from the set:
+  //   	- kAAFCompNone
+  // 	- kAAFCompAlpha
+  // 	- kAAFCompBlue
+  // 	- kAAFCompFill
+  // 	- kAAFCompGreen
+  // 	- kAAFCompPalette
+  // 	- kAAFCompRed
+  //
+  // The 'Size' field of the struct is the component size in bits.
+  // 
+  // If you Get more entries than were set, the extra entries will be padded with kAAFCompNone and a size of zero.
+  //
+  // If this method fails, PaletteLayoutArray will not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pNumberElements or PaletteLayoutArray is NULL.
+  //
+  // AAFRESULT_SMALLBUF
+  //   - numberElements indicates that the array is too small to hold
+  //     the data.
+  //
+  STDMETHOD(GetPaletteLayout) (THIS_
+    // The number of elements in each array
+    /*[in]*/ aafUInt32  numberElements,
+
+    // Array to hold 8 aafRGBAComponent_t indicating component order and size.
+    /*[out, size_is(numberElements)]*/ aafRGBAComponent_t*  PaletteLayoutArray) PURE;
+
+
+  //***********************************************************
+  //
+  // SetComponentMaxRef()
+  //
+  // Sets the ComponentMaxRef property.
+  //
+  // Succeeds if all of the following are true:
+  // 
+  // If this method fails, the ComponentMaxRef property will not be
+  // changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  STDMETHOD(SetComponentMaxRef) (THIS_
+    // Optional.
+    /*[in]*/ aafUInt32  componentMaxRef) PURE;
+
+
+  //***********************************************************
+  //
+  // GetComponentMaxRef()
+  //
+  // Gets the ComponentMaxRef property.
+  //
+  // Succeeds if all of the following are true:
+  // - pComponentMaxRef is a valid pointer
+  // - the property is present.
+  //
+  // If this method fails, pComponentMaxRef will not be changed.
+  //
+  // This method will return the following codes:
+  //
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pComponentMaxRef is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the property is not present.
+  //
+  STDMETHOD(GetComponentMaxRef) (THIS_
+    // Optional.
+    /*[out]*/ aafUInt32 *  pComponentMaxRef) PURE;
+
+
+  //***********************************************************
+  //
+  // SetComponentMinRef()
+  //
+  // Sets the ComponentMinRef property.
+  //
+  // Succeeds if all of the following are true:
+  // 
+  // If this method fails, the ComponentMinRef property will not be
+  // changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  STDMETHOD(SetComponentMinRef) (THIS_
+    // Optional.
+    /*[in]*/ aafUInt32  componentMinRef) PURE;
+
+
+  //***********************************************************
+  //
+  // GetComponentMinRef()
+  //
+  // Gets the ComponentMinRef property.
+  //
+  // Succeeds if all of the following are true:
+  // - pComponentMinRef is a valid pointer
+  // - the property is present.
+  //
+  // If this method fails, pComponentMinRef will not be changed.
+  //
+  // This method will return the following codes:
+  //
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pComponentMinRef is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the property is not present.
+  //
+  STDMETHOD(GetComponentMinRef) (THIS_
+    // Optional.
+    /*[out]*/ aafUInt32 *  pComponentMinRef) PURE;
+
+
+  //***********************************************************
+  //
+  // SetAlphaMaxRef()
+  //
+  // Sets the AlphaMaxRef property.
+  //
+  // Succeeds if all of the following are true:
+  // 
+  // If this method fails, the AlphaMaxRef property will not be
+  // changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  STDMETHOD(SetAlphaMaxRef) (THIS_
+    // Optional.
+    /*[in]*/ aafUInt32  alphaMaxRef) PURE;
+
+
+  //***********************************************************
+  //
+  // GetAlphaMaxRef()
+  //
+  // Gets the AlphaMaxRef property.
+  //
+  // Succeeds if all of the following are true:
+  // - pAlphaMaxRef is a valid pointer
+  // - the property is present.
+  //
+  // If this method fails, pAlphaMaxRef will not be changed.
+  //
+  // This method will return the following codes:
+  //
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pAlphaMaxRef is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the property is not present.
+  //
+  STDMETHOD(GetAlphaMaxRef) (THIS_
+    // Optional.
+    /*[out]*/ aafUInt32 *  pAlphaMaxRef) PURE;
+
+
+  //***********************************************************
+  //
+  // SetAlphaMinRef()
+  //
+  // Sets the AlphaMinRef property.
+  //
+  // Succeeds if all of the following are true:
+  // 
+  // If this method fails, the AlphaMinRef property will not be
+  // changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  STDMETHOD(SetAlphaMinRef) (THIS_
+    // Optional.
+    /*[in]*/ aafUInt32  alphaMinRef) PURE;
+
+
+  //***********************************************************
+  //
+  // GetAlphaMinRef()
+  //
+  // Gets the AlphaMinRef property.
+  //
+  // Succeeds if all of the following are true:
+  // - pAlphaMinRef is a valid pointer
+  // - the property is present.
+  //
+  // If this method fails, pAlphaMinRef will not be changed.
+  //
+  // This method will return the following codes:
+  //
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pAlphaMinRef is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the property is not present.
+  //
+  STDMETHOD(GetAlphaMinRef) (THIS_
+    // Optional.
+    /*[out]*/ aafUInt32 *  pAlphaMinRef) PURE;
+
+
+  //***********************************************************
+  //
+  // SetScanningDirection()
+  //
+  // Sets the ScanningDirection property.  This property is optional.
+  //
+  // Succeeds if all of the following are true:
+  // - scanningDirection is a value value.
+  // 
+  // If this method fails, the ScanningDirection property will not be
+  // changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_AAFRESULT_INVALID_ENUM_VALUE
+  //   - scanningDirection is not a valid value.
+  //
+  STDMETHOD(SetScanningDirection) (THIS_
+    // Scanning direction value.
+    /*[in]*/ aafScanningDirection_t  scanningDirection) PURE;
+
+
+  //***********************************************************
+  //
+  // GetScanningDirection()
+  //
+  // Gets the ScanningDirection property.  This property is optional.
+  //
+  // Succeeds if all of the following are true:
+  // - pScanningDirection is a valid pointer
+  // - the property is present.
+  // 
+  // If this method fails, pScanningDirection not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pScanningDirection is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the property is not present.
+  //
+  STDMETHOD(GetScanningDirection) (THIS_
+    // Scanning direction value.
+    /*[out]*/ aafScanningDirection_t *  pScanningDirection) PURE;
+
+
+
+  END_INTERFACE
+};
+#endif // __IAAFRGBADescriptor2_INTERFACE_DEFINED__
 
 
 

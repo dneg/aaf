@@ -317,6 +317,19 @@ typedef enum _aafSignalStandard_e
 	kAAFSignalS349M = 6
 } aafSignalStandard_e;
 	
+typedef aafInt32 aafScanningDirection_t;
+typedef enum _aafScanningDirection_e
+{
+	kAAFScanningLeftToRightTopToBottom = 0,
+	kAAFScanningRightToLeftTopToBottom = 1,
+	kAAFScanningLeftToRightBottomToTop = 2,
+	kAAFScanningRightToLeftBottomToTop = 3,
+	kAAFScanningTopToBottomLeftToRight = 4,
+	kAAFScanningTopToBottomRightToLeft = 5,
+	kAAFScanningBottomToTopLeftToRight = 6,
+	kAAFScanningBottomToTopRightToLeft = 7
+} aafScanningDirection_e;
+	
 typedef aafInt32 aafColorSiting_t;
 typedef enum _aafColorSiting_e
 {
@@ -1022,6 +1035,7 @@ typedef aafTimecodeSourceType_t aafTCSource_t;
 typedef aafPulldownDir_t        aafPulldownDirectionType_t;
 typedef aafPulldownKind_t       aafPulldownKindType_t;
 typedef aafSignalStandard_t     aafSignalStandardType_t;
+typedef aafScanningDirection_t  aafScanningDirectionType_t;
 
 
 /**************************/
