@@ -8,6 +8,21 @@ AAFMobSlot\
 #c
 #import ./AAFMobSlot.exp
 AD_HEAD
+/******************************************\
+*                                          *
+* Advanced Authoring Format                *
+*                                          *
+* Copyright (c) 1998 Avid Technology, Inc. *
+* Copyright (c) 1998 Microsoft Corporation *
+*                                          *
+\******************************************/
+
+ 
+/***********************************************\
+*	Stub only.   Implementation not yet added	*
+\***********************************************/
+
+
 AD_IDL(//
 // The IAAFTimelineMobSlot interface is implemented by objects which
 // contain time-varying timeline essence.
