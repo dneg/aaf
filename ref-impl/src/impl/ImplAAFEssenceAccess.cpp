@@ -72,6 +72,7 @@ const CLSID CLSID_AAFEssenceDataStream = { 0x42A63FE1, 0x968A, 0x11d2, { 0x80, 0
 //extern "C" const aafClassID_t CLSID_AAFNetworkLocator;
 //extern "C" const aafClassID_t CLSID_AAFSourceMob;
 extern "C" const CLSID CLSID_AAFFile;
+extern "C" const CLSID CLSID_AAFEssenceStream;
 
 //const IID IID_IAAFEssenceDataStream = { 0xCDDB6AB1, 0x98DC, 0x11d2, { 0x80, 0x8a, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
 //const aafUID_t CLSID_AAFWaveCodec = { 0x8D7B04B1, 0x95E1, 0x11d2, { 0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
@@ -224,12 +225,12 @@ ImplAAFEssenceAccess::Create (	  ImplAAFMasterMob *masterMob,
 		
 		// When we enable the cloneExternal (below) then Don't do this call for creating the
 		// file mob twice
-		CHECK(CreateFileMob(compHead, DEFAULT_FILE_SLOT, NULL, mediaKind, editRate, sampleRate,
+		CHECK(CreateFileMob(compHead, AAFTrue, DEFAULT_FILE_SLOT, NULL, mediaKind, editRate, sampleRate,
 			_destination, &_compFileMob));
 		CHECK(_compFileMob->GetMobID(&fileMobUID));
 		if(compHead != dataHead)
 		{
-			CHECK(CreateFileMob(dataHead, DEFAULT_FILE_SLOT, &fileMobUID, mediaKind, editRate, sampleRate,
+			CHECK(CreateFileMob(dataHead, AAFTrue, DEFAULT_FILE_SLOT, &fileMobUID, mediaKind, editRate, sampleRate,
 				NULL, &_dataFileMob));
 			_dataFileMob->AcquireReference();	//!!!Leaking here?
 		}
@@ -402,155 +403,278 @@ ImplAAFEssenceAccess::Create (	  ImplAAFMasterMob *masterMob,
 AAFRESULT STDMETHODCALLTYPE
    ImplAAFEssenceAccess::MultiCreate (ImplAAFMasterMob *masterMob,
 							aafUID_t codecID,
-                          aafInt16  /*arrayElemCount*/,
-                           aafmMultiCreate_t *  /*mediaArray*/,
-                           aafCompressEnable_t  /*Enable*/)
+                          aafInt16  arrayElemCount,
+                           aafmMultiCreate_t *  mediaArray,
+                           aafCompressEnable_t  Enable)
 {
-#if FULL_TOOLKIT
-	aafClassID_t 	mdesTag;
-	aafUID_t        uid;
-	aafTimeStamp_t  create_timestamp;
-	aafInt16				n;
-	aafMultiCreate_t *initPtr;
-	aafSubChannel_t	*destPtr;
-	aafCodecMetaInfo_t info;
-	aafBool			found;
-	aafLength_t		oneLength = CvtInt32toLength(1, oneLength);
-	aafCodecID_t	CodecID;
-	AAFMobSlot		 *tmpTrack;
-	AAFHeader		*head;
-	char 			codecIDString[OMUNIQUENAME_SIZE]; /* reasonable enough */
-	char			*variety;
-	
-	aafAssertValidFHdl(_mainFile);
-	aafAssertMediaInitComplete(_mainFile);
-	if (_mainFile->isAAFMedia())
-	{
-	   aafAssert(fileMob != NULL, _mainFile, AAFRESULT_INVALID_FILE_MOB);
-	}
-	XPROTECT(_mainFile)
-	{
-		_mainFile->GetHeadObject(&head);
+	IUnknown				*dataObj = NULL;
+	IUnknown				*iFileMob = NULL;
+	IAAFEssenceAccess		*iAccess = NULL;
+	IUnknown				*iUnk = NULL;
+	IAAFEssenceDataStream	*edStream = NULL;
+	IAAFPlugin				*plugin = NULL;
+	IAAFEssenceContainer	*container = NULL;
+	IAAFPlugin				*plug = NULL;
+	aafUID_t				fileMobUID, essenceKind;
+	aafLength_t				oneLength = CvtInt32toLength(1, oneLength);
+	AAFRESULT				aafError = AAFRESULT_SUCCESS;
+	ImplAAFDictionary		*dataDict = NULL;
+	ImplAAFHeader			*compHead = NULL;
+	ImplAAFHeader			*dataHead = NULL;
+	ImplAAFPluginManager	*plugins = NULL;
+	ImplAAFEssenceData		*implData = NULL;
+	ImplAAFMobSlot			*tmpTrack = NULL;
+	ImplAAFSourceMob		*fileMob = NULL;
+	aafSubChannel_t			*destPtr;
+	wchar_t					*nameBuf = NULL;
+	aafInt32				buflen, n;
+	aafUID_t				aafFormat = ContainerAAF;
+	aafmMultiCreate_t		*initPtr;
+	aafRational_t			sampleRate;
 
-		_masterTrackID = 1;
-	
-		/* Initialize the basic fields of the media handle
-		 */
-		CHECK(InitMediaHandle(fileMob));
+	XPROTECT()
+	{
+		_openType = kAAFCreated;
+		_dataFile = NULL;
+		
+		CHECK(masterMob->MyHeadObject(&compHead));
+		
+		if((_destination != NULL) && EqualAUID(&_fileFormat, &ContainerAAF))
+		{
+			CHECK(CreateEssenceFileFromLocator (compHead, _destination, &_dataFile));
+			CHECK(_dataFile->GetHeader(&dataHead));
+		}
+		else
+		{
+			CHECK(masterMob->MyHeadObject(&dataHead));
+		}
+		
+		// Can't put raw media inside of an AAF File
+		if(_destination == NULL && !EqualAUID(&_fileFormat, &aafFormat))
+			RAISE(AAFRESULT_WRONG_MEDIATYPE);
+		
+		
 		_masterMob = masterMob;
 		_masterMob->AcquireReference();
-		_fileMob = fileMob;
-		_compEnable = enable;
-		_dataFile = _mainFile;
-		if (_mainFile->isAAFMedia())
-		  {
-		     CHECK(fileMob->GetMediaDescription(&_mdes));
-			  /* JeffB-- copied Roger's change from the single-channel case to use */
-			  /* 			a private variable to store the codec ID.  Also copied    */
-			  /* My fix to Roger's change */
-			  /* */
-			  if(_mdes->ReadString(OMMDESCodecID, codecIDString, 
-											OMUNIQUENAME_SIZE) == AAFRESULT_SUCCESS)
-				{
-					variety = strchr(codecIDString, ':');
-					if(variety != NULL)
-					{
-						*variety = '\0';
-						variety++;			/* Skip over the separator */
-						_codecVariety = (char *)_mainFile->omOptMalloc(strlen(variety)+1);
-						strcpy(_codecVariety, variety);
-					}
-					CodecID = (aafCodecID_t)codecIDString;
-					TableLookupBlock(_mainFile->_session->_codecID, CodecID, 
-										 sizeof(_pvt->codecInfo), &_pvt->codecInfo, &found);
-				}
-		      else
-		      {
-		     		CHECK(_mdes->GetClassID(mdesTag));
-		     		CHECK(TableClassIDLookup(_mainFile->_session->_codecMDES, mdesTag,
-						sizeof(_pvt->codecInfo), &_pvt->codecInfo, &found));
-				}
-		  }
-		else
-		  {
-		     CodecID = _mainFile->_rawCodecID;
-		     	
-		     TableLookupBlock(_mainFile->_session->_codecID, CodecID, 
-							 sizeof(_pvt->codecInfo), &_pvt->codecInfo, &found);
-		  }
-		 if(!found)
-			     RAISE(AAFRESULT_CODEC_INVALID); 
-
-		_numChannels = arrayElemCount;
-		_channels = (aafSubChannel_t *)
-			_mainFile->omOptMalloc(sizeof(aafSubChannel_t) * _numChannels);
-		XASSERT((_channels != NULL), AAFRESULT_NOMEMORY);
 		
+		_numChannels = arrayElemCount;
+		_channels = (aafSubChannel_t *) new aafSubChannel_t[_numChannels];
+		XASSERT((_channels != NULL), AAFRESULT_NOMEMORY);
 
+		
+		// When we enable the cloneExternal (below) then Don't do this call for creating the
+		// file mob twice.
+		// Don't add slots here, as they will be added in the loop below
+		sampleRate = mediaArray[0].sampleRate;		// !!! Assumes that edit rate == sample rate of channel 1
+		essenceKind = *(mediaArray[0].mediaKind);	// Assumes that mediaKind somes from track #1
+		CHECK(CreateFileMob(compHead, AAFFalse, 0, NULL, essenceKind, sampleRate, sampleRate,
+			_destination, &_compFileMob));
+		CHECK(_compFileMob->GetMobID(&fileMobUID));
+		if(compHead != dataHead)
+		{
+			CHECK(CreateFileMob(dataHead, AAFFalse, 0, &fileMobUID, essenceKind, sampleRate, sampleRate,
+				NULL, &_dataFileMob));
+			_dataFileMob->AcquireReference();	//!!!Leaking here?
+		}
+		else
+			_dataFileMob = NULL;
+
+		
 		for (n = 0; n < arrayElemCount; n++)
 		{
 			initPtr = mediaArray + n;
 			destPtr = _channels + n;
-         if(_mainFile->isAAFMedia())
-         {
-				/* JeffB: Handle the case where an existing file=>tape mob connection exists
-				 */
-				if(fileMob->FindTrackByTrackID(initPtr->trackID, &tmpTrack) == AAFRESULT_TRACK_NOT_FOUND)
+//!!!			if(isAAFMedia())
+			{
+			/* JeffB: Handle the case where an existing file=>tape mob connection exists
+				*/
+				if(fileMob->FindSlotBySlotID(initPtr->slotID, &tmpTrack) == AAFRESULT_SLOT_NOT_FOUND)
 				{
-				 	CHECK(fileMob->AddNilReference(
-					  initPtr->trackID, oneLength, initPtr->mediaKind, editRate));
+					// !!! Assumes that the sampleRate == editRate
+					CHECK(fileMob->AddNilReference(
+						initPtr->slotID, oneLength, initPtr->mediaKind, initPtr->sampleRate));
+					tmpTrack->ReleaseReference();
+					tmpTrack = NULL;
 				}
-				CHECK(fileMob->FindTrackByTrackID(initPtr->trackID, &tmpTrack));
-				CHECK(tmpTrack->SetPhysicalNum(initPtr->trackID));
-		   }
-			destPtr->mediaKind = initPtr->mediaKind;
-			destPtr->trackID = initPtr->trackID;
+				CHECK(fileMob->FindSlotBySlotID(initPtr->slotID, &tmpTrack));
+				CHECK(tmpTrack->SetPhysicalNum(initPtr->subTrackNum));
+			}
+			destPtr->mediaKind = *(initPtr->mediaKind);
+			destPtr->trackID = initPtr->slotID;
 			destPtr->physicalOutChan = initPtr->subTrackNum;
-			CvtInt32toPosition(0, destPtr->dataOffset);
-			CvtInt32toLength(0, destPtr->numSamples);
-			destPtr->sampleRate = initPtr->sampleRate;
+			CHECK(masterMob->AddMasterSlot (&essenceKind, initPtr->slotID, _compFileMob, initPtr->slotID, L"A Slot"));	// Should be NULL or something useful!!!
+//!!!			CvtInt32toPosition(0, destPtr->dataOffset);
+//!!!			CvtInt32toLength(0, destPtr->numSamples);
+//!!!			destPtr->sampleRate = initPtr->sampleRate;
 		}
-	
-		_openType = kAAFCreated;
-	
-		if(_mainFile->isAAFMedia())
-		{	
-			/* Initialize the fields which are derived from information in
-			 * the _mainFile mob or media descriptor.
-			 */
-			CHECK(_mdes->WriteRational(OMMDFLSampleRate, mediaArray[0].sampleRate));
-
-			CHECK(_codec->codecGetMetaInfo(_mainFile->_session, &_pvt->codecInfo,_codecVariety,NULL, 0,
-											&info));
-			_dataObj = AAFNewClassFromClassID(_mainFile,info.dataClassID, NULL);
-		}
-	
-		if(_mainFile->isAAFMedia())
-		{
-			AAFGetDateTime(&create_timestamp);
-			  {
-				 CHECK(head->WriteTimeStamp(OMHEADLastModified, create_timestamp));
-			  }
+		_codecID = codecID;
 		
-			/* do this now, delay may mess up data contiguity
-			 */
-			CHECK(fileMob->ReadUID(OMMOBJMobID, &uid));
-			CHECK(_dataObj->WriteUID(OMMDATMobID, uid));
-			CHECK(head->AppendObjRefArray(OMHEADMediaData, _dataObj));
+		
+		plugins = ImplAAFContext::GetInstance()->GetPluginManager();
+		//!!!Handle case where multiple codecs exist for a codecID
+		CHECK(plugins->GetPluginInstance(_codecID, &plugin));
+		CHECK(plugin->QueryInterface(IID_IAAFEssenceCodec, (void **)&_codec));
+		plugin->Release();
+		plugin = NULL;
+				
+		iUnk = static_cast<IUnknown *> (this->GetContainer());
+		CHECK(iUnk->QueryInterface(IID_IAAFEssenceAccess, (void **)&iAccess));
+		iUnk->Release();
+		iUnk = NULL;
+		CHECK(_codec->SetEssenceAccess(iAccess));
+		// Now _codec is holding onto a reference to THIS, and we have a reference to _codec
+		// Creating a cycle which will never free.  I am decrementing the AAFEssenceAccess reference
+		//  Count  artificially by one, so that when EssenceAccess is Released, both objects will
+		// be deleted (the correct behavior).
+		iAccess->Release();
+		
+		
+		if(_destination != NULL)
+		{
+			if(EqualAUID(&_fileFormat, &aafFormat))
+			{
+				//!!!				ImplAAFMob	*destmob;
+				
+				//!!!				CHECK(CloneExternal (kFollowDepend, kNoIncludeMedia, _destFile, &destMob));
+			}
 		}
-	
-		/* Call the codec to create the actual media.
-		 */
-		CHECK(_codec->codecCreate(this));
-  		SetVideoLineMap(16, kTopFieldNone);
+		
+		CHECK(CreateCodecDef(compHead, codecID, &_codecDescriptor));
+		CHECK(CreateContainerDef(compHead))
+			//!!! As an optimization, use clone to move a copy of the definition objects into the media file.
+			// This can be just a copy because there shouldn't be any definitions there yet...
+			
+			if((dataHead != compHead) && (dataHead != NULL))
+			{
+				CHECK(CreateContainerDef(dataHead))
+					CHECK(CreateCodecDef(dataHead, codecID, NULL));
+			}
+			
+			// There isn't yet a container for AAF data, so this must be special-cased
+			if(EqualAUID(&_fileFormat, &aafFormat))
+			{
+				aafUID_t	essenceDataID;
+				
+				CHECK(_codec->GetEssenceDataID(&essenceDataID));
+				CHECK(dataHead->GetDictionary(&dataDict));
+				CHECK(dataDict->CreateInstance(&essenceDataID, (ImplAAFObject **)&implData));
+				dataObj = static_cast<IUnknown *> (implData->GetContainer());
+				
+				CHECK(implData->SetFileMob(_dataFileMob == NULL ? _compFileMob : _dataFileMob));
+				CHECK(dataHead->AppendEssenceData (implData));
+				
+				CHECK(CoCreateInstance(CLSID_AAFEssenceDataStream,
+					NULL, 
+					CLSCTX_INPROC_SERVER, 
+					IID_IAAFEssenceStream, 
+					(void **)&_stream));
+				//			_stream->AddRef();
+				CHECK(_stream->QueryInterface(IID_IAAFEssenceDataStream, (void **)&edStream));
+				edStream->Init(dataObj);
+				edStream->Release();
+				edStream = NULL;
+			}
+			else
+			{
+				_destination->GetPathBufLen(&buflen);
+				nameBuf = new wchar_t[buflen];
+				if(nameBuf == NULL)
+					RAISE(AAFRESULT_NOMEMORY);
+				CHECK(_destination->GetPath(nameBuf, buflen));
+				
+				CHECK(plugins->GetPluginInstance(_fileFormat, &plug));
+				CHECK(plug->QueryInterface(IID_IAAFEssenceContainer, (void **)&container));
+				plug->Release();
+				plug = NULL;
+				
+				CHECK(container->CreateEssenceStream(nameBuf, &fileMobUID, &_stream));
+				delete nameBuf;
+				nameBuf = NULL;			
+				container->Release();
+				container = NULL;
+			}
+			
+			CHECK(compHead->SetModified());		// To NOW
+			if(dataHead != compHead)
+			{
+				CHECK(dataHead->SetModified());	// To NOW
+			}
+						
+			iFileMob = static_cast<IUnknown *> (_compFileMob->GetContainer());	// Codec knowns about compFilemob only
+			CHECK(_codec->Create(iFileMob, _variety, _stream, arrayElemCount, mediaArray));
+			(void)(_codec->SetCompressionEnabled(Enable == kSDKCompressionEnable ? AAFTrue : AAFFalse));
+			
+			//		if(dataObj != NULL)
+			//		{
+			//			dataObj->Release();
+			//			dataObj = NULL;
+			//		}
+			if(dataDict != NULL)
+			{
+				dataDict->ReleaseReference();
+				dataDict = NULL;
+			}
+			if(compHead != NULL)
+			{
+				compHead->ReleaseReference();
+				compHead = NULL;
+			}
+			if(dataHead != NULL)
+			{
+				dataHead->ReleaseReference();
+				dataHead = NULL;
+			}
+			if(plugins != NULL)
+			{
+				plugins->ReleaseReference();
+				plugins = NULL;
+			}
+			if(implData != NULL)
+			{
+				implData->ReleaseReference();
+				implData = NULL;
+			}
+			if(tmpTrack != NULL)
+			{
+				tmpTrack->ReleaseReference();
+				tmpTrack = NULL;
+			}
 	}
 	XEXCEPT
+	{
+		if(fileMob != NULL)
+			fileMob->ReleaseReference();
+		if(tmpTrack != NULL)
+			tmpTrack->ReleaseReference();
+		if(dataDict != NULL)
+			dataDict->ReleaseReference();
+		if(compHead != NULL)
+			compHead->ReleaseReference();
+		if(dataHead != NULL)
+			dataHead->ReleaseReference();
+		if(plugins != NULL)
+			plugins->ReleaseReference();
+		if(implData != NULL)
+			implData->ReleaseReference();
+		if(nameBuf != NULL)
+			delete nameBuf;
+		if(edStream != NULL)
+			edStream->Release();
+		if(iAccess != NULL)
+			iAccess->Release();
+		//		if(dataObj != NULL)
+		//			dataObj->Release();
+		if(plugin != NULL)
+			plugin->Release();
+		if(container != NULL)
+			container->Release();
+		if(plug != NULL)
+			plug->Release();
+		_dataFile = NULL;
+	}
 	XEND
-	
+		
 	return (AAFRESULT_SUCCESS);
-#else
-	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
 }
 
 /**ImplementationPrivate**/
@@ -1022,17 +1146,7 @@ AAFRESULT ImplAAFEssenceAccess::SetEssenceCodecFlavour(aafUID_t variety)
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFEssenceAccess::SetBlockingSize (aafUInt32  /*numBytes*/)
 {
-#if FULL_TOOLKIT
-	aafAssertMediaHdl(this);
-	aafAssertValidFHdl(_mainFile);
-	aafAssertMediaInitComplete(_mainFile);
-	aafAssert(numBytes >= 0, _mainFile, AAFRESULT_BLOCKING_SIZE);
-
-	_stream->SetBlockingSize(numBytes);
-	return(AAFRESULT_SUCCESS);
-#else
-	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
+	return AAFRESULT_NOT_IMPLEMENTED;		// !!!Get rid of this from the API
 }
 
 	//@comm Allocating the space in this fashion ensures that the data will be
@@ -1206,17 +1320,6 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFEssenceAccess::CompleteWrite ()
 {
-#if FULL_TOOLKIT
-	AAFFile *       	main;
-	AAFMedia  *tstMedia;
-	aafInt16       	n;
-	aafTrackID_t	trackID;
-	aafTrackID_t   	fileTrackID;
-	aafErr_t		aafError = AAFRESULT_SUCCESS;
-
-	aafAssertMediaInitComplete(_mainFile);
-	main = _mainFile;
-#endif
 	IUnknown					*iUnk = NULL;
 	IAAFSourceMob				*iCompFM = NULL;
 
@@ -1264,91 +1367,6 @@ AAFRESULT STDMETHODCALLTYPE
 			CHECK(_dataFile->Save());
 		}
 
-#if FULL_TOOLKIT
-		if((_openType == kAAFCreated) || (_openType == kAAFAppended))
-		{
-			if(main->isAAFMedia())
-			{
-				if(_numChannels == 1)
-					trackID = _masterTrackID;
-				else if(_masterMob != NULL)
-				{
-					aafNumTracks_t		numMasterTracks;
-					CHECK(_masterMob->GetNumTracks(&numMasterTracks));
-					trackID = numMasterTracks + 1;
-				}
-				else
-				  trackID = 1;
-				for(n = 0; n < _numChannels; n++)
-				{
-					CHECK(_mdes->WriteLength(OMMDFLLength, _channels[n].numSamples));
-					
-					if((_openType == kAAFCreated) && (_masterMob != NULL))
-					{
-					  /* JEFF!! Changed fileTrackID to be 1 when creating audio.
-						* This should probably also be 1 for video?
-						*/
-					  if (_channels[n].mediaKind->IsSoundKind(kExactMatch, &aafError))
-						 {
-							fileTrackID = 1+n;
-						 }
-					  else
-						 fileTrackID = trackID+n;
-
-						CHECK(_masterMob->MobAddMasterTrack(
-												 _channels[n].mediaKind, trackID+n, 
-/*															 trackID+n, */
-															 fileTrackID,
-													 NULL, _fileMob));
-					}
-				}
-				CHECK(ReconcileMobLength(_fileMob));
-				if(_masterMob != NULL)
-				{
-					CHECK(ReconcileMobLength(_masterMob));
-				}
-			}
-		}
-	
-		/* Unlink this media from the list maintained by the AAFFile *
-		 */
-		if (this == main->_topMedia)
-			main->_topMedia = _pvt->nextMedia;
-		else
-		{
-			tstMedia = main->_topMedia;
-			while (tstMedia->_pvt->nextMedia != NULL)
-			{
-				if (tstMedia->_pvt->nextMedia == this)
-					tstMedia->_pvt->nextMedia = _pvt->nextMedia;
-				else
-					tstMedia = tstMedia->_pvt->nextMedia;
-			}
-		}
-	
-
-		if(_channels != NULL)
-		{
-			main->omOptFree(_channels);
-			_channels = NULL;
-		}
-		
-		if(_stream != NULL)
-			delete _stream;
-		_stream = NULL;
-		if(_pvt != NULL)
-			main->omOptFree(_pvt);
-		_pvt = NULL;
-		
-		if(_codecVariety != NULL)
-			main->omOptFree(_codecVariety);
-		_codecVariety = NULL;
-		
-		/* Clear the cookie so that this handle will show up as invalid
-		 * if the client continues to use it.
-		 */
-		_cookie = 0;
-#endif
 	}
 	XEXCEPT
 	{
@@ -1374,11 +1392,13 @@ AAFRESULT STDMETHODCALLTYPE
                            aafUID_t mediaKind,
                            aafInt16* numCh)
 {
-#if FULL_TOOLKIT
-	aafPosition_t		zeroPos;
+	aafPosition_t			zeroPos;
 	ImplAAFFindSourceInfo	*sourceInfo;
-	ImplAAFSourceMob *	fileMob;
-	
+	ImplAAFSourceMob		*fileMob;
+	IAAFEssenceStream		*stream;
+	ImplAAFDictionary		*dict = NULL;
+	IUnknown				*iUnk = NULL;
+
 	aafAssert(numCh != NULL, _mainFile, AAFRESULT_NULL_PARAM);
 	XPROTECT()
 	{
@@ -1388,15 +1408,28 @@ AAFRESULT STDMETHODCALLTYPE
 									   NULL,
 									   &sourceInfo));
 		CHECK(sourceInfo->GetMob((ImplAAFMob **)&fileMob));
-		CHECK(_codec->GetNumChannels(fileMob, mediaKind, numCh));
+		CHECK(CoCreateInstance(CLSID_AAFEssenceDataStream,
+				NULL, 
+				CLSCTX_INPROC_SERVER, 
+				IID_IAAFEssenceStream, 
+				(void **)&stream));
+		iUnk = static_cast<IUnknown *> (fileMob->GetContainer());
+		CHECK(_codec->GetNumChannels(iUnk, mediaKind, stream, numCh));
+		dict->ReleaseReference();
+		dict = NULL;
+		stream->Release();
+		stream = NULL;
 	}
 	XEXCEPT
+	{
+		if(dict)
+			dict->ReleaseReference();
+		if(stream)
+			stream->Release();
+	}
 	XEND
 	
 	return(AAFRESULT_SUCCESS);
-#else
-	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
 }
 
 
@@ -1488,16 +1521,7 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFEssenceAccess::SetTransformParameters (ImplAAFEssenceFormat * /*op*/)
 {
-#if FULL_TOOLKIT
-	aafAssertMediaHdl(this);
-	aafAssertValidFHdl(_mainFile);
-	aafAssertMediaInitComplete(_mainFile);
-
-	return (_codec->codecPutInfo(this, kVideoMemFormat, _pictureKind,
-								sizeof(aafVideoMemOp_t), op));
-#else
 	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
 }
 
 
@@ -1765,41 +1789,39 @@ AAFRESULT STDMETHODCALLTYPE
 
 /****/
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceAccess::IsHardwareAssistedCodec (aafCodecID_t  /*codecID*/,
-                           ImplAAFSourceMob * /*mob*/,
-                           aafBool*  /*result*/)
+    ImplAAFEssenceAccess::IsHardwareAssistedCodec (aafCodecID_t  /*codecID*/,	//!!!Get rid of parm fromIDL
+                           ImplAAFSourceMob *mob,
+                           aafBool*result)
 {
-#if FULL_TOOLKIT
-	aafCodecSelectInfo_t	select;
-	codecTable_t			codec_data;
-	aafBool					found;
-	
-	aafAssertValidFHdl(_mainFile);
-	aafAssertMediaInitComplete(_mainFile);
-	aafAssert(result != NULL, _mainFile, AAFRESULT_NULL_PARAM);
+	ImplAAFDictionary		*dict = NULL;	
+	ImplAAFPluginDescriptor	*desc = NULL;
+	aafUID_t				descID;
 
-	*result = FALSE;
-	XPROTECT(_mainFile)
-	{
-		TableLookupBlock(_mainFile->_session->_codecID, codecID,
-									sizeof(codec_data), &codec_data, &found);
-		if(!found)
-			RAISE(AAFRESULT_CODEC_INVALID);
+	if(result == NULL)
+		return AAFRESULT_NULL_PARAM;
 	
-		CHECK(_codec->codecGetSelectInfo(_mainFile, &codec_data, mdes, &select));
-		*result = select.hwAssisted;
+	*result = AAFFalse;
+	XPROTECT()
+	{
+ 		CHECK(_codec->GetEssenceDescriptorID (&descID))
+		CHECK(mob->GetDictionary(&dict));
+		CHECK(dict->LookupPluginDescriptor(&descID, &desc));
+		CHECK(desc->IsAccelerated(result));
+		desc->ReleaseReference();
+		desc = NULL;
+		dict->ReleaseReference();
+		dict = NULL;
 	}
 	XEXCEPT
 	{
-		if(XCODE() == AAFRESULT_INVALID_OP_CODEC)
-			NO_PROPAGATE();
+		if(desc != NULL)
+			desc->ReleaseReference();
+		if(dict != NULL)
+			dict->ReleaseReference();
 	}
 	XEND
 	
 	return (AAFRESULT_SUCCESS);
-#else
-	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
 }
 
 	//@comm That is, does
@@ -1895,10 +1917,7 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFEssenceAccess::SetStreamCacheSize (aafUInt32  /*cacheSize*/)
 {
-#if FULL_TOOLKIT
-#else
-	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
+	return AAFRESULT_NOT_IMPLEMENTED;		// Get rid of this from the IDL!
 }
 
 	//@comm Replaces omfmSetStreamCacheSize */
@@ -1908,10 +1927,7 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFEssenceAccess::GetStoredByteOrder (eAAFByteOrder_t *  /*pOrder*/)
 {
-#if FULL_TOOLKIT
-#else
-	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
+	return AAFRESULT_NOT_IMPLEMENTED;		//!!!
 }
 
 
@@ -1919,10 +1935,7 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFEssenceAccess::GetNativeByteOrder (eAAFByteOrder_t *  /*pOrder*/)
 {
-#if FULL_TOOLKIT
-#else
-	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
+	return AAFRESULT_NOT_IMPLEMENTED;		//!!!
 }
 
 AAFRESULT ImplAAFEssenceAccess::MakeAAFContainerDef(ImplAAFHeader *head, ImplAAFContainerDef **result)
@@ -2340,6 +2353,7 @@ ImplAAFEssenceAccess::ModifyEssenceFileFromLocator (ImplAAFHeader *srcHead, Impl
 
 AAFRESULT
 ImplAAFEssenceAccess::CreateFileMob (ImplAAFHeader *newHead,
+								aafBool				addSlots,
 								aafSlotID_t			slotID,
 								aafUID_t			*newMobID,
 								aafUID_t			mediaKind,
@@ -2367,15 +2381,18 @@ ImplAAFEssenceAccess::CreateFileMob (ImplAAFHeader *newHead,
 		
 		*result = fileMob;
 		AcquireImplReference(fileMob);
-		/* JeffB: Handle the case where an existing file=>tape mob connection exists
-		 */
-		if(fileMob->FindSlotBySlotID(slotID, &tmpSlot) == AAFRESULT_SLOT_NOT_FOUND)
+		if(addSlots)
 		{
-			CHECK(fileMob->AddNilReference(slotID, 
-				0, &mediaKind, editRate));
+			/* JeffB: Handle the case where an existing file=>tape mob connection exists
+			 */
+			if(fileMob->FindSlotBySlotID(slotID, &tmpSlot) == AAFRESULT_SLOT_NOT_FOUND)
+			{
+				CHECK(fileMob->AddNilReference(slotID, 
+					0, &mediaKind, editRate));
+			}
+			CHECK(fileMob->FindSlotBySlotID(slotID, &tmpSlot));
+			CHECK(tmpSlot->SetPhysicalNum(slotID));
 		}
-		CHECK(fileMob->FindSlotBySlotID(slotID, &tmpSlot));
-		CHECK(tmpSlot->SetPhysicalNum(slotID));
 //		CHECK(newHead->GetDictionary (&dict));
 		CHECK(_codec->GetEssenceDescriptorID(&essenceDescriptorID));
 		CHECK(dict->CreateInstance(&essenceDescriptorID, (ImplAAFObject **)&mdes));
@@ -2414,178 +2431,3 @@ ImplAAFEssenceAccess::CreateFileMob (ImplAAFHeader *newHead,
 		
 	return AAFRESULT_SUCCESS;
 }
-
- #if FULL_TOOLKIT
- /************************************************************************
- *
- * Internal support functions
- *
- ************************************************************************/
-
-/************************
- * SetStreamCacheSize
- *
- * 		Sets the size of the buffer used when caching read and
- *
- * Argument Notes:
- *		Zero is a calid cache size, although negative numbers are not
- *		allowed.
- *
- * ReturnValue:
- *		Error code (see below).
- *
- * Possible Errors:
- *		Standard errors (see top of file).
- *		AAFRESULT_INVALID_CACHE_SIZE -- Cache size must be >= 0.
- */
-aafErr_t AAFMedia::SetStreamCacheSize(
-			aafUInt32			cacheSize)		/* make the cache this big */
-{
-	
-	aafAssertMediaHdl(this);
-	aafAssert(cacheSize >= 0, _mainFile, AAFRESULT_INVALID_CACHE_SIZE);
-	
-	XPROTECT(_mainFile)
-	{
-#if	AAF_ENABLE_STREAM_CACHE
-		if((_stream->_cachePtr == NULL) || (cacheSize != _stream->_cachePhysSize))
-		{
-			if(_stream->_cachePtr != NULL)
-				_mainFile->omOptFree(_stream->_cachePtr);
-			
-			_stream->_cachePtr = (char *)_mainFile->omOptMalloc(cacheSize);
-			if(_stream->_cachePtr != NULL)
-				_stream->_cachePhysSize = cacheSize;
-			else
-			{
-				_stream->_cachePhysSize = 0;
-				RAISE(AAFRESULT_NOMEMORY);
-			}
-		}
-#endif
-	}
-	XEXCEPT
-	XEND
-
-	return(AAFRESULT_SUCCESS);
-}
-
-/************************
- *  Function: SourceGetVideoSignalType
- *
- * 		If media has video, what is it's signal type
- *
- * Argument Notes:
- *		Get from tape if possible, if not, best guess.
- *
- * ReturnValue:
- *		Error code (see below).
- *
- * Possible Errors:
- *		Standard errors (see top of file).
- */
-
-aafErr_t AAFMedia::SourceGetVideoSignalType(aafVideoSignalType_t *signalType)
-{
-	aafPosition_t	zeroPos;
-	aafVideoSignalType_t tmpSignalType = kVideoSignalNull;
-	AAFMobSlot *mslot = NULL;
-	AAFIterate *iterHdl;
-	aafSearchCrit_t searchCrit;
-	aafRational_t editRate;
-	double editRateFloat;
-	aafErr_t aafError = AAFRESULT_SUCCESS;
-	aafInt32 trackID = -1;
-	aafInt16 i = 0;
-	AAFDataDef *pictureKind = NULL;
-	aafFindSourceInfo_t	sourceInfo;
-	AAFHeader		*mainHead;
-
-	XPROTECT(_mainFile)
-	{
-		CHECK(_mainFile->GetHeadObject(&mainHead));
-		CvtInt32toPosition(0, zeroPos);
-
-		/* find video channel in file mob */
-		mainHead->DatakindLookup(PICTUREKIND, &pictureKind, &aafError);
-		CHECK(aafError);				
-		
-		i = _numChannels;
-		while (i > 0 && trackID < 0)
-		{
-			if (_channels[i-1].mediaKind == pictureKind)
-				trackID = _channels[i-1].trackID;
-			i--;
-		}
-		
-		if (trackID >= 0)
-		{
-			aafError = _fileMob->SearchSource(trackID,
-							zeroPos, kTapeMob, NULL, NULL, NULL, &sourceInfo);
-		}
-		
-
-		if (aafError == AAFRESULT_SUCCESS && sourceInfo.mob != NULL)
-		{
-			aafError = ((AAFTapeMob *)sourceInfo.mob)->GetSignalType(&tmpSignalType);
-			if (aafError == AAFRESULT_SUCCESS && tmpSignalType != kVideoSignalNull)
-			{
-				*signalType = tmpSignalType;
-				return(AAFRESULT_SUCCESS);
-			}
-			else /* no tape descriptor with signal tape, check editRate */
-			{
-				iterHdl = new AAFIterate(_mainFile);
-				searchCrit.searchTag = kByDatakind;
-				strcpy(searchCrit.tags.datakind, PICTUREKIND);
-				CHECK(iterHdl->MobGetNextSlot(sourceInfo.mob, &searchCrit, &mslot));
-				
-				delete iterHdl;
-				iterHdl = NULL;
-				
-				if (mslot != NULL)
-				{
-					CHECK(mslot->GetEditRate(&editRate));
-					editRateFloat = (double)editRate.numerator / (double)editRate.denominator;
-					if (fabs(editRateFloat - 29.97) < .1)
-						tmpSignalType = kNTSCSignal;
-					else if (fabs(editRateFloat - 25.0) < .01)
-						tmpSignalType = kPALSignal;
-					else
-						tmpSignalType = kVideoSignalNull;
-
-					if (tmpSignalType != kVideoSignalNull)
-					{
-						*signalType = tmpSignalType;
-						return(AAFRESULT_SUCCESS);
-					}
-				}
-			}
-		}
-		/* if this code is being executed, then the signal format wasn't 
-		   found or deduced by the tape mob.  At this point, try guessing
-		   from the sample rate? */
-		CHECK(_mdes->ReadRational(OMMDFLSampleRate, &editRate));
-		editRateFloat = (double)editRate.numerator / (double)editRate.denominator;
-		if (fabs(editRateFloat - 29.97) < .1)
-			*signalType = kNTSCSignal;
-		else if (fabs(editRateFloat - 25.0) < .01)
-			*signalType = kPALSignal;
-		else
-			*signalType = kVideoSignalNull;
-
-		return(AAFRESULT_SUCCESS);
- 
-	}
-	XEXCEPT
-		if (iterHdl)
-		{
-			iterHdl = NULL; /* do this first to prevent infinite loops */
-			delete iterHdl;
-		}
-	XEND
-	
-	*signalType = kVideoSignalNull;
-	return(AAFRESULT_SUCCESS);
-}
-#endif

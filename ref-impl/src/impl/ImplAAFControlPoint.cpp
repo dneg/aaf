@@ -157,7 +157,6 @@ AAFRESULT STDMETHODCALLTYPE
 	aafUID_t			newUID;
 	ImplAAFHeader		*head = NULL;
 	ImplAAFDictionary	*dict = NULL;
-	ImplAAFTypeDef		*def;
 
 	if(pTypeDef == NULL)
 		return AAFRESULT_NULL_PARAM;
