@@ -39,8 +39,8 @@
 #include <string.h>
 
 OMStorable::OMStorable(void)
-: _persistentProperties(), _containingObject(0), _name(0),
-  _pathName(0), _containingProperty(0), _store(0),
+: _persistentProperties(), _container(0), _name(0),
+  _pathName(0), _store(0),
   _classFactory(0)
 {
   TRACE("OMStorable::OMStorable");
@@ -55,7 +55,7 @@ OMStorable::~OMStorable(void)
   // object that is still attached. That is, the assertion detects an
   // attempt to create a dangling strong reference.
   //
-  PRECONDITION("Object not referenced", _containingProperty == 0);
+  PRECONDITION("Object not attached", !attached());
 
   delete [] _name;
   _name = 0;
@@ -128,68 +128,44 @@ OMStorable* OMStorable::restoreFrom(const OMStorable* containingObject,
   OMStorable* object = classFactory->create(cid);
   ASSERT("Registered class id", object != 0);
   ASSERT("Valid class factory", classFactory == object->classFactory());
-  // give the object a parent, no orphans allowed
-  object->setContainingObject(containingObject);
-  // give the object a name, all new objects need a name and so here
-  // we baptize them
-  object->setName(name);
+  // Attach the object.
+  object->attach(containingObject, name);
   object->setStore(&s);
   f->objectDirectory()->insert(object->pathName(), object);
   object->restoreContentsFrom(s);
   return object;
 }
 
-  // @mfunc  The <c OMStorable> that contains (owns) this
-  //          <c OMStorable>.
-  //   @rdesc The containing <c OMStorable>.
-  //   @this const
-OMStorable* OMStorable::containingObject(void) const
+  // @mfunc Attach this <c OMStorable>.
+  //   @parm The containining <c OMStorable>.
+  //   @parm The name to be given to this <c OMStorable>.
+void OMStorable::attach(const OMStorable* container, const char* name)
 {
-  TRACE("OMStorable::containingObject");
+  TRACE("OMStorable::attach");
+  // tjb PRECONDITION("Not attached", !attached());
+  PRECONDITION("Valid container", container != 0);
+  PRECONDITION("Valid name", validString(name));
 
-  return const_cast<OMStorable*>(_containingObject);
+  _container = container;
+  setName(name);
+
+  POSTCONDITION("Attached", attached());
 }
 
-  // @mfunc Inform this <c OMStorable> that it is contained
-  //        (owned) by the <c OMStorable> <p containingObject>.
-  //   @parm The containing <c OMStorable>.
-void OMStorable::setContainingObject(const OMStorable* containingObject)
+  // @mfunc Detach this <c OMStorable>.
+void OMStorable::detach(void)
 {
-  TRACE("OMStorable::setContainingObject");
-  //PRECONDITION("No valid old containing object", _containingObject == 0);
-  PRECONDITION("Valid new containing object", containingObject != 0);
-  _containingObject = containingObject;
+  TRACE("OMStorable::detach");
+  PRECONDITION("Attached", attached());
+
+  _container = 0;
+
   delete [] _pathName;
   _pathName = 0;
-}
+  delete [] _name;
+  _name = 0;
 
-  // @mfunc Inform this <c OMStorable> that it is no longer contained.
-void OMStorable::clearContainingObject(void)
-{
-  TRACE("OMStorable::clearContainingObject");
-  _containingObject = 0;
-}
-
-  // @mfunc Inform this <c OMStorable> that it is contained
-  //        within the <c OMProperty> <p containingProperty>.
-  //   @parm The containing <c OMProperty>.
-void OMStorable::setContainingProperty(const OMProperty* containingProperty)
-{
-  TRACE("OMStorable::setContainingProperty");
-  PRECONDITION("Object not already attached", _containingProperty == 0);
-  PRECONDITION("Valid property", containingProperty != 0);
-
-  _containingProperty = const_cast<OMProperty*>(containingProperty);
-
-  POSTCONDITION("Object properly attached", _containingProperty != 0);
-}
-
-  // @mfunc Inform this <c OMStorable> that it is no longer
-  //        contained within any <c OMProperty>.
-void OMStorable::clearContainingProperty(void)
-{
-  TRACE("OMStorable::clearContainingProperty");
-  _containingProperty = 0;
+  PRECONDITION("Detached", !attached());
 }
 
   // @mfunc The name of this <c OMStorable>.
@@ -224,8 +200,8 @@ void OMStorable::setName(const char* name)
 OMFile* OMStorable::file(void) const
 {
   TRACE("OMStorable::file");
-  PRECONDITION("Valid containing object", _containingObject != 0);
-  return _containingObject->file();
+  PRECONDITION("Valid containing object", _container != 0);
+  return _container->file();
 }
 
   // @mfunc The path to this <c OMStorable> from the root of
@@ -251,12 +227,12 @@ const char* OMStorable::pathName(void) const
 bool OMStorable::isRoot(void) const
 {
   TRACE("OMStorable::isRoot");
-  PRECONDITION("Valid containing object", containingObject() != 0);
+  PRECONDITION("Valid containing object", _container != 0);
   bool result;
 
   // By definition the root object is the one contained directly
   // within the file.
-  if (containingObject() == file()) {
+  if (_container == file()) {
     result = true;
   } else {
     result = false;
@@ -272,7 +248,7 @@ OMStoredObject* OMStorable::store(void) const
   TRACE("OMStorable::store");
 
   if (_store == 0) {
-    OMStorable* container = containingObject();
+    const OMStorable* container = _container;
     ASSERT("Valid container", container != 0);
     OMStorable* nonConstThis = const_cast<OMStorable*>(this);
     nonConstThis->_store = container->store()->create(name());
@@ -304,7 +280,7 @@ bool OMStorable::attached(void) const
 
   bool result;
 
-  if (_containingProperty != 0) {
+  if (_container != 0) {
     result = true;
   } else {
     result = false;
@@ -323,9 +299,9 @@ bool OMStorable::inFile(void) const
   //PRECONDITION("object is attached", attached());
 
   bool result;
-  OMStorable* container = containingObject();
-  if (container != 0) {
-    result = container->inFile();
+
+  if (_container != 0) {
+    result = _container->inFile();
   } else {
     result = false;
   }
@@ -344,9 +320,9 @@ bool OMStorable::persistent(void) const
   //PRECONDITION("object is in file", inFile());
 
   bool result;
-  OMStorable* container = containingObject();
-  if (container != 0) {
-    result = container->persistent();
+
+  if (_container != 0) {
+    result = _container->persistent();
   } else {
     result = false;
   }
@@ -398,7 +374,7 @@ char* OMStorable::makePathName(void)
   ASSERT("Non-root object properly named",
                                   IMPLIES(strcmp(name(), "/") == 0, isRoot()));
   ASSERT("Non-root object has valid container",
-                                  IMPLIES(!isRoot(), containingObject() != 0));
+                                          IMPLIES(!isRoot(), _container != 0));
 
   char* result = 0;
   if (isRoot()) {
@@ -407,7 +383,7 @@ char* OMStorable::makePathName(void)
     ASSERT("Valid heap pointer", result != 0);
     strcpy(result, name());
   } else {
-    OMStorable* cont = containingObject();
+    const OMStorable* cont = _container;
     if (cont->isRoot()) {
       // child of root
       result = new char[strlen(cont->pathName()) + strlen(name()) + 1];
@@ -421,7 +397,7 @@ char* OMStorable::makePathName(void)
       strcpy(result, cont->pathName());
       strcat(result, "/");
       strcat(result, name());
-	}
+    }
   }
 
   POSTCONDITION("Valid result", validString(result));
