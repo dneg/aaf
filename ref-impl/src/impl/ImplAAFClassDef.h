@@ -287,7 +287,7 @@ private:
   // OMWeakReferenceProperty<ImplAAFClassDef> _ParentClass;
   OMFixedSizeProperty<aafUID_t>                       _ParentClass;
 
-  OMStrongReferenceVectorProperty<ImplAAFPropertyDef> _Properties;
+  OMStrongReferenceSetProperty<ImplAAFPropertyDef> _Properties;
 
   // didn't use shorthand here in an attempt to avoid circular references
   ImplAAFSmartPointer<ImplAAFClassDef> _cachedParentClass;
