@@ -7,7 +7,7 @@ FLAGS="OMEXTERNAL | OMINTERNAL"
 SRC="src/*.cpp src/*.h"
 #
 OUT=docs/ObjectManager.html
-ADHTML="c:/program files/autoduck/html.fmt"
+ADHTML="${ADROOT}/html.fmt"
 OMHTML="docs/html.fmt"
 OMCONT="docs/contents.d"
 #
