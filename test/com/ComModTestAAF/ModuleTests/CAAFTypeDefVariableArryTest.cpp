@@ -531,9 +531,9 @@ static HRESULT CreateAAFFile(aafWChar *  pFileName )
 		checkResult(addVATypeToComponent (pDict));
 		///////////
 		
-		//Create a mob 
+		//Create a concrete subclass of mob 
 		IAAFMobSP spMob;
-		checkResult(defs.cdMob()->
+		checkResult(defs.cdMasterMob()->
 			CreateInstance(IID_IAAFMob, 
 			(IUnknown **)&spMob));
 		
@@ -553,9 +553,9 @@ static HRESULT CreateAAFFile(aafWChar *  pFileName )
 		IAAFSegmentSP spSeg;
 		checkResult(spFill->QueryInterface (IID_IAAFSegment, (void **)&spSeg));
 		
-		//Create a mob slot				
+		//Create a concrete subclass of mob slot
 		IAAFMobSlotSP spMobSlot;
-		checkResult(defs.cdMobSlot()->
+		checkResult(defs.cdStaticMobSlot()->
 			CreateInstance(IID_IAAFMobSlot, 
 									   (IUnknown **)&spMobSlot));		
 		
