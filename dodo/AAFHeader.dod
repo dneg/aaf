@@ -6,7 +6,6 @@ AAFHeader\
 AAFObject\
 #endm
 #c
-#import ./AAFUnitTest.exp
 #import ./AAFObject.exp
 AD_HEAD
 /******************************************\
@@ -20,15 +19,10 @@ AD_HEAD
 
 
 
-AD_FORWARD_DECLARATION(AAFMobs)
+AD_FORWARD_DECLARATION(AAFMob)
 AD_FORWARD_DECLARATION(EnumAAFMobs)
 AD_FORWARD_DECLARATION(EnumAAFMedia)
-AD_FORWARD_DECLARATION(AAFClassDictionary)
-AD_FORWARD_DECLARATION(AAFDataDefinition)
-AD_FORWARD_DECLARATION(EnumAAFDataDefinitions)
-AD_FORWARD_DECLARATION(AAFEffectDefinition)
-AD_FORWARD_DECLARATION(EnumAAFEffectDefinitions)
-AD_FORWARD_DECLARATION(EnumAAFDefinitions)
+AD_FORWARD_DECLARATION(AAFDictionary)
 AD_FORWARD_DECLARATION(AAFIdentification)
 AD_FORWARD_DECLARATION(EnumAAFIdentifications)
 
@@ -67,6 +61,7 @@ AD_XMETHOD1(RemoveMob,
 Remove the given mob from the header.
   // @devnote based on omfiGetNumMobs.)
 
+
 AD_METHOD3(IsMediaDataPresent,
 [in\\\,ref], aafUID_t *, pFileMobID, A Unique File Mob ID,
 [in], aafFileFormat_t, fmt, The Media File Format,
@@ -78,54 +73,26 @@ AD_XMETHOD2(GetMedia,
 [out\,retval], objOut, EnumAAFMedia, ppEnum, Media Enumeration,
 Return an enumerator for media that will apply the criteria.)
 
-AD_XMETHOD1(RegisterType,
-[in\,ref], objIn, AAFTypeDefinition, pTypeDefinition, Type Definition Object,
-Add the type definition object to the header's list of definitions.)
 
-AD_XMETHOD2(LookupType,
-[in\,ref], objPass, aafUID_t *, pTypeID, Type Unique ID,
-[out\,retval], objOut, AAFTypeDefinition, ppTypeDefinition, Datakind object,
-Return the data kind definition object with the given id.)
+AD_XMETHOD1(GetDictionary,
+[out\,retval], objOut, AAFDictionary, ppDictionary, The AAF Dictionary,
+Return the dictionary that contains all types of aaf defintion objects.)
 
-AD_XMETHOD1(RegisterDatakind,
-[in\,ref], objIn, AAFDataDefinition, pDataDefinition, Datakind Definition Object,
-Add the data kind definition object to the header's list of definitions.
-  // @devnote based on omfiDatakindRegister.)
 
-AD_XMETHOD2(LookupDatakind,
-[in\,ref], objPass, aafUID_t *, pDataKindID, Datakind Unique ID,
-[out\,retval], objOut, AAFDataDefinition, ppDataDefinition, Datakind object,
-Return the data kind definition object with the given id.
-  // @devnote based on omfiDatakindLookup.)
+AD_XMETHOD1(GetLastIdentification,
+[out\,retval], objOut, AAFIdentification, ppIdentification, Indentification Object,
+Return the last identification that modified the file.)
 
-AD_XMETHOD1(GetDataDefinitions,
-[out\,retval], objOut, EnumAAFDataDefinitions, ppEnum, Definition Enumeration,
-Return an enumerator for aff data definitions.)
+AD_XMETHOD2(GetIdentification,
+[in\,ref], objPass, aafUID_t *, pGeneration, Unique Generation ID,
+[out\,retval], objOut, AAFIdentification, ppIdentification, Indentification Object,
+Return the Identification that matches the given generation.)
 
-AD_XMETHOD1(RegisterEffectDefinition,
-[in\,ref], objIn, AAFEffectDefinition, pEffectDefinition, Effect Definition Object,
-Add the effect definition object to the header's list of definitions.
-  // @devnote based on omfiEffectDefRegister.)
+AD_XMETHOD2(GetIdentificationList,
+[in\,ref], objPass, aafIndentificationCrit_t *, pCriteria, Identification Criteria for enumeration,
+[out\,retval], objOut, EnumAAFIdentifications, ppEnum, Indentification Enumeration,
+Return an enumerator for all Identification the meet the given criteria.)
 
-AD_XMETHOD2(LookupEffectDefinition,
-[in\,ref], objPass, aafUID_t *, effectID, Effect Unique ID,
-[out\,retval], objOut, AAFEffectDefinition, ppEffectDefinition, Effect definition object,
-Return the effect definition object with the given id.
-  // @devnote based on omfiEffectDefLookup.)
-
-AD_XMETHOD1(GetEffectDefinitions,
-[out\,retval], objOut, EnumAAFEffectDefinitions, ppEnum, Definition Enumeration,
-Return an enumerator for aff effect definitions.)
-
-AD_XMETHOD2(GetDefinitions,
-[in\,ref], objPass, aafDefinitionCrit_t *, pDefCriteria, Definition Criteria for enumeration,
-[out\,retval], objOut, EnumAAFDefinitions, ppEnum, Definition Enumeration,
-Return an enumerator for definitions that will apply the criteria.
-// @devnote Should this method be private?)
-
-AD_XMETHOD1(GetClassDictionary,
-[out\,retval], objOut, AAFClassDictionary, ppClassDictionary, The Class Dictionary,
-Return the class dictionary for this header.)
 
 AD_METHOD1(GetToolkitVersion,
 [out\\\,retval], aafToolkitVersion_t *, pToolkitVersion, The Toolkit Version,
@@ -143,21 +110,5 @@ AD_METHOD1(GetLastModified,
 [out\\\,retval], aafTimeStamp_t *, pLastModified, The modification date-time stamp,
 Return the Last Modified property. This is a read-only property.)
 
-AD_XMETHOD1(GetLastIdentification,
-[out\,retval], objOut, AAFIdentification, ppIdentification, Indentification Object,
-Return the last identification that modified the file.)
-
-AD_XMETHOD2(GetIdentification,
-[in\,ref], objPass, aafUID_t *, pGeneration, Unique Generation ID,
-[out\,retval], objOut, AAFIdentification, ppIdentification, Indentification Object,
-Return the Identification that matches the given generation.)
-
-AD_XMETHOD2(GetIdentificationList,
-[in\,ref], objPass, aafIndentificationCrit_t *, pCriteria, Identification Criteria for enumeration,
-[out\,retval], objOut, EnumAAFIdentifications, ppEnum, Indentification Enumeration,
-Return an enumerator for all Identification the meet the given criteria.)
-
-
-AD_OVERRIDE(.method-Test)
 
 AD_CLASS_END
