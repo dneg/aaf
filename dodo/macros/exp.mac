@@ -32,6 +32,26 @@
 
 #ccccccccccccccccccccccccccc
 #c
+#c Goes at the head of the file.
+#c
+#c Arguments: none
+#c
+#startm AD_HEAD 00
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c AAFTypes support for IDL
+#c
+#c Arguments: none
+#c
+#startm AD_TYPES_HEAD 00
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
 #c Starts a class definition
 #c
 #c Arguments: none
@@ -100,6 +120,7 @@
 #startm AD_CPP_QUOTE 01
 #endm
 
+
 #ccccccccccccccccccccccccccc
 #c
 #c Inserts declaration for a method which takes no arguments.
@@ -108,10 +129,20 @@
 #c Argument2: method description
 #c
 #startm AD_METHOD0 02
-\\\#startm .method-%01 00
+\\\#startm .method-%01-h 00
   // Override from .this-module
   virtual AAFRESULT STDMETHODCALLTYPE
     %01 ();\\
+\\\#endm
+
+\#c arg1 = this module's name
+\\\#startm .method-%01-cpp 01
+  // Override from .this-module
+  AAFRESULT STDMETHODCALLTYPE
+    %%01::%01 ()
+  {
+    return AAFRESULT_NOT_IMPLEMENTED;
+  }\\
 \\\#endm
 #endm
 
@@ -131,10 +162,19 @@
 #c Macro Arg 07: method description
 #c
 #startm AD_XMETHOD1 07
-\\\#startm .method-%01 00
+\\\#startm .method-%01-h 00
   // Override from .this-module
   virtual AAFRESULT STDMETHODCALLTYPE
     %01 (/*%02*/ %04 .%03-indirection %05);\\
+\\\#endm
+
+\\\#startm .method-%01-cpp 01
+  // Override from .this-module
+  AAFRESULT STDMETHODCALLTYPE
+    %%01::%01 (/*%02*/ %04 .%03-indirection /*%05*/)
+  {
+    return AAFRESULT_NOT_IMPLEMENTED;
+  }\\
 \\\#endm
 #endm
 
@@ -155,11 +195,21 @@
 #c Macro Arg 12: method description
 #c
 #startm AD_XMETHOD2 12
-\\\#startm .method-%01 00
+\\\#startm .method-%01-h 00
   // Override from .this-module
   virtual AAFRESULT STDMETHODCALLTYPE
     %01 (/*%02*/ %04 .%03-indirection %05,
 	  /*%07*/ %09 .%08-indirection %10);\\
+\\\#endm
+
+\\\#startm .method-%01-cpp 01
+  // Override from .this-module
+  AAFRESULT STDMETHODCALLTYPE
+    %%01%01 (/*%02*/ %04 .%03-indirection /*%05*/,
+	  /*%07*/ %09 .%08-indirection /*%10*/)
+  {
+    return AAFRESULT_NOT_IMPLEMENTED;
+  }\\
 \\\#endm
 #endm
 
@@ -181,12 +231,23 @@
 #c Macro Arg 17: method description
 #c
 #startm AD_XMETHOD3 17
-\\\#startm .method-%01 00
+\\\#startm .method-%01-h 00
   // Override from .this-module
   virtual AAFRESULT STDMETHODCALLTYPE
     %01 (/*%02*/ %04 .%03-indirection %05,
 	  /*%07*/ %09 .%08-indirection %10,
 	  /*%12*/ %14 .%13-indirection %15);\\
+\\\#endm
+
+\\\#startm .method-%01-cpp 01
+  // Override from .this-module
+  AAFRESULT STDMETHODCALLTYPE
+    %%01::%01 (/*%02*/ %04 .%03-indirection /*%05*/,
+	  /*%07*/ %09 .%08-indirection /*%10*/,
+	  /*%12*/ %14 .%13-indirection /*%15*/)
+  {
+    return AAFRESULT_NOT_IMPLEMENTED;
+  }\\
 \\\#endm
 #endm
 
@@ -209,13 +270,25 @@
 #c Macro Arg 22: method description
 #c
 #startm AD_XMETHOD4 22
-\\\#startm .method-%01 00
+\\\#startm .method-%01-h 00
   // Override from .this-module
   virtual AAFRESULT STDMETHODCALLTYPE
     %01 (/*%02*/ %04 .%03-indirection %05,
 	  /*%07*/ %09 .%08-indirection %10,
 	  /*%12*/ %14 .%13-indirection %15,
 	  /*%17*/ %19 .%18-indirection %20);\\
+\\\#endm
+
+\\\#startm .method-%01-cpp 01
+  // Override from .this-module
+  AAFRESULT STDMETHODCALLTYPE
+    %%01::%01 (/*%02*/ %04 .%03-indirection /*%05*/,
+	  /*%07*/ %09 .%08-indirection /*%10*/,
+	  /*%12*/ %14 .%13-indirection /*%15*/,
+	  /*%17*/ %19 .%18-indirection /*%20*/)
+  {
+    return AAFRESULT_NOT_IMPLEMENTED;
+  }\\
 \\\#endm
 #endm
 
@@ -239,7 +312,7 @@
 #c Macro Arg 27: method description
 #c
 #startm AD_XMETHOD5 27
-\\\#startm .method-%01 00
+\\\#startm .method-%01-h 00
   // Override from .this-module
   virtual AAFRESULT STDMETHODCALLTYPE
     %01 (/*%02*/ %04 .%03-indirection %05,
@@ -247,6 +320,19 @@
 	  /*%12*/ %14 .%13-indirection %15,
 	  /*%17*/ %19 .%18-indirection %20,
 	  /*%22*/ %24 .%23-indirection %25);\\
+\\\#endm
+
+\\\#startm .method-%01-cpp 01
+  // Override from .this-module
+  virtual AAFRESULT STDMETHODCALLTYPE
+    %%01::%01 (/*%02*/ %04 .%03-indirection /*%05*/,
+	  /*%07*/ %09 .%08-indirection /*%10*/,
+	  /*%12*/ %14 .%13-indirection /*%15*/,
+	  /*%17*/ %19 .%18-indirection /*%20*/,
+	  /*%22*/ %24 .%23-indirection /*%25*/)
+  {
+    return AAFRESULT_NOT_IMPLEMENTED;
+  }\\
 \\\#endm
 #endm
 
@@ -271,7 +357,7 @@
 #c Macro Arg 32: method description
 #c
 #startm AD_XMETHOD6 32
-\\\#startm .method-%01 00
+\\\#startm .method-%01-h 00
   // Override from .this-module
   virtual AAFRESULT STDMETHODCALLTYPE
     %01 (/*%02*/ %04 .%03-indirection %05,
@@ -280,6 +366,20 @@
 	  /*%17*/ %19 .%18-indirection %20,
 	  /*%22*/ %24 .%23-indirection %25,
 	  /*%27*/ %29 .%28-indirection %30);\\
+\\\#endm
+
+\\\#startm .method-%01-cpp 01
+  // Override from .this-module
+  AAFRESULT STDMETHODCALLTYPE
+    %%01%01 (/*%02*/ %04 .%03-indirection /*%05*/,
+	  /*%07*/ %09 .%08-indirection /*%10*/,
+	  /*%12*/ %14 .%13-indirection /*%15*/,
+	  /*%17*/ %19 .%18-indirection /*%20*/,
+	  /*%22*/ %24 .%23-indirection /*%25*/,
+	  /*%27*/ %29 .%28-indirection /*%30*/)
+  {
+    return AAFRESULT_NOT_IMPLEMENTED;
+  }\\
 \\\#endm
 #endm
 
@@ -305,7 +405,7 @@
 #c Macro Arg 37: method description
 #c
 #startm AD_XMETHOD7 37
-\\\#startm .method-%01 00
+\\\#startm .method-%01-h 00
   // Override from .this-module
   virtual AAFRESULT STDMETHODCALLTYPE
     %01 (/*%02*/ %04 .%03-indirection %05,
@@ -315,6 +415,21 @@
 	  /*%22*/ %24 .%23-indirection %25,
 	  /*%27*/ %29 .%28-indirection %30,
 	  /*%32*/ %34 .%33-indirection %35);\\
+\\\#endm
+
+\\\#startm .method-%01-cpp 01
+  // Override from .this-module
+  AAFRESULT STDMETHODCALLTYPE
+    %%01::%01 (/*%02*/ %04 .%03-indirection /*%05*/,
+	  /*%07*/ %09 .%08-indirection /*%10*/,
+	  /*%12*/ %14 .%13-indirection /*%15*/,
+	  /*%17*/ %19 .%18-indirection /*%20*/,
+	  /*%22*/ %24 .%23-indirection /*%25*/,
+	  /*%27*/ %29 .%28-indirection /*%30*/,
+	  /*%32*/ %34 .%33-indirection /*%35*/)
+  {
+    return AAFRESULT_NOT_IMPLEMENTED;
+  }\\
 \\\#endm
 #endm
 
@@ -341,7 +456,7 @@
 #c Macro Arg 42: method description
 #c
 #startm AD_XMETHOD8 42
-\\\#startm .method-%01 00
+\\\#startm .method-%01-h 00
   // Override from .this-module
   virtual AAFRESULT STDMETHODCALLTYPE
     %01 (/*%02*/ %04 .%03-indirection %05,
@@ -352,6 +467,22 @@
 	  /*%27*/ %29 .%28-indirection %30,
 	  /*%32*/ %34 .%33-indirection %35,
 	  /*%37*/ %39 .%38-indirection %40);\\
+\\\#endm
+
+\\\#startm .method-%01-cpp 01
+  // Override from .this-module
+  virtual AAFRESULT STDMETHODCALLTYPE
+    %%01::%01 (/*%02*/ %04 .%03-indirection /*%05*/,
+	  /*%07*/ %09 .%08-indirection /*%10*/,
+	  /*%12*/ %14 .%13-indirection /*%15*/,
+	  /*%17*/ %19 .%18-indirection /*%20*/,
+	  /*%22*/ %24 .%23-indirection /*%25*/,
+	  /*%27*/ %29 .%28-indirection /*%30*/,
+	  /*%32*/ %34 .%33-indirection /*%35*/,
+	  /*%37*/ %39 .%38-indirection /*%40*/)
+  {
+    return AAFRESULT_NOT_IMPLEMENTED;
+  }\\
 \\\#endm
 #endm
 
@@ -379,7 +510,7 @@
 #c Macro Arg 47: method description
 #c
 #startm AD_XMETHOD9 47
-\\\#startm .method-%01 00
+\\\#startm .method-%01-h 00
   // Override from .this-module
   virtual AAFRESULT STDMETHODCALLTYPE
     %01 (/*%02*/ %04 .%03-indirection %05,
@@ -391,6 +522,23 @@
 	  /*%32*/ %34 .%33-indirection %35,
 	  /*%37*/ %39 .%38-indirection %40,
 	  /*%42*/ %44 .%43-indirection %45);\\
+\\\#endm
+
+\\\#startm .method-%01-cpp 01
+  // Override from .this-module
+  AAFRESULT STDMETHODCALLTYPE
+    %%01::%01 (/*%02*/ %04 .%03-indirection /*%05*/,
+	  /*%07*/ %09 .%08-indirection /*%10*/,
+	  /*%12*/ %14 .%13-indirection /*%15*/,
+	  /*%17*/ %19 .%18-indirection /*%20*/,
+	  /*%22*/ %24 .%23-indirection /*%25*/,
+	  /*%27*/ %29 .%28-indirection /*%30*/,
+	  /*%32*/ %34 .%33-indirection /*%35*/,
+	  /*%37*/ %39 .%38-indirection /*%40*/,
+	  /*%42*/ %44 .%43-indirection /*%45*/)
+  {
+    return AAFRESULT_NOT_IMPLEMENTED;
+  }\\
 \\\#endm
 #endm
 
@@ -419,7 +567,7 @@
 #c Macro Arg 52: method description
 #c
 #startm AD_XMETHOD_10 52
-\\\#startm .method-%01 00
+\\\#startm .method-%01-h 00
   // Override from .this-module
   virtual AAFRESULT STDMETHODCALLTYPE
     %01 (/*%02*/ %04 .%03-indirection %05,
@@ -432,6 +580,24 @@
 	  /*%37*/ %39 .%38-indirection %40,
 	  /*%42*/ %44 .%43-indirection %45,
 	  /*%47*/ %49 .%48-indirection %50);\\
+\\\#endm
+
+\\\#startm .method-%01-cpp 01
+  // Override from .this-module
+  AAFRESULT STDMETHODCALLTYPE
+    %%01::%01 (/*%02*/ %04 .%03-indirection /*%05*/,
+	  /*%07*/ %09 .%08-indirection /*%10*/,
+	  /*%12*/ %14 .%13-indirection /*%15*/,
+	  /*%17*/ %19 .%18-indirection /*%20*/,
+	  /*%22*/ %24 .%23-indirection /*%25*/,
+	  /*%27*/ %29 .%28-indirection /*%30*/,
+	  /*%32*/ %34 .%33-indirection /*%35*/,
+	  /*%37*/ %39 .%38-indirection /*%40*/,
+	  /*%42*/ %44 .%43-indirection /*%45*/,
+	  /*%47*/ %49 .%48-indirection /*%50*/)
+  {
+    return AAFRESULT_NOT_IMPLEMENTED;
+  }\\
 \\\#endm
 #endm
 
@@ -461,7 +627,7 @@
 #c Macro Arg 57: method description
 #c
 #startm AD_XMETHOD_11 57
-\\\#startm .method-%01 00
+\\\#startm .method-%01-h 00
   // Override from .this-module
   virtual AAFRESULT STDMETHODCALLTYPE
     %01 (/*%02*/ %04 .%03-indirection %05,
@@ -475,6 +641,25 @@
 	  /*%42*/ %44 .%43-indirection %45,
 	  /*%47*/ %49 .%48-indirection %50,
 	  /*%52*/ %54 .%53-indirection %55);\\
+\\\#endm
+
+\\\#startm .method-%01-cpp 01
+  // Override from .this-module
+  AAFRESULT STDMETHODCALLTYPE
+    %%01::%01 (/*%02*/ %04 .%03-indirection /*%05*/,
+	  /*%07*/ %09 .%08-indirection /*%10*/,
+	  /*%12*/ %14 .%13-indirection /*%15*/,
+	  /*%17*/ %19 .%18-indirection /*%20*/,
+	  /*%22*/ %24 .%23-indirection /*%25*/,
+	  /*%27*/ %29 .%28-indirection /*%30*/,
+	  /*%32*/ %34 .%33-indirection /*%35*/,
+	  /*%37*/ %39 .%38-indirection /*%40*/,
+	  /*%42*/ %44 .%43-indirection /*%45*/,
+	  /*%47*/ %49 .%48-indirection /*%50*/,
+	  /*%52*/ %54 .%53-indirection /*%55*/)
+  {
+    return AAFRESULT_NOT_IMPLEMENTED;
+  }\\
 \\\#endm
 #endm
 
