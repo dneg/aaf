@@ -29,14 +29,14 @@ AD_METHOD1(GetType,
 		   Returns the aafUID of the locator.)
 	//@comm Replaces part of omfmLocatorGetInfo
 
-AD_GETOBJ_METHOD1(GetPath,
-				  [in],AAFString,pathBuf,
-				  Pass in a string object which will be filled in,
-				  Return a full file path if available.)
+AD_METHOD1(GetPath,
+		   [in],aafString_t*,pathBuf,
+		   Pass in a string object which will be filled in,
+		   Return a full file path if available.)
 	//@comm Replaces part of omfmLocatorGetInfo
 
-AD_SETOBJ_METHOD1(SetPath,
-		   [in],AAFString,pathBuf,,
+AD_METHOD1(SetPath,
+		   [in],aafString_t*,pathBuf,,
 		   Sets a full file path.)
 
 
