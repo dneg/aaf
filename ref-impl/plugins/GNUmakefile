@@ -24,6 +24,8 @@ CXXFILES = AAFPluginCOM.cpp \
 	   CAAFEssenceFileContainer.cpp \
 	   CAAFJPEGCodec.cpp \
 	   CAAFJPEGDescriptorHelper.cpp \
+	   CAAFCDCICodec.cpp \
+	   CAAFCDCIDescriptorHelper.cpp \
 	   CAAFWAVECodec.cpp \
 	   CAAFAIFCCodec.cpp \
 	   jpegesdatadst.cpp \
