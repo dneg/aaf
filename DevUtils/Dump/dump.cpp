@@ -55,6 +55,7 @@
 //    -s       = print statistics.
 //    -z <pid> = dump properties with pid <pid> (hex) as all zeroes.
 //    -m <n>   = dump only the first <n> bytes (dec) of media streams. 
+//    -v       = validate the structure of the file
 //    -h       = print help.
 //
 //  Notes:
@@ -66,6 +67,7 @@
 //    3) -z is not valid with -r. Multiple -z flags may be supplied.
 //    4) <pid> must be specified in hex. Examples are 1a00 0x1a00 0x1A00 
 //    5) -m is not valid with -r.
+//    6) -v is only valid with -p or -a, it is not valid with -x or -r
 //
 
 #include <iostream.h>
@@ -448,6 +450,7 @@ enum optionType {hexadecimal, raw, property, aaf};
 enum optionType option = raw; // default
 bool zFlag = false;
 bool mFlag = false;
+bool vFlag = false;
 unsigned long int mLimit = 0;
 
 // Statistics gathering
@@ -461,6 +464,10 @@ size_t totalProperties;
 
 size_t totalStreamBytes;
 size_t totalFileBytes;
+
+// Validity chacking
+//
+size_t warningCount = 0;
 
 // Prototypes for local functions.
 //
@@ -609,6 +616,19 @@ static void dumpObject(IStorage* storage,
                        int isRoot,
                        OMUInt32 version);
 static OMUInt32 typeOf(IndexEntry* entry, OMUInt32 version);
+OMUInt32 objectCount(IStorage* storage,
+                     IStream* propertiesStream,
+                     IndexEntry* index,
+                     OMUInt32 version,
+                     bool swapNeeded);
+void checkObject(IStorage* storage,
+                 IStream* propertiesStream,
+                 IndexEntry* index,
+                 OMUInt32 entries,
+                 OMUInt32 version,
+                 char* pathName,
+                 int isRoot,
+                 bool swapNeeded);
 static void dumpContainedObjects(IStorage* storage,
                                  IStream* propertiesStream,
                                  IndexEntry* index,
@@ -700,6 +720,7 @@ static size_t fileSize(const char* fileName)
   if ((result == (size_t)-1) && (errno != 0)) {
     fatalError("fileSize", "ftell() failed");
   }
+  fclose(f);
   return result;
 }
 
@@ -2209,6 +2230,146 @@ OMUInt32 typeOf(IndexEntry* entry, OMUInt32 version)
   return result;
 }
 
+OMUInt32 objectCount(IStorage* storage,
+                     IStream* propertiesStream,
+                     IndexEntry* index,
+                     OMUInt32 version,
+                     bool swapNeeded)
+{
+  // get name of collection index
+  //
+  char* suffix = " index";
+  char* collectionName = readName(propertiesStream,
+                                  index->_offset,
+                                  index->_length,
+                                  version);
+
+  size_t size = strlen(collectionName) + strlen(suffix) + 1;
+  char* collectionIndexName = new char[size];
+  strcpy(collectionIndexName, collectionName);
+  strcat(collectionIndexName, suffix);
+
+  // open the collection index stream
+  //
+  IStream* subStream = 0;
+  openStream(storage, collectionIndexName, &subStream);
+  if (subStream == 0) {
+    fatalError("objectCount", "openStream() failed.");
+  }
+
+  OMUInt32 count = 0;
+  OMUInt32 highWaterMark = 0;
+  if (version >= 22) {
+    readUInt32(subStream, &count, swapNeeded);
+    readUInt32(subStream, &highWaterMark, swapNeeded);
+  } else {
+    readUInt32(subStream, &highWaterMark, swapNeeded);
+    readUInt32(subStream, &count, swapNeeded);
+  }
+  delete [] collectionName;
+  delete [] collectionIndexName;
+  subStream->Release();
+  return count;
+}
+
+void checkObject(IStorage* storage,
+                 IStream* propertiesStream,
+                 IndexEntry* index,
+                 OMUInt32 entries,
+                 OMUInt32 version,
+                 char* pathName,
+                 int isRoot, 
+                 bool swapNeeded)
+{
+  // Count expected storages and streams
+  //
+  size_t storageCount = 0;
+  size_t streamCount = 1; // For the "properties" stream
+  if (isRoot) {
+    streamCount = streamCount + 1; // For the "referenced properties" stream
+  }
+  for (size_t i = 0; i < entries; i++) {
+    switch(typeOf(&index[i], version)) {
+      case SF_DATA_STREAM:
+        streamCount = streamCount + 1;
+        break;
+      case SF_STRONG_OBJECT_REFERENCE:
+        storageCount = storageCount + 1;
+        break;
+      case SF_STRONG_OBJECT_REFERENCE_VECTOR:
+        storageCount = storageCount + objectCount(storage,
+                                                  propertiesStream,
+                                                  &index[i],
+                                                  version,
+                                                  swapNeeded);
+        streamCount = streamCount + 1;
+        break;
+      case SF_STRONG_OBJECT_REFERENCE_SET:
+        storageCount = storageCount + objectCount(storage,
+                                                  propertiesStream,
+                                                  &index[i],
+                                                  version,
+                                                  swapNeeded);
+        streamCount = streamCount + 1;
+        break;
+      case SF_WEAK_OBJECT_REFERENCE_VECTOR:
+        streamCount = streamCount + 1;
+        break;
+      case SF_WEAK_OBJECT_REFERENCE_SET:
+        streamCount = streamCount + 1;
+        break;
+    }
+  }
+  // Count actual storages and streams
+  //
+  HRESULT result;
+  size_t status;
+
+  IEnumSTATSTG* enumerator;
+  result = storage->EnumElements(0, NULL, 0, &enumerator);
+  if (!check(pathName, result)) {
+    fatalError("checkObject", "IStorage::EnumElements() failed.");
+  }
+  
+  result = enumerator->Reset();
+  if (!check(pathName, result)) {
+    fatalError("checkObject", "IStorage::Reset() failed.");
+  }
+  
+  OMUInt32 actualStorageCount = 0;
+  OMUInt32 actualStreamCount = 0;
+  do {
+    STATSTG statstg;
+    status = enumerator->Next(1, &statstg, NULL);
+    if (status == S_OK) {
+
+      switch (statstg.type) {
+      case STGTY_STORAGE:
+        actualStorageCount = actualStorageCount + 1;
+        break;
+      case STGTY_STREAM:
+        actualStreamCount = actualStreamCount + 1;
+        break;
+      }
+      CoTaskMemFree(statstg.pwcsName);
+    }
+  } while (status == S_OK);
+  if (actualStorageCount != storageCount) {
+    cerr << programName
+         << ": Warning : Incorrect IStorage count for \"" << pathName
+         << "\", expected " << storageCount << " IStorages, found "
+         << actualStorageCount << "." << endl;
+    warningCount = warningCount + 1;
+  }
+  if (actualStreamCount != streamCount) {
+    cerr << programName
+         << ": Warning : Incorrect IStream count for \"" << pathName
+         << "\", expected " << streamCount << " IStreams, found "
+         << actualStreamCount << "." << endl;
+    warningCount = warningCount + 1;
+  }
+}
+
 void dumpContainedObjects(IStorage* storage,
                           IStream* propertiesStream,
                           IndexEntry* index,
@@ -2218,6 +2379,18 @@ void dumpContainedObjects(IStorage* storage,
                           int isRoot,
                           bool swapNeeded)
 {
+
+  if (vFlag) {
+    checkObject(storage,
+                propertiesStream,
+                index,
+                entries,
+                version,
+                pathName,
+                isRoot,
+                swapNeeded);
+  }
+
   for (OMUInt32 i = 0; i < entries; i++) {
 
     int containerType = typeOf(&index[i], version);
@@ -3567,6 +3740,9 @@ void usage(void)
   cerr << "-m <n>   = dump only the first <n> bytes (dec) of media streams :"
        << endl
        << "             combine with -p and -a." << endl;
+  cerr << "-v       = validate the structure of the file :"
+       << endl
+       << "             combine with -p and -a." << endl;
   cerr << "-h       = help"
        << " : print this message and exit." << endl;
 }
@@ -3880,6 +4056,9 @@ int main(int argumentCount, char* argumentVector[])
           exit(EXIT_FAILURE);
         }
         break;
+      case 'v':
+        vFlag = true;
+        break;
       case 'h':
         usage();
         exit(EXIT_SUCCESS);
@@ -3921,6 +4100,13 @@ int main(int argumentCount, char* argumentVector[])
     if (zFlag) {
       cerr << programName
            << ": Error : -z not valid with -x or -r."
+           << endl;
+      usage();
+      exit(EXIT_FAILURE);
+    }
+    if (vFlag) {
+      cerr << programName
+           << ": Error : -v not valid with -x or -r."
            << endl;
       usage();
       exit(EXIT_FAILURE);
@@ -4001,6 +4187,12 @@ int main(int argumentCount, char* argumentVector[])
 
   }
 
-  return (EXIT_SUCCESS);
+  int result;
+  if (warningCount == 0) {
+    result = EXIT_SUCCESS;
+  } else {
+    result = 2;
+  }
+  return result;
 }
 
