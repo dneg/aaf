@@ -72,7 +72,7 @@ ImplAAFSelector::~ImplAAFSelector ()
 	size_t size = _alternates.getSize();
 	for (size_t i = 0; i < size; i++)
 	{
-		ImplAAFSegment* pSegment = _alternates.setValueAt(0, i);
+		ImplAAFSegment* pSegment = _alternates.clearValueAt(i);
 		if (pSegment)
 		{
 		  pSegment->ReleaseReference();

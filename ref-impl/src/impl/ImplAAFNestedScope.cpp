@@ -77,7 +77,7 @@ ImplAAFNestedScope::~ImplAAFNestedScope ()
 	size_t size = _slots.getSize();
 	for (size_t i = 0; i < size; i++)
 	{
-		ImplAAFSegment* pSegment = _slots.setValueAt(0, i);
+		ImplAAFSegment* pSegment = _slots.clearValueAt(i);
 
 		if (pSegment)
 		{

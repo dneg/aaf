@@ -73,7 +73,7 @@ ImplAAFEssenceGroup::~ImplAAFEssenceGroup ()
 {
 	size_t size = _choices.getSize();
 	for (size_t i = 0; i < size; i++) {
-		ImplAAFSegment *pClip = _choices.setValueAt(0, i);
+		ImplAAFSegment *pClip = _choices.clearValueAt(i);
 
 		if (pClip) {
 		  pClip->ReleaseReference();
