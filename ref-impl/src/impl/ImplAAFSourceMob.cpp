@@ -187,13 +187,13 @@ AAFRESULT STDMETHODCALLTYPE
 			//Need to release to old sequence!!!
 			aSequ = (ImplAAFSequence *)CreateImpl(CLSID_AAFSequence);
 			CHECK(aSequ->SetInitialValue(&timecodeKind));
-			CHECK(aSequ->AppendCpnt(tccp));
+			CHECK(aSequ->AppendComponent(tccp));
 		} /* FindTimecodeSlot */
 		else
 		{
 			aSequ = (ImplAAFSequence *)CreateImpl(CLSID_AAFSequence);
 			CHECK(aSequ->SetInitialValue(&timecodeKind));
-			CHECK(aSequ->AppendCpnt(tccp));
+			CHECK(aSequ->AppendComponent(tccp));
 			CHECK(AppendNewTimelineSlot(editrate, aSequ, slotID,
 										NULL, zeroPos, &newSlot));
 		}
