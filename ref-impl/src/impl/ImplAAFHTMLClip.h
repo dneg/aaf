@@ -15,11 +15,6 @@
 
 
 
-
-
-
-
-
 #ifndef __ImplAAFTextClip_h__
 #include "ImplAAFTextClip.h"
 #endif
@@ -101,9 +96,10 @@ public:
   //
   OMDECLARE_STORABLE(ImplAAFHTMLClip)
 
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplAAFHTMLClipTest.cpp.
-  static AAFRESULT test();
+protected:
+  // Persistent properties...
+  OMWideStringProperty _beginAnchor;
+  OMWideStringProperty _endAnchor;
 };
 
 #endif // ! __ImplAAFHTMLClip_h__
