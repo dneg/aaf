@@ -829,8 +829,8 @@ AAFRESULT STDMETHODCALLTYPE
 							aafUInt16  arrayElemCount,
 							aafmMultiCreate_t *mediaArray,
 							aafCompressEnable_t Enable,
-							ImplAAFLocator		* /*destination*/,
-							aafUID_t			/*fileFormat*/,
+							ImplAAFLocator		* destination,
+							aafUID_t			fileFormat,
 							IAAFEssenceMultiAccess **result)
 {
 	ImplAAFEssenceAccess	*access = NULL;
@@ -852,6 +852,10 @@ AAFRESULT STDMETHODCALLTYPE
 	  iUnk = static_cast<IUnknown *> (access->GetContainer());
     assert(NULL != iUnk);
 	  CHECK(iUnk->QueryInterface(IID_IAAFEssenceMultiAccess, (void **)&pMultiAccess));
+	  if(destination != NULL)
+		{
+			CHECK(access->SetEssenceDestination(destination, fileFormat));
+		}
 
 	  CHECK(access->MultiCreate(this, codecID, arrayElemCount, mediaArray, Enable));
 
