@@ -129,14 +129,26 @@ clean:
 	$(SH_PREFIX) $(RM) -f $(SRC_DIR)/cpp-api/AAF*.cpp $(SH_SUFFIX)
 	$(SH_PREFIX) $(RM) -f $(SRC_DIR)/com-api/CAAF*.h $(SH_SUFFIX)
 	$(SH_PREFIX) $(RM) -f $(SRC_DIR)/com-api/CAAF*.cpp $(SH_SUFFIX)
-	test -z `$(RM) -f $(SRC_DIR)/impl/Impl*.h |& grep "Nothing"`
-	$(SH_PREFIX) $(RM) -f $(SRC_DIR)/impl/Impl*.cpp $(SH_SUFFIX)
 	$(SH_PREFIX) $(RM) -f $(INCLUDE_DIR)/com-api/AAF*.h $(SH_SUFFIX)
 	$(SH_PREFIX) $(RM) -f $(INCLUDE_DIR)/com-api/EnumAAF*.h $(SH_SUFFIX)
 	$(SH_PREFIX) $(RM) -f $(INCLUDE_DIR)/com-api/AAF*.idl $(SH_SUFFIX)
 	$(SH_PREFIX) $(RM) -f $(INCLUDE_DIR)/com-api/EnumAAF*.idl $(SH_SUFFIX)
 	$(SH_PREFIX) $(RM) -f $(INCLUDE_DIR)/cpp-api/AAF*.h $(SH_SUFFIX)
 	$(SH_PREFIX) $(RM) -f $(INCLUDE_DIR)/cpp-api/EnumAAF*.h $(SH_SUFFIX)
+	@for file in $(SRC_DIR)/impl/Impl*.h ; do \
+		result=`cleartool ls -vob $$file` ; \
+		if test -z "$$result" ; then \
+			echo $(RM) -f $$file ; \
+			$(RM) -f $$file ; \
+		fi ; \
+	done
+	@for file in $(SRC_DIR)/impl/Impl*.cpp ; do \
+		result=`cleartool ls -vob $$file` ; \
+		if test -z "$$result" ; then \
+			echo $(RM) -f $$file ; \
+			$(RM) -f $$file ; \
+		fi ; \
+	done
 
 
 # This file contains the list of all dependents...
