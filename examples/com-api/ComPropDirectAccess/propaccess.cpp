@@ -708,7 +708,7 @@ static void CreateAAFFile(aafWChar * pFileName,
   ProductInfo.productVersion.minor = 0;
   ProductInfo.productVersion.tertiary = 0;
   ProductInfo.productVersion.patchLevel = 0;
-  ProductInfo.productVersion.type = kVersionUnknown;
+  ProductInfo.productVersion.type = kAAFVersionUnknown;
   ProductInfo.productVersionString = NULL;
   ProductInfo.productID = NIL_UID;
   ProductInfo.platform = NULL;
