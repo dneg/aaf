@@ -1,0 +1,180 @@
+#c /******************************************\
+#c *                                          *
+#c * Advanced Authoring Format                *
+#c *                                          *
+#c * Copyright (c) 1998 Avid Technology, Inc. *
+#c * Copyright (c) 1998 Microsoft Corporation *
+#c *                                          *
+#c \******************************************/
+
+
+#ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+#c
+#c AutoDodo macro file for use in generating COM API implementation
+#c C++ files for COM mix-in interface classes.
+#c
+#ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+
+
+#import macros/base.mac
+
+
+#startm AD_IDL 01
+#endm
+
+#startm AD_INCLUDE 01
+#endm
+
+#startm AD_HEAD 00
+/******************************************\\
+*                                          *
+* Advanced Authoring Format                *
+*                                          *
+* Copyright (c) 1998 Avid Technology, Inc. *
+* Copyright (c) 1998 Microsoft Corporation *
+*                                          *
+\\******************************************/
+
+#include <wtypes.h>
+#endm
+
+#startm AD_TYPES_HEAD 00
+#endm
+
+#startm AD_CLASS_BEGIN 00
+#endm
+
+#startm AD_COM_EXT_CLASS_BEGIN 01
+#endm
+
+#startm AD_ROOT_CLASS_BEGIN 00
+#endm
+
+#startm AD_TYPES_BEGIN 11
+#endm
+
+#startm AD_TYPES_END 00
+#endm
+
+#startm AD_METHOD0 02
+#endm
+
+#startm AD_XMETHOD1 07
+#endm
+
+#startm AD_XMETHOD2 12
+#endm
+
+#startm AD_XMETHOD3 17
+#endm
+
+#startm AD_XMETHOD4 22
+#endm
+
+#startm AD_XMETHOD5 27
+#endm
+
+#startm AD_XMETHOD6 32
+#endm
+
+#startm AD_XMETHOD7 37
+#endm
+
+#startm AD_XMETHOD8 42
+#endm
+
+#startm AD_XMETHOD9 47
+#endm
+
+#startm AD_XMETHOD_10 52
+#endm
+
+#startm AD_XMETHOD_11 57
+#endm
+
+#startm AD_CLASS_END 00
+#endm
+
+#startm AD_COM_EXT_CLASS_END 01
+#endm
+
+#startm AD_ROOT_CLASS_END 00
+#endm
+
+#startm AD_OVERRIDE 01
+#endm
+
+#startm AD_COM_METH 01
+#endm
+
+#startm AD_XCONSTRUCTOR1 06
+#endm
+
+#startm AD_XCONSTRUCTOR2 11
+#endm
+
+#startm AD_XCONSTRUCTOR3 16
+#endm
+
+#startm AD_XCONSTRUCTOR4 21
+#endm
+
+#startm AD_CPP_QUOTE 01
+#endm
+
+#startm AD_AAFTYPES 01
+#endm
+
+#startm AD_DECLARE_FORWARD_AAFTYPES 01
+#endm
+
+#startm AD_FORWARD_DECLARATION 01
+#endm
+
+#ccccccccccccccccccccccccccc
+#c
+#c Defining the interface UUID.
+#c NOTE: Should be placed immediately before AD_CLASS_BEGIN
+#c
+#c GUID
+#c Argument01: hex long  0-3[leading 0's w/o leading 0x]
+#c Argument02: hex short 4-5[leading 0's w/o leading 0x]
+#c Argument03: hex short 6-7[leading 0's w/o leading 0x]
+#c Argument04: hex byte   8 [leading 0's w/o leading 0x]
+#c Argument05: hex byte   9 [leading 0's w/o leading 0x]
+#c Argument06: hex byte  10 [leading 0's w/o leading 0x]
+#c Argument07: hex byte  11 [leading 0's w/o leading 0x]
+#c Argument08: hex byte  12 [leading 0's w/o leading 0x]
+#c Argument09: hex byte  13 [leading 0's w/o leading 0x]
+#c Argument10: hex byte  14 [leading 0's w/o leading 0x]
+#c Argument11: hex byte  15 [leading 0's w/o leading 0x]
+#c
+#c Example:
+#c AD_DEFAULT_UUID(b1a21372, 1a7d, 11d2, bf, 78, 00, 10, 4b, c9, 15, 6d)
+#c
+#c TomR:980713: Added
+#c
+#startm AD_DEFAULT_UUID 11
+// Default Interface for .this-module 
+// {%01-%02-%03-%04%05-%06%07%08%09%10%11}
+extern "C" const IID IID_I.this-module = { 0x%01, 0x%02, 0x%03, { 0x%04, 0x%05, 0x%06, 0x%07, 0x%08, 0x%09, 0x%10, 0x%11 } };
+#endm
+
+#startm AD_CLASS_UUID 11
+#endm
+
+#startm AD_BEGIN_SESSION 00
+#endm
+
+#startm AD_STATIC_CREATE 00
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Hack to quote the .this-module macro and keep it out of export
+#c files.  Do not define this macro in exp.mac!!!
+#c
+#startm AD_EXPORT_THIS_MODULE 00
+.this-module\
+#endm
