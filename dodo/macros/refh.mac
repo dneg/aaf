@@ -843,7 +843,7 @@ interface I%01;\
 #c The objIn macros are for use with pointers to objects that are
 #c passed into the method.  The Type argument is the base type, with
 #c no indirection specified.  For example, if you're passing in
-#c AAFObject*, AAFObject should be specified for the Type argument.#c
+#c AAFObject*, AAFObject should be specified for the Type argument.
 #c
 #c The objOut macros are for use with pointers to pointers to objects
 #c that are passed out of the method.  The Type argument is the base
