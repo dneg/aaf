@@ -84,7 +84,6 @@ ImplAAFSession::CreateFile (aafWChar *  pwFilePath,
 							ImplAAFFile ** ppFile)
 {
   ImplAAFRoot	*pRoot;
-
   if (! pwFilePath)
 	{
 	  return AAFRESULT_NULL_PARAM;
