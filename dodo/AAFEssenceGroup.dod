@@ -1,5 +1,5 @@
 #startm .this-module 0
-AAFMediaGroup\
+AAFEssenceGroup\
 #endm
 #c
 #startm .parent-module 0
@@ -36,27 +36,25 @@ AD_XCLASS_BEGIN(Concrete, StoredObject)
 AD_XMETHOD2(SetInitialValues,
 [in], objIn, AAFDataDef, datadef,Data Definition object,
 [in], objPass, aafLength_t, length,Length property value,
-Creates a new empty media group object with the given property values.)
+Creates a new empty essence group object with the given property values.)
 //@comm replaces the constructor.
 
 /****/
 AD_XMETHOD1(SetStillFrame,
 [in], objIn, AAFSegment, stillFrame,Still Frame source clip ,
-sets the still frame property on a media group to be the source clip passed as the stillFrame argument.)
-    //@comm Replaces omfiMediaGroupSetStillFrame
-    //@comm Media group choices should be added with the omfiMediaGroupAddChoice() function.
+sets the still frame property on a essence group to be the source clip passed as the stillFrame argument.)
+    //@comm Essence group choices should be added with the AddChoice() function.
     
 /****/
 AD_XMETHOD1(AddChoice,
 [in], objIn, AAFSegment, choice,Source clip to add as a choice ,
-adds the source clip specified in the choice argument as  a choice to the given media group object.)
-    //@comm Replaces omfiMediaGroupAddChoice
+adds the source clip specified in the choice argument as  a choice to the given essence group object.)
 
 /****/
 AD_XMETHOD2(GetIndexedRepresentation,
 [in], objPass, aafInt32, index,The 1-based index into the array,
 [out], objOut, AAFSegment , result,The representation at that index,
-adds the source clip specified in the choice argument as  a choice to the given media group object.)
+adds the source clip specified in the choice argument as  a choice to the given essence group object.)
 
 //	private:
 //		AAFSourceClip			*_stillFrame;
