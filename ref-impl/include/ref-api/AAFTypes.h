@@ -164,14 +164,15 @@ typedef aafInt32   		aafJPEGTableID_t; /* for TIFF objects */
 
 /************************************************************
  *
- * Enumerated AAFI types.
+ * Enumerated AAF types.
  *
  *************************************************************/
 
 typedef aafInt32 aafFileRev_t;
 typedef enum _aafFileRev_e
 {
-  kAAFRev1 = 0
+  kAAFRev1 = 0,
+  kAAFRev2 = 1
 } aafFileRev_e;
 
 typedef aafInt32 aafMediaOpenMode_t;
@@ -309,12 +310,12 @@ typedef aafInt32 aafSignalStandard_t;
 typedef enum _aafSignalStandard_e
 {
 	kAAFSignalNone = 0,
-	kAAFSignalS125MInterlace = 1,
-	kAAFSignalS125MProgressive = 2,
-	kAAFSignalS347M = 3,
-	kAAFSignalS274M = 4,
-	kAAFSignalS296M = 5,
-	kAAFSignalS349M = 6
+	kAAFSignalITU601 = 1,
+	kAAFSignalITU1358 = 2,
+	kAAFSignalSMPTE347M = 3,
+	kAAFSignalSMPTE274M = 4,
+	kAAFSignalSMPTE296M = 5,
+	kAAFSignalSMPTE349M = 6
 } aafSignalStandard_e;
 	
 typedef aafInt32 aafScanningDirection_t;
