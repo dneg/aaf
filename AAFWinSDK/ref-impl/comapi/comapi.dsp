@@ -110,6 +110,10 @@ SOURCE="..\..\..\ref-impl\src\com-api\CAAFAIFCDescriptor.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFAuxiliaryDescriptor.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFCDCIDescriptor.cpp"
 # End Source File
 # Begin Source File
@@ -373,6 +377,10 @@ SOURCE="..\..\..\ref-impl\src\com-api\CAAFRandomRawStorage.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFRawStorage.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFRecordingDescriptor.cpp"
 # End Source File
 # Begin Source File
 

@@ -114,6 +114,10 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFAIFCDescriptor.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFAuxiliaryDescriptor.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFBaseClassFactory.cpp"
 # End Source File
 # Begin Source File
@@ -391,6 +395,10 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFRandomRawStorage.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFRawStorage.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFRecordingDescriptor.cpp"
 # End Source File
 # Begin Source File
 
