@@ -169,6 +169,21 @@ static aafBool  InitCalled = AAFFalse;
 
 const aafProductVersion_t AAFReferenceImplementationVersion = {1, 0, 0, 1, kVersionBeta};
 
+AAFByteOrder GetNativeByteOrder(void)
+{
+  OMInt16 word = 0x1234;
+  OMInt8  byte = *((OMInt8*)&word);
+  AAFByteOrder result;
+
+//  ASSERT("Valid byte order", ((byte == 0x12) || (byte == 0x34)));
+
+  if (byte == 0x12) {
+    result = MOTOROLA_ORDER;
+  } else {
+    result = INTEL_ORDER;
+  }
+  return result;
+}
 
 aafBool	EqualAUID(const aafUID_t *uid1, const aafUID_t *uid2)
 {
@@ -179,10 +194,6 @@ static aafInt32 powi(
 			aafInt32	base,
 			aafInt32	exponent);
 
-double FloatFromRational(
-			aafRational_t	e);		/* IN - Convert this into a double */
-aafRational_t RationalFromFloat(
-			double	f);		/* IN - Convert this number into a rational */
 
 	/************************************************************
 	 *
@@ -804,6 +815,97 @@ aafErr_t PvtTimecodeToOffset(
 
 	return(OM_ERR_NONE);
 }
+
+/************************
+ * Function: AAFByteSwap16		(INTERNAL)
+ *
+ * 	Byte swap a short value to convert between big-endian and
+ *		little-endian formats.
+ *
+ * Argument Notes:
+ *		See argument comments.
+ *
+ * ReturnValue:
+ *		Modifies the value in place
+ *
+ * Possible Errors:
+ *		none
+ */
+void AAFByteSwap16(
+			aafInt16 * wp)	/* IN/OUT -- Byte swap this value */
+{
+	register unsigned char *cp = (unsigned char *) wp;
+	int             t;
+
+	t = cp[1];
+	cp[1] = cp[0];
+	cp[0] = t;
+}
+
+/************************
+ * Function: AAFByteSwap32		(INTERNAL)
+ *
+ * 	Byte swap a long value to convert between big-endian and
+ *		little-endian formats.
+ *
+ * Argument Notes:
+ *		See argument comments.
+ *
+ * ReturnValue:
+ *		Modifies the value in place
+ *
+ * Possible Errors:
+ *		none
+ */
+void AAFByteSwap32(
+			aafInt32 *lp)	/* IN/OUT -- Byte swap this value */
+{
+	register unsigned char *cp = (unsigned char *) lp;
+	int             t;
+
+	t = cp[3];
+	cp[3] = cp[0];
+	cp[0] = t;
+	t = cp[2];
+	cp[2] = cp[1];
+	cp[1] = t;
+}
+
+/************************
+ * Function: AAFByteSwap64		(INTERNAL)
+ *
+ * 	Byte swap a long value to convert between big-endian and
+ *		little-endian formats.
+ *
+ * Argument Notes:
+ *		See argument comments.
+ *
+ * ReturnValue:
+ *		Modifies the value in place
+ *
+ * Possible Errors:
+ *		none
+ */
+void AAFByteSwap64(
+			aafInt64 *lp)	/* IN/OUT -- Byte swap this value */
+{
+	register unsigned char *cp = (unsigned char *) lp;
+	int             t;
+
+	t = cp[7];
+	cp[7] = cp[0];
+	cp[0] = t;
+	t = cp[6];
+	cp[6] = cp[1];
+	cp[1] = t;
+	t = cp[5];
+	cp[5] = cp[2];
+	cp[2] = t;
+	t = cp[4];
+	cp[4] = cp[3];
+	cp[3] = t;
+}
+
 /*
 ;;; Local Variables: ***
 ;;; tab-width:3 ***
