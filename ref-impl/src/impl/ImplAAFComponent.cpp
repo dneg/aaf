@@ -20,6 +20,8 @@
 #include "ImplAAFComponent.h"
 #endif
 
+#include "AAFPropertyIDs.h"
+
 #include <assert.h>
 #include "AAFResult.h"
 #include "aafErr.h"

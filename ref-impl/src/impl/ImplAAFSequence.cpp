@@ -15,6 +15,7 @@
 #include "ImplAAFSequence.h"
 #include "ImplAAFObjectCreation.h"
 
+#include "AAFPropertyIDs.h"
 
 #include <assert.h>
 #include "AAFResult.h"
