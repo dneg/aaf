@@ -68,7 +68,7 @@ AD_XMETHOD3(Initialize,
 AD_XMETHOD6(GetFade,
 			[out],
 			objPass,
-			aafInt32 *,
+			aafLength_t *,
 			pFadeInLen,
 			Fade In Length,
 
@@ -86,7 +86,7 @@ AD_XMETHOD6(GetFade,
 
 			[out],
 			objPass,
-			aafInt32 *,
+			aafLength_t *,
 			pFadeOutLen,
 			Fade Out Length,
 
