@@ -32,12 +32,6 @@ using namespace std;
 
 #include "AAFPlatform.h"
 
-#if !defined(COMPILER_MSC)
-#include <unistd.h>
-#else
-#include <direct.h>
-#endif
-
 #include "AAFTypes.h"
 #include "AAFResult.h"
 #include "ModuleTest.h"
@@ -203,6 +197,8 @@ static const aafUInt8 compressed422JFIF[] =
 #define strncasecmp(s1, s2, n) strnicmp(s1, s2, n)
 #include <direct.h>
 #define getcwd(buf, size) _getcwd(buf, size)
+#else
+#include <unistd.h>		// getcwd
 #endif
 
 static bool acceptable_pchar(unsigned char c)
