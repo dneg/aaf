@@ -232,7 +232,7 @@ AD_METHOD1(GetBypassOverride,
 AD_METHOD1(CountSourceSegments,
 
 		   [out],
-		   aafInt32 *,
+		   aafUInt32 *,
 		   pResult,
 		   Number of source media segments in the operation group,
 
@@ -286,7 +286,7 @@ AD_METHOD1(IsValidTranOperation,
 AD_METHOD1(CountParameters,
 
 		   [out],
-		   aafInt32 *,
+		   aafUInt32 *,
 		   pResult,
 		   Number of parameter slots in the operation group,
 
