@@ -151,7 +151,6 @@ HRESULT Aaf2Omf::OpenInputFile ()
 {
 	HRESULT						rc = AAFRESULT_SUCCESS;
 	aafWChar*					pwFileName = NULL;
-//	aafProductIdentification_t	ProductInfo;
 	IAAFIdentification*			pIdent = NULL;
 
 	// convert file name to Wide char
@@ -265,6 +264,7 @@ HRESULT Aaf2Omf::OpenOutputFile ()
 	OMFProductInfo.productVersion.minor = productVersion.minor;
 	OMFProductInfo.productVersion.tertiary = productVersion.tertiary;
 	OMFProductInfo.productVersion.patchLevel = productVersion.patchLevel;
+	OMFProductInfo.productID = 42; // Comes from OMF !!!
 	OMFProductInfo.productVersion.type = (OMF2::omfProductReleaseType_t)productVersion.type;
 
 	rc = OMF2::omfsBeginSession(&OMFProductInfo, &OMFSession);
@@ -433,6 +433,32 @@ HRESULT Aaf2Omf::AAFFileRead()
 		if (OMFMob)
 		{
 			rc = TraverseMob(pMob, &OMFMob);
+			if (SUCCEEDED(rc))
+			{
+				// NOw add user comments 
+				aafUInt32	numComments = 0;
+
+				rc = pMob->GetNumComments(&numComments);
+				if (SUCCEEDED(rc) && (numComments > 0))
+				{
+					IEnumAAFMobComments*	pCommentIterator = NULL;
+					aafMobComment_t*		pMobComment = NULL;
+					rc = pMob->EnumAAFAllMobComments(&pCommentIterator);
+					while ( (SUCCEEDED(rc)) && (SUCCEEDED(pCommentIterator->NextOne(pMobComment))))
+					{
+						char*	pszComment;
+						char*	pszCommName;
+
+						UTLStrWToStrA(pMobComment->category, &pszCommName);
+						UTLStrWToStrA(pMobComment->comment, &pszComment);
+						rc = OMF2::omfiMobAppendComment(OMFFileHdl, OMFMob, pszCommName, pszComment);
+						UTLMemoryFree(pszCommName);
+						UTLMemoryFree(pszComment);
+					}
+					pCommentIterator->Release();
+				}
+			}
+
 		}
 		UTLMemoryFree(pwMobName);
 		UTLMemoryFree(pszMobName);
@@ -668,28 +694,108 @@ HRESULT Aaf2Omf::ConvertSourceMob(IAAFSourceMob* pSourceMob,
 	if (SUCCEEDED(rc))
 	{
 		// This is File Descriptor
-		OMF2::omfRational_t		rate;
-		aafRational_t			sampleRate;
+		OMF2::omfRational_t	rate;
+		aafRational_t		sampleRate;
+		aafLength_t		length;	
 
 		pFileDesc->GetSampleRate(&sampleRate);
+		pFileDesc->GetLength(&length);
 		rate.numerator = sampleRate.numerator;
 		rate.denominator = sampleRate.denominator;
 		rc = pEssenceDesc->QueryInterface(IID_IAAFTIFFDescriptor, (void **)&pTiffDesc);
 		if (SUCCEEDED(rc))
 		{
 			// It is a TIFF file descriptor
+			OMF2::omfDDefObj_t	datakind;
+			OMF2::omfObject_t	mediaDescriptor;
+			aafInt32			leadingLines, trailingLines;
+			aafJPEGTableID_t	JPEGTableID;
+			aafDataValue_t		pSummary;
+			aafUInt32			summarySize = 0;
+			aafBool				IsUniform;
+			aafBool				IsContiguous;
+
+			// retrieve TIFF descriptor properties
+			rc = pTiffDesc->GetSummaryBufferSize(&summarySize);
+			UTLMemoryAlloc(summarySize, (void **)&pSummary);
+			rc = pTiffDesc->GetSummary(summarySize, pSummary);
+			rc = pTiffDesc->GetTrailingLines(&trailingLines);
+			rc = pTiffDesc->GetLeadingLines(&leadingLines);
+			rc = pTiffDesc->GetIsUniform(&IsUniform);
+			rc = pTiffDesc->GetIsContiguous(&IsContiguous);
+			rc = pTiffDesc->GetJPEGTableID(&JPEGTableID);
+
+			// Create a new OMF TIFF File Descriptor
 			rc = OMF2::omfmFileMobNew(OMFFileHdl, pMobName, rate, CODEC_TIFF_VIDEO, pOMFSourceMob);
+			rc = OMF2::omfmMobGetMediaDescription(OMFFileHdl, *pOMFSourceMob, &mediaDescriptor);
 			rc = OMF2::omfiMobSetIdentity(OMFFileHdl, *pOMFSourceMob, OMFMobID);
+			rc = OMF2::omfsWriteLength(OMFFileHdl, mediaDescriptor, OMF2::OMMDFLLength, (OMF2::omfLength_t)length); 
+			if (rc)
+			{
+				char* pErrString = OMF2::omfsGetErrorString((OMF2::omfErr_t)rc);
+				goto Cleanup;
+			}
 			if (gpGlobals->bVerboseMode)
 				UTLstdprintf("%sAdded a Tiff Media Descriptor to a Source MOB\n", gpGlobals->indentLeader);
+
+			// Set OMF TIFF File Descriptor properties
+			OMF2::omfiDatakindLookup(OMFFileHdl, "omfi:data:Picture", &datakind, (OMF2::omfErr_t *)&rc);
+			rc = OMF2::omfsWriteBoolean( OMFFileHdl,
+										mediaDescriptor,
+										OMF2::OMTIFDIsContiguous, 
+										(OMF2::omfBool)IsContiguous);
+			rc = OMF2::omfsWriteBoolean( OMFFileHdl,
+										mediaDescriptor,
+										OMF2::OMTIFDIsUniform,
+										(OMF2::omfBool)IsUniform);
+			rc = OMF2::omfsWriteDataValue(OMFFileHdl,
+										 mediaDescriptor,
+										 OMF2::OMTIFDSummary,
+										 datakind,
+										 (OMF2::omfDataValue_t)pSummary,
+										 (OMF2::omfPosition_t)0,
+										 summarySize);
+			rc = OMF2::omfsWriteJPEGTableIDType( OMFFileHdl,
+								 				 mediaDescriptor,
+												 OMF2::OMTIFDJPEGTableID, 
+												 (OMF2::omfJPEGTableID_t)JPEGTableID);
+			rc = OMF2::omfsWriteInt32(OMFFileHdl,
+									 mediaDescriptor,
+									 OMF2::OMTIFDLeadingLines, 
+									 leadingLines);
+			rc = OMF2::omfsWriteInt32(OMFFileHdl,
+									 mediaDescriptor,
+									 OMF2::OMTIFDTrailingLines, 
+									 trailingLines);
+			UTLMemoryFree(pSummary);
 			goto Cleanup;
 		}
 		rc = pEssenceDesc->QueryInterface(IID_IAAFWAVEDescriptor, (void **)&pWAVEDesc);
 		if (SUCCEEDED(rc))
 		{
 			// It is a WAVE file descriptor
+			OMF2::omfDDefObj_t	datakind;
+			OMF2::omfObject_t	mediaDescriptor;
+			aafDataValue_t*		pSummary;
+			aafUInt32			summarySize = 0;
+
+			// retrieve WAVE descriptor properties
+			rc = pWAVEDesc->GetSummaryBufferSize(&summarySize);
+			UTLMemoryAlloc(summarySize, (void **)&pSummary);
+			rc = pWAVEDesc->GetSummary(summarySize, *pSummary);
+
+			//Create a new WAVE File Descriptor
 			rc = OMF2::omfmFileMobNew(OMFFileHdl, pMobName, rate, CODEC_WAVE_AUDIO, pOMFSourceMob);
 			rc = OMF2::omfiMobSetIdentity(OMFFileHdl, *pOMFSourceMob, OMFMobID);
+			rc = OMF2::omfmMobGetMediaDescription(OMFFileHdl, *pOMFSourceMob, &mediaDescriptor);
+			OMF2::omfiDatakindLookup(OMFFileHdl, "omfi:data:Sound", &datakind, (OMF2::omfErr_t *)&rc);
+			rc = OMF2::omfsWriteDataValue(OMFFileHdl,
+										 mediaDescriptor,
+										 OMF2::OMWAVDSummary,
+										 datakind,
+										 (OMF2::omfDataValue_t)pSummary,
+										 (OMF2::omfPosition_t)0,
+										 summarySize);
 			if (gpGlobals->bVerboseMode)
 				UTLstdprintf("%sAdded a Wave Media Descriptor to a Source MOB\n", gpGlobals->indentLeader);
 			goto Cleanup;
@@ -698,8 +804,21 @@ HRESULT Aaf2Omf::ConvertSourceMob(IAAFSourceMob* pSourceMob,
 		if (SUCCEEDED(rc))
 		{
 			// It is a AIFC file descriptor
+			OMF2::omfObject_t	mediaDescriptor;
+			aafDataValue_t*		pSummary;
+			aafUInt32			summarySize = 0;
+
+			// retrieve AIFC descriptor properties
+			// Not implemented YET
+			/*
+			rc = pAifcDesc->GetSummaryBufferSize(&summarySize);
+			UTLMemoryAlloc(summarySize, (void **)&pSummary);
+			rc = pAifcDesc->GetSummary(summarySize, *pSummary);
+			*/
 			rc = OMF2::omfmFileMobNew(OMFFileHdl, pMobName, rate, CODEC_AIFC_AUDIO, pOMFSourceMob);
 			rc = OMF2::omfiMobSetIdentity(OMFFileHdl, *pOMFSourceMob, OMFMobID);
+			rc = OMF2::omfmMobGetMediaDescription(OMFFileHdl, *pOMFSourceMob, &mediaDescriptor);
+			rc = OMF2::omfsWriteLength(OMFFileHdl, mediaDescriptor, OMF2::OMMDFLLength, (OMF2::omfLength_t)length); 
 			if (gpGlobals->bVerboseMode)
 				UTLstdprintf("%sAdded an AIFC Media Descriptor to a Source MOB\n", gpGlobals->indentLeader);
 			goto Cleanup;
