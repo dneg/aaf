@@ -78,7 +78,10 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 		if (++(*_iterator))
 		{
-			*ppParameterDef = _iterator->value();
+			OMObject* object = _iterator->currentObject();
+			ImplAAFParameterDef* obj = dynamic_cast<ImplAAFParameterDef*>(object);
+			// assert(obj != 0); // tjb - consistent way to handle this ?
+			*ppParameterDef = obj;
 			(*ppParameterDef)->AcquireReference();
 			ar = AAFRESULT_SUCCESS;
 		}
@@ -184,7 +187,7 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplEnumAAFParameterDefs::SetIterator(
                         ImplAAFObject *pObj,
-                        OMReferenceContainerIterator<ImplAAFParameterDef>* iterator)
+                        OMReferenceContainerIterator* iterator)
 {
 	AAFRESULT ar = AAFRESULT_SUCCESS;
 	

@@ -76,7 +76,10 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 		if (++(*_iterator))
 		{
-			*ppOperationDef = _iterator->value();
+			OMObject* object = _iterator->currentObject();
+			ImplAAFOperationDef* obj = dynamic_cast<ImplAAFOperationDef*>(object);
+			// assert(obj != 0); // tjb - consistent way to handle this ?
+			*ppOperationDef = obj;
 			(*ppOperationDef)->AcquireReference();
 			ar = AAFRESULT_SUCCESS;
 		}
@@ -181,7 +184,7 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplEnumAAFOperationDefs::SetIterator(
                         ImplAAFObject *pObj,
-                        OMReferenceContainerIterator<ImplAAFOperationDef>* iterator)
+                        OMReferenceContainerIterator* iterator)
 {
 	AAFRESULT ar = AAFRESULT_SUCCESS;
 	

@@ -112,11 +112,11 @@ public:
   // SDK Internal 
   virtual AAFRESULT STDMETHODCALLTYPE
 	  SetIterator(ImplAAFObject *pObj,
-				OMReferenceContainerIterator<ImplAAFOperationDef>* iterator);
+				OMReferenceContainerIterator* iterator);
 
 private:
 	ImplAAFObject						*_enumObj;
-	OMReferenceContainerIterator<ImplAAFOperationDef>*	_iterator;
+	OMReferenceContainerIterator*	_iterator;
 };
 
 #endif // ! __ImplEnumAAFOperationDefs_h__
