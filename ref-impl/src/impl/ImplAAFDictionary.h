@@ -59,6 +59,7 @@ class ImplAAFInterpolationDef;
 #include "ImplAAFContainerDef.h"
 #include "ImplAAFInterpolationDef.h"
 #include "ImplAAFTypeDef.h"
+#include "ImplAAFDataDef.h"
 
 class ImplAAFDictionary :
   public OMClassFactory, 
@@ -354,6 +355,7 @@ private:
     OMStrongReferenceVectorProperty<ImplAAFTypeDef>			_typeDefinitions;
     OMStrongReferenceVectorProperty<ImplAAFClassDef>		_classDefinitions;
     OMStrongReferenceVectorProperty<ImplAAFInterpolationDef>	_interpolationDefinitions;
+    OMStrongReferenceVectorProperty<ImplAAFDataDef>			_dataDefinitions;
 };
 
 #endif // ! __ImplAAFDictionary_h__
