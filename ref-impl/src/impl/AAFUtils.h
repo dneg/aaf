@@ -181,6 +181,12 @@ double FloatFromRational(
 aafRational_t RationalFromFloat(
 			double	f);		/* IN - Convert this number into a rational */
 
+
+// URL utility functions
+void wcsconvertURLtoFilepath(wchar_t *url, wchar_t *filepath);
+void wcsconvertFilepathtoURL(wchar_t *filepath, wchar_t *url);
+
+
 #endif				/* _AAF_UTIL_API_ */
 
 /* INDENT OFF */
