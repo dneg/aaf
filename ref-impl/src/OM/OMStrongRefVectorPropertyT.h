@@ -297,6 +297,30 @@ ReferencedObject*
   return oldObject;
 }
 
+  // @mfunc The value of this <c OMStrongReferenceVectorProperty>
+  //        at position <p index>.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          (contained) object. This type must be a descendant of
+  //          <c OMStorable>.
+  //   @parm The position from which to get the <p ReferencedObject>.
+  //   @rdesc A pointer to the <p ReferencedObject>.
+  //   @this const
+template <typename ReferencedObject>
+ReferencedObject* OMStrongReferenceVectorProperty<ReferencedObject>::valueAt(
+                                                     const size_t index) const
+{
+  TRACE("OMStrongReferenceVectorProperty<ReferencedObject>::valueAt");
+  PRECONDITION("Optional property is present",
+                                           IMPLIES(isOptional(), isPresent()));
+  PRECONDITION("Valid index", ((index >= 0) && (index < count())));
+
+  OMVectorElement<OMStrongObjectReference<ReferencedObject>,
+                  ReferencedObject>& element = _vector.getAt(index);
+
+  ReferencedObject* result = element.getValue();
+  return result;
+}
+
   // @mfunc Get the value of this <c OMStrongReferenceVectorProperty>
   //        at position <p index> into <p object>.
   //   @tcarg class | ReferencedObject | The type of the referenced
@@ -311,6 +335,7 @@ void OMStrongReferenceVectorProperty<ReferencedObject>::getValueAt(
                                                      const size_t index) const
 {
   TRACE("OMStrongReferenceVectorProperty<ReferencedObject>::getValueAt");
+  OBSOLETE("OMStrongReferenceVectorProperty<ReferencedObject>::valueAt");
   PRECONDITION("Optional property is present",
                                            IMPLIES(isOptional(), isPresent()));
   PRECONDITION("Valid index", ((index >= 0) && (index < count())));
@@ -320,6 +345,33 @@ void OMStrongReferenceVectorProperty<ReferencedObject>::getValueAt(
 
   object = element.getValue();
 
+}
+
+  // @mfunc If <p index> is valid, get the value of this
+  //        <c OMStrongReferenceVectorProperty> at position <p index>
+  //        into <p object> and return true, otherwise return false.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          (contained) object. This type must be a descendant of
+  //          <c OMStorable>.
+  //   @parm The position from which to get the <p ReferencedObject>.
+  //   @parm A pointer to a <p ReferencedObject>.
+  //   @rdesc True if <p index> is valid, false otherwise.
+  //   @this const
+template <typename ReferencedObject>
+bool OMStrongReferenceVectorProperty<ReferencedObject>::find(
+                                               const size_t index,
+                                               ReferencedObject*& object) const
+{
+  TRACE("OMStrongReferenceVectorProperty<ReferencedObject>::find");
+
+  bool result;
+  if (index < count()) {
+    object = valueAt(index);
+    result = true;
+  } else {
+    result = false;
+  }
+  return result;
 }
 
   // @mfunc Append the given <p ReferencedObject> <p object> to
@@ -533,6 +585,93 @@ size_t OMStrongReferenceVectorProperty<ReferencedObject>::indexOfValue(
                     ReferencedObject>& element = iterator.value();
     if (element.getValue() == object) {
       result = iterator.index();
+      break;
+    }
+  }
+  return result;
+}
+
+  // @mfunc The number of occurrences of <p object> in this
+  //        <c OMStrongReferenceVectorProperty>.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          (contained) object. This type must be a descendant of
+  //          <c OMStorable>.
+  //   @parm The object to count.
+  //   @rdesc The number of occurrences.
+  //   @this const
+template <typename ReferencedObject>
+size_t OMStrongReferenceVectorProperty<ReferencedObject>::countOfValue(
+                                          const ReferencedObject* object) const
+{
+  TRACE("OMStrongReferenceVectorProperty<ReferencedObject>::countOfValue");
+  size_t result = 0;
+
+  OMVectorIterator<
+    OMVectorElement<OMStrongObjectReference<ReferencedObject>,
+                    ReferencedObject> > iterator(_vector, OMBefore);
+  // This loop causes objects to be loaded but the one we are
+  // looking for must already be loaded.
+  while (++iterator) {
+    OMVectorElement<OMStrongObjectReference<ReferencedObject>,
+                    ReferencedObject>& element = iterator.value();
+    if (element.getValue() == object) {
+      result = result + 1;
+    }
+  }
+  return result;
+}
+
+  // @mfunc Does this <c OMStrongReferenceVectorProperty> contain
+  //        <p index> ? Is <p index> valid ?
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          (contained) object. This type must be a descendant of
+  //          <c OMStorable>.
+  //   @parm The index.
+  //   @rdesc True if the index is valid, false otherwise.
+  //   @this const
+template <typename ReferencedObject>
+bool OMStrongReferenceVectorProperty<ReferencedObject>::containsIndex(
+                                                      const size_t index) const
+{
+  TRACE("OMStrongReferenceVectorProperty<ReferencedObject>::containsIndex");
+
+  bool result;
+  if (index < count()) {
+    result = true;
+  } else {
+    result = false;
+  }
+  return result;
+}
+
+  // @mfunc If this <c OMStrongReferenceProperty> contains <p object>
+  //        then place its index in <p index> and return true, otherwise
+  //        return false.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          (contained) object. This type must be a descendant of
+  //          <c OMStorable>.
+  //   @parm The object for which to search.
+  //   @parm The index of the object.
+  //   @rdesc True if the object was found, false otherwise.
+  //   @this const
+template <typename ReferencedObject>
+bool OMStrongReferenceVectorProperty<ReferencedObject>::findIndex(
+                           const ReferencedObject* object, size_t& index) const
+{
+  TRACE("OMStrongReferenceVectorProperty<ReferencedObject>::findIndex");
+  bool result = false;
+
+  OMVectorIterator<
+    OMVectorElement<OMStrongObjectReference<ReferencedObject>,
+                    ReferencedObject> > iterator(_vector, OMBefore);
+  // This loop causes objects to be loaded but the one we are
+  // looking for must already be loaded.
+  while (++iterator) {
+    OMVectorElement<OMStrongObjectReference<ReferencedObject>,
+                    ReferencedObject>& element = iterator.value();
+    if (element.getValue() == object) {
+      index = iterator.index();
+      result = true;
       break;
     }
   }
