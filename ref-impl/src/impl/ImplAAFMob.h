@@ -363,15 +363,7 @@ AAFRESULT
 	aafMobKind_t mobKind,             /* IN */
 	aafMediaCriteria_t *pMediaCrit,    /* IN */
 	aafEffectChoice_t *pEffectChoice,  /* IN */  /* NOTE: take this arg out? */
-	ImplAAFComponent **ppThisCpnt,           /* OUT */
 	ImplAAFFindSourceInfo **ppSourceInfo);  /* OUT */
-
-	virtual AAFRESULT FindTrackAndSegment(aafSlotID_t trackID,
-							 aafPosition_t offset,
-							 ImplAAFMobSlot **track,
-							 ImplAAFSegment **segment,
-							 aafRational_t *srcRate,
-							 aafPosition_t *diffPos);
 
 	virtual AAFRESULT MobFindLeaf(ImplAAFMobSlot *track,
 					 aafMediaCriteria_t *mediaCrit,
@@ -390,7 +382,7 @@ AAFRESULT
 					 aafInt32	*nestDepth,
 					 aafPosition_t *diffPos);
 
-	virtual AAFRESULT FindNextMob(ImplAAFTimelineMobSlot *track, 
+	virtual AAFRESULT FindNextMob(ImplAAFMobSlot *track, 
 					 ImplAAFSegment *segment,
 					 aafLength_t length,
 					 aafPosition_t diffPos,
