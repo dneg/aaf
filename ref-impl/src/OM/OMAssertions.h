@@ -22,12 +22,12 @@ void reportAssertionFailure(char* kind,
 #if defined(OM_ENABLE_TRACE)
 
 #define TRACE(routine) \
-  currentRoutineName = routine; \
+  char* currentRoutineName = routine; \
   cerr << "Enter \"" << currentRoutineName << "\"." << endl;
 
 #else
 
-#define TRACE(routine) currentRoutineName = routine;
+#define TRACE(routine) char* currentRoutineName = routine;
 
 #endif
 
