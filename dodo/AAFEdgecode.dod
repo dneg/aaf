@@ -25,7 +25,7 @@ AD_HEAD
 
 AD_CLASS_UUID(38e6f8a2, 2a2c, 11d2, 84, 11, 00, 60, 08, 32, ac, b8)
 AD_DEFAULT_UUID(38e6f8a4, 2a2c, 11d2, 84, 11, 00, 60, 08, 32, ac, b8)
-AD_CLASS_BEGIN
+AD_XCLASS_BEGIN(Concrete, StoredObject)
 
 AD_METHOD2(Create,
 	[in],aafLength_t  ,length  ,Length Property Value,
@@ -40,4 +40,4 @@ AD_METHOD1(GetEdgecode,
 		   This set of functions returns the required property values
   // for the object identified by XXX.)
 
-AD_CLASS_END
+AD_XCLASS_END(Concrete, StoredObject)
