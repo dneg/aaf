@@ -44,7 +44,7 @@
 
 #include "AAFUtils.h" // AAFByteOrder
 
-
+#include "jpegesdata.h"
 
 // ID for this Plugin's CoClass.
 EXTERN_C const CLSID CLSID_AAFJPEGCodec;
@@ -322,6 +322,7 @@ private:
 		aafUInt32 imageWidth;
 		aafUInt32 imageHeight;
 
+		aafUInt16 components;
 		aafColorSpace_t colorSpace;
 		aafUInt32 horizontalSubsampling;
 		aafUInt32 verticalSubsampling;
@@ -337,6 +338,12 @@ private:
 		aafUInt32 bufferSize;
 
 	} aafCompressionParams;
+
+	void DumpSampleImage(const aafCompressionParams& param, JSAMPIMAGE rawSampleImage);
+
+	JSAMPIMAGE GetRawSampleImage(const aafCompressionParams& param); // throw HRESULT
+	void CopyDataToSampleImage(const aafCompressionParams& param, JSAMPIMAGE rawSampleImage); // throw HRESULT
+	void CopyDataFromSampleImage(JSAMPIMAGE rawSampleImage, aafCompressionParams& param); // throw HRESULT
 
 	// Compress a single image data from the given buffer. Return the actual
 	// number of bytes written.
@@ -451,6 +458,15 @@ private:
 
 	aafUInt16 _padBytesPerRow;
 	aafUInt32 _compression_IJG_Quality;
+
+
+	// Data do define and hold the sample image buffer used for raw sub-sampled
+	// YUV data (4-2-2 YCbCr). This is the buffer used with the jpeg_write_raw_data
+	// and jpeg_read_raw_data functions.
+	JSAMPIMAGE _rawSampleImage; /* a 3-D sample array: top index is color */
+	JSAMPARRAY _rawSampleArray; // array of all sample row pointers in raw sample image.
+	JSAMPLE * _rawSampleImageBuffer; // ultimate buffer for _sampleImage.
+	aafUInt32 _rawSampleImageBufferSize;
 
 };
 
