@@ -886,9 +886,10 @@ void OMWeakReferenceVectorProperty<ReferencedObject>::setBits(
   //   @parm The <c OMObject> to insert.
 template <typename ReferencedObject>
 void
-OMWeakReferenceVectorProperty<ReferencedObject>::insert(const OMObject* object)
+OMWeakReferenceVectorProperty<ReferencedObject>::insertObject(
+                                                        const OMObject* object)
 {
-  TRACE("OMWeakReferenceVectorProperty<ReferencedObject>::insert");
+  TRACE("OMWeakReferenceVectorProperty<ReferencedObject>::insertObject");
 
   PRECONDITION("Valid object", object != 0);
 
@@ -908,10 +909,10 @@ OMWeakReferenceVectorProperty<ReferencedObject>::insert(const OMObject* object)
   //   @this const
 template <typename ReferencedObject>
 bool
-OMWeakReferenceVectorProperty<ReferencedObject>::containsValue(
+OMWeakReferenceVectorProperty<ReferencedObject>::containsObject(
                                                   const OMObject* object) const
 {
-  TRACE("OMWeakReferenceVectorProperty<ReferencedObject>::containsValue");
+  TRACE("OMWeakReferenceVectorProperty<ReferencedObject>::containsObject");
 
   PRECONDITION("Valid object", object != 0);
 
@@ -929,10 +930,10 @@ OMWeakReferenceVectorProperty<ReferencedObject>::containsValue(
   //   @parm The <c OMObject> to remove.
 template <typename ReferencedObject>
 void
-OMWeakReferenceVectorProperty<ReferencedObject>::removeValue(
+OMWeakReferenceVectorProperty<ReferencedObject>::removeObject(
                                                         const OMObject* object)
 {
-  TRACE("OMWeakReferenceVectorProperty<ReferencedObject>::removeValue");
+  TRACE("OMWeakReferenceVectorProperty<ReferencedObject>::removeObject");
 
   PRECONDITION("Valid object", object != 0);
 
