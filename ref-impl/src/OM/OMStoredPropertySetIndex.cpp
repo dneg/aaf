@@ -72,6 +72,7 @@ void OMStoredPropertySetIndex::insert(OMPropertyId propertyId,
 
   IndexEntry* entry = find(propertyId);
 
+  ASSERT("New index entry", entry == 0);
   if (entry == 0 ) {
     entry = find();
     ASSERT("Found space for new entry", entry != 0);
@@ -170,40 +171,33 @@ bool OMStoredPropertySetIndex::isValid(void) const
 {
   TRACE("OMStoredPropertySetIndex::isValid");
 
+  // The validity constraints are ...
+  // 1) Each entry must have a non-zero length
+  // 2) Entries must not overlap
+  // 3) Entries must be in order of offset
+  // 4) There must be no gaps between entries
+  // We may choose to relax 3 and 4 in the future
   bool result = true;
   size_t entries = 0;
-  size_t position;
-  bool firstEntry = true;
-  size_t previousOffset;
   size_t currentOffset;
   size_t currentLength;
+  size_t position = 0;
 
   for (size_t i = 0; i < _capacity; i++) {
     if (_table[i]._valid) {
       entries++; // count valid entries
       currentOffset = _table[i]._offset;
       currentLength = _table[i]._length;
-      if (currentLength <= 0) {
+      if (currentLength == 0) {
         result = false; // entry has invalid length
         break;
       }
-      if (firstEntry) {
-        previousOffset = currentOffset;
-        position = currentOffset + currentLength;
-        firstEntry = false;
-      } else {
-        if (currentOffset < previousOffset) {
-          result = false; // entries out of order
-          break;
-        } else if (position > currentOffset) {
-          result = false; // entries overlap
-          break; 
-        } else {
-          // this entry is valid
-          previousOffset = currentOffset;
-          position = position + currentLength;
-        }
-      }
+      if (currentOffset != position) {
+        result = false;  // gap or overlap
+        break;
+	  }
+      // this entry is valid, calculate the expected next position
+      position = position + currentLength;
     }
   }
 
