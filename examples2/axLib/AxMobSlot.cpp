@@ -117,3 +117,22 @@ aafRational_t AxTimelineMobSlot::GetEditRate()
 
 	return rate;
 }
+
+//=---------------------------------------------------------------------=
+
+AxEventMobSlot::AxEventMobSlot( IAAFEventMobSlotSP spIaafEventMobSlot )
+:	AxMobSlot( AxQueryInterface<IAAFEventMobSlot, IAAFMobSlot>(spIaafEventMobSlot) ),
+	_spIaafEventMobSlot( spIaafEventMobSlot )
+{}
+
+AxEventMobSlot::~AxEventMobSlot()
+{}
+
+aafRational_t AxEventMobSlot::GetEditRate()
+{
+	aafRational_t rate;
+
+	CHECK_HRESULT( _spIaafEventMobSlot->GetEditRate( &rate ) );
+
+	return rate;
+}

@@ -85,4 +85,24 @@ private:
 
 //=---------------------------------------------------------------------=
 
+class AxEventMobSlot : public AxMobSlot {
+public:
+	AxEventMobSlot( IAAFEventMobSlotSP spIaafEventMobSlot );
+	~AxEventMobSlot();
+
+	aafRational_t GetEditRate();
+
+	operator IAAFEventMobSlotSP ()
+	{ return _spIaafEventMobSlot; }
+
+private:
+	AxEventMobSlot();
+	AxEventMobSlot( const AxEventMobSlot& );
+	AxEventMobSlot& operator=( const AxEventMobSlot& );
+
+	IAAFEventMobSlotSP _spIaafEventMobSlot;
+};
+
+//=---------------------------------------------------------------------=
+
 #endif
