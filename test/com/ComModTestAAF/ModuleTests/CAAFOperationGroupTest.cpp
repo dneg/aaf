@@ -90,7 +90,7 @@ const aafString_t  TEST_PARAM_DESC [2]	=	{L"A longer description of the TestEffe
 												L"An aproximation of PI"};
 const aafString_t  TEST_PARAM_UNITS[2]	=   {L"Furlongs per Fortnight", L"PI fractional members"};
 
-aafUID_t kTestParm2ID = {0};
+aafUID_t kTestParm2ID = {0x14b66cc5, 0x1a1, 0x11d4, { 0x80, 0x46, 0x8, 0x0, 0x36, 0x21, 0x8, 0x4 } };
 
 typedef IAAFSmartPointer<IAAFParameterDef>					IAAFParameterDefSP;
 typedef IAAFSmartPointer<IEnumAAFParameters>				IEnumAAFParametersSP;
@@ -251,8 +251,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		//add 2nd param
 		IAAFParameterDefSP spParam2Def;
 		checkResult(defs.cdParameterDef()->
-			CreateInstance(IID_IAAFParameterDef, (IUnknown **)&spParam2Def));	
-		checkResult(CoCreateGuid((GUID*)&kTestParm2ID));
+			CreateInstance(IID_IAAFParameterDef, (IUnknown **)&spParam2Def));
 		checkResult(spParam2Def->Initialize (kTestParm2ID, TEST_PARAM_NAME[1], TEST_PARAM_DESC[1], defs.tdRational()));
 		checkResult(spParam2Def->SetDisplayUnits(TEST_PARAM_UNITS[1]));
 		checkResult(pDictionary->RegisterParameterDef(spParam2Def));
