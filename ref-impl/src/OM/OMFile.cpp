@@ -12,9 +12,10 @@
 
 OMFile::OMFile(const OMAccessMode mode,
                OMStoredObject* store,
-               const OMClassFactory* factory)
+               const OMClassFactory* factory,
+               const OMLoadMode loadMode)
 : _root(0), _rootStoredObject(store), _classFactory(factory),
-  _objectDirectory(0), _mode(mode)
+  _objectDirectory(0), _mode(mode), _loadMode(loadMode)
 {
   TRACE("OMFile::OMFile");
 
@@ -26,7 +27,7 @@ OMFile::OMFile(const OMAccessMode mode,
                const OMClassFactory* factory,
                OMStorable* root)
 : _root(root), _rootStoredObject(store), _classFactory(factory),
-  _objectDirectory(0), _mode(mode)
+  _objectDirectory(0), _mode(mode), _loadMode(lazyLoad)
 {
   TRACE("OMFile::OMFile");
 
@@ -51,16 +52,18 @@ OMFile::~OMFile(void)
   //        exist.
   //   @parm The name of the file to open.
   //   @parm The factory to use for creating objects.
+  //   @parm Specifies the use of lazy or eager loading.
   //   @rdesc The newly opened <c OMFile>.
 OMFile* OMFile::openExistingRead(const wchar_t* fileName,
-                                 const OMClassFactory* factory)
+                                 const OMClassFactory* factory,
+                                 const OMLoadMode loadMode)
 {
   TRACE("OMFile::openExistingRead");
   PRECONDITION("Valid file name", validWideString(fileName));
   PRECONDITION("Valid class factory", factory != 0);
 
   OMStoredObject* store = OMStoredObject::openRead(fileName);
-  OMFile* newFile = new OMFile(readOnlyMode, store, factory);
+  OMFile* newFile = new OMFile(readOnlyMode, store, factory, loadMode);
   ASSERT("Valid heap pointer", newFile != 0);
   return newFile;
 }
@@ -71,16 +74,18 @@ OMFile* OMFile::openExistingRead(const wchar_t* fileName,
   //        exist.
   //   @parm The name of the file to open.
   //   @parm The factory to use for creating objects.
+  //   @parm Specifies the use of lazy or eager loading.
   //   @rdesc The newly opened <c OMFile>.
 OMFile* OMFile::openExistingModify(const wchar_t* fileName,
-                                   const OMClassFactory* factory)
+                                   const OMClassFactory* factory,
+                                   const OMLoadMode loadMode)
 {
   TRACE("OMFile::openExistingModify");
   PRECONDITION("Valid file name", validWideString(fileName));
   PRECONDITION("Valid class factory", factory != 0);
 
   OMStoredObject* store = OMStoredObject::openModify(fileName);
-  OMFile* newFile = new OMFile(modifyMode, store, factory);
+  OMFile* newFile = new OMFile(modifyMode, store, factory, loadMode);
   ASSERT("Valid heap pointer", newFile != 0);
   return newFile;
 }
@@ -264,11 +269,21 @@ OMObjectDirectory* OMFile::objectDirectory(void)
 }
 
   // @mfunc The byte order of this <c OMFile>.
+  //   @rdesc The byte order of this <c OMFile>.
   //   @this const
 OMByteOrder OMFile::byteOrder(void) const
 {
   ASSERT("Valid root", _rootStoredObject != 0);
   return _rootStoredObject->byteOrder();
+}
+
+  // @mfunc The loading mode (eager or lazy) of this <c OMFile>.
+  //   @rdesc The loading mode (eager or lazy) of this <c OMFile>.
+  //   @this const
+OMFile::OMLoadMode OMFile::loadMode(void) const
+{
+  TRACE("OMFile::loadMode");
+  return _loadMode;
 }
 
 const OMClassId& OMFile::classId(void) const
