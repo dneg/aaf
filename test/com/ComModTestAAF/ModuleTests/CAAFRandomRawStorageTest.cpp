@@ -391,7 +391,11 @@ public:
 	size_t status = wcstombs(cFileName, pFileName, FILENAME_MAX);
 	assert (status != (size_t)-1);
 	if (kAAFFileAccess_write == access)
-	  _file = fopen (cFileName, "wb");
+	  // BobT: Tom R discovered that Structured Storage requires
+	  // readability even for AAF files which are open only for
+	  // write.
+	  // _file = fopen (cFileName, "wb");
+	  _file = fopen (cFileName, "w+b");
 	else if (kAAFFileAccess_read == access)
 	  _file = fopen (cFileName, "rb");
 	else if (kAAFFileAccess_modify == access)
