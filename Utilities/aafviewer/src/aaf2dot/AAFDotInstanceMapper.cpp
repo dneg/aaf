@@ -27,6 +27,7 @@
 #include <AxMetaDef.h>
 #include <AxMob.h>
 #include <AAFTypeDefUIDs.h>
+#include <AAFResult.h>
 
 #include <iostream>
 #include <sstream>
@@ -230,8 +231,13 @@ AAFDotInstanceMapper::MapAAFObject( AxObject axObject, bool &popStack )
    IAAFSourceReferenceSP spIaafSourceReference;
    if ( AxIsA( spIUnknown, spIaafSourceReference ) )
    {
-      aafMobID_t mobID;
-      CHECK_HRESULT( spIaafSourceReference->GetSourceID( &mobID ) );
+      aafMobID_t mobID = {0};
+      HRESULT result = spIaafSourceReference->GetSourceID( &mobID );
+      if (!SUCCEEDED(result)) {
+	 if (result != AAFRESULT_PROP_NOT_PRESENT) {
+	    throw AxExHResult(result, __FILE__, __LINE__);
+	 }
+      }
 
       aafSlotID_t slotID;
       CHECK_HRESULT( spIaafSourceReference->GetSourceMobSlotID( &slotID ) );
