@@ -23,6 +23,8 @@ AD_FORWARD_DECLARATION(AAFOperationDef)
 AD_FORWARD_DECLARATION(EnumAAFOperationDefs)
 AD_FORWARD_DECLARATION(EnumAAFCodecDefs)
 AD_FORWARD_DECLARATION(EnumAAFContainerDefs)
+AD_FORWARD_DECLARATION(AAFInterpolationDef)
+AD_FORWARD_DECLARATION(EnumAAFInterpolationDefs)
 AD_CLASS_UUID(B1A21399, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
 
 AD_DEFAULT_UUID(B1A21398, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
@@ -195,7 +197,7 @@ Return the parameter definition object with the given id.)
 
 AD_XMETHOD1(GetParameterDefinitions,
 [out\,retval], objOut, EnumAAFParameterDefs, ppEnum, Definition Enumeration,
-Return an enumerator for aff parameter definitions.)
+Return an enumerator for all parameter definitions.)
 
 
 AD_XMETHOD1(RegisterCodecDefinition,
@@ -205,11 +207,11 @@ Add the codec definition object to the header's list of definitions.)
 AD_XMETHOD2(LookupCodecDefinition,
 [in\,ref], objPass, aafUID_t *, parameterID, Parameter Unique ID,
 [out\,retval], objOut, AAFCodecDef, ppParmDef, Codec definition object,
-Return the parameter definition object with the given id.)
+Return the codec definition object with the given id.)
 
 AD_XMETHOD1(GetCodecDefinitions,
 [out\,retval], objOut, EnumAAFCodecDefs, ppEnum, Definition Enumeration,
-Return an enumerator for aff parameter definitions.)
+Return an enumerator for all codec definitions.)
 
 AD_XMETHOD1(RegisterContainerDefinition,
 [in], objIn, AAFContainerDef, pParmDef, Container Definition Object,
@@ -218,11 +220,24 @@ Add the container definition object to the header's list of definitions.)
 AD_XMETHOD2(LookupContainerDefinition,
 [in\,ref], objPass, aafUID_t *, parameterID, Parameter Unique ID,
 [out\,retval], objOut, AAFContainerDef, ppParmDef, Container definition object,
-Return the parameter definition object with the given id.)
+Return the container definition object with the given id.)
 
 AD_XMETHOD1(GetContainerDefinitions,
 [out\,retval], objOut, EnumAAFContainerDefs, ppEnum, Definition Enumeration,
-Return an enumerator for aff parameter definitions.)
+Return an enumerator for all container definitions.)
+
+AD_XMETHOD1(RegisterInterpolationDefinition,
+[in], objIn, AAFInterpolationDef, pInterpDef, Interpolation Definition Object,
+Add the Interpolation definition object to the header's list of definitions.)
+
+AD_XMETHOD2(LookupInterpolationDefinition,
+[in\,ref], objPass, aafUID_t *, parameterID, Parameter Unique ID,
+[out\,retval], objOut, AAFInterpolationDef, ppInterpDef, Interpolation definition object,
+Return the Interpolation definition object with the given id.)
+
+AD_XMETHOD1(GetInterpolationDefinitions,
+[out\,retval], objOut, EnumAAFInterpolationDefs, ppEnum, Definition Enumeration,
+Return an enumerator for aff Interpolation definitions.)
 
 
 AD_XCLASS_END(Concrete, StoredObject)
