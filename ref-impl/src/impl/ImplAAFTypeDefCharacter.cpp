@@ -225,7 +225,7 @@ AAFRESULT STDMETHODCALLTYPE
 // class ImplAAFTypeDefCharacter
 
 void ImplAAFTypeDefCharacter::reorder(OMByte* externalBytes,
-                             size_t externalBytesSize) const
+                             size_t ANAME(externalBytesSize)) const
 {
   TRACE("ImplAAFTypeDefCharacter::reorder");
   PRECONDITION("Valid external bytes", externalBytes != 0);
@@ -234,10 +234,10 @@ void ImplAAFTypeDefCharacter::reorder(OMByte* externalBytes,
   reorderInteger(externalBytes, kExternalCharacterSize);
 }
 
-size_t ImplAAFTypeDefCharacter::externalSize(OMByte* internalBytes,
-                                    size_t internalBytesSize) const
+size_t ImplAAFTypeDefCharacter::externalSize(OMByte* ANAME(internalBytes),
+                                    size_t ANAME(internalBytesSize)) const
 {
-  TRACE("WideStringType::externalSize");
+  TRACE("ImplAAFTypeDefCharacter::externalSize");
 
   PRECONDITION("Valid internal bytes", internalBytes != 0);
   PRECONDITION("Valid internal bytes size", internalBytesSize >= kExternalCharacterSize);
@@ -246,7 +246,7 @@ size_t ImplAAFTypeDefCharacter::externalSize(OMByte* internalBytes,
 }
 
 void ImplAAFTypeDefCharacter::externalize(OMByte* internalBytes,
-                                 size_t internalBytesSize,
+                                 size_t ANAME(internalBytesSize),
                                  OMByte* externalBytes,
                                  size_t externalBytesSize,
                                  OMByteOrder byteOrder) const
@@ -265,8 +265,8 @@ void ImplAAFTypeDefCharacter::externalize(OMByte* internalBytes,
     contract(internalBytes, sizeof(aafCharacter), externalBytes, kExternalCharacterSize, byteOrder);
 }
 
-size_t ImplAAFTypeDefCharacter::internalSize(OMByte* externalBytes,
-                                    size_t externalBytesSize) const
+size_t ImplAAFTypeDefCharacter::internalSize(OMByte* ANAME(externalBytes),
+                                    size_t ANAME(externalBytesSize)) const
 {
   TRACE("ImplAAFTypeDefCharacter::internalSize");
 
@@ -277,7 +277,7 @@ size_t ImplAAFTypeDefCharacter::internalSize(OMByte* externalBytes,
 }
 
 void ImplAAFTypeDefCharacter::internalize(OMByte* externalBytes,
-                                 size_t externalBytesSize,
+                                 size_t ANAME(externalBytesSize),
                                  OMByte* internalBytes,
                                  size_t internalBytesSize,
                                  OMByteOrder byteOrder) const

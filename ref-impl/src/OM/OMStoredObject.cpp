@@ -1052,7 +1052,7 @@ void OMStoredObject::restore(OMPropertyTable*& table)
   //   @parm TBS
   //   @parm TBS
 void OMStoredObject::restore(OMDataStream& stream,
-                             size_t externalSize)
+                             size_t ANAME(externalSize))
 {
   TRACE("OMStoredObject::restore");
 
