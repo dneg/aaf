@@ -71,7 +71,7 @@ OMFile::OMFile(const wchar_t* fileName,
   _fileName = saveWideString(fileName);
   setClassFactory(factory);
   readSignature(_fileName);
-  setName("/");
+  setName(L"/");
 }
 
   // @mfunc Constructor. Create an <c OMFile> object representing
@@ -103,8 +103,8 @@ OMFile::OMFile(const wchar_t* fileName,
   PRECONDITION("Valid file name", validWideString(fileName));
   _fileName = saveWideString(fileName);
   setClassFactory(factory);
-  setName("<file>");
-  _root->attach(this, "/");
+  setName(L"<file>");
+  _root->attach(this, L"/");
   _root->setStore(rootStoredObject());
 }
 
@@ -300,7 +300,7 @@ OMStorable* OMFile::restore(void)
   if (id == OMRootStorable::_rootClassId) {
     ASSERT("Valid dictionary", _dictionary != 0);
     _root = new OMRootStorable();
-    _root->attach(this, "/");
+    _root->attach(this, L"/");
     _root->setStore(rootStoredObject());
     _root->setClassFactory(_dictionary);
 
@@ -310,7 +310,7 @@ OMStorable* OMFile::restore(void)
     ASSERT("Consistent dictionaries", metaDictionary == _dictionary);
     _root->setClassFactory(classFactory());
   } else {
-    _root = OMStorable::restoreFrom(this, "/", *rootStoredObject());
+    _root = OMStorable::restoreFrom(this, L"/", *rootStoredObject());
   }
   return root();
 }
@@ -438,34 +438,32 @@ OMFileSignature OMFile::signature(void) const
   //   @parm The pathname to the desired property.
   //   @rdesc The property instance.
   //   @this const
-OMProperty* OMFile::findPropertyPath(const char* propertyPathName) const
+OMProperty* OMFile::findPropertyPath(const wchar_t* propertyPathName) const
 {
   TRACE("OMFile::findPropertyPath");
-  PRECONDITION("Valid property path name", validString(propertyPathName));
-  PRECONDITION("Path name is absolute", propertyPathName[0] == '/');
+  PRECONDITION("Valid property path name", validWideString(propertyPathName));
+  PRECONDITION("Path name is absolute", propertyPathName[0] == L'/');
   PRECONDITION("Valid root", _root != 0);
 
-  char* path = new char[strlen(propertyPathName) + 1];
-  ASSERT("Valid heap pointer", path != 0);
-  strcpy(path, propertyPathName);
+  wchar_t* path = saveWideString(propertyPathName);
   
-  char* element = path;
+  wchar_t* element = path;
   element++; // skip first '/'
 
   const OMStorable* storable = _root;
   OMProperty* result = 0;
 
-  char* end = strchr(element, '/');
+  wchar_t* end = findWideCharacter(element, L'/');
   
   while (end != 0) {
     *end = 0;
     storable = storable->find(element);
     ASSERT("Valid storable pointer", storable != 0);
     element = ++end;
-    end = strchr(element, '/');
+    end = findWideCharacter(element, L'/');
   }
 
-  if ((element != 0) && (strlen(element) > 0)) {
+  if ((element != 0) && (lengthOfWideString(element) > 0)) {
     result = storable->findProperty(element);
   } else {
     result = 0;
