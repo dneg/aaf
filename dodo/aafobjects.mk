@@ -36,7 +36,6 @@ AAFPERSISTENTOBJECTS = \
 	AAFScopeReference \
 	AAFSequence \
 	AAFStringAttribute \
-	AAFTimecode \
 	AAFTimecodeStream \
 	AAFTimecodeStream12M \
 	AAFTransition \
@@ -98,6 +97,7 @@ HUMAN_TYPED_IMPL = \
 	AAFSourceClip \
 	AAFSourceMob \
 	AAFSourceReference \
+	AAFTimecode \
 	AAFTimelineMobSlot \
 	AAFTapeDescriptor \
 	EnumAAFLocators \
@@ -124,91 +124,3 @@ AAFOBJECTS = \
 AUTO_GEN_IMPL = \
 	$(AAFPERSISTENTOBJECTS) \
 	$(AAFNONPERSISTENTOBJECTS)
-
-# These are the Com Test files that are typed by humans.  Be sure to
-# remove them from the other list.  As you check each one in, just add
-# its name here and remove it from AUTO_GEN_COMTEST (below).
-# Do not add the 'Test' suffix here.
-HUMAN_TYPED_COMTEST = \
-	AAFMasterMob \
-	AAFMob \
-	AAFSourceClip \
-	AAFEssenceDescriptor \
-	AAFFile \
-	AAFNetworkLocator \
-	AAFSourceMob \
-	AAFSourceReference \
-	AAFComponent \
-	AAFHeader \
-	EnumAAFMobs
-
-# Build the list of all objects that have automatically-generated
-# COM Test classes.
-#This can go away when we institute a requirement that a module test
-# exist for every class
-AUTO_GEN_COMTEST = \
-	AAFAttribute \
-	AAFClassDef \
-	AAFDictionary \
-	AAFConstValue \
-	AAFControlCodeDef \
-	AAFControlPoint \
-	AAFDataDef \
-	AAFDefObject \
-	AAFEdgecode \
-	AAFEffectDef \
-	AAFEffectInvocation \
-	AAFFiller \
-	AAFFindSourceInfo \
-	AAFIntegerAttribute \
-	AAFLocator \
-	AAFMacLocator \
-	AAFMediaFilmDescriptor \
-	AAFMediaGroup \
-	AAFTapeDescriptor \
-	AAFNestedScope \
-	AAFObjectAttribute \
-	AAFParameter \
-	AAFParameterSlot \
-	AAFPulldown \
-	AAFPropertyDef \
-	AAFReferenceValue \
-	AAFScopeReference \
-	AAFSequence \
-	AAFStringAttribute \
-	AAFTimecode \
-	AAFTimecodeStream \
-	AAFTimecodeStream12M \
-	AAFTransition \
-	AAFTypeDef \
-	AAFUnixLocator \
-	AAFVaryingValue \
-	AAFWindowsLocator \
-	AAFRoot \
-	AAFMedia \
-	EnumAAFAttributes \
-	EnumAAFClassDefs \
-	EnumAAFComponents \
-	EnumAAFControlCodeDefs \
-	EnumAAFControlPoints \
-	EnumAAFDataDefs \
-	EnumAAFDefs \
-	EnumAAFEffectDefs \
-	EnumAAFIdentifications \
-	EnumAAFMedia \
-	EnumAAFMobComments \
-	EnumAAFParameterSlots \
-	EnumAAFPropertyDefs \
-	EnumAAFReferenceValues \
-	EnumAAFSegments \
-	EnumAAFTypeDefs \
-	AAFIdentification \
-	AAFObject \
-	AAFFileDescriptor \
-	AAFSegment \
-	AAFMobSlot \
-	AAFTimelineMobSlot \
-	AAFCompositionMob \
-	AAFSession \
-	EnumAAFLocators \
-	EnumAAFMobSlots
