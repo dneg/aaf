@@ -1,0 +1,88 @@
+#startm .this-module 0
+AAFSegment\
+#endm
+#c
+#startm .parent-module 0
+AAFComponent\
+#endm
+#c
+#import ./AAFUnitTest.exp
+#import ./AAFComponent.exp
+AD_HEAD
+/******************************************\
+*                                          *
+* Advanced Authoring Format                *
+*                                          *
+* Copyright (c) 1998 Avid Technology, Inc. *
+* Copyright (c) 1998 Microsoft Corporation *
+*                                          *
+\******************************************/
+class AAFSourceClip;
+class AAFPulldown;
+class AAFTimecode;
+class AAFSequence;
+
+AD_CLASS_BEGIN
+
+AD_CONSTRUCTOR2([in],AAFFile *,file, ,
+				[in],OMLObject,obj, ,
+				Creates one of these from a file and an object)
+
+AD_METHOD1(AccumulateLength,
+		   [in],omfLength_t *,length,,
+		   )
+
+AD_METHOD3(SegmentOffsetToTC,
+		   [in],omfPosition_t, offset,,
+		   [out],omfTimecode_t *,tc,,
+		   [out],aafBool *,found,,
+		   Converts the given offset to timecode.)
+
+AD_METHOD4(SegmentTCToOffset,
+		   [in],omfTimecode_t,tc,,
+		   [in],omfRational_t,editRate,,
+		   [out],omfFrameOffset_t *,offset,,
+		   [out],aafBool *,found,,
+		   )
+
+AD_METHOD4(FindSubSegment,
+		   [in],omfPosition_t,offset,,
+		   [out],omfPosition_t *,sequPosPtr,,
+		   [out],AAFSegment **,subseg,,
+		   [out],aafBool *,found,,
+		   )
+
+AD_METHOD6(TraverseToClip,
+		   [in],omfLength_t,length,,
+		   [out],AAFSegment **,sclp,,
+		   [out],AAFPulldown **,pulldownObj,,
+		   [out],aafInt32 *,pulldownPhase,,
+		   [out],omfLength_t *,sclpLen,,
+		   [out],aafBool *,isMask,,
+		   )
+
+AD_METHOD3(OffsetToTimecodeClip,
+		   [in],omfPosition_t,offset,,
+		   [out],AAFTimecode **,result,,
+		   [out],omfPosition_t *,tcStartPos,,
+		   )
+
+AD_METHOD1(NumRepresentations,
+		   [out],aafInt32 *,count,,
+		   )
+
+AD_GETOBJ_METHOD1(GenerateSequence,
+				  [out],AAFSequence,seq,,
+				  )
+
+AD_METHOD1(Load,
+		   [in],AAFFile *,file,,
+		   )
+
+AD_METHOD1(Save,
+		   [in],AAFFile *,file,,
+		   )
+
+AD_OVERRIDE(.method-Test)
+
+AD_CLASS_END
