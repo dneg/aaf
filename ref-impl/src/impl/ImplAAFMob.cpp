@@ -103,6 +103,14 @@ ImplAAFMob::~ImplAAFMob ()
 			pSlot->ReleaseReference();
 		}
 	}
+
+	size = _userComments.getSize();
+	for (size_t j = 0; j < size; j++)
+	{
+		ImplAAFTaggedValue* pTaggedValue = _userComments.setValueAt(0, j);
+		if (pTaggedValue)
+			pTaggedValue->ReleaseReference();
+	}
 }
 
 
