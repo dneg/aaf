@@ -21,7 +21,7 @@ test_only:
 run:
 	 $(SH_PREIX) cd tool ; $(MAKE) run $(SH_SUFFIX)
 
-.SUFFIXES: .cpp .h .comc .comh .dod .exp .idl .implc .implh .idlh
+.SUFFIXES: .cpp .h .comc .comh .dod .exp .idl .implc .implh
 								   
 DODO_TARGETS = \
 	aafobjects.all \
@@ -159,10 +159,10 @@ INCLUDE_DIR = ../ref-impl/include
 	$(SH_PREFIX) mv $*.tmp $*.idl $(SH_SUFFIX)
 	$(SH_PREFIX) cp $*.idl $(INCLUDE_DIR)/com-api/ $(SH_SUFFIX)
 
-.idl.idlh :
-	$(SH_PREFIX) $(RM) -f $*.idlh $(SH_SUFFIX)
-	$(SH_PREFIX) $(IDL) /out $(INCLUDE_DIR)/com-api $*.idl $(SH_SUFFIX)
-	$(SH_PREFIX) cp $(INCLUDE_DIR)/com-api/$*.h $*.idlh $(SH_SUFFIX)
+#.idl.idlh :
+#	$(SH_PREFIX) $(RM) -f $*.idlh $(SH_SUFFIX)
+#	$(SH_PREFIX) $(IDL) /out $(INCLUDE_DIR)/com-api $*.idl $(SH_SUFFIX)
+#	$(SH_PREFIX) cp $(INCLUDE_DIR)/com-api/$*.h $*.idlh $(SH_SUFFIX)
 
 # Make sure our list of objects in the src directories is up-to-date.
 aafobjects.all : aafobjects.list
@@ -173,7 +173,7 @@ aafobjects.list : aafobjects.mk
 
 clean:
 	$(SH_PREFIX) cd tool ; $(MAKE) clean $(SH_SUFFIX)
-	$(SH_PREFIX) $(RM) -rf *.cpp *.h *.idl *.exp *.comc *.comh *.implc *.implh *.idlh *.list $(SH_SUFFIX)
+	$(SH_PREFIX) $(RM) -rf *.cpp *.h *.idl *.exp *.comc *.comh *.implc *.implh *.list $(SH_SUFFIX)
 	$(SH_PREFIX) $(RM) -rf $(SRC_DIR)/cpp-api/*.cpp $(SH_SUFFIX)
 	$(SH_PREFIX) $(RM) -rf $(SRC_DIR)/com-api/*.h $(SH_SUFFIX)
 	$(SH_PREFIX) $(RM) -rf $(SRC_DIR)/com-api/*.cpp $(SH_SUFFIX)
@@ -183,7 +183,6 @@ clean:
 	$(SH_PREFIX) $(RM) -rf $(INCLUDE_DIR)/com-api/*.idl $(SH_SUFFIX)
 	$(SH_PREFIX) $(RM) -rf $(INCLUDE_DIR)/cpp-api/*.h $(SH_SUFFIX)
 
-AAFTypes.all : AAFTypes.idlh
 AAFTypes.all : AAFTypes.h
 AAFTypes.all : AAFTypes.exp AAFTypes.idl
 AAFTypes.all : AAFTypes.implh
@@ -197,16 +196,14 @@ AAFObject.all : AAFObject.cpp AAFObject.h
 AAFObject.all : AAFObject.comc AAFObject.comh
 AAFObject.all : AAFObject.exp AAFObject.idl
 AAFObject.all : AAFObject.implc AAFObject.implh
-AAFObject.all : AAFObject.idlh
 AAFObject.exp : macros/exp.mac macros/base.mac
 AAFObject.h : AAFObject.exp macros/h.mac macros/base.mac
 AAFObject.cpp : AAFObject.exp macros/cpp.mac macros/base.mac
 AAFObject.idl : AAFObject.exp macros/idl.mac macros/base.mac
 AAFObject.comc : AAFObject.comh AAFObject.exp macros/comc.mac macros/base.mac
-AAFObject.comh : AAFTypes.idlh AAFObject.idlh AAFObject.exp macros/comh.mac macros/base.mac
+AAFObject.comh : AAFObject.exp macros/comh.mac macros/base.mac
 AAFObject.implc : AAFObject.implh AAFObject.exp macros/implc.mac macros/base.mac
 AAFObject.implh : AAFObject.exp macros/implh.mac macros/base.mac
-AAFObject.idlh : AAFTypes.idl AAFObject.idl AAFTypes.idlh AAFObject.idl
 
 AAFAttribute.all : AAFAttribute.cpp AAFAttribute.h
 AAFAttribute.all : AAFAttribute.comc AAFAttribute.comh
@@ -220,8 +217,6 @@ AAFAttribute.comc : AAFAttribute.exp macros/comc.mac macros/base.mac
 AAFAttribute.comh : AAFAttribute.exp macros/comh.mac macros/base.mac
 AAFAttribute.implc : AAFAttribute.exp macros/implc.mac macros/base.mac
 AAFAttribute.implh : AAFAttribute.exp macros/implh.mac macros/base.mac
-#AAFAttribute.all : AAFAttribute.idlh
-#AAFAttribute.idlh : AAFTypes.idlh AAFAttribute.idl
 
 AAFAttributeArray.all : AAFAttributeArray.cpp AAFAttributeArray.h
 AAFAttributeArray.all : AAFAttributeArray.comc AAFAttributeArray.comh
@@ -248,8 +243,6 @@ EnumAAFPropertyDefinitions.comc : EnumAAFPropertyDefinitions.exp macros/comc.mac
 EnumAAFPropertyDefinitions.comh : EnumAAFPropertyDefinitions.exp macros/comh.mac macros/base.mac
 EnumAAFPropertyDefinitions.implc : EnumAAFPropertyDefinitions.exp macros/implc.mac macros/base.mac
 EnumAAFPropertyDefinitions.implh : EnumAAFPropertyDefinitions.exp macros/implh.mac macros/base.mac
-#EnumAAFPropertyDefinitions.all : EnumAAFPropertyDefinitions.idlh
-#EnumAAFPropertyDefinitions.idlh : AAFTypes.h EnumAAFPropertyDefinitions.idl
 
 AAFClassDefinition.all : AAFClassDefinition.cpp AAFClassDefinition.h
 AAFClassDefinition.all : AAFClassDefinition.comc AAFClassDefinition.comh
@@ -263,8 +256,6 @@ AAFClassDefinition.comc : AAFClassDefinition.exp macros/comc.mac macros/base.mac
 AAFClassDefinition.comh : AAFClassDefinition.exp macros/comh.mac macros/base.mac
 AAFClassDefinition.implc : AAFClassDefinition.exp macros/implc.mac macros/base.mac
 AAFClassDefinition.implh : AAFClassDefinition.exp macros/implh.mac macros/base.mac
-#AAFClassDefinition.all : AAFClassDefinition.idlh
-#AAFClassDefinition.idlh: AAFTypes.idlh AAFClassDefinition.idl
 
 # Build dependency
 AAFDictionary.all : \
@@ -286,9 +277,6 @@ AAFDictionary.comc : AAFDictionary.comh AAFDictionary.exp macros/comc.mac macros
 AAFDictionary.comh : AAFDictionary.exp macros/comh.mac macros/base.mac
 AAFDictionary.implc : AAFDictionary.implh AAFDictionary.exp macros/implc.mac macros/base.mac
 AAFDictionary.implh : AAFDictionary.exp macros/implh.mac macros/base.mac 
-#AAFDictionary.all : AAFDictionary.idlh
-#AAFDictionary.idlh : AAFDictionary.idl
-#AAFDictionary.comh : AAFDictionary.idlh
 
 AAFComponent.all : AAFComponent.cpp AAFComponent.h
 AAFComponent.all : AAFComponent.comc AAFComponent.comh
@@ -360,29 +348,26 @@ AAFDataDefinition.all : AAFDataDefinition.cpp AAFDataDefinition.h
 AAFDataDefinition.all : AAFDataDefinition.comc AAFDataDefinition.comh
 AAFDataDefinition.all : AAFDataDefinition.exp AAFDataDefinition.idl
 AAFDataDefinition.all : AAFDataDefinition.implc AAFDataDefinition.implh
-AAFDataDefinition.all : AAFDataDefinition.idlh
 AAFDataDefinition.exp : AAFDefinitionObject.exp macros/exp.mac macros/base.mac
 AAFDataDefinition.h : AAFDataDefinition.exp macros/h.mac macros/base.mac
 AAFDataDefinition.cpp : AAFDataDefinition.exp macros/cpp.mac macros/base.mac
 AAFDataDefinition.idl : AAFDataDefinition.exp macros/idl.mac macros/base.mac
 AAFDataDefinition.implh : AAFTypes.idl AAFDataDefinition.idl
 AAFDataDefinition.comc : AAFDataDefinition.comh AAFDataDefinition.exp macros/comc.mac macros/base.mac
-AAFDataDefinition.comh : AAFTypes.idlh AAFDataDefinition.idlh AAFDataDefinition.exp macros/comh.mac macros/base.mac
+AAFDataDefinition.comh : AAFDataDefinition.exp macros/comh.mac macros/base.mac
 AAFDataDefinition.implc : AAFDataDefinition.implh AAFDataDefinition.exp macros/implc.mac macros/base.mac
 AAFDataDefinition.implh : AAFDataDefinition.exp macros/implh.mac macros/base.mac
 
-AAFDefinitionObject.all : AAFDefinitionObject.idlh
 AAFDefinitionObject.all : AAFDefinitionObject.cpp AAFDefinitionObject.h
 AAFDefinitionObject.all : AAFDefinitionObject.comc AAFDefinitionObject.comh
 AAFDefinitionObject.all : AAFDefinitionObject.exp AAFDefinitionObject.idl
 AAFDefinitionObject.all : AAFDefinitionObject.implc AAFDefinitionObject.implh
-AAFDefinitionObject.all : AAFDefinitionObject.idlh
 AAFDefinitionObject.exp : AAFObject.exp macros/exp.mac macros/base.mac
 AAFDefinitionObject.h : AAFDefinitionObject.exp macros/h.mac macros/base.mac
 AAFDefinitionObject.cpp : AAFDefinitionObject.exp macros/cpp.mac macros/base.mac
 AAFDefinitionObject.idl : AAFTypes.idl AAFDefinitionObject.exp macros/idl.mac macros/base.mac
 AAFDefinitionObject.comc : AAFDefinitionObject.comh AAFDefinitionObject.exp macros/comc.mac macros/base.mac AAFDefinitionObject.comh
-AAFDefinitionObject.comh : AAFTypes.idlh AAFDefinitionObject.idlh AAFDefinitionObject.exp macros/comh.mac macros/base.mac AAFDefinitionObject.idlh
+AAFDefinitionObject.comh : AAFDefinitionObject.exp macros/comh.mac macros/base.mac
 AAFDefinitionObject.implc : AAFDefinitionObject.implh AAFDefinitionObject.exp macros/implc.mac macros/base.mac
 AAFDefinitionObject.implh : AAFDefinitionObject.exp macros/implh.mac macros/base.mac
 
@@ -694,9 +679,6 @@ AAFScopeReference.comh : AAFScopeReference.exp macros/comh.mac macros/base.mac
 AAFScopeReference.implc : AAFScopeReference.exp macros/implc.mac macros/base.mac
 AAFScopeReference.implh : AAFScopeReference.exp macros/implh.mac macros/base.mac
 
-#AAFObject.idlh : AAFObject.idl AAFTypes.idlh
-#AAFObject.comc : AAFObject.exp macros/comc.mac macros/base.mac AAFObject.comh
-#AAFObject.comh : AAFObject.exp macros/comh.mac macros/base.mac AAFObject.idlh
 AAFObjectAttribute.all : AAFObjectAttribute.cpp AAFObjectAttribute.h
 AAFObjectAttribute.all : AAFObjectAttribute.comc AAFObjectAttribute.comh
 AAFObjectAttribute.all : AAFObjectAttribute.exp AAFObjectAttribute.idl
@@ -999,9 +981,6 @@ AAFHeader.comc : AAFHeader.comh AAFHeader.exp macros/comc.mac macros/base.mac
 AAFHeader.comh : AAFHeader.exp macros/comh.mac macros/base.mac
 AAFHeader.implc : AAFHeader.implh AAFHeader.exp macros/implc.mac macros/base.mac
 AAFHeader.implh : AAFHeader.exp macros/implh.mac macros/base.mac
-#AAFHeader.all : AAFHeader.idlh
-#AAFHeader.idlh : AAFHeader.idl
-#AAFHeader.comh : AAFHeader.idlh
 
 AAFIdentification.all : AAFIdentification.cpp AAFIdentification.h
 AAFIdentification.all : AAFIdentification.comc AAFIdentification.comh
