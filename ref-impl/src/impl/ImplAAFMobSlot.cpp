@@ -34,28 +34,32 @@
 
 ImplAAFMobSlot::ImplAAFMobSlot ()
 : _name(			PID_MOBSLOT_NAME,			"Name"),
-  _origin(			PID_MOBSLOT_ORIGIN,			"Origin"),
   _trackID(			PID_MOBSLOT_TRACKID,		"TrackID"),
   _physicalTrackNum(PID_MOBSLOT_PHYSICAL_TRACK,	"PhysicalTrack"),
   _segment(			PID_MOBSLOT_SEGMENT,		"Segment") 
-{}
+{
+	_persistentProperties.put(_name.address());
+	_persistentProperties.put(_trackID.address());
+	_persistentProperties.put(_physicalTrackNum.address());
+	_persistentProperties.put(_segment.address());
+}
 
 
 ImplAAFMobSlot::~ImplAAFMobSlot ()
 {}
 
-
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFMobSlot::IsATrack (aafBool *retval)
+    ImplAAFMobSlot::GetSegment (ImplAAFSegment **result)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	*result = _segment;
+  return AAFRESULT_SUCCESS;
 }
 
-
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFMobSlot::GetSegment (ImplAAFSegment ** /*result*/)
+    ImplAAFMobSlot::SetSegment (ImplAAFSegment *value)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	_segment = value;
+	return AAFRESULT_SUCCESS;
 }
 
 
@@ -89,6 +93,16 @@ AAFRESULT STDMETHODCALLTYPE
 	return(AAFRESULT_SUCCESS); 
 }
 
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFMobSlot::SetName (aafString_t *name)
+{
+	aafAssert(name != NULL, NULL, AAFRESULT_NULL_PARAM);
+
+	AAFStringToStringProperty(_name, name);
+
+	return(AAFRESULT_SUCCESS); 
+}
+
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFMobSlot::GetPhysicalNum (aafUInt32 *result)
@@ -107,10 +121,32 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFMobSlot::GetDataKind (ImplAAFDataDef ** /*result*/)
+    ImplAAFMobSlot::GetDataDef (aafUID_t *result)
 {
-	//Call segment->GetDataKind.
-  return AAFRESULT_NOT_IMPLEMENTED;
+	ImplAAFSegment	*seg = _segment;
+	aafAssert(seg != NULL, NULL, AAFRESULT_NULLOBJECT);
+	return seg->GetDataDef(result);
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+  ImplAAFMobSlot::GetTrackID (
+    // @parm [out,retval] aafTrackID_t * | result | Track id of the Mob Slot
+    aafTrackID_t *  result
+  )
+{
+	*result = _trackID;
+	return AAFRESULT_SUCCESS;
+}
+
+AAFRESULT STDMETHODCALLTYPE
+  ImplAAFMobSlot::SetTrackID (
+    // @parm [in] aafTrackID_t | result | Track id of the Mob Slot
+    aafTrackID_t value
+  )
+{
+	_trackID = value;
+	return AAFRESULT_SUCCESS;
 }
 
 extern "C" const aafClassID_t CLSID_AAFMobSlot;
