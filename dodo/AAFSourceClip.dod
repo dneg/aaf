@@ -26,7 +26,7 @@ AD_FORWARD_DECLARATION(AAFMob)
 AD_CLASS_UUID(38e6f8a5, 2a2c, 11d2, 84, 11, 00, 60, 08, 32, ac, b8)
 
 AD_DEFAULT_UUID(38e6f8a7, 2a2c, 11d2, 84, 11, 00, 60, 08, 32, ac, b8)
-AD_CLASS_BEGIN
+AD_XCLASS_BEGIN(Concrete, StoredObject)
 AD_XMETHOD3(Initialize,
 			[in],
 				objPass,
@@ -260,4 +260,4 @@ AD_METHOD1(SetSourceReference,
   //
   // AAFRESULT_NOT_INITIALIZED
   //   - This object has not yet had Initialize\\\(\\\) called on it.)
-AD_CLASS_END
+AD_XCLASS_END(Concrete, StoredObject)
