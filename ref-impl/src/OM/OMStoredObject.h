@@ -67,6 +67,13 @@ public:
     //          this <c OMStoredObject>.
   void restore(OMPropertySet& properties);
 
+    // @cmember Check that the <c OMPropertySet> <p propertySet> is
+    //          consistent with the <c OMStoredPropertySetIndex>
+    //          propertySetIndex.
+    //   @this const
+  void validate(const OMPropertySet* propertySet,
+                const OMStoredPropertySetIndex* propertySetIndex) const;
+
     // @cmember Save the <c OMStoredVectorIndex> <p vector> in this
     //          <c OMStoredObject>, the vector is named <p vectorName>.
   void save(const OMStoredVectorIndex* vector, const char* vectorName);
