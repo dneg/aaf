@@ -83,9 +83,18 @@ AAFRESULT STDMETHODCALLTYPE
 
   hr = pvd->AllocateBits (sizeof (OMStorable*), (aafMemPtr_t*) &ppStorable);
   if (AAFRESULT_FAILED(hr)) return hr;
-  assert (*ppStorable);
+  assert (ppStorable);
+  if (*ppStorable)
+	{
+	  // An object was already here.  Release it before we trash the
+	  // reference to it.
+	  ImplAAFObject * tmp = dynamic_cast<ImplAAFObject*>(*ppStorable);
+	  assert (tmp);
+	  tmp->ReleaseReference ();
+	  *ppStorable = 0;
+	}
 
-  assert (*ppStorable);
+  assert (! *ppStorable);
   *ppStorable = pObject;
   pObject->AcquireReference ();
 
@@ -114,7 +123,7 @@ ImplAAFTypeDefStrongObjRef::GetObject (ImplAAFPropertyValue * pPropVal,
   if (AAFRESULT_FAILED(hr)) return hr;
   assert (*ppStorable);
   assert (ppObject);
-  ImplAAFObjectSP pObj;
+  ImplAAFObject * pObj;
   pObj = dynamic_cast<ImplAAFObject*>(*ppStorable);
   assert (pObj);
   *ppObject = pObj;
