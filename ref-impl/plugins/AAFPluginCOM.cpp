@@ -28,18 +28,16 @@ CAAFServer* g_pAAFServer = &g_AAFInProcServer;
 // Include the table the associates all of the CLSID's with class names and factory methods.
 #include "AAFPluginObjectTable_i.cpp"
 
-
+// Include the definitions for all of the interface IID's.
+#include "AAFPlugin_i.c"
 
 
 #if defined(_MAC)
 
 // Make sure we have defined IID_IUnknown and IID_IClassFactory.
-#define INITGUID
 #include <initguid.h>
 #include <coguid.h>	
 
-// temporarily include this definition here. This will be removed later.
-DEFINE_GUID(IID_IAAFEndian, 0x6BACC0C1, 0x6091, 0x11D2, 0x84, 0x1B, 0x00, 0x60, 0x08, 0x32, 0xAC, 0xB8);
 
 // Define struc
 typedef struct
