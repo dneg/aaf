@@ -3,12 +3,13 @@
 
 #include <stdarg.h>
 #include "AAFTypes.h"
+#include "OMFile.h"
+#include "ImplAAFHeader.h"
+
 //#include "CMAPIErr.h"	/* !!! */
 //#include "CMAPIIDS.h"	/* !!! */
 
 class ImplAAFFile;
-class ImplAAFObject;
-class ImplAAFHeader;
 
 /* Flags */
 #define kOMLWriting        0x0002U                 /* container was opened for writing   */
@@ -140,9 +141,7 @@ void SetHead(const ImplAAFHeader* head);
 
   private:
     const ImplAAFHeader* _head;
-#if OM_PRESENT
-    File* _file;
-#endif
+    OMFile* _file;
 };
 
 #define OMLGetReferenceData(v, o, d) OMLNewReference(v, (OMLObject)o, d)
