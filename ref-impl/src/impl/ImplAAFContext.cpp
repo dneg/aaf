@@ -17,6 +17,8 @@
 #include "ImplAAFSession.h"
 #endif
 
+#include "OMUtilities.h"
+
 #include "AAFFile.h"
 #include "ImplAAFFile.h"
 
@@ -24,7 +26,6 @@
 
 
 ImplAAFSession::ImplAAFSession ()
-: _pContainer (0)
 {}
 
 
@@ -32,27 +33,10 @@ ImplAAFSession::~ImplAAFSession ()
 {}
 
 
-void ImplAAFSession::InitContainer (void * pContainer)
-{
-//  assert (! _pContainer);
-  _pContainer = pContainer;
-  assert (_pContainer);
-}
-
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFSession::EndSession ()
 {
   return AAFRESULT_SUCCESS;
-}
-
-
-
-class IAAFObject;
-
-void * ImplAAFSession::GetContainer ()
-{
-  assert (_pContainer);
-  return _pContainer;
 }
 
   //****************
@@ -139,6 +123,13 @@ ImplAAFSession::SetDefaultIdentification (
   )
   {
 	  _defaultIdent = ident;
+
+    if ((_defaultIdent != 0) && (_defaultIdent->productName != 0)) {
+      setProgramName(_defaultIdent->productName);
+    } else {
+      setProgramName("Unknown");
+    }
+
 	  return(AAFRESULT_SUCCESS);
   }
 
