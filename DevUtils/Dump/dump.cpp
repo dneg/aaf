@@ -22,6 +22,17 @@
 //
 // Low-level AAF file dumper.
 //
+// This program is deliberately constructed as one file with no dependencies
+// (except for Microsoft Structured Storage) so that it can be ported with
+// relative ease to a new host. You'll be able to make some progress
+// understanding a Structured Storage AAF file even if all you have is this
+// source and a C++ compiler.
+
+// This program is complicated by the fact that it supports stored format
+// versions earlier than version 32 - the first and only shipping version.
+
+// The low-level stored format for Structured Storage AAF files is
+// documented in the file StoredFormat.doc
 
 // Tim Bingham 05-May-1998 Tim_Bingham@avid.com
 //             19-June-1998
