@@ -100,7 +100,7 @@ void DeleteImpl (ImplAAFRoot *& pObj)
 // the container's initialization method.
 
 static AAFRESULT InitializePluginFromDefinitionProc(
-  aafUID_constref defID, 
+  aafUID_constref /* defID */, 
   REFCLSID clsid, 
   IAAFRoot * pRoot)
 {
