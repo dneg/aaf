@@ -763,6 +763,12 @@ typedef interface IAAFSearchSource IAAFSearchSource;
 #endif 	/* __IAAFSearchSource_FWD_DEFINED__ */
 
 
+#ifndef __IAAFEssenceDataEx_FWD_DEFINED__
+#define __IAAFEssenceDataEx_FWD_DEFINED__
+typedef interface IAAFEssenceDataEx IAAFEssenceDataEx;
+#endif 	/* __IAAFEssenceDataEx_FWD_DEFINED__ */
+
+
 #ifndef __IAAFEssenceMultiAccess_FWD_DEFINED__
 #define __IAAFEssenceMultiAccess_FWD_DEFINED__
 typedef interface IAAFEssenceMultiAccess IAAFEssenceMultiAccess;
@@ -821,6 +827,7 @@ void __RPC_USER MIDL_user_free( void __RPC_FAR * );
 // AAF Interfaces.
 //=--------------------------------------------------------------------------=
 //
+
 
 
 
@@ -30775,6 +30782,406 @@ void __RPC_STUB IAAFSearchSource_SearchSource_Stub(
 #endif 	/* __IAAFSearchSource_INTERFACE_DEFINED__ */
 
 
+#ifndef __IAAFEssenceDataEx_INTERFACE_DEFINED__
+#define __IAAFEssenceDataEx_INTERFACE_DEFINED__
+
+/* interface IAAFEssenceDataEx */
+/* [unique][helpstring][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IAAFEssenceDataEx;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("d919d41f-979b-4aba-9785-8ec319dba448")
+    IAAFEssenceDataEx : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE Initialize( 
+            /* [in] */ IAAFSourceMob __RPC_FAR *pFileMob) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE Write( 
+            /* [in] */ aafUInt32 bytes,
+            /* [size_is][out] */ aafDataBuffer_t buffer,
+            /* [ref][out] */ aafUInt32 __RPC_FAR *bytesWritten) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE Read( 
+            /* [in] */ aafUInt32 bytes,
+            /* [length_is][size_is][out] */ aafDataBuffer_t buffer,
+            /* [ref][out] */ aafUInt32 __RPC_FAR *bytesRead) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetPosition( 
+            /* [in] */ aafPosition_t offset) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetPosition( 
+            /* [out] */ aafPosition_t __RPC_FAR *pOffset) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetSize( 
+            /* [out] */ aafLength_t __RPC_FAR *pSize) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE WriteSampleIndex( 
+            /* [in] */ aafUInt32 bytes,
+            /* [size_is][out] */ aafDataBuffer_t buffer,
+            /* [ref][out] */ aafUInt32 __RPC_FAR *bytesWritten) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE ReadSampleIndex( 
+            /* [in] */ aafUInt32 bytes,
+            /* [length_is][size_is][out] */ aafDataBuffer_t buffer,
+            /* [ref][out] */ aafUInt32 __RPC_FAR *bytesRead) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetSampleIndexPosition( 
+            /* [in] */ aafPosition_t offset) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetSampleIndexPosition( 
+            /* [out] */ aafPosition_t __RPC_FAR *pOffset) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetSampleIndexSize( 
+            /* [out] */ aafLength_t __RPC_FAR *pSize) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetFileMob( 
+            /* [in] */ IAAFSourceMob __RPC_FAR *pFileMob) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetFileMob( 
+            /* [in] */ IAAFSourceMob __RPC_FAR *__RPC_FAR *ppFileMob) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetFileMobID( 
+            /* [out] */ aafMobID_t __RPC_FAR *pFileMobID) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IAAFEssenceDataExVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
+            IAAFEssenceDataEx __RPC_FAR * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
+            IAAFEssenceDataEx __RPC_FAR * This);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
+            IAAFEssenceDataEx __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Initialize )( 
+            IAAFEssenceDataEx __RPC_FAR * This,
+            /* [in] */ IAAFSourceMob __RPC_FAR *pFileMob);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Write )( 
+            IAAFEssenceDataEx __RPC_FAR * This,
+            /* [in] */ aafUInt32 bytes,
+            /* [size_is][out] */ aafDataBuffer_t buffer,
+            /* [ref][out] */ aafUInt32 __RPC_FAR *bytesWritten);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Read )( 
+            IAAFEssenceDataEx __RPC_FAR * This,
+            /* [in] */ aafUInt32 bytes,
+            /* [length_is][size_is][out] */ aafDataBuffer_t buffer,
+            /* [ref][out] */ aafUInt32 __RPC_FAR *bytesRead);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetPosition )( 
+            IAAFEssenceDataEx __RPC_FAR * This,
+            /* [in] */ aafPosition_t offset);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPosition )( 
+            IAAFEssenceDataEx __RPC_FAR * This,
+            /* [out] */ aafPosition_t __RPC_FAR *pOffset);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSize )( 
+            IAAFEssenceDataEx __RPC_FAR * This,
+            /* [out] */ aafLength_t __RPC_FAR *pSize);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *WriteSampleIndex )( 
+            IAAFEssenceDataEx __RPC_FAR * This,
+            /* [in] */ aafUInt32 bytes,
+            /* [size_is][out] */ aafDataBuffer_t buffer,
+            /* [ref][out] */ aafUInt32 __RPC_FAR *bytesWritten);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ReadSampleIndex )( 
+            IAAFEssenceDataEx __RPC_FAR * This,
+            /* [in] */ aafUInt32 bytes,
+            /* [length_is][size_is][out] */ aafDataBuffer_t buffer,
+            /* [ref][out] */ aafUInt32 __RPC_FAR *bytesRead);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetSampleIndexPosition )( 
+            IAAFEssenceDataEx __RPC_FAR * This,
+            /* [in] */ aafPosition_t offset);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSampleIndexPosition )( 
+            IAAFEssenceDataEx __RPC_FAR * This,
+            /* [out] */ aafPosition_t __RPC_FAR *pOffset);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSampleIndexSize )( 
+            IAAFEssenceDataEx __RPC_FAR * This,
+            /* [out] */ aafLength_t __RPC_FAR *pSize);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetFileMob )( 
+            IAAFEssenceDataEx __RPC_FAR * This,
+            /* [in] */ IAAFSourceMob __RPC_FAR *pFileMob);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetFileMob )( 
+            IAAFEssenceDataEx __RPC_FAR * This,
+            /* [in] */ IAAFSourceMob __RPC_FAR *__RPC_FAR *ppFileMob);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetFileMobID )( 
+            IAAFEssenceDataEx __RPC_FAR * This,
+            /* [out] */ aafMobID_t __RPC_FAR *pFileMobID);
+        
+        END_INTERFACE
+    } IAAFEssenceDataExVtbl;
+
+    interface IAAFEssenceDataEx
+    {
+        CONST_VTBL struct IAAFEssenceDataExVtbl __RPC_FAR *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IAAFEssenceDataEx_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IAAFEssenceDataEx_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IAAFEssenceDataEx_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IAAFEssenceDataEx_Initialize(This,pFileMob)	\
+    (This)->lpVtbl -> Initialize(This,pFileMob)
+
+#define IAAFEssenceDataEx_Write(This,bytes,buffer,bytesWritten)	\
+    (This)->lpVtbl -> Write(This,bytes,buffer,bytesWritten)
+
+#define IAAFEssenceDataEx_Read(This,bytes,buffer,bytesRead)	\
+    (This)->lpVtbl -> Read(This,bytes,buffer,bytesRead)
+
+#define IAAFEssenceDataEx_SetPosition(This,offset)	\
+    (This)->lpVtbl -> SetPosition(This,offset)
+
+#define IAAFEssenceDataEx_GetPosition(This,pOffset)	\
+    (This)->lpVtbl -> GetPosition(This,pOffset)
+
+#define IAAFEssenceDataEx_GetSize(This,pSize)	\
+    (This)->lpVtbl -> GetSize(This,pSize)
+
+#define IAAFEssenceDataEx_WriteSampleIndex(This,bytes,buffer,bytesWritten)	\
+    (This)->lpVtbl -> WriteSampleIndex(This,bytes,buffer,bytesWritten)
+
+#define IAAFEssenceDataEx_ReadSampleIndex(This,bytes,buffer,bytesRead)	\
+    (This)->lpVtbl -> ReadSampleIndex(This,bytes,buffer,bytesRead)
+
+#define IAAFEssenceDataEx_SetSampleIndexPosition(This,offset)	\
+    (This)->lpVtbl -> SetSampleIndexPosition(This,offset)
+
+#define IAAFEssenceDataEx_GetSampleIndexPosition(This,pOffset)	\
+    (This)->lpVtbl -> GetSampleIndexPosition(This,pOffset)
+
+#define IAAFEssenceDataEx_GetSampleIndexSize(This,pSize)	\
+    (This)->lpVtbl -> GetSampleIndexSize(This,pSize)
+
+#define IAAFEssenceDataEx_SetFileMob(This,pFileMob)	\
+    (This)->lpVtbl -> SetFileMob(This,pFileMob)
+
+#define IAAFEssenceDataEx_GetFileMob(This,ppFileMob)	\
+    (This)->lpVtbl -> GetFileMob(This,ppFileMob)
+
+#define IAAFEssenceDataEx_GetFileMobID(This,pFileMobID)	\
+    (This)->lpVtbl -> GetFileMobID(This,pFileMobID)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceDataEx_Initialize_Proxy( 
+    IAAFEssenceDataEx __RPC_FAR * This,
+    /* [in] */ IAAFSourceMob __RPC_FAR *pFileMob);
+
+
+void __RPC_STUB IAAFEssenceDataEx_Initialize_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceDataEx_Write_Proxy( 
+    IAAFEssenceDataEx __RPC_FAR * This,
+    /* [in] */ aafUInt32 bytes,
+    /* [size_is][out] */ aafDataBuffer_t buffer,
+    /* [ref][out] */ aafUInt32 __RPC_FAR *bytesWritten);
+
+
+void __RPC_STUB IAAFEssenceDataEx_Write_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceDataEx_Read_Proxy( 
+    IAAFEssenceDataEx __RPC_FAR * This,
+    /* [in] */ aafUInt32 bytes,
+    /* [length_is][size_is][out] */ aafDataBuffer_t buffer,
+    /* [ref][out] */ aafUInt32 __RPC_FAR *bytesRead);
+
+
+void __RPC_STUB IAAFEssenceDataEx_Read_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceDataEx_SetPosition_Proxy( 
+    IAAFEssenceDataEx __RPC_FAR * This,
+    /* [in] */ aafPosition_t offset);
+
+
+void __RPC_STUB IAAFEssenceDataEx_SetPosition_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceDataEx_GetPosition_Proxy( 
+    IAAFEssenceDataEx __RPC_FAR * This,
+    /* [out] */ aafPosition_t __RPC_FAR *pOffset);
+
+
+void __RPC_STUB IAAFEssenceDataEx_GetPosition_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceDataEx_GetSize_Proxy( 
+    IAAFEssenceDataEx __RPC_FAR * This,
+    /* [out] */ aafLength_t __RPC_FAR *pSize);
+
+
+void __RPC_STUB IAAFEssenceDataEx_GetSize_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceDataEx_WriteSampleIndex_Proxy( 
+    IAAFEssenceDataEx __RPC_FAR * This,
+    /* [in] */ aafUInt32 bytes,
+    /* [size_is][out] */ aafDataBuffer_t buffer,
+    /* [ref][out] */ aafUInt32 __RPC_FAR *bytesWritten);
+
+
+void __RPC_STUB IAAFEssenceDataEx_WriteSampleIndex_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceDataEx_ReadSampleIndex_Proxy( 
+    IAAFEssenceDataEx __RPC_FAR * This,
+    /* [in] */ aafUInt32 bytes,
+    /* [length_is][size_is][out] */ aafDataBuffer_t buffer,
+    /* [ref][out] */ aafUInt32 __RPC_FAR *bytesRead);
+
+
+void __RPC_STUB IAAFEssenceDataEx_ReadSampleIndex_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceDataEx_SetSampleIndexPosition_Proxy( 
+    IAAFEssenceDataEx __RPC_FAR * This,
+    /* [in] */ aafPosition_t offset);
+
+
+void __RPC_STUB IAAFEssenceDataEx_SetSampleIndexPosition_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceDataEx_GetSampleIndexPosition_Proxy( 
+    IAAFEssenceDataEx __RPC_FAR * This,
+    /* [out] */ aafPosition_t __RPC_FAR *pOffset);
+
+
+void __RPC_STUB IAAFEssenceDataEx_GetSampleIndexPosition_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceDataEx_GetSampleIndexSize_Proxy( 
+    IAAFEssenceDataEx __RPC_FAR * This,
+    /* [out] */ aafLength_t __RPC_FAR *pSize);
+
+
+void __RPC_STUB IAAFEssenceDataEx_GetSampleIndexSize_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceDataEx_SetFileMob_Proxy( 
+    IAAFEssenceDataEx __RPC_FAR * This,
+    /* [in] */ IAAFSourceMob __RPC_FAR *pFileMob);
+
+
+void __RPC_STUB IAAFEssenceDataEx_SetFileMob_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceDataEx_GetFileMob_Proxy( 
+    IAAFEssenceDataEx __RPC_FAR * This,
+    /* [in] */ IAAFSourceMob __RPC_FAR *__RPC_FAR *ppFileMob);
+
+
+void __RPC_STUB IAAFEssenceDataEx_GetFileMob_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceDataEx_GetFileMobID_Proxy( 
+    IAAFEssenceDataEx __RPC_FAR * This,
+    /* [out] */ aafMobID_t __RPC_FAR *pFileMobID);
+
+
+void __RPC_STUB IAAFEssenceDataEx_GetFileMobID_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IAAFEssenceDataEx_INTERFACE_DEFINED__ */
+
+
 #ifndef __IAAFEssenceMultiAccess_INTERFACE_DEFINED__
 #define __IAAFEssenceMultiAccess_INTERFACE_DEFINED__
 
@@ -31199,7 +31606,7 @@ void __RPC_STUB IAAFMasterMobEx_ExtendMultiEssence_Stub(
 #endif 	/* __IAAFMasterMobEx_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_AAF_0201 */
+/* interface __MIDL_itf_AAF_0202 */
 /* [local] */ 
 
   //***********************************************************
@@ -31286,8 +31693,8 @@ STDAPI AAFCreateAAFFileOnRawStorage (
 
 
 
-extern RPC_IF_HANDLE __MIDL_itf_AAF_0201_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_AAF_0201_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_AAF_0202_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_AAF_0202_v0_0_s_ifspec;
 
 /* Additional Prototypes for ALL interfaces */
 

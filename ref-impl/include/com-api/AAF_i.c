@@ -1,23 +1,3 @@
-//=---------------------------------------------------------------------=
-//
-// $Id$ $Name$
-//
-// The contents of this file are subject to the AAF SDK Public
-// Source License Agreement (the "License"); You may not use this file
-// except in compliance with the License.  The License is available in
-// AAFSDKPSL.TXT, or you may obtain a copy of the License from the AAF
-// Association or its successor.
-//
-// Software distributed under the License is distributed on an "AS IS"
-// basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.  See
-// the License for the specific language governing rights and limitations
-// under the License.
-//
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
-// AAF Association.
-//
-//=---------------------------------------------------------------------=
-
 /* this file contains the actual definitions of */
 /* the IIDs and CLSIDs */
 
@@ -416,6 +396,9 @@ const IID IID_IAAFEndian = {0x6BACC0C1,0x6091,0x11D2,{0x84,0x1B,0x00,0x60,0x08,0
 
 
 const IID IID_IAAFSearchSource = {0x332CBDD0,0x5425,0x11D2,{0xAA,0x7A,0x10,0x00,0x3D,0x00,0x00,0x00}};
+
+
+const IID IID_IAAFEssenceDataEx = {0xd919d41f,0x979b,0x4aba,{0x97,0x85,0x8e,0xc3,0x19,0xdb,0xa4,0x48}};
 
 
 const IID IID_IAAFEssenceMultiAccess = {0xD815E2B4,0x2425,0x11d3,{0x80,0xAD,0x00,0x60,0x08,0x14,0x3E,0x6F}};
