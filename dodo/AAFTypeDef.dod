@@ -43,7 +43,7 @@ AD_XMETHOD1(GetTypeCategory,
 			eAAFTypeCategory_t *,
 			pTid,
 			Returned type category,
-			Returns the type category to which this type definition	belongs.
+			Returns the type category to which this type definition belongs.
   // 
   // Succeeds if:
   // - The pTid argument is valid

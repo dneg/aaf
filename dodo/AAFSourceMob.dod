@@ -36,11 +36,13 @@ AD_IDL(//
 // This interface is used with an object representing a SourceMob
 // containing some form of AAFEssenceDescriptor\, either an
 // AAFTapeDescriptor\, AAFFileDescriptor AAFFilmDescriptor\, or some
-// extended descriptor not in the v1 specification.  Some methods
+// extended descriptor not in the v1 specification. Some methods
 // exist here which exist only for one kind of AAFEssenceDescriptor. 
-//      AppendTimecodeClip -- Works only on tape AAFSourceMobs
-//      ValidateTimecodeRange -- Works only on tape AAFSourceMobs
-//      AppendEdgecodeClip -- Works only on film AAFSourceMobs
+//
+//      - AppendTimecodeClip -- Works only on tape AAFSourceMobs
+//      - ValidateTimecodeRange -- Works only on tape AAFSourceMobs
+//      - AppendEdgecodeClip -- Works only on film AAFSourceMobs
+//
 // These will return an error if the wrong descriptor is present.
 // 
 // If an AAFSourceMob points to another AAFSourceMob at the same rate
@@ -292,8 +294,9 @@ AD_XMETHOD7(AppendEdgecodeSlot,
 			  enumIn,
 			  aafFilmType_t,
 			  filmKind,
-			The film kind.  Can be one of:
-	// - kFtNull
+			The film kind.
+    // Can be one of:
+    // - kFtNull
     // - kFt35MM
     // - kFt16MM
     // - kFt8MM
@@ -302,7 +305,8 @@ AD_XMETHOD7(AppendEdgecodeSlot,
 			  enumIn,
 			  aafEdgeType_t,
 			  codeFormat,
-			  The code format.  Can be one of:
+			  The code format.
+    // Can be one of:
     // - kEtNull
     // - kEtKeycode
     // - kEtEdgenum4
@@ -338,7 +342,7 @@ AD_XMETHOD7(AppendEdgecodeSlot,
   //
   // AAFRESULT_FILMDESC_ONLY
   //   - Valid only for AAFSourceMob referencing an AAFFilmDescriptor
-  //   as EssenceDescriptor.)
+  //     as EssenceDescriptor.)
 
 
 AD_XMETHOD5(SpecifyValidCodeRange,
@@ -542,7 +546,7 @@ AD_XMETHOD9(AddPulldownRef,
 			  AAFDataDef,
 			  pEssenceKind,
 			  Data kind of slot to contain reference.  Requires a data kind
-	// valid for a essence stream.  Valid data kinds are:
+    // valid for a essence stream.  Valid data kinds are:
     // - Picture
     // - Sound,
 			[in],
@@ -560,7 +564,7 @@ AD_XMETHOD9(AddPulldownRef,
 			  aafPulldownKind_t,
 			  pulldownKind,
 			  Method of conversion.  Possible values are:
-    // - kAAFTwoThreePD   	-- Normal NTSC-20fps pulldown
+    // - kAAFTwoThreePD	    -- Normal NTSC-20fps pulldown
     // - kAAFPALPD
     // - kAAFOneToOneNTSC   -- NTSC recorded as 1 frame == 1 film frame.
     // - kAAFOneToOnePAL    -- PAL recorded as 1 frame == 1 film frame.,
@@ -574,9 +578,10 @@ AD_XMETHOD9(AddPulldownRef,
 			  aafPulldownDir_t,
 			  direction,
 			  Direction of the pulldown conversion. Possible values are:
-    //	- kAAFTapeToFilmSpeed -- Used to link a file descriptor with a
+    //
+    //  - kAAFTapeToFilmSpeed -- Used to link a file descriptor with a
     //							 tape descriptor.
-    //	- kAAFFilmToTapeSpeed -- Used to link a tape descriptor with a
+    //  - kAAFFilmToTapeSpeed -- Used to link a tape descriptor with a
     //							 film descriptor.,
 
 			Connects the specified Source Mob with the physical Source Mob
