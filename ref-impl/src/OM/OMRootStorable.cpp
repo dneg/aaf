@@ -65,8 +65,8 @@ void OMRootStorable::save(void) const
 {
   TRACE("OMRootStorable::save");
 
-  store()->save(classId());
-  store()->save(_persistentProperties);
+  OMRootStorable* nonConstThis = const_cast<OMRootStorable*>(this);
+  store()->save(*nonConstThis);
 }
 
   // @mfunc Restore the contents of an <c OMRootStorable>.
