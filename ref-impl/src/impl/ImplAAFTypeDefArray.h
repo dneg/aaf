@@ -70,7 +70,7 @@ public:
          aafUInt32  numElements,
 
          // @parm [out] newly-created property value
-         ImplAAFPropertyValue ** ppPropVal);
+         ImplAAFPropertyValue ** ppPropVal) ; //= 0;   //--cf make this a pure virtual method
 
 
   //****************
@@ -153,9 +153,29 @@ public:
   virtual void onRestore(void* clientContext) const;
 
 protected:
+	
+	//returns number of elements in this array
   virtual aafUInt32 pvtCount (ImplAAFPropertyValue * pInPropVal) const = 0;
-  //
-  // returns number of elements in this array
+
+  //Validates the input source 
+  virtual AAFRESULT STDMETHODCALLTYPE
+	  ValidateInputParams (ImplAAFPropertyValue ** ppElementValues,
+						aafUInt32  numElements);
+
+  //Creates a new PV
+  virtual AAFRESULT STDMETHODCALLTYPE
+	  CreateValue(ImplAAFPropertyValue ** ppPropVal, 
+								 aafUInt32 dataSize = 0); //overloaded function
+
+  //Copies individual element-values into the new PV
+  virtual AAFRESULT STDMETHODCALLTYPE
+	  CopyValuesIntoValue (ImplAAFPropertyValue ** ppElementValues,
+										  aafUInt32  numElements,
+										  aafUInt32  sizeElem,
+										  ImplAAFPropertyValue ** ppPropVal) ;
+
+  //Function to test appropriate array-ability;  pure-virtual
+  virtual bool IsArrayable(ImplAAFTypeDef * pSourceTypeDef) const = 0;
 };
 
 //
