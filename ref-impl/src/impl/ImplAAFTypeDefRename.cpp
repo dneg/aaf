@@ -253,4 +253,3 @@ OMProperty * ImplAAFTypeDefRename::pvtCreateOMProperty
 
 
 
-OMDEFINE_STORABLE(ImplAAFTypeDefRename, AUID_AAFTypeDefRename);

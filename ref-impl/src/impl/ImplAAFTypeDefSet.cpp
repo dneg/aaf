@@ -134,4 +134,3 @@ size_t ImplAAFTypeDefSet::NativeSize (void) const
 }
 
 
-OMDEFINE_STORABLE(ImplAAFTypeDefSet, AUID_AAFTypeDefSet);
