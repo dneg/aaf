@@ -124,5 +124,21 @@ SOURCE=..\..\..\Utilities\AafOmf\Omf2Aaf.h
 
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
+# Begin Source File
+
+SOURCE=..\..\..\OMF\libomfi.lib
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\OMF\libbento.lib
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\OMF\libjpeg.lib
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\OMF\libajpg.lib
+# End Source File
 # End Target
 # End Project
