@@ -51,7 +51,7 @@ writeHeader ()
   echo "<head>"
   echo "<meta http-equiv=\"Content-Type\""
   echo "      content=\"text/html; charset=ISO-8859-1\">"
-  echo "<title>Index of cvs change logs</title>"
+  echo "<title>$1</title>"
   echo "</head>"
   echo "<body>"
   echo "<h1 align=center>$1</h1>"
