@@ -627,17 +627,39 @@ int comparePropertyPath(const OMPropertyId* path1, const OMPropertyId* path2)
   return result;
 }
 
-// _wfopen() and _wremove() are in the W32 API on Windows 95, 98 and
-// ME but with an implementation that always fails. By default we use
-// _wfopen() when compiled on/for the W32 API, this can be overridden
-// by defining NO_W32_WFUNCS.
-
-#if !defined(NO_W32_WFUNCS)
 #if defined(OM_OS_WINDOWS)
-#define W32_WFOPEN
-#define W32_WREMOVE
+
+#include <windows.h>
+
+typedef enum WindowsKind {
+  wkError,       // error/unknown
+  wk3_1,         // Win32s
+  wkConsumer,    // Windows 95/98/Me
+  wkProfessional // Windows NT/2000/XP
+} WindowsKind;
+
+static WindowsKind getWindowsKind(void)
+{
+  WindowsKind result = wkError;
+
+  DWORD version = GetVersion();
+  BYTE majorVersion = (BYTE)(version        & 0x000000ff);
+  BYTE minorVersion = (BYTE)((version >> 8) & 0x000000ff);
+  if (version < 0x80000000) {
+    result = wkProfessional;
+  } else if (majorVersion < 4) {
+    result = wk3_1;
+  } else {
+    result = wkConsumer;
+  }
+  return result;
+}
+
 #endif
-#endif
+
+// _wfopen() and _wremove() are in the W32 API on Windows 95, 98 and
+// ME but with an implementation that always fails. So we only call
+// them if getWindowsKind() == wkProfessional.
 
 // Just like ANSI fopen() except for wchar_t* file names and modes.
 //
@@ -648,18 +670,22 @@ FILE* wfopen(const wchar_t* fileName, const wchar_t* mode)
   ASSERT("Valid mode", mode != 0);
 
   FILE* result = 0;
-#if defined(W32_WFOPEN)
-  result = _wfopen(fileName, mode);
-#else
-  char cFileName[FILENAME_MAX];
-  size_t status = wcstombs(cFileName, fileName, FILENAME_MAX);
-  ASSERT("Convert succeeded", status != (size_t)-1);
+#if defined(OM_OS_WINDOWS)
+  if (getWindowsKind() == wkProfessional) {
+    result = _wfopen(fileName, mode);
+  } else {
+#endif
+    char cFileName[FILENAME_MAX];
+    size_t status = wcstombs(cFileName, fileName, FILENAME_MAX);
+    ASSERT("Convert succeeded", status != (size_t)-1);
 
-  char cMode[FILENAME_MAX];
-  status = wcstombs(cMode, mode, FILENAME_MAX);
-  ASSERT("Convert succeeded", status != (size_t)-1);
+    char cMode[FILENAME_MAX];
+    status = wcstombs(cMode, mode, FILENAME_MAX);
+    ASSERT("Convert succeeded", status != (size_t)-1);
 
-  result = fopen(cFileName, cMode);
+    result = fopen(cFileName, cMode);
+#if defined(OM_OS_WINDOWS)
+  }
 #endif
   return result;
 }
@@ -671,14 +697,19 @@ int wremove(const wchar_t* fileName)
   ASSERT("Valid file name", fileName != 0);
 
   int result = 0;
-#if defined(W32_WREMOVE)
-  result = _wremove(fileName);
-#else
-  char cFileName[FILENAME_MAX];
-  size_t status = wcstombs(cFileName, fileName, FILENAME_MAX);
-  ASSERT("Convert succeeded", status != (size_t)-1);
+#if defined(OM_OS_WINDOWS)
+  if (getWindowsKind() == wkProfessional) {
+    result = _wremove(fileName);
+  } else {
+#endif
+    char cFileName[FILENAME_MAX];
+    size_t status = wcstombs(cFileName, fileName, FILENAME_MAX);
+    ASSERT("Convert succeeded", status != (size_t)-1);
 
-  result = remove(cFileName);
+    result = remove(cFileName);
+#if defined(OM_OS_WINDOWS)
+  }
 #endif
   return result;
 }
+
