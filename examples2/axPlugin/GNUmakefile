@@ -48,7 +48,7 @@ axPlugin : $(OBJDIR) $(LIBDIR) $(LIBDIR)/libaxPlugin$(DLL)
 
 
 $(LIBDIR)/libaxPlugin$(DLL) : $(CXXOBJS)
-	$(LD_DYN_LIB) -o $@ $(CXXOBJS) \
+	$(LD_DYN_LIB) -o $@ $(CXXOBJS) -L$(OBJDIR) -laxLib \
 	$(AAFBUILDDIR)/aafiid/$(AAFTARGETDIR)/libaafiid$(LIB) \
 
 
