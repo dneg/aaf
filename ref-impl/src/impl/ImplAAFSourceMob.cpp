@@ -985,8 +985,7 @@ AAFRESULT ImplAAFSourceMob::ReconcileMobLength(void)
 					timelineSlot = NULL;
 					CHECK(physMedia->GetLength(&len));
 					CHECK(physMedia->GetSampleRate(&srcRate));
-					physMedia->ReleaseReference();
-					physMedia = NULL;
+
 					
 					if((srcRate.numerator != destRate.numerator) ||
 						(srcRate.denominator != destRate.denominator))
@@ -1002,7 +1001,9 @@ AAFRESULT ImplAAFSourceMob::ReconcileMobLength(void)
 					slot->ReleaseReference();
 					slot = NULL;
 				}
-			}			
+			}
+			physMedia->ReleaseReference();
+			physMedia = NULL;			
 			slotIter->ReleaseReference();
 			slotIter = NULL;
 		}
