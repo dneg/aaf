@@ -16,12 +16,14 @@
 // 
 //=---------------------------------------------------------------------=
 
+#if defined(OS_WINDOWS)
 #pragma warning(disable:4786)
 // The prama is busted. It must be above std lib header includes, even then
 // it doesn't work. See:
 // http://support.microsoft.com/support/kb/articles/Q167/3/55.ASP
 // http://support.microsoft.com/support/kb/articles/Q195/3/86.ASP
 // http://support.microsoft.com/support/kb/articles/Q122/5/39.ASP
+#endif
 
 #include "AxHrMap.h"
 

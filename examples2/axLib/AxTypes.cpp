@@ -16,14 +16,18 @@
 // 
 //=---------------------------------------------------------------------=
 
+#if defined(OS_WINDOWS)
 #pragma warning(disable:4786)
 // The prama is busted. It must be above std lib header includes, even then
 // it doesn't work. See:
 // http://support.microsoft.com/support/kb/articles/Q167/3/55.ASP
 // http://support.microsoft.com/support/kb/articles/Q195/3/86.ASP
 // http://support.microsoft.com/support/kb/articles/Q122/5/39.ASP
+#endif
 
 #include "AxTypes.h"
+#include "AxUtil.h"
+#include "AxEx.h"
 
 #include <iostream>
 #include <map>
@@ -126,31 +130,27 @@ std::wostream& operator<<( std::wostream& os, const AxProductIdentification& id 
 std::wostream& operator<<( std::wostream& os, const aafUID_t& uid )
 {
         const int bufSize = 37;
-	wchar_t buf[bufSize];
+	char buf[bufSize];
 	int rc;
 	using namespace std;
 
-#if defined(OS_WINDOWS)
-	rc = swprintf( buf, L"%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x",
-					uid.Data1, uid.Data2, uid.Data3,
-					uid.Data4[0], uid.Data4[1],uid.Data4[2], uid.Data4[3],
-					uid.Data4[4], uid.Data4[5],uid.Data4[6], uid.Data4[7] );
-#else
-	rc = swprintf( buf, bufSize, L"%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x",
-					uid.Data1, uid.Data2, uid.Data3,
-					uid.Data4[0], uid.Data4[1],uid.Data4[2], uid.Data4[3],
-					uid.Data4[4], uid.Data4[5],uid.Data4[6], uid.Data4[7] );
-#endif
+	// swprintf does not have uniform all platform support.
+	// Instead, use snprintf and convert to wide characters.
+
+	rc = snprintf( buf, bufSize, "%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x",
+				     uid.Data1, uid.Data2, uid.Data3,
+				     uid.Data4[0], uid.Data4[1],uid.Data4[2], uid.Data4[3],
+				     uid.Data4[4], uid.Data4[5],uid.Data4[6], uid.Data4[7] );
 	if ( -1 == rc ) {
-	  // FIXME throw excetption.
+	  throw AxEx( L"swprintf failed" );
 	}
 
-	os << buf;
-	
+	AxString wBuf = AxStringUtil::mbtowc( buf );
+
+	os << wBuf;
+
 	return os;
 }
-
-
 
 std::wostream& operator<<( std::wostream& os, const aafProductVersion_t& pv )
 {

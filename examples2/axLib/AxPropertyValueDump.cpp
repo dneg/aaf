@@ -22,7 +22,8 @@
 #include "AxMetaDef.h"
 #include "AxUtil.h"
 
-#include <iomanip.h>
+#include <iomanip>
+#include <ostream>
 
 // Fixme - This should be above thie iomanip.h include, but if I put
 // it there I get many "ambiguos symbol" errors.

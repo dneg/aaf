@@ -39,7 +39,7 @@ public:
 		
 	IAAFPropertyValueSP GetValue() const;
 	
-	aafUID_t AxProperty::GetAUID() const;
+	aafUID_t GetAUID() const;
 
 	bool isA( const aafUID_t& propertyTypeUID ) const;
 

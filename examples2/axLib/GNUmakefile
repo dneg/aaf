@@ -25,6 +25,13 @@ export PACKAGE
 
 AAFBASE ?= ../..
 
+ifeq ($(shell uname), IRIX)
+# Warnings turned off:
+# 1107 - signed bit field has length of 1 bit in various stl files
+# 1682 - partial overide of AxPropertyValuePrtcl::process
+MODULE_PLATFORM_CFLAGS = -LANG:std -woff 1107,1682
+endif
+
 # Common definitions
 include $(AAFBASE)/build/common.mk
 

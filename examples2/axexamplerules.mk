@@ -24,6 +24,14 @@ PACKAGE = axExamples
 
 AAFBASE ?= ../..
 
+ifeq ($(shell uname), IRIX)
+# Warnings turned off:
+# 1107 - signed bit field has length of 1 bit in various stl files
+# 1682 - partial overide of AxPropertyValuePrtcl::process
+MODULE_PLATFORM_CFLAGS = -LANG:std -woff 1107,1682
+LIBCIO = -lCio
+endif
+
 # Common definitions
 include $(AAFBASE)/build/common.mk
 
@@ -38,7 +46,7 @@ all : $(OBJDIR) $(BINTARGET)
 
 $(BINTARGET) : $(CXXOBJS)
 	$(LD) $(CXXOBJS) $(RPATH_OPT) \
-	-L$(AAFSDKLIBDIR) -L$(OBJDIR) -laxLib -laaflib -laafiid -o $@
+	-L$(AAFSDKLIBDIR) -L$(OBJDIR) -laxLib -laaflib -laafiid $(LIBCIO) -o $@
 
 .PHONY : clean
 clean :

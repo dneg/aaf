@@ -35,7 +35,7 @@
 
 #include <map>
 
-#include <iostream>
+#include <ostream>
 
 namespace {
 

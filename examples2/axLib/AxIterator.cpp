@@ -177,6 +177,8 @@ auto_ptr<AxRecordIterator> AxRecordIterator::Clone()
 
 //=---------------------------------------------------------------------=
 
+
+template <>
 AxArrayIterator<IAAFTypeDefFixedArray>::AxArrayIterator( TypeDefSP spTypeDef,
 							 IAAFPropertyValueSP spPropVal )
 :	_spTypeDef( spTypeDef ),
@@ -186,6 +188,8 @@ AxArrayIterator<IAAFTypeDefFixedArray>::AxArrayIterator( TypeDefSP spTypeDef,
 	CHECK_HRESULT( _spTypeDef->GetCount( &_count ) );
 }
 
+
+template <>
 AxArrayIterator<IAAFTypeDefVariableArray>::AxArrayIterator( TypeDefSP spTypeDef,
 							    IAAFPropertyValueSP spPropVal )
 :	_spTypeDef( spTypeDef ),

@@ -36,8 +36,8 @@ public:
 	IAAFDictionarySP	 GetDictionary() const;
 	IAAFContentStorageSP GetContentStorage() const;
 
-	aafUInt32 AxHeader::CountMobs() const;
-	aafUInt32 AxHeader::CountEssence() const;
+	aafUInt32 CountMobs() const;
+	aafUInt32 CountEssence() const;
 
 	void AddMob( IAAFMobSP spIaafMob );
 	

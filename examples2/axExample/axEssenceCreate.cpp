@@ -40,6 +40,8 @@
 
 #include <iostream>
 
+#define USE_MINIMAL_IMAGE_FORMAT_SPECIFIERS 1
+
 namespace {
 
 
@@ -90,12 +92,12 @@ void AddImageEssence( AxMasterMob& masterMob,
 
 	// CreateEssence caused a TimelineMobSlot, SourceClip, SourceMob, and
 	// EssenceData to be created.  This is the scaffolding upon which we add
-    // essence data.
-    //
+	// essence data.
+	//
 	// Before writing essence, we need set the codec's format specifiers.
 	// These format specifiers are not persistent, the are made persistent
 	// via an EssenceDescriptor object.
-    //
+	//
 	// The EssenceDescriptor is accessed via the SourceMob.  So... let's get
 	// the source mob.  The id of the SourceMob is found in the SourceClip that
 	// is hanging off of slot 1.
@@ -158,7 +160,7 @@ void AddImageEssence( AxMasterMob& masterMob,
 	cdciDesc.SetVerticalSubsampling( verticalSubsampling );
 	cdciDesc.SetColorRange( colorRange );
 
-	// EssenceDescriptor
+	// EssenceDescriptor parameters.
 	// Nothing to do here.  We could add additional locators if necessary.
 
 	// Now, set the same set of essence format specifiers.  We are "talking"
@@ -166,6 +168,17 @@ void AddImageEssence( AxMasterMob& masterMob,
 
  	AxEssenceFormat axEssenceFormat( axEssenceAccess.GetEmptyFileFormat() );
 
+#if USE_MINIMAL_IMAGE_FORMAT_SPECIFIERS
+	// Minimal "known good" set of format specifiers.
+	axEssenceFormat.AddFormatSpecifier( kAAFStoredRect,   rect );
+	axEssenceFormat.AddFormatSpecifier( kAAFCDCIHorizSubsampling, horizontalSubsampling );
+	aafColorSpace_t colorSpace = kAAFColorSpaceYUV;
+	axEssenceFormat.AddFormatSpecifier( kAAFPixelFormat, colorSpace );
+#else
+	// Format specifer set that matches the essence descriptor
+	// parameters set above.
+	// This currently fails on Irix.  IAAFEssenceFormat::AddFormatSpecifer()
+	// throws:  HRESULT AxEssence.cpp:51 0x80120069 AAFRESULT_INVALID_PARM_SIZE
 	axEssenceFormat.AddFormatSpecifier( kAAFStoredRect,   rect );
 	axEssenceFormat.AddFormatSpecifier( kAAFSampledRect,  rect );
 	axEssenceFormat.AddFormatSpecifier( kAAFDisplayRect,  rect );
@@ -175,16 +188,15 @@ void AddImageEssence( AxMasterMob& masterMob,
 	// These are the format specifiers used by the CDCI, JPEG, and MPEG2 codecs.
 	// See AAFEssenceFormat.h.  Note, there is no VerticalSubsampling
 	// format specifier.. why not?
-
 	axEssenceFormat.AddFormatSpecifier( kAAFCDCICompWidth, componentWidth );
 	axEssenceFormat.AddFormatSpecifier( kAAFCDCIHorizSubsampling, horizontalSubsampling );
 	axEssenceFormat.AddFormatSpecifier( kAAFCDCIColorRange, colorRange );
 
 	// This format specifier is not part of the CDIC descriptor, in a real application
 	// it would probably have to be deduced from the EssenceDescriptor parameters.
-
 	aafColorSpace_t colorSpace = kAAFColorSpaceYUV;
 	axEssenceFormat.AddFormatSpecifier( kAAFPixelFormat, colorSpace );
+#endif
 
 	// That's it for the format specifiers...
 	axEssenceAccess.PutFileFormat( axEssenceFormat );
