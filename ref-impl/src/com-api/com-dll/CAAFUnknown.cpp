@@ -42,10 +42,6 @@
 #include <stddef.h>
 #include <string.h>
 
-#if defined(DONT_DELETE_LAST_REFERENCE)
-#include <iostream.h>
-#endif
-
 //=--------------------------------------------------------------------------=
 // CAAFUnknown::CAAFUnknown
 //=--------------------------------------------------------------------------=
