@@ -7,9 +7,7 @@
 #include "aafCvt.h"
 
 #include "AAFHeader.h"
-#if OM_PRESENT
-#include "file.h"
-#endif
+#include "OMFile.h"
 
 // Later: These two functions set a global alignment in the
 //file for writing properties.  Used only for media data
@@ -38,10 +36,8 @@ void OMContainer::SetDefaultByteOrder(aafInt16 byteOrder)
 // Close and save the file
 void OMContainer::OMLCloseContainer(void)
 {
-#if OM_PRESENT
 	*_file << *_head;
   _file->close();
-#endif
 }
 
 // Close without saving the file
@@ -76,10 +72,8 @@ void OMContainer::OMLOpenNewContainer(OMLSession sessionData,
 	char *pathname;
 
 	pathname = GetFileName(attributes);
-#if OM_PRESENT
-	_file = new File(pathname);
+	_file = new OMFile(pathname);
   _file->create();
-#endif
 }
 
 // OML Revision number
@@ -344,5 +338,10 @@ OMLErrorString OMLVGetErrorString(OMLErrorString errorString, OMLSize32 maxLengt
                                              OMLErrorNbr errorNumber, va_list inserts)
 {
 	return(0);
+}
+
+void OMContainer::SetHead(const ImplAAFHeader* head)
+{
+  _head = head;
 }
 
