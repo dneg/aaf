@@ -24,3 +24,49 @@
 * LIABILITY.
 *
 ************************************************************************/
+
+#include "OMDictionary.h"
+#include "OMPropertyDefinition.h"
+
+OMDictionary::PropertyDefinitionSet OMDictionary::_propertyDefinitions;
+
+static
+OMBuiltinPropertyDefinition dictionary(0, L"MetaDictionary", 0x0001, false);
+static
+OMBuiltinPropertyDefinition clientRoot(0, L"Header",         0x0002, false);
+
+OMPropertyDefinition* OMDictionary::find(const OMPropertyId propertyId)
+{
+  TRACE("OMDictionary::find");
+
+  PRECONDITION("Valid property id", propertyId != 0);
+
+  OMPropertyDefinition* result = 0;
+  bool status = _propertyDefinitions.find(propertyId, result);
+
+  POSTCONDITION("Property definition found", status);
+  POSTCONDITION("Valid result", result != 0);
+  return result;
+}
+
+void OMDictionary::insert(const OMPropertyId propertyId,
+                          const OMPropertyDefinition* definition)
+                          
+{
+  TRACE("OMDictionary::insert");
+
+  PRECONDITION("Valid property id", propertyId != 0);
+  PRECONDITION("Valid property definition", definition != 0);
+  PRECONDITION("Definition not already present",
+                                   !_propertyDefinitions.contains(propertyId));
+
+  bool status = _propertyDefinitions.insert(
+                                propertyId,
+                                const_cast<OMPropertyDefinition*>(definition));
+
+  POSTCONDITION("Definition not previously present", !status);
+  POSTCONDITION("Definition present",
+                                    _propertyDefinitions.contains(propertyId));
+}
+
+

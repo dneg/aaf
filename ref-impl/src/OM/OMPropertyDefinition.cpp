@@ -24,3 +24,64 @@
 * LIABILITY.
 *
 ************************************************************************/
+
+// @doc OMEXTERNAL
+#include "OMPropertyDefinition.h"
+#include "OMDictionary.h"
+
+#include "OMAssertions.h"
+
+  // @mfunc Constructor.
+OMBuiltinPropertyDefinition::OMBuiltinPropertyDefinition(
+                                                 const OMType* type,
+                                                 const wchar_t* name,
+                                                 const OMPropertyId propertyId,
+                                                 const bool isOptional)
+: _type(type),
+  _name(name),
+  _propertyId(propertyId),
+  _isOptional(isOptional)  
+{
+  TRACE("OMBuiltinPropertyDefinition::OMBuiltinPropertyDefinition");
+
+  OMDictionary::insert(localIdentification(), this);
+}
+
+  // @mfunc Destructor.
+OMBuiltinPropertyDefinition::~OMBuiltinPropertyDefinition(void)
+{
+  TRACE("OMBuiltinPropertyDefinition::~OMBuiltinPropertyDefinition");
+}
+
+  // @mfunc The type of the <c OMProperty> defined by this
+  //        <c OMBuiltinPropertyDefinition>.
+const OMType* OMBuiltinPropertyDefinition::type(void) const
+{
+  TRACE("OMBuiltinPropertyDefinition::type");
+  return _type;
+}
+
+  // @mfunc The name of the <c OMProperty> defined by this
+  //        <c OMBuiltinPropertyDefinition>.
+const wchar_t* OMBuiltinPropertyDefinition::name(void) const
+{
+  TRACE("OMBuiltinPropertyDefinition::name");
+  return _name;
+}
+
+  // @mfunc The locally unique identification of the <c OMProperty>
+  //        defined by this <c OMBuiltinPropertyDefinition>.
+OMPropertyId OMBuiltinPropertyDefinition::localIdentification(void) const
+{
+  TRACE("OMBuiltinPropertyDefinition::localIdentification");
+  return _propertyId;
+}
+
+  // @mfunc Is the <c OMProperty> defined by this
+  //        <c OMBuiltinPropertyDefinition> optional? 
+bool OMBuiltinPropertyDefinition::isOptional(void) const
+{
+  TRACE("OMBuiltinPropertyDefinition::isOptional");
+  return _isOptional;
+}
+
