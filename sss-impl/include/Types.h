@@ -61,14 +61,14 @@ $Date$
 #undef FLT4
 #endif /* FLT4 */
 
-#ifdef IA_64
+#ifdef __x86_64__
 typedef unsigned long UINT8;
 typedef unsigned int  UINT4;
 typedef unsigned short UINT2;
 typedef unsigned char BYTE;
 
 
-#else /* IA_64 */
+#else /* __x86_64__ */
 
 #ifdef _MSC_VER /* If this is Visual C++ */
 //typedef unsigned __int64 UINT8;
@@ -79,15 +79,15 @@ typedef unsigned long UINT4;
 typedef unsigned short UINT2;
 typedef unsigned char BYTE;
 
-#endif /* IA_64 */
+#endif /* __x86_64__ */
 
 
-#ifdef IA_64
+#ifdef __x86_64__
 typedef long SINT8;
 typedef int  SINT4;
 typedef short SINT2;
 
-#else /* IA_64 */
+#else /* __x86_64__ */
 
 #ifdef _MSC_VER /* If this is Visual C++ */
 typedef signed __int64 SINT8;
@@ -98,7 +98,7 @@ typedef signed long SINT4;
 typedef signed short SINT2;
 
 
-#endif /* IA_64 */
+#endif /* __x86_64__ */
 
 #ifndef _MSC_VER /* If this not is Visual C++ */
 typedef signed char CHAR;
