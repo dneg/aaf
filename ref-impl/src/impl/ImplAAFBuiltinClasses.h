@@ -54,8 +54,6 @@ private:
   static const ClassTblEntry sBuiltinClassTable[];
 
   ImplAAFDictionary* _dictionary; // pointer back to associated dictionary (temp)
-
-  ImplAAFClassDef *             _CD_Object;
 };
 
 #endif // ! __ImplAAFBuiltinClasses_h__
