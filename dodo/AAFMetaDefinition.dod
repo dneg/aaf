@@ -1,0 +1,62 @@
+#c/*************************************************\
+#c*                                                 *
+#c* Advanced Authoring Format                       *
+#c*                                                 *
+#c* Copyright (c) 1998-2000 Avid Technology, Inc.   *
+#c*                                                 *
+#c\*************************************************/
+#startm .this-module 0
+AAFMetaDefinition\
+#endm
+#c
+#startm .parent-module 0
+AAFObject\
+#endm
+AD_HEAD
+AD_IDL(//
+// This interface is defines an item to be referenced in the AAF file.
+// It specifies the AUID unique identifier used to define types used
+// in AAF persistent objects.
+AD_STD_COMMENT_IFC_HEADER
+AD_STD_COMMENT_IFC_INIT)
+AD_INCLUDE(AAFTypes)
+
+AD_CLASS_UUID(cee32173, 0c10, 11d4, 80, 14, 00, 10, 4b, c9, 15, 6d)
+
+AD_DEFAULT_UUID(cee32174, 0c10, 11d4, 80, 14, 00, 10, 4b, c9, 15, 6d)
+AD_XCLASS_BEGIN(Abstract, StoredObject)
+
+AD_XMETHOD3(Initialize,
+		   [in\, ref],
+		   objPass,
+		   aafUID_constref,
+		   id,
+		   AUID for new DeObject,
+		   [in\, string],
+		   objPass,
+		   aafCharacter_constptr,
+		   pName,
+		   Name for new Meta Definition,
+		   [in\, string],
+		   objPass,
+		   aafCharacter_constptr,
+		   pDescription,
+		   the Description of this meta definition,
+		   Init all fields of a meta definition object.)
+
+
+AD_XMETHOD1(GetAUID,
+		   [retval\,out],
+		   objPass,
+		   aafUID_t *,
+		   pAuid,
+		   Pointer to an AUID reference,
+		   Gets the AUID for this object.)
+
+AD_STD_METHOD_STRING_MULTI_SET_GET_SIZE(Name,
+     the Name of this definition.)
+
+AD_STD_METHOD_STRING_MULTI_SET_GET_SIZE(Description,
+     the Description of this definition.)
+
+AD_XCLASS_END(Abstract, StoredObject)

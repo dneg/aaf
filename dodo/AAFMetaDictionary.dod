@@ -1,0 +1,340 @@
+#c/*************************************************\
+#c*                                                 *
+#c* Advanced Authoring Format                       *
+#c*                                                 *
+#c* Copyright (c) 1998-2000 Avid Technology, Inc.   *
+#c*                                                 *
+#c\*************************************************/
+#startm .this-module 0
+AAFMetaDictionary\
+#endm
+#c
+#startm .parent-module 0
+AAFObject\
+#endm
+#c
+#c #import ./AAFObject.exp
+AD_HEAD
+AD_IDL(//
+// This interface is used to access dictionary services in an AAF
+// file.
+AD_STD_COMMENT_IFC_HEADER)
+AD_FORWARD_DECLARATION(AAFClassDef)
+AD_FORWARD_DECLARATION(EnumAAFClassDefs)
+AD_FORWARD_DECLARATION(AAFTypeDef)
+AD_FORWARD_DECLARATION(EnumAAFTypeDefs)
+
+AD_CLASS_UUID(e1085eea, 0cc3, 11d4, 80, 14, 00, 10, 4b, c9, 15, 6d)
+
+AD_DEFAULT_UUID(e1085eeb, 0cc3, 11d4, 80, 14, 00, 10, 4b, c9, 15, 6d)
+AD_XCLASS_BEGIN(Concrete, StoredObject)
+
+
+AD_XMETHOD1(RegisterClassDef,
+
+			[in],
+			objIn,
+			AAFClassDef,
+			pClassDef,
+			Class Definition,
+
+     Add the class definition object to the dictionary.
+  // 
+  // Succeeds if:
+  // - The pClassDef pointer is valid.
+  // - the ID contained in the class def is not already been
+  //   registered.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pClassDef\)
+  //
+  // AAFRESULT_INVALID_PARAM
+  //   - The class def ID has already been registered.)
+
+
+AD_XMETHOD2(LookupClassDef,
+
+			[in\, ref],
+			objPass,
+			aafUID_constref,
+			classId,
+			Class Unique ID,
+
+			[out\,retval],
+			objOut,
+			AAFClassDef,
+			ppClassDef,
+			Class Definition,
+
+     Return the class definition with the given id.
+  // 
+  // Succeeds if:
+  // - The pClassID pointer is valid.
+  // - The ppClassDef pointer is valid.
+  // - the ID is a recognized id for a class definition.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(Either pClassID or ppClassDef\)
+  //
+  // AAFRESULT_INVALID_PARAM
+  //   - The given ID is not recognized as a class definition ID.)
+
+
+AD_XMETHOD1(GetClassDefs,
+
+			[out\,retval],
+			objOut,
+			EnumAAFClassDefs,
+			ppEnum,
+			Class Definition Enumeration,
+
+     Return an enumerator for all class definitions.
+  //
+  // Succeeds if:
+  // - The ppEnum pointer is valid.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppEnum\))
+
+
+AD_XMETHOD1(CountClassDefs,
+			[out\, retval],
+			objPass,
+			aafUInt32 *,
+			pResult,
+			Total number of class definition objects,
+			Writes the number of class definition objects into the
+  // *pResult argument.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pResult pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pResult.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pResult is null.)
+
+AD_XMETHOD1(CreateForwardClassReference,
+
+			[in\, ref],
+			objPass,
+			aafUID_constref,
+			classId,
+			Class Unique ID,
+
+     Return the class definition with the given id.
+  // 
+  // Succeeds if:
+  // - The classId does not represent an existing forward class reference
+  //   or a class definition that has already been successfully registered.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  //
+  // AAFRESULT_INVALID_PARAM
+  //   - The given ID is not recognized as a class definition ID.)
+
+AD_XMETHOD2(HasForwardClassReference,
+
+			[in\, ref],
+			objPass,
+			aafUID_constref,
+			classId,
+			Class Unique ID,
+
+			[out\,retval],
+			objPass,
+			aafBoolean_t *,
+			pResult,
+			true if forward class reference; false if not a forward class reference,
+
+     Return kAAFTrue if the given class identification is a forward reference.
+  // 
+  // Succeeds if:
+  // - The pClassID pointer is valid.
+  // - The ppClassDef pointer is valid.
+  // - the ID is a recognized id for a class definition.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(Either pClassID or ppClassDef\)
+  //
+  // AAFRESULT_INVALID_PARAM
+  //   - The given ID is not recognized as a class definition ID.)
+
+AD_XMETHOD1(RegisterTypeDef,
+
+			[in],
+			objIn,
+			AAFTypeDef,
+			pTypeDef,
+			Type Definition Object,
+
+     Add the type definition object to the dictionary.
+  // 
+  // Succeeds if:
+  // - The pTypeDef pointer is valid.
+  // - the ID is not already been registered.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pClassDef\)
+  //
+  // AAFRESULT_INVALID_PARAM
+  //   - The given type has already been registered.)
+
+
+AD_XMETHOD2(LookupTypeDef,
+
+			[in\, ref],
+			objPass,
+			aafUID_constref,
+			typeId,
+			Type Unique ID,
+
+			[out\,retval],
+			objOut,
+			AAFTypeDef,
+			ppTypeDef,
+			Type Definition Object,
+
+     Return the type definition object with the given id.
+  // 
+  // Succeeds if:
+  // - The pTypeID pointer is valid.
+  // - The ppTypeDef pointer is valid.
+  // - the ID is a recognized id for a type definition.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(Either pTypeID or ppTypeDef\)
+  //
+  // AAFRESULT_INVALID_PARAM
+  //   - The given ID is not recognized as a type definition ID.)
+
+
+AD_XMETHOD1(GetTypeDefs,
+
+			[out\,retval],
+			objOut,
+			EnumAAFTypeDefs,
+			ppEnum,
+			Type Def Enumeration,
+
+     Return an enumerator for all type definitions.
+  //
+  // Succeeds if:
+  // - The ppEnum pointer is valid.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppEnum\))
+
+
+AD_XMETHOD1(CountTypeDefs,
+			[out\, retval],
+			objPass,
+			aafUInt32 *,
+			pResult,
+			Total number of type definition objects,
+			Writes the number of type definition objects into the
+  // *pResult argument.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pResult pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pResult.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pResult is null.)
+
+
+AD_XMETHOD1(RegisterOpaqueTypeDef,
+
+			[in],
+			objIn,
+			AAFTypeDef,
+			pTypeDef,
+			Type Definition Object,
+
+     Add the opaquetype definition object to the dictionary.
+  // 
+  // Succeeds if:
+  // - The pTypeDef pointer is valid.
+  // - the definition is not already been registered with RegisterTypeDef.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pTypeDef\)
+  //
+  // AAFRESULT_INVALID_PARAM
+  //   - The given type has already been registered.)
+
+
+AD_XMETHOD2(LookupOpaqueTypeDef,
+
+			[in\, ref],
+			objPass,
+			aafUID_constref,
+			typeId,
+			Type Unique ID,
+
+			[out\,retval],
+			objOut,
+			AAFTypeDef,
+			ppTypeDef,
+			Type Definition Object,
+
+     Return the opaque type definition object with the given id.
+  // 
+  // Succeeds if:
+  // - The pTypeID pointer is valid.
+  // - The ppTypeDef pointer is valid.
+  // - the ID is a recognized id for an opaque type definition.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(Either typeId or ppTypeDef\)
+  //
+  // AAFRESULT_INVALID_PARAM
+  //   - The given ID is not recognized as a type definition ID.)
+
+
+AD_XMETHOD1(GetOpaqueTypeDefs,
+
+			[out\,retval],
+			objOut,
+			EnumAAFTypeDefs,
+			ppEnum,
+			Type Def Enumeration,
+
+     Return an enumerator for all registered opaque type definitions.
+  //
+  // Succeeds if:
+  // - The ppEnum pointer is valid.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppEnum\))
+
+
+AD_XMETHOD1(CountOpaqueTypeDefs,
+			[out\, retval],
+			objPass,
+			aafUInt32 *,
+			pResult,
+			Total number of opaque type definition objects,
+			Writes the number of opaque type definition objects into the
+  // *pResult argument.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pResult pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pResult.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pResult is null.)
+
+AD_XCLASS_END(Concrete, StoredObject)
