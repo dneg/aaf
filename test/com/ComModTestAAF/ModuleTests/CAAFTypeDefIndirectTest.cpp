@@ -46,6 +46,10 @@ typedef IAAFSmartPointer<IAAFPropertyDef>           IAAFPropertyDefSP;
 typedef IAAFSmartPointer<IAAFPropertyValue>         IAAFPropertyValueSP;
 typedef IAAFSmartPointer<IAAFTypeDef>               IAAFTypeDefSP;
 typedef IAAFSmartPointer<IAAFTypeDefIndirect>       IAAFTypeDefIndirectSP;
+typedef IAAFSmartPointer<IAAFTypeDefInt>			IAAFTypeDefIntSP;
+typedef IAAFSmartPointer<IAAFTypeDefRename>			IAAFTypeDefRenameSP;
+typedef IAAFSmartPointer<IAAFTypeDefString>			IAAFTypeDefStringSP;
+typedef IAAFSmartPointer<IAAFTypeDefVariableArray>	IAAFTypeDefVariableArraySP;
 typedef IAAFSmartPointer<IAAFMob>                   IAAFMobSP;
 typedef IAAFSmartPointer<IAAFTimelineMobSlot>       IAAFTimelineMobSlotSP;
 typedef IAAFSmartPointer<IAAFMobSlot>               IAAFMobSlotSP;
@@ -73,11 +77,7 @@ extern "C"
 
   // Open the test file read only and validate the data.
   void CAAFTypeDefIndirect_read (aafCharacter_constptr pFileName); // throw HRESULT
-
-  // Open the test file and modify the data.
-  void CAAFTypeDefIndirect_modify (aafCharacter_constptr pFileName); // throw HRESULT
 }
-
 
 HRESULT CAAFTypeDefIndirect_test()
 {
@@ -87,14 +87,10 @@ HRESULT CAAFTypeDefIndirect_test()
 
   try
   {
-    // Run through a basic set of tests. Create the file, modify the file,
-    // and then read and validate the modified file.
+    // Run through a basic set of tests. Create the file, then read it
+    // back and validate it.
 
-//    cout << "     Creating " << aFileName << "..." << endl;
     CAAFTypeDefIndirect_create (wFileName);
-//    cout << "Modifying " << aFileName << "..." << endl;
-//    CAAFTypeDefIndirect_modify (wFileName);
-//    cout << "     Reading " << aFileName << "..." << endl;
     CAAFTypeDefIndirect_read (wFileName);
   }
   catch (HRESULT &rhr)
@@ -102,47 +98,43 @@ HRESULT CAAFTypeDefIndirect_test()
     result = rhr;
   }
 
-
-  if (SUCCEEDED (result))
-  {
-    cout << "The following IAAFTypeIndirect methods have not been tested yet:" << endl; 
-    cout << "     CreateValueFromActualValue" << endl; 
-    cout << "     CreateValueFromActualData  - incomplete" << endl; 
-    cout << "     GetActualValue" << endl; 
-//    cout << "     GetActualSize" << endl; 
-//    cout << "     GetActualType" << endl; 
-    cout << "     GetActualData              - incomplete" << endl; 
-
-    // The types of tests that still need to be done are getting and setting
-    // data of type definitions other then string including renamed types. 
-    // Other tests and the converter have already tested Boolean, UInt32, and 
-    // Rational. (transdel 2000-MAR-10)
-    result = AAFRESULT_TEST_PARTIAL_SUCCESS;
-  }
-
   return (result);
 }
 
 
 //
-// Constants for new class and property definitions
+// Constants for new property definitions
 //
+#define NUM_COMPONENT_ANNOTATION_PROPERTIES 6
+static const aafUID_t kComponentAnnotationPIDs[
+	NUM_COMPONENT_ANNOTATION_PROPERTIES]=
+{
+	{0x3feec650, 0xf579, 0x11d3, 
+		{ 0x94, 0xed, 0x0, 0x60, 0x97, 0xfe, 0x2b, 0xa5 }},
+	{0x3feec651, 0xf579, 0x11d3, 
+		{ 0x94, 0xed, 0x0, 0x60, 0x97, 0xfe, 0x2b, 0xa5 }},
+	{0xe39670a0, 0x566b, 0x11d4, 
+		{ 0x92, 0x29, 0x0, 0x50, 0x4, 0x9c, 0x3b, 0x9d }},
+	{0xd1854d0, 0x5675, 0x11d4,  
+		{ 0x92, 0x29, 0x0, 0x50, 0x4, 0x9c, 0x3b, 0x9d }},
+	{0x1f23b4a0, 0x5675, 0x11d4, 
+		{ 0x92, 0x29, 0x0, 0x50, 0x4, 0x9c, 0x3b, 0x9d }},
+	{0x3ee82080, 0x5675, 0x11d4, 
+		{ 0x92, 0x29, 0x0, 0x50, 0x4, 0x9c, 0x3b, 0x9d }}
+};
 
-// {3FEEC650-F579-11d3-94ED-006097FE2BA5}
-static const aafUID_t kPropAUID_Component_Annotation1 = 
-{ 0x3feec650, 0xf579, 0x11d3, { 0x94, 0xed, 0x0, 0x60, 0x97, 0xfe, 0x2b, 0xa5 } };
-static const aafUID_t kPropAUID_Component_Annotation2 = 
-{ 0x3feec651, 0xf579, 0x11d3, { 0x94, 0xed, 0x0, 0x60, 0x97, 0xfe, 0x2b, 0xa5 } };
+// AUID of renamed type we will create
+static const aafUID_t kAUID_Word = 
+{ 0x548be260, 0x566d, 0x11d4, { 0x92, 0x29, 0x0, 0x50, 0x4, 0x9c, 0x3b, 0x9d } };
 
-aafCharacter_constptr kSequenceAnnotation1 = 
+static aafCharacter_constptr kSequenceAnnotation1 = 
   L"Sequence - Component Annotation 1 - as a unicode string";
-const char kSequenceAnnotation2[] = 
+static const char kSequenceAnnotation2[] = 
    "Sequence - Component Annotation 2 - as array of UInt8";
-
+static aafUInt16 kSequenceAnnotation3=5;
 
 // The test mob id that we added...
 static aafMobID_t sTestMob = {0};
-
 
 #ifndef _DEBUG
 // convenient error handlers.
@@ -180,8 +172,6 @@ do {\
 
 #endif // #else // #ifndef _DEBUG
 
-
-
 // Cross-platform utility to delete a file.
 static void RemoveTestFile(const wchar_t* pFileName)
 {
@@ -195,8 +185,7 @@ static void RemoveTestFile(const wchar_t* pFileName)
   }
 }
 
-
-static void Test_ObjectEquality (IUnknown *obj1, IUnknown *obj2)
+static void Test_ObjectEquality(IUnknown *obj1, IUnknown *obj2)
 {
   // The only way to test object equality in COM is to compare IUnknown
   // interface pointers.
@@ -208,7 +197,6 @@ static void Test_ObjectEquality (IUnknown *obj1, IUnknown *obj2)
   checkExpression (pUnknown1 == pUnknown2, AAFRESULT_TEST_FAILED);  
 }
 
-//
 static void Test_RegisterIndirectComponentAnnotations (
   IAAFDictionary * pDictionary)
 {
@@ -227,38 +215,35 @@ static void Test_RegisterIndirectComponentAnnotations (
   IAAFClassDefSP pComponentClass;
   checkResult (pDictionary->LookupClassDef (AUID_AAFComponent, &pComponentClass));
 
-  // Initialize new property
-  IAAFPropertyDefSP pComponentAnnotationPropertyDef1;
-  checkResult (pComponentClass->RegisterOptionalPropertyDef (
-                                  kPropAUID_Component_Annotation1,
-                                  L"Indirect Component Annotation 1",
+  // Initialize new properties
+  IAAFPropertyDefSP pComponentAnnotationPropertyDef;
+  int n;
+  for(n=0;n<NUM_COMPONENT_ANNOTATION_PROPERTIES;n++)
+	checkResult (pComponentClass->RegisterOptionalPropertyDef (
+                                  kComponentAnnotationPIDs[n],
+                                  L"Indirect Component Annotation",
                                   pIndirectType,
-                                  &pComponentAnnotationPropertyDef1));
-
-  IAAFPropertyDefSP pComponentAnnotationPropertyDef2;
-  checkResult (pComponentClass->RegisterOptionalPropertyDef (
-                                  kPropAUID_Component_Annotation2,
-                                  L"Indirect Component Annotation 2",
-                                  pIndirectType,
-                                  &pComponentAnnotationPropertyDef2));
+                                  &pComponentAnnotationPropertyDef));
 }
 
 static void Test_LookupIndirectComponentAnnotations (
   IAAFDictionary * pDictionary,
-  IAAFPropertyDef **ppComponentAnnotationPropertyDef1,
-  IAAFPropertyDef **ppComponentAnnotationPropertyDef2)
+  IAAFPropertyDefSP *ppComponentAnnotationPropertyDefs)
 {
   // Find the class definition for components class
   IAAFClassDefSP pComponentClass;
   checkResult (pDictionary->LookupClassDef (AUID_AAFComponent, &pComponentClass));
 
-  // Find our property definition
-  checkResult (pComponentClass->LookupPropertyDef (
-                                      kPropAUID_Component_Annotation1,
-                                      ppComponentAnnotationPropertyDef1));
-  checkResult (pComponentClass->LookupPropertyDef (
-                                      kPropAUID_Component_Annotation2,
-                                      ppComponentAnnotationPropertyDef2));
+  // Find our property definitions
+  int n;
+  for(n=0;n<NUM_COMPONENT_ANNOTATION_PROPERTIES;n++)
+  {
+    checkResult (pComponentClass->LookupPropertyDef(
+										kComponentAnnotationPIDs[n],
+										&(ppComponentAnnotationPropertyDefs[n])));
+    checkExpression(ppComponentAnnotationPropertyDefs[n]!=0,
+		AAFRESULT_TEST_FAILED);
+  }
 }
 
 
@@ -308,6 +293,23 @@ static void Test_CreateValueFromActualData (
   checkResult (pObject->SetPropertyValue (pIndirectPropertyDef, pIndirectValue));
 }
 
+static void Test_CreateValueFromActualValue(IAAFDictionary *pDictionary,
+											IUnknown *pUnknown,
+											IAAFPropertyDef *pPropertyDef,
+											IAAFPropertyValue *pActualValue)
+{
+  CAAFBuiltinDefs defs(pDictionary);
+
+  IAAFPropertyValueSP pIndirectValue;
+  IAAFTypeDefIndirectSP pTypeDefIndirect;
+  checkResult(defs.tdIndirect()->QueryInterface(IID_IAAFTypeDefIndirect,
+	  (void**)&pTypeDefIndirect));
+  checkResult(pTypeDefIndirect->CreateValueFromActualValue(
+	  pActualValue,&pIndirectValue));
+  IAAFObjectSP pObject;
+  checkResult(pUnknown->QueryInterface(IID_IAAFObject,(void**)&pObject));
+  checkResult(pObject->SetPropertyValue(pPropertyDef,pIndirectValue));
+}
 
 //
 // Test to create and initialize an indirect property with the
@@ -404,8 +406,177 @@ static void Test_GetActualData (
 
 }
 
+static void Test_GetActualValue(IUnknown *pUnknown,IAAFPropertyDef *pPropertyDef,
+								IAAFPropertyValue **ppActualValue)
+{
+  IAAFObjectSP pObject;
+  checkResult(pUnknown->QueryInterface(IID_IAAFObject,(void**)&pObject));
+  IAAFPropertyValueSP pIndirectValue;
+  checkResult(pObject->GetPropertyValue(pPropertyDef,&pIndirectValue));
+  IAAFTypeDefSP pTypeDef;
+  checkResult(pIndirectValue->GetType(&pTypeDef));
+  IAAFTypeDefIndirectSP pTypeDefIndirect;
+  checkResult(pTypeDef->QueryInterface(IID_IAAFTypeDefIndirect,
+	  (void**)&pTypeDefIndirect));
+  checkResult(pTypeDefIndirect->GetActualValue(pIndirectValue,ppActualValue));
+  checkExpression(*ppActualValue!=0,AAFRESULT_TEST_FAILED);
+}
 
+static void ValidatePropertyValue(IAAFDictionary *pDictionary,
+	IUnknown *pUnknown,
+	IAAFPropertyDef *pIndirectPropertyDef,
+	aafUID_t const& kTypeID,
+	aafDataBuffer_t pExpectedData,
+	aafUInt32 expectedDataSize)
+{
+  IAAFObjectSP pObject;
+  checkResult (pUnknown->QueryInterface(IID_IAAFObject,(void**)&pObject));
 
+  IAAFTypeDefSP pExpectedType;
+  checkResult (pDictionary->LookupTypeDef(kTypeID,&pExpectedType));
+
+  Test_GetActualSize (
+          pObject,
+          pIndirectPropertyDef,
+          expectedDataSize);
+
+  IAAFTypeDefSP pActualType;
+  Test_GetActualType (
+          pObject,
+          pIndirectPropertyDef,
+          &pActualType);
+  Test_ObjectEquality(pActualType,pExpectedType);
+
+  unsigned char *pActualData=new unsigned char[expectedDataSize];
+  Test_GetActualData (
+          pObject,
+          pIndirectPropertyDef,
+          pExpectedType,
+          expectedDataSize,
+          (aafDataBuffer_t)pActualData);
+  checkExpression(!memcmp(pActualData,pExpectedData,expectedDataSize),
+	  AAFRESULT_TEST_FAILED);
+  delete(pActualData);
+}
+
+static void ValidateTestPropertyValues(IAAFDictionary *pDictionary,
+									   IAAFSequence *pSequence)
+{
+  IAAFPropertyDefSP ppComponentAnnotationPropertyDefs[
+	  NUM_COMPONENT_ANNOTATION_PROPERTIES];
+
+  Test_LookupIndirectComponentAnnotations (pDictionary,
+             ppComponentAnnotationPropertyDefs);
+
+  // Validate property value of type kAAFTypeID_String created via
+  // CreateValueFromActualData()
+  ValidatePropertyValue(pDictionary,pSequence,
+	  ppComponentAnnotationPropertyDefs[0],kAAFTypeID_String,
+	  (aafDataBuffer_t)kSequenceAnnotation1,
+	  2*(wcslen(kSequenceAnnotation1)+1));
+
+  // Validate property value of type kAAFTypeID_UInt8Array created via
+  // CreateValueFromActualData()
+  ValidatePropertyValue(pDictionary,pSequence,
+	  ppComponentAnnotationPropertyDefs[1],kAAFTypeID_UInt8Array,
+	  (aafDataBuffer_t)kSequenceAnnotation2,
+	  strlen(kSequenceAnnotation2)+1);
+
+  // Validate property value of renamed type created via 
+  // CreateValueFromActualData()
+  ValidatePropertyValue(pDictionary,pSequence,
+	  ppComponentAnnotationPropertyDefs[2],kAUID_Word,
+	  (aafDataBuffer_t)&kSequenceAnnotation3,sizeof(aafUInt16));
+
+  // Validate property value of type kAAFTypeID_String created via
+  // CreateValueFromActualValue()
+  ValidatePropertyValue(pDictionary,pSequence,
+	  ppComponentAnnotationPropertyDefs[3],kAAFTypeID_String,
+	  (aafDataBuffer_t)kSequenceAnnotation1,
+	  2*(wcslen(kSequenceAnnotation1)+1));
+
+  // Validate property value of type kAAFTypeID_UInt8Array created via
+  // CreateValueFromActualValue()
+  ValidatePropertyValue(pDictionary,pSequence,
+	  ppComponentAnnotationPropertyDefs[4],kAAFTypeID_UInt8Array,
+	  (aafDataBuffer_t)kSequenceAnnotation2,
+	  strlen(kSequenceAnnotation2)+1);
+
+  // Validate property value of renamed type created via 
+  // CreateValueFromActualValue()
+  ValidatePropertyValue(pDictionary,pSequence,
+	  ppComponentAnnotationPropertyDefs[5],kAUID_Word,
+	  (aafDataBuffer_t)&kSequenceAnnotation3,sizeof(aafUInt16));
+
+  // Validate string property values via GetActualValue()
+  int n;
+  IAAFPropertyValueSP pActualValue;
+  IAAFTypeDefSP pTypeDef;
+  for(n=0;n<2;n++)
+  {
+	// Property defs 0 and 3 correspond to string properties
+	Test_GetActualValue(pSequence,ppComponentAnnotationPropertyDefs[n==0?0:3],
+		  &pActualValue);
+	checkResult(pActualValue->GetType(&pTypeDef));
+	IAAFTypeDefStringSP pTypeDefString;
+	checkResult(pTypeDef->QueryInterface(IID_IAAFTypeDefString,
+	  (void**)&pTypeDefString));
+	aafUInt32 count;
+	checkResult(pTypeDefString->GetCount(pActualValue,&count));
+	checkExpression(count==wcslen(kSequenceAnnotation1)+1,AAFRESULT_TEST_FAILED);
+	aafCharacter *pString=new aafCharacter[count];
+	checkResult(pTypeDefString->GetElements(pActualValue,(aafMemPtr_t)pString,
+	  count*sizeof(aafCharacter)));
+	checkExpression(memcmp(pString,kSequenceAnnotation1,count*sizeof(aafCharacter))
+	  ==0,AAFRESULT_TEST_FAILED);
+	delete(pString);
+  }
+
+  // Validate UInt8 array property value via GetActualValue()
+  for(n=0;n<2;n++)
+  {
+	// Property defs 1 and 4 correspond to UInt8 array properties
+	Test_GetActualValue(pSequence,ppComponentAnnotationPropertyDefs[n==0?1:4],
+	  &pActualValue);
+	checkResult(pActualValue->GetType(&pTypeDef));
+	IAAFTypeDefVariableArraySP pTypeDefVariableArray;
+	checkResult(pTypeDef->QueryInterface(IID_IAAFTypeDefVariableArray,
+	  (void**)&pTypeDefVariableArray));
+	aafUInt32 count;
+	checkResult(pTypeDefVariableArray->GetCount(pActualValue,&count));
+	checkExpression(count==strlen(kSequenceAnnotation2)+1,AAFRESULT_TEST_FAILED);
+	aafUInt8 *pArray=new aafUInt8[count];
+	checkResult(pTypeDefVariableArray->GetCArray(pActualValue,(aafMemPtr_t)pArray,
+	  count*sizeof(aafUInt8)));
+	checkExpression(memcmp(pArray,kSequenceAnnotation2,count*sizeof(aafUInt8))==0,
+	  AAFRESULT_TEST_FAILED);
+	delete(pArray);
+  }
+
+  // Validate property value of renamed type via GetActualValue()
+  for(n=0;n<2;n++)
+  {
+	// Property defs 2 and 5 correspond to renamed properties
+	Test_GetActualValue(pSequence,ppComponentAnnotationPropertyDefs[n==0?2:5],
+	  &pActualValue);
+	checkResult(pActualValue->GetType(&pTypeDef));
+	IAAFTypeDefRenameSP pTypeDefRename;
+	checkResult(pTypeDef->QueryInterface(IID_IAAFTypeDefRename,
+	  (void**)&pTypeDefRename));
+	IAAFPropertyValueSP pBaseValue;
+	checkResult(pTypeDefRename->GetBaseValue(pActualValue,&pBaseValue));
+	checkResult(pBaseValue->GetType(&pTypeDef));
+	IAAFTypeDefIntSP pTypeDefInt;
+	checkResult(pTypeDef->QueryInterface(IID_IAAFTypeDefInt,(void**)&pTypeDefInt));
+	aafUInt32 size;
+	checkResult(pTypeDefInt->GetSize(&size));
+	checkExpression(size==sizeof(aafUInt16),AAFRESULT_TEST_FAILED);
+	aafUInt16 value;	
+	checkResult(pTypeDefInt->GetInteger(pBaseValue,(aafMemPtr_t)&value,
+	  sizeof(aafUInt16)));
+	checkExpression(value==kSequenceAnnotation3,AAFRESULT_TEST_FAILED);
+  }
+}
 
 // Create the test file.
 void CAAFTypeDefIndirect_create (aafCharacter_constptr pFileName)
@@ -414,8 +585,8 @@ void CAAFTypeDefIndirect_create (aafCharacter_constptr pFileName)
   IAAFFileSP pFile;
   IAAFHeaderSP pHeader;
   IAAFDictionarySP pDictionary;
-  IAAFPropertyDefSP pComponentAnnotationPropertyDef1;
-  IAAFPropertyDefSP pComponentAnnotationPropertyDef2;
+  IAAFPropertyDefSP ppComponentAnnotationPropertyDefs[
+	  NUM_COMPONENT_ANNOTATION_PROPERTIES];
   IAAFMobSP pMob;
   IAAFTimelineMobSlotSP pTimelineMobSlot;
   IAAFMobSlotSP pMobSlot;
@@ -436,12 +607,11 @@ void CAAFTypeDefIndirect_create (aafCharacter_constptr pFileName)
   v.type = kAAFVersionUnknown;
 
   ProductInfo.companyName = L"AAF Developers Desk";
-  ProductInfo.productName = L"AAFTypeDefIndirect Test - create";
+  ProductInfo.productName = L"AAFTypeDefIndirect Test";
   ProductInfo.productVersion = &v;
   ProductInfo.productVersionString = NULL;
   ProductInfo.productID = UnitTestProductID;
   ProductInfo.platform = NULL;
-
 
   checkResult (AAFFileOpenNewModify (pFileName, 0, &ProductInfo, &pFile));
   checkResult (pFile->GetHeader (&pHeader));
@@ -450,9 +620,7 @@ void CAAFTypeDefIndirect_create (aafCharacter_constptr pFileName)
   Test_RegisterIndirectComponentAnnotations (pDictionary);
 
   Test_LookupIndirectComponentAnnotations (pDictionary,
-             &pComponentAnnotationPropertyDef1,
-             &pComponentAnnotationPropertyDef2);
-
+	  ppComponentAnnotationPropertyDefs);
 
   // Create and composition mob and a sequence with several components.
   // each component will have a different indirect annotion type.
@@ -484,47 +652,11 @@ void CAAFTypeDefIndirect_create (aafCharacter_constptr pFileName)
   aafUInt32 sequenceAnnotation1Size = 2 * (wcslen (kSequenceAnnotation1) + 1);
   Test_CreateValueFromActualData (
           pSequence,
-          pComponentAnnotationPropertyDef1,
+          ppComponentAnnotationPropertyDefs[0],
           defs.tdString (),
           sequenceAnnotation1Size,
           (aafDataBuffer_t)kSequenceAnnotation1);
-
-  // 
-  // Get the length of the actual data and check that it matches the expected size.
-  //
-  Test_GetActualSize (
-          pSequence,
-          pComponentAnnotationPropertyDef1,
-          sequenceAnnotation1Size);
-
-  // 
-  // Get the type of the actual data and check that it matches the expected type.
-  //
-  IAAFTypeDefSP pActualType1;
-  Test_GetActualType (
-          pSequence,
-          pComponentAnnotationPropertyDef1,
-          &pActualType1);
-  Test_ObjectEquality (pActualType1, defs.tdString ());
-
-  //
-  // Get the string that we just wrote to the property (before file is saved) and
-  // validate the string.
-  //
-  assert (sequenceAnnotation1Size <= 128);
-  aafCharacter testAnnotation1String[128];
-  Test_GetActualData (
-          pSequence,
-          pComponentAnnotationPropertyDef1,
-          pActualType1,
-          sequenceAnnotation1Size,
-          (aafDataBuffer_t)testAnnotation1String);
-  checkExpression (0 == wcscmp (testAnnotation1String, kSequenceAnnotation1),
-          AAFRESULT_TEST_FAILED);
-
   
-
-
   // Test kAAFTypeID_UInt8Array
   // 
   // Set an ascii string as an array of unsigned bytes into the 2nd component annotation 
@@ -535,52 +667,84 @@ void CAAFTypeDefIndirect_create (aafCharacter_constptr pFileName)
   aafUInt32 sequenceAnnotation2Size = strlen (kSequenceAnnotation2) + 1;
   Test_CreateValueFromActualData (
           pSequence,
-          pComponentAnnotationPropertyDef2,
+          ppComponentAnnotationPropertyDefs[1],
           annotation2Type,
           sequenceAnnotation2Size,
           (aafDataBuffer_t)kSequenceAnnotation2);
 
-  // 
-  // Get the length of the actual data and check that it matches the expected size.
-  //
-  Test_GetActualSize (
-          pSequence,
-          pComponentAnnotationPropertyDef2,
-          sequenceAnnotation2Size);
+  // Register a renamed type ("word") of UInt16.
+  IAAFTypeDefRenameSP pTypeDefRenameWord;
+  checkResult(pDictionary->CreateMetaInstance(AUID_AAFTypeDefRename,
+    IID_IAAFTypeDefRename,(IUnknown **)&pTypeDefRenameWord));
+  checkResult(pTypeDefRenameWord->Initialize(kAUID_Word,
+											defs.tdUInt16(),
+											L"Word"));
+  IAAFTypeDefSP pTypeDef;
+  checkResult(pTypeDefRenameWord->QueryInterface(IID_IAAFTypeDef,
+    (void**)&pTypeDef));
+  checkResult(pDictionary->RegisterTypeDef(pTypeDef));
+  IAAFTypeDefSP pRegisteredTypeDefRename;
+  checkResult(pDictionary->LookupTypeDef(kAUID_Word,&pRegisteredTypeDefRename));
+  
+  Test_CreateValueFromActualData(
+	  pSequence,
+	  ppComponentAnnotationPropertyDefs[2],
+	  pRegisteredTypeDefRename,
+	  sizeof(aafUInt16),
+	  (aafDataBuffer_t)&kSequenceAnnotation3);
 
-  // 
-  // Get the type of the actual data and check that it matches the expected type.
-  //
-  IAAFTypeDefSP pActualType2;
-  Test_GetActualType (
-          pSequence,
-          pComponentAnnotationPropertyDef2,
-          &pActualType2);
-  Test_ObjectEquality (pActualType2, annotation2Type);
+  // Now use CreateValueFromActualValue() to create indirect property values
+  // of various types.
 
-  //
-  // Get the ascii string that we just wrote as an array of unsigned bytes to the 2nd 
-  // property (before file is saved) and validate the string.
-  //
-  assert (sequenceAnnotation2Size <= 128);
-  char testAnnotation2String[128];
-  Test_GetActualData (
-          pSequence,
-          pComponentAnnotationPropertyDef2,
-          annotation2Type,
-          sequenceAnnotation2Size,
-          (aafDataBuffer_t)testAnnotation2String);
-  checkExpression (0 == strcmp (testAnnotation2String, kSequenceAnnotation2),
-          AAFRESULT_TEST_FAILED);
+  // Create actual property value of string type
+  IAAFPropertyValueSP pActualStringValue;
+  IAAFTypeDefStringSP pTypeDefString;
+  checkResult(defs.tdString()->QueryInterface(IID_IAAFTypeDefString,
+	  (void**)&pTypeDefString));
+  checkResult(pTypeDefString->CreateValueFromCString(
+	  (aafMemPtr_t)kSequenceAnnotation1,sequenceAnnotation1Size,
+	  &pActualStringValue));
 
+  Test_CreateValueFromActualValue(pDictionary,pSequence,
+	  ppComponentAnnotationPropertyDefs[3],pActualStringValue);
 
+  // Create actual property value of UInt8 array type
+  checkResult(pDictionary->LookupTypeDef(kAAFTypeID_UInt8Array,&pTypeDef));
+  IAAFTypeDefVariableArraySP pTypeDefVariableArray;
+  checkResult(pTypeDef->QueryInterface(IID_IAAFTypeDefVariableArray,
+	  (void**)&pTypeDefVariableArray));
+  IAAFPropertyValueSP pActualUInt8ArrayValue;
+  aafUInt32 dataSize=(strlen(kSequenceAnnotation2)+1)*sizeof(char);
+  checkResult(pTypeDefVariableArray->CreateValueFromCArray(
+	  (aafMemPtr_t)kSequenceAnnotation2,dataSize,
+	  &pActualUInt8ArrayValue));
 
+  Test_CreateValueFromActualValue(pDictionary,pSequence,
+	  ppComponentAnnotationPropertyDefs[4],pActualUInt8ArrayValue);
 
-  checkResult (pSequence->QueryInterface (IID_IAAFSegment, (void**)&pSequenceSegment));
+  // Create actual property value of renamed type
+  IAAFTypeDefRenameSP pTypeDefRename;
+  checkResult(pRegisteredTypeDefRename->QueryInterface(IID_IAAFTypeDefRename,
+	  (void**)&pTypeDefRename));
+  IAAFTypeDefIntSP pTypeDefInt;
+  checkResult(defs.tdUInt16()->QueryInterface(IID_IAAFTypeDefInt,
+	  (void**)&pTypeDefInt));
+  IAAFPropertyValueSP pBaseValue;
+  checkResult(pTypeDefInt->CreateValue((aafMemPtr_t)&kSequenceAnnotation3,
+	  sizeof(aafUInt16),&pBaseValue));
+  IAAFPropertyValueSP pActualRenameValue;
+  checkResult(pTypeDefRename->CreateValue(pBaseValue,&pActualRenameValue));
+
+  Test_CreateValueFromActualValue(pDictionary,pSequence,
+	  ppComponentAnnotationPropertyDefs[5],pActualRenameValue);
+
+  ValidateTestPropertyValues(pDictionary,pSequence);
+
+  checkResult (pSequence->QueryInterface (IID_IAAFSegment,
+	  (void**)&pSequenceSegment));
   checkResult (pMobSlot->SetSegment (pSequenceSegment));
   checkResult (pMob->AppendSlot (pMobSlot));
   checkResult (pHeader->AddMob (pMob));
-
 
   checkResult (pFile->Save ());
   checkResult (pFile->Close ());
@@ -592,26 +756,15 @@ void CAAFTypeDefIndirect_read (aafCharacter_constptr pFileName)
   IAAFFileSP pFile;
   IAAFHeaderSP pHeader;
   IAAFDictionarySP pDictionary;
-  IAAFClassDefSP pComponentClass;
-  IAAFPropertyDefSP pComponentAnnotationPropertyDef1;
-  IAAFPropertyDefSP pComponentAnnotationPropertyDef2;
   IAAFMobSP pMob;
-  IAAFTimelineMobSlotSP pTimelineMobSlot;
   IAAFMobSlotSP pMobSlot;
   IAAFSequenceSP pSequence;
   IAAFSegmentSP pSequenceSegment;
-  IAAFComponentSP pSequenceComponent;
-
 
   checkResult (AAFFileOpenExistingRead (pFileName, 0, &pFile));
   checkResult (pFile->GetHeader (&pHeader));
   checkResult (pHeader->GetDictionary (&pDictionary));
 
-
-  Test_LookupIndirectComponentAnnotations (pDictionary,
-             &pComponentAnnotationPropertyDef1,
-             &pComponentAnnotationPropertyDef2);
-  
   CAAFBuiltinDefs defs (pDictionary);
 
   // Find the mob that we added in the create.
@@ -620,111 +773,8 @@ void CAAFTypeDefIndirect_read (aafCharacter_constptr pFileName)
   checkResult (pMobSlot->GetSegment (&pSequenceSegment));
   checkResult (pSequenceSegment->QueryInterface (IID_IAAFSegment, (void**)&pSequence));
 
-
-  // Test kAAFTypeID_String
-  //
-  aafUInt32 sequenceAnnotation1Size = 2 * (wcslen (kSequenceAnnotation1) + 1);
-
-  // 
-  // Get the length of the actual data and check that it matches the expected size.
-  //
-  Test_GetActualSize (
-          pSequence,
-          pComponentAnnotationPropertyDef1,
-          sequenceAnnotation1Size);
-
-  // 
-  // Get the type of the actual data and check that it matches the expected type.
-  //
-  IAAFTypeDefSP pActualType1;
-  Test_GetActualType (
-          pSequence,
-          pComponentAnnotationPropertyDef1,
-          &pActualType1);
-  Test_ObjectEquality (pActualType1, defs.tdString ());
-
-  // Get the string that we just wrote to the property (before file is saved) and
-  // validate the string.
-  //
-  assert (sequenceAnnotation1Size <= 128);
-  aafCharacter testAnnotationString[128];
-  Test_GetActualData (
-          pSequence,
-          pComponentAnnotationPropertyDef1,
-          pActualType1,
-          sequenceAnnotation1Size,
-          (aafDataBuffer_t)testAnnotationString);
-  checkExpression (0 == wcscmp (testAnnotationString, kSequenceAnnotation1),
-          AAFRESULT_TEST_FAILED);
-
-
-  // Test kAAFTypeID_UInt8Array
-  //
-  IAAFTypeDefSP annotation2Type;
-  checkResult (pDictionary->LookupTypeDef (kAAFTypeID_UInt8Array, &annotation2Type));
-
-  aafUInt32 sequenceAnnotation2Size = strlen (kSequenceAnnotation2) + 1;
-  Test_GetActualSize (
-          pSequence,
-          pComponentAnnotationPropertyDef2,
-          sequenceAnnotation2Size);
-
-  // 
-  // Get the type of the actual data and check that it matches the expected type.
-  //
-  IAAFTypeDefSP pActualType2;
-  Test_GetActualType (
-          pSequence,
-          pComponentAnnotationPropertyDef2,
-          &pActualType2);
-  Test_ObjectEquality (pActualType2, annotation2Type);
-
-  //
-  // Get the ascii string that we just wrote as an array of unsigned bytes to the 2nd 
-  // property (before file is saved) and validate the string.
-  //
-  assert (sequenceAnnotation2Size <= 128);
-  char testAnnotation2String[128];
-  Test_GetActualData (
-          pSequence,
-          pComponentAnnotationPropertyDef2,
-          annotation2Type,
-          sequenceAnnotation2Size,
-          (aafDataBuffer_t)testAnnotation2String);
-  checkExpression (0 == strcmp (testAnnotation2String, kSequenceAnnotation2),
-          AAFRESULT_TEST_FAILED);
+  ValidateTestPropertyValues(pDictionary,pSequence);
 
   checkResult (pFile->Close ());
 }
 
-// Open the test file and modify the data.
-void  CAAFTypeDefIndirect_modify (aafCharacter_constptr pFileName)
-{
-  aafProductIdentification_t	ProductInfo;
-  IAAFFileSP pFile;
-  IAAFHeaderSP pHeader;
-  IAAFDictionarySP pDictionary;
-
-  aafProductVersion_t v;
-  v.major = 1;
-  v.minor = 0;
-  v.tertiary = 0;
-  v.patchLevel = 0;
-  v.type = kAAFVersionUnknown;
-
-  ProductInfo.companyName = L"AAF Developers Desk";
-  ProductInfo.productName = L"AAFTypeDefIndirect Test - modify";
-  ProductInfo.productVersion = &v;
-  ProductInfo.productVersionString = NULL;
-  ProductInfo.productID = UnitTestProductID;
-  ProductInfo.platform = NULL;
-
-
-  checkResult (AAFFileOpenExistingModify (pFileName, 0, &ProductInfo, &pFile));
-//  checkResult (pFile->GetHeader (&pHeader));
-//  checkResult (pHeader->GetDictionary (&pDictionary));
-
- 
-  checkResult (pFile->Save ());
-  checkResult (pFile->Close ());
-}
