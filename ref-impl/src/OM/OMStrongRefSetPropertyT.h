@@ -899,6 +899,34 @@ OMStrongReferenceSetProperty<UniqueIdentification,
 }
 
 template <typename UniqueIdentification, typename ReferencedObject>
+OMContainerIterator<OMStrongReferenceSetElement>*
+OMStrongReferenceSetProperty<UniqueIdentification,
+                             ReferencedObject>::iterator(void) const
+{
+  TRACE("OMStrongReferenceSetProperty<UniqueIdentification,"
+                                     "ReferencedObject>::iterator");
+
+  OMSetIterator<UniqueIdentification, SetElement>* result =
+           new OMSetIterator<UniqueIdentification, SetElement>(_set, OMBefore);
+  ASSERT("Valid heap pointer", result != 0);
+  return result;
+}
+
+template <typename UniqueIdentification, typename ReferencedObject>
+void
+OMStrongReferenceSetProperty<UniqueIdentification,
+                             ReferencedObject>::insert(
+                                    void* key,
+                                    const OMStrongReferenceSetElement& element)
+{
+  TRACE("OMStrongReferenceSetProperty<UniqueIdentification,"
+                                     "ReferencedObject>::insert");
+
+  UniqueIdentification* k = reinterpret_cast<UniqueIdentification*>(key);
+  _set.insert(*k, element);
+}
+
+template <typename UniqueIdentification, typename ReferencedObject>
 OMKeySize OMStrongReferenceSetProperty<UniqueIdentification,
                                        ReferencedObject>::keySize(void) const
 {

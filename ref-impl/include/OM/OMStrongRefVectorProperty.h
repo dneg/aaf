@@ -242,6 +242,12 @@ public:
     //          higher are shifted up one index position.
   virtual void insertObjectAt(const OMObject* object, const size_t index);
 
+  virtual OMContainerIterator<OMStrongReferenceVectorElement>*
+                                                          iterator(void) const;
+
+  virtual void insert(const size_t index,
+                      const OMStrongReferenceVectorElement& element);
+
 private:
 
   typedef OMStrongReferenceVectorElement VectorElement;

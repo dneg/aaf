@@ -197,6 +197,12 @@ public:
 
   bool isValidIdentification(UniqueIdentification& id) const;
 
+  virtual OMContainerIterator<OMStrongReferenceSetElement>*
+                                                          iterator(void) const;
+
+  virtual void insert(void* key,
+                      const OMStrongReferenceSetElement& element);
+
   virtual OMKeySize keySize(void) const;
 
   virtual OMPropertyId keyPropertyId(void) const;
