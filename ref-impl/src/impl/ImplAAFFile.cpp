@@ -40,7 +40,7 @@
 #include "AAFStoredObjectIDs.h"
 #include "ImplAAFObjectCreation.h"
 #include "ImplAAFBuiltinDefs.h"
-#include "ImplAAFFileSignatures.h"
+#include "AAFFileSignatures.h"
 
 #include "AAFFileMode.h"
 
