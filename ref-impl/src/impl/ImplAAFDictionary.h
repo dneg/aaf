@@ -71,7 +71,7 @@ class ImplEnumAAFTypeDefs;
 #include "ImplAAFDataDef.h"
 
 class ImplAAFDictionary :
-  public OMClassFactory, 
+  public OMClassFactory,
   public ImplAAFObject
 {
 public:
@@ -119,6 +119,24 @@ public:
          // @parm [out,retval] Class Definition
          ImplAAFClassDef ** ppClassDef);
 
+  //****************
+  // CreateForwardClassReference()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    CreateForwardClassReference 
+        (// @parm [in] class identification
+         aafUID_constref classId);
+
+  //****************
+  // IsForwardClassReference()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    HasForwardClassReference 
+      (// @parm [in] class identification
+       aafUID_constref classId,
+
+       // @parm [out] kAAFTrue if the given class identification is a forward reference.
+       aafBoolean_t *pResult);
 
   //****************
   // RegisterClassDef()
@@ -590,6 +608,12 @@ bool PvtIsTypePresent (
   void SetBuiltinClasses(ImplAAFBuiltinClasses *pBuiltinClasses) { _pBuiltinClasses = pBuiltinClasses; };
 
 private:
+  bool hasForwardClassReference(aafUID_constref classId);
+  // If the given classId fromt the set of forward references.
+  void RemoveForwardClassReference(aafUID_constref classId);
+
+  ImplAAFTypeDef * findOpaqueTypeDefinition(aafUID_constref typeId);
+
 
   bool pvtLookupAxiomaticTypeDef (const aafUID_t & typeID,
 							   ImplAAFTypeDef ** ppTypeDef);
@@ -605,13 +629,54 @@ private:
   OMStrongReferenceSetProperty<OMUniqueObjectIdentification, ImplAAFContainerDef>			_containerDefinitions;
   OMStrongReferenceSetProperty<OMUniqueObjectIdentification, ImplAAFOperationDef>			_operationDefinitions;
   OMStrongReferenceSetProperty<OMUniqueObjectIdentification, ImplAAFParameterDef>			_parameterDefinitions;
-  OMStrongReferenceSetProperty<OMUniqueObjectIdentification, ImplAAFTypeDef>				_typeDefinitions;
-  OMStrongReferenceSetProperty<OMUniqueObjectIdentification, ImplAAFClassDef>				_classDefinitions;
   OMStrongReferenceSetProperty<OMUniqueObjectIdentification, ImplAAFInterpolationDef>		_interpolationDefinitions;
   OMStrongReferenceSetProperty<OMUniqueObjectIdentification, ImplAAFDataDef>				_dataDefinitions;
   OMStrongReferenceSetProperty<OMUniqueObjectIdentification, ImplAAFPluginDescriptor>		_pluginDefinitions;
+  OMStrongReferenceSetProperty<OMUniqueObjectIdentification, ImplAAFTypeDef>				_typeDefinitions;
+  OMStrongReferenceSetProperty<OMUniqueObjectIdentification, ImplAAFClassDef>				_classDefinitions;
 
-	ImplAAFTypeDef **_opaqueTypeDefinitions;
+  // Private class that represents an opaque class definition in an OMSet.
+  class OpaqueTypeDefinition
+  {
+  public:
+    OpaqueTypeDefinition();
+    OpaqueTypeDefinition(const OpaqueTypeDefinition& rhs);
+    OpaqueTypeDefinition(ImplAAFTypeDef * opaqueTypeDef);
+
+    // coersion operator to "transparently" extract the type
+    // definition pointer. This will be called when the enumerator
+    // attempts to assign an OpaqueTypeDefinition to an ImplAAFTypeDef *.
+    operator ImplAAFTypeDef * () const;
+
+    // Methods required by OMSet
+    const OMUniqueObjectIdentification identification(void) const;
+    OpaqueTypeDefinition& operator= (const OpaqueTypeDefinition& rhs);
+    bool operator== (const OpaqueTypeDefinition& rhs);
+
+  private:
+    ImplAAFTypeDef * _opaqueTypeDef;
+  };
+
+  OMSet<OMUniqueObjectIdentification, OpaqueTypeDefinition> _opaqueTypeDefinitions;
+
+  // Private class that represents a forward class reference.
+  class ForwardClassReference
+  {
+  public:
+    ForwardClassReference();
+    ForwardClassReference(const ForwardClassReference& rhs);
+    ForwardClassReference(aafUID_constref classId);
+
+    // Methods required by OMSet
+    const OMUniqueObjectIdentification identification(void) const;
+    ForwardClassReference& operator= (const ForwardClassReference& rhs);
+    bool operator== (const ForwardClassReference& rhs);
+
+  private:
+    aafUID_t _classId;
+  };
+
+  OMSet<OMUniqueObjectIdentification, ForwardClassReference> _forwardClassReferences;
 
   aafInt32 _lastGeneratedPid;	// must be signed!
 
