@@ -88,18 +88,6 @@ ImplAAFOperationDef::ImplAAFOperationDef ()
 
 ImplAAFOperationDef::~ImplAAFOperationDef ()
 {
-	aafUID_t	nilUID = { 0 };
-
-//	ImplAAFEssenceDescriptor *dataDef = _dataDef.setValue(nilUID);
-//	ImplAAFEssenceDescriptor *degradeTo = _degradeTo.setValue(0,0);
-//	if (dataDef)
-//	{
-//		dataDef->ReleaseReference();
-//	}
-//	if (degradeTo)
-//	{
-//		degradeTo->ReleaseReference();
-//	}
 }
 
   
