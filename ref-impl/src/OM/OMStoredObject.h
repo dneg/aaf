@@ -274,9 +274,9 @@ public:
 private:
   // @access Private members.
 
-  static OMStoredObject* open(const wchar_t* fileName,
-                              const OMFile::OMAccessMode mode);
-  static OMStoredObject* create(const wchar_t* fileName);
+  static OMStoredObject* openFile(const wchar_t* fileName,
+                                  const OMFile::OMAccessMode mode);
+  static OMStoredObject* createFile(const wchar_t* fileName);
 
   void create(const OMByteOrder byteOrder);
   void open(const OMFile::OMAccessMode mode);
