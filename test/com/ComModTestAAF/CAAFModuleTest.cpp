@@ -109,6 +109,8 @@ STDMETHODIMP CAAFModuleTest::Test
 {
 	HRESULT hr = S_OK;
 
+	aafUInt32	len = 0;  // strlen buffer and counter
+
 	struct STAT_t
 	{
 		aafInt16 	num_run;	/* total number of tests run */
@@ -142,7 +144,12 @@ STDMETHODIMP CAAFModuleTest::Test
 			if (0 == strcmp(reinterpret_cast<char *>(pClassName), AAFObjectMap[stats.num_run].pClassName))
 			{
 				cout << "Found." << endl;
-				cout << "Running " << AAFObjectMap[stats.num_run].pClassName << " module test...";
+				cout << "Running module test for " << AAFObjectMap[stats.num_run].pClassName;
+
+			// This is solely for the purpose of test result column alignment
+				for ( len = strlen(AAFObjectMap[stats.num_run].pClassName); len < 30; ++len)
+					cout << " "; 
+
 				hr = AAFObjectMap[stats.num_run].pfnTestProc();
 				if (FAILED(hr))
 				{
@@ -169,7 +176,12 @@ STDMETHODIMP CAAFModuleTest::Test
 	{
 		while (NULL != AAFObjectMap[stats.num_run].pCLSID)
 		{
-			cout << "Running " << AAFObjectMap[stats.num_run].pClassName << " module test...";
+			cout << "Running module test for " << AAFObjectMap[stats.num_run].pClassName;
+
+		// This is solely for the purpose of test result column alignment
+			for ( len = strlen(AAFObjectMap[stats.num_run].pClassName); len < 30; ++len)
+				cout << " "; 
+			
 			hr = AAFObjectMap[stats.num_run].pfnTestProc();
 			if (FAILED(hr))
 			{
