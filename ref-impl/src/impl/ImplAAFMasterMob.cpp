@@ -223,7 +223,8 @@ AAFRESULT STDMETHODCALLTYPE
 //   - pLen arg is NULL.
 // 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFMasterMob::GetTapeNameBufLen (aafInt32 *  pLen)
+    ImplAAFMasterMob::GetTapeNameBufLen (aafInt32	masterSlotID,
+										 aafInt32*  pLen)
 {
 #if FULLTOOLKIT
 	aafSlotID_t				slotID = 0;
@@ -262,11 +263,11 @@ AAFRESULT STDMETHODCALLTYPE
 // This function returns the number of media representations
 // available for the specified SlotID on a specified Master
 // Mob. This function is meant to work with
-// omfmGetRepresentationSourceClip, so that you can iterate through
+// GetRepresentationSourceClip, so that you can iterate through
 // all of the choices yourself.  In most cases, you can use
-// omfmGetCriteriaSourceClip to handle multiple
+// GetCriteriaSourceClip to handle multiple
 // representations. this function and
-// omfmGetRepresentationSourceClip are lower-level functions.
+// GetRepresentationSourceClip are lower-level functions.
 //
 // Succeeds if all of the following are true:
 // - the pNumReps pointer is valid.
@@ -350,9 +351,8 @@ AAFRESULT STDMETHODCALLTYPE
 #if FULLTOOLKIT
 	ImplAAFMobSlot	*pSlot = NULL;
   	ImplAAFSegment	*pSegment = NULL;
-//	ImplAAFObject	*pTmp;
-//	aafNumSlots_t	numReps;
-	aafErr_t		status = AAFRESULT_SUCCESS;
+	implCompType_t	compType;
+	HRESULT			hr = AAFRESULT_SUCCESS;
 	
 	if (!ppSourceClip)
 		return AAFRESULT_NULL_PARAM;
@@ -363,11 +363,16 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 		CHECK(FindSlotBySlotID(slotID, &pSlot));
 		CHECK(pSlot->GetSegment(&pSegment));
-//		if(pSegment->IsTypeOf(OMClassMGRP, &status))
+		pSegment->GetCompType(&compType);
+//		if(compType == kEssenceGroup)
 //		{
+//			aafNumSlots_t	numReps;
+//
 //			numReps = pSegment->GetObjRefArrayLength(OMMGRPChoices);
 //			if(index >= 1 && index <= numReps)
 //			{
+//				ImplAAFObject	*pTmp;
+//
 //				CHECK(pSegment->ReadNthObjRefArray(OMMGRPChoices, &pTmp, index));
 //				*sourceClip = (AAFSourceClip *)pTmp;
 //			}
@@ -383,15 +388,12 @@ AAFRESULT STDMETHODCALLTYPE
 		//if (pSegment && status != AAFRESULT_SUCCESS)
 		//	pSegment->ReleaseObject();
 
-		// TODO: Release reference to slot
-		//if (pSlot)
-		//	pSlot->ReleaseObject();
+		pSlot->ReleaseRef();
 	}
 	XEXCEPT
 	XEND
 	
-	return status;
-	//return AAFRESULT_NOT_IMPLEMENTED;
+	return hr;
 #else
 	return AAFRESULT_NOT_IMPLEMENTED;
 #endif
