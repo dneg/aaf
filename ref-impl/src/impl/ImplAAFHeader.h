@@ -171,6 +171,13 @@ public:
 		// @parm [in] Essence data object to Remove
         (ImplAAFEssenceData * pEssenceData);
 
+  //****************
+  // LookupEssenceData()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    LookupEssenceData
+        (aafMobID_constref mobID,   //@parm [in,ref] The Mob ID
+		 ImplAAFEssenceData ** ppEssenceData);  //@parm [out,retval] Matching EssenceData
 
   //****************
   // GetContentStorage()
