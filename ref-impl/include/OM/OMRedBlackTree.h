@@ -29,6 +29,12 @@
 #ifndef OMREDBLACKTREE_H
 #define OMREDBLACKTREE_H
 
+#if defined (_MSC_VER)
+  // - 'identifier' : identifier was truncated to 'number' characters in
+  //   the debug information
+#pragma warning(disable:4786) // Gak !
+#endif
+
 #include "OMAssertions.h"
 #include <stddef.h>
 
