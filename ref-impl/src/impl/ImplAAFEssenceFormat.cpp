@@ -142,12 +142,16 @@ AAFRESULT STDMETHODCALLTYPE
                            aafInt32*  bytesRead)
 {	
 	if((aafUInt32)index >= _elemUsed)
-	if((aafUInt32)bufSize < _elements[index].valueSize)
-		return(AAFRESULT_SMALLBUF);
+		return(AAFRESULT_FORMAT_BOUNDS);
 
 	*essenceFormatCode = _elements[index].parmName;
-	memcpy(value, _elements[index].parmValue, _elements[index].valueSize);
-	*bytesRead = _elements[index].valueSize;
+	if(bufSize != 0)
+	{
+		if((aafUInt32)bufSize < _elements[index].valueSize)
+			return(AAFRESULT_SMALLBUF);
+		memcpy(value, _elements[index].parmValue, _elements[index].valueSize);
+		*bytesRead = _elements[index].valueSize;
+	}		
 
 	return AAFRESULT_SUCCESS;
 }
