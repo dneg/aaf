@@ -622,6 +622,26 @@ SOURCE="..\..\..\..\ref-impl\src\impl\AAFUtils.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFGetFileBitsTest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFRandomFileTest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFRandomRawStorageTest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFRawStorageTest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFSetFileBitsTest.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\..\test\com\ComModTestAAF\ComModTestAAF.cpp
 # End Source File
 # Begin Source File
