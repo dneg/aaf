@@ -8,8 +8,8 @@ AAFTypeDef\
 #c
 AD_HEAD
 AD_IDL(//
-// This interface is used to define Structured types used in AAF persistent
-// objects.
+// This interface is used to define C-like structured types used in
+// AAF persistent objects.
 //
 // In addition to the specific error results listed for each method\,
 // all methods in this interface may also return one of the following
@@ -62,9 +62,11 @@ AD_XMETHOD2(EnumPropertyValues,
 			The resulting enumerator,
 
 			Returns an enumerator across property values contained in the
-  // struct assumed to be within the specified Property Value.
-  // Assumes that the given Property Value is of the
-  // kAAFTypeCategoryStruct.
+  // struct assumed to be within the specified Property Value.  Each
+  // element accessed by the enumerator corresponds to one of the
+  // struct elements.  Assumes that the given Property Value refers to
+  // an AAF structure \(that is\, the AAFTypeDef associated with that
+  // PropertyValue has a type category ofkAAFTypeCategoryStruct\).
   //
   // Succeeds if:
   // - The pPVal pointer is valid.
