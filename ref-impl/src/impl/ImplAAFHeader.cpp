@@ -415,7 +415,7 @@ AAFRESULT
 			dummyIDNT = AAFTrue;
 		}
 		
-	XASSERT(pIdent != NULL, OM_ERR_NEED_PRODUCT_IDENT);
+	XASSERT(pIdent != NULL, AAFRESULT_NEED_PRODUCT_IDENT);
     if (pIdent->productVersionString == 0) {
       pIdent->productVersionString = L"Unknown version";
     }
@@ -502,17 +502,17 @@ AAFRESULT STDMETHODCALLTYPE
 			if ((_fileRev.major == 1) && (_fileRev.minor == 0))
 			  *pRevision = kAAFRev1;
 			else
-				RAISE(OM_ERR_FILEREV_NOT_SUPP);
+				RAISE(AAFRESULT_FILEREV_NOT_SUPP);
 		  }
 		else
-			RAISE(OM_ERR_FILEREV_NOT_SUPP);
+			RAISE(AAFRESULT_FILEREV_NOT_SUPP);
 	}
 	XEXCEPT
 	{
 	}
 	XEND;
 
-	return (OM_ERR_NONE);
+	return (AAFRESULT_SUCCESS);
 #else
   return AAFRESULT_NOT_IMPLEMENTED;
 #endif
@@ -568,11 +568,11 @@ AAFRESULT ImplAAFHeader::IsValidHeadObject(void)
 #if FULL_TOOLKIT
 	aafClassID_t  		omfiID;
 
-	if (GetClassID(omfiID) != OM_ERR_NONE)
-		  return(OM_ERR_NOTAAFFILE);
+	if (GetClassID(omfiID) != AAFRESULT_SUCCESS)
+		  return(AAFRESULT_NOTAAFFILE);
 	if (!streq(omfiID, "HEAD"))
-	  return(OM_ERR_NOTAAFFILE);
-	return(OM_ERR_NONE);
+	  return(AAFRESULT_NOTAAFFILE);
+	return(AAFRESULT_SUCCESS);
 #else
   return AAFRESULT_NOT_IMPLEMENTED;
 #endif
