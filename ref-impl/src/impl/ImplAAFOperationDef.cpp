@@ -102,6 +102,24 @@ ImplAAFOperationDef::~ImplAAFOperationDef ()
 //	}
 }
 
+  
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFOperationDef::Initialize (
+      const aafUID_t & id,
+	  const aafWChar * pName,
+	  const aafWChar * pDesc)
+{
+	if (pName == NULL || pDesc == NULL)
+	{
+	  return AAFRESULT_NULL_PARAM;
+	}
+	else
+	{
+	  return pvtInitialize(id, pName, pDesc);
+	}
+	return AAFRESULT_SUCCESS;
+}
+
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFOperationDef::GetDataDef(
