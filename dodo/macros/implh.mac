@@ -123,6 +123,8 @@ class Impl%01;
 //@class    .this-module | Implementation class for .this-module
 #ifndef __Impl.this-module_h__
 #define __Impl.this-module_h__
+
+#include "OMStorable.h"
 #endm
 
 
@@ -586,6 +588,10 @@ public:
 #c
 #startm AD_CLASS_END 00
 public:
+  // Declare this class to be storable.
+  //
+  OMDECLARE_STORABLE(.this-module);
+
   // Declare the module test method. The implementation of the will be be
   // in /test/Impl.this-moduleTest.cpp.
   static AAFRESULT test();
