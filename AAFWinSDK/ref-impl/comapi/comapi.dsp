@@ -269,6 +269,10 @@ SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFEssenceDescriptorTest.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFEssenceFormat.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFFile.cpp"
 # End Source File
 # Begin Source File
