@@ -139,7 +139,7 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFCompositionMob.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\impl\ImplAAFConstValue.cpp"
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFConstantValue.cpp"
 # End Source File
 # Begin Source File
 

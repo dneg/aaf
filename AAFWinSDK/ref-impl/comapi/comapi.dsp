@@ -185,11 +185,11 @@ SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFCompositionMobTest.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\com-api\CAAFConstValue.cpp"
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFConstantValue.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFConstValueTest.cpp"
+SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFConstantValueTest.cpp"
 # End Source File
 # Begin Source File
 
