@@ -221,7 +221,7 @@ AAFRESULT STDMETHODCALLTYPE
 	}
 	else
 	{
-		theEnum->ReleaseRef();
+		theEnum->ReleaseReference();
 		*ppEnum = NULL;
 	}
 
