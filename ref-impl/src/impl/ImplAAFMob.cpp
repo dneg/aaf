@@ -2070,6 +2070,11 @@ AAFRESULT ImplAAFMob::ReconcileMobLength(void)
 }
 
 
+const OMMaterialIdentification&
+  ImplAAFMob::identification(void) const
+{
+  return *reinterpret_cast<const OMMaterialIdentification*>(&_mobID.reference());
+}
 
 
 
