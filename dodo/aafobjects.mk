@@ -167,6 +167,7 @@ PLUGIN_OBJECTS = \
 	AAFEssenceFormat \
 	AAFPlugin \
 	AAFEssenceStream \
+	AAFEssenceSampleStream \
 	AAFEssenceDataStream \
 	AAFEssenceCodec \
 	AAFEssenceContainer
