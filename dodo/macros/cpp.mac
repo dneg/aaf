@@ -312,8 +312,15 @@ aafUInt32 .this-module::AcquireRef()
 aafUInt32 .this-module::ReleaseRef()
 {
   long count = InterlockedDecrement(reinterpret_cast<long *>(&_refCount));
+#if 0
   if (0 == count)
     delete this;
+#else
+  if (0 > count)
+  {
+    cerr << this << " Error: Releasing an object with reference count:" << count << endl;
+  }
+#endif
   
   return count;
 }
