@@ -9,6 +9,9 @@ AAFSourceReference\
 #import ./AAFUnitTest.exp
 #import ./AAFSourceReference.exp
 AD_HEAD
+AD_FORWARD_DECLARATION(AAFMob)
+AD_FORWARD_DECLARATION(AAFDataDefinition)
+
 /******************************************\
 *                                          *
 * Advanced Authoring Format                *
@@ -19,8 +22,7 @@ AD_HEAD
 \******************************************/
 AD_CLASS_BEGIN
 
-AD_XCONSTRUCTOR4([in],objIn,AAFFile          ,file     ,File Handle,
-				 [in],objIn,AAFDataDefinition,datadef  ,Data Definition object,
+AD_XCONSTRUCTOR3([in],objIn,AAFDataDefinition,datadef  ,Data Definition object,
 				 [in],objPass,aafLength_t    ,length   ,Length property value,
 				 [in],objPass,aafSourceRef_t ,sourceRef,Source Reference,
 				 This function creates a new source clip object with
