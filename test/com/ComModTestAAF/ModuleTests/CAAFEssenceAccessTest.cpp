@@ -1469,7 +1469,7 @@ static HRESULT CreateVideoAAFFile(
 				writeBufferSize = compressedBufferSize;
 			}
 		}
-		else if (compression == kAAFCompression_LegacyDV)
+		else if (compression == kAAFCompressionDef_LegacyDV)
 		{
 			writeBuffer = readDVframe( &writeBufferSize );
 			rgbColorBuffer = writeBuffer;		// to ensure it is freed
@@ -1550,7 +1550,7 @@ static HRESULT CreateVideoAAFFile(
 			&pEssenceAccess));
 
 		// For legacy DV, the convenient way is to set a CDCI codec flavour
-		if (compression == kAAFCompression_LegacyDV)
+		if (compression == kAAFCompressionDef_LegacyDV)
 			checkResult(pEssenceAccess->SetEssenceCodecFlavour(kAAFCodecFlavour_LegacyDV_625_50));
 
 		// Get and display the current code name.
@@ -1623,7 +1623,7 @@ static HRESULT CreateVideoAAFFile(
 		if (codecID != kAAFCodecJPEG && compressEnable == kAAFCompressionDisable)
 		{
 			// For Legacy DV a flavour was set.  For other formats use format specifiers.
-			if (compression != kAAFCompression_LegacyDV)
+			if (compression != kAAFCompressionDef_LegacyDV)
 			{
 				// Set format specifiers needed for uncompressed CDCI video
 				checkResult(pEssenceAccess->GetEmptyFileFormat (&pTransformFormat));
@@ -1835,7 +1835,7 @@ static HRESULT ReadVideoAAFFile(
 				}
 			}
 		}
-		else if (compression == kAAFCompression_LegacyDV)
+		else if (compression == kAAFCompressionDef_LegacyDV)
 		{
 			compressedBuffer = readDVframe( &compressedBufferSize );
 			std_rc.xSize = 720;
@@ -2666,13 +2666,13 @@ HRESULT CAAFEssenceAccess_test(testMode_t mode)
 	{
 		cout << "        WriteSamples (DV CompressionDisable)" << endl;
 		hr = CreateVideoAAFFile(L"EssenceAccessCDCI_DV.aaf",NULL, kAAFCompressionDisable, kAAFColorSpaceYUV, 2, 
-			kAAFCodecCDCI, kAAFDataDef_Picture, testStandardCalls, kAAFCompression_LegacyDV);
+			kAAFCodecCDCI, kAAFDataDef_Picture, testStandardCalls, kAAFCompressionDef_LegacyDV);
 	}
 	if (SUCCEEDED(hr))
 	{
 		cout << "        ReadSamples (DV CompressionDisable)" << endl;
 		hr = ReadVideoAAFFile(L"EssenceAccessCDCI_DV.aaf", kAAFCompressionDisable, kAAFColorSpaceYUV, 2, 
-			kAAFCodecCDCI, testStandardCalls, kAAFCompression_LegacyDV);
+			kAAFCodecCDCI, testStandardCalls, kAAFCompressionDef_LegacyDV);
 	}
 
 	if(SUCCEEDED(hr))
