@@ -31,7 +31,6 @@
 #include "AAFTypes.h"
 
 #if defined(_MAC) || defined(macintosh)
-#include <wprintf.h>
 #include <initguid.h> // define all of the AAF guids.
 #include "AAF.h"
 #else
@@ -52,7 +51,7 @@ const CLSID CLSID_AAFFileDescriptor = { 0xe58a8562, 0x2a3e, 0x11D2, { 0xbf, 0xa4
 
 static void     FatalErrorCode(HRESULT errcode, int line, char *file)
 {
-  wprintf(L"Error '%0x' returned at line %d in %s\n", errcode, line, file);
+  printf("Error '%0x' returned at line %d in %s\n", errcode, line, file);
   exit(1);
 }
 
@@ -74,22 +73,25 @@ static HRESULT moduleErrorTmp = S_OK; /* note usage in macro */
 
 static void printIdentification(IAAFIdentification* pIdent)
 {
-    aafWChar companyName[500];
-	check(pIdent->GetCompanyName(companyName, sizeof (companyName)));
-	wprintf(L"CompanyName          = \"%s\"\n", companyName);
+    aafWChar wchName[500];
+    char chName[1000];
+    
+    
+	check(pIdent->GetCompanyName(wchName, sizeof (wchName)));
+	wcstombs(chName, wchName, sizeof(chName));
+	printf("CompanyName          = \"%s\"\n", chName);
 
-	aafWChar productName[500];
-	check(pIdent->GetProductName(productName, sizeof (productName)));
-	wprintf(L"ProductName          = \"%s\"\n", productName);
+	check(pIdent->GetProductName(wchName, sizeof (wchName)));
+	wcstombs(chName, wchName, sizeof(chName));
+	printf("ProductName          = \"%s\"\n", chName);
 
-	aafWChar productVersionString[500];
-	check(pIdent->GetProductVersionString(productVersionString,
-										  sizeof (productVersionString)));
-	wprintf(L"ProductVersionString = \"%s\"\n", productVersionString);
+	check(pIdent->GetProductVersionString(wchName, sizeof (wchName)));
+	wcstombs(chName, wchName, sizeof(chName));
+	printf("ProductVersionString = \"%s\"\n", chName);
 
-	aafWChar platform[500];
-	check(pIdent->GetPlatform(platform, sizeof (platform)));
-	wprintf(L"Platform             = \"%s\"\n", platform);
+	check(pIdent->GetPlatform(wchName, sizeof (wchName)));
+	wcstombs(chName, wchName, sizeof(chName));
+	printf("Platform             = \"%s\"\n", chName);
 }
 
 static void ReadAAFFile(aafWChar * pFileName)
@@ -126,7 +128,7 @@ static void ReadAAFFile(aafWChar * pFileName)
 
 	check(pHeader->GetLastIdentification(&pIdent));
 
-	wprintf(L"LastIdentification\n");
+	printf("LastIdentification\n");
 	printIdentification(pIdent);
 
 	check(pHeader->GetNumMobs(kAllMob, &numMobs));
@@ -144,6 +146,7 @@ static void ReadAAFFile(aafWChar * pFileName)
 	{
 		IAAFMob			*aMob;
 		aafWChar		name[500], slotName[500];
+    	char chName[1000];
 		aafNumSlots_t	numSlots;
 		IEnumAAFMobSlots	*slotIter;
 		IAAFMobSlot		*slot;
@@ -154,18 +157,21 @@ static void ReadAAFFile(aafWChar * pFileName)
 		check(mobIter->NextOne (&aMob));
 		check(aMob->GetName (name));
 		check(aMob->GetMobID (&mobID));
-		wprintf(L"Mob %ld: (ID %ld) is named '%s'\n", n, mobID.Data1, name);
+		wcstombs(chName, name, sizeof(chName));
+		printf("Mob %ld: (ID %ld) is named '%s'\n", n, mobID.Data1, chName);
+	    check(aMob->GetNumSlots (&numSlots));
+		printf("Found %ld slots\n", numSlots);
 	    if(SUCCEEDED(aMob->QueryInterface (IID_IAAFSourceMob, (void **)&smob)))
 		{
 			check(smob->GetEssenceDescription(&essenceDesc));
 			if(SUCCEEDED(essenceDesc->QueryInterface (IID_IAAFFileDescriptor, (void **)&fileDesc)))
 			{
 				check(fileDesc->GetSampleRate(&rate));
-				wprintf(L"    It is a file source mob of sample rate %ld/%ld.\n",
+				printf("    It is a file source mob of sample rate %ld/%ld.\n",
 						rate.numerator, rate.denominator);
 			}
 			else
-				wprintf(L"    It is a source mob, but not a file source mob\n");
+				printf("    It is a source mob, but not a file source mob\n");
 		}
 		check(aMob->GetNumSlots (&numSlots));
 		printf("Found %ld slots\n", numSlots);
@@ -177,8 +183,9 @@ static void ReadAAFFile(aafWChar * pFileName)
 				check(slotIter->NextOne (&slot));
 				check(slot->GetName (slotName));
 				check(slot->GetSlotID(&trackID));
-				wprintf(L"    Slot %ld: (ID %ld), is named '%s'\n",
-							s, trackID, slotName);
+				wcstombs(chName, slotName, sizeof(chName));
+				printf("    Slot %ld: (ID %ld), is named '%s'\n",
+							s, trackID, chName);
 			}
 		}
 	}
@@ -229,14 +236,14 @@ static void CreateAAFFile(aafWChar * pFileName)
 	long	test;
 	aafWChar		*names[5] = { L"FOOBAR1", L"FOOBAR2", L"FOOBAR3", L"FOOBAR4", L"FOOBAR5" };
 	aafRational_t	editRate = { 2997, 100 };
-	IAAFMobSlot		*newSlot;
-	IAAFSegment		*seg;
-	IAAFSourceClip	*sclp;
-	IAAFSourceMob	*smob;
+	IAAFMobSlot		*newSlot = NULL;
+	IAAFSegment		*seg = NULL;
+	IAAFSourceClip	*sclp = NULL;
+	IAAFSourceMob	*smob = NULL;
 	aafInt32		testSlot;
 	aafWChar		*slotNames[5] = { L"SLOT1", L"SLOT2", L"SLOT3", L"SLOT4", L"SLOT5" };
-	IAAFFileDescriptor	*fileDesc;
-	IAAFEssenceDescriptor *essenceDesc;
+	IAAFFileDescriptor	*fileDesc = NULL;
+	IAAFEssenceDescriptor *essenceDesc = NULL;
 	aafRational_t	audioRate = { 44100, 1 };
 
 	for(test = 0; test < 5; test++)
@@ -271,12 +278,37 @@ static void CreateAAFFile(aafWChar * pFileName)
 						   (void **)&sclp));		//!!!Temp, abstract superclass
 			check(sclp->QueryInterface (IID_IAAFSegment, (void **)&seg));
 			check(pMob->AppendNewSlot (seg, testSlot+1, slotNames[testSlot], &newSlot));
-//			seg->Release();
-//			newSlot->Release();
+			
+			// Cleanup references...
+			newSlot->Release();
+			newSlot = NULL;
+			
+			seg->Release();
+			seg = NULL;
+			
+			sclp->Release();
+			sclp = NULL;
 		}
+		
+		// Add the newly created and initialized Mob to the end of the mob index.
 		check(pHeader->AppendMob(pMob));
-//		pMob->Release();
+		
+		
+		// Cleanup references...
+		fileDesc->Release();
+		fileDesc = NULL;
+		
+		pMob->Release();
+		pMob = NULL;
+		
+		smob->Release();
+		smob = NULL;
 	}
+	
+	// Cleanup
+	pHeader->Release();
+	pHeader = NULL;
+	
 	check(pFile->Close());
 
 	check(pSession->EndSession());
@@ -302,14 +334,15 @@ struct CComInitialize
 main()
 {
 	CComInitialize comInit;
-	aafWChar * pFileName = L"Foo.aaf";
+	aafWChar * pwFileName = L"Foo.aaf";
+	const char * pFileName = "Foo.aaf";
 
-  	wprintf(L"***Creating file %s\n", pFileName);
-	CreateAAFFile(pFileName);
-  	wprintf(L"***Re-opening file %s\n", pFileName);
-	ReadAAFFile(pFileName);
+  	printf("***Creating file %s\n", pFileName);
+	CreateAAFFile(pwFileName);
+  	printf("***Re-opening file %s\n", pFileName);
+	ReadAAFFile(pwFileName);
 
-	wprintf(L"Done\n");
+	printf("Done\n");
 
 
 	return(0);
