@@ -1,14 +1,11 @@
 #include "OMFile.h"
 
 #include "OMAssertions.h"
-#include "OMUtilities.h"
 #include "OMStoredObject.h"
 #include "OMClassFactory.h"
 #include "OMObjectDirectory.h"
 
 #include <string.h>
-
-#include <windows.h>
 
 OMFile::OMFile(const char* name)
 : _name(name), _root(0)
@@ -23,69 +20,46 @@ OMFile::~OMFile(void)
   TRACE("OMFile::~OMFile");
 }
 
+OMFile* OMFile::open(const char* fileName)
+{
+  OMFile* newFile = new OMFile(fileName);
+  newFile->open();
+  return newFile;
+}
+
+OMFile* OMFile::create(const char* fileName)
+{
+  OMFile* newFile = new OMFile(fileName);
+  newFile->create();
+  return newFile;
+}
+
 void OMFile::create(void)
 {
   TRACE("File::create");
 
-  _root = createFile(_name);
-  _root.create();
+  _root = OMStoredObject::create(_name);
 }
 
 void OMFile::open(void)
 {
   TRACE("OMFile::open");
 
-  _root = openFile(_name);
-  _root.open();
+  _root = OMStoredObject::open(_name);
 }
 
 void OMFile::close(void)
 {
   TRACE("OMFile::close");
 
-  _root.close();
+  _root->close();
 }
 
-OMStoredObject& OMFile::root(void)
+OMStoredObject* OMFile::root(void)
 {
   TRACE("OMFile::root");
 
   return _root;
-}
-
-OMStoredObject& OMFile::openStoragePath(const char* storagePathName)
-{
-  TRACE("OMFile::openStoragePath");
-  PRECONDITION("Valid root storage", root != 0);
-  PRECONDITION("Valid stream path name", validString(storagePathName));
-  PRECONDITION("Path name is absolute", storagePathName[0] == '/');
-
-  char* path = new char[strlen(storagePathName) + 1];
-  strcpy(path, storagePathName);
-  
-  char* element = path;
-  element++; // skip first '/'
-
-  OMStoredObject* storage = &root();
-  OMStoredObject* result = 0;
-
-  char* end = strchr(element, '/');
-  
-  while (end != 0) {
-    *end = 0;
-    storage = storage->openSubStorage(element);
-    ASSERT("Valid storage pointer", storage != 0);
-    element = ++end;
-    end = strchr(element, '/');
-  }
-
-  if ((element != 0) && (strlen(element) > 0)) {
-    result = storage->openSubStorage(element);
-  } else {
-    result = storage;
-  }
-  
-  return *result;
 }
 
 OMFile& OMFile::operator << (const OMStorable& o)
@@ -94,7 +68,7 @@ OMFile& OMFile::operator << (const OMStorable& o)
 
   const_cast<OMStorable&>(o).setContainingObject(this);
   const_cast<OMStorable&>(o).setName("head");
-  o.saveTo(root());
+  o.saveTo(*root());
   return *this;
 }
 
@@ -121,54 +95,6 @@ OMObjectDirectory* OMFile::objectDirectory(void)
     _objectDirectory = new OMObjectDirectory(100);
   }
   return _objectDirectory;
-}
-
-OMStoredObject& OMFile::createFile(const char* fileName)
-{
-  TRACE("createFile");
-  PRECONDITION("Valid file name", validString(fileName));
-
-  wchar_t wcFileName[256];
-  convert(wcFileName, 256, fileName);
-
-  HRESULT result;
-  IStorage* storage;
-
-  result = StgCreateDocfile(
-    wcFileName,
-    STGM_DIRECT | STGM_READWRITE | STGM_SHARE_EXCLUSIVE | STGM_CREATE,
-    0,
-    &storage);
-  if (!checkFile(result, fileName)) {
-    exit(FAILURE);
-  }
-
-  return OMStoredObject(storage);
-}
-
-OMStoredObject& OMFile::openFile(const char* fileName)
-{
-  TRACE("openFile");
-  PRECONDITION("Valid file name", validString(fileName));
-
-  wchar_t wcFileName[256];
-  convert(wcFileName, 256, fileName);
-
-  HRESULT result;
-  IStorage* storage;
-
-  result = StgOpenStorage(
-    wcFileName,
-    0,
-    STGM_DIRECT | STGM_READWRITE | STGM_SHARE_EXCLUSIVE,
-    0,
-    0,
-    &storage);
-  if (!checkFile(result, fileName)) {
-    exit(FAILURE);
-  }
-
-  return OMStoredObject(storage);
 }
 
 int OMFile::classId(void) const
