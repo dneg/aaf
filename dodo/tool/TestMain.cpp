@@ -48,11 +48,14 @@
 #include "MacroSet.h"
 #endif
 
-#include <iostream.h>
+#include <iostream>
+using std::cout;
+using std::endl;
+
 #include <stdlib.h>
 
 
-void main ()
+int main ()
 {
   cout << "Testing SourceInfo..." << endl;
   SourceInfo::Test ();
@@ -70,5 +73,5 @@ void main ()
   MacroSet::Test ();
   cout << "done." << endl;
 
-  exit (0);
+  return 0;
 }

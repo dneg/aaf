@@ -155,9 +155,9 @@ static TextStream UnEscape
 }
 
 #if defined(_MAC)
-void main(int argc,char *argv[],char */*envp[]*/)
+int main(int argc,char *argv[],char */*envp[]*/)
 #else
-void main (int argc, char ** argv)
+int main (int argc, char ** argv)
 #endif
 {
   const char * command = argv[0];
@@ -256,5 +256,5 @@ void main (int argc, char ** argv)
 
   output.dump (stdout);
 
-  exit (0);
+  return 0;
 }
