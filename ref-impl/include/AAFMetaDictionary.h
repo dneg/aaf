@@ -17,7 +17,7 @@
 //
 // ../smpte/DictP18.csv 
 //
-// This file was generated on Thu Apr 29 19:04:54 EDT 1999
+// This file was generated on Thu Apr 29 19:42:32 EDT 1999
 // by user tbingham on system TBINGHAMPC.
 //
 // Key to macros.
@@ -608,7 +608,7 @@ AAF_PROPERTY(BeginAnchor,
   String,
   false,
   HTMLClip)
-AAF_PROPERTY(EndAncor,
+AAF_PROPERTY(EndAnchor,
   AAF_LITERAL_AUID(0x0641414C,
     0x4241, 0x0200,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
