@@ -40,7 +40,6 @@ AAFPERSISTENTOBJECTS = \
 	AAFParameter \
 	AAFParameterDef \
 	AAFPluggableCode \
-	AAFPluggableDef \
 	AAFPluginManager \
 	AAFPluginDescriptor \
 	AAFPulldown \
@@ -130,6 +129,7 @@ HUMAN_TYPED_IMPL = \
 	AAFMobSlot \
 	AAFNetworkLocator \
 	AAFObject \
+	AAFPluggableDef \
 	AAFSegment \
 	AAFSequence \
 	AAFSourceClip \
