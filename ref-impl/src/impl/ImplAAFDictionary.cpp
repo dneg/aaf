@@ -143,30 +143,30 @@ ImplAAFDictionary::~ImplAAFDictionary ()
   size_t size = _codecDefinitions.getSize();
   for (i = 0; i < size; i++)
 	{
-		ImplAAFCodecDef *pPlug = _codecDefinitions.setValueAt(0, i);
-		if (pPlug)
+		ImplAAFCodecDef *pCodec = _codecDefinitions.setValueAt(0, i);
+		if (pCodec)
 		{
-		  pPlug->ReleaseReference();
+		  pCodec->ReleaseReference();
 		}
 	}
 
 	size_t containerDefSize = _containerDefinitions.getSize();
 	for (i = 0; i < containerDefSize; i++)
 	{
-		ImplAAFContainerDef *pPlug = _containerDefinitions.setValueAt(0, i);
-		if (pPlug)
+		ImplAAFContainerDef *pContainer = _containerDefinitions.setValueAt(0, i);
+		if (pContainer)
 		{
-		  pPlug->ReleaseReference();
+		  pContainer->ReleaseReference();
 		}
 	}
 
 	size_t typeDefSize = _typeDefinitions.getSize();
 	for (i = 0; i < typeDefSize; i++)
 	{
-		ImplAAFTypeDef *pPlug = _typeDefinitions.setValueAt(0, i);
-		if (pPlug)
+		ImplAAFTypeDef *pType = _typeDefinitions.setValueAt(0, i);
+		if (pType)
 		{
-		  pPlug->ReleaseReference();
+		  pType->ReleaseReference();
 		}
 	}
 
