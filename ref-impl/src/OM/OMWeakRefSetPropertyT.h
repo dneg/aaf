@@ -74,9 +74,7 @@ OMWeakReferenceSetProperty<ReferencedObject>::OMWeakReferenceSetProperty(
                                         const wchar_t* name,
                                         const OMPropertyId keyPropertyId,
                                         const OMPropertyId* targetPropertyPath)
-: OMReferenceSetProperty(propertyId,
-                         SF_WEAK_OBJECT_REFERENCE_SET,
-                         name),
+: OMWeakReferenceSet(propertyId, name),
   _targetTag(nullOMPropertyTag),
   _targetName(0),
   _targetPropertyPath(0),
