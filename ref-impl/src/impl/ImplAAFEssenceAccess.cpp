@@ -769,6 +769,7 @@ AAFRESULT STDMETHODCALLTYPE
 	IAAFSourceMob			*iFileMob = NULL;
 	ImplAAFDictionary		*dict = NULL;
 	ImplAAFContainerDef		*containerDef = NULL;
+	ImplAAFCodecDef			*codecDef = NULL;
 	ImplAAFContentStorage	*cStore = NULL;
 	ImplAAFMobSlot			*slot = NULL;
 	ImplAAFSegment			*seg = NULL;
@@ -789,7 +790,7 @@ AAFRESULT STDMETHODCALLTYPE
 	aafUInt16		numCh;
 	wchar_t				*nameBuf = NULL;
 	aafUInt32			buflen;
-	aafUID_t			essenceDescClass;
+	aafUID_t			essenceDescClass, codecID;
 	aafBool					found = kAAFFalse, isIdentified;
 	aafUID_t				testFormat;
   AAFRESULT aafError = AAFRESULT_SUCCESS;
@@ -843,9 +844,14 @@ AAFRESULT STDMETHODCALLTYPE
     
 		CHECK(fileMob->GetMobID(&fileMobID));
 		CHECK(_mdes->GetObjectClass(&essenceDescClass));
-
+		CHECK(_mdes->GetCodecDef(&codecDef));
+		CHECK(codecDef->GetAUID(&codecID));
+		codecDef->ReleaseReference();
+		codecDef = NULL;
+	
 		plugins = ImplAAFContext::GetInstance()->GetPluginManager();
-		CHECK(plugins->MakeCodecFromEssenceDesc(essenceDescClass, &_codec));
+		CHECK(plugins->CreateInstanceFromDefinition(
+								codecID, NULL, IID_IAAFEssenceCodec, (void**)&_codec));
 	
 		// Initialize the multi-essence codec interface pointer (not required for this type of open).
 		aafError = _codec->QueryInterface(IID_IAAFMultiEssenceCodec, (void **)&_multicodec);
@@ -1023,8 +1029,8 @@ AAFRESULT STDMETHODCALLTYPE
 		
 		_masterMob = masterMob;
 		_masterMob->AcquireReference();
-		fileMob->ReleaseReference();
-		fileMob = NULL;
+		iFileMob->Release();
+		iFileMob = NULL;
 		compHead->ReleaseReference();
 		compHead = NULL;
 		if(plugins != NULL)
@@ -1187,7 +1193,7 @@ AAFRESULT STDMETHODCALLTYPE
 		CHECK(_mdes->GetObjectClass(&essenceDescClass));
 
 		plugins = ImplAAFContext::GetInstance()->GetPluginManager();
-		CHECK(plugins->MakeCodecFromEssenceDesc(essenceDescClass, &_codec));
+		CHECK(plugins->MakeCodecFromEssenceDesc(fileMob, _stream, &_codec));
 
     // Initialize the multi-essence codec interface pointer (not required for this type of open).
     CHECK(_codec->QueryInterface(IID_IAAFMultiEssenceCodec, (void **)&_multicodec));
