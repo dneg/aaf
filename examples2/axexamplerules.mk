@@ -37,17 +37,23 @@ endif
 include $(AAFBASE)/build/common.mk
 
 # Include directories
-INCLUDES = -I$(AAFSDKINCLUDEDIR) \
-	   -I../axLib
+INCLUDES = -I../../ref-impl/include \
+		-I../../ref-impl/include/ref-api \
+		-I../axLib
 
 BINTARGET = $(AAFSDKBINDIR)/$(PROGNAME)$(EXE)
 
 .PHONY : all
 all : $(OBJDIR) $(BINTARGET)
 
+ifeq ($(AAFTARGET),Debug-static)
+$(BINTARGET) : $(CXXOBJS) $(AXPROGRAM_ADDITIONAL_DEPENDS)
+	$(LD) $(CXXOBJS) -L$(OBJDIR) $(AXPROGRAM_LD_OPTIONS) -laxLib $(STATIC_LINK_LINE) -o $@
+else
 $(BINTARGET) : $(CXXOBJS) $(AXPROGRAM_ADDITIONAL_DEPENDS)
 	$(LD) $(CXXOBJS) $(RPATH_OPT) \
 	-L$(AAFSDKLIBDIR) -L$(OBJDIR) $(AXPROGRAM_LD_OPTIONS) -laxLib -laaflib -laafiid $(LIBCIO) -o $@
+endif
 
 .PHONY : clean
 clean ::

@@ -50,5 +50,3 @@ clean :
 .PHONY : realclean
 realclean :
 	cd com && $(MAKE) GENDEPS=0 $@
-
-

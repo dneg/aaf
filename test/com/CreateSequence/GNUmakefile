@@ -41,8 +41,13 @@ INCLUDES = -I../../../ref-impl/include \
 all : $(OBJDIR) $(AAFSDKBINDIR)/CreateSequence$(EXE)
 
 
+ifeq ($(AAFTARGET),Debug-static)
+$(AAFSDKBINDIR)/CreateSequence$(EXE) : $(CXXOBJS)
+	$(LD) $(CXXOBJS) $(STATIC_LINK_LINE) -o $@
+else
 $(AAFSDKBINDIR)/CreateSequence$(EXE) : $(CXXOBJS)
 	$(LD) $(CXXOBJS) -L$(AAFSDKLIBDIR) -laaflib -laafiid $(PLATFORMLIBS) -o $@ 
+endif
 
 
 .PHONY : clean

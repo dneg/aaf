@@ -32,8 +32,7 @@ include $(AAFBASE)/build/common.mk
 
 
 # Include directories
-INCLUDES = -I$(AAFSDKINCLUDEDIR) \
-	   -I../../ss-impl/ref
+INCLUDES = -I../../ss-impl/ref
 
 
 ifeq ($(AAFPLATFORM),SparcSolaris)
@@ -46,8 +45,7 @@ else
 all : $(OBJDIR) $(AAFSDKBINDIR)/dump$(EXE)
 
 $(AAFSDKBINDIR)/dump$(EXE) : $(CXXOBJS)
-	$(LD) $(CXXOBJS) $(RPATH_OPT) -L$(AAFSDKLIBDIR) $(LIBCIO) -o $@ \
-	$(AAFBUILDDIR)/ss-impl/librefstg$(LIB)
+	$(LD) $(CXXOBJS) $(RPATH_OPT) $(LIBCIO) -o $@ $(AAFBUILDDIR)/ss-impl/librefstg$(LIB)
 
 endif 
 endif 
@@ -65,4 +63,3 @@ realclean : clean
 
 
 include $(AAFBASE)/build/rules.mk
-

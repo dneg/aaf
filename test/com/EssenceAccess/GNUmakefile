@@ -41,8 +41,13 @@ INCLUDES = -I../../../ref-impl/include \
 all : $(OBJDIR) $(AAFSDKBINDIR)/EssenceAccess$(EXE)
 
 
+ifeq ($(AAFTARGET),Debug-static)
+$(AAFSDKBINDIR)/EssenceAccess$(EXE) : $(CXXOBJS)
+	$(LD) $(CXXOBJS) $(STATIC_LINK_LINE) -o $@
+else
 $(AAFSDKBINDIR)/EssenceAccess$(EXE) : $(CXXOBJS)
 	$(LD) $(CXXOBJS) -L$(AAFSDKLIBDIR) -laaflib -laafiid $(PLATFORMLIBS) -o $@
+endif
 
 
 .PHONY : clean

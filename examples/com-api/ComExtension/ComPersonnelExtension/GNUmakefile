@@ -32,7 +32,7 @@ include $(AAFBASE)/build/common.mk
 
 
 # Include directories
-INCLUDES = -I$(AAFSDKINCLUDEDIR) \
+INCLUDES = -I../../../../ref-impl/include \
 		-I../../../../ref-impl/include/ref-api \
 		-I../../../../ref-impl/include/com-api \
 		-I../../../../ref-impl/src/com-api \
@@ -41,6 +41,15 @@ INCLUDES = -I$(AAFSDKINCLUDEDIR) \
 
 
 .PHONY : all
+
+# This example not relevant for static builds
+ifeq ($(AAFTARGET),Debug-static)
+all :
+
+.PHONY : clean
+clean :
+
+else
 all : $(OBJDIR) \
 		$(AAFSDKBINDIR)/libAAFPersonnelExtension$(DLL) \
 		$(AAFSDKBINDIR)/ComPersonnelPluginWrite$(EXE)
@@ -79,11 +88,10 @@ clean :
 	@$(RM) $(AAFSDKBINDIR)/libAAFPersonnelExtension$(DLL)
 	@$(RM) $(AAFSDKBINDIR)/ComPersonnelPluginWrite$(EXE)
 	@$(RMDIR) $(OBJDIR)/ii_files
-
+endif
 
 .PHONY : realclean
 realclean : clean
 
 
 include $(AAFBASE)/build/rules.mk
-
