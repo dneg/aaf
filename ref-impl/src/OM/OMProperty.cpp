@@ -46,7 +46,7 @@ OMProperty::OMProperty(const OMPropertyId propertyId,
                        const OMStoredForm storedForm,
                        const wchar_t* name)
 : _propertyId(propertyId), _storedForm(storedForm),
-  _storedName(0), _name(name), _cName(0),
+  _storedName(0), _name(name),
   _propertySet(0), _definition(0),
   // _isOptional(false),
   // BobT: make optional by default, to hack around problem where
@@ -85,7 +85,6 @@ OMProperty::~OMProperty(void)
   TRACE("OMProperty::~OMProperty");
 
   delete [] _storedName;
-  delete [] _cName;
 }
 
   // @mfunc Close this <c OMProperty>.
@@ -119,15 +118,11 @@ const OMPropertyDefinition* OMProperty::definition(void) const
   // @mfunc The name of this <c OMProperty>.
   //   @rdesc The property name.
   //   @this const
-const char* OMProperty::name(void) const
+const wchar_t* OMProperty::name(void) const
 {
   TRACE("OMProperty::name");
 
-  if (_cName == 0) {
-    OMProperty* nonConstThis = const_cast<OMProperty*>(this);
-    nonConstThis->_cName = convertWideString(_name);
-  }
-  return _cName;
+  return _name;
 }
 
   // @mfunc The property id of this <c OMProperty>.
@@ -255,11 +250,8 @@ void OMProperty::saveName(void) const
 {
   TRACE("OMProperty::saveName");
 
-  const char* propertyName = name();
-  store()->write(_propertyId,
-                 _storedForm,
-                 (void *)propertyName,
-                 strlen(propertyName) + 1);
+  const wchar_t* name = storedName();
+  store()->writeName(_propertyId, _storedForm, name);
 }
 
   // @mfunc The persisted value of this property is its name.
@@ -269,14 +261,9 @@ void OMProperty::restoreName(size_t size)
 {
   TRACE("OMProperty::restoreName");
 
-  char* propertyName = new char[size];
-  ASSERT("Valid heap pointer", propertyName != 0);
-  store()->read(_propertyId,
-                _storedForm,
-                propertyName,
-                size);
-  ASSERT("Consistent property size", size == strlen(propertyName) + 1);
-  ASSERT("Consistent property name", strcmp(propertyName, name()) == 0);
+  wchar_t* propertyName = store()->readName(_propertyId, _storedForm, size);
+  ASSERT("Consistent property size", size == (lengthOfWideString(storedName()) + 1) * sizeof(OMCharacter));
+  ASSERT("Consistent property name", compareWideString(propertyName, storedName()) == 0);
   delete [] propertyName;
 }
 
