@@ -19,7 +19,7 @@
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFResult.h"
-
+#include "AAFDataDefs.h"
 
 
 // Cross-platform utility to delete a file.
@@ -236,6 +236,7 @@ IAAFEvent *EventMobSlotTest::CreateAnEvent(aafPosition_t* position,
 
   IAAFEvent *pEvent = NULL;
   IAAFComponent *pComponent = NULL;
+  aafUID_t		uid;
 
   try
   {
@@ -251,7 +252,9 @@ IAAFEvent *EventMobSlotTest::CreateAnEvent(aafPosition_t* position,
     {
       // Get the segment inteface to add to the mob slot
       checkResult(pEvent->QueryInterface(IID_IAAFComponent, (void **)&pComponent));
- 
+      uid = DDEF_Picture;	// Give a valid but nonsense kind
+	  checkResult(pComponent->SetDataDef(&uid));
+
       // Add the event to the sequence.
       checkResult(pSequence->AppendComponent(pComponent));
       pComponent->Release();
@@ -480,7 +483,7 @@ void EventMobSlotTest::CreateEventSequenceMobSlot()
   IAAFEventMobSlot *pEventMobSlot = NULL;
   IAAFMobSlot *pMobSlot = NULL;
   IAAFMob *pMob = NULL;
-
+  aafUID_t	uid;
 
   try
   {
@@ -488,6 +491,11 @@ void EventMobSlotTest::CreateEventSequenceMobSlot()
     checkResult(_pDictionary->CreateInstance(&AUID_AAFSequence,
                                              IID_IAAFSequence, 
                                              (IUnknown **)&pSequence));
+     checkResult(pSequence->QueryInterface(IID_IAAFComponent, (void **)&pComponent));
+     uid = DDEF_Picture;	// Give a valid but nonsense kind
+	 checkResult(pComponent->SetDataDef(&uid));
+	 pComponent->Release();
+	 pComponent = NULL;
 
 
     // Create an event (note: this will be replaced by a concrete event in a
