@@ -48,8 +48,8 @@
 
 
 ImplAAFTaggedValue::ImplAAFTaggedValue ():
-	_name(		PID_TaggedValue_Name,		"Name"),
-	_value(		PID_TaggedValue_Value,		"Value"),
+	_name(		PID_TaggedValue_Name,		L"Name"),
+	_value(		PID_TaggedValue_Value,		L"Value"),
   _initialized(false),
   _cachedTypeDef(NULL)
 {

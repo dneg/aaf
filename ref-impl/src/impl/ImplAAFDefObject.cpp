@@ -62,9 +62,9 @@
 extern "C" const aafClassID_t CLSID_EnumAAFPluginDescriptors;
 
 ImplAAFDefObject::ImplAAFDefObject ()
-: _name           (PID_DefinitionObject_Name,           "Name"),
-  _description    (PID_DefinitionObject_Description,    "Description"),
-  _identification (PID_DefinitionObject_Identification, "Identification")
+: _name           (PID_DefinitionObject_Name,           L"Name"),
+  _description    (PID_DefinitionObject_Description,    L"Description"),
+  _identification (PID_DefinitionObject_Identification, L"Identification")
 {
   _persistentProperties.put(_name.address());
   _persistentProperties.put(_description.address());

@@ -55,7 +55,7 @@ typedef ImplAAFSmartPointer<ImplAAFDataDef> ImplAAFDataDefSP;
 
 
 ImplAAFEventMobSlot::ImplAAFEventMobSlot ():
-  _editRate(PID_EventMobSlot_EditRate,	"EditRate")
+  _editRate(PID_EventMobSlot_EditRate,	L"EditRate")
 {
   _persistentProperties.put(_editRate.address());
 }

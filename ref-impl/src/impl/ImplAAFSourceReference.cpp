@@ -37,8 +37,8 @@
 #include "aafUtils.h"
 
 ImplAAFSourceReference::ImplAAFSourceReference ():
-	_sourceID(			PID_SourceReference_SourceID,		"SourceID"),
-	_sourceMobSlotId(	PID_SourceReference_SourceMobSlotID,	"SourceMobSlotID")
+	_sourceID(			PID_SourceReference_SourceID,		L"SourceID"),
+	_sourceMobSlotId(	PID_SourceReference_SourceMobSlotID,	L"SourceMobSlotID")
 {
 	_persistentProperties.put(		_sourceID.address());
 	_persistentProperties.put(		_sourceMobSlotId.address());
