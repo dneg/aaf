@@ -366,7 +366,7 @@ private:
   bool _isNew;
   bool _isValid;
   OMByteOrder _byteOrder;
-  static FactorySet _factory;
+  static FactorySet* _factory;
 
 };
 

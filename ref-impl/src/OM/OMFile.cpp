@@ -420,7 +420,8 @@ bool OMFile::isRecognized(const wchar_t* fileName,
   TRACE("OMFile::isRecognized");
   bool result = false;
 
-  FactorySetIterator iterator(_factory, OMBefore);
+  ASSERT("Valid factory", _factory != 0);
+  FactorySetIterator iterator(*_factory, OMBefore);
   while (++iterator) {
     if (iterator.value()->isRecognized(fileName)) {
       result = true;
@@ -444,7 +445,8 @@ bool OMFile::isRecognized(OMRawStorage* rawStorage,
   TRACE("OMFile::isRecognized");
   bool result = false;
 
-  FactorySetIterator iterator(_factory, OMBefore);
+  ASSERT("Valid factory", _factory != 0);
+  FactorySetIterator iterator(*_factory, OMBefore);
   while (++iterator) {
     if (iterator.value()->isRecognized(rawStorage)) {
       result = true;
@@ -458,11 +460,20 @@ bool OMFile::isRecognized(OMRawStorage* rawStorage,
 void OMFile::initialize(void)
 {
   TRACE("OMFile::initialize");
+  PRECONDITION("No valid factory", _factory == 0);
+
+  _factory = new OMFile::FactorySet();
+
+  POSTCONDITION("Valid factory", _factory != 0);
 }
 
 void OMFile::finalize(void)
 {
   TRACE("OMFile::finalize");
+
+  delete _factory;
+  _factory = 0;
+  POSTCONDITION("No valid factory", _factory == 0);
 }
 
 void OMFile::registerFactory(const OMStoredObjectEncoding& encoding,
@@ -472,7 +483,8 @@ void OMFile::registerFactory(const OMStoredObjectEncoding& encoding,
 
   PRECONDITION("Valid factory", factory != 0);
 
-  _factory.insert(encoding, factory);
+  ASSERT("Valid factory", _factory != 0);
+  _factory->insert(encoding, factory);
   factory->initialize();
 }
 
@@ -482,7 +494,8 @@ OMStoredObjectFactory* OMFile::findFactory(
   TRACE("OMFile::findFactory");
 
   OMStoredObjectFactory* result = 0;
-  _factory.find(encoding, result);
+  ASSERT("Valid factory", _factory != 0);
+  _factory->find(encoding, result);
   ASSERT("Recognized file encoding", result != 0);
   return result;
 }
@@ -490,11 +503,12 @@ OMStoredObjectFactory* OMFile::findFactory(
 void OMFile::removeFactory(const OMStoredObjectEncoding& encoding)
 {
   TRACE("OMFile::removeFactory");
-  PRECONDITION("Factory present", _factory.contains(encoding));
+  PRECONDITION("Valid factory", _factory != 0);
+  PRECONDITION("Factory present", _factory->contains(encoding));
 
   OMStoredObjectFactory* factory = 0;
-  _factory.find(encoding, factory);
-  _factory.remove(encoding);
+  _factory->find(encoding, factory);
+  _factory->remove(encoding);
   ASSERT("Valid factory", factory != 0);
   factory->finalize();
   delete factory;
@@ -504,20 +518,22 @@ void OMFile::removeAllFactories(void)
 {
   TRACE("OMFile::removeAllFactories");
 
-  FactorySetIterator iterator(_factory, OMBefore);
+  ASSERT("Valid factory", _factory != 0);
+  FactorySetIterator iterator(*_factory, OMBefore);
   while (++iterator) {
     OMStoredObjectFactory* factory = iterator.value();
     factory->finalize();
     delete factory;
   }
-  _factory.clear();
+  _factory->clear();
 }
 
 OMFile::FactorySetIterator* OMFile::factories(void)
 {
   TRACE("OMFile::factories");
 
-  FactorySetIterator* result = new FactorySetIterator(_factory, OMBefore);
+  ASSERT("Valid factory", _factory != 0);
+  FactorySetIterator* result = new FactorySetIterator(*_factory, OMBefore);
   POSTCONDITION("Valid iterator", result != 0);
   return result;
 }
@@ -1177,4 +1193,4 @@ OMRootStorable* OMFile::restoreRoot(void)
   return root;
 }
 
-OMFile::FactorySet OMFile::_factory;
+OMFile::FactorySet* OMFile::_factory;
