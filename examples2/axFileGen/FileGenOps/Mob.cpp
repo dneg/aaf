@@ -17,6 +17,7 @@
 //=---------------------------------------------------------------------=
 
 #include "Rate.h"
+#include "ParamMaps.h"
 
 #include <axFileGen.h>
 
@@ -26,6 +27,9 @@
 #include <AxDictionary.h>
 #include <AxHeader.h>
 #include <AxContentStorage.h>
+#include <AxIterator.h>
+
+#include <AAFResult.h>
 
 namespace {
 
@@ -163,5 +167,125 @@ void SetMobName::Execute( const std::vector<AxString>& argv )
 
 //=---------------------------------------------------------------------=
 
+AXFG_OP(
+  FindNamedMob,           
+  L"FindNamedMob",
+  L"Copy a mob.",
+  L"FileName mob_name FoundMobName",
+  L"Search for mob \"mob_name\", save reference as \"FoundMobName\".  The first occurence is returned.",
+  4,
+  4 ) 
+
+FindNamedMob::~FindNamedMob()
+{}
+
+void FindNamedMob::Execute( const std::vector<AxString>& argv )
+{
+	AxString fileName   = argv[1];
+	AxString mobName    = argv[2];
+	AxString mobRefName = argv[3];
+
+	AxHeader axHeader( HeaderFromFileOp( fileName ) );
+
+	AxMobIter axMobIter( axHeader.GetMobs() );
+	
+	IAAFMobSP spMob;
+	bool notAtEnd;
+	for ( notAtEnd = axMobIter.NextOne( spMob );
+	      notAtEnd;
+		  notAtEnd = axMobIter.NextOne( spMob ) ) {
+	
+		AxMob axMob( spMob );
+
+		try {
+			if ( axMob.GetName() == mobName ) {
+				break;
+			}
+		}
+		catch ( const AxExHResult& ex ) {
+			// ignore AAFRESULT_PROP_NOT_PRESENT
+			if ( ex.getHResult() != AAFRESULT_PROP_NOT_PRESENT ) {
+				throw;
+			}
+		}
+	}
+
+  	if ( !notAtEnd ) {
+		throw AxFGEx( L"Mob not found." );
+	}
+
+	SetCOM( spMob );
+	RegisterInstance( mobRefName );
+}
+	
+//=---------------------------------------------------------------------=
+
+AXFG_OP(
+  CopyMob,           
+  L"CopyMob",
+  L"Copy a mob.",
+  L"FileName SrcMobName DstMobName",
+  L"The copy may be referenced by the namd DstMobName - it *not* the actual mob name.",
+  4,
+  4 ) 
+
+CopyMob::~CopyMob()
+{}
+
+void CopyMob::Execute( const std::vector<AxString>& argv )
+{
+	AxString fileName   = argv[1];
+	AxString srcMobName = argv[2];
+	AxString dstMobName = argv[3];
+	
+	AxHeader axHeader( HeaderFromFileOp( fileName ) );
+
+	IAAFMobSP spMob;
+	GetInstance( srcMobName ).GetCOM( spMob );
+	AxMob axMob( spMob );
+
+	AxString name = axMob.GetName() + L" Copy";
+	IAAFMobSP spNewMob = axMob.Copy( name.c_str() );
+
+	axHeader.AddMob( spNewMob );
+
+	SetCOM( spNewMob );
+	RegisterInstance( dstMobName );
+}
+
+//=---------------------------------------------------------------------=
+
+AXFG_OP(
+  CloneExternal,           
+  L"CloneExternal",
+  L"Copy a mob to another file.",
+  L"SrcMobName DstFileName DstMobName include_media",
+  L"The copy may be referenced by the namd DstMobName - it *not* the actual mob name.",
+  5,
+  5 ) 
+
+CloneExternal::~CloneExternal()
+{}
+
+void CloneExternal::Execute( const std::vector<AxString>& argv )
+{
+	AxString srcMobName  = argv[1];
+	AxString dstFileName = argv[2];
+	AxString dstMobName  = argv[3];
+	AxString incMedia    = argv[4];
+
+	IAAFMobSP spSrcMob;
+	GetInstance( srcMobName ).GetCOM( spSrcMob );
+	AxMob axSrcMob( spSrcMob );
+
+	IAAFMobSP spNewDstMob = axSrcMob.CloneExternal( kAAFNoFollowDepend,
+													IncMediaParams::GetInstance().Find( *this, incMedia ),
+													FileFromFileOp( dstFileName ) );
+
+	SetCOM( spNewDstMob );
+	RegisterInstance( dstMobName );
+}
+
+//=---------------------------------------------------------------------=
 
 } // end of namespace
