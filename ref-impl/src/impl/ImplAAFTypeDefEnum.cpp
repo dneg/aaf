@@ -806,25 +806,28 @@ size_t ImplAAFTypeDefEnum::PropValSize (void) const
 }
 
 
+void ImplAAFTypeDefEnum::AttemptBuiltinRegistration (void)
+{
+  if (! _registrationAttempted)
+	{
+	  ImplAAFDictionarySP pDict;
+	  AAFRESULT hr = GetDictionary(&pDict);
+	  assert (AAFRESULT_SUCCEEDED (hr));
+	  pDict->pvtAttemptBuiltinSizeRegistration (this);
+	  _registrationAttempted = kAAFTrue;
+	}
+}
+
 aafBool ImplAAFTypeDefEnum::IsRegistered (void) const
 {
-  if (!_isRegistered)
-	{
-	  if (! _registrationAttempted)
-		{
-		  ImplAAFDictionarySP pDict;
-		  AAFRESULT hr = GetDictionary(&pDict);
-		  assert (AAFRESULT_SUCCEEDED (hr));
-		  pDict->pvtAttemptBuiltinSizeRegistration ((ImplAAFTypeDefEnum*) this);
-		  ((ImplAAFTypeDefEnum*)this)->_registrationAttempted = kAAFTrue;
-		}
-	}
+  ((ImplAAFTypeDefEnum*)this)->AttemptBuiltinRegistration ();
   return (_isRegistered ? kAAFTrue : kAAFFalse);
 }
 
 
 size_t ImplAAFTypeDefEnum::NativeSize (void) const
 {
+  ((ImplAAFTypeDefEnum*)this)->AttemptBuiltinRegistration ();
   assert (IsRegistered());
   return _registeredSize;
 }
