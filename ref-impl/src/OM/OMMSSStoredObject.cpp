@@ -259,7 +259,7 @@ void OMMSSStoredObject::close(void)
   }
 }
 
-void OMMSSStoredObject::close(OMFile& file)
+void OMMSSStoredObject::close(OMFile& /* file */)
 {
   TRACE("OMMSSStoredObject::close");
   ASSERT("Unimplemented code not reached", false); // tjb TBS
@@ -272,13 +272,13 @@ OMByteOrder OMMSSStoredObject::byteOrder(void) const
   return _byteOrder;
 }
 
-void OMMSSStoredObject::save(OMFile& file)
+void OMMSSStoredObject::save(OMFile& /* file */)
 {
   TRACE("OMMSSStoredObject::save(OMFile)");
   ASSERT("Unimplemented code not reached", false); // tjb TBS
 }
 
-void OMMSSStoredObject::save(OMStorable& object)
+void OMMSSStoredObject::save(OMStorable& /* object */)
 {
   TRACE("OMMSSStoredObject::save(OMFile)");
   ASSERT("Unimplemented code not reached", false); // tjb TBS
