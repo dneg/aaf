@@ -345,9 +345,36 @@ HRESULT AafOmf::GetUserInput(int argc, char* argv[])
 HRESULT AafOmf::OpenInputFile ()
 {
 	HRESULT		rc = AAFRESULT_SUCCESS;
+	FILE*		pStream = NULL;
 
-	if (IsOMFFile(sInFileName))
-		rc = OMFFileOpen(sInFileName);
+	// verify if file exists
+	if (strlen(sInFileName) > 0)
+	{
+		pStream = fopen(sInFileName, "r");
+		if (pStream != NULL)
+		{
+			if (IsOMFFile(pStream))
+			{
+				fclose(pStream);
+				rc = OMFFileOpen(sInFileName);
+			}
+			else
+			{
+				fclose(pStream);
+				cout <<"File : "<<sInFileName<<" is not a valid OMF file"<<endl;
+				cout << "Program will exit !"<<endl;
+				rc = OMF2::OM_ERR_NOTOMFIFILE;
+			}
+		}
+		else
+		{
+			cout << "Cannot find input file: "<< sInFileName<< endl;
+			cout << "Program will exit !"<<endl;
+			rc = AAFRESULT_FILE_NOT_FOUND;
+		}
+	}
+	else
+		rc = AAFRESULT_NULL_PARAM;
 
 	return rc;
 }
@@ -386,16 +413,14 @@ HRESULT AafOmf::OpenOutputFile ()
 //			This function returns AAFTrue if the given file is an OMF file.
 //
 // ============================================================================
-aafBool AafOmf::IsOMFFile (char *pFileName)
+aafBool AafOmf::IsOMFFile (FILE* pStream)
 {
 	aafBool		bReturn = AAFFalse;
-	FILE*		pStream = NULL;
 	int			result = 0;
 	char		ReadBuffer[8];
 	char		CompBuffer[8];
 
 
-	pStream = fopen(pFileName, "r");
 	CompBuffer[0] = (char)0xA4;
 	CompBuffer[1] = 'C';
 	CompBuffer[2] = 'M';
@@ -405,26 +430,17 @@ aafBool AafOmf::IsOMFFile (char *pFileName)
 	CompBuffer[6] = 'r';
 	CompBuffer[7] = 0x00;
 
-	if (pStream != NULL)
+	result = fseek(pStream, -24, SEEK_END);
+	if (result == 0)
 	{
-		result = fseek(pStream, -24, SEEK_END);
-		if (result == 0)
+		result = fread(ReadBuffer, sizeof( char ), sizeof(ReadBuffer), pStream);
+		if (result > 0)
 		{
-			result = fread(ReadBuffer, sizeof( char ), sizeof(ReadBuffer), pStream);
-			if (result > 0)
-			{
-				if (memcmp(CompBuffer, ReadBuffer, strlen(CompBuffer)) == 0)
-					bReturn = AAFTrue;
-			}
+			if (memcmp(CompBuffer, ReadBuffer, strlen(CompBuffer)) == 0)
+				bReturn = AAFTrue;
 		}
+	}
 	
-		fclose(pStream);
-	}
-	else
-	{
-		cout << "Cannot find input file: "<< pFileName<< endl;
-	}
-
 	return bReturn;
 }
 // ============================================================================
@@ -494,8 +510,11 @@ HRESULT AafOmf::AAFFileOpen( char* pFileName)
 	aafWChar				ProductName[256];
     aafWChar				ProductVersionString[256];
     aafWChar				Platform[256];
+	aafBool					bAddExtraIdent = AAFFalse;
 
 	aafProductIdentification_t	ProductInfo;
+	IAAFIdentification*		pIdent = NULL;
+
 	
 	convert(wcFileName, sizeof(wcFileName), pFileName);
 	rc = CoCreateInstance(CLSID_AAFFile, NULL, CLSCTX_INPROC_SERVER, IID_IAAFFile, (void **)&pFile);
@@ -532,18 +551,7 @@ HRESULT AafOmf::AAFFileOpen( char* pFileName)
 					convert(Platform, sizeof(Platform), text);
 					ProductInfo.platform = Platform;
 					rc = pFile->OpenNewModify(wcFileName, 0, &ProductInfo);
-					rc = pFile->Close();
-					ProductInfo.companyName = L"Company Name";
-					ProductInfo.productName = L"OMF to AAF File Conversion";
-					ProductInfo.productVersion.major = 1;
-					ProductInfo.productVersion.minor = 0;
-					ProductInfo.productVersion.tertiary = 0;
-					ProductInfo.productVersion.patchLevel = 0;
-					ProductInfo.productVersion.type = kVersionUnknown;
-					ProductInfo.productVersionString = NULL;
-					ProductInfo.productID = -1;
-					ProductInfo.platform = NULL;
-					rc = pFile->OpenExistingModify(wcFileName, 0, &ProductInfo);
+					bAddExtraIdent = AAFTrue;
 				}
 			}
 			else
@@ -564,7 +572,34 @@ HRESULT AafOmf::AAFFileOpen( char* pFileName)
 		bAAFFileOpen = AAFTrue;
 		rc = pFile->GetHeader(&pHeader);
 		if (AAFRESULT_SUCCESS == rc)
+		{
 			rc = pHeader->GetDictionary(&pDictionary);
+			if (AAFRESULT_SUCCESS == rc && bAddExtraIdent)
+			{
+				// Create a new Composition Mob
+				rc = pDictionary->CreateInstance(&AUID_AAFIdentification, 
+	 											 IID_IAAFIdentification,
+												 (IUnknown **)&pIdent);
+				if (AAFRESULT_SUCCESS == rc)
+				{
+					ProductInfo.companyName = L"Company Name";
+					ProductInfo.productName = L"OMF to AAF File Conversion";
+					ProductInfo.productVersion.major = 1;
+					ProductInfo.productVersion.minor = 0;
+					ProductInfo.productVersion.tertiary = 0;
+					ProductInfo.productVersion.patchLevel = 0;
+					ProductInfo.productVersion.type = kVersionUnknown;
+					ProductInfo.productVersionString = NULL;
+					ProductInfo.productID = -1;
+					ProductInfo.platform = NULL;
+					pIdent->SetCompanyName(ProductInfo.companyName);
+					pIdent->SetProductName(ProductInfo.productName);
+					pIdent->SetProductVersion(&ProductInfo.productVersion);
+					rc = pHeader->AppendIdentification(pIdent);
+				}
+				
+			}
+		}
 	}
 	else
 		rc = AAFRESULT_INTERNAL_ERROR;
@@ -595,6 +630,11 @@ HRESULT AafOmf::OMFFileRead()
 	OMF2::omfIterHdl_t		OMFMobIter = NULL;
 	OMF2::omfMobObj_t		OMFMob;
 
+	// AAF Variables
+	IAAFMob*				pMob = NULL;
+	IAAFCompositionMob*		pCompMob = NULL;
+	IAAFMasterMob*			pMasterMob = NULL;
+	IAAFSourceMob*			pSourceMob = NULL;
 	
 	rc = OMF2::omfiIteratorAlloc( OMFFileHdl, &OMFMobIter);
 	if (AAFRESULT_SUCCESS == rc)
@@ -602,17 +642,95 @@ HRESULT AafOmf::OMFFileRead()
 		rc = OMF2::omfiGetNumMobs( OMFFileHdl, OMF2::kAllMob, &nOMFNumMobs);
 		if (AAFRESULT_SUCCESS == rc)
 		{
-			cout <<"Found : "<<nOMFNumMobs<<" Mobs in the input file"<<endl;
+			if (bVerboseMode)
+			{
+				cout <<"Found : "<<nOMFNumMobs<<" Mobs in the input file"<<endl;
+			}
 			for (nOMFMobCount = 0; nOMFMobCount < nOMFNumMobs; nOMFMobCount++)
 			{
 				rc = OMF2::omfiGetNextMob(OMFMobIter, NULL, &OMFMob);
 				if (AAFRESULT_SUCCESS == rc)
 				{
-					rc = ParseOMFMOBObject(OMFMob);
+					pMob = NULL;
+					if (OMF2::omfiIsACompositionMob(OMFFileHdl, OMFMob, (OMF2::omfErr_t *) &rc))
+					{
+						// Create a new Composition Mob
+						rc = pDictionary->CreateInstance(&AUID_AAFCompositionMob, 
+	 													 IID_IAAFCompositionMob,
+														 (IUnknown **)&pCompMob);
+						if (AAFRESULT_SUCCESS == rc)
+						{
+							if (bVerboseMode)
+								cout <<"Created AAF Composition Mob"<<endl;
+							rc = ConvertOMFCompositionObject( OMFMob, pCompMob );
+							pCompMob->QueryInterface(IID_IAAFMob, (void **)&pMob);
+							pCompMob->Release();
+							pCompMob = NULL;
+						}
+					}
+					else if (OMF2::omfiIsAMasterMob(OMFFileHdl, OMFMob, (OMF2::omfErr_t *) &rc) )
+					{
+						// Create a Master Mob 
+						rc = pDictionary->CreateInstance(&AUID_AAFMasterMob,
+														 IID_IAAFMasterMob,
+														 (IUnknown **)&pMasterMob);
+						if (AAFRESULT_SUCCESS == rc)
+						{
+							if (bVerboseMode)
+								cout <<"Created AAF Master Mob"<<endl;
+							rc = ConvertOMFMasterMob(OMFMob, pMasterMob );
+							pMasterMob->QueryInterface(IID_IAAFMob, (void **)&pMob);
+							pMasterMob->Release();
+							pMasterMob = NULL;
+						}
+					}
+					else if ( OMF2::omfiIsASourceMob(OMFFileHdl, OMFMob, (OMF2::omfErr_t *)&rc) )
+					{
+						rc = pDictionary->CreateInstance(&AUID_AAFSourceMob,
+														 IID_IAAFSourceMob,
+														 (IUnknown **)&pSourceMob);
+						if (AAFRESULT_SUCCESS == rc)
+						{
+							if (bVerboseMode)
+								cout <<"Created AAF Source Mob"<<endl;
+							rc = ConvertOMFSourceMob( OMFMob, pSourceMob );
+							pSourceMob->QueryInterface(IID_IAAFMob, (void **)&pMob);
+							pSourceMob->Release();
+							pSourceMob = NULL;
+						}
+					}
+					else
+					{
+						OMF2::omfClassID_t		objClass;
+						char					id[5];
+
+						rc = OMF2::omfsReadClassID(OMFFileHdl, OMFMob, OMF2::OMOOBJObjClass, objClass);
+						if (OMF2::OM_ERR_NONE == rc && bVerboseMode)
+						{
+							strncpy(id, objClass, 4);
+							id[4] = '\0';
+							cout<<"Unrecognized Mob Class ID : "<<id<<endl;
+						}
+					}
+					if (pMob)
+					{
+						rc = ConvertOMFMOBObject( OMFMob, pMob);
+						if (rc != AAFRESULT_SUCCESS)
+							cout<<"Error convert basic MOB data"<<endl;
+						rc = TraverseOMFMob( OMFMob, pMob);
+						if (rc != AAFRESULT_SUCCESS)
+							cout<<"Error Traversing MOB "<<endl;
+						rc = pHeader->AppendMob(pMob);
+						if (rc != AAFRESULT_SUCCESS)
+							cout<<"Error appending MOB to the file"<<endl;
+						pMob->Release();
+						pMob = NULL;
+					}
 				}
 			}
 		}
 	}
+
 	OMF2::omfiIteratorDispose(OMFFileHdl, OMFMobIter);
 			
 	return rc;
@@ -738,59 +856,6 @@ HRESULT AafOmf::ConvertOMFClassDictionaryObject( OMF2::omfObject_t obj )
 }
 
 // ============================================================================
-// ParseOMFMOBObject
-//
-//			This function is invoked by the ConvertMobCallBack routine for 
-//			each OMF Mob object encountered. 
-//
-//	Algorithm:  Determine Mob kind
-//				if Composition Mob
-//					Convert Composition object
-//				else if Master Mob
-//					Convert Maste mob
-//				...
-//			
-// Returns: AAFRESULT_SUCCESS if MOB object is converted succesfully
-//
-// ============================================================================
-HRESULT AafOmf::ParseOMFMOBObject( OMF2::omfObject_t obj )
-{
-	HRESULT					rc = AAFRESULT_SUCCESS;
-
-	OMF2::omfProperty_t		idProp;
-	OMF2::omfClassID_t		objClass;
-
-
-	char					tmpClass[5];
-	// Get OMF Mob information data
-
-
-	idProp = OMF2::OMOOBJObjClass;
-	rc = OMF2::omfsReadClassID(OMFFileHdl, obj, idProp, objClass );
-	if (OMF2::OM_ERR_NONE == rc)
-	{
-		strncpy(tmpClass, objClass, 4);
-		if (!strncmp(tmpClass, "CMOB", 4) )
-			rc = ConvertOMFCompositionObject( obj );
-		else if (!strncmp(tmpClass, "MMOB", 4) )
-			ConvertOMFMasterMob( obj );
-		else if ( !strncmp(tmpClass, "SMOB", 4) )
-			ConvertOMFSourceMob( obj );
-		else
-		{
-			tmpClass[4] = '\0';
-			cout<<"Unrecognized Mob Class ID : "<<tmpClass<<endl;
-		}
-	}
-	else
-	{
-		cout<<"Cannot read OMF Class ID"<< endl;
-	}
-
-	return rc;
-}
-
-// ============================================================================
 // ConvertOMFMOBObject
 //
 //			This function is converts all the mob basic data (name, MobId, etc.) 
@@ -899,85 +964,56 @@ HRESULT AafOmf::ConvertOMFMOBObject( OMF2::omfObject_t obj, IAAFMob* pMob )
 // Returns: AAFRESULT_SUCCESS if MOB object is converted succesfully
 //
 // ============================================================================
-HRESULT AafOmf::ConvertOMFCompositionObject(OMF2::omfObject_t obj)
+HRESULT AafOmf::ConvertOMFCompositionObject(OMF2::omfObject_t obj, 
+											IAAFCompositionMob* pCompMob)
 {
 	HRESULT					rc = AAFRESULT_SUCCESS;
 
-	OMF2::omfClassID_t		objClass;
 	OMF2::omfDefaultFade_t	OMFDefaultFade;
 
-	IAAFMob*				pMob = NULL;
-	IAAFCompositionMob*		pCompMob = NULL;
-	aafUID_t				CompMobID;
 	aafDefaultFade_t		AAFDefaultFade;
 	
-	// Create a new Composition Mob
-	rc = pDictionary->CreateInstance(&AUID_AAFCompositionMob, 
-	 								 IID_IAAFCompositionMob,
-									 (IUnknown **)&pCompMob);
-	if (AAFRESULT_SUCCESS == rc && bVerboseMode)
-		cout << "Created AAF composition MOB "<< endl;
-	if (AAFRESULT_SUCCESS == rc )
+	// get Composition mob information
+	rc = OMF2::omfiMobGetDefaultFade(OMFFileHdl, obj, &OMFDefaultFade);
+	if (AAFRESULT_SUCCESS == rc && OMFDefaultFade.valid)
 	{
-		// get Composition mob information
-		rc = OMF2::omfiMobGetDefaultFade(OMFFileHdl, obj, &OMFDefaultFade);
-		if (AAFRESULT_SUCCESS == rc && OMFDefaultFade.valid)
+		AAFDefaultFade.fadeLength   = OMFDefaultFade.fadeLength;
+		switch(OMFDefaultFade.fadeType)
 		{
-			AAFDefaultFade.fadeLength   = OMFDefaultFade.fadeLength;
-			switch(OMFDefaultFade.fadeType)
-			{
-				case OMF2::kFadeNone: 
-					AAFDefaultFade.fadeType = kFadeNone;
-					break;
-				case OMF2::kFadeLinearAmp:
-					AAFDefaultFade.fadeType = kFadeLinearAmp;
-					break;
-				case OMF2::kFadeLinearPower:
-					AAFDefaultFade.fadeType = kFadeLinearPower;
-					break;
-			}
-			AAFDefaultFade.fadeEditUnit.numerator = OMFDefaultFade.fadeEditUnit.numerator;
-			AAFDefaultFade.fadeEditUnit.denominator = OMFDefaultFade.fadeEditUnit.denominator;
+			case OMF2::kFadeNone: 
+				AAFDefaultFade.fadeType = kFadeNone;
+				break;
+			case OMF2::kFadeLinearAmp:
+				AAFDefaultFade.fadeType = kFadeLinearAmp;
+				break;
+			case OMF2::kFadeLinearPower:
+				AAFDefaultFade.fadeType = kFadeLinearPower;
+				break;
 		}
-
-		// Set default fade values
-		if (OMFDefaultFade.valid)
-			pCompMob->SetDefaultFade(AAFDefaultFade.fadeLength,
-									 AAFDefaultFade.fadeType,
-									 AAFDefaultFade.fadeEditUnit);
-
-
-
-		rc = pCompMob->QueryInterface(IID_IAAFMob, (void **)&pMob);
-		if (AAFRESULT_SUCCESS == rc)
-		{
-			rc = ConvertOMFMOBObject(obj, pMob);
-			if (AAFRESULT_SUCCESS == rc)
-			{
-				ConvertOMFMobSlots( obj, pMob);
-				rc = pHeader->AppendMob(pMob);
-			}
-			pMob->Release();
-		}
-
+		AAFDefaultFade.fadeEditUnit.numerator = OMFDefaultFade.fadeEditUnit.numerator;
+		AAFDefaultFade.fadeEditUnit.denominator = OMFDefaultFade.fadeEditUnit.denominator;
 	}
 
-	if (pCompMob)
-		pCompMob->Release();
+	// Set default fade values
+	if (OMFDefaultFade.valid)
+		pCompMob->SetDefaultFade(AAFDefaultFade.fadeLength,
+								 AAFDefaultFade.fadeType,
+								 AAFDefaultFade.fadeEditUnit);
 
 	if (AAFRESULT_SUCCESS == rc && bVerboseMode)
 		cout << "Converted OMF Composition MOB to AAF"<< endl;
+
 	return rc;
 }
 // ============================================================================
-// ConvertOMFMobSlots
+// TraverseOMFMob
 //
 //			This function converts all the mob slots in the given OMF mob object 
 //			
 // Returns: AAFRESULT_SUCCESS if succesfully
 //
 // ============================================================================
-HRESULT AafOmf::ConvertOMFMobSlots( OMF2::omfObject_t obj, IAAFMob* pMob )
+HRESULT AafOmf::TraverseOMFMob( OMF2::omfObject_t obj, IAAFMob* pMob )
 {
 	HRESULT					rc = AAFRESULT_SUCCESS;
 	aafInt32				times;
@@ -996,7 +1032,6 @@ HRESULT AafOmf::ConvertOMFMobSlots( OMF2::omfObject_t obj, IAAFMob* pMob )
 
 	IAAFMobSlot*		pMobSlot = NULL;
 	IAAFSegment*		pSegment = NULL;
-	IAAFSequence*		pSequence = NULL;
 	IAAFTimelineMobSlot* pTimelineMobSlot = NULL;
 
 	rc = OMF2::omfiMobGetNumSlots(OMFFileHdl, obj, &numSlots);
@@ -1023,20 +1058,26 @@ HRESULT AafOmf::ConvertOMFMobSlots( OMF2::omfObject_t obj, IAAFMob* pMob )
 			{
 				rc = OMF2::omfiTrackGetInfo(OMFFileHdl, obj, OMFSlot, &OMFeditRate, sizeof(sTrackName),
 								sTrackName, &OMFOrigin, &OMFTrackID, &OMFSegment);
+				if (strlen(sTrackName) == 0)
+					strcpy(sTrackName, "unknown track name");
 				if (AAFRESULT_SUCCESS == rc)
 				{
-					rc = pDictionary->CreateInstance(&AUID_AAFSequence,
-													 IID_IAAFSequence,
-													 (IUnknown **)&pSequence);
-					ConvertOMFSequence(OMFSegment, pSequence);
-					pSequence->QueryInterface(IID_IAAFSegment, (void **)&pSegment);
-					convert(wcTrackName, sizeof(wcTrackName), sTrackName);
-					pMob->AppendNewSlot( pSegment, (aafSlotID_t)OMFTrackID, wcTrackName, &pMobSlot );
-					if (bVerboseMode)
+					ProcessOMFComponent(OMFSegment, &pSegment);
+					if (pSegment)
 					{
-						Indent(8);
-						cout<<"Converted SlotID : "<<(int)OMFTrackID<<" Name : "<<sTrackName<<endl;
-					} 
+						convert(wcTrackName, sizeof(wcTrackName), sTrackName);
+						pMob->AppendNewSlot( pSegment, (aafSlotID_t)OMFTrackID, wcTrackName, &pMobSlot );
+						if (bVerboseMode)
+						{
+							Indent(8);
+							cout<<"Converted SlotID : "<<(int)OMFTrackID<<" Name : "<<sTrackName<<endl;
+						}
+					}
+					if (pSegment)
+					{
+						pSegment->Release();
+						pSegment = NULL;
+					}
 				}
 			}
 			
@@ -1048,21 +1089,312 @@ HRESULT AafOmf::ConvertOMFMobSlots( OMF2::omfObject_t obj, IAAFMob* pMob )
 	return rc;
 }
 // ============================================================================
+// ProcessOMFComponent
+//
+//			This function will :
+//				1. Identify type of OMF Component
+//				2. Create the equivalent AAF object
+//				3. Convert the OMF datakind to AAF datadef of the object
+//				4. Traverse the component (if needed) into its objects
+//				5. return the AAF segment 
+//
+//	INPUTS:		OMFSegment	OMF object to be processed.
+//				pSegment	Pointer to a AAF Segment Interface pointer
+//
+//	OUTPUTS:	pSegment	new AAF Segment	
+//			
+// Returns: AAFRESULT_SUCCESS if MOB object is converted succesfully
+//
+// ============================================================================
+HRESULT AafOmf::ProcessOMFComponent(OMF2::omfObject_t OMFSegment, IAAFSegment** ppSegment)
+{
+	HRESULT					rc = AAFRESULT_SUCCESS;
+
+	IAAFSequence*			pSequence = NULL;
+	IAAFSourceClip*			pSourceClip = NULL;
+	IAAFTimecode*			pTimecode = NULL;
+//	IAAFEdgecode			pEdgecode = NULL;
+
+	// First get sequence information
+	if (OMF2::omfiIsASequence(OMFFileHdl, OMFSegment, (OMF2::omfErr_t *)&rc) )
+	{
+		rc = pDictionary->CreateInstance(&AUID_AAFSequence,
+										 IID_IAAFSequence,
+										 (IUnknown **)&pSequence);
+		pSequence->QueryInterface(IID_IAAFSegment, (void **)ppSegment);
+		if (bVerboseMode)
+		{
+			Indent(4);
+			cout <<"Processing Sequence"<< endl;
+		}
+		ConvertOMFSequence(OMFSegment, pSequence);
+		TraverseOMFComponent(OMFSegment);
+		pSequence->Release();
+	}
+
+	else if (OMF2::omfiIsASourceClip(OMFFileHdl, OMFSegment, (OMF2::omfErr_t *)&rc) )
+	{
+		rc = pDictionary->CreateInstance(&AUID_AAFSourceClip,
+										 IID_IAAFSourceClip,
+										 (IUnknown **)&pSourceClip);
+		pSourceClip->QueryInterface(IID_IAAFSegment, (void **)ppSegment);
+		if (bVerboseMode)
+		{
+			Indent(4);
+			cout <<"Processing SourceClip"<< endl;
+		}
+	}
+	else if (OMF2::omfiIsATimecodeClip(OMFFileHdl, OMFSegment, (OMF2::omfErr_t *)&rc) )
+	{
+		rc = pDictionary->CreateInstance(&AUID_AAFTimecode,
+										 IID_IAAFTimecode,
+										 (IUnknown **)&pTimecode);
+		pTimecode->QueryInterface(IID_IAAFSegment, (void **)ppSegment);
+		if (bVerboseMode)
+		{
+			Indent(4);
+			cout <<"Processing TimecodeClip"<< endl;
+		}
+	}
+	else if (OMF2::omfiIsAnEdgecodeClip(OMFFileHdl, OMFSegment, (OMF2::omfErr_t *)&rc) )
+	{
+//		rc = pDictionary->CreateInstance(&AUID_AAFEdgecode,
+//										 IID_IAAFEdgecode,
+//										 (IUnknown **)&pEdgecode);
+//		pEdgecode->QueryInterface(IID_IAAFSegment, (void **)ppSegment);
+		if (bVerboseMode)
+		{
+			Indent(4);
+			cout <<"Found EdgecodeClip"<< endl;
+			cout <<"Edgecode conversion NOT yet implemented !!!"<<endl;
+		}
+	}
+	else if (OMF2::omfiIsAFiller(OMFFileHdl, OMFSegment, (OMF2::omfErr_t *)&rc) )
+	{
+		if (bVerboseMode)
+		{
+			Indent(4);
+			cout <<"Processing Filler"<< endl;
+		}
+	}
+	else if (OMF2::omfiIsAnEffect(OMFFileHdl, OMFSegment, (OMF2::omfErr_t *)&rc) )
+	{
+		if (bVerboseMode)
+		{
+			Indent(4);
+			cout <<"Processing Effect"<< endl;
+		}
+	}
+	else if (OMF2::omfiIsATransition(OMFFileHdl, OMFSegment, (OMF2::omfErr_t *)&rc) )
+	{
+		if (bVerboseMode)
+		{
+			Indent(4);
+			cout <<"Processing Transition"<< endl;
+		}
+	}
+	else if (OMF2::omfiIsAConstValue(OMFFileHdl, OMFSegment, (OMF2::omfErr_t *)&rc) )
+	{
+		if (bVerboseMode)
+		{
+			Indent(4);
+			cout <<"Processing Constant Value"<< endl;
+		}
+	}
+	else if (OMF2::omfiIsAVaryValue(OMFFileHdl, OMFSegment, (OMF2::omfErr_t *)&rc) )
+	{
+		if (bVerboseMode)
+		{
+			Indent(4);
+			cout <<"Processing Varying Value"<< endl;
+		}
+	}
+	else if (OMF2::omfiIsANestedScope(OMFFileHdl, OMFSegment, (OMF2::omfErr_t *)&rc) )
+	{
+		if (bVerboseMode)
+		{
+			Indent(4);
+			cout <<"Processing Nested Scope"<< endl;
+		}
+	}
+	else if (OMF2::omfiIsAScopeRef(OMFFileHdl, OMFSegment, (OMF2::omfErr_t *)&rc) )
+	{
+		if (bVerboseMode)
+		{
+			Indent(4);
+			cout <<"Processing Scope Reference"<< endl;
+		}
+	}
+	else if (OMF2::omfiIsASelector(OMFFileHdl, OMFSegment, (OMF2::omfErr_t *)&rc) )
+	{
+		if (bVerboseMode)
+		{
+			Indent(4);
+			cout <<"Processing Selector"<< endl;
+		}
+	}
+	else if (OMF2::omfiIsAMediaGroup(OMFFileHdl, OMFSegment, (OMF2::omfErr_t *)&rc) )
+	{
+		if (bVerboseMode)
+		{
+			Indent(4);
+			cout <<"Processing Media Group"<< endl;
+		}
+	}
+	else
+	{
+		char	classID[5];
+
+		rc = OMF2::omfsReadClassID(OMFFileHdl, OMFSegment, OMF2::OMOOBJObjClass,classID);
+		classID[4] = '\0';
+		if (bVerboseMode)
+		{
+			Indent(8);
+			cout <<"UNKNOWN OBJECT : "<<classID<<endl;
+		}
+	}
+
+	return rc;
+}
+// ============================================================================
 // ConvertOMFSequence
 //
-//			This function extracts all the properties of an OMF Sequence,
+//			This function converts all the properties of an OMF Sequence, into 
+//			their AAF  equivalent.
+//			
+// Returns: AAFRESULT_SUCCESS 
+//
+// ============================================================================
+HRESULT AafOmf::ConvertOMFSequence(OMF2::omfObject_t sequence, 
+								   IAAFSequence* pSequence )
+{
+	HRESULT					rc = AAFRESULT_SUCCESS;
+
+	OMF2::omfDDefObj_t		datakind = NULL;
+	OMF2::omfUniqueName_t	datakindName;
+	OMF2::omfLength_t		sequLength = 0;
+
+	IAAFComponent*			pComponent = NULL;
+	aafUID_t				datadef;
+	
+	aafBool					bValid = AAFFalse;
+
+	// Get a pointer to a component interface
+	rc = pSequence->QueryInterface(IID_IAAFComponent, (void **)&pComponent);
+	if (AAFRESULT_SUCCESS == rc)
+	{
+		// Get Sequence data kind 
+		rc = OMF2::omfiSequenceGetInfo(OMFFileHdl, sequence, &datakind, &sequLength);
+		rc = OMF2::omfiDatakindGetName(OMFFileHdl, datakind, 64, datakindName);
+		if (strncmp("omfi:data:Picture", datakindName, 17)== 0)
+		{
+			bValid = AAFTrue;
+			datadef = DDEF_Video;
+		}
+		else if (strncmp("omfi:data:Sound", datakindName, 15) == 0)
+		{
+			bValid = AAFTrue;
+			datadef = DDEF_Audio;
+		}
+		else if(strncmp("omfi:data:Timecode", datakindName, 18) == 0)
+		{
+			bValid = AAFTrue;
+			datadef = DDEF_Timecode;
+		}
+		else
+		{
+			bValid = AAFFalse;
+			cout<<"Invalid DataDef : "<<datakindName<<" Found in sequence"<<endl;
+		}
+		if (bValid)
+			pComponent->SetDataDef(&datadef);
+		// Next - get all properties
+		rc = ConvertOMFComponentProperties(sequence, pComponent);
+		pComponent->Release();
+	}
+
+	return rc;
+}
+// ============================================================================
+// ConvertOMFComponentProperties
+//
+//			This function converts all the properties of an OMF Component, into 
+//			their AAF  equivalent.
+//			
+// Returns: AAFRESULT_SUCCESS 
+//
+// ============================================================================
+HRESULT AafOmf::ConvertOMFComponentProperties(OMF2::omfObject_t component, 
+											 IAAFComponent* pComponent )
+{
+	HRESULT					rc = AAFRESULT_SUCCESS;
+
+	OMF2::omfProperty_t		Property;
+	OMF2::omfUniqueName_t	propertyName;
+	OMF2::omfIterHdl_t		propertyIterator = NULL;
+	OMF2::omfType_t			propertyType = OMF2::OMNoType;
+	OMF2::omfDDefObj_t		datakind = NULL;
+
+	OMF2::omfiIteratorAlloc(OMFFileHdl, &propertyIterator);
+	OMF2::omfiGetNextProperty(propertyIterator, component, &Property, &propertyType);
+	while((OMF2::OM_ERR_NONE == rc) &&Property)
+	{
+		switch (Property)
+		{
+			case OMF2::OMCPNTDatakind:
+				break;
+			case OMF2::OMCPNTTrackKind:
+			case OMF2::OMCPNTEditRate:
+			case OMF2::OMCPNTName:
+			case OMF2::OMCPNTLength:
+			case OMF2::OMCPNTEffectID:
+			case OMF2::OMCPNTAttributes:
+			case OMF2::OMOOBJObjClass:
+				break;
+			default:
+
+				OMF2::omfiGetPropertyName(OMFFileHdl, Property, 64, propertyName);
+				cout<<"Component Property NOT converted : "<<propertyName<<endl;
+				break;
+		}
+		rc = OMF2::omfiGetNextProperty(propertyIterator, component, &Property, &propertyType);
+	}
+	rc = OMF2::omfiIteratorDispose(OMFFileHdl, propertyIterator);
+
+	return rc;
+}
+// ============================================================================
+// TraverseOMFComponent
+//
+//			This function reads all components the of an OMF Sequence,
 //			sets the equivalent AAF properties 
 //			
 // Returns: AAFRESULT_SUCCESS if MOB object is converted succesfully
 //
 // ============================================================================
-HRESULT AafOmf::ConvertOMFSequence(OMF2::omfObject_t OMFSegment, IAAFSequence* pSequence)
+HRESULT AafOmf::TraverseOMFComponent(OMF2::omfObject_t component )
 {
 	HRESULT					rc = AAFRESULT_SUCCESS;
+	OMF2::omfIterHdl_t		componentIterator = NULL;
+	OMF2::omfPosition_t		sequPos;
+	OMF2::omfCpntObj_t		sequComponent;
 
+	aafInt32				numComponents = 0;
+	aafInt32				cpntCount;
+
+	OMF2::omfiIteratorAlloc(OMFFileHdl, &componentIterator);
+	rc = OMF2::omfiSequenceGetNumCpnts(OMFFileHdl, component, &numComponents);
+	if (OMF2::OM_ERR_NONE == rc)
+	{
+		for (cpntCount = 0; cpntCount < numComponents; cpntCount++)
+		{   
+			rc = OMF2::omfiSequenceGetNextCpnt(componentIterator, component, NULL, 
+				                               &sequPos, &sequComponent); 
+		}
+	}
+	OMF2::omfiIteratorDispose(OMFFileHdl, componentIterator);
 	return rc;
 }
-
 // ============================================================================
 // ConvertOMFMasterMob
 //
@@ -1072,33 +1404,11 @@ HRESULT AafOmf::ConvertOMFSequence(OMF2::omfObject_t OMFSegment, IAAFSequence* p
 // Returns: AAFRESULT_SUCCESS if MOB object is converted succesfully
 //
 // ============================================================================
-HRESULT AafOmf::ConvertOMFMasterMob(OMF2::omfObject_t obj )
+HRESULT AafOmf::ConvertOMFMasterMob(OMF2::omfObject_t obj,
+									IAAFMasterMob* pMasterMob )
 {
 	HRESULT					rc = AAFRESULT_SUCCESS;
-
-	IAAFMasterMob*			pMasterMob = NULL;
-	IAAFMob*				pMob = NULL;
 	
-	// Create a Master Mob 
-	rc = pDictionary->CreateInstance(&AUID_AAFMasterMob,
-									 IID_IAAFMasterMob,
-									 (IUnknown **)&pMasterMob);
-	if (AAFRESULT_SUCCESS == rc)
-	{
-		if (bVerboseMode)
-			cout<<"Created AAF Master Mob"<<endl;
-		rc = pMasterMob->QueryInterface(IID_IAAFMob, (void **)&pMob);
-		if (AAFRESULT_SUCCESS == rc)
-		{
-			ConvertOMFMOBObject(obj, pMob );
-			rc = pHeader->AppendMob(pMob );
-			pMob->Release();
-		}
-	}
-	
-	if (pMasterMob)
-		pMasterMob->Release();
-
 	if (AAFRESULT_SUCCESS == rc && bVerboseMode)
 		cout << "Converted OMF Master MOB to AAF"<< endl;
 	return rc;
@@ -1113,38 +1423,17 @@ HRESULT AafOmf::ConvertOMFMasterMob(OMF2::omfObject_t obj )
 // Returns: AAFRESULT_SUCCESS if MOB object is converted succesfully
 //
 // ============================================================================
-HRESULT AafOmf::ConvertOMFSourceMob(OMF2::omfObject_t obj )
+HRESULT AafOmf::ConvertOMFSourceMob(OMF2::omfObject_t obj,
+									IAAFSourceMob* pSourceMob)
 {
 	HRESULT					rc = AAFRESULT_SUCCESS;
 
-	IAAFSourceMob*			pSourceMob = NULL;
-	IAAFMob*				pMob = NULL;
 	
-	// Create a Master Mob 
-	rc = pDictionary->CreateInstance(&AUID_AAFSourceMob,
-									 IID_IAAFSourceMob,
-									 (IUnknown **)&pSourceMob);
-	if (AAFRESULT_SUCCESS == rc)
-	{
-		if (bVerboseMode)
-			cout<<"Created AAF Source Mob"<<endl;
-
-		rc = pSourceMob->QueryInterface(IID_IAAFMob, (void **)&pMob);
-		if (AAFRESULT_SUCCESS == rc)
-		{
-			ConvertOMFMOBObject(obj, pMob );
-			rc = pHeader->AppendMob(pMob );
-			pMob->Release();
-		}
-	}
-	
-	if (pSourceMob)
-		pSourceMob->Release();
-
 	if (AAFRESULT_SUCCESS == rc && bVerboseMode)
 		cout << "Converted OMF Source MOB to AAF"<< endl;
 	return rc;
 }
+
 void AafOmf::OMFFileClose()
 {
 	OMF2::omfsCloseFile(OMFFileHdl);
@@ -1167,6 +1456,7 @@ void AafOmf::AAFFileClose( )
 
 	if (pFile)
 	{
+		pFile->Save();
 		pFile->Close();
 		pFile->Release();
 		pFile = NULL;
