@@ -63,7 +63,7 @@
 #include "AAFObjectModel.h"
 #include "AAFObjectModelProcs.h"
 
-#define DEBUG_DICTIONARY_SYNC
+// #define DEBUG_DICTIONARY_SYNC
 #ifdef DEBUG_DICTIONARY_SYNC
 // TEMPORARY - for wcout debug code below.
 #include <iostream>
@@ -1411,6 +1411,33 @@ void PrintPropertyName( ImplAAFPropertyDef* pPropDef )
 }
 #endif
 
+AAFRESULT ImplAAFMetaDictionary::PvtClearFileClassSet()
+{
+  // Clear the class defs in _fileClassDefinitions, then refill
+  // the set with class definitions from _classDefinitions.
+
+  AAFRESULT result = AAFRESULT_SUCCESS;
+  
+  OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFClassDef>
+    iter( _fileClassDefinitions );
+
+  int idCount = iter.count();
+  OMUniqueObjectIdentification pIds[ idCount ];
+
+  int i = 0;
+  while( ++iter ) {
+    assert ( i < idCount );
+    pIds[i] = iter.identification();
+    ++i;
+  }
+
+  for( i = 0 ; i < idCount; ++i ) {
+    _fileClassDefinitions.remove( pIds[i] );
+  }
+
+  return result;
+}
+
 AAFRESULT ImplAAFMetaDictionary::PvtMergeBuiltinClassDefsToFile()
 {
   AAFRESULT result = AAFRESULT_SUCCESS;
@@ -1523,9 +1550,9 @@ AAFRESULT ImplAAFMetaDictionary::PvtSyncCommonClassDefs()
                                ImplAAFClassDef>
   iter(_fileClassDefinitions); 
 
+#ifdef DEBUG_DICTIONARY_SYNC
   OMUInt32 classes = iter.count(); 
 
-#ifdef DEBUG_DICTIONARY_SYNC
   std::wcout << L"SyncCommonClassDefs:" << std::endl;
   std::wcout << L"Initially " << classes << L" class definitions in file." << 
   std::endl;
@@ -1547,10 +1574,11 @@ AAFRESULT ImplAAFMetaDictionary::PvtSyncCommonClassDefs()
     aafUID_t* uid = reinterpret_cast<aafUID_t*>(&id); 
     ImplAAFClassDef* pBuiltinClassDef = 0; 
     HRESULT hr = dataDictionary()->LookupClassDef(*uid, &pBuiltinClassDef); 
-    assert(pBuiltinClassDef);
 
     if (AAFRESULT_SUCCEEDED(hr)) {
       
+     assert(pBuiltinClassDef);
+
       // The class def exists in both the builtin and file
       // dictionaries.  Sync the property defs contained by these two
       // class defs to ensure both contain an identical set of
@@ -1579,8 +1607,9 @@ AAFRESULT ImplAAFMetaDictionary::SyncMetaDictionaries()
   // in dictionary.
 
   if ( AAFRESULT_SUCCESS == (hr = PvtSyncCommonClassDefs())  &&
-       AAFRESULT_SUCCESS == (hr = PvtMergeBuiltinClassDefsToFile()) &&
-       AAFRESULT_SUCCESS == (hr = PvtMergeFileClassDefsToBuiltin()) ) {
+       AAFRESULT_SUCCESS == (hr = PvtMergeFileClassDefsToBuiltin()) &&
+       AAFRESULT_SUCCESS == (hr = PvtClearFileClassSet()) &&
+       AAFRESULT_SUCCESS == (hr = PvtMergeBuiltinClassDefsToFile()) ) {
     // intentional noop
   }
 

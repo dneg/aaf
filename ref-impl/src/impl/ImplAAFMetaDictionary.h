@@ -402,6 +402,8 @@ private:
   // _fileClassDefinition into _fileClassDefinition.
   AAFRESULT PvtMergeFileClassDefsToBuiltin();
 
+  AAFRESULT PvtClearFileClassSet();
+
   //
   // Persistent data members.
   //
