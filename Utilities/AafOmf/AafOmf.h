@@ -52,6 +52,7 @@
 #include "AAFDataDefs.h"
 #include "AAFOperationDefs.h"
 #include "AAFParameterDefs.h"
+#include "AAFTypeDefUIDs.h"
 
 const int MAX_INDENT = 8;
 
