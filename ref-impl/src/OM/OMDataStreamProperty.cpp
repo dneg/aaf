@@ -33,6 +33,8 @@
 #include "OMPropertySet.h"
 #include "OMStorable.h"
 #include "OMStoredObject.h"
+#include "OMType.h"
+#include "OMUtilities.h"
 
 OMDataStreamProperty::OMDataStreamProperty(const OMPropertyId propertyId,
                                            const wchar_t* name)
@@ -232,6 +234,118 @@ void OMDataStreamProperty::write(const OMByte* buffer,
   ASSERT("Valid stream", _stream != 0);
 
   store()->writeToStream(_stream, buffer, bytes, bytesWritten);
+}
+
+  // @mfunc Attempt to read the number of elements given by
+  //        <p elementCount> and described by <p elementType> and
+  //        <p externalElementSize> from the data stream into the buffer
+  //        at address <p elements>. The actual number of elements read
+  //        is returned in <p elementsRead>.
+  //   @parm The element type
+  //   @parm The external element size 
+  //   @parm The address of the buffer into which the elements should be read.
+  //   @parm The number of elements to read.
+  //   @parm The actual number of elements that were read.
+  //   @this const
+void OMDataStreamProperty::readTypedElements(const OMType* elementType,
+                                             size_t externalElementSize,
+                                             OMByte* elements,
+                                             OMUInt32 elementCount,
+                                             OMUInt32& elementsRead) const
+{
+  TRACE("OMDataStreamProperty::readElements");
+
+  PRECONDITION("Valid element type", elementType != 0);
+  PRECONDITION("Valid element size", externalElementSize!= 0);
+  PRECONDITION("Valid buffer", elements != 0);
+  PRECONDITION("Valid element count", elementCount > 0);
+
+  // Allocate buffer for one element
+  OMByte* buffer = new OMByte[externalElementSize];
+
+  for (size_t i = 0; i < elementCount; i++) {
+
+    // Read an element of the property value
+    OMUInt32 actualByteCount;
+    read(buffer, externalElementSize, actualByteCount);
+    ASSERT("All bytes read", actualByteCount == externalElementSize);
+
+    // Reorder an element of the property value
+    if (store()->byteOrder() != hostByteOrder()) {
+      elementType->reorder(buffer, externalElementSize);
+    }
+
+    // Internalize an element of the property value
+    size_t requiredBytesSize = elementType->internalSize(buffer,
+                                                         externalElementSize);
+    ASSERT("Internal element size equals external element size",
+                                     requiredBytesSize == externalElementSize);
+
+    elementType->internalize(buffer,
+                             externalElementSize,
+                             &elements[i * externalElementSize],
+                             requiredBytesSize,
+                             hostByteOrder());
+  }
+  delete [] buffer;
+  elementsRead = elementCount;
+}
+
+
+  // @mfunc Attempt to write the number of elements given by
+  //        <p elementCount> and described by <p elementType> and
+  //        <p externalElementSize> to the data stream from the buffer
+  //        at address <p elements>. The actual number of elements written
+  //        is returned in <p elementsWritten>.
+  //   @parm The element type
+  //   @parm The external element size 
+  //   @parm The address of the buffer from which the elements should
+  //         be written.
+  //   @parm The number of elements to write.
+  //   @parm The actual number of elements that were written.
+void OMDataStreamProperty::writeTypedElements(const OMType* elementType,
+                                              size_t externalElementSize,
+                                              const OMByte* elements,
+                                              OMUInt32 elementCount,
+                                              OMUInt32& elementsWritten)
+{
+  TRACE("OMDataStreamProperty::writeElements");
+
+  PRECONDITION("Valid element type", elementType != 0);
+  PRECONDITION("Valid element size", externalElementSize!= 0);
+  PRECONDITION("Valid buffer", elements != 0);
+  PRECONDITION("Valid element count", elementCount > 0);
+
+  // Allocate buffer for one element
+  size_t externalBytesSize = elementType->externalSize(
+                                                 const_cast<OMByte*>(elements),
+                                                 externalElementSize);
+  ASSERT("Internal element size equals external element size",
+                                     externalBytesSize == externalElementSize);
+  OMByte* buffer = new OMByte[externalBytesSize];
+
+  for (size_t i = 0; i < elementCount; i++) {
+ 
+    // Externalize an element of the property value
+    elementType->externalize(
+                       const_cast<OMByte*>(&elements[i * externalElementSize]),
+                       externalElementSize,
+                       buffer,
+                       externalBytesSize,
+                       store()->byteOrder());
+
+    // Reorder an element of the property value
+    if (store()->byteOrder() != hostByteOrder()) {
+      elementType->reorder(buffer, externalBytesSize);
+    }
+
+    // Write an element of the property value
+    OMUInt32 actualByteCount;
+    write(buffer, externalBytesSize, actualByteCount);
+    ASSERT("All bytes written", actualByteCount == externalBytesSize);
+  }
+  delete [] buffer;
+  elementsWritten = elementCount;
 }
 
   // @mfunc The size of the raw bits of this
