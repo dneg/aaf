@@ -56,7 +56,7 @@ AD_XFUNCTION3(AAFFileOpenExistingRead,
 
 			[in\, string],
 			objPass,
-			wchar_t *,
+			aafCharacter *,
 			pFileName,
 			Null-terminated string containing name of filesystem file to be
     // opened for reading.  Filename must be in a form that would be
@@ -128,7 +128,7 @@ AD_XFUNCTION4(AAFFileOpenExistingModify,
 
 			[in\, string],
 			objPass,
-			wchar_t *,
+			aafCharacter *,
 			pFileName,
 			Null-terminated string containing name of filesystem file to be
     // opened for modification.  Filename must be in a form that would
@@ -216,7 +216,7 @@ AD_XFUNCTION4(AAFFileOpenNewModify,
 
 			[in\, string],
 			objPass,
-			wchar_t *,
+			aafCharacter *,
 			pFileName,
 			Null-terminated string containing name of filesystem file to be
     // opened for modification.  Filename must be in a form that would
