@@ -38,9 +38,6 @@
 #define DEFAULT_NUM_MOBS				1000
 #define DEFAULT_NUM_DATAOBJ			200
 
-const int PID_CONTENT_STORAGE_MOBS	   = 0;
-const int PID_CONTENT_STORAGE_ESSENCEDATA  = 1;
-
 extern "C" const aafClassID_t	CLSID_AAFContentStorage;
 OMDEFINE_STORABLE(ImplAAFContentStorage, CLSID_AAFContentStorage);
 
