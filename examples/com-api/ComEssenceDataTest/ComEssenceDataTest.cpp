@@ -223,6 +223,13 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 						   CLSCTX_INPROC_SERVER, 
 						   IID_IAAFMasterMob, 
 						   (void **)&pMasterMob));
+	// Get a Mob interface and set its variables.
+	check(pMasterMob->QueryInterface(IID_IAAFMob, (void **)&pMob));
+	check(pMob->GetMobID(&masterMobID));
+	check(pMob->SetName(L"A Master Mob"));
+	
+	// Add it to the file 
+	check(pHeader->AppendMob(pMob));
 
 	// Get an EssenceAccess Interface
 	check(CoCreateInstance(CLSID_AAFEssenceAccess,
@@ -256,13 +263,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	pEssenceAccess->Release();
 	pEssenceAccess= NULL;
 
-	// Get a Mob interface and set its variables.
-	check(pMasterMob->QueryInterface(IID_IAAFMob, (void **)&pMob));
-	check(pMob->GetMobID(&masterMobID));
-	check(pMob->SetName(L"A Master Mob"));
-	
-	// Add it to the file 
-	check(pHeader->AppendMob(pMob));
 	
 	pMasterMob->Release();
 	pMasterMob = NULL;
@@ -273,6 +273,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	pHeader = NULL;
 	pFile->Close();
 	pFile->Release();
+	pFile = NULL;
 
 cleanup:
 	// Cleanup and return
@@ -465,8 +466,8 @@ main()
 
 	printf("***Creating file %s\n", pFileName);
 	checkFatal(CreateAAFFile(pwFileName));
-	printf("***Re-opening file %s\n", pFileName);
-	ReadAAFFile(pwFileName);
+//!!!	printf("***Re-opening file %s\n", pFileName);
+//!!!	ReadAAFFile(pwFileName);
 
 	printf("Done\n");
 
