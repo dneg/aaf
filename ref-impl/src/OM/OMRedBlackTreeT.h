@@ -467,8 +467,8 @@ size_t OMRedBlackTree<Key, Value>::blackHeight(Node* subTree) const
 }
 
 template <typename Key, typename Value>
-OMRedBlackTree<Key, Value>::Node* OMRedBlackTree<Key, Value>::find(Key k,
-                                                               Node* x) const
+typename OMRedBlackTree<Key, Value>::Node*
+OMRedBlackTree<Key, Value>::find(Key k, Node* x) const
 {
   TRACE("OMRedBlackTree<Key, Value>::find");
   INVARIANT();
@@ -575,8 +575,8 @@ bool OMRedBlackTree<Key, Value>::insert(Node* n, Key k, Value v)
 }
 
 template <typename Key, typename Value>
-OMRedBlackTree<Key, Value>::Node* OMRedBlackTree<Key, Value>::predecessor(
-                                                                 Node* x) const
+typename OMRedBlackTree<Key, Value>::Node*
+OMRedBlackTree<Key, Value>::predecessor(Node* x) const
 {
   TRACE("OMRedBlackTree<Key, Value>::predecessor");
   // Cormen et. al. page 249 TREE-PREDECESSOR [by symmetry with TREE-SUCCESSOR]
@@ -596,8 +596,8 @@ OMRedBlackTree<Key, Value>::Node* OMRedBlackTree<Key, Value>::predecessor(
 }
 
 template <typename Key, typename Value>
-OMRedBlackTree<Key, Value>::Node* OMRedBlackTree<Key, Value>::successor(
-                                                                 Node* x) const
+typename OMRedBlackTree<Key, Value>::Node*
+OMRedBlackTree<Key, Value>::successor(Node* x) const
 {
   TRACE("OMRedBlackTree<Key, Value>::successor");
   // Cormen et. al. page 249 TREE-SUCCESSOR
@@ -617,8 +617,8 @@ OMRedBlackTree<Key, Value>::Node* OMRedBlackTree<Key, Value>::successor(
 }
 
 template <typename Key, typename Value>
-OMRedBlackTree<Key, Value>::Node* OMRedBlackTree<Key, Value>::minimum(
-                                                                 Node* x) const
+typename OMRedBlackTree<Key, Value>::Node*
+OMRedBlackTree<Key, Value>::minimum(Node* x) const
 {
   TRACE("OMRedBlackTree<Key, Value>::minimum");
   // Cormen et. al. page 248 TREE-MINIMUM
@@ -631,8 +631,8 @@ OMRedBlackTree<Key, Value>::Node* OMRedBlackTree<Key, Value>::minimum(
 }
 
 template <typename Key, typename Value>
-OMRedBlackTree<Key, Value>::Node* OMRedBlackTree<Key, Value>::maximum(
-                                                                 Node* x) const
+typename OMRedBlackTree<Key, Value>::Node*
+OMRedBlackTree<Key, Value>::maximum(Node* x) const
 {
   TRACE("OMRedBlackTree<Key, Value>::maximum");
   // Cormen et. al. page 248 TREE-MAXIMUM
