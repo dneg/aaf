@@ -13,7 +13,7 @@ cpp_quote("// basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.  S
 cpp_quote("// the License for the specific language governing rights and limitations")
 cpp_quote("// under the License.")
 cpp_quote("//")
-cpp_quote("// The Original Code of this file is Copyright 1998-2001, Licensor of the")
+cpp_quote("// The Original Code of this file is Copyright 1998-2004, Licensor of the")
 cpp_quote("// AAF Association.")
 cpp_quote("//")
 cpp_quote("// The Initial Developer of the Original Code of this file and the")
@@ -828,7 +828,7 @@ interface IAAFEssenceCodec : IUnknown
   //   - pName is null.
   // 
   HRESULT GetCodecDisplayName (
-    // which flavour of the codec to use, or kAAFNilCodecFlavour
+    // which flavour of the codec to use, or kNoCodecFlavour
     [in, ref] aafUID_constref  flavour,
 
     // Human-readable name of the flavour
