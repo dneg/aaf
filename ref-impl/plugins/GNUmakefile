@@ -68,15 +68,31 @@ SUPOBJS = $(OBJDIR)/aafCvt$(OBJ) \
 all : aafpgapi aafintp
 
 
-.PHONY : aafpgapi
-aafpgapi : $(OBJDIR) $(LIBDIR) $(LIBDIR)/libaafpgapi$(DLL)
+DYN_PGAPI_LIB = $(LIBDIR)/libaafpgapi$(DLL)
+DYN_INTP_LIB = $(LIBDIR)/libaafintp$(DLL)
+STAT_PGAPI_LIB = $(AAFBUILDDIR)/ref-impl/$(AAFTARGETDIR)/libaafpgapi$(LIB)
+STAT_INTP_LIB = $(AAFBUILDDIR)/ref-impl/$(AAFTARGETDIR)/libaafintp$(LIB)
 
+# Default targets are dynamic libraries
+PGAPI_LIB = $(DYN_PGAPI_LIB)
+INTP_LIB = $(DYN_INTP_LIB)
+ifeq ($(AAFTARGET),Debug-static)
+	PGAPI_LIB = $(STAT_PGAPI_LIB)
+	INTP_LIB = $(STAT_INTP_LIB)
+endif
+
+
+.PHONY : aafpgapi
+aafpgapi : $(OBJDIR) $(LIBDIR) $(PGAPI_LIB)
 
 .PHONY : aafintp
-aafintp : $(OBJDIR) $(LIBDIR) $(LIBDIR)/libaafintp$(DLL)
+aafintp : $(OBJDIR) $(LIBDIR) $(INTP_LIB)
 
 
-$(LIBDIR)/libaafpgapi$(DLL) : $(CXXOBJS)
+$(STAT_PGAPI_LIB) : $(CXXOBJS)
+	$(LD_STAT_LIB) $@ $(CXXOBJS)
+
+$(DYN_PGAPI_LIB) : $(CXXOBJS)
 	$(LD_DYN_LIB) \
 	-L$(LIBDIR) $(SUPOBJS) $(CXXOBJS) -o $@ \
 	$(AAFBUILDDIR)/aaflib/$(AAFTARGETDIR)/libaaflib$(LIB) \
@@ -84,13 +100,15 @@ $(LIBDIR)/libaafpgapi$(DLL) : $(CXXOBJS)
 	-ljpeg
 
 
-
 CXXFILES2 = AAFInterpCOM.cpp \
 		AAFRational.cpp \
 		CAAFBasicInterp.cpp
 
 
-$(LIBDIR)/libaafintp$(DLL) : $(CXXOBJS2)
+$(STAT_INTP_LIB) : $(CXXOBJS2)
+	$(LD_STAT_LIB) $@ $(CXXOBJS2)
+
+$(DYN_INTP_LIB) : $(SUPOBJS) $(CXXOBJS2)
 	$(LD_DYN_LIB) \
 	-L$(LIBDIR) $(SUPOBJS) $(CXXOBJS2) -o $@ \
 	$(AAFBUILDDIR)/aaflib/$(AAFTARGETDIR)/libaaflib$(LIB) \
@@ -101,8 +119,8 @@ $(LIBDIR)/libaafintp$(DLL) : $(CXXOBJS2)
 clean :
 	@$(RM) $(CXXOBJS) $(CXXOBJS2)
 	@$(RM) $(DEPS)
-	@$(RM) $(LIBDIR)/libaafpgapi$(DLL)
-	@$(RM) $(LIBDIR)/libaafintp$(DLL)
+	@$(RM) $(PGAPI_LIB)
+	@$(RM) $(INTP_LIB)
 	@$(RMDIR) $(OBJDIR)/ii_files
 
 
@@ -111,4 +129,3 @@ realclean : clean
 
 
 include $(AAFBASE)/build/rules.mk
-

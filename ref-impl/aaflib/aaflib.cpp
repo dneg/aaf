@@ -50,6 +50,11 @@
 #endif
 
 
+
+// Dynamic loading can be disabled using the Debug-static build.
+#ifndef DISABLE_DYNAMIC_LOADING
+
+
 //
 // Initialize the AUID's.
 //
@@ -62,8 +67,6 @@
 // Initialize static singleton data.
 //
 AAFDLL * AAFDLL::_singleton = NULL;
-
-
 
 
 //
@@ -943,3 +946,16 @@ HRESULT AAFDLL::CreateAAFFileOnRawStorage (
 	 pIdent,
 	 ppNewFile);
 }
+
+#else
+
+// Static builds.
+//
+// AAFLoad not needed since it is defined in CAAFModule.cpp
+// But AAFUnload is not.
+STDAPI AAFUnload()
+{
+  return S_OK;
+}
+
+#endif // DISABLE_DYNAMIC_LOADING
