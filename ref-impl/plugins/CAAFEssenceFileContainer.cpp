@@ -12,6 +12,9 @@
 
 #include <assert.h>
 #include "AAFResult.h"
+#include "AAFDefUIDs.h"
+#include "aafErr.h"
+#include "AAFStoredObjectIDs.h"
 
 #include <errno.h>
 
@@ -117,7 +120,50 @@ HRESULT STDMETHODCALLTYPE
   return S_OK;
 }
 
+HRESULT STDMETHODCALLTYPE
+    CAAFEssenceFileContainer::GetPluginID (aafUID_t *uid)
+{
+	*uid = ContainerFile;		// UID of the "file" container definition
+	return AAFRESULT_SUCCESS;
+}
 
+HRESULT STDMETHODCALLTYPE
+    CAAFEssenceFileContainer::GetPluggableDefinition (IAAFDictionary *dict, IAAFPluggableDef **def)
+{
+	aafUID_t			uid;
+	IAAFContainerDef	*container;
+	IAAFDefObject		*obj;
+	XPROTECT()
+	{
+		CHECK(dict->CreateInstance(&AUID_AAFContainerDef,
+							IID_IAAFContainerDef, 
+							(IUnknown **)&container));
+		uid = ContainerFile;
+		CHECK(container->SetEssenceIsIdentified(AAFFalse));
+		CHECK(container->QueryInterface(IID_IAAFDefObject, (void **)&obj));
+		CHECK(obj->Init(&uid, L"Raw file Container", L"Essence is in a non-container file."));
+		CHECK(container->QueryInterface(IID_IAAFPluggableDef, (void **)def));
+	}
+	XEXCEPT
+	XEND
+
+	return AAFRESULT_SUCCESS;
+}
+
+HRESULT STDMETHODCALLTYPE
+    CAAFEssenceFileContainer::GetDescriptor (IAAFDictionary *dict, IAAFPluginDescriptor **desc)
+{
+	XPROTECT()
+	{
+		CHECK(dict->CreateInstance(&AUID_AAFPluginDescriptor,
+							IID_IAAFPluginDescriptor, 
+							(IUnknown **)desc));
+	}
+	XEXCEPT
+	XEND
+
+	return AAFRESULT_SUCCESS;
+}
 
 HRESULT STDMETHODCALLTYPE
     CAAFEssenceFileContainer::CreateEssenceStream (wchar_t *  pName,

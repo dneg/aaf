@@ -15,7 +15,7 @@
 #include "AAFResult.h"
 
 const CLSID CLSID_AAFEssenceDataStream = { 0x42A63FE1, 0x968A, 0x11d2, { 0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
-const IID IID_IAAFEssenceData = { 0x6a33f4e2, 0x8ed6, 0x11d2, { 0xbf, 0x9d, 0x00, 0x10, 0x4b, 0xc9, 0x15, 0x6d } };
+//const IID IID_IAAFEssenceData = { 0x6a33f4e2, 0x8ed6, 0x11d2, { 0xbf, 0x9d, 0x00, 0x10, 0x4b, 0xc9, 0x15, 0x6d } };
 
 
 CAAFEssenceDataStream::CAAFEssenceDataStream (IUnknown * pControllingUnknown)
@@ -209,6 +209,12 @@ HRESULT CAAFEssenceDataStream::InternalQueryInterface
     else if (riid == IID_IAAFEssenceStream) 
     { 
         *ppvObj = (IAAFEssenceStream *)this; 
+        ((IUnknown *)*ppvObj)->AddRef();
+        return S_OK;
+    }
+    else if (riid == IID_IAAFPlugin) 
+    { 
+        *ppvObj = (IAAFPlugin *)this; 
         ((IUnknown *)*ppvObj)->AddRef();
         return S_OK;
     }

@@ -45,6 +45,22 @@ ImplAAFDefObject::~ImplAAFDefObject ()
 
 
 AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDefObject::Init (
+      aafUID_t *pAuid, aafWChar *pName, aafWChar *pDesc)
+{
+	if (pAuid == NULL || pName == NULL || pDesc == NULL)
+	{
+		return AAFRESULT_NULL_PARAM;
+	}
+	else
+	{
+		_identification = *pAuid;
+		_name = pName;
+		_description = pDesc;
+	}
+	return AAFRESULT_SUCCESS;
+}
+AAFRESULT STDMETHODCALLTYPE
     ImplAAFDefObject::SetName (
       wchar_t *  pName)
 {
