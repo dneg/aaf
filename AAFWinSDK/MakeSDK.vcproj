@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding = "Windows-1252"?>
+<VisualStudioProject
+	ProjectType="Visual C++"
+	Version="7.00"
+	Name="MakeSDK"
+	SccProjectName=""
+	SccLocalPath=""
+	Keyword="MakeFileProj">
+	<Platforms>
+		<Platform
+			Name="Win32"/>
+	</Platforms>
+	<Configurations>
+		<Configuration
+			Name="Debug|Win32"
+			OutputDirectory=".\Debug"
+			IntermediateDirectory=".\Debug"
+			ConfigurationType="0"
+			ATLMinimizesCRunTimeLibraryUsage="FALSE">
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="NMAKE /f win32aafsdk.mak CFG=Debug"
+				ReBuildCommandLine="NMAKE /f win32aafsdk.mak CFG=Debug /a"
+				Output="MakeSDK"/>
+		</Configuration>
+		<Configuration
+			Name="Release|Win32"
+			OutputDirectory=".\Release"
+			IntermediateDirectory=".\Release"
+			ConfigurationType="0"
+			ATLMinimizesCRunTimeLibraryUsage="FALSE">
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="NMAKE /f win32aafsdk.mak CFG=Release"
+				ReBuildCommandLine="NMAKE /f win32aafsdk.mak CFG=Release /a"
+				Output="MakeSDK"/>
+		</Configuration>
+	</Configurations>
+	<Files>
+		<File
+			RelativePath="MakeSDK.bsc">
+		</File>
+		<File
+			RelativePath=".\win32aafsdk.mak">
+		</File>
+	</Files>
+	<Globals>
+	</Globals>
+</VisualStudioProject>
