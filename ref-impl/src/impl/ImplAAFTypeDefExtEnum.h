@@ -224,12 +224,6 @@ private:
 					aafUInt32  bufSize);
 
   ImplAAFTypeDefSP BaseType (void) const;
-
-
-public:
-  // Declare this class to be storable.
-  //
-  OMDECLARE_STORABLE(ImplAAFTypeDefExtEnum)
 };
 
 //
