@@ -95,5 +95,16 @@ private:
   ImplAAFEnumerator<ImplAAFProperty*> * _rep;
 };
 
+//
+// smart pointer
+//
+
+#ifndef __ImplAAFSmartPointer_h__
+// caution! includes assert.h
+#include "ImplAAFSmartPointer.h"
+#endif
+
+typedef ImplAAFSmartPointer<ImplEnumAAFProperties> ImplEnumAAFPropertiesSP;
+
 
 #endif // ! __ImplEnumAAFProperties_h__

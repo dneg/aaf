@@ -87,13 +87,18 @@ AAFRESULT ImplAAFProperty::Initialize
 	  assert (pOmProp);
 	  bitsSize = pOmProp->bitsSize ();
 	  aafMemPtr_t pBits = NULL;
-	  hr = pvd->AllocateBits (bitsSize, &pBits);
-	  if (! AAFRESULT_SUCCEEDED (hr)) throw hr;
-	  if (bitsSize)
-	  {
-		  assert (pBits);
-		  pOmProp->getBits (pBits, bitsSize);
-	  }
+	  // Bobt hack! This should be removed once we have proper
+	  // integration with OM property def support.
+	  if (! pOmProp->isOptional() || pOmProp->isPresent ())
+		  {
+			hr = pvd->AllocateBits (bitsSize, &pBits);
+			if (! AAFRESULT_SUCCEEDED (hr)) throw hr;
+			if (bitsSize)
+			  {
+				assert (pBits);
+				pOmProp->getBits (pBits, bitsSize);
+			  }
+		  }
 	  _pPropVal = pvd;
 	}
   catch (HRESULT &rCaught)

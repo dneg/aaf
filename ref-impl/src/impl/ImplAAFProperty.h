@@ -74,6 +74,15 @@ private:
   ImplAAFPropertyValue * _pPropVal;
 };
 
+//
+// smart pointer
+//
+
+#ifndef __ImplAAFSmartPointer_h__
+// caution! includes assert.h
+#include "ImplAAFSmartPointer.h"
+#endif
+
+typedef ImplAAFSmartPointer<ImplAAFProperty> ImplAAFPropertySP;
+
 #endif // ! __ImplAAFProperty_h__
-
-
