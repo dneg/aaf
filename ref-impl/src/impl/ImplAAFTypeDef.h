@@ -155,6 +155,32 @@ public:
                            OMByte* internalBytes,
                            size_t internalBytesSize,
                            OMByteOrder byteOrder) const;
+
+
+  // Allocate an OMProperty that can represent this type.  Does so by
+  // converting name to mbs and calling pvtCreateOMPropertyMBS().
+  virtual OMProperty *
+    pvtCreateOMProperty (OMPropertyId pid,
+						 const aafCharacter * name) const;
+
+
+protected:
+  // Implemented by derived classes, and called by
+  // pvtCreateOMProperty().
+  virtual OMProperty *
+    pvtCreateOMPropertyMBS (OMPropertyId pid,
+							const char * name) const;
 };
+
+//
+// smart pointer
+//
+
+#ifndef __ImplAAFSmartPointer_h__
+// caution! includes assert.h
+#include "ImplAAFSmartPointer.h"
+#endif
+
+typedef ImplAAFSmartPointer<ImplAAFTypeDef> ImplAAFTypeDefSP;
 
 #endif // ! __ImplAAFTypeDef_h__

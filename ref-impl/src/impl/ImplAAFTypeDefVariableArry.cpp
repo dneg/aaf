@@ -16,6 +16,14 @@
 #include "ImplAAFTypeDefVariableArray.h"
 #endif
 
+#ifndef __ImplAAFTypeDefStrongObjRef_h__
+#include "ImplAAFTypeDefStrongObjRef.h"
+#endif
+
+#ifndef __ImplAAFTypeDefWeakObjRef_h__
+#include "ImplAAFTypeDefWeakObjRef.h"
+#endif
+
 #ifndef __ImplAAFHeader_h_
 #include "ImplAAFHeader.h"
 #endif
@@ -28,9 +36,6 @@
 #include <string.h>
 
 extern "C" const aafClassID_t CLSID_AAFPropertyValue;
-
-#define RELEASE_IF_SET(obj) \
-    if (obj) { obj->ReleaseReference(); obj = NULL; }
 
 
 ImplAAFTypeDefVariableArray::ImplAAFTypeDefVariableArray ()
@@ -47,49 +52,34 @@ ImplAAFTypeDefVariableArray::~ImplAAFTypeDefVariableArray ()
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDefVariableArray::GetType (
-      ImplAAFTypeDef ** ppTypeDef)
+      ImplAAFTypeDef ** ppTypeDef) const
 {
   if (! ppTypeDef) return AAFRESULT_NULL_PARAM;
 
-  ImplAAFHeader * pHead = NULL;
-  ImplAAFDictionary * pDict = NULL;
-  AAFRESULT rReturned = AAFRESULT_SUCCESS;
-  try
+  if (!_cachedElemType)
 	{
+	  ImplAAFDictionarySP pDict;
+
 	  AAFRESULT hr;
-	  /*
-	  hr = MyHeadObject(&pHead);
-	  if (AAFRESULT_FAILED(hr))
-		throw hr;
-	  assert (pHead);
-	  hr = (pHead->GetDictionary(&pDict));
-	  */
 	  hr = GetDictionary(&pDict);
 	  if (AAFRESULT_FAILED(hr))
-		throw hr;
+		return hr;
 	  assert (pDict);
 
-	  ImplAAFTypeDef * ptd = NULL;
+	  ImplAAFTypeDefVariableArray * pNonConstThis =
+		  (ImplAAFTypeDefVariableArray*) this;
 	  aafUID_t id = _ElementType;
-	  hr = pDict->LookupType (&id, &ptd);
+	  hr = pDict->LookupType (&id, &pNonConstThis->_cachedElemType);
 	  if (AAFRESULT_FAILED(hr))
-		throw hr;
-	  assert (ptd);
-
-	  *ppTypeDef = ptd;
-	  (*ppTypeDef)->AcquireReference ();
-
-	  ptd->ReleaseReference ();
-	  ptd = 0;
+		return hr;
+	  assert (_cachedElemType);
 	}
-  catch (AAFRESULT &rCaught)
-	{
-	  rReturned = rCaught;
-	}
-  RELEASE_IF_SET (pHead);
-  RELEASE_IF_SET (pDict);
+  assert (ppTypeDef);
+  *ppTypeDef = _cachedElemType;
+  assert (*ppTypeDef);
+  (*ppTypeDef)->AcquireReference ();
 
-  return rReturned;
+  return AAFRESULT_SUCCESS;
 }
 
 
@@ -126,7 +116,7 @@ AAFRESULT STDMETHODCALLTYPE
       ImplAAFPropertyValue * pPropVal,
       aafUInt32 *  pCount) const
 {
-  ImplAAFTypeDef * ptd = NULL;
+  ImplAAFTypeDefSP ptd;
   AAFRESULT hr;
 
   if (! pPropVal) return AAFRESULT_NULL_PARAM;
@@ -141,11 +131,10 @@ AAFRESULT STDMETHODCALLTYPE
   assert (ptd);
   assert (ptd->IsFixedSize());
   aafUInt32 elemSize = ptd->PropValSize();
-  ptd->ReleaseReference ();
   aafUInt32 propSize;
   assert (pPropVal);
 
-  ImplAAFPropValData * pvd = NULL;
+  ImplAAFPropValDataSP pvd;
   pvd = dynamic_cast<ImplAAFPropValData *>(pPropVal);
 
   assert (pvd);
@@ -179,15 +168,20 @@ ImplAAFTypeDefVariableArray::AppendElement
 }
 
 
+ImplAAFTypeDefSP ImplAAFTypeDefVariableArray::BaseType() const
+{
+  ImplAAFTypeDefSP result;
+  AAFRESULT hr = GetType (&result);
+  assert (AAFRESULT_SUCCEEDED (hr));
+  assert (result);
+  return result;
+}
+
+
 void ImplAAFTypeDefVariableArray::reorder(OMByte* externalBytes,
 										  size_t externalBytesSize) const
 {
-  ImplAAFTypeDefVariableArray * pNonConstThis =
-	(ImplAAFTypeDefVariableArray *) this;
-
-  ImplAAFTypeDef * ptd = 0;
-  AAFRESULT hr = pNonConstThis->GetType (&ptd);
-  assert (AAFRESULT_SUCCEEDED (hr));
+  ImplAAFTypeDefSP ptd = BaseType ();
   assert (ptd);
 
   aafUInt32 extElemSize = PropValSize ();
@@ -202,26 +196,19 @@ void ImplAAFTypeDefVariableArray::reorder(OMByte* externalBytes,
 	  numBytesLeft -= extElemSize;
 	  assert (numBytesLeft >= 0);
 	}
-  ptd->ReleaseReference ();
 }
 
 
 size_t ImplAAFTypeDefVariableArray::externalSize(OMByte* internalBytes,
 												 size_t internalBytesSize) const
 {
-  ImplAAFTypeDefVariableArray * pNonConstThis =
-	(ImplAAFTypeDefVariableArray *) this;
-
-  ImplAAFTypeDef * ptd = 0;
-  AAFRESULT hr = pNonConstThis->GetType (&ptd);
-  assert (AAFRESULT_SUCCEEDED (hr));
+  ImplAAFTypeDefSP ptd = BaseType ();
   assert (ptd);
 
   // aafUInt32 extElemSize = ptd->PropValSize ();
   // aafUInt32 intElemSize = ptd->NativeSize ();
   aafUInt32 extElemSize = ptd->externalSize (0, 0);
   aafUInt32 intElemSize = ptd->internalSize (0, 0);
-  ptd->ReleaseReference ();
   assert (intElemSize);
   aafUInt32 numElems = internalBytesSize / intElemSize;
   return numElems * extElemSize;
@@ -234,12 +221,7 @@ void ImplAAFTypeDefVariableArray::externalize(OMByte* internalBytes,
 											  size_t externalBytesSize,
 											  OMByteOrder byteOrder) const
 {
-  ImplAAFTypeDefVariableArray * pNonConstThis =
-	(ImplAAFTypeDefVariableArray *) this;
-
-  ImplAAFTypeDef * ptd = 0;
-  AAFRESULT hr = pNonConstThis->GetType (&ptd);
-  assert (AAFRESULT_SUCCEEDED (hr));
+  ImplAAFTypeDefSP ptd = BaseType ();
   assert (ptd);
 
   aafUInt32 intElemSize = ptd->internalSize (0, 0);
@@ -263,26 +245,19 @@ void ImplAAFTypeDefVariableArray::externalize(OMByte* internalBytes,
 	  assert (intNumBytesLeft >= 0);
 	  assert (extNumBytesLeft >= 0);
 	}
-  ptd->ReleaseReference ();
 }
 
 
 size_t ImplAAFTypeDefVariableArray::internalSize(OMByte* externalBytes,
 												 size_t externalBytesSize) const
 {
-  ImplAAFTypeDefVariableArray * pNonConstThis =
-	(ImplAAFTypeDefVariableArray *) this;
-
-  ImplAAFTypeDef * ptd = 0;
-  AAFRESULT hr = pNonConstThis->GetType (&ptd);
-  assert (AAFRESULT_SUCCEEDED (hr));
+  ImplAAFTypeDefSP ptd = BaseType ();
   assert (ptd);
 
   // aafUInt32 extElemSize = ptd->PropValSize ();
   // aafUInt32 intElemSize = ptd->NativeSize ();
   aafUInt32 extElemSize = ptd->externalSize (0, 0);
   aafUInt32 intElemSize = ptd->internalSize (0, 0);
-  ptd->ReleaseReference ();
   assert (intElemSize);
   aafUInt32 numElems = externalBytesSize / extElemSize;
   return numElems * intElemSize;
@@ -295,12 +270,7 @@ void ImplAAFTypeDefVariableArray::internalize(OMByte* externalBytes,
 											  size_t internalBytesSize,
 											  OMByteOrder byteOrder) const
 {
-  ImplAAFTypeDefVariableArray * pNonConstThis =
-	(ImplAAFTypeDefVariableArray *) this;
-
-  ImplAAFTypeDef * ptd = 0;
-  AAFRESULT hr = pNonConstThis->GetType (&ptd);
-  assert (AAFRESULT_SUCCEEDED (hr));
+  ImplAAFTypeDefSP ptd = BaseType ();
   assert (ptd);
 
   aafUInt32 intElemSize = ptd->internalSize (0, 0);
@@ -324,7 +294,6 @@ void ImplAAFTypeDefVariableArray::internalize(OMByte* externalBytes,
 	  assert (intNumBytesLeft >= 0);
 	  assert (extNumBytesLeft >= 0);
 	}
-  ptd->ReleaseReference ();
 }
 
 
@@ -357,8 +326,8 @@ size_t ImplAAFTypeDefVariableArray::PropValSize (void) const
 
 aafBool ImplAAFTypeDefVariableArray::IsRegistered (void) const
 {
-  assert (IsFixedSize());
-  return AAFFalse;
+  // Only depends on registration of basic type.
+  return BaseType()->IsRegistered ();
 }
 
 
@@ -366,6 +335,45 @@ size_t ImplAAFTypeDefVariableArray::NativeSize (void) const
 {
   assert (0);
   return 0; // not reached!
+}
+
+
+OMProperty * ImplAAFTypeDefVariableArray::pvtCreateOMPropertyMBS
+  (OMPropertyId pid,
+   const char * name) const
+{
+  assert (name);
+
+  ImplAAFTypeDefSP ptd = BaseType ();
+  assert (ptd);
+
+  OMProperty * result = 0;
+
+  if (dynamic_cast<ImplAAFTypeDefStrongObjRef*>((ImplAAFTypeDef*) ptd))
+	{
+	  // element is strong ref
+	  result = new OMStrongReferenceVectorProperty<ImplAAFObject> (pid, name);
+	}
+  else if (dynamic_cast<ImplAAFTypeDefWeakObjRef*>((ImplAAFTypeDef*) ptd))
+	{
+	  // element is weak ref, hence implemented as AUID array.
+	  // Specify a size of one element.
+	  result = new OMSimpleProperty (pid, name, sizeof (aafUID_t));
+	}
+
+  else
+	{
+	  // We don't support variable arrays of variably-sized properties.
+	  assert (ptd->IsFixedSize());
+	  aafUInt32 elemSize = ptd->NativeSize ();
+
+	  // But even though elems are fixed size, the variable array is
+	  // of variable size.  Specify a size of one element.
+	  result = new OMSimpleProperty (pid, name, elemSize);
+	}
+
+  assert (result);
+  return result;
 }
 
 

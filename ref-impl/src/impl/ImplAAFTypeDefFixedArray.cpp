@@ -27,10 +27,6 @@
 #include <assert.h>
 #include <string.h>
 
-#define RELEASE_IF_SET(obj) \
-    if (obj) { obj->ReleaseReference(); obj = NULL; }
-
-
 extern "C" const aafClassID_t CLSID_AAFPropertyValue;
 
 
@@ -49,46 +45,38 @@ ImplAAFTypeDefFixedArray::~ImplAAFTypeDefFixedArray ()
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDefFixedArray::GetType (
-      ImplAAFTypeDef ** ppTypeDef)
+      ImplAAFTypeDef ** ppTypeDef) const
 {
   if (! ppTypeDef) return AAFRESULT_NULL_PARAM;
 
-  ImplAAFHeader * pHead = NULL;
-  ImplAAFDictionary * pDict = NULL;
-  AAFRESULT rReturned = AAFRESULT_SUCCESS;
-  try
+  if (!_cachedBaseType)
 	{
+	  ImplAAFTypeDefFixedArray * pNonConstThis =
+		  (ImplAAFTypeDefFixedArray *) this;
+
+	  // Make sure this is already done!
+	  pNonConstThis->InitOMProperties ();
+
+	  ImplAAFDictionarySP pDict;
+
 	  AAFRESULT hr;
-	  hr = MyHeadObject(&pHead);
+	  hr = GetDictionary(&pDict);
 	  if (AAFRESULT_FAILED(hr))
-		throw hr;
-	  assert (pHead);
-	  hr = (pHead->GetDictionary(&pDict));
-	  if (AAFRESULT_FAILED(hr))
-		throw hr;
+		return hr;
 	  assert (pDict);
 
-	  ImplAAFTypeDef * ptd = NULL;
 	  aafUID_t id = _ElementType;
-	  hr = pDict->LookupType (&id, &ptd);
+	  hr = pDict->LookupType (&id, &pNonConstThis->_cachedBaseType);
 	  if (AAFRESULT_FAILED(hr))
-		throw hr;
-	  assert (ptd);
-
-	  *ppTypeDef = ptd;
-	  (*ppTypeDef)->AcquireReference ();
-
-	  ptd->ReleaseReference ();
-	  ptd = 0;
+		return hr;
+	  assert (_cachedBaseType);
 	}
-  catch (AAFRESULT &rCaught)
-	{
-	  rReturned = rCaught;
-	}
-  RELEASE_IF_SET (pHead);
-  RELEASE_IF_SET (pDict);
+  assert (ppTypeDef);
+  *ppTypeDef = _cachedBaseType;
+  assert (*ppTypeDef);
+  (*ppTypeDef)->AcquireReference ();
 
-  return rReturned;
+  return AAFRESULT_SUCCESS;
 }
 
 
@@ -153,14 +141,13 @@ aafUInt32 ImplAAFTypeDefFixedArray::pvtCount
 }
 
 
-ImplAAFTypeDef * ImplAAFTypeDefFixedArray::GetBaseType (void)
+ImplAAFTypeDefSP ImplAAFTypeDefFixedArray::BaseType (void) const
 {
-  AAFRESULT hr;
-  ImplAAFTypeDef * pBaseType = 0;
-  hr = GetType (&pBaseType);
+  ImplAAFTypeDefSP result;
+  AAFRESULT hr = GetType (&result);
   assert (AAFRESULT_SUCCEEDED (hr));
-  assert (pBaseType);
-  return pBaseType;
+  assert (result);
+  return result;
 }
 
 
@@ -170,10 +157,7 @@ void ImplAAFTypeDefFixedArray::reorder(OMByte* externalBytes,
   aafUInt32 numElems = _ElementCount;
   aafUInt32 elem = 0;
 
-  ImplAAFTypeDefFixedArray * pNonConstThis =
-	(ImplAAFTypeDefFixedArray *) this;
-
-  ImplAAFTypeDef * ptd = pNonConstThis->GetBaseType ();
+  ImplAAFTypeDefSP ptd = BaseType ();
   aafUInt32 elemSize = ptd->NativeSize ();
   aafInt32 numBytesLeft = externalBytesSize;
 
@@ -184,19 +168,14 @@ void ImplAAFTypeDefFixedArray::reorder(OMByte* externalBytes,
 	  numBytesLeft -= elemSize;
 	  assert (numBytesLeft >= 0);
 	}
-  ptd->ReleaseReference ();
 }
 
 
 size_t ImplAAFTypeDefFixedArray::externalSize(OMByte* /*internalBytes*/,
 											  size_t /*internalBytesSize*/) const
 {
-  ImplAAFTypeDefFixedArray * pNonConstThis =
-	(ImplAAFTypeDefFixedArray *) this;
-
-  ImplAAFTypeDef * ptd = pNonConstThis->GetBaseType ();
+  ImplAAFTypeDefSP ptd = BaseType ();
   size_t result = _ElementCount * ptd->externalSize (0, 0);
-  ptd->ReleaseReference ();
   return result;
 }
 
@@ -210,10 +189,7 @@ void ImplAAFTypeDefFixedArray::externalize(OMByte* internalBytes,
   aafUInt32 numElems = _ElementCount;
   aafUInt32 elem = 0;
 
-  ImplAAFTypeDefFixedArray * pNonConstThis =
-	(ImplAAFTypeDefFixedArray *) this;
-
-  ImplAAFTypeDef * ptd = pNonConstThis->GetBaseType ();
+  ImplAAFTypeDefSP ptd = BaseType ();
   aafUInt32 internalSize = ptd->NativeSize ();
   aafUInt32 externalSize = ptd->PropValSize ();
   aafInt32 internalBytesLeft = internalBytesSize;
@@ -233,19 +209,14 @@ void ImplAAFTypeDefFixedArray::externalize(OMByte* internalBytes,
 	  assert (internalBytesLeft >= 0);
 	  assert (externalBytesLeft >= 0);
 	}
-  ptd->ReleaseReference ();
 }
 
 
 size_t ImplAAFTypeDefFixedArray::internalSize(OMByte* /*externalBytes*/,
 											  size_t /*externalBytesSize*/) const
 {
-  ImplAAFTypeDefFixedArray * pNonConstThis =
-	(ImplAAFTypeDefFixedArray *) this;
-
-  ImplAAFTypeDef * ptd = pNonConstThis->GetBaseType ();
+  ImplAAFTypeDefSP ptd = BaseType ();
   size_t result = _ElementCount * ptd->internalSize (0, 0);
-  ptd->ReleaseReference ();
   return result;
 }
 
@@ -259,10 +230,7 @@ void ImplAAFTypeDefFixedArray::internalize(OMByte* externalBytes,
   aafUInt32 numElems = _ElementCount;
   aafUInt32 elem = 0;
 
-  ImplAAFTypeDefFixedArray * pNonConstThis =
-	(ImplAAFTypeDefFixedArray *) this;
-
-  ImplAAFTypeDef * ptd = pNonConstThis->GetBaseType ();
+  ImplAAFTypeDefSP ptd = BaseType ();
   aafUInt32 internalElemSize = ptd->internalSize (0, 0);
   aafUInt32 externalElemSize = ptd->externalSize (0, 0);
   aafInt32 internalBytesLeft = internalBytesSize;
@@ -282,63 +250,23 @@ void ImplAAFTypeDefFixedArray::internalize(OMByte* externalBytes,
 	  assert (internalBytesLeft >= 0);
 	  assert (externalBytesLeft >= 0);
 	}
-  ptd->ReleaseReference ();
 }
 
 
 aafBool ImplAAFTypeDefFixedArray::IsFixedSize (void) const
 {
-  aafBool result;
-  ImplAAFTypeDef * elemType = NULL;
-  AAFRESULT hr;
-  // BobT semi-hack: make non-const 'this' ptr so we can call
-  // GetType().  We know we're not munging the typedef we get back, so
-  // we know it'll be OK...
-  ImplAAFTypeDefArray * pNonConstThis =
-	(ImplAAFTypeDefArray *) this;
-  hr = pNonConstThis->GetType (&elemType);
-  assert (AAFRESULT_SUCCEEDED(hr));
-  assert (elemType);
-  result = elemType->IsFixedSize();
-  elemType->ReleaseReference();
-  return result;
+  return BaseType()->IsFixedSize();
 }
 
 size_t ImplAAFTypeDefFixedArray::PropValSize (void) const
 {
-  size_t result;
-  ImplAAFTypeDef * elemType = NULL;
-  AAFRESULT hr;
-  // BobT semi-hack: make non-const 'this' ptr so we can call
-  // GetType().  We know we're not munging the typedef we get back, so
-  // we know it'll be OK...
-  ImplAAFTypeDefArray * pNonConstThis =
-	(ImplAAFTypeDefArray *) this;
-  hr = pNonConstThis->GetType (&elemType);
-  assert (AAFRESULT_SUCCEEDED(hr));
-  assert (elemType);
-  result = elemType->PropValSize() * _ElementCount;
-  elemType->ReleaseReference();
-  return result;
+  return (BaseType()->PropValSize()) * _ElementCount;
 }
 
 
 aafBool ImplAAFTypeDefFixedArray::IsRegistered (void) const
 {
-  // true if underlying type is registered
-  ImplAAFTypeDef * elemType = NULL;
-  AAFRESULT hr;
-  // BobT semi-hack: make non-const 'this' ptr so we can call
-  // GetType().  We know we're not munging the typedef we get back, so
-  // we know it'll be OK...
-  ImplAAFTypeDefArray * pNonConstThis =
-	(ImplAAFTypeDefArray *) this;
-  hr = pNonConstThis->GetType (&elemType);
-  assert (AAFRESULT_SUCCEEDED(hr));
-  assert (elemType);
-  aafBool result = elemType->IsRegistered();
-  elemType->ReleaseReference ();
-  return result;
+  return BaseType()->IsRegistered();
 }
 
 
@@ -347,18 +275,22 @@ size_t ImplAAFTypeDefFixedArray::NativeSize (void) const
   assert (IsRegistered());
 
   size_t result;
-  ImplAAFTypeDef * elemType = NULL;
-  AAFRESULT hr;
-  // BobT semi-hack: make non-const 'this' ptr so we can call
-  // GetType().  We know we're not munging the typedef we get back, so
-  // we know it'll be OK...
-  ImplAAFTypeDefArray * pNonConstThis =
-	(ImplAAFTypeDefArray *) this;
-  hr = pNonConstThis->GetType (&elemType);
-  assert (AAFRESULT_SUCCEEDED(hr));
+  ImplAAFTypeDefSP elemType;
+  elemType = BaseType ();
   assert (elemType);
   result = elemType->NativeSize() * _ElementCount;
-  elemType->ReleaseReference();
+  return result;
+}
+
+
+OMProperty * ImplAAFTypeDefFixedArray::pvtCreateOMPropertyMBS
+  (OMPropertyId pid,
+   const char * name) const
+{
+  assert (name);
+  size_t elemSize = PropValSize ();
+  OMProperty * result = new OMSimpleProperty (pid, name, elemSize);
+  assert (result);
   return result;
 }
 

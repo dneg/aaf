@@ -23,10 +23,6 @@
 #include <assert.h>
 #include <string.h>
 
-#define RELEASE_IF_SET(obj) \
-    if (obj) { obj->ReleaseReference(); obj = NULL; }
-
-
 extern "C" const aafClassID_t CLSID_AAFPropValData;
 extern "C" const aafClassID_t CLSID_AAFPropValObjVectElem;
 
@@ -73,57 +69,39 @@ AAFRESULT STDMETHODCALLTYPE
   if (index >= pvtCount (pInPropVal))
 	return AAFRESULT_BADINDEX;
 
-  AAFRESULT rReturned = AAFRESULT_SUCCESS;
   aafUInt32 inBitsSize;
-  ImplAAFPropValData * pOutPVData = NULL;
-  ImplAAFPropValData * pvd = NULL;
-  ImplAAFTypeDef * ptd = NULL;
+  ImplAAFPropValDataSP pOutPVData;
+  ImplAAFPropValDataSP pvd;
+  ImplAAFTypeDefSP ptd;
 
-  try
-	{
-	  AAFRESULT hr;
-	  hr = GetType (&ptd);
-	  if (AAFRESULT_FAILED (hr)) throw hr;
-	  assert (ptd);
-	  aafUInt32 elementSize = ptd->PropValSize();
+  AAFRESULT hr;
+  hr = GetType (&ptd);
+  if (AAFRESULT_FAILED (hr)) return hr;
+  aafUInt32 elementSize = ptd->PropValSize();
 
-	  assert (pInPropVal);
-	  pvd = dynamic_cast<ImplAAFPropValData*> (pInPropVal);
-	  assert (pvd);
+  assert (pInPropVal);
+  pvd.SetPtr (dynamic_cast<ImplAAFPropValData*> (pInPropVal));
 
-	  hr = pvd->GetBitsSize (&inBitsSize);
-	  if (! AAFRESULT_SUCCEEDED (hr)) throw hr;
-	  assert ((index+1) * elementSize <= inBitsSize);
+  hr = pvd->GetBitsSize (&inBitsSize);
+  if (! AAFRESULT_SUCCEEDED (hr)) return hr;
+  assert ((index+1) * elementSize <= inBitsSize);
 
-	  pOutPVData = (ImplAAFPropValData *)CreateImpl(CLSID_AAFPropValData);
-	  if (! pOutPVData) throw AAFRESULT_NOMEMORY;
-	  assert (ptd);
-	  hr = pOutPVData->Initialize (ptd);
-	  if (AAFRESULT_FAILED(hr)) throw hr;
+  pOutPVData.SetPtr ((ImplAAFPropValData *)CreateImpl(CLSID_AAFPropValData));
+  if (! pOutPVData) return AAFRESULT_NOMEMORY;
+  hr = pOutPVData->Initialize (ptd);
+  if (AAFRESULT_FAILED(hr)) return hr;
 
+  hr = pOutPVData->AllocateFromPropVal (pvd,
+										index * elementSize,
+										elementSize,
+										NULL);
+  if (AAFRESULT_FAILED(hr)) return hr;
 
-	  hr = pOutPVData->AllocateFromPropVal (pvd,
-											index * elementSize,
-											elementSize,
-											NULL);
-	  if (AAFRESULT_FAILED(hr)) throw hr;
+  assert (ppOutPropVal);
+  *ppOutPropVal = pOutPVData;
 
-	  assert (ppOutPropVal);
-	  *ppOutPropVal = pOutPVData;
-	  assert (*ppOutPropVal);
-	}
-  catch (AAFRESULT &rCaught)
-	{
-	  rReturned = rCaught;
-	}
-
-  // Don't release this!  It is simply a dynamic_cast<>ed pInPropVal
-  // RELEASE_IF_SET (pvd);
-  RELEASE_IF_SET (ptd);
-
-  return rReturned;
+  return AAFRESULT_SUCCESS;
 }
-
 
 
 AAFRESULT STDMETHODCALLTYPE
