@@ -83,6 +83,20 @@ public:
                     OMUInt32 byteCount,
                     OMUInt32& bytesRead) const = 0;
 
+    // @cmember Attempt to read the number of bytes given by <p byteCount>
+    //          from offset <p position> in this <c OMRawStorage>
+    //          into the buffer at address <p bytes>.
+    //          The actual number of bytes read is returned in <p bytesRead>.
+    //          Reading from positions greater than
+    //          <mf OMRawStorage::size> causes <p bytesRead> to be less
+    //          than <p byteCount>. Reading bytes that have never been written
+    //          returns undefined data in <p bytes>.
+    //          @precondition <f isReadable()> && <f isPositionable()>
+  virtual void readAt(OMUInt64 possition,
+                      OMByte* bytes,
+                      OMUInt32 byteCount,
+                      OMUInt32& bytesRead) const = 0;
+
     // @cmember Is it possible to write to this <c OMRawStorage> ?
   virtual bool isWritable(void) const = 0;
 

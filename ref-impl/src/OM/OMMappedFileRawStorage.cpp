@@ -127,6 +127,31 @@ void OMMappedFileRawStorage::read(OMByte* /* bytes */,
   // TBS
 }
 
+  // @mfunc Attempt to read the number of bytes given by <p byteCount>
+  //        from the current position in this <c OMMappedFileRawStorage>
+  //        into the buffer at address <p bytes>.
+  //        The actual number of bytes read is returned in <p bytesRead>.
+  //        Reading from positions greater than
+  //        <mf OMMappedFileRawStorage::size> causes <p bytesRead> to be less
+  //        than <p byteCount>. Reading bytes that have never been written
+  //        returns undefined data in <p bytes>.
+  //   @parm TBS
+  //   @parm The buffer into which the bytes are to be read.
+  //   @parm The number of bytes to read.
+  //   @parm The number of bytes actually read.
+  //   @this const
+void OMMappedFileRawStorage::readAt(OMUInt64 /* position */,
+                                    OMByte* /* bytes */,
+                                    OMUInt32 /* byteCount */,
+                                    OMUInt32& /* bytesRead */) const
+{
+  TRACE("OMMappedFileRawStorage::readAt");
+  PRECONDITION("Readable", isReadable());
+  PRECONDITION("Readable", isPositionable());
+
+  ASSERT("Unimplemented code not reached", false); // tjb TBS
+}
+
   // @mfunc Is it possible to write to this <c OMMappedFileRawStorage> ?
   //  @rdesc True if this <c OMMappedFileRawStorage> is writable,
   //         false otherwise.
