@@ -33,10 +33,11 @@
 #include <stdlib.h>
 #include <iostream.h>
 
+
 namespace OMF2
 {
-#include "omPublic.h"
-#include "omMedia.h"
+	#include "omPublic.h"
+	#include "omMedia.h"
 }
 
 // OMF Includes
@@ -795,9 +796,6 @@ HRESULT Aaf2Omf::ConvertSourceMob(IAAFSourceMob* pSourceMob,
 	if (gpGlobals->bVerboseMode)
 		printf("Converting AAF Source MOB to OMF\n");
 
-	rc = pSourceMob->QueryInterface(IID_IAAFMob, (void **)&pMob);
-	FinishUpMob(pMob, *pOMFSourceMob);
-
 	rc = pSourceMob->GetEssenceDescriptor(&pEssenceDesc);
 	if (FAILED(rc))
 		return rc;
@@ -867,6 +865,10 @@ HRESULT Aaf2Omf::ConvertSourceMob(IAAFSourceMob* pSourceMob,
 				delete [] pwModel;
 			if (pszModel)
 				delete [] pszModel;
+
+			rc = pSourceMob->QueryInterface(IID_IAAFMob, (void **)&pMob);
+			FinishUpMob(pMob, *pOMFSourceMob);
+	
 		goto cleanup;
 		}
 	}
@@ -956,6 +958,8 @@ HRESULT Aaf2Omf::ConvertSourceMob(IAAFSourceMob* pSourceMob,
 				goto cleanup;
 			}
 			delete [] pSummary;
+			rc = pSourceMob->QueryInterface(IID_IAAFMob, (void **)&pMob);
+			FinishUpMob(pMob, *pOMFSourceMob);
 			goto cleanup;
 		}
 		rc = pEssenceDesc->QueryInterface(IID_IAAFWAVEDescriptor, (void **)&pWAVEDesc);
@@ -987,6 +991,8 @@ HRESULT Aaf2Omf::ConvertSourceMob(IAAFSourceMob* pSourceMob,
 										 summarySize);
 			if (gpGlobals->bVerboseMode)
 				printf("%sAdded a Wave Media Descriptor to a Source MOB\n", gpGlobals->indentLeader);
+			rc = pSourceMob->QueryInterface(IID_IAAFMob, (void **)&pMob);
+			FinishUpMob(pMob, *pOMFSourceMob);
 			goto cleanup;
 		}
 		rc = pEssenceDesc->QueryInterface(IID_IAAFAIFCDescriptor, (void **)&pAifcDesc);
@@ -1009,6 +1015,8 @@ HRESULT Aaf2Omf::ConvertSourceMob(IAAFSourceMob* pSourceMob,
 			if (gpGlobals->bVerboseMode)
 				printf("%sAdded an AIFC Media Descriptor to a Source MOB\n", gpGlobals->indentLeader);
 			delete [] pSummary;
+			rc = pSourceMob->QueryInterface(IID_IAAFMob, (void **)&pMob);
+			FinishUpMob(pMob, *pOMFSourceMob);
 			goto cleanup;
 		}
 		rc = pEssenceDesc->QueryInterface(IID_IAAFCDCIDescriptor, (void **)&pCDCIDesc);
@@ -1130,6 +1138,8 @@ HRESULT Aaf2Omf::ConvertSourceMob(IAAFSourceMob* pSourceMob,
 
 			if (gpGlobals->bVerboseMode)
 				printf("%sAdded a CDCI Media Descriptor to a Source MOB\n", gpGlobals->indentLeader);
+			rc = pSourceMob->QueryInterface(IID_IAAFMob, (void **)&pMob);
+			FinishUpMob(pMob, *pOMFSourceMob);
 			goto cleanup;
 		}
 		rc = pEssenceDesc->QueryInterface(IID_IAAFObject, (void **)&pAAFObject);
@@ -1161,6 +1171,8 @@ HRESULT Aaf2Omf::ConvertSourceMob(IAAFSourceMob* pSourceMob,
 				printf("%sInvalid essence descripor type found, datadef : %s\n", gpGlobals->indentLeader, szTempUID);
 			fprintf(stderr,"%sInvalid essence descriptor type found, datadef : %s\n", gpGlobals->indentLeader, szTempUID);
 		}
+		rc = pSourceMob->QueryInterface(IID_IAAFMob, (void **)&pMob);
+		FinishUpMob(pMob, *pOMFSourceMob);
 		goto cleanup;
 	}
 
@@ -1531,13 +1543,18 @@ HRESULT Aaf2Omf::ProcessComponent(IAAFComponent* pComponent,
 	if (SUCCEEDED(rc))
 	{
 //		//Component is an effect
-//		OMF2::omfEffObj_t	effect = NULL;
+		OMF2::omfObject_t	nest = NULL;
+		OMF2::omfObject_t	effect = NULL;
 
 		if (gpGlobals->bVerboseMode)
 		{
 			printf("%sProcessing Effect of length: %ld\n ", gpGlobals->indentLeader, (int)length);
 		}
-		rc = ConvertEffects(pEffect, pOMFSegment);
+		OMFError = OMF2::omfiNestedScopeNew(OMFFileHdl, OMFDatakind,
+								(OMF2::omfLength_t)length, &nest);
+		rc = ConvertEffects(pEffect, nest, &effect);
+		OMFError = OMF2::omfiNestedScopeAppendSlot(OMFFileHdl,nest,effect);
+		*pOMFSegment = nest;
 
 		goto cleanup;
 	}
@@ -1557,7 +1574,7 @@ HRESULT Aaf2Omf::ProcessComponent(IAAFComponent* pComponent,
 		rc = pTransition->GetOperationGroup(&pEffect);
 		// At this time (4/99) effects are not implemented therefore we 
 		// will have to create an Effect from thin air.(hack it !!)
-		rc = ConvertEffects(pEffect, &effect);
+		rc = ConvertEffects(pEffect, NULL, &effect);
 
 		OMFError = OMF2::omfiTransitionNew(OMFFileHdl,
 									 OMFDatakind,
@@ -2236,6 +2253,7 @@ cleanup:
 //
 // ============================================================================
 HRESULT Aaf2Omf::ConvertEffects(IAAFOperationGroup* pEffect,
+								OMF2::omfObject_t	 nest,
 								OMF2::omfEffObj_t*	pOMFEffect)
 {
 	HRESULT					rc = AAFRESULT_SUCCESS;
@@ -2247,7 +2265,7 @@ HRESULT Aaf2Omf::ConvertEffects(IAAFOperationGroup* pEffect,
 	OMF2::omfUniqueName_t	MCEffectID;
 	OMF2::omfErr_t			OMFError;
 	OMF2::omfBool			bDefExists;
-	OMF2::omfObject_t		pOMFSegment, pOMFEffectSlot;
+	OMF2::omfObject_t		pOMFSegment, pOMFEffectSlot, pScopeReference;
 
 	IAAFOperationDef*		pEffectDef = NULL;
 	IAAFParameterDef*		pParameterDef = NULL;
@@ -2258,6 +2276,7 @@ HRESULT Aaf2Omf::ConvertEffects(IAAFOperationGroup* pEffect,
 	IAAFFiller*				pFiller = NULL;
 	IAAFComponent*			pComponent = NULL;
 	IAAFSourceClip*			pSourceClip = NULL;
+	IAAFConstantValue*		pConstantValue = NULL;
 
 	aafUID_t				effectAUID;
 	aafUID_t				effectDefAUID;
@@ -2308,6 +2327,31 @@ HRESULT Aaf2Omf::ConvertEffects(IAAFOperationGroup* pEffect,
 			byPassPtr = NULL;
 
 		pEffectTranslate->GetEffectIDs(pEffect, effectID, MCEffectID);
+
+		// At some point we should try to reconstruct the AVX private effect ID
+		// from the AAF File
+#if AVID_SPECIAL
+		if(strcmp(MCEffectID, AVX_PLACEHOLDER_EFFECT) == 0)
+		{
+			strcpy(MCEffectID, "UnknownAVX Effect");
+			strcpy(effectID, "omfi:effect:Unknown");
+
+			if(pEffect->LookupParameter(kAAFParamID_AvidEffectID, &pParameter) == AAFRESULT_SUCCESS)
+			rc = pParameter->QueryInterface(IID_IAAFConstantValue, (void **)&pConstantValue);
+			if (SUCCEEDED(rc))
+			{
+				aafUInt32			srcValueLen, lenRead;
+				checkAAF(pConstantValue->GetValueBufLen(&srcValueLen));
+//				Assert(srcValueLen <= sizeof(MCEffectID));
+				checkAAF(pConstantValue->GetValue(srcValueLen, (unsigned char*)MCEffectID, &lenRead));
+				pConstantValue->Release();
+				pConstantValue = NULL;
+				pParameter->Release();
+				pParameter = NULL;
+			}
+		}
+#endif
+
 		bDefExists = OMF2::omfiEffectDefLookup(OMFFileHdl, effectID, &effectDef, &OMFError);
 		if (OMFError == OMF2::OM_ERR_NONE && !bDefExists)
 		{
@@ -2360,15 +2404,31 @@ HRESULT Aaf2Omf::ConvertEffects(IAAFOperationGroup* pEffect,
 		for(n = 0; n < numSources; n++)
 		{
 			checkAAF(pEffect->GetInputSegmentAt(n, &pSegment));
-			(void)(pSegment->QueryInterface(IID_IAAFSourceClip,
+			(void)(pSegment->QueryInterface(IID_IAAFComponent,
 												(void **) &pComponent));
 
 			if(pComponent != NULL)
 			{
 				checkAAF(ProcessComponent(pComponent,&pOMFSegment));
-				checkOMF(OMF2::omfiEffectAddNewSlot(OMFFileHdl,(*pOMFEffect),
+				if(nest != NULL)
+				{
+					checkOMF(OMF2::omfiNestedScopeAppendSlot(OMFFileHdl,nest, pOMFSegment));
+					checkOMF(OMF2::omfiScopeRefNew(OMFFileHdl,
+									 effectDatakind,
+									 (OMF2::omfLength_t)length,
+									 0,
+									 1,		// This may not be a constant
+									&pScopeReference));
+					checkOMF(OMF2::omfiEffectAddNewSlot(OMFFileHdl,(*pOMFEffect),
+									-1*(n+1), pScopeReference, &pOMFEffectSlot));
+				}
+				else
+				{
+					checkOMF(OMF2::omfiEffectAddNewSlot(OMFFileHdl,(*pOMFEffect),
 									-1*(n+1), pOMFSegment, &pOMFEffectSlot));
+				}
 				pComponent->Release();
+				pComponent = NULL;
 			}
 			//!!! Else error
 
@@ -2378,7 +2438,14 @@ HRESULT Aaf2Omf::ConvertEffects(IAAFOperationGroup* pEffect,
 		// If the effect ID is known, map to a apecific OMF effect ID
 		if(pEffect->LookupParameter(kAAFParameterDefLevel, &pParameter) == AAFRESULT_SUCCESS)
 		{
-			checkAAF(ConvertParameter(pParameter, effectDefAUID, (*pOMFEffect), -3,
+			aafInt32	levelSlot;
+#if AVID_SPECIAL
+			if(pEffectTranslate->isPrivateEffect(effectDefAUID))
+				levelSlot = OMF2_EFFE_ALLOTHERS_LEVEL_SLOT;
+			else
+#endif
+				levelSlot = -3;
+			checkAAF(ConvertParameter(pParameter, effectDefAUID, (*pOMFEffect), levelSlot,
 										(OMF2::omfLength_t)length));
 		}
 		if(pEffect->LookupParameter(kAAFParameterDefSMPTEWipeNumber, &pParameter) == AAFRESULT_SUCCESS)
@@ -2393,6 +2460,11 @@ HRESULT Aaf2Omf::ConvertEffects(IAAFOperationGroup* pEffect,
 		}
 #if AVID_SPECIAL
 		if(pEffect->LookupParameter(kAAFParamID_AvidUserParam, &pParameter) == AAFRESULT_SUCCESS)
+		{
+			checkAAF(ConvertParameter(pParameter, effectDefAUID, (*pOMFEffect),  0,
+										(OMF2::omfLength_t)length));
+		}
+		if(pEffect->LookupParameter(kAAFParamID_AvidBounds, &pParameter) == AAFRESULT_SUCCESS)
 		{
 			checkAAF(ConvertParameter(pParameter, effectDefAUID, (*pOMFEffect),  0,
 										(OMF2::omfLength_t)length));
@@ -2461,11 +2533,6 @@ HRESULT Aaf2Omf::ConvertEffects(IAAFOperationGroup* pEffect,
 										(OMF2::omfLength_t)length));
 		}
 		if(pEffect->LookupParameter(kAAFParamID_AvidSpillSupress, &pParameter) == AAFRESULT_SUCCESS)
-		{
-			checkAAF(ConvertParameter(pParameter, (*pOMFEffect),  xxx,
-										(OMF2::omfLength_t)length));
-		}
-		if(pEffect->LookupParameter(kAAFParamID_AvidBounds, &pParameter) == AAFRESULT_SUCCESS)
 		{
 			checkAAF(ConvertParameter(pParameter, (*pOMFEffect),  xxx,
 										(OMF2::omfLength_t)length));
