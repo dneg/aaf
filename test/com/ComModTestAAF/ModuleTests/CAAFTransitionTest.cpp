@@ -22,6 +22,10 @@
 #include "AAFResult.h"
 #include "AAFDefUIDs.h"
 
+// This values are used for testing purposes
+static aafUID_t    fillerUID = DDEF_Video;
+static aafLength_t  fillerLength = 3200;
+
 // Cross-platform utility to delete a file.
 static void RemoveTestFile(const wchar_t* pFileName)
 {
@@ -59,8 +63,11 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFMobSlot*				pNewSlot = NULL;
 	IAAFTransition*				pTransition = NULL;
 	IAAFGroup*					pGroup = NULL;
-	IAAFSegment*				pSeg = NULL;
+	IAAFGroup*					pGroupCopy = NULL;
+	IAAFSegment*				pSegment = NULL;
 	IAAFComponent*				pComponent = NULL;
+	IAAFFiller*					pFiller = NULL;
+	IAAFSequence*				pSequence = NULL;
 	
 	aafUID_t					newMobID;
 	aafUID_t					datadef = DDEF_Video;
@@ -69,7 +76,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	aafLength_t					transitionLength;
 	aafPosition_t				cutPoint = 0;
 
-	CvtInt32toLength(10, transitionLength);
+	CvtInt32toLength(100, transitionLength);
 	ProductInfo.companyName = L"AAF Developers Desk";
 	ProductInfo.productName = L"AAFTransition Test";
 	ProductInfo.productVersion.major = 1;
@@ -82,75 +89,143 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	ProductInfo.platform = NULL;
 
 
-  try
-  {
-    // Remove the previous test file if any.
-    RemoveTestFile(pFileName);
+	try
+	{
+		// Remove the previous test file if any.
+		RemoveTestFile(pFileName);
 
 
-    // Create the file
+		// Create the file
 		checkResult(CoCreateInstance(CLSID_AAFFile,
-								 NULL, 
-								 CLSCTX_INPROC_SERVER, 
-								 IID_IAAFFile, 
-								 (void **)&pFile));
+									 NULL, 
+									 CLSCTX_INPROC_SERVER, 
+									 IID_IAAFFile, 
+									 (void **)&pFile));
 		checkResult(pFile->Initialize());
 		checkResult(pFile->OpenNewModify(pFileName, 0, &ProductInfo));
 		bFileOpen = true;
  
-    // We can't really do anthing in AAF without the header.
+		// We can't really do anthing in AAF without the header.
 		checkResult(pFile->GetHeader(&pHeader));
-    // Get the number of mobs to force creation of the content storage.
-	// This is temporary as the content storage should be created by
-	// the call to OpenNewModify above.
-    aafNumSlots_t n;
-    checkResult(pHeader->GetNumMobs(kAllMob, &n));
+		// Get the number of mobs to force creation of the content storage.
+		// This is temporary as the content storage should be created by
+		// the call to OpenNewModify above.
+		aafNumSlots_t n;
+		checkResult(pHeader->GetNumMobs(kAllMob, &n));
 
-    // Get the AAF Dictionary so that we can create valid AAF objects.
-    checkResult(pHeader->GetDictionary(&pDictionary));
+		// Get the AAF Dictionary so that we can create valid AAF objects.
+		checkResult(pHeader->GetDictionary(&pDictionary));
  		
+		// ------------------------------------------------------------
+		//	To test a Transition we need to create a Sequence which will 
+		//	a Filler, a transition and another Filler. I know this is not 
+		//  very interesting, but it will let us test the Transition 
+		//  interface with the least amount of other stuff.
+		// ------------------------------------------------------------
+		//
 		// Create a CompositionMob
 		checkResult(pDictionary->CreateInstance(&AUID_AAFCompositionMob,
 							IID_IAAFCompositionMob, 
 							(IUnknown **)&pCompMob));
 
-    // Get a MOB interface
+		checkResult(pCompMob->Initialize(L"Transition Test"));
+		// Get a MOB interface
 		checkResult(pCompMob->QueryInterface (IID_IAAFMob, (void **)&pMob));
 		checkResult(CoCreateGuid((GUID *)&newMobID));
 		checkResult(pMob->SetMobID(&newMobID));
 
-		checkResult(pCompMob->Initialize(L"COMPMOB01"));
+		// Create a Sequence
+		checkResult(pDictionary->CreateInstance(&AUID_AAFSequence,
+												IID_IAAFSequence,
+												(IUnknown **) &pSequence));
+
+		// Get a Segment interface
+		checkResult(pSequence->QueryInterface(IID_IAAFSegment, (void **)&pSegment));
+		// Get a component interface and 
+		checkResult(pSequence->QueryInterface(IID_IAAFComponent, (void **)&pComponent));
+		// set the Data definition for it !
+		checkResult(pComponent->SetDataDef(&fillerUID));
+		// Release the component - because we need to reuse the pointer later
+		pComponent->Release();
+		pComponent = NULL;
+
+		// Create a new Mob Slot that will contain the sequence
+		checkResult(pMob->AppendNewSlot(pSegment, 1, L"Transition", &pNewSlot));
+
+
+		// Create a Filler
+		checkResult(pDictionary->CreateInstance(&AUID_AAFFiller,
+												IID_IAAFFiller,
+												(IUnknown **) &pFiller));
+
+		// Get a component interface
+		checkResult(pFiller->QueryInterface(IID_IAAFComponent, (void **) &pComponent));
+		// Set values for the filler
+	    checkResult(pFiller->Initialize( &fillerUID, fillerLength));
+		// append the filler to the sequence
+		checkResult(pSequence->AppendComponent(pComponent));
+
+		// Release the component - because we need to reuse the pointer later
+		pComponent->Release();
+		pComponent = NULL;
+
+		// Also release the filler
+		pFiller->Release();
+		pFiller = NULL;
 		
 	    checkResult(pDictionary->CreateInstance(&AUID_AAFTransition,
-								IID_IAAFTransition, 
-								(IUnknown **)&pTransition));
+												IID_IAAFTransition, 
+												(IUnknown **)&pTransition));
 		// Create an empty Effect object !!
 		checkResult(pDictionary->CreateInstance(&AUID_AAFGroup,
 												IID_IAAFGroup,
 												(IUnknown **)&pGroup));
 
 		checkResult(pTransition->Create (&datadef, transitionLength, cutPoint, pGroup));
+		checkResult(pGroup->Initialize(&datadef, transitionLength, NULL));
 		checkResult(pTransition->QueryInterface (IID_IAAFComponent, (void **)&pComponent));
 
-		checkResult(pMob->AppendNewSlot (pSeg, 0, L"Transition", &pNewSlot));
-		
+		// now append the transition
+		checkResult(pSequence->AppendComponent(pComponent));
+
+		// Release the component - because we need to reuse the pointer later
+		pComponent->Release();
+		pComponent = NULL;
+
+		// Create the second filler 
+		checkResult(pDictionary->CreateInstance(&AUID_AAFFiller,
+												IID_IAAFFiller,
+												(IUnknown **) &pFiller));
+
+		checkResult(pFiller->QueryInterface(IID_IAAFComponent, (void **) &pComponent));
+		// Set values for the filler
+	    checkResult(pFiller->Initialize( &fillerUID, fillerLength));
+		// append the filler to the sequence
+		checkResult(pSequence->AppendComponent(pComponent));
+
+		// Now, we append the composition mob to the file	
 		checkResult(pHeader->AppendMob(pMob));
+		// and we are done !
 	}
-  catch (HRESULT& rResult)
-  {
-    hr = rResult;
-  }
+	catch (HRESULT& rResult)
+	{
+		hr = rResult;
+	}
 	
 
 	// Cleanup and return
 	if (pNewSlot)
 		pNewSlot->Release();
 
-	if (pSeg)
-		pSeg->Release();
+	if (pSegment)
+		pSegment->Release();
 
-	if (pTransition)
-		pTransition->Release();
+	if (pSequence)
+		pSequence->Release();
+
+	if (pFiller)
+		pFiller->Release();
+
 
 	if (pGroup)
 		pGroup->Release();
@@ -166,6 +241,10 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 	if (pHeader)
 		pHeader->Release();
+
+
+	if (pTransition)
+		pTransition->Release();
 
 	if (pFile) 
 	{
@@ -189,15 +268,20 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	IEnumAAFMobSlots*			pEnum = NULL;
 	IAAFMob*					pMob = NULL;
 	IAAFMobSlot*				pMobSlot = NULL;
-	IAAFSegment*				pSeg = NULL;
+	IAAFSegment*				pSegment = NULL;
+	IAAFSequence*				pSequence = NULL;
 	IAAFTransition*				pTransition = NULL;
 	IAAFComponent*				pComponent = NULL;
+	IAAFFiller*					pFiller = NULL;
+	IAAFGroup*					pGroup = NULL;
+	IEnumAAFComponents*			pCompIter = NULL;
 //	aafUID_t					datadef ;
 	aafLength_t					transitionLength;
 	aafPosition_t				cutPoint;
 
 	aafProductIdentification_t	ProductInfo;
 	aafNumSlots_t				numMobs;
+	aafInt32					numComponents = 0;
 	HRESULT						hr = S_OK;
 
 	ProductInfo.companyName = L"AAF Developers Desk. NOT!";
@@ -212,9 +296,9 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	ProductInfo.platform = NULL;
 
 
-  try
-  {
-    // Open the file
+	try
+	{
+		// Open the file
 		checkResult(CoCreateInstance(CLSID_AAFFile,
 								 NULL, 
 								 CLSCTX_INPROC_SERVER, 
@@ -224,56 +308,87 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		checkResult(pFile->OpenExistingRead(pFileName, 0));
 		bFileOpen = true;
  
-    // We can't really do anthing in AAF without the header.
+		// We can't really do anthing in AAF without the header.
 		checkResult(pFile->GetHeader(&pHeader));
 
 		// Get the number of mobs in the file (should be one)
 		checkResult(pHeader->GetNumMobs(kAllMob, &numMobs));
 		checkExpression(1 == numMobs, AAFRESULT_TEST_FAILED);
 
-    checkResult(pHeader->EnumAAFAllMobs( NULL, &pMobIter));
+		checkResult(pHeader->EnumAAFAllMobs( NULL, &pMobIter));
 		while (AAFRESULT_SUCCESS == pMobIter->NextOne(&pMob))
 		{
-      checkResult(pMob->EnumAAFAllMobSlots (&pEnum));
+			checkResult(pMob->EnumAAFAllMobSlots (&pEnum));
 
-      while (AAFRESULT_SUCCESS == pEnum->NextOne (&pMobSlot))
-      {
-        checkResult(pMobSlot->GetSegment (&pSeg));
-        // Get an Edgeecode interface 
-        checkResult(pSeg->QueryInterface (IID_IAAFEdgecode, (void **)&pTransition));
-        checkResult(pTransition->GetCutPoint (&cutPoint));
-		checkResult(pTransition->QueryInterface(IID_IAAFComponent, (void **)&pComponent));
-		checkResult(pComponent->GetLength(&transitionLength));
-        // Check results !!
-        checkExpression(cutPoint == 0, AAFRESULT_TEST_FAILED);
-        checkExpression(transitionLength == 10, AAFRESULT_TEST_FAILED);
-      }
+			while (AAFRESULT_SUCCESS == pEnum->NextOne (&pMobSlot))
+			{
+				checkResult(pMobSlot->GetSegment (&pSegment));
+				// Check to see if Segment is a Sequence
+				checkResult(pSegment->QueryInterface(IID_IAAFSequence, (void **) &pSequence));
+				// It is, so get a Component Iterator
+				checkResult(pSequence->GetNumComponents(&numComponents));
+				// Verify that all 3 components(Filler, Transition, Filler) are present
+				checkExpression(numComponents == 3,  AAFRESULT_TEST_FAILED);
+				checkResult(pSequence->EnumComponents(&pCompIter));
+				// Now visit each and every one of the components.
+				while(AAFRESULT_SUCCESS == pCompIter->NextOne(&pComponent))
+				{
+					// Find out what kind of segment we have
+					if ((pComponent->QueryInterface(IID_IAAFTransition, (void **)&pTransition)) == AAFRESULT_SUCCESS)
+					{
+						// This is the transition 
+						checkResult(pTransition->GetCutPoint (&cutPoint));
+						checkResult(pComponent->GetLength(&transitionLength));
+						checkResult(pTransition->GetEffect(&pGroup));
+						// Check results !!
+						checkExpression(cutPoint == 0, AAFRESULT_TEST_FAILED);
+						checkExpression(transitionLength == 100, AAFRESULT_TEST_FAILED);
+					}
+					else
+					{
+						// validate that the other segments are Fillers
+						checkResult(pComponent->QueryInterface(IID_IAAFFiller, (void **)&pFiller));
+					}
+				}
+			}
 
-      pMob->Release();
-      pMob = NULL;
-	  }
+			pMob->Release();
+			pMob = NULL;
+		}
 	}
-  catch (HRESULT& rResult)
-  {
-    hr = rResult;
-  }
+	catch (HRESULT& rResult)
+	{
+		hr = rResult;
+	}
 	
 
 	// Cleanup and return
 	if (pTransition)
 		pTransition->Release();
 
+	if (pGroup)
+		pGroup->Release();
+
 	if (pComponent)
 		pComponent->Release();
 
-	if (pSeg)
-		pSeg->Release();
+	if (pSegment)
+		pSegment->Release();
 
 	if (pMobSlot)
 		pMobSlot->Release();
 
+	if (pSequence)
+		pSequence->Release();
+
+	if (pCompIter)
+		pCompIter->Release();
+
 	if (pEnum)
 		pEnum->Release();
+
+	if (pFiller)
+		pFiller->Release();
 
 	if (pMob)
 		pMob->Release();
@@ -311,10 +426,6 @@ HRESULT CAAFTransition::test()
 		" exception!" << endl; 
 	  hr = AAFRESULT_TEST_FAILED;
 	}
-
-  	// When all of the functionality of this class is tested, we can return success
-	if(hr == AAFRESULT_SUCCESS)
-		hr = AAFRESULT_TEST_PARTIAL_SUCCESS;
 
   return hr;
 }
