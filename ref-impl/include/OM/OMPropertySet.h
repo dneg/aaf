@@ -52,6 +52,9 @@ public:
     //          <p propertyId>.
   OMProperty* get(const OMPropertyId propertyId) const;
 
+    // @cmember Get the <c OMProperty> named <p propertyName>.
+  OMProperty* get(const char* propertyName) const;
+
     // @cmember Insert the <c OMProperty> <p property> into this
     //          <c OMPropertySet>.
   void put(OMProperty* property);
@@ -63,6 +66,10 @@ public:
     // @cmember Is an <c OMProperty> with property id <p propertyId>
     //          present in this <c OMPropertySet> ?
   bool isPresent(const OMPropertyId propertyId) const;
+
+    // @cmember Is an <c OMProperty> with name <p propertyName>
+    //          present in this <c OMPropertySet> ?
+  bool isPresent(const char* propertyName) const;
 
     // @cmember Is an <c OMProperty> with property id <p propertyId>
     //          allowed in this <c OMPropertySet> ?
@@ -97,6 +104,10 @@ private:
   // OMPropertySetElement for 'propertyId' or null if not found.
   //
   OMPropertySetElement* find(const OMPropertyId propertyId) const;
+
+  // OMPropertySetElement for 'propertyName' or null if not found.
+  //
+  OMPropertySetElement* find(const char* propertyName) const;
 
   // First free entry or null if full.
   //
