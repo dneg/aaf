@@ -146,6 +146,10 @@ AAFRESULT aafMobIDFromMajorMinor(
 		aafUInt32	minor,
 		aafMobID_t *mobID);     /* OUT - Newly created Mob ID */
 void RegisterCodecProperties(AafOmfGlobals *globals, OMF2::omfSessionHdl_t OMFSession);
+HRESULT InitGlobalVars( void );
+HRESULT IsOMFFile (char * pFileName );
+
+extern AafOmfGlobals*	gpGlobals;
 
 
 #define COMMON_ERR_BASE		(AAFRESULT)0xE0000000
