@@ -16,7 +16,8 @@ INCLUDES = -I../Include \
 all : $(BINDIR)/AafOmf$(EXE_SUFFIX)
 
 #tbd: AafOmf converter does not compile under Irix CC yet
-$(BINDIR)/AafOmf$(EXE_SUFFIX) : $(BINDIR) $(OBJDIR) $(CXXOBJS)
+$(BINDIR)/AafOmf$(EXE_SUFFIX) :
+#$(BINDIR)/AafOmf$(EXE_SUFFIX) : $(BINDIR) $(OBJDIR) $(CXXOBJS)
 #	$(CC) -n32 -Wl,-wall $(CXXOBJS) $(CC2LDOPT) \
 #	$(LD_DYN_LIB_PATH_FLAG) $(CC2LDOPT) $(LIBDIR) \
 #	-L$(LIBDIR) $(CC2LDOPT) -laaflib -laafiid -o $@ -lC -laafutils
