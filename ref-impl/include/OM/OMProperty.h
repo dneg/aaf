@@ -26,8 +26,8 @@
 ************************************************************************/
 
 // @doc OMEXTERNAL
-#ifndef OMPROPERTYBASE_H
-#define OMPROPERTYBASE_H
+#ifndef OMPROPERTY_H
+#define OMPROPERTY_H
 
 #include "OMPortability.h"
 #include "OMDataTypes.h"
