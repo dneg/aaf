@@ -86,6 +86,28 @@ public:
     //          is <p propertyId>. The property type is <p type>.
   void read(OMPropertyId propertyId, int type, void* start, size_t size);
 
+    // @cmember Open a stream called <p streamName> contained within
+    //          this <c OMStoredObject>.
+  IStream* openStream(const char* streamName);
+
+    // @cmember Create a stream called <p streamName> contained within
+    //          this <c OMStoredObject>.
+  IStream* createStream(const char* streamName);
+
+    // @cmember Read <p size> bytes from <p stream> into the buffer at
+    //          address <p data>.
+  void readFromStream(IStream* stream, void* data, size_t size);
+
+    // @cmember Write <p size> bytes from the buffer at address
+    //          <p data> to <p stream>.
+  void writeToStream(IStream* stream, void* data, size_t size);
+
+    // @cmember Size of <p stream> in bytes.
+  size_t sizeOfStream(IStream* stream) const;
+
+    // @cmember Close <p stream>.
+  void closeStream(IStream*& stream);
+
 private:
 
   static OMStoredObject* open(const wchar_t* fileName,
@@ -102,9 +124,6 @@ private:
 
   IStream* createStream(IStorage* storage, const char* streamName);
   IStream* openStream(IStorage* storage, const char* streamName);
-  void closeStream(IStream*& stream);
-  void writeToStream(IStream* stream, void* data, size_t size);
-  void readFromStream(IStream* stream, void* data, size_t size);
 
   IStorage* createStorage(IStorage* storage, const char* storageName);
   IStorage* openStorage(IStorage* storage,
