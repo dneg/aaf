@@ -262,8 +262,10 @@ void OMProperty::restoreName(size_t size)
   TRACE("OMProperty::restoreName");
 
   wchar_t* propertyName = store()->readName(_propertyId, _storedForm, size);
-  ASSERT("Consistent property size", size == (lengthOfWideString(storedName()) + 1) * sizeof(OMCharacter));
-  ASSERT("Consistent property name", compareWideString(propertyName, storedName()) == 0);
+  ASSERT("Consistent property size",
+         size == (lengthOfWideString(storedName()) + 1) * sizeof(OMCharacter));
+  ASSERT("Consistent property name",
+                           compareWideString(propertyName, storedName()) == 0);
   delete [] propertyName;
 }
 
