@@ -292,7 +292,7 @@ GetTime( AxPropertyValue axPropertyValue )
    AxPropertyValue second = axTypeDefRecord.GetValue( propValue, 2 );
    AxPropertyValue fraction = axTypeDefRecord.GetValue( propValue, 3 );
 
-   retTime.hour = GetUInt16( hour );
+   retTime.hour = (aafUInt8)GetUInt16( hour );
    retTime.minute = GetUInt8( minute );
    retTime.second = GetUInt8( second );
    retTime.fraction = GetUInt8( fraction );
@@ -390,7 +390,7 @@ GetProductVersion( AxPropertyValue axPropertyValue )
    retProductVersion.minor = GetUInt16( minor );
    retProductVersion.tertiary = GetUInt16( tertiary );
    retProductVersion.patchLevel = GetUInt16( patchLevel );
-   retProductVersion.type = GetEnumValue( type );
+   retProductVersion.type = (aafProductReleaseType_t)GetEnumValue( type );
 
    return retProductVersion;
 }
@@ -517,7 +517,7 @@ string
 ProcessStringForQuoting( string s )
 {
    string ret = s;
-   int index = 0;
+   unsigned index = 0;
    while ( index < ret.size() )
    {
       // escape newlines
@@ -542,7 +542,7 @@ LimitAttributeSize( string attribute, int maxLength, int maxWidth )
    {
       return "";
    }
-   else if ( attribute.size() > maxLength )
+   else if ( (int)attribute.size() > maxLength )
    {
       retAttribute.resize( maxLength - 1 );
       retAttribute.resize( maxLength, '~' );
@@ -550,7 +550,7 @@ LimitAttributeSize( string attribute, int maxLength, int maxWidth )
 
    // spread value over lines.
    int newLineIndex = maxWidth;
-   while ( newLineIndex < retAttribute.size() )
+   while ( newLineIndex < (int)retAttribute.size() )
    {
       retAttribute.insert( newLineIndex, "\\n" );
       newLineIndex += maxWidth + 2;
