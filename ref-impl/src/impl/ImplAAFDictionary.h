@@ -40,7 +40,7 @@ class ImplAAFContainerDef;
 class ImplAAFDataDef;
 class ImplAAFInterpolationDef;
 class ImplAAFOperationDef;
-class ImplAAFPluginDescriptor;
+class ImplAAFPluginDef;
 class ImplAAFTypeDef;
 class ImplAAFTypeDefEnum;
 class ImplAAFTypeDefRecord;
@@ -51,7 +51,7 @@ class ImplEnumAAFDataDefs;
 class ImplEnumAAFInterpolationDefs;
 class ImplEnumAAFOperationDefs;
 class ImplEnumAAFPluggableDefs;
-class ImplEnumAAFPluginDescriptors;
+class ImplEnumAAFPluginDefs;
 class ImplEnumAAFTypeDefs;
 
 #ifndef __ImplAAFObject_h__
@@ -69,6 +69,7 @@ class ImplEnumAAFTypeDefs;
 #include "ImplAAFInterpolationDef.h"
 #include "ImplAAFTypeDef.h"
 #include "ImplAAFDataDef.h"
+#include "ImplAAFPluginDef.h"
 
 class ImplAAFDictionary :
   public OMClassFactory,
@@ -459,7 +460,7 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     RegisterPluginDef
-        (ImplAAFPluginDescriptor * pPluginDesc);
+        (ImplAAFPluginDef * pPluginDesc);
 
   //****************
   // LookupPluginDef()
@@ -469,14 +470,14 @@ public:
         (// @parm [in,ref] Interpolation Unique ID
          const aafUID_t & interpolationID,
 
-         ImplAAFPluginDescriptor ** ppPluginDesc);
+         ImplAAFPluginDef ** ppPluginDesc);
 
   //****************
   // GetPluginDefs()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     GetPluginDefs
-        (ImplEnumAAFPluginDescriptors ** ppEnum);
+        (ImplEnumAAFPluginDefs ** ppEnum);
 
 
   //****************
@@ -636,7 +637,7 @@ private:
   OMStrongReferenceSetProperty<OMUniqueObjectIdentification, ImplAAFParameterDef>			_parameterDefinitions;
   OMStrongReferenceSetProperty<OMUniqueObjectIdentification, ImplAAFInterpolationDef>		_interpolationDefinitions;
   OMStrongReferenceSetProperty<OMUniqueObjectIdentification, ImplAAFDataDef>				_dataDefinitions;
-  OMStrongReferenceSetProperty<OMUniqueObjectIdentification, ImplAAFPluginDescriptor>		_pluginDefinitions;
+  OMStrongReferenceSetProperty<OMUniqueObjectIdentification, ImplAAFPluginDef>				_pluginDefinitions;
   OMStrongReferenceSetProperty<OMUniqueObjectIdentification, ImplAAFTypeDef>				_typeDefinitions;
   OMStrongReferenceSetProperty<OMUniqueObjectIdentification, ImplAAFClassDef>				_classDefinitions;
 
