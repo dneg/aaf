@@ -106,7 +106,7 @@ _platform(            PID_IDENTIFICATION_PLATFORM,             "platform")
 
 extern "C" const aafClassID_t CLSID_AAFIdentification;
 
-OMDEFINE_STORABLE(AAFIdentification, CLSID_AAFIdentification);
+OMDEFINE_STORABLE(ImplAAFIdentification, CLSID_AAFIdentification);
 
 /* returns true if string fits into buffer and does the conversion.
    Returns false otherwise. */
