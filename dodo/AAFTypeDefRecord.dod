@@ -1,0 +1,53 @@
+#startm .this-module 0
+AAFTypeDefStruct\
+#endm
+#c
+#startm .parent-module 0
+AAFTypeDef\
+#endm
+#c
+AD_HEAD
+/***********************************************\
+*	Stub only.   Implementation not yet added	*
+\***********************************************/
+AD_FORWARD_DECLARATION(EnumAAFPropertyValues)
+AD_CLASS_UUID(809c8ca5, 9884, 11d2, 84, 1f, 00, 60, 08, 32, ac, b8)
+
+AD_DEFAULT_UUID(809c8ca6, 9884, 11d2, 84, 1f, 00, 60, 08, 32, ac, b8)
+AD_CLASS_BEGIN
+AD_XMETHOD2(EnumPropertyValues,
+			[in],
+			objIn,
+			AAFPropertyValue,
+			pPVal,
+			The Property Value which is to be read for this data,
+
+			[out],
+			objOut,
+			EnumAAFPropertyValues,
+			ppEnum,
+			The resulting enumerator,
+
+			Returns an enumerator across property values contained in the
+  // struct assumed to be within the specified Property Value.
+  // Assumes that the given Property Value is of the
+  // kAAFTypeCategoryStruct.
+  //
+  // Succeeds if:
+  // - The pPVal pointer is valid.
+  // - The ppEnum pointer is valid.
+  // - The given Property Value is a kAAFTypeCategoryStruct.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - Either pPVal or ppEnum pointer is NULL.
+  //
+  // AAFRESULT_BAD_TYPE_CATEGORY
+  //   - The given Property Value is not a kAAFTypeCategoryStruct.)
+AD_CLASS_END
