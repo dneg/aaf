@@ -496,7 +496,7 @@ ImplAAFFile::OpenNewModify (const aafCharacter * pFileName,
 {
 	ImplAAFContentStorage	*pCStore = NULL;
 	AAFRESULT stat = AAFRESULT_SUCCESS;
-	aafVersionType_t		theVersion = { 1, 0 };
+	aafVersionType_t		theVersion = { 1, 1 };
 
 	if (! _initialized)
 		return AAFRESULT_NOT_INITIALIZED;
@@ -713,7 +713,7 @@ ImplAAFFile::OpenTransient (aafProductIdentification_t * pIdent)
 		}
 		_head->SetByteOrder(_byteOrder);
 		// FIXME FIXME - Hardcoded version!!!
-		aafVersionType_t theVersion = { 1, 0 };
+		aafVersionType_t theVersion = { 1, 1 };
 		_head->SetFileRevision (theVersion);
 		
 		ImplAAFContentStorage * pCStore = 0;
@@ -899,7 +899,7 @@ ImplAAFFile::CreateAAFFileOnRawStorage
 			  _byteOrder = 0x4d4d; // 'MM'
 			}
 		  _head->SetByteOrder(_byteOrder);
-		  aafVersionType_t theVersion = { 1, 0 };
+		  aafVersionType_t theVersion = { 1, 1 };
 		  _head->SetFileRevision (theVersion);
 
 		  //JeffB!!! We must decide whether def-only files have a
