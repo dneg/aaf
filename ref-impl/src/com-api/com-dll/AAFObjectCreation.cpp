@@ -4,20 +4,11 @@
 #include "ImplAAFContentStorage.h"
 
 #include <string.h>
+#include <assert.h>
 
 //JeffB: We currently have one object which exists in the file, but not in the API
-extern "C" const aafClassID_t
-CLSID_AAFContentStorage = { 0x54D4C481, 0x5F8B, 0x11d2, { 0x80, 0x73, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F} };
-
-static int equal(const aafClassID_t ida, const aafClassID_t idb)
-{
-  int result = 0;
-  
-  if (memcmp(&ida, &idb, sizeof(aafClassID_t)) == 0)
-    result = 1;
-
-    return result;
-}
+//extern "C" const aafClassID_t
+//CLSID_AAFContentStorage = { 0x54D4C481, 0x5F8B, 0x11d2, { 0x80, 0x73, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F} };
 
 // Creates and returns an Impl object based on the given class ID.
 // Will create the appropriate kind of API class and attach it.
@@ -39,14 +30,6 @@ ImplAAFRoot * CreateImpl (const aafClassID_t & rClassID)
 	//
 	memcpy(&classID, &rClassID, sizeof(CLSID));
 
-	if (equal(rClassID, CLSID_AAFContentStorage))
-	{
-		//!!!JeffB: This is temporary, until we decide if AAFContentStorage requires an API
-		// or uses more visible APIs.
-		implRoot = new ImplAAFContentStorage;
-	}
-	else
-	{
 	hr = CoCreateInstance(classID,
 				NULL, 
 				CLSCTX_INPROC_SERVER, 
@@ -57,7 +40,6 @@ ImplAAFRoot * CreateImpl (const aafClassID_t & rClassID)
 		pIAAFRoot->GetImplRep((void **)&implRoot);
 	else
 		implRoot = NULL;
-	}
 
 	return (implRoot);
 }
@@ -72,4 +54,35 @@ ImplAAFRoot * CreateImpl (const aafClassID_t & rClassID)
 //
 void DeleteImpl (ImplAAFRoot *& pObj)
 {
+  ReleaseImplReference(pObj);
+  pObj = NULL;
+}
+
+
+// Increases the reference count of the API container object.
+aafUInt32 AcquireImplReference(ImplAAFRoot *pObj)
+{
+  IAAFRoot * pRoot = static_cast<IAAFRoot *>(pObj->GetContainer());
+  assert(pRoot);
+  return pRoot->AddRef();
+}
+
+// Decreases the reference count of the API container object by one.
+// If the count goes to zero then the given Impl object will be deleted
+// with the corresponding API container object.
+aafUInt32 ReleaseImplReference(ImplAAFRoot *pObj)
+{
+  IAAFRoot * pRoot = static_cast<IAAFRoot *>(pObj->GetContainer());
+  assert(pRoot);
+  return pRoot->Release();
+}
+
+// Return the reference count of the given implementation object
+// container's reference count.
+aafUInt32 ReferenceImplCount(ImplAAFRoot *pObj)
+{
+  IAAFRoot * pRoot = static_cast<IAAFRoot *>(pObj->GetContainer());
+  assert(pRoot);
+  pRoot->AddRef();
+  return pRoot->Release();
 }
