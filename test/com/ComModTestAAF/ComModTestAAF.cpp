@@ -113,7 +113,14 @@ static void formatError(DWORD errorCode)
 	cerr << endl;
 }
 
-
+static void throwIfError(HRESULT hr)
+{
+  if (FAILED(hr))
+  {
+    formatError(hr);
+    throw hr;
+	}
+}
 
 // helper class
 struct CComInitialize
@@ -134,8 +141,7 @@ struct CAAFInitialize
     if (S_OK != hr)
   	{
       cerr << "FAILED! ";
-      formatError(hr);
-      throw hr;
+      throwIfError(hr);
 		}
     cout << "DONE" << endl;
   }
@@ -144,6 +150,30 @@ struct CAAFInitialize
   {
     AAFUnload();
   }
+};
+
+
+// simple helper class to initialize and cleanup AAF library.
+class CAAFInitializePlugins
+{
+public:
+  CAAFInitializePlugins() :
+    pPluginMgr(NULL)
+  {
+    throwIfError(AAFGetPluginManager(&pPluginMgr));
+    throwIfError(pPluginMgr->RegisterSharedPlugins());
+    pPluginMgr->Release();
+    pPluginMgr = NULL;
+  }
+
+  ~CAAFInitializePlugins()
+  {
+    if (pPluginMgr)
+      pPluginMgr->Release();
+  }
+
+  // cached for error cleanup.
+  IAAFPluginManager *pPluginMgr;
 };
 
 
@@ -175,6 +205,8 @@ int main(int argc, char* argv[])
 		// Make sure the dll can be loaded and initialized.
 		CAAFInitialize aafInit;
 
+		// Make sure the shared plugins can be loaded and registered.
+    CAAFInitializePlugins aafInitPlugins;
 
 		/* console window for mac */
 
