@@ -44,11 +44,11 @@ sdk-files :
 
 .PHONY : release-dist
 release-dist : release-files
-	./CreateDistribution.bash release Dist/release-files Dist/release $(AAFSDK) $(AAFPLATFORM) $(AAFSDKBUILD_H)
+	./CreateDistribution.bash release Dist/release-files Dist/aaf_release $(AAFSDK) $(AAFPLATFORM) $(AAFSDKBUILD_H)
 
 .PHONY : sdk-dist
 sdk-dist : sdk-files
-	./CreateDistribution.bash release Dist/sdk-files Dist/sdk $(AAFSDK) $(AAFPLATFORM) $(AAFSDKBUILD_H)
+	./CreateDistribution.bash release Dist/sdk-files Dist/aaf_sdk $(AAFSDK) $(AAFPLATFORM) $(AAFSDKBUILD_H)
 
 .PHONY : clean
 clean : realclean
