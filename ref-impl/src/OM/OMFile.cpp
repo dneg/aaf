@@ -11,7 +11,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 // 
-// The Original Code of this file is Copyright 1998-2001, Licensor of the
+// The Original Code of this file is Copyright 1998-2002, Licensor of the
 // AAF Association.
 // 
 // The Initial Developer of the Original Code of this file and the
@@ -482,10 +482,44 @@ void OMFile::registerFactory(const OMStoredObjectEncoding& encoding,
   TRACE("OMFile::registerFactory");
 
   PRECONDITION("Valid factory", factory != 0);
+  PRECONDITION("Unique encoding", !hasFactory(encoding));
+  PRECONDITION("Unique name", !hasFactory(factory->name()));
 
   ASSERT("Valid factory", _factory != 0);
   _factory->insert(encoding, factory);
   factory->initialize();
+}
+
+bool OMFile::hasFactory(const OMStoredObjectEncoding& encoding)
+{
+  TRACE("OMFile::hasFactory");
+  bool result = false;
+
+  if (_factory != 0) {
+    OMStoredObjectFactory* f = 0;
+    _factory->find(encoding, f);
+    if (f != 0) {
+      result = true;
+    }
+  }
+  return result;
+}
+
+bool OMFile::hasFactory(const wchar_t* name)
+{
+  TRACE("OMFile::hasFactory");
+  bool result = false;
+
+  if (_factory != 0) {
+    FactorySetIterator iterator(*_factory, OMBefore);
+    while (++iterator) {
+      if (compareWideString(iterator.value()->name(), name) == 0) {
+        result = true;
+        break;
+      }
+    }
+  }
+  return result;
 }
 
 OMStoredObjectFactory* OMFile::findFactory(

@@ -11,7 +11,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 // 
-// The Original Code of this file is Copyright 1998-2001, Licensor of the
+// The Original Code of this file is Copyright 1998-2002, Licensor of the
 // AAF Association.
 // 
 // The Initial Developer of the Original Code of this file and the
@@ -167,6 +167,10 @@ public:
 
   static void registerFactory(const OMStoredObjectEncoding& encoding,
                               OMStoredObjectFactory* factory);
+
+  static bool hasFactory(const OMStoredObjectEncoding& encoding);
+
+  static bool hasFactory(const wchar_t* name);
 
   static OMStoredObjectFactory* findFactory(
                                        const OMStoredObjectEncoding& encoding);
