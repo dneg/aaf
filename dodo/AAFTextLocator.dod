@@ -14,14 +14,6 @@ AAFLocator\
 #endm
 #c
 #c #import ./AAFLocator.exp
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-*                                          *
-\******************************************/
-AD_HEAD
 AD_IDL(//
 // The IAAFTextLocator interface is implemented by objects which
 // provide information to help find a file containing essence data
