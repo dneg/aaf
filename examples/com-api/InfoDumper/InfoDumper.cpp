@@ -2914,11 +2914,11 @@ int main(int argc, char* argv[])
 	HRESULT hr = AAFLoad(0);
 	if (!AAFRESULT_SUCCEEDED(hr))
 	  {
-	    cerr << "Failed to load the AAF DLL."
-                 << endl;
-	    cerr << "Is the $PATH environment variable set correctly ?"
-                 << endl;
-	    exit(1);
+		cerr << "Error : Failed to load the AAF library, ";
+		cerr << "check environment variables -" << endl;
+		cerr << "  Windows    - $PATH" << endl;
+		cerr << "  Unix/Linux - $LD_LIBRARY_PATH" << endl;
+		exit(hr);
 	  }
 
 	// Last argument should be input aaf filename

@@ -738,9 +738,11 @@ int main(int argumentCount, char *argumentVector[])
   //
   HRESULT hr = AAFLoad(0);
   if (!AAFRESULT_SUCCEEDED(hr)) {
-    printf("Failed to load the AAF DLL.\n");
-    printf("Is the $PATH environment variable set correctly ?\n");
-    exit(1);
+    fprintf(stderr, "Error : Failed to load the AAF library, ");
+    fprintf(stderr, "check environment variables -\n");
+    fprintf(stderr, "  Windows    - $PATH\n");
+    fprintf(stderr, "  Unix/Linux - $LD_LIBRARY_PATH\n");
+    exit(hr);
   }
 
   aafWChar FileNameBuffer[MAX];

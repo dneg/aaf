@@ -599,9 +599,14 @@ struct CAAFInitialize
 {
   CAAFInitialize(const char *dllname = NULL)
   {
-  	printf("Attempting to load the AAF dll...\n");
-    check(AAFLoad(dllname));
-    printf("DONE\n");
+    HRESULT hr = AAFLoad(dllname);
+	if (!AAFRESULT_SUCCEEDED(hr)) {
+	  fprintf(stderr, "Error : Failed to load the AAF library, ");
+	  fprintf(stderr, "check environment variables -\n");
+	  fprintf(stderr, "  Windows    - $PATH\n");
+	  fprintf(stderr, "  Unix/Linux - $LD_LIBRARY_PATH\n");
+	  exit(hr);
+	}
   }
 
   ~CAAFInitialize()
