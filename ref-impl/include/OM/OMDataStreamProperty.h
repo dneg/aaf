@@ -23,10 +23,9 @@ public:
     // @this const
   virtual void save(void) const;
 
-    // @cmember Restore this <c OMDataStreamProperty> from the
-    //          <c OMStoredObject> <p s>, the size of the
+    // @cmember Restore this <c OMDataStreamProperty>, the size of the
     //          <c OMDataStreamProperty> is <p size>.
-  virtual void restoreFrom(OMStoredObject& s, size_t size);
+  virtual void restore(size_t size);
 
     // @cmember Close this  <c OMDataStreamProperty>.
   virtual void close(void);

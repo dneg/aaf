@@ -37,10 +37,9 @@ public:
     // @cmember Close this <c OMProperty>.
   virtual void close(void);
 
-    // @cmember Restore this <c OMProperty> from the
-    //          <c OMStoredObject> <p s>, the size of the <c OMProperty>
+    // @cmember Restore this <c OMProperty>, the size of the <c OMProperty>
     //          is <p size>.
-  virtual void restoreFrom(OMStoredObject& s, size_t size) = 0;
+  virtual void restore(size_t size) = 0;
 
     // @cmember The name of this <c OMProperty>.
     // @this const 
@@ -179,10 +178,9 @@ public:
     // @cmember Close this <c OMProperty>.
   virtual void close(void);
 
-    // @cmember Restore this <c OMStrongReferenceProperty> from the
-    //          <c OMStoredObject> <p s>, the size of the
-    //          <c OMStrongReferenceProperty> is <p size>.
-  virtual void restoreFrom(OMStoredObject& s, size_t size);
+    // @cmember Restore this <c OMStrongReferenceProperty>, the size of
+    //          the <c OMStrongReferenceProperty> is <p size>.
+  virtual void restore(size_t size);
 
     // @cmember Detach the <c OMStorable> object with the given
     //          <p key> from this <c OMStrongReferenceProperty>. This
@@ -239,10 +237,9 @@ public:
     // @cmember close this <c OMWeakReferenceProperty>.
   virtual void close(void);
 
-    // @cmember Restore this <c OMWeakReferenceProperty> from the
-    //          <c OMStoredObject> <p s>, the size of the
-    //          <c OMWeakReferenceProperty> is <p size>.
-  virtual void restoreFrom(OMStoredObject& s, size_t size);
+    // @cmember Restore this <c OMWeakReferenceProperty>, the size of
+    //          the <c OMWeakReferenceProperty> is <p size>.
+  virtual void restore(size_t size);
 
     // @cmember Detach the <c OMStorable> object with the given
     //          <p key> from this <c OMWeakReferenceProperty>. This
@@ -276,7 +273,9 @@ public:
     //   @this const
   virtual void save(void) const;
 
-  virtual void restoreFrom(OMStoredObject& s, size_t size);
+    // @cmember Restore this <c OMSimpleProperty>, the size of
+    //          the <c OMSimpleProperty> is <p size>.
+  virtual void restore(size_t size);
 
     // @cmember The size of this <c OMSimpleProperty>.
     //   @this const
@@ -336,10 +335,9 @@ public:
     // @cmember "Address of" operator.
   PropertyType* operator &(void);
 
-    // @cmember Restore this <c OMFixedSizeProperty> from the
-    //          <c OMStoredObject> <p s>, the size of the
+    // @cmember Restore this <c OMFixedSizeProperty>, the size of the
     //          <c OMFixedSizeProperty> is <p size>.
-  virtual void restoreFrom(OMStoredObject& s, size_t size);
+  virtual void restore(size_t size);
 
 };
 
@@ -376,10 +374,9 @@ public:
     //   @this const
   bool copyToBuffer(PropertyType* buffer, size_t bufferSize) const;
 
-    // @cmember Restore this <c OMVariableSizeProperty> from the
-    //          <c OMStoredObject> <p s>, the size of the
-    //          <c OMVariableSizeProperty> is <p size>.
-  virtual void restoreFrom(OMStoredObject& s, size_t size);
+    // @cmember Restore this <c OMVariableSizeProperty>, the size of
+    //          the <c OMVariableSizeProperty> is <p size>.
+  virtual void restore(size_t size);
 
 };
 
@@ -425,10 +422,9 @@ public:
     // @cmember Close this <c OMProperty>.
   virtual void close(void);
 
-    // @cmember Restore this <c OMStrongReferenceVectorProperty> from
-    //          the <c OMStoredObject> <p s>, the size of the
-    //          <c OMStrongReferenceVectorProperty> is <p size>.
-  virtual void restoreFrom(OMStoredObject& s, size_t size);
+    // @cmember Restore this <c OMStrongReferenceVectorProperty>, the
+    //          size of the <c OMStrongReferenceVectorProperty> is <p size>.
+  virtual void restore(size_t size);
 
     // @cmember Get the size of this <c OMStrongReferenceVectorProperty>.
     //   @this const
