@@ -18,7 +18,7 @@
 
 #include <MultiGenTest.h>
 
-#include <MultiGenCommon.h>
+#include "MultiGenCommon.h"
 
 #include <AAFEssenceFormats.h>
 #include <AAFStoredObjectIDs.h>
@@ -383,7 +383,7 @@ void CountSamples::RunTest( CmdState& state, int argc, char** argv)
   if ( expectedCount != count ) {
     stringstream anError;
     anError << "sample counts do not match ("
-	    << count << " != " << expectedCount << ")";
+	    << static_cast<int>(count) << " != " << static_cast<int>(expectedCount) << ")";
     throw TestFailedEx( anError.str() );
   }
 }
