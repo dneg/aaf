@@ -169,6 +169,9 @@ private:
 
   OMFixedSizeProperty<OMPropertyId>          _pid;
 
+  OMFixedSizeProperty<aafBool>               _IsSearchable;
+  OMVariableSizeProperty<aafUInt8>			 _DefaultValue;
+
   ImplAAFTypeDef *                           _cachedType;
 
   char * _bname;  // name in byte-sized characters
