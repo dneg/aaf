@@ -214,7 +214,6 @@ AAFRESULT STDMETHODCALLTYPE
 		if (theEnum)
 		  theEnum->ReleaseReference();
 		theEnum = 0;
-		return(XCODE());
 	}
 	XEND;
 	
