@@ -111,6 +111,7 @@ AAFRESULT STDMETHODCALLTYPE
   if (! pDataDef)
 	return AAFRESULT_NULL_PARAM;
 
+	assert(_dataDef.isVoid());
 	_dataDef = pDataDef;
 
 	return AAFRESULT_SUCCESS;

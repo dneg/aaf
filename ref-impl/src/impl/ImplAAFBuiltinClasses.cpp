@@ -612,10 +612,11 @@ void ImplAAFBuiltinClasses::instantiateClasses ()
  	  parent = LookupAxiomaticClass(*cte->pParentId);
 	  if(parent)
 	  {
-		 hr = _axClassDefs[classIdx]->SetParent(parent);
-		 assert (AAFRESULT_SUCCEEDED (hr));
+//		 hr = _axClassDefs[classIdx]->SetParent(parent);
+//		 assert (AAFRESULT_SUCCEEDED (hr));
 		 hr = _axClassDefs[classIdx]->SetBootstrapParent(parent);
 		 assert (AAFRESULT_SUCCEEDED (hr));
+		 parent->ReleaseReference();
 	  }
 	  else
 	  {
@@ -623,8 +624,8 @@ void ImplAAFBuiltinClasses::instantiateClasses ()
 		  hr = _axClassDefs[classIdx]->IsRoot(&isRoot);
 		  assert (AAFRESULT_SUCCEEDED (hr));
 		  assert(isRoot);
-		  hr = _axClassDefs[classIdx]->SetParent(_axClassDefs[classIdx]);	// Make root curcular
-		  assert (AAFRESULT_SUCCEEDED (hr));
+//		  hr = _axClassDefs[classIdx]->SetParent(_axClassDefs[classIdx]);	// Make root curcular
+//		  assert (AAFRESULT_SUCCEEDED (hr));
 	  }
 
 	  ImplAAFClassDef * pcd = _axClassDefs[classIdx];

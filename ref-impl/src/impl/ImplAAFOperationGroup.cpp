@@ -192,8 +192,8 @@ AAFRESULT STDMETHODCALLTYPE
 	if(OperationDef == NULL)
 		return AAFRESULT_NULL_PARAM;
 
+	assert(_operationDefinition.isVoid());
 	_operationDefinition = OperationDef;
-	_operationDefinition->AcquireReference();
 
 	return AAFRESULT_SUCCESS;
 }

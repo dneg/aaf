@@ -463,6 +463,7 @@ ImplAAFObject* ImplAAFDictionary::pvtInstantiate(const aafUID_t & auid) const
 			}
 			hr = pcd->GetParent (&parent);
 			hr = parent->GetAUID(&parentAUID);
+			parent->ReleaseReference();
 		  result = pvtCreateBaseClassInstance(parentAUID);
 		}
 	}
@@ -602,18 +603,38 @@ AAFRESULT STDMETHODCALLTYPE
 	  // here's where we assure it's in the dictionary.
 	  if(_defRegistrationAllowed)
 	  {
-		  ImplAAFClassDef	*dictValue;
+		  ImplAAFClassDef	*dictValue, *parent;
 		  // These classes fail with doubly-opened storages
 		  if(memcmp(&classID, &kAAFClassID_ClassDefinition, sizeof(aafUID_t)) != 0
 		   && memcmp(&classID, &kAAFClassID_TypeDefinitionString, sizeof(aafUID_t)) != 0
 		   && memcmp(&classID, &kAAFClassID_TypeDefinitionVariableArray, sizeof(aafUID_t)) != 0
 		   && memcmp(&classID, &kAAFClassID_TypeDefinitionRecord, sizeof(aafUID_t)) != 0
 		   && memcmp(&classID, &kAAFClassID_TypeDefinitionFixedArray, sizeof(aafUID_t)) != 0
-		   && memcmp(&classID, &kAAFClassID_TypeDefinitionInteger, sizeof(aafUID_t)) != 0)
+		   && memcmp(&classID, &kAAFClassID_TypeDefinitionInteger, sizeof(aafUID_t)) != 0
+		   )
 		  {
 			  status = dictLookupClassDef(classID, &dictValue);
 			  if(status != AAFRESULT_SUCCESS || dictValue == NULL)
 			  {
+				aafBool		isRoot;
+				aafUID_t	uid;
+
+				  (*ppClassDef)->IsRoot(&isRoot);
+				  if(isRoot)
+				  {
+					 (*ppClassDef)->SetParent(*ppClassDef);
+				  }
+				  else
+				  {
+					 (*ppClassDef)->GetParent(&parent);	// Uses bootstrap parent if set
+					 parent->GetAUID(&uid);
+					 parent->ReleaseReference();
+					 parent = NULL;
+					 LookupClassDef (uid, &parent);
+					 (*ppClassDef)->SetParent(parent);
+					 parent->ReleaseReference();
+				  }
+				  (*ppClassDef)->SetBootstrapParent(NULL);
 				  status = RegisterClassDef(*ppClassDef);
 				  assert (AAFRESULT_SUCCEEDED (status));
 			  }

@@ -421,20 +421,13 @@ AAFRESULT STDMETHODCALLTYPE
       ImplAAFClassDef ** ppClassDef)
 {
 	aafBool		isRoot;
-	aafUID_t	uid;	//!!!DEBUG
 	if (! ppClassDef) return AAFRESULT_NULL_PARAM;
 	
 	IsRoot (&isRoot);
 	if(isRoot)
 		return AAFRESULT_IS_ROOT_CLASS;
 
-	GetAUID (&uid);	//!!!DEBUG
-	if(_BootstrapParent == NULL && memcmp(&uid, &AUID_AAFComponent, sizeof(aafUID_t)) == 0) //!!!DEBUG
-	{
-		GetAUID (&uid);	//!!!DEBUG
-	}
-
-	if(_BootstrapParent != NULL)
+	if(_ParentClass.isVoid())
 		*ppClassDef = _BootstrapParent;	// If we are in the bootstrap process
 	else
 		*ppClassDef = _ParentClass;		// else follow the weak reference
@@ -464,21 +457,11 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFClassDef::SetParent (
       ImplAAFClassDef *pClassDef)
 {
-  ImplAAFClassDef	*oldClassDef;
-  
-  if (! pClassDef)
-	return AAFRESULT_NULL_PARAM;
+	if (! pClassDef)
+		return AAFRESULT_NULL_PARAM;
 
-	// find out if this OperationDef is already set
-	if(!_ParentClass.isVoid())
-	{
-		oldClassDef = _ParentClass;
-		if (oldClassDef != 0)
-			oldClassDef->ReleaseReference();
-	}
+//	assert(_ParentClass.isVoid());
 	_ParentClass = pClassDef;
-	if(pClassDef)
-		pClassDef->AcquireReference();
   return AAFRESULT_SUCCESS;
 }
 
