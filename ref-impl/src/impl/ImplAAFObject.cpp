@@ -9,7 +9,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -394,41 +394,63 @@ AAFRESULT ImplPropertyCollection::GetNthElement
 ImplAAFObject::ImplAAFObject ()
   : _pProperties (0),
 	_cachedDefinition (0),
-	_OMPropInitStarted (AAFFalse),
-	_addedPropCount (0)
+	_apSavedProps (0),
+	_savedPropsSize (0),
+	_savedPropsCount (0)
 {
   const aafUID_t null_uid = { 0 };
   _soid = null_uid;
-
-  for (size_t i = 0; i < kMaxAddedPropCount; i++)
-	_addedProps[i] = 0;
 }
 
 
-/*
-template <typename T>
-static void CleanupObjRefs (OMProperty* p)
+ImplAAFObject::SavedProp::SavedProp (OMProperty * p)
+  : _p(p)
 {
-  OMStrongReferenceVectorProperty<T> * srv =
-	dynamic_cast<OMStrongReferenceVectorProperty<T>*>(p);
+  assert (p);
+}
+
+
+ImplAAFObject::SavedProp::~SavedProp ()
+{
+  assert (_p);
+  // The template argument here *must* match the type allocated in
+  // ImplAAFTypeDefFixedArray::pvtCreateOMPropertyMBS() and
+  // ImplAAFTypeDefVariableArray::pvtCreateOMPropertyMBS().
+  OMStrongReferenceVectorProperty<ImplAAFObject> * srv =
+	dynamic_cast<OMStrongReferenceVectorProperty <ImplAAFObject>*>(_p);
   if (srv)
 	{
 	  size_t size = srv->getSize();
 	  for (size_t i = 0; i < size; i++)
 		{
-		  OMStorable* oldObj = srv->setValueAt (0, i);
+		  ImplAAFObject* oldObj = srv->setValueAt (0, i);
 		  if (oldObj)
 			{
-			  ImplAAFObject * pObj =
-				dynamic_cast<ImplAAFObject*>(oldObj);
-			  assert (pObj);
-			  pObj->ReleaseReference ();
-			  pObj = 0;
+			  oldObj->ReleaseReference ();
+			  oldObj = 0;
 			}
 		}
 	}
+  else
+	{
+	  // The template argument here *must* match the type
+	  // allocated in
+	  // ImplAAFTypeDefStrongObjRef::pvtCreateOMPropertyMBS().
+	  OMStrongReferenceProperty<ImplAAFObject> * sro =
+		dynamic_cast<OMStrongReferenceProperty<ImplAAFObject>*>(_p);
+	  if (sro)
+		{
+		  ImplAAFObject* oldObj = sro->setValue (0);
+		  if (oldObj)
+			{
+			  oldObj->ReleaseReference ();
+			  oldObj = 0;
+			}
+		}
+	}
+  delete _p;
 }
-*/
+
 
 
 ImplAAFObject::~ImplAAFObject ()
@@ -439,46 +461,51 @@ ImplAAFObject::~ImplAAFObject ()
 	delete _pProperties;
 
   for (size_t i = 0;
-	   i <_addedPropCount;
+	   i <_savedPropsCount;
 	   i++)
 	{
-	  // The template argument here *must* match the type allocated in
-	  // ImplAAFTypeDefFixedArray::pvtCreateOMPropertyMBS() and
-	  // ImplAAFTypeDefVariableArray::pvtCreateOMPropertyMBS().
-	  OMStrongReferenceVectorProperty<ImplAAFObject> * srv =
-		dynamic_cast<OMStrongReferenceVectorProperty<ImplAAFObject>*>(_addedProps[i]);
-	  if (srv)
-		{
-		  size_t size = srv->getSize();
-		  for (size_t i = 0; i < size; i++)
-			{
-			  ImplAAFObject* oldObj = srv->setValueAt (0, i);
-			  if (oldObj)
-				{
-				  oldObj->ReleaseReference ();
-				  oldObj = 0;
-				}
-			}
-		}
-	  else
-		{
-		  // The template argument here *must* match the type
-		  // allocated in
-		  // ImplAAFTypeDefStrongObjRef::pvtCreateOMPropertyMBS().
-		  OMStrongReferenceProperty<ImplAAFObject> * sro =
-			dynamic_cast<OMStrongReferenceProperty<ImplAAFObject>*>(_addedProps[i]);
-		  if (sro)
-			{
-			  ImplAAFObject* oldObj = sro->setValue (0);
-			  if (oldObj)
-				{
-				  oldObj->ReleaseReference ();
-				  oldObj = 0;
-				}
-			}
-		}
-	  delete _addedProps[i];
+	  delete _apSavedProps[i];
 	}
+  delete [] _apSavedProps;
+}
+
+
+void ImplAAFObject::RememberAddedProp (OMProperty * pProp)
+{
+  assert (pProp);
+
+  // make sure that number of slots allocated (size) is no smaller
+  // than number used (count).
+  assert (_savedPropsSize >= _savedPropsCount);
+
+  // If we need a new one, allocate more.
+  if (_savedPropsSize == _savedPropsCount)
+	{
+	  // Need more.  We'll allocate in chunks of 10 props.
+	  aafUInt32 newSize = _savedPropsSize + 10;
+	  SavedProp ** pNewSavedProps = new SavedProp*[newSize];
+	  // Clear the allocated ones.
+	  memset (pNewSavedProps, 0, sizeof (SavedProp*) * newSize);
+	  // Copy over the ones already allocated.
+	  for (size_t i = 0; i < _savedPropsCount; i++)
+		{
+		  pNewSavedProps[i] = _apSavedProps[i];
+		}
+	  // ditch the old storage
+	  delete [] _apSavedProps;
+	  // zero this to keep Bounds Checker happy
+	  _apSavedProps = 0;
+	  // remember the new storage
+	  _apSavedProps = pNewSavedProps;
+	  // zero this to keep Bounds Checker happy
+	  pNewSavedProps = 0;
+	  _savedPropsSize = newSize;
+	}
+  // We have the space.  Save the prop.
+  assert (_savedPropsSize >= _savedPropsCount);
+  _apSavedProps[_savedPropsCount] = new SavedProp(pProp);
+  assert (_apSavedProps[_savedPropsCount]);
+  _savedPropsCount++;
 }
 
 
@@ -855,6 +882,8 @@ void ImplAAFObject::pvtSetSoid (const aafUID_t & id)
 }
 
 
+// Moved this code to ClassDef.
+#if 0
 //
 // Here is the mapping of DM type defs to OMProperty concrete
 // classes.
@@ -981,6 +1010,7 @@ void ImplAAFObject::InitOMProperties ()
 	  spDef = parentSP;
 	}
 }
+#endif // 0
 
 
 //

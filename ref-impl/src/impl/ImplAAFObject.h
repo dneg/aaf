@@ -14,7 +14,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -194,13 +194,14 @@ public:
 
   void pvtSetSoid (const aafUID_t & id);
 
-  // Initialize the OM Properties in this object.
-  void InitOMProperties ();
-
   virtual const OMClassId& classId(void) const;
 
   // Create and intialize associated external extensions.
   AAFRESULT InitializeExtensions(void);
+
+  // Remembers the given property so it will be deleted with this
+  // object.
+  void RememberAddedProp (OMProperty * pProp);
 
 private:
 
@@ -214,13 +215,34 @@ private:
   // stored object ID
   aafUID_t                 _soid;
 
-  // This is only kept so we can delete added properties when this
-  // object goes away.
-  enum { kMaxAddedPropCount = 100 };
-  OMProperty* _addedProps[kMaxAddedPropCount];
-  size_t _addedPropCount;
+  // 
+  // The following section is intended only to delete added properties
+  // when this object goes away.
+  // 
+  // Private class to manage saved properties
+  class SavedProp
+  {
+  public:
+	SavedProp (OMProperty * p);
+	~SavedProp ();
 
-  aafBool _OMPropInitStarted;
+  private:
+	// Disallow copy and assignment, so declare them private and don't
+	// implement!
+	SavedProp (const SavedProp&);
+	SavedProp& operator= (const SavedProp&);
+
+	OMProperty * _p;
+  };
+  //
+  // pointer to array of pointers to saved properties.
+  SavedProp ** _apSavedProps;
+  //
+  // size of _pSavedProps array.
+  aafUInt32 _savedPropsSize;
+  //
+  // number of those props that are actually used
+  aafUInt32 _savedPropsCount;
 };
 
 //
