@@ -263,7 +263,6 @@ static HRESULT GetUserInput(int argc, char* argv[])
 int main(int argc, char *argv[])
 {
 	HRESULT			hr;
-	CComInitialize	comInit;
 
 	hr = InitGlobalVars();
 	if (FAILED(hr))
