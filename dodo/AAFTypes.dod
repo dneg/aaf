@@ -227,6 +227,12 @@ typedef enum _aafFieldTop_t
 	kTopFieldNone = 2
 } aafFieldTop_t;
 
+typedef enum _aafAlphaTransparency_t
+{
+	kMinValueTransparent = 0,
+	kMaxValueTransparent = 1
+} aafAlphaTransparency_t;
+
 // TomR: The following enumeration, aafVideoFmtOpcode_t and aafAudioFmtOpcode_t, will 
 // be replaced by a more general "plugin option" object mechanism [TBD] that does not 
 // require the public AAF api to have any declared public knowledge of any particular
