@@ -30,6 +30,7 @@
 #define OMWEAKREFPROPERTYT_H
 
 #include "OMAssertions.h"
+#include "OMPropertyTable.h"
 
 template<typename ReferencedObject>
 OMWeakReferenceProperty<ReferencedObject>::OMWeakReferenceProperty(
@@ -39,7 +40,7 @@ OMWeakReferenceProperty<ReferencedObject>::OMWeakReferenceProperty(
 : OMReferenceProperty<ReferencedObject>(propertyId,
                                         SF_WEAK_OBJECT_REFERENCE,
                                         name), _reference(this, name),
-  _targetTag(0), _targetName(saveString(targetName)), _targetSet(0)
+  _targetName(saveString(targetName)), _targetSet(0)
 {
   TRACE("OMWeakReferenceProperty<ReferencedObject>::OMWeakReferenceProperty");
 }
@@ -48,6 +49,7 @@ template<typename ReferencedObject>
 OMWeakReferenceProperty<ReferencedObject>::~OMWeakReferenceProperty(void)
 {
   TRACE("OMWeakReferenceProperty<ReferencedObject>::~OMWeakReferenceProperty");
+  delete [] _targetName;
 }
 
   // @mfunc Get the value of this <c OMWeakReferenceProperty>.
@@ -64,7 +66,7 @@ void OMWeakReferenceProperty<ReferencedObject>::getValue(
   PRECONDITION("Optional property is present",
                                            IMPLIES(isOptional(), isPresent()));
 
-  ReferencedObject* result = _reference.getValue();
+  ReferencedObject* result = _reference.getValue(set());
 
   object = result;
 
@@ -83,6 +85,8 @@ ReferencedObject* OMWeakReferenceProperty<ReferencedObject>::setValue(
                                                const ReferencedObject* object)
 {
   TRACE("OMWeakReferenceProperty<ReferencedObject>::setValue");
+
+  // tjb PRECONDITION("Valid target", set()->containsValue(object));
 
   return _reference.setValue(object);
 }
@@ -113,14 +117,14 @@ template<typename ReferencedObject>
 ReferencedObject*
 OMWeakReferenceProperty<ReferencedObject>::operator -> (void)
 {
-  return _reference.getValue();
+  return _reference.getValue(set());
 }
 
 template<typename ReferencedObject>
 const ReferencedObject*
 OMWeakReferenceProperty<ReferencedObject>::operator -> (void) const
 {
-  return _reference.getValue();
+  return _reference.getValue(set());
 }
 
   // @mfunc Type conversion. Convert an
@@ -151,24 +155,21 @@ void OMWeakReferenceProperty<ReferencedObject>::save(void* clientContext) const
 {
   TRACE("OMWeakReferenceProperty<ReferencedObject>::save");
 
+  PRECONDITION("Non-void weak reference", !_reference.isVoid());
+
   ASSERT("Valid property set", _propertySet != 0);
   OMStorable* container = _propertySet->container();
   ASSERT("Valid container", container != 0);
   ASSERT("Container is persistent", container->persistent());
-  OMStoredObject* s = container->store();
+  OMStoredObject* store = container->store();
 
-  const char* pathName = _reference.pathName();
+  OMFile* file = container->file();
+  OMUInt32 tag = file->referencedProperties()->insert(_targetName);
 
-  ASSERT("Non-void weak reference", pathName != 0);
-
-  // save this name as the value of this property
-  s->write(_propertyId,
-           _storedForm,
-           (void *)pathName,
-           strlen(pathName) + 1);
+  const OMUniqueObjectIdentification& id = _reference.identification();
+  store->save(_propertyId, _storedForm, id, tag);
 
   _reference.save(clientContext);
-
 }
 
   // @mfunc Close this <c OMWeakReferenceProperty>.
@@ -194,19 +195,23 @@ void OMWeakReferenceProperty<ReferencedObject>::restore(size_t externalSize)
 {
   TRACE("OMWeakReferenceProperty<ReferencedObject>::restore");
 
-  // read the pathname from the file and save it in this weak reference
-  char* pathName = new char[externalSize];
-  ASSERT("Valid heap pointer", pathName != 0);
-
-  OMStoredObject* store = _propertySet->container()->store();
+  ASSERT("Valid property set", _propertySet != 0);
+  OMStorable* container = _propertySet->container();
+  ASSERT("Valid container", container != 0);
+  ASSERT("Container is persistent", container->persistent());
+  OMStoredObject* store = container->store();
   ASSERT("Valid store", store != 0);
 
-  store->read(_propertyId, _storedForm, pathName, externalSize);
+  OMUniqueObjectIdentification id;
+  OMUInt32 tag;
+  ASSERT("Sizes match", (sizeof(id) + sizeof(tag)) == externalSize);
+  store->restore(_propertyId, _storedForm, id, tag);
 
-  _reference.setPathName(pathName);
+  _reference.setIdentification(id);
   _reference.restore();
-  delete [] pathName;
 
+  POSTCONDITION("Target names match",
+                         strcmp(_targetName, _reference.targetName(tag)) == 0);
 }
 
   // @mfunc Get the raw bits of this <c OMWeakReferenceProperty>. The raw bits
@@ -250,6 +255,23 @@ void OMWeakReferenceProperty<ReferencedObject>::setBits(const OMByte* bits,
 
   const ReferencedObject* p = *(const ReferencedObject**)bits;
   setValue(p);
+}
+
+template<typename ReferencedObject>
+OMStrongReferenceSetProperty<ReferencedObject>*
+OMWeakReferenceProperty<ReferencedObject>::set(void) const
+{
+  TRACE("OMWeakReferenceProperty<ReferencedObject>::set");
+
+  OMWeakReferenceProperty<ReferencedObject>* nonConstThis =
+                  const_cast<OMWeakReferenceProperty<ReferencedObject>*>(this);
+
+  if (_targetSet == 0) {
+    ASSERT("Valid target name", validString(_targetName));
+    nonConstThis->_targetSet = _reference.targetSet(_targetName);
+  }
+  POSTCONDITION("Valid result", _targetSet != 0);
+  return _targetSet;
 }
 
 #endif

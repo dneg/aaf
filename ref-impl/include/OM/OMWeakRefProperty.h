@@ -96,10 +96,13 @@ public:
     //          is <p size> bytes in size.
   virtual void setBits(const OMByte* bits, size_t size);
 
+protected:
+
+  OMStrongReferenceSetProperty<ReferencedObject>* set(void) const;
+
 private:
 
   OMWeakObjectReference<ReferencedObject> _reference;
-  OMUInt32 _targetTag;
   char* _targetName;
   OMStrongReferenceSetProperty<ReferencedObject>* _targetSet;
 

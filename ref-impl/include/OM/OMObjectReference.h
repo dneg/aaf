@@ -77,10 +77,6 @@ public:
     // @cmember Restore this <c OMObjectReference>.
   virtual void restore(void) = 0;
 
-    // @cmember Get the value of this <c OMObjectReference>.
-    //          The value is a pointer to the <c ReferencedObject>.
-  virtual ReferencedObject* getValue(void) const = 0;
-
     // @cmember Set the value of this <c OMObjectReference>.
     //          The value is a pointer to the <c ReferencedObject>.
   virtual ReferencedObject* setValue(const ReferencedObject* value) = 0;
@@ -183,6 +179,9 @@ protected:
 
 };
 
+template<typename ReferencedObject>
+class OMStrongReferenceSetProperty;
+
   // @class Persistent weak references to persistent objects.
   //   @tcarg class | ReferencedObject | The type of the referenced
   //          object. This type must be a descendant of <c OMStorable>.
@@ -232,15 +231,21 @@ public:
 
     // @cmember Get the value of this <c OMWeakObjectReference>.
     //          The value is a pointer to the <c ReferencedObject>.
-  virtual ReferencedObject* getValue(void) const;
+  virtual ReferencedObject* getValue(
+                    OMStrongReferenceSetProperty<ReferencedObject>* set) const;
 
     // @cmember Set the value of this <c OMWeakObjectReference>.
     //          The value is a pointer to the <c ReferencedObject>.
   virtual ReferencedObject* setValue(const ReferencedObject* value);
 
-  const char* pathName(void) const;
+  const OMUniqueObjectIdentification& identification(void) const;
 
-  void setPathName(char* pathName);
+  void setIdentification(const OMUniqueObjectIdentification& identification);
+
+  OMStrongReferenceSetProperty<ReferencedObject>* targetSet(
+                                                 const char* targetName) const;
+
+  const char* targetName(OMUInt32 targetTag) const;
 
 protected:
 
@@ -248,7 +253,7 @@ protected:
 
 private:
 
-  char* _pathName;
+  OMUniqueObjectIdentification _identification;
 
 };
 
