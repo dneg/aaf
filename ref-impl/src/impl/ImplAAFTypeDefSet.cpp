@@ -34,15 +34,65 @@
 #include "ImplAAFPropertyValue.h"
 #endif
 
-#ifndef __ImplAAFPropValData_h__
-#include "ImplAAFPropValData.h"
+#ifndef __ImplAAFRefSetValue_h__
+#include "ImplAAFRefSetValue.h"
+#endif
+
+#ifndef __ImplAAFStrongRefSetValue_h__
+#include "ImplAAFStrongRefSetValue.h"
+#endif
+
+#ifndef __ImplAAFWeakRefSetValue_h__
+#include "ImplAAFWeakRefSetValue.h"
 #endif
 
 #ifndef __ImplEnumAAFPropertyValues_h__
 #include "ImplEnumAAFPropertyValues.h"
 #endif
 
+#ifndef __ImplAAFDictionary_h__
+#include "ImplAAFDictionary.h"
+#endif
 
+#ifndef __ImplAAFClassDef_h__
+#include "ImplAAFClassDef.h"
+#endif
+
+#ifndef __ImplAAFPropertyDef_h__
+#include "ImplAAFPropertyDef.h"
+#endif
+
+#ifndef __ImplAAFTypeDefRecord_h__
+#include "ImplAAFTypeDefRecord.h"
+#endif
+
+#ifndef __ImplAAFTypeDefStrongObjRef_h__
+#include "ImplAAFTypeDefStrongObjRef.h"
+#endif
+
+#ifndef __ImplAAFTypeDefWeakObjRef_h__
+#include "ImplAAFTypeDefWeakObjRef.h"
+#endif
+
+#ifndef __ImplAAFMob_h__
+#include "ImplAAFMob.h"
+#endif
+
+#ifndef __ImplAAFEssenceData_h__
+#include "ImplAAFEssenceData.h"
+#endif
+
+#ifndef __ImplAAFDefObject_h__
+#include "ImplAAFDefObject.h"
+#endif
+
+#ifndef __ImplAAFMetaDefinition_h__
+#include "ImplAAFMetaDefinition.h"
+#endif
+
+#include "OMStrongRefSetProperty.h"
+#include "OMWeakRefSetProperty.h"
+#include "OMDataTypes.h"
 
 
 #include "AAFStoredObjectIDs.h"
@@ -54,20 +104,18 @@
 #include <assert.h>
 #include <string.h>
 
-// Weak references may not be in v1.0...
-#ifndef ENABLE_TYPE_DEF_SET
-#define ENABLE_TYPE_DEF_SET 0
-#endif
-
-extern "C" const aafClassID_t CLSID_AAFPropValData;
+extern "C" const aafClassID_t CLSID_AAFStrongRefSetValue;
+extern "C" const aafClassID_t CLSID_AAFWeakRefSetValue;
 
 ImplAAFTypeDefSet::ImplAAFTypeDefSet () :
 _ElementType  ( PID_TypeDefinitionSet_ElementType, 
-			   L"ElementType", 
-			   L"/Dictionary/TypeDefinitions", 
-			   PID_MetaDefinition_Identification)
+         L"ElementType", 
+         L"/MetaDictionary/TypeDefinitions", 
+         PID_MetaDefinition_Identification),
+ _uidProperty(NULL),
+ _uidType(NULL)
 {
-	_persistentProperties.put(_ElementType.address());
+  _persistentProperties.put(_ElementType.address());
 }
 
 
@@ -80,84 +128,181 @@ ImplAAFTypeDefSet::Initialize (
       ImplAAFTypeDef * pTypeDef,
       aafCharacter_constptr  pTypeName)
 {
-#ifndef ENABLE_TYPE_DEF_SET
-	if (! pTypeName) 
-		return AAFRESULT_NULL_PARAM;
-	if (! pTypeDef)
-		return AAFRESULT_NULL_PARAM;
-	
-	//
-	// TBD: Validate that the given type definition exists in the
-	// dictionary.
-	//
-	
-	return pvtInitialize(id, pTypeDef, pTypeName);
-#else // #if ENABLE_TYPE_DEF_SET
+  AAFRESULT result = AAFRESULT_SUCCESS;
+  if (! pTypeName) 
+    return AAFRESULT_NULL_PARAM;
+  if (! pTypeDef)
+    return AAFRESULT_NULL_PARAM;
+
+  assert (!isInitialized());
+  if (isInitialized())
+    return AAFRESULT_ALREADY_INITIALIZED;
     
-  return AAFRESULT_NOT_IN_CURRENT_VERSION;
-    
-#endif // #else // #if ENABLE_TYPE_DEF_SET
+  //
+  // Validate: the given type definition exists in the
+  // dictionary. Also, make sure that the associated class
+  // definition contains a unique identifier!
+  //
+  
+  // The given type must be in the current dictionary.
+  aafUID_t typeID;
+  result = pTypeDef->GetAUID(&typeID);
+  if (AAFRESULT_FAILED(result))
+    return result;
+  ImplAAFDictionarySP pDictionary;
+  result = GetDictionary(&pDictionary);
+  if (AAFRESULT_FAILED(result))
+    return result;
+  ImplAAFTypeDefSP pType;
+  result = pDictionary->LookupTypeDef(typeID, &pType);
+  if (AAFRESULT_FAILED(result))
+    return result;
+  
+   
+  // The object reference must be for a class that has a unique
+  // identifier property. NOTE: The utility GetUIDType performs the validation.
+  GetUIDType(pTypeDef, result); // ignore return value (it is NOT reference counted).
+  if (AAFRESULT_FAILED(result))
+    return result;    
+  
+  result = pvtInitialize(id, pTypeDef, pTypeName);
+  
+  return result;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFTypeDefSet::GetTypeCategory (eAAFTypeCategory_t *  pTid)
+{
+  if (!pTid) return AAFRESULT_NULL_PARAM;
+  *pTid = kAAFTypeCatSet;
+  return AAFRESULT_SUCCESS;
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
 ImplAAFTypeDefSet::pvtInitialize (
-								  aafUID_constref  id,
-								  ImplAAFTypeDef * pTypeDef,
-								  aafCharacter_constptr  pTypeName)
+                  aafUID_constref  id,
+                  ImplAAFTypeDef * pTypeDef,
+                  aafCharacter_constptr  pTypeName)
 {
-#ifndef ENABLE_TYPE_DEF_SET
-	ImplAAFTypeDefObjectRef	*objRef;
-	AAFRESULT				result;
-	
-	if (! pTypeName) 
-		return AAFRESULT_NULL_PARAM;
-	if (! pTypeDef)
-		return AAFRESULT_NULL_PARAM;
-	
-	
-	// JeffB: only allow strong and weak references to objects
-	objRef = dynamic_cast<ImplAAFTypeDefObjectRef*>(pTypeDef);
-	if(objRef == NULL)
-		result = AAFRESULT_ELEMENT_NOT_OBJECT;
-	else
-	{
-		result = ImplAAFMetaDefinition::Initialize(id, pTypeName, NULL);
-		if (AAFRESULT_SUCCEEDED(result))
-		{
-			_ElementType = pTypeDef;
-		}
-	}
-	return result;
-#else // #if ENABLE_TYPE_DEF_SET
-    
-  return AAFRESULT_NOT_IN_CURRENT_VERSION;
-    
-#endif // #else // #if ENABLE_TYPE_DEF_SET
+  AAFRESULT result = AAFRESULT_SUCCESS;
+  
+  if (! pTypeName) 
+    return AAFRESULT_NULL_PARAM;
+  if (! pTypeDef)
+    return AAFRESULT_NULL_PARAM;
+  
+  
+  result = ImplAAFMetaDefinition::Initialize(id, pTypeName, NULL);
+  if (AAFRESULT_SUCCEEDED(result))
+  {
+    _ElementType = pTypeDef;
+
+    // This instance is now fully initialized.
+    setInitialized();
+  }
+  return result;
 }
+
+         
+ImplAAFTypeDefRecord* STDMETHODCALLTYPE
+  ImplAAFTypeDefSet::GetUIDType(ImplAAFTypeDef* pElementType, AAFRESULT& result) const
+{
+  ImplAAFTypeDefObjectRef  *objRef = NULL;
+  result = AAFRESULT_SUCCESS;
+  if (NULL != _uidType)
+    return _uidType;
+  
+  if (NULL == pElementType)
+  {
+    result = AAFRESULT_NULL_PARAM;
+    return NULL;
+  }
+
+  // JeffB: only allow strong and weak references to objects
+  objRef = dynamic_cast<ImplAAFTypeDefObjectRef*>(pElementType);
+  if(objRef == NULL)
+  {
+    result = AAFRESULT_ELEMENT_NOT_OBJECT;
+    return NULL;
+  }
+  
+  // The object reference must be for a class that has a unique
+  // identifier property.
+  ImplAAFClassDefSP pElementClass;
+  result = objRef->GetObjectType(&pElementClass);
+  if (AAFRESULT_FAILED(result))
+    return NULL;
+  ImplAAFPropertyDefSP pUIDPropertyDef;
+  result = pElementClass->GetUniqueIdentifier(&pUIDPropertyDef);
+  if (AAFRESULT_FAILED(result))
+    return NULL;
+
+	// TEMPORARY???: There are only a few types of object reference sets supported
+	// at this time.
+	switch (pUIDPropertyDef->localIdentification())
+	{
+    case PID_MetaDefinition_Identification:
+      break;
+    case PID_DefinitionObject_Identification:
+      break;
+		case PID_Mob_MobID:
+			break;
+		case PID_EssenceData_MobID:
+			break;
+			
+		default:
+			result = AAFRESULT_BAD_TYPE;
+			return NULL;
+			break;
+	}
+ 
+  // Preserve logical const-ness even though this method is bitwise non-const.
+  ImplAAFTypeDefSet* pNonConstThis = const_cast<ImplAAFTypeDefSet *>(this);
+  
+  // Cache the pid for the uid. 
+  pNonConstThis->_uidProperty = pUIDPropertyDef;
+    
+  ImplAAFTypeDefSP pUIDType;
+  result = pUIDPropertyDef->GetTypeDef(&pUIDType);
+  if (AAFRESULT_FAILED(result))
+    return NULL;
+  
+  // We only support record types for unique identifiers of objects...
+  // Preserve logical const-ness even though this method is bitwise non-const.
+  pNonConstThis->_uidType = dynamic_cast<ImplAAFTypeDefRecord*>((ImplAAFTypeDef*)pUIDType);
+  if (NULL == _uidType)
+  {
+    result = AAFRESULT_BAD_TYPE; // ??? TODO: Add support fo Renamed record...
+    return NULL;
+  }
+  
+  return _uidType;
+}
+
+
 
 AAFRESULT STDMETHODCALLTYPE
 ImplAAFTypeDefSet::GetElementType (
-							ImplAAFTypeDef ** ppTypeDef)
+              ImplAAFTypeDef ** ppTypeDef) const
 {
-#ifndef ENABLE_TYPE_DEF_SET
-	if (! ppTypeDef)
-		return AAFRESULT_NULL_PARAM;
-	
-	if(_ElementType.isVoid())
-		return AAFRESULT_OBJECT_NOT_FOUND;
-	
-	*ppTypeDef = _ElementType;
-	assert (*ppTypeDef);
-	
-	(*ppTypeDef)->AcquireReference ();
-	
-	return AAFRESULT_SUCCESS;
-#else // #if ENABLE_TYPE_DEF_SET
-    
-  return AAFRESULT_NOT_IN_CURRENT_VERSION;
-    
-#endif // #else // #if ENABLE_TYPE_DEF_SET
+  if (! ppTypeDef)
+    return AAFRESULT_NULL_PARAM;
+
+  assert (isInitialized());
+  if (!isInitialized())
+    return AAFRESULT_NOT_INITIALIZED;
+  
+  if(_ElementType.isVoid())
+    return AAFRESULT_OBJECT_NOT_FOUND;
+  
+  *ppTypeDef = _ElementType;
+  assert (*ppTypeDef);
+  
+  (*ppTypeDef)->AcquireReference ();
+  
+  return AAFRESULT_SUCCESS;
 }
 
 
@@ -166,77 +311,22 @@ ImplAAFTypeDefSet::AddElement (
       ImplAAFPropertyValue * pSetPropertyValue,
       ImplAAFPropertyValue * pElementPropertyValue)
 {
-#ifndef ENABLE_TYPE_DEF_SET
-	if (!pSetPropertyValue || !pElementPropertyValue)
-		return AAFRESULT_NULL_PARAM;
+  if (!pSetPropertyValue || !pElementPropertyValue)
+    return AAFRESULT_NULL_PARAM;
 
-  return AAFRESULT_NOT_IMPLEMENTED;
-
-#if 0
-	if (!pInPropVal)
-		return AAFRESULT_NULL_PARAM;
-	if (!pMemberPropVal)
-		return AAFRESULT_NULL_PARAM;
-	
-	AAFRESULT hr;
-	
-	ImplAAFPropValData* inPvd =
-		dynamic_cast<ImplAAFPropValData*> (pInPropVal);
-	assert (inPvd);
-	
-	ImplAAFPropValData* memPvd =
-		dynamic_cast<ImplAAFPropValData*> (pMemberPropVal);
-	assert (memPvd);
-	
-	aafUInt32 oldSize = 0;
-	hr = inPvd->GetBitsSize (&oldSize);
-	assert (AAFRESULT_SUCCEEDED (hr));
-	
-	aafUInt32 newElemSize = 0;
-	hr = memPvd->GetBitsSize (&newElemSize);
-	assert (AAFRESULT_SUCCEEDED (hr));
-	
-	aafUInt32 newSize = oldSize + newElemSize;
-	assert (newSize);
-	// sizeof (*buf) must be 1
-	aafUInt8* buf = new aafUInt8[newSize];
-	assert (buf);
-	
-	aafMemPtr_t pBits = 0;
-	
-	// Copy old bits into our buffer
-	if (oldSize)
-	{
-		pBits = 0;
-		hr = inPvd->GetBits (&pBits);
-		assert (AAFRESULT_SUCCEEDED (hr));
-		assert (pBits);
-		memcpy (buf, pBits, oldSize);
-	}
-	
-	// Append new prop val onto end of our buffer
-	pBits = 0;
-	hr = memPvd->GetBits (&pBits);
-	assert (AAFRESULT_SUCCEEDED (hr));
-	assert (pBits);
-	// Following ptr addition depends on buf being a byte pointer
-	memcpy (buf+oldSize, pBits, newElemSize);
-	
-	// Re-allocate prop val bits to hold newly expanded data
-	pBits = 0;
-	hr = inPvd->AllocateBits (newSize, &pBits);
-	assert (AAFRESULT_SUCCEEDED (hr));
-	assert (pBits);
-	memcpy (pBits, buf, newSize);
-	
-	delete[] buf;
-	return AAFRESULT_SUCCESS;
-#endif // #if 0
-#else // #if ENABLE_TYPE_DEF_SET
-    
-  return AAFRESULT_NOT_IN_CURRENT_VERSION;
-    
-#endif // #else // #if ENABLE_TYPE_DEF_SET
+  assert (isInitialized());
+  if (!isInitialized())
+    return AAFRESULT_NOT_INITIALIZED;
+  
+  ImplAAFRefSetValue* pRefSet = dynamic_cast<ImplAAFRefSetValue*>(pSetPropertyValue);
+  if (NULL != pRefSet)
+  {
+    return pRefSet->InsertElement(pElementPropertyValue);
+  }
+  else
+  {
+    return AAFRESULT_ELEMENT_NOT_OBJECT;
+  }
 }
 
 
@@ -246,96 +336,22 @@ ImplAAFTypeDefSet::RemoveElement(
       ImplAAFPropertyValue * pSetPropertyValue,
       ImplAAFPropertyValue * pElementPropertyValue)
 {
-#ifndef ENABLE_TYPE_DEF_SET
-	if (!pSetPropertyValue || !pElementPropertyValue)
-		return AAFRESULT_NULL_PARAM;
+  if (!pSetPropertyValue || !pElementPropertyValue)
+    return AAFRESULT_NULL_PARAM;
 
-  return AAFRESULT_NOT_IMPLEMENTED;
-
-#if 0
-	if (!pInPropVal)
-		return AAFRESULT_NULL_PARAM;
-	if (!pMemberPropVal)
-		return AAFRESULT_NULL_PARAM;
-	
-	AAFRESULT	hr;
-	bool		found;
-	aafUInt32	numElem, n;
-	
-	ImplAAFPropValData* inPvd =
-		dynamic_cast<ImplAAFPropValData*> (pInPropVal);
-	assert (inPvd);
-	
-	ImplAAFPropValData* memPvd =
-		dynamic_cast<ImplAAFPropValData*> (pMemberPropVal);
-	assert (memPvd);
-	
-	aafUInt32 oldSize = 0;
-	hr = inPvd->GetBitsSize (&oldSize);
-	assert (AAFRESULT_SUCCEEDED (hr));
-	
-	aafUInt32 newElemSize = 0;
-	hr = memPvd->GetBitsSize (&newElemSize);
-	assert (AAFRESULT_SUCCEEDED (hr));
-	
-	aafMemPtr_t pPropBits = 0, pMemberBits = 0, pDestBits = 0, srcPtr;
-	
-	// Copy old bits into our buffer
-	if (oldSize)
-	{
-		pPropBits = 0;
-		hr = inPvd->GetBits (&pPropBits);
-		assert (AAFRESULT_SUCCEEDED (hr));
-		assert (pPropBits);
-		
-		pMemberBits = 0;
-		hr = memPvd->GetBits (&pMemberBits);
-		assert (AAFRESULT_SUCCEEDED (hr));
-		assert (pMemberBits);
-		
-		numElem = oldSize / newElemSize;
-		found = false;
-		for(n = 0, srcPtr = pPropBits; n < numElem && !found; n++, srcPtr += newElemSize)
-		{
-			if(memcmp(srcPtr, pMemberBits, newElemSize) == 0)
-			{
-				found = true;
-				aafUInt32 newSize = oldSize - newElemSize;
-				assert (newSize);
-				aafUInt32	beforeBytes, afterBytes;
-				// sizeof (*buf) must be 1
-				aafUInt8* buf = new aafUInt8[newSize];
-				assert (buf);
-				// Following ptr addition depends on buf being a byte pointer
-				beforeBytes = srcPtr-pPropBits;
-				afterBytes = newSize - beforeBytes;
-				memcpy (buf, pPropBits, beforeBytes);
-				memcpy (buf+beforeBytes, pPropBits+beforeBytes+newElemSize, afterBytes);
-				
-				// Re-allocate prop val bits to hold newly deflated data
-				pDestBits = 0;
-				hr = inPvd->AllocateBits (newSize, &pDestBits);
-				assert (AAFRESULT_SUCCEEDED (hr));
-				assert (pDestBits);
-				memcpy (pDestBits, buf, newSize);
-				
-				delete[] buf;
-			}
-		}
-	}
-	else
-		found = false;
-	
-	if(found)
-		return AAFRESULT_SUCCESS;
-	else
-		return AAFRESULT_ELEMENT_NOT_PRESENT;
-#endif // #if 0
-#else // #if ENABLE_TYPE_DEF_SET
-    
-  return AAFRESULT_NOT_IN_CURRENT_VERSION;
-    
-#endif // #else // #if ENABLE_TYPE_DEF_SET
+  assert (isInitialized());
+  if (!isInitialized())
+    return AAFRESULT_NOT_INITIALIZED;
+  
+  ImplAAFRefSetValue* pRefSet = dynamic_cast<ImplAAFRefSetValue*>(pSetPropertyValue);
+  if (NULL != pRefSet)
+  {
+    return pRefSet->RemoveElement(pElementPropertyValue);
+  }
+  else
+  {
+    return AAFRESULT_ELEMENT_NOT_OBJECT;
+  }
 }
 
 //****************
@@ -347,16 +363,22 @@ ImplAAFTypeDefSet::ContainsElement(
       ImplAAFPropertyValue * pElementPropertyValue,
       aafBoolean_t*  pContainsElement)
 {
-#ifndef ENABLE_TYPE_DEF_SET
-	if (!pSetPropertyValue || !pElementPropertyValue || !pContainsElement)
-		return AAFRESULT_NULL_PARAM;
+  if (!pSetPropertyValue || !pElementPropertyValue || !pContainsElement)
+    return AAFRESULT_NULL_PARAM;
 
-	return AAFRESULT_NOT_IMPLEMENTED;
-#else // #if ENABLE_TYPE_DEF_SET
-    
-  return AAFRESULT_NOT_IN_CURRENT_VERSION;
-    
-#endif // #else // #if ENABLE_TYPE_DEF_SET
+  assert (isInitialized());
+  if (!isInitialized())
+    return AAFRESULT_NOT_INITIALIZED;
+  
+  ImplAAFRefSetValue* pRefSet = dynamic_cast<ImplAAFRefSetValue*>(pSetPropertyValue);
+  if (NULL != pRefSet)
+  {
+    return pRefSet->ContainsElement(pElementPropertyValue, pContainsElement);
+  }
+  else
+  {
+    return AAFRESULT_ELEMENT_NOT_OBJECT;
+  }
 }
 
 
@@ -366,46 +388,22 @@ ImplAAFTypeDefSet::GetCount (
       ImplAAFPropertyValue * pSetPropertyValue,
       aafUInt32 *  pCount)
 {
-#ifndef ENABLE_TYPE_DEF_SET
-	if (!pSetPropertyValue || !pCount)
-		return AAFRESULT_NULL_PARAM;
+  if (!pSetPropertyValue || !pCount)
+    return AAFRESULT_NULL_PARAM;
 
-	return AAFRESULT_NOT_IMPLEMENTED;
-
-#if 0
-	ImplAAFTypeDefSP ptd;
-	AAFRESULT hr;
-	
-	if (! pPropVal) return AAFRESULT_NULL_PARAM;
-	if (! pCount) return AAFRESULT_NULL_PARAM;
-	// Bobt semi-hack: need non-const this in order to call
-	// non-const GetType. We know we aren't mangling it, so it
-	// technically is OK...
-	ImplAAFTypeDefSet * pNonConstThis = (ImplAAFTypeDefSet *) this;
-	hr = pNonConstThis->GetElementType (&ptd);
-	if (AAFRESULT_FAILED(hr)) return hr;
-	assert (ptd);
-	assert (ptd->IsFixedSize());
-	aafUInt32 elemSize = ptd->PropValSize();
-	aafUInt32 propSize;
-	assert (pPropVal);
-	
-	ImplAAFPropValDataSP pvd;
-	pvd = dynamic_cast<ImplAAFPropValData *>(pPropVal);
-	
-	assert (pvd);
-	hr = pvd->GetBitsSize (&propSize);
-	if (AAFRESULT_FAILED(hr)) return hr;
-	assert (pCount);
-	*pCount = propSize / elemSize;
-	
-	return AAFRESULT_SUCCESS;
-#endif // #if 0
-#else // #if ENABLE_TYPE_DEF_SET
-    
-  return AAFRESULT_NOT_IN_CURRENT_VERSION;
-    
-#endif // #else // #if ENABLE_TYPE_DEF_SET
+  assert (isInitialized());
+  if (!isInitialized())
+    return AAFRESULT_NOT_INITIALIZED;
+  
+  ImplAAFRefSetValue* pRefSet = dynamic_cast<ImplAAFRefSetValue*>(pSetPropertyValue);
+  if (NULL != pRefSet)
+  {
+    return pRefSet->Count(pCount);
+  }
+  else
+  {
+    return AAFRESULT_ELEMENT_NOT_OBJECT;
+  }
 }
 
 
@@ -418,34 +416,28 @@ AAFRESULT ImplAAFTypeDefSet::CreateKey (
       aafUInt32  length,
       ImplAAFPropertyValue ** ppKey)
 {
-#ifndef ENABLE_TYPE_DEF_SET
-	if (!pKeyPtr || !ppKey)
-		return AAFRESULT_NULL_PARAM;
-	if (0 == length)
-	  return AAFRESULT_INVALID_PARAM;
+  AAFRESULT result = AAFRESULT_SUCCESS;
+  if (!pKeyPtr || !ppKey)
+    return AAFRESULT_NULL_PARAM;
+  if (0 == length)
+    return AAFRESULT_INVALID_PARAM;
 
-	return AAFRESULT_NOT_IMPLEMENTED;
+  assert (isInitialized());
+  if (!isInitialized())
+    return AAFRESULT_NOT_INITIALIZED;
+  
+  // Use the type of the unique identifier to create the key
+  // property value.
+  ImplAAFTypeDefSP pElementType;
+  result = GetElementType(&pElementType);
+  if (AAFRESULT_FAILED(result))
+    return result;
+  ImplAAFTypeDefRecord* pUIDType = GetUIDType(pElementType, result);
+  if (AAFRESULT_FAILED(result))
+    return result;
+  result = pUIDType->CreateValueFromStruct(pKeyPtr, length, ppKey);
 
-#if 0
-	AAFRESULT	hr;
-	aafMemPtr_t	theBits;
-	
-	ImplAAFPropValData	*result = (ImplAAFPropValData*) CreateImpl (CLSID_AAFPropValData);
-	if (!result)
-		return AAFRESULT_NOMEMORY;
-	hr = result->AllocateBits (pLength, &theBits);
-	if(hr == AAFRESULT_SUCCESS)
-	{
-		memcpy(theBits, pKeyPtr, pLength);
-	}
-	
-	return hr;
-#endif // #if 0
-#else // #if ENABLE_TYPE_DEF_SET
-    
-  return AAFRESULT_NOT_IN_CURRENT_VERSION;
-    
-#endif // #else // #if ENABLE_TYPE_DEF_SET
+  return result;
 }
 
 
@@ -457,16 +449,22 @@ AAFRESULT ImplAAFTypeDefSet::LookupElement (
       ImplAAFPropertyValue * pKey,
       ImplAAFPropertyValue ** ppElementPropertyValue)
 {
-#ifndef ENABLE_TYPE_DEF_SET
-	if (!pSetPropertyValue || !pKey || !ppElementPropertyValue)
-		return AAFRESULT_NULL_PARAM;
+  if (!pSetPropertyValue || !pKey || !ppElementPropertyValue)
+    return AAFRESULT_NULL_PARAM;
 
-	return AAFRESULT_NOT_IMPLEMENTED;
-#else // #if ENABLE_TYPE_DEF_SET
-    
-  return AAFRESULT_NOT_IN_CURRENT_VERSION;
-    
-#endif // #else // #if ENABLE_TYPE_DEF_SET
+  assert (isInitialized());
+  if (!isInitialized())
+    return AAFRESULT_NOT_INITIALIZED;
+  
+  ImplAAFRefSetValue* pRefSet = dynamic_cast<ImplAAFRefSetValue*>(pSetPropertyValue);
+  if (NULL != pRefSet)
+  {
+    return pRefSet->LookupElement(pKey, ppElementPropertyValue);
+  }
+  else
+  {
+    return AAFRESULT_ELEMENT_NOT_OBJECT;
+  }
 }
 
 //***********************************************************
@@ -477,16 +475,22 @@ AAFRESULT ImplAAFTypeDefSet::ContainsKey (
       ImplAAFPropertyValue * pKey,
       aafBoolean_t*  pContainsKey)
 {
-#ifndef ENABLE_TYPE_DEF_SET
-	if (!pSetPropertyValue || !pKey || !pContainsKey)
-		return AAFRESULT_NULL_PARAM;
+  if (!pSetPropertyValue || !pKey || !pContainsKey)
+    return AAFRESULT_NULL_PARAM;
 
-	return AAFRESULT_NOT_IMPLEMENTED;
-#else // #if ENABLE_TYPE_DEF_SET
-    
-  return AAFRESULT_NOT_IN_CURRENT_VERSION;
-    
-#endif // #else // #if ENABLE_TYPE_DEF_SET
+  assert (isInitialized());
+  if (!isInitialized())
+    return AAFRESULT_NOT_INITIALIZED;
+  
+  ImplAAFRefSetValue* pRefSet = dynamic_cast<ImplAAFRefSetValue*>(pSetPropertyValue);
+  if (NULL != pRefSet)
+  {
+    return pRefSet->ContainsKey(pKey, pContainsKey);
+  }
+  else
+  {
+    return AAFRESULT_ELEMENT_NOT_OBJECT;
+  }
 }
 
 
@@ -495,16 +499,23 @@ ImplAAFTypeDefSet::GetElements (
       ImplAAFPropertyValue * pSetPropertyValue,
       ImplEnumAAFPropertyValues ** ppEnum)
 {
-#ifndef ENABLE_TYPE_DEF_SET
-	if (!pSetPropertyValue || !ppEnum)
-		return AAFRESULT_NULL_PARAM;
+  if (!pSetPropertyValue || !ppEnum)
+    return AAFRESULT_NULL_PARAM;
 
-	return AAFRESULT_NOT_IMPLEMENTED;
-#else // #if ENABLE_TYPE_DEF_SET
-    
-  return AAFRESULT_NOT_IN_CURRENT_VERSION;
-    
-#endif // #else // #if ENABLE_TYPE_DEF_SET
+  assert (isInitialized());
+  if (!isInitialized())
+    return AAFRESULT_NOT_INITIALIZED;
+  
+  // Get the elements if the set property value is a object reference set.
+  ImplAAFRefSetValue* pRefSet = dynamic_cast<ImplAAFRefSetValue*>(pSetPropertyValue);
+  if (NULL != pRefSet)
+  {
+    return pRefSet->GetElements(ppEnum);
+  }
+  else
+  {
+    return AAFRESULT_ELEMENT_NOT_OBJECT;
+  }
 }
 
 
@@ -526,21 +537,172 @@ bool ImplAAFTypeDefSet::IsStringable () const
 
 
 
+OMProperty * ImplAAFTypeDefSet::pvtCreateOMProperty
+  (OMPropertyId pid,
+   const wchar_t * name) const
+{
+  assert (name);
+
+  assert (isInitialized());
+  if (!isInitialized())
+    return NULL;
+
+  ImplAAFTypeDefSP ptd;
+  AAFRESULT rc = (const_cast<ImplAAFTypeDefSet*>(this))->GetElementType(&ptd);
+	if (AAFRESULT_FAILED(rc))
+		return NULL;
+  assert (ptd);
+
+  OMProperty * result = 0;
+
+  if (dynamic_cast<ImplAAFTypeDefStrongObjRef*>((ImplAAFTypeDef*) ptd))
+	{
+	  // element is strong ref
+	  
+//	  
+
+		// TEMPORARY???: There are only a few types of object reference sets supported
+		// at this time.
+		switch (_uidProperty->localIdentification())
+		{
+//	    case PID_MetaDefinition_Identification:
+//	  		return new OMStrongReferenceSetProperty<OMObjectIdentification, ImplAAFMetaDefinition> (pid, name, _uidProperty->localIdentification());
+
+	    case PID_DefinitionObject_Identification:
+	  		return new OMStrongReferenceSetProperty<OMObjectIdentification, ImplAAFDefObject> (pid, name, _uidProperty->localIdentification());
+
+//			case PID_Mob_MobID:
+//				return new OMStrongReferenceSetProperty<OMUniqueMaterialIdentification, ImplAAFMob> (pid, name, _uidProperty->localIdentification());
+
+//			case PID_EssenceData_MobID:
+//				return new OMStrongReferenceSetProperty<OMUniqueMaterialIdentification, ImplAAFEssenceData> (pid, name, _uidProperty->localIdentification());
+		}
+
+		return NULL;
+	}
+  else if (dynamic_cast<ImplAAFTypeDefWeakObjRef*>((ImplAAFTypeDef*) ptd))
+	{
+	  // element is weak ref, hence implemented as AUID array.
+	  // Specify a size of one element.
+	  result = new OMSimpleProperty (pid, name, sizeof (aafUID_t));
+	}
+
+  else
+	{
+		// bad type	
+  }
+
+  assert (result);
+  return result;
+}
+
+
+
+
+
+// Allocate and initialize the correct subclass of ImplAAFPropertyValue 
+// for the given OMProperty.
+AAFRESULT STDMETHODCALLTYPE
+  ImplAAFTypeDefSet::CreatePropertyValue(
+    OMProperty *property,
+    ImplAAFPropertyValue ** ppPropertyValue ) const
+{
+  AAFRESULT result = AAFRESULT_SUCCESS;
+  assert (property && ppPropertyValue);
+  if (NULL == property || NULL == ppPropertyValue)
+    return AAFRESULT_NULL_PARAM;
+  *ppPropertyValue = NULL; // initialize out parameter
+  
+  OMReferenceSetProperty* pReferenceSetProperty = dynamic_cast<OMReferenceSetProperty*>(property);
+  if (NULL != pReferenceSetProperty)
+  {
+    assert (property->definition());
+    if (NULL == property->definition())
+      return AAFRESULT_INVALID_PARAM;
+    const OMType *type = property->definition()->type();
+    assert (type);
+    ImplAAFTypeDefSet *ptd = const_cast<ImplAAFTypeDefSet *> (dynamic_cast<const ImplAAFTypeDefSet *>(type));
+    assert (ptd);
+    if (NULL == ptd)
+      return AAFRESULT_INVALID_PARAM;
+      
+    ImplAAFTypeDefSP pElementType;
+    result = GetElementType(&pElementType);
+    if (AAFRESULT_FAILED(result))
+      return result;
+      
+    if (dynamic_cast<ImplAAFTypeDefStrongObjRef*>((ImplAAFTypeDef*) pElementType))
+    {
+      // element is strong ref
+      ImplAAFStrongRefSetValue* pStrongRefSet = NULL;
+      pStrongRefSet = (ImplAAFStrongRefSetValue*) CreateImpl (CLSID_AAFStrongRefSetValue);
+      if (!pStrongRefSet) 
+        return AAFRESULT_NOMEMORY;
+      result = pStrongRefSet->Initialize(this, property);
+      if (AAFRESULT_SUCCEEDED(result))
+      {
+        *ppPropertyValue = pStrongRefSet;
+      }
+      else
+      {
+        pStrongRefSet->ReleaseReference();
+      }
+    }
+    else if (dynamic_cast<ImplAAFTypeDefWeakObjRef*>((ImplAAFTypeDef*) pElementType))
+    {
+      // element is weak ref
+      ImplAAFWeakRefSetValue* pWeakRefSet = NULL;
+      pWeakRefSet = (ImplAAFWeakRefSetValue*) CreateImpl (CLSID_AAFWeakRefSetValue);
+      if (!pWeakRefSet) 
+        return AAFRESULT_NOMEMORY;
+      result = pWeakRefSet->Initialize(this, property);
+      if (AAFRESULT_SUCCEEDED(result))
+      {
+        *ppPropertyValue = pWeakRefSet;
+      }
+      else
+      {
+        pWeakRefSet->ReleaseReference();
+      }
+    }
+    else
+    { 
+//      assert (NULL != *ppPropertyValue);     
+//      return AAFRESULT_INVALID_PARAM;
+
+      // TEMPORARY HACK!
+      // Weak reference arrays are still implemented as an array of records!
+      
+      // If the property is not a reference vector then use the "old" method
+      // for creating a variable array property value.
+      result = ImplAAFTypeDef::CreatePropertyValue(property, ppPropertyValue);
+    }
+  }
+  else
+  {
+    // If the property is not a reference vector then use the "old" method
+    // for creating a variable array property value.
+    result = ImplAAFTypeDef::CreatePropertyValue(property, ppPropertyValue);
+  }
+  return result;
+}
+
+
 
 
 // override from OMStorable.
 const OMClassId& ImplAAFTypeDefSet::classId(void) const
 {
-	return (*reinterpret_cast<const OMClassId *>(&AUID_AAFTypeDefSet));
+  return (*reinterpret_cast<const OMClassId *>(&AUID_AAFTypeDefSet));
 }
 
 // Override callbacks from OMStorable
 void ImplAAFTypeDefSet::onSave(void* clientContext) const
 {
-	ImplAAFTypeDef::onSave(clientContext);
+  ImplAAFTypeDef::onSave(clientContext);
 }
 
 void ImplAAFTypeDefSet::onRestore(void* clientContext) const
 {
-	ImplAAFTypeDef::onRestore(clientContext);
+  ImplAAFTypeDef::onRestore(clientContext);
 }
