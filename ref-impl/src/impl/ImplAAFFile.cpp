@@ -13,7 +13,6 @@
 #include "OMUtilities.h"
 #include "ImplAAFDictionary.h"
 
-#include "ImplAAFSession.h"
 #include "ImplAAFHeader.h"
 #include "ImplAAFDataDef.h"
 
@@ -61,7 +60,6 @@ AAFRESULT STDMETHODCALLTYPE
 ImplAAFFile::OpenExistingRead (wchar_t * pFileName,
 							   aafUInt32 modeFlags)
 {
-	ImplAAFSession * pS;
 	AAFRESULT stat = AAFRESULT_SUCCESS;
 
 	// Validate parameters and preconditions.
@@ -80,9 +78,6 @@ ImplAAFFile::OpenExistingRead (wchar_t * pFileName,
 	if (modeFlags)
 		return AAFRESULT_BAD_FLAGS;
 	
-
-	pS = ImplAAFSession::GetInstance();
-	assert (pS);
 
 	// Save the mode flags for now. They are not currently (2/4/1999) used by the
 	// OM to open the doc file. Why do we return an error if modeFlags != 0?
@@ -136,7 +131,6 @@ ImplAAFFile::OpenExistingModify (wchar_t * pFileName,
 								 aafUInt32 modeFlags,
 								 aafProductIdentification_t * pIdent)
 {
-	ImplAAFSession * pS;
 	AAFRESULT stat = AAFRESULT_SUCCESS;
 
 
@@ -157,9 +151,6 @@ ImplAAFFile::OpenExistingModify (wchar_t * pFileName,
 		return AAFRESULT_BAD_FLAGS;
 
 	memcpy (&_ident, pIdent, sizeof (_ident));
-
-	pS = ImplAAFSession::GetInstance();
-	assert (pS);
 
 	
 	// Save the mode flags for now. They are not currently (2/4/1999) used by the
@@ -229,7 +220,6 @@ ImplAAFFile::OpenNewModify (wchar_t * pFileName,
 							aafUInt32 modeFlags,
 							aafProductIdentification_t * pIdent)
 {
-	ImplAAFSession * pS;
 	ImplAAFContentStorage	*pCStore = NULL;
 	AAFRESULT stat = AAFRESULT_SUCCESS;
 
@@ -248,9 +238,6 @@ ImplAAFFile::OpenNewModify (wchar_t * pFileName,
 	if (modeFlags)
 		return AAFRESULT_BAD_FLAGS;
 
-
-	pS = ImplAAFSession::GetInstance();
-	assert (pS);
 
 	memcpy (&_ident, pIdent, sizeof (_ident));
 
@@ -309,7 +296,6 @@ ImplAAFFile::OpenNewModify (wchar_t * pFileName,
 AAFRESULT STDMETHODCALLTYPE
 ImplAAFFile::OpenTransient (aafProductIdentification_t * pIdent)
 {
-	ImplAAFSession * pS;
 	ImplAAFContentStorage	*pCStore = NULL;
 	AAFRESULT stat = AAFRESULT_SUCCESS;
 
@@ -322,8 +308,6 @@ ImplAAFFile::OpenTransient (aafProductIdentification_t * pIdent)
 	if (! pIdent)
 		return AAFRESULT_NULL_PARAM;
 
-	pS = ImplAAFSession::GetInstance();
-	assert (pS);
 
 	memcpy (&_ident, pIdent, sizeof (_ident));
 
@@ -356,62 +340,6 @@ ImplAAFFile::OpenTransient (aafProductIdentification_t * pIdent)
 		_open = AAFTrue;
 		_openType = kOmTransient;
 		GetRevision(&_setrev);
-	}
-	catch (AAFRESULT &rc)
-	{
-		stat = rc;
-
-		// Cleanup after failure.
-		if (_file)
-		{
-			_file->close();
-			_file = 0;
-		}
-
-		if (NULL == _head)
-		{
-			_head->ReleaseReference();
-			_head = 0;
-		}
-	}
-
-	return stat;
-	pS = ImplAAFSession::GetInstance();
-	assert (pS);
-
-	memcpy (&_ident, pIdent, sizeof (_ident));
-
-	try
-	{
-		// Create the header for the OM manager to use as the root
-		// for the file.
-		_head = dynamic_cast<ImplAAFHeader*>(CreateImpl(CLSID_AAFHeader));
-		checkExpression(NULL != _head, AAFRESULT_BADHEAD);
-		
-		// Make sure the header is initialized with our previously created
-		// dictionary.
-		_head->SetDictionary(_dictionary);
-
-		// Add the ident to the header.
-		checkResult(_head->AddIdentificationObject(&_ident));
-		  
-		// Set the byte order
-		_byteOrder = hostByteOrder();
-		_head->SetByteOrder(_byteOrder);
-
-		 //JeffB!!! We must decide whether def-only files have a content storage
-		checkResult(_head->GetContentStorage(&pCStore));
-		pCStore->ReleaseReference(); // need to release this pointer!
-
-		// Attempt to create the file.
-		_file = OMFile::openNewTransient(_dictionary, _byteOrder, _head);
-		checkExpression(NULL != _file, AAFRESULT_INTERNAL_ERROR);
-
-		_open = AAFTrue;
-		_openType = kOmTransient;
-		GetRevision(&_setrev);
-
-
 	}
 	catch (AAFRESULT &rc)
 	{

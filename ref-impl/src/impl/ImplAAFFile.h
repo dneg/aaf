@@ -26,7 +26,6 @@ class OMFile;
 class ImplAAFDictionary;
 class ImplAAFFile;
 class ImplAAFHeader;
-class ImplAAFSession;
 class ImplAAFDataDef;
 
 class ImplAAFFile : public ImplAAFRoot
