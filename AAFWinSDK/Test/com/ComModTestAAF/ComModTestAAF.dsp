@@ -42,7 +42,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /c
-# ADD CPP /nologo /MD /W3 /GR /GX /Zi /O2 /I "../../../ref-impl/src/com-api" /I "../../../ref-impl/src/com-api/test" /I "../../../ref-impl/plugins" /I "../../../ref-impl/include/com-api/" /I "../../../ref-impl/src/impl" /I "../../ref-impl/include/comidl" /I "../../../ref-impl/include" /FI"stdafx.h" /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "UNICODE" /D "_UNICODE" /Yu"stdafx.h" /FD /c
+# ADD CPP /nologo /MD /W3 /GR /GX /Zi /O2 /I "../../../../ref-impl/src/com-api" /I "../../../../ref-impl/src/com-api/test" /I "../../../../ref-impl/plugins" /I "../../../../ref-impl/include/com-api/" /I "../../../../ref-impl/src/impl" /I "../../../ref-impl/include/comidl" /I "../../../../ref-impl/include" /FI"stdafx.h" /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "UNICODE" /D "_UNICODE" /Yu"stdafx.h" /FD /c
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -67,7 +67,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /c
-# ADD CPP /nologo /MDd /W3 /WX /Gm /GR /GX /ZI /Od /I "../../../ref-impl/src/com-api" /I "../../../ref-impl/src/com-api/test" /I "../../../ref-impl/plugins" /I "../../../ref-impl/include/com-api/" /I "../../../ref-impl/src/impl" /I "../../ref-impl/include/comidl" /I "../../../ref-impl/include" /FI"stdafx.h" /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "UNICODE" /D "_UNICODE" /Yu"stdafx.h" /FD /c
+# ADD CPP /nologo /MDd /W3 /WX /Gm /GR /GX /ZI /Od /I "../../../../ref-impl/src/com-api" /I "../../../../ref-impl/src/com-api/test" /I "../../../../ref-impl/plugins" /I "../../../../ref-impl/include/com-api/" /I "../../../../ref-impl/src/impl" /I "../../../ref-impl/include/comidl" /I "../../../../ref-impl/include" /FI"stdafx.h" /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "UNICODE" /D "_UNICODE" /Yu"stdafx.h" /FD /c
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
 BSC32=bscmake.exe
@@ -89,480 +89,480 @@ LINK32=link.exe
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFAIFCDescriptorTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFAIFCDescriptorTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFCDCIDescriptorTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFCDCIDescriptorTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFClassDefTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFClassDefTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFCodecDefTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFCodecDefTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFCommentMarkerTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFCommentMarkerTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFComponentTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFComponentTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFCompositionMobTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFCompositionMobTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFConstantValueTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFConstantValueTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFContainerDefTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFContainerDefTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFContentStorageTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFContentStorageTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFControlPointTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFControlPointTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFDataDefTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFDataDefTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFDefObjectTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFDefObjectTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFDictionaryTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFDictionaryTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFDigitalImageDescripTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFDigitalImageDescripTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFEdgecodeTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFEdgecodeTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFEssenceAccessTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFEssenceAccessTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFEssenceDataTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFEssenceDataTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFEssenceDescriptorTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFEssenceDescriptorTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFEssenceFormatTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFEssenceFormatTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFEssenceGroupTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFEssenceGroupTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFEventMobSlotTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFEssencePluginTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFEventTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFEventMobSlotTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFFileDescriptorTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFEventTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFFileTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFFileDescriptorTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFFillerTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFFileTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFFilmDescriptorTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFFillerTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFFindSourceInfoTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFFilmDescriptorTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFGPITriggerTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFFindSourceInfoTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFHeaderTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFGPITriggerTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFHTMLClipTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFHeaderTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFHTMLDescriptorTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFHTMLClipTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFIdentificationTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFHTMLDescriptorTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFInterpolationDefTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFIdentificationTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFIntraFrameMarkerTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFInterpolationDefTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFLocatorTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFIntraFrameMarkerTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFMasterMobTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFLocatorTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFMIDIFileDescriptorTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFMasterMobTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFMobSlotTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFMIDIFileDescriptorTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFMobTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFMobSlotTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFNestedScopeTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFMobTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFNetworkLocatorTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFNestedScopeTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFObjectTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFNetworkLocatorTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFOperationDefTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFObjectTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFOperationGroupTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFOperationDefTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFParameterDefTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFOperationGroupTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFParameterTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFParameterDefTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFPluggableCodeTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFParameterTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFPluginDescriptorTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFPluggableCodeTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFPluginManagerTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFPluginDescriptorTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFPropertyDefTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFPluginManagerTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFPropertyTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFPropertyDefTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFPropertyValueTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFPropertyTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFPropValDataTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFPropertyValueTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFPulldownTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFPropValDataTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFRGBADescriptorTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFPulldownTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFScopeReferenceTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFRGBADescriptorTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFSegmentTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFScopeReferenceTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFSelectorTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFSegmentTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFSequenceTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFSelectorTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFSourceClipTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFSequenceTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFSourceMobTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFSourceClipTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFSourceReferenceTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFSourceMobTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFStaticMobSlotTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFSourceReferenceTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFTaggedValueTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFStaticMobSlotTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFTapeDescriptorTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFTaggedValueTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFTextClipTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFTapeDescriptorTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFTextLocatorTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFTextClipTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFTIFFDescriptorTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFTextLocatorTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFTimecodeStream12MTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFTIFFDescriptorTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFTimecodeStreamTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFTimecodeStream12MTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFTimecodeTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFTimecodeStreamTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFTimelineMobSlotTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFTimecodeTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFTransitionTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFTimelineMobSlotTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFTypeDefEnumTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFTransitionTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFTypeDefExtEnumTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFTypeDefEnumTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFTypeDefFixedArrayTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFTypeDefExtEnumTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFTypeDefIntTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFTypeDefFixedArrayTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFTypeDefObjectRefTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFTypeDefIntTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFTypeDefRecordTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFTypeDefObjectRefTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFTypeDefRenameTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFTypeDefRecordTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFTypeDefSetTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFTypeDefRenameTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFTypeDefStreamTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFTypeDefSetTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFTypeDefStringTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFTypeDefStreamTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFTypeDefStrongObjRefTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFTypeDefStringTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFTypeDefTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFTypeDefStrongObjRefTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFTypeDefVariableArryTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFTypeDefTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFTypeDefWeakObjRefTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFTypeDefVariableArryTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFVaryingValueTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFTypeDefWeakObjRefTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFWAVEDescriptorTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFVaryingValueTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CEnumAAFClassDefsTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFWAVEDescriptorTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CEnumAAFCodecDefsTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CEnumAAFClassDefsTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CEnumAAFCodecFlavoursTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CEnumAAFCodecDefsTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CEnumAAFComponentsTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CEnumAAFCodecFlavoursTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CEnumAAFContainerDefsTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CEnumAAFComponentsTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CEnumAAFControlPointsTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CEnumAAFContainerDefsTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CEnumAAFDataDefsTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CEnumAAFControlPointsTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CEnumAAFEssenceDataTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CEnumAAFDataDefsTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CEnumAAFIdentificationsTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CEnumAAFEssenceDataTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CEnumAAFInterpolateDefsTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CEnumAAFIdentificationsTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CEnumAAFLoadedPluginsTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CEnumAAFInterpolateDefsTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CEnumAAFLocatorsTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CEnumAAFLoadedPluginsTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CEnumAAFMobSlotsTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CEnumAAFLocatorsTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CEnumAAFMobsTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CEnumAAFMobSlotsTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CEnumAAFOperationDefsTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CEnumAAFMobsTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CEnumAAFParameterDefsTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CEnumAAFOperationDefsTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CEnumAAFPluginDescTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CEnumAAFParameterDefsTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CEnumAAFPluginLocatorsTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CEnumAAFPluginDescTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CEnumAAFPropertiesTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CEnumAAFPluginLocatorsTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CEnumAAFPropertyDefsTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CEnumAAFPropertiesTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CEnumAAFPropertyValuesTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CEnumAAFPropertyDefsTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CEnumAAFSegmentsTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CEnumAAFPropertyValuesTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CEnumAAFTaggedValuesTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CEnumAAFSegmentsTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CEnumAAFTypeDefsTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CEnumAAFTaggedValuesTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\ComModTestAAF.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CEnumAAFTypeDefsTest.cpp
 # End Source File
 # End Group
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\impl\aafCvt.cpp"
+SOURCE="..\..\..\..\ref-impl\src\impl\aafCvt.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\impl\AAFUtils.cpp"
+SOURCE="..\..\..\..\ref-impl\src\impl\AAFUtils.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFModuleTest.cpp
+SOURCE=..\..\..\..\test\com\ComModTestAAF\CAAFModuleTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFModuleTest.h
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ComModTestAAF.cpp
 # End Source File
 # Begin Source File
 
