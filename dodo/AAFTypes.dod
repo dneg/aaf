@@ -575,30 +575,15 @@ typedef struct _aafUID_t
     aafUInt8  Data4[8];
 } aafUID_t;
 
-AD_CPP_QUOTE(/*)
-AD_CPP_QUOTE(\ * Type used to uniquely identify an AAF Mob.)
-AD_CPP_QUOTE(\ * This is a temporary definition provided for compatibility with)
-AD_CPP_QUOTE(\ * earlier versions of the toolkit. The final definition for)
-AD_CPP_QUOTE(\ * aafMobID_t may look more like the definition of aafMobIDX_t below.)
-AD_CPP_QUOTE(\ * During this transistion clients can define MOBID_IS_AUID)
-AD_CPP_QUOTE(\ * while converting their applications/plugins to use aafMobID_t)
-AD_CPP_QUOTE(\ * instead of aafUID_t for mob ids.)
-AD_CPP_QUOTE(\ */)
-#ifdef MOBID_IS_AUID
-  typedef struct _aafUID_t aafMobID_t;
-#else
-  typedef struct _aafMobIDX_t aafMobID_t;
-#endif
-
-typedef struct  _aafMobIDX_t
+typedef struct  _aafMobID_t
 {
-    aafUInt32 Data1;
-    aafUInt16 Data2;
-    aafUInt16 Data3;
-    aafUInt8 Data4[ 8 ];
-    // other data...
-    //aafUInt8 Data5[ 16 ]; //???
-}	aafMobIDX_t;
+    aafUInt8			SMPTELabel[12];		// 12-bytes of label prefix
+	aafUInt8			length;
+    aafUInt8			instanceHigh;
+    aafUInt8			instanceMid;
+    aafUInt8			instanceLow;
+    struct _aafUID_t	material;
+}	aafMobID_t;
 
 
 typedef struct _aafProductIdentification_t
