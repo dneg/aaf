@@ -169,9 +169,14 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 			return AAFRESULT_TEST_FAILED;
 		if ( memcmp(&mobID, &newUID, sizeof(mobID)) != 0)
 			return AAFRESULT_TEST_FAILED;
+
+		aMob->Release();
+		aMob = NULL;
 	}
 
-	//!!! Problem deleting, let it leak -- 	delete mobIter;
+	mobIter->Release();
+	mobIter = NULL;
+
 	hr = pFile->Close();
 	if (AAFRESULT_SUCCESS != hr)
 		return hr;
