@@ -696,18 +696,16 @@ void OMFile::close(void)
   _root->close();
   _rootStore->close();
 
-  if (isWritable()) {
-    if (isValid()) {
-      OMStoredObjectFactory* factory = findFactory(_encoding);
-      ASSERT("Recognized file encoding", factory != 0);
-      OMRawStorage* store = rawStorage();
-      if (store != 0) {
-        factory->close(store, isWritable());
-        store->synchronize();
-      } else {
-        const wchar_t* name = fileName();
-        factory->close(name, isWritable());
-      }
+  if (isValid()) {
+    OMStoredObjectFactory* factory = findFactory(_encoding);
+    ASSERT("Recognized file encoding", factory != 0);
+    OMRawStorage* store = rawStorage();
+    if (store != 0) {
+      factory->close(store, isWritable());
+      store->synchronize();
+    } else {
+      const wchar_t* name = fileName();
+      factory->close(name, isWritable());
     }
   }
 

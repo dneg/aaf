@@ -304,24 +304,28 @@ bool OMMSSStoredObjectFactory::compatibleNamedFile(
   //        contained in <p fileName> is closed.
   //   @parm The file name.
 void OMMSSStoredObjectFactory::close(const wchar_t* fileName,
-                                     bool /* isWritable */)
+                                     bool isWritable)
 {
   TRACE("OMMSSStoredObjectFactory::close");
 
-  // The encoding is used as the signature.
-  writeSignature(fileName, encoding());
+  if (isWritable) {
+    // The encoding is used as the signature.
+    writeSignature(fileName, encoding());
+  }
 }
 
   // @mfunc Perform any necessary actions when the file
   //        contained in <p rawStorage> is closed.
   //   @parm The <c OMRawStorage>
 void OMMSSStoredObjectFactory::close(OMRawStorage* rawStorage,
-                                     bool /* isWritable */)
+                                     bool isWritable )
 {
   TRACE("OMMSSStoredObjectFactory::close");
 
-  // The encoding is used as the signature.
-  writeSignature(rawStorage, encoding());
+  if (isWritable) {
+    // The encoding is used as the signature.
+    writeSignature(rawStorage, encoding());
+  }
 }
 
   // @mfunc Write the signature to the given raw storage.
