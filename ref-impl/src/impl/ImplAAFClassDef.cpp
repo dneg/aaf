@@ -47,11 +47,6 @@
 #endif
 
 
-#ifndef __AAFObjectModel_h__
-#include "AAFObjectModel.h"
-#endif
-
-
 #include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
 #include "ImplAAFObjectCreation.h"
