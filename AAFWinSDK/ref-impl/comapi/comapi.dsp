@@ -117,6 +117,10 @@ SOURCE="..\..\..\ref-impl\src\com-api\com-dll\AAFObjectCreation.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\comidl\AAFRoot_i.c
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFAIFCData.cpp"
 # End Source File
 # Begin Source File
