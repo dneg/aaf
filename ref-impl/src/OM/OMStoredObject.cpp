@@ -296,7 +296,9 @@ void OMStoredObject::save(const OMPropertySet& properties)
   while (++iterator) {
     OMProperty* p = iterator.property();
     ASSERT("Valid property", p != 0);
-//  ASSERT("Property has a definition", p->definition() != 0);
+#if defined(OM_VALIDATE_DEFINITIONS)
+    ASSERT("Property has a definition", p->definition() != 0);
+#endif
     if (!p->isOptional() || p->isPresent()) {
       p->save();
     }
@@ -772,6 +774,7 @@ void OMStoredObject::restore(OMStrongReference& singleton,
                              size_t externalSize)
 {
   TRACE("OMStoredObject::restore");
+
   wchar_t* name = referenceName(singleton.name(), singleton.propertyId());
   restoreName(singleton, name, externalSize);
   OMStrongObjectReference newReference(&singleton, name);
