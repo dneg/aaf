@@ -77,13 +77,13 @@ extern "C" const aafClassID_t CLSID_AAFSourceMob;
 extern "C" const aafClassID_t CLSID_AAFEssenceData;
 extern "C" const CLSID CLSID_AAFEssenceStream = { 0x66FE33B1, 0x946D, 0x11D2, { 0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
 extern "C" const IID IID_IAAFEssenceStream = { 0x83402902, 0x9146, 0x11d2, { 0x80, 0x88, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
-extern "C" const IID IID_IAAFEssenceCodec = { 0x74867B42, 0x946E, 0x11D2, { 0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
+extern "C" const IID IID_IAAFEssenceCodec = { 0x3631F7A2, 9121, 0x11D2, { 0x80, 0x88, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
 extern "C" const CLSID CLSID_AAFDefaultStream;
+extern "C" const IID IID_IAAFEssenceSampleStream = { 0x63E12802, 0xCCE5, 0x11D2, { 0x80, 0x98, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } };
 
 const CLSID CLSID_AAFEssenceDataStream = { 0x42A63FE1, 0x968A, 0x11d2, { 0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
 const IID IID_IAAFEssenceDataStream = { 0xCDDB6AB1, 0x98DC, 0x11d2, { 0x80, 0x8a, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
 const aafUID_t CLSID_AAFWaveCodec = { 0x8D7B04B1, 0x95E1, 0x11d2, { 0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
-
 ImplAAFEssenceAccess::ImplAAFEssenceAccess ()
 {
 	_destination = NULL;
@@ -97,207 +97,10 @@ ImplAAFEssenceAccess::ImplAAFEssenceAccess ()
 ImplAAFEssenceAccess::~ImplAAFEssenceAccess ()
 {}
 
-
-/****/
+/**ImplementationPrivate**/
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceAccess::CreateAudioEssence (ImplAAFMasterMob * /*masterMob*/,
-                           aafSlotID_t  /*masterSlotID*/,
-                           ImplAAFSourceMob * /*fileMob*/,
-                           aafRational_t  /*samplerate*/,
-                           aafCompressEnable_t  /*Enable*/,
-                           aafInt16  /*sampleSize*/,
-                           aafInt16  /*obj*/)
-{
-#if FULL_TOOLKIT
-	aafAudioMemOp_t	opList[4];
-	aafMultiCreate_t	init[MAX_DEF_AUDIO];
-	aafInt16				n;
-	aafUID_t				uid;
-	AAFMob			*mobPtr;
-	aafErr_t		status;
-	aafRational_t	createEditRate;
-	
-	aafAssertValidFHdl(_mainFile);
-	aafAssertMediaInitComplete(_mainFile);
-	if(_mainFile->isAAFMedia())
-	{
-		aafAssert(fileMob != NULL, _mainFile, OM_ERR_INVALID_FILE_MOB);
-	}
-	
-	XPROTECT(_mainFile)
-	{
-		if(numChannels == 1)
-		{
-			CHECK(Create(masterMob, masterTrackID, fileMob, 
-										 _mainFile->_soundKind,
-										 samplerate, enable));
-
-			opList[0].opcode = kAAFSampleSize;
-			opList[0].operand.sampleSize = sampleSize;
-			opList[1].opcode = kAAFNumChannels;
-			opList[1].operand.numChannels = numChannels;
-			opList[2].opcode = kAAFSampleRate;
-			opList[2].operand.sampleRate = samplerate;
-			opList[3].opcode = kAAFAFmtEnd;
-			CHECK(_codec->codecPutAudioInfo(this, opList));
-		}
-		else if(numChannels <= MAX_DEF_AUDIO)
-		{
-		  CHECK(fileMob->ReadUID(OMMOBJMobID, &uid));
-			status = _mainFile->LookupMob(uid, &mobPtr);
-			if((status != OM_ERR_NONE) || (mobPtr == NULL))
-		  	{
-				RAISE(OM_ERR_MISSING_MOBID);
-		  	}
-
-			for(n = 0; n < numChannels; n++)
-			{
-				init[n].mediaKind = _mainFile->_soundKind;
-				init[n].subTrackNum = n+1;	/* Physical Output Channel */
-				init[n].trackID = n+1;
-				init[n].sampleRate = samplerate;
-			}
-			CHECK(mobPtr->GetCreateEditRate(&createEditRate));
-			CHECK(MultiCreate(masterMob, fileMob, numChannels,
-										init, createEditRate, enable));
-			opList[0].opcode = kAAFSampleSize;
-			opList[0].operand.sampleSize = sampleSize;
-			opList[1].opcode = kAAFNumChannels;
-			opList[1].operand.numChannels = numChannels;
-			opList[2].opcode = kAAFSampleRate;
-			opList[2].operand.sampleRate = samplerate;
-			opList[3].opcode = kAAFAFmtEnd;
-			CHECK(PutAudioInfoArray(opList));
-		}
-		else
-			RAISE(OM_ERR_USE_MULTI_CREATE);
-	}
-	XEXCEPT
-	{
-	}
-	XEND
-	
-	return (OM_ERR_NONE);
-#else
-	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
-}
-
-//@comm Creates either a single stream of audio essence, or interleaved
-// audio-only data.  A separate call (MediaMultiCreate) exists 
-// in order to create interleaved audio and video data.
-// 
-//@comm The essence object initialized from this call can be used with
-// WriteDataSamples or WriteMultiSamples but NOT with 
-// or WriteDataLines.
-// 
-// Argument Notes:
-//@comm If you are creating the essence, and then attaching it to a master
-// mob, then the "masterMob" field may be left NULL.
-// 
-//@comm The numChannels field refers to the number of interleaved
-// channels on a single data stream.  
-// 
-//@comm The sample rate should be the actual samples per second, not the
-// edit rate.
-//@comm omfmAudioMediaCreate
-
-/****/
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceAccess::VideoMediaCreate (ImplAAFMasterMob * /*masterMob*/,
-                           aafSlotID_t  /*masterSlotID*/,
-                           ImplAAFSourceMob * /*fileMob*/,
-                           aafCompressEnable_t  /*Enable*/,
-                           aafRational_t  /*editrate*/,
-                           aafUInt32  /*StoredHeight*/,
-                           aafUInt32  /*StoredWidth*/,
-                           aafFrameLayout_t  /*layout*/,
-                           aafRational_t  /*ratio*/)
-{
-#if FULL_TOOLKIT
-	aafVideoMemOp_t	opList[4], op;
-
-	aafAssertValidFHdl(_mainFile);
-	aafAssertMediaInitComplete(_mainFile);
-	if(_mainFile->isAAFMedia())
-	{
-		aafAssert(fileMob != NULL, _mainFile, OM_ERR_INVALID_FILE_MOB);
-	}
-	XPROTECT(_mainFile)
-	{
-		
-		CHECK(Create(masterMob, masterTrackID, fileMob, _mainFile->_pictureKind,
-					editrate, enable));
-				
-		CHECK(VideoOpInit(opList));
-			
-		op.opcode = kAAFFrameLayout;
-		op.operand.expFrameLayout = layout;
-		CHECK(VideoOpAppend(kAAFAppendIfAbsent, op, opList, 4L));
-		
-		op.opcode = kAAFStoredRect;
-		op.operand.expRect.xSize = StoredWidth;
-		op.operand.expRect.ySize = StoredHeight;
-		op.operand.expRect.xOffset = op.operand.expRect.yOffset = 0;
-		CHECK(VideoOpAppend(kAAFAppendIfAbsent, op, opList, 4L));
-		
-		op.opcode = kAAFAspectRatio;
-		op.operand.expRational = iRatio;
-		CHECK(VideoOpAppend(kAAFAppendIfAbsent, op, opList, 4L));
-		
-		CHECK(_codec->codecPutVideoInfo(this, opList));
-	}
-	XEXCEPT
-	{
-	}
-	XEND
-	
-	return (OM_ERR_NONE);
-#else
-	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
-}
-
-AAFRESULT ImplAAFEssenceAccess::SetEssenceDestination(
-				ImplAAFLocator		*destination,
-				aafFileFormat_t		fileFormat)
-{
-	_destination = destination;
-	_fileFormat = fileFormat;
-	return AAFRESULT_SUCCESS;
-}
-
- //Sets which variety of the codec ID is to be used.)
-AAFRESULT ImplAAFEssenceAccess::SetEssenceCodecVariety(aafUID_t variety)
-{
-	_variety = variety;
-	return AAFRESULT_SUCCESS;
-}
-
-
-//@comm Creates a single stream of video essence.  A separate call
-// (MediaMultiCreate) exists to create interleaved audio and
-// video data.
-//@comm The essence object initialized from this call can be used with
-// WriteDataSamples or WriteDataLines, but NOT with
-// WriteMultiSamples.
-//@comm If you are creating the essence, and then attaching it to a master
-// mob, then the "masterMob" field may be left NULL.
-//@comm The storedHeight and storedWidth are the dimensions of the frame
-// as stored on disk (or as it should be restored by the codec.  The
-// displayRect and sampledRect are set to:
-// 	(0,0 @ sampledWidth, sampledHeight).
-//@comm If the displayed rectangle is not the same as the stored rectangle
-// (as with the old leadingLines and trailingLines), then you should
-// call SetDisplayRect().
-//@comm The frame layout contains the number of fields and whether they are
-// interlaced, but does not specify field dominance.
-//@comm Replaces omfmVideoMediaCreate
-
-/****/
-AAFRESULT STDMETHODCALLTYPE
-ImplAAFEssenceAccess::Create (ImplAAFMasterMob *masterMob,
-							  aafSlotID_t		masterSlotID,
+ImplAAFEssenceAccess::Create (	  ImplAAFMasterMob *masterMob,
+							aafSlotID_t		masterSlotID,
 							  aafUID_t			mediaKind,
 							  aafUID_t			codecID,
 							  aafRational_t	editRate,
@@ -466,7 +269,7 @@ ImplAAFEssenceAccess::Create (ImplAAFMasterMob *masterMob,
 	
 /****/
 AAFRESULT STDMETHODCALLTYPE
-   ImplAAFEssenceAccess::MultiCreate (ImplAAFMasterMob * /*masterMob*/,
+   ImplAAFEssenceAccess::MultiCreate (ImplAAFMasterMob *masterMob,
 							aafUID_t codecID,
                           aafInt16  /*arrayElemCount*/,
                            aafmMultiCreate_t *  /*mediaArray*/,
@@ -621,872 +424,10 @@ AAFRESULT STDMETHODCALLTYPE
 #endif
 }
 
-	//@comm The essence handle from this call can be used with
-	// WriteDataSamples or WriteMultiSamples but NOT with 
-	// or WriteDataLines.
-	//@comm If you are creating the essence, and then attaching it to a master
-	// mob, then the "masterMob" field may be left NULL.
-	//@comm Replaces omfmMediaMultiCreate
-	
-/****/
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceAccess::SetBlockingSize (aafInt32  /*numBytes*/)
-{
-#if FULL_TOOLKIT
-	aafAssertMediaHdl(this);
-	aafAssertValidFHdl(_mainFile);
-	aafAssertMediaInitComplete(_mainFile);
-	aafAssert(numBytes >= 0, _mainFile, OM_ERR_BLOCKING_SIZE);
-
-	_stream->SetBlockingSize(numBytes);
-	return(OM_ERR_NONE);
-#else
-	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
-}
-
-	//@comm Allocating the space in this fashion ensures that the data will be
-	// contiguous on disk (for at least numBytes bytes) even if other
-	// disk operations allocate space on the disk.  If the data written
-	// exceeds numBytes, then another disk block of numBytes size will be
-	// allocated.
-	//@comm Takes a essence handle, so the essence must have been opened or created.
-	// The space is allocated in terms of bytes.
-	//@comm Replaces omfmSetBlockingSize
-
-/****/
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceAccess::SetVideoLineMap (aafInt16  /*startLine*/,
-                           aafFieldTop_t  /*type*/)
-{
-#if FULL_TOOLKIT
-	aafVideoMemOp_t		ops[3];
-	
-	aafAssertMediaHdl(this);
-	aafAssertValidFHdl(_mainFile);
-	aafAssertMediaInitComplete(_mainFile);
-	
-	XPROTECT(_mainFile)
-	{
-		ops[0] .opcode= kAAFFrameLayout;
-		ops[1] .opcode= kAAFVFmtEnd;
-
-		CHECK(GetVideoInfoArray(ops));
-		
-		if (ops[0].operand.expFrameLayout == kFullFrame)
-			RAISE(OM_ERR_INVALID_OBJ);
-
-		/* even field dominance makes no sense for single field video */
-		if (ops[0].operand.expFrameLayout == kOneField && type == kDominantField2)
-			RAISE(OM_ERR_INVALID_OBJ);
-			
-		ops[0] .opcode= kAAFVideoLineMap;
-		ops[1] .opcode= kAAFVFmtEnd;
-		
-		if (startLine == 0)  /* for GRAPHICS files, no analog mapping */
-		{
-			switch(type)
-			{
-			case kDominantField1:
-				ops[0].operand.expLineMap[0] = 0;
-				ops[0].operand.expLineMap[1] = 1;
-				break;
-				
-			case kDominantField2:
-				ops[0].operand.expLineMap[0] = 1;
-				ops[0].operand.expLineMap[1] = 0;
-				break;
-				
-			case kNoDominant:
-			default:
-				ops[0].operand.expLineMap[0] = 0;
-				ops[0].operand.expLineMap[1] = 0;
-				break;
-			}
-		}
-		else  /* Video mapping, need to know format */
-		{
-			aafInt16 offset;
-			aafVideoSignalType_t signalType;
-			
-			CHECK(SourceGetVideoSignalType(&signalType));
-
-			switch (signalType)
-			{
-			case kNTSCSignal:
-				offset = 263;
-				break;
-				
-			case kPALSignal:
-				offset = 312;
-				break;
-			
-			default:
-			   RAISE(OM_ERR_INVALID_VIDEOSIGNALTYPE);
-				break;
-			}
-			
-			switch(type)
-			{
-			case kDominantField1:
-				ops[0].operand.expLineMap[0] = (aafInt32) startLine;
-				ops[0].operand.expLineMap[1] = (aafInt32) (startLine+offset+1);
-				break;
-				
-			case kDominantField2:
-				ops[0].operand.expLineMap[0] = (aafInt32) startLine;
-				ops[0].operand.expLineMap[1] = (aafInt32) (startLine+offset);
-				break;
-				
-			case kNoDominant:
-			default:
-			   RAISE(OM_ERR_INVALID_VIDEOSIGNALTYPE);
-				break;
-			}
-			
-		
-		}
-	
-		CHECK(_codec->codecPutVideoInfo(this, ops));
-	}
-	XEXCEPT
-	XEND
-	
-	return(OM_ERR_NONE);
-#else
-	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
-}
-
-	//@comm Takes a essence handle, so the essence must have been opened or created.
-	//@comm Replaces omfmSetVideoLineMap.
-
-/****/
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceAccess::GetVideoTopField (aafFieldTop_t *  /*type*/)
-{
-#if FULL_TOOLKIT
-	aafVideoMemOp_t		ops[3];
-
-	aafAssertMediaHdl(this);
-	aafAssertValidFHdl(_mainFile);
-	aafAssertMediaInitComplete(_mainFile);
-	
-	XPROTECT(_mainFile)
-	{
-		ops[0].opcode = kAAFVideoLineMap;
-		ops[1].opcode = kAAFFrameLayout;
-		ops[2].opcode = kAAFVFmtEnd;
-		CHECK(_codec->codecGetVideoInfo(this, ops));
-
-		if (ops[1].operand.expFrameLayout != kSeparateFields &&
-			ops[1].operand.expFrameLayout != kMixedFields)
-		{
-			*type = kTopFieldNone;  /* dominance only relevant for multi-field */
-			return(OM_ERR_NONE);
-		}
-
-		if(ops[0].operand.expLineMap[0] < ops[0].operand.expLineMap[1])
-			*type = kTopField1;  /* dominance only relevant for multi-field */
-		else
-			*type = kTopField2;  /* dominance only relevant for multi-field */
-
-	}
-	XEXCEPT
-	XEND
-	
-	return(OM_ERR_NONE);
-#else
-	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
-}
-
-	//@comm Takes a essence handle, so the essence must have been opened or created.
-	//@comm Replaces omfmGetVideoTopField
-	
-/****/
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceAccess::SetDisplayRect (aafRect_t *  /*DisplayRect*/)
-{
-#if FULL_TOOLKIT
-	AAFFile *				main;
-	aafVideoMemOp_t	ops[2];
-	
-	aafAssertMediaHdl(this);
-	main = _mainFile;
-	aafAssertValidFHdl(main);
-	aafAssertMediaInitComplete(main);
-
-	XPROTECT(main)
-	{
-		ops[0].opcode = kAAFDisplayRect;
-		ops[0].operand.expRect = DisplayRect;
-		ops[1].opcode = kAAFVFmtEnd;
-
-		CHECK(_codec->codecPutVideoInfo(this, ops));
-	}
-	XEXCEPT
-	XEND
-
-	return (OM_ERR_NONE);
-#else
-	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
-}
-
-	//@comm Handles the case where the displayed rectangle is not the same as
-	// the stored rectangle (as with the old leadingLines and trailingLines).
-	// A positive "leadingLines" (from 1.5) becomes a positive yOffset, and
-	// decreases the display height.
-	// A positive "trailingLines" (from 1.5) also decreases the display height.
-	//@comm Takes a essence handle, so the essence must have been opened or created.
-	//@comm Replaces  omfmSetDisplayRect
-
-/****/
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceAccess::SetSampledRect (aafRect_t *  /*SampledRect*/)
-{
-#if FULL_TOOLKIT
-	AAFFile *				main;
-	aafVideoMemOp_t	ops[2];
-
-	aafAssertMediaHdl(this);
-	main = _mainFile;
-	aafAssertValidFHdl(main);
-	aafAssertMediaInitComplete(main);
-
-	XPROTECT(main)
-	{
-		ops[0].opcode = kAAFSampledRect;
-		ops[0].operand.expRect = SampledRect;
-		ops[1].opcode = kAAFVFmtEnd;
-
-		CHECK(_codec->codecPutVideoInfo(this, ops));
-	}
-	XEXCEPT
-	XEND
-	
-	return (OM_ERR_NONE);
-#else
-	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
-}
-
-	//@comm Takes a essence handle, so the essence must have been opened or created
-	//@comm Replaces omfmSetSampledRect
-	
-/****/
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceAccess::WriteMultiSamples (aafInt16  /*arrayElemCount*/,
-                           aafmMultiXfer_t *  /*xferArray*/)
-{
-#if FULL_TOOLKIT
-	aafMultiXfer_t xfer;
-
-	aafAssertMediaHdl(this);
-	aafAssertValidFHdl(_mainFile);
-	aafAssertMediaInitComplete(_mainFile);
-	aafAssert(_numChannels == 1, _mainFile,
-		OM_ERR_SINGLE_CHANNEL_OP);
-	aafAssert(buffer != NULL, _mainFile, OM_ERR_BADDATAADDRESS);
-	aafAssert((_openType == kAAFCreated) ||
-				(_openType == kAAFAppended), _mainFile, OM_ERR_MEDIA_OPENMODE);
-	
-	XPROTECT(_mainFile)
-	{
-		xfer.subTrackNum = _channels[0].physicalOutChan;
-		xfer.numSamples = nSamples;
-		xfer.buflen = buflen;
-		xfer.buffer = buffer;
-		xfer.bytesXfered = 0;
-	
-		CHECK (_codec->codecWriteBlocks(this, deinterleave, 1, &xfer));
-
-		//!!!Move this into a loop when this routine is finished
-		// Do this here and not in the codec any more
-		CHECK(omfsAddInt32toInt64(xfer->numSamples, &_channels[0].numSamples));
-
-	}
-	XEXCEPT
-	XEND
-	
-	return(OM_ERR_NONE);
-#else
-	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
-}
-
-	//@comm arrayElemCount is the size of the array or transfer operations.
-	// xferArray points to an array of transfer parameters.  All fields
-	// in this array except for bytesXferred must be set up before
-	// doing the transfer.
-	//@comm Replaces omfmWriteMultiSamples
-
-/****/
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceAccess::WriteDataSamples (aafInt32  /*nSamples*/,
-                           aafDataBuffer_t  /*buffer*/,
-                           aafInt32  /*buflen*/)
-{
-#if FULL_TOOLKIT
-	aafMultiXfer_t xfer;
-
-	aafAssertMediaHdl(this);
-	aafAssertValidFHdl(_mainFile);
-	aafAssertMediaInitComplete(_mainFile);
-	aafAssert(_numChannels == 1, _mainFile,
-		OM_ERR_SINGLE_CHANNEL_OP);
-	aafAssert(buffer != NULL, _mainFile, OM_ERR_BADDATAADDRESS);
-	aafAssert((_openType == kAAFCreated) ||
-				(_openType == kAAFAppended), _mainFile, OM_ERR_MEDIA_OPENMODE);
-	
-	XPROTECT(_mainFile)
-	{
-		xfer.subTrackNum = _channels[0].physicalOutChan;
-		xfer.numSamples = nSamples;
-		xfer.buflen = buflen;
-		xfer.buffer = buffer;
-		xfer.bytesXfered = 0;
-	
-		CHECK (_codec->codecWriteBlocks(this, deinterleave, 1, &xfer));
-
-		// Do this here and not in the codec any more
-		CHECK(omfsAddInt32toInt64(xfer->numSamples, &_channels[0].numSamples));
-}
-	XEXCEPT
-	XEND
-	
-	return(OM_ERR_NONE);
-#else
-	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
-}
-
-	//@comm Takes a essence handle, so the essence must have been opened or created.
-	// A single video frame is ONE sample.
-	// Buflen must be large enough to hold nSamples * the maximum sample size.
-	//@comm Possible Errors:
-	// Standard errors (see top of file).
-	// OM_ERR_SINGLE_CHANNEL_OP -- Tried to write to an interleaved stream.
-	// OM_ERR_BADDATAADDRESS -- The buffer must not be a NULL pointer.
-	//@comm Replaces omfmWriteDataSamples
-
-/****/
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceAccess::WriteRawData (aafInt32  nSamples,
-                           aafDataBuffer_t  buffer,
-                           aafInt32  sampleSize)
-{
-	aafAssert(buffer != NULL, _mainFile, AAFRESULT_BADDATAADDRESS);
-	aafAssert((_openType == kAAFCreated) ||
-				(_openType == kAAFAppended), _mainFile,AAFRESULT_MEDIA_OPENMODE);
-
-	XPROTECT()
-	{
-		CHECK(_codec->WriteRawData (nSamples, buffer, sampleSize));
-	}
-	XEXCEPT
-	XEND
-	
-	return(AAFRESULT_SUCCESS);
-}
-
-	//@comm A single video frame is ONE sample.
-	//@comm Buflen must be large enough to hold
-	// nSamples * the maximum sample size.
-	//@comm Possible Errors:
-	// Standard errors (see top of file).
-	// OM_ERR_BADDATAADDRESS -- The buffer must not be a NULL pointer.
-	//@comm Replaces omfmWriteRawData
-	
-/****/
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceAccess::ReadRawData (aafInt32  nSamples,
-                           aafUInt32  buflen,
-                           aafDataBuffer_t  buffer,
-                           aafUInt32 *bytesRead,
-                           aafUInt32 *samplesRead)
-{
-
-	aafAssert(buffer != NULL, _mainFile, OM_ERR_BADDATAADDRESS);
-	XPROTECT()
-	{
-		CHECK(_codec->ReadRawData (nSamples, buflen, buffer, bytesRead, samplesRead));
-	}
-	XEXCEPT
-	{
-	}
-	XEND
-	
-	return(AAFRESULT_SUCCESS);
-}
-
-	//@comm A single video frame is ONE sample.
-	//@comm Buflen must be large enough to hold nSamples * the maximum sample size.
-	//@comm Possible Errors:
-	// Standard errors (see top of file).
-	// OM_ERR_BADDATAADDRESS -- The buffer must not be a NULL pointer.
-	//@comm Replaces omfmReadRawData
-	
-/****/
- AAFRESULT STDMETHODCALLTYPE
-   ImplAAFEssenceAccess::WriteDataLines (aafUInt32  /*nLines*/,
-                           aafUInt32  /*nBytesPerLine*/,
-                           aafDataBuffer_t  /*buffer*/,
-                           aafInt32 *  /*bytesWritten*/)
-{
-#if FULL_TOOLKIT
-	aafInt16		numVideo;
-	
-	aafAssertMediaHdl(this);
-	aafAssertValidFHdl(_mainFile);
-	aafAssertMediaInitComplete(_mainFile);
-	aafAssert((_openType == kAAFCreated) ||
-				(_openType == kAAFAppended), _mainFile, OM_ERR_MEDIA_OPENMODE);
-	
-	XPROTECT(_mainFile)
-	{
-		CHECK(_codec->codecGetNumChannels(_mainFile, _fileMob,
-											_pictureKind, &numVideo));
-		if(numVideo <= 0)
-			RAISE(OM_ERR_BADRWLINES);
-		CHECK (_codec->codecWriteLines(this, nLines, buffer, bytesWritten));
-	}
-	XEXCEPT
-	XEND
-	
-	return(OM_ERR_NONE);
-#else
-	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
-}
-
-	//@comm Writes single lines of video to a file.  This function allows writing
-	// video frames in pieces, for low-memory situations.  When enough lines
-	// have been written to constitute a frame, then the number of samples will
-	// be incremented by one.
-	//@comm This function works only for video essence.
-	//@comm The buffer must be large enough to hold an entire line of video. 
-	//@comm Possible Errors:
-	// Standard errors (see top of file).
-	// OM_ERR_BADRWLINES -- This function only works for video essence.
-	//@comm Replaces omfmWriteDataLines
-	//@devnote Previous version did not have nBytesPerLine, otherwise the actual size
-	// of the buffer cannot be known.
-	
-/****/
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceAccess::Close ()
-{
-#if 0
-	AAFFile *       	main;
-	AAFMedia  *tstMedia;
-	aafInt16       	n;
-	aafTrackID_t	trackID;
-	aafTrackID_t   	fileTrackID;
-	aafErr_t		aafError = OM_ERR_NONE;
-	
-	aafAssertMediaHdl(this);
-	aafAssertValidFHdl(_mainFile);
-	aafAssertMediaInitComplete(_mainFile);
-	main = _mainFile;
-#endif
-
-	XPROTECT()
-	{
-		/* Close the _codec-> before creating more objects, in order to keep trailer data
-		 * with the media in the file.
-		 */
-		if(_codec != NULL)		/* A codec was opened */
-			CHECK(_codec->Close());
-
-		if((_openType == kAAFCreated) || (_openType == kAAFAppended))
-		{
-#if 0
-			CHECK(_fileMob->FindSlotBySlotID(1, &tmpSlot));
-			CHECK(tmpSlot->GetSegment(&seg));
-			CHECK(seg->SetLength(&len));
-			CHECK(_masterMob->FindSlotBySlotID(1, &tmpSlot));
-			CHECK(tmpSlot->GetSegment(&seg));
-			CHECK(seg->SetLength(&len));
-#else
-			// Make the lengths of the affected tracks equal the sample length
-			// adjusted for the edit rate
-			CHECK(_fileMob->ReconcileMobLength());
-			CHECK(_masterMob->ReconcileMobLength());
-#endif
-		}
-
-#if FULL_TOOLKIT
-		if((_openType == kAAFCreated) || (_openType == kAAFAppended))
-		{
-			if(main->isAAFMedia())
-			{
-				if(_numChannels == 1)
-					trackID = _masterTrackID;
-				else if(_masterMob != NULL)
-				{
-					aafNumTracks_t		numMasterTracks;
-					CHECK(_masterMob->GetNumTracks(&numMasterTracks));
-					trackID = numMasterTracks + 1;
-				}
-				else
-				  trackID = 1;
-				for(n = 0; n < _numChannels; n++)
-				{
-					CHECK(_mdes->WriteLength(OMMDFLLength, _channels[n].numSamples));
-					
-					if((_openType == kAAFCreated) && (_masterMob != NULL))
-					{
-					  /* JEFF!! Changed fileTrackID to be 1 when creating audio.
-						* This should probably also be 1 for video?
-						*/
-					  if (_channels[n].mediaKind->IsSoundKind(kExactMatch, &aafError))
-						 {
-							fileTrackID = 1+n;
-						 }
-					  else
-						 fileTrackID = trackID+n;
-
-						CHECK(_masterMob->MobAddMasterTrack(
-												 _channels[n].mediaKind, trackID+n, 
-/*															 trackID+n, */
-															 fileTrackID,
-													 NULL, _fileMob));
-					}
-				}
-				CHECK(ReconcileMobLength(_fileMob));
-				if(_masterMob != NULL)
-				{
-					CHECK(ReconcileMobLength(_masterMob));
-				}
-			}
-		}
-	
-		/* Unlink this media from the list maintained by the AAFFile *
-		 */
-		if (this == main->_topMedia)
-			main->_topMedia = _pvt->nextMedia;
-		else
-		{
-			tstMedia = main->_topMedia;
-			while (tstMedia->_pvt->nextMedia != NULL)
-			{
-				if (tstMedia->_pvt->nextMedia == this)
-					tstMedia->_pvt->nextMedia = _pvt->nextMedia;
-				else
-					tstMedia = tstMedia->_pvt->nextMedia;
-			}
-		}
-	
-		/* If the data is kept in an external file, then close that file.
-		 * If the data is in the current file, leave it open.
-		 */
-		if ((_dataFile != main) && (_dataFile != NULL))
-			CHECK(_dataFile->Close());
-
-		if(_channels != NULL)
-		{
-			main->omOptFree(_channels);
-			_channels = NULL;
-		}
-		
-		if(_stream != NULL)
-			delete _stream;
-		_stream = NULL;
-		if(_pvt != NULL)
-			main->omOptFree(_pvt);
-		_pvt = NULL;
-		
-		if(_codecVariety != NULL)
-			main->omOptFree(_codecVariety);
-		_codecVariety = NULL;
-		
-		/* Clear the cookie so that this handle will show up as invalid
-		 * if the client continues to use it.
-		 */
-		_cookie = 0;
-#endif
-	}
-	XEXCEPT
-	{
-	}
-	XEND
-	
-	return(AAFRESULT_SUCCESS);
-}
-
-	//@comm This function should be called whether the essence was opened or created.
-	//@comm Replaces omfmMediaClose
-
-/****/
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceAccess::SetJPEGTables (aafJPEGcomponent_t  /*JPEGcomp*/,
-                           aafUInt8 *  /*QTables*/,
-                           aafUInt8 *  /*ACTables*/,
-                           aafUInt8 *  /*DCTables*/,
-                           aafInt16  /*QTableSize*/,
-                           aafInt16  /*ACTableSize*/,
-                           aafInt16  /*DCTableSize*/)
-{
-#if FULL_TOOLKIT
-	aafJPEGTables_t tables;
-
-	aafAssertMediaHdl(this);
-	aafAssertValidFHdl(_mainFile);
-	aafAssertMediaInitComplete(_mainFile);
-
-	tables.JPEGcomp = JPEGcomp;
-	tables.QTables = QTables;
-	tables.ACTables = ACTables;
-	tables.DCTables = DCTables;
-	tables.QTableSize = QTableSize;
-	tables.ACTableSize = ACTableSize;
-	tables.DCTableSize = DCTableSize;
-
-	return (_codec->codecPutInfo(this, kJPEGTables, _pictureKind,
-								sizeof(tables), &tables));
-#else
-	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
-}
-
-	//@comm This function needs to be called once for each component of the video.
-	//@comm Replaces omfmSetJPEGTables
-	
-/****/
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceAccess::SetAudioBlockLength (aafInt16  /*blockLength*/)
-{
-#if FULL_TOOLKIT
-	aafAudioCompressParms_t cparms;
-
-	aafAssertMediaHdl(this);
-	aafAssertValidFHdl(_mainFile);
-	aafAssertMediaInitComplete(_mainFile);
-
-	cparms.blockLength = blockLength;
-	return (_codec->codecPutInfo(this, kAudioCompressParms, _soundKind, sizeof(cparms), &cparms));
-#else
-	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
-}
-
-	//@comm Replaces omfmSetAudioCompressParms
-/****/
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceAccess::GetAudioBlockLength (aafInt16*  /*blockLength*/)
-{
-#if FULL_TOOLKIT
-	aafAudioCompressParms_t cparms;
-	aafErr_t				status;
-	
-	aafAssertMediaHdl(this);
-	aafAssertValidFHdl(_mainFile);
-	aafAssertMediaInitComplete(_mainFile);
-	aafAssert(blockLength != NULL, _mainFile, OM_ERR_NULL_PARAM);
-
-	status = _codec->codecGetInfo(this, kAudioCompressParms, _soundKind,
-								sizeof(cparms), &cparms);
-	*blockLength = cparms.blockLength;
-	return(status);
-#else
-	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
-}
-
-	//@comm Replaces omfmGetAudioCompressParms
-	
-/****/
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceAccess::SetPrivateMediaData (aafUInt32  /*parmBlockSize*/,
-                           aafDataBuffer_t  /*ParameterBlock*/)
-{
-#if FULL_TOOLKIT
-	aafAssertMediaHdl(this);
-	aafAssertValidFHdl(_mainFile);
-	aafAssertMediaInitComplete(_mainFile);
-
-	return (_codec->codecPutInfo(this, kCompressionParms, _nilKind,
-								parmBlockSize, ParameterBlock));
-#else
-	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
-}
-
-	//@parm IN -- .
-	//@comm The parameter block should be defined in the
-	// "h" file of the codec, and must be included by the application in
-	// order to use this call.
-	//@comm NOTE: All CODECs should default to reasonable parameters,
-	// in case the application doesn't know about a given codec.
-	//@comm Replaces omfmCodecSendPrivateData*/
-
-/****/
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceAccess::GetPrivateMediaData (aafUInt32  /*blocksize*/,
-                           aafDataBuffer_t  /*buffer*/)
-{
-#if FULL_TOOLKIT
-	aafAssertMediaHdl(this);
-	aafAssertValidFHdl(_mainFile);
-	aafAssertMediaInitComplete(_mainFile);
-	aafAssert(result != NULL, _mainFile, OM_ERR_NULL_PARAM);
-
-	XPROTECT(_mainFile)
-	{
-		CHECK(_codec->codecGetInfo(this, kCompressionParms, _nilKind, blocksize,
-								result));
-	}
-	XEXCEPT
-	XEND
-	
-	return (OM_ERR_NONE);
-#else
-	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
-}
-
-	//@comm The parameter block should be defined in the
-	// "h" file of the codec, and must be included by the application in
-	// order to use this call.
-	//@comm NOTE: All CODECs should default to reasonable parameters,
-	// in case the application doesn't know about a given codec.
-	//@comm Replaces omfmGetPrivateMediaData*/
-	//@devnote Added bytesRead 
-
-/****/
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceAccess::GetNumChannels (ImplAAFMasterMob * /*masterMob*/,
-                           aafSlotID_t  /*slotID*/,
-                           aafMediaCriteria_t*  /*mediaCrit*/,
-                           ImplAAFDataDef * /*mediaKind*/,
-                           aafInt16*  /*numCh*/)
-{
-#if FULL_TOOLKIT
-	aafPosition_t		zeroPos;
-	aafFindSourceInfo_t	sourceInfo;
-	AAFFileMob *			fileMob;
-	
-	aafAssertValidFHdl(_mainFile);
-	aafAssertMediaInitComplete(_mainFile);
-
-	aafAssert(numCh != NULL, _mainFile, OM_ERR_NULL_PARAM);
-	XPROTECT(_mainFile)
-	{
-		CvtInt32toPosition(0, zeroPos);	
-//!!!		if(IsMobKind(kFileMob))
-//!!!			fileMob = (AAFFileMob *)masterMob;	//!!CASTING
-//!!!		else
-		{
-			CHECK(masterMob->SearchSource(trackID, zeroPos,kFileMob,
-									mediaCrit, NULL, NULL, &sourceInfo));
-			fileMob = (AAFFileMob *)sourceInfo.mob;
-		}
-
-		CHECK(_codec->codecGetNumChannels(_mainFile, fileMob, mediaKind, numCh));
-	}
-	XEXCEPT
-	XEND
-	
-	return(OM_ERR_NONE);
-#else
-	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
-}
-
-	//@comm Returns the number of interleaved essence channels of a given type in the essence stream referenced by the given file mob
-	//@comm If the data format is not interleaved, then the answer will
-	// always be zero or one.  This function correctly returns zero
-	// for essence types not handled by a given codec, and handles codecs
-	// which work with multiple essence types.
-	//@comm Replaces omfmGetNumChannels*/
-
-/****/
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceAccess::GetLargestSampleSize (ImplAAFDataDef * /*mediaKind*/,
-                           aafInt32*  /*maxSize*/)
-{
-#if FULL_TOOLKIT
-	aafMaxSampleSize_t	parms;
-	AAFFile *			main;
-	
-	aafAssertMediaHdl(this);
-	main = _mainFile;
-	aafAssertValidFHdl(main);
-	aafAssertMediaInitComplete(main);
-
-	aafAssert(maxSize != NULL, main, OM_ERR_NULL_PARAM);
-	*maxSize = 0;
-	XPROTECT(main)
-	{
-		parms.mediaKind = mediaKind;
-		CHECK(_codec->codecGetInfo(this, kMaxSampleSize, mediaKind, sizeof(parms),
-								&parms));
-		*maxSize = parms.largestSampleSize;
-	}
-	XEXCEPT
-	XEND
-	
-	return(OM_ERR_NONE);
-#else
-	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
-}
-
-	//@comm For uncompressed data, or the output of the software codec,
-	// the sample size will propably be a constant.
-	//@comm The essence type parameter exists to support codecs with multiple
-	// interleaved essence types.
-	//@comm Replaces omfmGetLargestSampleSize*/
-
-/****/
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceAccess::GetSampleFrameSize (ImplAAFDataDef * /*mediaKind*/,
-                           aafPosition_t  /*frameNum*/,
-                           aafLength_t*  /*frameSize*/)
-{
-#if FULL_TOOLKIT
-	aafFrameSizeParms_t	parms;
-	AAFFile *			main;
-	
-	aafAssertMediaHdl(this);
-	main = _mainFile;
-	aafAssertValidFHdl(main);
-	aafAssertMediaInitComplete(main);
-
-	aafAssert(frameSize != NULL, main, OM_ERR_NULL_PARAM);
-	CvtInt32toInt64(0, frameSize);
-	XPROTECT(main)
-	{
-		parms.mediaKind = mediaKind;
-		parms.frameNum = frameNum;
-		CHECK(_codec->codecGetInfo(this, kSampleSize, mediaKind, sizeof(parms),
-								&parms));
-		*frameSize = parms.frameSize;
-	}
-	XEXCEPT
-	XEND
-	
-	return(OM_ERR_NONE);
-#else
-	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
-}
-
-	//@comm For uncompressed data, or the output of the software codec,
-	// the sample size will propably be a constant.
-	//@comm The essence type parameter exists to support codecs with multiple
-	// interleaved essence types.
-	//@comm Possible Errors:
-	// 	Standard errors (see top of file).
-	// 	OM_ERR_NULL_PARAM -- A return parameter was NULL.
-	//@comm Replaces omfmGetSampleFrameSize*/
-
-/****/
+/**ImplementationPrivate**/
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFEssenceAccess::Open (ImplAAFMasterMob *masterMob,
-                           aafSlotID_t  slotID,
+							aafSlotID_t  slotID,
                            aafMediaCriteria_t*mediaCrit,
                            aafMediaOpenMode_t  openMode,
                            aafCompressEnable_t  compEnable)
@@ -1655,7 +596,7 @@ AAFRESULT STDMETHODCALLTYPE
 	// object, which must be closed on file close.
 	//@comm Replaces omfmMediaOpen*/
 	
-/****/
+/**ImplementationPrivate**/
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFEssenceAccess::MultiOpen (ImplAAFMasterMob * /*masterMob*/,
                            aafSlotID_t  /*slotID*/,
@@ -1778,9 +719,532 @@ aafErr_t AAFMedia::MultiOpenFromFileMob(
 	// 	OM_ERR_NOMEMORY -- couldn't allocate memory for the essence handle
 	//@comm Replaces omfmMediaMultiOpen*/
 
+AAFRESULT ImplAAFEssenceAccess::SetEssenceDestination(
+				ImplAAFLocator		*destination,
+				aafFileFormat_t		fileFormat)
+{
+	_destination = destination;
+	_fileFormat = fileFormat;
+	return AAFRESULT_SUCCESS;
+}
+
+ //Sets which variety of the codec ID is to be used.)
+AAFRESULT ImplAAFEssenceAccess::SetEssenceCodecVariety(aafUID_t variety)
+{
+	_variety = variety;
+	return AAFRESULT_SUCCESS;
+}
+
+
+
+	//@comm The essence handle from this call can be used with
+	// WriteDataSamples or WriteMultiSamples but NOT with 
+	// or WriteDataLines.
+	//@comm If you are creating the essence, and then attaching it to a master
+	// mob, then the "masterMob" field may be left NULL.
+	//@comm Replaces omfmMediaMultiCreate
+	
 /****/
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceAccess::SetVideoMemFormat (ImplAAFEssenceFormat * /*op*/)
+    ImplAAFEssenceAccess::SetBlockingSize (aafUInt32  /*numBytes*/)
+{
+#if FULL_TOOLKIT
+	aafAssertMediaHdl(this);
+	aafAssertValidFHdl(_mainFile);
+	aafAssertMediaInitComplete(_mainFile);
+	aafAssert(numBytes >= 0, _mainFile, OM_ERR_BLOCKING_SIZE);
+
+	_stream->SetBlockingSize(numBytes);
+	return(OM_ERR_NONE);
+#else
+	return AAFRESULT_NOT_IMPLEMENTED;
+#endif
+}
+
+	//@comm Allocating the space in this fashion ensures that the data will be
+	// contiguous on disk (for at least numBytes bytes) even if other
+	// disk operations allocate space on the disk.  If the data written
+	// exceeds numBytes, then another disk block of numBytes size will be
+	// allocated.
+	//@comm Takes a essence handle, so the essence must have been opened or created.
+	// The space is allocated in terms of bytes.
+	//@comm Replaces omfmSetBlockingSize
+
+	
+/****/
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFEssenceAccess::WriteMultiSamples (aafInt16  /*arrayElemCount*/,
+                           aafmMultiXfer_t *  /*xferArray*/)
+{
+#if FULL_TOOLKIT
+	aafMultiXfer_t xfer;
+
+	aafAssertMediaHdl(this);
+	aafAssertValidFHdl(_mainFile);
+	aafAssertMediaInitComplete(_mainFile);
+	aafAssert(_numChannels == 1, _mainFile,
+		OM_ERR_SINGLE_CHANNEL_OP);
+	aafAssert(buffer != NULL, _mainFile, OM_ERR_BADDATAADDRESS);
+	aafAssert((_openType == kAAFCreated) ||
+				(_openType == kAAFAppended), _mainFile, OM_ERR_MEDIA_OPENMODE);
+	
+	XPROTECT(_mainFile)
+	{
+		xfer.subTrackNum = _channels[0].physicalOutChan;
+		xfer.numSamples = nSamples;
+		xfer.buflen = buflen;
+		xfer.buffer = buffer;
+		xfer.bytesXfered = 0;
+	
+		CHECK (_codec->codecWriteBlocks(this, deinterleave, 1, &xfer));
+
+		//!!!Move this into a loop when this routine is finished
+		// Do this here and not in the codec any more
+		CHECK(omfsAddInt32toInt64(xfer->numSamples, &_channels[0].numSamples));
+
+	}
+	XEXCEPT
+	XEND
+	
+	return(OM_ERR_NONE);
+#else
+	return AAFRESULT_NOT_IMPLEMENTED;
+#endif
+}
+
+	//@comm arrayElemCount is the size of the array or transfer operations.
+	// xferArray points to an array of transfer parameters.  All fields
+	// in this array except for bytesXferred must be set up before
+	// doing the transfer.
+	//@comm Replaces omfmWriteMultiSamples
+
+/****/
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFEssenceAccess::WriteSamples (aafUInt32  /*nSamples*/,
+                           aafDataBuffer_t  /*buffer*/,
+                           aafUInt32  /*buflen*/)
+{
+#if FULL_TOOLKIT
+	aafMultiXfer_t xfer;
+
+	aafAssertMediaHdl(this);
+	aafAssertValidFHdl(_mainFile);
+	aafAssertMediaInitComplete(_mainFile);
+	aafAssert(_numChannels == 1, _mainFile,
+		OM_ERR_SINGLE_CHANNEL_OP);
+	aafAssert(buffer != NULL, _mainFile, OM_ERR_BADDATAADDRESS);
+	aafAssert((_openType == kAAFCreated) ||
+				(_openType == kAAFAppended), _mainFile, OM_ERR_MEDIA_OPENMODE);
+	
+	XPROTECT(_mainFile)
+	{
+		xfer.subTrackNum = _channels[0].physicalOutChan;
+		xfer.numSamples = nSamples;
+		xfer.buflen = buflen;
+		xfer.buffer = buffer;
+		xfer.bytesXfered = 0;
+	
+		CHECK (_codec->codecWriteBlocks(this, deinterleave, 1, &xfer));
+
+		// Do this here and not in the codec any more
+		CHECK(omfsAddInt32toInt64(xfer->numSamples, &_channels[0].numSamples));
+}
+	XEXCEPT
+	XEND
+	
+	return(OM_ERR_NONE);
+#else
+	return AAFRESULT_NOT_IMPLEMENTED;
+#endif
+}
+
+	//@comm Takes a essence handle, so the essence must have been opened or created.
+	// A single video frame is ONE sample.
+	// Buflen must be large enough to hold nSamples * the maximum sample size.
+	//@comm Possible Errors:
+	// Standard errors (see top of file).
+	// OM_ERR_SINGLE_CHANNEL_OP -- Tried to write to an interleaved stream.
+	// OM_ERR_BADDATAADDRESS -- The buffer must not be a NULL pointer.
+	//@comm Replaces omfmWriteDataSamples
+
+/****/
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFEssenceAccess::WriteRawData (aafUInt32  nSamples,
+                           aafDataBuffer_t  buffer,
+                           aafUInt32  sampleSize)
+{
+	IAAFEssenceSampleStream	*pSamples;
+
+	aafAssert(buffer != NULL, _mainFile, AAFRESULT_BADDATAADDRESS);
+	aafAssert((_openType == kAAFCreated) ||
+				(_openType == kAAFAppended), _mainFile,AAFRESULT_MEDIA_OPENMODE);
+
+	XPROTECT()
+	{
+		CHECK(_codec->QueryInterface(IID_IAAFEssenceSampleStream, (void **)&pSamples));
+		CHECK(pSamples->WriteRawData (nSamples, buffer, sampleSize));
+	}
+	XEXCEPT
+	XEND
+	
+	return(AAFRESULT_SUCCESS);
+}
+
+	//@comm A single video frame is ONE sample.
+	//@comm Buflen must be large enough to hold
+	// nSamples * the maximum sample size.
+	//@comm Possible Errors:
+	// Standard errors (see top of file).
+	// OM_ERR_BADDATAADDRESS -- The buffer must not be a NULL pointer.
+	//@comm Replaces omfmWriteRawData
+	
+/****/
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFEssenceAccess::ReadRawData (aafUInt32  nSamples,
+                           aafUInt32  buflen,
+                           aafDataBuffer_t  buffer,
+                           aafUInt32 *bytesRead,
+                           aafUInt32 *samplesRead)
+{
+	IAAFEssenceSampleStream	*pSamples;
+
+	aafAssert(buffer != NULL, _mainFile, OM_ERR_BADDATAADDRESS);
+	XPROTECT()
+	{
+		CHECK(_codec->QueryInterface(IID_IAAFEssenceSampleStream, (void **)&pSamples));
+		CHECK(pSamples->ReadRawData (nSamples, buflen, buffer, bytesRead, samplesRead));
+	}
+	XEXCEPT
+	{
+	}
+	XEND
+	
+	return(AAFRESULT_SUCCESS);
+}
+
+	//@comm A single video frame is ONE sample.
+	//@comm Buflen must be large enough to hold nSamples * the maximum sample size.
+	//@comm Possible Errors:
+	// Standard errors (see top of file).
+	// OM_ERR_BADDATAADDRESS -- The buffer must not be a NULL pointer.
+	//@comm Replaces omfmReadRawData
+	
+/****/
+ AAFRESULT STDMETHODCALLTYPE
+   ImplAAFEssenceAccess::WriteFractionalSample (
+                           aafUInt32  /*nBytes*/,
+                           aafDataBuffer_t  /*buffer*/,
+                           aafUInt32 *  /*bytesWritten*/)
+{
+#if FULL_TOOLKIT
+	aafInt16		numVideo;
+	
+	aafAssertMediaHdl(this);
+	aafAssertValidFHdl(_mainFile);
+	aafAssertMediaInitComplete(_mainFile);
+	aafAssert((_openType == kAAFCreated) ||
+				(_openType == kAAFAppended), _mainFile, OM_ERR_MEDIA_OPENMODE);
+	
+	XPROTECT(_mainFile)
+	{
+		CHECK(_codec->codecGetNumChannels(_mainFile, _fileMob,
+											_pictureKind, &numVideo));
+		if(numVideo <= 0)
+			RAISE(OM_ERR_BADRWLINES);
+		CHECK (_codec->codecWriteLines(this, nLines, buffer, bytesWritten));
+	}
+	XEXCEPT
+	XEND
+	
+	return(OM_ERR_NONE);
+#else
+	return AAFRESULT_NOT_IMPLEMENTED;
+#endif
+}
+
+	//@comm Writes single lines of video to a file.  This function allows writing
+	// video frames in pieces, for low-memory situations.  When enough lines
+	// have been written to constitute a frame, then the number of samples will
+	// be incremented by one.
+	//@comm This function works only for video essence.
+	//@comm The buffer must be large enough to hold an entire line of video. 
+	//@comm Possible Errors:
+	// Standard errors (see top of file).
+	// OM_ERR_BADRWLINES -- This function only works for video essence.
+	//@comm Replaces omfmWriteDataLines
+	//@devnote Previous version did not have nBytesPerLine, otherwise the actual size
+	// of the buffer cannot be known.
+	
+/****/
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFEssenceAccess::CompleteWrite ()
+{
+#if FULL_TOOLKIT
+	AAFFile *       	main;
+	AAFMedia  *tstMedia;
+	aafInt16       	n;
+	aafTrackID_t	trackID;
+	aafTrackID_t   	fileTrackID;
+	aafErr_t		aafError = OM_ERR_NONE;
+	
+	aafAssertMediaInitComplete(_mainFile);
+	main = _mainFile;
+#endif
+
+	XPROTECT()
+	{
+		/* Close the _codec-> before creating more objects, in order to keep trailer data
+		 * with the media in the file.
+		 */
+		if(_codec != NULL)		/* A codec was opened */
+			CHECK(_codec->CompleteWrite());
+
+		if((_openType == kAAFCreated) || (_openType == kAAFAppended))
+		{
+			// Make the lengths of the affected tracks equal the sample length
+			// adjusted for the edit rate
+			CHECK(_fileMob->ReconcileMobLength());
+			CHECK(_masterMob->ReconcileMobLength());
+		}
+
+#if FULL_TOOLKIT
+		if((_openType == kAAFCreated) || (_openType == kAAFAppended))
+		{
+			if(main->isAAFMedia())
+			{
+				if(_numChannels == 1)
+					trackID = _masterTrackID;
+				else if(_masterMob != NULL)
+				{
+					aafNumTracks_t		numMasterTracks;
+					CHECK(_masterMob->GetNumTracks(&numMasterTracks));
+					trackID = numMasterTracks + 1;
+				}
+				else
+				  trackID = 1;
+				for(n = 0; n < _numChannels; n++)
+				{
+					CHECK(_mdes->WriteLength(OMMDFLLength, _channels[n].numSamples));
+					
+					if((_openType == kAAFCreated) && (_masterMob != NULL))
+					{
+					  /* JEFF!! Changed fileTrackID to be 1 when creating audio.
+						* This should probably also be 1 for video?
+						*/
+					  if (_channels[n].mediaKind->IsSoundKind(kExactMatch, &aafError))
+						 {
+							fileTrackID = 1+n;
+						 }
+					  else
+						 fileTrackID = trackID+n;
+
+						CHECK(_masterMob->MobAddMasterTrack(
+												 _channels[n].mediaKind, trackID+n, 
+/*															 trackID+n, */
+															 fileTrackID,
+													 NULL, _fileMob));
+					}
+				}
+				CHECK(ReconcileMobLength(_fileMob));
+				if(_masterMob != NULL)
+				{
+					CHECK(ReconcileMobLength(_masterMob));
+				}
+			}
+		}
+	
+		/* Unlink this media from the list maintained by the AAFFile *
+		 */
+		if (this == main->_topMedia)
+			main->_topMedia = _pvt->nextMedia;
+		else
+		{
+			tstMedia = main->_topMedia;
+			while (tstMedia->_pvt->nextMedia != NULL)
+			{
+				if (tstMedia->_pvt->nextMedia == this)
+					tstMedia->_pvt->nextMedia = _pvt->nextMedia;
+				else
+					tstMedia = tstMedia->_pvt->nextMedia;
+			}
+		}
+	
+		/* If the data is kept in an external file, then close that file.
+		 * If the data is in the current file, leave it open.
+		 */
+		if ((_dataFile != main) && (_dataFile != NULL))
+			CHECK(_dataFile->Close());
+
+		if(_channels != NULL)
+		{
+			main->omOptFree(_channels);
+			_channels = NULL;
+		}
+		
+		if(_stream != NULL)
+			delete _stream;
+		_stream = NULL;
+		if(_pvt != NULL)
+			main->omOptFree(_pvt);
+		_pvt = NULL;
+		
+		if(_codecVariety != NULL)
+			main->omOptFree(_codecVariety);
+		_codecVariety = NULL;
+		
+		/* Clear the cookie so that this handle will show up as invalid
+		 * if the client continues to use it.
+		 */
+		_cookie = 0;
+#endif
+	}
+	XEXCEPT
+	{
+	}
+	XEND
+	
+	return(AAFRESULT_SUCCESS);
+}
+
+	//@comm This function should be called whether the essence was opened or created.
+	//@comm Replaces omfmMediaClose
+
+	
+/****/
+
+/****/
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFEssenceAccess::GetNumChannels (ImplAAFMasterMob * /*masterMob*/,
+                           aafSlotID_t  /*slotID*/,
+                           aafMediaCriteria_t*  /*mediaCrit*/,
+                           ImplAAFDataDef * /*mediaKind*/,
+                           aafInt16*  /*numCh*/)
+{
+#if FULL_TOOLKIT
+	aafPosition_t		zeroPos;
+	aafFindSourceInfo_t	sourceInfo;
+	AAFFileMob *			fileMob;
+	
+	aafAssertValidFHdl(_mainFile);
+	aafAssertMediaInitComplete(_mainFile);
+
+	aafAssert(numCh != NULL, _mainFile, OM_ERR_NULL_PARAM);
+	XPROTECT(_mainFile)
+	{
+		CvtInt32toPosition(0, zeroPos);	
+//!!!		if(IsMobKind(kFileMob))
+//!!!			fileMob = (AAFFileMob *)masterMob;	//!!CASTING
+//!!!		else
+		{
+			CHECK(masterMob->SearchSource(trackID, zeroPos,kFileMob,
+									mediaCrit, NULL, NULL, &sourceInfo));
+			fileMob = (AAFFileMob *)sourceInfo.mob;
+		}
+
+		CHECK(_codec->codecGetNumChannels(_mainFile, fileMob, mediaKind, numCh));
+	}
+	XEXCEPT
+	XEND
+	
+	return(OM_ERR_NONE);
+#else
+	return AAFRESULT_NOT_IMPLEMENTED;
+#endif
+}
+
+	//@comm Returns the number of interleaved essence channels of a given type in the essence stream referenced by the given file mob
+	//@comm If the data format is not interleaved, then the answer will
+	// always be zero or one.  This function correctly returns zero
+	// for essence types not handled by a given codec, and handles codecs
+	// which work with multiple essence types.
+	//@comm Replaces omfmGetNumChannels*/
+
+/****/
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFEssenceAccess::GetLargestSampleSize (ImplAAFDataDef * /*mediaKind*/,
+                           aafUInt32*  /*maxSize*/)
+{
+#if FULL_TOOLKIT
+	aafMaxSampleSize_t	parms;
+	AAFFile *			main;
+	
+	aafAssertMediaHdl(this);
+	main = _mainFile;
+	aafAssertValidFHdl(main);
+	aafAssertMediaInitComplete(main);
+
+	aafAssert(maxSize != NULL, main, OM_ERR_NULL_PARAM);
+	*maxSize = 0;
+	XPROTECT(main)
+	{
+		parms.mediaKind = mediaKind;
+		CHECK(_codec->codecGetInfo(this, kMaxSampleSize, mediaKind, sizeof(parms),
+								&parms));
+		*maxSize = parms.largestSampleSize;
+	}
+	XEXCEPT
+	XEND
+	
+	return(OM_ERR_NONE);
+#else
+	return AAFRESULT_NOT_IMPLEMENTED;
+#endif
+}
+
+	//@comm For uncompressed data, or the output of the software codec,
+	// the sample size will propably be a constant.
+	//@comm The essence type parameter exists to support codecs with multiple
+	// interleaved essence types.
+	//@comm Replaces omfmGetLargestSampleSize*/
+
+/****/
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFEssenceAccess::GetSampleFrameSize (ImplAAFDataDef * /*mediaKind*/,
+                           aafPosition_t  /*frameNum*/,
+                           aafLength_t*  /*frameSize*/)
+{
+#if FULL_TOOLKIT
+	aafFrameSizeParms_t	parms;
+	AAFFile *			main;
+	
+	aafAssertMediaHdl(this);
+	main = _mainFile;
+	aafAssertValidFHdl(main);
+	aafAssertMediaInitComplete(main);
+
+	aafAssert(frameSize != NULL, main, OM_ERR_NULL_PARAM);
+	CvtInt32toInt64(0, frameSize);
+	XPROTECT(main)
+	{
+		parms.mediaKind = mediaKind;
+		parms.frameNum = frameNum;
+		CHECK(_codec->codecGetInfo(this, kSampleSize, mediaKind, sizeof(parms),
+								&parms));
+		*frameSize = parms.frameSize;
+	}
+	XEXCEPT
+	XEND
+	
+	return(OM_ERR_NONE);
+#else
+	return AAFRESULT_NOT_IMPLEMENTED;
+#endif
+}
+
+	//@comm For uncompressed data, or the output of the software codec,
+	// the sample size will propably be a constant.
+	//@comm The essence type parameter exists to support codecs with multiple
+	// interleaved essence types.
+	//@comm Possible Errors:
+	// 	Standard errors (see top of file).
+	// 	OM_ERR_NULL_PARAM -- A return parameter was NULL.
+	//@comm Replaces omfmGetSampleFrameSize*/
+
+
+
+/****/
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFEssenceAccess::SetTransformParameters (ImplAAFEssenceFormat * /*op*/)
 {
 #if FULL_TOOLKIT
 	aafAssertMediaHdl(this);
@@ -1794,113 +1258,7 @@ AAFRESULT STDMETHODCALLTYPE
 #endif
 }
 
-	//@comm This is the format expected on writes and produced on reads.
-	//@comm On writes, the data will be written in this format, except
-	// where a software codec may be used.
-	// On reads, the data will be translated to this format.
-	//@comm The current CODECs should support rgb888 and YUV as formats
-	// and all of the standard layouts.  A special format of
-	// kVmFmtStd says to use the file's native format & layout.
-	//@comm Replaces omfmSetVideoMemFormat*/
 
-/****/
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceAccess::SetAudioMemFormat (ImplAAFEssenceFormat * /*op*/)
-{
-#if FULL_TOOLKIT
-	aafAssertMediaHdl(this);
-	aafAssertValidFHdl(_mainFile);
-	aafAssertMediaInitComplete(_mainFile);
-
-	return (_codec->codecPutInfo(this, kSetAudioMemFormat, _soundKind,
-								sizeof(op), op));
-#else
-	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
-}
-
-	//@comm This is the format expected on writes and produced on reads.
-	//@comm On writes, the data will be written in this format, except
-	// where a software codec may be used.
-	// On reads, the data will be translated to this format.
-	//@comm The current CODECs should support different sample sizes and rates
-	// A special format of kAmFmtStd says to use the file's native
-	// size and rate.
- 	//@comm Replaces omfmSetAudioMemFormat
-
-/****/
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceAccess::GetDisplayRect (aafRect_t*  /*result*/)
-{
-#if FULL_TOOLKIT
-	aafVideoMemOp_t	ops[2];
-
-	aafAssertMediaHdl(this);
-	aafAssertValidFHdl(_mainFile);
-	aafAssertMediaInitComplete(_mainFile);
-	aafAssert(result != NULL, _mainFile, OM_ERR_NULL_PARAM);
-	
-	XPROTECT(_mainFile)
-	{
-		ops[0].opcode = kAAFDisplayRect;
-		ops[1].opcode = kAAFVFmtEnd;
-
-		CHECK(_codec->codecGetVideoInfo(this, ops));
-		*result = ops[0].operand.expRect;
-	}
-	XEXCEPT
-	XEND
-	
-	return (OM_ERR_NONE);
-#else
-	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
-}
-
-	//@comm Handles the case where the displayed rectangle is not the same as
-	// the stored rectangle (as with the old leadingLines and
-	// trailingLines).<nl>
-	// A positive "leadingLines" (from 1.5) becomes a positive yOffset, and
-	// decreases the display height.<nl>
-	// A positive "trailingLines" (from 1.5) also decreases the display
-	// height.
-	//@comm Takes a essence handle, so the essence must have been opened or
-	// created.
-	//@comm Possible Errors:
-	// Standard errors (see top of file).
-	//   OM_ERR_NULL_PARAM -- A NULL rectangle pointer.
-	//   OM_ERR_INVALID_OP_CODEC -- This codec doesn't support display rect
-	//								(may not be video essence)
- 	//@comm Replaces omfmGetDisplayRect
-
-/****/
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceAccess::GetSampledRect (aafRect_t*  /*result*/)
-{
-#if FULL_TOOLKIT
-	aafVideoMemOp_t	ops[2];
-
-	aafAssertMediaHdl(this);
-	aafAssertValidFHdl(_mainFile);
-	aafAssertMediaInitComplete(_mainFile);
-	aafAssert(result != NULL, _mainFile, OM_ERR_NULL_PARAM);
-	
-	XPROTECT(_mainFile)
-	{
-		ops[0].opcode = kAAFSampledRect;
-		ops[1].opcode = kAAFVFmtEnd;
-
-		CHECK(_codec->codecGetVideoInfo(this, ops));
-		*result = ops[0].operand.expRect;
-	}
-	XEXCEPT
-	XEND
-	
-	return (OM_ERR_NONE);
-#else
-	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
-}
 
 	//@comm Takes a essence handle, so the essence must have been opened or created.
 	//@comm Possible Errors:<nl>
@@ -1911,7 +1269,9 @@ AAFRESULT STDMETHODCALLTYPE
 
 /****/
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceAccess::GetSampleCount (aafLength_t *  /*result*/)
+    ImplAAFEssenceAccess::GetSampleCount (
+         ImplAAFDataDef * mediaKind,
+        aafLength_t *  /*result*/)
 {
 #if FULL_TOOLKIT
 	aafInt64		one;
@@ -1943,9 +1303,10 @@ AAFRESULT STDMETHODCALLTYPE
 
 /****/
  AAFRESULT STDMETHODCALLTYPE
-   ImplAAFEssenceAccess::ReadDataSamples (aafInt32  /*nSamples*/,
-                           aafInt32  /*buflen*/,
+   ImplAAFEssenceAccess::ReadSamples (aafUInt32  /*nSamples*/,
+                           aafUInt32  /*buflen*/,
                            aafDataBuffer_t  /*buffer*/,
+                           aafUInt32*  /*samplesRead*/,
                            aafUInt32*  /*bytesRead*/)
 {
 #if FULL_TOOLKIT
@@ -2018,10 +1379,11 @@ AAFRESULT STDMETHODCALLTYPE
 	
 /****/
  AAFRESULT STDMETHODCALLTYPE
-   ImplAAFEssenceAccess::ReadDataLines (aafInt32  /*nLines*/,
-                           aafInt32  /*bufLen*/,
+   ImplAAFEssenceAccess::ReadFractionalSample (
+                           aafUInt32 nBytes,
+						   aafUInt32  /*bufLen*/,
                            aafDataBuffer_t  /*buffer*/,
-                           aafInt32*  /*bytesRead*/)
+                           aafUInt32*  /*bytesRead*/)
 {
 #if FULL_TOOLKIT
 	aafAssertMediaHdl(this);
@@ -2045,7 +1407,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 /****/
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceAccess::GotoFrameNumber (aafInt64  /*frameNum*/)
+    ImplAAFEssenceAccess::SeektoEditFrame (aafInt64  /*frameNum*/)
 {
 #if FULL_TOOLKIT
 	aafInt64		one;
@@ -2071,78 +1433,12 @@ AAFRESULT STDMETHODCALLTYPE
 	//@comm An audio frame is one sample across all open channels.
 	//@comm Replaces omfmGotoFrameNumber
 
-/****/
-AAFRESULT STDMETHODCALLTYPE
-   ImplAAFEssenceAccess::GetVideoInfo (aafFrameLayout_t *  /*layout*/,
-                           aafInt32 *  /*fieldWidth*/,
-                           aafInt32 *  /*fieldHeight*/,
-                           aafRational_t *  /*editrate*/,
-                           aafInt16 *  /*bitsPerPixel*/,
-                           aafPixelFormat_t *  /*defaultPixelFmt*/)
-{
-#if FULL_TOOLKIT
-	aafFrameLayout_t	localLayout;
-	aafInt16					localBitsPerPixel;
-	aafInt32 localWidth, localHeight;
-	aafRational_t		localEditrate;
-	aafPixelFormat_t	localMemFmt;
-	aafVideoMemOp_t		opList[6];
 
-	aafAssertMediaHdl(this);
-	aafAssertValidFHdl(_mainFile);
-	aafAssertMediaInitComplete(_mainFile);
-	if(layout == NULL)
-		layout = &localLayout;
-	if(fieldWidth == NULL)
-		fieldWidth = &localWidth;
-	if(fieldHeight == NULL)
-		fieldHeight = &localHeight;
-	if(editrate == NULL)
-		editrate = &localEditrate;
-	if(defaultMemFmt == NULL)
-		defaultMemFmt = &localMemFmt;
-	if(bitsPerPixel == NULL)
-		bitsPerPixel = &localBitsPerPixel;
-
-	XPROTECT(_mainFile)
-	{
-		CHECK(_mdes->ReadRational(OMMDFLSampleRate, editrate));
-	
-		opList[0].opcode = kAAFFrameLayout;
-		opList[1].opcode = kAAFStoredRect;
-		opList[2].opcode = kAAFPixelSize;
-		opList[3].opcode = kAAFPixelFormat;
-		opList[4].opcode = kAAFVFmtEnd;
-		CHECK(_codec->codecGetVideoInfo(this, opList));
-		*layout = opList[0].operand.expFrameLayout;
-		*fieldWidth = opList[1].operand.expRect.xSize;
-		*fieldHeight = opList[1].operand.expRect.ySize;
-		*bitsPerPixel = opList[2].operand.expInt16;
-		*defaultMemFmt = opList[3].operand.expPixelFormat;
-	}
-	XEXCEPT
-	{
-		if(XCODE() == OM_ERR_INVALID_OP_CODEC)
-			RERAISE(OM_ERR_WRONG_MEDIATYPE);
-	}
-	XEND
-	
-	return (OM_ERR_NONE);
-#else
-	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
-}
-
-	//@comm Any parameters not required may have the pointers set to NULL.
-	//@comm Possible Errors:<nl>
-	// Standard errors (see top of file).<nl>
-	// OM_ERR_WRONG_MEDIATYPE -- Not video essence.<nl>
-	//@comm Replaces omfmGetVideoInfo */
 			
 			
 /****/
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceAccess::GetVideoInfoArray (ImplAAFEssenceFormat ** /*ops*/)
+    ImplAAFEssenceAccess::GetFileFormat (ImplAAFEssenceFormat ** /*ops*/)
 {
 #if FULL_TOOLKIT
 		return(_codec->codecGetVideoInfo(this, ops));
@@ -2152,10 +1448,21 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 	//@comm Replaces omfmGetVideoInfoArray */
+/****/
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFEssenceAccess::GetFileFormatParameterList (ImplAAFEssenceFormat ** /*ops*/)
+{
+#if FULL_TOOLKIT
+#else
+	return AAFRESULT_NOT_IMPLEMENTED;
+#endif
+}
+
+	//@comm Replaces omfmGetVideoInfoArray */
 
 /****/
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceAccess::PutVideoInfoArray (ImplAAFEssenceFormat * /*ops*/)
+    ImplAAFEssenceAccess::PutFileFormat (ImplAAFEssenceFormat * /*ops*/)
 {
 #if FULL_TOOLKIT
 		return(_codec->codecPutVideoInfo(this, ops));
@@ -2166,111 +1473,6 @@ AAFRESULT STDMETHODCALLTYPE
 
 	//@comm Replaces omfmPutVideoInfoArray */
 
-/****/
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceAccess::GetNumRepresentations (ImplAAFMasterMob * /*masterMob*/,
-                           aafSlotID_t  /*slotID*/,
-                           aafInt32*  /*numReps*/)
-{
-#if FULL_TOOLKIT
-#else
-	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
-}
-
-	//@comm Replaces omfmGetNumRepresentations */
-
-/****/
- AAFRESULT STDMETHODCALLTYPE
-   ImplAAFEssenceAccess::GetRepresentationSourceClip (ImplAAFMasterMob * /*masterMob*/,
-                           aafSlotID_t  /*slotID*/,
-                           aafInt32  /*index*/,
-                           ImplAAFSourceClip ** /*sourceClip*/)
-{
-#if FULL_TOOLKIT
-#else
-	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
-}
-
-	//@comm Replaces omfmGetRepresentationSourceClip */
-
-/****/
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceAccess::GetAudioInfo (aafRational_t*  /*rate*/,
-                           aafInt32*  /*sampleSize*/,
-                           aafInt32*  /*numChannels*/)
-{
-#if FULL_TOOLKIT
-	aafRational_t			localRate;
-	aafInt32						localSampleSize;
-	aafInt32						localNumChannels;
-	aafAudioMemOp_t		opList[3];
-	
-	aafAssertMediaHdl(this);
-	aafAssertValidFHdl(_mainFile);
-	aafAssertMediaInitComplete(_mainFile);
-	if(rate == NULL)
-		rate = &localRate;
-	if(sampleSize == NULL)
-		sampleSize = &localSampleSize;
-	if(numChannels == NULL)
-		numChannels = &localNumChannels;
-
-	XPROTECT(_mainFile)
-	{
-		CHECK(_mdes->ReadRational(OMMDFLSampleRate, rate));
-
-		opList[0].opcode = kAAFSampleSize;
-		opList[1].opcode = kAAFNumChannels;
-		opList[2].opcode = kAAFAFmtEnd;
-		CHECK(_codec->codecGetAudioInfo(this, opList));
-		*sampleSize = opList[0].operand.sampleSize;
-		*numChannels = opList[1].operand.numChannels;
-	}
-	XEXCEPT
-	{
-		if(XCODE() == OM_ERR_INVALID_OP_CODEC)
-			RERAISE(OM_ERR_WRONG_MEDIATYPE);
-	}
-	XEND
-		
-	return (OM_ERR_NONE);
-#else
-	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
-}
-
-	//@comm Any parameters not required may have the pointers set to NULL.
-	//@comm Possible Errors:<nl>
-	//	Standard errors (see top of file).<nl>
-	//	OM_ERR_WRONG_MEDIATYPE -- Not video essence.
-	//@comm Replaces omfmGetAudioInfo */
-
-
-/****/
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceAccess::GetAudioInfoArray (ImplAAFEssenceFormat ** /*ops*/)
-{
-#if FULL_TOOLKIT
-		return(_codec->codecGetAudioInfo(this, ops));
-#else
-	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
-}
-
-	//@comm Replaces omfmGetAudioInfoArray */
-
-/****/
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceAccess::PutAudioInfoArray (ImplAAFEssenceFormat * /*ops*/)
-{
-#if FULL_TOOLKIT
-		return(_codec->codecPutAudioInfo(this, ops));
-#else
-	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
-}
 
 
 /****/
@@ -2323,9 +1525,8 @@ AAFRESULT STDMETHODCALLTYPE
 
 /****/
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceAccess::GetCodecName (aafCodecID_t  /*codecID*/,
-                           aafInt32  /*namelen*/,
-                           aafUInt8 *  /*name*/)
+    ImplAAFEssenceAccess::GetCodecName (aafUInt32  /*namelen*/,
+                           wchar_t *  /*name*/)
 {
 #if FULL_TOOLKIT
 	aafCodecMetaInfo_t	meta;
@@ -2435,17 +1636,6 @@ AAFRESULT STDMETHODCALLTYPE
 	//@comm Replaces omfmSetStreamCacheSize */
 
 /****/
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceAccess::SourceGetVideoSignalType (aafVideoSignalType_t*  /*signalType*/)
-{
-#if FULL_TOOLKIT
-#else
-	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
-}
-
-	//@comm Replaces omfmSourceGetVideoSignalType */
-
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFEssenceAccess::GetStoredByteOrder (eAAFByteOrder_t *  /*pOrder*/)
@@ -2462,6 +1652,18 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFEssenceAccess::GetNativeByteOrder (eAAFByteOrder_t *  /*pOrder*/)
 {
 #if FULL_TOOLKIT
+#else
+	return AAFRESULT_NOT_IMPLEMENTED;
+#endif
+}
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFEssenceAccess::GetEssenceSampleStream
+         (ImplAAFEssenceSampleStream  **theStream)
+{
+#if FULL_TOOLKIT
+	*theStream = _stream;
+	return AAFRESULT_SUCCESS;
 #else
 	return AAFRESULT_NOT_IMPLEMENTED;
 #endif
