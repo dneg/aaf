@@ -48,12 +48,19 @@
 #include "ImplEnumAAFEffectDefs.h"
 #endif
 
+#ifndef __ImplEnumAAFCodecDefs_h__
+#include "ImplEnumAAFCodecDefs.h"
+#endif
+
+#ifndef __ImplEnumAAFContainerDefs_h__
+#include "ImplEnumAAFContainerDefs.h"
+#endif
+
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
 
 #include "ImplAAFObjectCreation.h"
-#include "ImplEnumAAFPluggableDefs.h"
 
 
 #ifndef __ImplAAFBaseClassFactory_h__
@@ -73,10 +80,12 @@
 #include "aafErr.h"
 #include "AAFUtils.h"
 
-extern "C" const aafClassID_t CLSID_EnumAAFPluggableDefs;
+extern "C" const aafClassID_t CLSID_EnumAAFDefObjects;
 extern "C" const aafClassID_t CLSID_EnumAAFEffectDefs;
 extern "C" const aafClassID_t CLSID_EnumAAFParameterDefs;
 extern "C" const aafClassID_t CLSID_EnumAAFTypeDefs;
+extern "C" const aafClassID_t CLSID_EnumAAFCodecDefs;
+extern "C" const aafClassID_t CLSID_EnumAAFContainerDefs;
 
 extern aafUID_t gTypeID_AUID;
 extern aafUID_t gTypeID_UInt8;
@@ -96,18 +105,20 @@ extern aafUID_t gClassID_Object;
 
 
 ImplAAFDictionary::ImplAAFDictionary ()
-: _pluginDefinitions    (PID_Dictionary_PluginDefinitions,    "PluginDefinitions"),
-  _effectDefinitions    (PID_Dictionary_EffectDefinitions,    "EffectDefinitions"), 
-  _parameterDefinitions (PID_Dictionary_ParameterDefinitions, "ParameterDefinitions"),
+: _effectDefinitions(PID_Dictionary_EffectDefinitions, "EffectDefinitions"), 
+  _parameterDefinitions(PID_Dictionary_ParameterDefinitions, "ParameterDefinitions"),
+  _codecDefinitions(PID_Dictionary_CodecDefinitions, "CodecDefinitions"),
+  _containerDefinitions(PID_Dictionary_ContainerDefinitions, "ContainerDefinitions"),
   _typeDefinitions      (PID_Dictionary_TypeDefinitions,      "TypeDefinitions"),
   _classDefinitions      (PID_Dictionary_ClassDefinitions,    "ClassDefinitions"),
   _pBuiltins (0)
 {
-  _persistentProperties.put (_pluginDefinitions.address());
   _persistentProperties.put (_effectDefinitions.address());
   _persistentProperties.put (_parameterDefinitions.address());
   _persistentProperties.put (_typeDefinitions.address());
   _persistentProperties.put (_classDefinitions.address());
+  _persistentProperties.put(_codecDefinitions.address());
+  _persistentProperties.put(_containerDefinitions.address());
 
   InitBuiltins();
 }
@@ -116,44 +127,34 @@ ImplAAFDictionary::ImplAAFDictionary ()
 ImplAAFDictionary::~ImplAAFDictionary ()
 {
   size_t i;
-  // Release the pluginDefinitions
-  size_t size = _pluginDefinitions.getSize();
+  // Release the _codecDefinitions
+  size_t size = _codecDefinitions.getSize();
   for (i = 0; i < size; i++)
 	{
-	  ImplAAFPluggableDef *pPlug =_pluginDefinitions.setValueAt(0, i);
-	  if (pPlug)
+		ImplAAFCodecDef *pPlug = _codecDefinitions.setValueAt(0, i);
+		if (pPlug)
 		{
 		  pPlug->ReleaseReference();
 		}
 	}
 
-  size_t effectDefSize = _effectDefinitions.getSize();
-  for (i = 0; i < effectDefSize; i++)
+	size_t containerDefSize = _containerDefinitions.getSize();
+	for (i = 0; i < containerDefSize; i++)
 	{
-	  ImplAAFEffectDef *pPlug =_effectDefinitions.setValueAt(0, i);
-	  if (pPlug)
+		ImplAAFContainerDef *pPlug = _containerDefinitions.setValueAt(0, i);
+		if (pPlug)
 		{
 		  pPlug->ReleaseReference();
 		}
 	}
 
-  size_t paramDefSize = _parameterDefinitions.getSize();
-  for (i = 0; i < paramDefSize; i++)
+	size_t typeDefSize = _typeDefinitions.getSize();
+	for (i = 0; i < typeDefSize; i++)
 	{
-	  ImplAAFParameterDef *pPlug = _parameterDefinitions.setValueAt(0, i);
-	  if (pPlug)
+		ImplAAFTypeDef *pPlug = _typeDefinitions.setValueAt(0, i);
+		if (pPlug)
 		{
 		  pPlug->ReleaseReference();
-		}
-	}
-
-  size_t typeDefSize = _typeDefinitions.getSize();
-  for (i = 0; i < typeDefSize; i++)
-	{
-	  ImplAAFTypeDef *pType = _typeDefinitions.setValueAt(0, i);
-	  if (pType)
-		{
-		  pType->ReleaseReference();
 		}
 	}
 
@@ -640,13 +641,13 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFDictionary::RegisterPluggableDefinition (
-      ImplAAFPluggableDef *pPlugDef)
+    ImplAAFDictionary::RegisterCodecDefinition (
+      ImplAAFCodecDef *pPlugDef)
 {
 	if (NULL == pPlugDef)
 		return AAFRESULT_NULL_PARAM;
 	
-	_pluginDefinitions.appendValue(pPlugDef);
+	_codecDefinitions.appendValue(pPlugDef);
 	// trr - We are saving a copy of pointer in _pluginDefinitions
 	// so we need to bump its reference count.
 	pPlugDef->AcquireReference();
@@ -654,19 +655,99 @@ AAFRESULT STDMETHODCALLTYPE
 	return(AAFRESULT_SUCCESS);
 }
 
+
+AAFRESULT
+    ImplAAFDictionary::GetNumCodecDefs(aafUInt32 *  pNumCodecDefs)
+{
+  size_t siz;
+
+  if(pNumCodecDefs == NULL)
+    return AAFRESULT_NULL_PARAM;
+  
+  _codecDefinitions.getSize(siz);
+  
+  *pNumCodecDefs = siz;
+  return AAFRESULT_SUCCESS;
+}
+
+AAFRESULT
+    ImplAAFDictionary::GetNthCodecDef (aafInt32 index, ImplAAFCodecDef **ppPluggableDefs)
+{
+  if (NULL == ppPluggableDefs)
+    return AAFRESULT_NULL_PARAM;
+
+  ImplAAFCodecDef *obj = NULL;
+  _codecDefinitions.getValueAt(obj, index);
+  *ppPluggableDefs = obj;
+	
+  // trr - We are returning a copy of pointer stored in _mobs so we need
+  // to bump its reference count.
+  if (obj)
+    obj->AcquireReference();
+  else
+    return AAFRESULT_NO_MORE_OBJECTS;
+
+  return AAFRESULT_SUCCESS;
+}
+
+AAFRESULT ImplAAFDictionary::LookupCodecDefinition(aafUID_t *defID, ImplAAFCodecDef **result)
+{
+	ImplAAFCodecDef				*codec = NULL;
+	aafBool						defFound;
+	aafUID_t					testAUID;
+	aafUInt32					n, numCodecs;
+
+	XPROTECT()
+	{
+		*result = NULL;
+		CHECK(GetNumCodecDefs(&numCodecs));
+		defFound = AAFFalse;
+		for(n = 0; n < numCodecs && !defFound; n++)
+		{
+			CHECK(GetNthCodecDef (n, &codec));
+			CHECK(codec->GetAUID (&testAUID));
+			if(EqualAUID(defID, &testAUID))
+			{
+				defFound = AAFTrue;
+				*result = codec;
+				codec->AcquireReference();
+				break;
+			}
+			codec->ReleaseReference();
+			codec = NULL;
+		}
+		if(codec != NULL)
+		{
+			codec->ReleaseReference();
+			codec = NULL;
+		}
+		if(!defFound)
+			 RAISE(AAFRESULT_NO_MORE_OBJECTS);
+	}
+	XEXCEPT
+	{
+		if(codec != NULL)
+			codec->ReleaseReference();
+	}
+	XEND
+	
+	return(AAFRESULT_SUCCESS);
+}
+
+
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFDictionary::GetPluggableDefinitions (
-	ImplEnumAAFPluggableDefs **ppEnum)
+    ImplAAFDictionary::GetCodecDefinitions (
+      ImplEnumAAFCodecDefs **ppEnum)
 {
 	if (NULL == ppEnum)
 		return AAFRESULT_NULL_PARAM;
 	*ppEnum = 0;
 	
-	ImplEnumAAFPluggableDefs *theEnum = (ImplEnumAAFPluggableDefs *)CreateImpl (CLSID_EnumAAFPluggableDefs);
+	ImplEnumAAFCodecDefs *theEnum = (ImplEnumAAFCodecDefs *)CreateImpl (CLSID_EnumAAFCodecDefs);
 	
 	XPROTECT()
 	{
-		CHECK(theEnum->SetDictionary(this));
+		CHECK(theEnum->SetEnumStrongProperty(this, &_codecDefinitions));
 		*ppEnum = theEnum;
 	}
 	XEXCEPT
@@ -681,28 +762,87 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDictionary::RegisterContainerDefinition (
+      ImplAAFContainerDef *pPlugDef)
+{
+	if (NULL == pPlugDef)
+		return AAFRESULT_NULL_PARAM;
+	
+	_containerDefinitions.appendValue(pPlugDef);
+	// trr - We are saving a copy of pointer in _pluginDefinitions
+	// so we need to bump its reference count.
+	pPlugDef->AcquireReference();
+	
+	return(AAFRESULT_SUCCESS);
+}
+
+AAFRESULT ImplAAFDictionary::LookupContainerDefinition(aafUID_t *defID, ImplAAFContainerDef **result)
+{
+	ImplAAFContainerDef			*container = NULL;
+	aafBool						defFound;
+	aafUID_t					testAUID;
+	aafUInt32					n, numContainers;
+
+	XPROTECT()
+	{
+		*result = NULL;
+		CHECK(GetNumContainerDefs(&numContainers));
+		defFound = AAFFalse;
+		for(n = 0; n < numContainers && !defFound; n++)
+		{
+			CHECK(GetNthContainerDef (n, &container));
+			CHECK(container->GetAUID (&testAUID));
+			if(EqualAUID(defID, &testAUID))
+			{
+				defFound = AAFTrue;
+				*result = container;
+				container->AcquireReference();
+				break;
+			}
+			container->ReleaseReference();
+			container = NULL;
+		}
+		if(container != NULL)
+		{
+			container->ReleaseReference();
+			container = NULL;
+		}
+		if(!defFound)
+			 RAISE(AAFRESULT_NO_MORE_OBJECTS);
+	}
+	XEXCEPT
+	{
+		if(container != NULL)
+			container->ReleaseReference();
+	}
+	XEND
+	
+	return(AAFRESULT_SUCCESS);
+}
+
 AAFRESULT
-    ImplAAFDictionary::GetNumPluggableDefs(aafUInt32 *  pNumPluggableDefs)
+    ImplAAFDictionary::GetNumContainerDefs(aafUInt32 *  pNumContainerDefs)
 {
   size_t siz;
 
-  if(pNumPluggableDefs == NULL)
+  if(pNumContainerDefs == NULL)
     return AAFRESULT_NULL_PARAM;
   
-  _pluginDefinitions.getSize(siz);
+  _containerDefinitions.getSize(siz);
   
-  *pNumPluggableDefs = siz;
+  *pNumContainerDefs = siz;
   return AAFRESULT_SUCCESS;
 }
 
 AAFRESULT
-    ImplAAFDictionary::GetNthPluggableDef (aafInt32 index, ImplAAFPluggableDef **ppPluggableDefs)
+    ImplAAFDictionary::GetNthContainerDef (aafInt32 index, ImplAAFContainerDef **ppPluggableDefs)
 {
   if (NULL == ppPluggableDefs)
     return AAFRESULT_NULL_PARAM;
 
-  ImplAAFPluggableDef *obj = NULL;
-  _pluginDefinitions.getValueAt(obj, index);
+  ImplAAFContainerDef *obj = NULL;
+  _containerDefinitions.getValueAt(obj, index);
   *ppPluggableDefs = obj;
 	
   // trr - We are returning a copy of pointer stored in _mobs so we need
@@ -715,57 +855,31 @@ AAFRESULT
   return AAFRESULT_SUCCESS;
 }
 
-AAFRESULT ImplAAFDictionary::LookupPluggableDef(aafUID_t *defID, ImplAAFPluggableDef **result)
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDictionary::GetContainerDefinitions (
+      ImplEnumAAFContainerDefs **ppEnum)
 {
-	ImplEnumAAFPluggableDefs	*pluggableEnum = NULL;
-	ImplAAFPluggableDef			*pluggable = NULL;
-	aafBool						defFound;
-	AAFRESULT					status;
-	aafUID_t					testAUID;
-
+	if (NULL == ppEnum)
+		return AAFRESULT_NULL_PARAM;
+	*ppEnum = 0;
+	
+	ImplEnumAAFContainerDefs *theEnum = (ImplEnumAAFContainerDefs *)CreateImpl (CLSID_EnumAAFContainerDefs);
+	
 	XPROTECT()
 	{
-		*result = NULL;
-		CHECK(GetPluggableDefinitions (&pluggableEnum));
-		status = pluggableEnum->NextOne (&pluggable);
-		defFound = AAFFalse;
-		while(status == AAFRESULT_SUCCESS && !defFound)
-		{
-			CHECK(pluggable->GetAUID (&testAUID));
-			if(EqualAUID(defID, &testAUID))
-			{
-				defFound = AAFTrue;
-				*result = pluggable;
-				pluggable->AcquireReference();
-				break;
-			}
-			pluggable->ReleaseReference();
-			pluggable = NULL;
-			status = pluggableEnum->NextOne (&pluggable);
-		}
-		if(pluggable != NULL)
-		{
-			pluggable->ReleaseReference();
-			pluggable = NULL;
-		}
-		pluggableEnum->ReleaseReference();
-		pluggableEnum = NULL;
-		if(!defFound)
-			 RAISE(AAFRESULT_NO_MORE_OBJECTS);
+		CHECK(theEnum->SetEnumStrongProperty(this, &_containerDefinitions));
+		*ppEnum = theEnum;
 	}
 	XEXCEPT
 	{
-		if(pluggableEnum != NULL)
-			pluggableEnum->ReleaseReference();
-		if(pluggable != NULL)
-			pluggable->ReleaseReference();
+		if (theEnum)
+			theEnum->ReleaseReference();
+		return(XCODE());
 	}
-	XEND
+	XEND;
 	
 	return(AAFRESULT_SUCCESS);
 }
-
-
 
 #define REGISTER_TYPE_BUILTIN(func) \
 { \
