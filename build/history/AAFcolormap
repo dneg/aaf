@@ -25,6 +25,10 @@ color Blue                CCCCFF
 color Magenta             FF00FF
 color Green               00FF00
 
+# default color
+
+default Green
+
 # Components
 
 component Object-Manager Pale-Green

@@ -181,6 +181,13 @@ function createColorMap(file) {
                    file, line) | "cat 1>&2";
             exit 1;
           }
+        } else if ($1 == "default") {
+          if (component == 1) {
+            printf("Error : \"%s\", line %s - illegally placed default.\n",
+                   file, line) | "cat 1>&2";
+            exit 1;
+          }
+          default="#" $2;
         } else if ($1 == "#") {
           # ignore comment
         } else {
@@ -207,7 +214,7 @@ function createColorMap(file) {
 }
 
 function rowcolor(files) {
-  result = "#FFFFFF"; /* White */
+  result = default;
   /* Get first file */
   split(files, fns, ",");
   ff = fns[1];
