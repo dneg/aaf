@@ -32,7 +32,6 @@
 #include <AxComponent.h>
 #include <AxDictionary.h>
 #include <AxEx.h>
-#include <AxMacMain.h>
 
 #include <AAFStoredObjectIDs.h>
 #include <AAFDataDefs.h>

@@ -30,7 +30,6 @@
 #include <AxDefObject.h>
 #include <AxDefObject.h>
 #include <AxIterator.h>
-#include <AxMacMain.h>
 
 #include <iostream>
 #include <sstream>

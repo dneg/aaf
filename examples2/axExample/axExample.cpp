@@ -24,7 +24,6 @@
 #include <AxFile.h>
 #include <AxEx.h>
 #include <AxUtil.h>
-#include <AxMacMain.h>
 
 #include <iostream>
 #include <sstream>

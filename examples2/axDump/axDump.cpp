@@ -33,7 +33,6 @@
 #include <AxBaseObjIter.h>
 #include <AxUtil.h>
 #include <AxEx.h>
-#include <AxMacMain.h>
 
 #include <AAFStoredObjectIDs.h>
 #include <AAFTypeDefUIDs.h>

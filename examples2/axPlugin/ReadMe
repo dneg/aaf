@@ -220,9 +220,9 @@ code, just link in your new code.
 
 8) If, for some reason, you need to add some platform specific code
 (i.e. a DllMain implementation for a Windows dll), this can be done by
-adding code to the AxPluginWin.cpp file.  For Unix and MacOS platforms
+adding code to the AxPluginWin.cpp file.  For Unix and MacOSX platforms
 use the like named file.  Currently, there is no need for any platform
-specific code, except on Mac. (See comments in AxPluginMac.cpp).
+specific code.
 
 10) The axPluginInfo program is a simple way to test loading your
 plugin.  It will load the plugin and log a bit of informatin about all

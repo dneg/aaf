@@ -32,7 +32,6 @@
 #include <AxDictionary.h>
 #include <AxInit.h>
 #include <AxUtil.h>
-#include <AxMacMain.h>
 
 #include <iostream>
 #include <sstream>
