@@ -6,7 +6,6 @@ AAFPropertyDefinition\
 AAFDefinitionObject\
 #endm
 #c
-#import ./AAFUnitTest.exp
 AD_HEAD
 
 AD_INCLUDE(AAFTypes)
@@ -176,7 +175,4 @@ AD_XMETHOD1(GetRefValues,
 			Reference value Enumeration,
 			Return an enumerator for the reference values.)
 
-AD_OVERRIDE(.method-Test)
-
 AD_CLASS_END
-

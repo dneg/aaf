@@ -6,7 +6,6 @@ AAFScopeReference\
 AAFSegment\
 #endm
 #c
-#import ./AAFUnitTest.exp
 AD_HEAD
 
 AD_INCLUDE(AAFTypes)
@@ -49,7 +48,5 @@ AD_METHOD1(GetRelativeSlot,
 		   pnRelativeSlot,
 		   Pointer to a Relative Slot,
 		   Gets the number of f slots that preced the slot containing the Scope Reference.)
-
-AD_OVERRIDE(.method-Test)
 
 AD_CLASS_END
