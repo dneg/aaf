@@ -52,13 +52,17 @@ void OMContainer::OMLAbortContainer(void)
 OMStorable* makeHeader(void)
 {
   AAFHeader* newAAFHeader = new AAFHeader;
-  return newAAFHeader->GetRepObject();
+  OMStorable* retval = dynamic_cast<OMStorable*>
+    (newAAFHeader->GetRepObject());
+  return retval;
 }
 
 OMStorable* makeIdentification(void)
 {
   AAFIdentification* newAAFIdentification = new AAFIdentification;
-  return newAAFIdentification->GetRepObject();
+  OMStorable* retval = dynamic_cast<OMStorable*>
+    (newAAFIdentification->GetRepObject());
+  return retval;
 }
 
 // Open a file
