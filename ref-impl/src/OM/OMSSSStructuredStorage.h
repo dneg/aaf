@@ -17,7 +17,7 @@
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
-// Licensor of the AAF Association is Schema Software Inc.
+// Licensor of the AAF Association is Schema Software, Inc.
 // All rights reserved.
 //
 //=---------------------------------------------------------------------=
