@@ -116,6 +116,14 @@ public:
 							const wchar_t * name) const;
 
 
+
+  // override from OMStorable.
+  virtual const OMClassId& classId(void) const;
+
+  // Override callbacks from OMStorable
+  virtual void onSave(void* clientContext) const;
+  virtual void onRestore(void* clientContext) const;
+
 private:
   OMWeakReferenceProperty<ImplAAFClassDef> _referencedType;
 };
