@@ -93,6 +93,11 @@ const size_t kTotalAUIDCount = sizeof(gAAFObjectTable)/sizeof(AAFObjectEntry_t);
 static AAFObjectEntry_t * g_AUIDTable[kTotalAUIDCount] = {0};
 
 
+// Declare a global instance of the factory so that the initialization
+// code will only be call once.
+static ImplAAFBaseClassFactory s_AAFBaseClassFactory;
+
+
 // Compare proc for sort and search.
 static int CompareTableEntries(const AAFObjectEntry_t **elem1,
                                const AAFObjectEntry_t **elem2)
@@ -148,7 +153,7 @@ ImplAAFBaseClassFactory::~ImplAAFBaseClassFactory(void)
 
 // Global function that looksup the built-in code class id for the corresponding
 // auid.
-const aafClassID_t* lookupClassID(const aafUID_t* pAUID)
+const aafClassID_t* ImplAAFBaseClassFactory::LookupClassID(const aafUID_t* pAUID)
 {
   // Return NULL if the given AUID cannot be found.
   const aafClassID_t *pClassID = NULL;
@@ -174,11 +179,11 @@ const aafClassID_t* lookupClassID(const aafUID_t* pAUID)
 //
 // Factory method for all built-in classes.
 //
-ImplAAFObject* ImplAAFBaseClassFactory::createObject(const aafUID_t* pAUID) const
+ImplAAFObject* ImplAAFBaseClassFactory::CreateInstance(const aafUID_t* pAUID) 
 {
 
   // Lookup the code class id for the given stored object id.
-  const aafClassID_t* id = lookupClassID(pAUID);
+  const aafClassID_t* id = LookupClassID(pAUID);
   if (NULL == id)
     return NULL;
   
@@ -186,7 +191,7 @@ ImplAAFObject* ImplAAFBaseClassFactory::createObject(const aafUID_t* pAUID) cons
   ImplAAFRoot *impl = CreateImpl(*id);
   if (NULL == impl)
   { // This is a serious programming error. A stored object id was found in the file
-	// with a known base class id but no base object could be created.
+	  // with a known base class id but no base object could be created.
     assert(NULL != impl);
     return NULL;
   }
@@ -199,7 +204,7 @@ ImplAAFObject* ImplAAFBaseClassFactory::createObject(const aafUID_t* pAUID) cons
     impl->ReleaseReference();
     impl = 0;
     assert(NULL != object);
-	return NULL;
+	  return NULL;
   }
 
   return object;
