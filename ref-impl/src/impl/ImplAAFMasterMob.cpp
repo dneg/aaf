@@ -461,7 +461,7 @@ AAFRESULT STDMETHODCALLTYPE
 		if (SUCCEEDED(hr))
 		{
 			hr = pSegment->NumRepresentations(&numReps);
-			if(index < 0 || index >= numReps)
+			if(index >= numReps)
 				return(AAFRESULT_BADINDEX);
 			pGroup = dynamic_cast<ImplAAFEssenceGroup*>(pSegment);
 			if(pGroup != NULL)
