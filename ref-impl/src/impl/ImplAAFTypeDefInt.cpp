@@ -263,7 +263,7 @@ AAFRESULT STDMETHODCALLTYPE
   // sign-extend or zero-fill the value.
   aafUInt8 valBuf[8];
   assert (_size <= sizeof (valBuf));
-  if (_isSigned)
+  if (_isSigned != 0)
 	{
 	  pvtSignExtend (pVal, valSize, valBuf, _size);
 	}
@@ -375,7 +375,7 @@ AAFRESULT STDMETHODCALLTYPE
   memcpy (pBits, valBuf, bitsSize);
 
   // BTW, we know that valsize >= bitsSize (from tests above)
-  if (_isSigned)
+  if (_isSigned != 0)
 	{
 	  pvtSignExtend (valBuf, bitsSize, pVal, valSize);
 	}
@@ -437,7 +437,7 @@ AAFRESULT STDMETHODCALLTYPE
   // sign-extend or zero-fill the value.
   aafUInt8 valBuf[8];
   assert (_size <= sizeof (valBuf));
-  if (_isSigned)
+  if (_isSigned != 0)
 	{
 	  pvtSignExtend (pVal, valSize, valBuf, _size);
 	}
@@ -504,4 +504,4 @@ size_t ImplAAFTypeDefInt::PropValSize (void)
 }
 
 
-OMDEFINE_STORABLE(ImplAAFTypeDefInt, AUID_AAFTypeDefInt);
+OMDEFINE_STORABLE(ImplAAFTypeDefInt, AUID_AAFTypeDefInt)
