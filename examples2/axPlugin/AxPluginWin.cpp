@@ -20,10 +20,6 @@
 
 #include "AAFCOMPlatformTypes.h"
 
-// Exclude rarely-used stuff from Windows headers
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-
 // Is it safe to unload the DLL?
 
 STDAPI DllCanUnloadNow(void)
@@ -58,4 +54,3 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
 	return AxPlugin::GetClassObject( rclsid, riid, ppv );
 }
-

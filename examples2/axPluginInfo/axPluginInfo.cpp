@@ -153,6 +153,8 @@ int main ( int argc, const char** argv ){
 			}
 		}
 	
+		// This will load the com library, and the default
+		// plugins.
 		AxInit initObj;
 		
 		AxFile axFile;
@@ -163,7 +165,6 @@ int main ( int argc, const char** argv ){
 		AxHeader axHeader( axFile.getHeader() );
 		AxDictionary axDictionary( axHeader.GetDictionary() );
 		
-		// This will cause the "default" plugins to load.
 		AxPluginMgr axPluginMgr;
 
 		if ( loadOpArg.first ) {

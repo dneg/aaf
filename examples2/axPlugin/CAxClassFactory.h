@@ -119,7 +119,12 @@ public:
 	{
 		// Fail if aggregation support requested, but riid not IID_IUnknown.
 		if ( pUnkOuter  &&  IID_IUnknown  != riid ) {
-			return CLASS_E_NOAGGREGATION;
+		  // Note the appropriate return value is (according
+		  // the "Inside COM", Dale Rogerson) is
+		  // CLASS_E_NOAGGREGATION.  This is not currently
+		  // defined in AAFCOMPlatformTypes, so we stick with
+		  // E_INVALIDARG;
+		  return E_INVALIDARG;
 		}
 
 		// Create the new component instance.

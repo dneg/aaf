@@ -16,9 +16,10 @@
 // 
 //=---------------------------------------------------------------------=
 
-#include "axPluginUtil.h"
+#include "AxPluginUtil.h"
 
 #include <string.h>
+#include <assert.h>
 
 bool operator==( const aafUID_t& uidL, const aafUID_t& uidR )
 {

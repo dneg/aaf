@@ -21,7 +21,7 @@
 
 #include <AAFCOMPlatformTypes.h>
 
-#include <objbase.h>
+#include <AxPluginUtil.h>
 
 // CAxUnkown is a standard implementation of IUnkown.
 //
@@ -102,8 +102,8 @@ public:
 
 	// Nondelegating IUnknown implementation
 	STDMETHOD(NondelegatingQueryInterface)(const IID&, void**);
-	virtual ULONG   __stdcall NondelegatingAddRef();
-	virtual ULONG   __stdcall NondelegatingRelease();
+	STDMETHOD_(ULONG,NondelegatingAddRef)();
+	STDMETHOD_(ULONG,NondelegatingRelease)();
 
 	// Constructor
 	CAxUnknown(IUnknown* pUnknownOuter);
