@@ -28,8 +28,6 @@
 #include "OMBufferedStream.h"
 #include "OMDataTypes.h"
 
-struct IStream;
-
   // @class IStream with buffering.
   //
   //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.

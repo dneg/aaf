@@ -27,8 +27,6 @@
 #include "OMMSStructuredStorage.h"
 #include "OMStoredStream.h"
 
-struct IStream;
-
   // @class Implementation of <c OMStoredStream> for Microsoft
   //        Structured Storage.
   //   @base public | <c OMStoredStream>

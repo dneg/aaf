@@ -31,9 +31,6 @@
 
 #include <stddef.h>
 
-struct IStorage;
-struct IStream;
-
 class OMStoredPropertySetIndex;
 class OMProperty;
 class OMPropertySet;
