@@ -263,7 +263,7 @@ extern "C" HRESULT CAAFCodecDef_test()
 	// When a method and its unit test have been implemented, remove it from the list.
 	if (SUCCEEDED(hr))
 	{
-		cout << "The following IAAFCodecDef methods have not been implemented:" << endl; 
+		cout << "The following IAAFCodecDef methods have not been tested:" << endl; 
 		cout << "     SetFileDescriptorClass" << endl; 
 		cout << "     GetFileDescriptorClass" << endl; 
 		hr = AAFRESULT_TEST_PARTIAL_SUCCESS;

@@ -21,6 +21,9 @@
 #include "AAFResult.h"
 #include "AAFDefUIDs.h"
 
+const aafUID_t kTestMobID1 = { 0x464AA9D8, 0x34AC, 0x11d3, { 0x80, 0xB4, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } };
+const aafUID_t kTestMobID2 = { 0x464AA9D9, 0x34AC, 0x11d3, { 0x80, 0xB4, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } };
+
 
 // Utility class to implement the test.
 struct ContentStorageTest
@@ -31,7 +34,7 @@ struct ContentStorageTest
 	void createFile(wchar_t *pFileName);
 	void openFile(wchar_t *pFileName);
 	
-	void createFileMob();
+	void createFileMob(aafUID_t newMobID);
 	void createEssenceData(IAAFSourceMob *pSourceMob);
 	void openEssenceData();
 	
@@ -92,17 +95,12 @@ extern "C" HRESULT CAAFContentStorage_test()
 	}
 	
 	// Cleanup our object if it exists.
-	if (SUCCEEDED(hr))
-	{
-		cout << "The following IEnumAAFPluginDescriptor methods have not been tested:" << endl;       
-		cout << "     LookupMob" << endl; 
-		cout << "     GetNumMobs" << endl; 
-		cout << "     GetMobs" << endl; 
-		cout << "     RemoveMob" << endl; 
-		cout << "     IsEssenceDataPresent" << endl; 
-		cout << "     RemoveEssenceData" << endl; 
-		hr = AAFRESULT_TEST_PARTIAL_SUCCESS;
-	}
+//	if (SUCCEEDED(hr))
+//	{
+//		cout << "The following IAAFContentStorage methods have not been tested:" << endl;       
+//		cout << "     GetMobs" << endl; 
+//		hr = AAFRESULT_TEST_PARTIAL_SUCCESS;
+//	}
 	
 	return hr;
 }
@@ -300,8 +298,8 @@ void ContentStorageTest::createFile(wchar_t *pFileName)
 	check(_pFile->GetHeader(&_pHeader));
 	check(_pHeader->GetDictionary(&_pDictionary));
 	
-	createFileMob();
-	createFileMob();
+	createFileMob(kTestMobID1);
+	createFileMob(kTestMobID2);
 	
 	check(_pFile->Save());
 	
@@ -310,8 +308,13 @@ void ContentStorageTest::createFile(wchar_t *pFileName)
 
 void ContentStorageTest::openFile(wchar_t *pFileName)
 {
-	aafUInt32	readNumEssenceData;
-	
+	aafUInt32		readNumEssenceData;
+	aafInt32		readNumMobs;
+	IAAFMob			*testMob = NULL;
+	IEnumAAFMobs	*pEnum;
+	aafUID_t		uid, readID;
+	aafBool			testBool;
+
 	check(AAFFileOpenExistingRead(pFileName, 0, &_pFile));
 	_bFileOpen = true;
 	check(_pFile->GetHeader(&_pHeader));
@@ -321,11 +324,55 @@ void ContentStorageTest::openFile(wchar_t *pFileName)
 	
 	check(_pHeader->GetNumEssenceData(&readNumEssenceData));
 	checkExpression(2 == readNumEssenceData, AAFRESULT_TEST_FAILED);
+	/***/
+	uid = kTestMobID1;
+	check(_pHeader->LookupMob(&uid, &testMob));
+	check(testMob->GetMobID(&readID));
+	checkExpression(memcmp(&uid, &readID, sizeof(readID)) == 0, AAFRESULT_TEST_FAILED);
+	testMob->Release();
+	testMob = NULL;
+	/***/
+	uid = kTestMobID2;
+	check(_pHeader->LookupMob(&uid, &testMob));
+	check(testMob->GetMobID(&readID));
+	checkExpression(memcmp(&uid, &readID, sizeof(readID)) == 0, AAFRESULT_TEST_FAILED);
+	testMob->Release();
+	testMob = NULL;
+	/***/
+	uid.Data1 = 0;	// Invalidate the mobID
+	uid.Data2 = 0;
+	uid.Data3 = 0;
+	checkExpression(_pHeader->LookupMob(&uid, &testMob) != AAFRESULT_SUCCESS, AAFRESULT_TEST_FAILED);
+	/***/
+	check(_pHeader->GetNumMobs(kFileMob, &readNumMobs));
+	checkExpression(2 == readNumMobs, AAFRESULT_TEST_FAILED);
+	check(_pHeader->GetNumMobs(kMasterMob, &readNumMobs));
+	checkExpression(0 == readNumMobs, AAFRESULT_TEST_FAILED);
+	/***/
+	uid = kTestMobID1;
+	check(_pHeader->EnumAAFAllMobs(NULL, &pEnum));		// !! Add tests for criteria
+	check(pEnum->NextOne(&testMob));
+	check(testMob->GetMobID(&readID));
+	checkExpression(memcmp(&uid, &readID, sizeof(readID)) == 0, AAFRESULT_TEST_FAILED);
+	testMob->Release();
+	testMob = NULL;
+	/***/
+	uid = kTestMobID2;
+    check(_pHeader->IsEssenceDataPresent (&uid, kAAFiMedia, &testBool));
+	checkExpression(AAFTrue == testBool, AAFRESULT_TEST_FAILED);
+	/***/
+	uid = kTestMobID2;
+ 	uid.Data1 = 0;	// Invalidate the mobID
+	uid.Data2 = 0;
+	uid.Data3 = 0;
+	check(_pHeader->IsEssenceDataPresent (&uid, kAAFiMedia, &testBool));
+	checkExpression(AAFFalse == testBool, AAFRESULT_TEST_FAILED);
 
+	/***/
 	cleanupReferences();
 }
 
-void ContentStorageTest::createFileMob()
+void ContentStorageTest::createFileMob(aafUID_t newMobID)
 {
 	assert(_pFile && _pHeader && _pDictionary);
 	assert(NULL == _pSourceMob);
@@ -341,9 +388,7 @@ void ContentStorageTest::createFileMob()
 	
 	check(_pSourceMob->QueryInterface (IID_IAAFMob, (void **)&_pMob));
 	
-	aafUID_t newUID = {0};
-	check(CoCreateGuid((GUID *)&newUID));
-	check(_pMob->SetMobID(&newUID));
+	check(_pMob->SetMobID(&newMobID));
 	check(_pMob->SetName(L"ContentStorageTest File Mob"));
 	
 	check(_pDictionary->CreateInstance(&AUID_AAFFileDescriptor,
