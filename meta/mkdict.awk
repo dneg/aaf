@@ -844,6 +844,17 @@ BEGIN {
       }
     } else if ($typeNameC == "alias") {
       if (firstAlias) {
+        if (kind == "enumeration" ) {
+          printf("AAF_TYPE_DEFINITION_ENUMERATION_END(%s, %s, AAF_TYPE(%s))\n", typeName, tguid, etype);
+        } else if (kind == "record") {
+          printf("AAF_TYPE_DEFINITION_RECORD_END(%s, %s)\n", typeName, tguid);
+        } else if (kind == "extendible") {
+          printf("AAF_TYPE_DEFINITION_EXTENDIBLE_ENUMERATION_END(%s, %s)\n", typeName, tguid);
+        } else if ((kind == "reference") && (qualif == "weak")) {
+          printf("AAF_TYPE_DEFINITION_WEAK_REFERENCE_END(\n  AAF_REFERENCE_TYPE_NAME(%s, %s), %s,\n  AAF_TYPE(%s))\n", typeName, targetType, tguid, targetType);
+        }
+        printf("\n");
+        printf("AAF_TYPE_TABLE_END()\n");
         printf("\n");
         printf("// Aliases\n");
         printf("//\n");
@@ -934,18 +945,6 @@ BEGIN {
 
 END {
   if (errors == 0 ){
-    if (kind == "enumeration" ) {
-      printf("AAF_TYPE_DEFINITION_ENUMERATION_END(%s, %s, AAF_TYPE(%s))\n", typeName, tguid, etype);
-    } else if (kind == "record") {
-      printf("AAF_TYPE_DEFINITION_RECORD_END(%s, %s)\n", typeName, tguid);
-    } else if (kind == "extendible") {
-      printf("AAF_TYPE_DEFINITION_EXTENDIBLE_ENUMERATION_END(%s, %s)\n", typeName, tguid);
-    } else if ((kind == "reference") && (qualif == "weak")) {
-      printf("AAF_TYPE_DEFINITION_WEAK_REFERENCE_END(\n  AAF_REFERENCE_TYPE_NAME(%s, %s), %s,\n  AAF_TYPE(%s))\n", typeName, targetType, tguid, targetType);
-    }
-    printf("\n");
-    printf("AAF_TYPE_TABLE_END()\n");
-    printf("\n");
     printf("// Undefine all macros\n");
     printf("//\n");
     printf("#undef AAF_TABLE_BEGIN\n");
