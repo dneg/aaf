@@ -105,6 +105,7 @@ AD_XMETHOD1(GetHeader,
   //
   // Succeeds if:
   // - This object has already been Initialize\(\)d.
+  // - This file object is open.
   // - the given header pointer is valid.
   // - this object contains a header.
   //
@@ -117,6 +118,9 @@ AD_XMETHOD1(GetHeader,
   //
   // AAFRESULT_NOT_INITIALIZED
   //   - This object has not yet had Initialize\(\) called on it.
+  //
+  // AAFRESULT_NOT_OPEN
+  //   - This object is not open.
   //
   // AAFRESULT_NULL_PARAM
   //   - the header pointer arg is NULL.
