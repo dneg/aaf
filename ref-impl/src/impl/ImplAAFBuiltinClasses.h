@@ -186,6 +186,7 @@ private:
   // Initialiaztion function which instantiates all axiomatic classes
   // and initializes them as much as it can.
   void instantiateClasses ();
+  void FinishInitClasses ();
 
   static ClassTblEntry sBuiltinClassTable[];
   static const aafUInt32 ksNumClassDefs;
