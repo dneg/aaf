@@ -171,7 +171,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 				pHeader->AppendMob(pTempMob);
 				pTempMob->Release();
 
-				hr = pMasterMob->AddMasterSlot((aafUID_t *)slotDDefs[test], test+1, 1, slotNames[test], pSrcMob);
+				hr = pMasterMob->AddMasterSlot((aafUID_t *)slotDDefs[test], 1, pSrcMob, test+1, slotNames[test]);
 			}
 			pSrcMob->Release();
 		}
@@ -336,9 +336,17 @@ HRESULT CAAFMasterMob::test()
 		cerr << "CAAFMasterMob::test...Caught general C++ exception!" << endl; 
 	}
 
-	// When all of the functionality of this class is tested, we can return success
+	// When all of the functionality of this class is tested, we can return success.
+	// When a method and its unit test have been implemented, remove it from the list.
 	if (SUCCEEDED(hr))
+	{
+		cout << "The following IAAFMasterMob methods have not been implemented:" << endl; 
+		cout << "     GetTapeName" << endl; 
+		cout << "     GetTapeNameBufLen" << endl; 
+		cout << "     GetRepresentationSourceClip" << endl; 
+		cout << "     GetCriteriaSourceClip" << endl; 
 		hr = AAFRESULT_TEST_PARTIAL_SUCCESS;
+	}
 
 	return hr;
 }
