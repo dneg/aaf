@@ -969,7 +969,7 @@ HRESULT STDMETHODCALLTYPE
 	{
 		aafInt64 filesize = 0;
 		CHECK(_stream->GetPosition(&filesize));
-		aafUInt32 wavesize = filesize & 0xffffffff;		// 64bit -> 32bit
+		aafUInt32 wavesize = static_cast<aafUInt32>(filesize & 0xffffffff);		// 64bit -> 32bit
 
 		if(!_readOnly && _sampleDataHeaderWritten)
 		{
@@ -1001,7 +1001,7 @@ HRESULT STDMETHODCALLTYPE
 		CHECK(fillSwappedWAVEData(&p, 4, &size32));
 
 		// Patch in data chunk size
-		size32 = wavesize - (_dataSizeOffset + 4);
+		size32 = static_cast<aafUInt32>(wavesize - (_dataSizeOffset + 4));
 		p = buf + _dataSizeOffset;
 		CHECK(fillSwappedWAVEData(&p, 4, &size32));
 
