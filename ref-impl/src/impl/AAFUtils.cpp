@@ -155,6 +155,7 @@
 #include "aafCvt.h"
 #include "AAFResult.h"
 
+
 /* Moved math.h down here to make NEXT's compiler happy */
 #include <math.h>
 
@@ -172,8 +173,8 @@ const aafProductVersion_t AAFReferenceImplementationVersion = {1, 0, 0, 1, kVers
 
 AAFByteOrder GetNativeByteOrder(void)
 {
-  OMInt16 word = 0x1234;
-  OMInt8  byte = *((OMInt8*)&word);
+  aafInt16 word = 0x1234;
+  aafInt8  byte = *((aafInt8*)&word);
   AAFByteOrder result;
 
 //  ASSERT("Valid byte order", ((byte == 0x12) || (byte == 0x34)));
