@@ -51,6 +51,7 @@
 #include "AAFStoredObjectIDs.h"
 #include "AAFResult.h"
 #include "AAFDefUIDs.h"
+#include "AAFContainerDefs.h"
 #include "aafUtils.h"
 
 #include "CAAFBuiltinDefs.h"
@@ -195,9 +196,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	checkResult(pContainerDef->QueryInterface (IID_IAAFDefObject,
                                           (void **)&pDef));
 
-	checkResult(pDef->SetName(sName));
-	checkResult(pDef->SetDescription(sDescription));
-
+	checkResult(pContainerDef->Initialize (ContainerAAF, sName, sDescription));
 	checkResult(pDictionary->RegisterContainerDef(pContainerDef));
 
 	//
