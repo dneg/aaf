@@ -68,10 +68,10 @@ ImplAAFSourceMob::~ImplAAFSourceMob ()
 }
 
 //****************
-// GetEssenceDescription()
+// GetEssenceDescriptor()
 //
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFSourceMob::GetEssenceDescription (ImplAAFEssenceDescriptor **ppEdes)
+    ImplAAFSourceMob::GetEssenceDescriptor (ImplAAFEssenceDescriptor **ppEdes)
 {
 	if (ppEdes == NULL)
 		return AAFRESULT_NULL_PARAM;
@@ -89,10 +89,10 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 //****************
-// SetEssenceDescription()
+// SetEssenceDescriptor()
 //
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFSourceMob::SetEssenceDescription (ImplAAFEssenceDescriptor *pEdes)
+    ImplAAFSourceMob::SetEssenceDescriptor (ImplAAFEssenceDescriptor *pEdes)
 {
 	if (pEdes == NULL)
 		return AAFRESULT_NULL_PARAM;
@@ -688,7 +688,7 @@ AAFRESULT STDMETHODCALLTYPE
 		return(AAFRESULT_NULL_PARAM);
 	XPROTECT()
 	{
-		CHECK(GetEssenceDescription (&edesc));
+		CHECK(GetEssenceDescriptor (&edesc));
 		if(edesc != NULL)
 		{
 			CHECK(edesc->GetOwningMobKind(pMobKind));
