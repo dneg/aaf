@@ -60,7 +60,7 @@ AD_XMETHOD1(GetType,
 			ppTypeDef,
 			type of elements in this array,
 
-     Returns the type of elements in this stream.
+     Returns the type of elements in this string.
   //
   // Succeeds if:
   // - Initialize\(\) has already been called on this object.
@@ -79,9 +79,9 @@ AD_XMETHOD2(GetCount,
 
 			[out],
 			objPass,
-			aafInt64 *,
+			aafUInt32 *,
 			pCount,
-			count of elements in the specified stream property value,
+			count of elements in the specified string property value,
 
      Returns number of elements contained in the referenced property
   // value.
@@ -95,147 +95,66 @@ AD_XMETHOD2(GetCount,
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(Either pPropVal or pCount\))
 
 
-AD_X2METHOD3(AppendElements,
-			 [in],
-			 objIn,
-			 AAFPropertyValue,
-			 pInPropVal,
-       property value corresponding to stream to which elements are to
+AD_XMETHOD2(AppendElements,
+
+			[in],
+			objIn,
+			AAFPropertyValue,
+			pInPropVal,
+       property value corresponding to string to which elements are to
     // be appended,
-			 ,
 
-			 [in\, size_is\(numElements\)],
-			 objInArray,
-			 AAFPropertyValue,
-			 pMemberPropVals,
-			 values to be appended to this stream,
-			 numElements,
+			[in],
+			objPass,
+			aafMemPtr_t,
+			pElements,
+			Null-terminated array of elements to be appended,
 
-			 [in],
-			 objPass,
-			 aafUInt32,
-			 numElements,
-			 number of values to be appended,
-			 ,
-
-			Appends elements to the end of the array\, setting them to the
-  // values given in the pMemberPropVals array.  The number of values
-  // to be appended is given by numElements.
+     Appends elements to the end of the array\, setting them to the
+  // values given in the pElements array.
   //
   // Succeeds if:
   // - Initialize\(\) has already been called on this object.
   // - pInPropVal pointer is valid.
-  // - pMemberPropVal pointer is valid.
+  // - pElements pointer is valid.
   AD_STD_COMMENT_METH_ERR_HEADER
-  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pInPropVal or pMemberPropVal\))
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pInPropVal or pElements\))
 
 
-AD_X2METHOD4(GetElementValues,
-			 [in],
-			 objIn,
-			 AAFPropertyValue,
-			 pInPropVal,
-			 property value to read,
-			 ,
-
-			 [in],
-			 objPass,
-			 aafInt64,
-			 startElement,
-			 zero-based index into elements in this array type,
-			 ,
-
-			 [out\, size_is\(numElements\)],
-			 objOutArray,
-			 AAFPropertyValue,
-			 pOutPropVals,
-			 array of values that are read,
-			 numElements,
-
-			 [in],
-			 objPass,
-			 aafUInt32,
-			 numElements,
-			 number of elements to get,
-			 ,
-
-     Gets multiple property values\, corresponding to stream element
-  // values\, from the given stream property value.  Elements are
-  // retrieved starting at the startElement index; numElements
-  // elements are retrieved.  Values are placed into the
-  // caller-allocated pOutPropVals array.  The size of the array
-  // allocated by the caller is indicated by the numElements argument.
-  // startElement index is zero-based.  startElement plus numElements
-  // must be less than the value returned by GetCount\(\).
-  // 
-  // Succeeds if:
-  // - Initialize\(\) has already been called on this object.
-  // - the indicated elements exist in this stream type def.
-  // - The pInPropVal pointer is valid.
-  // - The pOutPropVals pointer is valid.
-  AD_STD_COMMENT_METH_ERR_HEADER
-  AD_STD_COMMENT_METH_ERR_NO_INIT
-  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(Either pInPropVal or pOutPropVals\)
-  //
-  // AAFRESULT_BAD_PARAM
-  //   - startElement and numElements indicate elements which are
-  //     outside the bounds of this stream.)
-
-
-AD_XMETHOD4(GetElements,
+AD_XMETHOD3(GetElements,
 			[in],
 			objIn,
 			AAFPropertyValue,
-			pPropVal,
+			pInPropVal,
 			property value to read,
-			
-			[in],
-			objPass,
-			aafInt64,
-			startElement,
-			zero-based index into elements in this array type,
 
-			[out\, size_is\(numElements\)],
+			[out],
 			objPass,
 			aafMemPtr_t,
-			pData,
-			buffer into which C array data should be written,
+			pBuffer,
+			array of values that are read,
 
 			[in],
 			objPass,
 			aafUInt32,
-			numElements,
-			number of elements to get,
+			bufferSize,
+			size of pBuffer\, in bytes,
 
-     Copies the stream data contained in the given property value into
-  // the C array pointed to by pData.  Requires that any structures
-  // declared within this array typedef have had their offsets
-  // registered with that type.  The data copied stars with the
-  // element specified by startElement; numElements elements are
-  // copied.  startElement plus numElements must be less than the
-  // value returned by GetCount\(\).
-  //
-  // Succeeds if all of the following are true:
-  // - the pPropVal pointer is valid.
-  // - the pData pointer is valid.
-  // - dataSize indicates pData is large enough to hold the data.
-  // - compile-time struct has had its member offests registered.
-  // - the indicated elements exist in this stream type def.
-  //
-  // If this method fails nothing will be written to *ppPropVal.
+     Gets the value of this property as a string and places it into
+  // pBuffer.  bufferSize indicates the size of the buffer\, in bytes.
+  // 
+  // Succeeds if:
+  // - Initialize\(\) has already been called on this object.
+  // - The pInPropVal pointer is valid.
+  // - bufferSize indicates that pBuffer is large enough to hold the
+  //   data.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NO_INIT
-  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pPropVal or pData\)
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pInPropVal\)
   //
-  // AAFRESULT_BAD_PARAM
-  //   - dataSize indicates pData is too small.
-  //
-  // AAFRESULT_NOT_REGISTERED
-  //  - struct offsets have not yet been registered for this typedef.
-  //
-  // AAFRESULT_BAD_PARAM
-  //   - startElement and numElements indicate elements which are
-  //     outside the bounds of this stream.)
+  // AAFRESULT_SMALLBUF
+  //   - bufferSize indicates that pBuffer is too small to hold the
+  //     data.)
 
 
 AD_OVERRIDE(.method-GetTypeCategory)
