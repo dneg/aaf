@@ -171,8 +171,6 @@ void OMWeakReferenceVectorProperty<ReferencedObject>::restore(
 {
   TRACE("OMWeakReferenceVectorProperty<ReferencedObject>::restore");
 
-  PRECONDITION("Consistent property size", externalSize == strlen(name()) + 1);
-
   // get the name of the vector index stream
   //
   restoreName(externalSize);
