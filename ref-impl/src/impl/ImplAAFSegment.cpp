@@ -151,3 +151,7 @@ AAFRESULT ImplAAFSegment::GenerateSequence(ImplAAFSequence **seq)
 
 	return(AAFRESULT_SUCCESS);
 }
+
+extern "C" const aafClassID_t CLSID_AAFSegment;
+
+OMDEFINE_STORABLE(AAFSegment, CLSID_AAFSegment);
