@@ -786,21 +786,21 @@ main()
 	printf("***Re-opening file %s using ReadFractionalSample\n", pFileName);
 	ReadAAFFile(pwFileName, testFractionalCalls);
 	/**/
+#if 1
 	dataFile.dataFilename = rawData;
 	dataFile.dataFormat = ContainerFile;
 	printf("***Creating file %s using WriteSamples (External Raw Media)\n", pFileName);
 	checkFatal(CreateAAFFile(pwFileName, &dataFile, testStandardCalls));
 	printf("***Re-opening file %s using ReadSamples\n", pFileName);
 	ReadAAFFile(pwFileName, testStandardCalls);
+#endif
 	/**/
 	dataFile.dataFilename = externalAAF;
 	dataFile.dataFormat = ContainerAAF;
 	printf("***Creating file %s using WriteSamples (External AAF Media)\n", pFileName);
 	checkFatal(CreateAAFFile(pwFileName, &dataFile, testStandardCalls));
-#if 1
 	printf("***Re-opening file %s using ReadSamples\n", pFileName);
 	ReadAAFFile(pwFileName, testStandardCalls);
-#endif
 
 //	TestPluginManager();
 
