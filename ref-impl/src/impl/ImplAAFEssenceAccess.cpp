@@ -2639,7 +2639,6 @@ ImplAAFEssenceAccess::CreateFileMob (ImplAAFHeader *       newHead,
 		ImplAAFClassDefSP pClassDef;
 		CHECK(dict->LookupClassDef (essenceDescriptorID, &pClassDef));
 		CHECK(pClassDef->CreateInstance((ImplAAFObject **)&mdes));
-		CHECK(mdes->SetIsInContainer (_destination == NULL ? kAAFTrue : kAAFFalse));
 		CHECK(mdes->SetContainerFormat (_containerDefID));
 		CHECK(mdes->SetSampleRate(sampleRate));
 		CHECK(fileMob->SetEssenceDescriptor(mdes));
@@ -2647,7 +2646,6 @@ ImplAAFEssenceAccess::CreateFileMob (ImplAAFHeader *       newHead,
 		if(addLocator != NULL)
 		{
 			CHECK(mdes->AppendLocator(addLocator));
-			CHECK(mdes->SetIsInContainer(kAAFFalse));
 			CHECK(mdes->SetContainerFormat (_containerDefID));
 		}
 		if(dict != NULL)
