@@ -89,7 +89,9 @@ public:
 virtual AAFRESULT OffsetToTimecodeClip(aafPosition_t offset, ImplAAFTimecode **result,
 												aafPosition_t *tcStartPos);
 private:
-	OMFixedSizeProperty<aafTimecode_t>	_timecode;
+	OMFixedSizeProperty<aafPosition_t>	_start;
+	OMFixedSizeProperty<aafUInt16>	_FPS;
+	OMFixedSizeProperty<aafBool>	_drop;
 };
 
 #endif // ! __ImplAAFTimecode_h__
