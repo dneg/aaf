@@ -77,6 +77,21 @@
 
 #include "extensionWritePlugin.h"
 
+
+//
+// Define plugin constants.
+//
+#include "AAFPlugin.h"
+#include "AAFPlugin_i.c"
+
+//
+// Define Personnel Extension constants.
+//
+#include "AAFPersonnelExtension.h"
+#include "AAFPersonnelExtension_i.c"
+
+
+
 void main ()
 {
   const aafWChar * filename = L"extensionPlugin.aaf";
