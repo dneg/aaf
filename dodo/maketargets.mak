@@ -21,7 +21,7 @@ test_only:
 run:
 	 cd tool ; $(MAKE) run
 
-.SUFFIXES: .cpp .h .comc .comh .dod .exp .idl .fidl .implc .implh .comt .cppt .refh .frefh
+.SUFFIXES: .cpp .h .comc .comcx .comh .dod .exp .idl .fidl .implc .implh .comt .cppt .refh .frefh
 
 # This file contains the list of all of the targets to be built...								   
 include targets.mk
@@ -158,6 +158,14 @@ SRC_DIR = ../ref-impl/src
 	cp -f $*.comc $(SRC_DIR)/com-api/C$*.cpp
 	chmod -w $(SRC_DIR)/com-api/C$*.cpp
 
+.dod.comcx :
+	$(RM) -f $*.comcx
+	./tool/$(DODO) -f macros/comcx.mac < $*.dod > $*.tmp
+	mv $*.tmp $*.comcx
+	chmod -w $*.comcx
+	cp -f $*.comcx $(SRC_DIR)/com-api/C$*.cpp
+	chmod -w $(SRC_DIR)/com-api/C$*.cpp
+
 .dod.comt :
 	$(RM) -f $*.comt
 	./tool/$(DODO) -f macros/comt.mac < $*.dod > $*.tmp
@@ -223,7 +231,7 @@ SRC_DIR = ../ref-impl/src
 clean:
 	cd tool ; $(MAKE) clean
 	$(RM) -f *.cpp *.cppt *.h *.idl *.fidl *.exp
-	$(RM) -f *.comc *.comh *.comt *.refh *.frefh
+	$(RM) -f *.comc *.comcx *.comh *.comt *.refh *.frefh
 	$(RM) -f *.implc *.implh
 	$(RM) -f core
 	@for file in $(AAFOBJECTS) ; do \
