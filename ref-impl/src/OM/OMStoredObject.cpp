@@ -1327,10 +1327,10 @@ void OMStoredObject::restore(OMPropertyId propertyId,
   memcpy(&id, p, sizeof(id));
 
   if (byteOrder() != hostByteOrder()) {
-	reorderUInt16(tag); // assumes sizeof(tag) == 2
-	reorderUInt16(keyPropertyId);
-	//reorderUInt32(keySize);
-	reorderUniqueObjectIdentification(id);
+    reorderUInt16(tag); // assumes sizeof(tag) == 2
+    reorderUInt16(keyPropertyId);
+    //reorderUInt32(keySize);
+    reorderUniqueObjectIdentification(id);
   }
 }
 

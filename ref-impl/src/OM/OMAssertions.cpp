@@ -95,7 +95,7 @@ bool validString(const char* string)
   } else {
     size_t length = strlen(string);
     if (length == 0) {
-	  // bad length
+      // bad length
       result = false;
     } else {
       for (size_t i = 0; i < length; i++) {
@@ -106,7 +106,7 @@ bool validString(const char* string)
           break;
         }
       }
-	}
+    }
   }
 
   return result;
