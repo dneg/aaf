@@ -129,22 +129,14 @@ AAFRESULT STDMETHODCALLTYPE
 	if (pEdes == NULL)
 		return AAFRESULT_NULL_PARAM;
 
-
-	ImplAAFEssenceDescriptor *pOldEdes = _essenceDesc;
-	if (pOldEdes)
-	{
-	  if (pOldEdes == pEdes)
-      return AAFRESULT_SUCCESS;
-	  
-	  pOldEdes->ReleaseReference();
-	  pOldEdes = 0;
-	}
-
 	if (pEdes->attached())
 		return AAFRESULT_OBJECT_ALREADY_ATTACHED;
 
-	_essenceDesc = pEdes;
-	
+	ImplAAFEssenceDescriptor *pOldEdes = _essenceDesc.setValue(pEdes);
+
+	if (pOldEdes)
+	  pOldEdes->ReleaseReference();
+
 	if (pEdes)
 		pEdes->AcquireReference();
 
