@@ -97,7 +97,7 @@
 #include "AAFResult.h"
 #include "CAAFEnumValidation.h"
 
-class OMAssertionViolation;
+#include "OMAssertions.h"
 
 #include <assert.h>
 #include <string.h>
@@ -3052,7 +3052,7 @@ HRESULT C.this-module::%01
 #include "Impl.this-module.h"
 #include "AAFResult.h"
 
-class OMAssertionViolation;
+#include "OMAssertions.h"
 
 #include <assert.h>
 

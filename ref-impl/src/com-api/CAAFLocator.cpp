@@ -29,7 +29,7 @@
 #include "AAFResult.h"
 #include "CAAFEnumValidation.h"
 
-class OMAssertionViolation;
+#include "OMAssertions.h"
 
 #include <assert.h>
 #include <string.h>
