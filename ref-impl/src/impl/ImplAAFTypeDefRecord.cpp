@@ -44,7 +44,8 @@ ImplAAFTypeDefRecord::ImplAAFTypeDefRecord ()
   : _memberTypes ( PID_TypeDefinitionRecord_MemberTypes, "Member Types"),
 	_memberNames ( PID_TypeDefinitionRecord_MemberNames, "Member Names"),
 	_registeredOffsets (0),
-	_registeredSize (0)
+	_registeredSize (0),
+	_internalSizes (0)
 {
   _persistentProperties.put(_memberTypes.address());
   _persistentProperties.put(_memberNames.address());
@@ -55,6 +56,9 @@ ImplAAFTypeDefRecord::~ImplAAFTypeDefRecord ()
 {
   if (_registeredOffsets)
 	delete[] _registeredOffsets;
+
+  if (_internalSizes)
+	delete[] _internalSizes;
 }
 
 
@@ -76,6 +80,9 @@ AAFRESULT STDMETHODCALLTYPE
   if (! AAFRESULT_SUCCEEDED (hr)) return hr;
   hr = SetAUID (pID);
   if (! AAFRESULT_SUCCEEDED (hr)) return hr;
+
+  _internalSizes = new aafUInt32[numMembers];
+  if (! _internalSizes) return AAFRESULT_NOMEMORY;
 
   aafUInt32 i;
   aafUInt32 totalNameSize = 0;
@@ -105,6 +112,8 @@ AAFRESULT STDMETHODCALLTYPE
 	  AAFRESULT hr = ppMemberTypes[i]->GetAUID(&typeUID);
 	  assert (AAFRESULT_SUCCEEDED(hr));
 	  buf[i] = typeUID;
+
+	  _internalSizes[i] = ppMemberTypes[i]->PropValSize ();
 
 	  assert (pMemberNames[i]);
 	  wcscpy(tmpNamePtr, pMemberNames[i]);
@@ -669,9 +678,23 @@ AAFRESULT STDMETHODCALLTYPE
   _registeredOffsets = new aafUInt32[numMembers];
   if (! _registeredOffsets) return AAFRESULT_NOMEMORY;
 
+  assert (_internalSizes);
+
   for (aafUInt32 i = 0; i < numMembers; i++)
 	{
 	  _registeredOffsets[i] = pOffsets[i];
+	  if ((numMembers-1) == i)
+		{
+		  // Last (or perhaps only) member; take total struct size and
+		  // subtract last offset for this size
+		  _internalSizes[i] = structSize - pOffsets[i];
+		}
+	  else
+		{
+		  // We know it's not the last member, so it's safe to index
+		  // to the next element in pOffsets array.
+		  _internalSizes[i] = pOffsets[i+1] = pOffsets[i];
+		}
 	}
 
   _registeredSize = structSize;
@@ -689,46 +712,139 @@ ImplAAFTypeDefRecord::GetTypeCategory (eAAFTypeCategory_t *  pTid)
 }
 
 
-void ImplAAFTypeDefRecord::reorder(OMByte* /*bytes*/,
-								   size_t /*bytesSize*/) const
+void ImplAAFTypeDefRecord::reorder(OMByte* externalBytes,
+								   size_t externalBytesSize) const
 {
-  assert (0);
+  AAFRESULT hr;
+  aafUInt32 numMembers = 0;
+  aafUInt32 member = 0;
+  aafUInt32 externalMemberSize = 0;
+  ImplAAFTypeDef * ptdm = 0;
+
+  ImplAAFTypeDefRecord * pNonConstThis =
+	(ImplAAFTypeDefRecord *) this;
+
+  hr = pNonConstThis->GetCount (&numMembers);
+  assert (AAFRESULT_SUCCEEDED (hr));
+
+  aafInt32 numBytesLeft = externalBytesSize;
+
+  for (member = 0; member < numMembers; member++)
+	{
+	  hr = pNonConstThis->GetMemberType (member, &ptdm);
+	  assert (AAFRESULT_SUCCEEDED (hr));
+	  externalMemberSize = ptdm->PropValSize ();
+
+	  ptdm->reorder (externalBytes, externalMemberSize);
+	  externalBytes += externalMemberSize;
+	  numBytesLeft -= externalMemberSize;
+	  assert (numBytesLeft >= 0);
+	  ptdm->ReleaseReference ();
+	}
 }
 
 
 size_t ImplAAFTypeDefRecord::externalSize(OMByte* /*internalBytes*/,
 										  size_t /*internalBytesSize*/) const
 {
-  assert (0);
-  return 0; // Not reached!
+  return PropValSize ();
 }
 
 
-void ImplAAFTypeDefRecord::externalize(OMByte* /*internalBytes*/,
-									   size_t /*internalBytesSize*/,
-									   OMByte* /*externalBytes*/,
-									   size_t /*externalBytesSize*/,
-									   OMByteOrder /*byteOrder*/) const
+void ImplAAFTypeDefRecord::externalize(OMByte* internalBytes,
+									   size_t internalBytesSize,
+									   OMByte* externalBytes,
+									   size_t externalBytesSize,
+									   OMByteOrder byteOrder) const
 {
-  assert (0);
+  AAFRESULT hr;
+  aafUInt32 numMembers = 0;
+  aafUInt32 member = 0;
+  aafUInt32 externalMemberSize = 0;
+  aafUInt32 internalMemberSize = 0;
+  ImplAAFTypeDef * ptdm = 0;
+
+  ImplAAFTypeDefRecord * pNonConstThis =
+	(ImplAAFTypeDefRecord *) this;
+
+  hr = pNonConstThis->GetCount (&numMembers);
+  assert (AAFRESULT_SUCCEEDED (hr));
+
+  aafInt32 internalNumBytesLeft = internalBytesSize;
+  aafInt32 externalNumBytesLeft = externalBytesSize;
+
+  assert (_internalSizes);
+  for (member = 0; member < numMembers; member++)
+	{
+	  hr = pNonConstThis->GetMemberType (member, &ptdm);
+	  assert (AAFRESULT_SUCCEEDED (hr));
+	  externalMemberSize = ptdm->PropValSize ();
+	  internalMemberSize = _internalSizes[member];
+	  ptdm->externalize (internalBytes,
+						 internalMemberSize,
+						 externalBytes,
+						 externalMemberSize,
+						 byteOrder);
+	  externalBytes += externalMemberSize;
+	  internalBytes += internalMemberSize;
+	  externalNumBytesLeft -= externalMemberSize;
+	  internalNumBytesLeft -= internalMemberSize;
+	  assert (externalNumBytesLeft >= 0);
+	  assert (internalNumBytesLeft >= 0);
+	  ptdm->ReleaseReference ();
+	}
 }
 
 
 size_t ImplAAFTypeDefRecord::internalSize(OMByte* /*externalBytes*/,
-										  size_t /*externalSize*/) const
+										  size_t /*externalBytesSize*/) const
 {
-  assert (0);
-  return 0; // Not reached!
+  return NativeSize ();
 }
 
 
-void ImplAAFTypeDefRecord::internalize(OMByte* /*externalBytes*/,
-									   size_t /*externalBytesSize*/,
-									   OMByte* /*internalBytes*/,
-									   size_t /*internalBytesSize*/,
-									   OMByteOrder /*byteOrder*/) const
+void ImplAAFTypeDefRecord::internalize(OMByte* externalBytes,
+									   size_t externalBytesSize,
+									   OMByte* internalBytes,
+									   size_t internalBytesSize,
+									   OMByteOrder byteOrder) const
 {
-  assert (0);
+  AAFRESULT hr;
+  aafUInt32 numMembers = 0;
+  aafUInt32 member = 0;
+  aafUInt32 externalMemberSize = 0;
+  aafUInt32 internalMemberSize = 0;
+  ImplAAFTypeDef * ptdm = 0;
+
+  ImplAAFTypeDefRecord * pNonConstThis =
+	(ImplAAFTypeDefRecord *) this;
+
+  hr = pNonConstThis->GetCount (&numMembers);
+  assert (AAFRESULT_SUCCEEDED (hr));
+
+  aafInt32 internalNumBytesLeft = internalBytesSize;
+  aafInt32 externalNumBytesLeft = externalBytesSize;
+
+  for (member = 0; member < numMembers; member++)
+	{
+	  hr = pNonConstThis->GetMemberType (member, &ptdm);
+	  assert (AAFRESULT_SUCCEEDED (hr));
+	  externalMemberSize = ptdm->PropValSize ();
+	  internalMemberSize = _internalSizes[member];
+
+	  ptdm->internalize (externalBytes,
+						 externalMemberSize,
+						 internalBytes,
+						 internalMemberSize,
+						 byteOrder);
+	  externalBytes += externalMemberSize;
+	  internalBytes += internalMemberSize;
+	  externalNumBytesLeft -= externalMemberSize;
+	  internalNumBytesLeft -= internalMemberSize;
+	  assert (externalNumBytesLeft >= 0);
+	  assert (internalNumBytesLeft >= 0);
+	  ptdm->ReleaseReference ();
+	}
 }
 
 

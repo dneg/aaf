@@ -149,6 +149,127 @@ aafUInt32 ImplAAFTypeDefFixedArray::pvtCount
 }
 
 
+ImplAAFTypeDef * ImplAAFTypeDefFixedArray::GetBaseType (void)
+{
+  AAFRESULT hr;
+  ImplAAFTypeDef * pBaseType = 0;
+  hr = GetType (&pBaseType);
+  assert (AAFRESULT_SUCCEEDED (hr));
+  assert (pBaseType);
+  return pBaseType;
+}
+
+
+void ImplAAFTypeDefFixedArray::reorder(OMByte* externalBytes,
+									   size_t externalBytesSize) const
+{
+  aafUInt32 numElems = _ElementCount;
+  aafUInt32 elem = 0;
+
+  ImplAAFTypeDefFixedArray * pNonConstThis =
+	(ImplAAFTypeDefFixedArray *) this;
+
+  ImplAAFTypeDef * ptd = pNonConstThis->GetBaseType ();
+  aafUInt32 elemSize = ptd->NativeSize ();
+  aafInt32 numBytesLeft = externalBytesSize;
+
+  for (elem = 0; elem < numElems; elem++)
+	{
+	  ptd->reorder (externalBytes, elemSize);
+	  externalBytes += elemSize;
+	  numBytesLeft -= elemSize;
+	  assert (numBytesLeft >= 0);
+	}
+  ptd->ReleaseReference ();
+}
+
+
+size_t ImplAAFTypeDefFixedArray::externalSize(OMByte* /*internalBytes*/,
+											  size_t /*internalBytesSize*/) const
+{
+  return PropValSize();
+}
+
+
+void ImplAAFTypeDefFixedArray::externalize(OMByte* internalBytes,
+										   size_t internalBytesSize,
+										   OMByte* externalBytes,
+										   size_t externalBytesSize,
+										   OMByteOrder byteOrder) const
+{
+  aafUInt32 numElems = _ElementCount;
+  aafUInt32 elem = 0;
+
+  ImplAAFTypeDefFixedArray * pNonConstThis =
+	(ImplAAFTypeDefFixedArray *) this;
+
+  ImplAAFTypeDef * ptd = pNonConstThis->GetBaseType ();
+  aafUInt32 internalSize = ptd->NativeSize ();
+  aafUInt32 externalSize = ptd->PropValSize ();
+  aafInt32 internalBytesLeft = internalBytesSize;
+  aafInt32 externalBytesLeft = externalBytesSize;
+
+  for (elem = 0; elem < numElems; elem++)
+	{
+	  ptd->externalize (internalBytes,
+						internalSize,
+						externalBytes,
+						externalBytesSize,
+						byteOrder);
+	  internalBytes += internalSize;
+	  externalBytes += externalSize;
+	  internalBytesLeft -= internalSize;
+	  externalBytesLeft -= externalSize;
+	  assert (internalBytesLeft >= 0);
+	  assert (externalBytesLeft >= 0);
+	}
+  ptd->ReleaseReference ();
+}
+
+
+size_t ImplAAFTypeDefFixedArray::internalSize(OMByte* /*externalBytes*/,
+											  size_t /*externalBytesSize*/) const
+{
+  return NativeSize ();
+}
+
+
+void ImplAAFTypeDefFixedArray::internalize(OMByte* externalBytes,
+										   size_t externalBytesSize,
+										   OMByte* internalBytes,
+										   size_t internalBytesSize,
+										   OMByteOrder byteOrder) const
+{
+  aafUInt32 numElems = _ElementCount;
+  aafUInt32 elem = 0;
+
+  ImplAAFTypeDefFixedArray * pNonConstThis =
+	(ImplAAFTypeDefFixedArray *) this;
+
+  ImplAAFTypeDef * ptd = pNonConstThis->GetBaseType ();
+  aafUInt32 internalSize = ptd->NativeSize ();
+  aafUInt32 externalSize = ptd->PropValSize ();
+  aafInt32 internalBytesLeft = internalBytesSize;
+  aafInt32 externalBytesLeft = externalBytesSize;
+
+  for (elem = 0; elem < numElems; elem++)
+	{
+	  ptd->internalize (externalBytes,
+						externalBytesSize,
+						internalBytes,
+						internalSize,
+						byteOrder);
+	  internalBytes += internalSize;
+	  externalBytes += externalSize;
+	  internalBytesLeft -= internalSize;
+	  externalBytesLeft -= externalSize;
+	  assert (internalBytesLeft >= 0);
+	  assert (externalBytesLeft >= 0);
+	}
+  ptd->ReleaseReference ();
+}
+
+
 aafBool ImplAAFTypeDefFixedArray::IsFixedSize (void) const
 {
   aafBool result;

@@ -172,6 +172,151 @@ ImplAAFTypeDefVariableArray::AppendElement
 }
 
 
+void ImplAAFTypeDefVariableArray::reorder(OMByte* externalBytes,
+										  size_t externalBytesSize) const
+{
+  ImplAAFTypeDefVariableArray * pNonConstThis =
+	(ImplAAFTypeDefVariableArray *) this;
+
+  ImplAAFTypeDef * ptd = 0;
+  AAFRESULT hr = pNonConstThis->GetType (&ptd);
+  assert (AAFRESULT_SUCCEEDED (hr));
+  assert (ptd);
+
+  aafUInt32 extElemSize = PropValSize ();
+  aafUInt32 numElems = externalBytesSize / extElemSize;
+  aafInt32 numBytesLeft = externalBytesSize;
+  aafUInt32 elem = 0;
+
+  for (elem = 0; elem < numElems; elem++)
+	{
+	  ptd->reorder (externalBytes, extElemSize);
+	  externalBytes += extElemSize;
+	  numBytesLeft -= extElemSize;
+	  assert (numBytesLeft >= 0);
+	}
+  ptd->ReleaseReference ();
+}
+
+
+size_t ImplAAFTypeDefVariableArray::externalSize(OMByte* internalBytes,
+												 size_t internalBytesSize) const
+{
+  ImplAAFTypeDefVariableArray * pNonConstThis =
+	(ImplAAFTypeDefVariableArray *) this;
+
+  ImplAAFTypeDef * ptd = 0;
+  AAFRESULT hr = pNonConstThis->GetType (&ptd);
+  assert (AAFRESULT_SUCCEEDED (hr));
+  assert (ptd);
+
+  aafUInt32 extElemSize = ptd->PropValSize ();
+  aafUInt32 intElemSize = ptd->NativeSize ();
+  ptd->ReleaseReference ();
+  assert (intElemSize);
+  aafUInt32 numElems = internalBytesSize / intElemSize;
+  return numElems * extElemSize;
+}
+
+
+void ImplAAFTypeDefVariableArray::externalize(OMByte* internalBytes,
+											  size_t internalBytesSize,
+											  OMByte* externalBytes,
+											  size_t externalBytesSize,
+											  OMByteOrder byteOrder) const
+{
+  ImplAAFTypeDefVariableArray * pNonConstThis =
+	(ImplAAFTypeDefVariableArray *) this;
+
+  ImplAAFTypeDef * ptd = 0;
+  AAFRESULT hr = pNonConstThis->GetType (&ptd);
+  assert (AAFRESULT_SUCCEEDED (hr));
+  assert (ptd);
+
+  aafUInt32 intElemSize = NativeSize ();
+  aafUInt32 extElemSize = PropValSize ();
+  aafUInt32 numElems = internalBytesSize / intElemSize;
+  aafInt32 intNumBytesLeft = externalBytesSize;
+  aafInt32 extNumBytesLeft = internalBytesSize;
+  aafUInt32 elem = 0;
+
+  for (elem = 0; elem < numElems; elem++)
+	{
+	  ptd->externalize (internalBytes,
+						intElemSize,
+						externalBytes,
+						extElemSize,
+						byteOrder);
+	  internalBytes += intElemSize;
+	  externalBytes += extElemSize;
+	  intNumBytesLeft -= intElemSize;
+	  extNumBytesLeft -= extElemSize;
+	  assert (intNumBytesLeft >= 0);
+	  assert (extNumBytesLeft >= 0);
+	}
+  ptd->ReleaseReference ();
+}
+
+
+size_t ImplAAFTypeDefVariableArray::internalSize(OMByte* externalBytes,
+												 size_t externalBytesSize) const
+{
+  ImplAAFTypeDefVariableArray * pNonConstThis =
+	(ImplAAFTypeDefVariableArray *) this;
+
+  ImplAAFTypeDef * ptd = 0;
+  AAFRESULT hr = pNonConstThis->GetType (&ptd);
+  assert (AAFRESULT_SUCCEEDED (hr));
+  assert (ptd);
+
+  aafUInt32 extElemSize = ptd->PropValSize ();
+  aafUInt32 intElemSize = ptd->NativeSize ();
+  ptd->ReleaseReference ();
+  assert (intElemSize);
+  aafUInt32 numElems = externalBytesSize / extElemSize;
+  return numElems * intElemSize;
+}
+
+
+void ImplAAFTypeDefVariableArray::internalize(OMByte* externalBytes,
+											  size_t externalBytesSize,
+											  OMByte* internalBytes,
+											  size_t internalBytesSize,
+											  OMByteOrder byteOrder) const
+{
+  ImplAAFTypeDefVariableArray * pNonConstThis =
+	(ImplAAFTypeDefVariableArray *) this;
+
+  ImplAAFTypeDef * ptd = 0;
+  AAFRESULT hr = pNonConstThis->GetType (&ptd);
+  assert (AAFRESULT_SUCCEEDED (hr));
+  assert (ptd);
+
+  aafUInt32 intElemSize = NativeSize ();
+  aafUInt32 extElemSize = PropValSize ();
+  aafUInt32 numElems = externalBytesSize / extElemSize;
+  aafInt32 intNumBytesLeft = externalBytesSize;
+  aafInt32 extNumBytesLeft = internalBytesSize;
+  aafUInt32 elem = 0;
+
+  for (elem = 0; elem < numElems; elem++)
+	{
+	  ptd->internalize (externalBytes,
+						extElemSize,
+						internalBytes,
+						intElemSize,
+						byteOrder);
+	  internalBytes += intElemSize;
+	  externalBytes += extElemSize;
+	  intNumBytesLeft -= intElemSize;
+	  extNumBytesLeft -= extElemSize;
+	  assert (intNumBytesLeft >= 0);
+	  assert (extNumBytesLeft >= 0);
+	}
+  ptd->ReleaseReference ();
+}
+
+
 aafUInt32 ImplAAFTypeDefVariableArray::pvtCount
 (
  ImplAAFPropertyValue * pInPropVal
