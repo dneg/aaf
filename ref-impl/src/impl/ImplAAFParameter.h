@@ -39,19 +39,19 @@ protected:
 
 public:
   virtual AAFRESULT STDMETHODCALLTYPE
-    ImplAAFParameter::SetParameterDefinition (
+    SetParameterDefinition (
       ImplAAFParameterDef *pParmDef);
 
   virtual AAFRESULT STDMETHODCALLTYPE
-    ImplAAFParameter::GetParameterDefinition (
+    GetParameterDefinition (
       ImplAAFParameterDef **ppParmDef);	
 
   virtual AAFRESULT STDMETHODCALLTYPE
-    ImplAAFParameter::SetTypeDefinition (
+    SetTypeDefinition (
       ImplAAFTypeDef*  pTypeDef);
 
   virtual AAFRESULT STDMETHODCALLTYPE
-    ImplAAFParameter::GetTypeDefinition (
+    GetTypeDefinition (
       ImplAAFTypeDef **ppTypeDef);
 
 public:
