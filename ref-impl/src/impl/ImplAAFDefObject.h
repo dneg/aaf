@@ -152,11 +152,6 @@ public:
 public:
 	// Functions internal to the toolkit
 
-	virtual AAFRESULT
-		GetNumDescriptors (aafInt32 *  pCount);
-	virtual AAFRESULT
-		GetNthDescriptor (aafInt32 index, ImplAAFPluginDescriptor **ppDescriptor);
-
   // non-published method to set the containing dictionary for this
   // object.
   void SetDict (ImplAAFDictionary * pDict);
@@ -175,7 +170,7 @@ private:
 
   // auid to be used to identify this definition
   OMFixedSizeProperty<aafUID_t> _identification;
-  OMStrongReferenceVectorProperty<ImplAAFPluginDescriptor> _descriptors;
+  OMVariableSizeProperty<aafUID_t> _descriptors;
 
   // pointer to dict containing this object
   ImplAAFDictionary *           _pDict;
