@@ -47,6 +47,7 @@
 #include "OMStrongReference.h"
 #include "OMStrongReferenceVector.h"
 #include "OMWeakReference.h"
+#include "OMWeakReferenceVector.h"
 
 #include "OMAssertions.h"
 #include "OMUtilities.h"
@@ -455,10 +456,55 @@ void OMStoredObject::save(const OMWeakReference& singleton)
   // @mfunc Save the <c OMWeakReferenceVector> <p vector> in this
   //        <c OMStoredObject>.
   //   @parm TBS
-void OMStoredObject::save(const OMWeakReferenceVector& /* vector */)
+void OMStoredObject::save(const OMWeakReferenceVector& vector)
 {
   TRACE("OMStoredObject::save");
-  ASSERT("Unimplemented code not reached", false);
+
+  OMPropertyTag tag = vector.targetTag();
+
+  // create a vector index
+  //
+  size_t count = vector.count();
+  OMUniqueObjectIdentification* index = 0;
+  if (count > 0) {
+    index = new OMUniqueObjectIdentification[count];
+    ASSERT("Valid heap pointer", index != 0);
+  }
+  size_t position = 0;
+
+  // Iterate over the vector saving each element. The index entries
+  // are written in order of their unique keys.
+  //
+  OMContainerIterator<OMWeakReferenceVectorElement>& iterator =
+                                                            *vector.iterator();
+  while (++iterator) {
+
+    OMWeakReferenceVectorElement& element = iterator.value();
+
+    // enter into the index
+    //
+    index[position] = element.identification();
+
+    // save the object
+    //
+    element.save();
+
+    position = position + 1;
+  }
+  delete &iterator;
+
+  // save the vector index
+  //
+  wchar_t* name = collectionName(vector.name(), vector.propertyId());
+  save(name, index, count, tag, vector.keyPropertyId());
+  delete [] index;
+
+  // make an entry in the property index
+  //
+  saveName(vector, name);
+  delete [] name;
+
+  vector.clearTargetTag();
 }
 
   // @mfunc Save the <c OMWeakReferenceSet> <p set> in this
@@ -720,11 +766,40 @@ void OMStoredObject::restore(OMWeakReference& singleton,
   //        <c OMStoredObject>.
   //   @parm TBS
   //   @parm TBS
-void OMStoredObject::restore(OMWeakReferenceVector& /* vector */,
-                             size_t /* externalSize */)
+void OMStoredObject::restore(OMWeakReferenceVector& vector,
+                             size_t externalSize)
 {
   TRACE("OMStoredObject::restore");
-  ASSERT("Unimplemented code not reached", false);
+
+  // restore the index
+  //
+  OMUniqueObjectIdentification* vectorIndex = 0;
+  size_t entries;
+  OMPropertyTag tag;
+  OMPropertyId keyPropertyId;
+  wchar_t* name = collectionName(vector.name(), vector.propertyId());
+  restore(name, vectorIndex, entries, tag, keyPropertyId);
+  restoreName(vector, name, externalSize);
+  delete [] name;
+
+  ASSERT("Valid vector index", IMPLIES(entries != 0, vectorIndex != 0));
+  ASSERT("Valid vector index", IMPLIES(entries == 0, vectorIndex == 0));
+  ASSERT("Consistent key property ids",
+                                      keyPropertyId == vector.keyPropertyId());
+  vector.setTargetTag(tag);
+
+  // Iterate over the index restoring the elements of the vector.
+  //
+  if (entries > 0) {
+    vector.grow(entries); // Set the vector size
+    for (size_t i = 0; i < entries; i++) {
+      OMUniqueObjectIdentification key = vectorIndex[i];
+      OMWeakReferenceVectorElement element(&vector, key, tag);
+      element.restore();
+      vector.insert(i, element);
+    }
+  }
+  delete [] vectorIndex;
 }
 
   // @mfunc Restore the <c OMWeakReferenceSet> <p set> into this
