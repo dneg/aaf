@@ -31,10 +31,6 @@ AD_FORWARD_DECLARATION(AAFLocator)
  * @base public | AAFDefinitionObject
  *
  *************************************************************************/
-// {14035D91-1FF5-11d2-BF97-006097116212}
-DEFINE_GUID(<<name>>, 
-0x14035d91, 0x1ff5, 0x11d2, 0xbf, 0x97, 0x0, 0x60, 0x97, 0x11, 0x62, 0x12);
-
 AD_CLASS_UUID(14035d92, 1ff5, 11d2, bf, 97, 00, 60, 97, 11, 62, 12) 
 
 AD_DEFAULT_UUID(14035d91, 1ff5, 11d2, bf, 97, 00, 60, 97, 11, 62, 12)
@@ -182,7 +178,7 @@ AD_METHOD1(GetBypass,
 
 AD_METHOD1(SetBypass,
 		   [in],
-		   aafUInt32
+		   aafUInt32,
 		   baypass,
 		   Bypass media segment index,
 		   Sets the media segment index.)
