@@ -1746,7 +1746,7 @@ AAFRESULT ImplAAFMob::InternalSearchSource(
 	aafSlotID_t				nextTrackID;
 	ImplAAFFindSourceInfo	*sourceInfo = NULL ;
 	ImplAAFComponent		*leafObj = NULL;
-	ImplAAFOperationGroup	*effeObject;
+	ImplAAFOperationGroup	*effeObject = NULL;
 	
 	if(ppSourceInfo == NULL)
 		return(AAFRESULT_NULL_PARAM);
