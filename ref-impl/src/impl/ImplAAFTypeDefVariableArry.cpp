@@ -117,14 +117,19 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDefVariableArray::GetCount (
       ImplAAFPropertyValue * pPropVal,
-      aafUInt32 *  pCount)
+      aafUInt32 *  pCount) const
 {
   ImplAAFTypeDef * ptd = NULL;
   AAFRESULT hr;
 
   if (! pPropVal) return AAFRESULT_NULL_PARAM;
   if (! pCount) return AAFRESULT_NULL_PARAM;
-  hr = GetType (&ptd);
+  // Bobt semi-hack: need non-const this in order to call
+  // non-const GetType. We know we aren't mangling it, so it
+  // technically is OK...
+  ImplAAFTypeDefVariableArray * pNonConstThis =
+	(ImplAAFTypeDefVariableArray *) this;
+  hr = pNonConstThis->GetType (&ptd);
   if (AAFRESULT_FAILED(hr)) return hr;
   assert (ptd);
   assert (ptd->IsFixedSize());
@@ -170,7 +175,7 @@ ImplAAFTypeDefVariableArray::AppendElement
 aafUInt32 ImplAAFTypeDefVariableArray::pvtCount
 (
  ImplAAFPropertyValue * pInPropVal
-)
+) const
 {
   assert (pInPropVal);
   AAFRESULT hr;
@@ -181,27 +186,27 @@ aafUInt32 ImplAAFTypeDefVariableArray::pvtCount
 }
 
 
-aafBool ImplAAFTypeDefVariableArray::IsFixedSize (void)
+aafBool ImplAAFTypeDefVariableArray::IsFixedSize (void) const
 {
   return AAFFalse;
 }
 
 
-size_t ImplAAFTypeDefVariableArray::PropValSize (void)
+size_t ImplAAFTypeDefVariableArray::PropValSize (void) const
 {
   assert (0);
   return 0; // not reached!
 }
 
 
-aafBool ImplAAFTypeDefVariableArray::IsRegistered (void)
+aafBool ImplAAFTypeDefVariableArray::IsRegistered (void) const
 {
   assert (IsFixedSize());
   return AAFFalse;
 }
 
 
-size_t ImplAAFTypeDefVariableArray::NativeSize (void)
+size_t ImplAAFTypeDefVariableArray::NativeSize (void) const
 {
   assert (0);
   return 0; // not reached!

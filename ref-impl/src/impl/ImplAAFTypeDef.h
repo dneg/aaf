@@ -20,8 +20,11 @@ class ImplEnumAAFReferenceValues;
 #include "ImplAAFDefObject.h"
 #endif
 
+#ifndef OMTYPE_H
+#include "OMType.h"
+#endif
 
-class ImplAAFTypeDef : public ImplAAFDefObject
+class ImplAAFTypeDef : public ImplAAFDefObject, public OMType
 {
 public:
   //
@@ -116,6 +119,7 @@ public:
         (ImplEnumAAFReferenceValues ** ppEnum);
 
 
+
 public:
   // Declare this class to be storable.
   //
@@ -130,18 +134,45 @@ public:
   //
 
   // Returns true if property values of this type are of a fixed size.
-  virtual aafBool IsFixedSize (void);
+  virtual aafBool IsFixedSize (void) const;
 
   // If this->IsFixedSize(), then will return the size of property
   // values of this type.  If not fixed size, will assert().
-  virtual size_t PropValSize (void);
+  virtual size_t PropValSize (void) const;
 
   // Returns true if offsets have been registered for this type def.
-  virtual aafBool IsRegistered (void);
+  virtual aafBool IsRegistered (void) const;
 
   // If this->IsRegistered(), then will return the native in-memory
   // size of this type.  If not registered, will assert().
-  virtual size_t NativeSize (void);
+  virtual size_t NativeSize (void) const;
+
+  //*************************************************************
+  //
+  // Overrides from OMType, via inheritace through ImplAAFTypeDef
+  //
+  //*************************************************************
+
+  virtual void reorder(OMByte* bytes,
+                       size_t bytesSize) const;
+
+  virtual size_t externalSize(OMByte* internalBytes,
+                              size_t internalBytesSize) const;
+
+  virtual void externalize(OMByte* internalBytes,
+                           size_t internalBytesSize,
+                           OMByte* externalBytes,
+                           size_t externalBytesSize,
+                           OMByteOrder byteOrder) const;
+
+  virtual size_t internalSize(OMByte* externalBytes,
+                              size_t externalSize) const;
+
+  virtual void internalize(OMByte* externalBytes,
+                           size_t externalBytesSize,
+                           OMByte* internalBytes,
+                           size_t internalBytesSize,
+                           OMByteOrder byteOrder) const;
 };
 
 #endif // ! __ImplAAFTypeDef_h__

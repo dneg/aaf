@@ -112,28 +112,72 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 
-aafBool ImplAAFTypeDef::IsFixedSize (void)
+
+void ImplAAFTypeDef::reorder(OMByte* /*bytes*/,
+							 size_t /*bytesSize*/) const
+{
+  assert (0);
+}
+
+
+size_t ImplAAFTypeDef::externalSize(OMByte* /*internalBytes*/,
+									size_t /*internalBytesSize*/) const
+{
+  assert (0);
+  return 0; // Not reached!
+}
+
+
+void ImplAAFTypeDef::externalize(OMByte* /*internalBytes*/,
+								 size_t /*internalBytesSize*/,
+								 OMByte* /*externalBytes*/,
+								 size_t /*externalBytesSize*/,
+								 OMByteOrder /*byteOrder*/) const
+{
+  assert (0);
+}
+
+
+size_t ImplAAFTypeDef::internalSize(OMByte* /*externalBytes*/,
+									size_t /*externalSize*/) const
+{
+  assert (0);
+  return 0; // Not reached!
+}
+
+
+void ImplAAFTypeDef::internalize(OMByte* /*externalBytes*/,
+								 size_t /*externalBytesSize*/,
+								 OMByte* /*internalBytes*/,
+								 size_t /*internalBytesSize*/,
+								 OMByteOrder /*byteOrder*/) const
+{
+  assert (0);
+}
+
+
+aafBool ImplAAFTypeDef::IsFixedSize (void) const
 {
   assert (0);
   return AAFFalse; // not reached!
 }
 
 
-size_t ImplAAFTypeDef::PropValSize (void)
+size_t ImplAAFTypeDef::PropValSize (void) const
 {
   assert (0);
   return 0; // not reached!
 }
 
 
-aafBool ImplAAFTypeDef::IsRegistered (void)
+aafBool ImplAAFTypeDef::IsRegistered (void) const
 {
   assert (0);
   return AAFFalse; // not reached!
 }
 
 
-size_t ImplAAFTypeDef::NativeSize (void)
+size_t ImplAAFTypeDef::NativeSize (void) const
 {
   assert (0);
   return 0; // not reached!

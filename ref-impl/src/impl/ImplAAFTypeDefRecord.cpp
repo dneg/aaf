@@ -139,9 +139,15 @@ AAFRESULT STDMETHODCALLTYPE
   if (index >= count) return AAFRESULT_ILLEGAL_VALUE;
 
   _memberTypes.getValueAt (&memberUID, index);
-  hr = GetDict()->LookupType(&memberUID, &pMemberType);
+
+  ImplAAFDictionary * pDict = 0;
+  hr = GetDictionary (&pDict);
+  assert (AAFRESULT_SUCCEEDED(hr));
+  assert (pDict);
+  hr = pDict->LookupType(&memberUID, &pMemberType);
   assert (AAFRESULT_SUCCEEDED(hr));
   assert (pMemberType);
+  pDict->ReleaseReference();
   pMemberType->AcquireReference();
   assert (ppTypeDef);
   *ppTypeDef = pMemberType;
@@ -404,9 +410,14 @@ AAFRESULT STDMETHODCALLTYPE
 	  for (aafUInt32 i = 0; i < index; i++)
 		{
 		  _memberTypes.getValueAt (&memberUID, i);
-		  hr = GetDict()->LookupType (&memberUID, &ptd);
+		  ImplAAFDictionary * pDict = 0;
+		  hr = GetDictionary (&pDict);
+		  assert (AAFRESULT_SUCCEEDED(hr));
+		  assert (pDict);
+		  hr = pDict->LookupType (&memberUID, &ptd);
 		  assert (AAFRESULT_SUCCEEDED(hr));
 		  assert (ptd);
+		  pDict->ReleaseReference();
 		  ptd->AcquireReference ();
 		  offset += ptd->PropValSize();
 		  ptd->ReleaseReference ();
@@ -419,9 +430,14 @@ AAFRESULT STDMETHODCALLTYPE
 	  if (!pvdOut) throw AAFRESULT_NOMEMORY;
 
 	  _memberTypes.getValueAt (&memberUID, index);
-	  hr = GetDict()->LookupType (&memberUID, &ptd);
+	  ImplAAFDictionary * pDict = 0;
+	  hr = GetDictionary (&pDict);
+	  assert (AAFRESULT_SUCCEEDED(hr));
+	  assert (pDict);
+	  hr = pDict->LookupType (&memberUID, &ptd);
 	  assert (AAFRESULT_SUCCEEDED (hr));
 	  assert (ptd);
+	  pDict->ReleaseReference();
 	  ptd->AcquireReference();
 
 	  hr = pvdOut->Initialize (ptd);
@@ -521,9 +537,14 @@ AAFRESULT STDMETHODCALLTYPE
 	  for (aafUInt32 i = 0; i < index; i++)
 		{
 		  _memberTypes.getValueAt (&memberUID, i);
-		  hr = GetDict()->LookupType (&memberUID, &ptd);
+		  ImplAAFDictionary * pDict = 0;
+		  hr = GetDictionary (&pDict);
+		  assert (AAFRESULT_SUCCEEDED(hr));
+		  assert (pDict);
+		  hr = pDict->LookupType (&memberUID, &ptd);
 		  assert (AAFRESULT_SUCCEEDED (hr));
 		  assert (ptd);
+		  pDict->ReleaseReference();
 		  ptd->AcquireReference ();
 		  assert (ptd);
 		  offset += ptd->PropValSize();
@@ -534,9 +555,14 @@ AAFRESULT STDMETHODCALLTYPE
 	  // offset now points into prop storage
 
 	  _memberTypes.getValueAt (&memberUID, index);
-	  hr = GetDict()->LookupType (&memberUID, &ptd);
+	  ImplAAFDictionary * pDict = 0;
+	  hr = GetDictionary (&pDict);
+	  assert (AAFRESULT_SUCCEEDED(hr));
+	  assert (pDict);
+	  hr = pDict->LookupType (&memberUID, &ptd);
 	  assert (AAFRESULT_SUCCEEDED (hr));
 	  assert (ptd);
+	  pDict->ReleaseReference();
 	  ptd->AcquireReference();
 
 	  assert (pMemberPropVal);
@@ -614,7 +640,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDefRecord::GetCount (
-      aafUInt32 *  pCount)
+      aafUInt32 *  pCount) const
 {
   if (!pCount) return AAFRESULT_NULL_PARAM;
   *pCount = _memberTypes.count();
@@ -663,13 +689,57 @@ ImplAAFTypeDefRecord::GetTypeCategory (eAAFTypeCategory_t *  pTid)
 }
 
 
-aafBool ImplAAFTypeDefRecord::IsFixedSize (void)
+void ImplAAFTypeDefRecord::reorder(OMByte* /*bytes*/,
+								   size_t /*bytesSize*/) const
+{
+  assert (0);
+}
+
+
+size_t ImplAAFTypeDefRecord::externalSize(OMByte* /*internalBytes*/,
+										  size_t /*internalBytesSize*/) const
+{
+  assert (0);
+  return 0; // Not reached!
+}
+
+
+void ImplAAFTypeDefRecord::externalize(OMByte* /*internalBytes*/,
+									   size_t /*internalBytesSize*/,
+									   OMByte* /*externalBytes*/,
+									   size_t /*externalBytesSize*/,
+									   OMByteOrder /*byteOrder*/) const
+{
+  assert (0);
+}
+
+
+size_t ImplAAFTypeDefRecord::internalSize(OMByte* /*externalBytes*/,
+										  size_t /*externalSize*/) const
+{
+  assert (0);
+  return 0; // Not reached!
+}
+
+
+void ImplAAFTypeDefRecord::internalize(OMByte* /*externalBytes*/,
+									   size_t /*externalBytesSize*/,
+									   OMByte* /*internalBytes*/,
+									   size_t /*internalBytesSize*/,
+									   OMByteOrder /*byteOrder*/) const
+{
+  assert (0);
+}
+
+
+
+aafBool ImplAAFTypeDefRecord::IsFixedSize (void) const
 {
   return AAFTrue;
 }
 
 
-size_t ImplAAFTypeDefRecord::PropValSize (void)
+size_t ImplAAFTypeDefRecord::PropValSize (void) const
 {
   aafUInt32 count;
   size_t totalSize = 0;
@@ -682,7 +752,12 @@ size_t ImplAAFTypeDefRecord::PropValSize (void)
 	{
 	  ImplAAFTypeDef * pMemType;
 	  pMemType = 0;
-	  hr = GetMemberType (i, &pMemType);
+	  // Bobt semi-hack: need non-const this in order to call
+	  // non-const GetMemberType. We know we aren't mangling it, so it
+	  // technically is OK...
+	  ImplAAFTypeDefRecord * pNonConstThis =
+		(ImplAAFTypeDefRecord*) this;
+	  hr = pNonConstThis->GetMemberType (i, &pMemType);
 	  if (AAFRESULT_FAILED(hr)) return hr;
 	  assert (pMemType);
 	  assert (pMemType->IsFixedSize());
@@ -692,13 +767,13 @@ size_t ImplAAFTypeDefRecord::PropValSize (void)
 }
 
 
-aafBool ImplAAFTypeDefRecord::IsRegistered (void)
+aafBool ImplAAFTypeDefRecord::IsRegistered (void) const
 {
   return (_registeredOffsets ? AAFTrue : AAFFalse);
 }
 
 
-size_t ImplAAFTypeDefRecord::NativeSize (void)
+size_t ImplAAFTypeDefRecord::NativeSize (void) const
 {
   assert (IsRegistered());
   return _registeredSize;
