@@ -627,7 +627,7 @@ cpp_quote("EXTERN_C const CLSID CLSID_.this-module;")
   // NOTE: This is NOT the pointer to the COM object's implementation
   // object!
   //
-  HRESULT GetImplRep([out, string, retval] char **);
+  [local] HRESULT GetImplRep([out, retval] void **);
 }\
 #endm
 
@@ -644,7 +644,7 @@ cpp_quote("EXTERN_C const CLSID CLSID_.this-module;")
   // NOTE: This is NOT the pointer to the COM object's implementation
   // object!
   //
-  HRESULT GetImplRep([out, string, retval] char **);
+  [local] HRESULT GetImplRep([out, retval] void **);
 }\
 #endm
 
