@@ -337,9 +337,9 @@ ImplAAFDictionary *ImplAAFDictionary::CreateDictionary(void)
 //
 OMStorable* ImplAAFDictionary::create(const OMClassId& classId) const
 {
-  const aafUID_t & auid  = reinterpret_cast<const aafUID_t&>(classId);
+  const aafUID_t * auid  = reinterpret_cast<const aafUID_t*>(&classId);
   ImplAAFObject * pNewObject = 0;
-  pNewObject = pvtInstantiate (auid);
+  pNewObject = pvtInstantiate (*auid);
   if (pNewObject)
 	pNewObject->InitOMProperties ();
   return pNewObject;
@@ -444,8 +444,8 @@ AAFRESULT STDMETHODCALLTYPE
   // Initialize the out parameter.
   *ppvObject = NULL;
 
-  const OMClassId& classId  = reinterpret_cast<const OMClassId&>(auid);
-  *ppvObject = static_cast<ImplAAFObject *>(create(classId));
+  const OMClassId* classId  = reinterpret_cast<const OMClassId*>(&auid);
+  *ppvObject = static_cast<ImplAAFObject *>(create(*classId));
 
   if (NULL == *ppvObject)
     return AAFRESULT_INVALID_CLASS_ID;
@@ -463,7 +463,7 @@ ImplAAFObject *ImplAAFDictionary::CreateImplObject(const aafUID_t& auid)
   ImplAAFObject *pObject = NULL;
   AAFRESULT result = AAFRESULT_SUCCESS;
   
-  result = CreateInstance(const_cast<aafUID_t &>(auid), &pObject);
+  result = CreateInstance(auid, &pObject);
   assert(AAFRESULT_SUCCEEDED(result));
   return pObject;
 }
