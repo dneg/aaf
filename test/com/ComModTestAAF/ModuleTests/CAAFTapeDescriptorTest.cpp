@@ -116,9 +116,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 				// Create a source mob
 
 			  CAAFBuiltinDefs defs (pDictionary);
-				hr = pDictionary->CreateInstance(defs.cdSourceMob(),
-										IID_IAAFSourceMob, 
-										(IUnknown **)&pSourceMob);
+				hr = defs.cdSourceMob()->
+				  CreateInstance(IID_IAAFSourceMob, 
+								 (IUnknown **)&pSourceMob);
 				if (AAFRESULT_SUCCESS == hr)
 				{
 					hr = pSourceMob->QueryInterface(IID_IAAFMob, (void **)&pMob);
@@ -127,9 +127,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 						CoCreateGuid((GUID *)&newMobID);
 						pMob->SetMobID(newMobID);
 						pMob->SetName(L"TapeDescriptorTest");
-						hr = pDictionary->CreateInstance(defs.cdTapeDescriptor(),
-												IID_IAAFTapeDescriptor, 
-												(IUnknown **)&pTapeDesc);		
+						hr = defs.cdTapeDescriptor()->
+						  CreateInstance(IID_IAAFTapeDescriptor, 
+										 (IUnknown **)&pTapeDesc);		
  						if (AAFRESULT_SUCCESS == hr)
 						{
 							hr = pTapeDesc->QueryInterface(IID_IAAFEssenceDescriptor, (void **)&pEssDesc);

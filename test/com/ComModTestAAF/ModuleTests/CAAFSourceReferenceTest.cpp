@@ -110,9 +110,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		CAAFBuiltinDefs defs (pDictionary);
 
 		// Create an Abstract SourceReference
-		checkResult(pDictionary->CreateInstance(defs.cdSourceReference(),
-								  IID_IAAFSourceReference, 
-								  (IUnknown **)&pSourceReference));
+		checkResult(defs.cdSourceReference()->
+					CreateInstance(IID_IAAFSourceReference, 
+								   (IUnknown **)&pSourceReference));
 
 		// module-specific tests go here
 		//		Set Values.	

@@ -117,9 +117,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	CAAFBuiltinDefs defs (pDictionary);
      
     // Create a Composition mob - it should work !!
-    checkResult(pDictionary->CreateInstance(defs.cdCompositionMob(),
-                IID_IAAFCompositionMob, 
-                (IUnknown **)&pCompMob));
+    checkResult(defs.cdCompositionMob()->
+				CreateInstance(IID_IAAFCompositionMob, 
+							   (IUnknown **)&pCompMob));
     // get a IAAFMob interface
     checkResult(pCompMob->QueryInterface(IID_IAAFMob, (void **)&pMob));
     // Initialize the CompMob
@@ -128,9 +128,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
     checkResult(pMob->SetName(L"AAFFillerTest"));
 
     // Create a AAFFiller - since it is the first time we will check the error code
-    checkResult(pDictionary->CreateInstance(defs.cdFiller(),
-                IID_IAAFFiller, 
-                (IUnknown **)&pFiller));
+    checkResult(defs.cdFiller()->
+				CreateInstance(IID_IAAFFiller, 
+							   (IUnknown **)&pFiller));
     // Get a IAAFSegment interface for it
     checkResult(pFiller->QueryInterface (IID_IAAFSegment, (void **)&pSegment));
     // Set filler properties

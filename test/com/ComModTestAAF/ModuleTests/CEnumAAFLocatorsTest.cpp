@@ -116,9 +116,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
  		
 		//Make the first mob
 		// Create a Mob
-		checkResult(pDictionary->CreateInstance(defs.cdSourceMob(),
-								IID_IAAFSourceMob, 
-								(IUnknown **)&pSourceMob));
+		checkResult(defs.cdSourceMob()->
+					CreateInstance(IID_IAAFSourceMob, 
+								   (IUnknown **)&pSourceMob));
 		
 		// Initialize mob properties:
 		checkResult(pSourceMob->QueryInterface (IID_IAAFMob, (void **)&pMob));
@@ -127,9 +127,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pMob->SetName(L"EssenceDescriptorTest"));
 		
 		// Create the descriptor:
-		checkResult(pDictionary->CreateInstance(defs.cdEssenceDescriptor(),
-								IID_IAAFEssenceDescriptor, 
-								(IUnknown **)&edesc));		
+		checkResult(defs.cdEssenceDescriptor()->
+					CreateInstance(IID_IAAFEssenceDescriptor, 
+								   (IUnknown **)&edesc));		
  		checkResult(pSourceMob->SetEssenceDescriptor (edesc));
 
 			// Verify that there are no locators
@@ -138,9 +138,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
   
 		// Make a locator, and attach it to the EssenceDescriptor
-		checkResult(pDictionary->CreateInstance(defs.cdNetworkLocator(),
-								IID_IAAFLocator, 
-								(IUnknown **)&pLocator));		
+		checkResult(defs.cdNetworkLocator()->
+					CreateInstance(IID_IAAFLocator, 
+								   (IUnknown **)&pLocator));		
 		checkResult(pLocator->SetPath (locator1));
 		checkResult(edesc->AppendLocator(pLocator));
 		pLocator->Release();
@@ -151,9 +151,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkExpression(1 == numLocators, AAFRESULT_TEST_FAILED);
 
 		// Make a second ocator, and attach it to the EssenceDescriptor
-		checkResult(pDictionary->CreateInstance(defs.cdNetworkLocator(),
-								IID_IAAFLocator, 
-								(IUnknown **)&pLocator));		
+		checkResult(defs.cdNetworkLocator()->
+					CreateInstance(IID_IAAFLocator, 
+								   (IUnknown **)&pLocator));		
 		checkResult(pLocator->SetPath (locator2));
 		checkResult(edesc->AppendLocator(pLocator));
 		pLocator->Release();

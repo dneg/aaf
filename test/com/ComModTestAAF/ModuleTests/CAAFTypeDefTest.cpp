@@ -104,9 +104,8 @@ static HRESULT TestTypeDef ()
 
   // Let's try to do something interesting with a type definition
   IAAFTypeDefIntSP pTypeDefInt;
-  hr = pDict->CreateInstance (defs.cdTypeDefInt(),
-							  IID_IAAFTypeDefInt,
-							  (IUnknown **) &pTypeDefInt);
+  hr = defs.cdTypeDefInt()->CreateInstance (IID_IAAFTypeDefInt,
+											(IUnknown **) &pTypeDefInt);
   if (! SUCCEEDED (hr)) return hr;
   assert (pTypeDefInt);
 

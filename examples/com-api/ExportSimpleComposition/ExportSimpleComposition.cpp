@@ -204,9 +204,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 	for (i = 0; i<1; i++)
 	{
 		// Get a Master MOB Interface
-		check(pDictionary->CreateInstance( pMasterMobDef,
-			IID_IAAFMasterMob, 
-			(IUnknown **)&pMasterMob));
+		check(pMasterMobDef->
+			  CreateInstance(IID_IAAFMasterMob, 
+							 (IUnknown **)&pMasterMob));
 		// Get a Mob interface and set its variables.
 		check(pMasterMob->QueryInterface(IID_IAAFMob, (void **)&pMob));
 		check(pMob->GetMobID(&masterMobID));
@@ -218,9 +218,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 		if(dataFile != NULL)
 		{
 			// Make a locator, and attach it to the EssenceDescriptor
-			check(pDictionary->CreateInstance(pNetworkLocatorDef,
-				IID_IAAFLocator, 
-				(IUnknown **)&pLocator));		
+			check(pNetworkLocatorDef->
+				  CreateInstance(IID_IAAFLocator, 
+								 (IUnknown **)&pLocator));		
 			check(pLocator->SetPath (dataFile->dataFilename));
 			testContainer = dataFile->dataFormat;
 		}
@@ -438,16 +438,16 @@ static HRESULT ProcessAAFFile(aafWChar * pFileName, testType_t testType)
 		check(pHeader->GetMobs(&criteria, &pMobIter));
 
 		/* Create a Composition Mob */
-		check(pDictionary->CreateInstance( pCompositionMobDef,
-										   IID_IAAFMob,
-										   (IUnknown **)&pCompMob));
+		check(pCompositionMobDef->
+			  CreateInstance(IID_IAAFMob,
+							 (IUnknown **)&pCompMob));
 		/* Append the Mob to the Header */
 		check(pHeader->AddMob(pCompMob));
  
 		/* Create a TimelineMobSlot with an audio sequence */
-		check(pDictionary->CreateInstance( pSequenceDef,
-										   IID_IAAFSequence,
-										   (IUnknown **)&pAudioSequence));
+		check(pSequenceDef->
+			  CreateInstance(IID_IAAFSequence,
+							 (IUnknown **)&pAudioSequence));
 		check(pAudioSequence->QueryInterface(IID_IAAFSegment, (void **)&seg));
 
 		check(pAudioSequence->QueryInterface(IID_IAAFComponent,
@@ -524,9 +524,9 @@ static HRESULT ProcessAAFFile(aafWChar * pFileName, testType_t testType)
 						for (j=0; j<10; j++)
 						{
 							/* Create a new Source Clip */
-							check(pDictionary->CreateInstance( pSourceClipDef,
-								IID_IAAFSourceClip,
-								(IUnknown **)&pSourceClip));
+							check(pSourceClipDef->
+								  CreateInstance(IID_IAAFSourceClip,
+												 (IUnknown **)&pSourceClip));
 							// Initialize the Source Clip
 							check(pSourceClip->Initialize( pSoundDef, duration, sourceRef));
 							check(pSourceClip->QueryInterface(IID_IAAFComponent, (void **) &pComponent));

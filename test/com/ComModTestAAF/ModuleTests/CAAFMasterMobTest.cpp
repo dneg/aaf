@@ -178,9 +178,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		CAAFBuiltinDefs defs (pDictionary);
 				
 		// Create a Master Mob
-		checkResult(pDictionary->CreateInstance(defs.cdMasterMob(),
-			IID_IAAFMob, 
-			(IUnknown **)&pMob));
+		checkResult(defs.cdMasterMob()->
+					CreateInstance(IID_IAAFMob, 
+								   (IUnknown **)&pMob));
 		
 		// Set the IAAFMob properties
 		checkResult(CoCreateGuid((GUID *)&NewMobID));
@@ -192,12 +192,12 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pMob->QueryInterface(IID_IAAFMasterMob, (void **) &pMasterMob));
 		
 		// Create source mob to associate with our MasterMob.
-		checkResult(pDictionary->CreateInstance(defs.cdSourceMob(),
-			IID_IAAFSourceMob, 
+		checkResult(defs.cdSourceMob()->
+					CreateInstance(IID_IAAFSourceMob, 
 			(IUnknown **)&pTapeMob));		
-		hr = pDictionary->CreateInstance(defs.cdTapeDescriptor(),
-										 IID_IAAFTapeDescriptor, 
-										 (IUnknown **)&pTapeDesc);		
+		hr = defs.cdTapeDescriptor()->
+		  CreateInstance(IID_IAAFTapeDescriptor, 
+						 (IUnknown **)&pTapeDesc);		
 		if (AAFRESULT_SUCCESS == hr)
 		{
 			hr = pTapeDesc->QueryInterface(IID_IAAFEssenceDescriptor, (void **)&pEssDesc);
@@ -249,9 +249,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		for (test = 0; test < NumMobSlots; test++)
 		{
 			// Create source mob to associate with our MasterMob.
-			checkResult(pDictionary->CreateInstance(defs.cdSourceMob(),
-				IID_IAAFSourceMob, 
-				(IUnknown **)&pSrcMob));		
+			checkResult(defs.cdSourceMob()->
+						CreateInstance(IID_IAAFSourceMob, 
+									   (IUnknown **)&pSrcMob));		
 			
 			ref.sourceID = tapeMobID;
 			ref.sourceSlotID = test;
@@ -264,9 +264,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 													  ref,
 													  TAPE_MOB_LENGTH));
 			
-			checkResult(pDictionary->CreateInstance(defs.cdEssenceDescriptor(),
-				IID_IAAFEssenceDescriptor, 
-				(IUnknown **)&pDesc));		
+			checkResult(defs.cdEssenceDescriptor()->
+						CreateInstance(IID_IAAFEssenceDescriptor, 
+									   (IUnknown **)&pDesc));	
 			checkResult(pSrcMob->SetEssenceDescriptor(pDesc));
 			pDesc->Release();
 			pDesc = NULL;

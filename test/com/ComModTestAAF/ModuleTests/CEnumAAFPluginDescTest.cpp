@@ -177,18 +177,18 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
     checkResult(pHeader->GetDictionary(&pDictionary));
 	CAAFBuiltinDefs defs (pDictionary);
     
-	checkResult(pDictionary->CreateInstance(defs.cdCodecDef(),
-							  IID_IAAFDefObject, 
-							  (IUnknown **)&pPlugDef));
+	checkResult(defs.cdCodecDef()->
+				CreateInstance(IID_IAAFDefObject, 
+							   (IUnknown **)&pPlugDef));
     
 	for(n = 0; n < 2; n++)
 	{
-		checkResult(pDictionary->CreateInstance(defs.cdPluginDescriptor(),
-			IID_IAAFPluginDescriptor, 
-			(IUnknown **)&pDesc));
-		checkResult(pDictionary->CreateInstance(defs.cdNetworkLocator(),
-			IID_IAAFNetworkLocator, 
-			(IUnknown **)&pNetLoc));
+		checkResult(defs.cdPluginDescriptor()->
+					CreateInstance(IID_IAAFPluginDescriptor, 
+								   (IUnknown **)&pDesc));
+		checkResult(defs.cdNetworkLocator()->
+					CreateInstance(IID_IAAFNetworkLocator, 
+								   (IUnknown **)&pNetLoc));
 		checkResult(pNetLoc->QueryInterface (IID_IAAFLocator,
 			(void **)&pLoc));
 		checkResult(pLoc->SetPath (manuf2URL));
@@ -226,9 +226,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pDictionary->RegisterPluginDef (	pDesc));
 		
 		/**/
-		checkResult(pDictionary->CreateInstance( defs.cdNetworkLocator(),
-			IID_IAAFNetworkLocator, 
-			(IUnknown **)&pNetLoc2));
+		checkResult( defs.cdNetworkLocator()->
+					 CreateInstance(IID_IAAFNetworkLocator, 
+									(IUnknown **)&pNetLoc2));
 		checkResult(pNetLoc2->QueryInterface (IID_IAAFLocator,
 			(void **)&pLoc2));
 		checkResult(pLoc2->SetPath (manuf2URL));

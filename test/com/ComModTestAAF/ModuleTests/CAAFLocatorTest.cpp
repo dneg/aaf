@@ -121,18 +121,18 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 		//Make the first mob
 		// Create a Mob
-		checkResult(pDictionary->CreateInstance(defs.cdSourceMob(),
-								IID_IAAFSourceMob, 
-								(IUnknown **)&pSourceMob));
+		checkResult(defs.cdSourceMob()->
+					CreateInstance(IID_IAAFSourceMob, 
+								   (IUnknown **)&pSourceMob));
 
 		checkResult(pSourceMob->QueryInterface (IID_IAAFMob, (void **)&pMob));
 		checkResult(CoCreateGuid((GUID *)&newMobID));
 		checkResult(pMob->SetMobID(newMobID));
 		checkResult(pMob->SetName(L"SourceMOBTest"));
 		
-		checkResult(pDictionary->CreateInstance(defs.cdEssenceDescriptor(),
-								IID_IAAFEssenceDescriptor, 
-								(IUnknown **)&edesc));
+		checkResult(defs.cdEssenceDescriptor()->
+					CreateInstance(IID_IAAFEssenceDescriptor, 
+								   (IUnknown **)&edesc));
 										
  		checkResult(pSourceMob->SetEssenceDescriptor(edesc));
 
@@ -142,9 +142,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
   
 		// Make a locator, and attach it to the EssenceDescriptor
-		checkResult(pDictionary->CreateInstance(defs.cdNetworkLocator(),
-								IID_IAAFNetworkLocator, 
-								(IUnknown **)&pNetLocator));		
+		checkResult(defs.cdNetworkLocator()->
+					CreateInstance(IID_IAAFNetworkLocator, 
+								   (IUnknown **)&pNetLocator));		
 		checkResult(pNetLocator->QueryInterface (IID_IAAFLocator, (void **)&pLocator));
 
 		checkResult(pLocator->SetPath (TEST_PATH));

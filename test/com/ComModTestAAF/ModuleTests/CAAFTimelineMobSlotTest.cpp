@@ -118,9 +118,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		// aafRational_t	audioRate = { 44100, 1 };
 		
 		// Create a Mob
-		checkResult(pDictionary->CreateInstance(defs.cdMob(),
-			IID_IAAFMob, 
-			(IUnknown **)&pMob));
+		checkResult(defs.cdMob()->
+					CreateInstance(IID_IAAFMob, 
+								   (IUnknown **)&pMob));
 		
 		checkResult(CoCreateGuid((GUID *)&newMobID));
 		checkResult(pMob->SetMobID(newMobID));
@@ -129,15 +129,15 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		// Add some slots
 		for(test = 0; test < 5; test++)
 		{
-			checkResult(pDictionary->CreateInstance(defs.cdSourceClip(),
-				IID_IAAFSourceClip, 
-				(IUnknown **)&sclp));		
+			checkResult(defs.cdSourceClip()->
+						CreateInstance(IID_IAAFSourceClip, 
+									   (IUnknown **)&sclp));		
 			
 			checkResult(sclp->QueryInterface (IID_IAAFSegment, (void **)&seg));
 			
-			checkResult(pDictionary->CreateInstance(defs.cdTimelineMobSlot(),
-				IID_IAAFTimelineMobSlot, 
-				(IUnknown **)&timelineSlot));		
+			checkResult(defs.cdTimelineMobSlot()->
+						CreateInstance(IID_IAAFTimelineMobSlot, 
+									   (IUnknown **)&timelineSlot));		
 			checkResult(timelineSlot->SetEditRate (checkEditRate));
 			checkResult(timelineSlot->SetOrigin (0));
 			checkResult(timelineSlot->QueryInterface (IID_IAAFMobSlot, (void **)&newSlot));

@@ -199,9 +199,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 	  // create
 	  IAAFTypeDefObjectRefSP tdor;
-	  checkResult (pDictionary->CreateInstance(defs.cdTypeDefStrongObjRef(),
-											   IID_IAAFTypeDefObjectRef,
-											   (IUnknown**)&tdor));
+	  checkResult (defs.cdTypeDefStrongObjRef()->
+				   CreateInstance(IID_IAAFTypeDefObjectRef,
+								  (IUnknown**)&tdor));
 
 	  // get class def for the referenced type.  In this case,
 	  // AAFComponent.
@@ -250,9 +250,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 	  // Create a Composition Mob
 	  IAAFMobSP pMob;
-	  checkResult(pDictionary->CreateInstance(defs.cdCompositionMob(),
-											  IID_IAAFMob, 
-											  (IUnknown **)&pMob));
+	  checkResult(defs.cdCompositionMob()->
+				  CreateInstance(IID_IAAFMob, 
+								 (IUnknown **)&pMob));
 	  aafMobID_t mobID;
 	  checkResult(CoCreateGuid((GUID *)&mobID));
 	  checkResult(pMob->SetMobID(mobID));
@@ -264,14 +264,14 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	  // different lengths (13 for #1, 26 for #2).
 	  //
 	  IAAFFillerSP fill1;
-	  checkResult (pDictionary->CreateInstance(defs.cdFiller(),
-											   IID_IAAFFiller,
-											   (IUnknown **)&fill1));
+	  checkResult (defs.cdFiller()->
+				   CreateInstance(IID_IAAFFiller,
+								  (IUnknown **)&fill1));
 	  checkResult (fill1->Initialize (defs.ddPictureWithMatte(), 13));
 	  IAAFFillerSP fill2;
-	  checkResult (pDictionary->CreateInstance(defs.cdFiller(),
-											   IID_IAAFFiller,
-											   (IUnknown **)&fill2));
+	  checkResult (defs.cdFiller()->
+				   CreateInstance(IID_IAAFFiller,
+								  (IUnknown **)&fill2));
 	  checkResult (fill2->Initialize (defs.ddPictureWithMatte(), 26));
 
 	  // get the AAFObject interfaces

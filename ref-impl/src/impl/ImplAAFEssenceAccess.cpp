@@ -305,7 +305,8 @@ ImplAAFEssenceAccess::Create (ImplAAFMasterMob *    masterMob,
 			CHECK(_codec->GetEssenceDataID(&essenceDataID));
 			ImplAAFClassDefSP pEssenceDataClass;
 			CHECK(dataDict->LookupClassDef (essenceDataID, &pEssenceDataClass));
-			CHECK(dataDict->CreateInstance(pEssenceDataClass, (ImplAAFObject **)&implData));
+			CHECK(pEssenceDataClass->
+				  CreateInstance((ImplAAFObject **)&implData));
 			dataObj = static_cast<IUnknown *> (implData->GetContainer());
 			
 			CHECK(implData->SetFileMob(_dataFileMob == NULL ? _compFileMob : _dataFileMob));
@@ -614,7 +615,8 @@ AAFRESULT STDMETHODCALLTYPE
 				CHECK(dataHead->GetDictionary(&dataDict));
 				ImplAAFClassDefSP pEssenceDataClass;
 				CHECK(dataDict->LookupClassDef(essenceDataID, &pEssenceDataClass));
-				CHECK(dataDict->CreateInstance(pEssenceDataClass, (ImplAAFObject **)&implData));
+				CHECK(pEssenceDataClass->
+					  CreateInstance((ImplAAFObject **)&implData));
 				dataObj = static_cast<IUnknown *> (implData->GetContainer());
 				
 				CHECK(implData->SetFileMob(_dataFileMob == NULL ? _compFileMob : _dataFileMob));
@@ -2280,8 +2282,8 @@ AAFRESULT ImplAAFEssenceAccess::MakeAAFContainerDef(ImplAAFHeader *head, ImplAAF
 	XPROTECT()
 	{
 		CHECK(head->GetDictionary (&dict));
-		CHECK(dict->CreateInstance(dict->GetBuiltinDefs()->cdContainerDef(),
-								   (ImplAAFObject **)&obj));
+		CHECK(dict->GetBuiltinDefs()->cdContainerDef()->
+			  CreateInstance((ImplAAFObject **)&obj));
 		if(obj == NULL)
 			RAISE(AAFRESULT_NOMEMORY);
 		uid = ContainerAAF;
@@ -2725,8 +2727,8 @@ ImplAAFEssenceAccess::CreateFileMob (ImplAAFHeader *       newHead,
 		CHECK(newHead->GetDictionary (&dict));
 		/* Initialize the basic fields of the media handle
 		 */
-		CHECK(dict->CreateInstance(dict->GetBuiltinDefs()->cdSourceMob(),
-								   (ImplAAFObject **)&fileMob));
+		CHECK(dict->GetBuiltinDefs()->cdSourceMob()->
+			  CreateInstance((ImplAAFObject **)&fileMob));
 		if(newMobID != NULL)
 		{
 			fileMob->SetMobID(*newMobID);
@@ -2754,7 +2756,7 @@ ImplAAFEssenceAccess::CreateFileMob (ImplAAFHeader *       newHead,
 		CHECK(_codec->GetEssenceDescriptorID(&essenceDescriptorID));
 		ImplAAFClassDefSP pClassDef;
 		CHECK(dict->LookupClassDef (essenceDescriptorID, &pClassDef));
-		CHECK(dict->CreateInstance(pClassDef, (ImplAAFObject **)&mdes));
+		CHECK(pClassDef->CreateInstance((ImplAAFObject **)&mdes));
 		CHECK(mdes->SetIsInContainer (_destination == NULL ? AAFTrue : AAFFalse));
 		CHECK(mdes->SetContainerFormat (_fileFormat));
 		CHECK(mdes->SetSampleRate(sampleRate));

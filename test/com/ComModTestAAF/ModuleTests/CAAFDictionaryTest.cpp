@@ -185,9 +185,9 @@ static void RegisterNewClass (IAAFDictionary * pDictionary)
 
   // Create new object for our new filler class, and initialize it.
   IAAFClassDefSP pNewFillClass;
-  checkResult (pDictionary->CreateInstance(defs.cdClassDef(),
-										   IID_IAAFClassDef,
-										   (IUnknown **)&pNewFillClass));
+  checkResult (defs.cdClassDef()->
+			   CreateInstance(IID_IAAFClassDef,
+							  (IUnknown **)&pNewFillClass));
   checkResult (pNewFillClass->Initialize (kClassAUID_NewFill,
 										  pFillClass,
 										  L"New Filler"));
@@ -214,7 +214,7 @@ static void RegisterNewClass (IAAFDictionary * pDictionary)
 
 #define RegisterOneDef( \
  pDict,   /* Dictionary with which to test */ \
- soid,    /* Stored object ID for the def to test */ \
+ class,   /* class def for the def to test */ \
  \
  initTypeIID, /* IID of type to pass to Init */ \
  initTypeSP, /* Type of smart pointer to use with Init */ \
@@ -231,7 +231,7 @@ static void RegisterNewClass (IAAFDictionary * pDictionary)
   assert (pDict); \
   \
   initTypeSP pInitIfc; \
-  hr = pDict->CreateInstance(soid, initTypeIID, (IUnknown**) &pInitIfc); \
+  hr = class->CreateInstance(initTypeIID, (IUnknown**) &pInitIfc); \
   if (AAFRESULT_FAILED (hr)) return hr; \
   \
   hr = pInitIfc->initInvoc; \
@@ -330,7 +330,7 @@ static HRESULT RegisterDefs (IAAFDictionary * pDict)
   CAAFBuiltinDefs defs (pDict);
 
   RegisterOneDef (/* dictionary*/                  pDict,
-				  /* def object's SOID */          defs.cdTypeDefInt(),
+				  /* def object's class */         defs.cdTypeDefInt(),
 				  /* IID of def to pass to Init */ IID_IAAFTypeDefInt,
 				  /* SP of def to use with Init */ IAAFTypeDefIntSP,
 				  /* Init() invocation */
@@ -342,7 +342,7 @@ static HRESULT RegisterDefs (IAAFDictionary * pDict)
 				  /* reg method on pDict */        RegisterTypeDef);
   
   RegisterOneDef (/* dictionary*/                  pDict,
-				  /* def object's SOID */          defs.cdDataDef(),
+				  /* def object's class */         defs.cdDataDef(),
 				  /* IID of def to pass to Init */ IID_IAAFDefObject,
 				  /* SP of def to use with Init */ IAAFDefObjectSP,
 				  /* Init() invocation */
@@ -354,7 +354,7 @@ static HRESULT RegisterDefs (IAAFDictionary * pDict)
 				  /* reg method on pDict */        RegisterDataDef);
   
   RegisterOneDef (/* dictionary*/                  pDict,
-				  /* def object's SOID */          defs.cdOperationDef(),
+				  /* def object's class */         defs.cdOperationDef(),
 				  /* IID of def to pass to Init */ IID_IAAFDefObject,
 				  /* SP of def to use with Init */ IAAFDefObjectSP,
 				  /* Init() invocation */
@@ -366,7 +366,7 @@ static HRESULT RegisterDefs (IAAFDictionary * pDict)
 				  /* reg method on pDict */        RegisterOperationDef);
   
   RegisterOneDef (/* dictionary*/                  pDict,
-				  /* def object's SOID */          defs.cdParameterDef(),
+				  /* def object's class */         defs.cdParameterDef(),
 				  /* IID of def to pass to Init */ IID_IAAFDefObject,
 				  /* SP of def to use with Init */ IAAFDefObjectSP,
 				  /* Init() invocation */
@@ -378,7 +378,7 @@ static HRESULT RegisterDefs (IAAFDictionary * pDict)
 				  /* reg method on pDict */        RegisterParameterDef);
 
   RegisterOneDef (/* dictionary*/                  pDict,
-				  /* def object's SOID */          defs.cdCodecDef(),
+				  /* def object's class */         defs.cdCodecDef(),
 				  /* IID of def to pass to Init */ IID_IAAFDefObject,
 				  /* SP of def to use with Init */ IAAFDefObjectSP,
 				  /* Init() invocation */
@@ -399,7 +399,7 @@ static HRESULT RegisterDefs (IAAFDictionary * pDict)
   }  
 
   RegisterOneDef (/* dictionary*/                  pDict,
-				  /* def object's SOID */          defs.cdContainerDef(),
+				  /* def object's class */         defs.cdContainerDef(),
 				  /* IID of def to pass to Init */ IID_IAAFDefObject,
 				  /* SP of def to use with Init */ IAAFDefObjectSP,
 				  /* Init() invocation */
@@ -411,7 +411,7 @@ static HRESULT RegisterDefs (IAAFDictionary * pDict)
 				  /* reg method on pDict */        RegisterContainerDef);
   
   RegisterOneDef (/* dictionary*/                  pDict,
-				  /* def object's SOID */          defs.cdInterpolationDefinition(),
+				  /* def object's class */         defs.cdInterpolationDefinition(),
 				  /* IID of def to pass to Init */ IID_IAAFDefObject,
 				  /* SP of def to use with Init */ IAAFDefObjectSP,
 				  /* Init() invocation */
@@ -423,7 +423,7 @@ static HRESULT RegisterDefs (IAAFDictionary * pDict)
 				  /* reg method on pDict */        RegisterInterpolationDef);
   
   RegisterOneDef (/* dictionary*/                  pDict,
-				  /* def object's SOID */          defs.cdPluginDescriptor(),
+				  /* def object's class */         defs.cdPluginDescriptor(),
 				  /* IID of def to pass to Init */ IID_IAAFPluginDescriptor,
 				  /* SP of def to use with Init */ IAAFPluginDescriptorSP,
 				  /* Init() invocation */
@@ -622,18 +622,18 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	  CAAFBuiltinDefs defs (pDictionary);
 
 	  // Create a Composition Mob
-	  checkResult(pDictionary->CreateInstance(defs.cdCompositionMob(),
-											  IID_IAAFMob, 
-											  (IUnknown **)&pMob));
+	  checkResult(defs.cdCompositionMob()->
+				  CreateInstance(IID_IAAFMob, 
+								 (IUnknown **)&pMob));
 		
 	  checkResult(CoCreateGuid((GUID *)&NewMobID));
 	  checkResult(pMob->SetMobID(NewMobID));
 	  checkResult(pMob->SetName(L"AAFDictionaryTest"));
 		
 	  // Add mob slot w/ Sequence
-	  checkResult(pDictionary->CreateInstance(defs.cdSequence(),
-											  IID_IAAFSequence, 
-											  (IUnknown **)&pSequence));		
+	  checkResult(defs.cdSequence()->
+				  CreateInstance(IID_IAAFSequence, 
+								 (IUnknown **)&pSequence));		
 
 	  checkResult(pSequence->Initialize(defs.ddPicture()));
 		
@@ -653,17 +653,15 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 			  checkResult(pDictionary->LookupClassDef(kClassAUID_NewFill,
 													  &pNewFillClassDef));
 			  checkResult
-				(pDictionary->CreateInstance(pNewFillClassDef,
-											 IID_IAAFComponent, 
-											 (IUnknown**)&pComponent));
+				(pNewFillClassDef->CreateInstance(IID_IAAFComponent, 
+												  (IUnknown**)&pComponent));
 			  checkResult(pComponent->SetDataDef(defs.ddPictureWithMatte()));
 			}
 		  else
 			{
 			  checkResult
-				(pDictionary->CreateInstance(defs.cdFiller(),
-											 IID_IAAFComponent, 
-											 (IUnknown**)&pComponent));
+				(defs.cdFiller()->CreateInstance(IID_IAAFComponent, 
+												 (IUnknown**)&pComponent));
 
 			  checkResult(pComponent->SetDataDef(defs.ddPicture()));
 			}

@@ -112,9 +112,8 @@ static HRESULT TestPropertyValue ()
 
   // Let's try to do something interesting with a type definition
   IAAFTypeDefInt * pTypeDef = NULL;
-  hr = pDict->CreateInstance (defs.cdTypeDefInt(),
-							  IID_IAAFTypeDefInt,
-							  (IUnknown **) &pTypeDef);
+  hr = defs.cdTypeDefInt()->CreateInstance (IID_IAAFTypeDefInt,
+											(IUnknown **) &pTypeDef);
   if (! SUCCEEDED (hr)) return hr;
   assert (pTypeDef);
 

@@ -158,9 +158,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pHeader->GetDictionary(&pDictionary));
 		CAAFBuiltinDefs defs (pDictionary);
     
-		checkResult(pDictionary->CreateInstance(defs.cdOperationDef(),
-							  IID_IAAFOperationDef, 
-							  (IUnknown **)&pOperationDef));
+		checkResult(defs.cdOperationDef()->
+					CreateInstance(IID_IAAFOperationDef, 
+								   (IUnknown **)&pOperationDef));
   		checkResult(pDictionary->RegisterOperationDef(pOperationDef));
 		checkResult(pOperationDef->SetDataDef (defs.ddPicture()));
 		checkResult(pOperationDef->SetIsTimeWarp (AAFFalse));
@@ -177,9 +177,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pOperationDef->AppendDegradeToOperation (pOperationDef));
 
 		// Add two parameter defs, so that we can test all functions
-		checkResult(pDictionary->CreateInstance(defs.cdParameterDef(),
-							  IID_IAAFParameterDef, 
-							  (IUnknown **)&pParamDef));
+		checkResult(defs.cdParameterDef()->
+					CreateInstance(IID_IAAFParameterDef, 
+								   (IUnknown **)&pParamDef));
 
 		checkResult(pParamDef->SetDisplayUnits(TEST_PARAM_UNITS));
 		checkResult(pParamDef->QueryInterface(IID_IAAFDefObject, (void **) &pDefObject));
@@ -191,9 +191,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		pParamDef->Release();
 		pParamDef = NULL;
 
-		checkResult(pDictionary->CreateInstance(defs.cdParameterDef(),
-							  IID_IAAFParameterDef, 
-							  (IUnknown **)&pParamDef));
+		checkResult(defs.cdParameterDef()->
+					CreateInstance(IID_IAAFParameterDef, 
+								   (IUnknown **)&pParamDef));
 
 		checkResult(pParamDef->SetDisplayUnits(TEST_PARAM_UNITS));
 		checkResult(pParamDef->QueryInterface(IID_IAAFDefObject, (void **) &pDefObject));

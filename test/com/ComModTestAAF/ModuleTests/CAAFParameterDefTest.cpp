@@ -156,13 +156,13 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pHeader->GetDictionary(&pDictionary));
 		CAAFBuiltinDefs defs (pDictionary);
     
-		checkResult(pDictionary->CreateInstance(defs.cdOperationDef(),
-							  IID_IAAFOperationDef, 
-							  (IUnknown **)&pOperationDef));
+		checkResult(defs.cdOperationDef()->
+					CreateInstance(IID_IAAFOperationDef, 
+								   (IUnknown **)&pOperationDef));
     
-		checkResult(pDictionary->CreateInstance(defs.cdParameterDef(),
-							  IID_IAAFParameterDef, 
-							  (IUnknown **)&pParamDef));
+		checkResult(defs.cdParameterDef()->
+					CreateInstance(IID_IAAFParameterDef, 
+								   (IUnknown **)&pParamDef));
 
 		checkResult(pDictionary->RegisterOperationDef(pOperationDef));
 		checkResult(pDictionary->RegisterParameterDef(pParamDef));

@@ -78,9 +78,9 @@ static HRESULT CreateAAFSequence(IAAFDictionary *pDictionary,
 
 	CAAFBuiltinDefs defs (pDictionary);
 
- 	hr = pDictionary->CreateInstance(defs.cdSequence(),
-						   IID_IAAFSequence, 
-						   (IUnknown **)&pSequence);		
+ 	hr = defs.cdSequence()->
+	  CreateInstance(IID_IAAFSequence, 
+					 (IUnknown **)&pSequence);		
  	if (SUCCEEDED(hr))
 	{
 		pSequence->Initialize(defs.ddSound());
@@ -95,9 +95,9 @@ static HRESULT CreateAAFSequence(IAAFDictionary *pDictionary,
 	    IAAFComponent*	pComponent = NULL;
 			aafLength_t		len = 10;
 
-			hr = pDictionary->CreateInstance(defs.cdFiller(),
-									IID_IAAFComponent, 
-									(IUnknown **)&pComponent);
+			hr = defs.cdFiller()->
+			  CreateInstance(IID_IAAFComponent, 
+							 (IUnknown **)&pComponent);
  			if (FAILED(hr))
 				break;
 

@@ -384,9 +384,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 		// !!!Previous revisions of this file contained code here required to handle external essence
 		
 		// Get a Master MOB Interface
-		checkResult(pDictionary->CreateInstance(defs.cdMasterMob(),
-			IID_IAAFMasterMob, 
-			(IUnknown **)&pMasterMob));
+		checkResult(defs.cdMasterMob()->
+					CreateInstance(IID_IAAFMasterMob, 
+								   (IUnknown **)&pMasterMob));
 		// Get a Mob interface and set its variables.
 		checkResult(pMasterMob->QueryInterface(IID_IAAFMob, (void **)&pMob));
 		checkResult(pMob->GetMobID(&masterMobID));
@@ -400,9 +400,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 		if(dataFile != NULL)
 		{
 			// Make a locator, and attach it to the EssenceDescriptor
-			checkResult(pDictionary->CreateInstance(defs.cdNetworkLocator(),
-				IID_IAAFLocator, 
-				(IUnknown **)&pLocator));		
+			checkResult(defs.cdNetworkLocator()->
+						CreateInstance(IID_IAAFLocator, 
+									   (IUnknown **)&pLocator));		
 			checkResult(pLocator->SetPath (dataFile->dataFilename));
 			testContainer = dataFile->dataFormat;
 		}
@@ -976,9 +976,9 @@ static HRESULT CreateJPEGAAFFile(
 		CAAFBuiltinDefs defs (pDictionary);
 		
 		// Get a Master MOB Interface
-		checkResult(pDictionary->CreateInstance(defs.cdMasterMob(),
-			IID_IAAFMasterMob, 
-			(IUnknown **)&pMasterMob));
+		checkResult(defs.cdMasterMob()->
+					CreateInstance(IID_IAAFMasterMob, 
+								   (IUnknown **)&pMasterMob));
 		// Get a Mob interface and set its variables.
 		checkResult(pMasterMob->QueryInterface(IID_IAAFMob, (void **)&pMob));
 		checkResult(pMob->GetMobID(&masterMobID));
@@ -992,9 +992,9 @@ static HRESULT CreateJPEGAAFFile(
 		if(dataFile != NULL)
 		{
 			// Make a locator, and attach it to the EssenceDescriptor
-			checkResult(pDictionary->CreateInstance(defs.cdNetworkLocator(),
-				IID_IAAFLocator, 
-				(IUnknown **)&pLocator));		
+			checkResult(defs.cdNetworkLocator()->
+						CreateInstance(IID_IAAFLocator, 
+									   (IUnknown **)&pLocator));		
 			checkResult(pLocator->SetPath (dataFile->dataFilename));
 			testContainer = dataFile->dataFormat;
 		}

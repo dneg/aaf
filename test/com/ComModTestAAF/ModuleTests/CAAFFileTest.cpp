@@ -115,9 +115,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	  CAAFBuiltinDefs defs (pDictionary);
  	  
 	  // Create a Mob
-	  checkResult(pDictionary->CreateInstance(defs.cdMob(),
-							  IID_IAAFMob, 
-							  (IUnknown **)&pMob));
+	  checkResult(defs.cdMob()->
+				  CreateInstance(IID_IAAFMob, 
+								 (IUnknown **)&pMob));
     
 	  // Initialize the Mob properties
 	  checkResult(CoCreateGuid((GUID *)&newMobID));

@@ -156,18 +156,18 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		CAAFBuiltinDefs defs (pDictionary);
 		
 		// Create a Composition Mob
-		checkResult(pDictionary->CreateInstance(defs.cdCompositionMob(),
-			IID_IAAFMob, 
-			(IUnknown **)&pMob));
+		checkResult(defs.cdCompositionMob()->
+					CreateInstance(IID_IAAFMob, 
+								   (IUnknown **)&pMob));
 		
 		checkResult(CoCreateGuid((GUID *)&NewMobID));
 		checkResult(pMob->SetMobID(NewMobID));
 		checkResult(pMob->SetName(L"EnumAAFDataDefTest"));
 		
 		// Add mob slot w/ Sequence
-		checkResult(pDictionary->CreateInstance(defs.cdSequence(),
-			IID_IAAFSequence, 
-			(IUnknown **)&pSequence));		
+		checkResult(defs.cdSequence()->
+					CreateInstance(IID_IAAFSequence, 
+								   (IUnknown **)&pSequence));		
 		checkResult(pSequence->Initialize(defs.ddPicture()));
 		
 		//
@@ -179,9 +179,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		{
 			aafLength_t		len = 10;
 			
-			checkResult(pDictionary->CreateInstance(defs.cdFiller(),
-				IID_IAAFComponent, 
-				(IUnknown **)&pComponent));
+			checkResult(defs.cdFiller()->
+						CreateInstance(IID_IAAFComponent, 
+									   (IUnknown **)&pComponent));
 			
 			if(i == 0)
 			{

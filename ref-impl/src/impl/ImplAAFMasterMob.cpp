@@ -175,9 +175,8 @@ AAFRESULT STDMETHODCALLTYPE
 		ref.sourceSlotID = sourceSlotID;
 		ref.startTime = zeroPos;
 		CHECK(GetDictionary(&pDictionary));
-		pSrcClip = (ImplAAFSourceClip *)pDictionary->CreateImplObject(pDictionary->GetBuiltinDefs()->cdSourceClip());
-		if(pSrcClip == NULL)
-			RAISE(E_FAIL);
+		CHECK(pDictionary->GetBuiltinDefs()->cdSourceClip()->
+			  CreateInstance((ImplAAFObject**) &pSrcClip));
 
 		pDictionary->ReleaseReference();
 		pDictionary = NULL;

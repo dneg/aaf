@@ -132,9 +132,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		aafRational_t	audioRate = { 44100, 1 };
 
 		// Create a  Composition Mob
-		checkResult(pDictionary->CreateInstance(defs.cdCompositionMob(),
-								  IID_IAAFCompositionMob, 
-								  (IUnknown **)&pCompMob));
+		checkResult(defs.cdCompositionMob()->
+					CreateInstance(IID_IAAFCompositionMob, 
+								   (IUnknown **)&pCompMob));
 
 		checkResult(pCompMob->QueryInterface(IID_IAAFMob, (void **)&pMob));
 		checkResult(CoCreateGuid((GUID *)&newMobID));
@@ -147,9 +147,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pMob->AppendComment(TagNames, AltComment));
 
 		// Create a master mob to be referenced
-		checkResult(pDictionary->CreateInstance(defs.cdMasterMob(),
-								 IID_IAAFMasterMob, 
-								 (IUnknown **)&pReferencedMob));
+		checkResult(defs.cdMasterMob()->
+					CreateInstance(IID_IAAFMasterMob, 
+								   (IUnknown **)&pReferencedMob));
 
 		checkResult(pReferencedMob->QueryInterface(IID_IAAFMob, (void **)&pRMob));
 		checkResult(CoCreateGuid((GUID *)&referencedMobID));
@@ -159,9 +159,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		// Add some slots
 		for(test = 0; test < 5; test++)
 		{
- 			checkResult(pDictionary->CreateInstance(defs.cdSourceClip(),
-								     IID_IAAFSourceClip, 
-								     (IUnknown **)&sclp));		
+ 			checkResult(defs.cdSourceClip()->
+						CreateInstance(IID_IAAFSourceClip, 
+									   (IUnknown **)&sclp));		
 			// Set the properties for the SourceClip
 			sourceRef.sourceID = referencedMobID;
 			sourceRef.sourceSlotID = 0;

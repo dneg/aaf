@@ -121,9 +121,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		aafRational_t	audioRate = { 44100, 1 };
 		
 		// Create a Mob
-		checkResult(pDictionary->CreateInstance(defs.cdSourceMob(),
-			IID_IAAFSourceMob, 
-			(IUnknown **)&pSourceMob));
+		checkResult(defs.cdSourceMob()->
+					CreateInstance(IID_IAAFSourceMob, 
+								   (IUnknown **)&pSourceMob));
 		
 		checkResult(pSourceMob->QueryInterface (IID_IAAFMob, (void **)&pMob));
 		
@@ -137,9 +137,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 			checkResult(pSourceMob->AddNilReference (test+1, 0, defs.ddSound(), audioRate));
 		}
 		
-		checkResult(pDictionary->CreateInstance(defs.cdFileDescriptor(),
-			IID_IAAFEssenceDescriptor, 
-			(IUnknown **)&edesc));		
+		checkResult(defs.cdFileDescriptor()->
+					CreateInstance(IID_IAAFEssenceDescriptor, 
+								   (IUnknown **)&edesc));		
 		checkResult(edesc->QueryInterface(IID_IAAFFileDescriptor, (void **) &pFileDesc));
 		checkResult(pFileDesc->SetSampleRate (checkSampleRate));
 		checkResult(pFileDesc->SetContainerFormat (checkContainer));

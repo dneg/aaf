@@ -125,18 +125,18 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
  		
 		//Make the first mob
 		// Create a Mob
-		checkResult(pDictionary->CreateInstance(defs.cdSourceMob(),
-								IID_IAAFSourceMob, 
-								(IUnknown **)&pSourceMob));
+		checkResult(defs.cdSourceMob()->
+					CreateInstance(IID_IAAFSourceMob, 
+								   (IUnknown **)&pSourceMob));
 
 		checkResult(pSourceMob->QueryInterface (IID_IAAFMob, (void **)&pMob));
 		checkResult(CoCreateGuid((GUID *)&newMobID));
 		checkResult(pMob->SetMobID(newMobID));
 		checkResult(pMob->SetName(L"TextLocatorTestSourceMOB"));
 		
-		checkResult(pDictionary->CreateInstance(defs.cdTapeDescriptor(),
-								IID_IAAFTapeDescriptor, 
-								(IUnknown **)&pTapeDescriptor));
+		checkResult(defs.cdTapeDescriptor()->
+					CreateInstance(IID_IAAFTapeDescriptor, 
+								   (IUnknown **)&pTapeDescriptor));
 		
 		checkResult(pTapeDescriptor->QueryInterface(IID_IAAFEssenceDescriptor, (void **)&edesc));
 		// Set tape properties
@@ -155,9 +155,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
   
 		// Make a locator, and attach it to the EssenceDescriptor
-		checkResult(pDictionary->CreateInstance(defs.cdTextLocator(),
-								IID_IAAFTextLocator, 
-								(IUnknown **)&pTextLocator));		
+		checkResult(defs.cdTextLocator()->
+					CreateInstance(IID_IAAFTextLocator, 
+								   (IUnknown **)&pTextLocator));		
 		checkResult(pTextLocator->QueryInterface (IID_IAAFLocator, (void **)&pLocator));
 
 		checkResult(pTextLocator->SetName (TEST_NAME));

@@ -107,16 +107,16 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	CAAFBuiltinDefs defs (pDictionary);
 
 	// Create a film mob
-	checkResult(pDictionary->CreateInstance(defs.cdSourceMob(),
-					IID_IAAFSourceMob, 
-					(IUnknown **)&pSourceMob));
+	checkResult(defs.cdSourceMob()->
+				CreateInstance(IID_IAAFSourceMob, 
+							   (IUnknown **)&pSourceMob));
 	checkResult(pSourceMob->QueryInterface(IID_IAAFMob, (void **)&pMob));
 	CoCreateGuid((GUID *)&newMobID);
 	pMob->SetMobID(newMobID);
 	pMob->SetName(L"FilmDescriptorTest");
-	checkResult(pDictionary->CreateInstance(defs.cdFilmDescriptor(),
-							IID_IAAFFilmDescriptor, 
-							(IUnknown **)&pFilmDesc));		
+	checkResult(defs.cdFilmDescriptor()->
+				CreateInstance(IID_IAAFFilmDescriptor, 
+							   (IUnknown **)&pFilmDesc));		
 	checkResult(pFilmDesc->QueryInterface(IID_IAAFEssenceDescriptor, (void **)&pEssDesc));
 	checkResult(pSourceMob->SetEssenceDescriptor(pEssDesc));
 	checkResult(pFilmDesc->SetFilmManufacturer( Manufacturer ));

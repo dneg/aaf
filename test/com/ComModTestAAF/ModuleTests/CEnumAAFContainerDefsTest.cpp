@@ -145,9 +145,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
     checkResult(pHeader->GetDictionary(&pDictionary));
 	CAAFBuiltinDefs defs (pDictionary);
     
-	checkResult(pDictionary->CreateInstance(defs.cdContainerDef(),
-							  IID_IAAFContainerDef, 
-							  (IUnknown **)&pContainerDef));
+	checkResult(defs.cdContainerDef()->
+				CreateInstance(IID_IAAFContainerDef, 
+							   (IUnknown **)&pContainerDef));
     
 	checkResult(pContainerDef->QueryInterface (IID_IAAFDefObject,
                                           (void **)&pDef));
@@ -159,9 +159,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	pDef = NULL;
 	pContainerDef->Release();
 	pContainerDef = NULL;
-	checkResult(pDictionary->CreateInstance(defs.cdContainerDef(),
-							  IID_IAAFContainerDef, 
-							  (IUnknown **)&pContainerDef));
+	checkResult(defs.cdContainerDef()->
+				CreateInstance(IID_IAAFContainerDef, 
+							   (IUnknown **)&pContainerDef));
     
 	checkResult(pContainerDef->QueryInterface (IID_IAAFDefObject,
                                           (void **)&pDef));

@@ -145,9 +145,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
     checkResult(pHeader->GetDictionary(&pDictionary));
 	CAAFBuiltinDefs defs (pDictionary);
     
-	checkResult(pDictionary->CreateInstance(defs.cdInterpolationDefinition(),
-							  IID_IAAFInterpolationDef, 
-							  (IUnknown **)&pInterpolationDef));
+	checkResult(defs.cdInterpolationDefinition()->
+				CreateInstance(IID_IAAFInterpolationDef, 
+							   (IUnknown **)&pInterpolationDef));
     
 	checkResult(pInterpolationDef->QueryInterface (IID_IAAFDefObject,
                                           (void **)&pDef));
@@ -159,9 +159,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	pDef = NULL;
 	pInterpolationDef->Release();
 	pInterpolationDef = NULL;
-	checkResult(pDictionary->CreateInstance(defs.cdInterpolationDefinition(),
-							  IID_IAAFInterpolationDef, 
-							  (IUnknown **)&pInterpolationDef));
+	checkResult(defs.cdInterpolationDefinition()->
+				CreateInstance(IID_IAAFInterpolationDef, 
+							   (IUnknown **)&pInterpolationDef));
     
 	checkResult(pInterpolationDef->QueryInterface (IID_IAAFDefObject,
                                           (void **)&pDef));

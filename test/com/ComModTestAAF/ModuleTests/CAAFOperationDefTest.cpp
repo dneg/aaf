@@ -167,9 +167,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pHeader->GetDictionary(&pDictionary));
 		CAAFBuiltinDefs defs (pDictionary);
     
- 		checkResult(pDictionary->CreateInstance(defs.cdParameterDef(),
-						  IID_IAAFParameterDef, 
-						  (IUnknown **)&pParamDef));
+ 		checkResult(defs.cdParameterDef()->
+					CreateInstance(IID_IAAFParameterDef, 
+								   (IUnknown **)&pParamDef));
 		checkResult(pDictionary->RegisterParameterDef(pParamDef));
 		checkResult(pParamDef->QueryInterface(IID_IAAFDefObject, (void **) &pDefObject));
 		checkResult(pDefObject->Initialize (testParmID, TEST_PARAM_NAME, TEST_PARAM_DESC));
@@ -178,9 +178,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 		for(index = 0; index < 3; index++)
 		{
-			checkResult(pDictionary->CreateInstance(defs.cdOperationDef(),
-				IID_IAAFOperationDef, 
-				(IUnknown **)&pOperationDef));
+			checkResult(defs.cdOperationDef()->
+						CreateInstance(IID_IAAFOperationDef, 
+									   (IUnknown **)&pOperationDef));
 			checkResult(pDictionary->RegisterOperationDef(pOperationDef));
 			
 			checkResult(pOperationDef->QueryInterface(IID_IAAFDefObject, (void **) &pDefObject));

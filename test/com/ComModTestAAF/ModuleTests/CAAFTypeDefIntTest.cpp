@@ -120,9 +120,9 @@ static HRESULT CreateOneTypeDef (IAAFDictionary *  pDict,
 
   CAAFBuiltinDefs defs (pDict);
 
-  checkResult (pDict->CreateInstance (defs.cdTypeDefInt(),
-									  IID_IAAFTypeDefInt,
-									  (IUnknown **) &pTD));
+  checkResult (defs.cdTypeDefInt()->
+			   CreateInstance (IID_IAAFTypeDefInt,
+							   (IUnknown **) &pTD));
   assert (pTD);
   checkResult (pTD->Initialize (id, intSize, isSigned, name));
 

@@ -9,7 +9,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -712,9 +712,9 @@ HRESULT STDMETHODCALLTYPE
 	{
 	    CAAFBuiltinDefs defs (dict);
 
-		checkResult(dict->CreateInstance(defs.cdPluginDescriptor(),
-			IID_IAAFPluginDescriptor, 
-			(IUnknown **)&desc));
+		checkResult(defs.cdPluginDescriptor()->
+					CreateInstance(IID_IAAFPluginDescriptor, 
+								   (IUnknown **)&desc));
 
 		checkResult(desc->Initialize(AVID_PERSONNELRESOURCE_PLUGIN,
 		                       const_cast<wchar_t *>(kPersonnelResourceDisplayName),
@@ -728,9 +728,9 @@ HRESULT STDMETHODCALLTYPE
 		checkResult(desc->SetSupportsAuthentication(AAFFalse));
 
 		// Create the network locator for the Manufacturer's web site: 
-		checkResult(dict->CreateInstance(defs.cdNetworkLocator(),
-			IID_IAAFLocator, 
-			(IUnknown **)&pLoc));
+		checkResult(defs.cdNetworkLocator()->
+					CreateInstance(IID_IAAFLocator, 
+								   (IUnknown **)&pLoc));
 		checkResult(pLoc->SetPath (kManufURL));
 		checkResult(pLoc->QueryInterface(IID_IAAFNetworkLocator, (void **)&pNetLoc));
 		checkResult(desc->SetManufacturerInfo(pNetLoc));
@@ -741,9 +741,9 @@ HRESULT STDMETHODCALLTYPE
 
 		
 		// Create a Network locator to point to our default download site.
-		checkResult(dict->CreateInstance(defs.cdNetworkLocator(),
-			IID_IAAFLocator, 
-			(IUnknown **)&pLoc));
+		checkResult(defs.cdNetworkLocator()->
+					CreateInstance(IID_IAAFLocator, 
+								   (IUnknown **)&pLoc));
 		checkResult(pLoc->SetPath (kDownloadURL));
 		checkResult(desc->AppendLocator(pLoc));
 	

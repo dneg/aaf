@@ -111,9 +111,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
     //Make the first mob
 
 	  // Create a FileMob
-	  checkResult(pDictionary->CreateInstance(defs.cdSourceMob(),
-							IID_IAAFSourceMob, 
-							(IUnknown **)&pSourceMob));
+	  checkResult(defs.cdSourceMob()->
+				  CreateInstance(IID_IAAFSourceMob, 
+								 (IUnknown **)&pSourceMob));
 
 	  checkResult(pSourceMob->QueryInterface (IID_IAAFMob, (void **)&pMob));
 
@@ -121,9 +121,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	  checkResult(pMob->SetMobID(newMobID));
 	  checkResult(pMob->SetName(L"File Mob"));
 	
- 	  checkResult(pDictionary->CreateInstance(defs.cdFileDescriptor(),
-							IID_IAAFFileDescriptor, 
-							(IUnknown **)&edesc));		
+ 	  checkResult(defs.cdFileDescriptor()->
+				  CreateInstance(IID_IAAFFileDescriptor, 
+								 (IUnknown **)&edesc));		
 
     checkResult(pSourceMob->SetEssenceDescriptor (edesc));
 
@@ -134,9 +134,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
     pMob = NULL;
 
 	  // Create a MasterMob
-	  checkResult(pDictionary->CreateInstance(defs.cdMasterMob(),
-							IID_IAAFMob, 
-							(IUnknown **)&pMob));
+	  checkResult(defs.cdMasterMob()->
+				  CreateInstance(IID_IAAFMob, 
+								 (IUnknown **)&pMob));
 
 	  checkResult(CoCreateGuid((GUID *)&newMobID)); // hack: we need a utility function.
 	  checkResult(pMob->SetMobID(newMobID));
@@ -149,9 +149,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
     pMob = NULL;
 
 	  // Create a CompositionMob
-	  checkResult(pDictionary->CreateInstance(defs.cdCompositionMob(),
-							  IID_IAAFMob, 
-							  (IUnknown **)&pMob));
+	  checkResult(defs.cdCompositionMob()->
+				  CreateInstance(IID_IAAFMob, 
+								 (IUnknown **)&pMob));
 
 	  checkResult(CoCreateGuid((GUID *)&newMobID)); // hack: we need a utility function.
 	  checkResult(pMob->SetMobID(newMobID));

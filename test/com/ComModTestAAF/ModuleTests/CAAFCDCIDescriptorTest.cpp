@@ -29,13 +29,6 @@
 
 
 
-/***********************************************\
-*	Stub only.   Implementation not yet added	*
-\***********************************************/
-
-
-
-
 #include "AAF.h"
 #include "AAFResult.h"
 
@@ -209,9 +202,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
   {
 	  CAAFBuiltinDefs defs (pDictionary);
 	  // Create a source mob
-	  hr = pDictionary->CreateInstance(defs.cdSourceMob(),
-						  IID_IAAFSourceMob, 
-						  (IUnknown **)&pSourceMob);
+	  hr = defs.cdSourceMob()->
+		CreateInstance(IID_IAAFSourceMob, 
+					   (IUnknown **)&pSourceMob);
 	  if (SUCCEEDED(hr))
 	  {
 		  IAAFMob*	pMob = NULL;
@@ -224,9 +217,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 			  CoCreateGuid((GUID *)&newMobID);
 			  pMob->SetMobID(newMobID);
 			  pMob->SetName(L"CDCIDescriptorTest");
-			  hr = pDictionary->CreateInstance(defs.cdCDCIDescriptor(),
-									  IID_IAAFCDCIDescriptor, 
-									  (IUnknown **)&pCDCIDesc);		
+			  hr = defs.cdCDCIDescriptor()->
+				CreateInstance(IID_IAAFCDCIDescriptor, 
+							   (IUnknown **)&pCDCIDesc);		
 			  if (SUCCEEDED(hr))
 			  {
 				  // Add all CDCI properties

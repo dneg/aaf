@@ -148,9 +148,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
     checkResult(pHeader->GetDictionary(&pDictionary));
 	CAAFBuiltinDefs defs (pDictionary);
     
-	checkResult(pDictionary->CreateInstance(defs.cdCodecDef(),
-							  IID_IAAFCodecDef, 
-							  (IUnknown **)&pCodecDef));
+	checkResult(defs.cdCodecDef()->
+				CreateInstance(IID_IAAFCodecDef, 
+							   (IUnknown **)&pCodecDef));
     
 	checkResult(pCodecDef->QueryInterface (IID_IAAFDefObject,
                                           (void **)&pDef));
@@ -163,9 +163,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	pDef = NULL;
 	pCodecDef->Release();
 	pCodecDef = NULL;
-	checkResult(pDictionary->CreateInstance(defs.cdCodecDef(),
-							  IID_IAAFCodecDef, 
-							  (IUnknown **)&pCodecDef));
+	checkResult(defs.cdCodecDef()->
+				CreateInstance(IID_IAAFCodecDef, 
+							   (IUnknown **)&pCodecDef));
     
 	checkResult(pCodecDef->QueryInterface (IID_IAAFDefObject,
                                           (void **)&pDef));

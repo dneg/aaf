@@ -120,25 +120,25 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		CAAFBuiltinDefs defs (pDictionary);
 
 		//Make the MOB to be referenced
-		checkResult(pDictionary->CreateInstance(defs.cdMasterMob(),
-								 IID_IAAFMob, 
-								 (IUnknown **)&pReferencedMob));
+		checkResult(defs.cdMasterMob()->
+					CreateInstance(IID_IAAFMob, 
+								   (IUnknown **)&pReferencedMob));
 		checkResult(CoCreateGuid((GUID *)&referencedMobID));
 		checkResult(pReferencedMob->SetMobID(referencedMobID));
 		checkResult(pReferencedMob->SetName(L"AAFSourceClipTest::ReferencedMob"));
 
 		// Create a Mob
-		checkResult(pDictionary->CreateInstance(defs.cdCompositionMob(),
-								 IID_IAAFMob, 
-								 (IUnknown **)&pMob));
+		checkResult(defs.cdCompositionMob()->
+					CreateInstance(IID_IAAFMob,
+								   (IUnknown **)&pMob));
 		checkResult(CoCreateGuid((GUID *)&newMobID));
 		checkResult(pMob->SetMobID(newMobID));
 		checkResult(pMob->SetName(L"AAFSourceClipTest"));
 
 		// Create a SourceClip
-		checkResult(pDictionary->CreateInstance(defs.cdSourceClip(),
-								 IID_IAAFSegment, 
-								 (IUnknown **)&seg));
+		checkResult(defs.cdSourceClip()->
+					CreateInstance(IID_IAAFSegment, 
+								   (IUnknown **)&seg));
 		checkResult(seg->QueryInterface (IID_IAAFComponent,
                                           (void **)&comp));
 		checkResult(pDictionary->LookupDataDef(dataDef, &pDataDef));
