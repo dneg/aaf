@@ -14,9 +14,7 @@
 #undef WIN32_LEAN_AND_MEAN
 
 
-#ifndef __CAAFAIFCDescriptor_h__
-#include "CAAFAIFCDescriptor.h"
-#endif
+#include "AAF.h"
 
 #include <iostream.h>
 #include <stdio.h>
@@ -386,7 +384,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	return hr;
 }
 
-HRESULT CAAFAIFCDescriptor::test()
+extern "C" HRESULT CAAFAIFCDescriptor_test()
 {
 	aafWChar*	pFileName = L"AAFAIFCDescriptorTest.aaf";
 	HRESULT		hr = AAFRESULT_NOT_IMPLEMENTED;
@@ -399,7 +397,7 @@ HRESULT CAAFAIFCDescriptor::test()
 	}
 	catch (...)
 	{
-		cerr << "CAAFAIFCDescriptor::test...Caught general C++ exception!" << endl; 
+		cerr << "CAAFAIFCDescriptor_test...Caught general C++ exception!" << endl; 
 	}
 
 	return hr;
