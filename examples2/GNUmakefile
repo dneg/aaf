@@ -48,7 +48,7 @@ axPluginInfo:
 axPlugin:
 	cd axPlugin && $(MAKE)
 
-.PHONY: axPlugin
+.PHONY: axFileGen
 axFileGen:
 	cd axFileGen && $(MAKE)
 
