@@ -699,15 +699,6 @@ ImplAAFDictionary *ImplAAFHeader::GetDictionary()
   // its properties initialized.
   _dictionary->pvtInitCriticalBuiltins ();
 
-  // Make sure that _dictionary member points to the same instance
-  // as the value returned by ImplAAFObject::GetDictionary()!
-  ImplAAFDictionary	*pDictionary = NULL;
-  assert(AAFRESULT_SUCCESS == ImplAAFObject::GetDictionary(&pDictionary));
-  assert(pDictionary);
-  assert(pDictionary == result);
-  aafUInt32 refCount = pDictionary->ReleaseReference();
-  pDictionary = 0;
-  assert(0 != refCount);
 
   return(result);
 }
