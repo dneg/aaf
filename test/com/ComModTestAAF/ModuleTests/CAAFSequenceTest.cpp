@@ -63,7 +63,6 @@ inline void checkExpression(bool expression, HRESULT r)
 
 static HRESULT OpenAAFFile(aafWChar*			pFileName,
 						   aafMediaOpenMode_t	mode,
-						   // IAAFSession**		ppSession,
 						   IAAFFile**			ppFile,
 						   IAAFHeader**			ppHeader)
 {
@@ -81,38 +80,15 @@ static HRESULT OpenAAFFile(aafWChar*			pFileName,
 	ProductInfo.productID = -1;
 	ProductInfo.platform = NULL;
 
-	/*
-	hr = CoCreateInstance(CLSID_AAFSession,
-						   NULL, 
-						   CLSCTX_INPROC_SERVER, 
-						   IID_IAAFSession, 
-						   (void **)ppSession);
-	*/
-	hr = CoCreateInstance(CLSID_AAFFile,
-						   NULL, 
-						   CLSCTX_INPROC_SERVER, 
-						   IID_IAAFFile, 
-						   (void **)ppFile);
-	if (AAFRESULT_SUCCESS != hr)
-		return hr;
-    hr = (*ppFile)->Initialize();
-	if (AAFRESULT_SUCCESS != hr)
-		return hr;
-
-	// hr = (*ppSession)->SetDefaultIdentification(&ProductInfo);
-	// if (AAFRESULT_SUCCESS != hr)
-	// 	return hr;
 
 	switch (mode)
 	{
 	case kMediaOpenReadOnly:
-		// hr = (*ppSession)->OpenReadFile(pFileName, ppFile);
-		hr = (*ppFile)->OpenExistingRead(pFileName, 0);
+		hr = AAFFileOpenExistingRead(pFileName, 0, ppFile);
 		break;
 
 	case kMediaOpenAppend:
-		// hr = (*ppSession)->CreateFile(pFileName, kAAFRev1, ppFile);
-		hr = (*ppFile)->OpenNewModify(pFileName, 0, &ProductInfo);
+		hr = AAFFileOpenNewModify(pFileName, 0, &ProductInfo, ppFile);
 		break;
 
 	default:
@@ -122,8 +98,6 @@ static HRESULT OpenAAFFile(aafWChar*			pFileName,
 
 	if (FAILED(hr))
 	{
-		// (*ppSession)->Release();
-		// *ppSession = NULL;
 		(*ppFile)->Release();
 		*ppFile = NULL;
 		return hr;
@@ -132,8 +106,6 @@ static HRESULT OpenAAFFile(aafWChar*			pFileName,
   	hr = (*ppFile)->GetHeader(ppHeader);
 	if (FAILED(hr))
 	{
-		// (*ppSession)->Release();
-		// *ppSession = NULL;
 		(*ppFile)->Release();
 		*ppFile = NULL;
 		return hr;

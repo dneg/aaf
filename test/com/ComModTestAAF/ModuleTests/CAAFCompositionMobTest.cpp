@@ -94,13 +94,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
     
 		// Create the new AAF file.
-    checkResult(CoCreateInstance(CLSID_AAFFile,
-						     NULL, 
-						     CLSCTX_INPROC_SERVER, 
-						     IID_IAAFFile, 
-						     (void **)&pFile));
-	  checkResult(pFile->Initialize());
-	  checkResult(pFile->OpenNewModify(pFileName, 0, &ProductInfo));
+	  checkResult(AAFFileOpenNewModify(pFileName, 0, &ProductInfo, &pFile));
     bFileOpen = true;
 
     // We can't really do anthing in AAF without the header.
@@ -165,7 +159,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 {
 	IAAFFile *					pFile = NULL;
 	IAAFHeader *				pHeader = NULL;
-
+ 
 	IEnumAAFMobs*				pMobIter = NULL;
 	IAAFMob*					pMob = NULL;
 	IAAFCompositionMob*			pCompMob = NULL;
@@ -191,14 +185,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
   
   try
   {
-	  checkResult(CoCreateInstance(CLSID_AAFFile,
-						     NULL, 
-						     CLSCTX_INPROC_SERVER, 
-						     IID_IAAFFile, 
-						     (void **)&pFile));
-
-	  checkResult(pFile->Initialize());
-		checkResult(pFile->OpenExistingRead(pFileName, 0));
+		checkResult(AAFFileOpenExistingRead(pFileName, 0, &pFile));
 	  checkResult(pFile->GetHeader(&pHeader));
 
 		// Get the number of mobs in the file (should be one)
