@@ -250,10 +250,7 @@ void OMWeakReferenceProperty<ReferencedObject>::save(void) const
 
   OMPropertyTag tag = targetTag();
 
-  const OMUniqueObjectIdentification& id = _reference.identification();
-  store()->save(_propertyId, _storedForm, id, tag, _keyPropertyId);
-
-  _reference.save();
+  store()->save(*this);
 }
 
   // @mfunc Close this <c OMWeakReferenceProperty>.
@@ -280,16 +277,7 @@ void OMWeakReferenceProperty<ReferencedObject>::restore(
 {
   TRACE("OMWeakReferenceProperty<ReferencedObject>::restore");
 
-  OMUniqueObjectIdentification id;
-  OMPropertyTag tag;
-  ASSERT("Sizes match", (sizeof(tag) + sizeof(OMPropertyId) +
-                         sizeof(OMKeySize) + sizeof(id)) == externalSize);
-  OMPropertyId keyPropertyId;
-  store()->restore(_propertyId, _storedForm, id, tag, keyPropertyId);
-  ASSERT("Consistent key property ids", keyPropertyId == _keyPropertyId);
-  _targetTag = tag;
-  _reference = OMWeakObjectReference(this, id, _targetTag);
-  _reference.restore();
+  store()->restore(*this, externalSize);
   setPresent();
 }
 
