@@ -252,7 +252,6 @@ protected:
   
 private:
 	OMDataStreamProperty * _streamProperty;
-	ImplAAFRoot * _propertyContainer; // save reference to owning container.
 };
 
 //
