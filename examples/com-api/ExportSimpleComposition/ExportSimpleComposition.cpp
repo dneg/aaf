@@ -17,7 +17,7 @@
 #include <stdlib.h>
 
 #if defined(macintosh) || defined(_MAC)
-#include <console.h> /* Mac command line window */
+#include "DataInput.h"
 #endif
 
 #include "AAFTypes.h"
@@ -857,7 +857,8 @@ int main(int argumentCount, char* argumentVector[])
 {
 	/* console window for mac */
 	#if defined(macintosh) || defined(_MAC)
-	argumentCount = ccommand(&argumentVector);
+	char dataFile[] = "ExportSimpleComposition.inp";
+	getInputData(&argumentCount, argumentVector, dataFile);
 	#endif
 
 
@@ -901,6 +902,10 @@ int main(int argumentCount, char* argumentVector[])
 	printf("Working on file %s using ReadSamples\n", pFileName);
 	ProcessAAFFile(pwFileName, testStandardCalls);
 	
+	#ifdef _MAC
+ 	cleanUpInputData(argumentCount, argumentVector);
+	#endif
+
 	printf("DONE\n\n");
 
 	return(0);
