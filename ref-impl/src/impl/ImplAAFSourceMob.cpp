@@ -658,20 +658,16 @@ AAFRESULT STDMETHODCALLTYPE
 // SearchSource()
 //
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFSourceMob::SearchSource (aafSlotID_t  /*slotID*/,
-                           aafPosition_t  /*offset*/,
-                           aafMobKind_t  /*mobKind*/,
-                           aafMediaCriteria_t *  /*pMediaCrit*/,
-                           aafEffectChoice_t *  /*pEffectChoice*/,
-                           ImplAAFComponent ** /*ppThisCpnt*/,
-                           ImplAAFFindSourceInfo ** /*ppSourceInfo*/)
+    ImplAAFSourceMob::SearchSource (aafSlotID_t slotID,
+                           aafPosition_t  offset,
+                           aafMobKind_t  mobKind,
+                           aafMediaCriteria_t *pMediaCrit,
+                           aafEffectChoice_t *pEffectChoice,
+                           ImplAAFComponent **ppThisCpnt,
+                           ImplAAFFindSourceInfo **ppSourceInfo)
 {
-#if FULL_TOOLKIT
-	return(InternalMobSearchSource(slotID, offset, mobKind, mediaCrit,
-								effectChoice, thisCpnt, sourceInfo));
-#else
-	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
+	return(InternalSearchSource(slotID, offset, mobKind, pMediaCrit, pEffectChoice,
+										   ppThisCpnt, ppSourceInfo));
 }
 
 
