@@ -444,9 +444,6 @@ public:
     GetNumContainerDefs
         (aafUInt32 *  pNumContainerDefs);  //@parm [out,retval] Total number of pluggable defs
 
-  virtual AAFRESULT
-    GetNthContainerDef (aafInt32 index, ImplAAFContainerDef **ppEnum);
-
   // make sure built-in types are initialized.
   void InitBuiltins();
 
@@ -545,13 +542,13 @@ private:
   ImplAAFBuiltinDefs    * _pBuiltinDefs;
 
   OMStrongReferenceSetProperty<ImplAAFCodecDef>			   _codecDefinitions;
-  OMStrongReferenceVectorProperty<ImplAAFContainerDef>     _containerDefinitions;
+  OMStrongReferenceSetProperty<ImplAAFContainerDef>        _containerDefinitions;
   OMStrongReferenceVectorProperty<ImplAAFOperationDef>     _operationDefinitions;
   OMStrongReferenceVectorProperty<ImplAAFParameterDef>     _parameterDefinitions;
   OMStrongReferenceSetProperty<ImplAAFTypeDef>			   _typeDefinitions;
   OMStrongReferenceSetProperty<ImplAAFClassDef>		       _classDefinitions;
   OMStrongReferenceVectorProperty<ImplAAFInterpolationDef> _interpolationDefinitions;
-  OMStrongReferenceVectorProperty<ImplAAFDataDef>          _dataDefinitions;
+  OMStrongReferenceVectorProperty<ImplAAFDataDef>             _dataDefinitions;
   OMStrongReferenceVectorProperty<ImplAAFPluginDescriptor> _pluginDefinitions;
 
   aafInt32 _lastGeneratedPid;	// must be signed!

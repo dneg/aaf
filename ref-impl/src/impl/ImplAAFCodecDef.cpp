@@ -373,7 +373,8 @@ AAFRESULT STDMETHODCALLTYPE
 	if(*ppEnum == NULL)
 		return(AAFRESULT_NOMEMORY);
 	(*ppEnum)->SetEnumProperty(this, &_dataDefs);
-
+//	(*ppEnum)->SetIterator(this,
+//				OMReferenceContainerIterator<ImplAAFDataDef>* iterator);
 	return(AAFRESULT_SUCCESS);
 }
 
