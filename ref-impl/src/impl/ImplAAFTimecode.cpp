@@ -179,6 +179,8 @@ AAFRESULT STDMETHODCALLTYPE
 aafErr_t ImplAAFTimecode::OffsetToTimecodeClip(aafPosition_t offset, ImplAAFTimecode **result,
 												aafPosition_t *tcStartPos)
 {
+  	if(result == NULL)
+		return(AAFRESULT_NULL_PARAM);
 	*result = this;
 	CvtInt32toInt64(0, tcStartPos);
 	return(OM_ERR_NONE);
@@ -187,83 +189,4 @@ aafErr_t ImplAAFTimecode::OffsetToTimecodeClip(aafPosition_t offset, ImplAAFTime
 extern "C" const aafClassID_t CLSID_AAFTimecode;
 
 OMDEFINE_STORABLE(ImplAAFTimecode, CLSID_AAFTimecode);
-
-#if FULL_TOOLKIT
-/*************************************************************************
- * Function: omfiTimecodeNew()
- *
- *      This function creates a new timecode clip with the given
- *      property values.  The timecode value is represented with an
- *      aafTimecode_t struct consisting of startFrame, drop, and fps.
- *
- *      This function supports both 1.x and 2.x files.
- *
- * Argument Notes:
- *
- * ReturnValue:
- *		Error code (see below).
- *
- * Possible Errors:
- *		Standard errors (see top of file).
- *************************************************************************/
-AAFTimecode::AAFTimecode(AAFFile *file, OMLObject obj)
-{
-	Init(file, obj);
-}
-
-AAFTimecode::AAFTimecode(
-    AAFFile * file,               /* IN - File Handle */
-	aafLength_t length,          /* IN - Length Property Value */
-	aafTimecode_t timecode)      /* IN - Timecode Value (startFrame,
-								  *      drop, fps)
-								  */
-{
-	AAFObject * tmpTCClip = NULL;
-	AAFDataKind * datakind = NULL;
-	aafErr_t aafError = OM_ERR_NONE;
-	
-	XPROTECT(_file)
-	  {
-		CreatePersistant(file, "TCCP");
-
-		/* Set datakind object for timecode from cache */
-		if (!_head->DatakindLookup(TIMECODEKIND, &datakind, &aafError))
-		  {
-			RAISE(OM_ERR_INVALID_DATAKIND);
-		  }
-
-		CHECK(SetNewProps(length, datakind));
-		_timecode = timecode;
-	  }
-
-	XEXCEPT
-	  {
-	  }
-	XEND_VOID;
-}
-
-/*************************************************************************
- * Function: omfiTimecodeGetInfo()
- *************************************************************************/
-aafErr_t AAFTimecode::GetTimecode(
-	aafTimecode_t *timecode)  /* OUT - Timecode (startFrame, drop, fps) */
-{
-	aafAssertValidFHdl(_file);
-	aafAssert(timecode != NULL, _file, OM_ERR_NULL_PARAM);
-
-	*timecode = _timecode;
-
-	return(OM_ERR_NONE);
-}
-
-aafErr_t AAFTimecode::SegmentOffsetToTC(aafPosition_t offset, aafTimecode_t *tc, aafBool *found)
-{
-}
-
-
-aafErr_t AAFTimecode::SegmentTCToOffset(aafTimecode_t tc, aafRational_t editRate, aafFrameOffset_t *offset, aafBool *found)
-{
-}
-
-
-#endif
+ 
