@@ -34,7 +34,7 @@
 #endif
 
 #include "ImplAAFDictionary.h"
-#include "ImplAAFPluggableDef.h"
+#include "ImplAAFDefObject.h"
 #include "ImplAAFParameterDef.h"
 #include "ImplAAFTypeDef.h"
 #include "ImplAAFHeader.h"
@@ -157,7 +157,7 @@ AAFRESULT STDMETHODCALLTYPE
 	aafUID_t			newUID;
 	ImplAAFHeader		*head = NULL;
 	ImplAAFDictionary	*dict = NULL;
-	ImplAAFPluggableDef	*def;
+	ImplAAFTypeDef		*def;
 
 	if(pTypeDef == NULL)
 		return AAFRESULT_NULL_PARAM;
@@ -167,7 +167,7 @@ AAFRESULT STDMETHODCALLTYPE
 		CHECK(pTypeDef->GetAUID(&newUID));
 		CHECK(pTypeDef->MyHeadObject(&head));
 		CHECK(head->GetDictionary(&dict));
-		if(dict->LookupPluggableDef(&newUID, &def) == AAFRESULT_SUCCESS)
+		if(dict->LookupType(&newUID, &def) == AAFRESULT_SUCCESS)
 			def->ReleaseReference();
 
 		_type = newUID;
@@ -204,7 +204,7 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 		CHECK(MyHeadObject(&head));
 		CHECK(head->GetDictionary(&dict));
-		CHECK(dict->LookupPluggableDef(&_type, (ImplAAFPluggableDef **)ppTypeDef) == AAFRESULT_SUCCESS);
+		CHECK(dict->LookupType(&_type, ppTypeDef) == AAFRESULT_SUCCESS);
 		(*ppTypeDef)->AcquireReference();
 		head->ReleaseReference();
 		head = NULL;
