@@ -321,8 +321,13 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	  bFileOpen = true;
   
     // We can't really do anthing in AAF without the header.
-		checkResult(pFile->GetHeader(&pHeader));
+	checkResult(pFile->GetHeader(&pHeader));
 
+    // Get the number of mobs to force creation of the content storage.
+	// This is temporary as the content storage should be created by
+	// the call to OpenNewModify above.
+    aafNumSlots_t n;
+    checkResult(pHeader->GetNumMobs(kAllMob, &n));
 
     // Get the AAF Dictionary so that we can create valid AAF objects.
     checkResult(pHeader->GetDictionary(&pDictionary));
