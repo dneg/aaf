@@ -299,22 +299,22 @@ void OMMemoryRawStorage::writeAt(OMUInt64 /* position */,
   // @mfunc May this <c OMMemoryRawStorage> be changed in size ?
   //   @rdesc Always <e bool.true>.
   //   @this const
-bool OMMemoryRawStorage::isSizeable(void) const
+bool OMMemoryRawStorage::isExtendible(void) const
 {
-  TRACE("OMMemoryRawStorage::isSizeable");
+  TRACE("OMMemoryRawStorage::isExtendible");
 
   return true;
 }
 
   // @mfunc The current size of this <c OMMemoryRawStorage> in bytes.
-  //        precondition - isSizeable()
+  //        precondition - isExtendible()
   //   @rdesc The current size of this <c OMMemoryRawStorage> in bytes.
   //   @this const
 OMUInt64 OMMemoryRawStorage::size(void) const
 {
   TRACE("OMMemoryRawStorage::size");
 
-  PRECONDITION("Sizeable", isSizeable());
+  PRECONDITION("Extendible", isExtendible());
 
   OMUInt64 result = _size;
   POSTCONDITION("Consistent size and page count",
@@ -330,14 +330,14 @@ OMUInt64 OMMemoryRawStorage::size(void) const
   //        <c OMMemoryRawStorage> is truncated. Truncation may also result
   //        in the current position for <f read()> and <f write()>
   //        being set to <mf OMMemoryRawStorage::size>.
-  //        precondition - isSizeable()
+  //        precondition - isExtendible()
   //   @parm The new size of this <c OMMemoryRawStorage> in bytes.
   //   @devnote There is no ANSI way of truncating a file in place.
 void OMMemoryRawStorage::setSize(OMUInt64 newSize)
 {
   TRACE("OMMemoryRawStorage::setSize");
 
-  PRECONDITION("Sizeable", isSizeable());
+  PRECONDITION("Extendible", isExtendible());
 
   if (newSize != _size) {
 
