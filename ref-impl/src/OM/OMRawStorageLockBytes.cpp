@@ -128,7 +128,7 @@ OMRawStorageLockBytes::Flush(void)
 {
   TRACE("OMRawStorageLockBytes::Flush");
 
-  // TBS
+  _rawStorage->synchronize();
   return NOERROR;
 }
 
