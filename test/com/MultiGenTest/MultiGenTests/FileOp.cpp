@@ -44,11 +44,23 @@ public:
   {
     #define ADD_KIND( X ) \
     _kindMap[ string( #X ) ] = kAAFFileKind_Aaf##X;
+#if AAF_MAJOR_VERSION == 1 && AAF_MINOR_VERSION == 0 && AAF_MAINT_RELEASE < 2
+
+    ADD_KIND( MSSBinary );
+    ADD_KIND( SSSBinary );
+    ADD_KIND( M4KBinary );
+    ADD_KIND( S4KBinary );
+    
+#elif AAF_MAJOR_VERSION >= 1 && AAF_MINOR_VERSION >= 0
 
     ADD_KIND( M512Binary );
     ADD_KIND( S512Binary );
     ADD_KIND( M4KBinary );
-    ADD_KIND( S4KBinary );
+    ADD_KIND( S4KBinary )
+
+#else
+#error unsupported version
+#endif
   }
 
   ~KindMap()
