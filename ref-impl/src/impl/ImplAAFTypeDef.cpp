@@ -17,6 +17,9 @@
 #include <assert.h>
 #include <string.h>
 
+#if defined(macintosh) || defined(_MAC)
+#include <wstring.h>
+#endif
 
 ImplAAFTypeDef::ImplAAFTypeDef ()
 {}
