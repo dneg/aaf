@@ -144,7 +144,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		pDefObject->Release();
 		pDefObject = NULL;
 
-//!!!Not testing the SetAUID on AAFDefObject
+//!!!Not testing the Init() on AAFDefObject
 		checkResult(pOperationDef->SetDataDefinitionID (&testDataDef));
 		checkResult(pOperationDef->SetIsTimeWarp (AAFFalse));
 		checkResult(pOperationDef->SetNumberInputs (TEST_NUM_INPUTS));
