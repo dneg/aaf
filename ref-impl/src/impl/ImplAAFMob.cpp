@@ -39,8 +39,16 @@
 #include "ImplAAFMob.h"
 #endif
 
+#include "ImplAAFHeader.h"
+#include "ImplAAFContentStorage.h"
+#include "ImplAAFObjectCreation.h"
+
 #include <assert.h>
 #include "AAFResult.h"
+#include "aafCvt.h"
+
+extern "C" const aafClassID_t CLSID_AAFMobSlot;
+extern "C" const aafClassID_t CLSID_EnumAAFMobSlots;
 
 ImplAAFMob::ImplAAFMob ()
 : _mobID(			PID_MOB_MOBID,			"MobID"),
@@ -48,7 +56,13 @@ ImplAAFMob::ImplAAFMob ()
   _creationTime(    PID_MOB_CREATE_TIME,	"CreateTime"),
   _lastModified(    PID_MOB_MOD_TIME,		"ModTime"),
   _slots(			PID_MOB_SLOTS,			"Slots")
-{}
+{
+	_persistentProperties.put(_mobID.address());
+	_persistentProperties.put(_name.address());
+	_persistentProperties.put(_creationTime.address());
+	_persistentProperties.put(_lastModified.address());
+	_persistentProperties.put(_slots.address());
+}
 
 
 ImplAAFMob::~ImplAAFMob ()
@@ -105,6 +119,7 @@ static void AAFStringToStringProperty(OMStringProperty& stringProperty, aafStrin
 	char* string;
 	string = new char[aafString->length + 1];	//!!!S/b more than we need
 	wcstombs(string, aafString->value, aafString->length);
+	string[aafString->length] = '\0';
 	stringProperty = string;
   //!!!Leaking string?
 }
@@ -122,14 +137,6 @@ AAFRESULT STDMETHODCALLTYPE
 
 	return(AAFRESULT_SUCCESS); 
 }
-
-
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFMob::GetEditRate (aafRational_t *  /*editRate*/)
-{
-  return AAFRESULT_NOT_IMPLEMENTED;
-}
-
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFMob::GetModTime (aafTimeStamp_t *lastModified)
@@ -159,62 +166,16 @@ AAFRESULT STDMETHODCALLTYPE
   return AAFRESULT_NOT_IMPLEMENTED;
 }
 
-
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFMob::GetNumTracks (aafNumTracks_t *  /*numTracks*/)
+    ImplAAFMob::GetNumSlots (aafNumSlots_t *pNumSlots)
 {
-#if FULL_TOOLKIT
-   aafInt32 tmpNumTracks = 0, numSlots, loop;
-    AAFMobSlot * slot = NULL;
-    AAFObject * tmp = NULL;
-	aafErr_t aafError = OM_ERR_NONE;
+   size_t numSlots;
 
-	*numTracks = 0;
-	aafAssertValidFHdl(_file);
-
-	XPROTECT(_file)
-	  {
-		/* kAAFRev2x */
-		CHECK(GetNumSlots(&numSlots));
+	_slots.getSize(numSlots);
 	
-		for (loop = 1; loop <= numSlots; loop++)
-		  {
-			CHECK(ReadNthObjRefArray(OMMOBJSlots, &tmp, loop));
-			slot = (AAFMobSlot *)tmp;	//!!CASTING
-			if (slot->MobSlotIsTrack(&aafError))
-			  {
-				if (aafError == OM_ERR_NONE)
-				  tmpNumTracks++;
-				else
-				  {
-					RAISE(aafError);
-				  }
-			  }
+	*pNumSlots = numSlots;
 
-			/* Release Bento reference, so the useCount is decremented */
-			slot->ReleaseObject();
-	       } /* for */
-	  } /* XPROTECT */
-
-	XEXCEPT
-	  {
-		*numTracks = 0;
-		return(XCODE());
-	  }
-	XEND;
-
-	*numTracks = tmpNumTracks;
-	return(OM_ERR_NONE);
-#else
-  return AAFRESULT_NOT_IMPLEMENTED;
-#endif
-}
-
-
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFMob::GetNumSlots (aafNumSlots_t *  /*numSlots*/)
-{
-  return AAFRESULT_NOT_IMPLEMENTED;
+	return(AAFRESULT_SUCCESS);
 }
 
 
@@ -245,37 +206,35 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFMob::SetIdentity (aafUID_t *  /*mobID*/)
+    ImplAAFMob::SetIdentity (aafUID_t *newMobID)
 {
-#if FULL_TOOLKIT
     aafUID_t oldMobID;
     aafBool hasMobID = AAFFalse;
-	AAFObject * head = NULL;
-	AAFMob	*foundMob = NULL;
+	ImplAAFMob	*foundMob = NULL;
 	aafInt32 index = 0;
-	aafProperty_t prop = OMNoProperty;
 	aafErr_t aafError = OM_ERR_NONE;
-	AAFMob *mobPtr;
-	
-	aafAssertValidFHdl(_file);
-
-	XPROTECT(_file)
+	ImplAAFMob *mobPtr = NULL;
+	ImplAAFHeader *head;
+	ImplAAFContentStorage	*cstore;
+	XPROTECT()
 	  {
 		/* Remember the old mob ID so it can be removed from the hash table */
-		hasMobID = IsPropertyPresent(OMMOBJMobID, OMUID);
-		if(hasMobID)
-		{
-			CHECK(GetMobID(&oldMobID));
-		}
+		oldMobID = _mobID;
 
-		/* Does a mob with the new ID already exist?  If so, return error */
-		aafError = _file->LookupMob(newMobID, &mobPtr) ;
-		if(aafError == OM_ERR_NONE)
+//!!! JeffB; Put this back when we can get the head object from any object
+//!!!		CHECK(MyHeadObject(&head));
+//!!!		cstore = head->GetContentStorage();
+		
+			/* Does a mob with the new ID already exist?  If so, return error */
+
+//!!! JeffB; Put this back when we can get the head object from any object
+//!!!		aafError = cstore->LookupMob(newMobID, &mobPtr) ;
+		if(aafError == AAFRESULT_SUCCESS)
 		  {
 			if(mobPtr == NULL)
 				{
-				_mobID = newMobID;
-				CHECK(_file->FillOutStubMob(newMobID, this));
+				_mobID = *newMobID;
+//!!!				CHECK(_file->FillOutStubMob(newMobID, this));
 				}
 			else
 			{
@@ -284,7 +243,7 @@ AAFRESULT STDMETHODCALLTYPE
 		  }
 		else
 		{
-			_mobID = newMobID;
+			_mobID = *newMobID;
 
 			/* Remove the hash table entry for the old mobID, and add new one */
 		}
@@ -296,7 +255,8 @@ AAFRESULT STDMETHODCALLTYPE
 		 */
 		if (hasMobID)
 		  {
-			CHECK(_file->RemoveMobID(oldMobID));
+//!!! JeffB; Put this back when we can get the head object from any object
+//!!!			CHECK(cstore->UnlinkMobID(oldMobID));
 		  }
 	  } /* XPROTECT */
 
@@ -307,9 +267,6 @@ AAFRESULT STDMETHODCALLTYPE
 	XEND;
 
 	return(OM_ERR_NONE);
-#else
-  return AAFRESULT_NOT_IMPLEMENTED;
-#endif
 }
 
 
@@ -321,127 +278,76 @@ AAFRESULT STDMETHODCALLTYPE
 	return(OM_ERR_NONE);
 }
 
-
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFMob::SetEditRate (aafRational_t  /*editRate*/)
-{
-  return AAFRESULT_NOT_IMPLEMENTED;
-}
-
-
 // skip virtual aafErr_t Verify(char *buf, validateData_t *result);
 // What doe's this do?
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFMob::IsMobKind (aafMobKind_t  /*mobKind*/,
-                           aafBool *  /*result*/)
+    ImplAAFMob::IsMobKind (aafMobKind_t  mobKind,
+                           aafBool *result)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
 
-
-
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFMob::AppendNewSlot (aafRational_t  /*editRate*/,
-                           ImplAAFSegment * /*segment*/,
-                           ImplAAFMobSlot ** /*newSlot*/)
+ AAFRESULT STDMETHODCALLTYPE
+   ImplAAFMob::AppendNewSlot (aafRational_t  editRate,
+                           ImplAAFSegment *segment,
+                           aafTrackID_t  trackID,
+                           aafString_t *trackName,
+                           ImplAAFMobSlot **newSlot)
 {
-#if FULL_TOOLKIT
-	AAFMobSlot * tmpSlot = NULL;
+	ImplAAFMobSlot * tmpSlot = NULL;
 	aafLength_t length = CvtInt32toLength(0, length);
 	aafLength_t	mobLength = CvtInt32toLength(0, mobLength);
 	aafErr_t aafError = OM_ERR_NONE;
 
 	*newSlot = NULL;
-	aafAssertValidFHdl(_file);
-	aafAssert((segment != NULL), _file, OM_ERR_NULLOBJECT);
+	aafAssert((segment != NULL), _file, AAFRESULT_NULL_PARAM);
 
-	XPROTECT(_file)
+	XPROTECT()
 	  {
-		tmpSlot = new AAFMobSlot(_file);
+		tmpSlot = (ImplAAFMobSlot *)CreateImpl (CLSID_AAFMobSlot);
 		  {
-			CHECK(tmpSlot->WriteRational(OMMSLTEditRate, editRate));
-			CHECK(tmpSlot->WriteObjRef(OMMSLTSegment, segment));
-		
+//!!!			CHECK(tmpSlot->WriteRational(OMMSLTEditRate, editRate));
+			CHECK(tmpSlot->SetSegment(segment));
+			CHECK(tmpSlot->SetTrackID(trackID));
+			CHECK(tmpSlot->SetName(trackName));
+
 			/* Append new slot to mob */
-			CHECK(AppendObjRefArray(OMMOBJSlots, tmpSlot));
+			_slots.appendValue(tmpSlot);
 		  }
 	  } /* XPROTECT */
 
 	XEXCEPT
 	  {
-	    tmpSlot->Delete();
+//!!!	    tmpSlot->Delete();
 		return(XCODE());
 	  }
 	XEND;
 
 	*newSlot = tmpSlot;
-	return(OM_ERR_NONE);
-#else
-  return AAFRESULT_NOT_IMPLEMENTED;
-#endif
-}
-
-
- AAFRESULT STDMETHODCALLTYPE
-   ImplAAFMob::AppendNewTrack (aafRational_t  /*editRate*/,
-                           ImplAAFSegment * /*segment*/,
-                           aafPosition_t  /*origin*/,
-                           aafTrackID_t  /*trackID*/,
-                           aafString_t *  /*trackName*/,
-                           ImplAAFMobSlot ** /*newTrack*/)
-{
-#if FULL_TOOLKIT
-	aafTDescObj_t trackDesc = NULL;
-	AAFObject * tmpTrack = NULL;
-	aafLength_t length = CvtInt32toLength(0, length);
-	aafLength_t mobLength = CvtInt32toLength(0, mobLength);
-	aafBool hasDesc = AAFFalse;
-	AAFDataKind * datakind = NULL;
-	aafErr_t aafError = OM_ERR_NONE;
-
-	*newTrack = NULL;
-	aafAssertValidFHdl(_file);
-	aafAssert((segment != NULL), _file, OM_ERR_NULLOBJECT);
-
-	XPROTECT(_file)
-	  {
-		tmpTrack = new AAFMobSlot(_file);
-		/* NOTE: write unique labels, return error if not unique */
-		  {
-			CHECK(tmpTrack->WriteRational(OMMSLTEditRate, editRate));
-			
-			CHECK(tmpTrack->WriteObjRef(OMMSLTSegment, segment));
-			
-			CHECK(((AAFMobSlot *)tmpTrack)->SetTrackDesc(origin, trackID, trackName, &trackDesc));
-			hasDesc = AAFTrue;
-			
-			/* Append new slot to mob */
-			CHECK(AppendObjRefArray(OMMOBJSlots, tmpTrack));
-		  }
-	  } /* XPROTECT */
-
-	XEXCEPT
-	  {
-		if (hasDesc)
-		  trackDesc->Delete();
-	    tmpTrack->Delete();
-		return(XCODE());
-	  }
-	XEND;
-
-	*newTrack = (AAFMobSlot *)tmpTrack;
-	return(OM_ERR_NONE);
-#else
-  return AAFRESULT_NOT_IMPLEMENTED;
-#endif
+	return(AAFRESULT_SUCCESS);
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFMob::GetAllMobSlots (ImplEnumAAFMobSlots ** /*ppEnum*/)
+    ImplAAFMob::GetAllMobSlots (ImplEnumAAFMobSlots **ppEnum)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	ImplEnumAAFMobSlots		*theEnum = (ImplEnumAAFMobSlots *)CreateImpl (CLSID_EnumAAFMobSlots);
+		
+	// !!!Does not obey search criteria yet
+	XPROTECT()
+	{
+		CHECK(theEnum->SetEnumMob(this));
+		CHECK(theEnum->Reset());
+		*ppEnum = theEnum;
+	}
+	XEXCEPT
+	{
+		return(XCODE());
+	}
+	XEND;
+	
+	return(AAFRESULT_SUCCESS);
 }
 
 
@@ -653,51 +559,42 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFMob::FindTrackByTrackID (aafTrackID_t  /*trackID*/,
-                           ImplAAFMobSlot ** /*destTrack*/)
+    ImplAAFMob::FindTrackByTrackID (aafTrackID_t	trackID,
+                           ImplAAFMobSlot **destTrack)
 {
-#if FULL_TOOLKIT
-  AAFIterate *mobIter = NULL;
-  aafInt32 numTracks, loop;
-  AAFMobSlot *tmpTrack = NULL;
-  aafTrackID_t tmpTrackID;
-  aafBool foundTrack = AAFFalse;
+	aafInt32		loop, numTracks;
+	ImplAAFMobSlot	*tmpTrack = NULL;
+	aafTrackID_t	tmpTrackID;
+	aafBool			foundTrack = AAFFalse;
 
-  XPROTECT(_file)
+	XPROTECT()
 	{
-	  *destTrack = NULL;
-
-	  mobIter = new AAFIterate(_file);
-	  CHECK(GetNumTracks(&numTracks));
-	  for (loop = 1; loop <= numTracks; loop++)
+		*destTrack = NULL;
+		
+		// For size entries the valid positions are 0 .. size - 1
+		CHECK(GetNumSlots(&numTracks));
+		for (loop = 0; loop < numTracks; loop++)
 		{
-		  CHECK(mobIter->MobGetNextTrack(this, NULL, &tmpTrack));
-		  CHECK(tmpTrack->GetTrackID(&tmpTrackID));
-		  if (tmpTrackID == trackID)
+			_slots.getValueAt(tmpTrack, loop);
+			CHECK(tmpTrack->GetTrackID(&tmpTrackID));
+			if (tmpTrackID == trackID)
 			{
-			  foundTrack = AAFTrue;
-			  break;
+				foundTrack = AAFTrue;
+				break;
 			}
 		}
-	  delete mobIter;
-	mobIter = NULL;
-	  if (!foundTrack)
+		if (!foundTrack)
 		{
-		  RAISE(OM_ERR_TRACK_NOT_FOUND);
+			RAISE(OM_ERR_TRACK_NOT_FOUND);
 		}
-	  *destTrack = tmpTrack;
+		*destTrack = tmpTrack;
 	}
   XEXCEPT
 	{
-		if (mobIter)
-		  delete mobIter;
 	}
   XEND;
 
   return(OM_ERR_NONE);
-#else
-  return AAFRESULT_NOT_IMPLEMENTED;
-#endif
 }
 
 
@@ -1219,6 +1116,17 @@ AAFRESULT STDMETHODCALLTYPE
 
   // @commDeletes the entire Mob structure \(the MOBJ object and all its contained objects\)
   // and deletes the entry from the Header.
+
+// Internal to the toolkit functions
+AAFRESULT
+    ImplAAFMob::GetNthMobSlot (aafInt32 index /*0-based*/, ImplAAFMobSlot **ppMobSlot)
+{
+	ImplAAFMobSlot	*obj;
+	_slots.getValueAt(obj, index);
+	*ppMobSlot = obj;
+
+	return AAFRESULT_SUCCESS;
+}
 
 extern "C" const aafClassID_t CLSID_AAFMob;
 
