@@ -30,189 +30,189 @@ AD_CLASS_BEGIN
 
 AD_METHOD1(GetName,
 		   [retval][out],
-		   AAFString *,
+		   aafString_t *,
 		   pstrName,
-		   Pointer to name
+		   Pointer to name,
 		   Gets the unique name that identifies this datakind object.)
 
 AD_METHOD1(IsCharKind,
 		   [retval][out],
-		   AAFBool *,
+		   aafBool *,
 		   bIsCharKind,
 		   pointer to the return value, 
 		   Sets return value to TRUE if DataKind is a Char.)
 
 AD_METHOD1(IsUInt8Kind,
 		   [retval][out],
-		   AAFBool *,
+		   aafBool *,
 		   bIsUInt8Kind,
 		   pointer to the return value, 
 		   Sets return value to TRUE if DataKind is a UINT8.)
 
 AD_METHOD1(IsUInt16Kind,
 		   [retval][out],
-		   AAFBool *,
+		   aafBool *,
 		   bIsUIntKind,
 		   pointer to the return value, 
 		   Sets return value to TRUE if DataKind is a UINT16.)
 
 AD_METHOD1(IsUInt32Kind,
 		   [retval][out],
-		   AAFBool *,
+		   aafBool *,
 		   bIsUInt32Kind,
 		   pointer to the return value, 
 		   Sets return value to TRUE if DataKind is a UINT32.)
 
 AD_METHOD1(IsInt8Kind,
 		   [retval][out],
-		   AAFBool *,
+		   aafBool *,
 		   bIsInt8Kind,
 		   pointer to the return value, 
 		   Sets return value to TRUE if DataKind is a INT8.)
 
 AD_METHOD1(IsInt16Kind,
 		   [retval][out],
-		   AAFBool *,
+		   aafBool *,
 		   bIsIntKind,
 		   pointer to the return value, 
 		   Sets return value to TRUE if DataKind is a INT16.)
 
 AD_METHOD1(IsInt32Kind,
 		   [retval][out],
-		   AAFBool *,
+		   aafBool *,
 		   bIsInt32Kind,
 		   pointer to the return value, 
 		   Sets return value to TRUE if DataKind is a INT32.)
 
 AD_METHOD1(IsRationalKind,
 		   [retval][out],
-		   AAFBool *,
+		   aafBool *,
 		   bIsRationalKind,
 		   pointer to the return value, 
 		   Sets return value to TRUE if DataKind is a rational.)
 
 AD_METHOD1(IsBooleanKind,
 		   [retval][out],
-		   AAFBool *,
+		   aafBool *,
 		   bIsBooleanKind,
 		   pointer to the return value, 
 		   Sets return value to TRUE if DataKind is a boolean.)
 
 AD_METHOD1(IsStringKind,
 		   [retval][out],
-		   AAFBool *,
+		   aafBool *,
 		   bIsStringKind,
 		   pointer to the return value, 
 		   Sets return value to TRUE if DataKind is a string.)
 
 AD_METHOD1(IsColorSpaceKind,
 		   [retval][out],
-		   AAFBool *,
+		   aafBool *,
 		   bIsColorSpaceKind,
 		   pointer to the return value, 
 		   Sets return value to TRUE if DataKind is a colorspace.)
 
 AD_METHOD1(IsColorKind,
 		   [retval][out],
-		   AAFBool *,
+		   aafBool *,
 		   bIsColorKind,
 		   pointer to the return value, 
 		   Sets return value to TRUE if DataKind is a Color.)
 
 AD_METHOD1(IsDistanceKind,
 		   [retval][out],
-		   AAFBool *,
+		   aafBool *,
 		   bIsDistanceKind,
 		   pointer to the return value, 
 		   Sets return value to TRUE if DataKind is a distance.)
 
 AD_METHOD1(IsPointKind,
 		   [retval][out],
-		   AAFBool *,
+		   aafBool *,
 		   bIsPointKind,
 		   pointer to the return value, 
 		   Sets return value to TRUE if DataKind is a point.)
 
 AD_METHOD1(IsDirectionCodeKind,
 		   [retval][out],
-		   AAFBool *,
+		   aafBool *,
 		   bIsDirectionCodeKind,
 		   pointer to the return value, 
 		   Sets return value to TRUE if DataKind is a direction code.)
 
 AD_METHOD1(IsPolynomialKind,
 		   [retval][out],
-		   AAFBool *,
+		   aafBool *,
 		   bIsPolynomialKind,
 		   pointer to the return value, 
 		   Sets return value to TRUE if DataKind is a polynomial.)
 
 AD_METHOD1(IsPictureKind,
 		   [retval][out],
-		   AAFBool *,
+		   aafBool *,
 		   bIsPictureKind,
 		   pointer to the return value, 
 		   Sets return value to TRUE if DataKind is a picture.)
 
 AD_METHOD1(IsMatteKind,
 		   [retval][out],
-		   AAFBool *,
+		   aafBool *,
 		   bIsMatteKind,
 		   pointer to the return value, 
 		   Sets return value to TRUE if DataKind is a matte.)
 
 AD_METHOD1(IsPictureWithMatteKind,
 		   [retval][out],
-		   AAFBool *,
+		   aafBool *,
 		   bIsPictureWithMatteKind,
 		   pointer to the return value, 
 		   Sets return value to TRUE if DataKind is a picture with matte.)
 
 AD_METHOD1(IsSoundKind,
 		   [retval][out],
-		   AAFBool *,
+		   aafBool *,
 		   bIsSoundKind,
 		   pointer to the return value, 
 		   Sets return value to TRUE if DataKind is a sound.)
 
 AD_METHOD1(IsStereoSoundKind,
 		   [retval][out],
-		   AAFBool *,
+		   aafBool *,
 		   bIsStereoSoundKind,
 		   pointer to the return value, 
 		   Sets return value to TRUE if DataKind is a stereo sound.)
 
 AD_METHOD1(IsTimecodeKind,
 		   [retval][out],
-		   AAFBool *,
+		   aafBool *,
 		   bIsTimecodeKind,
 		   pointer to the return value, 
 		   Sets return value to TRUE if DataKind is a timecode.)
 
 AD_METHOD1(IsEdgecodeKind,
 		   [retval][out],
-		   AAFBool *,
+		   aafBool *,
 		   bIsEdgecodeKind,
 		   pointer to the return value, 
 		   Sets return value to TRUE if DataKind is a edgecode.)
 
 AD_METHOD2(DoesDatakindConvertTo,
-		   [retval][out],AAFBool *,bDoesConvertTo, pointer to result,
-		   [in],AAFString, datakindname, DatakindName to compare against
+		   [retval][out],aafBool *,bDoesConvertTo, pointer to result,
+		   [in],aafString_t, datakindname, DatakindName to compare against,
 		   Sets return value to TRUE if the datakind of the given object
 		   // can be converted to the datakind specified in the IN 
 		   // parameter with the datakindName string.)
 		   
 AD_METHOD2(IsDatakindOf,
-		   [retval][out],AAFBool *,bIsDatakindOf, pointer to result,
-		   [in],AAFString, datakindname, DatakindName to compare against
-		   Sets return value to TRUE if the datakind of the given object
+		   [retval][out],aafBool *,bIsDatakindOf, pointer to result,
+		   [in],aafString_t, datakindname, DatakindName to compare against,
+		   Sets the value to TRUE if the datakind of the given object
 		   // matches the datakind specified in the IN parameter with
 		   // the datakindName string.)
 
 AD_METHOD2(DoesDatakindConvertFrom,
-		   [retval][out],AAFBool *,bDoesConvertFrom, pointer to result,
-		   [in],AAFString, datakindname, DatakindName to compare against
+		   [retval][out],aafBool *,bDoesConvertFrom, pointer to result,
+		   [in],aafString_t, datakindname, DatakindName to compare against,
 		   Sets return value to TRUE if the datakind of the given object
 		   // can be converted from the datakind specified in the IN 
 		   // parameter specified with the datakindName string.)
