@@ -80,7 +80,7 @@ public:
     CreateValueFromValues
         (// @parm [in, size_is(numElements)] array of property values for elements of array value which
     // is to be created.
-         ImplAAFPropertyValue * pElementValues,
+         ImplAAFPropertyValue ** ppElementValues,
 
          // @parm [in] size of pElementValues array.
          aafUInt32  numElements,
@@ -172,8 +172,15 @@ public:
   // Declare the module test method. The implementation of the will be be
   // in /test/ImplAAFTypeDefFixedArrayTest.cpp.
   static AAFRESULT test();
+
+  // overrides from ImplAAFTypeDef
+  //
+  virtual aafBool IsFixedSize (void);
+  virtual size_t PropValSize (void);
+
+private:
+  OMStrongReferenceProperty<ImplAAFTypeDef> _ElementType;
+  OMFixedSizeProperty<aafUInt32>            _ElementCount;
 };
 
 #endif // ! __ImplAAFTypeDefFixedArray_h__
-
-

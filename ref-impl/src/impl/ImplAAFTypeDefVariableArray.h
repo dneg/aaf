@@ -14,6 +14,8 @@
 \******************************************/
 
 
+class ImplAAFPropertyValue;
+
 
 
 
@@ -92,7 +94,7 @@ public:
     CreateValueFromValues
         (// @parm [in, size_is(numElements)] array of property values for elements of array value which
     // is to be created.
-         ImplAAFPropertyValue ** ppElementValues,
+         ImplAAFPropertyValue ** pElementValues,
 
          // @parm [in] size of pElementValues array.
          aafUInt32  numElements,
@@ -176,6 +178,12 @@ public:
          aafUInt32  dataSize);
 
 
+  // Override from AAFTypeDef
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetTypeCategory (/*[out]*/ eAAFTypeCategory_t *  pTid);
+
+
+
 public:
   // Declare this class to be storable.
   //
@@ -184,8 +192,15 @@ public:
   // Declare the module test method. The implementation of the will be be
   // in /test/ImplAAFTypeDefVariableArrayTest.cpp.
   static AAFRESULT test();
+
+  // overrides from ImplAAFTypeDef
+  //
+  virtual aafBool IsFixedSize (void);
+  virtual size_t PropValSize (void);
+
+private:
+  // OMStrongReferenceProperty<ImplAAFTypeDef> _ElementType;
+  ImplAAFTypeDef * _ElementType;
 };
 
 #endif // ! __ImplAAFTypeDefVariableArray_h__
-
-
