@@ -1026,7 +1026,7 @@ HRESULT Omf2Aaf::ConvertOMFDatakind( OMF2::omfDDefObj_t datakind,
 
 	else
 	{
-		UTLstdprintf("Unknown DataDef :%s Found in sequence\n", datakindName);
+		UTLstdprintf("WARNING!!!: Unknown DataDef :%s Found in sequence\n", datakindName);
 		*pDatadef = DDEF_Unknown;
 	}
 
@@ -1762,7 +1762,7 @@ HRESULT Omf2Aaf::ProcessOMFComponent(OMF2::omfObject_t OMFSegment, IAAFComponent
 						// Unknown transition - convert it to a filler
 						if (gpGlobals->bVerboseMode)
 						{
-							UTLstdprintf("%sConverting UNKNOWN 1.x Transition to a Filler !! \n ", gpGlobals->indentLeader);
+							UTLstdprintf("WARNING: Converting UNKNOWN 1.x Transition to a Filler !! \n ");
 						}
 						rc = pDictionary->CreateInstance(&AUID_AAFFiller,
 														  IID_IAAFFiller,
@@ -1778,7 +1778,7 @@ HRESULT Omf2Aaf::ProcessOMFComponent(OMF2::omfObject_t OMFSegment, IAAFComponent
 					// Transition has no Effect ID - cannot convert !
 					if (gpGlobals->bVerboseMode)
 					{
-						UTLstdprintf("%sConverting UNKNOWN 1.x Transition to a Filler !! \n ", gpGlobals->indentLeader);
+						UTLstdprintf("WARNING: Converting UNKNOWN 1.x Transition to a Filler !! \n ");
 					}
 					rc = pDictionary->CreateInstance(&AUID_AAFFiller,
 													  IID_IAAFFiller,
@@ -2185,6 +2185,8 @@ HRESULT Omf2Aaf::ConvertOMFCDCIDescriptorLocator(OMF2::omfObject_t mediaDescript
 									IAAFCDCIDescriptor* pAAFDescriptor)
 {
 	HRESULT					rc = AAFRESULT_SUCCESS;
+	OMF2::omfErr_t			OMFError = OMF2::OM_ERR_NONE;
+
 	OMF2::omfFrameLayout_t	frameLayout;
 	OMF2::omfProperty_t		omCDCIComponentWidth;
 	OMF2::omfProperty_t		omCDCIHorizontalSubsampling;
@@ -2222,155 +2224,188 @@ HRESULT Omf2Aaf::ConvertOMFCDCIDescriptorLocator(OMF2::omfObject_t mediaDescript
 	if (FAILED(rc))
 		return rc;
 	// Get Digital Image properties and set them
-	rc = OMF2::omfsReadUInt32(OMFFileHdl, mediaDescriptor, OMF2::OMDIDDStoredHeight, &Height);
-	if (rc != AAFRESULT_SUCCESS)
+	OMFError = OMF2::omfsReadUInt32(OMFFileHdl, mediaDescriptor, OMF2::OMDIDDStoredHeight, &Height);
+	if (OMFError != OMF2::OM_ERR_NONE)
 	{
-		rc = OMF2::omfsReadInt32(OMFFileHdl, mediaDescriptor, OMF2::OMDIDDStoredHeight, (OMF2::omfInt32 *)&Height);
-		if (rc != AAFRESULT_SUCCESS)
+		OMFError = OMF2::omfsReadInt32(OMFFileHdl, mediaDescriptor, OMF2::OMDIDDStoredHeight, (OMF2::omfInt32 *)&Height);
+		if (OMFError != OMF2::OM_ERR_NONE)
 		{
 			Height = 0;
 		}
 	}
-	else
-		Height = 0;
-	rc = OMF2::omfsReadUInt32(OMFFileHdl, mediaDescriptor, OMF2::OMDIDDStoredWidth, &Width);
-	if (rc != AAFRESULT_SUCCESS)
+
+	OMFError = OMF2::omfsReadUInt32(OMFFileHdl, mediaDescriptor, OMF2::OMDIDDStoredWidth, &Width);
+	if (OMFError != OMF2::OM_ERR_NONE)
 	{
-		rc = OMF2::omfsReadInt32(OMFFileHdl, mediaDescriptor, OMF2::OMDIDDStoredWidth, (OMF2::omfInt32 *)&Width);
-		if (rc != AAFRESULT_SUCCESS)
+		OMFError = OMF2::omfsReadInt32(OMFFileHdl, mediaDescriptor, OMF2::OMDIDDStoredWidth, (OMF2::omfInt32 *)&Width);
+		if (OMFError != OMF2::OM_ERR_NONE)
 		{
 			Width = 0;
 		}
 	}
-	else
-		Width = 0;
 	rc = pDigImageDesc->SetStoredView(Height, Width);
 
-	rc = OMF2::omfsReadUInt32(OMFFileHdl, mediaDescriptor, OMF2::OMDIDDSampledHeight, &Height);
-	if (rc != AAFRESULT_SUCCESS)
+	OMFError = OMF2::omfsReadUInt32(OMFFileHdl, mediaDescriptor, OMF2::OMDIDDSampledHeight, &Height);
+	if (OMFError != OMF2::OM_ERR_NONE)
 	{
-		rc = OMF2::omfsReadInt32(OMFFileHdl, mediaDescriptor, OMF2::OMDIDDSampledHeight, (OMF2::omfInt32 *)&Height);
-		if (rc != AAFRESULT_SUCCESS)
+		OMFError = OMF2::omfsReadInt32(OMFFileHdl, mediaDescriptor, OMF2::OMDIDDSampledHeight, (OMF2::omfInt32 *)&Height);
+		if (OMFError != OMF2::OM_ERR_NONE)
 		{
 			Height = 0;
 		}
 	}
-	else
-		Height = 0;
-	rc = OMF2::omfsReadUInt32(OMFFileHdl, mediaDescriptor, OMF2::OMDIDDSampledWidth, &Width);
-	if (rc != AAFRESULT_SUCCESS)
+	OMFError = OMF2::omfsReadUInt32(OMFFileHdl, mediaDescriptor, OMF2::OMDIDDSampledWidth, &Width);
+	if (OMFError != OMF2::OM_ERR_NONE)
 	{
-		rc = OMF2::omfsReadInt32(OMFFileHdl, mediaDescriptor, OMF2::OMDIDDSampledWidth, (OMF2::omfInt32 *)&Width);
-		if (rc != AAFRESULT_SUCCESS)
+		OMFError = OMF2::omfsReadInt32(OMFFileHdl, mediaDescriptor, OMF2::OMDIDDSampledWidth, (OMF2::omfInt32 *)&Width);
+		if (OMFError != OMF2::OM_ERR_NONE)
 		{
 			Width = 0;
 		}
 	}
-	else
-		Width = 0;
-	rc = OMF2::omfsReadInt32(OMFFileHdl, mediaDescriptor, OMF2::OMDIDDSampledXOffset, &XOffset);
-	rc = OMF2::omfsReadInt32(OMFFileHdl, mediaDescriptor, OMF2::OMDIDDSampledYOffset, &YOffset);
+	OMFError = OMF2::omfsReadInt32(OMFFileHdl, mediaDescriptor, OMF2::OMDIDDSampledXOffset, &XOffset);
+	if (OMFError != OMF2::OM_ERR_NONE)
+		XOffset = 0;
+	OMFError = OMF2::omfsReadInt32(OMFFileHdl, mediaDescriptor, OMF2::OMDIDDSampledYOffset, &YOffset);
+	if (OMFError != OMF2::OM_ERR_NONE)
+		YOffset = 0;
 	rc = pDigImageDesc->SetSampledView(Height, Width, XOffset, YOffset);
 
-	rc = OMF2::omfsReadUInt32(OMFFileHdl, mediaDescriptor, OMF2::OMDIDDDisplayHeight, &Height);
-	if (rc != AAFRESULT_SUCCESS)
+	OMFError = OMF2::omfsReadUInt32(OMFFileHdl, mediaDescriptor, OMF2::OMDIDDDisplayHeight, &Height);
+	if (OMFError != OMF2::OM_ERR_NONE)
 	{
-		rc = OMF2::omfsReadInt32(OMFFileHdl, mediaDescriptor, OMF2::OMDIDDDisplayHeight, (OMF2::omfInt32 *)&Height);
-		if (rc != AAFRESULT_SUCCESS)
+		OMFError = OMF2::omfsReadInt32(OMFFileHdl, mediaDescriptor, OMF2::OMDIDDDisplayHeight, (OMF2::omfInt32 *)&Height);
+		if (OMFError != OMF2::OM_ERR_NONE)
 		{
 			Height = 0;
 		}
 	}
-	else
-		Height = 0;
-	rc = OMF2::omfsReadUInt32(OMFFileHdl, mediaDescriptor, OMF2::OMDIDDDisplayWidth, &Width);
-	if (rc != AAFRESULT_SUCCESS)
+	OMFError = OMF2::omfsReadUInt32(OMFFileHdl, mediaDescriptor, OMF2::OMDIDDDisplayWidth, &Width);
+	if (OMFError != OMF2::OM_ERR_NONE)
 	{
-		rc = OMF2::omfsReadInt32(OMFFileHdl, mediaDescriptor, OMF2::OMDIDDDisplayWidth, (OMF2::omfInt32 *)&Width);
-		if (rc != AAFRESULT_SUCCESS)
+		OMFError = OMF2::omfsReadInt32(OMFFileHdl, mediaDescriptor, OMF2::OMDIDDDisplayWidth, (OMF2::omfInt32 *)&Width);
+		if (OMFError != OMF2::OM_ERR_NONE)
 		{
 			Width = 0;
 		}
 	}
-	else
-		Width = 0;
-	rc = OMF2::omfsReadInt32(OMFFileHdl, mediaDescriptor, OMF2::OMDIDDDisplayXOffset, &XOffset);
-	rc = OMF2::omfsReadInt32(OMFFileHdl, mediaDescriptor, OMF2::OMDIDDDisplayYOffset, &YOffset);
+	OMFError = OMF2::omfsReadInt32(OMFFileHdl, mediaDescriptor, OMF2::OMDIDDDisplayXOffset, &XOffset);
+	if (OMFError != OMF2::OM_ERR_NONE)
+		XOffset = 0;
+	OMFError = OMF2::omfsReadInt32(OMFFileHdl, mediaDescriptor, OMF2::OMDIDDDisplayYOffset, &YOffset);
+	if (OMFError != OMF2::OM_ERR_NONE)
+		YOffset = 0;
 	rc = pDigImageDesc->SetDisplayView(Height, Width, XOffset, YOffset);
 
-	rc = OMF2::omfsReadLayoutType(OMFFileHdl, mediaDescriptor, OMF2::OMDIDDFrameLayout, &frameLayout);
-	if (frameLayout > 0)
-		AAFFrameLayout = (aafFrameLayout_t)(frameLayout-1);
-	else
-		AAFFrameLayout = (aafFrameLayout_t)0;
+	OMFError = OMF2::omfsReadLayoutType(OMFFileHdl, mediaDescriptor, OMF2::OMDIDDFrameLayout, &frameLayout);
 
+	if (OMFError != OMF2::OM_ERR_NONE)
+		AAFFrameLayout = (aafFrameLayout_t)0;
+	else
+	{
+		if (frameLayout > 0)
+			AAFFrameLayout = (aafFrameLayout_t)(frameLayout-1);
+		else
+			AAFFrameLayout = (aafFrameLayout_t)0;
+	}
 	rc = pDigImageDesc->SetFrameLayout(AAFFrameLayout);
-	rc = OMF2::omfsReadInt32(OMFFileHdl, mediaDescriptor, OMF2::OMDIDDAlphaTransparency, &alphaTransparency);
+	OMFError = OMF2::omfsReadInt32(OMFFileHdl, mediaDescriptor, OMF2::OMDIDDAlphaTransparency, &alphaTransparency);
+	if (OMFError != OMF2::OM_ERR_NONE)
+		alphaTransparency = 0;
 	rc = pDigImageDesc->SetAlphaTransparency((aafAlphaTransparency_t)alphaTransparency);
 
-	rc = OMF2::omfsReadRational(OMFFileHdl, mediaDescriptor, OMF2::OMDIDDGamma, (OMF2::omfRational_t *)&gamma);
+	OMFError = OMF2::omfsReadRational(OMFFileHdl, mediaDescriptor, OMF2::OMDIDDGamma, (OMF2::omfRational_t *)&gamma);
+	if (OMFError != OMF2::OM_ERR_NONE)
+	{
+		gamma.numerator = 0;
+		gamma.denominator = 1;
+	}
 	rc = pDigImageDesc->SetGamma(gamma);
 
-	rc = OMF2::omfsReadRational(OMFFileHdl, mediaDescriptor, OMF2::OMDIDDImageAspectRatio, (OMF2::omfRational_t *)&aspectRatio);
+	OMFError = OMF2::omfsReadRational(OMFFileHdl, mediaDescriptor, OMF2::OMDIDDImageAspectRatio, (OMF2::omfRational_t *)&aspectRatio);
+	if (OMFError != OMF2::OM_ERR_NONE)
+	{
+		aspectRatio.numerator = 0;
+		aspectRatio.denominator = 1;
+	}
 	rc = pDigImageDesc->SetImageAspectRatio(aspectRatio);
 
-	rc = OMF2::omfsReadInt32(OMFFileHdl, mediaDescriptor, OMF2::OMDIDDFieldAlignment, &alignmentFactor);
+	OMFError = OMF2::omfsReadInt32(OMFFileHdl, mediaDescriptor, OMF2::OMDIDDFieldAlignment, &alignmentFactor);
+	if (OMFError != OMF2::OM_ERR_NONE)
+		alignmentFactor = 0;
 	rc = pDigImageDesc->SetImageAlignmentFactor(alignmentFactor);
 
-	rc  = OMF2::OMReadProp(OMFFileHdl, mediaDescriptor, OMF2::OMDIDDVideoLineMap, 
+	OMFError = OMF2::OMReadProp(OMFFileHdl, mediaDescriptor, OMF2::OMDIDDVideoLineMap, 
 						   zeroPos, OMF2::kSwabIfNeeded, OMF2::OMInt32Array,
 						   sizeof(aafInt32), &videoLineMap[0]); 
-
+	if (OMFError != OMF2::OM_ERR_NONE)
+		videoLineMap[0] = 0;
 	omfsCvtInt32toPosition(sizeof(aafInt32), fourPos);
-	rc  = OMF2::OMReadProp(OMFFileHdl, mediaDescriptor, OMF2::OMDIDDVideoLineMap, 
+	OMFError  = OMF2::OMReadProp(OMFFileHdl, mediaDescriptor, OMF2::OMDIDDVideoLineMap, 
 						   fourPos, OMF2::kSwabIfNeeded, OMF2::OMInt32Array,
 						   sizeof(aafInt32), &videoLineMap[1]); 
+	if (OMFError != OMF2::OM_ERR_NONE)
+		videoLineMap[1] = 0;
 
 	rc = pDigImageDesc->SetVideoLineMap( (sizeof(videoLineMap)/sizeof(aafInt32)), videoLineMap);
 	pDigImageDesc->Release();
 	pDigImageDesc = NULL;
 
 	// To get the CDCI codec related properties we first reister them in OMF
-	rc = OMF2::omfsRegisterDynamicProp(OMFSession, OMF2::kOmfTstRevEither, 
+	OMFError = OMF2::omfsRegisterDynamicProp(OMFSession, OMF2::kOmfTstRevEither, 
 									   "ComponentWidth", OMClassCDCI, 
 									   OMF2::OMVersionType, OMF2::kPropRequired, 
 									   &omCDCIComponentWidth);
-	rc = OMF2::omfsRegisterDynamicProp(OMFSession, OMF2::kOmfTstRevEither, 
+	OMFError = OMF2::omfsRegisterDynamicProp(OMFSession, OMF2::kOmfTstRevEither, 
 									   "HorizontalSubsampling", OMClassCDCI, 
 									   OMF2::OMBoolean, OMF2::kPropRequired, 
 									   &omCDCIHorizontalSubsampling);
-	rc = OMF2::omfsRegisterDynamicProp(OMFSession, OMF2::kOmfTstRevEither, 
+	OMFError = OMF2::omfsRegisterDynamicProp(OMFSession, OMF2::kOmfTstRevEither, 
 									   "ColorSiting", OMClassCDCI, 
 									   OMF2::OMBoolean, OMF2::kPropRequired, 
 									   &omCDCIColorSiting);
-	rc = OMF2::omfsRegisterDynamicProp(OMFSession, OMF2::kOmfTstRevEither, 
+	OMFError = OMF2::omfsRegisterDynamicProp(OMFSession, OMF2::kOmfTstRevEither, 
 									   "BlackReferenceLevel", OMClassCDCI, 
 									   OMF2::OMInt32, OMF2::kPropRequired, 
 									   &omCDCIBlackReferenceLevel);
-	rc = OMF2::omfsRegisterDynamicProp(OMFSession, OMF2::kOmfTstRevEither, 
+	OMFError = OMF2::omfsRegisterDynamicProp(OMFSession, OMF2::kOmfTstRevEither, 
 									   "WhiteReferenceLevel", OMClassCDCI, 
 									   OMF2::OMInt32, OMF2::kPropRequired, 
 									   &omCDCIWhiteReferenceLevel);
-	rc = OMF2::omfsRegisterDynamicProp(OMFSession, OMF2::kOmfTstRevEither, 
+	OMFError = OMF2::omfsRegisterDynamicProp(OMFSession, OMF2::kOmfTstRevEither, 
 									   "ColorRange", OMClassCDCI, 
 									   OMF2::OMInt32, OMF2::kPropRequired, 
 									   &omCDCIColorRange);
-	rc = OMF2::omfsRegisterDynamicProp(OMFSession, OMF2::kOmfTstRevEither, 
+	OMFError = OMF2::omfsRegisterDynamicProp(OMFSession, OMF2::kOmfTstRevEither, 
 									   "PaddingBits", OMClassCDCI, 
 									   OMF2::OMInt32, OMF2::kPropRequired, 
 									   &omCDCIPaddingBits);
 	// Next we read the values
-	rc  = OMF2::omfsReadInt32(OMFFileHdl, mediaDescriptor, omCDCIComponentWidth, &componentWidth); 
-	rc  = OMF2::omfsReadUInt32(OMFFileHdl, mediaDescriptor, omCDCIHorizontalSubsampling, &horizontalSubsampling); 
-	rc = OMF2::OMReadProp(OMFFileHdl, mediaDescriptor, omCDCIHorizontalSubsampling, 
+	OMFError = OMF2::omfsReadInt32(OMFFileHdl, mediaDescriptor, omCDCIComponentWidth, &componentWidth); 
+	if (OMFError != OMF2::OM_ERR_NONE)
+		componentWidth = 0;
+	OMFError = OMF2::omfsReadUInt32(OMFFileHdl, mediaDescriptor, omCDCIHorizontalSubsampling, &horizontalSubsampling); 
+	if (OMFError != OMF2::OM_ERR_NONE)
+		horizontalSubsampling = 0;
+	OMFError = OMF2::OMReadProp(OMFFileHdl, mediaDescriptor, omCDCIHorizontalSubsampling, 
 						  zeroPos, OMF2::kSwabIfNeeded, OMF2::OMColorSitingType,
 						  sizeof(colorSiting), (void *)&(colorSiting));
-	rc  = OMF2::omfsReadUInt32(OMFFileHdl, mediaDescriptor, omCDCIBlackReferenceLevel, &blackReferenceLevel); 
-	rc  = OMF2::omfsReadUInt32(OMFFileHdl, mediaDescriptor, omCDCIWhiteReferenceLevel, &whiteReferenceLevel); 
-	rc  = OMF2::omfsReadUInt32(OMFFileHdl, mediaDescriptor, omCDCIColorRange, &colorRange); 
-	rc  = OMF2::OMReadProp(OMFFileHdl, mediaDescriptor, omCDCIPaddingBits, 
+	if (OMFError != OMF2::OM_ERR_NONE)
+		memset(&colorSiting, 0, sizeof(aafColorSiting_t));
+	OMFError = OMF2::omfsReadUInt32(OMFFileHdl, mediaDescriptor, omCDCIBlackReferenceLevel, &blackReferenceLevel); 
+	if (OMFError != OMF2::OM_ERR_NONE)
+		blackReferenceLevel = 0;
+	OMFError = OMF2::omfsReadUInt32(OMFFileHdl, mediaDescriptor, omCDCIWhiteReferenceLevel, &whiteReferenceLevel); 
+	if (OMFError != OMF2::OM_ERR_NONE)
+		whiteReferenceLevel = 0;
+	OMFError = OMF2::omfsReadUInt32(OMFFileHdl, mediaDescriptor, omCDCIColorRange, &colorRange); 
+	if (OMFError != OMF2::OM_ERR_NONE)
+		colorRange = 0;
+	OMFError = OMF2::OMReadProp(OMFFileHdl, mediaDescriptor, omCDCIPaddingBits, 
 						   zeroPos, OMF2::kSwabIfNeeded, OMF2::OMInt16,
 						   sizeof(paddingBits), &paddingBits); 
+	if (OMFError != OMF2::OM_ERR_NONE)
+		paddingBits = 0;
 	// Now set the EssenceDescriptor
 	rc = pAAFDescriptor->SetComponentWidth(componentWidth);
 	rc = pAAFDescriptor->SetHorizontalSubsampling(horizontalSubsampling);
@@ -2618,8 +2653,10 @@ HRESULT Omf2Aaf::ConvertOMFSourceMob(OMF2::omfObject_t obj,
 			}
 			else
 			{
+				// Generic or not recognizable media descriptor !!!
 				OMF2::omfClassID_t	objClass;
 				char				id[5];
+				char				summary[64];
 
 				OMFError = OMF2::omfsReadClassID(OMFFileHdl, mediaDescriptor, OMF2::OMOOBJObjClass, objClass);
 				strncpy(id, objClass, 4);
@@ -2628,6 +2665,19 @@ HRESULT Omf2Aaf::ConvertOMFSourceMob(OMF2::omfObject_t obj,
 					UTLstdprintf("%sCannot translate this Media File Descriptor: %s\n", gpGlobals->indentLeader, id);
 				UTLerrprintf("%sERROR:Cannot translate this Media File Descriptor: %s\n", gpGlobals->indentLeader, id) ;
 				gpGlobals->nNumUndefinedOMFObjects++;
+				// as a cop-out we generate a Wave descriptor and continue 
+				rc = pDictionary->CreateInstance(&AUID_AAFWAVEDescriptor,
+												 IID_IAAFWAVEDescriptor,
+												 (IUnknown **)&pWAVEDesc);
+				memset(summary, 0, sizeof(summary));
+				rc = pWAVEDesc->SetSummary(sizeof(summary), (aafDataValue_t)summary);
+				rc = pWAVEDesc->QueryInterface(IID_IAAFEssenceDescriptor, (void **)&pEssenceDesc);
+				pSourceMob->SetEssenceDescriptor(pEssenceDesc);
+				if (pWAVEDesc)
+				{
+					pWAVEDesc->Release();
+					pWAVEDesc = NULL;
+				}
 			}
 			// Retrieve and set generic File Descriptor properties.
 			rc = pEssenceDesc->QueryInterface(IID_IAAFFileDescriptor, (void **) &pFileDesc);
