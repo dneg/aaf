@@ -31,86 +31,27 @@
  *
  ************************************************************************/
 
+#include "ImplAAFEnumerator.h"
 
-class ImplAAFMob;
+#include "ImplAAFMob.h"
 
-
-
-
-
-
-
-#ifndef __ImplAAFRoot_h__
-#include "ImplAAFRoot.h"
-#endif
-
-#include "ImplAAFContentStorage.h"
-
-#include "OMReferenceContainerIter.h"
-
-class ImplEnumAAFMobs : public ImplAAFRoot
+class ImplEnumAAFMobs: public ImplAAFEnumerator<ImplAAFMob>
 {
 public:
-  //
-  // Constructor/destructor
-  //
-  //********
-  ImplEnumAAFMobs ();
-  ~ImplEnumAAFMobs ();
+	ImplEnumAAFMobs ();
 
+	virtual AAFRESULT STDMETHODCALLTYPE NextOne(ImplAAFMob ** ppMob);
+	virtual AAFRESULT STDMETHODCALLTYPE Next(
+		aafUInt32  count,
+		ImplAAFMob ** ppMobs,
+		aafUInt32 *  pFetched);
+	virtual AAFRESULT STDMETHODCALLTYPE Skip(aafUInt32  count);
+	// Clone() wrapper for pointer compatibility
+	virtual AAFRESULT STDMETHODCALLTYPE Clone(ImplEnumAAFMobs ** ppEnum);
 
-  //****************
-  // NextOne()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    NextOne
-        (ImplAAFMob ** ppMob);  //@parm [out,retval] The Next Mob
-
-
-  //****************
-  // Next()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    Next
-        (aafUInt32  count,   //@parm [in] number of mobs requested
-		 ImplAAFMob ** ppMobs,   //@parm [out, size_is(count), length_is(*pFetched)] array to receive mobs
-         aafUInt32 *  pFetched);  //@parm [out,ref] number of actual Mobs fetched into ppMobs array
-
-
-  //****************
-  // Skip()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    Skip
-        (aafUInt32  count);  //@parm [in] Number of elements to skip
-
-
-  //****************
-  // Reset()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    Reset ();
-
-
-  //****************
-  // Clone()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    Clone
-        (ImplEnumAAFMobs ** ppEnum);  //@parm [out,retval] new enumeration
-
-public:
-// Internal to the toolkit
-AAFRESULT
-    SetCriteria(aafSearchCrit_t *pCriteria);
-  virtual AAFRESULT STDMETHODCALLTYPE
-	  SetIterator(ImplAAFObject *pObj,
-				OMReferenceContainerIterator<ImplAAFMob>* iterator);
-
+    AAFRESULT SetCriteria(aafSearchCrit_t *pCriteria);
 private:
-	aafSearchCrit_t			_criteria;
-	ImplAAFObject*	_enumObj;
-	OMReferenceContainerIterator<ImplAAFMob>*	_iterator;
+	aafSearchCrit_t	_criteria;
 };
 
 #endif // ! __ImplEnumAAFMobs_h__

@@ -34,9 +34,9 @@
 
 class ImplAAFSegment;
 
-class ImplEnumAAFSegments;
-
-
+template <class T> 
+class ImplAAFEnumerator;
+typedef ImplAAFEnumerator<ImplAAFSegment> ImplEnumAAFSegments;
 
 #ifndef __ImplAAFSegment_h__
 #include "ImplAAFSegment.h"

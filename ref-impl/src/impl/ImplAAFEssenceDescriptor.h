@@ -34,13 +34,9 @@
 
 class ImplAAFLocator;
 
-class ImplEnumAAFLocators;
-
-
-
-
-
-
+template <class T> 
+class ImplAAFEnumerator;
+typedef ImplAAFEnumerator<ImplAAFLocator> ImplEnumAAFLocators;
 
 #ifndef __ImplAAFObject_h__
 #include "ImplAAFObject.h"

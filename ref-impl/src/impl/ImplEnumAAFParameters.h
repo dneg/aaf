@@ -31,89 +31,11 @@
  *
  ************************************************************************/
 
-class ImplAAFParameter;
+#include "ImplAAFEnumerator.h"
 
+#include "ImplAAFParameter.h"
 
-
-
-
-
-
-#ifndef __ImplAAFObject_h__
-#include "ImplAAFObject.h"
-#endif
-#include "OMReferenceContainerIter.h"
-
-class ImplEnumAAFParameters : public ImplAAFRoot
-{
-public:
-  //
-  // Constructor/destructor
-  //
-  //********
-  ImplEnumAAFParameters ();
-
-protected:
-  virtual ~ImplEnumAAFParameters ();
-
-public:
-
-
-  //****************
-  // NextOne()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    NextOne
-        // @parm [out,retval] The Next Parameter
-        (ImplAAFParameter ** ppParameter);
-
-  //****************
-  // Next()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    Next
-        (// @parm [in] number of control code defs requested
-         aafUInt32  count,
-
-         // @parm [out, size_is(count), length_is(*pFetched)] array to receive control code defs
-         ImplAAFParameter ** ppParameters,
-
-         // @parm [out,ref] number of actual Parameters fetched into ppParameters array
-         aafUInt32 *  pFetched);
-
-  //****************
-  // Skip()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    Skip
-        // @parm [in] Number of elements to skip
-        (aafUInt32  count);
-
-  //****************
-  // Reset()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    Reset ();
-
-
-  //****************
-  // Clone()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    Clone
-        // @parm [out,retval] new enumeration
-        (ImplEnumAAFParameters ** ppEnum);
-
-
-public:
-  // SDK Internal 
-  virtual AAFRESULT STDMETHODCALLTYPE
-	  SetIterator(ImplAAFObject *pObj,
-				OMReferenceContainerIterator<ImplAAFParameter>* iterator);
-private:
-	ImplAAFObject*	_enumObj;
-	OMReferenceContainerIterator<ImplAAFParameter>*	_iterator;
-};
+typedef ImplAAFEnumerator<ImplAAFParameter> ImplEnumAAFParameters;
 
 #endif // ! __ImplEnumAAFParameters_h__
 

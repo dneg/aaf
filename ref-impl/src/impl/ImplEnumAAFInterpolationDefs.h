@@ -30,84 +30,11 @@
  *
  ************************************************************************/
 
-class ImplAAFInterpolationDef;
+#include "ImplAAFEnumerator.h"
 
-#ifndef __ImplAAFObject_h__
-#include "ImplAAFObject.h"
-#endif
-#include "OMReferenceContainerIter.h"
+#include "ImplAAFInterpolationDef.h"
 
-class ImplEnumAAFInterpolationDefs : public ImplAAFRoot
-{
-public:
-  //
-  // Constructor/destructor
-  //
-  //********
-  ImplEnumAAFInterpolationDefs ();
-
-protected:
-  virtual ~ImplEnumAAFInterpolationDefs ();
-
-public:
-
-
-  //****************
-  // NextOne()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    NextOne
-        // @parm [out,retval] The Next PluggableDefinition
-        (ImplAAFInterpolationDef ** ppPluggableDef);
-
-  //****************
-  // Next()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    Next
-        (// @parm [in] number of Pluggable definitions requested
-         aafUInt32  count,
-
-         // @parm [out, size_is(count), length_is(*pFetched)] array to receive Pluggable definitions
-         ImplAAFInterpolationDef ** ppPluggableDefs,
-
-         // @parm [out,ref] number of actual PluggableDefs fetched into ppPluggableDefs array
-         aafUInt32 *  pFetched);
-
-  //****************
-  // Skip()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    Skip
-        // @parm [in] Number of elements to skip
-        (aafUInt32  count);
-
-  //****************
-  // Reset()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    Reset ();
-
-
-  //****************
-  // Clone()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    Clone
-        // @parm [out,retval] new enumeration
-        (ImplEnumAAFInterpolationDefs ** ppEnum);
-
-
-public:
-  // SDK Internal 
-  virtual AAFRESULT STDMETHODCALLTYPE
-	  SetIterator(ImplAAFObject *pObj,
-				OMReferenceContainerIterator<ImplAAFInterpolationDef>* iterator);
-
-private:
-	ImplAAFObject					*_enumObj;
-	OMReferenceContainerIterator<ImplAAFInterpolationDef>*	_iterator;
-};
+typedef ImplAAFEnumerator<ImplAAFInterpolationDef> ImplEnumAAFInterpolationDefs;
 
 #endif // ! __ImplEnumAAFInterpolationDefs_h__
 

@@ -31,9 +31,10 @@
  *
  ************************************************************************/
 
-
-class ImplEnumAAFPluginLocators;
-
+template <class T> 
+class ImplAAFEnumerator;
+class ImplAAFLocator;
+typedef ImplAAFEnumerator<ImplAAFLocator> ImplEnumAAFPluginLocators;
 
 #include "OMStrongRefProperty.h"
 #include "OMStrongRefVectorProperty.h"

@@ -3,8 +3,6 @@
 #ifndef __ImplEnumAAFEssenceData_h__
 #define __ImplEnumAAFEssenceData_h__
 
-#include "OMStorable.h"
-
 /***********************************************************************
  *
  *              Copyright (c) 1998-1999 Avid Technology, Inc.
@@ -32,90 +30,11 @@
  *
  ************************************************************************/
 
-class ImplAAFEssenceData;
-class ImplAAFObject;
+#include "ImplAAFEnumerator.h"
 
+#include "ImplAAFEssenceData.h"
 
-
-
-
-#ifndef __ImplAAFRoot_h__
-#include "ImplAAFRoot.h"
-#endif
-#include "ImplAAFContentStorage.h"
-
-
-#include "OMReferenceContainerIter.h"
-
-class ImplEnumAAFEssenceData : public ImplAAFRoot
-{
-public:
-  //
-  // Constructor/destructor
-  //
-  //********
-  ImplEnumAAFEssenceData ();
-
-protected:
-  virtual ~ImplEnumAAFEssenceData ();
-
-public:
-
-  //****************
-  // NextOne()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    NextOne
-		// @parm [out,retval] The Next EssenceData
-        (ImplAAFEssenceData ** ppEssenceData);
-
-  //****************
-  // Next()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    Next
-        (// @parm [in] number of essence data requested
-		 aafUInt32  count,
-
-		 // @parm [out, size_is(count), length_is(*pFetched)] array to receive EssenceData
-		 ImplAAFEssenceData ** ppEssenceData,
-
-		 // @parm [out,ref] number of actual EssenceData fetched into ppEssenceData array
-         aafUInt32 *  pFetched);
-
-  //****************
-  // Skip()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    Skip
-		// @parm [in] Number of elements to skip
-        (aafUInt32  count);
-
-  //****************
-  // Reset()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    Reset ();
-
-
-  //****************
-  // Clone()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    Clone
-		// @parm [out,retval] new enumeration
-        (ImplEnumAAFEssenceData ** ppEnum);
-
-public:
-// Internal to the toolkit
-  virtual AAFRESULT STDMETHODCALLTYPE
-	  SetIterator(ImplAAFObject *pObj,
-				OMReferenceContainerIterator<ImplAAFEssenceData>* iterator);
-
-private:
-	ImplAAFObject*	_enumObj;
-	OMReferenceContainerIterator<ImplAAFEssenceData>*	_iterator;
-};
+typedef ImplAAFEnumerator<ImplAAFEssenceData> ImplEnumAAFEssenceData;
 
 #endif // ! __ImplEnumAAFEssenceData_h__
 

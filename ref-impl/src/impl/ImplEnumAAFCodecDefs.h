@@ -30,90 +30,11 @@
  *
  ************************************************************************/
 
-class ImplAAFCodecDef;
+#include "ImplAAFEnumerator.h"
 
-#ifndef __ImplAAFObject_h__
-#include "ImplAAFObject.h"
-#endif
+#include "ImplAAFCodecDef.h"
 
-#include "OMReferenceContainerIter.h"
-
-#ifndef __ImplAAFRoot_h__
-#include "ImplAAFRoot.h"
-#endif
-
-
-class ImplEnumAAFCodecDefs : public ImplAAFRoot
-{
-public:
-  //
-  // Constructor/destructor
-  //
-  //********
-  ImplEnumAAFCodecDefs ();
-
-protected:
-  virtual ~ImplEnumAAFCodecDefs ();
-
-public:
-
-
-  //****************
-  // NextOne()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    NextOne
-        // @parm [out,retval] The Next PluggableDefinition
-        (ImplAAFCodecDef ** ppPluggableDef);
-
-  //****************
-  // Next()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    Next
-        (// @parm [in] number of Pluggable definitions requested
-         aafUInt32  count,
-
-         // @parm [out, size_is(count), length_is(*pFetched)] array to receive Pluggable definitions
-         ImplAAFCodecDef ** ppPluggableDefs,
-
-         // @parm [out,ref] number of actual PluggableDefs fetched into ppPluggableDefs array
-         aafUInt32 *  pFetched);
-
-  //****************
-  // Skip()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    Skip
-        // @parm [in] Number of elements to skip
-        (aafUInt32  count);
-
-  //****************
-  // Reset()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    Reset ();
-
-
-  //****************
-  // Clone()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    Clone
-        // @parm [out,retval] new enumeration
-        (ImplEnumAAFCodecDefs ** ppEnum);
-
-
-public:
-  // SDK Internal 
-  virtual AAFRESULT STDMETHODCALLTYPE
-	  SetIterator(ImplAAFObject *pObj,
-				OMReferenceContainerIterator<ImplAAFCodecDef>* iterator);
-
-private:
-	ImplAAFObject*	_enumObj;
-	OMReferenceContainerIterator<ImplAAFCodecDef>*	_iterator;
-};
+typedef ImplAAFEnumerator<ImplAAFCodecDef> ImplEnumAAFCodecDefs;
 
 #endif // ! __ImplEnumAAFCodecDefs_h__
 

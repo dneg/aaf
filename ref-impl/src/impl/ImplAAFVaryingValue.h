@@ -33,10 +33,10 @@
 
 class ImplAAFDataDef;
 class ImplAAFControlPoint;
-class ImplEnumAAFControlPoints;
 
-
-
+template <class T> 
+class ImplAAFEnumerator;
+typedef ImplAAFEnumerator<ImplAAFControlPoint> ImplEnumAAFControlPoints;
 
 #ifndef __ImplAAFParameter_h__
 #include "ImplAAFParameter.h"

@@ -31,91 +31,11 @@
  *
  ************************************************************************/
 
+#include "ImplAAFEnumerator.h"
 
-class ImplAAFPluginDef;
-class ImplAAFDefObject;
+#include "ImplAAFPluginDef.h"
 
-#ifndef __ImplAAFObject_h__
-#include "ImplAAFObject.h"
-#endif
-
-#include "OMReferenceContainerIter.h"
-
-#include "OMVariableSizeProperty.h"
-
-typedef OMVariableSizeProperty<aafUID_t> PluginDefWeakRefArrayProp_t;
-
-class ImplEnumAAFPluginDefs : public ImplAAFRoot
-{
-public:
-  //
-  // Constructor/destructor
-  //
-  //********
-  ImplEnumAAFPluginDefs ();
-
-protected:
-  virtual ~ImplEnumAAFPluginDefs ();
-
-public:
-
-
-  //****************
-  // NextOne()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    NextOne
-        // @parm [out,retval] The Next AAFPluginDescriptor
-        (ImplAAFPluginDef ** ppAAFPluginDef);
-
-  //****************
-  // Next()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    Next
-        (// @parm [in] number of AAFPluginDescriptors requested
-         aafUInt32  count,
-
-         // @parm [out, size_is(count), length_is(*pFetched)] array to receive AAFPluginDescriptors
-         ImplAAFPluginDef ** ppAAFPluginDefs,
-
-         // @parm [out,ref] number of actual AAFPluginDescriptors fetched into ppAAFPluginDescriptors array
-         aafUInt32 *  pFetched);
-
-  //****************
-  // Skip()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    Skip
-        // @parm [in] Number of elements to skip
-        (aafUInt32  count);
-
-  //****************
-  // Reset()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    Reset ();
-
-
-  //****************
-  // Clone()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    Clone
-        // @parm [out,retval] new enumeration
-        (ImplEnumAAFPluginDefs ** ppEnum);
-
-public:
-// Internal to the toolkit
-  // SDK Internal 
-  virtual AAFRESULT STDMETHODCALLTYPE
-	  SetIterator(ImplAAFObject *pObj,
-				OMReferenceContainerIterator<ImplAAFPluginDef>* iterator);
-
-private:
-	ImplAAFObject						*_enumObj;
-	OMReferenceContainerIterator<ImplAAFPluginDef>*	_iterator;
-};
+typedef ImplAAFEnumerator<ImplAAFPluginDef> ImplEnumAAFPluginDefs;
 
 #endif // ! __ImplEnumAAFPluginDescriptors_h__
 

@@ -57,9 +57,9 @@ class ImplAAFMobSlot;
 
 class ImplAAFFile;
 
-class ImplEnumAAFMobSlots;
-
-class ImplEnumAAFTaggedValues;
+template <class T> 
+class ImplAAFEnumerator;
+typedef ImplAAFEnumerator<ImplAAFMobSlot> ImplEnumAAFMobSlots;
 
 class ImplAAFFindSourceInfo;
 

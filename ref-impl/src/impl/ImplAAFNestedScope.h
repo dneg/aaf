@@ -46,20 +46,11 @@
  *
  *************************************************************************/
 
-#ifndef __ImplAAFSegment_h__
 #include "ImplAAFSegment.h"
-#endif
 
-class ImplEnumAAFSegments;
-
-
-
-
-
-
-#ifndef __ImplAAFSegment_h__
-#include "ImplAAFSegment.h"
-#endif
+template <class T> 
+class ImplAAFEnumerator;
+typedef ImplAAFEnumerator<ImplAAFSegment> ImplEnumAAFSegments;
 
 #include "OMStrongRefVectorProperty.h"
 

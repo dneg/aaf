@@ -30,100 +30,10 @@
  *
  ************************************************************************/
 
-class ImplAAFPropertyDef;
-class ImplAAFClassDef;
+#include "ImplAAFEnumerator.h"
 
-#ifndef __ImplAAFRoot_h__
-#include "ImplAAFRoot.h"
-#endif
+#include "ImplAAFPropertyDef.h"
 
-#include "OMReferenceContainerIter.h"
-
-class ImplEnumAAFPropertyDefs : public ImplAAFRoot
-{
-public:
-  //
-  // Constructor/destructor
-  //
-  //********
-  ImplEnumAAFPropertyDefs ();
-
-protected:
-  virtual ~ImplEnumAAFPropertyDefs ();
-
-public:
-
-
-  //****************
-  // NextOne()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    NextOne
-        // @parm [out,retval] The Next PropertyDefinition
-        (ImplAAFPropertyDef ** ppPropertyDef);
-
-  //****************
-  // Next()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    Next
-        (// @parm [in] number of property definition definitions
-		 // requested
-         aafUInt32  count,
-
-         // @parm [out, size_is(count), length_is(*pFetched)] array to
-		 // receive property definitions
-         ImplAAFPropertyDef ** ppPropertyDefs,
-
-         // @parm [out,ref] number of actual PropertyDefs fetched into
-		 // ppPropertyDefs array
-         aafUInt32 *  pFetched);
-
-  //****************
-  // Skip()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    Skip
-        // @parm [in] Number of elements to skip
-        (aafUInt32  count);
-
-  //****************
-  // Reset()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    Reset ();
-
-
-  //****************
-  // Clone()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    Clone
-        // @parm [out,retval] new enumeration
-        (ImplEnumAAFPropertyDefs ** ppEnum);
-
-
-
-public:
-  // SDK Internal 
-  virtual AAFRESULT STDMETHODCALLTYPE
-	  SetIterator(ImplAAFClassDef *pObj,
-				OMReferenceContainerIterator<ImplAAFPropertyDef>* iterator);
-
-private:
-	ImplAAFClassDef                   * _enumObj;
-	OMReferenceContainerIterator<ImplAAFPropertyDef>*	_iterator;
-};
-
-//
-// smart pointer
-//
-
-#ifndef __ImplAAFSmartPointer_h__
-// caution! includes assert.h
-#include "ImplAAFSmartPointer.h"
-#endif
-
-typedef ImplAAFSmartPointer<ImplEnumAAFPropertyDefs> ImplEnumAAFPropertyDefsSP;
+typedef ImplAAFEnumerator<ImplAAFPropertyDef> ImplEnumAAFPropertyDefs;
 
 #endif // ! __ImplEnumAAFPropertyDefs_h__

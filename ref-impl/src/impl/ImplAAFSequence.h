@@ -39,11 +39,9 @@ class ImplAAFSegment;
 
 class ImplAAFDataDef;
 
-class ImplEnumAAFComponents;
-
-
-
-
+template <class T> 
+class ImplAAFEnumerator;
+typedef ImplAAFEnumerator<ImplAAFComponent> ImplEnumAAFComponents;
 
 #ifndef __ImplAAFSegment_h__
 #include "ImplAAFSegment.h"

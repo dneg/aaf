@@ -49,7 +49,10 @@ class ImplAAFDataDef;
 class ImplAAFParameter;
 class ImplAAFSegment;
 class ImplAAFSourceReference;
-class ImplEnumAAFParameters;
+
+template <class T> 
+class ImplAAFEnumerator;
+typedef ImplAAFEnumerator<ImplAAFParameter> ImplEnumAAFParameters;
 
 #ifndef __ImplAAFParameter_h__
 #include "ImplAAFParameter.h"

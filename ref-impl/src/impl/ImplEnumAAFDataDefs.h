@@ -31,105 +31,11 @@
  *
  ************************************************************************/
 
-/***********************************************\
-*	Stub only.   Implementation not yet added	*
-\***********************************************/
+#include "ImplAAFEnumerator.h"
 
-
-class ImplAAFDataDef;
-
-
-
-
-
-
-
-
-#ifndef __ImplAAFObject_h__
-#include "ImplAAFObject.h"
-#endif
-
-#ifndef __ImplAAFDataDef_h__
 #include "ImplAAFDataDef.h"
-#endif
 
-#include "OMReferenceCOntainerIter.h"
-#include "OMWeakRefVectorProperty.h"
-
-typedef OMWeakReferenceVectorProperty<ImplAAFDataDef> DataDefWeakRefArrayProp_t;
-
-class ImplEnumAAFDataDefs : public ImplAAFRoot
-{
-public:
-  //
-  // Constructor/destructor
-  //
-  //********
-  ImplEnumAAFDataDefs ();
-
-protected:
-  virtual ~ImplEnumAAFDataDefs ();
-
-public:
-
-
-  //****************
-  // NextOne()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    NextOne
-        // @parm [out,retval] The Next DataDefinition
-        (ImplAAFDataDef ** ppDataDef);
-
-  //****************
-  // Next()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    Next
-        (// @parm [in] number of data definitions requested
-         aafUInt32  count,
-
-         // @parm [out, size_is(count), length_is(*pFetched)] array to receive data definitions
-         ImplAAFDataDef ** ppDataDef,
-
-         // @parm [out,ref] number of actual DataDefinition fetched into ppDataDefinition array
-         aafUInt32 *  pFetched);
-
-  //****************
-  // Skip()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    Skip
-        // @parm [in] Number of elements to skip
-        (aafUInt32  count);
-
-  //****************
-  // Reset()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    Reset ();
-
-
-  //****************
-  // Clone()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    Clone
-        // @parm [out,retval] new enumeration
-        (ImplEnumAAFDataDefs ** ppEnum);
-
-
-
-public:
-  // SDK Internal 
-  virtual AAFRESULT STDMETHODCALLTYPE
-	  SetIterator(ImplAAFObject *pObj,
-				OMReferenceContainerIterator<ImplAAFDataDef>* iterator);
-
-private:
-		ImplAAFObject					*_enumObj;
-	OMReferenceContainerIterator<ImplAAFDataDef>*	_iterator;
-};
+typedef ImplAAFEnumerator<ImplAAFDataDef> ImplEnumAAFDataDefs;
 
 #endif // ! __ImplEnumAAFDataDefs_h__
 

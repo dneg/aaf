@@ -30,88 +30,11 @@
  *
  ************************************************************************/
 
-class ImplAAFMetaDictionary;
+#include "ImplAAFEnumerator.h"
 
 #include "ImplAAFTypeDef.h"
-#include "OMReferenceContainerIter.h"
-#include "OMVariableSizeProperty.h"
-#include "OMStrongRefVectorProperty.h"
 
-//typedef OMVariableSizeProperty<aafUID_t> typeDefWeakRefArrayProp_t;
-//typedef OMStrongReferenceVectorProperty<ImplAAFTypeDef> typeDefStrongRefArrayProp_t;
-
-
-class ImplEnumAAFTypeDefs : public ImplAAFRoot
-{
-public:
-  //
-  // Constructor/destructor
-  //
-  //********
-  ImplEnumAAFTypeDefs ();
-
-protected:
-  virtual ~ImplEnumAAFTypeDefs ();
-
-public:
-
-
-  //****************
-  // NextOne()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    NextOne
-        // @parm [out,retval] The Next TypeDefinition
-        (ImplAAFTypeDef ** ppTypeDef);
-
-  //****************
-  // Next()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    Next
-        (// @parm [in] number of type definition definitions requested
-         aafUInt32  count,
-
-         // @parm [out, size_is(count), length_is(*pFetched)] array to receive type definition definitions
-         ImplAAFTypeDef ** ppTypeDefs,
-
-         // @parm [out,ref] number of actual TypeDefs fetched into ppTypeDefs array
-         aafUInt32 *  pFetched);
-
-  //****************
-  // Skip()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    Skip
-        // @parm [in] Number of elements to skip
-        (aafUInt32  count);
-
-  //****************
-  // Reset()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    Reset ();
-
-
-  //****************
-  // Clone()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    Clone
-        // @parm [out,retval] new enumeration
-        (ImplEnumAAFTypeDefs ** ppEnum);
-
-
-
-public:
-  // SDK Internal 
-  virtual AAFRESULT STDMETHODCALLTYPE
-	  SetIterator(ImplAAFMetaDictionary *pObj,
-				OMReferenceContainerIterator<ImplAAFTypeDef>* iterator);
-private:
-	ImplAAFMetaDictionary*	_enumObj;
-	OMReferenceContainerIterator<ImplAAFTypeDef>*	_iterator;
-};
+typedef ImplAAFEnumerator<ImplAAFTypeDef> ImplEnumAAFTypeDefs;
 
 #endif // ! __ImplEnumAAFTypeDefs_h__
 
