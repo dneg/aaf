@@ -224,9 +224,12 @@ void ImplAAFTypeDefFixedArray::externalize(OMByte* internalBytes,
   aafUInt32 externalSize = ptd->PropValSize ();
   if (internalSize == externalSize)
 	{
-	  copy (internalBytes,
-			externalBytes,
-			externalBytesSize);
+	  if (numElems > 0)
+	  {
+		copy (internalBytes,
+			  externalBytes,
+			  externalBytesSize);
+	  }
 	}
   else
 	{
@@ -277,9 +280,12 @@ void ImplAAFTypeDefFixedArray::internalize(OMByte* externalBytes,
   aafUInt32 externalElemSize = ptd->PropValSize ();
   if (internalElemSize == externalElemSize)
 	{
-	  copy (externalBytes,
-			internalBytes,
-			internalBytesSize);
+	  if (numElems > 0)
+	  {
+		copy (externalBytes,
+			  internalBytes,
+			  internalBytesSize);
+	  }
 	}
   else
 	{

@@ -398,15 +398,18 @@ void ImplAAFTypeDefVariableArray::externalize(OMByte* internalBytes,
 	aafUInt32 extElemSize = ptd->PropValSize ();
 	// aafUInt32 intElemSize = ptd->internalSize (0, 0);
 	// aafUInt32 extElemSize = ptd->externalSize (0, 0);
+	aafUInt32 numElems = internalBytesSize / intElemSize;
 	if (intElemSize == extElemSize)
 	{
-		copy (internalBytes,
-			externalBytes,
-			externalBytesSize);
+	  if (numElems > 0)
+	  {
+		  copy (externalBytes,
+				internalBytes,
+				externalBytesSize);
+	  }
 	}
 	else
 	{
-		aafUInt32 numElems = internalBytesSize / intElemSize;
 		aafInt32 intNumBytesLeft = internalBytesSize;
 		aafInt32 extNumBytesLeft = externalBytesSize;
 		aafUInt32 elem = 0;
@@ -461,16 +464,19 @@ void ImplAAFTypeDefVariableArray::internalize(OMByte* externalBytes,
 	aafUInt32 intElemSize = ptd->ActualSize ();
 	// aafUInt32 intElemSize = ptd->internalSize (0, 0);
 	// aafUInt32 extElemSize = ptd->externalSize (0, 0);
+	aafUInt32 numElems = externalBytesSize / extElemSize;
 	if (intElemSize == extElemSize)
 	{
 		assert (externalBytesSize <= internalBytesSize);
-		copy (externalBytes,
-			internalBytes,
-			externalBytesSize);
+		if (numElems > 0)
+		{
+		  copy (externalBytes,
+				internalBytes,
+				externalBytesSize);
+		}
 	}
 	else
 	{
-		aafUInt32 numElems = externalBytesSize / extElemSize;
 		aafInt32 intNumBytesLeft = internalBytesSize;
 		aafInt32 extNumBytesLeft = externalBytesSize;
 		aafUInt32 elem = 0;
