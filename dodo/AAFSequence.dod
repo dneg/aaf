@@ -76,7 +76,7 @@ AD_XMETHOD1(AppendComponent,
   // that it is not the first object in a transition\, and that it is
   // not neighboring another transition.  It also verifies that there
   // is enough source material on either side of the transition.  The
-  // function also verifies that the datakinds are compatible.
+  // function also verifies that the datadefs are compatible.
   //
   // This method will AddRef\(\) the component if it succeeds.
   //
@@ -102,9 +102,9 @@ AD_XMETHOD1(AppendComponent,
   // AAFRESULT_NULL_PARAM
   //   - pComponent is null.
   //
-  // AAFRESULT_INVALID_DATAKIND
+  // AAFRESULT_INVALID_DATADEF
   //   - The data kind of the component is not compatible with the 
-  //     data kind of the sequence.
+  //     data def of the sequence.
   //
   // AAFRESULT_LEADING_TRAN
   //   - Attempted to append a transition as the first component of
