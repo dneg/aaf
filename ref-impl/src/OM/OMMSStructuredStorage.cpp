@@ -393,7 +393,7 @@ void OMMSSInitialize(void)
 {
 #if defined(OM_WINDOWS_SS) || defined(OM_MACINTOSH_SS)
   if (!_COMIsInitialized) {
-    OMCoInitialize(0);
+    CoInitialize(0);
     _COMIsInitialized = 1;
   }
 #endif
@@ -403,7 +403,7 @@ void OMMSSFinalize(void)
 {
 #if defined(OM_WINDOWS_SS) || defined(OM_MACINTOSH_SS)
   if (_COMIsInitialized) {
-    OMCoUninitialize();
+    CoUninitialize();
     _COMIsInitialized = 0;
   }
 #endif
