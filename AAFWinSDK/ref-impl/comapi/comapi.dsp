@@ -341,14 +341,6 @@ SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFMediaGroupTest.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\com-api\CAAFTapeDescriptor.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFTapeDescriptorTest.cpp"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFMediaTest.cpp"
 # End Source File
 # Begin Source File
@@ -481,14 +473,6 @@ SOURCE="..\..\..\ref-impl\src\com-api\com-dll\CAAFServer.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\com-api\CAAFSession.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFSessionTest.cpp"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFSourceClip.cpp"
 # End Source File
 # Begin Source File
@@ -518,6 +502,14 @@ SOURCE="..\..\..\ref-impl\src\com-api\CAAFStringAttribute.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFStringAttributeTest.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFTapeDescriptor.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFTapeDescriptorTest.cpp"
 # End Source File
 # Begin Source File
 
@@ -714,6 +706,14 @@ SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFParameterSlots.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\com-api\test\CEnumAAFParameterSlotsTest.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFProperties.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\test\CEnumAAFPropertiesTest.cpp"
 # End Source File
 # Begin Source File
 

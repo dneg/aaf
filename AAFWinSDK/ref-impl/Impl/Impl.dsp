@@ -212,10 +212,6 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFMediaGroup.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\impl\ImplAAFTapeDescriptor.cpp"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFMob.cpp"
 # End Source File
 # Begin Source File
@@ -293,6 +289,10 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFSourceReference.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFStringAttribute.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFTapeDescriptor.cpp"
 # End Source File
 # Begin Source File
 
@@ -389,6 +389,10 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFMobSlots.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFParameterSlots.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFProperties.cpp"
 # End Source File
 # Begin Source File
 
