@@ -45,6 +45,7 @@ static const 	aafMobID_t	TEST_MobID =
 0x13, 0x00, 0x00, 0x00,
 {0xb6cb63f0, 0x0404, 0x11d4, 0x8e, 0x3d, 0x00, 0x90, 0x27, 0xdf, 0xca, 0x7c}};
 
+static aafUInt8 TEST_AIFC_Summary[] = "TEST";
 
 // Cross-platform utility to delete a file.
 static void RemoveTestFile(const wchar_t* pFileName)
@@ -137,6 +138,11 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		  checkResult(pSourceMob->AddNilReference (test+1, 0, defs.ddSound(), audioRate));
 	  }
 
+	  // Test AppendTimecodeSlot()
+	  aafRational_t videoRate = { 30000, 1001 };
+	  aafTimecode_t timeCode = { 108000, kAAFTcNonDrop, 30 };
+	  checkResult(pSourceMob->AppendTimecodeSlot(videoRate, 3, timeCode, 60*60*30));
+
 	  // Create a concrete subclass of EssenceDescriptor
  	  checkResult(defs.cdAIFCDescriptor()->
 				  CreateInstance(IID_IAAFEssenceDescriptor, 
@@ -144,7 +150,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 		IAAFAIFCDescriptor*			pAIFCDesc = NULL;
 		checkResult(edesc->QueryInterface (IID_IAAFAIFCDescriptor, (void **)&pAIFCDesc));
-		checkResult(pAIFCDesc->SetSummary (5, (unsigned char*)"TEST"));
+		checkResult(pAIFCDesc->SetSummary (sizeof(TEST_AIFC_Summary), TEST_AIFC_Summary));
 		pAIFCDesc->Release();
 		pAIFCDesc = NULL;
 
@@ -228,7 +234,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		  checkResult(aMob->GetMobID (&mobID));
 
 		  checkResult(aMob->CountSlots (&numSlots));
-		  if (2 != numSlots)
+		  if (3 != numSlots)
 			  return AAFRESULT_TEST_FAILED;
 		  if(numSlots != 0)
 		  {
@@ -245,6 +251,14 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		  }
 		  checkResult(aMob->QueryInterface (IID_IAAFSourceMob, (void **)&pSourceMob));
 		  checkResult(pSourceMob->GetEssenceDescriptor (&pEdesc));
+
+		  aafUInt8 summary[5];
+		  IAAFAIFCDescriptor* pAIFCDesc = NULL;
+		  checkResult(pEdesc->QueryInterface (IID_IAAFAIFCDescriptor, (void **)&pAIFCDesc));
+		  checkResult(pAIFCDesc->GetSummary (sizeof(summary), summary));
+		  checkExpression(memcmp(summary, TEST_AIFC_Summary, sizeof(TEST_AIFC_Summary)) == 0, AAFRESULT_TEST_FAILED);
+		  pAIFCDesc->Release();
+		  pAIFCDesc = NULL;
 
 		  pEdesc->Release();
 		  pEdesc = NULL;
@@ -323,7 +337,6 @@ extern "C" HRESULT CAAFSourceMob_test(testMode_t mode)
 	{
 		cout << "The following AAFSourceMob methods have not been implemented:" << endl; 
 		cout << "     Initialize" << endl; 
-		cout << "     AppendTimecodeSlot - needs unit test" << endl; 
 		cout << "     AppendEdgecodeSlot" << endl; 
 		cout << "     AppendPhysSourceRef - needs unit test" << endl; 
 		cout << "     SpecifyValidCodeRange" << endl; 
