@@ -23,6 +23,7 @@
 // @doc OMEXTERNAL
 
 // define OM_PERMIT_ZERO_LENGTH to eliminate debug check for zero-length properties on read
+// define OM_KLUDGE_TYPEDEFRECORD to eliminate PRECONDITION optional property not present
 
 #include "OMProperty.h"
 
@@ -385,9 +386,9 @@ void OMSimpleProperty::get(void* value, size_t ANAME(valueSize)) const
   PRECONDITION("Valid data buffer", value != 0);
   PRECONDITION("Valid size", valueSize >= _size);
 
-
+#ifndef OM_KLUDGE_TYPEDEFRECORD
 	PRECONDITION("Optional property is present",IMPLIES(isOptional(), isPresent()));
-
+#endif
 
   memcpy(value, _bits, _size);
 }
@@ -519,9 +520,9 @@ void OMSimpleProperty::getBits(OMByte* bits, size_t ANAME(bitsSize)) const
 {
   TRACE("OMSimpleProperty::getBits");
 
-
+#ifndef OM_KLUDGE_TYPEDEFRECORD
 	PRECONDITION("Optional property is present",IMPLIES(isOptional(), isPresent()));
-
+#endif
 
   PRECONDITION("Valid bits", bits != 0);
   PRECONDITION("Valid size", bitsSize >= _size);
