@@ -261,11 +261,11 @@ void OMStoredObject::save(OMStoredPropertySetIndex* index)
   //
   OMVersion version = currentVersion;
   writeToStream(_properties, &version, sizeof(version));
-  
+
   // Write count of entries.
   //
   writeToStream(_properties, &entries, sizeof(entries));
-  
+
   // Write entries.
   //
   OMPropertyId propertyId;
@@ -304,7 +304,7 @@ OMStoredPropertySetIndex* OMStoredObject::restore(void)
   OMVersion version;
   readUInt8FromStream(_properties, version);
   ASSERT("Recognized version number", version == currentVersion);
-  
+
   // Read count of entries.
   //
   OMPropertyCount entries;
@@ -325,7 +325,7 @@ OMStoredPropertySetIndex* OMStoredObject::restore(void)
     index->insert(propertyId, type, offset, length);
     offset = offset + length;
   }
-  
+
   POSTCONDITION("Valid index",
                  index->isValid(indexHeaderSize + (entries * indexEntrySize)));
   return index;
@@ -340,7 +340,7 @@ void OMStoredObject::restore(OMPropertySet& properties)
   PRECONDITION("Already open", _open);
 
   size_t entries = _index->entries();
-  
+
   OMPropertyId propertyId;
   OMStoredForm type;
   OMUInt32 offset;
@@ -463,7 +463,7 @@ void OMStoredObject::close(void)
   if (_open) {
 
     closeStream(_properties);
-  
+
     delete _index;
     _index = 0;
 
@@ -837,7 +837,7 @@ void OMStoredObject::save(const OMPropertyTable* table)
   // count of paths
   OMPropertyCount count = table->count();
   writeToStream(stream, &count, sizeof(count));
- 
+
   // count of property ids
   OMUInt32 pidCount = 0;
   for (size_t i = 0; i < count; i++) {
@@ -892,7 +892,7 @@ void OMStoredObject::save(OMPropertyId propertyId,
   p += sizeof(keySize);
   memcpy(p, &id, sizeof(id));
 
-  write(propertyId, storedForm, (void *)buffer, size); 
+  write(propertyId, storedForm, (void *)buffer, size);
 }
 
   // @mfunc Save a collection (vector/set) of weak references.
@@ -1177,7 +1177,7 @@ void OMStoredObject::restore(OMPropertyTable*& table)
   readUInt16FromStream(stream, count, reorderBytes);
   table = new OMPropertyTable();
   ASSERT("Valid heap pointer", table != 0);
- 
+
   if (count > 0) {
     // count of property ids
     OMUInt32 totalPids;
@@ -1259,7 +1259,7 @@ void OMStoredObject::restore(const wchar_t* collectionName,
                              OMPropertyId& keyPropertyId)
 {
   TRACE("OMStoredObject::restore");
-  
+
   // Calculate the stream name for the index.
   //
   wchar_t* indexName = collectionIndexStreamName(collectionName);
@@ -1375,7 +1375,7 @@ IStream* OMStoredObject::openStream(IStorage* storage,
   TRACE("OMStoredObject::openStream");
   PRECONDITION("Valid storage", storage != 0);
   PRECONDITION("Valid stream name", validWideString(streamName));
-  
+
   DWORD mode;
   if (_mode == OMFile::modifyMode) {
     mode = STGM_DIRECT | STGM_READWRITE | STGM_SHARE_EXCLUSIVE;
@@ -1386,7 +1386,7 @@ IStream* OMStoredObject::openStream(IStorage* storage,
   IStream* stream = 0;
   OMCHAR omStreamName[256];
   convert(omStreamName, 256, streamName);
-  
+
   HRESULT resultCode = storage->OpenStream(
     omStreamName,
     0,
@@ -1399,7 +1399,7 @@ IStream* OMStoredObject::openStream(IStorage* storage,
 #endif
 
   return stream;
-  
+
 }
 
   // @mfunc Close <p stream>.
@@ -1713,7 +1713,7 @@ void OMStoredObject::closeStorage(IStorage*& storage)
   //        to <p stream>.
   //   @parm The stream on which to write.
   //   @parm The buffer to write.
-  //   @parm The number of bytes to write.   
+  //   @parm The number of bytes to write.
 void OMStoredObject::writeToStream(IStream* stream, void* data, size_t size)
 {
   TRACE("OMStoredObject::writeToStream");
@@ -1753,7 +1753,7 @@ void OMStoredObject::writeToStream(IStream* stream,
   //        address <p data>.
   //   @parm The stream from which to read.
   //   @parm The buffer into which the bytes are read.
-  //   @parm The number of bytes to read.   
+  //   @parm The number of bytes to read.
 void OMStoredObject::readFromStream(IStream* stream, void* data, size_t size)
 {
   TRACE("OMStoredObject::readFromStream");
