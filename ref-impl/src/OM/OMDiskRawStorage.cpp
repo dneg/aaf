@@ -204,11 +204,6 @@ void OMDiskRawStorage::write(const OMByte* bytes,
 }
 
   // @mfunc May this <c OMDiskRawStorage> be changed in size ?
-  //        An implementation of <c OMDiskRawStorage> for disk files
-  //        would most probably return true. An implemetation
-  //        for network streams would return false. An implementation
-  //        for fixed size contiguous memory files (avoiding copying)
-  //        would return false.
   //   @rdesc Always <e bool.true>.
   //   @this const
 bool OMDiskRawStorage::isSizeable(void) const
@@ -254,10 +249,6 @@ void OMDiskRawStorage::setSize(OMUInt64 newSize)
 
   // @mfunc May the current position, for <f read()> and <f write()>,
   //        of this <c OMDiskRawStorage> be changed ?
-  //        An implementation of <c OMDiskRawStorage> for disk files
-  //        would most probably return true. An implemetation
-  //        for network streams would return false. An implementation
-  //        for memory files would return true.
   //   @rdesc Always <e bool.true>.
   //   @this const
 bool OMDiskRawStorage::isPositionable(void) const

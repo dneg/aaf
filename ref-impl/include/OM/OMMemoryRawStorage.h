@@ -90,11 +90,6 @@ public:
                      OMUInt32& bytesWritten);
 
     // @cmember May this <c OMMemoryRawStorage> be changed in size ?
-    //          An implementation of <c OMMemoryRawStorage> for disk files
-    //          would most probably return true. An implemetation
-    //          for network streams would return false. An implementation
-    //          for fixed size contiguous memory files (avoiding copying)
-    //          would return false.
   virtual bool isSizeable(void) const;
 
     // @cmember The current size of this <c OMMemoryRawStorage> in bytes.
@@ -114,10 +109,6 @@ public:
 
     // @cmember May the current position, for <f read()> and <f write()>,
     //          of this <c OMMemoryRawStorage> be changed ?
-    //          An implementation of <c OMMemoryRawStorage> for disk files
-    //          would most probably return true. An implemetation
-    //          for network streams would return false. An implementation
-    //          for memory files would return true.
   virtual bool isPositionable(void) const;
 
     // @cmember The current position for <f read()> and <f write()>, as an
