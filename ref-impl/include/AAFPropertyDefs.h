@@ -102,7 +102,7 @@ const aafUID_t kAAFPropID_CommentMarker_Annotation =
 {0x06010104, 0x020a, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02}};
 
 //{06010104-020c-0000-060e-2b3401010105}
-const aafUID_t kAAFPropID_DescriptiveMarker_DescriptiveFramework =
+const aafUID_t kAAFPropID_DescriptiveMarker_Description =
 {0x06010104, 0x020c, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x05}};
 
 //{05300506-0000-0000-060e-2b3401010102}
@@ -566,8 +566,16 @@ const aafUID_t kAAFPropID_DigitalImageDescriptor_AlphaTransparency =
 {0x05200102, 0x0000, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02}};
 
 //{04010201-0101-0200-060e-2b3401010102}
-const aafUID_t kAAFPropID_DigitalImageDescriptor_Gamma =
+const aafUID_t kAAFPropID_DigitalImageDescriptor_TransferCharacteristic =
 {0x04010201, 0x0101, 0x0200, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02}};
+
+//{04010201-0106-0100-060e-2b3401010109}
+const aafUID_t kAAFPropID_DigitalImageDescriptor_ColorPrimaries =
+{0x04010201, 0x0106, 0x0100, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x09}};
+
+//{04010201-0103-0100-060e-2b3401010102}
+const aafUID_t kAAFPropID_DigitalImageDescriptor_CodingEquations =
+{0x04010201, 0x0103, 0x0100, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02}};
 
 //{04180101-0000-0000-060e-2b3401010102}
 const aafUID_t kAAFPropID_DigitalImageDescriptor_ImageAlignmentFactor =
@@ -662,7 +670,7 @@ const aafUID_t kAAFPropID_SoundDescriptor_DialNorm =
 {0x04020701, 0x0000, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x05}};
 
 //{04020402-0000-0000-060e-2b3401010102}
-const aafUID_t kAAFPropID_SoundDescriptor_Compression =
+const aafUID_t kAAFPropID_SoundDescriptor_SoundCompression =
 {0x04020402, 0x0000, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02}};
 
 //{04020302-0100-0000-060e-2b3401010105}
@@ -942,7 +950,7 @@ const aafUID_t kAAFPropID_CompositionMob_DefFadeEditUnit =
 {0x05300403, 0x0000, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02}};
 
 //{06010104-010a-0000-060e-2b3401010108}
-const aafUID_t kAAFPropID_CompositionMob_Rendering =
+const aafUID_t kAAFPropID_CompositionMob_CompositionRendering =
 {0x06010104, 0x010a, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x08}};
 
 //{06010104-0203-0000-060e-2b3401010102}
@@ -981,9 +989,9 @@ const aafUID_t kAAFPropID_TimelineMobSlot_Origin =
 const aafUID_t kAAFPropID_TimelineMobSlot_MarkIn =
 {0x07020103, 0x010c, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x07}};
 
-//{07020103-0103-0000-060e-2b3401010107}
+//{07020103-0203-0000-060e-2b3401010107}
 const aafUID_t kAAFPropID_TimelineMobSlot_MarkOut =
-{0x07020103, 0x0103, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x07}};
+{0x07020103, 0x0203, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x07}};
 
 //{07020103-010d-0000-060e-2b3401010107}
 const aafUID_t kAAFPropID_TimelineMobSlot_UserPos =

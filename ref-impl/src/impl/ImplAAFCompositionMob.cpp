@@ -38,7 +38,7 @@ ImplAAFCompositionMob::ImplAAFCompositionMob ():
 	_defaultFadeLen(	PID_CompositionMob_DefaultFadeLength,		L"DefaultFadeLength"),
 	_defaultFadeType(	PID_CompositionMob_DefFadeType,			L"DefFadeType"),
 	_defaultFadeEditUnit(PID_CompositionMob_DefFadeEditUnit,	L"DefFadeEditUnit"),
-	_rendering(PID_CompositionMob_Rendering,	L"Rendering")
+	_rendering(PID_CompositionMob_CompositionRendering,	L"CompositionRendering")
 {
 	_persistentProperties.put(		_defaultFadeLen.address());
 	_persistentProperties.put(		_defaultFadeType.address());

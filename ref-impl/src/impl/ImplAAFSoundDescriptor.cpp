@@ -32,7 +32,7 @@
 
 ImplAAFSoundDescriptor::ImplAAFSoundDescriptor() :
 
-    _compression(       PID_SoundDescriptor_Compression,        L"Compression"),
+    _compression(       PID_SoundDescriptor_SoundCompression,        L"SoundCompression"),
     _channels(          PID_SoundDescriptor_Channels,           L"Channels"),
     _audioSamplingRate( PID_SoundDescriptor_AudioSamplingRate,  L"AudioSamplingRate"),
     _locked(            PID_SoundDescriptor_Locked,             L"Locked"),

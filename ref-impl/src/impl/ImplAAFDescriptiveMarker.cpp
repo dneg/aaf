@@ -40,7 +40,7 @@
 #include <string.h>
 
 ImplAAFDescriptiveMarker::ImplAAFDescriptiveMarker ()
-  : _descriptiveFramework( PID_DescriptiveMarker_DescriptiveFramework, L"DescriptiveFramework" )
+  : _descriptiveFramework( PID_DescriptiveMarker_Description, L"Description" )
 {
   _persistentProperties.put( _descriptiveFramework.address() );
 }
