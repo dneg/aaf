@@ -60,6 +60,18 @@ import "%01.idl";
 
 #ccccccccccccccccccccccccccc
 #c
+#c Adds quoted header include statement to idl file
+#c
+#c Argument1: Filename file to be included.
+#c
+#c
+#startm AD_CPP_QUOTE_INCLUDE 01
+cpp_quote("#include \\"%01\\"")
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
 #c Goes at the head of the file.
 #c
 #c Arguments: none

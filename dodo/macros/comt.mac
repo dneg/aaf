@@ -135,6 +135,10 @@ HRESULT C.this-module_test()
 #startm AD_CPPINCLUDE 01
 #endm
 
+#startm AD_CPP_QUOTE_INCLUDE 01
+#endm
+
+
 #startm AD_TYPES_BEGIN 11
 #endm
 
