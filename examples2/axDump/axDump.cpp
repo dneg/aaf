@@ -227,15 +227,11 @@ public:
 			AxTypeDef axBaseTypeDef( _axDict.LookupTypeDef( kAAFTypeID_UInt8Array ) );
 
 			AxTypeDefRename axTypeDefRename(
-				AxCreateMetaInstance<IAAFTypeDefRename>(
-							_axDict, AUID_AAFTypeDefRename, IID_IAAFTypeDefRename ) );
+				AxCreateMetaInstance<IAAFTypeDefRename>( _axDict ) );
 
 			axTypeDefRename.Initialize( typeUid, axBaseTypeDef, AxString( L"Opaque Data" ) );
 
-			// The query iterface can be removed if base class cast is implemented.
-			_axDict.RegisterOpaqueTypeDef(
-				AxQueryInterface<IAAFTypeDefRename,IAAFTypeDef>(
-					axTypeDefRename, IID_IAAFTypeDef ) );
+			_axDict.RegisterOpaqueTypeDef( axTypeDefRename );
 
 			_count++;
 		}
