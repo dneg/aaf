@@ -30,6 +30,10 @@
 #include "ImplEnumAAFMobComments.h"
 #endif
 
+#ifndef __ImplAAFGroup_h__
+#include "ImplAAFGroup.h"
+#endif
+
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
@@ -281,6 +285,8 @@ AAFRESULT STDMETHODCALLTYPE
 				hr= cstore->LookupMob(newMobID, &mobPtr) ;
 				if(hr== AAFRESULT_SUCCESS)
 				{
+					mobPtr->ReleaseReference();
+					mobPtr = NULL;
 					RAISE(AAFRESULT_DUPLICATE_MOBID);
 				}	
 				else if(hr== AAFRESULT_MOB_NOT_FOUND)
@@ -312,12 +318,12 @@ AAFRESULT STDMETHODCALLTYPE
 			cstore->ReleaseReference();
 			cstore = NULL;
 		}
-//		if (head)
-//		{
-//			head->ReleaseReference();
-//			head = NULL;
-//		}
-		
+		if (head)
+		{
+			head->ReleaseReference();
+			head = NULL;
+		}
+
 	}
 	XEND;
 
@@ -369,7 +375,7 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 		tmpSlot = (ImplAAFMobSlot *)CreateImpl (CLSID_AAFMobSlot);
 		if(tmpSlot == NULL)
-			return(E_FAIL);
+			return(AAFRESULT_NOMEMORY);
 
 //!!!	CHECK(tmpSlot->WriteRational(OMMSLTEditRate, editRate));
 		CHECK(tmpSlot->SetSegment(segment));
@@ -381,7 +387,8 @@ AAFRESULT STDMETHODCALLTYPE
 	} /* XPROTECT */
 	XEXCEPT
 	{
-//!!!	    tmpSlot->Delete();
+		if (tmpSlot)
+			tmpSlot->ReleaseReference();
 		return(XCODE());
 	}
 	XEND;
@@ -417,22 +424,25 @@ AAFRESULT STDMETHODCALLTYPE
 	XPROTECT()
 	  {
 		aSlot = (ImplAAFTimelineMobSlot *)CreateImpl (CLSID_AAFTimelineMobSlot);
-		  {
-			CHECK(aSlot->SetSegment(segment));
-			CHECK(aSlot->SetSlotID(slotID));
-			CHECK(aSlot->SetName(slotName));
-			CHECK(aSlot->SetEditRate(&editRate));
-			CHECK(aSlot->SetOrigin(origin));
+		if (NULL == aSlot)
+			return (AAFRESULT_NOMEMORY);
 
-			/* Append new slot to mob */
-			tmpSlot = aSlot;
-			_slots.appendValue(tmpSlot);
-		  }
+		CHECK(aSlot->SetSegment(segment));
+		CHECK(aSlot->SetSlotID(slotID));
+		CHECK(aSlot->SetName(slotName));
+		CHECK(aSlot->SetEditRate(&editRate));
+		CHECK(aSlot->SetOrigin(origin));
+
+		/* Append new slot to mob */
+		tmpSlot = aSlot;
+		_slots.appendValue(tmpSlot);
+
 	  } /* XPROTECT */
 
 	XEXCEPT
 	  {
-//!!!	    tmpSlot->Delete();
+		if (aSlot)
+			aSlot->ReleaseReference();
 		return(XCODE());
 	  }
 	XEND;
@@ -1286,7 +1296,9 @@ ImplAAFMob::AddPhysSourceRef (aafAppendOption_t  addType,
 	{
 		CvtInt32toInt64(0, &zeroPos);
 		sclp = (ImplAAFSourceClip *)CreateImpl(CLSID_AAFSourceClip);
-		sclp->Initialize(pEssenceKind, &srcRefLength, ref);
+		if (NULL == sclp)
+			RAISE(AAFRESULT_NOMEMORY);
+		CHECK(sclp->Initialize(pEssenceKind, &srcRefLength, ref));
 				
 		status = FindSlotBySlotID(aMobSlot, &slot);
 		if (status == AAFRESULT_SUCCESS)
@@ -1311,6 +1323,8 @@ ImplAAFMob::AddPhysSourceRef (aafAppendOption_t  addType,
 				}
 			}
 			//!!! else return an error
+			slot->ReleaseReference();
+			slot = NULL;
 		}
 		else
 		{
@@ -1333,6 +1347,8 @@ ImplAAFMob::AddPhysSourceRef (aafAppendOption_t  addType,
 			slot->ReleaseReference();
 		if(slotSeg != NULL)
 			slotSeg->ReleaseReference();
+		if(slot != NULL)
+			slot->ReleaseReference();
 		if(cpnt != NULL)
 			cpnt->ReleaseReference();
 	}
@@ -1363,7 +1379,7 @@ AAFRESULT ImplAAFMob::InternalSearchSource(
 	aafLength_t				cpntLen, nextLen, minLength, newLen;
 	ImplAAFPulldown			*pulldownObj = NULL;
 	aafSlotID_t				nextTrackID;
-	ImplAAFFindSourceInfo	*sourceInfo;
+	ImplAAFFindSourceInfo	*sourceInfo = NULL ;
 	ImplAAFComponent		*leafObj = NULL;
 	ImplAAFGroup	*effeObject;
 	
@@ -1372,6 +1388,8 @@ AAFRESULT ImplAAFMob::InternalSearchSource(
 	
 	/* Initialize outputs */
 	sourceInfo = (ImplAAFFindSourceInfo *)CreateImpl(CLSID_AAFFindSourceInfo);
+	if (NULL == sourceInfo)
+		return (AAFRESULT_NOMEMORY);
 	sourceInfo->AcquireReference();		// This will be passed out
 	*ppSourceInfo = sourceInfo;
 	sourceInfo->Clear();
@@ -1435,11 +1453,33 @@ AAFRESULT ImplAAFMob::InternalSearchSource(
 			sourceInfo, &sourceFound));
 		if (!sourceFound)
 			RAISE(AAFRESULT_TRAVERSAL_NOT_POSS);
+
+		nextMob->ReleaseReference();
+		if (leafObj)
+			leafObj->ReleaseReference();
+		if (effeObject)
+			effeObject->ReleaseReference();
+		rootObj->ReleaseReference();
+		track->ReleaseReference();
+		sourceInfo->ReleaseReference();
 	} /* XPROTECT */
 	XEXCEPT
 	{
 		if(XCODE() == AAFRESULT_PARSE_EFFECT_AMBIGUOUS)
 			sourceInfo->SetEffect(effeObject);
+
+		if (nextMob)
+			nextMob->ReleaseReference();
+		if (leafObj)
+			leafObj->ReleaseReference();
+		if (effeObject)
+			effeObject->ReleaseReference();
+		if (rootObj)
+			rootObj->ReleaseReference();
+		if (track)
+			track->ReleaseReference();
+		if (sourceInfo)
+			sourceInfo->ReleaseReference();
 	}
 	XEND;
 	
@@ -1519,7 +1559,7 @@ AAFRESULT ImplAAFMob::FindNextMob(ImplAAFMobSlot *track,
 	aafSlotID_t				tmpTrackID, nextTrackID;
 	aafPosition_t			tmpPos, convertPos;
 
-	if(retMob == NULL || retTrackID == NULL || retPos == NULL || retLen == NULL)
+	if(segment == NULL || retMob == NULL || retTrackID == NULL || retPos == NULL || retLen == NULL)
 		return(AAFRESULT_NULL_PARAM);
 
 	XPROTECT()
@@ -1577,9 +1617,19 @@ AAFRESULT ImplAAFMob::FindNextMob(ImplAAFMobSlot *track,
 		*retTrackID = nextTrackID;
 		*retPos = convertPos;
 		*retLen = sclpLen;
+
+		nextTrack->ReleaseReference();
+
+//		sclp->ReleaseReference(); // causes 800400c8 to be returned from MasterMob::OpenEssence
 	}
 	XEXCEPT
 	{
+		if (nextTrack)
+			nextTrack->ReleaseReference();
+		if (nextMob)
+			nextMob->ReleaseReference();
+//		if (sclp)
+//			sclp->ReleaseReference();
 	}
 	XEND;
 	
@@ -1652,7 +1702,10 @@ AAFRESULT ImplAAFMob::MobFindSource(
 			CHECK(sourceInfo->Init(this, trackID, offset,
 				srcRate, tmpLength,
 				/*!!!*/NULL));		// What to put in for CPNT
-				return(OM_ERR_NONE);
+				
+			rootObj->ReleaseReference();
+			track->ReleaseReference();
+			return(OM_ERR_NONE);
 		}
 		
 		/* 2) If not right mob type, find component at referenced position 
@@ -1725,11 +1778,30 @@ AAFRESULT ImplAAFMob::MobFindSource(
 		{
 			RAISE(OM_ERR_TRAVERSAL_NOT_POSS);
 		}
+		
+		nextMob->ReleaseReference();
+		if (leafObj)
+			leafObj->ReleaseReference();
+		if (effeObject)
+			effeObject->ReleaseReference();
+		rootObj->ReleaseReference();
+		track->ReleaseReference();
 	}
 	XEXCEPT
 	{
 		if(XCODE() == AAFRESULT_PARSE_EFFECT_AMBIGUOUS)
 			sourceInfo->SetEffect(effeObject);
+
+		if (nextMob)
+			nextMob->ReleaseReference();
+		if (leafObj)
+			leafObj->ReleaseReference();
+		if (effeObject)
+			effeObject->ReleaseReference();
+		if (rootObj)
+			rootObj->ReleaseReference();
+		if (track)
+			track->ReleaseReference();
 	}
 	XEND;
 	
