@@ -42,6 +42,7 @@ namespace OMF2
 }
 
 #include "AAFException.h"
+#include "OMFException.h"
 #include "AutoRelease.h"
 
 // OMF Includes
@@ -394,7 +395,8 @@ HRESULT GetUserInput(int argc, char* argv[])
 
 // ============================================================================
 // IsOMFFile
-//			This function returns AAFTrue if the given file is an OMF file.
+//  This function returns AAFRESULT_SUCCESS if the given file is an OMF file.
+//  and the error code otherwise.
 //
 // ============================================================================
 HRESULT IsOMFFile (char * pFileName )
@@ -514,7 +516,7 @@ int main(int argc, char *argv[])
 			// User indicated Input file must be an OMF file
 			// Conert OMF to AAF
 			check = IsOMFFile(gpGlobals->sInFileName);
-			check = OMFMain.ConvertFile();
+			OMFMain.ConvertFile();
 		}
 
 		// We are done, just display a summary of results
@@ -542,9 +544,8 @@ int main(int argc, char *argv[])
 		hr = e.Code();
 	}
 
-	// clean up memory
-	if(gpGlobals)
-		delete gpGlobals;
+	// If we get here then the gpGlobals was created.
+	delete gpGlobals;
 
 	return( hr );
 }
@@ -552,7 +553,7 @@ int main(int argc, char *argv[])
 
 void RegisterCodecProperties(AafOmfGlobals *globals, OMF2::omfSessionHdl_t OMFSession)
 {
-	OMF2::omfErr_t		OMFError;
+	OMFCheck	OMFError;
 
 	// To get the CDCI codec related properties we first reister them in OMF
 	OMFError = OMF2::omfsRegisterDynamicProp(OMFSession, OMF2::kOmfTstRevEither, 
@@ -594,8 +595,8 @@ void RegisterCodecProperties(AafOmfGlobals *globals, OMF2::omfSessionHdl_t OMFSe
 //
 //	Returns:
 //
-//		On Success: S_OK
-//		On Failure: A failed HRESULT
+//		On Success: AAFRESULT_SUCCESS
+//		On Failure: An exception.
 //
 static HRESULT AddPropertyToClass(IAAFDictionary *dict, const aafUID_t* pClassID, const aafUID_t* pPropTypeID, const aafUID_t* pPropID, aafCharacter*  pName)
 {
@@ -617,7 +618,7 @@ static HRESULT AddPropertyToClass(IAAFDictionary *dict, const aafUID_t* pClassID
 
 void RegisterOMFMCPrivate(AafOmfGlobals *globals, OMF2::omfSessionHdl_t OMFSession)
 {
-	OMF2::omfErr_t		OMFError;
+	OMFCheck		OMFError;
 	
 	OMFError = OMF2::omfsRegisterDynamicProp(OMFSession, OMF2::kOmfTstRevEither,
 		"AvidPrivateEffectID", OMClassEFFE, OMF2::OMString,
@@ -630,7 +631,7 @@ void RegisterOMFMCPrivate(AafOmfGlobals *globals, OMF2::omfSessionHdl_t OMFSessi
 
 void RegisterAAFMCPrivate(IAAFDictionary * dict)
 {
-	AAFRESULT	hr;
+	AAFCheck	hr;
 	
 	hr = AddPropertyToClass(dict, &kAAFClassID_Mob,
 							&kAAFTypeID_Int32,
@@ -647,8 +648,8 @@ void RegisterAAFMCPrivate(IAAFDictionary * dict)
 //
 //	Returns:
 //
-//		On Success: S_OK
-//		On Failure: A failed HRESULT
+//		On Success: AAFRESULT_SUCCESS
+//		On Failure: An exception.
 //
 HRESULT SetIntegerPropOnObject(IAAFObject* pObj, aafUID_t* pClassID, aafUID_t* pPropID, const aafUID_t* pIntTypeID,
 							   aafMemPtr_t pValue, aafUInt32 ValueSize, IAAFDictionary *dict)
@@ -694,8 +695,8 @@ HRESULT SetIntegerPropOnObject(IAAFObject* pObj, aafUID_t* pClassID, aafUID_t* p
 //
 //	Returns:
 //
-//		On Success: S_OK
-//		On Failure: A failed HRESULT
+//		On Success: AAFRESULT_SUCCESS
+//		On Failure: An exception.
 //
 HRESULT GetIntegerPropFromObject(IAAFObject* pObj, const aafUID_t* pClassID, aafUID_t* pPropID, const aafUID_t* pIntTypeID, aafMemPtr_t pValue, aafUInt32 ValueSize, IAAFDictionary *dict)
 {
