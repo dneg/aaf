@@ -37,11 +37,6 @@ AD_CLASS_UUID(B1A21377, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
 AD_DEFAULT_UUID(B1A21376, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
 AD_CLASS_BEGIN
 
-AD_METHOD1(IsATrack,
-[out\\\,retval], aafBool *, retval, True if slot is a track,
-Tests whether a Mob Slot is a track \\\(contains a Track Descriptor\\\, which makes
-  // it externally visible\\\).)
-
 AD_XMETHOD1(GetSegment,
 [out\,retval], objOut, AAFSegment, result, Segment property value,
 This method will get the segment for this mob slot.)
@@ -62,6 +57,22 @@ Returns information about the physical output channel associated with the
   // The function returns an error if the object specified in the track parameter is not
   // a track.)
 
+AD_METHOD1(GetDataDef,
+[out\\\,retval], aafUID_t *, result, Data Definition AUID,
+This method will return Data Definition object associated with segment in this Mob Slot.)
+
+AD_METHOD1(GetTrackID,
+	   [out\\\,retval], aafTrackID_t *, result, Track id of the Mob Slot,
+	   This method will return the track id of this mob slot.)
+
+AD_XMETHOD1(SetSegment,
+[in], objIn, AAFSegment, result, Segment property value,
+This method will set the segment for this mob slot.)
+
+AD_METHOD1(SetName,
+[in], aafString_t *, name, Mob Slot Name,
+This method will copy the given aafString into the mob slot name.)
+
 AD_METHOD1(SetPhysicalNum,
 [in], aafUInt32, number, The physical track number property value,
 Sets the physical output channel associated with the Track.
@@ -72,8 +83,8 @@ Sets the physical output channel associated with the Track.
   // of 2.
   // The function returns an error if the Mob Slot passed in is not a track.)
 
-AD_XMETHOD1(GetDataKind,
-[out\,retval], objOut, AAFDataDef, result, Data Definition object,
-This method will return Data Definition object associated with this Mob Slot.)
+AD_METHOD1(SetTrackID,
+	   [in], aafTrackID_t, value, Track id of the Mob Slot,
+	   This method will set the track id of this mob slot.)
 
 AD_CLASS_END
