@@ -52,8 +52,8 @@ public:
   virtual void save(void) const;
 
     // @cmember Restore this <c OMDataStreamProperty>, the size of the
-    //          <c OMDataStreamProperty> is <p size>.
-  virtual void restore(size_t size);
+    //          <c OMDataStreamProperty> is <p externalSize>.
+  virtual void restore(size_t externalSize);
 
     // @cmember Close this  <c OMDataStreamProperty>.
   virtual void close(void);
