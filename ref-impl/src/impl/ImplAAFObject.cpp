@@ -466,7 +466,7 @@ ImplAAFObject::SavedProp::~SavedProp ()
 	  size_t size = srv->getSize();
 	  for (size_t i = 0; i < size; i++)
 		{
-		  ImplAAFObject* oldObj = srv->setValueAt (0, i);
+		  ImplAAFObject* oldObj = srv->clearValueAt(i);
 		  if (oldObj)
 			{
 			  oldObj->ReleaseReference ();
@@ -483,7 +483,7 @@ ImplAAFObject::SavedProp::~SavedProp ()
 		dynamic_cast<OMStrongReferenceProperty<ImplAAFObject>*>(_p);
 	  if (sro)
 		{
-		  ImplAAFObject* oldObj = sro->setValue (0);
+		  ImplAAFObject* oldObj = sro->clearValue();
 		  if (oldObj)
 			{
 			  oldObj->ReleaseReference ();
