@@ -230,7 +230,8 @@ TARGET_H_FILES = \
 	$(AAFSDK_INCLUDE)/AAFSmartPointer.h \
 	$(AAFSDK_INCLUDE)/AAFSmartPointerBase.h \
 	$(AAFSDK_INCLUDE)/AAFStoredObjectIDs.h \
-	$(AAFSDK_INCLUDE)/AAFTypeDefUIDs.h
+	$(AAFSDK_INCLUDE)/AAFTypeDefUIDs.h \
+	$(AAFSDK_INCLUDE)/CAAFBuiltinDefs.h
 
 
 #
@@ -499,6 +500,9 @@ $(AAFSDK_INCLUDE)/AAFStoredObjectIDs.h : $(TOOLKIT_INCLUDE)/AAFStoredObjectIDs.h
 
 $(AAFSDK_INCLUDE)/AAFTypeDefUIDs.h : $(TOOLKIT_INCLUDE)/AAFTypeDefUIDs.h
 	$(UPDATE) $(TOOLKIT_INCLUDE)/AAFTypeDefUIDs.h $@
+
+$(AAFSDK_INCLUDE)/CAAFBuiltinDefs.h : $(TOOLKIT_INCLUDE)/CAAFBuiltinDefs.h
+	$(UPDATE) $(TOOLKIT_INCLUDE)/CAAFBuiltinDefs.h $@
 
 
 #

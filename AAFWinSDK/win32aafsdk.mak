@@ -258,7 +258,8 @@ TARGET_H_FILES = \
 	$(AAFSDK_INCLUDE)\AAFSmartPointerBase.h \
 	$(AAFSDK_INCLUDE)\AAFStoredObjectIDs.h \
 	$(AAFSDK_INCLUDE)\AAFTypeDefUIDs.h \
-	$(AAFSDK_INCLUDE)\AAFSDKBuild.h
+	$(AAFSDK_INCLUDE)\AAFSDKBuild.h \
+	$(AAFSDK_INCLUDE)\CAAFBuiltinDefs.h
 
 
 #
@@ -554,6 +555,9 @@ $(AAFSDK_INCLUDE)\AAFTypeDefUIDs.h : $(TOOLKIT_INCLUDE)\AAFTypeDefUIDs.h
 
 $(AAFSDK_INCLUDE)\AAFSDKBuild.h : $(TOOLKIT_INCLUDE)\AAFSDKBuild.h
 	$(UPDATE) $(TOOLKIT_INCLUDE)\AAFSDKBuild.h $@
+
+$(AAFSDK_INCLUDE)\CAAFBuiltinDefs.h : $(TOOLKIT_INCLUDE)\CAAFBuiltinDefs.h
+	$(UPDATE) $(TOOLKIT_INCLUDE)\CAAFBuiltinDefs.h $@
 
 #
 # Dependency and build rules for the IDL targets.
