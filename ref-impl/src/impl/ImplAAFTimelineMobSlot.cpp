@@ -32,7 +32,7 @@
 
 ImplAAFTimelineMobSlot::ImplAAFTimelineMobSlot ():
 	_editRate(	PID_TimelineMobSlot_EditRate,	"Edit Rate"),
-	_origin(	PID_TIMELINEMOBSLOT_ORIGIN,		"Origin")
+	_origin(	PID_TimelineMobSlot_Origin,		"Origin")
 
 {
 	_persistentProperties.put( _editRate.address());
