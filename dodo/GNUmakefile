@@ -1,7 +1,7 @@
 
 AAFBASE ?= ..
 
-include $(AAFBASE)/build/defs.mk
+include $(AAFBASE)/build/common.mk
 
 INCLUDE_DIR = $(AAFBASE)/ref-impl/include/com-api
 SRC_DIR = $(AAFBASE)/ref-impl/src/com-api
