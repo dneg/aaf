@@ -136,7 +136,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
  	if (AAFRESULT_SUCCESS != hr)
 		return hr;
 
-	pMob->Release();
 	if (pFile) pFile->Release();
 	if (pSession) pSession->Release();
 
