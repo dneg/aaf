@@ -53,10 +53,16 @@ class ImplEnumAAFOperationDefs;
 class ImplEnumAAFPluggableDefs;
 class ImplEnumAAFPluginDefs;
 class ImplEnumAAFTypeDefs;
+class ImplAAFMetaDictionary;
 
 #ifndef __ImplAAFObject_h__
 #include "ImplAAFObject.h"
 #endif
+
+#ifndef __ImplAAFMetaDictionary_h__
+#include "ImplAAFMetaDictionary.h"
+#endif
+
 
 #include "OMClassFactory.h"
 
@@ -73,7 +79,8 @@ class ImplEnumAAFTypeDefs;
 
 class ImplAAFDictionary :
   public OMClassFactory,
-  public ImplAAFObject
+//  public ImplAAFObject
+  public ImplAAFMetaDictionary // this is temporary!
 {
 public:
   //
@@ -493,6 +500,16 @@ public:
   //
   // Internal to the SDK
   //
+
+  // Return a pointer to the meta dictionary.
+  ImplAAFMetaDictionary *metaDictionary(void) const;
+
+  // Install the meta dictionary (i.e. the factory for creating
+  // meta data: classes, properties and types). This method
+  // can only be called once.
+  void setMetaDictionary(ImplAAFMetaDictionary *metaDictionary);
+
+
 #if USE_NEW_OBJECT_CREATION
 
   //****************
@@ -614,13 +631,6 @@ bool PvtIsTypePresent (
   void SetBuiltinClasses(ImplAAFBuiltinClasses *pBuiltinClasses) { _pBuiltinClasses = pBuiltinClasses; };
 
 private:
-  bool hasForwardClassReference(aafUID_constref classId);
-  // If the given classId fromt the set of forward references.
-  void RemoveForwardClassReference(aafUID_constref classId);
-
-  ImplAAFTypeDef * findOpaqueTypeDefinition(aafUID_constref typeId);
-
-
   bool pvtLookupAxiomaticTypeDef (const aafUID_t & typeID,
 							   ImplAAFTypeDef ** ppTypeDef);
 
@@ -638,51 +648,7 @@ private:
   OMStrongReferenceSetProperty<OMUniqueObjectIdentification, ImplAAFInterpolationDef>		_interpolationDefinitions;
   OMStrongReferenceSetProperty<OMUniqueObjectIdentification, ImplAAFDataDef>				_dataDefinitions;
   OMStrongReferenceSetProperty<OMUniqueObjectIdentification, ImplAAFPluginDef>				_pluginDefinitions;
-  OMStrongReferenceSetProperty<OMUniqueObjectIdentification, ImplAAFTypeDef>				_typeDefinitions;
-  OMStrongReferenceSetProperty<OMUniqueObjectIdentification, ImplAAFClassDef>				_classDefinitions;
 
-  // Private class that represents an opaque class definition in an OMSet.
-  class OpaqueTypeDefinition
-  {
-  public:
-    OpaqueTypeDefinition();
-    OpaqueTypeDefinition(const OpaqueTypeDefinition& rhs);
-    OpaqueTypeDefinition(ImplAAFTypeDef * opaqueTypeDef);
-
-    // coersion operator to "transparently" extract the type
-    // definition pointer. This will be called when the enumerator
-    // attempts to assign an OpaqueTypeDefinition to an ImplAAFTypeDef *.
-    operator ImplAAFTypeDef * () const;
-
-    // Methods required by OMSet
-    const OMUniqueObjectIdentification identification(void) const;
-    OpaqueTypeDefinition& operator= (const OpaqueTypeDefinition& rhs);
-    bool operator== (const OpaqueTypeDefinition& rhs);
-
-  private:
-    ImplAAFTypeDef * _opaqueTypeDef;
-  };
-
-  OMSet<OMUniqueObjectIdentification, OpaqueTypeDefinition> _opaqueTypeDefinitions;
-
-  // Private class that represents a forward class reference.
-  class ForwardClassReference
-  {
-  public:
-    ForwardClassReference();
-    ForwardClassReference(const ForwardClassReference& rhs);
-    ForwardClassReference(aafUID_constref classId);
-
-    // Methods required by OMSet
-    const OMUniqueObjectIdentification identification(void) const;
-    ForwardClassReference& operator= (const ForwardClassReference& rhs);
-    bool operator== (const ForwardClassReference& rhs);
-
-  private:
-    aafUID_t _classId;
-  };
-
-  OMSet<OMUniqueObjectIdentification, ForwardClassReference> _forwardClassReferences;
 
   aafInt32 _lastGeneratedPid;	// must be signed!
 
@@ -704,6 +670,8 @@ private:
   bool _OKToAssurePropTypes;
 
   bool _defRegistrationAllowed;
+
+  ImplAAFMetaDictionary *_metaDictionary;
 };
 
 //
