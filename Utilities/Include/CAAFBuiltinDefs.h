@@ -172,6 +172,7 @@ public:
   CLASS_DEF_METHOD(FileDescriptor);
   CLASS_DEF_METHOD(Filler);
   CLASS_DEF_METHOD(FilmDescriptor);
+  CLASS_DEF_METHOD(GPITrigger);
   CLASS_DEF_METHOD(HTMLClip);
   CLASS_DEF_METHOD(HTMLDescriptor);
   CLASS_DEF_METHOD(Identification);
