@@ -34,6 +34,7 @@
 #include "AAF.h"
 #include "AAFResult.h"
 #include "ModuleTest.h"
+#include "AAFDefUIDs.h"
 #include "AAFSmartPointer.h"
 #include "AAFStoredObjectIDs.h"
 #include "CAAFBuiltinDefs.h"
@@ -139,6 +140,7 @@ static void FillInProductInfo(aafProductIdentification_t& ProductInfo,
 	ProductInfo.productName = L"AAFTypeDefObjectRef Test";
 	ProductInfo.productVersion = &v;
 	ProductInfo.productVersionString = NULL;
+	ProductInfo.productID = UnitTestProductID;
 	ProductInfo.platform = NULL;
 }
 
