@@ -271,15 +271,16 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 		}
 		else if(testType == testMultiCalls)
 		{
-			aafmMultiXfer_t xfer;
+			aafmMultiXfer_t		xfer;
+			aafmMultiResult_t	result;
 
 //!!!		xfer.subTrackNum = _channels[0].physicalOutChan;
 			xfer.numSamples = dataLen;	//!!! hardcoded bytes/sample ==1
 			xfer.buflen = sizeof(dataBuff);
 			xfer.buffer = dataPtr;
-			xfer.bytesXfered = 0;
+			result.bytesXfered = 0;
 	
-			check(pEssenceAccess->WriteMultiSamples(1, &xfer));
+			check(pEssenceAccess->WriteMultiSamples(1, &xfer, &result));
 		}
 
 		// close essence data file
@@ -480,21 +481,21 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 					else if(testType == testFractionalCalls)
 					{
 						check(pEssenceAccess->ReadFractionalSample(dataLen,	// bytes to read
-														sizeof(AAFDataBuf),	// Maximum buffer size
 														AAFDataBuf,			// Buffer for the data
 														&AAFBytesRead));	// Actual number of bytes read
 					}
 					else if(testType == testMultiCalls)
 					{
-						aafmMultiXfer_t xfer;
+						aafmMultiXfer_t		xfer;
+						aafmMultiResult_t	result;
 
 						xfer.numSamples = dataLen;	//!!! Hardcoded	// Number of Samples 
 						xfer.buflen = sizeof(AAFDataBuf);
 						xfer.buffer = AAFDataBuf;
-						xfer.bytesXfered = 0;
-						check(pEssenceAccess->ReadMultiSamples(1, &xfer));
-						samplesRead = xfer.samplesXfered;
-						AAFBytesRead = xfer.bytesXfered;
+						result.bytesXfered = 0;
+						check(pEssenceAccess->ReadMultiSamples(1, &xfer, &result));
+						samplesRead = result.samplesXfered;
+						AAFBytesRead = result.bytesXfered;
 					}
 
 					// Now compare the data read from the AAF file to the actual WAV file
