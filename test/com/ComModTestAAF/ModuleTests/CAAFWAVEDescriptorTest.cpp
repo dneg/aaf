@@ -138,25 +138,15 @@ static HRESULT OpenAAFFile(aafWChar*			pFileName,
 	ProductInfo.productID = -1;
 	ProductInfo.platform = NULL;
 
-	hr = CoCreateInstance(CLSID_AAFFile,
-						   NULL, 
-						   CLSCTX_INPROC_SERVER, 
-						   IID_IAAFFile, 
-						   (void **)ppFile);
-	if (AAFRESULT_SUCCESS != hr)
-		return hr;
-    hr = (*ppFile)->Initialize();
-	if (AAFRESULT_SUCCESS != hr)
-		return hr;
 
 	switch (mode)
 	{
 	case kMediaOpenReadOnly:
-		hr = (*ppFile)->OpenExistingRead(pFileName, 0);
+		hr = AAFFileOpenExistingRead(pFileName, 0, ppFile);
 		break;
 
 	case kMediaOpenAppend:
-		hr = (*ppFile)->OpenNewModify(pFileName, 0, &ProductInfo);
+		hr = AAFFileOpenNewModify(pFileName, 0, &ProductInfo, ppFile);
 		break;
 
 	default:
