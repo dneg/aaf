@@ -942,16 +942,18 @@ void ImplAAFTypeDefRecord::externalize(OMByte* internalBytes,
 	  hr = pNonConstThis->GetMemberType (member, &ptdm);
 	  assert (AAFRESULT_SUCCEEDED (hr));
 	  externalMemberSize = ptdm->PropValSize ();
-	  internalMemberSize = _internalSizes[member];
+	  //internalMemberSize = _internalSizes[member];
+          internalMemberSize = ptdm->internalSize (externalBytes, externalMemberSize);
+
 	  ptdm->externalize (internalBytes,
 						 internalMemberSize,
 						 externalBytes,
 						 externalMemberSize,
 						 byteOrder);
 	  externalBytes += externalMemberSize;
-	  internalBytes += internalMemberSize;
+	  internalBytes += _internalSizes[member]; //internalMemberSize;
 	  externalNumBytesLeft -= externalMemberSize;
-	  internalNumBytesLeft -= internalMemberSize;
+	  internalNumBytesLeft -= _internalSizes[member]; //internalMemberSize;
 	  assert (externalNumBytesLeft >= 0);
 	  assert (internalNumBytesLeft >= 0);
 	}
@@ -1004,7 +1006,8 @@ void ImplAAFTypeDefRecord::internalize(OMByte* externalBytes,
 	  hr = pNonConstThis->GetMemberType (member, &ptdm);
 	  assert (AAFRESULT_SUCCEEDED (hr));
 	  externalMemberSize = ptdm->PropValSize ();
-	  internalMemberSize = _internalSizes[member];
+	  //internalMemberSize = _internalSizes[member];
+          internalMemberSize = ptdm->internalSize (externalBytes, externalMemberSize);
 
 	  ptdm->internalize (externalBytes,
 						 externalMemberSize,
@@ -1012,9 +1015,9 @@ void ImplAAFTypeDefRecord::internalize(OMByte* externalBytes,
 						 internalMemberSize,
 						 byteOrder);
 	  externalBytes += externalMemberSize;
-	  internalBytes += internalMemberSize;
+	  internalBytes += _internalSizes[member]; //internalMemberSize;
 	  externalNumBytesLeft -= externalMemberSize;
-	  internalNumBytesLeft -= internalMemberSize;
+	  internalNumBytesLeft -= _internalSizes[member]; //internalMemberSize;
 	  assert (externalNumBytesLeft >= 0);
 	  assert (internalNumBytesLeft >= 0);
 	}
