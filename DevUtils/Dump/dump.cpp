@@ -1374,7 +1374,7 @@ void dumpVectorIndexEntry(OMUInt32 i, VectorIndexEntry* vectorIndexEntry)
 {
   cout << setw(8) << i
        << " : "
-       << setw(8) << vectorIndexEntry->_elementName << endl;
+       << setw(10) << vectorIndexEntry->_elementName << endl;
 }
 
 void printVectorIndex(VectorIndexEntry* vectorIndex,
@@ -1386,9 +1386,9 @@ void printVectorIndex(VectorIndexEntry* vectorIndex,
        << ", Number of entries = " << count << " )" << endl;
 
   if (count > 0) {
-    cout << setw(8) << "index"
+    cout << setw(8) << "ordinal"
          << "   "
-         << setw(8) << "key" << endl;
+         << setw(10) << "local key" << endl;
 
     for (OMUInt32 i = 0; i < count; i++) {
       dumpVectorIndexEntry(i, &vectorIndex[i]);
