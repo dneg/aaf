@@ -4,7 +4,7 @@
 #include "OMFile.h"
 #include "OMClassFactory.h"
 #include "OMObjectDirectory.h"
-#include "OMTypes.h"
+#include "OMDataTypes.h"
 #include "OMProperty.h"
 
 #include "OMAssertions.h"
