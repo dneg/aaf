@@ -140,10 +140,10 @@ AXFG_OP(
   EventMobSlot,           
   L"EventMobSlot",
   L"Creates a EventMobSlot.",
-  L"FileName SlotName",
+  L"FileName SlotName EditRateName",
   L"SlotName is the name of the reference to this object - not the AAF slot name.",
-  3,
-  3 )
+  4,
+  4 )
 
 EventMobSlot::~EventMobSlot()
 {}
@@ -152,6 +152,7 @@ void EventMobSlot::Execute( const std::vector<AxString>& argv )
 {
 	AxString fileName = argv[1];
 	AxString slotName = argv[2];
+	AxString editRate = argv[3];
 
 	AxDictionary axDict( DictionaryFromFileOp( fileName ) );
 
@@ -161,6 +162,9 @@ void EventMobSlot::Execute( const std::vector<AxString>& argv )
 	// FIXME - Why does IAAFEventMobSlot have no Initialize() method?
 	// (IAAFMob does not have one either.)
 	// axSlot.Initialize();
+
+	AxEventMobSlot axEventMobSlot( spSlot );
+	axEventMobSlot.SetEditRate( RateOpToRational( GetInstance( editRate ) ) );
 
 	SetCOM( spSlot );
 	RegisterInstance( slotName );
