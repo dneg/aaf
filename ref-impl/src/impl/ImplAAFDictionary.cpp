@@ -1015,6 +1015,7 @@ void ImplAAFDictionary::InitBuiltins()
   REGISTER_TYPE_BUILTIN(_pBuiltins->TypeDefAUID);
   REGISTER_TYPE_BUILTIN(_pBuiltins->TypeDefAUIDArray);
   REGISTER_TYPE_BUILTIN(_pBuiltins->TypeDefWCharString);
+  REGISTER_TYPE_BUILTIN(_pBuiltins->TypeDefFadeType);
 
   REGISTER_CLASS_BUILTIN(_pBuiltins->ClassDefObject);
 }
