@@ -60,68 +60,26 @@ public:
 
   OMDECLARE_STORABLE(AAFIdentification);
 
+
   //****************
   // GetCompanyName()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     GetCompanyName
-        (aafString_t *  pCompanyName);  //@parm [out,retval] The Company Name
+	    (// @parm [out, size_is(bufSize), string] buffer into which name is written
+         wchar_t *  pName,
+
+		 // @parm [in] The size of the pName buffer
+		 aafInt32  bufSize);
 
 
   //****************
-  // GetProductName()
+  // GetCompanyNameBufLen()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetProductName
-        (aafString_t *  pProductName);  //@parm [out,retval] The Product Name
-
-
-  //****************
-  // GetProductVersionString()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    GetProductVersionString
-        (aafString_t *  pProductVersionString);  //@parm [out,retval] The Product Version String
-
-
-  //****************
-  // GetProductID()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    GetProductID
-        (aafUID_t *  pProductID);  //@parm [out,retval] The Product ID
-
-
-  //****************
-  // GetDate()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    GetDate
-        (aafTimeStamp_t *  pTimestamp);  //@parm [out,retval] The date-time stamp
-
-
-  //****************
-  // GetToolkitVersion()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    GetToolkitVersion
-        (aafProductVersion_t *  pToolkitVersion);  //@parm [out,retval] The Toolkit Version
-
-
-  //****************
-  // GetPlatform()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    GetPlatform
-        (aafString_t *  pPlatform);  //@parm [out,retval] The Platform
-
-
-  //****************
-  // GetGeneration()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    GetGeneration
-        (aafUID_t *  pGeneration);  //@parm [out,retval] The unique generation
+    GetCompanyNameBufLen
+		// @parm [out] required buffer length
+        (aafInt32 *  pLen);
 
 
   //****************
@@ -129,7 +87,29 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     SetCompanyName
-        (aafString_t *  pCompanyName);  //@parm [in,ref] The Company Name
+		// @parm [in, string] The Company Name
+        (wchar_t *  pName);
+
+
+  //****************
+  // GetProductName()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetProductName
+	    (// @parm [out, size_is(bufSize), string] buffer into which name is written
+         wchar_t *  pName,
+
+		 // @parm [in] The size of the pName buffer
+		 aafInt32  bufSize);
+
+
+  //****************
+  // GetProductNameBufLen()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetProductNameBufLen
+		// @parm [out] Returned length
+        (aafInt32 *  pLen);
 
 
   //****************
@@ -137,15 +117,29 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     SetProductName
-        (aafString_t *  pProductName);  //@parm [in,ref] The Product Name
+		// @parm [in, string] The Product Name
+        (wchar_t *  pName);
 
 
   //****************
-  // SetProductVersion()
+  // GetProductVersionString()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    SetProductVersion
-        (aafProductVersion_t *  pProductVersion);  //@parm [in,ref] The Product Version
+    GetProductVersionString
+	    (// @parm [out, size_is(bufSize), string] buffer into which the string is written
+         wchar_t *  pVersionString,
+
+		 // @parm [in] The size of the pVersionString buffer
+		 aafInt32  bufSize);
+
+
+  //****************
+  // GetProductVersionStringBufLen()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetProductVersionStringBufLen
+		// @parm [out] required buffer length
+        (aafInt32 *  pLen);
 
 
   //****************
@@ -153,7 +147,26 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     SetProductVersionString
-        (aafString_t *  pProductVersionString);  //@parm [in,ref] The Product Version String
+		// @parm [in, string] The Product Version String
+        (wchar_t *  pVersionString);
+
+
+  //****************
+  // SetProductVersion()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    SetProductVersion
+		// @parm [in] The Product Version
+        (aafProductVersion_t *  pVersion);
+
+
+  //****************
+  // GetProductID()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetProductID
+		// @parm [out] The Product ID
+        (aafUID_t *  pProductID);
 
 
   //****************
@@ -161,9 +174,57 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     SetProductID
-        (aafUID_t *  pProductID);  //@parm [in,ref] The Product ID
+		// @parm [in] The Product ID
+        (aafUID_t *  pProductID);
 
-	
+
+  //****************
+  // GetDate()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetDate
+		// @parm [out] The date-time stamp
+        (aafTimeStamp_t *  pTimestamp);
+
+
+  //****************
+  // GetRefImplVersion()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetRefImplVersion
+		// @parm [out] The Reference Implementation Version
+        (aafProductVersion_t *  pVersion);
+
+
+  //****************
+  // GetPlatform()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetPlatform
+	    (// @parm [out, size_is(bufSize), string] The Platform
+         wchar_t *  pPlatform,
+
+		 // @parm [in] The size of the pPlatform buffer
+		 aafInt32  bufSize);
+
+
+  //****************
+  // GetPlatformBufLen()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetPlatformBufLen
+		// @parm [out] Returned length
+        (aafInt32 *  pLen);
+
+
+  //****************
+  // GetGeneration()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetGeneration
+		// @parm [out] The unique generation
+        (aafUID_t *  pGeneration);
+
 public:
   // Declare the module test method. The implementation of the will be be
   // in /test/ImplAAFIdentificationTest.cpp.
