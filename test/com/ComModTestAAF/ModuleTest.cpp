@@ -135,3 +135,55 @@ HRESULT GetAAFVersions(IAAFHeader * pHeader,
   
   return result;
 }
+
+
+
+bool operator ==( const aafRational_t& a, const aafRational_t& b )
+{
+    bool  are_equal = true;
+
+    if( a.numerator != b.numerator  ||  a.denominator != b.denominator )
+    {
+        are_equal = false;
+    }
+
+
+    return are_equal;
+}
+
+
+
+bool operator !=( const aafRational_t& a, const aafRational_t& b )
+{
+    return (! operator==( a, b ) );
+}
+
+
+
+bool operator ==( const aafTimeStamp_t& a, const aafTimeStamp_t& b )
+{
+    bool  are_equal = true;
+
+    if( a.date.year != b.date.year  ||
+        a.date.month != b.date.month  ||
+        a.date.day != b.date.day  ||
+        a.time.hour != b.time.hour  ||
+        a.time.minute != b.time.minute  ||
+        a.time.second != b.time.second  ||
+        a.time.fraction != b.time.fraction )
+    {
+        are_equal = false;
+    }
+
+
+    return are_equal;
+}
+
+
+
+bool operator !=( const aafTimeStamp_t& a, const aafTimeStamp_t& b )
+{
+    return (! operator==( a, b ) );
+}
+
+

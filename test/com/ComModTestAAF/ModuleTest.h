@@ -68,4 +68,14 @@ bool RC1TestSupported(aafProductVersion_constref toolkitVersion);
 
 
 
+//
+// Comparison operators
+//
+bool operator ==( const aafRational_t& a, const aafRational_t& b );
+bool operator !=( const aafRational_t& a, const aafRational_t& b );
+
+bool operator ==( const aafTimeStamp_t& a, const aafTimeStamp_t& b );
+bool operator !=( const aafTimeStamp_t& a, const aafTimeStamp_t& b );
+
+
 #endif  // MODULE_TEST_COMMON_H
