@@ -37,7 +37,7 @@ targets.mk : aafobjects.mk GenTargets.sh
 	$(CP)  aafobjects.mk tmp.sh
 	$(CHMOD) a+w tmp.sh
 	$(CAT) GenTargets.sh >> tmp.sh
-	sh tmp.sh > targets.tmp
+	$(shell tmp.sh) > targets.tmp
 	@ $(MV) targets.tmp targets.mk
 	@ $(ECHO) "Done with targets.mk."
 
