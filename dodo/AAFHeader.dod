@@ -146,6 +146,7 @@ AD_XMETHOD1(AppendMob,
   // 
   // Succeeds if all of the following are true:
   // - the pMob pointer is valid.
+  // - the given mob is not already part of this collection.
   // 
   // If this method fails no state will be changed.
   // 
@@ -157,32 +158,10 @@ AD_XMETHOD1(AppendMob,
   //   - succeeded.  \(This is the only code indicating success.\)
   //
   // AAFRESULT_NULL_PARAM
-  //   - pMob is null.)
-
-
-AD_XMETHOD1(RemoveMob,
-			[in],
-			objIn,
-			AAFMob,
-			pMob,
-			Mob to remove from header,
-			Removes the given mob from the header.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pMob pointer is valid.
-  // - the given mob is found.
-  // 
-  // If this method fails no state will be changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
+  //   - pMob is null.
   //
-  // AAFRESULT_NULL_PARAM
-  //   - pMob is null.)
+  // AAFRESULT_DUPLICATE_MOBID
+  //   - the given mob is already contained.)
 
 
 AD_XMETHOD1(GetNumEssenceData,
@@ -450,7 +429,10 @@ AD_XMETHOD1(AppendIdentification,
 			AAFIdentification,
 			pIdent,
 			Identification to append,
-			Appends the given Identification class to the header.
+			Appends the given Identification class to the header.  This
+  // method does not attempt to identify duplicate identifications\, so
+  // it will succeed even if an identical identification has already
+  // been appended.
   // 
   // Succeeds if all of the following are true:
   // - the pIdent pointer is valid.
