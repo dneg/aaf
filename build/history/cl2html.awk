@@ -192,7 +192,7 @@ function createColorMap(file) {
                    file, line) | "cat 1>&2";
             exit 1;
           }
-          default="#" $2;
+          default=colors[$2];
         } else if ($1 == "#") {
           # ignore comment
         } else {
