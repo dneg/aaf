@@ -1,0 +1,58 @@
+#startm .this-module 0
+AAFParameter\
+#endm
+#c
+#startm .parent-module 0
+AAFObject\
+#endm
+#c
+#import ./AAFUnitTest.exp
+AD_HEAD
+/******************************************\
+*                                          *
+* Advanced Authoring Format                *
+*                                          *
+* Copyright (c) 1998 Avid Technology, Inc. *
+* Copyright (c) 1998 Microsoft Corporation *
+*                                          *
+\******************************************/
+
+AD_CLASS_BEGIN
+
+AD_METHOD1(SetLength,
+		   [in],
+		   aafLength_t,
+		   length,
+		   Length of this object,
+		   sets the length property values on the input component object.)
+
+AD_METHOD1(GetLength,
+		   [retval][out],
+		   aafLength_t,
+		   length,
+		   Length of this component,
+		   Gets the starting time and places it into the pStartTime
+		   // argument.  This function returns the length of a component.  It
+		   // supports both 1.x and 2.x component objects.  Length is not
+		   // stored as an implicit property on 1.x objects\, so this routine
+		   // recursively calculates the length.)
+	
+AD_METHOD1(SetDataKind,
+		   [in],
+		   AAFDataDefinition,
+		   datakind,
+		   DataKind of this object,
+		   sets the datakind property values on the input component object.)
+
+AD_METHOD1(GetDataKind,
+		  [retval][out],
+		  AAFDataDefinition *,
+		  datakind,
+		  DataKind of this object,
+		  returns datakind definition object)
+
+AD_OVERRIDE(.method-Test)
+
+AD_CLASS_END
+
+
