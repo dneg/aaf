@@ -101,12 +101,10 @@ void OMWeakReferenceSetProperty<ReferencedObject>::save(
   // Iterate over the set saving each element. The index entries
   // are written in order of their unique keys.
   //
-  OMSetIterator<OMUniqueObjectIdentification,
-                OMWeakReferenceSetElement<ReferencedObject> >
-                                                      iterator(_set, OMBefore);
+  SetIterator iterator(_set, OMBefore);
   while (++iterator) {
 
-    OMWeakReferenceSetElement<ReferencedObject>& element = iterator.value();
+    SetElement& element = iterator.value();
 
     // enter into the index
     //
@@ -140,11 +138,9 @@ void OMWeakReferenceSetProperty<ReferencedObject>::close(void)
 {
   TRACE("OMWeakReferenceSetProperty<ReferencedObject>::close");
 
-  OMSetIterator<OMUniqueObjectIdentification,
-                OMWeakReferenceSetElement<ReferencedObject> >
-                                                      iterator(_set, OMBefore);
+  SetIterator iterator(_set, OMBefore);
   while (++iterator) {
-    OMWeakReferenceSetElement<ReferencedObject>& element = iterator.value();
+    SetElement& element = iterator.value();
     element.close();
   }
 }
@@ -158,11 +154,9 @@ void OMWeakReferenceSetProperty<ReferencedObject>::detach(void)
 {
   TRACE("OMWeakReferenceSetProperty<ReferencedObject>::detach");
 
-  OMSetIterator<OMUniqueObjectIdentification,
-                OMWeakReferenceSetElement<ReferencedObject> >
-                                                      iterator(_set, OMBefore);
+  SetIterator iterator(_set, OMBefore);
   while (++iterator) {
-    OMWeakReferenceSetElement<ReferencedObject>& element = iterator.value();
+    SetElement& element = iterator.value();
     element.detach();
   }
 }
@@ -219,9 +213,7 @@ void OMWeakReferenceSetProperty<ReferencedObject>::restore(
   //
   for (size_t i = 0; i < entries; i++) {
     OMUniqueObjectIdentification key = setIndex[i];
-    OMWeakReferenceSetElement<ReferencedObject> newElement(this,
-                                                           key,
-                                                           _targetTag);
+    SetElement newElement(this, key, _targetTag);
     newElement.restore();
     _set.insert(newElement);
    }
@@ -273,9 +265,7 @@ void OMWeakReferenceSetProperty<ReferencedObject>::insert(
   // Set the set to contain the new object
   //
   OMUniqueObjectIdentification key = object->identification();
-  OMWeakReferenceSetElement<ReferencedObject> newElement(this,
-                                                         key,
-                                                         _targetTag);
+  SetElement newElement(this, key, _targetTag);
   newElement.setValue(object);
   _set.insert(newElement);
   setPresent();
@@ -347,7 +337,7 @@ OMWeakReferenceSetProperty<ReferencedObject>::remove(
 
   PRECONDITION("Object is present", contains(identification));
 
-  OMWeakReferenceSetElement<ReferencedObject>* element = 0;
+  SetElement* element = 0;
   bool found = _set.find(identification, &element);
   ASSERT("Object found", found);
   ReferencedObject* result = element->setValue(0);
@@ -372,7 +362,7 @@ bool OMWeakReferenceSetProperty<ReferencedObject>::ensureAbsent(
 {
   TRACE("OMWeakReferenceSetProperty<ReferencedObject>::ensureAbsent");
 
-  OMWeakReferenceSetElement<ReferencedObject>* element = 0;
+  SetElement* element = 0;
   bool result = _set.find(identification, &element);
   if (result) {
     element->setValue(0);
@@ -477,7 +467,7 @@ ReferencedObject* OMWeakReferenceSetProperty<ReferencedObject>::value(
 
   PRECONDITION("Object is present", contains(identification));
 
-  OMWeakReferenceSetElement<ReferencedObject>* element = 0;
+  SetElement* element = 0;
 
   _set.find(identification, &element);
   ReferencedObject* result = element->getValue();
@@ -505,7 +495,7 @@ bool OMWeakReferenceSetProperty<ReferencedObject>::find(
 {
   TRACE("OMWeakReferenceSetProperty<ReferencedObject>::find");
 
-  OMWeakReferenceSetElement<ReferencedObject>* element = 0;
+  SetElement* element = 0;
 
   bool result = _set.find(identification, &element);
   if (result) {
@@ -529,11 +519,9 @@ bool OMWeakReferenceSetProperty<ReferencedObject>::isVoid(void) const
 
   bool result = true;
 
-  OMSetIterator<OMUniqueObjectIdentification,
-                OMWeakReferenceSetElement<ReferencedObject> >
-                                                      iterator(_set, OMBefore);
+  SetIterator iterator(_set, OMBefore);
   while (++iterator) {
-    OMWeakReferenceSetElement<ReferencedObject>& element = iterator.value();
+    SetElement& element = iterator.value();
     ReferencedObject* object = element.getValue();
     if (object != 0) {
       result = false;
@@ -596,11 +584,9 @@ void OMWeakReferenceSetProperty<ReferencedObject>::getBits(OMByte* bits,
 
   const ReferencedObject** p = (const ReferencedObject**)bits;
 
-  OMSetIterator<OMUniqueObjectIdentification,
-                OMWeakReferenceSetElement<ReferencedObject> >
-                                                      iterator(_set, OMBefore);
+  SetIterator iterator(_set, OMBefore);
   while (++iterator) {
-    OMWeakReferenceSetElement<ReferencedObject>& element = iterator.value();
+    SetElement& element = iterator.value();
     *p++ = element.getValue();
   }
 }

@@ -36,6 +36,9 @@
 template <typename ReferencedObject>
 class OMWeakReferenceVectorIterator;
 
+template <typename Element>
+class OMVectorIterator;
+
   // @class Persistent elastic sequential collections of uniquely identified
   //        weakly referenced (non-contained) objects supported by the
   //        Object Manager.
@@ -195,8 +198,12 @@ public:
 
 private:
 
+  typedef OMWeakReferenceVectorElement<ReferencedObject> VectorElement;
+
+  typedef OMVectorIterator<VectorElement> VectorIterator;
+
     // The vector of references.
-  OMVector<OMWeakReferenceVectorElement<ReferencedObject> > _vector;
+  OMVector<VectorElement> _vector;
   OMPropertyTag _targetTag;
   char* _targetName;
   OMStrongReferenceSetProperty<ReferencedObject>* _targetSet;

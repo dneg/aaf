@@ -37,6 +37,9 @@
 template <typename ReferencedObject>
 class OMWeakReferenceSetIterator;
 
+template <typename Key, typename Element>
+class OMSetIterator;
+
   // @class Persistent sets of uniquely identified weakly referenced
   //        (non-contained) objects supported by the Object Manager.
   //        Objects are accessible by unique identifier (the key).
@@ -163,9 +166,12 @@ public:
 
 private:
 
+  typedef OMWeakReferenceSetElement<ReferencedObject> SetElement;
+
+  typedef OMSetIterator<OMUniqueObjectIdentification, SetElement> SetIterator;
+
   // The set of references.
-  OMSet<OMUniqueObjectIdentification,
-        OMWeakReferenceSetElement<ReferencedObject> > _set;
+  OMSet<OMUniqueObjectIdentification, SetElement> _set;
   OMPropertyTag _targetTag;
   char* _targetName;
   OMStrongReferenceSetProperty<ReferencedObject>* _targetSet;
