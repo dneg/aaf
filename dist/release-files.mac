@@ -15,8 +15,7 @@
 ./MacOLE/Extensions/Retail/Microsoft?Structured?Storage
 
 # Code Warriors V8 libraries
-./bin/MSL?C++.PPC.DLL
-./bin/MSL?RuntimePPC++.DLL
-./bin/MSL?C.PPC.DLL
-./bin/MSL?RuntimePPC.DLL
+./bin/MSL_All_Carbon.Shlb
+./bin/MSL_All_PPC.Shlb
+
 

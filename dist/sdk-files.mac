@@ -3,9 +3,9 @@
 
 # First, the header files. (There are a couple of .c files and a .r,
 # resource, file required as well.).  include/*.h include/*.c
-include/*.c
-include/*.h
-include/*.r
+./include/*.c
+./include/*.h
+./include/*.r
 
 # The release versions of the com-api, plugins, and static
 # libraries.
@@ -32,5 +32,10 @@ include/*.r
 ./lib/debug/AAFD.lib
 ./lib/debug/AAFIIDD.lib
 
+# Code Warriors V8 libraries
+./bin/Debug/MSL_All_Carbon.Shlb
+./bin/Debug/MSL_All_PPC.Shlb
+./bin/MSL_All_Carbon.Shlb
+./bin/MSL_All_PPC.Shlb
 
 
