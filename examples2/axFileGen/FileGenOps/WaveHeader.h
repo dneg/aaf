@@ -90,10 +90,11 @@ private:
 	aafUInt32 GetInt32( int idx );
 	aafUInt16 GetInt16( int idx );
 
-	// This must be alligned on a 32 bit boundry.
-	// I'm assuming the complier is going to to that correct.
-	// If not, then allocate as an aafUInt32 array.
 	int _headerSize;
+
+	// This must be alligned on a 32 bit boundry.
+	// I'm assuming the complier is going to do that correctly.
+	// There some assertions that will pick up such errors.
 	aafUInt8 _header[HEADER_SIZE];
 
 	int _sampleRate;
