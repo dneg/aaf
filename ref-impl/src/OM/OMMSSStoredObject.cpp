@@ -927,17 +927,24 @@ void OMMSSStoredObject::restore(OMStrongReferenceSet& set,
 
   for (size_t i = 0; i < entries; i++) {
     setIndex->iterate(context, localKey, count, key);
-    wchar_t* name = elementName(setName, setId, localKey);
-    OMStrongReferenceSetElement element(&set,
-                                        name,
-                                        localKey,
-                                        count,
-                                        key,
-                                        keySize);
-    element.restore();
-    set.insert(key, element);
-    delete [] name;
-    name = 0; // for BoundsChecker
+    // Restore the object only if it doesn't already exist in the set.
+    // Since the object is uniquely identified by the key, the
+    // external copy is identical to the internal one, so we may
+    // safely ignore the external one.
+    //
+    if (!set.contains(key)) {
+      wchar_t* name = elementName(setName, setId, localKey);
+      OMStrongReferenceSetElement element(&set,
+                                          name,
+                                          localKey,
+                                          count,
+                                          key,
+                                          keySize);
+      element.restore();
+      set.insert(key, element);
+      delete [] name;
+      name = 0; // for BoundsChecker
+    }
   }
   delete [] key;
   delete setIndex;
