@@ -14,6 +14,14 @@ dataid
 
 #include "literalAuidDef.h"
 
+#ifdef AAF_CLASS_ALIAS
+#undef AAF_CLASS_ALIAS
+#endif
+
+#define AAF_CLASS_ALIAS(name, alias) \
+cout << endl; \
+cout << "#define AUID_AAF" << #name << " AUID_AAF" << #alias << endl;
+
 static void doFile (const char * moduleName)
 {
   assert (moduleName);
