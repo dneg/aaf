@@ -105,7 +105,7 @@ AAFRESULT
     SetCriteria(aafSearchCrit_t *pCriteria);
 
 private:
-	aafInt32				_current;
+	aafUInt32				_current;
 	ImplAAFContentStorage	*_cStorage;
 	aafSearchCrit_t			_criteria;
 };
