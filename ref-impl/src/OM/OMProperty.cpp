@@ -45,7 +45,8 @@
 OMProperty::OMProperty(const OMPropertyId propertyId,
                        const OMStoredForm storedForm,
                        const wchar_t* name)
-: _propertyId(propertyId), _storedForm(storedForm), _name(name), _cName(0),
+: _propertyId(propertyId), _storedForm(storedForm),
+  _storedName(0), _name(name), _cName(0),
   _propertySet(0), _definition(0),
   // _isOptional(false),
   // BobT: make optional by default, to hack around problem where
@@ -83,6 +84,7 @@ OMProperty::~OMProperty(void)
 {
   TRACE("OMProperty::~OMProperty");
 
+  delete [] _storedName;
   delete [] _cName;
 }
 
@@ -276,6 +278,17 @@ void OMProperty::restoreName(size_t size)
   ASSERT("Consistent property size", size == strlen(propertyName) + 1);
   ASSERT("Consistent property name", strcmp(propertyName, name()) == 0);
   delete [] propertyName;
+}
+
+const wchar_t* OMProperty::storedName(void) const
+{
+  TRACE("OMProperty::storedName");
+
+  if (_storedName == 0) {
+    OMProperty* p = const_cast<OMProperty*>(this);
+    p->_storedName = OMStoredObject::referenceName(_name, propertyId());
+  }
+  return _storedName;
 }
 
 // class OMSimpleProperty
