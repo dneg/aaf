@@ -17,6 +17,8 @@ AD_HEAD
 *                                          *
 \******************************************/
 
+AD_FORWARD_DECLARATION(AAFDataDefinition)
+
 AD_CLASS_BEGIN
 
 AD_METHOD1(GetTime,
