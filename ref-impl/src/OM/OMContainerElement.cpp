@@ -135,6 +135,170 @@ OMUInt32 OMStrongReferenceVectorElement::localKey(void) const
   return  _localKey;
 }
 
+// class OMStrongReferenceSetElement
+
+  // @mfunc Constructor.
+OMStrongReferenceSetElement::OMStrongReferenceSetElement(void)
+: OMStrongReferenceVectorElement(),
+  _identification(0),
+  _identificationSize(0),
+  _referenceCount(0xffff /* sticky */)
+{
+  TRACE("OMStrongReferenceSetElement::OMStrongReferenceSetElement");
+}
+
+  // @mfunc Constructor.
+  //   @parm The <c OMProperty> (a set property) that contains this
+  //         <c OMStrongReferenceSetElement>.
+  //   @parm The name of this <c OMStrongReferenceSetElement>.
+  //   @parm The local key of this <c OMStrongReferenceSetElement> within
+  //         it's set.
+  //   @parm The unique key of this <c OMStrongReferenceSetElement>.
+  //   @parm TBS
+OMStrongReferenceSetElement::OMStrongReferenceSetElement(
+                                                     OMProperty* property,
+                                                     const wchar_t* name,
+                                                     OMUInt32 localKey,
+                                                     OMUInt32 referenceCount,
+                                                     void* identification,
+                                                     size_t identificationSize)
+: OMStrongReferenceVectorElement(property, name, localKey),
+  _identification(0),
+  _identificationSize(identificationSize),
+  _referenceCount(referenceCount)
+{
+  TRACE("OMStrongReferenceSetElement::OMStrongReferenceSetElement");
+
+  _identification = new OMByte[identificationSize];
+  ASSERT("Valid heap pointer", _identification != 0);
+  memcpy(_identification, identification, _identificationSize);
+}
+
+  // @mfunc Copy constructor.
+  //   @parm The <c OMStrongReferenceSetElement> to copy.
+OMStrongReferenceSetElement::OMStrongReferenceSetElement(
+                                        const OMStrongReferenceSetElement& rhs)
+: OMStrongReferenceVectorElement(rhs),
+  _identification(0),
+  _identificationSize(rhs._identificationSize),
+  _referenceCount(rhs._referenceCount)
+{
+  TRACE("OMStrongReferenceSetElement::OMStrongReferenceSetElement");
+
+  delete [] _identification;
+  _identification = new OMByte[_identificationSize];
+  ASSERT("Valid heap pointer", _identification != 0);
+  memcpy(_identification, rhs._identification, _identificationSize);
+}
+
+  // @mfunc Destructor.
+OMStrongReferenceSetElement::~OMStrongReferenceSetElement(void)
+{
+  TRACE("OMStrongReferenceSetElement::~OMStrongReferenceSetElement");
+  delete [] _identification;
+}
+
+  // @mfunc Assignment.
+  //        This operator provides value semantics for <c OMSet>.
+  //        This operator does not provide assignment of object references.
+  //   @parm The <c OMStrongReferenceSetElement> to be assigned.
+  //   @rdesc The <c OMStrongReferenceSetElement> resulting from
+  //          the assignment.
+OMStrongReferenceSetElement&
+OMStrongReferenceSetElement::operator= (const OMStrongReferenceSetElement& rhs)
+{
+  TRACE("OMStrongReferenceSetElement::operator=");
+
+  if (*this == rhs) {
+    return *this; // early return !
+  }
+
+  OMStrongReferenceVectorElement::operator=(rhs);
+  _identificationSize = rhs._identificationSize;
+  delete [] _identification;
+  _identification = 0; // for BoundsChecker
+  _identification = new OMByte[_identificationSize];
+  ASSERT("Valid heap pointer", _identification != 0);
+  memcpy(_identification, rhs._identification, _identificationSize);
+  _referenceCount = rhs._referenceCount;
+
+  return *this;
+}
+
+  // @mfunc Equality.
+  //        This operator provides value semantics for <c OMSet>.
+  //        This operator does not provide equality of object references.
+  //   @parm The <c OMStrongReferenceSetElement> to be compared.
+  //   @rdesc True if the values are the same, false otherwise.
+bool OMStrongReferenceSetElement::operator== (
+                                  const OMStrongReferenceSetElement& rhs) const
+{
+  TRACE("OMStrongReferenceSetElement::operator==");
+
+  bool result;
+
+  if ((_identification != 0) && (rhs._identification != 0)) {
+    if (memcmp(_identification,
+               rhs._identification,
+               _identificationSize) == 0) {
+      result = true;
+    } else {
+      result = false;
+    }
+  } else if ((_identification == 0) && (rhs._identification == 0)) {
+    result = true;
+  } else {
+    result = false;
+  }
+
+
+  ASSERT("Consistent",
+                      IMPLIES(result, _referenceCount == rhs._referenceCount));
+
+#if defined (OM_ENABLE_DEBUG)
+  bool check = OMStrongReferenceVectorElement::operator==(rhs);
+#endif
+  ASSERT("Consistent", IMPLIES(result, check));
+
+  return result;
+}
+
+  // @mfunc Set the value of this <c OMContainerElement>.
+  //   @parm A pointer to the new <p ReferencedObject>.
+  //   @rdesc A pointer to previous <p ReferencedObject>, if any.
+OMStorable* OMStrongReferenceSetElement::setValue(void* identification,
+                                                  const OMStorable* value)
+{
+  TRACE("OMStrongReferenceSetElement::setValue");
+  OBSOLETE("OMContainerElement<ObjectReference>::reference");
+
+  delete [] _identification;
+  _identification = 0 ; // for BoundsChecker
+  _identification = new OMByte[_identificationSize];
+  ASSERT("Valid heap pointer", _identification != 0);
+  memcpy(_identification, identification, _identificationSize);
+  return _reference.setValue(value);
+}
+
+  // @mfunc The unique key of this <c OMStrongReferenceSetElement>.
+  //   @rdesc  The unique key of this <c OMStrongReferenceSetElement>.
+void* OMStrongReferenceSetElement::identification(void) const
+{
+  TRACE("OMStrongReferenceSetElement::identification");
+
+  return _identification;
+}
+
+  // @mfunc The count of weak references to this
+  //        <c OMStrongReferenceSetElement>.
+  //   @rdesc The count of weak references.
+OMUInt32 OMStrongReferenceSetElement::referenceCount(void) const
+{
+  TRACE("OMStrongReferenceSetElement::referenceCount");
+
+  return _referenceCount;
+}
+
 // class OMWeakReferenceVectorElement
 
   // @mfunc Constructor.
