@@ -175,7 +175,7 @@ HUMAN_TYPED_IMPL="\
 	EnumAAFTaggedValueDefs \
 	EnumAAFKLVDataDefs \
 	AAFRecordingDescriptor \
-	AAFAuxillaryDescriptor "
+	AAFAuxiliaryDescriptor "
 
 # Defered interfaces
 #	AAFIntraFrameMarker \
