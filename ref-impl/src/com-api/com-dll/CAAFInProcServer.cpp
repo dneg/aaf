@@ -3,6 +3,8 @@
 #endif
 
 
+#include "aafrdli.h"
+
 #include <assert.h>
 #include <string.h>
 #include <stdio.h>
@@ -677,7 +679,60 @@ HRESULT AAFGetLibraryInfo(HINSTANCE hInstance, char **pServerPath, char **pServe
 
 HRESULT AAFGetLibraryInfo(HINSTANCE hInstance, char **pServerPath, char **pServerDirectory)
 {
-	return AAFRESULT_NOT_IMPLEMENTED;
+	HRESULT rc = S_OK;
+	char saveChar;
+	char *pDirSeparator = NULL;
+	int pathLen = 0;
+	
+	if (NULL == pServerPath || NULL == pServerDirectory)
+	  return AAFRESULT_NULL_PARAM;
+	
+	*pServerPath = *pServerDirectory = NULL;
+	
+	// In the MAC version we store the fragment block pointer in the HINSTANCE member.
+	CFragInitBlockPtr initBlkPtr = static_cast<CFragInitBlockPtr>(hInstance);
+	assert(initBlkPtr);
+	
+	
+	//
+	// Attempt to allocate and intialize the path to this code fragment.
+	int pathBufferSize = sizeof(StrFileName);
+	do
+	{
+		*pServerPath = new char[pathBufferSize];
+		if (NULL == *pServerPath)
+			return E_OUTOFMEMORY;
+		rc = AAFFSSpecToPath(initBlkPtr->fragLocator.u.onDisk.fileSpec, *pServerPath, pathBufferSize);
+		if (S_OK != rc)
+		{
+			delete [] *pServerPath;
+			*pServerPath = NULL;
+		}
+		pathBufferSize += sizeof(StrFileName);
+	} while (AAFRESULT_SMALLBUF == rc);
+	
+	if (S_OK == rc)
+	{
+		pDirSeparator = strrchr(*pServerPath, ':');
+		assert(pDirSeparator);
+		
+		// Copy the directory path.
+		saveChar = pDirSeparator[1];
+		pDirSeparator[1] = 0;
+		pathLen = strlen(*pServerPath);
+		
+		*pServerDirectory = new char[pathLen + 1];
+		if (NULL == *pServerDirectory)
+		{
+			delete [] *pServerPath;
+			*pServerPath = NULL;
+			return E_OUTOFMEMORY;
+		}
+		strcpy(*pServerDirectory, *pServerPath);
+		pDirSeparator[1] = saveChar; // restore saved character
+	}	
+	
+	return rc;
 }
 
 #else // Unix/SGI?
