@@ -438,7 +438,7 @@ bool OMFile::isRecognized(const wchar_t* fileName,
 	// second, search for other factories
 	if( !result ) {
 		FactorySetIterator iterator2(*_factory, OMBefore);
-		while (++iterator) {
+		while (++iterator2) {
 			if ( iterator2.value()->better()
 				 && iterator2.value()->isRecognized(fileName)) {
 				result = true;
@@ -482,7 +482,7 @@ bool OMFile::isRecognized(OMRawStorage* rawStorage,
 	// second, search for other factories
 	if( !result ) {
 		FactorySetIterator iterator2(*_factory, OMBefore);
-		while (++iterator) {
+		while (++iterator2) {
 			ASSERT("Properly positioned raw storage", rawStorage->position() == 0);
 			if ( iterator2.value()->better()
 				 && iterator2.value()->isRecognized(rawStorage)) {
