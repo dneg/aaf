@@ -169,6 +169,8 @@ interface IEnumAAFTaggedValueDefs;
 interface IEnumAAFKLVDataDefs;
 interface IAAFRecordingDescriptor;
 interface IAAFAuxiliaryDescriptor;
+interface IAAFDescriptiveFramework;
+interface IAAFDescriptiveMarker;
 interface IAAFEndian;
 interface IAAFSearchSource;
 interface IAAFEssenceMultiAccess;
@@ -310,6 +312,8 @@ typedef interface IEnumAAFTaggedValueDefs IEnumAAFTaggedValueDefs;
 typedef interface IEnumAAFKLVDataDefs IEnumAAFKLVDataDefs;
 typedef interface IAAFRecordingDescriptor IAAFRecordingDescriptor;
 typedef interface IAAFAuxiliaryDescriptor IAAFAuxiliaryDescriptor;
+typedef interface IAAFDescriptiveFramework IAAFDescriptiveFramework;
+typedef interface IAAFDescriptiveMarker IAAFDescriptiveMarker;
 typedef interface IAAFEndian IAAFEndian;
 typedef interface IAAFSearchSource IAAFSearchSource;
 typedef interface IAAFEssenceMultiAccess IAAFEssenceMultiAccess;
@@ -34431,20 +34435,16 @@ DECLARE_INTERFACE_(IAAFAuxiliaryDescriptor, IUnknown)
 
   /* *** IAAFAuxiliaryDescriptor methods *** */
 
+
   //***********************************************************
   //
   // Initialize()
   //
-  // Initializes a newly allocated, empty
+  // Initializes a newly allocated,
   // IAAFAuxiliaryDescriptor object.  This method must be called
   // after allocation, and before any other method can be called.
   //
-  // Succeeds if:
-  // - Initialize() has not yet been called on this object.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
+  // Return codes:
   // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  (This is the only code indicating success.)
@@ -34665,6 +34665,213 @@ DECLARE_INTERFACE_(IAAFAuxiliaryDescriptor, IUnknown)
   END_INTERFACE
 };
 #endif // __IAAFAuxiliaryDescriptor_INTERFACE_DEFINED__
+
+
+
+// IAAFDescriptiveFramework
+
+// ************************
+//
+// Interface IAAFDescriptiveFramework
+//
+// ************************
+
+
+
+
+
+#ifndef __IAAFDescriptiveFramework_INTERFACE_DEFINED__
+#define __IAAFDescriptiveFramework_INTERFACE_DEFINED__
+
+EXTERN_C const IID IID_IAAFDescriptiveFramework;
+
+#undef  INTERFACE
+#define INTERFACE   IAAFDescriptiveFramework
+
+DECLARE_INTERFACE_(IAAFDescriptiveFramework, IUnknown)
+{
+  BEGIN_INTERFACE
+
+  /* *** IUnknown methods *** */
+  STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppvObj) PURE;
+  STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
+  STDMETHOD_(ULONG,Release) (THIS) PURE;
+
+  /* *** IAAFDescriptiveFramework methods *** */
+
+
+
+  END_INTERFACE
+};
+#endif // __IAAFDescriptiveFramework_INTERFACE_DEFINED__
+
+
+
+// IAAFDescriptiveMarker
+
+// ************************
+//
+// Interface IAAFDescriptiveMarker
+//
+// ************************
+
+
+
+
+
+
+
+#ifndef __IAAFDescriptiveMarker_INTERFACE_DEFINED__
+#define __IAAFDescriptiveMarker_INTERFACE_DEFINED__
+
+EXTERN_C const IID IID_IAAFDescriptiveMarker;
+
+
+#undef  INTERFACE
+#define INTERFACE   IAAFDescriptiveMarker
+
+DECLARE_INTERFACE_(IAAFDescriptiveMarker, IUnknown)
+{
+  BEGIN_INTERFACE
+
+  /* *** IUnknown methods *** */
+  STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppvObj) PURE;
+  STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
+  STDMETHOD_(ULONG,Release) (THIS) PURE;
+
+  /* *** IAAFDescriptiveMarker methods *** */
+
+
+  //***********************************************************
+  //
+  // Initialize()
+  //
+  // Initializes a newly allocated,
+  // IAAFDescriptiveFrame object.  This method must be called
+  // after allocation, and before any other method can be called.
+  //
+  // Return codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_ALREADY_INITIALIZED
+  //   - Initialize() has already been called on this object.
+  STDMETHOD(Initialize) (THIS) PURE;
+
+
+  //***********************************************************
+  //
+  // SetDescribedSlotIDs()
+  //
+  // Specifies the slot IDs in the Mob to which the DescriptiveFramework refers.
+//
+// 
+// Return codes:
+//
+// AAFRESULT_SUCCESS
+//   - succeeded
+//
+// AAFRESULT_NULL_PARAM
+//   - pMonoSourceSlotIDs is null 
+//
+// This interface is not currently implemented.
+  //
+  STDMETHOD(SetDescribedSlotIDs) (THIS_
+    // Number of elements in the pDescribedSlotIDs array
+    /*[in]*/ aafUInt32  numberElements,
+
+    // Array of slot IDs
+    /*[in]*/ aafUInt32*  pDescribedSlotIDs) PURE;
+
+
+  //***********************************************************
+  //
+  // GetDescribedSlotIDs()
+  //
+  // // Get the described slot IDs that are referenced by this object.  Refer to
+// SetDescribedSlotIDs for a description of pDescribedSlotIDs.
+// Return codes:
+//
+// AAFRESULT_SUCCESS
+//   - succeeded
+//
+// AAFRESULT_NULL_PARAM
+//   - pDescribedSlotIDs is null
+//
+// AAFRESULT_PROP_NOT_PRESENT
+//   - the property is not present
+//
+// AAFRESULT_SMALLBUF
+//   - pDescribedSlotIDs is too small
+//
+// This interface is not currently implemented.
+  //
+  STDMETHOD(GetDescribedSlotIDs) (THIS_
+    // Number of elements in the pDescribedSlotIDs array
+    /*[in]*/ aafUInt32  numberElements,
+
+    // Array of channel IDs
+    /*[in]*/ aafUInt32*  pDescribedSlotIDs) PURE;
+
+  //***********************************************************
+  //
+  // GetDescribedSlotIDsSize()
+  //
+  // // Get the number of slot IDs stored by this DescriptiveMarker.
+//
+// Return codes:
+//
+// AAFRESULT_SUCCESS
+//   - succeeded
+//
+// AAFRESULT_NULL_PARAM
+//   - pDescribedSlotIDs is null 
+  //
+  STDMETHOD(GetDescribedSlotIDsSize) (THIS_
+    // Number of elements in the pDescribedSlotIDs array
+    /*[out]*/ aafUInt32 *  numberElements) PURE;
+
+  //***********************************************************
+  //
+  // SetDescriptiveFramework()
+  //
+  // // Sets the DescriptiveFramework that describes this DescriptiveMarker.
+//
+// Return codes:
+//
+// AAFRESULT_SUCCESS
+//	- succeeded
+//
+// AAFRESULT_NULL_PARAM
+//	- pDescriptorFramework is null
+  //
+  STDMETHOD(SetDescriptiveFramework) (THIS_
+    // DescriptorFramework object to set
+    /*[in]*/ IAAFDescriptiveFramework * pDescriptiveFramework) PURE;
+
+  //***********************************************************
+  //
+  // GetDescriptiveFramework()
+  //
+  // // Gets the DescriptiveFramework that describes this DescriptiveMarker.
+//
+// Return codes:
+//
+// AAFRESULT_SUCCESS
+//	- succeeded
+//
+// AAFRESULT_NULL_PARAM
+//	- ppDescriptorFramework is null
+  //
+  STDMETHOD(GetDescriptiveFramework) (THIS_
+    // DescriptorFramework object to return
+    /*[out,retval]*/ IAAFDescriptiveFramework ** ppDescriptiveFramework) PURE;
+
+
+  END_INTERFACE
+};
+#endif // __IAAFDescriptiveMarker_INTERFACE_DEFINED__
 
 
 
@@ -38551,9 +38758,6 @@ DECLARE_INTERFACE_(IAAFSourceReference2, IUnknown)
 //
 // AAFRESULT_NULL_PARAM
 //   - pChannelIDs is null
-//
-// AAFRESULT_PROP_NOT_PRESENT
-//   - the property is not present
   //
   STDMETHOD(GetChannelIDsSize) (THIS_
     // Number of elements in the pChannelIDs array
@@ -38622,14 +38826,10 @@ DECLARE_INTERFACE_(IAAFSourceReference2, IUnknown)
 //
 // AAFRESULT_NULL_PARAM
 //   - pMonoSourceSlotIDs is null
-//
-// AAFRESULT_PROP_NOT_PRESENT
-//   - the property is not present
   //
   STDMETHOD(GetMonoSourceSlotIDsSize) (THIS_
     // Number of elements in the pMonoSourceSlotIDs array
     /*[out]*/ aafUInt32 *  numberElements) PURE;
-
 
 
   END_INTERFACE

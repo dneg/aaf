@@ -179,5 +179,7 @@ extern "C" const aafClassID_t CLSID_EnumAAFTaggedValueDefs;
 extern "C" const aafClassID_t CLSID_EnumAAFKLVDataDefs;
 extern "C" const aafClassID_t CLSID_AAFRecordingDescriptor;
 extern "C" const aafClassID_t CLSID_AAFAuxiliaryDescriptor;
+extern "C" const aafClassID_t CLSID_AAFDescriptiveFramework;
+extern "C" const aafClassID_t CLSID_AAFDescriptiveMarker;
 
 #endif // __AAFClassIDs_h__
