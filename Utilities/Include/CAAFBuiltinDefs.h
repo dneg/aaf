@@ -188,6 +188,7 @@ public:
   CLASS_DEF_METHOD(PluginDescriptor);
   CLASS_DEF_METHOD(PropertyDef);
   CLASS_DEF_METHOD(Pulldown);
+  CLASS_DEF_METHOD(RGBADescriptor);
   CLASS_DEF_METHOD(ScopeReference);
   CLASS_DEF_METHOD(Selector);
   CLASS_DEF_METHOD(Sequence);
