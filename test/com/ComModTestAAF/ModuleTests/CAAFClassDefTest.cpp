@@ -281,6 +281,10 @@ static void VerifyAAFFile(CAAFClassDefTestLog& Log,IAAFFileSP pFile)
 	checkExpression(pFile!=0);
 	checkResult(pFile->GetHeader(&pHeader));
 	checkExpression(pHeader!=0);
+  
+	aafProductVersion_t toolkitVersion, fileToolkitVersion;
+	checkResult(GetAAFVersions(pHeader, &toolkitVersion, &fileToolkitVersion));
+
 	checkResult(pHeader->GetDictionary(&pDict));
 	checkExpression(pDict!=0);
   
@@ -387,6 +391,14 @@ static void VerifyAAFFile(CAAFClassDefTestLog& Log,IAAFFileSP pFile)
 		if(AreUnksSame(pReturnedParent,pParentClass)==kAAFFalse)
 			Log.MarkTestFailed(GET_PARENT);
 	}
+
+	if (ExtendingAAFObjectSupported(toolkitVersion) && ExtendingAAFObjectSupported(fileToolkitVersion))
+	{
+		IAAFClassDefSP pObjectClass;
+		IAAFPropertyDefSP propDef2;
+		checkResult(pDict->LookupClassDef(AUID_AAFObject, &pObjectClass));
+		checkResult(pObjectClass->LookupPropertyDef(ourPid2, &propDef2));
+	}
 }
 
 // This function creates the AAF file we will use for our test, and also performs
@@ -428,8 +440,12 @@ static void CreateAAFFile(CAAFClassDefTestLog& Log)
 	checkResult(pFile->GetHeader(&pHeader));
 	checkExpression(pHeader!=0);
 
+	aafProductVersion_t toolkitVersion;
+	checkResult(GetAAFVersions(pHeader, &toolkitVersion, NULL));
+
 	checkResult(pHeader->GetDictionary(&pDict));
 	checkExpression(pDict!=0);
+
 
 	IAAFTypeDefSP ptd;
 	checkResult(pDict->LookupTypeDef(kAAFTypeID_UInt8, &ptd));
@@ -442,20 +458,6 @@ static void CreateAAFFile(CAAFClassDefTestLog& Log)
 	if(badClass1->RegisterOptionalPropertyDef (ourPid1,L"First prop",ptd,
 		&propDef1)!=AAFRESULT_NOT_EXTENDABLE)
 		Log.MarkTestFailed(REGISTER_OPTIONAL_PROPERTY_DEF);
-	
-	// Try to extend an AAFObject.  Should fail, for now at least.
-	IAAFClassDefSP badClass2;
-	checkResult(pDict->LookupClassDef (AUID_AAFObject, &badClass2));
-	
-	IAAFPropertyDefSP propDef2;
-	// The following call will succeed on "some newer" toolkits.
-	HRESULT result = badClass2->RegisterOptionalPropertyDef (ourPid2, kOptionalObjectPropertyName, ptd,&propDef2);
-	if (FAILED(result))
-	{
-		if(result!=AAFRESULT_NOT_EXTENDABLE)
-			Log.MarkTestFailed(REGISTER_OPTIONAL_PROPERTY_DEF);
-	}
-
 	// Try to extend an AAFSequence.  Should succeed.
 	IAAFClassDefSP goodClass;
 	checkResult(pDict->LookupClassDef (AUID_AAFSequence, &goodClass));
@@ -534,6 +536,22 @@ static void CreateAAFFile(CAAFClassDefTestLog& Log)
 
 	// Register our new class definition in the dictionary.
 	checkResult(pDict->RegisterClassDef(pNewClass));
+
+	
+	// Try to extend an AAFObject.  Should fail, for now at least.
+	IAAFClassDefSP badClass2;
+	checkResult(pDict->LookupClassDef (AUID_AAFObject, &badClass2));
+	IAAFPropertyDefSP propDef2;
+	// The following call will succeed on "some newer" toolkits.
+	HRESULT result = badClass2->RegisterOptionalPropertyDef (ourPid2, kOptionalObjectPropertyName, ptd,&propDef2);
+	if (FAILED(result))
+	{
+		if (ExtendingAAFObjectSupported(toolkitVersion))
+			Log.MarkTestFailed(REGISTER_OPTIONAL_PROPERTY_DEF);
+		else if (result!=AAFRESULT_NOT_EXTENDABLE)
+			Log.MarkTestFailed(REGISTER_OPTIONAL_PROPERTY_DEF);
+	}
+
 
 	VerifyAAFFile(Log,pFile);
 
