@@ -199,6 +199,8 @@ void OMStoredObject::save(const OMPropertySet& properties)
   PRECONDITION("Already open", _open);
 
   size_t count = properties.count();
+  _index = new OMStoredPropertySetIndex(count);
+  ASSERT("Valid heap pointer", _index != 0);
   size_t context = 0;
   for (size_t i = 0; i < count; i++) {
     OMProperty* p = 0;
@@ -210,7 +212,8 @@ void OMStoredObject::save(const OMPropertySet& properties)
   validate(&properties, _index);
 #endif
   save(_index);
-
+  delete _index;
+  _index = 0;
 }
 
 void OMStoredObject::save(OMStoredPropertySetIndex* index)
@@ -425,8 +428,6 @@ void OMStoredObject::create(const OMByteOrder byteOrder)
 
   _byteOrder = byteOrder;
   _mode = OMFile::modifyMode;
-  _index = new OMStoredPropertySetIndex(50);
-  ASSERT("Valid heap pointer", _index != 0);
   _indexStream = createStream(_storage, propertyIndexStreamName);
   _propertiesStream = createStream(_storage, propertyValueStreamName);
   _open = true;
