@@ -118,6 +118,18 @@ IAAFSmartPointer<Type> AxCreateInstance( AxDictionary& dict )
 }
 
 template <class Type>
+IAAFSmartPointer<Type> AxCreateInstance( IAAFDictionarySP spDict )
+{
+	Type* dummy = 0;
+	
+	AxDictionary dict(spDict);
+	IUnknownSP spIUnknown = dict.CreateInstance( AxAUID(dummy), AxIID(dummy) );
+	IAAFSmartPointer<Type> sp;
+	AxQueryInterface( spIUnknown, sp );
+	return sp;
+}
+
+template <class Type>
 IAAFSmartPointer<Type> AxCreateMetaInstance( AxDictionary& dict )
 {
 	Type* dummy = 0;
