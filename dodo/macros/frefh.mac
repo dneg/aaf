@@ -1,0 +1,838 @@
+#c /******************************************\
+#c *                                          *
+#c * Advanced Authoring Format                *
+#c *                                          *
+#c * Copyright (c) 1998 Avid Technology, Inc. *
+#c * Copyright (c) 1998 Microsoft Corporation *
+#c *                                          *
+#c \******************************************/
+
+
+
+#ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+#c
+#c AutoDodo macro file for use in generating IDL files.
+#c
+#ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+
+
+#import macros/base.mac
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Pass through argument if for idl otherwise just comment the arg.
+#c 
+#c This macro is generally used to specify IDL options that would
+#c make since to emit to c++.
+#c To allow proper marshalling code generation of a struct: |
+#c typedef struct
+#c {
+#c     aafInt32 length;
+#c     AD_IDL([length_is(length)]) aafWchar *str;
+#c } aafString_t;
+#c
+#startm AD_IDL 01
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Includes another file.
+#c
+#c Argument: Base filename
+#c
+#startm AD_INCLUDE 01
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Goes at the head of the file.
+#c
+#c Arguments: none
+#c
+#startm AD_HEAD 00
+#endm
+
+#ccccccccccccccccccccccccccc
+#c
+#c Goes at the head of the file.
+#c
+#c Arguments: none
+#c
+#startm AD_TYPES_HEAD 00
+//=--------------------------------------------------------------------------=
+// .this-module.h")
+//=--------------------------------------------------------------------------=
+// (C) Copyright 1998 Avid Technology.
+// (C) Copyright 1998 Microsoft Corporation.
+//
+// THIS CODE AND INFORMATION IS PROVIDED 'AS IS' WITHOUT WARRANTY OF
+// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
+// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
+// PARTICULAR PURPOSE.
+//=--------------------------------------------------------------------------=
+// .this-module Interface.
+//=--------------------------------------------------------------------------=
+//
+#ifndef __.this-module_h__
+#define __.this-module_h__
+
+#ifndef __AAFCOMPlatformTypes_h__
+#include "AAFCOMPlatformTypes.h"
+#endif
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Starts a class definition
+#c
+#c Arguments: none
+#c
+#startm AD_CLASS_BEGIN 00
+
+#undef  INTERFACE
+#define INTERFACE   I.this-module
+
+DECLARE_INTERFACE_(I.this-module, IUnknown)
+{
+  BEGIN_INTERFACE
+
+  /* *** IUnknown methods *** */
+  STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppvObj) PURE;
+  STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
+  STDMETHOD_(ULONG,Release) (THIS) PURE;
+
+  /* *** I.this-module methods *** */\
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Starts a class definition with no parent class
+#c
+#c Arguments: none
+#c
+#startm AD_ROOT_CLASS_BEGIN 00
+AD_CLASS_BEGIN\
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Types definitions should only be used by idl and c++ & impl headers
+#c 
+#c
+#c GUID
+#c Argument01: hex long  0-3[leading 0's w/o leading 0x]
+#c Argument02: hex short 4-5[leading 0's w/o leading 0x]
+#c Argument03: hex short 6-7[leading 0's w/o leading 0x]
+#c Argument04: hex byte   8 [leading 0's w/o leading 0x]
+#c Argument05: hex byte   9 [leading 0's w/o leading 0x]
+#c Argument06: hex byte  10 [leading 0's w/o leading 0x]
+#c Argument07: hex byte  11 [leading 0's w/o leading 0x]
+#c Argument08: hex byte  12 [leading 0's w/o leading 0x]
+#c Argument09: hex byte  13 [leading 0's w/o leading 0x]
+#c Argument10: hex byte  14 [leading 0's w/o leading 0x]
+#c Argument11: hex byte  15 [leading 0's w/o leading 0x]
+#c
+#c Example:
+#c AD_TYPES_BEGIN(b1a21372, 1a7d, 11d2, bf, 78, 00, 10, 4b, c9, 15, 6d)
+#c
+#startm AD_TYPES_BEGIN 11
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Ends a types definition
+#c
+#c Types definitions should only be used by idl and c++ & impl headers. This should
+#c be the last line of a "types" dodo file.
+#c
+#c Arguments: none
+#c
+#startm AD_TYPES_END 00
+
+#endif // #ifndef __.this-module_h__\
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a method which takes no arguments.
+#c
+#c Argument1: method name
+#c Argument2: method description
+#c
+#startm AD_METHOD0 02
+  // %02
+  STDMETHOD(%01) (THIS) PURE;\
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a method which takes one argument.
+#c
+#c Macro Arg 01: method name
+#c
+#c Macro arguments 02+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt
+#c ----------   ----------   ---------   ----    ----    --------
+#c metharg 1    02           03          04      05      06
+#c
+#c Macro Arg 07: method description
+#c
+#startm AD_XMETHOD1 07
+  // %07
+  STDMETHOD(%01) (THIS_
+	/*%02*/ .%03-adornment%04 .%03-indirection %05) PURE;\
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a method which takes two arguments.
+#c
+#c Macro Arg 01: method name
+#c
+#c Macro arguments 02+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt
+#c ----------   ----------   ---------   ----    ----    --------
+#c metharg 1    02           03          04      05      06
+#c metharg 2    07           08          09      10      11
+#c
+#c Macro Arg 12: method description
+#c
+#startm AD_XMETHOD2 12
+  // %12
+  STDMETHOD(%01) (THIS_
+	/*%02*/ .%03-adornment%04 .%03-indirection %05,
+	/*%07*/ .%08-adornment%09 .%08-indirection %10) PURE;\
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a method which takes three arguments.
+#c
+#c Macro Arg 01: method name
+#c
+#c Macro arguments 02+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt
+#c ----------   ----------   ---------   ----    ----    --------
+#c metharg 1    02           03          04      05      06
+#c metharg 2    07           08          09      10      11
+#c metharg 3    12           13          14      15      16
+#c
+#c Macro Arg 17: method description
+#c
+#startm AD_XMETHOD3 17
+  // %17
+  STDMETHOD(%01) (THIS_
+	/*%02*/ .%03-adornment%04 .%03-indirection %05,
+	/*%07*/ .%08-adornment%09 .%08-indirection %10,
+	/*%12*/ .%13-adornment%14 .%13-indirection %15) PURE;\
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a method which takes four arguments.
+#c
+#c Macro Arg 01: method name
+#c
+#c Macro arguments 02+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt
+#c ----------   ----------   ---------   ----    ----    --------
+#c metharg 1    02           03          04      05      06
+#c metharg 2    07           08          09      10      11
+#c metharg 3    12           13          14      15      16
+#c metharg 4    17           18          19      20      21
+#c
+#c Macro Arg 22: method description
+#c
+#startm AD_XMETHOD4 22
+  // %22
+  STDMETHOD(%01) (THIS_
+	/*%02*/ .%03-adornment%04 .%03-indirection %05,
+	/*%07*/ .%08-adornment%09 .%08-indirection %10,
+	/*%12*/ .%13-adornment%14 .%13-indirection %15,
+	/*%17*/ .%18-adornment%19 .%18-indirection %20) PURE;\
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a method which takes five arguments.
+#c
+#c Macro Arg 01: method name
+#c
+#c Macro arguments 02+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt
+#c ----------   ----------   ---------   ----    ----    --------
+#c metharg 1    02           03          04      05      06
+#c metharg 2    07           08          09      10      11
+#c metharg 3    12           13          14      15      16
+#c metharg 4    17           18          19      20      21
+#c metharg 5    22           23          24      25      26
+#c
+#c Macro Arg 27: method description
+#c
+#startm AD_XMETHOD5 27
+  // %27
+  STDMETHOD(%01) (THIS_
+	/*%02*/ .%03-adornment%04 .%03-indirection %05,
+	/*%07*/ .%08-adornment%09 .%08-indirection %10,
+	/*%12*/ .%13-adornment%14 .%13-indirection %15,
+	/*%17*/ .%18-adornment%19 .%18-indirection %20,
+	/*%22*/ .%23-adornment%24 .%23-indirection %25) PURE;\
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a method which takes six arguments.
+#c
+#c Macro Arg 01: method name
+#c
+#c Macro arguments 02+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt
+#c ----------   ----------   ---------   ----    ----    --------
+#c metharg 1    02           03          04      05      06
+#c metharg 2    07           08          09      10      11
+#c metharg 3    12           13          14      15      16
+#c metharg 4    17           18          19      20      21
+#c metharg 5    22           23          24      25      26
+#c metharg 6    27           28          29      30      31
+#c
+#c Macro Arg 32: method description
+#c
+#startm AD_XMETHOD6 32
+  // %32
+  STDMETHOD(%01) (THIS_
+	/*%02*/ .%03-adornment%04 .%03-indirection %05,
+	/*%07*/ .%08-adornment%09 .%08-indirection %10,
+	/*%12*/ .%13-adornment%14 .%13-indirection %15,
+	/*%17*/ .%18-adornment%19 .%18-indirection %20,
+	/*%22*/ .%23-adornment%24 .%23-indirection %25,
+	/*%27*/ .%28-adornment%29 .%28-indirection %30) PURE;\
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a method which takes seven arguments.
+#c
+#c Macro Arg 01: method name
+#c
+#c Macro arguments 02+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt
+#c ----------   ----------   ---------   ----    ----    --------
+#c metharg 1    02           03          04      05      06
+#c metharg 2    07           08          09      10      11
+#c metharg 3    12           13          14      15      16
+#c metharg 4    17           18          19      20      21
+#c metharg 5    22           23          24      25      26
+#c metharg 6    27           28          29      30      31
+#c metharg 7    32           33          34      35      36
+#c
+#c Macro Arg 37: method description
+#c
+#startm AD_XMETHOD7 37
+  // %37
+  STDMETHOD(%01) (THIS_
+	/*%02*/ .%03-adornment%04 .%03-indirection %05,
+	/*%07*/ .%08-adornment%09 .%08-indirection %10,
+	/*%12*/ .%13-adornment%14 .%13-indirection %15,
+	/*%17*/ .%18-adornment%19 .%18-indirection %20,
+	/*%22*/ .%23-adornment%24 .%23-indirection %25,
+	/*%27*/ .%28-adornment%29 .%28-indirection %30,
+	/*%32*/ .%33-adornment%34 .%33-indirection %35) PURE;\
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a method which takes eight arguments.
+#c
+#c Macro Arg 01: method name
+#c
+#c Macro arguments 02+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt
+#c ----------   ----------   ---------   ----    ----    --------
+#c metharg 1    02           03          04      05      06
+#c metharg 2    07           08          09      10      11
+#c metharg 3    12           13          14      15      16
+#c metharg 4    17           18          19      20      21
+#c metharg 5    22           23          24      25      26
+#c metharg 6    27           28          29      30      31
+#c metharg 7    32           33          34      35      36
+#c metharg 8    37           38          39      40      41
+#c
+#c Macro Arg 42: method description
+#c
+#startm AD_XMETHOD8 42
+  // %42
+  STDMETHOD(%01) (THIS_
+	/*%02*/ .%03-adornment%04 .%03-indirection %05,
+	/*%07*/ .%08-adornment%09 .%08-indirection %10,
+	/*%12*/ .%13-adornment%14 .%13-indirection %15,
+	/*%17*/ .%18-adornment%19 .%18-indirection %20,
+	/*%22*/ .%23-adornment%24 .%23-indirection %25,
+	/*%27*/ .%28-adornment%29 .%28-indirection %30,
+	/*%32*/ .%33-adornment%34 .%33-indirection %35,
+	/*%37*/ .%38-adornment%39 .%38-indirection %40) PURE;\
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a method which takes nine arguments.
+#c
+#c Macro Arg 01: method name
+#c
+#c Macro arguments 02+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt
+#c ----------   ----------   ---------   ----    ----    --------
+#c metharg 1    02           03          04      05      06
+#c metharg 2    07           08          09      10      11
+#c metharg 3    12           13          14      15      16
+#c metharg 4    17           18          19      20      21
+#c metharg 5    22           23          24      25      26
+#c metharg 6    27           28          29      30      31
+#c metharg 7    32           33          34      35      36
+#c metharg 8    37           38          39      40      41
+#c metharg 9    42           43          44      45      46
+#c
+#c Macro Arg 47: method description
+#c
+#startm AD_XMETHOD9 47
+  // %47
+  STDMETHOD(%01) (THIS_
+	/*%02*/ .%03-adornment%04 .%03-indirection %05,
+	/*%07*/ .%08-adornment%09 .%08-indirection %10,
+	/*%12*/ .%13-adornment%14 .%13-indirection %15,
+	/*%17*/ .%18-adornment%19 .%18-indirection %20,
+	/*%22*/ .%23-adornment%24 .%23-indirection %25,
+	/*%27*/ .%28-adornment%29 .%28-indirection %30,
+	/*%32*/ .%33-adornment%34 .%33-indirection %35,
+	/*%37*/ .%38-adornment%39 .%38-indirection %40,
+	/*%42*/ .%43-adornment%44 .%43-indirection %45) PURE;\
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a method which takes ten arguments.
+#c
+#c Macro Arg 01: method name
+#c
+#c Macro arguments 02+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt
+#c ----------   ----------   ---------   ----    ----    --------
+#c metharg 1    02           03          04      05      06
+#c metharg 2    07           08          09      10      11
+#c metharg 3    12           13          14      15      16
+#c metharg 4    17           18          19      20      21
+#c metharg 5    22           23          24      25      26
+#c metharg 6    27           28          29      30      31
+#c metharg 7    32           33          34      35      36
+#c metharg 8    37           38          39      40      41
+#c metharg 9    42           43          44      45      46
+#c metharg 10   47           48          49      50      51
+#c
+#c Macro Arg 52: method description
+#c
+#startm AD_XMETHOD_10 52
+  // %52
+  STDMETHOD(%01) (THIS_
+	/*%02*/ .%03-adornment%04 .%03-indirection %05,
+	/*%07*/ .%08-adornment%09 .%08-indirection %10,
+	/*%12*/ .%13-adornment%14 .%13-indirection %15,
+	/*%17*/ .%18-adornment%19 .%18-indirection %20,
+	/*%22*/ .%23-adornment%24 .%23-indirection %25,
+	/*%27*/ .%28-adornment%29 .%28-indirection %30,
+	/*%32*/ .%33-adornment%34 .%33-indirection %35,
+	/*%37*/ .%38-adornment%39 .%38-indirection %40,
+	/*%42*/ .%43-adornment%44 .%43-indirection %45,
+	/*%47*/ .%48-adornment%49 .%48-indirection %50) PURE;\
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a method which takes eleven arguments.
+#c
+#c Macro Arg 01: method name
+#c
+#c Macro arguments 02+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt
+#c ----------   ----------   ---------   ----    ----    --------
+#c metharg 1    02           03          04      05      06
+#c metharg 2    07           08          09      10      11
+#c metharg 3    12           13          14      15      16
+#c metharg 4    17           18          19      20      21
+#c metharg 5    22           23          24      25      26
+#c metharg 6    27           28          29      30      31
+#c metharg 7    32           33          34      35      36
+#c metharg 8    37           38          39      40      41
+#c metharg 9    42           43          44      45      46
+#c metharg 10   47           48          49      50      51
+#c metharg 11   52           53          54      55      56
+#c
+#c Macro Arg 57: method description
+#c
+#startm AD_XMETHOD_11 57
+  // %57
+  STDMETHOD(%01) (THIS_
+	/*%02*/ .%03-adornment%04 .%03-indirection %05,
+	/*%07*/ .%08-adornment%09 .%08-indirection %10,
+	/*%12*/ .%13-adornment%14 .%13-indirection %15,
+	/*%17*/ .%18-adornment%19 .%18-indirection %20,
+	/*%22*/ .%23-adornment%24 .%23-indirection %25,
+	/*%27*/ .%28-adornment%29 .%28-indirection %30,
+	/*%32*/ .%33-adornment%34 .%33-indirection %35,
+	/*%37*/ .%38-adornment%39 .%38-indirection %40,
+	/*%42*/ .%43-adornment%44 .%43-indirection %45,
+	/*%47*/ .%48-adornment%49 .%48-indirection %50,
+	/*%52*/ .%53-adornment%54 .%53-indirection %55) PURE;\
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Forward declaration of another interface.
+#c
+#c Argument: Base name
+#c
+#startm AD_FORWARD_DECLARATION 01
+interface I%01;\
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Defining the interface UUID.
+#c NOTE: Should be placed immediately before AD_CLASS_BEGIN
+#c
+#c GUID
+#c Argument01: hex long  0-3[leading 0's w/o leading 0x]
+#c Argument02: hex short 4-5[leading 0's w/o leading 0x]
+#c Argument03: hex short 6-7[leading 0's w/o leading 0x]
+#c Argument04: hex byte   8 [leading 0's w/o leading 0x]
+#c Argument05: hex byte   9 [leading 0's w/o leading 0x]
+#c Argument06: hex byte  10 [leading 0's w/o leading 0x]
+#c Argument07: hex byte  11 [leading 0's w/o leading 0x]
+#c Argument08: hex byte  12 [leading 0's w/o leading 0x]
+#c Argument09: hex byte  13 [leading 0's w/o leading 0x]
+#c Argument10: hex byte  14 [leading 0's w/o leading 0x]
+#c Argument11: hex byte  15 [leading 0's w/o leading 0x]
+#c
+#c Example:
+#c AD_DEFAULT_UUID(b1a21372, 1a7d, 11d2, bf, 78, 00, 10, 4b, c9, 15, 6d)
+#c
+#c
+#startm AD_DEFAULT_UUID 11
+DEFINE_GUID(IID_I.this-module, 0x%01, 0x%02, 0x%03, 0x%04, 0x%05, 0x%06, 0x%07, 0x%08, 0x%09, 0x%10, 0x%11);\
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Defining the Class "Factory" UUID.
+#c NOTE: should be placed before AD_DEFAULT_UUID or after
+#c AD_CLASS_END
+#c
+#c GUID
+#c Argument01: hex long  0-3[leading 0's w/o leading 0x]
+#c Argument02: hex short 4-5[leading 0's w/o leading 0x]
+#c Argument03: hex short 6-7[leading 0's w/o leading 0x]
+#c Argument04: hex byte   8 [leading 0's w/o leading 0x]
+#c Argument05: hex byte   9 [leading 0's w/o leading 0x]
+#c Argument06: hex byte  10 [leading 0's w/o leading 0x]
+#c Argument07: hex byte  11 [leading 0's w/o leading 0x]
+#c Argument08: hex byte  12 [leading 0's w/o leading 0x]
+#c Argument09: hex byte  13 [leading 0's w/o leading 0x]
+#c Argument10: hex byte  14 [leading 0's w/o leading 0x]
+#c Argument11: hex byte  15 [leading 0's w/o leading 0x]
+#c
+#c Example:
+#c AD_CLASS_UUID(b1a21373, 1a7d, 11d2, bf, 78, 00, 10, 4b, c9, 15, 6d)
+#c
+#c TomR:980713: Added
+#c
+#startm AD_CLASS_UUID 11
+DEFINE_GUID(CLSID_.this-module, 0x%01, 0x%02, 0x%03, 0x%04, 0x%05, 0x%06, 0x%07, 0x%08, 0x%09, 0x%10, 0x%11);\
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Ends a class definition
+#c
+#c Arguments: none
+#c
+#startm AD_CLASS_END 00
+
+  //
+  // Return private implementation pointer for delegation.
+  // NOTE: This is NOT the pointer to the COM object's implementation
+  // object!
+  //
+  STDMETHOD(GetImplRep)(THIS_ void **) PURE;
+
+  END_INTERFACE
+};\
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Ends a class definition
+#c
+#c Arguments: none
+#c
+#startm AD_ROOT_CLASS_END 00
+
+  //
+  // Return private implementation pointer for delegation.
+  // NOTE: This is NOT the pointer to the COM object's implementation
+  // object!
+  //
+  STDMETHOD(GetImplRep)(THIS_ void **) PURE;
+
+  END_INTERFACE
+};\
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Specifies an overridden method
+#c
+#c Argument: method declaration
+#c
+#startm AD_OVERRIDE 01
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a constructor which takes one argument.
+#c Constructor name is assumed to be .this-module.
+#c
+#c Macro arguments 01+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt
+#c ----------   ----------   ---------   ----    ----    --------
+#c metharg 1    01           02          03      04      05
+#c
+#c Macro Arg 06: method description
+#c
+#startm AD_XCONSTRUCTOR1 06
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a constructor which takes two arguments.
+#c Constructor name is assumed to be .this-module.
+#c
+#c Macro arguments 01+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt
+#c ----------   ----------   ---------   ----    ----    --------
+#c metharg 1    01           02          03      04      05
+#c metharg 2    06           07          08      09      10
+#c
+#c Macro Arg 11: method description
+#c
+#startm AD_XCONSTRUCTOR2 11
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a constructor which takes three arguments.
+#c Constructor name is assumed to be .this-module.
+#c
+#c Macro arguments 01+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt
+#c ----------   ----------   ---------   ----    ----    --------
+#c metharg 1    01           02          03      04      05
+#c metharg 2    06           07          08      09      10
+#c metharg 3    11           12          13      14      15
+#c
+#c Macro Arg 16: method description
+#c
+#startm AD_XCONSTRUCTOR3 16
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a constructor which takes four arguments.
+#c Constructor name is assumed to be .this-module.
+#c
+#c Macro arguments 01+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt
+#c ----------   ----------   ---------   ----    ----    --------
+#c metharg 1    01           02          03      04      05
+#c metharg 2    06           07          08      09      10
+#c metharg 3    11           12          13      14      15
+#c metharg 4    16           17          18      19      20
+#c
+#c Macro Arg 21: method description
+#c
+#startm AD_XCONSTRUCTOR4 21
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a method which takes one argument, which is
+#c a pointer to an AAF object which is to be returned to the caller.
+#c This is different from the normal METHOD macro because the
+#c _rep will probably have the object in a different form.
+#c
+#c Argument1: method name
+#c Argument2: argument modifiers (e.g. [in])
+#c Argument3: argument type
+#c Argument4: argument name
+#c Argument5: argument comment
+#c Argument6: method description
+#c
+#startm AD_GETOBJ_METHOD1 06
+  // %06
+  STDMETHOD(%01) (THIS_
+	/*%02*/ %03 ** I%04) PURE;\
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a method which takes one argument, which is
+#c a pointer to an AAF object which is to be passed in from the caller.
+#c This is different from the normal METHOD macro because the
+#c _rep will probably have the object in a different form.
+#c
+#c Argument1: method name
+#c Argument2: argument modifiers (e.g. [in])
+#c Argument3: argument type
+#c Argument4: argument name
+#c Argument5: argument comment
+#c Argument6: method description
+#c
+#startm AD_SETOBJ_METHOD1 06
+  // %06
+  STDMETHOD(%01) (THIS_
+	/*%02*/ %03 * I%04) PURE;\
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Argument1: text to be quoted.
+#c 
+#c Just pass through the input quoted to cpp_quote and then
+#c let the midl compiler pass the quoted text to its ???.h 
+#c output.
+#c
+#c TomR:added 980714
+#c
+#startm AD_CPP_QUOTE 01
+%01\
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Argument1: base name to be converted to output type.
+#c NOTE: The \n is escaped so that the macro can be used
+#c in a statement without emitting a new line.
+#c
+#c TomR:added 980714
+#c
+#startm AD_AAFTYPES 01
+I%01 \
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Argument1: base name to be converted to output type.
+#c
+#c TomR:added 980714
+#c
+#startm AD_DECLARE_FORWARD_AAFTYPES 01
+interface I%01;\
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a static method used to bootstrap an AAF
+#c session by creating the first session object.
+#c
+#startm AD_BEGIN_SESSION 00
+#endm
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a static method used for a container to create
+#c its contained objects in the cpp API.
+#c
+#startm AD_STATIC_CREATE 00
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c The following macros assist in passing arguments to methods of the
+#c contained implementation class:
+#c
+#c The objIn macros are for use with pointers to objects that are
+#c passed into the method.  The Type argument is the base type, with
+#c no indirection specified.  For example, if you're passing in
+#c AAFObject*, AAFObject should be specified for the Type argument.
+#c
+#c The objOut macros are for use with pointers to pointers to objects
+#c that are passed out of the method.  The Type argument is the base
+#c type, with no indirection specified.  For example, if you're
+#c passing in AAFObject**, AAFObject should be specified for the Type
+#c argument.
+#c
+#c The objPass macros are for use with any kind of data which is
+#c passed exactly into or out of the method.
+#c
+
+
+#startm .objIn-adornment 00
+I\
+#endm
+
+
+#startm .objPass-adornment 00
+#endm
+
+
+#startm .objOut-adornment 00
+I\
+#endm
