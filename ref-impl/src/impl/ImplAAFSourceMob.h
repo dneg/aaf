@@ -153,10 +153,10 @@ public:
 
 
   //****************
-  // AddPhysSourceRef()
+  // NewPhysSourceRef()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    AddPhysSourceRef
+    NewPhysSourceRef
         (// @parm [in] Edit rate of slot to contain reference
 		 aafRational_t  editrate,
 
@@ -164,43 +164,49 @@ public:
 		 aafSlotID_t  aMobSlot,
 
 		 // @parm [in] Data kind of slot to contain reference
-         ImplAAFDataDef * pEssenceKind,
+         aafUID_t * pEssenceKind,
 
-		 // @parm [in] Physical Source Mob that is being referenced
-		 ImplAAFSegment * pSourceRefObj,
-
-		 // @parm [in] Offset in the physical Source Mob
-         aafPosition_t  srcRefOffset,
-
-		 // @parm [in] SlotID of slot in physical Source Mob
-		 aafInt32  srcRefSlot,
+		aafSourceRef_t  ref,
 
 		 // @parm [in] Length of the Source Clip
          aafLength_t  srcRefLength);
 
+  //****************
+  // AddPhysSourceRef()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    AppendPhysSourceRef
+        (// @parm [in] Edit rate of slot to contain reference
+		 aafRational_t  editrate,
+
+		 // @parm [in] SlotID of slot to contain reference
+		 aafSlotID_t  aMobSlot,
+
+		 // @parm [in] Data kind of slot to contain reference
+         aafUID_t * pEssenceKind,
+
+		aafSourceRef_t  ref,
+
+		 // @parm [in] Length of the Source Clip
+         aafLength_t  srcRefLength);
 
   //****************
   // AddPulldownRef()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     AddPulldownRef
-        (// @parm [in] Edit rate of slot to contain reference
+        (aafAppendOption_t  addType,
+		
+		// @parm [in] Edit rate of slot to contain reference
 		 aafRational_t  editrate,
 
 		 // @parm [in] SlotID of slot to contain reference
 		 aafSlotID_t  aMobSlot,
 
 		 // @parm [in] Data kind of slot to contain reference
-         ImplAAFDataDef * pEssenceKind,
+         aafUID_t * pEssenceKind,
 
-		 // @parm [in] Physical Source Mob that is being referenced
-		 ImplAAFSegment * pSourceRefObj,
-
-		 // @parm [in] Offset in the physical Source Mob
-         aafPosition_t  srcRefOffset,
-
-		 // @parm [in] SlotID of slot in physical Source Mob
-		 aafInt32  srcRefSlot,
+		aafSourceRef_t  ref,
 
 		 // @parm [in] Length of the Source Clip in the Source Mob
          aafLength_t  srcRefLength,
