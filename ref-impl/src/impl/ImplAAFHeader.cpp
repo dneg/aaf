@@ -66,9 +66,6 @@
 #define DEFAULT_NUM_EFFECT_DEFS		100
 
 
-// We need the class id of the dictionary so that we can then use the factory
-// method on dictionary 
-extern "C" const aafClassID_t	CLSID_AAFDictionary;
 
 ImplAAFHeader::ImplAAFHeader ()
 : _byteOrder(         PID_Header_ByteOrder,          "ByteOrder"),
@@ -523,7 +520,6 @@ AAFRESULT
     if (NULL == pDictionary)
       CHECK(AAFRESULT_NOMEMORY);
     CHECK(pDictionary->CreateInstance(&AUID_AAFIdentification, (ImplAAFObject **)&identObj));
-//    identObj = static_cast<ImplAAFIdentification *>(CreateImpl(CLSID_AAFIdentification));
     if (NULL == identObj)
       CHECK(AAFRESULT_NOMEMORY);
     CHECK(identObj->SetCompanyName(pIdent->companyName));
@@ -703,6 +699,15 @@ ImplAAFDictionary *ImplAAFHeader::GetDictionary()
 {
 	ImplAAFDictionary	*result = _dictionary;
   assert(result);
+
+	// Make sure that _dictionary member points to the same instance
+	// as the value returned by ImplAAFObject::GetDictionary()!
+	ImplAAFDictionary	*pDictionary = NULL;
+	assert(AAFRESULT_SUCCESS == ImplAAFObject::GetDictionary(&pDictionary));
+  assert(pDictionary);
+	assert(pDictionary == result);
+	assert(0 != pDictionary->ReleaseReference());
+
 	return(result);
 }
 
