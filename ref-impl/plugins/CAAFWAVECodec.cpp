@@ -3,8 +3,6 @@
 * Advanced Authoring Format                *
 *                                          *
 * Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
 \******************************************/
 
 #include "CAAFWAVECodec.h"
@@ -788,17 +786,20 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFWaveCodec::CompleteWrite ()
+    CAAFWaveCodec::CompleteWrite (IUnknown *unk)
 {
 	aafInt64	byteLen, sampleLen;
-	aafErr_t	aafError;
-	IAAFFileDescriptor *fileDesc;
+	IAAFEssenceDescriptor	*essenceDesc;
+	IAAFFileDescriptor		*fileDesc;
+	IAAFWAVEDescriptor		*waveDesc;
+	IAAFSourceMob			*fileMob;
+	aafDataValue_t			buf = NULL;
 
 	XPROTECT()
 	{
 		CHECK(_stream->GetLength (&byteLen));
 		sampleLen = byteLen / _bytesPerFrame;
-		aafError = (_mdes->QueryInterface(IID_IAAFFileDescriptor, (void **)&fileDesc));
+		CHECK(_mdes->QueryInterface(IID_IAAFFileDescriptor, (void **)&fileDesc));
 		CHECK(fileDesc->SetLength(sampleLen));
 
 		if(!_readOnly && _sampleDataHeaderWritten)
@@ -807,8 +808,31 @@ HRESULT STDMETHODCALLTYPE
 		
 		if(_interleaveBuf != NULL)
 			delete _interleaveBuf;
+
+		if(unk != NULL)
+		{
+			aafUInt32		bufsiz;
+
+			CHECK(unk->QueryInterface(IID_IAAFSourceMob, (void **)&fileMob));
+			CHECK(fileMob->GetEssenceDescriptor(&essenceDesc));
+			CHECK(essenceDesc->QueryInterface(IID_IAAFFileDescriptor, (void **)&fileDesc));
+			CHECK(fileDesc->SetLength(sampleLen));
+			CHECK(essenceDesc->QueryInterface(IID_IAAFWAVEDescriptor, (void **)&waveDesc));
+			CHECK(_mdes->GetSummaryBufferSize (&bufsiz));
+			buf = new aafUInt8[bufsiz];
+			if(buf == NULL)
+				RAISE(AAFRESULT_NOMEMORY);
+			CHECK(_mdes->GetSummary (bufsiz, buf));
+			CHECK(waveDesc->SetSummary (bufsiz, buf));
+			delete [] buf;
+			buf = NULL;
+		}
 	}
 	XEXCEPT
+	{
+		if(buf != NULL)
+			delete [] buf;
+	}
 	XEND;
 
 	return HRESULT_SUCCESS;
