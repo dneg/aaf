@@ -29,6 +29,7 @@
 #endif
 
 #include <assert.h>
+#include "AAFResult.h"
 
 
 ImplAAFFiller::ImplAAFFiller ()
@@ -40,13 +41,24 @@ ImplAAFFiller::~ImplAAFFiller ()
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFFiller::Create (ImplAAFDataDef * /*datadef*/,
-                           aafLength_t  /*length*/)
+    ImplAAFFiller::Create (aafUID_t*	pDataDef,
+                           aafLength_t		length)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	if (pDataDef == NULL)
+		return AAFRESULT_NULL_PARAM;
+	else
+		return( SetNewProps( length, pDataDef ) );
 }
 
-
+AAFRESULT ImplAAFFiller::TraverseToClip(aafLength_t length,
+										 ImplAAFSegment **sclp,
+										 ImplAAFPulldown **pulldownObj,
+										 aafInt32 *pulldownPhase,
+										 aafLength_t *sclpLen,
+										 aafBool *isMask)
+{
+	return ( AAFRESULT_FILL_FOUND );
+}
 
 extern "C" const aafClassID_t CLSID_AAFFiller;
 
