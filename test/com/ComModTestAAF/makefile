@@ -9,12 +9,10 @@ all: app
 BLD_CFG_DIR = ../../ref-impl/bld_cfg
 
 SOURCES = \
-	aafcomtst.cpp \
-	aafcomtstfunc.cpp
+	aafcomtst.cpp
 
 OBJECTS = \
-	aafcomtst.obj \
-	aafcomtstfunc.obj
+	aafcomtst.obj
 
 INCLUDES = -I. -I../../ref-impl/include/com-api \
 	-I../../ref-impl/src/com-api/com-dll
