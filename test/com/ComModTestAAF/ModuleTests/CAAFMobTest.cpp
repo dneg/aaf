@@ -571,11 +571,12 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	  aafCharacter dest_filename[128];
 	  wcscpy(dest_filename, pFileName);
 	  wcscat(dest_filename, L"_clone");
+	  // Remove the previous test file if any.
+	  RemoveTestFile(dest_filename);
 	  checkResult(AAFFileOpenNewModify(dest_filename, 0, &ProductInfo, &spDestFile));
 	  hr = pMob->CloneExternal(kAAFNoFollowDepend, kAAFNoIncludeMedia, spDestFile, &spClonedMob);
 	  checkExpression(hr == AAFRESULT_NOT_IMPLEMENTED || hr == AAFRESULT_NOT_IN_CURRENT_VERSION, AAFRESULT_TEST_FAILED);
 	  spDestFile->Close();
-	  RemoveTestFile(dest_filename);
 	  hr = AAFRESULT_SUCCESS; //move on
 
 	}
