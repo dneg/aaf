@@ -110,7 +110,15 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFBaseClassFactory.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\impl\ImplAAFBuiltins.cpp"
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFBuiltinClasses.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFBuiltinProps.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFBuiltinTypes.cpp"
 # End Source File
 # Begin Source File
 
