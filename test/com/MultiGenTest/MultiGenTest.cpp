@@ -390,7 +390,7 @@ bool wstrcmp( wchar_t* a, wchar_t* b )
 // Test multiplatform read/modify/write of AAF files.
 //
 
-int real_main( int argc, char **argv )
+int main( int argc, char **argv )
 {
   using namespace std;
 
@@ -432,12 +432,3 @@ int real_main( int argc, char **argv )
  
   return hr;
 }
-
-int main( int argc, char** argv )
-{
-	char* myargv[] = { argv[0], "-r", "FileOp", "read", "c:/cygwin/tmp/test.aaf",
-		"-r", "FindMasterMobs", "Mob", "-r", "FileOp", "close"  };
-
-	return real_main( sizeof(myargv)/sizeof(myargv[0]), myargv ); 
-}
-
