@@ -32,4 +32,23 @@ AD_CLASS_UUID(293600A2, 0D37, 11d3, 80, A9, 00, 60, 08, 14, 3E, 6F)
 
 AD_DEFAULT_UUID(293600A3, 0D37, 11d3, 80, A9, 00, 60, 08, 14, 3E, 6F)
 AD_XCLASS_BEGIN(Concrete, StoredObject)
+AD_XMETHOD3(Initialize,
+		   [in\, ref],
+		   objPass,
+		   aafUID_constref,
+		   id,
+		   AUID for new DeObject,
+		   [in\, string],
+		   objPass,
+		   aafCharacter_constptr,
+		   pName,
+		   Name for new DefObject,
+		   [in\, string],
+		   objPass,
+		   aafCharacter_constptr,
+		   pDescription,
+		   Description for new DefObject,
+		   Init all fields of a definition object.)
+
+
 AD_XCLASS_END(Concrete, StoredObject)
