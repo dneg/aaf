@@ -1499,7 +1499,7 @@ void *TableMobIDLookupPtr(
 			aafTable_t *table,
 			aafMobID_constref key)
 {
-  return(TableLookupPtr(table, (void *)&key));
+	return(TableLookupPtr(table, (void *)&key));
 }
 
 void TableMobIDLookupBlock(
