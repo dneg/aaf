@@ -125,13 +125,14 @@ ImplAAFBuiltinClasses::PropTblEntry \
 ImplAAFBuiltinClasses::sBuiltinPropTable[] = \
 {
 
-#define AAF_PROPERTY(name, id, tag, type, mandatory, container) \
+#define AAF_PROPERTY(name, id, tag, type, mandatory, uid, container) \
   { L"" L# name L"", \
 	id, \
     tag, \
     &kAAFTypeID_##type, \
     &kAAFClassID_##container, \
     mandatory, \
+    uid, \
 	ImplAAFBuiltinClasses::CreateOMPropType##type, \
     0 \
   },
