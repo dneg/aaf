@@ -4,17 +4,6 @@
 #define __ImplAAFEdgecode_h__
 
 
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-*                                          *
-\******************************************/
-
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
 /***********************************************************************
  *
  *              Copyright (c) 1998-1999 Avid Technology, Inc.
@@ -41,7 +30,11 @@
  * LIABILITY.
  *
  ************************************************************************/
+
+/***********************************************\
+*	Stub only.   Implementation not yet added	*
 \***********************************************/
+
 
 #ifndef __ImplAAFSegment_h__
 #include "ImplAAFSegment.h"
