@@ -134,7 +134,6 @@ HUMAN_TYPED_COMTEST = \
 	AAFSourceClip \
 	AAFFile \
 	AAFSourceMob \
-	EnumAAFLocators \
 	EnumAAFMobs
 
 # Build the list of all objects that have automatically-generated
@@ -191,6 +190,7 @@ AUTO_GEN_COMTEST = \
 	EnumAAFDefs \
 	EnumAAFEffectDefs \
 	EnumAAFIdentifications \
+	EnumAAFLocators \
 	EnumAAFMedia \
 	EnumAAFMobComments \
 	EnumAAFParameterSlots \
