@@ -210,9 +210,10 @@
 
 #ccccccccccccccccccccccccccc
 #c
-#c Starts a class definition
+#c Ends a class definition for classes which support more than the
+#c primary COM interface.
 #c
-#c Arguments: none
+#c Arguments: additional interface name
 #c
 #startm AD_COM_EXT_CLASS_BEGIN 01
 AD_CLASS_BEGIN\
@@ -1022,6 +1023,18 @@ AAFRESULT STDMETHODCALLTYPE
 #c Arguments: none
 #c
 #startm AD_CLASS_END 00
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Ends a class definition for classes which support more than the
+#c primary COM interface.
+#c
+#c Arguments: additional interface name
+#c
+#startm AD_COM_EXT_CLASS_END 01
+AD_CLASS_END\
 #endm
 
 
