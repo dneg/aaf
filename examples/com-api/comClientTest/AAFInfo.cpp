@@ -34,7 +34,7 @@
 #include "AAF.h"
 
 #if defined(macintosh) || defined(_MAC)
-#include <console.h> /* Mac command line window */
+#include "DataInput.h"
 #endif
 
 static void     FatalErrorCode(HRESULT errcode, int line, char *file)
@@ -221,7 +221,8 @@ int main(int argumentCount, char* argumentVector[])
   /* console window for mac */
 
   #if defined(macintosh) || defined(_MAC)
-  argumentCount = ccommand(&argumentVector);
+	char dataFile[] = "COMAAFINFO.inp";
+	getInputData(&argumentCount, argumentVector, dataFile);
   #endif
 
   if (argumentCount != 2) {
@@ -238,6 +239,10 @@ int main(int argumentCount, char* argumentVector[])
   CAAFInitialize aafInit;
 
   ReadAAFFile(wInputFileName);
+
+  #ifdef _MAC
+  cleanUpInputData(argumentCount, argumentVector);
+  #endif
 
   fprintf(stdout, "Done\n");
 
