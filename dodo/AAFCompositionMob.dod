@@ -6,6 +6,7 @@ AAFCompositionMob\
 AAFMob\
 #endm
 #c
+#import ./AAFMob.exp
 AD_HEAD
 /******************************************\
 *                                          *
@@ -28,12 +29,7 @@ AD_METHOD2(SetInitialValues,
   //@rdesc Error code [see below].
 	
 
-AD_METHOD1(IsMobKind,
-			[in],aafMobKind_t,mobKind,One of the defined mob kinds,
-			Ask if mob is of a particular aafMobKind_t.)
-  //@comm<tab>ex:	kCompMob, kMasterMob, kFileMob, kTapeMob, kFilmMob,
-  //<tab>		kPrimaryMob, kAllMob	//@rdesc TRUE if mob is the requested mob kind.
-  //@comm Override
+AD_OVERRIDE(.method-IsMobKind)
 
 
 AD_METHOD1(GetDefaultFade,
