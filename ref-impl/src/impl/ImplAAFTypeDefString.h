@@ -3,7 +3,6 @@
 #ifndef __ImplAAFTypeDefString_h__
 #define __ImplAAFTypeDefString_h__
 
-
 /******************************************\
 *                                          *
 * Advanced Authoring Format                *
@@ -13,17 +12,11 @@
 *                                          *
 \******************************************/
 
-
 class ImplAAFPropertyValue;
-
-
-
-
 
 #ifndef __ImplAAFTypeDef_h__
 #include "ImplAAFTypeDef.h"
 #endif
-
 
 class ImplAAFTypeDefString : public ImplAAFTypeDef
 {
@@ -71,8 +64,8 @@ public:
         (// @parm [in] property value of array
          ImplAAFPropertyValue * pPropVal,
 
-         // @parm [out] count of elements in the specified stream property value
-         aafInt64 *  pCount);
+         // @parm [out] count of elements in the specified string property value
+         aafUInt32 *  pCount);
 
 
   //****************
@@ -80,33 +73,12 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     AppendElements
-        (// @parm [in] property value corresponding to stream to which elements are to
+        (// @parm [in] property value corresponding to string to which elements are to
     // be appended
          ImplAAFPropertyValue * pInPropVal,
 
-         // @parm [in, size_is(numElements)] values to be appended to this stream
-         ImplAAFPropertyValue ** pMemberPropVals,
-
-         // @parm [in] number of values to be appended
-         aafUInt32  numElements);
-
-
-  //****************
-  // GetElementValues()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    GetElementValues
-        (// @parm [in] property value to read
-         ImplAAFPropertyValue * pInPropVal,
-
-         // @parm [in] zero-based index into elements in this array type
-         aafInt64  startElement,
-
-         // @parm [out, size_is(numElements)] array of values that are read
-         ImplAAFPropertyValue ** pOutPropVals,
-
-         // @parm [in] number of elements to get
-         aafUInt32  numElements);
+         // @parm [in] Null-terminated array of elements to be appended
+         aafMemPtr_t  pElements);
 
 
   //****************
@@ -115,16 +87,13 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     GetElements
         (// @parm [in] property value to read
-         ImplAAFPropertyValue * pPropVal,
+         ImplAAFPropertyValue * pInPropVal,
 
-         // @parm [in] zero-based index into elements in this array type
-         aafInt64  startElement,
+         // @parm [out] array of values that are read
+         aafMemPtr_t  pBuffer,
 
-         // @parm [out, size_is(numElements)] buffer into which C array data should be written
-         aafMemPtr_t  pData,
-
-         // @parm [in] number of elements to get
-         aafUInt32  numElements);
+         // @parm [in] size of pBuffer, in bytes
+         aafUInt32  bufferSize);
 
 
   // Override from AAFTypeDef
@@ -133,16 +102,14 @@ public:
 
 
 
+private:
+  OMWeakReferenceProperty<ImplAAFTypeDef> _ElementType;
+
+
 public:
   // Declare this class to be storable.
   //
   OMDECLARE_STORABLE(ImplAAFTypeDefString)
-
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplAAFTypeDefStringTest.cpp.
-  static AAFRESULT test();
 };
 
 #endif // ! __ImplAAFTypeDefString_h__
-
-
