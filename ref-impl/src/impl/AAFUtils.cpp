@@ -65,6 +65,7 @@
 #include "aafCvt.h"
 #include "AAFResult.h"
 #include "AAFSDKBuild.h"
+#include "utf8.h"
 
 
 extern const char AAFReferenceImplementationIdent[];
@@ -909,7 +910,7 @@ void wcsconvertURLtoFilepath(wchar_t *url, wchar_t *filepath)
 	// (wcsncasecmp and similiar are not available everywhere)
 	unsigned tlen = wcslen(url);
 	char *tmp = new char[tlen+1];		// +1 includes terminating '\0'
-	wcstombs(tmp, url, tlen+1);
+	wcstou8s(tmp, url, tlen+1);
 
 	// If no file scheme is found, assume a simple filepath and not a URI.
 	// Note that other schemes such as http and ftp are not supported.
@@ -934,7 +935,7 @@ void wcsconvertURLtoFilepath(wchar_t *url, wchar_t *filepath)
 
 	unescapeURI(fpath);
 
-	mbstowcs(filepath, fpath, strlen(fpath)+1);		// convert back to wcs
+	u8stowcs(filepath, fpath, strlen(fpath)+1);		// convert back to wcs
 	delete [] tmp;
 }
 
@@ -955,9 +956,9 @@ void wcsconvertURLtoFilepath(wchar_t *url, wchar_t *filepath)
 void wcsconvertFilepathtoURL(wchar_t *filepath, wchar_t *url)
 {
 	// convert to char* for ease of processing
-	int tlen = wcslen(filepath);
+	int tlen = wcsu8slen(filepath);
 	char *tmp = new char[tlen+1];		// +1 includes terminating '\0'
-	wcstombs(tmp, filepath, tlen+1);
+	wcstou8s(tmp, filepath, tlen+1);
 
 #ifdef _WIN32
 	// On WIN32 backslash is the directory separator, not a regular filename
@@ -982,7 +983,7 @@ void wcsconvertFilepathtoURL(wchar_t *filepath, wchar_t *url)
 		strcat(mb_url, "/");
 	strcat(mb_url, escaped);
 
-	mbstowcs(url, mb_url, strlen(mb_url)+1);		// convert back to wcs
+	u8stowcs(url, mb_url, strlen(mb_url)+1);		// convert back to wcs
 	delete [] mb_url;
 	delete [] escaped;
 	delete [] tmp;
