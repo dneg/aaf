@@ -33,6 +33,13 @@
 #include "OMExceptions.h"
 #include "OMRawStorage.h"
 
+#if defined( OM_COMPILER_GCC_SPARC_SUNOS )
+
+typedef off64_t __off64_t;
+
+#endif
+
+
   // @mfunc Create an <c OMStream> object by opening an existing
   //        file for read-only access, the file is named <p fileName>.
   //        The file must already exist.
@@ -166,7 +173,7 @@ OMUInt64 OMStream::size(void)
 #if defined( OM_OS_UNIX )
 
 	// all POSIX-compliant
-	int status = fseeko64( _file, (off64_t)0, SEEK_END);
+	int status = fseeko64( _file, (__off64_t)0, SEEK_END);
   ASSERT("Successful seek", status == 0);
 	
 #elif defined( OM_OS_WINDOWS )
@@ -226,8 +233,8 @@ OMUInt64 OMStream::position(void) const
 #if defined( OM_OS_UNIX )
 
 	// all POSIX-compliant
-  off64_t position = ftello64( _file );
-  ASSERT("Successful tell", IMPLIES(position == (off64_t)-1, errno == 0));
+  __off64_t position = ftello64( _file );
+  ASSERT("Successful tell", IMPLIES(position == (__off64_t)-1, errno == 0));
 	
 #elif defined( OM_OS_WINDOWS )
 
@@ -259,7 +266,7 @@ void OMStream::setPosition(OMUInt64 newPosition)
 #if defined( OM_OS_UNIX )
 
 	// all POSIX-compliant
-	off64_t position = newPosition;
+	__off64_t position = newPosition;
 	int status = fseeko64( _file, position, SEEK_SET);
   ASSERT("Successful seek", status == 0);
 	
