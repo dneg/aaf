@@ -1030,6 +1030,11 @@ AAFRESULT
 	return AAFRESULT_SUCCESS;
 }
 
+const OMUniqueObjectIdentification&
+  ImplAAFPluginDescriptor::identification(void) const
+{
+  return *reinterpret_cast<const OMUniqueObjectIdentification*>(&_identification.reference());
+}
 // Internal to the toolkit functions
 /*
 AAFRESULT
