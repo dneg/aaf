@@ -5,7 +5,7 @@
 #
 "{refh}AAF.h" Ä {GENERATED_FREFH}
 	echo "{refh}AAF.h"
-	if `exists -f "{refh}AAF.h"`
+	if "`exists -f "{refh}AAF.h"`"
 		SetFile -a l "{refh}AAF.h"
 		Delete -i -ay "{refh}AAF.h"
 	end
@@ -62,7 +62,7 @@
 
 "{refh}AAFPlugin.h" Ä {PLUGIN_FREFH_TARGETS}
 	echo "{refh}AAFPlugin.h"
-	if `exists -f "{refh}AAFPlugin.h"`
+	if "`exists -f "{refh}AAFPlugin.h"`"
 		SetFile -a l "{refh}AAFPlugin.h"
 		Delete -i -ay "{refh}AAFPlugin.h"
 	end
@@ -115,7 +115,7 @@
 
 "{refh}AAF_i.c" Ä "{dod}aafobjects.mk" "{dod}dod2iid.awk" "{macdodo}macaafobjects.mk"
 	echo "{refh}AAF_i.c"
-	if `exists -f "{refh}AAF_i.c"`
+	if "`exists -f "{refh}AAF_i.c"`"
 		SetFile -a l "{refh}AAF_i.c"
 		Delete -i -ay "{refh}AAF_i.c"
 	end
@@ -179,7 +179,7 @@
 
 "{refh}AAFPlugin_i.c" Ä "{dod}aafobjects.mk" "{dod}dod2iid.awk" "{macdodo}macaafobjects.mk"
 	echo "{refh}AAFPlugin_i.c"
-	if `exists -f "{refh}AAFPlugin_i.c"`
+	if "`exists -f "{refh}AAFPlugin_i.c"`"
 		SetFile -a l "{refh}AAFPlugin_i.c"
 		Delete -i -ay "{refh}AAFPlugin_i.c"
 	end
@@ -243,7 +243,7 @@
 
 "{refh}AAFRoot_i.c" Ä "{dod}aafobjects.mk" "{dod}dod2iid.awk" "{macdodo}macaafobjects.mk"
 	echo "{refh}AAFRoot_i.c"
-	if `exists -f "{refh}AAFRoot_i.c"`
+	if "`exists -f "{refh}AAFRoot_i.c"`"
 		SetFile -a l "{refh}AAFRoot_i.c"
 		Delete -i -ay "{refh}AAFRoot_i.c"
 	end
@@ -308,7 +308,7 @@
 
 "{impl}AAFClassIDs.h" Ä "{dod}aafobjects.mk" "{macdodo}macaafobjects.mk"
 	echo "{impl}AAFClassIDs.h"
-	if `exists -f "{impl}AAFClassIDs.h"`
+	if "`exists -f "{impl}AAFClassIDs.h"`"
 		SetFile -a l "{impl}AAFClassIDs.h"
 		Delete -i -ay "{impl}AAFClassIDs.h"
 	end
@@ -347,7 +347,7 @@
 
 "{comh}AAFCLSIDs.h" Ä "{dod}aafobjects.mk" "{macdodo}macaafobjects.mk"
 	echo "{comh}AAFCLSIDs.h"
-	if `exists -f "{comh}AAFCLSIDs.h"`
+	if "`exists -f "{comh}AAFCLSIDs.h"`"
 		SetFile -a l "{comh}AAFCLSIDs.h"
 		Delete -i -ay "{comh}AAFCLSIDs.h"
 	end
@@ -431,7 +431,7 @@
 	  end ; ¶
 	  echo "AAF_END_OBJECT_MAP()" ; ¶
 	) > "{comh}AAFObjectTable.tmp"
-	if `exists -f "{comh}AAFObjectTable.h"`
+	if "`exists -f "{comh}AAFObjectTable.h"`"
 		SetFile -a l "{comh}AAFObjectTable.h"
 		Delete -i -ay "{comh}AAFObjectTable.h"
 	end
@@ -475,7 +475,7 @@
 	  echo "//" ; ¶
 	  echo ¶#include ¶"AAFObjectTable.h¶" ; ¶
 	) > "{comh}AAFObjectTable.tmp"
-	if `exists -f "{comh}AAFObjectTable_i.cpp"`
+	if "`exists -f "{comh}AAFObjectTable_i.cpp"`"
 		SetFile -a l "{comh}AAFObjectTable_i.cpp"
 		Delete -i -ay "{comh}AAFObjectTable_i.cpp"
 	end
