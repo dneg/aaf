@@ -318,6 +318,7 @@ AAFRESULT STDMETHODCALLTYPE
 		CHECK(pMob->GetMobID(&mobID));
 		CHECK(TableRemoveMobID(_mobIndex, mobID));
 		_mobs.removeValue(pMob);
+    pMob->ReleaseReference(); // the set no longer owns this reference.
 	} /* XPROTECT */
 	XEXCEPT
 	{
@@ -528,7 +529,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 		//!!!_essenceData.removeValue(pEssenceData);	// This call doesn't exist yet
 	
-	return(AAFRESULT_SUCCESS);
+	return(AAFRESULT_NOT_IMPLEMENTED);
 }
 
 AAFRESULT ImplAAFContentStorage::LoadMobTables(void)
