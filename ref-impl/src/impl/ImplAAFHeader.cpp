@@ -685,11 +685,6 @@ AAFRESULT ImplAAFHeader::SetToolkitRevisionCurrent()
 	return (AAFRESULT_SUCCESS);
 }
 
-AAFRESULT ImplAAFHeader::LoadMobTables(void)
-{
-	ImplAAFContentStorage *cstore = GetContentStorage();
-	return(cstore->LoadMobTables());
-}
 
 // trr - NOTE: Eventhough this method returns a reference counted object it
 // does NOT bump the reference count. Currently only other file that calls

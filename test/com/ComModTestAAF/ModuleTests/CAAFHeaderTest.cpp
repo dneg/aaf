@@ -397,6 +397,9 @@ void HeaderTest::createEssenceData(IAAFSourceMob *pSourceMob)
 
 void HeaderTest::openMobs()
 {
+  aafUInt32	srchItem;
+  bool		found;
+
   assert(_pFile && _pHeader);
   assert(NULL == _pEnumMobs);
   assert(NULL == _pMob);
@@ -416,11 +419,21 @@ void HeaderTest::openMobs()
     // Validate the mob data.
 	aafMobID_t mobID;
     check(_pMob->GetMobID(&mobID));
-    if (0 != memcmp(&mobID, &_mobID[item], sizeof(mobID)))
-      check(AAFRESULT_TEST_FAILED);
+	for(srchItem = 0, found = false; !found && srchItem < mobCount; ++srchItem)
+	{
+		 if (0 == memcmp(&mobID, &_mobID[srchItem], sizeof(mobID)))
+		 {
+			 found = true;
+			 break;
+		 }
+	}
+	if(!found)
+	{
+		check(AAFRESULT_TEST_FAILED);
+	}
 
 	wchar_t mobName[128], expectedMobName[128];
-    aafUInt32 expectedMobNameLen = (formatMobName(item, expectedMobName) + 1) * 2;
+    aafUInt32 expectedMobNameLen = (formatMobName(srchItem, expectedMobName) + 1) * 2;
 	aafUInt32 mobNameLen;
 	check(_pMob->GetNameBufLen(&mobNameLen));
 	if (mobNameLen != expectedMobNameLen)
