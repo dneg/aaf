@@ -120,11 +120,14 @@ ImplAAFEssenceAccess::Create (	  ImplAAFMasterMob *masterMob,
 	IUnknown			*dataObj;
 	ImplAAFEssenceData	*implData;				
 	CLSID				dataClass;
-	
+	aafmMultiCreate_t	createBlock;
+
 	XPROTECT()
 	{
+
 		_openType = kAAFCreated;
-			
+
+
 		CHECK(masterMob->MyHeadObject(&head));
 
 		// Can't put raw media inside of an AAF File
@@ -242,8 +245,13 @@ ImplAAFEssenceAccess::Create (	  ImplAAFMasterMob *masterMob,
 		{
 			IUnknown	*iFileMob;
 
+			createBlock.mediaKind = &mediaKind;
+			createBlock.subTrackNum = 0;		//!!!
+			createBlock.slotID = DEFAULT_FILE_SLOT;
+			createBlock.sampleRate = audioRate;
+
 			iFileMob = static_cast<IUnknown *> (fileMob->GetContainer());
-			CHECK(_codec->Create(iFileMob, _variety, _stream));
+			CHECK(_codec->Create(iFileMob, _variety, _stream, 1, &createBlock));
 			(void)(_codec->SetCompression(enable));
 			//!!! 			SetVideoLineMap(16, kTopFieldNone);
 		}
@@ -820,23 +828,19 @@ AAFRESULT STDMETHODCALLTYPE
 
 /****/
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceAccess::WriteSamples (aafUInt32  /*nSamples*/,
-                           aafDataBuffer_t  /*buffer*/,
-                           aafUInt32  /*buflen*/)
+    ImplAAFEssenceAccess::WriteSamples (aafUInt32  nSamples,
+                           aafDataBuffer_t  buffer,
+                           aafUInt32  buflen)
 {
-#if FULL_TOOLKIT
-	aafMultiXfer_t xfer;
+	aafmMultiXfer_t xfer;
 
-	aafAssertMediaHdl(this);
-	aafAssertValidFHdl(_mainFile);
-	aafAssertMediaInitComplete(_mainFile);
 	aafAssert(_numChannels == 1, _mainFile,
 		OM_ERR_SINGLE_CHANNEL_OP);
 	aafAssert(buffer != NULL, _mainFile, OM_ERR_BADDATAADDRESS);
 	aafAssert((_openType == kAAFCreated) ||
 				(_openType == kAAFAppended), _mainFile, OM_ERR_MEDIA_OPENMODE);
 	
-	XPROTECT(_mainFile)
+	XPROTECT()
 	{
 		xfer.subTrackNum = _channels[0].physicalOutChan;
 		xfer.numSamples = nSamples;
@@ -844,18 +848,15 @@ AAFRESULT STDMETHODCALLTYPE
 		xfer.buffer = buffer;
 		xfer.bytesXfered = 0;
 	
-		CHECK (_codec->codecWriteBlocks(this, deinterleave, 1, &xfer));
+		CHECK (_codec->WriteBlocks(deinterleave, 1, &xfer));
 
 		// Do this here and not in the codec any more
-		CHECK(omfsAddInt32toInt64(xfer->numSamples, &_channels[0].numSamples));
+//!!!		CHECK(AddInt32toInt64(xfer.numSamples, &_channels[0].numSamples));
 }
 	XEXCEPT
 	XEND
 	
-	return(OM_ERR_NONE);
-#else
-	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
+	return(AAFRESULT_SUCCESS);
 }
 
 	//@comm Takes a essence handle, so the essence must have been opened or created.
@@ -1303,35 +1304,31 @@ AAFRESULT STDMETHODCALLTYPE
 
 /****/
  AAFRESULT STDMETHODCALLTYPE
-   ImplAAFEssenceAccess::ReadSamples (aafUInt32  /*nSamples*/,
-                           aafUInt32  /*buflen*/,
-                           aafDataBuffer_t  /*buffer*/,
-                           aafUInt32*  /*samplesRead*/,
-                           aafUInt32*  /*bytesRead*/)
+   ImplAAFEssenceAccess::ReadSamples (aafUInt32  nSamples,
+                           aafUInt32  buflen,
+                           aafDataBuffer_t  buffer,
+                           aafUInt32*  samplesRead,
+                           aafUInt32*  bytesRead)
 {
-#if FULL_TOOLKIT
-	aafMultiXfer_t xfer;
-	aafInt64		one;
+	aafmMultiXfer_t xfer;
+//!!!	aafInt64		one;
 	
-	aafAssertMediaHdl(this);
-	aafAssertValidFHdl(_mainFile);
-	aafAssertMediaInitComplete(_mainFile);
 	aafAssert(buffer != NULL, _mainFile, OM_ERR_NULL_PARAM);
 	aafAssert(bytesRead != NULL, _mainFile, OM_ERR_NULL_PARAM);
 
-	CvtInt32toInt64(1, &one);
-	if(Int64Greater(_pvt->repeatCount, one))
-	  GotoShortFrameNumber(1);
+//!!!	CvtInt32toInt64(1, &one);
+//!!!	if(Int64Greater(_pvt->repeatCount, one))
+//!!!	  SeektoEditFrame(0);
 
-	XPROTECT(_mainFile)
+	XPROTECT()
 	{
-		xfer.subTrackNum = _physicalOutChanOpen;
+//!!!		xfer.subTrackNum = _physicalOutChanOpen;
 		xfer.numSamples = nSamples;
 		xfer.buflen = buflen;
 		xfer.buffer = buffer;
 		xfer.bytesXfered = 0;
 	
-		CHECK(_codec->codecReadBlocks(this, deinterleave, 1, &xfer));
+		CHECK(_codec->ReadBlocks(deinterleave, 1, &xfer));
 	}
 	XEXCEPT
 	{
@@ -1341,10 +1338,7 @@ AAFRESULT STDMETHODCALLTYPE
 	
 	*bytesRead = xfer.bytesXfered;
 
-	return (OM_ERR_NONE);
-#else
-	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
+	return (AAFRESULT_SUCCESS);
 }
 
 	//@comm This call will only return a single channel of essence from an interleaved
