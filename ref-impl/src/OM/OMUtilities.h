@@ -98,6 +98,8 @@ int compareWideString(const wchar_t* string1, const wchar_t* string2);
 
 char* convertWideString(const wchar_t* string);
 
+wchar_t* findWideCharacter(const wchar_t* string, wchar_t character);
+
   // @func The number of characters needed to represent <p i> as a
   //       hexadecimal string without leading zeros.
   //   @parm A non-zero unsigned integer.

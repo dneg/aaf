@@ -191,6 +191,24 @@ char* convertWideString(const wchar_t* string)
   return result;
 }
 
+wchar_t* findWideCharacter(const wchar_t* string, wchar_t character)
+{
+  const wchar_t* p = string;
+  while(*p != 0) {
+    if (*p == character) {
+      break;
+    }
+    p++;
+  }
+  wchar_t* result;
+  if (*p == 0) {
+    result = 0;
+  } else {
+    result = const_cast<wchar_t*>(p);
+  }
+  return result;
+}
+
 char* saveString(const char* string)
 {
   TRACE("saveString");
