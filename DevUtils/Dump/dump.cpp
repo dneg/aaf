@@ -40,13 +40,14 @@
 //
 // Usage:
 //
-//  $ dump [-x -r -p -a -s -z <pid> -m <n> -l <n> -h] files...
+//  $ dump [-x -r -p -a -c -s -z <pid> -m <n> -l <n> -v -h] files...
 //
 //    -x       = hex dump, works for any file.
 //    -r       = raw dump, works for any structured storage file.
 //    -p       = property dump, works for files using the AAF stored
 //                 object format.
 //    -a       = AAF file dump, works only for AAF files.
+//    -c       = print raw reference counts
 //    -s       = print statistics.
 //    -z <pid> = dump properties with pid <pid> (hex) as all zeroes.
 //    -m <n>   = dump only the first <n> bytes (dec) of media streams. 
@@ -466,6 +467,7 @@ const OMUInt32 HIGHVERSION = 32;
 //
 enum optionType {hexadecimal, raw, property, aaf};
 enum optionType option = raw; // default
+bool cFlag = false;
 bool zFlag = false;
 bool mFlag = false;
 bool lFlag = false;
@@ -2016,11 +2018,15 @@ void dumpSetIndexEntry(OMUInt32 i,
 
 void printReferenceCount(OMUInt32 referenceCount)
 {
-  OMUInt32 count = referenceCount - 2;
-  if (count == 0xffffffff) {
-    cout << setw(8) << "sticky";
+  if (cFlag) {
+      cout << setw(8) << referenceCount;
   } else {
-    cout << setw(8) << count;
+    OMUInt32 count = referenceCount - 2;
+    if (count == 0xffffffff) {
+      cout << setw(8) << "sticky";
+    } else {
+      cout << setw(8) << count;
+    }
   }
 }
 
@@ -3797,7 +3803,8 @@ static int isAnAAFFile(const wchar_t* fileName,
 void usage(void)
 {
   cerr << programName << ": Usage : " << programName
-       << " [-x -r -p -a -s -z <pid> -m <n> -l <n> -h] <file...>" << endl;
+       << " [-x -r -p -a -c -s -z <pid> -m <n> -l <n> -v -h] <file...>"
+       << endl;
   cerr << "-x       = hex dump"
        << " : for any file." << endl;
   cerr << "-r       = raw dump"
@@ -3806,6 +3813,7 @@ void usage(void)
        << " : for any file using the AAF stored object format." << endl;
   cerr << "-a       = AAF file dump"
        << " : for any AAF file." << endl;
+  cerr << "-c       = print raw reference counts" << endl;
   cerr << "-s       = print statistics"
        << " : combine with -r, -p and -a." << endl;
   cerr << "-z <pid> = dump properties with pid <pid> (hex) as all zeros :"
@@ -4025,6 +4033,9 @@ int main(int argumentCount, char* argumentVector[])
         break;
       case 'a':
         option = aaf;
+        break;
+      case 'c':
+        cFlag = true;
         break;
       case 's':
         printStats = true;
