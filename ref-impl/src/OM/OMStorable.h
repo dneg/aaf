@@ -93,9 +93,13 @@ public:
     //          within this <c OMStorable>.
   OMStorable* find(const wchar_t* objectName) const;
 
+  OMStorable* find(OMPropertyId propertyId) const;
+
     // @cmember Find the <c OMProperty> named <p propertyName> contained
     //          within this <c OMStorable>.
   OMProperty* findProperty(const wchar_t* propertyName) const;
+
+  OMProperty* findProperty(OMPropertyId propertyId) const;
 
     // @cmember Is this <c OMStorable> the root of the object
     //          containment hierarchy.
