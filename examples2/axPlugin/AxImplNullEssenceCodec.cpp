@@ -418,6 +418,9 @@ void AxImplNullEssenceCodec::Open(
 {
 	TRACE
 	CHECK_HRESULT( AAFRESULT_NOT_IMPLEMENTED );
+
+	// The EssenceDescriptor contained by the fileMob should be
+	// used, at this point, to initialize the format specifiers.
 }
 	
 void AxImplNullEssenceCodec::CountSamples(
