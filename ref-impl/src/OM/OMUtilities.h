@@ -197,6 +197,33 @@ bool validString(const char* string);
   //   @rdesc True if the wchar_t string is valid, false otherwise.
 bool validWideString(const wchar_t* string);
 
+  // Conversions to strings
+
+  // Convert an OMUInt8 to a hexadecimal string like this -
+  // XX
+void toString(const OMUInt8&i, char* is);
+
+  // Convert an OMUInt16 to a hexadecimal string like this -
+  // XXXX
+void toString(const OMUInt16&i, char* is);
+
+  // Convert an OMUInt23 to a hexadecimal string like this -
+  // XXXXXXXX
+void toString(const OMUInt32&i, char* is);
+
+  // Convert an OMObjectIdentification to a string like this -
+  //{XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX}
+void toString(const OMObjectIdentification& id, char* idString);
+
+  // Caller allocated buffers must be at least this big -
+  //
+const size_t OMUInt8StringBufferSize = 3;
+const size_t OMUInt16StringBufferSize = 5;
+const size_t OMUInt32StringBufferSize = 9;
+const size_t OMObjectIdentificationStringBufferSize = 39;
+
+  // Check of types
+
 void checkTypes(void);
 
   // Manipulation of property paths

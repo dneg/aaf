@@ -453,6 +453,86 @@ bool validWideString(const wchar_t* string)
   return (string != 0) /* && (lengthOfWideString(string) > 0) */;
 }
 
+static const char digits[] = "0123456789ABCDEF"; 
+
+void toString(const OMUInt8&i, char* is)
+{
+  TRACE("toString");
+  PRECONDITION("Valid buffer", is != 0);
+
+  char* op = is;
+  *op++ = digits[ (i & 0xf0) >> 4 ];
+  *op++ = digits[ (i & 0x0f) ];
+  *op++ = '\0';
+}
+
+void toString(const OMUInt16&i, char* is)
+{
+  TRACE("toString");
+  PRECONDITION("Valid buffer", is != 0);
+
+  char* op = is;
+  OMUInt8 b0 = (OMUInt8)((i & 0xff00) >> 8);
+  OMUInt8 b1 = (OMUInt8)((i & 0x00ff));
+  toString(b0, op); op = op + 2;
+  toString(b1, op); op = op + 2;
+}
+
+void toString(const OMUInt32&i, char* is)
+{
+  TRACE("toString");
+  PRECONDITION("Valid buffer", is != 0);
+
+  char* op = is;
+  OMUInt16 w0 = (OMUInt16)((i & 0xffff0000) >> 16);
+  OMUInt16 w1 = (OMUInt16)((i & 0x0000ffff));
+  toString(w0, op); op = op + 4;
+  toString(w1, op); op = op + 4;
+}
+
+void toString(const OMObjectIdentification& id, char* idString)
+{
+  TRACE("toString");
+  PRECONDITION("Valid buffer", idString != 0);
+
+  char* op = idString;
+
+  *op++ = '{'; 
+
+  OMUInt32* lp = (OMUInt32 *)&id;
+
+  // long word
+  toString(*lp++, op); op = op + 8;
+
+  OMUInt16* wp = (OMUInt16 *)lp;
+
+  // word
+  *op++ = '-';
+  toString(*wp++, op); op = op + 4;
+  // word
+  *op++ = '-';
+  toString(*wp++, op); op = op + 4;
+
+  OMByte* bp = (OMByte *)wp;
+
+  // pseudo-word
+  *op++ = '-';
+  toString(*bp++, op); op = op + 2;
+  toString(*bp++, op); op = op + 2;
+
+  // bytes
+  *op++ = '-';
+  toString(*bp++, op); op = op + 2;
+  toString(*bp++, op); op = op + 2;
+  toString(*bp++, op); op = op + 2;
+  toString(*bp++, op); op = op + 2;
+  toString(*bp++, op); op = op + 2;
+  toString(*bp++, op); op = op + 2;
+
+  *op++ = '}'; 
+  *op = '\0'; 
+}
+
 void checkTypes(void)
 {
   TRACE("checkTypes");
