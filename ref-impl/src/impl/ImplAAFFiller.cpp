@@ -1,14 +1,3 @@
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-*                                          *
-\******************************************/
-
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
 /***********************************************************************
  *
  *              Copyright (c) 1998-1999 Avid Technology, Inc.
@@ -35,6 +24,9 @@
  * LIABILITY.
  *
  ************************************************************************/
+
+#ifndef __ImplAAFDataDef_h__
+#include "ImplAAFDataDef.h"
 #endif
 
 #include "AAFStoredObjectIDs.h"
