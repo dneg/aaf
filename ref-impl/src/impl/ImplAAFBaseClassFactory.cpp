@@ -78,9 +78,9 @@ extern "C" const aafClassID_t CLSID_AAFMobSlot;
 // Utility function for registering a given class id as legal in a
 // given file.This function hides the type "aafClassID_t" from the OM.
 //
-static void registerClass(OMFile* file, const aafClassID_t classId)
+static void registerClass(OMFile* file, const aafClassID_t& classId)
 {
-  file->classFactory()->add(reinterpret_cast<const OMClassId&>(classId),
+  file->classFactory()->add((const OMClassId&)(classId),
                             createObject);
 }
 
