@@ -240,7 +240,7 @@ AD_X2METHOD3(CreateValueFromValues,
 AD_XMETHOD3(CreateValueFromStruct,
 			[in\, size_is\(initDataSize\)],
 			objPass,
-			aafMemPtr_t *,
+			aafMemPtr_t,
 			pInitData,
 			pointer to compile-time struct containing data to use,
 
