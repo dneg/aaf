@@ -4150,15 +4150,15 @@ void _exitHandler(void)
 
 int main(int argumentCount, char* argumentVector[])
 {
-  atexit(_exitHandler);
-  checkSizes();
 #if defined(OM_OS_MACOS)
 #if defined(USECONSOLE)
   argumentCount = ccommand(&argumentVector); // console window for mac
 #endif
 #endif
-
   programName = baseName(argumentVector[0]);
+  atexit(_exitHandler);
+  checkSizes();
+
   int fileCount = 0;
   int flagCount = 0;
   int i;
