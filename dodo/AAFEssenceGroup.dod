@@ -6,7 +6,6 @@ AAFMediaGroup\
 AAFSegment\
 #endm
 #c
-#import ./AAFUnitTest.exp
 #import ./AAFSegment.exp
 AD_HEAD
 /******************************************\
@@ -19,6 +18,13 @@ AD_HEAD
 \******************************************/
 #c AD_INCLUDE(myVector)
 
+AD_FORWARD_DECLARATION(AAFSegment)
+AD_FORWARD_DECLARATION(AAFDataDefinition)
+
+
+AD_CLASS_UUID(e58a8568, 2a3e, 11D2, bf, a4, 00, 60, 97, 11, 62, 12)
+
+AD_DEFAULT_UUID(e58a8567, 2a3e, 11D2, bf, a4, 00, 60, 97, 11, 62, 12)
 AD_CLASS_BEGIN
 
 AD_XCONSTRUCTOR2(
@@ -50,8 +56,5 @@ adds the source clip specified in the choice argument as  a choice to the given 
 //		vector<AAFSourceClip *>	_choices;
 
 AD_OVERRIDE(.method-NumRepresentations)
-
-AD_OVERRIDE(.method-Test)
-
 
 AD_CLASS_END
