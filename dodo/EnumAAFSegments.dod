@@ -6,18 +6,13 @@ AAFRoot\
 #endm
 #c
 AD_HEAD
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
-
-
 /***********************************************\
-*	Stub only.   Implementation not yet added	*
+*												*
+* Advanced Authoring Format						*
+*												*
+* Copyright (c) 1998-1999 Avid Technology, Inc. *
+* Copyright (c) 1998-1999 Microsoft Corporation *
+*												*
 \***********************************************/
 
 
@@ -39,12 +34,12 @@ AD_XMETHOD1(NextOne,
   // properly releasing the returned pointer when it is no longer needed.
   // @comm This is a just simplified version of the Next method. )
 
-AD_XMETHOD3(Next,
-			[in], objPass, aafUInt32, count, number of segments requested,
+AD_X2METHOD3(Next,
+			[in], objPass, aafUInt32, count, number of segments requested,xxx,
 			[out\, size_is\(count\)\, length_is\(*pFetched\)],
-			objOut, AAFSegment, ppSegments, array to receive segments,
+			objOutArray, AAFSegment, ppSegments, array to receive segments,count,
 			[out\,ref], objPass, aafUInt32 *, pFetched,
-			number of actual Segments fetched into ppSegments array,
+			number of actual Segments fetched into ppSegments array,xxx,
 			Enumerates the next count elements \(AAFSegment pointers\) in 
   // the enumerator's list\, returning them in the given array along with the actual 
   // number of enumerated elements in pcFetched. The caller is responsible for 

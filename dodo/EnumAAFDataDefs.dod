@@ -36,12 +36,12 @@ AD_XMETHOD1(NextOne,
   // properly releasing the returned pointer when it is no longer needed.
   // @comm This is a just simplified version of the Next method. )
 
-AD_XMETHOD3(Next,
-			[in], objPass, aafUInt32, count, number of data definitions requested,
+AD_X2METHOD3(Next,
+			[in], objPass, aafUInt32, count, number of data definitions requested,xxx,
 			[out\, size_is\(count\)\, length_is\(*pFetched\)],
-			objOut, AAFDataDef, ppDataDef, array to receive data definitions,
+			objOutArray, AAFDataDef, ppDataDef, array to receive data definitions,count,
 			[out\,ref], objPass, aafUInt32 *, pFetched,
-			number of actual DataDefinition fetched into ppDataDefinition array,
+			number of actual DataDefinition fetched into ppDataDefinition array,xxx,
 			Enumerates the next count elements \(AAFDataDef pointers\) in 
   // the enumerator's list\, returning them in the given array along with the actual 
   // number of enumerated elements in pcFetched. The caller is responsible for 

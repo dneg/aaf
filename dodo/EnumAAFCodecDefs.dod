@@ -15,12 +15,6 @@ AD_HEAD
 *												*
 \***********************************************/
 
-
-/***********************************************\
-*	Stub only.   Implementation not yet added	*
-\***********************************************/
-
-
 AD_FORWARD_DECLARATION(AAFCodecDef)
 
 AD_CLASS_UUID(3B2C9AD3, 022A, 11d3, 80, A6, 00, 60, 08, 14, 3E, 6F)
@@ -38,12 +32,12 @@ AD_XMETHOD1(NextOne,
   // properly releasing the returned pointer when it is no longer needed.
   // @comm This is a just simplified version of the Next method. )
 
-AD_XMETHOD3(Next,
-			[in], objPass, aafUInt32, count, number of Pluggable definitions requested,
+AD_X2METHOD3(Next,
+			[in], objPass, aafUInt32, count, number of Pluggable definitions requested,xxx,
 			[out\, size_is\(count\)\, length_is\(*pFetched\)],
-			objOut, AAFCodecDef, ppPluggableDefs, array to receive Pluggable definitions,
+			objOutArray, AAFCodecDef, ppPluggableDefs, array to receive Pluggable definitions,count,
 			[out\,ref], objPass, aafUInt32 *, pFetched,
-			number of actual PluggableDefs fetched into ppPluggableDefs array,
+			number of actual PluggableDefs fetched into ppPluggableDefs array,xxx,
 			Enumerates the next count elements \(AAFCodecDef pointers\) in 
   // the enumerator's list\, returning them in the given array along with the actual 
   // number of enumerated elements in pcFetched. The caller is responsible for 
