@@ -123,7 +123,7 @@ public:
     CreateValueFromStruct
         (// @parm [in, size_is(initDataSize)] pointer to compile-time
 		 // struct containing data to use
-         aafMemPtr_t *  pInitData,
+         aafMemPtr_t pInitData,
 
          // @parm [in] size of data in pInitData
          aafUInt32  initDataSize,
@@ -283,10 +283,10 @@ private:
 
   aafUInt32          _cachedCount;
 
+  aafInt32           _cachedPropValSize;
+  aafBool            _propValSizeIsCached;
+
 public:
-  // Declare this class to be storable.
-  //
-  OMDECLARE_STORABLE(ImplAAFTypeDefRecord)
 
   // overrides from ImplAAFTypeDef
   //
