@@ -2,7 +2,7 @@
 #ifndef OMSTORABLE_H
 #define OMSTORABLE_H
 
-#include "OMTypes.h"
+#include "OMDataTypes.h"
 
 #include "OMPropertySet.h"
 

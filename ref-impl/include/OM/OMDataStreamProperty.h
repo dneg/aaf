@@ -2,7 +2,7 @@
 #ifndef OMDATASTREAMPROPERTY_H
 #define OMDATASTREAMPROPERTY_H
 
-#include "OMTypes.h"
+#include "OMDataTypes.h"
 
 #include "OMProperty.h"
 
