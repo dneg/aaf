@@ -1,0 +1,11 @@
+; AAFShellExt.def : Declares the module parameters for the DLL.
+
+LIBRARY      "AAFShellExt"
+DESCRIPTION  'AAFShellExt Windows Dynamic Link Library'
+
+EXPORTS
+    ; Explicit exports can go here
+	DllCanUnloadNow PRIVATE
+	DllGetClassObject PRIVATE
+	DllRegisterServer PRIVATE
+   	DllUnregisterServer PRIVATE
