@@ -1,0 +1,264 @@
+P {font-size: 9pt; font-family: serif}
+P.Normal { font-size: 10pt}
+P.R2H_Normal { font-size: 10pt; font-family: serif}
+P.FLUSH { text-indent: 0in }
+P.IndentedNormal { text-indent: 0in }
+P.ListBullet { text-indent: 0in }
+P.ListBullet2 { text-indent: 0in }
+P.ListBullet3 { text-indent: 0in }
+P.ListBullet4 { text-indent: 0in }
+P.ListNumber { text-indent: 0in }
+P.ListNumber2 { text-indent: 0in }
+P.ListNumber3 { text-indent: 0in }
+P.ListNumber4 { text-indent: 0in }
+P.List { text-indent: 0in }
+P.List2 { text-indent: 0in }
+P.List3 { text-indent: 0in }
+P.List4 { text-indent: 0in }
+P.Summary { text-indent: 0in }
+P.Parameter { text-indent: 0in }
+P.Preformatted { text-indent: 0in; font-size: 10pt; font-family: monospace; }
+P.Stub { text-indent: 0in; font-size: 14pt; font-family: Verdana, sans-serif; color: #FF0000}
+P.SubHeading { text-indent: 0in; font-size: 14pt; font-family: Verdana, sans-serif; color: #CCCCCC}
+P.SubHeading0 { text-indent: 0in; font-size: 12pt; font-weight: bold; text-decoration: underline; font-family: sans-serif; }
+P.SubHeading1 { text-indent: 0in; font-size: 12pt; font-weight: bold; font-family: sans-serif; }
+P.SubHeading2 { text-indent: 0in; font-size: 12pt; font-style: italic; font-family: sans-serif; }
+P.SubHeading3 { text-indent: 0in; font-size: 10pt; font-weight: bold; font-family: sans-serif; }
+P.SubHeading4 { text-indent: 0in; font-size: 10pt; font-style: italic; font-family: sans-serif; }
+P.GroupTOC { text-indent: 0in; font-size: 10pt; font-family: sans-serif; }
+P.Argument { text-indent: 0in; font-size: 10pt; font-family: Arial, serif; }
+P.Member { text-indent: 0in; font-size: 10pt; font-family: Arial, serif; }
+P.Picture { text-indent: 0in; text-align: center; }
+H1 { font-size: 16pt; font-family: serif; text-indent: 0in; margin-bottom: 0in }
+H1.Argument { font-size: 14pt; font-family: sans-serif; font-weight: bold }
+H1.Summary { font-size: 14pt; font-family: sans-serif; font-weight: bold }
+H2 { font-size: 14pt; font-family: sans-serif; text-indent: 0in; }
+UL { font-size: 10pt; font-family: sans-serif; margin-top: 0pt; }
+LI { font-size: 10pt; font-family: sans-serif; margin-top: 4pt; }
+PRE { font-size: 10pt; font-family: monospace; }
+PRE.BriefDecl { font-size: 8pt; font-family: monospace; }
+P.Title { font-size: 24pt; font-family: serif; text-indent: 0in }
+P.BriefSummary { font-size: 8pt; font-family: sans-serif; text-indent: 0in }
+P.TOC1 { font-size: 12pt; font-family: sans-serif; text-indent: 0in; margin-bottom: 0in; margin-top: 0in }
+P.TOC2 { font-size: 10pt; font-family: sans-serif; text-indent: .15in; margin-bottom: 0in; margin-top: 0in }
+P.TOC3 { font-size: 8pt; font-family: sans-serif; text-indent: .3in; margin-bottom: 0in; margin-top: 0in }
+P.TOC4 { font-size: 8pt; font-family: sans-serif; text-indent: .45in; margin-bottom: 0in; margin-top: 0in }
+P.TOC5 { font-size: 8pt; font-family: sans-serif; text-indent: .6in; margin-bottom: 0in; margin-top: 0in }
+P.TOC6 { font-size: 8pt; font-family: sans-serif; text-indent: .7in; margin-bottom: 0in; margin-top: 0in }
+P.TOC7 { font-size: 8pt; font-family: sans-serif; text-indent: .8in; margin-bottom: 0in; margin-top: 0in }
+P.TOC8 { font-size: 8pt; font-family: sans-serif; text-indent: .9in; margin-bottom: 0in; margin-top: 0in }
+P.TOC9 { font-size: 8pt; font-family: sans-serif; text-indent: 1in; margin-bottom: 0in; margin-top: 0in }
+P.TOC10 { font-size: 8pt; font-family: sans-serif; text-indent: 1.1in; margin-bottom: 0in; margin-top: 0in }
+P.TOC11 { font-size: 8pt; font-family: sans-serif; text-indent: 1.2in; margin-bottom: 0in; margin-top: 0in }
+P.TOC12 { font-size: 8pt; font-family: sans-serif; text-indent: 1.3in; margin-bottom: 0in; margin-top: 0in }
+P.TOC13 { font-size: 8pt; font-family: sans-serif; text-indent: 1.4in; margin-bottom: 0in; margin-top: 0in }
+P.TOC14 { font-size: 8pt; font-family: sans-serif; text-indent: 1.5in; margin-bottom: 0in; margin-top: 0in }
+P.DefaultValue { font-size: 8pt; font-family: sans-serif; margin-bottom: 0in }
+P.Type { font-size: 8pt; font-family: sans-serif; margin-bottom: 4pt; text-indent: 0in; }
+BODY { background-color: white;
+       color: #000000;
+       margin-left: 0px;
+       margin-right: 0;
+       margin-top: 0;
+       margin-bottom: 0 }
+BODY.TOC { background-color: #FFFFE0;
+	   margin-left: 15px;
+	   margin-right: 15px;
+	   margin-top: 10px;
+	   margin-bottom: 10px }
+BODY.Index { background-color: #FFFFE0;
+	     margin-left: 15px;
+	     margin-right: 15px;
+	     margin-top: 10px;
+	     margin-bottom: 10px }
+BODY.Summary { background-color: #FFFFE0;
+	       margin-left: 15px;
+	       margin-right: 15px;
+	       margin-top: 10px;
+	       margin-bottom: 10px }
+BODY.GlossaryWord { background-color: #FFFFE0;
+	            margin-left: 15px;
+	            margin-right: 15px;
+	            margin-top: 10px;
+	            margin-bottom: 10px }
+BODY.Argument { background-color: #FFFFE0;
+	        margin-left: 15px;
+	        margin-right: 15px;
+	        margin-top: 10px;
+	        margin-bottom: 10px }
+BODY.R2H { background-color: white;
+	   margin-left: 15px;
+	   margin-right: 15px;
+	   margin-top: 10px;
+	   margin-bottom: 10px }
+P.Index1 { font-size: 10pt; font-family: sans-serif; text-indent: 0in; margin-bottom: 0in; margin-top: 0in }
+P.Index2 { font-size: 10pt; font-family: sans-serif; text-indent: .25in; margin-bottom: 0in; margin-top: 0in }
+A {text-decoration: none}
+A:visited {color : Blue}
+A.Argument { font-style: italic; text-decoration: none}
+A.TOCElementOn { color: blue; text-decoration: underline; }
+A.TOCElementOff { color: black; text-decoration: none; }
+A.IndexElementOn { color: blue; text-decoration: underline; }
+A.IndexElementOff { color: black; text-decoration: none; }
+A.MenuBar { color: white }
+A.MenuBarOn { color: lightblue; font-family: sans-serif; font-size: 8pt; }
+A.MenuBarOff { color: white; font-family: sans-serif; font-size: 8pt; }
+A.Summary { text-decoration: none;
+	    color: #800000;
+	    vertical-align: super;
+	    font-size: xx-small }
+TABLE.NavBar { background-color: #000080 }
+TABLE.MarginStripe { background-color: #000080 }
+TABLE.TitleBar { }
+DIV.Terms { color: #0000FF; font-size: 8pt; }
+TABLE.Note { }
+TD.NoteBullet { width: 40; font-size: 10pt; color: blue; font-weight: bold; }
+TD.NoteBody { font-family: serif; font-size: 10pt; }
+TABLE.ToDo { }
+TD.ToDoBullet { width: 40; font-size: 10pt; color: red; font-weight: bold; }
+TD.ToDoBody { font-family: serif; font-size: 10pt; }
+TABLE.ArgList {  }
+TD.ArgName { font-family: serif; font-size: 10pt; font-style: italic; }
+TD.ArgComment { font-family: serif; font-size: 10pt; }
+
+TABLE.SubordinateList {  }
+TD.SubordinateGroupName { font-family: Verdana, sans-serif; font-size: 10pt; font-weight: bold; }
+TD.SubordinateName { font-family: Arial, sans-serif; font-size: 10pt }
+TD.SubordinateComment { font-family: Arial, sans-serif; font-size: 10pt; }
+
+TABLE.GroupMemberList {  }
+TD.GroupMemberName { font-family: serif; font-size: 10pt; font-style: italic; }
+TD.GroupMemberComment { font-family: serif; font-size: 10pt; }
+
+
+TABLE.MemberList {  }
+TD.MemberName { font-family: serif; font-size: 10pt; font-style: italic; }
+TD.MemberComment { font-family: serif; font-size: 10pt; }
+
+TABLE.InterfaceList {  }
+TD.InterfaceName { font-family: serif; font-size: 10pt; }
+TD.InterfaceComment { font-family: serif; font-size: 10pt; }
+
+TABLE.DefinitionList { }
+TD.DefinitionLabel { font-family: serif; font-size: 10pt; font-style: italic; }
+TD.DefinitionBody { font-family: serif; font-size: 10pt; }
+
+P.Hierarchy {
+	text-indent: 0in;
+	background-color: rgb(224,224,224);
+	border: 1px solid;
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-top: 1px;
+	padding-bottom: 1px;
+	border-color: #0000ff;
+	border-style: outset;
+	margin-top: 5px;
+ }
+P.HierarchyIndent0 {
+	text-indent: 0in;
+	margin-left: 0in;
+}
+TABLE.HierarchyRow {
+	margin-left: 0in;
+	margin-top: 0in;
+	margin-bottom: 0in;
+	martin-right: 0in;
+}
+
+P.Derivation {
+	text-indent: 0in;
+	background-color: rgb(224,224,224);
+	border: 1px solid;
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-top: 1px;
+	padding-bottom: 1px;
+	border-color: #0000ff;
+	border-style: outset;
+	margin-top: 5px;
+ }
+P.DerivationMulti {
+	text-indent: 0in;
+	background-color: rgb(224,224,224);
+	border: 1px solid;
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-top: 1px;
+	padding-bottom: 1px;
+	border-color: #0000ff;
+	border-style: outset;
+	margin-top: 2px;
+	margin-bottom: 0px;
+ }
+P.DerivationIndent0 {
+	text-indent: 0in;
+	margin-left: 0in;
+}
+P.DerivationIndent1 {
+	text-indent: 0in;
+	margin-left: 15px;
+}
+P.DerivationIndent2 {
+	text-indent: 0in;
+	margin-left: 60px;
+}
+P.DerivationIndent3 {
+	text-indent: 0in;
+	margin-left: 105px;
+}
+P.DerivationIndent4 {
+	text-indent: 0in;
+	margin-left: 150px;
+}
+P.DerivationIndent5 {
+	text-indent: 0in;
+	margin-left: 195px;
+}
+P.DerivationIndent6 {
+	text-indent: 0in;
+	margin-left: 240px;
+}
+P.DerivationIndent7 {
+	text-indent: 0in;
+	margin-left: 285px;
+}
+TABLE.DerivationRow {
+	margin-left: 0in;
+	margin-top: 0in;
+	margin-bottom: 0in;
+	margin-right: 0in;
+}
+
+P.GlossaryWord {
+	text-indent: 0in;
+	font-size: 18pt;
+	font-family: sans-serif;
+	font-style: italic;
+}
+
+SPAN.LocalReference {
+	font-weight: bold;
+}
+
+SPAN.ArgumentLocalRef {
+	font-style: italic;
+}
+
+
+TABLE.WithHeader {
+	padding-right: 20px;
+}
+TR.TitleRow {
+}
+TR.BodyRow {
+}
+TD.TitleCell {
+	font-weight: bold;
+	text-decoration: underline;
+}
+TD.BodyCell {
+}
+TABLE.NoHeader {
+	padding-right: 20px;
+}
