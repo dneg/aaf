@@ -855,13 +855,6 @@ ImplAAFFile::Open ()
 			(&aafFileKindAafSSBinary);
 		  checkExpression(sig == aafFileSignature, AAFRESULT_NOT_AAF_FILE);
 
-		if (IsWriteable() && _file->byteOrder() != hostByteOrder()) {
-		  // Modify of foreign files not yet supported
-		  _file->close();
-		  _file = 0;
-		  return AAFRESULT_NOT_IN_CURRENT_VERSION;
-		}
-
 		// Restore the meta dictionary, it should be the same object
 		// as _metafactory
 		OMDictionary* mf = _file->dictionary();
