@@ -319,7 +319,7 @@ extern "C" HRESULT CAAFStaticMobSlot_test()
 	catch (...)
 	{
 		cerr << "CAAFStaticMobSlot_test...Caught general C++"
-			" exception!" << endl; 
+			 << " exception!" << endl; 
 		hr = AAFRESULT_TEST_FAILED;
 	}
 	

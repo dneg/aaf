@@ -544,7 +544,9 @@ extern "C" HRESULT CEnumAAFDataDefs_test()
 	}
 	catch (...)
 	{
-		cerr << "CEnumAAFDataDef_test...Caught general C++ exception!" << endl; 
+		cerr << "CEnumAAFDataDef_test..."
+			 << "Caught general C++ exception!" << endl; 
+		hr = AAFRESULT_TEST_FAILED;
 	}
 
 	// When all of the functionality of this class is tested, we can return success.

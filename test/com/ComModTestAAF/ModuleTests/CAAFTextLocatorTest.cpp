@@ -363,7 +363,8 @@ extern "C" HRESULT CAAFTextLocator_test()
   catch (...)
 	{
 	  cerr << "CAAFTextLocator_test...Caught general C++"
-		" exception!" << endl; 
+		   << " exception!" << endl; 
+	  hr = AAFRESULT_TEST_FAILED;
 	}
 
 

@@ -470,7 +470,8 @@ extern "C" HRESULT CAAFTypeDefStrongObjRef_test()
 	}
   catch (...)
 	{
-	  cerr << "CAAFTypeDefStrongObjRef_test...Caught general C++ exception!" << endl; 
+	  cerr << "CAAFTypeDefStrongObjRef_test..."
+		   << "Caught general C++ exception!" << endl; 
 	  hr = AAFRESULT_TEST_FAILED;
 	}
 

@@ -254,7 +254,8 @@ extern "C" HRESULT CAAFFilmDescriptor_test()
 	catch (...)
 	{
 		cerr << "CAAFFilmDescriptor_test...Caught general C++"
-			" exception!" << endl; 
+			 << " exception!" << endl; 
+		hr = AAFRESULT_TEST_FAILED;
 	}
 
 //	if (SUCCEEDED(hr))

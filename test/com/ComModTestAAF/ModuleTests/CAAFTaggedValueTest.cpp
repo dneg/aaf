@@ -395,7 +395,7 @@ extern "C" HRESULT CAAFTaggedValue_test()
 	catch (...)
 	{
 	  cerr << "CTaggedValues_test...Caught general C++"
-		" exception!" << endl; 
+		   << " exception!" << endl; 
 	  hr = AAFRESULT_TEST_FAILED;
 	}
 

@@ -310,7 +310,7 @@ extern "C" HRESULT CAAFProperty_test()
 	catch (...)
 	{
 		cerr << "CAAFProperty_test...Caught general C++"
-			" exception!" << endl; 
+			 << " exception!" << endl; 
 		hr = AAFRESULT_TEST_FAILED;
 	}
 	

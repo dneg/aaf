@@ -358,7 +358,8 @@ extern "C" HRESULT CAAFFileDescriptor_test()
 	catch (...)
 	{
 		cerr << "CAAFFileDescriptor_test...Caught general C++"
-			" exception!" << endl; 
+			 << " exception!" << endl; 
+		hr = AAFRESULT_TEST_FAILED;
 	}
 	
 	return hr;

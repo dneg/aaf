@@ -1011,8 +1011,9 @@ extern "C" HRESULT CAAFDictionary_test()
 	}
   catch (...)
 	{
-	  cerr << "CAAFDictionary_test...Caught general C++ exception!" << endl; 
-    hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+	  cerr << "CAAFDictionary_test..."
+		   << "Caught general C++ exception!" << endl; 
+	  hr = AAFRESULT_TEST_FAILED;
 	}
 
   return hr;

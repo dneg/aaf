@@ -249,7 +249,9 @@ extern "C" HRESULT CAAFInterpolationDef_test()
 	}
 	catch (...)
 	{
-		cerr << "CAAFInterpolationDef_test...Caught general C++ exception!" << endl; 
+		cerr << "CAAFInterpolationDef_test..."
+			 <<" Caught general C++ exception!" << endl; 
+		hr = AAFRESULT_TEST_FAILED;
 	}
 
 	return hr;

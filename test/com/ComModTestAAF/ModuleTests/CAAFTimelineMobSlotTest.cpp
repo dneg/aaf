@@ -346,7 +346,7 @@ extern "C" HRESULT CAAFTimelineMobSlot_test()
 	catch (...)
 	{
 		cerr << "CAAFTimelineMobSlot_test...Caught general C++"
-			" exception!" << endl; 
+			 << " exception!" << endl; 
 		hr = AAFRESULT_TEST_FAILED;
 	}
 	

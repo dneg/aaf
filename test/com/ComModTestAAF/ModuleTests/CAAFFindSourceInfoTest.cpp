@@ -585,7 +585,9 @@ extern "C" HRESULT CAAFFindSourceInfo_test()
 	}
 	catch (...)
 	{
-		cerr << "CAAFFindSourceInfo_test...Caught general C++ exception!" << endl; 
+	  cerr << "CAAFFindSourceInfo_test..."
+		   << "Caught general C++ exception!" << endl; 
+	  hr = AAFRESULT_TEST_FAILED;
 	}
 	
 	if (SUCCEEDED(hr))

@@ -314,7 +314,8 @@ extern "C" HRESULT CAAFSourceMob_test()
   catch (...)
 	{
 	  cerr << "CAAFSourceMob_test...Caught general C++"
-		" exception!" << endl; 
+		   << " exception!" << endl; 
+	  hr = AAFRESULT_TEST_FAILED;
 	}
 
 

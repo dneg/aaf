@@ -394,7 +394,7 @@ extern "C" HRESULT CEnumAAFTaggedValues_test()
 	catch (...)
 	{
 	  cerr << "CEnumAAFTaggedValues_test...Caught general C++"
-		" exception!" << endl; 
+		   << " exception!" << endl; 
 	  hr = AAFRESULT_TEST_FAILED;
 	}
 

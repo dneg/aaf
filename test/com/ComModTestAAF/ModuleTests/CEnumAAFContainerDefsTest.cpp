@@ -369,7 +369,9 @@ extern "C" HRESULT CEnumAAFContainerDefs_test()
 	}
 	catch (...)
 	{
-		cerr << "CEnumAAFContainerDefs_test...Caught general C++ exception!" << endl; 
+		cerr << "CEnumAAFContainerDefs_test..."
+			 << "Caught general C++ exception!" << endl; 
+		hr = AAFRESULT_TEST_FAILED;
 	}
 	return hr;
 }

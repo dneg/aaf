@@ -517,8 +517,9 @@ extern "C" HRESULT CAAFMasterMob_test()
 	}
 	catch (...)
 	{
-		cerr << "CAAFMasterMob_test...Caught general C++ exception!" << endl; 
-		hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+		cerr << "CAAFMasterMob_test..."
+			 << "Caught general C++ exception!" << endl; 
+		hr = AAFRESULT_TEST_FAILED;
 	}
 
 	// When all of the functionality of this class is tested, we can return success.

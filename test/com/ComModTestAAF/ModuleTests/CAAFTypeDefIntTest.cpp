@@ -659,7 +659,8 @@ extern "C" HRESULT CAAFTypeDefInt_test()
   catch (...)
     {
       cerr << "CAAFTypeDefInt_test...Caught general C++"
-        " exception!" << endl; 
+		   << " exception!" << endl; 
+	  hr = AAFRESULT_TEST_FAILED;
     }
   return hr;
 }

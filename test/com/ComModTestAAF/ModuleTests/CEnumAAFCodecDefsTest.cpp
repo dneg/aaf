@@ -374,7 +374,9 @@ extern "C" HRESULT CEnumAAFCodecDefs_test()
 	}
 	catch (...)
 	{
-		cerr << "CEnumAAFCodecDefs_test...Caught general C++ exception!" << endl; 
+		cerr << "CEnumAAFCodecDefs_test..."
+			 << "Caught general C++ exception!" << endl; 
+		hr = AAFRESULT_TEST_FAILED;
 	}
 
 	return hr;

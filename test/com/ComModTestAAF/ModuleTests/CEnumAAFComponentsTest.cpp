@@ -625,7 +625,7 @@ extern "C" HRESULT CEnumAAFComponents_test()
 	catch (...)
 	{
 	  cerr << "CEnumAAFComponents_test...Caught general C++"
-		" exception!" << endl; 
+		   << " exception!" << endl; 
 	  hr = AAFRESULT_TEST_FAILED;
 	}
 

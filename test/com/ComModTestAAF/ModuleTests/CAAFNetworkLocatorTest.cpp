@@ -355,7 +355,8 @@ extern "C" HRESULT CAAFNetworkLocator_test()
   catch (...)
 	{
 	  cerr << "CAAFNetworkLocator_test...Caught general C++"
-		" exception!" << endl; 
+		   << " exception!" << endl; 
+	  hr = AAFRESULT_TEST_FAILED;
 	}
 
 
