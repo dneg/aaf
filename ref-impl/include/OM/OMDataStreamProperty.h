@@ -133,6 +133,18 @@ public:
     //          is <p size> bytes in size.
   virtual void setBits(const OMByte* bits, size_t size);
 
+    // @cmember Is a byte order specifed for this stream ?
+  virtual bool hasByteOrder(void) const;
+
+    // @cmember Specify a byte order for this stream.
+  virtual void setByteOrder(OMByteOrder byteOrder);
+
+    // @cmember The byte order of this stream.
+  virtual OMByteOrder byteOrder(void) const;
+
+    // @cmember Clear the byte order of this stream
+  virtual void clearByteOrder(void);
+
 protected:
 
   virtual const wchar_t* storedName(void) const;
@@ -143,6 +155,7 @@ private:
   void create(void);
 
   IStream* _stream;
+  OMByteOrder _byteOrder;
 
 };
 
