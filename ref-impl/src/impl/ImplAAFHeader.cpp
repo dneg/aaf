@@ -537,6 +537,11 @@ AAFRESULT ImplAAFHeader::SetModified(void)		// To NOW
 	return (OM_ERR_NONE);
 }
 
+void ImplAAFHeader::SetByteOrder(const aafInt16 byteOrder)
+{
+	_byteOrder = byteOrder;
+}
+
 AAFRESULT ImplAAFHeader::SetToolkitRevisionCurrent()
 {
 	_toolkitRev = AAFReferenceImplementationVersion;
