@@ -151,8 +151,9 @@ AAFRESULT STDMETHODCALLTYPE
 	}
 	else
 	{
-		result->ReleaseReference();
-		*ppEnum = NULL;
+	  result->ReleaseReference();
+	  result = 0;
+	  *ppEnum = NULL;
 	}
 	
 	return hr;
