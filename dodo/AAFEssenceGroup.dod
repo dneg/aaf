@@ -49,7 +49,7 @@ adds the source clip specified in the choice argument as  a choice to the given 
     //@comm Replaces omfiMediaGroupNumRepresentations
 
 /****/
-AD_METHOD1(GetIndexedRepresentation,
+AD_METHOD2(GetIndexedRepresentation,
 [in], aafInt32, index,The 1-based index into the array,
 [out], AAFSegment *, result,The representation at that index,
 adds the source clip specified in the choice argument as  a choice to the given media group object.)
