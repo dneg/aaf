@@ -15,6 +15,15 @@ OBJ = o${PTFM_SUFX}
 AAF_LIB = a${PTFM_SUFX}
 EXE = x${PTFM_SUFX}
 
+RM = rm
+ECHO = echo
+CP = cp
+CAT = cat
+CHMOD = chmod
+MV = mv
+SH = sh
+TOUCH = touch
+
 CC = gcc
 LD = gcc
 AAF_CMD_LINK = ld
