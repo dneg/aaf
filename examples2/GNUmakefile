@@ -20,7 +20,7 @@
 #
 ###############################################################################
 
-ALL = axLib axDump axExample axMasterMobEx
+ALL = axLib axDump axExample axMasterMobEx axPluginInfo axPlugin
 
 all: $(ALL)
 
@@ -40,12 +40,22 @@ axExample:
 axMasterMobEx:
 	cd axMasterMobEx && $(MAKE)
 
+.PHONY: axPluginInfo
+axPluginInfo:
+	cd axPluginInfo && $(MAKE)
+
+.PHONY: axPlugin
+axPlugin:
+	cd axPlugin && $(MAKE)
+
 .PHONY: clean
 clean:
 	cd axLib && $(MAKE) GENDEPS=0 $@
 	cd axDump && $(MAKE) GENDEPS=0 $@
 	cd axExample && $(MAKE) GENDEPS=0 $@
 	cd axMasterMobEx && $(MAKE) GENDEPS=0 $@
+	cd axPluginInfo && $(MAKE) GENDEPS=0 $@
+	cd axPlugin && $(MAKE) GENDEPS=0 $@
 
 .PHONY:  realclean
 realclean:
@@ -53,6 +63,8 @@ realclean:
 	cd axDump && $(MAKE) GENDEPS=0 $@
 	cd axExample && $(MAKE) GENDEPS=0 $@
 	cd axMasterMobEx && $(MAKE) GENDEPS=0 $@
+	cd axPluginInfo && $(MAKE) GENDEPS=0 $@
+	cd axPlugin && $(MAKE) GENDEPS=0 $@
 
 
 
