@@ -99,8 +99,6 @@ AAFRESULT ImplAAFTypeDefStream::GetStreamPropertyValue(
   ImplAAFPropertyValue * pPropertyValue,
   ImplAAFStreamPropertyValue *& pStreamPropertyValue)
 {
-  AAFRESULT result = AAFRESULT_SUCCESS;
-  
   pStreamPropertyValue = NULL; // init out parameter
   
   if (NULL == pPropertyValue)
@@ -109,7 +107,7 @@ AAFRESULT ImplAAFTypeDefStream::GetStreamPropertyValue(
   // The stream property value's type should be this instance of 
   // ImplAAFTypeDefStream.
   ImplAAFTypeDefSP pPropertyValueType;
-  result = pPropertyValue->GetType(&pPropertyValueType);
+  pPropertyValue->GetType(&pPropertyValueType);
   if ((ImplAAFTypeDef *)pPropertyValueType != (ImplAAFTypeDef *)this)
     return AAFRESULT_INVALID_PARAM;
   
