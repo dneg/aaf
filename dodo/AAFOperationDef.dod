@@ -10,7 +10,7 @@ AD_HEAD
 AD_IDL(//
 // The IAAFOperationDef interface is implemented by objects that specify an
 // operation definition.  Operation definitions specify which parameters are possible
-// on an operation\, while an IAAFOperationGroup specifies specific parameters and input segments
+// on an operation\, while an AAFOperationGroup specifies specific parameters and input segments
 // for a particular operation invocation.
 //
 // In addition to the specific error results listed for each method\,
@@ -48,18 +48,19 @@ AD_XMETHOD1(GetDataDefinitionID,
 			[out],
 			objPass,
 			aafUID_t *,
-			ppDataDef,
+			ppDataDefID,
 			Returned DataDefinition object,
-			Places the IAAFDataDefinition object attached to this IAAFOperationDef into the
-  // *ppDataDef argument.  If none exists yet\, NULL is placed into the
-  // *ppDataDef argument.
-  //
-  // The returned IAAFDataDefinition object\, if it exists\, is
-  // AddRef\(\)ed before it is returned.
+			Places the ID of the DataDefinition object attached to this IAAFOperationDef into the
+  // *ppDataDef argument.  The data definition ID will be one of the AUIDs in the file AAFDataDefs.h\,
+  // \(which includes DDEF_PICTURE\, and DDEF_SOUND\)\, and indicates what type of data the operation
+  // will be performed upon.  For example\, a video dissolve will have the data def DEF_VIDEO.  If a
+  // data definition is used which is not from AAFDataDefs.h\, then the client is responsible for making
+  // sure that a data definition object with that ID exists in the dictionary.  The SDK will take care of
+  // creating the standard data definitions.
   //
   // Succeeds if all of the following are true:
-  // - the ppDataDef pointer is valid.
-  // - A valid IAAFDataDefinition exists.
+  // - the ppDataDefID pointer is valid.
+  // - A valid DataDefinition exists.
   // 
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect\, it will return the first one
@@ -74,7 +75,7 @@ AD_XMETHOD1(GetDataDefinitionID,
   // AAFRESULT_NULL_PARAM
   //   - ppDataDef is null.
   //
-  // AAFRESULT_NO_ESSENCE_DESC
+  // AAFRESULT_INVALID_DATA_DEF
   //   - There is no IAAFDataDefinition.  There has to be one of some
   //     kind for this to be a valid operation definition.)
 
@@ -85,7 +86,13 @@ AD_XMETHOD1(SetDataDefinitionID,
 			aafUID_t *,
 			pDataDef,
 			Essence Descriptor object,
-			Sets the IAAFDataDefinition of this IAAFOperationDef to be the given one.
+			Sets the IAAFDataDefinition of this IAAFOperationDef to be the given one\, by looking
+  // up the given AUID in the dictionary.  The data definition ID will be one of the AUIDs in the file AAFDataDefs.h\,
+  // \(which includes DDEF_PICTURE\, and DDEF_SOUND\)\, and indicates what type of data the operation
+  // will be performed upon.  For example\, a video dissolve will have the data def DEF_VIDEO.  If a
+  // data definition is used which is not from AAFDataDefs.h\, then the client is responsible for making
+  // sure that a data definition object with that ID exists in the dictionary.  The SDK will take care of
+  // creating the standard data definitions..
   //
   // Succeeds if all of the following are true:
   // - the pDataDef pointer is valid.
@@ -121,7 +128,7 @@ AD_METHOD1(IsTimeWarp,
   // encountered in the order given below:
   // 
   // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
+  //   - succeeded.  \\\(This is the only code indicating success.\\\)
   //
   // AAFRESULT_NULL_PARAM
   //   - bIsTimeWarp arg is NULL.)
@@ -234,7 +241,8 @@ AD_XMETHOD2(GetCategory,
   // pCategory buffer.  The buffer is allocated by the caller.  The size
   // of the buffer is given by bufSize.  If the property name has not
   // yet been set\, a zero-length string will be written \(that is\,
-  // only the trailing null character\).
+  // only the trailing null character\).  Standard categories may be found in
+  // the file AAFOperationCategories.h.
   // 
   // Caller may call GetCategoryBufLen\(\) to determine the
   // required buffer size.
@@ -297,7 +305,8 @@ AD_XMETHOD1(SetCategory,
 		   Sets the category of the operation definition. Category is a
   // name that describes  a group of operations.  A copy is made of the data so the caller
   // retains ownership of the *pCategory buffer and is responsible for
-  // de-allocating it. 
+  // de-allocating it.  Standard categories may be found in
+  // the file AAFOperationCategories.h.
   // 
   // Succeeds if all of the following are true:
   // - the pCategory pointer is valid.
@@ -363,7 +372,10 @@ AD_METHOD1(GetBypass,
 		   aafUInt32 *,
 		   pBypass,
 		   Pointer to a Bypass media segment index ,
-		   Gets the Bypass media segment index.
+		   Gets the Bypass media segment index\\\, which is a value from 0 to one less
+  // than that returned by GetNumberInputs\\\(\\\).  This value allows the client application
+  // to pick one of the inputs \\\(foreground\\\, background\\\, etc.\\\) to stand in for the effect if
+  // it is not available\\\, and none of the degrade to effects are available.
   // 
   // Succeeds if all of the following are true:
   // - the pBypass pointer is valid.
@@ -388,7 +400,10 @@ AD_METHOD1(SetBypass,
 		   aafUInt32,
 		   bypass,
 		   Bypass media segment index,
-		   Sets the media segment index.
+		   Sets the media segment index\\\, which is a value from 0 to one less
+  // than that returned by GetNumberInputs\\\(\\\).  This value allows the client application
+  // to pick one of the inputs \\\(foreground\\\, background\\\, etc.\\\) to stand in for the effect if
+  // it is not available\\\, and none of the degrade to effects are available.
   // 
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect\\\, it will return the first one
