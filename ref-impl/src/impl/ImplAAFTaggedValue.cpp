@@ -39,7 +39,6 @@
 
 #include "ImplAAFDictionary.h"
 #include "ImplAAFDataDef.h"
-#include "ImplAAFHeader.h"
 
 #include <assert.h>
 #include <string.h>
@@ -128,7 +127,6 @@ AAFRESULT STDMETHODCALLTYPE
 {
 	aafUID_t			defUID;
 	ImplAAFDictionary	*dict = NULL;
-	ImplAAFHeader		*head = NULL;
 
 	if(ppTypeDef == NULL)
 		return AAFRESULT_NULL_PARAM;
@@ -136,8 +134,7 @@ AAFRESULT STDMETHODCALLTYPE
 	XPROTECT()
 	{
 		defUID = _type;
-		CHECK(MyHeadObject(&head));
-		CHECK(head->GetDictionary(&dict));
+		CHECK(GetDictionary(&dict));
 		CHECK(dict->LookupTypeDef(defUID, ppTypeDef));
 	}
 	XEXCEPT
@@ -145,9 +142,6 @@ AAFRESULT STDMETHODCALLTYPE
 		if(dict != NULL)
 		  dict->ReleaseReference();
 		dict = 0;
-		if(head != NULL)
-		  head->ReleaseReference();
-		head = 0;
 	}
 	XEND;
 
