@@ -46,7 +46,7 @@ public:
          wchar_t *  pName,
 
          // @parm [in] Type definition of this tagged value object
-         ImplAAFTypeDef * pTypeDef);
+         aafUID_t * pDatadef);
 
   //****************
   // GetName()
