@@ -48,7 +48,6 @@ AAFPERSISTENTOBJECTS = \
 # These are all of the other non-persistent objects:
 AAFNONPERSISTENTOBJECTS = \
 	AAFRoot \
-	AAFEssenceAccess \
 	AAFEssenceFormat \
 	EnumAAFAttributes \
 	EnumAAFClassDefs \
@@ -81,6 +80,7 @@ HUMAN_TYPED_IMPL = \
 	AAFComponent \
 	AAFCompositionMob \
 	AAFContentStorage \
+	AAFEssenceAccess \
 	AAFEssenceData \
 	AAFEssenceDescriptor \
 	AAFFile \
