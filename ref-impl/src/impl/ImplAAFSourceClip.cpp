@@ -31,6 +31,7 @@
 #include "ImplAAFSourceClip.h"
 #endif
 
+#include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
 
 #include <assert.h>
@@ -317,19 +318,6 @@ AAFRESULT ImplAAFSourceClip::TraverseToClip(aafLength_t length,
 	return(OM_ERR_NONE);
 }
 
-extern "C" const aafClassID_t CLSID_AAFSourceClip;
 
-OMDEFINE_STORABLE(ImplAAFSourceClip, CLSID_AAFSourceClip);
-
-// Cheat!  We're using this object's CLSID instead of object class...
-AAFRESULT STDMETHODCALLTYPE
-ImplAAFSourceClip::GetObjectClass(aafUID_t * pClass)
-{
-  if (! pClass)
-	{
-	  return AAFRESULT_NULL_PARAM;
-	}
-  memcpy (pClass, &CLSID_AAFSourceClip, sizeof (aafClassID_t));
-  return AAFRESULT_SUCCESS;
-}
+OMDEFINE_STORABLE(ImplAAFSourceClip, AUID_AAFSourceClip);
 
