@@ -81,7 +81,7 @@ extern "C" HRESULT CAAFHTMLClip_test()
 {
   HRESULT hr = S_OK;
   aafProductIdentification_t	ProductInfo = {0};
-  aafWChar * pFileName = L"HTMLClipTest.aaf";
+  aafWChar * pFileName = L"AAFHTMLClipTest.aaf";
 
   // Initialize the product info for this module test
   ProductInfo.companyName = L"AAF Developers Desk";
