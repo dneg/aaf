@@ -92,7 +92,7 @@ void AxImplPlugin::GetIndexedDefinitionObject(
 	AxDictionary axDict( spDict );
 
 	// FIXME - The should be parameterized.  Not all plugins are
-	// or codecs.
+	// codecs.
 	IAAFCodecDefSP spCodecDef;
 	AxCreateInstance( spDict, spCodecDef );
 	AxCodecDef axCodecDef( spCodecDef );

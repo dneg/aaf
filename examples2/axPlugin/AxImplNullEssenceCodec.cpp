@@ -23,6 +23,7 @@
 #include <AxEssence.h>
 #include <AxMetaDef.h>
 #include <AxMob.h>
+#include <AxTypes.h>
 
 #include <AAFCodecDefs.h>
 #include <AAFDataDefs.h>
@@ -47,7 +48,8 @@ AxImplNullEssenceCodec::AxImplNullEssenceCodec()
 	_essenceDataAUID( AUID_AAFEssenceData ),
 	_essenceDataDefID( DDEF_Picture ),
 	_categoryClassAUID( AUID_AAFCodecDef ),
-	_pAccess( 0 )
+	_pAccess( 0 ),
+	_numSamples( 0 )
 {
 	// Init the flavours vector
 	// kAAFNilCodecFlavour must be supported
@@ -72,6 +74,7 @@ void AxImplNullEssenceCodec::InitFormatSpecifiers()
 #define _INIT( SPECIFIER, UID ) \
 	SPECIFIER.SetUID( UID ); \
 	_specifierMap[ UID ] = &SPECIFIER;
+	
 
 #define _INIT_RO( SPECIFIER, UID ) \
 	_INIT( SPECIFIER, UID ) \
@@ -126,12 +129,16 @@ void AxImplNullEssenceCodec::InitFormatSpecifiers()
 		_maxValBufSize = _legacyFlag.GetValBufSize();
 	}
 
-	// Constant read only format specifiers.
+	// Initialize
+	_componentWidth = 8;
+	_horizSubsampling = 1;
+	
+	// Initialize values of constant read only format specifiers.
 	_numChannels = 1;
 	_willTransferLines = false;
 	_isCompressed = false;
 
-	// Computed read only format specifiers.
+	// Computed read only format specifiers, default vaules.
 	_maxSampleBytes = 0;
 	_pixelSize = 24;
 }
@@ -182,6 +189,8 @@ IAAFCDCIDescriptorSP AxImplNullEssenceCodec::GetEssenceDescriptor( IAAFSourceMob
 
 void AxImplNullEssenceCodec::UpdateEssenceDescriptor( IAAFSourceMobSP spSourceMob )
 {
+	TRACE
+
 	AxCDCIDescriptor axDesc( GetEssenceDescriptor( spSourceMob ) );
 	
 	// Update FileDescriptor properties
@@ -475,10 +484,10 @@ void AxImplNullEssenceCodec::CompleteWrite(
 	// Perform final processing on _spStream.
 
 	// Update the essence descriptor.
-	IAAFSourceMobSP spSrcMob( pFileMob );
-	UpdateEssenceDescriptor( spSrcMob );
-		
-	CHECK_HRESULT( AAFRESULT_NOT_IMPLEMENTED );
+	if ( pFileMob ) {
+		IAAFSourceMobSP spSrcMob( pFileMob );
+		UpdateEssenceDescriptor( spSrcMob );
+	}
 }
 
 void AxImplNullEssenceCodec::CreateDescriptorFromStream(
@@ -510,7 +519,7 @@ void AxImplNullEssenceCodec::PutEssenceFormat(
 	for (i = 0; i < numSpecifiers; i++ ) {
 
 		aafUID_t uid;
-		std::auto_ptr<aafUInt8> valBuf( new aafUInt8( _maxValBufSize ) );
+		std::auto_ptr<aafUInt8> valBuf( new aafUInt8[ _maxValBufSize ] );
 		aafInt32 bytesRead;
 
 		CHECK_HRESULT(
@@ -537,6 +546,7 @@ void AxImplNullEssenceCodec::PutEssenceFormat(
 			}
 		}
 	}
+
 }
 	
 void AxImplNullEssenceCodec::GetEssenceFormat(

@@ -205,7 +205,7 @@ public:
 	STDMETHOD(CompleteWrite) (
 		IAAFSourceMob * pFileMob)
 	{
-		AX_PLUGIN_CHECK_NULL_PARAM( pFileMob );
+		// No check for null pFileMob.  It is optional, and may have a null value.
 		AX_PLUGIN_TRY( _impl, CompleteWrite, (pFileMob) );
 	}
 

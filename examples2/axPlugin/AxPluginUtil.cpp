@@ -70,9 +70,7 @@ int AxPluginNameMap::GetMaxStringSize()
 {
 	MaxIntFunc max;
 
-	std::for_each( begin(), end(), max );
-
-	return max.GetVal();
+	return std::for_each( begin(), end(), max ).GetVal();
 }
 
 int AxPluginNameMap::GetMaxCBufferSize()

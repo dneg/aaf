@@ -50,6 +50,7 @@ public:
 	}
 
 private:
+	
 	int _val;
 };
 
@@ -169,8 +170,6 @@ int AxPluginSpecifierMap::GetMaxValBufSize()
 {
 	MaxIntFunc max;
 
-	std::for_each( begin(), end(), max );
-
-	return max.GetVal();
+	return std::for_each( begin(), end(), max ).GetVal();
 }
 
