@@ -352,7 +352,9 @@ private:
 		                         aafLength_t& numberOfSamples);
 	HRESULT AllocateSampleIndex(const aafLength_t& numberOfSamples);
 	HRESULT ReadSampleIndex();
+	HRESULT ReadSampleIndex32(aafUInt16 fileByteOrder);
 	HRESULT WriteSampleIndex();
+	HRESULT WriteSampleIndex32();
 
 	// Helper utility to make sure the given descriptor information is synchronized
 	// with the current information in the codec. Called in CompleteWrite method.

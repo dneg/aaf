@@ -116,7 +116,9 @@ public:
 	STDMETHOD (GetColorRange) (aafUInt32 *  pColorRange);
 	STDMETHOD (SetPaddingBits) (aafInt16  PaddingBits);
 	STDMETHOD (GetPaddingBits) ( aafInt16 *  pPaddingBits);
-
+	STDMETHOD (GetOffsetFrameIndexes) (aafUInt32 * pOffset);
+	STDMETHOD (GetFrameIndexByteOrder) (aafUInt16 *byteOrder);
+	STDMETHOD (PutFrameIndexProperties) (aafUInt32 offset, aafUInt16 byteOrder);
 
 private:
 	IUnknown *_filemob_unk; // used for equality testing.
