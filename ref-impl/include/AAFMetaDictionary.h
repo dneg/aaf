@@ -48,7 +48,7 @@
 //
 // AAFMetaDict.csv 
 //
-// This file was generated on Wed Sep  1 16:53:09 BST 2004
+// This file was generated on Tue Sep  7 15:24:47 BST 2004
 // by user phil on system pilot16.
 //
 // Key to macros.
@@ -2995,6 +2995,16 @@ AAF_CLASS(CDCIDescriptor,
     false,
     false,
     CDCIDescriptor)
+  AAF_PROPERTY(ReversedByteOrder,
+    // {03010201-0A00-0000-060E-2B3401010102}
+    AAF_LITERAL_AUID(0x03010201,
+      0x0A00, 0x0000,
+      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x02),
+    0x330b,
+    AAF_TYPE(Boolean),
+    false,
+    false,
+    CDCIDescriptor)
 AAF_CLASS_END(CDCIDescriptor,
   // {0D010101-0101-2800-060E-2B3402060101}
   AAF_LITERAL_AUID(0x0D010101,
@@ -3040,6 +3050,56 @@ AAF_CLASS(RGBADescriptor,
       0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x02),
     0x3404,
     AAF_TYPE(RGBALayout),
+    false,
+    false,
+    RGBADescriptor)
+  AAF_PROPERTY(ScanningDirection,
+    // {04010404-0100-0000-060E-2B3401010102}
+    AAF_LITERAL_AUID(0x04010404,
+      0x0100, 0x0000,
+      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x02),
+    0x3405,
+    AAF_TYPE(ScanningDirectionType),
+    false,
+    false,
+    RGBADescriptor)
+  AAF_PROPERTY(ComponentMaxRef,
+    // {04010503-0B00-0000-060E-2B3401010102}
+    AAF_LITERAL_AUID(0x04010503,
+      0x0B00, 0x0000,
+      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x02),
+    0x3406,
+    AAF_TYPE(UInt32),
+    false,
+    false,
+    RGBADescriptor)
+  AAF_PROPERTY(ComponentMinRef,
+    // {04010503-0C00-0000-060E-2B3401010102}
+    AAF_LITERAL_AUID(0x04010503,
+      0x0C00, 0x0000,
+      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x02),
+    0x3407,
+    AAF_TYPE(UInt32),
+    false,
+    false,
+    RGBADescriptor)
+  AAF_PROPERTY(AlphaMaxRef,
+    // {04010503-0D00-0000-060E-2B3401010102}
+    AAF_LITERAL_AUID(0x04010503,
+      0x0D00, 0x0000,
+      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x02),
+    0x3408,
+    AAF_TYPE(UInt32),
+    false,
+    false,
+    RGBADescriptor)
+  AAF_PROPERTY(AlphaMinRef,
+    // {04010503-0E00-0000-060E-2B3401010102}
+    AAF_LITERAL_AUID(0x04010503,
+      0x0E00, 0x0000,
+      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x02),
+    0x3409,
+    AAF_TYPE(UInt32),
     false,
     false,
     RGBADescriptor)
@@ -5678,6 +5738,36 @@ AAF_TYPE_DEFINITION_ENUMERATION(SignalStandardType,
 AAF_TYPE_DEFINITION_ENUMERATION_END(SignalStandardType, 
   // {02010124-0000-0000-060E-2B3401040101}
   AAF_LITERAL_AUID(0x02010124,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x04, 0x01, 0x01), AAF_TYPE(UInt8))
+AAF_TYPE_SEPARATOR()
+
+// ScanningDirectionType
+//
+AAF_TYPE_DEFINITION_ENUMERATION(ScanningDirectionType, 
+  // {02010125-0000-0000-060E-2B3401040101}
+  AAF_LITERAL_AUID(0x02010125,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x04, 0x01, 0x01), AAF_TYPE(UInt8))
+  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(ScanningLeftToRightTopToBottom,
+    0, ScanningDirectionType)
+  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(ScanningRightToLeftTopToBottom,
+    1, ScanningDirectionType)
+  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(ScanningLeftToRightBottomToTop,
+    2, ScanningDirectionType)
+  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(ScanningRightToLeftBottomToTop,
+    3, ScanningDirectionType)
+  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(ScanningTopToBottomLeftToRight,
+    4, ScanningDirectionType)
+  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(ScanningTopToBottomRightToLeft,
+    5, ScanningDirectionType)
+  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(ScanningBottomToTopLeftToRight,
+    6, ScanningDirectionType)
+  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(ScanningBottomToTopRightToLeft,
+    7, ScanningDirectionType)
+AAF_TYPE_DEFINITION_ENUMERATION_END(ScanningDirectionType, 
+  // {02010125-0000-0000-060E-2B3401040101}
+  AAF_LITERAL_AUID(0x02010125,
     0x0000, 0x0000,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x04, 0x01, 0x01), AAF_TYPE(UInt8))
 AAF_TYPE_SEPARATOR()
