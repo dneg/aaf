@@ -28,7 +28,7 @@
 
 #include <assert.h>
 #include "AAFResult.h"
-
+#include "aafUtils.h"
 
 ImplAAFSourceReference::ImplAAFSourceReference ():
 	_sourceID(			PID_SourceReference_SourceID,		"SourceID"),
@@ -99,6 +99,15 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 
+AAFRESULT ImplAAFSourceReference::ChangeContainedReferences(aafUID_t *from, aafUID_t *to)
+{
+	aafUID_t			myID;
+
+	if(EqualAUID(&myID, from))
+		SetSourceID(*to);
+
+	return AAFRESULT_SUCCESS;
+}
 
 
 OMDEFINE_STORABLE(ImplAAFSourceReference, AUID_AAFSourceReference);
