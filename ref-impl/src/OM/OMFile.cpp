@@ -651,7 +651,7 @@ OMObjectDirectory* OMFile::objectDirectory(void)
 {
   TRACE("OMFile::objectDirectory");
 
-#if defined(OM_ENABLE_DEBUG)
+#if defined(OM_TRACK_OBJECTS)
   // Create the object directory on demand (debugging only) 
   if (_objectDirectory == 0) {
     _objectDirectory = new OMObjectDirectory();
