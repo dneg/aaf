@@ -65,6 +65,14 @@ public:
         (aafUInt32  HorizontalSubsampling);
 
   //****************
+  // SetVerticalSubsampling()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    SetVerticalSubsampling
+		// @parm [in] Integer value.
+        (aafUInt32  VerticalSubsampling);
+
+  //****************
   // SetColorSiting()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
@@ -121,6 +129,14 @@ public:
         (aafUInt32 *  pHorizontalSubsampling);
 
   //****************
+  // GetVerticalSubsampling()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetVerticalSubsampling
+		// @parm [out] Address to store the integer value.
+        (aafUInt32 *  pVerticalSubsampling);
+
+  //****************
   // GetColorSiting()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
@@ -163,6 +179,7 @@ public:
 protected:
 	OMFixedSizeProperty<aafInt32>			_componentWidth;
 	OMFixedSizeProperty<aafUInt32>			_horizontalSubsampling;
+	OMFixedSizeProperty<aafUInt32>			_verticalSubsampling;
 	OMFixedSizeProperty<aafColorSiting_t>	_colorSiting;
 	OMFixedSizeProperty<aafUInt32>			_blackReferenceLevel;
 	OMFixedSizeProperty<aafUInt32>			_whiteReferenceLevel;
