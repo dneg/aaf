@@ -437,25 +437,11 @@ private:
   //
   struct pvtObjFifo
   {
-	pvtObjFifo () : _putIdx (0), _getIdx (0) {}
+	pvtObjFifo ();
 
-	ImplAAFObjectSP GetNext (void)
-	{
-	  ImplAAFObjectSP result;
+	ImplAAFObjectSP GetNext (void);
 
-	  if (_getIdx < _putIdx)
-		result = _objs[_getIdx++];
-	  else
-		result = 0;
-
-	  return result;
-	}
-
-	void Append (ImplAAFObjectSP obj)
-	{
-	  assert (_putIdx < kPvtMaxInitObjs);
-	  _objs[_putIdx++] = obj;
-	}
+	void Append (ImplAAFObjectSP obj);
 
   private:
 	enum {
