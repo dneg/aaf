@@ -26,7 +26,6 @@ class ImplAAFMob;
 #include "OMProperty.h"
 
 
-#include "AAFPropertyIDs.h"
 
 
 class ImplAAFSourceClip : public ImplAAFSourceReference

@@ -25,7 +25,6 @@
 
 #include "OMStorable.h"
 
-#include "AAFPropertyIDs.h"
 
 class ImplAAFCompositionMob : public ImplAAFMob
 {
