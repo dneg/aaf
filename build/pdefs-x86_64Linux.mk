@@ -47,6 +47,6 @@
 #------------------------------------------------------------------------------
 include $(AAFBASE)/build/pdefs-i586Linux.mk
 
-PLATFORM_CFLAGS += -fPIC
+PLATFORM_CFLAGS += -fPIC -DIA_64
 
 REL_FLAGS += -march=k8
