@@ -238,6 +238,35 @@ const char* OMStorable::pathName(void) const
   return _pathName;
 }
 
+  // @mfunc Find the <c OMStorable> named <p objectName> contained
+  //        within this <c OMStorable>.
+  //   @parm The name of the object.
+  //   @rdesc The object.
+  //   @this const
+OMStorable* OMStorable::find(const char* objectName) const
+{
+  TRACE("OMStorable::find");
+
+  OMProperty* p = findProperty(objectName);
+  OMStorable* object = 0;
+  p->getBits((OMByte*)&object, sizeof(object)); // tjb Gak !
+  ASSERT("Valid object", object != 0);
+  return object;
+}
+
+  // @mfunc Find the <c OMProperty> named <p propertyName> contained
+  //        within this <c OMStorable>.
+  //   @parm The name of the property.
+  //   @rdesc The property.
+  //   @this const
+OMProperty* OMStorable::findProperty(const char* propertyName) const
+{
+  TRACE("OMStorable::findProperty");
+
+  OMProperty* result = _persistentProperties.get(propertyName);
+  return result;
+}
+
   // @mfunc Is this <c OMStorable> the root of the object
   //        containment hierarchy.
   //   @rdesc True if this is the root object, false otherwise.
