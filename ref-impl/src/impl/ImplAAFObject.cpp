@@ -102,6 +102,8 @@ private:
   aafUInt32           _numUsed;
   aafUInt32           _numAllocated;
   OMPropertySet     * _pOMPropSet;
+
+  
 };
 
 
@@ -403,6 +405,7 @@ ImplAAFObject::ImplAAFObject ()
 
   const aafUID_t null_uid = { 0 };
   _soid = null_uid;
+  _isInitialized = kAAFFalse;
 }
 
 
