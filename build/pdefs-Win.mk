@@ -35,7 +35,8 @@
 #
 # Sets:
 #	MIPS_ABI, COMPILER, PLATFORM_CFLAGS, RPATH_OPT, 
-#	LD, LD_STAT_LIB, LD_DYN_LIB, U_OPTS, OBJ, EXE, LIB, DLL, BYTE_ORDER
+#	LD, LD_STAT_LIB, LD_DYN_LIB, U_OPTS, OBJ, EXE, LIB, DLL, BYTE_ORDER,
+#	UUIDLIB
 #
 #------------------------------------------------------------------------------
 
@@ -77,6 +78,11 @@ endif
 # Command to link dynamic library
 ifndef LD_DYN_LIB
     LD_DYN_LIB = $(CC) -shared
+endif
+
+# UUID library to use
+ifndef UUIDLIB
+    UUIDLIB = 
 endif
 
 
