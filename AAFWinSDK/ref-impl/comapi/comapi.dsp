@@ -206,7 +206,15 @@ SOURCE="..\..\..\ref-impl\src\com-api\CAAFEssenceGroup.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFEssenceMultiAccess.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFEssencePlugin.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFEssenceRawAccess.cpp"
 # End Source File
 # Begin Source File
 
