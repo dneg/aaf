@@ -1,0 +1,31 @@
+How To Add A Node
+=================
+
+1) declare/define class in Aif2XtlParseTreeNodes.h
+
+Use Aif2XtlStandardNode<> to creat a node to represent any AAF object,
+or create a new class derived from AifParseTreeNode.
+
+If the template is used, add an explict template instance to
+Aif2XtlStandardNodeFactory.cpp
+
+2) Create a factory object for the node.  Add an explicit instance of
+   the Aif2XtlStandardNodeFactory in Aif2XtlParseTreeNodes.cpp.
+
+3) Add PreOrderVistit and PostOrderVisit methods to
+   Aif2XtlParseTreeVisitor and Aif2XtlDumpVisitor in
+   Aif2XtlParseTreeVisitor.h.  Use the file's _DEFINE_METHODS macro in
+   both cases.
+
+How To Create A New Visitor
+===========================
+
+1) Derive from Aif2XtlParseTreeVisitor.
+
+2) Declare PreOrderVisit and PostOrderVisit methods.  They take as
+   there only argument a reference to one of the nodes defined in
+   Aif2XtlParseTreeNodes.  See the base class, Aif2XtlParseTreeVisitor
+   to see the full set of visitor methods.
+
+
+
