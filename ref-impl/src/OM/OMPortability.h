@@ -32,6 +32,9 @@ const bool false = 0;
 const bool true = 1;
 #include <stdlib.h> // for size_t
 
+typedef unsigned long DWORD;
+typedef long HRESULT;
+
 #endif
 
 #endif
