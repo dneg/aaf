@@ -111,6 +111,15 @@ AAFRESULT STDMETHODCALLTYPE
   if (! pInPropVal) return AAFRESULT_NULL_PARAM;
   if (! ppOutPropVal) return AAFRESULT_NULL_PARAM;
 
+  // Get the property value's embedded type and 
+  // check if it's the same as the base type.
+  ImplAAFTypeDefSP pInPropType;
+  if( AAFRESULT_FAILED( pInPropVal->GetType( &pInPropType ) ) )
+	return AAFRESULT_BAD_TYPE;
+  assert (pInPropType);
+  if( (ImplAAFTypeDef *)pInPropType != this )
+	return AAFRESULT_BAD_TYPE;
+
   aafUInt32 inBitsSize;
   ImplAAFPropValDataSP pOutPVData;
   ImplAAFPropValDataSP pvd;

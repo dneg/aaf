@@ -314,6 +314,15 @@ ImplAAFTypeDefSet::AddElement (
   if (!pSetPropertyValue || !pElementPropertyValue)
     return AAFRESULT_NULL_PARAM;
 
+  // Get the property value's embedded type and 
+  // check if it's the same as the base type.
+  ImplAAFTypeDefSP pInPropType;
+  if( AAFRESULT_FAILED( pSetPropertyValue->GetType( &pInPropType ) ) )
+	return AAFRESULT_BAD_TYPE;
+  assert (pInPropType);
+  if( (ImplAAFTypeDef *)pInPropType != this )
+	return AAFRESULT_BAD_TYPE;
+
   assert (isInitialized());
   if (!isInitialized())
     return AAFRESULT_NOT_INITIALIZED;
@@ -338,6 +347,15 @@ ImplAAFTypeDefSet::RemoveElement(
 {
   if (!pSetPropertyValue || !pElementPropertyValue)
     return AAFRESULT_NULL_PARAM;
+
+  // Get the property value's embedded type and 
+  // check if it's the same as the base type.
+  ImplAAFTypeDefSP pInPropType;
+  if( AAFRESULT_FAILED( pSetPropertyValue->GetType( &pInPropType ) ) )
+	return AAFRESULT_BAD_TYPE;
+  assert (pInPropType);
+  if( (ImplAAFTypeDef *)pInPropType != this )
+	return AAFRESULT_BAD_TYPE;
 
   assert (isInitialized());
   if (!isInitialized())
@@ -366,6 +384,15 @@ ImplAAFTypeDefSet::ContainsElement(
   if (!pSetPropertyValue || !pElementPropertyValue || !pContainsElement)
     return AAFRESULT_NULL_PARAM;
 
+  // Get the property value's embedded type and 
+  // check if it's the same as the base type.
+  ImplAAFTypeDefSP pInPropType;
+  if( AAFRESULT_FAILED( pSetPropertyValue->GetType( &pInPropType ) ) )
+	return AAFRESULT_BAD_TYPE;
+  assert (pInPropType);
+  if( (ImplAAFTypeDef *)pInPropType != this )
+	return AAFRESULT_BAD_TYPE;
+
   assert (isInitialized());
   if (!isInitialized())
     return AAFRESULT_NOT_INITIALIZED;
@@ -390,6 +417,15 @@ ImplAAFTypeDefSet::GetCount (
 {
   if (!pSetPropertyValue || !pCount)
     return AAFRESULT_NULL_PARAM;
+
+  // Get the property value's embedded type and 
+  // check if it's the same as the base type.
+  ImplAAFTypeDefSP pInPropType;
+  if( AAFRESULT_FAILED( pSetPropertyValue->GetType( &pInPropType ) ) )
+	return AAFRESULT_BAD_TYPE;
+  assert (pInPropType);
+  if( (ImplAAFTypeDef *)pInPropType != this )
+	return AAFRESULT_BAD_TYPE;
 
   assert (isInitialized());
   if (!isInitialized())
@@ -452,6 +488,15 @@ AAFRESULT ImplAAFTypeDefSet::LookupElement (
   if (!pSetPropertyValue || !pKey || !ppElementPropertyValue)
     return AAFRESULT_NULL_PARAM;
 
+  // Get the property value's embedded type and 
+  // check if it's the same as the base type.
+  ImplAAFTypeDefSP pInPropType;
+  if( AAFRESULT_FAILED( pSetPropertyValue->GetType( &pInPropType ) ) )
+	return AAFRESULT_BAD_TYPE;
+  assert (pInPropType);
+  if( (ImplAAFTypeDef *)pInPropType != this )
+	return AAFRESULT_BAD_TYPE;
+
   assert (isInitialized());
   if (!isInitialized())
     return AAFRESULT_NOT_INITIALIZED;
@@ -478,6 +523,15 @@ AAFRESULT ImplAAFTypeDefSet::ContainsKey (
   if (!pSetPropertyValue || !pKey || !pContainsKey)
     return AAFRESULT_NULL_PARAM;
 
+  // Get the property value's embedded type and 
+  // check if it's the same as the base type.
+  ImplAAFTypeDefSP pInPropType;
+  if( AAFRESULT_FAILED( pSetPropertyValue->GetType( &pInPropType ) ) )
+	return AAFRESULT_BAD_TYPE;
+  assert (pInPropType);
+  if( (ImplAAFTypeDef *)pInPropType != this )
+	return AAFRESULT_BAD_TYPE;
+
   assert (isInitialized());
   if (!isInitialized())
     return AAFRESULT_NOT_INITIALIZED;
@@ -501,6 +555,15 @@ ImplAAFTypeDefSet::GetElements (
 {
   if (!pSetPropertyValue || !ppEnum)
     return AAFRESULT_NULL_PARAM;
+
+  // Get the property value's embedded type and 
+  // check if it's the same as the base type.
+  ImplAAFTypeDefSP pInPropType;
+  if( AAFRESULT_FAILED( pSetPropertyValue->GetType( &pInPropType ) ) )
+	return AAFRESULT_BAD_TYPE;
+  assert (pInPropType);
+  if( (ImplAAFTypeDef *)pInPropType != this )
+	return AAFRESULT_BAD_TYPE;
 
   assert (isInitialized());
   if (!isInitialized())
