@@ -26,10 +26,11 @@
 #include <AxMobSlot.h>
 #include <AxComponent.h>
 #include <AxEssence.h>
-#include <AAFEssenceFormats.h>
+#include <AxIterator.h>
 #include <AxEx.h>
 #include <AxUtil.h>
 
+#include <AAFEssenceFormats.h>
 #include <AAFStoredObjectIDs.h>
 #include <AAFTypeDefUIDs.h>
 #include <AAFDataDefs.h>
@@ -56,7 +57,7 @@ void AddImageEssence( AxMasterMob& masterMob,
 	
 	// FIXME - This should be moved to a centralized location rather than having
 	// options strings tested all over the place.
-	pair<bool,int> mpegCodecOpt = args.get( "-mpeg2" );
+	std::pair<bool,int> mpegCodecOpt = args.get( "-mpeg2" );
 	aafUID_t codec;
 
 #if 0

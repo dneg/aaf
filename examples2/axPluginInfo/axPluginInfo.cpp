@@ -26,6 +26,7 @@
 #include <AxDictionary.h>
 #include <AxPluginMgr.h>
 #include <AxEssence.h>
+#include <AxIterator.h>
 #include <AxMacMain.h>
 
 #include <iostream>
@@ -43,7 +44,7 @@ void throwUsage()
 
 void ProcessEssenceFlavours( AxCodecDef& axCodecDef )
 {
-	wcout << L"Essence Flavours:\t";
+	std::wcout << L"Essence Flavours:\t";
 
 	if ( axCodecDef.AreThereFlavours() ) {
 

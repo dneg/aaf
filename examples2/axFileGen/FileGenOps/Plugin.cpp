@@ -21,6 +21,7 @@
 #include <AxPluginMgr.h>
 #include <AxEssence.h>
 #include <AxDictionary.h>
+#include <AxIterator.h>
 
 #include "ParamMaps.h"
 

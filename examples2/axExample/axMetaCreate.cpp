@@ -197,7 +197,7 @@ void AxCreateMetaDataExample( AxFile& axFile,
 	aafUInt32 v_b = 0x87654321;
 	KLV klv_b( KLVKey_AxExampleData_A, sizeof(v_b), reinterpret_cast<aafUInt8*>(&v_b) );
 
-	vector< MobDescription* > descV;
+	std::vector< MobDescription* > descV;
 
 	descV.push_back( 
 		new MobDescription( L"Audio Mob A",
@@ -223,7 +223,7 @@ void AxCreateMetaDataExample( AxFile& axFile,
 				    L"Essence Comment", L"No essence data yet.",
 				    klv_a, klv_b  ) );
 
-	vector< MobDescription* >::const_iterator iter;
+	std::vector< MobDescription* >::const_iterator iter;
 	for( iter = descV.begin(); iter != descV.end(); ++iter ) {
 		AddMasterMob( axHeader, axDictionary, **iter );
 	}
