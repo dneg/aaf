@@ -23,7 +23,6 @@
 #endif
 
 #include "OMProperty.h"
-#include "OMTypes.h"
 
 const int PID_IDENTIFICATION_COMPANYNAME          = 0;
 const int PID_IDENTIFICATION_PRODUCTNAME          = 1;
