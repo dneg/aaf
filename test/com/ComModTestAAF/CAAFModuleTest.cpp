@@ -19,6 +19,7 @@
 #include <iostream.h>
 #include <iomanip.h>
 #include <string.h>
+#include "AAFResult.h"
 
 
 //
@@ -114,9 +115,9 @@ STDMETHODIMP CAAFModuleTest::Test
 	aafInt16 	testCount = 0;	/* total number of Mod test objects attemped to find */
 	aafInt16	passCount = 0;	/* number of tests that succeeded */
 	aafInt16	failCount = 0;	/* number of tests that failed */
-	aafInt16	runCount = 0;	/* number of tests that were run */
 	aafInt16	nImplCount = 0;	/* number of tests not implemented */
 	aafInt32	index = 0;		/* General purpose index counter */ 
+	aafInt16	partialSuccessCount = 0;	/*number of tests that partially succeeded */
 
 	testResults[0] = NULL;
 
@@ -136,6 +137,8 @@ STDMETHODIMP CAAFModuleTest::Test
 					cout << "FAILED!" << endl;
 				else if (AAFRESULT_NOT_IMPLEMENTED == hr)
 					cout << "NOT IMPLEMENTED!" << endl;
+				else if ( AAFRESULT_TEST_PARTIAL_SUCCESS == testResults[testCount] )
+					cout<< "PARTIAL SUCCESS";
 				else
 					cout << "SUCCEEDED." << endl;
 
@@ -148,53 +151,68 @@ STDMETHODIMP CAAFModuleTest::Test
 	}
 	else
 	{
+		cout<< "Running Module tests ....  please wait\n"<< endl;
+
 		while (NULL != AAFObjectMap[testCount].pCLSID && MAX_TEST_COUNT > testCount)
 		{
-			cout << "Running module test for " << setiosflags(ios::left) << setw(30) << AAFObjectMap[testCount].pClassName;
-
 			testResults[testCount] = AAFObjectMap[testCount].pfnTestProc();
-			if ( AAFRESULT_SUCCESS == testResults[testCount] )
-				cout<< "SUCCEEDED." << endl;
-			else if ( AAFRESULT_NOT_IMPLEMENTED == testResults[testCount] )
-				cout<< "NOT IMPLEMENTED!" << endl;
-			else if ( FAILED(testResults[testCount]) )
-				cout<< "FAILED" << endl;
-			else
-				cout<< "UNKNOWN HRESULT!" << endl;
 
 			++testCount;
 			if ( MAX_TEST_COUNT <= testCount ) 
 				cout << "\n\nMAX_TEST_COUNT has been reached\n";
 		}
+		cout<< "Module tests completed\n\n"<< endl;
 
-		/* Tally the hresult stats */
-		for (index = 0; index < testCount; ++index)
-		{
-			if (AAFRESULT_SUCCESS == testResults[index])
-				++passCount;
-			else if (AAFRESULT_NOT_IMPLEMENTED == testResults[index])
-				++nImplCount;
-			else if (0 > testResults[index])
-				++failCount;
-		}
-		runCount = passCount + nImplCount + failCount;
+		for ( index = 0; index < testCount; ++index )
+			if ( AAFRESULT_SUCCESS == testResults[index] )
+			{
+				cout<< setiosflags(ios::left)<< setw(4)<< ++passCount;  
+				cout<< setw(30) << AAFObjectMap[index].pClassName;
+				cout<< "SUCCEEDED." << endl;
+			}
+
+		for ( index = 0; index < testCount; ++index )
+			if ( AAFRESULT_TEST_PARTIAL_SUCCESS == testResults[index] )
+			{
+				cout<< setiosflags(ios::left)<< setw(4)<< ++partialSuccessCount + passCount;  
+				cout<< setw(30) << AAFObjectMap[index].pClassName;
+				cout<< "Partial Success." << endl;
+			}
+
+		for ( index = 0; index < testCount; ++index )
+			if ( AAFRESULT_SUCCESS != testResults[index] &&
+				 AAFRESULT_NOT_IMPLEMENTED != testResults[index] &&
+				 AAFRESULT_TEST_PARTIAL_SUCCESS != testResults[index] )
+			{
+				cout<< setiosflags(ios::left)<< setw(4)<< ++failCount + partialSuccessCount + passCount;  
+				cout<< setw(30) << AAFObjectMap[index].pClassName;
+				cout<< "FAILED" << endl;
+			}
+
+		for ( index = 0; index < testCount; ++index )
+			if ( AAFRESULT_NOT_IMPLEMENTED == testResults[index])
+			{
+				cout<< setiosflags(ios::left)<< setw(4)<< ++nImplCount + failCount + partialSuccessCount + passCount;  
+				cout<< setw(30) << AAFObjectMap[index].pClassName;
+				cout<< "Not Implemented!" << endl;
+			}
+
 
 		cout<< "\n\n";
-		cout<< setw(20)<< "  Tests Run:"<< runCount << endl;
+		cout<< setw(20)<< "  Tests Run:"<< testCount << endl;
 		cout<< setw(20)<< "  Passed:"<< passCount << endl;
-		cout<< setw(20)<< "  Failed:"<< failCount << endl; 
-		cout<< setw(20)<< "  Not Implemented:"<< nImplCount<< endl<< endl;
+		cout<< setw(20)<< "  Failed:"<< failCount << endl;
+		cout<< setw(20)<< "  Not Implemented:"<< nImplCount<< endl;
 
-		if (runCount != testCount)
-			cout<< setw(20)<< "  Unknown HRESULTS:"<< testCount - runCount<< endl << endl;	
-
-		if ( failCount > 0 )
+		if (partialSuccessCount > 0 )
 		{
-			cout<< "\nList of tests that failed" << endl;
-			for ( index = 0; index <= testCount; ++index )
-				if (0 > testResults[index])
-					cout<< AAFObjectMap[index].pClassName << "	"<< endl;
+			cout<< setw(20)<< "  Partial Success:"<< partialSuccessCount<< endl;
+			cout<< "\n  Note: Partial Success means:"<< endl;
+			cout<< "       All currently implemented tests succeed"<< endl;
+			cout<< "       More tests need to be implemented\n"<<endl;
 		}
+
+		
 	}
 
 	return hr;
