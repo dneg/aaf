@@ -47,7 +47,6 @@ AAFPERSISTENTOBJECTS = \
 	AAFTimecode \
 	AAFTimecodeStream \
 	AAFTimecodeStream12M \
-	AAFTimelineMobSlot \
 	AAFTransition \
 	AAFTypeDef \
 	AAFUnixLocator \
@@ -94,6 +93,7 @@ HUMAN_TYPED_IMPL = \
 	AAFMob  \
 	AAFSegment \
 	AAFMobSlot \
+	AAFTimelineMobSlot \
 	AAFSession
 
 
