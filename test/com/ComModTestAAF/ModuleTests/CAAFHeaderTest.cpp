@@ -105,7 +105,9 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	IAAFHeader *				pHeader = NULL;
 	aafProductIdentification_t	ProductInfo;
 	aafNumSlots_t				numMobs;
+#ifdef FULL_TOOLKIT
 	IAAFMob						*pMob;
+#endif
 	aafUID_t					checkUID;
 
 	HRESULT						hr;
