@@ -23,7 +23,6 @@
 #include "AxTypes.h"
 #include "AxSmartPointer.h"
 #include "AxBaseObj.h"
-#include "AxIterator.h"
 
 #include <memory>
 
@@ -35,15 +34,11 @@ public:
 	AxObject( IAAFObjectSP spIaafObject );
 	virtual ~AxObject();
 
-    AxString GetClassName();
+	AxString GetClassName();
 	IAAFDictionarySP GetDictionary();
 
-	AxPropertyIter CreatePropertyIter();
-#if 0
-    IAAFPropertyDefSP RegisterOptionalPropertyDef ( aafUID_constref  id,
-									   const AxString& name,
-									   IAAFTypeDefSP spTypeDef );
-#endif
+	IEnumAAFPropertiesSP GetProperties();
+
 	inline operator IAAFObjectSP ()
 	{ return _spIaafObject; }
 
