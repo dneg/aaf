@@ -35,20 +35,19 @@ ImplAAFMasterMob::~ImplAAFMasterMob ()
 // AddMasterSlot()
 //
 // This function adds a slot to the specified Master Mob that
-// references the specified File Source Mob. The new slot in the
-// Master Mob contains a Source Clip that specifies the File Source
-// Mob in its source reference properties. Typically this is done
-// automatically by passing the Master Mob handle to
-// omfmMedia-Create, but this function allows you to add it later.
+// references the specified a slot in the specified Source Mob. The
+// new slot in the Master Mob contains a Source Clip that specifies
+// the Source Mob in its source reference properties.
 //
-// Note: The mediaKind  parameter requires a data kind valid for a
-// media stream. Valid data kinds are:
-// - Picture
-// - Sound
+// The pDataDef parameter requires a data kind valid for a media
+// stream. Valid data kinds are:
+//
+// - DDEF_Video
+// - DDEF_Audio
 //
 // Note: If pSlotName is passed in with zero length, then the
 // slot is not assigned a name.  Slot names are not used by the
-// Toolkit, and exist only so the user can name slots.
+// SDK, and exist only so the user can name slots.
 // 
 // Succeeds if all of the following are true:
 // (more conditions here)
@@ -62,46 +61,74 @@ ImplAAFMasterMob::~ImplAAFMasterMob ()
 // AAFRESULT_SUCCESS
 //   - succeeded.  (This is the only code indicating success.)
 //
-// (more results here)
+// AAFRESULT_NULL_PARAM
+//   - One or more of the following parameters are NULL pSourceMob,
+//     pDataDef, and pSlotName.
+//
+// AAFRESULT_INVALID_DATAKIND
+//   - The data kind of the source MOB slot to be added to the Master
+//     Mob does not match what is specfied in pDataDef.
+//
+// AAFRESULT_SLOT_NOTFOUND
+//   - The specified Source Mob slot was not found.
+//
+// AAFRESULT_SLOT_EXISTS
+//   - The specified Master slot ID already exists.
+//
 // 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFMasterMob::AddMasterSlot (aafUID_t*			pDataDef,
-									 aafSlotID_t		slotID,
-									 aafSlotID_t		fileSlotID,
-									 aafWChar*			pSlotName,
-									 ImplAAFSourceMob*	pFileMob)
+									 aafSlotID_t		sourceSlotID,
+									 ImplAAFSourceMob*	pSourceMob,
+									 aafSlotID_t		masterSlotID,
+									 aafWChar*			pSlotName)
 {
-	ImplAAFSegment			*pSegment = NULL;
-	ImplAAFSourceClip		*pSrcClip = NULL;
-	ImplAAFMobSlot			*pMobSlot = NULL;
-	aafLength_t				slotLength;
-	aafPosition_t			zeroPos;
-	aafSourceRef_t			ref;
-	aafUID_t				fileMobID;
-	aafUID_t				DataDef;
+	aafLength_t	slotLength;
+	aafUID_t	sourceMobID;
+	HRESULT		hr;
 
-	if (!pDataDef || !pFileMob)
+	if (!pDataDef || !pSourceMob || !pSlotName)
 		return AAFRESULT_NULL_PARAM;
 
-	XPROTECT()
+	// Get the slot length and mob id.  Verify that data kind
+	// of the slot is the same as pDataDef
+	hr = pSourceMob->GetMobID(&sourceMobID);
+	if (SUCCEEDED(hr))
 	{
-		CHECK(pFileMob->GetMobID(&fileMobID));
-		CHECK(pFileMob->FindSlotBySlotID(fileSlotID, &pMobSlot));
-		CHECK(pMobSlot->GetSegment(&pSegment));
-		CHECK(pSegment->GetLength(&slotLength));
-		CHECK(pSegment->GetDataDef(&DataDef));
+		ImplAAFMobSlot*	pMobSlot;
 
-		pSegment->ReleaseRef();
-		pMobSlot->ReleaseRef();
-		
-		// Make sure the slot contains the expected media type.
-		if (memcmp(&DataDef, pDataDef, sizeof(aafUID_t)) != 0)
-			return AAFRESULT_INVALID_DATAKIND;
+		hr = pSourceMob->FindSlotBySlotID(sourceSlotID, &pMobSlot);
+		if (SUCCEEDED(hr))
+		{
+			ImplAAFSegment*	pSegment;
+
+			hr = pMobSlot->GetSegment(&pSegment);
+			if (SUCCEEDED(hr))
+			{
+				aafUID_t	DataDef;
+
+				pSegment->GetLength(&slotLength);
+				pSegment->GetDataDef(&DataDef);
+				pSegment->ReleaseRef();
+
+				// Make sure the slot contains the expected media type.
+				if (memcmp(&DataDef, pDataDef, sizeof(aafUID_t)) != 0)
+					hr = AAFRESULT_INVALID_DATAKIND;
+			}
+			pMobSlot->ReleaseRef();
+		}
+	}
+
+	// Add the master slot
+	if (SUCCEEDED(hr))
+	{
+		ImplAAFSourceClip*	pSrcClip;
+		aafSourceRef_t		ref;
+		aafPosition_t		zeroPos;
 
 		CvtInt32toPosition(0, zeroPos);
-
-		ref.sourceID = fileMobID;
-		ref.sourceSlotID = fileSlotID;
+		ref.sourceID = sourceMobID;
+		ref.sourceSlotID = sourceSlotID;
 		ref.startTime = zeroPos;
 
 		pSrcClip = (ImplAAFSourceClip *)CreateImpl(CLSID_AAFSourceClip);
@@ -109,21 +136,19 @@ AAFRESULT STDMETHODCALLTYPE
 		{
 			ImplAAFMobSlot	*pNewSlot = NULL;
 
-			CHECK(pSrcClip->InitializeSourceClip(pDataDef, &slotLength, ref));
-			CHECK(AppendNewSlot(pSrcClip, slotID, pSlotName, &pNewSlot));
-
-			pNewSlot->ReleaseRef();
+			hr = pSrcClip->InitializeSourceClip(pDataDef, &slotLength, ref);
+			if (SUCCEEDED(hr))
+			{
+				hr = AppendNewSlot(pSrcClip, masterSlotID, pSlotName, &pNewSlot);
+				if (SUCCEEDED(hr))
+					pNewSlot->ReleaseRef();
+			}
 			pSrcClip->ReleaseRef();
 		}
+	}
 
-	} /* XPROTECT */
-	XEXCEPT
-	XEND;
-
-	return AAFRESULT_SUCCESS;
+	return hr;
 }
-
-
 
 //***********************************************************
 //
@@ -156,45 +181,22 @@ AAFRESULT STDMETHODCALLTYPE
 // AAFRESULT_NULL_PARAM
 //   - pTapeName arg is NULL.
 //
+// AAFRESULT_SLOT_NOTFOUND
+//   - The specified Master Slot was not found.
+//
+// AAFRESULT_NOT_TAPEMOB
+//   - The specified Master Slot does not contain a Tape MOB.
+//
 // AAFRESULT_SMALLBUF
 //   - bufSize indicates the buffer is too small to hold the string.
+//
 // 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFMasterMob::GetTapeName (aafInt32		masterSlotID,
 								   aafWChar*	pTapeName,
 								   aafInt32		bufSize)
 {
-#if FULLTOOLKIT
-//	ImplAAFFindSourceInfo*	pSourceInfo;
-	ImplAAFSourceClip*	pSrcClip = NULL;
-	aafSourceRef_t		ref;
-//	aafPosition_t			zeroPos;
-	
-	XPROTECT()
-	{
-		CHECK(GetRepresentationSourceClip (masterSlotID, 0, &pSrcClip));
-		CHECK(pSrcClip->GetRef(&ref));
-
-
-//		CvtInt32toPosition(0, zeroPos);
-
-//		CHECK(SearchSource(masterSlotID, zeroPos, kTapeMob, NULL, NULL, NULL, &pSourceInfo));
-
-		// TODO: Need to implement ImplAAFFindSourceInfo, there are currently no methods.
-		//CHECK(pSourceInfo->mob->GetName(pTapeName, bufSize));
-
-		// TODO: Release reference to source info
-		//if (pSourceInfo)
-		//	pSourceInfo->ReleaseObject();
-
-	}
-	XEXCEPT
-	XEND
-	
-	return AAFRESULT_SUCCESS;
-#else
 	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
 }
 
 
@@ -221,40 +223,20 @@ AAFRESULT STDMETHODCALLTYPE
 //
 // AAFRESULT_NULL_PARAM
 //   - pLen arg is NULL.
+//
+// AAFRESULT_SLOT_NOTFOUND
+//   - The specified Master Slot was not found.
+//
+// AAFRESULT_NOT_TAPEMOB
+//   - The specified Master Slot does not contain a Tape MOB.
+//
 // 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFMasterMob::GetTapeNameBufLen (aafInt32	masterSlotID,
 										 aafInt32*  pLen)
 {
-#if FULLTOOLKIT
-	aafSlotID_t				slotID = 0;
- 	aafPosition_t			zeroPos;
-	ImplAAFFindSourceInfo*	pSourceInfo;
-	
-	XPROTECT()
-	{
-		CvtInt32toPosition(0, zeroPos);
-
-		CHECK(GetNameLen(pLen));
-
-		// TODO: need to implement ImplAAFFindSourceInfo
-		CHECK(SearchSource(slotID, zeroPos, kTapeMob, NULL, NULL, NULL, &pSourceInfo));
-		//CHECK(pSourceInfo->mob->GetNameLen(pLen));
-
-		// TODO: Release reference to source info
-		//if (pSourceInfo)
-		//	pSourceInfo->ReleaseObject();
-	}
-	XEXCEPT
-	XEND
-	
-	return AAFRESULT_SUCCESS;
-#else
 	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
 }
-
-
 
 //***********************************************************
 //
@@ -262,12 +244,7 @@ AAFRESULT STDMETHODCALLTYPE
 //
 // This function returns the number of media representations
 // available for the specified SlotID on a specified Master
-// Mob. This function is meant to work with
-// GetRepresentationSourceClip, so that you can iterate through
-// all of the choices yourself.  In most cases, you can use
-// GetCriteriaSourceClip to handle multiple
-// representations. this function and
-// GetRepresentationSourceClip are lower-level functions.
+// Mob.
 //
 // Succeeds if all of the following are true:
 // - the pNumReps pointer is valid.
@@ -283,6 +260,10 @@ AAFRESULT STDMETHODCALLTYPE
 //
 // AAFRESULT_NULL_PARAM
 //   - pNumReps arg is NULL.
+//
+// AAFRESULT_SLOT_NOTFOUND
+//   - The specified Master Slot was not found.
+//
 // 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFMasterMob::GetNumRepresentations (aafSlotID_t	slotID,
@@ -290,26 +271,27 @@ AAFRESULT STDMETHODCALLTYPE
 {
 	ImplAAFMobSlot	*pSlot = NULL;
    	ImplAAFSegment	*pSegment = NULL;
+	HRESULT			hr;
 	
 	if (!pNumReps)
 		return AAFRESULT_NULL_PARAM;
 
 	*pNumReps = 0;
 	
-	XPROTECT()
+	hr = FindSlotBySlotID(slotID, &pSlot);
+	if (SUCCEEDED(hr))
 	{
-		CHECK(FindSlotBySlotID(slotID, &pSlot));
-		CHECK(pSlot->GetSegment(&pSegment));
-		CHECK(pSegment->NumRepresentations(pNumReps));
-		pSegment->ReleaseRef();
+		hr = pSlot->GetSegment(&pSegment);
+		if (SUCCEEDED(hr))
+		{
+			hr = pSegment->NumRepresentations(pNumReps);
+			pSegment->ReleaseRef();
+		}
 		pSlot->ReleaseRef();
 	}
-	XEXCEPT
-	XEND
 
-	return AAFRESULT_SUCCESS;
+	return hr;
 }
-
 
 //***********************************************************
 //
@@ -321,9 +303,7 @@ AAFRESULT STDMETHODCALLTYPE
 // of the choices yourself.  This method uses an integer index, not
 // an iterator.  The function GetRepresentationSourceClip takes an
 // index between 1 and the number of representations [inclusive],
-// and returns the indexed File Source Mob. You can make calls to
-// functions such as omfmGetVideoInfo and omfmIsMediaContiguous to
-// determine which media is the best fit.
+// and returns the indexed Source Mob.
 //
 // Succeeds if all of the following are true:
 // - the ppSourceClip pointer is valid.
@@ -339,74 +319,30 @@ AAFRESULT STDMETHODCALLTYPE
 //
 // AAFRESULT_NULL_PARAM
 //   - ppSourceClip arg is NULL.
-// 
+//
+// AAFRESULT_SLOT_NOTFOUND
+//   - The specified Master Slot was not found.
+//
+// AAFRESULT_BADINDEX
+//   - No Source Mob at specified index.
+//
 // AAFRESULT_MISSING_MEDIA_REP
-//   - add this to idl
+//   - TODO: add this to idl
 //
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFMasterMob::GetRepresentationSourceClip (aafSlotID_t			slotID,
 												   aafInt32				index,
 												   ImplAAFSourceClip**	ppSourceClip)
 {
-#if FULLTOOLKIT
-	ImplAAFMobSlot	*pSlot = NULL;
-  	ImplAAFSegment	*pSegment = NULL;
-	implCompType_t	compType;
-	HRESULT			hr = AAFRESULT_SUCCESS;
-	
-	if (!ppSourceClip)
-		return AAFRESULT_NULL_PARAM;
-
-	*ppSourceClip = NULL;
-		
-	XPROTECT()
-	{
-		CHECK(FindSlotBySlotID(slotID, &pSlot));
-		CHECK(pSlot->GetSegment(&pSegment));
-		pSegment->GetCompType(&compType);
-//		if(compType == kEssenceGroup)
-//		{
-//			aafNumSlots_t	numReps;
-//
-//			numReps = pSegment->GetObjRefArrayLength(OMMGRPChoices);
-//			if(index >= 1 && index <= numReps)
-//			{
-//				ImplAAFObject	*pTmp;
-//
-//				CHECK(pSegment->ReadNthObjRefArray(OMMGRPChoices, &pTmp, index));
-//				*sourceClip = (AAFSourceClip *)pTmp;
-//			}
-//			else
-//				status = AAFRESULT_MISSING_MEDIA_REP;
-//		}
-//		else
-		{
-			*ppSourceClip = static_cast<ImplAAFSourceClip*> (pSegment);	//!!CASTING
-		}
-
-		// TODO: Release reference to segment if error occurred
-		//if (pSegment && status != AAFRESULT_SUCCESS)
-		//	pSegment->ReleaseObject();
-
-		pSlot->ReleaseRef();
-	}
-	XEXCEPT
-	XEND
-	
-	return hr;
-#else
 	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
 }
-
-
 
 //***********************************************************
 //
 // GetCriteriaSourceClip()
 //
 // Returns the Source Clip on the specified slot of a Master Mob
-// that references the File Source Mob that best meets the specified
+// that references the Source Mob that best meets the specified
 // criteria.  This function will work whether multiple media
 // representations exist or not.
 //
@@ -443,136 +379,57 @@ AAFRESULT STDMETHODCALLTYPE
 //
 // AAFRESULT_NULL_PARAM
 //   - ppSourceClip arg is NULL.
+//
+// AAFRESULT_SLOT_NOTFOUND
+//   - The specified Master Slot was not found.
+//
 // 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFMasterMob::GetCriteriaSourceClip (aafSlotID_t			slotID,
 											 aafMediaCriteria_t*	pCriteria,
 											 ImplAAFSourceClip**	ppSourceClip)
 {
-#if FULLTOOLKIT
-	aafInt32				n, numReps, score, highestScore;
-	aafBool				isAAF;
-	ImplAAFFile *				dataFile;
-	ImplAAFObject			*mdes;
-	ImplAAFMob				*fileMob;
-	ImplAAFSourceClip		*highestScoreSourceClip, *sourceClip;
-	aafCodecID_t		codecID;
-	aafCodecSelectInfo_t selectInfo;
-	
-	if ( !pCriteria || !ppSourceClip)
-		return AAFRESULT_NULL_PARAM;
-
-	highestScore = 0;
-	highestScoreSourceClip = NULL;
-	*ppSourceClip = NULL;
-		
-	XPROTECT()
-	{
-		CHECK(GetNumRepresentations(slotID, &numReps));
-		for(n = 1; n <= numReps; n++)
-		{
-			CHECK(GetRepresentationSourceClip(slotID, n, &sourceClip));
-			if(numReps == 1)
-			{
-				highestScoreSourceClip = sourceClip;
-				break;
-			}
-			CHECK(sourceClip->ResolveRef(&fileMob));
-				
-			CHECK(((AAFFileMob *)fileMob)->ReadObjRef(OMSMOBMediaDescription, &mdes));
-			codecID = NULL;
-	
-#if 0	//!!!
-			CHECK(mdes->GetClassID(mdesTag));
-			CHECK(TableFirstEntryMatching(_file->_session->_codecMDES, &iter, 
-														 mdesTag, &more));
-			while(more && (codecID == NULL))
-			{
-				codecPtr = (codecTable_t *)iter.valuePtr;
-				CHECK(codecGetSelectInfo(file, codecPtr, mdes, &selectInfo));
-				if(selectInfo.willHandleMDES)
-				{
-					CHECK(codecGetMetaInfo(file->session, codecPtr, NULL, 0,
-													&meta));
-					codecID = meta.codecID;
-				}
-			
-				CHECK(TableNextEntry(&iter, &more));
-			}
-			if(codecID == NULL)
-				continue;
-#endif
-				
-			/* Check for locator file existance & continue if not present
-			 * A file which is supposed to be an AAF file must be opened
-			 * to check for the existance of the data object, so we must
-			 * open the file here.
-			 */
-			CHECK(((AAFFileMob *)fileMob)->LocateMediaFile(&dataFile, &isAAF));
-			if(dataFile == NULL)
-				continue;
-			if(dataFile != _file)
-				dataFile->Close();
-
-			score = 0;
-			switch(criteria->type)
-			{
-			case kAAFAnyRepresentation:
-				break;
-				
-			case kAAFFastestRepresentation:
-				if(selectInfo.hwAssisted)
-					score += 10;
-				if(selectInfo.isNative)
-					score += 10;
-				break;
-				
-			case kAAFBestFidelityRepresentation:
-				score = (100 - selectInfo.relativeLoss);
-				break;
-				
-			case kAAFSmallestRepresentation:
-				score = -1 * selectInfo.avgBitsPerSec;
-				break;
-				
-			case kAAFUseRepresentationProc:
-				score = (*criteria->proc)(_file, mdes, codecID);
-				break;
-			}
-	
-			if((score > highestScore) || (highestScoreSourceClip == NULL))
-			{
-				highestScore = score;
-				highestScoreSourceClip = sourceClip;
-			}
-		}
-	}
-	XEXCEPT
-	XEND
-		
-	*retSrcClip = highestScoreSourceClip;
-	return AAFRESULT_SUCCESS;
-#else
 	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
 }
 
 
 
+//***********************************************************
+//
+// SearchSource()
+//
+// AAFRESULT_SUCCESS
+//   - succeeded.  (This is the only code indicating success.)
+//
+// AAFRESULT_NULL_PARAM
+//   - ppSourceClip arg is NULL.
+//
+// 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFMasterMob::SearchSource (aafSlotID_t  /*slotID*/,
-                           aafPosition_t  /*offset*/,
-                           aafMobKind_t  /*mobKind*/,
-                           aafMediaCriteria_t *  /*pMediaCrit*/,
-                           aafEffectChoice_t *  /*pEffectChoice*/,
-                           ImplAAFComponent ** /*ppThisCpnt*/,
-                           ImplAAFFindSourceInfo ** /*ppSourceInfo*/)
+    ImplAAFMasterMob::SearchSource (aafSlotID_t				slotID,
+									aafPosition_t			offset,
+									aafMobKind_t			mobKind,
+									aafMediaCriteria_t*		pMediaCrit,
+									aafEffectChoice_t*		pEffectChoice,
+									ImplAAFComponent**		ppThisCpnt,
+									ImplAAFFindSourceInfo**	ppSourceInfo)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
 
-
-
+//***********************************************************
+//
+// GetMobKind()
+//
+// Returns kMasterMob in *pMobKind.
+// 
+// AAFRESULT_SUCCESS
+//   - succeeded.  (This is the only code indicating success.)
+//
+// AAFRESULT_NULL_PARAM
+//   - ppSourceClip arg is NULL.
+//
+// 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFMasterMob::GetMobKind (aafMobKind_t *pMobKind)
 {
