@@ -9,7 +9,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -45,6 +45,24 @@ _isIdentified(		PID_ContainerDefinition_EssenceIsIdentified, "EssenceIsIdentifie
 
 ImplAAFContainerDef::~ImplAAFContainerDef ()
 {}
+
+  
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFContainerDef::Initialize (
+      const aafUID_t & id,
+	  const aafWChar * pName,
+	  const aafWChar * pDesc)
+{
+	if (pName == NULL || pDesc == NULL)
+	{
+	  return AAFRESULT_NULL_PARAM;
+	}
+	else
+	{
+	  return pvtInitialize(id, pName, pDesc);
+	}
+	return AAFRESULT_SUCCESS;
+}
 
 
 AAFRESULT STDMETHODCALLTYPE
