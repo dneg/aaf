@@ -1,0 +1,68 @@
+#startm .this-module 0
+AAFTapeDescriptor\
+#endm
+#c
+#startm .parent-module 0
+AAFEssenceDescriptor\
+#endm
+#c
+#import ./AAFEssenceDescriptor.exp
+AD_HEAD
+AD_INCLUDE(AAFTypes)
+/******************************************\
+*                                          *
+* Advanced Authoring Format                *
+*                                          *
+* Copyright (c) 1998 Avid Technology, Inc. *
+* Copyright (c) 1998 Microsoft Corporation *
+*                                          *
+\******************************************/
+
+AD_CLASS_UUID(e58a856a, 2a3e, 11D2, bf, a4, 00, 60, 97, 11, 62, 12)
+
+AD_DEFAULT_UUID(e58a8569, 2a3e, 11D2, bf, a4, 00, 60, 97, 11, 62, 12)
+AD_CLASS_BEGIN
+
+AD_METHOD1(SetTapeManufacturer,
+		   [in],aafString_t*, name,,
+		   Sets the name of the company which manufactured the tape.)
+AD_METHOD1(GetTapeManufacturer,
+		   [out],aafString_t*, name,pass in a buffer which is cleared and filled.,
+		   Sets the name of the company which manufactured the tape.)
+AD_METHOD1(SetTapeModel,
+		   [in],aafString_t*, name,,
+		   Sets the brand or model of the tape.)
+AD_METHOD1(GetTapeModel,
+		   [out],aafString_t*, name,pass in a buffer which is cleared and filled.,
+		   Sets the brand or model of the tape.)
+
+AD_METHOD1(SetTapeFormFactor,
+		   [in],aafTapeCaseType_t, formFactor, ex: kVHSVideoTape\\\,kDATCartridge ,
+		   Sets the form factor [case size] of the tape.)
+AD_METHOD1(GetTapeFormFactor,
+		   [out],aafTapeCaseType_t*, formFactor, ex: kVHSVideoTape\\\,kDATCartridge,
+		   Gets the form factor [case size] of the tape.)
+
+AD_METHOD1(SetSignalType,
+		   [in],aafVideoSignalType_t, videoSignal, ex: kNTSCSignal,
+		   Sets the signal standard recorded on the tape.)
+AD_METHOD1(GetSignalType,
+		   [out],aafVideoSignalType_t*, videoSignal, ex: kNTSCSignal,
+		   Gets the signal standard recorded on the tape.)
+
+
+AD_METHOD1(SetTapeFormat,
+		   [in],aafTapeFormatType_t, tapeFormat, ex: kBetacamFormat\\\,kBetacamSPFormat,
+		   Sets the recording method of the tape.)
+AD_METHOD1(GetTapeFormat,
+		   [out],aafTapeFormatType_t*, tapeFormat, ex: kBetacamFormat\\\,kBetacamSPFormat,
+		   Gets the recording method of the tape.)
+
+AD_METHOD1(SetTapeLength,
+		   [in],aafLength_t, tapeFormat,The length of the tape in minutes.,
+		   Sets the length of the tape.)
+AD_METHOD1(GetTapeLength,
+		   [out],aafLength_t*, tapeFormat,The length of the tape in minutes.,
+		   Gets the length of the tape.)
+
+AD_CLASS_END
