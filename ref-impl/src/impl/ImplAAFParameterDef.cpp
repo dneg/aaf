@@ -102,6 +102,10 @@ AAFRESULT STDMETHODCALLTYPE
 	if(pTypeDef == NULL)
 		return AAFRESULT_NULL_PARAM;
 
+	// Check if given definition is in the dict.
+	if( !aafLookupTypeDef( this, pTypeDef ) )
+		return AAFRESULT_INVALID_OBJ;
+
 	_typeDef = pTypeDef;
 
 	return AAFRESULT_SUCCESS;

@@ -130,6 +130,10 @@ AAFRESULT STDMETHODCALLTYPE
   if (! pDataDef)
 	return AAFRESULT_NULL_PARAM;
 
+  // Check if given data definition is in the dict.
+  if( !aafLookupDataDef( this, pDataDef ) )
+    return AAFRESULT_INVALID_OBJ;
+
   _dataDef = pDataDef;
 	
   return AAFRESULT_SUCCESS;
@@ -167,6 +171,10 @@ AAFRESULT STDMETHODCALLTYPE
 	if (NULL == pOperationDef)
 		return AAFRESULT_NULL_PARAM;
 
+	// Check if given definition is in the dict.
+	if( !aafLookupOperationDef( this, pOperationDef ) )
+		return AAFRESULT_INVALID_OBJ;
+
 	_degradeTo.prependValue(pOperationDef);
 	// 2000-OCT-23 transdel : this is a weak reference. It is already owned by another
 	// strong reference set so we do not need to reference count it!
@@ -180,6 +188,10 @@ AAFRESULT STDMETHODCALLTYPE
 {
 	if (NULL == pOperationDef)
 		return AAFRESULT_NULL_PARAM;
+
+	// Check if given definition is in the dict.
+	if( !aafLookupOperationDef( this, pOperationDef ) )
+		return AAFRESULT_INVALID_OBJ;
 
 	_degradeTo.appendValue(pOperationDef);
 	// 2000-OCT-23 transdel : this is a weak reference. It is already owned by another
@@ -197,6 +209,10 @@ AAFRESULT STDMETHODCALLTYPE
 
 	if (index > _degradeTo.count()) // we can "insert" one after the end
 	  return AAFRESULT_BADINDEX;
+
+	// Check if given definition is in the dict.
+	if( !aafLookupOperationDef( this, pOperationDef ) )
+		return AAFRESULT_INVALID_OBJ;
 
 	_degradeTo.insertAt(pOperationDef, index);
 	return AAFRESULT_SUCCESS;
@@ -334,6 +350,10 @@ AAFRESULT STDMETHODCALLTYPE
 {
 	if (NULL == pAAFParameterDef)
 		return AAFRESULT_NULL_PARAM;
+
+	// Check if given definition is in the dict.
+	if( !aafLookupParameterDef( this, pAAFParameterDef ) )
+		return AAFRESULT_INVALID_OBJ;
 
 	_paramDefined.appendValue(pAAFParameterDef);
 	// 2000-OCT-23 transdel : this is a weak reference. It is already owned by another

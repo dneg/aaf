@@ -152,6 +152,10 @@ AAFRESULT STDMETHODCALLTYPE
 	if (! pEssenceKind)
 	  return AAFRESULT_NULL_PARAM;
 
+	// Check if given data definition is in the dict.
+	if( !aafLookupDataDef( this, pEssenceKind ) )
+	    return AAFRESULT_INVALID_OBJ;
+
 	_dataDefs.appendValue(pEssenceKind);
 
 	return AAFRESULT_SUCCESS;
@@ -280,6 +284,10 @@ AAFRESULT STDMETHODCALLTYPE
 	else if (!pClass->attached())
 	{
 		return AAFRESULT_OBJECT_NOT_ATTACHED;
+	}
+	else if (!aafLookupClassDef( this, pClass ) )
+	{
+	    return AAFRESULT_INVALID_OBJ;
 	}
 	else
 	{

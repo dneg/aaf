@@ -149,6 +149,10 @@ AAFRESULT STDMETHODCALLTYPE
   if (!pDataDef->attached() || !pOperationDef->attached())
     return AAFRESULT_OBJECT_NOT_ATTACHED;
 
+  // Check if given definition is in the dict.
+  if( !aafLookupOperationDef( this, pOperationDef ) )
+    return AAFRESULT_INVALID_OBJ;
+
 	XPROTECT()
 	{
 		CHECK(SetNewProps(length, pDataDef));
@@ -201,6 +205,10 @@ AAFRESULT STDMETHODCALLTYPE
   // Make sure object is already attached (to the dictionary).
   if (!OperationDef->attached())
     return AAFRESULT_OBJECT_NOT_ATTACHED;
+
+  // Check if given definition is in the dict.
+  if( !aafLookupOperationDef( this, OperationDef ) )
+    return AAFRESULT_INVALID_OBJ;
 
 	assert(_operationDefinition.isVoid());
 	_operationDefinition = OperationDef;

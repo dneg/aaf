@@ -242,6 +242,10 @@ AAFRESULT STDMETHODCALLTYPE
 	if(pDef == NULL)
 		return AAFRESULT_NULL_PARAM;
 
+	// Check if given definition is in the dict.
+	if( !aafLookupInterpolationDef( this, pDef ) )
+		return AAFRESULT_INVALID_OBJ;
+
 	_interpolation = pDef;
 
 	return AAFRESULT_SUCCESS;

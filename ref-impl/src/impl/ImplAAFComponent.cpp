@@ -133,6 +133,9 @@ AAFRESULT STDMETHODCALLTYPE
     return AAFRESULT_NULL_PARAM;
   if (!pDataDef->attached())
     return AAFRESULT_OBJECT_NOT_ATTACHED;
+  // Check if given data definition is in the dict.
+  if( !aafLookupDataDef( this, pDataDef ) )
+    return AAFRESULT_INVALID_OBJ;
 
   _dataDef = pDataDef;
 
