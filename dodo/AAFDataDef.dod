@@ -42,7 +42,7 @@ AD_XMETHOD1(IsPictureKind,
 		   aafBool *,
 		   bIsPictureKind,
 		   pointer to the return value, 
-		   Sets return value to TRUE if DataKind is a picture.)
+		   Sets return value to TRUE if DataDef is a picture.)
 
 AD_XMETHOD1(IsMatteKind,
 		   [retval\,out],
@@ -50,7 +50,7 @@ AD_XMETHOD1(IsMatteKind,
 		   aafBool *,
 		   bIsMatteKind,
 		   pointer to the return value, 
-		   Sets return value to TRUE if DataKind is a matte.)
+		   Sets return value to TRUE if DataDef is a matte.)
 
 AD_XMETHOD1(IsPictureWithMatteKind,
 		   [retval\,out],
@@ -58,7 +58,7 @@ AD_XMETHOD1(IsPictureWithMatteKind,
 		   aafBool *,
 		   bIsPictureWithMatteKind,
 		   pointer to the return value, 
-		   Sets return value to TRUE if DataKind is a picture with matte.)
+		   Sets return value to TRUE if DataDef is a picture with matte.)
 
 AD_XMETHOD1(IsSoundKind,
 		   [retval\,out],
@@ -66,7 +66,7 @@ AD_XMETHOD1(IsSoundKind,
 		   aafBool *,
 		   bIsSoundKind,
 		   pointer to the return value, 
-		   Sets return value to TRUE if DataKind is a sound.)
+		   Sets return value to TRUE if DataDef is a sound.)
 
 AD_XMETHOD2(DoesDataDefConvertTo,
 		   [in\,ref], objPass, aafUID_t *, pAuid, Auid to compare against,
