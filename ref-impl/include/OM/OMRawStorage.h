@@ -135,6 +135,8 @@ public:
   virtual bool isExtendible(void) const = 0;
 
     // @cmember The current extent of this <c OMRawStorage> in bytes.
+    //          The <f extent()> is the allocated size, while the <f size()>
+    //          is the valid size.
     //          @precondition <f isPositionable()>
   virtual OMUInt64 extent(void) const = 0;
 
@@ -150,6 +152,8 @@ public:
   virtual void extend(OMUInt64 newSize) = 0;
 
     // @cmember The current size of this <c OMRawStorage> in bytes.
+    //          The <f size()> is the valid size, while the <f extent()>
+    //          is the allocated size.
     //          @precondition <f isPositionable()>
   virtual OMUInt64 size(void) const = 0;
 
