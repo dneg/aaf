@@ -1098,11 +1098,13 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFMob::GetUsageCode (aafUID_t*  /*pUsageCode*/)
+    ImplAAFMob::GetUsageCode (aafUID_t*  pUsageCode )
 {
   if ( !_usageCode.isPresent() ) {
     return AAFRESULT_PROP_NOT_PRESENT;
   }
+
+  *pUsageCode = _usageCode;
 
   return AAFRESULT_SUCCESS;
 
