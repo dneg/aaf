@@ -478,7 +478,7 @@ static void rev_mem(char *buffer, size_t count)
 // Given a pathname return the corresponding file spec.
 AAFRDLIRESULT AAFFSSpecToPath(const FSSpec *pSpec, char *pathBuffer, int pathBufferSize)
 {
-  OSErr err = noErr;
+  AAFRDLIRESULT err = noErr;
   CInfoPBRec cInfo;
   StrFileName folderName;
   int currentLen = 0;
