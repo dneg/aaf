@@ -189,10 +189,6 @@ public:
 int main(int argc, char* argv[])
 {
 	int result = SUCCESS;
-	aafInt16	count = 0, 
-				i = 0;
-	char 		**myargv = NULL;
-
 
 
 
