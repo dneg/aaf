@@ -71,7 +71,7 @@ function trim(s, n) {
 }
 
 function rowcolor(files) {
-  result = "#FFCCCC";
+  result = "#FFFFFF";
   /* Get first file */
   split(files, fns, ",");
   ff = fns[1];
@@ -81,6 +81,8 @@ function rowcolor(files) {
     result = "#CCFFCC";
   } else if (match(ff, "ref-impl/include/OM")) {
     result = "#CCFFCC";
+  } else if (match(ff, "ref-impl/src/impl")) {
+    result = "#FFCCCC";
   }
   return result;
 }
