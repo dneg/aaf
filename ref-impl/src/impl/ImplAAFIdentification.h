@@ -227,11 +227,6 @@ public:
 		// @parm [out] The unique generation
         (aafUID_t *  pGeneration);
 
-public:
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplAAFIdentificationTest.cpp.
-  static AAFRESULT test();
-
 private:
   OMWideStringProperty                      _companyName;
   OMWideStringProperty						_productName;

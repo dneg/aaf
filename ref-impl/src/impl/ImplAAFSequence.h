@@ -106,10 +106,6 @@ public:
   //
   OMDECLARE_STORABLE(ImplAAFSequence)
 
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplAAFSequenceTest.cpp.
-  static AAFRESULT test();
-
   // Interfaces visible inside the toolkit, but not exposed through the API
   AAFRESULT GetNthComponent(aafUInt32 index, ImplAAFComponent **ppComponent);
 	virtual AAFRESULT ChangeContainedReferences(aafUID_t *from, aafUID_t *to);

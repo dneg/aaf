@@ -95,13 +95,6 @@ public:
         // @parm [out,retval] new enumeration
         (ImplEnumAAFPluginDescriptors ** ppEnum);
 
-
-
-public:
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplEnumAAFPluginDescriptorsTest.cpp.
-  static AAFRESULT test();
-
 public:
 // Internal to the toolkit
   // SDK Internal 

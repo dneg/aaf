@@ -102,9 +102,6 @@ public:
   //
   OMDECLARE_STORABLE(ImplAAFSelector)
 
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplAAFSelectorTest.cpp.
-  static AAFRESULT test();
 private:
 	OMStrongReferenceProperty<ImplAAFSegment>		_selected;
 	OMStrongReferenceVectorProperty<ImplAAFSegment>	_alternates;

@@ -150,10 +150,6 @@ public:
   //
   OMDECLARE_STORABLE(ImplAAFPulldown)
 
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplAAFPulldownTest.cpp.
-  static AAFRESULT test();
-
 private:
 	OMStrongReferenceProperty<ImplAAFSegment>	_inputSegment;
 	OMFixedSizeProperty<aafPulldownKind_t>		_pulldownKind;

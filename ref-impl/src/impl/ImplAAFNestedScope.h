@@ -94,11 +94,7 @@ public:
   //
   OMDECLARE_STORABLE(ImplAAFNestedScope)
 
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplAAFNestedScopeTest.cpp.
-  static AAFRESULT test();
-
-	// Persistent Properties	
+  // Persistent Properties	
   OMStrongReferenceVectorProperty<ImplAAFSegment>		_slots;
 };
 

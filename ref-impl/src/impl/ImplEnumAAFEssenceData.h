@@ -86,13 +86,6 @@ public:
 		// @parm [out,retval] new enumeration
         (ImplEnumAAFEssenceData ** ppEnum);
 
-
-
-public:
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplEnumAAFEssenceDataTest.cpp.
-  static AAFRESULT test();
-
 public:
 // Internal to the toolkit
 AAFRESULT SetContentStorage(ImplAAFContentStorage *pContentStorage);

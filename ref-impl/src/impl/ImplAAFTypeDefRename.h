@@ -43,7 +43,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     Initialize
         (// @parm [in] auid to be used to identify this type
-         aafUID_t *  pID,
+         const aafUID_t *  pID,
 
          // @parm [in] type to which this is an alias
          ImplAAFTypeDef * pBaseType,

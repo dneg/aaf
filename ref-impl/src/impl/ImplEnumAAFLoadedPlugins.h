@@ -85,12 +85,6 @@ public:
         (ImplEnumAAFLoadedPlugins ** ppEnum);
 
 
-
-public:
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplEnumAAFLoadedPluginsTest.cpp.
-  static AAFRESULT test();
-
 public:
 // Private to the SDK
 	virtual AAFRESULT SetCategory(aafUID_t *category);

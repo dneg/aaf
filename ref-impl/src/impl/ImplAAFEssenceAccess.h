@@ -634,11 +634,6 @@ public:
 
 
 public:
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplAAFEssenceAccessTest.cpp.
-  static AAFRESULT test();
-
-public:
 	//Toolkit private functions
 	AAFRESULT MakeAAFContainerDef(ImplAAFHeader *head, ImplAAFContainerDef **result);
 	AAFRESULT CreateContainerDef (ImplAAFHeader *head);

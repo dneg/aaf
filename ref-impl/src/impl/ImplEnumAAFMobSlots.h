@@ -95,9 +95,6 @@ public:
 
 
 public:
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplEnumAAFMobSlotsTest.cpp.
-  static AAFRESULT test();
 
 //Internal
 AAFRESULT SetEnumMob(ImplAAFMob *aMob);

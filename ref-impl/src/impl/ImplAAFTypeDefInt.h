@@ -39,7 +39,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     Initialize
         (// @parm [in] auid to be used to identify this type
-         aafUID_t *  pID,
+         const aafUID_t *  pID,
 
          // @parm [in] the size of this integer type in bytes
          aafUInt8  intSize,

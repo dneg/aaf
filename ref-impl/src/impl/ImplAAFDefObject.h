@@ -44,14 +44,16 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     Init
         // @parm [in] Pointer to an AUID reference
-        (aafUID_t *  pAuid, wchar_t *name, wchar_t *description);
+        (const aafUID_t *  pAuid,
+		 const wchar_t *name,
+		 const wchar_t *description);
   //****************
   // GetAUID()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     GetAUID
         // @parm [retval,out] Pointer to an AUID reference
-        (aafUID_t *  pAuid);
+        (aafUID_t * pAuid) const;
 
   //****************
   // SetAUID()
@@ -59,7 +61,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     SetAUID
         // @parm [in] Pointer to an AUID reference
-        (aafUID_t *  pAuid);
+        (const aafUID_t *  pAuid);
 
 
   //****************
@@ -67,7 +69,7 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     SetName
-        (aafWChar *  name);  //@parm [in, ref] Definition Name
+        (const wchar_t *  name);  //@parm [in, ref] Definition Name
 
 
   //****************
@@ -144,10 +146,6 @@ public:
   // Declare this class to be storable.
   //
   OMDECLARE_STORABLE(ImplAAFDefObject)
-
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplAAFDefObjectTest.cpp.
-  static AAFRESULT test();
 
 public:
 	// Functions internal to the toolkit

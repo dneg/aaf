@@ -127,10 +127,6 @@ public:
   //
   OMDECLARE_STORABLE(ImplAAFEssenceData)
 
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplAAFEssenceDataTest.cpp.
-  static AAFRESULT test();
-
 private:
   OMFixedSizeProperty<aafUID_t> _fileMobID;
   OMDataStreamProperty _mediaData;

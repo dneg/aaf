@@ -95,13 +95,6 @@ public:
 		// @parm [out,retval] new enumeration
         (ImplEnumAAFLocators ** ppEnum);
 
-
-
-public:
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplEnumAAFLocatorsTest.cpp.
-  static AAFRESULT test();
-
 public:
 // Internal to the toolkit
   virtual AAFRESULT STDMETHODCALLTYPE

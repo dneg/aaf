@@ -108,10 +108,6 @@ public:
   // Declare this class to be storable.
   //
   OMDECLARE_STORABLE(ImplAAFVaryingValue)
-
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplAAFVaryingValueTest.cpp.
-  static AAFRESULT test();
 private:
 	OMFixedSizeProperty<aafUID_t>						 _interpolation;
     OMStrongReferenceVectorProperty<ImplAAFControlPoint> _controlPoints;

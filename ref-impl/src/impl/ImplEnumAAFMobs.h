@@ -79,12 +79,6 @@ public:
     Clone
         (ImplEnumAAFMobs ** ppEnum);  //@parm [out,retval] new enumeration
 
-
-public:
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplEnumAAFMobsTest.cpp.
-  static AAFRESULT test();
-
 public:
 // Internal to the toolkit
 AAFRESULT

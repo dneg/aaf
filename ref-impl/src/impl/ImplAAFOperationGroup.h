@@ -214,10 +214,6 @@ public:
   //
   OMDECLARE_STORABLE(ImplAAFOperationGroup)
 
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplAAFOperationGroupTest.cpp.
-  static AAFRESULT test();
-
 private:
 	OMFixedSizeProperty<aafUID_t>						_operationDefinition;
 	OMStrongReferenceVectorProperty<ImplAAFSegment>		_inputSegments;

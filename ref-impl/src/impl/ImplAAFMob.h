@@ -304,10 +304,6 @@ public:
   // and deletes the entry from the Header.
 
 public:
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplAAFMobTest.cpp.
-  static AAFRESULT test();
-
 	// Interfaces visible inside the toolkit, but not exposed through the API
 AAFRESULT
     GetNthMobSlot (aafInt32 index /* 0-based*/, ImplAAFMobSlot **ppMobSlot);

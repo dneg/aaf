@@ -41,7 +41,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     Initialize
         (// @parm [in] auid to be used to identify this type
-         aafUID_t *  pID,
+         const aafUID_t *  pID,
 
          // @parm [in, size_is(numMembers)] array of member types to
 		 // be represented in this record type
@@ -255,6 +255,10 @@ public:
 
 
 private:
+
+  void pvtInitInternalSizes (void) const;
+
+
   // types of members in this record
   //
   // BobT Note!!! This should be weak reference vector property...

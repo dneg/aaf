@@ -90,11 +90,6 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     SetEnumStrongProperty( ImplAAFObject *pObj, containerDefStrongRefArrayProp_t *pProp);
 
-
-public:
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplEnumAAFContainerDefsTest.cpp.
-  static AAFRESULT test();
 private:
 	aafUInt32							_current;
 	ImplAAFObject						*_enumObj;

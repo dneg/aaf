@@ -114,9 +114,6 @@ public:
   //
   OMDECLARE_STORABLE(ImplAAFCodecDef)
 
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplAAFCodecDefTest.cpp.
-  static AAFRESULT test();
 private:
 	DataDefWeakRefArrayProp_t			_dataDefs;
 	OMFixedSizeProperty<aafUID_t>		_fileDescClass;

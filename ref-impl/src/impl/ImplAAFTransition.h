@@ -100,12 +100,6 @@ public:
 
 
 
-public:
-
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplAAFTransitionTest.cpp.
-  static AAFRESULT test();
-
 private:
 	OMStrongReferenceProperty<ImplAAFOperationGroup>	_operationGroup;
 	OMFixedSizeProperty<aafPosition_t>					_cutPoint;

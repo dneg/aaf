@@ -106,11 +106,6 @@ public:
 
 
 public:
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplEnumAAFPluginLocatorsTest.cpp.
-  static AAFRESULT test();
-
-public:
 // Internal to the toolkit
 AAFRESULT
     SetPluginDescriptor(ImplAAFPluginDescriptor *pEDesc);

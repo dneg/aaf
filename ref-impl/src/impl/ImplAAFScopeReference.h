@@ -84,14 +84,9 @@ public:
   //
   OMDECLARE_STORABLE(ImplAAFScopeReference)
 
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplAAFScopeReferenceTest.cpp.
-  static AAFRESULT test();
-
-	// Persistent Properties
-	OMFixedSizeProperty<aafUInt32>	_relativeScope;
-	OMFixedSizeProperty<aafUInt32>	_relativeSlot;
-
+  // Persistent Properties
+  OMFixedSizeProperty<aafUInt32>	_relativeScope;
+  OMFixedSizeProperty<aafUInt32>	_relativeSlot;
 };
 
 #endif // ! __ImplAAFScopeReference_h__

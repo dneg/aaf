@@ -51,7 +51,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     GetAUID
         // @parm [retval,out] Pointer to an AUID reference
-        (aafUID_t *  pAuid);
+        (aafUID_t *  pAuid) const;
 
   //****************
   // SetAUID()
@@ -508,10 +508,6 @@ public:
   // Declare this class to be storable.
   //
   OMDECLARE_STORABLE(ImplAAFPluginDescriptor)
-
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplAAFPluginDescriptorTest.cpp.
-  static AAFRESULT test();
 
 public:
 	virtual AAFRESULT

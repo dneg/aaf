@@ -107,10 +107,6 @@ public:
   //
   OMDECLARE_STORABLE(ImplAAFEssenceDescriptor)
 
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplAAFEssenceDescriptorTest.cpp.
-  static AAFRESULT test();
-
 public:
 	// Functions internal to the toolkit
 	virtual AAFRESULT STDMETHODCALLTYPE

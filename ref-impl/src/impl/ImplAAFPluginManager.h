@@ -58,11 +58,6 @@ public:
 
 
 public:
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplAAFPluginManagerTest.cpp.
-  static AAFRESULT test();
-
-public:
 	//Toolkit internal only
 static ImplAAFPluginManager *GetPluginManager(void);
 
