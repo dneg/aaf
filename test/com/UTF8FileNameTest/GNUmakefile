@@ -60,7 +60,7 @@ check : $(AAFSDKBINDIR)/UTF8FileNameTest$(EXE)
 clean :
 	@$(RM) $(CXXOBJS)
 	@$(RM) $(DEPS)
-	@$(RM) $(AAFSDKBINDIR)/ComFileKindTest$(EXE)
+	@$(RM) $(AAFSDKBINDIR)/UTF8FileNameTest$(EXE)
 	@$(RMDIR) $(OBJDIR)/ii_files
 
 
