@@ -18,6 +18,8 @@
 #include <objbase.h>
 #endif
 
+const int currentVersion = 3;
+
 #if defined(__sgi)
 #define OMQUADPART(x) x.u.QuadPart
 #define OMSETQUADPART(x,y) (OMQUADPART(x) = (y))
@@ -186,7 +188,7 @@ void OMStoredObject::save(OMStoredPropertySetIndex* index)
 
   // Write version number.
   //
-  OMUInt32 version = 2;
+  OMUInt32 version = currentVersion;
   writeToStream(_indexStream, &version, sizeof(version));
   
   // Write count of entries.
@@ -227,7 +229,7 @@ OMStoredPropertySetIndex* OMStoredObject::restore(void)
   OMUInt32 version;
   readFromStream(_indexStream, &version, sizeof(version));
   ASSERT("Valid version number", version > 0);
-  ASSERT("Recognized version number", version == 2);
+  ASSERT("Recognized version number", version == currentVersion);
   
   // Read count of entries.
   //
