@@ -281,7 +281,7 @@ inline bool AxIsA( IUnknownSP sp)
 {
 	HRESULT hr;
 	TypeDst * dummy;
-	hr = sp->QueryInterface( AxIID( dummy ),&dummy);
+	hr = sp->QueryInterface( AxIID( dummy ),reinterpret_cast<void**>(&dummy));
 
 	if ( SUCCEEDED(hr) ) {
 		return true;
