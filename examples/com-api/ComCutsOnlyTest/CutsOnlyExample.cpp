@@ -951,7 +951,7 @@ struct CComInitialize
   }
 };
 
-main()
+int main()
 {
   CComInitialize comInit;
   aafWChar * pwFileName = L"CutsOnly.aaf";
