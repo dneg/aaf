@@ -38,7 +38,7 @@
 #include "AAFSmartPointer.h"
 typedef IAAFSmartPointer<IAAFClassDef>         IAAFClassDefSP;
 typedef IAAFSmartPointer<IAAFComponent>        IAAFComponentSP;
-typedef IAAFSmartPointer<IAAFDefObject>        IAAFDefObjectSP;
+typedef IAAFSmartPointer<IAAFMetaDefinition>   IAAFMetaDefinitionSP;
 typedef IAAFSmartPointer<IAAFDictionary>       IAAFDictionarySP;
 typedef IAAFSmartPointer<IAAFFile>             IAAFFileSP;
 typedef IAAFSmartPointer<IAAFFiller>           IAAFFillerSP;
@@ -388,8 +388,8 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 
 	  // Compare this class def with one from the dict, using GUIDs
 	  // First, get the referenced object class def
-	  IAAFDefObjectSP refdDef;
-	  checkResult (refdObjClass->QueryInterface (IID_IAAFDefObject,
+	  IAAFMetaDefinitionSP refdDef;
+	  checkResult (refdObjClass->QueryInterface (IID_IAAFMetaDefinition,
 												 (void **)&refdDef));
 	  aafUID_t refdObjID;
 	  checkResult (refdDef->GetAUID (&refdObjID));
@@ -398,8 +398,8 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	  IAAFClassDefSP dictClass;
 	  checkResult (dict->LookupClassDef (AUID_AAFComponent,
 									  &dictClass));
-	  IAAFDefObjectSP dictDef;
-	  checkResult (dictClass->QueryInterface (IID_IAAFDefObject,
+	  IAAFMetaDefinitionSP dictDef;
+	  checkResult (dictClass->QueryInterface (IID_IAAFMetaDefinition,
 											  (void **)&dictDef));
 	  aafUID_t dictObjID;
 	  checkResult (dictDef->GetAUID (&dictObjID));
