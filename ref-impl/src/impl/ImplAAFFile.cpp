@@ -245,6 +245,7 @@ ImplAAFFile::OpenNewModify (wchar_t * pFileName,
 {
 	ImplAAFContentStorage	*pCStore = NULL;
 	AAFRESULT stat = AAFRESULT_SUCCESS;
+	aafVersionType_t		theVersion = { 1, 0 };
 
 	if (! _initialized)
 		return AAFRESULT_NOT_INITIALIZED;
@@ -284,6 +285,7 @@ ImplAAFFile::OpenNewModify (wchar_t * pFileName,
 		// Set the byte order
 		_byteOrder = hostByteOrder();
 		_head->SetByteOrder(_byteOrder);
+		_head->SetFileRevision (theVersion);
 
 		//JeffB!!! We must decide whether def-only files have a content storage
 		checkResult(_head->GetContentStorage(&pCStore));
@@ -486,9 +488,6 @@ ImplAAFFile::ImplAAFFile () :
 		_openType(kOmUndefined),
 		_head(NULL),
 		_semanticCheckEnable(AAFFalse),
-		_nilKind(0),
-		_pictureKind(0),
-		_soundKind(0),
 		_initialized(AAFFalse),
 		_open(AAFFalse),
 		_modeFlags(0)
@@ -519,23 +518,6 @@ ImplAAFFile::~ImplAAFFile ()
 
 void ImplAAFFile::InternalReleaseObjects()
 {
-	if (0 != _soundKind)
-	{
-		_soundKind->ReleaseReference();
-		_soundKind = 0;
-	}
-
-	if (0 != _pictureKind)
-	{
-		_pictureKind->ReleaseReference();
-		_pictureKind = 0;
-	}
-
-	if (0 != _nilKind)
-	{
-		_nilKind->ReleaseReference();
-		_nilKind = 0;
-	}
 }
 
 

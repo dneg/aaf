@@ -112,9 +112,6 @@ private:
   openType_t			_openType;
   ImplAAFHeader *   _head;		// Needed by Head object
   aafBool   _semanticCheckEnable;	//!!!  /* Used to stop recursion in checks */
-  ImplAAFDataDef *	_nilKind;// !!!
-  ImplAAFDataDef *	_pictureKind;// !!!
-  ImplAAFDataDef *	_soundKind;// !!!
   aafFileRev_t   _setrev;
   aafBool _initialized;
   aafBool _open;
