@@ -125,8 +125,10 @@ static const char KLVfrowney[] =        /* 16x16 frowney face */
 
 
 
+namespace {
 const aafCharacter* AttributeNames[]  = { L"Attribute A Name", L"Attribute B Name" };
 const aafCharacter* AttributeValues[] = { L"Attribute A Value", L"Attribute B Value" };
+};
 
 
 static aafFrameOffset_t 	TCstartFrame = 108000;	// One hour
