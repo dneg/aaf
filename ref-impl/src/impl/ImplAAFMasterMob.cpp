@@ -587,14 +587,27 @@ ImplAAFMasterMob::CreateEssence (aafSlotID_t		masterSlotID,
 								aafRational_t	sampleRate,
 								aafCompressEnable_t  enable,
 								ImplAAFLocator		*destination,
-								aafFileFormat_t		fileFormat,
+								aafUID_t			fileFormat,
 								ImplAAFEssenceAccess **result)
 {
 	ImplAAFEssenceAccess	*access;
 
 	access = (ImplAAFEssenceAccess *)CreateImpl (CLSID_AAFEssenceAccess);
 	*result = access;
-	return access->Create(this, masterSlotID, mediaKind, codecID, editRate, sampleRate, enable);
+
+	XPROTECT()
+	{
+		if(destination != NULL)
+		{
+			CHECK(access->SetEssenceDestination(destination, fileFormat));
+		}
+		
+		CHECK(access->Create(this, masterSlotID, mediaKind, codecID, editRate, sampleRate, enable));
+	}
+	XEXCEPT
+	XEND;
+
+	return(AAFRESULT_SUCCESS);
 }
 
 	//@comm Creates a single channel stream of essence.  Convenience functions
@@ -617,7 +630,7 @@ AAFRESULT STDMETHODCALLTYPE
 							aafmMultiCreate_t *mediaArray,
 							aafCompressEnable_t Enable,
 							ImplAAFLocator		*destination,
-							aafFileFormat_t		fileFormat,
+							aafUID_t			fileFormat,
 							ImplAAFEssenceAccess **result)
 {
 	ImplAAFEssenceAccess	*access;
