@@ -376,15 +376,20 @@ OMProperty * ImplAAFTypeDefFixedArray::pvtCreateOMProperty
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFTypeDefFixedArray::CreateValueFromValues (
-      ImplAAFPropertyValue ** ppElementValues,
-      aafUInt32  numElements,
-      ImplAAFPropertyValue ** ppPropVal)
+ImplAAFTypeDefFixedArray::ValidateInputParams (
+												  ImplAAFPropertyValue ** ppElementValues,
+												  aafUInt32  numElements)
+												  
 {
-	AAFRESULT hr;
+	//first call base impl.
+	HRESULT hr;
+	hr = ImplAAFTypeDefArray::ValidateInputParams(ppElementValues, numElements);
+	if (AAFRESULT_FAILED (hr)) 
+		return hr;
 
-	//first validate params + basic stuff ...
-	if (!ppElementValues || !ppPropVal)
+	//Next, do some additional specific checking for Fixed Array ...
+
+	if (!ppElementValues)
 		return AAFRESULT_NULL_PARAM;
 
 	//verify count
@@ -394,45 +399,26 @@ AAFRESULT STDMETHODCALLTYPE
 		return hr;
 	if (numElements != internalCount)
 		return AAFRESULT_DATA_SIZE;
+	
 
-	//verify that all the individual elem types are the same as each other,
-	// AND that each of them is FIXED Arrayable ...
+	return AAFRESULT_SUCCESS;
 
-	//get Base TD and size
-	ImplAAFTypeDefSP spTargetTD;
-	hr = GetType(&spTargetTD); //gets base elem type
-	if (AAFRESULT_FAILED (hr)) 
-		return hr;
-	aafUInt32 targetElemSize = spTargetTD->NativeSize();
+}//ValidateInputParams()
 
-	for (aafUInt32 i=0; i<numElements; i++)
-	{
-		//get  source size
-		ImplAAFTypeDefSP  spSourceTD;
-		hr = ppElementValues[i]->GetType (&spSourceTD);
-		if (AAFRESULT_FAILED (hr)) 
-			return hr;
 
-		//verify FIXED Arrayable
-		if (! spSourceTD->IsFixedArrayable())
-			return AAFRESULT_BAD_TYPE;
 
-		//verify that spTargetTD == spSourceTD
-		if (spSourceTD != spTargetTD )
-			return AAFRESULT_BAD_TYPE;
+AAFRESULT STDMETHODCALLTYPE
+ImplAAFTypeDefFixedArray::CreateValueFromValues (
+													ImplAAFPropertyValue ** ppElementValues,
+													aafUInt32  numElements,
+													ImplAAFPropertyValue ** ppPropVal)
+{
 
-		//verify that the target elem size is equal to that of source 
-		aafUInt32 sourceSize = spSourceTD->NativeSize();	
-		if (sourceSize != targetElemSize )
-			return AAFRESULT_BAD_SIZE;
-
-	}//for each elem
-
-	// All params validated; proceed ....
-
-	//... just defer to Base-Class Array implementation:
-	return ImplAAFTypeDefArray::CreateValueFromValues(ppElementValues, numElements, ppPropVal);
+	//simply defer to base impl.
+	return ImplAAFTypeDefArray::CreateValueFromValues(ppElementValues,numElements,
+												ppPropVal);
 }
+
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDefFixedArray::RawAccessType (
@@ -458,6 +444,8 @@ bool ImplAAFTypeDefFixedArray::IsVariableArrayable () const
 bool ImplAAFTypeDefFixedArray::IsStringable () const
 { return false; }
 
+bool ImplAAFTypeDefFixedArray::IsArrayable(ImplAAFTypeDef * pSourceTypeDef) const
+{ return pSourceTypeDef->IsFixedArrayable(); }
 
 
 
