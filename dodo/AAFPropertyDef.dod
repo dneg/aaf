@@ -7,37 +7,12 @@ AAFDefObject\
 #endm
 #c
 AD_HEAD
-
 AD_FORWARD_DECLARATION(EnumAAFReferenceValues)
 AD_FORWARD_DECLARATION(AAFReferenceValue)
-
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
-
-/*************************************************************************
- * 
- * @module AAFPropertyDef | AAFPropertyDef describes 
- *				properties allowed for a class.
- *
- * @base public | AAFDefObject
- *
- *************************************************************************/
-
 AD_CLASS_UUID(dfbd6522, 1d81, 11d2, bf, 96, 00, 60, 97, 11, 62, 12) 
 
 AD_DEFAULT_UUID(dfbd6521, 1d81, 11d2, bf, 96, 00, 60, 97, 11, 62, 12)
 AD_CLASS_BEGIN
-
-//AxD_CONSTRUCTOR2([in],aafUID_t,	Auid,auid for this definition object,
-//				[in], aafString_t, PropertyName, Specifies the name of this property,
-//				Constructs this object.)
-
 AD_METHOD1(GetAUID,
 		   [retval][out],
 		   aafUID_t *,
@@ -45,12 +20,14 @@ AD_METHOD1(GetAUID,
 		   Pointer to an AUID reference,
 		   Gets the AUID for this object.)
 
-AD_METHOD1(GetName,
+
+AD_METHOD1(GetPropertyName,
 		   [retval][out],
 		   aafString_t *,
 		   pstrName,
 		   Pointer to name,
 		   Gets the unique name that identifies this property definition.)
+
 
 AD_METHOD1(GetTypeAUID,
 		   [retval][out],
@@ -59,12 +36,14 @@ AD_METHOD1(GetTypeAUID,
 		   Pointer to the Type Definitions AUID,
 		   Gets the Type Definition's AUID associated with this object.)
 
+
 AD_METHOD1(SetPropertyID,
 		   [in\\\,ref],
 		   aafUID_t *,
 		   pPropertyID,
 		   Property Definition's AUID,
 		   Sets the Property Definitions AUID associated with this object.)
+
 
 AD_METHOD1(SetPropertyName,
 		   [in\\\,ref],
@@ -73,12 +52,14 @@ AD_METHOD1(SetPropertyName,
 		   Property Definition's name,
 		   Sets the Property Definitions name associated with this object.)
 
+
 AD_METHOD1(SetTypeAUID,
 		   [in],
 		   aafUID_t,
 		   TypeAuid,
 		   Type Definition's AUID,
 		   Sets the Type Definitions AUID associated with this object.)
+
 
 AD_METHOD1(GetMinVersion,
 		   [retval][out],
@@ -87,12 +68,14 @@ AD_METHOD1(GetMinVersion,
 		   Pointer to the minimum version ,
 		   Gets the Minimum AAF Version for this property definition.)
 
+
 AD_METHOD1(SetMinVersion,
 		   [in],
 		   aafVersionType_t,
 		   MinVersion,
 		   Minimum AAF Version,
 		   Sets the Minimum AAF Version for property definition.)
+
 
 AD_METHOD1(GetMaxVersion,
 		   [retval][out],
@@ -101,12 +84,14 @@ AD_METHOD1(GetMaxVersion,
 		   Pointer to the maximum version ,
 		   Gets the Maximum AAF Version for this property definition.)
 
+
 AD_METHOD1(SetMaxVersion,
 		   [in],
 		   aafVersionType_t,
 		   MaxVersion,
 		   Maximum AAF Version,
 		   Sets the Maximum AAF Version for property definition.)
+
 
 AD_METHOD1(IsSearchable,
 		   [retval][out],
@@ -115,12 +100,14 @@ AD_METHOD1(IsSearchable,
 		   pointer to the return value, 
 		   Identifies properties that can contain user-searchable data.)
 
+
 AD_METHOD1(SetIsSearchable,
 		   [in],
 		   aafBool,
 		   IsSearchable,
 		   is searchable value, 
 		   Sets the user-searchable boolean.)
+
 
 AD_METHOD1(IsOptional,
 		   [retval][out],
@@ -129,12 +116,14 @@ AD_METHOD1(IsOptional,
 		   pointer to the return value, 
 		   Specifies whether object instances can omit a value for the property.)
 
+
 AD_METHOD1(SetIsOptional,
 		   [in],
 		   aafBool,
 		   IsOptional,
 		   is optional value, 
 		   Sets the IsOptional boolean.)
+
 
 AD_METHOD1(GetDescription,
 		   [retval][out],
@@ -143,12 +132,14 @@ AD_METHOD1(GetDescription,
 		   Pointer to description,
 		   Gets the description of the property definition.)
 
+
 AD_METHOD1(SetDescription,
 		   [in],
 		   aafString_t,
 		   strDescription,
 		   description,
 		   Sets the description of the property definition.)
+
 
 AD_METHOD1(GetDefaultValue,
 		   [retval][out],
@@ -157,12 +148,14 @@ AD_METHOD1(GetDefaultValue,
 		   Pointer to default data value,
 		   Gets the default data value of this property definition.)
 
+
 AD_METHOD1(SetDefaultValue,
 		   [in],
 		   aafDataValue_t,
 		   pDataValue,
 		   default data value,
 		   Sets the default data value of this property definition.)
+
 
 AD_XMETHOD1(AppendRefValue,
 			[in],
@@ -172,6 +165,7 @@ AD_XMETHOD1(AppendRefValue,
 			Ref value to be added,
 			Add the reference value  to the property definition.)
 
+
 AD_XMETHOD1(RemoveRefValue,
 			[in],
 			objIn,
@@ -180,6 +174,7 @@ AD_XMETHOD1(RemoveRefValue,
 			Ref value to be removed,
 			Remove the reference value from the property definition.)
 
+
 AD_XMETHOD1(GetRefValues,
 			[out\,retval],
 			objOut,
@@ -187,5 +182,4 @@ AD_XMETHOD1(GetRefValues,
 			ppEnum, 
 			Reference value Enumeration,
 			Return an enumerator for the reference values.)
-
 AD_CLASS_END

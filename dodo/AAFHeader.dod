@@ -6,7 +6,7 @@ AAFHeader\
 AAFObject\
 #endm
 #c
-#import ./AAFObject.exp
+#c #import ./AAFObject.exp
 #import ./AAFEndian.exp
 AD_HEAD
 AD_IDL(//

@@ -83,10 +83,10 @@ public:
         (aafWChar *  name,  //@parm [in] Mob Name
 		aafInt32 bufSize);	  //@parm [in] size of the buffer required to hold Mob Name + terminator
   //****************
-  // GetNameLen()
+  // GetNameBufLen()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetNameLen
+    GetNameBufLen
         (aafInt32 *  nameLen);  //@parm [in,out] Mob Name length
 
   //****************

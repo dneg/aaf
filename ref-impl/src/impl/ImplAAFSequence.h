@@ -47,10 +47,10 @@ public:
 
 
   //****************
-  // SetInitialValue()
+  // Initialize()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    SetInitialValue
+    Initialize
 		// @parm [in] Data Definition object
         (aafUID_t * pDatadef);
 
