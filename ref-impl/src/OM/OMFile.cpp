@@ -262,30 +262,11 @@ bool OMFile::validSignature(const OMFileSignature& signature)
   TRACE("OMFile::validSignature");
   bool result;
 
-  if ((signature.Data2 == 0x4F4F) && (signature.Data3 == 0x4D4D)) {
+  if (signature.Data3 == 0x4D4F) { // "OM"
     result = true;
   } else {
     result = false;
   }
-  return result;
-}
-
-  // @mfunc Initialize the Object Manager specific parts
-  //        (Data2 and Data3) of the OMFileSignature <p prototype>.
-  //   @parm A prototype (partially complete) OMFileSignature.
-  //   @rdesc The fully initialized OMFileSignature.
-OMFileSignature OMFile::initializeSignature(const OMFileSignature& prototype)
-{
-  TRACE("OMFile::initializeSignature");
-
-  PRECONDITION("Reserved fields zero",
-                           ((prototype.Data2 == 0) && (prototype.Data3 == 0)));
-
-  OMFileSignature result = prototype;
-  result.Data2 = 0x4F4F; // "OO"
-  result.Data3 = 0x4D4D; // "MM" 
-
-  POSTCONDITION("Valid signature", validSignature(result));
   return result;
 }
 

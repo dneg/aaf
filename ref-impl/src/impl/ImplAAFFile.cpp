@@ -42,15 +42,11 @@
 
 #include <assert.h>
 
-// Partially initialized AAF file signature.
-static const OMFileSignature protosig =
-  { 0x0D464141,
-    0x0000, 0x0000,  // Must be zero - filled in by Object Manager
-  { 0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0xFF } };
-
-// Fully initialized AAF file signature.
-static const OMFileSignature aafFileSignature =
-                                         OMFile::initializeSignature(protosig);
+// AAF file signature.
+static const OMFileSignature aafFileSignature  =
+{0x42464141,
+ 0xff0d, 0x4d4f,
+{0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xff}};
 
 // local function for simplifying error handling.
 inline void checkResult(AAFRESULT r)
