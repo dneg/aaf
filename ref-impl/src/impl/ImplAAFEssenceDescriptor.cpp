@@ -151,6 +151,9 @@ AAFRESULT STDMETHODCALLTYPE
 		return AAFRESULT_BADINDEX;
 	
 	_locators.getValueAt(*ppLocator, index);
+	assert(*ppLocator);
+	(*ppLocator)->AcquireReference();
+
 	return AAFRESULT_SUCCESS;
 }
 
