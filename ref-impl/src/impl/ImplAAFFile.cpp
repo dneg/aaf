@@ -1,4 +1,3 @@
-
 /******************************************\
 *                                          *
 * Advanced Authoring Format                *
@@ -320,6 +319,18 @@ ImplAAFFile::Save ()
 	if (!_open)
 		return AAFRESULT_NOT_OPEN;
 
+	// If any new modes are added then the following line will
+	// have to be updated.
+	if (kOmCreate == _openType || kOmModify == _openType) {
+	  _file->save();
+	} else {
+	  return AAFRESULT_WRONG_OPENMODE;
+	}
+
+
+	// Record the fact that this file was modified
+	_head->SetModified();
+
 
 	// BobT Hack!  We don't have Save() hooked up yet; Close() will
 	// save, so I'll do something extremely ugly and just return without
@@ -442,11 +453,6 @@ ImplAAFFile::Close ()
 	// during the create or open methods.
 	InternalReleaseObjects();
 
-	// According to the current API documentation this method is
-	// supposed to write any unsaved changes. If any new modes are 
-	// added then the following line will have to be updated.
-	if (kOmCreate == _openType || kOmModify == _openType)
-		_file->save();
 
 	// Close the OM file.
 	_file->close();
