@@ -27,6 +27,7 @@
 
 #include "OMAssertions.h"
 #include "OMStoredObject.h"
+#include "OMStoredObjectFactory.h"
 #include "OMMSSStoredObject.h"
 #include "OMXMLStoredObject.h"
 #include "OMKLVStoredObject.h"
@@ -37,6 +38,7 @@
 #include "OMRootStorable.h"
 #include "OMRawStorage.h"
 #include "OMUniqueObjectIdentType.h"
+#include "OMSetIterator.h"
 
 #include <string.h>
 #include <stdio.h>
@@ -452,6 +454,55 @@ bool OMFile::isRecognized(const OMFileSignature& signature,
                                           (encoding == KLVBinaryEncoding) ||
                                           (encoding == XMLTextEncoding)));
   return result;
+}
+
+void OMFile::registerFactory(const OMStoredObjectEncoding& encoding,
+                             OMStoredObjectFactory* factory)
+{
+  TRACE("OMFile::registerFactory");
+
+  PRECONDITION("Valid factory", factory != 0);
+
+  _factory.insert(encoding, factory);
+  factory->initialize();
+}
+
+OMStoredObjectFactory* OMFile::findFactory(
+                                        const OMStoredObjectEncoding& encoding)
+{
+  TRACE("OMFile::findFactory");
+
+  OMStoredObjectFactory* result = 0;
+  _factory.find(encoding, result);
+  ASSERT("Recognized file encoding", result != 0);
+  return result;
+}
+
+void OMFile::removeFactory(const OMStoredObjectEncoding& encoding)
+{
+  TRACE("OMFile::removeFactory");
+  PRECONDITION("Factory present", _factory.contains(encoding));
+
+  OMStoredObjectFactory* factory = 0;
+  _factory.find(encoding, factory);
+  _factory.remove(encoding);
+  ASSERT("Valid factory", factory != 0);
+  factory->finalize();
+  delete factory;
+}
+
+void OMFile::removeAllFactories(void)
+{
+  TRACE("OMFile::removeAllFactories");
+
+  OMSetIterator<OMStoredObjectEncoding,
+                OMStoredObjectFactory*> iterator(_factory, OMBefore);
+
+  while (++iterator) {
+    OMStoredObjectFactory* factory = iterator.value();
+    delete factory;
+  }
+  _factory.clear();
 }
 
   // @mfunc Save all changes made to the contents of this
@@ -1220,3 +1271,5 @@ OMRootStorable* OMFile::restoreRoot(void)
   _loadMode = savedLoadMode;
   return root;
 }
+
+OMSet<OMStoredObjectEncoding, OMStoredObjectFactory*> OMFile::_factory;

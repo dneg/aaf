@@ -26,6 +26,7 @@
 
 #include "OMStorable.h"
 #include "OMDataTypes.h"
+#include "OMSet.h"
 
 #include <stddef.h>
 
@@ -35,6 +36,7 @@ class OMStoredObject;
 class OMDictionary;
 class OMRootStorable;
 class OMRawStorage;
+class OMStoredObjectFactory;
 
   // @class Files supported by the Object Manager.
   //   @base public | <c OMStorable>
@@ -165,6 +167,16 @@ public:
      //          returned in <p encoding>.
   static bool isRecognized(const OMFileSignature& signature,
                            OMFileEncoding& encoding);
+
+  static void registerFactory(const OMStoredObjectEncoding& encoding,
+                              OMStoredObjectFactory* factory);
+
+  static OMStoredObjectFactory* findFactory(
+                                       const OMStoredObjectEncoding& encoding);
+
+  static void removeFactory(const OMStoredObjectEncoding& encoding);
+
+  static void removeAllFactories(void);
 
   // @access Public members.
 
@@ -365,6 +377,7 @@ private:
   bool _isNew;
   bool _isValid;
   OMByteOrder _byteOrder;
+  static OMSet<OMStoredObjectEncoding, OMStoredObjectFactory*> _factory;
 
 };
 
