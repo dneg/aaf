@@ -1,59 +1,68 @@
 1) Running dodo on Windows
 
   a) Using Cygwin and GNU make
+
      This is the preferred method for running dodo on Windows.
      Details TBS
 
   b) Using the MKS Korn shell and GNU make
-     This is the method for running dodo on Windows that was in place when AAF
-     transitioned to OpenSource.
+
+     This is the method for running dodo on Windows that was in place
+     when AAF transitioned to OpenSource.
      Details TBS
 
   c) Using the MKS Korn shell and clearmake
-     This was the method originally used to run dodo at Avid but since clearmake is not freely
-     available (it is part of Rational ClearCase) we switched to method b) above when AAF
-     transitioned to OpenSource.
+
+     This was the method originally used to run dodo at Avid but since
+     clearmake is not freely available (it is part of Rational
+     ClearCase) we switched to method b) above when AAF transitioned
+     to OpenSource.
 
      $ clearmake -C gnu -f makefile SHELL=y:/mksnt/sh.exe
 
-     + "-C gnu" tells clearmake to run in GNU make compatibility mode (compatibility is limited)
-     + "-f makefile" is necessary because of the presence of GNUmakefile, added when b) was
-         implemented, clearmake can't process GNUmakefile even in GNU compatibility mode.
-     + "SHELL=y:/mksnt/sh.exe" is necessary because I have the MKS tools installed on Y: and not C:
+     + "-C gnu" tells clearmake to run in GNU make compatibility mode
+         (compatibility is limited)
+
+     + "-f makefile" is necessary because of the presence of
+         GNUmakefile, added when b) was implemented, clearmake can't
+         process GNUmakefile even in GNU compatibility mode.
+ 
+     + "SHELL=y:/mksnt/sh.exe" is necessary because I have the MKS
+          tools installed on Y: and not C:
 
 2) Running dodo on Unix/Linux
+
      TBS
 
 3) Running dodo from MPW on Macintosh
 
- # Where you put "cvs checkout AAF"
-set -e aaf "MacintoshHD:TimsFolder:sf:AAF:"
-set -e MacDodo "{aaf}AAFMacSDK:dodo:"
-set Commands "{Commands},{MacDodo}Tool:"
+    # Where you put "cvs checkout AAF"
+  set -e aaf "MacintoshHD:TimsFolder:sf:AAF:"
+  set -e MacDodo "{aaf}AAFMacSDK:dodo:"
+  set Commands "{Commands},{MacDodo}Tool:"
 
- # Where you installed MacPerl
-set -e MACPERL 'MacintoshHD:Applications (Mac OS 9):MPW 3.6d7:MacPerl:'
+    # Where you installed MacPerl
+  set -e MACPERL 'MacintoshHD:Applications (Mac OS 9):MPW 3.6d7:MacPerl:'
 
-directory "{aaf}:AAFMacSDK:dodo"
-make cleansdk > make.out
-make.out
+  directory "{aaf}:AAFMacSDK:dodo"
+  make cleansdk > make.out
+  make.out
 
-rundodo
+  rundodo
 
 4) Notes
 
-Before running dodo on Macintosh consider temporarily commenting out
-the line that says
-  SetFile -m . "{DSTFILE}"
-in your working copy of the file
-  :AAFMacSDK:dodo:tool:copy_if_diff
-this will, depending on your CVS client (currently true for MAC CVS
-Pro) , make files whose contents have not changed, appear as locally
-modified.
+  Before running dodo on Macintosh consider temporarily commenting out
+  the line that says
+    SetFile -m . "{DSTFILE}"
+  in your working copy of the file
+    :AAFMacSDK:dodo:tool:copy_if_diff
+  this will, depending on your CVS client (currently true for MAC CVS
+  Pro) , make files whose contents have not changed, appear as locally
+  modified.
 
-This is also true on Windows of WinCVS, in that case consider
-temporarily modifying the line that says
-  touch $2
-in your working copy of the file
-  update.ksh
-
+  This is also true on Windows of WinCVS, in that case consider
+  temporarily modifying the line that says
+    touch $2
+  in your working copy of the file
+    update.ksh
