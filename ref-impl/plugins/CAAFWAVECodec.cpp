@@ -18,7 +18,7 @@
 //#include "ImplAAFEssenceFormat.h"
 #include "aafErr.h"
 
-#define SAMPLE_SIZE		2			// For prototype, assume 16-bit samples
+#define SAMPLE_SIZE		1			// For prototype, assume 16-bit samples
 
 // CLSID for AAFEssenceCodec 
 //{8D7B04B1-95E1-11d2-8089-006008143E6F}
@@ -310,10 +310,10 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFWaveCodec::WriteRawData (aafDataBuffer_t  buffer,
+    CAAFWaveCodec::WriteRawData (aafUInt32 nSamples, aafDataBuffer_t  buffer,
         aafInt32  buflen)
 {
-	_stream->Write (buffer, buflen);
+	_stream->Write (buffer, nSamples * SAMPLE_SIZE);
 	return HRESULT_SUCCESS;
 }
 
