@@ -90,11 +90,16 @@ realclean : clean
 # NOTE: MultiGenTest is designed to be run across multiple
 # platforms and SDK versions - this test merely checks that
 # MultiGenTest is in good working order.
+TEST_LIB_NAME = libcom-api.so
+ifeq ($(AAFPLATFORM),PPCDarwin)
+TEST_LIB_NAME = libcom-api.dylib
+endif
+
 .PHONY : check
 check : $(AAFSDKBINDIR)/MultiGenTest$(EXE)
 	rm -f basic.aaf
-	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/MultiGenTest$(EXE) -r LoadLib libcom-api.so -r FileOp write S4KBinary basic.aaf -r AddMasterMobs A B -r FileOp save_and_close -r UnloadLib || exit 1
-	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/MultiGenTest$(EXE) -r LoadLib libcom-api.so -r FileOp read S4KBinary basic.aaf -r FindMasterMobsExclusive A B -r FileOp close -r UnloadLib || exit 1
+	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/MultiGenTest$(EXE) -r LoadLib $(TEST_LIB_NAME) -r FileOp write S4KBinary basic.aaf -r AddMasterMobs A B -r FileOp save_and_close -r UnloadLib || exit 1
+	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/MultiGenTest$(EXE) -r LoadLib $(TEST_LIB_NAME) -r FileOp read S4KBinary basic.aaf -r FindMasterMobsExclusive A B -r FileOp close -r UnloadLib || exit 1
 
 
 include $(AAFBASE)/build/rules.mk
