@@ -55,7 +55,7 @@ extern "C" const aafClassID_t CLSID_AAFPropValData;
 
 
 ImplAAFTypeDefEnum::ImplAAFTypeDefEnum ()
-  : _ElementType   ( PID_TypeDefinitionEnumeration_ElementType,   "ElementType"),
+  : _ElementType   ( PID_TypeDefinitionEnumeration_ElementType,   "ElementType", "/Dictionary/TypeDefinitions", PID_DefinitionObject_Identification),
 	_ElementNames  ( PID_TypeDefinitionEnumeration_ElementNames,  "ElementNames"),
 	_ElementValues ( PID_TypeDefinitionEnumeration_ElementValues, "ElementValues"),
 	_isRegistered (kAAFFalse),
@@ -91,14 +91,8 @@ ImplAAFTypeDefEnum::Initialize (
   if (kAAFTypeCatInt != baseTypeCat)
 	return AAFRESULT_BAD_TYPE;
 
-  aafUID_t typeUID;
-  assert (pType);
-  hr = pType->GetAUID(&typeUID);
-  assert (AAFRESULT_SUCCEEDED(hr));
-  _ElementType = typeUID;
-
   return pvtInitialize (id,
-						typeUID,
+						pType,
 						pElementValues,
 						pElementNames,
 						numElements,
@@ -109,7 +103,7 @@ ImplAAFTypeDefEnum::Initialize (
 AAFRESULT STDMETHODCALLTYPE
 ImplAAFTypeDefEnum::pvtInitialize (
       const aafUID_t & id,
-      const aafUID_t & typeId,
+      const ImplAAFTypeDef * pType,
       aafInt64 * pElementValues,
       aafString_t * pElementNames,
       aafUInt32 numElements,
@@ -150,7 +144,7 @@ ImplAAFTypeDefEnum::pvtInitialize (
 	  tmpNamePtr += wcslen (pElementNames[i]) + 1;
 	}
 
-  _ElementType = typeId;
+  _ElementType = pType;
 
   _ElementNames.setValue (namesBuf, totalNameSize * sizeof(wchar_t));
   delete[] namesBuf;
@@ -165,25 +159,16 @@ AAFRESULT STDMETHODCALLTYPE
 ImplAAFTypeDefEnum::GetElementType (
       ImplAAFTypeDef ** ppTypeDef) const
 {
-  if (! ppTypeDef) return AAFRESULT_NULL_PARAM;
+  if (! ppTypeDef)
+	return AAFRESULT_NULL_PARAM;
 
-  if (! _cachedBaseType)
-	{
-	  ImplAAFDictionarySP pDict;
+   if(_ElementType.isVoid())
+		return AAFRESULT_OBJECT_NOT_FOUND;
+  ImplAAFTypeDef *pTypeDef = _ElementType;
 
-	  AAFRESULT hr = GetDictionary(&pDict);
-	  if (AAFRESULT_FAILED(hr)) return hr;
-
-	  ImplAAFTypeDefEnum * pNonConstThis =
-		  (ImplAAFTypeDefEnum *) this;
-	  hr = pDict->LookupTypeDef (_ElementType, &pNonConstThis->_cachedBaseType);
-	  if (AAFRESULT_FAILED(hr)) return hr;
-	}
-  assert (ppTypeDef);
-  *ppTypeDef = _cachedBaseType;
+  *ppTypeDef = pTypeDef;
   assert (*ppTypeDef);
   (*ppTypeDef)->AcquireReference ();
-
   return AAFRESULT_SUCCESS;
 }
 

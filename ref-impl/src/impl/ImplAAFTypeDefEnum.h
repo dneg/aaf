@@ -249,7 +249,7 @@ public:
          const aafUID_t & id,
 
          // @parm [in] Type of values in this enumeration
-         const aafUID_t & typeId,
+         const ImplAAFTypeDef * pType,
 
          // @parm [in, size_is(numElems)] array of element values to be represented in this enumerated
     // type
@@ -267,8 +267,7 @@ public:
 
 
 private:
-  // OMWeakReferenceProperty<ImplAAFTypeDef> _ElementType;
-  OMFixedSizeProperty<aafUID_t>   _ElementType;
+   OMWeakReferenceProperty<ImplAAFTypeDef> _ElementType;
 
   // names of elements in this record; stored as single wchar_t array
   // with embedded nulls
@@ -276,8 +275,6 @@ private:
 
   // array of values for elements.
   OMVariableSizeProperty<aafInt64> _ElementValues;
-
-  ImplAAFTypeDefSP _cachedBaseType;
 
   aafBool          _isRegistered;
   aafBool          _registrationAttempted;
