@@ -11,7 +11,7 @@ class OMStorable;
   // @class Container class for <c OMProperty> objects.
 class OMPropertySet {
 public:
-  // @access Public members
+  // @access Public members.
 
     // @cmember Constructor.
   OMPropertySet(void);
