@@ -1214,7 +1214,7 @@ HRESULT STDMETHODCALLTYPE
 		return AAFRESULT_INVALID_PARAM;
 	// this codec only handles a single channel
 	else if (1 != nSamples)
-		return AAFRESULT_CODEC_CHANNELS;
+		return AAFRESULT_ONESAMPLEWRITE;
 
 
 
@@ -1415,12 +1415,12 @@ HRESULT STDMETHODCALLTYPE
 		return AAFRESULT_NULL_PARAM;
 	// We only support writing a single block at a time.
 	else if (1 != xferBlockCount)
-		return AAFRESULT_ONESAMPLEWRITE;
+		return AAFRESULT_CODEC_CHANNELS;
 	else if (0 == xferBlock[0].numSamples)
 		return AAFRESULT_INVALID_PARAM;
 	// this codec only handles a single channel
 	else if (1 != xferBlock[0].numSamples /*xferBlock[0].subTrackNum*/)
-		return AAFRESULT_CODEC_CHANNELS;
+		return AAFRESULT_ONESAMPLEWRITE;
 
 
 
@@ -1615,7 +1615,7 @@ HRESULT STDMETHODCALLTYPE
 	// We only support writing a single block at a time.
 	// this codec only handles a single channel
 	else if (1 != nSamples)
-		return AAFRESULT_CODEC_CHANNELS;
+		return AAFRESULT_ONESAMPLEWRITE;
 	else if (_currentIndex >= _writeIndex)
 		return (AAFRESULT_EOF);
 
@@ -1771,10 +1771,10 @@ HRESULT STDMETHODCALLTYPE
 		return AAFRESULT_NULL_PARAM;
 	// We only support writing a single block at a time.
 	else if (1 != xferBlockCount)
-		return AAFRESULT_ONESAMPLEWRITE;
+		return AAFRESULT_CODEC_CHANNELS;
 	// this codec only handles a single channel
 	else if (1 != xferBlock[0].numSamples)
-		return AAFRESULT_CODEC_CHANNELS;
+		return AAFRESULT_ONESAMPLEWRITE;
 	else if (_currentIndex >= _writeIndex)
 		return (AAFRESULT_EOF);
 
