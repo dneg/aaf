@@ -238,7 +238,6 @@ public:
   // Succeeds if all of the following are true:
   // - the object is initialized.
   // - the pBps pointer is valid.
-  // - the property is present.
   // 
   // If this method fails nothing will be written to *pBps.
   // 
@@ -253,12 +252,66 @@ public:
   // AAFRESULT_NULL_PARAM
   //   - pBps arg is NULL.
   //
-  // AAFRESULT_PROP_NOT_PRESENT
-  //   - the property is not present.
-  //
   STDMETHOD (GetAverageBPS) (
     // Average bytes per second of the essence stream. 
     /*[out]*/ aafUInt32 *  pBps);
+
+
+  //***********************************************************
+  //
+  // SetChannelAssignment()
+  //
+  // Sets the channel assignment scheme. This property is optional.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // 
+  // If this method fails the ChannelAssignment property will not be
+  // changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.
+  //
+  STDMETHOD (SetChannelAssignment) (
+    // The channel assignment to use. 
+    /*[in, ref]*/ aafUID_constref  channelAssignment);
+
+
+  //***********************************************************
+  //
+  // GetChannelAssignment()
+  //
+  // Gets the channel assignment scheme. This property is optional.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // - the pChannelAssignment pointer is valid.
+  // - the property is present.
+  // 
+  // If this method fails nothing will be written to *pChannelAssignment.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pChannelAssignment arg is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the property is not present.
+  //
+  STDMETHOD (GetChannelAssignment) (
+    // The channel assignment in use. 
+    /*[out]*/ aafUID_t *  pChannelAssignment);
 
 
   //***********************************************************

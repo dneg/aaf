@@ -15264,6 +15264,12 @@ EXTERN_C const IID IID_IAAFPCMDescriptor;
         virtual HRESULT STDMETHODCALLTYPE GetAverageBPS( 
             /* [out] */ aafUInt32 __RPC_FAR *pBps) = 0;
         
+        virtual HRESULT STDMETHODCALLTYPE SetChannelAssignment( 
+            /* [ref][in] */ aafUID_constref channelAssignment) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetChannelAssignment( 
+            /* [out] */ aafUID_t __RPC_FAR *pChannelAssignment) = 0;
+        
         virtual HRESULT STDMETHODCALLTYPE AreAllPeakEnvelopePropertiesPresent( 
             /* [out] */ aafBoolean_t __RPC_FAR *pArePresent) = 0;
         
@@ -15379,6 +15385,14 @@ EXTERN_C const IID IID_IAAFPCMDescriptor;
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetAverageBPS )( 
             IAAFPCMDescriptor __RPC_FAR * This,
             /* [out] */ aafUInt32 __RPC_FAR *pBps);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetChannelAssignment )( 
+            IAAFPCMDescriptor __RPC_FAR * This,
+            /* [ref][in] */ aafUID_constref channelAssignment);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetChannelAssignment )( 
+            IAAFPCMDescriptor __RPC_FAR * This,
+            /* [out] */ aafUID_t __RPC_FAR *pChannelAssignment);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AreAllPeakEnvelopePropertiesPresent )( 
             IAAFPCMDescriptor __RPC_FAR * This,
@@ -15515,6 +15529,12 @@ EXTERN_C const IID IID_IAAFPCMDescriptor;
 
 #define IAAFPCMDescriptor_GetAverageBPS(This,pBps)	\
     (This)->lpVtbl -> GetAverageBPS(This,pBps)
+
+#define IAAFPCMDescriptor_SetChannelAssignment(This,channelAssignment)	\
+    (This)->lpVtbl -> SetChannelAssignment(This,channelAssignment)
+
+#define IAAFPCMDescriptor_GetChannelAssignment(This,pChannelAssignment)	\
+    (This)->lpVtbl -> GetChannelAssignment(This,pChannelAssignment)
 
 #define IAAFPCMDescriptor_AreAllPeakEnvelopePropertiesPresent(This,pArePresent)	\
     (This)->lpVtbl -> AreAllPeakEnvelopePropertiesPresent(This,pArePresent)
@@ -15666,6 +15686,30 @@ HRESULT STDMETHODCALLTYPE IAAFPCMDescriptor_GetAverageBPS_Proxy(
 
 
 void __RPC_STUB IAAFPCMDescriptor_GetAverageBPS_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPCMDescriptor_SetChannelAssignment_Proxy( 
+    IAAFPCMDescriptor __RPC_FAR * This,
+    /* [ref][in] */ aafUID_constref channelAssignment);
+
+
+void __RPC_STUB IAAFPCMDescriptor_SetChannelAssignment_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPCMDescriptor_GetChannelAssignment_Proxy( 
+    IAAFPCMDescriptor __RPC_FAR * This,
+    /* [out] */ aafUID_t __RPC_FAR *pChannelAssignment);
+
+
+void __RPC_STUB IAAFPCMDescriptor_GetChannelAssignment_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
