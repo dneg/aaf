@@ -32,6 +32,7 @@
 
 #include "OMAssertions.h"
 #include "OMStoredObject.h"
+#include "OMMSSStoredObject.h"
 #include "OMClassFactory.h"
 #include "OMObjectDirectory.h"
 #include "OMPropertyTable.h"
@@ -236,7 +237,7 @@ OMFile* OMFile::openExistingRead(const wchar_t* fileName,
   PRECONDITION("Valid class factory", factory != 0);
   PRECONDITION("Valid dictionary", dictionary != 0);
 
-  OMStoredObject* store = OMStoredObject::openRead(fileName);
+  OMStoredObject* store = OMMSSStoredObject::openRead(fileName);
   OMFile* newFile = new OMFile(fileName,
                                clientOnRestoreContext,
                                readOnlyMode,
@@ -269,7 +270,7 @@ OMFile* OMFile::openExistingModify(const wchar_t* fileName,
   PRECONDITION("Valid class factory", factory != 0);
   PRECONDITION("Valid dictionary", dictionary != 0);
 
-  OMStoredObject* store = OMStoredObject::openModify(fileName);
+  OMStoredObject* store = OMMSSStoredObject::openModify(fileName);
   OMFile* newFile = new OMFile(fileName,
                                clientOnRestoreContext,
                                modifyMode,
@@ -311,7 +312,7 @@ OMFile* OMFile::openNewModify(const wchar_t* fileName,
   PRECONDITION("Valid signature", validSignature(signature));
   PRECONDITION("Valid dictionary ", dictionary != 0);
 
-  OMStoredObject* store = OMStoredObject::createModify(fileName, byteOrder);
+  OMStoredObject* store = OMMSSStoredObject::createModify(fileName, byteOrder);
   OMRootStorable* root = new OMRootStorable(clientRoot, dictionary);
   ASSERT("Valid heap pointer", root != 0);
 
@@ -348,8 +349,7 @@ OMFile* OMFile::openExistingRead(OMRawStorage* rawStorage,
                            (encoding == XMLTextEncoding));
   switch (encoding) {
   case MSSBinaryEncoding:
-  //store = OMMSSStoredObject::openRead(rawStorage);
-    store = OMStoredObject::openRead(rawStorage);
+    store = OMMSSStoredObject::openRead(rawStorage);
     break;
   case KLVBinaryEncoding:
   //store = OMKLVStoredObject::openRead(rawStorage);
@@ -394,8 +394,7 @@ OMFile* OMFile::openExistingModify(OMRawStorage* rawStorage,
                            (encoding == XMLTextEncoding));
   switch (encoding) {
   case MSSBinaryEncoding:
-  //store = OMMSSStoredObject::openModify(rawStorage);
-    store = OMStoredObject::openModify(rawStorage);
+    store = OMMSSStoredObject::openModify(rawStorage);
     break;
   case KLVBinaryEncoding:
   //store = OMKLVStoredObject::openModify(rawStorage);
@@ -444,8 +443,7 @@ OMFile* OMFile::openNewModify(OMRawStorage* rawStorage,
   OMStoredObject* store = 0;
   switch (encoding) {
   case MSSBinaryEncoding:
-  //store = OMMSSStoredObject::createModify(rawStorage, byteOrder);
-    store = OMStoredObject::createModify(rawStorage, byteOrder);
+    store = OMMSSStoredObject::createModify(rawStorage, byteOrder);
     break;
   case KLVBinaryEncoding:
   //store = OMKLVStoredObject::createModify(rawStorage, byteOrder);
