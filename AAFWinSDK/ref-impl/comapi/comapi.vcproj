@@ -118,7 +118,7 @@
 				OutputFile="../../Debug/RefImpl/AAFCOAPI.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="&quot;C:\dev\AAF\sss-impl\Debug&quot;;C:\dev\AAF\AAFWinSDK\lib"
+				AdditionalLibraryDirectories="&quot;..\..\sss-impl&quot;;C:\dev\AAF\AAFWinSDK\lib"
 				IgnoreAllDefaultLibraries="FALSE"
 				IgnoreDefaultLibraryNames=""
 				ModuleDefinitionFile="..\..\..\ref-impl\src\com-api\com-dll\AAFCOM.DEF"
