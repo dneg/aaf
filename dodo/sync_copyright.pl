@@ -142,7 +142,7 @@ sub read_copyright_message
   }
 
   while (<COPYRIGHT_HANDLE>) {
-    chomp;
+	s/[\n\r]//g; # rather than chomp in order to handle files downloaded on other platforms
     $line_length = length($_) - 1;
     $max_line_length = $line_length if ($line_length > $max_line_length);
     $copyright_message .= $_ . "\n";
