@@ -18,22 +18,13 @@ public:
 	CAAFClassFactory(AAFCreateComObjectProc );
 
     // IUnknown methods  
-	STDMETHOD(QueryInterface)(REFIID riid, void **ppvObjOut) \
-	{ \
-		return ExternalQueryInterface(riid, ppvObjOut); \
-	} \
-	STDMETHOD_(ULONG, AddRef)(void) \
-	{ \
-		return ExternalAddRef(); \
-	} \
-	STDMETHOD_(ULONG, Release)(void) \
-	{ \
-		return ExternalRelease(); \
-	} 
+	AAF_DECLARE_STANDARD_UNKNOWN()
 	
+protected:
 	// CAAFUnknown override
     virtual HRESULT InternalQueryInterface(REFIID riid, void **ppv);
-	
+
+public:
     // IClassFactory methods 
     STDMETHOD(CreateInstance)(IUnknown * punkOuter, REFIID riid, void ** ppv); 
     STDMETHOD(LockServer)(BOOL fLock);     
