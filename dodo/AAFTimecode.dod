@@ -24,17 +24,17 @@ AD_CLASS_BEGIN
 
 AD_CONSTRUCTOR2(
 [in],aafLength_t,length,Length Property Value,
-[in],aafTimecode_t,timecode,Timecode Value \(startFrame\, drop\, fps\),
+[in],aafTimecode_t,timecode,Timecode Value \\\(startFrame\\\, drop\\\, fps\\\),
 Constructor taking initial values.)
 
 /****/
 AD_METHOD1(GetTimecode,
-[out],aafTimecode_t*,timecode,Timecode \(startFrame\, drop\, fps\),
+[out],aafTimecode_t*,timecode,Timecode \\\(startFrame\\\, drop\\\, fps\\\),
 Get the timecode fields.)
 
 /****/
 AD_METHOD1(SetTimecode,
-[out],aafTimecode_t,timecode,Timecode \(startFrame\, drop\, fps\),
+[out],aafTimecode_t,timecode,Timecode \\\(startFrame\\\, drop\\\, fps\\\),
 Set the timecode fields.)
 
 /****/
