@@ -37,7 +37,7 @@
 #include "OMUniqueObjectIdentType.h"
 #include "OMSetIterator.h"
 
-#include "OMDiskRawStorage.h"
+#include "OMCachedDiskRawStorage.h"
 
 #include <string.h>
 #include <stdio.h>
@@ -135,9 +135,9 @@ OMFile* OMFile::openExistingModify(const wchar_t* fileName,
                          loadMode);
     ASSERT("Valid heap pointer", newFile != 0);
   } else {
-    OMRawStorage* rawStorage = OMDiskRawStorage::openExistingModify(fileName);
-    ASSERT("Valid raw storage", rawStorage != 0);
-    newFile = new OMFile(rawStorage,
+    OMRawStorage* store = OMCachedDiskRawStorage::openExistingModify(fileName);
+    ASSERT("Valid raw storage", store != 0);
+    newFile = new OMFile(store,
                          clientOnRestoreContext,
                          modifyMode,
                          factory,
@@ -202,9 +202,9 @@ OMFile* OMFile::openNewModify(const wchar_t* fileName,
     OMRootStorable* root = new OMRootStorable(clientRoot, dictionary);
     ASSERT("Valid heap pointer", root != 0);
 
-    OMRawStorage* rawStorage = OMDiskRawStorage::openNewModify(fileName);
-    ASSERT("Valid raw storage", rawStorage != 0);
-    newFile = new OMFile(rawStorage,
+    OMRawStorage* store = OMCachedDiskRawStorage::openNewModify(fileName);
+    ASSERT("Valid raw storage", store != 0);
+    newFile = new OMFile(store,
                          clientOnRestoreContext,
                          encoding,
                          modifyMode,
