@@ -1,0 +1,66 @@
+#startm .this-module 0
+AAFEssencePlugin\
+#endm
+#startm .parent-module 0
+AAFRoot\
+#endm
+#c
+#import ./AAFObject.exp
+#import ./AAFEndian.exp
+AD_HEAD
+/******************************************\
+*                                          *
+* Advanced Authoring Format                *
+*                                          *
+* Copyright (c) 1998 Avid Technology, Inc. *
+* Copyright (c) 1998 Microsoft Corporation *
+*                                          *
+\******************************************/
+
+
+AD_CLASS_UUID(AF98DE41, 952D, 11D2, 80, 89, 00, 60, 08, 14, 3e, 6f)
+
+AD_DEFAULT_UUID(AF98DE42, 952D, 11D2, 80, 89, 00, 60, 08, 14, 3e, 6f)
+
+AD_CLASS_BEGIN
+
+AD_XMETHOD3(NumCodecsMatching,
+[in],objPass,aafUID_t,dataDefinition,Looking for audio or video codecs,
+[in],objPass, aafFileRev_t,revision,for which variety of file,
+[out],objPass,aafInt32 *,result,Returns the number of matches,
+Find all of the codecs available for a particular media type.)
+
+AD_XMETHOD6(GetIndexedCodecInfo,
+			[in],
+			objPass,
+			aafUID_t,
+			dataDefinition,
+			Looking for audio or video codecs,
+			[in],
+			objPass, 
+			aafFileRev_t,
+			revision,
+			for which variety of file,
+			[in],
+			objPass, 
+			aafInt32,
+			index,
+			Which codec. 1 to number of codecs,
+			[in\,string],
+			objPass,
+			wchar_t *,
+			pName,
+			Codec Name,
+			[in],
+			objPass,
+			aafInt32,
+			bufSize,
+			length of the buffer to hold Codec Name,
+			[out],
+			objPass,
+			aafUID_t *,
+			codecID,
+			ID used to access the codec,
+			Get the codec name and ID.)
+
+AD_CLASS_END
