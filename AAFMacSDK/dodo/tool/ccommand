@@ -1,0 +1,34 @@
+#
+# Script: ccommand
+# proxy for unix exec command.
+#
+
+#
+# This variable will contain program name to execute.
+set programName ""
+
+
+if "{1}" == ""
+	echo "# exec needs at least one argument that represents to aaf program to execute."
+	exit 1
+end if
+
+set programName "{1}"
+shift
+
+# Create the argv file.
+echo "{parameters}" > "{programName}.arg"
+
+# Preserve the old obsolete inp file if present.
+if "`exists -f "{programName}.inp"`" ­ ""
+	Rename "{programName}.inp" "{programName}.inp1"
+end if
+
+# Call the program and wait until the program quits.
+"{programName}" -background -wait
+
+# Copy the output file to stdout
+catenate "{programName}.out"
+
+# cleanup temporary files.
+rm -f "{programName}.arg" "{programName}.out"
