@@ -39,6 +39,10 @@
 
 #include "CAAFBuiltinDefs.h"
 
+#if defined(macintosh) || defined(_MAC)
+#include "DataInput.h"
+#endif
+
 
 static void     FatalErrorCode(HRESULT errcode, int line, char *file)
 {
@@ -600,7 +604,7 @@ struct CAAFInitialize
 };
 
 
-int main()
+int main(int argc, char *argv[])
 {
   CComInitialize comInit;
   CAAFInitialize aafInit;

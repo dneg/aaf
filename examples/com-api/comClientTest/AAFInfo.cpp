@@ -218,13 +218,6 @@ struct CAAFInitialize
 
 int main(int argumentCount, char* argumentVector[])
 {
-  /* console window for mac */
-
-  #if defined(macintosh) || defined(_MAC)
-	char dataFile[] = "COMAAFINFO.inp";
-	getInputData(&argumentCount, argumentVector, dataFile);
-  #endif
-
   if (argumentCount != 2) {
     fprintf(stderr, "Error : wrong number of arguments\n");
     return(1);
@@ -239,10 +232,6 @@ int main(int argumentCount, char* argumentVector[])
   CAAFInitialize aafInit;
 
   ReadAAFFile(wInputFileName);
-
-  #ifdef _MAC
-  cleanUpInputData(argumentCount, argumentVector);
-  #endif
 
   fprintf(stdout, "Done\n");
 
