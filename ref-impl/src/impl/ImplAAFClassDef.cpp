@@ -780,6 +780,8 @@ ImplAAFClassDef::pvtRegisterExistingPropertyDef
 {
   if (!pPropDef)
 	return AAFRESULT_NULL_PARAM;
+  if (pPropDef->attached())
+	return AAFRESULT_OBJECT_ALREADY_ATTACHED;
 
   _Properties.appendValue(pPropDef);
   pPropDef->AcquireReference ();
