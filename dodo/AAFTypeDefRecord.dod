@@ -66,17 +66,29 @@ AD_X2METHOD5(Initialize,
 
      Initializes this type def to be identified by the given guid\, and
   // to contain the given members \(types and names\).  It is considered
-  // an error if multiple members have the same name.
+  // an error if multiple members have the same name.  Note that it is
+  // only possible to use certain types as member types.  Those
+  // permissible types include:
+  // - AAFTypeDefInt
+  // - AAFTypeDefRecord
+  // - AAFTypeDefEnum
+  // - AAFTypeDefExtEnum
+  // - AAFTypeDefFixedArray
   //
   // Succeeds if:
   // - Initialize\(\) has not yet been called on this object.
   // - pID is a valid pointer.
-  // - pMemberInfo is a valid pointer.
+  // - pMemberTypes is a valid pointer.
+  // - pMemberNames is a valid pointer.
   // - pTypeName is a valid pointer.
+  // - all specified member types are permissible for use in a Record.
   // - all member names are unique.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_ALREADY_INIT
-  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pID\\\, pMemberInfo\\\, or pTypeName\)
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pID\\\, pMemberTypes\\\, pMemberNames\\\, or pTypeName\)
+  //
+  // AAFRESULT_BAD_TYPE
+  //   - an illegal member type was given.
   //
   // AAFRESULT_DUPLICATE
   //   - a duplicate member name was given.)
