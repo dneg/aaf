@@ -36,6 +36,10 @@
 #include "ImplAAFEffectDef.h"
 #endif
 
+#ifndef __ImplAAFParameterDef_h__
+#include "ImplAAFParameterDef.h"
+#endif
+
 #ifndef __ImplEnumAAFEffectDefs_h__
 #include "ImplEnumAAFEffectDefs.h"
 #endif
@@ -65,13 +69,16 @@
 
 extern "C" const aafClassID_t CLSID_EnumAAFPluggableDefs;
 extern "C" const aafClassID_t CLSID_EnumAAFEffectDefs;
+extern "C" const aafClassID_t CLSID_EnumAAFParameterDefs;
 
 ImplAAFDictionary::ImplAAFDictionary ()
 : _pluginDefinitions(PID_Dictionary_PluginDefinitions, "PluginDefinitions"),
-  _effectDefinitions(PID_Dictionary_EffectDefinitions, "EffectDefinitions")
+  _effectDefinitions(PID_Dictionary_EffectDefinitions, "EffectDefinitions"), 
+  _parameterDefinitions(PID_Dictionary_ParameterDefinitions, "ParameterDefinitions")
 {
   _persistentProperties.put(_pluginDefinitions.address());
   _persistentProperties.put(_effectDefinitions.address());
+  _persistentProperties.put(_parameterDefinitions.address());
 }
 
 
@@ -93,6 +100,16 @@ ImplAAFDictionary::~ImplAAFDictionary ()
 	for (i = 0; i < effectDefSize; i++)
 	{
 		ImplAAFEffectDef *pPlug =_effectDefinitions.setValueAt(0, i);
+		if (pPlug)
+		{
+		  pPlug->ReleaseReference();
+		}
+	}
+
+	size_t paramDefSize = _parameterDefinitions.getSize();
+	for (i = 0; i < paramDefSize; i++)
+	{
+		ImplAAFParameterDef *pPlug = _parameterDefinitions.setValueAt(0, i);
 		if (pPlug)
 		{
 		  pPlug->ReleaseReference();
@@ -331,6 +348,101 @@ AAFRESULT STDMETHODCALLTYPE
 	XPROTECT()
 	{
 		CHECK(theEnum->SetEnumStrongProperty(this, &_effectDefinitions));
+		*ppEnum = theEnum;
+	}
+	XEXCEPT
+	{
+		if (theEnum)
+			theEnum->ReleaseReference();
+		return(XCODE());
+	}
+	XEND;
+	
+	return(AAFRESULT_SUCCESS);
+}
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDictionary::RegisterParameterDefinition (
+      ImplAAFParameterDef *pParameterDef)
+{
+	if (NULL == pParameterDef)
+		return AAFRESULT_NULL_PARAM;
+	
+	_parameterDefinitions.appendValue(pParameterDef);
+	// trr - We are saving a copy of pointer in _pluginDefinitions
+	// so we need to bump its reference count.
+	pParameterDef->AcquireReference();
+	
+	return(AAFRESULT_SUCCESS);
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDictionary::LookupParameterDefinition (
+      aafUID_t *pParameterID,
+      ImplAAFParameterDef **ppParameterDef)
+{
+	ImplEnumAAFParameterDefs		*parameterEnum = NULL;
+	ImplAAFParameterDef			*parameterDef = NULL;
+	aafBool						defFound;
+	AAFRESULT					status;
+	aafUID_t					testAUID;
+
+	XPROTECT()
+	{
+		CHECK(GetParameterDefinitions (&parameterEnum));
+		status = parameterEnum->NextOne (&parameterDef);
+		defFound = AAFFalse;
+		while(status == AAFRESULT_SUCCESS && !defFound)
+		{
+			CHECK(parameterDef->GetAUID (&testAUID));
+			if(EqualAUID(pParameterID, &testAUID))
+			{
+				defFound = AAFTrue;
+				*ppParameterDef = parameterDef;
+				parameterDef->AcquireReference();
+				break;
+			}
+			parameterDef->ReleaseReference();
+			parameterDef = NULL;
+			status = parameterEnum->NextOne (&parameterDef);
+		}
+		if(parameterDef != NULL)
+		{
+			parameterDef->ReleaseReference();
+			parameterDef = NULL;
+		}
+		parameterEnum->ReleaseReference();
+		parameterEnum = NULL;
+		if(!defFound)
+			 RAISE(AAFRESULT_NO_MORE_OBJECTS);
+	}
+	XEXCEPT
+	{
+		if(parameterEnum != NULL)
+			parameterEnum->ReleaseReference();
+		if(parameterDef != NULL)
+			parameterDef->ReleaseReference();
+	}
+	XEND
+	
+	return(AAFRESULT_SUCCESS);
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDictionary::GetParameterDefinitions (
+      ImplEnumAAFParameterDefs **ppEnum)
+{
+	if (NULL == ppEnum)
+		return AAFRESULT_NULL_PARAM;
+	*ppEnum = 0;
+	
+	ImplEnumAAFParameterDefs *theEnum = (ImplEnumAAFParameterDefs *)CreateImpl (CLSID_EnumAAFParameterDefs);
+	
+	XPROTECT()
+	{
+		CHECK(theEnum->SetEnumStrongProperty(this, &_parameterDefinitions));
 		*ppEnum = theEnum;
 	}
 	XEXCEPT
