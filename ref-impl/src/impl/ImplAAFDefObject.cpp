@@ -99,7 +99,8 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFDefObject::Initialize (
       const aafUID_t & id,
-	  const aafCharacter * pName )
+	  const aafCharacter * pName,
+	  const aafCharacter * pDesc )
 {
 	//validate pName
 	if (pName == NULL)
@@ -109,6 +110,9 @@ AAFRESULT STDMETHODCALLTYPE
 
 	_identification = id;
 	_name = pName;
+	
+	if (pDesc != NULL)
+		_description = pDesc;
 
 	return AAFRESULT_SUCCESS;
 }
