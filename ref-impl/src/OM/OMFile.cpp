@@ -334,8 +334,33 @@ OMFile* OMFile::openExistingRead(OMRawStorage* rawStorage,
 {
   TRACE("OMFile::openExistingRead");
 
+  PRECONDITION("Valid raw storage", rawStorage != 0);
+  PRECONDITION("Valid class factory", factory != 0);
+  PRECONDITION("Valid dictionary", dictionary != 0);
+
+  OMStoredObject* store = 0;
+  OMFileSignature s;
+  readSignature(rawStorage, s);
+  OMFileEncoding encoding = encodingOf(s);
+  ASSERT("Valid encoding", (encoding == MSSBinaryEncoding) ||
+                           (encoding == KLVBinaryEncoding) ||
+                           (encoding == XMLTextEncoding));
+
   // TBS
-  return 0;
+
+  ASSERT("Valid store", store != 0);
+
+  OMFile* newFile = new OMFile(rawStorage,
+                               encoding,
+                               clientOnRestoreContext,
+                               readOnlyMode,
+                               store,
+                               factory,
+                               dictionary,
+                               loadMode);
+  ASSERT("Valid heap pointer", newFile != 0);
+  POSTCONDITION("Object Manager file", newFile->isOMFile());
+  return newFile;
 }
 
 OMFile* OMFile::openExistingModify(OMRawStorage* rawStorage,
@@ -346,8 +371,33 @@ OMFile* OMFile::openExistingModify(OMRawStorage* rawStorage,
 {
   TRACE("OMFile::openExistingModify");
 
+  PRECONDITION("Valid raw storage", rawStorage != 0);
+  PRECONDITION("Valid class factory", factory != 0);
+  PRECONDITION("Valid dictionary", dictionary != 0);
+
+  OMStoredObject* store = 0;
+  OMFileSignature s;
+  readSignature(rawStorage, s);
+  OMFileEncoding encoding = encodingOf(s);
+  ASSERT("Valid encoding", (encoding == MSSBinaryEncoding) ||
+                           (encoding == KLVBinaryEncoding) ||
+                           (encoding == XMLTextEncoding));
+
   // TBS
-  return 0;
+
+  ASSERT("Valid store", store != 0);
+
+  OMFile* newFile = new OMFile(rawStorage,
+                               encoding,
+                               clientOnRestoreContext,
+                               modifyMode,
+                               store,
+                               factory,
+                               dictionary,
+                               loadMode);
+  ASSERT("Valid heap pointer", newFile != 0);
+  POSTCONDITION("Object Manager file", newFile->isOMFile());
+  return newFile;
 }
 
 OMFile* OMFile::openNewModify(OMRawStorage* rawStorage,
@@ -360,9 +410,40 @@ OMFile* OMFile::openNewModify(OMRawStorage* rawStorage,
 {
   TRACE("OMFile::openNewModify");
 
+  PRECONDITION("Valid raw storage", rawStorage != 0);
+  PRECONDITION("Valid class factory", factory != 0);
+  PRECONDITION("Valid byte order",
+                    ((byteOrder == littleEndian) || (byteOrder == bigEndian)));
+  PRECONDITION("Valid client root", clientRoot != 0);
+  PRECONDITION("Valid signature", validSignature(signature));
+  PRECONDITION("Valid dictionary ", dictionary != 0);
+
+  OMFileEncoding encoding = encodingOf(signature);
+  ASSERT("Valid encoding", (encoding == MSSBinaryEncoding) ||
+                           (encoding == KLVBinaryEncoding) ||
+                           (encoding == XMLTextEncoding));
+  OMStoredObject* store = 0;
+
   // TBS
-  return 0;
+
+  ASSERT("Valid store", store != 0);
+
+  OMRootStorable* root = new OMRootStorable(clientRoot, dictionary);
+  ASSERT("Valid heap pointer", root != 0);
+
+  OMFile* newFile = new OMFile(rawStorage,
+                               encoding,
+                               clientOnRestoreContext,
+                               signature,
+                               modifyMode,
+                               store,
+                               factory,
+                               dictionary,
+                               root);
+  ASSERT("Valid heap pointer", newFile != 0);
+  return newFile;
 }
+
    // @mfunc Is <p signature> a valid signature for an <c OMFile> ?
    //   @parm The signature to check.
    //   @rdesc True if <p signature> is a valid signature for an
