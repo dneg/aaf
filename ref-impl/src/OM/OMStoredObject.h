@@ -30,6 +30,7 @@
 #include "OMFile.h"
 
 class OMSimpleProperty;
+class OMDataVector;
 class OMDataStream;
 class OMStrongReference;
 class OMStrongReferenceSet;
@@ -88,6 +89,10 @@ public:
     //          <c OMStoredObject>.
   virtual void save(const OMSimpleProperty& property) = 0;
 
+    // @cmember Save the <c OMDataVector> <p property> in this
+    //          <c OMStoredObject>.
+  virtual void save(const OMDataVector& property) = 0;
+
     // @cmember Save the <c OMStrongReference> <p singleton> in this
     //          <c OMStoredObject>.
   virtual void save(const OMStrongReference& singleton) = 0;
@@ -140,6 +145,13 @@ public:
     //   @devnote The externalSize argument to this member function doesn't
     //            make sense for all derived instances of <c OMStoredObject>.
   virtual void restore(OMSimpleProperty& property,
+                       size_t externalSize) = 0;
+
+    // @cmember Restore the <c OMDataVector> <p property> into this
+    //          <c OMStoredObject>.
+    //   @devnote The externalSize argument to this member function doesn't
+    //            make sense for all derived instances of <c OMStoredObject>.
+  virtual void restore(OMDataVector& property,
                        size_t externalSize) = 0;
 
     // @cmember Restore the <c OMStrongReference> <p singleton> into this

@@ -48,17 +48,14 @@ OMDataVector::~OMDataVector(void)
 void OMDataVector::save(void) const
 {
   TRACE("OMDataVector::save");
-#if 0 // tjb - Not yet
   store()->save(*this);
-#endif
 }
 
 void OMDataVector::restore(size_t externalSize)
 {
   TRACE("OMDataVector::restore");
-#if 0 // tjb - Not yet
+
   // tjb -- resize ?
   store()->restore(*this, externalSize);
   setPresent();
-#endif
 }

@@ -52,6 +52,9 @@
 #include "OMWeakReferenceSet.h"
 #include "OMWeakReferenceVector.h"
 #include "OMDataStream.h"
+#include "OMDataVector.h"
+#include "OMArrayType.h"
+#include "OMDataContainerIterator.h"
 
 #include "OMAssertions.h"
 #include "OMExceptions.h"
@@ -384,6 +387,68 @@ void OMMSSStoredObject::save(const OMSimpleProperty& property)
     //
     write(propertyId, storedForm, bits, size);
   }
+}
+
+  // @mfunc Save the <c OMDataVector> <p property> in this
+  //        <c OMMSSStoredObject>.
+  //   @parm TBS
+void OMMSSStoredObject::save(const OMDataVector& property)
+{
+#if 0 // tjb - Not yet
+  TRACE("OMMSSStoredObject::save");
+
+  // Save as if this were an OMSimpleProperty
+
+  OMPropertyId propertyId = property.propertyId();
+  OMStoredForm storedForm = SF_DATA;
+  const OMType* propertyType = property.type();
+  ASSERT("Valid property type", propertyType != 0);
+  const OMArrayType* at = dynamic_cast<const OMArrayType*>(propertyType);
+  ASSERT("Correct type", at != 0);
+  OMType* elementType = at->elementType();
+  ASSERT("Fixed size elements", elementType->isFixedSize());
+  OMUInt32 elementSize = elementType->externalSize();
+  OMUInt32 elementCount = property.count();
+
+    // Allocate buffer for one element
+  OMByte* buffer = new OMByte[elementSize];
+  ASSERT("Valid heap pointer", buffer != 0);
+
+  // size
+  // Doh! 32-bit size and count but 16-bit property size
+  OMUInt64 size = elementSize * elementCount;
+  // ASSERT("Valid size"); // tjb
+  OMPropertySize propertySize = static_cast<OMPropertySize>(size);
+
+  _index->insert(propertyId, storedForm, _offset, propertySize);
+
+  OMDataContainerIterator* it = property.createIterator();
+  while (++(*it)) {
+
+    // Get a pointer to the element
+    const OMByte* bits = it->currentElement();
+
+
+    // Externalize element
+    elementType->externalize(bits,
+                             elementSize,
+                             buffer,
+                             elementSize,
+                             hostByteOrder());
+
+    // Reorder element
+    if (_reorderBytes) {
+      elementType->reorder(buffer, elementSize);
+    }
+
+    // value
+    writeToStream(_properties, buffer, elementSize);
+    _offset += elementSize;
+
+  }
+  delete it;
+  delete [] buffer;
+#endif
 }
 
   // @mfunc Save the <c OMStrongReference> <p singleton> in this
@@ -891,6 +956,57 @@ void OMMSSStoredObject::restore(OMSimpleProperty& property,
     bits = property.bits();
     read(propertyId, storedForm, bits, externalSize);
   }
+}
+
+  // @mfunc Restore the <c OMDataVector> <p property> into this
+  //        <c OMMSSStoredObject>.
+  //   @parm TBS
+  //   @parm TBS
+void OMMSSStoredObject::restore(OMDataVector& property,
+                                 size_t externalSize)
+{
+#if 0 // tjb - Not yet
+  TRACE("OMMSSStoredObject::restore");
+
+  const OMType* propertyType = property.type();
+  ASSERT("Valid property type", propertyType != 0);
+  const OMArrayType* at = dynamic_cast<const OMArrayType*>(propertyType);
+  ASSERT("Correct type", at != 0);
+  OMType* elementType = at->elementType();
+  ASSERT("Fixed size elements", elementType->isFixedSize());
+  OMUInt32 elementSize = elementType->externalSize();
+  ASSERT("Consistent element size", elementSize = property.elementSize());
+
+  // Allocate buffer for one element
+  OMByte* buffer = new OMByte[elementSize];
+  ASSERT("Valid heap pointer", buffer != 0);
+  OMByte* value = new OMByte[elementSize];
+  ASSERT("Valid heap pointer", value != 0);
+
+  property.clear();
+  OMUInt32 elementCount = externalSize / elementSize;
+
+  for (size_t i = 0; i < elementCount; i++) {
+
+    // Read one element
+    readFromStream(_properties, buffer, elementSize);
+
+    // Reorder one element
+    if (byteOrder() != hostByteOrder()) {
+      elementType->reorder(buffer, elementSize);
+    }
+
+    // Internalize one element
+    elementType->internalize(buffer,
+                             elementSize,
+                             value,
+                             elementSize,
+                             hostByteOrder());
+
+    property.appendValue(value);
+  }
+  delete [] buffer;
+#endif
 }
 
   // @mfunc Restore the <c OMStrongReference> <p singleton> into this
