@@ -216,6 +216,7 @@ void OMStoredObject::save(const OMPropertySet& properties)
 
   size_t count = properties.count();
   delete _index;
+  _index = 0; // for BoundsChecker
   _index = new OMStoredPropertySetIndex(count);
   ASSERT("Valid heap pointer", _index != 0);
   size_t countPresent = properties.countPresent();
@@ -1202,6 +1203,7 @@ void OMStoredObject::restore(OMPropertyTable*& table)
       internalizeUInt16Array(externalName, internalName, pidCount + 1);
       table->insert(internalName);
       delete [] internalName;
+      internalName = 0; // for BoundsChecker
       externalName = externalName + pidCount + 1;
     }
     delete [] buffer;
