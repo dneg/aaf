@@ -16,6 +16,7 @@
 
 
 class ImplEnumAAFLoadedPlugins;
+class ImplAAFPluginDescriptor;
 
 #ifndef __ImplAAFRoot_h__
 #include "ImplAAFRoot.h"
@@ -73,6 +74,10 @@ AAFRESULT RegisterPlugin(
 			CLSID		plugin);
 
 AAFRESULT Init(void);
+
+// Internal to the toolkit functions
+AAFRESULT GetFirstLoadedPlugin (aafTableIterate_t *iter, ImplAAFPluginDescriptor **ppDesc);
+AAFRESULT GetNextLoadedPlugin (aafTableIterate_t *iter, ImplAAFPluginDescriptor **ppDesc);
 
 private:
 	aafTable_t	*_plugins;
