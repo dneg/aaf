@@ -39,9 +39,7 @@ const aafProductVersion_t AAFToolkitVersion = {2, 1, 0, 1, kVersionBeta};
 
 static void     FatalErrorCode(aafErr_t errcode, int line, char *file)
 {
-// TODO: Fix this later. aafGetErrorString unresolved at link
-//  printf("Error '%s' returned at line %d in %s\n",
-//	 aafGetErrorString(errcode), line, file);
+  printf("Error '%0x' returned at line %d in %s\n", errcode, line, file);
   exit(1);
 }
 
@@ -61,75 +59,71 @@ static aafErr_t moduleErrorTmp = OM_ERR_NONE;/* note usage in macro */
 #define assert(b, msg) \
   if (!(b)) {fprintf(stderr, "ASSERT: %s\n\n", msg); exit(1);}
 
-void ReadAAFFile(unsigned char * pFileName, aafProductIdentification_t *pProductInfo)
+void printIdentification(IAAFIdentification* pIdent)
 {
-	IAAFSession *	pISessionPtr = NULL;
-	IAAFFile *	pIFilePtr = NULL;
-	HRESULT		hr;
-	aafFileRev_t FileRev;
-	  
-	hr = CoCreateInstance(CLSID_AAFSession,
-						  NULL, 
-						  CLSCTX_INPROC_SERVER, 
-						  IID_IAAFSession, 
-						  (void **)&pISessionPtr);
-	check(hr);
-	  
-	hr = pISessionPtr->SetDefaultIdentification(pProductInfo);
-	check(hr);
+	aafString_t companyName;
+	check(pIdent->GetCompanyName(&companyName));
+	wprintf(L"CompanyName          = \"%s\"\n", companyName.value);
 
-	hr = pISessionPtr->OpenReadFile(pFileName, &pIFilePtr);
-	check(hr);
-  
-	hr = pIFilePtr->GetRevision(&FileRev);
-	check(hr);
+	aafString_t productName;
+	check(pIdent->GetProductName(&productName));
+	wprintf(L"ProductName          = \"%s\"\n", productName.value);
 
-	if (FileRev == kAAFRev1)
-		fprintf(stdout, "Successfullly read file revision.\n");
-	else
-		fprintf(stdout, "Failed to read file revision.\n");
+	aafString_t productVersionString;
+	check(pIdent->GetProductVersionString(&productVersionString));
+	wprintf(L"ProductVersionString = \"%s\"\n", productVersionString.value);
 
-	check(pIFilePtr->Close());
-
-	check(pISessionPtr->EndSession());
-
-	if (pIFilePtr) pIFilePtr->Release();
-	if (pISessionPtr) pISessionPtr->Release();
+	aafString_t platform;
+	check(pIdent->GetPlatform(&platform));
+	wprintf(L"Platform             = \"%s\"\n", platform.value);
 }
 
-void CreateAAFFile(unsigned char * pFileName, aafProductIdentification_t *pProductInfo)
+void ReadAAFFile(unsigned char * pFileName)
 {
-	IAAFSession *	pISessionPtr = NULL;
-	IAAFFile *	pIFilePtr = NULL;
-	HRESULT		hr;
+	IAAFSession *				pSession = NULL;
+	IAAFFile *					pFile = NULL;
+	IAAFHeader *				pHeader = NULL;
+	IAAFIdentification *		pIdent;
+	aafProductIdentification_t	ProductInfo;
 
-	hr = CoCreateInstance(CLSID_AAFSession,
-						  NULL, 
-						  CLSCTX_INPROC_SERVER, 
-						  IID_IAAFSession, 
-						  (void **)&pISessionPtr);
-	check(hr);
-    
-	hr = pISessionPtr->SetDefaultIdentification(pProductInfo);
-	check(hr);
+	ProductInfo.companyName = (unsigned char *)"AAF Developers Desk. NOT!";
+	ProductInfo.productName = (unsigned char *)"Make AVR Example. NOT!";
+	ProductInfo.productVersion = AAFToolkitVersion;
+	ProductInfo.productVersionString = NULL;
+	ProductInfo.productID = -1;
+	ProductInfo.platform = NULL;
+	  
+	check(CoCreateInstance(CLSID_AAFSession,
+						   NULL, 
+						   CLSCTX_INPROC_SERVER, 
+						   IID_IAAFSession, 
+						   (void **)&pSession));
+	  
+	check(pSession->SetDefaultIdentification(&ProductInfo));
 
-	hr = pISessionPtr->CreateFile(pFileName, kAAFRev1, &pIFilePtr);
-	check(hr);
+	check(pSession->OpenReadFile(pFileName, &pFile));
   
-	check(pIFilePtr->Close());
+	check(pFile->GetHeader(&pHeader));
 
-	check(pISessionPtr->EndSession());
+	check(pHeader->GetLastIdentification(&pIdent));
 
-	if (pIFilePtr) pIFilePtr->Release();
-	if (pISessionPtr) pISessionPtr->Release();
+	fprintf(stdout, "LastIdentification\n");
+	printIdentification(pIdent);
+
+	check(pFile->Close());
+
+	check(pSession->EndSession());
+
+	if (pHeader) pHeader->Release();
+	if (pFile) pFile->Release();
+	if (pSession) pSession->Release();
 }
 
-main()
+void CreateAAFFile(unsigned char * pFileName)
 {
-	aafProductIdentification_t ProductInfo;
-
-	  
-	CoInitialize(NULL);
+	IAAFSession *				pSession = NULL;
+	IAAFFile *					pFile = NULL;
+	aafProductIdentification_t	ProductInfo;
 
 	ProductInfo.companyName = (unsigned char *)"AAF Developers Desk";
 	ProductInfo.productName = (unsigned char *)"Make AVR Example";
@@ -138,8 +132,30 @@ main()
 	ProductInfo.productID = -1;
 	ProductInfo.platform = NULL;
 
-	CreateAAFFile((unsigned char *)"Foo.aaf", &ProductInfo);
-	ReadAAFFile((unsigned char *)"Foo.aaf", &ProductInfo);
+	check(CoCreateInstance(CLSID_AAFSession,
+						   NULL, 
+						   CLSCTX_INPROC_SERVER, 
+						   IID_IAAFSession, 
+						   (void **)&pSession));
+    
+	check(pSession->SetDefaultIdentification(&ProductInfo));
+
+	check(pSession->CreateFile(pFileName, kAAFRev1, &pFile));
+  
+	check(pFile->Close());
+
+	check(pSession->EndSession());
+
+	if (pFile) pFile->Release();
+	if (pSession) pSession->Release();
+}
+
+main()
+{
+	CoInitialize(NULL);
+
+	CreateAAFFile((unsigned char *)"Foo.aaf");
+	ReadAAFFile((unsigned char *)"Foo.aaf");
 
 	fprintf(stdout, "Done\n");
 
