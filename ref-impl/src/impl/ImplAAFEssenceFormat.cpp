@@ -35,9 +35,9 @@ ImplAAFEssenceFormat::~ImplAAFEssenceFormat ()
 	for(n = 0; n < _elemUsed; n++)
 	{
 		if(_elements[n].parmValue != NULL)
-			delete _elements[n].parmValue;
+			delete [] _elements[n].parmValue;
 	}
-	delete _elements;
+	delete [] _elements;
 }
 
 AAFRESULT STDMETHODCALLTYPE
@@ -60,7 +60,7 @@ AAFRESULT STDMETHODCALLTYPE
 			for(n = 0; n < _elemUsed; n++)
 				_elements[n] = tempParm[n];
 			if(tempParm != NULL)
-				delete tempParm;
+				delete [] tempParm;
 		}
 		
 		parm = _elements + _elemUsed;
@@ -91,7 +91,7 @@ AAFRESULT STDMETHODCALLTYPE
 			parm->allocSize = valueSize;
 			
 			if(temp != NULL)
-				delete temp;
+				delete [] temp;
 		}
 		if(parm->parmValue != NULL && valueSize != 0)
 			memcpy(parm->parmValue, value, valueSize);	//!!!
