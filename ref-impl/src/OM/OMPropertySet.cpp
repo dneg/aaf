@@ -46,6 +46,7 @@ OMPropertySet::OMPropertySet(void)
 OMPropertySet::~OMPropertySet(void)
 {
   TRACE("OMPropertySet::~OMPropertySet");
+  _container = 0;
 }
 
   // @mfunc Get the <c OMProperty> associated with the property
