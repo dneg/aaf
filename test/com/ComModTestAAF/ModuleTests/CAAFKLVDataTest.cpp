@@ -58,9 +58,6 @@ static const aafUID_t *	slotDDefs[5] = {&DDEF_Picture, &DDEF_Sound, &DDEF_Sound,
 static aafLength_t	slotsLength[5] = { 297, 44100, 44100, 44100, 44100};
 
 static aafSourceRef_t sourceRef; 
-static aafWChar* TagNames =  L"TAG01";
-static aafWChar* Comments =  L"Comment 1";	
-static aafWChar* AltComment = L"Alternate Comment";
 
 static const 	aafMobID_t	TEST_MobID =
 {{0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00},
@@ -144,7 +141,6 @@ static void CreateOpaqueHandleFromKLVData(
   aafDataBuffer_t &opaqueHandle,
   aafUInt32 &handleSize)
 {
-  HRESULT result = S_OK;
   checkExpression (NULL != pData, E_INVALIDARG);
 
   IAAFObjectSP pObject;
@@ -189,7 +185,6 @@ static void InitializeKLVDataFromOpaqueHandle(
   aafDataBuffer_t opaqueHandle,
   aafUInt32 handleSize)
 {
-  HRESULT result = S_OK;
   checkExpression (NULL != opaqueHandle && NULL != pData && 0 < handleSize, E_INVALIDARG);
 
 
@@ -273,7 +268,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 		//Make the first mob
 		long	test;
-		aafRational_t	audioRate = { 44100, 1 };
 
 		// Create a  Composition Mob
 		checkResult(defs.cdCompositionMob()->
@@ -476,24 +470,12 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	aafUID_t			testKey;
 
 	IAAFMobSlot		*slot = NULL;
-	aafProductIdentification_t	ProductInfo;
 	aafNumSlots_t	numMobs, n, slt;
 	aafUInt32		numComments, bytesRead, com;
 	HRESULT						hr = S_OK;
 	char			Value[sizeof(KLVsmiley)];
 	aafSearchCrit_t	criteria;
 
-	aafProductVersion_t v;
-	v.major = 1;
-	v.minor = 0;
-	v.tertiary = 0;
-	v.patchLevel = 0;
-	v.type = kAAFVersionUnknown;
-	ProductInfo.companyName = L"AAF Developers Desk";
-	ProductInfo.productName = L"AAFKLVData Test";
-	ProductInfo.productVersion = &v;
-	ProductInfo.productVersionString = NULL;
-	ProductInfo.platform = NULL;
 
 	try
 	{

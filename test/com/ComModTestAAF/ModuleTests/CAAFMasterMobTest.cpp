@@ -57,7 +57,6 @@ static aafVideoSignalType_t VideoSignalType = kAAFPALSignal;
 static aafTapeFormatType_t TapeFormat = kAAFVHSFormat;
 static aafUInt32 TapeLength = 3200 ;
 
-static aafMobID_t		NewMobID;
 #define TAPE_MOB_OFFSET	10
 #define TAPE_MOB_LENGTH	60
 #define TAPE_MOB_NAME	L"A Tape Mob"
