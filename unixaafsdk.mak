@@ -368,20 +368,24 @@ $(AAFSDK_BIN) :
 		$(MKDIR) $(MKDIR_OPTS) $@; \
 	fi
 
+ifneq ($(AAFSDK_BIN), $(AAFSDK_BIN_EXT))
 $(AAFSDK_BIN_EXT) : $(AAFSDK_BIN)
 	@if [ ! -d $@ ]; then \
 		$(MKDIR) $(MKDIR_OPTS) $@; \
 	fi
+endif
 
 $(AAFSDK_BIN_DEBUG) : $(AAFSDK_BIN)
 	@if [ ! -d $@ ]; then \
 		$(MKDIR) $(MKDIR_OPTS) $@; \
 	fi
 
+ifneq ($(AAFSDK_BIN_DEBUG), $(AAFSDK_BIN_DEBUG_EXT))
 $(AAFSDK_BIN_DEBUG_EXT) : $(AAFSDK_BIN_DEBUG)
 	@if [ ! -d $@ ]; then \
 		$(MKDIR) $(MKDIR_OPTS) $@; \
 	fi
+endif
 
 $(AAFSDK_HELP) :
 	@$(ECHO) Skipping $(AAFSDK_HELP) 
