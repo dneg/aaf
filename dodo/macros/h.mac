@@ -28,6 +28,33 @@
 #endif
 #endm
 
+#ccccccccccccccccccccccccccc
+#c
+#c Generate a forward declaration of a class.
+#c
+#c Argument: class name
+#c
+#startm AD_FORWARD_DECLARATION 01
+	class %01;
+#endm
+
+#ccccccccccccccccccccccccccc
+#c
+#c Class UUID.
+#c
+#c Argument: Pieces of UUID
+#c
+#startm AD_CLASS_UUID 11
+#endm
+
+#ccccccccccccccccccccccccccc
+#c
+#c Default UUID.
+#c
+#c Argument: Pieces of UUID
+#c
+#startm AD_DEFAULT_UUID 11
+#endm
 
 #ccccccccccccccccccccccccccc
 #c
@@ -335,6 +362,58 @@ public:
   //@rdesc Returns an AAFResult status code
 #endm
 
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a method which takes seven arguments.
+#c
+#c Argument1: method name
+#c Argument2: argument modifiers (e.g. [in])
+#c Argument3: argument type
+#c Argument4: argument name
+#c Argument5: argument comment
+#c Argument6: argument modifiers (e.g. [in])
+#c Argument7: argument type
+#c Argument8: argument name
+#c Argument9: argument comment
+#c Argument10: argument modifiers (e.g. [in])
+#c Argument11: argument type
+#c Argument12: argument name
+#c Argument13: argument comment
+#c Argument14: argument modifiers (e.g. [in])
+#c Argument15: argument type
+#c Argument16: argument name
+#c Argument17: argument comment
+#c Argument18: argument modifiers (e.g. [in])
+#c Argument19: argument type
+#c Argument20: argument name
+#c Argument21: argument comment
+#c Argument22: argument modifiers (e.g. [in])
+#c Argument23: argument type
+#c Argument24: argument name
+#c Argument25: argument comment
+#c Argument26: argument modifiers (e.g. [in])
+#c Argument27: argument type
+#c Argument28: argument name
+#c Argument29: argument comment
+#c Argument30: method description
+#c
+#startm AD_METHOD7 30
+  //****************
+  // %01()
+  //
+  //@mfunc AAFRESULT | .this-module | %01 |
+  // %30
+  virtual AAFRESULT STDMETHODCALLTYPE
+    %01
+       (%03 %04,    //@parm %02 %05
+        %07 %08,    //@parm %06 %09
+        %11 %12,    //@parm %10 %13
+        %15 %16,    //@parm %14 %17
+        %19 %20,    //@parm %18 %21
+        %23 %24,    //@parm %22 %25
+        %27 %28);   //@parm %26 %29
+  //@rdesc Returns an AAFResult status code
+#endm
 
 #ccccccccccccccccccccccccccc
 #c
