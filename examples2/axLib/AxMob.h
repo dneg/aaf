@@ -43,6 +43,12 @@ public:
 
 	IAAFMobSlotSP LookupSlot( aafSlotID_t slotId );
 
+	IAAFMobSP Copy( const AxString& newMobName );
+
+	IAAFMobSP CloneExternal( aafDepend_t resolveDependencies,
+							 aafIncMedia_t includeMedia,
+							 IAAFFileSP spDestFile );
+
 	void AppendComment( const AxString& category,
 						const AxString& comment );
 

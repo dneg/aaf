@@ -131,6 +131,29 @@ IAAFMobSlotSP AxMob::LookupSlot( aafSlotID_t slotId )
 	return spIAAFMobSlot;
 }
 
+IAAFMobSP AxMob::Copy( const AxString& newMobName )
+{
+	IAAFMobSP spNewMob;
+
+	CHECK_HRESULT( _spIaafMob->Copy( newMobName.c_str(), &spNewMob ) );
+
+	return spNewMob;
+}
+
+IAAFMobSP AxMob::CloneExternal( aafDepend_t resolveDependencies,
+								aafIncMedia_t includeMedia,
+								IAAFFileSP spDestFile )
+{
+	IAAFMobSP spDstMob;
+
+	CHECK_HRESULT( _spIaafMob->CloneExternal( resolveDependencies,
+											  includeMedia,
+											  spDestFile,
+											  &spDstMob ) );
+
+	return spDstMob;
+}
+
 //=---------------------------------------------------------------------=
 
 AxSearchSource::AxSearchSource( IAAFSearchSourceSP spIaafSearchSource )
