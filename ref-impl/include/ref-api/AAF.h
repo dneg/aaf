@@ -168,7 +168,7 @@ interface IAAFKLVDataDefinition;
 interface IEnumAAFTaggedValueDefs;
 interface IEnumAAFKLVDataDefs;
 interface IAAFRecordingDescriptor;
-interface IAAFAuxillaryDescriptor;
+interface IAAFAuxiliaryDescriptor;
 interface IAAFEndian;
 interface IAAFSearchSource;
 interface IAAFEssenceMultiAccess;
@@ -309,7 +309,7 @@ typedef interface IAAFKLVDataDefinition IAAFKLVDataDefinition;
 typedef interface IEnumAAFTaggedValueDefs IEnumAAFTaggedValueDefs;
 typedef interface IEnumAAFKLVDataDefs IEnumAAFKLVDataDefs;
 typedef interface IAAFRecordingDescriptor IAAFRecordingDescriptor;
-typedef interface IAAFAuxillaryDescriptor IAAFAuxillaryDescriptor;
+typedef interface IAAFAuxiliaryDescriptor IAAFAuxiliaryDescriptor;
 typedef interface IAAFEndian IAAFEndian;
 typedef interface IAAFSearchSource IAAFSearchSource;
 typedef interface IAAFEssenceMultiAccess IAAFEssenceMultiAccess;
@@ -34395,11 +34395,11 @@ DECLARE_INTERFACE_(IAAFRecordingDescriptor, IUnknown)
 
 
 
-// IAAFAuxillaryDescriptor
+// IAAFAuxiliaryDescriptor
 
 // ************************
 //
-// Interface IAAFAuxillaryDescriptor
+// Interface IAAFAuxiliaryDescriptor
 //
 // ************************
 
@@ -34408,16 +34408,16 @@ DECLARE_INTERFACE_(IAAFRecordingDescriptor, IUnknown)
 
 
 
-#ifndef __IAAFAuxillaryDescriptor_INTERFACE_DEFINED__
-#define __IAAFAuxillaryDescriptor_INTERFACE_DEFINED__
+#ifndef __IAAFAuxiliaryDescriptor_INTERFACE_DEFINED__
+#define __IAAFAuxiliaryDescriptor_INTERFACE_DEFINED__
 
-EXTERN_C const IID IID_IAAFAuxillaryDescriptor;
+EXTERN_C const IID IID_IAAFAuxiliaryDescriptor;
 
 
 #undef  INTERFACE
-#define INTERFACE   IAAFAuxillaryDescriptor
+#define INTERFACE   IAAFAuxiliaryDescriptor
 
-DECLARE_INTERFACE_(IAAFAuxillaryDescriptor, IUnknown)
+DECLARE_INTERFACE_(IAAFAuxiliaryDescriptor, IUnknown)
 {
   BEGIN_INTERFACE
 
@@ -34426,14 +34426,14 @@ DECLARE_INTERFACE_(IAAFAuxillaryDescriptor, IUnknown)
   STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
   STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-  /* *** IAAFAuxillaryDescriptor methods *** */
+  /* *** IAAFAuxiliaryDescriptor methods *** */
 
   //***********************************************************
   //
   // Initialize()
   //
   // Initializes a newly allocated, empty
-  // IAAFAuxillaryDescriptor object.  This method must be called
+  // IAAFAuxiliaryDescriptor object.  This method must be called
   // after allocation, and before any other method can be called.
   //
   // Succeeds if:
@@ -34661,7 +34661,7 @@ DECLARE_INTERFACE_(IAAFAuxillaryDescriptor, IUnknown)
 
   END_INTERFACE
 };
-#endif // __IAAFAuxillaryDescriptor_INTERFACE_DEFINED__
+#endif // __IAAFAuxiliaryDescriptor_INTERFACE_DEFINED__
 
 
 

@@ -169,7 +169,7 @@ interface IAAFKLVDataDefinition;
 interface IEnumAAFTaggedValueDefs;
 interface IEnumAAFKLVDataDefs;
 interface IAAFRecordingDescriptor;
-interface IAAFAuxillaryDescriptor;
+interface IAAFAuxiliaryDescriptor;
 interface IAAFEndian;
 interface IAAFSearchSource;
 interface IAAFEssenceMultiAccess;
@@ -34190,12 +34190,12 @@ interface IAAFRecordingDescriptor : IUnknown
 
 // ************************
 //
-// Interface IAAFAuxillaryDescriptor
+// Interface IAAFAuxiliaryDescriptor
 //
 // ************************
 
 //
-// The IAAFAuxillaryDescriptor interface is implemented by objects that
+// The IAAFAuxiliaryDescriptor interface is implemented by objects that
 // describe a file source which has no physical source.
 //
 // In addition to the specific error results listed for each method,
@@ -34209,7 +34209,7 @@ interface IAAFRecordingDescriptor : IUnknown
 
 
 //
-// Objects that implement IAAFAuxillaryDescriptor also implement the following interfaces:
+// Objects that implement IAAFAuxiliaryDescriptor also implement the following interfaces:
 //  - IAAFPhysicalDescriptor
 //  - IAAFEssenceDescriptor
 //  - IAAFObject
@@ -34217,11 +34217,11 @@ interface IAAFRecordingDescriptor : IUnknown
 [
     object,
     uuid(197a9cb2-48de-40a3-b965-59531d3fcf23),
-    helpstring("IAAFAuxillaryDescriptor Interface"),
+    helpstring("IAAFAuxiliaryDescriptor Interface"),
     pointer_default(unique)
 ]
 
-interface IAAFAuxillaryDescriptor : IUnknown
+interface IAAFAuxiliaryDescriptor : IUnknown
 {
 
   //***********************************************************
@@ -34229,7 +34229,7 @@ interface IAAFAuxillaryDescriptor : IUnknown
   // Initialize()
   //
   // Initializes a newly allocated, empty
-  // IAAFAuxillaryDescriptor object.  This method must be called
+  // IAAFAuxiliaryDescriptor object.  This method must be called
   // after allocation, and before any other method can be called.
   //
   // Succeeds if:
