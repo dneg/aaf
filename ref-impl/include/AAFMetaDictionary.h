@@ -49,8 +49,8 @@
 //
 // DictP18-277-1847BMaster.csv 
 //
-// This file was generated on Mon Jun 26 15:27:12 EDT 2000
-// by user bedell on system JBEDELL2.
+// This file was generated on Tue Jun 27 13:55:02 EDT 2000
+// by user transdel on system TRANSDEL.
 //
 // Key to macros.
 //
@@ -3169,6 +3169,15 @@ AAF_CLASS(TypeDefinitionWeakObjectReference,
       0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x02),
     0x5401,
     AAF_REFERENCE_TYPE(WeakReference, ClassDefinition),
+    true,
+    false,
+    TypeDefinitionWeakObjectReference)
+  AAF_PROPERTY(TargetSet,
+    AAF_LITERAL_AUID(0x03010203,
+      0x0B00, 0x0000,
+      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x02),
+    0x5402,
+    AAF_TYPE(AUIDArray),
     true,
     false,
     TypeDefinitionWeakObjectReference)
