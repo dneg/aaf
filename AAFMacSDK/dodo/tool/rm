@@ -17,30 +17,35 @@ set printProgress "No"
 # parameter list.
 set silentDelete "No"
 
+set oldParameters "{parameters}"
 
 #
 # Check the parameter list for options. If a parameter is not an option
 # then it assumed to be a file path.
 #
-for param in {parameters}
-	if "{param}" =~ /-[A-Za-z]+/
-		if "{param}" == "-f"
+loop
+	if "{1}" =~ /-[A-Za-z]+/
+		if "{1}" == "-f"
 			set silentDelete "Yes"
-		else if "{param}" == "-i"
+		else if "{1}" == "-i"
 			set silentDelete "No"
-		else if "{param}" == "-v"
+		else if "{1}" == "-v"
 			set printProgress "Yes"
 		else
-			echo '# Parameter "'{param}'" is an unknown or unsupported option for the '{0}' command.'
+			echo '# Parameter "'{1}'" is an unknown or unsupported option for the '{0}' command.'
 			exit
 		end
 	else
-		set filesToDelete "{filesToDelete} '{param}'"
+		set filesToDelete "{filesToDelete} '{1}'"
 	end
+	
+	# continue processing parameters if necessary...
+	shift
+	break if "{1}" == ""
 end
 
 if "{printProgress}" == "Yes" 
-	echo '# Calling "'{0}' '{parameters}'"'
+	echo '# Calling "'{0}' '{oldParameters}'"'
 end
 
 
