@@ -70,6 +70,7 @@ AD_X2METHOD3(Next,
 			count,
 			number of objects requested,
 			xxx,
+			xxx,
 
 			[out\, size_is\(count\)\, length_is\(*pFetched\)],
 			objOutArray,
@@ -77,6 +78,7 @@ AD_X2METHOD3(Next,
 			ppPropertyValues,
 			array to receive Property Values,
 			count,
+			*pFetched,
 
 			[out\,ref],
 			objPass,
@@ -85,6 +87,8 @@ AD_X2METHOD3(Next,
 			number of actual Property Values fetched into ppPropertyValues
 	// array,
 			xxx,
+			xxx,
+
 			Enumerates the next count elements \(AAFPropertyValue pointers\)
   // in the enumerator's list\, returning them in the given array
   // along with the actual number of enumerated elements in

@@ -64,12 +64,12 @@ AD_XMETHOD1(NextOne,
   //   - no ParameterDefs remaining to be returned.)
 
 AD_X2METHOD3(Next,
-			[in], objPass, aafUInt32, count, number of control code definitions requested,xxx,
+			[in], objPass, aafUInt32, count, number of control code definitions requested,xxx,xxx,
 			[out\, size_is\(count\)\, length_is\(*pFetched\)],
 			objOutArray, AAFParameterDef, ppParameterDefs,
-			array to receive control code definitions,count,
+			array to receive control code definitions,count,*pFetched,
 			[out\,ref], objPass, aafUInt32 *, pFetched,
-			number of actual ParameterDefs fetched into ppParameterDefs array,xxx,
+			number of actual ParameterDefs fetched into ppParameterDefs array,xxx,xxx,
 			Enumerates the next count elements \(AAFParameterDef pointers\) in the
   // enumerator's list\, returning them in the given array along with
   // the actual number of enumerated elements in pNumFetched. The caller

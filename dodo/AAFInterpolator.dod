@@ -256,42 +256,52 @@ AD_X2METHOD5(InterpolateMany,
 			pStartInputValue,
 			Input values are from 0 \(effect start\)\, to 1 \(effect end\) inclusive.,
 			xxx,
+			xxx,
+
 			[in],
 			objPass,
 			aafRational_t *,
 			pInputStep,
 			Amount to add to *pStartInputValue to get the next point to interpolate,
 			xxx,
+			xxx,
+
 			[in],
 			objPass,
 			aafUInt32,
-			pGenerateCount,
+			generateCount,
 			The number of points to interpolate,
 			xxx,
+			xxx,
+
 			[out],
 			objPass,
 			aafMemPtr_t,
 			pOutputValue,
 			an array of generated control points,
 			pGenerateCount,
+			*pResultCount,
+
 			[out],
 			objPass,
 			aafUInt32 *,
-			ppResultCount,
+			pResultCount,
 			The number of points actually generated,
 			xxx,
+			xxx,
+
 			Interpolates between known control points on the value\, and
 	// creates an array of new AAFControlPoint which which can be imagined to exist
 	// at the given inputValue.  While InterpolateOne\(\) generates a single point\,
 	// this function starts at a given offset and generates interpolations until either
-	// pGenerateCount is reached\, or the next result would have an input value
+	// generateCount is reached\, or the next result would have an input value
 	// of greater than one. 
   //
   // Succeeds if all of the following are true:
   // - the pInputValue pointer is valid.
   // - the pInputStep pointer is valid.
   // - the ppOutputValue pointer is valid.
-  // - the ppResultCount pointer is valid.
+  // - the pResultCount pointer is valid.
   // - The input value is between 0 \(effect start\)\, to 1 \(effect end\) inclusive.
   // 
   // This method will return the following codes.  If more than one of
@@ -305,7 +315,5 @@ AD_X2METHOD5(InterpolateMany,
   //   - The input value must be between 0 and 1\, inclusive.
   //
   // AAFRESULT_NULL_PARAM
-  //   - pInputValue or ppOutputValue or pInputStep or ppResultCount is null.)
-
-
+  //   - pInputValue or ppOutputValue or pInputStep or pResultCount is null.)
 AD_XCLASS_END(Abstract, Transient)

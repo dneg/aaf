@@ -53,11 +53,11 @@ AD_XMETHOD1(NextOne,
   // @comm This is a just simplified version of the Next method. )
 
 AD_X2METHOD3(Next,
-			[in], objPass, aafUInt32, count, number of essence data requested,xxx,
+			[in], objPass, aafUInt32, count, number of essence data requested,xxx,xxx,
 			[out\, size_is\(count\)\, length_is\(*pFetched\)],
-			objOutArray, AAFEssenceData, ppEssenceData, array to receive EssenceData,count,
+			objOutArray, AAFEssenceData, ppEssenceData, array to receive EssenceData,count,*pFetched,
 			[out\,ref], objPass, aafUInt32 *, pFetched,
-			number of actual EssenceData fetched into ppEssenceData array,xxx,
+			number of actual EssenceData fetched into ppEssenceData array,xxx,xxx,
 			Enumerates the next count elements \(AAFEssenceData pointers\) in 
   // the enumerator's list\, returning them in the given array along with the actual 
   // number of enumerated elements in pcFetched. The caller is responsible for 
