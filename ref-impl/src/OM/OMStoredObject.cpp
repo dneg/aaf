@@ -50,6 +50,7 @@
 #include "OMWeakReference.h"
 #include "OMWeakReferenceSet.h"
 #include "OMWeakReferenceVector.h"
+#include "OMDataStream.h"
 
 #include "OMAssertions.h"
 #include "OMUtilities.h"
@@ -655,10 +656,18 @@ void OMStoredObject::save(const OMPropertyTable* table)
   // @mfunc Save the <c OMDataStream> <p stream> in this
   //        <c OMStoredObject>.
   //   @parm The <c OMDataStream> to save.
-void OMStoredObject::save(const OMDataStream& /* stream */)
+void OMStoredObject::save(const OMDataStream& stream)
 {
   TRACE("OMStoredObject::save");
-  ASSERT("Unimplemented code not reached", false);
+
+  // Use the property name as the stream name
+  //
+  OMPropertyId propertyId = stream.propertyId();
+  OMStoredForm storedForm = stream.storedForm();
+  wchar_t* name = streamName(stream.name(), stream.propertyId());
+  OMByteOrder byteOrder = stream.storedByteOrder();
+  saveStream(propertyId, storedForm, name, byteOrder);
+  delete [] name;
 }
 
   // @mfunc Restore the <c OMStoredObjectIdentification>
@@ -1042,11 +1051,28 @@ void OMStoredObject::restore(OMPropertyTable*& table)
   //        <c OMStoredObject>.
   //   @parm TBS
   //   @parm TBS
-void OMStoredObject::restore(OMDataStream& /* stream */,
-                             size_t /* externalSize */)
+void OMStoredObject::restore(OMDataStream& stream,
+                             size_t externalSize)
 {
   TRACE("OMStoredObject::restore");
-  ASSERT("Unimplemented code not reached", false);
+
+  OMPropertyId propertyId = stream.propertyId();
+  OMStoredForm storedForm = stream.storedForm();
+  wchar_t* sName = streamName(stream.name(), propertyId);
+  size_t characterCount = lengthOfWideString(sName) + 1;
+  size_t size = (characterCount * sizeof(OMCharacter)) + 1;
+  ASSERT("Consistent property size", size == externalSize);
+
+  wchar_t* name = 0;
+  OMByteOrder bo;
+  restoreStream(propertyId, storedForm, size, &name, &bo);
+  ASSERT("Consistent property name", compareWideString(name, sName) == 0);
+  ASSERT("Valid stored byte order", ((bo == littleEndian) ||
+                                     (bo == bigEndian) ||
+                                     (bo == unspecified)));
+  stream.setStoredByteOrder(bo);
+  delete [] name;
+  delete [] sName;
 }
 
   // @mfunc Open the <c OMStoredStream> representing the property
