@@ -47,7 +47,6 @@ class ImplAAFFile;
 #include "ImplAAFIdentification.h"
 #include "ImplAAFContentStorage.h"
 
-#include "OMProperty.h"
 
 class AAFDataKind;
 class AAFEffectDef;
@@ -277,10 +276,6 @@ public:
   // Declare the module test method. The implementation of the will be be
   // in /test/ImplAAFHeaderTest.cpp.
   static AAFRESULT test();
-
-  // Return this objects stored object class.
-  virtual AAFRESULT STDMETHODCALLTYPE
-	GetObjectClass(aafUID_t * pClass);
 
 public:
 	// Interfaces visible inside the toolkit, but not exposed through the API
