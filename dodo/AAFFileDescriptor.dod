@@ -6,7 +6,6 @@ AAFMediaFileDescriptor\
 AAFMediaDescriptor\
 #endm
 #c
-#import ./AAFUnitTest.exp
 #import ./AAFMediaDescriptor.exp
 AD_HEAD
 /******************************************\
@@ -18,6 +17,9 @@ AD_HEAD
 *                                          *
 \******************************************/
 
+AD_CLASS_UUID(e58a8562, 2a3e, 11D2, bf, a4, 00, 60, 97, 11, 62, 12)
+
+AD_DEFAULT_UUID(e58a8561, 2a3e, 11D2, bf, a4, 00, 60, 97, 11, 62, 12)
 AD_CLASS_BEGIN
 
 //@access Public Members
@@ -51,12 +53,5 @@ Sets sample rate of the media as opposed to the edit rate.)
 AD_METHOD1(GetSampleRate,
 [out],aafRational_t*,rate,,
 Sets sample rate of the media as opposed to the edit rate.)
-
-
-  //
-  // IAAFUnitTest interface method overrides
-  //
-AD_OVERRIDE(.method-Test)
-
 
 AD_CLASS_END
