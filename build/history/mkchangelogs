@@ -97,7 +97,7 @@ do
   # 
   if [[ ! -f $html ]]
   then
-    cat $clog | awk -f ${TOOLPATH}/cl2html.awk ${cmfile} > $html
+    cat $clog | awk -v TITLE="Log of changes made between $ptag and $tag" -f ${TOOLPATH}/cl2html.awk ${cmfile} > $html
   fi
   #
   # next tag

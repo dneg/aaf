@@ -74,7 +74,7 @@ function printHeader() {
   printf("</head>\n");
   printf("<body>\n");
   printKey();
-  printf("<h1 align=center>Change log</h1>\n");
+  printf("<h1 align=center>%s</h1>\n", TITLE);
   printf("\
 <table>\n\
 <tr>\n\
