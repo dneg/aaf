@@ -39,8 +39,9 @@
 //
 // Usage:
 //
-//  $ dump [-r -p -a -s -z <pid> -m <n> -h] files...
+//  $ dump [-x -r -p -a -s -z <pid> -m <n> -h] files...
 //
+//    -x       = hex dump, works for any file.
 //    -r       = raw dump, works for any structured storage file.
 //    -p       = property dump, works for files using the AAF stored
 //                 object format.
@@ -52,7 +53,7 @@
 //
 //  Notes:
 //
-//    1) -r, -p and -a are mutually exclusive.
+//    1) -x, -r, -p and -a are mutually exclusive.
 //    2) -s is valid with -r, -p and -a. When combined with either -p or -a
 //       statistics on objects and properties are displayed, when combined
 //       with -r statistics on IStorages, IStreams and bytes are displayed.
@@ -274,7 +275,7 @@ const OMUInt32 HIGHVERSION = 18;
 
 // Output format requested
 //
-enum optionType {raw, property, aaf};
+enum optionType {hexadecimal, raw, property, aaf};
 enum optionType option = raw; // default
 bool zFlag = false;
 bool mFlag = false;
@@ -400,6 +401,7 @@ static void dumpProperties(IStorage* storage,
                            int isRoot,
                            bool swapNeeded);
 static void openStorage(char* fileName, IStorage** storage);
+static void dumpFileHex(char* fileName);
 static void dumpFile(char* fileName);
 static void dumpFileProperties(char* fileName);
 static bool isAnAAFFile(const char* fileName);
@@ -2307,6 +2309,28 @@ void openStorage(char* fileName, IStorage** storage)
 
 }
 
+void dumpFileHex(char* fileName)
+{ 
+  FILE* infile;
+  int ch;
+
+  infile = fopen(fileName, "rb");
+  if (infile != NULL) {
+  
+    while((ch = fgetc(infile)) != EOF) {
+      dumper.print((char)ch);
+    }
+ 
+    dumper.flush();
+    fclose(infile);
+  } else {
+    cerr << programName <<": Error: "
+         << "File \"" << fileName << "\" not found."
+         << endl;
+    exit(EXIT_FAILURE);
+  }
+}
+
 void dumpFile(char* fileName)
 {
   resetStatistics();
@@ -2400,7 +2424,10 @@ static bool isAnAAFFile(const char* fileName)
 void usage(void)
 {
   cerr << programName << ": Usage : "
-       << programName << " [-r -p -a -s -z <pid> -m <n> -h] <file...>" << endl;
+       << programName << " [-x -r -p -a -s -z <pid> -m <n> -h] <file...>"
+                      << endl;
+  cerr << "-x       = hex dump"
+       << " : for any file." << endl;
   cerr << "-r       = raw dump"
        << " : for any structured storage file (default)." << endl;
   cerr << "-p       = property dump"
@@ -2599,8 +2626,8 @@ void CoUninitialize(void)
 // helper class
 struct CComInitialize
 {
-	CComInitialize() { CoInitialize(NULL); }
-	~CComInitialize() { CoUninitialize(); }
+  CComInitialize() { CoInitialize(NULL); }
+  ~CComInitialize() { CoUninitialize(); }
 };
 
 int main(int argumentCount, char* argumentVector[])
@@ -2630,6 +2657,9 @@ int main(int argumentCount, char* argumentVector[])
       char flag = argument[1];
 
       switch (flag) {
+      case 'x':
+        option = hexadecimal;
+        break;
       case 'r':
         option = raw;
         break;
@@ -2679,7 +2709,7 @@ int main(int argumentCount, char* argumentVector[])
                  << pid
                  << "\" is already being ignored."
                  << endl;
-	  }
+          }
         } else {
           cerr << programName
                << ": Error : -z must be followed by a property id."
@@ -2746,10 +2776,27 @@ int main(int argumentCount, char* argumentVector[])
     }
   }
 
-  if (option == raw) {
+  if (option == hexadecimal) {
+    if (printStats) {
+      cerr << programName
+           << ": Error : -s not valid with -x."
+           << endl;
+      usage();
+      exit(EXIT_FAILURE);
+    }
+    if (mFlag) {
+      cerr << programName
+           << ": Error : -m not valid with -x."
+           << endl;
+      usage();
+      exit(EXIT_FAILURE);
+    }
+  }
+
+  if ((option == hexadecimal) || (option == raw)) {
     if (zFlag) {
       cerr << programName
-           << ": Error : -z not valid with -r."
+           << ": Error : -z not valid with -x or -r."
            << endl;
       usage();
       exit(EXIT_FAILURE);
@@ -2766,6 +2813,13 @@ int main(int argumentCount, char* argumentVector[])
   }
   
   switch (option) {
+  case hexadecimal:
+    for (i = flagCount + 1; i < argumentCount; i++) {
+      cout << "Hex dump." << endl;
+      dumpFileHex(argumentVector[i]);
+    }
+    break;
+
   case raw:
     for (i = flagCount + 1; i < argumentCount; i++) {
       cout << "Raw dump." << endl;
