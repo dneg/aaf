@@ -164,3 +164,12 @@ OMFile* OMFile::file(void) const
 
   return const_cast<OMFile*>(this);
 }
+
+bool OMFile::attached(void)
+{
+  TRACE("OMFile::attached");
+
+  // By definition a file is attached.
+  //
+  return true;
+}
