@@ -87,6 +87,10 @@ LINK32=link.exe
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
+SOURCE=..\..\..\Utilities\AafOmf\Aaf2Omf.cpp
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\ref-impl\include\comidl\AAF_i.c"
 # End Source File
 # Begin Source File
@@ -101,13 +105,25 @@ SOURCE=..\..\..\Utilities\AafOmf\AafOmf.cpp
 
 SOURCE="..\..\..\ref-impl\src\impl\AAFUtils.cpp"
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Utilities\AafOmf\Omf2Aaf.cpp
+# End Source File
 # End Group
 # Begin Group "Header Files"
 
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 
+SOURCE=..\..\..\Utilities\AafOmf\Aaf2Omf.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\Utilities\AafOmf\AafOmf.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Utilities\AafOmf\Omf2Aaf.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"
