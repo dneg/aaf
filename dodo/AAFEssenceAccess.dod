@@ -2,10 +2,6 @@
 AAFMediaStream\
 #endm
 #c
-#startm .parent-module 0
-AAFObject\
-#endm
-#c
 #import ./AAFUnitTest.exp
 #import ./AAFObject.exp
 AD_HEAD
@@ -17,6 +13,8 @@ AD_HEAD
 * Copyright (c) 1998 Microsoft Corporation *
 *                                          *
 \******************************************/
+
+AD_INCLUDE(AAFTypes)
 
 typedef enum
 {
@@ -36,15 +34,10 @@ typedef struct
 
 AD_PARENT_MODULE(AAFMedia)
 
-AD_CLASS_DECL(AAFMedia) AD_IMPLEMENTS(IAAFMedia) AD_INHERITS_FROM(????)
-//@class Non-persistant class which implements a media metadata and streaming
-//capability.
-AD_BEGIN_CLASS()
-AD_CONSTRUCTOR(AAFComponent)
-AD_INTERFACE_METHOD_COMMENT(AAFMedia)
+AD_ROOT_CLASS_BEGIN
 
 /****/
-AD_METHOD7(AAFCompositionMob,AudioMediaCreate,\
+AD_METHOD7(AudioMediaCreate,\
 [in],AAFMasterMob *,masterMob,on this master mob,\
 [in],omfTrackID_t,masterTrackID,,\
 [in],AAFFileMob *,fileMob,& this file mob, create audio,\
@@ -73,7 +66,7 @@ Creates an audio media stream.)
 //@comm omfmAudioMediaCreate
 
 /****/
-AD_METHOD9(AAFCompositionMob,VideoMediaCreate,\
+AD_METHOD9(VideoMediaCreate,\
 [in],AAFMasterMob *,masterMob,on this master mob,\
 [in],omfTrackID_t,masterTrackID,masterTrackID,\
 [in],AAFFileMob *,fileMob,& this file mob, create video,\
@@ -104,13 +97,13 @@ Creates an audio media stream.)
 //@comm Replaces omfmVideoMediaCreate
 
 /****/
-AD_METHOD6(AAFCompositionMob,Create,\
-[in],AAFMasterMob *,masterMob,on this master mob,\
-[in],omfTrackID_t,masterTrackID,,\
-[in],AAFFileMob *,fileMob,and this file mob,\
-[in],AAFDataKind *,mediaKind,create media of this type,\
-[in],omfRational_t,samplerate,with this sample rate,\
-[in],omfCompressEnable_t,enable,optionally compressing it,\
+AD_METHOD6(Create,
+[in],AAFMasterMob *,masterMob,on this master mob,
+[in],omfTrackID_t,masterTrackID,,
+[in],AAFFileMob *,fileMob,and this file mob,
+[in],AAFDataKind *,mediaKind,create media of this type,
+[in],omfRational_t,samplerate,with this sample rate,
+[in],omfCompressEnable_t,enable,optionally compressing it,
 Creates a single channel stream of media.)
 	//@comm Creates a single channel stream of media.  Convenience functions
 	// exist to create audio or video media, and a separate call
@@ -126,7 +119,7 @@ Creates a single channel stream of media.)
 	//@comm Replaces omfmMediaCreate
 	
 /****/
-AD_METHOD6(AAFCompositionMob,MultiCreate,\
+AD_METHOD6(MultiCreate,\
 [in],AAFMasterMob *,masterMob,on this master mob,\
 [in],AAFFileMob (,fileMob,and this file mob, create,\
 [in],aafInt16,arrayElemCount,this many channels,\
@@ -142,7 +135,7 @@ Creates a multi-channel interleaved stream of media.)
 	//@comm Replaces omfmMediaMultiCreate
 	
 /****/
-AD_METHOD1(AAFCompositionMob,SetBlockingSize,\
+AD_METHOD1(SetBlockingSize,\
 [in],aafInt32,numBytes,Preallocate this many bytes,\
 Sets the size of chunks allocated on disk during writes (only).)
 	//@comm Allocating the space in this fashion ensures that the data will be
@@ -155,7 +148,7 @@ Sets the size of chunks allocated on disk during writes (only).)
 	//@comm Replaces omfmSetBlockingSize
 
 /****/
-AD_METHOD2(AAFCompositionMob,SetVideoLineMap,\
+AD_METHOD2(SetVideoLineMap,\
 [in],aafInt16,startLine,set this starting video line, \
 [in],omfFieldTop_t,type,and this top field, \
 Sets the video line map structure used by the codecs to deinterlace fields.)
@@ -163,14 +156,14 @@ Sets the video line map structure used by the codecs to deinterlace fields.)
 	//@comm Replaces omfmSetVideoLineMap.
 
 /****/
-AD_METHOD1(AAFCompositionMob,GetVideoTopField,\
+AD_METHOD1(GetVideoTopField,\
 [out],omfFieldTop_t,type,and this top field,\
 Gets the top video field used by the codecs to deinterlace fields.)
 	//@comm Takes a media handle, so the media must have been opened or created.
 	//@comm Replaces omfmGetVideoTopField
 	
 /****/
-AD_METHOD1(AAFCompositionMob,SetDisplayRect,\
+AD_METHOD1(SetDisplayRect,\
 [in],AAFRectangle,DisplayRect,set display rectangle,\
 Handles the case where the displayed rectangle is not the same as the stored rectangle (as with the old leadingLines and trailingLines).)
 	//@comm Handles the case where the displayed rectangle is not the same as
@@ -182,14 +175,14 @@ Handles the case where the displayed rectangle is not the same as the stored rec
 	//@comm Replaces  omfmSetDisplayRect
 
 /****/
-AD_METHOD1(AAFCompositionMob,SetSampledRect,\
+AD_METHOD1(SetSampledRect,\
 [in],omfRect_t,SampledRect,set sampled rectangle,\
 Handles the case where the sampled rectangle is not the same as the stored rectangle.)
 	//@comm Takes a media handle, so the media must have been opened or created
 	//@comm Replaces omfmSetSampledRect
 	
 /****/
-AD_METHOD1(AAFCompositionMob,WriteMultiSamples,\
+AD_METHOD1(WriteMultiSamples,\
 [in],aafInt16,arrayElemCount,Do this many transfers,\
 [out],omfmMultiXfer_t *,xferArray,referencing this array,\
 Writes multiple channels worth of sample data to an interleaved data stream, in the natural order for the CODEC.)
@@ -200,7 +193,7 @@ Writes multiple channels worth of sample data to an interleaved data stream, in 
 	//@comm Replaces omfmWriteMultiSamples
 
 /****/
-AD_METHOD3(AAFCompositionMob,WriteDataSamples,\
+AD_METHOD3(WriteDataSamples,\
 [in],aafInt32,nSamples,write this many samples,\
 [in],void *,buffer,to a buffer,\
 [in],aafInt32,buflen,of this size,\
@@ -216,7 +209,7 @@ aafErr_t WriteDataSamples(
 	//@comm Replaces omfmWriteDataSamples
 
 /****/
-AD_METHOD3(AAFCompositionMob,WriteRawData,\
+AD_METHOD3(WriteRawData,\
 [in],aafInt32,nSamples,write this many samples,\
 [in],void *,buffer,to a buffer,\
 [in],aafInt32,aafInt32,of this size,\
@@ -231,7 +224,7 @@ aafErr_t WriteRawData(
 	//@comm Replaces omfmWriteRawData
 	
 /****/
-AD_METHOD5(AAFCompositionMob,ReadRawData,\
+AD_METHOD5(ReadRawData,\
 [in],aafInt32,nSamples,write this many samples,\
 [in],omfUInt32,buflen,to a buffer of this size\
 [out],void *,buffer,here is the buffer\
@@ -246,7 +239,7 @@ Read pre-interleaved data from a media stream.)
 	//@comm Replaces omfmReadRawData
 	
 /****/
-AD_METHOD3(AAFCompositionMob,WriteDataLines,\
+AD_METHOD3(WriteDataLines,\
 [in],aafInt32,nLines,write this many lines on video,\
 [in],void *,buffer,from a buffer,\
 [out],aafInt32 *,bytesWritten,of this size,\
@@ -263,13 +256,13 @@ Writes single lines of video to a file.)
 	//@comm Replaces omfmWriteDataLines
 	
 /****/
-AD_METHOD0(AAFCompositionMob,Close,Finish operations on media data, and close any external files opened or created to hold the media..)
+AD_METHOD0(Close,Finish operations on media data, and close any external files opened or created to hold the media..)
 aafErr_t Close(void);	/* IN -- Close this media */
 	//@comm This function should be called whether the media was opened or created.
 	//@comm Replaces omfmMediaClose
 
 /****/
-AD_METHOD7(AAFCompositionMob,SetJPEGTables,
+AD_METHOD7(SetJPEGTables,
 [in],omfJPEGcomponent_t,JPEGcomp,change this component,\
 [in],omfUInt8 *,QTables,to have these Q-tables,\
 [in],omfUInt8 *,ACTables,and these AC-tables,\
@@ -282,18 +275,18 @@ Sets the Q, AC, & DC tables for the next frame to be compressed.)
 	//@comm Replaces omfmSetJPEGTables
 	
 /****/
-AD_METHOD1(AAFCompositionMob,SetAudioBlockLength,\
+AD_METHOD1(SetAudioBlockLength,\
 [in],aafInt16,blockLength,the block length,\
 Set common audio compression parms.)
 	//@comm Replaces omfmSetAudioCompressParms
 /****/
-AD_METHOD1(AAFCompositionMob,GetAudioBlockLength,\
+AD_METHOD1(GetAudioBlockLength,\
 [out],aafInt16*,blockLength,the block length,\
 Get common audio compression parms.)
 	//@comm Replaces omfmGetAudioCompressParms
 	
 /****/
-AD_METHOD2(AAFCompositionMob,SetPrivateMediaData,\
+AD_METHOD2(SetPrivateMediaData,\
 [in],long,parmBlockSize,a block of this size,\
 [in],void*,ParameterBlock,with these values,\
 Sends a parameter block of private information to the CODEC for this media.)
@@ -306,7 +299,7 @@ Sends a parameter block of private information to the CODEC for this media.)
 	//@comm Replaces omfmCodecSendPrivateData*/
 
 /****/
-AD_METHOD2(AAFCompositionMob,GetPrivateMediaData,\
+AD_METHOD2(GetPrivateMediaData,\
 [in],long,blocksize,,\
 [out],void*,result,,\
 Gets a parameter block of private information from the CODEC for this media.)
@@ -319,7 +312,7 @@ aafErr_t GetPrivateMediaData(
 	//@comm Replaces omfmGetPrivateMediaData*/
 
 /****/
-AD_METHOD5(AAFCompositionMob,GetNumChannels,\
+AD_METHOD5(GetNumChannels,\
 [in],AAFMasterMob*,masterMob,In this master mob,\
 [in],omfTrackID_t,trackID,On this track,\
 [in],omfMediaCriteria_t*,mediaCrit,using this media criteria,\
@@ -334,7 +327,7 @@ Takes an opaque handle, a master mob reference, and a track ID so that it may be
 	//@comm Replaces omfmGetNumChannels*/
 
 /****/
-AD_METHOD2(AAFCompositionMob,GetLargestSampleSize,\
+AD_METHOD2(GetLargestSampleSize,\
 [in],AAFDataKind*,mediaKind,and this media type,\
 [out],aafInt32*,maxSize,the largest sample size,\
 Returns the size in bytes of the largest sample for a given media type.)
@@ -345,7 +338,7 @@ Returns the size in bytes of the largest sample for a given media type.)
 	//@comm Replaces omfmGetLargestSampleSize*/
 
 /****/
-AD_METHOD3(AAFCompositionMob,GetSampleFrameSize,\
+AD_METHOD3(GetSampleFrameSize,\
 [in],AAFDataKind*,mediaKind,and this media type,\
 [in],omfPosition_t,frameNum,for this (1-based) sample frame number,\
 [out],omfLength_t*,frameSize,How big is the sample frame?,\
@@ -360,7 +353,7 @@ Returns the size in bytes of the given sample for a given media type.)
 	//@comm Replaces omfmGetSampleFrameSize*/
 
 /****/
-AD_METHOD5(AAFCompositionMob,Open,\
+AD_METHOD5(Open,\
 [in],AAFMasterMob*,masterMob,In this master mob,\
 [in],omfTrackID_t,trackID,On this track,\
 [in],omfMediaCriteria_t*,mediaCrit,using this media criteria,\
@@ -383,7 +376,7 @@ Opens a single channel of a file mob.)
 	//@comm Replaces omfmMediaOpen*/
 	
 /****/
-AD_METHOD5(AAFCompositionMob,MultiOpen,\
+AD_METHOD5(MultiOpen,\
 [in],AAFMasterMob*,masterMob,In this master mob,\
 [in],omfTrackID_t,trackID,On this track,\
 [in],omfMediaCriteria_t*,mediaCrit,using this media criteria,\
@@ -403,7 +396,7 @@ Opens a all channels associated with a file mob.)
 	//@comm Replaces omfmMediaMultiOpen*/
 
 /****/
-AD_METHOD1(AAFCompositionMob,SetVideoMemFormat,\
+AD_METHOD1(SetVideoMemFormat,\
 [in],omfVideoMemOp_t*,op,,\
 Sets the video memory format and layout expected in memory.)
 	//@comm This is the format expected on writes and produced on reads.
@@ -416,7 +409,7 @@ Sets the video memory format and layout expected in memory.)
 	//@comm Replaces omfmSetVideoMemFormat*/
 
 /****/
-AD_METHOD1(AAFCompositionMob,SetAudioMemFormat,\
+AD_METHOD1(SetAudioMemFormat,\
 [in],omfAudioMemOp_t*,op,,\
 Sets the audio memory format expected in memory.)
 	//@comm This is the format expected on writes and produced on reads.
@@ -429,7 +422,7 @@ Sets the audio memory format expected in memory.)
  	//@comm Replaces omfmSetAudioMemFormat
 
 /****/
-AD_METHOD1(AAFCompositionMob,GetDisplayRect,\
+AD_METHOD1(GetDisplayRect,\
 [out],omfRect_t*,result,Get the display rectangle,\
 Returns the display rectangle for the current video media.)
 	//@comm Handles the case where the displayed rectangle is not the same as
@@ -449,7 +442,7 @@ Returns the display rectangle for the current video media.)
  	//@comm Replaces omfmGetDisplayRect
 
 /****/
-AD_METHOD1(AAFCompositionMob,GetSampledRect,\
+AD_METHOD1(GetSampledRect,\
 [out],omfRect_t*,result,Get the sampled rectangle,\
 Returns the sampled rectangle for the current video media.)
 	//@comm Takes a media handle, so the media must have been opened or created.
@@ -460,14 +453,14 @@ Returns the sampled rectangle for the current video media.)
  	//@comm Replaces omfmGetSampledRect
 
 /****/
-AD_METHOD1(AAFCompositionMob,GetSampleCount,\
+AD_METHOD1(GetSampleCount,\
 [out],omfLength_t *,result,,\
 Returns the number of samples on the given media stream.)
 	//@comm A video sample is one frame.
 	//@comm Replaces omfmGetSampleCount
 
 /****/
-AD_METHOD4(AAFCompositionMob,ReadDataSamples,\
+AD_METHOD4(ReadDataSamples,\
 [in],aafInt32,nSamples,,\
 [in],aafInt32,buflen,,\
 [out],void*,buffer,,\
@@ -481,7 +474,7 @@ Read a given number of samples from an opened media stream.)
 	//@comm Replaces omfmReadDataSamples
 
 /****/
-AD_METHOD2(AAFCompositionMob,ReadMultiSamples,\
+AD_METHOD2(ReadMultiSamples,\
 [in],aafInt16,elemCount,,\
 [out],omfmMultiXfer_t *,xferArray,,\
 	//@comm arrayElemCount is the size of the array or transfer operations.
@@ -491,7 +484,7 @@ AD_METHOD2(AAFCompositionMob,ReadMultiSamples,\
 	//@comm Replaces omfmReadMultiSamples
 	
 /****/
-AD_METHOD4(AAFCompositionMob,ReadDataLines,\
+AD_METHOD4(ReadDataLines,\
 [in],aafInt32,nLines,\
 [in],aafInt32,bufLen,\
 [out],void*,buffer,\
@@ -507,7 +500,7 @@ aafErr_t ReadDataLines(
 	//@comm Replaces omfmReadDataLines
 
 /****/
-AD_METHOD1(AAFCompositionMob,GotoFrameNumber,\
+AD_METHOD1(GotoFrameNumber,\
 [in],omfInt64,frameNum,,\
 The "seek" function for media.)
 	//@comm Useful only on reading, you
@@ -516,7 +509,7 @@ The "seek" function for media.)
 	//@comm Replaces omfmGotoFrameNumber
 
 /****/
-AD_METHOD6(AAFCompositionMob,GetVideoInfo,,\
+AD_METHOD6(GetVideoInfo,,\
 [out],omfFrameLayout_t,layout,,\
 [out],aafInt32,fieldWidth,,\
 [out],aafInt32,fieldHeight,,\
@@ -532,13 +525,13 @@ Get video-related information about a given piece of media data.)
 			
 			
 /****/
-AD_METHOD1(AAFCompositionMob,GetVideoInfoArray,\
+AD_METHOD1(GetVideoInfoArray,\
 [out],omfVideoMemOp_t*,ops,,\
 Given an array of video format blocks, read the opcodes and fill in the operands from the file format.)
 	//@comm Replaces omfmGetVideoInfoArray */
 
 /****/
-AD_METHOD1(AAFCompositionMob,PutVideoInfoArray,\
+AD_METHOD1(PutVideoInfoArray,\
 [in],omfVideoMemOp_t*,ops,,\
 Given an array of video format blocks, read the opcodes and operands and change the file format.)
 aafErr_t PutVideoInfoArray(
@@ -546,7 +539,7 @@ aafErr_t PutVideoInfoArray(
 	//@comm Replaces omfmPutVideoInfoArray */
 
 /****/
-AD_METHOD3(AAFCompositionMob,GetNumRepresentations,\
+AD_METHOD3(GetNumRepresentations,\
 [in],AAFMasterMob*,masterMob,,\
 [in],omfTrackID_t,trackID,,\
 [out],aafInt32*,numReps,,\
@@ -554,7 +547,7 @@ Find out how many media representations (high/low res) exist for a particular tr
 	//@comm Replaces omfmGetNumRepresentations */
 
 /****/
-AD_METHOD4(AAFCompositionMob,GetRepresentationSourceClip,\
+AD_METHOD4(GetRepresentationSourceClip,\
 [in],AAFMasterMob*,masterMob,,\
 [in],omfTrackID_t,trackID,,\
 [in],aafInt32,index,,\
@@ -563,7 +556,7 @@ Get the indexed (1-based) representation for a particular track on this master m
 	//@comm Replaces omfmGetRepresentationSourceClip */
 
 /****/
-AD_METHOD3(AAFCompositionMob,GetAudioInfo,\
+AD_METHOD3(GetAudioInfo,\
 [out],omfRational_t*,rate,,\
 [out],aafInt32*,sampleSize,,\
 [out],aafInt32*,numChannels,,\
@@ -576,20 +569,20 @@ Get audio-related information about a given piece of media data.)
 
 
 /****/
-AD_METHOD1(AAFCompositionMob,GetAudioInfoArray,\
+AD_METHOD1(GetAudioInfoArray,\
 [out],omfAudioMemOp_t *,ops,,\
 Given an array of audio format blocks, read the opcodes and fill in the operands from the file format.)
 	//@comm Replaces omfmGetAudioInfoArray */
 
 /****/
-AD_METHOD1(AAFCompositionMob,PutAudioInfoArray,\
+AD_METHOD1(PutAudioInfoArray,\
 [in],omfAudioMemOp_t*,ops,,\
 Given an array of audio format blocks, read the opcodes and operands and change the file format.)
 aafErr_t PutAudioInfoArray(
 	//@comm Replaces omfmPutAudioInfoArray */
 
 /****/
-AD_METHOD3(AAFCompositionMob,IsHardwareAssistedCodec,\
+AD_METHOD3(IsHardwareAssistedCodec,\
 [in],omfCodecID_t,codecID,,\
 [in],AAFFileMob *,mob,,\
 [out],aafBool*,result,,\
@@ -604,7 +597,7 @@ Tells if the given codec is hardware-assisted.)
 	//@comm Replaces omfmIsHardwareAssistedCodec */
 
 /****/
-AD_METHOD3(AAFCompositionMob,GetCodecName,\
+AD_METHOD3(GetCodecName,\
 [in],omfCodecID_t,codecID,,\
 [in],aafInt32,namelen,,\
 [out],char *,name,,\
@@ -617,7 +610,7 @@ Returns the full name of the given codec, expanded for human consumption.)
 	//@comm Replaces omfmCodecGetName */
 
 /****/
-AD_METHOD1(AAFCompositionMob,GetCodecID,\
+AD_METHOD1(GetCodecID,\
 [out],omfCodecID_t*,codecID,,\
 Returns the codec ID being used to handle the specified media.)
 	//@comm This will be required in order to send private data to the codec.
@@ -625,7 +618,7 @@ Returns the codec ID being used to handle the specified media.)
 	//@comm Replaces omfmMediaGetCodecID */
 
 /****/
-AD_METHOD1(AAFCompositionMob,AddFrameIndexEntry,\
+AD_METHOD1(AddFrameIndexEntry,\
 [in],omfInt64,frameOffset,add a frame offset to it's frame index,\
 Adds a frame index entry for media which was added precompressed.)
 	//@comm This function should NOT be called when media is passed to the toolkit
@@ -637,19 +630,17 @@ Adds a frame index entry for media which was added precompressed.)
 	//@comm Replaces omfmAddFrameIndexEntry */
 
 /****/
-AD_METHOD1(AAFCompositionMob,SetStreamCacheSize,\
+AD_METHOD1(SetStreamCacheSize,\
 [in],omfUInt32,cacheSize,make the cache this many bytes long,\
 Set the size of the cache buffer used for media transfers.)
 	//@comm Replaces omfmSetStreamCacheSize */
 
 /****/
-AD_METHOD1(AAFCompositionMob,SourceGetVideoSignalType,\
+AD_METHOD1(SourceGetVideoSignalType,\
 [in],omfVideoSignalType_t*,signalType,,\
 Get the video signal type (NTSC/PAL/SECAM).)
 	//@comm Replaces omfmSourceGetVideoSignalType */
 
-AD_CLASS_FACTORY(ppMedia)
-AD_PRIVATE(AAFMedia)
-AD_END_CLASS()
+AD_OVERRIDE(.method-Test)
 
-AD_INCLUDE_GUARD_TAIL(AAFMedia)
+AD_ROOT_CLASS_END
