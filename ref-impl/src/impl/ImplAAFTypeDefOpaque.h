@@ -133,7 +133,19 @@ protected:
   virtual AAFRESULT LookupActualType (aafUID_constref typeID, 
                                       ImplAAFTypeDef ** ppActualType) const;
 
-	
+
+private:
+  //
+  // Utility to make sure that the given property value is for an opaque type.
+  //
+  AAFRESULT ValidateOpaquePropertyValue(ImplAAFPropertyValue * pOpaquePropertyValue);
+
+  //
+  // Utility to make sure that the given property value is for an opaque type.
+  //
+  AAFRESULT GetOpaqueHandleInfo(aafUInt32 handleSize, aafDataBuffer_t pHandle,
+                                aafUInt32& opaqueDataSize, aafDataBuffer_t& opaqueDataBits);
+
 };
 
 #endif // ! __ImplAAFTypeDefOpaque_h__
