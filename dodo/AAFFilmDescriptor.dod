@@ -3,10 +3,10 @@ AAFMediaFilmDescriptor\
 #endm
 #c
 #startm .parent-module 0
-AAFMediaDescriptor\
+AAFEssenceDescriptor\
 #endm
 #c
-#import ./AAFMediaDescriptor.exp
+#import ./AAFEssenceDescriptor.exp
 AD_HEAD
 /******************************************\
 *                                          *
