@@ -1531,6 +1531,38 @@ void OMStoredObject::externalizeString(const wchar_t* internalString,
   }
 }
 
+void OMStoredObject::reorderUInt16Array(OMUInt16* array,
+                                        size_t elementCount)
+{
+  TRACE("OMStoredObject::reorderUInt16Array");
+
+  for (size_t i = 0; i < elementCount; i++) {
+    reorderUInt16(array[i]);
+  }
+}
+
+void OMStoredObject::internalizeUInt16Array(OMUInt16* externalArray,
+                                            OMUInt16* internalArray,
+                                            size_t elementCount)
+{
+  TRACE("OMStoredObject::internalizeUInt16Array");
+
+  for (size_t i = 0; i < elementCount; i++) {
+    internalArray[i] = externalArray[i];
+  }
+}
+
+void OMStoredObject::externalizeUInt16Array(const OMUInt16* internalArray,
+                                            OMUInt16* externalArray,
+                                            size_t elementCount)
+{
+  TRACE("OMStoredObject::externalizeUInt16Array");
+
+  for (size_t i = 0; i < elementCount; i++) {
+    externalArray[i] = internalArray[i];
+  }
+}
+
 IStorage* OMStoredObject::createStorage(IStorage* storage,
                                         const wchar_t* storageName)
 {
