@@ -246,6 +246,38 @@ OMFile* OMProperty::file(void) const
   return container()->file();
 }
 
+  // @mfunc The persisted value of this property is its name.
+  //        Write the property name and enter it into the property index.
+  //   @this const
+void OMProperty::saveName(void) const
+{
+  TRACE("OMProperty::saveName");
+
+  const char* propertyName = name();
+  store()->write(_propertyId,
+                 _storedForm,
+                 (void *)propertyName,
+                 strlen(propertyName) + 1);
+}
+
+  // @mfunc The persisted value of this property is its name.
+  //        Read (and check) the property name.
+  //   @parm The (expected) size of the property name.
+void OMProperty::restoreName(size_t size)
+{
+  TRACE("OMProperty::restoreName");
+
+  char* propertyName = new char[size];
+  ASSERT("Valid heap pointer", propertyName != 0);
+  store()->read(_propertyId,
+                _storedForm,
+                propertyName,
+                size);
+  ASSERT("Consistent property size", size == strlen(propertyName) + 1);
+  ASSERT("Consistent property name", strcmp(propertyName, name()) == 0);
+  delete [] propertyName;
+}
+
 // class OMSimpleProperty
 
   // @mfunc Constructor.
