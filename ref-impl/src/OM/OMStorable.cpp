@@ -496,15 +496,17 @@ void OMStorable::onRestore(void*) const
   // nothing to do in this default implementation
 }
 
+const wchar_t* rootName = L"/";
+
 wchar_t* OMStorable::makePathName(void)
 {
   TRACE("OMStorable::makePathName");
 
   ASSERT("Object has a name", validWideString(name()));
   ASSERT("Root object properly named",
-                      IMPLIES(isRoot(), compareWideString(name(), L"/") == 0));
+                  IMPLIES(isRoot(), compareWideString(name(), rootName) == 0));
   ASSERT("Non-root object properly named",
-                      IMPLIES(compareWideString(name(), L"/") == 0, isRoot()));
+                  IMPLIES(compareWideString(name(), rootName) == 0, isRoot()));
   ASSERT("Non-root object has valid container",
                                           IMPLIES(!isRoot(), _container != 0));
 
@@ -529,7 +531,7 @@ wchar_t* OMStorable::makePathName(void)
       result = new wchar_t[characterCount + 1 + 1];
       ASSERT("Valid heap pointer", result != 0);
       copyWideString(result, cont->pathName(), pathNameLength + 1);
-      concatenateWideString(result, L"/", 1);
+      concatenateWideString(result, rootName, 1);
       concatenateWideString(result, name(), nameLength);
     }
   }
