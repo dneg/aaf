@@ -7,7 +7,7 @@ AAFRoot\
 #c
 AD_HEAD
 AD_IDL(//
-// An object which allows iteration over all of the AAFNetworkLocators
+// An object which allows iteration over all of the AAFLocators
 // attached to an AAFPluginDescriptor.  These locators describe how to
 // locate the exact object code described in the AAFPluginDescriptor.
 //
@@ -35,7 +35,7 @@ AD_IDL(//
 \***********************************************/
 
 
-AD_FORWARD_DECLARATION(AAFNetworkLocator)
+AD_FORWARD_DECLARATION(AAFLocator)
 
 AD_CLASS_UUID(AD1BB860, DBB2, 11d2, 80, 9C, 00, 60, 08, 14, 3E, 6F)
 
@@ -45,20 +45,20 @@ AD_XCLASS_BEGIN(Concrete, Transient)
 AD_XMETHOD1(NextOne,
 			[out\,retval],
 			objOut,
-			AAFNetworkLocator,
-			ppAAFNetworkLocator,
-			The Next AAFNetworkLocator,
+			AAFLocator,
+			ppAAFLocator,
+			The Next AAFLocator,
 			Enumerates to the next element in the enumerators list. The caller is responsible 
   // for properly releasing the returned pointer when it is no longer needed.
   // @comm This is a just simplified version of the Next method. )
 
 AD_XMETHOD3(Next,
-			[in], objPass, aafUInt32, count, number of AAFNetworkLocators requested,
+			[in], objPass, aafUInt32, count, number of AAFLocators requested,
 			[out\, size_is\(count\)\, length_is\(*pFetched\)],
-			objOut, AAFNetworkLocator, ppAAFNetworkLocators, array to receive AAFNetworkLocators,
+			objOut, AAFLocator, ppAAFLocators, array to receive AAFLocators,
 			[out\,ref], objPass, aafUInt32 *, pFetched,
-			number of actual AAFNetworkLocators fetched into ppAAFNetworkLocators array,
-			Enumerates the next count elements \(AAFNetworkLocator pointers\) in 
+			number of actual AAFLocators fetched into ppAAFLocators array,
+			Enumerates the next count elements \(AAFLocator pointers\) in 
   // the enumerator's list\, returning them in the given array along with the actual 
   // number of enumerated elements in pFetched. The caller is responsible for 
   // properly releasing the returned pointers.)
