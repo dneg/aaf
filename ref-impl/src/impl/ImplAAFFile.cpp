@@ -1230,6 +1230,8 @@ ImplAAFFile::SaveCopyAs (ImplAAFFile * pDestFile)
       spDstHeader->SetContentStorage( pNewDstStorage );
 
       spSrcContentStore->deepCopyTo( pNewDstStorable, 0 );
+      pNewDstStorage->onCopy( 0 );
+
     }
 
     // Clone the ident list.
@@ -1251,7 +1253,9 @@ ImplAAFFile::SaveCopyAs (ImplAAFFile * pDestFile)
 	
 	checkResult( spDstHeader->AppendIdentification( pNewDstIdent ) );
 
+	pNewDstIdent->onCopy( 0 );
        	spSrcIdent->deepCopyTo( pNewDstIdent, 0 );
+
       }
     }
 
