@@ -37,43 +37,43 @@
 
 extern "C" const aafClassID_t CLSID_EnumAAFPluginLocators;
 
-// : _pluginVersion(         PID_PluginDescriptor_VersionNumber,         "VersionNumber"),
-// : _minPlatformVersion(         PID_PluginDescriptor_MinPlatformVersion,    "MinPlatformVersion"),
-// : _maxPlatformVersion(         PID_PluginDescriptor_MaxPlatformVersion,    "MaxPlatformVersion"),
-// : _minEngineVersion(         PID_PluginDescriptor_MinEngineVersion,      "MinEngineVersion"),
-// : _maxEngineVersion(         PID_PluginDescriptor_MaxEngineVersion,      "MaxEngineVersion"),
-// : _minPluginAPIVersion(         PID_PluginDescriptor_MinPluginAPI,          "MinPluginAPI"),
-// : _maxPluginAPIVersion(         PID_PluginDescriptor_MaxPluginAPI,          "MaxPluginAPI"),
 
 ImplAAFPluginDescriptor::ImplAAFPluginDescriptor ():
  _categoryClass(		PID_PluginDescriptor_CategoryClass,		"CategoryClass"),
+ _pluginVersion(        PID_PluginDescriptor_VersionNumber,     "VersionNumber"),
  _pluginVersionString(	PID_PluginDescriptor_VersionString,		"VersionString"),
  _pluginManufacturerName(PID_PluginDescriptor_Manufacturer,		"Manufacturer"),
  _manufacturerURL(		PID_PluginDescriptor_ManufacturerInfo,  "ManufacturerInfo"),
  _pluginManufacturerID(	PID_PluginDescriptor_ManufacturerID,	"ManufacturerID"),
  _platform(				PID_PluginDescriptor_Platform,			"Platform"),
+ _minPlatformVersion(   PID_PluginDescriptor_MinPlatformVersion,"MinPlatformVersion"),
+ _maxPlatformVersion(   PID_PluginDescriptor_MaxPlatformVersion,"MaxPlatformVersion"),
  _engine(				PID_PluginDescriptor_Engine,			"Engine"),
+ _minEngineVersion(     PID_PluginDescriptor_MinEngineVersion,  "MinEngineVersion"),
+ _maxEngineVersion(     PID_PluginDescriptor_MaxEngineVersion,  "MaxEngineVersion"),
  _pluginAPI(			PID_PluginDescriptor_PluginAPI,			"PluginAPI"),
+ _minPluginAPIVersion(  PID_PluginDescriptor_MinPluginAPI,      "MinPluginAPI"),
+ _maxPluginAPIVersion(  PID_PluginDescriptor_MaxPluginAPI,      "MaxPluginAPI"),
  _softwareOnly(			PID_PluginDescriptor_SoftwareOnly,		"SoftwareOnly"),
  _accelerator(			PID_PluginDescriptor_Accelerator,		"Accelerator"),
  _locators(				PID_PluginDescriptor_Locators,			"Locators"),
  _authentication(		PID_PluginDescriptor_Authentication,	"Authentication")
 {
   _persistentProperties.put(_categoryClass.address());
-//  _persistentProperties.put(_pluginVersion.address());
+  _persistentProperties.put(_pluginVersion.address());
   _persistentProperties.put(_pluginVersionString.address());
   _persistentProperties.put(_pluginManufacturerName.address());
   _persistentProperties.put(_manufacturerURL.address());
   _persistentProperties.put(_pluginManufacturerID.address());
   _persistentProperties.put(_platform.address());
-//  _persistentProperties.put(_minPlatformVersion.address());
-//  _persistentProperties.put(_maxPlatformVersion.address());
+  _persistentProperties.put(_minPlatformVersion.address());
+  _persistentProperties.put(_maxPlatformVersion.address());
   _persistentProperties.put(_engine.address());
-//  _persistentProperties.put(_minEngineVersion.address());
-//  _persistentProperties.put(_maxEngineVersion.address());
+  _persistentProperties.put(_minEngineVersion.address());
+  _persistentProperties.put(_maxEngineVersion.address());
   _persistentProperties.put(_pluginAPI.address());
-//  _persistentProperties.put(_minPluginAPIVersion.address());
-//  _persistentProperties.put(_maxPluginAPIVersion.address());
+  _persistentProperties.put(_minPluginAPIVersion.address());
+  _persistentProperties.put(_maxPluginAPIVersion.address());
   _persistentProperties.put(_softwareOnly.address());
   _persistentProperties.put(_accelerator.address());
   _persistentProperties.put(_locators.address());
@@ -143,12 +143,35 @@ AAFRESULT STDMETHODCALLTYPE
 	return AAFRESULT_SUCCESS;
 }
 
-
+//!!!!Isn't there a setter?
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFPluginDescriptor::GetPluginVersion (
-      aafProductVersion_t *  /*pVersion*/)
+      aafVersionType_t *pVersion)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	if (pVersion == NULL)
+	{
+		return AAFRESULT_NULL_PARAM;
+	}
+	else
+	{
+		*pVersion = _pluginVersion;
+	}
+	return AAFRESULT_SUCCESS;
+}
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFPluginDescriptor::SetPluginVersion (
+      aafVersionType_t *pVersion)
+{
+	if (pVersion == NULL)
+	{
+		return AAFRESULT_NULL_PARAM;
+	}
+	else
+	{
+		_pluginVersion = *pVersion;
+	}
+	return AAFRESULT_SUCCESS;
 }
 
 
@@ -343,26 +366,52 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFPluginDescriptor::GetPlatformVersionRange (
-      aafProductVersion_t *  /*pMinVersion*/,
-      aafProductVersion_t *  /*pMaxVersion*/)
+      aafVersionType_t *pMinVersion,
+      aafVersionType_t *pMaxVersion)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	if (pMinVersion == NULL || pMaxVersion == NULL)
+	{
+		return AAFRESULT_NULL_PARAM;
+	}
+	else
+	{
+		*pMinVersion = _minPlatformVersion;
+		*pMaxVersion = _maxPlatformVersion;
+	}
+
+	return AAFRESULT_SUCCESS;
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFPluginDescriptor::SetPlatformMinimumVersion (
-      aafProductVersion_t *  /*pMinVersion*/)
+      aafVersionType_t *pMinVersion)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	if (pMinVersion == NULL)
+	{
+		return AAFRESULT_NULL_PARAM;
+	}
+	else
+	{
+		_minPlatformVersion = *pMinVersion;
+	}
+	return AAFRESULT_SUCCESS;
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFPluginDescriptor::SetPlatformMaximumVersion (
-      aafProductVersion_t *  /*pMaxVersion*/)
+      aafVersionType_t *pMaxVersion)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	if (pMaxVersion == NULL)
+	{
+		return AAFRESULT_NULL_PARAM;
+	}
+	else
+	{
+		_maxPlatformVersion = *pMaxVersion;
+	}
+	return AAFRESULT_SUCCESS;
 }
 
 
@@ -396,28 +445,54 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFPluginDescriptor::GetEngineVersionRange (
-      aafProductVersion_t *  /*pMinVersion*/,
-      aafProductVersion_t *  /*pMaxVersion*/)
+      aafVersionType_t *pMinVersion,
+      aafVersionType_t *pMaxVersion)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	if (pMinVersion == NULL || pMaxVersion == NULL)
+	{
+		return AAFRESULT_NULL_PARAM;
+	}
+	else
+	{
+		*pMinVersion = _minEngineVersion;
+		*pMaxVersion = _maxEngineVersion;
+	}
+
+	return AAFRESULT_SUCCESS;
 }
 
 
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFPluginDescriptor::SetEngineMinimumVersion (
-      aafProductVersion_t *  /*pMinVersion*/)
+      aafVersionType_t *pMinVersion)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	if (pMinVersion == NULL)
+	{
+		return AAFRESULT_NULL_PARAM;
+	}
+	else
+	{
+		_minEngineVersion = *pMinVersion;
+	}
+	return AAFRESULT_SUCCESS;
 }
 
 
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFPluginDescriptor::SetEngineMaximumVersion (
-      aafProductVersion_t *  /*pMaxVersion*/)
+      aafVersionType_t *pMaxVersion)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	if (pMaxVersion == NULL)
+	{
+		return AAFRESULT_NULL_PARAM;
+	}
+	else
+	{
+		_maxEngineVersion = *pMaxVersion;
+	}
+	return AAFRESULT_SUCCESS;
 }
 
 
@@ -452,27 +527,53 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFPluginDescriptor::GetPluginAPIVersionRange (
-      aafProductVersion_t *  /*pMinVersion*/,
-      aafProductVersion_t *  /*pMaxVersion*/)
+      aafVersionType_t *pMinVersion,
+      aafVersionType_t *pMaxVersion)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	if (pMinVersion == NULL || pMaxVersion == NULL)
+	{
+		return AAFRESULT_NULL_PARAM;
+	}
+	else
+	{
+		*pMinVersion = _minPluginAPIVersion;
+		*pMaxVersion = _maxPluginAPIVersion;
+	}
+
+	return AAFRESULT_SUCCESS;
 }
 
 
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFPluginDescriptor::SetPluginAPIMinimumVersion (
-      aafProductVersion_t *  /*pMinVersion*/)
+      aafVersionType_t *pMinVersion)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	if (pMinVersion == NULL)
+	{
+		return AAFRESULT_NULL_PARAM;
+	}
+	else
+	{
+		_minPluginAPIVersion = *pMinVersion;
+	}
+	return AAFRESULT_SUCCESS;
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFPluginDescriptor::SetPluginAPIMaximumVersion (
-      aafProductVersion_t *  /*pMaxVersion*/)
+      aafVersionType_t *pMaxVersion)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	if (pMaxVersion == NULL)
+	{
+		return AAFRESULT_NULL_PARAM;
+	}
+	else
+	{
+		_maxPluginAPIVersion = *pMaxVersion;
+	}
+	return AAFRESULT_SUCCESS;
 }
 
 AAFRESULT STDMETHODCALLTYPE
@@ -616,6 +717,7 @@ AAFRESULT STDMETHODCALLTYPE
 	for(n = siz-1; n >= 0; n--)
 	{
 		_locators.getValueAt(obj, n);
+		_locators.setValueAt(NULL, n);
 		_locators.setValueAt(obj, n+1);
 	}
 	_locators.setValueAt(pLocator, 0);
