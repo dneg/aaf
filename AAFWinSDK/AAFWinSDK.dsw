@@ -216,6 +216,42 @@ Package=<4>
 
 ###############################################################################
 
+Project: "ComExtensionRead"=".\examples\com-api\ComExtension\ComExtensionRead.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "ComExtensionWrite"=".\examples\com-api\ComExtension\ComExtensionWrite.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name AAFIID
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name AAFLIB
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name COMIDL
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name MakeSDK
+    End Project Dependency
+}}}
+
+###############################################################################
+
 Project: "ComModTestAAF"=".\Test\com\ComModTestAAF\ComModTestAAF.dsp" - Package Owner=<4>
 
 Package=<5>
