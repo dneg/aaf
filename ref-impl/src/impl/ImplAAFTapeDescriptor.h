@@ -151,9 +151,6 @@ public:
 
 
 public:
-  // Declare this class to be storable.
-  //
-  OMDECLARE_STORABLE(ImplAAFTapeDescriptor)
 
   virtual AAFRESULT	STDMETHODCALLTYPE
 		GetOwningMobKind (aafMobKind_t *pMobKind);

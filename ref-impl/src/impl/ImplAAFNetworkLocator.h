@@ -54,11 +54,6 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     SetPath (/*[in, string]*/ aafWChar *  pPathBuf);
 
-
-  // Declare this class to be storable.
-  //
-  OMDECLARE_STORABLE(ImplAAFNetworkLocator)
-
 private:
   OMWideStringProperty                             _path;
 };

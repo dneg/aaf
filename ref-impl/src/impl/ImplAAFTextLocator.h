@@ -66,12 +66,6 @@ public:
         (wchar_t *  pNameBuf);
 
 
-
-public:
-  // Declare this class to be storable.
-  //
-  OMDECLARE_STORABLE(ImplAAFTextLocator)
-
   // Persistent data
 private:
 	OMWideStringProperty                      _name;

@@ -73,12 +73,6 @@ public:
          // @parm [in, size_is(valueSize)] buffer containing value
          aafDataBuffer_t  pValue);
 
-
-public:
-  // Declare this class to be storable.
-  //
-  OMDECLARE_STORABLE(ImplAAFConstantValue)
-
 private:
   OMVariableSizeProperty<aafUInt8>	_value;
 };

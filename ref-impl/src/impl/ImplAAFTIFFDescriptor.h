@@ -161,13 +161,6 @@ public:
          // @parm [in, size_is(size)] buffer containing value
          aafDataValue_t  pSummary);
 
-
-
-public:
-  // Declare this class to be storable.
-  //
-  OMDECLARE_STORABLE(ImplAAFTIFFDescriptor)
-
 private:
 	OMFixedSizeProperty<aafBool>			_isUniform;
 	OMFixedSizeProperty<aafBool>			_isContiguous;

@@ -242,12 +242,6 @@ public:
 		// @parm [out] Optional.
         (aafInt32 *  pImageAlignmentFactor);
 
-
-public:
-  // Declare this class to be storable.
-  //
-  OMDECLARE_STORABLE(ImplAAFDigitalImageDescriptor)
-
 protected:
 	OMFixedSizeProperty<aafUID_t>				_compression;
 	OMFixedSizeProperty<aafUInt32>				_storedHeight;

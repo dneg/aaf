@@ -51,13 +51,6 @@ public:
         // @parm [in] Annotation property value
         (ImplAAFSourceReference * pAnnotation);
 
-
-
-public:
-  // Declare this class to be storable.
-  //
-  OMDECLARE_STORABLE(ImplAAFCommentMarker)
-
 protected:
   // The stored object model defines the annotation to be a 
   // an optional strong reference.

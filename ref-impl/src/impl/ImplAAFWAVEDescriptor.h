@@ -61,12 +61,6 @@ public:
 		 aafDataValue_t  pSummary);
 
 
-
-public:
-  // Declare this class to be storable.
-  //
-  OMDECLARE_STORABLE(ImplAAFWAVEDescriptor)
-
 private:
 	OMVariableSizeProperty<aafUInt8> _summary;
 

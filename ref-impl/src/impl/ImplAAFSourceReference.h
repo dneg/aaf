@@ -82,12 +82,6 @@ public:
 
 	virtual AAFRESULT ChangeContainedReferences(aafUID_t *from, aafUID_t *to);
 
-
-public:
-  // Declare this class to be storable.
-  //
-  OMDECLARE_STORABLE(ImplAAFSourceReference)
-
 private:
 	OMFixedSizeProperty<aafUID_t>	_sourceID;
 	OMFixedSizeProperty<aafInt32>	_sourceMobSlotId;

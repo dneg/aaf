@@ -53,7 +53,7 @@ public:
   ImplAAFMobSlot ();
   ~ImplAAFMobSlot ();
 
-  OMDECLARE_STORABLE(ImplAAFMobSlot)
+
   //****************
   // GetSegment()
   //

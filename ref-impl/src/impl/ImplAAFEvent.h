@@ -79,13 +79,6 @@ public:
         // @parm [out] size of required buffer, in bytes
         (aafUInt32 *  pBufSize);
 
-
-
-public:
-  // Declare this class to be storable.
-  //
-  OMDECLARE_STORABLE(ImplAAFEvent)
-
 protected:
   OMFixedSizeProperty<aafPosition_t> _position;
   OMWideStringProperty _comment;

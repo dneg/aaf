@@ -45,8 +45,6 @@ public:
   ImplAAFComponent ();
   ~ImplAAFComponent ();
 
-  OMDECLARE_STORABLE(ImplAAFComponent)
-
   //****************
   // SetLength()
   //

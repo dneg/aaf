@@ -311,9 +311,6 @@ public:
 
 
 public:
-  // Declare this class to be storable.
-  //
-  OMDECLARE_STORABLE(ImplAAFSourceMob)
 
   // SDK Internal
   virtual AAFRESULT ReconcileMobLength(void);

@@ -50,12 +50,6 @@ public:
         // @parm [in] The EssenceIsIdentified flag
         (aafBool  EssenceIsIdentified);
 
-
-public:
-  // Declare this class to be storable.
-  //
-  OMDECLARE_STORABLE(ImplAAFContainerDef)
-
 private:
 	OMFixedSizeProperty<aafBool>					_isIdentified;
 };

@@ -81,11 +81,6 @@ public:
         // @parm [in, string] DisplayUnits
         (wchar_t *  pDisplayUnits);
 
-public:
-  // Declare this class to be storable.
-  //
-  OMDECLARE_STORABLE(ImplAAFParameterDef)
-
 private:
 	OMFixedSizeProperty<aafUID_t>							_typeDef;
 	OMWideStringProperty									_displayUnits;

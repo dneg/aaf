@@ -140,15 +140,6 @@ public:
         // @parm [out, retval] AAFPluginDescriptor Enumeration
         (ImplEnumAAFPluginDescriptors ** ppEnum);
 
-
-public:
-  // Declare this class to be storable.
-  //
-  OMDECLARE_STORABLE(ImplAAFDefObject)
-
-public:
-	// Functions internal to the toolkit
-
 private:
   // friendly name of this definition
   OMWideStringProperty          _name;

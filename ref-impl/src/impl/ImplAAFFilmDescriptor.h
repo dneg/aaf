@@ -173,13 +173,6 @@ public:
         // @parm [in] Film Aspect Ratio
         (aafRational_t  aspectRatio);
 
-
-
-public:
-  // Declare this class to be storable.
-  //
-  OMDECLARE_STORABLE(ImplAAFFilmDescriptor)
-
 private:
 	OMWideStringProperty				_manufacturer;
 	OMWideStringProperty				_model;

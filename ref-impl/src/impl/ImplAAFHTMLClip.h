@@ -88,13 +88,6 @@ public:
         // @parm [in, string] Specifies the HTML tag that defines the end of the text
         (wchar_t *  pName);
 
-
-
-public:
-  // Declare this class to be storable.
-  //
-  OMDECLARE_STORABLE(ImplAAFHTMLClip)
-
 protected:
   // Persistent properties...
   OMWideStringProperty _beginAnchor;

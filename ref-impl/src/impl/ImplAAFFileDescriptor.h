@@ -108,13 +108,6 @@ public:
 		// @parm [out] Identifies the file format
         (aafUID_t *  pFormat);
 
-
-
-public:
-  // Declare this class to be storable.
-  //
-  OMDECLARE_STORABLE(ImplAAFFileDescriptor)
-
 public:
 	// Functions internal to the toolkit
 	virtual AAFRESULT STDMETHODCALLTYPE

@@ -148,12 +148,6 @@ private:
   ImplAAFTypeDefSP _cachedBaseType;
 
   ImplAAFTypeDefSP BaseType (void) const;
-
-
-public:
-  // Declare this class to be storable.
-  //
-  OMDECLARE_STORABLE(ImplAAFTypeDefString)
 };
 
 #ifndef __ImplAAFSmartPointer_h__

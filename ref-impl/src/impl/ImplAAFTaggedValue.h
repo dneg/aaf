@@ -133,9 +133,6 @@ public:
 
 
 public:
-  // Declare this class to be storable.
-  //
-  OMDECLARE_STORABLE(ImplAAFTaggedValue)
 
 	// persistent data
 	OMWideStringProperty				_name;

@@ -63,13 +63,6 @@ public:
         // @parm [out] Edgecode
         (aafEdgecode_t *  edgecode);
 
-
-
-public:
-  // Declare this class to be storable.
-  //
-  OMDECLARE_STORABLE(ImplAAFEdgecode)
-
 private:
 	OMFixedSizeProperty<aafPosition_t>			_start;
 	OMFixedSizeProperty<aafFilmType_t>			_filmType;
