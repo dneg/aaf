@@ -541,15 +541,15 @@ private:
   ImplAAFBuiltinTypes   * _pBuiltinTypes;
   ImplAAFBuiltinDefs    * _pBuiltinDefs;
 
-  OMStrongReferenceSetProperty<ImplAAFCodecDef>			   _codecDefinitions;
-  OMStrongReferenceSetProperty<ImplAAFContainerDef>        _containerDefinitions;
-  OMStrongReferenceVectorProperty<ImplAAFOperationDef>     _operationDefinitions;
-  OMStrongReferenceSetProperty<ImplAAFParameterDef>        _parameterDefinitions;
-  OMStrongReferenceSetProperty<ImplAAFTypeDef>			   _typeDefinitions;
-  OMStrongReferenceSetProperty<ImplAAFClassDef>		       _classDefinitions;
-  OMStrongReferenceVectorProperty<ImplAAFInterpolationDef> _interpolationDefinitions;
-  OMStrongReferenceSetProperty<ImplAAFDataDef>             _dataDefinitions;
-  OMStrongReferenceVectorProperty<ImplAAFPluginDescriptor> _pluginDefinitions;
+  OMStrongReferenceSetProperty<ImplAAFCodecDef>				_codecDefinitions;
+  OMStrongReferenceSetProperty<ImplAAFContainerDef>			_containerDefinitions;
+  OMStrongReferenceSetProperty<ImplAAFOperationDef>			_operationDefinitions;
+  OMStrongReferenceSetProperty<ImplAAFParameterDef>			_parameterDefinitions;
+  OMStrongReferenceSetProperty<ImplAAFTypeDef>				_typeDefinitions;
+  OMStrongReferenceSetProperty<ImplAAFClassDef>				_classDefinitions;
+  OMStrongReferenceSetProperty<ImplAAFInterpolationDef>		_interpolationDefinitions;
+  OMStrongReferenceSetProperty<ImplAAFDataDef>				_dataDefinitions;
+  OMStrongReferenceSetProperty<ImplAAFPluginDescriptor>		_pluginDefinitions;
 
   aafInt32 _lastGeneratedPid;	// must be signed!
 
