@@ -96,7 +96,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFTapeDescriptor*			pTapeDescriptor = NULL;
 	aafUInt32					numLocators;
 	HRESULT						hr = AAFRESULT_SUCCESS;
-	aafRational_t	audioRate = { 44100, 1 };
 
 
 	aafProductVersion_t v;

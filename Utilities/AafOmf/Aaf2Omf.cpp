@@ -2137,11 +2137,9 @@ void Aaf2Omf::ConvertEssenceDataObject( IAAFEssenceData* pEssenceData)
 	IAAFWAVEDescriptor*			pWAVEDesc = NULL;
 	IAAFCDCIDescriptor*			pJPEGDesc = NULL;
 	IAAFEssenceDescriptor		*pEssenceDesc = NULL;
-	IAAFMob*				pMob = NULL;
 	IAAFSourceMob*			pSourceMob = NULL;
 	IAAFObject*				pAAFObject = NULL;
 	aafMobID_t				mobID;
-	aafBool					bConvertMedia = kAAFFalse;
 	
 	// get the file mob id
 	rc = pEssenceData->GetFileMobID(&mobID);
@@ -2300,7 +2298,6 @@ CopyMedia:
 		aafLength_t		numBytes;
 		aafUInt32		nBlockSize;
 		aafUInt32		numBytesRead;
-		aafBool			bMore = kAAFFalse;
 		
 		rc = pEssenceData->GetSize(&numBytes);
 		if (numBytes > 0)
@@ -2308,7 +2305,6 @@ CopyMedia:
 			if (numBytes > (2 * 1048576))
 			{
 				nBlockSize = 2 * 1048576;	// only allocate 2 Meg
-				bMore = kAAFTrue;			// you going to need more than one read/write
 			}
 			else
 			{
@@ -2402,7 +2398,6 @@ void Aaf2Omf::ConvertEffects(IAAFOperationGroup* pEffect,
 	IAAFSourceClip*			pSourceClip = NULL;
 	IAAFDataDef*			pDataDef = 0;
 	IAAFDefObject* 			pDefObj = 0;
-	IAAFConstantValue*		pConstantValue = NULL;
 	
 	aafUID_t				effectAUID;
 	aafUID_t				effectDefAUID;
@@ -2417,7 +2412,6 @@ void Aaf2Omf::ConvertEffects(IAAFOperationGroup* pEffect,
 	
 	char*					pszName = NULL;
 	char*					pszDesc = NULL;
-	char*					stdName = NULL;
 	
 	IncIndentLevel();
 	
@@ -2463,6 +2457,9 @@ void Aaf2Omf::ConvertEffects(IAAFOperationGroup* pEffect,
 #if AVID_SPECIAL
 	if(strcmp(MCEffectID, AVX_PLACEHOLDER_EFFECT) == 0)
 	{
+		IAAFConstantValue*		pConstantValue = NULL;
+
+
 		strcpy(MCEffectID, "UnknownAVX Effect");
 		strcpy(effectID, "omfi:effect:Unknown");
 		
@@ -2779,7 +2776,7 @@ void Aaf2Omf::ConvertParameter(	IAAFParameter*		pParm,
 	aafUInt32			srcValueLen, destValueLen, lenRead;
 	aafDataBuffer_t		srcValue = NULL, destValue = NULL;
 	OMF2::omfInterpKind_t interpKind;
-	OMF2::omfObject_t	vval, kfVVAL = NULL;
+	OMF2::omfObject_t	vval;
 	aafRational_t		aafTime;
 	OMF2::omfRational_t	omfTime;
 	aafEditHint_t		aafEditHint;

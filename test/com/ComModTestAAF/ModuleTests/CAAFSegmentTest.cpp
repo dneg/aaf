@@ -41,11 +41,11 @@
 #include "CAAFBuiltinDefs.h"
 
 static aafWChar *slotName = L"SLOT1";
-static aafInt32 fadeInLen  = 1000;
-static aafInt32 fadeOutLen = 2000;
-static aafFadeType_t fadeInType = kAAFFadeLinearAmp;
-static aafFadeType_t fadeOutType = kAAFFadeLinearPower;
-static aafSourceRef_t sourceRef; 
+//static aafInt32 fadeInLen  = 1000;
+//static aafInt32 fadeOutLen = 2000;
+//static aafFadeType_t fadeInType = kAAFFadeLinearAmp;
+//static aafFadeType_t fadeOutType = kAAFFadeLinearPower;
+//static aafSourceRef_t sourceRef; 
 
 
 static const	aafMobID_t	TEST_MobID = 
@@ -96,7 +96,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFMob*					pReferencedMob = NULL;
 	IAAFTimelineMobSlot*		newSlot = NULL;
 	IAAFSegment*				seg = NULL;
-	aafRational_t				audioRate = { 44100, 1 };
 	bool bFileOpen = false;
 	aafProductIdentification_t	ProductInfo;
 	HRESULT						hr = AAFRESULT_SUCCESS;
@@ -219,22 +218,9 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	IAAFSegment*				pSegment = NULL;
 	IAAFSourceClip*				pSourceClip = NULL;
 	bool bFileOpen = false;
-	aafProductIdentification_t	ProductInfo;
 	aafSearchCrit_t				criteria;
 	aafNumSlots_t				numMobs, numSlots;
 	HRESULT						hr = AAFRESULT_SUCCESS;
-
-	aafProductVersion_t v;
-	v.major = 1;
-	v.minor = 0;
-	v.tertiary = 0;
-	v.patchLevel = 0;
-	v.type = kAAFVersionUnknown;
-	ProductInfo.companyName = L"AAF Developers Desk. NOT!";
-	ProductInfo.productName = L"AAFSegment Test. NOT!";
-	ProductInfo.productVersion = &v;
-	ProductInfo.productVersionString = NULL;
-	ProductInfo.platform = NULL;
 
 	try
 	{ 

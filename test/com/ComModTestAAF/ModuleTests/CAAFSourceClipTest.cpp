@@ -98,7 +98,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFSegment*				seg = NULL;
 	IAAFComponent*		pComponent = NULL;
 	IAAFSourceClip*				sclp = NULL;
-	aafRational_t				audioRate = { 44100, 1 };
 	bool bFileOpen = false;
 	aafProductIdentification_t	ProductInfo;
 	HRESULT						hr = AAFRESULT_SUCCESS;
@@ -231,7 +230,6 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	IAAFSegment*				pSegment = NULL;
 	IAAFSourceClip*				pSourceClip = NULL;
 	bool bFileOpen = false;
-	aafProductIdentification_t	ProductInfo;
 	aafSearchCrit_t				criteria;
 	aafNumSlots_t				numMobs, numSlots;
 	aafLength_t					rFadeInLen;
@@ -243,18 +241,6 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	aafBool						fadeOutPresent;
 	HRESULT						hr = AAFRESULT_SUCCESS;
 	aafMobID_t					rReferencedMobID;
-
-	aafProductVersion_t v;
-	v.major = 1;
-	v.minor = 0;
-	v.tertiary = 0;
-	v.patchLevel = 0;
-	v.type = kAAFVersionUnknown;
-	ProductInfo.companyName = L"AAF Developers Desk. NOT!";
-	ProductInfo.productName = L"AAFSourceClip Test. NOT!";
-	ProductInfo.productVersion = &v;
-	ProductInfo.productVersionString = NULL;
-	ProductInfo.platform = NULL;
 
 	try
 	{ 

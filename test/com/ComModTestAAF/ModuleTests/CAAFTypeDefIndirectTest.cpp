@@ -82,7 +82,6 @@ HRESULT CAAFTypeDefIndirect_test()
 {
   HRESULT result = AAFRESULT_SUCCESS;
   aafCharacter_constptr wFileName = L"AAFTypeDefIndirectTest.aaf";
-  const char *aFileName = "AAFTypeDefIndirectTest.aaf";
 
   try
   {
@@ -355,7 +354,6 @@ static void Test_GetActualType (
   IAAFObjectSP pObject;
   IAAFTypeDefIndirectSP pTypeDefIndirect;
   IAAFPropertyValueSP pIndirectValue;
-  aafUInt32 actualDataSize = 0;
 
   
   // Use the direct access interface to set the value.

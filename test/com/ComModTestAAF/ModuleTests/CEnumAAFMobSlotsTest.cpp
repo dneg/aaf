@@ -120,7 +120,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
  		
   //Make the first mob
 	  long	test;
-	  aafRational_t	audioRate = { 44100, 1 };
 
 	  // Create a concrete subclass of Mob
 	  checkResult(defs.cdMasterMob()->
@@ -214,7 +213,6 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	IAAFMob				*aMob = NULL;
 	IEnumAAFMobSlots	*slotIter = NULL;
 	IAAFMobSlot			*slot = NULL;
-	aafProductIdentification_t	ProductInfo;
 	aafNumSlots_t		numMobs, n, s;
 	HRESULT				hr = S_OK;
 	IAAFMobSlot*		pArray[2] = { NULL, NULL };
@@ -222,17 +220,6 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	aafUInt32			resultCount;
 	IEnumAAFMobSlots	*slotClone = NULL;
 	
-	aafProductVersion_t v;
-	v.major = 1;
-	v.minor = 0;
-	v.tertiary = 0;
-	v.patchLevel = 0;
-	v.type = kAAFVersionUnknown;
-	ProductInfo.companyName = L"AAF Developers Desk";
-	ProductInfo.productName = L"EnumAAFMobSlots Test";
-	ProductInfo.productVersion = &v;
-	ProductInfo.productVersionString = NULL;
-	ProductInfo.platform = NULL;
 	
 	try
 	{

@@ -30,10 +30,6 @@
 // Include the AAF Stored Object identifiers. These symbols are defined in aaf.lib.
 #include "AAFStoredObjectIDs.h"
 
-// This static variables are here so they can be referenced 
-// throughout the whole program.
-
-static aafSourceRef_t sourceRef; 
 
 #define assert(b, msg) \
   if (!(b)) {fprintf(stderr, "ASSERT: %s\n\n", msg); exit(1);}
@@ -117,7 +113,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 	IAAFMob*					pMob = NULL;
 	IAAFMasterMob*				pMasterMob = NULL;
 	IAAFEssenceAccess*			pEssenceAccess = NULL;
-	IAAFEssenceMultiAccess*		pMultiEssence = NULL;
 	IAAFEssenceFormat*			pFormat = NULL;
 	IAAFEssenceFormat			*format = NULL;
 	IAAFLocator					*pLocator = NULL;
@@ -127,7 +122,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 	aafRational_t				sampleRate = {44100, 1};
 	FILE*						pWavFile = NULL;
 	unsigned char				dataBuff[4096], *dataPtr;
-	size_t						bytesRead;
 	aafUInt32					dataOffset, dataLen;
 	aafUInt16					bitsPerSample, numCh;
 	aafInt32					n, numSpecifiers;
@@ -213,7 +207,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 	if (pWavFile)
 	{
 		// Read in the essence data
-		bytesRead = fread(dataBuff, sizeof(unsigned char), sizeof(dataBuff), pWavFile);
+		fread(dataBuff, sizeof(unsigned char), sizeof(dataBuff), pWavFile);
 		check(loadWAVEHeader(dataBuff,
 										&bitsPerSample,
 										&numCh,
@@ -526,7 +520,6 @@ AAFRESULT loadWAVEHeader(aafUInt8 *buf,
 // Make sure all of our required plugins have been registered.
 static HRESULT RegisterRequiredPlugins(void)
 {
-  HRESULT hr = S_OK;
 	IAAFPluginManager	*mgr = NULL;
 
   // Load the plugin manager 

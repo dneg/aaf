@@ -34,7 +34,7 @@
 #include <iostream.h>
 
 
-static wchar_t *manuf1URL = L"www.microsoft.com";
+//static wchar_t *manuf1URL = L"www.microsoft.com";
 static wchar_t *manuf2URL = L"www.avid.com";
 
 #include <iostream.h>
@@ -54,7 +54,7 @@ static wchar_t *manuf2URL = L"www.avid.com";
 #include "CAAFBuiltinDefs.h"
 
 const aafUID_t ID_MANUFACTURER = { 0xA6487F21, 0xE78F, 0x11d2, { 0x80, 0x9E, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } };		/* operand.expPixelFormat */
-static aafVersionType_t samplePluginVersion = { 0, 0 };//, 0, 0, kVersionReleased };
+//static aafVersionType_t samplePluginVersion = { 0, 0 };//, 0, 0, kVersionReleased };
 static aafVersionType_t sampleMinPlatformVersion = { 1, 2 }; //, 3, 4, kVersionDebug };
 static aafVersionType_t sampleMinEngineVersion = { 5, 6 }; //7, 9, kVersionPatched };
 static aafVersionType_t sampleMinAPIVersion = { 10, 11 };//, 12, 13, kAAFVersionBeta };

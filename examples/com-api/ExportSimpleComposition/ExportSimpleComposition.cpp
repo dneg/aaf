@@ -88,18 +88,31 @@ static void convert(char* cName, size_t length, const wchar_t* name)
   }
 }
 
-static void MobIDToString(aafMobID_t *uid, char *buf)
+static void MobIDtoString(aafMobID_constref uid, char *buf)
 {
-	sprintf(buf, "%02x%02x%02x%02x%02x%02x%02x%02x--%08lx-%04x-%04x-%02x%02x%02x%02x%02x%02x%02x%02x",
-		(int)uid->SMPTELabel[0], (int)uid->SMPTELabel[1], (int)uid->SMPTELabel[2], (int)uid->SMPTELabel[3], 
-		(int)uid->SMPTELabel[4], (int)uid->SMPTELabel[5], (int)uid->SMPTELabel[6], (int)uid->SMPTELabel[7], 
-		(int)uid->SMPTELabel[8], (int)uid->SMPTELabel[8], (int)uid->SMPTELabel[10], (int)uid->SMPTELabel[11], 
-		(int)uid->length, (int)uid->instanceHigh, (int)uid->instanceMid, (int)uid->instanceLow, 
-		uid->material.Data1, uid->material.Data2, uid->material.Data3, (int)uid->material.Data4[0],
-		(int)uid->material.Data4[1], (int)uid->material.Data4[2], (int)uid->material.Data4[3],
-		(int)uid->material.Data4[4],
-		(int)uid->material.Data4[5], (int)uid->material.Data4[6], (int)uid->material.Data4[7]);
+    sprintf( buf, "%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x-" \
+		  "%02x-%02x-%02x-%02x-" \
+		  "%08x%04x%04x" \
+		  "%02x%02x%02x%02x%02x%02x%02x%02x",
+
+	(int)uid.SMPTELabel[0], (int)uid.SMPTELabel[1], 
+	(int)uid.SMPTELabel[2], (int)uid.SMPTELabel[3],
+	(int)uid.SMPTELabel[4], (int)uid.SMPTELabel[5], 
+	(int)uid.SMPTELabel[6], (int)uid.SMPTELabel[7],
+	(int)uid.SMPTELabel[8], (int)uid.SMPTELabel[9], 
+	(int)uid.SMPTELabel[10], (int)uid.SMPTELabel[11],
+
+	(int)uid.length, (int)uid.instanceHigh, 
+	(int)uid.instanceMid, (int)uid.instanceLow,
+
+	uid.material.Data1, uid.material.Data2, uid.material.Data3,
+
+	(int)uid.material.Data4[0], (int)uid.material.Data4[1], 
+	(int)uid.material.Data4[2], (int)uid.material.Data4[3],
+	(int)uid.material.Data4[4], (int)uid.material.Data4[5], 
+	(int)uid.material.Data4[6], (int)uid.material.Data4[7] );
 }
+
 
 typedef enum { testStandardCalls, testMultiCalls, testFractionalCalls } testType_t;
 
@@ -141,7 +154,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 	IAAFMob*					pMob = NULL;
 	IAAFMasterMob*				pMasterMob = NULL;
 	IAAFEssenceAccess*			pEssenceAccess = NULL;
-	IAAFEssenceMultiAccess*		pMultiEssence = NULL;
 	IAAFEssenceFormat*			pFormat = NULL;
 	IAAFEssenceFormat			*format = NULL;
 	IAAFLocator					*pLocator = NULL;
@@ -151,7 +163,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 	aafRational_t				sampleRate = {44100, 1};
 	FILE*						pWavFile = NULL;
 	unsigned char				dataBuff[4096], *dataPtr;
-	size_t						bytesRead;
 	aafUInt32					dataOffset, dataLen;
 	aafUInt16					bitsPerSample, numCh;
 	aafInt32					n, numSpecifiers;
@@ -243,7 +254,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 		if (pWavFile)
 		{
 			// Read in the essence data
-			bytesRead = fread(dataBuff, sizeof(unsigned char), sizeof(dataBuff), pWavFile);
+			fread(dataBuff, sizeof(unsigned char), sizeof(dataBuff), pWavFile);
 			check(loadWAVEHeader(dataBuff,
 				&bitsPerSample,
 				&numCh,
@@ -381,9 +392,6 @@ static HRESULT ProcessAAFFile(aafWChar * pFileName, testType_t testType)
 	IAAFFile *					pFile = NULL;
 	IAAFHeader *				pHeader = NULL;
 	IAAFDictionary*				pDictionary = NULL;
-	IAAFEssenceAccess*			pEssenceAccess = NULL;
-	IAAFEssenceMultiAccess*		pMultiEssence = NULL;
-	IAAFEssenceFormat			*fmtTemplate =  NULL;
 	IEnumAAFMobs*				pMobIter = NULL;
 	aafNumSlots_t				numMobs, numSlots;
 	aafSearchCrit_t				criteria;
@@ -481,7 +489,7 @@ static HRESULT ProcessAAFFile(aafWChar * pFileName, testType_t testType)
 			check(pMob->GetMobID (&mobID));
 			check(pMob->GetName (namebuf, sizeof(namebuf)));
 			convert(mobName, sizeof(mobName), namebuf);
-			MobIDToString(&mobID, mobIDstr);
+			MobIDtoString(mobID, mobIDstr);
 			printf("    MasterMob Name = '%s'\n", mobName);
 			printf("        (mobID %s)\n", mobIDstr);
 			
@@ -812,7 +820,6 @@ AAFRESULT loadWAVEHeader(aafUInt8 *buf,
 // Make sure all of our required plugins have been registered.
 static HRESULT RegisterRequiredPlugins(void)
 {
-  HRESULT hr = S_OK;
 	IAAFPluginManager	*mgr = NULL;
 
   // Load the plugin manager 

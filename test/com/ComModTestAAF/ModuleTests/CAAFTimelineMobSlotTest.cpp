@@ -223,23 +223,10 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	IEnumAAFMobSlots		*slotIter = NULL;
 	IAAFMobSlot				*slot = NULL;
 	IAAFTimelineMobSlot		*timelineSlot = NULL;
-	aafProductIdentification_t	ProductInfo;
 	aafNumSlots_t			numMobs, n, s;
 	aafPosition_t			testOrigin;
 	aafRational_t			testRate;
 	HRESULT					hr = S_OK;
-	
-	aafProductVersion_t v;
-	v.major = 1;
-	v.minor = 0;
-	v.tertiary = 0;
-	v.patchLevel = 0;
-	v.type = kAAFVersionUnknown;
-	ProductInfo.companyName = L"AAF Developers Desk";
-	ProductInfo.productName = L"AAFTimelineMobSlot Test";
-	ProductInfo.productVersion = &v;
-	ProductInfo.productVersionString = NULL;
-	ProductInfo.platform = NULL;
 	
 	try
 	{

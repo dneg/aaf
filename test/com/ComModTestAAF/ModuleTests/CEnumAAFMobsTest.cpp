@@ -223,7 +223,6 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	IAAFFile *					pFile = NULL;
 	bool 						bFileOpen = false;
 	IAAFHeader *				pHeader = NULL;
-	aafProductIdentification_t	ProductInfo;
 	aafNumSlots_t				numMobs, i;
 	HRESULT						hr = S_OK;
 	HRESULT						localhr = S_OK;
@@ -231,24 +230,9 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	IEnumAAFMobs 				*cloneMobIter = NULL;
 	IAAFMob						*aMob = NULL;
 	IAAFMob						**mobArray = NULL;
-	IAAFMob						**smallMobArray = NULL;
 	aafSearchCrit_t				criteria;
 	aafUInt32					numFetched = 0;
 
-	aafProductVersion_t v;
-	v.major = 1;
-	v.minor = 0;
-	v.tertiary = 0;
-	v.patchLevel = 0;
-	v.type = kAAFVersionUnknown;
-
-	ProductInfo.companyName = L"AAF Developers Desk";
-	ProductInfo.productName = L"EnumAAFMobs Test";
-	ProductInfo.productVersion = &v;
-	ProductInfo.productVersionString = NULL;
-	ProductInfo.productID = UnitTestProductID;
-	ProductInfo.platform = NULL;
-	  
 
   try
   {

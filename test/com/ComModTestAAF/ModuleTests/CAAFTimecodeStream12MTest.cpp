@@ -64,7 +64,6 @@ inline void checkExpression(bool expression, HRESULT r)
     throw r;
 }
 
-static char				testPattern[] = "ATestBuffer Pattern";
 static aafRational_t	testSpeed = { 2997, 100 };
 static aafUInt32		userData1 = 0x526F626E;
 static aafUInt32		userData2 = 0x42656361;
@@ -92,11 +91,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 	aafProductIdentification_t	ProductInfo;
 	HRESULT						hr = S_OK;
-	aafLength_t					zero;
 	aafTimecode_t				startTC;
 	aafUInt32					n;
 
-	zero = 0;
 	aafProductVersion_t v;
 	v.major = 1;
 	v.minor = 0;
@@ -277,21 +274,8 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
   // aafUInt32				checkUserDataLen;
   aafPosition_t				offset;
   AAFRESULT					status;
-  aafProductIdentification_t	ProductInfo;
   aafNumSlots_t				numMobs;
   HRESULT						hr = S_OK;
-
-  aafProductVersion_t v;
-  v.major = 1;
-  v.minor = 0;
-  v.tertiary = 0;
-  v.patchLevel = 0;
-  v.type = kAAFVersionUnknown;
-  ProductInfo.companyName = L"AAF Developers Desk. NOT!";
-  ProductInfo.productName = L"AAFTimecodeStream12M Test. NOT!";
-  ProductInfo.productVersion = &v;
-  ProductInfo.productVersionString = NULL;
-  ProductInfo.platform = NULL;
 
   try
   {

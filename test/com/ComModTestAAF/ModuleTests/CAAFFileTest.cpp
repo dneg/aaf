@@ -269,24 +269,12 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
   IAAFHeader *				pHeader = NULL;
   IEnumAAFMobs *mobIter = NULL;
   IAAFMob			*pMob = NULL;
-  aafProductIdentification_t	ProductInfo;
   aafNumSlots_t				numMobs, n;
   HRESULT						hr = S_OK;
   aafWChar					name[500];
   aafMobID_t					mobID;
   aafFileRev_t					testRev;
 
-  aafProductVersion_t v;
-  v.major = 1;
-  v.minor = 0;
-  v.tertiary = 0;
-  v.patchLevel = 0;
-  v.type = kAAFVersionUnknown;
-  ProductInfo.companyName = L"AAF Developers Desk";
-  ProductInfo.productName = L"AAFFile Test";
-  ProductInfo.productVersion = &v;
-  ProductInfo.productVersionString = NULL;
-  ProductInfo.platform = NULL;
 	  
   try
   {

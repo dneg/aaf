@@ -527,22 +527,10 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	IEnumAAFLocators *			pEnum = NULL;
 	IAAFLocator	*				pLocator = NULL;
 	aafUInt32					numLocators;
-	aafProductIdentification_t	ProductInfo;
 	aafNumSlots_t	numMobs, n;
 	HRESULT						hr = AAFRESULT_SUCCESS;
 	bool bFileOpen = false;
 
-	aafProductVersion_t v;
-	v.major = 1;
-	v.minor = 0;
-	v.tertiary = 0;
-	v.patchLevel = 0;
-	v.type = kAAFVersionUnknown;
-	ProductInfo.companyName = L"AAF Developers Desk. NOT!";
-	ProductInfo.productName = L"AAFEssenceDescriptor Test. NOT!";
-	ProductInfo.productVersion = &v;
-	ProductInfo.productVersionString = NULL;
-	ProductInfo.platform = NULL;
 
 	try
 	{	

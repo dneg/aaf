@@ -59,14 +59,13 @@ static const aafUID_t propDef_id =
 #define TEST_NAME L"Test: Property Def Name"
 #define TEST_DESCRIPTION L"Test: Property Def Description"
 
-static const aafUInt8 TEST_INT_BYTE = 0xAB;
 static const aafUID_t TEST_UID = kAAFTypeID_UInt8;
 
 //Initialize our Non-Implemented flags to False ...
-static aafBoolean_t	 bSetDefaultValue_NI = kAAFFalse;       
-static aafBoolean_t  bSetIsSearchable_NI = kAAFFalse;       
-static aafBoolean_t  bGetDefaultValue_NI = kAAFFalse;       
-static aafBoolean_t  bGetIsSearchable_NI = kAAFFalse;       
+//static aafBoolean_t	 bSetDefaultValue_NI = kAAFFalse;       
+//static aafBoolean_t  bSetIsSearchable_NI = kAAFFalse;       
+//static aafBoolean_t  bGetDefaultValue_NI = kAAFFalse;       
+//static aafBoolean_t  bGetIsSearchable_NI = kAAFFalse;       
 
 
 // convenient error handlers.

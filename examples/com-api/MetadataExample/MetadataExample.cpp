@@ -61,22 +61,18 @@ static const aafUID_t KLVKey_BinaryBlob1 =
 { 0x6F3C8CE1, 0x6CEF, 0x11D2, { 0x80, 0x7D, 0x20, 0x15, 0x08, 0x45, 0x3E, 0x2a } }; 
 
 // Ascii string
-static const aafUID_t KLVKey_ASCIIString1 = 
-{ 0x6F3C8CE1, 0x6CEF, 0x11D2, { 0x80, 0x7D, 0x20, 0x15, 0x08, 0x45, 0x3E, 0x2b } };
+//static const aafUID_t KLVKey_ASCIIString1 = 
+//{ 0x6F3C8CE1, 0x6CEF, 0x11D2, { 0x80, 0x7D, 0x20, 0x15, 0x08, 0x45, 0x3E, 0x2b } };
 
 // Int32
 static const aafUID_t KLVKey_Int32_1 = 
 { 0x6F3C8CE1, 0x6CEF, 0x11D2, { 0x80, 0x7D, 0x20, 0x15, 0x08, 0x45, 0x3E, 0x2c } };
 
 static const aafUInt8 blobData[]={0x01, 0x02, 0xFF, 0x41, 0x42};
-static const char ASCIIStringData[]="Action scene with bikes";
+//static const char ASCIIStringData[]="Action scene with bikes";
 static const aafInt32 int32Data=2000;
 
 
-// This static variables are here so they can be referenced 
-// thru out the whole program.
-
-static aafSourceRef_t sourceRef; 
 
 #define assert(b, msg) \
   if (!(b)) {fprintf(stderr, "ASSERT: %s\n\n", msg); exit(1);}
@@ -121,16 +117,29 @@ static void convert(char* cName, size_t length, const wchar_t* name)
 
 static void MobIDtoString(aafMobID_constref uid, char *buf)
 {
-  sprintf(buf, "%02x%02x%02x%02x%02x%02x%02x%02x--%08lx-%04x-%04x-%02x%02x%02x%02x%02x%02x%02x%02x",
-	  (int)uid.SMPTELabel[0], (int)uid.SMPTELabel[1], (int)uid.SMPTELabel[2], (int)uid.SMPTELabel[3], 
-	  (int)uid.SMPTELabel[4], (int)uid.SMPTELabel[5], (int)uid.SMPTELabel[6], (int)uid.SMPTELabel[7], 
-	  (int)uid.SMPTELabel[8], (int)uid.SMPTELabel[8], (int)uid.SMPTELabel[10], (int)uid.SMPTELabel[11], 
-	  (int)uid.length, (int)uid.instanceHigh, (int)uid.instanceMid, (int)uid.instanceLow, 
-	  uid.material.Data1, uid.material.Data2, uid.material.Data3, (int)uid.material.Data4[0],
-	  (int)uid.material.Data4[1], (int)uid.material.Data4[2], (int)uid.material.Data4[3],
-	  (int)uid.material.Data4[4],
-	  (int)uid.material.Data4[5], (int)uid.material.Data4[6], (int)uid.material.Data4[7]);
+    sprintf( buf, "%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x-" \
+		  "%02x-%02x-%02x-%02x-" \
+		  "%08x%04x%04x" \
+		  "%02x%02x%02x%02x%02x%02x%02x%02x",
+
+	(int)uid.SMPTELabel[0], (int)uid.SMPTELabel[1], 
+	(int)uid.SMPTELabel[2], (int)uid.SMPTELabel[3],
+	(int)uid.SMPTELabel[4], (int)uid.SMPTELabel[5], 
+	(int)uid.SMPTELabel[6], (int)uid.SMPTELabel[7],
+	(int)uid.SMPTELabel[8], (int)uid.SMPTELabel[9], 
+	(int)uid.SMPTELabel[10], (int)uid.SMPTELabel[11],
+
+	(int)uid.length, (int)uid.instanceHigh, 
+	(int)uid.instanceMid, (int)uid.instanceLow,
+
+	uid.material.Data1, uid.material.Data2, uid.material.Data3,
+
+	(int)uid.material.Data4[0], (int)uid.material.Data4[1], 
+	(int)uid.material.Data4[2], (int)uid.material.Data4[3],
+	(int)uid.material.Data4[4], (int)uid.material.Data4[5], 
+	(int)uid.material.Data4[6], (int)uid.material.Data4[7] );
 }
+
 
 typedef enum { testStandardCalls, testMultiCalls } testType_t;
 
@@ -202,7 +211,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
   aafPosition_t	position=0;
   FILE*	pWavFile = NULL;
   unsigned char	dataBuff[4096], *dataPtr;
-  size_t	bytesRead;
   //	aafUInt32	bytesWritten;
   aafUInt32	dataOffset, dataLen;
   aafUInt16	bitsPerSample, numCh;
@@ -287,7 +295,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
   if (pWavFile)
     {
       // read in the essence data
-      bytesRead = fread(dataBuff, sizeof(unsigned char), sizeof(dataBuff), pWavFile);
+      fread(dataBuff, sizeof(unsigned char), sizeof(dataBuff), pWavFile);
       check(loadWAVEHeader(dataBuff,
 			   &bitsPerSample,
 			   &numCh,
@@ -985,7 +993,6 @@ AAFRESULT loadWAVEHeader(aafUInt8 *buf,
 // Make sure all of our required plugins have been registered.
 static HRESULT RegisterRequiredPlugins(void)
 {
-  HRESULT hr = S_OK;
   IAAFPluginManager	*mgr = NULL;
 
   // Load the plugin manager 

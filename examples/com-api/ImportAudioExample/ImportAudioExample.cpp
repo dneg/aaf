@@ -39,8 +39,6 @@
 aafWChar *	pwFileName; 
 char *	pFileName; 
 
-static aafSourceRef_t sourceRef; 
-
 #define assert(b, msg) \
   if (!(b)) {fprintf(stderr, "ASSERT: %s\n\n", msg); exit(1);}
 
@@ -82,18 +80,31 @@ static void convert(char* cName, size_t length, const wchar_t* name)
   }
 }
 
-static void MobIDToString(aafMobID_t *uid, char *buf)
+static void MobIDtoString(aafMobID_constref uid, char *buf)
 {
-	sprintf(buf, "%02x%02x%02x%02x%02x%02x%02x%02x--%08lx-%04x-%04x-%02x%02x%02x%02x%02x%02x%02x%02x",
-		(int)uid->SMPTELabel[0], (int)uid->SMPTELabel[1], (int)uid->SMPTELabel[2], (int)uid->SMPTELabel[3], 
-		(int)uid->SMPTELabel[4], (int)uid->SMPTELabel[5], (int)uid->SMPTELabel[6], (int)uid->SMPTELabel[7], 
-		(int)uid->SMPTELabel[8], (int)uid->SMPTELabel[8], (int)uid->SMPTELabel[10], (int)uid->SMPTELabel[11], 
-		(int)uid->length, (int)uid->instanceHigh, (int)uid->instanceMid, (int)uid->instanceLow, 
-		uid->material.Data1, uid->material.Data2, uid->material.Data3, (int)uid->material.Data4[0],
-		(int)uid->material.Data4[1], (int)uid->material.Data4[2], (int)uid->material.Data4[3],
-		(int)uid->material.Data4[4],
-		(int)uid->material.Data4[5], (int)uid->material.Data4[6], (int)uid->material.Data4[7]);
+    sprintf( buf, "%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x-" \
+		  "%02x-%02x-%02x-%02x-" \
+		  "%08x%04x%04x" \
+		  "%02x%02x%02x%02x%02x%02x%02x%02x",
+
+	(int)uid.SMPTELabel[0], (int)uid.SMPTELabel[1], 
+	(int)uid.SMPTELabel[2], (int)uid.SMPTELabel[3],
+	(int)uid.SMPTELabel[4], (int)uid.SMPTELabel[5], 
+	(int)uid.SMPTELabel[6], (int)uid.SMPTELabel[7],
+	(int)uid.SMPTELabel[8], (int)uid.SMPTELabel[9], 
+	(int)uid.SMPTELabel[10], (int)uid.SMPTELabel[11],
+
+	(int)uid.length, (int)uid.instanceHigh, 
+	(int)uid.instanceMid, (int)uid.instanceLow,
+
+	uid.material.Data1, uid.material.Data2, uid.material.Data3,
+
+	(int)uid.material.Data4[0], (int)uid.material.Data4[1], 
+	(int)uid.material.Data4[2], (int)uid.material.Data4[3],
+	(int)uid.material.Data4[4], (int)uid.material.Data4[5], 
+	(int)uid.material.Data4[6], (int)uid.material.Data4[7] );
 }
+
 
 typedef enum { testStandardCalls, testMultiCalls, testFractionalCalls } testType_t;
 
@@ -129,7 +140,7 @@ void doSomethingWithAudioFile()
  // Code here would depend upon required functionality
 }
 
-const aafUID_t NIL_UID = { 0, 0, 0, { 0, 0, 0, 0, 0, 0, 0, 0 } };
+//const aafUID_t NIL_UID = { 0, 0, 0, { 0, 0, 0, 0, 0, 0, 0, 0 } };
 
 static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 {
@@ -137,7 +148,6 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 	IAAFHeader *				pHeader = NULL;
 	IAAFDictionary*				pDictionary = NULL;
 	IAAFEssenceAccess*			pEssenceAccess = NULL;
-	IAAFEssenceMultiAccess*		pMultiEssence = NULL;
 	IAAFEssenceFormat			*fmtTemplate =  NULL;
 	IEnumAAFMobs*				pMobIter = NULL;
 	IAAFMob*					pMob = NULL;
@@ -147,7 +157,6 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 	aafSearchCrit_t				criteria;
 	aafMobID_t					mobID;
 	aafWChar					namebuf[1204];
-	FILE*						pWavFile = NULL;
 	IAAFTimelineMobSlot* pTimelineMobSlot = NULL;
 	IEnumAAFMobSlots* pMobSlotIter = NULL;
 	IAAFMobSlot* pMobSlot = NULL;
@@ -185,7 +194,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 			check(pMob->GetMobID (&mobID));
 			check(pMob->GetName (namebuf, sizeof(namebuf)));
 			convert(mobName, sizeof(mobName), namebuf);
-			MobIDToString(&mobID, mobIDstr);
+			MobIDtoString(mobID, mobIDstr);
 			printf("    MasterMob Name = '%s'\n", mobName);
 			printf("        (mobID %s)\n", mobIDstr);
 			
@@ -533,7 +542,6 @@ AAFRESULT loadWAVEHeader(aafUInt8 *buf,
 // Make sure all of our required plugins have been registered.
 static HRESULT RegisterRequiredPlugins(void)
 {
-  HRESULT hr = S_OK;
 	IAAFPluginManager	*mgr = NULL;
 
   // Load the plugin manager 

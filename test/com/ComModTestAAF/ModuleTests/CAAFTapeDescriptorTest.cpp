@@ -211,7 +211,6 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	IAAFTapeDescriptor*			pTapeDesc = NULL;
 	IEnumAAFMobs*				pMobIter = NULL;
 
-	aafProductIdentification_t	ProductInfo;
 	aafNumSlots_t				numMobs;
 
 	aafWChar					readManufacturer[256];
@@ -223,18 +222,6 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	aafUInt32					length;
 
 	HRESULT						hr = AAFRESULT_SUCCESS;
-
-	aafProductVersion_t v;
-	v.major = 1;
-	v.minor = 0;
-	v.tertiary = 0;
-	v.patchLevel = 0;
-	v.type = kAAFVersionUnknown;
-	ProductInfo.companyName = L"AAF Developers Desk";
-	ProductInfo.productName = L"AAFTapeDescriptor Test";
-	ProductInfo.productVersion = &v;
-	ProductInfo.productVersionString = NULL;
-	ProductInfo.platform = NULL;
 
 	hr = AAFFileOpenExistingRead(pFileName, 0, &pFile);
 

@@ -40,7 +40,6 @@
 
 #include "CAAFBuiltinDefs.h"
 
-static aafWChar *slotNames[5] = { L"SLOT1", L"SLOT2", L"SLOT3", L"SLOT4", L"SLOT5" };
 
 static const 	aafMobID_t	TEST_MobID =
 {{0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00},
@@ -200,21 +199,8 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	IAAFMob			*aMob = NULL;
 	IEnumAAFMobSlots	*slotIter = NULL;
 	IAAFMobSlot		*slot = NULL;
-	aafProductIdentification_t	ProductInfo;
 	aafNumSlots_t	numMobs, n, s;
 	HRESULT						hr = S_OK;
-
-	aafProductVersion_t v;
-	v.major = 1;
-	v.minor = 0;
-	v.tertiary = 0;
-	v.patchLevel = 0;
-	v.type = kAAFVersionUnknown;
-	ProductInfo.companyName = L"AAF Developers Desk. NOT!";
-	ProductInfo.productName = L"AAFSourceMob Test. NOT!";
-	ProductInfo.productVersion = &v;
-	ProductInfo.productVersionString = NULL;
-	ProductInfo.platform = NULL;
 
 	try
 	{ 

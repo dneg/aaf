@@ -217,7 +217,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	IAAFDefObject*		pDef = NULL;
 	IAAFContainerDef*	pContainerDef = NULL;
 	IAAFContainerDef*	pArray[2] = { NULL, NULL };
-	IAAFContainerDef**	pArrayDef = pArray;
+//	IAAFContainerDef**	pArrayDef = pArray;
 	bool				bFileOpen = false;
 	HRESULT				hr = S_OK;
 //	wchar_t				testString[256];

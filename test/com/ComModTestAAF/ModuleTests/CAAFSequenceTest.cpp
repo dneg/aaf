@@ -176,8 +176,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	  // Append two components onto sequence
 	  for(i = 0; i < 2; i++)
 	  {
-		  aafLength_t		len = 10;
-		  
 		  checkResult(defs.cdFiller()->
 			  CreateInstance(IID_IAAFComponent, 
 			  (IUnknown **)&pComponent));

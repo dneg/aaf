@@ -179,7 +179,6 @@ IAAFVaryingValue *AAFDomainUtils::AAFAddEmptyVaryingVal(IAAFDictionary *dict, IA
 
 IAAFParameterDef *AAFDomainUtils::CreateParameterDefinition(IAAFDictionary *pDict, aafUID_t parmDefID)
 {
-	IAAFParameterDef	*returnParmDef = NULL;
 	IAAFParameterDef	*parmDef;
 	IAAFTypeDef			*typeDef;
 	AAFRESULT			rc;

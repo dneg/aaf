@@ -540,8 +540,6 @@ static HRESULT  ReadAAFFile(aafWChar *  pFileName )
 	IAAFDictionary * pDict = NULL;
 	aafBoolean_t  bFileOpen = kAAFFalse;
 	
-	IEnumAAFMobs*				pMobIter = NULL;
-	
 	try
 	{
 		// Open the file

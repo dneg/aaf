@@ -168,7 +168,6 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	IAAFFilmDescriptor*			pFilmDesc = NULL;
 	IEnumAAFMobs*				pMobIter = NULL;
 	
-	aafProductIdentification_t	ProductInfo;
 	aafNumSlots_t				numMobs;
 	
 	aafWChar					readManufacturer[256];
@@ -179,18 +178,6 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	aafRational_t				readAspectRatio;
 	aafUInt32					length;
 
-	
-	aafProductVersion_t v;
-	v.major = 1;
-	v.minor = 0;
-	v.tertiary = 0;
-	v.patchLevel = 0;
-	v.type = kAAFVersionUnknown;
-	ProductInfo.companyName = L"AAF Developers Desk";
-	ProductInfo.productName = L"AAFFilmDescriptor Test";
-	ProductInfo.productVersion = &v;
-	ProductInfo.productVersionString = NULL;
-	ProductInfo.platform = NULL;
 	
 	checkResult(AAFFileOpenExistingRead(pFileName, 0, &pFile));
 	checkResult(pFile->GetHeader(&pHeader));

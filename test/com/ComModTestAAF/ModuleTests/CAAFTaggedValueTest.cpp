@@ -138,7 +138,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
  		
 		//Make the first mob
 		long	test;
-		aafRational_t	audioRate = { 44100, 1 };
 
 		// Create a  Composition Mob
 		checkResult(defs.cdCompositionMob()->
@@ -260,25 +259,12 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	IAAFTaggedValue*		pComment = NULL;
 
 	IAAFMobSlot		*slot = NULL;
-	aafProductIdentification_t	ProductInfo;
 	aafNumSlots_t	numMobs, n, slt;
 	aafUInt32		numComments, bytesRead, com;
 	HRESULT						hr = S_OK;
 	aafWChar		tag[64];
 	aafWChar		Value[64];
 	aafSearchCrit_t	criteria;
-
-	aafProductVersion_t v;
-	v.major = 1;
-	v.minor = 0;
-	v.tertiary = 0;
-	v.patchLevel = 0;
-	v.type = kAAFVersionUnknown;
-	ProductInfo.companyName = L"AAF Developers Desk";
-	ProductInfo.productName = L"AAFTaggedValue Test";
-	ProductInfo.productVersion = &v;
-	ProductInfo.productVersionString = NULL;
-	ProductInfo.platform = NULL;
 
 	try
 	{

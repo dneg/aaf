@@ -195,10 +195,6 @@ HRESULT EffectTranslate::GetAAFEffectID(	OMF2::omfUniqueNamePtr_t OMFEffectIDPtr
 						OMF2::omfUniqueNamePtr_t ExtendedEffectIDPtr,
 						aafUID_t	*aafUID)
 {
-	IAAFOperationDef	*pOpDef = NULL;
-	IAAFDefObject		*pDef = NULL;
-	IAAFParameter		*pParameter = NULL;
-	IAAFConstantValue	*pCVal = NULL;
 	HRESULT				rc = AAFRESULT_SUCCESS;
 	long				n, numStdEntries = sizeof(stdXlateTable)/sizeof(effectXlate_t);
 	bool				found = false;
@@ -246,3 +242,4 @@ bool EffectTranslate::RequiresNestedScope(aafUID_t &effectDefAUID)
 {
 	return isPrivateEffect(effectDefAUID);
 }
+
