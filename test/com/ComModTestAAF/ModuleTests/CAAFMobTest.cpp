@@ -564,14 +564,12 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	  checkResult(pHeader->CountMobs(kAAFAllMob, &numMobs));
 	  checkExpression(numMobs == 1, AAFRESULT_TEST_FAILED);
 
-	  //try Copy() ... it is not implemented
+	  //try Copy()
 	  const aafCharacter *copy_name = L"Name of Copied Mob";
 	  IAAFMobSP spCopiedMob;
-	  hr = pMob->Copy(copy_name, &spCopiedMob);
-	  checkExpression(hr == AAFRESULT_NOT_IMPLEMENTED || hr == AAFRESULT_NOT_IN_CURRENT_VERSION, AAFRESULT_TEST_FAILED);
-	  hr = AAFRESULT_SUCCESS; //move on
+	  checkResult(pMob->Copy(copy_name, &spCopiedMob));
 
-	  //try CloneExternal ... it is not implemented
+	  //try CloneExternal
 	  IAAFMobSP spClonedMob;
 	  IAAFFileSP spDestFile;
 	  aafCharacter dest_filename[128];
@@ -580,11 +578,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	  // Remove the previous test file if any.
 	  RemoveTestFile(dest_filename);
 	  checkResult(AAFFileOpenNewModify(dest_filename, 0, &ProductInfo, &spDestFile));
-	  hr = pMob->CloneExternal(kAAFNoFollowDepend, kAAFNoIncludeMedia, spDestFile, &spClonedMob);
-	  checkExpression(hr == AAFRESULT_NOT_IMPLEMENTED || hr == AAFRESULT_NOT_IN_CURRENT_VERSION, AAFRESULT_TEST_FAILED);
-	  spDestFile->Close();
-	  hr = AAFRESULT_SUCCESS; //move on
-
+	  checkResult(pMob->CloneExternal(kAAFNoFollowDepend, kAAFNoIncludeMedia, spDestFile, &spClonedMob));
+	  checkResult(spDestFile->Close());	  	
 	}
   catch (HRESULT& rResult)
 	{
