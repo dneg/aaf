@@ -45,7 +45,6 @@ Writes pre-interleaved data to a essence stream.)
 	//@comm Possible Errors:
 	// Standard errors (see top of file).
 	// OM_ERR_BADDATAADDRESS -- The buffer must not be a NULL pointer.
-	//@comm Replaces omfmWriteRawData
 	
 /****/
 AD_METHOD5(ReadRawData,
@@ -60,6 +59,5 @@ Read pre-interleaved data from a essence stream.)
 	//@comm Possible Errors:
 	// Standard errors (see top of file).
 	// OM_ERR_BADDATAADDRESS -- The buffer must not be a NULL pointer.
-	//@comm Replaces omfmReadRawData
 
 AD_XCLASS_END(Concrete, Transient)
