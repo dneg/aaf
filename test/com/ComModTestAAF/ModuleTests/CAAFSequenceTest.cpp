@@ -138,6 +138,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFSegment*	pSegment = NULL;
 	IAAFComponent*	pComponent = NULL;
 	aafMobID_t		NewMobID;
+	aafUInt32		numComponents;
 	int				i;
 	HRESULT			hr = S_OK;
 
@@ -175,7 +176,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	  //	(i.e. starting/ending w/ transition, two trans back
 	  //	to bacl).
 	  //
-	  for(i = 0; i < kNumComponents; i++)
+	  for(i = 0; i < kNumComponents + 1; i++)	// Add one more for delete below
 	  {
 		  aafLength_t		len = 10;
 
@@ -190,6 +191,11 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		  pComponent->Release();
       pComponent = NULL;
 	  }
+		checkResult(pSequence->CountComponents (&numComponents));
+		checkExpression(kNumComponents + 1 == numComponents, AAFRESULT_TEST_FAILED);
+		checkResult(pSequence->RemoveComponentAt(kNumComponents));
+		checkResult(pSequence->CountComponents (&numComponents));
+		checkExpression(kNumComponents == numComponents, AAFRESULT_TEST_FAILED);
 
 		checkResult(pSequence->QueryInterface (IID_IAAFSegment, (void **)&pSegment));
 
