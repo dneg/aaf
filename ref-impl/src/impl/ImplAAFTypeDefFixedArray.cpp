@@ -57,7 +57,7 @@ ImplAAFTypeDefFixedArray::~ImplAAFTypeDefFixedArray ()
   hr = SetName (pTypeName);
   if (! AAFRESULT_SUCCEEDED (hr)) return hr;
 
-  hr = SetIdentification (pID);
+  hr = SetAUID (pID);
   if (! AAFRESULT_SUCCEEDED (hr)) return hr;
 
   _ElementType = pTypeDef;
