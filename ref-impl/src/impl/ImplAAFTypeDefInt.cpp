@@ -186,9 +186,9 @@ ImplAAFTypeDefInt::ImplAAFTypeDefInt ()
   _persistentProperties.put(_isSigned.address());
 }
 
-
 ImplAAFTypeDefInt::~ImplAAFTypeDefInt ()
-{}
+{
+}
 
 
 AAFRESULT STDMETHODCALLTYPE
