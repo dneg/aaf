@@ -27,6 +27,8 @@
 #include "AAF.h"
 
 #include <iostream.h>
+#include <iomanip.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <wchar.h>
