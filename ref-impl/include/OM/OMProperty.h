@@ -1,3 +1,5 @@
+// @doc
+
 #ifndef OMPROPERTY_H
 #define OMPROPERTY_H
 
@@ -13,17 +15,46 @@ const int TID_WEAK_OBJECT_REFERENCE          = 3;
 class OMStoredObject;
 class OMStorable;
 
+  // @class Abstract base class for persistent properties supported by
+  //        the Object Manager.
 class OMProperty {
 public:
+  // @access Public members.
+
+    // @cmember Constructor.
   OMProperty(int pid, const char* name);
+
+    // @cmember Constructor.
   OMProperty(int pid, const int type, const char* name);
+
+    // @cmember Destructor.
   virtual ~OMProperty(void);
+
+    // @cmember Save this <c OMProperty> to the <c OMStoredObject>
+    //          <p s>.
+    // @this const
   virtual void saveTo(OMStoredObject& s) const = 0;
+
+    // @cmember Restore this <c OMProperty> from the
+    //          <c OMStoredObject> <p s>, the size of the <c OMProperty>
+    //          is <p size>.
   virtual void restoreFrom(OMStoredObject& s, size_t size) = 0;
+
+    // @cmember The name of this <c OMProperty>.
+    // @this const 
   const char* name(void) const;
+
+    // @cmember The property id of this <c OMProperty>.
+    // @this const
   int pid(void) const;
+
+    // @cmember Inform this <c OMProperty> that it is a property of
+    //          the <c OMStorable> object <p containingObject>.
   void setContainingObject(const OMStorable* containingObject);
+
+    // @cmember The address of this <c OMProperty> object.
   OMProperty* address(void);
+
 protected:
   int _pid;
   int _type;
