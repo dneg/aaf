@@ -41,6 +41,7 @@ class ImplAAFEffectDef;
 #endif
 
 typedef OMVariableSizeProperty<aafUID_t> effectDefWeakRefArrayProp_t;
+typedef OMStrongReferenceVectorProperty<ImplAAFEffectDef> effectDefStrongRefArrayProp_t;
 
 
 class ImplEnumAAFEffectDefs : public ImplAAFRoot
@@ -108,15 +109,18 @@ public:
   // SDK Internal 
   virtual AAFRESULT STDMETHODCALLTYPE
     SetEnumProperty( ImplAAFObject *pObj, effectDefWeakRefArrayProp_t *pProp);
+  virtual AAFRESULT STDMETHODCALLTYPE
+    SetEnumStrongProperty( ImplAAFObject *pObj, effectDefStrongRefArrayProp_t *pProp);
 
 public:
   // Declare the module test method. The implementation of the will be be
   // in /test/ImplEnumAAFEffectDefsTest.cpp.
   static AAFRESULT test();
 private:
-	aafUInt32					_current;
-	ImplAAFObject				*_enumObj;
-	effectDefWeakRefArrayProp_t	*_enumProp;
+	aafUInt32						_current;
+	ImplAAFObject					*_enumObj;
+	effectDefWeakRefArrayProp_t		*_enumProp;
+	effectDefStrongRefArrayProp_t	*_enumStrongProp;
 };
 
 #endif // ! __ImplEnumAAFEffectDefs_h__

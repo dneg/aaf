@@ -184,7 +184,7 @@ public:
 private:
 	OMFixedSizeProperty<aafUID_t>					_dataDef;
 	OMFixedSizeProperty<aafBool>					_isTimeWarp;
-	effectDefWeakRefArrayProp_t						_degradeTo;
+//!!!	effectDefWeakRefArrayProp_t						_degradeTo;
 	OMWideStringProperty                            _category;
 	OMFixedSizeProperty<aafInt32>					_numInputs;
 	OMFixedSizeProperty<aafUInt32>					_bypass;

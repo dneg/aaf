@@ -68,7 +68,7 @@ AAFRESULT STDMETHODCALLTYPE
       ImplAAFParameterDef **ppParameterDef)
 {
 	aafUInt32			numElem = _enumProp->size() / sizeof(aafUID_t);
-	aafUID_t			*tmp;
+	aafUID_t			value;
 	ImplAAFHeader		*head;
 	ImplAAFDictionary	*dict;
 
@@ -78,22 +78,13 @@ AAFRESULT STDMETHODCALLTYPE
 		return AAFRESULT_NO_MORE_OBJECTS;
 	XPROTECT()
 	{
-		tmp = new aafUID_t[_enumProp->size()];
-		if(tmp == NULL)
-			RAISE(AAFRESULT_NOMEMORY);
-
-		_enumProp->copyToBuffer(tmp, _enumProp->size());
+		_enumProp->getValueAt(&value, _current);
 		CHECK(_enumObj->MyHeadObject(&head));
 		CHECK(head->GetDictionary (&dict));
-		CHECK(dict->LookupPluggableDef((tmp + _current), (ImplAAFPluggableDef **)ppParameterDef));//!!!
+		CHECK(dict->LookupPluggableDef(&value, (ImplAAFPluggableDef **)ppParameterDef));//!!!
 		_current++;
-		delete [] tmp;
 	}
 	XEXCEPT
-	{
-		if(tmp != NULL)
-			delete [] tmp;
-	}
 	XEND;
 
 	return(AAFRESULT_SUCCESS); 

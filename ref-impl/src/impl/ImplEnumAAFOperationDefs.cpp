@@ -50,6 +50,7 @@ ImplEnumAAFEffectDefs::ImplEnumAAFEffectDefs ()
 	_current = 0;
 	_enumObj = NULL;
 	_enumProp = NULL;
+	_enumProp = NULL;
 }
 
 
@@ -68,10 +69,21 @@ AAFRESULT STDMETHODCALLTYPE
     ImplEnumAAFEffectDefs::NextOne (
       ImplAAFEffectDef **ppEffectDef)
 {
-	aafUInt32			numElem = _enumProp->size() / sizeof(aafUID_t);
-	aafUID_t			*tmp;
+	aafUInt32			numElem;
+	aafUID_t			value;
 	ImplAAFHeader		*head;
 	ImplAAFDictionary	*dict;
+
+	if(_enumProp != NULL)
+		numElem = _enumProp->size() / sizeof(aafUID_t);
+	else if(_enumStrongProp != NULL)
+	{
+		size_t	siz;
+		
+		_enumStrongProp->getSize(siz);
+		numElem = siz;
+	}
+	//!!!Else assert
 
 	if(ppEffectDef == NULL)
 		return(AAFRESULT_NULL_PARAM);
@@ -79,22 +91,20 @@ AAFRESULT STDMETHODCALLTYPE
 		return AAFRESULT_NO_MORE_OBJECTS;
 	XPROTECT()
 	{
-		tmp = new aafUID_t[_enumProp->size()];
-		if(tmp == NULL)
-			RAISE(AAFRESULT_NOMEMORY);
-
-		_enumProp->copyToBuffer(tmp, _enumProp->size());
-		CHECK(_enumObj->MyHeadObject(&head));
-		CHECK(head->GetDictionary (&dict));
-		CHECK(dict->LookupEffectDefinition((tmp + _current), ppEffectDef));
+		if(_enumProp != NULL)
+		{
+			_enumProp->getValueAt(&value, _current);
+			CHECK(_enumObj->MyHeadObject(&head));
+			CHECK(head->GetDictionary (&dict));
+			CHECK(dict->LookupEffectDefinition(&value, ppEffectDef));
+		}
+		else if(_enumStrongProp != NULL)
+			_enumStrongProp->getValueAt(*ppEffectDef, _current);
+		//!!!Else assert
+		(*ppEffectDef)->AcquireReference();
 		_current++;
-		delete [] tmp;
 	}
 	XEXCEPT
-	{
-		if(tmp != NULL)
-			delete [] tmp;
-	}
 	XEND;
 
 	return(AAFRESULT_SUCCESS); 
@@ -142,7 +152,17 @@ AAFRESULT STDMETHODCALLTYPE
 {
 	AAFRESULT	hr;
 	aafUInt32	newCurrent;
-	aafUInt32	numElem = _enumProp->size() / sizeof(aafUID_t);
+	aafUInt32	numElem;
+	if(_enumProp != NULL)
+		numElem = _enumProp->size() / sizeof(aafUID_t);
+	else if(_enumStrongProp != NULL)
+	{
+		size_t	siz;
+		
+		_enumStrongProp->getSize(siz);
+		numElem = siz;
+	}
+	//!!!Else assert
 
 	newCurrent = _current + count;
 
@@ -179,7 +199,11 @@ AAFRESULT STDMETHODCALLTYPE
 	if (result == NULL)
 		return E_FAIL;
 
-	hr = result->SetEnumProperty(_enumObj, _enumProp);
+	if(_enumProp != NULL)
+		hr = result->SetEnumProperty(_enumObj, _enumProp);
+	else if(_enumStrongProp != NULL)
+		hr = result->SetEnumStrongProperty(_enumObj, _enumStrongProp);
+	// !!!Else assert
 	if (SUCCEEDED(hr))
 	{
 		result->_current = _current;
@@ -202,12 +226,34 @@ AAFRESULT STDMETHODCALLTYPE
 	if (_enumObj)
 		_enumObj->ReleaseReference();
 	_enumObj = pObj;
+
 	if (pObj)
 		pObj->AcquireReference();
 	/**/
 //	if (_enumProp)
 //		_enumProp->ReleaseReference();		Do we have to refcount these externally?!!!
 	_enumProp = pProp;
+	_enumStrongProp = NULL;
+//	if (pProp)
+//		pProp->AcquireReference();
+
+	return AAFRESULT_SUCCESS;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplEnumAAFEffectDefs::SetEnumStrongProperty( ImplAAFObject *pObj, effectDefStrongRefArrayProp_t *pProp)
+{
+	if (_enumObj)
+		_enumObj->ReleaseReference();
+	_enumObj = pObj;
+	if (pObj)
+		pObj->AcquireReference();
+	/**/
+//	if (_enumProp)
+//		_enumProp->ReleaseReference();		Do we have to refcount these externally?!!!
+	_enumStrongProp = pProp;
+	_enumProp = NULL;
 //	if (pProp)
 //		pProp->AcquireReference();
 
