@@ -164,10 +164,10 @@ const OMInt32  OMINT32_MAX = ~OMINT32_MIN;
 const OMInt64  OMINT64_MIN = (OMInt64)((OMInt64)1 << (64 - 1));
 const OMInt64  OMINT64_MAX = ~OMINT64_MIN;
 
-const OMUInt8  OMUINT8_MAX  = ~(OMUInt8) 0;
-const OMUInt16 OMUINT16_MAX = ~(OMUInt16)0;
-const OMUInt32 OMUINT32_MAX = ~(OMUInt32)0;
-const OMUInt64 OMUINT64_MAX = ~(OMUInt64)0;
+const OMUInt8  OMUINT8_MAX  = (OMUInt8)(~(OMUInt8) 0);
+const OMUInt16 OMUINT16_MAX = (OMUInt8)(~(OMUInt16)0);
+const OMUInt32 OMUINT32_MAX = (OMUInt8)(~(OMUInt32)0);
+const OMUInt64 OMUINT64_MAX = (OMUInt8)(~(OMUInt64)0);
 
 typedef OMUInt16 OMPropertyId;
 typedef OMUInt16 OMPropertySize;
@@ -340,6 +340,6 @@ const OMStoredObjectEncoding nullOMStoredObjectEncoding = {0};
 //
 typedef OMUInt16 OMPropertyTag;
 
-const OMPropertyTag nullOMPropertyTag = ~(OMPropertyTag)0;
+const OMPropertyTag nullOMPropertyTag = (OMPropertyTag)(~(OMPropertyTag)0);
 
 #endif
