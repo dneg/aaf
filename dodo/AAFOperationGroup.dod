@@ -230,10 +230,9 @@ AD_XMETHOD1(AddNewParameter,
   // AAFRESULT_NULL_PARAM
   //   - pValue arg is NULL.)
 
-AD_XMETHOD2(AddNewInputSegment,
-	[in], objPass, aafInt32, index, Index \(1-based\) of the input segment,
+AD_XMETHOD1(AppendNewInputSegment,
 	[in], objIn, AAFSegment, pSegment, Segment to place in effect,
-	Adds another input segment to an effect at the given index.
+	Appends another input segment to an effect.
   // 
   // Succeeds if all of the following are true:
   // - the pSegment pointer is valid.
