@@ -226,8 +226,8 @@ ImplAAFFile::OpenExistingModify (wchar_t * pFileName,
 		// NOTE: If modifying an existing file WITHOUT an IDNT object, add a
 		// dummy IDNT object to indicate that this program was not the creator.
 		//
-		aafInt32	numIdent = 0;
-		checkResult(_head->GetNumIdentifications(&numIdent));
+		aafUInt32	numIdent = 0;
+		checkResult(_head->CountIdentifications(&numIdent));
 		if(numIdent == 0)
 		{
 			_head->AddIdentificationObject((aafProductIdentification_t *)NULL);

@@ -526,7 +526,7 @@ ImplAAFTypeDefSP ImplAAFTypeDefExtEnum::BaseType () const
 	  assert (AAFRESULT_SUCCEEDED(hr));
 	  assert (pDict);
 
-	  hr = pDict->LookupType (kAAFTypeID_AUID, &((ImplAAFTypeDefExtEnum*)this)->_cachedBaseType);
+	  hr = pDict->LookupTypeDef (kAAFTypeID_AUID, &((ImplAAFTypeDefExtEnum*)this)->_cachedBaseType);
 	  assert (AAFRESULT_SUCCEEDED(hr));
 	  assert (_cachedBaseType);
 	}
