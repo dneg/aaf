@@ -1,0 +1,4 @@
+TOOLNAME=${0##*/}
+TOOLPATH=${0%/${TOOLNAME}}
+
+${TOOLPATH}/mkchangelogs ${TOOLPATH}/AAFtagdates ${TOOLPATH}/AAFcolormap
