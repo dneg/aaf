@@ -959,6 +959,7 @@ void ImplAAFObject::InitOMProperties (void)
 	  assert (AAFRESULT_SUCCEEDED (hr));
 	  assert (ptd);
 
+#if 0
 	  // The only info we can compare is sizes of properties.  Let's
 	  // make sure they match.
 	  size_t omPropSize  = pProp->bitsSize ();
@@ -972,8 +973,8 @@ void ImplAAFObject::InitOMProperties (void)
 	  // the wrong size.  You'll also have to add an include to
 	  // iostream.h .  Be sure to reinstate the comments, and remove
 	  // the include<iostream.h> before you check in any changes!
-	  assert (definedSize == omPropSize);
-	  /*
+	  // assert (definedSize == omPropSize);
+	  
 	  if (definedSize != omPropSize)
 		{
 		  cerr << "Property size error: "
@@ -982,7 +983,7 @@ void ImplAAFObject::InitOMProperties (void)
 			   << ", omPropSize=0x"  << hex << omPropSize
 			   << endl;
 		}
-	  */
+#endif	  
 
 	  // Fill in other OMProp info that the property def can offer.
 	  // Specifically, the property type, and 'optionality'.
