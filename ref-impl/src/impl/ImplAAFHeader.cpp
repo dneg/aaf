@@ -71,9 +71,9 @@
 extern "C" const aafClassID_t	CLSID_AAFDictionary;
 
 ImplAAFHeader::ImplAAFHeader ()
-: _byteOrder(         PID_Header_ByteOrder,          "Byte Order"),
-  _lastModified(      PID_Header_LastModified,       "Last Modified"),
-  _identificationList(PID_Header_IdentificationList, "Identification List"),
+: _byteOrder(         PID_Header_ByteOrder,          "ByteOrder"),
+  _lastModified(      PID_Header_LastModified,       "LastModified"),
+  _identificationList(PID_Header_IdentificationList, "IdentificationList"),
   _contentStorage(		PID_Header_Content,	"Content"),
   _dictionary(PID_Header_Dictionary,	"Dictionary")
 {
