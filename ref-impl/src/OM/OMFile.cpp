@@ -6,6 +6,10 @@
 #include "OMClassFactory.h"
 #include "OMObjectDirectory.h"
 
+#include <string.h>
+
+#include <windows.h>
+
 OMFile::OMFile(const char* name)
 : _name(name), _root(0)
 {
