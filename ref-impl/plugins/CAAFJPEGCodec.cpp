@@ -1721,12 +1721,12 @@ typedef struct _aafEssenceFormatData_t
 	union
 	{
 		aafUInt8 expData[kMaxEssenceFormatData];
-		aafInt32 expUInt32;
+		aafUInt32 expUInt32;
 		aafInt32 expInt32;
-		aafInt16 expUInt16;
+		aafUInt16 expUInt16;
 		aafInt16 expInt16;
-		aafInt16 expUInt8;
-		aafInt16 expInt8;
+		aafUInt8 expUInt8;
+		aafInt8 expInt8;
 		aafRational_t expRational;
 		aafRect_t expRect;
 		aafColorSpace_t expColorSpace;
@@ -1749,6 +1749,21 @@ static void GetFormatParam(
 		num = param.operand.expUInt16;
 	else if (param.size == 4)
 		num = param.operand.expUInt32;
+	else
+		throw HRESULT(AAFRESULT_INVALID_PARM_SIZE);
+}
+
+
+static void GetFormatParam(
+  const aafEssenceFormatData_t& param, 
+  aafInt32& num) // throw HRESULT
+{
+	if (param.size == 1)
+		num = param.operand.expInt8;
+	else if (param.size == 2)
+		num = param.operand.expInt16;
+	else if (param.size == 4)
+		num = param.operand.expInt32;
 	else
 		throw HRESULT(AAFRESULT_INVALID_PARM_SIZE);
 }
