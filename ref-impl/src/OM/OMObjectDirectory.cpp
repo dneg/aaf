@@ -25,6 +25,7 @@
 *
 ************************************************************************/
 
+// @doc OMINTERNAL
 #include "OMObjectDirectory.h"
 #include "OMAssertions.h"
 #include "OMPortability.h"

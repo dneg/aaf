@@ -25,6 +25,7 @@
 *
 ************************************************************************/
 
+// @doc OMINTERNAL
 #ifndef OMPORTABILITY_H
 #define OMPORTABILITY_H
 

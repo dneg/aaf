@@ -25,6 +25,7 @@
 *
 ************************************************************************/
 
+// @doc OMEXTERNAL
 #include "OMUtilities.h"
 
 #include "OMAssertions.h"

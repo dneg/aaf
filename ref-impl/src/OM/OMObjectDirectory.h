@@ -25,6 +25,7 @@
 *
 ************************************************************************/
 
+// @doc OMINTERNAL
 #ifndef OMOBJECTDIRECTORY_H
 #define OMOBJECTDIRECTORY_H
 

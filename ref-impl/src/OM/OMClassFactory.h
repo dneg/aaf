@@ -25,6 +25,7 @@
 *
 ************************************************************************/
 
+// @doc OMEXTERNAL
 #ifndef OMCLASSFACTORY_H
 #define OMCLASSFACTORY_H
 

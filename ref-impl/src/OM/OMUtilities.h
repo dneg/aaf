@@ -25,6 +25,7 @@
 *
 ************************************************************************/
 
+// @doc OMEXTERNAL
 #ifndef OMUTILITIES_H
 #define OMUTILITIES_H
 
