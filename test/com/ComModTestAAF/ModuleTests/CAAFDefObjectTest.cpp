@@ -82,6 +82,8 @@ static HRESULT OpenAAFFile(aafWChar*			pFileName,
 	ProductInfo.productID = -1;
 	ProductInfo.platform = NULL;
 
+	*ppFile = NULL;
+
 	if(mode == kMediaOpenAppend)
 		hr = AAFFileOpenNewModify(pFileName, 0, &ProductInfo, ppFile);
 	else
@@ -89,8 +91,11 @@ static HRESULT OpenAAFFile(aafWChar*			pFileName,
 
 	if (FAILED(hr))
 	{
-		(*ppFile)->Release();
-		*ppFile = NULL;
+		if (*ppFile)
+		{
+			(*ppFile)->Release();
+			*ppFile = NULL;
+		}
 		return hr;
 	}
   
