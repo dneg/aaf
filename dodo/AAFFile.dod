@@ -72,7 +72,7 @@ AD_FORWARD_DECLARATION(AAFHeader)
 AD_CLASS_UUID(9346ACD2, 2713, 11d2, 80, 35, 00, 60, 08, 14, 3E, 6F)
 
 AD_DEFAULT_UUID(9346ACD3, 2713, 11d2, 80, 35, 00, 60, 08, 14, 3E, 6F)
-AD_CLASS_BEGIN
+AD_XCLASS_BEGIN(Concrete, Transient)
 AD_STATIC_CREATE
 AD_METHOD0(Initialize,
 		   Initializes a newly allocated\, empty IAAFFile-supporting object.
@@ -662,4 +662,4 @@ AD_XMETHOD1(GetRevision,
   //
   // AAFRESULT_NULL_PARAM
   //   - the revision pointer arg is NULL.)
-AD_CLASS_END
+AD_XCLASS_END(Concrete, Transient)
