@@ -181,10 +181,17 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFCodecDef::RemoveEssenceKind (
       ImplAAFDataDef * pEssenceKind)
 {
-  if (! pEssenceKind)
-	return AAFRESULT_NULL_PARAM;
+	if (! pEssenceKind)
+		return AAFRESULT_NULL_PARAM;
 
-  return AAFRESULT_NOT_IMPLEMENTED;
+	return AAFRESULT_NOT_IMPLEMENTED;
+	
+//!!!Wait until weak ref arrays are done
+//	if(_dataDefs.countOfValue(pEssenceKind) == 0)
+//		return AAFRESULT_OBJECT_NOT_FOUND;
+//	_dataDefs.removeValue(pEssenceKind);
+//
+//	return AAFRESULT_SUCCESS;
 }
 
 
@@ -193,9 +200,14 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFCodecDef::CountEssenceKinds (
       aafUInt32 * pResult)
 {
-  if (! pResult) return AAFRESULT_NULL_PARAM;
+	if (! pResult)
+		return AAFRESULT_NULL_PARAM;
 
-  return AAFRESULT_NOT_IMPLEMENTED;
+	return AAFRESULT_NOT_IMPLEMENTED;
+//!!!Wait until weak ref arrays are done
+//	*pResult = _dataDefs.countOfValue(pEssenceKind);
+//
+//  return AAFRESULT_SUCCESS;
 }
 
 
