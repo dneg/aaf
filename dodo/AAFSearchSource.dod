@@ -47,8 +47,8 @@ AD_XMETHOD7(SearchSource,
   // in the specified slot until it encounters the kind of Mob
   // specified in the mobKind parameter.  This function cannot be used
   // on a Composition Mob and is not intended to be called
-  // iteratively; use the omfiMobOpenSearch\, omfiMobGetNextSource\,
-  // omfiMobGetThisSource\, and omfiMobCloseSearch functions for those
+  // iteratively; use the MobOpenSearch\, MobGetNextSource\,
+  // MobGetThisSource\, and MobCloseSearch functions for those
   // purposes. 
   //
   // Succeeds if all of the following are true:
