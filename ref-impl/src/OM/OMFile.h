@@ -32,6 +32,8 @@ public:
   static OMFile* createModify(const wchar_t* fileName,
                               const OMClassFactory* factory,
                               OMStorable* root);
+  static OMFile* createTransient(const OMClassFactory* factory,
+                                 OMStorable* root);
 
   void save(void);
 
