@@ -33,6 +33,7 @@
 #endif
 
 #include "OMWeakRefProperty.h"
+#include "OMArrayProperty.h"
 
 class ImplAAFPropertyValue;
 
@@ -312,7 +313,7 @@ private:
   OMVariableSizeProperty<wchar_t> _ElementNames;
 
   // array of values for elements.
-  OMVariableSizeProperty<aafInt64> _ElementValues;
+  OMArrayProperty<aafInt64> _ElementValues;
 
   aafBool          _isRegistered;
   aafBool          _registrationAttempted;

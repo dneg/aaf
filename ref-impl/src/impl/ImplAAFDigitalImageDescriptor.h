@@ -29,7 +29,7 @@
 #include "ImplAAFFileDescriptor.h"
 #endif
 
-#include "OMVariableSizeProperty.h"
+#include "OMArrayProperty.h"
 
 class ImplAAFDigitalImageDescriptor : public ImplAAFFileDescriptor
 {
@@ -273,7 +273,7 @@ protected:
 	OMFixedSizeProperty<aafInt32>				_displayXOffset;
 	OMFixedSizeProperty<aafInt32>				_displayYOffset;
 	OMFixedSizeProperty<aafFrameLayout_t>		_frameLayout;
-	OMVariableSizeProperty<aafInt32>			_videoLineMap;
+	OMArrayProperty<aafInt32>			_videoLineMap;
 	OMFixedSizeProperty<aafRational_t>			_imageAspectRatio;
 	OMFixedSizeProperty<aafAlphaTransparency_t>	_alphaTransparency;
 	OMFixedSizeProperty<aafUID_t>				_gamma;

@@ -334,6 +334,14 @@ void ImplAAFTypeDefFixedArray::internalize(const OMByte* externalBytes,
 	}
 }
 
+OMType* ImplAAFTypeDefFixedArray::elementType(void) const
+{
+  ImplAAFTypeDef* result = 0;
+  AAFRESULT hr = GetType(&result);
+  assert(hr == 0);
+  result->ReleaseReference();
+  return result;
+}
 
 aafBool ImplAAFTypeDefFixedArray::IsFixedSize (void) const
 {

@@ -141,6 +141,8 @@ public:
                            size_t internalBytesSize,
                            OMByteOrder byteOrder) const;
 
+  virtual OMType* elementType(void) const;
+
   //****************
   // pvtInitialize()
   //

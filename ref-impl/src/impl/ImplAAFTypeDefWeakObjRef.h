@@ -35,7 +35,9 @@ class ImplAAFClassDef;
 #ifndef __ImplAAFTypeDefObjectRef_h__
 #include "ImplAAFTypeDefObjectRef.h"
 #endif
+#include "AAFUtils.h"
 #include "OMWeakRefProperty.h"
+#include "OMArrayProperty.h"
 
 
 class ImplAAFTypeDefWeakObjRef : public ImplAAFTypeDefObjectRef
@@ -153,7 +155,7 @@ public:
 private:
   // Persistent member properties
   OMWeakReferenceProperty<ImplAAFClassDef> _referencedType;
-  OMVariableSizeProperty<aafUID_t> _targetSet; // array of property definition ids
+  OMArrayProperty<aafUID_t> _targetSet; // array of property definition ids
   
   // Transient members
   OMPropertyId * _targetPids;
