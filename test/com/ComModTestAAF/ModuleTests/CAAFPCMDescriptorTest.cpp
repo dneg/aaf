@@ -33,6 +33,13 @@
 
 using namespace std;
 
+//
+// If defined, the macro enables tests for
+// the Set and GetChannelAssignment() methods.
+//
+#undef TEST_CHANNEL_ASSIGNMENT_FUNCTIONS
+
+
 const aafUInt32  peakEnvelopeDataSize = 16;
 struct CAAFPCMDescriptorTestFixture
 {
@@ -40,6 +47,7 @@ struct CAAFPCMDescriptorTestFixture
     aafUInt16               blockAlign;
     aafUInt8                sequenceOffset;
     aafUInt32               averageBPS;
+    aafUID_t                channelAssignment;
     aafUInt32               peakEnvelopeVersion;
     aafUInt32               peakEnvelopeFormat;
     aafUInt32               pointsPerPeakValue;
@@ -48,7 +56,7 @@ struct CAAFPCMDescriptorTestFixture
     aafUInt32               peakFrameCount;
     aafUInt32               peakOfPeaksPosition;
     aafTimeStamp_t          peakEnvelopeTimestamp;
-    char                    peakEnvelopeData[ peakEnvelopeDataSize ];
+    unsigned char           peakEnvelopeData[ peakEnvelopeDataSize ];
 };
 
 static const CAAFPCMDescriptorTestFixture  gTestData = 
@@ -59,24 +67,25 @@ static const CAAFPCMDescriptorTestFixture  gTestData =
       0x13, 0x00, 0x00, 0x00,
       { 0xf6d43ded, 0xa5aa, 0x4a05,
         0xa2, 0x84, 0x37, 0x8f,
-        0x94, 0x16, 0xd0, 0x56 } },
+        0x94, 0x16, 0xd0, 0x56 } }, // sourceMobID
 
-    8976,
-    51,
-    55372,
-    17234,
-    12,
-    17,
-    29,
-    35,
-    41,
-    54,
-    { {1979, 12, 31}, {11, 30, 0, 0} },
+    8976,   // blockAlign;
+    51,     // sequenceOffset;
+    55372,  // averageBPS;
+    { 0xa0262ea8, 0x9800, 0x47d2, { 0xad, 0x93, 0x98, 0x27, 0xfe, 0x82, 0xe3, 0x6d } }, // channelAssignment
+    17234,  // peakEnvelopeVersion;
+    12,     // peakEnvelopeFormat;
+    17,     // pointsPerPeakValue;
+    29,     // peakEnvelopeBlockSize;
+    35,     // peakChannelCount;
+    41,     // peakFrameCount;
+    54,     // peakOfPeaksPosition;
+    { {1979, 12, 31}, {11, 30, 0, 0} }, // peakEnvelopeTimestamp
 
     { '\x001', '\x002', '\x003', '\x004',
       '\x005', '\x006', '\x007', '\x008',
       '\x009', '\x00a', '\x00b', '\x00c',
-      '\x00d', '\x00e', '\x00f', '\x010' }
+      '\x00d', '\x00e', '\x00f', '\x010' }  // peakEnvelopeData
 };
 
 
@@ -111,10 +120,54 @@ static HRESULT CreateAAFFile(
 static HRESULT ReadAAFFile(
     aafWChar * pFileName);
 
-static HRESULT Test_IAAFPCMDescriptor_Uninitialized( IAAFPCMDescriptor* );
-static HRESULT Test_IAAFPCMDescriptor_NotPersistent( IAAFPCMDescriptor*, testMode_t );
+static HRESULT Test_IAAFPCMDescriptor_Uninitialized(
+    IAAFPCMDescriptor* );
+static HRESULT Test_IAAFPCMDescriptor(
+    IAAFPCMDescriptor*,
+    testMode_t );
+static HRESULT Test_IAAFPCMDescriptor_BlockAlign(
+    IAAFPCMDescriptor*,
+    testMode_t );
+static HRESULT Test_IAAFPCMDescriptor_SequenceOffset(
+    IAAFPCMDescriptor*,
+    testMode_t );
+static HRESULT Test_IAAFPCMDescriptor_AverageBPS(
+    IAAFPCMDescriptor*,
+    testMode_t );
+static HRESULT Test_IAAFPCMDescriptor_ChannelAssignment(
+    IAAFPCMDescriptor*,
+    testMode_t );
+static HRESULT Test_IAAFPCMDescriptor_AreAllPeakEnvelopePropertiesPresent(
+    IAAFPCMDescriptor*,
+    testMode_t );
+static HRESULT Test_IAAFPCMDescriptor_PeakEnvelopeVersion(
+    IAAFPCMDescriptor*,
+    testMode_t );
+static HRESULT Test_IAAFPCMDescriptor_PeakEnvelopeFormat(
+    IAAFPCMDescriptor*,
+    testMode_t );
+static HRESULT Test_IAAFPCMDescriptor_PointsPerPeakValue(
+    IAAFPCMDescriptor*,
+    testMode_t );
+static HRESULT Test_IAAFPCMDescriptor_PeakEnvelopeBlockSize(
+    IAAFPCMDescriptor*,
+    testMode_t );
+static HRESULT Test_IAAFPCMDescriptor_PeakChannelCount(
+    IAAFPCMDescriptor*,
+    testMode_t );
+static HRESULT Test_IAAFPCMDescriptor_PeakFrameCount(
+    IAAFPCMDescriptor*,
+    testMode_t );
+static HRESULT Test_IAAFPCMDescriptor_PeakOfPeaksPosition(
+    IAAFPCMDescriptor*,
+    testMode_t );
+static HRESULT Test_IAAFPCMDescriptor_PeakEnvelopeTimestamp(
+    IAAFPCMDescriptor*,
+    testMode_t );
+static HRESULT Test_IAAFPCMDescriptor_PeakEnvelopeData(
+    IAAFPCMDescriptor*,
+    testMode_t );
 
-static HRESULT Test_IAAFPCMDescriptor( IAAFPCMDescriptor*, testMode_t );
 
 
 //
@@ -123,12 +176,6 @@ static HRESULT Test_IAAFPCMDescriptor( IAAFPCMDescriptor*, testMode_t );
 HRESULT CAAFPCMDescriptor_test(
     testMode_t mode )
 {
-    // None of the tests are implemented. Do not run them to
-    // avoid unnecessary exceptions.
-    // Once the tests implemented remove this line.
-    return AAFRESULT_NOT_IMPLEMENTED;
-
-
     HRESULT  hr = AAFRESULT_NOT_IMPLEMENTED;
     const size_t fileNameBufLen = 128;
     aafWChar* pFileName = L"AAFPCMDescriptorTest.aaf";
@@ -286,10 +333,6 @@ static HRESULT CreateAAFFile(
         checkResult(pPCMDesc->Initialize());
 
 
-        checkResult(Test_IAAFPCMDescriptor_NotPersistent(pPCMDesc,
-                                                         kAAFUnitTestReadWrite));
-
-
         // Attach the descriptor to the source mob and
         // then attach the source mob to the file.
         checkResult(pPCMDesc->QueryInterface(IID_IAAFEssenceDescriptor, (void **) &pEssenceDesc));
@@ -416,27 +459,173 @@ static HRESULT ReadAAFFile(
 
 
 static HRESULT Test_IAAFPCMDescriptor_Uninitialized(
-    IAAFPCMDescriptor* )
+    IAAFPCMDescriptor* pPCMDesc )
 {
-    return AAFRESULT_NOT_IMPLEMENTED;
-}
+    HRESULT  hr = S_OK;
 
 
+    try
+    {
+        aafUInt16  blockAlign = 0;
+        hr = pPCMDesc->SetBlockAlign( blockAlign );
+        checkExpression( hr == AAFRESULT_NOT_INITIALIZED, AAFRESULT_TEST_FAILED );
+        hr = pPCMDesc->GetBlockAlign( &blockAlign );
+        checkExpression( hr == AAFRESULT_NOT_INITIALIZED, AAFRESULT_TEST_FAILED );
 
-static HRESULT Test_IAAFPCMDescriptor_NotPersistent(
-    IAAFPCMDescriptor*,
-    testMode_t )
-{
-    return AAFRESULT_NOT_IMPLEMENTED;
+
+        aafUInt8  sequenceOffset = 0;
+        hr = pPCMDesc->SetSequenceOffset( sequenceOffset );
+        checkExpression( hr == AAFRESULT_NOT_INITIALIZED, AAFRESULT_TEST_FAILED );
+        hr = pPCMDesc->GetSequenceOffset( &sequenceOffset );
+        checkExpression( hr == AAFRESULT_NOT_INITIALIZED, AAFRESULT_TEST_FAILED );
+
+
+        aafUInt32  averageBPS;
+        hr = pPCMDesc->SetAverageBPS( gTestData.averageBPS );
+        checkExpression( hr == AAFRESULT_NOT_INITIALIZED, AAFRESULT_TEST_FAILED );
+        hr = pPCMDesc->GetAverageBPS( &averageBPS );
+        checkExpression( hr == AAFRESULT_NOT_INITIALIZED, AAFRESULT_TEST_FAILED );
+
+
+#ifdef TEST_CHANNEL_ASSIGNMENT_FUNCTIONS
+        aafUID_t  channelAssignment;
+        hr = pPCMDesc->SetChannelAssignment( channelAssignment );
+        checkExpression( hr == AAFRESULT_NOT_INITIALIZED, AAFRESULT_TEST_FAILED );
+        hr = pPCMDesc->GetChannelAssignment( &channelAssignment );
+        checkExpression( hr == AAFRESULT_NOT_INITIALIZED, AAFRESULT_TEST_FAILED );
+#endif
+
+
+        aafUInt32  peakEnvelopeVersion = 0;
+        hr = pPCMDesc->SetPeakEnvelopeVersion( peakEnvelopeVersion );
+        checkExpression( hr == AAFRESULT_NOT_INITIALIZED, AAFRESULT_TEST_FAILED );
+        hr = pPCMDesc->GetPeakEnvelopeVersion( &peakEnvelopeVersion );
+        checkExpression( hr == AAFRESULT_NOT_INITIALIZED, AAFRESULT_TEST_FAILED );
+
+
+        aafUInt32  peakEnvelopeFormat;
+        hr = pPCMDesc->SetPeakEnvelopeFormat( gTestData.peakEnvelopeFormat );
+        checkExpression( hr == AAFRESULT_NOT_INITIALIZED, AAFRESULT_TEST_FAILED );
+        hr = pPCMDesc->GetPeakEnvelopeFormat( &peakEnvelopeFormat );
+        checkExpression( hr == AAFRESULT_NOT_INITIALIZED, AAFRESULT_TEST_FAILED );
+
+
+        aafUInt32  pointsPerPeakValue;
+        hr = pPCMDesc->SetPointsPerPeakValue( gTestData.pointsPerPeakValue );
+        checkExpression( hr == AAFRESULT_NOT_INITIALIZED, AAFRESULT_TEST_FAILED );
+        hr = pPCMDesc->GetPointsPerPeakValue( &pointsPerPeakValue );
+        checkExpression( hr == AAFRESULT_NOT_INITIALIZED, AAFRESULT_TEST_FAILED );
+
+
+        aafUInt32  peakEnvelopeBlockSize;
+        hr = pPCMDesc->SetPeakEnvelopeBlockSize( gTestData.peakEnvelopeBlockSize );
+        checkExpression( hr == AAFRESULT_NOT_INITIALIZED, AAFRESULT_TEST_FAILED );
+        hr = pPCMDesc->GetPeakEnvelopeBlockSize( &peakEnvelopeBlockSize );
+        checkExpression( hr == AAFRESULT_NOT_INITIALIZED, AAFRESULT_TEST_FAILED );
+
+
+        aafUInt32  peakChannelCount;
+        hr = pPCMDesc->SetPeakChannelCount( gTestData.peakChannelCount );
+        checkExpression( hr == AAFRESULT_NOT_INITIALIZED, AAFRESULT_TEST_FAILED );
+        hr = pPCMDesc->GetPeakChannelCount( &peakChannelCount );
+        checkExpression( hr == AAFRESULT_NOT_INITIALIZED, AAFRESULT_TEST_FAILED );
+
+
+        aafUInt32  peakFrameCount;
+        hr = pPCMDesc->SetPeakFrameCount( gTestData.peakFrameCount );
+        checkExpression( hr == AAFRESULT_NOT_INITIALIZED, AAFRESULT_TEST_FAILED );
+        hr = pPCMDesc->GetPeakFrameCount( &peakFrameCount );
+        checkExpression( hr == AAFRESULT_NOT_INITIALIZED, AAFRESULT_TEST_FAILED );
+
+
+        aafPosition_t  peakOfPeaksPosition;
+        hr = pPCMDesc->SetPeakOfPeaksPosition( gTestData.peakOfPeaksPosition );
+        checkExpression( hr == AAFRESULT_NOT_INITIALIZED, AAFRESULT_TEST_FAILED );
+        hr = pPCMDesc->GetPeakOfPeaksPosition( &peakOfPeaksPosition );
+        checkExpression( hr == AAFRESULT_NOT_INITIALIZED, AAFRESULT_TEST_FAILED );
+
+
+        aafTimeStamp_t  peakEnvelopeTimestamp;
+        hr = pPCMDesc->SetPeakEnvelopeTimestamp( gTestData.peakEnvelopeTimestamp );
+        checkExpression( hr == AAFRESULT_NOT_INITIALIZED, AAFRESULT_TEST_FAILED );
+        hr = pPCMDesc->GetPeakEnvelopeTimestamp( &peakEnvelopeTimestamp );
+        checkExpression( hr == AAFRESULT_NOT_INITIALIZED, AAFRESULT_TEST_FAILED );
+
+
+        aafPosition_t position = 0;
+        hr = pPCMDesc->SetPeakEnvelopeDataPosition( position );
+        checkExpression( hr == AAFRESULT_NOT_INITIALIZED, AAFRESULT_TEST_FAILED );
+        hr = pPCMDesc->GetPeakEnvelopeDataPosition( &position );
+        checkExpression( hr == AAFRESULT_NOT_INITIALIZED, AAFRESULT_TEST_FAILED );
+
+
+        aafLength_t  size;
+        hr = pPCMDesc->GetPeakEnvelopeDataSize( &size );
+        checkExpression( hr == AAFRESULT_NOT_INITIALIZED, AAFRESULT_TEST_FAILED );
+
+
+        unsigned char  peakEnvelopeData[ peakEnvelopeDataSize ];
+        aafUInt32  bytesTransferred;
+        hr = pPCMDesc->WritePeakEnvelopeData( peakEnvelopeDataSize,
+                                              (aafDataBuffer_t)(peakEnvelopeData),
+                                              &bytesTransferred );
+        checkExpression( hr == AAFRESULT_NOT_INITIALIZED, AAFRESULT_TEST_FAILED );
+        hr = pPCMDesc->ReadPeakEnvelopeData( peakEnvelopeDataSize,
+                                             peakEnvelopeData,
+                                             &bytesTransferred );
+        checkExpression( hr == AAFRESULT_NOT_INITIALIZED, AAFRESULT_TEST_FAILED );
+
+
+        // If we got to this point none of the tests above
+        // failed and the status can be set to 'success'.
+        hr = S_OK;
+    }
+    catch( HRESULT e )
+    {
+        hr = e;
+    }
+
+
+    return hr;
 }
 
 
 
 static HRESULT Test_IAAFPCMDescriptor(
-    IAAFPCMDescriptor*,
-    testMode_t )
+    IAAFPCMDescriptor* pPCMDesc,
+    testMode_t mode )
 {
-    return AAFRESULT_NOT_IMPLEMENTED;
+    HRESULT  hr = S_OK;
+
+
+    try
+    {
+        checkResult( Test_IAAFPCMDescriptor_BlockAlign( pPCMDesc, mode ) );
+        checkResult( Test_IAAFPCMDescriptor_SequenceOffset( pPCMDesc, mode ) );
+        checkResult( Test_IAAFPCMDescriptor_AverageBPS( pPCMDesc, mode ) );
+        checkResult( Test_IAAFPCMDescriptor_ChannelAssignment( pPCMDesc, mode ) );
+        checkResult( Test_IAAFPCMDescriptor_AreAllPeakEnvelopePropertiesPresent( pPCMDesc, mode ) );
+        checkResult( Test_IAAFPCMDescriptor_PeakEnvelopeVersion( pPCMDesc, mode ) );
+        checkResult( Test_IAAFPCMDescriptor_PeakEnvelopeFormat( pPCMDesc, mode ) );
+        checkResult( Test_IAAFPCMDescriptor_PointsPerPeakValue( pPCMDesc, mode ) );
+        checkResult( Test_IAAFPCMDescriptor_PeakEnvelopeBlockSize( pPCMDesc, mode ) );
+        checkResult( Test_IAAFPCMDescriptor_PeakChannelCount( pPCMDesc, mode ) );
+        checkResult( Test_IAAFPCMDescriptor_PeakFrameCount( pPCMDesc, mode ) );
+        checkResult( Test_IAAFPCMDescriptor_PeakOfPeaksPosition( pPCMDesc, mode ) );
+        checkResult( Test_IAAFPCMDescriptor_PeakEnvelopeTimestamp( pPCMDesc, mode ) );
+        checkResult( Test_IAAFPCMDescriptor_PeakEnvelopeData( pPCMDesc, mode ) );
+
+        // If we got to this point none of the tests above
+        // failed and the status can be set to 'success'.
+        hr = S_OK;
+    }
+    catch( HRESULT e )
+    {
+        hr = e;
+    }
+
+
+    return hr;
 }
 
 
@@ -455,7 +644,7 @@ static HRESULT Test_IAAFPCMDescriptor_BlockAlign(
 
         if( mode == kAAFUnitTestReadWrite )
         {
-            // GetBlockAlign() should succeed because Channels
+            // GetBlockAlign() should succeed because BlockAlign
             // is a required property.
             aafUInt16  blockAlign = bogusBlockAlign;
             hr = pPCMDesc->GetBlockAlign( &blockAlign );
@@ -584,12 +773,13 @@ static HRESULT Test_IAAFPCMDescriptor_AverageBPS(
 
         if( mode == kAAFUnitTestReadWrite )
         {
-            // GetAverageBPS() should fail if the property not present.
+            // GetAverageBPS() should succeed because AverageBPS
+            // is a required property.
             aafUInt32  averageBPS = bogusAverageBPS;
             hr = pPCMDesc->GetAverageBPS( &averageBPS );
-            checkExpression( hr == AAFRESULT_PROP_NOT_PRESENT,
+            checkExpression( hr == AAFRESULT_SUCCESS,
                              AAFRESULT_TEST_FAILED );
-            checkExpression( averageBPS == bogusAverageBPS,
+            checkExpression( averageBPS != bogusAverageBPS,
                              AAFRESULT_TEST_FAILED );
 
 
@@ -634,9 +824,76 @@ static HRESULT Test_IAAFPCMDescriptor_AverageBPS(
 
 
 
-static HRESULT Test_IAAFPCMDescriptor_AreAllPeakEnvelopePropertiesPresent(
+static HRESULT Test_IAAFPCMDescriptor_ChannelAssignment(
     IAAFPCMDescriptor* pPCMDesc,
     testMode_t mode )
+{
+    HRESULT  hr = S_OK;
+
+
+    try
+    {
+#ifdef TEST_CHANNEL_ASSIGNMENT_FUNCTIONS
+        static const aafUID_t bogusChannelAssignmentID =
+            { 0x4eb11210, 0x59c3, 0x4b7d,
+              { 0x80, 0x50, 0x8a, 0x12, 0x99, 0x2c, 0x96, 0xf1 } };
+
+
+        if( mode == kAAFUnitTestReadWrite )
+        {
+            // GetChannelAssignment() should fail if the property not present.
+            aafUID_t  channelAssignmentID = bogusChannelAssignmentID;
+            hr = pPCMDesc->GetChannelAssignment( &channelAssignmentID );
+            checkExpression( hr == AAFRESULT_PROP_NOT_PRESENT,
+                             AAFRESULT_TEST_FAILED );
+            checkExpression( channelAssignmentID == bogusChannelAssignmentID,
+                             AAFRESULT_TEST_FAILED );
+
+
+            // GetChannelAssignment() should fail if function arguments are invalid.
+            channelAssignmentID = bogusChannelAssignmentID;
+            hr = pPCMDesc->GetChannelAssignment( 0 );
+            checkExpression( hr == AAFRESULT_NULL_PARAM,
+                             AAFRESULT_TEST_FAILED );
+            checkExpression( channelAssignmentID == bogusChannelAssignmentID,
+                             AAFRESULT_TEST_FAILED );
+
+
+            // SetChannelAssignment() should always succeed
+            hr = pPCMDesc->SetChannelAssignment( gTestData.channelAssignment );
+            checkExpression( hr == AAFRESULT_SUCCESS, AAFRESULT_TEST_FAILED );
+        }
+
+
+        if( mode == kAAFUnitTestReadWrite || mode == kAAFUnitTestReadOnly )
+        {
+            // GetChannelAssignment() should succeed.
+            aafUID_t  channelAssignmentID = bogusChannelAssignmentID;
+            hr = pPCMDesc->GetChannelAssignment( &channelAssignmentID );
+            checkExpression( hr == AAFRESULT_SUCCESS, AAFRESULT_TEST_FAILED );
+            checkExpression( channelAssignmentID == gTestData.channelAssignment,
+                             AAFRESULT_TEST_FAILED );
+        }
+#endif
+
+        // If we got to this point none of the tests above
+        // failed and the status can be set to 'success'.
+        hr = S_OK;
+    }
+    catch( HRESULT e )
+    {
+        hr = e;
+    }
+
+
+    return hr;
+}
+
+
+
+static HRESULT Test_IAAFPCMDescriptor_AreAllPeakEnvelopePropertiesPresent(
+    IAAFPCMDescriptor* pPCMDesc,
+    testMode_t /* mode */)
 {
     HRESULT  hr = S_OK;
 
@@ -1256,7 +1513,7 @@ static HRESULT Test_IAAFPCMDescriptor_PeakEnvelopeTimestamp(
 
 
 
-static HRESULT Test_IAAFSoundDescriptor_WritePeakEnvelopeData(
+static HRESULT Test_IAAFPCMDescriptor_PeakEnvelopeData(
     IAAFPCMDescriptor* pPCMDesc,
     testMode_t mode )
 {
@@ -1265,33 +1522,126 @@ static HRESULT Test_IAAFSoundDescriptor_WritePeakEnvelopeData(
 
     try
     {
-        /*
-        // () should fail if function arguments are invalid.
-        const aafUInt32  bogusBytesWritten = 21;
-        aafUInt32  bytesWritten = bogusBytesWritten;
-        hr = pPCMDesc->WritePeakEnvelopeData( 0,
-                                              gTestData.peakEnvelopeData,
-                                              &bytesWritten );
-        checkExpression( hr == AAFRESULT_INVALID_PARAM,
-                         AAFRESULT_TEST_FAILED );
-        checkExpression( bytesWritten == bogusBytesWritten,
-                         AAFRESULT_TEST_FAILED );
+        unsigned char  bogusPeakEnvelopeData[ peakEnvelopeDataSize ];
+        memset( bogusPeakEnvelopeData, 0xED, peakEnvelopeDataSize );
 
-        bytesWritten = bogusBytesWritten;
-        hr = pPCMDesc->WritePeakEnvelopeData( peakEnvelopeDataSize,
-                                              0,
-                                              &bytesWritten );
-        checkExpression( hr == AAFRESULT_NULL_PARAM,
-                         AAFRESULT_TEST_FAILED );
-        checkExpression( bytesWritten == bogusBytesWritten,
-                         AAFRESULT_TEST_FAILED );
 
-        hr = pPCMDesc->WritePeakEnvelopeData( peakEnvelopeDataSize,
-                                              gTestData.peakEnvelopeData,
-                                              0 );
-        checkExpression( hr == AAFRESULT_NULL_PARAM,
-                         AAFRESULT_TEST_FAILED );
-                         */
+        if( mode == kAAFUnitTestReadWrite )
+        {
+            // ReadPeakEnvelopeData() should fail if the property not present.
+            unsigned char  buffer[ peakEnvelopeDataSize ];
+            memcpy( buffer, bogusPeakEnvelopeData, peakEnvelopeDataSize );
+            aafUInt32  bytesRead = 0;
+            hr = pPCMDesc->ReadPeakEnvelopeData( peakEnvelopeDataSize,
+                                                 buffer,
+                                                 &bytesRead );
+            checkExpression( hr == AAFRESULT_PROP_NOT_PRESENT,
+                             AAFRESULT_TEST_FAILED );
+            checkExpression( memcmp( buffer, bogusPeakEnvelopeData,
+                                     peakEnvelopeDataSize ) == 0,
+                             AAFRESULT_TEST_FAILED );
+            checkExpression( bytesRead == 0, AAFRESULT_TEST_FAILED );
+
+
+            // ReadPeakEnvelopeData() should fail if function
+            // arguments are invalid.
+            hr = pPCMDesc->ReadPeakEnvelopeData( peakEnvelopeDataSize,
+                                                 0,
+                                                 &bytesRead );
+            checkExpression( hr==AAFRESULT_NULL_PARAM, AAFRESULT_TEST_FAILED );
+            hr = pPCMDesc->ReadPeakEnvelopeData( peakEnvelopeDataSize,
+                                                 buffer,
+                                                 0 );
+            checkExpression( hr==AAFRESULT_NULL_PARAM, AAFRESULT_TEST_FAILED );
+            checkExpression( memcmp( buffer, bogusPeakEnvelopeData,
+                                     peakEnvelopeDataSize ) == 0,
+                             AAFRESULT_TEST_FAILED );
+            checkExpression( bytesRead == 0, AAFRESULT_TEST_FAILED );
+
+
+            // WritePeakEnvelopeData() should fail if the function
+            // arguments are invalid.
+            aafUInt32  bytesWritten = 0;
+            hr = pPCMDesc->WritePeakEnvelopeData( peakEnvelopeDataSize,
+                                                  0,
+                                                  &bytesWritten );
+            checkExpression( hr==AAFRESULT_NULL_PARAM, AAFRESULT_TEST_FAILED );
+            checkExpression( bytesWritten == 0, AAFRESULT_TEST_FAILED );
+
+
+            // WritePeakEnvelopeData() should always succeed
+            hr = pPCMDesc->WritePeakEnvelopeData(
+                    peakEnvelopeDataSize,
+                    (aafDataBuffer_t)(gTestData.peakEnvelopeData),
+                    &bytesWritten );
+            checkExpression( hr == AAFRESULT_SUCCESS, AAFRESULT_TEST_FAILED );
+            checkExpression( bytesWritten == peakEnvelopeDataSize, AAFRESULT_TEST_FAILED );
+
+
+            // GetPeakEnvelopeDataPosition() should fail if the function
+            // arguments are invalid.
+            hr = pPCMDesc->GetPeakEnvelopeDataPosition( 0 );
+            checkExpression( hr==AAFRESULT_NULL_PARAM, AAFRESULT_TEST_FAILED );
+
+
+            // GetPeakEnvelopeDataPosition() should always succeed
+            aafPosition_t  position = 0;
+            hr = pPCMDesc->GetPeakEnvelopeDataPosition( &position );
+            checkExpression( hr == AAFRESULT_SUCCESS, AAFRESULT_TEST_FAILED );
+            checkExpression( position == peakEnvelopeDataSize, AAFRESULT_TEST_FAILED );
+
+
+            // After writing to the stream the current position is
+            // past the end of the last byte, thefore Read() should
+            // fail.
+            bytesRead = 0;
+            hr = pPCMDesc->ReadPeakEnvelopeData( peakEnvelopeDataSize,
+                                                 buffer,
+                                                 &bytesRead );
+            checkExpression( hr == AAFRESULT_END_OF_DATA, AAFRESULT_TEST_FAILED );
+            checkExpression( bytesRead == 0, AAFRESULT_TEST_FAILED );
+
+
+            // GetPeakEnvelopeDataSize() should fail if the function
+            // arguments are invalid.
+            hr = pPCMDesc->GetPeakEnvelopeDataSize( 0 );
+            checkExpression( hr==AAFRESULT_NULL_PARAM, AAFRESULT_TEST_FAILED );
+
+
+            // GetPeakEnvelopeDataSize() should always succeed
+            aafLength_t  size = 0;
+            hr = pPCMDesc->GetPeakEnvelopeDataSize( &size );
+            checkExpression( hr == AAFRESULT_SUCCESS, AAFRESULT_TEST_FAILED );
+            checkExpression( size == peakEnvelopeDataSize, AAFRESULT_TEST_FAILED );
+        }
+
+
+        if( mode == kAAFUnitTestReadWrite || mode == kAAFUnitTestReadOnly )
+        {
+            // Make sure the current position is at the beginning of the stream
+            hr = pPCMDesc->SetPeakEnvelopeDataPosition( 0 );
+            checkExpression( hr == AAFRESULT_SUCCESS, AAFRESULT_TEST_FAILED );
+
+
+            // Check the stream size
+            aafLength_t  size = 0;
+            hr = pPCMDesc->GetPeakEnvelopeDataSize( &size );
+            checkExpression( hr == AAFRESULT_SUCCESS, AAFRESULT_TEST_FAILED );
+            checkExpression( size == peakEnvelopeDataSize, AAFRESULT_TEST_FAILED );
+
+
+            // ReadPeakEnvelopeData() should succeed.
+            unsigned char  buffer[ peakEnvelopeDataSize ];
+            memcpy( buffer, bogusPeakEnvelopeData, peakEnvelopeDataSize );
+            aafUInt32  bytesRead = 0;
+            hr = pPCMDesc->ReadPeakEnvelopeData( peakEnvelopeDataSize,
+                                                 buffer,
+                                                 &bytesRead );
+            checkExpression( hr == AAFRESULT_SUCCESS, AAFRESULT_TEST_FAILED );
+            checkExpression( memcmp( buffer, gTestData.peakEnvelopeData,
+                                     peakEnvelopeDataSize ) == 0,
+                             AAFRESULT_TEST_FAILED );
+        }
 
 
         // If we got to this point none of the tests above
