@@ -97,14 +97,11 @@ AAFRESULT STDMETHODCALLTYPE
                              ImplAAFEffectDef* pEffectDef)
 {
 	HRESULT					rc = AAFRESULT_SUCCESS;
-	ImplAAFSourceReference*	pSourceRef = NULL;
-	ImplAAFParameter*		pParms = NULL;
-	ImplAAFSegment*			pSeg = NULL;
 	ImplAAFHeader*			pHeader = NULL;
 	ImplAAFDictionary*		pDictionary = NULL;
-	ImplAAFEffectDef*		pOldEffectDef = NULL;
-	ImplAAFDefObject*		pDefObject = NULL;
+//	ImplAAFEffectDef*		pOldEffectDef = NULL;
 	aafUID_t				EffectDefAUID;
+	aafUID_t	uid;
 
 	if (pDatadef == NULL || pEffectDef == NULL)
 		return AAFRESULT_NULL_PARAM;
@@ -114,40 +111,29 @@ AAFRESULT STDMETHODCALLTYPE
 		// Get the Header and the dictionary objects for this file.
 		CHECK(pEffectDef->MyHeadObject(&pHeader));
 		CHECK(pHeader->GetDictionary(&pDictionary));
+		pHeader->ReleaseReference();
+		pHeader = NULL;
+
 		CHECK(SetNewProps(length, pDatadef));
-		// ***********************************************************************
-		// ************************************************************************
-		// Optional arguments are set here only as a way to NOT 
-		// fail inside the OM during initial development.
-		// Once optional properties are properly supported
-		// this setting instructions MUST BE REMOVED !!!
-														  
-		pSourceRef = (ImplAAFSourceReference *)CreateImpl(CLSID_AAFSourceReference);
-		if (pSourceRef == NULL)
-			return (E_FAIL);
-		pParms = (ImplAAFParameter *)CreateImpl(CLSID_AAFParameter);
-		if (pParms == NULL)
-			return (E_FAIL);
-		pSeg = (ImplAAFSegment *)CreateImpl(CLSID_AAFSegment);
-		if (pSeg == NULL)
-			return (E_FAIL);
-		_inputSegments.appendValue(pSeg);
-		_parameters.appendValue(pParms);
-		pSourceRef->SetSourceID(*pDatadef);				
-		pSourceRef->SetSourceMobSlotID((aafSlotID_t)1); 
-		_bypassOverride = (aafUInt32)0;							
-		_rendering = pSourceRef;
+		CHECK(pEffectDef->GetAUID(&uid));
+		_effectDefinition = uid;
 		// Lookup the effect definition's AUID
 		CHECK(pEffectDef->GetAUID(&EffectDefAUID));
 		// find out if this effectdef is already set
-		if (pDictionary->LookupEffectDefinition(&EffectDefAUID, &pOldEffectDef) == AAFRESULT_SUCCESS)
-			pOldEffectDef->ReleaseReference();
+// !!!JeffB: Not handling weak references as OM references yet.
+//		if (pDictionary->LookupEffectDefinition(&EffectDefAUID, &pOldEffectDef) == AAFRESULT_SUCCESS)
+//			pOldEffectDef->ReleaseReference();
 		_effectDefinition = EffectDefAUID;
 		pEffectDef->AcquireReference();
-		// ************************************************************************
-		// ************************************************************************
+		pDictionary->ReleaseReference();
 	}
 	XEXCEPT
+	{
+		if(pHeader != NULL)
+			pHeader->ReleaseReference();
+		if(pDictionary)
+			pDictionary->ReleaseReference();
+	}
 	XEND;
 
 	return rc;
@@ -160,24 +146,30 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFGroup::GetEffectDefinition (ImplAAFEffectDef **effectDef)
 {
-	ImplAAFHeader*		pHeader = NULL;
-	ImplAAFDictionary*	pDictionary = NULL;
+	aafUID_t			defUID;
+	ImplAAFDictionary	*dict = NULL;
+	ImplAAFHeader		*head = NULL;
 
 	if(effectDef == NULL)
 		return AAFRESULT_NULL_PARAM;
 
 	XPROTECT()
 	{
-		CHECK(MyHeadObject(&pHeader));
-		CHECK(pHeader->GetDictionary(&pDictionary));
-		CHECK(pDictionary->LookupEffectDefinition(&_effectDefinition, effectDef) == AAFRESULT_SUCCESS);
-		(*effectDef)->AcquireReference();
+		defUID = _effectDefinition;
+		CHECK(MyHeadObject(&head));
+		CHECK(head->GetDictionary(&dict));
+		CHECK(dict->LookupEffectDefinition(&defUID, effectDef));
 	}
 	XEXCEPT
+	{
+		if(dict != NULL)
+			dict->ReleaseReference();
+		if(head != NULL)
+			head->ReleaseReference();
+	}
 	XEND;
 
 	return AAFRESULT_SUCCESS;
-
 }
 
 	//@comm Replaces part of omfiEffectGetInfo
@@ -190,6 +182,7 @@ AAFRESULT STDMETHODCALLTYPE
 		return AAFRESULT_NULL_PARAM;
 
 	*sourceRef = _rendering;
+	_rendering->AcquireReference();
 	return AAFRESULT_SUCCESS;
 }
 
@@ -209,8 +202,6 @@ AAFRESULT STDMETHODCALLTYPE
 		if(isTimeWarp == NULL)
 			RAISE(AAFRESULT_NULL_PARAM);
 		CHECK(GetEffectDefinition(&def));
-//!!!		if(def == NULL)
-//			RAISE(AAFRESULT_NO_EFFECT_DEF);
 		CHECK(def->IsTimeWarp (isTimeWarp));
 	}
 	XEXCEPT
@@ -279,8 +270,6 @@ AAFRESULT STDMETHODCALLTYPE
 		if(validTransition == NULL)
 			RAISE(AAFRESULT_NULL_PARAM);
 		CHECK(GetEffectDefinition(&def));
-//!!!		if(def == NULL)
-//			RAISE(AAFRESULT_NO_EFFECT_DEF);
 		CHECK(def->GetNumberInputs (&numInputs));
 		*validTransition = (numInputs == 2 ? AAFTrue : AAFFalse);
 		//!!!Must also have a "level" parameter (Need definition for this!)
@@ -307,14 +296,12 @@ AAFRESULT STDMETHODCALLTYPE
 	//@comm Replaces part of omfiEffectAddNewSlot
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFGroup::AddNewInputSegment (aafInt32  index,
-                           ImplAAFSegment * value)
+    ImplAAFGroup::AppendNewInputSegment (ImplAAFSegment * value)
 {
-	AAFRESULT rc = AAFRESULT_SUCCESS;
-//	_inputSegments.putValueAt(value, index);
-//	value->AcquireReference();
+	_inputSegments.appendValue(value);
+	value->AcquireReference();
 
-	return AAFRESULT_NOT_IMPLEMENTED;
+	return AAFRESULT_SUCCESS;
 }
 
 	//@comm Replaces part of omfiEffectAddNewSlot
@@ -326,6 +313,7 @@ AAFRESULT STDMETHODCALLTYPE
 		return AAFRESULT_NULL_PARAM;
 
 	_rendering = sourceRef;
+	_rendering->AcquireReference();
 
 	return AAFRESULT_SUCCESS;
 }
@@ -346,7 +334,8 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFGroup::GetParameterByArgID (aafArgIDType_t  argID,
                            ImplAAFParameter ** ppParameter)
 {
-	ImplAAFParameter	*obj;
+	ImplAAFParameter	*parm = NULL;
+	ImplAAFParameterDef	*parmDef = NULL;
 	aafInt32			numParm, n;
 	aafUID_t			testAUID;
 
@@ -358,21 +347,27 @@ AAFRESULT STDMETHODCALLTYPE
 		CHECK(GetNumParameters (&numParm))
 		for(n = 0; n < numParm; n++)
 		{
-			_parameters.getValueAt(obj, n);
-			if (obj)
+			_parameters.getValueAt(parm, n);
+			if (parm)
 			{
-//!!! Need to get the Parameter Def (Needs definition and IDL)
-//				CHECK(obj->GetAUID(&testAUID));
+				CHECK(parm->GetParameterDefinition (&parmDef));	
+				CHECK(parmDef->GetAUID(&testAUID));
 				if(EqualAUID(&testAUID, &argID))
 				{
-					obj->AcquireReference();
-					*ppParameter = obj;
+					parm->AcquireReference();
+					*ppParameter = parm;
 					break;
 				}
 			}
 		}
 	}
 	XEXCEPT
+	{
+		if(parm != NULL)
+			parm->ReleaseReference();
+		if(parmDef != NULL)
+			parmDef->ReleaseReference();
+	}
 	XEND
 
 	return AAFRESULT_SUCCESS;
