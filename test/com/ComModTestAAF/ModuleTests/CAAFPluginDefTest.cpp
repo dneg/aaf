@@ -52,6 +52,9 @@ static wchar_t *manuf2URL = L"www.avid.com";
 #include "CAAFBuiltinDefs.h"
 
 const aafUID_t MANUF_JEFFS_PLUGINS = { 0xA6487F21, 0xE78F, 0x11d2, { 0x80, 0x9E, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } };		/* operand.expPixelFormat */
+// {E4E190C8-EA4A-11d3-A352-009027DFCA6A}
+const aafUID_t CODEC_DEF_ID = 
+{ 0xe4e190c8, 0xea4a, 0x11d3, { 0xa3, 0x52, 0x0, 0x90, 0x27, 0xdf, 0xca, 0x6a } };
 aafVersionType_t samplePluginVersion = { 0, 0 };//, 0, 0, kVersionReleased };
 aafVersionType_t sampleMinPlatformVersion = { 1, 2 }; //, 3, 4, kVersionDebug };
 aafVersionType_t sampleMinEngineVersion = { 5, 6 }; //7, 9, kVersionPatched };
@@ -178,7 +181,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	checkResult(defs.cdCodecDef()->
 				CreateInstance(IID_IAAFDefObject, 
 							   (IUnknown **)&pPlugDef));
-    
 	checkResult(defs.cdPluginDescriptor()->
 				CreateInstance(IID_IAAFPluginDescriptor, 
 							   (IUnknown **)&pDesc));
@@ -229,6 +231,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	
 	checkResult(pPlugDef->QueryInterface (IID_IAAFCodecDef,
                                           (void **)&pCodecDef));
+    checkResult(pCodecDef->Initialize (CODEC_DEF_ID, L"Test", L"Really, just a test."));
 	checkResult(pCodecDef->AddEssenceKind (defs.ddMatte()));
 	checkResult(pDictionary->RegisterCodecDef(pCodecDef));
 	/**/
