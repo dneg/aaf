@@ -84,6 +84,15 @@ OMPropertyDefinition* OMDictionary::remove(const OMPropertyId propertyId)
   return result;
 }
 
+bool OMDictionary::contains(const OMPropertyId /* propertyId */)
+{
+  TRACE("OMDictionary::contains");
+  ASSERT("Unimplemented code not reached", false);
+  bool result = false;
+
+  return result;
+}
+
 void OMDictionary::initialize(void)
 {
   TRACE("OMDictionary::initialize");

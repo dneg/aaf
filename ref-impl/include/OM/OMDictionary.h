@@ -45,6 +45,8 @@ public:
 
   static OMPropertyDefinition* remove(const OMPropertyId propertyId);
 
+  static bool contains(const OMPropertyId propertyId);
+
   static void initialize(void);
 
   static void finalize(void);
