@@ -165,7 +165,5 @@ void OMType::copy(OMByte* inputBytes,
   OMByte* ip = inputBytes;
   OMByte* op = outputBytes;
 
-  for (size_t i = 0; i < bytesSize; i++) {
-    *op++ = *ip++;
-  }
+  memcpy(op, ip, bytesSize);
 }
