@@ -18,8 +18,10 @@ AAF SDK from CVS from no earlier than April 2003.
 
 Building
 ========
-  cd Utilities/eli2aaf
-  make
+  from toplevel of SDK:
+    make utilities
+  or 
+    cd Utilities/eli2aaf && make
 
 The executable eli2aaf will be written to <platform>/g++/bin/debug/eli2aaf
 
@@ -41,11 +43,13 @@ Usage
 Limitations
 ===========
 
- * PAL 25 fps video with 48 kHz 16 bit audio only is supported at present
+ * Audio is only supported for PAL DV files at 48 kHz 16 bit sampling
+
+ * NTSC video is supported but no audio tracks or sources will be added
 
  * Importing of output AAF file has only been tested with Avid Xpress DV 3.0
 
- * The Name of the tape Source Mob is hard-coded to "Partie1"
+ * The Name of the tape Source Mob is hard-coded to "DCAE"
 
  * No attempt is made to recover from bad or missing video/audio data
 
