@@ -322,7 +322,7 @@ AAFRESULT STDMETHODCALLTYPE
 	return AAFRESULT_SUCCESS;
 }
 
-//Internal function only.  Not exposed through the COM API
+// Renamed to LookupEssenceData() in the COM API
 AAFRESULT
     ImplAAFContentStorage::LookupEssence (aafMobID_constref fileMobID,
                            ImplAAFEssenceData **ppEssence)
