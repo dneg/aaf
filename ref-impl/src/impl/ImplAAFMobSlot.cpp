@@ -28,6 +28,7 @@
 #include "ImplAAFMobSlot.h"
 #endif
 
+#include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
 
 #include <assert.h>
@@ -181,21 +182,8 @@ AAFRESULT STDMETHODCALLTYPE
 	return AAFRESULT_SUCCESS;
 }
 
-extern "C" const aafClassID_t CLSID_AAFMobSlot;
+OMDEFINE_STORABLE(ImplAAFMobSlot, AUID_AAFMobSlot);
 
-OMDEFINE_STORABLE(ImplAAFMobSlot, CLSID_AAFMobSlot);
-
-// Cheat!  We're using this object's CLSID instead of object class...
-AAFRESULT STDMETHODCALLTYPE
-ImplAAFMobSlot::GetObjectClass(aafUID_t * pClass)
-{
-  if (! pClass)
-	{
-	  return AAFRESULT_NULL_PARAM;
-	}
-  memcpy (pClass, &CLSID_AAFMobSlot, sizeof (aafClassID_t));
-  return AAFRESULT_SUCCESS;
-}
 
 AAFRESULT ImplAAFMobSlot::FindSegment(aafPosition_t offset,
 										  ImplAAFSegment **segment,

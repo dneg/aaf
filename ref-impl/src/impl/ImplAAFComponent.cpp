@@ -20,6 +20,7 @@
 #include "ImplAAFComponent.h"
 #endif
 
+#include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
 
 #include <assert.h>
@@ -213,19 +214,6 @@ AAFRESULT ImplAAFComponent::GetMinimumBounds(aafPosition_t rootPos, aafLength_t 
 	return AAFRESULT_SUCCESS;
 }
 
-extern "C" const aafClassID_t CLSID_AAFComponent;
 
-OMDEFINE_STORABLE(ImplAAFComponent, CLSID_AAFComponent);
 
-// Cheat!  We're using this object's CLSID instead of object class...
-AAFRESULT STDMETHODCALLTYPE
-ImplAAFComponent::GetObjectClass(aafUID_t * pClass)
-{
-  if (! pClass)
-	{
-	  return AAFRESULT_NULL_PARAM;
-	}
-  memcpy (pClass, &CLSID_AAFComponent, sizeof (aafClassID_t));
-  return AAFRESULT_SUCCESS;
-}
-
+OMDEFINE_STORABLE(ImplAAFComponent, AUID_AAFComponent);

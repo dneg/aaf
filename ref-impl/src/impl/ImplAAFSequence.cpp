@@ -15,6 +15,7 @@
 #include "ImplAAFSequence.h"
 #include "ImplAAFObjectCreation.h"
 
+#include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
 
 #include <assert.h>
@@ -557,19 +558,5 @@ AAFRESULT
 	return hr;
 }
 
-extern "C" const aafClassID_t CLSID_AAFSequence;
 
-OMDEFINE_STORABLE(ImplAAFSequence, CLSID_AAFSequence);
-
-// Cheat!  We're using this object's CLSID instead of object class...
-AAFRESULT STDMETHODCALLTYPE
-ImplAAFSequence::GetObjectClass(aafUID_t * pClass)
-{
-  if (! pClass)
-	{
-	  return AAFRESULT_NULL_PARAM;
-	}
-  memcpy (pClass, &CLSID_AAFSequence, sizeof (aafClassID_t));
-  return AAFRESULT_SUCCESS;
-}
-
+OMDEFINE_STORABLE(ImplAAFSequence, AUID_AAFSequence);
