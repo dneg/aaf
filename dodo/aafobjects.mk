@@ -99,7 +99,7 @@ HUMAN_TYPED_IMPL = \
 	AAFEssenceFormat \
 	AAFFiller \
 	AAFFindSourceInfo \
-	AAFGroup \
+	AAFEffect \
 	AAFHeader \
 	AAFIdentification \
 	AAFMasterMob \
