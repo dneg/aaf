@@ -3613,7 +3613,7 @@ void printHeader(StructuredStorageHeader& header)
   // Byte order
   //
   cout << "  Byte order     = ";
-  if ((header._uByteOrder != 0xFFFE) || (header._uByteOrder != 0xFEFF)) {
+  if (header._uByteOrder == 0xFFFE) {
     cout << "Intel";
   } else {
     cout << "Unknown";
