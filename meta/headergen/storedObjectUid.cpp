@@ -68,6 +68,23 @@ static void doFile (const char * moduleName)
   cout << "// AAF stored object UIDs." << endl
        << "//" << endl << endl;
 
+  cout << "#if !defined(INIT_AUID)" << endl;
+  cout << "#define ";
+  cout << "DEFINE_AUID(name, l, w1, w2, b1, b2, b3, b4, b5, b6, b7, b8) \\"
+       << endl;
+  cout << "  extern \"C\" const aafUID_t name"
+       << endl;
+  cout << "#else" << endl;
+  cout << "#define ";
+  cout << "DEFINE_AUID(name, l, w1, w2, b1, b2, b3, b4, b5, b6, b7, b8) \\"
+       << endl;
+  cout << "  extern \"C\" const aafUID_t name = \\"
+       << endl;
+  cout << "    { l, w1, w2, { b1, b2,  b3,  b4,  b5,  b6,  b7,  b8 } }"
+       << endl;
+  cout << "#endif" << endl;
+  cout << endl;
+
   cout << "// The AAF reference implementation uses shorter names than" << endl
        << "// SMPTE. The names are shortened by the following aliases." << endl
        << "//" << endl;
@@ -91,12 +108,12 @@ static void doFile (const char * moduleName)
   cout << endl;
 
   for (i = 0; i < sizeof(classes)/sizeof(classes[0]); i++){
-    printDefinition("const aafUID_t",
-                    prefix,
-                    classes[i].name,
-                    0,
-                    classes[i].identifier,
-                    cout);
+    printMacroInvocation(prefix,
+                         "DEFINE_AUID",
+                         classes[i].name,
+                         classes[i].identifier,
+                         cout);
+    cout << endl;
   }
 
   printEndGuard(moduleName, cout);
