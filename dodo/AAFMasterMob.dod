@@ -20,24 +20,6 @@ AD_HEAD
 \******************************************/
 
 AD_FORWARD_DECLARATION(AAFSourceClip)
-
-////////////////////////////////////////////////////////////////////////////////
-// Types required by this module:
-//
-// aafMobKind_t
-// aafBool
-// AAFDataDefinition [ a.k.a. AAFDataKind ]
-// aafTrackID_t
-// aafString_t
-// AAFSourceClip      [ was AAFFileMob ]
-// aafMediaCriteria_t
-// aafCriteriaType_t
-// aafCriteriaProc_t
-// aafEffectChoice_t
-// AAFComponent
-// aafFindSourceInfo_t
-
-AD_FORWARD_DECLARATION(AAFSourceClip)
 AD_FORWARD_DECLARATION(AAFSourceMob)
 AD_FORWARD_DECLARATION(AAFComponent)
 AD_FORWARD_DECLARATION(AAFDataDefinition)
@@ -49,7 +31,7 @@ AD_DEFAULT_UUID(b1a21372, 1a7d, 11d2, bf, 78, 00, 10, 4b, c9, 15, 6d)
 AD_CLASS_BEGIN
 
 AD_XMETHOD5(AddMasterTrack,
-[in\,ref], objIn, AAFDataDefinition, mediaKind, Data kind of new track. The mediaKind 
+[in], objIn, AAFDataDefinition, mediaKind, Data kind of new track. The mediaKind 
   // parameter requires a data kind valid for a media stream. Valid data kinds are:
   // Picture
   // Sound,
@@ -60,7 +42,7 @@ AD_XMETHOD5(AddMasterTrack,
   // Name is passed in with zero length\, then the track is not assigned a name. Track
   // names are not used by the Toolkit\, and exist only so the user can name
   // tracks.,
-[in\,ref], objIn, AAFSourceMob, fileMob, File Source Mob to be associated with new track in Master Mob.,
+[in], objIn, AAFSourceMob, fileMob, File Source Mob to be associated with new track in Master Mob.,
 This function adds a track to the specified Master Mob that references the specified 
   // File Source Mob. The new track in the Master Mob contains a Source Clip
   // that specifies the File Source Mob in its source reference properties. Typically
