@@ -464,6 +464,36 @@ HRESULT GetEffectIDs(IAAFOperationGroup *effect,
 	return AAFRESULT_SUCCESS;
 }
 
+aafInt32 GetMCKeyframeSlotID(aafUID_t& uid)
+{
+	aafInt32	result;
+	
+	if(isMCPrivateEffect(uid))
+		result = OMF2_EFFE_ALLOTHERS_KEYFRAME_SLOT;
+	else
+		result = OMF2_EFFE_PUBLIC_WITH_AVID_PRIVATE_DATA_KEYFRAME_SLOT;
+
+	return result;
+}
+
+bool isMCPrivateEffect(aafUID_t& uid)
+{
+	long	n, numEntries = sizeof(xlateTable)/sizeof(effectXlate_t);
+	bool	found = false;
+	bool	result = true;
+
+	for(n = 0; (n < numEntries) && !found; n++)
+	{
+		if ( CompareUUID(uid, *(xlateTable[n].aafID)))
+		{
+			result = (xlateTable[n].omfEffectID == NULL);
+			found = true;
+		}
+	}
+
+	return result;
+}
+
 HRESULT GetAAFEffectID(	OMF2::omfUniqueNamePtr_t OMFEffectIDPtr,
 						OMF2::omfUniqueNamePtr_t MCEffectIDPtr,
 						aafUID_t	*aafUID)
