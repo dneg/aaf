@@ -35,6 +35,7 @@ using namespace std;
 #include "AAFResult.h"
 #include "ModuleTest.h"
 #include "AAFDefUIDs.h"
+#include "AAFExtEnum.h"
 
 #include "CAAFBuiltinDefs.h"
 
@@ -178,7 +179,13 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 								 (IUnknown **)&pMob));
 
 	  checkResult(pMob->SetMobID(TEST_Composition_MobID));
-  	checkResult(pMob->SetName(L"Composition Mob"));
+  	  checkResult(pMob->SetName(L"Composition Mob"));
+
+	  // Check the Mob2 usage code implementations.
+	  // Need IAAFMob2 for to do that.
+	  IAAFSmartPointer<IAAFMob2> pMobInterface2;
+	  checkResult( pMob->QueryInterface( IID_IAAFMob2, reinterpret_cast<void**>(&pMobInterface2) ) );
+	  checkResult( pMobInterface2->SetUsageCode( kAAFUsage_TopLevel ) );
 
 	  checkResult(pHeader->AddMob(pMob));
 	}
@@ -597,6 +604,40 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 
 	  checkResult(pHeader->CountMobs(kAAFCompMob, &numMobs));
 	  checkExpression(1 == numMobs, AAFRESULT_TEST_FAILED);
+
+
+	  // Test usageCode search criteria.
+	  {
+	    aafSearchCrit_t usageCrit;
+	    usageCrit.searchTag = kAAFByUsageCode;
+	    usageCrit.tags.usageCode = kAAFUsage_TopLevel; 
+
+	    IAAFSmartPointer<IEnumAAFMobs> pEnumByUsage;
+	    checkResult( pHeader->GetMobs( &usageCrit, &pEnumByUsage ) );
+
+		// Should get one back, and it should be a composition mob.
+		IAAFSmartPointer<IAAFMob> pNextMob;
+		IAAFSmartPointer<IAAFMob> pLastFoundMob;
+		HRESULT nextHr;
+		int count;
+		for( count = 0, nextHr = pEnumByUsage->NextOne( &pNextMob );
+			 AAFRESULT_SUCCESS == nextHr;
+			 count++, nextHr = pEnumByUsage->NextOne( &pNextMob ) ){
+			pLastFoundMob = pNextMob;
+		}
+
+
+		checkExpression( AAFRESULT_NO_MORE_OBJECTS == nextHr,
+						 AAFRESULT_TEST_FAILED );
+	
+		checkExpression( 1 == count, AAFRESULT_TEST_FAILED );
+
+		IAAFSmartPointer<IAAFCompositionMob> pCompMob;
+		checkResult( pLastFoundMob->QueryInterface( IID_IAAFCompositionMob, (void**)&pCompMob ) );
+
+	  }
+
+
 
 	}
   catch (HRESULT& rResult)
