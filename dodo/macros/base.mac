@@ -581,7 +581,7 @@ AD_XMETHOD1(Get%01BufLen,
 AD_XMETHOD1(Set%01,
 			[in\\, string],
 			objPass,
-			wchar_t *,
+			aafCharacter_constptr,
 			p%01,
 			buffer from which %01 is to be read,
 
