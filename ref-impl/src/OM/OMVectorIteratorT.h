@@ -29,6 +29,8 @@
 // @author Tim Bingham | tjb | Avid Technology, Inc. | OMVectorIterator
 #include "OMAssertions.h"
 
+#include "OMVector.h"
+
   // @mfunc Create an <c OMVectorIterator> over the given
   //        <c OMVector> <p vector> and initialize it
   //        to the given <p initialPosition>.
