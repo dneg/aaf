@@ -438,7 +438,7 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFJPEGDescriptorHelper::SetGamma (aafRational_t  Gamma)
+    CAAFJPEGDescriptorHelper::SetGamma (aafUID_t  Gamma)
 {
   checkAssertion(NULL != _dides);
 	return _dides->SetGamma (Gamma);
@@ -447,7 +447,7 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFJPEGDescriptorHelper::GetGamma (aafRational_t *  pGamma)
+    CAAFJPEGDescriptorHelper::GetGamma (aafUID_t *  pGamma)
 {
   checkAssertion(NULL != _dides);
 	return _dides->GetGamma (pGamma);
@@ -456,7 +456,7 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFJPEGDescriptorHelper::SetImageAlignmentFactor (aafInt32  ImageAlignmentFactor)
+    CAAFJPEGDescriptorHelper::SetImageAlignmentFactor (aafUInt32  ImageAlignmentFactor)
 {
   checkAssertion(NULL != _dides);
 	return _dides->SetImageAlignmentFactor (ImageAlignmentFactor);
@@ -465,7 +465,7 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFJPEGDescriptorHelper::GetImageAlignmentFactor (aafInt32 *  pImageAlignmentFactor)
+    CAAFJPEGDescriptorHelper::GetImageAlignmentFactor (aafUInt32 *  pImageAlignmentFactor)
 {
   checkAssertion(NULL != _dides);
 	return _dides->GetImageAlignmentFactor (pImageAlignmentFactor);
