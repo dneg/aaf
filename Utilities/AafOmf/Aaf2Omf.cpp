@@ -482,7 +482,7 @@ void Aaf2Omf::AAFFileRead()
 				}
 				else
 				{
-					MobIDtoString(&MobID, szMobID);
+					MobIDtoString(MobID, szMobID);
 					printf("Unrecognized Mob kind encountered ID: %s\n", szMobID);
 //					fprintf(stderr,"Unrecognized Mob kind encountered ID: %s\n", szMobID);
 				}

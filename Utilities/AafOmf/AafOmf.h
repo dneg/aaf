@@ -140,7 +140,7 @@ int deleteFile( char* fileName );
 void IncIndentLevel( void );
 void DecIndentLevel( void );
 void AUIDtoString(aafUID_t *uid, char *buf);
-void MobIDtoString(aafMobID_t *uid, char *buf);
+void MobIDtoString(aafMobID_constref uid, char *buf);
 AAFRESULT aafMobIDFromMajorMinor(
         aafUInt32	prefix,
         aafUInt32	major,
