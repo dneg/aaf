@@ -162,46 +162,80 @@ static string stripDirAndExt(const char *str)
 }
 
 
-static unsigned char WAVEHeader[44];
-static int & WAVEDataLen = *reinterpret_cast<int *>(WAVEHeader + 40);
-static int & WAVEFileLen = *reinterpret_cast<int *>(WAVEHeader + 4);
-
-static void CreateWaveHeader(unsigned char * ptr)
+static void CreateWaveHeader(unsigned char *p, aafLength_t datalen, aafRational_t samplerate)
 {
-	aafInt32 * ptr32;
-	aafInt16 * ptr16;
+	// RIFF chunk
+	*p++ = 'R';
+	*p++ = 'I';
+	*p++ = 'F';
+	*p++ = 'F';
 
-		*ptr++ = 'R';		// Make sure that this is NOT byte-swapped
-		*ptr++ = 'I';
-		*ptr++ = 'F';
-		*ptr++ = 'F';
+	// WAVE format limits length to a little-endian 32bit uint
+	unsigned int len32 = (unsigned int)datalen;
+	unsigned int filelen = len32 + 44;		// WAVE header + "data" = 44
+	*p++ = (filelen & 0x000000ff);
+	*p++ = (filelen & 0x0000ff00) >> 8;
+	*p++ = (filelen & 0x00ff0000) >> 16;
+	*p++ = (filelen & 0xff000000) >> 24;
 
-		ptr += 4;			// Patch form length in later
+	*p++ = 'W';
+	*p++ = 'A';
+	*p++ = 'V';
+	*p++ = 'E';
 
-		*ptr++ = 'W';
-		*ptr++ = 'A';
-		*ptr++ = 'V';
-		*ptr++ = 'E';
-		*ptr++ = 'f';
-		*ptr++ = 'm';
-		*ptr++ = 't';
-		*ptr++ = ' ';
-		ptr32 = reinterpret_cast<aafInt32 *>(ptr);
-		*ptr32++ = 0x10;
-		ptr16 = reinterpret_cast<aafInt16 *>(ptr32);
-		*ptr16++ = 0x1;
-		*ptr16++ = 0x1;
-		ptr32 = reinterpret_cast<aafInt32 *>(ptr16);
-		*ptr32++ = 48000;
-		*ptr32++ = 96000;
-		ptr16 = reinterpret_cast<aafInt16 *>(ptr32);
-		*ptr16++ = 0x2;
-		*ptr16++ = 16;
-		ptr = reinterpret_cast<unsigned char *>(ptr16);
-		*ptr++ = 'd';
-		*ptr++ = 'a';
-		*ptr++ = 't';
-		*ptr++ = 'a';
+	// "fmt " sub-chunk
+	*p++ = 'f';
+	*p++ = 'm';
+	*p++ = 't';
+	*p++ = ' ';
+
+	// size of "fmt " sub-chunk is 16 (as 32bit little-endian)
+	*p++ = 0x10;
+	*p++ = 0x00;
+	*p++ = 0x00;
+	*p++ = 0x00;
+
+	// AudioFormat is 1 (as 16bit little-endian)
+	*p++ = 0x01;
+	*p++ = 0x00;
+
+	// NumChannels is 1 (as 16bit little-endian)
+	*p++ = 0x01;
+	*p++ = 0x00;
+
+	// SampleRate is 32bit little-endian
+	unsigned int sr32 = samplerate.numerator / samplerate.denominator;
+	*p++ = (sr32 & 0x000000ff);
+	*p++ = (sr32 & 0x0000ff00) >> 8;
+	*p++ = (sr32 & 0x00ff0000) >> 16;
+	*p++ = (sr32 & 0xff000000) >> 24;
+
+	// BytesPerSecond
+	unsigned int bps = sr32 * 2;		// 2 for 16bit mono
+	*p++ = (bps & 0x000000ff);
+	*p++ = (bps & 0x0000ff00) >> 8;
+	*p++ = (bps & 0x00ff0000) >> 16;
+	*p++ = (bps & 0xff000000) >> 24;
+
+	// BlockAlign = 2 for 16bit mono
+	*p++ = 0x02;
+	*p++ = 0x00;
+
+	// BitsPerSample = 16 for 16bit mono
+	*p++ = 0x10;
+	*p++ = 0x00;
+
+	// "data" sub-chunk
+	*p++ = 'd';
+	*p++ = 'a';
+	*p++ = 't';
+	*p++ = 'a';
+
+	// length of the data in this chunk
+	*p++ = (len32 & 0x000000ff);
+	*p++ = (len32 & 0x0000ff00) >> 8;
+	*p++ = (len32 & 0x00ff0000) >> 16;
+	*p++ = (len32 & 0xff000000) >> 24;
 }
 
 
@@ -755,9 +789,8 @@ static bool addMasterMobForDVFile(
 		srcclipA2.SetLength(length_in_er);
 		msrcclipA2.SetLength(length_in_er);
 
-		CreateWaveHeader(WAVEHeader);
-		WAVEDataLen = num_samples * 2;
-		WAVEFileLen = WAVEDataLen + 36;
+		unsigned char WAVEHeader[44];
+		CreateWaveHeader(WAVEHeader, num_samples * 2, wav_samplerate);
 
 		waveA1.SetSummary(sizeof(WAVEHeader), WAVEHeader);
 		waveA2.SetSummary(sizeof(WAVEHeader), WAVEHeader);
@@ -1008,7 +1041,7 @@ static bool createAAFFileForEditDecisions(const char *output_aaf_file,
 			if (formatPAL)
 			{
 				tc.drop = kAAFFalse;
-				tc.fps = editrate.numerator/editrate.denominator;
+				tc.fps = (aafInt16)(editrate.numerator/editrate.denominator);
 			}
 			else
 			{
@@ -1180,7 +1213,7 @@ static bool createAAFFileForEditDecisions(const char *output_aaf_file,
 		if (formatPAL)
 		{
 			tc.drop = kAAFFalse;
-			tc.fps = editrate.numerator/editrate.denominator;
+			tc.fps = (aafInt16)(editrate.numerator/editrate.denominator);
 		}
 		else
 		{
