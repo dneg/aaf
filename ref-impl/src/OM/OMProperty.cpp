@@ -12,15 +12,19 @@ OMProperty::OMProperty(const OMPropertyId propertyId,
                        const char* name)
 : _propertyId(propertyId), _type(type), _name(name)
 {
+  TRACE("OMProperty::OMProperty");
 }
 
 OMProperty::~OMProperty(void)
 {
+  TRACE("OMProperty::~OMProperty");
 }
 
   // @mfunc Close this <c OMProperty>.
 void OMProperty::close(void)
 {
+  TRACE("OMProperty::close");
+
   // nothing to do for most descendants of OMProperty
 }
 
@@ -29,6 +33,8 @@ void OMProperty::close(void)
   //   @this const
 const char* OMProperty::name(void) const
 {
+  TRACE("OMProperty::name");
+
   return _name;
 }
 
@@ -37,6 +43,8 @@ const char* OMProperty::name(void) const
   //   @this const
 const OMPropertyId OMProperty::propertyId(void) const
 {
+  TRACE("OMProperty::propertyId");
+
   return _propertyId;
 }
 
@@ -46,6 +54,8 @@ const OMPropertyId OMProperty::propertyId(void) const
   //   a member.
 void OMProperty::setPropertySet(const OMPropertySet* propertySet)
 {
+  TRACE("OMProperty::setPropertySet");
+
   _propertySet = propertySet;
 }
 
@@ -57,6 +67,8 @@ void OMProperty::setPropertySet(const OMPropertySet* propertySet)
   //   @rdesc The address of this <c OMProperty>.
 OMProperty* OMProperty::address(void)
 {
+  TRACE("OMProperty::address");
+
   return this;
 }
 
@@ -70,6 +82,7 @@ OMProperty* OMProperty::address(void)
 void OMProperty::detach(const OMStorable* object, const size_t key)
 {
   TRACE("OMProperty::detach");
+
   PRECONDITION("Valid object", object != 0);
   // nothing to do for most descendants of OMProperty
 }
@@ -82,6 +95,7 @@ OMSimpleProperty::OMSimpleProperty(const OMPropertyId propertyId,
                                    const char* name)
 : OMProperty(propertyId, TID_DATA, name), _size(0), _bits(0)
 {
+  TRACE("OMSimpleProperty::OMSimpleProperty");
 }
 
 OMSimpleProperty::OMSimpleProperty(const OMPropertyId propertyId,
@@ -89,9 +103,13 @@ OMSimpleProperty::OMSimpleProperty(const OMPropertyId propertyId,
                                    size_t valueSize)
 : OMProperty(propertyId, TID_DATA, name),
   _size(valueSize),
-  _bits(new unsigned char[valueSize])
+  _bits(0)
 {
+  TRACE("OMSimpleProperty::OMSimpleProperty");
   PRECONDITION("Valid size", (valueSize > 0));
+
+  _bits = new unsigned char[valueSize];
+  ASSERT("Valid heap pointer", _bits != 0);
 
   for (size_t i = 0; i < valueSize; i++) {
     _bits[i] = 0;
@@ -102,22 +120,30 @@ OMSimpleProperty::OMSimpleProperty(const OMPropertyId propertyId,
 
 OMSimpleProperty::~OMSimpleProperty(void)
 {
+  TRACE("OMSimpleProperty::~OMSimpleProperty");
+
   delete [] _bits;
 }
 
 size_t OMSimpleProperty::size(void) const
 {
+  TRACE("OMSimpleProperty::size");
+
   return _size;
 }
 
 void OMSimpleProperty::get(void* value, size_t valueSize) const
 {
+  TRACE("OMSimpleProperty::get");
+
   PRECONDITION("Valid size", valueSize >= _size);
   memcpy(value, _bits, _size);
 }
 
 void OMSimpleProperty::set(const void* value, size_t valueSize) 
 {
+  TRACE("OMSimpleProperty::set");
+
   if (valueSize != _size) {
     delete [] _bits;
     _bits = 0; // for BoundsChecker
@@ -132,6 +158,8 @@ void OMSimpleProperty::set(const void* value, size_t valueSize)
   //   @this const
 void OMSimpleProperty::save(void) const
 {
+  TRACE("OMSimpleProperty::save");
+
   ASSERT("Valid property set", _propertySet != 0);
   OMStorable* container = _propertySet->container();
   ASSERT("Valid container", container != 0);
@@ -141,6 +169,13 @@ void OMSimpleProperty::save(void) const
   s->write(_propertyId, _type, _bits, _size);
 }
 
+void OMSimpleProperty::restoreFrom(OMStoredObject& s, size_t size)
+{
+  TRACE("OMSimpleProperty::restoreFrom");
+  ASSERT("Sizes match", size == _size);
+
+  s.read(_propertyId, _type, _bits, _size);
+}
 
 // class OMCollectionProperty
 
@@ -149,10 +184,12 @@ OMCollectionProperty::OMCollectionProperty(const OMPropertyId propertyId,
                                            const char* name)
 : OMProperty(propertyId, type, name)
 {
+  TRACE("OMCollectionProperty::OMCollectionProperty");
 }
 
 OMCollectionProperty::~OMCollectionProperty(void)
 {
+  TRACE("OMCollectionProperty::~OMCollectionProperty");
 }
 
 // class OMStringProperty
@@ -161,14 +198,18 @@ OMStringProperty::OMStringProperty(const OMPropertyId propertyId,
                                    const char* name)
 : OMCharacterStringProperty<char>(propertyId, name)
 {
+  TRACE("OMStringProperty::OMStringProperty");
 }
 
 OMStringProperty::~OMStringProperty(void)
 {
+  TRACE("OMStringProperty::~OMStringProperty");
 }
 
 OMStringProperty& OMStringProperty::operator = (const char* value)
 {
+  TRACE("OMStringProperty::operator =");
+
   assign(value);
   return *this;
 }
@@ -179,15 +220,18 @@ OMWideStringProperty::OMWideStringProperty(const OMPropertyId propertyId,
                                            const char* name)
 : OMCharacterStringProperty<wchar_t>(propertyId, name)
 {
+  TRACE("OMWideStringProperty::OMWideStringProperty");
 }
 
 OMWideStringProperty::~OMWideStringProperty(void)
 {
+  TRACE("OMWideStringProperty::~OMWideStringProperty");
 }
 
 OMWideStringProperty& OMWideStringProperty::operator = (const wchar_t* value)
 {
+  TRACE("OMWideStringProperty::operator =");
+
   assign(value);
   return *this;
 }
-
