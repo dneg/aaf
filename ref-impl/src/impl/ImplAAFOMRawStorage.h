@@ -142,6 +142,17 @@ public:
     //          for memory files would return true.
   virtual bool isPositionable(void) const;
 
+  // @cmember The current position for <f read()> and <f write()>, as an
+  //          offset in bytes from the beginning of this
+  //          <c ImplAAFOMRawStorage>.
+  virtual OMUInt64 position(void) const;
+
+  // @cmember Set the current position for <f read()> and <f write()>, as an
+  //          offset in bytes from the beginning of this
+  //          <c ImplAAFOMRawStorage>.
+  //          precondition - isPositionable()
+  virtual void setPosition(OMUInt64 newPosition) const;
+
   // @cmember Synchronize this <c OMRawStorage> with its external
   //          representation.
   //          An implementation of <c OMRawStorage> for disk files would
@@ -155,6 +166,7 @@ public:
 private:
   IAAFRawStorage * _rep;
   IAAFRandomRawStorage * _randRep;
+  OMUInt64 _position;
 };
 
 #endif // ! __ImplAAFOMRawStorage_h__

@@ -29,7 +29,8 @@
 
 ImplAAFOMRawStorage::ImplAAFOMRawStorage (IAAFRawStorage * rep)
   : _rep (rep),
-	_randRep (0)
+    _randRep (0),
+    _position(0)
 {
   assert (rep);
   _rep->AddRef ();
@@ -72,8 +73,23 @@ void ImplAAFOMRawStorage::read(OMByte* bytes,
 {
   assert (_rep);
   AAFRESULT hr;
-  hr = _rep->Read (bytes, byteCount, &bytesRead);
+
+  // If raw storage is positionable (is IAAFRandomRawStorage) read bytes
+  // at the position specified by the _position member. Otherwise read
+  // at the current storage position which in this case always matches
+  // the _position value.
+  if (_randRep)
+  {
+    hr = _randRep->ReadAt (_position, bytes, byteCount, &bytesRead);
+  }
+  else
+  {
+    hr = _rep->Read (bytes, byteCount, &bytesRead);
+  }
   assert (AAFRESULT_SUCCEEDED (hr));
+
+  ImplAAFOMRawStorage* nonConstThis = const_cast<ImplAAFOMRawStorage*>(this);
+  nonConstThis->_position += bytesRead;
 }
 
 
@@ -87,6 +103,9 @@ void ImplAAFOMRawStorage::readAt(OMUInt64 position,
   AAFRESULT hr;
   hr = _randRep->ReadAt (position, bytes, byteCount, &bytesRead);
   assert (AAFRESULT_SUCCEEDED (hr));
+
+  ImplAAFOMRawStorage* nonConstThis = const_cast<ImplAAFOMRawStorage*>(this);
+  nonConstThis->_position = position + bytesRead;
 }
 
 
@@ -107,8 +126,21 @@ void ImplAAFOMRawStorage::write(const OMByte* bytes,
 {
   assert (_rep);
   AAFRESULT hr;
-  hr = _rep->Write (bytes, byteCount, &bytesWritten);
+
+  // If raw storage is positionable (is IAAFRandomRawStorage) write bytes
+  // at the position specified by the _position member. Otherwise write
+  // at the current storage position which in this case always matches
+  // the _position value.
+  if (_randRep)
+  {
+    hr = _randRep->WriteAt (_position, bytes, byteCount, &bytesWritten);
+  }
+  else
+  {
+    hr = _rep->Write (bytes, byteCount, &bytesWritten);
+  }
   assert (AAFRESULT_SUCCEEDED (hr));
+  _position += bytesWritten;
 }
 
 
@@ -122,6 +154,7 @@ void ImplAAFOMRawStorage::writeAt(OMUInt64 position,
   AAFRESULT hr;
   hr = _randRep->WriteAt (position, bytes, byteCount, &bytesWritten);
   assert (AAFRESULT_SUCCEEDED (hr));
+  _position = position + bytesWritten;
 }
 
 
@@ -180,6 +213,24 @@ bool ImplAAFOMRawStorage::isPositionable(void) const
 	return true;
   else
 	return false;
+}
+
+
+OMUInt64 ImplAAFOMRawStorage::position(void) const
+{
+  assert (_rep);
+  return _position;
+}
+
+
+void ImplAAFOMRawStorage::setPosition(OMUInt64 newPosition) const
+{
+  assert (_randRep);
+
+  // The _position value is used by read() and write() methods to
+  // adjust the storage current position before reading or writing.
+  ImplAAFOMRawStorage* nonConstThis = const_cast<ImplAAFOMRawStorage*>(this);
+  nonConstThis->_position = newPosition;
 }
 
 
