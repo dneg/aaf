@@ -551,7 +551,7 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFIdentifications.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFInterpolationDefs.cpp"
+SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFInterpolateDefs.cpp"
 # End Source File
 # Begin Source File
 
