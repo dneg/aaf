@@ -69,7 +69,7 @@ public:
   ImplAAFHeader ();
   ~ImplAAFHeader ();
 
-  OMDECLARE_STORABLE(AAFHeader);
+  OMDECLARE_STORABLE(ImplAAFHeader);
 
   //****************
   // LookupMob()
