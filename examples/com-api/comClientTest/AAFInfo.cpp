@@ -90,8 +90,8 @@ static void ReadAAFFile(aafWChar * pFileName)
 	IAAFIdentification *		pIdent;
 	aafProductIdentification_t	ProductInfo;
 
-	ProductInfo.companyName = (unsigned char *)"AAF Developers Desk. NOT!";
-	ProductInfo.productName = (unsigned char *)"Make AVR Example. NOT!";
+	ProductInfo.companyName = L"AAF Developers Desk. NOT!";
+	ProductInfo.productName = L"Make AVR Example. NOT!";
 	ProductInfo.productVersion.major = 1;
 	ProductInfo.productVersion.minor = 0;
 	ProductInfo.productVersion.tertiary = 0;
