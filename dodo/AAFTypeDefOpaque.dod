@@ -1,0 +1,59 @@
+#c/*************************************************\
+#c*                                                 *
+#c* Advanced Authoring Format                       *
+#c*                                                 *
+#c* Copyright (c) 1998-2000 Avid Technology, Inc.   *
+#c*                                                 *
+#c\*************************************************/
+#startm .this-module 0
+AAFTypeDefOpaque\
+#endm
+#c
+#startm .parent-module 0
+AAFTypeDefIndirect\
+#endm
+#c
+#import ./AAFTypeDef.exp
+#import ./AAFTypeDefIndirect.exp
+AD_HEAD
+AD_IDL(//
+// This interface is used to define Integer types used in AAF persistent
+// objects.
+AD_STD_COMMENT_IFC_HEADER)
+AD_FORWARD_DECLARATION(AAFPropertyValue)
+
+AD_CLASS_UUID(FE717CAB, F04C, 11d3, 80, 0B, 00, 10, 4B, C9, 15, 6D)
+
+AD_DEFAULT_UUID(FE717CAC, F04C, 11d3, 80, 0B, 00, 10, 4B, C9, 15, 6D)
+AD_XCLASS_BEGIN(Concrete, StoredObject)
+
+AD_XMETHOD2(GetActualTypeID,
+			[in],
+			objIn,
+			AAFPropertyValue,
+			pOpaquePropertyValue,
+			indirect property value to read,
+			
+			[out],
+			objPass,
+			aafUID_t *,
+			pActualTypeID,
+			the type id of the actual data,
+			Return the type id of the  actual data within the opaque property value.
+  //
+  //
+  // Succeeds if all of the following are true:
+  // - the pOpaquePropertyValue pointer is valid.
+  // - the pActualType pointer is valid.
+  //
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NO_INIT
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pOpaquePropertyValue or pActualTypeID\)
+  //
+  // AAFRESULT_ILLEGAL_VALUE
+  //   - the type of pOpaquePropertyValue was not opaque. 
+  //)
+
+AD_OVERRIDE(.method-GetTypeCategory)
+
+AD_XCLASS_END(Concrete, StoredObject)
