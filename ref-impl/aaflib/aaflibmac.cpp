@@ -57,6 +57,23 @@
 #define AAF_FRAGLOADOPTIONS kPrivateCFragCopy //kReferenceCFrag
 
 
+// transdel-2000-SEP-01: Replace c2pstr since it is not supported by either 
+// the carbon or cocoa environments.
+static unsigned char * my_c2pstr(char *s)
+{
+  unsigned char *p = reinterpret_cast<unsigned char *>(s);
+  int len = strlen(s);
+  int i;
+  
+  // Move the characters over one position so that we can write
+  // the length at position 0.
+  for (i = len; 0 <= (i - 1); --i)
+    p[i] = p[i - 1];
+
+  p[0] = (unsigned char)len;
+  
+  return p;
+}
 
 
 AAFRDLIRESULT AAFLoadLibrary(const char* name, AAFLibraryHandle* pLibHandle)
@@ -101,7 +118,7 @@ AAFRDLIRESULT AAFFindSymbol(AAFLibraryHandle libHandle, const char* symbolName, 
   // Copy and convert the c null terminated string to a Str63.
   strncpy((char *)PSymbolName, symbolName, sizeof(Str63));
   PSymbolName[sizeof(Str63) - 1] = 0; // force null termination
-  c2pstr((char *)PSymbolName);
+  my_c2pstr((char *)PSymbolName);
 
   result = FindSymbol((CFragConnectionID)libHandle, PSymbolName, &theSymbol, &symClass);
   if (noErr == result)
@@ -269,7 +286,7 @@ AAFRDLIRESULT AAFLoadSharedLibrary(const char* name, AAFLibraryHandle* pLibHandl
     
   strncpy((char *)libName, name, sizeof(Str63));
   libName[sizeof(Str63) - 1] = 0; // force null termination
-  c2pstr((char *)libName);
+  my_c2pstr((char *)libName);
   
   // Attempt to load the library.
   err = GetSharedLibrary(libName, archType, loadFlags, &connectionID, &mainAddr, (unsigned char *)errMessage);
