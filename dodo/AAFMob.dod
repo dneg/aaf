@@ -21,6 +21,7 @@ AD_HEAD
 
 AD_FORWARD_DECLARATION(AAFSegment)
 AD_FORWARD_DECLARATION(AAFMobSlot)
+AD_FORWARD_DECLARATION(AAFTimelineMobSlot)
 AD_FORWARD_DECLARATION(AAFFile)
 AD_FORWARD_DECLARATION(EnumAAFMobSlots)
 AD_FORWARD_DECLARATION(EnumAAFMobComments)
@@ -31,46 +32,51 @@ AD_CLASS_UUID(B1A21375, 1A7D, 11d2, BF, 78, 00, 10, 4B, C9, 15, 6D)
 AD_DEFAULT_UUID(B1A21374, 1A7D, 11d2, BF, 78, 00, 10, 4B, C9, 15, 6D)
 AD_CLASS_BEGIN
 
-AD_METHOD1(IsAPrimaryMob,
-[retval][out], aafBool *, retval, Set to true if this is a primary mob,
-This method will return true if this mob is a primary mob. If an error occurs
-  // the retval will be false.)
-
 AD_METHOD1(GetMobID,
 [out], aafUID_t *, pMobID, The unique media object id,
 This method returns the unique Mob ID associated with this mob.)
 
+AD_METHOD1(SetMobID,
+[in], aafUID_t *, pMobID, New Mob ID,
+When a mob is initially created\\\, the Toolkit internally creates 
+  // a mobID for the new mob.  This method should be used to change
+  // the mob's identity to an explicit mobID.)
+
 AD_METHOD1(GetName,
-[in\\\,out], aafString_t *, name, Mob Name,
-This method will copy the mob name into the given aafString_t.)
+[in\\\,string], aafWChar *, pName, Mob Name,
+This method will copy the mob name into the given string.)
 
-AD_METHOD1(GetModTime,
-[out], aafTimeStamp_t *, lastModified, Modified Time,
-This method will return the modification time for this mob.)
+AD_METHOD1(GetNameLen,
+[out], aafInt32 *, pLen, Mob Name,
+Returns the length of the string returned by the GetName and GetMobInfo methods.)
 
-AD_METHOD1(GetCreateTime,
-[out], aafTimeStamp_t *, creationTime, Creation Time,
-This method will return the creation time for this mob.)
-
-AD_METHOD3(GetMobInfo,
-[in\\\,out], aafString_t *, name, Mob Name,
-[out], aafTimeStamp_t *, lastModified, Modified Time,
-[out], aafTimeStamp_t *, creationTime, Creation Time,
-This method will all mob property information is a single call.)
+AD_METHOD1(SetName,
+[in\\\, string], aafWChar *, pName, Mob Name,
+This method sets the name property on a mob.)
 
 AD_METHOD1(GetNumSlots,
-[out], aafNumSlots_t *, numSlots, Number of slots,
+[out], aafNumSlots_t *, pNumSlots, Number of slots,
 This method returns the number of slots contained by this mob.)
 
+AD_XMETHOD1(AppendSlot,
+[in], objIn, AAFMobSlot, pSlot, Newly created slot,
+Appends the given mob slot to the mob.)
 
-AD_METHOD3(SetNewProps,
-[in], aafBool, isMasterMob, Whether or not this is a Master Mob,
-[in\\\,ref], aafString_t *, name, Mob Name \\\(optional\\\),
-[in], aafBool, isPrimary, Whether or not this is a primary mob,
-This method is called to create the new properties on a mob.)
+AD_XMETHOD1(RemoveSlot,
+[in], objIn, AAFMobSlot, pSlot, Existing slot in the mob,
+Removes the given mob slot from this header.  If the given mob
+  // slot is not found no action is taken and an error is returned.)
+
+AD_XMETHOD1(EnumAAFAllMobSlots,
+[out], objOut, EnumAAFMobSlots, ppEnum, Mob Slot Enumeration,
+return an enumeration for all mob slots.)
+
+AD_METHOD1(GetModTime,
+[out], aafTimeStamp_t *, pLastModified, Modified Time,
+This method will return the modification time for this mob.)
 
 AD_METHOD1(SetModTime,
-[in\\\, ref], aafTimeStamp_t *, modTime, New Modification Time,
+[in], aafTimeStamp_t *, pModTime, New Modification Time,
 This method sets the modification time on a mob.  The
   // modification time is initially set to the time that the mob
   // was created.  The Toolkit does not maintain the modification
@@ -78,117 +84,94 @@ This method sets the modification time on a mob.  The
   // method should be called explicitly to change the modification
   // time.)
 
+AD_METHOD1(GetCreateTime,
+[out], aafTimeStamp_t *, pCreationTime, Creation Time,
+This method will return the creation time for this mob.)
+
+AD_METHOD2(AppendComment,
+[in\\\,string], aafWChar *, pCategory, Comment heading,
+[in\\\,string], aafWChar *, pComment, Comment value,
+Creates a user-defined comment and appends it to the specified Mob.)
+
+AD_METHOD1(GetNumComments,
+[out], aafUInt32 *, pNumComments, Number  of Mob Comments,
+return total number of comments attached to this mob.)
+
+AD_XMETHOD1(EnumAAFAllMobComments,
+[out], objOut, EnumAAFMobComments, ppEnum, Mob Comments,
+return the enumeration for all mob comments..)
+
+AD_METHOD1(RemoveComment,
+[in], aafMobComment_t *, pSlot, Number  of Mob Comments,
+Remove a given comment from the mob.)
+
+AD_METHOD1(IsAPrimaryMob,
+[out], aafBool *, pRetval, Set to true if this is a primary mob,
+This method will return true if this mob is a primary mob. If an error occurs
+  // the retval will be false.)
+
+AD_XMETHOD4(AppendNewSlot,
+[in], objIn, AAFSegment, pSegment, Segment to append as slot component,
+[in], objPass, aafSlotID_t, slotID, new slot ID,
+[in\, string], objPass, aafWChar *,pSlotName, new slot name,
+[out], objOut, AAFMobSlot, ppNewSlot, Newly created slot,
+This method creates a new mob slot with the given property values and appends it to the input mob.)
+
+AD_XMETHOD6(AppendNewTimelineSlot,
+[in], objPass, aafRational_t, editRate, Edit rate property value,
+[in], objIn, AAFSegment, pSegment, Segment to append as slot component,
+[in], objPass, aafSlotID_t, slotID, new slot ID,
+[in\, string], objPass, aafWChar *,pSlotName, new slot name,
+[in], objPass, aafPosition_t, origin, The slot origin,
+[out], objOut, AAFTimelineMobSlot, ppNewSlot, Newly created slot,
+This method creates a new timeline mob slot with the given property values and appends it to the input mob.)
+
+AD_METHOD4(GetMobInfo,
+[out], aafTimeStamp_t *, pLastModified, Modified Time,
+[out], aafTimeStamp_t *, pCreationTime, Creation Time,
+[out\\\, size_is\\\(strSize\\\)\\\, string], aafWChar *, pName, Mob Name,
+[in], aafInt32, strSize, size of the supplied buffer.,
+This method will all mob property information is a single call.)
+
+
+
+AD_METHOD3(SetNewProps,
+[in], aafBool, isMasterMob, Whether or not this is a Master Mob,
+[in\\\,string], aafWChar *, pName, Mob Name \\\(optional\\\),
+[in], aafBool, isPrimary, Whether or not this is a primary mob,
+This method is called to create the new properties on a mob.)
+
+
 AD_METHOD1(SetPrimary,
 [in], aafBool, isPrimary, Whether or not the mob is a primary mob,
 This method is used to either add a mob to the HEAD Primary Mob
   // index or to take it out of the index.)
 
-AD_METHOD1(SetIdentity,
-[in\\\, ref], aafUID_t *, mobID, New Mob ID,
-When a mob is initially created\\\, the Toolkit internally creates 
-  // a mobID for the new mob.  This method should be used to change
-  // the mob's identity to an explicit mobID.)
-
-AD_METHOD1(SetName,
-[in\\\, ref], aafString_t *, name, Mob Name,
-This method sets the name property on a mob.)
-
-// skip virtual aafErr_t Verify(char *buf, validateData_t *result);
-// What doe's this do?
-
-AD_METHOD2(IsMobKind,
-[in], aafMobKind_t, mobKind, A valid mob kind.,
-[out\\\,retval], aafBool *, result, True is matches given mobKind,
-This method returns false by default. This method must be overridden by
-  // each subclass to return true for the the corresponding input mobKind.)
-
-
-AD_XMETHOD5(AppendNewSlot,
-[in], objPass, aafRational_t, editRate, Edit rate property value,
-[in], objIn, AAFSegment, segment, Segment to append as track component,
-[in], objPass, aafTrackID_t, trackID, The Track ID,
-[in], objPass, aafString_t *, trackName, Track Name \(optional\),
-[out], objOut, AAFMobSlot, newTrack, Newly created track,
-This method creates a new mob slot with the given property values and appends it to the input mob.)
-
-AD_XMETHOD1(GetAllMobSlots,
-[out\,retval], objOut, EnumAAFMobSlots, ppEnum, Mob Slot Enumeration,
-return an enumeration for all mob slots.)
-
-AD_METHOD2(AppendComment,
-[in\\\,ref], aafString_t *, category, Comment heading,
-[in\\\,ref], aafString_t *, comment, Comment value,
-Creates a user-defined comment and appends it to the specified Mob.)
-
-AD_METHOD1(GetNumComments,
-[out\\\,retval], aafUInt32 *, pEnum, Number  of Mob Comments,
-return total number of comments attached to this mob.)
-
-AD_XMETHOD1(GetComments,
-[out\,retval], objOut, EnumAAFMobComments, ppEnum, Mob Comments,
-return the enumeration for all mob comments..)
-
-
 AD_XMETHOD3(OffsetToMobTimecode,
-[in], objIn, AAFSegment, tcTrackID, Current track,
-[in\,ref], objPass, aafPosition_t *, offset, Offset into segment,
-[out], objPass, aafTimecode_t *, result, The resulting timecode,
+[in], objIn, AAFSegment, pTcSlotID, Current slot,
+[in], objPass, aafPosition_t *, pOffset, Offset into segment,
+[out], objPass, aafTimecode_t *, pResult, The resulting timecode,
 This method will all mob property information is a single call.)
 
-AD_XMETHOD2(FindTrackByTrackID,
-[in], objPass, aafTrackID_t, trackID, The requested track id,
-[out], objOut, AAFMobSlot, destTrack, The requested track,
-The method will find the mob slot for the given track id.)
-
-// trr: Does this method only work for AAFSourceMobs? If so we should probably move
-// it the AAFSourceMob.dod.
-AD_METHOD3(OffsetToTimecode,
-[in\\\,ref], aafTrackID_t*, trackID, Track ID of the track in the input mob,
-[in], aafPosition_t *, offset, Offset into the given track,
-[out], aafTimecode_t *, result, The resulting timecode,
-Given a master mob or source mob\\\, track ID of a track in a mob
-  // and an offset into the track\\\, this function searches for the
-  // tape mob and returns the associated timecode.)
-
-// trr: Does this method only work for AAFSourceMobs? If so we should probably move
-// it the AAFSourceMob.dod.
-AD_METHOD3(TimecodeToOffset,
-[in], aafTimecode_t, timecode, The timecode value,
-[in], aafTrackID_t, trackID, Track ID of track in source mob,
-[out], aafFrameOffset_t *, result, Resulting offset in source track,
-This function takes a timecode and source mob and track as input
-  // and returns the position in the track that corresponds to the
-  // timecode value.  This is accomplished by searching for the tape
-  // mob with the timecode and calculating the offset in the given
-  // source mob.)
-
-
-
-AD_XMETHOD2(Copy,
-[in], objPass, aafString_t *, destMobName, Optional Input. The name to be assigned to the new copy of the Mob.
-  // The destMobName argument is optional. Specify a NULL value if no desti\-
-  // nation Mob name is desired.,
-[out], objOut, AAFMob, destMob, Destination Mob,
-  // This function copies the specified Mob into a destination Mob in the same
-  // OMF file. The new Mob is returned through the destMob parameter. The func\-
-  // tion gives the destination Mob a new MobID and the name specified in the
-  // destMobName parameter. The function also copies all private data.)
+AD_XMETHOD2(FindSlotBySlotID,
+[in], objPass, aafSlotID_t, slotID, The requested slot id,
+[out], objOut, AAFMobSlot, ppDestSlot, The requested slot,
+The method will find the mob slot for the given slot id.)
 
 AD_METHOD2(ChangeRef,
-[in\\\,ref], aafUID_t *, oldMobID, Old Mob ID reference in source clip,
-[in\\\,ref], aafUID_t *, newMobID, New Mob ID reference in source clip,
+[in], aafUID_t *, pOldMobID, Old Mob ID reference in source clip,
+[in], aafUID_t *, pNewMobID, New Mob ID reference in source clip,
 Finds all Source Clips in the specified Mob that refer to the specified old Mob\\\,
   // and changes the references to point to the new Mob.
   // @commThis function traverses through the entire structure of the input Mob looking
   // for Source Clips\\\, and changes the sourceID property on all Source Clips with
   // oldMobID to newMobID.)
 
-
 AD_XMETHOD4(CloneExternal,
 [in], objPass, aafDepend_t, resolveDependencies, Whether to clone dependent mobs,
 [in], objPass, aafIncMedia_t, includeMedia, Whether to include media data,
-[in], objIn, AAFFile, destFile, Destination AAF File,
-[out], objOut, AAFMob, destMob, Destination Mob,
+[in], objIn, AAFFile, pDestFile, Destination AAF File,
+[out], objOut, AAFMob, ppDestMob, Destination Mob,
 Clones the specified Source Mob\, and optionally all dependent Mobs\, to an
   // external file\, keeping the same MobID.
   // @commThis function clones the specified Source Mob in the source file into a destina\-
@@ -203,9 +186,15 @@ Clones the specified Source Mob\, and optionally all dependent Mobs\, to an
   // Both AAF files must be open before you call this function and both must have
   // the same AAF Version number.)
 
-// ADx_OVERRIDE(.method-Delete)
-  // @commDeletes the entire Mob structure \(the MOBJ object and all its contained objects\)
-  // and deletes the entry from the Header.
+AD_XMETHOD2(Copy,
+[in\,string], objPass, aafWChar *, pDestMobName, Optional Input. The name to be assigned to the new copy of the Mob.
+  // The destMobName argument is optional. Specify a NULL value if no desti\-
+  // nation Mob name is desired.,
+[out], objOut, AAFMob, ppDestMob, Destination Mob,
+  // This function copies the specified Mob into a destination Mob in the same
+  // OMF file. The new Mob is returned through the destMob parameter. The func\-
+  // tion gives the destination Mob a new MobID and the name specified in the
+  // destMobName parameter. The function also copies all private data.)
 
 AD_CLASS_END
 
