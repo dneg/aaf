@@ -24,6 +24,7 @@ public class Messages {
 
     static final String commands="Misc. Commands\n"
         +"* Ctrl+A = open a AAF file using aaf2dot\n"
+        +"* Ctrl+M = open a AAF file using aafmeta2dot\n"
 	+"* Ctrl+D = open a file with dot\n"
         +"* Ctrl+N = open a file with neato\n"
 	+"* Ctrl+P = Print current view\n"
@@ -37,9 +38,10 @@ public class Messages {
 	+"* Press left or right mouse button and drag to move in the graph\n"
 	+"* Hold Shift, press left or right mouse button and drag vertically to zoom-in/zoom-out\n"
         +"* Hold Ctrl, press left mouse button and drag to select a region of interest\n"
+        +"* Click right mouse button on a cluster or node to center on it\n"
+        +"\nWhen viewing AAF file object diagram:\n"
         +"* Click left mouse button on a node to select / deselect outgoing edges\n"
         +"* Hold Shift, click left mouse button on a node to select / deselect incoming edges\n"
-        +"* Click right mouse button on a cluster or node to center on it\n"
 	;
 
     static final String loadError="An error occured while loading file ";

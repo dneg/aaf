@@ -128,7 +128,7 @@ public class AAFViewer {
         loadSVG(cmdLineDOTFile);
       }
       else if (cmdLinePrg.equals("-Paaf")) {
-        loadAAF(cmdLineDOTFile);
+        loadAAF(cmdLineDOTFile,true);
       }
       else {
         System.err.println("Bad option: " + cmdLinePrg);
@@ -186,6 +186,9 @@ public class AAFViewer {
     final JMenuItem openA = new JMenuItem("Open AAF file with aaf2dot...");
     openA.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A,
                                                 ActionEvent.CTRL_MASK));
+    final JMenuItem openAM = new JMenuItem("Open AAF file with aafmeta2dot...");
+    openAM.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_M,
+                                                ActionEvent.CTRL_MASK));
     final JMenuItem openI = new JMenuItem("Open with dot...");
     openI.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D,
                                                 ActionEvent.CTRL_MASK));
@@ -212,7 +215,10 @@ public class AAFViewer {
     ActionListener a0 = new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         if (e.getSource() == openA) {
-          openAAFFile();
+          openAAFFile(true);
+        }
+        if (e.getSource() == openAM) {
+          openAAFFile(false);
         }
         else if (e.getSource() == openI) {
           open(0);
@@ -263,6 +269,7 @@ public class AAFViewer {
     jmb.add(jm2);
     jmb.add(jm3);
     jm1.add(openA);
+    jm1.add(openAM);
     jm1.add(openI);
     jm1.add(open2I);
     jm1.add(openS);
@@ -285,6 +292,7 @@ public class AAFViewer {
     open2I.addActionListener(a0);
     openS.addActionListener(a0);
     openA.addActionListener(a0);
+    openAM.addActionListener(a0);
     pngI.addActionListener(a0);
     svgI.addActionListener(a0);
     printI.addActionListener(a0);
@@ -399,30 +407,36 @@ public class AAFViewer {
     }
   }
 
-  void openAAFFile() {
-    if (!ConfigManager.checkAaf2Dot()) {
-      JOptionPane.showMessageDialog(mainView.getFrame(),
-                                    "The aaf2dot command does not exist as " +
-                                    ConfigManager.m_Aaf2DotPath + "\n");
-      return;
-    }
-    final JFileChooser fc = new JFileChooser(ConfigManager.m_LastDir != null ?
-                                             ConfigManager.m_LastDir :
-                                             ConfigManager.m_PrjDir);
-    fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
-    fc.setDialogTitle("Find AAF File");
-    int returnVal = fc.showOpenDialog(mainView.getFrame());
-    if (returnVal == JFileChooser.APPROVE_OPTION) {
-      final SwingWorker worker = new SwingWorker() {
-        public Object construct() {
-          reset();
-          loadAAF(fc.getSelectedFile());
-          return null;
-        }
-      };
-      worker.start();
-    }
-  }
+      void openAAFFile(final boolean showObjectDiagram) {
+	 if (showObjectDiagram && !ConfigManager.checkAaf2Dot()) {
+	    JOptionPane.showMessageDialog(mainView.getFrame(),
+					  "The aaf2dot command does not exist as " +
+					  ConfigManager.m_Aaf2DotPath + "\n");
+	    return;
+	 }
+	 if (!showObjectDiagram && !ConfigManager.checkAafMeta2Dot()) {
+	    JOptionPane.showMessageDialog(mainView.getFrame(),
+					  "The aafmeta2dot command does not exist as " +
+					  ConfigManager.m_AafMeta2DotPath + "\n");
+	    return;
+	 }
+	 final JFileChooser fc = new JFileChooser(ConfigManager.m_LastDir != null ?
+						  ConfigManager.m_LastDir :
+						  ConfigManager.m_PrjDir);
+	 fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+	 fc.setDialogTitle("Find AAF File");
+	 int returnVal = fc.showOpenDialog(mainView.getFrame());
+	 if (returnVal == JFileChooser.APPROVE_OPTION) {
+	    final SwingWorker worker = new SwingWorker() {
+		     public Object construct() {
+			reset();
+			loadAAF(fc.getSelectedFile(), showObjectDiagram);
+			return null;
+		     }
+	       };
+	    worker.start();
+	 }
+      }
 
   void loadFile(File f, String prg) { //f=DOT file to load, prg=program to use ("dot" or "neato")
     if (f.exists()) {
@@ -466,24 +480,24 @@ public class AAFViewer {
     }
   }
 
-  void loadAAF(File f) {
-    ProgPanel pp = new ProgPanel("", "Loading AAF File");
-    try {
-      aafMngr.load(f, pp);
-      ConfigManager.defaultFont = vsm.getMainFont();
-      mainView.setTitle(ConfigManager.MAIN_TITLE + " - " + f.getAbsolutePath());
-      getGlobalView();
-      if (previousLocations.size() == 1) {
-        previousLocations.removeElementAt(0);
-      } //do not remember camera's initial location (before global view)
-      pp.destroy();
-    }
-    catch (Exception ex) {
-      pp.destroy();
-      JOptionPane.showMessageDialog(mainView.getFrame(),
-                                    Messages.loadError + f.toString());
-    }
-  }
+      void loadAAF(File f, boolean showObjectDiagram) {
+	 ProgPanel pp = new ProgPanel("", "Loading AAF File");
+	 try {
+	    aafMngr.load(f, pp, showObjectDiagram);
+	    ConfigManager.defaultFont = vsm.getMainFont();
+	    mainView.setTitle(ConfigManager.MAIN_TITLE + " - " + f.getAbsolutePath());
+	    getGlobalView();
+	    if (previousLocations.size() == 1) {
+	       previousLocations.removeElementAt(0);
+	    } //do not remember camera's initial location (before global view)
+	    pp.destroy();
+	 }
+	 catch (Exception ex) {
+	    pp.destroy();
+	    JOptionPane.showMessageDialog(mainView.getFrame(),
+					  Messages.loadError + f.toString());
+	 }
+      }
 
   void getGlobalView() {
     Location l = vsm.getGlobalView(vsm.getActiveCamera(),

@@ -27,10 +27,11 @@ class PrefWindow extends JFrame implements ActionListener {
     JCheckBox antialiascb; //set antialias rendering
     JTextField cmdLOptsTf;
     JTextField dotECmdLOptsTf;
+    JTextField dotMECmdLOptsTf;
 
     //directory panel
-    JButton brw1,brw2,brw3,brw4,brw5,brw6;
-    JTextField tf1,tf2,tf3,tf4,tf5,tf6;
+    JButton brw1,brw2,brw3,brw4,brw5,brw6,brw7;
+    JTextField tf1,tf2,tf3,tf4,tf5,tf6,tf7;
     JCheckBox cb1;
 
     PrefWindow(AAFViewer app){
@@ -82,7 +83,7 @@ class PrefWindow extends JFrame implements ActionListener {
         buildConstraints(constraints0,0,3,1,1,100,10);
         gridBag0.setConstraints(cmdLOptsTf,constraints0);
         miscPane.add(cmdLOptsTf);
-        //dot exporter command line options
+        //aaf2dot command line options
         JLabel dotECmdLOptsLb=new JLabel("aaf2dot command line options (-aafin and -dotout will be ignored)");
         buildConstraints(constraints0,0,4,1,1,100,10);
         gridBag0.setConstraints(dotECmdLOptsLb,constraints0);
@@ -91,9 +92,18 @@ class PrefWindow extends JFrame implements ActionListener {
         buildConstraints(constraints0,0,5,1,1,100,10);
         gridBag0.setConstraints(dotECmdLOptsTf,constraints0);
         miscPane.add(dotECmdLOptsTf);
+        //aafmeta2dot command line options
+        JLabel dotMECmdLOptsLb=new JLabel("aafmeta2dot command line options (-aafin and -dotout will be ignored)");
+        buildConstraints(constraints0,0,6,1,1,100,10);
+        gridBag0.setConstraints(dotMECmdLOptsLb,constraints0);
+        miscPane.add(dotMECmdLOptsLb);
+        dotMECmdLOptsTf=new JTextField(ConfigManager.AAFMETA2DOT_CMD_LINE_OPTS);
+        buildConstraints(constraints0,0,7,1,1,100,10);
+        gridBag0.setConstraints(dotMECmdLOptsTf,constraints0);
+        miscPane.add(dotMECmdLOptsTf);
 	//blank panel to fill remaining part of the tab
 	JPanel p1=new JPanel();
-	buildConstraints(constraints0,0,6,1,1,100,70);
+	buildConstraints(constraints0,0,8,1,1,100,70);
 	gridBag0.setConstraints(p1,constraints0);
 	miscPane.add(p1);
 	//add tab to panel
@@ -190,6 +200,19 @@ class PrefWindow extends JFrame implements ActionListener {
         buildConstraints(constraints,0,11,3,1,100,10);
         gridBag.setConstraints(tf6,constraints);
         dirPane.add(tf6);
+        JLabel l7=new JLabel("aafmeta2dot executable");
+        buildConstraints(constraints,0,12,2,1,90,10);
+        gridBag.setConstraints(l7,constraints);
+        dirPane.add(l7);
+        brw7=new JButton("Browse...");
+        buildConstraints(constraints,2,12,1,1,10,0);
+        gridBag.setConstraints(brw7,constraints);
+        brw7.addActionListener(this);
+        dirPane.add(brw7);
+        tf7=new JTextField(ConfigManager.m_AafMeta2DotPath.toString());tf7.setEnabled(false);
+        buildConstraints(constraints,0,13,3,1,100,10);
+        gridBag.setConstraints(tf7,constraints);
+        dirPane.add(tf7);
 	tabbedPane.addTab("Directories",dirPane);
 
 
@@ -294,6 +317,15 @@ class PrefWindow extends JFrame implements ActionListener {
                 tf6.setText(ConfigManager.m_Aaf2DotPath.toString());
             }
         }
+        else if (o==brw7){
+            fc=new JFileChooser(ConfigManager.m_AafMeta2DotPath);
+            fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+            returnVal= fc.showOpenDialog(this);
+            if (returnVal == JFileChooser.APPROVE_OPTION){
+                ConfigManager.m_AafMeta2DotPath=fc.getSelectedFile();
+                tf7.setText(ConfigManager.m_AafMeta2DotPath.toString());
+            }
+        }
 	else if (o==cb1){
 	    if (cb1.isSelected()){ConfigManager.DELETE_TEMP_FILES=true;}
 	    else {ConfigManager.DELETE_TEMP_FILES=false;}
@@ -310,6 +342,7 @@ class PrefWindow extends JFrame implements ActionListener {
 	ConfigManager.SAVE_WINDOW_LAYOUT=saveWindowLayoutCb.isSelected();
         ConfigManager.CMD_LINE_OPTS=cmdLOptsTf.getText();
         ConfigManager.AAF2DOT_CMD_LINE_OPTS=dotECmdLOptsTf.getText();
+        ConfigManager.AAFMETA2DOT_CMD_LINE_OPTS=dotMECmdLOptsTf.getText();
 // 	if (b1a.isSelected()){ConfigManager.GRAPH_ORIENTATION="LR";} else {ConfigManager.GRAPH_ORIENTATION="TB";}
     }
 

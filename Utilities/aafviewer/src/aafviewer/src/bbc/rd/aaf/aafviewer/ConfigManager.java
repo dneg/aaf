@@ -36,6 +36,7 @@ class ConfigManager {
 
     static String CMD_LINE_OPTS="";
     static String AAF2DOT_CMD_LINE_OPTS="";
+    static String AAFMETA2DOT_CMD_LINE_OPTS="";
 
     //directories
     static File m_TmpDir=new File("tmp");
@@ -44,6 +45,7 @@ class ConfigManager {
     static File m_NeatoPath=new File("C:\\Tools\\ATT\\Graphviz\\bin\\neato.exe");
     static File m_GraphVizFontDir=new File("C:\\Tools\\ATT\\Graphviz");
     static File m_Aaf2DotPath=new File( "C:\\Tools\\AAF\\aaf2dot.exe" );
+    static File m_AafMeta2DotPath=new File( "C:\\Tools\\AAF\\aafmeta2dot.exe" );
     static File m_LastDir=null;
     static File m_LastExportDir=null;
 
@@ -86,6 +88,8 @@ class ConfigManager {
 		catch (Exception ex){}
                 try {ConfigManager.m_Aaf2DotPath=new File(e.getElementsByTagNameNS(AAFViewer.aafvURI,"aaf2dot").item(0).getFirstChild().getNodeValue());}
                 catch (Exception ex){}
+                try {ConfigManager.m_AafMeta2DotPath=new File(e.getElementsByTagNameNS(AAFViewer.aafvURI,"aafmeta2dot").item(0).getFirstChild().getNodeValue());}
+                catch (Exception ex){}
 		try {
 		    e=(Element)(rt.getElementsByTagNameNS(AAFViewer.aafvURI,"preferences")).item(0);
 // 		    ConfigManager.GRAPH_ORIENTATION=e.getAttribute("graphOrient");
@@ -93,6 +97,7 @@ class ConfigManager {
 		    ConfigManager.SAVE_WINDOW_LAYOUT=(new Boolean(e.getAttribute("saveWindowLayout"))).booleanValue();
                     ConfigManager.CMD_LINE_OPTS=e.getAttribute("cmdL_options");
                     ConfigManager.AAF2DOT_CMD_LINE_OPTS=e.getAttribute("aaf2dot_cmdL_options");
+                    ConfigManager.AAFMETA2DOT_CMD_LINE_OPTS=e.getAttribute("aafmeta2dot_cmdL_options");
 		    if (ConfigManager.SAVE_WINDOW_LAYOUT){//window layout preferences
 			try {
 			    e=(Element)(rt.getElementsByTagNameNS(AAFViewer.aafvURI,"windows")).item(0);
@@ -140,8 +145,12 @@ class ConfigManager {
 	dirs.appendChild(aDir);
 	aDir=cfg.createElementNS(AAFViewer.aafvURI,"aafv:graphvizFontDir");
 	aDir.appendChild(cfg.createTextNode(ConfigManager.m_GraphVizFontDir.toString()));
+	dirs.appendChild(aDir);
         aDir=cfg.createElementNS(AAFViewer.aafvURI,"aafv:aaf2dot");
         aDir.appendChild(cfg.createTextNode(ConfigManager.m_Aaf2DotPath.toString()));
+	dirs.appendChild(aDir);
+        aDir=cfg.createElementNS(AAFViewer.aafvURI,"aafv:aafmeta2dot");
+        aDir.appendChild(cfg.createTextNode(ConfigManager.m_AafMeta2DotPath.toString()));
 	dirs.appendChild(aDir);
 	//save misc. constants
 	Element consts=cfg.createElementNS(AAFViewer.aafvURI,"aafv:preferences");
@@ -151,6 +160,7 @@ class ConfigManager {
 	consts.setAttribute("saveWindowLayout",String.valueOf(ConfigManager.SAVE_WINDOW_LAYOUT));
         consts.setAttribute("cmdL_options",ConfigManager.CMD_LINE_OPTS);
         consts.setAttribute("aaf2dot_cmdL_options",ConfigManager.AAF2DOT_CMD_LINE_OPTS);
+        consts.setAttribute("aafmeta2dot_cmdL_options",ConfigManager.AAFMETA2DOT_CMD_LINE_OPTS);
 	//window locations and sizes
 	if (ConfigManager.SAVE_WINDOW_LAYOUT){
 	    //first update the values
@@ -184,6 +194,12 @@ class ConfigManager {
         return res;
     }
 
+    static boolean checkAafMeta2Dot(){
+        boolean res=true;
+        if (!((m_TmpDir.exists()) && (m_AafMeta2DotPath.exists()))){res=false;}
+        return res;
+    }
+
 
     static String getDirStatus(){
 	StringBuffer sb=new StringBuffer();
@@ -199,8 +215,11 @@ class ConfigManager {
 	sb.append("GraphViz Font Directory (optional): ");
 	sb.append((m_GraphVizFontDir.exists()) ? m_GraphVizFontDir.toString() : "null");
 	sb.append("\n");
-        sb.append("Absolute Path to dotexporter (required if using aaf): ");
+        sb.append("Absolute Path to aaf2dot (required if using aaf2dot): ");
         sb.append((m_Aaf2DotPath.exists()) ? m_Aaf2DotPath.toString() : "null");
+        sb.append("\n");
+        sb.append("Absolute Path to aafmeta2dot (required if using aafmeta2dot): ");
+        sb.append((m_AafMeta2DotPath.exists()) ? m_AafMeta2DotPath.toString() : "null");
         sb.append("\n");
 	sb.append("Are you sure you want to continue?");
 	return sb.toString();

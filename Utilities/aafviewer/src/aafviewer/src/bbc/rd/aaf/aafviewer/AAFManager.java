@@ -31,20 +31,34 @@ public class AAFManager implements SVGReaderExtListener {
     application = app;
   }
 
-  void load(File f, ProgPanel pp) {
+  void load(File f, ProgPanel pp, boolean showObjectDiagram) {
     try {
       aafF = f;
       dotF = Utils.createTempFile(ConfigManager.m_TmpDir.toString(), "zgrv",
                                   ".dot");
       pp.setPBValue(10);
-      pp.setLabel("Exporting DOT from AAF file...");
-      if (!callAaf2Dot())
+      if (showObjectDiagram) {
+	 pp.setLabel("Generating DOT object diagram from AAF file...");
+	 if (!callAaf2Dot())
+	 {
+	    pp.destroy();
+	    deleteTempFiles();
+	    javax.swing.JOptionPane.showMessageDialog(AAFViewer.mainView.getFrame(),
+						      "aaf2dot failed.");
+	    return;
+	 }
+      }
+      else
       {
-        pp.destroy();
-        deleteTempFiles();
-        javax.swing.JOptionPane.showMessageDialog(AAFViewer.mainView.getFrame(),
-            "aaf2dot failed.");
-        return;
+	 pp.setLabel("Generating DOT class model diagram from AAF file...");
+	 if (!callAafMeta2Dot())
+	 {
+	    pp.destroy();
+	    deleteTempFiles();
+	    javax.swing.JOptionPane.showMessageDialog(AAFViewer.mainView.getFrame(),
+						      "aafmeta2dot failed.");
+	    return;
+	 }
       }
       pp.setPBValue(50);
       pp.setLabel("Converting DOT to SVG...");
@@ -83,6 +97,18 @@ public class AAFManager implements SVGReaderExtListener {
   private boolean callAaf2Dot() throws Exception {
     try {
       return generateDotFile(aafF.getAbsolutePath(), dotF.getAbsolutePath());
+    }
+    catch (Exception e) {
+      System.err.println("Exception in aaf2dot: " +
+                         e.getMessage() + "\n");
+      e.printStackTrace();
+      throw new Exception();
+    }
+  }
+
+  private boolean callAafMeta2Dot() throws Exception {
+    try {
+      return generateDotFileForClassModel(aafF.getAbsolutePath(), dotF.getAbsolutePath());
     }
     catch (Exception e) {
       System.err.println("Exception in aaf2dot: " +
@@ -131,6 +157,45 @@ public class AAFManager implements SVGReaderExtListener {
 
       StreamGobbler outputGobbler = new
           StreamGobbler(proc.getInputStream(), "AAF2DOT OUTPUT");
+
+      errorGobbler.start();
+      outputGobbler.start();
+
+      int exitVal = proc.waitFor();
+
+      if (exitVal != 0) {
+        return false;
+      }
+      else {
+        return true;
+      }
+    }
+    catch (Exception e) {
+      System.err.println("Error: generating OutputFile.\n");
+      throw e;
+    }
+  }
+
+
+  private boolean generateDotFileForClassModel(String aafFilePath, String dotFilePath) throws
+      Exception {
+    String optionArray[] = checkAafMeta2DotOptions(ConfigManager.AAFMETA2DOT_CMD_LINE_OPTS);
+    String cmdArray[] = new String[optionArray.length + 5];
+    cmdArray[0] = ConfigManager.m_AafMeta2DotPath.toString();
+    cmdArray[1] = "-aafin"; cmdArray[2] = aafFilePath;
+    cmdArray[3] = "-dotout"; cmdArray[4] = dotFilePath;
+    for (int i=0; i<optionArray.length; i++) {
+      cmdArray[i+5] = optionArray[i];
+    }
+    Runtime rt = Runtime.getRuntime();
+    try {
+      Process proc = rt.exec(cmdArray);
+
+      StreamGobbler errorGobbler = new
+          StreamGobbler(proc.getErrorStream(), "AAFMETA2DOT ERROR");
+
+      StreamGobbler outputGobbler = new
+          StreamGobbler(proc.getInputStream(), "AAFMETA2DOT OUTPUT");
 
       errorGobbler.start();
       outputGobbler.start();
@@ -226,6 +291,36 @@ public class AAFManager implements SVGReaderExtListener {
   /* checks that the command line options do not contain -aafin or -dotout and
    splits it into an string array */
   static String[] checkAaf2DotOptions(String options) {
+    int indexAAFIn = options.indexOf("-aafin");
+    int indexDotOut = options.indexOf("-dotout");
+    String res = options;
+    if (indexAAFIn != -1 || indexDotOut != -1) {
+      if (indexAAFIn != -1) {
+        int i = indexAAFIn;
+        res = options.substring(0, i);
+        while (i < options.length() && options.charAt(i) != ' ') {
+          i++;
+        }
+        res += options.substring(i);
+      }
+      if (indexDotOut != -1) {
+        String res2;
+        int i = indexDotOut;
+        res2 = res.substring(0, i);
+        while (i < res.length() && res.charAt(i) != ' ') {
+          i++;
+        }
+        res2 += res.substring(i);
+        res = res2;
+      }
+    }
+    String resSplit[] = res.split("(\\s)+"); // options separated by 1 or more spaces
+    return resSplit;
+  }
+
+  /* checks that the command line options do not contain -aafin or -dotout and
+   splits it into an string array */
+  static String[] checkAafMeta2DotOptions(String options) {
     int indexAAFIn = options.indexOf("-aafin");
     int indexDotOut = options.indexOf("-dotout");
     String res = options;
