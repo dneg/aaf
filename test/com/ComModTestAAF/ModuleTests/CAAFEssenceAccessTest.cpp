@@ -27,7 +27,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <strings.h>		// for strncasecmp()
+//#include <strings.h>		// for strncasecmp()
 #include <iostream>
 using namespace std;
 
@@ -542,6 +542,165 @@ const aafUID_t NIL_UID = { 0, 0, 0, { 0, 0, 0, 0, 0, 0, 0, 0 } };
 
 static HRESULT hrSetTransformParameters=0;
 
+
+static HRESULT ReadStaticEssenceAAFFile(aafWChar * pFileName, testType_t testType, aafUID_t codecID)
+{
+	HRESULT hr = AAFRESULT_SUCCESS;
+	IAAFFile *					pFile = NULL;
+	IAAFHeader *				pHeader = NULL;
+	IAAFDictionary*					pDictionary = NULL;
+	IAAFEssenceAccess*			pEssenceAccess = NULL;
+	IAAFEssenceMultiAccess*		pMultiEssence = NULL;
+	IAAFEssenceFormat			*fmtTemplate =  NULL;
+	IEnumAAFMobs*				pMobIter = NULL;
+	IAAFMob*					pMob = NULL;
+	IAAFMasterMob*				pMasterMob = NULL;
+	IAAFEssenceFormatSP pFormat;
+	
+	aafNumSlots_t				numMobs, numSlots;
+	aafSearchCrit_t				criteria;
+	aafMobID_t					mobID;
+	aafWChar					namebuf[1204];
+	unsigned char				AAFDataBuf[4096];
+	aafUInt32					AAFBytesRead, samplesRead;
+
+
+	
+	try
+	{
+		checkResult(AAFFileOpenExistingRead ( pFileName, 0, &pFile));
+		checkResult(pFile->GetHeader(&pHeader));
+		
+		// Get the AAF Dictionary so that we can create valid AAF objects.
+		checkResult(pHeader->GetDictionary(&pDictionary));
+		
+		
+		// Here we checkResult on the number of mobs in the file. 
+		// Get the number of master mobs in the file (should be one)
+		checkResult(pHeader->CountMobs(kAAFMasterMob, &numMobs));
+		checkExpression(1 == numMobs, AAFRESULT_TEST_FAILED);
+		criteria.searchTag = kAAFByMobKind;
+		criteria.tags.mobKind = kAAFMasterMob;
+		checkResult(pHeader->GetMobs(&criteria, &pMobIter));
+		while(AAFRESULT_SUCCESS == pMobIter->NextOne(&pMob))
+		{
+			char mobIDstr[256];
+			char mobName[256];
+			
+			
+			checkResult(pMob->GetMobID (&mobID));
+			checkResult(pMob->GetName (namebuf, sizeof(namebuf)));
+			convert(mobName, sizeof(mobName), namebuf);
+			MobIDtoString(mobID, mobIDstr);
+			// Make sure we have one slot 
+			checkResult(pMob->CountSlots(&numSlots));
+			checkExpression(1 == numSlots, AAFRESULT_TEST_FAILED);
+			// The essence data is in SlotID 1
+			// Get a Master Mob interface
+			checkResult(pMob->QueryInterface(IID_IAAFMasterMob, (void **)&pMasterMob));
+			
+			// Open the Essence Data
+			checkResult(pMasterMob->OpenEssence(	1,						// SlotID 1
+				NULL,				// mediaCriteria (Don't care)
+				kAAFMediaOpenReadOnly,	// Open mode
+				kAAFCompressionDisable,// Compress disabled
+				&pEssenceAccess));
+			
+			aafUID_t tstCodecID = {0};
+			checkResult(pEssenceAccess->GetCodecID(&tstCodecID));
+			if (false && memcmp(&tstCodecID, &codecID, sizeof(codecID)))
+			{
+			  cout << "     Warning:GetCodecID did not return CodecJPEG." << endl;
+			}
+
+  				
+			// Read the Data from the AAF file
+			if(testType == testStandardCalls)
+			{
+				checkResult(pEssenceAccess->ReadSamples(	1,	// number of samples - must be 1 for JPEG codec
+					sizeof(AAFDataBuf),	// Maximum buffer size
+					AAFDataBuf,			// Buffer for the data
+					&samplesRead,		// Actual number of samples read
+					&AAFBytesRead));	// Actual number of bytes read
+			}
+			else if(testType == testMultiCalls)
+			{
+				cout << "testMultiCalls not supported in AAF Static Essence Tests";
+				
+			}
+			
+			// Now compare the data read from the AAF file to the actual WAV file
+			if (sizeof(compressedJFIF) != AAFBytesRead)
+			{
+					cout << "***Wrong number of bytes read ( was "
+								<< AAFBytesRead
+								<< ", should be "
+								<< sizeof(uncompressedWAVE_Laser)
+								<< ")"
+								<< endl;
+			}
+			if (memcmp( compressedJFIF, AAFDataBuf, sizeof(compressedJFIF)) != 0)
+			{
+					cout << "*** Data Read is different than the data in the WAV file ***" << endl;
+			}
+			
+			// cleanup the master mob.
+			pMasterMob->Release();
+			pMasterMob = NULL;
+			
+			pMob->Release();
+			pMob = NULL;
+		}
+
+	}
+	catch (HRESULT& rhr)
+	{
+		hr = rhr; // return thrown error code.
+	}
+	catch (...)
+	{
+		// We CANNOT throw an exception out of a COM interface method!
+		// Return a reasonable exception code.
+		hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+	}
+
+	
+	// Cleanup and return
+	if (pMultiEssence)
+		pMultiEssence->Release();
+
+	if(fmtTemplate)
+		fmtTemplate->Release();
+
+	if (pEssenceAccess)
+		pEssenceAccess->Release();
+
+	if (pMasterMob)
+		pMob->Release();
+
+	if (pMob)
+		pMob->Release();
+
+	if (pMobIter)
+		pMobIter->Release();
+
+	if (pDictionary)
+		pDictionary->Release();
+
+	if (pHeader)
+		pHeader->Release();
+
+	if (pFile) 
+	{
+		HRESULT local_hr = pFile->Close();
+		if (FAILED(local_hr) && SUCCEEDED(hr))
+			hr = local_hr;
+		pFile->Release();
+	}
+	
+	return hr;
+}
+
 static HRESULT CreateStaticEssenceAAFFile(
 	aafWChar * pFileName, 
 	testDataFile_t *dataFile, 
@@ -628,7 +787,7 @@ static HRESULT CreateStaticEssenceAAFFile(
 		checkResult(pMasterMob->QueryInterface(IID_IAAFMasterMob2, (void **)&pMasterMob2));
 		// now create the Essence data file
 
-		checkResult(pMasterMob2->CreateStaticEssence(STD_SLOT_ID+1,				// Slot ID
+		checkResult(pMasterMob2->CreateStaticEssence(1,	// Slot ID
 			defs.ddPicture(),	// MediaKind
 			kAAFCodecJPEG,		// codecID
 			kAAFCompressionDisable, // compression
@@ -640,6 +799,16 @@ static HRESULT CreateStaticEssenceAAFFile(
 			/// There is no test writing of Static Essence Access
 			/// Although this does not use any different code than other tests to write essence
 		    /// However we do need a static essence codec in the SDK.
+
+	//	compressedJFIF
+		 aafUInt32 samplesWritten, bytesWritten;
+
+		checkResult(pEssenceAccess->WriteSamples(	1,
+						      sizeof(compressedJFIF),// buffer size
+				         (aafDataBuffer_t) compressedJFIF,	// THE data
+									&samplesWritten,
+									&bytesWritten));
+		checkResult(pEssenceAccess->CompleteWrite());
 
 	}
 	catch (HRESULT& rhr)
@@ -931,6 +1100,7 @@ static HRESULT CreateAudioAAFFile(aafWChar * pFileName, testDataFile_t *dataFile
 
 	return hr;
 }
+
 
 static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType, aafUID_t codecID)
 {
@@ -2334,12 +2504,17 @@ HRESULT CAAFEssenceAccess_test(testMode_t mode)
 
 	if (SUCCEEDED(hr))
 	{
-		cout << "    Create Static Essence Slot" << endl;
+		cout << "    Create Static Essence" << endl;
  		/**/
 		if(hr == AAFRESULT_SUCCESS && mode == kAAFUnitTestReadWrite)
 		{
-			cout << "        Write Static Essence" << endl;
+			cout << "        Write Static Essence (JPEG)" << endl;
 			hr = CreateStaticEssenceAAFFile(L"StaticEssenceAccess.aaf", NULL, testStandardCalls, kAAFCodecWAVE,kAAFTrue);
+		}
+		if (SUCCEEDED(hr))
+		{
+			cout << "        ReadSamples Static Essence (JPEG)" << endl;
+			hr = ReadStaticEssenceAAFFile(L"StaticEssenceAccess.aaf", testStandardCalls, kAAFCodecJPEG);
 		}
 	}
 
