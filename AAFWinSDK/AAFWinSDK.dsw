@@ -3,6 +3,21 @@ Microsoft Developer Studio Workspace File, Format Version 6.00
 
 ###############################################################################
 
+Project: "AAFIID"=".\ref-impl\AAFIID\AAFIID.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name COMIDL
+    End Project Dependency
+}}}
+
+###############################################################################
+
 Project: "AAFStandardCodecs"=".\ref-impl\AAFStandardCodecs\AAFStandardCodecs.dsp" - Package Owner=<4>
 
 Package=<5>
@@ -59,6 +74,9 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name COMIDL
     End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name AAFIID
+    End Project Dependency
 }}}
 
 ###############################################################################
@@ -76,6 +94,9 @@ Package=<4>
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name COMIDL
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name AAFIID
     End Project Dependency
 }}}
 
@@ -95,6 +116,9 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name COMIDL
     End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name AAFIID
+    End Project Dependency
 }}}
 
 ###############################################################################
@@ -112,6 +136,9 @@ Package=<4>
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name COMIDL
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name AAFIID
     End Project Dependency
 }}}
 
@@ -131,6 +158,18 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name COMIDL
     End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "Dump"=".\DevUtils\dump\dump.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
 }}}
 
 ###############################################################################
@@ -175,6 +214,9 @@ Package=<4>
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name ComEssenceDataTest
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name AAFIID
     End Project Dependency
 }}}
 
@@ -227,18 +269,6 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name AAFStandardCodecs
     End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "dump"=".\DevUtils\dump\dump.dsp" - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
 }}}
 
 ###############################################################################
