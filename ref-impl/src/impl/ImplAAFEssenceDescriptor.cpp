@@ -176,4 +176,3 @@ AAFRESULT
 	return AAFRESULT_SUCCESS;
 }
 
-OMDEFINE_STORABLE(ImplAAFEssenceDescriptor, AUID_AAFEssenceDescriptor);

@@ -693,4 +693,3 @@ ImplAAFDictionary *ImplAAFHeader::GetDictionary()
   return(result);
 }
 
-OMDEFINE_STORABLE(ImplAAFHeader, AUID_AAFHeader);
