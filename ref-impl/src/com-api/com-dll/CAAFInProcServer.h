@@ -48,11 +48,26 @@ public:
 
 	HRESULT Init( AAFComObjectInfo_t *, HINSTANCE );
 	HRESULT Term();
-
+  
+	//
+	// Normal COM In Proc Server entrypoints.
+	//
 	HRESULT GetClassObject( REFCLSID rclsid, REFIID riid, void ** ppv );
 	HRESULT CanUnloadNow( );
 	HRESULT RegisterServer( BOOL bRegTypeLib = FALSE );
 	HRESULT UnregisterServer( );
+
+	//
+	// Calls that need to be available for platforms that do 
+	// not support COM or Registry.
+	//
+
+	// Return the number of coclasses exported from this dll.
+	ULONG GetClassCount( );
+
+	// Get the nth implementation coclass id.
+	HRESULT GetClassObjectID(ULONG index, CLSID *pClassID);
+
 
 protected:
 	long GetRegisterIndex(long index);
