@@ -94,7 +94,7 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     GetName
-        (aafWChar *  name,  //@parm [in] Mob Name
+        (aafCharacter *  name,  //@parm [in] Mob Name
 		aafInt32 bufSize);	  //@parm [in] size of the buffer required to hold Mob Name + terminator
   //****************
   // GetNameBufLen()
@@ -178,7 +178,7 @@ public:
     GetMobInfo
         (aafTimeStamp_t *  lastModified,   //@parm [out] Modified Time
          aafTimeStamp_t *  creationTime,  //@parm [out] Creation Time
-		 aafWChar *  name,   //@parm [in,out] Mob Name
+		 aafCharacter *  name,   //@parm [in,out] Mob Name
 		 aafInt32  strSize);
 
   //****************
@@ -215,7 +215,7 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     SetName
-        (aafWChar *  name);  //@parm [in, ref] Mob Name
+        (aafCharacter *  name);  //@parm [in, ref] Mob Name
 
 
 // skip virtual aafErr_t Verify(char *buf, validateData_t *result);
@@ -230,7 +230,7 @@ public:
     AppendNewSlot
         (ImplAAFSegment * segment,   //@parm [in] Segment to append as slot component
 		 aafSlotID_t  slotID,   //@parm [in] The Slot ID
-         aafWChar *  slotName,   //@parm [in] Slot Name (optional)
+         aafCharacter *  slotName,   //@parm [in] Slot Name (optional)
 		 ImplAAFMobSlot ** newSlot);  //@parm [out] Newly created slot
 
 
@@ -242,7 +242,7 @@ public:
         (const aafRational_t &editRate,   //@parm [in] Edit rate property value
 		 ImplAAFSegment * segment,   //@parm [in] Segment to append as slot component
 		 aafSlotID_t  slotID,   //@parm [in] The Slot ID
-         const aafWChar *  slotName,   //@parm [in] Slot Name (optional)
+         const aafCharacter *  slotName,   //@parm [in] Slot Name (optional)
 		 aafPosition_t  origin,
 		 ImplAAFTimelineMobSlot ** newSlot);  //@parm [out] Newly created slot
 
@@ -260,8 +260,8 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     AppendComment
-        (aafWChar *  category,   //@parm [in,ref] Comment heading
-		 aafWChar *  comment);  //@parm [in,ref] Comment value
+        (aafCharacter *  category,   //@parm [in,ref] Comment heading
+		 aafCharacter *  comment);  //@parm [in,ref] Comment value
 
   //****************
   // RemoveComment()
@@ -337,7 +337,7 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     Copy
-        (aafWChar *  destMobName,   //@parm [in] Optional Input. The name to be assigned to the new copy of the Mob.
+        (aafCharacter *  destMobName,   //@parm [in] Optional Input. The name to be assigned to the new copy of the Mob.
   // The destMobName argument is optional. Specify a NULL value if no desti-
   // nation Mob name is desired.
 		 ImplAAFMob ** destMob);  //@parm [out] Destination Mob
