@@ -95,6 +95,10 @@ public:
     //   @this const
   void getAt(Element& value, const size_t index) const;
 
+    // @cmember Get the value of the <p Element> at
+    //          position <p index> in this <c OMVector>.
+  Element& getAt(const size_t index);
+
     // @cmember Insert <p value> into this <c OMVector> at
     //          position <p index>. Existing values in this
     //          <c OMVector> at <p index> and higher are
