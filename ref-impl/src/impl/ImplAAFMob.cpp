@@ -70,7 +70,22 @@ ImplAAFMob::ImplAAFMob ()
 
 
 ImplAAFMob::~ImplAAFMob ()
-{}
+{
+	// Release all of the mob slot pointers.
+	ImplAAFMobSlot *pSlot = NULL;
+	size_t size = _slots.getSize();
+	for (size_t i = 0; i < size; i++)
+	{
+		_slots.getValueAt(pSlot, i);
+		if (pSlot)
+		{
+			pSlot->ReleaseReference();
+			pSlot = NULL;
+			// Set the current value to 0 so that the OM can perform necessary cleanup.
+			_slots.setValueAt(0, i);
+		}
+	}
+}
 
 
 AAFRESULT STDMETHODCALLTYPE
@@ -86,6 +101,9 @@ AAFRESULT STDMETHODCALLTYPE
 	ImplAAFMob::AppendSlot
         (ImplAAFMobSlot *  pSlot)  //@parm [in,out] Mob Name length
 {
+	if (NULL == pSlot)
+		return AAFRESULT_NULL_PARAM;
+
   return AAFRESULT_NOT_IMPLEMENTED;
 }
 
@@ -427,6 +445,8 @@ AAFRESULT STDMETHODCALLTYPE
 	}
 	XEXCEPT
 	{
+		if (theEnum)
+			theEnum->ReleaseReference();
 		return(XCODE());
 	}
 	XEND;
@@ -681,6 +701,8 @@ AAFRESULT STDMETHODCALLTYPE
 			RAISE(OM_ERR_TRACK_NOT_FOUND);
 		}
 		*destSlot = tmpSlot;
+		if (tmpSlot)
+			tmpSlot->AcquireReference();
 	}
   XEXCEPT
 	{
