@@ -83,7 +83,7 @@ AAFRESULT STDMETHODCALLTYPE
  AAFRESULT STDMETHODCALLTYPE
    ImplAAFSourceMob::AddNilReference (aafSlotID_t slotID,
                            aafLength_t  length,
-                           ImplAAFDataDef *dataDef,
+                           aafUID_t *dataDef,
                            aafRational_t  editRate)
 {
 	ImplAAFSourceClip *		sub = NULL;
@@ -110,7 +110,7 @@ AAFRESULT STDMETHODCALLTYPE
 		sourceRef.sourceSlotID = 0;
 		CvtInt32toPosition(0, sourceRef.startTime);
 		sub = (ImplAAFSourceClip *)CreateImpl(CLSID_AAFSourceClip);
-		CHECK(sub->InitializeSourceClip (dataDef, length, sourceRef));
+		CHECK(sub->InitializeSourceClip (dataDef, &length, sourceRef));
 		CHECK(AppendNewTimelineSlot(editRate, sub, slotID, NULL, zeroPos, 
 												&newSlot));
 	}
