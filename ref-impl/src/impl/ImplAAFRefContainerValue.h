@@ -67,7 +67,7 @@ protected:
                         OMProperty *property);
   
   // Retrieve the property as an OMReferenceContainer.
-  OMReferenceContainer* referenceContainer(void) const;
+  virtual OMReferenceContainer* referenceContainer(void) const;
 
   // Utility for converting the a property value (parameter) into an object.
   static ImplAAFStorable * GetStorableFromPropertyValue(ImplAAFPropertyValue* pPropertyValue, AAFRESULT & result);

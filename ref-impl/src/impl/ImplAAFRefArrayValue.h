@@ -37,11 +37,11 @@
 #include "ImplAAFRefContainerValue.h"
 #endif
 
+// Forward references:
 class ImplAAFTypeDefArray;
-class OMReferenceVectorProperty;
+class OMObjectVector;
 class ImplAAFStorable;
-class TempStorable;
-class TempPropertyDefinition;
+template <typename ReferencedObject> class OMReferenceVector;
 
 class ImplAAFRefArrayValue : public ImplAAFRefContainerValue
 {
@@ -67,8 +67,12 @@ protected:
                         OMProperty *property,
                         bool fixedSize);
   
-  // Retrieve the property as an OMReferenceVectorProperty.
-  OMReferenceVectorProperty * referenceVectorProperty(void) const;
+  
+  // Retrieve the property or temporary reference vector as an OMReferenceContainer.
+  virtual OMReferenceContainer* referenceContainer(void) const;
+
+	// Retrieve the property or temporary reference vector as an OMObjectVector.
+	OMObjectVector * referenceVector(void) const;
   
   bool fixedSize(void) const;
   
@@ -139,12 +143,8 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE InsertElementAt(ImplAAFPropertyValue* pPropertyValue, aafUInt32 index);
   
 private:
-  void CleanupTemporaryProperty(void);
-
-private:
   bool _fixedSize; // true if the array property is fixed size
-  TempPropertyDefinition * _tempPropertyDefinition;
-  TempStorable *_tempStorable; // container for a temporary om property.
+  OMReferenceVector<ImplAAFStorable> * _tempStorableVector; // container for temporary storables
 };
 
 //
