@@ -1171,6 +1171,7 @@ void CreateAndRegisterPersonnelResource (IAAFDictionary * pDict)
 									   L"GivenName",
 									   ptd_String,
 									   kAAFFalse,	// mandatory
+									   kAAFFalse,	// not a unique identifier
 									   &pd_unused));
     pd_unused->Release();
     pd_unused=NULL;
@@ -1178,6 +1179,7 @@ void CreateAndRegisterPersonnelResource (IAAFDictionary * pDict)
 									    L"FamilyName",
 									    ptd_String,
 									    kAAFFalse,	// mandatory
+									    kAAFFalse,	// not a unique identifier
 									    &pd_unused));
     pd_unused->Release();
     pd_unused=NULL;
@@ -1199,6 +1201,7 @@ void CreateAndRegisterPersonnelResource (IAAFDictionary * pDict)
 									    L"Position",
 									    ptd_Position,
 									    kAAFFalse,   // mandatory
+									    kAAFFalse,	// not a unique identifier
 									    &pd_unused));
     pd_unused->Release();
     pd_unused=NULL;
@@ -1220,6 +1223,7 @@ void CreateAndRegisterPersonnelResource (IAAFDictionary * pDict)
 									    L"ContractID",
 									    ptd_ui32,
 									    kAAFTrue,    // optional
+									    kAAFFalse,	// not a unique identifier
 									    &pd_unused));
     pd_unused->Release();
     pd_unused=NULL;
@@ -1234,6 +1238,7 @@ void CreateAndRegisterPersonnelResource (IAAFDictionary * pDict)
 									    L"Role",
 									    ptd_String,
 									    kAAFTrue,    // optional
+									    kAAFFalse,	// not a unique identifier
 									    &pd_unused));
     pd_unused->Release();
     pd_unused=NULL;
@@ -1515,6 +1520,7 @@ void CreateAndRegisterAdminMob (IAAFDictionary * pDict)
 									    L"Personnel",
 									    ptd_PersonnelVector,
 									    kAAFFalse,
+									    kAAFFalse,	// not a unique identifier
 									    &pd_unused));
     pd_unused->Release();
     pd_unused=NULL;
