@@ -34,8 +34,6 @@ AD_XMETHOD1(GetEssenceDescription,
   // - the ppEssence pointer is valid.
   // \(other conditions here\)
   // 
-  // If this method fails nothing is written to *ppEssence.
-  // 
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect\, it will return the first one
   // encountered in the order given below:
@@ -60,8 +58,6 @@ AD_XMETHOD1(SetEssenceDescription,
   // Succeeds if all of the following are true:
   // - the pEssence pointer is valid.
   // \(other conditions here\)
-  // 
-  // If this method fails nothing is written to *pEssence.
   // 
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect\, it will return the first one
@@ -90,12 +86,10 @@ AD_XMETHOD2(Setup,
 			This function creates Source Mobs that are not in the standard
   // set \(that is\, not File Source Mobs\, tape Source Mobs\, or film
   // Source Mobs\).  The class name of the Essence Descriptor must be
-  // passed in\, as well as a Mob type.  This is the function upon
-  // which omfmFileMobNew\, omfmTapeMobNew\, and omfmFilmMobNew are
-  // built. If a tape Source Mob or a film Source Mob is required\,
-  // then one of these functions should be used instead.  If you need
-  // a type of Source Mob other than those supplied with the Toolkit\,
-  // then a wrapper function should be written that calls this
+  // passed in\, as well as a Mob type.
+  //
+  // If you need a type of Source Mob other than those supplied with the
+  // Toolkit\, then a wrapper function should be written that calls this
   // function to build underlying data structures.
   // 
   // This function has no relation to raw data \(non-AAF\) data
@@ -160,6 +154,12 @@ AD_XMETHOD4(AddNilReference,
   // AAFRESULT_SUCCESS
   //   - succeeded.  \(This is the only code indicating success.\)
   //
+  // AAFRESULT_NULL_PARAM
+  //   - dataDef is NULL
+  //
+  // AAFRESULT_BADRATE
+  //   - the editRate is not valid
+  //
   // \(other codes here.\))
 
 
@@ -186,15 +186,11 @@ AD_XMETHOD4(AddTimecodeClip,
 			  Duration of Timecode.,
 			This function adds a Timecode slot to a specified tape Mob or
   // film Mob\, with a specified starting timecode\, length\, and edit
-  // rate. Call the function omfm-MobValidateTimecodeRange following
-  // this function to make sure that the tape Mob has valid Timecode
-  // on a specified set of channels.  This function does not add the
-  // Filler to any of the other slots to indicate that the Timecode
-  // is valid for that channel\, so you should use
-  // omfmMobValida-teTimecodeRange for that purpose.
+  // rate.  This function does not add the Filler to any of the other slots
+  // to indicate that the Timecode is valid for that channel.
   // 
   // Note: The startTC parameter is expressed in frames since
-  // midnight. Use the function TimecodeToOffset to compute this number.
+  // midnight.
   // 
   // The length32 parameter can be the value FULL_RANGE\, in which
   // case the length is 24 hours.
@@ -322,8 +318,6 @@ AD_XMETHOD5(ValidateTimecodeRange,
   // - the pEssenceKind pointer is valid.
   // \(other conditions here\)
   // 
-  // If this method fails nothing is written to *ppEssence.
-  // 
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect\, it will return the first one
   // encountered in the order given below:
@@ -400,8 +394,6 @@ AD_XMETHOD7(AddPhysSourceRef,
   // - the pSourceRefObj pointer is valid.
   // \(other conditions here\)
   // 
-  // If this method fails nothing is written to *ppEssence.
-  // 
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect\, it will return the first one
   // encountered in the order given below:
@@ -473,22 +465,19 @@ AD_XMETHOD_10(AddPulldownRef,
   // - Sound
   //
   // Note: Possible values for pulldownKind are:
-  // - kOMFTwoThreePD
-  // - kOMFPALPD
-  // - kOMFOneToOneNTSC
-  // - kOMFOneToOnePAL
-  // - kOMFVideoTapNTSC
+  // - kAAFTwoThreePD
+  // - kAAFPALPD
+  // - kAAFOneToOneNTSC
+  // - kAAFOneToOnePAL
   //
   // Note: Possible values for direction are:
-  // - kOMFTapeToFilmSpeed
-  // - kOMFFilmToTapeSpeed
+  // - kAAFTapeToFilmSpeed
+  // - kAAFFilmToTapeSpeed
   //
   // Succeeds if all of the following are true:
   // - the pEssenceKind pointer is valid.
   // - the pSourceRefObj pointer is valid.
   // \(other conditions here\)
-  // 
-  // If this method fails nothing is written to *ppEssence.
   // 
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect\, it will return the first one
