@@ -44,7 +44,7 @@ Creates a single uninitialized AAF object of the class associated
   // with a specified stored object id.)
 
 
-AD_XMETHOD1(RegisterClass,
+AD_XMETHOD1(RegisterClassDef,
 
 			[in],
 			objIn,
@@ -65,7 +65,7 @@ AD_XMETHOD1(RegisterClass,
   //   - The class def ID has already been registered.)
 
 
-AD_XMETHOD2(LookupClass,
+AD_XMETHOD2(LookupClassDef,
 
 			[in\, ref],
 			objPass,
@@ -92,7 +92,7 @@ AD_XMETHOD2(LookupClass,
   //   - The given ID is not recognized as a class definition ID.)
 
 
-AD_XMETHOD1(GetClassDefinitions,
+AD_XMETHOD1(GetClassDefs,
 
 			[out\,retval],
 			objOut,
@@ -108,7 +108,32 @@ AD_XMETHOD1(GetClassDefinitions,
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppEnum\))
 
 
-AD_XMETHOD1(RegisterType,
+AD_XMETHOD1(CountClassDefs,
+			[out\, retval],
+			objPass,
+			aafUInt32 *,
+			pResult,
+			Total number of class definition objects,
+			Writes the number of class definition objects into the
+  // *pResult argument.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pResult pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pResult.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pResult is null.)
+
+
+AD_XMETHOD1(RegisterTypeDef,
 
 			[in],
 			objIn,
@@ -128,7 +153,7 @@ AD_XMETHOD1(RegisterType,
   //   - The given type has already been registered.)
 
 
-AD_XMETHOD2(LookupType,
+AD_XMETHOD2(LookupTypeDef,
 
 			[in\, ref],
 			objPass,
@@ -155,7 +180,7 @@ AD_XMETHOD2(LookupType,
   //   - The given ID is not recognized as a type definition ID.)
 
 
-AD_XMETHOD1(GetTypeDefinitions,
+AD_XMETHOD1(GetTypeDefs,
 
 			[out\,retval],
 			objOut,
@@ -171,7 +196,32 @@ AD_XMETHOD1(GetTypeDefinitions,
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppEnum\))
 
 
-AD_XMETHOD1(RegisterDataDefinition,
+AD_XMETHOD1(CountTypeDefs,
+			[out\, retval],
+			objPass,
+			aafUInt32 *,
+			pResult,
+			Total number of type definition objects,
+			Writes the number of type definition objects into the
+  // *pResult argument.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pResult pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pResult.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pResult is null.)
+
+
+AD_XMETHOD1(RegisterDataDef,
 
 			[in],
 			objIn,
@@ -182,7 +232,7 @@ AD_XMETHOD1(RegisterDataDefinition,
 			Add the data definition object to the header's list of definitions.)
 
 
-AD_XMETHOD2(LookupDataDefinition,
+AD_XMETHOD2(LookupDataDef,
 
             [in\, ref],
             objPass,
@@ -199,7 +249,7 @@ AD_XMETHOD2(LookupDataDefinition,
             Return the data definition object with the given id.)
 
 
-AD_XMETHOD1(GetDataDefinitions,
+AD_XMETHOD1(GetDataDefs,
 
             [out\,retval],
             objOut,
@@ -210,7 +260,32 @@ AD_XMETHOD1(GetDataDefinitions,
             Return an enumerator for aff data definitions.)
 
 
-AD_XMETHOD1(RegisterOperationDefinition,
+AD_XMETHOD1(CountDataDefs,
+			[out\, retval],
+			objPass,
+			aafUInt32 *,
+			pResult,
+			Total number of data definition objects,
+			Writes the number of data definition objects into the
+  // *pResult argument.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pResult pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pResult.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pResult is null.)
+
+
+AD_XMETHOD1(RegisterOperationDef,
 
             [in],
             objIn,
@@ -221,7 +296,7 @@ AD_XMETHOD1(RegisterOperationDefinition,
             Add the operation definition object to the header's list of definitions.)
 
 
-AD_XMETHOD2(LookupOperationDefinition,
+AD_XMETHOD2(LookupOperationDef,
 
             [in\, ref],
             objPass,
@@ -238,7 +313,7 @@ AD_XMETHOD2(LookupOperationDefinition,
             Return the operation definition object with the given id.)
 
 
-AD_XMETHOD1(GetOperationDefinitions,
+AD_XMETHOD1(GetOperationDefs,
 
             [out\,retval],
             objOut,
@@ -249,7 +324,32 @@ AD_XMETHOD1(GetOperationDefinitions,
             Return an enumerator for all operation definitions.)
 
 
-AD_XMETHOD1(RegisterParameterDefinition,
+AD_XMETHOD1(CountOperationDefs,
+			[out\, retval],
+			objPass,
+			aafUInt32 *,
+			pResult,
+			Total number of operation definition objects,
+			Writes the number of operation definition objects into the
+  // *pResult argument.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pResult pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pResult.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pResult is null.)
+
+
+AD_XMETHOD1(RegisterParameterDef,
 
             [in],
             objIn,
@@ -257,10 +357,10 @@ AD_XMETHOD1(RegisterParameterDefinition,
             pParmDef,
             Parameter Definition Object,
 
-            Add the operation definition object to the header's list of definitions.)
+            Add the parameter definition object to the header's list of definitions.)
 
 
-AD_XMETHOD2(LookupParameterDefinition,
+AD_XMETHOD2(LookupParameterDef,
 
             [in\, ref],
             objPass,
@@ -277,7 +377,7 @@ AD_XMETHOD2(LookupParameterDefinition,
             Return the parameter definition object with the given id.)
 
 
-AD_XMETHOD1(GetParameterDefinitions,
+AD_XMETHOD1(GetParameterDefs,
 
             [out\,retval],
             objOut,
@@ -288,7 +388,32 @@ AD_XMETHOD1(GetParameterDefinitions,
             Return an enumerator for all parameter definitions.)
 
 
-AD_XMETHOD1(RegisterCodecDefinition,
+AD_XMETHOD1(CountParameterDefs,
+			[out\, retval],
+			objPass,
+			aafUInt32 *,
+			pResult,
+			Total number of parameter definition objects,
+			Writes the number of parameter definition objects into the
+  // *pResult argument.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pResult pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pResult.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pResult is null.)
+
+
+AD_XMETHOD1(RegisterCodecDef,
 
             [in],
             objIn,
@@ -299,7 +424,7 @@ AD_XMETHOD1(RegisterCodecDefinition,
             Add the codec definition object to the header's list of definitions.)
 
 
-AD_XMETHOD2(LookupCodecDefinition,
+AD_XMETHOD2(LookupCodecDef,
 
             [in\, ref],
             objPass,
@@ -316,7 +441,7 @@ AD_XMETHOD2(LookupCodecDefinition,
             Return the codec definition object with the given id.)
 
 
-AD_XMETHOD1(GetCodecDefinitions,
+AD_XMETHOD1(GetCodecDefs,
 
             [out\,retval],
             objOut,
@@ -327,7 +452,32 @@ AD_XMETHOD1(GetCodecDefinitions,
             Return an enumerator for all codec definitions.)
 
 
-AD_XMETHOD1(RegisterContainerDefinition,
+AD_XMETHOD1(CountCodecDefs,
+			[out\, retval],
+			objPass,
+			aafUInt32 *,
+			pResult,
+			Total number of codec definition objects,
+			Writes the number of codec definition objects into the
+  // *pResult argument.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pResult pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pResult.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pResult is null.)
+
+
+AD_XMETHOD1(RegisterContainerDef,
 
             [in],
             objIn,
@@ -338,7 +488,7 @@ AD_XMETHOD1(RegisterContainerDefinition,
             Add the container definition object to the header's list of definitions.)
 
 
-AD_XMETHOD2(LookupContainerDefinition,
+AD_XMETHOD2(LookupContainerDef,
 
             [in\, ref],
             objPass,
@@ -355,7 +505,7 @@ AD_XMETHOD2(LookupContainerDefinition,
             Return the container definition object with the given id.)
 
 
-AD_XMETHOD1(GetContainerDefinitions,
+AD_XMETHOD1(GetContainerDefs,
 
             [out\,retval],
             objOut,
@@ -366,18 +516,43 @@ AD_XMETHOD1(GetContainerDefinitions,
             Return an enumerator for all container definitions.)
 
 
-AD_XMETHOD1(RegisterInterpolationDefinition,
+AD_XMETHOD1(CountContainerDefs,
+			[out\, retval],
+			objPass,
+			aafUInt32 *,
+			pResult,
+			Total number of container definition objects,
+			Writes the number of container definition objects into the
+  // *pResult argument.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pResult pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pResult.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pResult is null.)
+
+
+AD_XMETHOD1(RegisterInterpolationDef,
 
             [in],
             objIn,
             AAFInterpolationDef,
-            pInterpDef,
+            pInterpolationDef,
             Interpolation Definition Object,
 
             Add the Interpolation definition object to the header's list of definitions.)
 
 
-AD_XMETHOD2(LookupInterpolationDefinition,
+AD_XMETHOD2(LookupInterpolationDef,
 
             [in\, ref],
             objPass,
@@ -388,13 +563,13 @@ AD_XMETHOD2(LookupInterpolationDefinition,
             [out\,retval],
             objOut,
             AAFInterpolationDef,
-            ppInterpDef,
+            ppInterpolationDef,
             Interpolation definition object,
 
             Return the Interpolation definition object with the given id.)
 
 
-AD_XMETHOD1(GetInterpolationDefinitions,
+AD_XMETHOD1(GetInterpolationDefs,
 
             [out\,retval],
             objOut,
@@ -405,7 +580,32 @@ AD_XMETHOD1(GetInterpolationDefinitions,
             Return an enumerator for aff Interpolation definitions.)
 
 
-AD_XMETHOD1(RegisterPluginDescriptor,
+AD_XMETHOD1(CountInterpolationDefs,
+			[out\, retval],
+			objPass,
+			aafUInt32 *,
+			pResult,
+			Total number of interpolation definition objects,
+			Writes the number of interpolation definition objects into the
+  // *pResult argument.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pResult pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pResult.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pResult is null.)
+
+
+AD_XMETHOD1(RegisterPluginDef,
 
             [in],
             objIn,
@@ -416,7 +616,7 @@ AD_XMETHOD1(RegisterPluginDescriptor,
             Add the Interpolation definition object to the header's list of definitions.)
 
 
-AD_XMETHOD2(LookupPluginDescriptor,
+AD_XMETHOD2(LookupPluginDef,
 
             [in\, ref],
             objPass,
@@ -433,7 +633,7 @@ AD_XMETHOD2(LookupPluginDescriptor,
             Return the plugin descriptor object with the given id.)
 
 
-AD_XMETHOD1(GetPluginDescriptors,
+AD_XMETHOD1(GetPluginDefs,
 
             [out\,retval],
             objOut,
@@ -442,4 +642,29 @@ AD_XMETHOD1(GetPluginDescriptors,
             Definition Enumeration,
 
             Return an enumerator for all plugin descriptors.)
+
+
+AD_XMETHOD1(CountPluginDefs,
+			[out\, retval],
+			objPass,
+			aafUInt32 *,
+			pResult,
+			Total number of plugin definition objects,
+			Writes the number of plugin definition objects into the
+  // *pResult argument.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pResult pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pResult.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pResult is null.)
 AD_XCLASS_END(Concrete, StoredObject)

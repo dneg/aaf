@@ -95,32 +95,58 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     SetIsTimeWarp
-        // @parm [in] Degrade To Effect Definition Object
+        // @parm [in] Degrade To Operation Definition Object
         (aafBool  IsTimeWarp);
 
   //****************
-  // PrependDegradeToEffects()
+  // PrependDegradeToOperation()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    PrependDegradeToOperations (
+    PrependDegradeToOperation (
         // @parm [in] is timewarp value
       ImplAAFOperationDef  *pOperationDef);
 
   //****************
-  // AppendDegradeToEffects()
+  // AppendDegradeToOperation()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    AppendDegradeToOperations (
+    AppendDegradeToOperation (
         // @parm [in] is timewarp value
       ImplAAFOperationDef  *pOperationDef);
 
   //****************
-  // GetDegradeToEffects()
+  // InsertDegradeToOperationAt()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    InsertDegradeToOperationAt (
+        // @parm [in] index to insert
+      aafUInt32 index,
+        // @parm [in] operation def to insert
+      ImplAAFOperationDef  *pOperationDef);
+
+  //****************
+  // RemoveDegradeToOperationAt()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    RemoveDegradeToOperationAt (
+        // @parm [in] index of operation def to remove
+      aafUInt32 index);
+
+  //****************
+  // GetDegradeToOperations()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     GetDegradeToOperations (
         // @parm [out] Operation Definition Enumeration
       ImplEnumAAFOperationDefs  **ppEnum);
+
+  //****************
+  // CountDegradeToOperations()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    CountDegradeToOperations (
+        // @parm [out, retval] result
+      aafUInt32 * pResult);
 
   //****************
   // GetCategory()
@@ -181,7 +207,7 @@ public:
   // AppendParameterDefs()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    AddParameterDefs
+    AddParameterDef
         // @parm [in] Parameter definition Object
         (ImplAAFParameterDef * pAAFParameterDef);
 
@@ -189,9 +215,27 @@ public:
   // GetParameterDefinitions()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetParameterDefinitions
+    GetParameterDefs
         // @parm [out,retval] Parameter definition enumeration
         (ImplEnumAAFParameterDefs ** ppEnum);
+
+  //****************
+  // CountParameterDefinitions()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    CountParameterDefs
+        // @parm [out,retval] count of Parameter definitions
+        (aafUInt32 * pResult);
+
+  //****************
+  // LookupParameterDef()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    LookupParameterDef
+        // @parm [in] id to look up
+        (const aafUID_t & parameterDefId,
+        // @parm [out, retval] returned parameter def
+		 ImplAAFParameterDef ** ppParameterDef);
 
 private:
 	OMFixedSizeProperty<aafUID_t>					_dataDef;

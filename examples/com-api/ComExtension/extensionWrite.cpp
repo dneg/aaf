@@ -163,7 +163,7 @@ void extensionWrite (const aafCharacter * filename)
  
 
   // Add the new AdministrativeMob object to the file's header.
-  check (pHead->AppendMob (pAdminMob));
+  check (pHead->AddMob (pAdminMob));
 
   // Add several PersonnelResource objects to the AdminMob.
   // Instantiate the PersonnelResource object.

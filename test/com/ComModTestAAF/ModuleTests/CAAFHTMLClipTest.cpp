@@ -240,7 +240,7 @@ void HTMLClipTest::CreateHTMLClip()
   IAAFCompositionMob *pCompositionMob = NULL;
   IAAFMob *pReferencingMob = NULL;
   IAAFSegment *pSegment = NULL;
-  IAAFMobSlot *pMobSlot = NULL;
+  IAAFTimelineMobSlot *pMobSlot = NULL;
 
 
   try
@@ -255,7 +255,7 @@ void HTMLClipTest::CreateHTMLClip()
     checkResult(pReferencedMob->SetName(L"HTMLClipTest::ReferencedMob"));
 
     // Save the master mob.
-    checkResult(_pHeader->AppendMob(pReferencedMob));
+    checkResult(_pHeader->AddMob(pReferencedMob));
 
     // Use EssenceAccess to write some html essence
       // Create a file mob for the html essence.
@@ -286,11 +286,17 @@ void HTMLClipTest::CreateHTMLClip()
   
     checkResult(pHTMLClip->QueryInterface(IID_IAAFSegment, (void **)&pSegment));
     IAAFMobSlot *pSlot = NULL;
-    checkResult(pReferencingMob->AppendNewSlot(pSegment, 1, L"HTMLClipTest", &pMobSlot));
+	aafRational_t editRate = { 0, 1};
+    checkResult(pReferencingMob->AppendNewTimelineSlot(editRate,
+													   pSegment,
+													   1,
+													   L"HTMLClipTest",
+													   0,
+													   &pMobSlot));
 
 
     // Save the referencing mob.
-    checkResult(_pHeader->AppendMob(pReferencingMob));
+    checkResult(_pHeader->AddMob(pReferencingMob));
   }
   catch (HRESULT& rHR)
   {
@@ -381,21 +387,21 @@ void HTMLClipTest::OpenHTMLClip()
   try
   {
     // Get the number of composition mobs in the file (should be one)
-    checkResult(_pHeader->GetNumMobs(kCompMob, &compositionMobs));
+    checkResult(_pHeader->CountMobs(kCompMob, &compositionMobs));
     checkExpression(1 == compositionMobs, AAFRESULT_TEST_FAILED);
 
     // Get the composition mob. There should only be one.
     aafSearchCrit_t criteria;
     criteria.searchTag = kByMobKind;
     criteria.tags.mobKind = kCompMob;
-    checkResult(_pHeader->EnumAAFAllMobs(&criteria, &pEnumMobs));
+    checkResult(_pHeader->GetMobs(&criteria, &pEnumMobs));
     checkResult(pEnumMobs->NextOne(&pReferencingMob));
     checkResult(pReferencingMob->QueryInterface(IID_IAAFCompositionMob, (void **)&pCompositionMob));
 
     // Get the html clip in the slot. There should be only one.
-    checkResult(pReferencingMob->GetNumSlots(&mobSlots));
+    checkResult(pReferencingMob->CountSlots(&mobSlots));
     checkExpression(1 == mobSlots, AAFRESULT_TEST_FAILED);
-    checkResult(pReferencingMob->EnumAAFAllMobSlots(&pEnumSlots));
+    checkResult(pReferencingMob->GetSlots(&pEnumSlots));
     checkResult(pEnumSlots->NextOne(&pMobSlot));
     checkResult(pMobSlot->GetSegment(&pSegment));
     checkResult(pSegment->QueryInterface(IID_IAAFHTMLClip, (void **)&pHTMLClip));

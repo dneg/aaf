@@ -126,7 +126,8 @@ ImplAAFEventMobSlot::SetSegment (/*[in]*/ ImplAAFSegment * pSegment)
     if (NULL != pSequence)
     {
       aafUID_t sequDataDef, componentDataDef;
-      aafInt32 i, numberOfComponents = 0;
+      aafUInt32 i;
+	  aafUInt32 numberOfComponents = 0;
       aafPosition_t previousPosition;
       
       
@@ -134,7 +135,7 @@ ImplAAFEventMobSlot::SetSegment (/*[in]*/ ImplAAFSegment * pSegment)
       CHECK(pSequence->GetDataDef(&sequDataDef));
 
       // There must be at least one component in the sequence.
-      CHECK(pSequence->GetNumComponents(&numberOfComponents));
+      CHECK(pSequence->CountComponents(&numberOfComponents));
       if (0 >= numberOfComponents)
         RAISE(AAFRESULT_OBJECT_SEMANTIC);
 
@@ -146,7 +147,7 @@ ImplAAFEventMobSlot::SetSegment (/*[in]*/ ImplAAFSegment * pSegment)
       CHECK(pComponent->GetDataDef(&componentDataDef));
  
 	  CHECK(GetDictionary(&pDict));
-	  CHECK(pDict->LookupDataDefinition(componentDataDef, &pDef));
+	  CHECK(pDict->LookupDataDef(componentDataDef, &pDef));
 	  pDict->ReleaseReference();
 	  pDict = NULL;
 	  CHECK(pDef->DoesDataDefConvertTo(sequDataDef, &willConvert));
@@ -182,7 +183,7 @@ ImplAAFEventMobSlot::SetSegment (/*[in]*/ ImplAAFSegment * pSegment)
         // The component must have the same data definition [id] as the
         // sequence.
 		CHECK(GetDictionary(&pDict));
-		CHECK(pDict->LookupDataDefinition(componentDataDef, &pDef));
+		CHECK(pDict->LookupDataDef(componentDataDef, &pDef));
 		pDict->ReleaseReference();
 		pDict = NULL;
 		CHECK(pDef->DoesDataDefConvertTo(sequDataDef, &willConvert));

@@ -95,7 +95,7 @@ AAFRESULT STDMETHODCALLTYPE
 			_enumProp->getValueAt(&value, _current);
 			CHECK(_enumObj->MyHeadObject(&head));
 			CHECK(head->GetDictionary (&dict));
-			CHECK(dict->LookupParameterDefinition(value, ppParameterDef));
+			CHECK(dict->LookupParameterDef (value, ppParameterDef));
 			head->ReleaseReference();
 			head = NULL;
 			dict->ReleaseReference();

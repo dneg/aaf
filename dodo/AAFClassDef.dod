@@ -89,7 +89,7 @@ AD_XMETHOD1(CountPropertyDefs,
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pCount\))
 
 
-AD_XMETHOD5(AppendNewPropertyDef,
+AD_XMETHOD5(RegisterNewPropertyDef,
 			[in\, ref],
 			objPass,
 			aafUID_constref,
@@ -120,7 +120,7 @@ AD_XMETHOD5(AppendNewPropertyDef,
 			ppPropDef,
 			return pointer to newly created property def,
 
-     Creates a new property definition and appends it to this class
+     Creates a new property definition and registers it in this class
   // definition.  If ppPropDef is non-NULL\, will return the new
   // property definition in ppPropDef.
   // 
@@ -131,7 +131,7 @@ AD_XMETHOD5(AppendNewPropertyDef,
   // dictionary.  If this class has already been registered\, it is
   // possible to add optional properties\, but not through this
   // method.  Optional properties added to an existing \(registered\)
-  // class may be added through the AppendOpionalPropertyDef\(\)
+  // class may be added through the RegisterOptionalPropertyDef\(\)
   // method.
   // 
   // Succeeds if:
@@ -150,7 +150,7 @@ AD_XMETHOD5(AppendNewPropertyDef,
   //   - The given ID has already been registered.)
 
 
-AD_XMETHOD4(AppendOptionalPropertyDef,
+AD_XMETHOD4(RegisterOptionalPropertyDef,
 			[in\, ref],
 			objPass,
 			aafUID_constref,
@@ -175,7 +175,7 @@ AD_XMETHOD4(AppendOptionalPropertyDef,
 			ppPropDef,
 			return pointer to newly created property def,
 
-     Creates a new property definition and appends it to this class
+     Creates a new property definition and registers it in this class
   // definition.  If ppPropDef is non-NULL\, will return the new
   // property definition in ppPropDef.
   //
@@ -184,7 +184,7 @@ AD_XMETHOD4(AppendOptionalPropertyDef,
   // being added to a class which is already registered.  If so\, it
   // must be optional and this method will declare it so.  If it is
   // wished to add a mandatory property\, that may be done through the
-  // AppendNewPropertyDef\(\) method\, but that must be called on a class
+  // RegisterNewPropertyDef\(\) method\, but that must be called on a class
   // which is not yet registered.
   // 
   // Succeeds if:

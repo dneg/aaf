@@ -71,7 +71,7 @@ ImplAAFDefObject::ImplAAFDefObject ()
   _persistentProperties.put(_description.address());
   _persistentProperties.put(_identification.address());
   _persistentProperties.put(_descriptors.address());
-		(void)AppendPluginDescriptor (NULL);		// !!! TEMP Until optional properties
+		(void)AppendPluginDef (NULL);		// !!! TEMP Until optional properties
 }
 
 
@@ -229,7 +229,7 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFDefObject::AppendPluginDescriptor (
+    ImplAAFDefObject::AppendPluginDef (
       ImplAAFPluginDescriptor *pPluginDescriptor)
 {
 	aafUID_t	*tmp, newUID;
@@ -278,7 +278,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFDefObject::PrependPluginDescriptor (
+    ImplAAFDefObject::PrependPluginDef (
       ImplAAFPluginDescriptor *pPluginDescriptor)
 {
 	aafUID_t	*tmp = NULL, newUID;
@@ -319,7 +319,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFDefObject::EnumPluginDescriptors (
+    ImplAAFDefObject::GetPluginDefs (
       ImplEnumAAFPluginDescriptors **ppEnum)
 {
 	if(ppEnum == NULL)
@@ -334,3 +334,70 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDefObject::CountPluginDefs
+        (aafUInt32 * pResult)
+{
+  if (! pResult)
+	return AAFRESULT_NULL_PARAM;
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDefObject::InsertPluginDefAt
+        (aafUInt32 index,
+		 ImplAAFPluginDescriptor * pPluginDescriptor)
+{
+  if (! pPluginDescriptor)
+	return AAFRESULT_NULL_PARAM;
+
+  aafUInt32 count;
+  AAFRESULT hr;
+  hr = CountPluginDefs (&count);
+  if (AAFRESULT_FAILED (hr))
+	return hr;
+
+  if (index > count)
+	return AAFRESULT_BADINDEX;
+
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDefObject::GetPluginDefAt
+        (aafUInt32 index,
+		 ImplAAFPluginDescriptor ** ppPluginDescriptor)
+{
+  if (! ppPluginDescriptor)
+	return AAFRESULT_NULL_PARAM;
+
+  aafUInt32 count;
+  AAFRESULT hr;
+  hr = CountPluginDefs (&count);
+  if (AAFRESULT_FAILED (hr))
+	return hr;
+
+  if (index >= count)
+	return AAFRESULT_BADINDEX;
+
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDefObject::RemovePluginDefAt
+        (aafUInt32 index)
+{
+  aafUInt32 count;
+  AAFRESULT hr;
+  hr = CountPluginDefs (&count);
+  if (AAFRESULT_FAILED (hr))
+	return hr;
+
+  if (index >= count)
+	return AAFRESULT_BADINDEX;
+
+  return AAFRESULT_NOT_IMPLEMENTED;
+}

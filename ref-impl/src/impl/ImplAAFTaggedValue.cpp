@@ -131,7 +131,7 @@ AAFRESULT STDMETHODCALLTYPE
 		defUID = _type;
 		CHECK(MyHeadObject(&head));
 		CHECK(head->GetDictionary(&dict));
-		CHECK(dict->LookupType(defUID, ppTypeDef));
+		CHECK(dict->LookupTypeDef(defUID, ppTypeDef));
 	}
 	XEXCEPT
 	{

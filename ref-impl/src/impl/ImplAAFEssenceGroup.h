@@ -64,7 +64,7 @@ protected:
 public:
 
 
-/****/
+
   //****************
   // SetStillFrame()
   //
@@ -74,7 +74,7 @@ public:
         (ImplAAFSourceClip * stillFrame);
     //@comm Essence group choices should be added with the AddChoice() function.
     
-/****/
+
   //****************
   // GetStillFrame()
   //
@@ -84,33 +84,64 @@ public:
         (ImplAAFSourceClip **stillFrame);
     //@comm Essence group choices should be added with the AddChoice() function.
     
-/****/
+
   //****************
-  // AddChoice()
+  // AppendChoice()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     AppendChoice
         // @parm [in] Source clip to add as a choice 
         (ImplAAFSourceClip * choice);
 
-/****/
-  //****************
-  // GetNumChoices()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    GetNumChoices
-        (aafUInt32  *result);
 
   //****************
-  // GetIndexedChoice()
+  // PrependChoice()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetIndexedChoice
+    PrependChoice
+        // @parm [in] Source clip to add as a choice 
+        (ImplAAFSourceClip * choice);
+
+
+  //****************
+  // InsertChoiceAt()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    InsertChoiceAt
+        // @parm [in] place to put new choice
+        (aafUInt32 index,
+
+		 // @parm [in] Source clip to add as a choice
+		 ImplAAFSourceClip * choice);
+
+
+  //****************
+  // CountChoices()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    CountChoices
+        (aafUInt32  *result);
+
+
+  //****************
+  // GetChoiceAt()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetChoiceAt
         (// @parm [in] The 0-based index into the array
          aafUInt32  index,
 
          // @parm [out] The representation at that index
          ImplAAFSourceClip  ** result);
+
+
+  //****************
+  // RemoveChoiceAt()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    RemoveChoiceAt
+        (// @parm [in] The 0-based index into the array
+         aafUInt32  index);
 
 public:
 	//SDK-private methods
@@ -136,5 +167,3 @@ private:
 };	
 
 #endif // ! __ImplAAFEssenceGroup_h__
-
-
