@@ -28,7 +28,7 @@ AD_FORWARD_DECLARATION(AAFLocator)
 AD_CLASS_UUID(aed97eb1, 2bc8, 11D2, bf, aa, 00, 60, 97, 11, 62, 12)
 
 AD_DEFAULT_UUID(aed97eb0, 2bc8, 11D2, bf, aa, 00, 60, 97, 11, 62, 12)
-AD_CLASS_BEGIN
+AD_XCLASS_BEGIN(Concrete, Transient)
 
 /****/
 AD_XMETHOD7(CreateAudioEssence,
@@ -644,4 +644,4 @@ Get the video signal type [NTSC/PAL/SECAM].)
 	//@comm Replaces omfmSourceGetVideoSignalType */
 
 
-AD_CLASS_END
+AD_XCLASS_END(Concrete, Transient)
