@@ -44,7 +44,8 @@
 #include <string.h>
 #include "AAFResult.h"
 #include "aafErr.h"
-#include "ImplAAFHeader.h"
+// #include "ImplAAFHeader.h"
+#include "ImplAAFDictionary.h"
 #include "ImplAAFTypeDef.h"
 #include "ImplAAFParameterDef.h"
 #include "ImplAAFTypeDef.h"
@@ -68,7 +69,7 @@ AAFRESULT STDMETHODCALLTYPE
       ImplAAFParameterDef *pParmDef)
 {
 	aafUID_t			newUID;
-	ImplAAFHeader		*head = NULL;
+	// ImplAAFHeader		*head = NULL;
 	ImplAAFDictionary	*dict = NULL;
 
 	if(pParmDef == NULL)
@@ -77,24 +78,25 @@ AAFRESULT STDMETHODCALLTYPE
 	XPROTECT()
 	{
 		CHECK(pParmDef->GetAUID(&newUID));
-		CHECK(pParmDef->MyHeadObject(&head));
-		CHECK(head->GetDictionary(&dict));
+		// CHECK(pParmDef->MyHeadObject(&head));
+		// CHECK(head->GetDictionary(&dict));
+		CHECK(GetDictionary(&dict));
 // This is a weak reference, not yet counted
 //		if(dict->LookupParameterDef(&newUID, &def) == AAFRESULT_SUCCESS)
 //			def->ReleaseReference();
 
 		_parmDef = newUID;
 //		pParmDef->AcquireReference();
-		head->ReleaseReference();
-		head = NULL;
+		// head->ReleaseReference();
+		// head = NULL;
 		dict->ReleaseReference();
 		dict = NULL;
 	}
 	XEXCEPT
 	{
-		if(head)
-		  head->ReleaseReference();
-		head = 0;
+	  // if(head)
+	  // head->ReleaseReference();
+	  // head = 0;
 		if(dict)
 		  dict->ReleaseReference();
 		dict = 0;
@@ -110,7 +112,7 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFParameter::GetParameterDefinition (
       ImplAAFParameterDef **ppParmDef)
 {
-	ImplAAFHeader		*head = NULL;
+  // ImplAAFHeader		*head = NULL;
 	ImplAAFDictionary	*dict = NULL;
 
 	if(ppParmDef == NULL)
@@ -118,20 +120,21 @@ AAFRESULT STDMETHODCALLTYPE
 
 	XPROTECT()
 	{
-		CHECK(MyHeadObject(&head));
-		CHECK(head->GetDictionary(&dict));
+	  // CHECK(MyHeadObject(&head));
+	  // CHECK(head->GetDictionary(&dict));
+	  CHECK(GetDictionary(&dict));
 		CHECK(dict->LookupParameterDefinition(&_parmDef, ppParmDef));
 //		(*ppParmDef)->AcquireReference();
-		head->ReleaseReference();
-		head = NULL;
+		// head->ReleaseReference();
+		// head = NULL;
 		dict->ReleaseReference();
 		dict = NULL;
 	}
 	XEXCEPT
 	{
-		if(head)
-		  head->ReleaseReference();
-		head = 0;
+	  // if(head)
+	  // head->ReleaseReference();
+	  // head = 0;
 		if(dict)
 		  dict->ReleaseReference();
 		dict = 0;
@@ -148,7 +151,7 @@ AAFRESULT STDMETHODCALLTYPE
       ImplAAFTypeDef*  pTypeDef)
 {
 	aafUID_t			newUID;
-	ImplAAFHeader		*head = NULL;
+	// ImplAAFHeader		*head = NULL;
 	ImplAAFDictionary	*dict = NULL;
 
 	if(pTypeDef == NULL)
@@ -157,24 +160,25 @@ AAFRESULT STDMETHODCALLTYPE
 	XPROTECT()
 	{
 		CHECK(pTypeDef->GetAUID(&newUID));
-		CHECK(pTypeDef->MyHeadObject(&head));
-		CHECK(head->GetDictionary(&dict));
+		// CHECK(pTypeDef->MyHeadObject(&head));
+		// CHECK(head->GetDictionary(&dict));
+		CHECK(GetDictionary(&dict));
 // Weak references not yet refcounted
 //		if(dict->LookupTypeDef(&newUID, &def) == AAFRESULT_SUCCESS)
 //			def->ReleaseReference();
 
 		_typeDef = newUID;
 //		pTypeDef->AcquireReference();
-		head->ReleaseReference();
-		head = NULL;
+		// head->ReleaseReference();
+		// head = NULL;
 		dict->ReleaseReference();
 		dict = NULL;
 	}
 	XEXCEPT
 	{
-		if(head)
-		  head->ReleaseReference();
-		head = 0;
+	  // if(head)
+	  // head->ReleaseReference();
+	  // head = 0;
 		if(dict)
 		  dict->ReleaseReference();
 		dict = 0;
@@ -189,7 +193,7 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFParameter::GetTypeDefinition (
       ImplAAFTypeDef **ppTypeDef)
 {
-	ImplAAFHeader		*head = NULL;
+  // ImplAAFHeader		*head = NULL;
 	ImplAAFDictionary	*dict = NULL;
 
 	if(ppTypeDef == NULL)
@@ -197,20 +201,21 @@ AAFRESULT STDMETHODCALLTYPE
 
 	XPROTECT()
 	{
-		CHECK(MyHeadObject(&head));
-		CHECK(head->GetDictionary(&dict));
+	  // CHECK(MyHeadObject(&head));
+	  // CHECK(head->GetDictionary(&dict));
+	  CHECK(GetDictionary(&dict));
 		CHECK(dict->LookupType(&_typeDef, ppTypeDef));
 //		(*ppTypeDef)->AcquireReference();
-		head->ReleaseReference();
-		head = NULL;
+		// head->ReleaseReference();
+		// head = NULL;
 		dict->ReleaseReference();
 		dict = NULL;
 	}
 	XEXCEPT
 	{
-		if(head)
-		  head->ReleaseReference();
-		head = 0;
+	  // if(head)
+	  // head->ReleaseReference();
+	  // head = 0;
 		if(dict)
 		  dict->ReleaseReference();
 		dict = 0;
