@@ -103,6 +103,13 @@ public:
     //          <c OMDiskRawStorage> is truncated.
   virtual void setSize(OMUInt64 newSize);
 
+protected:
+  // @access Protected members.
+
+    // @cmember Set the position for subsequent reads and writes
+    //          to <p newPosition>.
+  virtual void setPosition(OMUInt64 newPosition) const;
+
 private:
   // @access Private members.
 

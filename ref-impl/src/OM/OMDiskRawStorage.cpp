@@ -253,3 +253,19 @@ void OMDiskRawStorage::setSize(OMUInt64 newSize)
   }
   // else no ANSI way to truncate the file in place
 }
+
+  // @mfunc Set the position for subsequent reads and writes
+  //        to <p newPosition>.
+  //   @parm The new position.
+  //   @devnote fseek takes a long int for offset this may not be sufficient
+  //            for 64-bit offsets.
+void OMDiskRawStorage::setPosition(OMUInt64 newPosition) const
+{
+  TRACE("OMDiskRawStorage::setPosition");
+
+  ASSERT("Supported position", newPosition <= LONG_MAX); // tjb - limit
+  long int liNewPosition = static_cast<long int>(newPosition);
+
+  int seekStatus = fseek(_file, liNewPosition, SEEK_SET);
+  ASSERT("Successful seek", seekStatus == 0); // tjb - error
+}
