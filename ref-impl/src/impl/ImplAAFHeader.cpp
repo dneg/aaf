@@ -22,8 +22,8 @@
 #include "ImplEnumAAFMobs.h"
 #endif
 
-#ifndef __ImplEnumAAFMedia_h__
-#include "ImplEnumAAFMedia.h"
+#ifndef __ImplEnumAAFEssenceData_h__
+#include "ImplEnumAAFEssenceData.h"
 #endif
 
 #ifndef __ImplAAFDictionary_h__
