@@ -42,7 +42,6 @@
 #include <assert.h>
 #include <string.h>
 #include "AAFResult.h"
-#include "aafCvt.h"
 #include "AAFUtils.h"
 #include "ImplAAFMob.h"
 
@@ -341,7 +340,7 @@ AAFRESULT
 		  if (tmpFound)
 			{
 			  *foundObj = tmpFound;
-			  if (Int64Less(tmpMinLen, rootLen))
+			  if (tmpMinLen < rootLen)
 				*minLength = tmpMinLen;
 			  else
 				*minLength = rootLen;

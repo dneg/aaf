@@ -92,7 +92,6 @@
 #include <wchar.h>
 #include "AAFResult.h"
 #include "AAFComponentVisitor.h"
-#include "aafCvt.h"
 #include "AAFUtils.h"
 
 #include "OMIdentitySet.h"
@@ -571,8 +570,6 @@ AAFRESULT STDMETHODCALLTYPE
                            ImplAAFMobSlot **newSlot)
 {
 	ImplAAFMobSlot * tmpSlot = NULL;
-	aafLength_t length = CvtInt32toLength(0, length);
-	aafLength_t	mobLength = CvtInt32toLength(0, mobLength);
   ImplAAFDictionary *pDictionary = NULL;
 
   // Validate input pointers...
@@ -630,8 +627,6 @@ AAFRESULT STDMETHODCALLTYPE
 	ImplAAFTimelineMobSlot	*aSlot = NULL;
 	ImplAAFMobSlot			*tmpSlot = NULL;
   ImplAAFDictionary *pDictionary = NULL;
-///fLength_t length = CvtInt32toLength(0, length);
-///	aafLength_t	mobLength = CvtInt32toLength(0, mobLength);
 
 
   // Validate input pointers...
@@ -1259,7 +1254,6 @@ AAFRESULT STDMETHODCALLTYPE
 	ImplAAFFindSourceInfo	*sourceInfo = NULL;
 	aafRational_t			editRate;
 	aafPosition_t			frameOffset64;
-	aafLength_t				zeroLen = CvtInt32toLength(0, zeroLen);
 	ImplEnumAAFMobSlots		*slotIter = NULL;
 	ImplAAFDataDef			*dataDef = NULL;
 	ImplAAFMob				*tapeMob = NULL;
@@ -1364,7 +1358,7 @@ AAFRESULT STDMETHODCALLTYPE
   if (NULL == result)
     return (AAFRESULT_NULL_PARAM);
 
-	CvtInt32toPosition(0, zero);
+	zero = 0;
 	
 	XPROTECT()
 	{
@@ -1732,7 +1726,7 @@ ImplAAFMob::AddPhysSourceRef (aafAppendOption_t  addType,
 
 	XPROTECT()
 	{
-		CvtInt32toInt64(0, &zeroPos);
+		zeroPos = 0;
 		CHECK(GetDictionary(&pDictionary));
 		CHECK(pDictionary->GetBuiltinDefs()->cdSourceClip()->
 			  CreateInstance ((ImplAAFObject **) &sclp));
@@ -1828,7 +1822,7 @@ AAFRESULT ImplAAFMob::InternalSearchSource(
 	aafBool					sourceFound = kAAFFalse, foundTransition = kAAFFalse;
 	ImplAAFMob				*nextMob = NULL;
 	aafInt32				nestDepth, pulldownPhase;
-	aafPosition_t			zeroPos = CvtInt32toPosition(0, zeroPos);
+	aafPosition_t			zeroPos = 0;
 	aafLength_t				cpntLen, nextLen, minLength, newLen;
 	ImplAAFPulldown			*pulldownObj = NULL;
 	aafSlotID_t				nextTrackID;
@@ -1864,7 +1858,7 @@ AAFRESULT ImplAAFMob::InternalSearchSource(
 			zeroPos,
 			&leafObj, &minLength, &foundTransition, &effeObject,
 			&nestDepth, NULL));
-		if (Int64Less(minLength, cpntLen))
+		if (minLength < cpntLen)
 		{
 			/* Figure out diffPos */
 			newLen = minLength;
@@ -1965,7 +1959,7 @@ AAFRESULT ImplAAFMob::MobFindLeaf(ImplAAFMobSlot *track,
 	*nestDepth = 0;
 	*foundObj = NULL;
 	*effeObject = NULL;
-	CvtInt32toLength(0, (*minLength));
+	*minLength = 0;
 	
 	XPROTECT()
 	{
@@ -2057,7 +2051,7 @@ AAFRESULT ImplAAFMob::FindNextMob(ImplAAFMobSlot *track,
 		else
 			tmpPos = diffPos;
 		
-		CHECK(AddInt64toInt64(sourceRef.startTime, &tmpPos));
+		tmpPos += sourceRef.startTime;
 		if (!isMask)
 		{
 			CHECK(nextTrack->ConvertToMyRate(tmpPos,track, &convertPos));
@@ -2115,7 +2109,7 @@ AAFRESULT ImplAAFMob::MobFindSource(
 	aafInt32				nestDepth, pulldownPhase;
 	aafMobKind_t			tstKind;
 	
-	CvtInt32toInt64(0, &zeroPos);
+	zeroPos = 0;
 	if(sourceInfo == NULL || foundSource == NULL)
 		return(AAFRESULT_NULL_PARAM);
 
@@ -2129,7 +2123,7 @@ AAFRESULT ImplAAFMob::MobFindSource(
 		CHECK(FindSlotBySlotID (trackID,  &track));
 		CHECK(track->FindSegment(offset, &rootObj, &srcRate, &diffPos));
 		CHECK(rootObj->GetLength(&tmpLength));
-		if (Int64Less(length, tmpLength))
+		if (length < tmpLength)
 		{
 			tmpLength = length;
 		}
@@ -2188,7 +2182,7 @@ AAFRESULT ImplAAFMob::MobFindSource(
 			&leafObj, &minLength, &foundTransition,
 			&effeObject, &nestDepth, NULL));
 		
-		if (Int64Less(minLength, length))
+		if (minLength < length)
 		{
 			/* Figure out diffPos!!! (changed newDIffPos -> tmpLength */
 			newLen = minLength;

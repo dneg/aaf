@@ -73,8 +73,6 @@ typedef ImplAAFSmartPointer<ImplAAFDataDef> ImplAAFDataDefSP;
 
 #include "ImplAAFPluginManager.h"
 #include "AAFUtils.h"
-#include "aafCvt.h"
-#include "AAFUtils.h"
 #include "ImplAAFHeader.h"
 #include "ImplAAFSourceMob.h"
 #include "ImplAAFSourceMob.h"
@@ -2786,8 +2784,8 @@ AAFRESULT STDMETHODCALLTYPE
 		++i;
 		while (!i.after()) 
 		{
-			if (Int64LessEqual(i.value().offset, frameNum) 
-				&& Int64Less(frameNum, i.value().offset + i.value().length))
+			if ((i.value().offset <= frameNum) 
+				&& (frameNum < i.value().offset + i.value().length))
 			{
 				aafUID_t mediaKind;
 				CHECK(pMediaKind->GetAUID(&mediaKind));
@@ -2888,8 +2886,8 @@ AAFRESULT STDMETHODCALLTYPE
 	 {
 		 while (!_cur.after())
 		 {
-			if (Int64LessEqual(0, _cur.value().pos) 
-					&& Int64Less(_cur.value().pos, _cur.value().length))
+			if ((0 <= _cur.value().pos) 
+					&& (_cur.value().pos < _cur.value().length))
 			{
 				status = _cur.value().codec->ReadSamples(nSamples, buflen, buffer, &cReads, &nReads);
 				_cur.value().pos += cReads;
@@ -2963,8 +2961,8 @@ AAFRESULT STDMETHODCALLTYPE
 
 		 while (!_cur.after())
 		 {
-			if (Int64LessEqual(0, _cur.value().pos) 
-					&& Int64Less(_cur.value().pos, _cur.value().length))
+			if ((0 <= _cur.value().pos) 
+					&& (_cur.value().pos < _cur.value().length))
 			{
 				aafUInt32 cReads = 0;
 				status = _cur.value().multicodec->ReadBlocks(kAAFdeinterleave, elemCount, xfer, result);
@@ -3032,8 +3030,8 @@ AAFRESULT STDMETHODCALLTYPE
 	++_cur;
 	while (!_cur.after()) 
 	{
-		if (Int64LessEqual(_cur.value().offset, frameNum) 
-				&& Int64Less(frameNum, _cur.value().offset + _cur.value().length))
+		if ((_cur.value().offset <= frameNum) 
+				&& (frameNum < _cur.value().offset + _cur.value().length))
 		{
 			status = _cur.value().codec->Seek(frameNum - _cur.value().offset);
 			if (SUCCEEDED(status))

@@ -32,7 +32,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include "aafErr.h"
-#include "aafCvt.h"
 #include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
 #include "ImplAAFTimecode.h"
@@ -262,12 +261,12 @@ AAFRESULT ImplAAFPulldown::MapOffset(aafPosition_t offset,
 		  if (reverse)
 			  drop = (drop ? kAAFFalse : kAAFTrue);
 
-		  CvtInt32toPosition(0, zeroPos);
-		  if (Int64Less(offset, zeroPos))
+		  zeroPos = 0;
+		  if (offset < zeroPos)
 			sign = -1;
 		  else 
 			sign = 1;
-		  TruncInt64toInt32(offset, &offset32);	/* OK FRAMEOFFSET */
+		  offset32 = offset;
 
 		  MaskGetBits(maskBits, &maskones);
 		  masksize = (char)maskLen;
@@ -287,7 +286,7 @@ AAFRESULT ImplAAFPulldown::MapOffset(aafPosition_t offset,
 				  ones *= sign;
 
 				  if (numFrames)
-					CvtInt32toInt64(ones, numFrames);
+					*numFrames = ones;
 				}
 			} 
 
@@ -306,7 +305,7 @@ AAFRESULT ImplAAFPulldown::MapOffset(aafPosition_t offset,
 				  full *= sign;
 
 				  if (numFrames)
-					CvtInt32toInt64(full, numFrames);
+					*numFrames = full;
 				}
 			}
 		}
@@ -450,7 +449,6 @@ AAFRESULT ImplAAFPulldown::intSegmentOffsetToTC(aafPosition_t offset, aafTimecod
 {
 	ImplAAFSegment	*pdwnInput;
 	aafLength_t	newStart;
-	aafInt32	start32;
 	
   XPROTECT()
     {
@@ -458,8 +456,7 @@ AAFRESULT ImplAAFPulldown::intSegmentOffsetToTC(aafPosition_t offset, aafTimecod
 		CHECK(((ImplAAFTimecode *)pdwnInput)->GetTimecode(tc));
 		*found = kAAFTrue;
 		  CHECK(MapOffset(offset, kAAFFalse, &newStart, NULL));
-		  CHECK(TruncInt64toInt32(newStart, &start32));
-		  tc->startFrame += start32;
+		  tc->startFrame += newStart;
     }
 
   XEXCEPT
@@ -497,7 +494,7 @@ AAFRESULT ImplAAFPulldown::TraverseToClip(aafLength_t length,
 	  	*pulldownObj = (ImplAAFPulldown *)this;
 	  if(pulldownPhase != NULL)
 	  	*pulldownPhase = phase;
- 	  if (Int64Less(length, *sclpLen))
+ 	  if (length < *sclpLen)
 		{
 		  *sclpLen = length;
 		}

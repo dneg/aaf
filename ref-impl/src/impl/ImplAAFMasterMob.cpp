@@ -36,7 +36,6 @@
 #include "ImplAAFEssenceAccess.h"
 #include <assert.h>
 #include "AAFResult.h"
-#include "aafCvt.h"
 #include "AAFUtils.h"
 
 #include "AAFStoredObjectIDs.h"
@@ -174,7 +173,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 		// Add the master slot
 
-			CvtInt32toPosition(0, zeroPos);
+			zeroPos = 0;
 			ref.sourceID = sourceMobID;
 			ref.sourceSlotID = sourceSlotID;
 			ref.startTime = zeroPos;
@@ -220,7 +219,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 		// Add the master slot
 
-			CvtInt32toPosition(0, zeroPos);
+			zeroPos = 0;
 			ref.sourceID = sourceMobID;
 			ref.sourceSlotID = sourceSlotID;
 			ref.startTime = zeroPos;

@@ -43,7 +43,6 @@
 #include "ImplAAFSourceClip.h"
 #include "aafErr.h"
 #include "AAFUtils.h"
-#include "aafCvt.h"
 #include "ImplAAFMobSlot.h"
 #include "ImplAAFMob.h"
 #include "ImplAAFMasterMob.h"
@@ -121,9 +120,9 @@ AAFRESULT STDMETHODCALLTYPE
 			RAISE(AAFRESULT_INVALID_DATADEF);
 		
 		/* Verify that length of still frame is 1 */
-		CvtInt32toInt64(1, &oneLength);
+		oneLength = 1;
 		CHECK(stillFrame->GetLength (&stillLength));
-		if (Int64NotEqual(oneLength, stillLength))
+		if (oneLength != stillLength)
 		{
 			RAISE(AAFRESULT_STILLFRAME_BADLENGTH);
 		}
@@ -354,7 +353,7 @@ AAFRESULT ImplAAFEssenceGroup::GetMinimumBounds(aafPosition_t rootPos, aafLength
 			  if (tmpFound)
 				{
 				  *foundObj = tmpFound;
-				  if (Int64Less(tmpMinLen, rootLen))
+				  if (tmpMinLen < rootLen)
 					*minLength = tmpMinLen;
 				  else
 					*minLength = rootLen;
@@ -546,7 +545,7 @@ AAFRESULT ImplAAFEssenceGroup::ValidateChoice(
 		/* Verify that length of choice matches length of group */
 		CHECK(GetLength (&groupLength));
 		CHECK(choice->GetLength (&newLength));
-		if (Int64NotEqual(groupLength, newLength))
+		if (groupLength != newLength)
 		{
 			RAISE(AAFRESULT_BAD_LENGTH);
 		}

@@ -39,7 +39,6 @@
 
 #include <assert.h>
 #include "AAFResult.h"
-#include "aafCvt.h"
 #include "AAFUtils.h"
 
 #include "ImplAAFSmartPointer.h"
@@ -481,9 +480,8 @@ AAFRESULT STDMETHODCALLTYPE
 ImplAAFSequence::SegmentOffsetToTC (aafPosition_t*  pOffset,
 									aafTimecode_t*  pTimecode)
 {
-	ImplAAFTimecode*	pTC = NULL;;
+	ImplAAFTimecode*	pTC = NULL;
 	aafPosition_t		sequPos;
-	aafUInt32			frameOffset;	
 	HRESULT				hr = AAFRESULT_SUCCESS;
 
 	if (pOffset == NULL || pTimecode == NULL)
@@ -499,9 +497,8 @@ ImplAAFSequence::SegmentOffsetToTC (aafPosition_t*  pOffset,
 		{
 			aafPosition_t	offset = *pOffset;
 
-			SubInt64fromInt64(sequPos, &offset);
-			TruncInt64toUInt32(offset, &frameOffset);
-			timecode.startFrame += frameOffset;
+			offset -= sequPos;
+			timecode.startFrame += offset;
 
 			*pTimecode = timecode;
 		}
@@ -543,14 +540,13 @@ ImplAAFSequence::SegmentTCToOffset (aafTimecode_t*		pTimecode,
 {
 	aafTimecode_t		startTC;
 	size_t				index, numCpnts;
-	aafInt32			segStart;
 	ImplAAFComponent*	pComponent;
 	ImplAAFSegment*		pSegment;
 	HRESULT				hr = AAFRESULT_SUCCESS;
 	aafLength_t			segLen, tcLen;
 	ImplAAFTimecode*	pTC;
 	aafFrameOffset_t	begPos, endPos;
-	aafPosition_t		sequPos;
+	aafPosition_t		sequPos, segStart;
 	aafBool				found = kAAFFalse;
 	aafLength_t			junk;
 
@@ -558,7 +554,7 @@ ImplAAFSequence::SegmentTCToOffset (aafTimecode_t*		pTimecode,
 		return AAFRESULT_NULL_PARAM;
 
 	segStart = 0;
-	CvtInt32toInt64(0, &junk);
+	junk = 0;
 
 	numCpnts = _components.count();
 	for (index=0; index < numCpnts; index++)
@@ -582,20 +578,17 @@ ImplAAFSequence::SegmentTCToOffset (aafTimecode_t*		pTimecode,
 			hr = pSubSegment->GetLength(&segLen);
 			if (SUCCEEDED(hr))
 			{
-				aafInt32	segLen32 = 0;
-
-  				TruncInt64toInt32(segLen, &segLen32);	// OK FRAMEOFFSET
-				if (segLen32 == 0)
+				if (segLen == 0)
 					continue;		// Skip zero-length clips, sometimes found in MC files
 
 	 			pTC = (ImplAAFTimecode *)pSubSegment;
 	 			pTC->GetTimecode(&startTC);
 				begPos = startTC.startFrame;
-				endPos = startTC.startFrame + segLen32;
+				endPos = startTC.startFrame + segLen;
 				if ((pTimecode->startFrame < endPos) && (begPos <= pTimecode->startFrame))
 				{
 					pComponent->AccumulateLength(&sequPos);
-  					TruncInt64toInt32(sequPos, &segStart);	// OK FRAMEOFFSET
+  					segStart = sequPos;
 					pTC->GetLength(&tcLen);
 					found = kAAFTrue;
 					break;
@@ -609,14 +602,11 @@ ImplAAFSequence::SegmentTCToOffset (aafTimecode_t*		pTimecode,
 	if (found)
 	{
 		aafPosition_t	newStart, oldStart;
-		aafInt32		start32, frameOffset;
 
 		// Assume found at this point, so finish generating result
-		CvtInt32toInt64((pTimecode->startFrame - startTC.startFrame) + segStart , &oldStart);
+		oldStart = (pTimecode->startFrame - startTC.startFrame) + segStart;
 		hr = AAFConvertEditRate(*pEditRate, oldStart, *pEditRate, kRoundFloor, &newStart);
-		TruncInt64toInt32(sequPos, &frameOffset);	// OK FRAMEOFFSET
-		TruncInt64toInt32(newStart, &start32);		// OK FRAMEOFFSET
-		*pOffset = start32 - frameOffset;
+		*pOffset = newStart - sequPos;
 
 		// check for out of bound timecode
 		if (pTimecode->startFrame < startTC.startFrame) 
@@ -626,10 +616,7 @@ ImplAAFSequence::SegmentTCToOffset (aafTimecode_t*		pTimecode,
 		}
 		else
 		{
-			aafUInt32 len;
-
-			TruncInt64toUInt32(tcLen, &len);
-			if (pTimecode->startFrame > (startTC.startFrame + len))
+			if (pTimecode->startFrame > (startTC.startFrame + tcLen))
 			{
 				// out of right bound
 				 hr = AAFRESULT_BADSAMPLEOFFSET;
@@ -663,26 +650,26 @@ AAFRESULT ImplAAFSequence::FindSubSegment(aafPosition_t offset,
 	XPROTECT( )
 	{
 		CHECK(GetLength(&segLen));
-		CvtInt32toPosition(0, begPos);
-		CvtInt32toPosition(0, zero);
+		begPos = 0;
+		zero = 0;
 		endPos = begPos;
-		CHECK(AddInt64toInt64(segLen, &endPos));
-		if (Int64LessEqual(begPos, offset) &&
-			Int64Less(offset, endPos))
+		endPos += segLen;
+		if (begPos <= offset &&
+			offset < endPos)
 		{
 			*found = kAAFFalse;
 			*subseg = NULL;
 			*sequPosPtr = 0;
-			CvtInt32toPosition(0, begPos);
+			begPos = 0;
 			endPos = begPos;
 			CHECK(CountComponents(&n));
 			for (aafUInt32 i = 0 ; *found != kAAFTrue && i < n ; i++) 
 			{
 				CHECK(GetComponentAt(i, (ImplAAFComponent**)&seg));
 				CHECK(seg->GetLength(&segLen));
-				CHECK(AddInt64toInt64(segLen, &endPos));
-				if (Int64LessEqual(begPos, offset) &&
-						Int64Less(offset, endPos))
+				endPos += segLen;
+				if (begPos <= offset &&
+					offset < endPos)
 				{
 					*found = kAAFTrue;
 					*subseg = seg;
@@ -698,7 +685,7 @@ AAFRESULT ImplAAFSequence::FindSubSegment(aafPosition_t offset,
 				seg = NULL;
 			}
 		}
-		else if (Int64Equal(begPos, endPos) && Int64Equal(offset, zero)) 	//JeffB: Handle zero-length sourceClips
+		else if ((begPos == endPos) && (offset == zero)) 	//JeffB: Handle zero-length sourceClips
 		{
 			*found = kAAFTrue;
 			*subseg = this;
@@ -853,7 +840,7 @@ AAFRESULT ImplAAFSequence::TraverseToClip(aafLength_t length,
 		*sclp = p_src_clip;
 
 		CHECK((*sclp)->GetLength(sclpLen));
-		if (Int64Less(length, *sclpLen))
+		if (length < *sclpLen)
 		{
 			*sclpLen = length;
 		}
@@ -1147,8 +1134,8 @@ AAFRESULT ImplAAFSequence::CheckLengthSemantics( ImplAAFComponent* pComponentNex
 		return status;
 	}
 
-	if ( ( dynamic_cast<ImplAAFTransition*>( pComponentNext )     && Int64Less( lengthLast, lengthNext ) ) ||
-		 ( dynamic_cast<ImplAAFTransition*>( GetLastComponent() ) && Int64Less( lengthNext, lengthLast ) ) ) {
+	if ( ( dynamic_cast<ImplAAFTransition*>( pComponentNext )     && ( lengthLast < lengthNext ) ) ||
+		 ( dynamic_cast<ImplAAFTransition*>( GetLastComponent() ) && ( lengthNext < lengthLast ) ) ) {
 		return AAFRESULT_INSUFF_TRAN_MATERIAL;
 	}
 	
@@ -1186,12 +1173,10 @@ AAFRESULT ImplAAFSequence::UpdateSequenceLength( ImplAAFComponent* pComponent )
 	}
 	
 	if ( dynamic_cast<ImplAAFTransition*>( pComponent ) )  {
-
-		SubInt64fromInt64( compLength, &seqLength );
+		seqLength -= compLength;
 	}
 	else {
-
-		AddInt64toInt64( compLength, &seqLength );
+		seqLength += compLength;
 	}
 	status = SetLength( seqLength );
 	if ( AAFRESULT_SUCCESS != status ) {

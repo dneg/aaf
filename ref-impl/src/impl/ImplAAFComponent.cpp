@@ -44,7 +44,6 @@
 #include <assert.h>
 #include "AAFResult.h"
 #include "aafErr.h"
-#include "aafCvt.h"
 #include "ImplAAFSmartPointer.h"
 typedef ImplAAFSmartPointer<ImplAAFDictionary> ImplAAFDictionarySP;
 typedef ImplAAFSmartPointer<ImplAAFDataDef>    ImplAAFDataDefSP;
@@ -370,21 +369,20 @@ AAFRESULT ImplAAFComponent::GetMinimumBounds(aafPosition_t rootPos, aafLength_t 
 		*found = this;
     AcquireReference(); // We are returning a reference so bump the reference count!
 		CHECK(GetLength(&tmpMinLen));
-		if (Int64Less(tmpMinLen, rootLen))
+		if (tmpMinLen < rootLen)
 		{
 			*minLength = tmpMinLen;
 			if(diffPos != NULL)
 			{
 				/* Figure out diffPos */
-				*diffPos = rootPos;
-				SubInt64fromInt64(currentObjPos, diffPos);
+				*diffPos = rootPos - currentObjPos;
 			}
 		}
 		else
 		{
 			*minLength = rootLen;
 			if(diffPos != NULL)
-				CvtInt32toInt64(0, diffPos);
+				*diffPos = 0;
 		}
 	} /* XPROTECT */
 	XEXCEPT

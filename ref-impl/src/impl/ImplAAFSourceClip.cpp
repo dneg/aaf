@@ -39,7 +39,6 @@
 #include "AAFPropertyIDs.h"
 
 #include <assert.h>
-#include "aafCvt.h" 
 #include "AAFResult.h"
 #include "AAFUtils.h"
 #include "AAFDefUIDs.h"
@@ -305,7 +304,7 @@ AAFRESULT STDMETHODCALLTYPE
 	if(memcmp(&sourceRef.sourceID, &nullMobID, sizeof(sourceRef.sourceID)) == 0)
 	{
 		sourceRef.sourceSlotID = 0;
-		CvtInt32toPosition(0, sourceRef.startTime);	
+		sourceRef.startTime = 0;
 	}
 	SetSourceID( sourceRef.sourceID );
 	SetSourceMobSlotID( sourceRef.sourceSlotID) ;
@@ -329,7 +328,7 @@ AAFRESULT ImplAAFSourceClip::TraverseToClip(aafLength_t length,
 		// We are returning a reference to this object so bump the ref count
 		AcquireReference();
 		CHECK((*sclp)->GetLength(sclpLen));
-		if (Int64Less(length, *sclpLen))
+		if (length < *sclpLen)
 		{
 			*sclpLen = length;
 		}

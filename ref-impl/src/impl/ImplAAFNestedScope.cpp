@@ -55,7 +55,6 @@
 #include <assert.h>
 #include <string.h>
 #include "AAFResult.h"
-#include "aafCvt.h"
 #include "aafErr.h"
 
 extern "C" const aafClassID_t CLSID_AAFSegment;

@@ -71,7 +71,6 @@
 #include "AAFTypes.h"
 #include "AAFResult.h"
 #include "aafErr.h"
-#include "aafCvt.h"
 #include "AAFUtils.h"
 #include "AAFDefUIDs.h"
 

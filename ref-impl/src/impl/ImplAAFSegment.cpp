@@ -28,9 +28,9 @@
 #endif
 
 #include <assert.h>
+#include "aafErr.h"
 #include "AAFResult.h"
 
-#include "aafCvt.h" 
 #include "ImplAAFTimecode.h"
 #include "ImplAAFSequence.h"
 
@@ -98,7 +98,7 @@ AAFRESULT ImplAAFSegment::AccumulateLength( aafLength_t *length)
 	XPROTECT()
 	  {
 		CHECK(GetLength(&len));
-		CHECK(AddInt64toInt64(len, length));
+		*length += len;
 	  }
 	XEXCEPT
 	  {
@@ -113,7 +113,7 @@ AAFRESULT ImplAAFSegment::OffsetToTimecodeClip(aafPosition_t /*offset*/,
 											   aafPosition_t *tcStartPos)
 {
 	*result = (ImplAAFTimecode*) NULL;
-	CvtInt32toInt64(0, tcStartPos);
+	*tcStartPos = 0;
 	return(AAFRESULT_SUCCESS);
 }
 
@@ -123,17 +123,17 @@ AAFRESULT ImplAAFSegment::FindSubSegment(aafPosition_t offset,
 										 aafBool *found)
 {
 	aafLength_t	segLen;
-	aafPosition_t begPos, endPos, zero;;
+	aafPosition_t begPos, endPos, zero;
 	
 	XPROTECT( )
 	{
 		CHECK(GetLength(&segLen));
-		CvtInt32toPosition(0, begPos);
-		CvtInt32toPosition(0, zero);
+		begPos = 0;
+		zero = 0;
 		endPos = begPos;
-		CHECK(AddInt64toInt64(segLen, &endPos));
-		if (Int64LessEqual(begPos, offset) &&
-			Int64Less(offset, endPos))
+		endPos += segLen;
+		if ((begPos <= offset) &&
+			(offset < endPos))
 		{
 			*found = kAAFTrue;
 			*subseg = this;
@@ -141,7 +141,7 @@ AAFRESULT ImplAAFSegment::FindSubSegment(aafPosition_t offset,
 			AcquireReference();
 			*sequPosPtr = 0;
 		}
-		else if (Int64Equal(begPos, endPos) && Int64Equal(offset, zero))	 //JeffB: Handle zero-length sourceClips
+		else if ((begPos == endPos) && (offset == zero))	 //JeffB: Handle zero-length sourceClips
 		{
 			*found = kAAFTrue;
 			*subseg = this;

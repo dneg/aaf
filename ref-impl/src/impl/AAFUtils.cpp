@@ -57,7 +57,6 @@
 #endif
 
 #include "AAFUtils.h"
-#include "aafCvt.h"
 #include "AAFResult.h"
 #include "utf8.h"
 
@@ -148,12 +147,11 @@ aafErr_t AAFConvertEditRate(
 	aafRounding_t howRound,	      /* IN - Rounding method (floor or ceiling) */
 	aafPosition_t *destPosition)  /* OUT - Destination Position */
 {
-	aafInt64		intPos, destPos;
-	aafInt32		remainder;
+	aafInt64		intPos, destPos, remainder;
 		
 	XPROTECT()
 	{
-		CvtInt32toInt64(0, destPosition);
+		*destPosition = 0;
 		if ((howRound != kRoundCeiling) && (howRound != kRoundFloor))
 		{
 			RAISE(AAFRESULT_INVALID_ROUNDING);
@@ -161,8 +159,9 @@ aafErr_t AAFConvertEditRate(
 
 		if(FloatFromRational(srcRate) != FloatFromRational(destRate))
 		{
-			CHECK(MultInt32byInt64((srcRate.denominator * destRate.numerator), srcPosition, &intPos));
-			CHECK(DivideInt64byInt32(intPos, (srcRate.numerator * destRate.denominator), &destPos, &remainder));
+			intPos = (srcRate.denominator * destRate.numerator) * srcPosition;
+			destPos = intPos / (srcRate.numerator * destRate.denominator);		// truncate to int
+			remainder = intPos % (srcRate.numerator * destRate.denominator);
 		}
 		else
 		{
@@ -190,7 +189,7 @@ aafErr_t AAFConvertEditRate(
 		{
 			*destPosition = destPos;
 			if(remainder != 0)
-				AddInt32toInt64(1, destPosition);
+				*destPosition = 1;
 		}
 	} /* XPROTECT */
 	XEXCEPT

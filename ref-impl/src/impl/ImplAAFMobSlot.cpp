@@ -49,7 +49,6 @@
 #include <assert.h>
 #include <wchar.h>
 #include "AAFResult.h"
-#include "aafCvt.h"
 #include "aafErr.h"
 
 ImplAAFMobSlot::ImplAAFMobSlot ()
@@ -228,7 +227,7 @@ AAFRESULT ImplAAFMobSlot::FindSegment(aafPosition_t offset,
 										  aafPosition_t *diffPos)
 {
 	ImplAAFSegment	*tmpSegment = NULL;
-	aafPosition_t begPos = CvtInt32toPosition(0, begPos);
+	aafPosition_t begPos = 0;
 	aafBool					foundClip = kAAFFalse;
 
 	if(diffPos == NULL || segment == NULL || srcRate == NULL)

@@ -29,7 +29,7 @@
 
 #include <assert.h>
 #include <string.h>
-#include "aafCvt.h"
+#include "aafErr.h"
 #include "ImplAAFMob.h"
 #include "ImplAAFOperationGroup.h"
 #include "AAFDefUIDs.h"
@@ -40,8 +40,8 @@ ImplAAFFindSourceInfo::ImplAAFFindSourceInfo ()
 	_cpnt = NULL;
 	_editRate.numerator = 0;
 	_editRate.denominator = 1;
-	CvtInt32toLength(0, _position);
-	CvtInt32toLength(0, _length);
+	_position = 0;
+	_length = 0;
 	_operationGroup = NULL;
 }
 
@@ -123,11 +123,8 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFFindSourceInfo::Clear(void)
 	_cpnt = NULL;
 	_editRate.numerator = 0;
 	_editRate.denominator = 1;
-//!!!	  (*sourceInfo).filmTapePdwn = NULL;
-//!!!	  (*sourceInfo).tapeFilmPdwn = NULL;
-//!!!	  (*sourceInfo).effeObject = NULL;
-	CvtInt32toLength(0, _position);
-	CvtInt32toLength(0, _length);
+	_position = 0;
+	_length = 0;
 	if (_operationGroup)
 		_operationGroup->ReleaseReference();
 	_operationGroup = NULL;

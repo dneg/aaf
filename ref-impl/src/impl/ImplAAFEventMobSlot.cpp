@@ -41,7 +41,6 @@
 #include "AAFPropertyIDs.h"
 #include "AAFResult.h"
 #include "aafErr.h"
-#include "aafCvt.h"
 #include "AAFUtils.h"
 
 #include <assert.h>
@@ -194,7 +193,7 @@ ImplAAFEventMobSlot::SetSegment (/*[in]*/ ImplAAFSegment * pSegment)
         // previous event.
         aafPosition_t currentPosition;
         CHECK(pEvent->GetPosition(&currentPosition));
-        if (Int64Less(currentPosition, previousPosition))
+        if (currentPosition < previousPosition)
           RAISE(AAFRESULT_OBJECT_SEMANTIC);
 
         // Save the current position to compare to the next event.

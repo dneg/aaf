@@ -55,7 +55,6 @@
 #include <assert.h>
 #include "ImplAAFEssenceDescriptor.h"
 #include "ImplAAFSourceClip.h"
-#include "aafCvt.h"
 #include "aafErr.h"
 #include "AAFResult.h"
 #include "ImplAAFDictionary.h"
@@ -154,8 +153,7 @@ AAFRESULT STDMETHODCALLTYPE
                            const aafRational_t & editRate)
 {
 	ImplAAFSourceClip *		sub = NULL;
- 	aafPosition_t	zeroPos = CvtInt32toPosition(0, zeroPos);
-	aafLength_t		zeroLen = CvtInt32toLength(0, zeroLen);
+ 	aafPosition_t	zeroPos = 0;
 	aafSourceRef_t	sourceRef;
 	ImplAAFTimelineMobSlot *	newSlot = NULL;		// Need version for non-timeline slots!!!
 	ImplAAFDictionary *pDictionary = NULL;
@@ -165,11 +163,10 @@ AAFRESULT STDMETHODCALLTYPE
 	
 	XPROTECT()
 	{
-    memset(&sourceRef, 0, sizeof(sourceRef));
-		CvtInt32toPosition(0, sourceRef.startTime);
+		memset(&sourceRef, 0, sizeof(sourceRef));
 		CHECK(GetDictionary(&pDictionary));
 		CHECK(pDictionary->GetBuiltinDefs()->cdSourceClip()->
-			  CreateInstance ((ImplAAFObject**) &sub));
+		CreateInstance ((ImplAAFObject**) &sub));
 		pDictionary->ReleaseReference();
 		pDictionary = NULL;
 		CHECK(sub->Initialize (pDataDef, length, sourceRef));
@@ -215,7 +212,6 @@ AAFRESULT STDMETHODCALLTYPE
 	XPROTECT()
 	{
 		memset(&sourceRef, 0, sizeof(sourceRef));
-		CvtInt32toPosition(0, sourceRef.startTime);
 
 		CHECK(GetDictionary(&pDictionary));
 		CHECK(pDictionary->GetBuiltinDefs()->cdSourceClip()->
@@ -255,7 +251,7 @@ AAFRESULT STDMETHODCALLTYPE
    ImplAAFSourceMob::AppendTimecodeSlot (aafRational_t editrate,
                            aafInt32 slotID,
 						   aafTimecode_t startTC,
-                           aafFrameLength_t length32)
+                           aafFrameLength_t length64)
 {
 	ImplAAFTimecode *tccp = NULL;
 	ImplAAFSequence	*aSequ = NULL;
@@ -267,16 +263,16 @@ AAFRESULT STDMETHODCALLTYPE
 	ImplAAFDictionary *pDictionary = NULL;
 
 	//!!!Validate tape mobs only, return AAFRESULT_TAPE_DESC_ONLY
-	if(length32 == FULL_LENGTH)
+	if(length64 == FULL_LENGTH)
 	  {
 		 fullLength = kAAFTrue;
-		 length32 = 1;
+		 length64 = 1;
 	  }
 	else
 	  fullLength = kAAFFalse;
 	
-	CvtInt32toPosition(0, zeroPos);
- 	CvtInt32toLength(length32, length);
+	zeroPos = 0;
+ 	length = length64;
 
 	XPROTECT()
 	{
@@ -314,7 +310,7 @@ AAFRESULT STDMETHODCALLTYPE
 			CHECK(PvtTimecodeToOffset(startTC.fps, 24, 0, 0, 0, 
 											 startTC.drop, &maxLength));
 			{
-				CvtInt32toLength(maxLength, length);
+				length = maxLength;
 				CHECK(tccp->SetLength(length) );
 				/* NOTE: What if the sequence already existed? */
 				CHECK(aSequ->SetLength(length) );
@@ -362,7 +358,7 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFSourceMob::AppendEdgecodeSlot (aafRational_t  editrate,
                            aafInt32  slotID,
                           aafFrameOffset_t  startEC,
-                           aafFrameLength_t  length32,
+                           aafFrameLength_t  length64,
                            aafFilmType_t  filmKind,
                            aafEdgeType_t  codeFormat,
                            aafEdgecodeHeader_t  header)
@@ -377,8 +373,8 @@ AAFRESULT STDMETHODCALLTYPE
 	ImplAAFDictionary *pDictionary = NULL;
 
 	// Validate film mobs only, return AAFRESULT_FILM_DESC_ONLY
-	CvtInt32toPosition(0, zeroPos);
-	CvtInt32toLength(0, zeroLen);
+	zeroPos = 0;
+	zeroLen = 0;
 	XPROTECT()
 	{
 		CHECK(GetDictionary(&pDictionary));
@@ -399,8 +395,8 @@ AAFRESULT STDMETHODCALLTYPE
 									 GetBuiltinDefs()->
 									 ddEdgecode()));	
 
-		CvtInt32toLength(length32, length);
-		CvtInt32toPosition(startEC, startPos);
+		length = length64;
+		startPos = startEC;
 		edge.startFrame = startPos;
 		edge.filmKind = filmKind;
 		edge.codeFormat = codeFormat;
@@ -453,7 +449,7 @@ AAFRESULT STDMETHODCALLTYPE
                            aafSlotID_t  slotID,
                            aafRational_t  editrate,
                            aafFrameOffset_t  startOffset,
-                           aafFrameLength_t  length32)
+                           aafFrameLength_t  length64)
 {
 	ImplAAFSourceClip		*sclp = NULL;
 	ImplAAFTimecode			*timecodeClip = NULL;
@@ -479,21 +475,20 @@ AAFRESULT STDMETHODCALLTYPE
 								&tcSlotLen));
 		CHECK(timecodeClip->GetLength(&tcLen));
 		CHECK(timecodeClip->GetTimecode(&timecode));
-		if(length32 == FULL_LENGTH)
+		if(length64 == FULL_LENGTH)
 		{
 			CHECK(PvtTimecodeToOffset(timecode.fps, 24, 0, 0, 0,
-			  						timecode.drop, &length32));
+			  						timecode.drop, &length64));
 		}
-		CvtInt32toLength(length32, length);
-		CvtInt32toLength(0, zeroLen);
+		length = length64;
+		zeroLen = 0;
 		
-		CvtInt32toPosition(startOffset, pos);
-		CvtInt32toPosition(0, zeroPos);
+		pos = startOffset;
+		zeroPos = 0;
 		endFillLen = tcSlotLen;
-		CHECK(SubInt64fromInt64(pos, &endFillLen));
-		CHECK(SubInt64fromInt64(length, &endFillLen));
+		endFillLen -= pos;
+		endFillLen -= length;
 		memset(&sourceRef, 0, sizeof(sourceRef));
-		CvtInt32toPosition(0, sourceRef.startTime);
 		CHECK(GetDictionary(&pDict));
 		CHECK(pDict->GetBuiltinDefs()->cdSourceClip()->
 			  CreateInstance((ImplAAFObject **)&sclp));
@@ -527,30 +522,29 @@ AAFRESULT STDMETHODCALLTYPE
 				CHECK(sequIter->NextOne(&subSegment));
 				CHECK(subSegment->GetLength(&segLen));
 				/* Skip zero-length clips, sometimes found in MC files */
-				if (Int64Equal(segLen, zeroLen))
+				if (segLen == zeroLen)
 					continue;
 				begPos = sequPos;
-				endPos = sequPos;
-				CHECK(AddInt64toInt64(segLen, &endPos));
-				if (Int64Less(pos, endPos) &&
-					Int64LessEqual(begPos, pos))
+				endPos = sequPos + segLen;
+				if (pos < endPos &&
+					begPos <= pos)
 				{
 					ImplAAFFiller	*test;		// Used only in test of type
 					test = dynamic_cast<ImplAAFFiller*>(subSegment);
 					if(test != NULL && (sequLoop == (numSegs-1)))
 		 			{
 						firstFillLen = pos;
-						CHECK(SubInt64fromInt64(sequPos, &firstFillLen));
+						firstFillLen -= sequPos;
 						CHECK(subSegment->GetLength(&oldFillLen));
 						endFillLen = oldFillLen;
-						CHECK(SubInt64fromInt64(length, &endFillLen));
-						CHECK(SubInt64fromInt64(firstFillLen, &endFillLen));
+						endFillLen -= length;
+						endFillLen -= firstFillLen;
 						/****/
 						CHECK(subSegment->SetLength(firstFillLen));
 						/* 1.x does not have a Sequence Length property */
 						CHECK(segSequ->GetLength(&sequLen));
-						SubInt64fromInt64(oldFillLen, &sequLen);
-						AddInt64toInt64(firstFillLen, &sequLen);
+						sequLen -= oldFillLen;
+						sequLen += firstFillLen;
 						CHECK(segSequ->SetLength(sequLen));
 
 						CHECK(pDict->GetBuiltinDefs()->cdFiller()->
@@ -741,11 +735,11 @@ AAFRESULT STDMETHODCALLTYPE
 	XPROTECT()
 	{
 		GetDictionary(&dict);
-		CvtInt32toInt64(0, &zero);
+		zero = 0;
 		XASSERT(direction == kAAFFilmToTapeSpeed || direction == kAAFTapeToFilmSpeed,
 				AAFRESULT_PULLDOWN_DIRECTION);
 
-		CvtInt32toPosition(0, zeroPos);
+		zeroPos = 0;
 		{
 			CHECK(dict->GetBuiltinDefs()->cdPulldown()->
 				  CreateInstance((ImplAAFObject **)&pdwn));
@@ -801,7 +795,7 @@ AAFRESULT STDMETHODCALLTYPE
 					CHECK(sequence->GetNthComponent (0, &subSeg));
 					CHECK(subSeg->GetLength(&foundLen));
 
-					if(Int64NotEqual(foundLen, zero))
+					if(foundLen != zero)
 					{
 						CHECK(sequence->SetNthComponent(n, pdwn));
 						sclp = dynamic_cast<ImplAAFSourceClip*>(subSeg);
@@ -927,7 +921,7 @@ AAFRESULT ImplAAFSourceMob::FindTimecodeClip(
 
 	XPROTECT()
 	{
-		CvtInt32toInt64(position, &offset);
+		offset = position;
 		*tcStartPos = 0;
 		*result = NULL;
 		CHECK(GetSlots (&slotIter));
