@@ -155,6 +155,7 @@ ImplAAFDictionary::~ImplAAFDictionary ()
 		if (pCodec)
 		{
 		  pCodec->ReleaseReference();
+		  pCodec = 0;
 		}
 	}
 
@@ -165,6 +166,7 @@ ImplAAFDictionary::~ImplAAFDictionary ()
 		if (pContainer)
 		{
 		  pContainer->ReleaseReference();
+		  pContainer = 0;
 		}
 	}
 
@@ -175,6 +177,7 @@ ImplAAFDictionary::~ImplAAFDictionary ()
 		if (pType)
 		{
 		  pType->ReleaseReference();
+		  pType = 0;
 		}
 	}
 
@@ -185,6 +188,7 @@ ImplAAFDictionary::~ImplAAFDictionary ()
 	  if (pClass)
 		{
 		  pClass->ReleaseReference();
+		  pClass = 0;
 		}
 	}
   size_t opsDefSize = _operationDefinitions.getSize();
@@ -194,6 +198,7 @@ ImplAAFDictionary::~ImplAAFDictionary ()
 	  if (pOps)
 		{
 		  pOps->ReleaseReference();
+		  pOps = 0;
 		}
 	}
   size_t parmDefSize = _parameterDefinitions.getSize();
@@ -203,6 +208,7 @@ ImplAAFDictionary::~ImplAAFDictionary ()
 	  if (pParm)
 		{
 		  pParm->ReleaseReference();
+		  pParm = 0;
 		}
 	}
   size_t interpDefSize = _interpolationDefinitions.getSize();
@@ -212,6 +218,7 @@ ImplAAFDictionary::~ImplAAFDictionary ()
 	  if (pInterp)
 		{
 		  pInterp->ReleaseReference();
+		  pInterp = 0;
 		}
 	}
 
@@ -222,6 +229,7 @@ ImplAAFDictionary::~ImplAAFDictionary ()
 	  if (pDesc)
 		{
 		  pDesc->ReleaseReference();
+		  pDesc = 0;
 		}
 	}
 
@@ -232,6 +240,7 @@ ImplAAFDictionary::~ImplAAFDictionary ()
 	  if (pDDef)
 		{
 		  pDDef->ReleaseReference();
+		  pDDef = 0;
 		}
 	}
 
@@ -452,9 +461,15 @@ AAFRESULT ImplAAFDictionary::dictLookupClass (
   XEXCEPT
 	{
 	  if(classEnum != NULL)
-		classEnum->ReleaseReference();
+		{
+		  classEnum->ReleaseReference();
+		  classEnum = 0;
+		}
 	  if(classDef != NULL)
-		classDef->ReleaseReference();
+		{
+		  classDef->ReleaseReference();
+		  classDef = 0;
+		}
 	}
   XEND
 	
@@ -539,6 +554,7 @@ AAFRESULT STDMETHODCALLTYPE
 	  // This class is already registered, probably because it was
 	  // already in the persisted dictionary.
 	  pExistingClassDef->ReleaseReference();
+	  pExistingClassDef = 0;
 	}
   return(AAFRESULT_SUCCESS);
 }
@@ -562,7 +578,10 @@ AAFRESULT STDMETHODCALLTYPE
   XEXCEPT
 	{
 	  if (theEnum)
-		theEnum->ReleaseReference();
+		{
+		  theEnum->ReleaseReference();
+		  theEnum = 0;
+		}
 	  return(XCODE());
 	}
   XEND;
@@ -607,6 +626,7 @@ AAFRESULT STDMETHODCALLTYPE
 	// ImplAAFObject::GetDictionary().
 	// pExistingTypeDef->SetDict(this);
     pExistingTypeDef->ReleaseReference();
+	pExistingTypeDef = 0;
   }
 
   return(AAFRESULT_SUCCESS);
@@ -663,9 +683,15 @@ AAFRESULT ImplAAFDictionary::dictLookupType (
   XEXCEPT
 	{
 	  if(typeEnum != NULL)
-		typeEnum->ReleaseReference();
+		{
+		  typeEnum->ReleaseReference();
+		  typeEnum = 0;
+		}
 	  if(typeDef != NULL)
-		typeDef->ReleaseReference();
+		{
+		  typeDef->ReleaseReference();
+		  typeDef = 0;
+		}
 	}
   XEND
 	
@@ -735,7 +761,10 @@ AAFRESULT STDMETHODCALLTYPE
 	XEXCEPT
 	{
 		if (theEnum)
+		  {
 			theEnum->ReleaseReference();
+			theEnum = 0;
+		  }
 		return(XCODE());
 	}
 	XEND;
@@ -779,6 +808,7 @@ AAFRESULT STDMETHODCALLTYPE
 	// ImplAAFObject::GetDictionary().
 	// pExistingDataDef->SetDict(this);
     pExistingDataDef->ReleaseReference();
+	pExistingDataDef = 0;
   }
 
   return(AAFRESULT_SUCCESS);
@@ -828,9 +858,15 @@ AAFRESULT STDMETHODCALLTYPE
 	XEXCEPT
 	{
 		if(dataEnum != NULL)
+		  {
 			dataEnum->ReleaseReference();
+			dataEnum = 0;
+		  }
 		if(dataDef != NULL)
+		  {
 			dataDef->ReleaseReference();
+			dataDef = 0;
+		  }
 	}
 	XEND
 	
@@ -856,7 +892,10 @@ AAFRESULT STDMETHODCALLTYPE
 	XEXCEPT
 	{
 		if (theEnum)
+		  {
 			theEnum->ReleaseReference();
+			theEnum = 0;
+		  }
 		return(XCODE());
 	}
 	XEND;
@@ -925,9 +964,15 @@ AAFRESULT STDMETHODCALLTYPE
 	XEXCEPT
 	{
 		if(effectEnum != NULL)
+		  {
 			effectEnum->ReleaseReference();
+			effectEnum = 0;
+		  }
 		if(effectDef != NULL)
+		  {
 			effectDef->ReleaseReference();
+			effectDef = 0;
+		  }
 	}
 	XEND
 	
@@ -953,7 +998,10 @@ AAFRESULT STDMETHODCALLTYPE
 	XEXCEPT
 	{
 		if (theEnum)
+		  {
 			theEnum->ReleaseReference();
+			theEnum = 0;
+		  }
 		return(XCODE());
 	}
 	XEND;
@@ -1020,9 +1068,15 @@ AAFRESULT STDMETHODCALLTYPE
 	XEXCEPT
 	{
 		if(parameterEnum != NULL)
+		  {
 			parameterEnum->ReleaseReference();
+			parameterEnum = 0;
+		  }
 		if(parameterDef != NULL)
+		  {
 			parameterDef->ReleaseReference();
+			parameterDef = 0;
+		  }
 	}
 	XEND
 	
@@ -1048,7 +1102,10 @@ AAFRESULT STDMETHODCALLTYPE
 	XEXCEPT
 	{
 		if (theEnum)
+		  {
 			theEnum->ReleaseReference();
+			theEnum = 0;
+		  }
 		return(XCODE());
 	}
 	XEND;
@@ -1143,7 +1200,10 @@ AAFRESULT ImplAAFDictionary::LookupCodecDefinition(aafUID_t *defID, ImplAAFCodec
 	XEXCEPT
 	{
 		if(codec != NULL)
+		  {
 			codec->ReleaseReference();
+			codec = 0;
+		  }
 	}
 	XEND
 	
@@ -1169,7 +1229,10 @@ AAFRESULT STDMETHODCALLTYPE
 	XEXCEPT
 	{
 		if (theEnum)
+		  {
 			theEnum->ReleaseReference();
+			theEnum = 0;
+		  }
 		return(XCODE());
 	}
 	XEND;
@@ -1230,7 +1293,10 @@ AAFRESULT ImplAAFDictionary::LookupContainerDefinition(aafUID_t *defID, ImplAAFC
 	XEXCEPT
 	{
 		if(container != NULL)
+		  {
 			container->ReleaseReference();
+			container = 0;
+		  }
 	}
 	XEND
 	
@@ -1289,7 +1355,10 @@ AAFRESULT STDMETHODCALLTYPE
 	XEXCEPT
 	{
 		if (theEnum)
+		  {
 			theEnum->ReleaseReference();
+			theEnum = 0;
+		  }
 		return(XCODE());
 	}
 	XEND;
@@ -1699,9 +1768,15 @@ AAFRESULT STDMETHODCALLTYPE
 	XEXCEPT
 	{
 		if(InterpolationEnum != NULL)
+		  {
 			InterpolationEnum->ReleaseReference();
+			InterpolationEnum = 0;
+		  }
 		if(InterpolationDef != NULL)
+		  {
 			InterpolationDef->ReleaseReference();
+			InterpolationDef = 0;
+		  }
 	}
 	XEND
 	
@@ -1727,7 +1802,10 @@ AAFRESULT STDMETHODCALLTYPE
 	XEXCEPT
 	{
 		if (theEnum)
+		  {
 			theEnum->ReleaseReference();
+			theEnum = 0;
+		  }
 		return(XCODE());
 	}
 	XEND;
@@ -1794,9 +1872,15 @@ AAFRESULT STDMETHODCALLTYPE
 	XEXCEPT
 	{
 		if(pEnum != NULL)
+		  {
 			pEnum->ReleaseReference();
+			pEnum = 0;
+		  }
 		if(pDesc != NULL)
+		  {
 			pDesc->ReleaseReference();
+			pDesc = 0;
+		  }
 	}
 	XEND
 	
@@ -1822,7 +1906,10 @@ AAFRESULT STDMETHODCALLTYPE
 	XEXCEPT
 	{
 		if (theEnum)
+		  {
 			theEnum->ReleaseReference();
+			theEnum = 0;
+		  }
 		return(XCODE());
 	}
 	XEND;

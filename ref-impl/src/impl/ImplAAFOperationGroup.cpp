@@ -90,7 +90,8 @@ ImplAAFOperationGroup::~ImplAAFOperationGroup ()
 		ImplAAFSegment *pSeg = _inputSegments.setValueAt(0, i);
 		if (pSeg)
 		{
-			pSeg->ReleaseReference();
+		  pSeg->ReleaseReference();
+		  pSeg = 0;
 		}
 	}
 	// Release all of the mob slot pointers.
@@ -100,13 +101,15 @@ ImplAAFOperationGroup::~ImplAAFOperationGroup ()
 		ImplAAFParameter *pParm = _parameters.setValueAt(0, j);
 		if (pParm)
 		{
-			pParm->ReleaseReference();
+		  pParm->ReleaseReference();
+		  pParm = 0;
 		}
 	}
 	ImplAAFSourceReference *ref = _rendering.setValue(0);
 	if (ref)
 	{
-		ref->ReleaseReference();
+	  ref->ReleaseReference();
+	  ref = 0;
 	}
 }
 
@@ -146,13 +149,16 @@ AAFRESULT STDMETHODCALLTYPE
 		_operationDefinition = OperationDefAUID;
 //		pOperationDef->AcquireReference();
 		pDictionary->ReleaseReference();
+		pDictionary = 0;
 	}
 	XEXCEPT
 	{
 		if(pHeader != NULL)
-			pHeader->ReleaseReference();
+		  pHeader->ReleaseReference();
+		pHeader = 0;
 		if(pDictionary)
-			pDictionary->ReleaseReference();
+		  pDictionary->ReleaseReference();
+		pDictionary = 0;
 	}
 	XEND;
 
@@ -180,14 +186,18 @@ AAFRESULT STDMETHODCALLTYPE
 		CHECK(head->GetDictionary(&dict));
 		CHECK(dict->LookupOperationDefinition(&defUID, OperationDef));
 		dict->ReleaseReference();
+		dict = 0;
 		head->ReleaseReference();
+		head = 0;
 	}
 	XEXCEPT
 	{
 		if(dict != NULL)
-			dict->ReleaseReference();
+		  dict->ReleaseReference();
+		dict = 0;
 		if(head != NULL)
-			head->ReleaseReference();
+		  head->ReleaseReference();
+		head = 0;
 	}
 	XEND;
 
@@ -242,7 +252,8 @@ AAFRESULT STDMETHODCALLTYPE
 	XEXCEPT
 	{
 		if(def)
-				def->ReleaseReference();
+		  def->ReleaseReference();
+		def = 0;
 	}
 	XEND
 
@@ -322,7 +333,8 @@ AAFRESULT STDMETHODCALLTYPE
 	XEXCEPT
 	{
 		if(def)
-				def->ReleaseReference();
+		  def->ReleaseReference();
+		def = 0;
 	}
 	XEND;
 
@@ -416,9 +428,11 @@ AAFRESULT STDMETHODCALLTYPE
 	XEXCEPT
 	{
 		if(parm != NULL)
-			parm->ReleaseReference();
+		  parm->ReleaseReference();
+		parm = 0;
 		if(parmDef != NULL)
-			parmDef->ReleaseReference();
+		  parmDef->ReleaseReference();
+		parmDef = 0;
 	}
 	XEND
 

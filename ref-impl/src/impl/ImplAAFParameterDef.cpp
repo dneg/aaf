@@ -54,7 +54,8 @@ AAFRESULT STDMETHODCALLTYPE
 	XEXCEPT
 	{
 		if(dict != NULL)
-			dict->ReleaseReference();
+		  dict->ReleaseReference();
+		dict = 0;
 	}
 	XEND;
 	

@@ -69,7 +69,8 @@ ImplAAFTransition::~ImplAAFTransition ()
 	ImplAAFOperationGroup *group = _operationGroup.setValue(0);
 	if (group)
 	{
-		group->ReleaseReference();
+	  group->ReleaseReference();
+	  group = 0;
 	}
 }
 
@@ -90,7 +91,8 @@ AAFRESULT STDMETHODCALLTYPE
 		CHECK(SetNewProps(length, pDatadef));
 		_cutPoint = cutPoint;
 		if (_operationGroup)
-			_operationGroup->ReleaseReference();
+		  _operationGroup->ReleaseReference();
+		_operationGroup = 0;
 		_operationGroup = pOperationGroup;
 		if (pOperationGroup)
 			pOperationGroup->AcquireReference();
@@ -149,7 +151,8 @@ AAFRESULT STDMETHODCALLTYPE
 		return AAFRESULT_NULL_PARAM;
 	
 	if (_operationGroup)
-		_operationGroup->ReleaseReference();
+	  _operationGroup->ReleaseReference();
+	_operationGroup = 0;
 
 	_operationGroup = pEffObj;
 	_operationGroup->AcquireReference();

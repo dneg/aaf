@@ -92,7 +92,8 @@ ImplAAFPluginDescriptor::~ImplAAFPluginDescriptor ()
 	ImplAAFNetworkLocator *pNetLocator = _manufacturerURL.setValue(0);
 	if (pNetLocator)
 	{
-		pNetLocator->ReleaseReference();
+	  pNetLocator->ReleaseReference();
+	  pNetLocator = 0;
 	}
 
 	// Release all of the other locator pointers.
@@ -102,7 +103,8 @@ ImplAAFPluginDescriptor::~ImplAAFPluginDescriptor ()
 		ImplAAFLocator *pLocator = _locators.setValueAt(0, i);
 		if (pLocator)
 		{
-			pLocator->ReleaseReference();
+		  pLocator->ReleaseReference();
+		  pLocator = 0;
 		}
 	}
 }
@@ -460,6 +462,7 @@ AAFRESULT STDMETHODCALLTYPE
 		ImplAAFNetworkLocator *pOldLoc = _manufacturerURL;
 		if (pOldLoc)
 		  pOldLoc->ReleaseReference();
+		pOldLoc = 0;
 	  }
 
 	_manufacturerURL = pManufacturerInfo;
@@ -980,7 +983,8 @@ AAFRESULT STDMETHODCALLTYPE
 	XEXCEPT
 	{
 		if (theEnum)
-			theEnum->ReleaseReference();
+		  theEnum->ReleaseReference();
+		theEnum = 0;
 		return(XCODE());
 	}
 	XEND;

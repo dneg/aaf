@@ -78,9 +78,15 @@ AAFRESULT STDMETHODCALLTYPE
 	XEXCEPT
 	{
 		if(aVal)
+		  {
 			aVal->ReleaseReference();
+			aVal = 0;
+		  }
 		if(dataEnum)
+		  {
 			dataEnum->ReleaseReference();
+			dataEnum = 0;
+		  }
 	}
 	XEND;
 
@@ -172,7 +178,10 @@ AAFRESULT STDMETHODCALLTYPE
 		if(pCodec != NULL)
 			pCodec->Release();
 		if(mgr != NULL)
+		  {
 			mgr->ReleaseReference();
+			mgr = 0;
+		  }
 	}
 	XEND;
 
@@ -273,7 +282,10 @@ AAFRESULT STDMETHODCALLTYPE
 		if(pCodec != NULL)
 			pCodec->Release();
 		if(mgr != NULL)
+		  {
 			mgr->ReleaseReference();
+			mgr = 0;
+		  }
 	}
 	XEND;
 

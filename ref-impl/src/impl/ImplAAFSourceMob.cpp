@@ -66,7 +66,8 @@ ImplAAFSourceMob::~ImplAAFSourceMob ()
 	ImplAAFEssenceDescriptor *essenceDesc = _essenceDesc.setValue(0);
 	if (essenceDesc)
 	{
-		essenceDesc->ReleaseReference();
+	  essenceDesc->ReleaseReference();
+	  essenceDesc = 0;
 	}
 }
 
@@ -110,7 +111,8 @@ AAFRESULT STDMETHODCALLTYPE
 
 	ImplAAFEssenceDescriptor *pOldEdes = _essenceDesc;
 	if (pOldEdes)
-		pOldEdes->ReleaseReference();
+	  pOldEdes->ReleaseReference();
+	pOldEdes = 0;
 
 	_essenceDesc = pEdes;
 	
@@ -155,16 +157,21 @@ AAFRESULT STDMETHODCALLTYPE
 		CHECK(AppendNewTimelineSlot(editRate, sub, slotID, L"Test", zeroPos, 
 												&newSlot));
 		newSlot->ReleaseReference();
+		newSlot = 0;
 		sub->ReleaseReference();
+		sub = 0;
 	}
 	XEXCEPT
 	{
 		if(sub != NULL)
-			sub->ReleaseReference();
+		  sub->ReleaseReference();
+		sub = 0;
 		if(newSlot != NULL)
-			newSlot->ReleaseReference();
+		  newSlot->ReleaseReference();
+		newSlot = 0;
 		if(pDictionary != NULL)
-			pDictionary->ReleaseReference();
+		  pDictionary->ReleaseReference();
+		pDictionary = 0;
 	}
 	XEND;
 
@@ -248,11 +255,14 @@ AAFRESULT STDMETHODCALLTYPE
 			}
 		}
 		if(newSlot != NULL)
-			newSlot->ReleaseReference();
+		  newSlot->ReleaseReference();
+		newSlot = 0;
 		if(aSequ != NULL)
-			aSequ->ReleaseReference();
+		  aSequ->ReleaseReference();
+		aSequ = 0;
 		if(tccp != NULL)
-			tccp->ReleaseReference();
+		  tccp->ReleaseReference();
+		tccp = 0;
 
 		pDictionary->ReleaseReference();
 		pDictionary = NULL;
@@ -260,13 +270,17 @@ AAFRESULT STDMETHODCALLTYPE
 	XEXCEPT
 	{
 		if(newSlot != NULL)
-			newSlot->ReleaseReference();
+		  newSlot->ReleaseReference();
+		newSlot = 0;
 		if(aSequ != NULL)
-			aSequ->ReleaseReference();
+		  aSequ->ReleaseReference();
+		aSequ = 0;
 		if(tccp != NULL)
-			tccp->ReleaseReference();
+		  tccp->ReleaseReference();
+		tccp = 0;
 		if(pDictionary != NULL)
-			pDictionary->ReleaseReference();
+		  pDictionary->ReleaseReference();
+		pDictionary = 0;
 	}
 	XEND;
 									
@@ -337,20 +351,25 @@ AAFRESULT STDMETHODCALLTYPE
 									NULL, zeroPos, &newSlot));
 
 		if(filler1 != NULL)
-			filler1->ReleaseReference();
+		  filler1->ReleaseReference();
+		filler1 = 0;
 		if(filler2 != NULL)
-			filler2->ReleaseReference();
+		  filler2->ReleaseReference();
+		filler2 = 0;
 		pDictionary->ReleaseReference();
 		pDictionary = NULL;
 	} /* XPROTECT */
 	XEXCEPT
 	{
 		if(filler1 != NULL)
-			filler1->ReleaseReference();
+		  filler1->ReleaseReference();
+		filler1 = 0;
 		if(filler2 != NULL)
-			filler2->ReleaseReference();
+		  filler2->ReleaseReference();
+		filler2 = 0;
 		if(pDictionary != NULL)
-			pDictionary->ReleaseReference();
+		  pDictionary->ReleaseReference();
+		pDictionary = 0;
 	}
 	XEND;
 
@@ -533,23 +552,32 @@ AAFRESULT STDMETHODCALLTYPE
 	XEXCEPT
 	{
 		if(aSequ!= NULL)
-			aSequ->ReleaseReference();
+		  aSequ->ReleaseReference();
+		aSequ = 0;
 		if(segSequ!= NULL)
-			segSequ->ReleaseReference();
+		  segSequ->ReleaseReference();
+		segSequ = 0;
 		if(filler1!= NULL)
-			filler1->ReleaseReference();
+		  filler1->ReleaseReference();
+		filler1 = 0;
 		if(filler2!= NULL)
-			filler2->ReleaseReference();
+		  filler2->ReleaseReference();
+		filler2 = 0;
 		if(seg!= NULL)
-			seg->ReleaseReference();
+		  seg->ReleaseReference();
+		seg = 0;
 		if(subSegment!= NULL)
-			subSegment->ReleaseReference();
+		  subSegment->ReleaseReference();
+		subSegment = 0;
 		if(pDict!= NULL)
-			pDict->ReleaseReference();
+		  pDict->ReleaseReference();
+		pDict = 0;
 		if(sclp!= NULL)
-			sclp->ReleaseReference();
+		  sclp->ReleaseReference();
+		sclp = 0;
 		if(timecodeClip!= NULL)
-			timecodeClip->ReleaseReference();
+		  timecodeClip->ReleaseReference();
+		timecodeClip = 0;
 	}
 	XEND;
 
@@ -722,7 +750,8 @@ AAFRESULT STDMETHODCALLTYPE
 	XEXCEPT
 	{
 		if(dict)
-			dict->ReleaseReference();
+		  dict->ReleaseReference();
+		dict = 0;
 	}
 	XEND;
 
@@ -765,6 +794,7 @@ AAFRESULT STDMETHODCALLTYPE
 		{
 			CHECK(edesc->GetOwningMobKind(pMobKind));
 			edesc->ReleaseReference();
+			edesc = 0;
 		}
 		else
 			*pMobKind = kAllMob;
@@ -772,7 +802,8 @@ AAFRESULT STDMETHODCALLTYPE
 	XEXCEPT
 	{
 		if(edesc != NULL)
-			edesc->ReleaseReference();
+		  edesc->ReleaseReference();
+		edesc = 0;
 	}
 	XEND;
 
@@ -835,11 +866,14 @@ AAFRESULT ImplAAFSourceMob::FindTimecodeClip(
 		if(XCODE() == AAFRESULT_NO_MORE_OBJECTS)
 			RERAISE(AAFRESULT_NO_TIMECODE);
 		if(slotIter!= NULL)
-			slotIter->ReleaseReference();
+		  slotIter->ReleaseReference();
+		slotIter = 0;
 		if(slot != NULL)
-			slot->ReleaseReference();
+		  slot->ReleaseReference();
+		slot = 0;
 		if(seg != NULL)
-			seg->ReleaseReference();
+		  seg->ReleaseReference();
+		seg = 0;
 		*result = NULL;
 	}
 	XEND;
@@ -921,15 +955,20 @@ AAFRESULT ImplAAFSourceMob::ReconcileMobLength(void)
 	XEXCEPT
 	{
 		if (slot)
-			slot->ReleaseReference();
+		  slot->ReleaseReference();
+		slot = 0;
 		if (timelineSlot)
-			timelineSlot->ReleaseReference();
+		  timelineSlot->ReleaseReference();
+		timelineSlot = 0;
 		if (physMedia)
-			physMedia->ReleaseReference();
+		  physMedia->ReleaseReference();
+		physMedia = 0;
 		if (seg)
-			seg->ReleaseReference();
+		  seg->ReleaseReference();
+		seg = 0;
 		if (slotIter)
-			slotIter->ReleaseReference();
+		  slotIter->ReleaseReference();
+		slotIter = 0;
 	}
 	XEND
 		

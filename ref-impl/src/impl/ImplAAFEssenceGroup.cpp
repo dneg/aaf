@@ -54,13 +54,15 @@ ImplAAFEssenceGroup::~ImplAAFEssenceGroup ()
 		ImplAAFSourceClip *pClip = _choices.setValueAt(0, i);
 
 		if (pClip) {
-			pClip->ReleaseReference();
+		  pClip->ReleaseReference();
+		  pClip = 0;
 		}
 	}
 	ImplAAFSourceClip *pClip = _stillFrame.setValue(0);
 	if (pClip)
 	{
-		pClip->ReleaseReference();
+	  pClip->ReleaseReference();
+	  pClip = 0;
 	}
 }
 
@@ -105,7 +107,8 @@ AAFRESULT STDMETHODCALLTYPE
 		{
 			ImplAAFSourceClip *pOldClip = _stillFrame;
 			if (pOldClip)
-				pOldClip->ReleaseReference();
+			  pOldClip->ReleaseReference();
+			pOldClip = 0;
 		}
 
 		_stillFrame = stillFrame;
@@ -117,8 +120,10 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 	  if (NULL != pDict)
 	    pDict->ReleaseReference();
+	  pDict = 0;
 	  if (NULL != pDef)
 	    pDef->ReleaseReference();
+	  pDef = 0;
 	}
 	XEND;
 	
@@ -190,9 +195,11 @@ AAFRESULT STDMETHODCALLTYPE
 	XEXCEPT
 	{
 		if(pDict != NULL)
-			pDict->ReleaseReference();
+		  pDict->ReleaseReference();
+		pDict = 0;
 		if(pDef != NULL)
-			pDef->ReleaseReference();
+		  pDef->ReleaseReference();
+		pDef = 0;
 	}
 	XEND;
 	

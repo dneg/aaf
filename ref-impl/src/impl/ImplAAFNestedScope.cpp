@@ -71,7 +71,8 @@ ImplAAFNestedScope::~ImplAAFNestedScope ()
 
 		if (pSegment)
 		{
-			pSegment->ReleaseReference();
+		  pSegment->ReleaseReference();
+		  pSegment = 0;
 		}
 	}
 
@@ -132,7 +133,8 @@ AAFRESULT ImplAAFNestedScope::ChangeContainedReferences(aafUID_t *from, aafUID_t
 	XEXCEPT
 	{
 		if(comp != NULL)
-			comp->ReleaseReference();
+		  comp->ReleaseReference();
+		comp = 0;
 	}
 	XEND;
 

@@ -46,7 +46,8 @@ ImplAAFSelector::~ImplAAFSelector ()
 	ImplAAFSegment *selected = _selected.setValue(0);
 	if (selected != NULL)
 	{
-		selected->ReleaseReference();
+	  selected->ReleaseReference();
+	  selected = 0;
 	}
 
 	size_t size = _alternates.getSize();
@@ -55,7 +56,8 @@ ImplAAFSelector::~ImplAAFSelector ()
 		ImplAAFSegment* pSegment = _alternates.setValueAt(0, i);
 		if (pSegment)
 		{
-			pSegment->ReleaseReference();
+		  pSegment->ReleaseReference();
+		  pSegment = 0;
 		}
 	}
 }
@@ -101,7 +103,8 @@ AAFRESULT STDMETHODCALLTYPE
 		pPrevSelected = _selected;
 		if (pPrevSelected)
 		{
-			pPrevSelected->ReleaseReference();
+		  pPrevSelected->ReleaseReference();
+		  pPrevSelected = 0;
 		}
 		_selected = pSelSegment;
 		_selected->AcquireReference();

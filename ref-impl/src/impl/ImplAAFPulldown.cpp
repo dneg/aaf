@@ -38,7 +38,8 @@ ImplAAFPulldown::~ImplAAFPulldown ()
 	ImplAAFSegment *seg = _inputSegment.setValue(0);
 	if (seg)
 	{
-		seg->ReleaseReference();
+	  seg->ReleaseReference();
+	  seg = 0;
 	}
 }
 
@@ -70,7 +71,8 @@ AAFRESULT STDMETHODCALLTYPE
 
 	ImplAAFSegment *pOldSeg = _inputSegment;
 	if (pOldSeg)
-		pOldSeg->ReleaseReference();
+	  pOldSeg->ReleaseReference();
+	pOldSeg = 0;
 
 	_inputSegment = pInputSegment;
 	

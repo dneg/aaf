@@ -53,7 +53,8 @@ ImplAAFMobSlot::~ImplAAFMobSlot ()
 	ImplAAFSegment *segment = _segment.setValue(0);
 	if (segment)
 	{
-		segment->ReleaseReference();
+	  segment->ReleaseReference();
+	  segment = 0;
 	}
 }
 
@@ -75,7 +76,8 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFMobSlot::SetSegment (ImplAAFSegment *value)
 {
 	if (_segment)
-		_segment->ReleaseReference();
+	  _segment->ReleaseReference();
+	_segment = 0;
 
 	_segment = value;
 
@@ -228,12 +230,14 @@ AAFRESULT ImplAAFMobSlot::FindSegment(aafPosition_t offset,
 		*/
 		*diffPos = offset;
 		tmpSegment->ReleaseReference();
+		tmpSegment = 0;
 		
 	} /* XPROTECT */
 	XEXCEPT
 	{
 		if (tmpSegment)	
-			tmpSegment->ReleaseReference();
+		  tmpSegment->ReleaseReference();
+		tmpSegment = 0;
 	}
 	XEND;
 	return(AAFRESULT_SUCCESS);

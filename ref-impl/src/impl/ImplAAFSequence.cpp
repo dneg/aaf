@@ -39,7 +39,8 @@ ImplAAFSequence::~ImplAAFSequence ()
 		ImplAAFComponent *pComp = _components.setValueAt(0, i);
 
 		if (pComp) {
-			pComp->ReleaseReference();
+		  pComp->ReleaseReference();
+		  pComp = 0;
 		}
 	}
 }
@@ -255,9 +256,11 @@ AAFRESULT STDMETHODCALLTYPE
 	XEXCEPT
 	{
 		if(pDict != NULL)
-			pDict->ReleaseReference();
+		  pDict->ReleaseReference();
+		pDict = 0;
 		if(pDef != NULL)
-			pDef->ReleaseReference();
+		  pDef->ReleaseReference();
+		pDef = 0;
 	}
 	XEND;
 
@@ -419,6 +422,7 @@ ImplAAFSequence::SegmentOffsetToTC (aafPosition_t*  pOffset,
 			*pTimecode = timecode;
 		}
 		pTC->ReleaseReference();
+		pTC = 0;
 	}
 
 	return hr;
@@ -514,6 +518,7 @@ ImplAAFSequence::SegmentTCToOffset (aafTimecode_t*		pTimecode,
 				}
 			}
 			pSubSegment->ReleaseReference();
+			pSubSegment = 0;
 		}
 	}
 	
@@ -606,7 +611,8 @@ AAFRESULT ImplAAFSequence::ChangeContainedReferences(aafUID_t *from, aafUID_t *t
 	XEXCEPT
 	{
 		if(comp != NULL)
-			comp->ReleaseReference();
+		  comp->ReleaseReference();
+		comp = 0;
 	}
 	XEND;
 

@@ -91,6 +91,7 @@ ImplAAFClassDef::~ImplAAFClassDef ()
 	  if (pd)
 		{
 		  pd->ReleaseReference();
+		  pd = 0;
 		}
 	}
 }
@@ -397,6 +398,7 @@ AAFRESULT STDMETHODCALLTYPE
   // AddRef; CreateImpl *also* will addref, so we've got one too
   // many.  Put us back to normal.
   tmp->ReleaseReference ();
+  tmp = 0;
 
   check_result (pd->Initialize (pID,
 								omPid,

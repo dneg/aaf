@@ -377,9 +377,11 @@ AAFRESULT STDMETHODCALLTYPE
 	XEXCEPT
 	{
 		if (pParmDef)
-			pParmDef->ReleaseReference();
+		  pParmDef->ReleaseReference();
+		pParmDef = 0;
 		if (pEnum)
-			pEnum->ReleaseReference();
+		  pEnum->ReleaseReference();
+		pEnum = 0;
 		if(tmp != NULL)
 			delete [] tmp;
 	}

@@ -62,7 +62,8 @@ ImplAAFVaryingValue::~ImplAAFVaryingValue ()
 		ImplAAFControlPoint *pControl = _controlPoints.setValueAt(0, i);
 		if (pControl)
 		{
-			pControl->ReleaseReference();
+		  pControl->ReleaseReference();
+		  pControl = 0;
 		}
 	}
 }
@@ -98,7 +99,8 @@ AAFRESULT STDMETHODCALLTYPE
 	XEXCEPT
 	{
 		if (theEnum)
-			theEnum->ReleaseReference();
+		  theEnum->ReleaseReference();
+		theEnum = 0;
 		return(XCODE());
 	}
 	XEND;
@@ -137,9 +139,11 @@ AAFRESULT STDMETHODCALLTYPE
 	XEXCEPT
 	{
 		if(head)
-			head->ReleaseReference();
+		  head->ReleaseReference();
+		head = 0;
 		if(dict)
-			dict->ReleaseReference();
+		  dict->ReleaseReference();
+		dict = 0;
 	}
 	XEND
 
@@ -172,9 +176,11 @@ AAFRESULT STDMETHODCALLTYPE
 	XEXCEPT
 	{
 		if(head)
-			head->ReleaseReference();
+		  head->ReleaseReference();
+		head = 0;
 		if(dict)
-			dict->ReleaseReference();
+		  dict->ReleaseReference();
+		dict = 0;
 	}
 	XEND;
 
@@ -211,9 +217,11 @@ AAFRESULT STDMETHODCALLTYPE
 	XEXCEPT
 	{
 		if(point)
-			point->ReleaseReference();
+		  point->ReleaseReference();
+		point = 0;
 		if(theEnum)
-			theEnum->ReleaseReference();
+		  theEnum->ReleaseReference();
+		theEnum = 0;
 	}
 	XEND;
 
@@ -283,7 +291,8 @@ AAFRESULT STDMETHODCALLTYPE
 		if(iParm)
 			iParm->Release();
 		if(mgr)
-			mgr->ReleaseReference();
+		  mgr->ReleaseReference();
+		mgr = 0;
 	}
 	XEND;
 	

@@ -36,7 +36,10 @@ ImplAAFCommentMarker::~ImplAAFCommentMarker ()
   // Cleanup references to contained objects.
   ImplAAFSourceReference *annotation = _annotation.setValue(0);
   if (annotation)
-    annotation->ReleaseReference();
+	{
+	  annotation->ReleaseReference();
+	  annotation = 0;
+	}
 }
 
 
@@ -67,7 +70,10 @@ AAFRESULT STDMETHODCALLTYPE
 {
 	ImplAAFSourceReference *oldValue = _annotation.setValue(0);
 	if (oldValue)
+	  {
 		oldValue->ReleaseReference();
+		oldValue = 0;
+	  }
 	
 	_annotation = pAnnotation;
 	
