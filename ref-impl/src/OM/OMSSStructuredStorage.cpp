@@ -282,9 +282,9 @@ OMSSIStorage::StgOpenStorageInOMRawStorage(
 HRESULT STDMETHODCALLTYPE
 OMSSIStorage::CreateStream(
 				const TCHAR FAR* pwcsName,
-				DWORD grfMode,
-				DWORD reserved1,
-				DWORD reserved2,
+				DWORD /* grfMode */,
+				DWORD /* reserved1 */,
+				DWORD /* reserved2 */,
 				IStream FAR *FAR *ppstm)
 {
 	TRACE("OMSSIStorage::CreateStream");
@@ -318,9 +318,9 @@ OMSSIStorage::CreateStream(
 HRESULT STDMETHODCALLTYPE
 OMSSIStorage::OpenStream(
 				const TCHAR FAR* pwcsName,
-				void FAR *reserved1,
-				DWORD grfMode,
-				DWORD reserved2,
+				void FAR * /* reserved1 */,
+				DWORD /* grfMode */,
+				DWORD /* reserved2 */,
 				IStream FAR *FAR *ppstm)
 {
 	TRACE("OMSSIStorage::OpenStream");
@@ -349,9 +349,9 @@ OMSSIStorage::OpenStream(
 HRESULT STDMETHODCALLTYPE
 OMSSIStorage::CreateStorage(
 				const TCHAR FAR* pwcsName,
-				DWORD grfMode,
-				DWORD reserved1,
-				DWORD reserved2,
+				DWORD /* grfMode */,
+				DWORD /* reserved1 */,
+				DWORD /* reserved2 */,
 				IStorage FAR *FAR *ppstg)
 {
 	TRACE("OMSSIStorage::CreateStorage");
@@ -380,10 +380,10 @@ OMSSIStorage::CreateStorage(
 HRESULT STDMETHODCALLTYPE
 OMSSIStorage::OpenStorage(
 				const TCHAR FAR* pwcsName,
-				IStorage FAR *pstgPriority,
-				DWORD grfMode,
-				SNB snbExclude,
-				DWORD reserved,
+				IStorage FAR * /* pstgPriority */,
+				DWORD /* grfMode */,
+				SNB /* snbExclude */,
+				DWORD /* reserved */,
 				IStorage FAR *FAR *ppstg)
 {
 	TRACE("OMSSIStorage::OpenStorage");
@@ -408,10 +408,10 @@ OMSSIStorage::OpenStorage(
 
 HRESULT STDMETHODCALLTYPE
 OMSSIStorage::CopyTo(
-				DWORD ciidExclude,
-				IID const FAR *rgiidExclude,
-				SNB snbExclude,
-				IStorage FAR *pstgDest)
+				DWORD /* ciidExclude */,
+				IID const FAR * /* rgiidExclude */,
+				SNB /* snbExclude */,
+				IStorage FAR * /* pstgDest */)
 {
 	TRACE("OMSSIStorage::CopyTo");
 	return STG_E_UNIMPLEMENTEDFUNCTION;
@@ -419,17 +419,17 @@ OMSSIStorage::CopyTo(
 
 HRESULT STDMETHODCALLTYPE 
 OMSSIStorage::MoveElementTo(
-				TCHAR const FAR* lpszName,
-				IStorage FAR *pstgDest,
-				TCHAR const FAR* lpszNewName,
-				DWORD grfFlags)
+				TCHAR const FAR* /* lpszName */,
+				IStorage FAR * /* pstgDest */,
+				TCHAR const FAR* /* lpszNewName */,
+				DWORD /* grfFlags */)
 {
 	TRACE("OMSSIStorage::MoveElementTo");
 	return STG_E_UNIMPLEMENTEDFUNCTION;
 }
 
 HRESULT STDMETHODCALLTYPE
-OMSSIStorage::Commit (DWORD grfCommitFlags)
+OMSSIStorage::Commit (DWORD /* grfCommitFlags */)
 {
 	TRACE("OMSSIStorage::Commit");
     return STG_E_UNIMPLEMENTEDFUNCTION;
@@ -444,17 +444,17 @@ OMSSIStorage::Revert (void)
 
 HRESULT STDMETHODCALLTYPE
 OMSSIStorage::EnumElements(
-				DWORD reserved1,
-				void FAR *reserved2,
-				DWORD reserved3,
-				IEnumSTATSTG FAR *FAR *ppenm)
+				DWORD /* reserved1 */,
+				void FAR * /* reserved2 */,
+				DWORD /* reserved3 */,
+				IEnumSTATSTG FAR *FAR * /* ppenm */)
 {
 	TRACE("OMSSIStorage::EnumElements");
     return STG_E_UNIMPLEMENTEDFUNCTION;
 }
 
 HRESULT STDMETHODCALLTYPE
-OMSSIStorage::DestroyElement(const TCHAR FAR* pwcsName)
+OMSSIStorage::DestroyElement(const TCHAR FAR* /* pwcsName */)
 {
 	TRACE("OMSSIStorage::DestroyElement");
     return STG_E_UNIMPLEMENTEDFUNCTION;
@@ -462,8 +462,8 @@ OMSSIStorage::DestroyElement(const TCHAR FAR* pwcsName)
 
 HRESULT STDMETHODCALLTYPE
 OMSSIStorage::RenameElement(
-				const TCHAR FAR* pwcsOldName,
-				const TCHAR FAR* pwcsNewName
+				const TCHAR FAR* /* pwcsOldName */,
+				const TCHAR FAR* /* pwcsNewName */
 			)
 {
 	TRACE("OMSSIStorage::RenameElement");
@@ -472,10 +472,10 @@ OMSSIStorage::RenameElement(
 
 HRESULT STDMETHODCALLTYPE
 OMSSIStorage::SetElementTimes(
-				const TCHAR FAR *lpszName,
-				FILETIME const FAR *pctime,
-				FILETIME const FAR *patime,
-				FILETIME const FAR *pmtime
+				const TCHAR FAR * /* lpszName */,
+				FILETIME const FAR * /* pctime */,
+				FILETIME const FAR * /* patime */,
+				FILETIME const FAR * /* pmtime */
 										)
 {
 	TRACE("OMSSIStorage::SetElementTimes");
@@ -493,8 +493,8 @@ OMSSIStorage::SetClass (REFCLSID clsid)
 
 HRESULT STDMETHODCALLTYPE
 OMSSIStorage::SetStateBits(
-				DWORD grfStateBits,
-				DWORD grfMask
+				DWORD /* grfStateBits */,
+				DWORD /* grfMask */
 				)
 {
 	TRACE("OMSSIStorage::SetStateBits");
@@ -672,17 +672,17 @@ OMSSIStream::SetSize( ULARGE_INTEGER libNewSize)
 
 HRESULT STDMETHODCALLTYPE
 OMSSIStream::CopyTo(
-				IStream FAR *pstm,
-				ULARGE_INTEGER cb,
-				ULARGE_INTEGER FAR *pcbRead,
-				ULARGE_INTEGER FAR *pcbWritten)
+				IStream FAR * /* pstm */,
+				ULARGE_INTEGER /* cb */,
+				ULARGE_INTEGER FAR * /* pcbRead */,
+				ULARGE_INTEGER FAR * /* pcbWritten */)
 {
 	TRACE("OMSSIStream::SetSize");
 	return STG_E_UNIMPLEMENTEDFUNCTION;
 }
 
 HRESULT STDMETHODCALLTYPE
-OMSSIStream::Commit(DWORD grfCommitFlags)
+OMSSIStream::Commit(DWORD /* grfCommitFlags */)
 {
 	TRACE("OMSSIStream::Commit");
 	return STG_E_UNIMPLEMENTEDFUNCTION;
@@ -697,9 +697,9 @@ OMSSIStream::Revert(void)
 
 HRESULT STDMETHODCALLTYPE
 OMSSIStream::LockRegion(
-				ULARGE_INTEGER libOffset,
-				ULARGE_INTEGER cb,
-				DWORD dwLockType)
+				ULARGE_INTEGER /* libOffset */,
+				ULARGE_INTEGER /* cb */,
+				DWORD /* dwLockType */)
 {
 	TRACE("OMSSIStream::LockRegion");
 	return STG_E_UNIMPLEMENTEDFUNCTION;
@@ -707,9 +707,9 @@ OMSSIStream::LockRegion(
 
 HRESULT STDMETHODCALLTYPE
 OMSSIStream::UnlockRegion(
-				ULARGE_INTEGER libOffset,
-				ULARGE_INTEGER cb,
-				DWORD dwLockType)
+				ULARGE_INTEGER /* libOffset */,
+				ULARGE_INTEGER /* cb */,
+				DWORD /* dwLockType */)
 {
 	TRACE("OMSSIStream::LockRegion");
 	return STG_E_UNIMPLEMENTEDFUNCTION;
@@ -744,7 +744,7 @@ OMSSIStream::Stat(
 }
 
 HRESULT STDMETHODCALLTYPE 
-OMSSIStream::Clone(IStream FAR * FAR *ppstm)
+OMSSIStream::Clone(IStream FAR * FAR * /* ppstm */)
 {
 	TRACE("OMSSIStream::Clone");
 	return STG_E_UNIMPLEMENTEDFUNCTION;
