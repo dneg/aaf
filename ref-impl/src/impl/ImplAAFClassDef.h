@@ -49,6 +49,15 @@ public:
   // GetPropertyDefs()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
+    Initialize
+        // @parm [in] existing class from which this one inherits
+        (ImplAAFClassDef * pParentClass);
+
+
+  //****************
+  // GetPropertyDefs()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
     GetPropertyDefs
         // @parm [out, retval] Property Definition enumeration
         (ImplEnumAAFPropertyDefs ** ppEnum);
@@ -137,5 +146,3 @@ public:
 };
 
 #endif // ! __ImplAAFClassDef_h__
-
-

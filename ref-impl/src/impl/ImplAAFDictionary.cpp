@@ -171,6 +171,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFDictionary::RegisterClass (
+      aafUID_t * /*pClassAUID*/,
       ImplAAFClassDef * /*pClassDef*/)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
@@ -188,6 +189,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFDictionary::RegisterType (
+      aafUID_t * /*pTypeAUID*/,
       ImplAAFTypeDef * /*pTypeDef*/)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
