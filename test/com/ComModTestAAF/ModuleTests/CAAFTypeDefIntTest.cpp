@@ -312,7 +312,7 @@ static HRESULT TestOneValue (aafUInt32 setDataSize,
 	getDataSize < setDataSize ? getDataSize : setDataSize;
   aafInt64 compareMask = ~0;
   if (compareSize < 8)
-	compareMask = ((aafInt64)1) << ((compareSize*8)-1);
+	compareMask = (((aafInt64)1) << (compareSize*8))-1;
   if ((getVal&compareMask) != (setData&compareMask))
 	{
 	  if (ppv)
