@@ -37,6 +37,7 @@
 #include "AAFStoredObjectIDs.h"
 #include "AAFResult.h"
 #include "AAFDefUIDs.h"
+#include "AAFFileMode.h"
 
 #include "CAAFBuiltinDefs.h"
 
@@ -64,6 +65,76 @@ inline void checkExpression(bool expression, HRESULT r)
 {
   if (!expression)
     throw r;
+}
+
+static HRESULT checkModeFlag (aafUInt32 modeFlags,
+							  HRESULT expectedResult)
+{
+  // Check mod flags
+  aafProductIdentification_t	ProductInfo = { 0 };
+  HRESULT temphr;
+  IAAFFile * pFile = 0;
+  temphr = AAFFileOpenNewModify(L"foo",
+								modeFlags,
+								&ProductInfo,
+								&pFile);
+  if (expectedResult != temphr)
+	{
+	  return AAFRESULT_TEST_FAILED;
+	}
+  if (pFile)
+	{
+	  return AAFRESULT_TEST_FAILED;
+	}
+
+  return AAFRESULT_SUCCESS;
+}
+
+
+static HRESULT checkModeFlags ()
+{
+  HRESULT temphr;
+
+  temphr = checkModeFlag (AAF_FILE_MODE_EAGER_LOADING,
+						  AAFRESULT_NOT_IMPLEMENTED);
+  if (AAFRESULT_FAILED (temphr)) return temphr;
+
+  temphr = checkModeFlag (AAF_FILE_MODE_REVERTABLE,
+						  AAFRESULT_NOT_IMPLEMENTED);
+  if (AAFRESULT_FAILED (temphr)) return temphr;
+
+  temphr = checkModeFlag (AAF_FILE_MODE_UNBUFFERED,
+						  AAFRESULT_NOT_IMPLEMENTED);
+  if (AAFRESULT_FAILED (temphr)) return temphr;
+
+  temphr = checkModeFlag (AAF_FILE_MODE_RECLAIMABLE,
+						  AAFRESULT_NOT_IMPLEMENTED);
+  if (AAFRESULT_FAILED (temphr)) return temphr;
+
+  temphr = checkModeFlag (AAF_FILE_MODE_USE_LARGE_SS_SECTORS,
+						  AAFRESULT_NOT_IMPLEMENTED);
+  if (AAFRESULT_FAILED (temphr)) return temphr;
+
+  temphr = checkModeFlag (AAF_FILE_MODE_CLOSE_FAIL_DIRTY,
+						  AAFRESULT_NOT_IMPLEMENTED);
+  if (AAFRESULT_FAILED (temphr)) return temphr;
+
+  temphr = checkModeFlag (AAF_FILE_MODE_DEBUG0_ON,
+						  AAFRESULT_NOT_IMPLEMENTED);
+  if (AAFRESULT_FAILED (temphr)) return temphr;
+
+  temphr = checkModeFlag (AAF_FILE_MODE_DEBUG1_ON,
+						  AAFRESULT_NOT_IMPLEMENTED);
+  if (AAFRESULT_FAILED (temphr)) return temphr;
+
+  aafUInt32 i;
+  for (i = 4; i < 28; i++)
+	{
+	  temphr = checkModeFlag ((1 << i),
+							  AAFRESULT_BAD_FLAGS);
+	  if (AAFRESULT_FAILED (temphr)) return temphr;
+	}
+  return AAFRESULT_SUCCESS;
 }
 
 
@@ -105,6 +176,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
       // Remove the previous test file if any.
       RemoveTestFile(pFileName);
 
+	  // Check for illegal mode flags.
+	  checkModeFlags ();
 
 	  // Create the file.
 	  checkResult(AAFFileOpenNewModify(pFileName, 0, &ProductInfo, &pFile));
@@ -267,19 +340,9 @@ extern "C" HRESULT CAAFFile_test()
 	  hr = AAFRESULT_TEST_FAILED;
 	}
 
-
-  	// When all of the functionality of this class is tested, we can return success
+  	// When all of the functionality of this class is tested, we can
+	// return success
 	if(hr == AAFRESULT_SUCCESS)
 		hr = AAFRESULT_TEST_PARTIAL_SUCCESS;
   return hr;
 }
-
-
-
-
-
-
-
-
-
-
