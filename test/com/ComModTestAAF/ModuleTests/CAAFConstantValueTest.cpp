@@ -1,19 +1,18 @@
 // @doc INTERNAL
-// @com This file implements the module test for CAAFDefinitionObject
+// @com This file implements the module test for CAAFConstantValue
 /***********************************************\
-*												*
-* Advanced Authoring Format						*
-*												*
+*                                               *
+* Advanced Authoring Format                     *
+*                                               *
 * Copyright (c) 1998-1999 Avid Technology, Inc. *
 * Copyright (c) 1998-1999 Microsoft Corporation *
-*												*
+*                                               *
 \***********************************************/
 
 
-
-#include "CAAFConstValue.h"
-#include "CAAFConstValue.h"
-#ifndef __CAAFConstValue_h__
+#include "CAAFConstantValue.h"
+#include "CAAFConstantValue.h"
+#ifndef __CAAFConstantValue_h__
 #error - improperly defined include guard
 #endif
 
@@ -30,7 +29,7 @@
 #include "aafUtils.h"
 
 // Temporarily necessary global declarations.
-extern "C" const CLSID CLSID_AAFConstValue; // generated
+extern "C" const CLSID CLSID_AAFConstantValue; // generated
 
 static aafUID_t	zeroID = { 0 };
 static aafWChar *slotNames[5] = { L"SLOT1", L"SLOT2", L"SLOT3", L"SLOT4", L"SLOT5" };
@@ -129,7 +128,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFSegment			*pSeg = NULL;
 	IAAFTimelineMobSlot	*pSlot = NULL;
 	IAAFParameter		*pParm = NULL;
-	IAAFConstValue		*pConstValue = NULL;
+	IAAFConstantValue		*pConstValue = NULL;
 	IAAFSegment			*pFiller = NULL;
 	IAAFComponent		*pComponent = NULL;
 	IAAFSourceClip		 *pSourceClip = NULL;
@@ -216,8 +215,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 			checkResult(pComponent->SetDataDef(&testDataDef));
  			checkResult(pOperationGroup->Initialize(&testDataDef, TEST_EFFECT_LEN, pOperationDef));
 
-			checkResult(pDictionary->CreateInstance(&AUID_AAFConstValue,
-							  IID_IAAFConstValue, 
+			checkResult(pDictionary->CreateInstance(&AUID_AAFConstantValue,
+							  IID_IAAFConstantValue, 
 							  (IUnknown **)&pConstValue));
 			checkResult(pConstValue->SetValue(sizeof(testLevel), (aafDataBuffer_t)&testLevel));
 			checkResult(pConstValue->QueryInterface (IID_IAAFParameter, (void **)&pParm));
@@ -341,7 +340,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	IAAFMobSlot*		pSlot = NULL;
 	IAAFFiller*			pFill = NULL;
 	IAAFSourceReference *pSourceRef = NULL;
-	IAAFConstValue		*pConstValue = NULL;
+	IAAFConstantValue		*pConstValue = NULL;
 	bool				bFileOpen = false;
 	aafUID_t			readSourceID;
 	aafBool				readIsTimeWarp;
@@ -394,7 +393,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
  			checkResult(pSeg->QueryInterface(IID_IAAFFiller, (void **) &pFill));
 			/**/
 			checkResult(pOperationGroup->GetParameterByArgID (kTestParmID, &pParameter));
- 			checkResult(pParameter->QueryInterface(IID_IAAFConstValue, (void **) &pConstValue));
+ 			checkResult(pParameter->QueryInterface(IID_IAAFConstantValue, (void **) &pConstValue));
 
 			/*** Check the ConstValue methods **/
 			aafUInt32		testLen, bytesRead;
@@ -530,10 +529,10 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 }
  
 
-HRESULT CAAFConstValue::test()
+HRESULT CAAFConstantValue::test()
 {
 	HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
-	aafWChar * pFileName = L"AAFConstValueTest.aaf";
+	aafWChar * pFileName = L"AAFConstantValueTest.aaf";
 
 	try
 	{
@@ -543,14 +542,14 @@ HRESULT CAAFConstValue::test()
 	}
 	catch (...)
 	{
-		cerr << "CAAFConstValue::test...Caught general C++ exception!" << endl; 
+		cerr << "CAAFConstantValue::test...Caught general C++ exception!" << endl; 
 	}
 
 	// When all of the functionality of this class is tested, we can return success.
 	// When a method and its unit test have been implemented, remove it from the list.
 //	if (SUCCEEDED(hr))
 //	{
-//		cout << "The following IAAFConstValue methods have not been implemented:" << endl; 
+//		cout << "The following IAAFConstantValue methods have not been implemented:" << endl; 
 //		cout << "     GetValue" << endl; 
 //		cout << "     GetValueBufLen" << endl; 
 //		cout << "     SetValue" << endl; 
