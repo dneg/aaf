@@ -49,8 +49,6 @@ OMObjectReference::OMObjectReference(OMProperty* property)
   _pointer(0)
 {
   TRACE("OMObjectReference::OMObjectReference");
-
-  POSTCONDITION("non-void", !isVoid());
 }
 
   // @mfunc Copy constructor.
@@ -75,7 +73,7 @@ OMObjectReference::~OMObjectReference(void)
 bool OMObjectReference::isVoid(void) const
 {
   bool result;
-  if ((_property == 0) && (_pointer == 0)) {
+  if (_pointer == 0) {
     result = true;
   } else {
     result = false;
@@ -163,7 +161,6 @@ OMStrongObjectReference::OMStrongObjectReference(OMProperty* property,
   _name(saveWideString(name))
 {
   TRACE("OMStrongObjectReference::OMStrongObjectReference");
-  POSTCONDITION("non-void", !isVoid());
 }
 
   // @mfunc Copy constructor.
@@ -198,9 +195,7 @@ bool OMStrongObjectReference::isVoid(void) const
 {
   bool result = OMObjectReference::isVoid();
   if (result) {
-    if ((_isLoaded) && (_name == 0)) {
-      result = true;
-    } else {
+    if ((!_isLoaded) && (_name != 0)) {
       result = false;
     }
   }
@@ -502,7 +497,6 @@ OMWeakObjectReference::OMWeakObjectReference(
   _targetSet(0)
 {
   TRACE("OMWeakObjectReference::OMWeakObjectReference");
-  POSTCONDITION("non-void", !isVoid());
 }
 
   // @mfunc Copy constructor.
@@ -527,8 +521,21 @@ OMWeakObjectReference::~OMWeakObjectReference(void)
   //   @this const
 bool OMWeakObjectReference::isVoid(void) const
 {
-  return (_identification == nullOMUniqueObjectIdentification) &&
-         OMObjectReference::isVoid();
+  TRACE("OMWeakObjectReference::isVoid");
+  bool result = OMObjectReference::isVoid();
+  if (result) {
+    if (_identification != nullOMUniqueObjectIdentification) {
+      ASSERT("Valid containing property", _property != 0);
+      OMFile* file = _property->propertySet()->container()->file();
+      OMPropertyTable* table = file->referencedProperties();
+      if (!table->isValid(_targetTag)) {
+        result = true;
+      } else {
+        result = false;
+      }
+    }
+  }
+  return result;
 }
 
   // @mfunc Assignment.
