@@ -56,14 +56,18 @@ checkDirectories Ä
 	if "" == "`exists -d {incl}`"
 		NewFolder "{incl}"
 	end
+	Set Exit 0						# don't exit early
 	backup -from {aaf}ref-impl:include: -to {aaf}AAFMacSDK:include: -check from -a > makesdk.tmp
 	backup -from {aaf}ref-impl:include:ref-api -to {aaf}AAFMacSDK:include: -check from -a | StreamEdit -e '/Prvate/ Delete' >>  makesdk.tmp
-	execute makesdk.tmp
-	if "`Search -e 'Duplicate' makesdk.tmp`"		
-		for item in `files -f -o -s {aaf}AAFMacSDK:include:`
-			if "`Search "{item}" makesdk.tmp`"	
-				SetFile -c CWIE -a l "{item}"
-				OrphanFiles "{item}"
+	Set Exit 1
+	if `count -c makesdk.tmp` ­ 0
+		execute makesdk.tmp
+		if "`Search -e 'Duplicate' makesdk.tmp`"		
+			for item in `files -f -o -s {aaf}AAFMacSDK:include:`
+				if "`Search "{item}" makesdk.tmp`"	
+					SetFile -c CWIE -a l "{item}"
+					OrphanFiles "{item}"
+				end
 			end
 		end
 	end
