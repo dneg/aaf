@@ -62,6 +62,8 @@ typedef BOOL   (__stdcall *SYMLOADMODULE) (HANDLE, HANDLE, LPSTR, LPSTR,
                                            DWORD, DWORD);
 typedef BOOL   (__stdcall *SYMGETSEARCHPATH) (HANDLE, LPSTR, DWORD);
 typedef BOOL   (__stdcall *SYMSETSEARCHPATH) (HANDLE, LPSTR);
+typedef DWORD  (__stdcall *SYMGETOPTIONS)    (VOID);
+typedef DWORD  (__stdcall *SYMSETOPTIONS)    (DWORD);
 
 static SYMINITIALIZEPROC          _SymInitialize = 0;
 static SYMCLEANUPPROC             _SymCleanup = 0;
@@ -73,14 +75,26 @@ static UNDECORATESYMBOLNAME       _UnDecorateSymbolName = 0;
 static SYMLOADMODULE              _SymLoadModule = 0;
 static SYMGETSEARCHPATH           _SymGetSearchPath = 0;
 static SYMSETSEARCHPATH           _SymSetSearchPath = 0;
+static SYMGETOPTIONS              _SymGetOptions = 0;
+static SYMSETOPTIONS              _SymSetOptions = 0;
 
 static HMODULE hModImagehlp = 0;
 
-static bool initialize(void)
+static bool initialize(OMOStream& s)
 {
-  hModImagehlp = LoadLibrary(L"IMAGEHLP.DLL");
+  wchar_t* name = L"IMAGEHLP.DLL";
+  hModImagehlp = LoadLibrary(name);
   if (!hModImagehlp) {
-    return false;
+    DWORD error = GetLastError();
+    if (error == ERROR_CALL_NOT_IMPLEMENTED) {
+      // A version of Windows without UNICODE support
+      char* cName = convertWideString(name);
+      hModImagehlp = LoadLibraryA(cName);
+      delete [] cName;
+    } else {
+      s << "LoadLibrary() failed, result = " << error << endl;
+      return false;
+    }
   }
 
   _SymInitialize =
@@ -150,6 +164,18 @@ static bool initialize(void)
     return false;
   }
 
+  _SymGetOptions  =   (SYMGETOPTIONS) GetProcAddress(hModImagehlp,
+                                                     "SymGetOptions");
+  if (!_SymGetOptions) {
+    return false;
+  }
+
+  _SymSetOptions  =   (SYMSETOPTIONS) GetProcAddress(hModImagehlp,
+                                                     "SymSetOptions");
+  if (!_SymSetOptions) {
+    return false;
+  }
+
   return true;
 }
 
@@ -164,13 +190,20 @@ void printStackTrace(OMOStream& s)
 {
   s << "Symbolic stack trace." << endl;
 
-  if (initialize()) {
+  if (initialize(s)) {
+
+    // Enable deferred loading of symbols. This means that a given
+    // symbol will not be loaded unless it is referenced.
+    //
+    DWORD options = _SymGetOptions();
+    options = _SymSetOptions(options | SYMOPT_DEFERRED_LOADS);
 
     BOOL status;
 
     status = _SymInitialize(GetCurrentProcess(), 0, TRUE);
     if (!status) {
-      s << "SymInitialize() failed." << endl;
+      DWORD error = GetLastError();
+      s << "SymInitialize() failed, result = " << error << endl;
     }
 
     CONTEXT context;
@@ -179,7 +212,8 @@ void printStackTrace(OMOStream& s)
 
     status = GetThreadContext(GetCurrentThread(), &context);
     if (!status) {
-     s << "GetThreadContext() failed." << endl;
+      DWORD error = GetLastError();
+      s << "GetThreadContext() failed, result = " << error << endl;
     }
 
     STACKFRAME stackFrame;
@@ -234,7 +268,7 @@ void printStackTrace(OMOStream& s)
             if (symStatus) {
               s << buffer;
             } else {
-              DWORD e = GetLastError();
+              DWORD error = GetLastError();
               s << sym->Name;
             }
           } else {
@@ -244,6 +278,7 @@ void printStackTrace(OMOStream& s)
             s << " + " << disp;
           }
         } else {
+          DWORD error = GetLastError();
           s << "<unknown routine>";
         }
 
@@ -254,9 +289,10 @@ void printStackTrace(OMOStream& s)
 
         DWORD moduleHandle = (DWORD)mbi.AllocationBase;
 
-        modStatus = GetModuleFileName((HMODULE)moduleHandle,
-                                      moduleName,
-                                      sizeof(moduleName));
+        modStatus = GetModuleFileName(
+                                     (HMODULE)moduleHandle,
+                                     moduleName,
+                                     sizeof(moduleName)/sizeof(moduleName[0]));
 
         if (modStatus) {
           char* fullName = convertWideString(moduleName);
@@ -276,7 +312,8 @@ void printStackTrace(OMOStream& s)
 
     status = _SymCleanup(GetCurrentProcess());
     if (!status) {
-      s << "symCleanup() failed." << endl;
+      DWORD error = GetLastError();
+      s << "symCleanup() failed, result = " << error << endl;
     }
 
   } else {
