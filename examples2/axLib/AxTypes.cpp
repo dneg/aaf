@@ -183,11 +183,19 @@ bool operator<( const aafUID_t& uidL, const aafUID_t& uidR )
 	return 0 > ::memcmp( &uidL, &uidR, sizeof( aafUID_t ) );
 }
 
+#if !defined(DISABLE_DYNAMIC_LOADING)
+// These two operators are also defined in ImplAAFCloneResolver.cpp
+// so only build if this is not a static build to avoid a clash.
 bool operator==( const aafUID_t& uidL, const aafUID_t& uidR )
 {
 	return 0 == ::memcmp( &uidL, &uidR, sizeof( aafUID_t ) );
 }
 
+bool operator==( const aafMobID_t& lhs, const aafMobID_t& rhs )
+{
+  return 0 == ::memcmp( &lhs, &rhs, sizeof( aafMobID_t ) );
+}
+#endif
 
 #if !(defined(OS_WINDOWS) || defined(OS_MACOS))
 bool operator==( const tagGUID& uidL, const tagGUID& uidR )
@@ -195,12 +203,6 @@ bool operator==( const tagGUID& uidL, const tagGUID& uidR )
 	return 0 == ::memcmp( &uidL, &uidR, sizeof( tagGUID ) );
 }
 #endif
-
-
-bool operator==( const aafMobID_t& lhs, const aafMobID_t& rhs )
-{
-  return 0 == ::memcmp( &lhs, &rhs, sizeof( aafMobID_t ) );
-}
 
 bool operator<( const aafMobID_t& lhs, const aafMobID_t& rhs )
 {
