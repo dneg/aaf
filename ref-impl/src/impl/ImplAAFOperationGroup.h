@@ -1,7 +1,7 @@
 //@doc
-//@class    AAFEffect | Implementation class for AAFEffect
-#ifndef __ImplAAFEffect_h__
-#define __ImplAAFEffect_h__
+//@class    AAFOperationGroup | Implementation class for AAFOperationGroup
+#ifndef __ImplAAFOperationGroup_h__
+#define __ImplAAFOperationGroup_h__
 
 
 /******************************************\
@@ -21,11 +21,11 @@
 
 class ImplAAFDataDef;
 
-class ImplAAFEffectDef;
+class ImplAAFOperationDef;
 
 class ImplAAFParameter;
 
-class ImplEnumAAFEffectDefs;
+class ImplEnumAAFOperationDefs;
 
 class ImplEnumAAFParameterDefs;
 
@@ -46,17 +46,17 @@ class ImplAAFSourceReference;
 #endif
 
 
-class ImplAAFEffect : public ImplAAFSegment
+class ImplAAFOperationGroup : public ImplAAFSegment
 {
 public:
   //
   // Constructor/destructor
   //
   //********
-  ImplAAFEffect ();
+  ImplAAFOperationGroup ();
 
 protected:
-  virtual ~ImplAAFEffect ();
+  virtual ~ImplAAFOperationGroup ();
 
 public:
 
@@ -74,18 +74,18 @@ public:
          aafLength_t  length,
 
          // @parm [in] Effect Definition object
-         ImplAAFEffectDef * effectDef);
+         ImplAAFOperationDef * operationDef);
 	//@comm  This function takes an already created effect definition object as an argument.
 	//@comm  To add slots to the effect, call AddNewSlot.
 	//@comm  To add renderings, call SetRender.
 
   //****************
-  // GetEffectDefinition()
+  // GetOperationDefinition()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetEffectDefinition
+    GetOperationDefinition
         // @parm [out] Effect definition object
-        (ImplAAFEffectDef ** effectDef);
+        (ImplAAFOperationDef ** OperationDef);
 	//@comm Replaces part of omfiEffectGetInfo
 
 
@@ -145,7 +145,7 @@ public:
   // IsValidTranEffect()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    IsValidTranEffect
+    IsValidTranOperation
         // @parm [out] TRUE if the effect is valid in a transition
         (aafBool *  validTransition);
 
@@ -212,20 +212,20 @@ public:
 public:
   // Declare this class to be storable.
   //
-  OMDECLARE_STORABLE(ImplAAFEffect)
+  OMDECLARE_STORABLE(ImplAAFOperationGroup)
 
   // Declare the module test method. The implementation of the will be be
-  // in /test/ImplAAFEffectTest.cpp.
+  // in /test/ImplAAFOperationGroupTest.cpp.
   static AAFRESULT test();
 
 private:
-	OMFixedSizeProperty<aafUID_t>						_effectDefinition;
+	OMFixedSizeProperty<aafUID_t>						_operationDefinition;
 	OMStrongReferenceVectorProperty<ImplAAFSegment>		_inputSegments;
 	OMStrongReferenceVectorProperty<ImplAAFParameter>	_parameters;
 	OMFixedSizeProperty<aafUInt32>						_bypassOverride;
 	OMStrongReferenceProperty<ImplAAFSourceReference>	_rendering;
 };
 
-#endif // ! __ImplAAFEffect_h__
+#endif // ! __ImplAAFOperationGroup_h__
 
 
