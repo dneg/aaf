@@ -85,6 +85,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFMob*					pReferencedMob = NULL;
 	IAAFTimelineMobSlot*		newSlot = NULL;
 	IAAFSegment*				seg = NULL;
+	IAAFComponent*		pComponent = NULL;
 	IAAFSourceClip*				sclp = NULL;
 	aafRational_t				audioRate = { 44100, 1 };
 	bool bFileOpen = false;
@@ -139,6 +140,10 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(defs.cdSourceClip()->
 					CreateInstance(IID_IAAFSourceClip, 
 								   (IUnknown **)&sclp));
+		 checkResult(sclp->QueryInterface(IID_IAAFComponent, (void **)&pComponent));
+		 checkResult(pComponent->SetDataDef(defs.ddPicture()));
+		pComponent->Release();
+		pComponent = NULL;
 								 		
 		// Set the properties for the SourceClip
 		checkResult(sclp->SetFade( fadeInLen, fadeInType, fadeOutLen, fadeOutType));
@@ -173,6 +178,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 	if (sclp)
 		sclp->Release();
+
+	if (pComponent)
+		pComponent->Release();
 
 	if (pMob)
 		pMob->Release();

@@ -90,6 +90,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	aafProductIdentification_t	ProductInfo;
 	aafMobID_t					newMobID, referencedMobID;
 	HRESULT						hr = AAFRESULT_SUCCESS;
+	IAAFComponent*				pComponent = NULL;
 
 	ProductInfo.companyName = L"AAF Developers Desk";
 	ProductInfo.productName = L"AAFSegment Test";
@@ -138,6 +139,10 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(defs.cdSourceClip()->
 					CreateInstance(IID_IAAFSegment, 
 								   (IUnknown **)&seg));
+		 checkResult(seg->QueryInterface(IID_IAAFComponent, (void **)&pComponent));
+		 checkResult(pComponent->SetDataDef(defs.ddPicture()));
+		pComponent->Release();
+		pComponent = NULL;
 								 		
 		aafRational_t editRate = { 0, 1};
 		checkResult(pMob->AppendNewTimelineSlot (editRate,
@@ -158,6 +163,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
   // Cleanup and return
 	if (newSlot)
 		newSlot->Release();
+
+	if (pComponent)
+		pComponent->Release();
 
 	if (seg)
 		seg->Release();
