@@ -799,8 +799,11 @@ OMStrongReferenceSetProperty<UniqueIdentification,
   TRACE("OMStrongReferenceSetProperty<UniqueIdentification, "
                                      "ReferencedObject>::remove");
 
-  // TBS
-  return 0;
+  PRECONDITION("Valid identification", identification != 0);
+
+  UniqueIdentification* id =
+                       reinterpret_cast<UniqueIdentification*>(identification);
+  return remove(*id);
 }
 
   // @mfunc Does this <c OMStrongReferenceSetProperty> contain an
@@ -820,8 +823,11 @@ OMStrongReferenceSetProperty<UniqueIdentification,
   TRACE("OMStrongReferenceSetProperty<UniqueIdentification, "
                                      "ReferencedObject>::containsObject");
 
-  // TBS
-  return false;
+  PRECONDITION("Valid identification", identification != 0);
+
+  UniqueIdentification* id =
+                       reinterpret_cast<UniqueIdentification*>(identification);
+  return contains(*id);
 }
 
   // @mfunc Find the <c OMObject> in this <c OMStrongReferenceSetProperty>
@@ -845,8 +851,17 @@ OMStrongReferenceSetProperty<UniqueIdentification,
   TRACE("OMStrongReferenceSetProperty<UniqueIdentification, "
                                      "ReferencedObject>::findObject");
 
-  // TBS
-  return false;
+  PRECONDITION("Valid identification", identification != 0);
+
+  UniqueIdentification* id =
+                       reinterpret_cast<UniqueIdentification*>(identification);
+
+  ReferencedObject* obj = 0;
+
+  bool result = find(*id, obj);
+
+  object = obj;
+  return result;
 }
 
 template <typename UniqueIdentification, typename ReferencedObject>
