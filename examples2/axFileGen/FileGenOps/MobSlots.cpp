@@ -36,6 +36,16 @@ AXFG_OP_DECLARATION( MobSlotSet )
 
 AXFG_OP_FACTORY_DECLARATION_B(
   MobSlotSet,
+  MobSlotSetSlotId,
+  L"MobSlotSetSlotId",
+  L"Set the slot id.",
+  L"MobSlotName slot_id",
+  L"",
+  3,
+  3 )
+
+AXFG_OP_FACTORY_DECLARATION_B(
+  MobSlotSet,
   MobSlotSetPhysNum,
   L"MobSlotSetPhysNum",
   L"Set the physical track number for any mob slot.",
@@ -75,6 +85,10 @@ void MobSlotSet::Execute( const std::vector<AxString>& argv )
 	else if ( opName == L"MobSlotSetName" ) {
 		AxString name = argv[2];
 		axSlot.SetName( name );
+	}
+	else if ( opName == L"MobSlotSetSlotId" ) {
+		AxString slotId = argv[2];
+		axSlot.SetSlotID( AxStringUtil::strtol( slotId ) );
 	}
 	else {
 		// This should never happen in a correct implementation.
