@@ -171,16 +171,27 @@ STDAPI ImplAAFFileOpenExistingRead (
 		hr = AAFRESULT_NOMEMORY;
   else
   {
-    // Make sure the file is initialized (not open yet...)
-    hr = pFile->Initialize();
-    if (SUCCEEDED(hr))
+    try
     {
-      // Attempt to open the file read only.
-      hr = pFile->OpenExistingRead(pFileName, modeFlags);
+      // Make sure the file is initialized (not open yet...)
+      hr = pFile->Initialize();
       if (SUCCEEDED(hr))
       {
-       *ppFile = pFile;
+        // Attempt to open the file read only.
+        hr = pFile->OpenExistingRead(pFileName, modeFlags);
+        if (SUCCEEDED(hr))
+        {
+         *ppFile = pFile;
+         pFile = NULL;
+        }
       }
+    }
+    catch (...)
+    {
+      // Cleanup the file if it could not be initialized and opened.
+      if (pFile)
+        pFile->ReleaseReference();
+      throw;
     }
   }
 
@@ -287,16 +298,27 @@ STDAPI ImplAAFFileOpenExistingModify (
 		hr = AAFRESULT_NOMEMORY;
   else
   {
-    // Make sure the file is initialized (not open yet...)
-    hr = pFile->Initialize();
-    if (SUCCEEDED(hr))
+    try
     {
-      // Attempt to open the file for modification.
-      hr = pFile->OpenExistingModify(pFileName, modeFlags, pIdent);
+      // Make sure the file is initialized (not open yet...)
+      hr = pFile->Initialize();
       if (SUCCEEDED(hr))
       {
-        *ppFile = pFile;
+        // Attempt to open the file for modification.
+        hr = pFile->OpenExistingModify(pFileName, modeFlags, pIdent);
+        if (SUCCEEDED(hr))
+        {
+          *ppFile = pFile;
+          pFile = NULL;
+        }
       }
+    }
+    catch (...)
+    {
+      // Cleanup the file if it could not be initialized and opened.
+      if (pFile)
+        pFile->ReleaseReference();
+      throw;
     }
   }
 
@@ -394,16 +416,27 @@ STDAPI ImplAAFFileOpenNewModify (
 		hr = AAFRESULT_NOMEMORY;
   else
   {
-    // Make sure the file is initialized (not open yet...)
-    hr = pFile->Initialize();
-    if (SUCCEEDED(hr))
+    try
     {
-      // Attempt to open a new file for modification.
-      hr = pFile->OpenNewModify(pFileName, modeFlags, pIdent);
+      // Make sure the file is initialized (not open yet...)
+      hr = pFile->Initialize();
       if (SUCCEEDED(hr))
       {
-        *ppFile = pFile;
+        // Attempt to open a new file for modification.
+        hr = pFile->OpenNewModify(pFileName, modeFlags, pIdent);
+        if (SUCCEEDED(hr))
+        {
+          *ppFile = pFile;
+          pFile = NULL;
+        }
       }
+    }
+    catch (...)
+    {
+      // Cleanup the file if it could not be initialized and opened.
+      if (pFile)
+        pFile->ReleaseReference();
+      throw;
     }
   }
 
@@ -477,16 +510,27 @@ STDAPI ImplAAFFileOpenTransient (
 		hr = AAFRESULT_NOMEMORY;
   else
   {
-    // Make sure the file is initialized (not open yet...)
-    hr = pFile->Initialize();
-    if (SUCCEEDED(hr))
+    try
     {
-      // Attempt to open a new transient file.
-      hr = pFile->OpenTransient(pIdent);
+      // Make sure the file is initialized (not open yet...)
+      hr = pFile->Initialize();
       if (SUCCEEDED(hr))
       {
-        *ppFile = pFile;
+        // Attempt to open a new transient file.
+        hr = pFile->OpenTransient(pIdent);
+        if (SUCCEEDED(hr))
+        {
+          *ppFile = pFile;
+          pFile = NULL;
+        }
       }
+    }
+    catch (...)
+    {
+      // Cleanup the file if it could not be initialized and opened.
+      if (pFile)
+        pFile->ReleaseReference();
+      throw;
     }
   }
 
@@ -523,6 +567,9 @@ STDAPI ImplAAFGetPluginManager (
 	*ppManager = NULL;
 	
 	implMgr = ImplAAFPluginManager::GetPluginManager();
+  if (NULL == implMgr)
+    hr = AAFRESULT_NOMEMORY;
+  else
     *ppManager = implMgr;
 	
 	return hr;
