@@ -65,6 +65,7 @@ public:
     //          exist.
   static OMFile* openExistingRead(const wchar_t* fileName,
                                   const OMClassFactory* factory,
+                                  void* clientOnRestoreContext,
                                   const OMLoadMode loadMode);
 
     // @cmember Open an existing <c OMFile> for modify access, the
@@ -73,6 +74,7 @@ public:
     //          exist.
   static OMFile* openExistingModify(const wchar_t* fileName,
                                     const OMClassFactory* factory,
+                                    void* clientOnRestoreContext,
                                     const OMLoadMode loadMode);
 
     // @cmember Open a new <c OMFile> for modify access, the
@@ -83,6 +85,7 @@ public:
     //          created file is given by <p root>.
   static OMFile* openNewModify(const wchar_t* fileName,
                                const OMClassFactory* factory,
+                               void* clientOnRestoreContext,
                                const OMByteOrder byteOrder,
                                OMStorable* root,
                                const OMFileSignature& signature);
@@ -95,6 +98,7 @@ public:
     // @cmember Constructor. Create an <c OMFile> object representing
     //          an existing external file.
   OMFile(const wchar_t* fileName,
+         void* clientOnRestoreContext,
          const OMAccessMode mode,
          OMStoredObject* store,
          const OMClassFactory* factory,
@@ -103,6 +107,7 @@ public:
     // @cmember Constructor. Create an <c OMFile> object representing
     //          a new external file.
   OMFile(const wchar_t* fileName,
+         void* clientOnRestoreContext,
          OMFileSignature signature,
          const OMAccessMode mode,
          OMStoredObject* store,
@@ -174,6 +179,8 @@ public:
 
   void* clientOnSaveContext(void);
 
+  void* clientOnRestoreContext(void);
+
 private:
   // @access Private members.
 
@@ -195,6 +202,7 @@ private:
   OMFileSignature _signature;
 
   void* _clientOnSaveContext;
+  void* _clientOnRestoreContext;
 
 };
 
