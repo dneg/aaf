@@ -43,28 +43,40 @@ public:
  
     // All reads/and writes advance the current element
 
-// General access
+// Random access in chunks of Elements
 
-    // Read elementCount Elements, starting at startElement,
+    // Read elementCount Elements, starting at index,
     // from the stream into elements.
-  void readElements(size_t startElement,
-                    size_t elementCount,
+  void readElements(OMUInt64 index,
+                    OMUInt32 elementCount,
                     Element* elements) const;
 
-    // Write elementCount Elements, starting at startElement,
+    // Write elementCount Elements, starting at index,
     // to the stream from elements.
-  void writeElements(size_t startElement,
-                     size_t elementCount,
+  void writeElements(OMUInt64 index,
+                     OMUInt32 elementCount,
                      const Element* elements);
+
+// Random access one Element at a time.
+
+    // Read elementCount Elements, starting at index,
+    // from the stream into elements.
+  void readElement(OMUInt64 index,
+                   Element* element) const;
+
+    // Write elementCount Elements, starting at index,
+    // to the stream from elements.
+  void writeElement(OMUInt64 index,
+                    const Element* element);
 
 // Sequential access in chunks of Elements
 
     // Read elementCount Elements from the stream into elements.
-  void readElements(size_t elementCount,
+  void readElements(OMUInt32 elementCount,
                     Element* elements) const;
 
     // Write elementCount Elements to the stream from elements.
-  void writeElements(size_t elementCount,
+  void writeElements(OMUInt32 elementCount,
                      const Element* elements);
 
 // Sequential access one Element at a time.
@@ -78,25 +90,24 @@ public:
 // Extend in chunks of Elements
 
     // Write elementCount Elements to the end of the stream from elements.
-  void appendElements(size_t elementCount,
+  void appendElements(OMUInt32 elementCount,
                       const Element* elements);
 
 // Extend one Element at a time
 
     // Write an element at the end of the stream.
-  void appendElement(const Element* element);
-
+  void appendElement(const Element element);
 
 // Stream positioning and count of elements
 
-    // The ordinal of the current element.
-  size_t position(void) const;
+    // The index of the current element.
+  OMUInt64 index(void) const;
 
-    // Make the element at ordinal newPosition the currentOne.
-  void setPosition(size_t newPosition);
+    // Make the element at newIndex the current one.
+  void setIndex(const OMUInt64 newIndex) const;
 
     // The count of elements in the stream.
-  size_t elementCount(void) const;
+  OMUInt64 elementCount(void) const;
 
 };
 
