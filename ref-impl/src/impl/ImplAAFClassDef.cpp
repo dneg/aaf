@@ -337,26 +337,7 @@ AAFRESULT STDMETHODCALLTYPE
   // augment it.
   if (pDict->IsAxiomaticClass (myAuid))
   {
-#if SUPPORT_EXPERIMENTAL_OPTIONAL_SETS
-
-		// TEMPORARY HACK:
-		// Explicitely allow the selected "private" classes to be extended
-		// with optional properties. NOTE: These classes cannot be subclassed.
-		// There should really be different types of class definitions to 
-		// handle these (and other) special cases.
-		// 2000-SEPT-13 transdel
-		if ((0 != memcmp(&myAuid, &AUID_AAFHeader, sizeof(aafUID_t))) &&
-		    (0 != memcmp(&myAuid, &AUID_AAFDictionary, sizeof(aafUID_t))) &&
-		    (0 != memcmp(&myAuid, &AUID_AAFContentStorage, sizeof(aafUID_t))))
-		{
-			return AAFRESULT_NOT_EXTENDABLE;
-		}
-
-#else // #if SUPPORT_EXPERIMENTAL_OPTIONAL_SETS
-
 		return AAFRESULT_NOT_EXTENDABLE;
-		
-#endif // #else // #if SUPPORT_EXPERIMENTAL_OPTIONAL_SETS
 	}
 
   aafUID_t typeId;
