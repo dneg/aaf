@@ -296,7 +296,7 @@ ReferencedObject* OMWeakReferenceVectorProperty<ReferencedObject>::setValueAt(
 {
   TRACE("OMWeakReferenceVectorProperty<ReferencedObject>::setValueAt");
 
-  PRECONDITION("Valid index", (index >= 0) && (index <= count()));
+  PRECONDITION("Valid index", index <= count());
   PRECONDITION("Valid object", object != 0);
 #if defined(OM_VALIDATE_WEAK_REFERENCES)
   PRECONDITION("Source container object attached to file",
@@ -341,7 +341,7 @@ ReferencedObject* OMWeakReferenceVectorProperty<ReferencedObject>::valueAt(
   TRACE("OMWeakReferenceVectorProperty<ReferencedObject>::valueAt");
   PRECONDITION("Optional property is present",
                                            IMPLIES(isOptional(), isPresent()));
-  PRECONDITION("Valid index", ((index >= 0) && (index < count())));
+  PRECONDITION("Valid index", index < count());
 
   VectorElement& element = _vector.getAt(index);
 
@@ -366,7 +366,7 @@ void OMWeakReferenceVectorProperty<ReferencedObject>::getValueAt(
   OBSOLETE("OMWeakReferenceVectorProperty<ReferencedObject>::valueAt");
   PRECONDITION("Optional property is present",
                                            IMPLIES(isOptional(), isPresent()));
-  PRECONDITION("Valid index", ((index >= 0) && (index < count())));
+  PRECONDITION("Valid index", index < count());
 
   VectorElement& element = _vector.getAt(index);
 
@@ -464,7 +464,7 @@ void OMWeakReferenceVectorProperty<ReferencedObject>::insertAt(
 {
   TRACE("OMWeakReferenceVectorProperty<ReferencedObject>::insertAt");
 
-  PRECONDITION("Valid index", (index >= 0) && (index <= count()));
+  PRECONDITION("Valid index", index <= count());
   PRECONDITION("Valid object", object != 0);
 #if defined(OM_VALIDATE_WEAK_REFERENCES)
   PRECONDITION("Source container object attached to file",
@@ -550,7 +550,7 @@ ReferencedObject*
 OMWeakReferenceVectorProperty<ReferencedObject>::removeAt(const size_t index)
 {
   TRACE("OMWeakReferenceVectorProperty<ReferencedObject>::removeAt");
-  PRECONDITION("Valid index", (index >= 0) && (index <= count()));
+  PRECONDITION("Valid index", index <= count());
 
   ReferencedObject* result = setValueAt(0, index);
   _vector.removeAt(index);
