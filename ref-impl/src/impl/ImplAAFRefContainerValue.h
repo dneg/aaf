@@ -68,10 +68,6 @@ protected:
 public:
 
   virtual AAFRESULT STDMETHODCALLTYPE WriteTo(OMProperty* pOmProp);
-  
-private:
-  OMProperty * _containerProperty; // TBD: the base class for singleton references
-	ImplAAFRoot * _propertyContainer; // save reference to owning container.
 };
 
 //
