@@ -36,6 +36,8 @@ class ImplAAFSegment;
 
 const int PID_SOURCEMOB_EDESC	= 5;
 
+const int FULL_LENGTH = -1;
+
 class ImplAAFSourceMob : public ImplAAFMob
 {
 public:
@@ -99,7 +101,7 @@ public:
   // AddTimecodeClip()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    AddTimecodeClip
+    AppendTimecodeClip
         (// @parm [in] Edit rate of Timecode slot
 		 aafRational_t  editrate,
 
@@ -117,7 +119,7 @@ public:
   // AddEdgecodeClip()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    AddEdgecodeClip
+    AppendEdgecodeClip
         (// @parm [in] Edit rate of the Edgecode slot
 		 aafRational_t  editrate,
 
