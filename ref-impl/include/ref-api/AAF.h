@@ -171,21 +171,22 @@ interface IAAFRecordingDescriptor;
 interface IAAFAuxiliaryDescriptor;
 interface IAAFDescriptiveFramework;
 interface IAAFDescriptiveMarker;
+interface IAAFComponent2;
+interface IAAFCompositionMob2;
 interface IAAFDataDef2;
+interface IAAFDictionary2;
+interface IAAFDigitalImageDescriptor2;
 interface IAAFEndian;
-interface IAAFHeader2;
-interface IAAFSearchSource;
 interface IAAFEssenceDataEx;
 interface IAAFEssenceMultiAccess;
-interface IAAFTypeDefVariableArrayEx;
+interface IAAFHeader2;
+interface IAAFMasterMob2;
 interface IAAFMasterMobEx;
 interface IAAFMob2;
-interface IAAFTimelineMobSlot2;
-interface IAAFComponent2;
-interface IAAFDictionary2;
+interface IAAFSearchSource;
 interface IAAFSourceReference2;
-interface IAAFMasterMob2;
-interface IAAFCompositionMob2;
+interface IAAFTimelineMobSlot2;
+interface IAAFTypeDefVariableArrayEx;
 #else
 typedef interface IAAFAIFCDescriptor IAAFAIFCDescriptor;
 typedef interface IAAFClassDef IAAFClassDef;
@@ -318,21 +319,22 @@ typedef interface IAAFRecordingDescriptor IAAFRecordingDescriptor;
 typedef interface IAAFAuxiliaryDescriptor IAAFAuxiliaryDescriptor;
 typedef interface IAAFDescriptiveFramework IAAFDescriptiveFramework;
 typedef interface IAAFDescriptiveMarker IAAFDescriptiveMarker;
+typedef interface IAAFComponent2 IAAFComponent2;
+typedef interface IAAFCompositionMob2 IAAFCompositionMob2;
 typedef interface IAAFDataDef2 IAAFDataDef2;
+typedef interface IAAFDictionary2 IAAFDictionary2;
+typedef interface IAAFDigitalImageDescriptor2 IAAFDigitalImageDescriptor2;
 typedef interface IAAFEndian IAAFEndian;
-typedef interface IAAFHeader2 IAAFHeader2;
-typedef interface IAAFSearchSource IAAFSearchSource;
 typedef interface IAAFEssenceDataEx IAAFEssenceDataEx;
 typedef interface IAAFEssenceMultiAccess IAAFEssenceMultiAccess;
-typedef interface IAAFTypeDefVariableArrayEx IAAFTypeDefVariableArrayEx;
+typedef interface IAAFHeader2 IAAFHeader2;
+typedef interface IAAFMasterMob2 IAAFMasterMob2;
 typedef interface IAAFMasterMobEx IAAFMasterMobEx;
 typedef interface IAAFMob2 IAAFMob2;
-typedef interface IAAFTimelineMobSlot2 IAAFTimelineMobSlot2;
-typedef interface IAAFComponent2 IAAFComponent2;
-typedef interface IAAFDictionary2 IAAFDictionary2;
+typedef interface IAAFSearchSource IAAFSearchSource;
 typedef interface IAAFSourceReference2 IAAFSourceReference2;
-typedef interface IAAFMasterMob2 IAAFMasterMob2;
-typedef interface IAAFCompositionMob2 IAAFCompositionMob2;
+typedef interface IAAFTimelineMobSlot2 IAAFTimelineMobSlot2;
+typedef interface IAAFTypeDefVariableArrayEx IAAFTypeDefVariableArrayEx;
 #endif
 
 // IAAFAIFCDescriptor
@@ -8254,6 +8256,7 @@ DECLARE_INTERFACE_(IAAFFilmDescriptor, IUnknown)
 
 EXTERN_C const IID IID_IAAFDigitalImageDescriptor;
 
+
 #undef  INTERFACE
 #define INTERFACE   IAAFDigitalImageDescriptor
 
@@ -8272,7 +8275,8 @@ DECLARE_INTERFACE_(IAAFDigitalImageDescriptor, IUnknown)
   //
   // SetCompression()
   //
-  // // Sets the kind of compression and format of compression
+  // //
+  // Sets the kind of compression and format of compression
   // information of the video essence data.  This property is
   // optional.  If there is no compression, the property is omitted.
   // 
@@ -8285,19 +8289,17 @@ DECLARE_INTERFACE_(IAAFDigitalImageDescriptor, IUnknown)
   //   - succeeded.  (This is the only code indicating success.)
   //
   STDMETHOD(SetCompression) (THIS_
-    // Identifies a Codec definition for the desired compression and
-	// format of compression information.
-    /*[in]*/ aafUID_constref  codecID) PURE;
+    // Optional.
+    /*[in]*/ aafUID_constref  compression) PURE;
 
 
   //***********************************************************
   //
   // GetCompression()
   //
-  // Gets the kind of compression and format of compression
+  // // Gets the kind of compression and format of compression
   // information of the video essence data.  This property is
-  // optional.  If there is no compression, the null AUID is
-  // returned.
+  // optional.
   //
   // Succeeds if all of the following are true:
   // - the pCompression pointer is valid.
@@ -8313,8 +8315,7 @@ DECLARE_INTERFACE_(IAAFDigitalImageDescriptor, IUnknown)
   //   - pComporession arg is NULL.
   //
   STDMETHOD(GetCompression) (THIS_
-    // Identifies a Codec definition for the desired compression and
-	// format of compression information.
+    // Optional.
     /*[out]*/ aafUID_t *  pCompression) PURE;
 
 
@@ -8840,8 +8841,7 @@ DECLARE_INTERFACE_(IAAFDigitalImageDescriptor, IUnknown)
   //
   // SetGamma()
   //
-  // Sets the Gamma property.  Specifies the expected output gamma
-  // setting on the video display device.
+  // Sets the TransferCharacteristic property.
   //
   // Succeeds if all of the following are true:
   // - 
@@ -8863,8 +8863,7 @@ DECLARE_INTERFACE_(IAAFDigitalImageDescriptor, IUnknown)
   //
   // GetGamma()
   //
-  // Gets the Gamma property.  Specifies the expected output gamma
-  // setting on the video display device.
+  // Gets the TransferCharacteristic property.
   //
   // Succeeds if all of the following are true:
   // - pGamma is a valid pointer
@@ -8938,10 +8937,23 @@ DECLARE_INTERFACE_(IAAFDigitalImageDescriptor, IUnknown)
     // Optional.
     /*[out]*/ aafUInt32 *  pImageAlignmentFactor) PURE;
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   END_INTERFACE
 };
 #endif // __IAAFDigitalImageDescriptor_INTERFACE_DEFINED__
-
 
 
 // IAAFCDCIDescriptor
@@ -34990,6 +35002,640 @@ DECLARE_INTERFACE_(IAAFDescriptiveMarker, IUnknown)
 
 
 
+// IAAFComponent2
+
+// ************************
+//
+// Interface IAAFComponent2
+//
+// ************************
+
+
+
+
+
+
+
+
+#ifndef __IAAFComponent2_INTERFACE_DEFINED__
+#define __IAAFComponent2_INTERFACE_DEFINED__
+
+EXTERN_C const IID IID_IAAFComponent2;
+
+#undef  INTERFACE
+#define INTERFACE   IAAFComponent2
+
+DECLARE_INTERFACE_(IAAFComponent2, IUnknown)
+{
+  BEGIN_INTERFACE
+
+  /* *** IUnknown methods *** */
+  STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppvObj) PURE;
+  STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
+  STDMETHOD_(ULONG,Release) (THIS) PURE;
+
+  /* *** IAAFComponent2 methods *** */
+
+
+
+
+  //***********************************************************
+  //
+  // SetLength()
+  //
+  // Sets the length property value on this component object.
+  // 
+  // Succeeds if all of the following are true:
+  // - the optional length property is present for this object.
+  //
+  // This method deals with an optional property, which will only be
+  // present for time-varying media.
+  // 
+  // If this method fails the length property will not be
+  // changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_BAD_PROP
+  //   - the optional length property is not present for this object.
+  //
+  STDMETHOD(SetLength) (THIS_
+    // The duration in edit units of this component
+    /*[in]*/ aafLength_constref  length) PURE;
+
+
+  //***********************************************************
+  //
+  // GetLength()
+  //
+  // Gets the duration in edit units of this component.
+  //	
+  // Succeeds if all of the following are true:
+  // - the pLength pointer is valid.
+  // - the optional length property is present for this object.
+  //
+  // This method deals with an optional property, which will only be
+  // present for time-varying media.
+  // 
+  // If this method fails nothing will be written to *pLength.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pLength arg is NULL.
+  //
+  // AAFRESULT_BAD_PROP
+  //   - the optional length property is not present for this object.
+  //
+  STDMETHOD(GetLength) (THIS_
+    // Length of this component
+    /*[retval][out]*/ aafLength_t *  pLength) PURE;
+	
+
+  //***********************************************************
+  //
+  // SetDataDef()
+  //
+  // sets the data definition property AUID on this component.
+  // 
+  // If this method fails the Data Definition property will not be
+  // changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pDataDef arg is NULL.
+  //
+  STDMETHOD(SetDataDef) (THIS_
+    // DataDef of this object
+    /*[in]*/ IAAFDataDef * pDataDef) PURE;
+
+
+  //***********************************************************
+  //
+  // GetDataDef()
+  //
+  // returns data definition object.
+  //
+  // Succeeds if all of the following are true:
+  // - the ppDatadef pointer is valid.
+  // 
+  // If this method fails nothing will be written to *ppDatadef.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppDatadef arg is NULL.
+  //
+  STDMETHOD(GetDataDef) (THIS_
+    // DataDef of this object
+    /*[out, retval]*/ IAAFDataDef ** ppDatadef) PURE;
+
+  //***********************************************************
+  //
+  // AppendKLVData()
+  //
+  // Appends a pre-existing KLV Data object to the specified
+  // component.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pKLV pointer is valid.
+  // 
+  // If this method fails no state will be changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - the pData arg is NULL.
+  //
+  STDMETHOD(AppendKLVData) (THIS_
+    // KLV object
+    /*[in]*/ IAAFKLVData * pData) PURE;
+
+
+  //***********************************************************
+  //
+  // CountKLVData()
+  //
+  // return total number of KLV data objects attached to this component.
+  //
+  // Succeeds if all of the following are true:
+  // - the pNumData pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pNumComments.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pNumData arg is NULL.
+  //
+  STDMETHOD(CountKLVData) (THIS_
+    // Number  of KLV data objects
+    /*[out]*/ aafUInt32 *  pNumData) PURE;
+
+
+  //***********************************************************
+  //
+  // GetKLVData()
+  //
+  // return the enumeration for all KLV data objects on this component.  The returned
+  // enumerator is AddRef()ed before it is returned.  The enumerator
+  // is implemented as a EnumAAFKLVData.
+  // 
+  // Succeeds if all of the following are true:
+  // - the ppEnum pointer is valid.
+  // 
+  // If this method fails nothing will be written to *ppEnum.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppEnum is null.
+  //
+  STDMETHOD(GetKLVData) (THIS_
+    // KLV data objects
+    /*[out]*/ IEnumAAFKLVData ** ppEnum) PURE;
+
+
+  //***********************************************************
+  //
+  // RemoveKLVData()
+  //
+  // // Removes the given KLV data object from this component.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pData pointer is valid.
+  // - the given KLV data object is present in the component.
+  // 
+  // If this method fails no state will be changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pData is null.
+  //
+  // AAFRESULT_OBJECT_NOT_FOUND
+  //   - the given KLV data object is not in this component.
+  //
+  STDMETHOD(RemoveKLVData) (THIS_
+    // KLV data object to remove
+    /*[in]*/ IAAFKLVData * pData) PURE;
+
+
+
+  //***********************************************************
+  //
+  // AppendComment()
+  //
+  // Append and attribute name/value pair to the attribute list. 
+  //
+  STDMETHOD(AppendComment) (THIS_
+    // The attribute name.
+    /*[in]*/ aafCharacter_constptr  pName,
+
+    // The attribute value.
+    /*[in]*/ aafCharacter_constptr  pValue) PURE;
+
+   // Creates a new tagged value, initializes it with the specified comment
+   // name/value pair, and appends it to the comment list.
+   //
+   // Succeeds if:
+   //   - pName and pValue are valid pointers.
+   //
+   // Return codes:
+   //
+   //   AAFRESULT_SUCCESS
+   //
+   //   AAFRESULT_NULL_PARAM
+   //	     - pName or pValue is null.
+
+  //***********************************************************
+  //
+  // CountComments()
+  //
+  // Return the number of comments contained by this component 
+  //
+  STDMETHOD(CountComments) (THIS_
+    // Pointer to comment count.
+    /*[out]*/ aafUInt32*  pNumComments) PURE;
+
+   // Returns the number of comments on this component.
+   //
+   // Succeeds if:
+   //   - pNumComments is a valid pointer
+   //
+   // Return codes:
+   //
+   //   AAFRESULT_SUCCESS
+   //
+   //   AAFRESULT_NULL_PARAM
+   //	     - pNumComments is null
+  
+
+  //***********************************************************
+  //
+  // GetComments()
+  //
+  // Return a comment enumerator for this component. 
+  //
+  STDMETHOD(GetComments) (THIS_
+    // Pointer to the new enumerator object created by this method.
+    /*[out]*/ IEnumAAFTaggedValues ** ppEnum) PURE;
+
+   // Creates an enumerator for this component\'s comments.  The new enumerator is
+   // AddRef'ed before it is returned.
+   //
+   // Succeeds if:
+   //   - pName and pValue are valid pointers.
+   //
+   // Return codes:
+   //
+   //   AAFRESULT_SUCCESS
+   //
+   //   AAFRESULT_NULL_PARAM
+   //	     - pEnum was null
+
+
+  //***********************************************************
+  //
+  // RemoveComment()
+  //
+  // Remove a comment (tagged value).
+  //
+  STDMETHOD(RemoveComment) (THIS_
+    // Pointer to the tagged value comment.
+    /*[in]*/ IAAFTaggedValue * pComment) PURE;
+
+   // Removes a component comment.
+   //
+   // Succeeds if:
+   //   - pName and pValue are valid pointers.
+   //
+   // Return codes:
+   //
+   //   AAFRESULT_SUCCESS
+   //
+   //   AAFRESULT_NULL_PARAM
+   //	     - pName or pValue is null.
+
+  //***********************************************************
+  //
+  // AppendAttribute()
+  //
+  // Append and attribute name/value pair to the attribute list. 
+  //
+  STDMETHOD(AppendAttribute) (THIS_
+    // The attribute name.
+    /*[in]*/ aafCharacter_constptr  pName,
+
+    // The attribute value.
+    /*[in]*/ aafCharacter_constptr  pValue) PURE;
+
+   // Creates a new tagged value, initializes it with the specified attribute
+   // name/value pair, and appends it to the attribute list.
+   //
+   // Succeeds if:
+   //   - pName and pValue are valid pointers.
+   //
+   // Return codes:
+   //
+   //   AAFRESULT_SUCCESS
+   //
+   //   AAFRESULT_NULL_PARAM
+   //	     - pName or pValue is null.
+
+  //***********************************************************
+  //
+  // CountAttributes()
+  //
+  // Return the number of attributes contained by this component 
+  //
+  STDMETHOD(CountAttributes) (THIS_
+    // Pointer to attribute count.
+    /*[out]*/ aafUInt32*  pNumAttributes) PURE;
+
+   // Returns the number of attributes on this component.
+   //
+   // Succeeds if:
+   //   - pNumAttributes is a valid pointer
+   //
+   // Return codes:
+   //
+   //   AAFRESULT_SUCCESS
+   //
+   //   AAFRESULT_NULL_PARAM
+   //	     - pNumAttributes is null
+  
+
+  //***********************************************************
+  //
+  // GetAttributes()
+  //
+  // Return an attribute enumerator for this component. 
+  //
+  STDMETHOD(GetAttributes) (THIS_
+    // Pointer to the new enumerator object created by this method.
+    /*[out]*/ IEnumAAFTaggedValues ** ppEnum) PURE;
+
+   // Creates an enumerator for this component\'s attributes.  The new enumerator is
+   // AddRef'ed before it is returned.
+   //
+   // Succeeds if:
+   //   - pName and pValue are valid pointers.
+   //
+   // Return codes:
+   //
+   //   AAFRESULT_SUCCESS
+   //
+   //   AAFRESULT_NULL_PARAM
+   //	     - pEnum was null
+
+
+  //***********************************************************
+  //
+  // RemoveAttribute()
+  //
+  // Remove an attribute (tagged value).
+  //
+  STDMETHOD(RemoveAttribute) (THIS_
+    // Pointer to the tagged value attribute.
+    /*[in]*/ IAAFTaggedValue * pAttribute) PURE;
+
+   // Removes a component attribute.
+   //
+   // Succeeds if:
+   //   - pName and pValue are valid pointers.
+   //
+   // Return codes:
+   //
+   //   AAFRESULT_SUCCESS
+   //
+   //   AAFRESULT_NULL_PARAM
+   //	     - pName or pValue is null.
+
+
+
+
+
+  END_INTERFACE
+};
+#endif // __IAAFComponent2_INTERFACE_DEFINED__
+
+
+
+// IAAFCompositionMob2
+
+// ************************
+//
+// Interface IAAFCompositionMob2
+//
+// ************************
+
+
+
+#ifndef __IAAFCompositionMob2_INTERFACE_DEFINED__
+#define __IAAFCompositionMob2_INTERFACE_DEFINED__
+
+EXTERN_C const IID IID_IAAFCompositionMob2;
+
+#undef  INTERFACE
+#define INTERFACE   IAAFCompositionMob2
+
+DECLARE_INTERFACE_(IAAFCompositionMob2, IUnknown)
+{
+  BEGIN_INTERFACE
+
+  /* *** IUnknown methods *** */
+  STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppvObj) PURE;
+  STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
+  STDMETHOD_(ULONG,Release) (THIS) PURE;
+
+  /* *** IAAFCompositionMob2 methods *** */
+
+
+
+  //***********************************************************
+  //
+  // Initialize()
+  //
+  // Initializes this object with the given name.
+  // 
+  // Succeeds if all of the following are true:
+  // - this object has not yet been initialized.
+  // - the pName pointer is valid.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_ALREADY_INITIALIZED
+  //   - Initialize() has already been called on this object.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pName argument is NULL.
+  //
+  STDMETHOD(Initialize) (THIS_
+    // Mob name [optional]
+    /*[in, string]*/ aafCharacter_constptr  pName) PURE;
+
+
+  //***********************************************************
+  //
+  // GetDefaultFade()
+  //
+  // Get the default fade for this composition.  If there is no
+  // default fade, this function returns with no error, but the VALID
+  // field of the structure is false.  This allows you to pass this
+  // struct to SourceClip::GetFade() in all cases.
+  //
+  // Succeeds if all of the following are true:
+  // - this object has already been initialized.
+  // - the pResult pointer is valid.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize() called on it.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pResult argument is NULL.
+  //
+  STDMETHOD(GetDefaultFade) (THIS_
+    // a default fade struct
+    /*[out]*/ aafDefaultFade_t *  pResult) PURE;
+	
+
+  //***********************************************************
+  //
+  // SetDefaultFade()
+  //
+  // Adds the default crossfade properties to the Mob.
+  //
+  // Succeeds if all of the following are true:
+  // - this object has already been initialized.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize() called on it.
+  //
+  // AAFRESULT_BAD_TYPE
+  //   - invalid fadeType.
+  //
+  // AAFRESULT_BAD_LENGTH
+  //   - invalid fadeLength.
+  //
+  STDMETHOD(SetDefaultFade) (THIS_
+    // Default fade length
+    /*[in]*/ aafLength_t  fadeLength,
+
+    // default fade type
+    /*[in]*/ aafFadeType_t  fadeType,
+
+    // default fade edit unit
+    /*[in]*/ aafRational_t  fadeEditUnit) PURE;
+
+
+  //***********************************************************
+  //
+  // SetRendering()
+  //
+  // set the MobID of a rendering of this CompositionMob.
+
+  // This method will return the following codes:
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  STDMETHOD(SetRendering) (THIS_
+    // Rendering MobID
+    /*[in, ref]*/ aafMobID_constref  mobID) PURE;
+
+  //***********************************************************
+  //
+  // GetRendering()
+  //
+  // return the MobID of a rendering of this CompositionMob.
+
+  // Succeeds if all of the following are true:
+  // - the pMobID pointer is valid.
+  //
+  // If this method fails nothing will be written to *pMobID.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  //
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pMobID arg is NULL.
+  //
+  STDMETHOD(GetRendering) (THIS_
+    // Rendering MobID
+    /*[out]*/ aafMobID_t *  pMobID) PURE;
+
+
+
+  END_INTERFACE
+};
+#endif // __IAAFCompositionMob2_INTERFACE_DEFINED__
+
+
+
 // IAAFDataDef2
 
 // ************************
@@ -35153,6 +35799,2041 @@ DECLARE_INTERFACE_(IAAFDataDef2, IUnknown)
 
 
 
+// IAAFDictionary2
+
+// ************************
+//
+// Interface IAAFDictionary2
+//
+// ************************
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#ifndef __IAAFDictionary2_INTERFACE_DEFINED__
+#define __IAAFDictionary2_INTERFACE_DEFINED__
+
+EXTERN_C const IID IID_IAAFDictionary2;
+
+#undef  INTERFACE
+#define INTERFACE   IAAFDictionary2
+
+DECLARE_INTERFACE_(IAAFDictionary2, IUnknown)
+{
+  BEGIN_INTERFACE
+
+  /* *** IUnknown methods *** */
+  STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppvObj) PURE;
+  STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
+  STDMETHOD_(ULONG,Release) (THIS) PURE;
+
+  /* *** IAAFDictionary2 methods *** */
+
+  //***********************************************************
+  //
+  // CreateInstance()
+  //
+  // Creates a single uninitialized AAF object of the class associated 
+  // with a specified stored object id. 
+  // 
+  STDMETHOD(CreateInstance)(THIS_
+    // Class identifier (AUID) of the stored object. This is the
+    // corresponding SMPTE identifier (as a GUID) for all predefined
+    // built-in classes.
+    aafUID_constref id,
+
+    // Reference to the identifier of the interface
+    REFIID riid,
+
+    // Address of output variable that receives the 
+    // interface pointer requested in riid
+    IUnknown ** ppvObject) PURE;
+
+
+  //***********************************************************
+  //
+  // CreateMetaInstance()
+  //
+  // Creates a single uninitialized AAF meta class or type associated 
+  // with a specified stored object id. 
+  // 
+  STDMETHOD(CreateMetaInstance)(THIS_
+    // Identifier (id) of a class or type definition. This is the
+    // corresponding SMPTE identifier (as a GUID) for all predefined
+    // built-in definitions.
+    aafUID_constref id,
+
+    // Reference to the identifier of the interface
+    REFIID riid,
+
+    // Address of output variable that receives the 
+    // interface pointer requested in riid
+    IUnknown ** ppMetaDefinition) PURE;
+
+
+
+
+  //***********************************************************
+  //
+  // RegisterClassDef()
+  //
+  // Add the class definition object to the dictionary.
+  // 
+  // Succeeds if:
+  // - The pClassDef pointer is valid.
+  // - the ID contained in the class def is not already been
+  //   registered.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pClassDef arg is NULL.
+  //
+  // AAFRESULT_INVALID_PARAM
+  //   - The class def ID has already been registered.
+  //
+  STDMETHOD(RegisterClassDef) (THIS_
+    // Class Definition
+    /*[in]*/ IAAFClassDef * pClassDef) PURE;
+
+
+  //***********************************************************
+  //
+  // LookupClassDef()
+  //
+  // Return the class definition with the given id.
+  // 
+  // Succeeds if:
+  // - The pClassID pointer is valid.
+  // - The ppClassDef pointer is valid.
+  // - the ID is a recognized id for a class definition.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - Either pClassID or ppClassDef arg is NULL.
+  //
+  // AAFRESULT_INVALID_PARAM
+  //   - The given ID is not recognized as a class definition ID.
+  //
+  STDMETHOD(LookupClassDef) (THIS_
+    // Class Unique ID
+    /*[in, ref]*/ aafUID_constref  classId,
+
+    // Class Definition
+    /*[out,retval]*/ IAAFClassDef ** ppClassDef) PURE;
+
+
+  //***********************************************************
+  //
+  // GetClassDefs()
+  //
+  // Return an enumerator for all class definitions.
+  //
+  // Succeeds if:
+  // - The ppEnum pointer is valid.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppEnum arg is NULL.
+  //
+  STDMETHOD(GetClassDefs) (THIS_
+    // Class Definition Enumeration
+    /*[out,retval]*/ IEnumAAFClassDefs ** ppEnum) PURE;
+
+
+  //***********************************************************
+  //
+  // CountClassDefs()
+  //
+  // Writes the number of class definition objects into the
+  // *pResult argument.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pResult pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pResult.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pResult is null.
+  //
+  STDMETHOD(CountClassDefs) (THIS_
+    // Total number of class definition objects
+    /*[out, retval]*/ aafUInt32 *  pResult) PURE;
+
+  //***********************************************************
+  //
+  // CreateForwardClassReference()
+  //
+  // Return the class definition with the given id.
+  // 
+  // Succeeds if:
+  // - The classId does not represent an existing forward class reference
+  //   or a class definition that has already been successfully registered.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_INVALID_PARAM
+  //   - The given ID is not recognized as a class definition ID.
+  //
+  STDMETHOD(CreateForwardClassReference) (THIS_
+    // Class Unique ID
+    /*[in, ref]*/ aafUID_constref  classId) PURE;
+
+  //***********************************************************
+  //
+  // HasForwardClassReference()
+  //
+  // Return kAAFTrue if the given class identification is a forward reference.
+  // 
+  // Succeeds if:
+  // - The pClassID pointer is valid.
+  // - The ppClassDef pointer is valid.
+  // - the ID is a recognized id for a class definition.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - Either pClassID or ppClassDef arg is NULL.
+  //
+  // AAFRESULT_INVALID_PARAM
+  //   - The given ID is not recognized as a class definition ID.
+  //
+  STDMETHOD(HasForwardClassReference) (THIS_
+    // Class Unique ID
+    /*[in, ref]*/ aafUID_constref  classId,
+
+    // true if forward class reference; false if not a forward class reference
+    /*[out,retval]*/ aafBoolean_t *  pResult) PURE;
+
+  //***********************************************************
+  //
+  // RegisterTypeDef()
+  //
+  // Add the type definition object to the dictionary.
+  // 
+  // Succeeds if:
+  // - The pTypeDef pointer is valid.
+  // - the ID is not already been registered.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pClassDef arg is NULL.
+  //
+  // AAFRESULT_INVALID_PARAM
+  //   - The given type has already been registered.
+  //
+  STDMETHOD(RegisterTypeDef) (THIS_
+    // Type Definition Object
+    /*[in]*/ IAAFTypeDef * pTypeDef) PURE;
+
+
+  //***********************************************************
+  //
+  // LookupTypeDef()
+  //
+  // Return the type definition object with the given id.
+  // 
+  // Succeeds if:
+  // - The pTypeID pointer is valid.
+  // - The ppTypeDef pointer is valid.
+  // - the ID is a recognized id for a type definition.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - Either pTypeID or ppTypeDef arg is NULL.
+  //
+  // AAFRESULT_INVALID_PARAM
+  //   - The given ID is not recognized as a type definition ID.
+  //
+  STDMETHOD(LookupTypeDef) (THIS_
+    // Type Unique ID
+    /*[in, ref]*/ aafUID_constref  typeId,
+
+    // Type Definition Object
+    /*[out,retval]*/ IAAFTypeDef ** ppTypeDef) PURE;
+
+
+  //***********************************************************
+  //
+  // GetTypeDefs()
+  //
+  // Return an enumerator for all type definitions.
+  //
+  // Succeeds if:
+  // - The ppEnum pointer is valid.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppEnum arg is NULL.
+  //
+  STDMETHOD(GetTypeDefs) (THIS_
+    // Type Def Enumeration
+    /*[out,retval]*/ IEnumAAFTypeDefs ** ppEnum) PURE;
+
+
+  //***********************************************************
+  //
+  // CountTypeDefs()
+  //
+  // Writes the number of type definition objects into the
+  // *pResult argument.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pResult pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pResult.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pResult is null.
+  //
+  STDMETHOD(CountTypeDefs) (THIS_
+    // Total number of type definition objects
+    /*[out, retval]*/ aafUInt32 *  pResult) PURE;
+
+
+  //***********************************************************
+  //
+  // RegisterOpaqueTypeDef()
+  //
+  // Add the opaquetype definition object to the dictionary.
+  // 
+  // Succeeds if:
+  // - The pTypeDef pointer is valid.
+  // - the definition is not already been registered with RegisterTypeDef.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pTypeDef arg is NULL.
+  //
+  // AAFRESULT_INVALID_PARAM
+  //   - The given type has already been registered.
+  //
+  STDMETHOD(RegisterOpaqueTypeDef) (THIS_
+    // Type Definition Object
+    /*[in]*/ IAAFTypeDef * pTypeDef) PURE;
+
+
+  //***********************************************************
+  //
+  // LookupOpaqueTypeDef()
+  //
+  // Return the opaque type definition object with the given id.
+  // 
+  // Succeeds if:
+  // - The pTypeID pointer is valid.
+  // - The ppTypeDef pointer is valid.
+  // - the ID is a recognized id for an opaque type definition.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - Either typeId or ppTypeDef arg is NULL.
+  //
+  // AAFRESULT_INVALID_PARAM
+  //   - The given ID is not recognized as a type definition ID.
+  //
+  STDMETHOD(LookupOpaqueTypeDef) (THIS_
+    // Type Unique ID
+    /*[in, ref]*/ aafUID_constref  typeId,
+
+    // Type Definition Object
+    /*[out,retval]*/ IAAFTypeDef ** ppTypeDef) PURE;
+
+
+  //***********************************************************
+  //
+  // GetOpaqueTypeDefs()
+  //
+  // Return an enumerator for all registered opaque type definitions.
+  //
+  // Succeeds if:
+  // - The ppEnum pointer is valid.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppEnum arg is NULL.
+  //
+  STDMETHOD(GetOpaqueTypeDefs) (THIS_
+    // Type Def Enumeration
+    /*[out,retval]*/ IEnumAAFTypeDefs ** ppEnum) PURE;
+
+
+  //***********************************************************
+  //
+  // CountOpaqueTypeDefs()
+  //
+  // Writes the number of opaque type definition objects into the
+  // *pResult argument.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pResult pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pResult.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pResult is null.
+  //
+  STDMETHOD(CountOpaqueTypeDefs) (THIS_
+    // Total number of opaque type definition objects
+    /*[out, retval]*/ aafUInt32 *  pResult) PURE;
+
+  //***********************************************************
+  //
+  // RegisterKLVDataKey()
+  //
+  // Add the definition for the given KLV key to the runtime dictionary.
+  // The pTypeDef will often be kAAFTypeID_UInt8Array,
+  // but may be something else.  // 
+  // Succeeds if:
+  // - The pTypeDef pointer is valid.
+  // - the definition is not already been registered with RegisterTypeDef.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pTypeDef arg is NULL.
+  //
+  // AAFRESULT_INVALID_PARAM
+  //   - The given type has already been registered.
+  //
+  STDMETHOD(RegisterKLVDataKey) (THIS_
+    // Key to define
+    /*[in]*/ aafUID_t  pUID,
+
+    // Type Definition Object
+    /*[in]*/ IAAFTypeDef * pTypeDef) PURE;
+
+  //***********************************************************
+  //
+  // RegisterDataDef()
+  //
+  // Add the data definition object to the header's list of definitions.
+  //
+  STDMETHOD(RegisterDataDef) (THIS_
+    // Data Definition Object
+    /*[in]*/ IAAFDataDef * pDataDef) PURE;
+
+
+  //***********************************************************
+  //
+  // LookupDataDef()
+  //
+  // Return the data definition object with the given id.
+  //
+  STDMETHOD(LookupDataDef) (THIS_
+    // Data Definition Unique ID
+    /*[in, ref]*/ aafUID_constref  dataDefinitionId,
+
+    // Data Definition Object
+    /*[out,retval]*/ IAAFDataDef ** ppDataDef) PURE;
+
+
+  //***********************************************************
+  //
+  // GetDataDefs()
+  //
+  // Return an enumerator for aff data definitions.
+  //
+  STDMETHOD(GetDataDefs) (THIS_
+    // Definition Enumeration
+    /*[out,retval]*/ IEnumAAFDataDefs ** ppEnum) PURE;
+
+
+  //***********************************************************
+  //
+  // CountDataDefs()
+  //
+  // Writes the number of data definition objects into the
+  // *pResult argument.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pResult pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pResult.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pResult is null.
+  //
+  STDMETHOD(CountDataDefs) (THIS_
+    // Total number of data definition objects
+    /*[out, retval]*/ aafUInt32 *  pResult) PURE;
+
+
+  //***********************************************************
+  //
+  // RegisterOperationDef()
+  //
+  // Add the operation definition object to the header's list of definitions.
+  //
+  STDMETHOD(RegisterOperationDef) (THIS_
+    // Operation Definition Object
+    /*[in]*/ IAAFOperationDef * pOperationDef) PURE;
+
+
+  //***********************************************************
+  //
+  // LookupOperationDef()
+  //
+  // Return the operation definition object with the given id.
+  //
+  STDMETHOD(LookupOperationDef) (THIS_
+    // Operation Def Unique ID
+    /*[in, ref]*/ aafUID_constref  operationId,
+
+    // Operation definition object
+    /*[out,retval]*/ IAAFOperationDef ** ppOperationDef) PURE;
+
+
+  //***********************************************************
+  //
+  // GetOperationDefs()
+  //
+  // Return an enumerator for all operation definitions.
+  //
+  STDMETHOD(GetOperationDefs) (THIS_
+    // Definition Enumeration
+    /*[out,retval]*/ IEnumAAFOperationDefs ** ppEnum) PURE;
+
+
+  //***********************************************************
+  //
+  // CountOperationDefs()
+  //
+  // Writes the number of operation definition objects into the
+  // *pResult argument.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pResult pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pResult.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pResult is null.
+  //
+  STDMETHOD(CountOperationDefs) (THIS_
+    // Total number of operation definition objects
+    /*[out, retval]*/ aafUInt32 *  pResult) PURE;
+
+
+  //***********************************************************
+  //
+  // RegisterParameterDef()
+  //
+  // Add the parameter definition object to the header's list of definitions.
+  //
+  STDMETHOD(RegisterParameterDef) (THIS_
+    // Parameter Definition Object
+    /*[in]*/ IAAFParameterDef * pParmDef) PURE;
+
+
+  //***********************************************************
+  //
+  // LookupParameterDef()
+  //
+  // Return the parameter definition object with the given id.
+  //
+  STDMETHOD(LookupParameterDef) (THIS_
+    // Parameter Unique ID
+    /*[in, ref]*/ aafUID_constref  parameterId,
+
+    // Parameter definition object
+    /*[out,retval]*/ IAAFParameterDef ** ppParmDef) PURE;
+
+
+  //***********************************************************
+  //
+  // GetParameterDefs()
+  //
+  // Return an enumerator for all parameter definitions.
+  //
+  STDMETHOD(GetParameterDefs) (THIS_
+    // Definition Enumeration
+    /*[out,retval]*/ IEnumAAFParameterDefs ** ppEnum) PURE;
+
+
+  //***********************************************************
+  //
+  // CountParameterDefs()
+  //
+  // Writes the number of parameter definition objects into the
+  // *pResult argument.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pResult pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pResult.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pResult is null.
+  //
+  STDMETHOD(CountParameterDefs) (THIS_
+    // Total number of parameter definition objects
+    /*[out, retval]*/ aafUInt32 *  pResult) PURE;
+
+
+  //***********************************************************
+  //
+  // RegisterCodecDef()
+  //
+  // Add the codec definition object to the header's list of definitions.
+  //
+  STDMETHOD(RegisterCodecDef) (THIS_
+    // Codec Definition Object
+    /*[in]*/ IAAFCodecDef * pParmDef) PURE;
+
+
+  //***********************************************************
+  //
+  // LookupCodecDef()
+  //
+  // Return the codec definition object with the given id.
+  //
+  STDMETHOD(LookupCodecDef) (THIS_
+    // Parameter Unique ID
+    /*[in, ref]*/ aafUID_constref  parameterId,
+
+    // Codec definition object
+    /*[out,retval]*/ IAAFCodecDef ** ppParmDef) PURE;
+
+
+  //***********************************************************
+  //
+  // GetCodecDefs()
+  //
+  // Return an enumerator for all codec definitions.
+  //
+  STDMETHOD(GetCodecDefs) (THIS_
+    // Definition Enumeration
+    /*[out,retval]*/ IEnumAAFCodecDefs ** ppEnum) PURE;
+
+
+  //***********************************************************
+  //
+  // CountCodecDefs()
+  //
+  // Writes the number of codec definition objects into the
+  // *pResult argument.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pResult pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pResult.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pResult is null.
+  //
+  STDMETHOD(CountCodecDefs) (THIS_
+    // Total number of codec definition objects
+    /*[out, retval]*/ aafUInt32 *  pResult) PURE;
+
+
+  //***********************************************************
+  //
+  // RegisterContainerDef()
+  //
+  // Add the container definition object to the header's list of definitions.
+  //
+  STDMETHOD(RegisterContainerDef) (THIS_
+    // Container Definition Object
+    /*[in]*/ IAAFContainerDef * pParmDef) PURE;
+
+
+  //***********************************************************
+  //
+  // LookupContainerDef()
+  //
+  // Return the container definition object with the given id.
+  //
+  STDMETHOD(LookupContainerDef) (THIS_
+    // Parameter Unique ID
+    /*[in, ref]*/ aafUID_constref  parameterId,
+
+    // Container definition object
+    /*[out,retval]*/ IAAFContainerDef ** ppParmDef) PURE;
+
+
+  //***********************************************************
+  //
+  // GetContainerDefs()
+  //
+  // Return an enumerator for all container definitions.
+  //
+  STDMETHOD(GetContainerDefs) (THIS_
+    // Definition Enumeration
+    /*[out,retval]*/ IEnumAAFContainerDefs ** ppEnum) PURE;
+
+
+  //***********************************************************
+  //
+  // CountContainerDefs()
+  //
+  // Writes the number of container definition objects into the
+  // *pResult argument.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pResult pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pResult.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pResult is null.
+  //
+  STDMETHOD(CountContainerDefs) (THIS_
+    // Total number of container definition objects
+    /*[out, retval]*/ aafUInt32 *  pResult) PURE;
+
+
+  //***********************************************************
+  //
+  // RegisterInterpolationDef()
+  //
+  // Add the Interpolation definition object to the header's list of definitions.
+  //
+  STDMETHOD(RegisterInterpolationDef) (THIS_
+    // Interpolation Definition Object
+    /*[in]*/ IAAFInterpolationDef * pInterpolationDef) PURE;
+
+
+  //***********************************************************
+  //
+  // LookupInterpolationDef()
+  //
+  // Return the Interpolation definition object with the given id.
+  //
+  STDMETHOD(LookupInterpolationDef) (THIS_
+    // Parameter Unique ID
+    /*[in, ref]*/ aafUID_constref  parameterId,
+
+    // Interpolation definition object
+    /*[out,retval]*/ IAAFInterpolationDef ** ppInterpolationDef) PURE;
+
+
+  //***********************************************************
+  //
+  // GetInterpolationDefs()
+  //
+  // Return an enumerator for aff Interpolation definitions.
+  //
+  STDMETHOD(GetInterpolationDefs) (THIS_
+    // Definition Enumeration
+    /*[out,retval]*/ IEnumAAFInterpolationDefs ** ppEnum) PURE;
+
+
+  //***********************************************************
+  //
+  // CountInterpolationDefs()
+  //
+  // Writes the number of interpolation definition objects into the
+  // *pResult argument.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pResult pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pResult.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pResult is null.
+  //
+  STDMETHOD(CountInterpolationDefs) (THIS_
+    // Total number of interpolation definition objects
+    /*[out, retval]*/ aafUInt32 *  pResult) PURE;
+
+
+  //***********************************************************
+  //
+  // RegisterPluginDef()
+  //
+  // Add the plugin definition object to the header's list of definitions.
+  //
+  STDMETHOD(RegisterPluginDef) (THIS_
+    // plugin definition Object
+    /*[in]*/ IAAFPluginDef * pPlugDef) PURE;
+
+
+  //***********************************************************
+  //
+  // LookupPluginDef()
+  //
+  // Return the plugin descriptor object with the given id.
+  //
+  STDMETHOD(LookupPluginDef) (THIS_
+    // Parameter Unique ID
+    /*[in, ref]*/ aafUID_constref  parameterId,
+
+    // plugin descriptor object
+    /*[out,retval]*/ IAAFPluginDef ** ppPlugDef) PURE;
+
+
+  //***********************************************************
+  //
+  // GetPluginDefs()
+  //
+  // Return an enumerator for all plugin descriptors.
+  //
+  STDMETHOD(GetPluginDefs) (THIS_
+    // Definition Enumeration
+    /*[out,retval]*/ IEnumAAFPluginDefs ** ppEnum) PURE;
+
+
+  //***********************************************************
+  //
+  // CountPluginDefs()
+  //
+  // Writes the number of plugin definition objects into the
+  // *pResult argument.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pResult pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pResult.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pResult is null.
+  //
+  STDMETHOD(CountPluginDefs) (THIS_
+    // Total number of plugin definition objects
+    /*[out, retval]*/ aafUInt32 *  pResult) PURE;
+
+
+  //***********************************************************
+  //
+  // RegisterKLVDataDef()
+  //
+  // Add the KLVData definition object to the header's list of definitions.
+  //
+  STDMETHOD(RegisterKLVDataDef) (THIS_
+    // plugin definition object
+    /*[in]*/ IAAFKLVDataDefinition * pDef) PURE;
+
+
+  //***********************************************************
+  //
+  // LookupKLVDataDef()
+  //
+  // Return the KLVData descriptor object with the given id.
+  //
+  STDMETHOD(LookupKLVDataDef) (THIS_
+    // KLV data definition Unique ID
+    /*[in, ref]*/ aafUID_constref  defId,
+
+    // KLVData descriptor object
+    /*[out,retval]*/ IAAFKLVDataDefinition ** ppDef) PURE;
+
+
+  //***********************************************************
+  //
+  // GetKLVDataDefs()
+  //
+  // Return an enumerator for all KLVData descriptors.
+  //
+  STDMETHOD(GetKLVDataDefs) (THIS_
+    // Definition Enumeration
+    /*[out,retval]*/ IEnumAAFKLVDataDefs ** ppEnum) PURE;
+
+
+  //***********************************************************
+  //
+  // CountKLVDataDefs()
+  //
+  // Writes the number of KLVData definition objects into the
+  // *pResult argument.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pResult pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pResult.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pResult is null.
+  //
+  STDMETHOD(CountKLVDataDefs) (THIS_
+    // Total number of KLVData definition objects
+    /*[out, retval]*/ aafUInt32 *  pResult) PURE;
+
+
+  //***********************************************************
+  //
+  // RegisterTaggedValueDef()
+  //
+  // Add the tagged value definition object to the header's list of definitions.
+  //
+  STDMETHOD(RegisterTaggedValueDef) (THIS_
+    // tagged value definition Object
+    /*[in]*/ IAAFTaggedValueDefinition * pDef) PURE;
+
+
+  //***********************************************************
+  //
+  // LookupTaggedValueDef()
+  //
+  // Return the tagged value descriptor object with the given id.
+  //
+  STDMETHOD(LookupTaggedValueDef) (THIS_
+    // tagged value definition ID
+    /*[in, ref]*/ aafUID_constref  defId,
+
+    // tagged value descriptor object
+    /*[out,retval]*/ IAAFTaggedValueDefinition ** ppDef) PURE;
+
+
+  //***********************************************************
+  //
+  // GetTaggedValueDefs()
+  //
+  // Return an enumerator for all tagged value descriptors.
+  //
+  STDMETHOD(GetTaggedValueDefs) (THIS_
+    // Definition Enumeration
+    /*[out,retval]*/ IEnumAAFTaggedValueDefs ** ppEnum) PURE;
+
+
+  //***********************************************************
+  //
+  // CountTaggedValueDefs()
+  //
+  // Writes the number of tagged value definition objects into the
+  // *pResult argument.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pResult pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pResult.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pResult is null.
+  //
+  STDMETHOD(CountTaggedValueDefs) (THIS_
+    // Total number of tagged value definition objects
+    /*[out, retval]*/ aafUInt32 *  pResult) PURE;
+
+
+
+  END_INTERFACE
+};
+#endif // __IAAFDictionary2_INTERFACE_DEFINED__
+
+
+
+// IAAFDigitalImageDescriptor2
+
+// ************************
+//
+// Interface IAAFDigitalImageDescriptor2
+//
+// ************************
+
+
+
+
+#ifndef __IAAFDigitalImageDescriptor2_INTERFACE_DEFINED__
+#define __IAAFDigitalImageDescriptor2_INTERFACE_DEFINED__
+
+EXTERN_C const IID IID_IAAFDigitalImageDescriptor2;
+
+#undef  INTERFACE
+#define INTERFACE   IAAFDigitalImageDescriptor2
+
+DECLARE_INTERFACE_(IAAFDigitalImageDescriptor2, IUnknown)
+{
+  BEGIN_INTERFACE
+
+  /* *** IUnknown methods *** */
+  STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppvObj) PURE;
+  STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
+  STDMETHOD_(ULONG,Release) (THIS) PURE;
+
+  /* *** IAAFDigitalImageDescriptor2 methods *** */
+
+
+  //***********************************************************
+  //
+  // SetCompression()
+  //
+  // //
+  // Sets the kind of compression and format of compression
+  // information of the video essence data.  This property is
+  // optional.  If there is no compression, the property is omitted.
+  // 
+  // If this method fails the Data Definition property will not be
+  // changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  STDMETHOD(SetCompression) (THIS_
+    // Optional.
+    /*[in]*/ aafUID_constref  compression) PURE;
+
+
+  //***********************************************************
+  //
+  // GetCompression()
+  //
+  // // Gets the kind of compression and format of compression
+  // information of the video essence data.  This property is
+  // optional.
+  //
+  // Succeeds if all of the following are true:
+  // - the pCompression pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pCompression.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pComporession arg is NULL.
+  //
+  STDMETHOD(GetCompression) (THIS_
+    // Optional.
+    /*[out]*/ aafUID_t *  pCompression) PURE;
+
+
+  //***********************************************************
+  //
+  // SetStoredView()
+  //
+  // Sets the dimension of the stored view.  Typically this includes
+  // leading blank video lines, any VITC lines, as well as the active
+  // picture area.
+  // 
+  // If this method fails the Stored Height and Stored Width
+  // properties will not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  STDMETHOD(SetStoredView) (THIS_
+    // Number of pixels in vertical dimension of stored view.
+    /*[in]*/ aafUInt32  StoredHeight,
+
+    // Number of pixels in horizontal dimension of stored view.
+    /*[in]*/ aafUInt32  StoredWidth) PURE;
+
+
+  //***********************************************************
+  //
+  // GetStoredView()
+  //
+  // Gets the dimension of the stored view.  Typically this includes
+  // leading blank video lines, any VITC lines, as well as the active
+  // picture area.
+  // 
+  // Succeeds if all of the following are true:
+  // - pStoredHieght and pStoredWidth are valid pointers.
+  // 
+  // If this method fails, the *pStoredHieght and *pStoredWidth will
+  // not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - either pStoredHeight or pStoredWidth is NULL.
+  //
+  STDMETHOD(GetStoredView) (THIS_
+    // Number of pixels in vertical dimension of stored view.
+    /*[out]*/ aafUInt32 *  pStoredHeight,
+
+    // Number of pixels in horizontal dimension of stored view.
+    /*[out]*/ aafUInt32 *  pStoredWidth) PURE;
+
+
+  //***********************************************************
+  //
+  // SetSampledView()
+  //
+  // Sets the dimensions of sampled view.  Typically this includes
+  // any VITC lines as well as the active picture area, but excludes
+  // leading blank video lines.  The offset is specified relative to
+  // the rectangle specified by Set/GetStoredView().
+  //
+  // The following properties are optional:
+  //
+  //     SampledXOffset - The default value is 0.  Use a value of 0 to
+  //                      select the default.
+  //     SampledYOffset - The default value is 0.  Use a value of 0 to
+  //                      select the default.
+  //
+  // Succeeds if all of the following are true:
+  // - The given dimensions exist within the StoredView.
+  // 
+  // If this method fails, the SampledXOffset and SampledYOffset
+  // properties will not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_ILLEGAL_VALUE
+  //   - The area specified by SampledHeight and SampledXOffset is
+  //     outside the StoredView, or the area specified by SampledWidth
+  //     and SampledYOffset is outside the StoredView.
+  //
+  STDMETHOD(SetSampledView) (THIS_
+    // Number of pixels in vertical dimension of sampled view.
+    /*[in]*/ aafUInt32  SampledHeight,
+
+    // Number of pixels in horizontal dimension of sampled view.
+    /*[in]*/ aafUInt32  SampledWidth,
+
+    // Number of pixels from top left corner of sampled view. Optional.
+    /*[in]*/ aafInt32  SampledXOffset,
+
+    // Number of pixels from top left corner of sampled view. Optional.
+    /*[in]*/ aafInt32  SampledYOffset) PURE;
+
+
+  //***********************************************************
+  //
+  // GetSampledView()
+  //
+  // Gets the dimensions of sampled view.  Typically this includes
+  // any VITC lines as well as the active picture area, but excludes
+  // leading blank video lines.  The offset is specified relative to
+  // the rectangle specified by Set/GetStoredView().
+  //
+  // Succeeds if all of the following are true:
+  // - pSampledHeight, pSampledWidth, pSampledXOffset and
+  //   pSampledYOffset are valid pointers
+  // 
+  // If any of the input parameters are NULL, the property will not
+  // be returned.
+  //
+  // If this method fails, *pSampledHeight, *pSampledWidth,
+  // *pSampledXOffset, and *pSampledYOffset will not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - any of pSampledHeight, pSampledWidth, pSampledXOffset, or
+  //     pSampledYOffset are NULL.
+  //
+  STDMETHOD(GetSampledView) (THIS_
+    // Number of pixels in vertical dimension of sampled view.
+    /*[out]*/ aafUInt32 *  pSampledHeight,
+
+    // Number of pixels in horizontal dimension of sampled view.
+    /*[out]*/ aafUInt32 *  pSampledWidth,
+
+    // Number of pixels from top left corner of sampled view. Optional.
+    /*[out]*/ aafInt32 *  pSampledXOffset,
+
+    // Number of pixels from top left corner of sampled view. Optional.
+    /*[out]*/ aafInt32 *  pSampledYOffset) PURE;
+
+
+  //***********************************************************
+  //
+  // SetDisplayView()
+  //
+  // Sets the dimension of display view.  Typically this includes
+  // the active picture area, but excludes leading blank video lines
+  // and any VITC lines.  The offset is specified relative to the
+  // rectangle specified by Set/GetStoredView().
+  // 
+  // The following properties are optional:
+  //
+  //     DisplayHeight  - The default value is the storedHeight. Use
+  //                      storedHeight to select the default.
+  //     DisplayWidth   - The default value is the storedWidth. Use
+  //                      storedWidth to select the default.
+  //     DisplayXOffset - The default value is 0.  Use a value of 0 to
+  //                      select the default.
+  //     DisplayYOffset - The default value is 0.  Use a value of 0 to
+  //                      select the default.
+  //
+  // Note that The specified display rectangle may exist outside the
+  // SampledView or even the StoredView.
+  //
+  // If this method fails the DisplayHeight, DisplayWidth, DisplayXOffset and
+  // DisplayYOffset properties will not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_ILLEGAL_VALUE
+  //   - The area specified by DisplayHeight and DisplayXOffset is
+  //     outside the StoredView, or the area specified by DisplayWidth
+  //     and DisplayYOffset is outside the StoredView.
+  //
+  STDMETHOD(SetDisplayView) (THIS_
+    // Number of pixels in vertical dimension of display view. Optional.
+    /*[in]*/ aafUInt32  DisplayHeight,
+
+    // Number of pixels in horizontal dimension of display view. Optional.
+    /*[in]*/ aafUInt32  DisplayWidth,
+
+    // Number of pixels from the top-left corner of the display view. Optional.
+    /*[in]*/ aafInt32  DisplayXOffset,
+
+    // Number pixels from the top-left corner of the display view. Optional.
+    /*[in]*/ aafInt32  DisplayYOffset) PURE;
+
+
+  //***********************************************************
+  //
+  // GetDisplayView()
+  //
+  // Gets the dimension of display view.  Typically this includes
+  // the active picture area, but excludes leading blank video lines
+  // and any VITC lines.  The offset is specified relative to the
+  // rectangle specified by Set/GetStoredView().
+  // 
+  // Note that The specified display rectangle may exist outside the
+  // SampledView or even the StoredView.
+  //
+  // Succeeds if all of the following are true:
+  // - pDisplayHeight, pDisplayWidth, pDisplayXOffset and
+  //   pDisplayYOffset are valid pointers.
+  // 
+  // If this method fails, *pDisplayHeight, *pDisplayWidth,
+  // *pDisplayXOffset, and *pDisplayYOffset will not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - any of pDisplayHeight, pDisplayWidth, pDisplayXOffset, or
+  //     pDisplayYOffset are NULL.
+  //
+  STDMETHOD(GetDisplayView) (THIS_
+    // Number of pixels in vertical dimension of display view. Optional.
+    /*[out]*/ aafUInt32 *  pDisplayHeight,
+
+    // Number of pixels in horizontal dimension of display view. Optional.
+    /*[out]*/ aafUInt32 *  pDisplayWidth,
+
+    // Number of pixels from the top-left corner of the display view. Optional.
+    /*[out]*/ aafInt32 *  pDisplayXOffset,
+
+    // Number pixels from the top-left corner of the display view. Optional.
+    /*[out]*/ aafInt32 *  pDisplayYOffset) PURE;
+
+
+  //***********************************************************
+  //
+  // SetFrameLayout()
+  //
+  // Sets the frame layout.  The frame layout describes whether all
+  // data for a complete sample is in one frame or is split into more
+  // than/ one field.
+  //
+  // Values are:
+  //
+  //    kNoLayout       - Default; not a valid value.
+  //    kFullFrame      - Each frame contains a full sample in
+  //                      progressive scan lines.
+  //    kSeparateFields - Each sample consists of two fields, which
+  //                      when interlaced produce a full sample.
+  //    kOneField       - Each sample consists of two interlaced
+  //                      fields, but only one field is stored in the
+  //                      data stream.
+  //    kMixedFields    - Similar to FullFrame, except the two fields
+  //                      may have been sampled at different times.
+  // 
+  // Succeeds if all of the following are true:
+  // - frameLayout is a valid value
+  // 
+  // If this method fails, the Frame Layout property will not be
+  // changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_ILLEGAL_VALUE
+  //   - FrameLayout is not a valid value.
+  //
+  STDMETHOD(SetFrameLayout) (THIS_
+    // layout of the frame
+    /*[in]*/ aafFrameLayout_t  FrameLayout) PURE;
+
+
+  //***********************************************************
+  //
+  // GetFrameLayout()
+  //
+  // Gets the frame layout.  The frame layout describes whether all
+  // data for a complete sample is in one frame or is split into more
+  // than one field.
+  // 
+  // Values are:
+  //
+  //    kNoLayout       - Default; not a valid value.
+  //    kFullFrame      - Each frame contains a full sample in
+  //                      progressive scan lines.
+  //    kSeparateFields - Each sample consists of two fields, which
+  //                      when interlaced produce a full sample.
+  //    kOneField       - Each sample consists of two interlaced
+  //                      fields, but only one field is stored in the
+  //                      data stream.
+  //    kMixedFields    - Similar to FullFrame, except the two fields
+  //                      may have been sampled at different times.
+  // 
+  // Succeeds if all of the following are true:
+  // - pFrameLayout is a valid pointer
+  // 
+  // If this method fails, *pFrameLayout will not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pFrameLayout is NULL.
+  //
+  STDMETHOD(GetFrameLayout) (THIS_
+    // layout of the frame
+    /*[out]*/ aafFrameLayout_t *  pFrameLayout) PURE;
+
+
+  //***********************************************************
+  //
+  // SetVideoLineMap()
+  //
+  // Sets the VideoLineMap property.  The video line map specifies the
+  // scan line in the analog source that corresponds to the beginning
+  // of each digitized field.  For single-field video, there is 1
+  // value in the array.  For interleaved video, there are 2 values
+  // in the array.
+  // 
+  // Succeeds if all of the following are true:
+  // - pVideoLineMap is a valid pointer
+  // 
+  // If this method fails, the Video Line Map property will not be
+  // changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pVideoLineMap is NULL.
+  //
+  STDMETHOD(SetVideoLineMap) (THIS_
+    // The number of elements in the array
+    /*[in]*/ aafUInt32  numberElements,
+
+    // Array to hold the Video Line Map information
+    /*[in, size_is(numberElements)]*/ aafInt32 *  pVideoLineMap) PURE;
+
+
+  //***********************************************************
+  //
+  // GetVideoLineMap()
+  //
+  // Gets the VideoLineMap property.  The video line map specifies the
+  // scan line in the analog source that corresponds to the beginning of each
+  // digitized field.  For single-field video, there is 1 value in the array.
+  // For interleaved video, there are 2 values in the array.
+  //
+  // The values are written to the array specified by pVideoLineMap,
+  // which is of size numberElements.  The required size may be found
+  // by calling GetVideoLineMapSize().
+  // 
+  // Succeeds if all of the following are true:
+  // - pVideoLineMap is a valid pointer.
+  // - numberElements indicates the array is large enough to hold the
+  //   data.
+  // 
+  // If this method fails, videoLineMap will not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pNumberElements is NULL.
+  //
+  // AAFRESULT_SMALLBUF
+  //   - numberElements indicates that the array is too small to hold
+  //     the data.
+  //
+  STDMETHOD(GetVideoLineMap) (THIS_
+    // The number of elements in the array
+    /*[in]*/ aafUInt32  numberElements,
+
+    // Array to hold the Video Line Map information
+    /*[out, size_is(numberElements)]*/ aafInt32 *  pVideoLineMap) PURE;
+
+
+  //***********************************************************
+  //
+  // GetVideoLineMapSize()
+  //
+  // Get the number of elements in the VideoLineMap property array.
+  // 
+  // Succeeds if all of the following are true:
+  // - pNumberElements is a valid pointer
+  // 
+  // If this method fails, *pNumberElements will not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pNumberElements is NULL.
+  //
+  STDMETHOD(GetVideoLineMapSize) (THIS_
+    // The number of elements in the array
+    /*[out]*/ aafUInt32 *  pNumberElements) PURE;
+
+
+  //***********************************************************
+  //
+  // SetImageAspectRatio()
+  //
+  // Sets the Image Aspect Ratio property.  This ratio describes the
+  // ratio between the horizontal size and the vertical size in the
+  // intended final image.
+  //
+  // Succeeds if all of the following are true:
+  // - 
+  // 
+  // If this method fails, the Image Access Ratio property will not be
+  // changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  STDMETHOD(SetImageAspectRatio) (THIS_
+    // Ratio between horizontal and vertical size
+    /*[in]*/ aafRational_t  ImageAspectRatio) PURE;
+
+
+  //***********************************************************
+  //
+  // GetImageAspectRatio()
+  //
+  // Gets the Image Aspect Ratio property.  This ratio describes the
+  // ratio between the horizontal size and the vertical size in the
+  // intended final image.
+  //
+  // Succeeds if all of the following are true:
+  // - pImageAspectRatio is a valid pointer
+  // 
+  // If this method fails, *pImageAspectRatio will not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pImageAspectRatio is NULL.
+  //
+  STDMETHOD(GetImageAspectRatio) (THIS_
+    // Ratio between horizontal and vertical size
+    /*[out]*/ aafRational_t *  pImageAspectRatio) PURE;
+
+
+  //***********************************************************
+  //
+  // SetAlphaTransparency()
+  //
+  // Sets the AlphaTransparency property.  This property is optional.
+  //
+  // Valid values:
+  //	kMaxValueTransparent - means the maximum Alpha value is
+  //                           transparent
+  //    kMinValueTransparent - means the minimum Alpha value is
+  //                           transparent
+  //
+  // Succeeds if all of the following are true:
+  // - AlphaTransparency is a valid value.
+  // 
+  // If this method fails, the AlphaTransparency property will not be
+  // changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_ILLEGAL_VALUE
+  //   - AlphaTransparency is not a valid value.
+  //
+  STDMETHOD(SetAlphaTransparency) (THIS_
+    // Alpha Transparency value.
+    /*[in]*/ aafAlphaTransparency_t  AlphaTransparency) PURE;
+
+
+  //***********************************************************
+  //
+  // GetAlphaTransparency()
+  //
+  // Gets the AlphaTransparency property.  This property is optional.
+  //
+  // Valid values:
+  //	kMaxValueTransparent - means the maximum Alpha value is transparent
+  //    kMinValueTransparent - means the minimum Alpha value is transparent
+  //
+  // Succeeds if all of the following are true:
+  // - pAlphaTransparency is a valid pointer
+  // 
+  // If this method fails, pAlphaTransparency not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pAlphaTransparency is NULL.
+  //
+  STDMETHOD(GetAlphaTransparency) (THIS_
+    // Alpha Transparency value.
+    /*[out]*/ aafAlphaTransparency_t *  pAlphaTransparency) PURE;
+
+
+
+  //***********************************************************
+  //
+  // SetImageAlignmentFactor()
+  //
+  // Sets the ImageAlignmentFactor property.  Specifies the alignment
+  // when storing the digital essence.  For example, a value of 16
+  // means that the image is stored on 16-byte boundaries.  The
+  // starting point for a field will always be a multiple of 16 bytes.
+  // If the field does not end on a 16-byte boundary, it is padded
+  // out to the next 16-byte boundary.
+  //
+  // Succeeds if all of the following are true:
+  // 
+  // If this method fails, the ImageAlignmentFactor property will not be
+  // changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  STDMETHOD(SetImageAlignmentFactor) (THIS_
+    // Optional.
+    /*[in]*/ aafUInt32  ImageAlignmentFactor) PURE;
+
+
+  //***********************************************************
+  //
+  // GetImageAlignmentFactor()
+  //
+  // Gets the ImageAlignmentFactor property.  Specifies the alignment when
+  // storing the digital essence.  For example, a value of 16 means that the image
+  // is stored on 16-byte boundaries.  The starting point for a field will always
+  // be a multiple of 16 bytes.  If the field does not end on a 16-byte boundary,
+  // it is padded out to the next 16-byte boundary.
+  //
+  //
+  // Succeeds if all of the following are true:
+  // - pImageAlignmentFactor is a valid pointer
+  // 
+  // If this method fails, pImageAlignmentFactor will not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pImageAlignmentFactor is NULL.
+  //
+  STDMETHOD(GetImageAlignmentFactor) (THIS_
+    // Optional.
+    /*[out]*/ aafUInt32 *  pImageAlignmentFactor) PURE;
+
+
+  //***********************************************************
+  //
+  // SetTransferCharacteristic()
+  //
+  // Sets the TransferCharacteristic property.
+  //
+  // Succeeds if all of the following are true:
+  // - 
+  // 
+  // If this method fails, the TransferCharacteristic property will not be
+  // changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  STDMETHOD(SetTransferCharacteristic) (THIS_
+    // Optional
+    /*[in]*/ aafUID_constref  TransferCharacteristic) PURE;
+
+
+  //***********************************************************
+  //
+  // GetTransferCharacteristic()
+  //
+  // Gets the TransferCharacteristic property.
+  //
+  // Succeeds if all of the following are true:
+  // - pTransferCharacteristic is a valid pointer
+  // 
+  // If this method fails, pTransferCharacteristic will not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pTransferCharacteristic is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the property is not present.
+  //
+  STDMETHOD(GetTransferCharacteristic) (THIS_
+    // Optional.
+    /*[out]*/ aafUID_t *  pTransferCharacteristic) PURE;
+
+  //***********************************************************
+  //
+  // SetCodingEquations()
+  //
+  // Sets the CodingEquations property.
+  //
+  // Succeeds if all of the following are true:
+  // - 
+  // 
+  // If this method fails, the CodingEquations property will not be
+  // changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  STDMETHOD(SetCodingEquations) (THIS_
+    // Optional
+    /*[in]*/ aafUID_constref  CodingEquations) PURE;
+
+
+  //***********************************************************
+  //
+  // GetCodingEquations()
+  //
+  // Gets the CodingEquations property.
+  //
+  // Succeeds if all of the following are true:
+  // - pCodingEquations is a valid pointer
+  // 
+  // If this method fails, pCodingEquations will not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pCodingEquations is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the property is not present.
+  //
+  STDMETHOD(GetCodingEquations) (THIS_
+    // Optional.
+    /*[out]*/ aafUID_t *  pCodingEquations) PURE;
+
+  //***********************************************************
+  //
+  // SetColorPrimaries()
+  //
+  // Sets the ColorPrimaries property.
+  //
+  // Succeeds if all of the following are true:
+  // - 
+  // 
+  // If this method fails, the ColorPrimaries property will not be
+  // changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  STDMETHOD(SetColorPrimaries) (THIS_
+    // Optional
+    /*[in]*/ aafUID_constref  ColorPrimaries) PURE;
+
+
+  //***********************************************************
+  //
+  // GetColorPrimaries()
+  //
+  // Gets the ColorPrimaries property.
+  //
+  // Succeeds if all of the following are true:
+  // - pColorPrimaries is a valid pointer
+  // 
+  // If this method fails, pColorPrimaries will not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pColorPrimaries is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the property is not present.
+  //
+  STDMETHOD(GetColorPrimaries) (THIS_
+    // Optional.
+    /*[out]*/ aafUID_t *  pColorPrimaries) PURE;
+
+  //***********************************************************
+  //
+  // SetFieldStartOffset()
+  //
+  // Sets the FieldStartOffset property.
+  //
+  // Succeeds if all of the following are true:
+  // 
+  // If this method fails, the FieldStartOffset property will not be
+  // changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  STDMETHOD(SetFieldStartOffset) (THIS_
+    // Optional.
+    /*[in]*/ aafUInt32  FieldStartOffset) PURE;
+
+
+  //***********************************************************
+  //
+  // GetFieldStartOffset()
+  //
+  // Gets the FieldStartOffset property.
+  //
+  // Succeeds if all of the following are true:
+  // - pFieldStartOffset is a valid pointer
+  // 
+  // If this method fails, pFieldStartOffset will not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pFieldStartOffset is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the property is not present.
+  //
+  STDMETHOD(GetFieldStartOffset) (THIS_
+    // Optional.
+    /*[out]*/ aafUInt32 *  pFieldStartOffset) PURE;
+
+  //***********************************************************
+  //
+  // SetFieldEndOffset()
+  //
+  // Sets the FieldEndOffset property.
+  //
+  // Succeeds if all of the following are true:
+  // 
+  // If this method fails, the FieldEndOffset property will not be
+  // changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  STDMETHOD(SetFieldEndOffset) (THIS_
+    // Optional.
+    /*[in]*/ aafUInt32  FieldEndOffset) PURE;
+
+
+  //***********************************************************
+  //
+  // GetFieldEndOffset()
+  //
+  // Gets the FieldEndOffset property.
+  //
+  // Succeeds if all of the following are true:
+  // - pFieldEndOffset is a valid pointer
+  // 
+  // If this method fails, pFieldEndOffset will not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pFieldEndOffset is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the property is not present.
+  //
+  STDMETHOD(GetFieldEndOffset) (THIS_
+    // Optional.
+    /*[out]*/ aafUInt32 *  pFieldEndOffset) PURE;
+
+  //***********************************************************
+  //
+  // SetFieldDominance()
+  //
+  // Sets the FieldDominance property.
+  //
+  // Succeeds if all of the following are true:
+  // 
+  // If this method fails, the FieldDominance property will not be
+  // changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_ILLEGAL_VALUE
+  //   - FieldDominance is not a valid value.
+  //
+  STDMETHOD(SetFieldDominance) (THIS_
+    // Optional.
+    /*[in]*/ aafFieldNumber_t  FieldDominance) PURE;
+
+
+  //***********************************************************
+  //
+  // GetFieldDominance()
+  //
+  // Gets the FieldDominance property.
+  //
+  // Succeeds if all of the following are true:
+  // - pFieldDominance is a valid pointer
+  // 
+  // If this method fails, pFieldDominance will not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pFieldDominance is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the property is not present.
+  //
+  STDMETHOD(GetFieldDominance) (THIS_
+    // Optional.
+    /*[out]*/ aafFieldNumber_t *  pFieldDominance) PURE;
+
+
+  END_INTERFACE
+};
+#endif // __IAAFDigitalImageDescriptor2_INTERFACE_DEFINED__
+
+
+
 // IAAFEndian
 
 // ************************
@@ -35238,6 +37919,388 @@ DECLARE_INTERFACE_(IAAFEndian, IUnknown)
   END_INTERFACE
 };
 #endif // __IAAFEndian_INTERFACE_DEFINED__
+
+
+
+// IAAFEssenceDataEx
+
+// ************************
+//
+// Interface IAAFEssenceDataEx
+//
+// ************************
+
+
+
+
+
+#ifndef __IAAFEssenceDataEx_INTERFACE_DEFINED__
+#define __IAAFEssenceDataEx_INTERFACE_DEFINED__
+
+EXTERN_C const IID IID_IAAFEssenceDataEx;
+
+#undef  INTERFACE
+#define INTERFACE   IAAFEssenceDataEx
+
+DECLARE_INTERFACE_(IAAFEssenceDataEx, IUnknown)
+{
+  BEGIN_INTERFACE
+
+  /* *** IUnknown methods *** */
+  STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppvObj) PURE;
+  STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
+  STDMETHOD_(ULONG,Release) (THIS) PURE;
+
+  /* *** IAAFEssenceDataEx methods *** */
+
+
+  //***********************************************************
+  //
+  // Initialize()
+  //
+  // Associates a weak reference to the given file mob with the
+  // essence data.
+  //
+  // Succeeds if all of the following are true:
+  // - the pFileMob pointer is valid and points to 
+  // a file mob (contains a file descriptor).
+  // 
+  // If this method fails no state will be changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pFileMob is null.
+  //
+  STDMETHOD(Initialize) (THIS_
+    // reference to a file mob
+    /*[in]*/ IAAFSourceMob * pFileMob) PURE;
+
+  //***********************************************************
+  //
+  // Write()
+  //
+  // Write pre-interleaved data to a essence stream.
+  //
+  STDMETHOD(Write) (THIS_
+    // write this many bytes to the data stream
+    /*[in]*/ aafUInt32  bytes,
+
+    // here is the buffer
+    /*[out, size_is(bytes)]*/ aafDataBuffer_t  buffer,
+
+    // 
+    /*[out,ref]*/ aafUInt32 *  bytesWritten) PURE;
+
+
+  //***********************************************************
+  //
+  // Read()
+  //
+  // Read pre-interleaved data from a essence stream.
+  //
+  STDMETHOD(Read) (THIS_
+    // read this many bytes from the data stream
+    /*[in]*/ aafUInt32  bytes,
+
+    // here is the buffer
+    /*[out, size_is(bytes), length_is(*bytesRead)]*/ aafDataBuffer_t  buffer,
+
+    // 
+    /*[out,ref]*/ aafUInt32 *  bytesRead) PURE;
+
+
+  //***********************************************************
+  //
+  // SetPosition()
+  //
+  // Seek to absolute position within the essence data.
+  //
+  STDMETHOD(SetPosition) (THIS_
+    // offset from beginning of essence
+    /*[in]*/ aafPosition_t  offset) PURE;
+
+
+  //***********************************************************
+  //
+  // GetPosition()
+  //
+  // Get the absolute position within the essence data.
+  //
+  STDMETHOD(GetPosition) (THIS_
+    // offset from beginning of essence
+    /*[out]*/ aafPosition_t*  pOffset) PURE;
+
+
+  //***********************************************************
+  //
+  // GetSize()
+  //
+  // Return the total size of the essence data.
+  //
+  STDMETHOD(GetSize) (THIS_
+    // size of essence data
+    /*[out]*/ aafLength_t *  pSize ) PURE;
+
+  //***********************************************************
+  //
+  // WriteSampleIndex()
+  //
+  // Write pre-interleaved data to a sample index stream.
+  //
+  STDMETHOD(WriteSampleIndex) (THIS_
+    // write this many bytes to the sample index stream
+    /*[in]*/ aafUInt32  bytes,
+
+    // here is the buffer
+    /*[out, size_is(bytes)]*/ aafDataBuffer_t  buffer,
+
+    // 
+    /*[out,ref]*/ aafUInt32 *  bytesWritten) PURE;
+
+
+  //***********************************************************
+  //
+  // ReadSampleIndex()
+  //
+  // Read pre-interleaved data from a sample index stream.
+  //
+  STDMETHOD(ReadSampleIndex) (THIS_
+    // read this many bytes from the sample index stream
+    /*[in]*/ aafUInt32  bytes,
+
+    // here is the buffer
+    /*[out, size_is(bytes), length_is(*bytesRead)]*/ aafDataBuffer_t  buffer,
+
+    // 
+    /*[out,ref]*/ aafUInt32 *  bytesRead) PURE;
+
+
+  //***********************************************************
+  //
+  // SetSampleIndexPosition()
+  //
+  // Seek to absolute position within the sample index data.
+  //
+  STDMETHOD(SetSampleIndexPosition) (THIS_
+    // offset from beginning of sample index
+    /*[in]*/ aafPosition_t  offset) PURE;
+
+
+  //***********************************************************
+  //
+  // GetSampleIndexPosition()
+  //
+  // Get the absolute position within the sample index data.
+  //
+  STDMETHOD(GetSampleIndexPosition) (THIS_
+    // offset from beginning of sample index
+    /*[out]*/ aafPosition_t*  pOffset) PURE;
+
+
+  //***********************************************************
+  //
+  // GetSampleIndexSize()
+  //
+  // Return the total size of the sample index data.
+  //
+  STDMETHOD(GetSampleIndexSize) (THIS_
+    // size of sample index data
+    /*[out]*/ aafLength_t *  pSize ) PURE;
+
+
+  //***********************************************************
+  //
+  // SetFileMob()
+  //
+  // Associates a weak reference to the given file mob with the
+  // essence data.
+  //
+  // Succeeds if all of the following are true:
+  // - the pFileMob pointer is valid and points to 
+  // a file mob (contains a file descriptor).
+  // 
+  // If this method fails no state will be changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pFileMob is null.
+  //
+  STDMETHOD(SetFileMob) (THIS_
+    // reference to a file mob
+    /*[in]*/ IAAFSourceMob * pFileMob) PURE;
+
+
+  //***********************************************************
+  //
+  // GetFileMob()
+  //
+  // Associates a weak reference to the given file mob with the
+  // essence data.
+  //
+  // Succeeds if all of the following are true:
+  // - the ppFileMob pointer is valid and a weak
+  // reference to the associated file mob can be
+  // resolved.
+  // 
+  // If this method fails no state will be changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppFileMob is null.
+  //
+  STDMETHOD(GetFileMob) (THIS_
+    // reference to a file mob
+    /*[in]*/ IAAFSourceMob ** ppFileMob) PURE;
+
+
+  //***********************************************************
+  //
+  // GetFileMobID()
+  //
+  // Return the mob id used to find the file mob associated with this
+  // essence.  The file mob must exist in the same file as this
+  // essence data.
+  //
+  STDMETHOD(GetFileMobID) (THIS_
+    // the file mob id associated with essence
+    /*[out]*/ aafMobID_t *  pFileMobID) PURE;
+
+
+  END_INTERFACE
+};
+#endif // __IAAFEssenceDataEx_INTERFACE_DEFINED__
+
+
+
+// IAAFEssenceMultiAccess
+
+// ************************
+//
+// Interface IAAFEssenceMultiAccess
+//
+// ************************
+
+
+
+
+
+
+
+
+#ifndef __IAAFEssenceMultiAccess_INTERFACE_DEFINED__
+#define __IAAFEssenceMultiAccess_INTERFACE_DEFINED__
+
+EXTERN_C const IID IID_IAAFEssenceMultiAccess;
+
+#undef  INTERFACE
+#define INTERFACE   IAAFEssenceMultiAccess
+
+DECLARE_INTERFACE_(IAAFEssenceMultiAccess, IUnknown)
+{
+  BEGIN_INTERFACE
+
+  /* *** IUnknown methods *** */
+  STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppvObj) PURE;
+  STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
+  STDMETHOD_(ULONG,Release) (THIS) PURE;
+
+  /* *** IAAFEssenceMultiAccess methods *** */
+
+  //***********************************************************
+  //
+  // WriteMultiSamples()
+  //
+  // Writes multiple channels worth of sample data to an interleaved
+  // data stream in the natural order for the CODEC.
+  //
+  STDMETHOD(WriteMultiSamples) (THIS_
+    // number of elements in the array of transfer operations
+    /*[in]*/ aafUInt16  arrayElemCount,
+
+    // Points to an array of transfer parameters.  All fields in this
+    // array except for bytesXferred must be set up before doing the
+    // transfer.  Some of the fields in the xferArray structure are
+    // status results like bytesXferred and samplesXferred.
+    //
+    // The multiXfer_t structure has the following fields, which
+    // specify one channel of data: 
+    //
+    //   essenceDef    [IN] -- The essence type definition
+    //   physical      [IN] -- The physical input-output channel
+    //   numSamples    [IN] -- The number of samples to transfer
+    //   buflen        [IN] -- The size of the buffer
+    //   buffer        [IN] -- The buffer for this
+    /*[in,size_is(arrayElemCount)]*/ aafmMultiXfer_t *  xferArray,
+
+    // Put results into this array.  It has the following fields,
+    // which return result for one channel of data:
+    //
+    //   bytesXfered   [OUT] -- The total number of bytes transferred
+    //   samplesXfered [OUT] -- The total number of samples transferred
+    /*[out,size_is(arrayElemCount)]*/ aafmMultiResult_t *  resultArray) PURE;
+
+
+  //***********************************************************
+  //
+  // ReadMultiSamples()
+  //
+  // Reads one or more channels from an interleaved data stream.
+  // Possible Errors:
+  //
+  //   Standard errors (see top of file).
+  //
+  //   AAFRESULT_END_OF_ESSENCE -- Hit the end of the essence (like
+  //                               EOF) while reading.
+  //
+  STDMETHOD(ReadMultiSamples) (THIS_
+    // The size of the array for transfer operations.
+    /*[in]*/ aafUInt16  elemCount,
+
+    // Points to an array of transfer parameters.  All fields in this
+    // array except for bytesXferred must be set up before doing the
+    // transfer.  Some of the fields in the xferArray structure are
+    // status results like bytesXferred and samplesXferred.
+    //
+    // The multiXfer_t structure has the following fields, which
+    // specify one channel of data:
+    //
+    //   essenceDef  [IN] -- The essence type definition
+    //   physical    [IN] -- The physical input-output channel
+    //   numSamples  [IN] -- The number of samples to transfer
+    //   buflen      [IN] -- The size of the buffer
+    //   buffer      [IN] -- The buffer for this
+    /*[in, size_is(elemCount)]*/ aafmMultiXfer_t *  xferArray,
+
+    // Results go into this array.
+    //
+    // The aafmMultiResult_t structure has the following fields,
+    // which return result for one channel of data: 
+    //
+    //   bytesXfered   [OUT] -- The total number of bytes transferred
+    //   samplesXfered [OUT] -- The total number of samples transferred
+    /*[out, size_is(elemCount)]*/ aafmMultiResult_t *  resultArray) PURE;
+
+  END_INTERFACE
+};
+#endif // __IAAFEssenceMultiAccess_INTERFACE_DEFINED__
 
 
 
@@ -36340,23 +39403,32 @@ DECLARE_INTERFACE_(IAAFHeader2, IUnknown)
 
 
 
-// IAAFSearchSource
+// IAAFMasterMob2
 
 // ************************
 //
-// Interface IAAFSearchSource
+// Interface IAAFMasterMob2
 //
 // ************************
 
-#ifndef __IAAFSearchSource_INTERFACE_DEFINED__
-#define __IAAFSearchSource_INTERFACE_DEFINED__
 
-EXTERN_C const IID IID_IAAFSearchSource;
+
+
+
+
+
+
+
+
+#ifndef __IAAFMasterMob2_INTERFACE_DEFINED__
+#define __IAAFMasterMob2_INTERFACE_DEFINED__
+
+EXTERN_C const IID IID_IAAFMasterMob2;
 
 #undef  INTERFACE
-#define INTERFACE   IAAFSearchSource
+#define INTERFACE   IAAFMasterMob2
 
-DECLARE_INTERFACE_(IAAFSearchSource, IUnknown)
+DECLARE_INTERFACE_(IAAFMasterMob2, IUnknown)
 {
   BEGIN_INTERFACE
 
@@ -36365,497 +39437,20 @@ DECLARE_INTERFACE_(IAAFSearchSource, IUnknown)
   STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
   STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-  /* *** IAAFSearchSource methods *** */
+  /* *** IAAFMasterMob2 methods *** */
 
-  //***********************************************************
-  //
-  // SearchSource()
-  //
-  // This function returns the source information for a slot in a
-  // Master Mob or Source Mob.  It follows the Source Clip references
-  // in the specified slot until it encounters the kind of Mob
-  // specified in the mobKind parameter.  This function cannot be used
-  // on a Composition Mob and is not intended to be called
-  // iteratively; use the MobOpenSearch, MobGetNextSource,
-  // MobGetThisSource, and MobCloseSearch functions for those
-  // purposes. 
-  //
-  // The returned component and find source info are AddRef()ed
-  // before they are returned.
-  //
-  // Succeeds if all of the following are true:
-  // - ppSourceInfo is non-NULL
-  // - a Mob of the requested kind is found
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - ppCpnt is null.
-  //
-  // OM_ERR_INVALID_MOBTYPE
-  //	- The enumerator is out of range (bad cast, or writing
-  //      toolkit newer than reader)
-  //
-  // OM_ERR_TRAVERSAL_NOT_POSS
-  //	- Can not find a mob of the given kind.
-  //
-  STDMETHOD(SearchSource) (THIS_
-    // Slot ID
-    /*[in]*/ aafSlotID_t  slotID,
-
-    // Offset
-    /*[in]*/ aafPosition_t  offset,
-
-    // Mob Kind
-    /*[in]*/ aafMobKind_t  mobKind,
-
-    // Media Criteria
-    /*[in]*/ aafMediaCriteria_t *  pMediaCrit,
-
-    // Operation Choice
-    /*[in]*/ aafOperationChoice_t *  pOperationChoice,
-
-    // Source Information
-    /*[out]*/ IAAFFindSourceInfo ** ppSourceInfo) PURE;
-
-  END_INTERFACE
-};
-#endif // __IAAFSearchSource_INTERFACE_DEFINED__
-
-
-
-// IAAFEssenceDataEx
-
-// ************************
-//
-// Interface IAAFEssenceDataEx
-//
-// ************************
-
-
-
-
-
-#ifndef __IAAFEssenceDataEx_INTERFACE_DEFINED__
-#define __IAAFEssenceDataEx_INTERFACE_DEFINED__
-
-EXTERN_C const IID IID_IAAFEssenceDataEx;
-
-#undef  INTERFACE
-#define INTERFACE   IAAFEssenceDataEx
-
-DECLARE_INTERFACE_(IAAFEssenceDataEx, IUnknown)
-{
-  BEGIN_INTERFACE
-
-  /* *** IUnknown methods *** */
-  STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppvObj) PURE;
-  STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
-  STDMETHOD_(ULONG,Release) (THIS) PURE;
-
-  /* *** IAAFEssenceDataEx methods *** */
 
 
   //***********************************************************
   //
   // Initialize()
   //
-  // Associates a weak reference to the given file mob with the
-  // essence data.
-  //
-  // Succeeds if all of the following are true:
-  // - the pFileMob pointer is valid and points to 
-  // a file mob (contains a file descriptor).
-  // 
-  // If this method fails no state will be changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pFileMob is null.
-  //
-  STDMETHOD(Initialize) (THIS_
-    // reference to a file mob
-    /*[in]*/ IAAFSourceMob * pFileMob) PURE;
-
-  //***********************************************************
-  //
-  // Write()
-  //
-  // Write pre-interleaved data to a essence stream.
-  //
-  STDMETHOD(Write) (THIS_
-    // write this many bytes to the data stream
-    /*[in]*/ aafUInt32  bytes,
-
-    // here is the buffer
-    /*[out, size_is(bytes)]*/ aafDataBuffer_t  buffer,
-
-    // 
-    /*[out,ref]*/ aafUInt32 *  bytesWritten) PURE;
-
-
-  //***********************************************************
-  //
-  // Read()
-  //
-  // Read pre-interleaved data from a essence stream.
-  //
-  STDMETHOD(Read) (THIS_
-    // read this many bytes from the data stream
-    /*[in]*/ aafUInt32  bytes,
-
-    // here is the buffer
-    /*[out, size_is(bytes), length_is(*bytesRead)]*/ aafDataBuffer_t  buffer,
-
-    // 
-    /*[out,ref]*/ aafUInt32 *  bytesRead) PURE;
-
-
-  //***********************************************************
-  //
-  // SetPosition()
-  //
-  // Seek to absolute position within the essence data.
-  //
-  STDMETHOD(SetPosition) (THIS_
-    // offset from beginning of essence
-    /*[in]*/ aafPosition_t  offset) PURE;
-
-
-  //***********************************************************
-  //
-  // GetPosition()
-  //
-  // Get the absolute position within the essence data.
-  //
-  STDMETHOD(GetPosition) (THIS_
-    // offset from beginning of essence
-    /*[out]*/ aafPosition_t*  pOffset) PURE;
-
-
-  //***********************************************************
-  //
-  // GetSize()
-  //
-  // Return the total size of the essence data.
-  //
-  STDMETHOD(GetSize) (THIS_
-    // size of essence data
-    /*[out]*/ aafLength_t *  pSize ) PURE;
-
-  //***********************************************************
-  //
-  // WriteSampleIndex()
-  //
-  // Write pre-interleaved data to a sample index stream.
-  //
-  STDMETHOD(WriteSampleIndex) (THIS_
-    // write this many bytes to the sample index stream
-    /*[in]*/ aafUInt32  bytes,
-
-    // here is the buffer
-    /*[out, size_is(bytes)]*/ aafDataBuffer_t  buffer,
-
-    // 
-    /*[out,ref]*/ aafUInt32 *  bytesWritten) PURE;
-
-
-  //***********************************************************
-  //
-  // ReadSampleIndex()
-  //
-  // Read pre-interleaved data from a sample index stream.
-  //
-  STDMETHOD(ReadSampleIndex) (THIS_
-    // read this many bytes from the sample index stream
-    /*[in]*/ aafUInt32  bytes,
-
-    // here is the buffer
-    /*[out, size_is(bytes), length_is(*bytesRead)]*/ aafDataBuffer_t  buffer,
-
-    // 
-    /*[out,ref]*/ aafUInt32 *  bytesRead) PURE;
-
-
-  //***********************************************************
-  //
-  // SetSampleIndexPosition()
-  //
-  // Seek to absolute position within the sample index data.
-  //
-  STDMETHOD(SetSampleIndexPosition) (THIS_
-    // offset from beginning of sample index
-    /*[in]*/ aafPosition_t  offset) PURE;
-
-
-  //***********************************************************
-  //
-  // GetSampleIndexPosition()
-  //
-  // Get the absolute position within the sample index data.
-  //
-  STDMETHOD(GetSampleIndexPosition) (THIS_
-    // offset from beginning of sample index
-    /*[out]*/ aafPosition_t*  pOffset) PURE;
-
-
-  //***********************************************************
-  //
-  // GetSampleIndexSize()
-  //
-  // Return the total size of the sample index data.
-  //
-  STDMETHOD(GetSampleIndexSize) (THIS_
-    // size of sample index data
-    /*[out]*/ aafLength_t *  pSize ) PURE;
-
-
-  //***********************************************************
-  //
-  // SetFileMob()
-  //
-  // Associates a weak reference to the given file mob with the
-  // essence data.
-  //
-  // Succeeds if all of the following are true:
-  // - the pFileMob pointer is valid and points to 
-  // a file mob (contains a file descriptor).
-  // 
-  // If this method fails no state will be changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pFileMob is null.
-  //
-  STDMETHOD(SetFileMob) (THIS_
-    // reference to a file mob
-    /*[in]*/ IAAFSourceMob * pFileMob) PURE;
-
-
-  //***********************************************************
-  //
-  // GetFileMob()
-  //
-  // Associates a weak reference to the given file mob with the
-  // essence data.
-  //
-  // Succeeds if all of the following are true:
-  // - the ppFileMob pointer is valid and a weak
-  // reference to the associated file mob can be
-  // resolved.
-  // 
-  // If this method fails no state will be changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - ppFileMob is null.
-  //
-  STDMETHOD(GetFileMob) (THIS_
-    // reference to a file mob
-    /*[in]*/ IAAFSourceMob ** ppFileMob) PURE;
-
-
-  //***********************************************************
-  //
-  // GetFileMobID()
-  //
-  // Return the mob id used to find the file mob associated with this
-  // essence.  The file mob must exist in the same file as this
-  // essence data.
-  //
-  STDMETHOD(GetFileMobID) (THIS_
-    // the file mob id associated with essence
-    /*[out]*/ aafMobID_t *  pFileMobID) PURE;
-
-
-  END_INTERFACE
-};
-#endif // __IAAFEssenceDataEx_INTERFACE_DEFINED__
-
-
-
-// IAAFEssenceMultiAccess
-
-// ************************
-//
-// Interface IAAFEssenceMultiAccess
-//
-// ************************
-
-
-
-
-
-
-
-
-#ifndef __IAAFEssenceMultiAccess_INTERFACE_DEFINED__
-#define __IAAFEssenceMultiAccess_INTERFACE_DEFINED__
-
-EXTERN_C const IID IID_IAAFEssenceMultiAccess;
-
-#undef  INTERFACE
-#define INTERFACE   IAAFEssenceMultiAccess
-
-DECLARE_INTERFACE_(IAAFEssenceMultiAccess, IUnknown)
-{
-  BEGIN_INTERFACE
-
-  /* *** IUnknown methods *** */
-  STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppvObj) PURE;
-  STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
-  STDMETHOD_(ULONG,Release) (THIS) PURE;
-
-  /* *** IAAFEssenceMultiAccess methods *** */
-
-  //***********************************************************
-  //
-  // WriteMultiSamples()
-  //
-  // Writes multiple channels worth of sample data to an interleaved
-  // data stream in the natural order for the CODEC.
-  //
-  STDMETHOD(WriteMultiSamples) (THIS_
-    // number of elements in the array of transfer operations
-    /*[in]*/ aafUInt16  arrayElemCount,
-
-    // Points to an array of transfer parameters.  All fields in this
-    // array except for bytesXferred must be set up before doing the
-    // transfer.  Some of the fields in the xferArray structure are
-    // status results like bytesXferred and samplesXferred.
-    //
-    // The multiXfer_t structure has the following fields, which
-    // specify one channel of data: 
-    //
-    //   essenceDef    [IN] -- The essence type definition
-    //   physical      [IN] -- The physical input-output channel
-    //   numSamples    [IN] -- The number of samples to transfer
-    //   buflen        [IN] -- The size of the buffer
-    //   buffer        [IN] -- The buffer for this
-    /*[in,size_is(arrayElemCount)]*/ aafmMultiXfer_t *  xferArray,
-
-    // Put results into this array.  It has the following fields,
-    // which return result for one channel of data:
-    //
-    //   bytesXfered   [OUT] -- The total number of bytes transferred
-    //   samplesXfered [OUT] -- The total number of samples transferred
-    /*[out,size_is(arrayElemCount)]*/ aafmMultiResult_t *  resultArray) PURE;
-
-
-  //***********************************************************
-  //
-  // ReadMultiSamples()
-  //
-  // Reads one or more channels from an interleaved data stream.
-  // Possible Errors:
-  //
-  //   Standard errors (see top of file).
-  //
-  //   AAFRESULT_END_OF_ESSENCE -- Hit the end of the essence (like
-  //                               EOF) while reading.
-  //
-  STDMETHOD(ReadMultiSamples) (THIS_
-    // The size of the array for transfer operations.
-    /*[in]*/ aafUInt16  elemCount,
-
-    // Points to an array of transfer parameters.  All fields in this
-    // array except for bytesXferred must be set up before doing the
-    // transfer.  Some of the fields in the xferArray structure are
-    // status results like bytesXferred and samplesXferred.
-    //
-    // The multiXfer_t structure has the following fields, which
-    // specify one channel of data:
-    //
-    //   essenceDef  [IN] -- The essence type definition
-    //   physical    [IN] -- The physical input-output channel
-    //   numSamples  [IN] -- The number of samples to transfer
-    //   buflen      [IN] -- The size of the buffer
-    //   buffer      [IN] -- The buffer for this
-    /*[in, size_is(elemCount)]*/ aafmMultiXfer_t *  xferArray,
-
-    // Results go into this array.
-    //
-    // The aafmMultiResult_t structure has the following fields,
-    // which return result for one channel of data: 
-    //
-    //   bytesXfered   [OUT] -- The total number of bytes transferred
-    //   samplesXfered [OUT] -- The total number of samples transferred
-    /*[out, size_is(elemCount)]*/ aafmMultiResult_t *  resultArray) PURE;
-
-  END_INTERFACE
-};
-#endif // __IAAFEssenceMultiAccess_INTERFACE_DEFINED__
-
-
-
-// IAAFTypeDefVariableArrayEx
-
-// ************************
-//
-// Interface IAAFTypeDefVariableArrayEx
-//
-// ************************
-
-
-
-
-
-#ifndef __IAAFTypeDefVariableArrayEx_INTERFACE_DEFINED__
-#define __IAAFTypeDefVariableArrayEx_INTERFACE_DEFINED__
-
-EXTERN_C const IID IID_IAAFTypeDefVariableArrayEx;
-
-
-#undef  INTERFACE
-#define INTERFACE   IAAFTypeDefVariableArrayEx
-
-DECLARE_INTERFACE_(IAAFTypeDefVariableArrayEx, IUnknown)
-{
-  BEGIN_INTERFACE
-
-  /* *** IUnknown methods *** */
-  STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppvObj) PURE;
-  STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
-  STDMETHOD_(ULONG,Release) (THIS) PURE;
-
-  /* *** IAAFTypeDefVariableArrayEx methods *** */
-
-
-
-  //***********************************************************
-  //
-  // PrependElement()
-  //
-  // Prepends an element to the end of the array, setting it to the
-  // value given in pMemberPropVal.
+  // Initializes a newly allocated, empty IAAFMasterMob-supporting
+  // object.  This method must be called after allocation, and before
+  // any other method can be called.
   //
   // Succeeds if:
-  // - Initialize() has already been called on this object.
-  // - pInPropVal pointer is valid.
-  // - pMemberPropVal pointer is valid.
+  // - Initialize() has not yet been called on this object.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -36864,31 +39459,144 @@ DECLARE_INTERFACE_(IAAFTypeDefVariableArrayEx, IUnknown)
   // AAFRESULT_SUCCESS
   //   - succeeded.  (This is the only code indicating success.)
   //
-  // AAFRESULT_NULL_PARAM
-  //   - either pInPropVal or pMemberPropVal arg is NULL.
-  //
-  STDMETHOD(PrependElement) (THIS_
-    // property value corresponding to array to which element is prepended
-    /*[in]*/ IAAFPropertyValue * pInPropVal,
-
-    // value to be prepended to this array
-    /*[in]*/ IAAFPropertyValue * pMemberPropVal) PURE;
-
-
+  // AAFRESULT_ALREADY_INITIALIZED
+  //   - Initialize() has already been called on this object.
+  STDMETHOD(Initialize) (THIS) PURE;
 
 
   //***********************************************************
   //
-  // RemoveElement()
+  // AddMasterSlot()
   //
-  // Remove an element from the Array, given an index.
-  // Index is zero-based,
-  // and must be less than the value returned by GetCount().
+  // This function adds a slot to the specified Master Mob that
+  // references the specified a slot in the specified Source Mob. The
+  // new slot in the Master Mob contains a Source Clip that specifies
+  // the Source Mob in its source reference properties.  Typically this
+  // is done automatically by passing the Master Mob handle to
+  // AAFMedia::Create, but this function allows you to add it later.
+  //
+  // Note: If pSlotName is passed in with zero length, then the
+  // slot is not assigned a name.  Slot names are not used by the
+  // SDK, and exist only so the user can name slots.
   // 
-  // Succeeds if:
-  // - Initialize() has already been called on this object.
-  // - the index exists in this array type def.
-  // - The pInPropVal pointer is valid.
+  // Succeeds if all of the following are true:
+  // (more conditions here)
+  // 
+  // If this method fails no state is changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize() called on it.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - One or more of the following parameters are NULL pSourceMob,
+  //     pSlotName, and pDataDef.
+  //
+  // AAFRESULT_INVALID_DATADEF
+  //   - The data kind of the source MOB slot to be added to the Master
+  //     Mob does not match what is specfied in pDataDef.
+  //
+  // AAFRESULT_SLOT_NOTFOUND
+  //   - The specified Source Mob slot was not found.
+  //
+  // AAFRESULT_SLOT_EXISTS
+  //   - The specified Master slot ID already exists.
+  //
+  STDMETHOD(AddMasterSlot) (THIS_
+    // Data kind of new slot.  Requires a data kind valid for a media
+	// stream. Valid data kinds are:
+    // - DDEF_Picture
+    // - DDEF_Sound
+    /*[in]*/ IAAFDataDef * pDataDef,
+
+    // Slot ID of the Source Mob slot to be added to the Master Mob
+    /*[in]*/ aafSlotID_t  sourceSlotID,
+
+    // Source Mob containing the slot to be added to the Master Mob
+    /*[in]*/ IAAFSourceMob * pSourceMob,
+
+    // SlotID assigned to the new Master Mob slot
+    /*[in]*/ aafSlotID_t  masterSlotID,
+
+    // Name to assign to new slot in Master Mob
+    /*[in, string]*/ aafCharacter_constptr  pSlotName) PURE;
+
+
+  //***********************************************************
+  //
+  // GetTapeName()
+  //
+  // Finds the tape Source Mob associated with a Master Mob slot
+  // and writes the name of the tape, which is stored in the
+  // Mobs Name property, into the pTapeName buffer.  The buffer is
+  // allocated by the caller.  The size of the buffer is given by
+  // bufSize.  If the property name has not yet been set, a
+  // zero-length string will be written (that is, only the trailing
+  // null character).
+  // 
+  // Caller may call GetTapeNameBufLen() to determine the required
+  // buffer size.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pTapeName pointer is valid.
+  // - the specified master slot was found.
+  // - the specified master slot contains a tape mob.
+  // - bufSize indicates the buffer is large enough to hold the name.
+  // 
+  // If this method fails nothing will be written to *pTapeName.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize() called on it.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pTapeName arg is NULL.
+  //
+  // AAFRESULT_SLOT_NOTFOUND
+  //   - The specified Master Slot was not found.
+  //
+  // AAFRESULT_NOT_TAPEMOB
+  //   - The specified Master Slot does not contain a Tape MOB.
+  //
+  // AAFRESULT_SMALLBUF
+  //   - bufSize indicates the buffer is too small to hold the string.
+  //
+  STDMETHOD(GetTapeName) (THIS_
+    // SlotID of the Master Mob slot
+    /*[in]*/ aafUInt32  masterSlotID,
+
+    // The returned name
+    /*[out, size_is(bufSize), string]*/ aafCharacter *  pTapeName,
+
+    // the size of the pTapeName buffer
+    /*[in]*/ aafUInt32  bufSize) PURE;
+
+
+  //***********************************************************
+  //
+  // GetTapeNameBufLen()
+  //
+  // Returns the length of buffer required for the GetTapeName()
+  // method.  The value is placed into the location specified by
+  // pLen.  The value will include space required for the trailing
+  // null character.
+  //
+  // Succeeds if all of the following are true:
+  // - the pLen pointer is valid.
+  //
+  // If this method fails nothing will be written to *pLen.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -36901,36 +39609,39 @@ DECLARE_INTERFACE_(IAAFTypeDefVariableArrayEx, IUnknown)
   //   - This object has not yet had Initialize() called on it.
   //
   // AAFRESULT_NULL_PARAM
-  //   - pInPropVal arg is NULL.
+  //   - pLen arg is NULL.
   //
-  // AAFRESULT_BADINDEX
-  //   - The given index is out of range for this array type def.
+  // AAFRESULT_SLOT_NOTFOUND
+  //   - The specified Master Slot was not found.
   //
-  STDMETHOD(RemoveElement) (THIS_
-    // property value corresponding to array
-    /*[in]*/ IAAFPropertyValue * pInPropVal,
+  // AAFRESULT_NOT_TAPEMOB
+  //   - The specified Master Slot does not contain a Tape MOB.
+  //
+  STDMETHOD(GetTapeNameBufLen) (THIS_
+    // SlotID of the Master Mob slot
+    /*[in]*/ aafUInt32  masterSlotID,
 
-    // zero-based index into elements in this array type
-    /*[in]*/ aafUInt32  index) PURE;
-
-
+    // required buffer length
+    /*[out]*/ aafUInt32 *  pLen) PURE;
 
 
   //***********************************************************
   //
-  // InsertElement()
+  // GetNumRepresentations()
   //
-  // Inserts the value of the single, indicated element of the fixed
-  // array contained in pInPropVal, to the value contained in
-  // pMemberPropVal.  Index is zero-based, and must be less than the
-  // value returned by GetCount().  Property value must be of the
-  // same type as returned by GetType().
-  // 
-  // Succeeds if:
-  // - Initialize() has already been called on this object.
-  // - the index exists in this array type def.
-  // - The pInPropVal pointer is valid.
-  // - The ppOutPropVal pointer is valid.
+  // This function returns the number of media representations
+  // available for the specified SlotID on a specified Master
+  // Mob. This function is meant to work with
+  // GetRepresentationSourceClip, so that you can iterate through
+  // all of the choices yourself.  In most cases, you can use
+  // GetCriteriaSourceClip to handle multiple
+  // representations.  This function and
+  // GetRepresentationSourceClip are lower-level functions.
+  //
+  // Succeeds if all of the following are true:
+  // - the pNumReps pointer is valid.
+  //
+  // If this method fails nothing will be written to *pNumReps.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -36943,29 +39654,581 @@ DECLARE_INTERFACE_(IAAFTypeDefVariableArrayEx, IUnknown)
   //   - This object has not yet had Initialize() called on it.
   //
   // AAFRESULT_NULL_PARAM
-  //   - either pInPropVal or ppOutPropVal arg is NULL.
+  //   - pNumReps arg is NULL.
+  //
+  // AAFRESULT_SLOT_NOTFOUND
+  //   - The Master Slot specified by slotID was not found.
+  //
+  STDMETHOD(GetNumRepresentations) (THIS_
+    // SlotID
+    /*[in]*/ aafSlotID_t  slotID,
+
+    // number of representations
+    /*[out, retval]*/ aafNumSlots_t *  pNumReps) PURE;
+
+
+  //***********************************************************
+  //
+  // GetRepresentation()
+  //
+  // This method returns the indexed media representation for the
+  // specified Master Mob, SlotID, and index.  This call is meant to
+  // work with GetNumRepresentations, so that you can iterate through
+  // all of the choices yourself.  This method uses an integer index,
+  // not an iterator.  The function GetRepresentationSourceClip takes
+  // an index between 1 and the number of representations
+  // [inclusive], and returns the indexed Source Mob. You can make
+  // calls to functions such as AAFMedia::GetVideoInfo and
+  // AAFMedia::IsMediaContiguous to determine which media is the best
+  // fit.
+  //
+  // The returned source clip is AddRef()ed before it is returned.
+  //
+  // Succeeds if all of the following are true:
+  // - the ppSourceClip pointer is valid.
+  //
+  // If this method fails nothing will be written to *ppSourceClip.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize() called on it.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppSourceClip arg is NULL.
+  //
+  // AAFRESULT_SLOT_NOTFOUND
+  //   - The specified Master Slot was not found.
   //
   // AAFRESULT_BADINDEX
-  //   - The given index is out of range for this array type def.
+  //   - No Source Mob at specified index.
   //
-  STDMETHOD(InsertElement) (THIS_
-    // property value corresponding to array
-    /*[in]*/ IAAFPropertyValue * pInPropVal,
+  STDMETHOD(GetRepresentation) (THIS_
+    // Slot ID
+    /*[in]*/ aafSlotID_t  slotID,
 
-    // zero-based index into elements in this array type
+    // Index of requested representation
     /*[in]*/ aafUInt32  index,
 
-    // value to be inserted into this array
-    /*[in]*/ IAAFPropertyValue * pMemberPropVal) PURE;
+    // Requested Source Clip
+    /*[out]*/ IAAFSegment ** ppSourceClip) PURE;
+
+
+  //***********************************************************
+  //
+  // GetCriteriaSegment()
+  //
+  // Returns the Segment on the specified slot of a Master Mob
+  // that references the Source Mob that best meets the specified
+  // criteria.  This function will work whether multiple media
+  // representations exist or not.
+  //
+  // The returned segment is AddRef()ed before it is returned.
+  //
+  // Succeeds if all of the following are true:
+  // - the ppSegment pointer is valid.
+  //
+  // If this method fails nothing will be written to *ppSegment.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize() called on it.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppSegment arg is NULL.
+  //
+  // AAFRESULT_SLOT_NOTFOUND
+  //   - The specified Master Slot was not found.
+  //
+  STDMETHOD(GetCriteriaSegment) (THIS_
+    // Slot ID
+    /*[in]*/ aafSlotID_t  slotID,
+
+    // Index of requested representation.  Note: the
+	// aafMediaCriteria_t is defined as the following structure:
+    // typedef struct
+    // {
+    //	aafCriteriaType_t type;
+    //	aafCriteriaProc_t proc;
+    // } aafMediaCriteria_t;
+	//
+    // The type field can have one of the following values:
+    // typedef enum
+    // {
+    //	kAAFAnyRepresentation = 0,
+    //	kAAFFastestRepresentation,
+    //	kAAFBestFidelityRepresentation,
+    //	kAAFSmallestRepresentation,
+    //	kAAFUseRepresentationProc
+    // } aafCriteriaType_t;
+    /*[in]*/ aafMediaCriteria_t *  pCriteria,
+
+    // Requested Segment
+    /*[out]*/ IAAFSegment ** ppSegment) PURE;
+
+
+  //***********************************************************
+  //
+  // AppendPhysSourceRef()
+  //
+  // Connects this Source Mob with the physical Source Mob that
+  // describes the previous generation of essence, appending it to
+  // existing Mob data.  If a physical Source Mob, such as a File
+  // Source Mob or tape Source Mob, references another physical
+  // Source Mob as its ancestor, with no pulldown, then this
+  // function makes the connection between the two.
+  //
+  // Functionally, this is a helper function to create a slot with an
+  // AAFSourceClip referencing a particular piece of media.  This
+  // function takes many parameters because the components of an
+  // aafSourceRef_t have been broken out as separate parameters.
+  //
+  // The ancestor of an AAFSourceMob with an AAFFileDescriptor is often an
+  // AAFTapeDescriptor or NIL.
+  //
+  // Succeeds if all of the following are true:
+  // - the pSourceRefObj pointer is valid.
+  // - the pEssenceKind pointer is valid.
+  // (other conditions here)
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize() called on it.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pSourceRefObj or pEssenceKind is null.
+  //
+  // (other codes here.)
+  //
+  STDMETHOD(AppendPhysSourceRef) (THIS_
+    // Edit rate of slot to contain reference
+    /*[in]*/ aafRational_t  editrate,
+
+    // SlotID of slot to contain reference
+    /*[in]*/ aafSlotID_t  aMobSlot,
+
+    // Data kind of slot to contain reference.  Requires a data kind
+	// valid for a essence stream.  Valid data kinds are:
+    // - Picture
+    // - Sound
+    /*[in]*/ IAAFDataDef * pEssenceKind,
+
+    // Reference to a Physical Source Mob
+    /*[in]*/ aafSourceRef_t  ref,
+
+    // Length of the Source Clip
+    /*[in]*/ aafLength_t  srcRefLength) PURE;
+
+
+  //***********************************************************
+  //
+  // NewPhysSourceRef()
+  //
+  // Connects this Source Mob with the physical Source Mob that
+  // describes the previous generation of essence, replacing any
+  // existing Mob data.  If a physical Source Mob, such as a File
+  // Source Mob or tape Source Mob, references another physical
+  // Source Mob as its ancestor, with no pulldown, then this
+  // function makes the connection between the two.
+  //
+  // Functionally, this is a helper function to create a slot with an
+  // AAFSourceClip referencing a particular piece of media.  This
+  // function takes many parameters because the components of an
+  // aafSourceRef_t have been broken out as separate parameters.
+  //
+  // The ancestor of an AAFSourceMob with an AAFFileDescriptor is often an
+  // AAFTapeDescriptor or NIL.
+  //
+  // Succeeds if all of the following are true:
+  // - the pSourceRefObj pointer is valid.
+  // - the pEssenceKind pointer is valid.
+  // (other conditions here)
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize() called on it.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pSourceRefObj or pEssenceKind is null.
+  //
+  // (other codes here.)
+  //
+  STDMETHOD(NewPhysSourceRef) (THIS_
+    // Edit rate of slot to contain reference
+    /*[in]*/ aafRational_t  editrate,
+
+    // SlotID of slot to contain reference
+    /*[in]*/ aafSlotID_t  aMobSlot,
+
+    // Data kind of slot to contain reference.  Requires a data kind
+	// valid for a essence stream.  Valid data kinds are:
+    // - Picture
+    // - Sound
+    /*[in]*/ IAAFDataDef * pEssenceKind,
+
+    // Reference to a Physical Source Mob
+    /*[in]*/ aafSourceRef_t  ref,
+
+    // Length of the Source Clip
+    /*[in]*/ aafLength_t  srcRefLength) PURE;
+
+
+  //***********************************************************
+  //
+  // CreateEssence()
+  //
+  // Creates a single channel stream of essence.  Convenience
+  // functions exist to create audio or video essence, and a separate
+  // call (MultiCreate) exists to create interleaved audio and video
+  // data.
+  //
+  // The essence handle from this call can be used with
+  // WriteDataSamples  and possibly WriteDataLines, but NOT with
+  // WriteMultiSamples.
+  // 
+  // If you are creating the essence, and then attaching it to a
+  // master mob, then the "masterMob" field may be left NULL.  For
+  // video, the sampleRate should be the edit rate of the file mob.
+  // For audio, the sample rate should be the actual samples per
+  // second.
+  //
+  STDMETHOD(CreateEssence) (THIS_
+    // 
+    /*[in]*/ aafSlotID_t  masterSlotID,
+
+    // create essence of this type
+    /*[in]*/ IAAFDataDef * pMediaKind,
+
+    // using this codec
+    /*[in, ref]*/ aafUID_constref  codecID,
+
+    // with this edit rate
+    /*[in]*/ aafRational_t  editRate,
+
+    // with this sample rate
+    /*[in]*/ aafRational_t  samplerate,
+
+    // optionally compressing it
+    /*[in]*/ aafCompressEnable_t  Enable,
+
+    // Optionally create the file HERE.
+    /*[in]*/ IAAFLocator * destination,
+
+    // with this format
+    /*[in, ref]*/ aafUID_constref  fileFormat,
+
+    // Return an essence access on the essence.
+    /*[out]*/ IAAFEssenceAccess ** access) PURE;
+
+
+  //***********************************************************
+  //
+  // CreateMultiEssence()
+  //
+  // Creates a multi-channel interleaved stream of essence.  The
+  // essence handle from this call can be used with WriteDataSamples
+  // or WriteMultiSamples but NOT with or WriteDataLines.
+  // 
+  // If you are creating the essence, and then attaching it to a
+  // master mob, then the "masterMob" field may be left NULL.
+  //
+  STDMETHOD(CreateMultiEssence) (THIS_
+    // using this codec
+    /*[in, ref]*/ aafUID_constref  codecID,
+
+    // this many channels
+    /*[in]*/ aafUInt16  arrayElemCount,
+
+    // using these definitions
+    /*[in,ref,size_is(arrayElemCount)]*/ aafmMultiCreate_t *  mediaArray,
+
+    // optionally compressing it
+    /*[in]*/ aafCompressEnable_t  Enable,
+
+    // Optionally create the file HERE.
+    /*[in]*/ IAAFLocator * destination,
+
+    // with this format
+    /*[in, ref]*/ aafUID_constref  fileFormat,
+
+    // Return an essence access on the essence.
+    /*[out]*/ IAAFEssenceMultiAccess**  access) PURE;
+
+
+  //***********************************************************
+  //
+  // OpenEssence()
+  //
+  // Opens a single channel of a file mob.  If the essence is
+  // interleaved, then it will be di-interleaved when samples are
+  // read.  This routine follows the locator, and may call the locator
+  // failure callback if the essence can not be found.  If the failure
+  // callback finds the essence, then this routine will return
+  // normally.
+  // 
+  // The essence handle from this call can be used with
+  // ReadDataSamples  and possibly ReadDataLines, but NOT with
+  // ReadMultiSamples.
+  // 
+  // NOTE: If a locator is followed, then essencePtr may reference
+  // ANOTHER file object, which must be closed on file close.
+  //
+  STDMETHOD(OpenEssence) (THIS_
+    // On this slot
+    /*[in]*/ aafSlotID_t  slotID,
+
+    // using this essence criteria
+    /*[in]*/ aafMediaCriteria_t*  mediaCrit,
+
+    // ReadOnly or Append
+    /*[in]*/ aafMediaOpenMode_t  openMode,
+
+    // optionally decompressing
+    /*[in]*/ aafCompressEnable_t  compEnable,
+
+    // Return an essence access on the essence.
+    /*[out]*/ IAAFEssenceAccess ** access) PURE;
+	
+
+  //***********************************************************
+  //
+  // OpenMultiEssence()
+  //
+  // Opens a all channels associated with a file mob.  This routine
+  // follows the locator, and may call the locator failure callback if
+  // the essence can not be found.  If the failure callback finds the
+  // essence, then this routine will return normally.
+  //
+  // The essence handle from this call can be used with
+  // WriteMultiSamples but NOT with WriteDataSamples.
+  //
+  STDMETHOD(OpenMultiEssence) (THIS_
+    // On this slot
+    /*[in]*/ aafSlotID_t  slotID,
+
+    // using this essence criteria
+    /*[in]*/ aafMediaCriteria_t*  mediaCrit,
+
+    // ReadOnly or Append
+    /*[in]*/ aafMediaOpenMode_t  openMode,
+
+    // optionally decompressing
+    /*[in]*/ aafCompressEnable_t  compEnable,
+
+    // Return an essence access on the essence.
+    /*[out]*/ IAAFEssenceMultiAccess**  access) PURE;
+
+
+  //***********************************************************
+  //
+  // CountChannels()
+  //
+  // Takes an opaque handle, a master mob reference, and a slot ID
+  // so that it may be called before the essence is opened.
+  //
+  // Returns the number of interleaved essence channels of a given
+  // type in the essence stream referenced by the given file mob.
+  //
+  // If the data format is not interleaved, then the answer will
+  // always be zero or one.  This function correctly returns zero for
+  // essence types not handled by a given codec, and handles codecs
+  // which work with multiple essence types.
+  //
+  STDMETHOD(CountChannels) (THIS_
+    // On this slot
+    /*[in]*/ aafSlotID_t  slotID,
+
+    // using this essence criteria
+    /*[in]*/ aafMediaCriteria_t*  mediaCrit,
+
+    // for this essence type
+    /*[in]*/ IAAFDataDef * pMediaKind,
+
+    // How many channels?
+    /*[out]*/ aafUInt16*  numCh) PURE;
 
 
 
+
+  //***********************************************************
+  //
+  // ExtendEssence()
+  //
+  // Extends a single stream of essence that was originally created using
+   // IAAFMasterMob::CreateEssence.  Extended essence is represented by
+   // a Sequence of SourceClip objects.  The first call to ExtendEssence will cause the
+   // TimelineMobSlot's SourceClip object to be replaced by a
+   // Sequence.  The initial SourceClip becomes the first
+   // component of the new Sequence.
+  //
+  STDMETHOD(ExtendEssence) (THIS_
+    // 
+    /*[in]*/ aafSlotID_t  masterSlotID,
+
+    // create essence of this type
+    /*[in]*/ IAAFDataDef * pMediaKind,
+
+    // using this codec
+    /*[in, ref]*/ aafUID_constref  codecID,
+
+    // with this edit rate
+    /*[in]*/ aafRational_t  editRate,
+
+    // with this sample rate
+    /*[in]*/ aafRational_t  samplerate,
+
+    // optionally compressing it
+    /*[in]*/ aafCompressEnable_t  Enable,
+
+    // Optionally create the file HERE.
+    /*[in]*/ IAAFLocator * destination,
+
+    // with this format
+    /*[in, ref]*/ aafUID_constref  fileFormat,
+
+    // Return an essence access on the essence.
+    /*[out]*/ IAAFEssenceAccess ** access) PURE;
+
+
+  //***********************************************************
+  //
+  // ExtendMultiEssence()
+  //
+  // Extends a multi-channel interleaved stream of essence that was
+   // originally created using IAAFMasterMob::CreateMultiEssence.
+   // Extended essence is represented by a Sequence of SourceClip objects.
+   // The first call to ExtendEssence will cause the TimelineMobSlot's SourceClip
+   // object to be replaced by a Sequence.  The initial SourceClip becomes the first
+   // component of the new Sequence.
+  //
+  STDMETHOD(ExtendMultiEssence) (THIS_
+    // using this codec
+    /*[in, ref]*/ aafUID_constref  codecID,
+
+    // this many channels
+    /*[in]*/ aafUInt16  arrayElemCount,
+
+    // using these definitions
+    /*[in,ref,size_is(arrayElemCount)]*/ aafmMultiCreate_t *  mediaArray,
+
+    // optionally compressing it
+    /*[in]*/ aafCompressEnable_t  Enable,
+
+    // Optionally create the file HERE.
+    /*[in]*/ IAAFLocator * destination,
+
+    // with this format
+    /*[in, ref]*/ aafUID_constref  fileFormat,
+
+    // Return an essence access on the essence.
+    /*[out]*/ IAAFEssenceMultiAccess**  access) PURE;
+
+
+  //***********************************************************
+  //
+  // CreateStaticEssence()
+  //
+  // Creates and initializes the objects required to represent static essence.
+  //
+  STDMETHOD(CreateStaticEssence) (THIS_
+    // 
+    /*[in]*/ aafSlotID_t  masterSlotID,
+
+    // create essence of this type
+    /*[in]*/ IAAFDataDef * pMediaKind,
+
+    // using this codec
+    /*[in, ref]*/ aafUID_constref  codecID,
+
+    // optionally compressing it
+    /*[in]*/ aafCompressEnable_t  Enable,
+
+    // Optionally create the file HERE.
+    /*[in]*/ IAAFLocator * destination,
+
+    // with this format
+    /*[in, ref]*/ aafUID_constref  fileFormat,
+
+    // Return an essence access on the essence.
+    /*[out]*/ IAAFEssenceAccess ** access) PURE;
+  // This function is broadly similar to CreateEssence except that the essence is 
+  // Created in a static slot in the MasterMob
+  //
+  // The essence handle from this call can be used with
+  // WriteDataSamples  and possibly WriteDataLines\, but NOT with
+  // WriteMultiSamples.
+  // 
+
+
+  //***********************************************************
+  //
+  // CreateEventEssence()
+  //
+  // Creates and initializes the objects required to represent stream of events.
+  //
+  STDMETHOD(CreateEventEssence) (THIS_
+    // 
+    /*[in]*/ aafSlotID_t  masterSlotID,
+
+    // create essence of this type
+    /*[in]*/ IAAFDataDef * pMediaKind,
+
+    // using this codec
+    /*[in, ref]*/ aafUID_constref  codecID,
+
+    // with this edit rate
+    /*[in]*/ aafRational_t  editRate,
+
+    // with this sample rate
+    /*[in]*/ aafRational_t  samplerate,
+
+    // optionally compressing it
+    /*[in]*/ aafCompressEnable_t  Enable,
+
+    // Optionally create the file HERE.
+    /*[in]*/ IAAFLocator * destination,
+
+    // with this format
+    /*[in, ref]*/ aafUID_constref  fileFormat,
+
+    // Return an essence access on the essence.
+    /*[out]*/ IAAFEssenceAccess ** access) PURE;
+   // This function is broadly similar to CreateEssence except that the essence is 
+  // Created in a event slot in the MasterMob
+  //
+  // 
+  // The essence handle from this call can be used with
+  // WriteDataSamples  and possibly WriteDataLines\, but NOT with
+  // WriteMultiSamples.
+  // 
 
 
   END_INTERFACE
 };
-#endif // __IAAFTypeDefVariableArrayEx_INTERFACE_DEFINED__
-
+#endif // __IAAFMasterMob2_INTERFACE_DEFINED__
 
 
 
@@ -38335,6 +41598,369 @@ DECLARE_INTERFACE_(IAAFMob2, IUnknown)
 
 
 
+// IAAFSearchSource
+
+// ************************
+//
+// Interface IAAFSearchSource
+//
+// ************************
+
+#ifndef __IAAFSearchSource_INTERFACE_DEFINED__
+#define __IAAFSearchSource_INTERFACE_DEFINED__
+
+EXTERN_C const IID IID_IAAFSearchSource;
+
+#undef  INTERFACE
+#define INTERFACE   IAAFSearchSource
+
+DECLARE_INTERFACE_(IAAFSearchSource, IUnknown)
+{
+  BEGIN_INTERFACE
+
+  /* *** IUnknown methods *** */
+  STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppvObj) PURE;
+  STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
+  STDMETHOD_(ULONG,Release) (THIS) PURE;
+
+  /* *** IAAFSearchSource methods *** */
+
+  //***********************************************************
+  //
+  // SearchSource()
+  //
+  // This function returns the source information for a slot in a
+  // Master Mob or Source Mob.  It follows the Source Clip references
+  // in the specified slot until it encounters the kind of Mob
+  // specified in the mobKind parameter.  This function cannot be used
+  // on a Composition Mob and is not intended to be called
+  // iteratively; use the MobOpenSearch, MobGetNextSource,
+  // MobGetThisSource, and MobCloseSearch functions for those
+  // purposes. 
+  //
+  // The returned component and find source info are AddRef()ed
+  // before they are returned.
+  //
+  // Succeeds if all of the following are true:
+  // - ppSourceInfo is non-NULL
+  // - a Mob of the requested kind is found
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppCpnt is null.
+  //
+  // OM_ERR_INVALID_MOBTYPE
+  //	- The enumerator is out of range (bad cast, or writing
+  //      toolkit newer than reader)
+  //
+  // OM_ERR_TRAVERSAL_NOT_POSS
+  //	- Can not find a mob of the given kind.
+  //
+  STDMETHOD(SearchSource) (THIS_
+    // Slot ID
+    /*[in]*/ aafSlotID_t  slotID,
+
+    // Offset
+    /*[in]*/ aafPosition_t  offset,
+
+    // Mob Kind
+    /*[in]*/ aafMobKind_t  mobKind,
+
+    // Media Criteria
+    /*[in]*/ aafMediaCriteria_t *  pMediaCrit,
+
+    // Operation Choice
+    /*[in]*/ aafOperationChoice_t *  pOperationChoice,
+
+    // Source Information
+    /*[out]*/ IAAFFindSourceInfo ** ppSourceInfo) PURE;
+
+  END_INTERFACE
+};
+#endif // __IAAFSearchSource_INTERFACE_DEFINED__
+
+
+
+// IAAFSourceReference2
+
+// ************************
+//
+// Interface IAAFSourceReference2
+//
+// ************************
+
+
+
+
+#ifndef __IAAFSourceReference2_INTERFACE_DEFINED__
+#define __IAAFSourceReference2_INTERFACE_DEFINED__
+
+EXTERN_C const IID IID_IAAFSourceReference2;
+
+#undef  INTERFACE
+#define INTERFACE   IAAFSourceReference2
+
+DECLARE_INTERFACE_(IAAFSourceReference2, IUnknown)
+{
+  BEGIN_INTERFACE
+
+  /* *** IUnknown methods *** */
+  STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppvObj) PURE;
+  STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
+  STDMETHOD_(ULONG,Release) (THIS) PURE;
+
+  /* *** IAAFSourceReference2 methods *** */
+
+
+
+  //***********************************************************
+  //
+  // GetSourceID()
+  //
+  // Gets the SourceID and places it into the pSourceID argument.
+  //
+  // Succeeds if all of the following are true:
+  // - the pSourceID pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pSourceID.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pSourceID arg is NULL.
+  //
+  STDMETHOD(GetSourceID) (THIS_
+    // Place to put source ID
+    /*[retval][out]*/ aafMobID_t *  pSourceID) PURE;
+
+
+  //***********************************************************
+  //
+  // SetSourceID()
+  //
+  // Sets the SourceID using the sourceID argument.
+  // 
+  // Always succeeds.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  STDMETHOD(SetSourceID) (THIS_
+    // Source ID to set
+    /*[in]*/ aafMobID_constref   sourceID) PURE;
+
+
+  //***********************************************************
+  //
+  // GetSourceMobSlotID()
+  //
+  // Gets the Mob Slot ID and places it into the pMobSlotID argument.
+  //
+  // Succeeds if all of the following are true:
+  // - the pMobSlotID pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pMobSlotID.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pMobSlotID arg is NULL.
+  //
+  STDMETHOD(GetSourceMobSlotID) (THIS_
+    // Place to put source mob slot ID
+    /*[retval][out]*/ aafSlotID_t *  pMobSlotID) PURE;
+
+
+  //***********************************************************
+  //
+  // SetSourceMobSlotID()
+  //
+  // Sets the mob slot ID using the mobSlotID argument.
+  // 
+  // Succeeds if all of the following are true:
+  // - (preconditions here)
+  // 
+  // If this method fails no state will be changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // (other error codes here.)
+  //
+  STDMETHOD(SetSourceMobSlotID) (THIS_
+    // Source Mob ID to set
+    /*[in]*/ aafSlotID_t   mobSlotID) PURE;
+
+
+
+  //***********************************************************
+  //
+  // SetChannelIDs()
+  //
+  // Specify the channels in a slot that are referenced. The first channel has
+// and ID of 1, the N'th channel has an ID of N.  The number of channel IDs
+// shall equal the number of channels being described the bht MobSlot containing
+// the SourceReference, e.g. 1 element for a mono audio slot, 6 elements for a 5.1
+// multi-channel audio slot.
+// 
+// Return codes:
+//
+// AAFRESULT_SUCCESS
+//   - succeeded
+//
+// AAFRESULT_NULL_PARAM
+//   - pChannelIDs is null 
+  //
+  STDMETHOD(SetChannelIDs) (THIS_
+    // Number of elements in the pChannelIDs array
+    /*[in]*/ aafUInt32  numberElements,
+
+    // Array of channel IDs
+    /*[in]*/ aafUInt32*  pChannelIDs) PURE;
+
+
+  //***********************************************************
+  //
+  // GetChannelIDs()
+  //
+  // // Get the channels in a slot that are referenced.  Refer to
+// SetChannelIDs for channel IDs description.
+// Return codes:
+//
+// AAFRESULT_SUCCESS
+//   - succeeded
+//
+// AAFRESULT_NULL_PARAM
+//   - pChannelIDs is null
+//
+// AAFRESULT_PROP_NOT_PRESENT
+//   - the property is not present
+//
+// AAFRESULT_SMALLBUF
+//   - pChannelIDs is too small
+  //
+  STDMETHOD(GetChannelIDs) (THIS_
+    // Number of elements in the pChannelIDs array
+    /*[in]*/ aafUInt32  numberElements,
+
+    // Array of channel IDs
+    /*[in]*/ aafUInt32*  pChannelIDs) PURE;
+
+  //***********************************************************
+  //
+  // GetChannelIDsSize()
+  //
+  // // Get the number of channel IDs stored by this SourceReference.
+//
+// AAFRESULT_SUCCESS
+//   - succeeded
+//
+// AAFRESULT_NULL_PARAM
+//   - pChannelIDs is null
+  //
+  STDMETHOD(GetChannelIDsSize) (THIS_
+    // Number of elements in the pChannelIDs array
+    /*[out]*/ aafUInt32 *  numberElements) PURE;
+
+  //***********************************************************
+  //
+  // SetMonoSourceSlotIDs()
+  //
+  // For reference from a multi-channel MobSlot to multiple mono MobSlots.
+// pMonoSourceSlotIDs identifies the mono slots referenced by this SourceReference
+// object.
+
+// 
+// Return codes:
+//
+// AAFRESULT_SUCCESS
+//   - succeeded
+//
+// AAFRESULT_NULL_PARAM
+//   - pMonoSourceSlotIDs is null 
+  //
+  STDMETHOD(SetMonoSourceSlotIDs) (THIS_
+    // Number of elements in the pMonoSourceSlotIDs array
+    /*[in]*/ aafUInt32  numberElements,
+
+    // Array of slot IDs
+    /*[in]*/ aafUInt32*  pMonoSourceSlotIDs) PURE;
+
+
+  //***********************************************************
+  //
+  // GetMonoSourceSlotIDs()
+  //
+  // // Get the mono slot IDs that are referenced by this object.  Refer to
+// SetMonoSourceSlotIDs for a description of pMonoSourceSlotIDs.
+// Return codes:
+//
+// AAFRESULT_SUCCESS
+//   - succeeded
+//
+// AAFRESULT_NULL_PARAM
+//   - pMonoSourceSlotIDs is null
+//
+// AAFRESULT_PROP_NOT_PRESENT
+//   - the property is not present
+//
+// AAFRESULT_SMALLBUF
+//   - pMonoSourceSlotIDs is too small
+  //
+  STDMETHOD(GetMonoSourceSlotIDs) (THIS_
+    // Number of elements in the pMonoSourceSlotIDs array
+    /*[in]*/ aafUInt32  numberElements,
+
+    // Array of channel IDs
+    /*[in]*/ aafUInt32*  pMonoSourceSlotIDs) PURE;
+
+  //***********************************************************
+  //
+  // GetMonoSourceSlotIDsSize()
+  //
+  // // Get the number of mono slot IDs stored by this SourceReference.
+//
+// AAFRESULT_SUCCESS
+//   - succeeded
+//
+// AAFRESULT_NULL_PARAM
+//   - pMonoSourceSlotIDs is null
+  //
+  STDMETHOD(GetMonoSourceSlotIDsSize) (THIS_
+    // Number of elements in the pMonoSourceSlotIDs array
+    /*[out]*/ aafUInt32 *  numberElements) PURE;
+
+
+  END_INTERFACE
+};
+#endif // __IAAFSourceReference2_INTERFACE_DEFINED__
+
+
+
 // IAAFTimelineMobSlot2
 
 // ************************
@@ -38661,11 +42287,11 @@ DECLARE_INTERFACE_(IAAFTimelineMobSlot2, IUnknown)
 
 
 
-// IAAFComponent2
+// IAAFTypeDefVariableArrayEx
 
 // ************************
 //
-// Interface IAAFComponent2
+// Interface IAAFTypeDefVariableArrayEx
 //
 // ************************
 
@@ -38673,18 +42299,16 @@ DECLARE_INTERFACE_(IAAFTimelineMobSlot2, IUnknown)
 
 
 
+#ifndef __IAAFTypeDefVariableArrayEx_INTERFACE_DEFINED__
+#define __IAAFTypeDefVariableArrayEx_INTERFACE_DEFINED__
 
+EXTERN_C const IID IID_IAAFTypeDefVariableArrayEx;
 
-
-#ifndef __IAAFComponent2_INTERFACE_DEFINED__
-#define __IAAFComponent2_INTERFACE_DEFINED__
-
-EXTERN_C const IID IID_IAAFComponent2;
 
 #undef  INTERFACE
-#define INTERFACE   IAAFComponent2
+#define INTERFACE   IAAFTypeDefVariableArrayEx
 
-DECLARE_INTERFACE_(IAAFComponent2, IUnknown)
+DECLARE_INTERFACE_(IAAFTypeDefVariableArrayEx, IUnknown)
 {
   BEGIN_INTERFACE
 
@@ -38693,599 +42317,21 @@ DECLARE_INTERFACE_(IAAFComponent2, IUnknown)
   STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
   STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-  /* *** IAAFComponent2 methods *** */
-
-
-
-
-  //***********************************************************
-  //
-  // SetLength()
-  //
-  // Sets the length property value on this component object.
-  // 
-  // Succeeds if all of the following are true:
-  // - the optional length property is present for this object.
-  //
-  // This method deals with an optional property, which will only be
-  // present for time-varying media.
-  // 
-  // If this method fails the length property will not be
-  // changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_BAD_PROP
-  //   - the optional length property is not present for this object.
-  //
-  STDMETHOD(SetLength) (THIS_
-    // The duration in edit units of this component
-    /*[in]*/ aafLength_constref  length) PURE;
-
-
-  //***********************************************************
-  //
-  // GetLength()
-  //
-  // Gets the duration in edit units of this component.
-  //	
-  // Succeeds if all of the following are true:
-  // - the pLength pointer is valid.
-  // - the optional length property is present for this object.
-  //
-  // This method deals with an optional property, which will only be
-  // present for time-varying media.
-  // 
-  // If this method fails nothing will be written to *pLength.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pLength arg is NULL.
-  //
-  // AAFRESULT_BAD_PROP
-  //   - the optional length property is not present for this object.
-  //
-  STDMETHOD(GetLength) (THIS_
-    // Length of this component
-    /*[retval][out]*/ aafLength_t *  pLength) PURE;
-	
-
-  //***********************************************************
-  //
-  // SetDataDef()
-  //
-  // sets the data definition property AUID on this component.
-  // 
-  // If this method fails the Data Definition property will not be
-  // changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pDataDef arg is NULL.
-  //
-  STDMETHOD(SetDataDef) (THIS_
-    // DataDef of this object
-    /*[in]*/ IAAFDataDef * pDataDef) PURE;
-
-
-  //***********************************************************
-  //
-  // GetDataDef()
-  //
-  // returns data definition object.
-  //
-  // Succeeds if all of the following are true:
-  // - the ppDatadef pointer is valid.
-  // 
-  // If this method fails nothing will be written to *ppDatadef.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - ppDatadef arg is NULL.
-  //
-  STDMETHOD(GetDataDef) (THIS_
-    // DataDef of this object
-    /*[out, retval]*/ IAAFDataDef ** ppDatadef) PURE;
-
-  //***********************************************************
-  //
-  // AppendKLVData()
-  //
-  // Appends a pre-existing KLV Data object to the specified
-  // component.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pKLV pointer is valid.
-  // 
-  // If this method fails no state will be changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - the pData arg is NULL.
-  //
-  STDMETHOD(AppendKLVData) (THIS_
-    // KLV object
-    /*[in]*/ IAAFKLVData * pData) PURE;
-
-
-  //***********************************************************
-  //
-  // CountKLVData()
-  //
-  // return total number of KLV data objects attached to this component.
-  //
-  // Succeeds if all of the following are true:
-  // - the pNumData pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pNumComments.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pNumData arg is NULL.
-  //
-  STDMETHOD(CountKLVData) (THIS_
-    // Number  of KLV data objects
-    /*[out]*/ aafUInt32 *  pNumData) PURE;
-
-
-  //***********************************************************
-  //
-  // GetKLVData()
-  //
-  // return the enumeration for all KLV data objects on this component.  The returned
-  // enumerator is AddRef()ed before it is returned.  The enumerator
-  // is implemented as a EnumAAFKLVData.
-  // 
-  // Succeeds if all of the following are true:
-  // - the ppEnum pointer is valid.
-  // 
-  // If this method fails nothing will be written to *ppEnum.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - ppEnum is null.
-  //
-  STDMETHOD(GetKLVData) (THIS_
-    // KLV data objects
-    /*[out]*/ IEnumAAFKLVData ** ppEnum) PURE;
-
-
-  //***********************************************************
-  //
-  // RemoveKLVData()
-  //
-  // // Removes the given KLV data object from this component.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pData pointer is valid.
-  // - the given KLV data object is present in the component.
-  // 
-  // If this method fails no state will be changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pData is null.
-  //
-  // AAFRESULT_OBJECT_NOT_FOUND
-  //   - the given KLV data object is not in this component.
-  //
-  STDMETHOD(RemoveKLVData) (THIS_
-    // KLV data object to remove
-    /*[in]*/ IAAFKLVData * pData) PURE;
+  /* *** IAAFTypeDefVariableArrayEx methods *** */
 
 
 
   //***********************************************************
   //
-  // AppendComment()
+  // PrependElement()
   //
-  // Append and attribute name/value pair to the attribute list. 
-  //
-  STDMETHOD(AppendComment) (THIS_
-    // The attribute name.
-    /*[in]*/ aafCharacter_constptr  pName,
-
-    // The attribute value.
-    /*[in]*/ aafCharacter_constptr  pValue) PURE;
-
-   // Creates a new tagged value, initializes it with the specified comment
-   // name/value pair, and appends it to the comment list.
-   //
-   // Succeeds if:
-   //   - pName and pValue are valid pointers.
-   //
-   // Return codes:
-   //
-   //   AAFRESULT_SUCCESS
-   //
-   //   AAFRESULT_NULL_PARAM
-   //	     - pName or pValue is null.
-
-  //***********************************************************
-  //
-  // CountComments()
-  //
-  // Return the number of comments contained by this component 
-  //
-  STDMETHOD(CountComments) (THIS_
-    // Pointer to comment count.
-    /*[out]*/ aafUInt32*  pNumComments) PURE;
-
-   // Returns the number of comments on this component.
-   //
-   // Succeeds if:
-   //   - pNumComments is a valid pointer
-   //
-   // Return codes:
-   //
-   //   AAFRESULT_SUCCESS
-   //
-   //   AAFRESULT_NULL_PARAM
-   //	     - pNumComments is null
-  
-
-  //***********************************************************
-  //
-  // GetComments()
-  //
-  // Return a comment enumerator for this component. 
-  //
-  STDMETHOD(GetComments) (THIS_
-    // Pointer to the new enumerator object created by this method.
-    /*[out]*/ IEnumAAFTaggedValues ** ppEnum) PURE;
-
-   // Creates an enumerator for this component\'s comments.  The new enumerator is
-   // AddRef'ed before it is returned.
-   //
-   // Succeeds if:
-   //   - pName and pValue are valid pointers.
-   //
-   // Return codes:
-   //
-   //   AAFRESULT_SUCCESS
-   //
-   //   AAFRESULT_NULL_PARAM
-   //	     - pEnum was null
-
-
-  //***********************************************************
-  //
-  // RemoveComment()
-  //
-  // Remove a comment (tagged value).
-  //
-  STDMETHOD(RemoveComment) (THIS_
-    // Pointer to the tagged value comment.
-    /*[in]*/ IAAFTaggedValue * pComment) PURE;
-
-   // Removes a component comment.
-   //
-   // Succeeds if:
-   //   - pName and pValue are valid pointers.
-   //
-   // Return codes:
-   //
-   //   AAFRESULT_SUCCESS
-   //
-   //   AAFRESULT_NULL_PARAM
-   //	     - pName or pValue is null.
-
-  //***********************************************************
-  //
-  // AppendAttribute()
-  //
-  // Append and attribute name/value pair to the attribute list. 
-  //
-  STDMETHOD(AppendAttribute) (THIS_
-    // The attribute name.
-    /*[in]*/ aafCharacter_constptr  pName,
-
-    // The attribute value.
-    /*[in]*/ aafCharacter_constptr  pValue) PURE;
-
-   // Creates a new tagged value, initializes it with the specified attribute
-   // name/value pair, and appends it to the attribute list.
-   //
-   // Succeeds if:
-   //   - pName and pValue are valid pointers.
-   //
-   // Return codes:
-   //
-   //   AAFRESULT_SUCCESS
-   //
-   //   AAFRESULT_NULL_PARAM
-   //	     - pName or pValue is null.
-
-  //***********************************************************
-  //
-  // CountAttributes()
-  //
-  // Return the number of attributes contained by this component 
-  //
-  STDMETHOD(CountAttributes) (THIS_
-    // Pointer to attribute count.
-    /*[out]*/ aafUInt32*  pNumAttributes) PURE;
-
-   // Returns the number of attributes on this component.
-   //
-   // Succeeds if:
-   //   - pNumAttributes is a valid pointer
-   //
-   // Return codes:
-   //
-   //   AAFRESULT_SUCCESS
-   //
-   //   AAFRESULT_NULL_PARAM
-   //	     - pNumAttributes is null
-  
-
-  //***********************************************************
-  //
-  // GetAttributes()
-  //
-  // Return an attribute enumerator for this component. 
-  //
-  STDMETHOD(GetAttributes) (THIS_
-    // Pointer to the new enumerator object created by this method.
-    /*[out]*/ IEnumAAFTaggedValues ** ppEnum) PURE;
-
-   // Creates an enumerator for this component\'s attributes.  The new enumerator is
-   // AddRef'ed before it is returned.
-   //
-   // Succeeds if:
-   //   - pName and pValue are valid pointers.
-   //
-   // Return codes:
-   //
-   //   AAFRESULT_SUCCESS
-   //
-   //   AAFRESULT_NULL_PARAM
-   //	     - pEnum was null
-
-
-  //***********************************************************
-  //
-  // RemoveAttribute()
-  //
-  // Remove an attribute (tagged value).
-  //
-  STDMETHOD(RemoveAttribute) (THIS_
-    // Pointer to the tagged value attribute.
-    /*[in]*/ IAAFTaggedValue * pAttribute) PURE;
-
-   // Removes a component attribute.
-   //
-   // Succeeds if:
-   //   - pName and pValue are valid pointers.
-   //
-   // Return codes:
-   //
-   //   AAFRESULT_SUCCESS
-   //
-   //   AAFRESULT_NULL_PARAM
-   //	     - pName or pValue is null.
-
-
-
-
-
-  END_INTERFACE
-};
-#endif // __IAAFComponent2_INTERFACE_DEFINED__
-
-
-
-// IAAFDictionary2
-
-// ************************
-//
-// Interface IAAFDictionary2
-//
-// ************************
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#ifndef __IAAFDictionary2_INTERFACE_DEFINED__
-#define __IAAFDictionary2_INTERFACE_DEFINED__
-
-EXTERN_C const IID IID_IAAFDictionary2;
-
-#undef  INTERFACE
-#define INTERFACE   IAAFDictionary2
-
-DECLARE_INTERFACE_(IAAFDictionary2, IUnknown)
-{
-  BEGIN_INTERFACE
-
-  /* *** IUnknown methods *** */
-  STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppvObj) PURE;
-  STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
-  STDMETHOD_(ULONG,Release) (THIS) PURE;
-
-  /* *** IAAFDictionary2 methods *** */
-
-  //***********************************************************
-  //
-  // CreateInstance()
-  //
-  // Creates a single uninitialized AAF object of the class associated 
-  // with a specified stored object id. 
-  // 
-  STDMETHOD(CreateInstance)(THIS_
-    // Class identifier (AUID) of the stored object. This is the
-    // corresponding SMPTE identifier (as a GUID) for all predefined
-    // built-in classes.
-    aafUID_constref id,
-
-    // Reference to the identifier of the interface
-    REFIID riid,
-
-    // Address of output variable that receives the 
-    // interface pointer requested in riid
-    IUnknown ** ppvObject) PURE;
-
-
-  //***********************************************************
-  //
-  // CreateMetaInstance()
-  //
-  // Creates a single uninitialized AAF meta class or type associated 
-  // with a specified stored object id. 
-  // 
-  STDMETHOD(CreateMetaInstance)(THIS_
-    // Identifier (id) of a class or type definition. This is the
-    // corresponding SMPTE identifier (as a GUID) for all predefined
-    // built-in definitions.
-    aafUID_constref id,
-
-    // Reference to the identifier of the interface
-    REFIID riid,
-
-    // Address of output variable that receives the 
-    // interface pointer requested in riid
-    IUnknown ** ppMetaDefinition) PURE;
-
-
-
-
-  //***********************************************************
-  //
-  // RegisterClassDef()
-  //
-  // Add the class definition object to the dictionary.
-  // 
-  // Succeeds if:
-  // - The pClassDef pointer is valid.
-  // - the ID contained in the class def is not already been
-  //   registered.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pClassDef arg is NULL.
-  //
-  // AAFRESULT_INVALID_PARAM
-  //   - The class def ID has already been registered.
-  //
-  STDMETHOD(RegisterClassDef) (THIS_
-    // Class Definition
-    /*[in]*/ IAAFClassDef * pClassDef) PURE;
-
-
-  //***********************************************************
-  //
-  // LookupClassDef()
-  //
-  // Return the class definition with the given id.
-  // 
-  // Succeeds if:
-  // - The pClassID pointer is valid.
-  // - The ppClassDef pointer is valid.
-  // - the ID is a recognized id for a class definition.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - Either pClassID or ppClassDef arg is NULL.
-  //
-  // AAFRESULT_INVALID_PARAM
-  //   - The given ID is not recognized as a class definition ID.
-  //
-  STDMETHOD(LookupClassDef) (THIS_
-    // Class Unique ID
-    /*[in, ref]*/ aafUID_constref  classId,
-
-    // Class Definition
-    /*[out,retval]*/ IAAFClassDef ** ppClassDef) PURE;
-
-
-  //***********************************************************
-  //
-  // GetClassDefs()
-  //
-  // Return an enumerator for all class definitions.
+  // Prepends an element to the end of the array, setting it to the
+  // value given in pMemberPropVal.
   //
   // Succeeds if:
-  // - The ppEnum pointer is valid.
+  // - Initialize() has already been called on this object.
+  // - pInPropVal pointer is valid.
+  // - pMemberPropVal pointer is valid.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -39295,1388 +42341,30 @@ DECLARE_INTERFACE_(IAAFDictionary2, IUnknown)
   //   - succeeded.  (This is the only code indicating success.)
   //
   // AAFRESULT_NULL_PARAM
-  //   - ppEnum arg is NULL.
+  //   - either pInPropVal or pMemberPropVal arg is NULL.
   //
-  STDMETHOD(GetClassDefs) (THIS_
-    // Class Definition Enumeration
-    /*[out,retval]*/ IEnumAAFClassDefs ** ppEnum) PURE;
+  STDMETHOD(PrependElement) (THIS_
+    // property value corresponding to array to which element is prepended
+    /*[in]*/ IAAFPropertyValue * pInPropVal,
+
+    // value to be prepended to this array
+    /*[in]*/ IAAFPropertyValue * pMemberPropVal) PURE;
+
+
 
 
   //***********************************************************
   //
-  // CountClassDefs()
+  // RemoveElement()
   //
-  // Writes the number of class definition objects into the
-  // *pResult argument.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pResult pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pResult.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pResult is null.
-  //
-  STDMETHOD(CountClassDefs) (THIS_
-    // Total number of class definition objects
-    /*[out, retval]*/ aafUInt32 *  pResult) PURE;
-
-  //***********************************************************
-  //
-  // CreateForwardClassReference()
-  //
-  // Return the class definition with the given id.
+  // Remove an element from the Array, given an index.
+  // Index is zero-based,
+  // and must be less than the value returned by GetCount().
   // 
   // Succeeds if:
-  // - The classId does not represent an existing forward class reference
-  //   or a class definition that has already been successfully registered.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_INVALID_PARAM
-  //   - The given ID is not recognized as a class definition ID.
-  //
-  STDMETHOD(CreateForwardClassReference) (THIS_
-    // Class Unique ID
-    /*[in, ref]*/ aafUID_constref  classId) PURE;
-
-  //***********************************************************
-  //
-  // HasForwardClassReference()
-  //
-  // Return kAAFTrue if the given class identification is a forward reference.
-  // 
-  // Succeeds if:
-  // - The pClassID pointer is valid.
-  // - The ppClassDef pointer is valid.
-  // - the ID is a recognized id for a class definition.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - Either pClassID or ppClassDef arg is NULL.
-  //
-  // AAFRESULT_INVALID_PARAM
-  //   - The given ID is not recognized as a class definition ID.
-  //
-  STDMETHOD(HasForwardClassReference) (THIS_
-    // Class Unique ID
-    /*[in, ref]*/ aafUID_constref  classId,
-
-    // true if forward class reference; false if not a forward class reference
-    /*[out,retval]*/ aafBoolean_t *  pResult) PURE;
-
-  //***********************************************************
-  //
-  // RegisterTypeDef()
-  //
-  // Add the type definition object to the dictionary.
-  // 
-  // Succeeds if:
-  // - The pTypeDef pointer is valid.
-  // - the ID is not already been registered.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pClassDef arg is NULL.
-  //
-  // AAFRESULT_INVALID_PARAM
-  //   - The given type has already been registered.
-  //
-  STDMETHOD(RegisterTypeDef) (THIS_
-    // Type Definition Object
-    /*[in]*/ IAAFTypeDef * pTypeDef) PURE;
-
-
-  //***********************************************************
-  //
-  // LookupTypeDef()
-  //
-  // Return the type definition object with the given id.
-  // 
-  // Succeeds if:
-  // - The pTypeID pointer is valid.
-  // - The ppTypeDef pointer is valid.
-  // - the ID is a recognized id for a type definition.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - Either pTypeID or ppTypeDef arg is NULL.
-  //
-  // AAFRESULT_INVALID_PARAM
-  //   - The given ID is not recognized as a type definition ID.
-  //
-  STDMETHOD(LookupTypeDef) (THIS_
-    // Type Unique ID
-    /*[in, ref]*/ aafUID_constref  typeId,
-
-    // Type Definition Object
-    /*[out,retval]*/ IAAFTypeDef ** ppTypeDef) PURE;
-
-
-  //***********************************************************
-  //
-  // GetTypeDefs()
-  //
-  // Return an enumerator for all type definitions.
-  //
-  // Succeeds if:
-  // - The ppEnum pointer is valid.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - ppEnum arg is NULL.
-  //
-  STDMETHOD(GetTypeDefs) (THIS_
-    // Type Def Enumeration
-    /*[out,retval]*/ IEnumAAFTypeDefs ** ppEnum) PURE;
-
-
-  //***********************************************************
-  //
-  // CountTypeDefs()
-  //
-  // Writes the number of type definition objects into the
-  // *pResult argument.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pResult pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pResult.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pResult is null.
-  //
-  STDMETHOD(CountTypeDefs) (THIS_
-    // Total number of type definition objects
-    /*[out, retval]*/ aafUInt32 *  pResult) PURE;
-
-
-  //***********************************************************
-  //
-  // RegisterOpaqueTypeDef()
-  //
-  // Add the opaquetype definition object to the dictionary.
-  // 
-  // Succeeds if:
-  // - The pTypeDef pointer is valid.
-  // - the definition is not already been registered with RegisterTypeDef.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pTypeDef arg is NULL.
-  //
-  // AAFRESULT_INVALID_PARAM
-  //   - The given type has already been registered.
-  //
-  STDMETHOD(RegisterOpaqueTypeDef) (THIS_
-    // Type Definition Object
-    /*[in]*/ IAAFTypeDef * pTypeDef) PURE;
-
-
-  //***********************************************************
-  //
-  // LookupOpaqueTypeDef()
-  //
-  // Return the opaque type definition object with the given id.
-  // 
-  // Succeeds if:
-  // - The pTypeID pointer is valid.
-  // - The ppTypeDef pointer is valid.
-  // - the ID is a recognized id for an opaque type definition.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - Either typeId or ppTypeDef arg is NULL.
-  //
-  // AAFRESULT_INVALID_PARAM
-  //   - The given ID is not recognized as a type definition ID.
-  //
-  STDMETHOD(LookupOpaqueTypeDef) (THIS_
-    // Type Unique ID
-    /*[in, ref]*/ aafUID_constref  typeId,
-
-    // Type Definition Object
-    /*[out,retval]*/ IAAFTypeDef ** ppTypeDef) PURE;
-
-
-  //***********************************************************
-  //
-  // GetOpaqueTypeDefs()
-  //
-  // Return an enumerator for all registered opaque type definitions.
-  //
-  // Succeeds if:
-  // - The ppEnum pointer is valid.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - ppEnum arg is NULL.
-  //
-  STDMETHOD(GetOpaqueTypeDefs) (THIS_
-    // Type Def Enumeration
-    /*[out,retval]*/ IEnumAAFTypeDefs ** ppEnum) PURE;
-
-
-  //***********************************************************
-  //
-  // CountOpaqueTypeDefs()
-  //
-  // Writes the number of opaque type definition objects into the
-  // *pResult argument.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pResult pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pResult.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pResult is null.
-  //
-  STDMETHOD(CountOpaqueTypeDefs) (THIS_
-    // Total number of opaque type definition objects
-    /*[out, retval]*/ aafUInt32 *  pResult) PURE;
-
-  //***********************************************************
-  //
-  // RegisterKLVDataKey()
-  //
-  // Add the definition for the given KLV key to the runtime dictionary.
-  // The pTypeDef will often be kAAFTypeID_UInt8Array,
-  // but may be something else.  // 
-  // Succeeds if:
-  // - The pTypeDef pointer is valid.
-  // - the definition is not already been registered with RegisterTypeDef.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pTypeDef arg is NULL.
-  //
-  // AAFRESULT_INVALID_PARAM
-  //   - The given type has already been registered.
-  //
-  STDMETHOD(RegisterKLVDataKey) (THIS_
-    // Key to define
-    /*[in]*/ aafUID_t  pUID,
-
-    // Type Definition Object
-    /*[in]*/ IAAFTypeDef * pTypeDef) PURE;
-
-  //***********************************************************
-  //
-  // RegisterDataDef()
-  //
-  // Add the data definition object to the header's list of definitions.
-  //
-  STDMETHOD(RegisterDataDef) (THIS_
-    // Data Definition Object
-    /*[in]*/ IAAFDataDef * pDataDef) PURE;
-
-
-  //***********************************************************
-  //
-  // LookupDataDef()
-  //
-  // Return the data definition object with the given id.
-  //
-  STDMETHOD(LookupDataDef) (THIS_
-    // Data Definition Unique ID
-    /*[in, ref]*/ aafUID_constref  dataDefinitionId,
-
-    // Data Definition Object
-    /*[out,retval]*/ IAAFDataDef ** ppDataDef) PURE;
-
-
-  //***********************************************************
-  //
-  // GetDataDefs()
-  //
-  // Return an enumerator for aff data definitions.
-  //
-  STDMETHOD(GetDataDefs) (THIS_
-    // Definition Enumeration
-    /*[out,retval]*/ IEnumAAFDataDefs ** ppEnum) PURE;
-
-
-  //***********************************************************
-  //
-  // CountDataDefs()
-  //
-  // Writes the number of data definition objects into the
-  // *pResult argument.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pResult pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pResult.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pResult is null.
-  //
-  STDMETHOD(CountDataDefs) (THIS_
-    // Total number of data definition objects
-    /*[out, retval]*/ aafUInt32 *  pResult) PURE;
-
-
-  //***********************************************************
-  //
-  // RegisterOperationDef()
-  //
-  // Add the operation definition object to the header's list of definitions.
-  //
-  STDMETHOD(RegisterOperationDef) (THIS_
-    // Operation Definition Object
-    /*[in]*/ IAAFOperationDef * pOperationDef) PURE;
-
-
-  //***********************************************************
-  //
-  // LookupOperationDef()
-  //
-  // Return the operation definition object with the given id.
-  //
-  STDMETHOD(LookupOperationDef) (THIS_
-    // Operation Def Unique ID
-    /*[in, ref]*/ aafUID_constref  operationId,
-
-    // Operation definition object
-    /*[out,retval]*/ IAAFOperationDef ** ppOperationDef) PURE;
-
-
-  //***********************************************************
-  //
-  // GetOperationDefs()
-  //
-  // Return an enumerator for all operation definitions.
-  //
-  STDMETHOD(GetOperationDefs) (THIS_
-    // Definition Enumeration
-    /*[out,retval]*/ IEnumAAFOperationDefs ** ppEnum) PURE;
-
-
-  //***********************************************************
-  //
-  // CountOperationDefs()
-  //
-  // Writes the number of operation definition objects into the
-  // *pResult argument.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pResult pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pResult.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pResult is null.
-  //
-  STDMETHOD(CountOperationDefs) (THIS_
-    // Total number of operation definition objects
-    /*[out, retval]*/ aafUInt32 *  pResult) PURE;
-
-
-  //***********************************************************
-  //
-  // RegisterParameterDef()
-  //
-  // Add the parameter definition object to the header's list of definitions.
-  //
-  STDMETHOD(RegisterParameterDef) (THIS_
-    // Parameter Definition Object
-    /*[in]*/ IAAFParameterDef * pParmDef) PURE;
-
-
-  //***********************************************************
-  //
-  // LookupParameterDef()
-  //
-  // Return the parameter definition object with the given id.
-  //
-  STDMETHOD(LookupParameterDef) (THIS_
-    // Parameter Unique ID
-    /*[in, ref]*/ aafUID_constref  parameterId,
-
-    // Parameter definition object
-    /*[out,retval]*/ IAAFParameterDef ** ppParmDef) PURE;
-
-
-  //***********************************************************
-  //
-  // GetParameterDefs()
-  //
-  // Return an enumerator for all parameter definitions.
-  //
-  STDMETHOD(GetParameterDefs) (THIS_
-    // Definition Enumeration
-    /*[out,retval]*/ IEnumAAFParameterDefs ** ppEnum) PURE;
-
-
-  //***********************************************************
-  //
-  // CountParameterDefs()
-  //
-  // Writes the number of parameter definition objects into the
-  // *pResult argument.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pResult pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pResult.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pResult is null.
-  //
-  STDMETHOD(CountParameterDefs) (THIS_
-    // Total number of parameter definition objects
-    /*[out, retval]*/ aafUInt32 *  pResult) PURE;
-
-
-  //***********************************************************
-  //
-  // RegisterCodecDef()
-  //
-  // Add the codec definition object to the header's list of definitions.
-  //
-  STDMETHOD(RegisterCodecDef) (THIS_
-    // Codec Definition Object
-    /*[in]*/ IAAFCodecDef * pParmDef) PURE;
-
-
-  //***********************************************************
-  //
-  // LookupCodecDef()
-  //
-  // Return the codec definition object with the given id.
-  //
-  STDMETHOD(LookupCodecDef) (THIS_
-    // Parameter Unique ID
-    /*[in, ref]*/ aafUID_constref  parameterId,
-
-    // Codec definition object
-    /*[out,retval]*/ IAAFCodecDef ** ppParmDef) PURE;
-
-
-  //***********************************************************
-  //
-  // GetCodecDefs()
-  //
-  // Return an enumerator for all codec definitions.
-  //
-  STDMETHOD(GetCodecDefs) (THIS_
-    // Definition Enumeration
-    /*[out,retval]*/ IEnumAAFCodecDefs ** ppEnum) PURE;
-
-
-  //***********************************************************
-  //
-  // CountCodecDefs()
-  //
-  // Writes the number of codec definition objects into the
-  // *pResult argument.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pResult pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pResult.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pResult is null.
-  //
-  STDMETHOD(CountCodecDefs) (THIS_
-    // Total number of codec definition objects
-    /*[out, retval]*/ aafUInt32 *  pResult) PURE;
-
-
-  //***********************************************************
-  //
-  // RegisterContainerDef()
-  //
-  // Add the container definition object to the header's list of definitions.
-  //
-  STDMETHOD(RegisterContainerDef) (THIS_
-    // Container Definition Object
-    /*[in]*/ IAAFContainerDef * pParmDef) PURE;
-
-
-  //***********************************************************
-  //
-  // LookupContainerDef()
-  //
-  // Return the container definition object with the given id.
-  //
-  STDMETHOD(LookupContainerDef) (THIS_
-    // Parameter Unique ID
-    /*[in, ref]*/ aafUID_constref  parameterId,
-
-    // Container definition object
-    /*[out,retval]*/ IAAFContainerDef ** ppParmDef) PURE;
-
-
-  //***********************************************************
-  //
-  // GetContainerDefs()
-  //
-  // Return an enumerator for all container definitions.
-  //
-  STDMETHOD(GetContainerDefs) (THIS_
-    // Definition Enumeration
-    /*[out,retval]*/ IEnumAAFContainerDefs ** ppEnum) PURE;
-
-
-  //***********************************************************
-  //
-  // CountContainerDefs()
-  //
-  // Writes the number of container definition objects into the
-  // *pResult argument.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pResult pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pResult.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pResult is null.
-  //
-  STDMETHOD(CountContainerDefs) (THIS_
-    // Total number of container definition objects
-    /*[out, retval]*/ aafUInt32 *  pResult) PURE;
-
-
-  //***********************************************************
-  //
-  // RegisterInterpolationDef()
-  //
-  // Add the Interpolation definition object to the header's list of definitions.
-  //
-  STDMETHOD(RegisterInterpolationDef) (THIS_
-    // Interpolation Definition Object
-    /*[in]*/ IAAFInterpolationDef * pInterpolationDef) PURE;
-
-
-  //***********************************************************
-  //
-  // LookupInterpolationDef()
-  //
-  // Return the Interpolation definition object with the given id.
-  //
-  STDMETHOD(LookupInterpolationDef) (THIS_
-    // Parameter Unique ID
-    /*[in, ref]*/ aafUID_constref  parameterId,
-
-    // Interpolation definition object
-    /*[out,retval]*/ IAAFInterpolationDef ** ppInterpolationDef) PURE;
-
-
-  //***********************************************************
-  //
-  // GetInterpolationDefs()
-  //
-  // Return an enumerator for aff Interpolation definitions.
-  //
-  STDMETHOD(GetInterpolationDefs) (THIS_
-    // Definition Enumeration
-    /*[out,retval]*/ IEnumAAFInterpolationDefs ** ppEnum) PURE;
-
-
-  //***********************************************************
-  //
-  // CountInterpolationDefs()
-  //
-  // Writes the number of interpolation definition objects into the
-  // *pResult argument.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pResult pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pResult.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pResult is null.
-  //
-  STDMETHOD(CountInterpolationDefs) (THIS_
-    // Total number of interpolation definition objects
-    /*[out, retval]*/ aafUInt32 *  pResult) PURE;
-
-
-  //***********************************************************
-  //
-  // RegisterPluginDef()
-  //
-  // Add the plugin definition object to the header's list of definitions.
-  //
-  STDMETHOD(RegisterPluginDef) (THIS_
-    // plugin definition Object
-    /*[in]*/ IAAFPluginDef * pPlugDef) PURE;
-
-
-  //***********************************************************
-  //
-  // LookupPluginDef()
-  //
-  // Return the plugin descriptor object with the given id.
-  //
-  STDMETHOD(LookupPluginDef) (THIS_
-    // Parameter Unique ID
-    /*[in, ref]*/ aafUID_constref  parameterId,
-
-    // plugin descriptor object
-    /*[out,retval]*/ IAAFPluginDef ** ppPlugDef) PURE;
-
-
-  //***********************************************************
-  //
-  // GetPluginDefs()
-  //
-  // Return an enumerator for all plugin descriptors.
-  //
-  STDMETHOD(GetPluginDefs) (THIS_
-    // Definition Enumeration
-    /*[out,retval]*/ IEnumAAFPluginDefs ** ppEnum) PURE;
-
-
-  //***********************************************************
-  //
-  // CountPluginDefs()
-  //
-  // Writes the number of plugin definition objects into the
-  // *pResult argument.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pResult pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pResult.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pResult is null.
-  //
-  STDMETHOD(CountPluginDefs) (THIS_
-    // Total number of plugin definition objects
-    /*[out, retval]*/ aafUInt32 *  pResult) PURE;
-
-
-  //***********************************************************
-  //
-  // RegisterKLVDataDef()
-  //
-  // Add the KLVData definition object to the header's list of definitions.
-  //
-  STDMETHOD(RegisterKLVDataDef) (THIS_
-    // plugin definition object
-    /*[in]*/ IAAFKLVDataDefinition * pDef) PURE;
-
-
-  //***********************************************************
-  //
-  // LookupKLVDataDef()
-  //
-  // Return the KLVData descriptor object with the given id.
-  //
-  STDMETHOD(LookupKLVDataDef) (THIS_
-    // KLV data definition Unique ID
-    /*[in, ref]*/ aafUID_constref  defId,
-
-    // KLVData descriptor object
-    /*[out,retval]*/ IAAFKLVDataDefinition ** ppDef) PURE;
-
-
-  //***********************************************************
-  //
-  // GetKLVDataDefs()
-  //
-  // Return an enumerator for all KLVData descriptors.
-  //
-  STDMETHOD(GetKLVDataDefs) (THIS_
-    // Definition Enumeration
-    /*[out,retval]*/ IEnumAAFKLVDataDefs ** ppEnum) PURE;
-
-
-  //***********************************************************
-  //
-  // CountKLVDataDefs()
-  //
-  // Writes the number of KLVData definition objects into the
-  // *pResult argument.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pResult pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pResult.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pResult is null.
-  //
-  STDMETHOD(CountKLVDataDefs) (THIS_
-    // Total number of KLVData definition objects
-    /*[out, retval]*/ aafUInt32 *  pResult) PURE;
-
-
-  //***********************************************************
-  //
-  // RegisterTaggedValueDef()
-  //
-  // Add the tagged value definition object to the header's list of definitions.
-  //
-  STDMETHOD(RegisterTaggedValueDef) (THIS_
-    // tagged value definition Object
-    /*[in]*/ IAAFTaggedValueDefinition * pDef) PURE;
-
-
-  //***********************************************************
-  //
-  // LookupTaggedValueDef()
-  //
-  // Return the tagged value descriptor object with the given id.
-  //
-  STDMETHOD(LookupTaggedValueDef) (THIS_
-    // tagged value definition ID
-    /*[in, ref]*/ aafUID_constref  defId,
-
-    // tagged value descriptor object
-    /*[out,retval]*/ IAAFTaggedValueDefinition ** ppDef) PURE;
-
-
-  //***********************************************************
-  //
-  // GetTaggedValueDefs()
-  //
-  // Return an enumerator for all tagged value descriptors.
-  //
-  STDMETHOD(GetTaggedValueDefs) (THIS_
-    // Definition Enumeration
-    /*[out,retval]*/ IEnumAAFTaggedValueDefs ** ppEnum) PURE;
-
-
-  //***********************************************************
-  //
-  // CountTaggedValueDefs()
-  //
-  // Writes the number of tagged value definition objects into the
-  // *pResult argument.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pResult pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pResult.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pResult is null.
-  //
-  STDMETHOD(CountTaggedValueDefs) (THIS_
-    // Total number of tagged value definition objects
-    /*[out, retval]*/ aafUInt32 *  pResult) PURE;
-
-
-
-  END_INTERFACE
-};
-#endif // __IAAFDictionary2_INTERFACE_DEFINED__
-
-
-
-// IAAFSourceReference2
-
-// ************************
-//
-// Interface IAAFSourceReference2
-//
-// ************************
-
-
-
-
-#ifndef __IAAFSourceReference2_INTERFACE_DEFINED__
-#define __IAAFSourceReference2_INTERFACE_DEFINED__
-
-EXTERN_C const IID IID_IAAFSourceReference2;
-
-#undef  INTERFACE
-#define INTERFACE   IAAFSourceReference2
-
-DECLARE_INTERFACE_(IAAFSourceReference2, IUnknown)
-{
-  BEGIN_INTERFACE
-
-  /* *** IUnknown methods *** */
-  STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppvObj) PURE;
-  STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
-  STDMETHOD_(ULONG,Release) (THIS) PURE;
-
-  /* *** IAAFSourceReference2 methods *** */
-
-
-
-  //***********************************************************
-  //
-  // GetSourceID()
-  //
-  // Gets the SourceID and places it into the pSourceID argument.
-  //
-  // Succeeds if all of the following are true:
-  // - the pSourceID pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pSourceID.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pSourceID arg is NULL.
-  //
-  STDMETHOD(GetSourceID) (THIS_
-    // Place to put source ID
-    /*[retval][out]*/ aafMobID_t *  pSourceID) PURE;
-
-
-  //***********************************************************
-  //
-  // SetSourceID()
-  //
-  // Sets the SourceID using the sourceID argument.
-  // 
-  // Always succeeds.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  STDMETHOD(SetSourceID) (THIS_
-    // Source ID to set
-    /*[in]*/ aafMobID_constref   sourceID) PURE;
-
-
-  //***********************************************************
-  //
-  // GetSourceMobSlotID()
-  //
-  // Gets the Mob Slot ID and places it into the pMobSlotID argument.
-  //
-  // Succeeds if all of the following are true:
-  // - the pMobSlotID pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pMobSlotID.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pMobSlotID arg is NULL.
-  //
-  STDMETHOD(GetSourceMobSlotID) (THIS_
-    // Place to put source mob slot ID
-    /*[retval][out]*/ aafSlotID_t *  pMobSlotID) PURE;
-
-
-  //***********************************************************
-  //
-  // SetSourceMobSlotID()
-  //
-  // Sets the mob slot ID using the mobSlotID argument.
-  // 
-  // Succeeds if all of the following are true:
-  // - (preconditions here)
-  // 
-  // If this method fails no state will be changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // (other error codes here.)
-  //
-  STDMETHOD(SetSourceMobSlotID) (THIS_
-    // Source Mob ID to set
-    /*[in]*/ aafSlotID_t   mobSlotID) PURE;
-
-
-
-  //***********************************************************
-  //
-  // SetChannelIDs()
-  //
-  // Specify the channels in a slot that are referenced. The first channel has
-// and ID of 1, the N'th channel has an ID of N.  The number of channel IDs
-// shall equal the number of channels being described the bht MobSlot containing
-// the SourceReference, e.g. 1 element for a mono audio slot, 6 elements for a 5.1
-// multi-channel audio slot.
-// 
-// Return codes:
-//
-// AAFRESULT_SUCCESS
-//   - succeeded
-//
-// AAFRESULT_NULL_PARAM
-//   - pChannelIDs is null 
-  //
-  STDMETHOD(SetChannelIDs) (THIS_
-    // Number of elements in the pChannelIDs array
-    /*[in]*/ aafUInt32  numberElements,
-
-    // Array of channel IDs
-    /*[in]*/ aafUInt32*  pChannelIDs) PURE;
-
-
-  //***********************************************************
-  //
-  // GetChannelIDs()
-  //
-  // // Get the channels in a slot that are referenced.  Refer to
-// SetChannelIDs for channel IDs description.
-// Return codes:
-//
-// AAFRESULT_SUCCESS
-//   - succeeded
-//
-// AAFRESULT_NULL_PARAM
-//   - pChannelIDs is null
-//
-// AAFRESULT_PROP_NOT_PRESENT
-//   - the property is not present
-//
-// AAFRESULT_SMALLBUF
-//   - pChannelIDs is too small
-  //
-  STDMETHOD(GetChannelIDs) (THIS_
-    // Number of elements in the pChannelIDs array
-    /*[in]*/ aafUInt32  numberElements,
-
-    // Array of channel IDs
-    /*[in]*/ aafUInt32*  pChannelIDs) PURE;
-
-  //***********************************************************
-  //
-  // GetChannelIDsSize()
-  //
-  // // Get the number of channel IDs stored by this SourceReference.
-//
-// AAFRESULT_SUCCESS
-//   - succeeded
-//
-// AAFRESULT_NULL_PARAM
-//   - pChannelIDs is null
-  //
-  STDMETHOD(GetChannelIDsSize) (THIS_
-    // Number of elements in the pChannelIDs array
-    /*[out]*/ aafUInt32 *  numberElements) PURE;
-
-  //***********************************************************
-  //
-  // SetMonoSourceSlotIDs()
-  //
-  // For reference from a multi-channel MobSlot to multiple mono MobSlots.
-// pMonoSourceSlotIDs identifies the mono slots referenced by this SourceReference
-// object.
-
-// 
-// Return codes:
-//
-// AAFRESULT_SUCCESS
-//   - succeeded
-//
-// AAFRESULT_NULL_PARAM
-//   - pMonoSourceSlotIDs is null 
-  //
-  STDMETHOD(SetMonoSourceSlotIDs) (THIS_
-    // Number of elements in the pMonoSourceSlotIDs array
-    /*[in]*/ aafUInt32  numberElements,
-
-    // Array of slot IDs
-    /*[in]*/ aafUInt32*  pMonoSourceSlotIDs) PURE;
-
-
-  //***********************************************************
-  //
-  // GetMonoSourceSlotIDs()
-  //
-  // // Get the mono slot IDs that are referenced by this object.  Refer to
-// SetMonoSourceSlotIDs for a description of pMonoSourceSlotIDs.
-// Return codes:
-//
-// AAFRESULT_SUCCESS
-//   - succeeded
-//
-// AAFRESULT_NULL_PARAM
-//   - pMonoSourceSlotIDs is null
-//
-// AAFRESULT_PROP_NOT_PRESENT
-//   - the property is not present
-//
-// AAFRESULT_SMALLBUF
-//   - pMonoSourceSlotIDs is too small
-  //
-  STDMETHOD(GetMonoSourceSlotIDs) (THIS_
-    // Number of elements in the pMonoSourceSlotIDs array
-    /*[in]*/ aafUInt32  numberElements,
-
-    // Array of channel IDs
-    /*[in]*/ aafUInt32*  pMonoSourceSlotIDs) PURE;
-
-  //***********************************************************
-  //
-  // GetMonoSourceSlotIDsSize()
-  //
-  // // Get the number of mono slot IDs stored by this SourceReference.
-//
-// AAFRESULT_SUCCESS
-//   - succeeded
-//
-// AAFRESULT_NULL_PARAM
-//   - pMonoSourceSlotIDs is null
-  //
-  STDMETHOD(GetMonoSourceSlotIDsSize) (THIS_
-    // Number of elements in the pMonoSourceSlotIDs array
-    /*[out]*/ aafUInt32 *  numberElements) PURE;
-
-
-  END_INTERFACE
-};
-#endif // __IAAFSourceReference2_INTERFACE_DEFINED__
-
-
-
-// IAAFMasterMob2
-
-// ************************
-//
-// Interface IAAFMasterMob2
-//
-// ************************
-
-
-
-
-
-
-
-
-
-
-#ifndef __IAAFMasterMob2_INTERFACE_DEFINED__
-#define __IAAFMasterMob2_INTERFACE_DEFINED__
-
-EXTERN_C const IID IID_IAAFMasterMob2;
-
-#undef  INTERFACE
-#define INTERFACE   IAAFMasterMob2
-
-DECLARE_INTERFACE_(IAAFMasterMob2, IUnknown)
-{
-  BEGIN_INTERFACE
-
-  /* *** IUnknown methods *** */
-  STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppvObj) PURE;
-  STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
-  STDMETHOD_(ULONG,Release) (THIS) PURE;
-
-  /* *** IAAFMasterMob2 methods *** */
-
-
-
-  //***********************************************************
-  //
-  // Initialize()
-  //
-  // Initializes a newly allocated, empty IAAFMasterMob-supporting
-  // object.  This method must be called after allocation, and before
-  // any other method can be called.
-  //
-  // Succeeds if:
-  // - Initialize() has not yet been called on this object.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_ALREADY_INITIALIZED
-  //   - Initialize() has already been called on this object.
-  STDMETHOD(Initialize) (THIS) PURE;
-
-
-  //***********************************************************
-  //
-  // AddMasterSlot()
-  //
-  // This function adds a slot to the specified Master Mob that
-  // references the specified a slot in the specified Source Mob. The
-  // new slot in the Master Mob contains a Source Clip that specifies
-  // the Source Mob in its source reference properties.  Typically this
-  // is done automatically by passing the Master Mob handle to
-  // AAFMedia::Create, but this function allows you to add it later.
-  //
-  // Note: If pSlotName is passed in with zero length, then the
-  // slot is not assigned a name.  Slot names are not used by the
-  // SDK, and exist only so the user can name slots.
-  // 
-  // Succeeds if all of the following are true:
-  // (more conditions here)
-  // 
-  // If this method fails no state is changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize() called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - One or more of the following parameters are NULL pSourceMob,
-  //     pSlotName, and pDataDef.
-  //
-  // AAFRESULT_INVALID_DATADEF
-  //   - The data kind of the source MOB slot to be added to the Master
-  //     Mob does not match what is specfied in pDataDef.
-  //
-  // AAFRESULT_SLOT_NOTFOUND
-  //   - The specified Source Mob slot was not found.
-  //
-  // AAFRESULT_SLOT_EXISTS
-  //   - The specified Master slot ID already exists.
-  //
-  STDMETHOD(AddMasterSlot) (THIS_
-    // Data kind of new slot.  Requires a data kind valid for a media
-	// stream. Valid data kinds are:
-    // - DDEF_Picture
-    // - DDEF_Sound
-    /*[in]*/ IAAFDataDef * pDataDef,
-
-    // Slot ID of the Source Mob slot to be added to the Master Mob
-    /*[in]*/ aafSlotID_t  sourceSlotID,
-
-    // Source Mob containing the slot to be added to the Master Mob
-    /*[in]*/ IAAFSourceMob * pSourceMob,
-
-    // SlotID assigned to the new Master Mob slot
-    /*[in]*/ aafSlotID_t  masterSlotID,
-
-    // Name to assign to new slot in Master Mob
-    /*[in, string]*/ aafCharacter_constptr  pSlotName) PURE;
-
-
-  //***********************************************************
-  //
-  // GetTapeName()
-  //
-  // Finds the tape Source Mob associated with a Master Mob slot
-  // and writes the name of the tape, which is stored in the
-  // Mobs Name property, into the pTapeName buffer.  The buffer is
-  // allocated by the caller.  The size of the buffer is given by
-  // bufSize.  If the property name has not yet been set, a
-  // zero-length string will be written (that is, only the trailing
-  // null character).
-  // 
-  // Caller may call GetTapeNameBufLen() to determine the required
-  // buffer size.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pTapeName pointer is valid.
-  // - the specified master slot was found.
-  // - the specified master slot contains a tape mob.
-  // - bufSize indicates the buffer is large enough to hold the name.
-  // 
-  // If this method fails nothing will be written to *pTapeName.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize() called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pTapeName arg is NULL.
-  //
-  // AAFRESULT_SLOT_NOTFOUND
-  //   - The specified Master Slot was not found.
-  //
-  // AAFRESULT_NOT_TAPEMOB
-  //   - The specified Master Slot does not contain a Tape MOB.
-  //
-  // AAFRESULT_SMALLBUF
-  //   - bufSize indicates the buffer is too small to hold the string.
-  //
-  STDMETHOD(GetTapeName) (THIS_
-    // SlotID of the Master Mob slot
-    /*[in]*/ aafUInt32  masterSlotID,
-
-    // The returned name
-    /*[out, size_is(bufSize), string]*/ aafCharacter *  pTapeName,
-
-    // the size of the pTapeName buffer
-    /*[in]*/ aafUInt32  bufSize) PURE;
-
-
-  //***********************************************************
-  //
-  // GetTapeNameBufLen()
-  //
-  // Returns the length of buffer required for the GetTapeName()
-  // method.  The value is placed into the location specified by
-  // pLen.  The value will include space required for the trailing
-  // null character.
-  //
-  // Succeeds if all of the following are true:
-  // - the pLen pointer is valid.
-  //
-  // If this method fails nothing will be written to *pLen.
+  // - Initialize() has already been called on this object.
+  // - the index exists in this array type def.
+  // - The pInPropVal pointer is valid.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -40689,800 +42377,72 @@ DECLARE_INTERFACE_(IAAFMasterMob2, IUnknown)
   //   - This object has not yet had Initialize() called on it.
   //
   // AAFRESULT_NULL_PARAM
-  //   - pLen arg is NULL.
-  //
-  // AAFRESULT_SLOT_NOTFOUND
-  //   - The specified Master Slot was not found.
-  //
-  // AAFRESULT_NOT_TAPEMOB
-  //   - The specified Master Slot does not contain a Tape MOB.
-  //
-  STDMETHOD(GetTapeNameBufLen) (THIS_
-    // SlotID of the Master Mob slot
-    /*[in]*/ aafUInt32  masterSlotID,
-
-    // required buffer length
-    /*[out]*/ aafUInt32 *  pLen) PURE;
-
-
-  //***********************************************************
-  //
-  // GetNumRepresentations()
-  //
-  // This function returns the number of media representations
-  // available for the specified SlotID on a specified Master
-  // Mob. This function is meant to work with
-  // GetRepresentationSourceClip, so that you can iterate through
-  // all of the choices yourself.  In most cases, you can use
-  // GetCriteriaSourceClip to handle multiple
-  // representations.  This function and
-  // GetRepresentationSourceClip are lower-level functions.
-  //
-  // Succeeds if all of the following are true:
-  // - the pNumReps pointer is valid.
-  //
-  // If this method fails nothing will be written to *pNumReps.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize() called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pNumReps arg is NULL.
-  //
-  // AAFRESULT_SLOT_NOTFOUND
-  //   - The Master Slot specified by slotID was not found.
-  //
-  STDMETHOD(GetNumRepresentations) (THIS_
-    // SlotID
-    /*[in]*/ aafSlotID_t  slotID,
-
-    // number of representations
-    /*[out, retval]*/ aafNumSlots_t *  pNumReps) PURE;
-
-
-  //***********************************************************
-  //
-  // GetRepresentation()
-  //
-  // This method returns the indexed media representation for the
-  // specified Master Mob, SlotID, and index.  This call is meant to
-  // work with GetNumRepresentations, so that you can iterate through
-  // all of the choices yourself.  This method uses an integer index,
-  // not an iterator.  The function GetRepresentationSourceClip takes
-  // an index between 1 and the number of representations
-  // [inclusive], and returns the indexed Source Mob. You can make
-  // calls to functions such as AAFMedia::GetVideoInfo and
-  // AAFMedia::IsMediaContiguous to determine which media is the best
-  // fit.
-  //
-  // The returned source clip is AddRef()ed before it is returned.
-  //
-  // Succeeds if all of the following are true:
-  // - the ppSourceClip pointer is valid.
-  //
-  // If this method fails nothing will be written to *ppSourceClip.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize() called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - ppSourceClip arg is NULL.
-  //
-  // AAFRESULT_SLOT_NOTFOUND
-  //   - The specified Master Slot was not found.
+  //   - pInPropVal arg is NULL.
   //
   // AAFRESULT_BADINDEX
-  //   - No Source Mob at specified index.
+  //   - The given index is out of range for this array type def.
   //
-  STDMETHOD(GetRepresentation) (THIS_
-    // Slot ID
-    /*[in]*/ aafSlotID_t  slotID,
+  STDMETHOD(RemoveElement) (THIS_
+    // property value corresponding to array
+    /*[in]*/ IAAFPropertyValue * pInPropVal,
 
-    // Index of requested representation
+    // zero-based index into elements in this array type
+    /*[in]*/ aafUInt32  index) PURE;
+
+
+
+
+  //***********************************************************
+  //
+  // InsertElement()
+  //
+  // Inserts the value of the single, indicated element of the fixed
+  // array contained in pInPropVal, to the value contained in
+  // pMemberPropVal.  Index is zero-based, and must be less than the
+  // value returned by GetCount().  Property value must be of the
+  // same type as returned by GetType().
+  // 
+  // Succeeds if:
+  // - Initialize() has already been called on this object.
+  // - the index exists in this array type def.
+  // - The pInPropVal pointer is valid.
+  // - The ppOutPropVal pointer is valid.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize() called on it.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - either pInPropVal or ppOutPropVal arg is NULL.
+  //
+  // AAFRESULT_BADINDEX
+  //   - The given index is out of range for this array type def.
+  //
+  STDMETHOD(InsertElement) (THIS_
+    // property value corresponding to array
+    /*[in]*/ IAAFPropertyValue * pInPropVal,
+
+    // zero-based index into elements in this array type
     /*[in]*/ aafUInt32  index,
 
-    // Requested Source Clip
-    /*[out]*/ IAAFSegment ** ppSourceClip) PURE;
+    // value to be inserted into this array
+    /*[in]*/ IAAFPropertyValue * pMemberPropVal) PURE;
 
 
-  //***********************************************************
-  //
-  // GetCriteriaSegment()
-  //
-  // Returns the Segment on the specified slot of a Master Mob
-  // that references the Source Mob that best meets the specified
-  // criteria.  This function will work whether multiple media
-  // representations exist or not.
-  //
-  // The returned segment is AddRef()ed before it is returned.
-  //
-  // Succeeds if all of the following are true:
-  // - the ppSegment pointer is valid.
-  //
-  // If this method fails nothing will be written to *ppSegment.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize() called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - ppSegment arg is NULL.
-  //
-  // AAFRESULT_SLOT_NOTFOUND
-  //   - The specified Master Slot was not found.
-  //
-  STDMETHOD(GetCriteriaSegment) (THIS_
-    // Slot ID
-    /*[in]*/ aafSlotID_t  slotID,
-
-    // Index of requested representation.  Note: the
-	// aafMediaCriteria_t is defined as the following structure:
-    // typedef struct
-    // {
-    //	aafCriteriaType_t type;
-    //	aafCriteriaProc_t proc;
-    // } aafMediaCriteria_t;
-	//
-    // The type field can have one of the following values:
-    // typedef enum
-    // {
-    //	kAAFAnyRepresentation = 0,
-    //	kAAFFastestRepresentation,
-    //	kAAFBestFidelityRepresentation,
-    //	kAAFSmallestRepresentation,
-    //	kAAFUseRepresentationProc
-    // } aafCriteriaType_t;
-    /*[in]*/ aafMediaCriteria_t *  pCriteria,
-
-    // Requested Segment
-    /*[out]*/ IAAFSegment ** ppSegment) PURE;
-
-
-  //***********************************************************
-  //
-  // AppendPhysSourceRef()
-  //
-  // Connects this Source Mob with the physical Source Mob that
-  // describes the previous generation of essence, appending it to
-  // existing Mob data.  If a physical Source Mob, such as a File
-  // Source Mob or tape Source Mob, references another physical
-  // Source Mob as its ancestor, with no pulldown, then this
-  // function makes the connection between the two.
-  //
-  // Functionally, this is a helper function to create a slot with an
-  // AAFSourceClip referencing a particular piece of media.  This
-  // function takes many parameters because the components of an
-  // aafSourceRef_t have been broken out as separate parameters.
-  //
-  // The ancestor of an AAFSourceMob with an AAFFileDescriptor is often an
-  // AAFTapeDescriptor or NIL.
-  //
-  // Succeeds if all of the following are true:
-  // - the pSourceRefObj pointer is valid.
-  // - the pEssenceKind pointer is valid.
-  // (other conditions here)
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize() called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pSourceRefObj or pEssenceKind is null.
-  //
-  // (other codes here.)
-  //
-  STDMETHOD(AppendPhysSourceRef) (THIS_
-    // Edit rate of slot to contain reference
-    /*[in]*/ aafRational_t  editrate,
-
-    // SlotID of slot to contain reference
-    /*[in]*/ aafSlotID_t  aMobSlot,
-
-    // Data kind of slot to contain reference.  Requires a data kind
-	// valid for a essence stream.  Valid data kinds are:
-    // - Picture
-    // - Sound
-    /*[in]*/ IAAFDataDef * pEssenceKind,
-
-    // Reference to a Physical Source Mob
-    /*[in]*/ aafSourceRef_t  ref,
-
-    // Length of the Source Clip
-    /*[in]*/ aafLength_t  srcRefLength) PURE;
-
-
-  //***********************************************************
-  //
-  // NewPhysSourceRef()
-  //
-  // Connects this Source Mob with the physical Source Mob that
-  // describes the previous generation of essence, replacing any
-  // existing Mob data.  If a physical Source Mob, such as a File
-  // Source Mob or tape Source Mob, references another physical
-  // Source Mob as its ancestor, with no pulldown, then this
-  // function makes the connection between the two.
-  //
-  // Functionally, this is a helper function to create a slot with an
-  // AAFSourceClip referencing a particular piece of media.  This
-  // function takes many parameters because the components of an
-  // aafSourceRef_t have been broken out as separate parameters.
-  //
-  // The ancestor of an AAFSourceMob with an AAFFileDescriptor is often an
-  // AAFTapeDescriptor or NIL.
-  //
-  // Succeeds if all of the following are true:
-  // - the pSourceRefObj pointer is valid.
-  // - the pEssenceKind pointer is valid.
-  // (other conditions here)
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize() called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pSourceRefObj or pEssenceKind is null.
-  //
-  // (other codes here.)
-  //
-  STDMETHOD(NewPhysSourceRef) (THIS_
-    // Edit rate of slot to contain reference
-    /*[in]*/ aafRational_t  editrate,
-
-    // SlotID of slot to contain reference
-    /*[in]*/ aafSlotID_t  aMobSlot,
-
-    // Data kind of slot to contain reference.  Requires a data kind
-	// valid for a essence stream.  Valid data kinds are:
-    // - Picture
-    // - Sound
-    /*[in]*/ IAAFDataDef * pEssenceKind,
-
-    // Reference to a Physical Source Mob
-    /*[in]*/ aafSourceRef_t  ref,
-
-    // Length of the Source Clip
-    /*[in]*/ aafLength_t  srcRefLength) PURE;
-
-
-  //***********************************************************
-  //
-  // CreateEssence()
-  //
-  // Creates a single channel stream of essence.  Convenience
-  // functions exist to create audio or video essence, and a separate
-  // call (MultiCreate) exists to create interleaved audio and video
-  // data.
-  //
-  // The essence handle from this call can be used with
-  // WriteDataSamples  and possibly WriteDataLines, but NOT with
-  // WriteMultiSamples.
-  // 
-  // If you are creating the essence, and then attaching it to a
-  // master mob, then the "masterMob" field may be left NULL.  For
-  // video, the sampleRate should be the edit rate of the file mob.
-  // For audio, the sample rate should be the actual samples per
-  // second.
-  //
-  STDMETHOD(CreateEssence) (THIS_
-    // 
-    /*[in]*/ aafSlotID_t  masterSlotID,
-
-    // create essence of this type
-    /*[in]*/ IAAFDataDef * pMediaKind,
-
-    // using this codec
-    /*[in, ref]*/ aafUID_constref  codecID,
-
-    // with this edit rate
-    /*[in]*/ aafRational_t  editRate,
-
-    // with this sample rate
-    /*[in]*/ aafRational_t  samplerate,
-
-    // optionally compressing it
-    /*[in]*/ aafCompressEnable_t  Enable,
-
-    // Optionally create the file HERE.
-    /*[in]*/ IAAFLocator * destination,
-
-    // with this format
-    /*[in, ref]*/ aafUID_constref  fileFormat,
-
-    // Return an essence access on the essence.
-    /*[out]*/ IAAFEssenceAccess ** access) PURE;
-
-
-  //***********************************************************
-  //
-  // CreateMultiEssence()
-  //
-  // Creates a multi-channel interleaved stream of essence.  The
-  // essence handle from this call can be used with WriteDataSamples
-  // or WriteMultiSamples but NOT with or WriteDataLines.
-  // 
-  // If you are creating the essence, and then attaching it to a
-  // master mob, then the "masterMob" field may be left NULL.
-  //
-  STDMETHOD(CreateMultiEssence) (THIS_
-    // using this codec
-    /*[in, ref]*/ aafUID_constref  codecID,
-
-    // this many channels
-    /*[in]*/ aafUInt16  arrayElemCount,
-
-    // using these definitions
-    /*[in,ref,size_is(arrayElemCount)]*/ aafmMultiCreate_t *  mediaArray,
-
-    // optionally compressing it
-    /*[in]*/ aafCompressEnable_t  Enable,
-
-    // Optionally create the file HERE.
-    /*[in]*/ IAAFLocator * destination,
-
-    // with this format
-    /*[in, ref]*/ aafUID_constref  fileFormat,
-
-    // Return an essence access on the essence.
-    /*[out]*/ IAAFEssenceMultiAccess**  access) PURE;
-
-
-  //***********************************************************
-  //
-  // OpenEssence()
-  //
-  // Opens a single channel of a file mob.  If the essence is
-  // interleaved, then it will be di-interleaved when samples are
-  // read.  This routine follows the locator, and may call the locator
-  // failure callback if the essence can not be found.  If the failure
-  // callback finds the essence, then this routine will return
-  // normally.
-  // 
-  // The essence handle from this call can be used with
-  // ReadDataSamples  and possibly ReadDataLines, but NOT with
-  // ReadMultiSamples.
-  // 
-  // NOTE: If a locator is followed, then essencePtr may reference
-  // ANOTHER file object, which must be closed on file close.
-  //
-  STDMETHOD(OpenEssence) (THIS_
-    // On this slot
-    /*[in]*/ aafSlotID_t  slotID,
-
-    // using this essence criteria
-    /*[in]*/ aafMediaCriteria_t*  mediaCrit,
-
-    // ReadOnly or Append
-    /*[in]*/ aafMediaOpenMode_t  openMode,
-
-    // optionally decompressing
-    /*[in]*/ aafCompressEnable_t  compEnable,
-
-    // Return an essence access on the essence.
-    /*[out]*/ IAAFEssenceAccess ** access) PURE;
-	
-
-  //***********************************************************
-  //
-  // OpenMultiEssence()
-  //
-  // Opens a all channels associated with a file mob.  This routine
-  // follows the locator, and may call the locator failure callback if
-  // the essence can not be found.  If the failure callback finds the
-  // essence, then this routine will return normally.
-  //
-  // The essence handle from this call can be used with
-  // WriteMultiSamples but NOT with WriteDataSamples.
-  //
-  STDMETHOD(OpenMultiEssence) (THIS_
-    // On this slot
-    /*[in]*/ aafSlotID_t  slotID,
-
-    // using this essence criteria
-    /*[in]*/ aafMediaCriteria_t*  mediaCrit,
-
-    // ReadOnly or Append
-    /*[in]*/ aafMediaOpenMode_t  openMode,
-
-    // optionally decompressing
-    /*[in]*/ aafCompressEnable_t  compEnable,
-
-    // Return an essence access on the essence.
-    /*[out]*/ IAAFEssenceMultiAccess**  access) PURE;
-
-
-  //***********************************************************
-  //
-  // CountChannels()
-  //
-  // Takes an opaque handle, a master mob reference, and a slot ID
-  // so that it may be called before the essence is opened.
-  //
-  // Returns the number of interleaved essence channels of a given
-  // type in the essence stream referenced by the given file mob.
-  //
-  // If the data format is not interleaved, then the answer will
-  // always be zero or one.  This function correctly returns zero for
-  // essence types not handled by a given codec, and handles codecs
-  // which work with multiple essence types.
-  //
-  STDMETHOD(CountChannels) (THIS_
-    // On this slot
-    /*[in]*/ aafSlotID_t  slotID,
-
-    // using this essence criteria
-    /*[in]*/ aafMediaCriteria_t*  mediaCrit,
-
-    // for this essence type
-    /*[in]*/ IAAFDataDef * pMediaKind,
-
-    // How many channels?
-    /*[out]*/ aafUInt16*  numCh) PURE;
-
-
-
-
-  //***********************************************************
-  //
-  // ExtendEssence()
-  //
-  // Extends a single stream of essence that was originally created using
-   // IAAFMasterMob::CreateEssence.  Extended essence is represented by
-   // a Sequence of SourceClip objects.  The first call to ExtendEssence will cause the
-   // TimelineMobSlot's SourceClip object to be replaced by a
-   // Sequence.  The initial SourceClip becomes the first
-   // component of the new Sequence.
-  //
-  STDMETHOD(ExtendEssence) (THIS_
-    // 
-    /*[in]*/ aafSlotID_t  masterSlotID,
-
-    // create essence of this type
-    /*[in]*/ IAAFDataDef * pMediaKind,
-
-    // using this codec
-    /*[in, ref]*/ aafUID_constref  codecID,
-
-    // with this edit rate
-    /*[in]*/ aafRational_t  editRate,
-
-    // with this sample rate
-    /*[in]*/ aafRational_t  samplerate,
-
-    // optionally compressing it
-    /*[in]*/ aafCompressEnable_t  Enable,
-
-    // Optionally create the file HERE.
-    /*[in]*/ IAAFLocator * destination,
-
-    // with this format
-    /*[in, ref]*/ aafUID_constref  fileFormat,
-
-    // Return an essence access on the essence.
-    /*[out]*/ IAAFEssenceAccess ** access) PURE;
-
-
-  //***********************************************************
-  //
-  // ExtendMultiEssence()
-  //
-  // Extends a multi-channel interleaved stream of essence that was
-   // originally created using IAAFMasterMob::CreateMultiEssence.
-   // Extended essence is represented by a Sequence of SourceClip objects.
-   // The first call to ExtendEssence will cause the TimelineMobSlot's SourceClip
-   // object to be replaced by a Sequence.  The initial SourceClip becomes the first
-   // component of the new Sequence.
-  //
-  STDMETHOD(ExtendMultiEssence) (THIS_
-    // using this codec
-    /*[in, ref]*/ aafUID_constref  codecID,
-
-    // this many channels
-    /*[in]*/ aafUInt16  arrayElemCount,
-
-    // using these definitions
-    /*[in,ref,size_is(arrayElemCount)]*/ aafmMultiCreate_t *  mediaArray,
-
-    // optionally compressing it
-    /*[in]*/ aafCompressEnable_t  Enable,
-
-    // Optionally create the file HERE.
-    /*[in]*/ IAAFLocator * destination,
-
-    // with this format
-    /*[in, ref]*/ aafUID_constref  fileFormat,
-
-    // Return an essence access on the essence.
-    /*[out]*/ IAAFEssenceMultiAccess**  access) PURE;
-
-
-  //***********************************************************
-  //
-  // CreateStaticEssence()
-  //
-  // Creates and initializes the objects required to represent static essence.
-  //
-  STDMETHOD(CreateStaticEssence) (THIS_
-    // 
-    /*[in]*/ aafSlotID_t  masterSlotID,
-
-    // create essence of this type
-    /*[in]*/ IAAFDataDef * pMediaKind,
-
-    // using this codec
-    /*[in, ref]*/ aafUID_constref  codecID,
-
-    // optionally compressing it
-    /*[in]*/ aafCompressEnable_t  Enable,
-
-    // Optionally create the file HERE.
-    /*[in]*/ IAAFLocator * destination,
-
-    // with this format
-    /*[in, ref]*/ aafUID_constref  fileFormat,
-
-    // Return an essence access on the essence.
-    /*[out]*/ IAAFEssenceAccess ** access) PURE;
-  // This function is broadly similar to CreateEssence except that the essence is 
-  // Created in a static slot in the MasterMob
-  //
-  // The essence handle from this call can be used with
-  // WriteDataSamples  and possibly WriteDataLines\, but NOT with
-  // WriteMultiSamples.
-  // 
-
-
-  //***********************************************************
-  //
-  // CreateEventEssence()
-  //
-  // Creates and initializes the objects required to represent stream of events.
-  //
-  STDMETHOD(CreateEventEssence) (THIS_
-    // 
-    /*[in]*/ aafSlotID_t  masterSlotID,
-
-    // create essence of this type
-    /*[in]*/ IAAFDataDef * pMediaKind,
-
-    // using this codec
-    /*[in, ref]*/ aafUID_constref  codecID,
-
-    // with this edit rate
-    /*[in]*/ aafRational_t  editRate,
-
-    // with this sample rate
-    /*[in]*/ aafRational_t  samplerate,
-
-    // optionally compressing it
-    /*[in]*/ aafCompressEnable_t  Enable,
-
-    // Optionally create the file HERE.
-    /*[in]*/ IAAFLocator * destination,
-
-    // with this format
-    /*[in, ref]*/ aafUID_constref  fileFormat,
-
-    // Return an essence access on the essence.
-    /*[out]*/ IAAFEssenceAccess ** access) PURE;
-   // This function is broadly similar to CreateEssence except that the essence is 
-  // Created in a event slot in the MasterMob
-  //
-  // 
-  // The essence handle from this call can be used with
-  // WriteDataSamples  and possibly WriteDataLines\, but NOT with
-  // WriteMultiSamples.
-  // 
-
-
-  END_INTERFACE
-};
-#endif // __IAAFMasterMob2_INTERFACE_DEFINED__
-
-
-
-
-// IAAFCompositionMob2
-
-// ************************
-//
-// Interface IAAFCompositionMob2
-//
-// ************************
-
-
-
-#ifndef __IAAFCompositionMob2_INTERFACE_DEFINED__
-#define __IAAFCompositionMob2_INTERFACE_DEFINED__
-
-EXTERN_C const IID IID_IAAFCompositionMob2;
-
-#undef  INTERFACE
-#define INTERFACE   IAAFCompositionMob2
-
-DECLARE_INTERFACE_(IAAFCompositionMob2, IUnknown)
-{
-  BEGIN_INTERFACE
-
-  /* *** IUnknown methods *** */
-  STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppvObj) PURE;
-  STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
-  STDMETHOD_(ULONG,Release) (THIS) PURE;
-
-  /* *** IAAFCompositionMob2 methods *** */
-
-
-
-  //***********************************************************
-  //
-  // Initialize()
-  //
-  // Initializes this object with the given name.
-  // 
-  // Succeeds if all of the following are true:
-  // - this object has not yet been initialized.
-  // - the pName pointer is valid.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_ALREADY_INITIALIZED
-  //   - Initialize() has already been called on this object.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pName argument is NULL.
-  //
-  STDMETHOD(Initialize) (THIS_
-    // Mob name [optional]
-    /*[in, string]*/ aafCharacter_constptr  pName) PURE;
-
-
-  //***********************************************************
-  //
-  // GetDefaultFade()
-  //
-  // Get the default fade for this composition.  If there is no
-  // default fade, this function returns with no error, but the VALID
-  // field of the structure is false.  This allows you to pass this
-  // struct to SourceClip::GetFade() in all cases.
-  //
-  // Succeeds if all of the following are true:
-  // - this object has already been initialized.
-  // - the pResult pointer is valid.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize() called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pResult argument is NULL.
-  //
-  STDMETHOD(GetDefaultFade) (THIS_
-    // a default fade struct
-    /*[out]*/ aafDefaultFade_t *  pResult) PURE;
-	
-
-  //***********************************************************
-  //
-  // SetDefaultFade()
-  //
-  // Adds the default crossfade properties to the Mob.
-  //
-  // Succeeds if all of the following are true:
-  // - this object has already been initialized.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize() called on it.
-  //
-  // AAFRESULT_BAD_TYPE
-  //   - invalid fadeType.
-  //
-  // AAFRESULT_BAD_LENGTH
-  //   - invalid fadeLength.
-  //
-  STDMETHOD(SetDefaultFade) (THIS_
-    // Default fade length
-    /*[in]*/ aafLength_t  fadeLength,
-
-    // default fade type
-    /*[in]*/ aafFadeType_t  fadeType,
-
-    // default fade edit unit
-    /*[in]*/ aafRational_t  fadeEditUnit) PURE;
-
-
-  //***********************************************************
-  //
-  // SetRendering()
-  //
-  // set the MobID of a rendering of this CompositionMob.
-
-  // This method will return the following codes:
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  STDMETHOD(SetRendering) (THIS_
-    // Rendering MobID
-    /*[in, ref]*/ aafMobID_constref  mobID) PURE;
-
-  //***********************************************************
-  //
-  // GetRendering()
-  //
-  // return the MobID of a rendering of this CompositionMob.
-
-  // Succeeds if all of the following are true:
-  // - the pMobID pointer is valid.
-  //
-  // If this method fails nothing will be written to *pMobID.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  //
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pMobID arg is NULL.
-  //
-  STDMETHOD(GetRendering) (THIS_
-    // Rendering MobID
-    /*[out]*/ aafMobID_t *  pMobID) PURE;
 
 
 
   END_INTERFACE
 };
-#endif // __IAAFCompositionMob2_INTERFACE_DEFINED__
+#endif // __IAAFTypeDefVariableArrayEx_INTERFACE_DEFINED__
+
+
 
 
 
