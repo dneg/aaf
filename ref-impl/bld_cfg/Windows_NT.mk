@@ -21,8 +21,13 @@ PTFM_SUFX = nt
 OBJ = obj
 AAF_LIB = lib
 EXE = exe
+
 CC = cl
 LD = cl
+AAF_CMD_LINK = link
+
+AAF_LINK_FLAGS = -lib -nologo
+AAF_LINK_OUTPUT_FLAG = -out:
 LFLAGS = 
 CFLAGS = /nologo /Gi- /MDd /W3 /GX /Z7 /Od /Yd /D "WIN32" /D "_DEBUG" /D "_WINDOWS"\
 	/D "_UNICODE" /D "UNICODE"
