@@ -101,6 +101,9 @@ OMRedBlackTree<Key, Value>::~OMRedBlackTree(void)
 
   // @mfunc Insert the <p Value> <p v> into this
   //         <c OMRedBlackTree> and associate it with <p Key> <p k>.
+  //         If this the first instance of an item identified
+  //         by <p Key> <p k> in this <c OMRedBlackTree>, the result
+  //         is true, otherwise the result is false.
   //   @tcarg class | Key  | The type of the unique key used to identify
   //          elements. This type must support operator =, operator !=
   //          and operator <lt>.
