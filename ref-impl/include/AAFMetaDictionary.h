@@ -17,7 +17,7 @@
 //
 // ../smpte/DictP18.csv 
 //
-// This file was generated on Wed Mar 31 09:56:11 EST 1999
+// This file was generated on Wed Mar 31 10:31:56 EST 1999
 // by user tbingham on system TBINGHAMPC.
 //
 // Key to macros.
@@ -2699,6 +2699,244 @@ AAF_PROPERTY(Code,
   false,
   PluggableCode)
 AAF_CLASS_END(PluggableCode)
+AAF_CLASS_SEPARATOR()
+
+// TypeDefinitionInteger
+//
+AAF_CLASS(TypeDefinitionInteger,
+  AAF_LITERAL_AUID(0x06510000,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
+  TypeDefinition)
+AAF_PROPERTY(Size,
+  AAF_LITERAL_AUID(0x06510100,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
+  0x5201,
+  UInt8,
+  false,
+  TypeDefinitionInteger)
+AAF_PROPERTY(IsSigned,
+  AAF_LITERAL_AUID(0x06510200,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
+  0x5202,
+  Boolean,
+  false,
+  TypeDefinitionInteger)
+AAF_CLASS_END(TypeDefinitionInteger)
+AAF_CLASS_SEPARATOR()
+
+// TypeDefinitionStrongObjectReference
+//
+AAF_CLASS(TypeDefinitionStrongObjectReference,
+  AAF_LITERAL_AUID(0x06520000,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
+  TypeDefinition)
+AAF_PROPERTY(ReferencedType,
+  AAF_LITERAL_AUID(0x06520100,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
+  0x5301,
+  RefAUID,
+  false,
+  TypeDefinitionStrongObjectReference)
+AAF_CLASS_END(TypeDefinitionStrongObjectReference)
+AAF_CLASS_SEPARATOR()
+
+// TypeDefinitionWeakObjectReference
+//
+AAF_CLASS(TypeDefinitionWeakObjectReference,
+  AAF_LITERAL_AUID(0x06530000,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
+  TypeDefinition)
+AAF_PROPERTY(ReferencedType,
+  AAF_LITERAL_AUID(0x06530100,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
+  0x5401,
+  RefAUID,
+  false,
+  TypeDefinitionWeakObjectReference)
+AAF_CLASS_END(TypeDefinitionWeakObjectReference)
+AAF_CLASS_SEPARATOR()
+
+// TypeDefinitionEnumeration
+//
+AAF_CLASS(TypeDefinitionEnumeration,
+  AAF_LITERAL_AUID(0x06540000,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
+  TypeDefinition)
+AAF_PROPERTY(ElementType,
+  AAF_LITERAL_AUID(0x06540100,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
+  0x5501,
+  RefAUID,
+  false,
+  TypeDefinitionEnumeration)
+AAF_PROPERTY(ElementNames,
+  AAF_LITERAL_AUID(0x06540200,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
+  0x5502,
+  StringArray,
+  false,
+  TypeDefinitionEnumeration)
+AAF_PROPERTY(ElementValues,
+  AAF_LITERAL_AUID(0x06540300,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
+  0x5503,
+  Int64Array,
+  false,
+  TypeDefinitionEnumeration)
+AAF_CLASS_END(TypeDefinitionEnumeration)
+AAF_CLASS_SEPARATOR()
+
+// TypeDefinitionFixedArray
+//
+AAF_CLASS(TypeDefinitionFixedArray,
+  AAF_LITERAL_AUID(0x06550000,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
+  TypeDefinition)
+AAF_PROPERTY(ElementType,
+  AAF_LITERAL_AUID(0x06550100,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
+  0x5601,
+  RefAUID,
+  false,
+  TypeDefinitionFixedArray)
+AAF_PROPERTY(ElementCount,
+  AAF_LITERAL_AUID(0x06550200,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
+  0x5602,
+  UInt32,
+  false,
+  TypeDefinitionFixedArray)
+AAF_CLASS_END(TypeDefinitionFixedArray)
+AAF_CLASS_SEPARATOR()
+
+// TypeDefinitionVariableArray
+//
+AAF_CLASS(TypeDefinitionVariableArray,
+  AAF_LITERAL_AUID(0x06560000,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
+  TypeDefinition)
+AAF_PROPERTY(ElementType,
+  AAF_LITERAL_AUID(0x06560100,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
+  0x5701,
+  RefAUID,
+  false,
+  TypeDefinitionVariableArray)
+AAF_CLASS_END(TypeDefinitionVariableArray)
+AAF_CLASS_SEPARATOR()
+
+// TypeDefinitionSet
+//
+AAF_CLASS(TypeDefinitionSet,
+  AAF_LITERAL_AUID(0x06570000,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
+  TypeDefinition)
+AAF_PROPERTY(ElementType,
+  AAF_LITERAL_AUID(0x06570100,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
+  0x5801,
+  RefAUID,
+  false,
+  TypeDefinitionSet)
+AAF_CLASS_END(TypeDefinitionSet)
+AAF_CLASS_SEPARATOR()
+
+// TypeDefinitionString
+//
+AAF_CLASS(TypeDefinitionString,
+  AAF_LITERAL_AUID(0x06580000,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
+  TypeDefinition)
+AAF_PROPERTY(ElementType,
+  AAF_LITERAL_AUID(0x06580100,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
+  0x5901,
+  RefAUID,
+  false,
+  TypeDefinitionString)
+AAF_CLASS_END(TypeDefinitionString)
+AAF_CLASS_SEPARATOR()
+
+// TypeDefinitionStream
+//
+AAF_CLASS(TypeDefinitionStream,
+  AAF_LITERAL_AUID(0x06590000,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
+  TypeDefinition)
+AAF_PROPERTY(ElementType,
+  AAF_LITERAL_AUID(0x06590100,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
+  0x5a01,
+  RefAUID,
+  false,
+  TypeDefinitionStream)
+AAF_CLASS_END(TypeDefinitionStream)
+AAF_CLASS_SEPARATOR()
+
+// TypeDefinitionRecord
+//
+AAF_CLASS(TypeDefinitionRecord,
+  AAF_LITERAL_AUID(0x065A0000,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
+  TypeDefinition)
+AAF_PROPERTY(MemberTypes,
+  AAF_LITERAL_AUID(0x065A0100,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
+  0x5b01,
+  RefAUIDArray,
+  false,
+  TypeDefinitionRecord)
+AAF_PROPERTY(MemberNames,
+  AAF_LITERAL_AUID(0x065A0200,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
+  0x5b02,
+  StringArray,
+  false,
+  TypeDefinitionRecord)
+AAF_CLASS_END(TypeDefinitionRecord)
+AAF_CLASS_SEPARATOR()
+
+// TypeDefinitionRename
+//
+AAF_CLASS(TypeDefinitionRename,
+  AAF_LITERAL_AUID(0x065B0000,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
+  TypeDefinition)
+AAF_PROPERTY(RenamedType,
+  AAF_LITERAL_AUID(0x065B0100,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
+  0x5c01,
+  RefAUID,
+  false,
+  TypeDefinitionRename)
+AAF_CLASS_END(TypeDefinitionRename)
 
 AAF_TABLE_END()
 
