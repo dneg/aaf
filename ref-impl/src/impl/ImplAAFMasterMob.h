@@ -331,6 +331,39 @@ public:
 	// mob, then the "masterMob" field may be left NULL.
 	//@comm Replaces omfmMediaMultiCreate
 
+/****/
+  //********************
+  // ExtendEssence()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+	  ExtendEssence
+		(
+			// @parm [in] On this slot.
+			aafSlotID_t  masterSlotID,
+			// @parm [in] create essence of this type. but this type is the same as others on this slot.
+			ImplAAFDataDef * pMediaKind,
+ 			aafUID_t			codecID,
+			aafRational_t	editRate,
+			aafRational_t	sampleRate,
+			aafCompressEnable_t  Enable,
+			ImplAAFLocator		*destination,
+			aafUID_t			fileFormat,
+			ImplAAFEssenceAccess **result);
+
+  //****************
+  // MultiCreate()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    ExtendMultiEssence
+        (
+ 				aafUID_t codecID,
+				aafUInt16  /*arrayElemCount*/,
+				aafmMultiCreate_t *  /*mediaArray*/,
+				aafCompressEnable_t  /*Enable*/,
+				ImplAAFLocator		*destination,
+				aafUID_t			fileFormat,
+				IAAFEssenceMultiAccess **result);
+
     //****************
   // Open()
   //

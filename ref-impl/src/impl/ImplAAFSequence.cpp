@@ -682,6 +682,80 @@ ImplAAFSequence::SegmentTCToOffset (aafTimecode_t*		pTimecode,
 	return hr;
 }
 
+//***************************************************************
+//
+// FindSubSeqment
+//
+// Gets a segment on the sequence. 
+//
+//
+//
+AAFRESULT ImplAAFSequence::FindSubSegment(aafPosition_t offset, 
+										 aafPosition_t *sequPosPtr,
+										 ImplAAFSegment **subseg,
+										 aafBool *found)
+{
+	aafLength_t	segLen;
+	aafPosition_t begPos, endPos;
+	aafUInt32 n = 0;
+	ImplAAFSegment* seg = NULL;
+
+	XPROTECT( )
+	{
+		CHECK(GetLength(&segLen));
+		CvtInt32toPosition(0, begPos);
+		endPos = begPos;
+		CHECK(AddInt64toInt64(segLen, &endPos));
+		if (Int64LessEqual(begPos, offset) &&
+			Int64Less(offset, endPos))
+		{
+			*found = kAAFFalse;
+			*subseg = NULL;
+			*sequPosPtr = 0;
+			CvtInt32toPosition(0, begPos);
+			endPos = begPos;
+			CHECK(CountComponents(&n));
+			for (aafUInt32 i = 0 ; *found != kAAFTrue && i < n ; i++) 
+			{
+				CHECK(GetComponentAt(i, (ImplAAFComponent**)&seg));
+				CHECK(seg->GetLength(&segLen));
+				CHECK(AddInt64toInt64(segLen, &endPos));
+				if (Int64LessEqual(begPos, offset) &&
+						Int64Less(offset, endPos))
+				{
+					*found = kAAFTrue;
+					*subseg = seg;
+					// We are returning a reference to this object so bump the ref count
+					seg->AcquireReference();
+					*sequPosPtr = begPos;
+				} 
+				else 
+				{
+					begPos = endPos;
+				}
+				seg->ReleaseReference();
+				seg = NULL;
+			}
+		}
+		else
+		{
+			*found = kAAFFalse;
+			*subseg = NULL;
+			*sequPosPtr = 0;
+		}
+	} /* XPROTECT */
+	XEXCEPT
+	{
+		if (seg) {
+			seg->ReleaseReference();
+			seg = NULL;
+		}
+	}
+	XEND;
+
+	return(AAFRESULT_SUCCESS);
+}
+
 //***********************************************************
 //
 // GetNthComponent()
@@ -781,7 +855,6 @@ AAFRESULT
 
 	return hr;
 }
-
 
 AAFRESULT ImplAAFSequence::TraverseToClip(aafLength_t length,
 											ImplAAFSegment **sclp,

@@ -50,6 +50,14 @@ class ImplAAFEssenceSampleIndex;
 #include "AAFPlugin.h"
 #endif
 
+#ifndef OMVECTOR_H
+#include "OMVector.h"
+#endif
+
+#ifndef OMVECTORITERATOR_H
+#include "OMVectorIterator.h"
+#endif
+
 typedef struct
 {
   aafUID_t mediaKind;
@@ -59,6 +67,26 @@ typedef struct
 
 typedef enum { kAAFCreated, kAAFAppended, kAAFReadOnly } aafOpenType_t;
 
+#include <vector>
+#include <iterator>
+
+typedef struct _tagAccessor_t
+{
+	ImplAAFSourceMob 	    *fileMob;
+	ImplAAFFileDescriptor	*mdes;
+	IAAFEssenceCodec		*codec;
+	IAAFMultiEssenceCodec *multicodec;
+	IAAFEssenceData			 *internalEssenceData;
+	IAAFEssenceStream		*stream;
+	ImplAAFFile					 *dataFile;
+	aafUID_t					 containerDefID;
+	aafPosition_t				offset, pos;
+	aafLength_t					length;
+	bool operator ==(_tagAccessor_t accessor)
+	{
+		return 0 == memcmp(this, &accessor, sizeof(_tagAccessor_t));
+	}
+} aafAccessor_t;
 
 class ImplAAFEssenceAccess : public ImplAAFRoot
 {
@@ -166,6 +194,55 @@ public:
 	// object, which must be closed on file close.
 	//@comm Replaces omfmMediaOpen*/
 	
+  //****************
+  // Append()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    Append
+        (ImplAAFMasterMob *masterMob,
+		// @parm [in] 
+		 aafSlotID_t masterSlotID,
+
+         // @parm [in] create essence of this type
+         const aafUID_t & mediaKind,
+
+ 		 const aafUID_t & codecID,
+		 const aafRational_t & editRate,
+		 const aafRational_t & sampleRate,
+
+         // @parm [in] optionally compressing it
+         aafCompressEnable_t  Enable);
+	//@comm Appends a single channel stream of essence.  Convenience functions
+	// exist to create audio or video essence, and a separate call
+	// (MultiAppend) exists to create interleaved audio and
+	// video data.
+	//@comm The essence handle from this call can be used with
+	// WriteDataSamples  and possibly WriteDataLines, but NOT with
+	// WriteMultiSamples.
+	//@comm If you are creating the essence, and then attaching it to a master
+	// mob, then the "masterMob" field may be left NULL.
+	// For video, the sampleRate should be the edit rate of the file mob.
+	// For audio, the sample rate should be the actual samples per second.
+	//@comm Replaces omfmMediaCreate
+
+/****/
+  //****************
+  // MultiAppend()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    MultiAppend
+        (					ImplAAFMasterMob *masterMob,
+ 							aafUID_constref codecID,
+                          aafUInt16  /*arrayElemCount*/,
+                           aafmMultiCreate_t *  /*mediaArray*/,
+                           aafCompressEnable_t  /*Enable*/t);
+	//@comm The essence handle from this call can be used with
+	// WriteDataSamples or WriteMultiSamples but NOT with 
+	// or WriteDataLines.
+	//@comm If you are creating the essence, and then attaching it to a master
+	// mob, then the "masterMob" field may be left NULL.
+	//@comm Replaces omfmMediaMultiCreate
+
 /****/
   //****************
   // MultiOpen()
@@ -546,6 +623,8 @@ private:
 	IAAFPluginDef		*_codecDescriptor;
 	ImplAAFFile				*_dataFile;
 	ImplAAFSourceMob		*_dataFileMob;
+	OMVector<aafAccessor_t> _codecList;
+	OMVectorIterator<aafAccessor_t> _cur;
 };
 
 #endif // ! __ImplAAFEssenceAccess_h__

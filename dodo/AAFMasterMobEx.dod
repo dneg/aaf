@@ -1,0 +1,99 @@
+#c *********************************************************************
+#c
+#c The contents of this file are subject to the AAF SDK Public
+#c Source License Agreement (the "License"); You may not use this file
+#c except in compliance with the License.  The License is available in
+#c AAFSDKPSL.TXT, or you may obtain a copy of the License from the AAF
+#c Association or its successor.
+#c 
+#c Software distributed under the License is distributed on an "AS IS"
+#c basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.  See
+#c the License for the specific language governing rights and limitations
+#c under the License.
+#c 
+#c The Original Code of this file is Copyright 1998-2001, Licensor of the
+#c AAF Association.
+#c 
+#c The Initial Developer of the Original Code of this file and the
+#c Licensor of the AAF Association is Avid Technology.
+#c All rights reserved.
+#c
+#c *********************************************************************
+#startm .this-module 0
+AAFMasterMobEx\
+#endm
+#c
+#startm .parent-module 0
+AAFMob\
+#endm
+AD_HEAD
+AD_IDL(//
+// The IAAFMasterMobEx interface extends IAAFMasterMob.  It supports
+// extended essence.  Extended essence is represented by a Sequence of
+// SourceClip objects.  Each SourceClip refers to a SourceMob which
+// describes one chunk of essence.
+//
+// Individual chunks of embedded essence are currently limited to 2GB
+// in size.  A Sequence of SourceClips provides the means to overcome
+// this limit.  There is no limit to the number of SourceClip objects
+// in the sequence or the sum total size of all essence in a file\,
+// other than those imposed by the underlying persistent object
+// store. It is expected that this will be significantly larger than
+// 2GB of essence data.
+//
+//
+// Essence can be extended at any time\, for any reason.  Typically\, it
+// will be extended because a CODEC returned an error indicating a
+// 2GB limit was reached.  To overcome this limit\, simply extend the
+// essence.
+//
+// IAAFEssenceAccess::ReadSamples knows how to read embedded
+// essence.  This interface is created by IAAFMasterMob::OpenEssence
+//
+// This interface returns the same errors as IAAFMasterMob::CreateEssence\,
+// and IAAFMasterMob::CreateMultiEssence.
+// 
+AD_STD_COMMENT_IFC_HEADER)
+AD_FORWARD_DECLARATION(AAFSourceClip)
+AD_FORWARD_DECLARATION(AAFSourceMob)
+AD_FORWARD_DECLARATION(AAFComponent)
+AD_FORWARD_DECLARATION(AAFDataDef)
+AD_FORWARD_DECLARATION(AAFEssenceAccess)
+AD_CLASS_UUID(b1a21371, 1a7d, 11d2, bf, 78, 00, 10, 4b, c9, 15, 6d )
+AD_DEFAULT_UUID(b1a21370, 1a7d, 11d2, bf, 78, 00, 10, 4b, c9, 15, 6d )
+AD_XCLASS_BEGIN(Concrete, StoredObject)
+
+AD_XMETHOD9(ExtendEssence,
+[in],objPass, aafSlotID_t,masterSlotID,,
+[in],objIn, AAFDataDef,pMediaKind,create essence of this type,
+[in\, ref],objPass, aafUID_constref,codecID,using this codec,
+[in],objPass, aafRational_t,editRate,with this edit rate,
+[in],objPass, aafRational_t,samplerate,with this sample rate,
+[in],enumIn, aafCompressEnable_t,Enable,optionally compressing it,
+[in],objIn, AAFLocator,destination,Optionally create the file HERE.,
+[in\, ref],objPass, aafUID_constref,fileFormat,with this format,
+[out],objOut, AAFEssenceAccess,access,Return an essence access on the essence.,
+      Extends a single stream of essence that was originally created using
+   // IAAFMasterMob::CreateEssence.  Extended essence is represented by
+   // a Sequence of SourceClip objects.  The first call to ExtendEssence will cause the
+   // TimelineMobSlot's SourceClip object to be replaced by a
+   // Sequence.  The initial SourceClip becomes the first
+   // component of the new Sequence.)
+
+
+AD_XMETHOD7(ExtendMultiEssence,
+[in\, ref],objPass, aafUID_constref,codecID,using this codec,
+[in],objPass, aafUInt16,arrayElemCount,this many channels,
+[in\,ref\,size_is\(arrayElemCount\)],objPass, aafmMultiCreate_t *,mediaArray,using these definitions,
+[in],enumIn, aafCompressEnable_t,Enable,optionally compressing it,
+[in],objIn,	  AAFLocator,destination,Optionally create the file HERE.,
+[in\, ref],objPass, aafUID_constref,fileFormat,with this format,
+[out],objPass, IAAFEssenceMultiAccess**,access,Return an essence access on the essence.,
+     Extends a multi-channel interleaved stream of essence that was
+   // originally created using IAAFMasterMob::CreateMultiEssence.
+   // Extended essence is represented by a Sequence of SourceClip objects.
+   // The first call to ExtendEssence will cause the TimelineMobSlot's SourceClip
+   // object to be replaced by a Sequence.  The initial SourceClip becomes the first
+   // component of the new Sequence.)
+
+AD_XCLASS_END(Abstract, Transient)

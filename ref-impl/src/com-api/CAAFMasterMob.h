@@ -47,10 +47,16 @@
 #include "CAAFMob.h"
 #endif
 
+//
+// Forward declaration
+//
+class ImplAAFMasterMob;
+
 
 class CAAFMasterMob
   : public IAAFMasterMob,
     public IAAFSearchSource,
+	public IAAFMasterMobEx,
     public CAAFMob
 {
 protected:
@@ -763,6 +769,86 @@ public:
 
     // @parm [out] AAFFindSourceInfo | ppSourceInfo | Source Information
     IAAFFindSourceInfo ** ppSourceInfo
+  );
+
+  //***********************************************************
+  // METHOD NAME: ExtendEssence()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFMasterMobEx | ExtendEssence |
+  // Extends a single stream of essence that was originally created using
+   // IAAFMasterMob::CreateEssence.  Extended essence is represented by
+   // a Sequence of SourceClip objects.  The first call to ExtendEssence will cause the
+   // TimelineMobSlot's SourceClip object to be replaced by a
+   // Sequence.  The initial SourceClip becomes the first
+   // component of the new Sequence.
+  // @end
+  // 
+  STDMETHOD (ExtendEssence)
+   (
+    // @parm [in] aafSlotID_t | masterSlotID | 
+    aafSlotID_t  masterSlotID,
+
+    // @parm [in] AAFDataDef | pMediaKind | create essence of this type
+    IAAFDataDef * pMediaKind,
+
+    // @parm [in, ref] aafUID_constref | codecID | using this codec
+    aafUID_constref  codecID,
+
+    // @parm [in] aafRational_t | editRate | with this edit rate
+    aafRational_t  editRate,
+
+    // @parm [in] aafRational_t | samplerate | with this sample rate
+    aafRational_t  samplerate,
+
+    // @parm [in] aafCompressEnable_t | Enable | optionally compressing it
+    aafCompressEnable_t  Enable,
+
+    // @parm [in] AAFLocator | destination | Optionally create the file HERE.
+    IAAFLocator * destination,
+
+    // @parm [in, ref] aafUID_constref | fileFormat | with this format
+    aafUID_constref  fileFormat,
+
+    // @parm [out] AAFEssenceAccess | access | Return an essence access on the essence.
+    IAAFEssenceAccess ** access
+  );
+
+  //***********************************************************
+  // METHOD NAME: ExtendMultiEssence()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFMasterMobEx | ExtendMultiEssence |
+  // Extends a multi-channel interleaved stream of essence that was
+   // originally created using IAAFMasterMob::CreateMultiEssence.
+   // Extended essence is represented by a Sequence of SourceClip objects.
+   // The first call to ExtendEssence will cause the TimelineMobSlot's SourceClip
+   // object to be replaced by a Sequence.  The initial SourceClip becomes the first
+   // component of the new Sequence.
+  // @end
+  // 
+  STDMETHOD (ExtendMultiEssence)
+   (
+    // @parm [in, ref] aafUID_constref | codecID | using this codec
+    aafUID_constref  codecID,
+
+    // @parm [in] aafUInt16 | arrayElemCount | this many channels
+    aafUInt16  arrayElemCount,
+
+    // @parm [in,ref,size_is(arrayElemCount)] aafmMultiCreate_t * | mediaArray | using these definitions
+    aafmMultiCreate_t *  mediaArray,
+
+    // @parm [in] aafCompressEnable_t | Enable | optionally compressing it
+    aafCompressEnable_t  Enable,
+
+    // @parm [in] AAFLocator | destination | Optionally create the file HERE.
+    IAAFLocator * destination,
+
+    // @parm [in, ref] aafUID_constref | fileFormat | with this format
+    aafUID_constref  fileFormat,
+
+    // @parm [out] IAAFEssenceMultiAccess** | access | Return an essence access on the essence.
+    IAAFEssenceMultiAccess**  access
   );
 
 

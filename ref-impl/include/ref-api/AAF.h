@@ -161,6 +161,7 @@ interface IAAFEndian;
 interface IAAFSearchSource;
 interface IAAFEssenceMultiAccess;
 interface IAAFTypeDefVariableArrayEx;
+interface IAAFMasterMobEx;
 #else
 typedef interface IAAFAIFCDescriptor IAAFAIFCDescriptor;
 typedef interface IAAFClassDef IAAFClassDef;
@@ -285,6 +286,7 @@ typedef interface IAAFEndian IAAFEndian;
 typedef interface IAAFSearchSource IAAFSearchSource;
 typedef interface IAAFEssenceMultiAccess IAAFEssenceMultiAccess;
 typedef interface IAAFTypeDefVariableArrayEx IAAFTypeDefVariableArrayEx;
+typedef interface IAAFMasterMobEx IAAFMasterMobEx;
 #endif
 
 // IAAFAIFCDescriptor
@@ -13110,6 +13112,8 @@ DECLARE_INTERFACE_(IAAFMasterMob, IUnknown)
 
     // How many channels?
     /*[out]*/ aafUInt16*  numCh) PURE;
+
+
 
 
 
@@ -32579,6 +32583,120 @@ DECLARE_INTERFACE_(IAAFTypeDefVariableArrayEx, IUnknown)
 #endif // __IAAFTypeDefVariableArrayEx_INTERFACE_DEFINED__
 
 
+
+
+
+// IAAFMasterMobEx
+
+// ************************
+//
+// Interface IAAFMasterMobEx
+//
+// ************************
+
+
+
+
+
+
+
+#ifndef __IAAFMasterMobEx_INTERFACE_DEFINED__
+#define __IAAFMasterMobEx_INTERFACE_DEFINED__
+
+EXTERN_C const IID IID_IAAFMasterMobEx;
+
+#undef  INTERFACE
+#define INTERFACE   IAAFMasterMobEx
+
+DECLARE_INTERFACE_(IAAFMasterMobEx, IUnknown)
+{
+  BEGIN_INTERFACE
+
+  /* *** IUnknown methods *** */
+  STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppvObj) PURE;
+  STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
+  STDMETHOD_(ULONG,Release) (THIS) PURE;
+
+  /* *** IAAFMasterMobEx methods *** */
+
+
+  //***********************************************************
+  //
+  // ExtendEssence()
+  //
+  // Extends a single stream of essence that was originally created using
+   // IAAFMasterMob::CreateEssence.  Extended essence is represented by
+   // a Sequence of SourceClip objects.  The first call to ExtendEssence will cause the
+   // TimelineMobSlot's SourceClip object to be replaced by a
+   // Sequence.  The initial SourceClip becomes the first
+   // component of the new Sequence.
+  //
+  STDMETHOD(ExtendEssence) (THIS_
+    // 
+    /*[in]*/ aafSlotID_t  masterSlotID,
+
+    // create essence of this type
+    /*[in]*/ IAAFDataDef * pMediaKind,
+
+    // using this codec
+    /*[in, ref]*/ aafUID_constref  codecID,
+
+    // with this edit rate
+    /*[in]*/ aafRational_t  editRate,
+
+    // with this sample rate
+    /*[in]*/ aafRational_t  samplerate,
+
+    // optionally compressing it
+    /*[in]*/ aafCompressEnable_t  Enable,
+
+    // Optionally create the file HERE.
+    /*[in]*/ IAAFLocator * destination,
+
+    // with this format
+    /*[in, ref]*/ aafUID_constref  fileFormat,
+
+    // Return an essence access on the essence.
+    /*[out]*/ IAAFEssenceAccess ** access) PURE;
+
+
+  //***********************************************************
+  //
+  // ExtendMultiEssence()
+  //
+  // Extends a multi-channel interleaved stream of essence that was
+   // originally created using IAAFMasterMob::CreateMultiEssence.
+   // Extended essence is represented by a Sequence of SourceClip objects.
+   // The first call to ExtendEssence will cause the TimelineMobSlot's SourceClip
+   // object to be replaced by a Sequence.  The initial SourceClip becomes the first
+   // component of the new Sequence.
+  //
+  STDMETHOD(ExtendMultiEssence) (THIS_
+    // using this codec
+    /*[in, ref]*/ aafUID_constref  codecID,
+
+    // this many channels
+    /*[in]*/ aafUInt16  arrayElemCount,
+
+    // using these definitions
+    /*[in,ref,size_is(arrayElemCount)]*/ aafmMultiCreate_t *  mediaArray,
+
+    // optionally compressing it
+    /*[in]*/ aafCompressEnable_t  Enable,
+
+    // Optionally create the file HERE.
+    /*[in]*/ IAAFLocator * destination,
+
+    // with this format
+    /*[in, ref]*/ aafUID_constref  fileFormat,
+
+    // Return an essence access on the essence.
+    /*[out]*/ IAAFEssenceMultiAccess**  access) PURE;
+
+
+  END_INTERFACE
+};
+#endif // __IAAFMasterMobEx_INTERFACE_DEFINED__
 
 
 

@@ -22,6 +22,7 @@
 
 #include "ImplAAFSourceClip.h"
 #include "ImplAAFSourceMob.h"
+#include "ImplAAFSequence.h"
 #include "ImplAAFComponent.h"
 #include "ImplAAFDataDef.h"
 #include "ImplAAFFindSourceInfo.h"
@@ -691,9 +692,11 @@ AAFRESULT ImplAAFMasterMob::ReconcileMobLength(void)
 	ImplEnumAAFMobSlots	*slotIter = NULL, *fileSlotIter = NULL;
 	ImplAAFMobSlot		*fileSlot = NULL, *slot = NULL;
 	ImplAAFSegment		*fileSeg = NULL, *seg = NULL;
-	aafUInt32			loop;
+	ImplAAFSequence		*fileSeq = NULL;
+	ImplAAFSourceClip	*fileClip = NULL;
+	aafUInt32			loop, numComponents = 0;
 	aafNumSlots_t		numSlots, fileNumSlots;
-	aafPosition_t		endPos;
+	aafPosition_t		endPos = {0}, tmpPos;
 
 	XPROTECT()
 	{
@@ -706,35 +709,78 @@ AAFRESULT ImplAAFMasterMob::ReconcileMobLength(void)
 		{
 			CHECK(slotIter->NextOne(&slot));
 			CHECK(slot->GetSegment(&seg));
-			CHECK(((ImplAAFSourceClip *)seg)->ResolveRef( &fileMob));
-			CHECK(fileMob->CountSlots(&fileNumSlots));
-			if(fileNumSlots >= 1)
+			fileSeq = dynamic_cast<ImplAAFSequence*>(seg);
+			if (fileSeq == NULL) 
 			{
-				CHECK(fileMob->GetSlots (&fileSlotIter));
-				CHECK(fileSlotIter->NextOne(&fileSlot));
-				CHECK(fileSlot->GetSegment(&fileSeg));
-				CHECK(fileSeg->GetLength(&endPos));
-				fileSeg->ReleaseReference();
-				fileSeg = NULL;
-				fileSlotIter->ReleaseReference();
-				fileSlotIter = NULL;
-			}
-			else
-				fileSlot = NULL;
-			fileMob->ReleaseReference();
-			fileMob = NULL;
-			CHECK(slot->ConvertToMyRate(endPos, fileSlot, &endPos));
-			if(fileSlot != NULL)
-			{
-				fileSlot->ReleaseReference();
-				fileSlot = NULL;
-			}
-			slot->ReleaseReference();
-			slot = NULL;
-			CHECK(seg->SetLength(endPos));
-			seg->ReleaseReference();
-			seg = NULL;
-		}			
+				CHECK(((ImplAAFSourceClip *)seg)->ResolveRef( &fileMob));
+				CHECK(fileMob->CountSlots(&fileNumSlots));
+				if(fileNumSlots >= 1)
+				{
+					CHECK(fileMob->GetSlots (&fileSlotIter));
+					CHECK(fileSlotIter->NextOne(&fileSlot));
+					CHECK(fileSlot->GetSegment(&fileSeg));
+					CHECK(fileSeg->GetLength(&endPos));
+					fileSeg->ReleaseReference();
+					fileSeg = NULL;
+					fileSlotIter->ReleaseReference();
+					fileSlotIter = NULL;
+				}
+				else
+					fileSlot = NULL;
+				fileMob->ReleaseReference();
+				fileMob = NULL;
+				CHECK(slot->ConvertToMyRate(endPos, fileSlot, &endPos));
+				if(fileSlot != NULL)
+				{
+					fileSlot->ReleaseReference();
+					fileSlot = NULL;
+				}
+				slot->ReleaseReference();
+				slot = NULL; 
+				CHECK(seg->SetLength(endPos));
+				seg->ReleaseReference();
+				seg = NULL;
+			} else {
+				CHECK(fileSeq->CountComponents(&numComponents));
+				if (numComponents >= 1) {
+					for (aafUInt32 i = 0 ; i < numComponents ; i++) {
+						CHECK(fileSeq->GetComponentAt(i, (ImplAAFComponent**)&fileClip));
+						CHECK(fileClip->ResolveRef( &fileMob));
+						CHECK(fileMob->CountSlots(&fileNumSlots));
+						if (fileNumSlots >= 1) 
+						{
+							CHECK(fileMob->GetSlots (&fileSlotIter));
+							CHECK(fileSlotIter->NextOne(&fileSlot));
+							CHECK(fileSlot->GetSegment(&fileSeg));
+							CHECK(fileSeg->GetLength(&tmpPos));
+							fileSeg->ReleaseReference();
+							fileSeg = NULL;
+							fileSlotIter->ReleaseReference();
+							fileSlotIter = NULL;
+						}
+						else
+							fileSlot = NULL;
+						fileMob->ReleaseReference();
+						fileMob = NULL;
+						CHECK(slot->ConvertToMyRate(tmpPos, fileSlot, &tmpPos));
+						if(fileSlot != NULL)
+						{
+							fileSlot->ReleaseReference();
+							fileSlot = NULL;
+						}
+						CHECK(((ImplAAFSegment*)fileClip)->SetLength(tmpPos));
+						endPos += tmpPos;
+						fileClip->ReleaseReference();
+						fileClip = NULL;
+					}
+				}
+				slot->ReleaseReference();
+				slot = NULL; 
+				CHECK(seg->SetLength(endPos));
+				seg->ReleaseReference();
+				seg = NULL;
+			} 
+		}		
 		slotIter->ReleaseReference();
 		slotIter = NULL;
 	}
@@ -754,6 +800,10 @@ AAFRESULT ImplAAFMasterMob::ReconcileMobLength(void)
 			seg->ReleaseReference();
 		if(fileMob != NULL)
 			fileMob->ReleaseReference();
+		if(fileSeq != NULL)
+			fileSeq->ReleaseReference();
+		if(fileClip != NULL)
+			fileClip->ReleaseReference();
 	}
 	XEND
 		
@@ -877,6 +927,125 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 /****/
+
+AAFRESULT STDMETHODCALLTYPE
+ImplAAFMasterMob::ExtendEssence(
+								aafSlotID_t masterSlotID,
+								ImplAAFDataDef *pMediaKind,
+								aafUID_t codecID,
+								aafRational_t editRate,
+								aafRational_t sampleRate,
+								aafCompressEnable_t enable,
+								ImplAAFLocator* destination,
+								aafUID_t fileFormat,
+								ImplAAFEssenceAccess **result)
+{
+ ImplAAFEssenceAccess	*access = NULL;
+
+  if (NULL == result)
+    return AAFRESULT_NULL_PARAM;
+
+  if (! pMediaKind)
+	return AAFRESULT_NULL_PARAM;
+  aafUID_t mediaKind;
+  AAFRESULT hr = pMediaKind->GetAUID(&mediaKind);
+  if (AAFRESULT_FAILED (hr))return hr;
+
+	access = (ImplAAFEssenceAccess *)CreateImpl (CLSID_AAFEssenceAccess);
+
+	XPROTECT()
+	{
+    if (NULL == access)
+      RAISE(AAFRESULT_NOMEMORY);
+
+		if(destination != NULL)
+		{
+			CHECK(access->SetEssenceDestination(destination, fileFormat));
+		}
+		
+		CHECK(access->Append(this, masterSlotID, mediaKind, codecID, editRate, sampleRate, enable));
+	  
+    *result = access;
+	}
+	XEXCEPT
+  {
+		if (access)
+      access->ReleaseReference();
+  }
+	XEND;
+
+	return(AAFRESULT_SUCCESS);
+}
+
+
+	//@comm Creates a single channel stream of essence.  Convenience functions
+	// exist to create audio or video essence, and a separate call
+	// (MultiCreate) exists to create interleaved audio and
+	// video data.
+	//@comm The essence handle from this call can be used with
+	// WriteDataSamples  and possibly WriteDataLines, but NOT with
+	// WriteMultiSamples.
+	//@comm If you are creating the essence, and then attaching it to a master
+	// mob, then the "masterMob" field may be left NULL.
+	// For video, the sampleRate should be the edit rate of the file mob.
+	// For audio, the sample rate should be the actual samples per second.
+	//@comm Replaces omfmMediaCreate
+	
+/****/
+AAFRESULT STDMETHODCALLTYPE
+ImplAAFMasterMob::ExtendMultiEssence(aafUID_t codecID,
+							aafUInt16  arrayElemCount,
+							aafmMultiCreate_t *mediaArray,
+							aafCompressEnable_t Enable,
+							ImplAAFLocator		*destination,
+							aafUID_t			fileFormat,
+							IAAFEssenceMultiAccess **result)
+{
+	ImplAAFEssenceAccess	*access = NULL;
+	IUnknown				*iUnk = NULL;
+  IAAFEssenceMultiAccess *pMultiAccess = NULL;
+  
+  if (NULL == result)
+    return AAFRESULT_NULL_PARAM;
+
+	access = (ImplAAFEssenceAccess *)CreateImpl (CLSID_AAFEssenceAccess);
+
+	XPROTECT()
+	{
+    if (NULL == access)
+      RAISE(AAFRESULT_NOMEMORY);
+
+    // Return a IAAFEssenceMultiAccess interface to the new EssenceAccess
+    // object.
+	  iUnk = static_cast<IUnknown *> (access->GetContainer());
+    assert(NULL != iUnk);
+	  CHECK(iUnk->QueryInterface(IID_IAAFEssenceMultiAccess, (void **)&pMultiAccess));
+	  if(destination != NULL)
+		{
+			CHECK(access->SetEssenceDestination(destination, fileFormat));
+		}
+
+	  CHECK(access->MultiAppend(this, codecID, arrayElemCount, mediaArray, Enable));
+
+    *result = pMultiAccess;
+    pMultiAccess = NULL;
+    access->ReleaseReference();
+    access = NULL;
+	}
+	XEXCEPT
+  {
+    if (pMultiAccess)
+      pMultiAccess->Release();
+		if (access)
+      access->ReleaseReference();
+  }
+	XEND;
+
+	return(AAFRESULT_SUCCESS);
+}
+
+
+/****/
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFMasterMob::CountChannels (
                            aafSlotID_t  slotID,
@@ -910,6 +1079,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 	return(AAFRESULT_SUCCESS);
 }
+
 
 /****/
 AAFRESULT STDMETHODCALLTYPE

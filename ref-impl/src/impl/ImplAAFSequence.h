@@ -153,7 +153,11 @@ public:
 	  /*[in]*/ aafRational_t *  pEditRate,
 	  /*[out]*/ aafFrameOffset_t *  pOffset);
 
-
+  // Override from AAFSegement	
+  virtual AAFRESULT FindSubSegment( aafPosition_t offset,
+									  aafPosition_t *sequPosPtr,
+									  ImplAAFSegment **subseg,
+									  aafBool *found);
 
 public:
 

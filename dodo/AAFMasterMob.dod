@@ -30,6 +30,7 @@ AAFMob\
 #c #import ./AAFObject.exp
 #c #import ./AAFMob.exp
 #import ./AAFSearchSource.exp
+#import ./AAFMasterMobEx.exp
 AD_HEAD
 AD_IDL(//
 // The IAAFMasterMob interface is implemented by objects which provide
@@ -55,7 +56,7 @@ AD_CLASS_UUID(b1a21373, 1a7d, 11d2, bf, 78, 00, 10, 4b, c9, 15, 6d)
 
 AD_DEFAULT_UUID(b1a21372, 1a7d, 11d2, bf, 78, 00, 10, 4b, c9, 15, 6d)
 #c AD_XCLASS_BEGIN(Concrete, StoredObject)
-AD_COM_EXT_CLASS_BEGIN(public IAAFSearchSource)
+AD_COM_EXT2_CLASS_BEGIN(public IAAFSearchSource,public IAAFMasterMobEx)
 AD_METHOD0(Initialize,
      Initializes a newly allocated\, empty IAAFMasterMob-supporting
   // object.  This method must be called after allocation\, and before
@@ -637,5 +638,7 @@ AD_XMETHOD4(CountChannels,
 
 
 AD_COM_METH(.method-SearchSource)
+AD_COM_METH(.method-ExtendEssence)
+AD_COM_METH(.method-ExtendMultiEssence)
 #c AD_XCLASS_END(Concrete, StoredObject)
-AD_COM_EXT_CLASS_END(AAFSearchSource)
+AD_COM_EXT2_CLASS_END(AAFSearchSource, AAFMasterMobEx)
