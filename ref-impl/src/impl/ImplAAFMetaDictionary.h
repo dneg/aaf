@@ -30,14 +30,11 @@
  *
  ************************************************************************/
 
-// Forward declarations:
-
-
-//#include "OMStorable.h"
-//#include "OMClassFactory.h"
-
 #include "ImplAAFObject.h"
 #include "OMStrongRefSetProperty.h"
+#include "OMReferenceSet.h"
+
+// Forward declarations:
 
 class ImplAAFMetaDefinition;
 class ImplAAFClassDef;
@@ -55,122 +52,6 @@ class ImplAAFTypeDefSet;
 
 class ImplEnumAAFClassDefs;
 class ImplEnumAAFTypeDefs;
-
-
-
-// TEMPORARY class to be replaced by new non-persistent OM classes.
-// Template class to store different types of non-persistent
-// elements in an OMSet.
-template <typename Element>
-class TempSetElement
-{
-public:
-TempSetElement();
-TempSetElement(const TempSetElement& rhs);
-TempSetElement(Element * value);
-
-// coersion operator to "transparently" extract the type
-// definition pointer. This will be called when the enumerator
-// attempts to assign an OpaqueTypeDefinition to an ImplAAFTypeDef *.
-operator Element * () const;
-
-// Methods required by OMSet
-const OMUniqueObjectIdentification identification(void) const;
-TempSetElement& operator= (const TempSetElement& rhs);
-bool operator== (const TempSetElement& rhs);
-
-private:
-aafUID_t _id;
-Element * _value;
-};
-
-
-
-
-
-
-// Template class to store different types of non-persistent
-template <typename Element>
-TempSetElement<Element>::TempSetElement() :
-  _value(NULL)
-{
-  memset(&_id, 0, sizeof(_id));
-}
-
-template <typename Element>
-TempSetElement<Element>::TempSetElement(const TempSetElement<Element> & rhs)
-{
-  _id = rhs._id;
-  _value = rhs._value;
-}
-
-template <typename Element>
-TempSetElement<Element>::TempSetElement(Element *value) :
-  _value(value)
-{
-  AAFRESULT result = AAFRESULT_NULL_PARAM;
-  if (_value)
-  {
-    result = value->GetAUID(&_id);
-  }
-  if (AAFRESULT_FAILED(result))
-  {
-    memset(&_id, 0, sizeof(_id));
-  }
-}
-
-
-// coersion operator to "transparently" extract the element
-// pointer. 
-template <typename Element>
-TempSetElement<Element>::operator Element * () const
-{
-  return _value;
-}
-
-
-template <typename Element>
-const OMUniqueObjectIdentification 
-  TempSetElement<Element>::identification(void) const
-{
-  return (*reinterpret_cast<const OMUniqueObjectIdentification *>(&_id));
-}
-
-template <typename Element>
-TempSetElement<Element> & TempSetElement<Element>::operator= (const TempSetElement<Element>& rhs)
-{
-  if (&rhs != this)
-  {
-    _id = rhs._id;
-    _value = rhs._value;
-  }
-  return *this;
-}
-
-template <typename Element>
-bool TempSetElement<Element>::operator== (const TempSetElement<Element>& rhs)
-{
-  if (&rhs == this)
-  {
-    return true;
-  }
-  else
-  {
-    // Test the value first since it is the more efficient comparison.
-    if (_value == rhs._value)
-    {
-      return true;
-    }
-    else
-    {
-      // Compare the ids.
-      return (0 == memcmp(&_id, &rhs._id, sizeof(_id)));
-    }
-  }
-}
-
-
-
 
 
 class ImplAAFMetaDictionary :
@@ -504,10 +385,10 @@ private:
   //
   // Non-persistent data members.
   //
-  OMSet<OMUniqueObjectIdentification, TempSetElement<ImplAAFTypeDef> > _opaqueTypeDefinitions;
-  OMSet<OMUniqueObjectIdentification, TempSetElement<ImplAAFClassDef> > _axiomaticClassDefinitions;
-  OMSet<OMUniqueObjectIdentification, TempSetElement<ImplAAFPropertyDef> > _axiomaticPropertyDefinitions;
-  OMSet<OMUniqueObjectIdentification, TempSetElement<ImplAAFTypeDef> > _axiomaticTypeDefinitions;
+  OMReferenceSet<OMUniqueObjectIdentification, ImplAAFTypeDef> _opaqueTypeDefinitions;
+  OMReferenceSet<OMUniqueObjectIdentification, ImplAAFClassDef> _axiomaticClassDefinitions;
+  OMReferenceSet<OMUniqueObjectIdentification, ImplAAFPropertyDef> _axiomaticPropertyDefinitions;
+  OMReferenceSet<OMUniqueObjectIdentification, ImplAAFTypeDef> _axiomaticTypeDefinitions;
 
   // Private class that represents a forward class reference.
   class ForwardClassReference

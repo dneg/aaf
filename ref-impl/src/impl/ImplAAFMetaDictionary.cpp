@@ -52,6 +52,8 @@
 //#include "ImplAAFObjectCreation.h"
 //#include "AAFClassDefUIDs.h"
 
+#include "OMReferenceSetIter.h"
+
 #include "ImplAAFObjectCreation.h"
 #include "aafErr.h"
 
@@ -77,7 +79,7 @@ ImplAAFMetaDictionary::ImplAAFMetaDictionary () :
 ImplAAFMetaDictionary::~ImplAAFMetaDictionary ()
 {
   // Release the _opaqueTypeDefinitions
-  OMSetIterator<OMUniqueObjectIdentification, TempSetElement<ImplAAFTypeDef> >opaqueTypeDefinitions(_opaqueTypeDefinitions, OMBefore);
+  OMReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFTypeDef> opaqueTypeDefinitions(_opaqueTypeDefinitions);
   while(++opaqueTypeDefinitions)
   {
     ImplAAFTypeDef *pType = opaqueTypeDefinitions.value();
@@ -89,7 +91,7 @@ ImplAAFMetaDictionary::~ImplAAFMetaDictionary ()
   }
 
   // Release the _axiomaticTypeDefinitions
-  OMSetIterator<OMUniqueObjectIdentification, TempSetElement<ImplAAFTypeDef> > axiomaticTypeDefinitions(_axiomaticTypeDefinitions, OMBefore);
+  OMReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFTypeDef> axiomaticTypeDefinitions(_axiomaticTypeDefinitions);
   while(++axiomaticTypeDefinitions)
   {
     ImplAAFTypeDef *pAxiomaticTypeDef = axiomaticTypeDefinitions.value();
@@ -101,7 +103,7 @@ ImplAAFMetaDictionary::~ImplAAFMetaDictionary ()
   }
 
   // Release the _axiomaticPropertyDefinitions
-  OMSetIterator<OMUniqueObjectIdentification, TempSetElement<ImplAAFPropertyDef> > axiomaticPropertyDefinitions(_axiomaticPropertyDefinitions, OMBefore);
+  OMReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFPropertyDef> axiomaticPropertyDefinitions(_axiomaticPropertyDefinitions);
   while(++axiomaticPropertyDefinitions)
   {
     ImplAAFPropertyDef *pAxiomaticPropertyDef = axiomaticPropertyDefinitions.value();
@@ -113,7 +115,7 @@ ImplAAFMetaDictionary::~ImplAAFMetaDictionary ()
   }
 
   // Release the _axiomaticClassDefinitions
-  OMSetIterator<OMUniqueObjectIdentification, TempSetElement<ImplAAFClassDef> > axiomaticClassDefinitions(_axiomaticClassDefinitions, OMBefore);
+  OMReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFClassDef> axiomaticClassDefinitions(_axiomaticClassDefinitions);
   while(++axiomaticClassDefinitions)
   {
     ImplAAFClassDef *pAxiomaticClassDef = axiomaticClassDefinitions.value();
@@ -241,11 +243,11 @@ ImplAAFTypeDef * ImplAAFMetaDictionary::findOpaqueTypeDefinition(aafUID_constref
   // NOTE: The following type cast is temporary. It should be removed as soon
   // as the OM has a declarative sytax to include the type
   // of the key used in the set. (trr:2000-FEB-29)
-  TempSetElement<ImplAAFTypeDef> opaqueTypeDefinition;
+  ImplAAFTypeDef* opaqueTypeDefinition;
   if (_opaqueTypeDefinitions.find((*reinterpret_cast<const OMObjectIdentification *>(&typeId)),
                                   opaqueTypeDefinition))
   {
-    return (ImplAAFTypeDef *)opaqueTypeDefinition;
+    return opaqueTypeDefinition;
   }
   else
   {
@@ -261,11 +263,11 @@ ImplAAFClassDef * ImplAAFMetaDictionary::findAxiomaticClassDefinition(aafUID_con
   // NOTE: The following type cast is temporary. It should be removed as soon
   // as the OM has a declarative sytax to include the type
   // of the key used in the set. (trr:2000-FEB-29)
-  TempSetElement<ImplAAFClassDef> axiomaticClassDefinition;
+  ImplAAFClassDef* axiomaticClassDefinition;
   if (_axiomaticClassDefinitions.find((*reinterpret_cast<const OMObjectIdentification *>(&classId)),
                                       axiomaticClassDefinition))
   {
-    return (ImplAAFClassDef *)axiomaticClassDefinition;
+    return axiomaticClassDefinition;
   }
   else
   {
@@ -279,11 +281,11 @@ ImplAAFPropertyDef * ImplAAFMetaDictionary::findAxiomaticPropertyDefinition(aafU
   // NOTE: The following type cast is temporary. It should be removed as soon
   // as the OM has a declarative sytax to include the type
   // of the key used in the set. (trr:2000-FEB-29)
-  TempSetElement<ImplAAFPropertyDef> axiomaticPropertyDefinition;
+  ImplAAFPropertyDef* axiomaticPropertyDefinition;
   if (_axiomaticPropertyDefinitions.find((*reinterpret_cast<const OMObjectIdentification *>(&propertyId)),
                                          axiomaticPropertyDefinition))
   {
-    return (ImplAAFPropertyDef *)axiomaticPropertyDefinition;
+    return axiomaticPropertyDefinition;
   }
   else
   {
@@ -297,11 +299,11 @@ ImplAAFTypeDef * ImplAAFMetaDictionary::findAxiomaticTypeDefinition(aafUID_const
   // NOTE: The following type cast is temporary. It should be removed as soon
   // as the OM has a declarative sytax to include the type
   // of the key used in the set. (trr:2000-FEB-29)
-  TempSetElement<ImplAAFTypeDef> axiomaticTypeDefinition;
+  ImplAAFTypeDef* axiomaticTypeDefinition;
   if (_axiomaticTypeDefinitions.find((*reinterpret_cast<const OMObjectIdentification *>(&typeId)),
                                      axiomaticTypeDefinition))
   {
-    return (ImplAAFTypeDef *)axiomaticTypeDefinition;
+    return axiomaticTypeDefinition;
   }
   else
   {
@@ -662,8 +664,7 @@ AAFRESULT STDMETHODCALLTYPE
   if (!containsType(newAUID) && !findOpaqueTypeDefinition(newAUID))
   {
     // This type is not yet registered, add it to the dictionary.
-    TempSetElement<ImplAAFTypeDef> opaque(pOpaqueTypeDef);
-    _opaqueTypeDefinitions.append(opaque);
+    _opaqueTypeDefinitions.appendValue(pOpaqueTypeDef);
     pOpaqueTypeDef->AcquireReference();
   }
 
