@@ -323,7 +323,7 @@ AAFRESULT ImplAAFSourceClip::TraverseToClip(aafLength_t length,
 	}
 	XEND;
 	
-	return(OM_ERR_NONE);
+	return(AAFRESULT_SUCCESS);
 }
 
 
