@@ -726,7 +726,6 @@ void ImplAAFClassDef::InitOMProperties (ImplAAFObject * pObj)
 		}		  
 		else if(defPid != PID_InterchangeObject_ObjClass
 			&& (defPid != PID_InterchangeObject_Generation)
-			&& (defPid != PID_PropertyDefinition_IsSearchable)
 			&& (defPid != PID_PropertyDefinition_DefaultValue))
 		{
 		  // Defined property wasn't found in OM property set.
@@ -743,7 +742,6 @@ void ImplAAFClassDef::InitOMProperties (ImplAAFObject * pObj)
 	  
 	if(defPid != PID_InterchangeObject_ObjClass
 			&& (defPid != PID_InterchangeObject_Generation)
-			&& (defPid != PID_PropertyDefinition_IsSearchable)
 			&& (defPid != PID_PropertyDefinition_DefaultValue))
 	{
 		  ImplAAFPropertyDef * pPropDef =
