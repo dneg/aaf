@@ -203,10 +203,8 @@ aafErr_t AAFConvertEditRate(
 				AddInt32toInt64(1, destPosition);
 		}
 	} /* XPROTECT */
-
 	XEXCEPT
 	{
-		return(XCODE());
 	}
 	XEND;
 
