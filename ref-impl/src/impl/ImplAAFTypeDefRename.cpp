@@ -47,7 +47,7 @@ ImplAAFTypeDefRename::~ImplAAFTypeDefRename ()
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDefRename::Initialize (
-      aafUID_t * pID,
+      const aafUID_t * pID,
       ImplAAFTypeDef * pBaseType,
       wchar_t * pTypeName)
 {

@@ -38,7 +38,7 @@ ImplAAFTypeDefSet::~ImplAAFTypeDefSet ()
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDefSet::Initialize (
-      aafUID_t *  /*pID*/,
+      const aafUID_t *  /*pID*/,
       ImplAAFTypeDef * /*pTypeDef*/,
       aafCharacter *  /*pTypeName*/)
 {
