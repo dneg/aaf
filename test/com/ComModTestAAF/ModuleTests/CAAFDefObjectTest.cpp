@@ -51,6 +51,38 @@
 #include "AAFStoredObjectIDs.h"
 #include "AAFResult.h"
 #include "AAFDefUIDs.h"
+#include "aafUtils.h"
+
+// Some handy smart pointers
+#include "AAFSmartPointer.h"
+typedef IAAFSmartPointer<IAAFDefObject>             IAAFDefObjectSP;
+typedef IAAFSmartPointer<IAAFPluginDescriptor>      IAAFPluginDescriptorSP;
+typedef IAAFSmartPointer<IAAFTypeDef>               IAAFTypeDefSP;
+typedef IAAFSmartPointer<IAAFTypeDefInt>            IAAFTypeDefIntSP;
+typedef IAAFSmartPointer<IEnumAAFPluginDescriptors> IEnumAAFPluginDescriptorsSP;
+
+
+//
+// Some guids
+//
+
+// {005DFB20-7B5B-11d3-844F-00600832ACB8}
+static const aafUID_t kTestTypeId = 
+{ 0x5dfb20, 0x7b5b, 0x11d3, { 0x84, 0x4f, 0x0, 0x60, 0x8, 0x32, 0xac, 0xb8 } };
+
+// {005DFB21-7B5B-11d3-844F-00600832ACB8}
+static const aafUID_t kTestPluginDescID1 = 
+{ 0x5dfb21, 0x7b5b, 0x11d3, { 0x84, 0x4f, 0x0, 0x60, 0x8, 0x32, 0xac, 0xb8 } };
+
+// {005DFB22-7B5B-11d3-844F-00600832ACB8}
+static const aafUID_t kTestPluginDescID2 = 
+{ 0x5dfb22, 0x7b5b, 0x11d3, { 0x84, 0x4f, 0x0, 0x60, 0x8, 0x32, 0xac, 0xb8 } };
+
+// {005DFB23-7B5B-11d3-844F-00600832ACB8}
+static const aafUID_t kTestPluginDescID3 = 
+{ 0x5dfb23, 0x7b5b, 0x11d3, { 0x84, 0x4f, 0x0, 0x60, 0x8, 0x32, 0xac, 0xb8 } };
+
+
 
 // Cross-platform utility to delete a file.
 static void RemoveTestFile(const wchar_t* pFileName)
@@ -162,10 +194,67 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 	checkResult(pDef->SetName(sName));
 	checkResult(pDef->SetDescription(sDescription));
- //   CAAFDefObject::AppendPluginDescriptor (IAAFPluginDescriptor * pPluginDescriptor)
- //   CAAFDefObject::PrependPluginDescriptor (IAAFPluginDescriptor * pPluginDescriptor)
 
 	checkResult(pDictionary->RegisterContainerDefinition(pContainerDef));
+
+	//
+	// Test GetAUID() using a type def
+	//
+	IAAFTypeDefIntSP pTypeDef;
+	checkResult (pDictionary->CreateInstance (&AUID_AAFTypeDefInt,
+											  IID_IAAFTypeDefInt,
+											  (IUnknown **)&pTypeDef));
+	checkResult (pTypeDef->Initialize ((aafUID_t*) &kTestTypeId,
+									   1,
+									   AAFFalse,
+									   L"Test Unsigned Byte"));
+
+	//
+	// test Append, Prepend, and enum plugin descriptor using same type def
+	//
+	IAAFPluginDescriptorSP pd1;
+	checkResult (pDictionary->CreateInstance (&AUID_AAFPluginDescriptor,
+											  IID_IAAFPluginDescriptor,
+											  (IUnknown **)&pd1));
+	checkResult (pd1->Init ((aafUID_t*) &kTestPluginDescID1,
+							L"PluginDesc1",
+							L"Plugin Descriptor 1 description"));
+	checkResult (pDictionary->RegisterPluginDescriptor (pd1));
+
+	IAAFPluginDescriptorSP pd2;
+	checkResult (pDictionary->CreateInstance (&AUID_AAFPluginDescriptor,
+											  IID_IAAFPluginDescriptor,
+											  (IUnknown **)&pd2));
+	checkResult (pd2->Init ((aafUID_t*) &kTestPluginDescID2,
+							L"PluginDesc2",
+							L"Plugin Descriptor 2 description"));
+	checkResult (pDictionary->RegisterPluginDescriptor (pd2));
+
+	IAAFPluginDescriptorSP pd3;
+	checkResult (pDictionary->CreateInstance (&AUID_AAFPluginDescriptor,
+											  IID_IAAFPluginDescriptor,
+											  (IUnknown **)&pd3));
+	checkResult (pd3->Init ((aafUID_t*) &kTestPluginDescID3,
+							L"PluginDesc3",
+							L"Plugin Descriptor 3 description"));
+	checkResult (pDictionary->RegisterPluginDescriptor (pd3));
+
+	IAAFDefObjectSP pDefObj;
+	checkResult(pTypeDef->QueryInterface (IID_IAAFDefObject,
+                                          (void **)&pDefObj));
+
+	// pd2 will eventually be second one
+	checkResult (pDefObj->AppendPluginDescriptor (pd2));
+	// pd3 will eventually be third one
+	checkResult (pDefObj->AppendPluginDescriptor (pd3));
+	// pd1 will be first one
+	checkResult (pDefObj->PrependPluginDescriptor (pd1));
+
+	IAAFTypeDefSP ptd;
+	checkResult(pTypeDef->QueryInterface (IID_IAAFTypeDef,
+                                          (void **)&ptd));
+	checkResult (pDictionary->RegisterType (ptd));
+
   }
   catch (HRESULT& rResult)
   {
@@ -226,12 +315,46 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 
 		checkResult(pDef->GetName (testString, sizeof(testString)));
 		checkExpression (wcscmp(testString, sName) == 0, AAFRESULT_TEST_FAILED);
- //   CAAFDefObject::GetNameBufLen (aafUInt32 *  pBufSize)
+
+		aafUInt32 nameLen;
+		checkResult (pDef->GetNameBufLen (&nameLen));
+		checkExpression (((wcslen (sName)+1) * sizeof (aafCharacter) == nameLen),
+						 AAFRESULT_TEST_FAILED);
+
 		checkResult(pDef->GetDescription (testString, sizeof(testString)));
 		checkExpression (wcscmp(testString, sDescription) == 0, AAFRESULT_TEST_FAILED);
-//    CAAFDefObject::GetDescriptionBufLen (aafUInt32 *  pBufSize)
- //   CAAFDefObject::GetAUID (aafUID_t *  pAuid)
-//    CAAFDefObject::EnumPluginDescriptors (IEnumAAFPluginDescriptors ** ppEnum)
+
+		checkResult (pDef->GetDescriptionBufLen (&nameLen));
+		checkExpression (((wcslen (sDescription)+1) * sizeof (aafCharacter) == nameLen),
+						 AAFRESULT_TEST_FAILED);
+
+		IAAFTypeDefSP pTypeDef;
+		checkResult (pDictionary->LookupType ((aafUID_t*) &kTestTypeId, &pTypeDef));
+
+		IAAFDefObjectSP pDefObj;
+		checkResult(pTypeDef->QueryInterface (IID_IAAFDefObject,
+											  (void **)&pDefObj));
+
+		aafUID_t id;
+		checkResult (pDefObj->GetAUID (&id));
+		checkExpression (0 != EqualAUID (&id, &kTestTypeId), AAFRESULT_TEST_FAILED);
+
+		IEnumAAFPluginDescriptorsSP epd;
+		checkResult (pDefObj->EnumPluginDescriptors (&epd));
+
+		IAAFPluginDescriptorSP pd;
+		// Check that plugin descriptors are entered in order.
+		checkResult (epd->NextOne (&pd));
+		checkResult (pd->GetAUID (&id));
+		checkExpression (0 != EqualAUID (&id, &kTestPluginDescID1), AAFRESULT_TEST_FAILED);
+
+		checkResult (epd->NextOne (&pd));
+		checkResult (pd->GetAUID (&id));
+		checkExpression (0 != EqualAUID (&id, &kTestPluginDescID2), AAFRESULT_TEST_FAILED);
+
+		checkResult (epd->NextOne (&pd));
+		checkResult (pd->GetAUID (&id));
+		checkExpression (0 != EqualAUID (&id, &kTestPluginDescID3), AAFRESULT_TEST_FAILED);
 	}
 	catch (HRESULT& rResult)
 	{
@@ -279,20 +402,6 @@ extern "C" HRESULT CAAFDefObject_test()
 	catch (...)
 	{
 		cerr << "CAAFDefObject_test...Caught general C++ exception!" << endl; 
-	}
-
-	// When all of the functionality of this class is tested, we can return success.
-	// When a method and its unit test have been implemented, remove it from the list.
-	if (SUCCEEDED(hr))
-	{
-		cout << "The following IAAFDefObject methods have not been tested:" << endl; 
-		cout << "     AppendPluginDescriptor" << endl; 
-		cout << "     PrependPluginDescriptor" << endl; 
-		cout << "     EnumPluginDescriptors" << endl; 
-		cout << "     GetNameBufLen" << endl; 
-		cout << "     GetDescriptionBufLen" << endl; 
-		cout << "     GetAUID" << endl; 
-		hr = AAFRESULT_TEST_PARTIAL_SUCCESS;
 	}
 
 	return hr;
