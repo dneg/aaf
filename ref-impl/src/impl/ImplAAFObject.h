@@ -34,7 +34,6 @@
 //
 // Forward declarations
 //
-class ImplEnumAAFProperties;
 class ImplAAFClassDef;
 class ImplAAFIdentification;
 class ImplAAFProperty;
@@ -42,6 +41,11 @@ class ImplAAFPropertyDef;
 class ImplAAFPropertyValue;
 class ImplPropertyCollection;
 class ImplAAFDictionary;
+
+template <class T> 
+class ImplAAFEnumerator;
+typedef ImplAAFEnumerator<ImplAAFProperty> ImplEnumAAFProperties;
+
 
 #include "AAFTypes.h"
 #include "OMStorable.h"
