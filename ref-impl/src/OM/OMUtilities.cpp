@@ -253,8 +253,7 @@ size_t stringSize(OMUInt32 i)
   PRECONDITION("Valid integer", i > 0);
 
   size_t result = 8;
-  int nibble;
-  while ((nibble = ((i & 0xf0000000) >> 28)) == 0) {
+  while (((i & 0xf0000000) >> 28) == 0) {
     ASSERT("Valid result", result != 0);
     result = result - 1;
     i = i << 4;
