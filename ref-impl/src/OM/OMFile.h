@@ -208,6 +208,9 @@ public:
   void close(void);
 
     // @cmember Retrieve the client root <c OMStorable> from this <c OMFile>.
+  OMStorable* clientRoot(void);
+
+    // @cmember Retrieve the root <c OMStorable> from this <c OMFile>.
   OMStorable* root(void);
 
   OMDictionary* dictionary(void) const;
