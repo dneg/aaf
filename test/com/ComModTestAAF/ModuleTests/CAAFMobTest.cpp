@@ -74,7 +74,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFMobSlot		*newSlot;
 	IAAFSegment		*seg;
 	IAAFSourceClip	*sclp;
-	aafInt32		testSlot;
 	aafRational_t	audioRate = { 44100, 1 };
 
 	// Create a Mob
@@ -241,7 +240,8 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 				hr = slot->GetSlotID(&trackID);
 				if (AAFRESULT_SUCCESS != hr)
 					return hr;
-				if (memcmp(slotName, slotNames[s], 10) != 0) 
+//				if (memcmp(slotName, slotNames[s], 10) != 0) 
+				if (wcscmp(slotName, slotNames[s]) != 0) 
 					return AAFRESULT_TEST_FAILED;
 			}
 		}
