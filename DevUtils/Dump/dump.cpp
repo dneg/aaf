@@ -212,21 +212,6 @@ const char* const propertiesStreamName = "properties";
 const char* const openArrayKeySymbol = "{";
 const char* const closeArrayKeySymbol = "}";
 
-// CLSID for AAFHeader 
-// Up to and including version 0.03
-// {B1A21383-1A7D-11D2-BF78-00104BC9156D}
-const CLSID OldCLSID_AAFHeader =
-  { 0xB1A21383,
-    0x1A7D, 0x11D2,
-  { 0xBF, 0x78, 0x00, 0x10, 0x4B, 0xC9, 0x15, 0x6D } };
-
-// Version 0.04 and up - SMPTE style stored class id
-//{06480000-0000-0000-060E-2B3401010104}
-const CLSID CLSID_AAFHeader =
-  { 0x06480000,
-    0x0000, 0x0000,
-  { 0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04 } };
-
 // The file kind for structured storage binary AAF files.
 //
 const CLSID aafFileKindAafSSBinary = 
@@ -493,7 +478,8 @@ static void convert(wchar_t* wcName, size_t length, const char* name);
 static void convert(char* cName, size_t length, const wchar_t* name);
 #endif
 static void convert(char* cName, size_t length, const char* name);
-#if defined (__sgi) || defined(_MAC) || defined(macintosh)
+#if defined (__sgi) || defined(_MAC) || defined(macintosh) \
+ || defined(__linux__)
 static void convert(char* cName, size_t length, const OMCharacter* name);
 #endif
 static void convertName(char* cName,
@@ -1061,7 +1047,8 @@ void convert(char* cName, size_t length, const char* name)
   }
 }
 
-#if defined (__sgi) || defined(_MAC) || defined(macintosh)
+#if defined (__sgi) || defined(_MAC) || defined(macintosh) \
+ || defined(__linux__)
 // For use when wchar_t and OMCharacter are incompatible.
 // e.g. when sizeof(wchar_t) != sizeof(OMCharacter)
 void convert(char* cName, size_t length, const OMCharacter* name)
