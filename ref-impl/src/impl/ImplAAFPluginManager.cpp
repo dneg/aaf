@@ -833,7 +833,7 @@ AAFRESULT ImplAAFPluginManager::UnregisterAllPlugins(void)
 
 // Internal to the toolkit functions
 AAFRESULT
-    ImplAAFPluginManager::GetFirstLoadedPlugin (aafTableIterate_t *iter, ImplAAFPluginDescriptor **ppDesc)
+    ImplAAFPluginManager::GetFirstLoadedPlugin (aafTableIterate_t *iter, ImplAAFPluginDef **ppDesc)
 {
 	aafBool		found;
 	AAFRESULT	status;
@@ -845,12 +845,12 @@ AAFRESULT
 	status = TableFirstEntry(_plugins, iter, &found);
 	if(!found)
 		return AAFRESULT_NO_MORE_OBJECTS; // AAFRESULT_BADINDEX ???
-	*ppDesc = (ImplAAFPluginDescriptor *)iter->valuePtr;
+	*ppDesc = (ImplAAFPluginDef *)iter->valuePtr;
 
 	return status;
 }
 AAFRESULT
-    ImplAAFPluginManager::GetNextLoadedPlugin (aafTableIterate_t *iter, ImplAAFPluginDescriptor **ppDesc)
+    ImplAAFPluginManager::GetNextLoadedPlugin (aafTableIterate_t *iter, ImplAAFPluginDef **ppDesc)
 {
 	aafBool		found;
 	AAFRESULT	status;
@@ -862,7 +862,7 @@ AAFRESULT
 	status = TableNextEntry(iter, &found);
 	if(!found)
 		return AAFRESULT_NO_MORE_OBJECTS; // AAFRESULT_BADINDEX ???
-	*ppDesc = (ImplAAFPluginDescriptor *)iter->valuePtr;
+	*ppDesc = (ImplAAFPluginDef *)iter->valuePtr;
 	return status;
 }
 
@@ -872,11 +872,11 @@ AAFRESULT
         IAAFDefObject	** ppPluginDef)
 {
 	IAAFPlugin				*plugin = NULL;
-	IAAFPluginDescriptor	*desc = NULL;
+	IAAFPluginDef			*desc = NULL;
 	IUnknown				*iUnk = NULL;
 	IAAFDictionary			*iDictionary = NULL;
 	aafUInt32				n, count;
-	aafUID_t				testID;
+	aafUID_t				testID, pluginID;
 	aafBool					found;
 
 	XPROTECT()
@@ -893,7 +893,9 @@ AAFRESULT
 			{
 				CHECK(plugin->GetIndexedDefinitionObject(n, iDictionary, ppPluginDef));
 				CHECK(plugin->CreateDescriptor(iDictionary, &desc));
-				CHECK((*ppPluginDef)->AppendPluginDef (desc));
+
+				CHECK((*ppPluginDef)->GetAUID(&pluginID));
+				CHECK(desc->SetDefinitionObjectID (pluginID));
 				CHECK(iDictionary->RegisterPluginDef(desc));
 
 				desc->Release();
