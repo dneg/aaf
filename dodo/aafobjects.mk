@@ -9,7 +9,6 @@
 # aaf object:
 AAFPERSISTENTOBJECTS = \
 	AAFAIFCData \
-	AAFDataDef \
 	AAFJPEGData \
 	AAFHTMLData \
 	AAFImageData \
@@ -29,7 +28,6 @@ AAFNONPERSISTENTOBJECTS = \
 	AAFRoot \
 	EnumAAFClassDefs \
 	EnumAAFCodecFlavours \
-	EnumAAFDataDefs \
 	EnumAAFDefs \
 	EnumAAFIdentifications \
 	EnumAAFObjects \
@@ -60,6 +58,7 @@ HUMAN_TYPED_IMPL = \
 	AAFContainerDef \
 	AAFContentStorage \
 	AAFControlPoint \
+	AAFDataDef \
 	AAFDefObject \
 	AAFDictionary \
 	AAFEdgecode \
@@ -139,6 +138,7 @@ HUMAN_TYPED_IMPL = \
 	EnumAAFComponents \
 	EnumAAFContainerDefs \
 	EnumAAFControlPoints \
+	EnumAAFDataDefs \
 	EnumAAFInterpolationDefs \
 	EnumAAFOperationDefs \
 	EnumAAFEssenceData \
