@@ -1,4 +1,8 @@
+
 PACKAGE = ComModAAF
+
+AAFBASE ?= ../../../..
+
 include $(AAFBASE)/build/defs.mk
 
 INCLUDES = -I.. -I. \

@@ -1,4 +1,7 @@
+
 PACKAGE = aafiid
+
+AAFBASE ?= ../..
 
 include $(AAFBASE)/build/defs.mk
 

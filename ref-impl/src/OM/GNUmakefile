@@ -1,6 +1,8 @@
 PACKAGE = ref-impl
 export PACKAGE
 
+AAFBASE ?= ../../..
+
 include $(AAFBASE)/build/defs.mk
 
 INCLUDES = -I. \

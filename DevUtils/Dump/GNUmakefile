@@ -1,6 +1,8 @@
 
 PACKAGE = DevUtils
 
+AAFBASE ?= ../..
+
 include $(AAFBASE)/build/defs.mk
 
 INCLUDES = -I../../ref-impl/include \

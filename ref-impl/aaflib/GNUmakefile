@@ -1,4 +1,7 @@
+
 PACKAGE = aaflib
+
+AAFBASE ?= ../..
 
 include $(AAFBASE)/build/defs.mk
 

@@ -1,8 +1,10 @@
 PACKAGE = dodoTool
 
-include ../../build/defs.mk
+AAFBASE ?= ../..
 
-INCLUDES = -I../../ref-impl/bld_cfg
+include $(AAFBASE)/build/defs.mk
+
+INCLUDES = -I$(AAFBASE)ref-impl/bld_cfg
 
 .PHONY : all
 all : dodo

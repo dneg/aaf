@@ -1,6 +1,8 @@
 
 PACKAGE = Utilities
 
+AAFBASE ?= ../..
+
 include $(AAFBASE)/build/defs.mk
 
 INCLUDES = -I../Include \

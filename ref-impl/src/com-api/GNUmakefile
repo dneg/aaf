@@ -1,5 +1,8 @@
+
 PACKAGE = com-api
 export PACKAGE
+
+AAFBASE ?= ../../..
 
 include $(AAFBASE)/build/defs.mk
 

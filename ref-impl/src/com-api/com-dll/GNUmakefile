@@ -1,4 +1,8 @@
+
 PACKAGE = com-dll
+
+AAFBASE ?= ../../../..
+
 include $(AAFBASE)/build/defs.mk
 
 INCLUDES = -I../../../include/ref-api \
