@@ -66,6 +66,17 @@ PLATFORM_CFLAGS =
 # _FILE_OFFSET_BITS   - determines which file system interface shall be used.
 PLATFORM_CFLAGS += -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
 
+# Platform specific compiler options
+#
+# When using glibc-2.1.2 defining _LARGEFILE_SOURCE (as libc documentation
+# suggests) is not enough to get fseeko() and ftello() declared. To have
+# fseeko/ftello we must request Single Unix Specification, version 2
+# definitions which is done by defining the macro _XOPEN_SOURCE having the
+# value of 500.
+# Note that for the later versions of the library, like glibc-2.2.2 for
+# example, _LARGEFILE_SOURCE will do the job.
+PLATFORM_CFLAGS += -D_XOPEN_SOURCE=500
+
 
 #------------------------------------------------------------------------------
 # Linker command and options
