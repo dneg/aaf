@@ -67,7 +67,6 @@ void OMDataStreamProperty::save(void) const
   if (!_exists) {
     p->create();
   }
-  p->_exists = true;
 }
 
   // @mfunc The number of objects contained within this
@@ -88,18 +87,8 @@ void OMDataStreamProperty::restore(size_t externalSize)
   TRACE("OMDataStreamProperty::restore");
 
   store()->restore(*this, externalSize);
-  open();
   setPresent();
-
-  // Temporary brute force solution to the Microsoft Structured
-  // Storage built in limit on the number of open storage elements
-  // (IStorages and IStreams) caused by use of a fixed size internal
-  // heap.
-  //
   _exists = true;
-  _stream->close();
-  delete _stream;
-  _stream = 0;
 }
 
   // @mfunc The size, in bytes, of the data in this
@@ -168,7 +157,6 @@ OMStoredStream* OMDataStreamProperty::stream(void) const
       p->open();
     } else {
       p->create();
-      p->_exists = true;
     }
   }
   ASSERT("Valid stream", _stream != 0);
@@ -181,7 +169,7 @@ void OMDataStreamProperty::open(void)
   PRECONDITION("Stream not already opened", _stream == 0);
 
   _stream = store()->openStoredStream(*this);
-
+  _exists = true;
   POSTCONDITION("Stream opened", _stream != 0);
 }
 
@@ -191,7 +179,7 @@ void OMDataStreamProperty::create(void)
   PRECONDITION("Stream not already created", _stream == 0);
 
   _stream = store()->createStoredStream(*this);
-
+  _exists = true;
   POSTCONDITION("Stream opened", _stream != 0);
 }
 
