@@ -41,6 +41,8 @@ public:
 
 	IEnumAAFPropertiesSP GetProperties();
 
+	IAAFClassDefSP GetDefinition();
+
 	inline operator IAAFObjectSP ()
 	{ return _spIaafObject; }
 

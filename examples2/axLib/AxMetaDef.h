@@ -320,6 +320,12 @@ public:
 	virtual ~AxTypeDefSet();
 
 	IAAFTypeDefSP GetElementType();
+	
+	// GetType() is not part of the IAAFTypeDef interface but
+	// matches the IAAFTypeDef{Fixed,Variable}Array interface.
+	// This makes it possible to use the GetType call in
+	// templated code.
+	IAAFTypeDefSP GetType();
 
 	IEnumAAFPropertyValuesSP GetElements( IAAFPropertyValueSP& );
 
@@ -338,8 +344,15 @@ public:
 	AxTypeDefObjRef( IAAFTypeDefObjectRefSP spIaafTypeDefObjRef );
 	virtual ~AxTypeDefObjRef();
 
-	virtual IUnknownSP GetObject( IAAFPropertyValueSP& spPropVal,
-			  					  const IID& iid );
+	IUnknownSP GetObject( IAAFPropertyValueSP& spPropVal,
+			      const IID& iid );
+
+	template <class Type>
+	IAAFSmartPointer<Type> GetObject(IAAFPropertyValueSP& spPropVal )
+        {
+	  IUnknownSP sp = GetObject( spPropVal, IID_IUnknown );
+	  return AxQueryInterface<IUnknown,Type>( sp );
+        }
 
 	IAAFClassDefSP GetObjectType();
 
@@ -453,13 +466,11 @@ public:
 	AxTypeDefExtEnum( IAAFTypeDefExtEnumSP spIaafTypeDefExtEnum );
 	virtual ~AxTypeDefExtEnum();
 
-	// this is not defined in the IDL, but is in the AAF spec?
-	//IAAFTypeDefSP GetElementType();
-
 	aafUInt32 CountElements();
 	AxString GetElementName( aafUInt32 index );
 	aafUID_t GetElementValue( aafUInt32 index );
 
+	AxString GetNameFromValue( IAAFPropertyValueSP spVal );
 
 private:
 	AxTypeDefExtEnum();
