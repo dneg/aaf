@@ -27,7 +27,7 @@ class ImplAAFEssenceSampleStream;
 class ImplAAFFileDescriptor;
 
 class ImplAAFLocator;
-
+class ImplAAFContainerDef;
 
 #ifndef __ImplAAFRoot_h__
 #include "ImplAAFRoot.h"
@@ -670,6 +670,11 @@ public:
   // Declare the module test method. The implementation of the will be be
   // in /test/ImplAAFEssenceAccessTest.cpp.
   static AAFRESULT test();
+
+public:
+	//Toolkit private functions
+	AAFRESULT MakeAAFContainerDef(ImplAAFContainerDef **result);
+	AAFRESULT MakeFileContainerDef(ImplAAFContainerDef **result);
 
 private:
 	aafUID_t			_codecID;
