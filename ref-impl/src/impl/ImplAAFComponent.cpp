@@ -47,7 +47,10 @@ AAFRESULT STDMETHODCALLTYPE
 	}
 	else
 	{
-		_length = *pLength;
+		if ( *pLength < 0 )
+			aafError = AAFRESULT_BAD_LENGTH;
+		else
+			_length = *pLength;
 	}
 	return aafError;
 }
@@ -145,10 +148,10 @@ AAFRESULT ImplAAFComponent::SetNewProps(
 	else
 	{
 		_dataDef = *pDataDef;
-		if ( length >= 0 )
-			_length	= length;
-		else
+		if ( length < 0 )
 			aafError = AAFRESULT_BAD_LENGTH;
+		else
+			_length	= length;
 	}
 		
 	return aafError;
