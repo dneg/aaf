@@ -234,7 +234,8 @@ class AxEssenceDescriptor : public AxObject {
 public:
 	AxEssenceDescriptor( IAAFEssenceDescriptorSP spIaafEssenceDescriptor );
 	~AxEssenceDescriptor();
-	aafUInt32 CountLocators();
+
+       aafUInt32 CountLocators();
 
 private:
 	AxEssenceDescriptor();
@@ -299,6 +300,14 @@ public:
 
 	aafUID_t GetCompression();
 
+	void GetStoredView( aafUInt32& StoredHeight, aafUInt32& StoredWidth);
+
+	void GetSampledView( aafUInt32& SampledHeight, aafUInt32& SampledWidth,
+			     aafUInt32& SampledXOffset, aafUInt32& SampledYOffset );
+	
+	void GetDisplayView( aafUInt32& DisplayedHeight, aafUInt32& DisplayedWidth,
+			     aafUInt32& DisplayedXOffset, aafUInt32& DisplayedYOffset );
+
 private:
 	AxDigitalImageDescriptor();
 	AxDigitalImageDescriptor( const AxDigitalImageDescriptor& );
@@ -318,6 +327,11 @@ public:
 	void SetHorizontalSubsampling( aafUInt32  HorizontalSubsampling );
 	void SetVerticalSubsampling( aafUInt32 VerticalSubsampling );
 	void SetColorRange( aafUInt32 ColorRange );
+
+	aafInt32  GetComponentWidth();
+	aafUInt32 GetHorizontalSubsampling();
+	aafUInt32 GetVerticalSubsampling();
+	aafUInt32 GetColorRange();
 
 private:
 	AxCDCIDescriptor();
