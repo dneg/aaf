@@ -183,4 +183,8 @@ typedef OMStoredObjectIdentification OMClassId;
 
 const OMClassId nullOMClassId = {0};
 
+// File signatures
+//
+typedef OMObjectIdentification OMFileSignature;
+
 #endif
