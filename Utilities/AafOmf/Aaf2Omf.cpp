@@ -735,7 +735,7 @@ void Aaf2Omf::ConvertSourceMob(IAAFSourceMob* pSourceMob,
 		aafUInt32			textSize = 0;
 		aafTapeCaseType_t	formFactor = kAAFTapeCaseNull;
 		aafTapeFormatType_t	tapeFormat = kAAFTapeFormatNull;
-		aafLength_t			tapeLength = 0;
+		aafUInt32			tapeLength = 0;
 		aafVideoSignalType_t videoSignal = kAAFVideoSignalNull;
 		
 		OMFError = OMF2::omfmTapeMobNew(OMFFileHdl, pMobName, pOMFSourceMob);
@@ -936,13 +936,13 @@ void Aaf2Omf::ConvertSourceMob(IAAFSourceMob* pSourceMob,
 		if (SUCCEEDED(pEssenceDesc->QueryInterface(IID_IAAFCDCIDescriptor, (void **)&pCDCIDesc)))
 		{
 			aafUInt32				storedWidth, storedHeight, lineMapSize, n;
-			aafUInt32				dispWidth, dispHeight, sampWidth, sampHeight;
-			aafInt32				sampX, sampY, dispX, dispY, align;
+			aafUInt32				dispWidth, dispHeight, sampWidth, sampHeight, align;
+			aafInt32				sampX, sampY, dispX, dispY;
 			aafAlphaTransparency_t	alphaTrans;
 			aafFrameLayout_t		layout;
 			OMF2::omfObject_t		mediaDescriptor;
-			aafRational_t			gamma, aspect;
-			OMF2::omfRational_t		OMFGamma, OMFAspect;
+			aafRational_t			aspect;
+			OMF2::omfRational_t		OMFAspect;
 			aafUID_t				compressionID;
 			char					*omfclassID;
 			char					*omfCompression;
@@ -991,12 +991,12 @@ void Aaf2Omf::ConvertSourceMob(IAAFSourceMob* pSourceMob,
 			rc = pDIDDDesc->GetFrameLayout(&layout);
 			OMFError = OMF2::omfsWriteLayoutType(OMFFileHdl, mediaDescriptor, OMF2::OMDIDDFrameLayout, (OMF2::omfFrameLayout_t)(layout+1));	// Toolkit used incorrect layout
 
-			if(pDIDDDesc->GetGamma(&gamma) == AAFRESULT_SUCCESS)
-			{
-				OMFGamma.numerator = gamma.numerator;
-				OMFGamma.denominator = gamma.denominator;
-				OMFError = OMF2::omfsWriteRational(OMFFileHdl, mediaDescriptor, OMF2::OMDIDDGamma, OMFGamma);
-			}
+//!!!			if(pDIDDDesc->GetGamma(&gamma) == AAFRESULT_SUCCESS)
+//			{
+//				OMFGamma.numerator = gamma.numerator;
+//				OMFGamma.denominator = gamma.denominator;
+//				OMFError = OMF2::omfsWriteRational(OMFFileHdl, mediaDescriptor, OMF2::OMDIDDGamma, OMFGamma);
+//			}
 
 			rc = pDIDDDesc->GetVideoLineMapSize(&lineMapSize);
 			lineMap = new aafInt32[lineMapSize];
