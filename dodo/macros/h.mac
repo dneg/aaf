@@ -237,6 +237,12 @@ public:
   .this-module (aafBool doInit = AAFTrue);
   virtual ~.this-module ();
 
+
+  // Reference Counting interface
+  virtual aafUInt32 AcquireRef();
+  virtual aafUInt32 ReleaseRef();
+  virtual aafUInt32 RefCount();
+
 public:\
 #endm
 
@@ -872,7 +878,11 @@ protected:
 private:
 
   Impl.this-module * _rep;
-
+  
+  // The number of outstanding references to this instance. ReleaseRef()
+  // will decrement this value and delete this instance when the value
+  // goes to 0.
+  aafUInt32 _refCount;
 };
 
 #endif // ! __.this-module_h__
