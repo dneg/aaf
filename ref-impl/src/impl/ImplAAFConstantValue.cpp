@@ -26,12 +26,8 @@
 #include "ImplAAFParameter.h"
 #endif
 
-
-
-
-
-
 #include "AAFStoredObjectIDs.h"
+#include "AAFPropertyIDs.h"
 
 #ifndef __ImplAAFConstValue_h__
 #include "ImplAAFConstValue.h"
@@ -42,7 +38,10 @@
 
 
 ImplAAFConstValue::ImplAAFConstValue ()
-{}
+: _value(			PID_ConstantValue_Value,			"Value")
+{
+	_persistentProperties.put(_value.address());
+}
 
 
 ImplAAFConstValue::~ImplAAFConstValue ()
@@ -53,30 +52,49 @@ ImplAAFConstValue::~ImplAAFConstValue ()
 /****/
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFConstValue::GetValue (
-      aafUInt32  /*valueSize*/,
-      aafDataBuffer_t  /*pValue*/,
-      aafUInt32*  /*bytesRead*/)
+      aafUInt32  valueSize,
+      aafDataBuffer_t  pValue,
+      aafUInt32*  bytesRead)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	if(pValue == NULL || bytesRead == NULL)
+		return(AAFRESULT_NULL_PARAM);
+
+	if (_value.size() > valueSize)
+	  return AAFRESULT_SMALLBUF;
+
+	_value.copyToBuffer(pValue, valueSize);
+	*bytesRead  = _value.size();
+
+	return(AAFRESULT_SUCCESS); 
 }
 
 
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFConstValue::GetValueBufLen (
-      aafUInt32 *  /*pLen*/)
+      aafUInt32 *pLen)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	if(pLen == NULL)
+		return(AAFRESULT_NULL_PARAM);
+
+	*pLen = _value.size();
+
+	return(AAFRESULT_SUCCESS); 
 }
 
 
 /****/
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFConstValue::SetValue (
-      aafUInt32  /*valueSize*/,
-      aafDataBuffer_t  /*pValue*/)
+      aafUInt32  valueSize,
+      aafDataBuffer_t  pValue)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	if(pValue == NULL)
+		return(AAFRESULT_NULL_PARAM);
+
+	_value.setValue(pValue, valueSize);
+
+	return(AAFRESULT_SUCCESS); 
 }
 
 
