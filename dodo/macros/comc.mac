@@ -1562,3 +1562,146 @@ I\
 #startm AD_EXPORT_THIS_MODULE 00
 .this-module\
 #endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Starts a class definition
+#c
+#c Argument1: Abstract or Concrete
+#c Argument2: Transient or StoredObject
+#c            special cases:CommonBase and StoredObjectBase
+#c
+#c Note: Concrete-StoredObject means Persistent. In other words
+#c Concrete-StoredObject objects (and derived objects) are the 
+#c only types of objects that should ever be found in an AAF
+#c file.
+#c
+#c Valid combiniations:          examples
+#c -----------------------       ---------------
+#c   Abstract-CommonBase         AAFRoot 
+#c   Abstract-Transient          ????
+#c   Abstract-StoredObjectBase   AAFObject
+#c   Abstract-StoredObject       AAFSourceReference, AAFComponent, ...
+#c   Concrete-Transient          EnumAAFMobs, EnumAAFMobSlots, ...
+#c   Concrete-StoredObject       AAFSegment, AAFSourceClip, ...
+#c
+#startm AD_XCLASS_BEGIN 02
+.begin-%01-%02
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Ends a class definition
+#c
+#c Argument1: Abstract or Concrete
+#c Argument2: Transient or StoredObject
+#c            special cases:CommonBase and StoredObjectBase
+#c
+#c Note: Concrete-StoredObject means Persistent. In other words
+#c Concrete-StoredObject objects (and derived objects) are the 
+#c only types of objects that should ever be found in an AAF
+#c file.
+#c
+#c Valid combiniations:          examples
+#c -----------------------       ---------------
+#c   Abstract-CommonBase         AAFRoot 
+#c   Abstract-Transient          ????
+#c   Abstract-StoredObjectBase   AAFObject
+#c   Abstract-StoredObject       AAFSourceReference, AAFComponent, ...
+#c   Concrete-Transient          EnumAAFMobs, EnumAAFMobSlots, ...
+#c   Concrete-StoredObject       AAFSegment, AAFSourceClip, ...
+#c
+#startm AD_XCLASS_END 02
+.end-%01-%02
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c The following macros implement all of the allowable
+#c combinations of the AD_XCLASS_BEGIN and AD_XCLASS_END
+#c
+
+
+#ccccccccccccccccccccccccccc
+#c Abstract-CommonBase
+#c Special case for the common base class for all AAF objects,
+#c Transient and StoredObject classes.
+#c (first version defined backwords compatibility)
+
+#startm .begin-Abstract-CommonBase 00
+AD_ROOT_CLASS_BEGIN\
+#endm
+
+#startm .end-Abstract-CommonBase 00
+AD_ROOT_CLASS_END\
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c Abstract-StoredObjectBase
+#c Special case for the base class for all AAF stored objects
+#c (first version defined backwords compatibility)
+
+#startm .begin-Abstract-StoredObjectBase 00
+AD_CLASS_BEGIN\
+#endm
+
+#startm .end-Abstract-StoredObjectBase 00
+AD_CLASS_END\
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c Abstract-Transient
+#c (first version defined backwords compatibility)
+
+#startm .begin-Abstract-Transient 00
+AD_CLASS_BEGIN\
+#endm
+
+#startm .end-Abstract-Transient 00
+AD_CLASS_END\
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c Abstract-StoredObject
+#c (first version defined backwords compatibility)
+
+#startm .begin-Abstract-StoredObject 00
+AD_CLASS_BEGIN\
+#endm
+
+#startm .end-Abstract-StoredObject 00
+AD_CLASS_END\
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c Concrete-Transient
+#c (first version defined backwords compatibility)
+
+#startm .begin-Concrete-Transient 00
+AD_CLASS_BEGIN\
+#endm
+
+#startm .end-Concrete-Transient 00
+AD_CLASS_END\
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c Concrete-StoredObject
+#c Note: These are the persistent classes.
+#c (first version defined backwords compatibility)
+
+#startm .begin-Concrete-StoredObject 00
+AD_CLASS_BEGIN\
+#endm
+
+#startm .end-Concrete-StoredObject 00
+AD_CLASS_END\
+#endm
