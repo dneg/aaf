@@ -70,8 +70,14 @@ checkDirectories Ä
 	# Create build directories so that CodeWarrior will not
 	# produce any warnings about missing access paths when a 
 	# project is opened.
+	if "" == "`exists -d {aaf}AAFMacSDK:bin:aafext:`"
+		NewFolder "{aaf}AAFMacSDK:bin:aafext:"
+	end
 	if "" == "`exists -d {aaf}AAFMacSDK:bin:debug:`"
 		NewFolder "{aaf}AAFMacSDK:bin:debug:"
+	end
+	if "" == "`exists -d {aaf}AAFMacSDK:bin:debug:aafext:`"
+		NewFolder "{aaf}AAFMacSDK:bin:debug:aafext:"
 	end
 	if "" == "`exists -d {aaf}AAFMacSDK:lib:`"
 		NewFolder "{aaf}AAFMacSDK:lib:"
