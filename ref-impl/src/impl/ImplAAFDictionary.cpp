@@ -165,10 +165,10 @@ ImplAAFDictionary::~ImplAAFDictionary ()
 {
   size_t i;
   // Release the _codecDefinitions
-  size_t size = _codecDefinitions.getSize();
-  for (i = 0; i < size; i++)
+	OMStrongReferenceSetIterator<ImplAAFCodecDef>codecDefinitions(_codecDefinitions);
+	while(++codecDefinitions)
 	{
-		ImplAAFCodecDef *pCodec = _codecDefinitions.setValueAt(0, i);
+		ImplAAFCodecDef *pCodec = codecDefinitions.setValue(0);
 		if (pCodec)
 		{
 		  pCodec->ReleaseReference();
@@ -187,10 +187,10 @@ ImplAAFDictionary::~ImplAAFDictionary ()
 		}
 	}
 
-	size_t typeDefSize = _typeDefinitions.getSize();
-	for (i = 0; i < typeDefSize; i++)
+	OMStrongReferenceSetIterator<ImplAAFTypeDef>typeDefinitions(_typeDefinitions);
+	while(++typeDefinitions)
 	{
-		ImplAAFTypeDef *pType = _typeDefinitions.setValueAt(0, i);
+		ImplAAFTypeDef *pType = typeDefinitions.setValue(0);
 		if (pType)
 		{
 		  pType->ReleaseReference();
@@ -198,17 +198,18 @@ ImplAAFDictionary::~ImplAAFDictionary ()
 		}
 	}
 
-  size_t classDefSize = _classDefinitions.getSize();
-  for (i = 0; i < classDefSize; i++)
+	OMStrongReferenceSetIterator<ImplAAFClassDef>classDefinitions(_classDefinitions);
+	while(++classDefinitions)
 	{
-	  ImplAAFClassDef *pClass = _classDefinitions.setValueAt(0, i);
-	  if (pClass)
+		ImplAAFClassDef *pClass = classDefinitions.setValue(0);
+		if (pClass)
 		{
 		  pClass->ReleaseReference();
 		  pClass = 0;
 		}
 	}
-  size_t opsDefSize = _operationDefinitions.getSize();
+
+	size_t opsDefSize = _operationDefinitions.getSize();
   for (i = 0; i < opsDefSize; i++)
 	{
 	  ImplAAFOperationDef *pOps = _operationDefinitions.setValueAt(0, i);
@@ -719,7 +720,11 @@ AAFRESULT STDMETHODCALLTYPE
 	
   XPROTECT()
 	{
-	  CHECK(theEnum->SetEnumStrongProperty(this, &_classDefinitions));
+		OMStrongReferenceSetIterator<ImplAAFClassDef>* iter = 
+			new OMStrongReferenceSetIterator<ImplAAFClassDef>(_classDefinitions);
+		if(iter == 0)
+			RAISE(AAFRESULT_NOMEMORY);
+		CHECK(theEnum->SetIterator(this, iter));
 	  *ppEnum = theEnum;
 	}
   XEXCEPT
@@ -881,6 +886,7 @@ const aafUID_t * ImplAAFDictionary::sAxiomaticTypeGuids[] =
   & kAAFTypeID_VersionType,
   & kAAFTypeID_RGBAComponent,
   & kAAFTypeID_MobID,
+  & kAAFTypeID_DataValue,
  
   & kAAFTypeID_ClassDefinitionStrongReference,
   & kAAFTypeID_ClassDefinitionStrongReferenceSet,
@@ -1051,7 +1057,11 @@ AAFRESULT STDMETHODCALLTYPE
 	
 	XPROTECT()
 	{
-		CHECK(theEnum->SetEnumStrongProperty(this, &_typeDefinitions));
+		OMStrongReferenceSetIterator<ImplAAFTypeDef>* iter = 
+			new OMStrongReferenceSetIterator<ImplAAFTypeDef>(_typeDefinitions);
+		if(iter == 0)
+			RAISE(AAFRESULT_NOMEMORY);
+		CHECK(theEnum->SetIterator(this, iter));
 		*ppEnum = theEnum;
 	}
 	XEXCEPT
@@ -1485,29 +1495,9 @@ AAFRESULT
   if(pNumCodecDefs == NULL)
     return AAFRESULT_NULL_PARAM;
   
-  _codecDefinitions.getSize(siz);
+  siz = _codecDefinitions.count();
   
   *pNumCodecDefs = siz;
-  return AAFRESULT_SUCCESS;
-}
-
-AAFRESULT
-    ImplAAFDictionary::GetNthCodecDef (aafInt32 index, ImplAAFCodecDef **ppPluggableDefs)
-{
-  if (NULL == ppPluggableDefs)
-    return AAFRESULT_NULL_PARAM;
-
-  ImplAAFCodecDef *obj = NULL;
-  _codecDefinitions.getValueAt(obj, index);
-  *ppPluggableDefs = obj;
-	
-  // trr - We are returning a copy of pointer stored in _mobs so we need
-  // to bump its reference count.
-  if (obj)
-    obj->AcquireReference();
-  else
-    return AAFRESULT_NO_MORE_OBJECTS;
-
   return AAFRESULT_SUCCESS;
 }
 
@@ -1515,44 +1505,52 @@ AAFRESULT ImplAAFDictionary::LookupCodecDef
   (const aafUID_t & defID,
    ImplAAFCodecDef **result)
 {
-	ImplAAFCodecDef				*codec = NULL;
+	ImplEnumAAFCodecDefs		*codecEnum = NULL;
+	ImplAAFCodecDef				*codecDef = NULL;
 	aafBool						defFound;
+	AAFRESULT					status;
 	aafUID_t					testAUID;
-	aafUInt32					n, numCodecs;
 
 	XPROTECT()
 	{
-		*result = NULL;
-		CHECK(GetNumCodecDefs(&numCodecs));
+		CHECK(GetCodecDefs (&codecEnum));
+		status = codecEnum->NextOne (&codecDef);
 		defFound = kAAFFalse;
-		for(n = 0; n < numCodecs && !defFound; n++)
+		while(status == AAFRESULT_SUCCESS && !defFound)
 		{
-			CHECK(GetNthCodecDef (n, &codec));
-			CHECK(codec->GetAUID (&testAUID));
+			CHECK(codecDef->GetAUID (&testAUID));
 			if(EqualAUID(&defID, &testAUID))
 			{
 				defFound = kAAFTrue;
-				*result = codec;
-				codec->AcquireReference();
+				*result = codecDef;
+				codecDef->AcquireReference();
 				break;
 			}
-			codec->ReleaseReference();
-			codec = NULL;
+			codecDef->ReleaseReference();
+			codecDef = NULL;
+			status = codecEnum->NextOne (&codecDef);
 		}
-		if(codec != NULL)
+		if(codecDef != NULL)
 		{
-			codec->ReleaseReference();
-			codec = NULL;
+			codecDef->ReleaseReference();
+			codecDef = NULL;
 		}
+		codecEnum->ReleaseReference();
+		codecEnum = NULL;
 		if(!defFound)
 			 RAISE(AAFRESULT_NO_MORE_OBJECTS);
 	}
 	XEXCEPT
 	{
-		if(codec != NULL)
+		if(codecEnum != NULL)
 		  {
-			codec->ReleaseReference();
-			codec = 0;
+			codecEnum->ReleaseReference();
+			codecEnum = 0;
+		  }
+		if(codecDef != NULL)
+		  {
+			codecDef->ReleaseReference();
+			codecDef = 0;
 		  }
 	}
 	XEND
@@ -1573,7 +1571,11 @@ AAFRESULT STDMETHODCALLTYPE
 	
 	XPROTECT()
 	{
-		CHECK(theEnum->SetEnumStrongProperty(this, &_codecDefinitions));
+		OMStrongReferenceSetIterator<ImplAAFCodecDef>* iter = 
+			new OMStrongReferenceSetIterator<ImplAAFCodecDef>(_codecDefinitions);
+		if(iter == 0)
+			RAISE(AAFRESULT_NOMEMORY);
+		CHECK(theEnum->SetIterator(this, iter));
 		*ppEnum = theEnum;
 	}
 	XEXCEPT
