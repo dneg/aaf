@@ -21,8 +21,8 @@ AAFNONPERSISTENTOBJECTS="\
 AAFCOMINTERFACESONLY="\
 	AAFEndian \
 	AAFSearchSource \
-	AAFEssenceMultiAccess \
-	AAFEssenceRawAccess "
+	AAFEssenceMultiAccess "
+
 
 # These are the impl files that are typed by humans.  Be sure to
 # remove them from the other list.  As you check each one in, just add
@@ -170,11 +170,14 @@ AUTO_GEN_IMPL="\
 
 PLUGIN_OBJECTS="\
 	AAFPlugin \
+	AAFClassExtension \
 	AAFEssenceStream \
 	AAFEssenceDataStream \
 	AAFEssenceCodec \
+	AAFMultiEssenceCodec \
 	AAFEssenceContainer \
 	AAFInterpolator "
+
 
 # objects in PLUGIN_OBJECTS are NOT built into the main interface IDL
 #---------------------------------------------
