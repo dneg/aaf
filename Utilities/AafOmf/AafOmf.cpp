@@ -183,7 +183,7 @@ AAFRESULT aafMobIDFromMajorMinor(
 //		Allocates memory and intializes the global variables
 //
 // ============================================================================
-static HRESULT InitGlobalVars( void )
+HRESULT InitGlobalVars( void )
 {
 	gpGlobals = new AafOmfGlobals;
 	if (gpGlobals == NULL)
@@ -234,7 +234,8 @@ static void Usage( void )
 	printf("\n*******************\n\n");
 	printf("%s : OMF/AAF file conversion Version 0.01.00\n\n", gpGlobals->pProgramName);
 	printf("Usage: \n");
-	printf("%s [-v] [-s] [-p logfile] [-d deffile] [-t tocfile] <infile> [outfile]\n\n", gpGlobals->pProgramName);
+//	printf("%s [-v] [-s] [-p logfile] [-d deffile] [-t tocfile] <infile> [outfile]\n\n", gpGlobals->pProgramName);
+	printf("%s [-v] [-s] [-nr] [-OMF] <infile> [outfile]\n\n", gpGlobals->pProgramName);
 	printf("-v         = Verbose - give progress report (optional)\n" );
 	printf("-s         = Straight conversion. Do NOT discard unnecessary objects (optional)\n");
 	printf("-nr        = DO NOT replace Output file. If Output file is present, give an error (optional)!!\n");
