@@ -139,6 +139,17 @@ DECLARE_INTERFACE_(I.this-module, IUnknown)
 
 #ccccccccccccccccccccccccccc
 #c
+#c Starts a class definition
+#c
+#c Arguments: none
+#c
+#startm AD_COM_EXT_CLASS_BEGIN 01
+AD_CLASS_BEGIN\
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
 #c Starts a class definition with no parent class
 #c
 #c Arguments: none
@@ -665,6 +676,16 @@ DEFINE_GUID(CLSID_.this-module, 0x%01, 0x%02, 0x%03, 0x%04, 0x%05, 0x%06, 0x%07,
 
 #ccccccccccccccccccccccccccc
 #c
+#c Specifies a method in a separate COM interface.
+#c
+#c Argument: method declaration
+#c
+#startm AD_COM_METH 01
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
 #c Inserts declaration for a constructor which takes one argument.
 #c Constructor name is assumed to be .this-module.
 #c
@@ -867,4 +888,14 @@ I\
 
 #startm .objOut-adornment 00
 I\
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Hack to quote the .this-module macro and keep it out of export
+#c files.  Do not define this macro in exp.mac!!!
+#c
+#startm AD_EXPORT_THIS_MODULE 00
+.this-module\
 #endm
