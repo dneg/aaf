@@ -313,6 +313,11 @@ AxHrMap::AxHrMap()
 	MAP_ADD( STG_E_FILEALREADYEXISTS );
 	MAP_ADD( STG_E_PATHNOTFOUND );
 
+	// Don't know the macro definition for 0x80030111. The MSVC++ Error Lookup tool 
+	// was used to translate it.  It is a structured storage error generated when
+	// the SS file exceeds 2GB when writting large amounts of essence data.
+	_map[ 0x80030111 ] = L"The compound file is too large for the current implementation.";
+
 #undef MAP_ADD
 }
 

@@ -60,7 +60,9 @@ void AxFile::OpenNewModify( const AxString& name,
 {
 	IAAFFileSP spIaafFile;
 
-	CHECK_HRESULT( AAFFileOpenNewModify( name.c_str(), mode,
+	const wchar_t* cname = name.c_str();
+
+	CHECK_HRESULT( AAFFileOpenNewModify( cname, mode,
 					     const_cast<aafProductIdentification_t*>( ident.getProductId() ),
 					     &spIaafFile ) );
 

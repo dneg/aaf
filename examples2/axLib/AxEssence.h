@@ -46,6 +46,13 @@ private:
 
 class AxEssenceAccess : public AxEssenceMultiAccess {
 public:
+
+	struct WriteResult {
+		HRESULT hr;
+		aafUInt32 samplesWritten;
+		aafUInt32 bytesWritten;
+	};
+
 	AxEssenceAccess( IAAFEssenceAccessSP& spIaafEssenceAccess );
 	~AxEssenceAccess();
 
@@ -56,9 +63,9 @@ public:
 	aafLength_t CountSamples( IAAFDataDefSP spDataDef );
 		
 	// pair<samplesWritten, bytesWritten>
-	pair<aafUInt32,aafUInt32> WriteSamples( aafUInt32 nSamples,
-						aafUInt32 bufLength,
-						aafDataBuffer_t buffer );
+	WriteResult WriteSamples( aafUInt32 nSamples,
+					  		  aafUInt32 bufLength,
+							  aafDataBuffer_t buffer );
 
 	void CompleteWrite();
 
@@ -78,12 +85,35 @@ public:
 	AxLocator( IAAFLocatorSP& spIaafLocator );
 	~AxLocator();
 
+	void SetPath( const AxString& path );
+
+	inline operator IAAFLocatorSP ()
+	{ return _spIaafLocator; }
+
 private:
 	AxLocator();
 	AxLocator( const AxLocator& );
 	AxLocator& operator=( const AxLocator& );
 	
 	IAAFLocatorSP _spIaafLocator;
+};
+
+
+//=---------------------------------------------------------------------=
+
+class AxNetworkLocator : public AxLocator {
+public:
+	AxNetworkLocator( IAAFNetworkLocatorSP& spIaafNetworkLocator );
+	~AxNetworkLocator();
+
+	void Initialize();
+
+private:
+	AxNetworkLocator();
+	AxNetworkLocator( const AxNetworkLocator& );
+	AxNetworkLocator& operator=( const AxNetworkLocator& );
+	
+	IAAFNetworkLocatorSP _spIaafNetworkLocator;
 };
 
 //=---------------------------------------------------------------------=
@@ -113,7 +143,7 @@ public:
 	bool IsSoundKind();
 	bool IsPictureKind();
 		
-	operator IAAFDataDefSP ()
+	inline operator IAAFDataDefSP ()
 	{ return _spIaafDataDef; }
 
 private:
@@ -141,7 +171,7 @@ public:
 	void SetNumberInputs( aafInt32 );
 	void SetBypass( aafUInt32 );
 	
-	operator IAAFOperationDefSP ()
+	inline operator IAAFOperationDefSP ()
 	{ return _spIaafOperationDef; }
 
 private:
@@ -269,7 +299,7 @@ public:
 								const_cast<FormatType*>(&value)) );
 	}
 
-	operator IAAFEssenceFormatSP ()
+	inline operator IAAFEssenceFormatSP ()
 	{ return _spIaafEssenceFormat; }
 
 private:

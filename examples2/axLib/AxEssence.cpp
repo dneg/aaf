@@ -18,6 +18,8 @@
 
 #include "AxEssence.h"
 
+#include <AAFResult.h>
+
 AxEssenceMultiAccess::AxEssenceMultiAccess( IAAFEssenceMultiAccessSP& sp )
 :	_spIaafEssenceMultiAccess( sp )
 {}
@@ -59,17 +61,23 @@ aafLength_t AxEssenceAccess::CountSamples( IAAFDataDefSP spDataDef )
 	return count;
 }
 	
-pair<aafUInt32,aafUInt32> AxEssenceAccess::WriteSamples( aafUInt32 nSamples,
-							 aafUInt32 bufLength,
-							 aafDataBuffer_t  buffer )
+AxEssenceAccess::WriteResult AxEssenceAccess::WriteSamples( aafUInt32 nSamples,
+													        aafUInt32 bufLength,
+							                                aafDataBuffer_t  buffer )
 {
-	pair<aafUInt32,aafUInt32> ret;
+	WriteResult ret = { AAFRESULT_SUCCESS, 0, 0 };
 
-	CHECK_HRESULT( _spIaafEssenceAccess->WriteSamples( nSamples,
-							   bufLength,
-							   buffer,
-							   &ret.first,
-							   &ret.second) );
+	ret.hr = _spIaafEssenceAccess->WriteSamples( nSamples,
+								   bufLength,
+								   buffer,
+								   &ret.samplesWritten,
+							       &ret.bytesWritten );
+
+	// We permit AAFRESULT_EOF.  Any other error throws and exceptions.
+	if ( ret.hr != AAFRESULT_EOF ) {
+		CHECK_HRESULT( ret.hr );
+	}
+
 	return ret;
 }
 
@@ -88,6 +96,27 @@ AxLocator::AxLocator( IAAFLocatorSP& spIaafLocator )
 
 AxLocator::~AxLocator()
 {}
+
+void AxLocator::SetPath( const AxString& path )
+{
+	CHECK_HRESULT( _spIaafLocator->SetPath( path.c_str() ) );
+}
+
+//=---------------------------------------------------------------------=
+
+AxNetworkLocator::AxNetworkLocator( IAAFNetworkLocatorSP& spIaafNetworkLocator )
+:	AxLocator( AxQueryInterface<IAAFNetworkLocator, IAAFLocator>(
+			   spIaafNetworkLocator, IID_IAAFLocator ) ),
+	_spIaafNetworkLocator( spIaafNetworkLocator )
+{}
+
+AxNetworkLocator::~AxNetworkLocator()
+{}
+
+void AxNetworkLocator::Initialize()
+{
+	CHECK_HRESULT( _spIaafNetworkLocator->Initialize() );
+}
 
 //=---------------------------------------------------------------------=
 
