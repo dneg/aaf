@@ -21,11 +21,21 @@
 
 
 
+
 // private key data for object info array. NOTE: This data is declared global to cause the
 // least amount of impact to other AAF source code. This is safe since there is only
 // a single CAAFInprocServer per dll.
 static AAFComObjectInfo_t **g_ppObjectInfoKey = NULL;
 static size_t g_objectCount = 0;
+
+static const char * g_EmptyString = "";
+
+
+// Implemented for each platform to get platform specific path information.
+static HRESULT AAFGetLibraryInfo(HINSTANCE hInstance, char **pServerPath, char **pServerDirectory);
+
+
+
 
 // Compare proc for sort and search.
 static int CompareObjectInfo(const AAFComObjectInfo_t **elem1,
@@ -55,6 +65,11 @@ static int CompareObjectInfo(const AAFComObjectInfo_t **elem1,
 }
 
 
+//
+//
+//
+
+
 
 CAAFInProcServer::CAAFInProcServer() :
   CAAFServer(),
@@ -67,10 +82,23 @@ CAAFInProcServer::~CAAFInProcServer()
 {
   if (NULL != g_ppObjectInfoKey)
   {
-    CoTaskMemFree(g_ppObjectInfoKey);
+    delete [] g_ppObjectInfoKey;
     g_ppObjectInfoKey = NULL;
   }
+
+	if (_serverPath && _serverPath !=  g_EmptyString)
+	{
+		delete [] _serverPath;
+		_serverPath = NULL;
+	}
+
+	if (_serverDirectory && _serverDirectory !=  g_EmptyString)
+	{
+		delete [] _serverDirectory;
+		_serverDirectory = NULL;
+	}
 }
+
 
 HRESULT CAAFInProcServer::Init
 (
@@ -81,7 +109,18 @@ HRESULT CAAFInProcServer::Init
   _pObjectInfo = pObjectInfo;
   _hInstance = hInstance;
 
-  
+	// Initialize the platform dependent file path information.
+	HRESULT rc = AAFGetLibraryInfo(hInstance, &_serverPath, &_serverDirectory);
+	if (S_OK != rc)
+	{ // ignore real errors for now...
+		//
+		//
+		// Set reasonable defaults:
+		_serverPath = const_cast<char *>(g_EmptyString);
+		_serverDirectory = const_cast<char *>(g_EmptyString);
+	}
+
+
   // Compute the size of the table.
   size_t i = 0;
   while (pObjectInfo[i].pCLSID)
@@ -90,7 +129,7 @@ HRESULT CAAFInProcServer::Init
 
 
   // Allocate the key table to the object info table.
-  g_ppObjectInfoKey = (AAFComObjectInfo_t **)CoTaskMemAlloc(g_objectCount * sizeof(AAFComObjectInfo_t *));
+  g_ppObjectInfoKey = new AAFComObjectInfo_t* [g_objectCount];
   if (NULL == g_ppObjectInfoKey)
     return E_OUTOFMEMORY;
 
@@ -574,3 +613,78 @@ HRESULT CAAFInProcServer::GetClassObjectID(ULONG index, CLSID *pClassID)
 	return S_OK;
 }
 
+// Platform dependent file system information needed by the reference
+// implementation.
+const char* CAAFInProcServer::GetServerPath() const
+{
+	return _serverPath;
+}
+const char* CAAFInProcServer::GetServerDirectory() const
+{
+	return _serverDirectory;
+}
+
+//
+// AAFGetLibraryInfo()
+// Implemented for each platform to get platform specific path information.
+//
+#if defined(WIN32) || defined(_WIN32)
+
+HRESULT AAFGetLibraryInfo(HINSTANCE hInstance, char **pServerPath, char **pServerDirectory)
+{
+	HRESULT rc = S_OK;
+	char path[MAX_PATH];
+	int pathLen = 0;
+	char *pDirSeparator = NULL;
+
+
+	if (NULL == hInstance || NULL == pServerPath || NULL == pServerDirectory)
+		return E_INVALIDARG;
+
+	pathLen = ::GetModuleFileNameA((HMODULE)hInstance, path, MAX_PATH);
+	if (0 == pathLen)
+	{
+		rc = HRESULT_FROM_WIN32(GetLastError());
+	}
+	else
+	{
+		*pServerPath = new char[pathLen + 1];
+		if (NULL == *pServerPath)
+			return E_OUTOFMEMORY;
+		strcpy(*pServerPath, path);
+
+		pDirSeparator = strrchr(path, '\\');
+		assert(pDirSeparator);
+		
+		// Terminate the directory string.
+		*pDirSeparator = 0;
+		pathLen = strlen(path);
+
+		*pServerDirectory = new char[pathLen + 1];
+		if (NULL == *pServerDirectory)
+		{
+			delete [] *pServerPath;
+			*pServerPath = NULL;
+			return E_OUTOFMEMORY;
+		}
+		strcpy(*pServerDirectory, path);
+	}
+
+	return rc;
+}
+
+#elif defined(macintosh) || defined(_MAC)
+
+HRESULT AAFGetLibraryInfo(HINSTANCE hInstance, char **pServerPath, char **pServerDirectory)
+{
+	return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+#else // Unix/SGI?
+
+HRESULT AAFGetLibraryInfo(HINSTANCE hInstance, char **pServerPath, char **pServerDirectory)
+{
+	return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+#endif
