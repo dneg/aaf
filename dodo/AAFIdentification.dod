@@ -8,20 +8,10 @@ AAFObject\
 #c
 #import ./AAFObject.exp
 AD_HEAD
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
-
  
 /***********************************************\
 *	Stub only.   Implementation not yet added	*
 \***********************************************/
-
 
 AD_IDL(//
 // The IAAFIdentification interface provides information about the
