@@ -25,7 +25,7 @@
 *
 ************************************************************************/
 
-// @doc OMINTERNAL
+// @doc OMEXTERNAL
 #ifndef OMSTORABLE_H
 #define OMSTORABLE_H
 
@@ -52,7 +52,6 @@ public:
 
     // @cmember The stored object identifier for the class of this
     //          <c OMStorable>.
-    //   @this const
   virtual const OMClassId& classId(void) const = 0;
   
 // private:
@@ -77,7 +76,6 @@ public:
   void setName(const char* name);
 
     // @cmember Save this <c OMStorable>.
-    //   @this const
   void save(void) const;
 
     // @cmember Close this <c OMStorable>.
@@ -95,16 +93,13 @@ public:
 
     // @cmember The path to this <c OMStorable> from the root of
     //          the <c OMFile> in which this <c OMStorable> resides.
-    //   @this const
   const char* pathName(void) const;
 
     // @cmember Is this <c OMStorable> the root of the object
     //          containment hierarchy.
-    //   @this const
   bool isRoot(void) const;
 
     // @cmember The stored representation of this <c OMStorable>.
-    //   @this const
   OMStoredObject* store(void) const;
 
     // @cmember Inform this <c OMStorable> where it should store its
@@ -127,7 +122,6 @@ public:
   virtual OMPropertySet* propertySet(void);
 
     // @cmember The <c OMClassFactory> that created this object.
-    //   @this const
   OMClassFactory* classFactory(void) const;
 
     // @cmember Inform this <c OMStorable> of the <c OMClassFactory>
@@ -151,7 +145,6 @@ protected:
 
     // @cmember The <c OMStorable> that contains (owns) this
     //          <c OMStorable>.
-    //   @this const
   OMStorable* containingObject(void) const;
 
   OMPropertySet _persistentProperties;

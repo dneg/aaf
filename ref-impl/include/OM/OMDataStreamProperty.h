@@ -25,7 +25,7 @@
 *
 ************************************************************************/
 
-// @doc OMINTERNAL
+// @doc OMEXTERNAL
 #ifndef OMDATASTREAMPROPERTY_H
 #define OMDATASTREAMPROPERTY_H
 
@@ -47,7 +47,6 @@ public:
   virtual ~OMDataStreamProperty(void);
 
     // @cmember Save this <c OMDataStreamProperty>.
-    // @this const
   virtual void save(void) const;
 
     // @cmember Restore this <c OMDataStreamProperty>, the size of the
@@ -59,7 +58,6 @@ public:
 
     // @cmember The size, in bytes, of the data in this
     //          <c OMDataStreamProperty>.
-    //   @this const
   OMUInt64 size(void) const;
 
     // @cmember Set the size, in bytes, of the data in this
@@ -68,7 +66,6 @@ public:
 
     // @cmember The current position for <f read()> and <f write()>, as an
     //          offset in bytes from the begining of the data stream.
-    // @this const
   OMUInt64 position(void) const;
 
     // @cmember Set the current position for <f read()> and <f write()>, as an
@@ -79,7 +76,6 @@ public:
     //          from the data stream into the buffer at address
     //          <p buffer>. The actual number of bytes read is returned
     //          in <p bytesRead>.
-    //   @this const
   void read(OMByte* buffer,
             const OMUInt32 bytes,
             OMUInt32& bytesRead) const;
