@@ -2,6 +2,7 @@
 #define OMPROPERTY_H
 
 #include "OMPortability.h"
+#include <stddef.h>
 
 const int TID_NONE                           = 0;
 const int TID_PROPERTY_DATA                  = 0;
@@ -27,7 +28,9 @@ protected:
   int _pid;
   int _type;
   const char* _name;
-  const OMStorable* _containingObject;  // The object that contains this property
+  // The object that contains this property
+  //
+  const OMStorable* _containingObject;
 };
 
 template <typename ReferencedObject>
@@ -44,12 +47,14 @@ protected:
 };
 
 template <typename ReferencedObject>
-class OMStrongReferenceProperty : public OMReferenceProperty<ReferencedObject> {
+class OMStrongReferenceProperty :
+                                 public OMReferenceProperty<ReferencedObject> {
 public:
   OMStrongReferenceProperty(int pid, const char* name);
   virtual void getValue(ReferencedObject*& object) const;
   virtual void setValue(const ReferencedObject*& object);
-  OMStrongReferenceProperty<ReferencedObject>& operator = (const ReferencedObject*& value);
+  OMStrongReferenceProperty<ReferencedObject>& operator =
+                                              (const ReferencedObject*& value);
   operator ReferencedObject*(void) const;
   virtual void saveTo(OMStoredObject& s) const;
   virtual void restoreFrom(OMStoredObject& s, size_t size);
@@ -60,7 +65,8 @@ class OMWeakReferenceProperty : public OMReferenceProperty<ReferencedObject> {
 public:
   OMWeakReferenceProperty(int pid, const char* name);
   virtual void getValue(ReferencedObject*& object) const;
-  OMWeakReferenceProperty<ReferencedObject>& operator = (const ReferencedObject*& value);
+  OMWeakReferenceProperty<ReferencedObject>& operator =
+                                              (const ReferencedObject*& value);
   operator ReferencedObject*(void) const;
   virtual void saveTo(OMStoredObject& s) const;
   virtual void restoreFrom(OMStoredObject& s, size_t size);
@@ -98,6 +104,7 @@ public:
   OMVariableSizeProperty(int pid, const char* name);
   void getValue(PropertyType* value, size_t valueSize) const;
   void setValue(const PropertyType* value, size_t valueSize);
+  bool copyToBuffer(PropertyType* buffer, size_t bufferSize) const;
   virtual void restoreFrom(OMStoredObject& s, size_t size);
 };
 
@@ -127,16 +134,31 @@ private:
   size_t _size;         // Number of elements in use
 };
 
-class OMStringProperty : public OMVariableSizeProperty<char> {
+template <typename CharacterType>
+class OMCharacterStringProperty :
+                                 public OMVariableSizeProperty<CharacterType> {
+public:
+  OMCharacterStringProperty(int pid, const char * name);
+  operator const CharacterType* (void);
+  operator const CharacterType* (void) const;
+  void assign(const CharacterType* characterString);
+  size_t length(void) const; // string length (not counting the null)
+  static size_t stringLength(const CharacterType* characterString);
+private:
+  // hide, declare but don't define
+  operator CharacterType* (void);
+};
+
+class OMStringProperty : public OMCharacterStringProperty<char> {
 public:
   OMStringProperty(int pid, const char* name);
   OMStringProperty& operator = (const char* value);
-  operator const char* (void);
-  operator const char* (void) const;
-  size_t length(void); // string length (not counting the null)
-private:
-  // hide, declare but don't define
-  operator char* (void);
+};
+
+class OMWideStringProperty : public OMCharacterStringProperty<wchar_t> {
+public:
+  OMWideStringProperty(int pid, const char* name);
+  OMWideStringProperty& operator = (const wchar_t* value);
 };
 
 #include "OMPropertyT.h"
