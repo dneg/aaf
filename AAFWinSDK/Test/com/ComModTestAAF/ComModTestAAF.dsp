@@ -481,10 +481,6 @@ SOURCE=..\..\..\test\com\CEnumAAFDataDefsTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CEnumAAFDefsTest.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\..\test\com\CEnumAAFEssenceDataTest.cpp
 # End Source File
 # Begin Source File
@@ -510,10 +506,6 @@ SOURCE=..\..\..\test\com\CEnumAAFMobSlotsTest.cpp
 # Begin Source File
 
 SOURCE=..\..\..\test\com\CEnumAAFMobsTest.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\test\com\CEnumAAFObjectsTest.cpp
 # End Source File
 # Begin Source File
 
