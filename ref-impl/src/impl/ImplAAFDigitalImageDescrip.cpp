@@ -14,23 +14,23 @@
 #include <string.h>
 
 ImplAAFDigitalImageDescriptor::ImplAAFDigitalImageDescriptor ()
-:	_compression(PID_DIGITAL_IMAGE_DESC_COMPRESSION,					"Compression"),
-	_storedHeight(PID_DIGITAL_IMAGE_DESC_STOREDHEIGHT,					"Stored Height"),
-	_storedWidth(PID_DIGITAL_IMAGE_DESC_STOREDWIDTH,					"Stored Width"),
-	_sampledHeight(PID_DIGITAL_IMAGE_DESC_SAMPLEDHEIGHT,				"Sampled Height"),
-	_sampledWidth(PID_DIGITAL_IMAGE_DESC_SAMPLEDWIDTH,					"Sampled Width"),
-	_sampledXOffset(PID_DIGITAL_IMAGE_DESC_SAMPLEDXOFFSET,				"Sampled XOffset"),
-	_sampledYOffset(PID_DIGITAL_IMAGE_DESC_SAMPLEDYOFFSET,				"Sampled YOffset"),
-	_displayHeight(PID_DIGITAL_IMAGE_DESC_DISPLAYHEIGHT,				"Display Height"),
-	_displayWidth(PID_DIGITAL_IMAGE_DESC_DISPLAYWIDTH,					"Display Width"),
-	_displayXOffset(PID_DIGITAL_IMAGE_DESC_DISPLAYXOFFSET,				"Display XOffset"),
-	_displayYOffset(PID_DIGITAL_IMAGE_DESC_DISPLAYYOFFSET,				"Display YOffset"),
-	_frameLayout(PID_DIGITAL_IMAGE_DESC_FRAMELAYOUT,					"Frame Layout"),
-	_videoLineMap(PID_DIGITAL_IMAGE_DESC_VIDEOLINEMAP,					"Video Line Map"),
-	_imageAspectRatio(PID_DIGITAL_IMAGE_DESC_IMAGEASPECTRATIO,			"Image Aspect Ratio"),
-	_alphaTransparency(PID_DIGITAL_IMAGE_DESC_ALPHATRANSPARENCY,		"Alpha Transparency"),
-	_gamma(PID_DIGITAL_IMAGE_DESC_GAMMA,								"Gamma"),
-	_imageAlignmentFactor(PID_DIGITAL_IMAGE_DESC_IMAGEALIGNMENTFACTOR,	"Image Alignment Factor")
+:	_compression(PID_DigitalImageDescriptor_Compression,					"Compression"),
+	_storedHeight(PID_DigitalImageDescriptor_StoredHeight,					"Stored Height"),
+	_storedWidth(PID_DigitalImageDescriptor_StoredWidth,					"Stored Width"),
+	_sampledHeight(PID_DigitalImageDescriptor_SampledHeight,				"Sampled Height"),
+	_sampledWidth(PID_DigitalImageDescriptor_SampledWidth,					"Sampled Width"),
+	_sampledXOffset(PID_DigitalImageDescriptor_SampledXOffset,				"Sampled XOffset"),
+	_sampledYOffset(PID_DigitalImageDescriptor_SampledYOffset,				"Sampled YOffset"),
+	_displayHeight(PID_DigitalImageDescriptor_DisplayHeight,				"Display Height"),
+	_displayWidth(PID_DigitalImageDescriptor_DisplayWidth,					"Display Width"),
+	_displayXOffset(PID_DigitalImageDescriptor_DisplayXOffset,				"Display XOffset"),
+	_displayYOffset(PID_DigitalImageDescriptor_DisplayYOffset,				"Display YOffset"),
+	_frameLayout(PID_DigitalImageDescriptor_FrameLayout,					"Frame Layout"),
+	_videoLineMap(PID_DigitalImageDescriptor_VideoLIneMap,					"Video Line Map"),
+	_imageAspectRatio(PID_DigitalImageDescriptor_ImageAspectRatio,			"Image Aspect Ratio"),
+	_alphaTransparency(PID_DigitalImageDescriptor_AlphaTransparency,		"Alpha Transparency"),
+	_gamma(PID_DigitalImageDescriptor_Gamma,								"Gamma"),
+	_imageAlignmentFactor(PID_DigitalImageDescriptor_ImageAlignmentFactor,	"Image Alignment Factor")
 {
 	_persistentProperties.put(_compression.address());
 	_persistentProperties.put(_storedHeight.address());

@@ -22,7 +22,7 @@
 
 
 ImplAAFNetworkLocator::ImplAAFNetworkLocator ()
-: _path(PID_NETWORKLOCATOR_URLSTRING, "URLString")
+: _path(PID_NetworkLocator_URLString, "URL String")
 {
   _persistentProperties.put(_path.address());
   _path = L"";
