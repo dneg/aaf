@@ -45,13 +45,18 @@ OMStreamProperty<Element>::~OMStreamProperty(void)
 
 template <typename Element>
 void OMStreamProperty<Element>::readElements(OMUInt64 index,
-                                             OMUInt32 elementCount,
+                                             OMUInt32 count,
                                              Element* elements) const
 {
   TRACE("OMStreamProperty<Element>::readElements");
 
+  PRECONDITION("Valid element count", count > 0);
+  PRECONDITION("Valid buffer", elements != 0);
+  PRECONDITION("Valid index", index < elementCount());
+  PRECONDITION("Valid element count", (index + count) <= elementCount());
+
   setIndex(index);
-  readElements(elementCount, elements);
+  readElements(count, elements);
 }
 
 template <typename Element>
@@ -60,6 +65,9 @@ void OMStreamProperty<Element>::writeElements(OMUInt64 index,
                                               const Element* elements)
 {
   TRACE("OMStreamProperty<Element>::writeElements");
+
+  PRECONDITION("Valid element count", elementCount > 0);
+  PRECONDITION("Valid buffer", elements != 0);
 
   setIndex(index);
   writeElements(elementCount, elements);
@@ -71,6 +79,9 @@ void OMStreamProperty<Element>::readElement(OMUInt64 index,
 {
   TRACE("OMStreamProperty<Element>::readElement");
 
+  PRECONDITION("Valid buffer", element != 0);
+  PRECONDITION("Valid index", index < elementCount());
+
   readElements(index, 1, element);
 }
 
@@ -80,6 +91,8 @@ void OMStreamProperty<Element>::writeElement(OMUInt64 index,
 {
   TRACE("OMStreamProperty<Element>::writeElement");
 
+  PRECONDITION("Valid buffer", element != 0);
+
   writeElements(index, 1, element);
 }
 
@@ -88,6 +101,9 @@ void OMStreamProperty<Element>::readElements(OMUInt32 elementCount,
                                              Element* elements) const
 {
   TRACE("OMStreamProperty<Element>::readElements");
+
+  PRECONDITION("Valid element count", elementCount > 0);
+  PRECONDITION("Valid buffer", elements != 0);
 
   OMUInt32 byteCount = elementCount * sizeof(Element);
   OMUInt32 actualByteCount;
@@ -104,6 +120,9 @@ void OMStreamProperty<Element>::writeElements(OMUInt32 elementCount,
 {
   TRACE("OMStreamProperty<Element>::writeElements");
   
+  PRECONDITION("Valid element count", elementCount > 0);
+  PRECONDITION("Valid buffer", elements != 0);
+
   OMUInt32 byteCount = elementCount * sizeof(Element);
   OMUInt32 actualByteCount;
   const OMByte* bytes = reinterpret_cast<const OMByte*>(elements);
@@ -119,6 +138,8 @@ void OMStreamProperty<Element>::readElement(Element* element) const
 {
   TRACE("OMStreamProperty<Element>::readElement");
 
+  PRECONDITION("Valid buffer", element != 0);
+
   readElements(index(), 1, element);
 }
 
@@ -126,6 +147,8 @@ template <typename Element>
 void OMStreamProperty<Element>::writeElement(const Element* element)
 {
   TRACE("OMStreamProperty<Element>::writeElement");
+
+  PRECONDITION("Valid buffer", element != 0);
 
   writeElements(index(), 1, &element);
 }
@@ -135,6 +158,9 @@ void OMStreamProperty<Element>::appendElements(OMUInt32 elementCount,
                                                const Element* elements)
 {
   TRACE("OMStreamProperty<Element>::appendElements");
+
+  PRECONDITION("Valid element count", elementCount > 0);
+  PRECONDITION("Valid buffer", elements != 0);
 
   writeElements(elementCount(), elementCount, elements);
 }
