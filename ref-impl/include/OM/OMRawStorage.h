@@ -139,9 +139,9 @@ public:
     //          would return false.
   virtual bool isExtendible(void) const = 0;
 
-    // @cmember The current size of this <c OMRawStorage> in bytes.
-    //          @precondition <f isExtendible()>
-  virtual OMUInt64 size(void) const = 0;
+    // @cmember The current extent of this <c OMRawStorage> in bytes.
+    //          @precondition <f isPositionable()>
+  virtual OMUInt64 extent(void) const = 0;
 
     // @cmember Set the size of this <c OMRawStorage> to <p newSize> bytes.
     //          If <p newSize> is greater than <mf OMRawStorage::size>
@@ -153,6 +153,10 @@ public:
     //          @precondition <f isExtendible()>
     //   @devnote How is failure to extend indicated ?
   virtual void extend(OMUInt64 newSize) = 0;
+
+    // @cmember The current size of this <c OMRawStorage> in bytes.
+    //          @precondition <f isPositionable()>
+  virtual OMUInt64 size(void) const = 0;
 
     // @cmember May the current position, for <f read()> and <f write()>,
     //          of this <c OMRawStorage> be changed ?

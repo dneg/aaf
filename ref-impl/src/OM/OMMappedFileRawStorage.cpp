@@ -225,13 +225,13 @@ bool OMMappedFileRawStorage::isExtendible(void) const
   return false;
 }
 
-  // @mfunc The current size of this <c OMMappedFileRawStorage> in bytes.
-  //        precondition - isExtendible()
-  //   @rdesc The current size of this <c OMMappedFileRawStorage> in bytes.
+  // @mfunc The current extent of this <c OMMappedFileRawStorage> in bytes.
+  //        precondition - isPositionable()
+  //   @rdesc The current extent of this <c OMMappedFileRawStorage> in bytes.
   //   @this const
-OMUInt64 OMMappedFileRawStorage::size(void) const
+OMUInt64 OMMappedFileRawStorage::extent(void) const
 {
-  TRACE("OMMappedFileRawStorage::size");
+  TRACE("OMMappedFileRawStorage::extent");
 
   ASSERT("Unimplemented code not reached", false); // tjb TBS
   return 0;
@@ -254,6 +254,18 @@ void OMMappedFileRawStorage::extend(OMUInt64 /* newSize */)
   TRACE("OMMappedFileRawStorage::extend");
 
   ASSERT("Unimplemented code not reached", false); // tjb TBS
+}
+
+  // @mfunc The current size of this <c OMMappedFileRawStorage> in bytes.
+  //        precondition - isPositionable()
+  //   @rdesc The current size of this <c OMMappedFileRawStorage> in bytes.
+  //   @this const
+OMUInt64 OMMappedFileRawStorage::size(void) const
+{
+  TRACE("OMMappedFileRawStorage::size");
+
+  ASSERT("Unimplemented code not reached", false); // tjb TBS
+  return 0;
 }
 
   // @mfunc May the current position, for <f read()> and <f write()>,

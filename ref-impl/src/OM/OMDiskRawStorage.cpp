@@ -250,18 +250,18 @@ bool OMDiskRawStorage::isExtendible(void) const
   return true;
 }
 
-  // @mfunc The current size of this <c OMDiskRawStorage> in bytes.
-  //        precondition - isExtendible()
-  //   @rdesc The current size of this <c OMDiskRawStorage> in bytes.
+  // @mfunc The current extent of this <c OMDiskRawStorage> in bytes.
+  //        precondition - isPositionable()
+  //   @rdesc The current extent of this <c OMDiskRawStorage> in bytes.
   //   @this const
-OMUInt64 OMDiskRawStorage::size(void) const
+OMUInt64 OMDiskRawStorage::extent(void) const
 {
-  TRACE("OMDiskRawStorage::size");
+  TRACE("OMDiskRawStorage::extent");
 
-  PRECONDITION("Extendible", isExtendible());
+  PRECONDITION("Positionable", isPositionable());
 
-  OMUInt64 result = size(_file);
-  return result;
+  ASSERT("Unimplemented code not reached", false); // tjb TBS
+  return 0;
 }
 
   // @mfunc Set the size of this <c OMDiskRawStorage> to <p newSize> bytes.
@@ -282,6 +282,20 @@ void OMDiskRawStorage::extend(OMUInt64 newSize)
   PRECONDITION("Writable", isWritable());
 
   setSize(_file, newSize);
+}
+
+  // @mfunc The current size of this <c OMDiskRawStorage> in bytes.
+  //        precondition - isPositionable()
+  //   @rdesc The current size of this <c OMDiskRawStorage> in bytes.
+  //   @this const
+OMUInt64 OMDiskRawStorage::size(void) const
+{
+  TRACE("OMDiskRawStorage::size");
+
+  PRECONDITION("Positionable", isPositionable());
+
+  OMUInt64 result = size(_file);
+  return result;
 }
 
   // @mfunc May the current position, for <f read()> and <f write()>,
