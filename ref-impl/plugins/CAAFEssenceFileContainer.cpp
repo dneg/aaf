@@ -6,7 +6,6 @@
 * Copyright (c) 1998 Microsoft Corporation *
 *                                          *
 \******************************************/
-#include <stdio.h>
 
 #include "CAAFEssenceFileContainer.h"
 #include "CAAFEssenceFileStream.h"
@@ -15,6 +14,10 @@
 #include "AAFResult.h"
 
 #include <errno.h>
+
+#if defined(_MAC) || defined(macintosh)
+#include <wstring.h>
+#endif
 
 
 // CLSID for AAFEssenceFileStream 
