@@ -26,14 +26,6 @@ AD_IDL(//
 //   - insufficient system memory is available to perform the
 //     operation.
 //)
-/***********************************************\
-*												*
-* Advanced Authoring Format						*
-*												*
-* Copyright (c) 1998-1999 Avid Technology, Inc. *
-*												*
-\***********************************************/
-
 AD_FORWARD_DECLARATION(AAFParameterDef)
 
 

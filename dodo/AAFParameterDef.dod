@@ -33,14 +33,6 @@ AD_IDL(//
 
 AD_FORWARD_DECLARATION(AAFTypeDef)
 
-/***********************************************\
-*												*
-* Advanced Authoring Format						*
-*												*
-* Copyright (c) 1998-1999 Avid Technology, Inc. *
-*												*
-\***********************************************/
-
 AD_CLASS_UUID(20045fa2, 1d87, 11d2, bf, 96, 00, 60, 97, 11, 62, 12) 
 
 AD_DEFAULT_UUID(20045fa1, 1d87, 11d2, bf, 96, 00, 60, 97, 11, 62, 12)

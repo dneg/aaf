@@ -28,14 +28,6 @@ AD_IDL(//
 //     operation.
 //)
 
-/***********************************************\
-*												*
-* Advanced Authoring Format						*
-*												*
-* Copyright (c) 1998-1999 Avid Technology, Inc. *
-*												*
-\***********************************************/
-
 AD_INCLUDE(AAFTypes)
 AD_FORWARD_DECLARATION(AAFParameterDef)
 AD_FORWARD_DECLARATION(AAFTypeDef)
