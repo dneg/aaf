@@ -103,7 +103,7 @@ bool validOMString(const OMCharacter* string)
   return (string != 0) /* && (lengthOfOMString(string) > 0) */;
 }
 
-#if defined (OM_ENABLE_TRACE)
+#if defined (OM_TRACE)
 
 void trace(const char* routineName)
 {

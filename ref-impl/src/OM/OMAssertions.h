@@ -108,14 +108,14 @@ bool validOMString(const OMCharacter* string);
 
 void checkTypes(void);
 
-#if defined(OM_ENABLE_TRACE)
+#if defined(OM_TRACE)
 
   // @func Output routine tracing information.
   //   @parm The name of the routine.
 void trace(const char* routineName);
 
   // @func Print routine tracing information (when enabled with
-  //       OM_ENABLE_DEBUG and OM_ENABLE_TRACE). The routine name
+  //       OM_ENABLE_DEBUG and OM_TRACE). The routine name
   //       provided is used by other assertions.
   //   @parm The routine name. For the most explicit output, names of
   //         member functions should be prefixed with the class name,

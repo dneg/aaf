@@ -67,4 +67,4 @@
 
 // Uncomment the following line if you want to see an exhausted list
 // of the calling sequence within the Object Manager.
-//#define OM_ENABLE_TRACE
+//#define OM_TRACE
