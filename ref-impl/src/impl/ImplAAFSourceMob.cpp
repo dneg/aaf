@@ -41,6 +41,7 @@
 #include "aafErr.h"
 #include "aafresult.h"
 #include "ImplAAFObjectCreation.h"
+#include "AAFDefUIDs.h"
 
 extern "C" const aafClassID_t	CLSID_AAFSourceClip;
 
@@ -115,22 +116,12 @@ AAFRESULT STDMETHODCALLTYPE
 	
 	XPROTECT()
 	{
- 		sourceRef.sourceID.Data1 = 0;
-		sourceRef.sourceID.Data2 = 0;
-		sourceRef.sourceID.Data3 = 0;
-		sourceRef.sourceID.Data4[0] = 0;
-		sourceRef.sourceID.Data4[1] = 0;
-		sourceRef.sourceID.Data4[2] = 0;
-		sourceRef.sourceID.Data4[3] = 0;
-		sourceRef.sourceID.Data4[4] = 0;
-		sourceRef.sourceID.Data4[5] = 0;
-		sourceRef.sourceID.Data4[6] = 0;
-		sourceRef.sourceID.Data4[7] = 0;
+ 		sourceRef.sourceID = NilMOBID;
 		sourceRef.sourceSlotID = 0;
 		CvtInt32toPosition(0, sourceRef.startTime);
 		sub = (ImplAAFSourceClip *)CreateImpl(CLSID_AAFSourceClip);
 		CHECK(sub->InitializeSourceClip (dataDef, &length, sourceRef));
-		CHECK(AppendNewTimelineSlot(editRate, sub, slotID, NULL, zeroPos, 
+		CHECK(AppendNewTimelineSlot(editRate, sub, slotID, L"Test", zeroPos, 
 												&newSlot));
 	}
 	XEXCEPT
