@@ -24,17 +24,25 @@ AD_DEFAULT_UUID(e58a8569, 2a3e, 11D2, bf, a4, 00, 60, 97, 11, 62, 12)
 AD_CLASS_BEGIN
 
 AD_METHOD1(SetTapeManufacturer,
-		   [in],aafString_t*, name,,
+		   [in\\\,string],aafWChar*, pName, Manufacturers name,
 		   Sets the name of the company which manufactured the tape.)
-AD_METHOD1(GetTapeManufacturer,
-		   [out],aafString_t*, name,pass in a buffer which is cleared and filled.,
-		   Sets the name of the company which manufactured the tape.)
+AD_METHOD2(GetTapeManufacturer,
+		   [in\\\,string],aafWChar*, pName,pass in a buffer which is cleared and filled.,
+		   [in], aafInt32, buflen, Length of the buffer to hold the Manufacturers name,
+		   Get the name of the company which manufactured the tape.)
+AD_METHOD1(GetManufacturerNameLen,
+		   [out], aafInt32 *, pLen, Manufacturers Name length,
+		   Returns the length of the string returned by the GetTapeManufacturer methods.)
 AD_METHOD1(SetTapeModel,
-		   [in],aafString_t*, name,,
+		   [in\\\,string],aafWChar*, pModelName, Tape Manufacturers Brand name,
 		   Sets the brand or model of the tape.)
-AD_METHOD1(GetTapeModel,
-		   [out],aafString_t*, name,pass in a buffer which is cleared and filled.,
-		   Sets the brand or model of the tape.)
+AD_METHOD2(GetTapeModel,
+		   [in\\\,string],aafWChar*, pModelName,pass in a buffer which is cleared and filled.,
+		   [in], aafInt32, buflen, Length of the buffer to hold the Manufacturers Brand name,
+		   Gets the brand or model of the tape.)
+AD_METHOD1(GetTapeModelLen,
+		   [out], aafInt32 *, pLen, Model length,
+		   Returns the length of the string returned by the GetTapeModel method.)
 
 AD_METHOD1(SetTapeFormFactor,
 		   [in],aafTapeCaseType_t, formFactor, ex: kVHSVideoTape\\\,kDATCartridge ,
