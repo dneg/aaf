@@ -28,7 +28,7 @@ AD_CLASS_UUID(dfbd6526, 1d81, 11d2, bf, 96, 00, 60, 97, 11, 62, 12)
 
 AD_DEFAULT_UUID(dfbd6525, 1d81, 11d2, bf, 96, 00, 60, 97, 11, 62, 12)
 AD_XCLASS_BEGIN(Concrete, StoredObject)
-AD_XMETHOD3(Initialize,
+AD_XMETHOD4(Initialize,
 
 			[in\, ref],
 			objPass,
@@ -48,8 +48,16 @@ AD_XMETHOD3(Initialize,
 			pClassName,
 			friendly name of this type definition,
 
+			[in],
+			objPass,
+			aafBoolean_t,
+			isConcrete,
+			can objects of this class be instantiated,
+
      Initializes this class definition object to inherit from the
-  // given parent class.
+  // given parent class.  If isConcrete is set to AAFTrue\, objects of
+  // this class can be instantiated; otherwise\, it will be illegal to
+  // instantiate such objects.
   // 
   // Succeeds if:
   // - The pID pointer is valid.
@@ -260,6 +268,22 @@ AD_XMETHOD1(GetParent,
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pClassDef\))
 
 
+AD_XMETHOD1(IsConcrete,
+			[out\, retval],
+			objPass,
+			aafBoolean_t*,
+			pResult,
+			Can this class be instantiated,
+
+     Returns true if this class can be instantiated; returns false
+  // otherwise. 
+  // 
+  // Succeeds if:
+  // - The ppClassDef pointer is valid.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pResult\))
+
+
 AD_XMETHOD1(IsRoot,
 			[out\, retval],
 			objPass,
@@ -267,14 +291,13 @@ AD_XMETHOD1(IsRoot,
 			isRoot,
 			Is this a root \(base\) class,
 
-     Gets the Parent class for this object.  If there is no parent\,
-  // returns the NULL AUID.  The only class which has no parent will
-  // be AAFObject.
+     Returns true if this class is the base of the inheritance
+  // hierarchy; returns false otherwise.
   // 
   // Succeeds if:
   // - The ppClassDef pointer is valid.
   AD_STD_COMMENT_METH_ERR_HEADER
-  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pClassDef\))
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(isRoot\))
 
 
 AD_XMETHOD1(IsUniquelyIdentified,
@@ -297,9 +320,10 @@ AD_XMETHOD1(GetUniqueIdentifier,
 			objOut,
 			AAFPropertyDef,
 			ppUniqueIdentifier,
-			Is this a UniquelyIdentified class,
+			The unique identifier,
 
-     Returns true if this class is uniquely identified.
+     Returns the property definition corresponding to this class'
+  // unique identifier.
   // 
   // Succeeds if:
   // - The ppUniqueIdentifier pointer is valid.
@@ -307,7 +331,8 @@ AD_XMETHOD1(GetUniqueIdentifier,
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppUniqueIdentifier\)
   //
   // AAFRESULT_PROP_NOT_PRESENT
-  //   - If this class definition does not have a unique identifier property definition.)
+  //   - If this class definition does not have a unique identifier
+  //     property definition.)
 
 
 AD_CLASSDEF_FACTORY(CreateInstance,

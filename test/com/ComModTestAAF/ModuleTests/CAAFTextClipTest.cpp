@@ -261,8 +261,8 @@ void TextClipTest::CreateTextClip()
     // Write some text essence.
 
 
-  // Create a TextClip
-  checkResult(defs.cdTextClip()->
+  // Create a concrete subclass of TextClip
+  checkResult(defs.cdHTMLClip()->
 			  CreateInstance(IID_IAAFTextClip, 
 							 (IUnknown **)&pTextClip));
   checkResult(pTextClip->QueryInterface(IID_IAAFComponent, (void **)&pComponent));
