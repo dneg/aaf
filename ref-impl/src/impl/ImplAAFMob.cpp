@@ -546,9 +546,8 @@ AAFRESULT STDMETHODCALLTYPE
 	XPROTECT()
 	{
 		CHECK(GetDictionary(&pDictionary));
-		tmpSlot = (ImplAAFMobSlot *)pDictionary->CreateImplObject(pDictionary->GetBuiltinDefs()->cdMobSlot());
-		if(tmpSlot == NULL)
-			RAISE(AAFRESULT_NOMEMORY);
+		CHECK(pDictionary->GetBuiltinDefs()->cdMobSlot()->
+			  CreateInstance ((ImplAAFObject**) &tmpSlot));
 		pDictionary->ReleaseReference();
 		pDictionary = NULL;
 
@@ -608,9 +607,8 @@ AAFRESULT STDMETHODCALLTYPE
 	XPROTECT()
 	  {
 		CHECK(GetDictionary(&pDictionary));
-		aSlot = (ImplAAFTimelineMobSlot *)pDictionary->CreateImplObject(pDictionary->GetBuiltinDefs()->cdTimelineMobSlot());
-		if (NULL == aSlot)
-			return (AAFRESULT_NOMEMORY);
+		CHECK(pDictionary->GetBuiltinDefs()->cdTimelineMobSlot()->
+			  CreateInstance ((ImplAAFObject**) &aSlot));
 		pDictionary->ReleaseReference();
 		pDictionary = NULL;
 
@@ -653,9 +651,10 @@ AAFRESULT STDMETHODCALLTYPE
     return (AAFRESULT_NULL_PARAM);
 
   
-  ImplEnumAAFMobSlots		*theEnum = (ImplEnumAAFMobSlots *)CreateImpl (CLSID_EnumAAFMobSlots);
-	if(theEnum == NULL)
-		return(E_FAIL);
+  ImplEnumAAFMobSlots *theEnum =
+	(ImplEnumAAFMobSlots *) CreateImpl (CLSID_EnumAAFMobSlots);
+  if(theEnum == NULL)
+	return(E_FAIL);
 
 	// !!!Does not obey search criteria yet
 	XPROTECT()
@@ -726,8 +725,8 @@ AAFRESULT STDMETHODCALLTYPE
 		{
 			// Create a new comment and add it to the list!
 			CHECK(GetDictionary(&pDictionary));
-			pTaggedValue = (ImplAAFTaggedValue *)pDictionary->CreateImplObject
-			  (pDictionary->GetBuiltinDefs()->cdTaggedValue());
+			CHECK(pDictionary->GetBuiltinDefs()->cdTaggedValue()->
+				  CreateInstance ((ImplAAFObject**) &pTaggedValue));
 			CHECK(pTaggedValue->Initialize(pTagName,
 										   pDictionary->GetBuiltinDefs()->
 										   tdString()));
@@ -798,7 +797,8 @@ AAFRESULT STDMETHODCALLTYPE
 	if(!_userComments.isPresent())
 		return AAFRESULT_PROP_NOT_PRESENT;
 		
-	ImplEnumAAFTaggedValues*	theEnum = (ImplEnumAAFTaggedValues *)CreateImpl(CLSID_EnumAAFTaggedValues);
+	ImplEnumAAFTaggedValues* theEnum =
+	  (ImplEnumAAFTaggedValues *)CreateImpl(CLSID_EnumAAFTaggedValues);
 
 	XPROTECT()
 	{
@@ -1494,8 +1494,8 @@ ImplAAFMob::AddPhysSourceRef (aafAppendOption_t  addType,
 	{
 		CvtInt32toInt64(0, &zeroPos);
 		CHECK(GetDictionary(&pDictionary));
-		sclp = (ImplAAFSourceClip *)pDictionary->CreateImplObject
-		  (pDictionary->GetBuiltinDefs()->cdSourceClip());
+		CHECK(pDictionary->GetBuiltinDefs()->cdSourceClip()->
+			  CreateInstance ((ImplAAFObject **) &sclp));
 		if (NULL == sclp)
 			RAISE(AAFRESULT_NOMEMORY);
 		ImplAAFDataDefSP pDataDef;

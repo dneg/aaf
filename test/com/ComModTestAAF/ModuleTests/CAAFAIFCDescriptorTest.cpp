@@ -11,7 +11,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -238,18 +238,18 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
  		
 		// Create a source mob
 		CAAFBuiltinDefs defs (pDictionary);
-		checkResult(pDictionary->CreateInstance(defs.cdSourceMob(),
-												IID_IAAFSourceMob, 
-												(IUnknown **)&pSourceMob));
+		checkResult(defs.cdSourceMob()->
+					CreateInstance(IID_IAAFSourceMob, 
+								   (IUnknown **)&pSourceMob));
 
 		checkResult(pSourceMob->QueryInterface(IID_IAAFMob, (void **)&pMob));
 
 		checkResult(CoCreateGuid((GUID *)&newMobID));
 		checkResult(pMob->SetMobID(newMobID));
 		checkResult(pMob->SetName(L"AIFCDescriptorTest"));
-		checkResult(pDictionary->CreateInstance(defs.cdAIFCDescriptor(),
-												IID_IAAFAIFCDescriptor, 
-												(IUnknown **)&pAIFCDesc));		
+		checkResult(defs.cdAIFCDescriptor()->
+					CreateInstance(IID_IAAFAIFCDescriptor, 
+								   (IUnknown **)&pAIFCDesc));		
 
 		AIFCSummary summary;
 		

@@ -126,9 +126,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	  aafRational_t	audioRate = { 44100, 1 };
 
 	  // Create a Mob
-	  checkResult(pDictionary->CreateInstance(defs.cdMob(),
-											  IID_IAAFMob, 
-											  (IUnknown **)&pMob));
+	  checkResult(defs.cdMob()->
+				  CreateInstance(IID_IAAFMob, 
+								 (IUnknown **)&pMob));
 
 	  checkResult(pMob->SetMobID(MOBTestID));
 	  checkResult(pMob->SetName(mobName));
@@ -139,9 +139,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	  // Add some slots
 	  for(test = 0; test < 5; test++)
 		{
- 		  checkResult(pDictionary->CreateInstance(defs.cdSourceClip(),
-												  IID_IAAFSourceClip, 
-												  (IUnknown **)&sclp));		
+ 		  checkResult(defs.cdSourceClip()->
+					  CreateInstance(IID_IAAFSourceClip, 
+									 (IUnknown **)&sclp));		
 
 		  checkResult(sclp->QueryInterface (IID_IAAFSegment, (void **)&seg));
 

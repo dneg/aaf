@@ -220,17 +220,17 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	CAAFBuiltinDefs defs (pDictionary);
  		
 	  // Create a source mob
-		checkResult(pDictionary->CreateInstance(defs.cdSourceMob(),
-							IID_IAAFSourceMob, 
-							(IUnknown **)&pSourceMob));
+		checkResult(defs.cdSourceMob()->
+					CreateInstance(IID_IAAFSourceMob, 
+								   (IUnknown **)&pSourceMob));
 		checkResult(pSourceMob->QueryInterface(IID_IAAFMob, (void **)&pMob));
 
 		checkResult(CoCreateGuid((GUID *)&newMobID));
 		checkResult(pMob->SetMobID(newMobID));
 		checkResult(pMob->SetName(L"WAVEDescriptorTest"));
-		checkResult(pDictionary->CreateInstance(defs.cdWAVEDescriptor(),
-									  IID_IAAFWAVEDescriptor, 
-									  (IUnknown **)&pWAVEDesc));		
+		checkResult(defs.cdWAVEDescriptor()->
+					CreateInstance(IID_IAAFWAVEDescriptor, 
+								   (IUnknown **)&pWAVEDesc));		
 
 		WAVEFORMATEX			summary;
 
