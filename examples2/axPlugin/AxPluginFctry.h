@@ -21,6 +21,7 @@
 
 #include "AxPluginFctryPrtcl.h"
 #include "AxPluginUtil.h"
+#include "CAxClassFactory.h"
 
 #if defined(OS_WINDOWS)
 // Disable warning "int' : forcing value to bool 'true' or 'false' (performance warning)"

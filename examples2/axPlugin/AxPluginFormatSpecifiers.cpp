@@ -54,7 +54,8 @@ private:
 	int _val;
 };
 
-const aafUID_t NULL_UID;
+const aafUID_t NULL_UID =  { 0x00000000, 0x0000, 0x0000,
+			     { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 } };
 };
 
 AxPluginUntypedFormatSpecifier::AxPluginUntypedFormatSpecifier( int size )

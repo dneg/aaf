@@ -68,6 +68,10 @@ private:
 // The CAxClassFactoryCounters is used to implement a CAxClassFactory<>
 // instance count, and to implement the LockServer() method.
 
+// gcc3 complains that CAxClassFactory has a private destructor
+// and now friends.  This prevents the warning.
+class CAxClassFactoryFriend_nonexistant;
+
 template <class ComObjectType>
 class CAxClassFactory : public CAxClassFactoryCounters, public IClassFactory {
 
@@ -169,6 +173,10 @@ public:
 
 private:
 
+	friend class CAxClassFactoryFriend_nonexistant;
+
+	// Object deletes itself when reference count drops to zero.
+	// Hence, destructor is declared private.
 	~CAxClassFactory()
 	{}
 
