@@ -10,7 +10,7 @@
 //
 // Include the appropriate header files:
 //
-#include "CAAFObjectStream.h"
+#include "CAAFEssenceDataStream.h"
 #include "CAAFWaveCodec.h"
 //
 // Include all objects in the following table:
