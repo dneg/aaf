@@ -20,7 +20,8 @@
 
 
 ImplAAFNetworkLocator::ImplAAFNetworkLocator ()
-: _path(PID_NETWORKLOCATOR_URLSTRING, "URLString")
+: _path(PID_NETWORKLOCATOR_URLSTRING, "URLString"),
+  _initialized(AAFFalse)
 {
   _persistentProperties.put(_path.address());
   _path = L"";
@@ -30,12 +31,31 @@ ImplAAFNetworkLocator::ImplAAFNetworkLocator ()
 ImplAAFNetworkLocator::~ImplAAFNetworkLocator ()
 {}
 
+
+AAFRESULT STDMETHODCALLTYPE
+ImplAAFNetworkLocator::Initialize ()
+{
+  if (_initialized)
+	{
+	  return AAFRESULT_ALREADY_INITIALIZED;
+	}
+  _initialized = AAFTrue;
+
+  return AAFRESULT_SUCCESS;
+}
+
+
 // Override from AAFLocator
 AAFRESULT STDMETHODCALLTYPE
 ImplAAFNetworkLocator::GetPath (aafWChar *  pPathBuf,
 								aafInt32    bufSize)
 {
   bool stat;
+  if (! _initialized)
+	{
+	  return AAFRESULT_NOT_INITIALIZED;
+	}
+
   if (! pPathBuf)
 	{
 	  return AAFRESULT_NULL_PARAM;
@@ -54,6 +74,11 @@ ImplAAFNetworkLocator::GetPath (aafWChar *  pPathBuf,
 AAFRESULT STDMETHODCALLTYPE
 ImplAAFNetworkLocator::GetPathBufLen (aafInt32 *  pLen)
 {
+  if (! _initialized)
+	{
+	  return AAFRESULT_NOT_INITIALIZED;
+	}
+
   if (! pLen)
 	{
 	  return AAFRESULT_NULL_PARAM;
@@ -68,6 +93,11 @@ ImplAAFNetworkLocator::GetPathBufLen (aafInt32 *  pLen)
 AAFRESULT STDMETHODCALLTYPE
 ImplAAFNetworkLocator::SetPath (aafWChar *  pPathBuf)
 {
+  if (! _initialized)
+	{
+	  return AAFRESULT_NOT_INITIALIZED;
+	}
+
   if (! pPathBuf)
 	{
 	  return AAFRESULT_NULL_PARAM;
@@ -87,6 +117,11 @@ OMDEFINE_STORABLE(ImplAAFNetworkLocator, CLSID_AAFNetworkLocator);
 AAFRESULT STDMETHODCALLTYPE
 ImplAAFNetworkLocator::GetObjectClass(aafUID_t * pClass)
 {
+  if (! _initialized)
+	{
+	  return AAFRESULT_NOT_INITIALIZED;
+	}
+
   if (! pClass)
 	{
 	  return AAFRESULT_NULL_PARAM;
