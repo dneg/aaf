@@ -132,6 +132,7 @@ size_t OMList<Element>::count(void) const
 {
   TRACE("OMList<Element>::count");
 
+#if defined(OM_DEBUG)
   size_t n = 0;
   Node* p = _nil->_next;;
   while (p != _nil) {
@@ -147,7 +148,7 @@ size_t OMList<Element>::count(void) const
     p = p->_previous;
   }
   ASSERT("Consistent backward count", n == _count);
-
+#endif
   return _count;
 }
 
