@@ -365,6 +365,11 @@ private:
   OMFile::OMAccessMode _mode;
   OMByteOrder _byteOrder;
   bool _reorderBytes;
+
+#if defined(OM_ENABLE_DEBUG)
+  static size_t _openStorages;
+  static size_t _openStreams;
+#endif
 };
 
 #endif
