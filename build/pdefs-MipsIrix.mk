@@ -68,8 +68,7 @@ include $(AAFBASE)/build/cdefs-$(COMPILER).mk
 # -xansi option is specified. Other compilers need them to be 
 # set explicitly.
 #------------------------------------------------------------------------------
-PLATFORM_CFLAGS = -Dsgi
-
+PLATFORM_CFLAGS = -Dsgi $(MODULE_PLATFORM_CFLAGS)
 
 #------------------------------------------------------------------------------
 # Linker command and options
