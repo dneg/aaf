@@ -197,6 +197,11 @@ typedef aafUInt8    	*aafDataBuffer_t;
 AD_CPP_QUOTE(\/*** Types for effects ***/)
 typedef struct _aafUID_t   aafArgIDType_t;
 	
+AD_CPP_QUOTE(\/*** Types for plugins ***/)
+typedef struct _aafUID_t	aafHardwarePlatform_t;
+typedef struct _aafUID_t	aafEngine_t;
+typedef struct _aafUID_t	aafPluginAPI_t;
+
 AD_CPP_QUOTE(/* typedefs for image processing */)
 typedef aafUInt8 	    aafCompSizeArray_t[MAX_NUM_RGBA_COMPS];
 typedef aafInt8 	    aafCompArray_t[MAX_NUM_RGBA_COMPS];
