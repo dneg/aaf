@@ -606,7 +606,7 @@ Opens a all channels associated with a file mob.)
 AD_XMETHOD4(GetNumChannels,
 [in],objPass, aafSlotID_t,slotID,On this slot,
 [in],objPass, aafMediaCriteria_t*,mediaCrit,using this essence criteria,
-[in],objIn, AAFDataDef,mediaKind,for this essence type,
+[in],objPass, aafUID_t,mediaKind,for this essence type,
 [out],objPass, aafInt16*,numCh,How many channels?,
 Takes an opaque handle  a master mob reference  and a slot ID so that it may be called before the essence is opened.)
 	//@comm Returns the number of interleaved essence channels of a given type in the essence stream referenced by the given file mob

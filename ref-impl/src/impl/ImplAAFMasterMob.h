@@ -393,7 +393,7 @@ public:
          aafMediaCriteria_t*  mediaCrit,
 
          // @parm [in] for this essence type
-         ImplAAFDataDef * mediaKind,
+         aafUID_t mediaKind,
 
          // @parm [out] How many channels?
          aafInt16*  numCh);
