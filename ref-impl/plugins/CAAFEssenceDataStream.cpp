@@ -9,6 +9,8 @@
 
 #include "CAAFEssenceDataStream.h"
 
+#include "AAF.h" // need declaration for IAAFEssenceData.
+
 #include <assert.h>
 #include "AAFResult.h"
 
