@@ -44,23 +44,6 @@
 #  include <objbase.h>
 #elif defined (__sgi) || defined (__FreeBSD__)
 
-#  define WINOLEAPI        STDAPI
-#  define WINOLEAPI_(type) STDAPI_(type)
-
-  WINOLEAPI CoCreateInstance(REFCLSID rclsid, LPUNKNOWN pUnkOuter,
-                             DWORD dwClsContext, REFIID riid, LPVOID FAR* ppv);
-
-  EXTERN_C WINOLEAPI CoCreateGuid(GUID FAR *pguid);
-  EXTERN_C WINOLEAPI_(LPVOID) CoTaskMemAlloc(ULONG cb);
-  EXTERN_C WINOLEAPI_(void)   CoTaskMemFree(LPVOID pv);
-  EXTERN_C WINOLEAPI CoInitialize(LPVOID);
-  EXTERN_C WINOLEAPI_(void) CoUninitialize(void);
-
-  EXTERN_C STDAPI_(BOOL) IsEqualGUID(REFGUID rguid1, REFGUID rguid2);
-
-#  define IsEqualIID(x, y) IsEqualGUID(x, y)
-#  define IsEqualCLSID(x, y) IsEqualGUID(x, y)
-
   EXTERN_C STDAPI  DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID FAR* ppv);
 
 #  ifndef INITGUID
@@ -71,12 +54,7 @@
       EXTERN_C const GUID name;                                         \
       EXTERN_C const GUID name                                          \
                 = { l, w1, w2, { b1, b2,  b3,  b4,  b5,  b6,  b7,  b8 } } 
-#  endif /* INITGUID */
-
-#  define DEFINE_OLEGUID(name, l, w1, w2) \
-      DEFINE_GUID(name, l, w1, w2, 0xC0,0,0,0,0,0,0,0x46)
-
-  DEFINE_OLEGUID(IID_IUnknown,            0x00000000L, 0, 0);
+#  endif // INITGUID
 
   // Make sure begin/end interface are at least defined. These macros are required
   // for all AAF interface files.
