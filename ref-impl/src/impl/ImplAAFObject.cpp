@@ -514,7 +514,7 @@ AAFRESULT STDMETHODCALLTYPE
 	  assert (AAFRESULT_SUCCEEDED (hr));
 
 	  ImplAAFClassDef * tmp;
-	  hr = pDict->LookupClass(classID, &tmp);
+	  hr = pDict->LookupClassDef(classID, &tmp);
 	  if (AAFRESULT_FAILED (hr))
 		return hr;
 	  if (! _cachedDefinition)
