@@ -228,17 +228,15 @@ bool find_comment( IAAFSmartPointer<IAAFMob> mob,
 
 //=---------------------------------------------------------------------=
 
-
+// This is here to call from a debugger.  You have to know it is here,
+// and turn it on if you want it. :)
+#if 0
 #include <iostream>
 
-// This is here to call from a debugger.  You have to know it is here :)
 extern "C" void PrintWideString( wchar_t* wstr )
 {
   std::wcout << wstr << std::endl;
 }
-
-//=---------------------------------------------------------------------=
-
-//=---------------------------------------------------------------------=
+#endif
 
 
