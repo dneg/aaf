@@ -1,3 +1,11 @@
+#c/******************************************\
+#c*                                          *
+#c* Advanced Authoring Format                *
+#c*                                          *
+#c* Copyright (c) 1998 Avid Technology, Inc. *
+#c* Copyright (c) 1998 Microsoft Corporation *
+#c*                                          *
+#c\******************************************/
 #startm .this-module 0
 AAFStaticMobSlot\
 #endm
@@ -6,26 +14,13 @@ AAFStaticMobSlot\
 AAFMobSlot\
 #endm
 #c
-#import ./AAFMobSlot.exp
 AD_HEAD
 
-
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
-
- 
-/***********************************************\
-*  Stub only.   Implementation not yet added    *
-\***********************************************/
-
-
-
+AD_IDL(//
+// StaticMobSlot describes essence data that has no relationship to time\,
+// such as a static image; consequently\, a StaticMobSlot does not define an
+// edit rate.
+//)
 
 AD_CLASS_UUID(e684d763, b935, 11d2, bf, 9d, 00, 10, 4b, c9, 15, 6d)
 
