@@ -163,33 +163,6 @@ public:
     //          <c OMStoredObject>.
   void save(const OMDataStream& stream);
 
-    // @cmember Save the <c OMStoredVectorIndex> <p vector> in this
-    //          <c OMStoredObject>, the vector is named <p vectorName>.
-  void save(const OMStoredVectorIndex* vector, const wchar_t* vectorName);
-
-    // @cmember Save the <c OMStoredSetIndex> <p set> in this
-    //          <c OMStoredObject>, the set is named <p setName>.
-  void save(const OMStoredSetIndex* set, const wchar_t* setName);
-
-    // @cmember Save a single weak reference.
-  void save(OMPropertyId propertyId,
-            OMStoredForm storedForm,
-            const OMUniqueObjectIdentification& id,
-            OMPropertyTag tag,
-            OMPropertyId keyPropertyId);
-
-    // @cmember Save a collection (vector/set) of weak references.
-  void save(const wchar_t* collectionName,
-            const OMUniqueObjectIdentification* index,
-            size_t count,
-            OMPropertyTag tag,
-            OMPropertyId keyPropertyId);
-
-  void saveStream(OMPropertyId pid,
-                  OMStoredForm storedForm,
-                  const wchar_t* name,
-                  OMByteOrder byteOrder);
-
     // @cmember Restore the <c OMStoredObjectIdentification>
     //          of this <c OMStoredObject> into <p id>.
   void restore(OMStoredObjectIdentification& id);
@@ -236,6 +209,70 @@ public:
     // @cmember Restore the <c OMDataStream> <p stream> into this
     //          <c OMStoredObject>.
   void restore(OMDataStream& stream, size_t externalSize);
+
+  // Name manipulation.
+
+    // @cmember Compute the name for a stream.
+    //   @devnote This member function doesn't make sense for all
+    //            derived instances of <c OMStoredObject>.
+  static wchar_t* streamName(const wchar_t* propertyName,
+                             OMPropertyId pid);
+
+    // @cmember Compute the name for an object reference.
+    //   @devnote This member function doesn't make sense for all
+    //            derived instances of <c OMStoredObject>.
+  static wchar_t* referenceName(const wchar_t* propertyName,
+                                OMPropertyId pid);
+
+    // @cmember Compute the name for a collection.
+    //   @devnote This member function doesn't make sense for all
+    //            derived instances of <c OMStoredObject>.
+  static wchar_t* collectionName(const wchar_t* propertyName,
+                                 OMPropertyId pid);
+
+    // @cmember Compute the name for an object reference
+    //          that is an element of a collection.
+    //   @devnote This member function doesn't make sense for all
+    //            derived instances of <c OMStoredObject>.
+  static wchar_t* elementName(const wchar_t* propertyName,
+                              OMPropertyId pid,
+                              OMUInt32 localKey);
+
+    // @cmember Constructor.
+  OMStoredObject(IStorage* s);
+
+    // @cmember Check that the <c OMPropertySet> <p propertySet> is
+    //          consistent with the <c OMStoredPropertySetIndex>
+    //          propertySetIndex.
+  void validate(const OMPropertySet* propertySet,
+                const OMStoredPropertySetIndex* propertySetIndex) const;
+
+    // @cmember Save the <c OMStoredVectorIndex> <p vector> in this
+    //          <c OMStoredObject>, the vector is named <p vectorName>.
+  void save(const OMStoredVectorIndex* vector, const wchar_t* vectorName);
+
+    // @cmember Save the <c OMStoredSetIndex> <p set> in this
+    //          <c OMStoredObject>, the set is named <p setName>.
+  void save(const OMStoredSetIndex* set, const wchar_t* setName);
+
+    // @cmember Save a single weak reference.
+  void save(OMPropertyId propertyId,
+            OMStoredForm storedForm,
+            const OMUniqueObjectIdentification& id,
+            OMPropertyTag tag,
+            OMPropertyId keyPropertyId);
+
+    // @cmember Save a collection (vector/set) of weak references.
+  void save(const wchar_t* collectionName,
+            const OMUniqueObjectIdentification* index,
+            size_t count,
+            OMPropertyTag tag,
+            OMPropertyId keyPropertyId);
+
+  void saveStream(OMPropertyId pid,
+                  OMStoredForm storedForm,
+                  const wchar_t* name,
+                  OMByteOrder byteOrder);
 
     // @cmember Restore the vector named <p vectorName> into this
     //          <c OMStoredObject>.
@@ -382,34 +419,6 @@ public:
                          wchar_t* mangledName,
                          size_t mangledNameSize);
 
-  // Name manipulation.
-
-    // @cmember Compute the name for a stream.
-    //   @devnote This member function doesn't make sense for all
-    //            derived instances of <c OMStoredObject>.
-  static wchar_t* streamName(const wchar_t* propertyName,
-                             OMPropertyId pid);
-
-    // @cmember Compute the name for an object reference.
-    //   @devnote This member function doesn't make sense for all
-    //            derived instances of <c OMStoredObject>.
-  static wchar_t* referenceName(const wchar_t* propertyName,
-                                OMPropertyId pid);
-
-    // @cmember Compute the name for a collection.
-    //   @devnote This member function doesn't make sense for all
-    //            derived instances of <c OMStoredObject>.
-  static wchar_t* collectionName(const wchar_t* propertyName,
-                                 OMPropertyId pid);
-
-    // @cmember Compute the name for an object reference
-    //          that is an element of a collection.
-    //   @devnote This member function doesn't make sense for all
-    //            derived instances of <c OMStoredObject>.
-  static wchar_t* elementName(const wchar_t* propertyName,
-                              OMPropertyId pid,
-                              OMUInt32 localKey);
-
   void writeName(OMPropertyId pid,
                  OMStoredForm storedForm,
                  const wchar_t* name);
@@ -439,15 +448,6 @@ public:
   static void externalizeUInt16Array(const OMUInt16* internalArray,
                                      OMUInt16* externalArray,
                                      size_t elementCount);
-
-    // @cmember Constructor.
-  OMStoredObject(IStorage* s);
-
-    // @cmember Check that the <c OMPropertySet> <p propertySet> is
-    //          consistent with the <c OMStoredPropertySetIndex>
-    //          propertySetIndex.
-  void validate(const OMPropertySet* propertySet,
-                const OMStoredPropertySetIndex* propertySetIndex) const;
 
 private:
   // @access Private members.
