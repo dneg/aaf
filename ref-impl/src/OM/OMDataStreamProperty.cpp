@@ -74,11 +74,15 @@ void OMDataStreamProperty::restore(size_t externalSize)
 {
   TRACE("OMDataStreamProperty::restore");
 
+  size_t characterCount = lengthOfWideString(storedName()) + 1;
+  size_t size = (characterCount * sizeof(OMCharacter)) + 1;
+  ASSERT("Consistent property size", size == externalSize);
+
   wchar_t* name = 0;
   OMByteOrder bo;
-  store()->restoreStream(_propertyId, _storedForm, externalSize, &name, &bo);
-  ASSERT("Consistent property size", externalSize == ((lengthOfWideString(storedName()) + 1) * sizeof(OMCharacter)) + 1);
-  ASSERT("Consistent property name", compareWideString(name, storedName()) == 0);
+  store()->restoreStream(_propertyId, _storedForm, size, &name, &bo);
+  ASSERT("Consistent property name",
+                                   compareWideString(name, storedName()) == 0);
   ASSERT("Valid stored byte order", ((bo == littleEndian) ||
                                      (bo == bigEndian) ||
                                      (bo == unspecified)));
