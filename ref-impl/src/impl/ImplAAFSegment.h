@@ -73,10 +73,6 @@ public:
 
 
 public:
-  // Declare this class to be storable.
-  //
-  OMDECLARE_STORABLE(ImplAAFSegment)
-
 
 	virtual AAFRESULT NumRepresentations(aafInt32 *  pCount);
 
