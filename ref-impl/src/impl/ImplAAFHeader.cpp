@@ -37,29 +37,18 @@
 #include "ImplEnumAAFIdentifications.h"
 #endif
 
-#include "AAFMob.h"
-
-
-
-
 #ifndef __ImplAAFHeader_h__
 #include "ImplAAFHeader.h"
-#endif
-
-#ifndef __AAFHeader_h__
-#include "AAFHeader.h"
 #endif
 
 #include "ImplAAFFile.h"
 
 #include <assert.h>
-#if 0
+
+// BobT 11-Sept-1998: Changed '#if 0' to '#if FULL_TOOLKIT'.
+#if FULL_TOOLKIT
 #include <stdio.h>
 #include <string.h>
-#include "AAFHeader.h"
-#include "AAFFile.h"
-#include "AAFMob.h"
-#include "AAFDataKind.h"
 #include "aafCvt.h"
 #include "aafTable.h"
 #include "AAFPrivate.h"
