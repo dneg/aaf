@@ -181,21 +181,22 @@ const CLSID CLSID_AAFHeader =
 //
 // Version : Changes
 //
-//  0.1    : initial version
-//  0.2    : add byte order flag to the property index, change stream names
-//  0.3    : change property ids to be unique within a file (this
+//  0.01   : initial version
+//  0.02   : add byte order flag to the property index, change stream names
+//  0.03   : change property ids to be unique within a file (this
 //           includes using automatically generated PIDs and changes to
 //           property names)
-//  0.4    : change to the use of SMPTE conformant stored class ids
-//  0.5    : change the value of many pids because of the addition of the
+//  0.04   : change to the use of SMPTE conformant stored class ids
+//  0.05   : change the value of many pids because of the addition of the
 //           new plugin related classes
-//  0.6    : change property names to match those in the dictionary
-//  0.7    : change AAFSourceMob::MediaDescription to
+//  0.06   : change property names to match those in the dictionary
+//  0.07   : change AAFSourceMob::MediaDescription to
 //           AAFSourceMob::EssenceDescription.
-//  0.8    : remove AAFPluggableDef. Renumbered TID_* values.
-//  0.9    : Effect -> OperationGroup, EffectDefinition -> OperationDefinition,
+//  0.08   : remove AAFPluggableDef. Renumbered TID_* values.
+//  0.09   : Effect -> OperationGroup, EffectDefinition -> OperationDefinition,
 //           PlugInDescriptors -> PluginDescriptors.
-//
+//  0.10   : remove OperationDefinition::PluginLocator and
+//           OperationDefinition::ManufacturerID.
 //
 
 // The following may change at run time depending on the file format
@@ -207,7 +208,7 @@ char* _closeArrayKeySymbol = (char*)closeArrayKeySymbol;
 
 // Highest version of file/index format recognized by this dumper
 //
-const OMUInt32 HIGHVERSION = 9;
+const OMUInt32 HIGHVERSION = 10;
 
 // Output format requested
 //
