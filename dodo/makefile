@@ -58,6 +58,7 @@ DODO_TARGETS = \
 	AAFTimecode.all \
 	AAFTimecodeStream.all \
 	AAFTimecodeStream12M.all \
+	AAFTransition.all \
 	AAFUInt64.all \
 	AAFUnitTest.all \
 	AAFUnixLocator.all \
@@ -592,6 +593,19 @@ AAFTimecodeStream12M.comc : AAFTimecodeStream12M.exp macros/comc.mac
 AAFTimecodeStream12M.comh : AAFTimecodeStream12M.exp macros/comh.mac
 AAFTimecodeStream12M.implc : AAFTimecodeStream12M.exp macros/implc.mac
 AAFTimecodeStream12M.implh : AAFTimecodeStream12M.exp macros/implh.mac
+
+AAFTransition.all : AAFTransition.cpp AAFTransition.h
+AAFTransition.all : AAFTransition.comc AAFTransition.comh
+AAFTransition.all : AAFTransition.exp AAFTransition.idl
+AAFTransition.all : AAFTransition.implc AAFTransition.implh
+AAFTransition.exp : AAFUnitTest.exp AAFTimecodeStream.exp macros/exp.mac
+AAFTransition.h : AAFTransition.exp macros/h.mac
+AAFTransition.cpp : AAFTransition.exp macros/cpp.mac
+AAFTransition.idl : AAFTransition.exp macros/idl.mac
+AAFTransition.comc : AAFTransition.exp macros/comc.mac
+AAFTransition.comh : AAFTransition.exp macros/comh.mac
+AAFTransition.implc : AAFTransition.exp macros/implc.mac
+AAFTransition.implh : AAFTransition.exp macros/implh.mac
 
 AAFUInt64.all : AAFUInt64.cpp AAFUInt64.h
 AAFUInt64.all : AAFUInt64.comc AAFUInt64.comh
