@@ -88,15 +88,15 @@ AAFRESULT STDMETHODCALLTYPE
                            aafNumSlots_t *pNumMobs)
 {
 	size_t				siz;
-	ImplEnumAAFMobs		*mobEnum;
+	ImplEnumAAFMobs		*mobEnum = NULL;
 	aafSearchCrit_t		criteria;
-	AAFRESULT			hr;
-	ImplAAFMob			*aMob;
+	AAFRESULT			hr = AAFRESULT_SUCCESS;
+	ImplAAFMob			*aMob = NULL;
 
 	if(pNumMobs == NULL)
 		return AAFRESULT_NULL_PARAM;
 	
-	 if(mobKind == kAllMob)
+	if(mobKind == kAllMob)
 	{
 		_mobs.getSize(siz);
 	}
@@ -104,17 +104,24 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 		criteria.searchTag = kByMobKind;
 		criteria.tags.mobKind = mobKind;
-		GetMobs (&criteria,&mobEnum);
+		hr = GetMobs (&criteria,&mobEnum);
 		siz = 0;
 		do {
 			hr = mobEnum->NextOne (&aMob);
-			if(hr == AAFRESULT_SUCCESS)
+      if(hr == AAFRESULT_SUCCESS)
+      {
 				siz++;
+        aMob->ReleaseRef();
+        aMob = NULL;
+      }
  		} while(hr == AAFRESULT_SUCCESS);
+
+    if (mobEnum)
+      mobEnum->ReleaseRef();
 	}
 	
 	*pNumMobs = siz;
-	return AAFRESULT_SUCCESS;
+	return hr;
 }
 
 
