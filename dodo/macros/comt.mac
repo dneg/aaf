@@ -195,13 +195,13 @@ HRESULT C.this-module_test()
 #startm AD_XMETHOD_11 57
 #endm
 
-#startm AD_X2METHOD3 20
+#startm AD_X2METHOD3 23
 #endm
 
-#startm AD_X2METHOD4 26
+#startm AD_X2METHOD4 30
 #endm
 
-#startm AD_X2METHOD5 32
+#startm AD_X2METHOD5 37
 #endm
 
 #startm AD_CLASS_END 00

@@ -735,148 +735,147 @@ interface I.this-module
 #ccccccccccccccccccccccccccc
 #c
 #c Inserts declaration for a method which takes three arguments.
-#c Allows an additional macro argument per method argument to let
+#c Allows two additional macro argument per method argument to let
 #c macro caller pass more info.  For example:
 #c
-#c For type           Arg is
-#c     ----           ------
-#c     objInArray     array size
-#c     objOutArray    array size
-#c     objInCustom    custom input "marshal" code
-#c     objOutCustom   custom output "marshal" code
-#c     all else       ignored
+#c For type           Arg1 is						arg2 is
+#c     ----           ------						----
+#c     objInArray     array size					-
+#c     objOutArray    alloc'd array size			fetched array size
+#c     objInCustom    custom input "marshal" code	-
+#c     objOutCustom   custom output "marshal" code	-
+#c     all else       -								-
 #c
 #c Macro Arg 01: method name
 #c
 #c Macro arguments 02+:
 #c 
-#c meth arg #   arg modfrs   obj style   type    name    arg cmnt aux
-#c ----------   ----------   ---------   ----    ----    -------- --
-#c metharg 1    02           03          04      05      06       07
-#c metharg 2    08           09          10      11      12       13
-#c metharg 3    14           15          16      17      18       19
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt aux1	aux2
+#c ----------   ----------   ---------   ----    ----    -------- ----  ----
+#c metharg 1    02           03          04      05      06       07	08
+#c metharg 2    09           10          11      12      13       14	15
+#c metharg 3    16           17          18      19      20       21	22
 #c
-#c Macro Arg 20: method description
+#c Macro Arg 23: method description
 #c
-#startm AD_X2METHOD3 20
+#startm AD_X2METHOD3 23
   //***********************************************************
   //
   // %01()
   //
-  // %20
+  // %23
   // 
   HRESULT %01 (
     // %06
     %02 .%03-adornment%04 .%03-indirection %05,
 
-    // %12
-    %08 .%09-adornment%10 .%09-indirection %11,
+    // %13
+    %09 .%10-adornment%11 .%10-indirection %12,
 
-    // %18
-    %14 .%15-adornment%16 .%15-indirection %17);\
+    // %20
+    %16 .%17-adornment%18 .%17-indirection %19);\
 #endm
 
 
 #ccccccccccccccccccccccccccc
 #c
 #c Inserts declaration for a method which takes four arguments.
-#c Allows an additional macro argument per method argument to let
+#c Allows two additional macro argument per method argument to let
 #c macro caller pass more info.  For example:
 #c
-#c For type           Arg is
-#c     ----           ------
-#c     objInArray     array size
-#c     objOutArray    array size
-#c     objInCustom    custom input "marshal" code
-#c     objOutCustom   custom output "marshal" code
-#c     all else       ignored
+#c For type           Arg1 is						arg2 is
+#c     ----           ------						----
+#c     objInArray     array size					-
+#c     objOutArray    alloc'd array size			fetched array size
+#c     objInCustom    custom input "marshal" code	-
+#c     objOutCustom   custom output "marshal" code	-
+#c     all else       -								-
 #c
 #c Macro Arg 01: method name
 #c
 #c Macro arguments 02+:
 #c 
-#c meth arg #   arg modfrs   obj style   type    name    arg cmnt aux
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt aux1	aux2
 #c ----------   ----------   ---------   ----    ----    -------- --
-#c metharg 1    02           03          04      05      06       07
-#c metharg 2    08           09          10      11      12       13
-#c metharg 3    14           15          16      17      18       19
-#c metharg 4    20           21          22      23      24       25
+#c metharg 1    02           03          04      05      06       07	08
+#c metharg 2    09           10          11      12      13       14	15
+#c metharg 3    16           17          18      19      20       21	22
+#c metharg 4    23           24          25      26      27       28	29
 #c
-#c Macro Arg 26: method description
+#c Macro Arg 30: method description
 #c
-#startm AD_X2METHOD4 26
+#startm AD_X2METHOD4 30
   //***********************************************************
   //
   // %01()
   //
-  // %26
+  // %30
   // 
   HRESULT %01 (
     // %06
     %02 .%03-adornment%04 .%03-indirection %05,
 
-    // %12
-    %08 .%09-adornment%10 .%09-indirection %11,
+    // %13
+    %09 .%10-adornment%11 .%10-indirection %12,
 
-    // %18
-    %14 .%15-adornment%16 .%15-indirection %17,
+    // %20
+    %16 .%17-adornment%18 .%17-indirection %19,
 
-    // %24
-    %20 .%21-adornment%22 .%21-indirection %23);\
+    // %27
+    %23 .%24-adornment%25 .%24-indirection %26);\
 #endm
 
 
 #ccccccccccccccccccccccccccc
 #c
 #c Inserts declaration for a method which takes five arguments.
-#c Allows an additional macro argument per method argument to let
+#c Allows two additional macro argument per method argument to let
 #c macro caller pass more info.  For example:
 #c
-#c For type           Arg is
-#c     ----           ------
-#c     objInArray     array size
-#c     objPassArray   array size
-#c     objOutArray    array size
-#c     objInCustom    custom input "marshal" code
-#c     objOutCustom   custom output "marshal" code
-#c     all else       ignored
+#c For type           Arg1 is						arg2 is
+#c     ----           ------						----
+#c     objInArray     array size					-
+#c     objOutArray    alloc'd array size			fetched array size
+#c     objInCustom    custom input "marshal" code	-
+#c     objOutCustom   custom output "marshal" code	-
+#c     all else       -								-
 #c
 #c Macro Arg 01: method name
 #c
 #c Macro arguments 02+:
 #c 
-#c meth arg #   arg modfrs   obj style   type    name    arg cmnt aux
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt aux1	aux2
 #c ----------   ----------   ---------   ----    ----    -------- --
-#c metharg 1    02           03          04      05      06       07
-#c metharg 2    08           09          10      11      12       13
-#c metharg 3    14           15          16      17      18       19
-#c metharg 4    20           21          22      23      24       25
-#c metharg 5    26           27          28      29      30       31
+#c metharg 1    02           03          04      05      06       07	08
+#c metharg 2    09           10          11      12      13       14	15
+#c metharg 3    16           17          18      19      20       21	22
+#c metharg 4    23           24          25      26      27       28	29
+#c metharg 5    30           31          32      33      34       35	36
 #c
-#c Macro Arg 32: method description
+#c Macro Arg 37: method description
 #c
-#startm AD_X2METHOD5 32
+#startm AD_X2METHOD5 37
   //***********************************************************
   //
   // %01()
   //
-  // %32
+  // %37
   // 
   HRESULT %01 (
     // %06
     %02 .%03-adornment%04 .%03-indirection %05,
 
-    // %12
-    %08 .%09-adornment%10 .%09-indirection %11,
+    // %13
+    %09 .%10-adornment%11 .%10-indirection %12,
 
-    // %18
-    %14 .%15-adornment%16 .%15-indirection %17,
+    // %20
+    %16 .%17-adornment%18 .%17-indirection %19,
 
-    // %24
-    %20 .%21-adornment%22 .%21-indirection %23,
+    // %27
+    %23 .%24-adornment%25 .%24-indirection %26,
 
-    // %30
-    %26 .%27-adornment%28 .%27-indirection %29);\
+    // %34
+    %30 .%31-adornment%32 .%31-indirection %33);\
 #endm
 
 
