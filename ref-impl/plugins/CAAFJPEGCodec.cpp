@@ -36,7 +36,7 @@
 #include "aafCvt.h"
 #include "AAFDataDefs.h"
 #include "AAFDefUIDs.h"
-#include "AAFStoredObjectIDs.h"
+#include "AAFClassDefUIDs.h"
 #include "AAFCodecDefs.h"
 #include "AAFEssenceFormats.h"
 
@@ -47,9 +47,12 @@
 const CLSID CLSID_AAFJPEGCodec = 
 { 0xdb382d1, 0x3bac, 0x11d3, { 0xbf, 0xd6, 0x0, 0x10, 0x4b, 0xc9, 0x15, 0x6d } };
 
+const aafUID_t AAF_CMPR_FULL_JPEG = { 0xedb35383, 0x6d30, 0x11d3, { 0xa0, 0x36, 0x0, 0x60, 0x94, 0xeb, 0x75, 0xcb } };
+
 const aafUID_t kAAFPropID_CDCIOffsetToFrameIndexes = { 0x9d15fca3, 0x54c5, 0x11d3, { 0xa0, 0x29, 0x0, 0x60, 0x94, 0xeb, 0x75, 0xcb } };
 const aafUID_t kAAFPropID_DIDFrameIndexByteOrder = { 0xb57e925d, 0x170d, 0x11d4, { 0xa0, 0x8f, 0x0, 0x60, 0x94, 0xeb, 0x75, 0xcb } };
 const aafUID_t kAAFPropID_DIDResolutionID = { 0xce2aca4d, 0x51ab, 0x11d3, { 0xa0, 0x24, 0x0, 0x60, 0x94, 0xeb, 0x75, 0xcb } };
+const aafUID_t kAAFPropID_DIDFirstFrameOffset = { 0xce2aca4e, 0x51ab, 0x11d3, { 0xa0, 0x24, 0x0, 0x60, 0x94, 0xeb, 0x75, 0xcb } };
 const aafUID_t kAAFPropID_DIDFrameSampleSize = { 0xce2aca50, 0x51ab, 0x11d3, { 0xa0, 0x24, 0x0, 0x60, 0x94, 0xeb, 0x75, 0xcb } };
 
 // The minimum number of elements added to the current sample index
@@ -88,7 +91,7 @@ static wchar_t *kManufRev = L"Rev 0.1";
 const aafUID_t MANUF_AVID_PLUGINS = { 0xA6487F21, 0xE78F, 0x11d2, { 0x80, 0x9E, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } };
 
 
-const aafUID_t NULL_ID = {0};
+const aafUID_t NULL_UID = { 0, 0, 0, { 0, 0, 0, 0, 0, 0, 0, 0 } };
 const aafRational_t NULL_RATIONAL = {0, 0};
 const aafRational_t DEFAULT_ASPECT_RATIO = {4, 3};
 
@@ -127,7 +130,8 @@ CAAFJPEGCodec::CAAFJPEGCodec (IUnknown * pControllingUnknown)
 	_compressEnable = kAAFCompressionEnable;
 	_length = 0;  // 64 bit int
 	_sampleRate = NULL_RATIONAL;
-	_containerFormat = NULL_ID;
+	_containerFormat = NULL_UID;
+	_compression = NULL_UID;
 	_codecID = kAAFCodecJPEG;
 	_storedHeight = 0;
 	_storedWidth = 0;
@@ -182,7 +186,7 @@ CAAFJPEGCodec::CAAFJPEGCodec (IUnknown * pControllingUnknown)
 	_rawSampleArray = NULL;
 	_rawSampleImageBuffer = NULL; // ultimate buffer for _sampleImage.
 	_rawSampleImageBufferSize = 0;
-
+	_resolutionID = 0;
 }
 
 
@@ -320,7 +324,10 @@ void CAAFJPEGCodec::CreateLegacyPropDefs(IAAFDictionary *p_dict)
 	IAAFPropertyDef			*pPropertyDef = NULL;
 	IAAFTypeDef				*pTypeDef = NULL;
 	IAAFClassDef            *pcd = 0;
-	checkResult(p_dict->LookupClassDef(AUID_AAFCDCIDescriptor, &pcd));
+	IAAFClassDef            *p_did_classdef = 0;
+
+	checkResult(p_dict->LookupClassDef(kAAFClassID_CDCIDescriptor, &pcd));
+	checkResult(p_dict->LookupClassDef(kAAFClassID_DigitalImageDescriptor, &p_did_classdef));
 	if(pcd->LookupPropertyDef(kAAFPropID_CDCIOffsetToFrameIndexes, &pPropertyDef) != AAFRESULT_SUCCESS)
 	{
 		checkResult(p_dict->LookupTypeDef(kAAFTypeID_Int32, &pTypeDef));
@@ -332,10 +339,10 @@ void CAAFJPEGCodec::CreateLegacyPropDefs(IAAFDictionary *p_dict)
 		pPropertyDef->Release();
 		pPropertyDef = NULL;
 	}
-	if(pcd->LookupPropertyDef(kAAFPropID_DIDFrameIndexByteOrder, &pPropertyDef) != AAFRESULT_SUCCESS)
+	if(p_did_classdef->LookupPropertyDef(kAAFPropID_DIDFrameIndexByteOrder, &pPropertyDef) != AAFRESULT_SUCCESS)
 	{
 		checkResult(p_dict->LookupTypeDef(kAAFTypeID_Int16, &pTypeDef));
-		checkResult(pcd->RegisterOptionalPropertyDef (kAAFPropID_DIDFrameIndexByteOrder,
+		checkResult(p_did_classdef->RegisterOptionalPropertyDef (kAAFPropID_DIDFrameIndexByteOrder,
 			L"FrameIndexByteOrder",
 			pTypeDef, &pPropertyDef));
 		pTypeDef->Release();
@@ -343,10 +350,10 @@ void CAAFJPEGCodec::CreateLegacyPropDefs(IAAFDictionary *p_dict)
 		pPropertyDef->Release();
 		pPropertyDef = NULL;
 	}		
-	if(pcd->LookupPropertyDef(kAAFPropID_DIDResolutionID, &pPropertyDef) != AAFRESULT_SUCCESS)
+	if(p_did_classdef->LookupPropertyDef(kAAFPropID_DIDResolutionID, &pPropertyDef) != AAFRESULT_SUCCESS)
 	{
 		checkResult(p_dict->LookupTypeDef(kAAFTypeID_Int32, &pTypeDef));
-		checkResult(pcd->RegisterOptionalPropertyDef (kAAFPropID_DIDResolutionID,
+		checkResult(p_did_classdef->RegisterOptionalPropertyDef (kAAFPropID_DIDResolutionID,
 			L"ResolutionID",
 			pTypeDef, &pPropertyDef));
 		pTypeDef->Release();
@@ -354,10 +361,21 @@ void CAAFJPEGCodec::CreateLegacyPropDefs(IAAFDictionary *p_dict)
 		pPropertyDef->Release();
 		pPropertyDef = NULL;
 	}		
-	if(pcd->LookupPropertyDef(kAAFPropID_DIDFrameSampleSize, &pPropertyDef) != AAFRESULT_SUCCESS)
+	if(p_did_classdef->LookupPropertyDef(kAAFPropID_DIDFirstFrameOffset, &pPropertyDef) != AAFRESULT_SUCCESS)
 	{
 		checkResult(p_dict->LookupTypeDef(kAAFTypeID_Int32, &pTypeDef));
-		checkResult(pcd->RegisterOptionalPropertyDef (kAAFPropID_DIDFrameSampleSize,
+		checkResult(p_did_classdef->RegisterOptionalPropertyDef (kAAFPropID_DIDFirstFrameOffset,
+			L"FirstFrameOffset",
+			pTypeDef, &pPropertyDef));
+		pTypeDef->Release();
+		pTypeDef = NULL;
+		pPropertyDef->Release();
+		pPropertyDef = NULL;
+	}		
+	if(p_did_classdef->LookupPropertyDef(kAAFPropID_DIDFrameSampleSize, &pPropertyDef) != AAFRESULT_SUCCESS)
+	{
+		checkResult(p_dict->LookupTypeDef(kAAFTypeID_Int32, &pTypeDef));
+		checkResult(p_did_classdef->RegisterOptionalPropertyDef (kAAFPropID_DIDFrameSampleSize,
 			L"FrameSampleSize",
 			pTypeDef, &pPropertyDef));
 		pTypeDef->Release();
@@ -369,6 +387,11 @@ void CAAFJPEGCodec::CreateLegacyPropDefs(IAAFDictionary *p_dict)
 	{
 		pcd->Release ();
 		pcd = 0;
+	}
+	if (p_did_classdef)
+	{
+		p_did_classdef->Release ();
+		p_did_classdef = 0;
 	}
 	if (pPropertyDef)
 	{
@@ -722,7 +745,7 @@ HRESULT STDMETHODCALLTYPE
 
 		// Get the compression code id from the descriptor and make sure that we
 		// can handle it in this codec.
-		aafUID_t codecID = NULL_ID;
+		aafUID_t codecID = NULL_UID;
 		hr = descriptorHelper.GetCompression(&codecID);
 		checkExpression(AAFRESULT_PROP_NOT_PRESENT == hr || AAFRESULT_SUCCESS == hr, hr);
 		if (AAFRESULT_SUCCESS == hr && EqualAUID(&codecID, &kAAFCodecJPEG) && 0 == padBits)
@@ -900,10 +923,20 @@ CAAFJPEGCodec::Create (IAAFSourceMob *unk,
 		// The first sample is always at offset 0...of course.E
 		// we have not written a sample yet so the next call to AddSampleIndexEntry will
 		// allow use the compute the size of the first, 0th, sample.
-		checkResult(AddSampleIndexEntry(0));
+		const aafUInt32			kStartPadding = 1024;
+		unsigned char *padBuf;
+		aafUInt32				bytesWritten, n;
+		padBuf = new unsigned char [kStartPadding];
+		padBuf[0] = 0xff;
+		padBuf[1] = 0xd8;
+		for(n = 2; n < kStartPadding-1; n++)
+			padBuf[n] = 0xff;
+		padBuf[kStartPadding-1] = 0xD9;
+		checkResult(_stream->Seek(0));
+		checkResult(_stream->Write(kStartPadding, padBuf, &bytesWritten));
+		delete padBuf;
+		checkResult(AddSampleIndexEntry(kStartPadding));
 		// setupStream()
-
-		checkResult(_descriptorHelper.SetMCProps( 76, _fileBytesPerSample ) );
 	}
 	catch (HRESULT& rhr)
 	{
@@ -969,7 +1002,15 @@ HRESULT STDMETHODCALLTYPE
 		//
 		// DigitalImageDescriptor methods:
 		//
-		checkResult(_descriptorHelper.GetCompression(&_codecID));
+
+		// Compression is optional property. If it's not present
+		// set it to default value. 
+		hr = _descriptorHelper.GetCompression( &_compression );
+		checkExpression( AAFRESULT_PROP_NOT_PRESENT == hr || 
+				 AAFRESULT_SUCCESS == hr, hr );
+		if( hr == AAFRESULT_PROP_NOT_PRESENT )
+		    _compression = NULL_UID;
+
 //		checkAssertion(kAAFTrue == EqualAUID(&_codecID, &CodecJPEG));
 		checkResult(_descriptorHelper.GetStoredView(&_storedHeight, &_storedWidth));
 		_imageHeight = _storedHeight;
@@ -1053,6 +1094,12 @@ HRESULT STDMETHODCALLTYPE
 		checkExpression(AAFRESULT_PROP_NOT_PRESENT == hr || AAFRESULT_SUCCESS == hr, hr);
 		if (AAFRESULT_PROP_NOT_PRESENT == hr)
 			_colorRange = (1U << _componentWidth) - 2;
+
+		hr = _descriptorHelper.GetResolutionID( &_resolutionID );
+		checkExpression( AAFRESULT_PROP_NOT_PRESENT == hr || 
+				 AAFRESULT_SUCCESS == hr, hr );
+		if( hr == AAFRESULT_PROP_NOT_PRESENT )
+		    _resolutionID = 0;
 
 		// Get the compression factor?
 		//
@@ -1898,11 +1945,11 @@ void CAAFJPEGCodec::UpdateDescriptor (CAAFJPEGDescriptorHelper& descriptorHelper
 	//	checkResult(descriptorHelper.SetIsInContainer(_isInAAFContainer));
 	checkResult(descriptorHelper.SetSampleRate(_sampleRate));
 	//	checkResult(descriptorHelper.SetContainerFormat(_containerFormat));
-	checkResult(descriptorHelper.SetCompression(_codecID));
+	checkResult(descriptorHelper.SetCompression(_compression));
 	checkResult(descriptorHelper.SetStoredView(_storedHeight, _storedWidth));
 	checkResult(descriptorHelper.SetSampledView(_sampledHeight, _sampledWidth, _sampledXOffset, _sampledYOffset));
 	checkResult(descriptorHelper.SetDisplayView(_displayHeight, _displayWidth, _displayXOffset, _displayYOffset));
-	checkResult(descriptorHelper.SetFrameLayout(_frameLayout));
+_frameLayout=kAAFSeparateFields;	checkResult(descriptorHelper.SetFrameLayout(_frameLayout));
 	checkResult(descriptorHelper.SetVideoLineMap(_videoLineMapSize, _videoLineMap));
 	checkResult(descriptorHelper.SetImageAspectRatio(_imageAspectRatio));
 	checkResult(descriptorHelper.SetAlphaTransparency(_alphaTransparency));
@@ -1915,6 +1962,13 @@ void CAAFJPEGCodec::UpdateDescriptor (CAAFJPEGDescriptorHelper& descriptorHelper
 	checkResult(descriptorHelper.SetWhiteReferenceLevel(_whiteReferenceLevel));
 	checkResult(descriptorHelper.SetColorRange(_colorRange));
 	checkResult(descriptorHelper.SetPaddingBits(_paddingBits));
+
+	if( _resolutionID != 0 )
+	{
+	    checkResult( descriptorHelper.SetResolutionID( _resolutionID ) );
+	    checkResult( descriptorHelper.SetFrameSampleSize( 0 ) );
+	    checkResult( descriptorHelper.SetFirstFrameOffset( 0 ) );
+	}
 }
 
 
@@ -1983,8 +2037,6 @@ void CAAFJPEGCodec::UpdateCalculatedData(void)
 
 	_fileBytesPerSample = (_bitsPerSample + 7) / 8;
 	_memBytesPerSample = _fileBytesPerSample;
-
-	checkResult(_descriptorHelper.SetMCProps( 76, _fileBytesPerSample ) );
 }
 
 
@@ -2211,6 +2263,7 @@ typedef struct _aafEssenceFormatData_t
 		aafColorSiting_t expColorSiting;
 		aafAlphaTransparency_t expAlphaTransparency;
 		aafFieldNumber_t	   expFieldDominance;
+		aafUID_t expUID;
 	} operand;
 } aafEssenceFormatData_t;
 
@@ -2300,7 +2353,8 @@ HRESULT STDMETHODCALLTYPE
 				// What do we do if the codec is asked to change the frame layout
 				// after samples have already been written to the stream? This
 				// should be a error in essence access...
-				checkAssertion(frameLayout != _frameLayout && 0 < _numberOfSamples);
+				if( _numberOfSamples > 0 )
+				    checkAssertion( frameLayout == _frameLayout );
 			}
 			else if (EqualAUID(&kAAFCDCIHorizSubsampling, &param.opcode))
 			{
@@ -2323,8 +2377,15 @@ HRESULT STDMETHODCALLTYPE
 			memset(&param, 0, sizeof(param));
 			checkResult(pFormat->GetIndexedFormatSpecifier (i, 
 				&param.opcode, sizeof(param.operand.expData), param.operand.expData, &param.size));
-			
-			if (EqualAUID(&kAAFNumChannels, &param.opcode))
+
+			if (EqualAUID(&kAAFCompression, &param.opcode))
+			{	// Validate the in-memory size.
+				checkExpression(param.size == sizeof(param.operand.expUID), AAFRESULT_INVALID_PARM_SIZE);
+
+				memcpy( &_compression, &(param.operand.expUID), 
+				    sizeof(param.operand.expUID) );
+			}
+			else if (EqualAUID(&kAAFNumChannels, &param.opcode))
 			{	// Validate the in-memory size.
 				checkExpression(param.size == sizeof(param.operand.expInt32), AAFRESULT_INVALID_PARM_SIZE);
 				// We only support a single channel.
@@ -2430,6 +2491,41 @@ HRESULT STDMETHODCALLTYPE
 
 				_compression_IJG_Quality = compressionQuality;
 			}
+			else if (EqualAUID(&kAAFResolutionID, &param.opcode))
+			{	// Validate the in-memory size.
+				checkExpression(param.size == sizeof(param.operand.expInt32), AAFRESULT_INVALID_PARM_SIZE);
+
+				aafInt32 resID = param.operand.expInt32;
+				switch( resID )
+				{
+				    case 75:
+				    case 76:
+				    case 77:
+				    case 78:
+				    case 79:
+				    case 80:
+				    case 82:
+				    case 95:
+				    case 96:
+				    case 97:
+				    case 98:
+				    case 102:
+				    case 103:
+				    case 104:
+				    case 110:
+				    case 111:
+				    case 112:
+				    case 113:
+					_resolutionID = resID;
+					memcpy( &_compression, 
+						&AAF_CMPR_FULL_JPEG, 
+						sizeof(_compression) );
+					break;
+				    default:
+					throw HRESULT(AAFRESULT_INVALID_PARAM);
+
+				}
+			}
 
 			
 			
@@ -2489,8 +2585,14 @@ HRESULT STDMETHODCALLTYPE
 			checkResult(pTemplate->GetIndexedFormatSpecifier (i, 
 				&param.opcode, sizeof(param.operand.expData), param.operand.expData, &param.size));
 
-
-			if (EqualAUID(&kAAFNumChannels, &param.opcode))
+			if( EqualAUID( &kAAFCompression, &param.opcode) )
+			{
+			    // Write out current compression ID
+			    memcpy( &(param.operand.expUID), &_compression, 
+				sizeof(param.operand.expUID) );
+				checkResult(fmt->AddFormatSpecifier (kAAFCompression, sizeof(param.operand.expUID), (aafDataBuffer_t)&param.operand.expUID));
+			}
+			else if (EqualAUID(&kAAFNumChannels, &param.opcode))
 			{	// We only support a single channel...		
 				param.operand.expInt32 = kDefaultNumCh;
 				checkResult(fmt->AddFormatSpecifier (kAAFNumChannels, sizeof(param.operand.expInt32), (aafDataBuffer_t)&param.operand.expInt32));
@@ -2647,6 +2749,11 @@ HRESULT STDMETHODCALLTYPE
 				param.operand.expRational = _gamma;
 				checkResult(fmt->AddFormatSpecifier (kAAFGamma, sizeof(param.operand.expRational), (aafDataBuffer_t)&param.operand.expRational));
 			}
+			else if (EqualAUID(&kAAFResolutionID, &param.opcode))
+			{
+				param.operand.expInt32 = _resolutionID;
+				checkResult(fmt->AddFormatSpecifier (kAAFResolutionID, sizeof(param.operand.expInt32), (aafDataBuffer_t)&param.operand.expInt32));
+			}
 			else
 			{	// The given opcode was not handled!
 				throw HRESULT(AAFRESULT_INVALID_OP_CODEC);
@@ -2698,6 +2805,11 @@ HRESULT STDMETHODCALLTYPE
 		// Start with an "empty" file format specifier.
 		checkResult(_access->GetEmptyFileFormat(&fmt));
 		
+		// Write out current compression ID
+		memcpy( &(param.operand.expUID), &_compression, 
+		    sizeof(param.operand.expUID) );
+		checkResult(fmt->AddFormatSpecifier (kAAFCompression, sizeof(param.operand.expUID), (aafDataBuffer_t)&param.operand.expUID));
+
 		// This codec only handles a single channel of Picture data.
 		param.operand.expInt32 = kDefaultNumCh;
 		checkResult(fmt->AddFormatSpecifier (kAAFNumChannels, sizeof(param.operand.expInt32), (aafDataBuffer_t)&param.operand.expInt32));
@@ -2783,6 +2895,9 @@ HRESULT STDMETHODCALLTYPE
 
 		param.operand.expUInt32 = _imageAlignmentFactor;
 		checkResult(fmt->AddFormatSpecifier (kAAFImageAlignmentFactor, sizeof(param.operand.expUInt32), (aafDataBuffer_t)&param.operand.expUInt32));
+
+		param.operand.expInt32 = _resolutionID;
+		checkResult(fmt->AddFormatSpecifier (kAAFResolutionID, sizeof(param.operand.expInt32), (aafDataBuffer_t)&param.operand.expInt32));
 
 		// Set the sample format and color space and component order and size.
 		// Initially use the same setup as omcJPEG.c...
