@@ -5,15 +5,15 @@
 // except in compliance with the License.  The License is available in
 // AAFSDKPSL.TXT, or you may obtain a copy of the License from the AAF
 // Association or its successor.
-// 
+//
 // Software distributed under the License is distributed on an "AS IS"
 // basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.  See
 // the License for the specific language governing rights and limitations
 // under the License.
-// 
+//
 // The Original Code of this file is Copyright 1998-2001, Licensor of the
 // AAF Association.
-// 
+//
 // The Initial Developer of the Original Code of this file and the
 // Licensor of the AAF Association is Avid Technology.
 // All rights reserved.
@@ -21,7 +21,7 @@
 //=---------------------------------------------------------------------=
 
 // @com Executable test program by Chris Morgan, intern for
-//      Avid Technology, Tewksbury 
+//      Avid Technology, Tewksbury
 // @com This is used for scalability testing of AAF code.
 // Last modified on 9/2/01.
 
@@ -62,7 +62,7 @@
 #endif
 
 // MAX is used for arrays when converting between types - set here for
-// debugging. 
+// debugging.
 const int MAX = 80;
 static char niceFileName[FILENAME_MAX];
 static void usage(void);
@@ -71,7 +71,7 @@ static aafWChar* slotName = L"SLOT1";
 //static aafInt32 fadeOutLen = 2000;
 //static aafFadeType_t fadeInType = kAAFFadeLinearAmp;
 //static aafFadeType_t fadeOutType = kAAFFadeLinearPower;
-static aafSourceRef_t sourceRef; 
+static aafSourceRef_t sourceRef;
 
 
 #define TAPE_LENGTH     1L * 60L *60L * 30L
@@ -115,7 +115,7 @@ static HRESULT convert(char* cName, size_t length, const wchar_t* name)
   size_t status = wcstombs(cName, name, length);
   if (status == (size_t)-1) {
     fprintf(stderr, ": Error : Conversion failed.\n");
-    return -1; 
+    return -1;
   } else {
     return S_OK;
   }
@@ -167,7 +167,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, long int N)
   long int                    i = 0;
 
   moduleErrorTmp = S_OK;
-  
+
 
   // delete any previous test file before continuing...
   char chFileName[1000];
@@ -219,11 +219,11 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, long int N)
 
   // sequence creation code pulled out of the subsequent loop.
   // Create a Composition Mob
-  check(pCDCompositionMob->CreateInstance(IID_IAAFMob, 
+  check(pCDCompositionMob->CreateInstance(IID_IAAFMob,
                                           (IUnknown **)&pCompMob));
 
-  check(pCDSequence->CreateInstance(IID_IAAFSequence, 
-                                    (IUnknown **)&pSequence));       
+  check(pCDSequence->CreateInstance(IID_IAAFSequence,
+                                    (IUnknown **)&pSequence));
   check(pSequence->QueryInterface (IID_IAAFSegment, (void **)&seg));
 
   check(pSequence->QueryInterface(IID_IAAFComponent, (void **)&aComponent));
@@ -249,7 +249,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, long int N)
     //Make the Tape MOB
     check(pCDSourceMob->CreateInstance(IID_IAAFSourceMob,
                                        (IUnknown **)&pTapeMob));
-    check(pCDTapeDescriptor->CreateInstance(IID_IAAFTapeDescriptor, 
+    check(pCDTapeDescriptor->CreateInstance(IID_IAAFTapeDescriptor,
                                             (IUnknown **)&pTapeDesc));
     check(pTapeDesc->QueryInterface (IID_IAAFEssenceDescriptor,
                                      (void **)&aDesc));
@@ -258,14 +258,14 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, long int N)
     aDesc = NULL;
     pTapeDesc->Release();
     pTapeDesc = NULL;
-      
+
     check(pTapeMob->AppendTimecodeSlot (videoRate, 0, tapeTC, TAPE_LENGTH));
     check(pTapeMob->AddNilReference (1,TAPE_LENGTH, pDdefPicture, videoRate));
     check(pTapeMob->QueryInterface (IID_IAAFMob, (void **)&pMob));
     pTapeMob->Release();
     pTapeMob = NULL;
 
-    
+
     // NOTE: TapeMob name is updated to change with number of objects
     // requested at cli.
     // In order to fit with the specification, it is made wide
@@ -273,9 +273,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, long int N)
     sprintf(TapeMobNameBuffer,"Tape Mob %ld",i);
     aafWChar TapeMobName[MAX];
     mbstowcs(TapeMobName,TapeMobNameBuffer,MAX);
-    
+
     check(pMob->SetName (TapeMobName));
-    
+
     check(pHeader->AddMob(pMob));
     check(pMob->GetMobID (&tapeMobID));
     pMob->Release();
@@ -284,7 +284,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, long int N)
     // Make a FileMob
     check(pCDSourceMob->CreateInstance(IID_IAAFSourceMob,
                                        (IUnknown **)&pFileMob));
-    check(pCDAIFCDescriptor->CreateInstance(IID_IAAFFileDescriptor, 
+    check(pCDAIFCDescriptor->CreateInstance(IID_IAAFFileDescriptor,
                                             (IUnknown **)&pFileDesc));
     check(pFileDesc->QueryInterface (IID_IAAFEssenceDescriptor,
                                      (void **)&aDesc));
@@ -295,12 +295,12 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, long int N)
     pAIFCDesc = NULL;
 
     // Make a locator, and attach it to the EssenceDescriptor
-    check(pCDNetworkLocator->CreateInstance(IID_IAAFNetworkLocator, 
-                                            (IUnknown **)&pNetLocator));     
+    check(pCDNetworkLocator->CreateInstance(IID_IAAFNetworkLocator,
+                                            (IUnknown **)&pNetLocator));
     check(pNetLocator->QueryInterface (IID_IAAFLocator, (void **)&pLocator));
-      
-    
-    check(pLocator->SetPath (TEST_PATH));   
+
+
+    check(pLocator->SetPath (TEST_PATH));
     check(aDesc->AppendLocator(pLocator));
     pLocator->Release();
     pLocator = NULL;
@@ -327,7 +327,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, long int N)
     pMob = NULL;
 
     //Make the Master MOB
-    check(pCDMasterMob->CreateInstance(IID_IAAFMasterMob, 
+    check(pCDMasterMob->CreateInstance(IID_IAAFMasterMob,
                                        (IUnknown **)&pMasterMob));
 
     sourceRef.sourceID = fileMobID;
@@ -337,7 +337,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, long int N)
                                        sourceRef, fileLen));
     check(pMasterMob->QueryInterface (IID_IAAFMob, (void **)&pMob));
     check(pMob->GetMobID (&masterMobID));
-    
+
     // NOTE: MasterMob name is updated to change with number of objects
     // requested at cli.
     // In order to fit with the specification, it is made wide
@@ -345,7 +345,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, long int N)
     sprintf(MasterMobNameBuffer,"Master Mob %ld",i);
     aafWChar MasterMobName[MAX];
     mbstowcs(MasterMobName,MasterMobNameBuffer,MAX);
-    
+
     check(pMob->SetName (MasterMobName));
 
     check(pHeader->AddMob(pMob));
@@ -353,11 +353,11 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, long int N)
     pMob = NULL;
 
     // the remaining part of the sequence code, adapted for updating slot names
-    
+
 
     // Create a SourceClip
-    check(pCDSourceClip->CreateInstance(IID_IAAFSourceClip, 
-                                        (IUnknown **)&compSclp));        
+    check(pCDSourceClip->CreateInstance(IID_IAAFSourceClip,
+                                        (IUnknown **)&compSclp));
 
     sourceRef.sourceID = masterMobID;
     sourceRef.sourceSlotID = 1;
@@ -367,10 +367,10 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, long int N)
     check(aComponent->SetDataDef(pDdefPicture));
     check(aComponent->SetLength (segLen));
     check(pSequence->AppendComponent (aComponent));
-  
+
     // Create a filler - Get the component interface only (IID_IAAFComponent)
-    check(pCDFiller->CreateInstance(IID_IAAFComponent, 
-                                    (IUnknown **)&compFill));        
+    check(pCDFiller->CreateInstance(IID_IAAFComponent,
+                                    (IUnknown **)&compFill));
 
     check(compFill->SetLength (fillLen));
 
@@ -448,7 +448,7 @@ cleanup:
 
   if (seg)
     seg->Release();
-  
+
   if (aComponent)
     aComponent->Release();
 
@@ -576,12 +576,12 @@ void usage(void)
 
 //  Main adapted to use command-line arguments with argument checking
 //  NOTE:  defining [0] program name; [1] Number N of components;
-//  [2] filename.aaf; 
+//  [2] filename.aaf;
 int main(int argumentCount, char *argumentVector[])
 {
   //  First check for correct number of arguments
   //  printf("%ld\n",argumentCount);
-  if ((argumentCount < 2) || (argumentCount > 3)) {       
+  if ((argumentCount < 2) || (argumentCount > 3)) {
     usage();
     return 0;
   }
@@ -598,7 +598,7 @@ int main(int argumentCount, char *argumentVector[])
     usage();
     return 0;
   }
-  
+
   //  With no second argument, set output filename to CreateSequence<N>.aaf
   if (argumentCount == 2) {
     strncpy(niceFileName, Ns, FILENAME_MAX);
@@ -627,16 +627,16 @@ int main(int argumentCount, char *argumentVector[])
 #if USE_TIMER_LIB
   UTLInitTimers(1000);
 #endif
-  
+
   aafWChar FileNameBuffer[MAX];
   mbstowcs(FileNameBuffer, niceFileName, MAX);
-  
+
   aafWChar * pwFileName = FileNameBuffer;
 
   //  Give a nice output here too...
   printf("Creating file %s with %ld components...\n", niceFileName, N);
   checkFatal(CreateAAFFile(pwFileName, N));
-  
+
   // Open the file and gather statistics
   ReadAAFFile(pwFileName);
 
