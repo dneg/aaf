@@ -28,6 +28,7 @@
 #include <AxHeader.h>
 #include <AxContentStorage.h>
 #include <AxIterator.h>
+#include <AxEssence.h>
 
 #include <AAFResult.h>
 
@@ -170,7 +171,7 @@ void SetMobName::Execute( const std::vector<AxString>& argv )
 AXFG_OP(
   FindNamedMob,           
   L"FindNamedMob",
-  L"Copy a mob.",
+  L"Find a mob by name.",
   L"FileName mob_name FoundMobName",
   L"Search for mob \"mob_name\", save reference as \"FoundMobName\".  The first occurence is returned.",
   4,
@@ -190,6 +191,50 @@ void FindNamedMob::Execute( const std::vector<AxString>& argv )
 	aafSearchCrit_t criteria;
 	criteria.tags.name = const_cast<aafString_t>(mobName.c_str());
   	criteria.searchTag = kAAFByName;
+
+	AxMobIter axMobIter( axHeader.GetMobs( criteria ) );
+	
+	IAAFMobSP spMob;
+	bool notAtEnd;
+    notAtEnd = axMobIter.NextOne( spMob );
+  	if ( !notAtEnd ) {
+		throw AxFGEx( L"Mob not found." );
+	}
+
+
+	SetCOM( spMob );
+	RegisterInstance( mobRefName );
+}
+
+//=---------------------------------------------------------------------=
+
+AXFG_OP(
+  FindMobByDataDef,           
+  L"FindMobByDataDef",
+  L"Find a mob by data def.",
+  L"FileName DataDefName FoundMobName",
+  L"The first occurence of a mob with a slot that matches the data def is returned.",
+  4,
+  4 ) 
+
+FindMobByDataDef::~FindMobByDataDef()
+{}
+
+void FindMobByDataDef::Execute( const std::vector<AxString>& argv )
+{
+	AxString fileName   = argv[1];
+	AxString defName    = argv[2];
+	AxString mobRefName = argv[3];
+
+	AxHeader axHeader( HeaderFromFileOp( fileName ) );
+
+	IAAFDataDefSP spDataDef;
+	GetInstance( defName ).GetCOM( spDataDef );
+	AxDataDef axDataDef( spDataDef );
+
+	aafSearchCrit_t criteria;
+	criteria.tags.datadef = axDataDef.GetAUID();
+  	criteria.searchTag = kAAFByDataDef;
 
 	AxMobIter axMobIter( axHeader.GetMobs( criteria ) );
 	
