@@ -37,7 +37,7 @@ private:
   void openModify(void);
   void createModify(void);
 
-  const char* _name;
+  char* _name;
   OMStoredObject* _root;
   
   OMClassFactory* _classFactory;
