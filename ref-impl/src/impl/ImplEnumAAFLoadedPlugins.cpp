@@ -1,6 +1,6 @@
 /***********************************************************************
  *
- *              Copyright (c) 1998-1999 Avid Technology, Inc.
+ *              Copyright (c) 1998-2000 Avid Technology, Inc.
  *
  * Permission to use, copy and modify this software and accompanying 
  * documentation, and to distribute and sublicense application software
@@ -51,15 +51,23 @@
 
 extern "C" const aafUID_t CLSID_EnumAAFLoadedPlugins;
 
-ImplEnumAAFLoadedPlugins::ImplEnumAAFLoadedPlugins ()
+ImplEnumAAFLoadedPlugins::ImplEnumAAFLoadedPlugins () :
+	_manager(NULL)
 {
-	_isFirst = kAAFTrue;
+	memset(&_category, 0, sizeof(_category));
 	_manager = ImplAAFPluginManager::GetPluginManager();
+	_isFirst = kAAFTrue;
 }
 
 
 ImplEnumAAFLoadedPlugins::~ImplEnumAAFLoadedPlugins ()
-{}
+{
+	if (_manager)
+	{
+		_manager->ReleaseReference();
+		_manager = NULL;
+	}
+}
 
 
 AAFRESULT STDMETHODCALLTYPE
