@@ -148,6 +148,7 @@ typedef unsigned short int OMUInt16;
 typedef unsigned long int  OMUInt32;
 
 typedef OMUInt8 OMByte;
+typedef OMUInt16 OMCharacter;
 
 typedef struct {
   OMUInt8 SMPTELabel[12];
@@ -397,6 +398,7 @@ static size_t maxSignatureSize = signatureSize();
 //           Remove the offset filed field from stored property set index
 //           entries.
 //  0.25   : Change stored froms to use bit values.
+//  0.26   : Use 2 byte characters for names in Object Manager meta-data
 //
 
 // The following may change at run time depending on the file format
@@ -433,7 +435,7 @@ const int OLD_TID_DATA_STREAM                    = 4;
 
 // Highest version of file/index format recognized by this dumper
 //
-const OMUInt32 HIGHVERSION = 25;
+const OMUInt32 HIGHVERSION = 26;
 
 // Output format requested
 //
@@ -478,6 +480,9 @@ static void convert(wchar_t* wcName, size_t length, const char* name);
 static void convert(char* cName, size_t length, const wchar_t* name);
 #endif
 static void convert(char* cName, size_t length, const char* name);
+#if defined (__sgi)
+static void convert(char* cName, size_t length, const OMCharacter* name);
+#endif
 static void convertName(char* cName,
                         size_t length,
                         OMCHAR* wideName,
@@ -631,6 +636,31 @@ static double percent(size_t whole, size_t part);
 
 static bool ignoring(OMUInt32 pid);
 static void ignore(OMUInt32 pid);
+
+
+static char* readName(IStream* stream,
+                      OMUInt32 nameOffset,
+                      OMUInt32 nameSize,
+                      OMUInt32 version)
+{
+  char* result;
+  char* buffer;
+  buffer = new char[nameSize];
+  read(stream,
+       nameOffset,
+       buffer,
+       nameSize);
+  if (version < 25) {
+    result = buffer;
+  } else {
+    // name consists of 2-byte characters
+    char* name = new char[nameSize/2];
+    convert(name, nameSize/2, (OMCharacter*)buffer);
+    delete [] buffer;
+    result = name;
+  }
+  return result;
+}
 
 static size_t fileSize(const char* fileName)
 {
@@ -985,6 +1015,20 @@ void convert(char* cName, size_t length, const char* name)
     fatalError("convert", "Conversion failed.");
   }
 }
+
+#if defined (__sgi)
+// For use when sizeof(wchar_t) != sizeof(OMCharacter)
+void convert(char* cName, size_t length, const OMCharacter* name)
+{
+  for (size_t i = 0; i < length; i++) {
+    char ch = name[i]; // truncate
+    cName[i] = ch;
+    if (ch == 0) {
+      break;
+    }
+  }
+}
+#endif
 
 void convertName(char* cName, size_t length, OMCHAR* wideName, char** tag)
 {
@@ -2085,11 +2129,10 @@ void dumpContainedObjects(IStorage* storage,
       break;
 
     case SF_DATA_STREAM: {
-      char* subStreamName = new char[index[i]._length];
-      read(propertiesStream,
-           index[i]._offset,
-           subStreamName,
-           index[i]._length);
+      char* subStreamName = readName(propertiesStream,
+                                     index[i]._offset,
+                                     index[i]._length,
+                                     version);
       
       // Compute the pathname for this stream
       //
@@ -2114,11 +2157,10 @@ void dumpContainedObjects(IStorage* storage,
     case SF_STRONG_OBJECT_REFERENCE: {
       // get name of sub-storage
       //
-      char* subStorageName = new char[index[i]._length];
-      read(propertiesStream,
-           index[i]._offset,
-           subStorageName,
-           index[i]._length);
+      char* subStorageName = readName(propertiesStream,
+                                      index[i]._offset,
+                                      index[i]._length,
+                                      version);
       
       // Compute the pathname for this object
       //
@@ -2149,8 +2191,10 @@ void dumpContainedObjects(IStorage* storage,
       // get name of vector index
       //
       char* suffix = " index";
-      char* vectorName = new char[index[i]._length];
-      read(propertiesStream, index[i]._offset, vectorName, index[i]._length);
+      char* vectorName = readName(propertiesStream,
+                                  index[i]._offset,
+                                  index[i]._length,
+                                  version);
 
       size_t size = strlen(vectorName) + strlen(suffix) + 1;
       char* vectorIndexName = new char[size];
@@ -2264,8 +2308,10 @@ void dumpContainedObjects(IStorage* storage,
       // get name of set index
       //
       char* suffix = " index";
-      char* setName = new char[index[i]._length];
-      read(propertiesStream, index[i]._offset, setName, index[i]._length);
+      char* setName = readName(propertiesStream,
+                               index[i]._offset,
+                               index[i]._length,
+                               version);
 
       size_t size = strlen(setName) + strlen(suffix) + 1;
       char* setIndexName = new char[size];
@@ -2436,8 +2482,10 @@ void dumpContainedObjects(IStorage* storage,
       // get name of index
       //
       char* suffix = " index";
-      char* setName = new char[index[i]._length];
-      read(propertiesStream, index[i]._offset, setName, index[i]._length);
+      char* setName = readName(propertiesStream,
+                               index[i]._offset,
+                               index[i]._length,
+                               version);
 
       size_t size = strlen(setName) + strlen(suffix) + 1;
       char* setIndexName = new char[size];
