@@ -73,7 +73,8 @@ PostBuild_Cmds=regsvr32 /s Release/AAFCOAPI.dll
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /MTd /W3 /Gm /GR /GX /ZI /Od /I "../../../ref-impl/src/com-api" /I "../../../ref-impl/plugins" /I "../../../ref-impl/include/com-api/" /I "../../../ref-impl/src/impl" /I "../../../ref-impl/src/Om" /I "../../../ref-impl/include/OM" /I "../../../ref-impl/src/com-api/com-dll" /I "../include/comidl" /I "../../../ref-impl/include/ref-api" /I "../../../ref-impl/include" /D "_DEBUG" /D "OM_ENABLE_DEBUG" /D "_WIN32" /D "_WINDOWS" /D "UNICODE" /D "_UNICODE" /D "WIN32" /D "BOB_TEST" /D "AAF_MODULE_TEST" /FR /YX /FD /c
+# ADD CPP /nologo /MTd /W3 /Gm /GR /GX /ZI /Od /I "../../../ref-impl/src/com-api" /I "../../../ref-impl/plugins" /I "../../../ref-impl/include/com-api/" /I "../../../ref-impl/src/impl" /I "../../../ref-impl/src/Om" /I "../../../ref-impl/include/OM" /I "../../../ref-impl/src/com-api/com-dll" /I "../include/comidl" /I "../../../ref-impl/include/ref-api" /I "../../../ref-impl/include" /D "_DEBUG" /D "OM_ENABLE_DEBUG" /D "_WIN32" /D "_WINDOWS" /D "UNICODE" /D "_UNICODE" /D "WIN32" /D "BOB_TEST" /D "AAF_MODULE_TEST" /YX /FD /c
+# SUBTRACT CPP /Fr
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -83,8 +84,8 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /dll /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /dll /incremental:no /debug /machine:I386 /nodefaultlib:"libcd.lib libcid.lib" /out:"Debug/AAFCOAPI.dll" /pdbtype:sept
-# SUBTRACT LINK32 /nodefaultlib
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /dll /debug /machine:I386 /nodefaultlib:"libcd.lib libcid.lib" /out:"Debug/AAFCOAPI.dll" /pdbtype:sept
+# SUBTRACT LINK32 /incremental:no /map /nodefaultlib
 # Begin Special Build Tool
 SOURCE="$(InputPath)"
 PostBuild_Cmds=regsvr32 /s Debug/AAFCOAPI.dll
@@ -110,11 +111,19 @@ SOURCE="..\..\..\ref-impl\src\com-api\com-dll\AAFObjectCreation.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\com-api\CAAFAttribute.cpp"
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFAIFCData.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFAttributeTest.cpp"
+SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFAIFCDataTest.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFAIFCDescriptor.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFAIFCDescriptorTest.cpp"
 # End Source File
 # Begin Source File
 
@@ -135,6 +144,14 @@ SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFClassDefTest.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\com-api\com-dll\CAAFClassFactory.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFCommentMarker.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFCommentMarkerTest.cpp"
 # End Source File
 # Begin Source File
 
@@ -210,6 +227,14 @@ SOURCE="..\..\..\ref-impl\src\com-api\CAAFDigitalImageDescriptor.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFDOSLocator.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFDOSLocatorTest.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFEdgecode.cpp"
 # End Source File
 # Begin Source File
@@ -268,11 +293,31 @@ SOURCE="..\..\..\ref-impl\src\com-api\CAAFEssenceFormat.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFEssenceFormatTest.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFEssencePlugin.cpp"
 # End Source File
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFEssencePluginTest.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFEvent.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFEventMobSlot.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFEventMobSlotTest.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFEventTest.cpp"
 # End Source File
 # Begin Source File
 
@@ -308,11 +353,43 @@ SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFFindSourceInfoTest.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFGPITrigger.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFGPITriggerTest.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFHeader.cpp"
 # End Source File
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFHeaderTest.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFHTMLClip.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFHTMLClipTest.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFHTMLData.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFHTMLDataTest.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFHTMLDescriptor.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFHTMLDescriptorTest.cpp"
 # End Source File
 # Begin Source File
 
@@ -324,15 +401,31 @@ SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFIdentificationTest.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFImageData.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFImageDataTest.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\com-api\com-dll\CAAFInProcServer.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\com-api\CAAFIntegerAttribute.cpp"
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFIntraFrameMarker.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFIntegerAttributeTest.cpp"
+SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFIntraFrameMarkerTest.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFJPEGData.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFJPEGDataTest.cpp"
 # End Source File
 # Begin Source File
 
@@ -376,6 +469,22 @@ SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFMediaGroupTest.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFMIDIData.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFMIDIDataTest.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFMIDIDescriptor.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFMIDIDescriptorTest.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFMob.cpp"
 # End Source File
 # Begin Source File
@@ -416,14 +525,6 @@ SOURCE="..\..\..\ref-impl\src\com-api\CAAFObject.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\com-api\CAAFObjectAttribute.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFObjectAttributeTest.cpp"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFObjectTest.cpp"
 # End Source File
 # Begin Source File
@@ -437,14 +538,6 @@ SOURCE="..\..\..\ref-impl\src\com-api\CAAFParameterDef.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFParameterDefTest.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\com-api\CAAFParameterSlot.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFParameterSlotTest.cpp"
 # End Source File
 # Begin Source File
 
@@ -464,7 +557,15 @@ SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFPropertyDefTest.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFPropertyTest.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFPropertyValue.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFPropertyValueTest.cpp"
 # End Source File
 # Begin Source File
 
@@ -481,6 +582,14 @@ SOURCE="..\..\..\ref-impl\src\com-api\CAAFReferenceValue.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFReferenceValueTest.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFRGBADescriptor.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFRGBADescriptorTest.cpp"
 # End Source File
 # Begin Source File
 
@@ -505,6 +614,14 @@ SOURCE="..\..\..\ref-impl\src\com-api\CAAFSegment.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFSegmentTest.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFSelector.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFSelectorTest.cpp"
 # End Source File
 # Begin Source File
 
@@ -544,11 +661,19 @@ SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFSourceReferenceTest.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\com-api\CAAFStringAttribute.cpp"
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFStaticMobSlot.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFStringAttributeTest.cpp"
+SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFStaticMobSlotTest.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFTaggedValue.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFTaggedValueTest.cpp"
 # End Source File
 # Begin Source File
 
@@ -557,6 +682,38 @@ SOURCE="..\..\..\ref-impl\src\com-api\CAAFTapeDescriptor.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFTapeDescriptorTest.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFTextClip.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFTextClipTest.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFTextLocator.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFTextLocatorTest.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFTIFFData.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFTIFFDataTest.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFTIFFDescriptor.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFTIFFDescriptorTest.cpp"
 # End Source File
 # Begin Source File
 
@@ -628,6 +785,14 @@ SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFVaryingValueTest.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFWAVEData.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFWAVEDataTest.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFWAVEDescriptor.cpp"
 # End Source File
 # Begin Source File
@@ -641,14 +806,6 @@ SOURCE="..\..\..\ref-impl\src\com-api\CAAFWindowsLocator.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFWindowsLocatorTest.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFAttributes.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\com-api\test\CEnumAAFAttributesTest.cpp"
 # End Source File
 # Begin Source File
 
@@ -756,14 +913,6 @@ SOURCE="..\..\..\ref-impl\src\com-api\test\CEnumAAFParameterDefsTest.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFParameterSlots.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\com-api\test\CEnumAAFParameterSlotsTest.cpp"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFProperties.cpp"
 # End Source File
 # Begin Source File
@@ -781,6 +930,10 @@ SOURCE="..\..\..\ref-impl\src\com-api\test\CEnumAAFPropertyDefsTest.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFPropertyValues.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\test\CEnumAAFPropertyValuesTest.cpp"
 # End Source File
 # Begin Source File
 
