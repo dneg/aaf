@@ -44,22 +44,6 @@ ImplAAFFindSourceInfo::~ImplAAFFindSourceInfo ()
 {}
 
 
-extern "C" const aafClassID_t CLSID_AAFFindSourceInfo;
-
-OMDEFINE_STORABLE(ImplAAFFindSourceInfo, CLSID_AAFFindSourceInfo);
-
-// Cheat!  We're using this object's CLSID instead of object class...
-AAFRESULT STDMETHODCALLTYPE
-ImplAAFFindSourceInfo::GetObjectClass(aafUID_t * pClass)
-{
-  if (! pClass)
-	{
-	  return AAFRESULT_NULL_PARAM;
-	}
-  memcpy (pClass, &CLSID_AAFFindSourceInfo, sizeof (aafClassID_t));
-  return AAFRESULT_SUCCESS;
-}
-
 AAFRESULT STDMETHODCALLTYPE
 ImplAAFFindSourceInfo::Init(ImplAAFMob *mob, aafSlotID_t slotID, aafPosition_t position,
 							aafRational_t editRate, aafLength_t length,
