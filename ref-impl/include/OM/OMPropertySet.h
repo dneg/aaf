@@ -31,9 +31,17 @@ public:
     //          <c OMPropertySet>.
   void iterate(size_t& context, OMProperty*& property) const;
 
-    // @cmember Does this <c OMPropertySet> contain an <c OMProperty>
-    //          with property id <p propertyId> ?
-  bool contains(const OMPropertyId propertyId) const;
+    // @cmember Is an <c OMProperty> with property id <p propertyId>
+    //          present in this <c OMPropertySet> ?
+  bool isPresent(const OMPropertyId propertyId) const;
+
+    // @cmember Is an <c OMProperty> with property id <p propertyId>
+    //          allowed in this <c OMPropertySet> ?
+  bool isAllowed(const OMPropertyId propertyId) const;
+
+    // @cmember Is an <c OMProperty> with property id <p propertyId>
+    //          a required member of this <c OMPropertySet> ?
+  bool isRequired(const OMPropertyId propertyId) const;
 
     // @cmember The number of <c OMProperty> objects in this
     //          <c OMPropertySet>.
