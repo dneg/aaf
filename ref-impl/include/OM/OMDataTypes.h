@@ -40,12 +40,12 @@
 typedef signed char            OMInt8;
 typedef short int              OMInt16;
 typedef long int               OMInt32;
-typedef _int64                 OMInt64;
+typedef __int64                OMInt64;
 
 typedef unsigned char          OMUInt8;
 typedef unsigned short int     OMUInt16;
 typedef unsigned long int      OMUInt32;
-typedef unsigned _int64        OMUInt64;
+typedef unsigned __int64       OMUInt64;
 
 #elif defined(OM_COMPILER_MWERKS_PPC_MACOS)
 typedef signed char            OMInt8;
