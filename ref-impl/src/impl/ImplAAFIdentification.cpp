@@ -186,16 +186,15 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFIdentification::GetProductVersion (aafProductVersion_t* productVersion)
 {
-	if(!_productVersion.isPresent())
-	{
-		return AAFRESULT_PROP_NOT_PRESENT;
-	}
-	
 	if (! productVersion)
 	{
 		return AAFRESULT_NULL_PARAM;
 	}
-	
+
+	if(!_productVersion.isPresent())
+	{
+		return AAFRESULT_PROP_NOT_PRESENT;
+	}	
 	*productVersion = _productVersion;
 	return AAFRESULT_SUCCESS;
 }
@@ -281,16 +280,18 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFIdentification::GetPlatform (aafWChar *  pPlatform,
 										aafUInt32 bufSize)
 {
+	if (! pPlatform)
+	{
+		return AAFRESULT_NULL_PARAM;
+	}
+	
 	if(!_platform.isPresent())
 	{
 		return AAFRESULT_PROP_NOT_PRESENT;
 	}
 
 	bool stat;
-	if (! pPlatform)
-	{
-		return AAFRESULT_NULL_PARAM;
-	}
+	
 	stat = _platform.copyToBuffer(pPlatform, bufSize);
 	if (! stat)
 	{
@@ -303,15 +304,16 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFIdentification::GetPlatformBufLen (aafUInt32 *  pLen)
 {
-	if(!_platform.isPresent())
-	{
-		return AAFRESULT_PROP_NOT_PRESENT;
-	}
-	
 	if (! pLen)
 	{
 		return AAFRESULT_NULL_PARAM;
 	}
+
+	if(!_platform.isPresent())
+	{
+		return AAFRESULT_PROP_NOT_PRESENT;
+	}
+		
 	*pLen = _platform.size();
 	return AAFRESULT_SUCCESS;
 }
