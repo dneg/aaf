@@ -552,6 +552,10 @@ SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFParameterDefs.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFParameters.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFPluginDescriptors.cpp"
 # End Source File
 # Begin Source File
