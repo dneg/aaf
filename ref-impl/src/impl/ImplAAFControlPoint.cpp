@@ -35,6 +35,7 @@
 
 #include "ImplAAFDictionary.h"
 #include "ImplAAFPluggableDef.h"
+#include "ImplAAFParameterDef.h"
 #include "ImplAAFTypeDef.h"
 #include "ImplAAFHeader.h"
 
