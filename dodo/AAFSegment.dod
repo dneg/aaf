@@ -25,7 +25,8 @@ AD_HEAD
 
 AD_IDL(//
 // The IAAFSegment interface is implemented by objects which represent
-// a component that is independent of any surrounding object.
+// a component that is independent of any other components which may
+// surround it in a sequence.
 //
 // In addition to the specific error results listed for each method\,
 // all methods in this interface may also return one of the following
