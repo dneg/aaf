@@ -175,6 +175,9 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFCDCIDescriptor::GetColorSiting (aafColorSiting_t* pColorSiting)
 {
+	if(!_colorSiting.isPresent())
+		return AAFRESULT_PROP_NOT_PRESENT;
+
 	if (pColorSiting == NULL)
 		return AAFRESULT_NULL_PARAM;
 
@@ -187,6 +190,9 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFCDCIDescriptor::GetBlackReferenceLevel (aafUInt32* pBlackReferenceLevel)
 {
+	if(!_blackReferenceLevel.isPresent())
+		return AAFRESULT_PROP_NOT_PRESENT;
+
 	if (pBlackReferenceLevel == NULL)
 		return AAFRESULT_NULL_PARAM;
 
@@ -199,6 +205,9 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFCDCIDescriptor::GetWhiteReferenceLevel (aafUInt32* pWhiteReferenceLevel)
 {
+	if(!_whiteReferenceLevel.isPresent())
+		return AAFRESULT_PROP_NOT_PRESENT;
+	
 	if (pWhiteReferenceLevel == NULL)
 		return AAFRESULT_NULL_PARAM;
 
@@ -211,6 +220,9 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFCDCIDescriptor::GetColorRange (aafUInt32* pColorRange)
 {
+	if(!_colorRange.isPresent())
+		return AAFRESULT_PROP_NOT_PRESENT;
+	
 	if (pColorRange == NULL)
 		return AAFRESULT_NULL_PARAM;
 
@@ -223,6 +235,9 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFCDCIDescriptor::GetPaddingBits (aafInt16* pPaddingBits)
 {
+	if(!_paddingBits.isPresent())
+		return AAFRESULT_PROP_NOT_PRESENT;
+	
 	if (pPaddingBits == NULL)
 		return AAFRESULT_NULL_PARAM;
 
