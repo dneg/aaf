@@ -92,7 +92,7 @@ SOURCE=..\..\..\..\test\com\EssenceAccess\EssenceAccess.cpp
 # End Group
 # Begin Source File
 
-SOURCE=.\Debug\ReadWriteEssenceDataRates.ksh
+SOURCE=.\ReadWriteEssenceDataRates.ksh
 # End Source File
 # End Target
 # End Project
