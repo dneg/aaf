@@ -452,16 +452,15 @@ AAFRESULT
 AAFRESULT 
     ImplAAFHeader::AppendIdentification (ImplAAFIdentification * pIdent)
 {
-  if (! pIdent)
+	if (! pIdent)
 	{
-	  return AAFRESULT_NULL_PARAM;
+		return AAFRESULT_NULL_PARAM;
 	}
 
 	_identificationList.appendValue(pIdent);
 	pIdent->AcquireReference();
 
-
-  return AAFRESULT_NOT_IMPLEMENTED;
+	return AAFRESULT_SUCCESS;
 }
 
 
