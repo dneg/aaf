@@ -30,7 +30,7 @@
 #include "aafErr.h"
 #include "AAFTypes.h"
 
-#if PORT_LANG_CPLUSPLUS
+#ifdef __cplusplus
 extern          "C"
 {
 #endif
@@ -269,7 +269,7 @@ aafErr_t TableSlotIDLookup(
 void testaafTable(void);
 #endif
 
-#if PORT_LANG_CPLUSPLUS
+#ifdef __cplusplus
 }
 #endif
 #endif				/* _AAF_TABLE_API_ */
