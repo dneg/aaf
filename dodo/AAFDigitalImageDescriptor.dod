@@ -427,7 +427,7 @@ AD_XMETHOD1(SetFrameLayout,
   //    kOneField       - Each sample consists of two interlaced
   //                      fields\, but only one field is stored in the
   //                      data stream.
-  //    kMixedFields    - Similar to FullFrame, except the two fields
+  //    kMixedFields    - Similar to FullFrame\, except the two fields
   //                      may have been sampled at different times.
   // 
   // Succeeds if all of the following are true:
@@ -465,7 +465,7 @@ AD_XMETHOD1(GetFrameLayout,
   //    kOneField       - Each sample consists of two interlaced
   //                      fields\, but only one field is stored in the
   //                      data stream.
-  //    kMixedFields    - Similar to FullFrame, except the two fields
+  //    kMixedFields    - Similar to FullFrame\, except the two fields
   //                      may have been sampled at different times.
   // 
   // Succeeds if all of the following are true:
