@@ -91,10 +91,10 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-   ImplAAFSourceClip::GetFade (aafInt32		*fadeInLen,
+   ImplAAFSourceClip::GetFade (aafLength_t	*fadeInLen,
                            aafFadeType_t	*fadeInType,
                            aafBool			*fadeInPresent,
-                           aafInt32			*fadeOutLen,
+                           aafLength_t		*fadeOutLen,
                            aafFadeType_t	*fadeOutType,
                            aafBool			*fadeOutPresent)
 {
@@ -112,7 +112,7 @@ AAFRESULT STDMETHODCALLTYPE
 	else
 	{
 	
-		*fadeInLen		= _fadeInLength;
+        *fadeInLen      = _fadeInLength;
 		*fadeInType		= _fadeInType;
 		if (_fadeInLength > 0)
 		{
