@@ -39,41 +39,35 @@
 // Changes Nov01: fpos_t is supposed to be opaque ... Glibc 2.2 uses a Struct
 // Attempt to use alternative 64 bit seeks where possible using XOpen5 fseeko
 
-// MacOS CodeWarrior differences
-
-#if defined (__MSL__)
-typedef fpos_t off_t;
-#define fseeko _fseek
-#define ftello _ftell
-#endif
-
 // Irix MipsPro differences
-
 #if defined (__sgi) && !defined(__GLIBC__)
 typedef off64_t off_t;
 #define fseeko fseeko64
 #define ftello ftello64
-#endif
 
-// Win32 differences
-
-#if defined (_WIN32)
+#elif defined (_WIN32)		// Win32 differences
 typedef __int64 off_t;
-//next 2 lines needsd to prevent VC trying to redefine off_t in wchar.h
-// which is called from utf8.h.
+// __OFF_T_DEFINED prevents MSVC redefining off_t in wchar.h
+// which is included by utf8.h.
 typedef long _off_t;
 #define _OFF_T_DEFINED
 
 #define fseeko(fp, off, whence) fsetpos(fp, &off)
 static off_t ftello (FILE* fp)
 {
-off_t position;
+  off_t position;
 
-if(0 != fgetpos(fp, &position))
-   return -1;
+  if(0 != fgetpos(fp, &position))
+     return -1;
 
-return position;
+  return position;
 }
+
+#else
+
+// All POSIX systems
+#include <sys/types.h>		// for off_t definition
+
 #endif
 
 
