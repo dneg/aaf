@@ -20,6 +20,9 @@ const IID IID_IAAFEssenceData = { 0x6a33f4e2, 0x8ed6, 0x11d2, { 0xbf, 0x9d, 0x00
 // Interface for AAFEssenceDataStream 
 // {CDDB6AB1-98DC-11d2-808A-006008143E6F}
 const IID IID_IAAFEssenceDataStream = { 0xCDDB6AB1, 0x98DC, 0x11d2, { 0x80, 0x8a, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
+// Default Interface for AAFDefaultStream 
+// {83402902-9146-11d2-8088-006008143e6f}
+const IID IID_IAAFEssenceStream = { 0x83402902, 0x9146, 0x11d2, { 0x80, 0x88, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
 
 
 CAAFEssenceDataStream::CAAFEssenceDataStream (IUnknown * pControllingUnknown)
