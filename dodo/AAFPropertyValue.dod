@@ -7,14 +7,47 @@ AAFRoot\
 #endm
 #c
 AD_HEAD
+AD_IDL(//
+// This interface is used to access the values of properties contained
+// in AAF persistent objects.  Values may be simple \(e.g. integer\)\,
+// structured \(e.g. aafTimecode_t\)\, other AAF persistent objects\,
+// media\, or arrays of other types.
+//
+// In addition to the specific error results listed for each method\,
+// all methods in this interface may also return one of the following
+// values:
+// 
+// AAFRESULT_NOMEMORY
+//   - insufficient system memory is available to perform the
+//     operation.
+//
 /***********************************************\
 *	Stub only.   Implementation not yet added	*
-\***********************************************/
+\***********************************************/)
 AD_FORWARD_DECLARATION(AAFTypeDef)
 AD_CLASS_UUID(83057d71, 9691, 11d2, aa, 7f, 80, e6, aa, 00, 00, 00)
 
 AD_DEFAULT_UUID(83057d72, 9691, 11d2, aa, 7f, 80, e6, aa, 00, 00, 00)
 AD_CLASS_BEGIN
+AD_METHOD0(Initialize,
+		   Initializes a newly allocated\, empty IAAFPropertyValue-supporting
+  // object.  This method must be called after allocation\, and before
+  // any other method can be called.
+  //
+  // Succeeds if:
+  // - Initialize\(\) has not yet been called on this object.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_ALREADY_INITIALIZED
+  //   - Initialize\(\) has already been called on this object.)
+
+
 AD_XMETHOD1(GetType,
 			[out],
 			objOut,
@@ -35,8 +68,11 @@ AD_XMETHOD1(GetType,
   // AAFRESULT_SUCCESS
   //   - succeeded.  \(This is the only code indicating success.\)
   //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
+  //
   // AAFRESULT_NULL_PARAM
-  //   - Either pPVal or pSize pointer is NULL.
+  //   - ppTypeDef pointer is NULL.
   //
   // AAFRESULT_BAD_TYPE
   //   - This Property Value is not of a recognized type.)
@@ -61,6 +97,9 @@ AD_XMETHOD1(GetTypeID,
   // AAFRESULT_SUCCESS
   //   - succeeded.  \(This is the only code indicating success.\)
   //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
+  //
   // AAFRESULT_NULL_PARAM
-  //   - Either pPVal or pSize pointer is NULL.)
+  //   - pTypeID pointer is NULL.)
 AD_CLASS_END

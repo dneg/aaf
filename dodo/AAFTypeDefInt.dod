@@ -7,13 +7,44 @@ AAFTypeDef\
 #endm
 #c
 AD_HEAD
+AD_IDL(//
+// This interface is used to define Integer types used in AAF persistent
+// objects.
+//
+// In addition to the specific error results listed for each method\,
+// all methods in this interface may also return one of the following
+// values:
+// 
+// AAFRESULT_NOMEMORY
+//   - insufficient system memory is available to perform the
+//     operation.
+//
 /***********************************************\
 *	Stub only.   Implementation not yet added	*
-\***********************************************/
+\***********************************************/)
 AD_CLASS_UUID(809c8ca1, 9884, 11d2, 84, 1f, 00, 60, 08, 32, ac, b8)
 
 AD_DEFAULT_UUID(809c8ca2, 9884, 11d2, 84, 1f, 00, 60, 08, 32, ac, b8)
 AD_CLASS_BEGIN
+AD_METHOD0(Initialize,
+		   Initializes a newly allocated\, empty IAAFTypeDefInt-supporting
+  // object.  This method must be called after allocation\, and before
+  // any other method can be called.
+  //
+  // Succeeds if:
+  // - Initialize\(\) has not yet been called on this object.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_ALREADY_INITIALIZED
+  //   - Initialize\(\) has already been called on this object.)
+
+
 AD_XMETHOD2(GetSize,
 			[in],
 			objIn,
@@ -42,6 +73,9 @@ AD_XMETHOD2(GetSize,
   // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
   //
   // AAFRESULT_NULL_PARAM
   //   - Either pPVal or pSize pointer is NULL.
@@ -99,6 +133,9 @@ AD_XMETHOD4(GetValue,
   // AAFRESULT_SUCCESS
   //   - succeeded.  \(This is the only code indicating success.\)
   //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
+  //
   // AAFRESULT_NULL_PARAM
   //   - Either pPVal or pSize pointer is NULL.
   //
@@ -151,6 +188,9 @@ AD_XMETHOD3(SetValue,
   // AAFRESULT_SUCCESS
   //   - succeeded.  \(This is the only code indicating success.\)
   //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
+  //
   // AAFRESULT_NULL_PARAM
   //   - Either pPVal or pValBuf pointer is NULL.
   //
@@ -193,6 +233,9 @@ AD_XMETHOD2(GetInt8Value,
   // AAFRESULT_SUCCESS
   //   - succeeded.  \(This is the only code indicating success.\)
   //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
+  //
   // AAFRESULT_NULL_PARAM
   //   - Either pPVal or pResult pointer is NULL.
   //
@@ -234,6 +277,9 @@ AD_XMETHOD2(SetInt8Value,
   // AAFRESULT_SUCCESS
   //   - succeeded.  \(This is the only code indicating success.\)
   //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
+  //
   // AAFRESULT_NULL_PARAM
   //   - Either pPVal or pNewValue pointer is NULL.
   //
@@ -273,6 +319,9 @@ AD_XMETHOD2(GetInt16Value,
   // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
   //
   // AAFRESULT_NULL_PARAM
   //   - Either pPVal or pResult pointer is NULL.
@@ -317,6 +366,9 @@ AD_XMETHOD2(SetInt16Value,
   // AAFRESULT_SUCCESS
   //   - succeeded.  \(This is the only code indicating success.\)
   //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
+  //
   // AAFRESULT_NULL_PARAM
   //   - Either pPVal or pNewValue pointer is NULL.
   //
@@ -360,6 +412,9 @@ AD_XMETHOD2(GetInt32Value,
   // AAFRESULT_SUCCESS
   //   - succeeded.  \(This is the only code indicating success.\)
   //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
+  //
   // AAFRESULT_NULL_PARAM
   //   - Either pPVal or pResult pointer is NULL.
   //
@@ -402,6 +457,9 @@ AD_XMETHOD2(SetInt32Value,
   // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
   //
   // AAFRESULT_NULL_PARAM
   //   - Either pPVal or pNewValue pointer is NULL.

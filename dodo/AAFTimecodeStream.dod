@@ -8,59 +8,123 @@ AAFSegment\
 #c
 #import ./AAFSegment.exp
 AD_HEAD
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
-
-
+AD_IDL(//
+// Objects which support IAAFTimecodeStream specify a stream of
+// timecode data.
+//
+// In addition to the specific error results listed for each method\,
+// all methods in this interface may also return one of the following
+// values:
+// 
+// AAFRESULT_NOMEMORY
+//   - insufficient system memory is available to perform the
+//     operation.
+//
+// AAFRESULT_NOT_INITIALIZED
+//   - This object has not yet had Initialize\(\) called on it through
+//     this object's primary interface.  Note that IAAFSearchSource is
+//     not a primary interface for a concrete class\, so it is not
+//     appropriate for the Initialize\(\) method to exist in this
+//     interface.  The Initialize\(\) method is available through the
+//     concrete object's primary interface.
+//
 /***********************************************\
 *	Stub only.   Implementation not yet added	*
-\***********************************************/
-
-
+\***********************************************/)
 AD_INCLUDE(AAFTypes)
-
 AD_CLASS_UUID(7B007BF1, 2D39, 11d2, 80, 43, 00, 60, 08, 14, 3E, 6F)
+
 AD_DEFAULT_UUID(7B007BF2, 2D39, 11d2, 80, 43, 00, 60, 08, 14, 3E, 6F)
-
 AD_CLASS_BEGIN
+AD_XMETHOD2(GetPositionTimecode,
 
-/****/
-AD_METHOD2(GetPositionTimecode,
-[in],aafPosition_t,position,Zero based offset to set the timecode at,
-[out],aafTimecode_t *,timecode,Timecode [startFrame drop fps],
-Get the timecode fields at the given position.)
+			[in],
+			objPass,
+			aafPosition_t,
+			position,
+			Zero based offset to set the timecode at,
 
-/****/
-AD_METHOD2(SetPositionTimecode,
-[in],aafPosition_t,position,Zero-based offset to set the timecode at,
-[in],aafTimecode_t,timecode,Timecode [startFrame  drop  fps],
-Set the timecode fields for a given frame.  The frame index must within the length of the object.)
+			[out],
+			objPass,
+			aafTimecode_t *,
+			timecode,
+			Timecode [startFrame drop fps],
 
-AD_METHOD1(GetUserDataLength,
-[out],aafInt32*,length,Fixed length of the user data [userbits] in bytes,
-Gets the length of the user data for one frame.)
+			Get the timecode fields at the given position.)
 
-AD_METHOD3(GetUserDataAtPosition,
-[in],aafPosition_t,position,Zero-based offset,
-[in],aafInt32,buflen,Length of the buffer,
-[out],aafDataBuffer_t,buffer,Passed in and filled with user data,
-Gets the user data [userbits] for a particular frame.)
 
-/****/
-AD_METHOD3(SetUserDataAtPosition,
-[in],aafPosition_t,position,Zero-based offset to set the userbits at,
-[in],aafInt32,buflen,Length of the buffer,
-[in],aafDataBuffer_t,buffer,user data for the given frame,
-Gets the user data [userbits] for a particular frame.)
+AD_XMETHOD2(SetPositionTimecode,
+			[in],
+			objPass,
+			aafPosition_t,
+			position,
+			Zero-based offset to set the timecode at,
+
+			[in],
+			objPass,
+			aafTimecode_t,
+			timecode,
+			Timecode [startFrame  drop  fps],
+
+			Set the timecode fields for a given frame.  The frame index must
+  // within the length of the object.)
+
+
+AD_XMETHOD1(GetUserDataLength,
+			[out],
+			objPass,
+			aafInt32 *,
+			length,
+			Fixed length of the user data [userbits] in bytes,
+			Gets the length of the user data for one frame.)
+
+
+AD_XMETHOD3(GetUserDataAtPosition,
+
+			[in],
+			objPass,
+			aafPosition_t,
+			position,
+			Zero-based offset,
+
+			[in],
+			objPass,
+			aafInt32,
+			buflen,
+			Length of the buffer,
+
+			[out],
+			objPass,
+			aafDataBuffer_t,
+			buffer,
+			Passed in and filled with user data,
+
+			Gets the user data [userbits] for a particular frame.)
+
+
+AD_XMETHOD3(SetUserDataAtPosition,
+
+			[in],
+			objPass,
+			aafPosition_t,
+			position,
+			Zero-based offset to set the userbits at,
+
+			[in],
+			objPass,
+			aafInt32,
+			buflen,
+			Length of the buffer,
+
+			[in],
+			objPass,
+			aafDataBuffer_t,
+			buffer,
+			user data for the given frame,
+
+			Gets the user data [userbits] for a particular frame.)
 							 
-/****/
+
 AD_OVERRIDE(.method-SegmentOffsetToTC)
 AD_OVERRIDE(.method-SegmentTCToOffset)
-
 AD_CLASS_END
