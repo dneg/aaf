@@ -123,6 +123,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 	IAAFMasterMob*				pMasterMob = NULL;
 
 	IAAFEssenceAccess*			pEssenceAccess = NULL;
+	IAAFEssenceRawAccess*		pRawEssence = NULL;
+	IAAFEssenceMultiAccess*		pMultiEssence = NULL;
 	IAAFEssenceFormat*			pFormat = NULL;
 	IAAFEssenceFormat			*format = NULL;
 	IAAFLocator					*pLocator = NULL;
@@ -254,9 +256,12 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 		// write out the data
 		if(testType == testRawCalls)
 		{
-			check(pEssenceAccess->WriteRawData(	dataLen,	// Number of Samples
+			check(pEssenceAccess->QueryInterface(IID_IAAFEssenceRawAccess, (void **)&pRawEssence));
+			check(pRawEssence->WriteRawData(	dataLen,	// Number of Samples
 											dataPtr,	// THE Raw data
 											sizeof(dataBuff)));// buffer size
+			pRawEssence->Release();
+			pRawEssence = NULL;
 		}
 		else if(testType == testStandardCalls)
 		{
@@ -276,13 +281,16 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 			aafmMultiXfer_t		xfer;
 			aafmMultiResult_t	result;
 
+			check(pEssenceAccess->QueryInterface(IID_IAAFEssenceMultiAccess, (void **)&pMultiEssence));
 //!!!		xfer.subTrackNum = _channels[0].physicalOutChan;
 			xfer.numSamples = dataLen;	//!!! hardcoded bytes/sample ==1
 			xfer.buflen = sizeof(dataBuff);
 			xfer.buffer = dataPtr;
 			result.bytesXfered = 0;
 	
-			check(pEssenceAccess->WriteMultiSamples(1, &xfer, &result));
+			check(pMultiEssence->WriteMultiSamples(1, &xfer, &result));
+			pMultiEssence->Release();
+			pMultiEssence = NULL;
 		}
 
 		// close essence data file
@@ -328,6 +336,12 @@ cleanup:
 	if (pEssenceAccess)
 		pEssenceAccess->Release();
 	
+	if (pRawEssence)
+		pRawEssence->Release();
+	
+	if (pMultiEssence)
+		pMultiEssence->Release();
+	
 	if (pMasterMob)
 		pMasterMob->Release();
 
@@ -359,6 +373,8 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 	IAAFHeader *				pHeader = NULL;
 	IAAFDictionary*					pDictionary = NULL;
 	IAAFEssenceAccess*			pEssenceAccess = NULL;
+	IAAFEssenceRawAccess*		pRawEssence = NULL;
+	IAAFEssenceMultiAccess*		pMultiEssence = NULL;
 	IAAFEssenceFormat			*fmtTemplate =  NULL;
 	IEnumAAFMobs*				pMobIter = NULL;
 	IAAFMob*					pMob = NULL;
@@ -466,11 +482,14 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 					// Read the Raw Data from the AAF file
 					if(testType == testRawCalls)
 					{
-						check(pEssenceAccess->ReadRawData(	dataLen,		// Number of Samples 
+						check(pEssenceAccess->QueryInterface(IID_IAAFEssenceRawAccess, (void **)&pRawEssence));
+						check(pRawEssence->ReadRawData(	dataLen,		// Number of Samples 
 														sizeof(AAFDataBuf),	// Maximum buffer size
 														AAFDataBuf,			// Buffer for the data
 														&AAFBytesRead,	// Actual number of bytes read
 														&samplesRead));		// Actual number of samples read
+						pRawEssence->Release();
+						pRawEssence = NULL;
 					}
 					else if(testType == testStandardCalls)
 					{
@@ -491,13 +510,16 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 						aafmMultiXfer_t		xfer;
 						aafmMultiResult_t	result;
 
+						check(pEssenceAccess->QueryInterface(IID_IAAFEssenceMultiAccess, (void **)&pMultiEssence));
 						xfer.numSamples = dataLen;	//!!! Hardcoded	// Number of Samples 
 						xfer.buflen = sizeof(AAFDataBuf);
 						xfer.buffer = AAFDataBuf;
 						result.bytesXfered = 0;
-						check(pEssenceAccess->ReadMultiSamples(1, &xfer, &result));
+						check(pMultiEssence->ReadMultiSamples(1, &xfer, &result));
 						samplesRead = result.samplesXfered;
 						AAFBytesRead = result.bytesXfered;
+						pMultiEssence->Release();
+						pMultiEssence = NULL;
 					}
 
 					// Now compare the data read from the AAF file to the actual WAV file
@@ -551,6 +573,10 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 cleanup:
 	// Cleanup and return
 
+	if (pRawEssence)
+		pRawEssence->Release();
+	if (pMultiEssence)
+		pMultiEssence->Release();
 	if(fmtTemplate)
 	{
 		fmtTemplate->Release();
