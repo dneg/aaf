@@ -34,7 +34,8 @@
 
 #include "CAAFBuiltinDefs.h"
 
-#include <iostream.h>
+#include <iostream>
+using namespace std;
 #include <stdio.h>
 #include <stdlib.h>
 

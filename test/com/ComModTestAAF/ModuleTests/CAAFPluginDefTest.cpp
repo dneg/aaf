@@ -30,7 +30,8 @@ static wchar_t *manuf1URL = L"www.microsoft.com";
 static wchar_t *manuf2URL = L"www.avid.com";
 static wchar_t *manuf3URL = L"www.softimage.com";
 
-#include <iostream.h>
+#include <iostream>
+using namespace std;
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>

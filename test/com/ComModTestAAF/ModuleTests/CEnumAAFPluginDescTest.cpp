@@ -26,13 +26,15 @@
 #include "AAF.h"
 #include "AAFPluginDefs.h"
 
-#include <iostream.h>
+#include <iostream>
+using namespace std;
 
 
 //static wchar_t *manuf1URL = L"www.microsoft.com";
 static wchar_t *manuf2URL = L"www.avid.com";
 
-#include <iostream.h>
+#include <iostream>
+using namespace std;
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>

@@ -28,8 +28,10 @@
 #include "CAAFModuleTest.h"
 #include "ModuleTest.h"
 
-#include <iostream.h>
-#include <iomanip.h>
+#include <iostream>
+#include <iomanip>
+using namespace std;
+
 #include <time.h>
 #include <string.h>
 

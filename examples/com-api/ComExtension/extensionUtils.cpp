@@ -30,7 +30,6 @@
 
 #include "CAAFBuiltinDefs.h"
 
-#include <iostream.h>
 #include <stdlib.h>
 #include <wchar.h>
 #include <string.h>

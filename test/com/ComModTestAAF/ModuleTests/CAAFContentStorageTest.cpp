@@ -25,7 +25,8 @@
 
 #include "AAF.h"
 
-#include <iostream.h>
+#include <iostream>
+using namespace std;
 #include <assert.h>
 #include <string.h>
 #include <stdio.h>

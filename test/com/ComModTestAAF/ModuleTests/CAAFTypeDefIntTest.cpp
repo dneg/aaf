@@ -28,7 +28,8 @@
 #include "ModuleTest.h"
 #include "AAFStoredObjectIDs.h"
 
-#include <iostream.h>
+#include <iostream>
+using namespace std;
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>

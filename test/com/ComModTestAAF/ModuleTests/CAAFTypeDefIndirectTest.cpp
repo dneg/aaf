@@ -54,8 +54,9 @@ typedef IAAFSmartPointer<IAAFSegment>               IAAFSegmentSP;
 typedef IAAFSmartPointer<IAAFComponent>             IAAFComponentSP;
 
 
-#include <iostream.h>
-#include <iomanip.h>
+#include <iostream>
+#include <iomanip>
+using namespace std;
 #include <stdio.h>
 #include <assert.h>
 #include <stdlib.h>

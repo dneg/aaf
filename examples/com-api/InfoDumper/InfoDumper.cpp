@@ -35,9 +35,10 @@
 #include "AAFTypeDefUIDs.h"
 #include "AAFPropertyDefs.h"
 #include <assert.h>
-#include <iostream.h>
-#include <iomanip.h>
-#include <fstream.h>
+#include <iostream>
+#include <iomanip>
+#include <fstream>
+using namespace std;
 #include <stdio.h> // for sprintf()
 #include <stdlib.h>
 #include <string.h>

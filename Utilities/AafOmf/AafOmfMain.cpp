@@ -28,7 +28,9 @@
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
-#include <iostream.h>
+#include <iostream>
+using namespace std;
+
 #ifdef macintosh
 	#include "DataInput.h"
 #endif 

@@ -34,9 +34,10 @@
 #include "AAFStoredObjectIDs.h"
 #include "AAFTypeDefUIDs.h"
 #include <assert.h>
-#include <iostream.h>
-#include <iomanip.h>
-#include <fstream.h>
+#include <iostream>
+#include <iomanip>
+#include <fstream>
+using namespace std;
 #include <stdlib.h>
 #include <stdio.h> // for sprintf()
 #include <string.h>

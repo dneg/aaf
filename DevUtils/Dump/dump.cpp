@@ -50,8 +50,10 @@
 //             file.
 //
 
-#include <iostream.h>
-#include <iomanip.h>
+#include <iostream>
+#include <iomanip>
+using namespace std;
+
 #include <stdlib.h>
 #include <stdio.h>
 

@@ -24,7 +24,8 @@
 
 #include "AAF.h"
 #include "AAFTypes.h"
-#include <iostream.h>
+#include <iostream>
+using namespace std;
 
 //
 // Structs, typedefs, and helper functions for use with the

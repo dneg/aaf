@@ -517,7 +517,8 @@ HRESULT checkStinkyFiller (IAAFDictionary * pDict,
 //
 //*********************************************
 
-#include <iostream.h>
+#include <iostream>
+using namespace std;
 #include <stdio.h>
 
 static void     FatalErrorCode(HRESULT errcode, int line, char *file)

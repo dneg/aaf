@@ -25,8 +25,9 @@
 #include "extensionUtils.h"
 #include "AAFResult.h"
 
-#include <iostream.h>
-#include <iomanip.h>
+#include <iostream>
+#include <iomanip>
+using namespace std;
 #include <assert.h>
 
 

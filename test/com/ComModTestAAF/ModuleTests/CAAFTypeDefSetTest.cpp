@@ -30,7 +30,8 @@
 #include "AAFStoredObjectIDs.h"
 #include "AAFPropertyDefs.h"
 
-#include <iostream.h>
+#include <iostream>
+using namespace std;
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
