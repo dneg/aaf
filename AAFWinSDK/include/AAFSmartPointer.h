@@ -90,7 +90,6 @@ protected:
   }
 };
 
-
 //
 // The smart pointer class.
 //
@@ -98,7 +97,19 @@ template <typename ReferencedType>
 struct IAAFSmartPointer
   : public AAFSmartPointerBase <ReferencedType, AAFRefCountedCOMReference>
 {
-};
+  IAAFSmartPointer()
+    : AAFSmartPointerBase<ReferencedType, AAFRefCountedCOMReference>()
+  {}
 
+  // ctor that takes ownership of ReferencedType pointer
+  explicit IAAFSmartPointer( ReferencedType* p )
+    : AAFSmartPointerBase<ReferencedType, AAFRefCountedCOMReference>( p )
+  {}
+
+  // copy ctor
+  IAAFSmartPointer( const IAAFSmartPointer& src )
+    : AAFSmartPointerBase<ReferencedType, AAFRefCountedCOMReference>( src )
+  {}
+};
 
 #endif // ! __AAFSmartPointer_h__
