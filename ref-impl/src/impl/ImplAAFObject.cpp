@@ -41,6 +41,10 @@ extern "C" const aafClassID_t CLSID_AAFProperty;
 extern "C" const aafClassID_t CLSID_EnumAAFProperties;
 
 
+#define RELEASE_IF_SET(obj) \
+    if (obj) { obj->ReleaseReference(); obj = NULL; }
+
+
 // explicit template instantiation
 // template class ImplAAFCollection<ImplAAFProperty *>;
 
@@ -65,7 +69,8 @@ public:
          ImplAAFProperty* * pElem);
 
   AAFRESULT
-    Initialize (OMPropertySet * pPropSet);
+    Initialize (ImplAAFObject * pObj,
+				OMPropertySet * pOMPropSet);
 
 private:
   //AAFRESULT initProperty(aafUInt32 index,
@@ -85,7 +90,10 @@ ImplPropertyCollection::ImplPropertyCollection ()
 
 
 AAFRESULT ImplPropertyCollection::Initialize
-(OMPropertySet * pOMPropSet)
+(
+ ImplAAFObject * pObj,
+ OMPropertySet * pOMPropSet
+)
 {
   ImplAAFPropertyDef * pPropDef = NULL;
   AAFRESULT rReturned = AAFRESULT_SUCCESS;
@@ -109,8 +117,28 @@ AAFRESULT ImplPropertyCollection::Initialize
 	  _pProperties[i] = NULL;
 	}
 
+  ImplAAFHeader * pHead = NULL;
+  ImplAAFDictionary * pDict = NULL;
   try
 	{
+	  AAFRESULT hr;
+	  assert (pObj);
+	  hr = pObj->MyHeadObject(&pHead);
+	  if (AAFRESULT_OBJECT_NOT_ATTACHED == hr)
+		{
+		  // this must be the head object
+		  pHead = dynamic_cast<ImplAAFHeader*>(pObj);
+		  if (!pHead)
+			throw AAFRESULT_OBJECT_NOT_ATTACHED;
+		}
+	  else
+		{
+		  if (AAFRESULT_FAILED(hr)) throw hr;
+		}
+	  assert (pHead);
+	  hr = (pHead->GetDictionary(&pDict));
+	  if (AAFRESULT_FAILED(hr)) throw hr;
+	  assert (pDict);
 
 	  size_t omContext = 0;
 	  OMProperty * pOmProp = NULL;
@@ -125,7 +153,8 @@ AAFRESULT ImplPropertyCollection::Initialize
 		  pOMPropSet->iterate (omContext, pOmProp);
 		  assert (pOmProp);
 		  OMPropertyId opid = pOmProp->propertyId ();
-		  AAFRESULT hr = ImplAAFBuiltins::LookupPropDef (opid, &pPropDef);
+		  assert (pDict);
+		  AAFRESULT hr = pDict->LookupPropDef (opid, &pPropDef);
 		  if (AAFRESULT_FAILED (hr)) throw hr;
 		  assert (pPropDef);
 		  hr = _pProperties[i]->Initialize (pPropDef, pOmProp);
@@ -159,6 +188,9 @@ AAFRESULT ImplPropertyCollection::Initialize
 		  _pProperties = NULL;
 		}
 	}
+  RELEASE_IF_SET (pHead)
+  RELEASE_IF_SET (pDict);
+
   return rReturned;
 }
 
@@ -292,7 +324,7 @@ AAFRESULT ImplAAFObject::InitProperties ()
 		return AAFRESULT_NOMEMORY;
 	  OMPropertySet * ps = propertySet();
 	  assert (ps);
-	  AAFRESULT hr = _pProperties->Initialize (ps);
+	  AAFRESULT hr = _pProperties->Initialize (this, ps);
 	  if (AAFRESULT_FAILED (hr)) return hr;
 	}
   assert (_pProperties);
