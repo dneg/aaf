@@ -73,11 +73,10 @@ AafOmfGlobals*	gpGlobals = NULL;
 // ============================================================================
 // Delete a file given its  name
 // ============================================================================
-void deleteFile(char* fileName)
+int deleteFile(char* fileName)
 {
 
-	int result = remove(fileName);
-	//.. ignore error which typically happens if the file doesn;t exist
+	return(remove(fileName));
 
 }
 
