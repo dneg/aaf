@@ -150,7 +150,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
   IAAFDictionary*	pDictionary = NULL;
   IAAFDefObject*	pPlugDef = NULL;
   IAAFCodecDef*		pCodecDef = NULL;
-  IAAFPluginDescriptor *pDesc = NULL;
+  IAAFPluginDef *pDesc = NULL;
   IAAFNetworkLocator *pNetLoc = NULL, *pNetLoc2 = NULL, *pNetLoc3 = NULL;
   IAAFLocator		*pLoc = NULL, *pLoc2 = NULL, *pLoc3 = NULL;
   aafUID_t			category = AUID_AAFDefObject, manufacturer = MANUF_JEFFS_PLUGINS;
@@ -177,8 +177,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 				CreateInstance(IID_IAAFDefObject, 
 							   (IUnknown **)&pPlugDef));
     
-	checkResult(defs.cdPluginDescriptor()->
-				CreateInstance(IID_IAAFPluginDescriptor, 
+	checkResult(defs.cdPluginDef()->
+				CreateInstance(IID_IAAFPluginDef, 
 							   (IUnknown **)&pDesc));
 	checkResult(defs.cdNetworkLocator()->
 				CreateInstance(IID_IAAFNetworkLocator, 
@@ -222,7 +222,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	checkResult(pLoc2->SetPath (manuf2URL));
     checkResult(pDesc->AppendLocator(pLoc2));
 	/**/
-	checkResult(pPlugDef->AppendPluginDef(pDesc));
+	checkResult(pDesc->SetDefinitionObjectID(TestPluginDesc));
 
 	
 	checkResult(pPlugDef->QueryInterface (IID_IAAFCodecDef,
@@ -296,8 +296,8 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	IEnumAAFCodecDefs *pEnumPluggable = NULL;
 	IAAFCodecDef *pCodecDef = NULL;
 	IAAFDefObject *pDefObj = NULL;
-	IEnumAAFPluginDescriptors *pEnumDesc;
-	IAAFPluginDescriptor *pPlugin = NULL;
+	IEnumAAFPluginDefs *pEnumDesc;
+	IAAFPluginDef *pPlugin = NULL;
 	IAAFNetworkLocator	*pNetLoc = NULL;
 	IAAFLocator			*pLocator = NULL;
 	IEnumAAFPluginLocators *pEnumLoc = NULL;
@@ -319,10 +319,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 
 		checkResult(pHeader->GetDictionary(&pDictionary));
 	
-		checkResult(pDictionary->GetCodecDefs(&pEnumPluggable));
-		checkResult(pEnumPluggable->NextOne (&pCodecDef));
-		checkResult(pCodecDef->QueryInterface (IID_IAAFDefObject, (void **)&pDefObj));
-		checkResult(pDefObj->GetPluginDefs (&pEnumDesc));
+		checkResult(pDictionary->GetPluginDefs (&pEnumDesc));
 		checkResult(pEnumDesc->NextOne (&pPlugin));
 
 		/**/
