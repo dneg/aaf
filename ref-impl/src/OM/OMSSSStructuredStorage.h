@@ -24,3 +24,4 @@ extern "C" int createStructuredStorageInOMRawStorageEx (
     RootStorage** out_ppRoot,
     unsigned long in_sectorSize);
 
+
