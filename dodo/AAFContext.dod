@@ -41,7 +41,11 @@ AD_XMETHOD2(OpenModifyFile,
 			Opens an AAF file for modification.)
 
 AD_METHOD1(SetDefaultIdentification,
-			[in],aafProductIdentification_t *,ident, a struct from which it is initialized,
-			Sets the object which identifies the creator of the file.)
+		   [in],aafProductIdentification_t *,ident, a struct from which it is initialized,
+		   Sets the object which identifies the creator of the file.)
+
+AD_METHOD1(GetIdentification,
+		   [out],aafProductIdentification_t *,ident, returned identification info,
+		   Gets information identifying the creator of the file.)
 
 AD_ROOT_CLASS_END
