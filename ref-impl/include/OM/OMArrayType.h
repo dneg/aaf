@@ -29,7 +29,7 @@
 #include "OMType.h"
 
 // @author Tim Bingham | tjb | Avid Technology, Inc. | OMArrayType
-class OMArrayType : public OMType {
+class OMArrayType {
 public:
 
   virtual OMType* elementType(void) const = 0;
