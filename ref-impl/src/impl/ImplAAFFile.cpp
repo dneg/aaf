@@ -138,7 +138,12 @@ ImplAAFFile::OpenExistingRead (const aafCharacter * pFileName,
         checkExpression(sig == aafFileSignature, AAFRESULT_NOT_AAF_FILE);
 
 		// Get the byte order
-		_byteOrder = _file->byteOrder();
+		OMByteOrder byteOrder = _file->byteOrder();
+		if (byteOrder == littleEndian) {
+			_byteOrder = 0x4949; // 'II'
+		} else { // bigEndian
+			_byteOrder = 0x4d4d; // 'MM'
+		}
 
 		// Restore the header.
 		bool regWasEnabled = _factory->SetEnableDefRegistration (false);
@@ -238,7 +243,12 @@ ImplAAFFile::OpenExistingModify (const aafCharacter * pFileName,
 		checkExpression(NULL != _file, AAFRESULT_INTERNAL_ERROR);
 
 		// Get the byte order
-		_byteOrder = _file->byteOrder();
+		OMByteOrder byteOrder = _file->byteOrder();
+		if (byteOrder == littleEndian) {
+			_byteOrder = 0x4949; // 'II'
+		} else { // bigEndian
+			_byteOrder = 0x4d4d; // 'MM'
+		}
 
 		// Restore the header.
 		bool regWasEnabled = _factory->SetEnableDefRegistration (false);
@@ -374,7 +384,12 @@ ImplAAFFile::OpenNewModify (const aafCharacter * pFileName,
 		checkResult(_head->AddIdentificationObject(pIdent));
 		  
 		// Set the byte order
-		_byteOrder = hostByteOrder();
+		OMByteOrder byteOrder = hostByteOrder();
+		if (byteOrder == littleEndian) {
+			_byteOrder = 0x4949; // 'II'
+		} else { // bigEndian
+			_byteOrder = 0x4d4d; // 'MM'
+		}
 		_head->SetByteOrder(_byteOrder);
 		_head->SetFileRevision (theVersion);
 
@@ -385,7 +400,7 @@ ImplAAFFile::OpenNewModify (const aafCharacter * pFileName,
 
 		// Attempt to create the file.
 		const OMFileSignature aafFileSignature  = *reinterpret_cast<const OMFileSignature *>(&aafFileSignatureGUID);
-		_file = OMFile::openNewModify(pFileName, _factory, _byteOrder, _head, aafFileSignature);
+		_file = OMFile::openNewModify(pFileName, _factory, byteOrder, _head, aafFileSignature);
 		checkExpression(NULL != _file, AAFRESULT_INTERNAL_ERROR);
 
 		// Now that the file is open and the header has been
@@ -466,7 +481,12 @@ ImplAAFFile::OpenTransient (aafProductIdentification_t * pIdent)
 		checkResult(_head->AddIdentificationObject(pIdent));
 		  
 		// Set the byte order
-		_byteOrder = hostByteOrder();
+		OMByteOrder byteOrder = hostByteOrder();
+		if (byteOrder == littleEndian) {
+			_byteOrder = 0x4949; // 'II'
+		} else { // bigEndian
+			_byteOrder = 0x4d4d; // 'MM'
+		}
 		_head->SetByteOrder(_byteOrder);
 
 		//JeffB!!! We must decide whether def-only files have a content storage
@@ -475,7 +495,8 @@ ImplAAFFile::OpenTransient (aafProductIdentification_t * pIdent)
 		pCStore = 0;
 
 		// Attempt to create the file.
-		_file = OMFile::openNewTransient(_factory, _byteOrder, _head);
+
+		_file = OMFile::openNewTransient(_factory, byteOrder, _head);
 		checkExpression(NULL != _file, AAFRESULT_INTERNAL_ERROR);
 
 		// Now that the file is open and the header has been
