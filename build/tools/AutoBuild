@@ -279,7 +279,7 @@ if [ $BUILD_RUN_COMMAND -eq 1 ]; then
 
     printf "Files that differ from ${BUILD_TAG}:\n\n" >> $MAKE_LOG_FILENAME
     printf "M - files modified locally\n" >> $MAKE_LOG_FILENAME
-    printf "U - out of date files (modified in the cvs repository)\n" >> $MAKE_LOG_FILENAME
+    printf "U - files that have changed since ${BUILD_TAG}\n" >> $MAKE_LOG_FILENAME
     printf "Unknown local files are not shown.\n\n" >> $MAKE_LOG_FILENAME
 
     echo Running: cvs -nq update -d -r ${BUILD_TAG} 
