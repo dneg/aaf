@@ -200,7 +200,7 @@ private:
   void readSignature(const wchar_t* fileName);
 
   OMStorable* _root;
-  OMStoredObject* _rootStoredObject;
+  OMStoredObject* _rootStore;
 
   OMDictionary* _dictionary;
   OMObjectDirectory* _objectDirectory;
