@@ -18,7 +18,6 @@ AAFPERSISTENTOBJECTS = \
 	AAFDataDef \
 	AAFDefObject \
 	AAFDOSLocator \
-	AAFEdgecode \
 	AAFEffectDef \
 	AAFEffectInvocation \
 	AAFEvent \
@@ -105,6 +104,7 @@ HUMAN_TYPED_IMPL = \
 	AAFComponent \
 	AAFCompositionMob \
 	AAFContentStorage \
+	AAFEdgecode \
 	AAFEssenceAccess \
 	AAFEssenceData \
 	AAFEssenceDescriptor \
