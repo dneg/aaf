@@ -36,10 +36,6 @@
 
 #include <assert.h>
 
-#if defined(_MAC)
-#pragma export on
-#endif // #if defined(_MAC)
-
 
 
 
@@ -1097,7 +1093,4 @@ STDAPI
   return hr;
 }
 
-#if defined(_MAC)
-#pragma export off
-#endif // #if defined(_MAC)
 
