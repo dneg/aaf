@@ -127,7 +127,7 @@
     tag = $1;
     tagrev = $2;
     gsub(":", "", tag);
-    /* Associative array - yum ! */
+    # Associative array - yum !
     tagmap[tagrev] = tagmap[tagrev] " " tag;
   }
 }

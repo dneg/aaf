@@ -122,7 +122,7 @@ $ cat Everything.log | awk -f build/history/flatlog.awk  > Everything.flog
 $ for t in RC1 Build-0500 Build-0501 Build-0502 \
            Build-0503 Build-0504 Build-0505
 > do
-> grep -w $t Everything.flog | sort -r -k 3 -k 4 | \
+> grep " T $t\$" Everything.flog | sort -r -k 3 -k 4 | \
     head -n 1 | awk '{printf("%s %s %s\n", $7, $3, $4)}'
 > done
 RC1 2001/04/17 22:14:43
