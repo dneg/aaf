@@ -184,10 +184,10 @@ STDAPI ImplAAFFileOpenExistingRead (
   if (AAFRESULT_SUCCEEDED (hr))
 	{
 	  const aafUID_t* pFileKind;
-	  if (modeFlags & AAF_FILE_MODE_USE_SMALL_SS_SECTORS)
-	  	pFileKind = &kAAFFileKind_Aaf512Binary;
-      else
+	  if (modeFlags & AAF_FILE_MODE_USE_LARGE_SS_SECTORS)
 	  	pFileKind = &kAAFFileKind_Aaf4KBinary;
+    else
+	  	pFileKind = &kAAFFileKind_Aaf512Binary;
 
 	  hr = ImplAAFCreateAAFFileOnRawStorage
 		(pRawStg,
@@ -357,10 +357,10 @@ STDAPI ImplAAFFileOpenExistingModify (
   if (AAFRESULT_SUCCEEDED (hr))
 	{
 	  const aafUID_t* pFileKind;
-	  if (modeFlags & AAF_FILE_MODE_USE_SMALL_SS_SECTORS)
-	  	pFileKind = &kAAFFileKind_Aaf512Binary;
-      else
+	  if (modeFlags & AAF_FILE_MODE_USE_LARGE_SS_SECTORS)
 	  	pFileKind = &kAAFFileKind_Aaf4KBinary;
+		else
+	  	pFileKind = &kAAFFileKind_Aaf512Binary;
 
 	  hr = ImplAAFCreateAAFFileOnRawStorage
 		(pRawStg,
@@ -516,10 +516,10 @@ STDAPI ImplAAFFileOpenNewModify (
   if (AAFRESULT_SUCCEEDED (hr))
 	{
 	  const aafUID_t* pFileKind;
-	  if (modeFlags & AAF_FILE_MODE_USE_SMALL_SS_SECTORS)
-	  	pFileKind = &kAAFFileKind_Aaf512Binary;
-      else
+	  if (modeFlags & AAF_FILE_MODE_USE_LARGE_SS_SECTORS)
 	  	pFileKind = &kAAFFileKind_Aaf4KBinary;
+		else
+	  	pFileKind = &kAAFFileKind_Aaf512Binary;
 
 	  hr = ImplAAFCreateAAFFileOnRawStorage
 		(pRawStg,
@@ -702,10 +702,10 @@ STDAPI ImplAAFFileOpenTransient (
   if (AAFRESULT_SUCCEEDED (hr))
 	{
 	  const aafUID_t* pFileKind;
-	  if (modeFlags & AAF_FILE_MODE_USE_SMALL_SS_SECTORS)
-	  	pFileKind = &kAAFFileKind_Aaf512Binary;
-      else
+	  if (modeFlags & AAF_FILE_MODE_USE_LARGE_SS_SECTORS)
 	  	pFileKind = &kAAFFileKind_Aaf4KBinary;
+		else
+	  	pFileKind = &kAAFFileKind_Aaf512Binary;
 
 	  hr = ImplAAFCreateAAFFileOnRawStorage
 		(pRawStg,

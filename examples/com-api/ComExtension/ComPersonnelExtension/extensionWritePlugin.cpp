@@ -26,6 +26,7 @@
 #include "AAFPlugin.h"
 #include "AAFStoredObjectIDs.h"
 #include "AAFTypeDefUIDs.h"
+#include "AAFFileKinds.h"
 
 #include "extensionUtils.h"
 #include "extensionWritePlugin.h"
@@ -173,7 +174,8 @@ HRESULT extensionWritePlugin (const aafCharacter * filename)
     ProductInfo.productID = NULL_UID;
     ProductInfo.platform = 0;
   
-    check (AAFFileOpenNewModify ((aafCharacter*) filename,
+    check (AAFFileOpenNewModifyEx ((aafCharacter*) filename,
+							     &kAAFFileKind_Aaf4KBinary,
 							     0,
 							     &ProductInfo,
 							     &pFile));

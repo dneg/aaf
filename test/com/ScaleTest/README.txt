@@ -63,7 +63,7 @@ NOTE: Requires a Bourne shell to run the scripts
 
    To create and read 512 sector files
 
-       sh <datadir>/runaaftest.sh read write 512b <n>
+       sh <datadir>/runaaftest.sh read write <n>
 
          where <datadir> should be set to the directory where the test data
 		 has been stored
@@ -72,9 +72,9 @@ NOTE: Requires a Bourne shell to run the scripts
 
 	   E.g. 
 
-	   sh /home/joe/aaftestdata/runaaftest.sh read write 512b 4000
+	   sh /home/joe/aaftestdata/runaaftest.sh read write 4000
 
-       sh /c/aaftestdata/runaaftest.sh read write 512b 4000
+       sh /c/aaftestdata/runaaftest.sh read write 4000
 	       (/c means drive C: under MSYS)
 
    To create and read 4k sector files
@@ -88,6 +88,6 @@ NOTE: Requires a Bourne shell to run the scripts
 
 	   E.g. 
 
-	   sh /home/joe/aaftestdata/runaaftest.sh read write 4000
+	   sh /home/joe/aaftestdata/runaaftest.sh read write 4k 4000
 
-       sh /c/aaftestdata/runaaftest.sh read write 4000
+       sh /c/aaftestdata/runaaftest.sh read write 4k 4000

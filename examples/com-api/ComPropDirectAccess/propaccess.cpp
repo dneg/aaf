@@ -27,6 +27,7 @@
 
 #include "AAF.h"
 #include "AAFFileMode.h"
+#include "AAFFileKinds.h"
 
 
 #include "CAAFBuiltinDefs.h"
@@ -610,7 +611,7 @@ static void CreateAAFFile(aafWChar * pFileName,
   ProductInfo.platform = NULL;
   
   IAAFFileSP spFile;
-  check (AAFFileOpenNewModify(pFileName, 0, &ProductInfo, &spFile));
+  check (AAFFileOpenNewModifyEx(pFileName, &kAAFFileKind_Aaf4KBinary, 0, &ProductInfo, &spFile));
   
   IAAFHeaderSP spHeader;
   check (spFile->GetHeader(&spHeader));

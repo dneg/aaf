@@ -194,7 +194,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, long int N)
 #if USE_MEMORY_FILE
   check(MemoryFileOpenNewModify (0, &ProductInfo, &pFile));
 #else
-  check(AAFFileOpenNewModify (pFileName, 0, &ProductInfo, &pFile));
+  check(AAFFileOpenNewModifyEx (pFileName, &kAAFFileKind_Aaf4KBinary, 0, &ProductInfo, &pFile));
 #endif
 
   check(pFile->GetHeader(&pHeader));

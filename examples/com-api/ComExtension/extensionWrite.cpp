@@ -25,6 +25,7 @@
 #include "AAF.h"
 #include "AAFStoredObjectIDs.h"
 #include "AAFTypeDefUIDs.h"
+#include "AAFFileKinds.h"
 
 #include "extensionUtils.h"
 #include "extensionWrite.h"
@@ -149,7 +150,8 @@ void extensionWrite (const aafCharacter * filename)
     ProductInfo.productID = NULL_UID;
     ProductInfo.platform = 0;
   
-    check (AAFFileOpenNewModify ((aafCharacter*) filename,
+    check (AAFFileOpenNewModifyEx ((aafCharacter*) filename,
+							     &kAAFFileKind_Aaf4KBinary,
 							     0,
 							     &ProductInfo,
 							     &pFile));

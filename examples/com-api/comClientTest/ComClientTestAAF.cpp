@@ -34,6 +34,7 @@
 
 // Include the AAF Stored Object identifiers. These symbols are defined in aaf.lib.
 #include "AAFStoredObjectIDs.h"
+#include "AAFFileKinds.h"
 
 #include "CAAFBuiltinDefs.h"
 
@@ -434,7 +435,7 @@ static void CreateAAFFile(aafWChar * pFileName)
   ProductInfo.productID = NIL_UID;
   ProductInfo.platform = NULL;
   
-  check(AAFFileOpenNewModify(pFileName, 0, &ProductInfo, &pFile));
+  check(AAFFileOpenNewModifyEx(pFileName, &kAAFFileKind_Aaf4KBinary, 0, &ProductInfo, &pFile));
   check(pFile->GetHeader(&pHeader));
 
   // Get the AAF Dictionary so that we can create valid AAF objects.

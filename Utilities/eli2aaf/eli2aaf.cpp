@@ -84,7 +84,7 @@ const aafUID_t kAAFPropID_DIDImageSize				= { 0xce2aca4f, 0x51ab, 0x11d3, { 0xa0
 
 static bool writeNetworkLocator = false;
 static bool useRawStorage = false;
-static bool useSmallSectors = false;
+static bool useLargeSectors = false;
 
 // Add a property definition to the dictionary, after first checking if it
 // needs to be added (used in CreateLegacyPropDefs() only)
@@ -926,8 +926,8 @@ static bool createAAFFileForEditDecisions(const char *output_aaf_file,
 			if (!useRawStorage)
 			{
 				int modeFlags = 0;
-				if (useSmallSectors)
-					modeFlags |= AAF_FILE_MODE_USE_SMALL_SS_SECTORS;
+				if (useLargeSectors)
+					modeFlags |= AAF_FILE_MODE_USE_LARGE_SS_SECTORS;
 
 				CHECK_HRESULT(AAFFileOpenNewModify(
 					AxStringUtil::mbtowc( output_aaf_file ).c_str(), modeFlags, &ProductInfo, &pFile));
@@ -936,10 +936,10 @@ static bool createAAFFileForEditDecisions(const char *output_aaf_file,
 			{
 				// RawStorage with MS SS known to fail for 4k (works with 512)
 				const aafUID_t* pFileKind;
-				if (useSmallSectors)
-					pFileKind = &kAAFFileKind_Aaf512Binary;
+				if (useLargeSectors)
+					pFileKind = &kAAFFileKind_Aaf4KBinary;
 				else
-					pFileKind = &kAAFFileKind_Aaf4KBinary; 
+					pFileKind = &kAAFFileKind_Aaf512Binary; 
 
 				IAAFRawStorage* pRawStorage = 0;
 				CHECK_HRESULT (AAFCreateRawStorageDisk(
@@ -1261,7 +1261,7 @@ int main(int argc, char* argv[])
 {
 	if (argc < 3)
 	{
-		cout << "Usage: " << argv[0] << " [-netloc] [-useraw] [-smallSectors] [-nocompmob] [-notapemob] [-noaudio] infile outfile [essencedir]" << endl;
+		cout << "Usage: " << argv[0] << " [-netloc] [-useraw] [-largeSectors] [-nocompmob] [-notapemob] [-noaudio] infile outfile [essencedir]" << endl;
 		return 1;
 	}
 
@@ -1281,10 +1281,10 @@ int main(int argc, char* argv[])
 			useRawStorage = true;
 			i++;
 		}
-		else if (!strcmp(argv[i], "-smallSectors"))
+		else if (!strcmp(argv[i], "-largeSectors"))
 		{
 			// create AAF file using 4k sectors
-			useSmallSectors = true;
+			useLargeSectors = true;
 			i++;
 		}
 		else if (!strcmp(argv[i], "-nocompmob"))
@@ -1321,7 +1321,7 @@ int main(int argc, char* argv[])
 		if (useRawStorage)
 			idxOffset++;
 
-		if (useSmallSectors)
+		if (useLargeSectors)
 			idxOffset++;
 
 		if (!create_compmob)

@@ -39,6 +39,7 @@
 #include "AAFContainerDefs.h"
 #include "AAFCodecDefs.h"
 #include "AAFEssenceFormats.h"
+#include "AAFFileKinds.h"
 
 // Include the AAF interface declarations.
 #include "AAF.h"
@@ -175,7 +176,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 
 	/* Create a new AAF file */
 
-	check(AAFFileOpenNewModify (pFileName, 0, &ProductInfo, &pFile));
+	check(AAFFileOpenNewModifyEx (pFileName, &kAAFFileKind_Aaf4KBinary, 0, &ProductInfo, &pFile));
 	check(pFile->GetHeader(&pHeader));
 	
 	/* Get the AAF Dictionary from the file */

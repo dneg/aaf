@@ -124,8 +124,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName,
 
 		if( !UseRaw )
 		{
-			checkResult(AAFFileOpenNewModify(
+			checkResult(AAFFileOpenNewModifyEx(
 				pFileName,
+				pFileKind,
 				0,
 				&ProductInfo,
 				ppFile));
