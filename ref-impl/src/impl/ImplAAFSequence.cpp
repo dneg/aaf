@@ -263,7 +263,7 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFSequence::RemoveComponent (ImplAAFComponent* pComponent)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  return AAFRESULT_NOT_IN_CURRENT_VERSION;
 }
 
 //***********************************************************
