@@ -55,7 +55,7 @@
 #               vestiges of registration code.                                #
 # 06-OCT-1999 : transdel Use copy instead of xcopy so that we can rename the  #
 #               files during the copy operation. Also, removed bin\debug      #
-#               directory from sdk.                                           #
+#               directory from sdk. Also added support for nmake /a option.   #
 ###############################################################################
 
 
@@ -99,7 +99,11 @@ SDKDIR  = .
 #
 # The top level directory of the AAF SDK.
 #
+!if "$(SDKDIR)"=="."
+AAFSDK = .
+!else
 AAFSDK = $(SDKDIR)\aafsdk
+!endif
 
 
 #
@@ -132,6 +136,7 @@ AAFSDK_CFG=$(AAFSDK)\config.mk
 # Directory structure for the AAF SDK
 #
 AAFSDK_BIN     = $(AAFSDK)\bin
+AAFSDK_DEBUG   = $(AAFSDK_BIN)\debug
 AAFSDK_HELP    = $(AAFSDK)\help
 AAFSDK_INCLUDE = $(AAFSDK)\include
 AAFSDK_LIB     = $(AAFSDK)\lib
@@ -142,6 +147,7 @@ AAFSDK_LIB     = $(AAFSDK)\lib
 #
 TOOLKIT_INCLUDE = $(AAFTOOLKIT)\ref-impl\include
 TOOLKIT_INCLUDE_COMAPI = $(TOOLKIT_INCLUDE)\com-api
+TOOLKIT_INCLUDE_REFAPI = $(TOOLKIT_INCLUDE)\ref-api
 TOOLKIT_PLUGINS = $(AAFTOOLKIT)\ref-impl\plugins
 TOOLKIT_COMIDL = $(AAFTOOLKIT)\AAFWinSDK\ref-impl\include\comidl
 TOOLKIT_DEBUG_REFIMPL = $(AAFTOOLKIT)\AAFWinSDK\Debug\RefImpl
@@ -166,7 +172,13 @@ TOOLKIT_TARGET_REFIMPL = $(TOOLKIT_RELEASE_REFIMPL)
 # Target directories
 #
 TARGET_DIRS = \
+!if "$(AAFSDK)"!="."
+	$(AAFSDK) \
+!endif
 	$(AAFSDK_BIN) \
+!if "$(CFG)"=="FULL"
+	$(AAFSDK_DEBUG) \
+!endif
 	$(AAFSDK_HELP) \
 	$(AAFSDK_INCLUDE) \
 	$(AAFSDK_LIB)
@@ -178,6 +190,8 @@ TARGET_DIRS = \
 TARGET_H_FILES = \
 	$(AAFSDK_INCLUDE)\AAFClassDefUIDs.h \
 	$(AAFSDK_INCLUDE)\AAFCodecDefs.h \
+	$(AAFSDK_INCLUDE)\AAFCOMPlatform.h \
+	$(AAFSDK_INCLUDE)\AAFCOMPlatformTypes.h \
 	$(AAFSDK_INCLUDE)\AAFContainerDefs.h \
 	$(AAFSDK_INCLUDE)\AAFDataDefs.h \
 	$(AAFSDK_INCLUDE)\AAFDefUIDs.h \
@@ -210,12 +224,12 @@ TARGET_IDL_FILES = \
 # Target midl files that need to be copied.
 #
 TARGET_MIDL_FILES = \
-	$(AAFSDK_INCLUDE)\AAFTypes.h \
 	$(AAFSDK_INCLUDE)\AAF.h \
 	$(AAFSDK_INCLUDE)\AAFPlugin.h \
 	$(AAFSDK_INCLUDE)\AAFPluginTypes.h \
-	$(AAFSDK_INCLUDE)\AAF_i.c \
-	$(AAFSDK_INCLUDE)\AAFPlugin_i.c
+	$(AAFSDK_INCLUDE)\AAFPlugin_i.c \
+	$(AAFSDK_INCLUDE)\AAFTypes.h \
+	$(AAFSDK_INCLUDE)\AAF_i.c
 
 
 #
@@ -252,15 +266,18 @@ TARGET_LIB_FILES = \
 # Release dynamic link libraries.
 #
 RELEASE_DLL_FILES = \
-	$(AAFSDK_BIN)\aafcoapi.dll
+	$(AAFSDK_BIN)\aafcoapi.dll \
+	$(AAFSDK_BIN)\aafintp.dll \
+	$(AAFSDK_BIN)\aafpgapi.dll
 
 
 #
 # Release dynamic link libraries.
 #
 DEBUG_DLL_FILES = \
-	$(AAFSDK_BIN)\aafcoapid.dll
-
+	$(AAFSDK_DEBUG)\aafcoapi.dll \
+	$(AAFSDK_DEBUG)\aafintp.dll \
+	$(AAFSDK_DEBUG)\aafpgapi.dll
 
 
 #
@@ -270,10 +287,8 @@ TARGET_DLL_FILES = \
 !if "$(CFG)"=="FULL"
 	$(RELEASE_DLL_FILES) \
 	$(DEBUG_DLL_FILES)
-!elseif "$(CFG)"=="Release"
-	$(RELEASE_DLL_FILES)
 !else
-	$(DEBUG_DLL_FILES)
+	$(RELEASE_DLL_FILES)
 !endif
 
 
@@ -282,13 +297,21 @@ TARGET_DLL_FILES = \
 #
 CONFIG_FILES_TO_REMOVE = \
 !if "$(CFG)"=="Release"
-	$(DEBUG_LIB_FILES) \
+#	$(DEBUG_LIB_FILES) \
 	$(DEBUG_DLL_FILES)
 !elseif "$(CFG)"=="Debug"
-	$(RELEASE_LIB_FILES) \
+#	$(RELEASE_LIB_FILES) \
+	$(DEBUG_DLL_FILES) \
 	$(RELEASE_DLL_FILES)
 !endif
 
+#
+# Configuration directories that need to be cleanup up from LASTCFG.
+#
+CONFIG_DIRS_TO_REMOVE = \
+!if "$(CFG)"=="Release" || "$(CFG)"=="Debug"
+	$(AAFSDK_DEBUG)
+!endif
 
 #
 # Target files that need to be cleanup up.
@@ -309,12 +332,16 @@ TARGET_FILES_TO_REMOVE = \
 # Note: Order is important: must have child before parent directory.
 #
 TARGET_DIRS_TO_REMOVE = \
+	$(AAFSDK_DEBUG) \
 	$(AAFSDK_BIN) \
 	$(AAFSDK_HELP) \
 	$(AAFSDK_INCLUDE) \
+!if "$(AAFSDK)"=="."
+	$(AAFSDK_LIB)
+!else
 	$(AAFSDK_LIB) \
 	$(AAFSDK)
-
+!endif
 
 #
 # Main dependency order for all targets
@@ -358,19 +385,28 @@ $(AAFSDK_CFG) : $(SDK_TARGETS)
 # Dependencies and build rules to create the AAF SDK directory structure.
 #
 $(AAFSDK) :
-	md $(AAFSDK)
+	if not exist $(AAFSDK) \
+	    md $(AAFSDK)
 
-$(AAFSDK_BIN) : $(AAFSDK)
-	md $(AAFSDK_BIN)
+$(AAFSDK_BIN) :
+	if not exist $(AAFSDK_BIN) \
+	    md $(AAFSDK_BIN)
 
-$(AAFSDK_HELP) : $(AAFSDK)
-	md $(AAFSDK_HELP)
+$(AAFSDK_DEBUG) : $(AAFSDK_BIN)
+	if not exist $(AAFSDK_DEBUG) \
+	    md $(AAFSDK_DEBUG)
 
-$(AAFSDK_INCLUDE) : $(AAFSDK)
-	md $(AAFSDK_INCLUDE)
+$(AAFSDK_HELP) :
+	if not exist $(AAFSDK_HELP) \
+	    md $(AAFSDK_HELP)
 
-$(AAFSDK_LIB) : $(AAFSDK)
-	md $(AAFSDK_LIB)
+$(AAFSDK_INCLUDE) :
+	if not exist $(AAFSDK_INCLUDE) \
+	    md $(AAFSDK_INCLUDE)
+
+$(AAFSDK_LIB) :
+	if not exist $(AAFSDK_LIB) \
+	    md $(AAFSDK_LIB)
 
 
 #
@@ -381,6 +417,12 @@ $(AAFSDK_INCLUDE)\AAFClassDefUIDs.h : $(TOOLKIT_INCLUDE)\AAFClassDefUIDs.h
 
 $(AAFSDK_INCLUDE)\AAFCodecDefs.h : $(TOOLKIT_INCLUDE)\AAFCodecDefs.h
 	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFCodecDefs.h "$(AAFSDK_INCLUDE)\"
+
+$(AAFSDK_INCLUDE)\AAFCOMPlatform.h : $(TOOLKIT_INCLUDE_REFAPI)\AAFCOMPlatform.h
+	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE_REFAPI)\AAFCOMPlatform.h "$(AAFSDK_INCLUDE)\"
+
+$(AAFSDK_INCLUDE)\AAFCOMPlatformTypes.h : $(TOOLKIT_INCLUDE_REFAPI)\AAFCOMPlatformTypes.h
+	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE_REFAPI)\AAFCOMPlatformTypes.h "$(AAFSDK_INCLUDE)\"
 
 $(AAFSDK_INCLUDE)\AAFContainerDefs.h : $(TOOLKIT_INCLUDE)\AAFContainerDefs.h
 	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFContainerDefs.h "$(AAFSDK_INCLUDE)\"
@@ -496,17 +538,27 @@ $(AAFSDK_LIB)\aafd.lib : $(TOOLKIT_DEBUG_REFIMPL)\aafd.lib
 # Dependency and build rules for the Release DLL targets.
 #
 $(AAFSDK_BIN)\aafcoapi.dll : $(TOOLKIT_TARGET_REFIMPL)\aafcoapi.dll
-	$(CP) $(CP_OPTS) $(TOOLKIT_RELEASE_REFIMPL)\aafcoapi.dll "$(AAFSDK_BIN)\"
+	$(CP) $(CP_OPTS) $(TOOLKIT_TARGET_REFIMPL)\aafcoapi.dll "$(AAFSDK_BIN)\"
+
+$(AAFSDK_BIN)\aafintp.dll : $(TOOLKIT_TARGET_REFIMPL)\aafintp.dll
+	$(CP) $(CP_OPTS) $(TOOLKIT_TARGET_REFIMPL)\aafintp.dll "$(AAFSDK_BIN)\"
+
+$(AAFSDK_BIN)\aafpgapi.dll : $(TOOLKIT_TARGET_REFIMPL)\aafpgapi.dll
+	$(CP) $(CP_OPTS) $(TOOLKIT_TARGET_REFIMPL)\aafpgapi.dll "$(AAFSDK_BIN)\"
 
 
 
 #
 # Dependency and build rules for the Debug DLL targets.
 #
-$(AAFSDK_BIN)\aafcoapid.dll : $(TOOLKIT_DEBUG_REFIMPL)\aafcoapi.dll
-	$(CP) $(CP_OPTS) $(TOOLKIT_DEBUG_REFIMPL)\aafcoapi.dll "$(AAFSDK_BIN)\AAFCOAPID.dll"
+$(AAFSDK_DEBUG)\aafcoapi.dll : $(TOOLKIT_DEBUG_REFIMPL)\aafcoapi.dll
+	$(CP) $(CP_OPTS) $(TOOLKIT_DEBUG_REFIMPL)\aafcoapi.dll "$(AAFSDK_DEBUG)\"
 
+$(AAFSDK_DEBUG)\aafintp.dll : $(TOOLKIT_DEBUG_REFIMPL)\aafintp.dll
+	$(CP) $(CP_OPTS) $(TOOLKIT_DEBUG_REFIMPL)\aafintp.dll "$(AAFSDK_DEBUG)\"
 
+$(AAFSDK_DEBUG)\aafpgapi.dll : $(TOOLKIT_DEBUG_REFIMPL)\aafpgapi.dll
+	$(CP) $(CP_OPTS) $(TOOLKIT_DEBUG_REFIMPL)\aafpgapi.dll "$(AAFSDK_DEBUG)\"
 
 
 #
@@ -516,8 +568,14 @@ cleanconfigfiles:
 !if "$(CONFIG_FILES_TO_REMOVE)" != ""
 	@for %%f in ( $(CONFIG_FILES_TO_REMOVE) ) do \
 	    @if exist %%f \
-		@echo $(RM) $(RM_OPTS) %%f & \
+	        @echo $(RM) $(RM_OPTS) %%f & \
 	        $(RM) $(RM_OPTS) %%f
+!endif
+!if "$(CONFIG_DIRS_TO_REMOVE)" != ""
+	@for %%d in ( $(CONFIG_DIRS_TO_REMOVE) ) do \
+	    @if exist %%d \
+	        @echo rd %%d & \
+	        rd %%d
 !endif
 
 
@@ -528,7 +586,7 @@ cleanconfigfiles:
 cleanfiles : cleanconfigfiles
 	@for %%f in ( $(TARGET_FILES_TO_REMOVE) ) do \
 	    @if exist %%f \
-		@echo $(RM) $(RM_OPTS) %%f & \
+	        @echo $(RM) $(RM_OPTS) %%f & \
 	        $(RM) $(RM_OPTS) %%f
 
 
@@ -538,7 +596,7 @@ cleanfiles : cleanconfigfiles
 cleandirs :
 	@for %%d in ( $(TARGET_DIRS_TO_REMOVE) ) do \
 	    @if exist %%d \
-		@echo rd %%d & \
+	        @echo rd %%d & \
 	        rd %%d
 
 #
