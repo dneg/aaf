@@ -817,9 +817,8 @@ OMWeakReferenceSetProperty<ReferencedObject>::targetPropertyPath(void) const
 {
   TRACE("OMWeakReferenceSetProperty<ReferencedObject>::targetPropertyPath");
 
-  PRECONDITION("Valid target name", validWideString(_targetName));
-
   if (_targetPropertyPath == 0) {
+    ASSERT("Valid target name", validWideString(_targetName));
     OMWeakReferenceSetProperty<ReferencedObject>* nonConstThis =
                const_cast<OMWeakReferenceSetProperty<ReferencedObject>*>(this);
     nonConstThis->_targetPropertyPath = file()->path(_targetName);
