@@ -16,41 +16,13 @@
 // 
 //=---------------------------------------------------------------------=
 
-#include "AxPlugin.h"
+#include <AAFPlatform.h>
 
-#include "AAFCOMPlatformTypes.h"
+#if defined(OS_WINDOWS)
 
-// Is it safe to unload the DLL?
+// No platform specific windows code is required.
 
-STDAPI DllCanUnloadNow(void)
-{
-	if ( AxPlugin::CanUnloadNow() ) {
-		return S_OK;
-	}
-	else {
-		return S_FALSE;
-	}
-}
+// If ever the need arises to implement DllMain (or the like) it can
+// go here.
 
-// Return the number of components implemented by this library.
-
-STDAPI AAFGetClassCount(void)
-{
-	return AxPlugin::GetClassCount();
-}
-
-
-// Get the class id of the "i'th" component implemented by this library.
-
-STDAPI AAFGetClassObjectID(ULONG index, CLSID *pClassID)
-{
-	return AxPlugin::GetClassObjectID( index, pClassID );
-}
-
-// Create an instance of the class factory for the component
-// identified by "rcslid".
-
-STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
-{
-	return AxPlugin::GetClassObject( rclsid, riid, ppv );
-}
+#endif
