@@ -172,8 +172,11 @@ TARGET_DIRS = \
 # Target Header files that need to be copied
 #
 TARGET_H_FILES = \
+	$(AAFSDK_INCLUDE)\AAFDataDefs.h \
 	$(AAFSDK_INCLUDE)\AAFDefUIDs.h \
 	$(AAFSDK_INCLUDE)\AAFMetaDictionary.h \
+	$(AAFSDK_INCLUDE)\AAFOperationDefs.h \
+	$(AAFSDK_INCLUDE)\AAFParameterDefs.h \
 	$(AAFSDK_INCLUDE)\AAFPropertyIDs.h \
 	$(AAFSDK_INCLUDE)\AAFResult.h \
 	$(AAFSDK_INCLUDE)\AAFStoredObjectIDs.h
@@ -185,7 +188,6 @@ TARGET_H_FILES = \
 TARGET_IDL_FILES = \
 	$(AAFSDK_INCLUDE)\AAFTypes.idl \
 	$(AAFSDK_INCLUDE)\AAF.idl \
-	$(AAFSDK_INCLUDE)\AAFModuleTest.idl \
 	$(AAFSDK_INCLUDE)\AAFPlugin.idl \
 	$(AAFSDK_INCLUDE)\AAFPluginTypes.idl
 
@@ -196,7 +198,6 @@ TARGET_IDL_FILES = \
 TARGET_MIDL_FILES = \
 	$(AAFSDK_INCLUDE)\AAFTypes.h \
 	$(AAFSDK_INCLUDE)\AAF.h \
-	$(AAFSDK_INCLUDE)\AAFModuleTest.h \
 	$(AAFSDK_INCLUDE)\AAFPlugin.h \
 	$(AAFSDK_INCLUDE)\AAFPluginTypes.h \
 	$(AAFSDK_INCLUDE)\AAF_i.c \
@@ -396,11 +397,20 @@ $(AAFSDK_LIB) : $(AAFSDK)
 #
 # Dependency and build rules for the Header targets.
 #
+$(AAFSDK_INCLUDE)\AAFDataDefs.h : $(TOOLKIT_INCLUDE)\AAFDataDefs.h
+	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFDataDefs.h "$(AAFSDK_INCLUDE)\"
+
 $(AAFSDK_INCLUDE)\AAFDefUIDs.h : $(TOOLKIT_INCLUDE)\AAFDefUIDs.h
 	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFDefUIDs.h "$(AAFSDK_INCLUDE)\"
 
 $(AAFSDK_INCLUDE)\AAFMetaDictionary.h : $(TOOLKIT_INCLUDE)\AAFMetaDictionary.h
 	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFMetaDictionary.h "$(AAFSDK_INCLUDE)\"
+
+$(AAFSDK_INCLUDE)\AAFOperationDefs.h : $(TOOLKIT_INCLUDE)\AAFOperationDefs.h
+	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFOperationDefs.h "$(AAFSDK_INCLUDE)\"
+
+$(AAFSDK_INCLUDE)\AAFParameterDefs.h : $(TOOLKIT_INCLUDE)\AAFParameterDefs.h
+	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFParameterDefs.h "$(AAFSDK_INCLUDE)\"
 
 $(AAFSDK_INCLUDE)\AAFPropertyIDs.h : $(TOOLKIT_INCLUDE)\AAFPropertyIDs.h
 	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFPropertyIDs.h "$(AAFSDK_INCLUDE)\"
@@ -439,9 +449,6 @@ $(AAFSDK_INCLUDE)\AAFTypes.h : $(TOOLKIT_COMIDL)\AAFTypes.h
 
 $(AAFSDK_INCLUDE)\AAF.h : $(TOOLKIT_COMIDL)\AAF.h
 	$(CP) $(CP_OPTS) $(TOOLKIT_COMIDL)\AAF.h "$(AAFSDK_INCLUDE)\"
-
-$(AAFSDK_INCLUDE)\AAFModuleTest.h : $(TOOLKIT_COMIDL)\AAFModuleTest.h
-	$(CP) $(CP_OPTS) $(TOOLKIT_COMIDL)\AAFModuleTest.h "$(AAFSDK_INCLUDE)\"
 
 $(AAFSDK_INCLUDE)\AAF_i.c : $(TOOLKIT_COMIDL)\AAF_i.c
 	$(CP) $(CP_OPTS) $(TOOLKIT_COMIDL)\AAF_i.c "$(AAFSDK_INCLUDE)\"
@@ -487,7 +494,7 @@ $(AAFSDK_BIN)\aafcoapi.dll : $(TOOLKIT_TARGET_REFIMPL)\aafcoapi.dll
 #
 # Dependency and build rules for the Debug DLL targets.
 #
-$(AAFSDK_DEBUG)\aafcoapi.dll : $(TOOLKIT_TARGET_REFIMPL)\aafcoapi.dll
+$(AAFSDK_DEBUG)\aafcoapi.dll : $(TOOLKIT_DEBUG_REFIMPL)\aafcoapi.dll
 	$(CP) $(CP_OPTS) $(TOOLKIT_DEBUG_REFIMPL)\aafcoapi.dll "$(AAFSDK_DEBUG)\"
 
 
