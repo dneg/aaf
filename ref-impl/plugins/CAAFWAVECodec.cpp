@@ -135,7 +135,7 @@ HRESULT STDMETHODCALLTYPE
 		pcd = 0;
 		uid = CodecWave;
 		CHECK(codecDef->QueryInterface(IID_IAAFDefObject, (void **)&obj));
-		CHECK(obj->Initialize(uid, L"WAVE Codec", L"Handles RIFF WAVE data."));
+		CHECK(codecDef->Initialize(uid, L"WAVE Codec", L"Handles RIFF WAVE data."));
 		CAAFBuiltinDefs defs (dict);
 		CHECK(codecDef->AddEssenceKind (defs.ddSound()));
 		*def = obj;

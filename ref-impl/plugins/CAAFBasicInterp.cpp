@@ -107,7 +107,7 @@ HRESULT STDMETHODCALLTYPE
 							 (IUnknown **)&interpDef));
 		uid = LinearInterpolator;
 		CHECK(interpDef->QueryInterface(IID_IAAFDefObject, (void **)&obj));
-		CHECK(obj->Initialize(uid, L"Basic Plugins", L"Handles step and linear interpolation."));
+		CHECK(interpDef->Initialize(uid, L"Basic Plugins", L"Handles step and linear interpolation."));
 		*def = obj;
 		interpDef->Release();
 		interpDef = NULL;

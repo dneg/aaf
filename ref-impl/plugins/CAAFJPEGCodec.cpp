@@ -351,7 +351,7 @@ HRESULT STDMETHODCALLTYPE
 		// Initialize the standard Definition properties.
 		checkResult(codecDef->QueryInterface(IID_IAAFDefObject, (void **)&obj));
 		uid = CodecJPEG;
-		checkResult(obj->Initialize(uid, 
+		checkResult(codecDef->Initialize(uid, 
 		                      const_cast<wchar_t *>(kDisplayName),
 		                      const_cast<wchar_t *>(kDescription)));
 
