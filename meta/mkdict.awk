@@ -140,7 +140,7 @@ BEGIN {
   printf("// the License for the specific language governing rights and limitations\n");
   printf("// under the License.\n");
   printf("//\n");
-  printf("// The Original Code of this file is Copyright 1998-2001, Licensor of the\n");
+  printf("// The Original Code of this file is Copyright 1998-2004, Licensor of the\n");
   printf("// AAF Association.\n");
   printf("//\n");
   printf("// The Initial Developer of the Original Code of this file and the\n");
