@@ -85,14 +85,14 @@ AD_METHOD4(AddTimecodeClip,
   // expressed in frames since midnight. Use the function
   // TimecodeToOffset to compute this number.,
 		   [in], aafFrameLength_t,	length32, Duration of Timecode. The length32 parameter can be the value
-  // FULL_RANGE\, in which case the length is 24 hours.,
+  // FULL_RANGE\\\, in which case the length is 24 hours.,
 Adds a Timecode to the specified Timecode track of a Source Mob.
-  // @comm This function adds a Timecode track to a specified tape Mob or film Mob\, with
-  // a specified starting timecode\, length\, and edit rate. Call the function omfm-MobValidateTimecodeRange
+  // @comm This function adds a Timecode track to a specified tape Mob or film Mob\\\, with
+  // a specified starting timecode\\\, length\\\, and edit rate. Call the function omfm-MobValidateTimecodeRange
   // following this function to make sure that the
   // tape Mob has valid Timecode on a specified set of channels.
   // This function does not add the Filler to any of the other tracks to indicate that
-  // the Timecode is valid for that channel\, so you should use omfmMobValida-teTimecodeRange
+  // the Timecode is valid for that channel\\\, so you should use omfmMobValida-teTimecodeRange
   // for that purpose.
   // @devnote based on omfmMobAddTimecodeClip)
 
@@ -114,24 +114,24 @@ AD_METHOD7(AddEdgecodeClip,
   // kEtKeycode
   // kEtEdgenum4
   // kEtEdgenum5,
-		   [in\,ref], char *, header, The Edgecode's 8-byte header.,
+		   [in\\\,ref], char *, header, The Edgecode's 8-byte header.,
 Adds an Edgecode track and Edgecode to the specified Source Mob.
-  // @comm Adds an Edgecode track to a specified film Mob\, with a specified starting
-  // edgecode\, length\, and edit rate. You must add a media track with a Source
+  // @comm Adds an Edgecode track to a specified film Mob\\\, with a specified starting
+  // edgecode\\\, length\\\, and edit rate. You must add a media track with a Source
   // Clip to the Film Source Mob to make the edgecode track valid.
   // @devnote based on omfmMobAddEdgecodeClip)
 
-AD_METHOD5(ValidateTimecodeRange,
-           [in\,ref], objIn, AAFDataDefinition, mediaKind,
-           Data kind for the track to be added. The mediaKind parameter
+AD_XMETHOD5(ValidateTimecodeRange,
+            [in\\\,ref], objIn, AAFDataDefinition, mediaKind,
+            Data kind for the track to be added. The mediaKind parameter
   // requires a data kind valid for a media stream. 
   // @ex Valid data kinds are: |
   // Picture
   // Sound,
-           [in], objPass, aafTrackID_t, trackID, TrackID for the track to be added.,
-           [in], objPass, aafRational_t, editrate, Edit rate for the track to be added.,
-           [in], objPass, aafFrameOffset_t, startOffset, Start offset for the track to be added.,
-           [in], objPass, aafFrameLength_t, ength32, Duration of the Source Clip in the track.,
+            [in], objPass, aafTrackID_t, trackID, TrackID for the track to be added.,
+            [in], objPass, aafRational_t, editrate, Edit rate for the track to be added.,
+            [in], objPass, aafFrameOffset_t, startOffset, Start offset for the track to be added.,
+            [in], objPass, aafFrameLength_t, ength32, Duration of the Source Clip in the track.,
 Adds track containing Source Clips to a tape Source Mob to indicate that the
   // Timecode is valid for that channel.
   // @devnote based on omfmMobValidateTimecodeRange)
@@ -242,5 +242,3 @@ AD_OVERRIDE(.method-Test)
 AD_OVERRIDE(.method-IsMobKind)
 
 AD_CLASS_END
-
-
