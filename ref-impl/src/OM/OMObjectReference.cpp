@@ -607,6 +607,12 @@ OMStorable* OMWeakObjectReference::getValue(void) const
     set()->find(&nonConstThis->_identification, object);
     nonConstThis->_pointer = object;
   }  
+  // If the following assertion is violated we have a dangling weak
+  // reference.  The reference illegally designates an object that is
+  // not present in the target set.  Code elsewhere prevents the
+  // removal of objects that are weakly referenced hence a dangling
+  // reference is an assertion violation rather than a run-time error.
+  //
   POSTCONDITION("Object found",
                    IMPLIES(_identification != nullOMUniqueObjectIdentification,
                            _pointer != 0));
