@@ -282,7 +282,7 @@ HRESULT CAAFSourceMob::test()
 	pObject->Release();
 
 	// When all of the functionality of this class is tested, we can return success
-	if(hr == AAF_RESULT_SUCCESS)
+	if(hr == AAFRESULT_SUCCESS)
 		hr = AAFRESULT_TEST_PARTIAL_SUCCESS;
 	  
 	return hr;
