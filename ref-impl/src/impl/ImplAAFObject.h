@@ -18,6 +18,9 @@
 //
 //class AAFObject;
 class ImplEnumAAFProperties;
+class ImplAAFClassDef;
+class ImplAAFPropertyDef;
+class ImplAAFPropertyValue;
 
 
 #include "AAFTypes.h"
@@ -57,6 +60,15 @@ public:
 
 
   //****************
+  // GetDefinition()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetDefinition
+		// @parm [out] class definition of which this object is an instance.
+        (ImplAAFClassDef ** ppClassDef);
+
+
+  //****************
   // GetObjectClass()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
@@ -65,11 +77,46 @@ public:
 
 
   //****************
-  // EnumProperties()
+  // GetProperties()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-	EnumProperties
+	GetProperties
 		(ImplEnumAAFProperties ** ppEnum);
+
+
+  //****************
+  // CountProperties()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+	CountProperties
+		(aafUInt32 * pCount);
+
+
+  //****************
+  // GetPropertyValue()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+	GetPropertyValue
+		(ImplAAFPropertyDef * pPropDef,
+		 ImplAAFPropertyValue ** ppPropVal);
+
+
+  //****************
+  // SetPropertyValue()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+	SetPropertyValue
+		(ImplAAFPropertyDef * pPropDef,
+		 ImplAAFPropertyValue * pPropVal);
+
+
+  //****************
+  // IsPropertyPresent()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+	IsPropertyPresent
+		(ImplAAFPropertyDef * pPropDef,
+		 aafBool * pResult);
 
 
   //***********************************************************

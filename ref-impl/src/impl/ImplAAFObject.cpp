@@ -18,6 +18,8 @@
 #include "AAFResult.h"
 #include "OMFile.h"
 #include "ImplAAFHeader.h"
+#include "ImplAAFClassDef.h"
+#include "ImplAAFPropertyDef.h"
 
 
 #include "AAFStoredObjectIDs.h"
@@ -43,6 +45,14 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFObject::GetGeneration (aafUID_t *  /*pGeneration*/)
+{
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFObject::GetDefinition (ImplAAFClassDef **  /*ppClassDef*/)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
@@ -84,7 +94,38 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-	ImplAAFObject::EnumProperties (ImplEnumAAFProperties ** /*ppEnum*/)
+	ImplAAFObject::GetProperties (ImplEnumAAFProperties ** /*ppEnum*/)
+{
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+	ImplAAFObject::CountProperties (aafUInt32 * /*pCount*/)
+{
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+	ImplAAFObject::GetPropertyValue (ImplAAFPropertyDef * /*pPropDef*/,
+									 ImplAAFPropertyValue ** /*ppPropVal*/)
+{
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+	ImplAAFObject::SetPropertyValue (ImplAAFPropertyDef * /*pPropDef*/,
+									 ImplAAFPropertyValue * /*pPropVal*/)
+{
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+	ImplAAFObject::IsPropertyPresent (ImplAAFPropertyDef * /*pPropDef*/,
+									  aafBool * /*pResult*/)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
