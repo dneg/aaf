@@ -201,7 +201,7 @@ bool
 OMXMLStoredObjectFactory::isRecognized(OMRawStorage* rawStorage)
 {
   TRACE("OMXMLStoredObjectFactory::isRecognized");
-  char* signature = "<?XML VERSION=\"1.0\"?>"
+  char signature[] = "<?XML VERSION=\"1.0\"?>"
   "<?OM SIGNATURE=\"{xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx}\"?>";
   char* p = strchr(signature, '{');
   ASSERT("Found place holder", p != 0);
