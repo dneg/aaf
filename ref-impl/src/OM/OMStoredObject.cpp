@@ -399,7 +399,7 @@ OMStoredObject* OMStoredObject::open(const wchar_t* fileName,
     0,
     &storage);
   if (!checkFile(result, fileName)) {
-    exit(FAILURE);
+    exit(EXIT_FAILURE);
   }
 
   OMStoredObject* newStoredObject = new OMStoredObject(storage);
@@ -425,7 +425,7 @@ OMStoredObject* OMStoredObject::create(const wchar_t* fileName)
     0,
     &storage);
   if (!checkFile(result, fileName)) {
-    exit(FAILURE);
+    exit(EXIT_FAILURE);
   }
 
   OMStoredObject* newStoredObject = new OMStoredObject(storage);
@@ -566,7 +566,7 @@ OMUInt64 OMStoredObject::streamSize(IStream* stream) const
   STATSTG statstg;
   HRESULT status = stream->Stat(&statstg, STATFLAG_NONAME);
   if (!check(status)) {
-    exit(FAILURE);
+    exit(EXIT_FAILURE);
   }
   OMUInt64 result = toOMUInt64(statstg.cbSize);
   return result;
@@ -582,7 +582,7 @@ void OMStoredObject::streamSetSize(IStream* stream, const OMUInt64 newSize)
   ULARGE_INTEGER newStreamSize = fromOMUInt64(newSize);
   HRESULT status = stream->SetSize(newStreamSize);
   if (!check(status)) {
-    exit(FAILURE);
+    exit(EXIT_FAILURE);
   }
 }
 
@@ -849,7 +849,7 @@ IStream* OMStoredObject::createStream(IStorage* storage,
     0,
     &stream);
   if (!checkStream(resultCode, streamName)) {
-    exit(FAILURE);
+    exit(EXIT_FAILURE);
   }
 
   return stream;
@@ -879,7 +879,7 @@ IStream* OMStoredObject::openStream(IStorage* storage, const char* streamName)
     0,
     &stream);
   if (!checkStream(resultCode, streamName)) {
-    exit(FAILURE);
+    exit(EXIT_FAILURE);
   }
 
   return stream;
@@ -934,7 +934,7 @@ IStorage* OMStoredObject::createStorage(IStorage* storage,
     0,
     &newStorage);
   if (!checkStorage(resultCode, storageName)) {
-    exit(FAILURE);
+    exit(EXIT_FAILURE);
   }
 
   return newStorage;
@@ -969,7 +969,7 @@ IStorage* OMStoredObject::openStorage(IStorage* storage,
     0,
     &newStorage);
   if (!checkStorage(resultCode, storageName)) {
-    exit(FAILURE);
+    exit(EXIT_FAILURE);
   }
 
   return newStorage;
@@ -1004,7 +1004,7 @@ void OMStoredObject::writeToStream(IStream* stream, void* data, size_t size)
   unsigned long bytesWritten;
   HRESULT resultCode = stream->Write(data, size, &bytesWritten);
   if (!check(resultCode)) {
-    exit(FAILURE);
+    exit(EXIT_FAILURE);
   }
   ASSERT("Successful write", bytesWritten == size);
 }
@@ -1028,7 +1028,7 @@ void OMStoredObject::writeToStream(IStream* stream,
 
   HRESULT resultCode = stream->Write(data, bytes, &bytesWritten);
   if (!check(resultCode)) {
-    exit(FAILURE);
+    exit(EXIT_FAILURE);
   }
 }
 
@@ -1047,7 +1047,7 @@ void OMStoredObject::readFromStream(IStream* stream, void* data, size_t size)
   unsigned long bytesRead;
   HRESULT result = stream->Read(data, size, &bytesRead);
   if (!check(result)) {
-    exit(FAILURE);
+    exit(EXIT_FAILURE);
   }
   ASSERT("Successful read", bytesRead == size);
 }
@@ -1071,7 +1071,7 @@ void OMStoredObject::readFromStream(IStream* stream,
 
   HRESULT result = stream->Read(data, bytes, &bytesRead);
   if (!check(result)) {
-    exit(FAILURE);
+    exit(EXIT_FAILURE);
   }
 }
 
@@ -1121,7 +1121,7 @@ void OMStoredObject::setClass(IStorage* storage, const OMClassId& cid)
   memcpy(&g, &cid, sizeof(GUID));
   HRESULT resultCode = storage->SetClass(g);
   if (!check(resultCode)) {
-    exit(FAILURE);
+    exit(EXIT_FAILURE);
   }
 
 }
@@ -1134,7 +1134,7 @@ void OMStoredObject::getClass(IStorage* storage, OMClassId& cid)
   STATSTG statstg;
   HRESULT result = storage->Stat(&statstg, STATFLAG_NONAME);
   if (!check(result)) {
-    exit(FAILURE);
+    exit(EXIT_FAILURE);
   }
   memcpy(&cid, &statstg.clsid, sizeof(OMClassId));
 }
@@ -1156,7 +1156,7 @@ OMUInt64 OMStoredObject::streamPosition(IStream* stream) const
   ULARGE_INTEGER position;
   HRESULT status = stream->Seek(zero, STREAM_SEEK_CUR, &position);
   if (!check(status)) {
-    exit(FAILURE);
+    exit(EXIT_FAILURE);
   }
   result = toOMUInt64(position);
   return result;
@@ -1180,7 +1180,7 @@ void OMStoredObject::streamSetPosition(IStream* stream, const OMUInt64 offset)
   memcpy(&position, &newPosition, sizeof(LARGE_INTEGER));
   HRESULT status = stream->Seek(position, STREAM_SEEK_SET, &oldPosition);
   if (!check(status)) {
-    exit(FAILURE);
+    exit(EXIT_FAILURE);
   }
 }
 
@@ -1202,7 +1202,7 @@ static void convert(wchar_t* wcName, size_t length, const char* name)
       << name
       << "\" to a wide character string."
       << endl;
-    exit(FAILURE);  
+    exit(EXIT_FAILURE);  
   }
 }
 
@@ -1221,7 +1221,7 @@ static void convert(char* cName, size_t length, const wchar_t* name)
     cerr << getProgramName()
       << ": Error : Conversion failed."
       << endl;
-    exit(FAILURE);  
+    exit(EXIT_FAILURE);  
   }
 }
 
@@ -1239,7 +1239,7 @@ static void convert(char* cName, size_t length, const char* name)
     cerr << getProgramName()
       << ": Error : Conversion failed."
       << endl;
-    exit(FAILURE);  
+    exit(EXIT_FAILURE);  
   }
 }
 
@@ -1259,7 +1259,7 @@ static void convert(wchar_t* wcName, size_t length, const wchar_t* name)
     cerr << getProgramName()
       << ": Error : Conversion failed."
       << endl;
-    exit(FAILURE);  
+    exit(EXIT_FAILURE);  
   }
 }
 

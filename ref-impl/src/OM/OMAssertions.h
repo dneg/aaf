@@ -6,9 +6,6 @@
 
 #include <stddef.h>
 
-#define SUCCESS (1)
-#define FAILURE (2)
-
 #if defined (OM_ENABLE_DEBUG)
 
 #include "OMDataTypes.h"
@@ -30,12 +27,12 @@
   //         violation occurred.
   //   @parm The line number at which the assertion violation
   //         occurred.
-void reportAssertionFailure(char* assertionKind,
-                            char* assertionName,
-                            char* expressionString,
-                            char* routineName,
-                            char* fileName,
-                            size_t lineNumber);
+void reportAssertionViolation(char* assertionKind,
+                              char* assertionName,
+                              char* expressionString,
+                              char* routineName,
+                              char* fileName,
+                              size_t lineNumber);
 
   // @func Is the given string valid ? Use <f validString> in
   //       expressions passed to the assertion macros
@@ -77,8 +74,9 @@ void trace(const char* routineName);
 
 #else
 
-#define TRACE(routine) char* currentRoutineName; \
-                       currentRoutineName = routine;
+#define TRACE(routine) \
+  char* currentRoutineName; \
+  currentRoutineName = routine;
 
 #endif
 
@@ -96,8 +94,8 @@ void trace(const char* routineName);
 #define PRECONDITION(name, expression) \
   (expression) \
     ? (void)0  \
-    : reportAssertionFailure("Precondition", name, #expression, \
-                             currentRoutineName, __FILE__, __LINE__)
+    : reportAssertionViolation("Precondition", name, #expression, \
+                               currentRoutineName, __FILE__, __LINE__)
 
   // @func Assert (when enabled with OM_ENABLE_DEBUG) that the
   //       postcondition described by <p name> and <p expression> is
@@ -113,8 +111,8 @@ void trace(const char* routineName);
 #define POSTCONDITION(name, expression) \
   (expression) \
     ? (void)0  \
-    : reportAssertionFailure("Postcondition", name, #expression, \
-                             currentRoutineName, __FILE__, __LINE__)
+    : reportAssertionViolation("Postcondition", name, #expression, \
+                               currentRoutineName, __FILE__, __LINE__)
 
   // @func Assert (when enabled with OM_ENABLE_DEBUG) that the
   //       condition described by <p name> and <p expression> is
@@ -130,8 +128,8 @@ void trace(const char* routineName);
 #define ASSERT(name, expression) \
   (expression) \
     ? (void)0  \
-    : reportAssertionFailure("Assertion",    name, #expression, \
-                             currentRoutineName, __FILE__, __LINE__)
+    : reportAssertionViolation("Assertion",    name, #expression, \
+                               currentRoutineName, __FILE__, __LINE__)
 
   // @func Assert (when enabled with OM_ENABLE_DEBUG) that the
   //       invariant for the class of the current object is true.
