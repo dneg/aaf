@@ -80,6 +80,8 @@ extern "C" const aafClassID_t CLSID_AAFHeader;
 extern "C" const aafClassID_t CLSID_AAFIdentification;
 extern "C" const aafClassID_t CLSID_AAFComponent;
 extern "C" const aafClassID_t CLSID_AAFMob;
+extern "C" const aafClassID_t CLSID_AAFMasterMob;
+extern "C" const aafClassID_t CLSID_AAFCompositionMob;
 extern "C" const aafClassID_t CLSID_AAFSegment;
 extern "C" const aafClassID_t CLSID_AAFMobSlot;
 extern "C" const aafClassID_t CLSID_AAFContentStorage;
@@ -110,6 +112,7 @@ void OMContainer::OMLOpenContainer(OMLSession sessionData,
   char *pathname = GetFileName(attributes);
   _file = OMFile::openRead(pathname);
 
+  registerClass(_file, CLSID_AAFCompositionMob);
   registerClass(_file, CLSID_AAFHeader);
   registerClass(_file, CLSID_AAFIdentification);
   registerClass(_file, CLSID_AAFFile);
@@ -117,6 +120,7 @@ void OMContainer::OMLOpenContainer(OMLSession sessionData,
   registerClass(_file, CLSID_AAFHeader);
   registerClass(_file, CLSID_AAFIdentification);
   registerClass(_file, CLSID_AAFComponent);
+  registerClass(_file, CLSID_AAFMasterMob);
   registerClass(_file, CLSID_AAFMob);
   registerClass(_file, CLSID_AAFSegment);
   registerClass(_file, CLSID_AAFMobSlot);
