@@ -20,7 +20,7 @@
 // USA
 
 
-#ifdef _WIN32
+#ifdef _MSC_VER
 #pragma warning( disable : 4786 )	// disable warning about debug info truncated
 #endif
 
@@ -28,7 +28,7 @@
 #include <stdlib.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#ifndef _WIN32
+#ifndef _MSC_VER
 #include <unistd.h>				// stat() under unix
 #endif
 
@@ -52,6 +52,8 @@
 #include <AxMetaDef.h>
 #include <AxPropertyValue.h>
 #include <AAFResult.h>
+#include <AAFFileKinds.h>
+#include <AAFFileMode.h>
 
 #define DV_PAL_FRAME_SIZE 144000
 #define DV_NTSC_FRAME_SIZE 120000
@@ -66,6 +68,8 @@ const aafUID_t kAAFPropID_DIDFrameSampleSize		= { 0xce2aca50, 0x51ab, 0x11d3, { 
 const aafUID_t kAAFPropID_DIDImageSize				= { 0xce2aca4f, 0x51ab, 0x11d3, { 0xa0, 0x24, 0x0, 0x60, 0x94, 0xeb, 0x75, 0xcb } };
 
 static bool writeNetworkLocator = false;
+static bool useRawStorage = false;
+static bool useLargeSectors = false;
 
 // Add a property definition to the dictionary, after first checking if it
 // needs to be added (used in CreateLegacyPropDefs() only)
@@ -97,7 +101,7 @@ static void CreateLegacyPropDefs(IAAFDictionary *p_dict)
 	ADD_PROPERTY_DEF( DID, ResolutionID, Int32 );
 	ADD_PROPERTY_DEF( DID, FirstFrameOffset, Int32 );
 	ADD_PROPERTY_DEF( DID, FrameSampleSize, Int32 );
-	ADD_PROPERTY_DEF( DID, ImageSize, Int32 );
+	ADD_PROPERTY_DEF( DID, ImageSize, Int64 );
 
 	if (pCDCI)
 	{
@@ -361,18 +365,20 @@ static bool addMasterMobForDVFile(
 					AxHeader &head, AxDictionary &dict,
 					AxSourceMob *p_tapemob, AxMasterMob &mmob)
 {
-	ifstream essenceinput(filename.c_str(),ios::binary);
-	if(!essenceinput)
-	{
-		cerr << "Error Opening Essence File " << filename <<endl;
-		return false;
-	}
-	essenceinput.seekg (0, ios::end);
-	int eslength = essenceinput.tellg();
-	essenceinput.seekg (0, ios::beg);
+	// For Large File Support (>2GB) we must use the awkward stat() and
+	// _stati64() calls below.  C++ standard library ifstream seekg and tellg
+	// aren't 64bit capable using GCC 3.3 and MSVC 7 (GCC 3.4 fixes this).
+#ifdef _MSC_VER
+	struct _stati64 statbuf;
+	_stati64(filename.c_str(), &statbuf);
+#else
+	struct stat statbuf;
+	stat(filename.c_str(), &statbuf);
+#endif
+	aafLength_t eslength = statbuf.st_size;
 
 	// Truncate frame count to ignore any partial frame at the end
-	int cliplength = eslength /
+	aafLength_t cliplength = eslength /
 					( formatPAL ? DV_PAL_FRAME_SIZE : DV_NTSC_FRAME_SIZE );
 
 	aafSourceRef_t srcref;		// tmp SourceRef used for multiple SetSourceReference()'s
@@ -416,7 +422,7 @@ static bool addMasterMobForDVFile(
 	if (p_tapemob)
 		srcref.sourceID = p_tapemob->GetMobID();
 	srcref.sourceSlotID = 1;
-	int start_timecode = getFirstTimecodeFromDVFile(filename.c_str());
+	aafPosition_t start_timecode = getFirstTimecodeFromDVFile(filename.c_str());
 	if (start_timecode == -1)
 		srcref.startTime = 0;
 	else
@@ -487,7 +493,7 @@ static bool addMasterMobForDVFile(
 	SET_PROPERTY_VALUE( CDCIOffsetToFrameIndexes, aafInt32, 0 );
 	SET_PROPERTY_VALUE( DIDFrameIndexByteOrder, aafUInt16, 0x4949 );
 	SET_PROPERTY_VALUE( DIDFirstFrameOffset, aafInt32, 0x0 );
-	SET_PROPERTY_VALUE( DIDImageSize, aafInt32, eslength );
+	SET_PROPERTY_VALUE( DIDImageSize, aafInt64, eslength );
 	if (formatPAL)
 	{
 		SET_PROPERTY_VALUE( DIDResolutionID, aafUInt32, 0x8d );
@@ -547,7 +553,7 @@ static bool addMasterMobForDVFile(
 		return false;
 	}
 
-	aafUInt32 total_written = 0;
+	aafInt64 total_written = 0;
 	do
 	{
 		unsigned char buffer[8192];
@@ -710,20 +716,25 @@ static bool addMasterMobForDVFile(
 
 	if (add_audio)
 	{
+#ifdef _MSC_VER
+		struct _stati64 statbuf;
+		_stati64(filename.c_str(), &statbuf);
+#else
 		struct stat statbuf;
 		stat(filename.c_str(), &statbuf);
+#endif
 
 		// (hard-coded to 48kHz)
 		// 48000 samples per second at 2 bytes per sample
 		// so 1920 samples per frame
 		// so 3840 bytes per frame.
-		int num_samples = (statbuf.st_size / DV_PAL_FRAME_SIZE) * 1920;
+		aafLength_t num_samples = (statbuf.st_size / DV_PAL_FRAME_SIZE) * 1920;
 		waveA1.SetLength(num_samples);
 		waveA2.SetLength(num_samples);
 
 		// These lengths are in editrate
 		// (lengths are always in units of the containing slot)
-		int length_in_er = num_samples / 1920;
+		aafInt64 length_in_er = num_samples / 1920;
 		srcclipA1.SetLength(length_in_er);
 		msrcclipA1.SetLength(length_in_er);
 		srcclipA2.SetLength(length_in_er);
@@ -779,8 +790,8 @@ static bool addMasterMobForDVFile(
 					cerr << "Error Opening File " << filename << endl;
 					return false;
 				}
-				int total_A = 0;
-				for (int i = 0; i < statbuf.st_size; i += DV_PAL_FRAME_SIZE)
+				aafLength_t total_A = 0;
+				for (aafLength_t i = 0; i < statbuf.st_size; i += DV_PAL_FRAME_SIZE)
 				{
 					unsigned char buf[DV_PAL_FRAME_SIZE];
 					int r;
@@ -865,8 +876,42 @@ static bool createAAFFileForEditDecisions(const char *output_aaf_file,
 			}
 
 			// Create the new AAF file
-			CHECK_HRESULT(AAFFileOpenNewModify(
-				AxStringUtil::mbtowc( output_aaf_file ).c_str(), 0, &ProductInfo, &pFile));
+			if (!useRawStorage)
+			{
+				int modeFlags = 0;
+				if (useLargeSectors)
+					modeFlags |= AAF_FILE_MODE_USE_LARGE_SS_SECTORS;
+
+				CHECK_HRESULT(AAFFileOpenNewModify(
+					AxStringUtil::mbtowc( output_aaf_file ).c_str(), modeFlags, &ProductInfo, &pFile));
+			}
+			else
+			{
+				// RawStorage with MS SS known to fail for 4k (works with 512)
+				const aafUID_t* pFileKind;
+				if (useLargeSectors)
+					pFileKind = &aafFileKindAaf4KBinary; 
+				else
+					pFileKind = &aafFileKindAafSSBinary;
+
+				IAAFRawStorage* pRawStorage = 0;
+				CHECK_HRESULT (AAFCreateRawStorageDisk(
+					AxStringUtil::mbtowc( output_aaf_file ).c_str(),
+					kAAFFileExistence_new,
+					kAAFFileAccess_modify,
+					&pRawStorage));
+				CHECK_HRESULT (AAFCreateAAFFileOnRawStorage (
+					pRawStorage,
+					kAAFFileExistence_new,
+					kAAFFileAccess_modify,
+					pFileKind,
+					0,
+					&ProductInfo,
+					&pFile));
+					pRawStorage->Release();
+
+					CHECK_HRESULT(pFile->Open());
+			}
 		}
 
 		IAAFHeaderSP headsp;
@@ -1169,27 +1214,53 @@ int main(int argc, char* argv[])
 {
 	if (argc < 3)
 	{
-		cout << "Usage: " << argv[0] << " [-netloc] infile outfile [essencedir]" << endl;
+		cout << "Usage: " << argv[0] << " [-netloc] [-useraw] [-largeSectors] infile outfile [essencedir]" << endl;
 		return 1;
 	}
 
 	int i = 1;		// argv index
-	if (!strcmp(argv[i], "-netloc"))
+	while (true)
 	{
-		// writeNetworkLocator flag is used to alternate between embedded essence
-		// with ContainerAAF property and no embedded essence with ContainerFile property
-		writeNetworkLocator = true;
-		i++;
+		if (!strcmp(argv[i], "-netloc"))
+		{
+			// writeNetworkLocator flag is used to alternate between embedded essence
+			// with ContainerAAF property and no embedded essence with ContainerFile property
+			writeNetworkLocator = true;
+			i++;
+		}
+		else if (!strcmp(argv[i], "-useraw"))
+		{
+			//create AAF file on raw storage
+			useRawStorage = true;
+			i++;
+		}
+		else if (!strcmp(argv[i], "-largeSectors"))
+		{
+			//create AAF file using 4k sectors
+			useLargeSectors = true;
+			i++;
+		}
+		else
+			break;
 	}
 	const char *edit_list = argv[i++];
 	const char *output_aaf_file = argv[i++];
 	const char *essence_src_dir = NULL;
 	if (argc >= 4)
 	{
+		int idxOffset = 3;
+
 		if (writeNetworkLocator)
-			essence_src_dir = argv[4];
-		else
-			essence_src_dir = argv[3];
+			idxOffset++;
+
+		if (useRawStorage)
+			idxOffset++;
+
+		if (useLargeSectors)
+			idxOffset++;
+
+		if (idxOffset <= (argc - 1))
+			essence_src_dir = argv[idxOffset];
 	}
 
 	FILE *edlfp = fopen(edit_list, "rb");
