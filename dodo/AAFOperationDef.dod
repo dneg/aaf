@@ -10,7 +10,7 @@ AD_HEAD
 AD_IDL(//
 // The IAAFEffectDef interface is implemented by objects that specify an
 // effect definition.  Effect definitions specify which parameters are possible
-// on an effect\, while an IAAFGroup specifies specific parameters and input segments
+// on an effect\, while an IAAFEffect specifies specific parameters and input segments
 // for a particular effect invocation.
 //
 // In addition to the specific error results listed for each method\,
@@ -108,7 +108,7 @@ AD_METHOD1(IsTimeWarp,
 		   aafBool *,
 		   bIsTimeWarp,
 		   pointer to the return value, 
-		   Returns the value of isTimeWarp.    IsTimeWarp is true if the length of an IAAFGroup
+		   Returns the value of isTimeWarp.    IsTimeWarp is true if the length of an IAAFEffect
   // is different from the lengths of the input segments.  For example\\\, a slow motion effect.
   //
   // Succeeds if all of the following are true:
@@ -131,7 +131,7 @@ AD_METHOD1(SetIsTimeWarp,
 		   aafBool,
 		   IsTimeWarp,
 		   is timewarp value, 
-		Sets the IsTimeWarp boolean.  IsTimeWarp is true if the length of an IAAFGroup
+		Sets the IsTimeWarp boolean.  IsTimeWarp is true if the length of an IAAFEffect
   // is different from the lengths of the input segments.  For example\\\, a slow motion effect.
   // 
   // This method will return the following codes.  If more than one of
