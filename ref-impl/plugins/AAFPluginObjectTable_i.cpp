@@ -19,7 +19,6 @@
 //
 AAF_BEGIN_OBJECT_MAP(AAFPluginObjectMap)
 	AAF_OBJECT_ENTRY(AAFDefaultCodec)
-	AAF_OBJECT_ENTRY(AAFDefaultStream)
 	AAF_OBJECT_ENTRY(AAFEssenceDataStream)
 	AAF_OBJECT_ENTRY(AAFEssenceFileContainer)
 	AAF_OBJECT_ENTRY(AAFWaveCodec)
