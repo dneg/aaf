@@ -571,7 +571,7 @@ AAFRESULT ImplAAFFile::Create(
 							  ImplAAFSession		*session, 
 							  aafFileRev_t		rev)
 {
-  OMLRefCon        myRefCon;
+  OMLRefCon        myRefCon = NULL;
 
   XPROTECT()
 	{
