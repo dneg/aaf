@@ -2166,9 +2166,15 @@ HRESULT STDMETHODCALLTYPE
 		// Use attributes of known IEC DV formats to derive
 		// VerticalSubsampling
 		if (_imageHeight == 288)
+		{
+			formatPAL = true;
 			_verticalSubsampling = 2;	// for IEC_DV_625_50
+		}
 		else
+		{
+			formatPAL = false;
 			_verticalSubsampling = 1;	// for IEC_DV_525_60
+		}
 
 		// Only 4:2:0 and 4:1:1 DV color sampling supported by libdv
 		checkExpression( _verticalSubsampling == 1 || _verticalSubsampling == 2, AAFRESULT_BADPIXFORM );
@@ -2179,9 +2185,11 @@ HRESULT STDMETHODCALLTYPE
 		if (EqualAUID(&_compression, &kLegacy_DV))
 		{
 			// Experiment showed that legacy applications require display size set equal to stored size
+			// and that FrameLayout have the incorrect value of MixedFields, not SeparateFields
 			// (e.g. Avid Xpress DV)
 			_displayWidth = _storedWidth;
 			_displayHeight = _storedHeight;
+			_frameLayout = kAAFMixedFields;
 		}
 	}
 	else
@@ -2190,14 +2198,8 @@ HRESULT STDMETHODCALLTYPE
 		checkExpression( _verticalSubsampling == 1, AAFRESULT_BADPIXFORM );
 	}
 
-	// If compression is set, set DV params
 	if (_compressEnable == kAAFCompressionEnable && IsDV(_compression))
 	{
-		if (_imageHeight == 288)
-			formatPAL = true;
-		else
-			formatPAL = false;
-
 #ifdef USE_LIBDV
 		// Setup libdv encoder object, defaults and tuning parameters
 		_encoder = dv_encoder_new( FALSE, FALSE, FALSE );
