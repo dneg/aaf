@@ -515,6 +515,13 @@ AD_XCONSTRUCTOR4(%01, objPass, %02, %03, %04,
 \
 #endm
 
+#startm .unkIn-indirection 00
+*\
+#endm
+
+#startm .unkOut-indirection 00
+**\
+#endm
 
 #ccccccccccccccccccccccccccccccccccc
 #c
