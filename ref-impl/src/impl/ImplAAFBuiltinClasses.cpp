@@ -247,6 +247,7 @@ const /*static*/ aafUID_t * ImplAAFBuiltinClasses::sAxClassIDs[] =
   &AUID_AAFTypeDefVariableArray,
   &AUID_AAFTypeDefFixedArray,
   &AUID_AAFTypeDefString,
+  &AUID_AAFTypeDefIndirect,
   &AUID_AAFTypeDefEnum,
   &AUID_AAFTypeDefRename,
   &AUID_AAFTypeDefStrongObjRef,

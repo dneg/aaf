@@ -24,6 +24,11 @@
  * LIABILITY.
  *
  ************************************************************************/
+
+// Turn on/off experimental object creation code...
+#define USE_NEW_OBJECT_CREATION 1
+
+
 #ifndef __ImplAAFDictionary_h__
 #include "ImplAAFDictionary.h"
 #endif
@@ -349,12 +354,26 @@ OMStorable* ImplAAFDictionary::create(const OMClassId& classId) const
 {
   AAFRESULT hr;
   const aafUID_t * auid  = reinterpret_cast<const aafUID_t*>(&classId);
-  ImplAAFClassDefSP pcd;
   ImplAAFDictionary * pNonConstThis = (ImplAAFDictionary*) this;
+
+#if USE_NEW_OBJECT_CREATION
+  
+  // Call the sample top-level dictionary method that is called
+  // by the API client to create objects.
+  ImplAAFObject *pObject = NULL;
+  hr = pNonConstThis->CreateInstance(*auid, &pObject);
+  assert (AAFRESULT_SUCCEEDED (hr));
+  return pObject;
+
+#else // #if USE_NEW_OBJECT_CREATION
+  
+  ImplAAFClassDefSP pcd;
   hr = pNonConstThis->LookupClassDef(*auid, &pcd);
   assert (AAFRESULT_SUCCEEDED (hr));
   
   return CreateAndInit (pcd);
+
+#endif // #else // #if USE_NEW_OBJECT_CREATION
 }
 
 
@@ -478,11 +497,24 @@ AAFRESULT STDMETHODCALLTYPE
   if (NULL == ppvObject)
     return AAFRESULT_NULL_PARAM;
   
+  // Lookup the class definition for the given classId. If the class
+  // definition is one of the "built-in" class definitions then the
+  // definition will be created and registered with the dictionary
+  // if necessary. (TRR 2000-MAR-01)
   ImplAAFClassDefSP pClassDef;
   AAFRESULT hr;
   hr = LookupClassDef (classId, &pClassDef);
   if (AAFRESULT_FAILED (hr))
 	return hr;
+
+#if USE_NEW_OBJECT_CREATION
+
+  // The class definition is the factory for the corresponding 
+  // "data" object. For example the class definition for MasterMob is the 
+  // factory for creating instances of MasterMobs. (TRR 2000-MAR-01)
+  return pClassDef->CreateInstance(ppvObject);
+
+#else // #if USE_NEW_OBJECT_CREATION
 
   *ppvObject = CreateAndInit (pClassDef);
 
@@ -490,21 +522,8 @@ AAFRESULT STDMETHODCALLTYPE
     return AAFRESULT_INVALID_CLASS_ID;
   else
     return AAFRESULT_SUCCESS;
-}
 
-
-// internal utility factory method to create an ImplAAFObject given a classdef.
-// This method was created to make it simpler to replace calls to "Deprecated"
-// call to CreateImpl which should only be used for instanciating transient
-// non-ImplAAFObject classes such as an enumerator.
-ImplAAFObject *ImplAAFDictionary::CreateImplObject(aafUID_constref classID)
-{
-  ImplAAFObject *pObject = NULL;
-  AAFRESULT result = AAFRESULT_SUCCESS;
-  
-  result = CreateInstance(classID, &pObject);
-  assert(AAFRESULT_SUCCEEDED(result));
-  return pObject;
+#endif // #else // #if USE_NEW_OBJECT_CREATION
 }
 
 
@@ -621,6 +640,62 @@ AAFRESULT STDMETHODCALLTYPE
   return(AAFRESULT_SUCCESS);
 }
 
+#if USE_NEW_OBJECT_CREATION
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDictionary::CreateImplClassDef (
+      aafUID_constref classID,
+      aafUID_constref parentClassId,
+      aafCharacter_constptr pClassName,
+      ImplAAFClassDef ** ppClassDef)
+{
+  assert(pClassName && ppClassDef);
+  AAFRESULT result = AAFRESULT_SUCCESS;
+  *ppClassDef = NULL;
+
+  // Lookup the class definitions class definition! This had
+  // better not be recursive!
+  ImplAAFClassDef *pClassDefsClassDef = GetBuiltinDefs()->cdClassDef();
+  ImplAAFClassDef *pClassDef = NULL;
+
+  // Create an instance of a class definition and initialize it.
+  pClassDef = (ImplAAFClassDef *)pvtInstantiate(AUID_AAFClassDef);
+  if (NULL == pClassDef)
+    return AAFRESULT_NOMEMORY;
+
+  result = pClassDef->pvtInitialize(classID, &parentClassId, pClassName);
+  if (AAFRESULT_FAILED(result))
+  {
+    // Delete the new object.
+    pClassDef->ReleaseReference();
+    pClassDef = NULL;
+  }
+  else
+  {
+    // Make sure properties are initialized (???)
+    pClassDefsClassDef->InitOMProperties (pClassDef);
+
+    // The class definition could be successfully initialized. NOTE: This
+    // object has already been reference counted.
+    *ppClassDef = pClassDef;
+  }
+
+  return result;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDictionary::CreateClassDef (
+      aafUID_constref classID,
+      ImplAAFClassDef *pParentClass,
+      aafCharacter_constptr pClassName,
+      ImplAAFClassDef ** ppClassDef)
+{
+
+ return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+#endif // #if USE_NEW_OBJECT_CREATION
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFDictionary::RegisterClassDef (
@@ -797,6 +872,7 @@ const aafUID_t * ImplAAFDictionary::sAxiomaticTypeGuids[] =
   & kAAFTypeID_UInt32,
   & kAAFTypeID_UInt8,
   & kAAFTypeID_UInt8Array8,
+  & kAAFTypeID_Indirect,
   & kAAFTypeID_VersionType,
   & kAAFTypeID_RGBAComponent,
   & kAAFTypeID_MobID,
@@ -1221,6 +1297,9 @@ AAFRESULT STDMETHODCALLTYPE
 
 	if (NULL == pParameterDef)
 		return AAFRESULT_NULL_PARAM;
+	if (pParameterDef->attached())
+		return AAFRESULT_OBJECT_ALREADY_ATTACHED;
+
 
 	_parameterDefinitions.appendValue(pParameterDef);
 	// trr - We are saving a copy of pointer in _pluginDefinitions

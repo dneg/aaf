@@ -56,22 +56,26 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFParameterDef::Initialize (
       const aafUID_t & id,
 	  const aafWChar * pName,
-	  const aafWChar * pDesc)
+	  const aafWChar * pDesc,
+    ImplAAFTypeDef * pType)
 {
-	if (pName == NULL || pDesc == NULL)
+  AAFRESULT result = AAFRESULT_SUCCESS;
+	if (pName == NULL || pDesc == NULL || pType == NULL)
 	{
 	  return AAFRESULT_NULL_PARAM;
 	}
 	else
 	{
-	  return pvtInitialize(id, pName, pDesc);
+    AAFRESULT result = pvtInitialize(id, pName, pDesc);
+	  if (AAFRESULT_SUCCEEDED (result))
+      result = SetTypeDef (pType);
 	}
-	return AAFRESULT_SUCCESS;
+	return result;
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFParameterDef::GetTypeDef (
+    ImplAAFParameterDef::GetTypeDefinition (
       ImplAAFTypeDef **ppTypeDef)
 {
 	aafUID_t			uid;
