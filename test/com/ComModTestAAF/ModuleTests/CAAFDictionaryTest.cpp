@@ -370,6 +370,14 @@ static HRESULT RegisterDefs (IAAFDictionary * pDict)
 				  /* IID of def to register */     IID_IAAFOperationDef,
 				  /* SP for def to register */     IAAFOperationDefSP,
 				  /* reg method on pDict */        RegisterOperationDef);
+
+  // Hack!
+  {
+	IAAFOperationDefSP od;
+	checkResult (pDict->LookupOperationDef (kTestOperationDefID,
+										    &od));
+	checkResult (od->SetDataDef (defs.ddMatte()));
+  }  
   
   RegisterOneDef (/* dictionary*/                  pDict,
 				  /* def object's class */         defs.cdParameterDef(),
