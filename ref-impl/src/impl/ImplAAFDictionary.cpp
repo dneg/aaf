@@ -61,6 +61,7 @@
 #include <assert.h>
 #include <string.h>
 #include "aafErr.h"
+#include "aafUtils.h"
 
 extern "C" const aafClassID_t CLSID_EnumAAFPluggableDefs;
 
@@ -336,6 +337,36 @@ AAFRESULT
 
   return AAFRESULT_SUCCESS;
 }
+
+AAFRESULT ImplAAFDictionary::LookupPluggableDef(aafUID_t *defID, ImplAAFPluggableDef **result)
+{
+	ImplEnumAAFPluggableDefs	*pluggableEnum;
+	ImplAAFPluggableDef			*pluggable;
+	aafBool						defFound;
+	AAFRESULT					status;
+	aafUID_t					testAUID;
+
+	XPROTECT()
+	{
+		CHECK(GetPluggableDefinitions (&pluggableEnum));
+		status = pluggableEnum->NextOne (&pluggable);
+		defFound = AAFFalse;
+		while(status == AAFRESULT_SUCCESS && !defFound)
+		{
+			CHECK(pluggable->GetAUID (&testAUID));
+			if(EqualAUID(defID, &testAUID))
+				defFound = AAFTrue;
+			status = pluggableEnum->NextOne (&pluggable);
+		}
+		if(!defFound)
+			 RAISE(AAFRESULT_NO_MORE_OBJECTS);
+	}
+	XEXCEPT
+	XEND
+	
+	return(AAFRESULT_SUCCESS);
+}
+
 
 
 OMDEFINE_STORABLE(ImplAAFDictionary, AUID_AAFDictionary);
