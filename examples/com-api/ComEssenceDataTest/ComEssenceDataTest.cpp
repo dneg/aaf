@@ -369,7 +369,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 					fclose(pWavFile);
 
 					// Read the Raw Data from the AAF file
-					check(pEssenceAccess->ReadRawData(	sizeof(AAFDataBuf),	// Number of Samples 
+					check(pEssenceAccess->ReadRawData(	WAVBytesRead,		// Number of Samples 
 														sizeof(AAFDataBuf),	// Maximum buffer size
 														AAFDataBuf,			// Buffer for the data
 														&AAFBytesRead,		// Actual number of bytes read
