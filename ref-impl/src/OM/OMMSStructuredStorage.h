@@ -40,11 +40,11 @@
 // 3) The reference implementation
 //    for which USE_REFERENCE_SS is defined
 //
-#if defined(_WIN32)
+#if defined(OM_OS_WINDOWS)
 #define USE_WINDOWS_SS
-#elif defined(_MAC) || defined(macintosh)
+#elif defined(OM_OS_MACOS)
 #define USE_MACINTOSH_SS
-#elif defined(__sgi) || defined(__linux__) || defined (__FreeBSD__)
+#elif defined(OM_OS_UNIX)
 #define USE_REFERENCE_SS
 #endif
 

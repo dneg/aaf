@@ -26,6 +26,7 @@
 #include "OMUtilities.h"
 
 #include "OMAssertions.h"
+#include "OMPortability.h"
 
 #include <string.h>
 #include <stdio.h>
@@ -388,7 +389,7 @@ int comparePropertyPath(const OMPropertyId* path1, const OMPropertyId* path2)
 // NO_W32_WFOPEN.
 
 #if !defined(NO_W32_WFOPEN)
-#if defined(_WIN32) || defined(WIN32)
+#if defined(OM_OS_WINDOWS)
 #define W32_WFOPEN
 #endif
 #endif

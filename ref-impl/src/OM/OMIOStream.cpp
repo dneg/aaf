@@ -29,17 +29,17 @@
 #include "OMAssertions.h"
 
 #include <iostream.h>
-#if defined(_WIN32)
+#if defined(OM_OS_WINDOWS)
 #include <strstrea.h>
 #else
 #include <strstream.h>
 #endif
 
-#if defined(_WIN32)
+#if defined(OM_OS_WINDOWS)
 #define NEWLINE "\r\n"
-#elif defined(_MAC) || defined(macintosh)
+#elif defined(OM_OS_MACOS)
 #define NEWLINE "\r"
-#elif defined(__sgi) || defined(__linux__) || defined (__FreeBSD__)
+#elif defined(OM_OS_UNIX)
 #define NEWLINE "\n"
 #endif
 
