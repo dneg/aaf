@@ -43,7 +43,6 @@
 #include "ImplAAFFileDescriptor.h"
 #include "ImplAAFSourceMob.h"
 
-
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
@@ -276,6 +275,7 @@ static AAFRDLIRESULT testPluginProc(const char *path, const char* name, char isD
 	AAFTestLibraryProcData *pData = (AAFTestLibraryProcData *)userData;
 	assert(pData && pData->plugins && pData->pluginFiles && pData->currentLibraryPath && pData->pluginPrefix && pData->pluginPrefixSize);
 
+#ifndef __sgi
   //
   // If the current name is not a directory and not equal to the 
   // path this dll (the reference implementation dll) and 
@@ -290,6 +290,12 @@ static AAFRDLIRESULT testPluginProc(const char *path, const char* name, char isD
         rc = (pData->plugins)->RegisterPluginFile(path);
     }
   }
+#else
+  if(!isDirectory && 0 != strcmp(pData->currentLibraryPath, name))
+  {
+	rc = (pData->plugins)->RegisterPluginFile(name);
+  }
+#endif
 
   // Ignore error results and continue processing plugins...
   return 0;
@@ -297,6 +303,7 @@ static AAFRDLIRESULT testPluginProc(const char *path, const char* name, char isD
 
 static AAFRDLIRESULT registerSharedPluginsProc(const char* path, const char* name, char isDirectory, void * userData)
 {
+#ifndef __sgi
   AAFRESULT rc = AAFRESULT_SUCCESS;
   AAFTestLibraryProcData *pData = (AAFTestLibraryProcData *)userData;
   assert(pData && pData->plugins && pData->pluginFiles && pData->currentLibraryPath && pData->pluginDirectory);
@@ -315,6 +322,9 @@ static AAFRDLIRESULT registerSharedPluginsProc(const char* path, const char* nam
 
   // Ignore error results and continue processing plugins...
   return 0;
+#else
+  return(testPluginProc(path,name,isDirectory,userData));
+#endif
 }
 
 
