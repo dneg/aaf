@@ -61,10 +61,26 @@ inline void checkResult(HRESULT r)
   if (FAILED(r))
     throw r;
 }
-inline void checkExpression(bool expression, HRESULT r)
+inline void checkExpression(bool expression, HRESULT r=AAFRESULT_TEST_FAILED)
 {
   if (!expression)
     throw r;
+}
+
+// Function to compare COM interface pointers, taken from 
+// CAAFTypeDefFixedArrayTest.cpp.
+template <class T1, class T2>
+aafBoolean_t  AreUnksSame(T1& cls1, T2& cls2)
+{
+	IAAFSmartPointer<IUnknown>    spUnk1, spUnk2;
+	
+	checkResult(cls1->QueryInterface(IID_IUnknown, (void **)&spUnk1));
+	checkResult(cls2->QueryInterface(IID_IUnknown, (void **)&spUnk2));
+	
+	if (spUnk1 == spUnk2)
+		return kAAFTrue;
+	else
+		return kAAFFalse;
 }
 
 static HRESULT checkModeFlag (aafUInt32 modeFlags,
@@ -187,7 +203,12 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	  checkResult(pFile->GetHeader(&pHeader));
 
 	  // Get the AAF Dictionary so that we can create valid AAF objects.
-	  checkResult(pHeader->GetDictionary(&pDictionary));
+	  checkResult(pFile->GetDictionary(&pDictionary));
+
+      // Make sure the header returns us the same dictionary as the file
+	  IAAFDictionarySP pDictionaryFromHeader;
+	  checkResult(pHeader->GetDictionary(&pDictionaryFromHeader));
+	  checkExpression(AreUnksSame(pDictionary,pDictionaryFromHeader)==kAAFTrue);
 
 	  CAAFBuiltinDefs defs (pDictionary);
  	  
@@ -344,12 +365,10 @@ extern "C" HRESULT CAAFFile_test()
 	  hr = AAFRESULT_TEST_FAILED;
 	}
 
-	// When all of the functionality of this class is tested, we can return success.
-	// When a method and its unit test have been implemented, remove it from the list.
 	if (SUCCEEDED(hr))
 	{
-//		cout << "The following IAAFFile tests have not been implemented:" << endl; 
-//		cout << "     GetRevision" << endl; 
+		// Open() and SaveCopyAs() method were not in the current version
+		// of the toolkit at the time this module test was written.
 		hr = AAFRESULT_NOT_IN_CURRENT_VERSION;
 	}
 
