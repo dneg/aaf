@@ -180,6 +180,9 @@ public:
   // in /test/ImplAAFTapeDescriptorTest.cpp.
   static AAFRESULT test();
 
+  virtual AAFRESULT	STDMETHODCALLTYPE
+		GetOwningMobKind (aafMobKind_t *pMobKind);
+
   // Return this objects stored object class.
   virtual AAFRESULT STDMETHODCALLTYPE
 	GetObjectClass(aafUID_t * pClass);
