@@ -93,7 +93,7 @@ public:
                        OMUInt32 byteCount,
                        OMUInt32& bytesWritten);
 
-    // @cmember The current size of this <c OMDiskRawStorage> in byres.
+    // @cmember The current size of this <c OMDiskRawStorage> in bytes.
   virtual OMUInt64 size(void) const;
 
     // @cmember Set the size of this <c OMDiskRawStorage> to <p newSize> bytes.
