@@ -194,16 +194,18 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFTapeDescriptor::GetTapeFormFactor (aafTapeCaseType_t*	pFormFactor)
 {
     AAFRESULT aafError = AAFRESULT_SUCCESS;
-
-	if(!_formFactor.isPresent())
+	
+	if (pFormFactor == NULL)
+	{
+		aafError = AAFRESULT_NULL_PARAM;
+	}
+	
+	else if(!_formFactor.isPresent())
 	{
 		return AAFRESULT_PROP_NOT_PRESENT;
 	}
 	
-	else if (pFormFactor == NULL)
-	{
-		aafError = AAFRESULT_NULL_PARAM;
-	}
+
 	else
 	{
 		*pFormFactor = _formFactor;
@@ -236,16 +238,16 @@ AAFRESULT STDMETHODCALLTYPE
 {
     AAFRESULT aafError = AAFRESULT_SUCCESS;
 
-	
-	if(!_videoSignalType.isPresent())
-	{
-		return AAFRESULT_PROP_NOT_PRESENT;
-	}
-	
-	else if (pVideoSignal == NULL)
+	if (pVideoSignal == NULL)
 	{
 		aafError = AAFRESULT_NULL_PARAM;
 	}
+	
+	else if(!_videoSignalType.isPresent())
+	{
+		return AAFRESULT_PROP_NOT_PRESENT;
+	}
+	 
 	else
 	{
 		*pVideoSignal = _videoSignalType;
@@ -279,15 +281,14 @@ AAFRESULT STDMETHODCALLTYPE
 {
     AAFRESULT aafError = AAFRESULT_SUCCESS;
 
-	
-	if(!_tapeFormat.isPresent())
-	{
-		return AAFRESULT_PROP_NOT_PRESENT;
-	}
-	else if (pTapeFormat == NULL)
+	if (pTapeFormat == NULL)
 	{
 		aafError = AAFRESULT_NULL_PARAM;
 	}
+	else if(!_tapeFormat.isPresent())
+	{
+		return AAFRESULT_PROP_NOT_PRESENT;
+	}	
 	else
 	{
 		*pTapeFormat = _tapeFormat;
@@ -319,14 +320,13 @@ AAFRESULT STDMETHODCALLTYPE
 {
     AAFRESULT aafError = AAFRESULT_SUCCESS;
 
-	
-	if(!_tapeLength.isPresent())
-	{
-		return AAFRESULT_PROP_NOT_PRESENT;
-	}
-	else if (pTapeLength == NULL)
+	if (pTapeLength == NULL)
 	{
 		aafError = AAFRESULT_NULL_PARAM;
+	}
+	else if(!_tapeLength.isPresent())
+	{
+		return AAFRESULT_PROP_NOT_PRESENT;
 	}
 	else
 	{
