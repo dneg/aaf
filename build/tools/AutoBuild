@@ -150,6 +150,11 @@ fi
 CVSROOT=${CVSROOT:=:pserver:anonymous@cvs.aaf.sourceforge.net:/cvsroot/aaf}
 export CVSROOT
 
+#
+# Create the required ~/tmp directory.
+#
+mkdir -p ~/tmp
+
 # Check out or update the source tree.
 
 CVS_CO_LOG_FILENAME=~/tmp/cvs.co.log

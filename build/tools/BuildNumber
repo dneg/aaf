@@ -113,6 +113,11 @@ HEADER_BUILD_NUMBER=`grep "define AAF_BUILD_NUMBER" ${AAFSDKBUILD_H} | awk '{pri
 HEADER_BUILD_TAG=`printf "Build-%04d" $HEADER_BUILD_NUMBER`
 
 #
+# Create the required ~/tmp directory.
+#
+mkdir -p ~/tmp
+
+#
 # Pluck out the most recent Build-#### tag from the log header.
 # Note the tab character in the sed.  The regexp form used by sed does
 # *not* recognized "\t" (AFAIK).
