@@ -950,7 +950,7 @@ void Aaf2Omf::ConvertSourceMob(IAAFSourceMob* pSourceMob,
 			// It is a CDCI file descriptor
 			rc = pEssenceDesc->QueryInterface(IID_IAAFDigitalImageDescriptor, (void **)&pDIDDDesc);//!!!
 			rc = pDIDDDesc->GetCompression(&compressionID);
-			if(memcmp(&compressionID, &CodecJPEG, sizeof(CodecJPEG)) == 0)
+			if(memcmp(&compressionID, &kAAFCodecJPEG, sizeof(kAAFCodecJPEG)) == 0)
 			{
 				omfclassID = "CDCI";		// For now!!! (Get full toolkit w/all codecs later)
 //				omfclassID = "JPED";
