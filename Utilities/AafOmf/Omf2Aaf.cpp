@@ -958,7 +958,7 @@ void Omf2Aaf::ConvertOMFMOBObject( omfObject_t obj, IAAFMob* pMob )
 
 	omfErr_t	testErr;
 	testErr = omfiMobGetInfo(OMFFileHdl, obj, &OMFMobID, sizeof(sMobName), sMobName, NULL, NULL);
-	char *src = (OM_ERR_NONE == testErr) ? sMobName : "<not named>";
+	char *src = (OM_ERR_NONE == testErr) ? sMobName : (char*)"<not named>";
 	aafWChar*	pwMobName = new wchar_t[strlen(src)+1];
 	mbstowcs(pwMobName, src, strlen(src)+1);
 	AAFCheck aafCheck;
