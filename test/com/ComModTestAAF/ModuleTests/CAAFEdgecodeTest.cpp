@@ -94,13 +94,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 
     // Create the file
-		checkResult(CoCreateInstance(CLSID_AAFFile,
-								 NULL, 
-								 CLSCTX_INPROC_SERVER, 
-								 IID_IAAFFile, 
-								 (void **)&pFile));
-		checkResult(pFile->Initialize());
-		checkResult(pFile->OpenNewModify(pFileName, 0, &ProductInfo));
+	  checkResult(AAFFileOpenNewModify(pFileName, 0, &ProductInfo, &pFile));
 		bFileOpen = true;
  
     // We can't really do anthing in AAF without the header.
@@ -213,13 +207,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
   try
   {
     // Open the file
-		checkResult(CoCreateInstance(CLSID_AAFFile,
-								 NULL, 
-								 CLSCTX_INPROC_SERVER, 
-								 IID_IAAFFile, 
-								 (void **)&pFile));
-		checkResult(pFile->Initialize());
-		checkResult(pFile->OpenExistingRead(pFileName, 0));
+		checkResult(AAFFileOpenExistingRead(pFileName, 0, &pFile));
 		bFileOpen = true;
  
     // We can't really do anthing in AAF without the header.
