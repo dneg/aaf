@@ -32,7 +32,7 @@ AD_CLASS_UUID(46114413, 0676, 11d4, A3, 56, 00, 90, 27, DF, CA, 6A)
 
 AD_DEFAULT_UUID(46114414, 0676, 11d4, A3, 56, 00, 90, 27, DF, CA, 6A)
 AD_XCLASS_BEGIN(Concrete, StoredObject)
-AD_XMETHOD4(Initialize,
+AD_XMETHOD3(Initialize,
 			[in],
 			objPass,
 			aafUID_t,
@@ -51,15 +51,9 @@ AD_XMETHOD4(Initialize,
 			pValue, 
 			buffer containing value,
 
-			[in], 
-			objIn,
-			AAFTypeDef, 
-			def, 
-			Underlying type definition,
-
      Initializes a new KLVData object to be interpreted using the
-  // given given key.  The type will often be kAAFTypeID_UInt8Array\,
-  // but may be something else.
+  // given given key.  The key must have been registered using dictionary\-\>RegisterKLVDataKey\(\)
+  // in order to use the byte swapping functionality of the type model.
   //
   // This method must be called after allocation\, and before
   // any other method can be called.
