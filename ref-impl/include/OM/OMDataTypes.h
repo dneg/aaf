@@ -29,19 +29,27 @@
 #ifndef OMDATATYPES_H
 #define OMDATATYPES_H
 
-// Figure out the host architecture
+// Figure out the compiler and define a symbol of the
+// form COMPILER_<compiler name>_<processor>_<operating system>
 //
-#if defined(_M_IX86)
-#define HOST_IX86
-#elif defined(_M_PPC) || defined(powerc)
-#define HOST_PPC
-#elif defined(__sgi)
-#define HOST_SGI
+// If your compiler is not listed please add code to detect it here
+// and add a section defining the OM[U]Int{8|16|32}64} types below.
+//
+#if defined (_MSC_VER) && defined(_M_IX86) && defined(_WIN32)
+#define COMPILER_MSC_INTEL_WINDOWS
+#elif defined(__MWERKS__) && defined(__POWERPC__) && defined(macintosh)
+#define COMPILER_MWERKS_PPC_MACOS
+#elif defined(__GNUC__) && defined(__mips__) && defined(__sgi__)
+#define COMPILER_GCC_MIPS_SGI
+#elif defined(__GNUC__) && defined(__i386__) && defined(__linux__)
+#define COMPILER_GCC_INTEL_LINUX
+#elif defined(__GNUC__) && defined(__i386__) && defined(__FreeBSD__)
+#define COMPILER_GCC_INTEL_FREEBSD
 #else
-#error "Unknown host machine architecture"
+#error "Unknown compiler"
 #endif
 
-#if defined(HOST_IX86)
+#if defined(COMPILER_MSC_INTEL_WINDOWS)
 typedef signed char            OMInt8;
 typedef short int              OMInt16;
 typedef long int               OMInt32;
@@ -52,7 +60,7 @@ typedef unsigned short int     OMUInt16;
 typedef unsigned long int      OMUInt32;
 typedef unsigned _int64        OMUInt64;
 
-#elif defined(HOST_PPC)
+#elif defined(COMPILER_MWERKS_PPC_MACOS)
 typedef signed char            OMInt8;
 typedef short int              OMInt16;
 typedef long int               OMInt32;
@@ -63,7 +71,7 @@ typedef unsigned short int     OMUInt16;
 typedef unsigned long int      OMUInt32;
 typedef unsigned long long int OMUInt64;
 
-#elif defined(HOST_SGI)
+#elif defined(COMPILER_GCC_MIPS_SGI)
 typedef signed char            OMInt8;
 typedef short int              OMInt16;
 typedef long int               OMInt32;
@@ -73,6 +81,29 @@ typedef unsigned char          OMUInt8;
 typedef unsigned short int     OMUInt16;
 typedef unsigned long int      OMUInt32;
 typedef unsigned long long int OMUInt64;
+
+#elif defined(COMPILER_GCC_INTEL_LINUX)
+typedef signed char            OMInt8;
+typedef short int              OMInt16;
+typedef long int               OMInt32;
+typedef long long int          OMInt64;
+
+typedef unsigned char          OMUInt8;
+typedef unsigned short int     OMUInt16;
+typedef unsigned long int      OMUInt32;
+typedef unsigned long long int OMUInt64;
+
+#elif defined (COMPILER_GCC_INTEL_FREEBSD)
+typedef signed char            OMInt8;
+typedef short int              OMInt16;
+typedef long int               OMInt32;
+typedef long long int          OMInt64;
+
+typedef unsigned char          OMUInt8;
+typedef unsigned short int     OMUInt16;
+typedef unsigned long int      OMUInt32;
+typedef unsigned long long int OMUInt64;
+
 #endif
 
 typedef OMUInt8                OMByte;
