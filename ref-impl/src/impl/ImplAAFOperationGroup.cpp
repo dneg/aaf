@@ -62,7 +62,7 @@
 #include "AAFResult.h"
 #include "aafErr.h"
 #include "aafCvt.h"
-#include "aafUtils.h"
+#include "AAFUtils.h"
 #include "AAFDefUIDs.h"
 
 extern "C" const aafClassID_t CLSID_AAFSourceReference;
