@@ -108,8 +108,8 @@ AD_XMETHOD5(RegisterNewPropertyDef,
 			type of the new property,
 
 			[in],
-			objPass,
-			aafBool,
+			enumIn,
+			aafBoolean_t,
 			isOptional,
 			true if new property is to be optional,
 
