@@ -32,8 +32,6 @@
 
 #include "OMOStream.h"
 
-#include "OMAssertions.h"
-
   // @mfunc Insert a character string.
   //   @parm The string to insert.
   //   @rdesc The modified <c OMOStream>
@@ -96,9 +94,6 @@ OMOStream omlog;
   //   @rdesc The modified <c OMOStream>
 OMOStream& OMOStream::put(const char* string)
 {
-  TRACE("OMOStream::put");
-  PRECONDITION("Valid string", validString(string));
-
   cerr << string;
   return *this;
 }
@@ -108,8 +103,6 @@ OMOStream& OMOStream::put(const char* string)
   //   @rdesc The modified <c OMOStream>
 OMOStream& OMOStream::put(OMUInt32 i)
 {
-  TRACE("OMOStream::put");
-
   cerr << i;
   return *this;
 }
@@ -119,8 +112,6 @@ OMOStream& OMOStream::put(OMUInt32 i)
   //   @rdesc The modified <c OMOStream>
 OMOStream& OMOStream::put(void* p)
 {
-  TRACE("OMOStream::put");
-
   cerr << p;
   return *this;
 }
@@ -129,8 +120,6 @@ OMOStream& OMOStream::put(void* p)
   //   @rdesc The modified <c OMOStream>
 OMOStream& OMOStream::putLine(void)
 {
-  TRACE("OMOStream::putLine");
-
   cerr << endl;
   return *this;
 }
