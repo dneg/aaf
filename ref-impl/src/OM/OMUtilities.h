@@ -9,6 +9,8 @@ void setProgramName(const char* name);
 
 void convert(wchar_t* wcName, size_t length, const char* name);
 
+void convert(char* cName, size_t length, wchar_t* name);
+
 void formatError(DWORD errorCode);
 
 void printError(const char* prefix, const char* type);
