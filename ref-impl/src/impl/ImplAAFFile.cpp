@@ -83,11 +83,6 @@ void ImplAAFFile::InternalReleaseObjects()
     _nilKind = 0;
   }
 
-  if (0 != _head)
-  {
-    _head->ReleaseRef();
-    _head = 0;
-  }
 }
   //***********************************************************
   // METHOD NAME: Close()
@@ -167,39 +162,38 @@ void ImplAAFFile::InternalReleaseObjects()
 #endif
 	  if (_fmt == kAAFiMedia)
 		{
+      // Release all of the pointers that we created or copied during
+      // the create or open methods.
+      InternalReleaseObjects();
+
 #if FULL_TOOLKIT
 		  if (_BentoErrorNumber)
-        // Release all of the pointers that we created or copied during
-        // the create or open methods.
-        InternalReleaseObjects();
-
-			_container->OMLAbortContainer();
-        
-        // Whenever a file is created or opened a new container is created.
-        // If we don't want to leak the container object and any objects
-        // in the associated OMFile object we had better delete the container
-        // object here.
-        delete _container;
-        _container = 0;
+				_container->OMLAbortContainer();
 		  else
       {
 #endif
-        // Release all of the pointers that we created or copied during
-        // the create or open methods.
-        InternalReleaseObjects();
-
 			  _container->OMLCloseContainer();
-        
-        // Whenever a file is created or opened a new container is created.
-        // If we don't want to leak the container object and any objects
-        // in the associated OMFile object we had better delete the container
-        // object here.
-        delete _container;
-        _container = 0;
-
 #if FULL_TOOLKIT
       }
 #endif
+  
+      // Whenever a file is created or opened a new container is created.
+      // If we don't want to leak the container object and any objects
+      // in the associated OMFile object we had better delete the container
+      // object here.
+      delete _container;
+      _container = 0;
+      
+      // Release the last reference to the header of the file. 
+      // We need to release the header after the file is closed so
+      // that the OMFile object within the container can safely use
+      // its reference to its root (a.k.a. header).
+      if (0 != _head)
+      {
+        _head->ReleaseReference();
+        _head = 0;
+      }
+
 	  }
 	  _cookie = 0;
 #if FULL_TOOLKIT
@@ -242,7 +236,7 @@ void ImplAAFFile::InternalReleaseObjects()
 
     // We are returning a copy of the reference counted object.
     if (_head)
-      _head->AcquireRef();
+      _head->AcquireReference();
 
     return(AAFRESULT_SUCCESS);
   }
