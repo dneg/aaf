@@ -399,18 +399,6 @@ Package=<4>
 
 ###############################################################################
 
-Project: "FileValidator"=".\Utilities\FileValidator\FileValidator.dsp" - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
 Project: "Impl"=".\ref-impl\Impl\Impl.dsp" - Package Owner=<4>
 
 Package=<5>
@@ -523,9 +511,6 @@ Package=<4>
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name FileGenerator
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name FileValidator
     End Project Dependency
 }}}
 
