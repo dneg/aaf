@@ -65,7 +65,7 @@ AAFRESULT STDMETHODCALLTYPE
 		if(pAAFCodecFlavour == NULL)
 			RAISE(AAFRESULT_NULL_PARAM);
 		if(_current >= numElem)
-			RAISE(AAFRESULT_NO_MORE_OBJECTS);
+			RAISE(AAFRESULT_NO_MORE_FLAVOURS);
 		CHECK(_codec->GetIndexedFlavourID (_current, pAAFCodecFlavour));
 
 		_current++;
@@ -135,7 +135,7 @@ AAFRESULT STDMETHODCALLTYPE
 	}
 	else
 	{
-		hr = E_FAIL;
+		hr = AAFRESULT_NO_MORE_FLAVOURS;
 	}
 
 	return hr;
