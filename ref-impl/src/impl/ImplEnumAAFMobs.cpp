@@ -106,7 +106,7 @@ AAFRESULT STDMETHODCALLTYPE
                            ImplAAFMob **ppMobs,
                            aafUInt32 *pFetched)
 {
-	ImplAAFMob*		pMob;
+	ImplAAFMob**	ppMob;
 	aafUInt32		numMobs;
 	HRESULT			hr;
 
@@ -114,10 +114,10 @@ AAFRESULT STDMETHODCALLTYPE
 		return E_INVALIDARG;
 
 	// Point at the first component in the array.
-	pMob = *ppMobs;
+	ppMob = ppMobs;
 	for (numMobs = 0; numMobs < count; numMobs++)
 	{
-		hr = NextOne(&pMob);
+		hr = NextOne(ppMob);
 		if (FAILED(hr))
 			break;
 
@@ -125,7 +125,7 @@ AAFRESULT STDMETHODCALLTYPE
 		// will increment off the end of the array when
 		// numComps == count-1, but the for loop should
 		// prevent access to this location.
-		pMob++;
+		ppMob++;
 	}
 	
 	if (pFetched)
