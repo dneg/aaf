@@ -37,14 +37,17 @@
 // The following stored form values are used to denote the on-disk
 // representation of a given property.
 //
-const int SF_DATA                           = 0;
-const int SF_DATA_STREAM                    = 1;
-const int SF_STRONG_OBJECT_REFERENCE        = 2;
-const int SF_STRONG_OBJECT_REFERENCE_VECTOR = 3;
-const int SF_STRONG_OBJECT_REFERENCE_SET    = 4;
-const int SF_WEAK_OBJECT_REFERENCE          = 5;
-const int SF_WEAK_OBJECT_REFERENCE_VECTOR   = 6;
-const int SF_WEAK_OBJECT_REFERENCE_SET      = 7;
+const int SF_DATA                                   =  0;
+const int SF_DATA_STREAM                            =  1;
+const int SF_STRONG_OBJECT_REFERENCE                =  2;
+const int SF_STRONG_OBJECT_REFERENCE_VECTOR         =  3;
+const int SF_STRONG_OBJECT_REFERENCE_SET            =  4;
+const int SF_WEAK_OBJECT_REFERENCE                  =  5;
+const int SF_WEAK_OBJECT_REFERENCE_VECTOR           =  6;
+const int SF_WEAK_OBJECT_REFERENCE_SET              =  7;
+const int SF_WEAK_OBJECT_REFERENCE_STORED_OBJECT_ID =  8;
+const int SF_UNIQUE_OBJECT_ID                       =  9;
+const int SF_OPAQUE_STREAM                          = 10;
 
 
 class OMStoredObject;
