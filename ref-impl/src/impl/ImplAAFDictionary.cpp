@@ -96,6 +96,40 @@ ImplAAFDictionary::~ImplAAFDictionary ()
 #include "ImplAAFBaseClassFactory.h"
 #endif
 
+
+
+OMStorable* ImplAAFDictionary::create(const OMClassId& classId) const
+{
+  OMStorable *result = NULL;
+
+
+  // If the given classId is for the dictionary then just return 
+  // this instance.
+  if (0 == memcmp(&classId, &AUID_AAFDictionary, sizeof(OMClassId)))
+  {
+    // Bump the reference count before returning this.
+    AcquireReference();
+    return const_cast<ImplAAFDictionary*>(this);
+  }
+
+  // Search the current dictionary...
+  // TBD
+  
+
+	// If not in then current dictionary then look in the built-in
+  // dictionary...
+	if (NULL == result)
+	{
+    // Attempt to lookup the class in the base class factory before looking in the
+	  // current file.
+	  const aafUID_t* pAUID  = reinterpret_cast<const aafUID_t*>(&classId);
+    result = ImplAAFBaseClassFactory::CreateInstance(pAUID);
+	}
+
+	return result;
+}
+
+
 // Creates a single uninitialized AAF object of the class associated 
   // with a specified stored object id.
 AAFRESULT STDMETHODCALLTYPE 
@@ -112,16 +146,11 @@ AAFRESULT STDMETHODCALLTYPE
   if (NULL == pAUID || NULL == ppvObject)
     return AAFRESULT_NULL_PARAM;
   
-  // Look for the object in the built-in base class factory.
-  *ppvObject = ImplAAFBaseClassFactory::CreateInstance(pAUID);
+  // Initialize the out parameter.
+	*ppvObject = NULL;
 
-  if (NULL == *ppvObject)
-  {
-    // TBD:
-    // Search the rest of the dictionary for extension classes.
-    // 
-  }
-  
+  const OMClassId* classId  = reinterpret_cast<const OMClassId*>(pAUID);
+  *ppvObject = static_cast<ImplAAFObject *>(create(*classId));
 
   if (NULL == *ppvObject)
     return AAFRESULT_INVALID_CLASS_ID;
