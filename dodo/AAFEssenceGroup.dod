@@ -27,10 +27,11 @@ AD_CLASS_UUID(e58a8568, 2a3e, 11D2, bf, a4, 00, 60, 97, 11, 62, 12)
 AD_DEFAULT_UUID(e58a8567, 2a3e, 11D2, bf, a4, 00, 60, 97, 11, 62, 12)
 AD_CLASS_BEGIN
 
-AD_XCONSTRUCTOR2(
+AD_XMETHOD2(SetInitialValues
 [in], objIn, AAFDataDefinition, datadef,Data Definition object,
 [in], objPass, aafLength_t, length,Length property value,
 Creates a new empty media group object with the given property values.)
+//@comm replaces the constructor.
 
 /****/
 AD_XMETHOD1(SetStillFrame,
