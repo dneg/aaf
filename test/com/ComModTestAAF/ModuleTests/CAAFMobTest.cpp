@@ -39,6 +39,9 @@
 
 #include "CAAFBuiltinDefs.h"
 
+typedef IAAFSmartPointer<IAAFMob>					IAAFMobSP;
+typedef IAAFSmartPointer<IAAFFile>					IAAFFileSP;
+
 static aafWChar *slotNames[5] = { L"SLOT1", L"SLOT2", L"SLOT3", L"SLOT4", L"SLOT5" };
 
 
@@ -202,6 +205,27 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	  checkResult(pHeader->RemoveMob(pMob2));
 	  checkResult(pHeader->CountMobs(kAAFAllMob, &numMobs));
 	  checkExpression(numMobs == 1, AAFRESULT_TEST_FAILED);
+
+	  //try Copy() ... it is not implemented
+	  const aafCharacter *copy_name = L"Name of Copied Mob";
+	  IAAFMobSP spCopiedMob;
+	  hr = pMob->Copy(copy_name, &spCopiedMob);
+	  checkExpression(hr == AAFRESULT_NOT_IMPLEMENTED, AAFRESULT_TEST_FAILED);
+	  hr = AAFRESULT_SUCCESS; //move on
+
+	  //try CloneExternal ... it is not implemented
+	  IAAFMobSP spClonedMob;
+	  IAAFFileSP spDestFile;
+	  aafCharacter dest_filename[128];
+	  wcscpy(dest_filename, pFileName);
+	  wcscat(dest_filename, L"_clone");
+	  checkResult(AAFFileOpenNewModify(dest_filename, 0, &ProductInfo, &spDestFile));
+	  hr = pMob->CloneExternal(kAAFNoFollowDepend, kAAFNoIncludeMedia, spDestFile, &spClonedMob);
+	  checkExpression(hr == AAFRESULT_NOT_IMPLEMENTED, AAFRESULT_TEST_FAILED);
+	  spDestFile->Close();
+	  RemoveTestFile(dest_filename);
+	  hr = AAFRESULT_SUCCESS; //move on
+
 	}
   catch (HRESULT& rResult)
 	{
