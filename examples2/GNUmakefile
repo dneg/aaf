@@ -28,7 +28,7 @@ all: $(ALL)
 axLib:
 	cd axLib && $(MAKE)
 
-.PHONY: axLib
+.PHONY: axDump
 axDump:
 	cd axDump && $(MAKE)
 
