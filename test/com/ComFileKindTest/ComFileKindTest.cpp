@@ -383,7 +383,8 @@ static void SetFilename(aafWChar *filename, const char *api, const char *kind, b
 		// leaving space for terminating null.
 		size_t padlen = FILENAME_MAX - wcslen(full) - 1;
 #else
-		size_t padlen = NAME_MAX - wcslen(filename);
+		// Get the runtime value for NAME_MAX on the current filesystem
+		size_t padlen = pathconf(".", _PC_NAME_MAX) - wcslen(filename);
 #endif
 		// Preserve space for ".aaf" (4 chars)
 		for (int i = 0; i < padlen - 4; i++)
