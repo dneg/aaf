@@ -1000,7 +1000,15 @@ ImplAAFFile::CreateAAFFileOnRawStorage
 												loadMode,
 												aafFileEncoding,
 												_metafactory);
+
+			  // Sync the file's dictionary with the built in
+			  // dictionary before proceeding further.
+			  ImplAAFMetaDictionary* d = dynamic_cast<ImplAAFMetaDictionary*>(_metafactory);
+			  assert(d);
+			  checkResult( d->SyncMetaDictionaries() );
+
 			}
+
 		} // endif new/existing
 	  else
 		{
@@ -1059,6 +1067,10 @@ ImplAAFFile::Open ()
 		ImplAAFMetaDictionary* d = dynamic_cast<ImplAAFMetaDictionary*>(mf);
 		assert(d);
 		d->InstantiateAxiomaticDefinitions();
+
+		// Sync the file's dictionary with the built in
+		// dictionary before proceeding further.
+		checkResult( d->SyncMetaDictionaries() );
 
 		  // Get the byte order
 		  OMByteOrder byteOrder = _file->byteOrder();
