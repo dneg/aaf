@@ -239,6 +239,32 @@ public:
                            OMByteOrder byteOrder) const;
 
 
+  //****************
+  // pvtInitialize()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    pvtInitialize
+        (// @parm [in] auid to be used to identify this type
+         const aafUID_t *  pID,
+
+         // @parm [in] Type of values in this enumeration
+         const aafUID_t * pTypeId,
+
+         // @parm [in, size_is(numElems)] array of element values to be represented in this enumerated
+    // type
+         aafInt64 * pElementValues,
+
+         // @parm [in, size_is(numElems)] array of element names to be represented in this enumerated
+    // type
+         aafString_t *  pElementNames,
+
+         // @parm [in] number of members in pElementValues and pElementNames arrays
+         aafUInt32  numElems,
+
+         // @parm [in] friendly name of this type definition
+         wchar_t *  pTypeName);
+
+
 private:
   // OMWeakReferenceProperty<ImplAAFTypeDef> _ElementType;
   OMFixedSizeProperty<aafUID_t>   _ElementType;
