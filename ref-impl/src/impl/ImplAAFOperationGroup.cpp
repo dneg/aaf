@@ -117,14 +117,14 @@ ImplAAFOperationGroup::~ImplAAFOperationGroup ()
 	OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFParameter>parameters(_parameters);
 	while(++parameters)
 	{
-		ImplAAFParameter *pParm = parameters.setValue(0);
+		ImplAAFParameter *pParm = parameters.clearValue();
 		if (pParm)
 		{
 		  pParm->ReleaseReference();
 		  pParm = 0;
 		}
 	}
-	ImplAAFSourceReference *ref = _rendering.setValue(0);
+	ImplAAFSourceReference *ref = _rendering.clearValue();
 	if (ref)
 	{
 	  ref->ReleaseReference();

@@ -118,7 +118,7 @@ ImplAAFClassDef::~ImplAAFClassDef ()
 	OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFPropertyDef>propertyDefinitions(_Properties);
 	while(++propertyDefinitions)
 	{
-		ImplAAFPropertyDef *pProperty = propertyDefinitions.setValue(0);
+		ImplAAFPropertyDef *pProperty = propertyDefinitions.clearValue();
 		if (pProperty)
 		{
 		  pProperty->ReleaseReference();
