@@ -1,6 +1,6 @@
 #
 ADROOT="c:/program files/autoduck"
-AUTODUCK="${ADROOT}/autoduck.exe"
+ADEXEC="${ADROOT}/autoduck.exe"
 ADHTML="${ADROOT}/html.fmt"
 #
 SRC="src/*.cpp src/*.h"
@@ -11,5 +11,5 @@ OUTPUT=docs/ObjectManager.html
 OMHTML="docs/html.fmt"
 OMCONT="docs/contents.d"
 #
-"${AUTODUCK}" /x "${FLAGS}" /s${OMHTML} /o ${OUTPUT} /r html /f"${ADHTML}" ${SRC} ${OMCONT}
+"${ADEXEC}" /x "${FLAGS}" /s${OMHTML} /o ${OUTPUT} /r html /f"${ADHTML}" ${SRC} ${OMCONT}
 #
