@@ -16,6 +16,9 @@ const int PID_COMPOSITIONMOB_DEFAULTFADELENGTH        =   6;
 const int PID_COMPOSITIONMOB_DEFAULTFADETYPE          =   7;
 const int PID_COMPOSITIONMOB_DEFAULTFADEEDITUNIT      =   8;
 
+const int PID_CONTENT_STORAGE_MOBS                    =   0;
+const int PID_CONTENT_STORAGE_ESSENCEDATA             =   1;
+
 const int PID_DIGITAL_IMAGE_DESC_COMPRESSION          =  20;
 const int PID_DIGITAL_IMAGE_DESC_STOREDHEIGHT         =  21;
 const int PID_DIGITAL_IMAGE_DESC_STOREDWIDTH          =  22;
@@ -33,6 +36,9 @@ const int PID_DIGITAL_IMAGE_DESC_IMAGEASPECTRATIO     =  33;
 const int PID_DIGITAL_IMAGE_DESC_ALPHATRANSPARENCY    =  34;
 const int PID_DIGITAL_IMAGE_DESC_GAMMA                =  35;
 const int PID_DIGITAL_IMAGE_DESC_IMAGEALIGNMENTFACTOR =  36;
+
+const int PID_ESSENCEDATA_FILEMOBID                   =   0;
+const int PID_ESSENCEDATA_MEDIADATA                   =   1;
 
 const int PID_ESSENCE_DESC_LOCATORS                   =   0;
 
