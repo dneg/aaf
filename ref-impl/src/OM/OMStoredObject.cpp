@@ -919,17 +919,17 @@ void OMStoredObject::readFromStream(IStream* stream, void* data, size_t size)
   ASSERT("Successful read", bytesRead == size);
 }
 
-  // @mfunc Read a UInt32 from <p stream> into <p i>. If <p
-  //        _reorderBytes> is true then the bytes are reordered.
+  // @mfunc Read a UInt32 from <p stream> into <p i>. If
+  //        <p reorderBytes> is true then the bytes are reordered.
   //   @parm The stream from which to read.
   //   @parm The resulting OMUInt32.
   //   @parm If true then reorder the bytes.
 void OMStoredObject::readUInt32FromStream(IStream* stream,
                                           OMUInt32& i,
-                                          bool _reorderBytes)
+                                          bool reorderBytes)
 {
   readFromStream(stream, &i, sizeof(OMUInt32));
-  if (_reorderBytes) {
+  if (reorderBytes) {
     reorderOMUInt32(i);
   }
 }
