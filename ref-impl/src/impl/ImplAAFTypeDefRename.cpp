@@ -31,9 +31,6 @@
 
 extern "C" const aafClassID_t CLSID_AAFPropValData;
 
-#define RELEASE_IF_SET(obj) \
-    if (obj) { obj->ReleaseReference(); obj = NULL; }
-
 
 ImplAAFTypeDefRename::ImplAAFTypeDefRename ()
   : _RenamedType  ( PID_TypeDefinitionRename_RenamedType, "RenamedType")
@@ -76,42 +73,39 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDefRename::GetBaseType (
-      ImplAAFTypeDef ** ppBaseType)
+      ImplAAFTypeDef ** ppBaseType) const
 {
   if (! ppBaseType) return AAFRESULT_NULL_PARAM;
 
-  ImplAAFHeader * pHead = NULL;
-  ImplAAFDictionary * pDict = NULL;
-  AAFRESULT rReturned = AAFRESULT_SUCCESS;
-  try
+  if (!_cachedBaseType)
 	{
+	  ImplAAFHeaderSP pHead;
+	  ImplAAFDictionarySP pDict;
+
 	  AAFRESULT hr;
 	  hr = MyHeadObject(&pHead);
 	  if (AAFRESULT_FAILED(hr))
-		throw hr;
+		return hr;
 	  assert (pHead);
 	  hr = (pHead->GetDictionary(&pDict));
 	  if (AAFRESULT_FAILED(hr))
-		throw hr;
+		return hr;
 	  assert (pDict);
 
-	  ImplAAFTypeDef * ptd = NULL;
+	  ImplAAFTypeDefRename * pNonConstThis =
+		  (ImplAAFTypeDefRename *) this;
 	  aafUID_t id = _RenamedType;
-	  hr = pDict->LookupType (&id, &ptd);
+	  hr = pDict->LookupType (&id, &pNonConstThis->_cachedBaseType);
 	  if (AAFRESULT_FAILED(hr))
-		throw hr;
-
-	  *ppBaseType = ptd;
-	  (*ppBaseType)->AcquireReference ();
+		return hr;
+	  assert (_cachedBaseType);
 	}
-  catch (AAFRESULT &rCaught)
-	{
-	  rReturned = rCaught;
-	}
-  RELEASE_IF_SET (pHead);
-  RELEASE_IF_SET (pDict);
+  assert (ppBaseType);
+  *ppBaseType = _cachedBaseType;
+  assert (*ppBaseType);
+  (*ppBaseType)->AcquireReference ();
 
-  return rReturned;
+  return AAFRESULT_SUCCESS;
 }
 
 
@@ -124,90 +118,64 @@ AAFRESULT STDMETHODCALLTYPE
   if (! pInPropVal) return AAFRESULT_NULL_PARAM;
   if (! ppOutPropVal) return AAFRESULT_NULL_PARAM;
 
-  AAFRESULT rReturned = AAFRESULT_SUCCESS;
   aafUInt32 inBitsSize;
-  ImplAAFPropValData * pOutPVData = NULL;
-  ImplAAFPropValData * pvd = NULL;
-  ImplAAFTypeDef * ptd = NULL;
+  ImplAAFPropValDataSP pOutPVData;
+  ImplAAFPropValDataSP pvd;
+  ImplAAFTypeDefSP ptd;
 
-  try
-	{
-	  AAFRESULT hr;
-	  hr = GetBaseType (&ptd);
-	  if (AAFRESULT_FAILED (hr)) throw hr;
-	  assert (ptd);
-	  aafUInt32 elementSize = ptd->PropValSize();
+  AAFRESULT hr;
+  hr = GetBaseType (&ptd);
+  if (AAFRESULT_FAILED (hr)) return hr;
+  assert (ptd);
+  aafUInt32 elementSize = ptd->PropValSize();
 
-	  assert (pInPropVal);
-	  pvd = dynamic_cast<ImplAAFPropValData*> (pInPropVal);
-	  assert (pvd);
+  assert (pInPropVal);
+  pvd = dynamic_cast<ImplAAFPropValData*> (pInPropVal);
+  assert (pvd);
 
-	  hr = pvd->GetBitsSize (&inBitsSize);
-	  if (! AAFRESULT_SUCCEEDED (hr)) throw hr;
+  hr = pvd->GetBitsSize (&inBitsSize);
+  if (! AAFRESULT_SUCCEEDED (hr)) return hr;
 
-	  pOutPVData = (ImplAAFPropValData *)CreateImpl(CLSID_AAFPropValData);
-	  if (! pOutPVData) throw AAFRESULT_NOMEMORY;
-	  assert (ptd);
-	  hr = pOutPVData->Initialize (ptd);
-	  if (AAFRESULT_FAILED(hr)) throw hr;
+  pOutPVData = (ImplAAFPropValData *)CreateImpl(CLSID_AAFPropValData);
+  if (! pOutPVData) return AAFRESULT_NOMEMORY;
+  assert (ptd);
+  hr = pOutPVData->Initialize (ptd);
+  if (AAFRESULT_FAILED(hr)) return hr;
 
-	  hr = pOutPVData->AllocateFromPropVal (pvd,
-											0,
-											inBitsSize,
-											NULL);
-	  if (AAFRESULT_FAILED(hr)) throw hr;
+  hr = pOutPVData->AllocateFromPropVal (pvd,
+										0,
+										inBitsSize,
+										NULL);
+  if (AAFRESULT_FAILED(hr)) return hr;
 
-	  assert (ppOutPropVal);
-	  *ppOutPropVal = pOutPVData;
-	  assert (*ppOutPropVal);
-	}
-  catch (AAFRESULT &rCaught)
-	{
-	  rReturned = rCaught;
-	}
-
-  // Don't release this!  It is simply a dynamic_cast<>ed pInPropVal
-  // RELEASE_IF_SET (pvd);
-  RELEASE_IF_SET (ptd);
-
-  return rReturned;
+  assert (ppOutPropVal);
+  *ppOutPropVal = pOutPVData;
+  (*ppOutPropVal)->AcquireReference ();
+  assert (*ppOutPropVal);
+  return AAFRESULT_SUCCESS;
 }
 
+
+ImplAAFTypeDefSP ImplAAFTypeDefRename::BaseType () const
+{
+  ImplAAFTypeDefSP result;
+  AAFRESULT hr = GetBaseType (&result);
+  assert (AAFRESULT_SUCCEEDED (hr));
+  assert (result);
+  return result;
+}
 
 void ImplAAFTypeDefRename::reorder(OMByte* externalBytes,
 								   size_t externalBytesSize) const
 {
-  // BobT hack: need non-const this pointer in order to call
-  // GetBaseType(), and to do ReleaseReference() later.  Since we know
-  // we're not changing this object for real, we don't *really* mind
-  // cheating a bit on const-ness...
-  ImplAAFTypeDefRename * pNonConstThis =
-	(ImplAAFTypeDefRename *) this;
-  ImplAAFTypeDef * ptd = 0;
-  AAFRESULT hr = pNonConstThis->GetBaseType (&ptd);
-  assert (AAFRESULT_SUCCEEDED(hr));
-  assert (ptd);
-  ptd->reorder (externalBytes, externalBytesSize);
-  ptd->ReleaseReference ();
+  BaseType()->reorder (externalBytes, externalBytesSize);
 }
 
 
 size_t ImplAAFTypeDefRename::externalSize(OMByte* internalBytes,
 										  size_t internalBytesSize) const
 {
-  // BobT hack: need non-const this pointer in order to call
-  // GetBaseType(), and to do ReleaseReference() later.  Since we know
-  // we're not changing this object for real, we don't *really* mind
-  // cheating a bit on const-ness...
-  ImplAAFTypeDefRename * pNonConstThis =
-	(ImplAAFTypeDefRename *) this;
-  ImplAAFTypeDef * ptd = 0;
-  AAFRESULT hr = pNonConstThis->GetBaseType (&ptd);
-  assert (AAFRESULT_SUCCEEDED(hr));
-  assert (ptd);
-  size_t result = ptd->externalSize (internalBytes, internalBytesSize);
-  ptd->ReleaseReference ();
-  return result;
+  return BaseType()->externalSize (internalBytes, internalBytesSize);
 }
 
 
@@ -217,41 +185,18 @@ void ImplAAFTypeDefRename::externalize(OMByte* internalBytes,
 									   size_t externalBytesSize,
 									   OMByteOrder byteOrder) const
 {
-  // BobT hack: need non-const this pointer in order to call
-  // GetBaseType(), and to do ReleaseReference() later.  Since we know
-  // we're not changing this object for real, we don't *really* mind
-  // cheating a bit on const-ness...
-  ImplAAFTypeDefRename * pNonConstThis =
-	(ImplAAFTypeDefRename *) this;
-  ImplAAFTypeDef * ptd = 0;
-  AAFRESULT hr = pNonConstThis->GetBaseType (&ptd);
-  assert (AAFRESULT_SUCCEEDED(hr));
-  assert (ptd);
-  ptd->externalize (internalBytes,
-					internalBytesSize,
-					externalBytes,
-					externalBytesSize,
-					byteOrder);
-  ptd->ReleaseReference ();
+  BaseType()->externalize (internalBytes,
+						   internalBytesSize,
+						   externalBytes,
+						   externalBytesSize,
+						   byteOrder);
 }
 
 
 size_t ImplAAFTypeDefRename::internalSize(OMByte* externalBytes,
 										  size_t externalBytesSize) const
 {
-  // BobT hack: need non-const this pointer in order to call
-  // GetBaseType(), and to do ReleaseReference() later.  Since we know
-  // we're not changing this object for real, we don't *really* mind
-  // cheating a bit on const-ness...
-  ImplAAFTypeDefRename * pNonConstThis =
-	(ImplAAFTypeDefRename *) this;
-  ImplAAFTypeDef * ptd = 0;
-  AAFRESULT hr = pNonConstThis->GetBaseType (&ptd);
-  assert (AAFRESULT_SUCCEEDED(hr));
-  assert (ptd);
-  size_t result = ptd->internalSize (externalBytes, externalBytesSize);
-  ptd->ReleaseReference ();
-  return result;
+  return BaseType()->internalSize (externalBytes, externalBytesSize);
 }
 
 
@@ -261,22 +206,44 @@ void ImplAAFTypeDefRename::internalize(OMByte* externalBytes,
 									   size_t internalBytesSize,
 									   OMByteOrder byteOrder) const
 {
-  // BobT hack: need non-const this pointer in order to call
-  // GetBaseType(), and to do ReleaseReference() later.  Since we know
-  // we're not changing this object for real, we don't *really* mind
-  // cheating a bit on const-ness...
-  ImplAAFTypeDefRename * pNonConstThis =
-	(ImplAAFTypeDefRename *) this;
-  ImplAAFTypeDef * ptd = 0;
-  AAFRESULT hr = pNonConstThis->GetBaseType (&ptd);
-  assert (AAFRESULT_SUCCEEDED(hr));
-  assert (ptd);
-  ptd->externalize (externalBytes,
-					externalBytesSize,
-					internalBytes,
-					internalBytesSize,
-					byteOrder);
-  ptd->ReleaseReference ();
+  BaseType()->externalize (externalBytes,
+						   externalBytesSize,
+						   internalBytes,
+						   internalBytesSize,
+						   byteOrder);
+}
+
+
+
+aafBool ImplAAFTypeDefRename::IsFixedSize() const
+{
+  return BaseType()->IsFixedSize ();
+}
+
+
+size_t ImplAAFTypeDefRename::PropValSize() const
+{
+  return BaseType()->PropValSize ();
+}
+
+
+aafBool ImplAAFTypeDefRename::IsRegistered() const
+{
+  return BaseType()->IsRegistered ();
+}
+
+
+size_t ImplAAFTypeDefRename::NativeSize() const
+{
+  return BaseType()->NativeSize ();
+}
+
+
+OMProperty * ImplAAFTypeDefRename::pvtCreateOMProperty
+  (OMPropertyId pid,
+   const aafCharacter * name) const
+{
+  return BaseType()->pvtCreateOMProperty (pid, name);
 }
 
 
