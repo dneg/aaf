@@ -292,6 +292,8 @@ void OMStrongReferenceProperty<ReferencedObject>::getBits(
                                                       size_t ANAME(size)) const
 {
   TRACE("OMStrongReferenceProperty<ReferencedObject>::getBits");
+  OBSOLETE("methods on class OMReferenceProperty");
+
   PRECONDITION("Optional property is present",
                                            IMPLIES(isOptional(), isPresent()));
   PRECONDITION("Valid bits", bits != 0);
@@ -315,6 +317,8 @@ void OMStrongReferenceProperty<ReferencedObject>::setBits(const OMByte* bits,
                                                           size_t ANAME(size))
 {
   TRACE("OMStrongReferenceProperty<ReferencedObject>::getBits");
+  OBSOLETE("methods on class OMReferenceProperty");
+
   PRECONDITION("Valid bits", bits != 0);
   PRECONDITION("Valid size", size >= bitsSize());
 
