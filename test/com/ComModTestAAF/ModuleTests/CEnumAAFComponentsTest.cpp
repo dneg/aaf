@@ -296,94 +296,97 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	HRESULT						hr = S_OK;
 
 
+	aafProductVersion_t v;
+	v.major = 1;
+	v.minor = 0;
+	v.tertiary = 0;
+	v.patchLevel = 0;
+	v.type = kAAFVersionUnknown;
 	ProductInfo.companyName = L"AAF Developers Desk";
 	ProductInfo.productName = L"EnumAAFComponents Test";
-	ProductInfo.productVersion.major = 1;
-	ProductInfo.productVersion.minor = 0;
-	ProductInfo.productVersion.tertiary = 0;
-	ProductInfo.productVersion.patchLevel = 0;
-	ProductInfo.productVersion.type = kAAFVersionUnknown;
+	ProductInfo.productVersion = &v;
 	ProductInfo.productVersionString = NULL;
 	ProductInfo.productID = UnitTestProductID;
 	ProductInfo.platform = NULL;
 
+	try 
+    {
+	  // Remove the previous test file if any.
+	  RemoveTestFile(pFileName);
 
-  try 
-  {
-    // Remove the previous test file if any.
-    RemoveTestFile(pFileName);
 
-
-    // Create the file.
-		checkResult(AAFFileOpenNewModify(pFileName, 0, &ProductInfo, &pFile));
+	  // Create the file.
+	  checkResult(AAFFileOpenNewModify(pFileName, 0, &ProductInfo, &pFile));
 	  bFileOpen = true;
   
-    // We can't really do anthing in AAF without the header.
+	  // We can't really do anthing in AAF without the header.
 	  checkResult(pFile->GetHeader(&pHeader));
 
-    // Get the number of mobs to force creation of the content storage.
+	  // Get the number of mobs to force creation of the content storage.
 	  // This is temporary as the content storage should be created by
 	  // the call to OpenNewModify above.
-    aafNumSlots_t n;
-    checkResult(pHeader->CountMobs(kAAFAllMob, &n));
+	  aafNumSlots_t n;
+	  checkResult(pHeader->CountMobs(kAAFAllMob, &n));
 
-    // Get the AAF Dictionary so that we can create valid AAF objects.
-    checkResult(pHeader->GetDictionary(&pDictionary));
+	  // Get the AAF Dictionary so that we can create valid AAF objects.
+	  checkResult(pHeader->GetDictionary(&pDictionary));
  
-    // Create a sequence withou attaching it to the file.
-    checkResult(CreateAAFSequence(pDictionary, &pSequence));
+	  // Create a sequence withou attaching it to the file.
+	  checkResult(CreateAAFSequence(pDictionary, &pSequence));
     
-    // Test the enumeration methods.
-    checkResult(TestEnumerator(pSequence));
-  }
+	  // Test the enumeration methods.
+	  checkResult(TestEnumerator(pSequence));
+	}
 	catch (HRESULT& rResult)
 	{
-    hr = rResult;
+	  hr = rResult;
 	}
 
 
 	// Cleanup and return
-  if (pSequence)
-    pSequence->Release();
+	if (pSequence)
+	  pSequence->Release();
 
-  if (pDictionary)
-    pDictionary->Release();
+	if (pDictionary)
+	  pDictionary->Release();
 
-  if (pHeader)
-		pHeader->Release();
+	if (pHeader)
+	  pHeader->Release();
 			
 	if (pFile)
-	{	// Close file
+	  {	// Close file
 		if (bFileOpen)
 		  {
 			pFile->Save();
 			pFile->Close();
 		  }
  		pFile->Release();
-	}
+	  }
 
 	return hr;
 }
 
 static HRESULT ReadAAFFile(aafWChar * pFileName)
 {
-	IAAFFile *					pFile = NULL;
-	bool bFileOpen = false;
-	IAAFHeader *				pHeader = NULL;
-	aafProductIdentification_t	ProductInfo;
-	HRESULT						hr = S_OK;
+  IAAFFile *					pFile = NULL;
+  bool bFileOpen = false;
+  IAAFHeader *				pHeader = NULL;
+  aafProductIdentification_t	ProductInfo;
+  HRESULT						hr = S_OK;
 
 
-	ProductInfo.companyName = L"AAF Developers Desk";
-	ProductInfo.productName = L"EnumAAFComponents Test";
-	ProductInfo.productVersion.major = 1;
-	ProductInfo.productVersion.minor = 0;
-	ProductInfo.productVersion.tertiary = 0;
-	ProductInfo.productVersion.patchLevel = 0;
-	ProductInfo.productVersion.type = kAAFVersionUnknown;
-	ProductInfo.productVersionString = NULL;
-	ProductInfo.productID = UnitTestProductID;
-	ProductInfo.platform = NULL;
+  aafProductVersion_t v;
+  v.major = 1;
+  v.minor = 0;
+  v.tertiary = 0;
+  v.patchLevel = 0;
+  v.type = kAAFVersionUnknown;
+  ProductInfo.companyName = L"AAF Developers Desk";
+  ProductInfo.productName = L"EnumAAFComponents Test";
+  ProductInfo.productVersion = &v;
+  ProductInfo.productVersionString = NULL;
+  ProductInfo.productID = UnitTestProductID;
+  ProductInfo.platform = NULL;
 	  
   try
   {

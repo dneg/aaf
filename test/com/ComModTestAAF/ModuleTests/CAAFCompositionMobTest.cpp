@@ -92,13 +92,15 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
       // Remove the previous test file if any.
       RemoveTestFile(pFileName);
 
+	  aafProductVersion_t v;
+	  v.major = 1;
+	  v.minor = 0;
+	  v.tertiary = 0;
+	  v.patchLevel = 0;
+	  v.type = kAAFVersionUnknown;
 	  ProductInfo.companyName = L"AAF Developers Desk";
 	  ProductInfo.productName = L"AAFCompositionMobTest";
-	  ProductInfo.productVersion.major = 1;
-	  ProductInfo.productVersion.minor = 0;
-	  ProductInfo.productVersion.tertiary = 0;
-	  ProductInfo.productVersion.patchLevel = 0;
-	  ProductInfo.productVersion.type = kAAFVersionUnknown;
+	  ProductInfo.productVersion = &v;
 	  ProductInfo.productVersionString = NULL;
 	  ProductInfo.productID = UnitTestProductID;
 	  ProductInfo.platform = NULL;
@@ -169,30 +171,30 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 static HRESULT ReadAAFFile(aafWChar * pFileName)
 {
-	IAAFFile *					pFile = NULL;
-	IAAFHeader *				pHeader = NULL;
+  IAAFFile *					pFile = NULL;
+  IAAFHeader *				pHeader = NULL;
  
-	IEnumAAFMobs*				pMobIter = NULL;
-	IAAFMob*					pMob = NULL;
-	IAAFCompositionMob*			pCompMob = NULL;
+  IEnumAAFMobs*				pMobIter = NULL;
+  IAAFMob*					pMob = NULL;
+  IAAFCompositionMob*			pCompMob = NULL;
 
-	aafSearchCrit_t				criteria;
-	aafDefaultFade_t			defaultFade;
-	aafProductIdentification_t	ProductInfo;
-	aafNumSlots_t				numMobs;
-	HRESULT						hr = S_OK;
+  aafSearchCrit_t				criteria;
+  aafDefaultFade_t			defaultFade;
+  aafProductIdentification_t	ProductInfo;
+  aafNumSlots_t				numMobs;
+  HRESULT						hr = S_OK;
 
-
-	ProductInfo.companyName = L"AAF Developers Desk";
-	ProductInfo.productName = L"AAFCompositionMob Test";
-	ProductInfo.productVersion.major = 1;
-	ProductInfo.productVersion.minor = 0;
-	ProductInfo.productVersion.tertiary = 0;
-	ProductInfo.productVersion.patchLevel = 0;
-	ProductInfo.productVersion.type = kAAFVersionUnknown;
-	ProductInfo.productVersionString = NULL;
-	ProductInfo.platform = NULL;
-
+  aafProductVersion_t v;
+  v.major = 1;
+  v.minor = 0;
+  v.tertiary = 0;
+  v.patchLevel = 0;
+  v.type = kAAFVersionUnknown;
+  ProductInfo.companyName = L"AAF Developers Desk";
+  ProductInfo.productName = L"AAFCompositionMob Test";
+  ProductInfo.productVersion = &v;
+  ProductInfo.productVersionString = NULL;
+  ProductInfo.platform = NULL;
   
   try
   {

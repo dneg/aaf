@@ -73,25 +73,27 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
   bool bFileOpen = false;
   IAAFHeader *        pHeader = NULL;
   IAAFDictionary*  pDictionary = NULL;
-	IAAFMob						*pMob = NULL;
-	IAAFTimelineMobSlot	*newSlot = NULL;
-	IAAFSegment		*seg = NULL;
-	IAAFSourceClip	*sclp = NULL;
-	IAAFComponent*		pComponent = NULL;
-	aafProductIdentification_t	ProductInfo;
-	aafMobID_t					newMobID;
-	HRESULT						hr = S_OK;
+  IAAFMob						*pMob = NULL;
+  IAAFTimelineMobSlot	*newSlot = NULL;
+  IAAFSegment		*seg = NULL;
+  IAAFSourceClip	*sclp = NULL;
+  IAAFComponent*		pComponent = NULL;
+  aafProductIdentification_t	ProductInfo;
+  aafMobID_t					newMobID;
+  HRESULT						hr = S_OK;
 
-	ProductInfo.companyName = L"AAF Developers Desk";
-	ProductInfo.productName = L"AAFMob Test";
-	ProductInfo.productVersion.major = 1;
-	ProductInfo.productVersion.minor = 0;
-	ProductInfo.productVersion.tertiary = 0;
-	ProductInfo.productVersion.patchLevel = 0;
-	ProductInfo.productVersion.type = kAAFVersionUnknown;
-	ProductInfo.productVersionString = NULL;
-	ProductInfo.productID = UnitTestProductID;
-	ProductInfo.platform = NULL;
+  aafProductVersion_t v;
+  v.major = 1;
+  v.minor = 0;
+  v.tertiary = 0;
+  v.patchLevel = 0;
+  v.type = kAAFVersionUnknown;
+  ProductInfo.companyName = L"AAF Developers Desk";
+  ProductInfo.productName = L"AAFMob Test";
+  ProductInfo.productVersion = &v;
+  ProductInfo.productVersionString = NULL;
+  ProductInfo.productID = UnitTestProductID;
+  ProductInfo.platform = NULL;
 
 
   try
@@ -215,13 +217,15 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	aafUInt32			resultCount;
 	IEnumAAFMobSlots	*slotClone = NULL;
 	
+	aafProductVersion_t v;
+	v.major = 1;
+	v.minor = 0;
+	v.tertiary = 0;
+	v.patchLevel = 0;
+	v.type = kAAFVersionUnknown;
 	ProductInfo.companyName = L"AAF Developers Desk";
 	ProductInfo.productName = L"EnumAAFMobSlots Test";
-	ProductInfo.productVersion.major = 1;
-	ProductInfo.productVersion.minor = 0;
-	ProductInfo.productVersion.tertiary = 0;
-	ProductInfo.productVersion.patchLevel = 0;
-	ProductInfo.productVersion.type = kAAFVersionUnknown;
+	ProductInfo.productVersion = &v;
 	ProductInfo.productVersionString = NULL;
 	ProductInfo.platform = NULL;
 	

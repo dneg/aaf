@@ -86,35 +86,36 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	aafMobID_t					newMobID;
 	HRESULT						hr = S_OK;
 
+	aafProductVersion_t v;
+	v.major = 1;
+	v.minor = 0;
+	v.tertiary = 0;
+	v.patchLevel = 0;
+	v.type = kAAFVersionUnknown;
 	ProductInfo.companyName = L"AAF Developers Desk";
 	ProductInfo.productName = L"EnumAAFTaggedValues Test";
-	ProductInfo.productVersion.major = 1;
-	ProductInfo.productVersion.minor = 0;
-	ProductInfo.productVersion.tertiary = 0;
-	ProductInfo.productVersion.patchLevel = 0;
-	ProductInfo.productVersion.type = kAAFVersionUnknown;
+	ProductInfo.productVersion = &v;
 	ProductInfo.productVersionString = NULL;
 	ProductInfo.productID = UnitTestProductID;
 	ProductInfo.platform = NULL;
 
+	try
+	{
+	  // Remove the previous test file if any.
+	  RemoveTestFile(pFileName);
 
-  try
-  {
-    // Remove the previous test file if any.
-    RemoveTestFile(pFileName);
-
-    // Create the file.
-		checkResult(AAFFileOpenNewModify(pFileName, 0, &ProductInfo, &pFile));
-		bFileOpen = true;
+	  // Create the file.
+	  checkResult(AAFFileOpenNewModify(pFileName, 0, &ProductInfo, &pFile));
+	  bFileOpen = true;
  
-    // We can't really do anthing in AAF without the header.
-		checkResult(pFile->GetHeader(&pHeader));
+	  // We can't really do anthing in AAF without the header.
+	  checkResult(pFile->GetHeader(&pHeader));
 
-    // Get the AAF Dictionary so that we can create valid AAF objects.
-    checkResult(pHeader->GetDictionary(&pDictionary));
-	CAAFBuiltinDefs defs (pDictionary);
+	  // Get the AAF Dictionary so that we can create valid AAF objects.
+	  checkResult(pHeader->GetDictionary(&pDictionary));
+	  CAAFBuiltinDefs defs (pDictionary);
  		
-  //Make the first mob
+	  //Make the first mob
 	  long	test;
 	  aafRational_t	audioRate = { 44100, 1 };
 
@@ -123,7 +124,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 				  CreateInstance(IID_IAAFMob, 
 								 (IUnknown **)&pMob));
 
-		checkResult(CoCreateGuid((GUID *)&newMobID));
+	  checkResult(CoCreateGuid((GUID *)&newMobID));
 	  checkResult(pMob->SetMobID(newMobID));
 	  checkResult(pMob->SetName(L"EnumAAFTaggedValuesTest"));
 		// append some comments to this mob !!
@@ -208,33 +209,35 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 static HRESULT ReadAAFFile(aafWChar * pFileName)
 {
-	IAAFFile *					pFile = NULL;
+  IAAFFile *					pFile = NULL;
   bool bFileOpen = false;
-	IAAFHeader *				pHeader = NULL;
-	IEnumAAFMobs *mobIter = NULL;
-	IAAFMob			*aMob = NULL;
-	IEnumAAFMobSlots	*slotIter = NULL;
-	IEnumAAFTaggedValues* pCommentIterator = NULL;
-	IEnumAAFTaggedValues* pCloneIterator = NULL;
-	IAAFTaggedValue*		pComment = NULL;
+  IAAFHeader *				pHeader = NULL;
+  IEnumAAFMobs *mobIter = NULL;
+  IAAFMob			*aMob = NULL;
+  IEnumAAFMobSlots	*slotIter = NULL;
+  IEnumAAFTaggedValues* pCommentIterator = NULL;
+  IEnumAAFTaggedValues* pCloneIterator = NULL;
+  IAAFTaggedValue*		pComment = NULL;
 
-	IAAFMobSlot		*slot = NULL;
-	aafProductIdentification_t	ProductInfo;
-	aafNumSlots_t	numMobs, n, slt;
-	aafUInt32		numComments, bytesRead, com;
-	HRESULT						hr = S_OK;
-	aafWChar		tag[64];
-	aafWChar		Value[64];
+  IAAFMobSlot		*slot = NULL;
+  aafProductIdentification_t	ProductInfo;
+  aafNumSlots_t	numMobs, n, slt;
+  aafUInt32		numComments, bytesRead, com;
+  HRESULT						hr = S_OK;
+  aafWChar		tag[64];
+  aafWChar		Value[64];
 
-	ProductInfo.companyName = L"AAF Developers Desk";
-	ProductInfo.productName = L"EnumAAFTaggedValues Test";
-	ProductInfo.productVersion.major = 1;
-	ProductInfo.productVersion.minor = 0;
-	ProductInfo.productVersion.tertiary = 0;
-	ProductInfo.productVersion.patchLevel = 0;
-	ProductInfo.productVersion.type = kAAFVersionUnknown;
-	ProductInfo.productVersionString = NULL;
-	ProductInfo.platform = NULL;
+  aafProductVersion_t v;
+  v.major = 1;
+  v.minor = 0;
+  v.tertiary = 0;
+  v.patchLevel = 0;
+  v.type = kAAFVersionUnknown;
+  ProductInfo.companyName = L"AAF Developers Desk";
+  ProductInfo.productName = L"EnumAAFTaggedValues Test";
+  ProductInfo.productVersion = &v;
+  ProductInfo.productVersionString = NULL;
+  ProductInfo.platform = NULL;
 
   try
   {

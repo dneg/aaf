@@ -428,13 +428,16 @@ void CAAFTypeDefIndirect_create (aafCharacter_constptr pFileName)
   RemoveTestFile (pFileName);
 
   // Create the file.
+  aafProductVersion_t v;
+  v.major = 1;
+  v.minor = 0;
+  v.tertiary = 0;
+  v.patchLevel = 0;
+  v.type = kAAFVersionUnknown;
+
   ProductInfo.companyName = L"AAF Developers Desk";
   ProductInfo.productName = L"AAFTypeDefIndirect Test - create";
-  ProductInfo.productVersion.major = 1;
-  ProductInfo.productVersion.minor = 0;
-  ProductInfo.productVersion.tertiary = 0;
-  ProductInfo.productVersion.patchLevel = 0;
-  ProductInfo.productVersion.type = kAAFVersionUnknown;
+  ProductInfo.productVersion = &v;
   ProductInfo.productVersionString = NULL;
   ProductInfo.productID = UnitTestProductID;
   ProductInfo.platform = NULL;
@@ -702,13 +705,16 @@ void  CAAFTypeDefIndirect_modify (aafCharacter_constptr pFileName)
   IAAFHeaderSP pHeader;
   IAAFDictionarySP pDictionary;
 
+  aafProductVersion_t v;
+  v.major = 1;
+  v.minor = 0;
+  v.tertiary = 0;
+  v.patchLevel = 0;
+  v.type = kAAFVersionUnknown;
+
   ProductInfo.companyName = L"AAF Developers Desk";
   ProductInfo.productName = L"AAFTypeDefIndirect Test - modify";
-  ProductInfo.productVersion.major = 1;
-  ProductInfo.productVersion.minor = 0;
-  ProductInfo.productVersion.tertiary = 0;
-  ProductInfo.productVersion.patchLevel = 0;
-  ProductInfo.productVersion.type = kAAFVersionUnknown;
+  ProductInfo.productVersion = &v;
   ProductInfo.productVersionString = NULL;
   ProductInfo.productID = UnitTestProductID;
   ProductInfo.platform = NULL;
