@@ -1,12 +1,15 @@
 #ifndef OMSTORABLE_H
 #define OMSTORABLE_H
 
+#include "OMTypes.h"
+
 #include "OMPropertySet.h"
 
 class OMStoredObject;
 class OMFile;
 
-// Abstract base class for all objects that may be stored by the Object Manager.
+// Abstract base class for all objects that may be stored by the
+// Object Manager.
 //
 class OMStorable {
 
@@ -14,7 +17,7 @@ public:
 
   OMStorable(void);
 
-  virtual int classId(void) const = 0;
+  virtual const OMClassId& classId(void) const = 0;
   
 // private:
   
@@ -28,7 +31,9 @@ public:
 
   // Restore an object, of unknown sub-class, from `s'.
   //
-  static OMStorable* restoreFrom(const OMStorable* container, const char* name, OMStoredObject& s);
+  static OMStorable* restoreFrom(const OMStorable* container,
+                                 const char* name,
+                                 OMStoredObject& s);
   
   virtual OMFile* file(void) const;
 
@@ -56,5 +61,20 @@ protected:
   const char* _pathName;
 
 };
+
+#define OMDECLARE_STORABLE(className)                           \
+public:                                                         \
+  virtual const OMClassId& Impl##className::classId(void) const \
+    {                                                           \
+      return *_classId;                                         \
+    }                                                           \
+                                                                \
+private:                                                        \
+  static const OMClassId* const _classId;                       \
+public:
+
+#define OMDEFINE_STORABLE(className, classId)                   \
+const OMClassId* const Impl##className::_classId =              \
+reinterpret_cast<const OMClassId* const>(&classId);
 
 #endif
