@@ -47,7 +47,7 @@ ImplAAFDigitalImageDescriptor::ImplAAFDigitalImageDescriptor ()
 	_videoLineMap(PID_DigitalImageDescriptor_VideoLineMap,					L"VideoLineMap"),
 	_imageAspectRatio(PID_DigitalImageDescriptor_ImageAspectRatio,			L"ImageAspectRatio"),
 	_alphaTransparency(PID_DigitalImageDescriptor_AlphaTransparency,		L"AlphaTransparency"),
-	_gamma(PID_DigitalImageDescriptor_TransferCharacteristic,								L"TransferCharacteristic"),
+	_gamma(PID_DigitalImageDescriptor_TransferCharacteristic,				L"TransferCharacteristic"),
 	_imageAlignmentFactor(PID_DigitalImageDescriptor_ImageAlignmentFactor,	L"ImageAlignmentFactor")
 {
 	aafInt32	videoLineMap[2];
