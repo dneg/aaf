@@ -112,6 +112,46 @@ void AUIDtoString(aafUID_t *uid, char *buf)
 			(int)uid->Data4[1], (int)uid->Data4[2], (int)uid->Data4[3], (int)uid->Data4[4],
 			(int)uid->Data4[5], (int)uid->Data4[6], (int)uid->Data4[7]);
 }
+struct SMPTELabel
+{
+	aafUInt32	MobIDMajor;
+	aafUInt32	MobIDMinor;
+	aafUInt8	oid;
+	aafUInt8	size;
+	aafUInt8	ulcode;
+	aafUInt8	SMPTE;
+	aafUInt8	Registry;
+	aafUInt8	unused;
+	aafUInt16	MobIDPrefix;
+};
+
+union label
+{
+	aafUID_t			guid;
+	struct SMPTELabel	smpte;
+};
+
+AAFRESULT aafMobIDFromMajorMinor(
+        aafUInt32	major,
+		aafUInt32	minor,
+		aafUID_t *mobID)     /* OUT - Newly created Mob ID */
+{
+	union label		aLabel;
+	
+	aLabel.smpte.oid = 0x06;
+	aLabel.smpte.size = 0x0E;
+	aLabel.smpte.ulcode = 0x2B;
+	aLabel.smpte.SMPTE = 0x34;
+	aLabel.smpte.Registry = 0x02;
+	aLabel.smpte.unused = 0;
+	aLabel.smpte.MobIDPrefix = 42;		// Means its an OMF Uid
+
+	aLabel.smpte.MobIDMajor = major;
+	aLabel.smpte.MobIDMinor = minor;
+
+	*mobID = aLabel.guid;
+	return(AAFRESULT_SUCCESS);
+}
 
 // ============================================================================
 // InitGlobalVars
