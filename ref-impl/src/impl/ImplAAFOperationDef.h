@@ -3,7 +3,6 @@
 #ifndef __ImplAAFOperationDef_h__
 #define __ImplAAFOperationDef_h__
 
-
 /***********************************************************************
  *
  *              Copyright (c) 1998-1999 Avid Technology, Inc.
@@ -15,7 +14,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -32,16 +31,12 @@
  ************************************************************************/
 
 
-class ImplAAFParameterDef;
-
+class ImplAAFDataDef;
 class ImplAAFLocator;
-
+class ImplAAFParameterDef;
 class ImplEnumAAFLocators;
-
-class ImplEnumAAFParameterDefs;
-
 class ImplEnumAAFOperationDefs;
-
+class ImplEnumAAFParameterDefs;
  
 #ifndef __ImplAAFDefObject_h__
 #include "ImplAAFDefObject.h"
@@ -67,20 +62,20 @@ protected:
 public:
 
   //****************
-  // GetDataDefinition()
+  // GetDataDef()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetDataDefinitionID
+    GetDataDef
         // @parm [out,retval] pointer to the return value
-        (aafUID_t *pDataDefID);
+        (ImplAAFDataDef ** ppDataDef);
 
   //****************
-  // SetDataDefinition()
+  // SetDataDef()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    SetDataDefinitionID
+    SetDataDef
         // @parm [in] Pointer to the new data Definition Object
-        (const aafUID_t & dataDefID);
+        (ImplAAFDataDef * pDataDef);
 
   //****************
   // IsTimeWarp()
@@ -153,15 +148,15 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     GetCategory (
-        wchar_t		*pCategory,
-		aafInt32	bufSize);
+        aafCharacter		*pCategory,
+		aafUInt32	bufSize);
 
   //****************
   // GetCategoryBufLen()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
 	GetCategoryBufLen (
-			aafInt32 *		pLen);
+			aafUInt32 *		pLen);
 
 			//****************
   // SetCategory()
@@ -169,7 +164,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     SetCategory
         // @parm [in] category
-        (wchar_t *category);
+        (const aafCharacter *category);
 
   //****************
   // GetNumberInputs()

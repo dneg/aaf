@@ -62,12 +62,12 @@ protected:
 public:
 
   //****************
-  // Create()
+  // Initialize()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    Create
+    Initialize
         (// @parm [in] Data Definition Object
-         const aafUID_t & datadef,
+         ImplAAFDataDef * pDataDef,
 
 		 // @parm [in] Length property value
          aafLength_t  length,

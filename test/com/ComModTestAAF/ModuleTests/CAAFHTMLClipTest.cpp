@@ -43,6 +43,8 @@
 #include "AAFResult.h"
 #include "AAFDefUIDs.h"
 
+#include "CAAFBuiltinDefs.h"
+
 
 
 // Cross-platform utility to delete a file.
@@ -242,11 +244,12 @@ void HTMLClipTest::CreateHTMLClip()
   IAAFSegment *pSegment = NULL;
   IAAFTimelineMobSlot *pMobSlot = NULL;
 
+  CAAFBuiltinDefs defs (_pDictionary);
 
   try
   {
     //Make the MOB to be referenced
-    checkResult(_pDictionary->CreateInstance(AUID_AAFMasterMob,
+    checkResult(_pDictionary->CreateInstance(defs.cdMasterMob(),
 					    IID_IAAFMasterMob, 
 					    (IUnknown **)&pMasterMob));
   
@@ -264,7 +267,7 @@ void HTMLClipTest::CreateHTMLClip()
 
 
     // Create a HTMLClip
-    checkResult(_pDictionary->CreateInstance(AUID_AAFHTMLClip,
+    checkResult(_pDictionary->CreateInstance(defs.cdHTMLClip(),
 					    IID_IAAFHTMLClip, 
 					    (IUnknown **)&pHTMLClip));
     checkResult(pHTMLClip->SetBeginAnchor(const_cast<wchar_t *>(_beginAnchor)));
@@ -277,7 +280,7 @@ void HTMLClipTest::CreateHTMLClip()
     checkResult(pSourceReference->SetSourceMobSlotID(0));
 
     // Create a composition mob to hold the html clip.
-    checkResult(_pDictionary->CreateInstance(AUID_AAFCompositionMob,
+    checkResult(_pDictionary->CreateInstance(defs.cdCompositionMob(),
 					    IID_IAAFCompositionMob, 
 					    (IUnknown **)&pCompositionMob));
     checkResult(pCompositionMob->QueryInterface(IID_IAAFMob, (void **)&pReferencingMob));

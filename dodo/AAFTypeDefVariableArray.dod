@@ -18,8 +18,7 @@ AD_HEAD
 AD_IDL(//
 // This interface is used to define variably-sized Array types used in
 // AAF persistent objects.
-AD_STD_COMMENT_IFC_HEADER
-AD_STD_COMMENT_IFC_STUB)
+AD_STD_COMMENT_IFC_HEADER)
 AD_FORWARD_DECLARATION(AAFPropertyValue)
 AD_CLASS_UUID(307e9e65, dcb2, 11d2, 84, 29, 00, 60, 08, 32, ac, b8)
 

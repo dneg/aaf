@@ -92,7 +92,6 @@ AD_XMETHOD1(GetProperties,
   // interface.
   // 
   AD_STD_COMMENT_METH_ADDREF\(ppEnum\)
-  AD_STD_COMMENT_METH_STUB
   // Succeeds if all of the following are true:
   // - the ppEnum pointer is valid.
   // 

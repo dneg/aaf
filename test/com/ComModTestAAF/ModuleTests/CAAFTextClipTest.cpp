@@ -39,6 +39,8 @@
 #include "AAFResult.h"
 #include "AAFDefUIDs.h"
 
+#include "CAAFBuiltinDefs.h"
+
 
 // Cross-platform utility to delete a file.
 static void RemoveTestFile(const wchar_t* pFileName)
@@ -236,8 +238,10 @@ void TextClipTest::CreateTextClip()
 
   try
   {
-  //Make the MOB to be referenced
-  checkResult(_pDictionary->CreateInstance(AUID_AAFMasterMob,
+	CAAFBuiltinDefs defs (_pDictionary);
+
+	//Make the MOB to be referenced
+	checkResult(_pDictionary->CreateInstance(defs.cdMasterMob(),
 					  IID_IAAFMasterMob, 
 					  (IUnknown **)&pMasterMob));
   
@@ -255,7 +259,7 @@ void TextClipTest::CreateTextClip()
 
 
   // Create a TextClip
-  checkResult(_pDictionary->CreateInstance(AUID_AAFTextClip,
+  checkResult(_pDictionary->CreateInstance(defs.cdTextClip(),
 					  IID_IAAFTextClip, 
 					  (IUnknown **)&pTextClip));
 
@@ -265,7 +269,7 @@ void TextClipTest::CreateTextClip()
   checkResult(pSourceReference->SetSourceMobSlotID(0));
 
   // Create a composition mob to hold the text clip.
-  checkResult(_pDictionary->CreateInstance(AUID_AAFCompositionMob,
+  checkResult(_pDictionary->CreateInstance(defs.cdCompositionMob(),
 					  IID_IAAFCompositionMob, 
 					  (IUnknown **)&pCompositionMob));
   checkResult(pCompositionMob->QueryInterface(IID_IAAFMob, (void **)&pReferencingMob));

@@ -19,8 +19,7 @@ AD_IDL(//
 // definition.  The operations on a class definition include managing
 // the position of the class within the class heirarchy\, and
 // accessing property definitions associated with the class.
-AD_STD_COMMENT_IFC_HEADER
-AD_STD_COMMENT_IFC_STUB)
+AD_STD_COMMENT_IFC_HEADER)
 AD_FORWARD_DECLARATION(EnumAAFPropertyDefs)
 AD_FORWARD_DECLARATION(AAFPropertyDef)
 AD_FORWARD_DECLARATION(AAFDefObject)
@@ -45,7 +44,7 @@ AD_XMETHOD3(Initialize,
 
 			[in\, string],
 			objPass,
-			aafCharacter *,
+			aafCharacter_constptr,
 			pClassName,
 			friendly name of this type definition,
 
@@ -98,7 +97,7 @@ AD_XMETHOD5(RegisterNewPropertyDef,
 
 			[in\, string],
 			objPass,
-			aafCharacter *,
+			aafCharacter_constptr,
 			pName,
 			name of the new property,
 
@@ -159,7 +158,7 @@ AD_XMETHOD4(RegisterOptionalPropertyDef,
 
 			[in\, string],
 			objPass,
-			aafCharacter *,
+			aafCharacter_constptr,
 			pName,
 			name of the new property,
 

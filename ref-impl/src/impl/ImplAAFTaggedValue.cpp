@@ -9,7 +9,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -38,6 +38,7 @@
 #endif
 
 #include "ImplAAFDictionary.h"
+#include "ImplAAFDataDef.h"
 #include "ImplAAFHeader.h"
 
 #include <assert.h>
@@ -63,14 +64,20 @@ ImplAAFTaggedValue::~ImplAAFTaggedValue ()
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTaggedValue::Initialize (const aafCharacter * pName,
-									const aafUID_t & dataDef)
+									ImplAAFTypeDef * pTypeDef)
 {
 	HRESULT					rc = AAFRESULT_SUCCESS;
 
 	if (pName == NULL)
 		return AAFRESULT_NULL_PARAM;
 
-	_type = dataDef;
+	if (! pTypeDef)
+	  return AAFRESULT_NULL_PARAM;
+	aafUID_t typeDef;
+	AAFRESULT hr = pTypeDef->GetAUID(&typeDef);
+	if (AAFRESULT_FAILED (hr))return hr;
+
+	_type = typeDef;
 	_name = pName;
 
 	return rc;
@@ -78,7 +85,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFTaggedValue::GetName (wchar_t* pName, aafInt32 bufSize)
+    ImplAAFTaggedValue::GetName (aafCharacter * pName, aafInt32 bufSize)
 {
     AAFRESULT	aafError = AAFRESULT_SUCCESS;
 	bool		status;
@@ -99,7 +106,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFTaggedValue::GetNameBufLen (aafInt32* pLen)
+    ImplAAFTaggedValue::GetNameBufLen (aafUInt32* pLen)
 {
     AAFRESULT	aafError = AAFRESULT_SUCCESS;
 

@@ -188,14 +188,19 @@ HRESULT STDMETHODCALLTYPE
 	aafUID_t			uid;
 	IAAFContainerDef	*container = NULL;
 	IAAFDefObject		*obj = NULL;
+    IAAFClassDef        *pcd = 0;
+
 	if((dict == NULL) || (def == NULL))
 		return AAFRESULT_NULL_PARAM;
 
 	XPROTECT()
 	{
-		CHECK(dict->CreateInstance(AUID_AAFContainerDef,
+		CHECK(dict->LookupClassDef(AUID_AAFContainerDef, &pcd));
+		CHECK(dict->CreateInstance(pcd,
 							IID_IAAFContainerDef, 
 							(IUnknown **)&container));
+		pcd->Release();
+		pcd = 0;
 		uid = ContainerFile;
 		CHECK(container->SetEssenceIsIdentified(AAFFalse));
 		CHECK(container->QueryInterface(IID_IAAFDefObject, (void **)&obj));
@@ -209,9 +214,20 @@ HRESULT STDMETHODCALLTYPE
 	XEXCEPT
 	{
 		if(container != NULL)
+		  {
 			container->Release();
+			container = 0;
+		  }
 		if(obj != NULL)
+		  {
 			obj->Release();
+			obj = 0;
+		  }
+		if (pcd)
+		  {
+			pcd->Release();
+			pcd = 0;
+		  }
 	}
 	XEND
 
@@ -233,18 +249,23 @@ HRESULT STDMETHODCALLTYPE
 	IAAFPluginDescriptor	*desc = NULL;
 	IAAFLocator				*pLoc = NULL;
 	IAAFNetworkLocator		*pNetLoc = NULL;
+	IAAFClassDef            *pcd = 0;
 	
 	XPROTECT()
 	{
-		CHECK(dict->CreateInstance(AUID_AAFPluginDescriptor,
+	    CHECK(dict->LookupClassDef(AUID_AAFPluginDescriptor, &pcd));
+		CHECK(dict->CreateInstance(pcd,
 			IID_IAAFPluginDescriptor, 
 			(IUnknown **)&desc));
+		pcd->Release();
+		pcd = 0;
 		*descPtr = desc;
 		CHECK(desc->Initialize(EXAMPLE_FILE_PLUGIN, L"Essence File Container", L"Handles non-container files."));
 
 		CHECK(desc->SetCategoryClass(AUID_AAFDefObject));
 		CHECK(desc->SetPluginVersionString(manufRev));
-		CHECK(dict->CreateInstance(AUID_AAFNetworkLocator,
+		CHECK(dict->LookupClassDef(AUID_AAFNetworkLocator, &pcd));
+		CHECK(dict->CreateInstance(pcd,
 			IID_IAAFLocator, 
 			(IUnknown **)&pLoc));
 		CHECK(pLoc->SetPath (manufURL));
@@ -262,9 +283,11 @@ HRESULT STDMETHODCALLTYPE
 		CHECK(desc->SetSupportsAuthentication(AAFFalse));
 		
 		/**/
-		CHECK(dict->CreateInstance(AUID_AAFNetworkLocator,
+		CHECK(dict->CreateInstance(pcd,
 			IID_IAAFLocator, 
 			(IUnknown **)&pLoc));
+		pcd->Release ();
+		pcd = 0;
 		CHECK(pLoc->SetPath (downloadURL));
 		CHECK(desc->AppendLocator(pLoc));
 		desc->Release();
@@ -275,11 +298,25 @@ HRESULT STDMETHODCALLTYPE
 	XEXCEPT
 	{
 		if(desc != NULL)
+		  {
 			desc->Release();
+			desc = 0;
+		  }
 		if(pLoc != NULL)
+		  {
 			pLoc->Release();
+			pLoc = 0;
+		  }
 		if(pNetLoc != NULL)
+		  {
 			pNetLoc->Release();
+			pNetLoc = 0;
+		  }
+		if (pcd)
+		  {
+			pcd->Release ();
+			pcd = 0;
+		  }
 	}
 	XEND
 

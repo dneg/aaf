@@ -122,6 +122,7 @@ void extensionWrite (const aafCharacter * filename)
   IAAFDictionary *pDict=NULL;
   IAAFMob *pAdminMob=NULL;
   IAAFObject *pPersResource=NULL;
+  IAAFClassDef *pcd = 0;
   
 
   try
@@ -160,9 +161,12 @@ void extensionWrite (const aafCharacter * filename)
 
  
     // Instantiate a AdministrativeMob object.
-    check (pDict->CreateInstance (kClassID_AdminMob,
+	check (pDict->LookupClassDef (kClassID_AdminMob, &pcd));
+    check (pDict->CreateInstance (pcd,
 								  IID_IAAFMob,
 								  (IUnknown**) &pAdminMob));
+	pcd->Release();
+	pcd = 0;
     check (pAdminMob->SetName (L"Administrative Information"));
  
 
@@ -171,9 +175,12 @@ void extensionWrite (const aafCharacter * filename)
 
     // Add several PersonnelResource objects to the AdminMob.
     // Instantiate the PersonnelResource object.
-    check (pDict->CreateInstance (kClassID_PersonnelResource,
+	check (pDict->LookupClassDef (kClassID_PersonnelResource, &pcd));
+    check (pDict->CreateInstance (pcd,
 								  IID_IAAFObject,
 								  (IUnknown**) &pPersResource));
+	pcd->Release();
+	pcd = 0;
 
     PersonnelResourceInitialize (pPersResource,
 							     L"Morgan",
@@ -186,9 +193,12 @@ void extensionWrite (const aafCharacter * filename)
     pPersResource=NULL;
 
   // Instantiate the PersonnelResource object.
-    check (pDict->CreateInstance (kClassID_PersonnelResource,
+	check (pDict->LookupClassDef (kClassID_PersonnelResource, &pcd));
+    check (pDict->CreateInstance (pcd,
 								  IID_IAAFObject,
 								  (IUnknown**) &pPersResource));
+	pcd->Release ();
+	pcd = 0;
 
     PersonnelResourceInitialize (pPersResource,
 							     L"Ohanian",
@@ -202,9 +212,12 @@ void extensionWrite (const aafCharacter * filename)
     pPersResource->Release();
     pPersResource=NULL;
   // Instantiate the PersonnelResource object.
-    check (pDict->CreateInstance (kClassID_PersonnelResource,
+	check (pDict->LookupClassDef (kClassID_PersonnelResource, &pcd))
+    check (pDict->CreateInstance (pcd,
 								  IID_IAAFObject,
 								  (IUnknown**) &pPersResource));
+	pcd->Release();
+	pcd = 0;
 
     PersonnelResourceInitialize (pPersResource,
 							     L"Oldman",
@@ -240,6 +253,12 @@ void extensionWrite (const aafCharacter * filename)
       pDict->Release();
     if (pHead)
       pHead->Release();
+	if (pcd)
+	  {
+		pcd->Release();
+		pcd = 0;
+	  }
+
     if (pFile)
     {
       pFile->Close();
