@@ -150,6 +150,15 @@ public:
         (ImplAAFClassDef ** ppClassDef);
 
 
+  //****************
+  // CreateInstance()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    CreateInstance
+        // @parm [out, retval] newly created object
+        (ImplAAFObject ** ppobject);
+
+
 public:
 
   //
@@ -213,6 +222,8 @@ public:
   // Make sure that the type definition of each property definition
   // has been loaded into memory.
   void AssurePropertyTypesLoaded ();
+
+  void InitOMProperties (ImplAAFObject * pObj);
 
 private:
 

@@ -9,7 +9,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -46,6 +46,7 @@
 #include "AAFResult.h"
 #include "AAFUtils.h"
 #include "ImplAAFDictionary.h"
+#include "ImplAAFBuiltinDefs.h"
 
 #include <assert.h>
 
@@ -308,7 +309,10 @@ ImplAAFBuiltinClasses::NewBuiltinClassDef (const aafUID_t & rClassID,
 		  ImplAAFClassDef * pcd = (ImplAAFClassDef*)
 			_dictionary->pvtInstantiate(AUID_AAFClassDef);
 		  assert (pcd);
-		  pcd->InitOMProperties ();
+		  _dictionary
+			->GetBuiltinDefs()
+			->cdClassDef()
+			->InitOMProperties (pcd);
 
 		  status = InitBuiltinClassDef (rClassID, pcd);
 		  if (AAFRESULT_SUCCEEDED (status))

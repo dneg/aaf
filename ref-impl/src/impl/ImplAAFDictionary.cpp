@@ -9,7 +9,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -347,18 +347,39 @@ ImplAAFDictionary *ImplAAFDictionary::CreateDictionary(void)
 //
 OMStorable* ImplAAFDictionary::create(const OMClassId& classId) const
 {
+  AAFRESULT hr;
   const aafUID_t * auid  = reinterpret_cast<const aafUID_t*>(&classId);
-  ImplAAFObject * pNewObject = 0;
-  pNewObject = pvtInstantiate (*auid);
-  if (pNewObject)
-	pNewObject->InitOMProperties ();
+  ImplAAFClassDefSP pcd;
+  ImplAAFDictionary * pNonConstThis = (ImplAAFDictionary*) this;
+  hr = pNonConstThis->LookupClassDef(*auid, &pcd);
+  assert (AAFRESULT_SUCCEEDED (hr));
+  
+  return CreateAndInit (pcd);
+}
 
-  // Attempt to initialize the any class extensions associated with
-  // this object. Only the most derived extension that has an associated
-  // plugin is created.
-  // QUESTION: How should we "deal with" failure? We really need an 
-  // error/warning log file for this kind of information.
-  AAFRESULT result = pNewObject->InitializeExtensions();
+
+ImplAAFObject *
+ImplAAFDictionary::CreateAndInit(ImplAAFClassDef * pClassDef) const
+{
+  assert (pClassDef);
+  AAFRESULT hr;
+  aafUID_t auid;
+  hr = pClassDef->GetAUID(&auid);
+  assert (AAFRESULT_SUCCEEDED (hr));
+
+  ImplAAFObject * pNewObject = 0;
+  pNewObject = pvtInstantiate (auid);
+  if (pNewObject)
+	{
+	  pClassDef->InitOMProperties (pNewObject);
+
+	  // Attempt to initialize the any class extensions associated
+	  // with this object. Only the most derived extension that has an
+	  // associated  plugin is created.
+	  // QUESTION: How should we "deal with" failure? We really need
+	  // an  error/warning log file for this kind of information.
+	  AAFRESULT result = pNewObject->InitializeExtensions();
+	}
 
   return pNewObject;
 }
@@ -447,8 +468,8 @@ ImplAAFObject* ImplAAFDictionary::pvtInstantiate(const aafUID_t & auid) const
   // with a specified stored object id.
 AAFRESULT STDMETHODCALLTYPE 
   ImplAAFDictionary::CreateInstance (
-    // Class definition of the stored object to be created.
-    ImplAAFClassDef * pClassDef,
+    // Stored Object ID of the stored object to be created.
+    aafUID_constref classId,
 
     // Address of output variable that receives the 
     // object pointer requested in auid
@@ -457,15 +478,13 @@ AAFRESULT STDMETHODCALLTYPE
   if (NULL == ppvObject)
     return AAFRESULT_NULL_PARAM;
   
-  // Initialize the out parameter.
-  *ppvObject = NULL;
-
-  aafUID_t auid;
-  AAFRESULT hr = pClassDef->GetAUID (&auid);
+  ImplAAFClassDefSP pClassDef;
+  AAFRESULT hr;
+  hr = LookupClassDef (classId, &pClassDef);
   if (AAFRESULT_FAILED (hr))
 	return hr;
-  const OMClassId* classId  = reinterpret_cast<const OMClassId*>(&auid);
-  *ppvObject = static_cast<ImplAAFObject *>(create(*classId));
+
+  *ppvObject = CreateAndInit (pClassDef);
 
   if (NULL == *ppvObject)
     return AAFRESULT_INVALID_CLASS_ID;
@@ -478,12 +497,12 @@ AAFRESULT STDMETHODCALLTYPE
 // This method was created to make it simpler to replace calls to "Deprecated"
 // call to CreateImpl which should only be used for instanciating transient
 // non-ImplAAFObject classes such as an enumerator.
-ImplAAFObject *ImplAAFDictionary::CreateImplObject(ImplAAFClassDef * pClassDef)
+ImplAAFObject *ImplAAFDictionary::CreateImplObject(aafUID_constref classID)
 {
   ImplAAFObject *pObject = NULL;
   AAFRESULT result = AAFRESULT_SUCCESS;
   
-  result = CreateInstance(pClassDef, &pObject);
+  result = CreateInstance(classID, &pObject);
   assert(AAFRESULT_SUCCEEDED(result));
   return pObject;
 }
@@ -1732,8 +1751,8 @@ void ImplAAFDictionary::InitBuiltins()
   if (AAFRESULT_FAILED (hr))
 	{
 	  // not already in dictionary
-	  hr = CreateInstance (GetBuiltinDefs()->cdDataDef(),
-						   (ImplAAFObject **)&dataDef);
+	  hr = GetBuiltinDefs()->cdDataDef()->
+		CreateInstance ((ImplAAFObject **)&dataDef);
 	  hr = dataDef->Initialize (DDEF_Picture, L"Picture", L"Picture data");
 	  hr = RegisterDataDef (dataDef);
 	}
@@ -1744,8 +1763,8 @@ void ImplAAFDictionary::InitBuiltins()
   if (AAFRESULT_FAILED (hr))
 	{
 	  // not already in dictionary
-	  hr = CreateInstance (GetBuiltinDefs()->cdDataDef(),
-						   (ImplAAFObject **)&dataDef);
+	  hr = GetBuiltinDefs()->cdDataDef()->
+		CreateInstance ((ImplAAFObject **)&dataDef);
 	  hr = dataDef->Initialize (DDEF_Sound, L"Sound", L"Sound data");
 	  hr = RegisterDataDef (dataDef);
 	}
@@ -1756,8 +1775,8 @@ void ImplAAFDictionary::InitBuiltins()
   if (AAFRESULT_FAILED (hr))
 	{
 	  // not already in dictionary
-	  hr = CreateInstance (GetBuiltinDefs()->cdDataDef(),
-						   (ImplAAFObject **)&dataDef);
+	  hr = GetBuiltinDefs()->cdDataDef()->
+		CreateInstance ((ImplAAFObject **)&dataDef);
 	  hr = dataDef->Initialize (DDEF_Timecode, L"Timecode", L"Timecode data");
 	  hr = RegisterDataDef (dataDef);
 	}
@@ -1768,8 +1787,8 @@ void ImplAAFDictionary::InitBuiltins()
   if (AAFRESULT_FAILED (hr))
 	{
 	  // not already in dictionary
-	  hr = CreateInstance (GetBuiltinDefs()->cdDataDef(),
-						   (ImplAAFObject **)&dataDef);
+	  hr = GetBuiltinDefs()->cdDataDef()->
+		CreateInstance ((ImplAAFObject **)&dataDef);
 	  hr = dataDef->Initialize (DDEF_Edgecode, L"Edgecode", L"Edgecode data");
 	  hr = RegisterDataDef (dataDef);
 	}
@@ -1780,8 +1799,8 @@ void ImplAAFDictionary::InitBuiltins()
   if (AAFRESULT_FAILED (hr))
 	{
 	  // not already in dictionary
-	  hr = CreateInstance (GetBuiltinDefs()->cdDataDef(),
-						   (ImplAAFObject **)&dataDef);
+	  hr = GetBuiltinDefs()->cdDataDef()->
+		CreateInstance ((ImplAAFObject **)&dataDef);
 	  hr = dataDef->Initialize (DDEF_Matte, L"Matte", L"Matte data");
 	  hr = RegisterDataDef (dataDef);
 	}
@@ -1792,8 +1811,8 @@ void ImplAAFDictionary::InitBuiltins()
   if (AAFRESULT_FAILED (hr))
 	{
 	  // not already in dictionary
-	  hr = CreateInstance (GetBuiltinDefs()->cdDataDef(),
-						   (ImplAAFObject **)&dataDef);
+	  hr = GetBuiltinDefs()->cdDataDef()->
+		CreateInstance ((ImplAAFObject **)&dataDef);
 	  hr = dataDef->Initialize (DDEF_PictureWithMatte, L"PictureWithMatte", L"PictureWithMatte data");
 	  hr = RegisterDataDef (dataDef);
 	}
