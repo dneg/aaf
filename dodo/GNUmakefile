@@ -39,7 +39,7 @@ depend.mk : aafobjects.mk
 
 targets :
 	@echo "[Building $@]\n"
-	$(MAKE) -f maketargets.mak
+	$(MAKE) -f maketargets_gnu.mak
 
 #.PHONY : clean
 clean :
@@ -47,11 +47,10 @@ clean :
 	$(MAKE) -f dodotargets.mak clean
 	$(MAKE) -f dododepend.mak clean
 	touch targets.mk depend.mk
-	$(MAKE) -f maketargets.mak clean
+	$(MAKE) -f maketargets_gnu.mak clean
 	-@rm -f targets.mk depend.mk
 
 include $(AAFBASE)/build/rules.mk
-
 
 
 

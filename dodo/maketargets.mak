@@ -59,7 +59,7 @@ $(INCLUDE_DIR)/com-api/AAFPrivate.idl : $(PRIVATE_FIDL_TARGETS)
 	$(RM) -f $(INCLUDE_DIR)/com-api/AAFPrivate.idl
 	$(CP)  aafobjects.mk tmp.sh
 	$(CHMOD) a+w tmp.sh
-	$(CAT) GenAAFPrivateIdl.sh >> tmp.sh
+	$(CAT) GenAafPrivateIdl.sh >> tmp.sh
 	$(SH) tmp.sh > $(INCLUDE_DIR)/com-api/AAFPrivate.idl
 	$(RM) tmp.sh
 	$(CHMOD) -w $(INCLUDE_DIR)/com-api/AAFPrivate.idl
@@ -70,7 +70,7 @@ $(INCLUDE_DIR)/com-api/AAF.idl : $(FIDL_TARGETS)
 	$(RM) -f $(INCLUDE_DIR)/com-api/AAF.idl
 	$(CP)  aafobjects.mk tmp.sh
 	$(CHMOD) a+w tmp.sh
-	$(CAT) GenAAFIdl.sh >> tmp.sh
+	$(CAT) GenAafIdl.sh >> tmp.sh
 	$(SH) tmp.sh > $(INCLUDE_DIR)/com-api/AAF.idl
 	$(RM) tmp.sh
 	$(CHMOD) -w $(INCLUDE_DIR)/com-api/AAF.idl
@@ -199,7 +199,6 @@ $(COMAPI_DIR)/AAFObjectTable_i.cpp : aafobjects.mk
 	$(RM) -f $(COMAPI_DIR)/AAFObjectTable_i.cpp
 	$(MV) $(COMAPI_DIR)/AAFObjectTable_i.tmp $(COMAPI_DIR)/AAFObjectTable_i.cpp
 	$(CHMOD) -w $(COMAPI_DIR)/AAFObjectTable_i.cpp
-
 
 $(COMAPI_DIR)/CAAFEnumValidation.cpp $(COMAPI_DIR)/CAAFEnumValidation.h : GenEnumValidation.pl AAFPluginTypes.dod AAFTypes.dod
 	@ $(ECHO) Generating references CAAFEnumValidation.cpp and CAAFEnumValidation.h ...
