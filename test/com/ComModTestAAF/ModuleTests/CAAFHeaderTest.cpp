@@ -219,13 +219,7 @@ void HeaderTest::createFile(wchar_t *pFileName)
   // Remove the previous test file if any.
   removeTestFile(pFileName);
    
-  check(CoCreateInstance(CLSID_AAFFile,
-                         NULL, 
-                         CLSCTX_INPROC_SERVER, 
-                         IID_IAAFFile, 
-                         (void **)&_pFile));
-  check(_pFile->Initialize());
-  check(_pFile->OpenNewModify(pFileName, 0, &_productInfo));
+  check(AAFFileOpenNewModify(pFileName, 0, &_productInfo, &_pFile));
   _bFileOpen = true;
   check(_pFile->GetHeader(&_pHeader));
   check(_pHeader->GetDictionary(&_pDictionary));
@@ -239,13 +233,7 @@ void HeaderTest::createFile(wchar_t *pFileName)
 
 void HeaderTest::openFile(wchar_t *pFileName)
 {
-  check(CoCreateInstance(CLSID_AAFFile,
-                         NULL, 
-                         CLSCTX_INPROC_SERVER, 
-                         IID_IAAFFile, 
-                         (void **)&_pFile));
-  check(_pFile->Initialize());
-  check(_pFile->OpenExistingRead(pFileName, 0));
+  check(AAFFileOpenExistingRead(pFileName, 0, &_pFile));
   _bFileOpen = true;
   check(_pFile->GetHeader(&_pHeader));
 
