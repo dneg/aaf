@@ -11,7 +11,7 @@
 
 
 
-
+#undef WIN32_LEAN_AND_MEAN
 
 
 #include "CAAFWAVEDescriptor.h"
