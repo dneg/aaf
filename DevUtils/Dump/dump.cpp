@@ -128,15 +128,6 @@ typedef wchar_t OMCHAR;
 typedef char OMCHAR;
 #endif
 
-#if defined (_MSC_VER)
-#if _MSC_VER <= 1000
-#define typename class
-typedef int bool;
-const bool false = 0;
-const bool true = 1;
-#endif
-#endif
-
 // Console input for Macintosh (two different methods).
 //
 #if defined(OM_OS_MACOS)
