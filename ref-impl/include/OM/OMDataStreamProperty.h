@@ -74,6 +74,8 @@ public:
     //          offset in bytes from the begining of the data stream.
   void setPosition(const OMUInt64 offset) const;
 
+  // Raw access interface - these functions do not use the OMType interface
+
     // @cmember Attempt to read the number of bytes given by <p bytes>
     //          from the data stream into the buffer at address
     //          <p buffer>. The actual number of bytes read is returned
@@ -89,6 +91,31 @@ public:
   void write(const OMByte* buffer,
              const OMUInt32 bytes,
              OMUInt32& bytesWritten);
+
+  // Typed access interface - these functions use the OMType interface
+
+    // @cmember Attempt to read the number of elements given by
+    //          <p elementCount> and described by <p elementType> and
+    //          <p externalElementSize> from the data stream into the buffer
+    //          at address <p elements>. The actual number of elements read
+    //          is returned in <p elementsRead>.
+  void readTypedElements(const OMType* elementType,
+                         size_t externalElementSize,
+                         OMByte* elements,
+                         OMUInt32 elementCount,
+                         OMUInt32& elementsRead) const;
+
+
+    // @cmember Attempt to write the number of elements given by
+    //          <p elementCount> and described by <p elementType> and
+    //          <p externalElementSize> to the data stream from the buffer
+    //          at address <p elements>. The actual number of elements written
+    //          is returned in <p elementsWritten>.
+  void writeTypedElements(const OMType* elementType,
+                          size_t externalElementSize,
+                          const OMByte* elements,
+                          OMUInt32 elementCount,
+                          OMUInt32& elementsWritten);
 
   // Direct property access interface
 
