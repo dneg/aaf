@@ -80,6 +80,7 @@ AD_XMETHOD3(Initialize,
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_ALREADY_INIT
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pTypeDef or pValue\)
+  //
   // AAFRESULT_NOT_VALID_KEY
   //   - The  given key must not resolve to a builtin type.  For most purposes\, use
   //     IAAFTypeDefRename to rename an existing type.
