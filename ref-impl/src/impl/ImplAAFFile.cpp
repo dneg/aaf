@@ -11,6 +11,7 @@
 #include "ImplAAFFile.h"
 
 #include "OMFile.h"
+#include "OMUtilities.h"
 #include "ImplAAFClassFactory.h"
 
 #include "ImplAAFSession.h"
@@ -93,6 +94,9 @@ ImplAAFFile::OpenExistingRead (wchar_t * pFileName,
 		_file = OMFile::openRead(pFileName, _classFactory);
 		checkExpression(NULL != _file, AAFRESULT_INTERNAL_ERROR);
 
+		// Get the byte order
+		_byteOrder = _file->byteOrder();
+
 		// Restore the header.
 		OMStorable* head = _file->restore();
 		_head = dynamic_cast<ImplAAFHeader *>(head);
@@ -167,6 +171,9 @@ ImplAAFFile::OpenExistingModify (wchar_t * pFileName,
 		// Ask the OM to open the file.
 		_file = OMFile::openModify(pFileName, _classFactory);
 		checkExpression(NULL != _file, AAFRESULT_INTERNAL_ERROR);
+
+		// Get the byte order
+		_byteOrder = _file->byteOrder();
 
 		// Restore the header.
 		OMStorable* head = _file->restore();
@@ -253,8 +260,12 @@ ImplAAFFile::OpenNewModify (wchar_t * pFileName,
 		// Add the ident to the header.
 		checkResult(_head->AddIdentificationObject(&_ident));
 		  
+		// Set the byte order
+		_byteOrder = hostByteOrder();
+		_head->SetByteOrder(_byteOrder);
+
 		// Attempt to create the file.
-		_file = OMFile::createModify(pFileName, _classFactory, _head);
+		_file = OMFile::createModify(pFileName, _classFactory, _byteOrder, _head);
 		checkExpression(NULL != _file, AAFRESULT_INTERNAL_ERROR);
 
 		_open = AAFTrue;

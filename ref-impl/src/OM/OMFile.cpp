@@ -72,6 +72,7 @@ OMFile* OMFile::openModify(const wchar_t* fileName,
 
 OMFile* OMFile::createWrite(const wchar_t* fileName,
                             const OMClassFactory* factory,
+                            const OMByteOrder byteOrder,
                             OMStorable* root)
 {
   TRACE("OMFile::createWrite");
@@ -87,6 +88,7 @@ OMFile* OMFile::createWrite(const wchar_t* fileName,
 
 OMFile* OMFile::createModify(const wchar_t* fileName,
                              const OMClassFactory* factory,
+                             const OMByteOrder byteOrder,
                              OMStorable* root)
 {
   TRACE("OMFile::createModify");
@@ -94,13 +96,14 @@ OMFile* OMFile::createModify(const wchar_t* fileName,
   PRECONDITION("Valid class factory", factory != 0);
   PRECONDITION("Valid root", root != 0);
 
-  OMStoredObject* store = OMStoredObject::createModify(fileName);
+  OMStoredObject* store = OMStoredObject::createModify(fileName, byteOrder);
   OMFile* newFile = new OMFile(modifyMode, store, factory, root);
   ASSERT("Valid heap pointer", newFile != 0);
   return newFile;
 }
 
 OMFile* OMFile::createTransient(const OMClassFactory* factory,
+                                const OMByteOrder byteOrder,
                                 OMStorable* root)
 {
   TRACE("OMFile::createTransient");
@@ -176,6 +179,12 @@ OMObjectDirectory* OMFile::objectDirectory(void)
     ASSERT("Valid heap pointer", _objectDirectory != 0);
   }
   return _objectDirectory;
+}
+
+OMByteOrder OMFile::byteOrder(void) const
+{
+  ASSERT("Valid root", _rootStoredObject != 0);
+  return _rootStoredObject->byteOrder();
 }
 
 const OMClassId& OMFile::classId(void) const
