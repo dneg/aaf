@@ -31,6 +31,8 @@
 #include "ImplAAFSequence.h"
 
 #include "AAFStoredObjectIDs.h"
+#include "AAFClassIDs.h"
+#include "ImplAAFObjectCreation.h"
 
 
 ImplAAFSegment::ImplAAFSegment ()
@@ -160,18 +162,23 @@ AAFRESULT ImplAAFSegment::TraverseToClip(aafLength_t length,
 
 AAFRESULT ImplAAFSegment::GenerateSequence(ImplAAFSequence **seq)
 {
-	ImplAAFSequence	*tmp;
+	ImplAAFSequence	*tmp = NULL;
 // ***	ImplAAFDataDef	*datakind;
 				
 	XPROTECT( )
 	{
 // ***	CHECK(GetDatakind(&datakind));
-		tmp = new ImplAAFSequence();
+    tmp = (ImplAAFSequence *)CreateImpl(CLSID_AAFSequence);
+    if (NULL == tmp)
+      RAISE(AAFRESULT_NOMEMORY);
+
 		CHECK(tmp->AppendComponent(this));
 		*seq = tmp;
 	} /* XPROTECT */
 	XEXCEPT
 	{
+    if (tmp)
+      tmp->ReleaseReference();
 	}
 	XEND;
 
