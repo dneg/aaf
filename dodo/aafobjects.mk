@@ -38,8 +38,9 @@ AAFCOMINTERFACESONLY="\
 	AAFMob2 \
 	AAFTimelineMobSlot2 \
 	AAFComponent2 \
-	AAFDictionary2 "
-
+	AAFDictionary2 \
+	AAFSourceReference2 \
+	AAFMasterMob2 "
 
 # These are the impl files that are typed by humans.  Be sure to
 # remove them from the other list.  As you check each one in, just add
@@ -172,8 +173,9 @@ HUMAN_TYPED_IMPL="\
 	AAFTaggedValueDefinition \
 	AAFKLVDataDefinition \
 	EnumAAFTaggedValueDefs \
-	EnumAAFKLVDataDefs "
-
+	EnumAAFKLVDataDefs \
+	AAFRecordingDescriptor \
+	AAFAuxillaryDescriptor "
 
 # Defered interfaces
 #	AAFIntraFrameMarker \

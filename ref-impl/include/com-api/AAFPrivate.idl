@@ -101,6 +101,7 @@ interface IAAFRoot : IUnknown
 // Objects that implement IAAFHTMLClip also implement the following interfaces:
 //  - IAAFTextClip
 //  - IAAFSourceReference
+//  - IAAFSourceReference2
 //  - IAAFSegment
 //  - IAAFComponent
 //  - IAAFComponent2
@@ -530,6 +531,7 @@ interface IAAFStrongRefValue : IUnknown
 //
 // Objects that implement IAAFTextClip also implement the following interfaces:
 //  - IAAFSourceReference
+//  - IAAFSourceReference2
 //  - IAAFSegment
 //  - IAAFComponent
 //  - IAAFComponent2

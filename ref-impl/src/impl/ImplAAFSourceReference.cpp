@@ -107,6 +107,34 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFSourceReference::SetChannelIDs (
+      aafUInt32  /*numberElements*/,
+      aafUInt32*  /*pChannelIDs*/)
+{
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFSourceReference::GetChannelIDs (
+      aafUInt32  /*numberElements*/,
+      aafUInt32*  /*pChannelIDs*/)
+{
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFSourceReference::GetChannelIDsSize (
+      aafUInt32 *  /*numberElements*/)
+{
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+
+
 AAFRESULT ImplAAFSourceReference::ChangeContainedReferences(aafMobID_constref from,
 															aafMobID_constref to)
 {

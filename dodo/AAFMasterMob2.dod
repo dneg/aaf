@@ -22,7 +22,7 @@
 #c
 #c *********************************************************************
 #startm .this-module 0
-AAFMasterMob\
+AAFMasterMob2\
 #endm
 #c
 #startm .parent-module 0
@@ -31,9 +31,6 @@ AAFMob\
 #c
 #c #import ./AAFObject.exp
 #c #import ./AAFMob.exp
-#import ./AAFSearchSource.exp
-#import ./AAFMasterMobEx.exp
-#import ./AAFMasterMob2.exp
 AD_HEAD
 AD_IDL(//
 // The IAAFMasterMob interface is implemented by objects which provide
@@ -55,11 +52,16 @@ AD_FORWARD_DECLARATION(AAFComponent)
 AD_FORWARD_DECLARATION(AAFDataDef)
 AD_FORWARD_DECLARATION(AAFFindSourceInfo)
 AD_FORWARD_DECLARATION(AAFEssenceAccess)
-AD_CLASS_UUID(b1a21373, 1a7d, 11d2, bf, 78, 00, 10, 4b, c9, 15, 6d)
 
-AD_DEFAULT_UUID(b1a21372, 1a7d, 11d2, bf, 78, 00, 10, 4b, c9, 15, 6d)
-#c AD_XCLASS_BEGIN(Concrete, StoredObject)
-AD_COM_EXT3_CLASS_BEGIN(public IAAFSearchSource,public IAAFMasterMobEx,public IAAFMasterMob2)
+AD_CLASS_UUID(b0cd13c9, 1e72, 4e37, 99, ff, b8, 2c, c9, 72, 80, c2)
+
+AD_DEFAULT_UUID(afcffd2c, 279b, 466f, a4, 96, 55, cb, dc, c1, 75, 31)
+AD_XCLASS_BEGIN(Concrete, StoredObject)
+
+#c
+#c Original MasterMob methods
+#c
+
 AD_METHOD0(Initialize,
      Initializes a newly allocated\, empty IAAFMasterMob-supporting
   // object.  This method must be called after allocation\, and before
@@ -631,23 +633,72 @@ AD_XMETHOD4(CountChannels,
   // essence types not handled by a given codec\, and handles codecs
   // which work with multiple essence types.)
 
-#c
-#c SearchSource methods
-#c
-
-AD_COM_METH(.method-SearchSource)
 
 #c
 #c MasterMobEx methods
 #c
-AD_COM_METH(.method-ExtendEssence)
-AD_COM_METH(.method-ExtendMultiEssence)
+
+
+AD_XMETHOD9(ExtendEssence,
+[in],objPass, aafSlotID_t,masterSlotID,,
+[in],objIn, AAFDataDef,pMediaKind,create essence of this type,
+[in\, ref],objPass, aafUID_constref,codecID,using this codec,
+[in],objPass, aafRational_t,editRate,with this edit rate,
+[in],objPass, aafRational_t,samplerate,with this sample rate,
+[in],enumIn, aafCompressEnable_t,Enable,optionally compressing it,
+[in],objIn, AAFLocator,destination,Optionally create the file HERE.,
+[in\, ref],objPass, aafUID_constref,fileFormat,with this format,
+[out],objOut, AAFEssenceAccess,access,Return an essence access on the essence.,
+      Extends a single stream of essence that was originally created using
+   // IAAFMasterMob::CreateEssence.  Extended essence is represented by
+   // a Sequence of SourceClip objects.  The first call to ExtendEssence will cause the
+   // TimelineMobSlot's SourceClip object to be replaced by a
+   // Sequence.  The initial SourceClip becomes the first
+   // component of the new Sequence.)
+
+
+AD_XMETHOD7(ExtendMultiEssence,
+[in\, ref],objPass, aafUID_constref,codecID,using this codec,
+[in],objPass, aafUInt16,arrayElemCount,this many channels,
+[in\,ref\,size_is\(arrayElemCount\)],objPass, aafmMultiCreate_t *,mediaArray,using these definitions,
+[in],enumIn, aafCompressEnable_t,Enable,optionally compressing it,
+[in],objIn,	  AAFLocator,destination,Optionally create the file HERE.,
+[in\, ref],objPass, aafUID_constref,fileFormat,with this format,
+[out],objPass, IAAFEssenceMultiAccess**,access,Return an essence access on the essence.,
+     Extends a multi-channel interleaved stream of essence that was
+   // originally created using IAAFMasterMob::CreateMultiEssence.
+   // Extended essence is represented by a Sequence of SourceClip objects.
+   // The first call to ExtendEssence will cause the TimelineMobSlot's SourceClip
+   // object to be replaced by a Sequence.  The initial SourceClip becomes the first
+   // component of the new Sequence.)
 
 #c
-#c MasterMob2 methods
+#c New MasterMob2 methods
 #c
-AD_COM_METH(.method-CreateStaticEssence)
-AD_COM_METH(.method-CreateEventEssence)
 
-#c AD_XCLASS_END(Concrete, StoredObject)
-AD_COM_EXT3_CLASS_END(AAFSearchSource, AAFMasterMobEx, AAFMasterMob2)
+AD_XMETHOD7(CreateStaticEssence,
+[in],objPass, aafSlotID_t,masterSlotID,,
+[in],objIn, AAFDataDef,pMediaKind,create essence of this type,
+[in\, ref],objPass, aafUID_constref,codecID,using this codec,
+[in],enumIn, aafCompressEnable_t,Enable,optionally compressing it,
+[in],objIn,	  AAFLocator,destination,Optionally create the file HERE.,
+[in\, ref],objPass, aafUID_constref,fileFormat,with this format,
+[out],objOut, AAFEssenceAccess,access,Return an essence access on the essence.,
+
+     Creates and initializes the objects required to represent static essence.)
+
+AD_XMETHOD9(CreateEventEssence,
+[in],objPass, aafSlotID_t,masterSlotID,,
+[in],objIn, AAFDataDef,pMediaKind,create essence of this type,
+[in\, ref],objPass, aafUID_constref,codecID,using this codec,
+[in],objPass, aafRational_t,editRate,with this edit rate,
+[in],objPass, aafRational_t,samplerate,with this sample rate,
+[in],enumIn, aafCompressEnable_t,Enable,optionally compressing it,
+[in],objIn,	  AAFLocator,destination,Optionally create the file HERE.,
+[in\, ref],objPass, aafUID_constref,fileFormat,with this format,
+[out],objOut, AAFEssenceAccess,access,Return an essence access on the essence.,
+
+     Creates and initializes the objects required to represent stream of events.)
+
+AD_XCLASS_END(Concrete, StoredObject)
+

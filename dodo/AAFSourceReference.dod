@@ -30,6 +30,7 @@ AAFSegment\
 #endm
 #c
 #c #import ./AAFSegment.dod
+#import ./AAFSourceReference2.exp
 AD_HEAD
 AD_IDL(//
 // The IAAFSourceReference interface is implemented by objects that
@@ -55,7 +56,7 @@ AD_IDL(//
 AD_CLASS_UUID(92B88034, 2B2B, 11d2, BF, 7E, 00, 10, 4B, C9, 15, 6D)
 
 AD_DEFAULT_UUID(92B88033, 2B2B, 11d2, BF, 7E, 00, 10, 4B, C9, 15, 6D)
-AD_XCLASS_BEGIN(Abstract, StoredObject)
+AD_COM_EXT_CLASS_BEGIN(public IAAFSourceReference2)
 AD_XMETHOD1(GetSourceID,
 			[retval][out],
 			objPass,
@@ -147,4 +148,13 @@ AD_XMETHOD1(SetSourceMobSlotID,
   //   - succeeded.  \(This is the only code indicating success.\)
   //
   // \(other error codes here.\))
-AD_XCLASS_END(Abstract, StoredObject)
+
+#c
+#c SourceReference2 methods
+#c
+
+AD_COM_METH(.method-SetChannelIDs)
+AD_COM_METH(.method-GetChannelIDs)
+AD_COM_METH(.method-GetChannelIDsSize)
+
+AD_COM_EXT_CLASS_END(AAFSourceReference2)

@@ -81,6 +81,39 @@ public:
 		// @parm [in] Source Mob ID to set
         (aafSlotID_t   mobSlotID);
 
+
+  //****************
+  // SetChannelIDs()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    SetChannelIDs
+        (// @parm [in] Number of elements in the pChannelIDs array
+         aafUInt32  numberElements,
+
+         // @parm [in] Array of channel IDs
+         aafUInt32*  pChannelIDs);
+
+
+  //****************
+  // GetChannelIDs()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetChannelIDs
+        (// @parm [in] Number of elements in the pChannelIDs array
+         aafUInt32  numberElements,
+
+         // @parm [in] Array of channel IDs
+         aafUInt32*  pChannelIDs);
+
+  //****************
+  // GetChannelIDsSize()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetChannelIDsSize
+        // @parm [out] Number of elements in the pChannelIDs array
+        (aafUInt32 *  numberElements);
+
+
 public:
 	//SDK-private
 

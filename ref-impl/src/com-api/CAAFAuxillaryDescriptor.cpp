@@ -26,8 +26,8 @@
 
 
 
-#include "CAAFSourceReference.h"
-#include "ImplAAFSourceReference.h"
+#include "CAAFAuxillaryDescriptor.h"
+#include "ImplAAFAuxillaryDescriptor.h"
 #include "AAFResult.h"
 #include "CAAFEnumValidation.h"
 
@@ -38,48 +38,101 @@
 #include <string.h>
 
 
-// CLSID for AAFSourceReference 
-// {92B88034-2B2B-11d2-BF7E-00104BC9156D}
-EXTERN_C const CLSID CLSID_AAFSourceReference = { 0x92B88034, 0x2B2B, 0x11d2, { 0xBF, 0x7E, 0x00, 0x10, 0x4B, 0xC9, 0x15, 0x6D } };
+
+
+
+// CLSID for AAFAuxillaryDescriptor 
+// {989d79d1-9aca-43f6-8be1-03ad2ad075d5}
+EXTERN_C const CLSID CLSID_AAFAuxillaryDescriptor = { 0x989d79d1, 0x9aca, 0x43f6, { 0x8b, 0xe1, 0x03, 0xad, 0x2a, 0xd0, 0x75, 0xd5 } };
 
 
 
 
 
-CAAFSourceReference::CAAFSourceReference (IUnknown * pControllingUnknown, aafBool doInit)
-  : CAAFSegment (pControllingUnknown, kAAFFalse)
+
+CAAFAuxillaryDescriptor::CAAFAuxillaryDescriptor (IUnknown * pControllingUnknown, aafBool doInit)
+  : CAAFPhysicalDescriptor (pControllingUnknown, kAAFFalse)
 {
   if (doInit)
     {
-      ImplAAFSourceReference * newRep;
-      newRep = new ImplAAFSourceReference;
+      ImplAAFAuxillaryDescriptor * newRep;
+      newRep = new ImplAAFAuxillaryDescriptor;
       assert (newRep);
       InitRep (newRep);
     }
 }
 
 
-CAAFSourceReference::~CAAFSourceReference ()
+CAAFAuxillaryDescriptor::~CAAFAuxillaryDescriptor ()
 {
 }
 
-HRESULT STDMETHODCALLTYPE
-    CAAFSourceReference::GetSourceID (aafMobID_t *  pSourceID)
-{
-  HRESULT hr;
 
-  ImplAAFSourceReference * ptr;
+HRESULT STDMETHODCALLTYPE
+    CAAFAuxillaryDescriptor::Initialize ()
+{
+  ImplAAFAuxillaryDescriptor * ptr;
   ImplAAFRoot * pO;
   pO = GetRepObject ();
   assert (pO);
-  ptr = static_cast<ImplAAFSourceReference*> (pO);
+  ptr = static_cast<ImplAAFAuxillaryDescriptor*> (pO);
+  assert (ptr);
+  HRESULT hr;
+
+  try
+    {
+      hr = ptr->Initialize();
+    }
+  catch (OMException& e)
+    {
+      // OMExceptions should be handled by the impl code. However, if an
+      // unhandled OMException occurs, control reaches here. We must not
+      // allow the unhandled exception to reach the client code, so we
+      // turn it into a failure status code.
+      //
+      // If the OMException contains an HRESULT, it is returned to the
+      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
+      //
+      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
+    }
+  catch (OMAssertionViolation &)
+    {
+      // Control reaches here if there is a programming error in the
+      // impl code that was detected by an assertion violation.
+      // We must not allow the assertion to reach the client code so
+      // here we turn it into a failure status code.
+      //
+      hr = AAFRESULT_ASSERTION_VIOLATION;
+    }
+  catch (...)
+    {
+      // We CANNOT throw an exception out of a COM interface method!
+      // Return a reasonable exception code.
+      //
+      hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+    }
+
+  return hr;
+}
+
+
+HRESULT STDMETHODCALLTYPE
+    CAAFAuxillaryDescriptor::SetMimeType (aafCharacter_constptr  pMimeType)
+{
+  HRESULT hr;
+
+  ImplAAFAuxillaryDescriptor * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAAFAuxillaryDescriptor*> (pO);
   assert (ptr);
 
 
   try
     {
-      hr = ptr->GetSourceID
-       (pSourceID);
+      hr = ptr->SetMimeType
+       (pMimeType);
     }
   catch (OMException& e)
     {
@@ -116,22 +169,24 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFSourceReference::SetSourceID (aafMobID_constref   sourceID)
+    CAAFAuxillaryDescriptor::GetMimeType (aafCharacter *  pMimeType,
+        aafUInt32  bufSize)
 {
   HRESULT hr;
 
-  ImplAAFSourceReference * ptr;
+  ImplAAFAuxillaryDescriptor * ptr;
   ImplAAFRoot * pO;
   pO = GetRepObject ();
   assert (pO);
-  ptr = static_cast<ImplAAFSourceReference*> (pO);
+  ptr = static_cast<ImplAAFAuxillaryDescriptor*> (pO);
   assert (ptr);
 
 
   try
     {
-      hr = ptr->SetSourceID
-       (sourceID);
+      hr = ptr->GetMimeType
+       (pMimeType,
+        bufSize);
     }
   catch (OMException& e)
     {
@@ -168,22 +223,73 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFSourceReference::GetSourceMobSlotID (aafSlotID_t *  pMobSlotID)
+    CAAFAuxillaryDescriptor::GetMimeTypeBufLen (aafUInt32 *  pBufSize)
 {
   HRESULT hr;
 
-  ImplAAFSourceReference * ptr;
+  ImplAAFAuxillaryDescriptor * ptr;
   ImplAAFRoot * pO;
   pO = GetRepObject ();
   assert (pO);
-  ptr = static_cast<ImplAAFSourceReference*> (pO);
+  ptr = static_cast<ImplAAFAuxillaryDescriptor*> (pO);
   assert (ptr);
 
 
   try
     {
-      hr = ptr->GetSourceMobSlotID
-       (pMobSlotID);
+      hr = ptr->GetMimeTypeBufLen
+       (pBufSize);
+    }
+  catch (OMException& e)
+    {
+      // OMExceptions should be handled by the impl code. However, if an
+      // unhandled OMException occurs, control reaches here. We must not
+      // allow the unhandled exception to reach the client code, so we
+      // turn it into a failure status code.
+      //
+      // If the OMException contains an HRESULT, it is returned to the
+      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
+      //
+      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
+    }
+  catch (OMAssertionViolation &)
+    {
+      // Control reaches here if there is a programming error in the
+      // impl code that was detected by an assertion violation.
+      // We must not allow the assertion to reach the client code so
+      // here we turn it into a failure status code.
+      //
+      hr = AAFRESULT_ASSERTION_VIOLATION;
+    }
+  catch (...)
+    {
+      // We CANNOT throw an exception out of a COM interface method!
+      // Return a reasonable exception code.
+      //
+      hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+    }
+
+  return hr;
+}
+
+
+HRESULT STDMETHODCALLTYPE
+    CAAFAuxillaryDescriptor::SetCharSet (aafCharacter_constptr  pCharSet)
+{
+  HRESULT hr;
+
+  ImplAAFAuxillaryDescriptor * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAAFAuxillaryDescriptor*> (pO);
+  assert (ptr);
+
+
+  try
+    {
+      hr = ptr->SetCharSet
+       (pCharSet);
     }
   catch (OMException& e)
     {
@@ -220,22 +326,24 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFSourceReference::SetSourceMobSlotID (aafSlotID_t   mobSlotID)
+    CAAFAuxillaryDescriptor::GetCharSet (aafCharacter *  pCharSet,
+        aafUInt32  bufSize)
 {
   HRESULT hr;
 
-  ImplAAFSourceReference * ptr;
+  ImplAAFAuxillaryDescriptor * ptr;
   ImplAAFRoot * pO;
   pO = GetRepObject ();
   assert (pO);
-  ptr = static_cast<ImplAAFSourceReference*> (pO);
+  ptr = static_cast<ImplAAFAuxillaryDescriptor*> (pO);
   assert (ptr);
 
 
   try
     {
-      hr = ptr->SetSourceMobSlotID
-       (mobSlotID);
+      hr = ptr->GetCharSet
+       (pCharSet,
+        bufSize);
     }
   catch (OMException& e)
     {
@@ -272,65 +380,51 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFSourceReference::SetChannelIDs (aafUInt32  numberElements,
-        aafUInt32*  pChannelIDs)
+    CAAFAuxillaryDescriptor::GetCharSetBufLen (aafUInt32 *  pBufSize)
 {
   HRESULT hr;
 
-  ImplAAFSourceReference * ptr;
+  ImplAAFAuxillaryDescriptor * ptr;
   ImplAAFRoot * pO;
   pO = GetRepObject ();
   assert (pO);
-  ptr = static_cast<ImplAAFSourceReference*> (pO);
+  ptr = static_cast<ImplAAFAuxillaryDescriptor*> (pO);
   assert (ptr);
 
 
-
-  hr = ptr->SetChannelIDs (numberElements,
-    pChannelIDs);
-
-
-  return hr;
-}
-
-
-HRESULT STDMETHODCALLTYPE
-    CAAFSourceReference::GetChannelIDs (aafUInt32  numberElements,
-        aafUInt32*  pChannelIDs)
-{
-  HRESULT hr;
-
-  ImplAAFSourceReference * ptr;
-  ImplAAFRoot * pO;
-  pO = GetRepObject ();
-  assert (pO);
-  ptr = static_cast<ImplAAFSourceReference*> (pO);
-  assert (ptr);
-
-
-
-  hr = ptr->GetChannelIDs (numberElements,
-    pChannelIDs);
-
-
-  return hr;
-}
-
-
-HRESULT STDMETHODCALLTYPE
-    CAAFSourceReference::GetChannelIDsSize (aafUInt32 *  numberElements)
-{
-  HRESULT hr;
-
-  ImplAAFSourceReference * ptr;
-  ImplAAFRoot * pO;
-  pO = GetRepObject ();
-  assert (pO);
-  ptr = static_cast<ImplAAFSourceReference*> (pO);
-  assert (ptr);
-
-
-  hr = ptr->GetChannelIDsSize (numberElements);
+  try
+    {
+      hr = ptr->GetCharSetBufLen
+       (pBufSize);
+    }
+  catch (OMException& e)
+    {
+      // OMExceptions should be handled by the impl code. However, if an
+      // unhandled OMException occurs, control reaches here. We must not
+      // allow the unhandled exception to reach the client code, so we
+      // turn it into a failure status code.
+      //
+      // If the OMException contains an HRESULT, it is returned to the
+      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
+      //
+      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
+    }
+  catch (OMAssertionViolation &)
+    {
+      // Control reaches here if there is a programming error in the
+      // impl code that was detected by an assertion violation.
+      // We must not allow the assertion to reach the client code so
+      // here we turn it into a failure status code.
+      //
+      hr = AAFRESULT_ASSERTION_VIOLATION;
+    }
+  catch (...)
+    {
+      // We CANNOT throw an exception out of a COM interface method!
+      // Return a reasonable exception code.
+      //
+      hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+    }
 
   return hr;
 }
@@ -343,36 +437,28 @@ inline int EQUAL_UID(const GUID & a, const GUID & b)
 {
   return (0 == memcmp((&a), (&b), sizeof (aafUID_t)));
 }
-HRESULT CAAFSourceReference::InternalQueryInterface
+HRESULT CAAFAuxillaryDescriptor::InternalQueryInterface
 (
     REFIID riid,
     void **ppvObj)
 {
-    HRESULT hr = S_OK;
-
     if (NULL == ppvObj)
         return E_INVALIDARG;
 
     // We only support the IClassFactory interface 
-    if (EQUAL_UID(riid,IID_IAAFSourceReference)) 
+    if (EQUAL_UID(riid,IID_IAAFAuxillaryDescriptor)) 
     { 
-        *ppvObj = (IAAFSourceReference *)this; 
-        ((IUnknown *)*ppvObj)->AddRef();
-        return S_OK;
-    }
-
-    if (EQUAL_UID(riid,IID_IAAFSourceReference2)) 
-    { 
-        *ppvObj = (IAAFSourceReference2 *)this; 
+        *ppvObj = (IAAFAuxillaryDescriptor *)this; 
         ((IUnknown *)*ppvObj)->AddRef();
         return S_OK;
     }
 
     // Always delegate back to base implementation.
-    return CAAFSegment::InternalQueryInterface(riid, ppvObj);
+    return CAAFPhysicalDescriptor::InternalQueryInterface(riid, ppvObj);
 }
 
 //
 // Define the contrete object support implementation.
 // 
-AAF_DEFINE_FACTORY(AAFSourceReference)
+AAF_DEFINE_FACTORY(AAFAuxillaryDescriptor)
+

@@ -1189,3 +1189,31 @@ AAFRESULT STDMETHODCALLTYPE
 	// 	Standard errors (see top of file).
 	// 	AAFRESULT_NOMEMORY -- couldn't allocate memory for the essence handle
 	//@comm Replaces omfmMediaMultiOpen*/
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFMasterMob::CreateStaticEssence (aafSlotID_t  /*masterSlotID*/,
+                           ImplAAFDataDef * /*pMediaKind*/,
+                           aafUID_constref  /*codecID*/,
+                           aafCompressEnable_t  /*Enable*/,
+                           ImplAAFLocator * /*destination*/,
+                           aafUID_constref  /*fileFormat*/,
+                           ImplAAFEssenceAccess ** /*access*/)
+{
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFMasterMob::CreateEventEssence (aafSlotID_t  /*masterSlotID*/,
+                           ImplAAFDataDef * /*pMediaKind*/,
+                           aafUID_constref  /*codecID*/,
+                           aafRational_t  /*editRate*/,
+                           aafRational_t  /*samplerate*/,
+                           aafCompressEnable_t  /*Enable*/,
+                           ImplAAFLocator * /*destination*/,
+                           aafUID_constref  /*fileFormat*/,
+                           ImplAAFEssenceAccess ** /*access*/)
+{
+  return AAFRESULT_NOT_IMPLEMENTED;
+}

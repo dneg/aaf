@@ -1,0 +1,77 @@
+#c *********************************************************************
+#c
+#c $Id$ $Name$
+#c
+#c The contents of this file are subject to the AAF SDK Public
+#c Source License Agreement (the "License"); You may not use this file
+#c except in compliance with the License.  The License is available in
+#c AAFSDKPSL.TXT, or you may obtain a copy of the License from the AAF
+#c Association or its successor.
+#c 
+#c Software distributed under the License is distributed on an "AS IS"
+#c basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.  See
+#c the License for the specific language governing rights and limitations
+#c under the License.
+#c 
+#c The Original Code of this file is Copyright 1998-2004, Licensor of the
+#c AAF Association.
+#c 
+#c The Initial Developer of the Original Code of this file and the
+#c Licensor of the AAF Association is Avid Technology.
+#c All rights reserved.
+#c
+#c *********************************************************************
+#startm .this-module 0
+AAFAuxillaryDescriptor\
+#endm
+#c
+#startm .parent-module 0
+AAFPhysicalDescriptor\
+#endm
+#c
+AD_HEAD
+AD_INCLUDE(AAFTypes)
+AD_IDL(//
+// The IAAFAuxillaryDescriptor interface is implemented by objects that
+// describe a file source which has no physical source.
+//
+// In addition to the specific error results listed for each method\,
+// all methods in this interface may also return one of the following
+// values:
+// 
+// AAFRESULT_NOMEMORY
+//   - insufficient system memory is available to perform the
+//     operation.
+//)
+
+
+AD_CLASS_UUID(989d79d1, 9aca, 43f6, 8b, e1, 03, ad, 2a, d0, 75, d5)
+
+AD_DEFAULT_UUID(197a9cb2, 48de, 40a3, b9, 65, 59, 53, 1d, 3f, cf, 23)
+
+AD_XCLASS_BEGIN(Concrete, StoredObject)
+AD_METHOD0(Initialize,
+		   Initializes a newly allocated\, empty
+  // IAAFAuxillaryDescriptor object.  This method must be called
+  // after allocation\, and before any other method can be called.
+  //
+  // Succeeds if:
+  // - Initialize\(\) has not yet been called on this object.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_ALREADY_INITIALIZED
+  //   - Initialize\(\) has already been called on this object.)
+
+AD_STD_METHOD_STRING_MULTI_SET_GET_SIZE(MimeType,
+     The registered mime type of the data per RFC 2046 and RFC 2048.)
+
+AD_STD_METHOD_STRING_MULTI_SET_GET_SIZE(CharSet,
+     The registered character set per RFC 2048.)
+
+AD_XCLASS_END(Concrete, StoredObject)

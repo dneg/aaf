@@ -49,6 +49,7 @@
 #include "CAAFMob.h"
 #endif
 
+
 //
 // Forward declaration
 //
@@ -58,7 +59,8 @@ class ImplAAFMasterMob;
 class CAAFMasterMob
   : public IAAFMasterMob,
     public IAAFSearchSource,
-	public IAAFMasterMobEx,
+    public IAAFMasterMobEx,
+    public IAAFMasterMob2,
     public CAAFMob
 {
 protected:
@@ -765,6 +767,7 @@ public:
     IAAFFindSourceInfo ** ppSourceInfo
   );
 
+
   //***********************************************************
   // METHOD NAME: ExtendEssence()
   //
@@ -844,6 +847,78 @@ public:
     // @parm [out] IAAFEssenceMultiAccess** | access | Return an essence access on the essence.
     IAAFEssenceMultiAccess**  access
   );
+
+
+  //***********************************************************
+  // METHOD NAME: CreateStaticEssence()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFMasterMob | CreateStaticEssence |
+  // Creates and initializes the objects required to represent static essence.
+  // @end
+  // 
+  STDMETHOD (CreateStaticEssence)
+   (
+    // @parm [in] aafSlotID_t | masterSlotID | 
+    aafSlotID_t  masterSlotID,
+
+    // @parm [in] AAFDataDef | pMediaKind | create essence of this type
+    IAAFDataDef * pMediaKind,
+
+    // @parm [in, ref] aafUID_constref | codecID | using this codec
+    aafUID_constref  codecID,
+
+    // @parm [in] aafCompressEnable_t | Enable | optionally compressing it
+    aafCompressEnable_t  Enable,
+
+    // @parm [in] AAFLocator | destination | Optionally create the file HERE.
+    IAAFLocator * destination,
+
+    // @parm [in, ref] aafUID_constref | fileFormat | with this format
+    aafUID_constref  fileFormat,
+
+    // @parm [out] AAFEssenceAccess | access | Return an essence access on the essence.
+    IAAFEssenceAccess ** access
+  );
+
+  //***********************************************************
+  // METHOD NAME: CreateEventEssence()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFMasterMob | CreateEventEssence |
+  // Creates and initializes the objects required to represent stream of events.
+  // @end
+  // 
+  STDMETHOD (CreateEventEssence)
+   (
+    // @parm [in] aafSlotID_t | masterSlotID | 
+    aafSlotID_t  masterSlotID,
+
+    // @parm [in] AAFDataDef | pMediaKind | create essence of this type
+    IAAFDataDef * pMediaKind,
+
+    // @parm [in, ref] aafUID_constref | codecID | using this codec
+    aafUID_constref  codecID,
+
+    // @parm [in] aafRational_t | editRate | with this edit rate
+    aafRational_t  editRate,
+
+    // @parm [in] aafRational_t | samplerate | with this sample rate
+    aafRational_t  samplerate,
+
+    // @parm [in] aafCompressEnable_t | Enable | optionally compressing it
+    aafCompressEnable_t  Enable,
+
+    // @parm [in] AAFLocator | destination | Optionally create the file HERE.
+    IAAFLocator * destination,
+
+    // @parm [in, ref] aafUID_constref | fileFormat | with this format
+    aafUID_constref  fileFormat,
+
+    // @parm [out] AAFEssenceAccess | access | Return an essence access on the essence.
+    IAAFEssenceAccess ** access
+  );
+
 
 
 protected:

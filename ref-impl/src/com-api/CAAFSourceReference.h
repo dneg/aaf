@@ -46,6 +46,7 @@
 
 class CAAFSourceReference
   : public IAAFSourceReference,
+    public IAAFSourceReference2,
     public CAAFSegment
 {
 protected:
@@ -58,7 +59,6 @@ protected:
   virtual ~CAAFSourceReference ();
 
 public:
-
 
   //***********************************************************
   //
@@ -156,6 +156,92 @@ public:
     // Source Mob ID to set 
     /*[in]*/ aafSlotID_t   mobSlotID);
 
+
+  //***********************************************************
+  // METHOD NAME: SetChannelIDs()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFSourceReference2 | SetChannelIDs |
+  // Specify the channels in a slot that are referenced. The first channel has
+// and ID of 1, the N'th channel has an ID of N.  The number of channel IDs
+// shall equal the number of channels being described the bht MobSlot containing
+// the SourceReference, e.g. 1 element for a mono audio slot, 6 elements for a 5.1
+// multi-channel audio slot.
+// 
+// Return codes:
+//
+// AAFRESULT_SUCCESS
+//   - succeeded
+//
+// AAFRESULT_NULL_PARAM
+//   - pChannelIDs is null 
+  // @end
+  // 
+  STDMETHOD (SetChannelIDs)
+   (
+    // @parm [in] aafUInt32 | numberElements | Number of elements in the pChannelIDs array
+    aafUInt32  numberElements,
+
+    // @parm [in] aafUInt32* | pChannelIDs | Array of channel IDs
+    aafUInt32*  pChannelIDs
+  );
+
+  //***********************************************************
+  // METHOD NAME: GetChannelIDs()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFSourceReference2 | GetChannelIDs |
+  // // Get the channels in a slot that are referenced.  Refer to
+// SetChannelIDs for channel IDs description.
+// Return codes:
+//
+// AAFRESULT_SUCCESS
+//   - succeeded
+//
+// AAFRESULT_NULL_PARAM
+//   - pChannelIDs is null
+//
+// AAFRESULT_PROP_NOT_PRESENT
+//   - the property is not present
+//
+// AAFRESULT_SMALLBUF
+//   - pChannelIDs is too small
+  // @end
+  // 
+  STDMETHOD (GetChannelIDs)
+   (
+    // @parm [in] aafUInt32 | numberElements | Number of elements in the pChannelIDs array
+    aafUInt32  numberElements,
+
+    // @parm [in] aafUInt32* | pChannelIDs | Array of channel IDs
+    aafUInt32*  pChannelIDs
+  );
+
+  //***********************************************************
+  // METHOD NAME: GetChannelIDsSize()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFSourceReference2 | GetChannelIDsSize |
+  // // Get the number of channel IDs stored by this SourceReference.
+//
+// AAFRESULT_SUCCESS
+//   - succeeded
+//
+// AAFRESULT_NULL_PARAM
+//   - pChannelIDs is null
+//
+// AAFRESULT_PROP_NOT_PRESENT
+//   - the property is not present
+  // @end
+  // 
+  STDMETHOD (GetChannelIDsSize)
+   (
+    // @parm [out] aafUInt32 * | numberElements | Number of elements in the pChannelIDs array
+    aafUInt32 *  numberElements
+  );
+
+
+
 protected:
   // 
   // Declare the QI that implements for the interfaces
@@ -176,5 +262,4 @@ public:
 };
 
 #endif // ! __CAAFSourceReference_h__
-
 

@@ -452,6 +452,79 @@ public:
 	// which work with multiple essence types.
 	//@comm Replaces omfmGetNumChannels*/
 
+
+  //***********************************************************
+  // METHOD NAME: CreateStaticEssence()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFMasterMob2 | CreateStaticEssence |
+  // Creates and initializes the objects required to represent static essence.
+  // @end
+  // 
+  virtual AAFRESULT STDMETHODCALLTYPE
+  CreateStaticEssence (
+    // @parm [in] aafSlotID_t | masterSlotID | 
+    aafSlotID_t  masterSlotID,
+
+    // @parm [in] AAFDataDef | pMediaKind | create essence of this type
+    ImplAAFDataDef * pMediaKind,
+
+    // @parm [in, ref] aafUID_constref | codecID | using this codec
+    aafUID_constref  codecID,
+
+    // @parm [in] aafCompressEnable_t | Enable | optionally compressing it
+    aafCompressEnable_t  Enable,
+
+    // @parm [in] AAFLocator | destination | Optionally create the file HERE.
+    ImplAAFLocator * destination,
+
+    // @parm [in, ref] aafUID_constref | fileFormat | with this format
+    aafUID_constref  fileFormat,
+
+    // @parm [out] AAFEssenceAccess | access | Return an essence access on the essence.
+    ImplAAFEssenceAccess ** access
+  );
+
+  //***********************************************************
+  // METHOD NAME: CreateEventEssence()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFMasterMob2 | CreateEventEssence |
+  // Creates and initializes the objects required to represent stream of events.
+  // @end
+  // 
+  virtual AAFRESULT STDMETHODCALLTYPE
+  CreateEventEssence (
+    // @parm [in] aafSlotID_t | masterSlotID | 
+    aafSlotID_t  masterSlotID,
+
+    // @parm [in] AAFDataDef | pMediaKind | create essence of this type
+    ImplAAFDataDef * pMediaKind,
+
+    // @parm [in, ref] aafUID_constref | codecID | using this codec
+    aafUID_constref  codecID,
+
+    // @parm [in] aafRational_t | editRate | with this edit rate
+    aafRational_t  editRate,
+
+    // @parm [in] aafRational_t | samplerate | with this sample rate
+    aafRational_t  samplerate,
+
+    // @parm [in] aafCompressEnable_t | Enable | optionally compressing it
+    aafCompressEnable_t  Enable,
+
+    // @parm [in] AAFLocator | destination | Optionally create the file HERE.
+    ImplAAFLocator * destination,
+
+    // @parm [in, ref] aafUID_constref | fileFormat | with this format
+    aafUID_constref  fileFormat,
+
+    // @parm [out] AAFEssenceAccess | access | Return an essence access on the essence.
+    ImplAAFEssenceAccess ** access
+  );
+
+
+
 public:
 
   // Internal to the SDK
