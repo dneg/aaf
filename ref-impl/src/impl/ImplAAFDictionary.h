@@ -29,7 +29,7 @@ class ImplAAFEffectDef;
 
 class ImplEnumAAFEffectDefs;
 
-class ImplAAFPluggableDefinition;
+class ImplAAFPluggableDef;
 
 class ImplEnumAAFPluggableDefs;
 
@@ -229,6 +229,8 @@ public:
 
   virtual AAFRESULT
     GetNthPluggableDef (aafInt32 index, ImplAAFPluggableDef **ppEnum);
+
+  	AAFRESULT LookupPluggableDef(aafUID_t *containerID, ImplAAFPluggableDef **result);
 
 private:
     OMStrongReferenceVectorProperty<ImplAAFPluggableDef> _pluginDefinitions;
