@@ -128,8 +128,8 @@ ImplAAFMob::ImplAAFMob ()
 ImplAAFMob::~ImplAAFMob ()
 {
 	// Release all of the mob slot pointers.
-	size_t size = _slots.getSize();
-	for (size_t i = 0; i < size; i++)
+	size_t count = _slots.count();
+	for (size_t i = 0; i < count; i++)
 	{
 		ImplAAFMobSlot *pSlot = _slots.clearValueAt(i);
 		if (pSlot)
@@ -141,8 +141,8 @@ ImplAAFMob::~ImplAAFMob ()
 
 	if(_userComments.isPresent())
 	{
-		size = _userComments.getSize();
-		for (size_t j = 0; j < size; j++)
+		count = _userComments.count();
+		for (size_t j = 0; j < count; j++)
 		{
 			ImplAAFTaggedValue* pTaggedValue = _userComments.clearValueAt(j);
 			if (pTaggedValue)
@@ -152,8 +152,8 @@ ImplAAFMob::~ImplAAFMob ()
 	}
 	if(_KLVData.isPresent())
 	{
-		size = _KLVData.getSize();
-		for (size_t j = 0; j < size; j++)
+		count = _KLVData.count();
+		for (size_t j = 0; j < count; j++)
 		{
 			ImplAAFKLVData* pKLVData = _KLVData.clearValueAt(j);
 			if (pKLVData)
