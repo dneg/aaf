@@ -641,7 +641,7 @@ HRESULT Omf2Aaf::ConvertOMFDataDefinitionObject( OMF2::omfObject_t obj )
 	{
 		IAAFOperationDef*	pEffectDef = NULL;
 		rc = ConvertOMFEffectDefinition(obj, NULL, &pEffectDef);
-//		pEffectDef->Release();
+		pEffectDef->Release();
 	}
 	DecIndentLevel();
 	return rc;
@@ -2863,9 +2863,19 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 			OMFError = OMF2::omfeVideoRepeatGetInfo(OMFFileHdl, effect, &effectLength, &effectSegment, &phaseOffset);
 			if(OMF2::OM_ERR_NONE == OMFError)
 			{
-				rc = ProcessOMFComponent(effectSegment, &pEffectSegment);
-				if (SUCCEEDED(rc))
-					bFoundEffect = AAFTrue;
+				bFoundEffect = AAFTrue;
+				if (effectSegment)
+					rc = ProcessOMFComponent(effectSegment, &pEffectSegment);
+			}
+		}
+		else if (strcmp(effectID, "omfi:effect:VideoDissolve") == 0)
+		{
+			OMFError = OMF2::omfeVideoDissolveGetInfo(OMFFileHdl, effect, &effectLength, &effectSegment, NULL, NULL);
+			if(OMF2::OM_ERR_NONE == OMFError)
+			{
+				bFoundEffect = AAFTrue;
+				if (effectSegment)
+					rc = ProcessOMFComponent(effectSegment, &pEffectSegment);
 			}
 		}
 		else
@@ -2905,6 +2915,25 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 				pSourceRef->Release();
 			}
 			 
+		}
+		else if (OMF2::OM_ERR_PROP_NOT_PRESENT == OMFError)
+		{
+			// we need to add this code hear until optional arguments are implemented !!!
+			IAAFSourceReference*	pNULLSourceRef= NULL;
+			IAAFSourceClip*			pNULLSourceClip = NULL;
+			aafSourceRef_t			sourceRef;
+
+			rc = pDictionary->CreateInstance(&AUID_AAFSourceClip, IID_IAAFSourceClip, (IUnknown **)&pNULLSourceClip);
+			sourceRef.sourceID = zeroID;
+			sourceRef.sourceSlotID = 0;
+			sourceRef.startTime = 0;
+			pNULLSourceClip->Initialize (&effectAUID, &effectLength, sourceRef);
+			pNULLSourceClip->QueryInterface (IID_IAAFSourceReference, (void **)&pNULLSourceRef);
+			pEffect->SetRender(pNULLSourceRef);
+			pNULLSourceRef->Release();
+			pNULLSourceRef = NULL;
+			pNULLSourceClip->Release();
+			pNULLSourceClip = NULL;
 		}
 //		rc = SetEffectOptionalProperties(effect, pEffect, (aafLength_t)effectLength, effectAUID);
 	}
@@ -2971,6 +3000,7 @@ HRESULT Omf2Aaf::ConvertOMFEffectDefinition(OMF2::omfDDefObj_t	effectDef,
 			(*ppEffectDef)->QueryInterface(IID_IAAFDefObject, (void **)&pDefObject);
 			pDefObject->Init(&effectDefAUID, pwName, pwDesc);
 			pDefObject->Release();
+			pDefObject = NULL;
 			pDictionary->RegisterOperationDefinition(*ppEffectDef);
 			(*ppEffectDef)->SetIsTimeWarp((aafBool)isTimeWarp);
 			(*ppEffectDef)->SetCategory(pwName);
@@ -3039,12 +3069,14 @@ void Omf2Aaf::CreateParameterDefinition(IAAFOperationDef*	pEffectDef)
 		pParameterDef->QueryInterface(IID_IAAFDefObject, (void **)&pDefObject);
 		pDefObject->Init(&parameterDefAUID, pwName, pwDesc);
 		pDefObject->Release();
+		pDefObject = NULL;
 		pDictionary->RegisterParameterDefinition(pParameterDef);
 		UTLStrAToStrW("Not Specified", &pwDisplayUnits);
 		pParameterDef->SetDisplayUnits(pwDisplayUnits);
 		UTLMemoryFree(pwDisplayUnits);
 	}
 	pEffectDef->AddParameterDefs(pParameterDef);
+
 	pParameterDef->Release();
 	if (pwName)
 		UTLMemoryFree(pwName);
