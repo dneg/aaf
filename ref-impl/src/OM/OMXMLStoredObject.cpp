@@ -146,12 +146,6 @@ void OMXMLStoredObject::close(void)
   _store.synchronize();
 }
 
-void OMXMLStoredObject::close(OMFile& /* file */)
-{
-  TRACE("OMXMLStoredObject::close");
-  close();
-}
-
   // @mfunc The byte order of this <c OMXMLStoredObject>.
   //   @rdesc The byte order.
   //   @this const

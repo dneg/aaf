@@ -24,7 +24,6 @@
 // @author Tim Bingham | tjb | Avid Technology, Inc. | OMKLVStoredObject
 #include "OMKLVStoredObject.h"
 
-#include "OMUtilities.h"
 #include "OMRawStorage.h"
 
   // @mfunc Open the root <c OMKLVStoredObject> in the raw storage
@@ -121,12 +120,6 @@ OMStoredObject* OMKLVStoredObject::open(const wchar_t* /* name */)
 
   // @mfunc Close this <c OMKLVStoredObject>.
 void OMKLVStoredObject::close(void)
-{
-  TRACE("OMKLVStoredObject::close");
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
-}
-
-void OMKLVStoredObject::close(OMFile& /* file */)
 {
   TRACE("OMKLVStoredObject::close");
   ASSERT("Unimplemented code not reached", false); // tjb TBS

@@ -86,8 +86,6 @@ public:
     // @cmember Close this <c OMKLVStoredObject>.
   virtual void close(void);
 
-  virtual void close(OMFile& file);
-
     // @cmember The byte order of this <c OMKLVStoredObject>.
     //   @devnote This member function doesn't make sense for all
     //            derived instances of <c OMStoredObject>.
