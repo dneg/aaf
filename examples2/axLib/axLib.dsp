@@ -119,7 +119,7 @@ SOURCE=.\AxContentStorage.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\AxDictionary.cpp
+SOURCE=.\AxDefObject.cpp
 
 !IF  "$(CFG)" == "axLib - Win32 Release"
 
@@ -132,7 +132,7 @@ SOURCE=.\AxDictionary.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\AxDefObject.cpp
+SOURCE=.\AxDictionary.cpp
 
 !IF  "$(CFG)" == "axLib - Win32 Release"
 
@@ -301,6 +301,10 @@ SOURCE=.\AxObject.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\AxParameter.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\AxPluginMgr.cpp
 # End Source File
 # Begin Source File
@@ -403,11 +407,11 @@ SOURCE=.\AxContentStorage.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\AxDictionary.h
+SOURCE=.\AxDefObject.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\AxDefObject.h
+SOURCE=.\AxDictionary.h
 # End Source File
 # Begin Source File
 
@@ -456,6 +460,10 @@ SOURCE=.\AxMobSlot.h
 # Begin Source File
 
 SOURCE=.\AxObject.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\AxParameter.h
 # End Source File
 # Begin Source File
 
