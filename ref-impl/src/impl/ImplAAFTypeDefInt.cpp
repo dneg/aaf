@@ -659,4 +659,3 @@ OMProperty * ImplAAFTypeDefInt::pvtCreateOMPropertyMBS
 }
 
 
-OMDEFINE_STORABLE(ImplAAFTypeDefInt, AUID_AAFTypeDefInt)
