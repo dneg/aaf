@@ -3,7 +3,7 @@ AAFDataDefinition\
 #endm
 #c
 #startm .parent-module 0
-AAFObject\
+AAFDefinitionObject\
 #endm
 #c
 #import ./AAFUnitTest.exp
@@ -19,14 +19,18 @@ AD_HEAD
 
 /*************************************************************************
  * 
- * @class AAFDataDefinition | This class encapsulates the definition and  
- *		  functionality of AAF data kinds which are implemented as AUIDs.
+ * @class AAFDataDefinition | The AAFDataDefinition class identifies a   
+ *		  globally defined data kind.
  *
- * @base public | AAFObject
+ * @base public | AAFDefinitionObject
  *
  *************************************************************************/
 
 AD_CLASS_BEGIN
+
+AD_CONSTRUCTOR2([in],aafAuid_t,Auid,auid for this definition object,
+				[in],aafString_t, Name, Unique name of this Data definition,
+				Constructs and sets the AUID ad Name of this DataDefinition object.)
 
 AD_METHOD1(GetName,
 		   [retval][out],
