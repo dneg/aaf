@@ -51,32 +51,10 @@ AD_METHOD1(GetNumCpnts,
   // would not return the editRate property from a mob slot.
   // Additional functions are provided to return optional properties.)
 
-AD_METHOD3(SegmentOffsetToTC,
-		   [in],aafPosition_t  ,offset,,
-		   [out],aafTimecode_t *,tc   ,,
-		   [out],aafBool *      ,found,,
-		   )
-
-AD_METHOD4(SegmentTCToOffset,
-		   [in],aafTimecode_t     ,tc      ,,
-		   [in],aafRational_t     ,editRate,,
-		   [out],aafFrameOffset_t *,offset  ,,
-		   [out],aafBool *         ,found   ,,
-		   )
-
-AD_XMETHOD4(FindSubSegment,
-			[in],objPass,aafPosition_t  ,offset    ,,
-			[out],objPass,aafPosition_t *,sequPosPtr,,
-			[out],objOut,AAFSegment,subseg    ,,
-			[out],objPass,aafBool *      ,found     ,,
-		   )
-
-AD_XMETHOD3(OffsetToTimecodeClip,
-			[in],objPass,aafPosition_t  ,offset    ,,
-			[out],objOut,AAFTimecode,result    ,,
-			[out],objPass,aafPosition_t *,tcStartPos,,
-		   )
-
+AD_OVERRIDE(.method-FindSubSegment)
+AD_OVERRIDE(.method-SegmentOffsetToTC)
+AD_OVERRIDE(.method-SegmentTCToOffset)
+AD_OVERRIDE(.method-OffsetToTimecodeClip)
 AD_OVERRIDE(.method-Test)
 
 AD_CLASS_END
