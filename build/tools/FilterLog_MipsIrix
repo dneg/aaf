@@ -29,6 +29,7 @@ next if ( /^gmake/ );
 next if ( /^cd / );
 next if ( /^Building/ );
 next if ( /^Generating/ );
+next if ( /^Skipping/ );
 next if ( /^CC / );
 next if ( /^ CC / );
 next if ( /^cd / );
