@@ -78,7 +78,6 @@
 # $35     = column(AI)    => if this entity is a class and the class is
 #                            abstract, this field contains "abstract" otherwise
 #                            this field should be empty.
-#
 # $36     = column(AJ)    => if this entity is a property and the property is
 #                            unique identifier, this field contains "uid"
 #                            otherwise this field should be empty.
@@ -222,8 +221,9 @@ BEGIN {
   printf("//     type      = the type of the property [*]\n");
   printf("//     mandatory = true if the property is mandatory\n");
   printf("//                 false if the property is optional\n");
-  printf("//     uid       = true if the property is the unique identifier for this class\n");
-  printf("//                 false if the property is not the unique identifier for this class\n");
+  printf("//     uid       = true if the property is the unique identifier\n");
+  printf("//                 for this class, false if the property is not\n");
+  printf("//                 the unique identifier for this class\n");
   printf("//     container = the class that defines this property\n");
   printf("//\n");
   printf("// AAF_TYPE(type)\n");
@@ -641,22 +641,22 @@ BEGIN {
         printf("//\n");
       }
       if ($isMandatoryC != "") {
-        printError(sprintf("Illegal entry \"%s\" in column Z, for class \"%s\".\n", $isMandatoryC, class));
+        classError(class, isMandatoryC);
         errors++;
       }
       if ($className1C != $elementNameC) {
-        printError(sprintf("Illegal entry \"%s\" in column AD, for class \"%s\".\n", $className1C, class));
+        classError(class, className1C);
         errors++;
       }
       if ($referenceTypeC != "") {
-        printError(sprintf("Illegal entry \"%s\" in column AH, for class \"%s\".\n", $referenceTypeC, class));
+        classError(class, referenceTypeC);
         errors++;
       }
       concrete = "true";
       if ($isAbstractC == "abstract") {
         concrete = "false";
       } else if ($isAbstractC != "") {
-        printError(sprintf("Illegal entry \"%s\" in column AI, for class \"%s\".\n", $isAbstractC, class));
+        classError(class, isAbstractC);
         errors++;
       }
       # AAF_CLASS(name, id, parent)
@@ -717,7 +717,7 @@ BEGIN {
           # Special cases for weak reference vectors.
             printf("AAF_TYPE_DEFINITION_WEAK_REFERENCE_VECTOR(\n  AAF_REFERENCE_TYPE_NAME(%s, %s), %s,\n  AAF_TYPE(%s))\n", typeName, elementType, guid, elementType);
         } else {
-          printError(sprintf("Illegal entry \"%s\" in column X, for type \"%s\".\n", $qualifC, typeName));
+          typeError(typeName, qualifC);
           errors++;
         }
       } else if (kind == "record") {
@@ -751,7 +751,7 @@ BEGIN {
         } else if ($qualifC == "weak" ) {
           printf("AAF_TYPE_DEFINITION_WEAK_REFERENCE(\n  AAF_REFERENCE_TYPE_NAME(%s, %s), %s,\n  AAF_TYPE(%s))\n", typeName, targetType, guid, targetType);
         } else {
-          printError(sprintf("Illegal entry \"%s\" in column X, for type \"%s\".\n", $qualifC, typeName));
+          typeError(typeName, qualifC);
           errors++;
         }
       } else if (kind == "stream") {
@@ -803,14 +803,14 @@ BEGIN {
           # type = sprintf("AAF_%s(%s, %s)", reftype, type, $referenceTypeC);
           type = sprintf("AAF_REFERENCE_TYPE(%s, %s)", type, $referenceTypeC);
         } else {
-          printError(sprintf("Illegal entry \"%s\" in column AH, for property \"%s\" of class \"%s\".\n", $referenceTypeC, $elementNameC, class));
+          propertyError($elementNameC, class, referenceTypeC)
           errors++;
         }
       } else {
         if ($referenceTypeC == "") {
           type = sprintf("AAF_TYPE(%s)", type);
         } else {
-          printError(sprintf("Illegal entry \"%s\" in column AH, for property \"%s\" of class \"%s\".\n", $referenceTypeC, $elementNameC, class));
+          propertyError($elementNameC, class, referenceTypeC);
           errors++;
         }
       }
@@ -820,25 +820,26 @@ BEGIN {
       } else if ($isMandatoryC == "O") {
         mandatory = "false";
       } else {
-        printError(sprintf("Illegal entry \"%s\" in column Z, for property \"%s\" of class \"%s\".\n", $isMandatoryC , $elementNameC, class));
+        propertyError($elementNameC, class, isMandatoryC);
         errors++;
       }
       if ($parentC != class) {
-        printError(sprintf("Illegal entry \"%s\" in column AC, for property \"%s\" of class \"%s\".\n", $parentC, $elementNameC, class));
+        propertyError($elementNameC, class, parentC);
         errors++;
       }
       if ($className1C != $parentC) {
-        printError(sprintf("Illegal entry \"%s\" in column AD, for property \"%s\" of class \"%s\".\n", $className1C, $elementNameC, class));
+        propertyError($elementNameC, class, className1C);
         errors++;
       }
       if ($isAbstractC != "") {
-        printError(sprintf("Illegal entry \"%s\" in column AI, for property \"%s\" of class \"%s\".\n", $isAbstractC, $elementNameC, class));
+        propertyError($elementNameC, class, isAbstractC);
         errors++;
       }
       if ($isUidC == "uid") {
         uid = "true";
         if ($isMandatoryC == "O") {
-          printError(sprintf("Illegal entry \"%s\" in column AJ, for property \"%s\" of class \"%s\". A unique identifier must be mandatory.\n", $isUidC, $elementNameC, class));
+          propertyError($elementNameC, class, isUidC);
+          printError("A unique identifier must be mandatory.\n");
           errors++;
         }
       } else {
@@ -952,4 +953,24 @@ function printError(message)
 {
   printf("#error %s", message);
   printf("Error : %s", message) | "cat 1>&2";
+}
+
+function elementError(column, elementName)
+{
+  printError(sprintf("Illegal entry \"%s\" in column \"%s\", for %s.\n", $column, column, elementName));
+}
+
+function classError(class, column)
+{
+  elementError(column , sprintf("class \"%s\"", class));
+}
+
+function typeError(type, column)
+{
+  elementError(column , sprintf("type \"%s\"", type));
+}
+
+function propertyError(property, class, column)
+{
+  elementError(column, sprintf("property \"%s\" of class \"%s\"", property, class));
 }
