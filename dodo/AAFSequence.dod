@@ -23,14 +23,14 @@ AD_XMETHOD1(SetInitialValue,
 			aafUID_t *,
 			pDatadef,
 			DataDef of this object,
-			This function creates a new sequence object with the given
-  // property values.  The length of the sequence is initially set to
-  // 0.  When components are appended to the sequence with the
-  // AppendCpnt\(\) call\, the length of the appended component is
+			This function sets the properties on a newly created sequence
+  // object with the given property values. The length of the sequence is
+  // initially set to 0.  When components are appended to the sequence with
+  // the AppendComponent\(\) call\, the length of the appended component is
   // added to the length of the sequence.
   // 
   // Succeeds if all of the following are true:
-  // - the pDataDef pointer is valid.
+  // - the pDatadef pointer is valid.
   // 
   // If this method fails no state is changed.
   // 
@@ -42,16 +42,16 @@ AD_XMETHOD1(SetInitialValue,
   //   - succeeded.  \(This is the only code indicating success.\)
   //
   // AAFRESULT_NULL_PARAM
-  //   - pDataDef is null.)
+  //   - pDatadef is null.)
 
 
-AD_XMETHOD1(AppendCpnt,
+AD_XMETHOD1(AppendComponent,
 			[in],
 			objIn,
 			AAFComponent,
 			pComponent,
 			Component to append to the sequence,
-  // This function appends the input component to the given sequence\,
+			This function appends the input component to the given sequence\,
   // enforcing bottom up creation of mobs.  The length of the sequence
   // is incremented by the size of the component\, unless the component
   // is a transition.  If the component is a transition\, it verifies
@@ -59,9 +59,12 @@ AD_XMETHOD1(AppendCpnt,
   // not neighboring another transition.  It also verifies that there
   // is enough source material on either side of the transition.  The
   // function also verifies that the datakinds are compatible.
+  //
+  // If the component is successfully appended to the sequence\, the
+  // reference count of the component is incremented.
   // 
   // Succeeds if all of the following are true:
-  // - the -pComponent pointer is valid.
+  // - the pComponent pointer is valid.
   // 
   // If this method fails no state is changed.
   // 
@@ -73,10 +76,26 @@ AD_XMETHOD1(AppendCpnt,
   //   - succeeded.  \(This is the only code indicating success.\)
   //
   // AAFRESULT_NULL_PARAM
-  //   - pComponent is null.)
+  //   - pComponent is null.
+  //
+  // AAFRESULT_INVALID_DATAKIND
+  //   - The data kind of the component is not compatible with the 
+  //     data kind of the sequence.
+  //
+  // AAFRESULT_LEADING_TRAN
+  //   - Attempted to append a transition as the first component of
+  //     a sequence.  A sequence can not start with a transition. 
+  //
+  // AAFRESULT_ADJACENT_TRAN
+  //   - Attempted to append a transition next to a transition.  A
+  //     sequence can not contain back to back transitions.
+  //
+  // AAFRESULT_INSUFF_TRAN_MATERIAL
+  //   - There is not enough source material to add this component.
+  //)
 
 
-AD_XMETHOD1(RemoveCpnt,
+AD_XMETHOD1(RemoveComponent,
 			[in],
 			objIn,
 			AAFComponent,
@@ -102,13 +121,13 @@ AD_XMETHOD1(RemoveCpnt,
   //   - pComponent is null.)
 
 
-AD_XMETHOD1(GetNumCpnts,
+AD_XMETHOD1(GetNumComponents,
 			[out],
 			objPass,
 			aafInt32 *,
 			pNumCpnts,
 			Number of components,
-  // This function returns the number of components in the sequence.
+			This function returns the number of components in the sequence.
   // 
   // Succeeds if all of the following are true:
   // - the pNumCpnts pointer is valid.
@@ -132,7 +151,7 @@ AD_XMETHOD1(EnumComponents,
 			EnumAAFComponents,
 			ppEnum,
 			Component Enumeration,
-			Places an enumerator for the components contained in the sequence
+			Places an IEnumAAFComponents enumerator for the components contained in the sequence
   // into the *ppEnum argument.
   // 
   // Succeeds if all of the following are true:
@@ -148,7 +167,11 @@ AD_XMETHOD1(EnumComponents,
   //   - succeeded.  \(This is the only code indicating success.\)
   //
   // AAFRESULT_NULL_PARAM
-  //   - ppEnum is null.)
+  //   - ppEnum is null.
+  //
+  // E_FAIL
+  //   - Failed to create the enumerator.
+  //)
 
 
 AD_OVERRIDE(.method-SegmentOffsetToTC)
