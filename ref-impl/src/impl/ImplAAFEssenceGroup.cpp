@@ -541,3 +541,22 @@ AAFRESULT ImplAAFEssenceGroup::ValidateChoice(
 
 	return(AAFRESULT_SUCCESS);
 }
+
+void ImplAAFEssenceGroup::Accept(AAFComponentVisitor& visitor)
+{
+	aafUInt32 count = 0;
+	CountChoices(&count);
+	for(aafUInt32 i=0; i<count; i++)
+	{
+		ImplAAFSegment* pChoice = 0;
+		GetChoiceAt(i, &pChoice);
+
+       	        pChoice->Accept(visitor);
+
+		pChoice->ReleaseReference();
+		pChoice = NULL;
+	}
+
+	// TODO
+	// visitor.VisitEssenceGroup(this);
+}

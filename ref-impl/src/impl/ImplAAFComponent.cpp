@@ -402,6 +402,13 @@ AAFRESULT ImplAAFComponent::ChangeContainedReferences(aafMobID_constref /*from*/
 	return AAFRESULT_SUCCESS;
 }
 
+
+void ImplAAFComponent::Accept(AAFComponentVisitor&)
+{
+	// do nothing
+}
+
+
 void ImplAAFComponent::onCopy(void* clientContext) const
 {
   ImplAAFObject::onCopy(clientContext);

@@ -163,6 +163,10 @@ public:
 												aafMobID_constref to);
 	virtual AAFRESULT ValidateChoice(ImplAAFSegment *choice);
 
+	// Visit this component and its sub-components
+	// with the specified visitor.
+	virtual void Accept(AAFComponentVisitor& visitor);
+
 private:
 	OMStrongReferenceVectorProperty<ImplAAFSegment>	_choices;
 	OMStrongReferenceProperty<ImplAAFSourceClip>		_stillFrame;

@@ -140,6 +140,10 @@ public:
 					 aafLength_t *sclpLen,
 					 aafBool *isMask);
 
+	// Visit this component and its sub-components
+	// with the specified visitor.
+	virtual void Accept(AAFComponentVisitor& visitor);
+
 	// OM deep copy notification
 	virtual void onCopy(void* clientContext) const;
 

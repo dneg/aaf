@@ -1191,3 +1191,23 @@ AAFRESULT ImplAAFSequence::UpdateSequenceLength( ImplAAFComponent* pComponent )
 
 	return AAFRESULT_SUCCESS;
 }
+
+void ImplAAFSequence::Accept(AAFComponentVisitor& visitor)
+{
+	aafUInt32 count = 0;
+	CountComponents(&count);
+	for(aafUInt32 i=0; i<count; i++)
+	{
+		ImplAAFComponent* pComponent = 0;
+		GetNthComponent(i, &pComponent);
+
+       	        pComponent->Accept(visitor);
+
+		pComponent->ReleaseReference();
+		pComponent = NULL;
+	}
+
+	// TODO
+	// visitor.VisitSequence(this);
+}
+

@@ -66,6 +66,8 @@ enum _implCompType_t
 		kComponent	=2
 	} implCompType_t;
 
+class AAFComponentVisitor;
+
 class ImplAAFComponent : public ImplAAFObject
 {
 public:
@@ -277,6 +279,10 @@ public:
 	virtual AAFRESULT GetComponentType(implCompType_t* pType) {*pType = kComponent; return AAFRESULT_SUCCESS;}
 	virtual AAFRESULT ChangeContainedReferences(aafMobID_constref from,
 												aafMobID_constref to);
+
+	// Visit this component and its sub-components
+	// with the specified visitor.
+	virtual void Accept(AAFComponentVisitor& visitor);
 
 
   // OM deep copy notification

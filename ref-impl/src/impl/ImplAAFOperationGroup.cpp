@@ -632,6 +632,26 @@ AAFRESULT ImplAAFOperationGroup::ChangeContainedReferences(aafMobID_constref fro
 }
 
 
+void ImplAAFOperationGroup::Accept(AAFComponentVisitor& visitor)
+{
+	aafUInt32 count = 0;
+	CountSourceSegments(&count);
+	for(aafUInt32 i=0; i<count; i++)
+	{
+		ImplAAFSegment* pSegment = 0;
+		GetInputSegmentAt(i, &pSegment);
+
+       	        pSegment->Accept(visitor);
+
+		pSegment->ReleaseReference();
+		pSegment = NULL;
+	}
+
+	// TODO
+	// visitor.VisitOperationGroup(this);
+}
+
+
 void ImplAAFOperationGroup::onCopy( void* clientContext ) const
 {
   ImplAAFSegment::onCopy(clientContext);

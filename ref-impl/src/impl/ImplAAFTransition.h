@@ -117,6 +117,10 @@ public:
 
 	virtual AAFRESULT GetComponentType(implCompType_t* pType) {*pType = kTransition; return AAFRESULT_SUCCESS;}
 
+	// Visit this component and its sub-components
+	// with the specified visitor.
+	virtual void Accept(AAFComponentVisitor& visitor);
+
 
 private:
 	OMStrongReferenceProperty<ImplAAFOperationGroup>	_operationGroup;

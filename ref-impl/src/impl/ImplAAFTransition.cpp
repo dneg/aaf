@@ -205,3 +205,14 @@ AAFRESULT ImplAAFTransition::ChangeContainedReferences(aafMobID_constref from,
 	return AAFRESULT_SUCCESS;
 }
 
+
+
+void ImplAAFTransition::Accept(AAFComponentVisitor& visitor)
+{
+	assert(_operationGroup);
+	_operationGroup->Accept(visitor);
+
+	// TODO
+	// visitor.VisitTransition(this);
+}
+

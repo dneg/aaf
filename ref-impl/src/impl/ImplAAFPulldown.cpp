@@ -527,3 +527,15 @@ AAFRESULT ImplAAFPulldown::ChangeContainedReferences(aafMobID_constref from,
 
 	return AAFRESULT_SUCCESS;
 }
+
+
+
+void ImplAAFPulldown::Accept(AAFComponentVisitor& visitor)
+{
+	assert(_inputSegment);
+
+	_inputSegment->Accept(visitor);
+
+	// TODO
+	// visitor.VisitPulldown(this);
+}

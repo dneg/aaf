@@ -44,6 +44,7 @@
 #include "AAFUtils.h"
 #include "AAFDefUIDs.h"
 #include "AAFDataDefs.h"
+#include "AAFComponentVisitor.h"
 #include "ImplAAFHeader.h"
 
 #include "ImplAAFSmartPointer.h"
@@ -353,6 +354,14 @@ AAFRESULT ImplAAFSourceClip::TraverseToClip(aafLength_t length,
 	
 	return(AAFRESULT_SUCCESS);
 }
+
+
+
+void ImplAAFSourceClip::Accept(AAFComponentVisitor& visitor)
+{
+	visitor.VisitSourceClip(this);
+}
+
 
 
 void ImplAAFSourceClip::onCopy(void* clientContext) const
