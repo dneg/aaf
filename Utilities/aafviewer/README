@@ -1,0 +1,133 @@
+AAFViewer
+--------------------------
+24-04-2003
+
+
+Contents:
+
+1. INTRODUCTION
+2. REQUIREMENTS
+3. BUILD
+4. USE
+5. LICENSES
+6. FEEDBACK
+
+
+
+1. INTRODUCTION
+-------------------
+
+The AAFViewer displays a 2 dimensional representation of the contents of a AAF file. It shows the objects and relationships between the objects. Continous zoom and movement functionality allows easy navigation of the data structure.
+
+The AAFViewer is aimed at showing features of the AAF model that are not easily represented in a form such as that produced by InfoDumper. The AAFViewer is good at showing the relationships (weak, strong and source references) in the AAF model. Some property types, such as stream data, are not shown.
+
+The AAFViewer uses the aaf2dot utility to convert the AAF file contents into the 'dot' format. This format is the input to the dot program that does the actual layout of the diagram, and this results in a SVG (Scalar Vector Graphics) file. The contents of the SVG file are then rendered in the AAFViewer. The characteristics and content of the output can be changed using the commandline options sent to the aaf2dot utility.
+
+
+The AAFViewer uses the following programs and code:
+	- AAF SDK
+	- J2SE
+	- GraphViz developed by AT&T Research (http://www.graphviz.org/)
+	- ZVTM developed by Emmanuel Pietriga (http://zvtm.sourceforge.net/)
+
+
+
+2. REQUIREMENTS
+-------------------
+
+The AAFViewer was tested using the following software:
+  - Graphviz version 1.9.0 (contains the 'dot' program)
+	http://www.research.att.com/sw/tools/graphviz/download.html
+  - J2SE version 1.4.1
+	http://java.sun.com/j2se/1.4.1/download.html
+  - ZVTM - Zoomable Visual Transformation Machine, version 0.8.2
+	http://zvtm.sourceforge.net/
+
+You need to download Graphviz and J2SE from the web sites shown.
+
+The jar file for ZVTM (zvtm.jar) and associated jar files have been placed in AAF/Utilities/aafviewer/lib.
+
+
+
+3. BUILD
+------------
+
+The jar file for the AAFViewer (aafviewer.jar) has been placed in AAF/Utilities/aafviewer/lib. You therefore do not have to compile the code yourself.
+
+The source for AAFViewer can be found in AAF/Utilities/aafviewer/src/aafviewer/src. If you want to make changes and need to compile the code:
+$ cd AAF/Utilities/aafviewer/src/aafviewer
+$ make
+$ make jar
+Note: the jar file is placed in AAF/Utilities/aafviewer/src/aafviewer and not in AAF/Utilities/aafviewer/lib.
+Note: edit the Makefile and set the path for the JDK. It is set to /usr/java/j2sdk1.4.1_02
+
+
+aaf2dot requires AxLib in AAF/examples22/axLib.
+
+To build aaf2dot for Linux:
+$ cd AAF/Utilities/aafviewer/src/aaf2dot
+$ make
+The executable will be placed in AAF/AAFi686LinuxSDK/g++/bin/debug/
+
+To build aaf2dot for Windows:
+Use the aaf2dot.dsw workspace to compile aaf2dot. This file is in AAF/AAFWinSDK/Utilities/aafviewer and the project file aaf2dot.dsp is in AAF/AAFWinSDK/Utilities/aafviewer/aaf2dot
+The executable will be placed in AAF/AAFWinSDK/Utilities/aafviewer/aaf2dot/Debug.
+Note: the aaf2dot.dsp project was not added to MakeSDK.dsw in AAF/AAFWinSDK because it depends on AxLib and AxLib is not part of the MakeSDK.dsw workspace.
+
+
+
+4. USE
+----------
+
+Assuming the following directories and contents:
+lib/		: aafviewer.jar, xercesImpl.jar xmlParserAPIs.jar, zvtm.jar
+linux/		: aaf2dot, aafviewer
+linux/lib	: libaafintp.so, libaafpgapi.so, libcom-api.so
+windows/	: aaf2dot, aafviewer.bat
+windows/lib	: AAFCOAPI.dll
+
+and the java executable in /usr/java/j2sdk1.4.1_02/bin on Linux and C:\j2sdk1.4.1_02\bin\ on Windows and correct configuration (see below).
+
+
+An example 'aafviewer' file for linux is provided in AAF/Utilities/aafviewer/linux. An example aafviewer.bat file for windows is provided in AAF/Utilities/aafviewer/windows.
+
+
+The AAFViewer uses a configuration file aafviewer.cfg. This configuration file is expected in your Linux home directory (eg /home/philip) or Windows home directory (eg c:\Documents and Settings\Administrator).
+If you do not have a configuration file, then you must enter the information required in the View-Preferences menu.
+Alternatively, edit the sample-aafviewer.cfg configuration file, rename to aafviewer.cfg and place in your home directory.
+
+
+aaf2dot command-line options (in aafviewer.cfg or View-Preferences menu):
+-nodictionary             Don't include dictionary objects
+-nodatadefrefs            Don't show data definition references (active if -nodictionary not selected)
+-notaggedvalues           Don't include Tagged value objects
+-noessencedata            Don't include Essence data objects
+-noklvdata                Don't include KLV data objects
+-cluster                  Group objects that belong to the same MOB
+-concentrate              Merge (in graph) associations that have the same end-point
+-debug                    Output debug information
+The use of the 'cluster' option is recommended. 
+The sample configuration file has the following options set:
+	-nodictionary -notaggedvalues -noklvdata -cluster
+
+
+The viewer keyboard and mouse commands are described in the Help-Commands menu. Besides movement and zooming, you can also select/de-select incoming and outgoing edges.
+
+
+5. LICENSES
+---------------
+
+aaf2dot is licensed (with *exceptions)  under GNU LGPL. See COPYING.
+*exceptions: the aaf2dot.cpp and AxBaseObjIterExt.cpp/h source files were derived from the AAF SDK source and therefore have the corresponding AAF SDK license.
+
+AAFViewer java code is derived from ZGRViewer, which is part of the ZVTM code on sourceforge. AAFViewer is licensed under GNU LGPL.
+
+The ZVTM is licensed under GNU LGPL. See zvtm.license
+
+The xerces libraries are licensed under the Apache Software License Agreement. See xerces.license
+
+
+6. FEEDBACK
+---------------
+Philip de Nier (philipn@users.sourceforge.net)
+
