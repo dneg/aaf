@@ -824,12 +824,13 @@ static void FillYCbCr422SampleBufferFromYCbCr(
 	}
 }
 
-static HRESULT CreateJPEGAAFFile(
+static HRESULT CreateVideoAAFFile(
   aafWChar * pFileName,
   testDataFile_t *dataFile,
   aafCompressEnable_t compressEnable,
 	aafColorSpace_t colorSpace,
 	aafUInt32 horizontalSubsample,
+	aafUID_t codecID,
 	testType_t testType)
 {
 	HRESULT hr = AAFRESULT_SUCCESS;
@@ -935,7 +936,7 @@ static HRESULT CreateJPEGAAFFile(
 		v.patchLevel = 0;
 		v.type = kAAFVersionUnknown;
 		ProductInfo.companyName = L"AAF Developers Desk";
-		ProductInfo.productName = L"JPEG Essence Codec Test";
+		ProductInfo.productName = L"Video Essence Codec Test";
 		ProductInfo.productVersion = &v;
 		ProductInfo.productVersionString = NULL;
 		ProductInfo.productID = NIL_UID;
@@ -1168,11 +1169,12 @@ static HRESULT CreateJPEGAAFFile(
 }
 
 
-static HRESULT ReadJPEGAAFFile(
+static HRESULT ReadVideoAAFFile(
   aafWChar * pFileName, 
 	aafCompressEnable_t compressEnable,
 	aafColorSpace_t colorSpace,
 	aafUInt32 horizontalSubsample,
+	aafUID_t codecID,
   testType_t testType)
 {
 	HRESULT hr = AAFRESULT_SUCCESS;
@@ -1825,39 +1827,46 @@ HRESULT CAAFEssenceAccess_test()
 	if (SUCCEEDED(hr))
 	{
 		cout << "        WriteSamples (compression disabled, RGB)" << endl;
-		hr = CreateJPEGAAFFile(L"EssenceAccessJPEG.aaf",NULL, kAAFCompressionDisable, kAAFColorSpaceRGB, 1, testStandardCalls);
+		hr = CreateVideoAAFFile(L"EssenceAccessJPEG.aaf",NULL, kAAFCompressionDisable, kAAFColorSpaceRGB, 1, 
+				kAAFCodecJPEG, testStandardCalls);
 	}
 	if (SUCCEEDED(hr))
 	{
 		cout << "        ReadSamples (compression disabled, RGB)" << endl;
-		hr = ReadJPEGAAFFile(L"EssenceAccessJPEG.aaf", kAAFCompressionDisable, kAAFColorSpaceRGB, 1, testStandardCalls);
+		hr = ReadVideoAAFFile(L"EssenceAccessJPEG.aaf", kAAFCompressionDisable, kAAFColorSpaceRGB, 1,  
+				kAAFCodecJPEG, testStandardCalls);
 	}
 	if (SUCCEEDED(hr))
 	{
 		cout << "        ReadSamples (compression enabled, RGB)" << endl;
-		hr = ReadJPEGAAFFile(L"EssenceAccessJPEG.aaf", kAAFCompressionEnable, kAAFColorSpaceRGB, 1, testStandardCalls);
+		hr = ReadVideoAAFFile(L"EssenceAccessJPEG.aaf", kAAFCompressionEnable, kAAFColorSpaceRGB, 1,  
+				kAAFCodecJPEG, testStandardCalls);
 	}
 
 	if (SUCCEEDED(hr))
 	{
 		cout << "        WriteSamples (compression enabled, RGB)" << endl;
-		hr = CreateJPEGAAFFile(L"EssenceAccessJPEGComp.aaf",NULL, kAAFCompressionEnable, kAAFColorSpaceRGB, 1, testStandardCalls);
+		hr = CreateVideoAAFFile(L"EssenceAccessJPEGComp.aaf",NULL, kAAFCompressionEnable, kAAFColorSpaceRGB, 1,  
+				kAAFCodecJPEG, testStandardCalls);
 	}
 	if (SUCCEEDED(hr))
 	{
 		cout << "        ReadSamples (compression disabled, RGB)" << endl;
-		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGComp.aaf", kAAFCompressionDisable, kAAFColorSpaceRGB, 1, testStandardCalls);
+		hr = ReadVideoAAFFile(L"EssenceAccessJPEGComp.aaf", kAAFCompressionDisable, kAAFColorSpaceRGB, 1,  
+				kAAFCodecJPEG, testStandardCalls);
 	}
 	if (SUCCEEDED(hr))
 	{
 		cout << "        ReadSamples (compression enabled, RGB)" << endl;
-		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGComp.aaf", kAAFCompressionEnable, kAAFColorSpaceRGB, 1, testStandardCalls);
+		hr = ReadVideoAAFFile(L"EssenceAccessJPEGComp.aaf", kAAFCompressionEnable, kAAFColorSpaceRGB, 1,  
+				kAAFCodecJPEG, testStandardCalls);
 	}
 
 	if (SUCCEEDED(hr))
 	{
 		cout << "        WriteMultiSamples (compression disabled, RGB)" << endl;
-		hr = CreateJPEGAAFFile(L"EssenceAccessJPEGMulti.aaf",NULL, kAAFCompressionDisable, kAAFColorSpaceRGB, 1, testMultiCalls);
+		hr = CreateVideoAAFFile(L"EssenceAccessJPEGMulti.aaf",NULL, kAAFCompressionDisable, kAAFColorSpaceRGB, 1, 
+				kAAFCodecJPEG, testMultiCalls);
     if (AAFRESULT_INVALID_OP_CODEC == hr)
     {
       cout << "          Codec does not support interleaved data." << endl;
@@ -1868,12 +1877,14 @@ HRESULT CAAFEssenceAccess_test()
 	    if (SUCCEEDED(hr))
 	    {
 		    cout << "        ReadMultiSamples (compression disabled, RGB)" << endl;
-		    hr = ReadJPEGAAFFile(L"EssenceAccessJPEGMulti.aaf", kAAFCompressionDisable, kAAFColorSpaceRGB, 1, testMultiCalls);
+		    hr = ReadVideoAAFFile(L"EssenceAccessJPEGMulti.aaf", kAAFCompressionDisable, kAAFColorSpaceRGB, 1,  
+				kAAFCodecJPEG, testMultiCalls);
 	    }
 	    if (SUCCEEDED(hr))
 	    {
 		    cout << "        ReadMultiSamples (compression enabled, RGB)" << endl;
-		    hr = ReadJPEGAAFFile(L"EssenceAccessJPEGMulti.aaf", kAAFCompressionEnable, kAAFColorSpaceRGB, 1, testMultiCalls);
+		    hr = ReadVideoAAFFile(L"EssenceAccessJPEGMulti.aaf", kAAFCompressionEnable, kAAFColorSpaceRGB, 1,  
+				kAAFCodecJPEG, testMultiCalls);
 	    }
     }
   }
@@ -1881,7 +1892,8 @@ HRESULT CAAFEssenceAccess_test()
 	if (SUCCEEDED(hr))
 	{
 		cout << "        WriteMultiSamples (compression enabled, RGB)" << endl;
-		hr = CreateJPEGAAFFile(L"EssenceAccessJPEGMultiComp.aaf",NULL, kAAFCompressionEnable, kAAFColorSpaceRGB, 1, testMultiCalls);
+		hr = CreateVideoAAFFile(L"EssenceAccessJPEGMultiComp.aaf",NULL, kAAFCompressionEnable, kAAFColorSpaceRGB,1, 
+				kAAFCodecJPEG, testMultiCalls);
     if (AAFRESULT_INVALID_OP_CODEC == hr)
     {
       cout << "          Codec does not support interleaved data." << endl;
@@ -1892,12 +1904,14 @@ HRESULT CAAFEssenceAccess_test()
 	    if (SUCCEEDED(hr))
 	    {
 		    cout << "        ReadMultiSamples (compression disabled, RGB)" << endl;
-		    hr = ReadJPEGAAFFile(L"EssenceAccessJPEGMultiComp.aaf", kAAFCompressionDisable, kAAFColorSpaceRGB, 1, testMultiCalls);
+		    hr = ReadVideoAAFFile(L"EssenceAccessJPEGMultiComp.aaf", kAAFCompressionDisable, kAAFColorSpaceRGB, 1, 
+				kAAFCodecJPEG, testMultiCalls);
 	    }
 	    if (SUCCEEDED(hr))
 	    {
 		    cout << "        ReadMultiSamples (compression enabled, RGB)" << endl;
-		    hr = ReadJPEGAAFFile(L"EssenceAccessJPEGMultiComp.aaf", kAAFCompressionEnable, kAAFColorSpaceRGB, 1, testMultiCalls);
+		    hr = ReadVideoAAFFile(L"EssenceAccessJPEGMultiComp.aaf", kAAFCompressionEnable, kAAFColorSpaceRGB, 1, 
+				kAAFCodecJPEG, testMultiCalls);
 	    }
     }
 	}
@@ -1906,45 +1920,87 @@ HRESULT CAAFEssenceAccess_test()
 	if (SUCCEEDED(hr))
 	{
 		cout << "        WriteSamples (compression enabled, YUV)" << endl;
-		hr = CreateJPEGAAFFile(L"EssenceAccessJPEGCompYUV.aaf",NULL, kAAFCompressionEnable, kAAFColorSpaceYUV, 1, testStandardCalls);
+		hr = CreateVideoAAFFile(L"EssenceAccessJPEGCompYUV.aaf",NULL, kAAFCompressionEnable, kAAFColorSpaceYUV, 1, 
+				kAAFCodecJPEG, testStandardCalls);
 	}
 	if (SUCCEEDED(hr))
 	{
 		cout << "        ReadSamples (compression disabled, YUV)" << endl;
-		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGCompYUV.aaf", kAAFCompressionDisable, kAAFColorSpaceYUV, 1, testStandardCalls);
+		hr = ReadVideoAAFFile(L"EssenceAccessJPEGCompYUV.aaf", kAAFCompressionDisable, kAAFColorSpaceYUV, 1, 
+				kAAFCodecJPEG, testStandardCalls);
 	}
 	if (SUCCEEDED(hr))
 	{
 		cout << "        ReadSamples (compression enabled, YUV)" << endl;
-		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGCompYUV.aaf", kAAFCompressionEnable, kAAFColorSpaceYUV, 1, testStandardCalls);
+		hr = ReadVideoAAFFile(L"EssenceAccessJPEGCompYUV.aaf", kAAFCompressionEnable, kAAFColorSpaceYUV, 1, 
+				kAAFCodecJPEG, testStandardCalls);
 	}
 	if (SUCCEEDED(hr))
 	{
 		cout << "        ReadSamples (compression enabled, RGB)" << endl;
-		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGCompYUV.aaf", kAAFCompressionEnable, kAAFColorSpaceRGB, 1, testStandardCalls);
+		hr = ReadVideoAAFFile(L"EssenceAccessJPEGCompYUV.aaf", kAAFCompressionEnable, kAAFColorSpaceRGB, 1, 
+				kAAFCodecJPEG, testStandardCalls);
 	}
 
 
 	if (SUCCEEDED(hr))
 	{
 		cout << "        WriteSamples (compression enabled, YUV 4-2-2)" << endl;
-		hr = CreateJPEGAAFFile(L"EssenceAccessJPEGCompYUV422.aaf",NULL, kAAFCompressionEnable, kAAFColorSpaceYUV, 2, testStandardCalls);
+		hr = CreateVideoAAFFile(L"EssenceAccessJPEGCompYUV422.aaf",NULL, kAAFCompressionEnable, kAAFColorSpaceYUV, 2, 
+				kAAFCodecJPEG, testStandardCalls);
 	}
 	if (SUCCEEDED(hr))
 	{
 		cout << "        ReadSamples (compression disabled, YUV)" << endl;
-		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGCompYUV422.aaf", kAAFCompressionDisable, kAAFColorSpaceYUV, 2, testStandardCalls);
+		hr = ReadVideoAAFFile(L"EssenceAccessJPEGCompYUV422.aaf", kAAFCompressionDisable, kAAFColorSpaceYUV, 2, 
+				kAAFCodecJPEG, testStandardCalls);
 	}
 	if (SUCCEEDED(hr))
 	{
 		cout << "        ReadSamples (compression enabled, YUV 4-2-2)" << endl;
-		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGCompYUV422.aaf", kAAFCompressionEnable, kAAFColorSpaceYUV, 2, testStandardCalls);
+		hr = ReadVideoAAFFile(L"EssenceAccessJPEGCompYUV422.aaf", kAAFCompressionEnable, kAAFColorSpaceYUV, 2, 
+				kAAFCodecJPEG, testStandardCalls);
 	}
 	if (SUCCEEDED(hr))
 	{
 		cout << "        ReadSamples (compression enabled, RGB)" << endl;
-		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGCompYUV422.aaf", kAAFCompressionEnable, kAAFColorSpaceRGB, 1, testStandardCalls);
+		hr = ReadVideoAAFFile(L"EssenceAccessJPEGCompYUV422.aaf", kAAFCompressionEnable, kAAFColorSpaceRGB, 1, 
+				kAAFCodecJPEG, testStandardCalls);
 	}
+
+#if 0
+	if (SUCCEEDED(hr))
+	{
+		cout << "    Internal Essence (CDCI):" << endl;
+	}
+	
+	if (SUCCEEDED(hr))
+	{
+		cout << "        WriteSamples (YUV)" << endl;
+		hr = CreateVideoAAFFile(L"EssenceAccessJPEGCompYUV.aaf",NULL, kAAFCompressionEnable, kAAFColorSpaceYUV, 1, 
+			kAAFCodecJPEG, testStandardCalls);
+	}
+	if (SUCCEEDED(hr))
+	{
+		cout << "        ReadSamples (YUV)" << endl;
+		hr = ReadVideoAAFFile(L"EssenceAccessJPEGCompYUV.aaf", kAAFCompressionEnable, kAAFColorSpaceYUV, 1, 
+			kAAFCodecJPEG, testStandardCalls);
+	}
+	
+	
+	if (SUCCEEDED(hr))
+	{
+		cout << "        WriteSamples (YUV 4-2-2)" << endl;
+		hr = CreateVideoAAFFile(L"EssenceAccessJPEGCompYUV422.aaf",NULL, kAAFCompressionEnable, kAAFColorSpaceYUV, 2, 
+			kAAFCodecJPEG, testStandardCalls);
+	}
+	if (SUCCEEDED(hr))
+	{
+		cout << "        ReadSamples (YUV 4-2-2)" << endl;
+		hr = ReadVideoAAFFile(L"EssenceAccessJPEGCompYUV422.aaf", kAAFCompressionEnable, kAAFColorSpaceYUV, 2, 
+			kAAFCodecJPEG, testStandardCalls);
+	}
+#endif
 
 
 	// When all of the functionality of this class is tested, we can return success.
