@@ -32,20 +32,8 @@
 #include "AAF.h"
 
 
-// Include the defintions for the AAF Stored Object identifiers.
-#define INIT_AUID
+// Include the AAF Stored Object identifiers. These symbols are defined in aaf.lib.
 #include "AAFStoredObjectIDs.h"
-
-#ifdef __cplusplus
-extern "C"{
-#endif 
-
-STDAPI AAFLoad(const char * dllname);
-STDAPI AAFUnload();
-
-#ifdef __cplusplus
-}
-#endif
 
 
 

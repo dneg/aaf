@@ -137,90 +137,45 @@ static void printIdentification(IAAFIdentification* pIdent)
 static void ReadAAFFile(aafWChar * pFileName)
 {
   HRESULT hr = S_OK;
-  // IAAFSession * pSession = NULL;
   IAAFFile * pFile = NULL;
 
-  /*
-  hr = CoCreateInstance(CLSID_AAFSession,
-                        NULL, 
-                        CLSCTX_INPROC_SERVER, 
-                        IID_IAAFSession, 
-                        (void **)&pSession);
-  */
-  hr = CoCreateInstance(CLSID_AAFFile,
-                        NULL, 
-                        CLSCTX_INPROC_SERVER, 
-                        IID_IAAFFile, 
-                        (void **)&pFile);
+
+  hr = AAFFileOpenExistingRead (pFileName, 0, &pFile);
   check(hr); // display error message
   if (SUCCEEDED(hr))
   {
-    aafProductIdentification_t	ProductInfo;
+    IAAFHeader * pHeader = NULL;
 
-
-    ProductInfo.companyName = L"AAF Developers Desk. NOT!";
-    ProductInfo.productName = L"Make AVR Example. NOT!";
-    ProductInfo.productVersion.major = 1;
-    ProductInfo.productVersion.minor = 0;
-    ProductInfo.productVersion.tertiary = 0;
-    ProductInfo.productVersion.patchLevel = 0;
-    ProductInfo.productVersion.type = kVersionUnknown;
-    ProductInfo.productVersionString = NULL;
-    ProductInfo.productID = -1;
-    ProductInfo.platform = NULL;
-
-    // hr = pSession->SetDefaultIdentification(&ProductInfo);
-    // check(hr); // display error message
+    hr = pFile->GetHeader(&pHeader);
+    check(hr); // display error message
     if (SUCCEEDED(hr))
     {
-      // IAAFFile * pFile = NULL;
-      
-      // hr = pSession->OpenReadFile(pFileName, &pFile);
-      hr = pFile->Initialize();
-      check(hr); // display error message
-      hr = pFile->OpenExistingRead(pFileName, 0);
+      IAAFIdentification *    pIdent = NULL;
+
+      hr = pHeader->GetLastIdentification(&pIdent);
       check(hr); // display error message
       if (SUCCEEDED(hr))
       {
-        IAAFHeader * pHeader = NULL;
+        fprintf(stdout, "LastIdentification\n");
+        printIdentification(pIdent);
 
-        hr = pFile->GetHeader(&pHeader);
-        check(hr); // display error message
-        if (SUCCEEDED(hr))
-        {
-          IAAFIdentification *    pIdent = NULL;
+        pIdent->Release();
+        pIdent = NULL;
 
-          hr = pHeader->GetLastIdentification(&pIdent);
-          check(hr); // display error message
-          if (SUCCEEDED(hr))
-          {
-            fprintf(stdout, "LastIdentification\n");
-            printIdentification(pIdent);
-
-            pIdent->Release();
-            pIdent = NULL;
-
-            aafNumSlots_t n;
-            hr = pHeader->GetNumMobs(kAllMob, &n);
-            check(hr);
-            printf("Number of Mobs       = %d\n", n);
-          }
-          pHeader->Release();
-          pHeader = NULL;
-        }
-        
-        hr = pFile->Close();
+        aafNumSlots_t n;
+        hr = pHeader->GetNumMobs(kAllMob, &n);
         check(hr);
-
-        pFile->Release();
-        pFile = NULL;
+        printf("Number of Mobs       = %d\n", n);
       }
+      pHeader->Release();
+      pHeader = NULL;
     }
 
-    // pSession->EndSession(); // obsolete!
+    hr = pFile->Close();
+    check(hr);
 
-    // pSession->Release();
-    // pSession = NULL;
+    pFile->Release();
+    pFile = NULL;
   }
 }
 
@@ -238,6 +193,24 @@ struct CComInitialize
   }
 };
 
+// simple helper class to initialize and cleanup AAF library.
+struct CAAFInitialize
+{
+  CAAFInitialize(const char *dllname = NULL)
+  {
+  	printf("Attempting to load the AAF dll...\n");
+    check(AAFLoad(dllname));
+    printf("DONE\n");
+  }
+
+  ~CAAFInitialize()
+  {
+    AAFUnload();
+  }
+};
+
+
+
 int main(int argumentCount, char* argumentVector[])
 {
   if (argumentCount != 2) {
@@ -251,6 +224,7 @@ int main(int argumentCount, char* argumentVector[])
   convert(wInputFileName, 256, inputFileName);
 
   CComInitialize comInit;
+  CAAFInitialize aafInit;
 
   ReadAAFFile(wInputFileName);
 

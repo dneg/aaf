@@ -21,10 +21,7 @@
 // Include the AAF interface declarations.
 #include "AAF.h"
 
-
-
-// Include the defintions for the AAF Stored Object identifiers.
-#define INIT_AUID
+// Include the AAF Stored Object identifiers. These symbols are defined in aaf.lib.
 #include "AAFStoredObjectIDs.h"
 
 
@@ -163,19 +160,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 	ProductInfo.productID = -1;
 	ProductInfo.platform = NULL;
 
-#if 0
 	check(AAFFileOpenNewModify (pFileName, 0, &ProductInfo, &pFile));
-#else
-	check(CoCreateInstance(CLSID_AAFFile,
-               NULL, 
-               CLSCTX_INPROC_SERVER, 
-               IID_IAAFFile, 
-               (void **)&pFile));
-
-	// Create and open new AAF File
-	check(pFile->Initialize());
-	check(pFile->OpenNewModify(pFileName, 0, &ProductInfo));
-#endif
 	check(pFile->GetHeader(&pHeader));
 
   // Get the AAF Dictionary so that we can create valid AAF objects.
@@ -606,6 +591,23 @@ struct CComInitialize
   }
 };
 
+// simple helper class to initialize and cleanup AAF library.
+struct CAAFInitialize
+{
+  CAAFInitialize(const char *dllname = NULL)
+  {
+  	printf("Attempting to load the AAF dll...\n");
+    HRESULT hr = AAFLoad(dllname);
+    (SUCCEEDED(hr)) ? printf("DONE\n") : printf("FAILED\n");
+  }
+
+  ~CAAFInitialize()
+  {
+    AAFUnload();
+  }
+};
+
+
 
 //**********************
 // Extra code required to scan the original WAVE headers and extract metadata parameters & data offset
@@ -755,7 +757,9 @@ cleanup:
 main()
 {
 	CComInitialize comInit;
-	aafWChar *		pwFileName = L"EssenceTest.aaf";
+  CAAFInitialize aafInit;
+
+  aafWChar *		pwFileName = L"EssenceTest.aaf";
 	const char *	pFileName = "EssenceTest.aaf";
 	aafWChar *	rawData = L"EssenceTestRaw.wav";
 	aafWChar *	externalAAF = L"ExternalAAFEssence.aaf";
