@@ -36,6 +36,11 @@
 #define AAFRESULT_FAILED(Status) ((AAFRESULT)(Status)<0)
 #define AAFRESULT_SUCCEEDED(Status) (!(AAFRESULT_FAILED(Status)))
 
+#ifndef MAKE_HRESULT
+#define MAKE_HRESULT(sev,fac,code) \
+    ((HRESULT) (((unsigned long)(sev)<<31) | ((unsigned long)(fac)<<16) | ((unsigned long)(code))) )
+#endif
+
 // #define _FACILITY_AAF    FACILITY_ITF
 #define _FACILITY_AAF 0x12
 #define MAKE_AAFHRESULT( code ) MAKE_HRESULT( SEVERITY_ERROR, _FACILITY_AAF, code )

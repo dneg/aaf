@@ -28,14 +28,15 @@
 #include "CAAFBasicInterp.h"
 
 #include <assert.h>
+#include <string.h>
 #include "AAFResult.h"
 
 #include "AAF.h"
 
 #include "aafErr.h"
-#include "aafUtils.h"
+#include "AAFUtils.h"
 #include "aafCvt.h"
-#include "aafDefUIDs.h"
+#include "AAFDefUIDs.h"
 #include "AAFStoredObjectIDs.h"
 #include "AAFRational.h"
 #include "AAFInterpolatorDefs.h"
@@ -501,6 +502,10 @@ HRESULT CAAFBasicInterp::FindBoundValues(aafRational_t point,
 //
 // 
 // 
+inline int EQUAL_UID(const GUID & a, const GUID & b)
+{
+  return (0 == memcmp((&a), (&b), sizeof (aafUID_t)));
+}
 HRESULT CAAFBasicInterp::InternalQueryInterface
 (
     REFIID riid,
@@ -512,13 +517,13 @@ HRESULT CAAFBasicInterp::InternalQueryInterface
         return E_INVALIDARG;
 
     // We only support the IClassFactory interface 
-    if (riid == IID_IAAFInterpolator)
+    if (EQUAL_UID(riid,IID_IAAFInterpolator))
     { 
         *ppvObj = (IAAFInterpolator *)this; 
         ((IUnknown *)*ppvObj)->AddRef();
         return S_OK;
     }
-    else if (riid == IID_IAAFPlugin) 
+    else if (EQUAL_UID(riid,IID_IAAFPlugin)) 
     { 
         *ppvObj = (IAAFPlugin *)this; 
         ((IUnknown *)*ppvObj)->AddRef();
@@ -533,3 +538,9 @@ HRESULT CAAFBasicInterp::InternalQueryInterface
 // Define the contrete object support implementation.
 // 
 AAF_DEFINE_FACTORY(AAFBasicInterp)
+
+
+
+
+
+
