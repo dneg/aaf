@@ -273,6 +273,11 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	check(pCompMob->QueryInterface (IID_IAAFMob, (void **)&pMob));
 	check(pMob->AppendNewSlot (seg, 1, slotName, &newSlot));
 
+	// This variable is about to be overwritten so we need to 
+	// release the old interface.
+	aComponent->Release();
+	aComponent = NULL;
+
 	// Create a SourceClip
 	check(CoCreateInstance( CLSID_AAFSourceClip,
 						   NULL, 
@@ -648,7 +653,13 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 										check(pMasterMob->GetTapeName (ref.sourceSlotID,
 											buf, sizeof(buf)));
 										wprintf(L"            Derived from tape = '%s'\n", buf);
+
+										pMasterMob->Release();
+										pMasterMob = NULL;
 									}
+
+									pSourceClip->Release();
+									pSourceClip = NULL;
 								}
 								hr = pComponent->QueryInterface(IID_IAAFFiller, (void **) &pFiller);
 								if(AAFRESULT_SUCCESS == hr)
@@ -709,6 +720,12 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 
 cleanup:
 	// Cleanup and return
+	if (info)
+		info->Release();
+
+	if (pMasterMob)
+		pMasterMob->Release();
+
 	if(pSourceMob)
 		pSourceMob->Release();
 
@@ -762,12 +779,6 @@ cleanup:
 		pFile->Close();
 		pFile->Release();
 	}
-	
-	if (info)
-		info->Release();
-
-	if (pMasterMob)
-		pMasterMob->Release();
 
 	return moduleErrorTmp;
 }
