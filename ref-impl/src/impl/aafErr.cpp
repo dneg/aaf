@@ -24,9 +24,6 @@
  *
  ************************************************************************/
 
-#if FULL_TOOLKIT
-#include "masterhd.h"
-#endif
 #include <string.h>
 
 #include "aafErr.h"
@@ -62,55 +59,6 @@ char *aafGetErrorString(
 		return ("AAF_ERR: Unknown error code");
 }
 
-/************************
- * Function: aafGetExpandedErrorString
- *
- * 		Given an error code, returns an error string.
- *
- * Argument Notes:
- *		<none>.
- *
- * ReturnValue:
- *		Always returns an error string of some sort, although
- *		it may just be "unknown error code".
- *
- * Possible Errors:
- *		Standard errors (see top of file).
- */
-char *aafGetExpandedErrorString(aafErr_t code,
-											aafInt16 buflen,
-											char *buffer)
-{
-#if FULL_TOOLKIT
-	char	*basic = aafGetErrorString(code);
-	
-	strncpy(buffer, basic, buflen);
-	if((strlen(basic) < (aafUInt16)buflen) && (file != NULL))
-	{
-		if(code == OM_ERR_BADOPEN ||
-		   code == OM_ERR_NOTAAFFILE ||
-		   code == OM_ERR_FILE_NOT_FOUND)
-		{
-			if(file->ContainerErrorRaised())
-			{
-				strncat(buffer, "\n[", buflen - strlen(buffer));
-				strncat(buffer, file->GetContainerErrString(), buflen - strlen(buffer));
-				strncat(buffer, "]", buflen - strlen(buffer));
-			}
-			else if(file->_session->GetContainerError() != 0)
-			{
-				strncat(buffer, "\n[", buflen - strlen(buffer));
-				strncat(buffer, file->_session->GetContainerErrString(), buflen - strlen(buffer));
-				strncat(buffer, "]", buflen - strlen(buffer));
-			}
-		}
-	}
-
-	return(buffer);
-#else
-	return(NULL);
-#endif
-}
 
 /************************
  * Function: aafRegErr			(CALLED BY MACROS)
