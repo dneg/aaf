@@ -36,7 +36,7 @@ BEGIN {
       files = fields[1];
       cs = 2; /* Start of comment */
     }
-    /* put comment back together - undo split on ":" */
+    /* Put comment back together - undo split on ":" */
     comments = trim(fields[cs], 1);
     for (i = cs + 1; i <= f; i++) {
       comments = comments ":" fields[i]
@@ -45,10 +45,10 @@ BEGIN {
     printf("[dir      = \"%s\"]\n", dir);
     printf("[files    = \"%s\"]\n", files);
     printf("[comments = \"%s\"]\n", comments);
-    /* print previous table row */
+    /* Print previous table row */
     printRow(date, name, files, comments, color);
   }
-  /* build new table row */
+  /* Build new table row */
   date = $1;
   name = $3;
   entrytext = "";
@@ -58,13 +58,13 @@ BEGIN {
 }
 
 /^\t/ {
-  /* accumulate the text of this entry */
+  /* Accumulate the text of this entry */
   entrytext = entrytext $0;
 }
 
 END {
   if (date != "") {
-    /* print last table row */
+    /* Print last table row */
     printRow(date, name, files, comments, color);
   }
   printTrailer();
