@@ -24,6 +24,12 @@ PACKAGE = MultiGenTest
 
 AAFBASE ?= ../../..
 
+ifeq ($(shell uname), IRIX)
+# Warnings turned off:
+# 1107 - signed bit field has length of 1 bit in various stl files
+MODULE_PLATFORM_CFLAGS = -LANG:std -woff 1107
+LIBCIO = -lCio
+endif
 
 # Common definitions
 include $(AAFBASE)/build/common.mk
@@ -49,7 +55,7 @@ all : $(AAFSDKBINDIR)/MultiGenTest$(EXE)
 # $(AAFSDKBINDIR)/MultiGenTest$(EXE) : $(CXXOBJS) MultiGenTests
 $(AAFSDKBINDIR)/MultiGenTest$(EXE) : $(CXXOBJS) $(CXXOBJS2)
 	$(LD) $(CXXOBJS) $(CXXOBJS2) \
-	-L$(AAFSDKLIBDIR) -laaflib -laafiid -o $@
+	-L$(AAFSDKLIBDIR) -laaflib -laafiid $(LIBCIO) -o $@
 
 
 #.PHONY : MultiGenTests
