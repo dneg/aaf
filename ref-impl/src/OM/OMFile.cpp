@@ -762,47 +762,6 @@ OMRawStorage* OMFile::rawStorage(void) const
   return _rawStorage;
 }
 
-  // @mfunc Find the property instance in this <c OMFile>
-  //        named by <p propertyPathName>.
-  //   @parm The pathname to the desired property.
-  //   @rdesc The property instance.
-  //   @this const
-OMProperty* OMFile::findPropertyPath(const wchar_t* propertyPathName) const
-{
-  TRACE("OMFile::findPropertyPath");
-
-  PRECONDITION("Valid property path name", validWideString(propertyPathName));
-  PRECONDITION("Path name is absolute", propertyPathName[0] == L'/');
-  PRECONDITION("Valid root", _root != 0);
-
-  wchar_t* path = saveWideString(propertyPathName);
-
-  wchar_t* element = path;
-  element++; // skip first '/'
-
-  const OMStorable* storable = _root;
-  OMProperty* result = 0;
-
-  wchar_t* end = findWideCharacter(element, L'/');
-
-  while (end != 0) {
-    *end = 0;
-    storable = storable->find(element);
-    ASSERT("Valid storable pointer", storable != 0);
-    element = ++end;
-    end = findWideCharacter(element, L'/');
-  }
-
-  if ((element != 0) && (lengthOfWideString(element) > 0)) {
-    result = storable->findProperty(element);
-  } else {
-    result = 0;
-  }
-
-  delete [] path;
-  return result;
-}
-
 OMPropertyId* OMFile::path(const wchar_t* propertyPathName) const
 {
   TRACE("OMFile::path");
