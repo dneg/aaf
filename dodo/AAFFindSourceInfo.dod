@@ -11,11 +11,9 @@ AD_HEAD
 *                                          *
 \******************************************/
 
-AD_CLASS_UUID(9346ACD0, 2713, 11d2, 80, 35, 00, 60, 08, 14, 3E, 6F)
-AD_DEFAULT_UUID(9346ACD1, 2713, 11d2, 80, 35, 00, 60, 08, 14, 3E, 6F)
-
 AD_INCLUDE(AAFTypes)
 
+AD_CLASS_UUID(9346ACD0, 2713, 11d2, 80, 35, 00, 60, 08, 14, 3E, 6F)
+AD_DEFAULT_UUID(9346ACD1, 2713, 11d2, 80, 35, 00, 60, 08, 14, 3E, 6F)
 AD_ROOT_CLASS_BEGIN
-
 AD_ROOT_CLASS_END
