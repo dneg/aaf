@@ -29,7 +29,8 @@
 
 OMRootStorable::OMRootStorable(void)
 : _clientRoot(0x0002, L"Header"),
-  _dictionary(0x0001, L"MetaDictionary")
+  _dictionary(0x0001, L"MetaDictionary"),
+  _file(0)
 {
   initialize(0, 0);
 }
@@ -37,7 +38,8 @@ OMRootStorable::OMRootStorable(void)
 OMRootStorable::OMRootStorable(OMStorable* clientRoot,
                                OMDictionary* dictionary)
 : _clientRoot(0x0002, L"Header"),
-  _dictionary(0x0001, L"MetaDictionary")
+  _dictionary(0x0001, L"MetaDictionary"),
+  _file(0)
 {
   initialize(clientRoot, dictionary);
 }
@@ -79,6 +81,12 @@ void OMRootStorable::restoreContents(void)
   TRACE("OMRootStorable::restoreContents");
 
   store()->restore(_persistentProperties);
+}
+
+void OMRootStorable::attachToFile(OMFile* file)
+{
+  TRACE("OMRootStorable::attachToFile");
+  _file = file;
 }
 
 OMStorable* OMRootStorable::clientRoot(void) const

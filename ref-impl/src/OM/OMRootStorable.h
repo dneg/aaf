@@ -57,6 +57,8 @@ public:
 
   // OMRootStorable functions
 
+  void attachToFile(OMFile* file);
+
   OMStorable* clientRoot(void) const;
 
   OMDictionary* dictionary(void) const;
@@ -70,6 +72,7 @@ private:
 
   OMStrongReferenceProperty<OMStorable> _clientRoot;
   OMStrongReferenceProperty<OMDictionary> _dictionary;
+  OMFile* _file;
 
 };
 
