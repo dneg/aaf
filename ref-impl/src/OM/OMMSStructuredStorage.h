@@ -149,14 +149,16 @@ static inline ULARGE_INTEGER fromOMUInt64(const OMUInt64& x)
 * intervals since January 1, 1601 UTC (coordinate universal time).
 *
 */
+
 // Portable way to define 64 bit constants
 #ifdef _MSC_VER
 #define UINT64_C(c)	c
 #else
 #define UINT64_C(c) c##LL
+// Also, provide a replacement Int32x32To64() for non-MSVC compilers
 static inline OMInt64 Int32x32To64 (DWORD multiplier, DWORD multiplicand)
 {
-	OMInt64 ret = (OMInt64)multiplier * (OMInt64)multiplicand;
+	return (OMInt64)multiplier * (OMInt64)multiplicand;
 }
 #endif
 
