@@ -157,25 +157,40 @@ public:
   //
 
   //****************
-  // Similar to AppendNewPropertyDef(), except it does not require
-  // that class be unregistered.
+  // pvtInitialize()
+  //
+  // Same as Initialize(), but takes guid for parent class instead of
+  // object pointer.
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    pvtAppendNewPropertyDef
-        (// @parm [in] auid to be used to identify this property
-         aafUID_t *  pID,
+    pvtInitialize
+        // @parm [in] auid to be used to identify this type
+        (const aafUID_t * pID,
 
-         // @parm [in, string] name of the new property
+		// Inheritance parent of this class
+		const aafUID_t * pParentClassId,
+
+		// Human-legible name
+		const aafCharacter * pClassName);
+
+
+  // Private method to unconditionally append a property def (ignoring
+  // whether or not property is optional or not, or if this class has
+  // already been registered).
+  AAFRESULT STDMETHODCALLTYPE
+    pvtAppendPropertyDef
+        (aafUID_t *  pID,
          wchar_t *  pName,
-
-         // @parm [in] type of the new property
-         ImplAAFTypeDef * pTypeDef,
-
-         // @parm [in] true if new property is to be optional
+         const aafUID_t * pTypeId,
          aafBool  isOptional,
-
-         // @parm [out] return pointer to newly created property def
          ImplAAFPropertyDef ** ppPropDef);
+
+
+  // Appends an existing property def object.
+  AAFRESULT STDMETHODCALLTYPE
+    pvtAppendExistingPropertyDef
+        (// PropertyDef to append
+		 ImplAAFPropertyDef * pPropDef);
 
 
   //****************
@@ -195,19 +210,11 @@ public:
   void pvtGetParentAUID (aafUID_t & result);
 
 
+  // Make sure that the type definition of each property definition
+  // has been loaded into memory.
+  void AssurePropertyTypesLoaded ();
+
 private:
-
-  // Private method to unconditionally append a property def (ignoring
-  // whether or not property is optional or not, or if this class has
-  // already been registered).
-  AAFRESULT STDMETHODCALLTYPE
-    pvtAppendPropertyDef
-        (aafUID_t *  pID,
-         wchar_t *  pName,
-         ImplAAFTypeDef * pTypeDef,
-         aafBool  isOptional,
-         ImplAAFPropertyDef ** ppPropDef);
-
 
   //
   // Private implementation classes to share lookup code between
@@ -273,6 +280,8 @@ private:
 
   // didn't use shorthand here in an attempt to avoid circular references
   ImplAAFSmartPointer<ImplAAFClassDef> _cachedParentClass;
+
+  bool _propTypesLoaded;
 };
 
 //
