@@ -7,8 +7,9 @@ AAFRoot\
 #c
 AD_HEAD
 AD_IDL(//
-// This interface is used to enumerate over the AAFObjects contained
-// in a collection.
+// This interface is used to enumerate over the IAAFObjects contained
+// in a vector of IAAFObjects, or some other collection of
+// IAAFObjects.
 //
 /***********************************************\
 *	Stub only.   Implementation not yet added	*
