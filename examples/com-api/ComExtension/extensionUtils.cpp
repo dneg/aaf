@@ -144,13 +144,15 @@ void PrintPersonnelResource (IAAFDictionary * pDict,
 void PrintPersonnelResources (IAAFDictionary * pDict,
 							  IAAFMob * pMob)
 {
-  // Get an IAAFObject for the mob
+  // Get an IAAFObject for the mob, then use it to get the class
+  // definition describing the PersonnelMob
   IAAFObjectSP pMobObj;
   check (pMob->QueryInterface (IID_IAAFObject, (void **)&pMobObj));
-
   IAAFClassDefSP cd;
   check (pMobObj->GetDefinition (&cd));
 
+  // Use the class definition to get the definition for the Personnel
+  // property.
   IAAFPropertyDefSP pd;
   check (cd->LookupPropertyDef ((aafUID_t*) &kPropID_PersonnelMob_Personnel,
 								&pd));
@@ -165,10 +167,12 @@ void PrintPersonnelResources (IAAFDictionary * pDict,
   IAAFTypeDefVariableArraySP tda;
   check (td->QueryInterface (IID_IAAFTypeDefVariableArray, (void **)&tda));
 
-  // Get the number of personnel objects
+  // Use the type def for arrays to get the number of personnel
+  // objects in this property value.
   aafUInt32 numPersonnel = 0;
   check (tda->GetCount (pva, &numPersonnel));
 
+  // Get the type def describing elements of the array
   IAAFTypeDefSP basetd;
   check (tda->GetType (&basetd));
   IAAFTypeDefObjectRefSP tdo;
@@ -177,7 +181,7 @@ void PrintPersonnelResources (IAAFDictionary * pDict,
   cout << "There are " << numPersonnel
 	   << " personnel record objects." << endl;
 
-  // Print each one.
+  // Print each element in the array.
   aafUInt32 i;
   for (i = 0; i < numPersonnel; i++)
 	{
