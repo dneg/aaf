@@ -179,16 +179,29 @@ void trace(const char* routineName);
 #define IMPLIES(a, b) \
   (!(a) || (b))
 
+  // @func Evaluate <p expression> for each element,
+  //       <p start> .. <p elementCount> of a collection. Use
+  //       <p index> as the name of the index. The <p expression>
+  //       is most usefully one of the assertion macros such as
+  //       <f PRECONDITION>, <f POSTCONDITION> or <f ASSERT>.
+  //   @parm The index name.
+  //   @parm The starting index.
+  //   @parm The number of elements.
+  //   @parm The expression to evaluate for each element.
+#define FOREACH(index, start, elementCount, expression) \
+  { for (size_t index = start; index < start + elementCount; index++) \
+    {expression;} }
+
   // @func Universal quantifier. Evaluate <p expression> for all
   //       elements, 0 .. <p elementCount> of a collection. Use
   //       <p index> as the name of the index. The <p expression>
   //       is most usefully one of the assertion macros such as
   //       <f PRECONDITION>, <f POSTCONDITION> or <f ASSERT>.
-  //   @parm The index.
+  //   @parm The index name.
   //   @parm The number of elements in the collection.
   //   @parm The expression to evaluate for each element.
 #define FORALL(index, elementCount, expression) \
-  for (size_t index = 0; index < elementCount; index++) {expression;}
+        FOREACH(index, 0, elementCount, expression) 
 
 #else
 
@@ -203,6 +216,8 @@ void trace(const char* routineName);
 #define INVARIANT()
 
 #define IMPLIES(a, b)
+
+#define FOREACH(index, start, elementCount, expression)
 
 #define FORALL(index, elementCount, expression)
 
