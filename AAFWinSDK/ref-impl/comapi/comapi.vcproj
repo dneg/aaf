@@ -47,7 +47,7 @@
 				OutputFile="../../Release/RefImpl/AAFCOAPI.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="&quot;C:\dev\AAF\sss-impl\release&quot;;C:\dev\AAF\AAFWinSDK\lib"
+				AdditionalLibraryDirectories="&quot;C:\dev\AAF\sss-impl\&quot;;C:\dev\AAF\AAFWinSDK\lib"
 				IgnoreDefaultLibraryNames=""
 				ModuleDefinitionFile="..\..\..\ref-impl\src\com-api\com-dll\AAFCOM.DEF"
 				ProgramDatabaseFile=".\../../Release/RefImpl/AAFCOAPI.pdb"
