@@ -914,12 +914,6 @@ void OMStoredObject::save(OMPropertyId propertyId,
   PRECONDITION("Valid index", IMPLIES(count == 0, index== 0));
   PRECONDITION("Valid collection name", validString(collectionName));
 
-  // Write the index entry
-  write(propertyId,
-        storedForm,
-        (void *)collectionName,
-        strlen(collectionName) + 1); 
-
   // Calculate the stream name for the index.
   //
   char* indexName = setIndexStreamName(collectionName);
@@ -1240,7 +1234,7 @@ void OMStoredObject::restore(OMPropertyId propertyId,
   //         identifier of objects in the target set.
 void OMStoredObject::restore(OMPropertyId propertyId,
                              OMStoredForm storedForm,
-                             char*& collectionName,
+                             const char* collectionName,
                              size_t nameSize,
                              const OMUniqueObjectIdentification*& index,
                              size_t &count,
@@ -1249,8 +1243,6 @@ void OMStoredObject::restore(OMPropertyId propertyId,
 {
   TRACE("OMStoredObject::restore");
   
-  read(propertyId, storedForm, collectionName, nameSize);
-
   // Calculate the stream name for the index.
   //
   char* indexName = setIndexStreamName(collectionName);
