@@ -100,9 +100,16 @@ OSErr pascal DllInitializationRoutine(CFragInitBlockPtr initBlkPtr);
 OSErr pascal DllExecutionRoutine();
 void pascal __terminate();
 void pascal DllTerminationRoutine();
+
+// Prototypes for experimental Spotlight debugging
+void SLInit(void);
+void SLEnable(void);
+void SLDisable(void);
+void SLEnterInterrupt(void);
+void SLLeaveInterrupt(void);
+void SLResetLeaks(void);
 }
 
-#include "MetroNubUtils.h"
 
 
 #pragma export on
@@ -254,6 +261,7 @@ DllGetVersion(UInt32* pVersion)
 OSErr pascal
 DllInitializationRoutine(CFragInitBlockPtr initBlkPtr)
 {
+	SLInit();
 	DllData.InitBlock = *initBlkPtr;
 	DllData.Inited = false;
 	DllData.ResRefNum = -1;
@@ -345,6 +353,31 @@ DllTerminationRoutine()
 	}
 	
 	__terminate();
+}
+
+
+void SLInit(void)
+{
+}
+
+void SLDisable(void)
+{
+}
+
+void SLEnable(void)
+{
+}
+
+void SLEnterInterrupt(void)
+{
+}
+
+void SLLeaveInterrupt(void)
+{
+}
+
+void SLResetLeaks(void)
+{
 }
 
 
