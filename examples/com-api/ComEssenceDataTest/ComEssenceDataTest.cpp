@@ -86,6 +86,7 @@ const CLSID CLSID_EnumAAFIdentifications = { 0xB1A21385, 0x1A7D, 0x11D2, { 0xBF,
 const CLSID CLSID_EnumAAFLocators = { 0xB1A2139F, 0x1A7D, 0x11D2, { 0xBF, 0x78, 0x00, 0x10, 0x4B, 0xC9, 0x15, 0x6D } };
 const CLSID CLSID_EnumAAFMobSlots = { 0xB1A21389, 0x1A7D, 0x11D2, { 0xBF, 0x78, 0x00, 0x10, 0x4B, 0xC9, 0x15, 0x6D } };
 const CLSID CLSID_EnumAAFMobs = { 0xB1A21387, 0x1A7D, 0x11D2, { 0xBF, 0x78, 0x00, 0x10, 0x4B, 0xC9, 0x15, 0x6D } };
+const CLSID CLSID_AAFEssenceAccess = { 0xaed97eb1, 0x2bc8, 0x11D2, { 0xbf, 0xaa, 0x00, 0x60, 0x97, 0x11, 0x62, 0x12 } };
 
 #endif
 
@@ -94,10 +95,30 @@ const CLSID CLSID_EnumAAFMobs = { 0xB1A21387, 0x1A7D, 0x11D2, { 0xBF, 0x78, 0x00
 
 static aafSourceRef_t sourceRef; 
 
+static unsigned char smiley[] =        /* 16x16 smiley face */
+  "      ****      "
+  "    ********    "
+  "   **********   "
+  "  ************  "
+  " ***  ****  *** "
+  " ***  ****  *** "
+  "****************"
+  "****************"
+  "****************"
+  "****************"
+  " ** ******** ** "
+  " *** ****** *** "
+  "  ***  **  ***  "
+  "   ****  ****   "
+  "    ********    "
+  "      ****      ";
+
 static aafBool	EqualAUID(aafUID_t *uid1, aafUID_t *uid2)
 {
 	return(memcmp((char *)uid1, (char *)uid2, sizeof(aafUID_t)) == 0 ? AAFTrue : AAFFalse);
 }
+
+#define TEST_PATH	L"SomeFile.dat"
 
 static void     LogError(HRESULT errcode, int line, char *file)
 {
@@ -133,14 +154,22 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFFile*					pFile = NULL;
 	IAAFHeader*					pHeader = NULL;
 	IAAFMob*					pMob = NULL;
-	IAAFMob*					pCompMob = NULL;
 	IAAFEssenceDescriptor*		aDesc = NULL;
 	IAAFMasterMob*				pMasterMob = NULL;
-	IAAFSourceMob*				pFileMob = NULL;
-	IAAFFileDescriptor*			pFileDesc = NULL;
+	IAAFEssenceAccess*			pEssenceAccess = NULL;
 
-	aafUID_t					fileMobID, masterMobID;
+/*	
+	//	This variables are needed if the Essence data is in a separate
+	//	data file.
+
+	IAAFLocator*				pLocator = NULL;
+	IAAFNetworkLocator*			pNetLocator = NULL;
+	IAAFFileDescriptor*			pFileDesc = NULL;
+*/
+	aafUID_t					masterMobID;
 	aafProductIdentification_t	ProductInfo;
+	aafRational_t				editRate = {44100, 1};
+	aafRational_t				sampleRate = {44100, 1};
 
 	ProductInfo.companyName = L"AAF Developers Desk";
 	ProductInfo.productName = L"Make AVR Example";
@@ -164,16 +193,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	check(pFile->OpenNewModify(pFileName, 0, &ProductInfo));
 	check(pFile->GetHeader(&pHeader));
 
-	// TODO 
-	// add code to create media specific data
-	//
-
-	// Make a FileMob
-	check(CoCreateInstance( CLSID_AAFSourceMob,
-						   NULL, 			  
-						   CLSCTX_INPROC_SERVER, 
-						   IID_IAAFSourceMob, 
-						   (void **)&pFileMob));
+/* This code is needed if the Essence data is to be saved
+	in a separate file. For now it is commented out. 
+	// Get a file locator Interface
 	check(CoCreateInstance( CLSID_AAFFileDescriptor,
 						   NULL, 			  
 						   CLSCTX_INPROC_SERVER, 
@@ -181,55 +203,88 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 						   (void **)&pFileDesc));
 	check(pFileDesc->QueryInterface (IID_IAAFEssenceDescriptor, (void **)&aDesc));
 
-	check(pFileMob->QueryInterface (IID_IAAFMob, (void **)&pMob));
-	check(pMob->GetMobID (&fileMobID));
-	check(pHeader->AppendMob(pMob));
-	pMob->Release();
-	pMob = NULL;
-
-	//Make the Master MOB
+	// Get a Locator Interface, and attach it to the EssenceDescriptor
+	check(CoCreateInstance(CLSID_AAFNetworkLocator,
+							NULL, 
+							CLSCTX_INPROC_SERVER, 
+							IID_IAAFNetworkLocator, 
+							(void **)&pNetLocator));		
+	check(pNetLocator->QueryInterface (IID_IAAFLocator, (void **)&pLocator));
+	check(pLocator->SetPath (TEST_PATH));	
+	check(aDesc->AppendLocator(pLocator));
+*/
+	// Get a Master MOB Interface
 	check(CoCreateInstance( CLSID_AAFMasterMob,
 						   NULL, 			  
 						   CLSCTX_INPROC_SERVER, 
 						   IID_IAAFMasterMob, 
 						   (void **)&pMasterMob));
 
-	sourceRef.sourceID = fileMobID;
-	sourceRef.sourceSlotID = 1;
-	sourceRef.startTime = 0;
-	
+	// Get an EssenceAccess Interface
+	check(CoCreateInstance(CLSID_AAFEssenceAccess,
+							NULL, 
+							CLSCTX_INPROC_SERVER, 
+							IID_IAAFEssenceAccess, 
+							(void **)&pEssenceAccess));		
+/*
+	since the data will be saved in the same file we do not need to make
+	this call. Will be used when writing a separate Essence Data file.
+	check(pEssenceAccess->SetEssenceDestination(pLocator, kAAFiMedia));
+*/
+	// now create the Essence data file
+	check(pEssenceAccess->Create(	pMasterMob,		// The MasteMob
+									1,				// Slot ID
+									DDEF_Audio,		// MediaKind
+									CodecWave,		// codecID
+									editRate,		// edit rate
+									sampleRate,		// sample rate
+									kSDKCompressionDisable));// Compress disabled
+
+	// write out the data (a smiley face)
+	check(pEssenceAccess->WriteRawData(	1,			// Number of Samples
+										&smiley[0],	// THE Raw data
+										sizeof(smiley))); // buffer size
+
+
+	// Release all unnecesary interfaces
+	pEssenceAccess->Release();
+	pEssenceAccess= NULL;
+
+	// Get a Mob interface and set its variables.
 	check(pMasterMob->QueryInterface(IID_IAAFMob, (void **)&pMob));
 	check(pMob->GetMobID(&masterMobID));
 	check(pMob->SetName(L"A Master Mob"));
+	
+	// Add it to the file 
 	check(pHeader->AppendMob(pMob));
+	
+	pMasterMob->Release();
+	pMasterMob = NULL;
 	pMob->Release();
 	pMob = NULL;
 
+	pHeader->Release();
+	pHeader = NULL;
+	pFile->Close();
+	pFile->Release();
+
 cleanup:
 	// Cleanup and return
-
+	if (pEssenceAccess)
+		pEssenceAccess->Release();
+	
 	if (pMasterMob)
 		pMasterMob->Release();
 
 	if (pMob)
 		pMob->Release();
 
-	if (pFileMob)
-		pFileMob->Release();
-
-	if (pFileDesc)
-		pFileDesc->Release();
-
 	if (pHeader)
 		pHeader->Release();
 
-	if (pFile) 
-	{
-		pFile->Close();
+	if (pFile)
 		pFile->Release();
-	}
 
-	
 	return moduleErrorTmp;
 }
 
@@ -237,7 +292,13 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 {
 	IAAFFile *					pFile = NULL;
 	IAAFHeader *				pHeader = NULL;
+	IEnumAAFMobs*				pMobIter = NULL;
+	IAAFMob*					pMob = NULL;
 
+	aafNumSlots_t				numMobs;
+	aafSearchCrit_t				criteria;
+	aafUID_t					mobID;
+	aafWChar					namebuf[1204];
 
 	check(CoCreateInstance(CLSID_AAFFile,
                NULL, 
@@ -248,9 +309,40 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	check(pFile->OpenExistingRead(pFileName, 0));
 	check(pFile->GetHeader(&pHeader));
 
-	// TODO 
-	// add code to read and validate Media related MOBS 
-	//
+	// Here we check on the number of mobs in the file. 
+	// Get the number of master mobs in the file (should be one)
+	check(pHeader->GetNumMobs(kMasterMob, &numMobs));
+	if (1 == numMobs )
+	{
+		printf("Found %ld Master Mobs\n", numMobs);
+		criteria.searchTag = kByMobKind;
+		criteria.tags.mobKind = kMasterMob;
+		check(pHeader->EnumAAFAllMobs(&criteria, &pMobIter));
+		while(AAFRESULT_SUCCESS == pMobIter->NextOne(&pMob))
+		{
+			aafWChar	buf[256];
+
+			check(pMob->GetMobID (&mobID));
+			check(pMob->GetName (namebuf, sizeof(namebuf)));
+			AUIDtoString(&mobID, buf);
+			wprintf(L"    MasterMob Name = '%s'\n", namebuf);
+			wprintf(L"        (mobID %s)\n", buf);
+			
+
+			pMob->Release();
+			pMob = NULL;
+		}
+
+		pMobIter->Release();
+		pMobIter = NULL;
+	}
+	else
+	{
+		printf("***Wrong number of Master mobs in the file (was %ld should be %ld)\n",
+			numMobs, 1L);
+	}
+
+	wprintf(L"--------\n");
 
 cleanup:
 	// Cleanup and return
@@ -284,8 +376,8 @@ struct CComInitialize
 main()
 {
 	CComInitialize comInit;
-	aafWChar * pwFileName = L"MediaTest.aaf";
-	const char * pFileName = "MediaTest .aaf";
+	aafWChar * pwFileName = L"EssenceTest.aaf";
+	const char * pFileName = "EssenceTest .aaf";
 
 	printf("***Creating file %s\n", pFileName);
 	checkFatal(CreateAAFFile(pwFileName));
