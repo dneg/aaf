@@ -187,32 +187,19 @@ void FindNamedMob::Execute( const std::vector<AxString>& argv )
 
 	AxHeader axHeader( HeaderFromFileOp( fileName ) );
 
-	AxMobIter axMobIter( axHeader.GetMobs() );
+	aafSearchCrit_t criteria;
+	criteria.tags.name = const_cast<aafString_t>(mobName.c_str());
+  	criteria.searchTag = kAAFByName;
+
+	AxMobIter axMobIter( axHeader.GetMobs( criteria ) );
 	
 	IAAFMobSP spMob;
 	bool notAtEnd;
-	for ( notAtEnd = axMobIter.NextOne( spMob );
-	      notAtEnd;
-		  notAtEnd = axMobIter.NextOne( spMob ) ) {
-	
-		AxMob axMob( spMob );
-
-		try {
-			if ( axMob.GetName() == mobName ) {
-				break;
-			}
-		}
-		catch ( const AxExHResult& ex ) {
-			// ignore AAFRESULT_PROP_NOT_PRESENT
-			if ( ex.getHResult() != AAFRESULT_PROP_NOT_PRESENT ) {
-				throw;
-			}
-		}
-	}
-
+    notAtEnd = axMobIter.NextOne( spMob );
   	if ( !notAtEnd ) {
 		throw AxFGEx( L"Mob not found." );
 	}
+
 
 	SetCOM( spMob );
 	RegisterInstance( mobRefName );
