@@ -19,14 +19,14 @@ class ImplEnumAAFPluginLocators;
 
 
 
-#ifndef __ImplAAFDefObject_h__
-#include "ImplAAFDefObject.h"
+#ifndef __ImplAAFObject_h__
+#include "ImplAAFObject.h"
 #endif
 
 #include "ImplAAFLocator.h"
 #include "ImplAAFNetworkLocator.h"
 
-class ImplAAFPluginDescriptor : public ImplAAFDefObject
+class ImplAAFPluginDescriptor : public ImplAAFObject
 {
 public:
   //

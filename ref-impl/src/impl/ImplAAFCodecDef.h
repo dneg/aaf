@@ -21,12 +21,12 @@ class ImplEnumAAFCodecFlavours;
 
 
 
-#ifndef __ImplAAFPluggableDef_h__
-#include "ImplAAFPluggableDef.h"
+#ifndef __ImplAAFDefObject_h__
+#include "ImplAAFDefObject.h"
 #endif
 
 
-class ImplAAFCodecDef : public ImplAAFPluggableDef
+class ImplAAFCodecDef : public ImplAAFDefObject
 {
 public:
   //
