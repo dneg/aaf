@@ -3,7 +3,6 @@
 #ifndef __ImplAAFTypeDef_h__
 #define __ImplAAFTypeDef_h__
 
-
 /******************************************\
 *                                          *
 * Advanced Authoring Format                *
@@ -15,9 +14,6 @@
 
 
 class ImplEnumAAFReferenceValues;
-
-
-
 
 
 #ifndef __ImplAAFDefObject_h__
@@ -128,6 +124,17 @@ public:
   // Declare the module test method. The implementation of the will be be
   // in /test/ImplAAFTypeDefTest.cpp.
   static AAFRESULT test();
+
+  //
+  // non-published methods
+  //
+
+  // Returns true if property values of this type are of a fixed size.
+  virtual aafBool IsFixedSize (void);
+
+  // If this->IsFixedSize(), then will return the size of property
+  // values of this type.  If not fixed size, will assert().
+  virtual size_t PropValSize (void);
 };
 
 #endif // ! __ImplAAFTypeDef_h__

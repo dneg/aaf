@@ -17,12 +17,26 @@
 #include "ImplAAFTypeDefFixedArray.h"
 #endif
 
+#ifndef __ImplAAFPropertyValue_h__
+#include "ImplAAFPropertyValue.h"
+#endif
+
+#include "AAFPropertyIDs.h"
+#include "ImplAAFObjectCreation.h"
+
 #include <assert.h>
 #include <string.h>
 
+extern "C" const aafClassID_t CLSID_AAFPropertyValue;
+
 
 ImplAAFTypeDefFixedArray::ImplAAFTypeDefFixedArray ()
-{}
+  : _ElementType  ( PID_TypeDefinitionFixedArray_ElementType,  "Element Type"),
+	_ElementCount ( PID_TypeDefinitionFixedArray_ElementCount, "Element Count")
+{
+  _persistentProperties.put(_ElementType.address());
+  _persistentProperties.put(_ElementCount.address());
+}
 
 
 ImplAAFTypeDefFixedArray::~ImplAAFTypeDefFixedArray ()
@@ -30,37 +44,57 @@ ImplAAFTypeDefFixedArray::~ImplAAFTypeDefFixedArray ()
 
  AAFRESULT STDMETHODCALLTYPE
    ImplAAFTypeDefFixedArray::Initialize (
-      aafUID_t *  /*pID*/,
-      ImplAAFTypeDef * /*pTypeDef*/,
-      aafUInt32  /*nElements*/,
-      wchar_t *  /*pTypeName*/)
+      aafUID_t *  pID,
+      ImplAAFTypeDef * pTypeDef,
+      aafUInt32  nElements,
+      wchar_t *  pTypeName)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  if (! pTypeName) return AAFRESULT_NULL_PARAM;
+  if (! pTypeDef)  return AAFRESULT_NULL_PARAM;
+  if (! pID)       return AAFRESULT_NULL_PARAM;
+
+  HRESULT hr;
+  hr = SetName (pTypeName);
+  if (! AAFRESULT_SUCCEEDED (hr)) return hr;
+
+  hr = SetIdentification (pID);
+  if (! AAFRESULT_SUCCEEDED (hr)) return hr;
+
+  _ElementType = pTypeDef;
+  _ElementCount = nElements;
+
+  return AAFRESULT_SUCCESS;
 }
 
 
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDefFixedArray::GetType (
-      ImplAAFTypeDef ** /*ppTypeDef*/)
+      ImplAAFTypeDef ** ppTypeDef)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  if (! ppTypeDef) return AAFRESULT_NULL_PARAM;
+  *ppTypeDef = _ElementType;
+  (*ppTypeDef)->AcquireReference ();
+
+  return AAFRESULT_SUCCESS;
 }
 
 
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDefFixedArray::GetCount (
-      aafUInt32 *  /*pCount*/)
+      aafUInt32 *  pCount)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  if (! pCount) return AAFRESULT_NULL_PARAM;
+  *pCount = _ElementCount;
+  return AAFRESULT_SUCCESS;
 }
 
 
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDefFixedArray::CreateValueFromValues (
-      ImplAAFPropertyValue * /*pElementValues*/,
+      ImplAAFPropertyValue ** /*ppElementValues*/,
       aafUInt32  /*numElements*/,
       ImplAAFPropertyValue ** /*ppPropVal*/)
 {
@@ -82,11 +116,50 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDefFixedArray::GetElementValue (
-      ImplAAFPropertyValue * /*pInPropVal*/,
-      aafUInt32  /*index*/,
-      ImplAAFPropertyValue ** /*ppOutPropVal*/)
+      ImplAAFPropertyValue * pInPropVal,
+      aafUInt32  index,
+      ImplAAFPropertyValue ** ppOutPropVal)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  if (! pInPropVal) return AAFRESULT_NULL_PARAM;
+  if (! ppOutPropVal) return AAFRESULT_NULL_PARAM;
+
+  if (index >= _ElementCount)
+	return AAFRESULT_BADINDEX;
+
+  AAFRESULT hr;
+  aafUInt32 inBitsSize;
+  aafUInt32 elementSize = _ElementType->PropValSize();
+
+  hr = pInPropVal->GetBitsSize (&inBitsSize);
+  if (! AAFRESULT_SUCCEEDED (hr)) return hr;
+  assert (index * elementSize <= inBitsSize);
+
+  ImplAAFPropertyValue * pv = NULL;
+  pv = (ImplAAFPropertyValue *)CreateImpl(CLSID_AAFPropertyValue);
+  if (! pv)
+	return AAFRESULT_NOMEMORY;
+  assert (_ElementType);
+  hr = pv->Initialize (_ElementType);
+  if (AAFRESULT_FAILED(hr))
+	{
+	  pv->ReleaseReference();
+	  return hr;
+	}
+
+  hr = pv->AllocateFromPropVal (pInPropVal,
+								index * elementSize,
+								elementSize,
+								NULL);
+  if (AAFRESULT_FAILED(hr))
+	{
+	  pv->ReleaseReference ();
+	  return hr;
+	}
+
+  assert (ppOutPropVal);
+  *ppOutPropVal = pv;
+
+  return AAFRESULT_SUCCESS;
 }
 
 
@@ -123,6 +196,15 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 
+aafBool ImplAAFTypeDefFixedArray::IsFixedSize (void)
+{
+  return _ElementType->IsFixedSize();
+}
+
+size_t ImplAAFTypeDefFixedArray::PropValSize (void)
+{
+  return _ElementType->PropValSize() * _ElementCount;
+}
+
+
 OMDEFINE_STORABLE(ImplAAFTypeDefFixedArray, AUID_AAFTypeDefFixedArray);
-
-

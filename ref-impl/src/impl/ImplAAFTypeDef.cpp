@@ -111,6 +111,19 @@ AAFRESULT STDMETHODCALLTYPE
   return AAFRESULT_NOT_IMPLEMENTED;
 }
 
+
+aafBool ImplAAFTypeDef::IsFixedSize (void)
+{
+  assert (0);
+  return AAFFalse; // not reached!
+}
+
+
+size_t ImplAAFTypeDef::PropValSize (void)
+{
+  assert (0);
+  return 0; // not reached!
+}
+
+
 OMDEFINE_STORABLE(ImplAAFTypeDef, AUID_AAFTypeDef);
-
-
