@@ -53,6 +53,7 @@ class ImplAAFFile;
 #include "ImplAAFIdentification.h"
 #include "ImplAAFContentStorage.h"
 #include "ImplAAFDictionary.h"
+#include "ImplAAFFile.h"
 
 
 class AAFDataKind;
@@ -294,6 +295,7 @@ public:
   // Makes the ObjectModelVersion present, if it wasn't already; in any
   // case, sets it to the given value.
   void      SetObjectModelVersion (aafUInt32 version);
+  void SetFile(ImplAAFFile *file) { _file = file; }
 
 private:
   // These are private accessor methods.
