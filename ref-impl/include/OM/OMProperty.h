@@ -50,6 +50,7 @@ const int SF_WEAK_OBJECT_REFERENCE_SET      = 7;
 class OMStoredObject;
 class OMStorable;
 class OMPropertySet;
+class OMPropertyDefinition;
 class OMType;
 
   // @class Abstract base class for persistent properties supported by
@@ -63,11 +64,16 @@ public:
              const int storedForm,
              const char* name);
 
-    // Temporary pseudo-constructor.
+    // @cmember Temporary pseudo-constructor for clients which provide
+	//          a type definition.
   void initialize(const OMPropertyId propertyId,
                   const char* name,
                   OMType* type,
                   const bool isOptional = false);
+
+    // @cmember Temporary pseudo-constructor for clients which provide
+	//          a property definition.
+  void initialize(const OMPropertyDefinition* definition);
 
     // @cmember Destructor.
   virtual ~OMProperty(void);
@@ -156,11 +162,16 @@ protected:
     //          is present.
   void clearPresent(void);
 
-  int _propertyId;
+  OMPropertyId _propertyId;
   int _storedForm; // The on-disk representation used (one of the SF_* values)
   const char* _name;
   const OMPropertySet* _propertySet; // The PropertySet that contains
                                      // this property
+  // The _definition member is set by clients which pass a definition
+  // to initialize().  It is preferred over the _type member, which is
+  // set by clients which pass a type to initialize().  Only one can
+  // be set.
+  const OMPropertyDefinition* _definition;
   const OMType* _type;
 
 private:
