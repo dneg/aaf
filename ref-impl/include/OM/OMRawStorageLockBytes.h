@@ -83,7 +83,7 @@ public:
 private:
   // @access Private members.
 
-  OMRawStorage* _rawStorge;
+  OMRawStorage* _rawStorage;
 
 };
 
