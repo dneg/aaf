@@ -158,7 +158,7 @@ OMF_DLL_NAME = libOMFI.a
 #
 
 # Config-specific dirs
-ifeq ($(CFG), Release )
+ifeq ($(CFG), Release)
     CONFIG_DIRS = \
        	$(AAFSDK_BIN) \
        	$(AAFSDK_BIN_EXT) \
@@ -653,4 +653,3 @@ rebuildmsg :
 
 rebuildall : rebuildmsg clean targets
 	@echo Done rebuilding.
-
