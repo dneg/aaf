@@ -32,12 +32,12 @@
 #include "OMSetIterator.h"
 #include "OMReferenceContainerIter.h"
 
-template <typename ReferencedObject>
+template <typename UniqueIdentification, typename ReferencedObject>
 class OMStrongReferenceSetProperty;
 
 // @class Iterators over <c OMStrongReferenceSetProperty>s.
 //   @tcarg class | ReferencedObject | The type of the contained objects.
-template <typename ReferencedObject>
+template <typename UniqueIdentification, typename ReferencedObject>
 class OMStrongReferenceSetIterator :
                         public OMReferenceContainerIterator<ReferencedObject> {
 public:
@@ -57,7 +57,8 @@ public:
     //          associated <c OMStrongReferenceSetProperty> in the reverse
     //          direction (decreasing <p Key>s).
   OMStrongReferenceSetIterator(
-                     const OMStrongReferenceSetProperty<ReferencedObject>& set,
+                     const OMStrongReferenceSetProperty<UniqueIdentification,
+                                                        ReferencedObject>& set,
                      OMIteratorPosition initialPosition = OMBefore);
 
     // @cmember Destroy this <c OMStrongReferenceSetIterator>.
@@ -145,14 +146,14 @@ public:
     // @cmember Return the <p Key> of the <p ReferencedObject> in the
     //          associated <c OMStrongReferenceSetProperty> at the position
     //          currently designated by this <c OMStrongReferenceSetIterator>.
-   OMUniqueObjectIdentification identification(void) const;
+   UniqueIdentification identification(void) const;
 
 protected:
 
-  typedef OMStrongReferenceSetElement<OMUniqueObjectIdentification,
+  typedef OMStrongReferenceSetElement<UniqueIdentification,
                                       ReferencedObject> SetElement;
 
-  typedef OMSetIterator<OMUniqueObjectIdentification, SetElement> SetIterator;
+  typedef OMSetIterator<UniqueIdentification, SetElement> SetIterator;
 
     // @cmember Create an <c OMStrongReferenceSetIterator> given
     //          an underlying <c OMSetIterator>.
