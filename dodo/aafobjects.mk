@@ -61,7 +61,6 @@ AAFNONPERSISTENTOBJECTS = \
 	EnumAAFDefs \
 	EnumAAFEffectDefs \
 	EnumAAFIdentifications \
-	EnumAAFLocators \
 	EnumAAFMedia \
 	EnumAAFMobComments \
 	EnumAAFParameterSlots \
