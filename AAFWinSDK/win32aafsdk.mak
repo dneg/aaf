@@ -157,6 +157,7 @@ TOOLKIT_PLUGINS = $(AAFTOOLKIT)\ref-impl\plugins
 TOOLKIT_COMIDL = $(AAFTOOLKIT)\AAFWinSDK\ref-impl\include\comidl
 TOOLKIT_DEBUG_REFIMPL = $(AAFTOOLKIT)\AAFWinSDK\Debug\RefImpl
 TOOLKIT_RELEASE_REFIMPL = $(AAFTOOLKIT)\AAFWinSDK\Release\RefImpl
+OMF_LIBS = $(AAFTOOLKIT)\Omf
 
 
 #
@@ -276,8 +277,8 @@ TARGET_LIB_FILES = \
 RELEASE_DLL_FILES = \
 	$(AAFSDK_BIN)\aafcoapi.dll \
 	$(AAFSDK_BIN)\aafintp.dll \
-	$(AAFSDK_BIN)\aafpgapi.dll
-
+	$(AAFSDK_BIN)\aafpgapi.dll \
+	$(AAFSDK_BIN)\omfToolkit.dll
 
 #
 # Release dynamic link libraries.
@@ -285,7 +286,8 @@ RELEASE_DLL_FILES = \
 DEBUG_DLL_FILES = \
 	$(AAFSDK_DEBUG)\aafcoapi.dll \
 	$(AAFSDK_DEBUG)\aafintp.dll \
-	$(AAFSDK_DEBUG)\aafpgapi.dll
+	$(AAFSDK_DEBUG)\aafpgapi.dll \
+	$(AAFSDK_DEBUG)\omfToolkitd.dll
 
 
 #
@@ -568,7 +570,9 @@ $(AAFSDK_BIN)\aafintp.dll : $(TOOLKIT_TARGET_REFIMPL)\aafintp.dll
 $(AAFSDK_BIN)\aafpgapi.dll : $(TOOLKIT_TARGET_REFIMPL)\aafpgapi.dll
 	$(CP) $(CP_OPTS) $(TOOLKIT_TARGET_REFIMPL)\aafpgapi.dll $(AAFSDK_BIN)\
 
-
+$(AAFSDK_BIN)\omfToolkit.dll : $(OMF_LIBS)\omfToolkit.dll
+	$(CP) $(CP_OPTS) $(OMF_LIBS)\omfToolkit.dll $(AAFSDK_BIN)\
+	
 
 #
 # Dependency and build rules for the Debug DLL targets.
@@ -582,6 +586,8 @@ $(AAFSDK_DEBUG)\aafintp.dll : $(TOOLKIT_DEBUG_REFIMPL)\aafintp.dll
 $(AAFSDK_DEBUG)\aafpgapi.dll : $(TOOLKIT_DEBUG_REFIMPL)\aafpgapi.dll
 	$(CP) $(CP_OPTS) $(TOOLKIT_DEBUG_REFIMPL)\aafpgapi.dll $(AAFSDK_DEBUG)\
 
+$(AAFSDK_DEBUG)\omfToolkitd.dll : $(OMF_LIBS)\omfToolkitd.dll
+	$(CP) $(CP_OPTS) $(OMF_LIBS)\omfToolkitd.dll $(AAFSDK_BIN)\
 
 #
 # Clean out all files that are specific to a particular configuration.
