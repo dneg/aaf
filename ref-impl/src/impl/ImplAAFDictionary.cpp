@@ -1521,6 +1521,30 @@ void ImplAAFDictionary::InitBuiltins()
   dataDef->ReleaseReference();
   dataDef = NULL;
 
+  hr = LookupDataDef (DDEF_Auxiliary, &dataDef);
+  if (AAFRESULT_FAILED (hr))
+	{
+	  // not already in dictionary
+	  hr = GetBuiltinDefs()->cdDataDef()->
+		CreateInstance ((ImplAAFObject **)&dataDef);
+	  hr = dataDef->Initialize (DDEF_Auxiliary, L"Auxiliary", L"Auxiliary data");
+	  hr = RegisterDataDef (dataDef);
+	}
+  dataDef->ReleaseReference();
+  dataDef = NULL;
+
+  hr = LookupDataDef (DDEF_DescriptiveMetadata, &dataDef);
+  if (AAFRESULT_FAILED (hr))
+	{
+	  // not already in dictionary
+	  hr = GetBuiltinDefs()->cdDataDef()->
+		CreateInstance ((ImplAAFObject **)&dataDef);
+	  hr = dataDef->Initialize (DDEF_DescriptiveMetadata, L"DescriptiveMetadata", L"Descriptive metadata");
+	  hr = RegisterDataDef (dataDef);
+	}
+  dataDef->ReleaseReference();
+  dataDef = NULL;
+
   //**********************
   hr = LookupContainerDef (ContainerAAF, &containerDef);
   if (AAFRESULT_FAILED (hr))
