@@ -53,6 +53,7 @@
 #include "AAFPropertyIDs.h"
 
 #include "OMReferenceSetIter.h"
+#include "OMPropertySetIterator.h"
 
 #include "ImplAAFObjectCreation.h"
 #include "aafErr.h"
@@ -1231,6 +1232,22 @@ void ImplAAFMetaDictionary::InitializeAxiomaticOMProperties(void)
       throw AAFRESULT_CLASS_NOT_FOUND;
 
     pType->InitOMProperties(pClassDef);
+  }
+  
+   
+  // Handle special case of initializition the meta dictionary's 
+  // OM propreties. TODO: Add InitOMProperties method to ImplAAFMetaDictionary.
+  pClassDef = findAxiomaticClassDefinition(AUID_AAFMetaDictionary);
+  assert (pClassDef);
+  OMPropertySetIterator iter(*propertySet(), OMBefore);
+  while (++iter)
+  {
+    ImplAAFPropertyDefSP pPropertyDef;
+    pClassDef->LookupPropertyDefbyOMPid(iter.propertyId(), &pPropertyDef);
+    OMPropertyDefinition * propertyDefinition = static_cast<OMPropertyDefinition *>((ImplAAFPropertyDef *)pPropertyDef);
+    assert(propertyDefinition);
+    OMProperty *property = iter.property();
+    property->initialize(propertyDefinition);
   }
 }
 
