@@ -86,8 +86,6 @@ BEGIN {
   #
   # Initialize global variables.
   #
-  class = "0"
-  parent = "root"
 
   pidinc = 256 # 0x100
 }
@@ -98,12 +96,16 @@ BEGIN {
 
 {
   if ($13 != "") { # This item has a name
+    # printf("// <%s> \n", $20);
     if ($13 == "Class") { # This item is a class
       if ($10 != class) { # This is a new class
-        if (class != "0" ) {
+        if (class != "" ) {
+          # end the old one
           printf("AAF_CLASS_END(%s)\n", class);
+          parent = $20;
+        } else {
+          parent = "0"
         }
-        parent = class;
         class = $10;
         printf("\n");
         printf("// %s\n", class);
