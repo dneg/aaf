@@ -65,9 +65,6 @@ void AxImplPlugin::CountDefinitions(
 void AxImplPlugin::GetIndexedDefinitionID(
 		aafUInt32 index, aafUID_t *result )
 {
-	if ( !result ) {
-		CHECK_HRESULT( AAFRESULT_NULL_PARAM );
-	}
 	if ( index > _definitionParams.size() ) {
 		CHECK_HRESULT( AAFRESULT_BADINDEX );
 	}
@@ -78,13 +75,7 @@ void AxImplPlugin::GetIndexedDefinitionID(
 void AxImplPlugin::GetPluginDescriptorID(
 		aafUID_t *result )
 {
-	if ( !result ) {
-		CHECK_HRESULT( AAFRESULT_NULL_PARAM );
-	}
-
 	*result = _pluginDescriptorAUID;
-
-	CHECK_HRESULT(!S_OK);
 }
 
 
@@ -93,14 +84,6 @@ void AxImplPlugin::GetIndexedDefinitionObject(
 		IAAFDictionary *dict, 
 		IAAFDefObject **def )
 {
-	if ( !dict ) {
-		CHECK_HRESULT( AAFRESULT_NULL_PARAM );
-	}
-
-	if ( !def ) {
-		CHECK_HRESULT( AAFRESULT_NULL_PARAM );
-	}
-	
 	if ( index >= _definitionParams.size() ) {
 		CHECK_HRESULT( AAFRESULT_BADINDEX );
 	}
@@ -136,14 +119,6 @@ void AxImplPlugin::CreateDescriptor(
 		IAAFDictionary *dict,
 		IAAFPluginDef **desc )
 {
-	if ( !dict ) {
-		CHECK_HRESULT( AAFRESULT_NULL_PARAM );
-	}
-
-	if ( !desc ) {
-		CHECK_HRESULT( AAFRESULT_NULL_PARAM );
-	}
-
 	IAAFDictionarySP spDict( dict );
 
 	IAAFNetworkLocatorSP spNetLoc;

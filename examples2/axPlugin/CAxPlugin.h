@@ -19,6 +19,8 @@
 // 
 //=---------------------------------------------------------------------=
 
+#include "AxPluginUtil.h"
+
 #include <AAFResult.h>
 #include <AAFPlugin.h>
 
@@ -47,6 +49,7 @@ public:
 	STDMETHOD(CountDefinitions)(
 		aafUInt32 *pDefCount )
 	{
+		AX_PLUGIN_CHECK_NULL_PARAM( pDefCount );
 		AX_PLUGIN_TRY( _impl, CountDefinitions, (pDefCount) );
 	}
 
@@ -54,6 +57,7 @@ public:
 	STDMETHOD(GetIndexedDefinitionID)(
 		aafUInt32 index, aafUID_t *result )
 	{
+		AX_PLUGIN_CHECK_NULL_PARAM( result );
 		AX_PLUGIN_TRY( _impl, GetIndexedDefinitionID, (index, result) );
 	}
 
@@ -61,6 +65,7 @@ public:
 	STDMETHOD(GetPluginDescriptorID)(
 		aafUID_t *result )
 	{
+		AX_PLUGIN_CHECK_NULL_PARAM( result );
 		AX_PLUGIN_TRY( _impl, GetPluginDescriptorID, (result) );
 	}
 
@@ -69,6 +74,8 @@ public:
         IAAFDictionary *dict,
         IAAFDefObject **def )
 	{
+		AX_PLUGIN_CHECK_NULL_PARAM( dict );
+		AX_PLUGIN_CHECK_NULL_PARAM( def );
 		AX_PLUGIN_TRY( _impl, GetIndexedDefinitionObject, (index, dict, def) );
 	}
  
@@ -76,6 +83,8 @@ public:
 		IAAFDictionary *dict,
 		IAAFPluginDef **desc )
 	{	
+		AX_PLUGIN_CHECK_NULL_PARAM( dict );
+		AX_PLUGIN_CHECK_NULL_PARAM( desc );
 		AX_PLUGIN_TRY( _impl, CreateDescriptor, (dict, desc) );
 	}
 

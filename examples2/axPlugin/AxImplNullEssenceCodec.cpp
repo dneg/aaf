@@ -254,10 +254,6 @@ void AxImplNullEssenceCodec::CountFlavours(
 {
 	TRACE
 
-	if ( !pCount ) {
-		CHECK_HRESULT( AAFRESULT_NULL_PARAM );
-	}
-
 	*pCount = _flavours.size();
 }
 
@@ -267,10 +263,6 @@ void AxImplNullEssenceCodec::GetIndexedFlavourID(
 {
 	TRACE
 
-	if ( !pVariant ) {
-		CHECK_HRESULT( AAFRESULT_NULL_PARAM );
-	}
-	
 	if ( index >= _flavours.size() ) {
 		CHECK_HRESULT( AAFRESULT_BADINDEX );
 	}
@@ -283,10 +275,6 @@ void AxImplNullEssenceCodec::CountDataDefinitions(
 {
 	TRACE
 
-	if ( !pCount ) {
-		CHECK_HRESULT( AAFRESULT_NULL_PARAM );
-	}
-
 	// FIXME, the CDCI, JPEG, AIFC, and WAVE all return
 	// the value one, but then return AAFRESULT_NOT_IMPLEMENTED
 	// in GetIndexedDataDefinition(). Hence, zero seems more
@@ -298,10 +286,6 @@ void AxImplNullEssenceCodec::GetIndexedDataDefinition(
 		aafUInt32  index,
 		aafUID_t *  pDataDefID )
 {
-	if ( !pDataDefID ) {
-		CHECK_HRESULT( AAFRESULT_NULL_PARAM );
-	}
-	
 	if ( index >= 0 ) {
 		CHECK_HRESULT( AAFRESULT_BADINDEX );
 	}
@@ -316,10 +300,6 @@ void AxImplNullEssenceCodec::GetMaxCodecDisplayNameLength(
 {
 	TRACE
 
-	if ( !pBufSize ) {
-		CHECK_HRESULT( AAFRESULT_NULL_PARAM );
-	}
-
 	*pBufSize = _flavourNames.GetMaxCBufferSize();
 }
 
@@ -329,10 +309,6 @@ void AxImplNullEssenceCodec::GetCodecDisplayName(
 		aafUInt32  bufSize )
 {
 	TRACE
-
-	if ( !pName ) {
-		CHECK_HRESULT( AAFRESULT_NULL_PARAM );
-	}
 
 	DisplayNameIterType iter;
 	iter = _flavourNames.find( flavour );
@@ -400,10 +376,6 @@ void AxImplNullEssenceCodec::Create(
 {
 	TRACE
 
-	if ( !fileMob || ! stream ) {
-		CHECK_HRESULT( AAFRESULT_NULL_PARAM );
-	}
-
 	if ( !_flavourNames.IsFound( flavour ) ) {
 		// FIXME - The CDCI and JPEG codecs return AAFRESULT_NULL_PARAMS.
 		// This seems like a better alternative, but remains less than ideal.
@@ -441,10 +413,6 @@ void AxImplNullEssenceCodec::CountSamples(
 		aafUID_constref  essenceKind,
 		aafLength_t *  pNumSamples)
 {
-	if ( !pNumSamples ) {
-		CHECK_HRESULT( AAFRESULT_NULL_PARAM );
-	}
-
 	if ( essenceKind != _dataDefID ) {
 		CHECK_HRESULT( AAFRESULT_INVALID_DATADEF );
 	}
@@ -460,10 +428,6 @@ void AxImplNullEssenceCodec::WriteSamples(
 		aafUInt32 *  bytesWritten)
 {
 	TRACE
-
-	if ( !samplesWritten || !bytesWritten || !buffer ) {
-		CHECK_HRESULT( AAFRESULT_NULL_PARAM );
-	}
 
 	if ( buflen < GetFrameSize() ) {
 		CHECK_HRESULT( AAFRESULT_SMALLBUF );
@@ -486,10 +450,6 @@ void AxImplNullEssenceCodec::ReadSamples(
 {
 	TRACE
 
-	if ( !samplesRead || !bytesRead ) {
-		CHECK_HRESULT( AAFRESULT_NULL_PARAM );
-	}
-	
 	// Read samples from _stream, aligned as necessary.
 	
 	*samplesRead = 1;
@@ -512,10 +472,6 @@ void AxImplNullEssenceCodec::CompleteWrite(
 {
 	TRACE
 
-	if ( !pFileMob ) {
-		CHECK_HRESULT( AAFRESULT_NULL_PARAM );
-	}
-
 	// Perform final processing on _spStream.
 
 	// Update the essence descriptor.
@@ -536,10 +492,6 @@ void AxImplNullEssenceCodec::CreateDescriptorFromStream(
 void AxImplNullEssenceCodec::GetCurrentEssenceStream(
 		IAAFEssenceStream ** ppStream)
 {
-	if ( !ppStream ) {
-		CHECK_HRESULT( AAFRESULT_NULL_PARAM );
-	}
-
 	// FIXME - Mixed use of smart/dump pointer.
 	// Is there a better way to deal with this?
 
@@ -550,10 +502,6 @@ void AxImplNullEssenceCodec::GetCurrentEssenceStream(
 void AxImplNullEssenceCodec::PutEssenceFormat(
 		IAAFEssenceFormat * pFormat)
 {
-	if ( !pFormat ) {
-		CHECK_HRESULT(AAFRESULT_NULL_PARAM);
-	}
-
 	aafInt32 numSpecifiers;
 	int i;
 
@@ -595,14 +543,6 @@ void AxImplNullEssenceCodec::GetEssenceFormat(
 		IAAFEssenceFormat * pFormatTemplate,
 		IAAFEssenceFormat ** ppNewFormat)
 {
-	if ( !pFormatTemplate ) {
-		CHECK_HRESULT( AAFRESULT_NULL_PARAM );
-	}
-
-	if ( !ppNewFormat ) {
-		CHECK_HRESULT( AAFRESULT_NULL_PARAM );
-	}
-
 	aafInt32 numSpecifiers;
 	int i;
 
@@ -639,10 +579,6 @@ void AxImplNullEssenceCodec::GetEssenceFormat(
 void AxImplNullEssenceCodec::GetDefaultEssenceFormat(
 		IAAFEssenceFormat ** ppNewFormat)
 {
-	if ( !ppNewFormat ) {
-		CHECK_HRESULT( AAFRESULT_NULL_PARAM );
-	}
-
 	IAAFSmartPointer<IAAFEssenceFormat> pFormat;
 	CHECK_HRESULT( _pAccess->GetEmptyFileFormat( &pFormat ) );
 
@@ -662,11 +598,6 @@ void AxImplNullEssenceCodec::GetEssenceDescriptorID(
 		aafUID_t *  pDescriptorID)
 {
 	TRACE
-
-	if ( !pDescriptorID ) {
-		CHECK_HRESULT(AAFRESULT_NULL_PARAM);
-	}
-
 	*pDescriptorID = _descriptorAUID;
 }
 
@@ -674,11 +605,6 @@ void AxImplNullEssenceCodec::GetEssenceDataID(
 		aafUID_t *  pEssenceDataID)
 {
 	TRACE
-	
-	if ( !pEssenceDataID ) {
-		CHECK_HRESULT( AAFRESULT_NULL_PARAM );
-	}
-
 	*pEssenceDataID = _essenceDataAUID;
 }
 	
@@ -689,10 +615,6 @@ void AxImplNullEssenceCodec::GetIndexedSampleSize(
 {
 	TRACE
 	
-	if ( !pLength ) {
-		CHECK_HRESULT( AAFRESULT_NULL_PARAM );
-	}
-		
 	if ( _dataDefID != essenceDefID ) {
 		CHECK_HRESULT( AAFRESULT_CODEC_CHANNELS );
 	}
@@ -705,11 +627,6 @@ void AxImplNullEssenceCodec::GetLargestSampleSize(
 		aafLength_t *  pLength)
 {
 	TRACE
-
-	if ( !pLength ) {
-		CHECK_HRESULT( AAFRESULT_NULL_PARAM );
-	}
-		
 		
 	if ( _dataDefID != essenceDefID ) {
 		CHECK_HRESULT( AAFRESULT_CODEC_CHANNELS );

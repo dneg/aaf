@@ -76,3 +76,7 @@ public:
 	return S_OK;
 
 #endif
+
+
+#define AX_PLUGIN_CHECK_NULL_PARAM( PNTR ) \
+{ if ( !(PNTR) ) { CHECK_HRESULT( AAFRESULT_NULL_PARAM ) } }

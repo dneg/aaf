@@ -47,12 +47,14 @@ public:
 	STDMETHOD(SetEssenceAccess)(
 		IAAFEssenceAccess * pEssenceAccess )
 	{
+		AX_PLUGIN_CHECK_NULL_PARAM( pEssenceAccess );
 		AX_PLUGIN_TRY( _impl, SetEssenceAccess, (pEssenceAccess) );
 	}
 
 	STDMETHOD(CountFlavours)(
 		aafUInt32*  pCount )
 	{
+		AX_PLUGIN_CHECK_NULL_PARAM( pCount );
 		AX_PLUGIN_TRY( _impl, CountFlavours, (pCount) );
 	}
 
@@ -60,12 +62,14 @@ public:
 		aafUInt32  index,
 		aafUID_t *  pVariant )
 	{
+		AX_PLUGIN_CHECK_NULL_PARAM( pVariant );
 		AX_PLUGIN_TRY( _impl, GetIndexedFlavourID, (index, pVariant) );
 	}
  
 	STDMETHOD(CountDataDefinitions)(
 		aafUInt32*  pCount )
 	{
+		AX_PLUGIN_CHECK_NULL_PARAM( pCount );
 		AX_PLUGIN_TRY( _impl, CountDataDefinitions, (pCount) );
 	}
 
@@ -73,12 +77,14 @@ public:
 		aafUInt32  index,
 		aafUID_t *  pDataDefID )
 	{
+		AX_PLUGIN_CHECK_NULL_PARAM( pDataDefID );
 		AX_PLUGIN_TRY( _impl, GetIndexedDataDefinition, (index, pDataDefID) );
 	}
 
 	STDMETHOD(GetMaxCodecDisplayNameLength) (
 		aafUInt32*  pBufSize )
 	{
+		AX_PLUGIN_CHECK_NULL_PARAM( pBufSize );
 		AX_PLUGIN_TRY( _impl, GetMaxCodecDisplayNameLength, (pBufSize) );
 	}		
 
@@ -87,6 +93,7 @@ public:
 		aafCharacter *  pName,
 		aafUInt32  bufSize )
 	{
+		AX_PLUGIN_CHECK_NULL_PARAM( pName );
 		AX_PLUGIN_TRY( _impl, GetCodecDisplayName, (flavour, pName, bufSize) );
 	}
 	
@@ -96,6 +103,9 @@ public:
 		IAAFEssenceStream * stream,
 		aafUInt16 *  pNumChannels )
 	{	
+		AX_PLUGIN_CHECK_NULL_PARAM( fileMob );
+		AX_PLUGIN_CHECK_NULL_PARAM( stream );
+		AX_PLUGIN_CHECK_NULL_PARAM( pNumChannels );
 		AX_PLUGIN_TRY( _impl, CountChannels, (fileMob, essenceKind, stream, pNumChannels) );
 	}
 
@@ -104,6 +114,9 @@ public:
 		IAAFEssenceStream * stream,
 		aafSelectInfo_t *  pSelectInfo )
 	{
+		AX_PLUGIN_CHECK_NULL_PARAM( fileMob );
+		AX_PLUGIN_CHECK_NULL_PARAM( stream );
+		AX_PLUGIN_CHECK_NULL_PARAM( pSelectInfo );
 		AX_PLUGIN_TRY( _impl, GetSelectInfo, (fileMob, stream, pSelectInfo) );
 	}
 
@@ -116,6 +129,10 @@ public:
 		aafCharacter *  pErrorText,
 		aafUInt32*  pBytesRead)
 	{
+		AX_PLUGIN_CHECK_NULL_PARAM( fileMob );
+		AX_PLUGIN_CHECK_NULL_PARAM( stream );
+		AX_PLUGIN_CHECK_NULL_PARAM( pErrorText );
+		AX_PLUGIN_CHECK_NULL_PARAM( pBytesRead );
 		AX_PLUGIN_TRY( _impl, ValidateEssence, (fileMob, stream, verbose, outputWarnings, bufSize, pErrorText, pBytesRead) );
 	}
 
@@ -127,6 +144,8 @@ public:
 		IAAFEssenceStream * stream,
 		aafCompressEnable_t  compEnable)
 	{	
+		AX_PLUGIN_CHECK_NULL_PARAM( fileMob );
+		AX_PLUGIN_CHECK_NULL_PARAM( stream );
 		AX_PLUGIN_TRY( _impl, Create, (fileMob, flavour, essenceKind, sampleRate, stream, compEnable) );
 	}	
 
@@ -136,6 +155,8 @@ public:
 		IAAFEssenceStream * stream,
 		aafCompressEnable_t  compEnable)
 	{
+		AX_PLUGIN_CHECK_NULL_PARAM( fileMob );
+		AX_PLUGIN_CHECK_NULL_PARAM( stream );
 		AX_PLUGIN_TRY( _impl, Open, (fileMob, openMode, stream, compEnable) );
 	}
 	
@@ -143,6 +164,7 @@ public:
 		aafUID_constref  essenceKind,
 		aafLength_t *  pNumSamples)
 	{
+		AX_PLUGIN_CHECK_NULL_PARAM( pNumSamples );
 		AX_PLUGIN_TRY( _impl, CountSamples, (essenceKind, pNumSamples) );
 	}
 
@@ -153,6 +175,9 @@ public:
 		aafUInt32 *  samplesWritten,
 		aafUInt32 *  bytesWritten)
 	{
+		AX_PLUGIN_CHECK_NULL_PARAM( buffer );
+		AX_PLUGIN_CHECK_NULL_PARAM( samplesWritten );
+		AX_PLUGIN_CHECK_NULL_PARAM( bytesWritten );
 		AX_PLUGIN_TRY( _impl, WriteSamples, (nSamples, buflen, buffer, samplesWritten, bytesWritten) );
 	}
 
@@ -163,6 +188,9 @@ public:
 		aafUInt32 *  samplesRead,
 		aafUInt32 *  bytesRead)
 	{
+		AX_PLUGIN_CHECK_NULL_PARAM( buffer );
+		AX_PLUGIN_CHECK_NULL_PARAM( samplesRead );
+		AX_PLUGIN_CHECK_NULL_PARAM( bytesRead );
 		AX_PLUGIN_TRY( _impl, ReadSamples, (nSamples, buflen, buffer, samplesRead, bytesRead) );
 	}
 
@@ -176,6 +204,7 @@ public:
 	STDMETHOD(CompleteWrite) (
 		IAAFSourceMob * pFileMob)
 	{
+		AX_PLUGIN_CHECK_NULL_PARAM( pFileMob );
 		AX_PLUGIN_TRY( _impl, CompleteWrite, (pFileMob) );
 	}
 
@@ -183,18 +212,22 @@ public:
 		IAAFEssenceStream * pStream,
 		IAAFSourceMob * pSourceMob)
 	{
+		AX_PLUGIN_CHECK_NULL_PARAM( pStream );
+		AX_PLUGIN_CHECK_NULL_PARAM( pSourceMob );
 		AX_PLUGIN_TRY( _impl, CreateDescriptorFromStream, (pStream, pSourceMob) );
 	}
 
 	STDMETHOD(GetCurrentEssenceStream) (
 		IAAFEssenceStream ** ppStream)
 	{
+		AX_PLUGIN_CHECK_NULL_PARAM( ppStream );
 		AX_PLUGIN_TRY( _impl, GetCurrentEssenceStream, (ppStream) );
 	}
 
 	STDMETHOD(PutEssenceFormat) (
 		IAAFEssenceFormat * pFormat)
 	{
+		AX_PLUGIN_CHECK_NULL_PARAM( pFormat );
 		AX_PLUGIN_TRY( _impl, PutEssenceFormat, (pFormat) );
 	}
 	
@@ -202,24 +235,29 @@ public:
 		IAAFEssenceFormat * pFormatTemplate,
 		IAAFEssenceFormat ** ppNewFormat)
 	{
+		AX_PLUGIN_CHECK_NULL_PARAM( pFormatTemplate );
+		AX_PLUGIN_CHECK_NULL_PARAM( ppNewFormat );
 		AX_PLUGIN_TRY( _impl, GetEssenceFormat, (pFormatTemplate, ppNewFormat) );
 	}
 
 	STDMETHOD(GetDefaultEssenceFormat) (
 		IAAFEssenceFormat ** ppNewFormat)
 	{
+		AX_PLUGIN_CHECK_NULL_PARAM( ppNewFormat );
 		AX_PLUGIN_TRY( _impl, GetDefaultEssenceFormat, (ppNewFormat) );
 	}
 
 	STDMETHOD(GetEssenceDescriptorID) (
 		aafUID_t *  pDescriptorID)
 	{
+		AX_PLUGIN_CHECK_NULL_PARAM( pDescriptorID );
 		AX_PLUGIN_TRY( _impl, GetEssenceDescriptorID, (pDescriptorID) );
 	}
 
 	STDMETHOD(GetEssenceDataID) (
 		aafUID_t *  pEssenceDataID)
 	{
+		AX_PLUGIN_CHECK_NULL_PARAM( pEssenceDataID );
 		AX_PLUGIN_TRY( _impl, GetEssenceDataID, (pEssenceDataID) );
 	}
 	
@@ -228,6 +266,7 @@ public:
 		aafPosition_t  sampleOffset,
 		aafLength_t *  pLength)
 	{
+		AX_PLUGIN_CHECK_NULL_PARAM( pLength );
 		AX_PLUGIN_TRY( _impl, GetIndexedSampleSize, (essenceDefID, sampleOffset, pLength) );
 	}
 
@@ -235,6 +274,7 @@ public:
 		aafUID_constref  essenceDefID,
 		aafLength_t *  pLength)
 	{
+		AX_PLUGIN_CHECK_NULL_PARAM( pLength );
 		AX_PLUGIN_TRY( _impl, GetLargestSampleSize, (essenceDefID, pLength) );
 	}
 	
