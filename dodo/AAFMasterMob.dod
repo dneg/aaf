@@ -549,7 +549,7 @@ AD_XMETHOD7(CreateMultiEssence,
 [in],objPass, aafCompressEnable_t,Enable,optionally compressing it,
 [in],objIn,	  AAFLocator,destination,Optionally create the file HERE.,
 [in],objPass, aafUID_t,fileFormat,with this format,
-[out],objOut, AAFEssenceAccess,access,Return an essence access on the essence.,
+[out],objPass, IAAFEssenceMultiAccess**,access,Return an essence access on the essence.,
 Creates a multi-channel interleaved stream of essence.)
 	//@comm The essence handle from this call can be used with
 	// WriteDataSamples or WriteMultiSamples but NOT with 
@@ -585,15 +585,15 @@ AD_XMETHOD5(OpenMultiEssence,
 [in],objPass, aafMediaCriteria_t*,mediaCrit,using this essence criteria,
 [in],objPass, aafMediaOpenMode_t,openMode,ReadOnly or Append,
 [in],objPass, aafCompressEnable_t,compEnable,optionally decompressing,
-[out],objOut, AAFEssenceAccess,access,Return an essence access on the essence.,
+[out],objPass, IAAFEssenceMultiAccess**,access,Return an essence access on the essence.,
 Opens a all channels associated with a file mob.)
 	//@comm This routine
 	// follows the locator, and may call the locator failure callback if
 	// the essence can not be found.  If the failure callback finds the essence,
 	// then this routine will return normally.
 	//@comm The essence handle from this call can be used with
-	// WriteDataSamples or WriteMultiSamples but NOT with 
-	//  WriteDataLines.
+	//  WriteMultiSamples but NOT with 
+	//  WriteDataSamples.
 	//@comm Possible Errors:
 	// 	Standard errors (see top of file).
 	// 	OM_ERR_NOMEMORY -- couldn't allocate memory for the essence handle
