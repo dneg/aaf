@@ -25,12 +25,13 @@ AD_FORWARD_DECLARATION(AAFDataDefinition)
 
 AD_CLASS_BEGIN
 
-AD_CONSTRUCTOR4(
-		   [in], AAFDataDefinition *, datadef, Data Definition object,
-		   [in], aafLength_t, length, Length property value,
-		   [in], aafPosition_t, cutPoint, The point at which a cut would be inserted if the transition were removed,
-		   [in], AAFEffectInvocation *, effect, A reference to an effect invocation object,
-		   Constructor which allows specification of starting values.)	 
+AD_XCONSTRUCTOR4(
+				 [in], objIn, AAFDataDefinition, datadef, Data Definition object,
+				 [in], objPass, aafLength_t, length, Length property value,
+				 [in], objPass, aafPosition_t, cutPoint,
+				 The point at which a cut would be inserted if the transition were removed,
+				 [in], objIn, AAFEffectInvocation, effect, A reference to an effect invocation object,
+				 Constructor which allows specification of starting values.)	 
 
 AD_METHOD1(GetCutPoint,
 		   [out],
@@ -39,12 +40,14 @@ AD_METHOD1(GetCutPoint,
 		   Cut Point,
 		   Gets the point at which a cut would be inserted if the transition were removed.)
 	//@comm Replaces part of omfsTransitionGetInfo
-AD_METHOD1(GetEffect,
-		   [out],
-		   AAFEffectInvocation *,
-		   effObj,
-		   Effect used by transition,
-		   Gets the effect invocation associated with the transition.)
+
+AD_XMETHOD1(GetEffect,
+			[out],
+			objOut,
+			AAFEffectInvocation,
+			effObj,
+			Effect used by transition,
+			Gets the effect invocation associated with the transition.)
 	//@comm Replaces part of omfsTransitionGetInfo
 
 AD_METHOD1(SetCutPoint,
@@ -54,15 +57,14 @@ AD_METHOD1(SetCutPoint,
 		   Cut Point,
 		   Sets the point at which a cut would be inserted if the transition were removed.)
 
-AD_METHOD1(SetEffect,
-		   [in],
-		   AAFEffectInvocation *,
-		   effObj,
-		   Effect used by transition,
-		   Sets the effect invocation associated with the transition.)
+AD_XMETHOD1(SetEffect,
+			[in],
+			objIn,
+			AAFEffectInvocation,
+			effObj,
+			Effect used by transition,
+			Sets the effect invocation associated with the transition.)
 
 AD_OVERRIDE(.method-Test)
 
-
 AD_CLASS_END
-
