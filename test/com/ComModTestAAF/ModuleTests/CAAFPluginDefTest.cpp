@@ -75,6 +75,8 @@ inline void checkExpression(bool expression, HRESULT r)
     throw r;
 }
 
+static aafUID_t TestPluginDesc = { 0x7C77C181, 0x2283, 0x11d2, { 0x80, 0xAD, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } };
+
 static HRESULT OpenAAFFile(aafWChar*			pFileName,
 						   aafMediaOpenMode_t	mode,
 						   IAAFFile**			ppFile,
@@ -161,6 +163,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
                                           (void **)&pLoc));
 	checkResult(pLoc->SetPath (manuf2URL));
 
+	checkResult(pDesc->Init (&TestPluginDesc, L"Test Plugin", L"TestPlugin Description"));
 	checkResult(pDesc->SetCategoryClass(&category));
 	checkResult(pDesc->SetPluginVersionString(manufRev));
     checkResult(pDesc->SetManufacturerInfo(pNetLoc));
@@ -184,7 +187,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
     checkResult(pDesc->SetPluginAPIMinimumVersion(&sampleMinAPIVersion));
     checkResult(pDesc->SetPluginAPIMaximumVersion(&sampleMaxAPIVersion));
 
-	/**/
+	checkResult(pDictionary->RegisterPluginDescriptor (	pDesc));
+
+	  /**/
 	checkResult(pDictionary->CreateInstance(&AUID_AAFNetworkLocator,
 							  IID_IAAFNetworkLocator, 
 							  (IUnknown **)&pNetLoc2));
@@ -372,9 +377,6 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 		pCodecDef->Release();
 	if (pDefObj)
 		pDefObj->Release();
-
-//!!!	if (pEnumPluggable)
-//!!!		pEnumPluggable->Release();
 
 	if (pDictionary)
 		pDictionary->Release();
