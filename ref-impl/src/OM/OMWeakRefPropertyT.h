@@ -47,9 +47,9 @@ OMWeakReferenceProperty<ReferencedObject>::OMWeakReferenceProperty(
                                               const wchar_t* name,
                                               const wchar_t* targetName,
                                               const OMPropertyId keyPropertyId)
-: OMReferenceProperty<ReferencedObject>(propertyId,
-                                        SF_WEAK_OBJECT_REFERENCE,
-                                        name), _reference(),
+: OMReferenceProperty(propertyId,
+                      SF_WEAK_OBJECT_REFERENCE,
+                      name), _reference(),
   _targetTag(nullOMPropertyTag),
   _targetName(targetName),
   _targetPropertyPath(0),
@@ -58,6 +58,34 @@ OMWeakReferenceProperty<ReferencedObject>::OMWeakReferenceProperty(
   TRACE("OMWeakReferenceProperty<ReferencedObject>::OMWeakReferenceProperty");
 
   _reference = OMWeakObjectReference<ReferencedObject>(this);
+}
+
+  // @mfunc Constructor.
+  //   @parm The property id.
+  //   @parm The name of this <c OMWeakReferenceProperty>.
+  //   @parm The id of the property by which the <p ReferencedObject>
+  //         is uniquely identified (the key).
+  //   @parm The name (as a list of pids) of the the <c OMProperty> instance
+  //         (a set property) in which the object referenced by this
+  //         <c OMWeakReferenceProperty> resides.
+template<typename ReferencedObject>
+OMWeakReferenceProperty<ReferencedObject>::OMWeakReferenceProperty(
+                                        const OMPropertyId propertyId,
+                                        const wchar_t* name,
+                                        const OMPropertyId keyPropertyId,
+                                        const OMPropertyId* targetPropertyPath)
+: OMReferenceProperty(propertyId,
+                      SF_WEAK_OBJECT_REFERENCE,
+                      name), _reference(),
+  _targetTag(nullOMPropertyTag),
+  _targetName(0),
+  _targetPropertyPath(0),
+  _keyPropertyId(keyPropertyId)
+{
+  TRACE("OMWeakReferenceProperty<ReferencedObject>::OMWeakReferenceProperty");
+
+  _reference = OMWeakObjectReference<ReferencedObject>(this);
+  _targetPropertyPath = savePropertyPath(targetPropertyPath);
 }
 
 template<typename ReferencedObject>
@@ -296,6 +324,47 @@ void OMWeakReferenceProperty<ReferencedObject>::setBits(const OMByte* bits,
 
   const ReferencedObject* p = *(const ReferencedObject**)bits;
   setValue(p);
+}
+
+  // @mfunc Get the value of this <c OMWeakReferenceProperty>.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          (pointed to) object. This type must be a descendant of
+  //          <c OMStorable>.
+  //   @rdesc A pointer to an <c OMObject>.
+  //   @this const
+template<typename ReferencedObject>
+OMObject*
+OMWeakReferenceProperty<ReferencedObject>::getObject(void) const
+{
+  TRACE("OMWeakReferenceProperty<ReferencedObject>::getObject");
+
+  ReferencedObject* p = 0;  
+  getValue(p);
+  OMObject* result = p;
+
+  return result;
+}
+
+  // @mfunc Set the value of this <c OMWeakReferenceProperty>.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          (contained) object. This type must be a descendant of
+  //          <c OMStorable>.
+  //   @parm A pointer to the new <c OMObject>.
+  //   @rdesc A pointer to the old <c OMObject>. If lazy
+  //          loading is enabled and the referenced object was never
+  //          loaded the value returned is 0.
+template <typename ReferencedObject>
+OMObject* OMWeakReferenceProperty<ReferencedObject>::setObject(
+                                                        const OMObject* object)
+{
+  TRACE("OMWeakReferenceProperty<ReferencedObject>::setObject");
+
+  PRECONDITION("Valid object", object != 0);
+
+  const ReferencedObject* p = dynamic_cast<const ReferencedObject*>(object);
+  ASSERT("Object is correct type", p != 0);
+
+  return setValue(p);
 }
 
 template<typename ReferencedObject>

@@ -31,7 +31,7 @@
 
 #include "OMVector.h"
 #include "OMContainerElement.h"
-#include "OMContainerProperty.h"
+#include "OMRefVectorProperty.h"
 
 template <typename ReferencedObject>
 class OMWeakReferenceVectorIterator;
@@ -47,10 +47,9 @@ class OMVectorIterator;
   //   @tcarg class | ReferencedObject | The type of the referenced
   //          (contained) object. This type must be a descendant of
   //          <c OMStorable>.
-  //   @base public | <c OMContainerProperty>
+  //   @base public | <c OMReferenceVectorProperty>
 template <typename ReferencedObject>
-class OMWeakReferenceVectorProperty :
-                                 public OMContainerProperty<ReferencedObject> {
+class OMWeakReferenceVectorProperty : public OMReferenceVectorProperty {
 public:
   // @access Public members.
 
@@ -60,6 +59,11 @@ public:
                                 const wchar_t* targetName,
                                 const OMPropertyId keyPropertyId);
 
+    // @cmember Constructor.
+  OMWeakReferenceVectorProperty(const OMPropertyId propertyId,
+                                const wchar_t* name,
+                                const OMPropertyId keyPropertyId,
+                                const OMPropertyId* targetPropertyPath);
     // @cmember Destructor.
   virtual ~OMWeakReferenceVectorProperty(void);
 
@@ -197,6 +201,22 @@ public:
     //          copied from the buffer at address <p bits> which is
     //          <p size> bytes in size.
   virtual void setBits(const OMByte* bits, size_t size);
+
+    // @cmember Insert <p object> into this
+    //          <c OMWeakReferenceVectorProperty>.
+  virtual void insert(const OMObject* object);
+
+    // @cmember Does this <c OMWeakReferenceVectorProperty> contain
+    //          <p object> ?
+  virtual bool containsValue(const OMObject* object) const;
+
+    // @cmember Remove <p object> from this
+    //          <c OMWeakReferenceVectorProperty>.
+  virtual void removeValue(const OMObject* object);
+
+    // @cmember Create an <c OMReferenceContainerIterator> over this
+    //          <c OMWeakReferenceVectorProperty>.
+  virtual OMReferenceContainerIterator* createIterator(void) const;
 
 private:
 

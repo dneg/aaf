@@ -37,18 +37,20 @@
   // @mfunc Constructor.
   //   @parm The property id.
   //   @parm The name of this <c OMWeakReferenceSetProperty>.
-  //   @parm The name of the the <c OMProperty> instance (a set property)
-  //         in which the objects referenced by the elements of this
-  //         <c OMWeakReferenceSetProperty> reside.
+  //   @parm The name (as a string) of the the <c OMProperty> instance
+  //         (a set property) in which the objects referenced by the
+  //         elements of this <c OMWeakReferenceSetProperty> reside.
+  //   @parm The id of the property by which the <p ReferencedObject>s
+  //         are uniquely identified (the key).
 template <typename ReferencedObject>
 OMWeakReferenceSetProperty<ReferencedObject>::
                    OMWeakReferenceSetProperty(const OMPropertyId propertyId,
                                               const wchar_t* name,
                                               const wchar_t* targetName,
                                               const OMPropertyId keyPropertyId)
-: OMContainerProperty<ReferencedObject>(propertyId,
-                                        SF_WEAK_OBJECT_REFERENCE_SET,
-                                        name),
+: OMReferenceSetProperty(propertyId,
+                         SF_WEAK_OBJECT_REFERENCE_SET,
+                         name),
   _targetTag(nullOMPropertyTag),
   _targetName(targetName),
   _targetPropertyPath(0),
@@ -56,6 +58,34 @@ OMWeakReferenceSetProperty<ReferencedObject>::
 {
   TRACE("OMWeakReferenceSetProperty<ReferencedObject>::"
                                                  "OMWeakReferenceSetProperty");
+}
+
+  // @mfunc Constructor.
+  //   @parm The property id.
+  //   @parm The name of this <c OMWeakReferenceSetProperty>.
+  //   @parm The id of the property by which the <p ReferencedObject>s
+  //         are uniquely identified (the key).
+  //   @parm The name (as a list of pids) of the the <c OMProperty> instance
+  //         (a set property) in which the objects referenced by the
+  //         elements of this <c OMWeakReferenceSetProperty> reside.
+template <typename ReferencedObject>
+OMWeakReferenceSetProperty<ReferencedObject>::OMWeakReferenceSetProperty(
+                                        const OMPropertyId propertyId,
+                                        const wchar_t* name,
+                                        const OMPropertyId keyPropertyId,
+                                        const OMPropertyId* targetPropertyPath)
+: OMReferenceSetProperty(propertyId,
+                         SF_WEAK_OBJECT_REFERENCE_SET,
+                         name),
+  _targetTag(nullOMPropertyTag),
+  _targetName(0),
+  _targetPropertyPath(0),
+  _keyPropertyId(keyPropertyId)
+{
+  TRACE("OMWeakReferenceSetProperty<ReferencedObject>::"
+                                                 "OMWeakReferenceSetProperty");
+
+  _targetPropertyPath = savePropertyPath(targetPropertyPath);
 }
 
   // @mfunc Destructor.
@@ -620,6 +650,91 @@ void OMWeakReferenceSetProperty<ReferencedObject>::setBits(const OMByte* bits,
     insert(object);
   }
 
+}
+
+  // @mfunc Insert <p object> into this
+  //        <c OMWeakReferenceSetProperty>.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          (contained) object. This type must be a descendant of
+  //          <c OMStorable> and <c OMUnique>.
+  //   @parm The <c OMObject> to insert.
+template <typename ReferencedObject>
+void
+OMWeakReferenceSetProperty<ReferencedObject>::insert(const OMObject* object)
+{
+  TRACE("OMWeakReferenceSetProperty<ReferencedObject>::insert");
+
+  PRECONDITION("Valid object", object != 0);
+
+  const ReferencedObject* p = dynamic_cast<const ReferencedObject*>(object);
+  ASSERT("Object is correct type", p != 0);
+
+  insert(p);
+}
+
+  // @mfunc Does this <c OMWeakReferenceSetProperty> contain
+  //        <p object> ?
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          (contained) object. This type must be a descendant of
+  //          <c OMStorable> and <c OMUnique>.
+  //   @parm The <c OMObject> for which to search.
+  //   @rdesc True if <p object> is present, false otherwise.
+  //   @this const
+template <typename ReferencedObject>
+bool
+OMWeakReferenceSetProperty<ReferencedObject>::containsValue(
+                                                  const OMObject* object) const
+{
+  TRACE("OMWeakReferenceSetProperty<ReferencedObject>::containsValue");
+
+  PRECONDITION("Valid object", object != 0);
+
+  const ReferencedObject* p = dynamic_cast<const ReferencedObject*>(object);
+  ASSERT("Object is correct type", p != 0);
+
+  return containsValue(p);
+}
+
+  // @mfunc Remove <p object> from this
+  //        <c OMWeakReferenceSetProperty>.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          (contained) object. This type must be a descendant of
+  //          <c OMStorable> and <c OMUnique>.
+  //   @parm The <c OMObject> to remove.
+template <typename ReferencedObject>
+void
+OMWeakReferenceSetProperty<ReferencedObject>::removeValue(
+                                                        const OMObject* object)
+{
+  TRACE("OMWeakReferenceSetProperty<ReferencedObject>::removeValue");
+
+  PRECONDITION("Valid object", object != 0);
+
+  const ReferencedObject* p = dynamic_cast<const ReferencedObject*>(object);
+  ASSERT("Object is correct type", p != 0);
+
+  removeValue(p);
+}
+
+  // @mfunc Create an <c OMReferenceContainerIterator> over this
+  //        <c OMWeakReferenceSetProperty>.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          (contained) object. This type must be a descendant of
+  //          <c OMStorable> and <c OMUnique>.
+  //   @rdesc An <c OMReferenceContainerIterator> over this
+  //          <c OMWeakReferenceSetProperty>.
+  //   @this const
+template <typename ReferencedObject>
+OMReferenceContainerIterator*
+OMWeakReferenceSetProperty<ReferencedObject>::createIterator(void) const
+{
+  TRACE("OMWeakReferenceSetProperty<ReferencedObject>::createIterator");
+
+  OMWeakReferenceSetIterator<ReferencedObject>* result =
+             new OMWeakReferenceSetIterator<ReferencedObject>(*this, OMBefore);
+  ASSERT("Valid heap pointer", result != 0);
+
+  return result;
 }
 
 template<typename ReferencedObject>

@@ -31,7 +31,7 @@
 
 #include "OMSet.h"
 #include "OMContainerElement.h"
-#include "OMContainerProperty.h"
+#include "OMRefSetProperty.h"
 #include "OMDataTypes.h"
 
 template <typename ReferencedObject>
@@ -47,10 +47,9 @@ class OMSetIterator;
   //   @tcarg class | ReferencedObject | The type of the referenced
   //          (contained) object. This type must be a descendant of
   //          <c OMStorable> and of <c OMUnique>.
-  //   @base public | <c OMContainerProperty>
+  //   @base public | <c OMReferenceSetProperty>
 template <typename ReferencedObject>
-class OMWeakReferenceSetProperty :
-                                 public OMContainerProperty<ReferencedObject> {
+class OMWeakReferenceSetProperty : public OMReferenceSetProperty {
 public:
   // @access Public members.
 
@@ -60,6 +59,11 @@ public:
                              const wchar_t* targetName,
                              const OMPropertyId keyPropertyId);
 
+    // @cmember Constructor.
+  OMWeakReferenceSetProperty(const OMPropertyId propertyId,
+                             const wchar_t* name,
+                             const OMPropertyId keyPropertyId,
+                             const OMPropertyId* targetPropertyPath);
     // @cmember Destructor.
   virtual ~OMWeakReferenceSetProperty(void);
 
@@ -164,6 +168,22 @@ public:
     //          copied from the buffer at address <p bits> which is
     //          <p size> bytes in size.
   virtual void setBits(const OMByte* bits, size_t size);
+
+    // @cmember Insert <p object> into this
+    //          <c OMWeakReferenceSetProperty>.
+  virtual void insert(const OMObject* object);
+
+    // @cmember Does this <c OMWeakReferenceSetProperty> contain
+    //          <p object> ?
+  virtual bool containsValue(const OMObject* object) const;
+
+    // @cmember Remove <p object> from this
+    //          <c OMWeakReferenceSetProperty>.
+  virtual void removeValue(const OMObject* object);
+
+    // @cmember Create an <c OMReferenceContainerIterator> over this
+    //          <c OMWeakReferenceSetProperty>.
+  virtual OMReferenceContainerIterator* createIterator(void) const;
 
 private:
 

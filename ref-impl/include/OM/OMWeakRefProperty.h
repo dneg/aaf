@@ -31,6 +31,7 @@
 
 #include "OMDataTypes.h"
 #include "OMProperty.h"
+#include "OMRefProperty.h"
 #include "OMObjectReference.h"
 
   // @class Persistent weak reference (pointer to shared object)
@@ -40,7 +41,7 @@
   //          <c OMStorable>.
   //   @base public | <c OMReferenceProperty>
 template <typename ReferencedObject>
-class OMWeakReferenceProperty : public OMReferenceProperty<ReferencedObject> {
+class OMWeakReferenceProperty : public OMReferenceProperty {
 public:
   // @access Public members.
 
@@ -49,6 +50,12 @@ public:
                           const wchar_t* name,
                           const wchar_t* targetName,
                           const OMPropertyId keyPropertyId);
+
+    // @cmember Constructor.
+  OMWeakReferenceProperty(const OMPropertyId propertyId,
+                          const wchar_t* name,
+                          const OMPropertyId keyPropertyId,
+                          const OMPropertyId* targetPropertyPath);
 
     // @cmember Destructor.
   virtual ~OMWeakReferenceProperty(void);
@@ -97,6 +104,12 @@ public:
     //          bits are copied from the buffer at address <p bits> which
     //          is <p size> bytes in size.
   virtual void setBits(const OMByte* bits, size_t size);
+
+    // @cmember Get the value of this <c OMWeakReferenceProperty>.
+  virtual OMObject* getObject(void) const;
+
+    // @cmember set the value of this <c OMWeakReferenceProperty>.
+  virtual OMObject* setObject(const OMObject* object);
 
 private:
 
