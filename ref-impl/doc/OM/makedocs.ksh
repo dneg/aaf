@@ -3,9 +3,9 @@ ADROOT="c:/program files/autoduck"
 AUTODUCK="${ADROOT}/autoduck.exe"
 ADHTML="${ADROOT}/html.fmt"
 #
-FLAGS="OMEXTERNAL | OMINTERNAL"
-#
 SRC="src/*.cpp src/*.h"
+#
+FLAGS="OMEXTERNAL | OMINTERNAL"
 #
 OUT=docs/ObjectManager.html
 OMHTML="docs/html.fmt"
