@@ -886,7 +886,7 @@ void OMStoredObject::restore(OMStrongReferenceSet& set,
   //   @parm TBS
   //   @parm TBS
 void OMStoredObject::restore(OMWeakReference& singleton,
-                             size_t externalSize)
+                             size_t ANAME(externalSize))
 {
   TRACE("OMStoredObject::restore");
 
@@ -2179,7 +2179,7 @@ void OMStoredObject::saveName(const OMProperty& property,
   //   @parm The expected property name.
   //   @parm The (expected) size of the property name.
 void OMStoredObject::restoreName(OMProperty& property,
-                                 const wchar_t* name,
+                                 const wchar_t* ANAME(name),
                                  size_t size)
 {
   TRACE("OMStoredObject::restoreName");
