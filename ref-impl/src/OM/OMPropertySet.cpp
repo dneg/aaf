@@ -1,5 +1,4 @@
-// @doc
-
+// @doc OMEXTERNAL
 #include "OMPropertySet.h"
 #include "OMProperty.h"
 
@@ -8,7 +7,7 @@
 #define OMPROPERTYSET_CHUNKSIZE (20)
 
 OMPropertySet::OMPropertySet(void)
-: _count(0), _capacity(OMPROPERTYSET_CHUNKSIZE), _containingObject(0)
+: _count(0), _capacity(OMPROPERTYSET_CHUNKSIZE), _container(0)
 {
   TRACE("OMPropertySet::OMPropertySet");
   PRECONDITION("Valid Capacity", _capacity >= 0);
@@ -27,17 +26,17 @@ OMPropertySet::~OMPropertySet(void)
 }
 
   // @mfunc Get the <c OMProperty> associated with the property
-  //        id <p pid>.
+  //        id <p propertyId>.
   //   @parm Property id.
-  //   @rdesc The <c OMProperty> object with property id <p pid>.
+  //   @rdesc The <c OMProperty> object with property id <p propertyId>.
   //   @this const
-OMProperty* OMPropertySet::get(const int pid) const
+OMProperty* OMPropertySet::get(const OMPropertyId propertyId) const
 {
   TRACE("OMPropertySet::get");
   OMProperty* result;
-  PRECONDITION("Valid property id", pid >= 0 );
-  PRECONDITION("Property set contains the property", contains(pid));
-  OMPropertySetElement* element = find(pid);
+  PRECONDITION("Valid property id", propertyId >= 0 );
+  PRECONDITION("Property set contains the property", contains(propertyId));
+  OMPropertySetElement* element = find(propertyId);
   ASSERT("Element found", element != 0);
   ASSERT("Valid element", element->_valid);
   result = element->_property;
@@ -53,9 +52,9 @@ void OMPropertySet::put(OMProperty* property)
 {
   TRACE("OMPropertySet::put");
   // SAVE(_count);
-  int pid = property->pid();
-  PRECONDITION("Valid property id", pid >= 0);
-  PRECONDITION("Property not already installed", !contains(pid));
+  OMPropertyId propertyId = property->propertyId();
+  PRECONDITION("Valid property id", propertyId >= 0);
+  PRECONDITION("Property not already installed", !contains(propertyId));
   OMPropertySetElement* element = find();
   if (element == 0) {
     grow(OMPROPERTYSET_CHUNKSIZE);
@@ -63,14 +62,14 @@ void OMPropertySet::put(OMProperty* property)
   }
   ASSERT("Found space for new element", element != 0);
 
-  element->_pid = pid;
+  element->_propertyId = propertyId;
   element->_property = property;
   element->_valid = true;
-  element->_property->setContainingObject(_containingObject);
+  element->_property->setPropertySet(this);
   _count++;
-  POSTCONDITION("Property installed", contains(property->pid()));
+  POSTCONDITION("Property installed", contains(property->propertyId()));
   POSTCONDITION("Consistent property set",
-                property == find(property->pid())->_property);
+                property == find(property->propertyId())->_property);
   // POSTCONDITION("Count increased by one", _count == OLD(_count) + 1);
   POSTCONDITION("Valid count", ((_count >= 0) && (_count <= _capacity)));
 }
@@ -105,14 +104,14 @@ void OMPropertySet::iterate(size_t& context, OMProperty*& property) const
 }
 
   // @mfunc Does this <c OMPropertySet> contain an <c OMProperty>
-  //        with property id <p pid> ?
+  //        with property id <p propertyId> ?
   //  @rdesc <e bool.true> if an <c OMProperty> with property id
-  //         <p pid> is present <e bool.false> otherwise.
+  //         <p propertyId> is present <e bool.false> otherwise.
   //  @parm Property id.
   //  @this const
-bool OMPropertySet::contains(const int pid) const
+bool OMPropertySet::contains(const OMPropertyId propertyId) const
 {
-  OMPropertySetElement* element = find(pid);
+  OMPropertySetElement* element = find(propertyId);
   if (element != 0) {
     return true;
   } else {
@@ -131,28 +130,41 @@ size_t OMPropertySet::count(void) const
   return _count;
 }
 
-  // @mfunc Inform this <c OMPropertySet> that it contains the <c
-  // OMProperty> objects of the <c OMStorable> <p containingObject>.
-  //   @parm The <c OMStorable> object that owns this <c OMPropertySet>.
-void OMPropertySet::setContainingObject(const OMStorable* containingObject)
+  // @mfunc This <c OMPropertySet> is contained by the given <c
+  //        OMStorable> object <p container>. The <c OMProperty> objects
+  //        in this <c OMPropertySet> are the properties of the given
+  //        <c OMStorable> object <p container>.
+  //   @parm The <c OMStorable> object that contains this <c OMPropertySet>.
+void OMPropertySet::setContainer(const OMStorable* container)
 {
-  _containingObject = containingObject;
+  _container = container;
   POSTCONDITION("Valid count", ((_count >= 0) && (_count <= _capacity)));
 }
 
-bool OMPropertySet::equal(const int& pida, const int& pidb)
+  // @mfunc The <c OMStorable> object that contains this
+  //        <c OMPropertySet>.
+  //   @rdesc The <c OMStorable> object that contains this
+  //          <c OMPropertySet>.
+  //   @this const
+OMStorable* OMPropertySet::container(void) const
 {
-  // For when PIDS are not ints
-  return pida == pidb;
+  return const_cast<OMStorable*>(_container);
 }
 
-OMPropertySet::OMPropertySetElement* OMPropertySet::find(const int pid) const
+bool OMPropertySet::equal(const OMPropertyId& propertyIda,
+                          const OMPropertyId& propertyIdb)
+{
+  return propertyIda == propertyIdb;
+}
+
+OMPropertySet::OMPropertySetElement* OMPropertySet::find(
+                                           const OMPropertyId propertyId) const
 {
   OMPropertySetElement* result = 0;
 
   for (size_t i = 0; i < _capacity; i++) {
     if (_propertySet[i]._valid) {
-      if (equal(_propertySet[i]._pid, pid)) {
+      if (equal(_propertySet[i]._propertyId, propertyId)) {
         result = &_propertySet[i];
         break;
       }
