@@ -136,21 +136,22 @@ AAFRESULT ImplAAFComponent::SetNewProps(
         aafLength_t length,			/* IN - Length property value */
         aafUID_t *pDataDef)			/* IN - DataDef property value */
 {
-//	aafAssertValidFHdl(_file);
-//	aafAssert((datakind != NULL), _file, OM_ERR_INVALID_DATAKIND);
-//	assert(dataDef != NULL);
+    AAFRESULT aafError = AAFRESULT_SUCCESS;
 	
 	if (pDataDef == NULL)
 	{
-		return AAFRESULT_NULL_PARAM;
+		return aafError = AAFRESULT_NULL_PARAM;
 	}
 	else
 	{
 		_dataDef = *pDataDef;
-		_length	= length;
+		if ( length >= 0 )
+			_length	= length;
+		else
+			aafError = AAFRESULT_BAD_LENGTH;
 	}
 		
-	return(AAFRESULT_SUCCESS);
+	return aafError;
 }
 
 AAFRESULT ImplAAFComponent::AccumulateLength(aafLength_t *pLength)
