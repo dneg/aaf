@@ -22,11 +22,13 @@ class ImplAAFProperty;
 class ImplAAFPropertyDef;
 class ImplAAFPropertyValue;
 class ImplPropertyCollection;
+class ImplAAFDictionary;
 
 #include "AAFTypes.h"
 #include "OMStorable.h"
 #include "OMProperty.h"
 #include "ImplAAFRoot.h"
+
 
 
 class ImplAAFObject : public OMStorable, public ImplAAFRoot
@@ -156,13 +158,17 @@ public:
 
 
 public:
-	// Interfaces ivisible inside the toolkit, but not exposed through the API
-  
-	// Gets the head object of the file containing this object.
-	// This function is used to maintain MOB and Definition tables in the
-	// head object.
-	virtual AAFRESULT MyHeadObject
-		(class ImplAAFHeader **header);
+  // Interfaces ivisible inside the toolkit, but not exposed through the API
+
+  // Gets the head object of the file containing this object.
+  // This function is used to maintain MOB and Definition tables in the
+  // head object.
+  virtual AAFRESULT MyHeadObject
+    (class ImplAAFHeader **header);
+
+  // Gets the dictionary used to create this instance.
+  virtual AAFRESULT STDMETHODCALLTYPE 
+    GetDictionary(ImplAAFDictionary **ppDictionary);
 
 
 public:

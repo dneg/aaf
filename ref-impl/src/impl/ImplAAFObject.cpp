@@ -25,6 +25,7 @@
 #include "AAFResult.h"
 #include "OMFile.h"
 #include "ImplAAFHeader.h"
+#include "ImplAAFDictionary.h"
 #include "ImplAAFClassDef.h"
 #include "ImplAAFProperty.h"
 #include "ImplAAFPropertyDef.h"
@@ -462,6 +463,25 @@ AAFRESULT ImplAAFObject::MyHeadObject
 
 	return(AAFRESULT_SUCCESS);
 }
+
+// Gets the dictionary used to create this instance.
+AAFRESULT STDMETHODCALLTYPE
+ImplAAFObject::GetDictionary(ImplAAFDictionary **ppDictionary)
+{
+  if(NULL == ppDictionary)
+    return AAFRESULT_NULL_PARAM;
+
+  *ppDictionary = dynamic_cast<ImplAAFDictionary *>(classFactory());
+  assert(NULL != *ppDictionary);
+  if (NULL == *ppDictionary)
+    return AAFRESULT_INVALID_OBJ;
+  
+  // Bump the reference count...
+  (*ppDictionary)->AcquireReference();
+  
+  return AAFRESULT_SUCCESS;
+}
+
 
 //
 // Define the symbol for the stored object id
