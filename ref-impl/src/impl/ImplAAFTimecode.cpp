@@ -9,7 +9,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -28,6 +28,9 @@
 #ifndef __ImplAAFTimecode_h__
 #include "ImplAAFTimecode.h"
 #endif
+
+#include "ImplAAFDictionary.h"
+#include "ImplAAFBuiltinDefs.h"
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
@@ -69,7 +72,10 @@ AAFRESULT STDMETHODCALLTYPE
 			return AAFRESULT_INVALID_TIMECODE;
 		}
 
-		CHECK(SetNewProps(length, DDEF_Timecode));
+		ImplAAFDictionarySP pDict;
+		CHECK(GetDictionary (&pDict));
+		CHECK(SetNewProps(length,
+						  pDict->GetBuiltinDefs()->ddTimecode()));
 		_start = timecode->startFrame;
 		if (timecode->drop == kTcDrop)
 		{
