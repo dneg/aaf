@@ -24,6 +24,7 @@
  * LIABILITY.
  *
  ************************************************************************/
+#include "ImplAAFDigitalImageDescriptor.h"
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
