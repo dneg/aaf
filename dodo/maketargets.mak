@@ -248,8 +248,8 @@ clean:
 	done
 	$(RM) -f $(SRC_DIR)/cpp-api/test/AAF*Test.cpp
 	$(RM) -f $(SRC_DIR)/cpp-api/test/EnumAAF*Test.cpp
-	$(RM) -f $(SRC_DIR)/com-api/test/CAAF*Test.cpp
-	$(RM) -f $(SRC_DIR)/com-api/test/CEnumAAF*Test.cpp
+#	$(RM) -f $(SRC_DIR)/com-api/test/CAAF*Test.cpp
+#	$(RM) -f $(SRC_DIR)/com-api/test/CEnumAAF*Test.cpp
 	$(RM) -f $(INCLUDE_DIR)/com-api/AAF.h
 	$(RM) -f $(INCLUDE_DIR)/com-api/AAFTypes.h
 	$(RM) -f $(INCLUDE_DIR)/com-api/AAFModuleTest.h
@@ -264,6 +264,10 @@ clean:
 		$(RM) -f $(SRC_DIR)/impl/Impl$$file.cpp ; \
 		echo $(RM) -f $(SRC_DIR)/impl/Impl$$file.h ; \
 		$(RM) -f $(SRC_DIR)/impl/Impl$$file.h ; \
+	done
+	@for file in $(AUTO_GEN_COMTEST) ; do \
+		echo $(RM) -f $(SRC_DIR)/com-api/test/C$${file}Test.cpp ; \
+		$(RM) -f $(SRC_DIR)/com-api/test/C$${file}Test.cpp ; \
 	done
 
 
