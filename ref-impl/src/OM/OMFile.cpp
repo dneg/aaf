@@ -90,8 +90,7 @@ OMFile::OMFile(const wchar_t* fileName,
   PRECONDITION("Valid file name", validWideString(fileName));
   _fileName = saveWideString(fileName);
   setName("<file>");
-  _root->setContainingObject(this);
-  _root->setName("/");
+  _root->attach(this, "/");
   _root->setStore(rootStoredObject());
 }
 
@@ -328,11 +327,7 @@ void OMFile::close(void)
   if (_mode == modifyMode) {
     writeSignature(_fileName);
   }
-#if 0
-  _rootStoredObject->close();
-  delete _rootStoredObject;
-  _rootStoredObject = 0;
-#endif
+  _root->detach();
 }
 
   // @mfunc Retrieve the root <c OMStorable> from this <c OMFile>.
