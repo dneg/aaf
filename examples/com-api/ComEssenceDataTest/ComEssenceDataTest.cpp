@@ -129,113 +129,22 @@ static void AUIDtoString(aafUID_t *uid, char *buf)
 
 typedef enum { testRawCalls, testStandardCalls, testMultiCalls, testFractionalCalls } testType_t;
 
-#define DEFAULT_SAMPLE_SIZE	8
-#define SAMPLE_SIZE_BYTES	((DEFAULT_SAMPLE_SIZE + 7) / 8)
+typedef aafInt16	AAFByteOrder;
+const AAFByteOrder INTEL_ORDER		      = 0x4949; // 'II' for Intel
+const AAFByteOrder MOTOROLA_ORDER         = 0x4d4d; // 'MM' for Motorola
 
-/*// app work on all WAVE files, not just laser.wav.
-AAFRESULT CAAFWaveCodec::loadWAVEHeader(void)
-{
-	aafInt32			offset, chunkStart, formSize;
-	aafInt64			chunkStart64;
-	aafInt16			pcm_format;
-	aafUInt8            chunkID[4];
-	aafUInt32			chunkSize, bytesRead;
-	aafBool				fmtFound = AAFFalse, dataFound = AAFFalse;
- 	aafInt32			junk32, rate;
-	aafInt64			savePos;
-#if DEBUG_READ
-	aafUInt8			debugBuf[64];
-#endif
 
-	if(_headerLoaded)
-		return AAFRESULT_SUCCESS;
-//!!!	pdata->fmtOps[0].opcode = kOmfAFmtEnd;
-//!!!	_interleaveBuf = NULL;
-	
-	XPROTECT()
-	{
-//!!!		CvtInt32toInt64(0, &pdata->formSizeOffset);
-//!!!		CvtInt32toInt64(0, &pdata->dataSizeOffset);
-//!!!		CvtInt32toInt64(0, &pdata->numSamplesOffset);
-		CHECK(_stream->GetPosition (&savePos));
-	
-#if DEBUG_READ
-		CHECK(_stream->Seek(0L));
-		_stream->Read(64L, debugBuf, &bytesRead);
-#endif
-		CHECK(_stream->Seek(0L));
-		CHECK(_stream->Read(4L, chunkID, &bytesRead));
-		if (memcmp(&chunkID, "RIFF", (size_t) 4) != 0)
-			RAISE(OM_ERR_BADWAVEDATA);
-		CHECK(GetWAVEData(4L, (void *) &formSize));	
-		CHECK(_stream->Read(4L, chunkID, &bytesRead));
-		if (memcmp(&chunkID, "WAVE", (size_t) 4) != 0)
-			RAISE(OM_ERR_BADWAVEDATA);
-		CHECK(_stream->GetPosition(&chunkStart64));
-		CHECK(TruncInt64toInt32(chunkStart64, &offset));	// OK - 32-bit format
-	
-		while ((offset < formSize) && _stream->Read(4L, chunkID, &bytesRead) == AAFRESULT_SUCCESS)
-		{
-			CHECK(GetWAVEData(4L, (void *) &chunkSize));	
-			CHECK(_stream->GetPosition(&chunkStart64));
-	
-			if (memcmp(&chunkID, "fmt ", (size_t) 4) == 0)
-			{
-				// WAVE field: wFormatTag
-				CHECK(GetWAVEData(2L, &pcm_format));
-				if (pcm_format != 1)
-					RAISE(OM_ERR_BADWAVEDATA);
-	
-				// WAVE field: wChannels
-				CHECK(GetWAVEData(2L, &_numCh));
-	
-				// WAVE field: wSamplesPerSec
-				CHECK(GetWAVEData(4L, &rate));
-				_sampleRate.numerator = rate;
-				_sampleRate.denominator = 1;
-	
-				// Skip WAVE field: avgBytesPerSec (4 bytes)
-				CHECK(GetWAVEData(4L, &junk32));
-	
-				// WAVE field wBlockAlign
-				CHECK(GetWAVEData(2L, &_bytesPerFrame));
-	
-				// WAVE field Sample Width
-				CHECK(GetWAVEData(2L, &_bitsPerSample));
-	
-				_bytesPerFrame = ((_bitsPerSample + 7) / 8) * _numCh;
-	
-				fmtFound = AAFTrue;
-			} else if (memcmp(&chunkID, "data", (size_t) 4) == 0)
-			{
-				CvtInt32toInt64(chunkSize / _bytesPerFrame, &_sampleFrames);
-				// Positioned at beginning of audio data
-				CHECK(_stream->GetPosition(&_dataStartOffset));
-	
-				dataFound = AAFTrue;
-			}
-			CHECK(TruncInt64toInt32(chunkStart64, &chunkStart));	// OK - 32-bit format
-			offset = chunkStart + chunkSize;
-	
-			if(offset > formSize)
-				break;
-			if (fmtFound && dataFound)	// Do we have all information yet?
-				break;
-			CHECK(_stream->Seek(offset));
-		}
-		_headerLoaded = AAFTrue;
-		CHECK(_stream->Seek (savePos));
-	}
-	XEXCEPT
-	{
-		RERAISE(OM_ERR_BADWAVEDATA);
-	}
-	XEND
-	
-	
-	return(AAFRESULT_SUCCESS);
-}
-*/
+AAFByteOrder GetNativeByteOrder(void);
+void AAFByteSwap32(
+			aafInt32 *lp);	/* IN/OUT -- Byte swap this value */
+void AAFByteSwap16(
+			aafInt16 * wp);	/* IN/OUT -- Byte swap this value */
+void scanSwappedWAVEData(aafUInt8 **srcBufHdl, aafInt32 maxsize, void *data);
+AAFRESULT loadWAVEHeader(aafUInt8 *buf,
+										aafUInt16 *bitsPerSample,
+										aafUInt16 *numCh,
+										aafUInt32 *dataOffset,
+										aafUInt32 *dataLen);
 
 static HRESULT CreateAAFFile(aafWChar * pFileName, testType_t testType)
 {
@@ -247,23 +156,19 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testType_t testType)
 	IAAFMasterMob*				pMasterMob = NULL;
 	IAAFEssenceAccess*			pEssenceAccess = NULL;
 	IAAFEssenceFormat*			pFormat;
-/*	
-	//	This variables are needed if the Essence data is in a separate
-	//	data file.
-
-	IAAFLocator*				pLocator = NULL;
-	IAAFNetworkLocator*			pNetLocator = NULL;
-	IAAFFileDescriptor*			pFileDesc = NULL;
-*/
+	// !!!Previous revisions of this file contained variables here required to handle external essence
 	aafUID_t					masterMobID;
 	aafProductIdentification_t	ProductInfo;
 	aafRational_t				editRate = {44100, 1};
 	aafRational_t				sampleRate = {44100, 1};
 	FILE*						pWavFile = NULL;
 	unsigned char				dataBuff[4096], *dataPtr;
-	size_t						bytesRead, dataLen;
-	aafInt32					bytesLeft;
-	aafUInt32					bytesWritten;
+	size_t						bytesRead;
+	aafUInt32					bytesWritten, dataOffset, dataLen;
+	aafUInt16					bitsPerSample, numCh;
+		IAAFEssenceFormat	*format;
+		aafInt32			n, numSpecifiers;
+		aafUID_t			essenceFormatCode;
 
   
   // delete any previous test file before continuing...
@@ -274,7 +179,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testType_t testType)
 
 
 	ProductInfo.companyName = L"AAF Developers Desk";
-	ProductInfo.productName = L"Make AVR Example";
+	ProductInfo.productName = L"Essence Data Test";
 	ProductInfo.productVersion.major = 1;
 	ProductInfo.productVersion.minor = 0;
 	ProductInfo.productVersion.tertiary = 0;
@@ -298,28 +203,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testType_t testType)
   // Get the AAF Dictionary so that we can create valid AAF objects.
   check(pHeader->GetDictionary(&pDictionary));
 
+	// !!!Previous revisions of this file contained code here required to handle external essence
 
-/* This code is needed if the Essence data is to be saved
-	in a separate file. For now it is commented out. 
-	// Get a file locator Interface
-	check(CoCreateInstance( CLSID_AAFFileDescriptor,
-						   NULL, 			  
-						   CLSCTX_INPROC_SERVER, 
-						   IID_IAAFFileDescriptor, 
-						   (void **)&pFileDesc));
-	check(pFileDesc->QueryInterface (IID_IAAFEssenceDescriptor, (void **)&aDesc));
-
-	// Get a Locator Interface, and attach it to the EssenceDescriptor
-	check(CoCreateInstance(CLSID_AAFNetworkLocator,
-							NULL, 
-							CLSCTX_INPROC_SERVER, 
-							IID_IAAFNetworkLocator, 
-							(void **)&pNetLocator));		
-	check(pNetLocator->QueryInterface (IID_IAAFLocator, (void **)&pLocator));
-	check(pLocator->SetPath (TEST_PATH));	
-	check(aDesc->AppendLocator(pLocator));
-*/
-	// Get a Master MOB Interface
+  // Get a Master MOB Interface
 	check(pDictionary->CreateInstance( &AUID_AAFMasterMob,
 						   IID_IAAFMasterMob, 
 						   (IUnknown **)&pMasterMob));
@@ -331,11 +217,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testType_t testType)
 	// Add it to the file 
 	check(pHeader->AppendMob(pMob));
 
-/*
-	since the data will be saved in the same file we do not need to make
-	this call. Will be used when writing a separate Essence Data file.
-	check(pEssenceAccess->SetEssenceDestination(pLocator, kAAFiMedia));
-*/
+	// !!!Previous revisions of this file contained code here required to handle external essence
+
 	// now create the Essence data file
 	check(pMasterMob->CreateEssence(1,				// Slot ID
 									DDEF_Audio,		// MediaKind
@@ -353,25 +236,14 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testType_t testType)
 	{
 		// read in the essence data
 		bytesRead = fread(dataBuff, sizeof(unsigned char), sizeof(dataBuff), pWavFile);
+		check(loadWAVEHeader(dataBuff,
+										&bitsPerSample,
+										&numCh,
+										&dataOffset,
+										&dataLen));
 		if(testType != testRawCalls)
 		{
-			dataPtr = dataBuff;
-			bytesLeft = bytesRead;
-			while(bytesLeft > 0)
-			{
-				while(bytesLeft > 0 && *dataPtr != 'd')
-				{
-					dataPtr++;
-					bytesLeft--;
-				}
-				if(memcmp(dataPtr, "data", 4) == 0)
-					break;
-			}
-						//!!! In development.  NOT industrial strength WAVE reader code.
-						// Assumes wave chunk is the last chunk & doesn't parse all chunks
-			dataPtr += 8;
-			dataLen = bytesLeft - 8;
-			// Assumes 8-bit WAVE data
+			dataPtr = dataBuff + dataOffset;
 		}
 		else
 		{	
@@ -379,9 +251,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testType_t testType)
 			dataLen = bytesRead;
 		}
 
-		IAAFEssenceFormat	*format;
-		aafInt32			n, numSpecifiers;
-		aafUID_t			essenceFormatCode;
 		check(pEssenceAccess->GetFileFormatParameterList (&format));
 		check(format->NumFormatSpecifiers (&numSpecifiers));
 		for(n = 0; n < numSpecifiers; n++)
@@ -393,7 +262,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testType_t testType)
 		check(pEssenceAccess->GetEmptyFileFormat (&pFormat));
 		check(pFormat->NumFormatSpecifiers (&numSpecifiers));
 
-		aafInt32	sampleSize = DEFAULT_SAMPLE_SIZE;
+		aafInt32	sampleSize = bitsPerSample;
 		check(pFormat->AddFormatSpecifier (kAAFAudioSampleBits, sizeof(sampleSize), (aafUInt8 *)&sampleSize));
 		check(pEssenceAccess->PutFileFormat (pFormat));
 		
@@ -500,8 +369,9 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 	aafUInt32					AAFBytesRead, samplesRead;
 	FILE*						pWavFile = NULL;
 	unsigned char				WAVDataBuf[4096], *dataPtr;
-	size_t						WAVBytesRead, dataLen;
-	aafInt32					bytesLeft;
+	size_t						WAVBytesRead;
+	aafUInt32					dataOffset, dataLen;
+	aafUInt16					bitsPerSample, numCh;
 
 	check(CoCreateInstance(CLSID_AAFFile,
                NULL, 
@@ -512,8 +382,8 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 	check(pFile->OpenExistingRead(pFileName, 0));
 	check(pFile->GetHeader(&pHeader));
 
-  // Get the AAF Dictionary so that we can create valid AAF objects.
-  check(pHeader->GetDictionary(&pDictionary));
+	// Get the AAF Dictionary so that we can create valid AAF objects.
+	check(pHeader->GetDictionary(&pDictionary));
 
 
 	// Here we check on the number of mobs in the file. 
@@ -559,23 +429,14 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 					// read in the essence data
 					WAVBytesRead = fread(WAVDataBuf, sizeof(unsigned char), sizeof(WAVDataBuf), pWavFile);
 					fclose(pWavFile);
+					check(loadWAVEHeader(WAVDataBuf,
+										&bitsPerSample,
+										&numCh,
+										&dataOffset,
+										&dataLen));
 					if(testType != testRawCalls)
 					{
-						dataPtr = WAVDataBuf;
-						bytesLeft = WAVBytesRead;
-						while(bytesLeft > 0)
-						{
-							while(bytesLeft > 0 && *dataPtr != 'd')
-							{
-								dataPtr++;
-								bytesLeft--;
-							}
-							if(memcmp(dataPtr, "data", 4) == 0)
-								break;
-						}
-						dataPtr += 8;
-						bytesLeft -= 8;
-						dataLen = bytesLeft;
+						dataPtr = WAVDataBuf + dataOffset;
 					}
 					else
 					{	
@@ -592,10 +453,10 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 					check(pEssenceAccess->GetFileFormat (fmtTemplate, &pFormat));
 					check(pFormat->GetFormatSpecifier (kAAFAudioSampleBits, sizeof(sampleBits),
                            (aafDataBuffer_t)&sampleBits, &bytesRead));
-					if(sampleBits != DEFAULT_SAMPLE_SIZE)
+					if(sampleBits != bitsPerSample)
 					{
 						printf("***Wrong sample size read ( was %ld , should be %ld)\n",
-							sampleBits, DEFAULT_SAMPLE_SIZE);
+							sampleBits, bitsPerSample);
 					}
 
 					// Read the Raw Data from the AAF file
@@ -716,24 +577,143 @@ struct CComInitialize
 };
 
 
+//**********************
+// Extra code required to scan the original WAVE headers and extract metadata parameters & data offset
+AAFByteOrder GetNativeByteOrder(void)
+{
+  aafInt16 word = 0x1234;
+  aafInt8  byte = *((aafInt8*)&word);
+  AAFByteOrder result;
+
+//  ASSERT("Valid byte order", ((byte == 0x12) || (byte == 0x34)));
+
+  if (byte == 0x12) {
+    result = MOTOROLA_ORDER;
+  } else {
+    result = INTEL_ORDER;
+  }
+  return result;
+}
+
+void AAFByteSwap32(
+			aafInt32 *lp)	/* IN/OUT -- Byte swap this value */
+{
+	register unsigned char *cp = (unsigned char *) lp;
+	int             t;
+
+	t = cp[3];
+	cp[3] = cp[0];
+	cp[0] = t;
+	t = cp[2];
+	cp[2] = cp[1];
+	cp[1] = t;
+}
+
+void AAFByteSwap16(
+			aafInt16 * wp)	/* IN/OUT -- Byte swap this value */
+{
+	register unsigned char *cp = (unsigned char *) wp;
+	int             t;
+
+	t = cp[1];
+	cp[1] = cp[0];
+	cp[0] = t;
+}
+
+// app work on all WAVE files, not just laser.wav.
+void scanSwappedWAVEData(aafUInt8 **srcBufHdl, aafInt32 maxsize, void *data)
+{
+	AAFByteOrder	nativeByteOrder = GetNativeByteOrder()
+		;
+	memcpy(data, *srcBufHdl, maxsize);
+	(*srcBufHdl) += maxsize;
+	
+	if ((maxsize == sizeof(aafInt32)) && (INTEL_ORDER != nativeByteOrder))
+			AAFByteSwap32((aafInt32 *) data);
+	else if ((maxsize == sizeof(aafInt16)) && (INTEL_ORDER != nativeByteOrder))
+			AAFByteSwap16((aafInt16 *) data);
+}
+
+AAFRESULT loadWAVEHeader(aafUInt8 *buf,
+										aafUInt16 *bitsPerSample,
+										aafUInt16 *numCh,
+										aafUInt32 *dataOffset,
+										aafUInt32 *dataLen)
+{
+	aafInt32			formSize;
+	aafInt16			pcm_format, junk16;
+	aafUInt32			chunkSize;
+	aafBool				fmtFound = AAFFalse, dataFound = AAFFalse;
+	aafUInt8			chunkID[4];
+ 	aafInt32			junk32, rate, bytesPerFrame;
+	aafUInt8			*ptr;
+	aafRational_t		sampleRate;
+
+	ptr = buf;
+	scanSwappedWAVEData(&ptr, sizeof(chunkID), &chunkID);	
+	if (memcmp(&chunkID, "RIFF", (size_t) 4) != 0)
+		return(AAFRESULT_BADWAVEDATA);
+	scanSwappedWAVEData(&ptr, sizeof(formSize), &formSize);	
+	scanSwappedWAVEData(&ptr, sizeof(chunkID), &chunkID);	
+	if (memcmp(&chunkID, "WAVE", (size_t) 4) != 0)
+		return(AAFRESULT_BADWAVEDATA);
+	
+	scanSwappedWAVEData(&ptr, sizeof(chunkID), &chunkID);	
+	while ((ptr-buf) < formSize)
+	{
+		scanSwappedWAVEData(&ptr, sizeof(chunkSize), &chunkSize);	
+
+		if (memcmp(&chunkID, "fmt ", (size_t) 4) == 0)
+		{
+			// WAVE field: wFormatTag
+			scanSwappedWAVEData(&ptr, sizeof(aafUInt16), (aafUInt8 *)&pcm_format);
+			if (pcm_format != 1)
+				return(AAFRESULT_BADWAVEDATA);
+	
+			// WAVE field: wChannels
+			scanSwappedWAVEData(&ptr, sizeof(aafUInt16), (aafUInt8 *)numCh);
+	
+			// WAVE field: wSamplesPerSec
+			scanSwappedWAVEData(&ptr, sizeof(aafUInt32), (aafUInt8 *)&rate);
+			sampleRate.numerator = rate;
+			sampleRate.denominator = 1;
+	
+			// Skip WAVE field: avgBytesPerSec (4 bytes)
+			scanSwappedWAVEData(&ptr, sizeof(junk32), (aafUInt8 *)&junk32);
+
+			// WAVE field wBlockAlign
+			scanSwappedWAVEData(&ptr, sizeof(aafUInt16), (aafUInt8 *)&junk16);
+	
+			// WAVE field Sample Width
+			scanSwappedWAVEData(&ptr, sizeof(aafUInt16), (aafUInt8 *)bitsPerSample);
+			bytesPerFrame = (((*bitsPerSample) + 7) / 8) * (*numCh);
+			fmtFound = AAFTrue;
+		} else if (memcmp(&chunkID, "data", (size_t) 4) == 0)
+		{
+			*dataLen = chunkSize / bytesPerFrame;
+			// Positioned at beginning of audio data
+			*dataOffset = ptr - buf;
+	
+			dataFound = AAFTrue;
+		}
+	
+		if((ptr-buf) > formSize)
+			break;
+		if (fmtFound && dataFound)	// Do we have all information yet?
+			break;
+		scanSwappedWAVEData(&ptr, sizeof(chunkID), &chunkID);	
+	}	
+	
+	return(AAFRESULT_SUCCESS);
+}
+
+
+
 main()
 {
 	CComInitialize comInit;
 	aafWChar * pwFileName = L"EssenceTest.aaf";
 	const char * pFileName = "EssenceTest.aaf";
-
-//!!!	IAAFEssencePlugin *codecManager = NULL;
-//	aafInt32		numCodecs;
-
-	// This call to CoCreateInstance is here to allow the DLL to be quickly
-	// loaded for debug.  It now serves no other function.
-//!!!	CoCreateInstance(CLSID_AAFEssencePlugin,
-//               NULL, 
-  //             CLSCTX_INPROC_SERVER, 
- //              IID_IAAFEssencePlugin, 
- //              (void **)&codecManager);
-//	codecManager->NumCodecsMatching (DDEF_Audio, kAAFRev1, &numCodecs);
-
 
 	printf("***Creating file %s using writeRawData\n", pFileName);
 	checkFatal(CreateAAFFile(pwFileName, testRawCalls));
