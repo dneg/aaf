@@ -39,8 +39,11 @@
 #include <iostream.h>
 #include <iomanip.h>
 #include <stdlib.h>
-#include <limits.h>
 #include <stdio.h>
+
+#include <errno.h>
+#include <ctype.h>
+#include <string.h>
 
 #if defined(_MAC) || defined(macintosh)
 #include <console.h>
@@ -52,6 +55,8 @@
 // define standard guids
 #include <initguid.h>
 #include <coguid.h>
+#elif defined(__sgi)
+#include "storage.h"
 #else
 #include <objbase.h>
 #endif
@@ -68,7 +73,6 @@ typedef char OMCHAR;
 typedef int bool;
 const bool false = 0;
 const bool true = 1;
-#include <stdlib.h>
 #endif
 #endif
 
@@ -682,6 +686,38 @@ void indent(int level)
   }
 }
 
+#if defined(__sgi)
+
+static const unsigned char guidMap[] =
+{ 3, 2, 1, 0, '-', 5, 4, '-', 7, 6, '-', 8, 9, '-', 10, 11, 12, 13, 14, 15 }; 
+static const wchar_t digits[] = L"0123456789ABCDEF"; 
+
+#define GUIDSTRMAX 38 
+
+int StringFromGUID2(const GUID& guid, OMCHAR* buffer, int bufferSize) 
+{
+  const unsigned char* ip = (const unsigned char*) &guid; // input pointer
+  OMCHAR* op = buffer;                                    // output pointer
+
+  *op++ = L'{'; 
+ 
+  for (int i = 0; i < sizeof(guidMap); i++) { 
+
+    if (guidMap[i] == '-') { 
+      *op++ = L'-'; 
+    } else { 
+      *op++ = digits[ (ip[guidMap[i]] & 0xF0) >> 4 ]; 
+      *op++ = digits[ (ip[guidMap[i]] & 0x0F) ]; 
+    } 
+  } 
+  *op++ = L'}'; 
+  *op = L'\0'; 
+ 
+  return GUIDSTRMAX; 
+} 
+
+#endif
+
 void printClsid(REFCLSID clsid)
 {
   char cs[256];
@@ -689,11 +725,10 @@ void printClsid(REFCLSID clsid)
   if (!IsEqualCLSID(CLSID_NULL, clsid)) {
     OMCHAR s[256];
     int result = StringFromGUID2(clsid, s, 256);
-    if (0 >= result) {
+    if (result <= 0) {
       strcpy(cs, "unknown");
     } else {
       convert(cs, 256, s);
-      // need to free memory allocated by StringFromCLSID ??
     }
   } else {
     strcpy(cs, "null");
@@ -729,7 +764,7 @@ size_t sizeOfStream(IStream* stream, const char* streamName)
   unsigned long int streamBytes = statstg.cbSize.LowPart;
   if (statstg.cbSize.HighPart != 0) {
     warning("sizeOfStream", "Large streams not handled.");
-    streamBytes = ULONG_MAX;
+    streamBytes = (size_t)-1;
   }
   return streamBytes;
 }
@@ -772,7 +807,7 @@ void printStat(STATSTG* statstg, char* tag)
     unsigned long int byteCount = statstg->cbSize.LowPart;
     if (statstg->cbSize.HighPart != 0) {
       warning("printStat", "Large streams not handled.");
-      byteCount = ULONG_MAX;
+      byteCount = (size_t)-1;
     }
     
     indent(6);
@@ -829,7 +864,7 @@ void dumpStream(IStream* stream, STATSTG* statstg, char* pathName)
   unsigned long int byteCount = statstg->cbSize.LowPart;
   if (statstg->cbSize.HighPart != 0) {
     warning("dumpStream", "Large streams not handled.");
-    byteCount = ULONG_MAX;
+    byteCount = (size_t)-1;
   }
   totalStreamBytes = totalStreamBytes + byteCount;
   
@@ -1530,7 +1565,7 @@ void dumpDataStream(IStream* stream,
   unsigned long int streamBytes = statstg.cbSize.LowPart;
   if (statstg.cbSize.HighPart != 0) {
     warning("dumpDataStream", "Large streams not handled.");
-    streamBytes = ULONG_MAX;
+    streamBytes = (size_t)-1;
   }
   totalStreamBytes = totalStreamBytes + streamBytes;
   totalPropertyBytes = totalPropertyBytes + streamBytes;
@@ -2213,6 +2248,18 @@ void ignore(OMUInt32 pid)
     exit(FAILURE);
   }
 }
+
+#if defined(__sgi)
+// stubs
+void CoInitialize(void *)
+{
+}
+
+void CoUninitialize(void)
+{
+}
+
+#endif
 
 // helper class
 struct CComInitialize
