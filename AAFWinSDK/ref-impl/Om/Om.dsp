@@ -64,7 +64,7 @@ LIB32=link.exe -lib
 # PROP Intermediate_Dir "Debug"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /Z7 /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /MDd /W3 /WX /GR /GX /Z7 /Od /I "../../../ref-impl/src/OM" /I "../../../ref-impl/include/Om" /D "_DEBUG" /D "OM_DEBUG" /D "OM_STACK_TRACE_ON_ASSERT" /D "_WIN32" /D "WIN32" /D "_WINDOWS" /D "UNICODE" /D "_UNICODE" /FR /YX /FD /c
+# ADD CPP /nologo /MDd /W3 /WX /GR /GX /Z7 /Od /I "../../../ref-impl/src/OM" /I "../../../ref-impl/include/Om" /I "../../../sss-impl/include" /D "_DEBUG" /D "OM_DEBUG" /D "OM_STACK_TRACE_ON_ASSERT" /D "_WIN32" /D "WIN32" /D "_WINDOWS" /D "UNICODE" /D "_UNICODE" /FR /YX /FD /c
 # SUBTRACT CPP /X
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
@@ -267,6 +267,10 @@ SOURCE="..\..\..\ref-impl\src\OM\OMRenamedType.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\OM\OMRootStorable.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\OM\OMSSSStorageRWInputSource.cpp"
 # End Source File
 # Begin Source File
 
