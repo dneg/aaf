@@ -49,6 +49,9 @@ typedef IAAFSmartPointer<IAAFTypeDefInt>			IAAFTypeDefIntSP;
 typedef IAAFSmartPointer<IUnknown>					IUnknownSP;
 typedef IAAFSmartPointer<IAAFDefObject>				IAAFDefObjectSP;
 typedef IAAFSmartPointer<IAAFTypeDefVariableArray>		IAAFTypeDefVariableArraySP;
+typedef IAAFSmartPointer<IAAFTypeDefVariableArrayEx>		IAAFTypeDefVariableArrayExSP;
+
+
 typedef IAAFSmartPointer<IAAFObject>				IAAFObjectSP;
 typedef IAAFSmartPointer<IAAFMob>					IAAFMobSP;
 //typedef IAAFSmartPointer<IAAFCompositionMob>		IAAFCompositionMobSP;
@@ -476,11 +479,64 @@ static HRESULT verifyContents (IAAFHeader* const pHeader, IAAFDictionary* const 
 	//the returned some_int should be the same as new_int
 	checkExpression( some_int == new_int, AAFRESULT_TEST_FAILED );
 
+	//////////////
+	//////////////
+	////////////////////   PREPEND
+
+	check_count =0;
+	spVA->GetCount(spPropVal, &check_count); //get current count
+
+	//Create some value, and Prepend it
+	some_int = 123;
+	checkResult(spSomeInt->CreateValue((aafMemPtr_t)&some_int, sizeof (some_int), &spSomeVal));
+	//now get the VA intf
+	IAAFTypeDefVariableArrayExSP spVA_Ex;
+	checkResult(spTypeDef->QueryInterface(IID_IAAFTypeDefVariableArrayEx, (void**)&spVA_Ex));
+	checkResult(spVA_Ex->PrependElement(spPropVal, spSomeVal)) ;
+	//Reset, and then get new count
+	good_count = 0;
+	checkResult(spVA->GetCount(spPropVal, &good_count)); 
+	//Should be one more than previous count.
+	checkExpression( good_count == (check_count+1), AAFRESULT_TEST_FAILED );
+
+	//////////////
+	////////////////////   INSERT
+
+	check_count =0;
+	spVA->GetCount(spPropVal, &check_count); //get current count
+
+	//Create some value, and Insert it somewhere
+	some_int = 456;
+	checkResult(spSomeInt->CreateValue((aafMemPtr_t)&some_int, sizeof (some_int), &spSomeVal));
+	//now get the VA intf
+	//checkResult(spTypeDef->QueryInterface(IID_IAAFTypeDefVariableArrayEx, (void**)&spVA_Ex));
+	checkResult(spVA_Ex->InsertElement(spPropVal, 4, spSomeVal)) ;
+	//Reset, and then get new count
+	good_count = 0;
+	checkResult(spVA->GetCount(spPropVal, &good_count)); 
+	//Should be one more than previous count.
+	checkExpression( good_count == (check_count+1), AAFRESULT_TEST_FAILED );
+
+	//////////////
+	////////////////////   Remove
+
+	check_count =0;
+	spVA->GetCount(spPropVal, &check_count); //get current count
+
+	//now get the VA intf
+	//checkResult(spTypeDef->QueryInterface(IID_IAAFTypeDefVariableArrayEx, (void**)&spVA_Ex));
+	checkResult(spVA_Ex->RemoveElement(spPropVal, 2)) ;
+	//Reset, and then get new count
+	good_count = 0;
+	checkResult(spVA->GetCount(spPropVal, &good_count)); 
+	//Should be one LESS than previous count.
+	checkExpression( good_count == (check_count-1), AAFRESULT_TEST_FAILED );
+
 
 	// how about some negative testing before we're done ?! ....
 	
-	hr = spVA->GetElementValue(spPropVal, newCount, &spSomeVal); 
-	//0-based index,  so newCount should be out-of-range by 1 element
+	hr = spVA->GetElementValue(spPropVal, good_count+1, &spSomeVal); 
+	//out-of-range by 1 element
 	checkExpression( hr == AAFRESULT_BADINDEX,    AAFRESULT_TEST_FAILED );
 
 	return S_OK;
