@@ -238,6 +238,8 @@ template class AxIterator< IAAFSmartPointer<IAAFMob>,           IEnumAAFMobs >;
 template class AxIterator< IAAFSmartPointer<IAAFEssenceData>,   IEnumAAFEssenceData >;
 template class AxIterator< IAAFSmartPointer<IAAFMobSlot>,       IEnumAAFMobSlots >;
 template class AxIterator< IAAFSmartPointer<IAAFDataDef>,       IEnumAAFDataDefs >;
+template class AxIterator< IAAFSmartPointer<IAAFOperationDef>,  IEnumAAFOperationDefs >;
+template class AxIterator< IAAFSmartPointer<IAAFParameterDef>,  IEnumAAFParameterDefs >;
 template class AxIterator< aafUID_t,                            IEnumAAFCodecFlavours >;
 template class AxIterator< aafUID_t,                            IEnumAAFLoadedPlugins >;
 template class AxIterator< IAAFSmartPointer<IAAFComponent>,		IEnumAAFComponents >;

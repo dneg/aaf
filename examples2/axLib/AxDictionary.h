@@ -42,6 +42,8 @@ public:
 	IEnumAAFClassDefsSP GetClassDefs();
 	IEnumAAFTypeDefsSP GetTypeDefs();
 	IEnumAAFDataDefsSP GetDataDefs();
+	IEnumAAFOperationDefsSP GetOperationDefs();
+	IEnumAAFParameterDefsSP GetParameterDefs();
 
 	void RegisterOpaqueTypeDef( IAAFTypeDefSP );
 
