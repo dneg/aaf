@@ -17,8 +17,12 @@ AD_HEAD
 *                                          *
 \******************************************/
 
+AD_INCLUDE(AAFTypes)
 AD_FORWARD_DECLARATION(AAFDataDefinition)
 
+AD_CLASS_UUID(9c568a82, 2096, 11d2, bf, 98, 00, 60, 97, 11, 62, 1) 
+
+AD_DEFAULT_UUID(9c568a81, 2096, 11d2, bf, 98, 00, 60, 97, 11, 62, 12)
 AD_CLASS_BEGIN
 
 AD_METHOD1(SetLength,
