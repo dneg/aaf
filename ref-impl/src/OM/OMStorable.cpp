@@ -115,9 +115,6 @@ void OMStorable::save(void) const
   // that were opened on demand as closing them would lose important
   // state information, such as the current seek position.
   //
-  #ifndef OM_USE_STORAGE_EX 
-  //this fix is not needed by  the MSS Ex version and can cause small problems with
-  //schemasoft structured storage.
   if (opened) {
     ASSERT("Valid store", _store != 0);
     _store->close();
@@ -125,7 +122,6 @@ void OMStorable::save(void) const
     delete _store;
     nonConstThis->_store = 0;
   }
-#endif
   nonConstThis->_exists = true;
 }
 
