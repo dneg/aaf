@@ -17,7 +17,7 @@
 //
 // ../smpte/DictP18.csv 
 //
-// This file was generated on Wed May 12 12:03:54 EDT 1999
+// This file was generated on Tue May 25 09:42:58 EDT 1999
 // by user tbingham on system TBINGHAMPC.
 //
 // Key to macros.
@@ -1331,6 +1331,16 @@ AAF_PROPERTY(EssenceIsIdentified,
 AAF_CLASS_END(ContainerDefinition)
 AAF_CLASS_SEPARATOR()
 
+// InterpolationDefinition
+//
+AAF_CLASS(InterpolationDefinition,
+  AAF_LITERAL_AUID(0x06444A00,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
+  DefinitionObject)
+AAF_CLASS_END(InterpolationDefinition)
+AAF_CLASS_SEPARATOR()
+
 // Dictionary
 //
 AAF_CLASS(Dictionary,
@@ -2218,7 +2228,6 @@ AAF_CLASS(Locator,
   InterchangeObject)
 AAF_CLASS_END(Locator)
 AAF_CLASS_SEPARATOR()
-
 
 // NetworkLocator
 //
