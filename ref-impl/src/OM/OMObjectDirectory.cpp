@@ -1,6 +1,6 @@
 #include "OMObjectDirectory.h"
 #include "OMAssertions.h"
-#include "OMUtilities.h"
+#include "OMPortability.h"
 
 #include <string.h>
 #include <iostream.h>
