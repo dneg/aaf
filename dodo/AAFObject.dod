@@ -6,9 +6,6 @@ AAFRoot\
 #endm
 #c
 AD_HEAD
-/***********************************************\
-*	Stub only.   Implementation not yet added	*
-\***********************************************/
 AD_IDL(//
 // This interface is implemented for all AAF persistent classes.  In
 // addition to methods which all clients can use\, it provides methods
@@ -25,7 +22,11 @@ AD_IDL(//
 //
 // AAFRESULT_NOT_INITIALIZED
 //   - This object has not yet had Initialize\(\) called on it through
-//     this object's primary interface.
+//     this object's primary interface.  Note that IAAFObject is a
+//     primary interface for an abstract class\, so it is not
+//     appropriate for the Initialize\(\) method to exist in this
+//     interface.  The Initialize\(\) method is available through the
+//     concrete object's primary interface.
 //)
 AD_FORWARD_DECLARATION(EnumAAFProperties)
 AD_CLASS_UUID(B1A213AC, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
@@ -53,8 +54,7 @@ AD_XMETHOD1(SetGeneration,
   //   - succeeded.  \(This is the only code indicating success.\)
   //
   // AAFRESULT_NULL_PARAM
-  //   - pGeneration arg is NULL.
-  //)
+  //   - pGeneration arg is NULL.)
 
 
 AD_XMETHOD1(GetGeneration,
@@ -93,8 +93,6 @@ AD_XMETHOD1(GetObjectClass,
             Gets the object class of which this object is an instance
   // and places it into the caller-allocated aafUID_t pointed to by
   // pClass.
-  //
-  // NOTE! Stub only.   Implementation not yet added.
   //
   // Succeeds if all of the following are true:
   // - the given pClass pointer is valid.

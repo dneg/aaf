@@ -60,6 +60,10 @@ public:
   OMDECLARE_STORABLE(ImplAAFIdentification)
 
 
+  virtual AAFRESULT STDMETHODCALLTYPE
+	Initialize ();
+
+
   //****************
   // GetCompanyName()
   //
@@ -148,6 +152,15 @@ public:
     SetProductVersionString
 		// @parm [in, string] The Product Version String
         (wchar_t *  pVersionString);
+
+
+  //****************
+  // GetProductVersion()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetProductVersion
+		// @parm [out] The Product Version
+        (aafProductVersion_t *  pVersion);
 
 
   //****************
@@ -243,6 +256,7 @@ private:
   // StructuredProperty<aafProductVersion_t> _toolkitVersion;
   OMWideStringProperty                             _platform;
   // FixedSizeProperty<AUID>                 _generation;
+  aafBool									 _initialized;
 };
 
 #endif // ! __ImplAAFIdentification_h__
