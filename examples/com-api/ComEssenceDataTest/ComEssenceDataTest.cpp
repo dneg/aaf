@@ -318,6 +318,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 
 		// close essence data file
 		fclose(pWavFile);
+    pWavFile = NULL;
 
 		// Finish writing the destination
 		check(pEssenceAccess->CompleteWrite());
@@ -356,6 +357,16 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 
 cleanup:
 	// Cleanup and return
+	if(pFormat)
+		pFormat->Release();
+	if(format)
+		format->Release();
+	if(pLocator)
+		pLocator->Release();
+
+  if (pWavFile)
+    fclose(pWavFile);
+
 	if (pEssenceAccess)
 		pEssenceAccess->Release();
 	
@@ -378,14 +389,11 @@ cleanup:
 		pHeader->Release();
 
 	if (pFile)
-		pFile->Release(); 
+  {
+    pFile->Close();
+		pFile->Release();
+  }
 
-	if(pFormat)
-		pFormat->Release();
-	if(format)
-		format->Release();
-	if(pLocator)
-		pLocator->Release();
 
 	return moduleErrorTmp;
 }
@@ -467,6 +475,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 					// read in the essence data
 					WAVBytesRead = fread(WAVDataBuf, sizeof(unsigned char), sizeof(WAVDataBuf), pWavFile);
 					fclose(pWavFile);
+          pWavFile = NULL;
 					check(loadWAVEHeader(WAVDataBuf,
 										&bitsPerSample,
 										&numCh,
@@ -596,6 +605,8 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 cleanup:
 	// Cleanup and return
 
+  if (pWavFile)
+    fclose(pWavFile);
 	if (pRawEssence)
 		pRawEssence->Release();
 	if (pMultiEssence)
