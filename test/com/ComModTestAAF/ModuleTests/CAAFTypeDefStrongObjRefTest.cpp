@@ -336,7 +336,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	  checkResult (header->GetDictionary (&dict));
 
 	  // Validate that there is only one composition mob.
-	  aafInt32 numMobs = 0;
+	  aafNumSlots_t numMobs = 0;
 	  checkResult(header->GetNumMobs(kCompMob, &numMobs));
 	  checkExpression(1 == numMobs, AAFRESULT_TEST_FAILED);
 
