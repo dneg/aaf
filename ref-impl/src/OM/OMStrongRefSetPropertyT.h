@@ -93,10 +93,12 @@ OMStrongReferenceSetProperty<UniqueIdentification,
   // create a set index
   //
   size_t count = _set.count();
-  OMUInt32 keySize = sizeof(UniqueIdentification);
-  OMStoredSetIndex* index = new OMStoredSetIndex(count,
-                                                 _keyPropertyId,
-                                                 keySize);
+  size_t keySize = sizeof(UniqueIdentification);
+  ASSERT("Valid key size", keySize <= ~(OMKeySize)0);
+  OMStoredSetIndex* index = new OMStoredSetIndex(
+                                              count,
+                                              _keyPropertyId,
+                                              static_cast<OMKeySize>(keySize));
   ASSERT("Valid heap pointer", index != 0);
   index->setFirstFreeKey(localKey());
   size_t position = 0;
