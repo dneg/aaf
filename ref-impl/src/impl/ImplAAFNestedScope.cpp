@@ -128,9 +128,6 @@ AAFRESULT STDMETHODCALLTYPE
   if(pSegment == NULL)
 	return(AAFRESULT_NULL_PARAM);
 
-  if(pSegment->attached())
-	return(AAFRESULT_OBJECT_ALREADY_ATTACHED);
-
   aafUInt32 count;
   AAFRESULT hr;
   hr = CountSegments (&count);
@@ -138,6 +135,9 @@ AAFRESULT STDMETHODCALLTYPE
 
   if (index > count)
 	return AAFRESULT_BADINDEX;
+
+  if(pSegment->attached())
+	return(AAFRESULT_OBJECT_ALREADY_ATTACHED);
 
   _slots.insertAt(pSegment,index);
   pSegment->AcquireReference();

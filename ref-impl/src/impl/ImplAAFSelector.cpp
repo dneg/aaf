@@ -115,15 +115,19 @@ AAFRESULT STDMETHODCALLTYPE
 	if (pSelSegment == NULL)
 		return AAFRESULT_NULL_PARAM;
 
-	if (pSelSegment->attached())
-		return AAFRESULT_OBJECT_ALREADY_ATTACHED;
-
 	pPrevSelected = _selected;
 	if (pPrevSelected)
 	{
+	  if( pPrevSelected == pSelSegment )
+		return AAFRESULT_SUCCESS;
+
 	  pPrevSelected->ReleaseReference();
 	  pPrevSelected = 0;
 	}
+
+	if (pSelSegment->attached())
+		return AAFRESULT_OBJECT_ALREADY_ATTACHED;
+
 	_selected = pSelSegment;
 	_selected->AcquireReference();
 

@@ -305,15 +305,15 @@ AAFRESULT STDMETHODCALLTYPE
   if (!pComponent) 
     return AAFRESULT_NULL_PARAM;
 
-  if (pComponent->attached())
-    return AAFRESULT_OBJECT_ALREADY_ATTACHED;
-
   aafUInt32 count;
   AAFRESULT ar;
   ar = CountComponents (&count);
   if (AAFRESULT_FAILED (ar)) return ar;
   if (index > count)
 	return AAFRESULT_BADINDEX;
+
+  if (pComponent->attached())
+    return AAFRESULT_OBJECT_ALREADY_ATTACHED;
 
   _components.insertAt(pComponent,index);
   pComponent->AcquireReference();
@@ -753,12 +753,12 @@ AAFRESULT
 {
 	HRESULT				hr;
 
-	if (pComponent->attached())
-		return AAFRESULT_OBJECT_ALREADY_ATTACHED;
-
 	size_t numCpnts = _components.count();
 	if (index < numCpnts)
 	{
+		if (pComponent->attached())
+			return AAFRESULT_OBJECT_ALREADY_ATTACHED;
+
 		_components.setValueAt(pComponent, index);
 		pComponent->AcquireReference();
 		hr =  AAFRESULT_SUCCESS;

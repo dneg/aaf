@@ -98,9 +98,6 @@ AAFRESULT STDMETHODCALLTYPE
 	if (pOperationGroup == NULL)
 		return AAFRESULT_NULL_PARAM;
 
-	if (pOperationGroup->attached())
-		return AAFRESULT_OBJECT_ALREADY_ATTACHED;
-
 	if (pDataDef == NULL)
 		return AAFRESULT_NULL_PARAM;
 
@@ -109,8 +106,17 @@ AAFRESULT STDMETHODCALLTYPE
 		CHECK(SetNewProps(length, pDataDef));
 		_cutPoint = cutPoint;
 		if (_operationGroup)
+		{
+		  if( pOperationGroup == _operationGroup )
+			RAISE( AAFRESULT_SUCCESS );
+
 		  _operationGroup->ReleaseReference();
-		_operationGroup = 0;
+		  _operationGroup = 0;
+		}
+
+		if (pOperationGroup->attached())
+			RAISE(  AAFRESULT_OBJECT_ALREADY_ATTACHED );
+
 		_operationGroup = pOperationGroup;
 		if (pOperationGroup)
 			pOperationGroup->AcquireReference();
@@ -168,12 +174,17 @@ AAFRESULT STDMETHODCALLTYPE
 	if (pEffObj == NULL)
 		return AAFRESULT_NULL_PARAM;
 	
-	if (pEffObj->attached())
-		return AAFRESULT_OBJECT_ALREADY_ATTACHED;
-
 	if (_operationGroup)
+	{
+	  if( pEffObj == _operationGroup )
+		return AAFRESULT_SUCCESS;
+
 	  _operationGroup->ReleaseReference();
-	_operationGroup = 0;
+	  _operationGroup = 0;
+	}
+
+	if( pEffObj->attached() )
+		return AAFRESULT_OBJECT_ALREADY_ATTACHED;
 
 	_operationGroup = pEffObj;
 	_operationGroup->AcquireReference();
