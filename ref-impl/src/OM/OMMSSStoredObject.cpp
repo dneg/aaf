@@ -486,7 +486,7 @@ void OMMSSStoredObject::save(const OMPropertySet& properties)
   PRECONDITION("At start of value stream", streamPosition(_properties) == 0);
   PRECONDITION("At start of value stream", _offset == 0);
 
-  size_t count = properties.count();
+  size_t count = properties.countPresent();
   delete _index;
   _index = 0; // for BoundsChecker
   _index = new OMStoredPropertySetIndex(count);
