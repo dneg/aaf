@@ -41,15 +41,16 @@
   //         <c OMWeakReferenceVectorProperty> reside.
 template <typename ReferencedObject>
 OMWeakReferenceVectorProperty<ReferencedObject>::
-                   OMWeakReferenceVectorProperty(const OMPropertyId propertyId,
-                                                 const char* name,
-                                                 const char* targetName)
+                OMWeakReferenceVectorProperty(const OMPropertyId propertyId,
+                                              const char* name,
+                                              const char* targetName,
+                                              const OMPropertyId keyPropertyId)
 : OMContainerProperty<ReferencedObject>(propertyId,
                                         SF_WEAK_OBJECT_REFERENCE_VECTOR,
                                         name),
   _targetTag(nullOMPropertyTag),
   _targetName(saveString(targetName)),
-  _keyPropertyId(0 /* tjb */)
+  _keyPropertyId(keyPropertyId)
 {
   TRACE("OMWeakReferenceVectorProperty<ReferencedObject>::"
                                               "OMWeakReferenceVectorProperty");

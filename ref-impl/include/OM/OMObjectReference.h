@@ -186,7 +186,7 @@ protected:
 
 };
 
-template<typename ReferencedObject>
+template <typename UniqueIdentification, typename ReferencedObject>
 class OMStrongReferenceSetProperty;
 
   // @class Persistent weak references to persistent objects.
@@ -254,11 +254,13 @@ public:
 
 private:
 
-  OMStrongReferenceSetProperty<ReferencedObject>* set(void) const;
+  OMStrongReferenceSetProperty<OMUniqueObjectIdentification,
+                               ReferencedObject>* set(void) const;
 
   OMUniqueObjectIdentification _identification;
   OMPropertyTag _targetTag;
-  OMStrongReferenceSetProperty<ReferencedObject>* _targetSet; // cache only
+  OMStrongReferenceSetProperty<OMUniqueObjectIdentification,
+                               ReferencedObject>* _targetSet;
 
 };
 
