@@ -71,7 +71,6 @@ ImplAAFDefObject::ImplAAFDefObject ()
   _persistentProperties.put(_description.address());
   _persistentProperties.put(_identification.address());
   _persistentProperties.put(_descriptors.address());
-		(void)AppendPluginDef (NULL);		// !!! TEMP Until optional properties
 }
 
 
