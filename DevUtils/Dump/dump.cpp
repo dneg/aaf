@@ -710,6 +710,8 @@ static double percent(size_t whole, size_t part);
 static bool ignoring(OMUInt32 pid);
 static void ignore(OMUInt32 pid);
 
+static void initializeCOM(void);
+static void finalizeCOM(void);
 
 static char* readName(IStream* stream,
                       OMUInt32 nameOffset,
@@ -3478,6 +3480,7 @@ void dumpFile(char* fileName)
 {
   resetStatistics();
 
+  initializeCOM();
   IStorage* storage = 0;
   openStorage(fileName, &storage);
 
@@ -3501,6 +3504,8 @@ void dumpFile(char* fileName)
     
   // Releasing the last reference to the root storage closes the file.
   storage->Release();
+  storage = 0;
+  finalizeCOM();
 
   totalFileBytes = fileSize(fileName);
   printStatistics();
@@ -3550,6 +3555,7 @@ void dumpFileProperties(char* fileName, const char* label)
 {
   resetStatistics();
 
+  initializeCOM();
   IStorage* storage = 0;
   openStorage(fileName, &storage);
 
@@ -3575,6 +3581,7 @@ void dumpFileProperties(char* fileName, const char* label)
   // Releasing the last reference to the root storage closes the file.
   storage->Release();
   storage = 0;
+  finalizeCOM();
 
   totalFileBytes = fileSize(fileName);
   printStatistics();
@@ -4004,6 +4011,20 @@ void ignore(OMUInt32 pid)
     usage();
     exit(EXIT_FAILURE);
   }
+}
+
+void initializeCOM(void)
+{
+#if !defined(OM_REFERENCE_SS)
+  CoInitialize(0);
+#endif
+}
+
+void finalizeCOM(void)
+{
+#if !defined(OM_REFERENCE_SS)
+  CoUninitialize();
+#endif
 }
 
 
