@@ -1658,9 +1658,9 @@ AAFRESULT STDMETHODCALLTYPE
                            aafInt16* numCh)
 {
 	aafPosition_t			zeroPos;
-	ImplAAFFindSourceInfo	*sourceInfo;
-	ImplAAFSourceMob		*fileMob;
-	IAAFEssenceStream		*stream;
+	ImplAAFFindSourceInfo	*sourceInfo = NULL;
+	ImplAAFSourceMob		*fileMob = NULL;
+	IAAFEssenceStream		*stream = NULL;
 	ImplAAFDictionary		*dict = NULL;
 	IUnknown				*iUnk = NULL;
 	IAAFSourceMob			*iFileMob = NULL;
@@ -1682,9 +1682,9 @@ AAFRESULT STDMETHODCALLTYPE
 				(void **)&stream));
 		iUnk = static_cast<IUnknown *> (fileMob->GetContainer());	// Codec knowns about compFilemob only
 		CHECK(iUnk->QueryInterface(IID_IAAFSourceMob, (void **)&iFileMob));
-		iUnk->Release();
-		iUnk= NULL;
 		CHECK(_codec->GetNumChannels(iFileMob, mediaKind, stream, numCh));
+		fileMob->ReleaseReference();
+		fileMob = NULL;
 		dict->ReleaseReference();
 		dict = NULL;
 		stream->Release();
@@ -1696,6 +1696,8 @@ AAFRESULT STDMETHODCALLTYPE
 	}
 	XEXCEPT
 	{
+		if(fileMob)
+		  fileMob->ReleaseReference();
 		if(dict)
 		  dict->ReleaseReference();
 		dict = 0;
@@ -2133,20 +2135,21 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFEssenceAccess::GetCodecName (aafUInt32 namelen,
                            wchar_t *  name)
 {
-	IAAFDefObject	*def = NULL;
+//	IAAFDefObject	*def = NULL;
 	
 	XPROTECT()
 	{
 		//!!!Assert that _pluginDescriptor is NON-NULL
-		CHECK(_codecDescriptor->QueryInterface(IID_IAAFDefObject, (void **)&def));
-		CHECK(def->GetName (name, namelen));
-		def->Release();
-		def = NULL;
+//		CHECK(_codecDescriptor->QueryInterface(IID_IAAFDefObject, (void **)&def));
+//		CHECK(def->GetName (name, namelen));
+		CHECK(_codec->GetCodecDisplayName (_variety, name, namelen));
+//		def->Release();
+//		def = NULL;
 	}
 	XEXCEPT
 	{
-		if(def != NULL)
-			def->Release();
+//		if(def != NULL)
+//			def->Release();
 	}
 	XEND
 	
@@ -2166,21 +2169,22 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFEssenceAccess::GetCodecID (aafCodecID_t *codecID)
 {
-	IAAFPlugin	*plug = NULL;
+//	IAAFPlugin	*plug = NULL;
 
-	XPROTECT()
-	{
-		CHECK(_codec->QueryInterface(IID_IAAFPlugin, (void **)&plug));
+//	XPROTECT()
+//	{
+		*codecID = _codecID;
+//		CHECK(_codec->QueryInterface(IID_IAAFPlugin, (void **)&plug));
 //!!!		CHECK(plug->GetPluggableID(codecID));
-		plug->Release();
-		plug = NULL;
-	}
-	XEXCEPT
-	{
-		if(plug != NULL)
-			plug->Release();
-	}
-	XEND
+//		plug->Release();
+//		plug = NULL;
+//	}
+//	XEXCEPT
+//	{
+//		if(plug != NULL)
+//			plug->Release();
+//	}
+//	XEND
 	
 	return (AAFRESULT_SUCCESS);
 }
