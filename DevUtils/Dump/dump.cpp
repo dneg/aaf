@@ -1467,9 +1467,11 @@ void dumpIndexEntry(OMUInt32 i, IndexEntry* indexEntry)
   ASSERT("Valid index entry", indexEntry != 0);
   cout << setw(12) << i;
   cout << setw(12) << hex
-                  << indexEntry->_pid
-                  << dec;
-  cout << setw(12) << indexEntry->_type;
+                   << indexEntry->_pid
+                   << dec;
+  cout << setw(12) << hex
+                   << indexEntry->_type
+                   << dec;
   cout << setw(12) << indexEntry->_offset;
   cout << setw(12) << indexEntry->_length;
   cout << endl;
@@ -1481,7 +1483,7 @@ void printIndex(IndexEntry* index, OMUInt32 entries)
   if (entries > 0) {
     cout << setw(12) << "property";
     cout << setw(12) << "pid (hex)";
-    cout << setw(12) << "type";
+    cout << setw(12) << "form (hex)";
     cout << setw(12) << "offset";
     cout << setw(12) << "length";
     cout << endl;
