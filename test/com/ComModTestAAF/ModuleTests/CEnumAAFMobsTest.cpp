@@ -435,6 +435,17 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	// Make sure it returns E_INVALIDARG	
 	if (mobIter->Next(1, mobArray, &numFetched) != AAFRESULT_SUCCESS)
 		localhr = AAFRESULT_TEST_FAILED;
+	else
+	{
+		for (i = 0; i < numFetched; i++)
+		if (mobArray[i] != NULL)
+		{
+			mobArray[i]->Release();
+			mobArray[i] = NULL;
+		}
+		else
+			localhr = AAFRESULT_TEST_FAILED;		
+	}
 
 	if (SUCCEEDED(localhr))
 		cout<< "	Next() ...		Passed" << endl;
@@ -563,6 +574,17 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	
 		if (cloneMobIter->Next(1, mobArray, &numFetched) != AAFRESULT_SUCCESS)
 			localhr = AAFRESULT_TEST_FAILED;
+		else
+		{
+			for (i = 0; i < numFetched; i++)
+			if (mobArray[i] != NULL)
+			{
+				mobArray[i]->Release();
+				mobArray[i] = NULL;
+			}
+			else
+				localhr = AAFRESULT_TEST_FAILED;		
+		}
 
 		cloneMobIter->Release();
  		cloneMobIter = NULL;
