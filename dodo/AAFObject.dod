@@ -6,6 +6,21 @@ AAFRoot\
 #endm
 #c
 AD_HEAD
+/******************************************\
+*                                          *
+* Advanced Authoring Format                *
+*                                          *
+* Copyright (c) 1998 Avid Technology, Inc. *
+* Copyright (c) 1998 Microsoft Corporation *
+*                                          *
+\******************************************/
+
+ 
+/***********************************************\
+*	Stub only.   Implementation not yet added	*
+\***********************************************/
+
+
 AD_IDL(//
 // This interface is implemented for all AAF persistent classes.  In
 // addition to methods which all clients can use\, it provides methods
