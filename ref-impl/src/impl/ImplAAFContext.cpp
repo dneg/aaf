@@ -67,7 +67,7 @@ void * ImplAAFSession::GetContainer ()
 	  AAFFile	*apiFile;
 		  
 	AAFFile::CreateObject(&apiFile);
-	  *file = apiFile->GetRepObject();
+	  *file = static_cast<ImplAAFFile*>(apiFile->GetRepObject());
 	  (*file)->Create(filePath, this, rev);
 	  return(AAFRESULT_SUCCESS);
   }
@@ -83,7 +83,7 @@ void * ImplAAFSession::GetContainer ()
 	  AAFFile	*apiFile;
 		  
 	AAFFile::CreateObject(&apiFile);
-	  *file = apiFile->GetRepObject();
+	  *file = static_cast<ImplAAFFile*>(apiFile->GetRepObject());
 	  (*file)->OpenRead(filePath, this);
 	  return(AAFRESULT_SUCCESS);
   }
@@ -99,7 +99,7 @@ void * ImplAAFSession::GetContainer ()
 	  AAFFile	*apiFile;
 		  
 	AAFFile::CreateObject(&apiFile);
-	  *file = apiFile->GetRepObject();
+	  *file = static_cast<ImplAAFFile*>(apiFile->GetRepObject());
 	  (*file)->OpenModify(filePath, this);
 	return(AAFRESULT_SUCCESS);
   }
