@@ -40,7 +40,8 @@ OMDEFINE_STORABLE(ImplAAFContentStorage, CLSID_AAFContentStorage);
 extern "C" const aafClassID_t CLSID_EnumAAFMobs;
 
 ImplAAFContentStorage::ImplAAFContentStorage ()
-: _mobs(         PID_CONTENT_STORAGE_MOBS,          "mobs") /*!!!,
+: _mobIndex(0),
+  _mobs(PID_CONTENT_STORAGE_MOBS, "mobs") /*!!!,
   _mediaData(      PID_CONTENT_STORAGE_MEDIA,       "mediaData") */
 {
   _persistentProperties.put(_mobs.address());
@@ -51,7 +52,26 @@ ImplAAFContentStorage::ImplAAFContentStorage ()
 
 
 ImplAAFContentStorage::~ImplAAFContentStorage ()
-{}
+{
+	// Cleanup the non-persistent data...
+	TableDispose(_mobIndex);
+	_mobIndex = 0;
+
+	// Cleanup the persistent data...
+	ImplAAFMob *pMob = NULL;
+	size_t size;
+	_mobs.getSize(size);
+	for (size_t i = 0; i < size; i++)
+	{
+		_mobs.getValueAt(pMob, i);
+		if (pMob)
+		{
+			pMob->ReleaseReference();
+		  // Set value to 0 so OM can perform necessary cleanup.
+		  _mobs.setValueAt(0, i);
+		}
+	}
+}
 
 
 AAFRESULT STDMETHODCALLTYPE
@@ -66,7 +86,13 @@ AAFRESULT STDMETHODCALLTYPE
 		tmpMob = (ImplAAFMob *)TableUIDLookupPtr(_mobIndex, *mobID);
 
 		if (tmpMob)
+			{
 		  *ppMob = tmpMob;
+			// trr - We are returning a copy of mob pointer so we need to 
+			// bump the reference count. Note: The copy that is in the 
+			// table has NOT be reference counted.
+			tmpMob->AcquireReference();
+			}
 		else
 		  {
 			RAISE(AAFRESULT_MOB_NOT_FOUND);
@@ -137,8 +163,12 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFContentStorage::GetMobs (aafSearchCrit_t *pSearchCriteria,
                            ImplEnumAAFMobs **ppEnum)
 {
+	if (NULL == ppEnum)
+		return AAFRESULT_NULL_PARAM;
+	*ppEnum = 0;
+	
 	ImplEnumAAFMobs		*theEnum = (ImplEnumAAFMobs *)CreateImpl (CLSID_EnumAAFMobs);
-		
+	
 	XPROTECT()
 	{
 		CHECK(theEnum->SetContentStorage(this));
@@ -148,6 +178,8 @@ AAFRESULT STDMETHODCALLTYPE
 	}
 	XEXCEPT
 	{
+		if (theEnum)
+			theEnum->ReleaseReference();
 		return(XCODE());
 	}
 	XEND;
@@ -159,9 +191,16 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT
     ImplAAFContentStorage::GetNthMob (aafInt32 index, ImplAAFMob **ppMob)
 {
-	ImplAAFMob	*obj;
+	ImplAAFMob	*obj = NULL;
 	_mobs.getValueAt(obj, index);
 	*ppMob = obj;
+	
+	// trr - We are returning a copy of pointer stored in _mobs so we need
+	// to bump its reference count.
+	if (obj)
+		obj->AcquireReference();
+	else
+		return AAFRESULT_NO_MORE_MOBS;
 
 	return AAFRESULT_SUCCESS;
 }
@@ -170,10 +209,16 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFContentStorage::AppendMob (ImplAAFMob *pMob)
 {
 	aafUID_t	mobID;
+
+	if (NULL == pMob)
+		return AAFRESULT_NULL_PARAM;
 	
 	XPROTECT()
 	{
 		_mobs.appendValue(pMob);
+		// trr - We are saving a copy of pointer in _mobs so we need
+		// to bump its reference count.
+		pMob->AcquireReference();
 		CHECK(pMob->GetMobID(&mobID));
 		CHECK(TableAddUID(_mobIndex, mobID, pMob, kAafTableDupError));
 	} /* XPROTECT */
@@ -190,6 +235,8 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFContentStorage::RemoveMob (ImplAAFMob *pMob)
 {
 	aafUID_t	mobID;
+	if (NULL == pMob)
+		return AAFRESULT_NULL_PARAM;
 
 	XPROTECT()
 	{
@@ -209,6 +256,8 @@ AAFRESULT
     ImplAAFContentStorage::ChangeIndexedMobID (ImplAAFMob *pMob, aafUID_t *newID)
 {
 	aafUID_t	mobID;
+	if (NULL == pMob)
+		return AAFRESULT_NULL_PARAM;
 
 	XPROTECT()
 	{
@@ -259,6 +308,12 @@ AAFRESULT ImplAAFContentStorage::LoadMobTables(void)
 		mobTableSize *= 2; /* Allow for some growth */
 		if(mobTableSize < DEFAULT_NUM_MOBS)
 			mobTableSize = DEFAULT_NUM_MOBS;
+		// dispose of the old table
+		if (_mobIndex)
+		{
+			TableDispose(_mobIndex);
+			_mobIndex = 0;
+		}
 		CHECK(NewUIDTable(NULL, mobTableSize, &(_mobIndex)));
 
 		for(n = 0; n < siz; n++)
