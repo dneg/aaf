@@ -57,6 +57,28 @@ AD_XMETHOD1(GetGeneration,
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pGeneration\))
 
 
+AD_XMETHOD1(GetObjectClass,
+            [out],
+			objPass,
+			aafUID_t *,
+			pClass,
+			ID of object class of which this object is an instance.,
+            Gets the object class of which this object is an instance
+  // and places it into the caller-allocated aafUID_t pointed to by
+  // pClass.
+  //
+  // Succeeds if all of the following are true:
+  // - the given pClass pointer is valid.
+  //
+  // Note! Use care when dealing with the object class.  Among the
+  // pitfalls to be avoided is that tests for equality will not
+  // reflect inheritance.  This becomes important if an unknown
+  // non-builtin \(that is\, user defined\) object class ID is obtained.
+  //
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pClass\))
+
+
 AD_XMETHOD1(GetDefinition,
             [out],
 			objOut,
