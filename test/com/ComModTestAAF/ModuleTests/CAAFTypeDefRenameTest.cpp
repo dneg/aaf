@@ -33,6 +33,7 @@
 #include <wchar.h>
 #include "AAF.h"
 #include "AAFResult.h"
+#include "ModuleTest.h"
 #include "AAFSmartPointer.h"
 #include "AAFStoredObjectIDs.h"
 #include "CAAFBuiltinDefs.h"
@@ -374,15 +375,17 @@ static void ReadTypeDefRenameFile(aafWChar *pFilename)
 	pFile->Close();
 }
 
-extern "C" HRESULT CAAFTypeDefRename_test()
+extern "C" HRESULT CAAFTypeDefRename_test(testMode_t mode);
+extern "C" HRESULT CAAFTypeDefRename_test(testMode_t mode)
 {
 	aafWChar *pTestFilename=L"TypeDefRenameTest.aaf";
 
 	try
 	{
-		CreateTypeDefRenameFile(pTestFilename);
+      	if(mode == kAAFUnitTestReadWrite)
+			CreateTypeDefRenameFile(pTestFilename);
 		ReadTypeDefRenameFile(pTestFilename);
-		RemoveTestFile(pTestFilename);
+//		RemoveTestFile(pTestFilename);
 	}
 	catch(HRESULT& rResult)
 	{
