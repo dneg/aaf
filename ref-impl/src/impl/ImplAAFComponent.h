@@ -114,8 +114,8 @@ public:
 										ImplAAFComponent **found, aafBool *foundTransition);
 
 	virtual AAFRESULT GetComponentType(implCompType_t* pType) {*pType = kComponent; return AAFRESULT_SUCCESS;}
-	virtual AAFRESULT ChangeContainedReferences(const aafUID_t & from,
-												const aafUID_t & to);
+	virtual AAFRESULT ChangeContainedReferences(aafMobID_constref from,
+												aafMobID_constref to);
 
 
 private:

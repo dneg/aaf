@@ -59,7 +59,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     GetSourceID
 		// @parm [retval][out] Place to put source ID
-        (aafUID_t *  pSourceID);
+        (aafMobID_t *  pSourceID);
 
   //****************
   // SetSourceID()
@@ -67,7 +67,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     SetSourceID
 		// @parm [in] Source ID to set
-        (aafUID_t   sourceID);
+        (aafMobID_constref   sourceID);
 
   //****************
   // GetSourceMobSlotID()
@@ -88,11 +88,11 @@ public:
 public:
 	//SDK-private
 
-	virtual AAFRESULT ChangeContainedReferences(const aafUID_t & from,
-												const aafUID_t & to);
+	virtual AAFRESULT ChangeContainedReferences(aafMobID_constref from,
+												aafMobID_constref to);
 
 private:
-	OMFixedSizeProperty<aafUID_t>	_sourceID;
+	OMFixedSizeProperty<aafMobID_t>	_sourceID;
 	OMFixedSizeProperty<aafInt32>	_sourceMobSlotId;
 
 };
