@@ -49,8 +49,8 @@
 //
 // DictP18-277-1847BMaster.csv 
 //
-// This file was generated on Fri Apr  7 13:52:03 EDT 2000
-// by user bedell on system JBEDELL2.
+// This file was generated on Fri Apr  7 21:45:47 EDT 2000
+// by user transdel on system TRANSDEL.
 //
 // Key to macros.
 //
@@ -1225,7 +1225,7 @@ AAF_CLASS(ClassDefinition,
   AAF_LITERAL_AUID(0x06444100,
     0x0000, 0x0000,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
-  DefinitionObject,
+  MetaDefinition,
   true)
   AAF_PROPERTY(ParentClass,
     AAF_LITERAL_AUID(0x06444101,
@@ -1357,7 +1357,7 @@ AAF_CLASS(PropertyDefinition,
   AAF_LITERAL_AUID(0x06444500,
     0x0000, 0x0000,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
-  DefinitionObject,
+  MetaDefinition,
   true)
   AAF_PROPERTY(Type,
     AAF_LITERAL_AUID(0x06444501,
@@ -1400,7 +1400,7 @@ AAF_CLASS(TypeDefinition,
   AAF_LITERAL_AUID(0x06444600,
     0x0000, 0x0000,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
-  DefinitionObject,
+  MetaDefinition,
   false)
 AAF_CLASS_END(TypeDefinition)
 AAF_CLASS_SEPARATOR()
@@ -1639,7 +1639,7 @@ AAF_CLASS(Dictionary,
   AAF_LITERAL_AUID(0x06450000,
     0x0000, 0x0000,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
-  InterchangeObject,
+  MetaDictionary,
   true)
   AAF_PROPERTY(ClassDefinitions,
     AAF_LITERAL_AUID(0x06450100,
@@ -3145,6 +3145,68 @@ AAF_CLASS(TypeDefinitionCharacter,
   TypeDefinition,
   true)
 AAF_CLASS_END(TypeDefinitionCharacter)
+AAF_CLASS_SEPARATOR()
+
+// MetaDefinition
+//
+AAF_CLASS(MetaDefinition,
+  AAF_LITERAL_AUID(0x06600000,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
+  InterchangeObject,
+  false)
+  AAF_PROPERTY(Identification,
+    AAF_LITERAL_AUID(0x06600100,
+      0x0000, 0x0000,
+      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
+    0x5e01,
+    AAF_TYPE(AUID),
+    true,
+    MetaDefinition)
+  AAF_PROPERTY(Name,
+    AAF_LITERAL_AUID(0x06600200,
+      0x0000, 0x0000,
+      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
+    0x5e02,
+    AAF_TYPE(String),
+    true,
+    MetaDefinition)
+  AAF_PROPERTY(Description,
+    AAF_LITERAL_AUID(0x06600300,
+      0x0000, 0x0000,
+      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
+    0x5e03,
+    AAF_TYPE(String),
+    false,
+    MetaDefinition)
+AAF_CLASS_END(MetaDefinition)
+AAF_CLASS_SEPARATOR()
+
+// MetaDictionary
+//
+AAF_CLASS(MetaDictionary,
+  AAF_LITERAL_AUID(0x06610000,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
+  InterchangeObject,
+  true)
+  AAF_PROPERTY(ClassDefinitions,
+    AAF_LITERAL_AUID(0x06610100,
+      0x0000, 0x0000,
+      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
+    0x5f01,
+    AAF_REFERENCE_TYPE(StrongReferenceSet, ClassDefinition),
+    false,
+    MetaDictionary)
+  AAF_PROPERTY(TypeDefinitions,
+    AAF_LITERAL_AUID(0x06610200,
+      0x0000, 0x0000,
+      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
+    0x5f02,
+    AAF_REFERENCE_TYPE(StrongReferenceSet, TypeDefinition),
+    false,
+    MetaDictionary)
+AAF_CLASS_END(MetaDictionary)
 
 AAF_TABLE_END()
 
