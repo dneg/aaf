@@ -56,10 +56,7 @@ void OMDataStreamProperty::save(void) const
 {
   TRACE("OMDataStreamProperty::save");
 
-  // Use the property name as the stream name
-  //
-  const wchar_t* name = storedName();
-  store()->saveStream(_propertyId, _storedForm, name, _byteOrder);
+  store()->save(*this);
 
   // The stream has never been written to but we want the stream to
   // exist in the file, create it.
@@ -73,25 +70,11 @@ void OMDataStreamProperty::save(void) const
   // @mfunc Restore this <c OMDataStreamProperty>, the size of the
   //        <c OMDataStreamProperty> is <p externalSize>.
   //   @parm The size of the <c OMDataStreamProperty>.
-void OMDataStreamProperty::restore(size_t ANAME(externalSize))
+void OMDataStreamProperty::restore(size_t externalSize)
 {
   TRACE("OMDataStreamProperty::restore");
 
-  size_t characterCount = lengthOfWideString(storedName()) + 1;
-  size_t size = (characterCount * sizeof(OMCharacter)) + 1;
-  ASSERT("Consistent property size", size == externalSize);
-
-  wchar_t* name = 0;
-  OMByteOrder bo;
-  store()->restoreStream(_propertyId, _storedForm, size, &name, &bo);
-  ASSERT("Consistent property name",
-                                   compareWideString(name, storedName()) == 0);
-  ASSERT("Valid stored byte order", ((bo == littleEndian) ||
-                                     (bo == bigEndian) ||
-                                     (bo == unspecified)));
-  _byteOrder = bo;
-  delete [] name;
-
+  store()->restore(*this, externalSize);
   open();
   setPresent();
 
