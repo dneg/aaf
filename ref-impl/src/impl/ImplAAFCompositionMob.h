@@ -91,7 +91,7 @@ public:
   // METHOD NAME: GetMobKind()
   //
   // DESCRIPTION:
-  // @mfunc AAFRESULT | AAFMobPrivate | GetMobKind |
+  // @mfunc AAFRESULT | GetMobKind |
   // This method returns the kind of this mob.
   // 
   // Succeeds if all of the following are true:

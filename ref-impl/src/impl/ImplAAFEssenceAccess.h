@@ -32,7 +32,6 @@ class ImplAAFContainerDef;
 class ImplAAFDataDef;
 class ImplAAFDictionary;
 class ImplAAFEssenceFormat;
-class ImplAAFEssenceSampleStream;
 class ImplAAFEssenceStream;
 class ImplAAFFile;
 class ImplAAFFileDescriptor;

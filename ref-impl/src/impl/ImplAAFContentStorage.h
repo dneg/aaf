@@ -53,7 +53,6 @@ typedef ImplAAFEnumerator<ImplAAFEssenceData> ImplEnumAAFEssenceData;
 #include "OMStrongRefSetProperty.h"
 #include "OMDataTypes.h"
 
-class AAFDataKind;
 class AAFOperationDef;
 
 
