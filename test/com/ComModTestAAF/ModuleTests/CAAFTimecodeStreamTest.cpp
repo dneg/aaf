@@ -135,7 +135,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		
 		checkResult(pCompMob->Initialize(L"COMPMOB01"));
 		
-		checkResult(defs.cdTimecodeStream()->
+		// Create a concrete subclass fo TimecodeStream
+		checkResult(defs.cdTimecodeStream12M()->
 					CreateInstance(IID_IAAFTimecodeStream, 
 								   (IUnknown **)&pTimecodeStream));		
 		 checkResult(pTimecodeStream->QueryInterface(IID_IAAFComponent, (void **)&pComponent));
