@@ -171,7 +171,6 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	IAAFFile *					pFile = NULL;
 	bool bFileOpen = false;
 	IAAFHeader *				pHeader = NULL;
-  IAAFDictionary*  pDictionary = NULL;
 	IEnumAAFMobs*				pMobIter = NULL;
 	IEnumAAFMobSlots*			pEnum = NULL;
 	IAAFMob*					pMob = NULL;
@@ -225,7 +224,16 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
         checkExpression(startTC.startFrame == 108000, AAFRESULT_TEST_FAILED);
         checkExpression(startTC.drop == kTcNonDrop, AAFRESULT_TEST_FAILED);
         checkExpression(startTC.fps == 30, AAFRESULT_TEST_FAILED);
+
+        pTimecode->Release();
+        pTimecode = NULL;
+
+        pSeg->Release();
+        pSeg = NULL;
       }
+
+      pEnum->Release();
+      pEnum = NULL;
 
       pMob->Release();
       pMob = NULL;
@@ -253,8 +261,8 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	if (pMob)
 		pMob->Release();
 
-	if (pDictionary)
-		pDictionary->Release();
+	if (pMobIter)
+		pMobIter->Release();
 
 	if (pHeader)
 		pHeader->Release();
