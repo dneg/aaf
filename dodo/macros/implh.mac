@@ -215,8 +215,13 @@ AD_CLASS_BEGIN\
 struct I.this-module;
 class .this-module;
 
+#ifndef __AAFTypes_h__
 #include "AAFTypes.h"
+#endif
 
+#ifndef __AAFResult_h_
+#include "AAFResult.h"
+#endif
 
 class Impl.this-module
 {

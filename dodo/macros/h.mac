@@ -221,6 +221,10 @@ AD_CLASS_BEGIN\
 #include "AAFTypes.h"
 #endif
 
+#ifndef __AAFResult_h_
+#include "AAFResult.h"
+#endif
+
 //
 // Forward declaration
 //
