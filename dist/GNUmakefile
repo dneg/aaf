@@ -16,6 +16,17 @@
 # 
 ###############################################################################
 
+# This make file is normally called from the top level makefile
+# (../GNUmakefile) using the "dist" target.
+
+# The top level make target does not currently work under Win2K.
+# Instead, run the following from this directory:
+#
+#    make AAFPLATFORM=Win AAFSDK=../AAFWinSDK release-dist
+#    make AAFPLATFORM=Win AAFSDK=../AAFWinSDK sdk-dist
+#
+# It was tested using Cygwin.
+
 AAFBASE ?= ..
 
 #
@@ -23,8 +34,13 @@ AAFBASE ?= ..
 #
 include $(AAFBASE)/build/common.mk
 
+ifeq ($(AAFPLATFORM),Win)
+RELEASE_FILES_SRC = ./release-files.win
+SDK_FILES_SRC = ./sdk-files.win
+else
 RELEASE_FILES_SRC = ./release-files.unix
 SDK_FILES_SRC = ./sdk-files.unix
+endif
 
 DST_DIR = $(AAFSDK)/Dist
 RELEASE_FILES_DST = $(DST_DIR)/release-files

@@ -26,13 +26,19 @@ create_unix_distribution ()
 	cd $1;
 	filename=$2.tar.gz;
 	FileList=`grep -v \# $3`;
-	tar cvf - ${FileList} | gzip -c > $filename
+	tar cvf - ${FileList} | gzip -c > ${filename}
 }
 
-create_sdk_distribution ()
+create_win_distribution ()
 {
-	echo create_sdk_distribution $1;
+	echo create_zip_distribution $1 $2 $3;
+
+	cd $1;
+	filename=$2.zip;
+	FileList=`grep -v \# $3`;
+	zip -r ${filename} ${FileList} ;
 }
+
 
 #
 # main
@@ -69,7 +75,11 @@ echo DIST_FILE_NAME = $DIST_FILE_NAME
 
 case ${AAFPLATFORM} in
         i686Linux ) create_unix_distribution $AAFSDK $DIST_FILE_NAME $DIST_LIST  ;;
+
 	MipsIrix  ) create_unix_distribution $AAFSDK $DIST_FILE_NAME $DIST_LIST  ;;
+
+	Win       ) create_win_distribution $AAFSDK $DIST_FILE_NAME $DIST_LIST  ;;
+
 	*         ) usage;;
 esac
 	
