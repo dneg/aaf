@@ -119,23 +119,6 @@ typedef struct _AafOmfGlobals
 } AafOmfGlobals;
 
 
-// ============================================================================
-// simple helper class to initialize and cleanup COM library.
-// ============================================================================
-struct CComInitialize
-{
-	CComInitialize()
-	{
-		CoInitialize(NULL);
-	}
-
-	~CComInitialize()
-	{
-		CoUninitialize();
-	}
-};
-
-
 int deleteFile( char* fileName );
 void IncIndentLevel( void );
 void DecIndentLevel( void );
