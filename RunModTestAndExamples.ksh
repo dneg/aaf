@@ -71,7 +71,22 @@ RELEASE="AAFWinSDK/Release"
 
 OLD_PATH=""
 
-Status=0
+STATUS=0
+
+RESULTS=""
+
+CheckExitCode ()
+{
+	ExitCode=$1
+	PROGRAM=$2
+
+	#Generate list of all the results
+	RESULTS="${RESULTS}$ExitCode  $PROGRAM\n"
+
+	if [ $ExitCode -ne 0 ]; then
+		STATUS=1
+	fi
+}
 
 
 SetPath ()
@@ -121,6 +136,8 @@ RunMainScript ()
 		cp ../../Test/Com/ComModTestAAF/Laser.wav .
 		ComModAAF
 
+		CheckExitCode $? "ComModAAF"
+
 		cd ..
 	fi
 
@@ -130,9 +147,14 @@ RunMainScript ()
 		cp ../Test/AAFSequenceTest.aaf .
 		AafOmf -omf AAFSequenceTest.aaf
 
+		CheckExitCode $? "AafOmf Convertor Test 1 -  AAF -> OMF"
+
 		PrintSeparator "AafOmf Convertor Test 2 -  OMF -> AAF"
 		cp D:/views/Complx2x.omf .
 		AafOmf Complx2x.omf
+
+		CheckExitCode $? "AafOmf Convertor Test 2 -  OMF -> AAF"
+
 		cd ..
 	fi
 
@@ -140,27 +162,37 @@ RunMainScript ()
 	if [ CLIENTTEST -eq 1 ] || [ ALL -eq 1 ]; then
 		PrintSeparator "Running COMClientAAF"
 		COMClientAAF
+
+		CheckExitCode $? "COMClientAAF"
 	fi
 
 	if [ CUTSTEST -eq 1 ] || [ ALL -eq 1 ]; then
 		PrintSeparator "Running ComCutsTestAAF"
 		ComCutsTestAAF
+
+		CheckExitCode $? "ComCutsTestAAF"
 	fi
 
 	if [ ESSENCETEST -eq 1 ] || [ ALL -eq 1 ]; then
 		cp ../../../examples/com-api/ComEssenceDataTest/Laser.wav .
 		PrintSeparator "Running ComEssenceDataTest"
 		ComEssenceDataTest
+
+		CheckExitCode $? "ComEssenceDataTest"
 	fi
 
 	if [ AAFINFO -eq 1 ] || [ ALL -eq 1 ]; then
 		PrintSeparator "Running ComAAFInfo on EssenceTest.aaf"
 		ComAAFInfo EssenceTest.aaf
+
+		CheckExitCode $? "ComAAFInfo"
 	fi
 	
 	if [ PROPDIRECTDUMP -eq 1 ] || [ ALL -eq 1 ]; then
 		PrintSeparator "Running ComPropDirectDump on EssenceTest.aaf"
 		ComPropDirectDump EssenceTest.aaf
+
+		CheckExitCode $? "ComPropDirectDump" 
 	fi
 	cd ../..
 
@@ -169,6 +201,8 @@ RunMainScript ()
 		cd DevUtils
 		cp ../Test/AAFSequenceTest.aaf .
 		dump AAFSequenceTest.aaf
+
+		CheckExitCode $? "dump"
 
 		cd ..
 	fi
@@ -188,3 +222,9 @@ fi
 if [ CHECK_RELEASE -eq 1 ]; then
 	RunMainScript "Release"
 fi
+
+
+print "\nPrinting Test Exit Codes:\n$RESULTS" 
+
+
+exit $STATUS
