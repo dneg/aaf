@@ -80,6 +80,14 @@ depend.mk : aafobjects.mk
 		echo $$base.comcx : macros/comcx.mac macros/base.mac >> depend.tmp ; \
 		echo $$base.exp : macros/exp.mac macros/base.mac >> depend.tmp ; \
       done
+	@ for base in $(PLUGIN_OBJECTS) ; do \
+		echo $$base.all... ; \
+		echo "" >> depend.tmp ; \
+		echo $$base.all : $$base.fidl >> depend.tmp ; \
+		echo $$base.fidl : macros/fidl.mac macros/base.mac >> depend.tmp ; \
+		echo $$base.exp : macros/exp.mac macros/base.mac >> depend.tmp ; \
+		echo $$base.frefh : macros/frefh.mac macros/base.mac >> depend.tmp ; \
+     done
 	@ echo "" >> depend.tmp
 	for file in $(HUMAN_TYPED_IMPL) ; do \
 		grep -v $$file\.impl depend.tmp | grep -v $$file\.comt > depend.tmp2 ; \
