@@ -8,23 +8,33 @@ AAFSegment\
 #c
 #c #import ./AAFSegment.exp
 AD_HEAD
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
-
+AD_IDL(//
+// This interface provides access to the EssenceGroup object\, which contains
+// multiple representations of the same media within a MasterMob.  The IAAFEssenceAccess
+// methods allow specifying parameters such as "best quality"\, or "lowest frame rate"
+// for and follow the correct path through the EssenceGroup in order to find the media
+// which matches the criteria.
+//
+// In addition to the specific error results listed for each method\,
+// all methods in this interface may also return one of the following
+// values:
+// 
+// AAFRESULT_NOMEMORY
+//   - insufficient system memory is available to perform the
+//     operation.
+//)
 /***********************************************\
-*	Stub only.   Implementation not yet added	*
+*												*
+* Advanced Authoring Format						*
+*												*
+* Copyright (c) 1998-1999 Avid Technology, Inc. *
+* Copyright (c) 1998-1999 Microsoft Corporation *
+*												*
 \***********************************************/
-
 
 #c AD_INCLUDE(myVector)
 
-AD_FORWARD_DECLARATION(AAFSegment)
+AD_FORWARD_DECLARATION(AAFSourceClip)
 AD_FORWARD_DECLARATION(AAFDataDef)
 
 
@@ -33,27 +43,26 @@ AD_CLASS_UUID(e58a8568, 2a3e, 11D2, bf, a4, 00, 60, 97, 11, 62, 12)
 AD_DEFAULT_UUID(e58a8567, 2a3e, 11D2, bf, a4, 00, 60, 97, 11, 62, 12)
 AD_XCLASS_BEGIN(Concrete, StoredObject)
 
-AD_XMETHOD2(SetInitialValues,
-[in], objIn, AAFDataDef, datadef,Data Definition object,
-[in], objPass, aafLength_t, length,Length property value,
-Creates a new empty essence group object with the given property values.)
-//@comm replaces the constructor.
-
 /****/
 AD_XMETHOD1(SetStillFrame,
-[in], objIn, AAFSegment, stillFrame,Still Frame source clip ,
+[in], objIn, AAFSourceClip, stillFrame,Still Frame source clip ,
 sets the still frame property on a essence group to be the source clip passed as the stillFrame argument.)
     //@comm Essence group choices should be added with the AddChoice() function.
     
 /****/
-AD_XMETHOD1(AddChoice,
-[in], objIn, AAFSegment, choice,Source clip to add as a choice ,
+AD_XMETHOD1(AppendChoice,
+[in], objIn, AAFSourceClip, choice,Source clip to add as a choice ,
 adds the source clip specified in the choice argument as  a choice to the given essence group object.)
 
 /****/
+AD_XMETHOD1(GetNumRepresentations,
+[out], objPass, aafUInt32* , result,The number of representations contained within.,
+Returns the number of representations contained within\, excepting the still frame.)
+
+/****/
 AD_XMETHOD2(GetIndexedRepresentation,
-[in], objPass, aafInt32, index,The 1-based index into the array,
-[out], objOut, AAFSegment , result,The representation at that index,
+[in], objPass, aafUInt32, index,The 0-based index into the array,
+[out], objOut, AAFSourceClip , result,The representation at that index,
 adds the source clip specified in the choice argument as  a choice to the given essence group object.)
 
 //	private:
