@@ -118,14 +118,17 @@ OMStoredObject* OMStoredObject::openModify(const wchar_t* fileName)
 }
 
   // @mfunc Create a new root <c OMStoredObject> in the disk file
-  //        <p fileName>.
+  //        <p fileName>. The byte order of the newly created root
+  //        is given by <p byteOrder>.
   //   @parm The name of the file to create. The file must not exist.
+  //   @parm The desired byte ordering for the new file.
   //   @rdesc An <c OMStoredObject> representing the root object in
   //          the disk file.
-OMStoredObject* OMStoredObject::createModify(const wchar_t* fileName)
+OMStoredObject* OMStoredObject::createModify(const wchar_t* fileName,
+                                             const OMByteOrder byteOrder)
 {
   OMStoredObject* newStoredObject = OMStoredObject::create(fileName);
-  newStoredObject->create();
+  newStoredObject->create(byteOrder);
 
   return newStoredObject;
 }
@@ -197,8 +200,8 @@ void OMStoredObject::save(OMStoredPropertySetIndex* index)
 
   // Write byte order flag.
   //
-  OMByteOrder byteOrder = hostByteOrder();
-  writeToStream(_indexStream, &byteOrder, sizeof(byteOrder));
+  ASSERT("Index in native byte order", _byteOrder == hostByteOrder());
+  writeToStream(_indexStream, &_byteOrder, sizeof(_byteOrder));
 
   // Write version number.
   //
@@ -374,11 +377,12 @@ OMStoredObject* OMStoredObject::create(const wchar_t* fileName)
 static const char* const propertyIndexStreamName = "property index";
 static const char* const propertyValueStreamName = "property values";
  
-void OMStoredObject::create(void)
+void OMStoredObject::create(const OMByteOrder byteOrder)
 {
   TRACE("OMStoredObject::create");
   PRECONDITION("Not already open", !_open);
 
+  _byteOrder = byteOrder;
   _mode = modifyMode;
   _index = new OMStoredPropertySetIndex(50);
   ASSERT("Valid heap pointer", _index != 0);
@@ -563,7 +567,7 @@ OMStoredObject* OMStoredObject::create(const char* name)
   IStorage* newStorage = createStorage(_storage, name);
   OMStoredObject* result = new OMStoredObject(newStorage);
   ASSERT("Valid heap pointer", result != 0);
-  result->create();
+  result->create(_byteOrder);
   return result;
 }
 
@@ -783,7 +787,7 @@ IStream* OMStoredObject::openStream(IStorage* storage, const char* streamName)
   if (!checkStream(resultCode, streamName)) {
     exit(FAILURE);
   }
-  
+
   return stream;
   
 }
@@ -798,6 +802,11 @@ void OMStoredObject::closeStream(IStream*& stream)
   HRESULT resultCode = stream->Release();
   stream = 0;
   ASSERT("Reference count is 0.", resultCode == 0);
+}
+
+OMByteOrder OMStoredObject::byteOrder(void) const
+{
+  return _byteOrder;
 }
 
 IStorage* OMStoredObject::createStorage(IStorage* storage,
