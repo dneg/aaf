@@ -11,6 +11,7 @@ OnUndocumentedParams = true
 
 [Source]
 Wildcard = '.\\AAFNoSpace.idl'
+Wildcard = '.\\AAFTypes.idl'
 
 [Exclusion]
 
@@ -19,7 +20,7 @@ AAFapi.Output File Name = 'aafapi'
 AAFapi.Title = 'AAF COM API Reference'
 AAFapi.Trailer Banner = ''
 AAFapi.Trailer URL = ''
-All.Home URL = 'http://www.aafassociation.org'
+All.Home URL = 'frontCover.html'
 All.Project Name = 'AAF SDK'
 All.Required Header = 'AAF.h'
 New Standard.Trailer Banner = ''

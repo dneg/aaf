@@ -1,6 +1,7 @@
 #/usr/bin/perl
 # usage: perl this-file.perl AAF.idl |perl idlblankcomfix.perl > AAFNoSpace.idl
 $/ = "";  # munch input as paragraphs rather than lines
+
 while (<>) {
 	# replace any two blank // with a single one with same number of initial spaces
 	s|(^\s*//)\s*\n+\s*//\s&\n|\1\n|m;
