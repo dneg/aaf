@@ -372,7 +372,7 @@ OMStoredStream* OMXMLStoredObject::createStoredStream(
   // @mfunc Constructor.
   //   @parm The <c OMRawStorage> on which this <c OMXMLStoredObject> resides.
 OMXMLStoredObject::OMXMLStoredObject(OMRawStorage* s)
-: _storage(s)
+: _store(s)
 {
   TRACE("OMXMLStoredObject::OMXMLStoredObject");
 }

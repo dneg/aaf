@@ -214,7 +214,7 @@ private:
     // @cmember Constructor.
   OMXMLStoredObject(OMRawStorage* s);
 
-  OMRawStorage* _storage;
+  OMRawStorage* _store;
 
 };
 
