@@ -33,15 +33,17 @@ AD_IDL(//
 AD_FORWARD_DECLARATION(AAFDataDef)
 AD_FORWARD_DECLARATION(AAFControlPoint)
 AD_FORWARD_DECLARATION(EnumAAFControlPoints)
+AD_FORWARD_DECLARATION(AAFInterpolationDef)
 
 AD_CLASS_UUID(91920d61, 2a2e, 11D2, bf, A3, 00, 60, 97, 11, 62, 12)
 
 AD_DEFAULT_UUID(91920d60, 2a2e, 11D2, bf, A3, 00, 60, 97, 11, 62, 12)
 AD_XCLASS_BEGIN(Concrete, StoredObject)
 
-AD_XMETHOD1(AddPoint,
+AD_XMETHOD1(AppendPoint,
 			[in],objIn,AAFControlPoint, pPoint, pointer to IAAFControlPoint object,
-			Adds a control point in time order into a IAAFVaryingValue object.  The point
+			Appends a control point to the end a IAAFVaryingValue object\, which implies
+	// that it occurs at a later time than existing point.  The point
   // will be sorted by time order\, not the order in which the points were added.
   // 
   // Succeeds if all of the following are true:
@@ -83,6 +85,61 @@ AD_XMETHOD1(GetControlPoints,
   //
   // AAFRESULT_NULL_PARAM
   //   - ppEnum is null.)
+
+AD_XMETHOD1(GetInterpolationDefinition,
+			[out],
+			objOut,
+			AAFInterpolationDef,
+			ppInterpolation,
+			Returned InterpolationDefinition object,
+			Places the InterpolationDefinition object attached to this VaryingValue into the
+  // *ppInterpolation argument.  If none exists yet\, NULL is placed into the
+  // *ppInterpolation argument.
+  //
+  // The returned InterpolationDefinition object\, if it exists\, is
+  // AddRef\(\)ed before it is returned.
+  //
+  // Succeeds if all of the following are true:
+  // - the ppInterpolation pointer is valid.
+  // - A valid InterpolationDefinition exists.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppInterpolation is null.)
+
+
+AD_XMETHOD1(SetInterpolationDefinition,
+			[in],
+			objIn,
+			AAFInterpolationDef,
+			pInterpolation,
+			InterpolationDefinition object,
+			Sets the InterpolationDefinition of this VaryingValue to be the given one.
+  //
+  // Succeeds if all of the following are true:
+  // - the pEssence pointer is valid.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pInterpolation is null.)
 
 AD_XMETHOD1(GetValueBufLen,
 			[out],
