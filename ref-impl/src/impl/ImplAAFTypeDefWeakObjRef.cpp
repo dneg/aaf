@@ -8,8 +8,8 @@
 \******************************************/
 
 
-#ifndef __ImplAAFPropertyValue_h__
-#include "ImplAAFPropertyValue.h"
+#ifndef __ImplAAFPropValData_h__
+#include "ImplAAFPropValData.h"
 #endif
 
 #ifndef __ImplAAFClassDef_h__
@@ -28,14 +28,14 @@
 
 
 ImplAAFTypeDefWeakObjRef::ImplAAFTypeDefWeakObjRef ()
-  : _ReferencedType (0)
-{}
+  : _referencedType (PID_TypeDefinitionWeakObjectReference_ReferencedType, "ReferencedType")
+{
+  _persistentProperties.put(_referencedType.address());
+}
 
 
 ImplAAFTypeDefWeakObjRef::~ImplAAFTypeDefWeakObjRef ()
-{
-  if (_ReferencedType) _ReferencedType->ReleaseReference ();
-}
+{}
 
 
 // Override from AAFTypeDefObjectRef
@@ -54,10 +54,9 @@ AAFRESULT STDMETHODCALLTYPE
   hr = SetName (pTypeName);
   if (! AAFRESULT_SUCCEEDED (hr)) return hr;
 
-  assert (!_ReferencedType);
-  _ReferencedType = pObjType;
-  if (_ReferencedType)
-	_ReferencedType->AcquireReference ();
+  if (! pObjType) return AAFRESULT_NULL_PARAM;
+  _referencedType = pObjType;
+  pObjType->AcquireReference ();
 
   hr = SetAUID (pID);
   if (! AAFRESULT_SUCCEEDED (hr)) return hr;
@@ -94,8 +93,10 @@ AAFRESULT STDMETHODCALLTYPE
 {
   if (! ppObjType) return AAFRESULT_NULL_PARAM;
 
-  *ppObjType = _ReferencedType;
+  *ppObjType = _referencedType;
+  assert (*ppObjType);
   (*ppObjType)->AcquireReference ();
+
   return AAFRESULT_SUCCESS;
 }
 

@@ -101,7 +101,7 @@ ImplAAFDictionary::ImplAAFDictionary ()
   _parameterDefinitions (PID_Dictionary_ParameterDefinitions, "ParameterDefinitions"),
   _typeDefinitions      (PID_Dictionary_TypeDefinitions,      "TypeDefinitions"),
   _classDefinitions      (PID_Dictionary_ClassDefinitions,    "ClassDefinitions"),
-  _builtinsInited (AAFFalse)
+  _pBuiltins (0)
 {
   _persistentProperties.put (_pluginDefinitions.address());
   _persistentProperties.put (_effectDefinitions.address());
@@ -115,56 +115,62 @@ ImplAAFDictionary::ImplAAFDictionary ()
 
 ImplAAFDictionary::~ImplAAFDictionary ()
 {
-	size_t i;
-	// Release the pluginDefinitions
-	size_t size = _pluginDefinitions.getSize();
-	for (i = 0; i < size; i++)
+  size_t i;
+  // Release the pluginDefinitions
+  size_t size = _pluginDefinitions.getSize();
+  for (i = 0; i < size; i++)
 	{
-		ImplAAFPluggableDef *pPlug =_pluginDefinitions.setValueAt(0, i);
-		if (pPlug)
+	  ImplAAFPluggableDef *pPlug =_pluginDefinitions.setValueAt(0, i);
+	  if (pPlug)
 		{
 		  pPlug->ReleaseReference();
 		}
 	}
 
-	size_t effectDefSize = _effectDefinitions.getSize();
-	for (i = 0; i < effectDefSize; i++)
+  size_t effectDefSize = _effectDefinitions.getSize();
+  for (i = 0; i < effectDefSize; i++)
 	{
-		ImplAAFEffectDef *pPlug =_effectDefinitions.setValueAt(0, i);
-		if (pPlug)
+	  ImplAAFEffectDef *pPlug =_effectDefinitions.setValueAt(0, i);
+	  if (pPlug)
 		{
 		  pPlug->ReleaseReference();
 		}
 	}
 
-	size_t paramDefSize = _parameterDefinitions.getSize();
-	for (i = 0; i < paramDefSize; i++)
+  size_t paramDefSize = _parameterDefinitions.getSize();
+  for (i = 0; i < paramDefSize; i++)
 	{
-		ImplAAFParameterDef *pPlug = _parameterDefinitions.setValueAt(0, i);
-		if (pPlug)
+	  ImplAAFParameterDef *pPlug = _parameterDefinitions.setValueAt(0, i);
+	  if (pPlug)
 		{
 		  pPlug->ReleaseReference();
 		}
 	}
 
-	size_t typeDefSize = _typeDefinitions.getSize();
-	for (i = 0; i < typeDefSize; i++)
+  size_t typeDefSize = _typeDefinitions.getSize();
+  for (i = 0; i < typeDefSize; i++)
 	{
-		ImplAAFTypeDef *pType = _typeDefinitions.setValueAt(0, i);
-		if (pType)
+	  ImplAAFTypeDef *pType = _typeDefinitions.setValueAt(0, i);
+	  if (pType)
 		{
 		  pType->ReleaseReference();
 		}
 	}
 
-	size_t classDefSize = _classDefinitions.getSize();
-	for (i = 0; i < classDefSize; i++)
+  size_t classDefSize = _classDefinitions.getSize();
+  for (i = 0; i < classDefSize; i++)
 	{
-		ImplAAFClassDef *pClass = _classDefinitions.setValueAt(0, i);
-		if (pClass)
+	  ImplAAFClassDef *pClass = _classDefinitions.setValueAt(0, i);
+	  if (pClass)
 		{
 		  pClass->ReleaseReference();
 		}
+	}
+
+  if (_pBuiltins)
+	{
+	  delete _pBuiltins;
+	  _pBuiltins = 0;
 	}
 }
 
@@ -773,26 +779,37 @@ AAFRESULT ImplAAFDictionary::LookupPluggableDef(aafUID_t *defID, ImplAAFPluggabl
 
 void ImplAAFDictionary::InitBuiltins()
 {
-  if (_builtinsInited) return;
+  if (_pBuiltins) return;
+
+  _pBuiltins = new ImplAAFBuiltins;
+  assert (_pBuiltins);
 
   // Put built-in types into dictionary.
-  REGISTER_TYPE_BUILTIN(ImplAAFBuiltins::TypeDefAUID);
-  REGISTER_TYPE_BUILTIN(ImplAAFBuiltins::TypeDefUInt8);
-  REGISTER_TYPE_BUILTIN(ImplAAFBuiltins::TypeDefUInt16);
-  REGISTER_TYPE_BUILTIN(ImplAAFBuiltins::TypeDefInt16);
-  REGISTER_TYPE_BUILTIN(ImplAAFBuiltins::TypeDefUInt32);
-  REGISTER_TYPE_BUILTIN(ImplAAFBuiltins::TypeDefInt32);
-  REGISTER_TYPE_BUILTIN(ImplAAFBuiltins::TypeDefInt64);
-  REGISTER_TYPE_BUILTIN(ImplAAFBuiltins::TypeDefObjRef);
-  REGISTER_TYPE_BUILTIN(ImplAAFBuiltins::TypeDefObjRefArray);
-  REGISTER_TYPE_BUILTIN(ImplAAFBuiltins::TypeDefAUIDArray);
-  REGISTER_TYPE_BUILTIN(ImplAAFBuiltins::TypeDefUInt8Array);
-  REGISTER_TYPE_BUILTIN(ImplAAFBuiltins::TypeDefUInt8Array8);
-  REGISTER_TYPE_BUILTIN(ImplAAFBuiltins::TypeDefWCharString);
+  REGISTER_TYPE_BUILTIN(_pBuiltins->TypeDefUInt8);
+  REGISTER_TYPE_BUILTIN(_pBuiltins->TypeDefUInt16);
+  REGISTER_TYPE_BUILTIN(_pBuiltins->TypeDefInt16);
+  REGISTER_TYPE_BUILTIN(_pBuiltins->TypeDefUInt32);
+  REGISTER_TYPE_BUILTIN(_pBuiltins->TypeDefInt32);
+  REGISTER_TYPE_BUILTIN(_pBuiltins->TypeDefInt64);
+  REGISTER_TYPE_BUILTIN(_pBuiltins->TypeDefObjRef);
+  REGISTER_TYPE_BUILTIN(_pBuiltins->TypeDefObjRefArray);
+  REGISTER_TYPE_BUILTIN(_pBuiltins->TypeDefUInt8Array);
+  REGISTER_TYPE_BUILTIN(_pBuiltins->TypeDefUInt8Array8);
+  REGISTER_TYPE_BUILTIN(_pBuiltins->TypeDefAUID);
+  REGISTER_TYPE_BUILTIN(_pBuiltins->TypeDefAUIDArray);
+  REGISTER_TYPE_BUILTIN(_pBuiltins->TypeDefWCharString);
 
-  REGISTER_CLASS_BUILTIN(ImplAAFBuiltins::ClassDefObject);
-
-  _builtinsInited = AAFTrue;
+  REGISTER_CLASS_BUILTIN(_pBuiltins->ClassDefObject);
 }
+
+AAFRESULT
+ImplAAFDictionary::LookupPropDef (OMPropertyId opid,
+								  ImplAAFPropertyDef ** ppd)
+{
+  InitBuiltins ();
+  assert (_pBuiltins);
+  return _pBuiltins->LookupPropDef (opid, ppd);
+}
+
 
 OMDEFINE_STORABLE(ImplAAFDictionary, AUID_AAFDictionary);
