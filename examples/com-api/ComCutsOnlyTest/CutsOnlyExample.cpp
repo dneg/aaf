@@ -418,8 +418,8 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	IAAFMasterMob*				pMasterMob = NULL;
 	aafSearchCrit_t				criteria;
 	aafNumSlots_t				numMobs, numSlots;
-	aafInt32					numCompMobs;
-	aafInt32					numTapeMobs, numFileMobs, numMasterMobs;
+	aafNumSlots_t				numCompMobs;
+	aafNumSlots_t				numTapeMobs, numFileMobs, numMasterMobs;
 	HRESULT						hr = AAFRESULT_SUCCESS;
 	aafUID_t					mobID;
 	aafWChar					bufW[1204];
