@@ -62,21 +62,25 @@
 {
   if (doInit)
 	{
+#ifdef BOB_TEST
 	  Impl.this-module * newRep;
 	  newRep = new Impl.this-module;
 	  assert (newRep);
 	  InitRep (newRep);
 	  newRep->InitCppParent (this);
+#endif
 	}
 }
 
 
 .this-module::~.this-module ()
 {
+#ifdef BOB_TEST
   Impl.this-module * rep;
   rep = GetRepObject ();
   assert (rep);
   delete rep;
+#endif
 }
 #endm
 
@@ -103,36 +107,46 @@
 {
   if (doInit)
 	{
+#ifdef BOB_TEST
 	  Impl.this-module * newRep;
 	  newRep = new Impl.this-module;
 	  assert (newRep);
 	  InitRep (newRep);
 	  newRep->InitCppParent (this);
+#endif
 	}
 }
 
 
 .this-module::~.this-module ()
 {
+#ifdef BOB_TEST
   Impl.this-module * rep;
   rep = GetRepObject ();
   assert (rep);
   delete rep;
+#endif
 }
 
 
 void .this-module::InitRep (Impl.this-module * newRep)
 {
+#ifdef BOB_TEST
   assert (newRep);
   _rep = newRep;
   newRep->InitCppParent (this);
+#endif
 }
 
 
 Impl.this-module * .this-module::GetRepObject ()
 {
+#ifdef BOB_TEST
   assert (_rep);
   return _rep;
+#else
+	return ((Impl.this-module *)NULL);
+#endif
 }
 #endm
 
@@ -148,6 +162,7 @@ Impl.this-module * .this-module::GetRepObject ()
 AAFRESULT STDMETHODCALLTYPE
     .this-module::%01 ()
 {
+#ifdef BOB_TEST
   Impl.this-module * ptr;
   ImplAAFObject * pO;
   pO = GetRepObject ();
@@ -155,6 +170,9 @@ AAFRESULT STDMETHODCALLTYPE
   ptr = static_cast<Impl.this-module*> (pO);
   assert (ptr);
   return ptr->%01();
+#else
+	return AAFRESULT_NOT_IMPLEMENTED;
+#endif
 }
 #endm
 
@@ -174,6 +192,7 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     .this-module::%01 (%03 %04)
 {
+#ifdef BOB_TEST
   Impl.this-module * ptr;
   ImplAAFObject * pO;
   pO = GetRepObject ();
@@ -181,6 +200,9 @@ AAFRESULT STDMETHODCALLTYPE
   ptr = static_cast<Impl.this-module*> (pO);
   assert (ptr);
   return ptr->%01 (%04);
+#else
+	return AAFRESULT_NOT_IMPLEMENTED;
+#endif
 }
 #endm
 
@@ -204,6 +226,7 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     .this-module::%01 (%03 %04, %07 %08)
 {
+#ifdef BOB_TEST
   Impl.this-module * ptr;
   ImplAAFObject * pO;
   pO = GetRepObject ();
@@ -211,6 +234,9 @@ AAFRESULT STDMETHODCALLTYPE
   ptr = static_cast<Impl.this-module*> (pO);
   assert (ptr);
   return ptr->%01 (%04,%08);
+#else
+	return AAFRESULT_NOT_IMPLEMENTED;
+#endif
 }
 #endm
 
@@ -238,6 +264,7 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     .this-module::%01 (%03 %04, %07 %08, %11, %12)
 {
+#ifdef BOB_TEST
   Impl.this-module * ptr;
   ImplAAFObject * pO;
   pO = GetRepObject ();
@@ -245,6 +272,9 @@ AAFRESULT STDMETHODCALLTYPE
   ptr = static_cast<Impl.this-module*> (pO);
   assert (ptr);
   return ptr->%01 (%04,%08,%12);
+#else
+	return AAFRESULT_NOT_IMPLEMENTED;
+#endif
 }
 #endm
 
@@ -276,6 +306,7 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     .this-module::%01 (%03 %04, %07 %08, %11 %12, %15, %16)
 {
+#ifdef BOB_TEST
   Impl.this-module * ptr;
   ImplAAFObject * pO;
   pO = GetRepObject ();
@@ -283,6 +314,9 @@ AAFRESULT STDMETHODCALLTYPE
   ptr = static_cast<Impl.this-module*> (pO);
   assert (ptr);
   return ptr->%01 (%04,%08,%12,%16);
+#else
+	return AAFRESULT_NOT_IMPLEMENTED;
+#endif
 }
 #endm
 
@@ -318,6 +352,7 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     .this-module::%01 (%03 %04, %07 %08, %11 %12, %15 %16, %19 %20)
 {
+#ifdef BOB_TEST
   Impl.this-module * ptr;
   ImplAAFObject * pO;
   pO = GetRepObject ();
@@ -325,6 +360,9 @@ AAFRESULT STDMETHODCALLTYPE
   ptr = static_cast<Impl.this-module*> (pO);
   assert (ptr);
   return ptr->%01 (%04,%08,%12,%16,%20);
+#else
+	return AAFRESULT_NOT_IMPLEMENTED;
+#endif
 }
 #endm
 
@@ -364,6 +402,7 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     .this-module::%01 (%03 %04, %07 %08, %11 %12, %15 %16, %19 %20, %23 %24)
 {
+#ifdef BOB_TEST
   Impl.this-module * ptr;
   ImplAAFObject * pO;
   pO = GetRepObject ();
@@ -371,6 +410,9 @@ AAFRESULT STDMETHODCALLTYPE
   ptr = static_cast<Impl.this-module*> (pO);
   assert (ptr);
   return ptr->%01 (%04,%08,%12,%16,%20,%24);
+#else
+	return AAFRESULT_NOT_IMPLEMENTED;
+#endif
 }
 #endm
 
@@ -419,10 +461,12 @@ AAFRESULT STDMETHODCALLTYPE
 #startm AD_CONSTRUCTOR1 05
 .this-module::.this-module (%02 %03)
 {
+#ifdef BOB_TEST
   Impl.this-module * newRep;
   newRep = new Impl.this-module (%03);
   assert (newRep);
   InitRep (newRep);
+#endif
 }
 #endm
 
@@ -445,10 +489,12 @@ AAFRESULT STDMETHODCALLTYPE
 #startm AD_CONSTRUCTOR2 09
 .this-module::.this-module (%02 %03,%06 %07)
 {
+#ifdef BOB_TEST
   Impl.this-module * newRep;
   newRep = new Impl.this-module (%03, %07);
   assert (newRep);
   InitRep (newRep);
+#endif
 }
 #endm
 
@@ -477,10 +523,12 @@ AAFRESULT STDMETHODCALLTYPE
 							%06 %07,
 							%10 %11)
 {
+#ifdef BOB_TEST
   Impl.this-module * newRep;
   newRep = new Impl.this-module (%03, %07, %11);
   assert (newRep);
   InitRep (newRep);
+#endif
 }
 #endm
 
@@ -514,10 +562,12 @@ AAFRESULT STDMETHODCALLTYPE
 							%10 %11,
 							%14 %15)
 {
+#ifdef BOB_TEST
   Impl.this-module * newRep;
   newRep = new Impl.this-module (%03, %07, %11, %15);
   assert (newRep);
   InitRep (newRep);
+#endif
 }
 #endm
 
@@ -544,6 +594,7 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     .this-module::%01 (%03 ** %04)
 {
+#ifdef BOB_TEST
   ImplAAFObject * pThisO;
   Impl%03 * repObj;
   %03  * retObj;
@@ -562,6 +613,9 @@ AAFRESULT STDMETHODCALLTYPE
   assert (retObj);
   assert (%04);
   *%04 = retObj;
+#else
+	return AAFRESULT_NOT_IMPLEMENTED;
+#endif
 }
 #endm
 
@@ -588,6 +642,7 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     .this-module::%01 (%03 * %04)
 {
+#ifdef BOB_TEST
   ImplAAFObject* pArgO;
   ImplAAFObject* pThisO;
   Impl%03 * repObj;
@@ -603,5 +658,8 @@ AAFRESULT STDMETHODCALLTYPE
   assert (repObj);
   stat = pThisO->%01 (repObj);
   return stat;
+#else
+	return AAFRESULT_NOT_IMPLEMENTED;
+#endif
 }
 #endm
