@@ -103,6 +103,32 @@ public:
                                const OMFileSignature& signature,
                                OMDictionary* dictionary = 0);
 
+    // @cmember Open an existing <c OMFile> for read-only access.
+    // @devnote Will superceed openExistingRead() above.
+  static OMFile* openExistingRead(OMRawStorage* rawStorage,
+                                  const OMClassFactory* factory,
+                                  void* clientOnRestoreContext,
+                                  const OMLoadMode loadMode,
+                                  OMDictionary* dictionary = 0);
+
+    // @cmember Open an existing <c OMFile> for modify access.
+    // @devnote Will superceed openExistingModify() above.
+  static OMFile* openExistingModify(OMRawStorage* rawStorage,
+                                    const OMClassFactory* factory,
+                                    void* clientOnRestoreContext,
+                                    const OMLoadMode loadMode,
+                                    OMDictionary* dictionary = 0);
+
+    // @cmember Open a new <c OMFile> for modify access.
+    // @devnote Will superceed openNewModify() above.
+  static OMFile* openNewModify(OMRawStorage* rawStorage,
+                               const OMClassFactory* factory,
+                               void* clientOnRestoreContext,
+                               const OMByteOrder byteOrder,
+                               OMStorable* clientRoot,
+                               const OMFileSignature& signature,
+                               OMDictionary* dictionary = 0);
+
      // @cmember Is <p signature> a valid signature for an <c OMFile> ?
   static bool validSignature(const OMFileSignature& signature);
 
@@ -121,6 +147,31 @@ public:
     // @cmember Constructor. Create an <c OMFile> object representing
     //          a new external file.
   OMFile(const wchar_t* fileName,
+         void* clientOnRestoreContext,
+         OMFileSignature signature,
+         const OMAccessMode mode,
+         OMStoredObject* store,
+         const OMClassFactory* factory,
+         OMDictionary* dictionary,
+         OMRootStorable* root);
+
+    // @cmember Constructor. Create an <c OMFile> object representing
+    //          an existing external file.
+    // @devnote Will superceed OMFile::OMFile (for existing files) above.
+  OMFile(OMRawStorage* rawStorage,
+         const OMFileEncoding encoding,
+         void* clientOnRestoreContext,
+         const OMAccessMode mode,
+         OMStoredObject* store,
+         const OMClassFactory* factory,
+         OMDictionary* dictionary,
+         const OMLoadMode loadMode);
+
+    // @cmember Constructor. Create an <c OMFile> object representing
+    //          a new external file.
+    // @devnote Will superceed OMFile::OMFile (for new files) above.
+  OMFile(OMRawStorage* rawStorage,
+         const OMFileEncoding encoding,
          void* clientOnRestoreContext,
          OMFileSignature signature,
          const OMAccessMode mode,
