@@ -197,6 +197,9 @@ static const aafUInt8 compressed422JFIF[] =
   0x28,0x00,0x03,0xFF,0xD9
 };
 
+// Prototype to satisfy the CW compiler.
+extern "C" HRESULT CAAFEssenceAccess_test();
+
 
 static aafBool	EqualAUID(aafUID_t *uid1, aafUID_t *uid2)
 {
@@ -1763,13 +1766,14 @@ AAFRESULT loadWAVEHeader(aafUInt8 *buf,
 	return(AAFRESULT_SUCCESS);
 }
 
-extern "C" HRESULT CAAFEssenceAccess_test()
+
+HRESULT CAAFEssenceAccess_test()
 {
 	CComInitialize comInit;
 	AAFRESULT	hr = S_OK;
 	
-	aafWChar *	rawData = L"AAFEssenceAccessExtRaw.wav";
-	aafWChar *	externalAAF = L"AAFEssenceAccessExtAAF.aaf";
+	aafWChar *	rawData = L"EssenceAccessExtRaw.wav";
+	aafWChar *	externalAAF = L"EssenceAccessExtAAF.aaf";
 #if 1
 	testDataFile_t	dataFile;
 #endif
@@ -1777,42 +1781,42 @@ extern "C" HRESULT CAAFEssenceAccess_test()
 #if 1
   cout << "    Internal Essence (WAVE)" << endl;
   cout << "        WriteRawData" << endl;
-	hr = CreateAAFFile(L"AAFEssenceAccessRaw.aaf", NULL, testRawCalls);
+	hr = CreateAAFFile(L"EssenceAccessRaw.aaf", NULL, testRawCalls);
 	if(hr == AAFRESULT_SUCCESS)
 	{
-		hr = ReadAAFFile(L"AAFEssenceAccessRaw.aaf", testRawCalls);
+		hr = ReadAAFFile(L"EssenceAccessRaw.aaf", testRawCalls);
 	}
 	
 	/**/
 	if(hr == AAFRESULT_SUCCESS)
 	{
         cout << "        WriteSamples" << endl;
-		hr = CreateAAFFile(L"AAFEssenceAccess.aaf", NULL, testStandardCalls);
+		hr = CreateAAFFile(L"EssenceAccess.aaf", NULL, testStandardCalls);
 	}
 	
 	if(hr == AAFRESULT_SUCCESS)
 	{
-		hr = ReadAAFFile(L"AAFEssenceAccess.aaf", testStandardCalls);
+		hr = ReadAAFFile(L"EssenceAccess.aaf", testStandardCalls);
 	}
 	/**/
 	if(hr == AAFRESULT_SUCCESS)
 	{
         cout << "        WriteMultiSamples" << endl;
-		checkResult(CreateAAFFile(L"AAFEssenceAccessMulti.aaf", NULL, testMultiCalls));
+		checkResult(CreateAAFFile(L"EssenceAccessMulti.aaf", NULL, testMultiCalls));
 	}
 	if(hr == AAFRESULT_SUCCESS)
 	{
-		hr = ReadAAFFile(L"AAFEssenceAccessMulti.aaf", testMultiCalls);
+		hr = ReadAAFFile(L"EssenceAccessMulti.aaf", testMultiCalls);
 	}
 	/**/
 	if(hr == AAFRESULT_SUCCESS)
 	{
         cout << "        WriteFractionalSample" << endl;
-		hr = CreateAAFFile(L"AAFEssenceAccessFract.aaf", NULL, testFractionalCalls);
+		hr = CreateAAFFile(L"EssenceAccessFract.aaf", NULL, testFractionalCalls);
 	}
 	if(hr == AAFRESULT_SUCCESS)
 	{
-		hr = ReadAAFFile(L"AAFEssenceAccessFract.aaf", testFractionalCalls);
+		hr = ReadAAFFile(L"EssenceAccessFract.aaf", testFractionalCalls);
 	}
 	/**/
 	dataFile.dataFilename = rawData;
@@ -1821,11 +1825,11 @@ extern "C" HRESULT CAAFEssenceAccess_test()
 	{
         cout << "    External Essence:" << endl;
         cout << "        WriteSamples (External Raw Essence)" << endl;
-		hr = CreateAAFFile(L"AAFEssenceAccessRawRef.aaf", &dataFile, testStandardCalls);
+		hr = CreateAAFFile(L"EssenceAccessRawRef.aaf", &dataFile, testStandardCalls);
 	}
 	if(hr == AAFRESULT_SUCCESS)
 	{
-		hr = ReadAAFFile(L"AAFEssenceAccessRawRef.aaf", testStandardCalls);
+		hr = ReadAAFFile(L"EssenceAccessRawRef.aaf", testStandardCalls);
 	}
 	/**/
 	dataFile.dataFilename = externalAAF;
@@ -1833,170 +1837,170 @@ extern "C" HRESULT CAAFEssenceAccess_test()
 	if(hr == AAFRESULT_SUCCESS)
 	{
         cout << "        WriteSamples (External AAF Essence)" << endl;
-		hr = CreateAAFFile(L"AAFEssenceAccessRef.aaf", &dataFile, testStandardCalls);
+		hr = CreateAAFFile(L"EssenceAccessRef.aaf", &dataFile, testStandardCalls);
 	}
 	if(hr == AAFRESULT_SUCCESS)
 	{
-		hr = ReadAAFFile(L"AAFEssenceAccessRef.aaf", testStandardCalls);
+		hr = ReadAAFFile(L"EssenceAccessRef.aaf", testStandardCalls);
 	}
 	
 #endif // #if 0
 
   cout << "    Internal Essence (JPEG):" << endl;
   cout << "        WriteRawData" << endl;
-	hr = CreateJPEGAAFFile(L"AAFEssenceAccessJPEGRaw.aaf",NULL, kSDKCompressionDisable, kColorSpaceRGB, 1, testRawCalls);
+	hr = CreateJPEGAAFFile(L"EssenceAccessJPEGRaw.aaf",NULL, kSDKCompressionDisable, kColorSpaceRGB, 1, testRawCalls);
 	if (SUCCEEDED(hr))
 	{
 	  cout << "        ReadRawData" << endl;
-		hr = ReadJPEGAAFFile(L"AAFEssenceAccessJPEGRaw.aaf", kSDKCompressionDisable, kColorSpaceRGB, 1, testRawCalls);
+		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGRaw.aaf", kSDKCompressionDisable, kColorSpaceRGB, 1, testRawCalls);
 	}
 	if (SUCCEEDED(hr))
 	{
 		cout << "        ReadSamples (compression enabled, RGB)" << endl;
-		hr = ReadJPEGAAFFile(L"AAFEssenceAccessJPEGRaw.aaf", kSDKCompressionEnable, kColorSpaceRGB, 1, testStandardCalls);
+		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGRaw.aaf", kSDKCompressionEnable, kColorSpaceRGB, 1, testStandardCalls);
 	}
 	if (SUCCEEDED(hr))
 	{
 		cout << "        ReadSamples (compression enabled, YUV)" << endl;
-		hr = ReadJPEGAAFFile(L"AAFEssenceAccessJPEGRaw.aaf", kSDKCompressionEnable, kColorSpaceYUV, 1, testStandardCalls);
+		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGRaw.aaf", kSDKCompressionEnable, kColorSpaceYUV, 1, testStandardCalls);
 	}
 
 	if (SUCCEEDED(hr))
 	{
 		cout << "        WriteSamples (compression disabled, RGB)" << endl;
-		hr = CreateJPEGAAFFile(L"AAFEssenceAccessJPEG.aaf",NULL, kSDKCompressionDisable, kColorSpaceRGB, 1, testStandardCalls);
+		hr = CreateJPEGAAFFile(L"EssenceAccessJPEG.aaf",NULL, kSDKCompressionDisable, kColorSpaceRGB, 1, testStandardCalls);
 	}
 	if (SUCCEEDED(hr))
 	{
 	  cout << "        ReadRawData" << endl;
-		hr = ReadJPEGAAFFile(L"AAFEssenceAccessJPEG.aaf", kSDKCompressionDisable, kColorSpaceRGB, 1, testRawCalls);
+		hr = ReadJPEGAAFFile(L"EssenceAccessJPEG.aaf", kSDKCompressionDisable, kColorSpaceRGB, 1, testRawCalls);
 	}
 	if (SUCCEEDED(hr))
 	{
 		cout << "        ReadSamples (compression disabled, RGB)" << endl;
-		hr = ReadJPEGAAFFile(L"AAFEssenceAccessJPEG.aaf", kSDKCompressionDisable, kColorSpaceRGB, 1, testStandardCalls);
+		hr = ReadJPEGAAFFile(L"EssenceAccessJPEG.aaf", kSDKCompressionDisable, kColorSpaceRGB, 1, testStandardCalls);
 	}
 	if (SUCCEEDED(hr))
 	{
 		cout << "        ReadSamples (compression enabled, RGB)" << endl;
-		hr = ReadJPEGAAFFile(L"AAFEssenceAccessJPEG.aaf", kSDKCompressionEnable, kColorSpaceRGB, 1, testStandardCalls);
+		hr = ReadJPEGAAFFile(L"EssenceAccessJPEG.aaf", kSDKCompressionEnable, kColorSpaceRGB, 1, testStandardCalls);
 	}
 
 	if (SUCCEEDED(hr))
 	{
 		cout << "        WriteSamples (compression enabled, RGB)" << endl;
-		hr = CreateJPEGAAFFile(L"AAFEssenceAccessJPEGComp.aaf",NULL, kSDKCompressionEnable, kColorSpaceRGB, 1, testStandardCalls);
+		hr = CreateJPEGAAFFile(L"EssenceAccessJPEGComp.aaf",NULL, kSDKCompressionEnable, kColorSpaceRGB, 1, testStandardCalls);
 	}
 	if (SUCCEEDED(hr))
 	{
 	  cout << "        ReadRawData" << endl;
-		hr = ReadJPEGAAFFile(L"AAFEssenceAccessJPEGComp.aaf", kSDKCompressionDisable, kColorSpaceRGB, 1, testRawCalls);
+		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGComp.aaf", kSDKCompressionDisable, kColorSpaceRGB, 1, testRawCalls);
 	}
 	if (SUCCEEDED(hr))
 	{
 		cout << "        ReadSamples (compression disabled, RGB)" << endl;
-		hr = ReadJPEGAAFFile(L"AAFEssenceAccessJPEGComp.aaf", kSDKCompressionDisable, kColorSpaceRGB, 1, testStandardCalls);
+		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGComp.aaf", kSDKCompressionDisable, kColorSpaceRGB, 1, testStandardCalls);
 	}
 	if (SUCCEEDED(hr))
 	{
 		cout << "        ReadSamples (compression enabled, RGB)" << endl;
-		hr = ReadJPEGAAFFile(L"AAFEssenceAccessJPEGComp.aaf", kSDKCompressionEnable, kColorSpaceRGB, 1, testStandardCalls);
+		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGComp.aaf", kSDKCompressionEnable, kColorSpaceRGB, 1, testStandardCalls);
 	}
 
 	if (SUCCEEDED(hr))
 	{
 		cout << "        WriteMultiSamples (compression disabled, RGB)" << endl;
-		hr = CreateJPEGAAFFile(L"AAFEssenceAccessJPEGMulti.aaf",NULL, kSDKCompressionDisable, kColorSpaceRGB, 1, testMultiCalls);
+		hr = CreateJPEGAAFFile(L"EssenceAccessJPEGMulti.aaf",NULL, kSDKCompressionDisable, kColorSpaceRGB, 1, testMultiCalls);
 	}
 	if (SUCCEEDED(hr))
 	{
 	  cout << "        ReadRawData" << endl;
-		hr = ReadJPEGAAFFile(L"AAFEssenceAccessJPEGMulti.aaf", kSDKCompressionDisable, kColorSpaceRGB, 1, testRawCalls);
+		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGMulti.aaf", kSDKCompressionDisable, kColorSpaceRGB, 1, testRawCalls);
 	}
 	if (SUCCEEDED(hr))
 	{
 		cout << "        ReadMultiSamples (compression disabled, RGB)" << endl;
-		hr = ReadJPEGAAFFile(L"AAFEssenceAccessJPEGMulti.aaf", kSDKCompressionDisable, kColorSpaceRGB, 1, testMultiCalls);
+		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGMulti.aaf", kSDKCompressionDisable, kColorSpaceRGB, 1, testMultiCalls);
 	}
 	if (SUCCEEDED(hr))
 	{
 		cout << "        ReadMultiSamples (compression enabled, RGB)" << endl;
-		hr = ReadJPEGAAFFile(L"AAFEssenceAccessJPEGMulti.aaf", kSDKCompressionEnable, kColorSpaceRGB, 1, testMultiCalls);
+		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGMulti.aaf", kSDKCompressionEnable, kColorSpaceRGB, 1, testMultiCalls);
 	}
 
 	if (SUCCEEDED(hr))
 	{
 		cout << "        WriteMultiSamples (compression enabled, RGB)" << endl;
-		hr = CreateJPEGAAFFile(L"AAFEssenceAccessJPEGMultiComp.aaf",NULL, kSDKCompressionEnable, kColorSpaceRGB, 1, testMultiCalls);
+		hr = CreateJPEGAAFFile(L"EssenceAccessJPEGMultiComp.aaf",NULL, kSDKCompressionEnable, kColorSpaceRGB, 1, testMultiCalls);
 	}
 	if (SUCCEEDED(hr))
 	{
 	  cout << "        ReadRawData" << endl;
-		hr = ReadJPEGAAFFile(L"AAFEssenceAccessJPEGMultiComp.aaf", kSDKCompressionDisable, kColorSpaceRGB, 1, testRawCalls);
+		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGMultiComp.aaf", kSDKCompressionDisable, kColorSpaceRGB, 1, testRawCalls);
 	}
 	if (SUCCEEDED(hr))
 	{
 		cout << "        ReadMultiSamples (compression disabled, RGB)" << endl;
-		hr = ReadJPEGAAFFile(L"AAFEssenceAccessJPEGMultiComp.aaf", kSDKCompressionDisable, kColorSpaceRGB, 1, testMultiCalls);
+		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGMultiComp.aaf", kSDKCompressionDisable, kColorSpaceRGB, 1, testMultiCalls);
 	}
 	if (SUCCEEDED(hr))
 	{
 		cout << "        ReadMultiSamples (compression enabled, RGB)" << endl;
-		hr = ReadJPEGAAFFile(L"AAFEssenceAccessJPEGMultiComp.aaf", kSDKCompressionEnable, kColorSpaceRGB, 1, testMultiCalls);
+		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGMultiComp.aaf", kSDKCompressionEnable, kColorSpaceRGB, 1, testMultiCalls);
 	}
 
 
 	if (SUCCEEDED(hr))
 	{
 		cout << "        WriteSamples (compression enabled, YUV)" << endl;
-		hr = CreateJPEGAAFFile(L"AAFEssenceAccessJPEGCompYUV.aaf",NULL, kSDKCompressionEnable, kColorSpaceYUV, 1, testStandardCalls);
+		hr = CreateJPEGAAFFile(L"EssenceAccessJPEGCompYUV.aaf",NULL, kSDKCompressionEnable, kColorSpaceYUV, 1, testStandardCalls);
 	}
 	if (SUCCEEDED(hr))
 	{
 	  cout << "        ReadRawData" << endl;
-		hr = ReadJPEGAAFFile(L"AAFEssenceAccessJPEGCompYUV.aaf", kSDKCompressionDisable, kColorSpaceYUV, 1, testRawCalls);
+		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGCompYUV.aaf", kSDKCompressionDisable, kColorSpaceYUV, 1, testRawCalls);
 	}
 	if (SUCCEEDED(hr))
 	{
 		cout << "        ReadSamples (compression disabled, YUV)" << endl;
-		hr = ReadJPEGAAFFile(L"AAFEssenceAccessJPEGCompYUV.aaf", kSDKCompressionDisable, kColorSpaceYUV, 1, testStandardCalls);
+		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGCompYUV.aaf", kSDKCompressionDisable, kColorSpaceYUV, 1, testStandardCalls);
 	}
 	if (SUCCEEDED(hr))
 	{
 		cout << "        ReadSamples (compression enabled, YUV)" << endl;
-		hr = ReadJPEGAAFFile(L"AAFEssenceAccessJPEGCompYUV.aaf", kSDKCompressionEnable, kColorSpaceYUV, 1, testStandardCalls);
+		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGCompYUV.aaf", kSDKCompressionEnable, kColorSpaceYUV, 1, testStandardCalls);
 	}
 	if (SUCCEEDED(hr))
 	{
 		cout << "        ReadSamples (compression enabled, RGB)" << endl;
-		hr = ReadJPEGAAFFile(L"AAFEssenceAccessJPEGCompYUV.aaf", kSDKCompressionEnable, kColorSpaceRGB, 1, testStandardCalls);
+		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGCompYUV.aaf", kSDKCompressionEnable, kColorSpaceRGB, 1, testStandardCalls);
 	}
 
 
 	if (SUCCEEDED(hr))
 	{
 		cout << "        WriteSamples (compression enabled, YUV 4-2-2)" << endl;
-		hr = CreateJPEGAAFFile(L"AAFEssenceAccessJPEGCompYUV422.aaf",NULL, kSDKCompressionEnable, kColorSpaceYUV, 2, testStandardCalls);
+		hr = CreateJPEGAAFFile(L"EssenceAccessJPEGCompYUV422.aaf",NULL, kSDKCompressionEnable, kColorSpaceYUV, 2, testStandardCalls);
 	}
 	if (SUCCEEDED(hr))
 	{
 	  cout << "        ReadRawData" << endl;
-		hr = ReadJPEGAAFFile(L"AAFEssenceAccessJPEGCompYUV422.aaf", kSDKCompressionDisable, kColorSpaceYUV, 2, testRawCalls);
+		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGCompYUV422.aaf", kSDKCompressionDisable, kColorSpaceYUV, 2, testRawCalls);
 	}
 	if (SUCCEEDED(hr))
 	{
 		cout << "        ReadSamples (compression disabled, YUV)" << endl;
-		hr = ReadJPEGAAFFile(L"AAFEssenceAccessJPEGCompYUV422.aaf", kSDKCompressionDisable, kColorSpaceYUV, 2, testStandardCalls);
+		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGCompYUV422.aaf", kSDKCompressionDisable, kColorSpaceYUV, 2, testStandardCalls);
 	}
 	if (SUCCEEDED(hr))
 	{
 		cout << "        ReadSamples (compression enabled, YUV 4-2-2)" << endl;
-		hr = ReadJPEGAAFFile(L"AAFEssenceAccessJPEGCompYUV422.aaf", kSDKCompressionEnable, kColorSpaceYUV, 2, testStandardCalls);
+		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGCompYUV422.aaf", kSDKCompressionEnable, kColorSpaceYUV, 2, testStandardCalls);
 	}
 	if (SUCCEEDED(hr))
 	{
 		cout << "        ReadSamples (compression enabled, RGB)" << endl;
-		hr = ReadJPEGAAFFile(L"AAFEssenceAccessJPEGCompYUV422.aaf", kSDKCompressionEnable, kColorSpaceRGB, 1, testStandardCalls);
+		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGCompYUV422.aaf", kSDKCompressionEnable, kColorSpaceRGB, 1, testStandardCalls);
 	}
 
 
