@@ -224,7 +224,9 @@ void OMStoredObject::save(const OMPropertySet& properties)
     OMProperty* p = 0;
     properties.iterate(context, p);
     ASSERT("Valid property", p != 0);
-    p->save();
+    if (!p->isOptional() || p->isPresent()) {
+      p->save();
+    }
   }
 #if !defined(OM_DISABLE_VALIDATE)
   validate(&properties, _index);
@@ -361,6 +363,7 @@ void OMStoredObject::restore(OMPropertySet& properties)
     OMProperty* p = properties.get(propertyId);
     ASSERT("Valid property", p != 0);
     p->restore(length);
+    ASSERT("Property is present", IMPLIES(p->isOptional(), p->isPresent()));
   }
 #if !defined(OM_DISABLE_VALIDATE)
   validate(&properties, _index);
@@ -690,7 +693,7 @@ void OMStoredObject::validate(
     propertySet->iterate(context, p);
     ASSERT("Valid property", p != 0);
     propertyId = p->propertyId();
-    if (propertySet->isRequired(propertyId)) {
+    if (!p->isOptional()) {
       bool found = propertySetIndex->find(propertyId, type, offset, length);
       ASSERT("Required property present", found);
       if (!found) {
