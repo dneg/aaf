@@ -447,7 +447,7 @@ HRESULT dumpPropertyValue (IAAFPropertyValueSP pPVal,
 
 			// Now get base property value and recursively print that
 			IAAFPropertyValueSP pBasePropVal;
-			checkResult(pTDR->GetValue (pPVal, &pBasePropVal));
+			checkResult(pTDR->GetBaseValue (pPVal, &pBasePropVal));
 			checkResult (dumpPropertyValue (pBasePropVal,
 											pDict,
 											indent+1,
