@@ -31,8 +31,8 @@
 const aafUID_t kNullID = {0};
 
 ImplAAFEssenceData::ImplAAFEssenceData () :
-  _fileMobID(PID_ESSENCEDATA_FILEMOBID, "fileMobID"),
-  _mediaData(PID_ESSENCEDATA_MEDIADATA, "mediaData")
+  _fileMobID(PID_EssenceData_MobID, "MobID"),
+  _mediaData(PID_ESSENCEDATA_MEDIADATA, "Essence Data")
 {
   // Add the properties into the property set.
   _persistentProperties.put(_fileMobID.address());
