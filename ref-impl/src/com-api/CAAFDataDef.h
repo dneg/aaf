@@ -38,7 +38,6 @@
 
 
 
-
 #ifndef __CAAFDefObject_h__
 #include "CAAFDefObject.h"
 #endif
@@ -46,7 +45,6 @@
 
 class CAAFDataDef
   : public IAAFDataDef,
-    public IAAFDataDef2,
     public CAAFDefObject
 {
 protected:
@@ -59,6 +57,7 @@ protected:
   virtual ~CAAFDataDef ();
 
 public:
+
 
   //***********************************************************
   //
@@ -167,34 +166,6 @@ public:
 
     // pointer to result
     /*[retval, out]*/ aafBoolean_t *  bDoesConvertFrom);
-  //***********************************************************
-  // METHOD NAME: IsTimecodeKind()
-  //
-  // DESCRIPTION:
-  // @mfunc AAFRESULT | AAFDataDef2 | IsTimecodeKind |
-  // Sets return value to TRUE if DataDef is a timecode.
-  // @end
-  // 
-  STDMETHOD (IsTimecodeKind)
-   (
-    // @parm [retval,out] aafBoolean_t * | bIsTimecodeKind | pointer to the return value
-    aafBoolean_t *  bIsTimecodeKind
-  );
-
-  //***********************************************************
-  // METHOD NAME: IsEdgecodeKind()
-  //
-  // DESCRIPTION:
-  // @mfunc AAFRESULT | AAFDataDef2 | IsEdgecodeKind |
-  // Sets return value to TRUE if DataDef is an edgecode.
-  // @end
-  // 
-  STDMETHOD (IsEdgecodeKind)
-   (
-    // @parm [retval,out] aafBoolean_t * | bIsEdgecodeKind | pointer to the return value
-    aafBoolean_t *  bIsEdgecodeKind
-  );
-
 
 protected:
   // 
@@ -216,4 +187,5 @@ public:
 };
 
 #endif // ! __CAAFDataDef_h__
+
 

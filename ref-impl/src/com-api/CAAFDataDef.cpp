@@ -37,7 +37,6 @@
 #include <assert.h>
 #include <string.h>
 
-
 // CLSID for AAFDataDef 
 // {dfbd652A-1d81-11d2-bf96-006097116212}
 EXTERN_C const CLSID CLSID_AAFDataDef = { 0xdfbd652A, 0x1d81, 0x11d2, { 0xbf, 0x96, 0x00, 0x60, 0x97, 0x11, 0x62, 0x12 } };
@@ -62,6 +61,7 @@ CAAFDataDef::CAAFDataDef (IUnknown * pControllingUnknown, aafBool doInit)
 CAAFDataDef::~CAAFDataDef ()
 {
 }
+
 
 HRESULT STDMETHODCALLTYPE
     CAAFDataDef::Initialize (aafUID_constref  id,
@@ -550,42 +550,6 @@ HRESULT STDMETHODCALLTYPE
   return hr;
 }
 
-HRESULT STDMETHODCALLTYPE
-    CAAFDataDef::IsTimecodeKind (aafBoolean_t *  bIsTimecodeKind)
-{
-  HRESULT hr;
-
-  ImplAAFDataDef * ptr;
-  ImplAAFRoot * pO;
-  pO = GetRepObject ();
-  assert (pO);
-  ptr = static_cast<ImplAAFDataDef*> (pO);
-  assert (ptr);
-
-
-  hr = ptr->IsTimecodeKind (bIsTimecodeKind);
-
-  return hr;
-}
-
-HRESULT STDMETHODCALLTYPE
-    CAAFDataDef::IsEdgecodeKind (aafBoolean_t *  bIsEdgecodeKind)
-{
-  HRESULT hr;
-
-  ImplAAFDataDef * ptr;
-  ImplAAFRoot * pO;
-  pO = GetRepObject ();
-  assert (pO);
-  ptr = static_cast<ImplAAFDataDef*> (pO);
-  assert (ptr);
-
-
-  hr = ptr->IsEdgecodeKind (bIsEdgecodeKind);
-
-  return hr;
-}
-
 //
 // 
 // 
@@ -598,8 +562,6 @@ HRESULT CAAFDataDef::InternalQueryInterface
     REFIID riid,
     void **ppvObj)
 {
-    HRESULT hr = S_OK;
-
     if (NULL == ppvObj)
         return E_INVALIDARG;
 
@@ -607,13 +569,6 @@ HRESULT CAAFDataDef::InternalQueryInterface
     if (EQUAL_UID(riid,IID_IAAFDataDef)) 
     { 
         *ppvObj = (IAAFDataDef *)this; 
-        ((IUnknown *)*ppvObj)->AddRef();
-        return S_OK;
-    }
-
-    if (EQUAL_UID(riid,IID_IAAFDataDef2)) 
-    { 
-        *ppvObj = (IAAFDataDef2 *)this; 
         ((IUnknown *)*ppvObj)->AddRef();
         return S_OK;
     }
@@ -626,3 +581,4 @@ HRESULT CAAFDataDef::InternalQueryInterface
 // Define the contrete object support implementation.
 // 
 AAF_DEFINE_FACTORY(AAFDataDef)
+
