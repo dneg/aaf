@@ -112,7 +112,7 @@ void trace(const char* routineName)
 
 #endif
 
-#if defined (OM_ENABLE_OBSOLETE)
+#if defined (OM_OBSOLETE)
 
 void obsolete(const char* routineName, const char* newRoutineName)
 {

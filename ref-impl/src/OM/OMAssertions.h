@@ -135,7 +135,7 @@ inline void noTrace(const char* NNAME(routine)) {}
 
 #endif
 
-#if defined(OM_ENABLE_OBSOLETE)
+#if defined(OM_OBSOLETE)
 
   // @func Output a message indicating that the <p routineName>
   //       is obsolete and that <p newRoutineName> should be used instead
@@ -144,7 +144,7 @@ inline void noTrace(const char* NNAME(routine)) {}
 void obsolete(const char* routineName, const char* newRoutineName);
 
   // @func Print a message (when enabled with OM_ENABLE_DEBUG and
-  //       OM_ENABLE_OBSOLETE) indicating that the current routine
+  //       OM_OBSOLETE) indicating that the current routine
   //       is obsolete and that <p newRoutineName> should be used instead.
   //       OBSOLETE is provided to aid clients in migrating from one
   //       Object Manager version to the next. Routines are made obsolete
