@@ -53,6 +53,9 @@
 #elif defined(__GNUC__) && defined(__i386__) && defined(__FreeBSD__)
 #define OM_COMPILER_GCC_INTEL_FREEBSD
 #define OM_OS_UNIX
+#elif defined(__GNUC__) && defined(__i386__) && defined(__CYGWIN__)
+#define OM_COMPILER_GCC_INTEL_CYGWIN
+#define OM_OS_UNIX
 #elif defined(mips) && defined(sgi)
 #define OM_COMPILER_SGICC_MIPS_SGI
 #define OM_OS_UNIX
