@@ -510,11 +510,6 @@ void OMStorable::setClassFactory(const OMClassFactory* classFactory)
   POSTCONDITION("Valid class factory", _classFactory != 0);
 }
 
-  // @mfunc Create a shallow copy of this <c OMStorable>.
-  //         In a shallow copy, strong references are not followed.
-  //         That is, contained objects are not copied.
-  //   @rdesc TBS
-  //  @this const
 OMStorable* OMStorable::shallowCopy(void) const
 {
   TRACE("OMStorable::shallowCopy");
@@ -522,23 +517,6 @@ OMStorable* OMStorable::shallowCopy(void) const
   return 0;
 }
 
-  // @mfunc Create a deep copy of this <c OMStorable>, attach the
-  //        copy to <p destination>.  In a deep copy, strong
-  //        references are followed. That is, contained objects are copied.
-  //        This function copies the entire object tree rooted at this
-  //        <c OMStorable>. This root object is treated
-  //        differently than the contained objects in that only the
-  //        strong references are copied. Clients may choose to create
-  //        <p destination> using <mf OMStorable::shallowCopy>.
-  //        All strong reference properties of this <c OMStorable> must
-  //        be present in the property set of <p destination>. The values
-  //        of the strong reference properties of <p destination> must
-  //        be void and are replaced by those of this <c OMStorable>.
-  //        Any properties of <p destination> not also in this
-  //        <c OMStorable> are left unchanged.
-  //  @parm TBS
-  //  @parm TBS
-  //  @this const
 void OMStorable::deepCopyTo(OMStorable* /* destination */,
                             void* /* clientContext */) const
 {
