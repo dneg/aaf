@@ -422,138 +422,138 @@ $(AAFSDK_LIB) :
 # Dependency and build rules for the Header targets.
 #
 $(AAFSDK_INCLUDE)\AAFClassDefUIDs.h : $(TOOLKIT_INCLUDE)\AAFClassDefUIDs.h
-	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFClassDefUIDs.h "$(AAFSDK_INCLUDE)\"
+	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFClassDefUIDs.h $(AAFSDK_INCLUDE)\
 
 $(AAFSDK_INCLUDE)\AAFCodecDefs.h : $(TOOLKIT_INCLUDE)\AAFCodecDefs.h
-	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFCodecDefs.h "$(AAFSDK_INCLUDE)\"
+	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFCodecDefs.h $(AAFSDK_INCLUDE)\
 
 $(AAFSDK_INCLUDE)\AAFCOMPlatform.h : $(TOOLKIT_INCLUDE_REFAPI)\AAFCOMPlatform.h
-	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE_REFAPI)\AAFCOMPlatform.h "$(AAFSDK_INCLUDE)\"
+	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE_REFAPI)\AAFCOMPlatform.h $(AAFSDK_INCLUDE)\
 
 $(AAFSDK_INCLUDE)\AAFCOMPlatformTypes.h : $(TOOLKIT_INCLUDE_REFAPI)\AAFCOMPlatformTypes.h
-	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE_REFAPI)\AAFCOMPlatformTypes.h "$(AAFSDK_INCLUDE)\"
+	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE_REFAPI)\AAFCOMPlatformTypes.h $(AAFSDK_INCLUDE)\
 
 $(AAFSDK_INCLUDE)\AAFContainerDefs.h : $(TOOLKIT_INCLUDE)\AAFContainerDefs.h
-	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFContainerDefs.h "$(AAFSDK_INCLUDE)\"
+	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFContainerDefs.h $(AAFSDK_INCLUDE)\
 
 $(AAFSDK_INCLUDE)\AAFDataDefs.h : $(TOOLKIT_INCLUDE)\AAFDataDefs.h
-	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFDataDefs.h "$(AAFSDK_INCLUDE)\"
+	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFDataDefs.h $(AAFSDK_INCLUDE)\
 
 $(AAFSDK_INCLUDE)\AAFDefUIDs.h : $(TOOLKIT_INCLUDE)\AAFDefUIDs.h
-	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFDefUIDs.h "$(AAFSDK_INCLUDE)\"
+	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFDefUIDs.h $(AAFSDK_INCLUDE)\
 
 $(AAFSDK_INCLUDE)\AAFEssenceFormats.h : $(TOOLKIT_INCLUDE)\AAFEssenceFormats.h
-	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFEssenceFormats.h "$(AAFSDK_INCLUDE)\"
+	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFEssenceFormats.h $(AAFSDK_INCLUDE)\
 
 $(AAFSDK_INCLUDE)\AAFInterpolatorDefs.h : $(TOOLKIT_INCLUDE)\AAFInterpolatorDefs.h
-	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFInterpolatorDefs.h "$(AAFSDK_INCLUDE)\"
+	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFInterpolatorDefs.h $(AAFSDK_INCLUDE)\
 
 $(AAFSDK_INCLUDE)\AAFMetaDictionary.h : $(TOOLKIT_INCLUDE)\AAFMetaDictionary.h
-	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFMetaDictionary.h "$(AAFSDK_INCLUDE)\"
+	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFMetaDictionary.h $(AAFSDK_INCLUDE)\
 
 $(AAFSDK_INCLUDE)\AAFOperationCategories.h : $(TOOLKIT_INCLUDE)\AAFOperationCategories.h
-	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFOperationCategories.h "$(AAFSDK_INCLUDE)\"
+	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFOperationCategories.h $(AAFSDK_INCLUDE)\
 
 $(AAFSDK_INCLUDE)\AAFOperationDefs.h : $(TOOLKIT_INCLUDE)\AAFOperationDefs.h
-	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFOperationDefs.h "$(AAFSDK_INCLUDE)\"
+	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFOperationDefs.h $(AAFSDK_INCLUDE)\
 
 $(AAFSDK_INCLUDE)\AAFParameterDefs.h : $(TOOLKIT_INCLUDE)\AAFParameterDefs.h
-	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFParameterDefs.h "$(AAFSDK_INCLUDE)\"
+	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFParameterDefs.h $(AAFSDK_INCLUDE)\
 
 $(AAFSDK_INCLUDE)\AAFPluginDefs.h : $(TOOLKIT_INCLUDE)\AAFPluginDefs.h
-	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFPluginDefs.h "$(AAFSDK_INCLUDE)\"
+	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFPluginDefs.h $(AAFSDK_INCLUDE)\
 
 $(AAFSDK_INCLUDE)\AAFPropertyIDs.h : $(TOOLKIT_INCLUDE)\AAFPropertyIDs.h
-	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFPropertyIDs.h "$(AAFSDK_INCLUDE)\"
+	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFPropertyIDs.h $(AAFSDK_INCLUDE)\
 
 $(AAFSDK_INCLUDE)\AAFResult.h : $(TOOLKIT_INCLUDE)\AAFResult.h
-	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFResult.h "$(AAFSDK_INCLUDE)\"
+	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFResult.h $(AAFSDK_INCLUDE)\
 
 $(AAFSDK_INCLUDE)\AAFSmartPointerBase.h : $(TOOLKIT_INCLUDE)\AAFSmartPointerBase.h
-	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFSmartPointerBase.h "$(AAFSDK_INCLUDE)\"
+	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFSmartPointerBase.h $(AAFSDK_INCLUDE)\
 
 $(AAFSDK_INCLUDE)\AAFSmartPointer.h : $(TOOLKIT_INCLUDE)\com-api\AAFSmartPointer.h
-	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\com-api\AAFSmartPointer.h "$(AAFSDK_INCLUDE)\"
+	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\com-api\AAFSmartPointer.h $(AAFSDK_INCLUDE)\
 
 $(AAFSDK_INCLUDE)\AAFStoredObjectIDs.h : $(TOOLKIT_INCLUDE)\AAFStoredObjectIDs.h
-	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFStoredObjectIDs.h "$(AAFSDK_INCLUDE)\"
+	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFStoredObjectIDs.h $(AAFSDK_INCLUDE)\
 
 $(AAFSDK_INCLUDE)\AAFTypeDefUIDs.h : $(TOOLKIT_INCLUDE)\AAFTypeDefUIDs.h
-	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFTypeDefUIDs.h "$(AAFSDK_INCLUDE)\"
+	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFTypeDefUIDs.h $(AAFSDK_INCLUDE)\
 
 
 #
 # Dependency and build rules for the IDL targets.
 #
 $(AAFSDK_INCLUDE)\AAFTypes.idl : $(TOOLKIT_INCLUDE_COMAPI)\AAFTypes.idl
-	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE_COMAPI)\AAFTypes.idl "$(AAFSDK_INCLUDE)\"
+	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE_COMAPI)\AAFTypes.idl $(AAFSDK_INCLUDE)\
 
 $(AAFSDK_INCLUDE)\AAF.idl : $(TOOLKIT_INCLUDE_COMAPI)\AAF.idl
-	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE_COMAPI)\AAF.idl "$(AAFSDK_INCLUDE)\"
+	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE_COMAPI)\AAF.idl $(AAFSDK_INCLUDE)\
 
 $(AAFSDK_INCLUDE)\AAFModuleTest.idl : $(TOOLKIT_INCLUDE_COMAPI)\AAFModuleTest.idl
-	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE_COMAPI)\AAFModuleTest.idl "$(AAFSDK_INCLUDE)\"
+	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE_COMAPI)\AAFModuleTest.idl $(AAFSDK_INCLUDE)\
 
 $(AAFSDK_INCLUDE)\AAFPluginTypes.idl : $(TOOLKIT_INCLUDE_COMAPI)\AAFPluginTypes.idl
-	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE_COMAPI)\AAFPluginTypes.idl "$(AAFSDK_INCLUDE)\"
+	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE_COMAPI)\AAFPluginTypes.idl $(AAFSDK_INCLUDE)\
 
 $(AAFSDK_INCLUDE)\AAFPlugin.idl : $(TOOLKIT_PLUGINS)\AAFPlugin.idl
-	$(CP) $(CP_OPTS) $(TOOLKIT_PLUGINS)\AAFPlugin.idl "$(AAFSDK_INCLUDE)\"
+	$(CP) $(CP_OPTS) $(TOOLKIT_PLUGINS)\AAFPlugin.idl $(AAFSDK_INCLUDE)\
 
 
 #
 # Dependency and build rules for the MIDL generated targets.
 #
 $(AAFSDK_INCLUDE)\AAFTypes.h : $(TOOLKIT_COMIDL)\AAFTypes.h
-	$(CP) $(CP_OPTS) $(TOOLKIT_COMIDL)\AAFTypes.h "$(AAFSDK_INCLUDE)\"
+	$(CP) $(CP_OPTS) $(TOOLKIT_COMIDL)\AAFTypes.h $(AAFSDK_INCLUDE)\
 
 $(AAFSDK_INCLUDE)\AAF.h : $(TOOLKIT_COMIDL)\AAF.h
-	$(CP) $(CP_OPTS) $(TOOLKIT_COMIDL)\AAF.h "$(AAFSDK_INCLUDE)\"
+	$(CP) $(CP_OPTS) $(TOOLKIT_COMIDL)\AAF.h $(AAFSDK_INCLUDE)\
 
 $(AAFSDK_INCLUDE)\AAF_i.c : $(TOOLKIT_COMIDL)\AAF_i.c
-	$(CP) $(CP_OPTS) $(TOOLKIT_COMIDL)\AAF_i.c "$(AAFSDK_INCLUDE)\"
+	$(CP) $(CP_OPTS) $(TOOLKIT_COMIDL)\AAF_i.c $(AAFSDK_INCLUDE)\
 
 $(AAFSDK_INCLUDE)\AAFPluginTypes.h : $(TOOLKIT_COMIDL)\AAFPluginTypes.h
-	$(CP) $(CP_OPTS) $(TOOLKIT_COMIDL)\AAFPluginTypes.h "$(AAFSDK_INCLUDE)\"
+	$(CP) $(CP_OPTS) $(TOOLKIT_COMIDL)\AAFPluginTypes.h $(AAFSDK_INCLUDE)\
 
 $(AAFSDK_INCLUDE)\AAFPlugin.h : $(TOOLKIT_PLUGINS)\AAFPlugin.h
-	$(CP) $(CP_OPTS) $(TOOLKIT_PLUGINS)\AAFPlugin.h "$(AAFSDK_INCLUDE)\"
+	$(CP) $(CP_OPTS) $(TOOLKIT_PLUGINS)\AAFPlugin.h $(AAFSDK_INCLUDE)\
 
 $(AAFSDK_INCLUDE)\AAFPlugin_i.c : $(TOOLKIT_PLUGINS)\AAFPlugin_i.c
-	$(CP) $(CP_OPTS) "$(TOOLKIT_PLUGINS)\AAFPlugin_i.c" "$(AAFSDK_INCLUDE)\"
+	$(CP) $(CP_OPTS) $(TOOLKIT_PLUGINS)\AAFPlugin_i.c $(AAFSDK_INCLUDE)\
 
 
 #
 # Dependency and build rules for the release library targets.
 #
 $(AAFSDK_LIB)\aafiid.lib : $(TOOLKIT_RELEASE_REFIMPL)\aafiid.lib
-	$(CP) $(CP_OPTS) $(TOOLKIT_RELEASE_REFIMPL)\aafiid.lib "$(AAFSDK_LIB)\"
+	$(CP) $(CP_OPTS) $(TOOLKIT_RELEASE_REFIMPL)\aafiid.lib $(AAFSDK_LIB)\
 
 $(AAFSDK_LIB)\aaf.lib : $(TOOLKIT_RELEASE_REFIMPL)\aaf.lib
-	$(CP) $(CP_OPTS) $(TOOLKIT_RELEASE_REFIMPL)\aaf.lib "$(AAFSDK_LIB)\"
+	$(CP) $(CP_OPTS) $(TOOLKIT_RELEASE_REFIMPL)\aaf.lib $(AAFSDK_LIB)\
 
 
 #
 # Dependency and build rules for the debug library targets.
 #
 $(AAFSDK_LIB)\aafiidd.lib : $(TOOLKIT_DEBUG_REFIMPL)\aafiidd.lib
-	$(CP) $(CP_OPTS) $(TOOLKIT_DEBUG_REFIMPL)\aafiidd.lib "$(AAFSDK_LIB)\"
+	$(CP) $(CP_OPTS) $(TOOLKIT_DEBUG_REFIMPL)\aafiidd.lib $(AAFSDK_LIB)\
 
 $(AAFSDK_LIB)\aafd.lib : $(TOOLKIT_DEBUG_REFIMPL)\aafd.lib
-	$(CP) $(CP_OPTS) $(TOOLKIT_DEBUG_REFIMPL)\aafd.lib "$(AAFSDK_LIB)\"
+	$(CP) $(CP_OPTS) $(TOOLKIT_DEBUG_REFIMPL)\aafd.lib $(AAFSDK_LIB)\
 
 
 #
 # Dependency and build rules for the Release DLL targets.
 #
 $(AAFSDK_BIN)\aafcoapi.dll : $(TOOLKIT_TARGET_REFIMPL)\aafcoapi.dll
-	$(CP) $(CP_OPTS) $(TOOLKIT_TARGET_REFIMPL)\aafcoapi.dll "$(AAFSDK_BIN)\"
+	$(CP) $(CP_OPTS) $(TOOLKIT_TARGET_REFIMPL)\aafcoapi.dll $(AAFSDK_BIN)\
 
 $(AAFSDK_BIN)\aafintp.dll : $(TOOLKIT_TARGET_REFIMPL)\aafintp.dll
-	$(CP) $(CP_OPTS) $(TOOLKIT_TARGET_REFIMPL)\aafintp.dll "$(AAFSDK_BIN)\"
+	$(CP) $(CP_OPTS) $(TOOLKIT_TARGET_REFIMPL)\aafintp.dll $(AAFSDK_BIN)\
 
 $(AAFSDK_BIN)\aafpgapi.dll : $(TOOLKIT_TARGET_REFIMPL)\aafpgapi.dll
-	$(CP) $(CP_OPTS) $(TOOLKIT_TARGET_REFIMPL)\aafpgapi.dll "$(AAFSDK_BIN)\"
+	$(CP) $(CP_OPTS) $(TOOLKIT_TARGET_REFIMPL)\aafpgapi.dll $(AAFSDK_BIN)\
 
 
 
@@ -561,13 +561,13 @@ $(AAFSDK_BIN)\aafpgapi.dll : $(TOOLKIT_TARGET_REFIMPL)\aafpgapi.dll
 # Dependency and build rules for the Debug DLL targets.
 #
 $(AAFSDK_DEBUG)\aafcoapi.dll : $(TOOLKIT_DEBUG_REFIMPL)\aafcoapi.dll
-	$(CP) $(CP_OPTS) $(TOOLKIT_DEBUG_REFIMPL)\aafcoapi.dll "$(AAFSDK_DEBUG)\"
+	$(CP) $(CP_OPTS) $(TOOLKIT_DEBUG_REFIMPL)\aafcoapi.dll $(AAFSDK_DEBUG)\
 
 $(AAFSDK_DEBUG)\aafintp.dll : $(TOOLKIT_DEBUG_REFIMPL)\aafintp.dll
-	$(CP) $(CP_OPTS) $(TOOLKIT_DEBUG_REFIMPL)\aafintp.dll "$(AAFSDK_DEBUG)\"
+	$(CP) $(CP_OPTS) $(TOOLKIT_DEBUG_REFIMPL)\aafintp.dll $(AAFSDK_DEBUG)\
 
 $(AAFSDK_DEBUG)\aafpgapi.dll : $(TOOLKIT_DEBUG_REFIMPL)\aafpgapi.dll
-	$(CP) $(CP_OPTS) $(TOOLKIT_DEBUG_REFIMPL)\aafpgapi.dll "$(AAFSDK_DEBUG)\"
+	$(CP) $(CP_OPTS) $(TOOLKIT_DEBUG_REFIMPL)\aafpgapi.dll $(AAFSDK_DEBUG)\
 
 
 #
