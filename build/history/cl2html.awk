@@ -21,7 +21,6 @@ BEGIN {
   entrytext = "";
   files = "";
   comments = "";
-  color = "#FFCCCC";
 }
 
 /^\t/ {
