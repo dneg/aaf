@@ -39,6 +39,9 @@ class OMPropertyDefinition {
 public:
   // @access Public members.
 
+    // @cmember Destructor.
+  virtual ~OMPropertyDefinition(void) {}
+
     // @cmember The type of the <c OMProperty> defined by this
     //          <c OMPropertyDefinition>.
   virtual const OMType* type(void) const = 0;

@@ -34,11 +34,18 @@
 
 class OMStorable;
 
+// @class Abstract base class decribing the class factory used by
+//        the Object Manager and provided by Object Manager clients.
+//
 class OMClassFactory {
 public:
+  // @access Public members.
 
-  // Create an instance of the appropriate derived class, given the class id.
-  //
+    //@cmember Destructor.
+  virtual ~OMClassFactory(void) {}
+
+    // @cmember Create an instance of the appropriate derived class,
+    //          given the class id.
   virtual OMStorable* create(const OMClassId& classId) const = 0;
 
 };
