@@ -205,7 +205,8 @@ void OMWeakReferenceProperty<ReferencedObject>::close(void)
   //          <c OMStorable>.
   //   @parm The external (persisted) size of the <c OMWeakReferenceProperty>.
 template<typename ReferencedObject>
-void OMWeakReferenceProperty<ReferencedObject>::restore(size_t externalSize)
+void OMWeakReferenceProperty<ReferencedObject>::restore(
+                                                    size_t ANAME(externalSize))
 {
   TRACE("OMWeakReferenceProperty<ReferencedObject>::restore");
 
@@ -254,8 +255,9 @@ bool OMWeakReferenceProperty<ReferencedObject>::isVoid(void) const
   //   @parm The size of the buffer.
   //   @this const
 template<typename ReferencedObject>
-void OMWeakReferenceProperty<ReferencedObject>::getBits(OMByte* bits,
-                                                    size_t size) const
+void OMWeakReferenceProperty<ReferencedObject>::getBits(
+                                                      OMByte* bits,
+                                                      size_t ANAME(size)) const
 {
   TRACE("OMWeakReferenceProperty<ReferencedObject>::getBits");
   PRECONDITION("Optional property is present",
@@ -278,7 +280,7 @@ void OMWeakReferenceProperty<ReferencedObject>::getBits(OMByte* bits,
   //   @parm The size of the buffer.
 template<typename ReferencedObject>
 void OMWeakReferenceProperty<ReferencedObject>::setBits(const OMByte* bits,
-                                                    size_t size)
+                                                        size_t ANAME(size))
 {
   TRACE("OMWeakReferenceProperty<ReferencedObject>::getBits");
   PRECONDITION("Valid bits", bits != 0);
