@@ -33,7 +33,7 @@
 // Use include guard so that the file can be included in every 
 // platform build without causing any errors in the build.
 //
-#if defined(__sgi)
+#if defined( OS_UNIX )
 
 // Declare the public interface that must be implemented.
 
@@ -126,4 +126,5 @@ AAFRDLIRESULT AAFFindLibrary(
    return rc;
 }
 
-#endif /* #if defined(sgi) */
+#endif /* #if defined( OS_UNIX ) */
+

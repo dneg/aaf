@@ -32,19 +32,27 @@
 
 // NOTE: This file may have to be modified to support other COM platforms.
 
-#if defined(_MAC) || defined(_MAC_) || defined(macintosh)
+// AAF platform definitions and data types
+#ifndef __AAFPlatform_h__
+#include "AAFPlatform.h"
+#endif
+
+#if defined( OS_MACOS )
   // Include file form ActiveX SDK for the Macintosh. Otherwise the 
   // OLE (2.08, 2.24) interfaces cannot be used since they use standard
   // window's types and defines...
   #include <wintypes.h>
-#elif defined(WIN32) || defined(_WIN32)
+
+
+#elif defined( OS_WINDOWS )
   #include <wtypes.h>
 
-#elif defined (__sgi) || defined (__FreeBSD__) || defined(_Linux)
+
+#elif defined( OS_UNIX )
 
   // Bobt: for some reason, gcc on FreeBSD needs this in order to  
   // properly do rtti stuff.
-# if defined (__FreeBSD__)
+# if defined ( OS_FREEBSD )
 #  include <g++/std/typeinfo.h>
 # endif
 
@@ -103,27 +111,14 @@
 # define TRUE 1
 # define FALSE 0
 
-# if defined(_WIN32) && !defined(OLE2ANSI)
-   typedef WCHAR OLECHAR;
-   typedef /* [string] */ OLECHAR __RPC_FAR *LPOLESTR;
-   typedef /* [string] */ const OLECHAR __RPC_FAR *LPCOLESTR;
-#  define OLESTR(str) L##str
-# else
-    typedef char      OLECHAR;
-    typedef LPSTR     LPOLESTR;
-    typedef LPCSTR    LPCOLESTR;
-#  define OLESTR(str) str
-# endif
+typedef char      OLECHAR;
+typedef LPSTR     LPOLESTR;
+typedef LPCSTR    LPCOLESTR;
+#define OLESTR(str) str
 
-# ifdef _MSC_VER
-#  define STDCALL __stdcall
-#  define EXPORTDLL _declspec(dllexport)
-#  define STDMETHODCALLTYPE __stdcall
-# else // _MSC_VER
-#  define STDCALL 
-#  define EXPORTDLL
-#  define STDMETHODCALLTYPE 
-# endif // _MSC_VER
+# define STDCALL 
+# define EXPORTDLL
+# define STDMETHODCALLTYPE 
 
 # define STDMETHODIMP HRESULT STDCALL
 # define STDMETHOD(method)        virtual HRESULT STDCALL method
@@ -223,9 +218,10 @@ const GUID IID_IUnknown = {0x0,0x0,0x0,{0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0}};;
 
   // stolen from winreg.h (from vc++6.0)
 #define HKEY_CLASSES_ROOT           (( HKEY ) 0x80000000 )
+
 #else
-  // Default to the reference implementation.
-# include "ref.hxx"
+#error Unknown operating system
+
 #endif
 
 

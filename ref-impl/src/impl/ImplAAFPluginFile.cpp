@@ -30,11 +30,12 @@
 // Include the AAF Runtime Dynamic (Library) Loader Interface  
 #include "aafrdli.h"
 
+#include "AAFTypes.h"
 #include "AAFResult.h"
 #include <assert.h>
 #include <string.h>
 
-#if defined(WIN32)
+#if defined( OS_WINDOWS )
 // Include declarations for InterlockedIncrement() and InterlockcedDecrment().
 #include <winbase.h>
 #endif
@@ -106,7 +107,7 @@ HRESULT ImplAAFPluginFile::CreatePluginFile(
 aafUInt32 ImplAAFPluginFile::AcquireReference() const
 {  
   ImplAAFPluginFile *nonConstThis = const_cast<ImplAAFPluginFile *>(this);
-#if defined(WIN32)
+#if defined( OS_WINDOWS )
 	return ::InterlockedIncrement(reinterpret_cast<long *>(&nonConstThis->_refCount));
 #else
   ++(nonConstThis->_refCount);
@@ -117,7 +118,7 @@ aafUInt32 ImplAAFPluginFile::AcquireReference() const
 // Decrement the object reference count and delete the container.
 aafUInt32 ImplAAFPluginFile::ReleaseReference()
 {
-#if defined(WIN32)
+#if defined( OS_WINDOWS )
 	aafUInt32 count = ::InterlockedDecrement(reinterpret_cast<long *>(&_refCount));
 #else
 	aafUInt32 count = --(_refCount);

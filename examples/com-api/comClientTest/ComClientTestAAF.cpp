@@ -32,6 +32,7 @@
 
 // Include the AAF interface declarations.
 #include "AAF.h"
+#include "AAFTypes.h"
 
 
 // Include the AAF Stored Object identifiers. These symbols are defined in aaf.lib.
@@ -39,7 +40,7 @@
 
 #include "CAAFBuiltinDefs.h"
 
-#if defined(macintosh) || defined(_MAC)
+#if defined( OS_MACOS )
 #include "DataInput.h"
 #endif
 
@@ -149,7 +150,7 @@ static void convert(wchar_t* wName, size_t length, const wchar_t* name)
   }
 }
 
-#if defined(__sgi) || defined(__linux__) || defined (__FreeBSD__)
+#if defined( OS_UNIX )
 
 static const unsigned char guidMap[] =
 { 3, 2, 1, 0, '-', 5, 4, '-', 7, 6, '-', 8, 9, '-', 10, 11, 12, 13, 14, 15 }; 

@@ -30,6 +30,7 @@
 
 #include "extensionReadPlugin.h"
 #include "extensionUtils.h"
+#include "AAFTypes.h"
 #include "AAFResult.h"
 
 
@@ -37,10 +38,12 @@
 #include <assert.h>
 
 
-#ifndef __sgi
+#if defined( OS_WINDOWS ) || defined( OS_MACOS )
 #define AAFPERSONNELEXTENSION_DLLNAME L"AAFPersonnelExtension.dll"
-#else
+#elif defined( OS_UNIX )
 #define AAFPERSONNELEXTENSION_DLLNAME L"libAAFPersonnelExtension.so"
+#else
+#error Unknown operating system
 #endif
 
 

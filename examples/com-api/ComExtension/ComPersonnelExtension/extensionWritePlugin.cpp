@@ -33,15 +33,18 @@
 #include "extensionUtils.h"
 #include "extensionWritePlugin.h"
 #include "AAFResult.h"
+#include "AAFTypes.h"
 
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 
-#ifndef __sgi
+#if defined( OS_WINDOWS ) || defined( OS_MACOS )
 #define AAFPERSONNELEXTENSION_DLLNAME L"AAFPersonnelExtension.dll"
-#else
+#elif defined( OS_UNIX )
 #define AAFPERSONNELEXTENSION_DLLNAME L"libAAFPersonnelExtension.so"
+#else
+#error Unknown operating system
 #endif
 
 //

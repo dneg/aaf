@@ -36,13 +36,17 @@
 #include "AAFCOMPlatformTypes.h"
 #endif
 
-#if defined(_MAC) || defined(_MAC_) || defined(macintosh)
+#if defined( OS_MACOS )
   // Include files from ActiveX SDK for the Macintosh
 #  include <compobj.h>
-#elif defined(WIN32) || defined(_WIN32)
+
+
+#elif defined( OS_WINDOWS )
 #  include <unknwn.h>
 #  include <objbase.h>
-#elif defined (__sgi) || defined (__FreeBSD__)
+
+
+#elif defined( OS_UNIX )
 
   EXTERN_C STDAPI  DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID FAR* ppv);
 
@@ -81,18 +85,11 @@
       );
  
 # define GetModuleFileName  GetModuleFileNameW
+
 #else
-  // Default to the Structured Storage reference implementation.
-#  include "REF.HXX"
-  
-  // Make sure begin/end interface are at least defined. These macros are required
-  // for all AAF interface files.
-#  ifndef BEGIN_INTERFACE
-#    define BEGIN_INTERFACE
-#  endif
-#  ifndef END_INTERFACE
-#    define END_INTERFACE
-#  endif
+#error Unknown operating system
+
+
 #endif
 
 

@@ -651,7 +651,7 @@ HRESULT PersonnelResourceGetActorName (IAAFObject * pObj,
 }
 
 // On Irix CC, this operator conflicts with ostream::<<(const wchar_t*)
-#ifndef __sgi
+#if !defined( OS_IRIX )
 //
 // Prints the given string.
 //

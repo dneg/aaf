@@ -34,7 +34,7 @@
 #endif
 
 
-#if defined(WIN32)
+#if defined( OS_WINDOWS )
 // Include declarations for InterlockedIncrement() and InterlockcedDecrment().
 #include <winbase.h>
 #endif
@@ -84,7 +84,7 @@ aafUInt32 CAAFServer::GetActiveObjectCount()
 
 aafUInt32 CAAFServer::InterlockedIncrement(aafUInt32 *value)
 {
-#if defined(WIN32)
+#if defined( OS_WINDOWS )
 	return ::InterlockedIncrement(reinterpret_cast<long *>(value));
 #else
 	return (++(*value));
@@ -92,7 +92,7 @@ aafUInt32 CAAFServer::InterlockedIncrement(aafUInt32 *value)
 }
 aafUInt32 CAAFServer::InterlockedDecrement(aafUInt32 *value)
 {
-#if defined(WIN32)
+#if defined( OS_WINDOWS )
 	return ::InterlockedDecrement(reinterpret_cast<long *>(value));
 #else
 	return (--(*value));

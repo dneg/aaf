@@ -26,11 +26,14 @@
  ************************************************************************/
 
 
+// Declare the public interface that must be implemented.
+#include "aaflib.h"
+
 //
 // Use include guard so that the file can be included in every 
 // platform build without causing any errors in the build.
 //
-#if defined(macintosh) || defined(_MAC)
+#if defined( OS_MACOS )
 
 // Declare the public interface that must be implemented.
 
@@ -574,4 +577,5 @@ AAFRDLIRESULT AAFFSSpecToPath(const FSSpec *pSpec, char *pathBuffer, int pathBuf
   return err;
 }
 
-#endif /* #if defined(macintosh) || defined(_MAC) */
+#endif /* #if defined( OS_MACOS ) */
+

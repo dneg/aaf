@@ -34,6 +34,7 @@
 
 
 #include "AAF.h"
+#include "AAFTypes.h"
 #include "AAFResult.h"
 #include "AAFStoredObjectIDs.h"
 #include "AAFTypeDefUIDs.h"
@@ -50,11 +51,11 @@
 #include "AAFSmartPointer.h"
 #endif
 
-#if defined(macintosh) || defined(_MAC)
+#if defined( OS_MACOS )
 #include "DataInput.h"
 #endif
 
-#if defined(__MWERKS__)
+#if defined( COMPILER_MWERKS )
 #if defined(__MSL_CPP__) && (__MSL_CPP__ >= 0x5300)
 #define IOS_FMT_FLAGS ios_base::fmtflags
 #else

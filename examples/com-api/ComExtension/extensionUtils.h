@@ -28,6 +28,7 @@
  ************************************************************************/
 
 #include "AAF.h"
+#include "AAFTypes.h"
 #include <iostream.h>
 
 //
@@ -253,9 +254,10 @@ void PrintPosition (IAAFDictionary * pDict,
 // Prints the given string.
 //
 // On Irix CC, this operator conflicts with ostream::<<(const wchar_t*)
-#ifndef __sgi
+#if !defined( OS_IRIX )
 ostream& operator<< (ostream& s,
 					 aafCharacter_constptr wstring);
 #endif
 
 #endif // ! __extensionUtils_h__
+

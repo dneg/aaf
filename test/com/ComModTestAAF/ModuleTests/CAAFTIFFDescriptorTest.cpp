@@ -33,6 +33,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "AAFTypes.h"
 #include "AAFStoredObjectIDs.h"
 #include "AAFResult.h"
 #include "ModuleTest.h"
@@ -190,7 +191,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	aafUInt16				numEntries = 2;
 	unsigned long			nOffset;
 
-#if defined(_WIN32) || defined(WIN32)
+#if defined( OS_WINDOWS )
 	tiffHeader.tiff_byteOrder = TIFF_LITTLEENDIAN;
 #else
 	tiffHeader.tiff_byteOrder = TIFF_BIGENDIAN;
@@ -335,7 +336,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		checkExpression(leadingLines == 10, AAFRESULT_TEST_FAILED);
 		checkExpression(trailingLines == 20, AAFRESULT_TEST_FAILED);
 // The next statement is not true when doing cross-platform tests
-//#if defined(_WIN32) || defined(WIN32)
+//#if defined( OS_WINDOWS )
 //		checkExpression(memcmp(summary, "II", 2) == 0, AAFRESULT_TEST_FAILED);
 //#else
 //		checkExpression(memcmp(summary, "MM", 2) == 0, AAFRESULT_TEST_FAILED);

@@ -26,12 +26,14 @@
  ************************************************************************/
 
 
+// Declare the public interface that must be implemented.
+#include "aaflib.h"
 
 //
 // Use include guard so that the file can be included in every 
 // platform build without causing any errors in the build.
 //
-#if defined(WIN32) || defined(_WIN32)
+#if defined( OS_WINDOWS )
 
 // Declare the public interface that must be implemented.
 #include "aafrdli.h"
@@ -247,4 +249,5 @@ AAFRDLIRESULT AAFFindLibrary(const char* name, LPFNAAFTESTFILEPROC testProc, voi
 	return result;
 }
 
-#endif /* #if defined(WIN32) || defined(_WIN32) */
+#endif /* #if defined( OS_WINDOWS ) */
+

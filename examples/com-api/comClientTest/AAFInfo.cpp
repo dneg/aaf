@@ -32,8 +32,9 @@
 
 // Include the AAF interface declarations.
 #include "AAF.h"
+#include "AAFTypes.h"
 
-#if defined(macintosh) || defined(_MAC)
+#if defined( OS_MACOS )
 #include "DataInput.h"
 #endif
 
