@@ -1260,7 +1260,7 @@ void OMStoredObject::restore(OMPropertyId propertyId,
   //   @parm The id of the property whose value is the unique
   //         identifier of objects in the target set.
 void OMStoredObject::restore(const wchar_t* collectionName,
-                             const OMUniqueObjectIdentification*& index,
+                             OMUniqueObjectIdentification*& index,
                              size_t &count,
                              OMPropertyTag& tag,
                              OMPropertyId& keyPropertyId)
