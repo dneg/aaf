@@ -3,6 +3,10 @@
 #ifndef __CAAFServer_h__
 #define __CAAFServer_h__
 
+#ifndef __AAFTypes_h__
+#include "AAFTypes.h"
+#endif
+
 
 class CAAFServer
 {
@@ -12,16 +16,16 @@ protected:
 public:
 	virtual ~CAAFServer();
 
-	void Lock(AAFBool fLock);
+	void Lock(aafBool fLock);
 	void IncrementActiveObjects();
 	void DecrementActiveObjects();
 
-	AAFUInt32 GetLockCount();
-	AAFUInt32 GetActiveObjectCount();
+	aafUInt32 GetLockCount();
+	aafUInt32 GetActiveObjectCount();
 
 protected:
-	AAFUInt32 _lockCount;
-	AAFUInt32 _activeCount;
+	aafUInt32 _lockCount;
+	aafUInt32 _activeCount;
 };
 
 extern CAAFServer* g_pAAFServer;
