@@ -407,16 +407,17 @@ void OMSSStoredObject::save(const OMDataVector& property)
   ASSERT("Correct type", at != 0);
   OMType* elementType = at->elementType();
   ASSERT("Fixed size elements", elementType->isFixedSize());
-  OMUInt32 elementSize = elementType->externalSize();
+  OMUInt32 elementSize = elementType->internalSize();
+  OMUInt32 externalElementSize = elementType->externalSize();
   OMUInt32 elementCount = property.count();
 
     // Allocate buffer for one element
-  OMByte* buffer = new OMByte[elementSize];
+  OMByte* buffer = new OMByte[externalElementSize];
   ASSERT("Valid heap pointer", buffer != 0);
 
   // size
   // Doh! 32-bit size and count but 16-bit property size
-  OMUInt64 size = elementSize * elementCount;
+  OMUInt64 size = externalElementSize * elementCount;
   // ASSERT("Valid size"); // tjb
   OMPropertySize propertySize = static_cast<OMPropertySize>(size);
 
@@ -433,17 +434,17 @@ void OMSSStoredObject::save(const OMDataVector& property)
     elementType->externalize(bits,
                              elementSize,
                              buffer,
-                             elementSize,
+                             externalElementSize,
                              hostByteOrder());
 
     // Reorder element
     if (_reorderBytes) {
-      elementType->reorder(buffer, elementSize);
+      elementType->reorder(buffer, externalElementSize);
     }
 
     // value
-    writeToStream(_properties, buffer, elementSize);
-    _offset += elementSize;
+    writeToStream(_properties, buffer, externalElementSize);
+    _offset += externalElementSize;
 
   }
   delete it;
@@ -464,16 +465,17 @@ void OMSSStoredObject::save(const OMDataSet& property)
   ASSERT("Correct type", st != 0);
   OMType* elementType = st->elementType();
   ASSERT("Fixed size elements", elementType->isFixedSize());
-  OMUInt32 elementSize = elementType->externalSize();
+  OMUInt32 elementSize = elementType->internalSize();
+  OMUInt32 externalElementSize = elementType->externalSize();
   OMUInt32 elementCount = property.count();
 
     // Allocate buffer for one element
-  OMByte* buffer = new OMByte[elementSize];
+  OMByte* buffer = new OMByte[externalElementSize];
   ASSERT("Valid heap pointer", buffer != 0);
 
   // size
   // Doh! 32-bit size and count but 16-bit property size
-  OMUInt64 size = elementSize * elementCount;
+  OMUInt64 size = externalElementSize * elementCount;
   // ASSERT("Valid size"); // tjb
   OMPropertySize propertySize = static_cast<OMPropertySize>(size);
 
@@ -490,17 +492,17 @@ void OMSSStoredObject::save(const OMDataSet& property)
     elementType->externalize(bits,
                              elementSize,
                              buffer,
-                             elementSize,
+                             externalElementSize,
                              hostByteOrder());
 
     // Reorder element
     if (_reorderBytes) {
-      elementType->reorder(buffer, elementSize);
+      elementType->reorder(buffer, externalElementSize);
     }
 
     // value
-    writeToStream(_properties, buffer, elementSize);
-    _offset += elementSize;
+    writeToStream(_properties, buffer, externalElementSize);
+    _offset += externalElementSize;
 
   }
   delete it;
@@ -1032,31 +1034,31 @@ void OMSSStoredObject::restore(OMDataVector& property,
   ASSERT("Correct type", at != 0);
   OMType* elementType = at->elementType();
   ASSERT("Fixed size elements", elementType->isFixedSize());
-  OMUInt32 elementSize = elementType->externalSize();
-  ASSERT("Consistent element size", elementSize = property.elementSize());
+  OMUInt32 externalElementSize = elementType->externalSize();
+  OMUInt32 elementSize = elementType->internalSize();
 
   // Allocate buffer for one element
-  OMByte* buffer = new OMByte[elementSize];
+  OMByte* buffer = new OMByte[externalElementSize];
   ASSERT("Valid heap pointer", buffer != 0);
   OMByte* value = new OMByte[elementSize];
   ASSERT("Valid heap pointer", value != 0);
 
   property.clear();
-  OMUInt32 elementCount = externalSize / elementSize;
+  OMUInt32 elementCount = externalSize / externalElementSize;
 
   for (size_t i = 0; i < elementCount; i++) {
 
     // Read one element
-    readFromStream(_properties, buffer, elementSize);
+    readFromStream(_properties, buffer, externalElementSize);
 
     // Reorder one element
     if (byteOrder() != hostByteOrder()) {
-      elementType->reorder(buffer, elementSize);
+      elementType->reorder(buffer, externalElementSize);
     }
 
     // Internalize one element
     elementType->internalize(buffer,
-                             elementSize,
+                             externalElementSize,
                              value,
                              elementSize,
                              hostByteOrder());
@@ -1078,31 +1080,31 @@ void OMSSStoredObject::restore(OMDataSet& property,
   ASSERT("Correct type", st != 0);
   OMType* elementType = st->elementType();
   ASSERT("Fixed size elements", elementType->isFixedSize());
-  OMUInt32 elementSize = elementType->externalSize();
-  ASSERT("Consistent element size", elementSize = property.elementSize());
+  OMUInt32 externalElementSize = elementType->externalSize();
+  OMUInt32 elementSize = elementType->internalSize();
 
   // Allocate buffer for one element
-  OMByte* buffer = new OMByte[elementSize];
+  OMByte* buffer = new OMByte[externalElementSize];
   ASSERT("Valid heap pointer", buffer != 0);
   OMByte* value = new OMByte[elementSize];
   ASSERT("Valid heap pointer", value != 0);
 
   property.clear();
-  OMUInt32 elementCount = externalSize / elementSize;
+  OMUInt32 elementCount = externalSize / externalElementSize;
 
   for (size_t i = 0; i < elementCount; i++) {
 
     // Read one element
-    readFromStream(_properties, buffer, elementSize);
+    readFromStream(_properties, buffer, externalElementSize);
 
     // Reorder one element
     if (byteOrder() != hostByteOrder()) {
-      elementType->reorder(buffer, elementSize);
+      elementType->reorder(buffer, externalElementSize);
     }
 
     // Internalize one element
     elementType->internalize(buffer,
-                             elementSize,
+                             externalElementSize,
                              value,
                              elementSize,
                              hostByteOrder());

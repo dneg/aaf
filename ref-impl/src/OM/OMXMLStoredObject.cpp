@@ -287,7 +287,7 @@ void OMXMLStoredObject::save(const OMSimpleProperty& property)
   _stream << beginl;
   _stream << "<data>" << endl;
 
-  OMUInt16 size = property.size();
+  OMUInt16 size = property.size(); // tjb externalizing NYI
   _stream << "<!-- data size is " << dec << size << " bytes -->" << endl;
 
   OMByte* start = property.bits();
@@ -315,7 +315,7 @@ void OMXMLStoredObject::save(const OMDataVector& property)
   ASSERT("Correct type", at != 0);
   OMType* elementType = at->elementType();
   ASSERT("Fixed size elements", elementType->isFixedSize());
-  OMUInt32 size = elementType->externalSize();
+  OMUInt32 size = elementType->internalSize(); // tjb externalizing NYI
   OMUInt32 count = property.count();
 
   _stream << indent;
@@ -373,7 +373,7 @@ void OMXMLStoredObject::save(const OMDataSet& property)
   ASSERT("Correct type", st != 0);
   OMType* elementType = st->elementType();
   ASSERT("Fixed size elements", elementType->isFixedSize());
-  OMUInt32 size = elementType->externalSize();
+  OMUInt32 size = elementType->internalSize(); // tjb externalizing NYI
   OMUInt32 count = property.count();
 
   _stream << indent;
