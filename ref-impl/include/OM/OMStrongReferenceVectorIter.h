@@ -78,15 +78,15 @@ public:
     //          <c OMStrongReferenceVectorIterator> is made ready to traverse
     //          the associated <c OMStrongReferenceVectorProperty> in the
     //          reverse direction (decreasing indexes).
-   virtual void reset(OMIteratorPosition initialPosition = OMBefore);
+  virtual void reset(OMIteratorPosition initialPosition = OMBefore);
 
     // @cmember Is this <c OMStrongReferenceVectorIterator> positioned before
     //          the first <p ReferencedObject> ?
-   virtual bool before(void) const;
+  virtual bool before(void) const;
 
     // @cmember Is this <c OMStrongReferenceVectorIterator> positioned after
     //          the last <p ReferencedObject> ?
-   virtual bool after(void) const;
+  virtual bool after(void) const;
 
     // @cmember Is this <c OMStrongReferenceVectorIterator> validly
     //          positioned on a <p ReferencedObject> ?
@@ -110,7 +110,7 @@ public:
     //          becomes <e bool.false> and
     //          <mf OMStrongReferenceVectorIterator::after> becomes
     //          <e bool.true>. 
-   virtual bool operator++();
+  virtual bool operator++();
 
     // @cmember Retreat this <c OMStrongReferenceVectorIterator> to the
     //          previous <p ReferencedObject>, if any.
@@ -126,19 +126,19 @@ public:
     //          becomes <e bool.false> and
     //          <mf OMStrongReferenceVectorIterator::before> becomes
     //          <e bool.true>. 
-   virtual bool operator--();
+  virtual bool operator--();
 
     // @cmember Return the <p ReferencedObject> in the associated
     //          <c OMStrongReferenceVectorProperty> at the position currently
     //          designated by this <c OMStrongReferenceVectorIterator>.
-   virtual ReferencedObject* value(void) const;
+  virtual ReferencedObject* value(void) const;
 
     // @cmember Set the <p ReferencedObject> in the associated
     //          <c OMStrongReferenceVectorProperty> at the position currently
     //          designated by this <c OMStrongReferenceVectorIterator> to
     //          <p newObject>. The previous <p ReferencedObject>, if any,
     //          is returned.
-   virtual ReferencedObject* setValue(const ReferencedObject* newObject);
+  virtual ReferencedObject* setValue(const ReferencedObject* newObject);
 
     // @cmember Set the <p Element> in the associated <c OMContainer> at the
     //          position currently designated by this
@@ -150,12 +150,12 @@ public:
     //          associated <c OMStrongReferenceVectorProperty> at the position
     //          currently designated by this
     //          <c OMStrongReferenceVectorIterator>.
-   virtual size_t index(void) const;
+  virtual size_t index(void) const;
 
     // @cmember Return the <p OMObject> in the associated
     //          reference container property at the position currently
     //          designated by this <c OMStrongReferenceVectorIterator>.
-   virtual OMObject* currentObject(void) const;
+  virtual OMObject* currentObject(void) const;
 
 protected:
 
