@@ -411,11 +411,8 @@ ImplAAFFile::OpenNewModify (const aafCharacter * pFileName,
 		HRESULT hr = _head->GetDictionary(&dictionary);
 		if (hr != AAFRESULT_SUCCESS)
 		  return hr;
+    dictionary->InitOMProperties(dictionary->GetBuiltinDefs()->cdDictionary());
 		dictionary->InitBuiltins();
-		dictionary->
-		  GetBuiltinDefs()->
-		  cdDictionary()->
-		  InitOMProperties (dictionary);
 
 		dictionary->ReleaseReference();
 		dictionary = 0;
