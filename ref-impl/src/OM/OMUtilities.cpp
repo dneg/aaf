@@ -6,7 +6,7 @@
 #include <string.h>
 #include <stdio.h>
 
-char programName[FILENAME_MAX] = "Object Manager";
+static char programName[FILENAME_MAX] = "Object Manager";
 
 void setProgramName(const char* name)
 {
