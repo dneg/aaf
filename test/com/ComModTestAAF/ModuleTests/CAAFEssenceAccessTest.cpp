@@ -295,7 +295,7 @@ static void MobIDtoString(aafMobID_t *uid, char *buf)
 		(int)uid->material.Data4[5], (int)uid->material.Data4[6], (int)uid->material.Data4[7]);
 }
 
-typedef enum { testRawCalls, testStandardCalls, testMultiCalls, testFractionalCalls } testType_t;
+typedef enum { testStandardCalls, testMultiCalls } testType_t;
 
 typedef aafInt16	AAFByteOrder;
 const AAFByteOrder INTEL_ORDER		      = 0x4949; // 'II' for Intel
@@ -334,7 +334,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 	IAAFMasterMob*				pMasterMob = NULL;
 	
 	IAAFEssenceAccess*			pEssenceAccess = NULL;
-	IAAFEssenceRawAccess*		pRawEssence = NULL;
 	IAAFEssenceMultiAccess*		pMultiEssence = NULL;
 	IAAFEssenceFormat*			pFormat = NULL;
 	IAAFEssenceFormat			*format = NULL;
@@ -347,10 +346,12 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 	FILE*						pWavFile = NULL;
 	unsigned char				dataBuff[4096], *dataPtr;
 	size_t						bytesRead;
-	aafUInt32					bytesWritten, dataOffset, dataLen;
+//	aafUInt32					bytesWritten;
+	aafUInt32					dataOffset, dataLen;
 	aafUInt16					bitsPerSample, numCh;
 	aafInt32			n, numSpecifiers;
 	aafUID_t			essenceFormatCode, testContainer;
+  aafUInt32 samplesWritten, bytesWritten;
 	// delete any previous test file before continuing...
 	char chNameBuffer[1000];
 
@@ -429,15 +430,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 			&sampleRate,
 			&dataOffset,
 			&dataLen));
-		if(testType != testRawCalls)
-		{
-			dataPtr = dataBuff + dataOffset;
-		}
-		else
-		{	
-			dataPtr = dataBuff;
-			dataLen = bytesRead;
-		}
+		dataPtr = dataBuff + dataOffset;
 		
 		// now create the Essence data file
 		checkResult(pMasterMob->CreateEssence(1,				// Slot ID
@@ -449,7 +442,13 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 			pLocator,	// In current file
 			testContainer,	// In AAF Format
 			&pEssenceAccess));// Compress disabled
-		
+
+    // Get the codecID and validate that it is what we expect.
+    aafUID_t codecID = {0};
+		checkResult(pEssenceAccess->GetCodecID(&codecID));
+		checkExpression(0 == memcmp(&codecID, &CodecWave, sizeof(codecID)), AAFRESULT_TEST_FAILED);
+    
+
 		checkResult(pEssenceAccess->GetFileFormatParameterList (&format));
 		checkResult(format->NumFormatSpecifiers (&numSpecifiers));
 		for(n = 0; n < numSpecifiers; n++)
@@ -469,28 +468,14 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 		pFormat->Release();
 		pFormat = NULL;
 		// write out the data
-		if(testType == testRawCalls)
-		{
-			checkResult(pEssenceAccess->QueryInterface(IID_IAAFEssenceRawAccess, (void **)&pRawEssence));
-			checkResult(pRawEssence->WriteRawData(	dataLen,	// Number of Samples
-				dataPtr,	// THE Raw data
-				sizeof(dataBuff)));// buffer size
-			pRawEssence->Release();
-			pRawEssence = NULL;
-		}
-		else if(testType == testStandardCalls)
+		if(testType == testStandardCalls)
 		{
 			checkResult(pEssenceAccess->WriteSamples(	dataLen,	//!!! hardcoded bytes/sample ==1// Number of Samples
-				dataPtr,	// THE Raw data
-				sizeof(dataBuff)));// buffer size
-		}
-		else if(testType == testFractionalCalls)
-		{
-			checkResult(pEssenceAccess->WriteFractionalSample(
-				dataLen,			// number of bytes
-				dataPtr,			// THE data	
-				&bytesWritten));	// !!!checkResult this when it works
-		}
+						      sizeof(dataBuff),// buffer size
+				          dataPtr,	// THE data
+									&samplesWritten,
+									&bytesWritten));
+    }
 		else if(testType == testMultiCalls)
 		{
 			aafmMultiXfer_t		xfer;
@@ -506,6 +491,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 			checkResult(pMultiEssence->WriteMultiSamples(1, &xfer, &result));
 			pMultiEssence->Release();
 			pMultiEssence = NULL;
+
+			samplesWritten = result.samplesXfered;
+			bytesWritten = result.bytesXfered;
 		}
 		
 		// close essence data file
@@ -532,9 +520,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 	if (pMultiEssence)
 		pMultiEssence->Release();
 	
-	if (pRawEssence)
-		pRawEssence->Release();
-
 	if(pFormat)
 		pFormat->Release();
 
@@ -584,7 +569,6 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 	IAAFHeader *				pHeader = NULL;
 	IAAFDictionary*					pDictionary = NULL;
 	IAAFEssenceAccess*			pEssenceAccess = NULL;
-	IAAFEssenceRawAccess*		pRawEssence = NULL;
 	IAAFEssenceMultiAccess*		pMultiEssence = NULL;
 	IAAFEssenceFormat			*fmtTemplate =  NULL;
 	IEnumAAFMobs*				pMobIter = NULL;
@@ -645,7 +629,15 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 				kAAFCompressionDisable,// Compress disabled
 				&pEssenceAccess));
 			
-			// Open and read the Wave file (for comparison)
+			aafUID_t codecID = {0};
+			checkResult(pEssenceAccess->GetCodecID(&codecID));
+			if (false && memcmp(&codecID, &CodecWave, sizeof(codecID)))
+			{
+			  cout << "     Warning:GetCodecID did not return CodecJPEG." << endl;
+			}
+
+      
+      // Open and read the Wave file (for comparison)
 			pWavFile = fopen("Laser.wav", "r");
 			checkExpression(pWavFile != NULL, AAFRESULT_TEST_FAILED);
 			
@@ -659,15 +651,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 				&readSampleRate,
 				&dataOffset,
 				&dataLen));
-			if(testType != testRawCalls)
-			{
-				dataPtr = WAVDataBuf + dataOffset;
-			}
-			else
-			{	
-				dataPtr = WAVDataBuf;
-				dataLen = WAVBytesRead;
-			}
+			dataPtr = WAVDataBuf + dataOffset;
 			
 			aafUInt32			sampleBits;
 			aafInt32			bytesRead;
@@ -684,30 +668,13 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 			pFormat = NULL;
 			checkExpression(sampleBits == bitsPerSample, AAFRESULT_TEST_FAILED);
 			
-			// Read the Raw Data from the AAF file
-			if(testType == testRawCalls)
-			{
-				checkResult(pEssenceAccess->QueryInterface(IID_IAAFEssenceRawAccess, (void **)&pRawEssence));
-				checkResult(pRawEssence->ReadRawData(	dataLen,		// Number of Samples 
-					sizeof(AAFDataBuf),	// Maximum buffer size
-					AAFDataBuf,			// Buffer for the data
-					&AAFBytesRead,	// Actual number of bytes read
-					&samplesRead));		// Actual number of samples read
-				pRawEssence->Release();
-				pRawEssence = NULL;
-			}
-			else if(testType == testStandardCalls)
+			// Read the Data from the AAF file
+			if(testType == testStandardCalls)
 			{
 				checkResult(pEssenceAccess->ReadSamples(	dataLen,	//!!! Hardcoded	// Number of Samples 
 					sizeof(AAFDataBuf),	// Maximum buffer size
 					AAFDataBuf,			// Buffer for the data
 					&samplesRead,		// Actual number of samples read
-					&AAFBytesRead));	// Actual number of bytes read
-			}
-			else if(testType == testFractionalCalls)
-			{
-				checkResult(pEssenceAccess->ReadFractionalSample(dataLen,	// bytes to read
-					AAFDataBuf,			// Buffer for the data
 					&AAFBytesRead));	// Actual number of bytes read
 			}
 			else if(testType == testMultiCalls)
@@ -767,9 +734,6 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 	if (pMultiEssence)
 		pMultiEssence->Release();
 
-	if (pRawEssence)
-		pRawEssence->Release();
-	
 	if (pFormat)
 		pFormat->Release();
 	
@@ -873,7 +837,6 @@ static HRESULT CreateJPEGAAFFile(
 	IAAFMasterMob*				pMasterMob = NULL;
 	
 	IAAFEssenceAccess*			pEssenceAccess = NULL;
-	IAAFEssenceRawAccess*		pRawEssence = NULL;
 	IAAFEssenceMultiAccess*		pMultiEssence = NULL;
 	IAAFEssenceFormat*			pFormat = NULL;
 	IAAFEssenceFormat			*format = NULL;
@@ -895,6 +858,7 @@ static HRESULT CreateJPEGAAFFile(
 	aafDataBuffer_t rgbColorBuffer = NULL, compressedBuffer = NULL;
 	aafDataBuffer_t writeBuffer = NULL;
 	aafUInt32 writeBufferSize = 0, compressedBufferSize = 0;
+  aafUInt32 samplesWritten, bytesWritten;
 
 
 	try
@@ -1026,6 +990,12 @@ static HRESULT CreateJPEGAAFFile(
 		convert(chNameBuffer, sizeof(chNameBuffer), wNameBuffer);
 //		cout << "        Codec:" << chNameBuffer << endl;
 
+    // Get the codecID and validate that it is what we expect.
+    aafUID_t codecID = {0};
+		checkResult(pEssenceAccess->GetCodecID(&codecID));
+		checkExpression(0 == memcmp(&codecID, &CodecJPEG, sizeof(codecID)), AAFRESULT_TEST_FAILED);
+
+
 		checkResult(pEssenceAccess->GetFileFormatParameterList (&format));
 		checkResult(format->NumFormatSpecifiers (&numSpecifiers));
 		for(n = 0; n < numSpecifiers; n++)
@@ -1096,38 +1066,14 @@ static HRESULT CreateJPEGAAFFile(
 		aafUInt32 index;
 		for (index = 0; index < MAX_SAMPLE_COUNT; ++index)
 		{
-			if(testType == testRawCalls)
-			{
-				checkResult(pEssenceAccess->QueryInterface(IID_IAAFEssenceRawAccess, (void **)&pRawEssence));
-
-				checkResult(pRawEssence->WriteRawData(STD_SAMPLE_COUNT,	// Number of Samples
-					const_cast<aafDataBuffer_t>(compressedJFIF),	// THE Raw data
-					sizeof(compressedJFIF)));// buffer size
-				
-				pRawEssence->Release();
-				pRawEssence = NULL;
-			}
-			else if(testType == testStandardCalls)
+			if(testType == testStandardCalls)
 			{
 				checkResult(pEssenceAccess->WriteSamples(STD_SAMPLE_COUNT,	//!!! hardcoded bytes/sample ==1// Number of Samples
-					writeBuffer,	// THE Raw data
-					writeBufferSize));// buffer size
+					writeBufferSize, // buffer size
+					writeBuffer,	// THE data
+					&samplesWritten,
+					&bytesWritten));
 			}
-//			else if(testType == testFractionalCalls)
-//			{
-//				cout << "        WriteFractionalSample" << endl;
-//				// It is ok for a codec to only support writing whole samples.
-//				hr = pEssenceAccess->WriteFractionalSample(
-//					sizeof(compressedJFIF),			// number of bytes
-//					const_cast<aafDataBuffer_t>(compressedJFIF),			// THE data	
-//					&bytesWritten);	// !!!checkResult this when it works
-//				if (AAFRESULT_NOT_IMPLEMENTED == hr)
-//				{
-//					cout << "        Codec does not support writing fractional samples." << endl;
-//					hr = S_OK;
-//				}
-//				checkResult(hr);
-//			}
 			else if(testType == testMultiCalls)
 			{
 				aafmMultiXfer_t		xfer;
@@ -1144,6 +1090,9 @@ static HRESULT CreateJPEGAAFFile(
 
 				pMultiEssence->Release();
 				pMultiEssence = NULL;
+
+			  samplesWritten = result.samplesXfered;
+			  bytesWritten = result.bytesXfered;
 			}
 		
 		}
@@ -1172,9 +1121,6 @@ static HRESULT CreateJPEGAAFFile(
 	if (pMultiEssence)
 		pMultiEssence->Release();
 	
-	if (pRawEssence)
-		pRawEssence->Release();
-
 	if(pFormat)
 		pFormat->Release();
 
@@ -1230,7 +1176,6 @@ static HRESULT ReadJPEGAAFFile(
 	IAAFHeader *				pHeader = NULL;
 	IAAFDictionary*					pDictionary = NULL;
 	IAAFEssenceAccess*			pEssenceAccess = NULL;
-	IAAFEssenceRawAccess*		pRawEssence = NULL;
 	IAAFEssenceMultiAccess*		pMultiEssence = NULL;
 	IAAFEssenceFormat			*fmtTemplate =  NULL;
 	IAAFEssenceFormat* pTransformFormat = NULL;
@@ -1347,6 +1292,12 @@ static HRESULT ReadJPEGAAFFile(
 				compressEnable,// Compression
 				&pEssenceAccess));
 
+			aafUID_t codecID = {0};
+			checkResult(pEssenceAccess->GetCodecID(&codecID));
+			if (false && memcmp(&codecID, &CodecWave, sizeof(codecID)))
+			{
+			  cout << "     Warning:GetCodecID did not return CodecJPEG." << endl;
+			}
 
 			// Setup the formats that we want to query.
 			checkResult(pEssenceAccess->GetEmptyFileFormat (&fmtTemplate));
@@ -1437,37 +1388,24 @@ static HRESULT ReadJPEGAAFFile(
 			checkExpression(NULL != AAFDataBuf, AAFRESULT_NOMEMORY);
 
 			aafLength_t sampleCount = 0;
-			checkResult(pEssenceAccess->GetSampleCount(defs.ddPicture(), &sampleCount));
+			checkResult(pEssenceAccess->CountSamples(defs.ddPicture(), &sampleCount));
 			checkExpression(MAX_SAMPLE_COUNT == sampleCount, AAFRESULT_TEST_FAILED);
 
 			aafUInt32 index;
 			for (index = 0; index < sampleCount; ++index)
 			{
 				aafLength_t sampleSize;
-				checkResult(pEssenceAccess->GetSampleFrameSize(defs.ddPicture(), index, &sampleSize));
+				checkResult(pEssenceAccess->GetIndexedSampleSize(defs.ddPicture(), index, &sampleSize));
 				if (kAAFCompressionDisable == compressEnable)
 					checkExpression(compressedBufferSize == sampleSize, AAFRESULT_TEST_FAILED);
 				else
 					checkExpression(sampleBufferSize == sampleSize, AAFRESULT_TEST_FAILED);
 
 
-				// Read the Raw Data from the AAF file
+				// Read the Data from the AAF file
 				samplesRead = 0;
 				AAFBytesRead = 0;
-				if(testType == testRawCalls)
-				{
-					checkResult(pEssenceAccess->QueryInterface(IID_IAAFEssenceRawAccess, (void **)&pRawEssence));
-					
-					checkResult(pRawEssence->ReadRawData(STD_SAMPLE_COUNT,		// Number of Samples 
-						sampleBufferSize,	// Maximum buffer size
-						AAFDataBuf,			// Buffer for the data
-						&samplesRead,	// Actual number of samples read
-						&AAFBytesRead));		// Actual number of bytes read
-
-					pRawEssence->Release();
-					pRawEssence = NULL;
-				}
-				else if(testType == testStandardCalls)
+				if(testType == testStandardCalls)
 				{
 					checkResult(pEssenceAccess->ReadSamples(STD_SAMPLE_COUNT,	//!!! Hardcoded	// Number of Samples 
 						sampleBufferSize,	// Maximum buffer size
@@ -1475,12 +1413,6 @@ static HRESULT ReadJPEGAAFFile(
 						&samplesRead,		// Actual number of samples read
 						&AAFBytesRead));	// Actual number of bytes read
 				}
-//				else if(testType == testFractionalCalls)
-//				{
-//				checkResult(pEssenceAccess->ReadFractionalSample(dataLen,	// bytes to read
-//					AAFDataBuf,			// Buffer for the data
-//					&AAFBytesRead));	// Actual number of bytes read
-//				}
 				else if(testType == testMultiCalls)
 				{
 					aafmMultiXfer_t		xfer;
@@ -1562,9 +1494,6 @@ static HRESULT ReadJPEGAAFFile(
 
 	if (pMultiEssence)
 		pMultiEssence->Release();
-
-	if (pRawEssence)
-		pRawEssence->Release();
 
 	if (pTransformFormat)
 		pTransformFormat->Release();
@@ -1781,19 +1710,10 @@ HRESULT CAAFEssenceAccess_test()
 	
 	aafWChar *	rawData = L"EssenceAccessExtRaw.wav";
 	aafWChar *	externalAAF = L"EssenceAccessExtAAF.aaf";
-#if 1
 	testDataFile_t	dataFile;
-#endif
 	
-#if 1
   cout << "    Internal Essence (WAVE)" << endl;
-  cout << "        WriteRawData" << endl;
-	hr = CreateAAFFile(L"EssenceAccessRaw.aaf", NULL, testRawCalls);
-	if(hr == AAFRESULT_SUCCESS)
-	{
-		hr = ReadAAFFile(L"EssenceAccessRaw.aaf", testRawCalls);
-	}
-	
+  
 	/**/
 	if(hr == AAFRESULT_SUCCESS)
 	{
@@ -1816,15 +1736,6 @@ HRESULT CAAFEssenceAccess_test()
 		hr = ReadAAFFile(L"EssenceAccessMulti.aaf", testMultiCalls);
 	}
 	/**/
-	if(hr == AAFRESULT_SUCCESS)
-	{
-        cout << "        WriteFractionalSample" << endl;
-		hr = CreateAAFFile(L"EssenceAccessFract.aaf", NULL, testFractionalCalls);
-	}
-	if(hr == AAFRESULT_SUCCESS)
-	{
-		hr = ReadAAFFile(L"EssenceAccessFract.aaf", testFractionalCalls);
-	}
 	/**/
 	dataFile.dataFilename = rawData;
 	dataFile.dataFormat = ContainerFile;
@@ -1851,36 +1762,16 @@ HRESULT CAAFEssenceAccess_test()
 		hr = ReadAAFFile(L"EssenceAccessRef.aaf", testStandardCalls);
 	}
 	
-#endif // #if 0
-
-  cout << "    Internal Essence (JPEG):" << endl;
-  cout << "        WriteRawData" << endl;
-	hr = CreateJPEGAAFFile(L"EssenceAccessJPEGRaw.aaf",NULL, kAAFCompressionDisable, kAAFColorSpaceRGB, 1, testRawCalls);
 	if (SUCCEEDED(hr))
-	{
-	  cout << "        ReadRawData" << endl;
-		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGRaw.aaf", kAAFCompressionDisable, kAAFColorSpaceRGB, 1, testRawCalls);
-	}
-	if (SUCCEEDED(hr))
-	{
-		cout << "        ReadSamples (compression enabled, RGB)" << endl;
-		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGRaw.aaf", kAAFCompressionEnable, kAAFColorSpaceRGB, 1, testStandardCalls);
-	}
-	if (SUCCEEDED(hr))
-	{
-		cout << "        ReadSamples (compression enabled, YUV)" << endl;
-		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGRaw.aaf", kAAFCompressionEnable, kAAFColorSpaceYUV, 1, testStandardCalls);
-	}
+  {
+    cout << "    Internal Essence (JPEG):" << endl;
+  }
+  
 
 	if (SUCCEEDED(hr))
 	{
 		cout << "        WriteSamples (compression disabled, RGB)" << endl;
 		hr = CreateJPEGAAFFile(L"EssenceAccessJPEG.aaf",NULL, kAAFCompressionDisable, kAAFColorSpaceRGB, 1, testStandardCalls);
-	}
-	if (SUCCEEDED(hr))
-	{
-	  cout << "        ReadRawData" << endl;
-		hr = ReadJPEGAAFFile(L"EssenceAccessJPEG.aaf", kAAFCompressionDisable, kAAFColorSpaceRGB, 1, testRawCalls);
 	}
 	if (SUCCEEDED(hr))
 	{
@@ -1900,11 +1791,6 @@ HRESULT CAAFEssenceAccess_test()
 	}
 	if (SUCCEEDED(hr))
 	{
-	  cout << "        ReadRawData" << endl;
-		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGComp.aaf", kAAFCompressionDisable, kAAFColorSpaceRGB, 1, testRawCalls);
-	}
-	if (SUCCEEDED(hr))
-	{
 		cout << "        ReadSamples (compression disabled, RGB)" << endl;
 		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGComp.aaf", kAAFCompressionDisable, kAAFColorSpaceRGB, 1, testStandardCalls);
 	}
@@ -1918,42 +1804,48 @@ HRESULT CAAFEssenceAccess_test()
 	{
 		cout << "        WriteMultiSamples (compression disabled, RGB)" << endl;
 		hr = CreateJPEGAAFFile(L"EssenceAccessJPEGMulti.aaf",NULL, kAAFCompressionDisable, kAAFColorSpaceRGB, 1, testMultiCalls);
-	}
-	if (SUCCEEDED(hr))
-	{
-	  cout << "        ReadRawData" << endl;
-		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGMulti.aaf", kAAFCompressionDisable, kAAFColorSpaceRGB, 1, testRawCalls);
-	}
-	if (SUCCEEDED(hr))
-	{
-		cout << "        ReadMultiSamples (compression disabled, RGB)" << endl;
-		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGMulti.aaf", kAAFCompressionDisable, kAAFColorSpaceRGB, 1, testMultiCalls);
-	}
-	if (SUCCEEDED(hr))
-	{
-		cout << "        ReadMultiSamples (compression enabled, RGB)" << endl;
-		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGMulti.aaf", kAAFCompressionEnable, kAAFColorSpaceRGB, 1, testMultiCalls);
-	}
+    if (AAFRESULT_INVALID_OP_CODEC == hr)
+    {
+      cout << "          Codec does not support interleaved data." << endl;
+      hr = AAFRESULT_SUCCESS;
+    }
+    else
+    {
+	    if (SUCCEEDED(hr))
+	    {
+		    cout << "        ReadMultiSamples (compression disabled, RGB)" << endl;
+		    hr = ReadJPEGAAFFile(L"EssenceAccessJPEGMulti.aaf", kAAFCompressionDisable, kAAFColorSpaceRGB, 1, testMultiCalls);
+	    }
+	    if (SUCCEEDED(hr))
+	    {
+		    cout << "        ReadMultiSamples (compression enabled, RGB)" << endl;
+		    hr = ReadJPEGAAFFile(L"EssenceAccessJPEGMulti.aaf", kAAFCompressionEnable, kAAFColorSpaceRGB, 1, testMultiCalls);
+	    }
+    }
+  }
 
 	if (SUCCEEDED(hr))
 	{
 		cout << "        WriteMultiSamples (compression enabled, RGB)" << endl;
 		hr = CreateJPEGAAFFile(L"EssenceAccessJPEGMultiComp.aaf",NULL, kAAFCompressionEnable, kAAFColorSpaceRGB, 1, testMultiCalls);
-	}
-	if (SUCCEEDED(hr))
-	{
-	  cout << "        ReadRawData" << endl;
-		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGMultiComp.aaf", kAAFCompressionDisable, kAAFColorSpaceRGB, 1, testRawCalls);
-	}
-	if (SUCCEEDED(hr))
-	{
-		cout << "        ReadMultiSamples (compression disabled, RGB)" << endl;
-		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGMultiComp.aaf", kAAFCompressionDisable, kAAFColorSpaceRGB, 1, testMultiCalls);
-	}
-	if (SUCCEEDED(hr))
-	{
-		cout << "        ReadMultiSamples (compression enabled, RGB)" << endl;
-		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGMultiComp.aaf", kAAFCompressionEnable, kAAFColorSpaceRGB, 1, testMultiCalls);
+    if (AAFRESULT_INVALID_OP_CODEC == hr)
+    {
+      cout << "          Codec does not support interleaved data." << endl;
+      hr = AAFRESULT_SUCCESS;
+    }
+    else
+    {
+	    if (SUCCEEDED(hr))
+	    {
+		    cout << "        ReadMultiSamples (compression disabled, RGB)" << endl;
+		    hr = ReadJPEGAAFFile(L"EssenceAccessJPEGMultiComp.aaf", kAAFCompressionDisable, kAAFColorSpaceRGB, 1, testMultiCalls);
+	    }
+	    if (SUCCEEDED(hr))
+	    {
+		    cout << "        ReadMultiSamples (compression enabled, RGB)" << endl;
+		    hr = ReadJPEGAAFFile(L"EssenceAccessJPEGMultiComp.aaf", kAAFCompressionEnable, kAAFColorSpaceRGB, 1, testMultiCalls);
+	    }
+    }
 	}
 
 
@@ -1961,11 +1853,6 @@ HRESULT CAAFEssenceAccess_test()
 	{
 		cout << "        WriteSamples (compression enabled, YUV)" << endl;
 		hr = CreateJPEGAAFFile(L"EssenceAccessJPEGCompYUV.aaf",NULL, kAAFCompressionEnable, kAAFColorSpaceYUV, 1, testStandardCalls);
-	}
-	if (SUCCEEDED(hr))
-	{
-	  cout << "        ReadRawData" << endl;
-		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGCompYUV.aaf", kAAFCompressionDisable, kAAFColorSpaceYUV, 1, testRawCalls);
 	}
 	if (SUCCEEDED(hr))
 	{
@@ -1991,11 +1878,6 @@ HRESULT CAAFEssenceAccess_test()
 	}
 	if (SUCCEEDED(hr))
 	{
-	  cout << "        ReadRawData" << endl;
-		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGCompYUV422.aaf", kAAFCompressionDisable, kAAFColorSpaceYUV, 2, testRawCalls);
-	}
-	if (SUCCEEDED(hr))
-	{
 		cout << "        ReadSamples (compression disabled, YUV)" << endl;
 		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGCompYUV422.aaf", kAAFCompressionDisable, kAAFColorSpaceYUV, 2, testStandardCalls);
 	}
@@ -2017,14 +1899,8 @@ HRESULT CAAFEssenceAccess_test()
 	{
 		cout << "The following IAAFEssenceAccess methods have not been tested:" << endl;  
 		cout << "     CountChannels" << endl;
-//		cout << "     GetSampleFrameSize" << endl; 
-//		cout << "     GetSampleCount" << endl; 
-//		cout << "     GetCodecName" << endl; 
-		cout << "     GetCodecID" << endl; 
 		cout << "     SetEssenceCodecFlavour" << endl; 
-//		cout << "     GetLargestSampleSize" << endl; 
 		cout << "     SetTransformParameters" << endl; 
-		cout << "     AddSampleIndexEntry" << endl; 
 		hr = AAFRESULT_TEST_PARTIAL_SUCCESS;
 	}
 	

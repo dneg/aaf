@@ -95,7 +95,7 @@ static void MobIDToString(aafMobID_t *uid, char *buf)
 		(int)uid->material.Data4[5], (int)uid->material.Data4[6], (int)uid->material.Data4[7]);
 }
 
-typedef enum { testRawCalls, testStandardCalls, testMultiCalls, testFractionalCalls } testType_t;
+typedef enum { testStandardCalls, testMultiCalls, testFractionalCalls } testType_t;
 
 typedef aafInt16	AAFByteOrder;
 const AAFByteOrder INTEL_ORDER		      = 0x4949; // 'II' for Intel
@@ -137,7 +137,6 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 	IAAFHeader *				pHeader = NULL;
 	IAAFDictionary*				pDictionary = NULL;
 	IAAFEssenceAccess*			pEssenceAccess = NULL;
-	IAAFEssenceRawAccess*		pRawEssence = NULL;
 	IAAFEssenceMultiAccess*		pMultiEssence = NULL;
 	IAAFEssenceFormat			*fmtTemplate =  NULL;
 	IEnumAAFMobs*				pMobIter = NULL;
@@ -255,7 +254,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 												
 						// Get the sample count
 						aafLength_t sampleCount;
-						check(pEssenceAccess->GetSampleCount(pSoundDef, &sampleCount));
+						check(pEssenceAccess->CountSamples(pSoundDef, &sampleCount));
 						
 						// Read the samples of audio data
 						bytesLeft = (aafUInt32) sampleCount * dataLen;

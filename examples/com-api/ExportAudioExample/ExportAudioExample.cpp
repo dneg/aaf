@@ -77,7 +77,7 @@ static void convert(char* cName, size_t length, const wchar_t* name)
 }
 
 
-typedef enum { testRawCalls, testStandardCalls, testMultiCalls, testFractionalCalls } testType_t;
+typedef enum { testStandardCalls, testMultiCalls, testFractionalCalls } testType_t;
 
 typedef aafInt16	AAFByteOrder;
 const AAFByteOrder INTEL_ORDER		      = 0x4949; // 'II' for Intel
@@ -117,7 +117,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 	IAAFMob*					pMob = NULL;
 	IAAFMasterMob*				pMasterMob = NULL;
 	IAAFEssenceAccess*			pEssenceAccess = NULL;
-	IAAFEssenceRawAccess*		pRawEssence = NULL;
 	IAAFEssenceMultiAccess*		pMultiEssence = NULL;
 	IAAFEssenceFormat*			pFormat = NULL;
 	IAAFEssenceFormat			*format = NULL;
@@ -136,6 +135,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
   IAAFClassDef *pMasterMobDef = NULL;
   IAAFClassDef *pNetworkLocatorDef = NULL;
   IAAFDataDef *pSoundDef = NULL;
+  aafUInt32 samplesWritten, bytesWritten;
 
 
 	// Delete any previous test file before continuing...
@@ -262,8 +262,10 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 		while (samplesLeft >0)
 		{
 			check(pEssenceAccess->WriteSamples(	dataLen,	//!!! hardcoded bytes/sample ==1// Number of Samples
-												dataPtr,	// THE Raw data
-												sizeof(dataBuff)));// buffer size
+												sizeof(dataBuff), // buffer size
+												dataPtr,	// THE data
+												&samplesWritten,
+												&bytesWritten));
 			samplesLeft=samplesLeft-dataLen;
 		}
 
