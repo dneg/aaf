@@ -520,15 +520,10 @@ void OMWeakReferenceProperty<ReferencedObject>::shallowCopyTo(
   ASSERT("Valid destination", dest != this);
 
   dest->_reference = _reference;
-  dest->_targetTag = _targetTag;
+  dest->_targetTag = nullOMPropertyTag;
   dest->_targetName = _targetName;
   delete [] dest->_targetPropertyPath;
-  dest->_targetPropertyPath = 0; // for BoundsChecker
-  if (_targetPropertyPath != 0) {
-    dest->_targetPropertyPath = savePropertyPath(_targetPropertyPath);
-  } else {
-    dest->_targetPropertyPath = 0;
-  }
+  dest->_targetPropertyPath = 0;
   dest->_keyPropertyId = _keyPropertyId;
 }
 
