@@ -85,6 +85,16 @@ Omf2Aaf::Omf2Aaf() : pFile(NULL), pHeader(NULL), pDictionary(NULL)
 // ============================================================================
 Omf2Aaf::~Omf2Aaf()
 {
+	if (pHeader)
+		pHeader->Release();
+	if (pDictionary)
+		pDictionary->Release();
+	if (pFile)
+	{
+		pFile->Save();
+		pFile->Close();
+		pFile->Release();
+	}
 }
 // ============================================================================
 // ConvertFile
@@ -997,18 +1007,17 @@ HRESULT Omf2Aaf::ConvertOMFDatakind( OMF2::omfDDefObj_t datakind,
 	
 	rc = OMF2::omfiDatakindGetName(OMFFileHdl, datakind, 64, datakindName);
 	if (strncmp("omfi:data:Picture", datakindName, strlen(datakindName))== 0)
-		*pDatadef = DDEF_Video;
+		*pDatadef = DDEF_Picture;
 	else if (strncmp("omfi:data:Sound", datakindName, strlen(datakindName)) == 0)
-		*pDatadef = DDEF_Audio;
+		*pDatadef = DDEF_Sound;
 	else if (strncmp("omfi:data:StereoSound", datakindName, strlen(datakindName)) == 0)
-		*pDatadef = DDEF_Audio;
+		*pDatadef = DDEF_Sound;
 	else if(strncmp("omfi:data:Timecode", datakindName, strlen(datakindName)) == 0)
 		*pDatadef = DDEF_Timecode;
 	else if(strncmp("omfi:data:Edgecode", datakindName, strlen(datakindName)) == 0)
 		*pDatadef = DDEF_Edgecode;
 	else if(strncmp("omfi:data:PictureWithMatte", datakindName, strlen(datakindName)) == 0)
-//		*pDatadef = kAAFEffectPictureWithMate;
-		*pDatadef = DDEF_Video;			// hack for now TLK
+		*pDatadef = DDEF_PictureWithMatte;
 
 	else
 	{
@@ -2489,6 +2498,10 @@ HRESULT Omf2Aaf::ConvertOMFSourceMob(OMF2::omfObject_t obj,
 						pTapeDesc->Release();
 						pTapeDesc = NULL;
 					}
+					if (pwManufacturer)
+						UTLMemoryFree(pwManufacturer);
+					if (pwModel)
+						UTLMemoryFree(pwModel);
 				}
 			}
 			else if ( OMF2::omfsIsTypeOf(OMFFileHdl, mediaDescriptor, OMClassMDFM, &OMFError))
@@ -2806,6 +2819,8 @@ void Omf2Aaf::OMFFileClose()
 {
 	OMF2::omfsCloseFile(OMFFileHdl);
 	OMF2::omfsEndSession(OMFSession);
+	OMFSession = NULL;
+	OMFFileHdl = NULL;
 }
 
 // ============================================================================
