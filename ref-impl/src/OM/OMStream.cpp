@@ -28,6 +28,7 @@
 #include <limits.h>
 #include <errno.h>
 #include <stdio.h>
+#include <sys/stat.h>
 
 #include "OMUtilities.h"
 #include "OMExceptions.h"
@@ -164,6 +165,13 @@ OMUInt64 OMStream::size(void)
   TRACE("OMStream::size");
   PRECONDITION("No error on stream", ferror(_file) == 0);
 
+  struct stat fileStat;
+  fflush( _file );
+  OMInt64 status = fstat( fileno( _file ), &fileStat );
+  ASSERT( "Successful fstat", status == 0 );
+  OMUInt64 result = fileStat.st_size;
+
+  /*
 	// where are we now?
 	OMUInt64 oldposition = position();
 
@@ -195,7 +203,7 @@ OMUInt64 OMStream::size(void)
 
 	// back to where we started from
 	setPosition( oldposition );
-
+  */
 	return result;
 }
 
