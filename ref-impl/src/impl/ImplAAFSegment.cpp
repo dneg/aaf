@@ -129,6 +129,8 @@ AAFRESULT ImplAAFSegment::FindSubSegment(aafPosition_t offset,
 		{
 			*found = AAFTrue;
 			*subseg = this;
+			// We are returning a reference to this object so bump the ref count
+			AcquireReference();
 			*sequPosPtr = 0;
 		}
 		else
