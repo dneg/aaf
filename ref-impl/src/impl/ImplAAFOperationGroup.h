@@ -33,6 +33,14 @@ class ImplAAFSegment;
 
 class ImplAAFSourceReference;
 
+#ifndef __ImplAAFParameter_h__
+#include "ImplAAFParameter.h"
+#endif
+
+#ifndef __ImplAAFSourceReference_h__
+#include "ImplAAFSourceReference.h"
+#endif
+
 #ifndef __ImplAAFSegment_h__
 #include "ImplAAFSegment.h"
 #endif
@@ -87,7 +95,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     GetRender
         // @parm [out] Final rendering segment
-        (ImplAAFSegment ** segment);
+        (ImplAAFSourceReference ** sourceRef);
 	//@comm If this property does not exist the error
 	// OM_ERR_PROP_NOT_PRESENT will be returned.
 	//@comm Working and final renderings are handled by using
@@ -100,7 +108,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     IsATimeWarp
         // @parm [out] Working rendering source clip
-        (aafBool **  sourceClip);
+        (aafBool *  sourceClip);
 	//@comm Replaces omfiEffectIsATimeWarp
 
 
@@ -146,10 +154,7 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     AddNewParameter
-        (// @parm [in] Argument ID for the slot
-         aafArgIDType_t  argID,
-
-         // @parm [in] Parameter to place in effect slot
+        (// @parm [in] Parameter to place in effect slot
          ImplAAFParameter * value);
 	//@comm Replaces part of omfiEffectAddNewSlot
 
@@ -171,7 +176,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     SetRender
         // @parm [in] A segment containing a representation of the rendering
-        (ImplAAFSegment * segment);
+        (ImplAAFSourceReference * sref);
 	//@comm Replaces omfiEffectSetFinalRender and omfiEffectSetWorkingRender
 
   //****************
@@ -217,11 +222,11 @@ public:
   static AAFRESULT test();
 
 private:
-//	OMFixedSizeProperty<aafUID_t>						_effectDefinition;
-//	OMStrongReferenceVectorProperty<ImplAAFSegment>		_inputSegments;
-//	OMStrongReferenceVectorProperty<ImplAAFParameter>	_parameters;
-//	OMFixedSizeProperty<aafUInt32>						_bypassOverride;
-//	OMStrongReferenceProperty<ImplAAFSourceReference>	_rendering;
+	OMFixedSizeProperty<aafUID_t>						_effectDefinition;
+	OMStrongReferenceVectorProperty<ImplAAFSegment>		_inputSegments;
+	OMStrongReferenceVectorProperty<ImplAAFParameter>	_parameters;
+	OMFixedSizeProperty<aafArgIDType_t>					_bypassOverride;
+	OMStrongReferenceProperty<ImplAAFSourceReference>	_rendering;
 };
 
 #endif // ! __ImplAAFGroup_h__
