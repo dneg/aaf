@@ -75,7 +75,7 @@ AAFRESULT STDMETHODCALLTYPE
 	// exist, return  AAFRESULT_NO_ESSENCE_DESC.
 
   if (*ppEdes)
-    (*ppEdes)->AcquireRef();
+    (*ppEdes)->AcquireReference();
 
 	return AAFRESULT_SUCCESS;
 }
@@ -91,7 +91,15 @@ AAFRESULT STDMETHODCALLTYPE
 	if (pEdes == NULL)
 		return AAFRESULT_NULL_PARAM;
 
+	ImplAAFEssenceDescriptor *pOldEdes = _essenceDesc;
+	if (pOldEdes)
+		pOldEdes->ReleaseReference();
+
 	_essenceDesc = pEdes;
+	
+	if (pEdes)
+		pEdes->AcquireReference();
+
 	return AAFRESULT_SUCCESS;
 }
 
