@@ -95,7 +95,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     GetTapeName
         (// @parm [in] SlotID of the Master Mob slot
-		 aafInt32  masterSlotID,
+		 aafUInt32  masterSlotID,
 
 		 // @parm [out, size_is(bufSize), string] The returned name
 		 aafWChar *  pTapeName,
@@ -110,7 +110,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     GetTapeNameBufLen
         (// @parm [in] SlotID of the Master Mob slot
-		 aafInt32  masterSlotID,
+		 aafUInt32  masterSlotID,
 
 		 // @parm [out] required buffer length
          aafUInt32 *  pLen);
@@ -323,7 +323,7 @@ public:
     CreateMultiEssence
         (
  							aafUID_t codecID,
-                          aafInt16  /*arrayElemCount*/,
+                          aafUInt16  /*arrayElemCount*/,
                            aafmMultiCreate_t *  /*mediaArray*/,
                            aafCompressEnable_t  /*Enable*/,
 							ImplAAFLocator		*destination,
@@ -400,10 +400,10 @@ public:
 
   /****/
   //****************
-  // GetNumChannels()
+  // CountChannels()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetNumChannels
+    CountChannels
         (// @parm [in] On this slot
          aafSlotID_t  slotID,
 
@@ -414,7 +414,7 @@ public:
          ImplAAFDataDef * pMediaKind,
 
          // @parm [out] How many channels?
-         aafInt16*  numCh);
+         aafUInt16*  numCh);
 	//@comm Returns the number of interleaved essence channels of a given type in the essence stream referenced by the given file mob
 	//@comm If the data format is not interleaved, then the answer will
 	// always be zero or one.  This function correctly returns zero

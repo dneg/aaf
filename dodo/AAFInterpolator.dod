@@ -1,9 +1,9 @@
 #c/*************************************************\
-#c*													*
-#c* Advanced Authoring Format						*
-#c*													*
-#c* Copyright (c) 1998-1999 Avid Technology, Inc.	*
-#c*													*
+#c*                                                 *
+#c* Advanced Authoring Format                       *
+#c*                                                 *
+#c* Copyright (c) 1998-1999 Avid Technology, Inc.   *
+#c*                                                 *
 #c\*************************************************/
 #startm .this-module 0
 AAFInterpolator\
@@ -49,7 +49,7 @@ AD_IDL(//
 AD_XMETHOD1(GetNumTypesSupported,
 		   [out],
 		   objPass,
-		   aafInt32*,
+		   aafUInt32*,
 		   pCount,
 		   Number of data types supported,
 			 Each interpolator plugin will support a given number of interpolator
@@ -74,7 +74,7 @@ AD_XMETHOD1(GetNumTypesSupported,
 AD_XMETHOD2(GetIndexedSupportedType,
 		   [in],
 		   objPass,
-		   aafInt32,
+		   aafUInt32,
 		   index,
 		   Which flavour to get the ID for,
 		   [out],
@@ -264,7 +264,7 @@ AD_X2METHOD5(InterpolateMany,
 			xxx,
 			[in],
 			objPass,
-			aafInt32,
+			aafUInt32,
 			pGenerateCount,
 			The number of points to interpolate,
 			xxx,
