@@ -86,7 +86,6 @@ DefaultEdge::Write( ofstream &dotFile, InstanceMapperProfile &profile )
 DotGraph::DotGraph( std::string name, std::string uid ) 
    :	DotElement( name, uid )
 {
-   SetElementAttribute( "ordering", "out" );
 }
 
 
