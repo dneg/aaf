@@ -20,10 +20,12 @@
 
 #if defined(__sgi)
 #define OMHIGHPART(x) x.u.HighPart
-#define OMLOWPART(x)  x.u.LowPart
+#define OMLOWPART (x) x.u.LowPart
+#define OMQUADPART(x) x.u.QuadPart
 #else
 #define OMHIGHPART(x) x.HighPart
-#define OMLOWPART(x)  x.LowPart
+#define OMLOWPART (x) x.LowPart
+#define OMQUADPART(x) x.QuadPart
 #endif
 
 #if defined(_WIN32) && defined(UNICODE)
@@ -193,7 +195,7 @@ OMStoredPropertySetIndex* OMStoredObject::restore(void)
 {
   TRACE("OMStoredObject::restore");
   PRECONDITION("Already open", _open);
-  PRECONDITION("At start of index stream", streamOffset(_indexStream) == 0);
+  PRECONDITION("At start of index stream", streamPosition(_indexStream) == 0);
 
   // Read byte order flag.
   //
@@ -240,7 +242,7 @@ void OMStoredObject::restore(OMPropertySet& properties)
   TRACE("OMStoredObject::restore");
   PRECONDITION("Already open", _open);
   PRECONDITION("At start of properties stream",
-               streamOffset(_propertiesStream) == 0);
+               streamPosition(_propertiesStream) == 0);
 
   size_t entries = _index->entries();
   
@@ -420,7 +422,7 @@ void OMStoredObject::read(OMPropertyId propertyId,
   // is synchronized with the index.
   //
   // ASSERT("Sequential access",
-  //        actualOffset == streamOffset(_propertiesStream));
+  //        actualOffset == streamPosition(_propertiesStream));
 
   // Read property value.
   //
@@ -431,9 +433,9 @@ void OMStoredObject::read(OMPropertyId propertyId,
   //   @parm An open stream.
   //   @rdesc The size of <p stream> in bytes
   //   @this const
-size_t OMStoredObject::sizeOfStream(IStream* stream) const
+OMUInt64 OMStoredObject::streamSize(IStream* stream) const
 {
-  TRACE("OMStoredObject::sizeOfStream");
+  TRACE("OMStoredObject::streamSize");
   PRECONDITION("Valid stream", stream != 0);
 
   STATSTG statstg;
@@ -441,9 +443,23 @@ size_t OMStoredObject::sizeOfStream(IStream* stream) const
   if (!check(status)) {
     exit(FAILURE);
   }
-  ASSERT("Small stream", OMHIGHPART(statstg.cbSize) == 0);
-  size_t result = OMLOWPART(statstg.cbSize);
+  OMUInt64 result = OMQUADPART(statstg.cbSize);
   return result;
+}
+
+  // @mfunc Set the size, in bytes, of <p stream>
+  //   @parm An open stream.
+  //   @parm The new size for the stream.
+void OMStoredObject::streamSetSize(IStream* stream, const OMUInt64 newSize)
+{
+  TRACE("OMStoredObject::streamSetSize");
+
+  ULARGE_INTEGER newStreamSize;
+  OMQUADPART(newStreamSize) = newSize;
+  HRESULT status = stream->SetSize(newStreamSize);
+  if (!check(status)) {
+    exit(FAILURE);
+  }
 }
 
   // @mfunc Open a stream called <p streamName> contained within this
@@ -805,33 +821,46 @@ void OMStoredObject::getClass(IStorage* storage, OMClassId& cid)
   memcpy(&cid, &statstg.clsid, sizeof(OMClassId));
 }
 
-size_t OMStoredObject::streamOffset(IStream* stream)
+  // @mfunc The current position for <f readFromStream()> and
+  //        <f writeToStream()>, as an offset in bytes from the begining
+  //        of the data stream.
+  //   @rdesc The current position for <f readFromStream()> and
+  //          <f writeToStream()>, as an offset in bytes from the begining
+  //          of the data stream.
+  //   @this const
+OMUInt64 OMStoredObject::streamPosition(IStream* stream) const
 {
-  TRACE("OMStoredObject::streamOffset");
+  TRACE("OMStoredObject::streamPosition");
 
-  size_t result;
+  OMUInt64 result;
   LARGE_INTEGER zero = {0, 0};
   ULARGE_INTEGER position;
   HRESULT status = stream->Seek(zero, STREAM_SEEK_CUR, &position);
   if (!check(status)) {
     exit(FAILURE);
   }
-  ASSERT("Small stream", OMHIGHPART(position) == 0);
-  result = OMLOWPART(position);
+  result = OMQUADPART(position);
   return result;
 }
 
-void OMStoredObject::streamSeek(IStream* stream, size_t offset)
+  // @mfunc Set the current position for <f readFromStream()> and
+  //        <f writeToStream()>, as an offset in bytes from the begining of
+  //        the data stream.
+  //   @parm The position to use for subsequent calls to readFromStream() and
+  //         writeToStream() on this stream. The position is specified as an
+  //         offset in bytes from the begining of the data stream.
+  //   @this const
+void OMStoredObject::streamSetPosition(IStream* stream, const OMUInt64 offset)
 {
-  TRACE("OMStoredObject::streamSeek");
+  TRACE("OMStoredObject::streamSetPosition");
 
-  LARGE_INTEGER newPosition = {0, offset};
+  LARGE_INTEGER newPosition;
   ULARGE_INTEGER oldPosition;
+  OMQUADPART(newPosition) = offset;
   HRESULT status = stream->Seek(newPosition, STREAM_SEEK_SET, &oldPosition);
   if (!check(status)) {
     exit(FAILURE);
   }
-  ASSERT("Small stream", OMHIGHPART(oldPosition) == 0);
 }
 
 static void convert(wchar_t* wcName, size_t length, const char* name)
