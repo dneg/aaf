@@ -33,6 +33,8 @@
 #include <assert.h>
 #include <string.h>
 #include "aafCvt.h"
+#include "ImplAAFMob.h"
+#include "aafdefuids.h"
 
 ImplAAFFindSourceInfo::ImplAAFFindSourceInfo ()
 {}
@@ -88,6 +90,7 @@ ImplAAFFindSourceInfo::Duplicate(ImplAAFFindSourceInfo *result)
 AAFRESULT STDMETHODCALLTYPE ImplAAFFindSourceInfo::Clear(void)
 {
 	_mob = NULL;
+	_cpnt = NULL;
 	_editRate.numerator = 0;
 	_editRate.denominator = 1;
 //!!!	  (*sourceInfo).filmTapePdwn = NULL;
@@ -105,6 +108,39 @@ ImplAAFFindSourceInfo::SetEffect(
 										ImplAAFEffectInvocation *effect)
 {
 	_effect = effect;
+	return AAFRESULT_SUCCESS;
+}
+
+AAFRESULT STDMETHODCALLTYPE
+ImplAAFFindSourceInfo::SetComponent(
+										ImplAAFComponent *cpnt)
+{
+	_cpnt = cpnt;
+	return AAFRESULT_SUCCESS;
+}
+
+AAFRESULT STDMETHODCALLTYPE
+		ImplAAFFindSourceInfo::GetReference(aafSourceRef_t *pSourceRef)
+{
+	if (pSourceRef == NULL)
+		return AAFRESULT_NULL_PARAM;
+
+	XPROTECT()
+	{
+		pSourceRef->sourceSlotID = _slotID;
+		pSourceRef->startTime = _position;
+		if(_mob != NULL)
+		{
+			CHECK(_mob->GetMobID(&pSourceRef->sourceID));
+		}
+		else
+		{
+			pSourceRef->sourceID = NilMOBID;
+		}
+	}
+	XEXCEPT
+	XEND;
+
 	return AAFRESULT_SUCCESS;
 }
 

@@ -52,6 +52,7 @@
 #include "AAFResult.h"
 #include "aafCvt.h"
 #include "AAFUtils.h"
+#include "aafdefuids.h"
 
 extern "C" const aafClassID_t CLSID_AAFMobSlot;
 extern "C" const aafClassID_t CLSID_AAFTimelineMobSlot;
@@ -361,24 +362,24 @@ AAFRESULT STDMETHODCALLTYPE
 	aafAssert((segment != NULL), _file, AAFRESULT_NULL_PARAM);
 
 	XPROTECT()
-	  {
+	{
 		tmpSlot = (ImplAAFMobSlot *)CreateImpl (CLSID_AAFMobSlot);
-		  {
-//!!!			CHECK(tmpSlot->WriteRational(OMMSLTEditRate, editRate));
-			CHECK(tmpSlot->SetSegment(segment));
-			CHECK(tmpSlot->SetSlotID(slotID));
-			CHECK(tmpSlot->SetName(slotName));
+		if(tmpSlot == NULL)
+			return(E_FAIL);
 
-			/* Append new slot to mob */
-			_slots.appendValue(tmpSlot);
-		  }
-	  } /* XPROTECT */
+//!!!	CHECK(tmpSlot->WriteRational(OMMSLTEditRate, editRate));
+		CHECK(tmpSlot->SetSegment(segment));
+		CHECK(tmpSlot->SetSlotID(slotID));
+		CHECK(tmpSlot->SetName(slotName));
 
+		/* Append new slot to mob */
+		_slots.appendValue(tmpSlot);
+	} /* XPROTECT */
 	XEXCEPT
-	  {
+	{
 //!!!	    tmpSlot->Delete();
 		return(XCODE());
-	  }
+	}
 	XEND;
 
 	*newSlot = tmpSlot;
@@ -443,7 +444,9 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFMob::EnumAAFAllMobSlots (ImplEnumAAFMobSlots **ppEnum)
 {
 	ImplEnumAAFMobSlots		*theEnum = (ImplEnumAAFMobSlots *)CreateImpl (CLSID_EnumAAFMobSlots);
-		
+	if(theEnum == NULL)
+		return(E_FAIL);
+
 	// !!!Does not obey search criteria yet
 	XPROTECT()
 	{
@@ -1343,11 +1346,10 @@ AAFRESULT ImplAAFMob::InternalSearchSource(
 										   aafMobKind_t mobKind,
 										   aafMediaCriteria_t *pMediaCrit,
 										   aafEffectChoice_t *pEffectChoice,
-										   ImplAAFComponent **ppThisCpnt,
 										   ImplAAFFindSourceInfo **ppSourceInfo)
 {
-	ImplAAFTimelineMobSlot 	*track = NULL;
-	ImplAAFComponent		*rootObj = NULL;
+	ImplAAFMobSlot 			*track = NULL;
+	ImplAAFSegment			*rootObj = NULL;
 	aafRational_t			srcRate;
 	aafPosition_t			diffPos, nextPos;
 	aafBool					sourceFound = AAFFalse, foundTransition = AAFFalse;
@@ -1365,18 +1367,18 @@ AAFRESULT ImplAAFMob::InternalSearchSource(
 		return(AAFRESULT_NULL_PARAM);
 	
 	/* Initialize outputs */
-	if (ppThisCpnt)
-		*ppThisCpnt = NULL;
 	sourceInfo = (ImplAAFFindSourceInfo *)CreateImpl(CLSID_AAFFindSourceInfo);
+	sourceInfo->AcquireReference();		// This will be passed out
 	*ppSourceInfo = sourceInfo;
 	sourceInfo->Clear();
 	
 	XPROTECT()
 	{
 		/* Find segment at offset */
-		CHECK(FindTrackAndSegment(trackID, offset,
-			(ImplAAFMobSlot **)&track, (ImplAAFSegment **)&rootObj, &srcRate, &diffPos));
+		CHECK(FindSlotBySlotID (trackID,  &track));
+		CHECK(track->FindSegment(offset, &rootObj, &srcRate, &diffPos));
 		CHECK(rootObj->GetLength(&cpntLen));
+		CHECK(sourceInfo->SetComponent(rootObj));
 		
 		/*** Find leaf object in this track that points to the next mob ***/
 		CHECK(MobFindLeaf(track, 
@@ -1439,71 +1441,7 @@ AAFRESULT ImplAAFMob::InternalSearchSource(
 	
 	return AAFRESULT_SUCCESS;
 }
-										   
-AAFRESULT ImplAAFMob::FindTrackAndSegment(aafSlotID_t trackID,
-										  aafPosition_t offset,
-										  ImplAAFMobSlot **track,
-										  ImplAAFSegment **segment,
-										  aafRational_t *srcRate,
-										  aafPosition_t *diffPos)
-{
-	aafBool					foundClip = AAFFalse;
-	ImplAAFTimelineMobSlot	*tmpTrack = NULL;
-	aafPosition_t begPos = CvtInt32toPosition(0, begPos);
-	aafRational_t tmpSrcRate;
-	aafPosition_t origin = 0;
-	aafSlotID_t tmpTrackID;
-	ImplAAFSegment	*tmpSegment = NULL;
-
-	if(track == NULL || segment == NULL || srcRate == NULL)
-		return(AAFRESULT_NULL_PARAM);
-
-	XPROTECT()
-	{
-		/* Initialize return parameters */
-		*track = NULL;
-		*segment = NULL;
-		
-		CHECK(FindSlotBySlotID (trackID,  (ImplAAFMobSlot **)&tmpTrack));
-		
-		CHECK(tmpTrack->GetEditRate(&tmpSrcRate));
-		CHECK(tmpTrack->GetOrigin(&origin));
-		CHECK(tmpTrack->GetSlotID(&tmpTrackID));
-		CHECK(tmpTrack->GetSegment(&tmpSegment));
-		{
-			*track = tmpTrack;
-			*srcRate = tmpSrcRate;
-		}
-		
-		/* Normalize the requested position on the track by adding
-		* the StartPosition (1.x) or Origin (2.x) to it.  The origin
-		* was acquired above with omfiTrackGetInfo().
-		* The StartPosition/Origin will usually be 0.  It may be 
-		* negative, if more data before the original "origin" was 
-		* digitized later.
-		*/
-		if (!IsInt64Positive(origin))
-			MultInt32byInt64(-1, origin, &origin);
-		AddInt64toInt64(origin, &offset);
-		
-		CHECK(tmpSegment->FindSubSegment(offset, &begPos, segment, &foundClip));
-		if(!foundClip)
-			RAISE(AAFRESULT_TRAVERSAL_NOT_POSS);
-
-		/* Calculate diffPos - difference between requested offset and
-		* the beginning of clip that contains it. 
-		*/
-		(*diffPos) = offset;
-		CHECK(SubInt64fromInt64(begPos, diffPos));
-		
-	} /* XPROTECT */
-	XEXCEPT
-	{
-	}
-	XEND;
-	return(AAFRESULT_SUCCESS);
-}
-										   
+										   										   
 AAFRESULT ImplAAFMob::MobFindLeaf(ImplAAFMobSlot *track,
 								  aafMediaCriteria_t *mediaCrit,
 								  aafEffectChoice_t *effectChoice,
@@ -1556,7 +1494,7 @@ AAFRESULT ImplAAFMob::MobFindLeaf(ImplAAFMobSlot *track,
 /* This function will resolve mask objects to find the correct offset,
 * and will map track IDs for 1.0 files.
 */
-AAFRESULT ImplAAFMob::FindNextMob(ImplAAFTimelineMobSlot *track, 
+AAFRESULT ImplAAFMob::FindNextMob(ImplAAFMobSlot *track, 
 								  ImplAAFSegment *segment,
 								  aafLength_t length,
 								  aafPosition_t diffPos,
@@ -1572,10 +1510,8 @@ AAFRESULT ImplAAFMob::FindNextMob(ImplAAFTimelineMobSlot *track,
 	aafBool					isMask = AAFFalse, reverse = AAFFalse;
 	aafSourceRef_t			sourceRef;
 	ImplAAFMob				*nextMob = NULL;
-	aafRational_t			srcRate, destRate;
-	aafUID_t				nullUID = {0,0,0};		// Need "isNIL" utility
-	aafUID_t				MCnullUID = {1,0,1};
-	ImplAAFTimelineMobSlot 	*nextTrack = NULL;
+	aafUID_t				nullUID = NilMOBID;		// Need "isNIL" utility
+	ImplAAFMobSlot 			*nextTrack = NULL;
 	aafSlotID_t				tmpTrackID, nextTrackID;
 	aafPosition_t			tmpPos, convertPos;
 
@@ -1591,15 +1527,13 @@ AAFRESULT ImplAAFMob::FindNextMob(ImplAAFTimelineMobSlot *track,
 			*pulldownObj = NULL;
 		
 		/* Get source editrate from track, for later conversion */
-		CHECK(track->GetEditRate(&srcRate));
 		
 		CHECK(segment->TraverseToClip(length, (ImplAAFSegment **)&sclp, pulldownObj, pulldownPhase,& sclpLen,
 			&isMask));
 		
 		
 		CHECK(sclp->GetSourceReference(&sourceRef));
-		if (EqualAUID(&nullUID, &sourceRef.sourceID) || 
-			EqualAUID(&MCnullUID, &sourceRef.sourceID))
+		if (EqualAUID(&nullUID, &sourceRef.sourceID))
 		{
 			RAISE(AAFRESULT_TRAVERSAL_NOT_POSS);
 		}
@@ -1610,7 +1544,6 @@ AAFRESULT ImplAAFMob::FindNextMob(ImplAAFTimelineMobSlot *track,
 		
 		/* Get destination track's edit rate */
 		CHECK(nextMob->FindSlotBySlotID(tmpTrackID, (ImplAAFMobSlot **)&nextTrack));
-		CHECK(nextTrack->GetEditRate(&destRate));
 		CHECK(nextTrack->GetSlotID(&nextTrackID));
 		
 		/* If its a MASK, apply the mask bits to the offset difference
@@ -1631,9 +1564,7 @@ AAFRESULT ImplAAFMob::FindNextMob(ImplAAFTimelineMobSlot *track,
 		CHECK(AddInt64toInt64(sourceRef.startTime, &tmpPos));
 		if (!isMask)
 		{
-			CHECK(AAFConvertEditRate(srcRate, tmpPos,
-				destRate, kRoundFloor,
-				&convertPos));
+			CHECK(nextTrack->ConvertToMyRate(tmpPos,track, &convertPos));
 		}
 		else
 			convertPos = tmpPos;
@@ -1661,7 +1592,7 @@ AAFRESULT ImplAAFMob::MobFindSource(
 									ImplAAFFindSourceInfo *sourceInfo,
 									aafBool *foundSource)
 {
-	ImplAAFTimelineMobSlot	*track = NULL;
+	ImplAAFMobSlot			*track = NULL;
 	ImplAAFPulldown			*pulldownObj = NULL;
 	ImplAAFSegment			*rootObj = NULL;
 	ImplAAFComponent		*leafObj = NULL;
@@ -1672,7 +1603,6 @@ AAFRESULT ImplAAFMob::MobFindSource(
 	aafPosition_t			foundPos, diffPos, zeroPos;
 	aafRational_t			srcRate;
 	aafLength_t				tmpLength, foundLen, minLength, newLen;
-//	aafErr_t aafError = OM_ERR_NONE;
 	aafInt32				nestDepth, pulldownPhase;
 	aafMobKind_t			tstKind;
 	
@@ -1687,8 +1617,8 @@ AAFRESULT ImplAAFMob::MobFindSource(
 		CHECK(sourceInfo->Clear());
 		
 		/* Verify that track and position are valid */
-		CHECK(FindTrackAndSegment(trackID, offset, 
-			(ImplAAFMobSlot **)&track, &rootObj, &srcRate, &diffPos));
+		CHECK(FindSlotBySlotID (trackID,  &track));
+		CHECK(track->FindSegment(offset, &rootObj, &srcRate, &diffPos));
 		CHECK(rootObj->GetLength(&tmpLength));
 		if (Int64Less(length, tmpLength))
 		{
