@@ -49,11 +49,6 @@
 #endif
 
 
-
-
-
-
-
 #include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
 
@@ -65,6 +60,10 @@
 #include "ImplAAFBaseClassFactory.h"
 #endif
 
+#ifndef __ImplAAFBuiltins_h__
+#include "ImplAAFBuiltins.h"
+#endif
+
 
 
 #include "ImplAAFMob.h"
@@ -72,20 +71,41 @@
 #include <assert.h>
 #include <string.h>
 #include "aafErr.h"
-#include "aafUtils.h"
+#include "AAFUtils.h"
 
 extern "C" const aafClassID_t CLSID_EnumAAFPluggableDefs;
 extern "C" const aafClassID_t CLSID_EnumAAFEffectDefs;
 extern "C" const aafClassID_t CLSID_EnumAAFParameterDefs;
+extern "C" const aafClassID_t CLSID_EnumAAFTypeDefs;
+
+extern aafUID_t gTypeID_AUID;
+extern aafUID_t gTypeID_UInt8;
+extern aafUID_t gTypeID_UInt16;
+extern aafUID_t gTypeID_Int16;
+extern aafUID_t gTypeID_UInt32;
+extern aafUID_t gTypeID_Int32;
+extern aafUID_t gTypeID_Int8;
+extern aafUID_t gTypeID_Int64;
+extern aafUID_t gTypeID_ObjRef;
+extern aafUID_t gTypeID_ObjRefArray;
+extern aafUID_t gTypeID_AUIDArray;
+extern aafUID_t gTypeID_UInt8Array;
+extern aafUID_t gTypeID_UInt8Array8;
+
 
 ImplAAFDictionary::ImplAAFDictionary ()
-: _pluginDefinitions(PID_Dictionary_PluginDefinitions, "PluginDefinitions"),
-  _effectDefinitions(PID_Dictionary_EffectDefinitions, "EffectDefinitions"), 
-  _parameterDefinitions(PID_Dictionary_ParameterDefinitions, "ParameterDefinitions")
+: _pluginDefinitions    (PID_Dictionary_PluginDefinitions,    "PluginDefinitions"),
+  _effectDefinitions    (PID_Dictionary_EffectDefinitions,    "EffectDefinitions"), 
+  _parameterDefinitions (PID_Dictionary_ParameterDefinitions, "ParameterDefinitions"),
+  _typeDefinitions      (PID_Dictionary_TypeDefinitions,      "TypeDefinitions"),
+  _builtinsInited (AAFFalse)
 {
-  _persistentProperties.put(_pluginDefinitions.address());
-  _persistentProperties.put(_effectDefinitions.address());
-  _persistentProperties.put(_parameterDefinitions.address());
+  _persistentProperties.put (_pluginDefinitions.address());
+  _persistentProperties.put (_effectDefinitions.address());
+  _persistentProperties.put (_parameterDefinitions.address());
+  _persistentProperties.put (_typeDefinitions.address());
+
+  InitBuiltins();
 }
 
 
@@ -262,29 +282,98 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFDictionary::RegisterType (
-      aafUID_t * /*pTypeAUID*/,
-      ImplAAFTypeDef * /*pTypeDef*/)
+      ImplAAFTypeDef * pTypeDef)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  if (NULL == pTypeDef)
+	return AAFRESULT_NULL_PARAM;
+	
+  _typeDefinitions.appendValue(pTypeDef);
+  pTypeDef->AcquireReference();
+	
+  pTypeDef->SetDict(this);
+
+  return(AAFRESULT_SUCCESS);
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFDictionary::LookupType (
-      aafUID_t *  /*pTypeID*/,
-      ImplAAFTypeDef ** /*ppTypeDef*/)
+      aafUID_t *  pTypeID,
+      ImplAAFTypeDef ** ppTypeDef)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	ImplEnumAAFTypeDefs		*typeEnum = NULL;
+	ImplAAFTypeDef			*typeDef = NULL;
+	aafBool						defFound;
+	AAFRESULT					status;
+	aafUID_t					testAUID;
+
+	XPROTECT()
+	{
+		CHECK(GetTypeDefinitions (&typeEnum));
+		status = typeEnum->NextOne (&typeDef);
+		defFound = AAFFalse;
+		while(status == AAFRESULT_SUCCESS && !defFound)
+		{
+			CHECK(typeDef->GetAUID (&testAUID));
+			if(EqualAUID(pTypeID, &testAUID))
+			{
+				defFound = AAFTrue;
+				*ppTypeDef = typeDef;
+				typeDef->AcquireReference();
+				break;
+			}
+			typeDef->ReleaseReference();
+			typeDef = NULL;
+			status = typeEnum->NextOne (&typeDef);
+		}
+		if(typeDef != NULL)
+		{
+			typeDef->ReleaseReference();
+			typeDef = NULL;
+		}
+		typeEnum->ReleaseReference();
+		typeEnum = NULL;
+		if(!defFound)
+			 RAISE(AAFRESULT_NO_MORE_OBJECTS);
+	}
+	XEXCEPT
+	{
+		if(typeEnum != NULL)
+			typeEnum->ReleaseReference();
+		if(typeDef != NULL)
+			typeDef->ReleaseReference();
+	}
+	XEND
+	
+	return(AAFRESULT_SUCCESS);
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFDictionary::GetTypeDefinitions (
-      ImplEnumAAFTypeDefs ** /*ppEnum*/)
+      ImplEnumAAFTypeDefs ** ppEnum)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	if (NULL == ppEnum)
+		return AAFRESULT_NULL_PARAM;
+	*ppEnum = 0;
+	
+	ImplEnumAAFTypeDefs *theEnum = (ImplEnumAAFTypeDefs *)CreateImpl (CLSID_EnumAAFTypeDefs);
+	
+	XPROTECT()
+	{
+		CHECK(theEnum->SetEnumStrongProperty(this, &_typeDefinitions));
+		*ppEnum = theEnum;
+	}
+	XEXCEPT
+	{
+		if (theEnum)
+			theEnum->ReleaseReference();
+		return(XCODE());
+	}
+	XEND;
+	
+	return(AAFRESULT_SUCCESS);
 }
-
 
 
 AAFRESULT STDMETHODCALLTYPE
@@ -631,6 +720,36 @@ AAFRESULT ImplAAFDictionary::LookupPluggableDef(aafUID_t *defID, ImplAAFPluggabl
 
 
 
+#define REGISTER_BUILTIN(func) \
+{ \
+  ImplAAFTypeDef * pTD = 0; \
+  AAFRESULT hr = func (&pTD); \
+  assert (AAFRESULT_SUCCEEDED(hr)); \
+  assert (pTD); \
+  RegisterType (pTD); \
+}
+
+
+void ImplAAFDictionary::InitBuiltins()
+{
+  if (_builtinsInited) return;
+
+  // Put built-in types into dictionary.
+  REGISTER_BUILTIN(ImplAAFBuiltins::TypeDefAUID);
+  REGISTER_BUILTIN(ImplAAFBuiltins::TypeDefUInt8);
+  REGISTER_BUILTIN(ImplAAFBuiltins::TypeDefUInt16);
+  REGISTER_BUILTIN(ImplAAFBuiltins::TypeDefInt16);
+  REGISTER_BUILTIN(ImplAAFBuiltins::TypeDefUInt32);
+  REGISTER_BUILTIN(ImplAAFBuiltins::TypeDefInt32);
+  REGISTER_BUILTIN(ImplAAFBuiltins::TypeDefInt64);
+  REGISTER_BUILTIN(ImplAAFBuiltins::TypeDefObjRef);
+  REGISTER_BUILTIN(ImplAAFBuiltins::TypeDefObjRefArray);
+  REGISTER_BUILTIN(ImplAAFBuiltins::TypeDefAUIDArray);
+  REGISTER_BUILTIN(ImplAAFBuiltins::TypeDefUInt8Array);
+  REGISTER_BUILTIN(ImplAAFBuiltins::TypeDefUInt8Array8);
+  REGISTER_BUILTIN(ImplAAFBuiltins::TypeDefWCharString);
+
+  _builtinsInited = AAFTrue;
+}
+
 OMDEFINE_STORABLE(ImplAAFDictionary, AUID_AAFDictionary);
-
-
