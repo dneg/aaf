@@ -317,7 +317,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFTapeDescriptor::SetTapeLength (aafLength_t	tapeLength)
+    ImplAAFTapeDescriptor::SetTapeLength (aafUInt32	tapeLength)
 {
     AAFRESULT aafError = AAFRESULT_SUCCESS;
 
@@ -334,7 +334,7 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFTapeDescriptor::GetTapeLength (aafLength_t*	pTapeLength)
+    ImplAAFTapeDescriptor::GetTapeLength (aafUInt32*	pTapeLength)
 {
     AAFRESULT aafError = AAFRESULT_SUCCESS;
 
