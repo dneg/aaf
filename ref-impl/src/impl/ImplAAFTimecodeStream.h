@@ -4,14 +4,16 @@
 #define __ImplAAFTimecodeStream_h__
 
 
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
+/***********************************************\
+*												*
+* Advanced Authoring Format						*
+*												*
+* Copyright (c) 1998-1999 Avid Technology, Inc. *
+* Copyright (c) 1998-1999 Microsoft Corporation *
+*												*
+\***********************************************/
+
+#include "OMDataStreamProperty.h"
 
 
 #ifndef __AAFTypes_h__
@@ -195,7 +197,7 @@ public:
 public:
 	// SDK-internal calls
   virtual AAFRESULT STDMETHODCALLTYPE
-	UnpackTimecode(aafUInt8 *buffer, aafUInt32 buflen, aafTimecode_t *tc);
+	UnpackTimecode(aafUInt8 *buffer, aafUInt32 buflen, aafUInt32 fps, aafTimecode_t *tc);
   virtual AAFRESULT STDMETHODCALLTYPE
 	PackTimecode(aafTimecode_t *tc, aafUInt8 *buffer, aafUInt32 buflen);
   virtual AAFRESULT STDMETHODCALLTYPE
@@ -205,6 +207,7 @@ public:
 	PackUserBits(aafUInt8 *unpackedBuffer, aafUInt32 unpackedBuflen,
 					aafUInt8 *packedBuffer, aafUInt32 packedBuflen);
 
+
 public:
   // Declare this class to be storable.
   //
@@ -213,9 +216,21 @@ public:
   // Declare the module test method. The implementation of the will be be
   // in /test/ImplAAFTimecodeStreamTest.cpp.
   static AAFRESULT test();
-private:
+private: 
+  virtual AAFRESULT STDMETHODCALLTYPE
+    Write(aafUInt32  bytes, aafDataBuffer_t  buffer, aafUInt32 *  bytesWritten);
+  virtual AAFRESULT STDMETHODCALLTYPE
+    Read(aafUInt32  bytes, aafDataBuffer_t  buffer, aafUInt32 *  bytesRead);
+  virtual AAFRESULT STDMETHODCALLTYPE
+    SetPosition(aafPosition_t  offset);
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetPosition(aafPosition_t  *pOffset);
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetSize(aafLength_t *  pSize );
+
+   //****************
 	OMFixedSizeProperty<aafRational_t>				_sampleRate;
-	OMVariableSizeProperty<aafUInt8>				_source;
+	OMDataStreamProperty							_source;
 	OMFixedSizeProperty<aafTimecodeSourceType_t>	_sourceType;
 };
 

@@ -9,20 +9,14 @@ AAFTimecodeStream\
 #import ./AAFTimecodeStream.exp
 #import ./AAFSegment.exp
 AD_HEAD
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
-
-
 /***********************************************\
-*	Stub only.   Implementation not yet added	*
+*												*
+* Advanced Authoring Format						*
+*												*
+* Copyright (c) 1998-1999 Avid Technology, Inc. *
+* Copyright (c) 1998-1999 Microsoft Corporation *
+*												*
 \***********************************************/
-
 
 AD_INCLUDE(AAFTypes)
 
@@ -31,18 +25,6 @@ AD_DEFAULT_UUID(EBF5EDB2, 2D3A, 11d2, 80, 43, 00, 60, 08, 14, 3E, 6F)
 
 AD_XCLASS_BEGIN(Concrete, StoredObject)
 
-/****/
-AD_OVERRIDE(.method-GetPositionTimecode)
-AD_OVERRIDE(.method-SetPositionTimecode)
-
-AD_OVERRIDE(.method-GetUserDataLength)
-AD_OVERRIDE(.method-GetUserDataAtPosition)
-AD_OVERRIDE(.method-SetUserDataAtPosition)
-
-/****/
-AD_OVERRIDE(.method-SegmentOffsetToTC)
-AD_OVERRIDE(.method-SegmentTCToOffset)
-/****/
 AD_OVERRIDE(.method-GetSampleSize)
 
 AD_XCLASS_END(Concrete, StoredObject)
