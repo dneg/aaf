@@ -28,13 +28,15 @@ AAF_CMD_LINK = link
 
 AAF_LINK_FLAGS = -lib -nologo
 AAF_LINK_OUTPUT_FLAG = -out:
+
 LFLAGS = 
-CFLAGS = /nologo /Gi- /MDd /W3 /GX /Z7 /Od /Yd /D "WIN32" /D "_DEBUG" /D "_WINDOWS"\
+CFLAGS = /nologo /Gi- /MDd /W3 /GX /Z7 /Od /Yd /D "WIN32" /D "_WIN32" /D "_DEBUG" /D "_WINDOWS"\
 	/D "_UNICODE" /D "UNICODE"
 #CFLAGS = /nologo /Gi-
 OBJFILE = /Fo$*.${OBJ}
 EXEFLAG = /Fo
-DLL_LINK_FLAGS = /DLL
+DLL_LINK_FLAGS = kernel32.lib user32.lib advapi32.lib ole32.lib oleaut32.lib uuid.lib\
+	/nologo /DLL /subsystem:windows /debug /pdb:none 
 ARFLAGS = -r
 
 SH_PREFIX = 
