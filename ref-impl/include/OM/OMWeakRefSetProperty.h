@@ -175,6 +175,8 @@ private:
 
   OMPropertyId* targetPropertyPath(void) const;
 
+  void clearTargetTag(void) const;
+
   // The set of references.
   OMSet<OMUniqueObjectIdentification, SetElement> _set;
   OMPropertyTag _targetTag;

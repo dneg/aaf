@@ -846,4 +846,18 @@ OMWeakReferenceVectorProperty<ReferencedObject>::targetPropertyPath(void) const
   return _targetPropertyPath;
 }
 
+template<typename ReferencedObject>
+void
+OMWeakReferenceVectorProperty<ReferencedObject>::clearTargetTag(void) const
+{
+  TRACE("OMWeakReferenceVectorProperty<ReferencedObject>::clearTargetTag");
+
+  OMWeakReferenceVectorProperty<ReferencedObject>* nonConstThis =
+            const_cast<OMWeakReferenceVectorProperty<ReferencedObject>*>(this);
+
+  nonConstThis->_targetTag = nullOMPropertyTag;
+  delete [] nonConstThis->_targetPropertyPath;
+  nonConstThis->_targetPropertyPath = 0;
+}
+
 #endif

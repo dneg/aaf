@@ -208,6 +208,8 @@ private:
 
   OMPropertyId* targetPropertyPath(void) const;
 
+  void clearTargetTag(void) const;
+
     // The vector of references.
   OMVector<VectorElement> _vector;
   OMPropertyTag _targetTag;

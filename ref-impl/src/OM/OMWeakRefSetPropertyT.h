@@ -126,6 +126,7 @@ void OMWeakReferenceSetProperty<ReferencedObject>::save(void) const
   //
   saveName();
 
+  clearTargetTag();
 }
 
   // @mfunc Close this <c OMWeakReferenceSetProperty>.
@@ -653,6 +654,20 @@ OMWeakReferenceSetProperty<ReferencedObject>::targetPropertyPath(void) const
   }
   POSTCONDITION("Valid result", _targetPropertyPath != 0);
   return _targetPropertyPath;
+}
+
+template<typename ReferencedObject>
+void
+OMWeakReferenceSetProperty<ReferencedObject>::clearTargetTag(void) const
+{
+  TRACE("OMWeakReferenceSetProperty<ReferencedObject>::clearTargetTag");
+
+  OMWeakReferenceSetProperty<ReferencedObject>* nonConstThis =
+               const_cast<OMWeakReferenceSetProperty<ReferencedObject>*>(this);
+
+  nonConstThis->_targetTag = nullOMPropertyTag;
+  delete [] nonConstThis->_targetPropertyPath;
+  nonConstThis->_targetPropertyPath = 0;
 }
 
 #endif
