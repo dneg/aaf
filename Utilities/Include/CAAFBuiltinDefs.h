@@ -236,7 +236,18 @@ public:
   //
   TYPE_DEF_METHOD(Rational);
   TYPE_DEF_METHOD(String);
+  TYPE_DEF_METHOD(Character);
+  TYPE_DEF_METHOD(Indirect);
 
+  // Built-in integer types
+  TYPE_DEF_METHOD(UInt8);
+  TYPE_DEF_METHOD(UInt16);
+  TYPE_DEF_METHOD(UInt32);
+  TYPE_DEF_METHOD(UInt64);
+  TYPE_DEF_METHOD(Int8);
+  TYPE_DEF_METHOD(Int16);
+  TYPE_DEF_METHOD(Int32);
+  TYPE_DEF_METHOD(Int64);
 
 private:
   IAAFDictionary * _pDict;
