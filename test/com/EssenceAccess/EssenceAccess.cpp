@@ -55,7 +55,7 @@
 #endif
 
 #if defined(macintosh) || defined(_MAC)
-#include <console.h> /* Mac command line window */
+#include "DataInput.h"
 #endif
 
 // This static variables are here so they can be referenced 
@@ -959,7 +959,8 @@ int main(int argumentCount, char *argumentVector[])
 	/* console window for mac */
 
 	#if defined(macintosh) || defined(_MAC)
-	argumentCount = ccommand(&argumentVector);
+	char inputFile[] = "EssenceAcess.inp";
+	getInputData(&argumentCount, argumentVector, inputFile);
 	#endif
 
 
@@ -1047,6 +1048,11 @@ int main(int argumentCount, char *argumentVector[])
 	
 	//  and now, we're all done...
 	printf("Done\n");
+
+	#ifdef _MAC
+		cleanUpInputData(argumentCount, argumentVector);
+	#endif
+
 	return(0);
 	
 }

@@ -47,7 +47,7 @@
 #include "AAFStoredObjectIDs.h"
 
 #if defined(macintosh) || defined(_MAC)
-#include <console.h> /* Mac command line window */
+#include "DataInput.h"
 #endif
 
 // There are differences in the microsoft and other compilers in the "Length" specifier
@@ -63,7 +63,6 @@
 
 // MAX is used for arrays when converting between types - set here for debugging. 
 const int MAX = 80;
-static char* programName;
 static char* niceFileName;
 static void usage(void);
 static aafWChar* slotName = L"SLOT1";
@@ -600,10 +599,9 @@ int main(int argumentCount, char *argumentVector[])
 	/* console window for mac */
 
 	#if defined(macintosh) || defined(_MAC)
-	argumentCount = ccommand(&argumentVector);
+		char dataFile[] = "CreateSequence (PPC).inp";
+		getInputData(&argumentCount, argumentVector, dataFile);
 	#endif
-
-	programName = argumentVector[0];
 	
 	//  First check for correct number of arguments
 	//  printf("%ld\n",argumentCount);
@@ -659,6 +657,10 @@ int main(int argumentCount, char *argumentVector[])
 	
 	// Open the file and gather statistics
 	ReadAAFFile(pwFileName);
+
+	#ifdef _MAC
+		cleanUpInputData(argumentCount, argumentVector);
+	#endif
 
 	return(0);
 }
