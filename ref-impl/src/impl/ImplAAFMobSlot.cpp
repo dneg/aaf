@@ -261,7 +261,7 @@ AAFRESULT ImplAAFMobSlot::FindSegment(aafPosition_t offset,
 }
 
 AAFRESULT ImplAAFMobSlot::ConvertToEditRate(aafPosition_t tmpPos,
-										aafRational_t destRate,
+										aafRational_t /*destRate*/,
 										aafPosition_t *convertPos)
 {
 	if(convertPos == NULL )
@@ -271,7 +271,7 @@ AAFRESULT ImplAAFMobSlot::ConvertToEditRate(aafPosition_t tmpPos,
 }
 
 AAFRESULT ImplAAFMobSlot::ConvertToMyRate(aafPosition_t tmpPos,
-										  ImplAAFMobSlot *srcSlot,
+										  ImplAAFMobSlot */*srcSlot*/,
 										aafPosition_t *convertPos)
 {
 	if(convertPos == NULL )
