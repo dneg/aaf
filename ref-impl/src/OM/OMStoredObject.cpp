@@ -1210,6 +1210,7 @@ static void convert(wchar_t* wcName, size_t length, const char* name)
 
 static void convert(char* cName, size_t length, const wchar_t* name)
 {
+  TRACE("convert");
   ASSERT("Valid program name", validString(getProgramName()));
   PRECONDITION("Valid input name", validWideString(name));
   PRECONDITION("Valid output buffer", cName != 0);
