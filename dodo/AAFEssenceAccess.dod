@@ -16,13 +16,6 @@ AAFRoot\
 #import ./AAFEssenceRawAccess.exp
 #import ./AAFEssenceMultiAccess.exp
 AD_HEAD
-/************************************************\
-*											    *
-* Advanced Authoring Format					    *
-*										        *
-* Copyright (c) 1998-1999 Avid Technology, Inc. *
-*										        *
-\************************************************/
 
 AD_IDL(//
 // AAFEssenceAccess is an interace which provides streaming access over multiple channels of
