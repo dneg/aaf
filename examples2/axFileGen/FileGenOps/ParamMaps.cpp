@@ -26,8 +26,6 @@
 // is already instantiated"  etc for the other instances.
 #endif
 
-
-
 #include "ParamMaps.h"
 
 #include <axFileGen.h>
@@ -475,11 +473,24 @@ ParamMap< aafIncMedia_t, aafIncMedia_e >::ParamMap()
 	_map[ L"kAAFNoIncludeMedia" ] = kAAFNoIncludeMedia;
 	_map[ L"NoIncludeMedia" ]     = kAAFNoIncludeMedia;
 
-	_map[ L"kAAFIncludeMedia" ]       = kAAFIncludeMedia;
+	_map[ L"kAAFIncludeMedia" ]   = kAAFIncludeMedia;
 	_map[ L"IncludeMedia" ]       = kAAFIncludeMedia;
 }
 
 template class ParamMap< aafIncMedia_t, aafIncMedia_e >;
+
+//=---------------------------------------------------------------------=
+
+ParamMap< aafDepend_t, aafDepend_e >::ParamMap()
+{
+	_map[ L"kAAFNoFollowDepend" ] = kAAFNoFollowDepend;
+	_map[ L"NoFollowDepend" ]     = kAAFNoFollowDepend;
+
+	_map[ L"kAAFFollowDepend" ]   = kAAFFollowDepend;
+	_map[ L"FollowDepend" ]       = kAAFFollowDepend;
+}
+
+template class ParamMap< aafDepend_t, aafDepend_e >;
 
 //=---------------------------------------------------------------------=
 

@@ -259,26 +259,27 @@ AXFG_OP(
   CloneExternal,           
   L"CloneExternal",
   L"Copy a mob to another file.",
-  L"SrcMobName DstFileName DstMobName include_media",
+  L"SrcMobName DstFileName DstMobName include_media follow_depends",
   L"The copy may be referenced by the namd DstMobName - it *not* the actual mob name.",
-  5,
-  5 ) 
+  6,
+  6 ) 
 
 CloneExternal::~CloneExternal()
 {}
 
 void CloneExternal::Execute( const std::vector<AxString>& argv )
 {
-	AxString srcMobName  = argv[1];
-	AxString dstFileName = argv[2];
-	AxString dstMobName  = argv[3];
-	AxString incMedia    = argv[4];
+	AxString srcMobName    = argv[1];
+	AxString dstFileName   = argv[2];
+	AxString dstMobName    = argv[3];
+	AxString incMedia      = argv[4];
+	AxString followDepends = argv[5];
 
 	IAAFMobSP spSrcMob;
 	GetInstance( srcMobName ).GetCOM( spSrcMob );
 	AxMob axSrcMob( spSrcMob );
 
-	IAAFMobSP spNewDstMob = axSrcMob.CloneExternal( kAAFNoFollowDepend,
+	IAAFMobSP spNewDstMob = axSrcMob.CloneExternal( DependParams::GetInstance().Find( *this, followDepends ),
 													IncMediaParams::GetInstance().Find( *this, incMedia ),
 													FileFromFileOp( dstFileName ) );
 
