@@ -27,6 +27,38 @@
  *
  ************************************************************************/
 
+//
+// This class provides a facility to allow clients to access builtin
+// definition objects easily.  When set up, the client simply has to
+// call a method on this function, which returns a pointer to the
+// primary interface of the requested definition object.
+//
+// The returned object is *not* reference counted beyond that
+// maintained by the this class.  Therefore the client must promise
+// that his use of the returned interface will last no longer than the
+// scope of the CAAFBuiltinDefs object from which it was obtained
+// unless he explicitly maintains a reference count of the use of the
+// interface beyond that scope.
+//
+// Usage example:
+//
+// // Creates and returns a Filler object, using the given dictionary.
+// void MyFunc (IAAFDictionary * pDict)
+// {
+//   // Use of ImplAAFBuiltinDefs to obtain a class definition
+//   ImplAAFBuiltinDefs defs (pDict);	// create builtin defs object.
+//   ImplAAFObject * pFiller = 0;
+//   defs.cdFiller()->CreateInstance(&pFiller);
+//   // Note that IAAFClassDef interface returned by cdFiller() is
+//   // only used for the duration of the CreateInstance() function
+//   // call.
+// 
+//   // Use of ImplAAFBuiltinDefs to obtain a data definition
+//   pFiller->Initialize(defs.ddPicture(), 10);
+//   // Note that IAAFDataDef interface returned by ddPicture() is
+//   // only used for the duration of the Initialize() function call.
+// }
+//
 
 #include "AAF.h"  // for IAAFDictionary
 #include "AAFDataDefs.h"
