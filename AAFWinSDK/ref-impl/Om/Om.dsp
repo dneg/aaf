@@ -111,6 +111,10 @@ SOURCE="..\..\..\ref-impl\src\OM\OMPropertyTable.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\OM\OMRootStorable.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\OM\OMStorable.cpp"
 # End Source File
 # Begin Source File
