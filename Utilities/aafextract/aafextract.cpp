@@ -128,9 +128,9 @@ extensionByDescriptor(IAAFSourceMob *pSourceMob, char *ext, size_t size)
 		aafUID_t compression = {0}, null_id = {0};
 		if (SUCCEEDED(pDID->GetCompression(&compression)))
 		{
-			if (compression == kAAFCompression_LegacyDV ||
-				compression == kAAFCompression_IEC_DV_625_50 ||
-				compression == kAAFCompression_IEC_DV_525_60)
+			if (compression == kAAFCompressionDef_LegacyDV ||
+				compression == kAAFCompressionDef_IEC_DV_625_50 ||
+				compression == kAAFCompressionDef_IEC_DV_525_60)
 			{
 				strncpy(ext, "dv", size);
 				return;
