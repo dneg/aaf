@@ -214,8 +214,6 @@ OMStorable* OMProperty::container(void) const
 
   ASSERT("Valid property set", _propertySet != 0);
   OMStorable* result = _propertySet->container();
-  ASSERT("Valid container", result != 0);
-  ASSERT("Container is persistent", result->persistent());
 
   POSTCONDITION("Valid result", result != 0);
   return result;
