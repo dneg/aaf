@@ -421,8 +421,8 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	aafMobID_t			readSourceID;
   aafUID_t  testInterpID, checkInterpID = LinearInterpolator;
 	aafBool				readIsTimeWarp;
-	aafInt32			checkNumInputs, testNumSources, testNumParam;
-	aafUInt32			checkBypass;
+	aafUInt32			checkBypass, testNumSources, testNumParam;
+	aafInt32			checkNumInputs;
 	HRESULT				hr = S_OK;
 	wchar_t				checkName[256];
 	aafUID_t			checkCat;

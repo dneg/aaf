@@ -398,7 +398,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	IAAFInterpolationDef	*pInterpDef = NULL;
 	bool				bFileOpen = false;
 	aafBool				readIsTimeWarp;
-	aafInt32			testNumSources, testNumParam;
+	aafUInt32			testNumSources, testNumParam;
 	HRESULT				hr = S_OK;
 	aafNumSlots_t		s;
 	aafNumSlots_t	numSlots;

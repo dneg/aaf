@@ -372,7 +372,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	IAAFConstantValue		*pConstValue = NULL;
 	IAAFTypeDef			*pTypeDef = NULL;
 	bool				bFileOpen = false;
-	aafInt32			testNumParam;
+	aafUInt32			testNumParam;
 	HRESULT				hr = S_OK;
 	wchar_t				checkName[256];
 	aafNumSlots_t		s;
