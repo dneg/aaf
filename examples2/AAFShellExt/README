@@ -1,0 +1,55 @@
+AAFShellExt Notes
+20 Feb 2002
+Jim Trainor
+
+AAFShellExt is a Microsoft Windows Explorer rooted namespace
+extension.  It implements, among others, the IShellFolder, IEnumIDList
+and IShellView interfaces used by explorer to support browsing and
+viewing of what ever data the underlying COM implementation supports.
+
+The implementation is based on a book called "Windows Shell
+Programming" by Scott Seely, ISBN 0-13-025496-7.  There are a number
+of header files and static libraries that ship with this book that are
+required to compile AAFShellExt.  The book's software license prevents
+distribution of these header files and libraries.  (I don't think
+there are any restrictions on derived works.)  A later version of
+AAFShellExt may or may not depend on these header files and libraries.
+
+I have a pre-built ready to install (using Install Shield) version of
+AAFShellExt.  Contact me if you would like to get a copy:
+jim_trainor@aafassociation.org
+
+When testing AAFShellExt, please take note of the debugging tips in
+section 9.6 of the book: "Test and Debugging Namespace Extensions".
+
+Most of the code that I added is in AxShellExt.{cpp,h}.  This code is
+quite "raw" at the moment.  The code will be cleaned, and some minor
+improvements implemented soon.  Probably in March.  The so-called
+"recursive iterator" (AxBaseObjRecIter, in axLib) that AxShellExt.cpp
+depends on will also be restructured at that time.
+
+Once you have the book, copy the following files into the AAFShellExt
+directory:
+
+WindowsShellProgramming/include:
+AppBarLayout.h     EmptyVolumeCache2Impl.h  RemoteComputerImpl.h
+AppBarMonitor.h    EnumFORMATETCImpl.h      SV2CVW2Params.h
+CAMan.h            EnumIDListImpl.h         ScreenSaverApp.h
+CANIMTRY.H         ExtractIconImpl.h        ScreenSaverWnd.h
+CAppBar.h          FileViewFrm.h            ShellExtInitImpl.h
+CTaskBar.h         FileViewer.h             ShellExtensionLibrary.h
+CntlApp.h          InputObjectImpl.h        ShellFolderImpl.h
+CommandHandler.h   ModPropertyPage.h        ShellIconImpl.h
+ContextMenuImpl.h  OleCommandTargetImpl.h   ShellPropSheetExtImpl.h
+CopyHookImpl.h     PersistFileImpl.h        ShellViewImpl.h
+DataObjectImpl.h   PersistFolderImpl.h      include.zip
+DeskBandImpl.h     PersistStreamImpl.h      singleton.h
+DropTargetImpl.h   PidlMgr.h
+
+WindowsShellProgramming/lib:
+AppBarLib.lib         FileViewer.lib       ShellExtension.lib    TaskBard.lib
+AppBarLibd.lib        FileViewerd.lib      ShellExtensionD.lib   taskbar.lib
+ControlPanelLib.lib   ScreenSaverLib.lib   ShellExtensionU.lib
+ControlPanelLibd.lib  ScreenSaverLibd.lib  ShellExtensionUD.lib
+
+END
