@@ -47,6 +47,7 @@
 
 #ifdef WIN32
 #include <winbase.h>
+#include <tchar.h>
 #endif
 
 typedef AAFRESULT (*AAFModuleTestProc)();
@@ -82,7 +83,7 @@ void AAFFooTest();
 // routine copied from Tim Bingham's test program...
 void formatError(DWORD errorCode)
 {
-  CHAR buffer[256];
+  TCHAR buffer[256];
 
   int status = FormatMessage(
     FORMAT_MESSAGE_FROM_SYSTEM,
@@ -93,7 +94,7 @@ void formatError(DWORD errorCode)
     NULL);
 
   if (status != 0) {
-    int length = strlen(buffer);
+    int length = _tcslen(buffer);
     if (length >= 2) {
       buffer[length - 2] = '\0';
     }
