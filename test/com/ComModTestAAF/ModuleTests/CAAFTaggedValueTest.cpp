@@ -51,17 +51,18 @@ inline void checkExpression(bool expression, HRESULT r)
 
 static HRESULT CreateAAFFile(aafWChar * pFileName)
 {
-	IAAFFile *					pFile = NULL;
-	bool bFileOpen = false;
+	IAAFFile *			pFile = NULL;
+	bool				bFileOpen = false;
 	IAAFHeader *        pHeader = NULL;
-	IAAFDictionary*  pDictionary = NULL;
-	IAAFMob						*pMob = NULL;
-	IAAFMobSlot		*newSlot = NULL;
-	IAAFSegment		*seg = NULL;
-	IAAFSourceClip	*sclp = NULL;
+	IAAFDictionary*		pDictionary = NULL;
+	IAAFMob				*pMob = NULL;
+	IAAFCompositionMob* pCompMob = NULL;
+	IAAFMobSlot			*newSlot = NULL;
+	IAAFSegment			*seg = NULL;
+	IAAFSourceClip		*sclp = NULL;
 	aafProductIdentification_t	ProductInfo;
-	aafUID_t					newUID;
-	HRESULT						hr = S_OK;
+	aafUID_t			newUID;
+	HRESULT				hr = S_OK;
 
 	ProductInfo.companyName = L"AAF Developers Desk";
 	ProductInfo.productName = L"AAFTaggedValues Test";
@@ -95,13 +96,14 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		aafRational_t	audioRate = { 44100, 1 };
 
 		// Create a Mob
-		checkResult(pDictionary->CreateInstance(&AUID_AAFMob,
-								  IID_IAAFMob, 
-								  (IUnknown **)&pMob));
+		checkResult(pDictionary->CreateInstance(&AUID_AAFCompositionMob,
+								  IID_IAAFCompositionMob, 
+								  (IUnknown **)&pCompMob));
 
+		checkResult(pCompMob->QueryInterface(IID_IAAFMob, (void **)&pMob));
 		checkResult(CoCreateGuid((GUID *)&newUID));
 		checkResult(pMob->SetMobID(&newUID));
-		checkResult(pMob->SetName(L"EnumAAFTaggedValuesTest"));
+		checkResult(pMob->SetName(L"AAFTaggedValuesTest"));
 
 		// append a comment to this mob !!
 		checkResult(pMob->AppendComment(TagNames, Comments));
@@ -147,6 +149,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
   if (sclp)
     sclp->Release();
+
+  if (pCompMob)
+	  pCompMob->Release();
 
   if (pMob)
     pMob->Release();
@@ -304,8 +309,8 @@ extern "C" HRESULT CAAFTaggedValue_test()
 	try
 	{
 		hr = CreateAAFFile(	pFileName );
-//		if(hr == AAFRESULT_SUCCESS)
-//			hr = ReadAAFFile( pFileName );
+		if(hr == AAFRESULT_SUCCESS)
+			hr = ReadAAFFile( pFileName );
 	}
 	catch (...)
 	{
