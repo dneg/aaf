@@ -32,11 +32,11 @@
 #include "ImplAAFTypeDef.h"
 
 ImplAAFParameter::ImplAAFParameter ()
-: _parmDef(			PID_Parameter_Definition,	"Definition"),
-  _typeDef(			PID_Parameter_Type,			"Type")
+: _parmDef(			PID_Parameter_Definition,	"Definition")//,
+//  _typeDef(			PID_Parameter_Type,			"Type")
 {
 	_persistentProperties.put(_parmDef.address());
-	_persistentProperties.put(_typeDef.address());
+//	_persistentProperties.put(_typeDef.address());
 }
 
 
@@ -50,8 +50,8 @@ AAFRESULT STDMETHODCALLTYPE
       ImplAAFParameterDef *pParmDef)
 {
 	aafUID_t			newUID;
-	ImplAAFHeader		*head;
-	ImplAAFDictionary	*dict;
+	ImplAAFHeader		*head = NULL;
+	ImplAAFDictionary	*dict = NULL;
 	ImplAAFPluggableDef	*def;
 
 	if(pParmDef == NULL)
@@ -62,13 +62,24 @@ AAFRESULT STDMETHODCALLTYPE
 		CHECK(pParmDef->GetAUID(&newUID));
 		CHECK(pParmDef->MyHeadObject(&head));
 		CHECK(head->GetDictionary(&dict));
-		if(dict->LookupPluggableDef(&newUID, &def) == AAFRESULT_SUCCESS)
-			def->ReleaseReference();
+// This is a weak reference, not yet counted
+//		if(dict->LookupParameterDef(&newUID, &def) == AAFRESULT_SUCCESS)
+//			def->ReleaseReference();
 
 		_parmDef = newUID;
 		pParmDef->AcquireReference();
+		head->ReleaseReference();
+		head = NULL;
+		dict->ReleaseReference();
+		dict = NULL;
 	}
 	XEXCEPT
+	{
+		if(head)
+			head->ReleaseReference();
+		if(dict)
+			dict->ReleaseReference();
+	}
 	XEND
 
 	return AAFRESULT_SUCCESS;
@@ -80,8 +91,8 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFParameter::GetParameterDefinition (
       ImplAAFParameterDef **ppParmDef)
 {
-	ImplAAFHeader		*head;
-	ImplAAFDictionary	*dict;
+	ImplAAFHeader		*head = NULL;
+	ImplAAFDictionary	*dict = NULL;
 
 	if(ppParmDef == NULL)
 		return AAFRESULT_NULL_PARAM;
@@ -90,10 +101,20 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 		CHECK(MyHeadObject(&head));
 		CHECK(head->GetDictionary(&dict));
-		CHECK(dict->LookupPluggableDef(&_parmDef, (ImplAAFPluggableDef **)ppParmDef) == AAFRESULT_SUCCESS);
+		CHECK(dict->LookupParameterDefinition(&_parmDef, ppParmDef));
 		(*ppParmDef)->AcquireReference();
+		head->ReleaseReference();
+		head = NULL;
+		dict->ReleaseReference();
+		dict = NULL;
 	}
 	XEXCEPT
+	{
+		if(head)
+			head->ReleaseReference();
+		if(dict)
+			dict->ReleaseReference();
+	}
 	XEND;
 
 	return AAFRESULT_SUCCESS;
@@ -105,9 +126,10 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFParameter::SetTypeDefinition (
       ImplAAFTypeDef*  pTypeDef)
 {
+#if 0
 	aafUID_t			newUID;
-	ImplAAFHeader		*head;
-	ImplAAFDictionary	*dict;
+	ImplAAFHeader		*head = NULL;
+	ImplAAFDictionary	*dict = NULL;
 	ImplAAFPluggableDef	*def;
 
 	if(pTypeDef == NULL)
@@ -118,16 +140,30 @@ AAFRESULT STDMETHODCALLTYPE
 		CHECK(pTypeDef->GetAUID(&newUID));
 		CHECK(pTypeDef->MyHeadObject(&head));
 		CHECK(head->GetDictionary(&dict));
-		if(dict->LookupPluggableDef(&newUID, &def) == AAFRESULT_SUCCESS)
-			def->ReleaseReference();
+// Weak references not yet refcounted
+//		if(dict->LookupPluggableDef(&newUID, &def) == AAFRESULT_SUCCESS)
+//			def->ReleaseReference();
 
 		_typeDef = newUID;
 		pTypeDef->AcquireReference();
+		head->ReleaseReference();
+		head = NULL;
+		dict->ReleaseReference();
+		dict = NULL;
 	}
 	XEXCEPT
+	{
+		if(head)
+			head->ReleaseReference();
+		if(dict)
+			dict->ReleaseReference();
+	}
 	XEND;
 
 	return AAFRESULT_SUCCESS;
+#else
+	return AAFRESULT_NOT_IMPLEMENTED;
+#endif
 }
 
 
@@ -135,8 +171,9 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFParameter::GetTypeDefinition (
       ImplAAFTypeDef **ppTypeDef)
 {
-	ImplAAFHeader		*head;
-	ImplAAFDictionary	*dict;
+#if 0
+	ImplAAFHeader		*head = NULL;
+	ImplAAFDictionary	*dict = NULL;
 
 	if(ppTypeDef == NULL)
 		return AAFRESULT_NULL_PARAM;
@@ -147,11 +184,24 @@ AAFRESULT STDMETHODCALLTYPE
 		CHECK(head->GetDictionary(&dict));
 		CHECK(dict->LookupPluggableDef(&_typeDef, (ImplAAFPluggableDef **)ppTypeDef) == AAFRESULT_SUCCESS);
 		(*ppTypeDef)->AcquireReference();
+		head->ReleaseReference();
+		head = NULL;
+		dict->ReleaseReference();
+		dict = NULL;
 	}
 	XEXCEPT
+	{
+		if(head)
+			head->ReleaseReference();
+		if(dict)
+			dict->ReleaseReference();
+	}
 	XEND;
 
 	return AAFRESULT_SUCCESS;
+#else
+	return AAFRESULT_NOT_IMPLEMENTED;
+#endif
 }
 
 
