@@ -143,6 +143,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFCodecDef*	pPlugDef = NULL;
 	IAAFDataDef		*pDataDef = NULL;
 	IAAFClassDef	*classDef = NULL;
+	IAAFClassDef *pWaveClassDef=0,*pReturnedClassDef=0;
 	bool bFileOpen = false;
 	HRESULT			hr = S_OK;
 	aafUID_t		uid;
@@ -175,7 +176,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pPlugDef->SetFileDescriptorClass (classDef));
 
 		// Make sure GetFileDescriptorClass() returns correct value
-		IAAFClassDef *pWaveClassDef=0,*pReturnedClassDef=0;
 		aafUID_t uid = kAAFClassID_WAVEDescriptor;
 		checkResult(pDictionary->LookupClassDef(uid, &pWaveClassDef));
 		checkResult(pPlugDef->GetFileDescriptorClass(&pReturnedClassDef));
@@ -191,6 +191,12 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 
   // Cleanup and return
+  if (pReturnedClassDef)
+    pReturnedClassDef->Release();
+
+  if (pWaveClassDef)
+    pWaveClassDef->Release();
+
   if (classDef)
     classDef->Release();
 
@@ -225,6 +231,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	IAAFHeader*				pHeader = NULL;
 	IAAFDictionary*			 pDictionary = NULL;
 	IAAFCodecDef			*pCodec = NULL;
+	IAAFClassDef *pWaveClassDef=0,*pReturnedClassDef=0;
 	IAAFDataDef				*pDataDef = NULL;
 	IEnumAAFCodecFlavours	*pEnum = NULL;
 	bool					bFileOpen = false;
@@ -254,7 +261,6 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 		checkResult(pCodec->AreThereFlavours (&testResult));
 		checkExpression (kAAFFalse == testResult,
 						 AAFRESULT_TEST_FAILED);
-		IAAFClassDef *pWaveClassDef=0,*pReturnedClassDef=0;
 		aafUID_t uid = kAAFClassID_WAVEDescriptor;
 		checkResult(pDictionary->LookupClassDef(uid, &pWaveClassDef));
 		checkResult(pCodec->GetFileDescriptorClass(&pReturnedClassDef));
@@ -269,6 +275,12 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	}
 
 	// Cleanup and return
+  if (pReturnedClassDef)
+    pReturnedClassDef->Release();
+
+  if (pWaveClassDef)
+    pWaveClassDef->Release();
+
 	if (pEnum)
 		pEnum->Release();
 	if (pDataDef)
