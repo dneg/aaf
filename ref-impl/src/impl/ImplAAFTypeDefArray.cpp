@@ -55,11 +55,68 @@ ImplAAFTypeDefArray::~ImplAAFTypeDefArray ()
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDefArray::CreateValueFromValues (
-      ImplAAFPropertyValue ** /*ppElementValues*/,
-      aafUInt32  /*numElements*/,
-      ImplAAFPropertyValue ** /*ppPropVal*/)
+      ImplAAFPropertyValue ** ppElementValues,
+      aafUInt32  numElements,
+      ImplAAFPropertyValue ** ppPropVal)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	AAFRESULT hr;
+
+	//first validate params 
+	if (!ppElementValues || !ppPropVal)
+		return AAFRESULT_NULL_PARAM;
+	
+	// proceed ....
+	
+	//get  source size
+	ImplAAFTypeDefSP  spSourceTD;
+	hr = (*ppElementValues)->GetType (&spSourceTD);  //get 1st element's TD
+	if (AAFRESULT_FAILED (hr)) 
+		return hr;
+	aafUInt32 sourceSize = spSourceTD->NativeSize();
+	
+	aafUInt32 totalSize = sourceSize * numElements; //scale size based on "n" Elements
+	
+	//Create target, and get pTargetData
+	ImplAAFPropValData * pvd_Target;
+	pvd_Target = (ImplAAFPropValData*) CreateImpl (CLSID_AAFPropValData);
+	if (!pvd_Target) 
+		return AAFRESULT_NOMEMORY;
+		
+	aafMemPtr_t pTargetData = 0;
+	hr = pvd_Target->AllocateBits(totalSize, &pTargetData);
+	if (AAFRESULT_FAILED (hr))
+		return hr;
+
+	//Copy each source elements' bits over ...
+
+	for (aafUInt32 i=0; i<numElements; i++)
+	{
+		//get  Source Data
+		ImplAAFPropValData * pvd_Source = dynamic_cast<ImplAAFPropValData*> (ppElementValues[i]);
+		assert (pvd_Source);
+		
+		aafUInt32 source_bitsSize;
+		hr = pvd_Source->GetBitsSize (&source_bitsSize);
+		if (AAFRESULT_FAILED (hr))
+			return hr;
+		assert (source_bitsSize == sourceSize); //make sure the bits-size is same as the reference
+		
+		aafMemPtr_t pSourceData = 0;
+		hr = pvd_Source->GetBits (&pSourceData);
+		if (AAFRESULT_FAILED (hr))
+			return hr;
+		assert (pSourceData);
+		
+		//copy the bits
+		memcpy(pTargetData, pSourceData, source_bitsSize);
+		//once done, incr the target pointer by the amt. of bits copied
+		pTargetData += source_bitsSize;
+
+	}//for each element
+	
+	*ppPropVal = pvd_Target;
+	return AAFRESULT_SUCCESS;
+	
 }
 
 
@@ -209,11 +266,87 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDefArray::SetElementValue (
-      ImplAAFPropertyValue * /*pPropVal*/,
-      aafUInt32  /*index*/,
-      ImplAAFPropertyValue * /*pMemberPropVal*/)
+      ImplAAFPropertyValue * pPropVal,
+      aafUInt32  index,
+      ImplAAFPropertyValue * pMemberPropVal)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	
+	//Ensure our input pointers are valid
+	if (!pPropVal || !pMemberPropVal)
+		return AAFRESULT_NULL_PARAM;
+	
+	//Ensure index is within range
+	if (index >= pvtCount(pPropVal))  //if index is > 0..n-1
+		return AAFRESULT_BADINDEX; //AAFRESULT_BAD_PARAM;
+	
+	//all parameters validated;  proceed ....
+
+	AAFRESULT hr;
+
+	//get  source size
+	ImplAAFTypeDefSP  spSourceTD;
+	hr = pMemberPropVal->GetType (&spSourceTD);
+	if (AAFRESULT_FAILED (hr)) 
+		return hr;
+	aafUInt32 sourceSize = spSourceTD->NativeSize();
+
+	//get Base TD and size
+	ImplAAFTypeDefSP spTargetTD;
+	hr = GetType (&spTargetTD); //gets base elem type
+	if (AAFRESULT_FAILED (hr)) 
+		return hr;
+	aafUInt32 targetElemSize = spTargetTD->NativeSize();
+
+	//verify that spTargetTD == spSourceTD
+	if (spTargetTD != spSourceTD)
+		return AAFRESULT_BAD_TYPE;
+	
+	//verify that the target elem size is equal to that of source 
+	if (targetElemSize != sourceSize)
+		return AAFRESULT_BAD_SIZE;
+	
+	//// On to data ...
+
+	//get  Source Data
+	ImplAAFPropValData * pvd_Source = dynamic_cast<ImplAAFPropValData*> (pMemberPropVal);
+	assert (pvd_Source);
+	
+	aafUInt32 source_bitsSize;
+	hr = pvd_Source->GetBitsSize (&source_bitsSize);
+	if (AAFRESULT_FAILED (hr))
+		return hr;
+	assert (source_bitsSize);
+	assert ( targetElemSize == source_bitsSize);
+	
+	aafMemPtr_t pSourceData = 0;
+	hr = pvd_Source->GetBits (&pSourceData);
+	if (AAFRESULT_FAILED (hr))
+		return hr;
+	assert (pSourceData);
+	
+
+	//get  Target  Data
+	ImplAAFPropValData * pvd_Target = dynamic_cast<ImplAAFPropValData*> (pPropVal);
+    assert (pvd_Target);
+	
+	aafUInt32 target_bitsSize;
+	hr = pvd_Target->GetBitsSize (&target_bitsSize);
+	if (AAFRESULT_FAILED (hr))
+		return hr;
+	assert ( target_bitsSize >= ((index+1) * targetElemSize)  );
+	
+	aafMemPtr_t pTargetData = 0;
+	hr = pvd_Target->GetBits (&pTargetData); //gets the 0th index location
+	if (AAFRESULT_FAILED (hr))
+		return hr;
+	assert (pTargetData);
+	
+	//make target point to the right element
+	pTargetData += (index * targetElemSize);
+	
+	//finally, copy over the appropriate bits
+	memcpy (pTargetData, pSourceData, sourceSize);
+	return AAFRESULT_SUCCESS;
 }
 
 
