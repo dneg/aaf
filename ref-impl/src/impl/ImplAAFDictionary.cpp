@@ -88,6 +88,8 @@ ImplAAFDictionary::ImplAAFDictionary ()
   _interpolationDefinitions      (PID_Dictionary_InterpolationDefinitions,    L"InterpolationDefinitions", PID_DefinitionObject_Identification),
   _dataDefinitions      (PID_Dictionary_DataDefinitions,    L"DataDefinitions", PID_DefinitionObject_Identification),
   _pluginDefinitions      (PID_Dictionary_PluginDefinitions,    L"PluginDefinitions", PID_DefinitionObject_Identification),
+  _klvDataDefinitions( PID_Dictionary_KLVDataDefinitions, L"KLVDataDefinitions", PID_DefinitionObject_Identification),
+  _taggedValueDefinitions( PID_Dictionary_TaggedValueDefinitions, L"TaggedValueDefinitions", PID_DefinitionObject_Identification),
   _pBuiltinClasses (0),
   _pBuiltinTypes (0),
   _pBuiltinDefs (0),
@@ -106,6 +108,8 @@ ImplAAFDictionary::ImplAAFDictionary ()
   _persistentProperties.put(_interpolationDefinitions.address());
   _persistentProperties.put(_dataDefinitions.address());
   _persistentProperties.put(_pluginDefinitions.address());
+  _persistentProperties.put(_klvDataDefinitions.address());
+  _persistentProperties.put(_taggedValueDefinitions.address());
 
 }
 
