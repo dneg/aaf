@@ -12,10 +12,6 @@
 #include "ImplAAFPropValData.h"
 #endif
 
-#ifndef __ImplAAFPropValStrongRefVect_h__
-#include "ImplAAFPropValStrongRefVect.h"
-#endif
-
 #ifndef __ImplAAFPropValWeakRefVect_h__
 #include "ImplAAFPropValWeakRefVect.h"
 #endif
