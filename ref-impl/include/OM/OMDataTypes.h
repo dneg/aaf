@@ -1,6 +1,6 @@
 /***********************************************************************
 *
-*              Copyright (c) 1998-1999 Avid Technology, Inc.
+*              Copyright (c) 1998-2000 Avid Technology, Inc.
 *
 * Permission to use, copy and modify this software and accompanying
 * documentation, and to distribute and sublicense application software
@@ -120,8 +120,7 @@ typedef unsigned long long int OMUInt64;
 #endif
 
 typedef OMUInt8                OMByte;
-typedef OMUInt8                OMCharacter;
-typedef OMUInt16               OMWideCharacter;
+typedef OMUInt16               OMCharacter;
 
 typedef OMUInt16 OMPropertyId;
 typedef OMUInt16 OMPropertySize;
