@@ -50,6 +50,7 @@
 #include "AAFPropertyIDs.h"
 
 #include "ImplAAFObjectCreation.h"
+#include "ImplEnumAAFPluggableDefs.h"
 
 #ifndef __ImplAAFDictionary_h__
 #include "ImplAAFDictionary.h"
@@ -59,7 +60,9 @@
 
 #include <assert.h>
 #include <string.h>
+#include "aafErr.h"
 
+extern "C" const aafClassID_t CLSID_EnumAAFPluggableDefs;
 
 ImplAAFDictionary::ImplAAFDictionary ()
 : _pluginDefinitions(PID_Dictionary_PluginDefinitions, "PluginDefinitions")
@@ -229,7 +232,81 @@ AAFRESULT STDMETHODCALLTYPE
   return AAFRESULT_NOT_IMPLEMENTED;
 }
 
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDictionary::RegisterPluggableDefinition (
+      ImplAAFPluggableDef *pPlugDef)
+{
+	if (NULL == pPlugDef)
+		return AAFRESULT_NULL_PARAM;
+	
+	_pluginDefinitions.appendValue(pPlugDef);
+	// trr - We are saving a copy of pointer in _pluginDefinitions
+	// so we need to bump its reference count.
+	pPlugDef->AcquireReference();
+	
+	return(AAFRESULT_SUCCESS);
+}
 
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDictionary::GetPluggableDefinitions (
+	ImplEnumAAFPluggableDefs **ppEnum)
+{
+	if (NULL == ppEnum)
+		return AAFRESULT_NULL_PARAM;
+	*ppEnum = 0;
+	
+	ImplEnumAAFPluggableDefs *theEnum = (ImplEnumAAFPluggableDefs *)CreateImpl (CLSID_EnumAAFPluggableDefs);
+	
+	XPROTECT()
+	{
+		CHECK(theEnum->SetDictionary(this));
+		*ppEnum = theEnum;
+	}
+	XEXCEPT
+	{
+		if (theEnum)
+			theEnum->ReleaseReference();
+		return(XCODE());
+	}
+	XEND;
+	
+	return(AAFRESULT_SUCCESS);
+}
+
+
+AAFRESULT
+    ImplAAFDictionary::GetNumPluggableDefs(aafUInt32 *  pNumPluggableDefs)
+{
+  size_t siz;
+
+  if(pNumPluggableDefs == NULL)
+    return AAFRESULT_NULL_PARAM;
+  
+  _pluginDefinitions.getSize(siz);
+  
+  *pNumPluggableDefs = siz;
+  return AAFRESULT_SUCCESS;
+}
+
+AAFRESULT
+    ImplAAFDictionary::GetNthPluggableDef (aafInt32 index, ImplAAFPluggableDef **ppPluggableDefs)
+{
+  if (NULL == ppPluggableDefs)
+    return AAFRESULT_NULL_PARAM;
+
+  ImplAAFPluggableDef *obj = NULL;
+  _pluginDefinitions.getValueAt(obj, index);
+  *ppPluggableDefs = obj;
+	
+  // trr - We are returning a copy of pointer stored in _mobs so we need
+  // to bump its reference count.
+  if (obj)
+    obj->AcquireReference();
+  else
+    return AAFRESULT_NO_MORE_OBJECTS;
+
+  return AAFRESULT_SUCCESS;
+}
 
 
 OMDEFINE_STORABLE(ImplAAFDictionary, AUID_AAFDictionary);
