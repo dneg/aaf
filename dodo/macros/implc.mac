@@ -204,6 +204,9 @@ AD_CLASS_BEGIN\
 #include "Impl.this-module.h"
 #endif
 
+// Include the declaration for the reference counting container callback function.
+#include "ImplAAFObjectCreation.h"
+
 #include <assert.h>
 
 
@@ -215,6 +218,32 @@ Impl.this-module::Impl.this-module ()
 Impl.this-module::~Impl.this-module ()
 {}
 
+
+// Increment the object reference count.
+aafUInt32 Impl.this-module::AcquireRef()
+{
+  // Delegate to global function to increment the reference
+  // count for this implementation object's COM or C++ API object.
+  return 1; //AcquireImplReference(this);
+}
+
+// Decrement the object reference count and delete the container.
+aafUInt32 Impl.this-module::ReleaseRef()
+{
+  // If there is only a single reference left it is the container's
+  // reference to this implementation object. Tell the container to
+  // Delete itself. The container's destructor will delete this
+  // object.
+  return 1; // ReleaseImplReference(this);
+}
+
+// Just return the count. (this could be inline in the header...)
+aafUInt32 Impl.this-module::RefCount()
+{
+  // Delegate to global function to return the reference
+  // count for this implementation object's COM or C++ API object.
+  return 1; //ReferenceImplCount(this);
+}
 
 void Impl.this-module::InitContainer (void * pContainer)
 {
