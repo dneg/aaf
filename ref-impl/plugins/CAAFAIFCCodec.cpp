@@ -1645,6 +1645,7 @@ AAFRESULT CAAFAIFCCodec::loadAIFCHeader(void)
 
 				/* AIFC field sampleSize */
 				CHECK(GetAIFCData(2L, &_bitsPerSample));
+				_bytesPerFrame = (_bitsPerSample+7)/8;
 
 				/* AIFC field: sampleRate */	// Need extended float code!!!
 				CHECK(GetAIFCData(sizeof(ieeerate), &ieeerate));
