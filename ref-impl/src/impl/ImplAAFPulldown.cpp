@@ -507,3 +507,15 @@ AAFRESULT ImplAAFPulldown::TraverseToClip(aafLength_t length,
 
 
 
+AAFRESULT ImplAAFPulldown::ChangeContainedReferences(aafMobID_constref from,
+													aafMobID_constref to)
+{
+	ImplAAFSegment	*seg;
+	
+	seg = _inputSegment;
+
+	if(seg != NULL)
+		seg->ChangeContainedReferences(from, to);
+
+	return AAFRESULT_SUCCESS;
+}

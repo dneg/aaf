@@ -178,3 +178,15 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 
+AAFRESULT ImplAAFTransition::ChangeContainedReferences(aafMobID_constref from,
+													aafMobID_constref to)
+{
+	ImplAAFSegment	*seg;
+	
+	seg = _operationGroup;
+
+	if(seg != NULL)
+		seg->ChangeContainedReferences(from, to);
+
+	return AAFRESULT_SUCCESS;
+}

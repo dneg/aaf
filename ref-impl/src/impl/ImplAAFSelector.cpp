@@ -363,3 +363,37 @@ AAFRESULT
 
 
 
+AAFRESULT ImplAAFSelector::ChangeContainedReferences(aafMobID_constref from,
+													aafMobID_constref to)
+{
+	aafInt32			n, count;
+	ImplAAFSegment		*seg = NULL;
+	ImplAAFComponent	*selected;
+	
+	XPROTECT()
+	{
+		CHECK(GetNumAlternateSegments (&count));
+		for(n = 0; n < count; n++)
+		{
+			CHECK(GetNthSegment (n, &seg));
+			CHECK(seg->ChangeContainedReferences(from, to));
+			seg->ReleaseReference();
+			seg = NULL;
+		}
+
+		selected = _selected;
+		if(selected != NULL)
+		{
+			CHECK(selected->ChangeContainedReferences(from, to));
+		}
+	}
+	XEXCEPT
+	{
+		if(seg != NULL)
+		  seg->ReleaseReference();
+		seg = 0;
+	}
+	XEND;
+
+	return AAFRESULT_SUCCESS;
+}
