@@ -1,5 +1,5 @@
-#ifndef __IAAFSmartPointer_h__
-#define __IAAFSmartPointer_h__
+#ifndef __AAFSmartPointer_h__
+#define __AAFSmartPointer_h__
 /***********************************************\
 *                                               *
 * Advanced Authoring Format                     *
@@ -82,4 +82,4 @@ struct IAAFSmartPointer
 };
 
 
-#endif // ! __IAAFSmartPointer_h__
+#endif // ! __AAFSmartPointer_h__
