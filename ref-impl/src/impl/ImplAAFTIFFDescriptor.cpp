@@ -103,10 +103,11 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTIFFDescriptor::GetLeadingLines (aafInt32* pLeadingLines)
 {
-	if(!_leadingLines.isPresent())
-		return AAFRESULT_PROP_NOT_PRESENT;
-	else if (pLeadingLines == NULL)
+	if (pLeadingLines == NULL)
 		return AAFRESULT_NULL_PARAM;
+	
+	else if(!_leadingLines.isPresent())
+		return AAFRESULT_PROP_NOT_PRESENT;
 	else
 	{
 		*pLeadingLines = _leadingLines;
@@ -131,11 +132,12 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTIFFDescriptor::GetTrailingLines (aafInt32* pTrailingLines)
 {
-	if(!_trailingLines.isPresent())
-		return AAFRESULT_PROP_NOT_PRESENT;
-	else if (pTrailingLines == NULL)
+	if (pTrailingLines == NULL)
 		return AAFRESULT_NULL_PARAM;
-	else
+
+	else if(!_trailingLines.isPresent())
+		return AAFRESULT_PROP_NOT_PRESENT;
+	else 
 	{
 		*pTrailingLines = _trailingLines;
 		return AAFRESULT_SUCCESS;
@@ -154,10 +156,12 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTIFFDescriptor::GetJPEGTableID (aafJPEGTableID_t* pJPEGTableID)
 {
-	if(!_jpegTableID.isPresent())
-		return AAFRESULT_PROP_NOT_PRESENT;
-	else if (pJPEGTableID == NULL)
+	if (pJPEGTableID == NULL)
 		return AAFRESULT_NULL_PARAM;
+	
+	else if(!_jpegTableID.isPresent())
+		return AAFRESULT_PROP_NOT_PRESENT;
+
 	else
 	{
 		*pJPEGTableID = _jpegTableID;
