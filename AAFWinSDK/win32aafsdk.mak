@@ -61,6 +61,7 @@
 #               dlls were not always replaced with release versions for the   #
 #               release and "FULL" builds of the sdk.                         #
 # 06-APR-2000 : transdel adding new required header files.                    #
+# 27-JUL-2000 : transdel adding support for "aafext" plugin directory         #
 ###############################################################################
 
 
@@ -145,6 +146,8 @@ AAFSDK_DEBUG   = $(AAFSDK_BIN)\debug
 AAFSDK_HELP    = $(AAFSDK)\help
 AAFSDK_INCLUDE = $(AAFSDK)\include
 AAFSDK_LIB     = $(AAFSDK)\lib
+AAFSDK_BIN_EXT = $(AAFSDK_BIN)\aafext
+AAFSDK_DEBUG_EXT = $(AAFSDK_DEBUG)\aafext
 
 
 #
@@ -157,6 +160,8 @@ TOOLKIT_PLUGINS = $(AAFTOOLKIT)\ref-impl\plugins
 TOOLKIT_COMIDL = $(AAFTOOLKIT)\AAFWinSDK\ref-impl\include\comidl
 TOOLKIT_DEBUG_REFIMPL = $(AAFTOOLKIT)\AAFWinSDK\Debug\RefImpl
 TOOLKIT_RELEASE_REFIMPL = $(AAFTOOLKIT)\AAFWinSDK\Release\RefImpl
+TOOLKIT_DEBUG_REFIMPL_EXT = $(AAFTOOLKIT)\AAFWinSDK\Debug\RefImpl\aafext
+TOOLKIT_RELEASE_REFIMPL_EXT = $(AAFTOOLKIT)\AAFWinSDK\Release\RefImpl\aafext
 OMF_LIBS = $(AAFTOOLKIT)\Omf
 
 
@@ -165,12 +170,15 @@ OMF_LIBS = $(AAFTOOLKIT)\Omf
 #
 !if "$(CFG)"=="FULL"
 TOOLKIT_TARGET_REFIMPL = $(TOOLKIT_RELEASE_REFIMPL)
+TOOLKIT_TARGET_REFIMPL_EXT = $(TOOLKIT_RELEASE_REFIMPL_EXT)
 OMF_DLL_NAME = "omfToolkit.dll"
 !elseif "$(CFG)"=="Debug"
 TOOLKIT_TARGET_REFIMPL = $(TOOLKIT_DEBUG_REFIMPL)
+TOOLKIT_TARGET_REFIMPL_EXT = $(TOOLKIT_DEBUG_REFIMPL_EXT)
 OMF_DLL_NAME = "omfToolkitd.dll"
 !elseif "$(CFG)"=="Release"
 TOOLKIT_TARGET_REFIMPL = $(TOOLKIT_RELEASE_REFIMPL)
+TOOLKIT_TARGET_REFIMPL_EXT = $(TOOLKIT_RELEASE_REFIMPL_EXT)
 OMF_DLL_NAME = "omfToolkit.dll"
 !else
 !ERROR Unknown configuration!
@@ -185,8 +193,10 @@ TARGET_DIRS = \
 	$(AAFSDK) \
 !endif
 	$(AAFSDK_BIN) \
+	$(AAFSDK_BIN_EXT) \
 !if "$(CFG)"=="FULL"
 	$(AAFSDK_DEBUG) \
+	$(AAFSDK_DEBUG_EXT) \
 !endif
 	$(AAFSDK_HELP) \
 	$(AAFSDK_INCLUDE) \
@@ -279,8 +289,8 @@ TARGET_LIB_FILES = \
 #
 RELEASE_DLL_FILES = \
 	$(AAFSDK_BIN)\aafcoapi.dll \
-	$(AAFSDK_BIN)\aafintp.dll \
-	$(AAFSDK_BIN)\aafpgapi.dll \
+	$(AAFSDK_BIN_EXT)\aafintp.dll \
+	$(AAFSDK_BIN_EXT)\aafpgapi.dll \
 	$(AAFSDK_BIN)\omfToolkit.dll
 
 #
@@ -288,8 +298,8 @@ RELEASE_DLL_FILES = \
 #
 DEBUG_DLL_FILES = \
 	$(AAFSDK_DEBUG)\aafcoapi.dll \
-	$(AAFSDK_DEBUG)\aafintp.dll \
-	$(AAFSDK_DEBUG)\aafpgapi.dll \
+	$(AAFSDK_DEBUG_EXT)\aafintp.dll \
+	$(AAFSDK_DEBUG_EXT)\aafpgapi.dll \
 	$(AAFSDK_DEBUG)\omfToolkitd.dll
 
 
@@ -328,6 +338,7 @@ CONFIG_FILES_TO_REMOVE = \
 #
 CONFIG_DIRS_TO_REMOVE = \
 !if "$(CFG)"=="Release" || "$(CFG)"=="Debug"
+	$(AAFSDK_DEBUG_EXT) \
 	$(AAFSDK_DEBUG)
 !endif
 
@@ -350,7 +361,9 @@ TARGET_FILES_TO_REMOVE = \
 # Note: Order is important: must have child before parent directory.
 #
 TARGET_DIRS_TO_REMOVE = \
+	$(AAFSDK_DEBUG_EXT) \
 	$(AAFSDK_DEBUG) \
+	$(AAFSDK_BIN_EXT) \
 	$(AAFSDK_BIN) \
 	$(AAFSDK_HELP) \
 	$(AAFSDK_INCLUDE) \
@@ -410,9 +423,17 @@ $(AAFSDK_BIN) :
 	if not exist $(AAFSDK_BIN) \
 	    md $(AAFSDK_BIN)
 
+$(AAFSDK_BIN_EXT) : $(AAFSDK_BIN)
+	if not exist $(AAFSDK_BIN_EXT) \
+	    md $(AAFSDK_BIN_EXT)
+
 $(AAFSDK_DEBUG) : $(AAFSDK_BIN)
 	if not exist $(AAFSDK_DEBUG) \
 	    md $(AAFSDK_DEBUG)
+
+$(AAFSDK_DEBUG_EXT) : $(AAFSDK_DEBUG)
+	if not exist $(AAFSDK_DEBUG_EXT) \
+	    md $(AAFSDK_DEBUG_EXT)
 
 $(AAFSDK_HELP) :
 	if not exist $(AAFSDK_HELP) \
@@ -567,11 +588,11 @@ $(AAFSDK_LIB)\aafd.lib : $(TOOLKIT_DEBUG_REFIMPL)\aafd.lib
 $(AAFSDK_BIN)\aafcoapi.dll : $(TOOLKIT_TARGET_REFIMPL)\aafcoapi.dll
 	$(CP) $(CP_OPTS) $(TOOLKIT_TARGET_REFIMPL)\aafcoapi.dll $(AAFSDK_BIN)\
 
-$(AAFSDK_BIN)\aafintp.dll : $(TOOLKIT_TARGET_REFIMPL)\aafintp.dll
-	$(CP) $(CP_OPTS) $(TOOLKIT_TARGET_REFIMPL)\aafintp.dll $(AAFSDK_BIN)\
+$(AAFSDK_BIN_EXT)\aafintp.dll : $(TOOLKIT_TARGET_REFIMPL_EXT)\aafintp.dll
+	$(CP) $(CP_OPTS) $(TOOLKIT_TARGET_REFIMPL_EXT)\aafintp.dll $(AAFSDK_BIN_EXT)\
 
-$(AAFSDK_BIN)\aafpgapi.dll : $(TOOLKIT_TARGET_REFIMPL)\aafpgapi.dll
-	$(CP) $(CP_OPTS) $(TOOLKIT_TARGET_REFIMPL)\aafpgapi.dll $(AAFSDK_BIN)\
+$(AAFSDK_BIN_EXT)\aafpgapi.dll : $(TOOLKIT_TARGET_REFIMPL_EXT)\aafpgapi.dll
+	$(CP) $(CP_OPTS) $(TOOLKIT_TARGET_REFIMPL_EXT)\aafpgapi.dll $(AAFSDK_BIN_EXT)\
 
 $(AAFSDK_BIN)\omfToolkit.dll : $(OMF_LIBS)\$(OMF_DLL_NAME)
 	$(CP) $(CP_OPTS) $(OMF_LIBS)\$(OMF_DLL_NAME) $(AAFSDK_BIN)\
@@ -583,11 +604,11 @@ $(AAFSDK_BIN)\omfToolkit.dll : $(OMF_LIBS)\$(OMF_DLL_NAME)
 $(AAFSDK_DEBUG)\aafcoapi.dll : $(TOOLKIT_DEBUG_REFIMPL)\aafcoapi.dll
 	$(CP) $(CP_OPTS) $(TOOLKIT_DEBUG_REFIMPL)\aafcoapi.dll $(AAFSDK_DEBUG)\
 
-$(AAFSDK_DEBUG)\aafintp.dll : $(TOOLKIT_DEBUG_REFIMPL)\aafintp.dll
-	$(CP) $(CP_OPTS) $(TOOLKIT_DEBUG_REFIMPL)\aafintp.dll $(AAFSDK_DEBUG)\
+$(AAFSDK_DEBUG_EXT)\aafintp.dll : $(TOOLKIT_DEBUG_REFIMPL_EXT)\aafintp.dll
+	$(CP) $(CP_OPTS) $(TOOLKIT_DEBUG_REFIMPL_EXT)\aafintp.dll $(AAFSDK_DEBUG_EXT)\
 
-$(AAFSDK_DEBUG)\aafpgapi.dll : $(TOOLKIT_DEBUG_REFIMPL)\aafpgapi.dll
-	$(CP) $(CP_OPTS) $(TOOLKIT_DEBUG_REFIMPL)\aafpgapi.dll $(AAFSDK_DEBUG)\
+$(AAFSDK_DEBUG_EXT)\aafpgapi.dll : $(TOOLKIT_DEBUG_REFIMPL_EXT)\aafpgapi.dll
+	$(CP) $(CP_OPTS) $(TOOLKIT_DEBUG_REFIMPL_EXT)\aafpgapi.dll $(AAFSDK_DEBUG_EXT)\
 
 $(AAFSDK_DEBUG)\omfToolkitd.dll : $(OMF_LIBS)\omfToolkitd.dll
 	$(CP) $(CP_OPTS) $(OMF_LIBS)\omfToolkitd.dll $(AAFSDK_DEBUG)\
