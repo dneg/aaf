@@ -51,7 +51,7 @@
 #include "AAFResult.h"
 #include "AAFDataDefs.h"
 #include "AAFOperationDefs.h"
-
+#include "AAFParameterDefs.h"
 
 const int MAX_INDENT = 8;
 
@@ -106,7 +106,7 @@ typedef struct _AafOmfGlobals
 	char*			pProgramName;
 } AafOmfGlobals;
 
-void deleteFile( char* fileName );
+int deleteFile( char* fileName );
 void IncIndentLevel( void );
 void DecIndentLevel( void );
 void AUIDtoString(aafUID_t *uid, char *buf);
