@@ -20,6 +20,8 @@
 #include "AAFTypes.h"
 #include "AAFResult.h"
 
+#include "AAFPropertyIDs.h"
+
 #include <assert.h>
 
 
