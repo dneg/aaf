@@ -36,7 +36,10 @@
 
 #include <iostream.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <assert.h>
+#include <string.h>
+#include <wchar.h>
 
 #include "AAFSmartPointer.h"
 typedef IAAFSmartPointer<IAAFRawStorage>  IAAFRawStorageSP;
@@ -423,23 +426,23 @@ public:
   HRESULT STDMETHODCALLTYPE
     QueryInterface (REFIID iid, void ** ppIfc)
     { if (! ppIfc) return AAFRESULT_NULL_PARAM;
-	  if (iid == IID_IUnknown)
+	  if (equalUID (iid, IID_IUnknown))
 		{ IUnknown * runk = (IAAFRawStorage*) this;
 		*ppIfc = (void*) runk;
 		AddRef ();
 		return AAFRESULT_SUCCESS; }
-	  else if (iid == IID_IAAFRawStorage)
+	  else if (equalUID (iid, IID_IAAFRawStorage))
 		{ IAAFRawStorage * rrs = this;
 		*ppIfc = (void*) rrs;
 		AddRef ();
 		return AAFRESULT_SUCCESS; }
-	  else if (iid == IID_IAAFRandomRawStorage)
+	  else if (equalUID (iid, IID_IAAFRandomRawStorage))
 		{ IAAFRandomRawStorage * rrrs = this;
 		*ppIfc = (void*) rrrs;
 		AddRef ();
 		return AAFRESULT_SUCCESS; }
 	  else
-		return E_FAIL; }
+		return E_NOINTERFACE; }
 
   aafUInt32 STDMETHODCALLTYPE
     AddRef () {return ++_refCnt;}
@@ -551,6 +554,9 @@ private:
   void pvtSetPosition (aafUInt64 position)
   { int seekStatus = fseek(_file, static_cast<long>(position), SEEK_SET);
     assert (0 == seekStatus); }
+
+  int equalUID(const GUID & a, const GUID & b)
+  { return (0 == memcmp((&a), (&b), sizeof (aafUID_t))); }
 
   aafUInt32       _refCnt;
   aafFileAccess_e _access;  
