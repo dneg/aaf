@@ -20,7 +20,7 @@ typedef struct tagAAFComObjectInfo
 {
 	const CLSID* pCLSID;
 	LPCOLESTR pClassName;
-	AAFCreateComObjectProc pfnCreate;;
+	AAFCreateComObjectProc pfnCreate;
 } AAFComObjectInfo_t;
 
 
