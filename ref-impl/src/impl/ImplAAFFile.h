@@ -37,6 +37,47 @@ class ImplAAFDataDef;
 class ImplAAFFile : public ImplAAFRoot
 {
 public:
+
+  //
+  // methods to support API
+  //
+
+  virtual AAFRESULT STDMETHODCALLTYPE
+	Initialize ();
+
+  virtual AAFRESULT STDMETHODCALLTYPE
+	OpenExistingRead (wchar_t * pFileName,
+					  aafUInt32 modeFlags);
+
+  virtual AAFRESULT STDMETHODCALLTYPE
+	OpenExistingModify (wchar_t * pFileName,
+						aafUInt32 modeFlags,
+						aafProductIdentification_t * pIdent);
+
+  virtual AAFRESULT STDMETHODCALLTYPE
+	OpenNewModify (wchar_t * pFileName,
+				   aafUInt32 modeFlags,
+				   aafProductIdentification_t * pIdent);
+
+  virtual AAFRESULT STDMETHODCALLTYPE
+	OpenTransient ();
+
+  virtual AAFRESULT STDMETHODCALLTYPE
+	Close ();
+
+  virtual AAFRESULT STDMETHODCALLTYPE
+	Save ();
+
+  virtual AAFRESULT STDMETHODCALLTYPE
+	Revert ();
+
+  virtual AAFRESULT STDMETHODCALLTYPE
+	GetHeader (ImplAAFHeader ** header);
+
+  virtual AAFRESULT STDMETHODCALLTYPE
+	GetRevision (aafFileRev_t *  rev);
+  
+
   //
   // Constructor/destructor
   //
@@ -46,34 +87,7 @@ public:
 #if 0
   OMDECLARE_STORABLE(ImplAAFFile)
 #endif
-  //***********************************************************
-  // METHOD NAME: Close()
-  //
-  // DESCRIPTION:
-  // @mfunc AAFRESULT | AAFFile | Close |
-  // Closes an AAF file, saving the result.
-  // @end
-  virtual AAFRESULT STDMETHODCALLTYPE
-    Close ();
 
-  //***********************************************************
-  // METHOD NAME: GetRevision()
-  //
-  // DESCRIPTION:
-  // @mfunc AAFRESULT | AAFFile | GetRevision |
-  // Get the revision of the ciurrent AAF file.
-  // @end
-  // 
-  virtual AAFRESULT STDMETHODCALLTYPE
-  GetRevision (
-    // @parm aafFileRev_t * | rev | [out] Revision of the current file
-    aafFileRev_t *  rev
-  );
-
-  virtual AAFRESULT STDMETHODCALLTYPE
-  GetHeader (
-    ImplAAFHeader ** header
-  );
 
 public:
   // Declare the module test method. The implementation of the will be be
@@ -126,6 +140,10 @@ private:
 		aafInt32		_stackTraceSize;	//!!!	
 #endif
 		aafFileRev_t     _setrev;
+
+  aafBool _initialized;
+  aafBool _open;
+  aafProductIdentification_t _ident;
 };
 
 #endif // ! __ImplAAFFile_h__
