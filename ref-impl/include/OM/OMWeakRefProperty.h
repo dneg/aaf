@@ -146,6 +146,7 @@ private:
   const wchar_t* _targetName;
   OMPropertyId* _targetPropertyPath;
   OMPropertyId _keyPropertyId;
+  OMStrongReferenceSet* _targetSet;
 
     // OMWeakReferenceProperty can't be assigned - declare but don't define
   OMWeakReferenceProperty& operator = (const OMWeakReferenceProperty& rhs);

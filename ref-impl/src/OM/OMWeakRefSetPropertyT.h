@@ -55,7 +55,8 @@ OMWeakReferenceSetProperty<ReferencedObject>::
   _targetTag(nullOMPropertyTag),
   _targetName(targetName),
   _targetPropertyPath(0),
-  _keyPropertyId(keyPropertyId)
+  _keyPropertyId(keyPropertyId),
+  _targetSet(0)
 {
   TRACE("OMWeakReferenceSetProperty<ReferencedObject>::"
                                                  "OMWeakReferenceSetProperty");
@@ -79,7 +80,8 @@ OMWeakReferenceSetProperty<ReferencedObject>::OMWeakReferenceSetProperty(
   _targetTag(nullOMPropertyTag),
   _targetName(0),
   _targetPropertyPath(0),
-  _keyPropertyId(keyPropertyId)
+  _keyPropertyId(keyPropertyId),
+  _targetSet(0)
 {
   TRACE("OMWeakReferenceSetProperty<ReferencedObject>::"
                                                  "OMWeakReferenceSetProperty");
@@ -194,6 +196,7 @@ void OMWeakReferenceSetProperty<ReferencedObject>::insert(
   PRECONDITION("Target object attached to file", object->inFile());
   PRECONDITION("Source container object and target object in same file",
                                         container()->file() == object->file());
+  PRECONDITION("Valid target object", targetSet()->containsObject(object));
 #endif
   // Set the set to contain the new object
   //
@@ -807,8 +810,14 @@ OMStrongReferenceSet*
 OMWeakReferenceSetProperty<ReferencedObject>::targetSet(void) const
 {
   TRACE("OMWeakReferenceSetProperty<ReferencedObject>::targetSet");
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
-  return 0;
+  OMWeakReferenceSetProperty<ReferencedObject>* nonConstThis =
+               const_cast<OMWeakReferenceSetProperty<ReferencedObject>*>(this);
+  if (_targetSet == 0) {
+    nonConstThis->_targetSet = OMWeakObjectReference::targetSet(this,
+                                                                targetTag());
+  }
+  POSTCONDITION("Valid result", _targetSet != 0);
+  return _targetSet;
 }
 
 template <typename ReferencedObject>

@@ -290,6 +290,7 @@ private:
   const wchar_t* _targetName;
   OMPropertyId* _targetPropertyPath;
   OMPropertyId _keyPropertyId;
+  OMStrongReferenceSet* _targetSet;
 
   friend class OMWeakReferenceVectorIterator<ReferencedObject>;
 

@@ -649,6 +649,27 @@ OMStorable* OMWeakObjectReference::setValue(
   return oldObject;
 }
 
+OMStrongReferenceSet*
+OMWeakObjectReference::targetSet(const OMProperty* property,
+                                 OMPropertyTag targetTag)
+{
+  TRACE("OMWeakObjectReference::targetSet");
+
+  ASSERT("Valid containing property", property != 0);
+  OMFile* file = property->propertySet()->container()->file();
+  OMPropertyTable* table = file->referencedProperties();
+  ASSERT("Valid target tag", table->isValid(targetTag));
+  const OMPropertyId* targetPath = table->valueAt(targetTag);
+  ASSERT("Valid target path", validPropertyPath(targetPath));
+
+  OMProperty* set = file->findProperty(targetPath);
+
+  OMStrongReferenceSet* result = dynamic_cast<OMStrongReferenceSet*>(set);
+
+  POSTCONDITION("Valid result", result != 0);
+  return result;
+}
+
 const OMUniqueObjectIdentification&
 OMWeakObjectReference::identification(void) const
 {
@@ -665,18 +686,9 @@ OMStrongReferenceSet* OMWeakObjectReference::set(void) const
   TRACE("OMWeakObjectReference::set");
 
   if (_targetSet == 0) {
-    ASSERT("Valid containing property", _property != 0);
-    OMFile* file = _property->propertySet()->container()->file();
-    OMPropertyTable* table = file->referencedProperties();
-    ASSERT("Valid target tag", table->isValid(_targetTag));
-    const OMPropertyId* targetPath = table->valueAt(_targetTag);
-    ASSERT("Valid target path", validPropertyPath(targetPath));
-
-    OMProperty* property = file->findProperty(targetPath);
-
     OMWeakObjectReference* nonConstThis =
                                       const_cast<OMWeakObjectReference*>(this);
-    nonConstThis->_targetSet = dynamic_cast<OMStrongReferenceSet*>(property);
+    nonConstThis->_targetSet = targetSet(_property, _targetTag);
   }
 
   POSTCONDITION("Valid result", _targetSet != 0);

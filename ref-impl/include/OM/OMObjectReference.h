@@ -243,6 +243,9 @@ public:
 
   void setTargetTag(OMPropertyTag targetTag);
 
+  static OMStrongReferenceSet* targetSet(const OMProperty* property,
+                                         OMPropertyTag targetTag);
+
   const OMUniqueObjectIdentification& identification(void) const;
 
 private:
