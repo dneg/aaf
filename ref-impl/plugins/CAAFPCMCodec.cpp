@@ -716,10 +716,15 @@ HRESULT STDMETHODCALLTYPE
 	if (0 == nSamples)
 	  return AAFRESULT_INVALID_PARAM;
 
-	aafPosition_t offset;
-	checkResult(_stream->GetPosition(&offset));
-	if ( offset + buflen > (aafPosition_t)2*1024*1024*1024-1 ) {
-	  return AAFRESULT_EOF;
+	// The BWF file format limits filesize to 4GB.
+	// The AAF and File containers do not have this limit.
+	if (_containerFormat == kAAFContainerDef_RIFFWAVE)
+	{
+		aafPosition_t offset;
+		checkResult(_stream->GetPosition(&offset));
+		if ( offset + buflen > (aafPosition_t)4*1024*1024*1024-1 ) {
+		  return AAFRESULT_EOF;
+		}
 	}
 
 	// If there multiple channels in the PCM file and the data is interleaved
