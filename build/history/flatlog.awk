@@ -53,10 +53,9 @@
 #  - file names containing spaces/tabs
 #
 
-/^RCS file:/ {
+/^Working file:/ {
   file  = $3;
   revision = "";
-  gsub(",v", "", file);
 }
 
 /^revision/ {
