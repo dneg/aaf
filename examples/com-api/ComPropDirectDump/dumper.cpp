@@ -25,6 +25,14 @@
  *
  ************************************************************************/
 
+#if defined(macintosh)
+  // Make sure we have defined IID_IUnknown and IID_IClassFactory.
+  #include <initguid.h>
+  #include <coguid.h>	
+#endif
+
+
+
 #include "AAF.h"
 #include "AAFResult.h"
 #include "AAFTypeDefUIDs.h"
