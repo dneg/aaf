@@ -103,6 +103,7 @@ typedef IAAFSmartPointer<IAAFTypeDefRecord>        IAAFTypeDefRecordSP;
 typedef IAAFSmartPointer<IAAFTypeDefStream>        IAAFTypeDefStreamSP;
 typedef IAAFSmartPointer<IAAFTypeDefSet>           IAAFTypeDefSetSP;
 typedef IAAFSmartPointer<IAAFTypeDefStrongObjRef>  IAAFTypeDefStrongObjRefSP;
+typedef IAAFSmartPointer<IAAFTypeDefWeakObjRef> IAAFTypeDefWeakObjRefSP;
 typedef IAAFSmartPointer<IAAFFile>                 IAAFFileSP;
 typedef IAAFSmartPointer<IAAFHeader>               IAAFHeaderSP;
 typedef IAAFSmartPointer<IEnumAAFProperties>       IEnumAAFPropertiesSP;
@@ -740,6 +741,26 @@ static HRESULT printAAFName(
     checkResult( pMetaDef->GetNameBufLen( &bufSize ) );
     aafStringBuf = (aafCharacter*) new aafUInt8[ bufSize ];
     checkResult( pMetaDef->GetName(aafStringBuf, bufSize) );
+    // print the name
+    checkResult(printAAFString(aafStringBuf,  os));
+    if (aafStringBuf)
+	delete[]aafStringBuf;
+    aafStringBuf=NULL;
+
+
+    return status;
+}
+static HRESULT printAAFName(
+		IAAFDefObject  *pDefObj,
+		ostream		    &os )
+{
+    HRESULT	    status = AAFRESULT_SUCCESS;
+    aafCharacter*   aafStringBuf = NULL;
+    aafUInt32	    bufSize = 0;
+
+    checkResult( pDefObj->GetNameBufLen( &bufSize ) );
+    aafStringBuf = (aafCharacter*) new aafUInt8[ bufSize ];
+    checkResult( pDefObj->GetName(aafStringBuf, bufSize) );
     // print the name
     checkResult(printAAFString(aafStringBuf,  os));
     if (aafStringBuf)
@@ -1709,12 +1730,8 @@ HRESULT dumpPropertyValue (IAAFPropertyValueSP pPVal,
 	    
 	    IAAFObjectSP pObj;
 	    checkResult(pTDO->GetObject(pPVal, IID_IAAFObject, (IUnknown **)&pObj));
-	    if (showProps)
-	      {
-		os << "object:" ;
-	      }
 	    checkResult (dumpObject (pObj, pDict, dumpFlags, indent+1, os));
-	    
+	    // can we have a strong obj ref to a MetaDefinition? yes, but not in prop direct?
 	    break;	
 	  }
 	
@@ -1723,8 +1740,8 @@ HRESULT dumpPropertyValue (IAAFPropertyValueSP pPVal,
 	    // Not implemented in current SDK, treated as AUIDs
 	    if (showProps)
 	      {
-		IAAFDefObject *pDefObj=NULL;
-		IAAFMetaDefinition *pMetaDef=NULL;
+		IAAFDefObjectSP pDefObj;
+		IAAFMetaDefinitionSP pMetaDef;
 		// weak object reference; only dump summary info (not
 		// recursively)
 		IAAFTypeDefObjectRefSP pTDO;
@@ -1736,21 +1753,13 @@ HRESULT dumpPropertyValue (IAAFPropertyValueSP pPVal,
 		
 		IAAFObjectSP pObj;
 		
-		if (!pTDO->GetObject(pPVal, IID_IAAFDefObject, (IUnknown**)&pObj))
+		if (!pTDO->GetObject(pPVal, IID_IAAFDefObject, (IUnknown**)&pDefObj))
 		  {
-		    checkResult(pDefObj->GetNameBufLen(&bufSize));
-		    nameBuf = (aafCharacter*) new aafUInt8[bufSize];
-		    checkResult(pDefObj->GetName(nameBuf, bufSize));
-		    // print the name
-		    checkResult(printAAFString(nameBuf,  os));
+		    printAAFName(pDefObj, os);
 		  } else if (!pTDO->GetObject(pPVal, IID_IAAFMetaDefinition, 
 					      (IUnknown**)&pMetaDef))
 		  {
-		    checkResult(pMetaDef->GetNameBufLen(&bufSize));
-		    nameBuf = (aafCharacter*) new aafUInt8[bufSize];
-		    checkResult(pMetaDef->GetName(nameBuf, bufSize));
-		    // print the name
-		    checkResult(printAAFString(nameBuf, os));
+		    checkResult(printAAFName(pMetaDef, os));
 		  } else
 		  {
 		    // treat as AUID
@@ -1912,12 +1921,12 @@ HRESULT dumpPropertyValue (IAAFPropertyValueSP pPVal,
 	    aafUInt32 i;
 	    for (i = 0; i < numElems; i++)
 	      {
-		if (showProps)
-		  {
-		    printIndent (indent, os);
-		    os << "  [" << i << "]: ";
-		  }
+		printIndent (indent, os);
+		printAAFName(pTD, os);
+		os << "  [" << i << "]: ";
+
 		IAAFPropertyValueSP pElemPropVal;
+		// Get array elements using index
 		checkResult(pTDFA->GetElementValue(pPVal, i, &pElemPropVal));
 		checkResult (dumpPropertyValue (pElemPropVal,
 						pDict,
@@ -1939,25 +1948,72 @@ HRESULT dumpPropertyValue (IAAFPropertyValueSP pPVal,
 	    // Get number of elements
 	    aafUInt32 numElems=0;
 	    checkResult(pTDVA->GetCount(pPVal, &numElems));
-	    if (dumpFlags.showTypes && showProps)
+	    // Get type
+	    IAAFTypeDefSP pElemTD;
+	    IAAFTypeDefObjectRefSP pElemTDObjRef;
+	    IAAFTypeDefStrongObjRefSP pElemTDStrongObjRef;
+	    IAAFTypeDefWeakObjRefSP pElemTDWeakObjRef;
+	    IAAFClassDefSP pElemTDObjRefCD;
+
+	    checkResult(pTDVA->GetType(&pElemTD));
+	    if (SUCCEEDED(pElemTD->QueryInterface(IID_IAAFTypeDefObjectRef,
+						   (void**) &pElemTDObjRef)))
 	      {
-		os << "variably-sized array [0x" << hex << numElems << "]:" << endl;
-	      }
-	    aafUInt32 i;
-	    for (i = 0; i < numElems; i++)
-	      {
-		if (showProps)
+		// Treat array of strong and weak object references specially
+		if (SUCCEEDED(pElemTD->QueryInterface(IID_IAAFTypeDefStrongObjRef,
+						      (void**) &pElemTDStrongObjRef)))
+		  os << "Strong Object Reference Array";
+		else if (SUCCEEDED(pElemTD->QueryInterface(IID_IAAFTypeDefWeakObjRef,
+						      (void**) &pElemTDStrongObjRef)))
+		  os << "Weak Object Reference Array";
+		else
+		  os << "Unknown-type object reference array";
+		os << " [" << numElems << "] of ";
+		checkResult(pElemTDObjRef->GetObjectType(&pElemTDObjRefCD));
+		printAAFName( pElemTDObjRefCD, os);
+		os << endl;
+
+		aafUInt32 i;
+		for (i = 0; i < numElems; i++)
 		  {
 		    printIndent (indent, os);
-		    os << "[" << hex << i << "]: ";
+		    printAAFName( pTD, os);
+		    os << " [" << hex << i << "]: ";
+
+		    IAAFPropertyValueSP pElemPropVal;
+		    checkResult(pTDVA->GetElementValue(pPVal, i, &pElemPropVal));
+		    checkResult (dumpPropertyValue (pElemPropVal,
+						    pDict,
+						    dumpFlags, showProps,
+						    indent+1,
+						    os));
 		  }
-		IAAFPropertyValueSP pElemPropVal;
-		checkResult(pTDVA->GetElementValue(pPVal, i, &pElemPropVal));
-		checkResult (dumpPropertyValue (pElemPropVal,
-						pDict,
-						dumpFlags, showProps,
-						indent+1,
-						os));
+	    
+		break;
+	      }
+	    else
+	      {
+		// Handle arrays other than object references
+		if (dumpFlags.showTypes && showProps)
+		  {
+		    os << "variably-sized array [0x" << hex << numElems << "]:" << endl;
+		  }
+		aafUInt32 i;
+		for (i = 0; i < numElems; i++)
+		  {
+		    if (showProps)
+		      {
+			printIndent (indent, os);
+			os << "[" << hex << i << "]: ";
+		      }
+		    IAAFPropertyValueSP pElemPropVal;
+		    checkResult(pTDVA->GetElementValue(pPVal, i, &pElemPropVal));
+		    checkResult (dumpPropertyValue (pElemPropVal,
+						    pDict,
+						    dumpFlags, showProps,
+						    indent+1,
+						    os));
+		  }
 	      }
 	    
 	    break;
