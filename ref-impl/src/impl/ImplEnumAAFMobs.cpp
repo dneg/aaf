@@ -27,7 +27,6 @@
 
 extern "C" const aafClassID_t CLSID_EnumAAFMobs;
 
-OMDEFINE_STORABLE(ImplEnumAAFMobs, CLSID_EnumAAFMobs);
 
 ImplEnumAAFMobs::ImplEnumAAFMobs ()
 {
