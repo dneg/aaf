@@ -378,7 +378,7 @@ void OMStrongReferenceVectorProperty<ReferencedObject>::appendValue(
 
   PRECONDITION("Valid object", object != 0);
 
-  setValueAt(object, count());
+  insertAt(object, count());
 
 }
 
@@ -797,12 +797,16 @@ void OMStrongReferenceVectorProperty<ReferencedObject>::setBits(
   PRECONDITION("Valid bits", bits != 0);
   PRECONDITION("Valid size", size >= bitsSize());
 
-  size_t count = size / sizeof(ReferencedObject*);
+  size_t elementCount = size / sizeof(ReferencedObject*);
   ReferencedObject** p = (ReferencedObject**)bits;
 
-  for (size_t i = 0; i < count; i++) {
+  for (size_t i = 0; i < elementCount; i++) {
     ReferencedObject* object = p[i];
-    setValueAt(object, i);
+    if (i < count()) {
+      setValueAt(object, i);
+    } else {
+      appendValue(object);
+    }
   }
 
 }
