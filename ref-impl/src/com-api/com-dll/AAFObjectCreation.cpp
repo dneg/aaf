@@ -27,7 +27,7 @@
 
 #include "ImplAAFObjectCreation.h"
 #include "AAF.h"
-#include "AAFRoot.h"
+#include "AAFPrivate.h"
 #include "ImplAAFObject.h"
 #include "ImplAAFPluginManager.h"
 
