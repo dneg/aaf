@@ -574,8 +574,9 @@ size_t OMWeakReferenceSetProperty<ReferencedObject>::bitsSize(void) const
   //   @parm The size of the buffer.
   //   @this const
 template<typename ReferencedObject>
-void OMWeakReferenceSetProperty<ReferencedObject>::getBits(OMByte* bits,
-                                                             size_t size) const
+void OMWeakReferenceSetProperty<ReferencedObject>::getBits(
+                                                      OMByte* bits,
+                                                      size_t ANAME(size)) const
 {
   TRACE("OMWeakReferenceSetProperty<ReferencedObject>::getBits");
 
