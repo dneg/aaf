@@ -239,6 +239,7 @@ AD_CLASS_BEGIN\
 
 
 .this-module::.this-module (aafBool doInit)
+  : _rep((Impl.this-module *)NULL)
 {
   if (doInit)
     {
@@ -267,7 +268,7 @@ void .this-module::InitRep (Impl.this-module * newRep)
 {
 #ifdef BOB_TEST
   assert (newRep);
-  assert (_rep);
+  assert (!_rep);
   _rep = newRep;
   newRep->InitContainer (this);
 #endif
