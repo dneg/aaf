@@ -41,16 +41,24 @@ targets :
 	@echo "[Building $@]\n"
 	$(MAKE) -f maketargets_gnu.mak
 
-#.PHONY : clean
+.PHONY : clean
 clean :
-	cd tool && $(MAKE) clean
+	cd tool && $(MAKE) GENDEPS=0 clean
 	$(MAKE) -f dodotargets.mak clean
 	$(MAKE) -f dododepend.mak clean
 	touch targets.mk depend.mk
 	$(MAKE) -f maketargets_gnu.mak clean
+
+.PHONY : realclean
+realclean : clean
+	$(MAKE) -f maketargets_gnu.mak $@
 	-@rm -f targets.mk depend.mk
 
-include $(AAFBASE)/build/rules.mk
+# Although the following include is standard for all the makefiles 
+# in this distribution, it's commented out here because this 
+# directory doesn't contain any C/C++ files and doesn't need 
+# building rules for them
+#include $(AAFBASE)/build/rules.mk
 
 
 

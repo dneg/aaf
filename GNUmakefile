@@ -28,9 +28,17 @@ check : ref-impl
 
 .PHONY : clean
 clean :
-	cd ref-impl && $(MAKE) clean
-	cd DevUtils && $(MAKE) clean
-	cd Utilities && $(MAKE) clean
-	cd examples && $(MAKE) clean
-	cd test && $(MAKE) clean
+	cd ref-impl && $(MAKE) $@
+	cd DevUtils && $(MAKE) $@
+	cd Utilities && $(MAKE) $@
+	cd examples && $(MAKE) $@
+	cd test && $(MAKE) $@
+
+.PHONY : realclean
+realclean :
+	cd ref-impl && $(MAKE) $@
+	cd DevUtils && $(MAKE) $@
+	cd Utilities && $(MAKE) $@
+	cd examples && $(MAKE) $@
+	cd test && $(MAKE) $@
 

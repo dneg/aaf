@@ -3,18 +3,12 @@
 #   Target:     {refh}AAF.h, {refh}AAFPlugin.h, {refh}AAF_i.c, {refh}AAFPlugin_i.c
 #   Sources:    all frefh files
 #
-"{refh}AAF.h" Ä "{macdodo}macaafobjects.mk" {GENERATED_FREFH}
-	echo "{refh}AAF.h"
+
+MAKEMACDODO2 = #"{macdodo}makemacdodo.mak2"
+
+"{dod}AAF.refh" Ä "{macdodo}macaafobjects.mk" "{MAKEMACDODO2}" "{dod}CopyrightMessage.txt" {GENERATED_FREFH}
 	( echo "//=--------------------------------------------------------------------------=" ; ¶
-	  echo "// (C) Copyright 1998-2000 Avid Technology." ; ¶
-	  echo "//" ; ¶
-	  echo "// This file was GENERATED for the AAF SDK on " ; ¶
-	  echo "//  "`date` ; ¶
-	  echo "//" ; ¶
-	  echo "// THIS CODE AND INFORMATION IS PROVIDED 'AS IS' WITHOUT WARRANTY OF" ; ¶
-	  echo "// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO" ; ¶
-	  echo "// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A" ; ¶
-	  echo "// PARTICULAR PURPOSE." ; ¶
+	  catenate "{dod}CopyrightMessage.txt" ; ¶
 	  echo "//=--------------------------------------------------------------------------=" ; ¶
 	  echo "// AAF Interfaces." ; ¶
 	  echo "//=--------------------------------------------------------------------------=" ; ¶
@@ -51,23 +45,17 @@
 	  catenate AAFModule.frefh; ¶
 	  echo "" ; ¶
 	  echo '#endif // __AAF_h__' ; ¶
-	) > "{refh}AAF.h.tmp"
-	SetFile -t TEXT -c CWIE "{refh}AAF.h.tmp"
-	Rename "{refh}AAF.h.tmp" "AAF.h"
+	) > "{dod}AAF.h.tmp"
+	SetFile -t TEXT -c CWIE "{dod}AAF.h.tmp"
+	Rename -y "{dod}AAF.h.tmp" "{dod}AAF.refh"
 
+"{refh}AAF.h" Ä "{dod}AAF.refh"
+	copy_if_diff -p "{dod}AAF.refh" "{refh}AAF.h"
+	
 
-"{refh}AAFPrivate.h" Ä "{macdodo}macaafobjects.mk" {GENERATED_PRIVATE_FREFH}
-	echo "{refh}AAFPrivate.h"
+"{dod}AAFPrivate.refh" Ä "{macdodo}macaafobjects.mk" "{MAKEMACDODO2}" "{dod}CopyrightMessage.txt" {GENERATED_PRIVATE_FREFH}
 	( echo "//=--------------------------------------------------------------------------=" ; ¶
-	  echo "// (C) Copyright 1998-2000 Avid Technology." ; ¶
-	  echo "//" ; ¶
-	  echo "// This file was GENERATED for the AAF SDK on " ; ¶
-	  echo "//  "`date` ; ¶
-	  echo "//" ; ¶
-	  echo "// THIS CODE AND INFORMATION IS PROVIDED 'AS IS' WITHOUT WARRANTY OF" ; ¶
-	  echo "// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO" ; ¶
-	  echo "// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A" ; ¶
-	  echo "// PARTICULAR PURPOSE." ; ¶
+	  catenate "{dod}CopyrightMessage.txt" ; ¶
 	  echo "//=--------------------------------------------------------------------------=" ; ¶
 	  echo "// Private AAF Interfaces." ; ¶
 	  echo "//=--------------------------------------------------------------------------=" ; ¶
@@ -96,23 +84,17 @@
 	  end ; ¶
 	  echo "" ; ¶
 	  echo '#endif // __AAFPrivate_h__' ; ¶
-	) > "{refh}AAFPrivate.h.tmp"
-	SetFile -t TEXT -c CWIE "{refh}AAFPrivate.h.tmp"
-	Rename "{refh}AAFPrivate.h.tmp" "AAFPrivate.h"
+	) > "{dod}AAFPrivate.h.tmp"
+	SetFile -t TEXT -c CWIE "{dod}AAFPrivate.h.tmp"
+	Rename -y "{dod}AAFPrivate.h.tmp" "{dod}AAFPrivate.refh"
+
+"{refh}AAFPrivate.h" Ä "{dod}AAFPrivate.refh"
+	copy_if_diff -p "{dod}AAFPrivate.refh" "{refh}AAFPrivate.h"
 
 
-"{refh}AAFPlugin.h" Ä "{macdodo}macaafobjects.mk" {PLUGIN_FREFH_TARGETS}
-	echo "{refh}AAFPlugin.h"
+"{dod}AAFPlugin.refh" Ä "{macdodo}macaafobjects.mk" "{MAKEMACDODO2}" "{dod}CopyrightMessage.txt" {PLUGIN_FREFH_TARGETS}
 	( echo "//=--------------------------------------------------------------------------=" ; ¶
-	  echo "// (C) Copyright 1998-2000 Avid Technology." ; ¶
-	  echo "//" ; ¶
-	  echo "// This file was GENERATED for the AAF SDK on " ; ¶
-	  echo "//  "`date` ; ¶
-	  echo "//" ; ¶
-	  echo "// THIS CODE AND INFORMATION IS PROVIDED 'AS IS' WITHOUT WARRANTY OF" ; ¶
-	  echo "// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO" ; ¶
-	  echo "// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A" ; ¶
-	  echo "// PARTICULAR PURPOSE." ; ¶
+	  catenate "{dod}CopyrightMessage.txt" ; ¶
 	  echo "//=--------------------------------------------------------------------------=" ; ¶
 	  echo "// AAF Plugin Interfaces." ; ¶
 	  echo "//=--------------------------------------------------------------------------=" ; ¶
@@ -145,27 +127,21 @@
 	  end ; ¶
 	  echo "" ; ¶
 	  echo '#endif // __AAFPlugin_h__' ; ¶
-	) > "{refh}AAFPlugin.h.tmp"
-	SetFile -t TEXT -c CWIE "{refh}AAFPlugin.h.tmp"
-	Rename "{refh}AAFPlugin.h.tmp" "AAFPlugin.h"
+	) > "{dod}AAFPlugin.h.tmp"
+	SetFile -t TEXT -c CWIE "{dod}AAFPlugin.h.tmp"
+	Rename -y "{dod}AAFPlugin.h.tmp" "{dod}AAFPlugin.refh"
+
+"{refh}AAFPlugin.h" Ä "{dod}AAFPlugin.refh"
+	copy_if_diff -p "{dod}AAFPlugin.refh" "{refh}AAFPlugin.h"
 
 
-"{refh}AAF_i.c" Ä "{dod}aafobjects.mk" "{dod}dod2iid.pl" "{macdodo}macaafobjects.mk" {GENERATED_FREFH}
-	echo "{refh}AAF_i.c"
+"{dod}AAF_i.refh" Ä "{dod}dod2iid.pl" "{macdodo}macaafobjects.mk" "{MAKEMACDODO2}" "{dod}CopyrightMessage.txt" {GENERATED_FREFH}
 	( echo "/* this file contains the actual definitions of */" ; ¶
 	  echo "/* the IIDs and CLSIDs */" ; ¶
 	  echo "" ; ¶
 	  echo "/* link this file in with the server and any clients */" ; ¶
 	  echo "//=--------------------------------------------------------------------------=" ; ¶
-	  echo "// (C) Copyright 1998-2000 Avid Technology." ; ¶
-	  echo "//" ; ¶
-	  echo "// This file was GENERATED for the AAF SDK on " ; ¶
-	  echo "//  "`date` ; ¶
-	  echo "//" ; ¶
-	  echo "// THIS CODE AND INFORMATION IS PROVIDED 'AS IS' WITHOUT WARRANTY OF" ; ¶
-	  echo "// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO" ; ¶
-	  echo "// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A" ; ¶
-	  echo "// PARTICULAR PURPOSE." ; ¶
+	  catenate "{dod}CopyrightMessage.txt" ; ¶
 	  echo "//=--------------------------------------------------------------------------=" ; ¶
 	  echo "// Definitions for all of the public IID needed by an AAF SDK client" ; ¶
 	  echo "//=--------------------------------------------------------------------------=" ; ¶
@@ -199,27 +175,21 @@
 	  echo "}" ; ¶
 	  echo '#endif' ; ¶
 	  echo "" ; ¶
-	) > "{refh}AAF_i.c.tmp"
-	SetFile -t TEXT -c CWIE "{refh}AAF_i.c.tmp"
-	Rename "{refh}AAF_i.c.tmp" "AAF_i.c"
+	) > "{dod}AAF_i.c.tmp"
+	SetFile -t TEXT -c CWIE "{dod}AAF_i.c.tmp"
+	Rename -y "{dod}AAF_i.c.tmp" "{dod}AAF_i.refh"
+
+"{refh}AAF_i.c" Ä "{dod}AAF_i.refh"
+	copy_if_diff -p "{dod}AAF_i.refh" "{refh}AAF_i.c"
 
 
-"{refh}AAFPlugin_i.c" Ä "{dod}aafobjects.mk" "{dod}dod2iid.pl" "{macdodo}macaafobjects.mk" {PLUGIN_FREFH_TARGETS}
-	echo "{refh}AAFPlugin_i.c"
+"{dod}AAFPlugin_i.refh" Ä "{dod}dod2iid.pl" "{macdodo}macaafobjects.mk" "{MAKEMACDODO2}" "{dod}CopyrightMessage.txt" {PLUGIN_FREFH_TARGETS}
 	( echo "/* this file contains the actual definitions of */" ; ¶
 	  echo "/* the IIDs and CLSIDs */" ; ¶
 	  echo "" ; ¶
 	  echo "/* link this file in with the server and any clients */" ; ¶
 	  echo "//=--------------------------------------------------------------------------=" ; ¶
-	  echo "// (C) Copyright 1998-2000 Avid Technology." ; ¶
-	  echo "//" ; ¶
-	  echo "// This file was GENERATED for the AAF SDK on " ; ¶
-	  echo "//  "`date` ; ¶
-	  echo "//" ; ¶
-	  echo "// THIS CODE AND INFORMATION IS PROVIDED 'AS IS' WITHOUT WARRANTY OF" ; ¶
-	  echo "// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO" ; ¶
-	  echo "// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A" ; ¶
-	  echo "// PARTICULAR PURPOSE." ; ¶
+	  catenate "{dod}CopyrightMessage.txt" ; ¶
 	  echo "//=--------------------------------------------------------------------------=" ; ¶
 	  echo "// Definitions for all public IID's needed by an AAF SDK Plugin author" ; ¶
 	  echo "//=--------------------------------------------------------------------------=" ; ¶
@@ -253,29 +223,23 @@
 	  echo "}" ; ¶
 	  echo '#endif' ; ¶
 	  echo "" ; ¶
-	) > "{refh}AAFPlugin_i.c.tmp"
-	SetFile -t TEXT -c CWIE "{refh}AAFPlugin_i.c.tmp"
-	Rename "{refh}AAFPlugin_i.c.tmp" "AAFPlugin_i.c"
+	) > "{dod}AAFPlugin_i.c.tmp"
+	SetFile -t TEXT -c CWIE "{dod}AAFPlugin_i.c.tmp"
+	Rename -y "{dod}AAFPlugin_i.c.tmp" "{dod}AAFPlugin_i.refh"
+
+"{refh}AAFPlugin_i.c" Ä "{dod}AAFPlugin_i.refh"
+	copy_if_diff -p "{dod}AAFPlugin_i.refh" "{refh}AAFPlugin_i.c"
 
 
-"{refh}AAFPrivate_i.c" Ä "{dod}aafobjects.mk" "{dod}dod2iid.pl" "{macdodo}macaafobjects.mk" {GENERATED_PRIVATE_FREFH}
-	echo "{refh}AAFPrivate_i.c"
+"{dod}AAFPrivate_i.refh" Ä "{dod}dod2iid.pl" "{macdodo}macaafobjects.mk" "{MAKEMACDODO2}" "{dod}CopyrightMessage.txt" {GENERATED_PRIVATE_FREFH}
 	( echo "/* this file contains the actual definitions of */" ; ¶
 	  echo "/* the IIDs and CLSIDs */" ; ¶
 	  echo "" ; ¶
 	  echo "/* link this file in with the server and any clients */" ; ¶
 	  echo "//=--------------------------------------------------------------------------=" ; ¶
-	  echo "// (C) Copyright 1998 Avid Technology." ; ¶
-	  echo "//" ; ¶
-	  echo "// This file was GENERATED for the AAF SDK on " ; ¶
-	  echo "//  "`date` ; ¶
-	  echo "//" ; ¶
-	  echo "// THIS CODE AND INFORMATION IS PROVIDED 'AS IS' WITHOUT WARRANTY OF" ; ¶
-	  echo "// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO" ; ¶
-	  echo "// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A" ; ¶
-	  echo "// PARTICULAR PURPOSE." ; ¶
+	  catenate "{dod}CopyrightMessage.txt" ; ¶
 	  echo "//=--------------------------------------------------------------------------=" ; ¶
-	  echo "// Definitions for all Private IID's needed by an AAF SDK Plugin author" ; ¶
+	  echo "// Definitions for all public IID's needed by an AAF SDK Plugin author" ; ¶
 	  echo "//=--------------------------------------------------------------------------=" ; ¶
 	  echo "//" ; ¶
 	  echo "" ; ¶
@@ -307,24 +271,17 @@
 	  echo "}" ; ¶
 	  echo '#endif' ; ¶
 	  echo "" ; ¶
-	) > "{refh}AAFPrivate_i.c.tmp"
-	SetFile -t TEXT -c CWIE "{refh}AAFPrivate_i.c.tmp"
-	Rename "{refh}AAFPrivate_i.c.tmp" "AAFPrivate_i.c"
+	) > "{dod}AAFPrivate_i.c.tmp"
+	SetFile -t TEXT -c CWIE "{dod}AAFPrivate_i.c.tmp"
+	Rename -y "{dod}AAFPrivate_i.c.tmp" "{dod}AAFPrivate_i.refh"
+
+"{refh}AAFPrivate_i.c" Ä "{dod}AAFPrivate_i.refh"
+	copy_if_diff -p "{dod}AAFPrivate_i.refh" "{refh}AAFPrivate_i.c"
 
 
-
-"{impl}AAFClassIDs.h" Ä "{dod}aafobjects.mk" "{macdodo}macaafobjects.mk"
-	echo "{impl}AAFClassIDs.h"
+"{dod}AAFClassIDs.implh" Ä "{macdodo}macaafobjects.mk" "{MAKEMACDODO2}" "{dod}CopyrightMessage.txt"
 	( echo "//=--------------------------------------------------------------------------=" ; ¶
-	  echo "// (C) Copyright 1998-2000 Avid Technology." ; ¶
-	  echo "//" ; ¶
-	  echo "// This file was GENERATED for the AAF SDK on " ; ¶
-	  echo "//  "`date` ; ¶
-	  echo "//" ; ¶
-	  echo "// THIS CODE AND INFORMATION IS PROVIDED 'AS IS' WITHOUT WARRANTY OF" ; ¶
-	  echo "// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO" ; ¶
-	  echo "// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A" ; ¶
-	  echo "// PARTICULAR PURPOSE." ; ¶
+	  catenate "{dod}CopyrightMessage.txt" ; ¶
 	  echo "//=--------------------------------------------------------------------------=" ; ¶
 	  echo "// Declarations for all of the private AAF code class ids" ; ¶
 	  echo "// This file is private to the AAF Reference Implementation." ; ¶
@@ -343,23 +300,17 @@
 	  end ; ¶
 	  echo "" ; ¶
 	  echo '#endif // __AAFClassIDs_h__' ; ¶
-	) > "{impl}AAFClassIDs.h.tmp"
-	SetFile -t TEXT -c CWIE "{impl}AAFClassIDs.h.tmp"
-	Rename "{impl}AAFClassIDs.h.tmp" "AAFClassIDs.h"
+	) > "{dod}AAFClassIDs.h.tmp"
+	SetFile -t TEXT -c CWIE "{dod}AAFClassIDs.h.tmp"
+	Rename -y "{dod}AAFClassIDs.h.tmp" "{dod}AAFClassIDs.implh"
+
+"{impl}AAFClassIDs.h" Ä "{dod}AAFClassIDs.implh"
+	copy_if_diff -p "{dod}AAFClassIDs.implh" "{impl}AAFClassIDs.h"
 
 
-"{comh}AAFCLSIDs.h" Ä "{dod}aafobjects.mk" "{macdodo}macaafobjects.mk"
-	echo "{comh}AAFCLSIDs.h"
+"{dod}AAFCLSIDs.comh" Ä "{macdodo}macaafobjects.mk" "{MAKEMACDODO2}" "{dod}CopyrightMessage.txt" 
 	( echo "//=--------------------------------------------------------------------------=" ; ¶
-	  echo "// (C) Copyright 1998-2000 Avid Technology." ; ¶
-	  echo "//" ; ¶
-	  echo "// This file was GENERATED for the AAF SDK on " ; ¶
-	  echo "//  "`date` ; ¶
-	  echo "//" ; ¶
-	  echo "// THIS CODE AND INFORMATION IS PROVIDED 'AS IS' WITHOUT WARRANTY OF" ; ¶
-	  echo "// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO" ; ¶
-	  echo "// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A" ; ¶
-	  echo "// PARTICULAR PURPOSE." ; ¶
+	  catenate "{dod}CopyrightMessage.txt" ; ¶
 	  echo "//=--------------------------------------------------------------------------=" ; ¶
 	  echo "// Declarations for all of the private AAF code class ids" ; ¶
 	  echo "// This file is private to the AAF Reference Implementation." ; ¶
@@ -377,24 +328,17 @@
 	  end ; ¶
 	  echo "" ; ¶
 	  echo '#endif // __AAFCLSIDs_h__' ; ¶
-	) > "{comh}AAFCLSIDs.h.tmp"
-	SetFile -t TEXT -c CWIE "{comh}AAFCLSIDs.h.tmp"
-	Rename "{comh}AAFCLSIDs.h.tmp" "AAFCLSIDs.h"
+	) > "{dod}AAFCLSIDs.h.tmp"
+	SetFile -t TEXT -c CWIE "{dod}AAFCLSIDs.h.tmp"
+	Rename -y "{dod}AAFCLSIDs.h.tmp" "{dod}AAFCLSIDs.comh"
+
+"{comh}AAFCLSIDs.h" Ä "{dod}AAFCLSIDs.comh"
+	copy_if_diff -p "{dod}AAFCLSIDs.comh" "{comh}AAFCLSIDs.h"
 
 
-
-"{comh}AAFObjectTable.h" Ä "{dod}aafobjects.mk" "{macdodo}macaafobjects.mk"
-	echo "{comh}AAFObjectTable.h"
+"{dod}AAFObjectTable.comh" Ä "{macdodo}macaafobjects.mk" "{MAKEMACDODO2}" "{dod}CopyrightMessage.txt" 
 	( echo "//=--------------------------------------------------------------------------=" ; ¶
-	  echo "// (C) Copyright 1998-2000 Avid Technology." ; ¶
-	  echo "//" ; ¶
-	  echo "// This file was GENERATED for the AAF SDK on " ; ¶
-	  echo "//  "`date` ; ¶
-	  echo "//" ; ¶
-	  echo "// THIS CODE AND INFORMATION IS PROVIDED 'AS IS' WITHOUT WARRANTY OF" ; ¶
-	  echo "// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO" ; ¶
-	  echo "// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A" ; ¶
-	  echo "// PARTICULAR PURPOSE." ; ¶
+	  catenate "{dod}CopyrightMessage.txt" ; ¶
 	  echo "//=--------------------------------------------------------------------------=" ; ¶
 	  echo "// This file contains invocations of the macros described below." ; ¶
 	  echo "//" ; ¶
@@ -434,23 +378,17 @@
 	      echo '	AAF_OBJECT_ENTRY('{class}')'; ¶
 	  end ; ¶
 	  echo "AAF_END_OBJECT_MAP()" ; ¶
-	) > "{comh}AAFObjectTable.h.tmp"
-	SetFile -t TEXT -c CWIE "{comh}AAFObjectTable.h.tmp"
-	rename -y "{comh}AAFObjectTable.h.tmp" "AAFObjectTable.h"
+	) > "{dod}AAFObjectTable.h.tmp"
+	SetFile -t TEXT -c CWIE "{dod}AAFObjectTable.h.tmp"
+	Rename -y "{dod}AAFObjectTable.h.tmp" "{dod}AAFObjectTable.comh"
+
+"{comh}AAFObjectTable.h" Ä "{dod}AAFObjectTable.comh"
+	copy_if_diff -p "{dod}AAFObjectTable.comh" "{comh}AAFObjectTable.h"
 
 
-"{comh}AAFObjectTable_i.cpp" Ä "{dod}aafobjects.mk" "{macdodo}macaafobjects.mk"
-	echo "{comh}AAFObjectTable_i.cpp"
+"{dod}AAFObjectTable_i.comh" Ä "{macdodo}macaafobjects.mk" "{MAKEMACDODO2}" "{dod}CopyrightMessage.txt" 
 	( echo "//=--------------------------------------------------------------------------=" ; ¶
-	  echo "// (C) Copyright 1998-2000 Avid Technology." ; ¶
-	  echo "//" ; ¶
-	  echo "// This file was GENERATED for the AAF SDK on " ; ¶
-	  echo "//  "`date` ; ¶
-	  echo "//" ; ¶
-	  echo "// THIS CODE AND INFORMATION IS PROVIDED 'AS IS' WITHOUT WARRANTY OF" ; ¶
-	  echo "// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO" ; ¶
-	  echo "// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A" ; ¶
-	  echo "// PARTICULAR PURPOSE." ; ¶
+	  catenate "{dod}CopyrightMessage.txt" ; ¶
 	  echo "//=--------------------------------------------------------------------------=" ; ¶
 	  echo "" ; ¶
 	  echo "//" ; ¶
@@ -476,25 +414,29 @@
 	  echo "// Include AAF Object Table:" ; ¶
 	  echo "//" ; ¶
 	  echo ¶#include ¶"AAFObjectTable.h¶" ; ¶
-	) > "{comh}AAFObjectTable_i.cpp.tmp"
-	SetFile -t TEXT -c CWIE "{comh}AAFObjectTable_i.cpp.tmp"
-	rename -y "{comh}AAFObjectTable_i.cpp.tmp" "{comh}AAFObjectTable_i.cpp"
+	) > "{dod}AAFObjectTable_i.cpp.tmp"
+	SetFile -t TEXT -c CWIE "{dod}AAFObjectTable_i.cpp.tmp"
+	Rename -y "{dod}AAFObjectTable_i.cpp.tmp" "{dod}AAFObjectTable_i.comh"
+
+"{comh}AAFObjectTable_i.cpp" Ä "{dod}AAFObjectTable_i.comh"
+	copy_if_diff -p "{dod}AAFObjectTable_i.comh" "{comh}AAFObjectTable_i.cpp"
 
  
-"{comh}CAAFEnumValidation.log" ÄÄ "{dod}AAFTypes.dod" "{dod}AAFPluginTypes.dod" "{comh}CAAFEnumValidation.h" "{comh}CAAFEnumValidation.cpp"
-	echo "{comh}CAAFEnumValidation.h"
-	echo "{comh}CAAFEnumValidation.cpp"
+"{dod}CAAFEnumValidation.log" ÄÄ "{dod}AAFTypes.dod" "{dod}AAFPluginTypes.dod" "{dod}CAAFEnumValidation.h" "{dod}CAAFEnumValidation.cpp"
 	perl GenEnumValidation.pl AAFTypes.dod AAFPluginTypes.dod > CAAFEnumValidation.log
 	Set error {Status}
 	if {error} == 0
 		SetFile -t TEXT -c CWIE CAAFEnumValidation.h
-		move -y CAAFEnumValidation.h "{comh}"
 		SetFile -t TEXT -c CWIE CAAFEnumValidation.cpp
-		move -y CAAFEnumValidation.cpp "{comc}"
-		move -y CAAFEnumValidation.log "{comh}CAAFEnumValidation.log"
 	end
 	
-"{comh}CAAFEnumValidation.h" ÄÄ "{comh}CAAFEnumValidation.log"
+"{dod}CAAFEnumValidation.h" ÄÄ "{dod}CAAFEnumValidation.log"
 
-"{comc}CAAFEnumValidation.cpp" ÄÄ "{comh}CAAFEnumValidation.log"
+"{dod}CAAFEnumValidation.cpp" ÄÄ "{dod}CAAFEnumValidation.log"
+
+"{comh}CAAFEnumValidation.h" Ä "{dod}CAAFEnumValidation.h"
+	copy_if_diff -p "{dod}CAAFEnumValidation.h" "{comh}CAAFEnumValidation.h"
+	
+"{comc}CAAFEnumValidation.cpp" Ä "{dod}CAAFEnumValidation.cpp"
+	copy_if_diff -p "{dod}CAAFEnumValidation.cpp" "{comc}CAAFEnumValidation.cpp"
 

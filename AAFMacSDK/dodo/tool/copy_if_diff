@@ -1,0 +1,149 @@
+# MPW Script: copy_if_diff
+# AUTHOR: Tom Ransdell
+# Created: 01-MAR-2001
+# Purpose: 
+#   Only copy the given file source file if it is different from the destination file.
+# This script should work for both Projector style version control as well as cvs style.
+
+set DEBUG 0
+
+set USAGE "# Usage: copy_if_diff [-p] src_file (dest_file | dest_directory)"
+
+set PROGRESS 0        # default to no progress messages
+set SRCDIR ""
+set SRCFILENAME ""
+set SRCFILE ""
+set DSTDIR ""
+set DSTFILENAME ""
+set DSTFILE ""
+
+if {#} ­ 2 && {#} ­ 3
+  echo "# ERROR: Wrong number of parameers."
+  echo "{USAGE}"
+  exit 1
+end
+
+if {#} == 3
+  if "{1}" ­ "-p"
+    echo "# ERROR: Unknown argument '{1}'."
+    echo "{USAGE}"
+    exit 2
+  end 
+  set PROGRESS 1
+  shift # pop off the first parameter
+end
+
+if "" == "`exists "{1}"`"
+  echo "# ERROR: file '{1}' does not exist."
+  echo "{USAGE}"
+  exit 3
+end
+
+if "" ­ "`exists -d "{1}"`"
+  echo "# ERROR: '{1}' is directory. Directory copies are not supported."
+  echo "{USAGE}"
+  exit 4
+end
+
+# Extract source file information.
+if "{1}" =~ /(Å:)¨1(Å)¨2/
+  set SRCDIR "{¨1}"
+  set SRCFILENAME "{¨2}"
+else
+  set SRCDIR ""	# Use current directory
+  set SRCFILENAME "{1}"
+end
+set SRCFILE "{SRCDIR}{SRCFILENAME}"
+
+# Extract destination file information.
+if "" ­ "`exists "{2}"`"
+  if "" ­ "`exists -d "{2}"`"
+    if "{2}" =~ /Å:/
+      set DSTDIR "{2}"
+    else
+      set DSTDIR "{2}:"
+    end
+    set DSTFILENAME "{SRCFILENAME}"
+  else
+    if "{2}" =~ /(Å:)¨1(Å)¨2/
+      set DSTDIR "{¨1}"
+      set DSTFILENAME "{¨2}"
+    else
+	    set DSTDIR ""	# Use current directory
+		  set DSTFILENAME "{2}"
+    end
+  end
+else
+  # If the destination path does not exist then make sure that the 
+  # parent directory exists.
+  if "{2}" =~ /(Å:)¨1(Å)¨2/
+    set DSTDIR "{¨1}"
+    set DSTFILENAME "{¨2}"
+    if "" == "`exists -d "{DSTDIR}"`"
+      echo "# ERROR: '{2}' Destination file directory does not exist."
+      echo "{USAGE}"
+      exit 7
+    end
+  else
+	  set DSTDIR ""	# Use current directory
+		set DSTFILENAME "{2}"
+  end
+end
+set DSTFILE "{DSTDIR}{DSTFILENAME}"
+
+
+if {DEBUG}
+  echo "copy_if_diff '{SRCFILE}' '{DSTFILE}' # with final paths"
+end
+
+if "{SRCFILE}" == "{DSTFILE}"
+  if {PROGRESS}
+    echo "# WARNING: '{SRCFILE}' source and destinition files paths point to the same file."
+  end
+  exit 0 # succeed
+end
+
+
+if "" ­ "`exists -f "{DSTFILE}"`"
+  #compare -n -m "{DSTFILE}" "{SRCFILE}" > dev:null ³ dev:null # compare only works for TEXT files!
+  #set COMPARE_STATUS {status}
+	# Use perl "one-liner" to compare any two files.
+	set COMPARE_STATUS `echo "{SRCFILE}|=>|{DSTFILE}" | perl -mFile::Compare -n -e 'my($src, $dst) = split(/\|=>\|/, $_, 2);' -e 'printf File::Compare::compare("$src", "$dst");'`
+  if {COMPARE_STATUS} == 0
+    if {PROGRESS}
+      echo '"'{DSTFILE}'" did not change.'
+    end
+  else
+    # The source and destination
+    # Copy to a temporary file in the destination directory.
+    duplicate -y "{SRCFILE}" "{DSTDIR}copy_if_diff.tmp"
+    # Make sure the file can be replaced.
+    SetFile -a l "{DSTFILE}"
+    set PROJECTINFO_TEXT "`ProjectInfo -s "{DSTFILE}"`"
+    if "" ­ "{PROJECTINFO_TEXT}"
+      # If the old file has a Projector 'ckid' resource then we need to 
+      # properly transfer this infomation to the newly generated file.
+      ModifyReadOnly "{DSTFILE}"
+      TransferCKID "{DSTFILE}" "{DSTDIR}copy_if_diff.tmp"
+    end
+    # We are finished updating the temporary file.
+    Rename -y "{DSTDIR}copy_if_diff.tmp" "{DSTFILE}"
+    if {PROGRESS}
+      echo '"'{DSTFILE}'" updated.'
+    end
+  end
+else
+  # Destination file did not exist so just copy the source file.
+  duplicate "{SRCFILE}" "{DSTFILE}"
+  if {PROGRESS}
+    echo '"'{DSTFILE}'" copied.'
+  end
+end
+
+# Cleanup the new file and make sure that it can easily be
+# checked into a VCS.
+SetFile -a l "{DSTFILE}"
+set PROJECTINFO_TEXT "`ProjectInfo -s "{DSTFILE}"`"
+if "" ­ "{PROJECTINFO_TEXT}"
+	OrphanFiles "{DSTFILE}"
+end

@@ -211,17 +211,18 @@ sub find_end_of_enum
 sub printCopywrite
 {
   local (*THEFILE) = @_;  # Filehandle
-  my $theTime = gmtime;
 
-  printf THEFILE "/**************************************************\\\n";
-  printf THEFILE "*                                                  *\n";
-  printf THEFILE "* Advanced Authoring Format                        *\n";
-  printf THEFILE "*                                                  *\n";
-  printf THEFILE "* Copyright (c) 1998-2000 Avid Technology, Inc.    *\n";
-  printf THEFILE "*                                                  *\n";
-  printf THEFILE "* Automatically generated:%s *\n", $theTime;
-  printf THEFILE "*                                                  *\n";
-  printf THEFILE "\\**************************************************/\n\n";
+  printf THEFILE "//=--------------------------------------------------------------------------=\n";
+  printf THEFILE "// (C) Copyright 1998-2000 Avid Technology.\n";
+  printf THEFILE "//\n";
+  printf THEFILE "// This file was GENERATED for the AAF SDK\n";
+  printf THEFILE "//\n";
+  printf THEFILE "// THIS CODE AND INFORMATION IS PROVIDED 'AS IS' WITHOUT WARRANTY OF\n";
+  printf THEFILE "// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO\n";
+  printf THEFILE "// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A\n";
+  printf THEFILE "// PARTICULAR PURPOSE.\n";
+  printf THEFILE "//=--------------------------------------------------------------------------=\n";
+  printf THEFILE "\n\n";
 }
 
 # Subroutine to print the validation function declaration.

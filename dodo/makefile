@@ -58,7 +58,7 @@ $(SRC_DIR)/com-api/aafobjects.mk : aafobjects.mk
 
 #targets: aafobjects.mk targets.mk depend.mk
 
-targets: 
+targets: targets.mk depend.mk
 	@$(ECHO) "\n======== [ /coresw/AAF-toolkit/dodo ] \"Building targets\"\n"
 	$(MAKE) -f maketargets.mak $(RELENG_MAKEFLAGS)
 
@@ -73,10 +73,15 @@ depend.mk : aafobjects.mk
 
 depend : targets.mk depend.mk
 
+
 clean:
 	cd tool ; $(MAKE) clean
 	$(MAKE) -f dodotargets.mak clean
 	$(MAKE) -f dododepend.mak clean
 	$(TOUCH) targets.mk depend.mk
 	$(MAKE) -f maketargets.mak clean
+
+realclean : clean
+	$(MAKE) -f maketargets.mak $@
 	$(RM) -f targets.mk depend.mk
+
