@@ -120,7 +120,7 @@ typedef IAAFSmartPointer<IAAFClassDef>          IAAFClassDefSP;
 typedef IAAFSmartPointer<IAAFDictionary>        IAAFDictionarySP;
 typedef IAAFSmartPointer<IAAFEssenceDescriptor> IAAFEssenceDescriptorSP;
 typedef IAAFSmartPointer<IAAFFile>              IAAFFileSP;
-typedef IAAFSmartPointer<IAAFHTMLDescriptor>    IAAFHTMLDescriptorSP;
+typedef IAAFSmartPointer<IAAFAIFCDescriptor>    IAAFAIFCDescriptorSP;
 typedef IAAFSmartPointer<IAAFFiller>            IAAFFillerSP;
 typedef IAAFSmartPointer<IAAFHeader>            IAAFHeaderSP;
 typedef IAAFSmartPointer<IAAFMob>               IAAFMobSP;
@@ -748,14 +748,15 @@ static void CreateAAFFile(aafWChar * pFileName,
   check (spMob->SetMobID(newMobID));
   check (spMob->SetName(L"a Source Mob"));
 
-  IAAFHTMLDescriptorSP  spHTMLDesc;
-  check (defs.cdHTMLDescriptor()->
-		 CreateInstance(IID_IAAFHTMLDescriptor, 
-						(IUnknown **) &spHTMLDesc));
+  IAAFAIFCDescriptorSP  spAIFCDesc;
+  check (defs.cdAIFCDescriptor()->
+		 CreateInstance(IID_IAAFAIFCDescriptor, 
+						(IUnknown **) &spAIFCDesc));
   aafRational_t  audioRate = { 44100, 1 };
 
   IAAFEssenceDescriptorSP spEssenceDesc;
-  check (spHTMLDesc->QueryInterface (IID_IAAFEssenceDescriptor,
+  check(spAIFCDesc->SetSummary (5, (unsigned char*)"TEST"));
+  check (spAIFCDesc->QueryInterface (IID_IAAFEssenceDescriptor,
 								   (void **)&spEssenceDesc));
   check (smob->SetEssenceDescriptor (spEssenceDesc));
 
