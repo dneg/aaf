@@ -182,7 +182,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 						   IID_IAAFTapeDescriptor, 
 						   (void **)&pTapeDesc));
 	check(pTapeDesc->QueryInterface (IID_IAAFEssenceDescriptor, (void **)&aDesc));
-	check(pTapeMob->SetEssenceDescription(aDesc));
+	check(pTapeMob->SetEssenceDescriptor(aDesc));
 	aDesc->Release();
 	aDesc = NULL;
 		
@@ -219,7 +219,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	check(pLocator->SetPath (TEST_PATH));	
 	check(aDesc->AppendLocator(pLocator));
 
-	check(pFileMob->SetEssenceDescription(aDesc));
+	check(pFileMob->SetEssenceDescriptor(aDesc));
 	aDesc->Release();
 	aDesc = NULL;
 	pFileDesc->Release();
@@ -281,7 +281,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	sourceRef.sourceID = masterMobID;
 	sourceRef.sourceSlotID = 1;
 	sourceRef.startTime = 0;
-	check(compSclp->SetRef(sourceRef));
+	check(compSclp->SetSourceReference(sourceRef));
 	check(compSclp->QueryInterface (IID_IAAFComponent, (void **)&aComponent));
 
 	check(aComponent->SetLength (&segLen));
@@ -476,7 +476,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 			wprintf(L"    (mobID %s)\n", buf);
 
 			check(pMob->QueryInterface (IID_IAAFSourceMob, (void **)&pSourceMob));
-			check(pSourceMob->GetEssenceDescription (&pEdesc));
+			check(pSourceMob->GetEssenceDescriptor (&pEdesc));
 			check(pEdesc->EnumAAFAllLocators(&pLocEnum));
 
 			// This should read the one real locator
@@ -715,22 +715,3 @@ main()
 
   return(0);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
