@@ -1,5 +1,5 @@
 // @doc INTERNAL
-// @com This file implements the module test for CAAFDefinitionObject
+// @com This file implements the module test for CAAFTextClip
 /***********************************************\
 *                                               *
 * Advanced Authoring Format                     *
@@ -9,11 +9,7 @@
 *                                               *
 \***********************************************/
 
-#include "CAAFTextClip.h"
-#include "CAAFTextClip.h"
-#ifndef __CAAFTextClip_h__
-#error - improperly defined include guard
-#endif
+#include "AAF.h"
 
 
 #include <iostream.h>
@@ -74,7 +70,7 @@ private:
 };
 
 
-HRESULT CAAFTextClip::test()
+extern "C" HRESULT CAAFTextClip_test()
 {
   HRESULT hr = S_OK;
   aafProductIdentification_t	ProductInfo = {0};
@@ -110,7 +106,7 @@ HRESULT CAAFTextClip::test()
   }
   catch (...)
   {
-    cerr << "CAAFTextClip::test...Caught general C++ exception!" << endl;
+    cerr << "CAAFTextClip_test...Caught general C++ exception!" << endl;
     hr = AAFRESULT_TEST_FAILED;
   }
 
