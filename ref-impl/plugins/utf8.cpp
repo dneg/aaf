@@ -64,9 +64,9 @@ int wcu8len( const wchar_t w )
 {
 	if( !(w&~0x7f) ) return 1;
 	if( !(w&~0x7ff) ) return 2;
-	else if( !(w&~0xffff) ) return 3;
-	else if( !(w&~0x1fffff) ) return 4;
-	else /* error */ return -1;
+	if( !(w&~0xffff) ) return 3;
+	if( !(w&~0x1fffff) ) return 4;
+	return -1; /* error */
 }
 
 // number of char required to represent a wchar_t string in utf8
@@ -76,7 +76,7 @@ int wcsu8slen( const wchar_t *pw )
 	int len=0;
 	wchar_t w;
 
-	while( w=*pw++ )
+	while( (w = *pw++) )
 	{
 		if( !(w&~0x7f) ) len+=1;
 		else if( !(w&~0x7ff) ) len+=2;
@@ -97,7 +97,7 @@ size_t wcstou8s( char *pu, const wchar_t *pw, size_t count )
 
 	size_t clen=0;
 	wchar_t w;
-	while( w=*pw++ )
+	while( (w = *pw++) )
 	{
 		int ulen=wcu8len(w);
 		
@@ -170,7 +170,7 @@ int u8swcslen( const char* pu )
 	int len=0;
 	char c;
 
-	while( c=*pu )
+	while( (c = *pu) )
 	{
 		if( !(c&0x80) ) { len++; pu+=1; }
 		else if( (c&0xe0)==0xc0 ) { len++; pu+=2; }
@@ -198,5 +198,3 @@ size_t u8stowcs( wchar_t *pw, const char *pu, size_t count )
 	if( '\0'==*pu && clen<count) pw[clen++]=L'\0';
 	return clen;
 }
-
-
