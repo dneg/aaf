@@ -45,7 +45,7 @@ typedef IAAFSmartPointer<IAAFTypeDef>				IAAFTypeDefSP;
 typedef IAAFSmartPointer<IAAFPropertyValue>			IAAFPropertyValueSP;
 typedef IAAFSmartPointer<IAAFTypeDefInt>			IAAFTypeDefIntSP;
 typedef IAAFSmartPointer<IUnknown>					IUnknownSP;
-typedef IAAFSmartPointer<IAAFDefObject>				IAAFDefObjectSP;
+typedef IAAFSmartPointer<IAAFMetaDefinition>				IAAFMetaDefinitionSP;
 
 //// Our TEST (gold) values ....
 
@@ -258,10 +258,10 @@ static HRESULT  ReadAAFFile(aafWChar *  pFileName )
 		checkResult( spPropDef->GetTypeDef(&spTypeDef) );
 
 		//check AUID
-		IAAFDefObjectSP  spDefObj;
+		IAAFMetaDefinitionSP  spMetaDefinition;
 		aafUID_t checkUID = {0};
-		checkResult(spTypeDef->QueryInterface(IID_IAAFDefObject, (void**)&spDefObj));
-		checkResult(spDefObj->GetAUID (&checkUID));
+		checkResult(spTypeDef->QueryInterface(IID_IAAFMetaDefinition, (void**)&spMetaDefinition));
+		checkResult(spMetaDefinition->GetAUID (&checkUID));
 		checkExpression(memcmp(&checkUID, &TEST_UID, sizeof(checkUID)) == 0, AAFRESULT_TEST_FAILED);
 		
 		//check Category of the typedef - WE HAPPEN TO KNOW THAT ITS AN "INTEGER" ... 
