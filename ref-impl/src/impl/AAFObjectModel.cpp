@@ -162,7 +162,7 @@ static PropertyDefinition * s##name##_PropertyDefinitions[] = \
 #define AAF_PROPERTY(name, id, tag, type, mandatory, uid, container) \
   &sPropertyDefinitions[sPropertyIndex++],
 
-#define AAF_CLASS_END(name) \
+#define AAF_CLASS_END(name, id, parent, concrete) \
   0 \
 };
 
@@ -373,7 +373,7 @@ static DefinitionEnumerationMember * MY_ENUM_MEMBER_ARRAY(name)[] = \
 {
 #define AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(name, value, container) \
   &sTypeDefinitionEnumerationMembers[sEnumerationMemberIndex++],
-#define AAF_TYPE_DEFINITION_ENUMERATION_END(name) \
+#define AAF_TYPE_DEFINITION_ENUMERATION_END(name, id, type) \
   0 \
 };
 
@@ -522,7 +522,7 @@ static DefinitionRecordField * \
 #define AAF_TYPE_DEFINITION_RECORD_FIELD(name, type, container) \
   &sTypeDefinitionRecordFields[sRecordFieldIndex++],
 
-#define AAF_TYPE_DEFINITION_RECORD_END(name) \
+#define AAF_TYPE_DEFINITION_RECORD_END(name, id) \
   0 \
 };
 
@@ -659,7 +659,7 @@ static DefinitionExtendibleEnumerationMember * \
 {
 #define AAF_TYPE_DEFINITION_EXTENDIBLE_ENUMERATION_MEMBER(name, auid, container) \
   &sTypeDefinitionExtendibleEnumerationMembers[sExtensibleEnumerationMemberIndex++],
-#define AAF_TYPE_DEFINITION_EXTENDIBLE_ENUMERATION_END(name) \
+#define AAF_TYPE_DEFINITION_EXTENDIBLE_ENUMERATION_END(name, id) \
   0 \
 };
 
@@ -844,7 +844,7 @@ static aafUID_constptr MY_ARRAY_NAME(name)[] = \
 #define AAF_TYPE_DEFINITION_WEAK_REFERENCE_MEMBER(name, parent, container) \
   MY_PROPERTY_ID(name, parent),
   
-#define AAF_TYPE_DEFINITION_WEAK_REFERENCE_END(name) \
+#define AAF_TYPE_DEFINITION_WEAK_REFERENCE_END(name, id, type) \
 	NULL \
 };
 
