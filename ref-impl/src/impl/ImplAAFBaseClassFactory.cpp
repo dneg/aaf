@@ -58,6 +58,8 @@
 #define CLSID_AAFCodecDefinition CLSID_AAFCodecDef
 #define CLSID_AAFContainerDefinition CLSID_AAFContainerDef
 #define CLSID_AAFInterpolationDefinition CLSID_AAFInterpolationDef
+#define CLSID_AAFMediaFilmDescriptor CLSID_AAFFilmDescriptor
+#define CLSID_AAFMediaGroup CLSID_AAFEssenceGroup
 
 //
 // Include the AAF macro invocations.
