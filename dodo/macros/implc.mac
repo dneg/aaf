@@ -144,10 +144,6 @@ Impl%01\
 #include "Impl.this-module.h"
 #endif
 
-#ifndef __.this-module_h__
-#include ".this-module.h"
-#endif
-
 #include <assert.h>
 
 
