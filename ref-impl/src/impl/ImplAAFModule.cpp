@@ -316,19 +316,6 @@ STDAPI ImplAAFFileOpenExistingRead (
 //   - The named file is not a valid AAF file.
 // 
 
-#if defined(READMODIFYWRITE_NOT_SUPPORTED)
-	
-STDAPI ImplAAFFileOpenExistingModify (
-  const aafCharacter *,
-  aafUInt32,
-  aafProductIdentification_t *,
-  ImplAAFFile **)
-{
-	return AAFRESULT_NOT_IN_CURRENT_VERSION;
-}
-
-#else // #if defined(READMODIFYWRITE_NOT_SUPPORTED)	
-
 STDAPI ImplAAFFileOpenExistingModify (
   // Null-terminated string containing name of filesystem file to be
   // opened for modification.  Filename must be in a form that would
@@ -434,10 +421,6 @@ STDAPI ImplAAFFileOpenExistingModify (
   return hr;
 #endif // USE_RAW_STORAGE
 }
-
-#endif // #else // #if defined(READMODIFYWRITE_NOT_SUPPORTED)	
-
-
 
 //***********************************************************
 //
@@ -1003,16 +986,6 @@ ImplAAFCreateAAFFileOnRawStorage
 
   if (! ppNewFile)
 	return AAFRESULT_NULL_PARAM;
-
-#if defined(READMODIFYWRITE_NOT_SUPPORTED)
-
-  if ((kAAFFileExistence_existing == existence) &&
-      (kAAFFileAccess_modify == access))
-  {
-    return AAFRESULT_NOT_IN_CURRENT_VERSION;
-  }
-
-#endif
 
   HRESULT hr = S_OK;
   ImplAAFFileSP pFile;
