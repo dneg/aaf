@@ -622,17 +622,17 @@ AAFRESULT STDMETHODCALLTYPE
 			
 		  CHECK(tcSeg->SegmentOffsetToTC(offset, &timecode, &tcFound))
 
-		  /* Release Bento reference, so the useCount is decremented */
-		  if (tcSeg)
-			{
-			  tcSeg->ReleaseObject();	
-			  tcSeg = NULL;
-			}
-		  if (slot)
-			{
-			  slot->ReleaseObject();	
-			  slot = NULL;
-			}
+//!!!		  /* Release reference, so the useCount is decremented */
+//		  if (tcSeg)
+//			{
+//			  tcSeg->ReleaseObject();	
+//			  tcSeg = NULL;
+//			}
+//		  if (slot)
+//			{
+//			  slot->ReleaseObject();	
+//			  slot = NULL;
+//			}
 
 	  /* Assume found at this point, so finish generating result */
 	  /* If this is a Film Composer file that has a mask or pulldown object
@@ -775,9 +775,9 @@ AAFRESULT STDMETHODCALLTYPE
 			}
 		} /* for */
 
-	  /* Release Bento reference, so the useCount is decremented */
-	  if (sourceInfo.mob)
-		 sourceInfo.mob->ReleaseObject();
+//!!!	  /* Release reference, so the useCount is decremented */
+//	  if (sourceInfo.mob)
+//		 sourceInfo.mob->ReleaseObject();
 
 	  *result = timecode;
 	  if (iterHdl)
@@ -845,17 +845,17 @@ AAFRESULT STDMETHODCALLTYPE
 
 			CHECK(seg->SegmentTCToOffset(timecode, editRate, result, &found));			  
 
-			/* Release Bento reference, so the useCount is decremented */
-			if (seg)
-			  {
-				 seg->ReleaseObject();	
-				 seg = NULL;
-			  }
-			if (slot)
-			  {
-				 slot->ReleaseObject();	
-				 slot = NULL;
-			  }
+//!!!			/* Release reference, so the useCount is decremented */
+//			if (seg)
+//			  {
+//				 seg->ReleaseObject();	
+//				 seg = NULL;
+//			  }
+//			if (slot)
+//			  {
+//				 slot->ReleaseObject();	
+//				 slot = NULL;
+//			  }
 		 } /* for */
 
 	 if(!found)
@@ -863,9 +863,9 @@ AAFRESULT STDMETHODCALLTYPE
 		 RAISE(OM_ERR_TIMECODE_NOT_FOUND);
 	  }
 
-	  /* Release Bento reference, so the useCount is decremented */
-	  if (sourceInfo.mob)
-		 OMLReleaseObject((OMLObject)sourceInfo.mob);	
+//!!!	  /* Release reference, so the useCount is decremented */
+//	  if (sourceInfo.mob)
+//		 OMLReleaseObject((OMLObject)sourceInfo.mob);	
 		
 	  if (iterHdl)
 		{
@@ -1208,9 +1208,9 @@ AAFRESULT STDMETHODCALLTYPE
 
 		/* Delete out of mob cache */
 		entry = (mobTableEntry_t *)TableUIDLookupPtr(_head->_mobs, _mobID);
-		/* Tell Bento that cache's object reference has been deleted */
-		if (entry)
-		  _container->OMLReleaseObject(entry->mob->_obj);
+//!!!		/* Tell container that cache's object reference has been deleted */
+//		if (entry)
+//		  _container->OMLReleaseObject(entry->mob->_obj);
 		CHECK(TableRemoveUID(_head->_mobs, _mobID));
 
 		/* Remove from Mobs index */
