@@ -318,6 +318,7 @@ void Omf2Aaf::AAFFileOpen( char* pFileName)
 	}
 	pAAF->RegisterAAFProperties(pDictionary);
 	gpGlobals->pLogger->Log(kLogInfo, "AAF File: %s Created succesfully\n", pFileName);
+	pAAF->SetDictionary(pDictionary);
 
 	// auto_ptrs will clean up all allocated memory upon return;
 	return;
