@@ -13,6 +13,8 @@
 \************************************************/
 
 
+class ImplAAFBuiltins;
+
 class ImplAAFClassDef;
 
 class ImplEnumAAFClassDefs;
@@ -262,14 +264,16 @@ public:
   virtual AAFRESULT
     GetNthPluggableDef (aafInt32 index, ImplAAFPluggableDef **ppEnum);
 
-  	AAFRESULT LookupPluggableDef(aafUID_t *containerID, ImplAAFPluggableDef **result);
+  AAFRESULT LookupPluggableDef(aafUID_t *containerID, ImplAAFPluggableDef **result);
 
+  AAFRESULT LookupPropDef (OMPropertyId opid,
+						   ImplAAFPropertyDef ** ppd);
 private:
   // make sure built-in types are initialized.
   void InitBuiltins();
 
 private:
-	aafBool _builtinsInited;
+  ImplAAFBuiltins * _pBuiltins;
 
     OMStrongReferenceVectorProperty<ImplAAFPluggableDef>	_pluginDefinitions;
     OMStrongReferenceVectorProperty<ImplAAFEffectDef>		_effectDefinitions;
