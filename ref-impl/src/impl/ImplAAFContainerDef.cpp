@@ -37,7 +37,7 @@
 
 
 ImplAAFContainerDef::ImplAAFContainerDef () :
-_isIdentified(		PID_ContainerDefinition_EssenceIsIdentified, "EssenceIsIdentified")
+_isIdentified(		PID_ContainerDefinition_EssenceIsIdentified, L"EssenceIsIdentified")
 {
   _persistentProperties.put(_isIdentified.address());
 }

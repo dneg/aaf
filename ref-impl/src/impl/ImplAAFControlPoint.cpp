@@ -52,9 +52,9 @@
 #include "aafErr.h"
 
 ImplAAFControlPoint::ImplAAFControlPoint ()
-: _time(			PID_ControlPoint_Time,			"Time"),
-  _value(			PID_ControlPoint_Value,			"Value"),
-  _hint(			PID_ControlPoint_EditHint,		"EditHint"),
+: _time(			PID_ControlPoint_Time,			L"Time"),
+  _value(			PID_ControlPoint_Value,			L"Value"),
+  _hint(			PID_ControlPoint_EditHint,		L"EditHint"),
   _initialized(false),
   _cachedTypeDef(NULL)
 {
