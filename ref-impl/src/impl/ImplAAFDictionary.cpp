@@ -252,38 +252,37 @@ static ImplAAFObject* CreateBaseClassInstance(const aafUID_t* pAUID)
 //
 OMStorable* ImplAAFDictionary::create(const OMClassId& classId) const
 {
-	const aafUID_t* pAUID  = reinterpret_cast<const aafUID_t*>(&classId);
-  OMStorable *result = NULL;
+  const aafUID_t* pAUID  = reinterpret_cast<const aafUID_t*>(&classId);
+  OMStorable *result = 0;
 
-
-  // If the given classId is for the dictionary then just return 
-  // this instance.
-  if (0 == memcmp(pAUID, &AUID_AAFDictionary, sizeof(aafUID_t)))
-  {
-    // Bump the reference count before returning this.
+  // Is this a request to create the dictionary?
+  if (memcmp(pAUID, &AUID_AAFDictionary, sizeof(aafUID_t)) == 0) {
+    // The result is just this instance.
+    result = const_cast<ImplAAFDictionary*>(this);
+    // Bump the reference count.
     AcquireReference();
-    return const_cast<ImplAAFDictionary*>(this);
+  } else {
+
+    // Create an instance of the class corresponsing to the given
+    // stored object id.
+
+    // Try the built-in dictionary first.
+    //
+    result = ::CreateBaseClassInstance(pAUID);
+    if (result == 0) {
+      // Not in the built-in dictionary, try the current dictionary.
+      // TBD
+      //
+    }
   }
 
-
+  // If we created an object then give it a reference to the factory
+  // (dictionary) that was used to created it.
   //
-	// Look in the built-in dictionary first.
-  //
-
-  // Lookup the code class id for the given stored object id.
-  result = ::CreateBaseClassInstance(pAUID);
-  if (NULL != result)
-    return result;
-
-
-  //
-  // Search the current dictionary...
-  // TBD
-  //
-  
-	
-
-	return result;
+  if (result != 0) {
+    result->setClassFactory(this);
+  }
+  return result;
 }
 
 
