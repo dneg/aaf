@@ -36,7 +36,7 @@ class ImplAAFFindSourceInfo;
 
 class ImplAAFScopeStack;
 
-class ImplAAFGroup;
+class ImplAAFEffect;
 
 
 
@@ -373,7 +373,7 @@ AAFRESULT
 					 ImplAAFComponent **foundObj,
 					 aafLength_t *minLength,
 					 aafBool *foundTransition,
-					 ImplAAFGroup **effeObject,
+					 ImplAAFEffect **effeObject,
 					 aafInt32	*nestDepth,
 					 aafPosition_t *diffPos);
 
