@@ -1243,8 +1243,10 @@ AD_CLASS_END\
   // %02 
   // 
   STDMETHOD(%01)(THIS_
-    // Class definition of the stored object to be created.
-    IAAFClassDef * pClassDef,
+    // Class identifier (AUID) of the stored object. This is the
+    // corresponding SMPTE identifier (as a GUID) for all predefined
+    // built-in classes.
+    aafUID_constref id,
 
     // Reference to the identifier of the interface
     REFIID riid,
@@ -1256,7 +1258,7 @@ AD_CLASS_END\
 
 
 #ccccccccccccccccccccccccccc
-#c Begining of the module definitions
+#c Beginning of the module definitions
 #c
 #startm AD_MODULE_BEGIN 02
 #endm

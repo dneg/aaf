@@ -1461,7 +1461,6 @@ AD_CLASS_BEGIN\
 
 #ccccccccccccccccccccccccccc
 #c
-#c IMPLH 
 #c Declaration for the dictionary's factory method.
 #c
 #startm AD_DICTIONARY_FACTORY 02
@@ -1471,8 +1470,10 @@ AD_CLASS_BEGIN\
   // %02
   virtual AAFRESULT STDMETHODCALLTYPE 
   %01 (
-    // Class definition of the stored object to be created.
-    ImplAAFClassDef * pClassDef,
+    // Class identifier (AUID) of the stored object. This is the
+    // corresponding SMPTE identifier (as a GUID) for all predefined
+    // built-in classes.
+    const aafUID_t & id,
 
     // Address of output variable that receives the 
     // object pointer requested in pAUID
@@ -1481,7 +1482,24 @@ AD_CLASS_BEGIN\
 
 
 #ccccccccccccccccccccccccccc
-#c Begining of the module definitions
+#c
+#c Declaration for the class definition's factory method.
+#c
+#startm AD_CLASSDEF_FACTORY 02
+  //****************
+  // %01()
+  //
+  // %02
+  virtual AAFRESULT STDMETHODCALLTYPE 
+  %01 (
+    // Address of output variable that receives the 
+    // object pointer requested in pAUID
+    ImplAAFObject ** ppvObject);
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c Beginning of the module definitions
 #c
 #startm AD_MODULE_BEGIN 02
 #endm

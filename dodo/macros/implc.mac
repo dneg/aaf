@@ -1184,7 +1184,6 @@ AD_CLASS_BEGIN\
 
 #ccccccccccccccccccccccccccc
 #c
-#c IMPLC 
 #c Declaration for the dictionary's factory method.
 #c
 #startm AD_DICTIONARY_FACTORY 02
@@ -1196,18 +1195,20 @@ AD_CLASS_BEGIN\
 // %02
 AAFRESULT STDMETHODCALLTYPE 
   Impl.this-module::%01 (
-    // Class definition of the stored object to be created.
-    ImplAAFClassDef * pClassDef,
+    // Class identifier (AUID) of the stored object. This is the
+    // corresponding SMPTE identifier (as a GUID) for all predefined
+    // built-in classes.
+    const aafUID_t & id,
 
     // Address of output variable that receives the 
-    // object pointer requested in pClassDef
+    // object pointer requested in id
     ImplAAFObject ** ppvObject)
 {
   if (NULL == ppvObject)
     return AAFRESULT_NULL_PARAM;
   
   // Look for the object in the built-in base class factory.
-  *ppvObject = ImplAAFBaseClassFactory::CreateInstance(pClassDef);
+  *ppvObject = ImplAAFBaseClassFactory::CreateInstance(&id);
 
   if (NULL == *ppvObject)
   {
@@ -1226,7 +1227,46 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 #ccccccccccccccccccccccccccc
-#c Begining of the module definitions
+#c
+#c Declaration for the class definition's factory method.
+#c
+#startm AD_CLASSDEF_FACTORY 02
+
+#ifndef __ImplAAFBaseClassFactory_h__
+#include "ImplAAFBaseClassFactory.h"
+#endif
+
+// %02
+AAFRESULT STDMETHODCALLTYPE 
+  Impl.this-module::%01 (
+    // Address of output variable that receives the 
+    // requested object pointer
+    ImplAAFObject ** ppvObject)
+{
+  if (NULL == ppvObject)
+    return AAFRESULT_NULL_PARAM;
+
+  // Look for the object in the built-in base class factory.
+  *ppvObject = ImplAAFBaseClassFactory::CreateInstance(this);
+
+  if (NULL == *ppvObject)
+  {
+    // TBD:
+    // Search the rest of the dictionary for extension classes.
+    // 
+  }
+  
+
+  if (NULL == *ppvObject)
+    return AAFRESULT_INVALID_CLASS_ID;
+  else
+    return AAFRESULT_SUCCESS;
+}
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c Beginning of the module definitions
 #c
 #startm AD_MODULE_BEGIN 02
 #endm

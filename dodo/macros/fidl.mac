@@ -1405,7 +1405,6 @@ AD_CLASS_END\
 
 #ccccccccccccccccccccccccccc
 #c
-#c IDL 
 #c Declaration for the dictionary's factory method.
 #c
 #startm AD_DICTIONARY_FACTORY 02
@@ -1416,9 +1415,32 @@ AD_CLASS_END\
   // %02 
   // 
   HRESULT %01(
-    // Class definition of the stored object to be created.
-    [in] IAAFClassDef * pClassDef,
+    // Class identifier (id) of the stored object. This is the
+    // corresponding SMPTE identifier (as a GUID) for all predefined
+    // built-in classes.
+    [in, ref] aafUID_constref id,
 
+    // Reference to the identifier of the interface
+    [in, ref] REFIID riid,
+
+    // Address of output variable that receives the 
+    // interface pointer requested in riid
+    [out, iid_is(riid)] IUnknown ** ppvObject);
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Declaration for the class definition's factory method.
+#c
+#startm AD_CLASSDEF_FACTORY 02
+  //***********************************************************
+  //
+  // %01()
+  //
+  // %02 
+  // 
+  HRESULT %01(
     // Reference to the identifier of the interface
     [in, ref] REFIID riid,
 
@@ -1510,7 +1532,7 @@ AD_CLASS_END\
 
 
 #ccccccccccccccccccccccccccc
-#c Begining of the module definitions
+#c Beginning of the module definitions
 #c
 #startm AD_MODULE_BEGIN 02
 #endm

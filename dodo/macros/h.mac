@@ -1496,10 +1496,36 @@ AD_CLASS_END\
 
 #ccccccccccccccccccccccccccc
 #c
-#c CPPH 
 #c Declaration for the dictionary's factory method.
 #c
 #startm AD_DICTIONARY_FACTORY 02
+  //***********************************************************
+  // METHOD NAME: %01()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | .this-module | %01 |
+  // %02
+  // @end
+  // 
+  virtual AAFRESULT STDMETHODCALLTYPE 
+  %01 (
+    // Class identifier (AUID) of the stored object. This is the
+    // corresponding SMPTE identifier (as a GUID) for all predefined
+    // built-in classes.
+    const aafUID_t & id,
+
+    // Address of output variable that receives the 
+    // object pointer requested in pAUID
+    AAFObject ** ppvObject);
+#endm
+
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Declaration for the class definition's factory method.
+#c
+#startm AD_CLASSDEF_FACTORY 02
   //***********************************************************
   // METHOD NAME: %01()
   //
@@ -1519,9 +1545,8 @@ AD_CLASS_END\
 #endm
 
 
-
 #ccccccccccccccccccccccccccc
-#c Begining of the module definitions
+#c Beginning of the module definitions
 #c
 #startm AD_MODULE_BEGIN 02
 #endm
