@@ -278,6 +278,7 @@ AAFRESULT SetModified(void);		// To NOW
 
   void SetByteOrder(const aafInt16 byteOrder);
   void SetDictionary(ImplAAFDictionary *pDictionary);
+  void SetFileRevision(aafVersionType_t pRevision);
 
 private:
 	// These are private accessor methods.
@@ -289,16 +290,16 @@ private:
 		ImplAAFFile		*_file;
 
 		// Non-table instance variables
-		aafVersionType_t	_fileRev;
 		aafProductVersion_t	_toolkitRev;
 
 		// Persistent properties
     //
-		OMFixedSizeProperty<aafInt16>                      _byteOrder;
-		OMFixedSizeProperty<aafTimeStamp_t>                _lastModified;
-    OMStrongReferenceVectorProperty<ImplAAFIdentification> _identificationList;
+		OMFixedSizeProperty<aafInt16>						_byteOrder;
+		OMFixedSizeProperty<aafTimeStamp_t>					_lastModified;
+		OMStrongReferenceVectorProperty<ImplAAFIdentification> _identificationList;
 		OMStrongReferenceProperty<ImplAAFContentStorage>	_contentStorage;
-		OMStrongReferenceProperty<ImplAAFDictionary>	_dictionary;
+		OMStrongReferenceProperty<ImplAAFDictionary>		_dictionary;
+		OMFixedSizeProperty<aafVersionType_t>               _fileRev;
 };
 
 #endif // ! __ImplAAFHeader_h__
