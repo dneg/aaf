@@ -209,17 +209,26 @@ aafBool	EqualMobID(aafMobID_constref mobID1, aafMobID_constref mobID2)
 	return(memcmp(&mobID1, &mobID2, sizeof(aafMobID_t)) == 0 ? kAAFTrue : kAAFFalse);
 }
 
+
+/************************
+ *   Function:	aafIsEqualGUID
+ *
+ *	Determines whether specified GUIDs are equal.
+ *
+ *   ReturnValue:
+ *	kAAFTrue - The GUIDs are equal.
+ *	kAAFFalse - The GUIDs are not equal.
+ */
+aafBool aafIsEqualGUID( const GUID& guid1, const GUID& guid2 )
+{
+    return( memcmp( (void*)&guid1, (void*)&guid2, sizeof(GUID) ) == 0 ? 
+        kAAFTrue : kAAFFalse );
+}
+
+
 static aafInt32 powi(
 			aafInt32	base,
 			aafInt32	exponent);
-
-
-	/************************************************************
-	 *
-	 * Public Functions (Part of the toolkit API)
-	 *
-	 *************************************************************/
-
 
 
 /************************
