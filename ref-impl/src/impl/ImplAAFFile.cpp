@@ -147,10 +147,16 @@ ImplAAFFile::Initialize ()
 	// The following is temporary code. (transdel:2000-APR-11)
 	_factory->setMetaDictionary(_metafactory);
 	_metafactory->setDataDictionary(_factory);
+	
+	// Experimental: Create and initialize all of the axiomatic definitions.
+	// This must be done before another other definitions or data objects
+	// can be created.
+	AAFRESULT result = _metafactory->InstantiateAxiomaticDefinitions();
+	assert(AAFRESULT_SUCCEEDED(result));
 
 	_initialized = kAAFTrue;
 
-	return AAFRESULT_SUCCESS;
+	return result;
 }
 
 
