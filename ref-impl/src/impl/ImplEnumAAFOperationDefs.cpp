@@ -82,9 +82,11 @@ AAFRESULT STDMETHODCALLTYPE
 			dict = NULL;
 		}
 		else if(_enumStrongProp != NULL)
+		{
 			_enumStrongProp->getValueAt(*ppOperationDef, _current);
+			(*ppOperationDef)->AcquireReference();
+		}
 		//!!!Else assert
-		(*ppOperationDef)->AcquireReference();
 		_current++;
 		if (head) {
 			head->ReleaseReference();
