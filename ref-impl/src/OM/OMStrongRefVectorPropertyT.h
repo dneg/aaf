@@ -263,6 +263,31 @@ ReferencedObject*
   return oldObject;
 }
 
+  // @mfunc Set the value of this <c OMStrongReferenceVectorProperty>
+  //        at position <p index> to 0.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          (contained) object. This type must be a descendant of
+  //          <c OMStorable>.
+  //   @parm The position to clear.
+  //   @rdesc A pointer to the old <p ReferencedObject>. If lazy
+  //          loading is enabled and the referenced object was never
+  //          loaded the value returned is 0.
+template <typename ReferencedObject>
+ReferencedObject* 
+OMStrongReferenceVectorProperty<ReferencedObject>::clearValueAt(
+                                                            const size_t index)
+{
+  TRACE("OMStrongReferenceVectorProperty<ReferencedObject>::clearValueAt");
+  PRECONDITION("Valid index", index < count());
+
+  VectorElement& element = _vector.getAt(index);
+  ReferencedObject* oldObject = element.setValue(0);
+
+  POSTCONDITION("Object properly cleared",
+                                         _vector.getAt(index).getValue() == 0);
+  return oldObject;
+}
+
   // @mfunc The value of this <c OMStrongReferenceVectorProperty>
   //        at position <p index>.
   //   @tcarg class | ReferencedObject | The type of the referenced

@@ -88,6 +88,10 @@ public:
   ReferencedObject* setValueAt(const ReferencedObject* object,
                                const size_t index);
 
+    // @cmember Set the value of this <c OMStrongReferenceVectorProperty>
+    //          at position <p index> to 0.
+  ReferencedObject* clearValueAt(const size_t index);
+
     // @cmember The value of this <c OMStrongReferenceVectorProperty>
     //          at position <p index>.
   ReferencedObject* valueAt(const size_t index) const;
