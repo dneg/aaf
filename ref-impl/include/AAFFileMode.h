@@ -39,14 +39,14 @@
 
 // Control of lazy/eager loading
 //
-// - When set, the bit signifies eager loading.
-// - When clear (the default), lazy loading is specified.
+// - When set, the bit signifies lazy loading.
+// - When clear (the default), eager loading is specified.
 //
 // The following applies to:
 // - AAFFileOpenExistingRead()
 // - AAFFileOpenExistingModify()
 // - IAAFFile::SaveAs()
-#define AAF_FILE_MODE_EAGER_LOADING        (1 << 0)
+#define AAF_FILE_MODE_LAZY_LOADING        (1 << 0)
 
 // Control of reversion
 //

@@ -110,7 +110,7 @@ inline int equalUID(const aafUID_t & a, const aafUID_t & b)
 static bool areAllModeFlagsDefined (aafUInt32 modeFlags)
 {
   static const aafUInt32 kAllFlags =
-	AAF_FILE_MODE_EAGER_LOADING |
+	AAF_FILE_MODE_LAZY_LOADING |
 	AAF_FILE_MODE_REVERTABLE |
 	AAF_FILE_MODE_UNBUFFERED |
 	AAF_FILE_MODE_RECLAIMABLE |
@@ -136,9 +136,9 @@ static bool areAllModeFlagsDefined (aafUInt32 modeFlags)
 //
 static bool areAllModeFlagsSupported (aafUInt32 modeFlags)
 {
-	//NOTE: Eager loading and large sector support included
+	//NOTE: Lazy loading and large sector support included
   static const aafUInt32 kSupportedFlags =
-	AAF_FILE_MODE_USE_LARGE_SS_SECTORS | AAF_FILE_MODE_EAGER_LOADING;
+	AAF_FILE_MODE_USE_LARGE_SS_SECTORS | AAF_FILE_MODE_LAZY_LOADING;
 
   if (modeFlags & (~kSupportedFlags))
 	{
@@ -199,7 +199,7 @@ AAFRESULT STDMETHODCALLTYPE
 ImplAAFFile::OpenExistingRead (const aafCharacter * pFileName,
 							   aafUInt32 modeFlags)
 {
-	OMFile::OMLoadMode	loadMode = OMFile::lazyLoad;	// The default behavior
+	OMFile::OMLoadMode	loadMode = OMFile::eagerLoad;	// The default behavior
 	AAFRESULT stat = AAFRESULT_SUCCESS;
 
 	// Validate parameters and preconditions.
@@ -221,14 +221,9 @@ ImplAAFFile::OpenExistingRead (const aafCharacter * pFileName,
 	if (! areAllModeFlagsSupported (modeFlags))
 	  return AAFRESULT_NOT_IN_CURRENT_VERSION;
 
-	// modeFlags only in RawStorage API
-	// remove when implemented in NamedFile API
-	//NOTE: Enable Eager Loading for test purposes
-	//if( modeFlags )
-	  //return AAFRESULT_NOT_IN_CURRENT_VERSION;
-    if( modeFlags & AAF_FILE_MODE_EAGER_LOADING)
+    if( modeFlags & AAF_FILE_MODE_LAZY_LOADING)
 	{
-		  loadMode = OMFile::eagerLoad;
+		  loadMode = OMFile::lazyLoad;
 	}
 
 	// Save the mode flags for now. They are not currently (2/4/1999) used by the
@@ -340,7 +335,7 @@ ImplAAFFile::OpenExistingModify (const aafCharacter * pFileName,
 								 aafUInt32 modeFlags,
 								 aafProductIdentification_t * pIdent)
 {
-	OMFile::OMLoadMode	loadMode = OMFile::lazyLoad;	// The default behavior
+	OMFile::OMLoadMode	loadMode = OMFile::eagerLoad;	// The default behavior
 	AAFRESULT stat = AAFRESULT_SUCCESS;
 
 
@@ -366,14 +361,9 @@ ImplAAFFile::OpenExistingModify (const aafCharacter * pFileName,
 	if (! areAllModeFlagsSupported (modeFlags))
 	  return AAFRESULT_NOT_IN_CURRENT_VERSION;
 
-	// modeFlags only in RawStorage API
-	// remove when implemented in NamedFile API
-	//NOTE: Enable Eager loading
-	//if( modeFlags )
-	  //return AAFRESULT_NOT_IN_CURRENT_VERSION;
-	if( modeFlags & AAF_FILE_MODE_EAGER_LOADING)
+	if( modeFlags & AAF_FILE_MODE_LAZY_LOADING)
 	{
-		loadMode = OMFile::eagerLoad;
+		loadMode = OMFile::lazyLoad;
 	}
 
 	// Save the mode flags for now. They are not currently (2/4/1999) used by the
@@ -765,7 +755,7 @@ ImplAAFFile::CreateAAFFileOnRawStorage
    aafUInt32 modeFlags,
    aafProductIdentification_constptr pIdent)
 {
- 	OMFile::OMLoadMode	loadMode = OMFile::lazyLoad;	// The default behavior
+ 	OMFile::OMLoadMode	loadMode = OMFile::eagerLoad;	// The default behavior
 
   if (! _initialized)
 	return AAFRESULT_NOT_INITIALIZED;
@@ -781,6 +771,9 @@ ImplAAFFile::CreateAAFFileOnRawStorage
 
 	if (! areAllModeFlagsSupported (modeFlags))
 	  return AAFRESULT_NOT_IN_CURRENT_VERSION;
+
+  if (modeFlags & AAF_FILE_MODE_LAZY_LOADING)
+      loadMode = OMFile::lazyLoad;
 
   AAFRESULT hr;
   aafBoolean_t b = kAAFFalse;
