@@ -85,6 +85,8 @@ bool deleteFiles = false;
 #define aaf_assert(b, msg) \
 	if (!(b)) {fprintf(stderr, "ASSERT: %s\n\n", msg); exit(1);}
 
+#define aaf_simple_assert(x) aaf_assert( (x), #x );
+
 static void LogError(HRESULT errcode, int line, char *file)
 {
 	printf("Error '%0x' returned at line %d in %s\n", errcode, line, file);
@@ -399,13 +401,17 @@ static HRESULT ReadAAFFileEssenceData(aafWChar *pFileName, int frame_limit, aafL
 		IEnumAAFEssenceData		*pEnumEssenceData;
 		IAAFEssenceData			*pEssenceData;
 
+		aaf_simple_assert(pFile);
 		check(pFile->GetHeader(&pHeader));
+		aaf_simple_assert(pHeader);
 		check(pHeader->CountEssenceData(&essenceDataCount));
 		check(pHeader->EnumEssenceData(&pEnumEssenceData));
+		aaf_simple_assert(pEnumEssenceData);
 		for (unsigned i = 0; i < essenceDataCount; i++)
 		{
 			aafLength_t		size = 0;
 			check(pEnumEssenceData->NextOne(&pEssenceData));
+			aaf_simple_assert(pEssenceData)
 			check(pEssenceData->GetSize(&size));
 			aaf_assert(size == bytes, "GetSize() matches total written bytes");
 
