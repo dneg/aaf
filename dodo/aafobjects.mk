@@ -11,7 +11,6 @@ AAFPERSISTENTOBJECTS = \
 	AAFAttribute \
 	AAFClassDef \
 	AAFDictionary \
-	AAFCompositionMob \
 	AAFConstValue \
 	AAFControlCodeDef \
 	AAFControlPoint \
@@ -25,7 +24,6 @@ AAFPERSISTENTOBJECTS = \
 	AAFIntegerAttribute \
 	AAFLocator \
 	AAFMacLocator \
-	AAFMasterMob \
 	AAFMediaFilmDescriptor \
 	AAFMediaGroup  \
 	AAFMediaTapeDescriptor \
@@ -86,11 +84,13 @@ AAFCOMINTERFACESONLY = \
 # Do not add the 'Impl'prefix here.
 HUMAN_TYPED_IMPL = \
 	AAFComponent \
+	AAFCompositionMob \
 	AAFEssenceDescriptor \
 	AAFFile \
 	AAFFileDescriptor \
 	AAFHeader \
 	AAFIdentification \
+	AAFMasterMob \
 	AAFMob  \
 	AAFMobSlot \
 	AAFNetworkLocator \
@@ -130,12 +130,11 @@ AUTO_GEN_IMPL = \
 # its name here and remove it from AUTO_GEN_COMTEST (below).
 # Do not add the 'Test' suffix here.
 HUMAN_TYPED_COMTEST = \
-	AAFCompositionMob \
-	AAFMasterMob \
 	AAFMob \
 	AAFSourceClip \
 	AAFFile \
 	AAFSourceMob \
+	EnumAAFLocators \
 	EnumAAFMobs
 
 # Build the list of all objects that have automatically-generated
@@ -192,7 +191,6 @@ AUTO_GEN_COMTEST = \
 	EnumAAFDefs \
 	EnumAAFEffectDefs \
 	EnumAAFIdentifications \
-	EnumAAFLocators \
 	EnumAAFMedia \
 	EnumAAFMobComments \
 	EnumAAFParameterSlots \
@@ -210,5 +208,7 @@ AUTO_GEN_COMTEST = \
 	AAFMobSlot \
 	AAFTimelineMobSlot \
 	AAFSourceReference \
+	AAFCompositionMob \
+	AAFMasterMob \
 	AAFSession \
 	EnumAAFMobSlots
