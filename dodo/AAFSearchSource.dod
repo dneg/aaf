@@ -9,9 +9,9 @@ AD_CLASS_BEGIN
 AD_XMETHOD7(SearchSource,
 			[in],
 			  objPass,
-			  aafTrackID_t,
-			  trackID,
-			  Track ID,
+			  aafSlotID_t,
+			  slotID,
+			  Slot ID,
 			[in],
 			  objPass,
 			  aafPosition_t,
@@ -42,9 +42,9 @@ AD_XMETHOD7(SearchSource,
 			  AAFFindSourceInfo,
 			  ppSourceInfo,
 			  Source Information,
-			This function returns the source information for a track in a
+			This function returns the source information for a slot in a
   // Master Mob or Source Mob.  It follows the Source Clip references
-  // in the specified track until it encounters the kind of Mob
+  // in the specified slot until it encounters the kind of Mob
   // specified in the mobKind parameter.  This function cannot be used
   // on a Composition Mob and is not intended to be called
   // iteratively; use the omfiMobOpenSearch\, omfiMobGetNextSource\,

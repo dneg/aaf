@@ -27,10 +27,6 @@ AD_METHOD2(SetInitialValues,
 				[in],aafBool,isPrimary,Whether or not the mob is a primary mob,
 				Constructor given name and primary mob status.)
   //@rdesc Error code [see below].
-	
-
-AD_OVERRIDE(.method-IsMobKind)
-
 
 AD_METHOD1(GetDefaultFade,
 		   [out],aafDefaultFade_t *,result,a default fade struct,
