@@ -233,6 +233,10 @@ public:
     // @cmember Is this file recognized by the Object Manager ?
   bool isOMFile(void) const;
 
+    // @cmember The name of this <c OMFile>.
+    //   @devnote Soon to be obsolete.
+  const wchar_t* fileName(void) const;
+
     // @cmember The signature of this <c OMFile>.
   OMFileSignature signature(void) const;
 
