@@ -1,0 +1,119 @@
+//@doc
+//@class    EnumAAFComponents | Implementation class for EnumAAFComponents
+#ifndef __ImplEnumAAFComponents_h__
+#define __ImplEnumAAFComponents_h__
+
+#include "OMStorable.h"
+
+/******************************************\
+*                                          *
+* Advanced Authoring Format                *
+*                                          *
+* Copyright (c) 1998 Avid Technology, Inc. *
+* Copyright (c) 1998 Microsoft Corporation *
+*                                          *
+\******************************************/
+
+/******************************************\
+*                                          *
+* Advanced Authoring Format                *
+*                                          *
+* Copyright (c) 1998 Avid Technology, Inc. *
+* Copyright (c) 1998 Microsoft Corporation *
+*                                          *
+\******************************************/
+
+
+class ImplAAFComponent;
+class ImplAAFSequence;
+
+
+
+
+
+
+
+#ifndef __ImplAAFRoot_h__
+#include "ImplAAFRoot.h"
+#endif
+
+
+class ImplEnumAAFComponents : public ImplAAFRoot
+{
+public:
+  //
+  // Constructor/destructor
+  //
+  //********
+  ImplEnumAAFComponents ();
+  virtual ~ImplEnumAAFComponents ();
+
+
+
+  //****************
+  // NextOne()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    NextOne
+		// @parm [out,retval] The Next Component
+        (ImplAAFComponent ** ppComponent);
+
+  //****************
+  // Next()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    Next
+        (// @parm [in] number of components requested
+		 aafUInt32  count,
+
+		 // @parm [out, size_is(count), length_is(*pFetched)] array to receive components
+		 ImplAAFComponent ** ppComponents,
+
+		 // @parm [out,ref] number of actual Components fetched into ppComponents array
+         aafUInt32 *  pFetched);
+
+  //****************
+  // Skip()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    Skip
+		// @parm [in] Number of elements to skip
+        (aafUInt32  count);
+
+  //****************
+  // Reset()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    Reset ();
+
+
+  //****************
+  // Clone()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    Clone
+		// @parm [out,retval] new enumeration
+        (ImplEnumAAFComponents ** ppEnum);
+
+
+
+public:
+  // Declare this class to be storable.
+  //
+  OMDECLARE_STORABLE(ImplEnumAAFComponents)
+
+  // Declare the module test method. The implementation of the will be be
+  // in /test/ImplEnumAAFComponentsTest.cpp.
+  static AAFRESULT test();
+
+  //Internal
+  AAFRESULT SetEnumSequence(ImplAAFSequence * pSequence);
+
+private:
+	aafInt32			_current;
+	ImplAAFSequence*	_pSequence;
+
+};
+
+#endif // ! __ImplEnumAAFComponents_h__
+
