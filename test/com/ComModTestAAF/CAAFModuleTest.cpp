@@ -17,8 +17,8 @@
 #endif
 
 #include <iostream.h>
+#include <iomanip.h>
 #include <string.h>
-#include <time.h>
 
 
 //
@@ -109,79 +109,49 @@ STDMETHODIMP CAAFModuleTest::Test
 {
 	HRESULT hr = S_OK;
 
-	aafUInt32	len = 0;  // strlen buffer and counter
+	aafUInt32	index = 0; // index counter for AAFObjectMap table search - TS
 
-	struct STAT_t
+	struct STAT_t	// Tests results stats struct - TS
 	{
 		aafInt16 	num_run;	/* total number of tests run */
 		aafInt16	num_failed;	/* number of tests that failed */
 		aafInt32	result[1000];	/* and the result of the test */
 	} stats = { 0, 0, NULL };
 
-	/* Print Header */
-
-	cout << endl; \
-	cout<< "*******************" << endl; \
-	cout<< " AAFCOMTST Results" << endl; \
-	cout<< "*******************" << endl<< endl;	
-
-
-	/* Get and print start time */
-
-	time_t s_time;
-	time(&s_time);
-	cout<<"AAF COM Interface tests started: " <<ctime(&s_time) <<endl <<endl;
 
 
 	// Search the object table for the given class id.
 
 	if (NULL != pClassName)
 	{
-		cout << "Looking for " << pClassName << " module test...";
-
-		while (NULL != AAFObjectMap[stats.num_run].pCLSID)
+		while (NULL != AAFObjectMap[index].pCLSID)
 		{
-			if (0 == strcmp(reinterpret_cast<char *>(pClassName), AAFObjectMap[stats.num_run].pClassName))
+			if (0 == strcmp(reinterpret_cast<char *>(pClassName), AAFObjectMap[index].pClassName))
 			{
-				cout << "Found." << endl;
-				cout << "Running module test for " << AAFObjectMap[stats.num_run].pClassName;
+				cout << "Running module test for " << setiosflags(ios::left) << setw(30) << AAFObjectMap[index].pClassName;
 
-			// This is solely for the purpose of test result column alignment
-				for ( len = strlen(AAFObjectMap[stats.num_run].pClassName); len < 30; ++len)
-					cout << " "; 
 
-				hr = AAFObjectMap[stats.num_run].pfnTestProc();
+				hr = AAFObjectMap[index].pfnTestProc();
 				if (FAILED(hr))
-				{
 					cout << "FAILED!" << endl;
-					++stats.num_failed;
-				}
 				else if (AAFRESULT_NOT_IMPLEMENTED == hr)
-				{
 					cout << "NOT IMPLEMENTED!" << endl;
-					++stats.num_failed;
-				}
 				else
 					cout << "SUCCEEDED." << endl;
 
 				return S_OK;
 			}
-			stats.result[stats.num_run] = hr;
-			++stats.num_run;
+		++index;	
 		}
 		
-		cout<< "NOT FOUND IN MODULE TABLE!" << endl;
+		cout<< setiosflags(ios::left) << setw(54) << pClassName << "NOT FOUND IN MODULE TABLE!" << endl;
 	}
 	else
 	{
 		while (NULL != AAFObjectMap[stats.num_run].pCLSID)
 		{
-			cout << "Running module test for " << AAFObjectMap[stats.num_run].pClassName;
+			cout << "Running module test for " << setiosflags(ios::left) << setw(30) << AAFObjectMap[stats.num_run].pClassName;
 
-		// This is solely for the purpose of test result column alignment
-			for ( len = strlen(AAFObjectMap[stats.num_run].pClassName); len < 30; ++len)
-				cout << " "; 
-			
 			hr = AAFObjectMap[stats.num_run].pfnTestProc();
 			if (FAILED(hr))
 			{
@@ -199,49 +169,36 @@ STDMETHODIMP CAAFModuleTest::Test
 			stats.result[stats.num_run] = hr;
 			++stats.num_run;
 		}
-	}
 
+		cout<< stats.num_run<< " Test(s) Run\n";
+		cout<< stats.num_failed<< " Failed\n"<< endl;
 
-	/* Get and Print finish time	*/
-	time_t e_time;
-	time(&e_time);
-	cout<< endl<< "AAF COM Interface tests finished: " <<ctime(&e_time) <<endl;
-
-
-	/* Determine and print elapsed time */
-	double elapsed_time = difftime( e_time, s_time );
-	cout<< "AAF COM Interface tests completed in ";
-	cout<< ((long)elapsed_time/3600) <<":"; /* hours */
-	cout<< (((long)elapsed_time%3600)/60) <<":"; /* minutes */
-	cout<< (((long)elapsed_time%3600)%60) <<endl <<endl; /* seconds */
-
-	cout<< stats.num_run<< " Test(s) Run"<< endl;
-	cout<< stats.num_failed<< " Failed"<< endl<< endl;
-
-	/*	This is being commented out because until implementation, all tests fail
-	/* list of all tests that failed */
-/*	if ( stats.num_failed > 0 )
-	{
-		cout << endl << "List of tests that failed" << endl;
-		for ( index = 0; index < stats.num_run; ++index )
-			switch (stats.result[index])
+		/*	This is being commented out because until implementation, all tests fail
+		/* list of all tests that failed */
+	/*	if ( stats.num_failed > 0 )
 		{
-			case 0:
-				break;
-			case -1:
-				cout<< AAFObjectMap[index].pClassName << "	"<< "FAILED!"<< endl;
-				break;
-			case 1:
-				cout<< AAFObjectMap[index].pClassName << "	"<< "NOT IMPLEMENTED"<< endl;
-				break;
-			case -2:
-				cout<< AAFObjectMap[index].pClassName << "	"<< "Not found in table"<< endl;
-				break;
-			default:
-				cout<< AAFObjectMap[index].pClassName << "	"<< "UNKOWN RESULT"<< endl;
+			cout << "\n" << "List of tests that failed" << endl;
+			for ( index = 0; index < stats.num_run; ++index )
+				switch (stats.result[index])
+			{
+				case 0:
+					break;
+				case -1:
+					cout<< AAFObjectMap[index].pClassName << "	"<< "FAILED!"<< endl;
+					break;
+				case 1:
+					cout<< AAFObjectMap[index].pClassName << "	"<< "NOT IMPLEMENTED"<< endl;
+					break;
+				case -2:
+					cout<< AAFObjectMap[index].pClassName << "	"<< "Not found in table"<< endl;
+					break;
+				default:
+					cout<< AAFObjectMap[index].pClassName << "	"<< "UNKOWN RESULT"<< endl;
+			}
 		}
+	*/
 	}
-*/
+
 	return hr;
 }
 
