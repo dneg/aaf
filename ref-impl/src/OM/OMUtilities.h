@@ -39,6 +39,22 @@
   //   @rdesc The host byte order.
 OMByteOrder hostByteOrder(void);
 
+  // ISO C Amendment 1 equivalents.
+  //
+  // wcscmp()  <-> compareWideString(const wchar_t*, const wchar_t*)
+  // wcscpy()  <-> copyWideString(wchar_t*, const wchar_t*)
+  // wcscat()  <-> concatenateWideString(wchar_t*, const wchar_t*)
+  //
+  // wcsncmp() <-> compareWideString(const wchar_t*, const wchar_t*, size_t)
+  // wcsncpy() <-> copyWideString(wchar_t*, const wchar_t*, size_t)
+  // wcsncat() <-> concatenateWideString(wchar_t*, const wchar_t*, size_t)
+  //
+  // wcslen()  <-> lengthOfWideString()
+  // wcschr()  <-> findWideCharacter()
+  //
+  // none      <-> saveWideString()
+  // none      <-> countWideCharacter()
+
   // @func The length of the wide character string <p string> in characters
   //       excluding the terminating null character. Same as strlen(),
   //       but for wide characters.
