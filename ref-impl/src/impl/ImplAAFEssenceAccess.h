@@ -323,6 +323,11 @@ public:
 	// which work with multiple essence types.
 	//@comm Replaces omfmGetNumChannels*/
 
+  // INTERNAL to the SDK
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetSelectInfo (ImplAAFSourceMob *fileMob,
+                      aafSelectInfo_t* pSelectInfo);
+
 /****/
   //****************
   // GetLargestSampleSize()
