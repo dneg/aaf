@@ -894,7 +894,7 @@ void Omf2Aaf::ConvertOMFDatakind( OMF2::omfDDefObj_t datakind,
 	return;
 }
 
-void Omf2Aaf::ConvertOMFDataDef
+void Omf2Aaf::ConvertOMFDataDef			// Used for essence types audio, video, smell, etc...
   (OMF2::omfDDefObj_t datakind, 
    IAAFDataDef ** ppDataDef)
 {
@@ -903,6 +903,23 @@ void Omf2Aaf::ConvertOMFDataDef
   AAFCheck rc = pDictionary->LookupDataDef (defUid, ppDataDef);
 }
 
+void Omf2Aaf::ConvertOMFDataDefType		// Used for parameter types Integer, Rational, etc...
+  (OMF2::omfDDefObj_t datakind, 
+   IAAFTypeDef ** ppTypeDef)
+{
+	IAAFTypeDef				*pTypeDef;
+	OMF2::omfUniqueName_t	datakindName;
+	OMF2::omfErr_t			OMFError;
+
+	OMFError = OMF2::omfiDatakindGetName(OMFFileHdl, datakind, 64, datakindName);
+	if (strcmp(datakindName, "omfi:data:Rational") == 0)
+	{
+		pDictionary->LookupTypeDef(kAAFTypeID_Rational, &pTypeDef);
+	}
+	// Else error!!!
+
+	*ppTypeDef = pTypeDef;
+}
 // ============================================================================
 // ConvertOMFMOBObject
 //
@@ -2653,6 +2670,7 @@ HRESULT Omf2Aaf::ConvertOMFConstValue(OMF2::omfSegObj_t segment,
 
 	aafUInt32			valueSize;
 	IAAFParameter*		pParameter;
+	IAAFTypeDef*		pTypeDef = NULL;
 
 	OMFError = OMF2::omfiDataValueGetSize(OMFFileHdl, segment, &cvValueSize);
 	OMF2::omfsTruncInt64toUInt32(cvValueSize, &valueSize);
@@ -2666,6 +2684,10 @@ HRESULT Omf2Aaf::ConvertOMFConstValue(OMF2::omfSegObj_t segment,
 			"%sProcessing Constant Value of length = %ld\n ", gpGlobals->indentLeader, (int)cvLength);
 		rc = pConstValue->SetValue(valueSize, (unsigned char *)pcvBuffer);
 		
+		ConvertOMFDataDefType(cvDatakind, &pTypeDef);
+		pParameter->SetTypeDefinition(pTypeDef);
+		pTypeDef->Release();
+		pTypeDef = NULL;
 	}
 	if (pcvBuffer)
 		delete [] pcvBuffer;
@@ -2706,6 +2728,7 @@ HRESULT Omf2Aaf::ConvertOMFVaryingValue(OMF2::omfSegObj_t segment,
 	IAAFControlPoint*		pControlPoint = NULL;
 	IAAFTypeDef*			pTypeDef = NULL;
 	IAAFInterpolationDef*	pInterp = NULL;
+	IAAFParameter*			pParm = NULL;
 
 	aafRational_t			AAFCPTime;
 	aafEditHint_t			AAFCPEditHint;
@@ -2716,6 +2739,14 @@ HRESULT Omf2Aaf::ConvertOMFVaryingValue(OMF2::omfSegObj_t segment,
 	IncIndentLevel();
 	OMFError = OMF2::omfiVaryValueGetInfo(OMFFileHdl, segment, &vvDatakind, &vvLength, &vvInterpolation);
 	// tlk We do NOT know how to handle Interpolations yet !!!
+
+	ConvertOMFDataDefType(vvDatakind, &pTypeDef);
+	rc = pVaryingValue->QueryInterface(IID_IAAFParameter, (void **)&pParm);
+	pParm->SetTypeDefinition(pTypeDef);
+	pParm->Release();
+	pParm = NULL;
+	pTypeDef->Release();
+	pTypeDef = NULL;
 
 	// Get number of Points 
 	OMFError = OMF2::omfiVaryValueGetNumPoints(OMFFileHdl, segment, &numPoints);
@@ -2766,6 +2797,7 @@ HRESULT Omf2Aaf::ConvertOMFVaryingValue(OMF2::omfSegObj_t segment,
 						OMFError = OMF2::omfsReadDataValue(OMFFileHdl, control, OMF2::OMCTLPValue, cpDatakind, pCPBuffer, offset,valueSize, &bytesRead);
 					}
 					pControlPoint->SetValue((aafUInt32)valueSize, (unsigned char *)pCPBuffer);
+					pControlPoint->SetTypeDefinition(pTypeDef);
 					pVaryingValue->AddControlPoint(pControlPoint);
 					pControlPoint->Release();
 					pControlPoint = NULL;
@@ -3472,7 +3504,8 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 			pParameterDef->Release();
 			pParameterDef = NULL;
 		}
-		else
+		else if (strcmp(effectID, "omfi:effect:MonoAudioGain") == 0)
+//		else if(0 /*processUnknownEffects*/)	// Add a flag to this routine, false when called from a subclass
 		{
 			// --------------------------------------------------------------
 			//			Generic OMF 2.x Effect processing !!! 
@@ -3498,6 +3531,7 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 										L"Level, equal to mix ratio of B/A. Range is 0 to 1. The formula  P = (Level*B)+((1-Level)*A)",
 										L" ",
 										&pParameterDef);
+
 			pEffectDef->AddParameterDef(pParameterDef);
 		
 			OMFError = OMF2::omfiEffectGetNumSlots(OMFFileHdl, effect, &numSlots);;
