@@ -224,7 +224,7 @@ AAFRESULT STDMETHODCALLTYPE
 #c
 #startm AD_XMETHOD1 07
 AAFRESULT STDMETHODCALLTYPE
-    Impl.this-module::%01 (%04 .%03-indirection /*%05*/)
+    Impl.this-module::%01 (.%03-adornment%04 .%03-indirection /*%05*/)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
@@ -248,8 +248,8 @@ AAFRESULT STDMETHODCALLTYPE
 #c
 #startm AD_XMETHOD2 12
 AAFRESULT STDMETHODCALLTYPE
-    Impl.this-module::%01 (%04 .%03-indirection /*%05*/,
-                           %09 .%08-indirection /*%10*/)
+    Impl.this-module::%01 (.%03-adornment%04 .%03-indirection /*%05*/,
+                           .%08-adornment%09 .%08-indirection /*%10*/)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
@@ -273,9 +273,9 @@ AAFRESULT STDMETHODCALLTYPE
 #c Macro Arg 17: method description
 #c
 #startm AD_XMETHOD3 17
-    Impl.this-module::%01 (%04 .%03-indirection /*%05*/,
-                           %09 .%08-indirection /*%10*/,
-                           %14 .%13-indirection /*%15*/)
+    Impl.this-module::%01 (.%03-adornment%04 .%03-indirection /*%05*/,
+                           .%08-adornment%09 .%08-indirection /*%10*/,
+                           .%13-adornment%14 .%13-indirection /*%15*/)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
@@ -300,10 +300,10 @@ AAFRESULT STDMETHODCALLTYPE
 #c Macro Arg 22: method description
 #c
 #startm AD_XMETHOD4 22
-    Impl.this-module::%01 (%04 .%03-indirection /*%05*/,
-                           %09 .%08-indirection /*%10*/,
-                           %14 .%13-indirection /*%15*/,
-                           %19 .%18-indirection /*%20*/)
+    Impl.this-module::%01 (.%03-adornment%04 .%03-indirection /*%05*/,
+                           .%08-adornment%09 .%08-indirection /*%10*/,
+                           .%13-adornment%14 .%13-indirection /*%15*/,
+                           .%18-adornment%19 .%18-indirection /*%20*/)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
@@ -329,11 +329,11 @@ AAFRESULT STDMETHODCALLTYPE
 #c Macro Arg 27: method description
 #c
 #startm AD_XMETHOD5 27
-    Impl.this-module::%01 (%04 .%03-indirection /*%05*/,
-                           %09 .%08-indirection /*%10*/,
-                           %14 .%13-indirection /*%15*/,
-                           %19 .%18-indirection /*%20*/,
-                           %24 .%23-indirection /*%25*/)
+    Impl.this-module::%01 (.%03-adornment%04 .%03-indirection /*%05*/,
+                           .%08-adornment%09 .%08-indirection /*%10*/,
+                           .%13-adornment%14 .%13-indirection /*%15*/,
+                           .%18-adornment%19 .%18-indirection /*%20*/,
+                           .%23-adornment%24 .%23-indirection /*%25*/)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
@@ -360,12 +360,12 @@ AAFRESULT STDMETHODCALLTYPE
 #c Macro Arg 32: method description
 #c
 #startm AD_XMETHOD6 32
-    Impl.this-module::%01 (%04 .%03-indirection /*%05*/,
-                           %09 .%08-indirection /*%10*/,
-                           %14 .%13-indirection /*%15*/,
-                           %19 .%18-indirection /*%20*/,
-                           %24 .%23-indirection /*%25*/,
-                           %29 .%28-indirection /*%30*/)
+    Impl.this-module::%01 (.%03-adornment%04 .%03-indirection /*%05*/,
+                           .%08-adornment%09 .%08-indirection /*%10*/,
+                           .%13-adornment%14 .%13-indirection /*%15*/,
+                           .%18-adornment%19 .%18-indirection /*%20*/,
+                           .%23-adornment%24 .%23-indirection /*%25*/,
+                           .%28-adornment%29 .%28-indirection /*%30*/)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
@@ -393,13 +393,13 @@ AAFRESULT STDMETHODCALLTYPE
 #c Macro Arg 37: method description
 #c
 #startm AD_XMETHOD7 37
-    Impl.this-module::%01 (%04 .%03-indirection /*%05*/,
-                           %09 .%08-indirection /*%10*/,
-                           %14 .%13-indirection /*%15*/,
-                           %19 .%18-indirection /*%20*/,
-                           %24 .%23-indirection /*%25*/,
-                           %29 .%28-indirection /*%30*/,
-                           %34 .%33-indirection /*%35*/)
+    Impl.this-module::%01 (.%03-adornment%04 .%03-indirection /*%05*/,
+                           .%08-adornment%09 .%08-indirection /*%10*/,
+                           .%13-adornment%14 .%13-indirection /*%15*/,
+                           .%18-adornment%19 .%18-indirection /*%20*/,
+                           .%23-adornment%24 .%23-indirection /*%25*/,
+                           .%28-adornment%29 .%28-indirection /*%30*/,
+                           .%33-adornment%34 .%33-indirection /*%35*/)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
@@ -428,14 +428,14 @@ AAFRESULT STDMETHODCALLTYPE
 #c Macro Arg 42: method description
 #c
 #startm AD_XMETHOD8 42
-    Impl.this-module::%01 (%04 .%03-indirection /*%05*/,
-                           %09 .%08-indirection /*%10*/,
-                           %14 .%13-indirection /*%15*/,
-                           %19 .%18-indirection /*%20*/,
-                           %24 .%23-indirection /*%25*/,
-                           %29 .%28-indirection /*%30*/,
-                           %34 .%33-indirection /*%35*/,
-                           %39 .%38-indirection /*%40*/)
+    Impl.this-module::%01 (.%03-adornment%04 .%03-indirection /*%05*/,
+                           .%08-adornment%09 .%08-indirection /*%10*/,
+                           .%13-adornment%14 .%13-indirection /*%15*/,
+                           .%18-adornment%19 .%18-indirection /*%20*/,
+                           .%23-adornment%24 .%23-indirection /*%25*/,
+                           .%28-adornment%29 .%28-indirection /*%30*/,
+                           .%33-adornment%34 .%33-indirection /*%35*/,
+                           .%38-adornment%39 .%38-indirection /*%40*/)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
@@ -465,15 +465,15 @@ AAFRESULT STDMETHODCALLTYPE
 #c Macro Arg 47: method description
 #c
 #startm AD_XMETHOD9 47
-    Impl.this-module::%01 (%04 .%03-indirection /*%05*/,
-                           %09 .%08-indirection /*%10*/,
-                           %14 .%13-indirection /*%15*/,
-                           %19 .%18-indirection /*%20*/,
-                           %24 .%23-indirection /*%25*/,
-                           %29 .%28-indirection /*%30*/,
-                           %34 .%33-indirection /*%35*/,
-                           %39 .%38-indirection /*%40*/,
-                           %44 .%43-indirection /*%45*/)
+    Impl.this-module::%01 (.%03-adornment%04 .%03-indirection /*%05*/,
+                           .%08-adornment%09 .%08-indirection /*%10*/,
+                           .%13-adornment%14 .%13-indirection /*%15*/,
+                           .%18-adornment%19 .%18-indirection /*%20*/,
+                           .%23-adornment%24 .%23-indirection /*%25*/,
+                           .%28-adornment%29 .%28-indirection /*%30*/,
+                           .%33-adornment%34 .%33-indirection /*%35*/,
+                           .%38-adornment%39 .%38-indirection /*%40*/,
+                           .%43-adornment%44 .%43-indirection /*%45*/)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
@@ -504,16 +504,16 @@ AAFRESULT STDMETHODCALLTYPE
 #c Macro Arg 52: method description
 #c
 #startm AD_XMETHOD_10 52
-    Impl.this-module::%01 (%04 .%03-indirection /*%05*/,
-                           %09 .%08-indirection /*%10*/,
-                           %14 .%13-indirection /*%15*/,
-                           %19 .%18-indirection /*%20*/,
-                           %24 .%23-indirection /*%25*/,
-                           %29 .%28-indirection /*%30*/,
-                           %34 .%33-indirection /*%35*/,
-                           %39 .%38-indirection /*%40*/,
-                           %44 .%43-indirection /*%45*/,
-                           %49 .%48-indirection /*%50*/)
+    Impl.this-module::%01 (.%03-adornment%04 .%03-indirection /*%05*/,
+                           .%08-adornment%09 .%08-indirection /*%10*/,
+                           .%13-adornment%14 .%13-indirection /*%15*/,
+                           .%18-adornment%19 .%18-indirection /*%20*/,
+                           .%23-adornment%24 .%23-indirection /*%25*/,
+                           .%28-adornment%29 .%28-indirection /*%30*/,
+                           .%33-adornment%34 .%33-indirection /*%35*/,
+                           .%38-adornment%39 .%38-indirection /*%40*/,
+                           .%43-adornment%44 .%43-indirection /*%45*/,
+                           .%48-adornment%49 .%48-indirection /*%50*/)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
@@ -545,17 +545,17 @@ AAFRESULT STDMETHODCALLTYPE
 #c Macro Arg 57: method description
 #c
 #startm AD_XMETHOD_11 57
-    Impl.this-module::%01 (%04 .%03-indirection /*%05*/,
-                           %09 .%08-indirection /*%10*/,
-                           %14 .%13-indirection /*%15*/,
-                           %19 .%18-indirection /*%20*/,
-                           %24 .%23-indirection /*%25*/,
-                           %29 .%28-indirection /*%30*/,
-                           %34 .%33-indirection /*%35*/,
-                           %39 .%38-indirection /*%40*/,
-                           %44 .%43-indirection /*%45*/,
-                           %49 .%48-indirection /*%50*/,
-                           %54 .%53-indirection /*%55*/)
+    Impl.this-module::%01 (.%03-adornment%04 .%03-indirection /*%05*/,
+                           .%08-adornment%09 .%08-indirection /*%10*/,
+                           .%13-adornment%14 .%13-indirection /*%15*/,
+                           .%18-adornment%19 .%18-indirection /*%20*/,
+                           .%23-adornment%24 .%23-indirection /*%25*/,
+                           .%28-adornment%29 .%28-indirection /*%30*/,
+                           .%33-adornment%34 .%33-indirection /*%35*/,
+                           .%38-adornment%39 .%38-indirection /*%40*/,
+                           .%43-adornment%44 .%43-indirection /*%45*/,
+                           .%48-adornment%49 .%48-indirection /*%50*/,
+                           .%53-adornment%54 .%53-indirection /*%55*/)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
@@ -623,7 +623,7 @@ I.this-module * Impl.this-module::GetCOMParent ()
 #c Macro Arg 06: method description
 #c
 #startm AD_XCONSTRUCTOR1 06
-Impl.this-module::Impl.this-module (%03 .%02-indirection /*%04*/)
+Impl.this-module::Impl.this-module (.%02-adornment%03 .%02-indirection /*%04*/)
 {}
 #endm
 
@@ -643,8 +643,8 @@ Impl.this-module::Impl.this-module (%03 .%02-indirection /*%04*/)
 #c Macro Arg 11: method description
 #c
 #startm AD_XCONSTRUCTOR2 11
-Impl.this-module::Impl.this-module (%03 .%02-indirection /*%04*/,
-	%08 .%07-indirection /*%09*/)
+Impl.this-module::Impl.this-module (.%02-adornment%03 .%02-indirection /*%04*/,
+	.%07-adornment%08 .%07-indirection /*%09*/)
 {}
 #endm
 
@@ -665,9 +665,9 @@ Impl.this-module::Impl.this-module (%03 .%02-indirection /*%04*/,
 #c Macro Arg 16: method description
 #c
 #startm AD_XCONSTRUCTOR3 16
-Impl.this-module::Impl.this-module (%03 .%02-indirection /*%04*/,
-	%08 .%07-indirection /*%09*/,
-	%13 .%12-indirection /*%14*/)
+Impl.this-module::Impl.this-module (.%02-adornment%03 .%02-indirection /*%04*/,
+	.%07-adornment%08 .%07-indirection /*%09*/,
+	.%12-adornment%13 .%12-indirection /*%14*/)
 {}
 #endm
 
@@ -689,10 +689,10 @@ Impl.this-module::Impl.this-module (%03 .%02-indirection /*%04*/,
 #c Macro Arg 21: method description
 #c
 #startm AD_XCONSTRUCTOR4 21
-Impl.this-module::Impl.this-module (%03 .%02-indirection /*%04*/,
-	%08 .%07-indirection /*%09*/,
-	%13 .%12-indirection /*%14*/,
-	%18 .%17-indirection /*%19*/)
+Impl.this-module::Impl.this-module (.%02-adornment%03 .%02-indirection /*%04*/,
+	.%07-adornment%08 .%07-indirection /*%09*/,
+	.%12-adornment%13 .%12-indirection /*%14*/,
+	.%17-adornment%18 .%17-indirection /*%19*/)
 {}
 #endm
 
@@ -748,4 +748,39 @@ AAFRESULT STDMETHODCALLTYPE
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c The following macros assist in passing arguments to methods of the
+#c contained implementation class:
+#c
+#c The objIn macros are for use with pointers to objects that are
+#c passed into the method.  The Type argument is the base type, with
+#c no indirection specified.  For example, if you're passing in
+#c AObject*, AObject should be specified for the Type argument.#c
+#c
+#c The objOut macros are for use with pointers to pointers to objects
+#c that are passed out of the method.  The Type argument is the base
+#c type, with no indirection specified.  For example, if you're
+#c passing in AObject**, AObject should be specified for the Type
+#c argument.
+#c
+#c The objPass macros are for use with any kind of data which is
+#c passed exactly into or out of the method.
+#c
+
+
+#startm .objIn-adornment 00
+Impl\
+#endm
+
+
+#startm .objPass-adornment 00
+#endm
+
+
+#startm .objOut-adornment 00
+Impl\
 #endm
