@@ -99,7 +99,7 @@ AD_XMETHOD1(SetDataDef,
 			aafUID_t *,
 			pDatadef,
 			DataDef of this object,
-			sets the data definition property AUID on the input component object.
+			sets the data definition property AUID on this component.
   // 
   // Succeeds if all of the following are true:
   // - the pDatadef pointer is valid.

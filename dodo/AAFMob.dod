@@ -67,9 +67,9 @@ AD_XMETHOD1(SetMobID,
 			pMobID,
 			New Mob ID,
 
-			When a mob is initially created\, the Toolkit internally creates 
-  // a mobID for the new mob.  This method should be used to change
-  // the mob's identity to an explicit mobID.
+  // When a mob is initially created\, the Reference Implementation
+  // internally creates a mobID for the new mob.  This method should
+  // be used to change the mob's identity to an explicit mobID.
   // 
   // Succeeds if all of the following are true:
   // - the pMobID pointer is valid.
@@ -324,10 +324,10 @@ AD_XMETHOD1(SetModTime,
 
 			This method sets the modification time on a mob.  The
   // modification time is initially set to the time that the mob
-  // was created.  The Toolkit does not maintain the modification
-  // time every time that a mob has been updated.  Therefore\, this
-  // method should be called explicitly to change the modification
-  // time.
+  // was created.  The Reference Implementation does not maintain the
+  // modification time every time that a mob has been updated.
+  // Therefore\, this method should be called explicitly to change the
+  // modification time.
   // 
   // Succeeds if all of the following are true:
   // - the pLastModified pointer is valid.
