@@ -336,6 +336,15 @@ typedef enum
 
 typedef enum
 {
+	kRefLimitMinimum = 0,
+	kRefLimitMaximum,
+	kRefMinimum,
+	kRefMaximum,
+	kRefEnumvalue
+} aafReferenceType_t;
+
+typedef enum
+{
   kFindNull, kFindIncoming, kFindOutgoing, kFindRender,
   kFindEffectSrc1, kFindEffectSrc2, kFindEffectSrc3, kFindEffectSrc4, 
   kFindEffectSrc5, kFindEffectSrc6, kFindEffectSrc7, kFindEffectSrc8
