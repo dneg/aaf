@@ -7,11 +7,11 @@
 
 #include <stddef.h>
 
-const int TID_NONE                           = 0;
-const int TID_PROPERTY_DATA                  = 0;
+const int TID_DATA                           = 0;
 const int TID_STRONG_OBJECT_REFERENCE        = 1;
 const int TID_STRONG_OBJECT_REFERENCE_VECTOR = 2;
 const int TID_WEAK_OBJECT_REFERENCE          = 3;
+const int TID_DATA_STREAM                    = 4;
 
 class OMStoredObject;
 class OMStorable;
@@ -22,9 +22,6 @@ class OMPropertySet;
 class OMProperty {
 public:
   // @access Public members.
-
-    // @cmember Constructor.
-  OMProperty(const OMPropertyId propertyId, const char* name);
 
     // @cmember Constructor.
   OMProperty(const OMPropertyId propertyId, const int type, const char* name);
