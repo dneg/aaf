@@ -46,116 +46,6 @@
 // Global Variables and functions
 // ============================================================================
 
-void Indent(int numSpaces)
-{
-	for (int i = 0; i < numSpaces;i++)
-	{
-		cout<<" ";
-	}
-}
-void reportAssertionFailure(char* name,
-                            char* expressionString,
-                            char* fileName,
-                            size_t lineNumber)
-{
-  cerr << "Assertion \"" << name << "\" failed." << endl;
-  cerr << "The failure occurred at line "
-       << lineNumber << " in file \"" << fileName << "\"." << endl;
-  cerr << "The condition \"" << expressionString << "\" was violated." << endl;
-
-  exit(FAILURE);
-}
-
-// Assertions are on unless they are explicitly turned off.
-//
-#if !defined(NODEBUG)
-#define ASSERT(expression, name)  \
-  (expression) \
-    ? (void)0  \
-    : reportAssertionFailure(name, #expression,  __FILE__, __LINE__)
-
-#else
-#define ASSERT(expression, expression)
-#endif
-
-void fatalError(char* routineName, char* message)
-{
-  cerr << ": Fatal error in routine \"" << routineName << "\". "
-       << message << endl;
-
-  exit(FAILURE);
-}
-// ============================================================================
-// Wide char ot char and vice versa conversion overloaded functions
-// ============================================================================
-static void convert(wchar_t* wcName, size_t length, const char* name)
-{
-  ASSERT((name && *name), "Valid input name");
-  ASSERT(wcName != 0, "Valid output buffer");
-  ASSERT(length > 0, "Valid output buffer size");
-  
-  size_t status = mbstowcs(wcName, name, length);
-  if (status == (size_t)-1) {
-    fatalError("convert", "Conversion failed.");
-  }
-}
-
-static void convert(char* cName, size_t length, const wchar_t* name)
-{
-  ASSERT((name && *name), "Valid input name");
-  ASSERT(cName != 0, "Valid output buffer");
-  ASSERT(length > 0, "Valid output buffer size");
-
-  size_t status = wcstombs(cName, name, length);
-  if (status == (size_t)-1) {
-    fatalError("convert", "Conversion failed.");
-  }
-}
-
-static void convert(char* cName, size_t length, const char* name)
-{
-  ASSERT((name && *name), "Valid input name");
-  ASSERT(cName != 0, "Valid output buffer");
-  ASSERT(length > 0, "Valid output buffer size");
-
-  size_t sourceLength = strlen(name);
-  if (sourceLength < length - 1) {
-    strncpy(cName, name, length);
-  } else {
-    fatalError("convert", "Conversion failed.");
-  }
-}
-
-static void convert(wchar_t* wName, size_t length, const wchar_t* name)
-{
-  ASSERT((name && *name), "Valid input name");
-  ASSERT(wName != 0, "Valid output buffer");
-  ASSERT(length > 0, "Valid output buffer size");
-
-  size_t sourceLength = 0;
-  while (*name)
-    ++sourceLength;
-  if (sourceLength < length - 1) {
-    // Copy the string if there is enough room in the destinition buffer.
-    while (*wName++ = *name++)
-      ;
-  } else {
-    fatalError("convert", "Conversion failed.");
-  }
-}
-
-// ============================================================================
-// Delete a file given its wide char name
-// ============================================================================
-void deleteFile(const wchar_t* fileName)
-{
-	char cName[256];
-
-	convert(cName, 256, fileName);
-	int result = remove(cName);
-	//.. ignore error which typically happens if the file doesn;t exist
-
-}
 // ============================================================================
 // Delete a file given its  name
 // ============================================================================
@@ -166,6 +56,14 @@ void deleteFile(char* fileName)
 	//.. ignore error which typically happens if the file doesn;t exist
 
 }
+void Indent(int numSpaces)
+{
+	for (int i = 0; i < numSpaces;i++)
+	{
+		cout<<" ";
+	}
+}
+
 
 char* baseName(char* fullName)
 {
@@ -201,13 +99,13 @@ AafOmf::AafOmf() : pFile(NULL), pHeader(NULL), pDictionary(NULL),
 	bOMFFileOpen(AAFFalse), bAAFFileOpen(AAFFalse),
 	bCreateTOCFile(AAFFalse), bConvertAllObjects(AAFFalse), bLogFile(AAFFalse), bDefFile(AAFFalse), 
 	nNumOMFObjects(0), nNumAAFObjects(0), nNumOMFProperties(0), nNumAAFProperties(0),
-	nNumUndefinedOMFObjects(0), nNumUndefinedOMFProperties(0)
+	nNumUndefinedOMFObjects(0), nNumUndefinedOMFProperties(0),numIndents(0)
 {
 	memset(sInFileName, 0, sizeof(sInFileName));
 	memset(sOutFileName, 0, sizeof(sOutFileName));
 	memset(sLogFileName, 0, sizeof(sLogFileName));
 	memset(sDefinitionFileName, 0, sizeof(sDefinitionFileName));
-
+	memset(indentLeader, 0, sizeof(indentLeader));
 }
 
 // ============================================================================
@@ -215,6 +113,7 @@ AafOmf::AafOmf() : pFile(NULL), pHeader(NULL), pDictionary(NULL),
 // ============================================================================
 AafOmf::~AafOmf()
 {
+	UTLExitFileIO();
 	if (bOMFFileOpen)
 	{
 		OMFFileClose();
@@ -236,19 +135,54 @@ AafOmf::~AafOmf()
 // ============================================================================
 void AafOmf::Usage( void )
 {
-	cout << "================================================================================" << endl;
-	cout << pProgramName<<" : OMFI to AAF file conversion Version 0.01.00"<< endl;
-	cout << "Usage: "<< endl;
-	cout << pProgramName<< " [-v] [-s] [-p logfile] [-d deffile] [-t tocfile] <infile> [outfile]"<< endl;
-	cout << endl;
-	cout << "-v         = Verbose - give progress report (optional)" << endl;
-	cout <<	"-s         = Straight conversion. Do NOT discard unnecessary objects (optional)"<<endl;
-	cout << "-p logfile = Log file name(optional)" << endl;
-	cout << "-d deffile = Definition file (optional)" << endl;
-	cout << "-t tocfile = Dump OMFI Table of contents (optional)" << endl;
-	cout << "infile     = input file name (required)"<< endl;
-	cout << "outfile    = output file name (optional)" << endl;
-	cout << "================================================================================" << endl;
+	UTLstdprintf("\n*******************\n\n");
+	UTLstdprintf("%s : OMFI to AAF file conversion Version 0.01.00\n\n",pProgramName);
+	UTLstdprintf("Usage: \n");
+	UTLstdprintf("%s [-v] [-s] [-p logfile] [-d deffile] [-t tocfile] <infile> [outfile]\n\n", pProgramName);
+	UTLstdprintf("-v         = Verbose - give progress report (optional)\n" );
+	UTLstdprintf("-s         = Straight conversion. Do NOT discard unnecessary objects (optional)\n");
+	UTLstdprintf("-p logfile = Log file name(optional)\n");
+	UTLstdprintf("-d deffile = Definition file (optional)\n");
+	UTLstdprintf("-t tocfile = Dump OMFI Table of contents (optional)\n");
+	UTLstdprintf("infile     = input file name (required)\n");
+	UTLstdprintf("outfile    = output file name (optional)\n");
+	UTLstdprintf("\n*******************\n\n");
+}
+/******************** IncIndentLevel *******************
+	Increases the incrementation used for readability
+
+	Inputs:		none
+				  
+	Outputs:	none
+
+	Returns:	none
+
+	Errors:		none
+*********************************************************/
+void AafOmf::IncIndentLevel( void )
+{
+	numIndents++;
+	if (numIndents <= MAX_INDENT)
+		indentLeader[numIndents-1] = '\t';
+}
+
+/******************** DecIndentLevel *******************
+	Lessens the incrementation used for readability
+
+	Inputs:		none
+			  
+	Outputs:	none
+
+	Returns:	none
+
+	Errors:		none
+*********************************************************/
+void AafOmf::DecIndentLevel(void)
+{
+	numIndents--;
+	if (numIndents >= 0 && numIndents < MAX_INDENT)
+		indentLeader[numIndents] = 0;
+
 }
 
 // ============================================================================
@@ -361,15 +295,13 @@ HRESULT AafOmf::OpenInputFile ()
 			else
 			{
 				fclose(pStream);
-				cout <<"File : "<<sInFileName<<" is not a valid OMF file"<<endl;
-				cout << "Program will exit !"<<endl;
+				UTLerrprintf("File : %s is not a valid OMF file!!!\n",sInFileName);
 				rc = OMF2::OM_ERR_NOTOMFIFILE;
 			}
 		}
 		else
 		{
-			cout << "Cannot find input file: "<< sInFileName<< endl;
-			cout << "Program will exit !"<<endl;
+			UTLerrprintf("Unable to Open %s\n", sInFileName);
 			rc = AAFRESULT_FILE_NOT_FOUND;
 		}
 	}
@@ -400,7 +332,7 @@ HRESULT AafOmf::OpenOutputFile ()
 	
 	if (bOverride)
 	{
-		cout <<"Previous file : "<<sOutFileName<<" will be overwritten"<<endl;
+		UTLstdprintf("Previous file: %s will be overwritten\n",sOutFileName);
 		deleteFile(sOutFileName);
 	}
 
@@ -477,17 +409,15 @@ HRESULT AafOmf::OMFFileOpen(char * pFileName)
 	if (OMF2::kOmfRev2x != OMFFileRev)
 	{
 		rc = AAFRESULT_FILEREV_NOT_SUPP ;
-		cout << "OMFI File Revision 1.0 is NOT supported"<<endl<<endl;
+		UTLerrprintf("OMFI File Revision 1.0 is NOT supported\n\n");
 		OMF2::omfsCloseFile(OMFFileHdl);
 		OMF2::omfsEndSession(OMFSession);
 	}
 	else
 	{
+		bOMFFileOpen = AAFTrue;
 		if (bVerboseMode)
-		{
-			cout << "OMF File : "<< pFileName<<" opened succesfully"<< endl;
-			bOMFFileOpen = AAFTrue;
-		}
+			UTLstdprintf("OMF File: %s opened succesfully\n", pFileName);
 	}
 	return rc;
 }
@@ -504,19 +434,20 @@ HRESULT AafOmf::AAFFileOpen( char* pFileName)
 
 	OMF2::omfObject_t		OMFHeadObject, OMFIdent;
 	char					text[256];
-	aafWChar				wcFileName[256];
+	aafWChar*				pwFileName = NULL;
 	aafInt32				nOMFIdentifications;
-	aafWChar				CompanyName[256];
-	aafWChar				ProductName[256];
-    aafWChar				ProductVersionString[256];
-    aafWChar				Platform[256];
+	aafWChar*				pwCompanyName = NULL;
+	aafWChar*				pwProductName;
+    aafWChar*				pwProductVersionString = NULL;
+    aafWChar*				pwPlatform;
 	aafBool					bAddExtraIdent = AAFFalse;
 
 	aafProductIdentification_t	ProductInfo;
 	IAAFIdentification*		pIdent = NULL;
 
 	
-	convert(wcFileName, sizeof(wcFileName), pFileName);
+	UTLStrAToStrW(pFileName, &pwFileName);
+
 	rc = CoCreateInstance(CLSID_AAFFile, NULL, CLSCTX_INPROC_SERVER, IID_IAAFFile, (void **)&pFile);
 	if (AAFRESULT_SUCCESS == rc)
 	{
@@ -536,21 +467,21 @@ HRESULT AafOmf::AAFFileOpen( char* pFileName)
 				{
 					if(OMF2::omfsReadString(OMFFileHdl, OMFIdent, OMF2::OMIDNTCompanyName, text, sizeof(text)) != OMF2::OM_ERR_NONE)
 						strcpy(text, "<Not Specified>");
-					convert(CompanyName, sizeof(CompanyName), text);
-					ProductInfo.companyName = CompanyName;
+					UTLStrAToStrW(text, &pwCompanyName);
+					ProductInfo.companyName = pwCompanyName;
 					if(OMF2::omfsReadString(OMFFileHdl, OMFIdent, OMF2::OMIDNTProductName, text, sizeof(text)) != OMF2::OM_ERR_NONE)
 						strcpy(text, "<Not Specified>");
-					convert(ProductName, sizeof(ProductName), text);
-					ProductInfo.productName = ProductName;
+					UTLStrAToStrW(text, &pwProductName);
+					ProductInfo.productName = pwProductName;
 					if(OMF2::omfsReadString(OMFFileHdl, OMFIdent, OMF2::OMIDNTProductVersionString, text, sizeof(text)) != OMF2::OM_ERR_NONE)
 						strcpy(text, "<Not Specified>");
-					convert(ProductVersionString, sizeof(ProductVersionString), text);
-					ProductInfo.productVersionString = ProductVersionString;
+					UTLStrAToStrW(text, &pwProductVersionString);
+					ProductInfo.productVersionString = pwProductVersionString;
 					if(OMF2::omfsReadString(OMFFileHdl, OMFIdent, OMF2::OMIDNTPlatform, text, sizeof(text)) != OMF2::OM_ERR_NONE)
 						strcpy(text, "<Not Specified>");
-					convert(Platform, sizeof(Platform), text);
-					ProductInfo.platform = Platform;
-					rc = pFile->OpenNewModify(wcFileName, 0, &ProductInfo);
+					UTLStrAToStrW(text, &pwPlatform);
+					ProductInfo.platform = pwPlatform;
+					rc = pFile->OpenNewModify(pwFileName, 0, &ProductInfo);
 					bAddExtraIdent = AAFTrue;
 				}
 			}
@@ -566,7 +497,7 @@ HRESULT AafOmf::AAFFileOpen( char* pFileName)
 				ProductInfo.productVersionString = NULL;
 				ProductInfo.productID = -1;
 				ProductInfo.platform = NULL;
-				rc = pFile->OpenNewModify(wcFileName, 0, &ProductInfo);
+				rc = pFile->OpenNewModify(pwFileName, 0, &ProductInfo);
 			}
 		}
 		bAAFFileOpen = AAFTrue;
@@ -605,7 +536,23 @@ HRESULT AafOmf::AAFFileOpen( char* pFileName)
 		rc = AAFRESULT_INTERNAL_ERROR;
 
 	if (bVerboseMode)
-		cout << "AAF File : "<< pFileName<<" Created succesfully"<< endl;
+		UTLstdprintf("AAF File: %s Created succesfully\n", pFileName);
+
+	// Clean up all allocated memory and return
+	if(pwFileName)
+		UTLMemoryFree(pwFileName);
+
+	if(pwCompanyName)
+		UTLMemoryFree(pwCompanyName);
+
+	if(pwProductName)
+		UTLMemoryFree(pwProductName);
+
+	if(pwProductVersionString)
+		UTLMemoryFree(pwProductVersionString);
+
+	if(pwPlatform)
+		UTLMemoryFree(pwPlatform);
 
 	return rc;
 }
@@ -644,7 +591,7 @@ HRESULT AafOmf::OMFFileRead()
 		{
 			if (bVerboseMode)
 			{
-				cout <<"Found : "<<nOMFNumMobs<<" Mobs in the input file"<<endl;
+				UTLstdprintf("Found: %ld Mobs in the input file\n", nOMFNumMobs);
 			}
 			for (nOMFMobCount = 0; nOMFMobCount < nOMFNumMobs; nOMFMobCount++)
 			{
@@ -661,7 +608,7 @@ HRESULT AafOmf::OMFFileRead()
 						if (AAFRESULT_SUCCESS == rc)
 						{
 							if (bVerboseMode)
-								cout <<"Created AAF Composition Mob"<<endl;
+								UTLstdprintf( "Created AAF Composition Mob\n");
 							rc = ConvertOMFCompositionObject( OMFMob, pCompMob );
 							pCompMob->QueryInterface(IID_IAAFMob, (void **)&pMob);
 							pCompMob->Release();
@@ -677,7 +624,7 @@ HRESULT AafOmf::OMFFileRead()
 						if (AAFRESULT_SUCCESS == rc)
 						{
 							if (bVerboseMode)
-								cout <<"Created AAF Master Mob"<<endl;
+								UTLstdprintf("Created AAF Master Mob\n");
 							rc = ConvertOMFMasterMob(OMFMob, pMasterMob );
 							pMasterMob->QueryInterface(IID_IAAFMob, (void **)&pMob);
 							pMasterMob->Release();
@@ -692,7 +639,7 @@ HRESULT AafOmf::OMFFileRead()
 						if (AAFRESULT_SUCCESS == rc)
 						{
 							if (bVerboseMode)
-								cout <<"Created AAF Source Mob"<<endl;
+								UTLstdprintf("Created AAF Source Mob\n");
 							rc = ConvertOMFSourceMob( OMFMob, pSourceMob );
 							pSourceMob->QueryInterface(IID_IAAFMob, (void **)&pMob);
 							pSourceMob->Release();
@@ -709,20 +656,20 @@ HRESULT AafOmf::OMFFileRead()
 						{
 							strncpy(id, objClass, 4);
 							id[4] = '\0';
-							cout<<"Unrecognized Mob Class ID : "<<id<<endl;
+							UTLstdprintf("Unrecognized Mob Class ID: %s\n",id);
 						}
 					}
 					if (pMob)
 					{
 						rc = ConvertOMFMOBObject( OMFMob, pMob);
 						if (rc != AAFRESULT_SUCCESS)
-							cout<<"Error convert basic MOB data"<<endl;
+							UTLerrprintf("Error convert basic MOB data\n");
 						rc = TraverseOMFMob( OMFMob, pMob);
 						if (rc != AAFRESULT_SUCCESS)
-							cout<<"Error Traversing MOB "<<endl;
+							UTLerrprintf("Error Traversing MOB\n ");
 						rc = pHeader->AppendMob(pMob);
 						if (rc != AAFRESULT_SUCCESS)
-							cout<<"Error appending MOB to the file"<<endl;
+							UTLerrprintf("Error appending MOB to the file\n");
 						pMob->Release();
 						pMob = NULL;
 					}
@@ -757,7 +704,10 @@ HRESULT AafOmf::ConvertOMFHeader( void )
 
 	rc = OMF2::omfsGetHeadObject( OMFFileHdl, &OMFHeader );
 	if (bVerboseMode)
-		cout<<"Processing OMF Header"<<endl;
+	{
+		UTLstdprintf("Processing OMF Header\n");
+	}
+	IncIndentLevel();
 	if (OMF2::OM_ERR_NONE == rc)
 	{
 		//From the OMF header we will extract all definition Objects and Class Dictionary
@@ -765,8 +715,7 @@ HRESULT AafOmf::ConvertOMFHeader( void )
 		numDefs = OMF2::omfsLengthObjRefArray(OMFFileHdl, OMFHeader, OMF2::OMHEADDefinitionObjects);
 		if (bVerboseMode)
 		{
-			Indent(4);
-			cout<<"Found : "<<numDefs<< " Data Definitions"<<endl;
+			UTLstdprintf("%sFound: %ld Data Definitions\n", indentLeader, numDefs);
 		}
 		for (int i = 1;i <= numDefs;i++)
 		{
@@ -781,8 +730,7 @@ HRESULT AafOmf::ConvertOMFHeader( void )
 		numEntries = OMF2::omfsLengthObjRefArray(OMFFileHdl, OMFHeader, OMF2::OMHEADClassDictionary);
 		if (bVerboseMode)
 		{
-			Indent(4);
-			cout<<"Found : "<<numEntries<< " Class Definitions"<<endl;
+			UTLstdprintf("Found: %ld Class Definitions\n", numEntries);
 		}
 		for (int j = 0;j < numEntries; j++)
 		{
@@ -795,8 +743,9 @@ HRESULT AafOmf::ConvertOMFHeader( void )
 		}
 	}
 	if (AAFRESULT_SUCCESS == rc && bVerboseMode)
-		cout << "Converted OMF Header values to AAF"<< endl;
+		UTLstdprintf("Converted OMF Header values to AAF\n");
 
+	DecIndentLevel();
 	return rc;
 }
 // ============================================================================
@@ -815,15 +764,16 @@ HRESULT AafOmf::ConvertOMFDataDefinitionObject( OMF2::omfObject_t obj )
 	OMF2::omfClassID_t		objClass;
 	char					id[5];
 
+	IncIndentLevel();
 	rc = OMF2::omfsReadClassID(OMFFileHdl, obj, OMF2::OMOOBJObjClass, objClass);
 	if (OMF2::OM_ERR_NONE == rc && bVerboseMode)
 	{
 		strncpy(id, objClass, 4);
 		id[4] = '\0';
-		Indent(8);
-		cout<<"Processing : "<<id <<" "<<endl;
+		UTLstdprintf("%sProcessing: %s Data Definition\n", indentLeader, id );
 	}
 
+	DecIndentLevel();
 	return rc;
 }
 // ============================================================================
@@ -842,16 +792,15 @@ HRESULT AafOmf::ConvertOMFClassDictionaryObject( OMF2::omfObject_t obj )
 	HRESULT					rc = AAFRESULT_SUCCESS;
 	char					id[5];
 
+	IncIndentLevel();
 	memset(id, 0, sizeof(id));
 	rc = OMF2::omfsReadClassID(OMFFileHdl, obj, OMF2::OMCLSDClass, id);
 	if ( OMF2::OM_ERR_PROP_NOT_PRESENT == rc )
-		cout << "*** Invalid Class Id ***"<<endl;
+		UTLerrprintf("*** Invalid Class Id ***\n");
 	else if (bVerboseMode)
-	{
-		Indent(8);
-		cout<<"Processing : "<<id <<" Class Definition"<<endl;
-	}
+		UTLstdprintf("%sProcessing: %s Class Definition\n", indentLeader, id);
 
+	DecIndentLevel();
 	return rc;
 }
 
@@ -867,7 +816,7 @@ HRESULT AafOmf::ConvertOMFMOBObject( OMF2::omfObject_t obj, IAAFMob* pMob )
 {
 	HRESULT					rc = AAFRESULT_SUCCESS;
 	char					sMobName[32];
-	aafWChar				wcMobName[32];
+	aafWChar*				pwMobName = NULL;
 	aafInt32				numComments;
 	aafInt32				times;
 
@@ -895,20 +844,18 @@ HRESULT AafOmf::ConvertOMFMOBObject( OMF2::omfObject_t obj, IAAFMob* pMob )
 
 	union label aLabel;
 
+	IncIndentLevel();
 	rc = OMF2::omfiMobGetInfo(OMFFileHdl, obj, &OMFMobID, 32, sMobName, NULL, NULL);
 	if (AAFRESULT_SUCCESS == rc)
-		convert(wcMobName, 32, sMobName);
+		UTLStrAToStrW(sMobName, &pwMobName);
 	else
-		convert(wcMobName, 32, "Name NOT provided");
-
+		UTLStrAToStrW("Name NOT provided", &pwMobName);
 
 	if (bVerboseMode)
-	{
-		Indent(8);
-		cout<<"Mob Name : "<<sMobName<<endl;
-	}
+		UTLstdprintf("%sMob Name: %s", indentLeader, sMobName);
+
 	// Set Name
-	pMob->SetName(wcMobName);
+	pMob->SetName(pwMobName);
 
 	// Convert OMF MobID into AAF AUID
 	aLabel.smpte.MobIDMajor = OMFMobID.major;
@@ -934,16 +881,20 @@ HRESULT AafOmf::ConvertOMFMOBObject( OMF2::omfObject_t obj, IAAFMob* pMob )
 		for (times = 0; times < numComments; times++)
 		{
 			char		sCommentName[64];
-			aafWChar	wcCommentName[64];
+			aafWChar*	pwCommentName = NULL;
 			char		sCommentValue[256];
-			aafWChar	wcCommentValue[256];
+			aafWChar*	pwCommentValue = NULL;
 
 			rc = OMF2::omfiMobGetNextComment(OMFIterator, obj, sizeof(sCommentName), sCommentName, sizeof(sCommentValue), sCommentValue);
 			if (AAFRESULT_SUCCESS == rc)
 			{
-				convert(wcCommentName, sizeof(sCommentName), sCommentName);
-				convert(wcCommentValue, sizeof(sCommentValue), sCommentValue);
-				pMob->AppendComment(wcCommentName, wcCommentValue);
+				UTLStrAToStrW(sCommentName, &pwCommentName);
+				UTLStrAToStrW(sCommentValue, &pwCommentValue);
+				pMob->AppendComment(pwCommentName, pwCommentValue);
+				if (pwCommentName)
+					UTLMemoryFree(pwCommentName);
+				if (pwCommentValue)
+					UTLMemoryFree(pwCommentValue);
 			}
 		}
 
@@ -951,6 +902,10 @@ HRESULT AafOmf::ConvertOMFMOBObject( OMF2::omfObject_t obj, IAAFMob* pMob )
 		OMF2::omfiIteratorDispose(OMFFileHdl, OMFIterator);
 	}
 
+	if (pwMobName)
+		UTLMemoryFree(pwMobName);
+
+	DecIndentLevel();
 	return rc;
 }
 // ============================================================================
@@ -1001,7 +956,7 @@ HRESULT AafOmf::ConvertOMFCompositionObject(OMF2::omfObject_t obj,
 								 AAFDefaultFade.fadeEditUnit);
 
 	if (AAFRESULT_SUCCESS == rc && bVerboseMode)
-		cout << "Converted OMF Composition MOB to AAF"<< endl;
+		UTLstdprintf("Converted OMF Composition MOB to AAF\n");
 
 	return rc;
 }
@@ -1028,7 +983,7 @@ HRESULT AafOmf::TraverseOMFMob( OMF2::omfObject_t obj, IAAFMob* pMob )
 	OMF2::omfPosition_t		OMFOrigin;
 	OMF2::omfErr_t			OMFError;
 	char					sTrackName[32];
-	aafWChar				wcTrackName[32];					
+	aafWChar*				pwTrackName = NULL;					
 
 	IAAFMobSlot*		pMobSlot = NULL;
 	IAAFSegment*		pSegment = NULL;
@@ -1042,10 +997,10 @@ HRESULT AafOmf::TraverseOMFMob( OMF2::omfObject_t obj, IAAFMob* pMob )
 	if (AAFRESULT_SUCCESS != rc)
 		numTracks = 0;
 
+	IncIndentLevel();
 	if (bVerboseMode)
 	{
-		Indent(4);
-		cout<<"Found : "<<numSlots<<" sub tracks"<<endl;
+		UTLstdprintf("%sFound: %ld sub tracks\n", indentLeader, numSlots);
 	}
 	OMF2::omfiIteratorAlloc(OMFFileHdl, &OMFIterator);
 	for (times = 0; times < numSlots; times++)
@@ -1065,13 +1020,14 @@ HRESULT AafOmf::TraverseOMFMob( OMF2::omfObject_t obj, IAAFMob* pMob )
 					ProcessOMFComponent(OMFSegment, &pSegment);
 					if (pSegment)
 					{
-						convert(wcTrackName, sizeof(wcTrackName), sTrackName);
-						pMob->AppendNewSlot( pSegment, (aafSlotID_t)OMFTrackID, wcTrackName, &pMobSlot );
+						IncIndentLevel();
+						UTLStrAToStrW(sTrackName, &pwTrackName);
+						pMob->AppendNewSlot( pSegment, (aafSlotID_t)OMFTrackID, pwTrackName, &pMobSlot );
 						if (bVerboseMode)
 						{
-							Indent(8);
-							cout<<"Converted SlotID : "<<(int)OMFTrackID<<" Name : "<<sTrackName<<endl;
+							UTLstdprintf("%sConverted SlotID: %d, Name: %s\n",indentLeader, (int)OMFTrackID, sTrackName);
 						}
+						DecIndentLevel();
 					}
 					if (pSegment)
 					{
@@ -1085,6 +1041,9 @@ HRESULT AafOmf::TraverseOMFMob( OMF2::omfObject_t obj, IAAFMob* pMob )
 	}
 
 	OMF2::omfiIteratorDispose(OMFFileHdl, OMFIterator);
+	DecIndentLevel();
+	if (pwTrackName)
+		UTLMemoryFree(pwTrackName);
 
 	return rc;
 }
@@ -1519,6 +1478,10 @@ int main(int argc, char *argv[])
 
 
 	theApp.pProgramName = baseName(argv[0]);
+	rc = UTLInitFileIO();
+	if (FAILED(rc))
+		return rc;
+
 	cout << theApp.pProgramName << ": Version 0.01.00" << endl;
 	if (AAFRESULT_SUCCESS == theApp.GetUserInput(argc, argv) )
 	{
@@ -1530,7 +1493,7 @@ int main(int argc, char *argv[])
 					if (AAFRESULT_SUCCESS == rc)
 						rc = theApp.OMFFileRead();
 					else
-						fatalError("Main", "Could not convert OMF Header Object");
+						UTLerrprintf("Could not convert OMF Header Object");
 			}
 		}
 	}
@@ -1538,5 +1501,6 @@ int main(int argc, char *argv[])
 	{
 		theApp.Usage();
 	}
-	return(0);
+
+	return(rc);
 }
