@@ -34,6 +34,7 @@
 #include "OMAssertions.h"
 #include "OMStoredVectorIndex.h"
 #include "OMStrongReferenceVectorIter.h"
+#include "OMStoredObject.h"
 
   // @mfunc Constructor.
   //   @parm The property id.
