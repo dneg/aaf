@@ -164,6 +164,8 @@ HRESULT dumpObject(IAAFObjectSP pContainer, int indent)
   IAAFPropertySP pProp;
   IAAFPropertyDefSP pPDef;
   IAAFPropertyValueSP pPVal;
+  IAAFClassDefSP pClassDef;
+
   try
 	{
 	  // Get the contained properties.
@@ -171,7 +173,18 @@ HRESULT dumpObject(IAAFObjectSP pContainer, int indent)
 
 	  cout << endl;
 	  printIndent (indent);
-	  cout << "***Dumping Object***" << endl;
+	  cout << "Object of Class: ";
+	  checkResult(pContainer->GetDefinition (&pClassDef));
+      aafUInt32 bufClassNameSize;
+		  checkResult(pClassDef->GetNameBufLen (&bufClassNameSize));
+		  wchar_t * classNameBuf = new wchar_t[bufClassNameSize];
+		  assert (classNameBuf);
+		  checkResult(pClassDef->GetName(classNameBuf, bufClassNameSize));
+		  char *mbBuf = make_mbstring(bufClassNameSize, classNameBuf); // create an ansi/asci
+		  checkExpression(NULL != mbBuf, AAFRESULT_NOMEMORY);
+		  cout << mbBuf << endl;
+		  delete[] mbBuf;
+		  delete[] classNameBuf;
 
 	  // Enumerate across Properties
 	  while (AAFRESULT_SUCCEEDED (pPropEnum->NextOne (&pProp)))
