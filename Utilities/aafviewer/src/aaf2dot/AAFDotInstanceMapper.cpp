@@ -363,7 +363,7 @@ AAFDotInstanceMapper::MapKnownAAFRecordTypes( AxProperty axProperty, bool &popSt
    AxPropertyDef propertyDef( axProperty.GetDefinition() );
    AxTypeDef typeDef( propertyDef.GetTypeDef() );
 
-   if ( typeDef.GetAUID() == kAAFTypeID_MobID )	// MobID
+   if ( typeDef.GetAUID() == kAAFTypeID_MobIDType )	// MobID
    {
       ObjectStalker *oStalker = dynamic_cast< ObjectStalker* > ( PopStalker() );
       if ( oStalker == 0 )

@@ -124,6 +124,9 @@ bool Is_aafColorSiting_t_Valid(aafColorSiting_t param)
     case kAAFCoSiting:
     case kAAFAveraging:
     case kAAFThreeTap:
+    case kAAFQuincunx:
+    case kAAFRec601:
+    case kAAFUnknownSiting:
       return true;
     default:
       return false;
@@ -583,6 +586,10 @@ bool Is_aafPulldownKind_t_Valid(aafPulldownKind_t param)
     case kAAFPALPD:
     case kAAFOneToOneNTSC:
     case kAAFOneToOnePAL:
+    case kAAFVideoTapNTSC:
+    case kAAFOneToOneHDSixty:
+    case kAAFTwentyFourToSixtyPD:
+    case kAAFTwoToOnePD:
       return true;
     default:
       return false;

@@ -2150,7 +2150,7 @@ HRESULT dumpPropertyValue (IAAFPropertyValueSP pPVal,
 		checkResult(ptd->QueryInterface(IID_IUnknown,
 						(void**)&pUnkAUID));
 		// See if it is a MobID
-		checkResult (pDict->LookupTypeDef (kAAFTypeID_MobID, &ptd));
+		checkResult (pDict->LookupTypeDef (kAAFTypeID_MobIDType, &ptd));
 		IUnknown * pUnkMobID = 0;
 		checkResult(ptd->QueryInterface(IID_IUnknown,
 						(void**)&pUnkMobID));
