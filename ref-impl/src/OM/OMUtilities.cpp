@@ -37,8 +37,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <iostream.h>
-
 static char programName[FILENAME_MAX] = "Object Manager";
 
 void setProgramName(const char* name)
