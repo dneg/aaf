@@ -41,7 +41,7 @@ public:
 
   virtual OMFile* file(void) const;
 
-  virtual bool attached(void);
+  virtual bool persistent(void);
 
 private:
 
