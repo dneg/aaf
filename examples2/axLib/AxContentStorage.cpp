@@ -23,8 +23,7 @@
 #include <ostream>
 
 AxContentStorage::AxContentStorage( IAAFContentStorageSP spIaafContentStorage )
-:	AxObject( AxQueryInterface<IAAFContentStorage,IAAFObject>(
-		spIaafContentStorage, IID_IAAFObject ) ),
+:	AxObject( AxQueryInterface<IAAFContentStorage,IAAFObject>(spIaafContentStorage) ),
 	_spIaafContentStorage( spIaafContentStorage )
 {}
 

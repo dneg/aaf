@@ -32,6 +32,7 @@ public:
 	~AxDictionary();
 
 	bool isKnownTypeDef( const aafUID_t& typeId );
+	bool isKnownOperationDef( const aafUID_t& typeId );
 	
 	IAAFTypeDefSP LookupTypeDef( const aafUID_t& typeId );
 	IAAFClassDefSP LookupClassDef( const aafUID_t& classId );
@@ -67,42 +68,25 @@ private:
 
 //=---------------------------------------------------------------------=
 
-// FIXME - How can we confirm that auid and iid match?  (Or is it
-// implied if the cast to iid succeeds?)  Perhaps a map of IID to
-// AUID.  That would probably work since we have a type-safe
-// AxQueryInterface call to confirm that iid is correct given Type.
-// Actually, if we had a map<IID,AUID> then these function would not
-// require auid or iid arguments - both could be deduced from Type.
-
 template <class Type>
-IAAFSmartPointer<Type> AxCreateInstance( AxDictionary& dict, 
-										 const aafUID_t& auid,
-										 const IID& iid )
+IAAFSmartPointer<Type> AxCreateInstance( AxDictionary& dict )
 {
-	Type* dummy;
-	if ( !( iid == AxIID( dummy ) ) ) {
-		throw AxEx( L"IID Type mismatch" );
-	}
+	Type* dummy = 0;
 
-	IUnknownSP spIUnknown = dict.CreateInstance( auid, iid );
+	IUnknownSP spIUnknown = dict.CreateInstance( AxAUID(dummy), AxIID(dummy) );
 	IAAFSmartPointer<Type> sp;
-	AxQueryInterface( spIUnknown, sp, iid );
+	AxQueryInterface( spIUnknown, sp );
 	return sp;
 }
 
 template <class Type>
-IAAFSmartPointer<Type> AxCreateMetaInstance( AxDictionary& dict, 
-											 const aafUID_t& auid,
-											 const IID& iid )
+IAAFSmartPointer<Type> AxCreateMetaInstance( AxDictionary& dict )
 {
 	Type* dummy = 0;
-	if ( !( iid == AxIID( dummy ) ) ) {
-		throw AxEx( L"IID Type mismatch" );
-	}
 
-	IUnknownSP spIUnknown = dict.CreateMetaInstance( auid, iid );
+	IUnknownSP spIUnknown = dict.CreateMetaInstance( AxAUID(dummy), AxIID(dummy) );
 	IAAFSmartPointer<Type> sp;
-	AxQueryInterface( spIUnknown, sp, iid );
+	AxQueryInterface( spIUnknown, sp );
 	return sp;
 }
 

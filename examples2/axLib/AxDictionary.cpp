@@ -21,8 +21,7 @@
 #include <AAFResult.h>
 
 AxDictionary::AxDictionary( IAAFDictionarySP spIaafDictionary )
-:	AxObject( AxQueryInterface<IAAFDictionary, IAAFObject>(
-			   spIaafDictionary, IID_IAAFObject ) ),
+:	AxObject( AxQueryInterface<IAAFDictionary, IAAFObject>(spIaafDictionary) ),
 	_spIaafDictionary( spIaafDictionary )
 {}
 
@@ -34,6 +33,28 @@ bool AxDictionary::isKnownTypeDef( const aafUID_t& typeId )
 	IAAFTypeDefSP spIaafTypeDef;
 
 	HRESULT hr = _spIaafDictionary->LookupTypeDef( typeId, &spIaafTypeDef );
+
+	bool result = true;
+
+	// We accept AAFRESULT_NO_MORE_OBJECTS (i.e. not known), or 
+	// AAFRESULT_SUCCESS (known).  Anything else throws.
+
+	// FIXME - This is not a documented return value!  (FIXDOCS)
+	if ( AAFRESULT_NO_MORE_OBJECTS == hr ) {
+		result = false;
+	}
+	else if ( AAFRESULT_SUCCESS != hr ) {
+		CHECK_HRESULT( hr );
+	}
+
+	return result;
+}
+
+bool AxDictionary::isKnownOperationDef( const aafUID_t& opId )
+{
+	IAAFOperationDefSP spIaafOperationDef;
+
+	HRESULT hr = _spIaafDictionary->LookupOperationDef( opId, &spIaafOperationDef );
 
 	bool result = true;
 

@@ -21,6 +21,8 @@
 
 #include "AxEx.h"
 
+#include <AAFStoredObjectIDs.h>
+
 #include <utility>
 
 // Define AAF_SMART_POINTER_ASSERT before including AAFSmartPointer.h
@@ -46,143 +48,171 @@ inline const IID& AxIID( Type* )
 	throw AxExBadImp( L"AxIID()" );
 }
 
-#define AXIID_SPECIALIZE(TYPE) \
-template<> inline const IID& AxIID<TYPE>( TYPE* ) { return IID_##TYPE; }
+#define AXIID_SPECIALIZE(TYPE, TYPEID) \
+template<> inline const IID& AxIID< TYPE >( TYPE * ) { return TYPEID; }
+
+
+template <class Type>
+inline const aafUID_t& AxAUID( Type* )
+{
+	throw AxExBadImp( L"AxAUID()" );
+}
+
+#define AXAUID_SPECIALIZE(TYPE, TYPEID) \
+template<> inline const aafUID_t& AxAUID< TYPE >( TYPE * ) { return TYPEID; }
 
 //
-// Usual smart pointer typedefs
+// Macros to declare a smart pointer typedef, and to
+// define specialized instances of the AxIID and AxAUID
+// macros.  Three versions are required:
 //
 
-#define AXSP_TDEF(T) \
+// Declare smart pointer, AxIID, and AxAUID given root
+// type name (i.e. no prefix).
+#define AXSP_TDEF_A(T) \
+  typedef IAAFSmartPointer< IAAF##T >	IAAF##T##SP ; \
+  AXIID_SPECIALIZE( IAAF##T, IID_IAAF##T ) \
+  AXAUID_SPECIALIZE( IAAF##T, AUID_AAF##T )
+
+// Declare smart pointer, and AxIID given root type name
+// (i.e. no prefix).  Used for COM interfaces with no
+// associated stored object.
+#define AXSP_TDEF_B(T) \
+  typedef IAAFSmartPointer< IAAF##T >	IAAF##T##SP ; \
+  AXIID_SPECIALIZE( IAAF##T, IID_IAAF##T ) \
+
+// Declare smart ponter and AxIID given full type name.
+// Used to declare IEnum types.
+#define AXSP_TDEF_C(T) \
   typedef IAAFSmartPointer< T >	T##SP ; \
-  AXIID_SPECIALIZE(T)
+  AXIID_SPECIALIZE( T, IID_##T )
 
-AXSP_TDEF( IAAFAIFCDescriptor )
-AXSP_TDEF( IAAFClassDef )
-AXSP_TDEF( IAAFCodecDef )
-AXSP_TDEF( IAAFCommentMarker )
-AXSP_TDEF( IAAFComponent )
-AXSP_TDEF( IAAFCompositionMob )
-AXSP_TDEF( IAAFConstantValue )
-AXSP_TDEF( IAAFContainerDef )
-AXSP_TDEF( IAAFContentStorage )
-AXSP_TDEF( IAAFControlPoint )
-AXSP_TDEF( IAAFDataDef )
-AXSP_TDEF( IAAFDefObject )
-AXSP_TDEF( IAAFPluginDef )
-AXSP_TDEF( IAAFDictionary )
-AXSP_TDEF( IAAFEdgecode )
-AXSP_TDEF( IAAFOperationDef )
-AXSP_TDEF( IAAFEssenceAccess )
-AXSP_TDEF( IAAFEssenceData )
-AXSP_TDEF( IAAFEssenceDescriptor )
-AXSP_TDEF( IAAFEvent )
-AXSP_TDEF( IAAFEventMobSlot )
-AXSP_TDEF( IAAFFile )
-AXSP_TDEF( IAAFFileDescriptor )
-AXSP_TDEF( IAAFFilmDescriptor )
-AXSP_TDEF( IAAFDigitalImageDescriptor )
-AXSP_TDEF( IAAFCDCIDescriptor )
-AXSP_TDEF( IAAFEssenceFormat )
-AXSP_TDEF( IAAFEssenceGroup )
-AXSP_TDEF( IAAFFiller )
-AXSP_TDEF( IAAFFindSourceInfo )
-AXSP_TDEF( IAAFOperationGroup )
-AXSP_TDEF( IAAFGPITrigger )
-AXSP_TDEF( IAAFHeader )
-AXSP_TDEF( IAAFIdentification )
-AXSP_TDEF( IAAFInterpolationDef )
-AXSP_TDEF( IAAFKLVData )
-AXSP_TDEF( IAAFLocator )
-AXSP_TDEF( IAAFMasterMob )
-AXSP_TDEF( IAAFMasterMobEx )
-AXSP_TDEF( IAAFMetaDefinition )
-AXSP_TDEF( IAAFMob )
-AXSP_TDEF( IAAFMobSlot )
-AXSP_TDEF( IAAFNestedScope )
-AXSP_TDEF( IAAFNetworkLocator )
-AXSP_TDEF( IAAFObject )
-AXSP_TDEF( IAAFParameter )
-AXSP_TDEF( IAAFParameterDef )
-AXSP_TDEF( IAAFProperty )
-AXSP_TDEF( IAAFPropertyDef )
-AXSP_TDEF( IAAFPropertyValue )
-AXSP_TDEF( IAAFPluginManager )
-AXSP_TDEF( IAAFPulldown )
-AXSP_TDEF( IAAFRGBADescriptor )
-AXSP_TDEF( IAAFScopeReference )
-AXSP_TDEF( IAAFSegment )
-AXSP_TDEF( IAAFSelector )
-AXSP_TDEF( IAAFSequence )
-AXSP_TDEF( IAAFSourceClip )
-AXSP_TDEF( IAAFSourceMob )
-AXSP_TDEF( IAAFSourceReference )
-AXSP_TDEF( IAAFStaticMobSlot )
-AXSP_TDEF( IAAFTapeDescriptor )
-AXSP_TDEF( IAAFTaggedValue )
-AXSP_TDEF( IAAFTextLocator )
-AXSP_TDEF( IAAFTimecode )
-AXSP_TDEF( IAAFTimelineMobSlot )
-AXSP_TDEF( IAAFTransition )
-AXSP_TDEF( IAAFTIFFDescriptor )
-AXSP_TDEF( IAAFTimecodeStream )
-AXSP_TDEF( IAAFTimecodeStream12M )
-AXSP_TDEF( IAAFTypeDef )
-AXSP_TDEF( IAAFTypeDefCharacter )
-AXSP_TDEF( IAAFTypeDefIndirect )
-AXSP_TDEF( IAAFTypeDefInt )
-AXSP_TDEF( IAAFTypeDefRename )
-AXSP_TDEF( IAAFTypeDefEnum )
-AXSP_TDEF( IAAFTypeDefExtEnum )
-AXSP_TDEF( IAAFTypeDefFixedArray )
-AXSP_TDEF( IAAFTypeDefRecord )
-AXSP_TDEF( IAAFTypeDefSet )
-AXSP_TDEF( IAAFTypeDefStream )
-AXSP_TDEF( IAAFTypeDefString )
-AXSP_TDEF( IAAFTypeDefStrongObjRef )
-AXSP_TDEF( IAAFTypeDefWeakObjRef )
-AXSP_TDEF( IAAFTypeDefObjectRef )
-AXSP_TDEF( IAAFTypeDefOpaque )
-AXSP_TDEF( IAAFTypeDefVariableArray )
-AXSP_TDEF( IAAFVaryingValue )
-AXSP_TDEF( IAAFWAVEDescriptor )
-AXSP_TDEF( IEnumAAFClassDefs )
-AXSP_TDEF( IEnumAAFCodecDefs )
-AXSP_TDEF( IEnumAAFCodecFlavours )
-AXSP_TDEF( IEnumAAFComponents )
-AXSP_TDEF( IEnumAAFContainerDefs )
-AXSP_TDEF( IEnumAAFControlPoints )
-AXSP_TDEF( IEnumAAFDataDefs )
-AXSP_TDEF( IEnumAAFIdentifications )
-AXSP_TDEF( IEnumAAFInterpolationDefs )
-AXSP_TDEF( IEnumAAFOperationDefs )
-AXSP_TDEF( IEnumAAFEssenceData )
-AXSP_TDEF( IEnumAAFKLVData )
-AXSP_TDEF( IEnumAAFLoadedPlugins )
-AXSP_TDEF( IEnumAAFLocators )
-AXSP_TDEF( IEnumAAFMobSlots )
-AXSP_TDEF( IEnumAAFMobs )
-AXSP_TDEF( IEnumAAFParameterDefs )
-AXSP_TDEF( IEnumAAFParameters )
-AXSP_TDEF( IEnumAAFProperties )
-AXSP_TDEF( IEnumAAFPropertyDefs )
-AXSP_TDEF( IEnumAAFPropertyValues )
-AXSP_TDEF( IEnumAAFPluginDefs )
-AXSP_TDEF( IEnumAAFPluginLocators )
-AXSP_TDEF( IEnumAAFSegments )
-AXSP_TDEF( IEnumAAFTaggedValues )
-AXSP_TDEF( IEnumAAFTypeDefs )
-AXSP_TDEF( IAAFRawStorage )
-AXSP_TDEF( IAAFRandomRawStorage )
-AXSP_TDEF( IAAFGetFileBits )
-AXSP_TDEF( IAAFSetFileBits )
-AXSP_TDEF( IAAFRandomFile )
-AXSP_TDEF( IAAFEndian )
-AXSP_TDEF( IAAFSearchSource )
-AXSP_TDEF( IAAFEssenceMultiAccess )
-AXSP_TDEF( IAAFTypeDefVariableArrayEx )
+AXSP_TDEF_A( AIFCDescriptor )
+AXSP_TDEF_A( ClassDef )
+AXSP_TDEF_A( CodecDef )
+AXSP_TDEF_A( CommentMarker )
+AXSP_TDEF_A( Component )
+AXSP_TDEF_A( CompositionMob )
+AXSP_TDEF_A( ConstantValue )
+AXSP_TDEF_A( ContainerDef )
+AXSP_TDEF_A( ContentStorage )
+AXSP_TDEF_A( ControlPoint )
+AXSP_TDEF_A( DataDef )
+AXSP_TDEF_A( DefObject )
+AXSP_TDEF_A( PluginDef )
+AXSP_TDEF_A( Dictionary )
+AXSP_TDEF_A( Edgecode )
+AXSP_TDEF_A( OperationDef )
+AXSP_TDEF_B( EssenceAccess )
+AXSP_TDEF_A( EssenceData )
+AXSP_TDEF_A( EssenceDescriptor )
+AXSP_TDEF_A( Event )
+AXSP_TDEF_A( EventMobSlot )
+AXSP_TDEF_B( File )
+AXSP_TDEF_A( FileDescriptor )
+AXSP_TDEF_A( FilmDescriptor )
+AXSP_TDEF_A( DigitalImageDescriptor )
+AXSP_TDEF_A( CDCIDescriptor )
+AXSP_TDEF_B( EssenceFormat )
+AXSP_TDEF_A( EssenceGroup )
+AXSP_TDEF_A( Filler )
+AXSP_TDEF_B( FindSourceInfo )
+AXSP_TDEF_A( OperationGroup )
+AXSP_TDEF_A( GPITrigger )
+AXSP_TDEF_A( Header )
+AXSP_TDEF_A( Identification )
+AXSP_TDEF_A( InterpolationDef )
+AXSP_TDEF_A( KLVData )
+AXSP_TDEF_A( Locator )
+AXSP_TDEF_A( MasterMob )
+AXSP_TDEF_B( MasterMobEx )
+AXSP_TDEF_A( MetaDefinition )
+AXSP_TDEF_A( Mob )
+AXSP_TDEF_A( MobSlot )
+AXSP_TDEF_A( NestedScope )
+AXSP_TDEF_A( NetworkLocator )
+AXSP_TDEF_A( Object )
+AXSP_TDEF_A( Parameter )
+AXSP_TDEF_A( ParameterDef )
+AXSP_TDEF_B( Property )
+AXSP_TDEF_A( PropertyDef )
+AXSP_TDEF_B( PropertyValue )
+AXSP_TDEF_B( PluginManager )
+AXSP_TDEF_A( Pulldown )
+AXSP_TDEF_A( RGBADescriptor )
+AXSP_TDEF_A( ScopeReference )
+AXSP_TDEF_A( Segment )
+AXSP_TDEF_A( Selector )
+AXSP_TDEF_A( Sequence )
+AXSP_TDEF_A( SourceClip )
+AXSP_TDEF_A( SourceMob )
+AXSP_TDEF_A( SourceReference )
+AXSP_TDEF_A( StaticMobSlot )
+AXSP_TDEF_A( TapeDescriptor )
+AXSP_TDEF_A( TaggedValue )
+AXSP_TDEF_A( TextLocator )
+AXSP_TDEF_A( Timecode )
+AXSP_TDEF_A( TimelineMobSlot )
+AXSP_TDEF_A( Transition )
+AXSP_TDEF_A( TIFFDescriptor )
+AXSP_TDEF_A( TimecodeStream )
+AXSP_TDEF_A( TimecodeStream12M )
+AXSP_TDEF_A( TypeDef )
+AXSP_TDEF_A( TypeDefCharacter )
+AXSP_TDEF_A( TypeDefIndirect )
+AXSP_TDEF_A( TypeDefInt )
+AXSP_TDEF_A( TypeDefRename )
+AXSP_TDEF_A( TypeDefEnum )
+AXSP_TDEF_A( TypeDefExtEnum )
+AXSP_TDEF_A( TypeDefFixedArray )
+AXSP_TDEF_A( TypeDefRecord )
+AXSP_TDEF_A( TypeDefSet )
+AXSP_TDEF_A( TypeDefStream )
+AXSP_TDEF_A( TypeDefString )
+AXSP_TDEF_A( TypeDefStrongObjRef )
+AXSP_TDEF_A( TypeDefWeakObjRef )
+AXSP_TDEF_B( TypeDefObjectRef )
+AXSP_TDEF_A( TypeDefOpaque )
+AXSP_TDEF_A( TypeDefVariableArray )
+AXSP_TDEF_A( VaryingValue )
+AXSP_TDEF_A( WAVEDescriptor )
+AXSP_TDEF_C( IEnumAAFClassDefs )
+AXSP_TDEF_C( IEnumAAFCodecDefs )
+AXSP_TDEF_C( IEnumAAFCodecFlavours )
+AXSP_TDEF_C( IEnumAAFComponents )
+AXSP_TDEF_C( IEnumAAFContainerDefs )
+AXSP_TDEF_C( IEnumAAFControlPoints )
+AXSP_TDEF_C( IEnumAAFDataDefs )
+AXSP_TDEF_C( IEnumAAFIdentifications )
+AXSP_TDEF_C( IEnumAAFInterpolationDefs )
+AXSP_TDEF_C( IEnumAAFOperationDefs )
+AXSP_TDEF_C( IEnumAAFEssenceData )
+AXSP_TDEF_C( IEnumAAFKLVData )
+AXSP_TDEF_C( IEnumAAFLoadedPlugins )
+AXSP_TDEF_C( IEnumAAFLocators )
+AXSP_TDEF_C( IEnumAAFMobSlots )
+AXSP_TDEF_C( IEnumAAFMobs )
+AXSP_TDEF_C( IEnumAAFParameterDefs )
+AXSP_TDEF_C( IEnumAAFParameters )
+AXSP_TDEF_C( IEnumAAFProperties )
+AXSP_TDEF_C( IEnumAAFPropertyDefs )
+AXSP_TDEF_C( IEnumAAFPropertyValues )
+AXSP_TDEF_C( IEnumAAFPluginDefs )
+AXSP_TDEF_C( IEnumAAFPluginLocators )
+AXSP_TDEF_C( IEnumAAFSegments )
+AXSP_TDEF_C( IEnumAAFTaggedValues )
+AXSP_TDEF_C( IEnumAAFTypeDefs )
+AXSP_TDEF_B( RawStorage )
+AXSP_TDEF_B( RandomRawStorage )
+AXSP_TDEF_B( GetFileBits )
+AXSP_TDEF_B( SetFileBits )
+AXSP_TDEF_B( RandomFile )
+AXSP_TDEF_B( Endian )
+AXSP_TDEF_B( SearchSource )
+AXSP_TDEF_B( EssenceMultiAccess )
+AXSP_TDEF_B( TypeDefVariableArrayEx )
 
-AXSP_TDEF( IUnknown )
+AXSP_TDEF_C( IUnknown )
 
 //=---------------------------------------------------------------------=
 
@@ -191,14 +221,9 @@ AXSP_TDEF( IUnknown )
 
 template <class TypeSrc, class TypeDst>
 inline void AxQueryInterface( IAAFSmartPointer<TypeSrc> spSrc,
-							  IAAFSmartPointer<TypeDst>& spDst,
-							  const IID& iid )
+							  IAAFSmartPointer<TypeDst>& spDst )
 {
 	TypeDst* dummy = 0;
-
-	if ( !( iid == AxIID( dummy ) ) ) {
-		throw AxEx( L"IID TypeDst mismatch" );
-	}
 	
 	CHECK_HRESULT(
 		spSrc->QueryInterface( AxIID(dummy), reinterpret_cast<void**>(&spDst) ) );
@@ -210,16 +235,15 @@ inline void AxQueryInterface( IAAFSmartPointer<TypeSrc> spSrc,
 
 template <class TypeSrc, class TypeDst>
 inline IAAFSmartPointer< TypeDst >
-AxQueryInterface( IAAFSmartPointer<TypeSrc> spSrc,
-				  const IID& iid )
+AxQueryInterface( IAAFSmartPointer<TypeSrc> spSrc )
 {
 	IAAFSmartPointer< TypeDst > spDst;
-	AxQueryInterface( spSrc, spDst, iid );
+	AxQueryInterface( spSrc, spDst );
 	return spDst;
 }
 
 
-// AxIsA() - A versin of QueryInterface that returns a bool indicating
+// AxIsA() - A version of QueryInterface that returns a bool indicating
 // success.  Maybe "IsA" is not the best name.  Maybe it would be
 // better to return a pair<bool, IAAFSmartPointer<TypeDst>, but using
 // TypeDst for one of the arguments permits the compiler to deduce

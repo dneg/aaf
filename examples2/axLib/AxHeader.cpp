@@ -23,14 +23,12 @@
 #include <iostream>
 
 AxHeader::AxHeader( IAAFHeaderSP spIaafHeader )
-:	AxObject( AxQueryInterface<IAAFHeader,IAAFObject>(
-				spIaafHeader, IID_IAAFObject ) ),
+:	AxObject( AxQueryInterface<IAAFHeader,IAAFObject>(spIaafHeader) ),
 	_spIaafHeader( spIaafHeader )
 {}
 
 AxHeader::AxHeader( const AxHeader& other )
-:	AxObject( AxQueryInterface<IAAFHeader,IAAFObject>(
-				other._spIaafHeader, IID_IAAFObject ) ),
+:	AxObject( AxQueryInterface<IAAFHeader,IAAFObject>(other._spIaafHeader) ),
 	_spIaafHeader( other._spIaafHeader )
 {}
 

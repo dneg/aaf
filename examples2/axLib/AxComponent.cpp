@@ -21,8 +21,7 @@
 //=---------------------------------------------------------------------=
 
 AxComponent::AxComponent( IAAFComponentSP spIaafComponent )
-:	AxObject( AxQueryInterface<IAAFComponent, IAAFObject>(
-				spIaafComponent, IID_IAAFObject) ),
+:	AxObject( AxQueryInterface<IAAFComponent, IAAFObject>( spIaafComponent ) ),
 	_spIaafComponent( spIaafComponent )
 {}
 
@@ -55,8 +54,7 @@ IAAFDataDefSP AxComponent::GetDataDef()
 //=---------------------------------------------------------------------=
 
 AxSegment::AxSegment( IAAFSegmentSP spIaafSegment )
-:	AxComponent( AxQueryInterface<IAAFSegment, IAAFComponent>(
-					spIaafSegment, IID_IAAFComponent) ),
+:	AxComponent( AxQueryInterface<IAAFSegment, IAAFComponent>(spIaafSegment) ),
 	_spIaafSegment( spIaafSegment )
 {}
 
@@ -66,8 +64,7 @@ AxSegment::~AxSegment()
 //=---------------------------------------------------------------------=
 
 AxTransition::AxTransition( IAAFTransitionSP spIaafTransition )
-:	AxComponent( AxQueryInterface<IAAFTransition, IAAFComponent>(
-					spIaafTransition, IID_IAAFComponent) ),
+:	AxComponent( AxQueryInterface<IAAFTransition, IAAFComponent>( spIaafTransition ) ),
 	_spIaafTransition( spIaafTransition )
 {}
 
@@ -87,8 +84,7 @@ void AxTransition::Initialize( IAAFDataDefSP spDataDef,
 //=---------------------------------------------------------------------=
 
 AxSequence::AxSequence( IAAFSequenceSP spIaafSequence )
-:	AxSegment( AxQueryInterface<IAAFSequence, IAAFSegment>(
-					spIaafSequence, IID_IAAFSegment) ),
+:	AxSegment( AxQueryInterface<IAAFSequence, IAAFSegment>( spIaafSequence ) ),
 	_spIaafSequence( spIaafSequence )
 {}
 
@@ -108,8 +104,7 @@ void AxSequence::AppendComponent( IAAFComponentSP spIaafComponent )
 //=---------------------------------------------------------------------=
 
 AxSourceReference::AxSourceReference( IAAFSourceReferenceSP spIaafSourceReference )
-:	AxSegment( AxQueryInterface<IAAFSourceReference, IAAFSegment>(
-					spIaafSourceReference, IID_IAAFSegment) ),
+:	AxSegment( AxQueryInterface<IAAFSourceReference, IAAFSegment>( spIaafSourceReference ) ),
 	_spIaafSourceReference( spIaafSourceReference )
 {}
 
@@ -128,8 +123,7 @@ aafMobID_t AxSourceReference::GetSourceID()
 //=---------------------------------------------------------------------=
 
 AxSourceClip::AxSourceClip( IAAFSourceClipSP spIaafSourceClip )
-:	AxSourceReference( AxQueryInterface<IAAFSourceClip, IAAFSourceReference>(
-						spIaafSourceClip, IID_IAAFSourceReference) ),
+:	AxSourceReference( AxQueryInterface<IAAFSourceClip, IAAFSourceReference>(spIaafSourceClip) ),
 	_spIaafSourceClip( spIaafSourceClip )
 {}
 
@@ -147,8 +141,7 @@ void AxSourceClip::Initialize( IAAFDataDefSP spIaafDataDef,
 //=---------------------------------------------------------------------=
 
 AxOperationGroup::AxOperationGroup( IAAFOperationGroupSP spIaafOperationGroup )
-:	AxSegment( AxQueryInterface<IAAFOperationGroup, IAAFSegment>(
-					spIaafOperationGroup, IID_IAAFSegment) ),
+:	AxSegment( AxQueryInterface<IAAFOperationGroup, IAAFSegment>(spIaafOperationGroup) ),
 	_spIaafOperationGroup( spIaafOperationGroup )
 {}
 

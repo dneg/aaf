@@ -26,7 +26,8 @@ class AxFile {
 
  public:
 
-	static bool isAAFFile( const AxString& name );
+	// Is it an aaf file?
+    static bool isAAFFile( const AxString& name );
 	 
 	AxFile();
 
@@ -40,7 +41,6 @@ class AxFile {
 						aafUInt32 mode = 0,
 						const AxProductIdentification& ident = AxProductIdentification() );
 
-	// Currently fails due to AAF_RESULT_NOT_IN_CURRENT_VERSION
 	void OpenExistingModify( const AxString& name,
 				 aafUInt32 mode = 0,
 				 const AxProductIdentification& ident = AxProductIdentification() );

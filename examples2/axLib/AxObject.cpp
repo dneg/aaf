@@ -33,8 +33,7 @@ AxObject::AxObject( const AxObject& other )
 {}
 
 AxObject::AxObject( IAAFObjectSP spIaafObject )
-:	AxBaseObj( AxQueryInterface<IAAFObject, IUnknown>(
-				spIaafObject, IID_IUnknown) ),
+:	AxBaseObj( AxQueryInterface<IAAFObject, IUnknown>(spIaafObject) ),
 	_spIaafObject( spIaafObject )
 {}
 

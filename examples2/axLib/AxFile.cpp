@@ -22,6 +22,7 @@
 
 #include <iostream>
 
+
 //=---------------------------------------------------------------------=
 
 bool AxFile::isAAFFile( const AxString& name )
@@ -71,7 +72,6 @@ void AxFile::OpenNewModify( const AxString& name,
     _mode	= mode;
 }
 
-// AAF_RESULT_NOT_IN_CURRENT_VERSION
 void AxFile::OpenExistingModify( const AxString& name,
 				 aafUInt32 mode,
 				 const AxProductIdentification& ident )

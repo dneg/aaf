@@ -30,8 +30,7 @@ AxEssenceMultiAccess::~AxEssenceMultiAccess()
 //=---------------------------------------------------------------------=
 
 AxEssenceAccess::AxEssenceAccess( IAAFEssenceAccessSP sp )
-:	AxEssenceMultiAccess( AxQueryInterface<IAAFEssenceAccess, IAAFEssenceMultiAccess>(
-							sp, IID_IAAFEssenceMultiAccess ) ),
+:	AxEssenceMultiAccess( AxQueryInterface<IAAFEssenceAccess, IAAFEssenceMultiAccess>( sp ) ),
 	_spIaafEssenceAccess( sp )
 {}
 
@@ -122,8 +121,7 @@ AxEssenceAccess::ReadResult AxEssenceAccess::ReadSamples( aafUInt32 nSamples,
 //=---------------------------------------------------------------------=
 
 AxLocator::AxLocator( IAAFLocatorSP spIaafLocator )
-:	AxObject( AxQueryInterface<IAAFLocator, IAAFObject>(
-				spIaafLocator, IID_IAAFObject ) ),
+:	AxObject( AxQueryInterface<IAAFLocator, IAAFObject>(spIaafLocator) ),
 	_spIaafLocator( spIaafLocator )
 {}
 
@@ -138,8 +136,7 @@ void AxLocator::SetPath( const AxString& path )
 //=---------------------------------------------------------------------=
 
 AxNetworkLocator::AxNetworkLocator( IAAFNetworkLocatorSP spIaafNetworkLocator )
-:	AxLocator( AxQueryInterface<IAAFNetworkLocator, IAAFLocator>(
-			   spIaafNetworkLocator, IID_IAAFLocator ) ),
+:	AxLocator( AxQueryInterface<IAAFNetworkLocator, IAAFLocator>(spIaafNetworkLocator) ),
 	_spIaafNetworkLocator( spIaafNetworkLocator )
 {}
 
@@ -154,8 +151,7 @@ void AxNetworkLocator::Initialize()
 //=---------------------------------------------------------------------=
 
 AxDefObject::AxDefObject( IAAFDefObjectSP spIaafDefObject )
-:	AxObject( AxQueryInterface<IAAFDefObject, IAAFObject>(
-				spIaafDefObject, IID_IAAFObject) ),
+:	AxObject( AxQueryInterface<IAAFDefObject, IAAFObject>(spIaafDefObject) ),
 	_spIaafDefObject( spIaafDefObject )
 {}
 
@@ -174,8 +170,7 @@ aafUID_t AxDefObject::GetAUID()
 //=---------------------------------------------------------------------=
 
 AxDataDef::AxDataDef( IAAFDataDefSP spIaafDataDef )
-:	AxDefObject( AxQueryInterface<IAAFDataDef, IAAFDefObject>(
-					spIaafDataDef, IID_IAAFDefObject ) ),
+:	AxDefObject( AxQueryInterface<IAAFDataDef, IAAFDefObject>(spIaafDataDef) ),
 	_spIaafDataDef( spIaafDataDef )
 {}
 
@@ -204,8 +199,7 @@ bool AxDataDef::IsPictureKind()
 //=---------------------------------------------------------------------=
 
 AxOperationDef::AxOperationDef( IAAFOperationDefSP spIaafOperationDef )
-:	AxDefObject( AxQueryInterface<IAAFOperationDef, IAAFDefObject>(
-					spIaafOperationDef, IID_IAAFDefObject ) ),
+:	AxDefObject( AxQueryInterface<IAAFOperationDef, IAAFDefObject>(spIaafOperationDef) ),
 	_spIaafOperationDef( spIaafOperationDef )
 {}
 
@@ -247,8 +241,7 @@ void AxOperationDef::SetBypass( aafUInt32 bypassTrack )
 //=---------------------------------------------------------------------=
 
 AxEssenceDescriptor::AxEssenceDescriptor( IAAFEssenceDescriptorSP sp )
-:	AxObject( AxQueryInterface<IAAFEssenceDescriptor, IAAFObject>(
-				sp, IID_IAAFObject ) ),
+:	AxObject( AxQueryInterface<IAAFEssenceDescriptor, IAAFObject>(sp) ),
 	_spIaafEssenceDescriptor( sp )
 {}
 
@@ -258,8 +251,7 @@ AxEssenceDescriptor::~AxEssenceDescriptor()
 //=---------------------------------------------------------------------=
 
 AxFileDescriptor::AxFileDescriptor( IAAFFileDescriptorSP sp )
-:	AxEssenceDescriptor( AxQueryInterface<IAAFFileDescriptor, IAAFEssenceDescriptor>(
-						sp, IID_IAAFEssenceDescriptor ) ),
+:	AxEssenceDescriptor( AxQueryInterface<IAAFFileDescriptor, IAAFEssenceDescriptor>(sp) ),
 	_spIaafFileDescriptor( sp )
 {}
 
@@ -269,8 +261,7 @@ AxFileDescriptor::~AxFileDescriptor()
 //=---------------------------------------------------------------------=
 
 AxWAVEDescriptor::AxWAVEDescriptor( IAAFWAVEDescriptorSP sp )
-:	AxFileDescriptor( AxQueryInterface<IAAFWAVEDescriptor, IAAFFileDescriptor>(
-					sp, IID_IAAFFileDescriptor ) ),
+:	AxFileDescriptor( AxQueryInterface<IAAFWAVEDescriptor, IAAFFileDescriptor>(sp) ),
 	_spIaafWAVEDescriptor( sp )
 {}
 
@@ -285,8 +276,7 @@ void AxWAVEDescriptor::SetSummary( aafUInt32 size, aafDataValue_t  pSummary )
 //=---------------------------------------------------------------------=
 
 AxDigitalImageDescriptor::AxDigitalImageDescriptor( IAAFDigitalImageDescriptorSP sp )
-:	AxFileDescriptor( AxQueryInterface<IAAFDigitalImageDescriptor, IAAFFileDescriptor>(
-					sp, IID_IAAFFileDescriptor ) ),
+:	AxFileDescriptor( AxQueryInterface<IAAFDigitalImageDescriptor, IAAFFileDescriptor>(sp) ),
 	_spIaafDigitalImageDescriptor( sp )
 {}
 
@@ -326,8 +316,7 @@ void AxDigitalImageDescriptor::SetVideoLineMap( aafUInt32  numberElements, const
 //=---------------------------------------------------------------------=
 
 AxCDCIDescriptor::AxCDCIDescriptor( IAAFCDCIDescriptorSP sp )
-:	AxDigitalImageDescriptor( AxQueryInterface<IAAFCDCIDescriptor, IAAFDigitalImageDescriptor>(
-				sp, IID_IAAFDigitalImageDescriptor ) ),
+:	AxDigitalImageDescriptor( AxQueryInterface<IAAFCDCIDescriptor, IAAFDigitalImageDescriptor>(sp) ),
 	_spIaafCDCIDescriptor( sp )
 {}
 

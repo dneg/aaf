@@ -111,13 +111,13 @@ void AxPropertyValue::Process( AxPropertyValuePrtcl& prtcl )
 	switch( cat )
 	{
 
-#define CASE(T)										       \
-		case kAAFTypeCat##T :						               \
-		{									       \
-		    IAAFTypeDef##T##SP sp;					               \
-			AxQueryInterface( axTypeDef.GetTypeDefSP(), sp, IID_IAAFTypeDef##T );  \
-			prtcl.process( _spIaafPropertyValue, sp );			       \
-			break;								       \
+#define CASE(T)	\
+		case kAAFTypeCat##T :	\
+		{ \
+		    IAAFTypeDef##T##SP sp; \
+			AxQueryInterface( axTypeDef.GetTypeDefSP(), sp ); \
+			prtcl.process( _spIaafPropertyValue, sp ); \
+			break; \
 		}
 
 		CASE( Int )

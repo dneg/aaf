@@ -79,7 +79,7 @@ void PropValToIter::process( IAAFPropertyValueSP& spIaafPropertyValue,
 	spIUnknown = axStrongObjRef.GetObject( spIaafPropertyValue, 				  						      IID_IAAFObject );
 
 	IAAFObjectSP spIaafObject;
-	AxQueryInterface( spIUnknown, spIaafObject, IID_IAAFObject );
+	AxQueryInterface( spIUnknown, spIaafObject );
 
 	AxObject axObj( spIaafObject );
 	auto_ptr< AxBaseObjIterPrtcl > iter(

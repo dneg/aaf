@@ -293,8 +293,7 @@ void AxPropertyValueDump::process( IAAFPropertyValueSP& spPropVal,
 		AxTypeDefStrongObjRef axStrongObjRef( spTypeDef );
 
 		AxObject axObj( AxQueryInterface<IUnknown,IAAFObject>(
-			axStrongObjRef.GetObject( spPropVal, IID_IAAFObject ),
-			IID_IAAFObject ) );
+			axStrongObjRef.GetObject( spPropVal, IID_IAAFObject ) ) );
 		
 		_os << L" to object of class " << axObj.GetClassName();
 	}
@@ -313,8 +312,7 @@ void AxPropertyValueDump::process( IAAFPropertyValueSP& spPropVal,
 		AxTypeDefWeakObjRef axWeakObjRef( spTypeDef );
 
 		AxObject axObj( AxQueryInterface<IUnknown,IAAFObject>(
-			axWeakObjRef.GetObject( spPropVal, IID_IAAFObject ),
-			IID_IAAFObject ) );
+			axWeakObjRef.GetObject( spPropVal, IID_IAAFObject ) ) );
 		
 		_os << L"to object of class " << axObj.GetClassName() << L" named \"";
 
