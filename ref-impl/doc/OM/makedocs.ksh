@@ -24,7 +24,7 @@ OMDOC=doc/OM
 #
 # The Object Manager sources
 #
-SRC="src/*.cpp src/*.h"
+SRC="src/OM/*.cpp src/OM/*.h include/OM/*.h"
 #
 # Extract both the internal and external documentation
 #
