@@ -1,26 +1,30 @@
 /*
-@doc OMEXTERNAL
+@doc OMEXTERNAL OMINTERNAL
 
-@contents1 Contents | 
+@contents1 AAF Object Manager Internal Documentation | 
 
-@head3 C/C++ Elements |
+@subindex Classes
+@subindex Class Members
+@subindex Macros and Functions
+@subindex Enums
 
-@subindex Classes and Class Members
-
-@normal Help file built: <date>
-
-@subindex About Autoduck
-
-***********************************************************************
-@contents2 Classes and Class Members |
-@index class,mfunc,mdata |
+@normal This documentation was generated using autoduck on  <date>
 
 ***********************************************************************
-@contents2 About Autoduck | The sources for this Help file were generated
-by Autoduck, the source code documentation tool that generates Print or
-Help files from tagged comments in C, C++, Assembly, and Basic source
-files.
+@contents2 Classes |
+@index class |
 
-For more information, contact Eric Artzt (erica@microsoft.com).
+***********************************************************************
+@contents2 Class Members |
+@index mfunc,mdata |
+
+***********************************************************************
+@contents2 Macros and Functions |
+@index func,cb |
+
+***********************************************************************
+@contents2 Enums |
+@index enum, menum |
+
 */
 
