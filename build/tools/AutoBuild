@@ -178,12 +178,13 @@ else
 	exit 1
     fi
 
-    cd $TMP_CO_DIR
+    cd $TMPCODIR
     if [ $? -ne 0 ]; then
-	echo Failed to change to directory: $TMP_CO_DIR
+	echo Failed to change to directory: $TMPCODIR
 	exit 1
     fi
 
+    # If a previous result is lingering, remove it.
     # -f never fails, no need to check return code
     rm -rf AAF
 
