@@ -43,6 +43,7 @@ namespace OMF2
 
 #include "AafOmf.h"
 #include "EffectTranslate.h"
+#include "AAFClassDefUIDs.h"
 
 #define CompareUUID(a, b) (memcmp((char *)&a, (char *)&b, sizeof(aafUID_t)) == 0)
 
@@ -353,33 +354,39 @@ HRESULT GetAAFEffectID(	OMF2::omfUniqueNamePtr_t OMFEffectIDPtr,
 		strncmp(MCEffectID, "EFF_BLEND_LCONCEAL", 18) == 0 ||
 		strncmp(MCEffectID, "EFF_BLEND_PEEL", 14) == 0 ||
 		strncmp(MCEffectID, "EFF_BLEND_PUSH", 14) == 0 )
-		{
-			// Truncate off direction part of the effect ID before convert
-			dirStr = strstr(MCEffectID, "_BOTTOM_LEFT");
-			if(dirStr != NULL)
-				*dirStr = '\0';	
-			dirStr = strstr(MCEffectID, "_BOTTOM_RIGHT");
-			if(dirStr != NULL)
-				*dirStr = '\0';	
-			dirStr = strstr(MCEffectID, "_TOP_RIGHT");
-			if(dirStr != NULL)
-				*dirStr = '\0';	
-			dirStr = strstr(MCEffectID, "_TOP_LEFT");
-			if(dirStr != NULL)
-				*dirStr = '\0';	
-			dirStr = strstr(MCEffectID, "_TOP");
-			if(dirStr != NULL)
-				*dirStr = '\0';	
-			dirStr = strstr(MCEffectID, "_BOTTOM");
-			if(dirStr != NULL)
-				*dirStr = '\0';	
-			dirStr = strstr(MCEffectID, "_LEFT");
-			if(dirStr != NULL)
-				*dirStr = '\0';	
-			dirStr = strstr(MCEffectID, "_RIGHT");
-			if(dirStr != NULL)
-				*dirStr = '\0';	
-		}
+	{
+		// Truncate off direction part of the effect ID before convert
+		dirStr = strstr(MCEffectID, "_BOTTOM_LEFT");
+		if(dirStr != NULL)
+			*dirStr = '\0';	
+		dirStr = strstr(MCEffectID, "_BOTTOM_RIGHT");
+		if(dirStr != NULL)
+			*dirStr = '\0';	
+		dirStr = strstr(MCEffectID, "_TOP_RIGHT");
+		if(dirStr != NULL)
+			*dirStr = '\0';	
+		dirStr = strstr(MCEffectID, "_TOP_LEFT");
+		if(dirStr != NULL)
+			*dirStr = '\0';	
+		dirStr = strstr(MCEffectID, "_TOP");
+		if(dirStr != NULL)
+			*dirStr = '\0';	
+		dirStr = strstr(MCEffectID, "_BOTTOM");
+		if(dirStr != NULL)
+			*dirStr = '\0';	
+		dirStr = strstr(MCEffectID, "_LEFT");
+		if(dirStr != NULL)
+			*dirStr = '\0';	
+		dirStr = strstr(MCEffectID, "_RIGHT");
+		if(dirStr != NULL)
+			*dirStr = '\0';	
+	}
+	else if(strncmp(MCEffectID, "EFF_BLEND_WIPE", 14) == 0)
+	{
+		*aafUID = kAAFEffectSMPTEVideoWipe;
+		found = true;
+	}
+
 
 	for(n = 0; (n < numEntries) && !found; n++)
 	{
@@ -403,6 +410,37 @@ HRESULT GetAAFEffectID(	OMF2::omfUniqueNamePtr_t OMFEffectIDPtr,
 	return rc;
 }
 
+IAAFInterpolationDef *CreateInterpolationDefinition(IAAFDictionary *dict, aafUID_t interpolationDefID)
+{
+	IAAFInterpolationDef	*interpDef;
+	IAAFDefObject			*defObject;
+	AAFRESULT				hr;
+
+	hr = dict->LookupInterpolationDefinition(interpolationDefID,&interpDef);
+	if(hr == AAFRESULT_SUCCESS && interpDef != NULL)
+		return interpDef;
+
+//	dprintf("AEffect::CreateInterpolationDefinition()\n");	//JeffB:
+
+	(void)(dict->CreateInstance(kAAFClassID_InterpolationDefinition,
+			IID_IAAFInterpolationDef,
+			(IUnknown **)&interpDef));
+	(void)(interpDef->QueryInterface(IID_IAAFDefObject, (void **) &defObject));
+	if(memcmp(&interpolationDefID, &LinearInterpolator, sizeof(aafUID_t)) == 0)
+	{
+ 		(void)(defObject->Initialize(interpolationDefID, L"LinearInterp", L"Linear keyframe interpolation"));
+		dict->RegisterInterpolationDefinition(interpDef);
+	}
+	else
+	{
+		interpDef->Release();
+		interpDef = NULL;
+	}
+
+	defObject->Release();
+
+	return(interpDef);
+}
 
 #if 0
 #define EFF_EMPTY_EFFECT				"EFF_EMPTY_EFFECT"	//	This is the ID for the effect 

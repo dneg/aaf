@@ -40,6 +40,7 @@ HRESULT GetAAFEffectID(	OMF2::omfUniqueNamePtr_t OMFEffectIDPtr,
 						OMF2::omfUniqueNamePtr_t MCEffectIDPtr,
 						aafUID_t	*aafUID);
 
+IAAFInterpolationDef *CreateInterpolationDefinition(IAAFDictionary *dict, aafUID_t interpolationDefID);
 
 // Media composer effect IDs
 const aafUID_t kEffBlendPIPUUID =		{0xD94E75C2,0x6ADF,0x11d3,{0x80,0xCF,0x00,0x60,0x08,0x14,0x3E,0x6F}};
