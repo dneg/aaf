@@ -149,6 +149,7 @@ typedef unsigned long int  OMUInt32;
 
 typedef OMUInt8 OMByte;
 typedef OMUInt16 OMCharacter;
+typedef OMUInt16 OMPropertyId;
 
 typedef struct {
   OMUInt8 SMPTELabel[12];
@@ -399,6 +400,8 @@ static size_t maxSignatureSize = signatureSize();
 //           entries.
 //  0.25   : Change stored froms to use bit values.
 //  0.26   : Use 2 byte characters for names in Object Manager meta-data
+//  0.27   : Use a string of pids instead of a string of 2-byte characters
+//           for entries in the referenced properties table.
 //
 
 // The following may change at run time depending on the file format
@@ -435,7 +438,7 @@ const int OLD_TID_DATA_STREAM                    = 4;
 
 // Highest version of file/index format recognized by this dumper
 //
-const OMUInt32 HIGHVERSION = 26;
+const OMUInt32 HIGHVERSION = 27;
 
 // Output format requested
 //
@@ -518,6 +521,13 @@ static void readOMString(IStream* stream,
 static void printOMString(const OMCharacter* string);
 static void swapOMString(OMCharacter* string,
                          size_t characterCount);
+static void readPidString(IStream* stream,
+                          OMPropertyId* string,
+                          size_t pidCount,
+                          bool swapNeeded);
+static void printPidString(const OMPropertyId* string);
+static void swapPidString(OMPropertyId* string,
+                          size_t pidCount);
 static void readCLSID(IStream* stream, CLSID* value, bool swapNeeded);
 static void swapCLSID(CLSID* value);
 static void dumpIndexEntry(OMUInt32 i, IndexEntry* indexEntry);
@@ -1532,6 +1542,41 @@ void swapOMString(OMCharacter* string,
                   size_t characterCount)
 {
   for (size_t index = 0; index < characterCount; index++) {
+    swapUInt16(&string[index]);
+  }
+}
+
+void readPidString(IStream* stream,
+                   OMPropertyId* string,
+                   size_t pidCount,
+                   bool swapNeeded)
+{
+  read(stream, string, pidCount * sizeof(OMPropertyId));
+  if (swapNeeded) {
+    swapPidString(string, pidCount);
+  }
+}
+
+void printPidString(const OMPropertyId* string)
+{
+  IOS_FMT_FLAGS savedFlags = cout.setf(ios::basefield);
+  char savedFill = cout.fill();
+
+  const OMPropertyId* p = string;
+  while (*p != 0) {
+  
+    cout << hex << setw(4) << setfill('0') << *p << " ";
+  
+    ++p;
+  }
+  cout.setf(savedFlags, ios::basefield);
+  cout.fill(savedFill);
+}
+
+void swapPidString(OMPropertyId* string,
+                   size_t pidCount)
+{
+  for (size_t index = 0; index < pidCount; index++) {
     swapUInt16(&string[index]);
   }
 }
@@ -3309,6 +3354,42 @@ static void dumpReferencedProperties(IStorage* root, OMUInt16 version)
       delete [] buffer;
     } else if (version > 26) {
       // version 27 -    "names" are 2-byte property ids
+      OMUInt32 pidCount;
+      readUInt32(stream, &pidCount, swap);
+      OMPropertyId* buffer = new OMPropertyId[pidCount];
+      readPidString(stream, buffer, pidCount, swap);
+
+      OMPropertyId** names = new OMPropertyId*[nameCount];
+      OMPropertyId* p = buffer;
+      size_t index;
+      for (index = 0; index < nameCount; index++) {
+        names[index] = p;
+        while (*p != 0) {
+         ++p;
+		}
+        ++p;
+      }
+
+      cout << endl;
+      cout << "Dump of Referenced Properties" << endl;
+      cout << "( Byte order = " << byteOrder(bo)
+           << " (" << endianity << ")";
+      cout << ", Number of entries = " << nameCount << " )" << endl;
+  
+      if (nameCount > 0) {
+        cout << setw(8) << "tag"
+             << "   "
+             << "path to target (hex pid list)" << endl;
+      }
+
+      for (index = 0; index < nameCount; index++) {
+        cout << setw(8) << index << " : ";
+        printPidString(names[index]);
+        cout << endl;
+      }
+
+      delete [] names;
+      delete [] buffer;
     }
     stream->Release();
   }    // version  0 - 18 no referenced properties table
