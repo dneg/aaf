@@ -26,7 +26,7 @@
 all: ComCutsOnlyTest ComEssenceDataTest ComExtension ComPropDirectAccess \
 	ComPropDirectDump ExportAudioExample ExportSimpleComposition \
 	ImportAudioExample InfoDumper MetadataExample comClientTest \
-	ExportDV ImportDV
+	ExportDV ImportDV ExportPCM ImportPCM
 
 .PHONY : ComCutsOnlyTest
 ComCutsOnlyTest:
@@ -80,6 +80,14 @@ ExportDV :
 ImportDV :
 	cd ImportDV && $(MAKE)
 
+.PHONY : ExportPCM
+ExportPCM :
+	cd ExportPCM && $(MAKE)
+
+.PHONY : ImportPCM
+ImportPCM :
+	cd ImportPCM && $(MAKE)
+
 .PHONY : clean
 clean :
 	cd ComCutsOnlyTest && $(MAKE) GENDEPS=0 $@
@@ -95,6 +103,8 @@ clean :
 	cd comClientTest && $(MAKE) GENDEPS=0 $@
 	cd ExportDV && $(MAKE) GENDEPS=0 $@
 	cd ImportDV && $(MAKE) GENDEPS=0 $@
+	cd ExportPCM && $(MAKE) GENDEPS=0 $@
+	cd ImportPCM && $(MAKE) GENDEPS=0 $@
 
 .PHONY : realclean
 realclean :
@@ -111,3 +121,5 @@ realclean :
 	cd comClientTest && $(MAKE) GENDEPS=0 $@
 	cd ExportDV && $(MAKE) GENDEPS=0 $@
 	cd ImportDV && $(MAKE) GENDEPS=0 $@
+	cd ExportPCM && $(MAKE) GENDEPS=0 $@
+	cd ImportPCM && $(MAKE) GENDEPS=0 $@
