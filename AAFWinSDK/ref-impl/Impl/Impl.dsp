@@ -134,6 +134,10 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFClassDef.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFCloneResolver.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFCodecDef.cpp"
 # End Source File
 # Begin Source File
