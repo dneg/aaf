@@ -217,6 +217,11 @@
 #define PORTKEY_COMP_UNIX_ANSIC 1
 #define PORTKEY_APP_MULTIPROC
 
+#if defined (__GNUC__)
+#define PORTKEY_INT64_NATIVE 1
+#define PORTKEY_INT64_TYPE long long
+#endif
+
 #endif
 
 #endif /* portkey_h*/
