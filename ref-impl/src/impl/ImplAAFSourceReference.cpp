@@ -34,12 +34,18 @@
 #include "AAFResult.h"
 #include "AAFUtils.h"
 
+#include <OMVariableSizeProperty.h>
+
 ImplAAFSourceReference::ImplAAFSourceReference ():
 	_sourceID(			PID_SourceReference_SourceID,		L"SourceID"),
-	_sourceMobSlotId(	PID_SourceReference_SourceMobSlotID,	L"SourceMobSlotID")
+	_sourceMobSlotId(	PID_SourceReference_SourceMobSlotID,	L"SourceMobSlotID"),
+	_channelIDs( PID_SourceReference_ChannelIDs, L"ChannelIDs" ),
+	_monoSourceSlotIDs( PID_SourceReference_MonoSourceSlotIDs, L"MonoSourceSlotIDs" )
 {
-	_persistentProperties.put(		_sourceID.address());
-	_persistentProperties.put(		_sourceMobSlotId.address());
+	_persistentProperties.put( _sourceID.address() );
+	_persistentProperties.put( _sourceMobSlotId.address() );
+	_persistentProperties.put( _channelIDs.address() );
+	_persistentProperties.put( _monoSourceSlotIDs.address() );
 }
 
 
@@ -109,30 +115,114 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFSourceReference::SetChannelIDs (
-      aafUInt32  /*numberElements*/,
-      aafUInt32*  /*pChannelIDs*/)
+      aafUInt32  numberElements,
+      aafUInt32*  pChannelIDs )
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  if( NULL == pChannelIDs ) {
+    return AAFRESULT_NULL_PARAM;
+  }
+
+  _channelIDs.setValue(pChannelIDs, numberElements);
+  
+  return AAFRESULT_SUCCESS;
 }
 
 
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFSourceReference::GetChannelIDs (
-      aafUInt32  /*numberElements*/,
-      aafUInt32*  /*pChannelIDs*/)
+      aafUInt32 numberElements,
+      aafUInt32* pChannelIDs )
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  if( NULL == pChannelIDs ) {
+    return AAFRESULT_NULL_PARAM;
+  }
+
+  if( !_channelIDs.isPresent() ) {
+    return AAFRESULT_PROP_NOT_PRESENT;
+  }
+
+  if ( _channelIDs.size() > numberElements ) {
+    return AAFRESULT_SMALLBUF;
+  }
+
+  _channelIDs.copyToBuffer( pChannelIDs, numberElements );
+  
+  return AAFRESULT_SUCCESS;
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFSourceReference::GetChannelIDsSize (
-      aafUInt32 *  /*numberElements*/)
+      aafUInt32 *  pNumberElements)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  if ( NULL == pNumberElements ) {
+    return AAFRESULT_NULL_PARAM;
+  }
+
+  if( !_channelIDs.isPresent() ) {
+    return AAFRESULT_PROP_NOT_PRESENT;
+  }
+
+  *pNumberElements = _channelIDs.size();
+
+  return AAFRESULT_SUCCESS;
 }
 
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFSourceReference::SetMonoSourceSlotIDs (
+      aafUInt32 numberElements,
+      aafUInt32* pMonoSourceSlotIDs)
+{
+  if( NULL == pMonoSourceSlotIDs ) {
+    return AAFRESULT_NULL_PARAM;
+  }
+
+  _monoSourceSlotIDs.setValue(pMonoSourceSlotIDs, numberElements);
+  
+  return AAFRESULT_SUCCESS;
+}
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFSourceReference::GetMonoSourceSlotIDs (
+      aafUInt32  numberElements,
+      aafUInt32*  pMonoSourceSlotIDs )
+{
+  if( NULL == pMonoSourceSlotIDs ) {
+    return AAFRESULT_NULL_PARAM;
+  }
+  
+  if( !_monoSourceSlotIDs.isPresent() ) {
+    return AAFRESULT_PROP_NOT_PRESENT;
+  }
+
+  if ( _monoSourceSlotIDs.size() > numberElements ) {
+    return AAFRESULT_SMALLBUF;
+  }
+
+  _monoSourceSlotIDs.copyToBuffer( pMonoSourceSlotIDs, numberElements );
+  
+  return AAFRESULT_SUCCESS;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFSourceReference::GetMonoSourceSlotIDsSize (
+      aafUInt32 *  pNumberElements )
+{
+  if ( NULL == pNumberElements) {
+    return AAFRESULT_NULL_PARAM;
+  }
+
+  if( !_monoSourceSlotIDs.isPresent() ) {
+    return AAFRESULT_PROP_NOT_PRESENT;
+  }
+
+  *pNumberElements = _monoSourceSlotIDs.size();
+
+  return AAFRESULT_SUCCESS;
+}
 
 
 AAFRESULT ImplAAFSourceReference::ChangeContainedReferences(aafMobID_constref from,
