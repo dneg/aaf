@@ -315,7 +315,7 @@ private:
 	AAFRESULT SetCompressionEnabled(aafCompressEnable_t compEnable);
 	AAFRESULT fillSwappedWAVEData(aafUInt8 **destBufHdl, aafUInt32 maxsize, void *data);
 	AAFRESULT scanSwappedWAVEData(aafUInt8 **srcBufHdl, aafUInt32 maxsize, void *data);
-	AAFRESULT CreateWAVEheader(aafUInt8 *buffer, aafUInt32 bufsize, aafUInt16 numCh);
+	AAFRESULT CreateWAVEheader(aafUInt8 *buffer, aafUInt32 bufsize, aafUInt16 numCh, aafUInt32 *hdrSize);
 	AAFRESULT loadWAVEHeader(void);
 	AAFRESULT GetWAVEData(aafUInt32 len, void *buf);
 
