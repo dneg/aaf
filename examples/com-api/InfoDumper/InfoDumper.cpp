@@ -100,6 +100,8 @@ typedef IAAFSmartPointer<IAAFTypeDefVariableArray> IAAFTypeDefVariableArraySP;
 typedef IAAFSmartPointer<IAAFTypeDefString>        IAAFTypeDefStringSP;
 typedef IAAFSmartPointer<IAAFTypeDefRecord>        IAAFTypeDefRecordSP;
 typedef IAAFSmartPointer<IAAFTypeDefStream>        IAAFTypeDefStreamSP;
+typedef IAAFSmartPointer<IAAFTypeDefSet>           IAAFTypeDefSetSP;
+typedef IAAFSmartPointer<IAAFTypeDefStrongObjRef>  IAAFTypeDefStrongObjRefSP;
 typedef IAAFSmartPointer<IAAFFile>                 IAAFFileSP;
 typedef IAAFSmartPointer<IAAFHeader>               IAAFHeaderSP;
 typedef IAAFSmartPointer<IEnumAAFProperties>       IEnumAAFPropertiesSP;
@@ -717,6 +719,63 @@ static HRESULT dumpClassDef(
   return returnHr;
 }
 
+
+
+static HRESULT printAAFName(
+		IAAFMetaDefinition  *pMetaDef,
+		ostream		    &os )
+{
+    HRESULT	    status = AAFRESULT_SUCCESS;
+    aafCharacter*   aafStringBuf = NULL;
+    aafUInt32	    bufSize = 0;
+
+    checkResult( pMetaDef->GetNameBufLen( &bufSize ) );
+    aafStringBuf = (aafCharacter*) new aafUInt8[ bufSize ];
+    checkResult( pMetaDef->GetName(aafStringBuf, bufSize) );
+    // print the name
+    checkResult(printAAFString(aafStringBuf, bufSize, os, NULL));
+    if (aafStringBuf)
+	delete[]aafStringBuf;
+    aafStringBuf=NULL;
+
+
+    return status;
+}
+
+
+
+static HRESULT printAAFName(
+		IAAFTypeDef	*pTypeDef,
+		ostream		&os )
+{
+    HRESULT		    status = AAFRESULT_SUCCESS;
+    IAAFMetaDefinitionSP    pMetaDef;
+
+
+    checkResult( pTypeDef->QueryInterface( IID_IAAFMetaDefinition,
+			    (void**)&pMetaDef ) );
+
+    return printAAFName( pMetaDef, os );
+}
+
+
+
+static HRESULT printAAFName(
+		IAAFClassDef	*pClassDef,
+		ostream		&os )
+{
+    HRESULT		    status = AAFRESULT_SUCCESS;
+    IAAFMetaDefinitionSP    pMetaDef;
+
+
+    checkResult( pClassDef->QueryInterface( IID_IAAFMetaDefinition,
+			    (void**)&pMetaDef ) );
+
+    return printAAFName( pMetaDef, os );
+}
+
+
+
 static HRESULT dumpTypeDef(
 			   IAAFTypeDefSP pTypeDef, // object to be dumped
 			   IAAFDictionary * pDict,  // dictionary for this file
@@ -733,7 +792,22 @@ static HRESULT dumpTypeDef(
       // Get MetaDef pointer
       checkResult(pTypeDef->QueryInterface(IID_IAAFMetaDefinition,
 					   (void**) &pMetaDef));
-      IAAFTypeDefIntSP pTypeDefInt;
+      IAAFTypeDefIntSP		    pTypeDefInt;
+      IAAFTypeDefCharacterSP	    pTypeDefCharacter;
+      IAAFTypeDefEnumSP		    pTypeDefEnum;
+      IAAFTypeDefExtEnumSP	    pTypeDefExtEnum;
+      IAAFTypeDefFixedArraySP	    pTypeDefFixedArray;
+      IAAFTypeDefIndirectSP	    pTypeDefIndirect;
+      IAAFTypeDefObjectRefSP	    pTypeDefObjectRef;
+      IAAFTypeDefOpaqueSP	    pTypeDefOpaque;
+      IAAFTypeDefRecordSP	    pTypeDefRecord;
+      IAAFTypeDefRenameSP	    pTypeDefRename;
+      IAAFTypeDefSetSP		    pTypeDefSet;
+      IAAFTypeDefStreamSP	    pTypeDefStream;
+      IAAFTypeDefStringSP	    pTypeDefString;
+      IAAFTypeDefVariableArraySP    pTypeDefVariableArray;
+
+
       if (SUCCEEDED(pTypeDef->QueryInterface(IID_IAAFTypeDefInt,
 					(void**) &pTypeDefInt)))
 	{
@@ -752,13 +826,337 @@ static HRESULT dumpTypeDef(
 	    os << "false" << endl;
 	}
       else
+	//
+	//  IAAFTypeDefCharacter
+	//
+	if (SUCCEEDED(pTypeDef->QueryInterface(IID_IAAFTypeDefCharacter,
+					(void**) &pTypeDefCharacter)))
+	{
+	    os << "TypeDefinitionCharacter for: ";
+	    checkResult( dumpMetaDefCommon( pMetaDef, pDict, 
+		dumpFlags, indent, os ));
+	}
+	else
+	//
+	//  IAAFTypeDefEnum 
+	//
+	if (SUCCEEDED(pTypeDef->QueryInterface(IID_IAAFTypeDefEnum,
+					(void**) &pTypeDefEnum)))
+	{
+	    IAAFTypeDefSP	    pElementTypeDef;
+	    aafUInt32		    count;
+	    aafUInt32		    i;
+	    aafInt64		    elemValue;
+	    aafCharacter	    *aafStringBuf = NULL;
+	    aafUInt32		    bufSize;
+
+
+	    os << "TypeDefinitionEnumeration for: ";
+	    checkResult( dumpMetaDefCommon( pMetaDef, pDict, 
+		dumpFlags, indent, os ));
+
+	    checkResult( pTypeDefEnum->GetElementType( &pElementTypeDef ) );
+
+	    // Print the name
+	    os << "ElementType: ";
+	    checkResult( printAAFName( pElementTypeDef, os ) );
+	    os << endl;
+
+	    // Get the number of enumeration elements 
+	    checkResult( pTypeDefEnum->CountElements( &count ) );
+
+	    os << "ElementNames:";
+	    for( i=0; i<count; i++ )
+	    {
+		// Get enum element value
+		checkResult( pTypeDefEnum->GetElementValue( i, &elemValue ) );
+
+		// Get enum element name and print it out
+		checkResult( pTypeDefEnum->GetNameBufLenFromInteger ( elemValue, &bufSize ) );
+		aafStringBuf = (aafCharacter*)new aafUInt8[ bufSize ];
+		checkResult( pTypeDefEnum->GetNameFromInteger( elemValue, aafStringBuf, bufSize ) );
+		os << ' ';
+		checkResult( printAAFString(aafStringBuf, bufSize, os, NULL) );
+		if( aafStringBuf )
+		    delete[] aafStringBuf;
+		aafStringBuf = NULL;
+	    }
+	    os << endl;
+
+	    os << "ElementValues:";
+	    for( i=0; i<count; i++ )
+	    {
+		checkResult( pTypeDefEnum->GetElementValue( i, &elemValue ) );
+		os << ' ' << dec << (long)elemValue;
+	    }
+	    os << endl;
+	}
+	else
+	//
+	//  IAAFTypeDefExtEnum
+	//
+	if (SUCCEEDED(pTypeDef->QueryInterface(IID_IAAFTypeDefExtEnum,
+					(void**) &pTypeDefExtEnum)))
+	{
+	    IAAFTypeDefSP	    pElementTypeDef;
+	    aafUInt32		    count;
+	    aafUInt32		    i;
+	    aafUID_t		    elemValue;
+	    aafCharacter	    *aafStringBuf = NULL;
+	    aafUInt32		    bufSize;
+
+
+	    os << "TypeDefinitionExtendibleEnumeration for: ";
+	    checkResult( dumpMetaDefCommon( pMetaDef, pDict, 
+		dumpFlags, indent, os ));
+
+	    // Get the number of enumeration elements 
+	    checkResult( pTypeDefExtEnum->CountElements( &count ) );
+
+	    os << "ElementNames:";
+	    for( i=0; i<count; i++ )
+	    {
+		// Get enum element value
+		checkResult( pTypeDefExtEnum->GetElementValue( i, &elemValue ) );
+
+		// Get enum element name and print it out
+		checkResult( pTypeDefExtEnum->GetNameBufLenFromAUID( elemValue, &bufSize ) );
+		aafStringBuf = (aafCharacter*)new aafUInt8[ bufSize ];
+		checkResult( pTypeDefExtEnum->GetNameFromAUID( elemValue, aafStringBuf, bufSize ) );
+		os << ' ';
+		checkResult( printAAFString(aafStringBuf, bufSize, os, NULL) );
+		if( aafStringBuf )
+		    delete[] aafStringBuf;
+		aafStringBuf = NULL;
+	    }
+	    os << endl;
+
+	    os << "ElementValues:";
+	    for( i=0; i<count; i++ )
+	    {
+		checkResult( pTypeDefExtEnum->GetElementValue( i, &elemValue ) );
+		printAUID( elemValue, os );
+	    }
+	    os << endl;
+	}
+	else
+	//
+	//  IAAFTypeDefFixedArray
+	//
+	if (SUCCEEDED(pTypeDef->QueryInterface(IID_IAAFTypeDefFixedArray,
+					(void**) &pTypeDefFixedArray)))
+	{
+	    IAAFTypeDefSP	    pElementTypeDef;
+	    aafUInt32		    count;
+
+
+	    os << "TypeDefinitionFixedArray for: ";
+	    checkResult( dumpMetaDefCommon( pMetaDef, pDict, 
+		dumpFlags, indent, os ));
+
+	    // Print array elements type
+	    checkResult( pTypeDefFixedArray->GetType( &pElementTypeDef ) );
+	    os << "ElementType: ";
+	    checkResult( printAAFName( pElementTypeDef, os ) );
+	    os << endl;
+
+	    // Print array elements count
+	    checkResult( pTypeDefFixedArray->GetCount( &count ) );
+	    os << "ElementCount: " << dec << (long)count << endl;
+	}
+	else
+	//
+	//  IAAFTypeDefIndirect
+	//
+	if (SUCCEEDED(pTypeDef->QueryInterface(IID_IAAFTypeDefIndirect,
+					(void**) &pTypeDefIndirect)))
+	{
+	    os << "TypeDefinitionIndirect for: ";
+	    checkResult( dumpMetaDefCommon( pMetaDef, pDict, 
+		dumpFlags, indent, os ));
+	}
+	else
+	//
+	//  IAAFTypeDefOpaque
+	//
+	if (SUCCEEDED(pTypeDef->QueryInterface(IID_IAAFTypeDefOpaque,
+					(void**) &pTypeDefOpaque)))
+	{
+	    os << "TypeDefinitionOpaque for: ";
+	    checkResult( dumpMetaDefCommon( pMetaDef, pDict, 
+		dumpFlags, indent, os ));
+	}
+	else
+	//
+	//  IAAFTypeDefRecord
+	//
+	if (SUCCEEDED(pTypeDef->QueryInterface(IID_IAAFTypeDefRecord,
+					(void**) &pTypeDefRecord)))
+	{
+	    IAAFTypeDefSP	    pMemberTypeDef;
+	    aafUInt32		    count;
+	    aafUInt32		    i;
+	    aafCharacter	    *aafStringBuf = NULL;
+	    aafUInt32		    bufSize;
+
+
+	    os << "TypeDefinitionRecord for: ";
+	    checkResult( dumpMetaDefCommon( pMetaDef, pDict, 
+		dumpFlags, indent, os ));
+
+	    checkResult( pTypeDefRecord->GetCount( &count ) );
+
+	    os << "MemberTypes:";
+	    for( i=0; i<count; i++ )
+	    {
+		os << ' ';
+		checkResult( pTypeDefRecord->GetMemberType( i, &pMemberTypeDef ) );
+		checkResult( printAAFName( pMemberTypeDef, os ) );
+	    }
+	    os << endl;
+
+	    os << "MemberNames: ";
+	    for( i=0; i<count; i++ )
+	    {
+		// Get enum element name and print it out
+		checkResult( pTypeDefRecord->GetMemberNameBufLen( i, &bufSize ) );
+		aafStringBuf = (aafCharacter*)new aafUInt8[ bufSize ];
+		checkResult( pTypeDefRecord->GetMemberName( i, aafStringBuf, bufSize ) );
+		os << ' ';
+		checkResult( printAAFString(aafStringBuf, bufSize, os, NULL) );
+		if( aafStringBuf )
+		    delete[] aafStringBuf;
+		aafStringBuf = NULL;
+	    }
+	    os << endl;
+	}
+	else
+	//
+	//  IAAFTypeDefRename
+	//
+	if (SUCCEEDED(pTypeDef->QueryInterface(IID_IAAFTypeDefRename,
+					(void**) &pTypeDefRename)))
+	{
+	    IAAFTypeDefSP	    pRenamedTypeDef;
+
+
+	    os << "TypeDefinitionRename for: ";
+	    checkResult( dumpMetaDefCommon( pMetaDef, pDict, 
+		dumpFlags, indent, os ));
+
+	    // Print out the underlying type
+	    checkResult( pTypeDefRename->GetBaseType( &pRenamedTypeDef ) );
+	    os << "RenamedType: ";
+	    checkResult( printAAFName( pRenamedTypeDef, os ) );
+	    os << endl;
+	}
+	else
+	//
+	//  IAAFTypeDefSet
+	//
+	if (SUCCEEDED(pTypeDef->QueryInterface(IID_IAAFTypeDefSet,
+					(void**) &pTypeDefSet)))
+	{
+	    IAAFTypeDefSP	    pElementTypeDef;
+
+
+	    os << "TypeDefinitionSet for: ";
+	    checkResult( dumpMetaDefCommon( pMetaDef, pDict, 
+		dumpFlags, indent, os ));
+
+	    // Print out set elements type
+	    checkResult( pTypeDefSet->GetElementType( &pElementTypeDef ) );
+	    os << "ElementType: ";
+	    checkResult( printAAFName( pElementTypeDef, os ) );
+	    os << endl;
+	}
+	else
+	//
+	//  IAAFTypeDefStream
+	//
+	if (SUCCEEDED(pTypeDef->QueryInterface(IID_IAAFTypeDefStream,
+					(void**) &pTypeDefStream)))
+	{
+	    os << "TypeDefinitionStream for: ";
+	    checkResult( dumpMetaDefCommon( pMetaDef, pDict, 
+		dumpFlags, indent, os ));
+	}
+	else
+	//
+	//  IAAFTypeDefString
+	//
+	if (SUCCEEDED(pTypeDef->QueryInterface(IID_IAAFTypeDefString,
+					(void**) &pTypeDefString)))
+	{
+	    IAAFTypeDefSP	    pStringTypeDef;
+
+
+	    os << "TypeDefinitionString for: ";
+	    checkResult( dumpMetaDefCommon( pMetaDef, pDict, 
+		dumpFlags, indent, os ));
+
+	    // Print out string elements type
+	    checkResult( pTypeDefString->GetType( &pStringTypeDef ) );
+	    os << "ElementType: ";
+	    checkResult( printAAFName( pStringTypeDef, os ) );
+	    os << endl;
+	}
+	else
+	//
+	//  IAAFTypeDefObjRef
+	//
+	if (SUCCEEDED(pTypeDef->QueryInterface(IID_IAAFTypeDefObjectRef,
+					(void**) &pTypeDefObjectRef)))
+	{
+	    IAAFTypeDefObjectRefSP	pTypeDefDummy;
+	    IAAFClassDefSP		pClassDef;
+
+	    if( SUCCEEDED( pTypeDef->QueryInterface(IID_IAAFTypeDefStrongObjRef,
+					(void**) &pTypeDefDummy) ) )
+		os << "TypeDefinitionStrongObjectReference for: ";
+	    else
+	    if( SUCCEEDED( pTypeDef->QueryInterface(IID_IAAFTypeDefWeakObjRef,
+					(void**) &pTypeDefDummy) ) )
+		os << "TypeDefinitionWeakObjectReference for: ";
+	    else
+		os << "TypeDefinitionObjectReference for: ";
+
+	    checkResult( dumpMetaDefCommon( pMetaDef, pDict, 
+		dumpFlags, indent, os ));
+
+	    os << "ReferencedType: ";
+	    checkResult( pTypeDefObjectRef->GetObjectType( &pClassDef ) );
+	    checkResult( printAAFName( pClassDef, os ) );
+	    os << endl;
+	}
+	else
+	//
+	//  IAAFTypeDefVariableArray
+	//
+	if (SUCCEEDED(pTypeDef->QueryInterface(IID_IAAFTypeDefVariableArray,
+					(void**) &pTypeDefVariableArray)))
+	{
+	    IAAFTypeDefSP	    pElementTypeDef;
+
+
+	    os << "TypeDefinitionVariableArray for: ";
+	    checkResult( dumpMetaDefCommon( pMetaDef, pDict, 
+		dumpFlags, indent, os ));
+	    
+	    // Print out array elements type
+	    checkResult( pTypeDefVariableArray->GetType( &pElementTypeDef ) );
+	    os << "ElementType: ";
+	    checkResult( printAAFName( pElementTypeDef, os ) );
+	    os << endl;
+	}
+	else
 	{
 	  os << "TypeDefinition for: ";
 	  checkResult(dumpMetaDefCommon(pMetaDef, pDict,
 					dumpFlags, indent, os));
 	}
 
-      // QI for the concrete subclasses of TypeDefinition and print out properties
+	// QI for the concrete subclasses of TypeDefinition and print out properties
     }
   catch (HRESULT &caught)
     {
