@@ -675,6 +675,7 @@ public:
 	AAFRESULT CreateContainerDef (ImplAAFHeader *head);
 	AAFRESULT CreateCodecDef(ImplAAFHeader *head, aafUID_t codecDef);
 	AAFRESULT CreateEssenceFileFromLocator (ImplAAFHeader *srcHead, ImplAAFLocator *loc, ImplAAFFile **result);
+	AAFRESULT ModifyEssenceFileFromLocator (ImplAAFHeader *srcHead, ImplAAFLocator *loc, ImplAAFFile **result);
 	AAFRESULT CreateFileMob (ImplAAFHeader *newHead, aafSlotID_t slotID, aafUID_t *newMobID,
 							aafUID_t mediaKind, aafRational_t editRate,aafRational_t sampleRate,
 							ImplAAFLocator *addLocator, ImplAAFSourceMob **result);
