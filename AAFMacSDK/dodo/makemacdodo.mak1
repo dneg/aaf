@@ -428,7 +428,7 @@ macaafobjects.mk Ä {dod}aafobjects.mk
 	echo "" >> macdodo.tmp
 	echo '# AAFModule.all composite target' >> macdodo.tmp
 	echo '	AAFModule.all ¶' >> targets_all.tmp
-	echo AAFModule.all Ä {frefh}AAFModule.frefh >> macdodo.tmp
+	echo AAFModule.all Ä {frefh}AAFModule.frefh {comc}CAAFModule.cpp >> macdodo.tmp
 	echo "" >> macdodo.tmp
 	echo '	{frefh}AAFModule.frefh ¶' >> generated_targets.tmp
 	echo '	{frefh}AAFModule.frefh ¶' >> generated_frefh.tmp
@@ -440,6 +440,16 @@ macaafobjects.mk Ä {dod}aafobjects.mk
 	echo '	'end  >> macdodo.tmp
 	echo '	''{DODO} -f {macros}frefh.mac < {dod}AAFModule.dod > {frefh}AAFModule.frefh' >> macdodo.tmp
 	echo '	''SetFile -t TEXT -c CWIE -a L {frefh}AAFModule.frefh'  >> macdodo.tmp
+	echo "" >> macdodo.tmp
+	echo "" >> macdodo.tmp	
+	echo '{comc}CAAFModule.cpp Ä {dod}AAFModule.dod {macros}comc.mac {macros}base.mac' >> macdodo.tmp
+	echo '	''echo {comc}CAAFModule.cpp' >> macdodo.tmp
+	echo '	''if "`exists -f {comc}CAAFModule.cpp`"'  >> macdodo.tmp
+	echo '		''SetFile -a l {comc}CAAFModule.cpp'  >> macdodo.tmp
+	echo '		''Delete -i -ay {comc}CAAFModule.cpp'  >> macdodo.tmp
+	echo '	'end  >> macdodo.tmp
+	echo '	''{DODO} -f {macros}comc.mac < {dod}AAFModule.dod > {comc}CAAFModule.cpp'  >> macdodo.tmp
+	echo '	''SetFile -t TEXT -c CWIE -a L {comc}CAAFModule.cpp'  >> macdodo.tmp
 	echo "" >> macdodo.tmp
 	echo "" >> macdodo.tmp
 	echo '	AAF.all ¶' >> targets_all.tmp
