@@ -206,10 +206,13 @@ private:
 
   OMPropertyTag targetTag(void) const;
 
+  OMPropertyId* targetPropertyPath(void) const;
+
     // The vector of references.
   OMVector<VectorElement> _vector;
   OMPropertyTag _targetTag;
   const wchar_t* _targetName;
+  OMPropertyId* _targetPropertyPath;
   OMPropertyId _keyPropertyId;
 
   friend class OMWeakReferenceVectorIterator<ReferencedObject>;

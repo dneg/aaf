@@ -102,9 +102,12 @@ private:
 
   OMPropertyTag targetTag(void) const;
 
+  OMPropertyId* targetPropertyPath(void) const;
+
   OMWeakObjectReference<ReferencedObject> _reference;
   OMPropertyTag _targetTag;
   const wchar_t* _targetName;
+  OMPropertyId* _targetPropertyPath;
   OMPropertyId _keyPropertyId;
 
 };

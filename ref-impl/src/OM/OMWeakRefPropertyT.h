@@ -44,6 +44,7 @@ OMWeakReferenceProperty<ReferencedObject>::OMWeakReferenceProperty(
                                         name), _reference(),
   _targetTag(nullOMPropertyTag),
   _targetName(targetName),
+  _targetPropertyPath(0),
   _keyPropertyId(keyPropertyId)
 {
   TRACE("OMWeakReferenceProperty<ReferencedObject>::OMWeakReferenceProperty");
@@ -55,6 +56,8 @@ template<typename ReferencedObject>
 OMWeakReferenceProperty<ReferencedObject>::~OMWeakReferenceProperty(void)
 {
   TRACE("OMWeakReferenceProperty<ReferencedObject>::~OMWeakReferenceProperty");
+
+  delete [] _targetPropertyPath;
 }
 
   // @mfunc Get the value of this <c OMWeakReferenceProperty>.
@@ -300,6 +303,23 @@ OMPropertyTag OMWeakReferenceProperty<ReferencedObject>::targetTag(void) const
   }
   POSTCONDITION("Valid target property tag", _targetTag != nullOMPropertyTag);
   return _targetTag;
+}
+
+template<typename ReferencedObject>
+OMPropertyId*
+OMWeakReferenceProperty<ReferencedObject>::targetPropertyPath(void) const
+{
+  TRACE("OMWeakReferenceProperty<ReferencedObject>::targetPropertyPath");
+
+  PRECONDITION("Valid target name", validWideString(_targetName));
+
+  if (_targetPropertyPath == 0) {
+    OMWeakReferenceProperty<ReferencedObject>* nonConstThis =
+                  const_cast<OMWeakReferenceProperty<ReferencedObject>*>(this);
+    nonConstThis->_targetPropertyPath = file()->path(_targetName);
+  }
+  POSTCONDITION("Valid result", _targetPropertyPath != 0);
+  return _targetPropertyPath;
 }
 
 #endif

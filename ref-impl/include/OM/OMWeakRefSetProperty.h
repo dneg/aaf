@@ -173,10 +173,13 @@ private:
 
   OMPropertyTag targetTag(void) const;
 
+  OMPropertyId* targetPropertyPath(void) const;
+
   // The set of references.
   OMSet<OMUniqueObjectIdentification, SetElement> _set;
   OMPropertyTag _targetTag;
   const wchar_t* _targetName;
+  OMPropertyId* _targetPropertyPath;
   OMPropertyId _keyPropertyId;
 
   friend class OMWeakReferenceSetIterator<ReferencedObject>;
