@@ -50,7 +50,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     AddMasterSlot
         (// @parm [in] Data kind of new slot
-		 ImplAAFDataDef * pMediaKind,
+		 aafUID_t * pDataDef,
 
 		 // @parm [in] SlotID of new Master Mob slot
 		 aafSlotID_t  slotID,
