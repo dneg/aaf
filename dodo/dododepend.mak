@@ -74,8 +74,9 @@ depend.mk : aafobjects.mk
 	@ for base in $(AAFCOMINTERFACESONLY) ; do \
 		echo $$base.all... ; \
 		echo "" >> depend.tmp ; \
-		echo $$base.all : $$base.fidl $$base.exp >> depend.tmp ; \
+		echo $$base.all : $$base.fidl $$base.comcx $$base.exp >> depend.tmp ; \
 		echo $$base.fidl : macros/fidl.mac macros/base.mac >> depend.tmp ; \
+		echo $$base.comcx : macros/comcx.mac macros/base.mac >> depend.tmp ; \
 		echo $$base.exp : macros/exp.mac macros/base.mac >> depend.tmp ; \
       done
 	@ echo "" >> depend.tmp
