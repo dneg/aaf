@@ -200,7 +200,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		// Add some slots
 		for(test = 0; test < 2; test++)
 		{
- 			checkResult(pDictionary->CreateInstance(&AUID_AAFGroup,
+ 			checkResult(pDictionary->CreateInstance(&AUID_AAFEffect,
 							     IID_IAAFEffect, 
 							     (IUnknown **)&pEffect));
 			
