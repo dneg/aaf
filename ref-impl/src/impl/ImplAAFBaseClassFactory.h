@@ -89,7 +89,8 @@ class OMContainer
 		void OMLOpenContainer(OMLSession sessionData,
                                          OMLRefCon attributes,
                                          OMLconst_OMLGlobalName typeName, 
-                                         OMLContainerUseMode useFlags);
+                                         OMLContainerUseMode useFlags,
+                                         ImplAAFHeader*& header);
 		void OMLSetContainerVersion1(void);
 		void OMLOpenNewContainer(OMLSession sessionData,
                                           OMLRefCon attributes,
