@@ -11,12 +11,12 @@ AD_HEAD
 
 AD_INCLUDE(AAFTypes)
 
-AD_FORWARD_DECLARATION(AAFDataDefinition)
-AD_FORWARD_DECLARATION(AAFEffectDefinition)
+AD_FORWARD_DECLARATION(AAFDataDef)
+AD_FORWARD_DECLARATION(AAFEffectDef)
 AD_FORWARD_DECLARATION(AAFParameter)
 AD_FORWARD_DECLARATION(AAFParameterSlot)
-AD_FORWARD_DECLARATION(EnumAAFEffectDefinitions)
-AD_FORWARD_DECLARATION(EnumAAFControlCodeDefinitions)
+AD_FORWARD_DECLARATION(EnumAAFEffectDefs)
+AD_FORWARD_DECLARATION(EnumAAFControlCodeDefs)
 AD_FORWARD_DECLARATION(AAFSegment)
 
 /******************************************\
@@ -36,16 +36,16 @@ AD_DEFAULT_UUID(3AE3BA82, 2C98, 11d2, 80, 42, 00, 60, 08, 14, 3E, 6F)
 AD_CLASS_BEGIN
 
 AD_XMETHOD3(Initialize,
-	[in], objIn, AAFDataDefinition, datadef, Data definition object,
+	[in], objIn, AAFDataDef, datadef, Data definition object,
 	[in], objPass, aafLength_t, length, Length property value,
-	[in], objIn, AAFEffectDefinition, effectDef, Effect Definition object,
+	[in], objIn, AAFEffectDef, effectDef, Effect Definition object,
 	Initializes an effect object with the given property values.)
 	//@comm  This function takes an already created effect definition object as an argument.
 	//@comm  To add slots to the effect, call omfiEffectAddNewSlot.
 	//@comm  To add renderings, call omfiEffectSetFinalRender or omfiEffectSetWorkingRender.
 
 AD_XMETHOD1(GetEffectDefinition,
-			[out], objOut, AAFEffectDefinition, effectDef, Effect definition object,
+			[out], objOut, AAFEffectDef, effectDef, Effect definition object,
 		   Returns the effect definition for this invocation.)
 	//@comm Replaces part of omfiEffectGetInfo
 
