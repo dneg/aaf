@@ -159,7 +159,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 		pComponent->SetDataDef((aafUID_t*)&DDEF_Audio);
 		pComponent->SetLength(&len);
-		hr = pSequence->AppendCpnt(pComponent);
+		hr = pSequence->AppendComponent(pComponent);
 
 		pComponent->Release();
 
@@ -256,7 +256,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 				pSegment->QueryInterface(IID_IAAFSequence, (void **) &pSequence);
 				pSegment->Release();
 
-				pSequence->GetNumCpnts(&numCpnts);
+				pSequence->GetNumComponents(&numCpnts);
 				if (numCpnts != kNumComponents)
 				{
 					hr = AAFRESULT_TEST_FAILED;
@@ -343,9 +343,16 @@ HRESULT CAAFSequence::test()
 		cerr << "CAAFSequence::test...Caught general C++ exception!" << endl; 
 	}
 
-	// When all of the functionality of this class is tested, we can return success
+	// When all of the functionality of this class is tested, we can return success.
+	// When a method and its unit test have been implemented, remove it from the list.
 	if (SUCCEEDED(hr))
+	{
+		cout << "The following AAFSequence methods have not been implemented:" << endl; 
+		cout << "     RemoveComponent" << endl; 
+		cout << "     SegmentOffsetToTC - needs unit test" << endl; 
+		cout << "     SegmentTCToOffset - needs unit test" << endl; 
 		hr = AAFRESULT_TEST_PARTIAL_SUCCESS;
+	}
 
 	return hr;
 }
