@@ -7,15 +7,11 @@
 *                                          *
 \******************************************/
 
+#include "AAFStoredObjectIDs.h"
 
 #ifndef __ImplAAFPropertyValue_h__
 #include "ImplAAFPropertyValue.h"
 #endif
-
-
-
-
-#include "AAFStoredObjectIDs.h"
 
 #ifndef __ImplAAFTypeDefExtEnum_h__
 #include "ImplAAFTypeDefExtEnum.h"
@@ -125,8 +121,8 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDefExtEnum::AppendElement (
-      ImplaafUID_t * * /*pValue*/,
-      Implwchar_t * * /*pName*/)
+      aafUID_t * /*pValue*/,
+      wchar_t * /*pName*/)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
@@ -142,5 +138,3 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 OMDEFINE_STORABLE(ImplAAFTypeDefExtEnum, AUID_AAFTypeDefExtEnum);
-
-

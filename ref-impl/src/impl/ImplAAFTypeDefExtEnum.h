@@ -156,10 +156,10 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     AppendElement
         (// @parm [in] value of appended element
-         ImplaafUID_t * * pValue,
+         aafUID_t * pValue,
 
          // @parm [in] name of appended element
-         Implwchar_t * * pName);
+         wchar_t * pName);
 
 
   // Override from AAFTypeDef
@@ -179,5 +179,3 @@ public:
 };
 
 #endif // ! __ImplAAFTypeDefExtEnum_h__
-
-
