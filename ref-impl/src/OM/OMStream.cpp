@@ -152,7 +152,7 @@ void OMStream::write(const OMByte* bytes,
   POSTCONDITION("All bytes written", actualByteCount == byteCount);
 }
 
-OMUInt64 OMStream::size(void) const
+OMUInt64 OMStream::size(void) 
 {
   TRACE("OMStream::size");
   PRECONDITION("No error on stream", ferror(_file) == 0);
@@ -166,7 +166,7 @@ OMUInt64 OMStream::size(void) const
 #if defined( OM_OS_UNIX )
 
 	// all POSIX-compliant
-	int status = fseeko64( _file, (__off64_t)0, SEEK_END);
+	int status = fseeko64( _file, (off64_t)0, SEEK_END);
   ASSERT("Successful seek", status == 0);
 	
 #elif defined( OM_OS_WINDOWS )
@@ -227,8 +227,8 @@ OMUInt64 OMStream::position(void) const
 #if defined( OM_OS_UNIX )
 
 	// all POSIX-compliant
-	__off64_t position = ftello64( _file );
-  ASSERT("Successful tell", IMPLIES(position == (__off64_t)-1, errno == 0));
+  off64_t position = ftello64( _file );
+  ASSERT("Successful tell", IMPLIES(position == (off64_t)-1, errno == 0));
 	
 #elif defined( OM_OS_WINDOWS )
 
@@ -259,7 +259,7 @@ void OMStream::setPosition(OMUInt64 newPosition)
 #if defined( OM_OS_UNIX )
 
 	// all POSIX-compliant
-	__off64_t position = newPosition;
+	off64_t position = newPosition;
 	int status = fseeko64( _file, position, SEEK_SET);
   ASSERT("Successful seek", status == 0);
 	

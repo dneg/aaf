@@ -1596,9 +1596,14 @@ void ImplAAFFile::registerFactories(void)
 
   OMFile::registerFactory(ENCODING(DEFAULTFileKind),
                           new OMSSSStoredObjectFactory(AAFSSSEncoding,
-																											 Signature_SSBinary,
-                                                       L"AAF-S",
-                                                       L"AAF SchemaSoft SS"));
+						 Signature_SSBinary,
+                                                 L"AAF-S",
+                                                 L"AAF SchemaSoft SS"));
+	OMFile::registerFactory(AAFS4KEncoding,
+                          new OMSSSStoredObjectFactory(AAFS4KEncoding,
+                                                       Signature_SSBin_4K,
+                                                       L"AAF-S4K",
+                                                       L"AAF Schemasoft 4K"));
 
 #else
 #error Unknown platform

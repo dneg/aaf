@@ -92,7 +92,8 @@ const aafUID_t aafFileKindAafSSBinary = aafFileKindAafMSSBinary;
 #elif defined( OS_SOLARIS )
 // DEFAULT is SSS 512. MSS not available
 const aafUID_t aafFileKindAafSSBinary = aafFileKindAafSSSBinary;
-
+// default 4k binary
+const aafUID_t aafFileKindAaf4KBinary = aafFileKindAafS4KBinary;
 #else
 #error Unknown platform
 #endif
