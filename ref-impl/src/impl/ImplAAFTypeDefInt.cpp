@@ -374,7 +374,6 @@ AAFRESULT STDMETHODCALLTYPE
   //	{
   //	  return AAFRESULT_BAD_TYPE;
   //	}
-  assert (pPropType);
 
   // current impl only allows 1, 2, 4, and 8-bit ints.
   if ((1 != valSize) &&
@@ -455,15 +454,15 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 	  return hr;
 	}
-
-  // determine if the property value's embedded type is compatible
-  // with this one for reading.  For now, we'll only allow integral
-  // type properties to be read by this integral type def.
   assert (pPropType);
-  if (! dynamic_cast<ImplAAFTypeDefInt *>((ImplAAFTypeDef*) pPropType))
-	{
-	  return AAFRESULT_BAD_TYPE;
-	}
+
+  // ConradF 7/5/2000 : allow all types to be read as an integral type
+  // (made necessary in order to read Enum types as integral types.)
+  // assert (pPropType);
+  // if (! dynamic_cast<ImplAAFTypeDefInt *>(pPropType))
+  //	{
+  //	  return AAFRESULT_BAD_TYPE;
+  //	}
 
   // current impl only allows 1, 2, 4, and 8-bit ints.
   if ((1 != valSize) &&

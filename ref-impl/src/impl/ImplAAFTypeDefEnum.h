@@ -188,6 +188,34 @@ public:
          // @parm [in] new value of the enum represented by the given property value
          aafInt64  valueIn);
 
+///////////////////
+  virtual AAFRESULT STDMETHODCALLTYPE
+		CreateValueFromName (
+    // the Name of a valid Enum symbol
+    /*[in]*/ aafCharacter_constptr  Name,
+
+    // newly created property value
+    /*[out]*/ ImplAAFPropertyValue ** ppPropVal);
+
+  virtual AAFRESULT STDMETHODCALLTYPE
+	  GetElementName (
+    // index of element to retrieve
+    /*[in]*/ aafUInt32  index,
+
+    // requested value
+    /*[out, size_is(bufSize)]*/ aafCharacter *  pOutValue,
+
+    // The size of the pOutValue buffer in bytes
+    /*[in]*/ aafUInt32  bufSize);
+  
+  virtual AAFRESULT STDMETHODCALLTYPE
+	 GetElementNameBufLen (
+    // index of element to retrieve
+    /*[in]*/ aafUInt32  index,
+
+    // required buffer length, in bytes
+    /*[out]*/ aafUInt32 *  pLen);
+
 
   //****************
   // RegisterSize()
@@ -287,17 +315,9 @@ private:
   //
   // private methods
   //
-  AAFRESULT STDMETHODCALLTYPE
-    GetElementNameBufLen (aafUInt32  index,
-						  aafUInt32 * pLen);
-
-  AAFRESULT STDMETHODCALLTYPE
-    GetElementName (aafUInt32 index,
-					wchar_t * pName,
-					aafUInt32  bufSize);
-
 
   ImplAAFTypeDefSP BaseType (void) const;
+
 
 public:
   // Overrides from ImplAAFTypeDef
