@@ -39,6 +39,7 @@ class ImplAAFTypeDef;
 #endif
 
 #include "OMPropertyDefinition.h"
+#include "OMVariableSizeProperty.h"
 
 typedef OMProperty* (*ImplAAFOMPropertyCreateFunc_t)
   (OMPropertyId pid,
