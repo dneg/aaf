@@ -5,10 +5,10 @@ ADFLAGS="OMEXTERNAL | OMINTERNAL"
 #
 SRC="src/*.cpp src/*.h"
 #
-OUT=docs/OM
+OUT=docs/ObjectManager
 HFMT="c:/program files/autoduck/html.fmt"
 OMFMT="docs/OM.fmt"
-CONT="docs/OM.d"
+CONT="docs/contents.d"
 #
 # html output
 #
