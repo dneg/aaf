@@ -232,16 +232,14 @@ sub printFunctionDeclaration
   local (*THEFILE, $name) = @_;  # Filehandle, string
 
   # Enums that end in AAF are special. Strip off the
-  # the _e (or _t for compatibility) so that we can use the 
-  # rest of the name as base and append the '_t' to create 
-  # the corresponding type name.
+  # the _e so that we can use the rest of the name as 
+  # base and append the '_t' to create the corresponding 
+  # type name.
   $_ = $name;
-  s/(_[et])$//;
+  s/(_[et])$/_t/;
   $name = $_;
 
-  print THEFILE 'bool Is_', $name, '_Valid(', $name;  
-  print THEFILE '_t' if ($1 ne ''); # only add if one was removed.
-  print THEFILE ' param)';
+  print THEFILE 'bool Is_', $name, '_Valid(', $name, ' param)';
 }
 
 # Subroutine to write out the validateEnums.h header file
