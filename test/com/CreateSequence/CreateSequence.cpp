@@ -606,14 +606,15 @@ int main(int argumentCount, char *argumentVector[])
   //  With no second argument, set output filename to CreateSequence<N>.aaf
   if (argumentCount == 2) {
     strncpy(niceFileName, Ns, FILENAME_MAX);
-    strcat (niceFileName, ".aaf");
   } else  {
     //  Otherwise output to filename specified in the second argument
     //  NB this case must have argC ==3 from earlier check
 
     strncpy(niceFileName, argumentVector[2], FILENAME_MAX);
-    strcat(niceFileName, ".aaf");
   }
+  if (strstr(niceFileName, ".aaf") == 0)
+    strcat (niceFileName, ".aaf");
+
   //  and then carry on...
 
   // Load the AAF library explicity to catch the common error
