@@ -17,6 +17,12 @@ AD_INCLUDE(AAFTypes)
 * Copyright (c) 1998 Microsoft Corporation *
 *                                          *
 \******************************************/
+AD_IDL(//
+// The TapeDescriptor class describes an audio or video tape media.
+// A TapeDescriptor object shall be the EssenceDescription of a
+// physical Source Mob. 
+// TapeDescriptor is a subclass of EssenceDescriptor class.
+//)
 
 AD_CLASS_UUID(e58a856a, 2a3e, 11D2, bf, a4, 00, 60, 97, 11, 62, 12)
 
@@ -25,52 +31,251 @@ AD_CLASS_BEGIN
 
 AD_METHOD1(SetTapeManufacturer,
 		   [in\\\,string],aafWChar*, pName, Manufacturers name,
-		   Sets the name of the company which manufactured the tape.)
+		   Sets the name of the company which manufactured the tape.
+  // 
+  // This method succeeds if all of the following are true:
+  // - the pName pointer is valid.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\\\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \\\(This is the only code indicating success.\\\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pName arg is NULL. )
+
 AD_METHOD2(GetTapeManufacturer,
 		   [in\\\,string],aafWChar*, pName,pass in a buffer which is cleared and filled.,
 		   [in], aafInt32, buflen, Length of the buffer to hold the Manufacturers name,
-		   Get the name of the company which manufactured the tape.)
+		   Get the name of the company which manufactured the tape.
+  // 
+  // If the buffer is too small\\\, the pName buffer remains unchanged.
+  // This method succeeds if all of the following are true:
+  // - the pName pointer is valid.
+  // - buflen is big enough to hold the whole buffer.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\\\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \\\(This is the only code indicating success.\\\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pName arg is NULL.
+  // AAFRESULT_SMALLBUF
+  //   - Buffer is too small to hold the Manufacturer name. )
+
 AD_METHOD1(GetManufacturerNameLen,
 		   [out], aafInt32 *, pLen, Manufacturers Name length,
-		   Returns the length of the string returned by the GetTapeManufacturer methods.)
+		   Returns the length of the string returned by the GetTapeManufacturer methods.
+  // 
+  // This method succeeds if all of the following are true:
+  // - the pLen pointer is valid.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\\\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \\\(This is the only code indicating success.\\\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pLen arg is NULL.)
+
 AD_METHOD1(SetTapeModel,
 		   [in\\\,string],aafWChar*, pModelName, Tape Manufacturers Brand name,
-		   Sets the brand or model of the tape.)
+		   Sets the brand or model of the tape.
+  // 
+  // This method succeeds if all of the following are true:
+  // - the pModelName pointer is valid.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\\\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \\\(This is the only code indicating success.\\\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pModelName arg is NULL. )
+
 AD_METHOD2(GetTapeModel,
 		   [in\\\,string],aafWChar*, pModelName,pass in a buffer which is cleared and filled.,
 		   [in], aafInt32, buflen, Length of the buffer to hold the Manufacturers Brand name,
-		   Gets the brand or model of the tape.)
+		   Gets the brand or model of the tape.
+  // 
+  // If the buffer is too small\\\, the pModelName buffer remains unchanged.
+  // This method succeeds if all of the following are true:
+  // - the pModelName pointer is valid.
+  // - buflen is big enough to hold the whole buffer.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\\\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \\\(This is the only code indicating success.\\\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pModelName arg is NULL.
+  // AAFRESULT_SMALLBUF
+  //   - Buffer is too small to hold the Manufacturer name.)
+
 AD_METHOD1(GetTapeModelLen,
 		   [out], aafInt32 *, pLen, Model length,
-		   Returns the length of the string returned by the GetTapeModel method.)
+		   Returns the length of the string returned by the GetTapeModel method.
+  // 
+  // This method succeeds if all of the following are true:
+  // - the pLen pointer is valid.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\\\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \\\(This is the only code indicating success.\\\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pLen arg is NULL.)
 
 AD_METHOD1(SetTapeFormFactor,
 		   [in],aafTapeCaseType_t, formFactor, ex: kVHSVideoTape\\\,kDATCartridge ,
-		   Sets the form factor [case size] of the tape.)
+		   Sets the form factor [case size] of the tape.
+  // 
+  // This method succeeds if all of the following are true:
+  //	formFactor represents a valid format.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\\\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \\\(This is the only code indicating success.\\\)
+  //
+  // AAFRESULT_BAD_TYPE
+  //	- formFactor is invalid.)
+
 AD_METHOD1(GetTapeFormFactor,
-		   [out],aafTapeCaseType_t*, formFactor, ex: kVHSVideoTape\\\,kDATCartridge,
-		   Gets the form factor [case size] of the tape.)
+		   [out],aafTapeCaseType_t*, pFormFactor, ex: kVHSVideoTape\\\,kDATCartridge,
+		   Gets the form factor [case size] of the tape. 
+  // 
+  // This method succeeds if all of the following are true:
+  // - the pFormFactor pointer is valid.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\\\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \\\(This is the only code indicating success.\\\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pFormFactor arg is NULL.)
 
 AD_METHOD1(SetSignalType,
 		   [in],aafVideoSignalType_t, videoSignal, ex: kNTSCSignal,
-		   Sets the signal standard recorded on the tape.)
+		   Sets the signal standard recorded on the tape.
+  // 
+  // This method succeeds if all of the following are true:
+  //	videoSignal represents a valid video signal type.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\\\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \\\(This is the only code indicating success.\\\)
+  //
+  // AAFRESULT_BAD_TYPE
+  //	- videoSignal is invalid.)
+
 AD_METHOD1(GetSignalType,
-		   [out],aafVideoSignalType_t*, videoSignal, ex: kNTSCSignal,
-		   Gets the signal standard recorded on the tape.)
+		   [out],aafVideoSignalType_t*, pVideoSignal, ex: kNTSCSignal,
+		   Gets the signal standard recorded on the tape.
+  // 
+  // This method succeeds if all of the following are true:
+  // - the pVideoSignal pointer is valid.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\\\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \\\(This is the only code indicating success.\\\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pVideoSignal arg is NULL.)
 
 
 AD_METHOD1(SetTapeFormat,
 		   [in],aafTapeFormatType_t, tapeFormat, ex: kBetacamFormat\\\,kBetacamSPFormat,
-		   Sets the recording method of the tape.)
+		   Sets the recording method of the tape.
+  // 
+  // This method succeeds if all of the following are true:
+  //	tapeFormat represents a valid tape format type.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\\\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \\\(This is the only code indicating success.\\\)
+  //
+  // AAFRESULT_BAD_TYPE
+  //	- tapeFormat is invalid.)
+
 AD_METHOD1(GetTapeFormat,
-		   [out],aafTapeFormatType_t*, tapeFormat, ex: kBetacamFormat\\\,kBetacamSPFormat,
-		   Gets the recording method of the tape.)
+		   [out],aafTapeFormatType_t*, pTapeFormat, ex: kBetacamFormat\\\,kBetacamSPFormat,
+		   Gets the recording method of the tape.
+  // 
+  // This method succeeds if all of the following are true:
+  // - the pTapeFormat pointer is valid.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\\\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \\\(This is the only code indicating success.\\\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pTapeFormat arg is NULL.)
 
 AD_METHOD1(SetTapeLength,
 		   [in],aafLength_t, tapeLength,The length of the tape in minutes.,
-		   Sets the length of the tape.)
+		   Sets the length of the tape.
+  // 
+  // This method succeeds if all of the following are true:
+  //	tapeLength is a positive number.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\\\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \\\(This is the only code indicating success.\\\)
+  //
+  // AAFRESULT_BAD_LENGTH
+  //	- tapeLength is negative.)
+
 AD_METHOD1(GetTapeLength,
 		   [out],aafLength_t*, pTapeLength,The length of the tape in minutes.,
-		   Gets the length of the tape.)
+		   Gets the length of the tape.
+  // 
+  // This method succeeds if all of the following are true:
+  // - the pTapeLength pointer is valid.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\\\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \\\(This is the only code indicating success.\\\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pTapeLength arg is NULL.)
 
 AD_CLASS_END
