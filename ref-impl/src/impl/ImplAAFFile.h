@@ -78,10 +78,6 @@ public:
   // in /test/ImplAAFFileTest.cpp.
   static AAFRESULT test();
 
-  void InitContainer (void * pContainer);
-
-  void * GetContainer ();
-
 AAFRESULT Create(
 			aafDataBuffer_t		stream, 
 			ImplAAFSession *	session, 
@@ -98,8 +94,6 @@ private:
 								   ImplAAFSession * session,
 								   OMLContainerUseMode useMode, 
 								   openType_t type);
-
-	void * _pContainer;
 
 		aafInt32       	_cookie;
 		aafFileFormat_t _fmt;

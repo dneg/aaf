@@ -31,29 +31,12 @@
 
 
 ImplAAFFile::ImplAAFFile ()
-: _pContainer (0), _fmt(kAAFiMedia)
+: _fmt(kAAFiMedia)
 {}
 
 
 ImplAAFFile::~ImplAAFFile ()
 {}
-
-
-void ImplAAFFile::InitContainer (void * pContainer)
-{
-//  assert (! _pContainer);
-  _pContainer = pContainer;
-  assert (_pContainer);
-}
-
-
-struct  IAAFObject;
-
-void * ImplAAFFile::GetContainer ()
-{
-  assert (_pContainer);
-  return _pContainer;
-}
 
   //***********************************************************
   // METHOD NAME: Close()
