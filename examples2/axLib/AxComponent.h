@@ -83,6 +83,8 @@ public:
 	aafPosition_t GetCutPoint();
 	void SetCutPoint( aafPosition_t cutPoint );
 
+	IAAFOperationGroupSP GetOperationGroup();
+
 	operator IAAFTransitionSP ()
 	{ return _spIaafTransition; }
 

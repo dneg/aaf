@@ -100,6 +100,13 @@ void AxTransition::SetCutPoint( aafPosition_t cutPoint )
 	CHECK_HRESULT( _spIaafTransition->SetCutPoint( cutPoint ) );
 }
 
+IAAFOperationGroupSP AxTransition::GetOperationGroup()
+{
+  IAAFOperationGroupSP spOpGroup;
+  CHECK_HRESULT( _spIaafTransition->GetOperationGroup( &spOpGroup ) );
+  return spOpGroup;
+}
+
 //=---------------------------------------------------------------------=
 
 AxSequence::AxSequence( IAAFSequenceSP spIaafSequence )

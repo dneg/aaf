@@ -206,6 +206,12 @@ public:
 	void SetNumberInputs( aafInt32 );
 	void SetBypass( aafUInt32 );
 	
+	IAAFDataDefSP GetDataDef();
+	aafBoolean_t IsTimeWarp();
+	aafUID_t GetCategory();
+	aafInt32 GetNumberInputs();
+	aafUInt32 GetBypass();
+	
 	inline operator IAAFOperationDefSP ()
 	{ return _spIaafOperationDef; }
 
