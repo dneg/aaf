@@ -204,6 +204,9 @@ HRESULT C.this-module_test()
 #startm AD_X2METHOD5 37
 #endm
 
+#startm AD_GETOBJECT3 17
+#endm
+
 #startm AD_CLASS_END 00
 #endm
 

@@ -1205,6 +1205,56 @@ AD_CATCH_ASSERTION_END
 
 #ccccccccccccccccccccccccccc
 #c
+#c Inserts declaration for a method which takes three arguments.
+#c
+#c Macro Arg 01: method name
+#c
+#c Macro arguments 02+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt
+#c ----------   ----------   ---------   ----    ----    --------
+#c metharg 1    02           03          04      05      06
+#c metharg 2    07           08          09      10      11
+#c metharg 3    12           13          14      15      16
+#c
+#c Macro Arg 17: method description
+#c
+#startm AD_GETOBJECT3 17
+HRESULT STDMETHODCALLTYPE
+    C.this-module::%01 (.%03-adornment%04 .%03-indirection %05,
+        .%08-adornment%09 .%08-indirection %10,
+        .%13-adornment%14 .%13-indirection %15)
+{
+  HRESULT hr = S_OK;
+
+AD_CATCH_ASSERTION_BEGIN
+
+  Impl.this-module * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<Impl.this-module*> (pO);
+  assert (ptr);
+
+.%03-setup(%04, %05, foo, bar)
+.%13-setup(%14, %15, foo, bar)
+
+  hr = ptr->%01
+       (.%03-internalname(%05),
+        .%13-internalname(%15));
+
+.%03-cleanup(%04, %05, foo, bar)
+.%13-cleanup(%14, %15, %10, bar)
+
+AD_CATCH_ASSERTION_END
+
+  return hr;
+}
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
 #c Ends a class definition
 #c
 #c Arguments: none
@@ -1739,6 +1789,48 @@ EXTERN_C const CLSID CLSID_.this-module = { 0x%01, 0x%02, 0x%03, { 0x%04, 0x%05,
 
 #ccccccccccccccccccccccccccc
 #c
+#c #define .unkIn-setup(T, externArg, aux1, aux2)
+#c
+#c arg1 = unadorned type
+#c arg2 = external arg name
+#c arg3 = aux argument
+#c arg4 = aux argument
+#c
+#c Override map Unknown to Root (IUnknown to ImplAAFRoot)
+#c
+#startm .unkIn-setup 04
+  //
+  // set up for %02
+  //
+  ImplAAFRoot * internal%02 = NULL;
+  if (%02)
+    {
+      HRESULT hStat;
+      IAAFRoot * iObj;
+      ImplAAFRoot *arg;
+      hStat = %02->QueryInterface (IID_IAAFRoot, (void **)&iObj);
+      if (FAILED(hStat))
+      {
+        // If input IUnknown argument MUST supprt our private IAAFRoot interface.
+        // If it does not than the argument is not one of our implementation objects!
+        assert(E_NOINTERFACE == hStat);
+        if (E_NOINTERFACE == hStat)
+          return AAFRESULT_INVALID_PARAM;
+        else
+          return hStat;
+      }
+      assert (iObj);
+      hStat = iObj->GetImplRep((void **)&arg);
+      assert (SUCCEEDED (hStat));
+      iObj->Release(); // we are through with this interface pointer.
+      internal%02 = static_cast<ImplAAFRoot*>(arg);
+      assert (internal%02);
+    }
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
 #c #define .enumIn-setup(T, externArg, aux1, aux2)
 #c
 #c arg1 = unadorned type
@@ -1853,6 +1945,30 @@ EXTERN_C const CLSID CLSID_.this-module = { 0x%01, 0x%02, 0x%03, { 0x%04, 0x%05,
 
 #ccccccccccccccccccccccccccc
 #c
+#c #define .unkOut-setup(T, externArg, aux1, aux2)
+#c
+#c arg1 = unadorned type
+#c arg2 = external arg name
+#c arg3 = aux argument
+#c arg4 = aux argument
+#c
+#c Override map Unknown to Root (IUnknown to ImplAAFRoot)
+#c
+#startm .unkOut-setup 04
+  //
+  // set up for %02
+  //
+  ImplAAFRoot * internal%02 = NULL;
+  ImplAAFRoot ** pinternal%02 = NULL;
+  if (%02)
+    {
+      pinternal%02 = &internal%02;
+    }
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
 #c #define .objOutArray-setup(T, externArg, arraySize, aux)
 #c
 #c arg1 = unadorned type
@@ -1942,6 +2058,17 @@ internal%01\
 
 #ccccccccccccccccccccccccccc
 #c
+#c #define .unkIn-internalname(externArg)    (internArg)
+#c
+#c arg1 = external arg name
+#c
+#startm .unkIn-internalname 01
+internal%01\
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
 #c #define .enumIn-internalname(externArg)    (internArg)
 #c
 #c arg1 = external arg name
@@ -1986,6 +2113,17 @@ pinternal%01\
 
 #ccccccccccccccccccccccccccc
 #c
+#c #define .unkOut-internalname(externArg)   (internArg)
+#c
+#c arg1 = external arg name
+#c
+#startm .unkOut-internalname 01
+pinternal%01\
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
 #c #define .objOutArray-internalname(externArg)   (internArg)
 #c
 #c arg1 = external arg name
@@ -2005,6 +2143,22 @@ pinternal%01\
 #c arg4 = aux arg
 #c
 #startm .objIn-cleanup 04
+  //
+  // no cleanup necessary for %02
+  //
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c #define .unkIn-cleanup(T, externArg, aux1, aux2)
+#c
+#c arg1 = unadorned type
+#c arg2 = external arg name
+#c arg3 = aux arg
+#c arg4 = aux arg
+#c
+#startm .unkIn-cleanup 04
   //
   // no cleanup necessary for %02
   //
@@ -2107,6 +2261,30 @@ pinternal%01\
           //pUnknown->Release();
           internal%02->ReleaseReference(); // We are through with this pointer.
         }
+    }
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c #define .unkOut-cleanup(T, externArg, aux1, aux2)
+#c
+#c arg1 = unadorned type
+#c arg2 = external arg name
+#c arg3 = IID for QueryInterface
+#c arg4 = aux arg
+#c
+#startm .unkOut-cleanup 04
+  //
+  // cleanup for %02
+  //
+  if (internal%02)
+    {
+      IUnknown *pUnknown = static_cast<IUnknown *> (internal%02->GetContainer());
+      HRESULT hStat = pUnknown->QueryInterface(%03, (void **)%02);
+      if (SUCCEEDED(hr) && FAILED(hStat))
+        hr = hStat;
+      internal%02->ReleaseReference(); // We are through with this pointer.
     }
 #endm
 
@@ -2220,6 +2398,13 @@ I\
 #startm .objOutArrayCustom-adornment 00
 #endm
 
+#startm .unkIn-adornment 00
+I\
+#endm
+
+#startm .unkOut-adornment 00
+I\
+#endm
 
 #ccccccccccccccccccccccccccc
 #c
