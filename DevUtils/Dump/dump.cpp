@@ -206,6 +206,16 @@ const CLSID CLSID_AAFHeader =
     0x0000, 0x0000,
   { 0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04 } };
 
+// The file kind for structured storage binary AAF files.
+//
+const CLSID aafFileKindAafSSBinary = 
+{0x0d464141, 0x4f4f, 0x4d4d, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xff}};
+
+// The file kind for structured storage binary MXF files
+//
+const CLSID aafFileKindMxfSSBinary = 
+{0x0d46584d, 0x4f4f, 0x4d4d, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xff}};
+
 // The signature for structured storage binary AAF files. This includes
 // the structured storage file signature.
 //
@@ -220,7 +230,7 @@ unsigned char aafSSBinaryFileSignature[] = {
 //
 unsigned char mxfSSBinaryFileSignature[] = {
   0xd0, 0xcf, 0x11, 0xe0, 0xa1, 0xb1, 0x1a, 0xe1,
-  0x4D, 0x58, 0x46, 0x0d, 0x4f, 0x4f, 0x4d, 0x4d,
+  0x4d, 0x58, 0x46, 0x0d, 0x4f, 0x4f, 0x4d, 0x4d,
   0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xff
 };
 
@@ -233,14 +243,14 @@ struct format {
   unsigned char* signature;
   size_t signatureSize;
   // Could add the offset of the signature here
-  const char* formatName; // For now this is a string, this could be a GUID
+  const GUID* fileKind;
 } formatTable[] = {
   {aafSSBinaryFileSignature,
    sizeof(aafSSBinaryFileSignature),
-   "AAFSSBINARY"},
+   &aafFileKindAafSSBinary},
   {mxfSSBinaryFileSignature,
    sizeof(mxfSSBinaryFileSignature),
-   "MXFSSBINARY"}
+   &aafFileKindMxfSSBinary}
 };
 
 static size_t signatureSize(void);
@@ -448,8 +458,8 @@ static bool readSignature(const wchar_t* fileName,
                           size_t signatureSize);
 static bool isRecognizedSignature(unsigned char* signature,
                                   size_t signatureSize,
-                                  const char** format);
-static bool isAnAAFFile(const wchar_t* fileName);
+                                  GUID* fileKind);
+static bool isAnAAFFile(const wchar_t* fileName, GUID* fileKind);
 static void usage(void);
 
 static void printInteger(const size_t value, char* label);
@@ -2492,7 +2502,7 @@ size_t signatureSize(void)
 //
 bool isRecognizedSignature(unsigned char* signature,
                            size_t signatureSize,
-                           const char** formatName)
+                           GUID* fileKind)
 {
   bool result = false;
 
@@ -2502,7 +2512,7 @@ bool isRecognizedSignature(unsigned char* signature,
                  signature,
                  formatTable[i].signatureSize) == 0) {
         result = true;
-        *formatName = formatTable[i].formatName;
+        memcpy(fileKind, formatTable[i].fileKind, sizeof(CLSID));
         break;
       }
     }
@@ -2512,13 +2522,12 @@ bool isRecognizedSignature(unsigned char* signature,
 
 // Does the given file purport to be an AAF file ?
 //
-static bool isAnAAFFile(const wchar_t* fileName)
+static bool isAnAAFFile(const wchar_t* fileName, CLSID* fileKind)
 {
   bool result = false;
   unsigned char* signature = new unsigned char[maxSignatureSize];
   if (readSignature(fileName, signature, maxSignatureSize)) {
-    const char* formatName = 0;
-    if (isRecognizedSignature(signature, maxSignatureSize, &formatName)) {
+    if (isRecognizedSignature(signature, maxSignatureSize, fileKind)) {
       result = true;
     } else {
       result = false;
@@ -2949,7 +2958,8 @@ int main(int argumentCount, char* argumentVector[])
       wchar_t wcFileName[FILENAME_MAX];
       size_t status = mbstowcs(wcFileName, argumentVector[i], FILENAME_MAX);
       ASSERT("Convert succeeded", status != (size_t)-1);
-      if (isAnAAFFile(wcFileName)) {
+      CLSID x = {0};
+      if (isAnAAFFile(wcFileName, &x)) {
         dumpFileProperties(argumentVector[i]);
       } else {
         cerr << programName
