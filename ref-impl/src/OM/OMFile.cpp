@@ -595,6 +595,7 @@ void OMFile::close(void)
       OMRawStorage* store = rawStorage();
       if (store != 0) {
         factory->close(store);
+        store->synchronize();
       } else {
         const wchar_t* name = fileName();
         factory->close(name);
