@@ -50,8 +50,8 @@ extern "C" const aafClassID_t CLSID_AAFPropValData;
 
 ImplAAFTypeDefRename::ImplAAFTypeDefRename ()
   : _RenamedType  ( PID_TypeDefinitionRename_RenamedType, 
-                    L"RenamedType", 
-                    L"/Dictionary/TypeDefinitions", 
+                    L"RenamedType",
+                    L"/MetaDictionary/TypeDefinitions",
                     PID_MetaDefinition_Identification)
 {
   _persistentProperties.put(_RenamedType.address());
