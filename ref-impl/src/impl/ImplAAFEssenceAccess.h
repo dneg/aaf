@@ -83,7 +83,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
 	SetEssenceDestination(
 				ImplAAFLocator		*destination,
-				aafFileFormat_t		fileFormat);
+				aafUID_t			fileFormat);
 
  //Sets which variety of the codec ID is to be used.)
   virtual AAFRESULT STDMETHODCALLTYPE
@@ -692,7 +692,7 @@ private:
 	aafUID_t			_codecID;
 	aafUID_t			_variety;
 	ImplAAFLocator		*_destination;
-	aafFileFormat_t		_fileFormat;
+	aafUID_t			_fileFormat;
 	ImplAAFSourceMob	*_fileMob;
 	aafInt32			_numChannels;
 	aafSubChannel_t		*_channels;
