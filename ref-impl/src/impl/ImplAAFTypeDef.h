@@ -106,9 +106,6 @@ public:
         (aafSwapNeeded_t  SwapNeeded);
 
 public:
-  // Declare this class to be storable.
-  //
-  OMDECLARE_STORABLE(ImplAAFTypeDef)
 
   //
   // non-published methods
