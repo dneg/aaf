@@ -74,6 +74,10 @@
 #include "AAFStoredObjectIDs.h"
 #endif
 
+#ifndef __AAFClassDefUIDs_h__
+#include "AAFClassDefUIDs.h"
+#endif
+
 #include "ImplAAFBuiltinDefs.h"
 
 
@@ -781,7 +785,8 @@ static AAFRESULT CreateNewStrongRefVectorType (const aafUID_t & idToCreate,
 }
 
 
-static AAFRESULT CreateNewWeakRefType (const aafUID_t & idToCreate,
+static AAFRESULT CreateNewWeakRefType
+ (const aafUID_t & idToCreate,
 								  ImplAAFDictionary * pDict,
 								  ImplAAFTypeDef ** ppCreatedTypeDef)
 {
@@ -815,7 +820,14 @@ static AAFRESULT CreateNewWeakRefType (const aafUID_t & idToCreate,
 #else
 		  ImplAAFTypeDef * ptd = 0;
 		  // Instead, alias to an auid
-		  hr = pDict->LookupTypeDef (kAAFTypeID_AUID, &ptd);
+		  if(memcmp(curElem->pRefdTypeId, &kAAFClassID_Mob, sizeof(aafUID_t)) == 0)
+		  {
+			hr = pDict->LookupTypeDef (kAAFTypeID_MobID, &ptd);
+		  }
+		  else
+		  {
+			hr = pDict->LookupTypeDef (kAAFTypeID_AUID, &ptd);
+		  }
 		  assert (AAFRESULT_SUCCEEDED (hr));
 #endif
 
