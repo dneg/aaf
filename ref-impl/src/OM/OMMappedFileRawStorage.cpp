@@ -36,7 +36,7 @@
   //   @parm The file name.
   //   @rdesc The newly created <c OMMappedFileRawStorage> object.
 OMMappedFileRawStorage*
-OMMappedFileRawStorage::openExistingRead(const wchar_t* fileName)
+OMMappedFileRawStorage::openExistingRead(const wchar_t* /* fileName */)
 {
   TRACE("OMMappedFileRawStorage::openExistingRead");
 
@@ -51,7 +51,7 @@ OMMappedFileRawStorage::openExistingRead(const wchar_t* fileName)
   //   @parm The file name.
   //   @rdesc The newly created <c OMMappedFileRawStorage> object.
 OMMappedFileRawStorage*
-OMMappedFileRawStorage::openExistingModify(const wchar_t* fileName)
+OMMappedFileRawStorage::openExistingModify(const wchar_t* /* fileName */)
 {
   TRACE("OMMappedFileRawStorage::openExistingModify");
 
@@ -65,7 +65,7 @@ OMMappedFileRawStorage::openExistingModify(const wchar_t* fileName)
   //   @parm The file name.
   //   @rdesc The newly created <c OMMappedFileRawStorage> object.
 OMMappedFileRawStorage*
-OMMappedFileRawStorage::openNewModify(const wchar_t* fileName)
+OMMappedFileRawStorage::openNewModify(const wchar_t* /* fileName */)
 {
   TRACE("OMMappedFileRawStorage::openNewModify");
 
@@ -76,8 +76,9 @@ OMMappedFileRawStorage::openNewModify(const wchar_t* fileName)
   // @mfunc Constructor.
   //   @parm The file.
   //   @parm The access mode.
-OMMappedFileRawStorage::OMMappedFileRawStorage(/* TBS */
-                                               OMFile::OMAccessMode accessMode)
+OMMappedFileRawStorage::OMMappedFileRawStorage(
+                                         /* TBS */
+                                         OMFile::OMAccessMode /* accessMode */)
 {
   TRACE("OMMappedFileRawStorage::OMMappedFileRawStorage");
 
@@ -130,9 +131,9 @@ bool OMMappedFileRawStorage::isWritable(void) const
   //   @parm The number of bytes to read.
   //   @parm The number of bytes actually read.
   //   @this const
-void OMMappedFileRawStorage::read(OMByte* bytes,
-                            OMUInt32 byteCount,
-                            OMUInt32& bytesRead) const
+void OMMappedFileRawStorage::read(OMByte* /* bytes */,
+                                  OMUInt32 /* byteCount */,
+                                  OMUInt32& /* bytesRead */) const
 {
   TRACE("OMMappedFileRawStorage::read");
 
@@ -152,9 +153,9 @@ void OMMappedFileRawStorage::read(OMByte* bytes,
   //   @parm The buffer from which the bytes are to be written.
   //   @parm The number of bytes to write.
   //   @parm The actual number of bytes written.
-void OMMappedFileRawStorage::write(const OMByte* bytes,
-                             OMUInt32 byteCount,
-                             OMUInt32& bytesWritten)
+void OMMappedFileRawStorage::write(const OMByte* /* bytes */,
+                                   OMUInt32 /* byteCount */,
+                                   OMUInt32& /* bytesWritten */)
 {
   TRACE("OMMappedFileRawStorage::write");
 
@@ -196,7 +197,7 @@ OMUInt64 OMMappedFileRawStorage::size(void) const
   //        precondition - isSizeable()
   //   @parm The new size of this <c OMMappedFileRawStorage> in bytes.
   //   @devnote There is no ISO/ANSI way of truncating a file in place.
-void OMMappedFileRawStorage::setSize(OMUInt64 newSize)
+void OMMappedFileRawStorage::setSize(OMUInt64 /* newSize */)
 {
   TRACE("OMMappedFileRawStorage::setSize");
 
@@ -236,7 +237,7 @@ OMUInt64 OMMappedFileRawStorage::position(void) const
   //   @parm The new position.
   //   @devnote fseek takes a long int for offset this may not be sufficient
   //            for 64-bit offsets.
-void OMMappedFileRawStorage::setPosition(OMUInt64 newPosition)
+void OMMappedFileRawStorage::setPosition(OMUInt64 /* newPosition */)
 {
   TRACE("OMMappedFileRawStorage::setPosition");
 

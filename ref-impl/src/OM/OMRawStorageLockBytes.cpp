@@ -34,7 +34,7 @@
 #include "OMRawStorage.h"
 
 HRESULT STDMETHODCALLTYPE
-OMRawStorageLockBytes::QueryInterface(REFIID riid,
+OMRawStorageLockBytes::QueryInterface(REFIID /* riid */,
                                       void** ppvObject)
 {
   TRACE("OMRawStorageLockBytes::QueryInterface");
@@ -145,9 +145,9 @@ OMRawStorageLockBytes::SetSize(ULARGE_INTEGER cb)
 
   // @mfunc See Microsoft documentation for details.
 HRESULT STDMETHODCALLTYPE
-OMRawStorageLockBytes::LockRegion(ULARGE_INTEGER libOffset,
-                                  ULARGE_INTEGER cb,
-                                  DWORD dwLockType)
+OMRawStorageLockBytes::LockRegion(ULARGE_INTEGER /* libOffset */,
+                                  ULARGE_INTEGER /* cb */,
+                                  DWORD /* dwLockType */)
 {
   TRACE("OMRawStorageLockBytes::LockRegion");
 
@@ -157,9 +157,9 @@ OMRawStorageLockBytes::LockRegion(ULARGE_INTEGER libOffset,
 
   // @mfunc See Microsoft documentation for details.
 HRESULT STDMETHODCALLTYPE
-OMRawStorageLockBytes::UnlockRegion(ULARGE_INTEGER libOffset,
-                                    ULARGE_INTEGER cb,
-                                    DWORD dwLockType)
+OMRawStorageLockBytes::UnlockRegion(ULARGE_INTEGER /* libOffset */,
+                                    ULARGE_INTEGER /* cb */,
+                                    DWORD /* dwLockType */)
 {
   TRACE("OMRawStorageLockBytes::UnlockRegion");
 
@@ -170,7 +170,7 @@ OMRawStorageLockBytes::UnlockRegion(ULARGE_INTEGER libOffset,
   // @mfunc See Microsoft documentation for details.
 HRESULT STDMETHODCALLTYPE
 OMRawStorageLockBytes::Stat(STATSTG *pstatstg,
-                            DWORD grfStatFlag)
+                            DWORD /* grfStatFlag */)
 {
   TRACE("OMRawStorageLockBytes::Stat");
 
