@@ -170,6 +170,7 @@ Impl%01\
 #endif
 
 #include <assert.h>
+#include <string.h>
 
 
 Impl.this-module::Impl.this-module ()
