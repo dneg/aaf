@@ -760,6 +760,8 @@ static bool createAAFFileForEditDecisions(const char *output_aaf_file,
 			tapemob.AppendSlot(tapeslotvid);
 			tapeslotaud1.SetSegment(tapefiller_aud1);
 			tapemob.AppendSlot(tapeslotaud1);
+			tapeslotaud2.SetSegment(tapefiller_aud2);
+			tapemob.AppendSlot(tapeslotaud2);
 			tapeslottc.SetSegment(tcseg);
 			tapemob.AppendSlot(tapeslottc);
 			if (create_tapemob)
