@@ -122,10 +122,10 @@ AAFRESULT STDMETHODCALLTYPE
 {
 	ImplAAFMob**	ppMob;
 	aafUInt32		numMobs;
-	HRESULT			hr;
+	HRESULT			hr = S_OK;
 
-	if ((pFetched == NULL && count != 1) || (pFetched != NULL && count == 1))
-		return E_INVALIDARG;
+	if (pFetched == NULL || ppMobs == NULL)
+		return AAFRESULT_NULL_PARAM;
 
 	// Point at the first component in the array.
 	ppMob = ppMobs;
