@@ -189,13 +189,6 @@ LINK_STG += -L$(AAFBUILDDIR)/sss-impl -lSSRW2C
 else
 endif
 
-# check for MS reference implementation librefstg.a
-ifeq ($(wildcard $(AAFBUILDDIR)/ss-impl/librefstg$(LIB)),$(AAFBUILDDIR)/ss-impl/librefstg$(LIB))
-STORAGE_LIBS += $(AAFBUILDDIR)/ss-impl/librefstg$(LIB)
-LINK_STG += -L$(AAFBUILDDIR)/ss-impl -lrefstg
-endif
-
-
 #----------------------------------------------------------
 # STATIC_LINK_LINE - Link line used for static builds
 # Pulls in all required static libraries to achieve a
