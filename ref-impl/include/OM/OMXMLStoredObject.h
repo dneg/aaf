@@ -220,8 +220,6 @@ private:
   OMIOStream _stream;
   OMByteOrder _byteOrder;
 
-  static OMUInt16 _seed; // For use during save()
-
   // Binary data formatting
 
   void output(void);
@@ -233,8 +231,6 @@ private:
     // Flush any pending dumped bytes.
     //
   void flush(void);
-
-  static wchar_t* temporaryFileName(const OMDataStream& stream);
 
   static char _table[128];
 
