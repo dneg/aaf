@@ -92,7 +92,7 @@ public:
     CreateValueFromValues
         (// @parm [in, size_is(numElements)] array of property values for elements of array value which
     // is to be created.
-         ImplAAFPropertyValue * pElementValues,
+         ImplAAFPropertyValue ** ppElementValues,
 
          // @parm [in] size of pElementValues array.
          aafUInt32  numElements,
