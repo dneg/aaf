@@ -667,8 +667,10 @@ void OMStoredObject::validate(
     propertySet->iterate(context, p);
     ASSERT("Valid property", p != 0);
     propertyId = p->propertyId();
-    bool found = propertySetIndex->find(propertyId, type, offset, length);
-    ASSERT("Required property present", found);
+    if (propertySet->isRequired(propertyId)) {
+      bool found = propertySetIndex->find(propertyId, type, offset, length);
+      ASSERT("Required property present", found);
+    }
   }
 
   // Check that there are no spurious properties.
@@ -677,8 +679,8 @@ void OMStoredObject::validate(
   context = 0;
   for (size_t k = 0; k < entries; k++) {
     propertySetIndex->iterate(context, propertyId, type, offset, length);
-    OMProperty* p = propertySet->get(propertyId);
-    ASSERT("Property allowed", p != 0);
+    bool allowed = propertySet->isAllowed(propertyId);
+    ASSERT("Property allowed", allowed);
   }
 
 }
