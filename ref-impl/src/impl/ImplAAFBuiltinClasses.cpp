@@ -45,7 +45,7 @@ const /*static*/ ImplAAFBuiltinClasses::ClassTblEntry \
 ImplAAFBuiltinClasses::sBuiltinClassTable[] = \
 {
 
-#define AAF_CLASS(name, id, parent) \
+#define AAF_CLASS(name, id, parent, concrete) \
   { &AUID_AAF##name, L"" L# name L"", &AUID_AAF##parent },
 
 #define AAF_TABLE_END() \
