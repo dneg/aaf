@@ -65,6 +65,9 @@ public:
     // @cmember Remove <p object> from this <c OMContainerProperty>.
   virtual void removeObject(const OMObject* object) = 0;
 
+    // @cmember Remove all objects from this <c OMContainerProperty>.
+  virtual void removeAllObjects(void) = 0;
+
     // @cmember Create an <c OMReferenceContainerIterator> over this
     //          <c OMContainerProperty>.
   virtual OMReferenceContainerIterator* createIterator(void) const = 0;
