@@ -247,6 +247,7 @@ static void readIndexEntry(IStream* stream,
                            bool swapNeeded);
 static IndexEntry* readIndex(IStream* stream, OMUInt32 count, bool swapNeeded);
 static bool isValid(const IndexEntry* index, const OMUInt32 entries);
+static size_t valueStreamSize(const IndexEntry* index, const OMUInt32 entries);
 static char* typeName(OMUInt32 type);
 static void openStorage(IStorage* parentStorage,
                         char* storageName,
@@ -1081,6 +1082,21 @@ bool isValid(const IndexEntry* index, const OMUInt32 entries)
   return result;
 }
 
+// Minimum value stream size for a value stream with this index.
+//
+size_t valueStreamSize(const IndexEntry* index, const OMUInt32 entries)
+{
+  size_t result;
+
+  if (entries != 0) {
+    size_t last = entries - 1;
+    result = index[last]._offset + index[last]._length;
+  } else {
+    result = 0;
+  }
+  return result;
+}
+
 char* typeName(OMUInt32 type)
 {
   char * result;
@@ -1451,7 +1467,13 @@ void dumpProperties(IStorage* storage,
 
   // Check that the property value stream is the correct size for the
   // given index.
-  // NYI.
+  //
+  size_t actualStreamSize = sizeOfStream(stream, _propertyValueStreamName);
+  size_t expectedStreamSize = valueStreamSize(index, entries);
+
+  if (actualStreamSize < expectedStreamSize) {
+    fatalError("dumpProperties", "Property value stream too small.");
+  }
 
   for (OMUInt32 i = 0; i < entries; i++) {
 
