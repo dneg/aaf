@@ -1,9 +1,9 @@
 #c/*************************************************\
-#c*													*
-#c* Advanced Authoring Format						*
-#c*													*
-#c* Copyright (c) 1998-1999 Avid Technology, Inc.	*
-#c*													*
+#c*                                                 *
+#c* Advanced Authoring Format                       *
+#c*                                                 *
+#c* Copyright (c) 1998-1999 Avid Technology, Inc.   *
+#c*                                                 *
 #c\*************************************************/
 #startm .this-module 0
 AAFPluginManager\
@@ -36,6 +36,33 @@ AD_CLASS_UUID(AD1BB85B, DBB2, 11d2, 80, 9C, 00, 60, 08, 14, 3E, 6F)
 
 AD_DEFAULT_UUID(AD1BB85C, DBB2, 11d2, 80, 9C, 00, 60, 08, 14, 3E, 6F)
 AD_XCLASS_BEGIN(Concrete, Transient)
+
+AD_METHOD0(RegisterSharedPlugins,
+
+			Attempts to load and register all of the AAF plugin files found
+  // in shared installation directory.)
+
+AD_XMETHOD1(RegisterPluginDirectory,
+			[in],
+			objPass,
+			aafCharacter_constptr,
+			directoryName,
+			Pointer to the name of directory to look for plugins.,
+
+			Attempts to load and register all of the AAF plugin files found
+  // in the given directory.)
+
+AD_XMETHOD1(RegisterPluginFile,
+			[in],
+			objPass,
+			aafCharacter_constptr,
+			fileName,
+			Pointer to the name of plugin file to register.,
+
+			Attempts to load and register all of the AAF plugins found
+  // in the given file.)
+
+
 
 AD_XMETHOD2(EnumLoadedPlugins,
 			[in],
@@ -105,5 +132,38 @@ AD_XMETHOD3(CreatePluginDefinition,
   //
   // AAFRESULT_NULL_PARAM
   //   - if pPluginDesc is null.)
+
+AD_XMETHOD4(CreateInstance,
+	[in], objPass, REFCLSID, rclsid,
+		The class id of the plugin object do you want to create,
+	[in], objPass, IUnknown *, pUnkOuter,
+		The controlling unknown of the new instance,
+	[in], objPass, REFIID, riid,
+		The IID of the initialial interface for the new plugin instance,
+	[out\,iid_is\(riid\)], objPass, void **, ppPlugin,
+		The IID of the initialial interface for the new plugin instance,
+	Create an object contained within one of the loaded plugin files.
+  // Succeeds if all of the following are true:
+  // - the rclsid was found by the plugin manager
+  // - the interface corresponding to riid is supported by the plugin
+  // - if pUnkOuter is not NULL and given plugin supports aggregation and riid must be
+  //      a reference to IID_IUnknown.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // E_INVALIDARG
+  //   - if ppPlugin is null.
+  //   - pUnkOuter is not NULL and riid is not IID_IUnknown.
+  //
+  // AAFRESULT_EXTENSION_NOT_FOUND
+  //   - The given rclsid could not be found by the Plugin Manager.
+  //
+  // E_NOINTERFACE
+  //   - if initial interface given by riid is not supported by the plugin.)
 
 AD_XCLASS_END(Concrete, Transient)
