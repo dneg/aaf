@@ -860,7 +860,7 @@ int wremove(const wchar_t* fileName)
 
 OMUniqueObjectIdentification createUniqueIdentifier(void)
 {
-  OMUniqueObjectIdentification result = {0,0,0,{0}};
+  OMUniqueObjectIdentification result = nullOMUniqueObjectIdentification;
   GUID u;
   CoCreateGuid(&u);
   memcpy(&result, &u, sizeof(OMUniqueObjectIdentification));
@@ -873,7 +873,7 @@ OMUniqueObjectIdentification createUniqueIdentifier(void)
 
 OMUniqueObjectIdentification createUniqueIdentifier(void)
 {
-  OMUniqueObjectIdentification result = {0,0,0,{0}};
+  OMUniqueObjectIdentification result = nullOMUniqueObjectIdentification;
   // {FFFFFFFF-3B78-47ec-98DD-68AC60D2539E}
   static OMUniqueObjectIdentification id =
     {0xffffffff, 0x3b78, 0x47ec,
@@ -895,7 +895,7 @@ OMUniqueObjectIdentification createUniqueIdentifier(void)
 
 OMUniqueObjectIdentification createUniqueIdentifier(void)
 {
-  OMUniqueObjectIdentification result = {0,0,0,{0}};
+  OMUniqueObjectIdentification result = nullOMUniqueObjectIdentification;
   CFUUIDRef ur = CFUUIDCreate(kCFAllocatorDefault);
   CFUUIDBytes ub = CFUUIDGetUUIDBytes(ur);
   memcpy(&result, &ub, sizeof(OMUniqueObjectIdentification));
@@ -911,7 +911,7 @@ extern "C" {
 
 OMUniqueObjectIdentification createUniqueIdentifier(void)
 {
-  OMUniqueObjectIdentification result = {0,0,0,{0}};
+  OMUniqueObjectIdentification result = nullOMUniqueObjectIdentification;
   uuid_t u;
   uuid_generate(u);
   memcpy(&result, &u, sizeof(OMUniqueObjectIdentification));
@@ -925,7 +925,7 @@ OMUniqueObjectIdentification createUniqueIdentifier(void)
 {
   TRACE("createUniqueIdentifier");
 
-  OMUniqueObjectIdentification result = {0,0,0,{0}};
+  OMUniqueObjectIdentification result = nullOMUniqueObjectIdentification;
   uint32_t status;
   uuid_t u;
   uuid_create(&u, &status);
