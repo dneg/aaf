@@ -93,6 +93,10 @@ SOURCE=..\..\..\Utilities\AafOmf\Aaf2Omf.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\Utilities\AafOmf\AAFException.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\Utilities\AafOmf\AafOmf.cpp
 # End Source File
 # Begin Source File
@@ -101,7 +105,23 @@ SOURCE=..\..\..\Utilities\AafOmf\EffectTranslate.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\Utilities\AafOmf\ExceptionBase.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Utilities\AafOmf\LoggerBase.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\Utilities\AafOmf\Omf2Aaf.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Utilities\AafOmf\OMFException.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Utilities\AafOmf\StreamLogger.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"
