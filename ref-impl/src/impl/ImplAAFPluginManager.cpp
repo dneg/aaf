@@ -1,19 +1,24 @@
 /************************************************\
-*												*
-* Advanced Authoring Format						*
-*												*
-* Copyright (c) 1998-1999 Avid Technology, Inc. *
-* Copyright (c) 1998-1999 Microsoft Corporation *
-*												*
+*	                                               *
+* Advanced Authoring Format                      *
+*                                                *
+* Copyright (c) 1998-1999 Avid Technology, Inc.  *
+* Copyright (c) 1998-1999 Microsoft Corporation  *
+*                                                *
 \************************************************/
+
+#ifndef __ImplAAFPluginManager_h__
+#include "ImplAAFPluginManager.h"
+#endif
 
 #ifndef __ImplEnumAAFLoadedPlugins_h__
 #include "ImplEnumAAFLoadedPlugins.h"
 #endif
 
-#ifndef __ImplAAFPluginManager_h__
-#include "ImplAAFPluginManager.h"
+#ifndef __ImplAAFPluginFile_h__
+#include "ImplAAFPluginFile.h"
 #endif
+
 
 #include "ImplAAFContext.h"
 #include "ImplAAFDictionary.h"
@@ -27,20 +32,30 @@
 #include "aafErr.h"
 #include "ImplAAFObjectCreation.h"
 
-extern "C" const IID IID_IAAFEssenceStream = { 0x83402902, 0x9146, 0x11d2, { 0x80, 0x88, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
-extern "C" const IID IID_IAAFEssenceCodec = { 0x3631F7A2, 0x9121, 0x11D2, { 0x80, 0x88, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
-//extern "C" const IID IID_IAAFEssenceSampleStream = { 0x63E12802, 0xCCE5, 0x11D2, { 0x80, 0x98, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } };
-extern "C" const IID IID_IAAFEssenceContainer = {0xa7337031,0xc103,0x11d2,{0x80,0x8a,0x00,0x60,0x08,0x14,0x3e,0x6f}};
-extern "C" const IID IID_IAAFPlugin = {0x3631F7A4,0x9121,0x11d2,{0x80,0x88,0x00,0x60,0x08,0x14,0x3e,0x6f}};
-extern "C" const IID IID_IAAFEssenceDataStream = {0xCDDB6AB1,0x98DC,0x11d2,{0x80,0x8a,0x00,0x60,0x08,0x14,0x3e,0x6f}};
-extern "C" const IID IID_IAAFInterpolator = {0x75C6CDF2,0x0D67,0x11d3,{0x80,0xA9,0x00,0x60,0x08,0x14,0x3e,0x6f}};
+#ifndef __AAFPlugin_h__
+#include "AAFPlugin.h"
+#endif
 
-const CLSID CLSID_AAFWaveCodec = { 0x8D7B04B1, 0x95E1, 0x11d2, { 0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
-const CLSID CLSID_AAFEssenceFileContainer = { 0xa7337030, 0xc103, 0x11d2, { 0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
-const CLSID CLSID_AAFBasicInterp = { 0x5B6C85A1, 0x0EDE, 0x11d3, { 0x80, 0xA9, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
+#include "AAFPlugin_i.c"
+
+
 extern "C" const aafClassID_t CLSID_EnumAAFLoadedPlugins;
 
+
+
+// Dispose proc for values in pluginFiles table.
+static void	ImplAAFPluginFileDisposeProc(void *valuePtr)
+{
+  if (valuePtr)
+	{
+		ImplAAFPluginFile *pPluginFile = (ImplAAFPluginFile *)valuePtr;
+    pPluginFile->ReleaseReference();
+	}
+}
+
+
 ImplAAFPluginManager::ImplAAFPluginManager () :
+  _pluginFiles(0),
   _plugins(0),
 	_codecDesc(0)
 {}
@@ -58,6 +73,25 @@ ImplAAFPluginManager::~ImplAAFPluginManager ()
   {
 	  TableDispose(_codecDesc);
 	  _codecDesc = 0;
+  }
+
+  if (_pluginFiles)
+  {
+		// We need to cleanup the elements in the list manually.
+		aafBool found = AAFFalse;
+		aafTableIterate_t iter = {0};
+	  AAFRESULT status = ::TableFirstEntry(_pluginFiles, &iter, &found);
+		while((AAFRESULT_SUCCESS == status) && found)
+		{
+			::ImplAAFPluginFileDisposeProc(iter.valuePtr);
+			iter.valuePtr = NULL;
+
+			::TableNextEntry(&iter,&found);
+		}
+
+
+	  TableDispose(_pluginFiles);
+	  _pluginFiles = 0;
   }
 }
 
@@ -86,21 +120,87 @@ AAFRESULT STDMETHODCALLTYPE
 	return(AAFRESULT_SUCCESS);
 }
 
+
+
 AAFRESULT ImplAAFPluginManager::Init(void)
 {
+	// SEE HACK below...
+	const CLSID CLSID_AAFEssenceDataStream = 
+	{ 0x42A63FE1, 0x968A, 0x11d2, { 0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
+
+
+	// Currently the names of the standard plugins are hardcoded.
+	// The next version will search a "known directory" for all
+	// for all files where ImplAAFPluginFile::CreatePluginFile succeeds
+	// (i.e. all files that can be loaded as a shared library and 
+	// contains all of the expected exported functions.)
+	const char *pluginFileNames[] = 
+	{
+#if defined(_WIN32) || defined(WIN32)
+		"AAFPGAPI.DLL",
+		"AAFINTP.DLL",
+#elif defined(macintosh) || defined(_MAC)
+		"AAFPGAPI.DLL (PPC)",
+		"AAFINTP.DLL (PPC)",
+#else
+		"aafpgapi.so",
+		"aafintp.so",
+#endif
+		NULL
+	};
+	ImplAAFPluginFile *pPluginFile = NULL;
+
+
 	XPROTECT()
 	{
+		CHECK(NewUIDTable(NULL, 20, &_pluginFiles));
 		CHECK(NewUIDTable(NULL, 20, &_plugins));
 		CHECK(NewUIDTable(NULL, 20, &_codecDesc));
 		//!!! Here is where we should check the registry in a loop
 		// looking for plugins to load
 		// for each plugin found
 		//	RegisterPlugin()
-		CHECK(RegisterPlugin(CLSID_AAFEssenceFileContainer));
-		CHECK(RegisterPlugin(CLSID_AAFWaveCodec));
-		CHECK(RegisterPlugin(CLSID_AAFBasicInterp));
+		
+		for (int pluginIndex = 0; pluginFileNames[pluginIndex]; ++pluginIndex)
+		{
+			ULONG classIDs = 0, index = 0;
+			CLSID classID;
+			CHECK(ImplAAFPluginFile::CreatePluginFile(pluginFileNames[pluginIndex], &pPluginFile));
+			classIDs = pPluginFile->GetClassCount();
+			for (index = 0; index < classIDs; ++index)
+			{
+				CHECK(pPluginFile->GetClassObjectID(index, &classID));
+
+				// Save the classID -> plugin file association.
+				CHECK(TableAddValuePtr(
+						_pluginFiles,
+						&classID,
+						sizeof(CLSID),
+						pPluginFile,
+						kAafTableDupError));
+				
+				// We are saving a reference to the plugin file so bump its reference count.
+				pPluginFile->AcquireReference();
+
+				// Now attempt to register this class id for the current plugin file.
+				// HACK: Problem CAAFEssenceDataStream is NOT a plugin!
+				if (!IsEqualCLSID(CLSID_AAFEssenceDataStream, classID))
+					CHECK(RegisterPlugin(classID));
+			}
+
+			pPluginFile->ReleaseReference();
+			pPluginFile = NULL;
+		}
+
+//		CHECK(RegisterPlugin(CLSID_AAFEssenceFileContainer));
+//		CHECK(RegisterPlugin(CLSID_AAFWaveCodec));
+//		CHECK(RegisterPlugin(CLSID_AAFBasicInterp));
 	}
 	XEXCEPT
+	{
+		if (pPluginFile)
+			pPluginFile->ReleaseReference();
+	}
 	XEND
 
 	return AAFRESULT_SUCCESS;
@@ -112,6 +212,40 @@ ImplAAFPluginManager *ImplAAFPluginManager::GetPluginManager()
 
 	return(ImplAAFContext::GetInstance()->GetPluginManager());
 }
+
+
+AAFRESULT ImplAAFPluginManager::CreateInstance(REFCLSID rclsid, IUnknown* pUnkOuter, REFIID riid, void ** result)
+{
+	AAFRESULT rc = AAFRESULT_SUCCESS;
+	ImplAAFPluginFile *pPluginFile = (ImplAAFPluginFile *)::TableLookupPtr(_pluginFiles, (void *)&rclsid);
+
+	if (NULL == pPluginFile)
+		rc = AAFRESULT_CODEC_INVALID;
+	else
+	{
+		// The reference implementation must be "self-contained". We do
+		// not want any user supplied classes to be created and used
+		// instead on one our built-in classes.
+		//
+		// The simplest change is to just simulate a call to 
+		// CoCreateInstance:
+		//
+		// This code is invoked within the current module so we
+		// should just be able to call the DllGetClassObject entry point
+		// instead of calling CoCreateInstance and searching the 
+		// registry.
+		IClassFactory *pFactory = NULL;
+		rc = pPluginFile->GetClassObject(rclsid, IID_IClassFactory, (void **)&pFactory);
+		if (SUCCEEDED(rc))
+		{
+			rc = pFactory->CreateInstance(pUnkOuter, riid, (void **)result);
+			pFactory->Release();
+		}
+	}
+
+	return rc;
+}
+
 
 AAFRESULT ImplAAFPluginManager::GetPluginInstance(
 			aafUID_t		pluginID,
@@ -125,9 +259,8 @@ AAFRESULT ImplAAFPluginManager::GetPluginInstance(
 		TableUIDLookupBlock(_plugins, pluginID, sizeof(CLSID), &codecCLSID, &found);
 		if(!found)
 			return(AAFRESULT_CODEC_INVALID);
-		CHECK(CoCreateInstance(codecCLSID,
+		CHECK(CreateInstance(codecCLSID,
 			NULL, 
-			CLSCTX_INPROC_SERVER, 
 			IID_IAAFPlugin, 
 			(void **)result));
 	}
@@ -150,9 +283,8 @@ AAFRESULT ImplAAFPluginManager::MakeCodecFromEssenceDesc(
 		TableUIDLookupBlock(_codecDesc, essenceDescriptor, sizeof(CLSID), &codecCLSID, &found);
 		if(!found)
 			return(AAFRESULT_CODEC_INVALID);
-		CHECK(CoCreateInstance(codecCLSID,
+		CHECK(CreateInstance(codecCLSID,
                NULL, 
-               CLSCTX_INPROC_SERVER, 
                IID_IAAFEssenceCodec, 
                (void **)codec));
 	}
@@ -170,9 +302,8 @@ AAFRESULT ImplAAFPluginManager::RegisterPlugin(CLSID pluginClass)
 
 	XPROTECT()
 	{
-		CHECK(CoCreateInstance(pluginClass,
+		CHECK(CreateInstance(pluginClass,
                NULL, 
-               CLSCTX_INPROC_SERVER, 
                IID_IAAFPlugin, 
                (void **)&plugin));
 		CHECK(plugin->GetIndexedDefinitionID(/*!!!*/0, &uid));
@@ -185,7 +316,14 @@ AAFRESULT ImplAAFPluginManager::RegisterPlugin(CLSID pluginClass)
 		if(plugin->QueryInterface(IID_IAAFEssenceCodec, (void **)&codec) == AAFRESULT_SUCCESS)
 		{
 			CHECK(codec->GetEssenceDescriptorID(&uid));
-			CHECK(TableAddUIDBlock(_codecDesc, uid, &pluginClass, sizeof(CLSID), kAafTableDupError));
+
+			CHECK(TableAddUIDBlock(
+				_codecDesc,
+				uid,
+				&pluginClass,
+				sizeof(CLSID),
+				kAafTableDupError));
+			
 			codec->Release();
 			codec = NULL;
 		}
@@ -283,12 +421,10 @@ AAFRESULT
 	}
 	XEXCEPT
 	{
-		if(plugin)
-			plugin->Release();
 		if(desc)
 			desc->Release();
-		if(iUnk)
-			iUnk->Release();
+		if(plugin)
+			plugin->Release();
 		if(iDictionary)
 			iDictionary->Release();
 	}
