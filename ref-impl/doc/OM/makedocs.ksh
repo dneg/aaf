@@ -10,14 +10,6 @@
 #
 ADROOT="../bin"
 #
-# The autoduck program
-#
-ADEXEC="${ADROOT}/autoduck.exe"
-#
-# The standard autoduck html format
-#
-ADHTML="${ADROOT}/html.fmt"
-#
 # The Object Manager autoduck directory
 #
 OMDOC=doc/OM
@@ -25,6 +17,14 @@ OMDOC=doc/OM
 # The Object Manager sources
 #
 SRC="src/OM/*.cpp src/OM/*.h include/OM/*.h"
+#
+# The autoduck program
+#
+ADEXEC="${ADROOT}/autoduck.exe"
+#
+# The standard autoduck html format
+#
+ADHTML="${ADROOT}/html.fmt"
 #
 # Extract both the internal and external documentation
 #
