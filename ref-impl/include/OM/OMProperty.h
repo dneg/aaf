@@ -414,6 +414,19 @@ public:
     //          address <p value> into the <c OMVariableSizeProperty>.
   void setValue(const PropertyType* value, size_t valueSize);
 
+    // @cmember Get the value of the item at position <p index> in this
+    //          <c OMVariableSizeProperty>. The value is obtained by copying
+    //          a single item of type PropertyType from this
+    //          <c OMVariableSizeProperty> at position <p index>.
+    //   @this const
+  void getValueAt(PropertyType* value, const size_t index) const;
+
+    // @cmember Set the value of the item at position <p index> in this
+    //          <c OMVariableSizeProperty>. The value is set by copying
+    //          a single item of type PropertyType into this
+    //          <c OMVariableSizeProperty> at position <p index>.
+  void setValueAt(const PropertyType* value, const size_t index);
+
     // @cmember Get the value of this <c OMvariableSizeProperty>.  The
     //          value is obtained by copying the value from the
     //          <c OMVariableSizeProperty>. The buffer is at address
@@ -425,6 +438,10 @@ public:
     // @cmember Restore this <c OMVariableSizeProperty>, the size of
     //          the <c OMVariableSizeProperty> is <p size>.
   virtual void restore(size_t size);
+
+    // @cmember The number of items in this this <c OMVariableSizeProperty>.
+    //   @this const 
+  size_t count(void) const;
 
 };
 
