@@ -350,6 +350,31 @@ AD_XMETHOD1(CountOpaqueTypeDefs,
   // AAFRESULT_NULL_PARAM
   //   - pResult is null.)
 
+AD_XMETHOD2(RegisterKLVDataKey,
+
+			[in],
+			objPass,
+			aafUID_t,
+			pUID,
+			Key to define,
+
+			[in],
+			objIn,
+			AAFTypeDef,
+			pTypeDef,
+			Type Definition Object,
+
+     Add the definition for the given KLV key to the runtime dictionary.
+  // The pTypeDef will often be kAAFTypeID_UInt8Array\,
+  // but may be something else.  // 
+  // Succeeds if:
+  // - The pTypeDef pointer is valid.
+  // - the definition is not already been registered with RegisterTypeDef.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pTypeDef\)
+  //
+  // AAFRESULT_INVALID_PARAM
+  //   - The given type has already been registered.)
 
 AD_XMETHOD1(RegisterDataDef,
 
