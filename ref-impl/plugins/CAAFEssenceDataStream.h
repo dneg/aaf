@@ -17,14 +17,6 @@
 #endif
 
 
-
-
-
-
-#ifndef __CAAFDefaultStream_h__
-#include "CAAFDefaultStream.h"
-#endif
-
 #ifndef __CAAFUnknown_h__
 #include "CAAFUnknown.h"
 #endif
@@ -36,8 +28,9 @@ interface IAAFEssenceData;
 EXTERN_C const CLSID CLSID_AAFEssenceDataStream;
 
 class CAAFEssenceDataStream
-  : public CAAFDefaultStream,
-  public IAAFEssenceDataStream
+  : public IAAFEssenceDataStream,
+    public IAAFEssenceStream,
+    public CAAFUnknown
 {
 protected:
 
@@ -45,13 +38,23 @@ protected:
   //
   // Constructor/destructor
   //
-  CAAFEssenceDataStream (IUnknown * pControllingUnknown, aafBool doInit = AAFTrue);
+  CAAFEssenceDataStream (IUnknown * pControllingUnknown);
   virtual ~CAAFEssenceDataStream ();
 
 public:
+  //
+  // IAAFEssenceDataStream methods.
+  //
+
+  // Initialize this instance with an IAAFEssenceData interface pointer
+  // ba calling QueryInterface on the given IUnknown pointer.
   STDMETHOD (Init)
             (/* [in] */ IUnknown *essenceData);
 
+  
+  //
+  // IAAFEssenceStream methods.
+  //
 
   // Write some number of bytes to the stream exactly and with no formatting or compression.
   STDMETHOD (Write)
@@ -96,6 +99,13 @@ public:
     (/*[in]*/ aafInt32  itsSize); // The size of the cache buffer. 
 
 
+  
+  //
+  // IUnknown methods. (Macro defined in CAAFUnknown.h)
+  //
+
+  AAF_DECLARE_STANDARD_UNKNOWN()
+
 protected:
   // 
   // Declare the QI that implements for the interfaces
@@ -106,17 +116,14 @@ protected:
 
 public:
   //
-  // This class as concrete. All AAF objects can be constructed from
+  // This class as concrete. All objects can be constructed from
   // a CLSID. This will allow subclassing all "base-classes" by
   // aggreggation.
   // 
-  AAF_DECLARE_CONCRETE();
+  AAF_DECLARE_FACTORY();
   //
-  //********
 
-  // Declare the module test method. The implementation of the will be be
-  // in /test/CAAFEssenceStreamTest.cpp.
-  static HRESULT test();
+
 private:
 	IAAFEssenceData		*_data;
 };
