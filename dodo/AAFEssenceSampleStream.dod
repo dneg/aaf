@@ -14,13 +14,6 @@ AAFRoot\
 #c
 #c #import ./AAFObject.exp
 AD_HEAD
-/************************************************\
-*												*
-* Advanced Authoring Format						*
-*												*
-* Copyright (c) 1998-1999 Avid Technology, Inc.	*
-*												*
-\************************************************/
 
 // AAFEssenceSampleStream provides a sample-based stream for accessing essence data in
 // its raw form.   For example to read or write JFIF data as opposed to the decompressed
