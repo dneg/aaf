@@ -18,6 +18,10 @@ ADEXEC="${ADROOT}/autoduck.exe"
 #
 ADHTML="${ADROOT}/html.fmt"
 #
+# The Object Manager autoduck directory
+#
+OMDOC=doc/OM
+#
 # The Object Manager sources
 #
 SRC="src/*.cpp src/*.h"
@@ -28,12 +32,12 @@ FLAGS="OMEXTERNAL | OMINTERNAL"
 #
 # The generated html file
 #
-OUTPUT=docs/ObjectManager.html
+OUTPUT=${OMDOC}/ObjectManager.html
 #
 # Customized files
 #
-OMHTML="docs/html.fmt"
-OMCONT="docs/contents.d"
+OMHTML=${OMDOC}/html.fmt
+OMCONT=${OMDOC}/contents.d
 #
 "${ADEXEC}" /x "${FLAGS}" /s ${OMHTML} /o ${OUTPUT} /r html /f "${ADHTML}" ${SRC} ${OMCONT}
 #
