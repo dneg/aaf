@@ -459,11 +459,36 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDefRecord::GetStruct (
-      ImplAAFPropertyValue * /*pPropVal*/,
-      aafMemPtr_t  /*pData*/,
-      aafUInt32  /*dataSize*/)
+      ImplAAFPropertyValue * pPropVal,
+      aafMemPtr_t pData,
+      aafUInt32 dataSize)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  if (! pPropVal)
+	return AAFRESULT_NULL_PARAM;
+  if (! pData)
+	return AAFRESULT_NULL_PARAM;
+
+  // Bobt hack implementation! Not platform-independent!
+  aafUInt32 bitsSize = 0;
+  ImplAAFPropValData * pvd = 0;
+  assert (pPropVal);
+  pvd = dynamic_cast<ImplAAFPropValData*>(pPropVal);
+  assert (pvd);
+  AAFRESULT hr;
+  hr = pvd->GetBitsSize (&bitsSize);
+  if (AAFRESULT_FAILED(hr))
+	return hr;
+  if (dataSize < bitsSize)
+	return AAFRESULT_ILLEGAL_VALUE;
+
+  aafMemPtr_t pBits;
+  hr = pvd->GetBits (&pBits);
+  if (AAFRESULT_FAILED(hr))
+	return hr;
+
+  // Bobt hack!!! should be registered size, not bitsSize.
+  memcpy (pData, pBits, bitsSize);
+  return AAFRESULT_SUCCESS;
 }
 
 
@@ -553,11 +578,36 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDefRecord::SetStruct (
-      ImplAAFPropertyValue * /*pPropVal*/,
-      aafMemPtr_t  /*pData*/,
-      aafUInt32  /*dataSize*/)
+      ImplAAFPropertyValue * pPropVal,
+      aafMemPtr_t pData,
+      aafUInt32 dataSize)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  if (! pPropVal)
+	return AAFRESULT_NULL_PARAM;
+  if (! pData)
+	return AAFRESULT_NULL_PARAM;
+
+  // Bobt hack implementation! Not platform-independent!
+  aafUInt32 bitsSize = 0;
+  ImplAAFPropValData * pvd = 0;
+  AAFRESULT hr;
+  assert (pPropVal);
+  pvd = dynamic_cast<ImplAAFPropValData*>(pPropVal);
+  assert (pvd);
+  hr = pvd->GetBitsSize (&bitsSize);
+  if (AAFRESULT_FAILED(hr))
+	return hr;
+  if (dataSize > bitsSize)
+	return AAFRESULT_ILLEGAL_VALUE;
+
+  aafMemPtr_t pBits;
+  hr = pvd->GetBits (&pBits);
+  if (AAFRESULT_FAILED(hr))
+	return hr;
+
+  // Bobt hack!!! should be registered size, not bitsSize.
+  memcpy (pBits, pData, bitsSize);
+  return AAFRESULT_SUCCESS;
 }
 
 
