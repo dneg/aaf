@@ -31,8 +31,6 @@
 // AAF type definition UIDs.
 //
 
-#define TYPE_GUID_NAME(type) kAAFTypeID_##type
-
 //{01010100-0000-0000-060e-2b3401040101}
 const aafUID_t kAAFTypeID_UInt8 =
 {0x01010100, 0x0000, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x04, 0x01, 0x01}};
