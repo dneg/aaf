@@ -209,7 +209,6 @@ TARGET_H_FILES = \
 	$(AAFSDK_INCLUDE)/AAFExtEnum.h \
 	$(AAFSDK_INCLUDE)/AAFFileKinds.h \
 	$(AAFSDK_INCLUDE)/AAFFileMode.h \
-	$(AAFSDK_INCLUDE)/AAFFileSignatures.h \
 	$(AAFSDK_INCLUDE)/AAFInterpolatorDefs.h \
 	$(AAFSDK_INCLUDE)/AAFMetaDictionary.h \
 	$(AAFSDK_INCLUDE)/AAFOperationCategories.h \
