@@ -109,6 +109,11 @@ static void convert(char* cName, size_t length, const wchar_t* name)
 	}
 }
 
+static bool operator == (const aafUID_t a, const aafUID_t b)
+{
+	return memcmp(&a, &b, sizeof(a)) == 0;
+}
+
 const aafUID_t NIL_UID = { 0, 0, 0, { 0, 0, 0, 0, 0, 0, 0, 0 } };
 
 static char *input_video = NULL;
@@ -179,9 +184,26 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, aafUID_t container)
 
 	// Locator needed for non-embedded essence
 	CAAFBuiltinDefs defs(pDictionary);
-	check(defs.cdNetworkLocator()->CreateInstance(IID_IAAFLocator, (IUnknown **)&pLocator));		
-	check(pLocator->SetPath(L"Laser.wav"));
-	remove("Laser.wav");
+	check(defs.cdNetworkLocator()->CreateInstance(IID_IAAFLocator, (IUnknown **)&pLocator));
+	if (container == NIL_UID)
+	{
+		pLocator = NULL;
+	}
+	else if (container == ContainerAAF)
+	{
+		check(pLocator->SetPath(L"Laser.aaf"));
+		remove("Laser.aaf");
+	}
+	else if (container == ContainerFile)
+	{
+		check(pLocator->SetPath(L"Laser.pcm"));
+		remove("Laser.pcm");
+	}
+	else	// RIFFWAVE container
+	{
+		check(pLocator->SetPath(L"Laser.wav"));
+		remove("Laser.wav");
+	}
 
 	// Get a pointer to video data for WriteSamples
 	unsigned char *dataPtr, buf[4096];
@@ -196,7 +218,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, aafUID_t container)
 						sampleRate,				// sample rate
 						kAAFCompressionDisable,
 						pLocator,				// Locator
-						container,				// Container
+						container,			// Container
 						&pEssenceAccess));		//
 
 	pEssenceAccess->SetEssenceCodecFlavour( kAAFNilCodecFlavour );
@@ -299,20 +321,21 @@ static HRESULT RegisterRequiredPlugins(void)
 
 void printUsage(const char *progname)
 {
-	cout << "Usage : " << progname << " [-file|-AAF]" << endl;
+	cout << "Usage : " << progname << " [-File|-AAF]" << endl;
 	cout << endl;
 	cout << "\tWith no arguments creates ExportPCM.aaf containing Laser audio samples" << endl;
 	cout << "\tand creates external BWF file Laser.wav" << endl;
 	cout << endl;
-	cout << "\t-file  use ContainerFile instead of ContainerRIFFWAVE" << endl;
-	cout << "\t-aaf   use ContainerAAF instead of ContainerRIFFWAVE" << endl;
+	cout << "\t-File   use ContainerFile instead of ContainerRIFFWAVE" << endl;
+	cout << "\t-AAF    use ContainerAAF instead of ContainerRIFFWAVE" << endl;
+	cout << "\t-embed  store embedded essence in ExportPCM.aaf (no external file)" << endl;
 	cout << endl;
 }
 
 extern int main(int argc, char *argv[])
 {
 	aafUID_t		container = ContainerRIFFWAVE;
-	aafWChar *		pwFileName	= L"ExportPCM.aaf";
+	aafWChar		*pwFileName	= L"ExportPCM.aaf";
 
 	int i = 1;
 	if (argc > 1)
@@ -324,14 +347,19 @@ extern int main(int argc, char *argv[])
 				printUsage(argv[0]);
 				return 0;
 			}
-			else if (!strcmp(argv[i], "-file"))
+			else if (!strcmp(argv[i], "-File"))
 			{
 				container = ContainerFile;
 				i++;
 			}
-			else if (!strcmp(argv[i], "-aaf"))
+			else if (!strcmp(argv[i], "-AAF"))
 			{
 				container = ContainerAAF;
+				i++;
+			}
+			else if (!strcmp(argv[i], "-embed"))
+			{
+				container = NIL_UID;
 				i++;
 			}
 			else
@@ -344,7 +372,6 @@ extern int main(int argc, char *argv[])
 
 	// Make sure all of our required plugins have been registered.
 	checkFatal(RegisterRequiredPlugins());
-
 
 	checkFatal(CreateAAFFile(pwFileName, container));
 
