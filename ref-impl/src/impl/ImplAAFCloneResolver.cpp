@@ -125,16 +125,3 @@ void ImplAAFCloneResolver::CloneClassDef( const OMClassId& id,
 }
 
 //=---------------------------------------------------------------------=
-
-bool operator==( const aafMobID_t& lhs, const aafMobID_t& rhs )
-{
-   return (memcmp( &rhs, &lhs, sizeof(aafMobID_t) ) == 0) ? true : false;
-}
-
-bool operator==( const aafUID_t& lhs, const aafUID_t& rhs )
-{
-   return (memcmp( &rhs, &lhs, sizeof(aafUID_t) ) == 0) ? true : false;
-}
-
-//=---------------------------------------------------------------------=
-

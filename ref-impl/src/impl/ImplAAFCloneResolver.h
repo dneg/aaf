@@ -26,6 +26,7 @@
 #define __ImplAAFCloneResolver_h__
 
 #include "AAFResult.h"
+#include "AAFUtils.h"
 
 #include "ImplAAFDictionary.h"
 #include "ImplAAFMetaDictionary.h"
@@ -91,12 +92,6 @@ template <class Type>
 HRESULT ImplAAFCloneResolverLookupDef( ImplAAFDictionary* pDict, const aafUID_t& auid, Type** pDef );
 template <class Type>
 HRESULT ImplAAFCloneResolverRegisterDef( ImplAAFDictionary* pDict, Type* ppDef );
-
-//=---------------------------------------------------------------------=
-
-// Required for OMVector
-bool operator==( const aafMobID_t& lhs, const aafMobID_t& rhs );
-bool operator==( const aafUID_t& lhs, const aafUID_t& rhs );
 
 //=---------------------------------------------------------------------=
 
