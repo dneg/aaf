@@ -42,10 +42,10 @@
 //
 // The following source files were used as input : 
 //
-// DictP18-277-1847BMaster.csv 
+// AAFMetaDict.csv 
 //
-// This file was generated on Tue Jul 16 15:11:23 EDT 2002
-// by user tjb on system tjb.avid.com.
+// This file was generated on Wed Feb 11 16:30:49 GMT 2004
+// by user phil on system pilot16.
 //
 // Key to macros.
 //
@@ -3566,7 +3566,7 @@ AAF_CLASS(MobSlot,
       0x0000, 0x0000,
       0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x02),
     0x4801,
-    AAF_TYPE(Int32),
+    AAF_TYPE(UInt32),
     true,
     false,
     MobSlot)
