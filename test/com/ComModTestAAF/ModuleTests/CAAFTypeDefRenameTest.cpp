@@ -151,9 +151,9 @@ static const 	aafMobID_t	TEST_MobID =
 // Function to check if property value has a specific type.
 static aafBool PropValTypeIs(IAAFPropertyValue *pPropVal,aafUID_t *pAUID)
 {
-	IAAFTypeDef *pTypeDef;
+	IAAFTypeDefSP pTypeDef;
 	checkResult(pPropVal->GetType(&pTypeDef));
-	IAAFMetaDefinition *pMetaDef;
+	IAAFMetaDefinitionSP pMetaDef;
 	checkResult(pTypeDef->QueryInterface(IID_IAAFMetaDefinition,
 		(void**)&pMetaDef));
 	aafUID_t PropValAUID;
