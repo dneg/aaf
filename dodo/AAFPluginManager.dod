@@ -22,9 +22,7 @@ AD_IDL(//
 //     operation.
 //)
 
-AD_FORWARD_DECLARATION(EnumAAFPropertyDefs)
-AD_FORWARD_DECLARATION(AAFPropertyDef)
-AD_FORWARD_DECLARATION(AAFDefObject)
+AD_FORWARD_DECLARATION(EnumAAFLoadedPlugins)
 
 /******************************************\
 *                                          *

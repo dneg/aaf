@@ -33,7 +33,8 @@ AD_IDL(//
 *                                          *
 \******************************************/
 
- 
+AD_FORWARD_DECLARATION(AAFPluginDescriptor)
+
 /***********************************************\
 *	Stub only.   Implementation not yet added	*
 \***********************************************/
