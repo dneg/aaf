@@ -52,6 +52,8 @@ public:
 
 	AxString GenerateNameList();
 
+	void Add( AxString name, const Type& val );
+
 private:
 
 	ParamMap();

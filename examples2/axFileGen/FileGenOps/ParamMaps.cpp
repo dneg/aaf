@@ -91,6 +91,13 @@ AxString ParamMap<Type,Tag>::GenerateNameList()
 	return listAsString;
 }
 
+template <class Type, class Tag>
+void ParamMap<Type,Tag>::Add( AxString name, const Type& val )
+{
+	// If _map[name] exists, the old value is simply replaced.
+	// This is intentional.
+	_map[name] = val;
+}
 
 //=---------------------------------------------------------------------=
 //=---------------------------------------------------------------------=
