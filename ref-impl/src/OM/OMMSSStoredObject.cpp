@@ -339,13 +339,15 @@ void OMMSSStoredObject::close(OMFile& file)
   close();
 
   if (file.isWritable()) {
-    OMFileSignature signature = file.signature();
-    OMRawStorage* store = file.rawStorage();
-    if (store != 0) {
-      writeSignature(store, signature);
-    } else {
-      const wchar_t* fileName = file.fileName();
-      writeSignature(fileName, signature);
+    if (file.isValid()) {
+      OMFileSignature signature = file.signature();
+      OMRawStorage* store = file.rawStorage();
+      if (store != 0) {
+        writeSignature(store, signature);
+      } else {
+        const wchar_t* fileName = file.fileName();
+        writeSignature(fileName, signature);
+      }
     }
   }
 }
