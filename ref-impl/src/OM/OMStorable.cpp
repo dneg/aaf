@@ -13,7 +13,8 @@
 
 OMStorable::OMStorable(void)
 : _persistentProperties(), _containingObject(0), _name(0),
-  _pathName(0), _containingProperty(0), _key(0), _store(0)
+  _pathName(0), _containingProperty(0), _key(0), _store(0),
+  _classFactory(0)
 {
   TRACE("OMStorable::OMStorable");
   _persistentProperties.setContainer(this);
@@ -95,8 +96,10 @@ OMStorable* OMStorable::restoreFrom(const OMStorable* containingObject,
   OMClassId cid;
   s.restore(cid);
   OMFile* f = containingObject->file();
-  OMStorable* object = f->classFactory()->create(cid);
+  const OMClassFactory* classFactory = f->classFactory();
+  OMStorable* object = classFactory->create(cid);
   ASSERT("Registered class id", object != 0);
+  ASSERT("Valid class factory", classFactory == object->classFactory());
   // give the object a parent, no orphans allowed
   object->setContainingObject(containingObject);
   // give the object a name, all new objects need a name and so here
@@ -309,6 +312,32 @@ OMPropertySet* OMStorable::propertySet(void)
   TRACE("OMStorable::propertySet");
 
   return &_persistentProperties;
+}
+
+  // @mfunc The <c OMClassFactory> that created this object.
+  //   @rdesc The <c OMClassFactory> that created this object.
+  //   @this const
+OMClassFactory* OMStorable::classFactory(void) const
+{
+  TRACE("OMStorable::classFactory");
+  PRECONDITION("Valid class factory", _classFactory != 0);
+
+  return const_cast<OMClassFactory*>(_classFactory);
+}
+
+  // @mfunc Inform this <c OMStorable> of the <c OMClassFactory>
+  //      that was used to create it.
+  //   @parm The <c OMClassFactory> that was used to create
+  //         this <c OMStorable>.
+void OMStorable::setClassFactory(const OMClassFactory* classFactory)
+{
+  TRACE("OMStorable::setClassFactory");
+  PRECONDITION("Valid class factory", classFactory != 0);
+  PRECONDITION("No previous valid class factory", _classFactory == 0);
+
+  _classFactory = classFactory;
+
+  POSTCONDITION("Valid class factory", _classFactory != 0);
 }
 
 char* OMStorable::makePathName(void)
