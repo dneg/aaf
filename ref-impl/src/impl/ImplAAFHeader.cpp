@@ -486,7 +486,7 @@ AAFRESULT STDMETHODCALLTYPE
   while (AAFRESULT_SUCCEEDED (pEnumIds->NextOne (&pTestId)))
 	{
 	  aafUID_t testGen;
-	  hr = pTestId->GetGeneration (&testGen);
+	  hr = pTestId->GetGenerationID (&testGen);
 	  if (AAFRESULT_FAILED (hr)) return hr;
 	  if (EqualAUID (&testGen, &generation))
 		{
