@@ -3,7 +3,28 @@ Microsoft Developer Studio Workspace File, Format Version 6.00
 
 ###############################################################################
 
-Project: "aaf2xtl"=aaf2xtl\aaf2xtl.dsp - Package Owner=<4>
+Project: "aaf2xtl"=.\aaf2xtl\aaf2xtl.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name aif2xtllib
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name aiflib
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name aifsantefelib
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "aif2xtllib"=.\aif2xtllib\aif2xtllib.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -15,7 +36,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "aif2xtllib"=aif2xtllib\aif2xtllib.dsp - Package Owner=<4>
+Project: "aiflib"=.\aiflib\aiflib.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -27,19 +48,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "aifsantefelib"=aifsantefelib\aifsantefelib.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "aiflib"=aiflib\aiflib.dsp - Package Owner=<4>
+Project: "aifsantefelib"=.\aifsantefelib\aifsantefelib.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
