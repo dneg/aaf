@@ -44,15 +44,15 @@ aafobjects.all : \
 
 $(INCLUDE_DIR)/com-api/aafobjects.mk : aafobjects.mk
 	$(SH_PREFIX) $(RM) -f $(INCLUDE_DIR)/com-api/aafobjects.mk $(SH_SUFFIX)
-	$(SH_PREFIX) cp -p aafobjects.mk $(INCLUDE_DIR)/com-api $(SH_SUFFIX)
+	$(SH_PREFIX) cp -m aafobjects.mk $(INCLUDE_DIR)/com-api $(SH_SUFFIX)
 
 $(SRC_DIR)/com-api/aafobjects.mk : aafobjects.mk
 	$(SH_PREFIX) $(RM) -f $(SRC_DIR)/com-api/aafobjects.mk $(SH_SUFFIX)
-	$(SH_PREFIX) cp -p aafobjects.mk $(SRC_DIR)/com-api $(SH_SUFFIX)
+	$(SH_PREFIX) cp -m aafobjects.mk $(SRC_DIR)/com-api $(SH_SUFFIX)
 
 $(SRC_DIR)/cpp-api/aafobjects.mk : aafobjects.mk
 	$(SH_PREFIX) $(RM) -f $(SRC_DIR)/cpp-api/aafobjects.mk $(SH_SUFFIX)
-	$(SH_PREFIX) cp -p aafobjects.mk $(SRC_DIR)/cpp-api $(SH_SUFFIX)
+	$(SH_PREFIX) cp -m aafobjects.mk $(SRC_DIR)/cpp-api $(SH_SUFFIX)
 
 
 
