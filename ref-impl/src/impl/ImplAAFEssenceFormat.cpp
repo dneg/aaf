@@ -35,7 +35,8 @@ ImplAAFEssenceFormat::~ImplAAFEssenceFormat ()
 
 	for(n = 0; n < _elemUsed; n++)
 	{
-		delete _elements[n].parmValue;
+		if(_elements[n].parmValue != NULL)
+			delete _elements[n].parmValue;
 	}
 	delete _elements;
 }
@@ -70,6 +71,8 @@ AAFRESULT STDMETHODCALLTYPE
 			parm->parmValue = new unsigned char[valueSize];
 			memcpy(parm->parmValue, value, valueSize);
 		}
+		else
+			parm->parmValue = NULL;
 		parm->valueSize = valueSize;
 		parm->allocSize = valueSize;
 		parm->parmName = essenceFormatCode;
@@ -84,12 +87,15 @@ AAFRESULT STDMETHODCALLTYPE
 				parm->parmValue = new unsigned char[valueSize];
 				memcpy(parm->parmValue, temp, valueSize);
 			}
+			else
+				parm->parmValue = NULL;
 			parm->allocSize = valueSize;
 			
 			if(temp != NULL)
 				delete temp;
 		}
-		memcpy(parm->parmValue, value, valueSize);
+		if(parm->parmValue != NULL && valueSize != 0)
+			memcpy(parm->parmValue, value, valueSize);	//!!!
 		parm->valueSize = valueSize;
 	}
 
@@ -116,7 +122,8 @@ AAFRESULT STDMETHODCALLTYPE
 	if((aafUInt32)bufSize < parm->valueSize)
 		return(AAFRESULT_SMALLBUF);
 
-	memcpy(value, parm->parmValue, parm->valueSize);
+	if(parm->parmValue != NULL && parm->valueSize != 0)
+		memcpy(value, parm->parmValue, parm->valueSize);//!!!
 	*bytesRead = parm->valueSize;
 
 	return AAFRESULT_SUCCESS;
@@ -149,7 +156,8 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 		if((aafUInt32)bufSize < _elements[index].valueSize)
 			return(AAFRESULT_SMALLBUF);
-		memcpy(value, _elements[index].parmValue, _elements[index].valueSize);
+		if(_elements[index].valueSize != 0)
+			memcpy(value, _elements[index].parmValue, _elements[index].valueSize);
 		*bytesRead = _elements[index].valueSize;
 	}		
 
