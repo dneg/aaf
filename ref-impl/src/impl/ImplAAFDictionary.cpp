@@ -165,8 +165,6 @@ ImplAAFDictionary::ImplAAFDictionary ()
   _persistentProperties.put(_dataDefinitions.address());
   _persistentProperties.put(_pluginDefinitions.address());
 
-  _pBuiltinTypes   = new ImplAAFBuiltinTypes (this);
-  _pBuiltinClasses = new ImplAAFBuiltinClasses (this);
 
   // Set the pointer to the current meta dictionary.
   // WARNING: this is (temporarily) recursive!
@@ -352,6 +350,9 @@ ImplAAFDictionary *ImplAAFDictionary::CreateDictionary(void)
     // by the OMClassFactory interface we just set the factory to "itself".
     //
     pDictionary->setClassFactory(pDictionary);
+
+  	pDictionary->_pBuiltinTypes   = new ImplAAFBuiltinTypes (pDictionary);
+	pDictionary->_pBuiltinClasses = new ImplAAFBuiltinClasses (pDictionary);
   }
   
   pDictionary->pvtSetSoid (AUID_AAFDictionary);
@@ -945,7 +946,6 @@ AAFRESULT STDMETHODCALLTYPE
 {
   ImplAAFTypeDefSP			typeDef;
   AAFRESULT					status;
-//	aafUID_t				foundUID;
 
   if (! ppTypeDef) return AAFRESULT_NULL_PARAM;
 

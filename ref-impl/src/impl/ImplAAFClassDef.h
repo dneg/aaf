@@ -32,7 +32,6 @@
 
 class ImplEnumAAFPropertyDefs;
 class ImplAAFDefObject;
-class ImplAAFTypeDef;
 class ImplAAFPropertyDef;
 
 #ifndef __ImplAAFMetaDefinition_h__
@@ -41,6 +40,10 @@ class ImplAAFPropertyDef;
 
 #ifndef __ImplAAFPropertyDef_h__
 #include "ImplAAFPropertyDef.h"
+#endif
+
+#ifndef __ImplAAFTypeDef_h__
+#include "ImplAAFTypeDef.h"
 #endif
 
 class ImplAAFClassDef : public ImplAAFMetaDefinition

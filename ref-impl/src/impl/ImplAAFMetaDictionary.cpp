@@ -482,7 +482,7 @@ AAFRESULT STDMETHODCALLTYPE
 {
   if (NULL == pTypeDef)
 	  return AAFRESULT_NULL_PARAM;
-  if (pTypeDef->attached())
+  if (attached() && pTypeDef->attached())
   {
     if (file() != pTypeDef->file())
       return AAFRESULT_OBJECT_ALREADY_ATTACHED;
