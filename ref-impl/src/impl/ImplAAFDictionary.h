@@ -44,6 +44,8 @@ class ImplAAFContainerDef;
 class ImplEnumAAFInterpolationDefs;
 
 class ImplAAFInterpolationDef;
+class ImplAAFPluginDescriptor;
+class ImplEnumAAFPluginDescriptors;
 
 #ifndef __ImplAAFObject_h__
 #include "ImplAAFObject.h"
@@ -302,6 +304,30 @@ public:
         // @parm [out,retval] Definition Enumeration
         (ImplEnumAAFInterpolationDefs ** ppEnum);
 
+  //****************
+  // RegisterPluginDescriptor()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    RegisterPluginDescriptor
+        (ImplAAFPluginDescriptor * pPluginDesc);
+
+  //****************
+  // LookupPluginDescriptor()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    LookupPluginDescriptor
+        (// @parm [in,ref] Interpolation Unique ID
+         aafUID_t *  InterpolationID,
+
+         ImplAAFPluginDescriptor ** ppPluginDesc);
+
+  //****************
+  // GetPluginDescriptors()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetPluginDescriptors
+        (ImplEnumAAFPluginDescriptors ** ppEnum);
+
 public:
   // Declare this class to be storable.
   //
@@ -356,6 +382,7 @@ private:
     OMStrongReferenceVectorProperty<ImplAAFClassDef>		_classDefinitions;
     OMStrongReferenceVectorProperty<ImplAAFInterpolationDef>	_interpolationDefinitions;
     OMStrongReferenceVectorProperty<ImplAAFDataDef>			_dataDefinitions;
+	OMStrongReferenceVectorProperty<ImplAAFPluginDescriptor> _pluginDefinitions;
 };
 
 #endif // ! __ImplAAFDictionary_h__
