@@ -173,10 +173,10 @@ bool CAAFJPEGDescriptorHelper::operator!=(const CAAFJPEGDescriptorHelper& rhs)
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFJPEGDescriptorHelper::GetNumLocators (aafInt32 *  pCount)
+    CAAFJPEGDescriptorHelper::GetNumLocators (aafUInt32 *  pCount)
 {
 	checkAssertion(NULL != _edes);
-	return _edes->GetNumLocators(pCount);
+	return _edes->CountLocators(pCount);
 }
 
 
@@ -200,7 +200,7 @@ HRESULT STDMETHODCALLTYPE
     CAAFJPEGDescriptorHelper::EnumAAFAllLocators (IEnumAAFLocators ** ppEnum)
 {
 	checkAssertion(NULL != _edes);
-	return _edes->EnumAAFAllLocators (ppEnum);
+	return _edes->GetLocators (ppEnum);
 }
 
 

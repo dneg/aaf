@@ -248,7 +248,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pSourceMob->SetEssenceDescriptor(pEssDesc));
 
 		// Add the MOB to the file
-		checkResult(pHeader->AppendMob(pMob));
+		checkResult(pHeader->AddMob(pMob));
 	}
   catch (HRESULT& rResult)
   {
@@ -303,10 +303,10 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	  // Open the AAF file
 	  checkResult(OpenAAFFile(pFileName, kMediaOpenReadOnly, &pFile, &pHeader));
 
-	  checkResult(pHeader->GetNumMobs(kAllMob, &numMobs));
+	  checkResult(pHeader->CountMobs(kAllMob, &numMobs));
 	  checkExpression(1 == numMobs, AAFRESULT_TEST_FAILED);
 
-	  checkResult(pHeader->EnumAAFAllMobs(NULL, &pMobIter));
+	  checkResult(pHeader->GetMobs(NULL, &pMobIter));
 		checkResult(pMobIter->NextOne(&pMob));
 		checkResult(pMob->QueryInterface(IID_IAAFSourceMob, (void **)&pSourceMob));
 		

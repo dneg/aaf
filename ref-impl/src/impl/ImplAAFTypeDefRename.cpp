@@ -111,7 +111,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 	  ImplAAFTypeDefRename * pNonConstThis =
 		  (ImplAAFTypeDefRename *) this;
-	  hr = pDict->LookupType (_RenamedType, &pNonConstThis->_cachedBaseType);
+	  hr = pDict->LookupTypeDef (_RenamedType, &pNonConstThis->_cachedBaseType);
 	  if (AAFRESULT_FAILED(hr))
 		return hr;
 	  assert (_cachedBaseType);

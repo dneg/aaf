@@ -158,6 +158,105 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 //****************
+// PrependSlot()
+//
+AAFRESULT STDMETHODCALLTYPE
+	ImplAAFMob::PrependSlot
+        (ImplAAFMobSlot *  pSlot)  //@parm [in,out] Mob Name length
+{
+	AAFRESULT aafError = AAFRESULT_SUCCESS;
+
+	if (NULL == pSlot)
+		return AAFRESULT_NULL_PARAM;
+
+	return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+//****************
+// InsertSlotAt()
+//
+AAFRESULT STDMETHODCALLTYPE
+	ImplAAFMob::InsertSlotAt
+        (aafUInt32 index,          //@parm [in] index to insert
+		 ImplAAFMobSlot *  pSlot)  //@parm [in] Mob Name length
+{
+	AAFRESULT aafError = AAFRESULT_SUCCESS;
+
+	if (NULL == pSlot)
+		return AAFRESULT_NULL_PARAM;
+
+	aafUInt32 count;
+	aafError = CountSlots (&count);
+	if (AAFRESULT_FAILED (aafError))
+	  return aafError;
+
+	if (index > count)
+	  return AAFRESULT_BADINDEX;
+
+	return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+//****************
+// RemoveSlotAt()
+//
+AAFRESULT STDMETHODCALLTYPE
+	ImplAAFMob::RemoveSlotAt
+        (aafUInt32 index)  //@parm [in] index of slot to remove
+{
+	AAFRESULT aafError = AAFRESULT_SUCCESS;
+
+	aafUInt32 count;
+	aafError = CountSlots (&count);
+	if (AAFRESULT_FAILED (aafError))
+	  return aafError;
+
+	if (index >= count)
+	  return AAFRESULT_BADINDEX;
+
+	return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+//****************
+// GetSlotAt()
+//
+AAFRESULT STDMETHODCALLTYPE
+	ImplAAFMob::GetSlotAt
+        (aafUInt32 index,          //@parm [in] index to insert
+		 ImplAAFMobSlot ** ppSlot)  //@parm [out] returned slot
+{
+	AAFRESULT aafError = AAFRESULT_SUCCESS;
+
+	if (NULL == ppSlot)
+		return AAFRESULT_NULL_PARAM;
+
+	aafUInt32 count;
+	aafError = CountSlots (&count);
+	if (AAFRESULT_FAILED (aafError))
+	  return aafError;
+
+	if (index >= count)
+	  return AAFRESULT_BADINDEX;
+
+	return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+//****************
+// LookupSlot()
+//
+AAFRESULT STDMETHODCALLTYPE
+	ImplAAFMob::LookupSlot
+        (aafSlotID_t slotId,          //@parm [in] ID of slot to get
+		 ImplAAFMobSlot ** ppSlot)  //@parm [out] returned slot
+{
+	AAFRESULT aafError = AAFRESULT_SUCCESS;
+
+	if (NULL == ppSlot)
+		return AAFRESULT_NULL_PARAM;
+
+	return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+//****************
 // RemoveSlot()
 //
 AAFRESULT STDMETHODCALLTYPE
@@ -278,7 +377,7 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFMob::GetNumSlots (aafNumSlots_t *pNumSlots)
+    ImplAAFMob::CountSlots (aafNumSlots_t *pNumSlots)
 {
    size_t numSlots;
 
@@ -506,7 +605,7 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFMob::EnumAAFAllMobSlots (ImplEnumAAFMobSlots **ppEnum)
+    ImplAAFMob::GetSlots (ImplEnumAAFMobSlots **ppEnum)
 {
 	ImplEnumAAFMobSlots		*theEnum = (ImplEnumAAFMobSlots *)CreateImpl (CLSID_EnumAAFMobSlots);
 	if(theEnum == NULL)
@@ -550,10 +649,10 @@ AAFRESULT STDMETHODCALLTYPE
 
 	XPROTECT()
 	{
-		CHECK(GetNumComments(&numComments));
+		CHECK(CountComments(&numComments));
 		if (numComments > 0)
 		{
-			CHECK(EnumAAFAllMobComments(&pEnum));
+			CHECK(GetComments(&pEnum));
 			CHECK(pEnum->NextOne(&pTaggedValue));
 			while(pTaggedValue)
 			{
@@ -609,13 +708,16 @@ AAFRESULT STDMETHODCALLTYPE
 //
 AAFRESULT STDMETHODCALLTYPE
 	ImplAAFMob::RemoveComment
-        (aafMobComment_t *  comment)
+        (ImplAAFTaggedValue * comment)
 {
+  if (! comment)
+	return AAFRESULT_NULL_PARAM;
+
   return AAFRESULT_NOT_IN_CURRENT_VERSION;
 }
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFMob::GetNumComments (aafUInt32*  pNumComments)
+    ImplAAFMob::CountComments (aafUInt32*  pNumComments)
 {
 	size_t	numComments;
 
@@ -638,7 +740,7 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFMob::EnumAAFAllMobComments (ImplEnumAAFTaggedValues** ppEnum)
+    ImplAAFMob::GetComments (ImplEnumAAFTaggedValues** ppEnum)
 {
 	if(!_userComments.isPresent())
 		return AAFRESULT_PROP_NOT_PRESENT;
@@ -692,7 +794,7 @@ AAFRESULT STDMETHODCALLTYPE
 		
 		/* Find timecode slot in mob */
 		//!!!			iterHdl = new AAFIterate(_file);
-		CHECK(EnumAAFAllMobSlots (&iter));
+		CHECK(GetSlots (&iter));
 		while(iter->NextOne(&slot) == AAFRESULT_SUCCESS)
 		{
 			CHECK(slot->GetSegment(&seg));
@@ -794,7 +896,7 @@ AAFRESULT STDMETHODCALLTYPE
 		*destSlot = NULL;
 		
 		// For size entries the valid positions are 0 .. size - 1
-		CHECK(GetNumSlots(&numSlots));
+		CHECK(CountSlots(&numSlots));
 		for (loop = 0; loop < numSlots; loop++)
 		{
 			_slots.getValueAt(tmpSlot, loop);
@@ -856,7 +958,7 @@ AAFRESULT STDMETHODCALLTYPE
 			&mediaCrit, NULL, &sourceInfo));
 		
 		CHECK(sourceInfo->GetMob(&tapeMob));
-		CHECK(tapeMob->EnumAAFAllMobSlots (&slotIter));
+		CHECK(tapeMob->GetSlots (&slotIter));
 		while(slotIter->NextOne((ImplAAFMobSlot**)&slot) == AAFRESULT_SUCCESS)
 		{
 			CHECK(slot->GetEditRate(&editRate));
@@ -867,7 +969,7 @@ AAFRESULT STDMETHODCALLTYPE
 			* datakind of the slot segment.
 			*/
 			CHECK(seg->GetDataDef(&datakind));
-			CHECK(dict->LookupDataDefinition(datakind, &dataDef));
+			CHECK(dict->LookupDataDef(datakind, &dataDef));
 			aafBool		isTimecode;
 			CHECK(dataDef->IsDataDefOf(DDEF_Timecode, &isTimecode));
 			if (isTimecode)
@@ -950,7 +1052,7 @@ AAFRESULT STDMETHODCALLTYPE
 			NULL /* mediaCrit */, NULL, &sourceInfo));
 		
 		CHECK(sourceInfo->GetMob(&tapeMob));
-		CHECK(tapeMob->EnumAAFAllMobSlots(&iterHdl));
+		CHECK(tapeMob->GetSlots(&iterHdl));
 		while(iterHdl->NextOne(&slot) == AAFRESULT_SUCCESS)
 		{
 			timelineSlot = dynamic_cast<ImplAAFTimelineMobSlot*>(slot);
@@ -1103,7 +1205,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 	XPROTECT()
 	{
-		CHECK(EnumAAFAllMobSlots (&iter));
+		CHECK(GetSlots (&iter));
 		while(iter->NextOne(&slot) == AAFRESULT_SUCCESS)
 		{
 			CHECK(slot->ChangeContainedReferences(oldMobID, newMobID));

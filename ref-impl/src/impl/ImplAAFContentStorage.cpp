@@ -158,7 +158,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFContentStorage::GetNumMobs (aafMobKind_t mobKind,
+    ImplAAFContentStorage::CountMobs (aafMobKind_t mobKind,
                            aafNumSlots_t *pNumMobs)
 {
 	size_t				siz;
@@ -273,7 +273,7 @@ AAFRESULT
 }
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFContentStorage::AppendMob (ImplAAFMob *pMob)
+    ImplAAFContentStorage::AddMob (ImplAAFMob *pMob)
 {
 	aafUID_t	mobID;
 	ImplAAFMob	*test;
@@ -349,7 +349,7 @@ AAFRESULT
 }
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFContentStorage::GetNumEssenceData(aafUInt32 *  pNumEssenceData)
+    ImplAAFContentStorage::CountEssenceData(aafUInt32 *  pNumEssenceData)
 {
   size_t siz;
 
@@ -376,7 +376,7 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 		//!!!fmt is unused?
 		*pResult = AAFFalse;
-		CHECK(GetNumEssenceData(&numEssence));
+		CHECK(CountEssenceData(&numEssence));
 		for(n = 0; n < numEssence && !(*pResult); n ++)
 		{
 			CHECK(GetNthEssenceData(n, &testData));
@@ -415,7 +415,7 @@ AAFRESULT
 	XPROTECT()
 	{
 		found = AAFFalse;
-		CHECK(GetNumEssenceData(&numEssence));
+		CHECK(CountEssenceData(&numEssence));
 		for(n = 0; n < numEssence && !found; n ++)
 		{
 			CHECK(GetNthEssenceData(n, &testData));
@@ -479,7 +479,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFContentStorage::AppendEssenceData (ImplAAFEssenceData * pEssenceData)
+    ImplAAFContentStorage::AddEssenceData (ImplAAFEssenceData * pEssenceData)
 {
 	aafUID_t	mobID;
 	ImplAAFMob	*pMatchingMob = NULL;
