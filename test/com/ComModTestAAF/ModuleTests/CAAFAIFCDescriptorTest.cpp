@@ -96,7 +96,7 @@ static const aafMobID_t	TEST_MobID =
 0x13, 0x00, 0x00, 0x00,
 {0x1f64f50a, 0x03fd, 0x11d4, 0x8e, 0x3d, 0x00, 0x90, 0x27, 0xdf, 0xca, 0x7c}};
 
-//#if defined(_WIN32) || defined(WIN32)
+//#if defined( OS_WINDOWS )
 //  // Wave data does not have to be swapped on Windows platforms.
  // #define SWAPSUMMARY(summary)
 //#else

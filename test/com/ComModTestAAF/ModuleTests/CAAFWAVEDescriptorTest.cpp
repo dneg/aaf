@@ -28,9 +28,7 @@
  ************************************************************************/
 
 
-#if defined(WIN32) || defined(_WIN32)
 #undef WIN32_LEAN_AND_MEAN
-#endif
 
 
 #include "AAF.h"
@@ -39,6 +37,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "AAFTypes.h"
 #include "AAFStoredObjectIDs.h"
 #include "AAFResult.h"
 #include "ModuleTest.h"
@@ -46,7 +45,7 @@
 
 #include "CAAFBuiltinDefs.h"
 
-#if !defined(WIN32) && !defined(_WIN32)
+#if !defined( OS_WINDOWS )
 
 #define WAVE_FORMAT_PCM 0x0001
 
@@ -63,7 +62,7 @@ typedef struct tWAVEFORMATEX
 } WAVEFORMATEX, *PWAVEFORMATEX;
 
 
-#endif
+#endif  // !defined( OS_WINDOWS )
 
 
   // Simple utilities to swap bytes.
@@ -95,7 +94,7 @@ typedef struct tWAVEFORMATEX
     // Ignore extra information for now trr: 1999-02-19
   }
 
-#if defined(_WIN32) || defined(WIN32)
+#if defined( OS_WINDOWS )
   // Wave data does not have to be swapped on Windows platforms.
   #define SWAPSUMMARY(summary)
 #else
@@ -105,7 +104,7 @@ typedef struct tWAVEFORMATEX
 
 
   #define SWAPSUMMARY(summary) SwapSummary(summary);
-#endif
+#endif  // OS_WINDOWS
 
 
 static const 	aafMobID_t	TEST_MobID =
