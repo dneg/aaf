@@ -162,13 +162,13 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(defs.cdOperationDef()->
 					CreateInstance(IID_IAAFOperationDef, 
 								   (IUnknown **)&pOperationDef));
+		checkResult(pOperationDef->Initialize(TEST_EFFECT_AUID, TEST_EFFECT_NAME, TEST_EFFECT_DESC));
   		checkResult(pDictionary->RegisterOperationDef(pOperationDef));
 		checkResult(pOperationDef->SetDataDef (defs.ddPicture()));
 		checkResult(pOperationDef->SetIsTimeWarp (kAAFFalse));
 		checkResult(pOperationDef->SetNumberInputs (TEST_NUM_INPUTS));
 		checkResult(pOperationDef->SetCategory (TEST_CATEGORY));
 		checkResult(pOperationDef->SetBypass (TEST_BYPASS));
-		checkResult(pOperationDef->Initialize(TEST_EFFECT_AUID, TEST_EFFECT_NAME, TEST_EFFECT_DESC));
 
 		// !!!Added circular definitions because we don't have optional properties
 		checkResult(pOperationDef->AppendDegradeToOperation (pOperationDef));
