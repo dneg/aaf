@@ -2723,7 +2723,7 @@ void dumpContainedObjects(IStorage* storage,
 
         // Compute the path name for this element
         //
-        char* thisPathName = makePathName(pathName, subStorageName, isRoot);
+        char* elementPathName = makePathName(pathName, subStorageName, isRoot);
         
         // open the storage
         //
@@ -2734,13 +2734,13 @@ void dumpContainedObjects(IStorage* storage,
         }
         // dump the object
         //
-        dumpObject(subStorage, thisPathName, 0, version);
+        dumpObject(subStorage, elementPathName, 0, version);
 
         delete [] elementName;
         elementName = 0;
 
-        delete [] thisPathName;
-        thisPathName = 0;
+        delete [] elementPathName;
+        elementPathName = 0;
 
         delete [] subStorageName;
         subStorageName = 0;
@@ -2895,7 +2895,7 @@ void dumpContainedObjects(IStorage* storage,
 
         // Compute the path name for this element
         //
-        char* thisPathName = makePathName(pathName, subStorageName, isRoot);
+        char* elementPathName = makePathName(pathName, subStorageName, isRoot);
         
         // open the storage
         //
@@ -2906,13 +2906,13 @@ void dumpContainedObjects(IStorage* storage,
         }
         // dump the object
         //
-        dumpObject(subStorage, thisPathName, 0, version);
+        dumpObject(subStorage, elementPathName, 0, version);
 
         delete [] elementName;
         elementName = 0;
 
-        delete [] thisPathName;
-        thisPathName = 0;
+        delete [] elementPathName;
+        elementPathName = 0;
 
         delete [] subStorageName;
         subStorageName = 0;
