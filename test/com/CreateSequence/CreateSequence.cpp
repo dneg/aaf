@@ -39,12 +39,12 @@
 #include "AAF.h"
 #include "AAFFileKinds.h"
 
-STDAPI AAFMemoryFileOpenNewModify (
+STDAPI MemoryFileOpenNewModify (
   aafUInt32  modeFlags,
   aafProductIdentification_t*  pIdent,
   IAAFFile** ppFile);
 
-STDAPI AAFMemoryFileSaveToDisk(
+STDAPI MemoryFileSaveToDisk(
   aafCharacter_constptr  pFileName,
   IAAFFile* pFile);
 
@@ -194,7 +194,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, long int N)
   ProductInfo.platform = NULL;
 
 #if USE_MEMORY_FILE
-  check(AAFMemoryFileOpenNewModify (0, &ProductInfo, &pFile));
+  check(MemoryFileOpenNewModify (0, &ProductInfo, &pFile));
 #else
   check(AAFFileOpenNewModify (pFileName, 0, &ProductInfo, &pFile));
 #endif
@@ -530,7 +530,7 @@ cleanup:
     pFile->Close();
 
 #if USE_MEMORY_FILE
-    check(AAFMemoryFileSaveToDisk(pFileName, pFile));
+    check(MemoryFileSaveToDisk(pFileName, pFile));
 #endif
     finish = clock();
     duration = ((double) (finish - start) / CLOCKS_PER_SEC);
@@ -585,7 +585,7 @@ void usage(void)
   printf("<file> defaults to <Number of components>.aaf\n");
 }
 
-STDAPI AAFMemoryFileOpenNewModify (
+STDAPI MemoryFileOpenNewModify (
   aafUInt32  modeFlags,
   aafProductIdentification_t*  pIdent,
   IAAFFile** ppFile)
@@ -626,7 +626,7 @@ STDAPI AAFMemoryFileOpenNewModify (
   return S_OK;
 }
 
-STDAPI AAFMemoryFileSaveToDisk(
+STDAPI MemoryFileSaveToDisk(
   aafCharacter_constptr  pFileName,
   IAAFFile* pFile)
 {
