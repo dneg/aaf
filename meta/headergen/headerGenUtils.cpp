@@ -55,6 +55,8 @@ void printCopyright (ostream & s)
 "//\n"
 "// This file was GENERATED for the AAF SDK\n"
 "//\n"
+"// $""Id$ $""Name$\n"
+"//\n"
 "// The contents of this file are subject to the AAF SDK Public\n"
 "// Source License Agreement (the \"License\"); You may not use this file\n"
 "// except in compliance with the License.  The License is available in\n"
