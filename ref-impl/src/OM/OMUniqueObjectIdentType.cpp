@@ -44,8 +44,9 @@ OMUniqueObjectIdentificationType::~OMUniqueObjectIdentificationType(void)
   TRACE("OMUniqueObjectIdentificationType::~OMUniqueObjectIdentificationType");
 }
 
-void OMUniqueObjectIdentificationType::reorder(OMByte* externalBytes,
-                                               size_t externalBytesSize) const
+void OMUniqueObjectIdentificationType::reorder(
+                                         OMByte* externalBytes,
+                                         size_t ANAME(externalBytesSize)) const
 {
   TRACE("OMUniqueObjectIdentificationType::reorder");
 

@@ -34,7 +34,7 @@
 // @author Tim Bingham | tjb | Avid Technology, Inc. | OMIntegerType
 
 void OMIntegerType::reorder(OMByte* externalBytes,
-                            size_t externalBytesSize) const
+                            size_t ANAME(externalBytesSize)) const
 {
   TRACE("OMIntegerType::reorder");
 
@@ -44,8 +44,8 @@ void OMIntegerType::reorder(OMByte* externalBytes,
   }
 }
 
-size_t OMIntegerType::externalSize(OMByte* internalBytes,
-                                   size_t internalBytesSize) const
+size_t OMIntegerType::externalSize(OMByte* ANAME(internalBytes),
+                                   size_t ANAME(internalBytesSize)) const
 {
   TRACE("OMIntegerType::externalSize");
 
@@ -56,7 +56,7 @@ size_t OMIntegerType::externalSize(OMByte* internalBytes,
 }
 
 void OMIntegerType::externalize(OMByte* internalBytes,
-                                size_t internalBytesSize,
+                                size_t ANAME(internalBytesSize),
                                 OMByte* externalBytes,
                                 size_t externalBytesSize,
                                 OMByteOrder /* byteOrder */) const
@@ -74,8 +74,8 @@ void OMIntegerType::externalize(OMByte* internalBytes,
   copy(internalBytes, externalBytes, externalBytesSize);
 }
 
-size_t OMIntegerType::internalSize(OMByte* externalBytes,
-                                   size_t externalBytesSize) const
+size_t OMIntegerType::internalSize(OMByte* ANAME(externalBytes),
+                                   size_t ANAME(externalBytesSize)) const
 {
   TRACE("OMIntegerType::internalSize");
 
@@ -86,7 +86,7 @@ size_t OMIntegerType::internalSize(OMByte* externalBytes,
 }
 
 void OMIntegerType::internalize(OMByte* externalBytes,
-                                size_t externalBytesSize,
+                                size_t ANAME(externalBytesSize),
                                 OMByte* internalBytes,
                                 size_t internalBytesSize,
                                 OMByteOrder /* byteOrder */) const
