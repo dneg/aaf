@@ -24,7 +24,7 @@ run:
 .SUFFIXES: .cpp .h .comc .comh .dod .exp .idl .implc .implh .comt .cppt
 
 # This file contains the list of all of the targets to be built...								   
-sinclude targets.mk
+include targets.mk
 
 
 targets: $(DODO_TARGETS)
@@ -140,4 +140,4 @@ clean:
 
 
 # This file contains the list of all dependents...
-sinclude depend.mk
+include depend.mk
