@@ -506,14 +506,13 @@ HRESULT STDMETHODCALLTYPE
   if (0 != fsetpos(_pFile, &pos))
   { // What error code should we return?
     if (feof(_pFile))
-      return AAFRESULT_EOF;
+      return AAFRESULT_BADSAMPLEOFFSET;
     else
       return AAFRESULT_INTERNAL_ERROR;
   }
 
   return AAFRESULT_SUCCESS;
 }
-
 
 HRESULT STDMETHODCALLTYPE
     CAAFEssenceFileStream::SeekRelative (aafInt32  byteOffset)
