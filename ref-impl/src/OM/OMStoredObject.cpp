@@ -472,16 +472,18 @@ void OMStoredObject::open(const OMFile::OMAccessMode mode)
 void OMStoredObject::close(void)
 {
   TRACE("OMStoredObject::close");
-  PRECONDITION("Already open", _open);
 
-  closeStream(_properties);
+  if (_open) {
+
+    closeStream(_properties);
   
-  delete _index;
-  _index = 0;
+    delete _index;
+    _index = 0;
 
-  closeStorage(_storage);
+    closeStorage(_storage);
 
-  _open = false;
+    _open = false;
+  }
 }
 
   // @mfunc Write a property value to this <c OMStoredObject>. The
