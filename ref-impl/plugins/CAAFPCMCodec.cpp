@@ -34,8 +34,6 @@
 
 #include "AAF.h"
 
-//#include "CAAFEssenceFormat.h"
-//#include "ImplAAFEssenceFormat.h"
 #include "aafErr.h"
 #include "AAFUtils.h"
 #include "aafCvt.h"
@@ -79,7 +77,6 @@ inline void checkResult(AAFRESULT r)
 // Debugging log function which is optimised away for default builds
 static void plugin_trace(const char *fmt, ...)
 {
-#define PLUGIN_TRACE 1
 #ifdef PLUGIN_TRACE
 	va_list		ap;
 
