@@ -334,7 +334,7 @@ OMStoredObject* OMStoredObject::create(const wchar_t* fileName)
 
   result = StgCreateDocfile(
     omFileName,
-    STGM_DIRECT | STGM_READWRITE | STGM_SHARE_EXCLUSIVE | STGM_CREATE,
+    STGM_DIRECT | STGM_READWRITE | STGM_SHARE_EXCLUSIVE | STGM_FAILIFTHERE,
     0,
     &storage);
   if (!checkFile(result, fileName)) {
