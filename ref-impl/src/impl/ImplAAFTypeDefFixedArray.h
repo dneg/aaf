@@ -159,9 +159,14 @@ public:
 
 
 protected:
-  virtual aafUInt32 pvtCount (ImplAAFPropertyValue * pInPropVal) const;
-  //
   // returns number of elements in this array
+	virtual aafUInt32 pvtCount (ImplAAFPropertyValue * pInPropVal) const;
+
+  virtual AAFRESULT STDMETHODCALLTYPE
+	  ValidateInputParams (ImplAAFPropertyValue ** ppElementValues,
+						aafUInt32  numElements);
+
+  virtual bool IsArrayable(ImplAAFTypeDef * pSourceTypeDef) const;
 
 public:
 
