@@ -48,6 +48,7 @@ AAFPropertyDefinition::BuildDot( AAFDotHome *dotHome, DotFactory *factory, DotGr
 {
    aafUInt32 count = 0;
    AAFTypeDefinition *typeDef = _typeDef;
+   bool isArrayOrSet = false;
 
    AAFTypeDefinitionRef *typeRef = 0;
    if ( dynamic_cast< AAFTypeDefinitionFixedArray* > ( _typeDef ) != 0 )
@@ -55,16 +56,19 @@ AAFPropertyDefinition::BuildDot( AAFDotHome *dotHome, DotFactory *factory, DotGr
       AAFTypeDefinitionFixedArray *faDef = dynamic_cast< AAFTypeDefinitionFixedArray* > ( _typeDef );
       typeRef = dynamic_cast< AAFTypeDefinitionRef*> ( faDef->GetElementTypeDef() );
       count = faDef->GetCount();
+      isArrayOrSet = true;
    }
    else if ( dynamic_cast< AAFTypeDefinitionVariableArray* > ( _typeDef ) != 0 )
    {
       AAFTypeDefinitionVariableArray *vaDef = dynamic_cast< AAFTypeDefinitionVariableArray* > ( _typeDef );
       typeRef = dynamic_cast< AAFTypeDefinitionRef*> ( vaDef->GetElementTypeDef() );
+      isArrayOrSet = true;
    }
    else if ( dynamic_cast< AAFTypeDefinitionSet* > ( _typeDef ) != 0 )
    {
       AAFTypeDefinitionSet *sDef = dynamic_cast< AAFTypeDefinitionSet* > ( _typeDef );
       typeRef = dynamic_cast< AAFTypeDefinitionRef*> ( sDef->GetElementTypeDef() );
+      isArrayOrSet = true;
    }
    else
    {
@@ -95,11 +99,25 @@ AAFPropertyDefinition::BuildDot( AAFDotHome *dotHome, DotFactory *factory, DotGr
       {
 	 if ( _isOptional )
 	 {
-	    edge->SetElementAttribute( "headlabel", "\"0..n\"" );
+	    if ( isArrayOrSet )
+	    {
+	       edge->SetElementAttribute( "headlabel", "\"0..n\"" );
+	    }
+	    else
+	    {
+	       edge->SetElementAttribute( "headlabel", "\"0..1\"" );
+	    }
 	 }
 	 else
 	 {
-	    edge->SetElementAttribute( "headlabel", "\"1..n\"" );
+	    if ( isArrayOrSet )
+	    {
+	       edge->SetElementAttribute( "headlabel", "\"1..n\"" );
+	    }
+	    else
+	    {
+	       edge->SetElementAttribute( "headlabel", "\"1\"" );
+	    }
 	 }
       }
       else
