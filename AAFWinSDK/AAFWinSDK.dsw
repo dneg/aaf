@@ -3,6 +3,30 @@ Microsoft Developer Studio Workspace File, Format Version 6.00
 
 ###############################################################################
 
+Project: "AAFBasicInterpolators"=".\ref-impl\AAFBasicInterpolators\AAFBasicInterpolators.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name AAFIID
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name AAFLIB
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name COMIDL
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name MakeSDK
+    End Project Dependency
+}}}
+
+###############################################################################
+
 Project: "AAFIID"=".\ref-impl\AAFIID\AAFIID.dsp" - Package Owner=<4>
 
 Package=<5>
@@ -337,6 +361,9 @@ Package=<4>
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name MakeSDK
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name AAFBasicInterpolators
     End Project Dependency
 }}}
 
