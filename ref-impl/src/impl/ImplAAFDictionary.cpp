@@ -1604,67 +1604,40 @@ ImplAAFDictionary::LookupComplexPropTypeByOMPid
 {
   AAFRESULT hr;
 
-  // This call may fail if a legal OMPropertyId is specified which
-  // corresponds to a prop in a class which is not yet in the
-  // dictionary.
-  hr = pvtLookupComplexPropTypeByOMPid (opid, ppTypeDef);
-  if (AAFRESULT_SUCCEEDED (hr))
-	{
-	  // The given OMPropertyId was found.  Return, passing on the
-	  // good news.
-	  return hr;
-	}
-
-  assert (AAFRESULT_FAILED (hr));
-  if (AAFRESULT_NO_MORE_OBJECTS != hr)
-	{
-	  // The lookup failed, but for a reason other than not finding it
-	  // in the dictionary.  We can't recover from this.  Return,
-	  // passing on the bad news.
-	  return hr;
-	}
-
-  // Couldn't find it in dict.  Ask builtins to look for it.
   aafUID_t typeAUID;
   assert (_pBuiltinProps);
   hr = _pBuiltinProps->LookupBuiltinComplexPropTypeFromOMPid
 	(opid, &typeAUID);
-  if (AAFRESULT_FAILED (hr))
+  if (AAFRESULT_SUCCEEDED (hr))
 	{
-	  // Couldn't find it in builtins.  Can't go any further, so pass
-	  // on the bad news.
-	  return hr;
+	  // Found a built-in matching that OM PID.  Look up its type.
+	  static const aafUID_t kNull_auid = { 0 };
+	  if (EqualAUID (&typeAUID, &kNull_auid))
+		{
+		  // It's a non-complex type.  Return NULL to the caller, and
+		  // don't attempt to look it up because that will cause an
+		  // attempt to load it into the dictionary (creating a
+		  // potential infinite recursion when first un-persisting the
+		  // header and dictionary).
+		  *ppTypeDef = 0;
+		}
+	  else
+		{
+		  // Cast away constness
+		  assert (ppTypeDef);
+		  hr = ((ImplAAFDictionary*)this)->LookupType
+			(&typeAUID, ppTypeDef);
+		  assert (AAFRESULT_SUCCEEDED (hr));
+		  assert (ppTypeDef);
+		  assert (*ppTypeDef);
+		}
+	  return AAFRESULT_SUCCESS;
 	}
-
-  // Found its AUID, which is in TypeID.  If this is a non-complex
-  // type (that is, is a strong object reference) then the returned
-  // auid will be the null auid.
-  ImplAAFTypeDef * pTypeDef = 0;
-  static const aafUID_t kNull_auid = { 0 };
-  if (EqualAUID (&typeAUID, &kNull_auid))
-	{
-	  // It's a non-complex type.  Return NULL to the caller, and
-	  // don't attempt to look it up because that will cause an
-	  // attempt to load it into the dictionary (creating a potential
-	  // infinite recursion when first un-persisting the header and
-	  // dictionary).
-	  pTypeDef = 0;
-	}
-  else
-	{
-	  // It's a complex type.  Looking it up will force it into the
-	  // dict from builtins.
-
-	  // Cast away constness
-	  hr = ((ImplAAFDictionary*)this)->LookupType
-		(&typeAUID, &pTypeDef);
-	  assert (AAFRESULT_SUCCEEDED (hr));
-	  assert (pTypeDef);
-	}
-
-  assert (ppTypeDef);
-  *ppTypeDef = pTypeDef;
-  return AAFRESULT_SUCCESS;
+  // Didn't find it in builtins.  Look for it in registered class in
+  // the dictionary.
+  hr = pvtLookupComplexPropTypeByOMPid (opid, ppTypeDef);
+  // Pass or fail, return the result.
+  return hr;
 }
 
 
