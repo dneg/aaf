@@ -23,7 +23,11 @@ AD_IDL(//
 //
 // AAFRESULT_NOT_INITIALIZED
 //   - This object has not yet had Initialize\(\) called on it through
-//     this object's primary interface.
+//     this object's primary interface.  Note that
+//     IAAFEssenceDescriptor is a primary interface for an abstract
+//     class\, so it is not appropriate for the Initialize\(\) method
+//     to exist in this interface.  The Initialize\(\) method is
+//     available through the concrete object's primary interface.
 //)
 AD_FORWARD_DECLARATION(AAFLocator)
 AD_FORWARD_DECLARATION(EnumAAFLocators)
@@ -66,8 +70,8 @@ AD_XMETHOD1(AppendLocator,
 			Locator to append,
 
 			Append another locator to this essence descriptor.  Use this
-  // function to add a locator to be scanned first when searching for
-  // the essence \(a new primary location\).
+  // function to add a locator to be scanned last when searching for
+  // the essence \(a secondary location for the essence\).
   // 
   // Succeeds if all of the following are true:
   // - the pLocator pointer is valid.
@@ -92,9 +96,9 @@ AD_XMETHOD1(PrependLocator,
 			pLocator,
 			Locator to append,
 
-  // Append another locator to this essence descriptor.  Use this
+			Append another locator to this essence descriptor.  Use this
   // function to add a locator to be scanned first when searching for
-  // the essence \(a secondary location for the essence\).
+  // the essence \(a new primary location for the essence\).
   // 
   // Succeeds if all of the following are true:
   // - the pLocator pointer is valid.
