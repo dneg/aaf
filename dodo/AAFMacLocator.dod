@@ -6,7 +6,6 @@ AAFMacLocator\
 AAFLocator\
 #endm
 #c
-#import ./AAFUnitTest.exp
 AD_HEAD
 /******************************************\
 *                                          *
@@ -18,22 +17,24 @@ AD_HEAD
 \******************************************/
 
 AD_INCLUDE(AAFTypes)
+
+AD_CLASS_UUID(94659781, 2a3c, 11D2, bf, a4, 00, 60, 97, 11, 62, 12)
+
+AD_DEFAULT_UUID(94659781, 2a3c, 11D2, bf, a4, 00, 60, 97, 11, 62, 12)
 AD_CLASS_BEGIN
 
-/****/
 AD_METHOD1(GetVolumeName,
 [out],aafString_t*,volname,Pass in a string which will be filled in,
 Get the volume name from a Mac locator.)
 
-/****/
 AD_METHOD1(GetVRef,
-[out],aafInt16*,vRef,,
+[out],aafInt16*,vRef, value ref,
 Get the volume reference number from a Mac locator.)
 	//@comm Present on Macs only.
 	
-/****/
+
 AD_METHOD1(GetDirID,
-[out],aafInt32*,DirID,,
+[out],aafInt32*,DirID, directory ID,
 Get the DirID from a Mac locator.)
 	//@comm Replaces part of omfmMacLocatorGetInfo
 	
@@ -44,13 +45,7 @@ Set the volume name for a Mac locator.)
 
 /****/
 AD_METHOD1(SetDirID,
-[out],aafInt32,DirID,,
+[in],aafInt32 ,DirID, directory ID,
 Set the DirID for a Mac locator.)
-
-  //
-  // IAAFUnitTest interface method overrides
-  //
-AD_OVERRIDE(.method-Test)
-
 
 AD_CLASS_END
