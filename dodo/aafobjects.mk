@@ -37,6 +37,13 @@ AAFPERSISTENTOBJECTS = \
 	AAFTimecodeStream12M \
 	AAFTransition \
 	AAFTypeDef \
+	AAFTypeDefArray \
+	AAFTypeDefInt \
+	AAFTypeDefMedia \
+	AAFTypeDefObject \
+	AAFTypeDefObjectVector \
+	AAFTypeDefStruct \
+	AAFTypeDefUInt \
 	AAFUnixLocator \
 	AAFVaryingValue \
 	AAFWindowsLocator
@@ -47,6 +54,8 @@ AAFPERSISTENTOBJECTS = \
 AAFNONPERSISTENTOBJECTS = \
 	AAFRoot \
 	AAFEssenceFormat \
+	AAFProperty \
+	AAFPropertyValue \
 	EnumAAFAttributes \
 	EnumAAFClassDefs \
 	EnumAAFControlCodeDefs \
@@ -56,9 +65,11 @@ AAFNONPERSISTENTOBJECTS = \
 	EnumAAFEffectDefs \
 	EnumAAFIdentifications \
 	EnumAAFMobComments \
+	EnumAAFObjects \
 	EnumAAFParameterSlots \
 	EnumAAFPropertyDefs \
 	EnumAAFProperties \
+	EnumAAFPropertyValues \
 	EnumAAFReferenceValues \
 	EnumAAFSegments \
 	EnumAAFTypeDefs 
@@ -103,7 +114,7 @@ HUMAN_TYPED_IMPL = \
 	AAFTimecode \
 	AAFTimelineMobSlot \
 	AAFTapeDescriptor \
-	AAFWAVEDescriptor \
+	AAFWaveDescriptor \
 	EnumAAFComponents \
 	EnumAAFEssenceData \
 	EnumAAFLocators \
