@@ -172,16 +172,16 @@ public:
                            OMByteOrder byteOrder) const;
 
 
+  /*
   // Allocate an OMProperty that can represent this type.  Does so by
   // converting name to mbs and calling pvtCreateOMPropertyMBS().
   virtual OMProperty *
     pvtCreateOMProperty (OMPropertyId pid,
 						 const aafCharacter * name) const;
+						 */
 
-
-protected:
-  // Implemented by derived classes, and called by
-  // pvtCreateOMProperty().
+  // Allocate an OMProperty that can represent this type.  Implemented
+  // by derived classes.
   virtual OMProperty *
     pvtCreateOMPropertyMBS (OMPropertyId pid,
 							const char * name) const;
