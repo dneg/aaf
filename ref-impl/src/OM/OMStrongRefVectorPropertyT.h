@@ -464,12 +464,10 @@ bool OMStrongReferenceVectorProperty<ReferencedObject>::containsValue(
   OMVectorIterator<
     OMStrongReferenceVectorElement<ReferencedObject> >
                                                    iterator(_vector, OMBefore);
-  // This loop causes objects to be loaded but the one we are
-  // looking for must already be loaded.
   while (++iterator) {
     OMStrongReferenceVectorElement<ReferencedObject>&
                                                     element = iterator.value();
-    if (element.getValue() == object) {
+    if (element.pointer() == object) {
       result = true;
       break;
     }
@@ -577,12 +575,10 @@ size_t OMStrongReferenceVectorProperty<ReferencedObject>::indexOfValue(
   OMVectorIterator<
     OMStrongReferenceVectorElement<ReferencedObject> >
                                                    iterator(_vector, OMBefore);
-  // This loop causes objects to be loaded but the one we are
-  // looking for must already be loaded.
   while (++iterator) {
     OMStrongReferenceVectorElement<ReferencedObject>&
                                                     element = iterator.value();
-    if (element.getValue() == object) {
+    if (element.pointer() == object) {
       result = iterator.index();
       break;
     }
@@ -611,12 +607,10 @@ size_t OMStrongReferenceVectorProperty<ReferencedObject>::countOfValue(
   OMVectorIterator<
     OMStrongReferenceVectorElement<ReferencedObject> >
                                                    iterator(_vector, OMBefore);
-  // This loop causes objects to be loaded but the one we are
-  // looking for must already be loaded.
   while (++iterator) {
     OMStrongReferenceVectorElement<ReferencedObject>&
                                                     element = iterator.value();
-    if (element.getValue() == object) {
+    if (element.pointer() == object) {
       result = result + 1;
     }
   }
@@ -666,12 +660,10 @@ bool OMStrongReferenceVectorProperty<ReferencedObject>::findIndex(
   OMVectorIterator<
     OMStrongReferenceVectorElement<ReferencedObject> >
                                                    iterator(_vector, OMBefore);
-  // This loop causes objects to be loaded but the one we are
-  // looking for must already be loaded.
   while (++iterator) {
     OMStrongReferenceVectorElement<ReferencedObject>&
                                                     element = iterator.value();
-    if (element.getValue() == object) {
+    if (element.pointer() == object) {
       index = iterator.index();
       result = true;
       break;
