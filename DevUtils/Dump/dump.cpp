@@ -67,7 +67,6 @@
 #include <stdio.h>
 
 #include <errno.h>
-#include <ctype.h>
 #include <string.h>
 
 #if defined(_MAC) || defined(macintosh)
@@ -442,7 +441,32 @@ private:
   unsigned char* _buffer;
   int _count;
   int _line;
+
+  static char table[128];
+
+  char map(int c);
+
 };
+
+// Interpret values 0x00 - 0x7f as ASCII characters.
+//
+char Dumper::table[128] = {
+'.',  '.',  '.',  '.',  '.',  '.',  '.',  '.',
+'.',  '.',  '.',  '.',  '.',  '.',  '.',  '.',
+'.',  '.',  '.',  '.',  '.',  '.',  '.',  '.',
+'.',  '.',  '.',  '.',  '.',  '.',  '.',  '.',
+' ',  '!',  '"',  '#',  '$',  '%',  '&', '\'',
+'(',  ')',  '*',  '+',  ',',  '-',  '.',  '/',
+'0',  '1',  '2',  '3',  '4',  '5',  '6',  '7',
+'8',  '9',  ':',  ';',  '<',  '=',  '>',  '?',
+'@',  'A',  'B',  'C',  'D',  'E',  'F',  'G',
+'H',  'I',  'J',  'K',  'L',  'M',  'N',  'O',
+'P',  'Q',  'R',  'S',  'T',  'U',  'V',  'W',
+'X',  'Y',  'Z',  '[', '\\',  ']',  '^',  '_',
+'`',  'a',  'b',  'c',  'd',  'e',  'f',  'g',
+'h',  'i',  'j',  'k',  'l',  'm',  'n',  'o',
+'p',  'q',  'r',  's',  't',  'u',  'v',  'w',
+'x',  'y',  'z',  '{',  '|',  '}',  '~',  '.'};
 
 Dumper::Dumper(void)
   : _buffer(new unsigned char[BYTESPERLINE]), _count(0), _line(0)
@@ -481,11 +505,8 @@ void Dumper::output(void)
   spaces(SEPARATION);
   
   for (i = 0; i < _count; i++) {
-    if (isprint(_buffer[i])) {
-      cout << (char)_buffer[i];
-    } else {
-      cout << '.';
-    }
+    int c = (unsigned char)_buffer[i];
+    cout << map(c);
   }
   
   cout << endl;
@@ -515,6 +536,17 @@ void Dumper::flush(void)
   }
   _count = 0;
   _line = 0;
+}
+
+char Dumper::map(int c)
+{
+  char result;
+  if (c < 0x80) {
+    result = table[c & 0x7f];
+  } else {
+    result = '.';
+  }
+  return result;
 }
 
 Dumper dumper;
