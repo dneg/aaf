@@ -44,17 +44,17 @@ AD_XMETHOD1(GetTypeDef,
 		   [retval\,out],
 		   objOut,
 		   AAFTypeDef,
-		   pTypeDef,
+		   ppTypeDef,
 		   Pointer to a type definition,
 			Places the AAFTypeDef object attached to this IAAFParameterDef into the
-  // *ppDataDef argument.  If none exists yet\, NULL is placed into the
-  // *ppDataDef argument.
+  // *ppTypeDef argument.  If none exists yet\, NULL is placed into the
+  // *ppTypeDef argument.
   //
   // The returned AAFTypeDef object\, if it exists\, is
   // AddRef\(\)ed before it is returned.
   //
   // Succeeds if all of the following are true:
-  // - the ppDataDef pointer is valid.
+  // - the ppTypeDef pointer is valid.
   // - A valid AAFTypeDef exists.
   // 
   // This method will return the following codes.  If more than one of
@@ -68,7 +68,7 @@ AD_XMETHOD1(GetTypeDef,
   //   - This object has not yet had Initialize\(\) called on it.
   //
   // AAFRESULT_NULL_PARAM
-  //   - ppDataDef is null.
+  //   - ppTypeDef is null.
   //
   // AAFRESULT_NO_ESSENCE_DESC
   //   - There is no AAFTypeDef.  There has to be one of some
@@ -78,12 +78,12 @@ AD_XMETHOD1(SetTypeDef,
 		   [in],
 		   objIn,
 		   AAFTypeDef,
-		   ppTypeDef,
+		   pTypeDef,
 		   Pointer to a type definition,
 			Sets the AAFTypeDef of this IAAFOperationDef to be the given one.
   //
   // Succeeds if all of the following are true:
-  // - the ppTypeDef pointer is valid.
+  // - the pTypeDef pointer is valid.
   // 
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect\, it will return the first one
@@ -96,7 +96,7 @@ AD_XMETHOD1(SetTypeDef,
   //   - This object has not yet had Initialize\(\) called on it.
   //
   // AAFRESULT_NULL_PARAM
-  //   - ppTypeDef is null.)
+  //   - pTypeDef is null.)
 
 AD_XMETHOD2(GetDisplayUnits,
 			[in\,string],
@@ -115,7 +115,9 @@ AD_XMETHOD2(GetDisplayUnits,
   // pDisplayUnits buffer.  The buffer is allocated by the caller.  The size
   // of the buffer is given by bufSize.  If the property name has not
   // yet been set\, a zero-length string will be written \(that is\,
-  // only the trailing null character\).
+  // only the trailing null character\).  The display units string is intended
+  // for display to the user\, and so should be concise.  No other formatting for
+  // machine readability is implied.
   // 
   // Caller may call GetDisplayUnitsBufLen\(\) to determine the
   // required buffer size.
@@ -178,7 +180,9 @@ AD_XMETHOD1(SetDisplayUnits,
 		   Sets the DisplayUnits of the operation definition. DisplayUnits is a
   // name that describes  a group of operation groups.  A copy is made of the data so the caller
   // retains ownership of the *pDisplayUnits buffer and is responsible for
-  // de-allocating it. 
+  // de-allocating it.  The display units string is intended
+  // for display to the user\, and so should be concise.  No other formatting for
+  // machine readability is implied.
   // 
   // Succeeds if all of the following are true:
   // - the pDisplayUnits pointer is valid.

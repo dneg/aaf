@@ -16,10 +16,11 @@ AAFObject\
 #c
 AD_HEAD
 AD_IDL(//
-// The IAAFControlPoint interface is implemented by objects that an individual point value
+// The IAAFControlPoint interface is implemented by objects that store an individual point value
 // of a parameter whose value changes during the operation group.  IAAFControlPoints must be added to
-// and IAAFVaryingValue\, which is then added to the IAAFOperationGroup.  For parameters which are
-// constant in value during the operation group\, use IAAFConstantValue.
+// an object which implements IAAFVaryingValue\, which is then added to the IAAFOperationGroup.
+//
+// For parameters which are constant in value during the operation group\, use IAAFConstantValue.
 //
 // In addition to the specific error results listed for each method\,
 // all methods in this interface may also return one of the following
