@@ -78,24 +78,6 @@ public:
 
 
   //****************
-  // GetIsSearchable()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    GetIsSearchable
-        // @parm [out, retval] pointer to the result
-        (aafBool *  pIsSearchable);
-
-
-  //****************
-  // SetIsSearchable()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    SetIsSearchable
-        // @parm [in] is searchable value
-        (aafBool  IsSearchable);
-
-
-  //****************
   // GetDefaultValue()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
@@ -169,7 +151,6 @@ private:
 
   OMFixedSizeProperty<OMPropertyId>          _pid;
 
-  OMFixedSizeProperty<aafBool>               _IsSearchable;
   OMVariableSizeProperty<aafUInt8>			 _DefaultValue;
 
   ImplAAFTypeDef *                           _cachedType;
