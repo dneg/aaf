@@ -90,12 +90,12 @@ AAFRESULT ImplAAFProperty::Initialize
 	  _pPropDef = pPropDef;
 	  // BobT: don't reference count the property def!
 	  // _pPropDef->AcquireReference ();
-
 	  AAFRESULT hr;
 	  hr = pPropDef->GetTypeDef (&ptd);
 	  if (AAFRESULT_FAILED(hr)) throw hr;
 	  assert (ptd);
 
+#if defined(ALWAYS_USE_PROPVALDATA)
 	  pvd = (ImplAAFPropValData*) CreateImpl (CLSID_AAFPropValData);
 	  if (! pvd) throw AAFRESULT_NOMEMORY;
 
@@ -119,7 +119,12 @@ AAFRESULT ImplAAFProperty::Initialize
 				pOmProp->getBits (pBits, bitsSize);
 			  }
 		  }
+
 	  _pPropVal = pvd;
+#else // #if defined(ALWAYS_USE_PROPVALDATA)
+	  // Let the type definition create the correct subclass of property value.
+	  hr = ptd->CreatePropertyValue(pOmProp, &_pPropVal);
+#endif // #else // #if defined(ALWAYS_USE_PROPVALDATA)
 	}
   catch (HRESULT &rCaught)
 	{
