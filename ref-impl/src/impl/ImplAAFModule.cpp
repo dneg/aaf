@@ -591,8 +591,6 @@ STDAPI ImplAAFFileOpenNewModifyEx (
 //
 // Transient files are never considered Revertable.
 //
-// NOTE! Stub only.   Implementation not yet added.
-//
 // Succeeds if:
 // - This object has already been Initialize()d.
 // - The pIdent argument is valid.

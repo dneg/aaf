@@ -25,6 +25,7 @@
 #include "OMFile.h"
 #include "OMUtilities.h"
 #include "OMClassFactory.h"
+#include "OMMemoryRawStorage.h"
 
 #include "OMMSSStoredObjectFactory.h"
 #include "OMXMLStoredObjectFactory.h"
@@ -63,6 +64,7 @@ typedef ImplAAFSmartPointer<ImplAAFRandomRawStorage>
 //0xff0d, 0x4d4f,
 //{0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xff}};
 
+extern "C" const aafClassID_t CLSID_AAFRandomRawStorage;
 
 static const aafProductIdentification_t kNullIdent = { 0 };
 
@@ -570,11 +572,9 @@ ImplAAFFile::OpenNewModify (const aafCharacter * pFileName,
 	return stat;
 }
 
-
 AAFRESULT STDMETHODCALLTYPE
 ImplAAFFile::OpenTransient (aafProductIdentification_t * pIdent)
 {
-
 	if (! _initialized)
 		return AAFRESULT_NOT_INITIALIZED;
 
@@ -584,7 +584,106 @@ ImplAAFFile::OpenTransient (aafProductIdentification_t * pIdent)
 	if (! pIdent)
 		return AAFRESULT_NULL_PARAM;
 
-	return AAFRESULT_NOT_IN_CURRENT_VERSION;
+	OMRawStorage * pOMRawStg;
+	ImplAAFRawStorage* pRawStg;
+	bool pRawStg_owns_pOMRawStg = false;
+
+	try {
+		//
+		// Create a memory backed ImplAAFRawStorage
+		//
+
+		pOMRawStg = OMMemoryRawStorage::openNewModify ();
+		if (!pOMRawStg) {
+			throw AAFRESULT_NOMEMORY;
+		}
+
+		pRawStg = static_cast<ImplAAFRawStorage *>(::CreateImpl(CLSID_AAFRandomRawStorage));
+		if(!pRawStg)
+		{
+			throw AAFRESULT_NOMEMORY;
+		}
+
+		pRawStg->Initialize(pOMRawStg, kAAFFileAccess_modify);
+		pRawStg_owns_pOMRawStg = true;
+
+
+		//
+		// Create a file on top of the memory backed storage. 
+		//
+
+		_access = kAAFFileAccess_modify;
+		_existence = kAAFFileExistence_new;
+
+		// The following code fragment originated in
+		// CreateAAFFileOnRawStorage().  It should probably be
+		// factored out and made reusable.  Similar code
+		// fragments appear in other ImplAAFFile methods as
+		// well.
+
+		// start of CreateAAFFileOnRawStorage fragment
+
+		// Create and init the header;
+		const OMClassId& soid =
+		  *reinterpret_cast<const OMClassId *>(&AUID_AAFHeader);
+		_head = static_cast<ImplAAFHeader *>(_factory->create(soid));
+		checkExpression(NULL != _head, AAFRESULT_BADHEAD);
+		_head->SetDictionary(_factory);
+		if (sCurrentAAFObjectModelVersion) {
+		  _head->SetObjectModelVersion(sCurrentAAFObjectModelVersion);
+		}
+		
+		// Set the byte order
+		OMByteOrder byteOrder = hostByteOrder();
+		if (byteOrder == littleEndian) {
+		  _byteOrder = 0x4949; // 'II'
+		}
+		else { // bigEndian
+		  _byteOrder = 0x4d4d; // 'MM'
+		}
+		_head->SetByteOrder(_byteOrder);
+		// FIXME FIXME - Hardcoded version!!!
+		aafVersionType_t theVersion = { 1, 0 };
+		_head->SetFileRevision (theVersion);
+		
+		ImplAAFContentStorage * pCStore = 0;
+ 	        checkResult(_head->GetContentStorage(&pCStore));
+		pCStore->ReleaseReference();
+		pCStore = 0;
+		
+		// Attempt to create the file.
+		const OMStoredObjectEncoding aafFileEncoding =
+		  *reinterpret_cast<const OMStoredObjectEncoding*> (&aafFileKindAafSSBinary);
+		  
+		_file = OMFile::openNewModify (pOMRawStg,
+					       _factory,
+					       0,
+					       byteOrder,
+					       _head,
+					       aafFileEncoding,
+					       _metafactory);
+
+		Open();
+
+		// end of CreateAAFFileOnRawStorage fragment						  
+
+		// Add the ident to the header.
+		checkResult( _head->AddIdentificationObject(pIdent) );
+
+	}
+	catch ( AAFRESULT& ex ) {
+		if ( pOMRawStg && !pRawStg_owns_pOMRawStg ) {
+			delete pOMRawStg;
+		}
+
+		if ( pRawStg ) {
+			pRawStg->ReleaseReference();
+			pRawStg = 0;
+		}
+
+		return ex;
+	}
+	return AAFRESULT_SUCCESS;
 }
 
 
