@@ -464,9 +464,11 @@ void OMFile::saveFile(void* clientOnSaveContext)
 
   _clientOnSaveContext = clientOnSaveContext;
 
+  _isValid = false; // failing save() leaves the file invalid
   if (isWritable()) {
     _rootStore->save(*this);
   }
+  _isValid = true; // successful save() leaves the file valid
 }
 
   // @mfunc Save the entire contents of this <c OMFile> as well as
