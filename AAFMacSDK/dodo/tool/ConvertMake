@@ -1,0 +1,8 @@
+# Script to perform a simple conversion of a unix make file to
+# a mpw make file. This file will have to be updated if the
+# format of aafobjects.mk changes!
+#
+StreamEdit -e '/ ¶"/ || /¶"/ Replace // ""' ¶
+           -e '/¶\/ Replace // "¶¶"' ¶
+		   -e '/¶$/ Replace // ""'
+
