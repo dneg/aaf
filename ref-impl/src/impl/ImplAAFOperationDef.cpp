@@ -1,6 +1,6 @@
 /***********************************************************************
  *
- *              Copyright (c) 1998-1999 Avid Technology, Inc.
+ *              Copyright (c) 1998-2000 Avid Technology, Inc.
  *
  * Permission to use, copy and modify this software and accompanying 
  * documentation, and to distribute and sublicense application software
@@ -27,9 +27,7 @@
 
 
 #include "AAFStoredObjectIDs.h"
-#ifndef __AAFStoredObjectIDs_h__
 #include "AAFPropertyIDs.h"
-#endif
 #include "ImplAAFObjectCreation.h"
 
 #ifndef __ImplAAFParameterDef_h__
@@ -170,7 +168,9 @@ AAFRESULT STDMETHODCALLTYPE
 		return AAFRESULT_NULL_PARAM;
 
 	_degradeTo.prependValue(pOperationDef);
-	pOperationDef->AcquireReference();
+	// 2000-OCT-23 transdel : this is a weak reference. It is already owned by another
+	// strong reference set so we do not need to reference count it!
+	//	pOperationDef->AcquireReference();
 	return AAFRESULT_SUCCESS;
 }
 
@@ -182,7 +182,9 @@ AAFRESULT STDMETHODCALLTYPE
 		return AAFRESULT_NULL_PARAM;
 
 	_degradeTo.appendValue(pOperationDef);
-	pOperationDef->AcquireReference();
+	// 2000-OCT-23 transdel : this is a weak reference. It is already owned by another
+	// strong reference set so we do not need to reference count it!
+	//	pOperationDef->AcquireReference();
 	return AAFRESULT_SUCCESS;
 }
 
@@ -334,9 +336,9 @@ AAFRESULT STDMETHODCALLTYPE
 		return AAFRESULT_NULL_PARAM;
 
 	_paramDefined.appendValue(pAAFParameterDef);
-	// trr - We are saving a copy of pointer in _paramDefined
-	// so we need to bump its reference count.
-	pAAFParameterDef->AcquireReference();
+	// 2000-OCT-23 transdel : this is a weak reference. It is already owned by another
+	// strong reference set so we do not need to reference count it!
+	//	pAAFParameterDef->AcquireReference();
 	
 	return(AAFRESULT_SUCCESS);
 }
