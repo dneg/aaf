@@ -269,8 +269,8 @@ void OMStorable::setName(const wchar_t* name)
 OMFile* OMStorable::file(void) const
 {
   TRACE("OMStorable::file");
-  PRECONDITION("Valid containing object", _container != 0);
-  return _container->file();
+  PRECONDITION("Valid containing object", container() != 0);
+  return container()->file();
 }
 
   // @mfunc Find the <c OMStorable> named <p objectName> contained
@@ -328,12 +328,12 @@ OMProperty* OMStorable::findProperty(OMPropertyId propertyId) const
 bool OMStorable::isRoot(void) const
 {
   TRACE("OMStorable::isRoot");
-  PRECONDITION("Valid containing object", _container != 0);
+  PRECONDITION("Valid containing object", container() != 0);
   bool result;
 
   // By definition the root object is the one contained directly
   // within the file.
-  if (_container == file()) {
+  if (container() == file()) {
     result = true;
   } else {
     result = false;
@@ -349,13 +349,12 @@ OMStoredObject* OMStorable::store(void) const
   TRACE("OMStorable::store");
 
   if (_store == 0) {
-    const OMStorable* container = _container;
-    ASSERT("Valid container", container != 0);
+    ASSERT("Valid container", container() != 0);
     OMStorable* nonConstThis = const_cast<OMStorable*>(this);
     if (_exists) {
-      nonConstThis->_store = container->store()->open(name());
+      nonConstThis->_store = container()->store()->open(name());
     } else {
-      nonConstThis->_store = container->store()->create(name());
+      nonConstThis->_store = container()->store()->create(name());
     }
   }
   POSTCONDITION("Valid store", _store != 0);
@@ -385,7 +384,7 @@ bool OMStorable::attached(void) const
 
   bool result;
 
-  if (_container != 0) {
+  if (container() != 0) {
     result = true;
   } else {
     result = false;
@@ -405,8 +404,8 @@ bool OMStorable::inFile(void) const
 
   bool result;
 
-  if (_container != 0) {
-    result = _container->inFile();
+  if (container() != 0) {
+    result = container()->inFile();
   } else {
     result = false;
   }
@@ -426,8 +425,8 @@ bool OMStorable::persistent(void) const
 
   bool result;
 
-  if (_container != 0) {
-    result = _container->persistent();
+  if (container() != 0) {
+    result = container()->persistent();
   } else {
     result = false;
   }
