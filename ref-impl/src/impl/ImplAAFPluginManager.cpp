@@ -55,7 +55,8 @@ inline void	ImplAAFPluginFileDisposeProc(void *valuePtr)
   if (valuePtr)
 	{
 		ImplAAFPluginFile *pPluginFile = (ImplAAFPluginFile *)valuePtr;
-    pPluginFile->ReleaseReference();
+		pPluginFile->ReleaseReference();
+		pPluginFile = 0;
 	}
 }
 

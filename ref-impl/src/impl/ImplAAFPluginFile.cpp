@@ -77,6 +77,7 @@ HRESULT ImplAAFPluginFile::CreatePluginFile(
 
   if (pPluginFile)
     pPluginFile->ReleaseReference();
+  pPluginFile = 0;
 
   return result;
 }
