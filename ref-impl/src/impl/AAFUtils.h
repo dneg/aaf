@@ -35,7 +35,9 @@
 
 #include "aafErr.h"
 #include "AAFTypes.h"
-#include "Container.h"
+
+class ImplAAFFile;
+class ImplAAFObject;
 #include "OMUtilities.h"
 
 typedef enum
@@ -160,7 +162,7 @@ void AAFByteSwap64(
 
 #define PROGRESS_UNKNOWN	-1
 
-aafBool isObjFunc(AAFFile * file,
+aafBool isObjFunc(ImplAAFFile * file,
                          ImplAAFObject * obj,
                          void *data);
 
