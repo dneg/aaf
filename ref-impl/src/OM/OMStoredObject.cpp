@@ -235,7 +235,7 @@ OMStoredObject* OMStoredObject::openStoragePath(const char* storagePathName)
   return result;
 }
 
-  // @mfunc Save the <c OMPropertSet> <p p properties> in this
+  // @mfunc Save the <c OMPropertySet> <p properties> in this
   //        <c OMStoredObject>.
   //   @parm The <c OMPropertySet> to save.
 void OMStoredObject::save(const OMPropertySet& properties)
