@@ -56,6 +56,7 @@
 #include "OMUtilities.h"
 
 #include "OMMSStructuredStorage.h"
+#include "OMMSSStoredStream.h"
 #include "OMType.h"
 
 const OMVersion currentVersion = 32;
@@ -1102,12 +1103,17 @@ void OMStoredObject::restore(OMDataStream& stream,
   //        <p property> contained within this <c OMStoredObject>.
   //   @parm TBS
   //   @rdesc TBS
-OMStoredStream* OMStoredObject::openStoredStream(
-                                            const OMDataStream& /* property */)
+OMStoredStream* OMStoredObject::openStoredStream(const OMDataStream& property)
 {
   TRACE("OMStoredObject::openStoredStream");
-  ASSERT("Unimplemented code not reached", false);
-  return 0;
+
+  wchar_t* sName = streamName(property.name(), property.propertyId());
+  IStream* stream = openStream(sName);
+  OMMSSStoredStream* result = new OMMSSStoredStream(stream);
+  ASSERT("Valid heap pointer", result != 0);
+  delete [] sName;
+
+  return result;
 }
 
   // @mfunc Create an <c OMStoredStream> representing the property
@@ -1115,11 +1121,16 @@ OMStoredStream* OMStoredObject::openStoredStream(
   //   @parm TBS
   //   @rdesc TBS
 OMStoredStream* OMStoredObject::createStoredStream(
-                                            const OMDataStream& /* property */)
+                                                  const OMDataStream& property)
 {
   TRACE("OMStoredObject::createStoredStream");
-  ASSERT("Unimplemented code not reached", false);
-  return 0;
+
+  wchar_t* sName = streamName(property.name(), property.propertyId());
+  IStream* stream = createStream(sName);
+  OMMSSStoredStream* result = new OMMSSStoredStream(stream);
+  ASSERT("Valid heap pointer", result != 0);
+  delete [] sName;
+  return result;
 }
 
 wchar_t* OMStoredObject::streamName(const wchar_t* propertyName,
