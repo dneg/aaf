@@ -121,7 +121,8 @@ public:
   void save(OMPropertyId propertyId,
             int type,
             const OMUniqueObjectIdentification& id,
-            OMPropertyTag tag);
+            OMPropertyTag tag,
+            OMPropertyId keyPropertyId);
 
     // @cmember Save a collection (vector/set) of weak references.
   void save(OMPropertyId propertyId,
@@ -129,7 +130,8 @@ public:
             const char* collectionName,
             const OMUniqueObjectIdentification* index,
             size_t count,
-            OMPropertyTag tag);
+            OMPropertyTag tag,
+            OMPropertyId keyPropertyId);
 
     // @cmember Restore the vector named <p vectorName> into this
     //          <c OMStoredObject>.
@@ -146,7 +148,8 @@ public:
   void restore(OMPropertyId propertyId,
                int type,
                OMUniqueObjectIdentification& id,
-               OMPropertyTag& tag);
+               OMPropertyTag& tag,
+               OMPropertyId& keyPropertyId);
 
     // @cmember Restore a collection (vector/set) of weak references.
   void restore(OMPropertyId propertyId,
@@ -155,7 +158,8 @@ public:
                size_t nameSize,
                const OMUniqueObjectIdentification*& index,
                size_t &count,
-               OMPropertyTag& tag);
+               OMPropertyTag& tag,
+               OMPropertyId& keyPropertyId);
 
     // @cmember Write a property value to this <c OMStoredObject>. The
     //          property value to be written occupies <p size> bytes at
