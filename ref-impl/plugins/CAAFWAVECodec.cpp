@@ -57,7 +57,7 @@ CAAFWaveCodec::CAAFWaveCodec (IUnknown * pControllingUnknown, aafBool doInit)
 	_sampleRate.numerator = 44100;
 	_sampleRate.denominator = 1;
 	_bitsPerSample = 8;
-	_numCh = 0;
+	_numCh = 1;
 	_bytesPerFrame = 1;
 	_sampleFrames = 0;
 	_interleaveBuf = NULL;
