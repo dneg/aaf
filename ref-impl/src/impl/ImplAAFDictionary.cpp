@@ -922,9 +922,6 @@ AAFRESULT STDMETHODCALLTYPE
   if (NULL == pDataDef)
 	return AAFRESULT_NULL_PARAM;
 	
-  if (pDataDef->attached())
-	return AAFRESULT_OBJECT_ALREADY_ATTACHED;
-
   // Get the AUID of the new type to register.
   aafUID_t newAUID;
   HRESULT hr = pDataDef->GetAUID(&newAUID);
@@ -937,6 +934,9 @@ AAFRESULT STDMETHODCALLTYPE
 
   if (hr != AAFRESULT_SUCCESS) {
     // This type is not yet registered, add it to the dictionary.
+    // first making sure it's being used somewhere else.
+    if (pDataDef->attached())
+	return AAFRESULT_OBJECT_ALREADY_ATTACHED;
     _dataDefinitions.appendValue(pDataDef);
     pDataDef->AcquireReference();
     // Set up the (non-persistent) dictionary pointer.
