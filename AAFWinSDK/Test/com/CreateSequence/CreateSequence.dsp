@@ -93,7 +93,7 @@ SOURCE=..\..\..\..\test\com\CreateSequence\CreateSequence.cpp
 # End Group
 # Begin Source File
 
-SOURCE=.\Debug\SaveOpenTimevsObjects.ksh
+SOURCE=.\SaveOpenTimevsObjects.ksh
 # End Source File
 # End Target
 # End Project
