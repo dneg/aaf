@@ -756,6 +756,24 @@ typedef struct
 	} tags;
 } aafDefinitionCrit_t;
 
+typedef enum
+{
+	kNoIdSearch = 0, 
+	kByIdProductID, 
+	kByIdGeneration, 
+	kByIdToolkitVersion, 
+} aafIdentificationCritType_t;
+
+typedef struct
+{
+	aafIdentificationCritType_t type;
+	union 
+	{
+		aafUID_t *		    productID;
+		aafUID_t *          generation;
+		aafProductVersion_t toolkitVersion;
+	} tags;
+} aafIdentificationCrit_t;
 
 
 
