@@ -295,13 +295,10 @@ void AxImplNullEssenceCodec::GetIndexedDataDefinition(
 		aafUInt32  index,
 		aafUID_t *  pDataDefID )
 {
-	if ( index >= 0 ) {
-		CHECK_HRESULT( AAFRESULT_BADINDEX );
-	}
-
 	// FIXME - What should be done here?  The CDCI, JPEG, AIFC, and WAVE
 	// codecs all return AAFRESULT_NOT_IMPLEMENTED.
-	// The bad index exception is returned in leiu of "bad implementation".
+
+	CHECK_HRESULT(AAFRESULT_NOT_IMPLEMENTED);
 }
 
 void AxImplNullEssenceCodec::GetMaxCodecDisplayNameLength(
