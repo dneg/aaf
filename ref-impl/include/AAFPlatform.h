@@ -180,6 +180,40 @@
 
 /****************************************************************
  *
+ *  Platform Identifying Strings. Human readable.
+ *
+ ***************************************************************/
+
+#if defined( OS_WINDOWS )
+# define PLATFORM_NAME L"Win32"
+
+#elif defined( OS_IRIX )
+# define PLATFORM_NAME L"IRIX"
+
+#elif defined( OS_LINUX )
+# define PLATFORM_NAME L"Linux"
+
+#elif defined( OS_SOLARIS )
+# define PLATFORM_NAME L"Solaris"
+
+#elif defined( OS_FREEBSD )
+# define PLATFORM_NAME L"FreeBSD"
+
+#elif defined( OS_OPENBSD )
+# define PLATFORM_NAME L"OpenBSD"
+
+#elif defined( OS_DARWIN )
+# define PLATFORM_NAME L"MacOS X"
+
+#else
+# error "Unknown platform - add platform string";
+
+#endif
+
+
+    
+/****************************************************************
+ *
  *  Basic types
  *
  ***************************************************************/

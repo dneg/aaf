@@ -127,12 +127,30 @@ static void GetDateTime(aafTimeStamp_t *ts)
 #define TEST_VERSION		L"TEST VERSION"
 
 #if defined( OS_WINDOWS )
-#define PLATFORM_NAME		L"Win32"
-#elif defined( OS_UNIX )
-#define PLATFORM_NAME		L"Unix"
+# define PLATFORM_NAME L"Win32"
+
+#elif defined( OS_IRIX )
+# define PLATFORM_NAME L"IRIX"
+
+#elif defined( OS_LINUX )
+# define PLATFORM_NAME L"Linux"
+
+#elif defined( OS_SOLARIS )
+# define PLATFORM_NAME L"Solaris"
+
+#elif defined( OS_FREEBSD )
+# define PLATFORM_NAME L"FreeBSD"
+
+#elif defined( OS_OPENBSD )
+# define PLATFORM_NAME L"OpenBSD"
+
+#elif defined( OS_DARWIN )
+# define PLATFORM_NAME L"MacOS X"
+
 #else
-#define PLATFORM_NAME		L"Unknown"
+# error "Unknown platform - add platform string";
 #endif
+#define PLATFORM_STRING L"AAFSDK (" PLATFORM_NAME L")"
 
 aafProductVersion_t			testVersion =  { 1, 0, 0, 0, kAAFVersionUnknown };
 
@@ -342,7 +360,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		TestMethod(pIdent->GetPlatformBufLen(NULL), AAFRESULT_NULL_PARAM);
 		TestMethod(pIdent->GetPlatformBufLen(&bufSize), AAFRESULT_SUCCESS);
 		
-		if (bufSize != sizeof(PLATFORM_NAME))
+		if (bufSize != sizeof(PLATFORM_STRING))
 			localhr = AAFRESULT_TEST_FAILED;
 
 		PrintTestResult(testName);
@@ -355,7 +373,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		TestMethod(pIdent->GetPlatform(myBuffer, bufSize-1), AAFRESULT_SMALLBUF);
 		TestMethod(pIdent->GetPlatform(myBuffer, bufSize), AAFRESULT_SUCCESS);
 
-		if (wcscmp(myBuffer, PLATFORM_NAME))
+		if (wcscmp(myBuffer, PLATFORM_STRING))
 			localhr = AAFRESULT_TEST_FAILED;
 							
 		delete [] myBuffer;

@@ -65,15 +65,7 @@ ImplAAFIdentification::ImplAAFIdentification():
   _persistentProperties.put(   _platform.address());
   _persistentProperties.put(_generation.address());
 
-  
-#if defined( OS_WINDOWS )
-  _platform = L"Win32";
-#elif defined( OS_UNIX )
-  _platform = L"Unix";
-#else
-  _platform = L"Unknown";
-#endif
-
+  _platform = L"AAFSDK (" PLATFORM_NAME L")";
 }
 
 
