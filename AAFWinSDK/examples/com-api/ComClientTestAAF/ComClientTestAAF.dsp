@@ -1,24 +1,25 @@
-# Microsoft Developer Studio Project File - Name="ComTestAAF" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="ComClientTestAAF" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 5.00
 # ** DO NOT EDIT **
 
 # TARGTYPE "Win32 (x86) Application" 0x0101
 
-CFG=ComTestAAF - Win32 Debug
+CFG=ComClientTestAAF - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
-!MESSAGE NMAKE /f "ComTestAAF.mak".
+!MESSAGE NMAKE /f "ComClientTestAAF.mak".
 !MESSAGE 
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "ComTestAAF.mak" CFG="ComTestAAF - Win32 Debug"
+!MESSAGE NMAKE /f "ComClientTestAAF.mak" CFG="ComClientTestAAF - Win32 Debug"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "ComTestAAF - Win32 Release" (based on "Win32 (x86) Application")
-!MESSAGE "ComTestAAF - Win32 Debug" (based on "Win32 (x86) Application")
+!MESSAGE "ComClientTestAAF - Win32 Release" (based on\
+ "Win32 (x86) Application")
+!MESSAGE "ComClientTestAAF - Win32 Debug" (based on "Win32 (x86) Application")
 !MESSAGE 
 
 # Begin Project
@@ -28,7 +29,7 @@ CPP=cl.exe
 MTL=midl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "ComTestAAF - Win32 Release"
+!IF  "$(CFG)" == "ComClientTestAAF - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -52,10 +53,10 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /machine:I386
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386 /out:"Release/COMCLIENTAAF.EXE"
 # SUBTRACT LINK32 /pdb:none
 
-!ELSEIF  "$(CFG)" == "ComTestAAF - Win32 Debug"
+!ELSEIF  "$(CFG)" == "ComClientTestAAF - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -79,30 +80,21 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /pdb:none /debug /debugtype:both /machine:I386
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /pdb:none /debug /debugtype:both /machine:I386 /out:"Debug/COMCLIENTAAF.EXE"
 
 !ENDIF 
 
 # Begin Target
 
-# Name "ComTestAAF - Win32 Release"
-# Name "ComTestAAF - Win32 Debug"
+# Name "ComClientTestAAF - Win32 Release"
+# Name "ComClientTestAAF - Win32 Debug"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\include\COMIDL\AAF_i.c"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\..\examples\com-api\ident\ident.cpp"
-
-!IF  "$(CFG)" == "ComTestAAF - Win32 Release"
-
-# ADD CPP /GR
-
-!ELSEIF  "$(CFG)" == "ComTestAAF - Win32 Debug"
-
-!ENDIF 
-
+SOURCE="..\..\..\..\examples\com-api\clientTest\ComClientTestAAF.cpp"
 # End Source File
 # End Target
 # End Project
