@@ -636,7 +636,7 @@ DECLARE_INTERFACE_(IClassFactory2, IClassFactory)
 	// IClassFactory methods
 	STDMETHOD(CreateInstance)(THIS_ LPUNKNOWN pUnkOuter, REFIID riid,
 		LPVOID FAR* ppvObject) PURE;
-	STDMETHOD(LockServer)(THIS_ BOOL fLock) PURE;
+	STDMETHOD(LockServer)(THIS_ OLEBOOL fLock) PURE;
 
 	//  IClassFactory2 methods
 	STDMETHOD(GetLicInfo)(THIS_ LPLICINFO pLicInfo) PURE;
