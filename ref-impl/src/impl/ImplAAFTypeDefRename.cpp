@@ -351,7 +351,7 @@ void ImplAAFTypeDefRename::onRestore(void* clientContext) const
 
 void ImplAAFTypeDefRename::onCopy(void* clientContext) const
 {
-  ImplAAFTypeDefRename::onCopy(clientContext);
+  ImplAAFTypeDef::onCopy(clientContext);
 
   if ( clientContext ) {
     ImplAAFCloneResolver* pResolver = reinterpret_cast<ImplAAFCloneResolver*>(clientContext);
