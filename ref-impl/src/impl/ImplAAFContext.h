@@ -15,15 +15,12 @@
 #include "AAFTypes.h"
 #include "ImplAAFRoot.h"
 
-class ImplAAFFile;
-
-#include "Container.h"
 
 //
 // Forward declaration
 //
-struct IAAFSession;
-class AAFSession;
+class ImplAAFFile;
+class AAFPluginManager;
 
 
 class ImplAAFSession : public ImplAAFRoot
@@ -106,12 +103,11 @@ public:
   // in /test/ImplAAFSessionTest.cpp.
   static AAFRESULT test();
 
-	ImplAAFFile *GetTopFile(void);
-	void SetTopFile(ImplAAFFile *file);
-	OMLSession	GetContainerSession(void);
-	aafProductIdentification_t *GetDefaultIdent(void);
-void InitPluginManager (void);
-class AAFPluginManager *GetPluginManager (void);
+  ImplAAFFile *GetTopFile(void);
+  void SetTopFile(ImplAAFFile *file);
+  aafProductIdentification_t *GetDefaultIdent(void);
+  void InitPluginManager (void);
+  AAFPluginManager *GetPluginManager (void);
 
 private:
 
