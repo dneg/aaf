@@ -553,8 +553,6 @@ static void ClassDefTest(CAAFClassDefTestLog& Log)
 
 extern "C" HRESULT CAAFClassDef_test()
 {
-	HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
-
 	// Create test log
 	CAAFClassDefTestLog Log(NUM_IAAFCLASSDEF_METHODS,
 		(const char**)ppIAAFMethodNames);
