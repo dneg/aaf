@@ -22,24 +22,31 @@ AD_CLASS_UUID(B1A21387, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
 AD_DEFAULT_UUID(B1A21386, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
 AD_ROOT_CLASS_BEGIN
 
-AD_METHOD1(NextOne,
-[out\,retval], AD_AAFTYPES\(AAFPropertyDefinition\) **, ppPropertyDefinition, The Next PropertyDefinition,
-Enumerates to the next element in the enumerators list. The caller is responsible for 
+AD_XMETHOD1(NextOne,
+			[out\,retval],
+			objOut,
+			AAFPropertyDefinition,
+			ppPropertyDefinition,
+			The Next PropertyDefinition,
+			Enumerates to the next element in the enumerators list. The caller is responsible for 
   // properly releasing the returned pointer when it is no longer needed.
   // @comm This is a just simplified version of the Next method. )
 
-AD_METHOD3(Next,
-[in], aafUInt32, count, number of property definitions requested,
-[out\, size_is\(count\)\, length_is\(*pFetched\)], AD_AAFTYPES\(AAFPropertyDefinition\) **, ppPropertyDefinitions, array to receive property definitions,
-[out\,ref], aafUInt32 *, pFetched, number of actual PropertyDefinitions fetched into ppPropertyDefinitions array,
-Enumerates the next count elements \(AD_AAFTYPES\(AAFPropertyDefinition\) pointers\) in 
+AD_XMETHOD3(Next,
+			[in], objPass, aafUInt32, count, number of property definitions requested,
+			[out\, size_is\(count\)\, length_is\(*pFetched\)],
+			objOut, AD_AAFTYPES\(AAFPropertyDefinition\) **, ppPropertyDefinitions,
+			array to receive property definitions,
+			[out\,ref],objPass, aafUInt32 *, pFetched,
+			number of actual PropertyDefinitions fetched into ppPropertyDefinitions array,
+			Enumerates the next count elements \(AD_AAFTYPES\(AAFPropertyDefinition\) pointers\) in 
   // the enumerator's list\, returning them in the given array along with the actual 
   // number of enumerated elements in pcFetched. The caller is responsible for 
   // properly releasing the returned pointers.)
 
 AD_METHOD1(Skip,
-[in], aafUInt32, count, Number of elements to skip,
-Instructs the enumerator to skip the next count elements in the enumeration so that 
+		   [in], aafUInt32, count, Number of elements to skip,
+		   Instructs the enumerator to skip the next count elements in the enumeration so that 
   // the next call to AD_AAFTYPES\(EnumAAFPropertyDefinitions\)::Next will not return 
   // those elements.)
 
@@ -49,17 +56,25 @@ Instructs the enumerator to position itself at the beginning of the list of elem
   // each pass through the list\, nor will the elements necessarily be enumerated in 
   // the same order. The exact behavior depends on the collection being enumerated.)
 
-AD_METHOD1(Clone,
-[out\,retval], AD_AAFTYPES\(EnumAAFPropertyDefinitions\) **, ppEnum, new enumeration,
-Creates another property definition enumerator with the same state as the current 
+AD_XMETHOD1(Clone,
+			[out\,retval],
+			objOut,
+			EnumAAFPropertyDefinitions,
+			ppEnum,
+			new enumeration,
+			Creates another property definition enumerator with the same state as the current 
   // enumerator to iterate over the same list. This method makes it possible to 
   // record a point in the enumeration sequence in order to return to that point 
   // at a later time.
   // @comm The caller must release this new enumerator separately from the first enumerator.)
 
-AD_METHOD1(NextOne,
-[out\,retval], AD_AAFTYPES\(AAFPropertyDefinition\) **, ppPropertyDefinition, The Next PropertyDefinition,
-Enumerates to the next element in the enumerators list. The caller is responsible for 
+AD_XMETHOD1(NextOne,
+			[out\,retval],
+			objOut,
+			AAFPropertyDefinition,
+			ppPropertyDefinition,
+			The Next PropertyDefinition,
+			Enumerates to the next element in the enumerators list. The caller is responsible for 
   // properly releasing the returned pointer when it is no longer needed.
   // @comm This is a just simplified version of the Next method. )
 
