@@ -36,6 +36,8 @@ class ImplAAFPropertyValue;
 
 #include "OMWeakRefProperty.h"
 
+class ImplEnumAAFPropertyValues;
+
 class ImplAAFTypeDefVariableArray : public ImplAAFTypeDefArray
 {
 public:
@@ -119,6 +121,14 @@ public:
          // @parm [out] newly-created property value
          ImplAAFPropertyValue ** ppPropVal);
 
+
+  //****************
+  // GetElements() 
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+		GetElements (
+								ImplAAFPropertyValue *pInPropVal,
+								ImplEnumAAFPropertyValues **ppEnum);
 
   // Override from AAFTypeDef
   virtual AAFRESULT STDMETHODCALLTYPE

@@ -35,6 +35,8 @@
 #include "OMWeakRefVectorProperty.h"
 #include "OMWeakRefProperty.h"
 
+class ImplEnumAAFPropertyValues;
+
 class ImplAAFTypeDefFixedArray : public ImplAAFTypeDefArray
 {
 public:
@@ -103,6 +105,13 @@ public:
          // @parm [out] newly-created property value
          ImplAAFPropertyValue ** ppPropVal);
 
+  //****************
+  // GetElements() 
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+		GetElements (
+								ImplAAFPropertyValue *pInPropVal,
+								ImplEnumAAFPropertyValues **ppEnum);
 
   //*************************************************************
   //
