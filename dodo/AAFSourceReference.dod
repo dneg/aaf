@@ -21,34 +21,34 @@ AD_CLASS_BEGIN
 
 AD_METHOD1(GetSourceID,
 		   [retval][out],
-		   AAFSourceID *,
+		   aafUID_t *,
 		   pSourceID,
 		   Place to put source ID,
 		   Gets the SourceID and places it into the pSourceID argument.)
 
 AD_METHOD1(SetSourceID,
 		   [in],
-		   AAFSourceID ,
+		   aafUID_t ,
 		   sourceID,
 		   Source ID to set,
 		   Sets the SourceID using the sourceID argument.)
 
 AD_METHOD1(GetSourceMobSlotID,
 		   [retval][out],
-		   AAFMobSlotID *,
+		   aafTrackID_t *,
 		   pMobSlotID,
 		   Place to put source mob slot ID,
 		   Gets the Mob Slot ID and places it into the pMobSlotID argument.)
 
 AD_METHOD1(SetSourceMobSlotID,
 		   [in],
-		   AAFMobSlotID ,
+		   aafTrackID_t ,
 		   mobSlotID,
 		   Source Mob ID to set,
 		   Sets the mob slot ID using the mobSlotID argument.)
 
 
-AAF_OVERRIDE(.method-Test)
+AD_OVERRIDE(.method-Test)
 
 
 AD_CLASS_END
