@@ -213,6 +213,25 @@ void OMProperty::clearPresent(void)
   _isPresent = false;
 }
 
+  // @mfunc The type of this <c OMProperty>.
+  //   @rdesc The type.
+  //   @this const
+const OMType* OMProperty::type(void) const
+{
+  TRACE("OMProperty::type");
+
+  // BobT: temporarily remove this precondition to allow either
+  // _definition or _type to be set (but not both).
+  // PRECONDITION("Valid property definition", _definition != 0);
+
+  const OMType* result = _type;
+  if (_definition != 0) {
+    result = _definition->type();
+    PRECONDITION("Both _type and _definition not set", _type == 0);
+  }
+  return result;
+}
+
 // class OMSimpleProperty
 
   // @mfunc Constructor.
@@ -299,35 +318,28 @@ void OMSimpleProperty::write(void) const
   OMStoredObject* store = container->store();
   ASSERT("Valid stored object", store != 0);
 
-  // BobT: temporarily remove this precondition to allow either
-  // _definition or _type to be set (but not both).
-  // PRECONDITION("Valid property definition", _definition != 0);
+  const OMType* propertyType = type();
 
-  const OMType* type = _type;
-  if (_definition != 0) {
-    type = _definition->type();
-    PRECONDITION("Both _type and _definition not set", _type == 0);
-  }
-  if (type != 0) { // tjb - temporary, should be ASSERTION below
+  if (propertyType != 0) { // tjb - temporary, should be ASSERTION below
 
-    ASSERT("Valid property type", type != 0);
+    ASSERT("Valid property type", propertyType != 0);
  
     // Allocate buffer for property value
-    size_t externalBytesSize = type->externalSize(_bits,
-                                                  _size);
+    size_t externalBytesSize = propertyType->externalSize(_bits,
+                                                          _size);
     OMByte* buffer = new OMByte[externalBytesSize];
     ASSERT("Valid heap pointer", buffer != 0);
 
     // Externalize property value
-    type->externalize(_bits,
-                      _size,
-                      buffer,
-                      externalBytesSize,
-                      store->byteOrder());
+    propertyType->externalize(_bits,
+                              _size,
+                              buffer,
+                              externalBytesSize,
+                              store->byteOrder());
   
     // Reorder property value
     if (store->byteOrder() != hostByteOrder()) {
-      type->reorder(buffer, externalBytesSize);
+      propertyType->reorder(buffer, externalBytesSize);
     }
 
     // Write property value
@@ -355,19 +367,11 @@ void OMSimpleProperty::read(size_t externalBytesSize)
   OMStoredObject* store = _propertySet->container()->store();
   ASSERT("Valid store", store != 0);
 
-  // BobT: temporarily remove this precondition to allow either
-  // _definition or _type to be set (but not both).
-  // PRECONDITION("Valid property definition", _definition != 0);
+  const OMType* propertyType = type();
 
-  const OMType* type = _type;
-  if (_definition != 0) {
-    type = _definition->type();
-    PRECONDITION("Both _type and _definition not set", _type == 0);
-  }
+  if (propertyType != 0) { // tjb - temporary, should be ASSERTION below
 
-  if (type != 0) { // tjb - temporary, should be ASSERTION below
-
-    ASSERT("Valid property type", type != 0);
+    ASSERT("Valid property type", propertyType != 0);
 
     // Allocate buffer for property value
     OMByte* buffer = new OMByte[externalBytesSize];
@@ -378,19 +382,20 @@ void OMSimpleProperty::read(size_t externalBytesSize)
 
     // Reorder property value
     if (store->byteOrder() != hostByteOrder()) {
-      type->reorder(buffer, externalBytesSize);
+      propertyType->reorder(buffer, externalBytesSize);
     }
 
     // Internalize property value
-    size_t requiredBytesSize = type->internalSize(buffer, externalBytesSize);
+    size_t requiredBytesSize = propertyType->internalSize(buffer,
+                                                          externalBytesSize);
     setSize(requiredBytesSize);
     ASSERT("Property value buffer large enough", _size >= requiredBytesSize);
 
-    type->internalize(buffer,
-                      externalBytesSize,
-                      _bits,
-                      requiredBytesSize,
-                      hostByteOrder());
+    propertyType->internalize(buffer,
+                              externalBytesSize,
+                              _bits,
+                              requiredBytesSize,
+                              hostByteOrder());
     delete [] buffer;
   } else {
     // tjb - temporary, no type information, do it the old way
