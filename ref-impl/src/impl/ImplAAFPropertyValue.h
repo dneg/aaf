@@ -6,7 +6,7 @@
 
 /***********************************************************************
  *
- *              Copyright (c) 1998-1999 Avid Technology, Inc.
+ *              Copyright (c) 1998-2000 Avid Technology, Inc.
  *
  * Permission to use, copy and modify this software and accompanying 
  * documentation, and to distribute and sublicense application software
@@ -46,11 +46,10 @@ class ImplAAFPropertyValue : public ImplAAFRoot
 {
 public:
   //
-  // Constructor/destructor
+  // Constructor
   //
   //********
   ImplAAFPropertyValue ();
-
 
   //****************
   // GetType()
@@ -58,7 +57,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     GetType
         // @parm [out] The type definition associated with this property value
-        (ImplAAFTypeDef ** ppTypeDef);
+        (ImplAAFTypeDef ** ppTypeDef) const;
 
 
   //****************
@@ -73,19 +72,44 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE WriteTo(OMProperty* pOmProp);
 
 protected:
+  //
+  // Destructor
+  //
+  //********
   virtual ~ImplAAFPropertyValue ();
+
+
+  // non-published method to initialize this object.
+  // Initialize an instance from a type definition. This is the "old-style"
+  // "non-direct" access initialization method. 
+  AAFRESULT Initialize (const ImplAAFTypeDef *propertyType);
+
+  // non-published method to initialize this object.
+  // Initialize the instance from the given type and property. This is the new
+  // more "direct" access initialization method. NOTE: The given type must be the
+  // same instance as the type in the given property.
+  AAFRESULT Initialize (const ImplAAFTypeDef *propertyType,
+                        OMProperty *property);
 
   //****************
   //
   // non-published method to set up one of these.
   //
-  AAFRESULT SetType (ImplAAFTypeDef * pType);
+  AAFRESULT SetType (const ImplAAFTypeDef * pType);
 
   const ImplAAFTypeDef * pvtGetType (void) const;
+  
+  // accessor methods for subclasses:
+  const ImplAAFTypeDef *type(void) const;
+  OMProperty *property(void) const;
+  ImplAAFRoot *propertyContainer(void) const;
 
 private:
   // type of this property
-  ImplAAFTypeDef * _pType;
+  const ImplAAFTypeDef * _pType;
+  
+  OMProperty *_property; // The property associated with this property value.
+  ImplAAFRoot *_propertyContainer; // 
 };
 
 //
