@@ -24,22 +24,10 @@
 //
 #define __dest_os __mac_os
 
-//#define CHECKMEMORYLEAKS // Uncomment this line to turn leak checking on
-
 #define _MAC
 #define NONAMELESSUNION
 
 #include "MacHeaders.h"
-
-
-// Define to enable the module testing of the shared library.
-#define AAF_MODULE_TEST
-#ifndef _DEBUG
-#define _DEBUG
-#endif
-
-// Define delegation callbacks...
-#define BOB_TEST
 
 // Dump specific definitions
 //
