@@ -20,7 +20,7 @@
 #
 ###############################################################################
 
-ALL = axLib axDump axExample axMasterMobEx axPluginInfo axPlugin
+ALL = axLib axDump axExample axMasterMobEx axFileGen axPluginInfo axPlugin
 
 all: $(ALL)
 
