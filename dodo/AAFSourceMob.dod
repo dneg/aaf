@@ -6,7 +6,6 @@ AAFSourceMob\
 AAFMob\
 #endm
 #c
-#import ./AAFUnitTest.exp
 #import ./AAFObject.exp
 #import ./AAFMob.exp
 
@@ -229,9 +228,6 @@ Returns source information for a track in a Master Mob or Source Mob.
   // omfiMobGetThisSource\, and omfiMobCloseSearch functions for those
   // purposes.
   // @devnote based on omfiMobSearchSource)
-
-
-AD_OVERRIDE(.method-Test)
 
 AD_OVERRIDE(.method-IsMobKind)
 
