@@ -116,6 +116,11 @@ public:
     //          store (disk file).
   virtual bool persistent(void) const;
 
+    // @cmember Is this <c OMStorable> dirty ?
+    //          A dirty object is one that has been modified since it
+    //          was last saved or that has never been saved at all. 
+  bool isDirty(void) const;
+
     // @cmember This object's property set.
   virtual OMPropertySet* propertySet(void);
 
