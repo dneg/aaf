@@ -397,6 +397,8 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	IAAFEssenceDescriptor*		pEdesc = NULL;
 	IAAFSourceMob*				pSourceMob = NULL;
 
+	IAAFFindSourceInfo*			info = NULL;
+	IAAFMasterMob*				pMasterMob = NULL;
 	aafSearchCrit_t				criteria;
 	aafNumSlots_t				numMobs, numSlots;
 	aafInt32					numCompMobs;
@@ -626,7 +628,9 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 								if(AAFRESULT_SUCCESS == hr)
 								{
 									aafWChar	buf[256];
+									aafSourceRef_t		ref;
 
+									check(pSourceClip->GetSourceReference (&ref));
 									wprintf(L"        %ld) A length %ld source clip\n", item, length);
 									check(pSourceClip->ResolveRef(&pReferencedMob));
 									check(pReferencedMob->GetMobID(&mobID));
@@ -635,8 +639,13 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 									wprintf(L"            References mob = '%s'\n", namebuf);
 									wprintf(L"                (mobID %s)\n", buf);
 
-									pSourceClip->Release();
-									pSourceClip = NULL;
+									hr = pReferencedMob->QueryInterface(IID_IAAFMasterMob, (void **) &pMasterMob);
+ 									if(AAFRESULT_SUCCESS == hr)
+									{
+										check(pMasterMob->GetTapeName (ref.sourceSlotID,
+											buf, sizeof(buf)));
+										wprintf(L"            Derived from tape = '%s'\n", buf);
+									}
 								}
 								hr = pComponent->QueryInterface(IID_IAAFFiller, (void **) &pFiller);
 								if(AAFRESULT_SUCCESS == hr)
@@ -751,6 +760,12 @@ cleanup:
 		pFile->Release();
 	}
 	
+	if (info)
+		info->Release();
+
+	if (pMasterMob)
+		pMasterMob->Release();
+
 	return moduleErrorTmp;
 }
 
