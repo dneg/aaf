@@ -57,8 +57,7 @@
 
 #include <assert.h>
 
-
-.this-module::.this-module (AAFBool doInit)
+.this-module::.this-module (aafBool doInit)
 : .parent-module (AAFFalse)
 {
   if (doInit)
@@ -100,7 +99,7 @@
 #include <assert.h>
 
 
-.this-module::.this-module (AAFBool doInit)
+.this-module::.this-module (aafBool doInit)
 {
   if (doInit)
 	{
