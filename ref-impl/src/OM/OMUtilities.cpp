@@ -211,6 +211,19 @@ wchar_t* findWideCharacter(const wchar_t* string, wchar_t character)
   return result;
 }
 
+size_t countWideCharacter(const wchar_t* string, wchar_t character)
+{
+  size_t result = 0;
+  wchar_t* element = const_cast<wchar_t*>(string);
+  wchar_t* end = findWideCharacter(element, character);
+  while (end != 0) {
+    result = result + 1;
+    element = ++end;
+    end = findWideCharacter(element, character);
+  }
+  return result;
+}
+
 void printWideString(const wchar_t* string)
 {
   TRACE("printWideString");
