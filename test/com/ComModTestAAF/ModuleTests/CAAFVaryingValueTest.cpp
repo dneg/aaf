@@ -158,13 +158,12 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFSourceClip		 *pSourceClip = NULL;
 	IAAFControlPoint	 *pControlPoint = NULL;
 	IAAFSourceReference *pSourceRef = NULL;
-	IAAFTypeDefInt		 *pIntDef = NULL;
 	IAAFInterpolationDef *pInterpDef = NULL;
 	IAAFPluginManager	*pMgr = NULL;
 	IAAFTypeDef			*pTypeDef = NULL;
 	bool				bFileOpen = false;
 	HRESULT				hr = S_OK;
-	aafUID_t			testDataDef = DDEF_Picture, testInterpDef = kAAFTypeID_Rational;
+	aafUID_t			testDataDef = DDEF_Picture;
 	aafLength_t			effectLen = TEST_EFFECT_LEN;
 	aafUID_t			effectID = kTestEffectID;
 	aafUID_t			parmID = kTestParmID;
@@ -198,10 +197,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		pDefObject->Release();
 		pDefObject = NULL;
 
-		checkResult(pDictionary->CreateInstance(AUID_AAFTypeDefInt,
-							  IID_IAAFTypeDefInt, 
-							  (IUnknown **)&pIntDef));
-		checkResult(pIntDef->Initialize (testInterpDef, sizeof(aafRational_t), AAFTrue, L"Signed Rational Effect Parameter"));
+		checkResult(pDictionary->LookupType (kAAFTypeID_Rational, &pTypeDef));
 		checkResult(AAFGetPluginManager(&pMgr));
 		checkResult(pMgr->CreatePluginDefinition(LinearInterpolator, pDictionary, &pDefObject));
 		checkResult(pDefObject->QueryInterface(IID_IAAFInterpolationDef, (void **) &pInterpDef));
@@ -211,8 +207,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pDictionary->RegisterOperationDefinition(pOperationDef));
 		checkResult(pDictionary->RegisterParameterDefinition(pParamDef));
 		checkResult(pDictionary->RegisterInterpolationDefinition(pInterpDef));
-		checkResult(pIntDef->QueryInterface(IID_IAAFTypeDef, (void **) &pTypeDef));
-		checkResult(pDictionary->RegisterType(pTypeDef));
 
 		checkResult(pOperationDef->QueryInterface(IID_IAAFDefObject, (void **) &pDefObject));
 		checkResult(pDefObject->Initialize (effectID, TEST_EFFECT_NAME, TEST_EFFECT_DESC));
@@ -356,8 +350,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 	if (pParm)
 		pParm->Release();
-	if (pIntDef)
-		pIntDef->Release();
 	if (pInterpDef)
 		pInterpDef->Release();
 	if (pVaryingValue)
