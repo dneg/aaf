@@ -34,6 +34,7 @@ DODO_TARGETS = \
 	AAFControlCodeDefinition.all \
 	AAFControlPoint.all \
 	AAFDataDefinition.all \
+	AAFDefinitionObject.all \
 	AAFEdgecode.all \
 	AAFEffectDefinition.all \
 	AAFEffectInvocation.all \
@@ -293,7 +294,7 @@ AAFDataDefinition.all : AAFDataDefinition.cpp AAFDataDefinition.h
 AAFDataDefinition.all : AAFDataDefinition.comc AAFDataDefinition.comh
 AAFDataDefinition.all : AAFDataDefinition.exp AAFDataDefinition.idl
 AAFDataDefinition.all : AAFDataDefinition.implc AAFDataDefinition.implh
-AAFDataDefinition.exp : AAFUnitTest.exp macros/exp.mac macros/base.mac
+AAFDataDefinition.exp : AAFDefinitionObject.exp AAFUnitTest.exp macros/exp.mac macros/base.mac
 AAFDataDefinition.h : AAFDataDefinition.exp macros/h.mac macros/base.mac
 AAFDataDefinition.cpp : AAFDataDefinition.exp macros/cpp.mac macros/base.mac
 AAFDataDefinition.idl : AAFDataDefinition.exp macros/idl.mac macros/base.mac
@@ -301,6 +302,20 @@ AAFDataDefinition.comc : AAFDataDefinition.exp macros/comc.mac macros/base.mac
 AAFDataDefinition.comh : AAFDataDefinition.exp macros/comh.mac macros/base.mac
 AAFDataDefinition.implc : AAFDataDefinition.exp macros/implc.mac macros/base.mac
 AAFDataDefinition.implh : AAFDataDefinition.exp macros/implh.mac macros/base.mac
+
+
+AAFDefinitionObject.all : AAFDefinitionObject.cpp AAFDefinitionObject.h
+AAFDefinitionObject.all : AAFDefinitionObject.comc AAFDefinitionObject.comh
+AAFDefinitionObject.all : AAFDefinitionObject.exp AAFDefinitionObject.idl
+AAFDefinitionObject.all : AAFDefinitionObject.implc AAFDefinitionObject.implh
+AAFDefinitionObject.exp : AAFObject.exp AAFUnitTest.exp macros/exp.mac macros/base.mac
+AAFDefinitionObject.h : AAFDefinitionObject.exp macros/h.mac macros/base.mac
+AAFDefinitionObject.cpp : AAFDefinitionObject.exp macros/cpp.mac macros/base.mac
+AAFDefinitionObject.idl : AAFDefinitionObject.exp macros/idl.mac macros/base.mac
+AAFDefinitionObject.comc : AAFDefinitionObject.exp macros/comc.mac macros/base.mac
+AAFDefinitionObject.comh : AAFDefinitionObject.exp macros/comh.mac macros/base.mac
+AAFDefinitionObject.implc : AAFDefinitionObject.exp macros/implc.mac macros/base.mac
+AAFDefinitionObject.implh : AAFDefinitionObject.exp macros/implh.mac macros/base.mac
 
 AAFEdgecode.all : AAFEdgecode.cpp AAFEdgecode.h
 AAFEdgecode.all : AAFEdgecode.comc AAFEdgecode.comh
