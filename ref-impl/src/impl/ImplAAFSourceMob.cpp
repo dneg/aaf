@@ -134,6 +134,8 @@ AAFRESULT STDMETHODCALLTYPE
 		sourceRef.sourceSlotID = 0;
 		CvtInt32toPosition(0, sourceRef.startTime);
 		sub = (ImplAAFSourceClip *)CreateImpl(CLSID_AAFSourceClip);
+		if(sub == NULL)
+			return(E_FAIL);
 		CHECK(sub->InitializeSourceClip (dataDef, &length, sourceRef));
 		CHECK(AppendNewTimelineSlot(editRate, sub, slotID, L"Test", zeroPos, 
 												&newSlot));
@@ -192,6 +194,8 @@ AAFRESULT STDMETHODCALLTYPE
  		if (FindSlotBySlotID(slotID, (ImplAAFMobSlot **)&mobSlot) == AAFRESULT_SUCCESS)
 		{
 			aSequ = (ImplAAFSequence *)CreateImpl(CLSID_AAFSequence);
+			if(aSequ == NULL)
+				RAISE(E_FAIL);
 			CHECK(aSequ->Initialize(&timecodeKind));
 			CHECK(aSequ->AppendComponent(tccp));
 			CHECK(mobSlot->SetSegment(aSequ));
@@ -200,6 +204,8 @@ AAFRESULT STDMETHODCALLTYPE
 		else
 		{
 			aSequ = (ImplAAFSequence *)CreateImpl(CLSID_AAFSequence);
+			if(aSequ == NULL)
+				RAISE(E_FAIL);
 			CHECK(aSequ->Initialize(&timecodeKind));
 			CHECK(aSequ->AppendComponent(tccp));
 			CHECK(AppendNewTimelineSlot(editrate, aSequ, slotID,
@@ -278,8 +284,12 @@ AAFRESULT STDMETHODCALLTYPE
 		(_file, edgecodeKind, zeroLen);	
 		filler2 = CreateImpl(CLSID_AAFFiller);
 		(_file, edgecodeKind, zeroLen);	
+		if(filler1 == NULL || filler2 == NULL)
+			RAISE(E_FAIL);
 
 		ecSequence = CreateImpl(CLSID_AAFSequence);
+		if(ecSequence == NULL)
+			RAISE(E_FAIL);
 		(_file, edgecodeKind);
 
 		CvtInt32toLength(length32, length);
@@ -290,7 +300,9 @@ AAFRESULT STDMETHODCALLTYPE
 		strncpy((char *)edge.header, header, 8);
 		
 		edgecodeClip = CreateImpl(CLSID_AAFEdgecode);
-		(_file, length, edge);
+		if(edgecodeClip == NULL)
+			RAISE(E_FAIL);
+		 (_file, length, edge);
 		
 		CHECK(ecSequence->AppendCpnt(filler1));
 		CHECK(ecSequence->AppendCpnt(edgecodeClip));
@@ -381,6 +393,8 @@ AAFRESULT STDMETHODCALLTYPE
 		{
 			aSequ  = CreateImpl(CLSID_AAFSequence(_file, mediaKind);
 			filler1 = CreateImpl(CLSID_AAFFiller(_file, mediaKind, pos);	
+			if(aSequ == NULL || filler1 == NULL)
+				RAISE(E_FAIL);
 			CHECK(aSequ->AppendCpnt(filler1));
 			CHECK(aSequ->AppendCpnt(sclp));
 			filler2 = CreateImpl(CLSID_AAFFiller(_file, mediaKind, endFillLen);	
@@ -663,11 +677,10 @@ AAFRESULT STDMETHODCALLTYPE
                            aafMobKind_t  mobKind,
                            aafMediaCriteria_t *pMediaCrit,
                            aafEffectChoice_t *pEffectChoice,
-                           ImplAAFComponent **ppThisCpnt,
                            ImplAAFFindSourceInfo **ppSourceInfo)
 {
 	return(InternalSearchSource(slotID, offset, mobKind, pMediaCrit, pEffectChoice,
-										   ppThisCpnt, ppSourceInfo));
+										   ppSourceInfo));
 }
 
 
