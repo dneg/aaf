@@ -44,7 +44,7 @@ AD_FORWARD_DECLARATION(AAFDefObject)
 AD_CLASS_UUID(dfbd6526, 1d81, 11d2, bf, 96, 00, 60, 97, 11, 62, 12)
 
 AD_DEFAULT_UUID(dfbd6525, 1d81, 11d2, bf, 96, 00, 60, 97, 11, 62, 12)
-AD_CLASS_BEGIN
+AD_XCLASS_BEGIN(Concrete, StoredObject)
 AD_XMETHOD1(GetName,
 			[out\, retval],
 			objPass,
@@ -147,4 +147,4 @@ AD_XMETHOD1(GetPropertyDefs,
 	// AAFRESULT_SUCCESS
 	//   - succeeded.  \(This is the only code indicating success.\) )
 
-AD_CLASS_END
+AD_XCLASS_END(Concrete, StoredObject)

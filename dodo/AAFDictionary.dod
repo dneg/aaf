@@ -37,7 +37,7 @@ AD_FORWARD_DECLARATION(EnumAAFEffectDefs)
 AD_CLASS_UUID(B1A21399, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
 
 AD_DEFAULT_UUID(B1A21398, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
-AD_CLASS_BEGIN
+AD_XCLASS_BEGIN(Concrete, StoredObject)
 
 AD_XMETHOD2(LookupClass,
 [in\,ref], objPass, aafUID_t *, pClassID, Class Unique ID,
@@ -99,4 +99,4 @@ AD_XMETHOD1(GetEffectDefinitions,
 Return an enumerator for aff effect definitions.)
 
 
-AD_CLASS_END
+AD_XCLASS_END(Concrete, StoredObject)

@@ -26,7 +26,7 @@ AD_FORWARD_DECLARATION(EnumAAFPropertyValues)
 AD_CLASS_UUID(c3274645, 9467, 11d2, 84, 1f, 00, 60, 08, 32, ac, b8)
 
 AD_DEFAULT_UUID(c3274646, 9467, 11d2, 84, 1f, 00, 60, 08, 32, ac, b8)
-AD_CLASS_BEGIN
+AD_XCLASS_BEGIN(Concrete, StoredObject)
 AD_METHOD0(Initialize,
 		   Initializes a newly allocated\, empty IAAFTypeDefArray-supporting
   // object.  This method must be called after allocation\, and before
@@ -115,4 +115,4 @@ AD_XMETHOD2(GetElementCount,
   //
   // AAFRESULT_NULL_PARAM
   //   - The pCount pointer is NULL.)
-AD_CLASS_END
+AD_XCLASS_END(Concrete, StoredObject)
