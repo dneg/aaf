@@ -119,6 +119,7 @@ void printReg(const aafUID_t& id, ostream& s)
 void printDefinition(const char* type,
                      const char* prefix,
                      const char* name,
+                     size_t width,
                      const aafUID_t& identifier,
                      ostream& s)
 {
@@ -129,6 +130,10 @@ void printDefinition(const char* type,
   s << " ";
   s << prefix;
   s << name;
+  size_t actualWidth = strlen(prefix) + strlen(name);
+  for (size_t i = actualWidth; i < width; i++) {
+    s << " ";
+  }
   s << " =" << endl;
   print(identifier, cout);
   s << ";" << endl << endl;

@@ -43,6 +43,7 @@ static void doFile (const char * moduleName)
       printDefinition("const aafUID_t",
                       prefix,
                       members[i].name,
+                      0,
                       members[i].identifier,
                       cout);
     }

@@ -72,6 +72,7 @@ static void doFile (const char * moduleName)
     printDefinition("const aafUID_t",
                     prefix,
                     classes[i].name,
+                    0,
                     classes[i].identifier,
                     cout);
   }

@@ -34,6 +34,7 @@ static void doFile(const char* moduleName)
     printDefinition("const aafUID_t",
                     prefix,
                     properties[i].name,
+                    0,
                     properties[i].identifier,
                     cout);
   }
@@ -53,6 +54,7 @@ static void doFile(const char* moduleName)
     printDefinition("const aafUID_t",
                     prefix,
                     special[i].name,
+                    0,
                     special[i].identifier,
                     cout);
   }
