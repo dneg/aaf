@@ -217,9 +217,9 @@ void OMStrongReferenceSetProperty<ReferencedObject>::restore(
     setIndex->iterate(context, localKey, count, key);
     char* name = elementName(localKey);
     OMSetElement<OMStrongObjectReference<ReferencedObject>,
-                 ReferencedObject> element(this, name, localKey, key);
-    element.restore();
-    _set.insert(element);
+                 ReferencedObject> newElement(this, name, localKey, key);
+    newElement.restore();
+    _set.insert(newElement);
     delete [] name;
     name = 0; // for BoundsChecker
   }

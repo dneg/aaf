@@ -205,9 +205,9 @@ void OMStrongReferenceVectorProperty<ReferencedObject>::restore(
       vectorIndex->iterate(context, localKey);
       char* name = elementName(localKey);
       OMVectorElement<OMStrongObjectReference<ReferencedObject>,
-                      ReferencedObject> element(this, name, localKey);
-      element.restore();
-      _vector.setAt(element, i);
+                      ReferencedObject> newElement(this, name, localKey);
+      newElement.restore();
+      _vector.setAt(newElement, i);
       delete [] name;
       name = 0; // for BoundsChecker
     }
