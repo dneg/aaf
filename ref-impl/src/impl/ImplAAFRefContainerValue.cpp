@@ -54,6 +54,9 @@
 
 #include "OMProperty.h"
 #include "OMContainerProperty.h" // TBD: include header for base class for singleton references.
+#include "OMReferenceContainer.h"
+#include "OMRefSetProperty.h"
+#include "OMRefVectorProperty.h"
 #include "OMPropertyDefinition.h"
 #include "OMObject.h"
 
@@ -93,11 +96,23 @@ AAFRESULT ImplAAFRefContainerValue::Initialize (
 }
 
   
-// Retrieve the property as an OMContainerProperty.
-OMContainerProperty * ImplAAFRefContainerValue::containerProperty(void) const
+// Retrieve the property as an OMReferenceContainer.
+OMReferenceContainer* ImplAAFRefContainerValue::referenceContainer(void) const
 {
   assert (isInitialized());
-  return static_cast<OMContainerProperty *>(property());
+  OMProperty* p = property();
+  OMContainerProperty* cp = dynamic_cast<OMContainerProperty*>(p);
+  assert(cp != 0);
+  // Perhaps the following nastiness should be hidden inside
+  // the Object Manager - tjb
+  OMReferenceContainer* result = 0;
+
+  result = dynamic_cast<OMReferenceSetProperty*>(cp);
+  if (result == 0)
+    result = dynamic_cast<OMReferenceVectorProperty*>(cp);
+
+  assert(result != 0);
+  return result;
 }
 
 
@@ -194,14 +209,14 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFRefContainerValue::InsertObject(
   if (!isInitialized())
     return AAFRESULT_NOT_INITIALIZED;
  
-  // Hand off to the OMContainerProperty
-  OMContainerProperty * pContainerProperty = containerProperty();
+  // Hand off to the OMReferenceContainer
+  OMReferenceContainer* pReferenceContainer = referenceContainer();
 
   // Object refernce containers should only contain a single reference
   // to an object.
-  if (!pContainerProperty->containsObject(pObject))
+  if (!pReferenceContainer->containsObject(pObject))
   {
-    pContainerProperty->insertObject(pObject);
+    pReferenceContainer->insertObject(pObject);
     if (usesReferenceCounting())
     {
       pObject->AcquireReference();
@@ -228,9 +243,9 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFRefContainerValue::ContainsObject(
   if (!isInitialized())
     return AAFRESULT_NOT_INITIALIZED;
  
-  // Hand off to the OMContainerProperty
-  OMContainerProperty * pContainerProperty = containerProperty();
-  if (pContainerProperty->containsObject(pObject))
+  // Hand off to the OMReferenceContainer
+  OMReferenceContainer* pReferenceContainer = referenceContainer();
+  if (pReferenceContainer->containsObject(pObject))
   {
     *pResult = kAAFTrue;
   }
@@ -251,15 +266,15 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFRefContainerValue::RemoveObject(
   if (!isInitialized())
     return AAFRESULT_NOT_INITIALIZED;
  
-  // Hand off to the OMContainerProperty
-  OMContainerProperty * pContainerProperty = containerProperty();
+  // Hand off to the OMeferenceContainer
+  OMReferenceContainer* pReferenceContainer = referenceContainer();
   
   // Object refernce containers should only contain a single reference
   // to an object.
-  if (!pContainerProperty->containsObject(pObject))
+  if (!pReferenceContainer->containsObject(pObject))
     result = AAFRESULT_OBJECT_NOT_FOUND;
 
-  pContainerProperty->removeObject(pObject);
+  pReferenceContainer->removeObject(pObject);
   if (usesReferenceCounting())
     pObject->ReleaseReference();
     
@@ -312,7 +327,7 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFRefContainerValue::Count(
   if (NULL == pCount)
     return AAFRESULT_NULL_PARAM;
  
-  *pCount = containerProperty()->count(); 
+  *pCount = referenceContainer()->count(); 
   return result;
 }
   
@@ -356,7 +371,7 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFRefContainerValue::GetElements(
   ImplEnumAAFStorablePropVals* pNewEnum = dynamic_cast<ImplEnumAAFStorablePropVals*>(pRoot);
   if (NULL != pNewEnum)
   {
-    OMReferenceContainerIterator* newIterator = containerProperty()->createIterator();
+    OMReferenceContainerIterator* newIterator = referenceContainer()->createIterator();
     if (NULL != newIterator)
     {
       result = pNewEnum->Initialize(this, newIterator);
