@@ -1022,6 +1022,15 @@ OMProperty * ImplAAFTypeDefRecord::pvtCreateOMPropertyMBS
 }
 
 
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFTypeDefRecord::RawAccessType (
+      ImplAAFTypeDef ** ppRawTypeDef)
+{
+  // Return variable array of unsigned char
+  return pvtGetUInt8Array8Type (ppRawTypeDef);
+}
+
+
 bool ImplAAFTypeDefRecord::IsAggregatable () const
 { return true; }
 

@@ -386,6 +386,15 @@ OMProperty * ImplAAFTypeDefFixedArray::pvtCreateOMPropertyMBS
 }
 
 
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFTypeDefFixedArray::RawAccessType (
+      ImplAAFTypeDef ** ppRawTypeDef)
+{
+  // Return variable array of unsigned char
+  return pvtGetUInt8Array8Type (ppRawTypeDef);
+}
+
+
 bool ImplAAFTypeDefFixedArray::IsAggregatable () const
 { return true; }
 
