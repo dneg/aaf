@@ -2355,6 +2355,8 @@ HRESULT STDMETHODCALLTYPE
 				// should be a error in essence access...
 				if( _numberOfSamples > 0 )
 				    checkAssertion( frameLayout == _frameLayout );
+
+				_frameLayout = frameLayout;
 			}
 			else if (EqualAUID(&kAAFCDCIHorizSubsampling, &param.opcode))
 			{
@@ -2710,7 +2712,7 @@ HRESULT STDMETHODCALLTYPE
 			}
 			else if (EqualAUID(&kAAFFrameLayout, &param.opcode))
 			{	// Write out the current pad bytes per row.
-				param.operand.expFrameLayout = _padBytesPerRow;
+				param.operand.expFrameLayout = _frameLayout;
 				checkResult(fmt->AddFormatSpecifier (kAAFFrameLayout, sizeof(param.operand.expFrameLayout), (aafDataBuffer_t)&param.operand.expFrameLayout));
 			}
 			else if (EqualAUID(&kAAFPadBytesPerRow, &param.opcode))
