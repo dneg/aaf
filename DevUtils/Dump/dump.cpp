@@ -3521,15 +3521,6 @@ int main(int argumentCount, char* argumentVector[])
 {
   checkSizes();
 
-#if defined(_MAC) || defined(macintosh)
-#if defined(USE_DATAINPUT)
-  char dataFile[] = "dump.inp";
-  getInputData(&argumentCount, argumentVector, dataFile);
-#else
-  argumentCount = ccommand(&argumentVector); // console window for mac
-#endif
-#endif
-
   // Initialize com library for this process.
   CComInitialize comInit;
 
@@ -3767,12 +3758,6 @@ int main(int argumentCount, char* argumentVector[])
     break;
 
   }
-
-#if defined(_MAC) || defined(macintosh)
-#if defined(USE_DATAINPUT)
-  cleanUpInputData(argumentCount, argumentVector);
-#endif
-#endif
 
   return (EXIT_SUCCESS);
 }
