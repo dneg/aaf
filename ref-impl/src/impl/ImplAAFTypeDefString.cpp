@@ -56,7 +56,7 @@
 extern "C" const aafClassID_t CLSID_AAFPropValData;
 
 ImplAAFTypeDefString::ImplAAFTypeDefString ()
-  : _ElementType  ( PID_TypeDefinitionString_ElementType,  "ElementType")
+  : _ElementType  ( PID_TypeDefinitionString_ElementType,  "ElementType", "/Dictionary/TypeDefinitions", PID_DefinitionObject_Identification)
 {
   _persistentProperties.put(_ElementType.address());
 }
@@ -77,11 +77,7 @@ AAFRESULT STDMETHODCALLTYPE
   if (! pTypeDef->IsStringable())
 	return AAFRESULT_BAD_TYPE;
 
-  aafUID_t typeId;
-  AAFRESULT hr = pTypeDef->GetAUID(&typeId);
-  if (! AAFRESULT_SUCCEEDED (hr)) return hr;
-
-  return pvtInitialize (id, typeId, pTypeName);
+  return pvtInitialize (id, pTypeDef, pTypeName);
 }
 
 
@@ -89,7 +85,7 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDefString::pvtInitialize (
       const aafUID_t & id,
-	  const aafUID_t & typeId,
+      const ImplAAFTypeDef * pTypeDef,
       const aafCharacter * pTypeName)
 {
   if (! pTypeName) return AAFRESULT_NULL_PARAM;
@@ -100,7 +96,7 @@ AAFRESULT STDMETHODCALLTYPE
 	if (AAFRESULT_FAILED (hr))
     return hr;
 
-  _ElementType = typeId;
+  _ElementType = pTypeDef;
 
   return AAFRESULT_SUCCESS;
 }
@@ -111,30 +107,16 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDefString::GetType (
       ImplAAFTypeDef ** ppTypeDef) const
 {
-  if (! ppTypeDef) return AAFRESULT_NULL_PARAM;
+  if (! ppTypeDef)
+	return AAFRESULT_NULL_PARAM;
 
-  if (!_cachedBaseType)
-	{
-	  ImplAAFDictionarySP pDict;
+   if(_ElementType.isVoid())
+		return AAFRESULT_OBJECT_NOT_FOUND;
+  ImplAAFTypeDef *pTypeDef = _ElementType;
 
-	  AAFRESULT hr;
-	  hr = GetDictionary(&pDict);
-	  if (AAFRESULT_FAILED(hr))
-		return hr;
-	  assert (pDict);
-
-	  ImplAAFTypeDefString * pNonConstThis =
-		  (ImplAAFTypeDefString *) this;
-	  hr = pDict->LookupTypeDef (_ElementType, &pNonConstThis->_cachedBaseType);
-	  if (AAFRESULT_FAILED(hr))
-		return hr;
-	  assert (_cachedBaseType);
-	}
-  assert (ppTypeDef);
-  *ppTypeDef = _cachedBaseType;
+  *ppTypeDef = pTypeDef;
   assert (*ppTypeDef);
   (*ppTypeDef)->AcquireReference ();
-
   return AAFRESULT_SUCCESS;
 }
 
