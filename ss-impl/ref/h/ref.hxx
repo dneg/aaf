@@ -113,7 +113,9 @@ typedef const char *LPCSTR;
 #endif // _WIN32
 
 const ULONG MAX_ULONG = 0xFFFFFFFF;
+#if !defined(USHRT_MAX)
 const USHORT USHRT_MAX = 0xFFFF;
+#endif
 #define MAXULONG MAX_ULONG
 #define MAX_PATH _MAX_PATH
 
