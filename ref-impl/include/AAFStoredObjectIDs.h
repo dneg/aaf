@@ -1,17 +1,17 @@
-/******************************************\
-*                                          *
-* File: AAFStoredObjectIDs.h               *
-*                                          *
-* Purpose: Definitions for controlling     * 
-*          AUID initialization             *
-*                                          *
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
+/***********************************************\
+*                                               *
+* File: AAFStoredObjectIDs.h                    *
+*                                               *
+* Purpose: Definitions for controlling          *
+*          AUID initialization                  *
+*                                               *
+*                                               *
+* Advanced Authoring Format                     *
+*                                               *
+* Copyright (c) 1998-1999 Avid Technology, Inc. *
+* Copyright (c) 1998 1999Microsoft Corporation  *
+*                                               *
+\***********************************************/
 #ifndef __AAFStoredObjectIDs_h__
 
 #ifndef __AAFTypes_h__
@@ -29,7 +29,6 @@
 // name in AAF.
 //
 #define AUID_AAFClassDefinition AUID_AAFClassDef
-#define AUID_AAFConstantValue AUID_AAFConstValue
 #define AUID_AAFDataDefinition AUID_AAFDataDef
 #define AUID_AAFDefinitionObject AUID_AAFDefObject
 #define AUID_AAFEdgeCode AUID_AAFEdgecode
