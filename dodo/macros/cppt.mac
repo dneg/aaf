@@ -45,7 +45,7 @@
 #error - improperly defined include guard
 #endif
 
-HRESULT .this-module::test()
+AAFRESULT .this-module::test()
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
@@ -59,13 +59,13 @@ HRESULT .this-module::test()
 #c Arguments: none
 #c
 #startm AD_ROOT_CLASS_BEGIN 00
-#include "C.this-module.h"
-#include "C.this-module.h"
-#ifndef _C.this-module_h_
+#include ".this-module.h"
+#include ".this-module.h"
+#ifndef __.this-module_h__
 #error - improperly defined include guard
 #endif
 
-HRESULT C.this-module::test()
+AAFRESULT .this-module::test()
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
