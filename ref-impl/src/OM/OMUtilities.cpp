@@ -34,6 +34,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include "utf8.h"
 
 OMByteOrder hostByteOrder(void)
 {
@@ -64,6 +65,7 @@ size_t lengthOfWideString(const wchar_t* string)
     ++length;
     ++p;
   }
+
   return length;
 }
 
@@ -87,6 +89,7 @@ wchar_t* copyWideString(wchar_t* destination,
   for (i = i; i < length; i++) {
     *d++ = 0;
   }
+
   return destination;
 }
 
@@ -105,6 +108,7 @@ wchar_t* copyWideString(wchar_t* destination,
     *d++ = *s++;
   }
   *d = 0;
+
   return destination;
 }
 
@@ -161,6 +165,7 @@ wchar_t* saveWideString(const wchar_t* string)
   wchar_t* result = new wchar_t[length];
   ASSERT("Valid heap pointer", result != 0);
   copyWideString(result, string, length);
+
   return result;
 }
 
@@ -236,9 +241,9 @@ void convertWideStringToString(char*  result,
   if (length > (resultSize - 1)) {
     length = resultSize - 1;
   }
-  size_t status = wcstombs(result, string, length);
+  size_t status = wcstou8s(result, string, resultSize);
   ASSERT("Successful conversion", status != (size_t)-1);
-  result[length] = 0;
+  //result[length] = 0;
 }
 
 void convertStringToWideString(wchar_t* result,
@@ -252,9 +257,10 @@ void convertStringToWideString(wchar_t* result,
   if (length > (resultSize - 1)) {
     length = resultSize - 1;
   }
-  size_t status  = mbstowcs(result, string, length);
+  //size_t status  = mbstowcs(result, string, length);
+  size_t status  = u8stowcs(result, string, resultSize);
   ASSERT("Successful conversion", status != (size_t)-1);
-  result[length] = 0;
+  //result[length] = 0;
 }
 
 char* convertWideString(const wchar_t* string)
@@ -265,7 +271,8 @@ char* convertWideString(const wchar_t* string)
   size_t length = lengthOfWideString(string);
   char* result = new char[length + 1];
   ASSERT("Valid heap pointer", result != 0);
-  size_t status = wcstombs(result, string, length + 1);
+  //size_t status = wcstombs(result, string, length + 1);
+  size_t status = wcstou8s(result, string, length + 1);
   ASSERT("Successful conversion", status != (size_t)-1);
   return result;
 }
@@ -278,7 +285,8 @@ wchar_t* convertString(const char* string)
   size_t length = strlen(string);
   wchar_t* result = new wchar_t[length + 1];
   ASSERT("Valid heap pointer", result != 0);
-  size_t status = mbstowcs(result, string, length + 1);
+  //size_t status = mbstowcs(result, string, length + 1);
+  size_t status = u8stowcs(result, string, length + 1);
   ASSERT("Successful conversion", status != (size_t)-1);
   return result;
 }
@@ -771,11 +779,11 @@ FILE* wfopen(const wchar_t* fileName, const wchar_t* mode)
   } else {
 #endif
     char cFileName[FILENAME_MAX];
-    size_t status = wcstombs(cFileName, fileName, FILENAME_MAX);
+	size_t status = wcstou8s(cFileName, fileName, FILENAME_MAX);
     ASSERT("Convert succeeded", status != (size_t)-1);
 
     char cMode[FILENAME_MAX];
-    status = wcstombs(cMode, mode, FILENAME_MAX);
+	 status = wcstou8s(cMode, mode, FILENAME_MAX);
     ASSERT("Convert succeeded", status != (size_t)-1);
 
     result = fopen(cFileName, cMode);
@@ -798,7 +806,7 @@ int wremove(const wchar_t* fileName)
   } else {
 #endif
     char cFileName[FILENAME_MAX];
-    size_t status = wcstombs(cFileName, fileName, FILENAME_MAX);
+    size_t status = wcstou8s(cFileName, fileName, FILENAME_MAX);
     ASSERT("Convert succeeded", status != (size_t)-1);
 
     result = remove(cFileName);
