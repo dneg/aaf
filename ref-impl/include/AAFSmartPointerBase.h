@@ -138,7 +138,7 @@ struct AAFSmartPointerBase : public RefCountType
   AAFSmartPointerBase (const AAFSmartPointerBase<ReferencedType, RefCountType> & src);
   
   // dtor
-  ~AAFSmartPointerBase ();
+  virtual ~AAFSmartPointerBase ();
 
   // assignment operator
   AAFSmartPointerBase<ReferencedType, RefCountType> & operator=
@@ -184,7 +184,7 @@ AAFSmartPointerBase ()
 
 template <typename ReferencedType, typename RefCountType>
 AAFSmartPointerBase<ReferencedType, RefCountType>::
-AAFSmartPointerBase\
+AAFSmartPointerBase
   (const AAFSmartPointerBase<ReferencedType, RefCountType> & src)
 	: _rep (src._rep)
 {
