@@ -40,8 +40,7 @@ run:
 # the ref-impl make file...
 aafobjects.all : \
 	$(INCLUDE_DIR)/com-api/aafobjects.mk \
-	$(SRC_DIR)/com-api/aafobjects.mk \
-	$(SRC_DIR)/cpp-api/aafobjects.mk
+	$(SRC_DIR)/com-api/aafobjects.mk 
 
 $(INCLUDE_DIR)/com-api/aafobjects.mk : aafobjects.mk
 	@echo "\n======== [ /coresw/AAF-toolkit/dodo ] \"Building $(INCLUDE_DIR)/com-api/aafobjects.mk\"\n"
@@ -53,10 +52,6 @@ $(SRC_DIR)/com-api/aafobjects.mk : aafobjects.mk
 	$(RM) -f $(SRC_DIR)/com-api/aafobjects.mk
 	cp aafobjects.mk $(SRC_DIR)/com-api
 
-$(SRC_DIR)/cpp-api/aafobjects.mk : aafobjects.mk
-	@echo "\n======== [ /coresw/AAF-toolkit/dodo ] \"Building $(SRC_DIR)/cpp-api/aafobjects.mk\"\n"
-	$(RM) -f $(SRC_DIR)/cpp-api/aafobjects.mk
-	cp aafobjects.mk $(SRC_DIR)/cpp-api
 
 
 
