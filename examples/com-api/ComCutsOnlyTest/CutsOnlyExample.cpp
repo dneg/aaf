@@ -84,6 +84,9 @@ static aafBool	EqualAUID(aafUID_t *uid1, aafUID_t *uid2)
 #define FILL_LENGTH			10L
 #define TEST_PATH	L"AnotherFile.aaf"
 
+#define assert(b, msg) \
+  if (!(b)) {fprintf(stderr, "ASSERT: %s\n\n", msg); exit(1);}
+
 static void     LogError(HRESULT errcode, int line, char *file)
 {
   printf("Error '%0x' returned at line %d in %s\n", errcode, line, file);
@@ -105,12 +108,28 @@ static HRESULT moduleErrorTmp = S_OK; /* note usage in macro */
      exit(1);\
 }
 
-static void AUIDtoString(aafUID_t *uid, aafWChar *buf)
+static void AUIDtoString(aafUID_t *uid, char *buf)
 {
-	wsprintf(buf, L"%08lx-%04x-%04x-%02x%02x%02x%02x%02x%02x%02x%02x",
+	sprintf(buf, "%08lx-%04x-%04x-%02x%02x%02x%02x%02x%02x%02x%02x",
 			uid->Data1, uid->Data2, uid->Data3, (int)uid->Data4[0],
 			(int)uid->Data4[1], (int)uid->Data4[2], (int)uid->Data4[3], (int)uid->Data4[4],
 			(int)uid->Data4[5], (int)uid->Data4[6], (int)uid->Data4[7]);
+}
+
+
+static HRESULT convert(char* cName, size_t length, const wchar_t* name)
+{
+  assert((name && *name), "Valid input name");
+  assert(cName != 0, "Valid output buffer");
+  assert(length > 0, "Valid output buffer size");
+
+  size_t status = wcstombs(cName, name, length);
+  if (status == (size_t)-1) {
+    fprintf(stderr, ": Error : Conversion failed.\n\n");
+    return -1; 
+  }
+  else
+  	return S_OK;
 }
 
 
@@ -168,7 +187,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 	check(pFile->Initialize());
 	check(pFile->OpenNewModify(pFileName, 0, &ProductInfo));
-  check(pFile->GetHeader(&pHeader));
+	check(pFile->GetHeader(&pHeader));
 
 	//Make the Tape MOB
 	check(CoCreateInstance( CLSID_AAFSourceMob,
@@ -268,15 +287,21 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 			   IID_IAAFSequence, 
 			   (void **)&pSequence));		
 	check(pSequence->QueryInterface (IID_IAAFSegment, (void **)&seg));
+
 	check(pSequence->QueryInterface(IID_IAAFComponent, (void **)&aComponent));
+
 	check(aComponent->SetDataDef(&videoDef));
 	check(pCompMob->QueryInterface (IID_IAAFMob, (void **)&pMob));
 	check(pMob->AppendNewSlot (seg, 1, slotName, &newSlot));
 
 	// This variable is about to be overwritten so we need to 
+
 	// release the old interface.
+
 	aComponent->Release();
+
 	aComponent = NULL;
+
 
 	// Create a SourceClip
 	check(CoCreateInstance( CLSID_AAFSourceClip,
@@ -302,6 +327,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 									   (void **)&compFill));		
 
 	check(compFill->SetLength (&fillLen));
+
 	check(compFill->SetDataDef(&videoDef));
 	check(pSequence->AppendComponent (compFill));
 
@@ -413,7 +439,8 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	aafInt32					numTapeMobs, numFileMobs, numMasterMobs;
 	HRESULT						hr = AAFRESULT_SUCCESS;
 	aafUID_t					mobID;
-	aafWChar					namebuf[1204];
+	aafWChar					bufW[1204];
+	char						bufA[2408];
 	aafLength_t					length;
 
 	  
@@ -438,7 +465,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 			numMobs, 4L);
 	}
 
-	wprintf(L"--------\n");
+	printf("--------\n");
 	// Get the number of tape mobs in the file (should be one)
 	check(pHeader->GetNumMobs(kTapeMob, &numTapeMobs));
 	if (1 == numTapeMobs )
@@ -449,13 +476,12 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		check(pHeader->EnumAAFAllMobs(&criteria, &pMobIter));
 		while(AAFRESULT_SUCCESS == pMobIter->NextOne(&pMob))
 		{
-			aafWChar	buf[256];
-
 			check(pMob->GetMobID (&mobID));
-			check(pMob->GetName (namebuf, sizeof(namebuf)));
-			AUIDtoString(&mobID, buf);
-			wprintf(L"    TapeName = '%s'\n", namebuf);
-			wprintf(L"        (mobID %s)\n", buf);
+			check(pMob->GetName (bufW, sizeof(bufW)));
+			check(convert(bufA, sizeof(bufA), bufW));
+			printf("    TapeName = '%s'\n", bufA);
+			AUIDtoString(&mobID, bufA);
+			printf("        (mobID %s)\n", bufA);
 
 			pMob->Release();
 			pMob = NULL;
@@ -471,7 +497,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	}
 
 
-	wprintf(L"--------\n");
+	printf("--------\n");
 	// Get the number of file mobs in the file (should be one)
 	check(pHeader->GetNumMobs(kFileMob, &numFileMobs));
 	if (1 == numFileMobs )
@@ -482,11 +508,9 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		check(pHeader->EnumAAFAllMobs(&criteria, &pMobIter));
 		while(AAFRESULT_SUCCESS == pMobIter->NextOne(&pMob))
 		{
-			aafWChar	buf[256];
-
 			check(pMob->GetMobID (&mobID));
-			AUIDtoString(&mobID, buf);
-			wprintf(L"    (mobID %s)\n", buf);
+			AUIDtoString(&mobID, bufA);
+			printf("    (mobID %s)\n", bufA);
 
 			check(pMob->QueryInterface (IID_IAAFSourceMob, (void **)&pSourceMob));
 			check(pSourceMob->GetEssenceDescriptor (&pEdesc));
@@ -495,14 +519,15 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 			// This should read the one real locator
 			if(pLocEnum->NextOne(&pLocator) == AAFRESULT_SUCCESS)
 			{
-				check(pLocator->GetPath (buf, sizeof(buf)));
-				wprintf(L"        There is one locator pointing to '%s'\n", buf);
+				check(pLocator->GetPath (bufW, sizeof(bufW)));
+				check(convert(bufA, sizeof(bufA), bufW));
+				printf("        There is one locator pointing to '%s'\n", bufA);
 
 				pLocator->Release();
 				pLocator = NULL;
 			}
 			else
-				wprintf(L"        There are no locators on this file mob.\n");
+				printf("        There are no locators on this file mob.\n");
 
 
 			pLocEnum->Release();
@@ -527,7 +552,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 			numFileMobs, 1L);
 	}
 
-	wprintf(L"--------\n");
+	printf("--------\n");
 	// Get the number of master mobs in the file (should be one)
 	check(pHeader->GetNumMobs(kMasterMob, &numMasterMobs));
 	if (1 == numMasterMobs )
@@ -538,13 +563,12 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		check(pHeader->EnumAAFAllMobs(&criteria, &pMobIter));
 		while(AAFRESULT_SUCCESS == pMobIter->NextOne(&pMob))
 		{
-			aafWChar	buf[256];
-
 			check(pMob->GetMobID (&mobID));
-			check(pMob->GetName (namebuf, sizeof(namebuf)));
-			AUIDtoString(&mobID, buf);
-			wprintf(L"    MasterMob Name = '%s'\n", namebuf);
-			wprintf(L"        (mobID %s)\n", buf);
+			check(pMob->GetName (bufW, sizeof(bufW)));
+			check(convert(bufA, sizeof(bufA), bufW));
+			printf("    MasterMob Name = '%s'\n", bufA);
+			AUIDtoString(&mobID, bufA);
+			printf("        (mobID %s)\n", bufA);
 			
 
 			pMob->Release();
@@ -560,7 +584,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 			numMasterMobs, 1L);
 	}
 
-	wprintf(L"--------\n");
+	printf("--------\n");
 	// Get the number of composition mobs in the file (should be one)
 	check(pHeader->GetNumMobs(kCompMob, &numCompMobs));
 	if (1 == numCompMobs )
@@ -573,11 +597,9 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		check(pHeader->EnumAAFAllMobs(&criteria, &pMobIter));
 		while (pMobIter && AAFRESULT_SUCCESS == pMobIter->NextOne(&pMob))
 		{
-			aafWChar	buf[256];
-
 			check(pMob->GetMobID (&mobID));
-			AUIDtoString(&mobID, buf);
-			wprintf(L"    (mobID %s)\n", buf);
+			AUIDtoString(&mobID, bufA);
+			printf("    (mobID %s)\n", bufA);
 			pMob->GetNumSlots(&numSlots);
 			if (1 == numSlots)
 			{
@@ -595,18 +617,17 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 					hr = pSegment->QueryInterface(IID_IAAFSourceClip, (void **) &pSourceClip);
 					if(AAFRESULT_SUCCESS == hr)
 					{
-						wprintf(L"    Found source clip on slot\n");
-						wprintf(L"        It has length %ld\n", length);
+						printf("    Found source clip on slot\n");
+						printf("        It has length %ld\n", length);
 						hr = pSourceClip->ResolveRef(&pReferencedMob);
 						if(hr == AAFRESULT_SUCCESS)
 						{
-							aafWChar	buf[256];
-
 							check(pReferencedMob->GetMobID(&mobID));
-							check(pReferencedMob->GetName (namebuf, sizeof(namebuf)));
-							AUIDtoString(&mobID, buf);
-							wprintf(L"        References mob = '%s'\n", namebuf);
-							wprintf(L"            (mobID %s)\n", buf);
+							check(pReferencedMob->GetName (bufW, sizeof(bufW)));
+							check(convert(bufA, sizeof(bufA), bufW));
+							printf("        References mob = '%s'\n", bufW);
+							AUIDtoString(&mobID, bufA);
+							printf("            (mobID %s)\n", bufA);
 
 							pReferencedMob->Release();
 							pReferencedMob = NULL;
@@ -624,9 +645,9 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 							aafInt32	numComponents, item = 0;
 					
 							check(pSequence->GetNumComponents (&numComponents));
-							wprintf(L"    Found Sequence on slot with %ld components\n",
+							printf("    Found Sequence on slot with %ld components\n",
 								numComponents);
-							wprintf(L"        It has length %ld\n", length);
+							printf("        It has length %ld\n", length);
 							check(pSequence->EnumComponents (&pCompIter));
 							while (pCompIter && AAFRESULT_SUCCESS == pCompIter->NextOne(&pComponent))
 							{
@@ -635,36 +656,41 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 								hr = pComponent->QueryInterface(IID_IAAFSourceClip, (void **) &pSourceClip);
 								if(AAFRESULT_SUCCESS == hr)
 								{
-									aafWChar	buf[256];
 									aafSourceRef_t		ref;
 
 									check(pSourceClip->GetSourceReference (&ref));
-									wprintf(L"        %ld) A length %ld source clip\n", item, length);
+									printf("        %ld) A length %ld source clip\n", item, length);
 									check(pSourceClip->ResolveRef(&pReferencedMob));
 									check(pReferencedMob->GetMobID(&mobID));
-									check(pReferencedMob->GetName (namebuf, sizeof(namebuf)));
-									AUIDtoString(&mobID, buf);
-									wprintf(L"            References mob = '%s'\n", namebuf);
-									wprintf(L"                (mobID %s)\n", buf);
+									check(pReferencedMob->GetName (bufW, sizeof(bufW)));
+									check(convert(bufA, sizeof(bufA), bufW));
+									printf("            References mob = '%s'\n", bufA);
+									AUIDtoString(&mobID, bufA);
+									printf("                (mobID %s)\n", bufA);
 
 									hr = pReferencedMob->QueryInterface(IID_IAAFMasterMob, (void **) &pMasterMob);
  									if(AAFRESULT_SUCCESS == hr)
 									{
 										check(pMasterMob->GetTapeName (ref.sourceSlotID,
-											buf, sizeof(buf)));
-										wprintf(L"            Derived from tape = '%s'\n", buf);
+											bufW, sizeof(bufW)));
+										check(convert(bufA, sizeof(bufA), bufW));
+										printf("            Derived from tape = '%s'\n", bufA);
+
 
 										pMasterMob->Release();
+
 										pMasterMob = NULL;
 									}
 
+
 									pSourceClip->Release();
+
 									pSourceClip = NULL;
 								}
 								hr = pComponent->QueryInterface(IID_IAAFFiller, (void **) &pFiller);
 								if(AAFRESULT_SUCCESS == hr)
 								{
-									wprintf(L"        %ld) A length %ld filler\n", item, length);
+									printf("        %ld) A length %ld filler\n", item, length);
 
 									pFiller->Release();
 									pFiller = NULL;
@@ -682,7 +708,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 						}
 						else
 						{
-							wprintf(L"    Found unknown segment on slot\n");
+							printf("    Found unknown segment on slot\n");
 						}
 					}
 
@@ -721,10 +747,14 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 cleanup:
 	// Cleanup and return
 	if (info)
+
 		info->Release();
 
+
 	if (pMasterMob)
+
 		pMasterMob->Release();
+
 
 	if(pSourceMob)
 		pSourceMob->Release();
