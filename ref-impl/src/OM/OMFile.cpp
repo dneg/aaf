@@ -359,6 +359,7 @@ OMFile* OMFile::openExistingRead(OMRawStorage* rawStorage,
   TRACE("OMFile::openExistingRead");
 
   PRECONDITION("Valid raw storage", rawStorage != 0);
+  PRECONDITION("Compatible raw storage access mode", rawStorage->isReadable());
   PRECONDITION("Valid class factory", factory != 0);
   PRECONDITION("Valid dictionary", dictionary != 0);
 
@@ -381,6 +382,8 @@ OMFile* OMFile::openExistingModify(OMRawStorage* rawStorage,
   TRACE("OMFile::openExistingModify");
 
   PRECONDITION("Valid raw storage", rawStorage != 0);
+  PRECONDITION("Compatible raw storage access mode",
+                         rawStorage->isReadable() && rawStorage->isWritable());
   PRECONDITION("Valid class factory", factory != 0);
   PRECONDITION("Valid dictionary", dictionary != 0);
 
@@ -405,6 +408,7 @@ OMFile* OMFile::openNewWrite(OMRawStorage* rawStorage,
   TRACE("OMFile::openNewWrite");
 
   PRECONDITION("Valid raw storage", rawStorage != 0);
+  PRECONDITION("Compatible raw storage access mode", rawStorage->isWritable());
   PRECONDITION("Valid class factory", factory != 0);
   PRECONDITION("Valid byte order",
                     ((byteOrder == littleEndian) || (byteOrder == bigEndian)));
@@ -438,6 +442,8 @@ OMFile* OMFile::openNewModify(OMRawStorage* rawStorage,
   TRACE("OMFile::openNewModify");
 
   PRECONDITION("Valid raw storage", rawStorage != 0);
+  PRECONDITION("Compatible raw storage access mode",
+                         rawStorage->isReadable() && rawStorage->isWritable());
   PRECONDITION("Valid class factory", factory != 0);
   PRECONDITION("Valid byte order",
                     ((byteOrder == littleEndian) || (byteOrder == bigEndian)));
