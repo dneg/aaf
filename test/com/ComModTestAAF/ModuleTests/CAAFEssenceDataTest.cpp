@@ -19,6 +19,7 @@
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFResult.h"
+#include "AAFDefUIDs.h"
 
 
 // Utility class to implement the test.
@@ -157,7 +158,7 @@ EssenceDataTest::EssenceDataTest():
   _productInfo.productVersion.patchLevel = 0;
   _productInfo.productVersion.type = kVersionUnknown;
   _productInfo.productVersionString = NULL;
-  _productInfo.productID = -1;
+  _productInfo.productID = UnitTestProductID;
   _productInfo.platform = NULL;
 }
 
