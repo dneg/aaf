@@ -31,6 +31,85 @@
 // GUIDs for built-in type definitions
 //
 
+#include "AAFTypes.h"
+
+#define TYPE_GUID_NAME(type) kAAFTypeID_##type
+
+//
+// pass 0: define guids for types we'll use
+//
+
+#define AAF_TYPE_DEFINITION_INTEGER(name, id, size, signed) \
+  const aafUID_t TYPE_GUID_NAME(name) = id;
+#define AAF_TYPE_DEFINITION_ENUMERATION(name, id, type) \
+  const aafUID_t TYPE_GUID_NAME(name) = id;
+#define AAF_TYPE_DEFINITION_RECORD(name, id) \
+  const aafUID_t TYPE_GUID_NAME(name) = id;
+#define AAF_TYPE_DEFINITION_VARYING_ARRAY(name, id, type) \
+  const aafUID_t TYPE_GUID_NAME(name) = id;
+#define AAF_TYPE_DEFINITION_FIXED_ARRAY(name, id, type, count) \
+  const aafUID_t TYPE_GUID_NAME(name) = id;
+#define AAF_TYPE_DEFINITION_RENAME(name, id, type) \
+  const aafUID_t TYPE_GUID_NAME(name) = id;
+#define AAF_TYPE_DEFINITION_STRING(name, id, type) \
+  const aafUID_t TYPE_GUID_NAME(name) = id;
+#define AAF_TYPE_DEFINITION_EXTENDIBLE_ENUMERATION(name, id) \
+  const aafUID_t TYPE_GUID_NAME(name) = id;
+#define AAF_TYPE_DEFINITION_CHARACTER(name, id, size) \
+  const aafUID_t TYPE_GUID_NAME(name) = id;
+#define AAF_TYPE_DEFINITION_SET(name, id, type) \
+  const aafUID_t TYPE_GUID_NAME(name) = id;
+#define AAF_TYPE_DEFINITION_STRONG_REFERENCE(name, id, type) \
+  const aafUID_t TYPE_GUID_NAME(name) = id;
+#define AAF_TYPE_DEFINITION_STRONG_REFERENCE_SET(name, id, type) \
+  const aafUID_t TYPE_GUID_NAME(name) = id;
+#define AAF_TYPE_DEFINITION_STRONG_REFERENCE_VECTOR(name, id, type) \
+  const aafUID_t TYPE_GUID_NAME(name) = id;
+#define AAF_TYPE_DEFINITION_WEAK_REFERENCE(name, id, type) \
+  const aafUID_t TYPE_GUID_NAME(name) = id;
+#define AAF_TYPE_DEFINITION_WEAK_REFERENCE_SET(name, id, type) \
+  const aafUID_t TYPE_GUID_NAME(name) = id;
+#define AAF_TYPE_DEFINITION_WEAK_REFERENCE_VECTOR(name, id, type) \
+  const aafUID_t TYPE_GUID_NAME(name) = id;
+#define AAF_TYPE_DEFINITION_STRONG_REFERENCE(name, id, type) \
+  const aafUID_t TYPE_GUID_NAME(name) = id;
+#define AAF_TYPE_DEFINITION_STRONG_REFERENCE_SET(name, id, type) \
+  const aafUID_t TYPE_GUID_NAME(name) = id;
+#define AAF_TYPE_DEFINITION_STRONG_REFERENCE_VECTOR(name, id, type) \
+  const aafUID_t TYPE_GUID_NAME(name) = id;
+#define AAF_TYPE_DEFINITION_WEAK_REFERENCE(name, id, type) \
+  const aafUID_t TYPE_GUID_NAME(name) = id;
+#define AAF_TYPE_DEFINITION_WEAK_REFERENCE_SET(name, id, type) \
+  const aafUID_t TYPE_GUID_NAME(name) = id;
+#define AAF_TYPE_DEFINITION_WEAK_REFERENCE_VECTOR(name, id, type) \
+  const aafUID_t TYPE_GUID_NAME(name) = id;
+#define AAF_TYPE_DEFINITION_STREAM(name, id) \
+  const aafUID_t TYPE_GUID_NAME(name) = id;
+
+#define AAF_TYPE(name) name
+#define AAF_REFERENCE_TYPE(type, target)      AAF_TYPE(target##type)
+#define AAF_REFERENCE_TYPE_NAME(type, target) AAF_TYPE(target##type)
+
+#include "AAFMetaDictionary.h"
+
+
+#if 0
+
+// {669349C6-EBC3-11d2-842C-00600832ACB8}
+const aafUID_t kAAFTypeID_aafUInt8Array_t = 
+{ 0x669349c6, 0xebc3, 0x11d2, { 0x84, 0x2c, 0x0, 0x60, 0x8, 0x32, 0xac, 0xb8 } };
+
+
+// {669349C4-EBC3-11d2-842C-00600832ACB8}
+const aafUID_t kAAFTypeID_ObjRefArray = 
+{ 0x669349c4, 0xebc3, 0x11d2, { 0x84, 0x2c, 0x0, 0x60, 0x8, 0x32, 0xac, 0xb8 } };
+
+
+// {669349C3-EBC3-11d2-842C-00600832ACB8}
+const aafUID_t kAAFTypeID_ObjRef = 
+{ 0x669349c3, 0xebc3, 0x11d2, { 0x84, 0x2c, 0x0, 0x60, 0x8, 0x32, 0xac, 0xb8 } };
+
+
 // {669349B6-EBC3-11d2-842C-00600832ACB8}
 const aafUID_t kAAFTypeID_AUID = 
 { 0x669349b6, 0xebc3, 0x11d2, { 0x84, 0x2c, 0x0, 0x60, 0x8, 0x32, 0xac, 0xb8 } };
@@ -91,5 +170,6 @@ const aafUID_t kAAFTypeID_WCharString =
 const aafUID_t kAAFTypeID_FadeType = 
 { 0xeee39bc1, 0x183c, 0x11d3, { 0x84, 0x2f, 0x0, 0x60, 0x8, 0x32, 0xac, 0xb8 } };
 
+#endif
 
 #endif // ! __AAFTypeDefUIDs_h__ */
