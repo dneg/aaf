@@ -32,10 +32,16 @@
 ./lib/debug/AAFD.lib
 ./lib/debug/AAFIIDD.lib
 
+# Additional Microsoft libraries (including Structured Storage).
+./MacOLE/Extensions/Retail/Microsoft?Component?Library
+./MacOLE/Extensions/Retail/Microsoft?Debug?Library
+./MacOLE/Extensions/Retail/Microsoft?OLE?Automation
+./MacOLE/Extensions/Retail/Microsoft?OLE?Library
+./MacOLE/Extensions/Retail/Microsoft?Structured?Storage
+
 # Code Warriors V8 libraries
 ./bin/Debug/MSL_All_Carbon.Shlb
 ./bin/Debug/MSL_All_PPC.Shlb
 ./bin/MSL_All_Carbon.Shlb
 ./bin/MSL_All_PPC.Shlb
-
 
