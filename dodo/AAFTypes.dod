@@ -521,7 +521,13 @@ AD_CPP_QUOTE(extern const aafProductVersion_t AAFReferenceImplementationVersion;
 
 typedef struct _aafTimeStamp_t
 {
-	aafUInt32         	TimeVal;
+	// The TimeVal field format is the same as the Timestamp field in
+	// a GUID.  In short, it is represented by Universal Coordinated
+	// Time (UTC) in a 60-bit number as a count of 100-nanosecond
+	// intervals since 00:00:00.00, 15 October 1582 (the date of
+	// Gregorian reform to the Christian calendar).  See
+	// draft-leach-uuids-guids-01.txt for a further discussion.
+	aafInt64         	TimeVal;
 	aafInt8            	IsGMT;
 } aafTimeStamp_t;
 
