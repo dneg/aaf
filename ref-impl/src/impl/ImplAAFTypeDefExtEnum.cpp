@@ -22,6 +22,10 @@
 #include "ImplAAFDictionary.h"
 #endif
 
+#ifndef __AAFTypeDefUIDs_h__
+#include "AAFTypeDefUIDs.h"
+#endif
+
 #include "AAFUtils.h"
 
 #include <assert.h>
@@ -31,9 +35,6 @@
 #if defined(_MAC) || defined(macintosh)
 #include <wstring.h>
 #endif
-
-// Hack! We'll have to ditch this when the well-known auids come in to play.
-extern aafUID_t gTypeID_AUID;
 
 extern "C" const aafClassID_t CLSID_AAFPropValData;
 
@@ -55,7 +56,7 @@ ImplAAFTypeDefExtEnum::~ImplAAFTypeDefExtEnum ()
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDefExtEnum::Initialize (
-      aafUID_t * pID,
+      const aafUID_t * pID,
       wchar_t * pTypeName)
 {
   if (!pID)
@@ -249,7 +250,7 @@ AAFRESULT STDMETHODCALLTYPE
 		throw hr;
 	  assert (pDict);
 
-	  hr = pDict->LookupType (&gTypeID_AUID ,&ptd);
+	  hr = pDict->LookupType (&kAAFTypeID_AUID ,&ptd);
 	  if (AAFRESULT_FAILED(hr))
 		throw hr;
 	  assert (ptd);
@@ -304,7 +305,7 @@ AAFRESULT STDMETHODCALLTYPE
 		throw hr;
 	  assert (pDict);
 
-	  hr = pDict->LookupType (&gTypeID_AUID ,&ptd);
+	  hr = pDict->LookupType (&kAAFTypeID_AUID ,&ptd);
 	  if (AAFRESULT_FAILED(hr))
 		throw hr;
 	  assert (ptd);
@@ -559,7 +560,7 @@ ImplAAFTypeDef * ImplAAFTypeDefExtEnum::GetBaseType ()
   assert (pDict);
 
   ImplAAFTypeDef * ptd = 0;
-  hr = pDict->LookupType (&gTypeID_AUID ,&ptd);
+  hr = pDict->LookupType (&kAAFTypeID_AUID ,&ptd);
   pDict->ReleaseReference ();
   assert (AAFRESULT_SUCCEEDED(hr));
   assert (ptd);
