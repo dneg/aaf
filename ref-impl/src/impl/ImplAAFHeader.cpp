@@ -13,6 +13,7 @@
 #include "AAFResult.h"
 #include "aafTable.h"
 #include "aafErr.h"
+#include "aafUtils.h"
 
 #ifndef __ImplAAFMob_h__
 #include "ImplAAFMob.h"
@@ -521,6 +522,14 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 	  return AAFRESULT_NULL_PARAM;
 	}
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+AAFRESULT ImplAAFHeader::SetModified(void)		// To NOW
+{
+	aafTimeStamp_t	now;
+
+	AAFGetDateTime(&now);
   return AAFRESULT_NOT_IMPLEMENTED;
 }
 
