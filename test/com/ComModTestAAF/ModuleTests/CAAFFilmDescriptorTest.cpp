@@ -90,7 +90,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFFilmDescriptor*			pFilmDesc = NULL;
 	
 	aafProductIdentification_t	ProductInfo;
-	HRESULT						hr = AAFRESULT_SUCCESS;
 	
 	
 	aafProductVersion_t v;
@@ -180,7 +179,6 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	aafRational_t				readAspectRatio;
 	aafUInt32					length;
 
-	HRESULT						hr = AAFRESULT_SUCCESS;
 	
 	aafProductVersion_t v;
 	v.major = 1;

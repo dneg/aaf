@@ -218,7 +218,6 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	IEnumAAFMobSlots	*slotIter = NULL;
 	IAAFMobSlot		*slot = NULL;
 	IAAFFileDescriptor *pFileDesc = NULL;
-	aafProductIdentification_t	ProductInfo;
 	aafNumSlots_t	numMobs, n, s;
 	HRESULT						hr = S_OK;
 	aafRational_t				testSampleRate;
@@ -226,17 +225,6 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	aafLength_t					testLength;
 //	aafBool						testBool;
 	
-	aafProductVersion_t v;
-	v.major = 1;
-	v.minor = 0;
-	v.tertiary = 0;
-	v.patchLevel = 0;
-	v.type = kAAFVersionUnknown;
-	ProductInfo.companyName = L"AAF Developers Desk. NOT!";
-	ProductInfo.productName = L"AAFFileDescriptor Test. NOT!";
-	ProductInfo.productVersion = &v;
-	ProductInfo.productVersionString = NULL;
-	ProductInfo.platform = NULL;
 	
 	try
 	{ 

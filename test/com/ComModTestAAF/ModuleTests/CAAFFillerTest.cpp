@@ -207,24 +207,12 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
   IAAFDataDef * pDataDef = 0;
   IAAFDefObject * pDefObj = 0;
   
-  aafProductIdentification_t  ProductInfo;
   aafNumSlots_t        numMobs, numSlots;
   aafSearchCrit_t        criteria;
   aafUID_t          readFillerUID;
   aafLength_t          readFillerLength;
   HRESULT            hr = AAFRESULT_SUCCESS;
 
-  aafProductVersion_t v;
-  v.major = 1;
-  v.minor = 0;
-  v.tertiary = 0;
-  v.patchLevel = 0;
-  v.type = kAAFVersionUnknown;
-  ProductInfo.companyName = L"AAF Developers Desk";
-  ProductInfo.productName = L"AAFFiller Test";
-  ProductInfo.productVersion = &v;
-  ProductInfo.productVersionString = NULL;
-  ProductInfo.platform = NULL;
 
   try 
 	{
