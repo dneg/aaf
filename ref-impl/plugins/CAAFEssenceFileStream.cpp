@@ -42,8 +42,8 @@
 //
 /*inline*/ bool AafPos2AnsiPos(fpos_t *ansiPos, const aafPosition_t *aafPos)
 {
-#if defined (__GNUC__) && ((__GNUC__ >= 2) && (__GNUC_MINOR__ >= 96))
-  // For gcc version 2.96 and above fpos_t is a struct
+#if defined (__GLIBC__) && ((__GLIBC__ >= 2) && (__GLIBC_MINOR__ >= 2))
+  // For glibc 2.2 and above fpos_t is a struct
   // NYI
   return false;
 #else
@@ -67,8 +67,8 @@
 
 /*inline*/ bool AnsiPos2AafPos(aafPosition_t *aafPos, const fpos_t *ansiPos)
 {
-#if defined (__GNUC__) && ((__GNUC__ >= 2) && (__GNUC_MINOR__ >= 96))
-  // For gcc version 2.96 and above fpos_t is a struct
+#if defined (__GLIBC__) && ((__GLIBC__ >= 2) && (__GLIBC_MINOR__ >= 2))
+  // For glibc 2.2 and above fpos_t is a struct
   // NYI
   return false;
 #else
