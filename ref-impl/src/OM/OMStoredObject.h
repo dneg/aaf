@@ -1,4 +1,4 @@
-// @doc
+// @doc OMEXTERNAL
 #ifndef OMSTOREDOBJECT_H
 #define OMSTOREDOBJECT_H
 
@@ -18,13 +18,7 @@ class OMStoredVectorIndex;
   // @class In-memory representation of a persistent object.
 class OMStoredObject {
 public:
-  // @access Public members.
-
-    // @cmember Constructor.
-  OMStoredObject(IStorage* s);
-
-    // @cmember Destructor.
-  ~OMStoredObject(void);
+  // @access Static members.
 
     // @cmember Open the root <c OMStoredObject> in the disk file
     //          <p fileName> for reading only.
@@ -38,9 +32,32 @@ public:
     //          <p fileName>.
   static OMStoredObject* createModify(const wchar_t* fileName);
 
-    // @cmember Open the existing <c OMStoredObject> named by <p
-    //          storagePathName>.
+  // @access Public members.
+
+    // @cmember Constructor.
+  OMStoredObject(IStorage* s);
+
+    // @cmember Destructor.
+  ~OMStoredObject(void);
+
+    // @cmember Create a new <c OMStoredObject>, named <p name>,
+    //          contained by this <c OMStoredObject>.
+  OMStoredObject* create(const char* name);
+
+    // @cmember Open an exsiting <c OMStoredObject>, named <p name>,
+    //          contained by this <c OMStoredObject>.
+  OMStoredObject* open(const char* name);
+
   OMStoredObject* openStoragePath(const char* storagePathName);
+
+    // @cmember Close this <c OMStoredObject>.
+  void close(void);
+
+    // @cmember Save the <c OMClassId> <p cid> in this <c OMStoredObject>.
+  void save(const OMClassId& cid);
+
+    // @cmember Restore the class id of this <c OMStoredObject>.
+  void restore(OMClassId& cid);
 
     // @cmember Save the <c OMProperty> <p p> in this <c OMStoredObject>.
   void save(OMProperty* p);
@@ -49,42 +66,25 @@ public:
     //          this <c OMStoredObject>.
   void restore(OMPropertySet& properties);
 
-    // @cmember Close this <c OMStoredObject>.
-  void close(void);
+    // @cmember Save the <c OMStoredVectorIndex> <p vector> in this
+    //          <c OMStoredObject>, the vector is named <p vectorName>.
+  void save(const OMStoredVectorIndex* vector, const char* vectorName);
+
+    // @cmember Restore the vector named <p vectorName> into this
+    //          <c OMStoredObject>.
+  void restore(OMStoredVectorIndex*& vector, const char* vectorName);
 
     // @cmember Write a property value to this <c OMStoredObject>. The
     //          property value to be written occupies <p size> bytes at
-    //          the address <p start>. The property id is <p pid>. The
-    //          property type is <p type>.
-  void write(int pid, int type, void* start, size_t size);
+    //          the address <p start>. The property id is <p propertyId>.
+    //          The property type is <p type>.
+  void write(OMPropertyId propertyId, int type, void* start, size_t size);
 
     // @cmember Read a property value from this <c OMStoredObject>.
     //          The property value is read into a buffer which occupies
     //          <p size> bytes at the address <p start>. The property id
-    //          is <p pid>. The property type is <p type>.
-  void read(int pid, int type, void* start, size_t size);
-
-    // @cmember Save the <c OMClassId> <p cid> in this <c OMStoredObject>.
-  void saveClassId(const OMClassId& cid);
-
-    // @cmember Restore the class id of this <c OMStoredObject>.
-  OMClassId restoreClassId(void);
-
-    // @cmember Create a new <c OMStoredObject>, named <p name>,
-    //          contained by this <c OMStoredObject>.
-  OMStoredObject* createSubStorage(const char* name);
-
-    // @cmember Open an exsiting <c OMStoredObject>, named <p name>,
-    //          contained by this <c OMStoredObject>.
-  OMStoredObject* openSubStorage(const char* name);
-
-    // @cmember Save the <c OMStoredVectorIndex> <p index> in this
-    //          <c OMStoredObject>, the vector is named <p vectorName>.
-  void save(const OMStoredVectorIndex* index, const char* vectorName);
-
-    // @cmember Restore the vector named <p vectorName> into this
-    //          <c OMStoredObject>.
-  OMStoredVectorIndex* restore(const char* vectorName);
+    //          is <p propertyId>. The property type is <p type>.
+  void read(OMPropertyId propertyId, int type, void* start, size_t size);
 
 private:
 
