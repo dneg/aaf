@@ -70,7 +70,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDefVariableArray::CreateValueFromValues (
-      ImplAAFPropertyValue * /*pElementValues*/,
+      ImplAAFPropertyValue ** /*ppElementValues*/,
       aafUInt32  /*numElements*/,
       ImplAAFPropertyValue ** /*ppPropVal*/)
 {
