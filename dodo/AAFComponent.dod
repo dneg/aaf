@@ -6,7 +6,6 @@ AAFComponent\
 AAFObject\
 #endm
 #c
-#import ./AAFUnitTest.exp
 #import ./AAFObject.exp
 AD_HEAD
 
@@ -20,18 +19,21 @@ AD_FORWARD_DECLARATION(AAFDataDefinition)
 * Copyright (c) 1998 Microsoft Corporation *
 *                                          *
 \******************************************/
+AD_CLASS_UUID(38e6f8a0, 2a2c, 11d2, 84, 11, 00, 60, 08, 32, ac, b8)
+
+AD_DEFAULT_UUID(38e6f8a1, 2a2c, 11d2, 84, 11, 00, 60, 08, 32, ac, b8)
 AD_CLASS_BEGIN
 
 AD_METHOD1(SetLength,
 		   [in],
-		   aafLength_t,
+		   aafLength_t *,
 		   length,
 		   Length of this object,
 		   sets the length property values on the input component object.)
 
 AD_METHOD1(GetLength,
 		   [retval][out],
-		   aafLength_t,
+		   aafLength_t *,
 		   length,
 		   Length of this component,
   Gets the starting time and places it into the pStartTime
@@ -40,19 +42,21 @@ AD_METHOD1(GetLength,
   // stored as an implicit property on 1.x objects\\\, so this routine
   // recursively calculates the length.)
 	
-AD_METHOD1(SetDataDefinition,
-		   [in],
-		   AAFDataDefinition*,
-		   datadef,
-		   DataDefinition of this object,
-		   sets the data definition property value on the input component object.)
+AD_XMETHOD1(SetDataDefinition,
+			[in],
+			objIn,
+			AAFDataDefinition,
+			datadef,
+			DataDefinition of this object,
+			sets the data definition property value on the input component object.)
 
-AD_METHOD1(GetDataDefinition,
-		   [retval][out],
-		   AAFDataDefinition*,
-		   datadef,
-		   DataDefinition of this object,
-		   returns data definition object)
+AD_XMETHOD1(GetDataDefinition,
+			[retval][out],
+			objOut,
+			AAFDataDefinition,
+			datadef,
+			DataDefinition of this object,
+			returns data definition object)
 
 AD_OVERRIDE(.method-Test)
 
