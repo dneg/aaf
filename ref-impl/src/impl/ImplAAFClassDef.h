@@ -330,6 +330,8 @@ private:
   class pvtPropertyIdentifier
   {
   public:
+    virtual ~pvtPropertyIdentifier() {}
+
 	// Returns kAAFTrue if this property identifier matches the given
 	// property definition.
 	virtual aafBool DoesMatch

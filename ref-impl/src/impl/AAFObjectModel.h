@@ -136,6 +136,8 @@ public:
     _initializeDefinitionProc(0)
   {}
 
+  virtual ~Definition() {}
+
   aafUID_constptr id(void) const { return _id; }
   aafCharacter_constptr name(void) const { return _name; }
   bool concrete (void) const { return _concrete; }
@@ -435,6 +437,8 @@ public:
     _containerId(containerId)
   {}
 
+  virtual ~DefinitionEnumerationMember() {}
+
   virtual void Initialize (void); // only the member data of this object
 
   aafCharacter_constptr name(void) const { return _name; }
@@ -566,6 +570,8 @@ public:
     _fieldOffset(fieldOffset),
     _typeDefinition(0)
   {}
+
+  virtual ~DefinitionRecordField() {}
 
   virtual void Initialize (void); // only the member data of this object
 
@@ -717,6 +723,8 @@ public:
     _auid(auid),
     _containerId(containerId)
   {}
+
+  virtual ~DefinitionExtendibleEnumerationMember() {}
 
   virtual void Initialize (void); // only the member data of this object
 

@@ -244,6 +244,7 @@ public:
       _subArgC(-1),
       _subArgV(0)
   {}
+  virtual ~CmdFunc() {}
   virtual void operator()( CmdState& state ) {}
   int GetMinArgs()               { return _minArgs; }
   void SetArgC( int subArgC )    { _subArgC = subArgC; }
