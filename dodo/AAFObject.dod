@@ -50,8 +50,11 @@ AD_XMETHOD1(SetGeneration,
 			aafUID_t *,
 			pGeneration,
 			Generation ID to which this object is to be set,
-			Sets the generation of this object to the given value.  Succeeds
-  // if all of the following are true:
+			Sets the generation of this object to the given value.
+  //
+  // NOTE! Stub only.   Implementation not yet added.
+  //
+  // Succeeds if all of the following are true:
   // - the given pGeneration pointer is valid.
   //
   // This method will return the following codes.  If more than one of
@@ -75,7 +78,11 @@ AD_XMETHOD1(GetGeneration,
 		    Gets the generation of this object\, which is a unique identifier
   // that is used to detect when an object has been modified.  The
   // generation is placed into the caller-allocated aafUID_t pointed
-  // to by pGeneration.  Succeeds if all of the following are true:
+  // to by pGeneration.
+  //
+  // NOTE! Stub only.   Implementation not yet added.
+  //
+  // Succeeds if all of the following are true:
   // - the given pGeneration pointer is valid.
   //
   // This method will return the following codes.  If more than one of
@@ -97,7 +104,11 @@ AD_XMETHOD1(GetObjectClass,
 			ID of object class of which this object is an instance.,
             Gets the object class of which this object is an instance
   // and places it into the caller-allocated aafUID_t pointed to by
-  // pClass.  Succeeds if all of the following are true:
+  // pClass.
+  //
+  // NOTE! Stub only.   Implementation not yet added.
+  //
+  // Succeeds if all of the following are true:
   // - the given pClass pointer is valid.
   //
   // Note! Use care when dealing with the object class.  Among the
@@ -124,13 +135,17 @@ AD_XMETHOD1(EnumProperties,
 			  Property Enumeration,
               Places an enumerator for properties into the *ppEnum argument.
   // 
+  // The returned enumerator is AddRef\(\)ed before it is returned.
+  // 
+  // NOTE! Stub only.   Implementation not yet added.
+  //
   // Succeeds if all of the following are true:
   // - the ppEnum pointer is valid.
   // 
   // If this method fails nothing will be written to *ppEnum.
   // 
   // Note! This is a low-level method which allows direct access to
-  // properties.  If such access is done\, any syntactic checking \(such
+  // properties.  If such access is done\, any semantic checking \(such
   // as that which is performed in all other named property Get/Set
   // methods\) is not done here.  Users must use this method at their
   // own risk.

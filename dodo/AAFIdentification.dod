@@ -338,6 +338,8 @@ AD_XMETHOD1(SetProductVersion,
   // ownership of the *pVersion struct and is responsible for
   // de-allocating it.
   // 
+  // NOTE! Stub only.   Implementation not yet added.
+  //
   // Succeeds if all of the following are true:
   // - the pVersion pointer is valid.
   // 
@@ -367,6 +369,8 @@ AD_XMETHOD1(GetProductID,
   // the caller-allocated aafUID_t specified by the pProductID
   // argument.
   // 
+  // NOTE! Stub only.   Implementation not yet added.
+  //
   // Succeeds if all of the following are true:
   // - the pProductID pointer is valid.
   // 
@@ -393,6 +397,8 @@ AD_XMETHOD1(SetProductID,
   // A copy is made of the data so the caller retains ownership of the
   // *pProductID aafUID_t and is responsible for de-allocating it.
   // 
+  // NOTE! Stub only.   Implementation not yet added.
+  //
   // Succeeds if all of the following are true:
   // - the pProductID pointer is valid.
   // 
@@ -416,8 +422,13 @@ AD_XMETHOD1(GetDate,
 			aafTimeStamp_t *,
 			pTimestamp,
 			The date-time stamp,
-			Writes the Data-time Stamp property into the caller-allocated
-  // aafTimeStamp_t specified by the pTimeStamp argument.
+			Writes the Date-time Stamp property into the caller-allocated
+  // aafTimeStamp_t specified by the pTimeStamp argument.  The
+  // date-time stamp recorded in this object corresponds to the time
+  // that this file was created or modified upon the occasion that
+  // this object was added to the file.
+  //
+  // NOTE! Stub only.   Implementation not yet added.
   //
   // Note: This is a read-only property.
   // 
@@ -443,10 +454,12 @@ AD_XMETHOD1(GetRefImplVersion,
 			aafProductVersion_t *,
 			pVersion,
 			The Reference Implementation Version,
-			Obtains the version of the Reference Implementation which created
-  // or last modified this AAF file and writes it into the
+			Obtains the version of the Reference Implementation which
+  // created this identification object and writes it into the
   // caller-allocated aafProductVersion_t specified by the pVersion
   // argument.
+  //
+  // NOTE! Stub only.   Implementation not yet added.
   //
   // Note: This is a read-only property.
   // 
@@ -483,6 +496,15 @@ AD_XMETHOD2(GetPlatform,
   // bufSize.  If the property name has not yet been set\, a
   // zero-length string will be written \(that is\, only the trailing
   // null character\).
+  //
+  // This information is provided only to allow diagnostic printing of
+  // platform information to be read by humans.  The format of the
+  // strings is not guaranteed to remain the same for a given
+  // platform.  Having said that\, the possible values currently
+  // returned are:
+  // - "Win32" for Intel/Win32 platforms
+  // - "MacOS" for MacOS platforms
+  // - "Unknown" for unknown platforms
   // 
   // Caller may call GetPlatformBufLen\(\) to determine the
   // required buffer size.
@@ -542,12 +564,14 @@ AD_XMETHOD1(GetGeneration,
 			pGeneration,
 			The unique generation,
 			Obtains the generation of this AAF file\, which was generated at
-  // the time some application created or opened this file for
-  // modification.  If a file was opened for modification by many applications
-  // in its lifetime\, then there will be multiple Identification objects.
-  // This is written into the caller-allocated aafUID_t
-  // specified by the pGeneration argument.
+  // the time this identification object was created.  If a file was
+  // opened for modification by many applications in its lifetime\,
+  // then there will be multiple Identification objects.  This is
+  // written into the caller-allocated aafUID_t specified by the
+  // pGeneration argument.
   // 
+  // NOTE! Stub only.   Implementation not yet added.
+  //
   // Note: This is a read-only property.
   // 
   // Succeeds if all of the following are true:
