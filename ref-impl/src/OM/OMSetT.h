@@ -31,12 +31,12 @@
 
 #include "OMAssertions.h"
 
-template<typename Key, typename Element>
+template <typename Key, typename Element>
 OMSet<Key, Element>::OMSet()
 {
 }
 
-template<typename Key, typename Element>
+template <typename Key, typename Element>
 OMSet<Key, Element>::~OMSet()
 {
 }
