@@ -80,9 +80,6 @@ public:
     //          <c OMStrongReferenceSetProperty>.
   size_t count(void) const;
 
-    // @cmember Get the size of this <c OMStrongReferenceSetProperty>.
-  size_t getSize(void) const;
-
     // @cmember Insert <p object> into this
     //          <c OMStrongReferenceSetProperty>.
   void insert(const ReferencedObject* object);

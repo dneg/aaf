@@ -240,25 +240,6 @@ OMStrongReferenceSetProperty<UniqueIdentification,
   return _set.count();
 }
 
-  // @mfunc Get the size of this <c OMStrongReferenceSetProperty>.
-  //   @tcarg class | ReferencedObject | The type of the referenced
-  //          (contained) object. This type must be a descendant of
-  //          <c OMStorable>.
-  //     @rdesc The size of this <c OMStrongReferenceSetProperty>.
-  //     @this const
-template <typename UniqueIdentification, typename ReferencedObject>
-size_t
-OMStrongReferenceSetProperty<UniqueIdentification,
-                             ReferencedObject>::getSize(void) const
-{
-  TRACE("OMStrongReferenceSetProperty<UniqueIdentification, "
-                                     "ReferencedObject>::getSize");
-  OBSOLETE("OMStrongReferenceSetProperty<UniqueIdentification, "
-                                        "ReferencedObject>::count");
-
-  return count();
-}
-
   // @mfunc Insert <p object> into this
   //        <c OMStrongReferenceSetProperty>.
   //   @tcarg class | ReferencedObject | The type of the referenced

@@ -77,12 +77,6 @@ public:
     //          <c OMStrongReferenceVectorProperty>.
   size_t count(void) const;
 
-    // @cmember Get the size of this <c OMStrongReferenceVectorProperty>.
-  void getSize(size_t& size) const;
-
-    // @cmember Get the size of this <c OMStrongReferenceVectorProperty>.
-  size_t getSize(void) const;
-
     // @cmember Set the value of this <c OMStrongReferenceVectorProperty>
     //          at position <p index> to <p object>.
   ReferencedObject* setValueAt(const ReferencedObject* object,
