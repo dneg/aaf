@@ -35,7 +35,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     GetType
         // @parm [out] type of elements in this array
-        (ImplAAFTypeDef ** ppTypeDef) = 0;
+        (ImplAAFTypeDef ** ppTypeDef) const = 0;
 
 
   //****************
@@ -134,5 +134,17 @@ protected:
   //
   // returns number of elements in this array
 };
+
+//
+// smart pointer
+//
+
+#ifndef __ImplAAFSmartPointer_h__
+// caution! includes assert.h
+#include "ImplAAFSmartPointer.h"
+#endif
+
+typedef ImplAAFSmartPointer<ImplAAFTypeDefArray> ImplAAFTypeDefArraySP;
+
 
 #endif // ! __ImplAAFTypeDefArray_h__

@@ -151,7 +151,7 @@ AAFRESULT ImplAAFBuiltinClasses::ImportBuiltinClassDef
    ImplAAFClassDef ** ppResult)
 {
   AAFRESULT hr;
-  ImplAAFClassDef * pcd = 0;
+  ImplAAFClassDefSP pcd;
 
   assert (ppResult);
 
@@ -171,18 +171,17 @@ AAFRESULT ImplAAFBuiltinClasses::ImportBuiltinClassDef
   hr = _dictionary->RegisterClass (pcd);
 
   if (AAFRESULT_FAILED (hr))
-	{
-	  assert (pcd);
-	  pcd->ReleaseReference ();
-	  return hr;
-	}
+	return hr;
 
   assert (pcd);
 
-  pcd->InitOMProperties ();
+  ImplAAFObjectSP objSP;
+  objSP = (ImplAAFObject*) pcd;
+  _dictionary->pvtInitObjectProperties (objSP);
 
   assert (ppResult);
   *ppResult = pcd;
+  (*ppResult)->AcquireReference ();
 
   return AAFRESULT_SUCCESS;
 }

@@ -3,7 +3,6 @@
 * Advanced Authoring Format                *
 *                                          *
 * Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
 *                                          *
 \******************************************/
 
@@ -24,15 +23,15 @@
 #include "ImplAAFHeader.h"
 #endif
 
+#ifndef __AAFTypeDefUIDs_h__
+#include "AAFTypeDefUIDs.h"
+#endif
+
 #include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
 
 #include <assert.h>
 #include <string.h>
-
-
-#define RELEASE_IF_SET(obj) \
-    if (obj) { obj->ReleaseReference(); obj = NULL; }
 
 
 ImplAAFTypeDefWeakObjRef::ImplAAFTypeDefWeakObjRef ()
@@ -95,42 +94,38 @@ ImplAAFTypeDefWeakObjRef::GetObject (ImplAAFPropertyValue * pPropVal,
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFTypeDefWeakObjRef::GetObjectType (ImplAAFClassDef ** ppObjType)
+    ImplAAFTypeDefWeakObjRef::GetObjectType (ImplAAFClassDef ** ppObjType) const
 {
   if (! ppObjType) return AAFRESULT_NULL_PARAM;
 
-  ImplAAFHeader * pHead = NULL;
-  ImplAAFDictionary * pDict = NULL;
-  AAFRESULT rReturned = AAFRESULT_SUCCESS;
-  try
+  if (! _cachedObjType)
 	{
+	  ImplAAFHeaderSP pHead;
+	  ImplAAFDictionarySP pDict;
+
 	  AAFRESULT hr;
 	  hr = MyHeadObject(&pHead);
 	  if (AAFRESULT_FAILED(hr))
-		throw hr;
+		return hr;
 	  assert (pHead);
 	  hr = (pHead->GetDictionary(&pDict));
 	  if (AAFRESULT_FAILED(hr))
-		throw hr;
+		return hr;
 	  assert (pDict);
 
-	  ImplAAFClassDef * pcd = NULL;
+	  ImplAAFTypeDefWeakObjRef * pNonConstThis =
+		  (ImplAAFTypeDefWeakObjRef *) this;
 	  aafUID_t id = _referencedType;
-	  hr = pDict->LookupClass (&id, &pcd);
+	  hr = pDict->LookupClass (&id, &pNonConstThis->_cachedObjType);
 	  if (AAFRESULT_FAILED(hr))
-		throw hr;
-
-	  *ppObjType = pcd;
-	  (*ppObjType)->AcquireReference ();
+		return hr;
+	  assert (_cachedObjType);
 	}
-  catch (AAFRESULT &rCaught)
-	{
-	  rReturned = rCaught;
-	}
-  RELEASE_IF_SET (pHead);
-  RELEASE_IF_SET (pDict);
-
-  return rReturned;
+  assert (ppObjType);
+  *ppObjType = _cachedObjType;
+  assert (*ppObjType);
+  (*ppObjType)->AcquireReference ();
+  return AAFRESULT_SUCCESS;
 }
 
   // Override from AAFTypeDefObjectRef
@@ -151,15 +146,59 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 
-aafBool ImplAAFTypeDefWeakObjRef::IsFixedSize (void)
+ImplAAFTypeDefSP ImplAAFTypeDefWeakObjRef::BaseType () const
+{
+  if (! _cachedAuidType)
+	{
+	  AAFRESULT hr;
+	  ImplAAFDictionarySP pDict;
+	  hr = GetDictionary (&pDict);
+	  assert (AAFRESULT_SUCCEEDED(hr));
+	  assert (pDict);
+
+	  ImplAAFTypeDefWeakObjRef * pNonConstThis =
+		(ImplAAFTypeDefWeakObjRef *) this;
+	  hr = pDict->LookupType (&kAAFTypeID_AUID, &pNonConstThis->_cachedAuidType);
+	  assert (AAFRESULT_SUCCEEDED(hr));
+	  assert (_cachedAuidType);
+	}
+  return _cachedAuidType;
+}
+
+
+aafBool ImplAAFTypeDefWeakObjRef::IsFixedSize (void) const
 {
   return AAFTrue;
 }
 
 
-size_t ImplAAFTypeDefWeakObjRef::PropValSize (void)
+size_t ImplAAFTypeDefWeakObjRef::PropValSize (void) const
+{
+  return BaseType()->PropValSize();
+}
+
+
+aafBool ImplAAFTypeDefWeakObjRef::IsRegistered (void) const
+{
+  return BaseType()->IsRegistered();
+}
+
+
+size_t ImplAAFTypeDefWeakObjRef::NativeSize (void) const
 {
   return sizeof (ImplAAFObject*);
+}
+
+
+OMProperty * ImplAAFTypeDefWeakObjRef::pvtCreateOMPropertyMBS
+  (OMPropertyId pid,
+   const char * name) const
+{
+  assert (name);
+  size_t elemSize = PropValSize ();
+  OMProperty * result = new OMSimpleProperty (pid, name, elemSize);
+  assert (result);
+  return result;
 }
 
 

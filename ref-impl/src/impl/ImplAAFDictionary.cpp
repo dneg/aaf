@@ -346,21 +346,12 @@ OMStorable* ImplAAFDictionary::create(const OMClassId& classId) const
 	  result->setClassFactory(this);
 	}
 
-  if (_OKToInitProps)
-	{
-	  // Initialize the OM properties on this object.  Must be set
-	  // after the object knows what dictionary created it.
-	  //
-	  // Only call this after this dictionary has been officially
-	  // "create()"d.  This is necessary so that upon restore,
-	  // built-in def objects don't get forced into the dict
-	  // before it has had a chance to un-persist the correct
-	  // versions from disk.
-	  //
-	  ImplAAFObject * pObj = static_cast<ImplAAFObject*>(result);
-	  assert (pObj);
-	  pObj->InitOMProperties ();
-	}
+  // Initialize the OM properties on this object.
+  //
+  ImplAAFObjectSP pObj;
+  pObj = static_cast<ImplAAFObject*>(result);
+  assert (pObj);
+  pvtInitObjectProperties (pObj);
 
   return result;
 }
@@ -1394,11 +1385,9 @@ void ImplAAFDictionary::InitBuiltins()
   dataDef = NULL;
 }
 
-inline void check_result (AAFRESULT r)
-{
-  if (AAFRESULT_FAILED (r))
-	throw r;
-}
+#define check_result(result)     \
+  if (AAFRESULT_FAILED (result)) \
+	return result;
 
 
 /* Note!  Will modify argument... */
@@ -1420,7 +1409,6 @@ inline void check_result (AAFRESULT r)
 }
 
 
-#if 1
 //
 // Looks up a property def by OMPropertyId.  Looks first for classes
 // currently registered in the dictionary; looks next in builtin
@@ -1470,7 +1458,7 @@ ImplAAFDictionary::LookupPropDefByOMPid
 
   // Found it, and the auid corresponding to the class which includes
   // this pid is in ClassID.
-  ImplAAFClassDef * pClassDef = 0;
+  ImplAAFClassDefSP pClassDef;
   assert (_pBuiltinClasses);
   hr = _pBuiltinClasses->ImportBuiltinClassDef (classAUID, &pClassDef);
   assert (AAFRESULT_SUCCEEDED (hr));
@@ -1479,10 +1467,6 @@ ImplAAFDictionary::LookupPropDefByOMPid
   // Created a new class def.  It doesn't currently have any
   // properties defined, so we should hook it up.
   _pBuiltinProps->RegisterBuiltinProperties (pClassDef);
-
-  assert (pClassDef);
-  pClassDef->ReleaseReference ();
-  pClassDef = 0;
 
   // *Now* we can look up that OM PID in the dictionary.  This time it
   // had better succeed.
@@ -1507,96 +1491,52 @@ AAFRESULT ImplAAFDictionary::pvtLookupPropDefByOMPid
 {
   if (! ppd) return AAFRESULT_NULL_PARAM;
 
-  AAFRESULT rReturned = AAFRESULT_SUCCESS;
-  ImplEnumAAFClassDefs * pClassEnum = 0;
-  ImplAAFClassDef * pClassDef = 0;
-  ImplEnumAAFPropertyDefs * pPropEnum = 0;
-  ImplAAFPropertyDef * pPropDef = 0;
+  ImplEnumAAFClassDefsSP pClassEnum;
+  ImplAAFClassDefSP pClassDef;
 
   //
   // Property defs are owned by class defs, so we'll have to iterate
   // across class defs first, and then within the classes' property
   // defs... 
   //
-  try
-	{
-	  check_result (((ImplAAFDictionary*)this)->GetClassDefinitions (&pClassEnum));
-	  assert (pClassEnum);
+  check_result (((ImplAAFDictionary*)this)->GetClassDefinitions (&pClassEnum));
+  assert (pClassEnum);
 
-	  while (AAFRESULT_SUCCEEDED (pClassEnum->NextOne (&pClassDef)))
+  while (AAFRESULT_SUCCEEDED (pClassEnum->NextOne (&pClassDef)))
+	{
+	  // We've got a class.  Ask it to look up the prop def.
+	  assert (pClassDef);
+	  assert (ppd);
+	  AAFRESULT hr = pClassDef->LookupPropertyDefbyOMPid (opid, ppd);
+	  if (AAFRESULT_SUCCEEDED (hr))
 		{
-		  // We've got a class.  Iterate across its prop defs.
-		  assert (pClassDef);
-		  check_result (pClassDef->GetPropertyDefs (&pPropEnum));
-		  assert (pPropEnum);
+		  // We've found the prop def!
+		  assert (ppd);
+		  assert (*ppd);
 
-		  while (AAFRESULT_SUCCEEDED (pPropEnum->NextOne (&pPropDef)))
-			{
-			  // We've got a property definition.  See if it matches
-			  // the given OMPropertyId
-
-			  assert (pPropDef);
-			  OMPropertyId omPid = pPropDef->OmPid ();
-			  if (opid == omPid)
-				{
-				  // We've found the prop def!
-				  assert (ppd);
-				  *ppd = pPropDef;
-				  (*ppd)->AcquireReference ();
-
-				  release_if_set (pClassEnum);
-				  release_if_set (pPropEnum);
-				  release_if_set (pClassDef);
-				  release_if_set (pPropDef);
-				  return AAFRESULT_SUCCESS;
-				}
-			  else
-				{
-				  // nope, this prop def isn't the one.
-				  release_and_zero (pPropDef);
-				}
-			}
-
-		  // Property enumerator failed.  If we're here, no more
-		  // properties in this class.  Try the next class.
-		  //
-		  // Make sure the pPropEnum->NextOne() call didn't get us a
-		  // property (pPropDef should have been zeroed the previous
-		  // successful time through the loop).
-		  assert (!pPropDef);
-
-		  // Since we're going to try the next class, we'll have to
-		  // get rid of this class, and its property enumerator.
-		  release_and_zero (pClassDef);
-		  release_and_zero (pPropEnum);
+		  return AAFRESULT_SUCCESS;
 		}
-
-	  // Class enumerator failed.  If we're here, no more classes
-	  // registered in the dictionary.  Indicate failure.
-	  throw AAFRESULT_NO_MORE_OBJECTS;
+	  // Not in that class; try the next class.  First, get rid of
+	  // this class.
 	}
-  catch (HRESULT &rCaught)
-	{
-	  rReturned = rCaught;
-	}
-  release_if_set (pClassEnum);
-  release_if_set (pPropEnum);
-  release_if_set (pClassDef);
-  release_if_set (pPropDef);
 
-  return rReturned;
+  // Class enumerator failed.  If we're here, no more classes
+  // registered in the dictionary.  Indicate failure.
+  return AAFRESULT_NO_MORE_OBJECTS;
 }
-#endif // 1
 
 
 //
-// Looks up a property def by OMPropertyId.  Looks first for classes
-// currently registered in the dictionary; looks next in builtin
-// classes which may not yet be registered.  If found in builtins,
-// will register that class.
+// Looks up a property def by OMPropertyId.  Looks first for
+// properties in built-in types (to avoid recursive dictionary
+// lookups).  That's OK since for built-in types the OMPID->TypeGuid
+// mapping won't change even with client extensions.
+//
+// If that OM PID is not found in builtins, will look next in
+// registered classes.
 //
 AAFRESULT
-ImplAAFDictionary::LookupComplexPropTypeByOMPid
+ImplAAFDictionary::LookupPropTypeByOMPid
 (
  OMPropertyId opid,
  ImplAAFTypeDef ** ppTypeDef
@@ -1606,36 +1546,24 @@ ImplAAFDictionary::LookupComplexPropTypeByOMPid
 
   aafUID_t typeAUID;
   assert (_pBuiltinProps);
-  hr = _pBuiltinProps->LookupBuiltinComplexPropTypeFromOMPid
+  hr = _pBuiltinProps->LookupBuiltinPropTypeFromOMPid
 	(opid, &typeAUID);
   if (AAFRESULT_SUCCEEDED (hr))
 	{
 	  // Found a built-in matching that OM PID.  Look up its type.
-	  static const aafUID_t kNull_auid = { 0 };
-	  if (EqualAUID (&typeAUID, &kNull_auid))
-		{
-		  // It's a non-complex type.  Return NULL to the caller, and
-		  // don't attempt to look it up because that will cause an
-		  // attempt to load it into the dictionary (creating a
-		  // potential infinite recursion when first un-persisting the
-		  // header and dictionary).
-		  *ppTypeDef = 0;
-		}
-	  else
-		{
-		  // Cast away constness
-		  assert (ppTypeDef);
-		  hr = ((ImplAAFDictionary*)this)->LookupType
-			(&typeAUID, ppTypeDef);
-		  assert (AAFRESULT_SUCCEEDED (hr));
-		  assert (ppTypeDef);
-		  assert (*ppTypeDef);
-		}
+	  // Cast away constness
+	  assert (ppTypeDef);
+	  hr = ((ImplAAFDictionary*)this)->LookupType
+		(&typeAUID, ppTypeDef);
+	  assert (AAFRESULT_SUCCEEDED (hr));
+	  assert (ppTypeDef);
+	  assert (*ppTypeDef);
 	  return AAFRESULT_SUCCESS;
 	}
+
   // Didn't find it in builtins.  Look for it in registered class in
   // the dictionary.
-  hr = pvtLookupComplexPropTypeByOMPid (opid, ppTypeDef);
+  hr = pvtLookupPropTypeByOMPid (opid, ppTypeDef);
   // Pass or fail, return the result.
   return hr;
 }
@@ -1646,7 +1574,7 @@ ImplAAFDictionary::LookupComplexPropTypeByOMPid
 // look for that OMPropertyId in classes currently registered in the
 // dictionary.
 //
-AAFRESULT ImplAAFDictionary::pvtLookupComplexPropTypeByOMPid
+AAFRESULT ImplAAFDictionary::pvtLookupPropTypeByOMPid
 (
  OMPropertyId opid,
  ImplAAFTypeDef ** ppTypeDef
@@ -1654,87 +1582,62 @@ AAFRESULT ImplAAFDictionary::pvtLookupComplexPropTypeByOMPid
 {
   if (! ppTypeDef) return AAFRESULT_NULL_PARAM;
 
-  AAFRESULT rReturned = AAFRESULT_SUCCESS;
-  ImplEnumAAFClassDefs * pClassEnum = 0;
-  ImplAAFClassDef * pClassDef = 0;
-  ImplEnumAAFPropertyDefs * pPropEnum = 0;
-  ImplAAFPropertyDef * pPropDef = 0;
+  ImplEnumAAFClassDefsSP pClassEnum;
+  ImplAAFClassDefSP pClassDef;
+  ImplEnumAAFPropertyDefsSP pPropEnum;
+  ImplAAFPropertyDefSP pPropDef;
 
   //
   // Property defs are owned by class defs, so we'll have to iterate
   // across class defs first, and then within the classes' property
   // defs... 
   //
-  try
+  check_result (((ImplAAFDictionary*)this)->GetClassDefinitions (&pClassEnum));
+  assert (pClassEnum);
+
+  while (AAFRESULT_SUCCEEDED (pClassEnum->NextOne (&pClassDef)))
 	{
-	  check_result (((ImplAAFDictionary*)this)->GetClassDefinitions (&pClassEnum));
-	  assert (pClassEnum);
+	  // We've got a class.  Iterate across its prop defs.
+	  assert (pClassDef);
+	  check_result (pClassDef->GetPropertyDefs (&pPropEnum));
+	  assert (pPropEnum);
 
-	  while (AAFRESULT_SUCCEEDED (pClassEnum->NextOne (&pClassDef)))
+	  while (AAFRESULT_SUCCEEDED (pPropEnum->NextOne (&pPropDef)))
 		{
-		  // We've got a class.  Iterate across its prop defs.
-		  assert (pClassDef);
-		  check_result (pClassDef->GetPropertyDefs (&pPropEnum));
-		  assert (pPropEnum);
+		  // We've got a property definition.  See if it matches
+		  // the given OMPropertyId
 
-		  while (AAFRESULT_SUCCEEDED (pPropEnum->NextOne (&pPropDef)))
+		  assert (pPropDef);
+		  OMPropertyId omPid = pPropDef->OmPid ();
+		  if (opid == omPid)
 			{
-			  // We've got a property definition.  See if it matches
-			  // the given OMPropertyId
-
+			  // We've found the prop def!
 			  assert (pPropDef);
-			  OMPropertyId omPid = pPropDef->OmPid ();
-			  if (opid == omPid)
-				{
-				  // We've found the prop def!
-				  ImplAAFTypeDef * ptd = 0;
-				  assert (pPropDef);
-				  check_result (pPropDef->GetTypeDef (&ptd));
-				  assert (ptd);
-				  assert (ppTypeDef);
-				  *ppTypeDef = ptd;
+			  assert (ppTypeDef);
+			  check_result (pPropDef->GetTypeDef (ppTypeDef));
+			  assert (*ppTypeDef);
 
-				  release_if_set (pClassEnum);
-				  release_if_set (pPropEnum);
-				  release_if_set (pClassDef);
-				  release_if_set (pPropDef);
-				  return AAFRESULT_SUCCESS;
-				}
-			  else
-				{
-				  // nope, this prop def isn't the one.
-				  release_and_zero (pPropDef);
-				}
+			  return AAFRESULT_SUCCESS;
 			}
-
-		  // Property enumerator failed.  If we're here, no more
-		  // properties in this class.  Try the next class.
-		  //
-		  // Make sure the pPropEnum->NextOne() call didn't get us a
-		  // property (pPropDef should have been zeroed the previous
-		  // successful time through the loop).
-		  assert (!pPropDef);
-
-		  // Since we're going to try the next class, we'll have to
-		  // get rid of this class, and its property enumerator.
-		  release_and_zero (pClassDef);
-		  release_and_zero (pPropEnum);
+		  else
+			{
+			  // nope, this prop def isn't the one.
+			  pPropDef = 0;
+			}
 		}
 
-	  // Class enumerator failed.  If we're here, no more classes
-	  // registered in the dictionary.  Indicate failure.
-	  throw AAFRESULT_NO_MORE_OBJECTS;
+	  // Property enumerator failed.  If we're here, no more
+	  // properties in this class.  Try the next class.
+	  //
+	  // Make sure the pPropEnum->NextOne() call didn't get us a
+	  // property (pPropDef should have been zeroed the previous
+	  // successful time through the loop).
+	  assert (!pPropDef);
 	}
-  catch (HRESULT &rCaught)
-	{
-	  rReturned = rCaught;
-	}
-  release_if_set (pClassEnum);
-  release_if_set (pPropEnum);
-  release_if_set (pClassDef);
-  release_if_set (pPropDef);
 
-  return rReturned;
+  // Class enumerator failed.  If we're here, no more classes
+  // registered in the dictionary.  Indicate failure.
+  return AAFRESULT_NO_MORE_OBJECTS;
 }
 
 
@@ -1955,15 +1858,36 @@ AAFRESULT ImplAAFDictionary::GenerateOmPid
 }
 
 
+// Register the given object to be initialized "at the right time".
+// If that time is now, will init immediately.  If not ready yet,
+// will put obj on queue to be initialized when everything's ready.
+void ImplAAFDictionary::pvtInitObjectProperties
+  (ImplAAFObjectSP pObj) const
+{
+  assert (pObj);
+  if (_OKToInitProps)
+	{
+	  pObj->InitOMProperties ();
+	}
+  else
+	{
+	  // cast away const-ness
+	  ((ImplAAFDictionary*)this)->_objsToInit.Append (pObj);
+	}
+}
+
+
 const static aafUID_t * sCriticalTypes[] =
 {
   &kAAFTypeID_ObjRef,
   &kAAFTypeID_WCharString,
   &kAAFTypeID_AUID,
   &kAAFTypeID_AUIDArray,
+  &kAAFTypeID_ObjRefArray,
 };
 
-void ImplAAFDictionary::pvtInitCriticalBuiltins ()
+
+void ImplAAFDictionary::pvtInitCriticalBuiltins (void)
 {
   if (_initStarted)
 	return;
@@ -1996,20 +1920,18 @@ void ImplAAFDictionary::pvtInitCriticalBuiltins ()
   // Sucked in the critical types.  Now initialize the properties
   // of each.
   assert (! _OKToInitProps);
-  _OKToInitProps = AAFTrue;
 
-  for (i = 0; i < kNumCritTypes; i++)
+  // Note that the queue may grow because pvtInitObjectProperties()
+  // gets called during calls to InitOMProperties().
+  ImplAAFObjectSP pObj = _objsToInit.GetNext ();
+  while (pObj)
 	{
-	  ImplAAFTypeDef * ptd = 0;
-	  hr = LookupType (sCriticalTypes[i], &ptd);
-	  if (AAFRESULT_SUCCEEDED (hr))
-		{
-		  assert (ptd);
-		  ptd->InitOMProperties ();
-		  ptd->ReleaseReference ();
-		  ptd = 0;
-		}
-	}
+	  pObj->InitOMProperties();
+	  pObj = _objsToInit.GetNext ();
+	}  
+
+  assert (! _OKToInitProps);
+  _OKToInitProps = AAFTrue;
 
   // Make sure the dict itself has had properties init'd.
   InitOMProperties ();
