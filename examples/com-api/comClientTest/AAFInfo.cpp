@@ -112,6 +112,61 @@ static void convert(wchar_t* wName, size_t length, const wchar_t* name)
   }
 }
 
+#if defined( OS_UNIX )
+
+static const unsigned char guidMap[] =
+{ 3, 2, 1, 0, '-', 5, 4, '-', 7, 6, '-', 8, 9, '-', 10, 11, 12, 13, 14, 15 }; 
+static const wchar_t digits[] = L"0123456789ABCDEF"; 
+
+#define GUIDSTRMAX 38 
+
+typedef OLECHAR OMCHAR;
+
+int StringFromGUID2(const GUID& guid, OMCHAR* buffer, int bufferSize) 
+{
+  const unsigned char* ip = (const unsigned char*) &guid; // input pointer
+  OMCHAR* op = buffer;                                    // output pointer
+
+  *op++ = L'{'; 
+ 
+  for (size_t i = 0; i < sizeof(guidMap); i++) { 
+
+    if (guidMap[i] == '-') { 
+      *op++ = L'-'; 
+    } else { 
+      *op++ = digits[ (ip[guidMap[i]] & 0xF0) >> 4 ]; 
+      *op++ = digits[ (ip[guidMap[i]] & 0x0F) ]; 
+    } 
+  } 
+  *op++ = L'}'; 
+  *op = L'\0'; 
+ 
+  return GUIDSTRMAX; 
+} 
+
+#endif
+
+// The maximum number of characters in the formated GUID.
+// (as returned by StringFromGUID2).
+const size_t MAX_GUID_BUFFER = 40;
+
+static void formatGUID(char *cBuffer, size_t length, aafUID_t *pGUID)
+{
+  assert(pGUID, "Valid input GUID");
+  assert(cBuffer != 0, "Valid output buffer");
+  assert(length > 0, "Valid output buffer size");
+
+  int bytesCopied = 0;
+  OLECHAR wGUID[MAX_GUID_BUFFER];
+
+  bytesCopied = StringFromGUID2(*((GUID*)pGUID), wGUID, MAX_GUID_BUFFER);
+  if (0 < bytesCopied) {
+    convert(cBuffer, length, wGUID);
+  } else {
+    fprintf(stderr, "\nError : formatGUID failed.\n\n");
+    exit(1);  
+  }
+}
 
 static void printIdentification(IAAFIdentification* pIdent)
 {
@@ -163,6 +218,11 @@ static void printIdentification(IAAFIdentification* pIdent)
       break;
   }
   printf("ProductVersion.type       = \"%s\"\n", releaseType);
+
+  aafUID_t productID;
+  check(pIdent->GetProductID(&productID));
+  formatGUID(chName, sizeof(chName), &productID);
+  printf("ProductID            = %s\n", chName);
 
   check(pIdent->GetPlatform(wchName, sizeof (wchName)));
   convert(chName, sizeof(chName), wchName);
