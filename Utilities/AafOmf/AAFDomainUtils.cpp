@@ -12,7 +12,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -82,9 +82,9 @@ IAAFInterpolationDef *AAFDomainUtils::CreateInterpolationDefinition(IAAFDictiona
 
 //	dprintf("AEffect::CreateInterpolationDefinition()\n");	//JeffB:
 
-	(void)(dict->CreateInstance(defs.cdInterpolationDefinition(),
-			IID_IAAFInterpolationDef,
-			(IUnknown **)&interpDef));
+	(void)(defs.cdInterpolationDefinition()->
+		   CreateInstance(IID_IAAFInterpolationDef,
+						  (IUnknown **)&interpDef));
 	(void)(interpDef->QueryInterface(IID_IAAFDefObject, (void **) &defObject));
 	if(memcmp(&interpolationDefID, &LinearInterpolator, sizeof(aafUID_t)) == 0)
 	{
@@ -116,9 +116,9 @@ IAAFTypeDef *AAFDomainUtils::CreateTypeDefinition(IAAFDictionary *pDict, aafUID_
 	if(rc == AAFRESULT_SUCCESS && typeDef != NULL)
 		return typeDef;
 
-	CHECKAAF(pDict->CreateInstance(defs.cdTypeDef(),
-			IID_IAAFTypeDef,
-			(IUnknown **)&typeDef));
+	CHECKAAF(defs.cdTypeDef()->
+			 CreateInstance(IID_IAAFTypeDef,
+							(IUnknown **)&typeDef));
 	CHECKAAF(typeDef->QueryInterface(IID_IAAFDefObject, (void **) &defObject));
 	if(memcmp(&typeDefID, &kAAFTypeID_Rational, sizeof(aafUID_t)) == 0)
 	{
@@ -150,9 +150,9 @@ void AAFDomainUtils::AAFAddOnePoint(IAAFDictionary *dict, aafRational_t percentT
 
 	CAAFBuiltinDefs defs (dict);
 
-	CHECKAAF(dict->CreateInstance(defs.cdControlPoint(),
-		IID_IAAFControlPoint,
-		(IUnknown **)&pPoint));
+	CHECKAAF(defs.cdControlPoint()->
+			 CreateInstance(IID_IAAFControlPoint,
+							(IUnknown **)&pPoint));
 		
 	CHECKAAF(pPoint->SetTypeDefinition(typeDef));
 	CHECKAAF(pPoint->SetValue(buflen, (unsigned char *)buf));
@@ -171,9 +171,9 @@ IAAFParameter *AAFDomainUtils::AAFAddConstantVal(IAAFDictionary *dict, long bufl
 
 	CAAFBuiltinDefs defs (dict);
 
-	CHECKAAF(dict->CreateInstance(defs.cdConstantValue(),
-		IID_IAAFConstantValue,
-		(IUnknown **)&pCVal));
+	CHECKAAF(defs.cdConstantValue()->
+			 CreateInstance(IID_IAAFConstantValue,
+							(IUnknown **)&pCVal));
 	CHECKAAF(pCVal->SetValue(buflen, (unsigned char *)buf));
 	CHECKAAF(pCVal->QueryInterface(IID_IAAFParameter, (void **) &pParm));
 	CHECKAAF(pGroup->AddParameter(pParm));
@@ -192,9 +192,9 @@ IAAFVaryingValue *AAFDomainUtils::AAFAddEmptyVaryingVal(IAAFDictionary *dict, IA
 
 	CAAFBuiltinDefs defs (dict);
 
-	CHECKAAF(dict->CreateInstance(defs.cdVaryingValue(),
-		IID_IAAFVaryingValue,
-		(IUnknown **)&pVVal));
+	CHECKAAF(defs.cdVaryingValue()->
+			 CreateInstance(IID_IAAFVaryingValue,
+							(IUnknown **)&pVVal));
 	CHECKAAF(pVVal->SetInterpolationDefinition(CreateInterpolationDefinition(
 												dict, LinearInterpolator)));
 	CHECKAAF(pVVal->QueryInterface(IID_IAAFParameter, (void **) &pParm));
@@ -222,9 +222,9 @@ IAAFParameterDef *AAFDomainUtils::CreateParameterDefinition(IAAFDictionary *pDic
 
 	CAAFBuiltinDefs defs (pDict);
 
-	CHECKAAF(pDict->CreateInstance(defs.cdParameterDef(),
-			IID_IAAFParameterDef,
-			(IUnknown **)&parmDef));
+	CHECKAAF(defs.cdParameterDef()->
+			 CreateInstance(IID_IAAFParameterDef,
+							(IUnknown **)&parmDef));
 	CHECKAAF(parmDef->QueryInterface(IID_IAAFDefObject, (void **) &defObject));
 
 	if(memcmp(&parmDefID, &kAAFParameterDefLevel, sizeof(aafUID_t)) == 0)
