@@ -249,6 +249,18 @@ Package=<4>
 
 ###############################################################################
 
+Project: "Dictionary"=".\Utilities\Dictionary\Dictionary.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
 Project: "Dump"=".\DevUtils\dump\dump.dsp" - Package Owner=<4>
 
 Package=<5>
@@ -311,6 +323,12 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name OM
     End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name Dictionary
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name Formatters
+    End Project Dependency
 }}}
 
 ###############################################################################
@@ -326,6 +344,27 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name OM
     End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name Dictionary
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name Formatters
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name rxplib
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "Formatters"=".\Utilities\Formatters\Formatters.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
 }}}
 
 ###############################################################################
@@ -484,6 +523,18 @@ Package=<4>
 ###############################################################################
 
 Project: "libjpeg"=".\ref-impl\libjpeg\libjpeg.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "rxplib"=".\Utilities\rxp\rxplib.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
