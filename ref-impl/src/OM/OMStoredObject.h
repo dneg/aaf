@@ -41,6 +41,7 @@ struct IStream;
 class OMStoredPropertySetIndex;
 class OMProperty;
 class OMPropertySet;
+class OMPropertyTable;
 class OMStoredVectorIndex;
 class OMStoredSetIndex;
 
@@ -112,6 +113,10 @@ public:
     //          <c OMStoredObject>, the set is named <p setName>.
   void save(const OMStoredSetIndex* set, const char* setName);
 
+    // @cmember Save the <c OMPropertyTable> <p table> in this
+    //          <c OMStoredObject>.
+  void save(const OMPropertyTable* table);
+
     // @cmember Restore the vector named <p vectorName> into this
     //          <c OMStoredObject>.
   void restore(OMStoredVectorIndex*& vector, const char* vectorName);
@@ -119,6 +124,9 @@ public:
     // @cmember Restore the set named <p setName> into this
     //          <c OMStoredObject>.
   void restore(OMStoredSetIndex*& set, const char* setName);
+
+    // @cmember Restore the <c OMPropertyTable> in this <c OMStoredObject>.
+  void restore(OMPropertyTable*& table);
 
     // @cmember Write a property value to this <c OMStoredObject>. The
     //          property value to be written occupies <p size> bytes at
