@@ -26,6 +26,7 @@
 #endif
 
 #include "AxHrMap.h"
+#include "AxStorageErrors.h"
 
 #include <AAFResult.h>
 
@@ -42,7 +43,7 @@ AxHrMap::AxHrMap()
 #define MAP_ADD( HR ) _map[ HR ] = HRSTRING( L, #HR ) ;
 
 	
-	// Error code list generated automatically using the command:
+	// AAF error code list generated automatically using the command:
 	// grep AAFRESULT ref-impl/include/AAFResult.h | cut -d\  -f2 | sort | uniq
 
 	MAP_ADD( AAFRESULT_24BITVIDEO );
@@ -311,13 +312,55 @@ AxHrMap::AxHrMap()
 	MAP_ADD( AAFRESULT_ZERO_SAMPLESIZE );
 	MAP_ADD( AAFRESULT_EVENT_SEMANTICS );
 
+
+	// Structured storage error code list generated automatically
+	// using the command:
+	// grep STG_E ss-impl/ref/h/storage.h | cut -d\  -f2 | sort | uniq
+	// STG_S error code were take manualy from storage.h
+
+	MAP_ADD( STG_E_ABNORMALAPIEXIT );
+	MAP_ADD( STG_E_ACCESSDENIED );
+	MAP_ADD( STG_E_CANTSAVE );
+	MAP_ADD( STG_E_DISKISWRITEPROTECTED );
+	MAP_ADD( STG_E_DOCFILECORRUPT );
+	MAP_ADD( STG_E_FILEALREADYEXISTS );
+	MAP_ADD( STG_E_FILENOTFOUND );
+	MAP_ADD( STG_E_INSUFFICIENTMEMORY );
+	MAP_ADD( STG_E_INUSE );
+	MAP_ADD( STG_E_INVALIDFLAG );
+	MAP_ADD( STG_E_INVALIDFUNCTION );
+	MAP_ADD( STG_E_INVALIDHANDLE );
+	MAP_ADD( STG_E_INVALIDHEADER );
+	MAP_ADD( STG_E_INVALIDNAME );
+	MAP_ADD( STG_E_INVALIDPARAMETER );
+	MAP_ADD( STG_E_INVALIDPOINTER );
+	MAP_ADD( STG_E_LOCKVIOLATION );
+	MAP_ADD( STG_E_MEDIUMFULL );
+	MAP_ADD( STG_E_NOMOREFILES );
+	MAP_ADD( STG_E_NOTCURRENT );
+	MAP_ADD( STG_E_NOTFILEBASEDSTORAGE );
+	MAP_ADD( STG_E_OLDDLL );
+	MAP_ADD( STG_E_OLDFORMAT );
+	MAP_ADD( STG_E_PATHNOTFOUND );
+	MAP_ADD( STG_E_READFAULT );
+	MAP_ADD( STG_E_REVERTED );
+	MAP_ADD( STG_E_SEEKERROR );
+	MAP_ADD( STG_E_SHAREREQUIRED );
+	MAP_ADD( STG_E_SHAREVIOLATION );
+	MAP_ADD( STG_E_TOOMANYOPENFILES );
+	MAP_ADD( STG_E_UNIMPLEMENTEDFUNCTION );
+	MAP_ADD( STG_E_UNKNOWN );
+	MAP_ADD( STG_E_WRITEFAULT );
+
+	MAP_ADD( STG_S_CONVERTED );
+	MAP_ADD( STG_S_BUFFEROVERFLOW );
+	MAP_ADD( STG_S_TRYOVERWRITE );
+
 	// Misc. Win32 errors.
 #if defined(OS_WINDOWS)
 
 	MAP_ADD( ERROR_MOD_NOT_FOUND );
 	MAP_ADD( E_NOINTERFACE );
-	MAP_ADD( STG_E_FILEALREADYEXISTS );
-	MAP_ADD( STG_E_PATHNOTFOUND );
 
 	// FIXME - Find out what proprocessor macro defines this.
 	// I would have expected ERROR_MOD_NOT_FOUND ????
@@ -325,7 +368,7 @@ AxHrMap::AxHrMap()
 	
 	// What is the macro definition for 0x80030111? The MSVC++ Error Lookup tool 
 	// was used to translate it.  It is a structured storage error generated when
-	// the SS file exceeds 2GB when writting large amounts of essence data.
+	// the SS file exceeds 2GB when writing large amounts of essence data.
 	_map[ 0x80030111 ] = L"The compound file is too large for the current implementation.";
 #endif
 
