@@ -897,7 +897,6 @@ AAFRESULT STDMETHODCALLTYPE
   _defObj = def;
 
   return AAFRESULT_SUCCESS;
-//	assert(_dataDef.isVoid());
 }
 
 

@@ -668,7 +668,6 @@ AAFRESULT STDMETHODCALLTYPE
 	if (! pClassDef)
 		return AAFRESULT_NULL_PARAM;
 
-//	assert(_ParentClass.isVoid());
 	_ParentClass = pClassDef;
   return AAFRESULT_SUCCESS;
 }

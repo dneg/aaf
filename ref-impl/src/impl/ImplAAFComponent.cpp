@@ -135,7 +135,6 @@ AAFRESULT STDMETHODCALLTYPE
   _dataDef = pDataDef;
 
   return AAFRESULT_SUCCESS;
-//	assert(_dataDef.isVoid());
 }
 
 

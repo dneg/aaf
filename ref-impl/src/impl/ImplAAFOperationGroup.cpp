@@ -155,15 +155,7 @@ AAFRESULT STDMETHODCALLTYPE
     // The operation definition is a weak reference that is
     // owned by the dictionary so we do NOT need to reference
     // count it.
-//    // find out if this OperationDef is already set
-//		if(!_operationDefinition.isVoid())
-//		{
-//			pOldOperationDef = _operationDefinition;
-//			if (pOldOperationDef != 0)
-//				pOldOperationDef->ReleaseReference();
-//		}
 		_operationDefinition = pOperationDef;
-//		pOperationDef->AcquireReference();
 	}
 	XEXCEPT
 	{
