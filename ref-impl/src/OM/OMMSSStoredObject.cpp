@@ -2733,13 +2733,14 @@ void OMMSSStoredObject::externalizeUInt16Array(const OMUInt16* internalArray,
   }
 }
 /*
-* MS VC++ versions prior to version 7.0 do not define STGOPTIONS.
+* MS VC++ versions prior to version 7.0 do not define STGOPTIONS (unless a
+* recent Microsoft platform SDK was installed).  Hence test for STGOPTIONS_VERSION.
 */
 #ifdef OM_USE_STORAGE_EX
 #ifndef STGOPTIONS_VERSION
 typedef void STGOPTIONS;
-#endif //_MSC_VER
-#endif //OM_USE_STORAGE_EX
+#endif // STGOPTIONS_VERSION
+#endif // OM_USE_STORAGE_EX
 
 OMMSSStoredObject* OMMSSStoredObject::openFile(const wchar_t* fileName,
                                                const OMFile::OMAccessMode mode)
