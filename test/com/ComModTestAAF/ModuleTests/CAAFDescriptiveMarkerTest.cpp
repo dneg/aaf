@@ -44,6 +44,9 @@ using namespace std;
 const aafUID_t TestDesciptiveFrameworkClassID = 
 { 0x023a1cae, 0xdc16, 0x4db9, { 0x95, 0xf9, 0x43, 0xd0, 0x56, 0xca, 0xd3, 0x78 } };
 
+aafUInt32 TestDescribedSlotIDsVector[] = { 1, 3, 5, 7, 11 };
+const aafUInt32 TestDescribedIDsVectorSize = 5;
+
 static void RegisterDescriptiveTestFramework( IAAFSmartPointer<IAAFDictionary>& pDict )
 {
   using namespace mtc;
@@ -112,6 +115,20 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 							   (IUnknown**)&pDescFramework ) );
     CheckResult( pDescMarker->SetDescriptiveFramework( pDescFramework ) );
 
+    // Get described slots - should not be present.
+    aafUInt32 size = 0;
+    HRESULT hr = pDescMarker->GetDescribedSlotIDsSize( &size );
+    CheckExpression( AAFRESULT_PROP_NOT_PRESENT == hr, AAFRESULT_TEST_FAILED );
+
+    // Set/Get single described slot.
+    aafUInt32 setSingleSlotID = 0xdeadbeef;
+    CheckResult( pDescMarker->SetDescribedSlotIDs( 1, &setSingleSlotID ) );
+    aafUInt32 getSingleSlotID = 0;
+    CheckResult( pDescMarker->GetDescribedSlotIDs( 1, &getSingleSlotID ) );
+    CheckExpression( setSingleSlotID == getSingleSlotID, AAFRESULT_TEST_FAILED );
+
+    // Set the persistent described slots.
+    CheckResult( pDescMarker->SetDescribedSlotIDs( TestDescribedIDsVectorSize, TestDescribedSlotIDsVector ) );
 
     CheckResult( filePointers.pFile->Save() );
     CheckResult( filePointers.pFile->Close() );
@@ -160,6 +177,23 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 
     CheckExpression( memcmp( &auid, &TestDesciptiveFrameworkClassID, sizeof(auid) ) == 0,
 		     AAFRESULT_TEST_FAILED );
+
+    // Get, and test, the described slots from the marker.
+    aafUInt32 getSlotIDsVector[TestDescribedIDsVectorSize];
+    aafUInt32 getSlotIDsVectorSize = 0;
+
+    CheckResult( pDescMarker->GetDescribedSlotIDsSize( &getSlotIDsVectorSize ) );
+    CheckExpression( TestDescribedIDsVectorSize == getSlotIDsVectorSize, AAFRESULT_TEST_FAILED );
+
+    CheckExpression( AAFRESULT_SMALLBUF ==
+		       pDescMarker->GetDescribedSlotIDs( getSlotIDsVectorSize-1, getSlotIDsVector ),
+		     AAFRESULT_TEST_FAILED );
+
+    CheckResult( pDescMarker->GetDescribedSlotIDs( getSlotIDsVectorSize, getSlotIDsVector ) );
+
+    CheckExpression( 0 == memcmp( getSlotIDsVector, TestDescribedSlotIDsVector, sizeof(TestDescribedSlotIDsVector) ),
+		     AAFRESULT_TEST_FAILED );
+
 
     CheckResult( filePointers.pFile->Close() );
   }

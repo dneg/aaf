@@ -35,6 +35,7 @@
 
 #include "ImplAAFSourceReference.h"
 
+#include "OMSetProperty.h"
 #include "OMStrongRefProperty.h"
 
 class ImplAAFDescriptiveFramework;
@@ -111,7 +112,9 @@ public:
         (ImplAAFDescriptiveFramework ** ppDescriptiveFramework);
 
  private:
+    OMSetProperty<aafUInt32> _describedSlots;
     OMStrongReferenceProperty<ImplAAFDescriptiveFramework> _descriptiveFramework;
+    
 };
 
 #endif // ! __ImplAAFDescriptiveMarker_h__

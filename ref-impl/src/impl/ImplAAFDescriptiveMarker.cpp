@@ -40,11 +40,12 @@
 #include <string.h>
 
 ImplAAFDescriptiveMarker::ImplAAFDescriptiveMarker ()
-  : _descriptiveFramework( PID_DescriptiveMarker_Description, L"Description" )
+  : _describedSlots( PID_DescriptiveMarker_DescribedSlots, L"DescribedSlots" ),
+    _descriptiveFramework( PID_DescriptiveMarker_Description, L"Description" )
 {
+  _persistentProperties.put( _describedSlots.address() );
   _persistentProperties.put( _descriptiveFramework.address() );
 }
-
 
 ImplAAFDescriptiveMarker::~ImplAAFDescriptiveMarker ()
 {
@@ -66,21 +67,51 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFDescriptiveMarker::SetDescribedSlotIDs (
-      aafUInt32  /*numberElements*/,
-      aafUInt32*  /*pDescribedSlotIDs*/)
+      aafUInt32  numberElements,
+      aafUInt32*  pDescribedSlotIDs)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  if (!pDescribedSlotIDs) {
+    return AAFRESULT_NULL_PARAM;
+  }
+
+  _describedSlots.clear();
+  int i;
+  for ( i = 0; i < numberElements; ++i ) {
+    _describedSlots.insert( pDescribedSlotIDs[i] );
+  }
+
+  return AAFRESULT_SUCCESS;
 }
 
 
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFDescriptiveMarker::GetDescribedSlotIDs (
-      aafUInt32  /*numberElements*/,
-      aafUInt32*  /*pDescribedSlotIDs*/)
+      aafUInt32  numberElements,
+      aafUInt32* pDescribedSlotIDs)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  if ( !pDescribedSlotIDs ) {
+    return AAFRESULT_NULL_PARAM;
+  }
+
+  if ( !_describedSlots.isPresent() ) {
+    return AAFRESULT_PROP_NOT_PRESENT;
+  }
+
+  if ( _describedSlots.count() > numberElements ) {
+    return AAFRESULT_SMALLBUF;
+  }
+
+  aafUInt32* pNextDescribedSlotID = pDescribedSlotIDs;
+  OMSetPropertyIterator<aafUInt32> iter( _describedSlots, OMBefore );
+  while( ++iter ) {
+    *pNextDescribedSlotID = iter.value();
+    pNextDescribedSlotID++;
+  }
+
+  return AAFRESULT_SUCCESS;
 }
+
 
 
 AAFRESULT STDMETHODCALLTYPE
@@ -91,8 +122,11 @@ AAFRESULT STDMETHODCALLTYPE
     return AAFRESULT_NULL_PARAM;
   }
 
-  // FIXME - Set to zero pending implementation.
-  *pNumberElements = 0;
+  if ( !_describedSlots.isPresent() ) {
+    return AAFRESULT_PROP_NOT_PRESENT;
+  }
+
+  *pNumberElements = _describedSlots.count();
 
   return AAFRESULT_SUCCESS;
 }

@@ -57,6 +57,7 @@ const int PID_Event_Position                                     = 0x0601;
 const int PID_Event_Comment                                      = 0x0602;
 const int PID_GPITrigger_ActiveState                             = 0x0801;
 const int PID_CommentMarker_Annotation                           = 0x0901;
+const int PID_DescriptiveMarker_DescribedSlots                   = 0x6102;
 const int PID_DescriptiveMarker_Description                      = 0x6101;
 const int PID_OperationGroup_OperationDefinition                 = 0x0B01;
 const int PID_OperationGroup_InputSegments                       = 0x0B02;
