@@ -229,25 +229,21 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	// Add it to the file 
 	check(pHeader->AppendMob(pMob));
 
-	// Get an EssenceAccess Interface
-	check(CoCreateInstance(CLSID_AAFEssenceAccess,
-							NULL, 
-							CLSCTX_INPROC_SERVER, 
-							IID_IAAFEssenceAccess, 
-							(void **)&pEssenceAccess));		
 /*
 	since the data will be saved in the same file we do not need to make
 	this call. Will be used when writing a separate Essence Data file.
 	check(pEssenceAccess->SetEssenceDestination(pLocator, kAAFiMedia));
 */
 	// now create the Essence data file
-	check(pEssenceAccess->Create(	pMasterMob,		// The MasteMob
-									1,				// Slot ID
+	check(pMasterMob->CreateEssence(1,				// Slot ID
 									DDEF_Audio,		// MediaKind
 									CodecWave,		// codecID
 									editRate,		// edit rate
 									sampleRate,		// sample rate
-									kSDKCompressionDisable));// Compress disabled
+									kSDKCompressionDisable,
+									NULL,			// In current file
+									kAAFiMedia,		// In AAF Format
+									&pEssenceAccess));// Compress disabled
 
 	// open the Essence file to be included in this AAF file("Laser.wav")
 	pWavFile = fopen("Laser.wav", "r");
@@ -262,14 +258,15 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 		// close essence data file
 		fclose(pWavFile);
+
+		// Finish writing the destination
+		pEssenceAccess->CompleteWrite();
 	}
 	else
 	{
 		printf("***Failed to open Wave file Laser.wav\n");
 	}
 
-	// Close the EssenceData
-	check(pEssenceAccess->Close());
 	// Release all unnecesary interfaces
 	pEssenceAccess->Release();
 	pEssenceAccess= NULL;
@@ -372,18 +369,12 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 				// Get a Master Mob interface
 				check(pMob->QueryInterface(IID_IAAFMasterMob, (void **)&pMasterMob));
 
-				// Get an EssenceAccess Interface
-				check(CoCreateInstance(CLSID_AAFEssenceAccess,
-										NULL, 
-										CLSCTX_INPROC_SERVER, 
-										IID_IAAFEssenceAccess, 
-										(void **)&pEssenceAccess));		
 				// Open the Essence Data
-				check(pEssenceAccess->Open(	pMasterMob,				//Master Mob pointer
-											1,						// SlotID 1
+					check(pMasterMob->OpenEssence(	1,						// SlotID 1
 											NULL,				// mediaCriteria (Don't care)
 											kMediaOpenReadOnly,	// Open mode
-											kSDKCompressionDisable));// Compress disabled
+											kSDKCompressionDisable,// Compress disabled
+											&pEssenceAccess));
 
 				// Open and read the Wave file (for comparison)
 				pWavFile = fopen("Laser.wav", "r");
@@ -393,11 +384,14 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 					WAVBytesRead = fread(WAVDataBuf, sizeof(unsigned char), sizeof(WAVDataBuf), pWavFile);
 					fclose(pWavFile);
 
+//AAFRESULT STDMETHODCALLTYPE
+//    ImplAAFEssenceAccess::GetEssenceSampleStream
+//         (AAFEssenceSampleStream  **theStream)
 					// Read the Raw Data from the AAF file
 					check(pEssenceAccess->ReadRawData(	WAVBytesRead,		// Number of Samples 
 														sizeof(AAFDataBuf),	// Maximum buffer size
 														AAFDataBuf,			// Buffer for the data
-														&AAFBytesRead,		// Actual number of bytes read
+														&AAFBytesRead,	// Actual number of bytes read
 														&samplesRead));		// Actual number of samples read
 
 					// Now compare the data read from the AAF file to the actual WAV file
@@ -415,10 +409,6 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 				{
 					printf("***Failed to open Wave file Laser.wav for comparison\n");
 				}
-
-				// Close the EssenceData
-				check(pEssenceAccess->Close());
-
 			}
 			else
 			{
