@@ -78,7 +78,7 @@ AAFRESULT STDMETHODCALLTYPE
 		ImplAAFDictionarySP pDict;
 		CHECK(GetDictionary(&pDict));
 		CHECK(SetNewProps(length,
-						  pDict->GetBuiltinDefs()->ddEdgecode()));
+						  pDict->GetBuiltinDefs()->ddkAAFEdgecode()));
 		_start = edgecode.startFrame;
 		if (edgecode.filmKind < kAAFFtNull || edgecode.filmKind > kAAFFt65MM)
 			return AAFRESULT_INVALID_FILMTYPE;

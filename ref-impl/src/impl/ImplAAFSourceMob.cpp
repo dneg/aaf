@@ -300,7 +300,7 @@ AAFRESULT STDMETHODCALLTYPE
 				  CreateInstance((ImplAAFObject**) &aSequ));
 			CHECK(aSequ->Initialize(pDictionary->
 									GetBuiltinDefs()->
-									ddTimecode()));
+									ddkAAFTimecode()));
 			CHECK(aSequ->AppendComponent(tccp));
 			CHECK(mobSlot->SetSegment(aSequ));
 
@@ -311,7 +311,7 @@ AAFRESULT STDMETHODCALLTYPE
 				  CreateInstance ((ImplAAFObject**) &aSequ));
 			CHECK(aSequ->Initialize(pDictionary->
 									GetBuiltinDefs()->
-									ddTimecode()));
+									ddkAAFTimecode()));
 			CHECK(aSequ->AppendComponent(tccp));
 			CHECK(AppendNewTimelineSlot(editrate, aSequ, slotID,
 										L"Timecode", zeroPos, &newSlot));
@@ -394,18 +394,18 @@ AAFRESULT STDMETHODCALLTYPE
 			  CreateInstance((ImplAAFObject**) &filler1));
 		CHECK(filler1->Initialize(pDictionary->
 								  GetBuiltinDefs()->
-								  ddEdgecode(), zeroLen));	
+								  ddkAAFEdgecode(), zeroLen));	
 		CHECK(pDictionary->GetBuiltinDefs()->cdFiller()->
 			  CreateInstance ((ImplAAFObject**) &filler2));
 		CHECK(filler2->Initialize(pDictionary->
 								  GetBuiltinDefs()->
-								  ddEdgecode(), zeroLen));	
+								  ddkAAFEdgecode(), zeroLen));	
 
 		CHECK(pDictionary->GetBuiltinDefs()->cdSequence()->
 			  CreateInstance ((ImplAAFObject**) &ecSequence));
 		CHECK(ecSequence->Initialize(pDictionary->
 									 GetBuiltinDefs()->
-									 ddEdgecode()));	
+									 ddkAAFEdgecode()));	
 
 		CvtInt32toLength(length32, length);
 		CvtInt32toPosition(startEC, startPos);
@@ -943,9 +943,9 @@ AAFRESULT ImplAAFSourceMob::FindTimecodeClip(
 		{
 		  ImplAAFDataDefSP pDataDef;
 		  CHECK(slot->GetDataDef (&pDataDef));
-		  aafUID_t dataDef;
-		  CHECK(pDataDef->GetAUID (&dataDef));
-		  if(EqualAUID(&dataDef, &DDEF_Timecode))
+		  aafBool isTimecode = kAAFFalse;
+		  CHECK(pDataDef->IsTimecodeKind(&isTimecode));
+		  if(isTimecode)
 			{
 			  CHECK(slot->GetPhysicalNum (&phys));
 			  if((phys == 0) || (phys == 1))

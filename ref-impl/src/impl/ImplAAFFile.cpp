@@ -87,8 +87,8 @@ static const aafUInt32 sCurrentAAFObjectModelVersion = 1;
 #define ENCODING(x) *reinterpret_cast<const OMStoredObjectEncoding*>(&x)
 
 // these are the installation defaults set in AAFFileKinds.h
-#define AAF512Encoding ENCODING(aafFileKindAaf512Binary)
-#define AAF4KEncoding ENCODING(aafFileKindAaf4KBinary)
+#define AAF512Encoding ENCODING(kAAFFileKind_Aaf512Binary)
+#define AAF4KEncoding ENCODING(kAAFFileKind_Aaf4KBinary)
 
 
 // local function for simplifying error handling.
@@ -830,10 +830,10 @@ ImplAAFFile::CreateAAFFileOnRawStorage
 		// A NULL pFileKind argument was acceptable in previous toolkits when this selection was
 		// not available.  Now, treat pFileKind as DontCare.
 	  if (! pFileKind)
-		  pFileKind = &aafFileKindDontCare;
+		  pFileKind = &kAAFFileKind_DontCare;
 
 		// can specify DontCare or a required FileKind on open existing
-      if (!equalUID(*pFileKind,aafFileKindDontCare) && !OMFile::hasFactory(ENCODING(*pFileKind)))
+      if (!equalUID(*pFileKind,kAAFFileKind_DontCare) && !OMFile::hasFactory(ENCODING(*pFileKind)))
 	      return AAFRESULT_FILEKIND_NOT_REGISTERED;
 
 	  break;
@@ -1490,20 +1490,20 @@ OMRawStorage * ImplAAFFile::RawStorage ()
 
 
 // FileKinds from the point of view of the OM
-#define AAFM512Encoding ENCODING(aafFileKindAafM512Binary)
-#define AAFS512Encoding ENCODING(aafFileKindAafS512Binary)
-#define AAFG512Encoding ENCODING(aafFileKindAafG512Binary)
-#define AAFS4KEncoding ENCODING(aafFileKindAafS4KBinary)
-#define AAFM4KEncoding ENCODING(aafFileKindAafM4KBinary)
-#define AAFG4KEncoding ENCODING(aafFileKindAafG4KBinary)
+#define AAFM512Encoding ENCODING(kAAFFileKind_AafM512Binary)
+#define AAFS512Encoding ENCODING(kAAFFileKind_AafS512Binary)
+#define AAFG512Encoding ENCODING(kAAFFileKind_AafG512Binary)
+#define AAFS4KEncoding ENCODING(kAAFFileKind_AafS4KBinary)
+#define AAFM4KEncoding ENCODING(kAAFFileKind_AafM4KBinary)
+#define AAFG4KEncoding ENCODING(kAAFFileKind_AafG4KBinary)
 
 // these are only prototype
-#define AAFXMLEncoding ENCODING(aafFileKindAafXmlText)
-#define AAFKLVEncoding ENCODING(aafFileKindAafKlvBinary)
+#define AAFXMLEncoding ENCODING(kAAFFileKind_AafXmlText)
+#define AAFKLVEncoding ENCODING(kAAFFileKind_AafKlvBinary)
 
 // signatures from the point of view of the OM
-#define Signature_SSBin_512 ENCODING(aafSignature_Aaf_SSBin_512)
-#define Signature_SSBin_4K ENCODING(aafSignature_Aaf_SSBin_4K)
+#define Signature_SSBin_512 ENCODING(kAAFSignature_Aaf512Binary)
+#define Signature_SSBin_4K ENCODING(kAAFSignature_Aaf4KBinary)
 
 void ImplAAFFile::registerFactories(void)
 {
@@ -1515,7 +1515,7 @@ void ImplAAFFile::registerFactories(void)
 #if defined( OS_WINDOWS )
 // DEFAULT is Schemasoft 4K
 
-	assert( equalUID( aafFileKindAaf4KBinary, aafFileKindAafS4KBinary));
+	assert( equalUID( kAAFFileKind_Aaf4KBinary, kAAFFileKind_AafS4KBinary));
 
 	OMFile::registerFactory(AAFS4KEncoding,
                           new OMSS_SSStoredObjectFactory(AAFS4KEncoding,
@@ -1529,7 +1529,7 @@ void ImplAAFFile::registerFactories(void)
                                                        L"AAF-M4K",
                                                        L"AAF Microsoft 4K"));
 
-	assert( equalUID( aafFileKindAaf512Binary, aafFileKindAafS512Binary));
+	assert( equalUID( kAAFFileKind_Aaf512Binary, kAAFFileKind_AafS512Binary));
 
 	OMFile::registerFactory(AAFS512Encoding,
                           new OMSS_SSStoredObjectFactory(AAFS512Encoding,
@@ -1551,9 +1551,9 @@ void ImplAAFFile::registerFactories(void)
 #elif defined( OS_DARWIN ) || defined( OS_IRIX ) || defined( OS_LINUX ) || defined( OS_SOLARIS )
 
 #ifdef USE_LIBGSF
-	// If LIBGSF support is explicitly requested, GSF SS is the default
-	assert( equalUID( aafFileKindAaf4KBinary, aafFileKindAafG4KBinary));
-	assert( equalUID( aafFileKindAaf512Binary, aafFileKindAafG512Binary));
+	// If LIBGSF support is explicitly requested, GSF SS 4K is the default
+	assert( equalUID( kAAFFileKind_Aaf4KBinary, kAAFFileKind_AafG4KBinary));
+	assert( equalUID( kAAFFileKind_Aaf512Binary, kAAFFileKind_AafG512Binary));
 
 	OMFile::registerFactory(AAFG4KEncoding,
                           new OMGSF_SSStoredObjectFactory(AAFG4KEncoding,
@@ -1567,8 +1567,8 @@ void ImplAAFFile::registerFactories(void)
                                                        L"AAF GSF SS"));
 #else
 	// DEFAULT is SchemaSoft 4K
-	assert( equalUID( aafFileKindAaf4KBinary, aafFileKindAafS4KBinary));
-	assert( equalUID( aafFileKindAaf512Binary, aafFileKindAafS512Binary));
+	assert( equalUID( kAAFFileKind_Aaf4KBinary, kAAFFileKind_AafS4KBinary));
+	assert( equalUID( kAAFFileKind_Aaf512Binary, kAAFFileKind_AafS512Binary));
 #endif // USE_LIBGSF
 
 	OMFile::registerFactory(AAFS4KEncoding,

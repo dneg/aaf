@@ -1449,13 +1449,37 @@ void ImplAAFDictionary::InitBuiltins()
   ImplAAFContainerDef	*containerDef = NULL;
   AAFRESULT		hr;
 
+  hr = LookupDataDef (kAAFDataDef_Picture, &dataDef);
+  if (AAFRESULT_FAILED (hr))
+	{
+	  // not already in dictionary
+	  hr = GetBuiltinDefs()->cdDataDef()->
+		CreateInstance ((ImplAAFObject **)&dataDef);
+	  hr = dataDef->Initialize (kAAFDataDef_Picture, L"Picture", L"Picture data");
+	  hr = RegisterDataDef (dataDef);
+	}
+  dataDef->ReleaseReference();
+  dataDef = NULL;
+
   hr = LookupDataDef (DDEF_Picture, &dataDef);
   if (AAFRESULT_FAILED (hr))
 	{
 	  // not already in dictionary
 	  hr = GetBuiltinDefs()->cdDataDef()->
 		CreateInstance ((ImplAAFObject **)&dataDef);
-	  hr = dataDef->Initialize (DDEF_Picture, L"Picture", L"Picture data");
+	  hr = dataDef->Initialize (DDEF_Picture, L"LegacyPicture", L"Legacy Picture data");
+	  hr = RegisterDataDef (dataDef);
+	}
+  dataDef->ReleaseReference();
+  dataDef = NULL;
+
+  hr = LookupDataDef (kAAFDataDef_Sound, &dataDef);
+  if (AAFRESULT_FAILED (hr))
+	{
+	  // not already in dictionary
+	  hr = GetBuiltinDefs()->cdDataDef()->
+		CreateInstance ((ImplAAFObject **)&dataDef);
+	  hr = dataDef->Initialize (kAAFDataDef_Sound, L"Sound", L"Sound data");
 	  hr = RegisterDataDef (dataDef);
 	}
   dataDef->ReleaseReference();
@@ -1467,7 +1491,19 @@ void ImplAAFDictionary::InitBuiltins()
 	  // not already in dictionary
 	  hr = GetBuiltinDefs()->cdDataDef()->
 		CreateInstance ((ImplAAFObject **)&dataDef);
-	  hr = dataDef->Initialize (DDEF_Sound, L"Sound", L"Sound data");
+	  hr = dataDef->Initialize (DDEF_Sound, L"LegacySound", L"Legacy Sound data");
+	  hr = RegisterDataDef (dataDef);
+	}
+  dataDef->ReleaseReference();
+  dataDef = NULL;
+
+  hr = LookupDataDef (kAAFDataDef_Timecode, &dataDef);
+  if (AAFRESULT_FAILED (hr))
+	{
+	  // not already in dictionary
+	  hr = GetBuiltinDefs()->cdDataDef()->
+		CreateInstance ((ImplAAFObject **)&dataDef);
+	  hr = dataDef->Initialize (kAAFDataDef_Timecode, L"Timecode", L"Timecode data");
 	  hr = RegisterDataDef (dataDef);
 	}
   dataDef->ReleaseReference();
@@ -1479,67 +1515,67 @@ void ImplAAFDictionary::InitBuiltins()
 	  // not already in dictionary
 	  hr = GetBuiltinDefs()->cdDataDef()->
 		CreateInstance ((ImplAAFObject **)&dataDef);
-	  hr = dataDef->Initialize (DDEF_Timecode, L"Timecode", L"Timecode data");
+	  hr = dataDef->Initialize (DDEF_Timecode, L"LegacyTimecode", L"Legacy Timecode data");
 	  hr = RegisterDataDef (dataDef);
 	}
   dataDef->ReleaseReference();
   dataDef = NULL;
 
-  hr = LookupDataDef (DDEF_Edgecode, &dataDef);
+  hr = LookupDataDef (kAAFDataDef_Edgecode, &dataDef);
   if (AAFRESULT_FAILED (hr))
 	{
 	  // not already in dictionary
 	  hr = GetBuiltinDefs()->cdDataDef()->
 		CreateInstance ((ImplAAFObject **)&dataDef);
-	  hr = dataDef->Initialize (DDEF_Edgecode, L"Edgecode", L"Edgecode data");
+	  hr = dataDef->Initialize (kAAFDataDef_Edgecode, L"Edgecode", L"Edgecode data");
 	  hr = RegisterDataDef (dataDef);
 	}
   dataDef->ReleaseReference();
   dataDef = NULL;
   
-  hr = LookupDataDef (DDEF_Matte, &dataDef);
+  hr = LookupDataDef (kAAFDataDef_Matte, &dataDef);
   if (AAFRESULT_FAILED (hr))
 	{
 	  // not already in dictionary
 	  hr = GetBuiltinDefs()->cdDataDef()->
 		CreateInstance ((ImplAAFObject **)&dataDef);
-	  hr = dataDef->Initialize (DDEF_Matte, L"Matte", L"Matte data");
+	  hr = dataDef->Initialize (kAAFDataDef_Matte, L"Matte", L"Matte data");
 	  hr = RegisterDataDef (dataDef);
 	}
   dataDef->ReleaseReference();
   dataDef = NULL;
 
-  hr = LookupDataDef (DDEF_PictureWithMatte, &dataDef);
+  hr = LookupDataDef (kAAFDataDef_PictureWithMatte, &dataDef);
   if (AAFRESULT_FAILED (hr))
 	{
 	  // not already in dictionary
 	  hr = GetBuiltinDefs()->cdDataDef()->
 		CreateInstance ((ImplAAFObject **)&dataDef);
-	  hr = dataDef->Initialize (DDEF_PictureWithMatte, L"PictureWithMatte", L"PictureWithMatte data");
+	  hr = dataDef->Initialize (kAAFDataDef_PictureWithMatte, L"PictureWithMatte", L"PictureWithMatte data");
 	  hr = RegisterDataDef (dataDef);
 	}
   dataDef->ReleaseReference();
   dataDef = NULL;
 
-  hr = LookupDataDef (DDEF_Auxiliary, &dataDef);
+  hr = LookupDataDef (kAAFDataDef_Auxiliary, &dataDef);
   if (AAFRESULT_FAILED (hr))
 	{
 	  // not already in dictionary
 	  hr = GetBuiltinDefs()->cdDataDef()->
 		CreateInstance ((ImplAAFObject **)&dataDef);
-	  hr = dataDef->Initialize (DDEF_Auxiliary, L"Auxiliary", L"Auxiliary data");
+	  hr = dataDef->Initialize (kAAFDataDef_Auxiliary, L"Auxiliary", L"Auxiliary data");
 	  hr = RegisterDataDef (dataDef);
 	}
   dataDef->ReleaseReference();
   dataDef = NULL;
 
-  hr = LookupDataDef (DDEF_DescriptiveMetadata, &dataDef);
+  hr = LookupDataDef (kAAFDataDef_Descriptive, &dataDef);
   if (AAFRESULT_FAILED (hr))
 	{
 	  // not already in dictionary
 	  hr = GetBuiltinDefs()->cdDataDef()->
 		CreateInstance ((ImplAAFObject **)&dataDef);
-	  hr = dataDef->Initialize (DDEF_DescriptiveMetadata, L"DescriptiveMetadata", L"Descriptive metadata");
+	  hr = dataDef->Initialize (kAAFDataDef_Descriptive, L"Descriptive", L"Descriptive data");
 	  hr = RegisterDataDef (dataDef);
 	}
   dataDef->ReleaseReference();
@@ -1965,6 +2001,172 @@ AAFRESULT STDMETHODCALLTYPE
   
   return AAFRESULT_SUCCESS;
 }
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDictionary::LookupAuxiliaryDataDef (
+      ImplAAFDataDef **ppDataDef)
+{
+  if (!ppDataDef) return AAFRESULT_NULL_PARAM;
+
+  AAFRESULT hr = LookupDataDef( kAAFDataDef_Auxiliary, ppDataDef );
+  assert(AAFRESULT_SUCCEEDED (hr));
+  assert(NULL != *ppDataDef);
+
+  return AAFRESULT_SUCCESS;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDictionary::LookupDescriptiveDataDef (
+      ImplAAFDataDef **ppDataDef)
+{
+  if (!ppDataDef) return AAFRESULT_NULL_PARAM;
+
+  AAFRESULT hr = LookupDataDef( kAAFDataDef_Descriptive, ppDataDef );
+  assert(AAFRESULT_SUCCEEDED (hr));
+  assert(NULL != *ppDataDef);
+
+  return AAFRESULT_SUCCESS;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDictionary::LookupEdgecodeDataDef (
+      ImplAAFDataDef **ppDataDef)
+{
+  if (!ppDataDef) return AAFRESULT_NULL_PARAM;
+
+  AAFRESULT hr = LookupDataDef( kAAFDataDef_Edgecode, ppDataDef );
+  assert(AAFRESULT_SUCCEEDED (hr));
+  assert(NULL != *ppDataDef);
+
+  return AAFRESULT_SUCCESS;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDictionary::LookupLegacyPictureDataDef (
+      ImplAAFDataDef **ppDataDef)
+{
+  if (!ppDataDef) return AAFRESULT_NULL_PARAM;
+
+  AAFRESULT hr = LookupDataDef( DDEF_Picture, ppDataDef );
+  assert(AAFRESULT_SUCCEEDED (hr));
+  assert(NULL != *ppDataDef);
+
+  return AAFRESULT_SUCCESS;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDictionary::LookupLegacySoundDataDef (
+      ImplAAFDataDef **ppDataDef)
+{
+  if (!ppDataDef) return AAFRESULT_NULL_PARAM;
+
+  AAFRESULT hr = LookupDataDef( DDEF_Sound, ppDataDef );
+  assert(AAFRESULT_SUCCEEDED (hr));
+  assert(NULL != *ppDataDef);
+
+  return AAFRESULT_SUCCESS;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDictionary::LookupLegacyTimecodeDataDef (
+      ImplAAFDataDef **ppDataDef)
+{
+  if (!ppDataDef) return AAFRESULT_NULL_PARAM;
+
+  AAFRESULT hr = LookupDataDef( DDEF_Timecode, ppDataDef );
+  assert(AAFRESULT_SUCCEEDED (hr));
+  assert(NULL != *ppDataDef);
+
+  return AAFRESULT_SUCCESS;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDictionary::LookupMatteDataDef (
+      ImplAAFDataDef **ppDataDef)
+{
+  if (!ppDataDef) return AAFRESULT_NULL_PARAM;
+
+  AAFRESULT hr = LookupDataDef( kAAFDataDef_Matte, ppDataDef );
+  assert(AAFRESULT_SUCCEEDED (hr));
+  assert(NULL != *ppDataDef);
+
+  return AAFRESULT_SUCCESS;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDictionary::LookupPictureDataDef (
+      ImplAAFDataDef **ppDataDef)
+{
+  if (!ppDataDef) return AAFRESULT_NULL_PARAM;
+
+  AAFRESULT hr = LookupDataDef( kAAFDataDef_Picture, ppDataDef );
+  assert(AAFRESULT_SUCCEEDED (hr));
+  assert(NULL != *ppDataDef);
+
+  return AAFRESULT_SUCCESS;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDictionary::LookupPictureWithMatteDataDef (
+      ImplAAFDataDef **ppDataDef)
+{
+  if (!ppDataDef) return AAFRESULT_NULL_PARAM;
+
+  AAFRESULT hr = LookupDataDef( kAAFDataDef_PictureWithMatte, ppDataDef );
+  assert(AAFRESULT_SUCCEEDED (hr));
+  assert(NULL != *ppDataDef);
+
+  return AAFRESULT_SUCCESS;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDictionary::LookupSoundDataDef (
+      ImplAAFDataDef **ppDataDef)
+{
+  if (!ppDataDef) return AAFRESULT_NULL_PARAM;
+
+  AAFRESULT hr = LookupDataDef( kAAFDataDef_Sound, ppDataDef );
+  assert(AAFRESULT_SUCCEEDED (hr));
+  assert(NULL != *ppDataDef);
+
+  return AAFRESULT_SUCCESS;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDictionary::LookupTimecodeDataDef (
+      ImplAAFDataDef **ppDataDef)
+{
+  if (!ppDataDef) return AAFRESULT_NULL_PARAM;
+
+  AAFRESULT hr = LookupDataDef( kAAFDataDef_Timecode, ppDataDef );
+  assert(AAFRESULT_SUCCEEDED (hr));
+  assert(NULL != *ppDataDef);
+
+  return AAFRESULT_SUCCESS;
+}
+
 
 
 AAFRESULT ImplAAFDictionary::PvtIsPropertyDefDuplicate(

@@ -74,7 +74,24 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFDataDef::IsPictureKind (
       aafBool *bIsPictureKind)
 {
-	return(IsDataDefOf(GetDict()->GetBuiltinDefs()->ddPicture(), bIsPictureKind));
+	AAFRESULT	hr;
+	aafBool	isV10 = kAAFFalse;
+	aafBool	isV11 = kAAFFalse;
+
+	hr = IsDataDefOf(GetDict()->GetBuiltinDefs()->ddkAAFPicture(), &isV11);
+	if (AAFRESULT_FAILED (hr)) return hr;
+	if (!isV11)
+	{
+		hr = IsDataDefOf(GetDict()->GetBuiltinDefs()->ddPicture(), &isV10);
+		if (AAFRESULT_FAILED (hr)) return hr;
+	}
+
+	if ((isV11==kAAFTrue) || (isV10==kAAFTrue))
+		*bIsPictureKind = kAAFTrue;
+	else
+		*bIsPictureKind = kAAFFalse;
+
+	return AAFRESULT_SUCCESS;
 }
 
 
@@ -82,7 +99,7 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFDataDef::IsMatteKind (
       aafBool *bIsMatteKind)
 {
-	return(IsDataDefOf(GetDict()->GetBuiltinDefs()->ddMatte(), bIsMatteKind));
+	return(IsDataDefOf(GetDict()->GetBuiltinDefs()->ddkAAFMatte(), bIsMatteKind));
 }
 
 
@@ -90,7 +107,7 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFDataDef::IsPictureWithMatteKind (
       aafBool *bIsPictureWithMatteKind)
 {
-	return(IsDataDefOf(GetDict()->GetBuiltinDefs()->ddPictureWithMatte(), bIsPictureWithMatteKind));
+	return(IsDataDefOf(GetDict()->GetBuiltinDefs()->ddkAAFPictureWithMatte(), bIsPictureWithMatteKind));
 }
 
 
@@ -98,7 +115,24 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFDataDef::IsSoundKind (
       aafBool *bIsSoundKind)
 {
-	return(IsDataDefOf(GetDict()->GetBuiltinDefs()->ddSound(), bIsSoundKind));
+	AAFRESULT	hr;
+	aafBool	isV10 = kAAFFalse;
+	aafBool	isV11 = kAAFFalse;
+
+	hr = IsDataDefOf(GetDict()->GetBuiltinDefs()->ddkAAFSound(), &isV11);
+	if (AAFRESULT_FAILED (hr)) return hr;
+	if (!isV11)
+	{
+		hr = IsDataDefOf(GetDict()->GetBuiltinDefs()->ddSound(), &isV10);
+		if (AAFRESULT_FAILED (hr)) return hr;
+	}
+
+	if ((isV11==kAAFTrue) || (isV10==kAAFTrue))
+		*bIsSoundKind = kAAFTrue;
+	else
+		*bIsSoundKind = kAAFFalse;
+
+	return AAFRESULT_SUCCESS;
 }
 
 
@@ -106,7 +140,24 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFDataDef::IsTimecodeKind (
       aafBool *bIsTimecodeKind)
 {
-	return(IsDataDefOf(GetDict()->GetBuiltinDefs()->ddTimecode(), bIsTimecodeKind));
+	AAFRESULT	hr;
+	aafBool	isV10 = kAAFFalse;
+	aafBool	isV11 = kAAFFalse;
+
+	hr = IsDataDefOf(GetDict()->GetBuiltinDefs()->ddkAAFTimecode(), &isV11);
+	if (AAFRESULT_FAILED (hr)) return hr;
+	if (!isV11)
+	{
+		hr = IsDataDefOf(GetDict()->GetBuiltinDefs()->ddTimecode(), &isV10);
+		if (AAFRESULT_FAILED (hr)) return hr;
+	}
+
+	if ((isV11==kAAFTrue) || (isV10==kAAFTrue))
+		*bIsTimecodeKind = kAAFTrue;
+	else
+		*bIsTimecodeKind = kAAFFalse;
+
+	return AAFRESULT_SUCCESS;
 }
 
 
@@ -114,7 +165,7 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFDataDef::IsEdgecodeKind (
       aafBool *bIsEdgecodeKind)
 {
-	return(IsDataDefOf(GetDict()->GetBuiltinDefs()->ddEdgecode(), bIsEdgecodeKind));
+	return(IsDataDefOf(GetDict()->GetBuiltinDefs()->ddkAAFEdgecode(), bIsEdgecodeKind));
 }
 
 
@@ -138,10 +189,11 @@ AAFRESULT STDMETHODCALLTYPE
 		CHECK(IsDataDefOf (pDataDef, &result));
 		if(result == kAAFFalse)
 		{
-			aafBool	isPWM;
-			aafUID_t	picture = DDEF_Picture;
-			CHECK(IsPictureWithMatteKind (&isPWM));
-			if((isPWM == kAAFTrue) && EqualAUID(&picture, &id))
+			aafBool	thisIsPWM;
+			CHECK(IsPictureWithMatteKind (&thisIsPWM));
+			aafBool	argIsPict;
+			CHECK(pDataDef->IsPictureKind (&argIsPict));
+			if((thisIsPWM == kAAFTrue) && (argIsPict == kAAFTrue))
 				result = kAAFTrue;
 		}
 		*bDoesConvertTo = result;
@@ -197,12 +249,11 @@ AAFRESULT STDMETHODCALLTYPE
 		CHECK(IsDataDefOf (pDataDef, &result));
 		if(result == kAAFFalse)
 		{
-			aafBool		isPict;
-			aafUID_t	pictureMatte = DDEF_PictureWithMatte;
-			CHECK(IsPictureKind (&isPict));
-			aafUID_t id;
-			CHECK(pDataDef->GetAUID (&id));
-			if((isPict == kAAFTrue) && EqualAUID(&pictureMatte, &id))
+			aafBool	thisIsPict;
+			CHECK(IsPictureKind (&thisIsPict));
+			aafBool	argIsPWM;
+			CHECK(pDataDef->IsPictureWithMatteKind (&argIsPWM));
+			if((thisIsPict == kAAFTrue) && (argIsPWM == kAAFTrue))
 				result = kAAFTrue;
 		}
 		*bDoesConvertFrom = result;

@@ -1146,16 +1146,16 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFSmartPointer<ImplAAFDataDef>      spDataDef;
 
     // If pTCSeg is null, then we must search for the first slot that
-    // has a segment with data definition of type DDEF_Timecode.
+    // has a segment with data definition of type timecode.
     
     if ( pTcSeg ) {
       pTcSeg->AcquireReference();
       *(&spSeg) = pTcSeg;
 
-      aafUID_t dataDefID;
+      aafBool isTimecode = kAAFFalse;
       CHECK(spSeg->GetDataDef(&spDataDef));
-      CHECK(spDataDef->GetAUID(&dataDefID));
-      if (!EqualAUID(&dataDefID, &DDEF_Timecode)) {
+      CHECK(spDataDef->IsTimecodeKind(&isTimecode));
+      if (!isTimecode) {
 		RAISE(AAFRESULT_TIMECODE_NOT_FOUND);
 	  }
     }
@@ -1170,11 +1170,11 @@ AAFRESULT STDMETHODCALLTYPE
 	
 		// Verify that it's a timecode slot by looking at the
 		// data definition of the slot segment. 
-		aafUID_t dataDefID;
+		aafBool isTimecode = kAAFFalse;
 		CHECK(spSeg->GetDataDef(&spDataDef));
-		CHECK(spDataDef->GetAUID(&dataDefID));
+		CHECK(spDataDef->IsTimecodeKind(&isTimecode));
 	
-		if (EqualAUID(&dataDefID, &DDEF_Timecode)) {
+		if (isTimecode) {
 			found = true;
 			break;
 		}
@@ -1261,7 +1261,6 @@ AAFRESULT STDMETHODCALLTYPE
 	aafPosition_t			frameOffset64;
 	aafLength_t				zeroLen = CvtInt32toLength(0, zeroLen);
 	ImplEnumAAFMobSlots		*slotIter = NULL;
-	ImplAAFDictionary		*dict = NULL;
 	ImplAAFDataDef			*dataDef = NULL;
 	ImplAAFMob				*tapeMob = NULL;
 
@@ -1276,9 +1275,6 @@ AAFRESULT STDMETHODCALLTYPE
 	XPROTECT()
 	{
 
-		CHECK(GetDictionary(&dict));
-		ImplAAFDataDefSP pDDPicture;
-		CHECK(dict->LookupDataDef(DDEF_Picture, &pDDPicture));
 		mediaCrit.type = kAAFAnyRepresentation;
 		CHECK(InternalSearchSource(*slotID, *offset, kAAFTapeMob,
 			&mediaCrit, NULL, &sourceInfo));
@@ -1295,8 +1291,8 @@ AAFRESULT STDMETHODCALLTYPE
 			* datadef of the slot segment.
 			*/
 			CHECK(seg->GetDataDef(&dataDef));
-			aafBool		isTimecode;
-			CHECK(dataDef->IsDataDefOf(pDDPicture, &isTimecode));
+			aafBool	isTimecode = kAAFFalse;
+			CHECK(dataDef->IsTimecodeKind(&isTimecode));
 			if (isTimecode)
 			{
 				/* Assume found at this point, so finish generating result */
@@ -1316,8 +1312,6 @@ AAFRESULT STDMETHODCALLTYPE
 		slotIter->ReleaseReference();
 		slotIter = NULL;
     sourceInfo->ReleaseReference();
-		dict->ReleaseReference();
-		dict = NULL;
 		
 		
 		*result = timecode;
@@ -1339,9 +1333,6 @@ AAFRESULT STDMETHODCALLTYPE
     if (sourceInfo)
       sourceInfo->ReleaseReference();
     sourceInfo = NULL;
-		if (dict)
-		  dict->ReleaseReference();
-		dict = 0;
 	}
 	XEND;
 	

@@ -58,8 +58,8 @@
 //   // for the duration of the CreateInstance() function call.
 // 
 //   // Use of CAAFBuiltinDefs to obtain a data definition
-//   pFiller->Initialize(defs.ddPicture(), 10);
-//   // Note that ImplAAFDataDef returned by ddPicture() is only used
+//   pFiller->Initialize(defs.ddkAAFPicture(), 10);
+//   // Note that ImplAAFDataDef returned by ddkAAFPicture() is only used
 //   // for the duration of the Initialize() function call.
 // }
 //
@@ -109,8 +109,11 @@ public:	\
 private: \
   ImplAAFDumbPointer<ImplAAFDataDef> _pdd##meth_name
 
-#define DATA_DEF_METHOD(name) \
+#define DATA_DEF_METHOD_LEGACY(name) \
    DATA_DEF_METHOD_DECL(dd##name, DDEF_##name)
+
+#define DATA_DEF_METHOD(name) \
+   DATA_DEF_METHOD_DECL(ddkAAF##name, kAAFDataDef_##name)
 
 
 #define TYPE_DEF_METHOD_DECL(meth_name, tdef_constant) \
@@ -260,14 +263,23 @@ public:
   //
   // Data Def 'get' methods
   //
+  // defines ddXXX() which use AAF v1.0 values
+  DATA_DEF_METHOD_LEGACY(Edgecode);
+  DATA_DEF_METHOD_LEGACY(Matte);
+  DATA_DEF_METHOD_LEGACY(Picture);
+  DATA_DEF_METHOD_LEGACY(PictureWithMatte);
+  DATA_DEF_METHOD_LEGACY(Sound);
+  DATA_DEF_METHOD_LEGACY(Timecode);
+
+  // defines ddkAAFXXX() which use AAF v1.1 values
+  DATA_DEF_METHOD(Auxiliary);
+  DATA_DEF_METHOD(Descriptive);
   DATA_DEF_METHOD(Edgecode);
   DATA_DEF_METHOD(Matte);
   DATA_DEF_METHOD(Picture);
   DATA_DEF_METHOD(PictureWithMatte);
   DATA_DEF_METHOD(Sound);
   DATA_DEF_METHOD(Timecode);
-  DATA_DEF_METHOD(DescriptiveMetadata);
-  DATA_DEF_METHOD(Auxiliary);
 
 
   //

@@ -675,6 +675,103 @@ public:
     aafUInt32 *  pResult
   );
 
+  //****************
+  // LookupAuxiliaryDataDef()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    LookupAuxiliaryDataDef
+        // @parm [out,retval] Data Definition Object
+        (ImplAAFDataDef ** ppDataDef);
+
+  //****************
+  // LookupDescriptiveDataDef()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    LookupDescriptiveDataDef
+        // @parm [out,retval] Data Definition Object
+        (ImplAAFDataDef ** ppDataDef);
+
+
+  //****************
+  // LookupEdgecodeDataDef()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    LookupEdgecodeDataDef
+        // @parm [out,retval] Data Definition Object
+        (ImplAAFDataDef ** ppDataDef);
+
+
+  //****************
+  // LookupLegacyPictureDataDef()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    LookupLegacyPictureDataDef
+        // @parm [out,retval] Data Definition Object
+        (ImplAAFDataDef ** ppDataDef);
+
+
+  //****************
+  // LookupLegacySoundDataDef()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    LookupLegacySoundDataDef
+        // @parm [out,retval] Data Definition Object
+        (ImplAAFDataDef ** ppDataDef);
+
+
+  //****************
+  // LookupLegacyTimecodeDataDef()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    LookupLegacyTimecodeDataDef
+        // @parm [out,retval] Data Definition Object
+        (ImplAAFDataDef ** ppDataDef);
+
+
+  //****************
+  // LookupMatteDataDef()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    LookupMatteDataDef
+        // @parm [out,retval] Data Definition Object
+        (ImplAAFDataDef ** ppDataDef);
+
+
+  //****************
+  // LookupPictureDataDef()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    LookupPictureDataDef
+        // @parm [out,retval] Data Definition Object
+        (ImplAAFDataDef ** ppDataDef);
+
+
+  //****************
+  // LookupPictureWithMatteDataDef()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    LookupPictureWithMatteDataDef
+        // @parm [out,retval] Data Definition Object
+        (ImplAAFDataDef ** ppDataDef);
+
+
+  //****************
+  // LookupSoundDataDef()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    LookupSoundDataDef
+        // @parm [out,retval] Data Definition Object
+        (ImplAAFDataDef ** ppDataDef);
+
+
+  //****************
+  // LookupTimecodeDataDef()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    LookupTimecodeDataDef
+        // @parm [out,retval] Data Definition Object
+        (ImplAAFDataDef ** ppDataDef);
+
 
 
 public:

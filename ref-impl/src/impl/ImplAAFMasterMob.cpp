@@ -76,8 +76,8 @@ ImplAAFMasterMob::Initialize ()
 // The dataDef parameter requires a data kind valid for a media
 // stream. Valid data kinds are:
 //
-// - DDEF_Picture
-// - DDEF_Sound
+// - Picture
+// - Sound
 //
 // Note: If pSlotName is passed in with zero length, then the
 // slot is not assigned a name.  Slot names are not used by the
