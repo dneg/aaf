@@ -282,6 +282,14 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFTypeDefRename::RawAccessType (
+      ImplAAFTypeDef ** ppRawTypeDef)
+{
+  return BaseType()->RawAccessType (ppRawTypeDef);
+}
+
+
 bool ImplAAFTypeDefRename::IsAggregatable () const
 { return BaseType()->IsAggregatable(); }
 
