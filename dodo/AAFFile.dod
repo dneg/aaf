@@ -6,38 +6,100 @@ AAFRoot\
 #endm
 #c
 AD_HEAD
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
-
+AD_IDL(//
+// This interface is used with an object representing an AAF file.
+// An object supporting IAAFFile may be in one of the following
+// states:
+//
+// 1\) Closed.  This object is not associated with any storage.  Even
+//    so\, it may contain transient objects.
+//
+// 2\) Open for Reading.  This object is associated with a storage from
+//    which information is only to be read.
+//
+// 3\) Open for Writing.  This object is associated with a storage to
+//    which information is to be written.
+//
+// 4\) Open for Modification.  This object is associated with a
+//    storage\, potentially containing data which is to be modified.
+//
+// When created\, objects implementing this interface are initially in
+// the Closed state.
+//
+// Whenever the state of an IAAFFile-implementing object is changed
+// from any of the Open states to Closed\, any changes made since the
+// last Save\(\) are lost.
+//
+// An IAAFFile-implementing object may not be transitioned directly
+// from one Open state to another; it must first be put through the
+// Closed state.  Even so\, it may not be possible for a
+// previously-Opened IAAFFile-implementing object to be re-opened in
+// any of the Open states.  For example\, an IAAFFile-implementing
+// object which contains AAF data may not be opened for reading.
+//)
 AD_INCLUDE(AAFTypes)
-
 AD_FORWARD_DECLARATION(AAFHeader)
-
 AD_CLASS_UUID(9346ACD2, 2713, 11d2, 80, 35, 00, 60, 08, 14, 3E, 6F)
+
 AD_DEFAULT_UUID(9346ACD3, 2713, 11d2, 80, 35, 00, 60, 08, 14, 3E, 6F)
 AD_CLASS_BEGIN
-
 AD_STATIC_CREATE
-
 AD_METHOD0(Close,
-			Closes an AAF file\, saving the result.)
+		   Closes an AAF file\, saving any changes.  Succeeds if:
+  // - this file object is not currently closed.
+  //
+  // Returns one of the following:
+  //
+  // S_OK
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // E_AAF_NOT_OPEN
+  //   - this object has already been closed.
+  //)
 
-AD_METHOD1(GetRevision,
-			[out], aafFileRev_t *,rev, Revision of the current file,
-			Get the revision of the current AAF file.)
 
 AD_XMETHOD1(GetHeader,
-			[retval][out],
+			[out\, retval],
 			objOut,
 			AAFHeader,
-			header,
-			Header of the current file,
-			Get the header of the current AAF file.)
+			ppHeader,
+			Set to header of the current file,
+			Returns the header object associated with this file.
+  //
+  // Succeeds if:
+  // - the given header pointer is valid.
+  // - this object contains a header.
+  //
+  // Returns one of the following:
+  //
+  // S_OK
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // E_AAF_INVALID_ARG
+  //   - the header pointer arg is NULL.
+  //
+  // E_AAF_NO_HEADER
+  //   - this object contains no header.
+  //)
 
+
+AD_XMETHOD1(GetRevision,
+			[out\, retval],
+			objPass,
+			aafFileRev_t *,
+			pRev,
+			Revision of the current file,
+			Get the revision of the current AAF file\, and returns it in pRev.
+  //
+  // Succeeds if:
+  // - the given revision pointer is valid.
+  //
+  // Returns one of the following:
+  //
+  // S_OK
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // E_AAF_INVALID_ARG
+  //   - the revision pointer arg is NULL.
+  //)
 AD_CLASS_END
