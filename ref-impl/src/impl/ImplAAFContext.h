@@ -19,8 +19,7 @@
 class ImplAAFFile;
 class AAFFile;
 
-#include "Stubs.h"
-
+#include "Container.h"
 
 //
 // Forward declaration
@@ -76,6 +75,19 @@ public:
         (aafDataBuffer_t  filePath,   //@parm [in] File path [replace with object later]
 		 ImplAAFFile ** file);  //@parm [out] Current AAF file
 
+  //***********************************************************
+  // METHOD NAME: SetCurrentIdentification()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFSession | SetCurrentIdentification |
+  // Sets the object which identifies the creator of the file.
+  // @end
+  // 
+  virtual AAFRESULT STDMETHODCALLTYPE
+  SetDefaultIdentification (
+    // @parm aafProductIdentification | ident | [in] a struct from which it is initialized
+    aafProductIdentification_t  *ident
+  );
 
 public:
   // Declare the module test method. The implementation of the will be be
@@ -89,11 +101,13 @@ public:
 	ImplAAFFile *GetTopFile(void);
 	void SetTopFile(ImplAAFFile *file);
 	OMLSession GetContainerSession(void);
+	aafProductIdentification_t *GetDefaultIdent(void);
 
 private:
 
-  void * _pContainer;
+	void * _pContainer;
 	ImplAAFFile	*_topFile;
+	aafProductIdentification_t	*_defaultIdent;
 };
 
 #endif // ! __ImplAAFSession_h__
