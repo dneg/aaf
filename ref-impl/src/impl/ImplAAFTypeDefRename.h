@@ -150,6 +150,15 @@ public:
   virtual bool IsVariableArrayable () const;
   virtual bool IsStringable () const;
 
+
+
+  // override from OMStorable.
+  virtual const OMClassId& classId(void) const;
+
+  // Override callbacks from OMStorable
+  virtual void onSave(void* clientContext) const;
+  virtual void onRestore(void* clientContext) const;
+
 private:
   ImplAAFTypeDefSP BaseType () const;
 
