@@ -40,14 +40,14 @@
 
 #define AAF_MAJOR_VERSION 1
 #define AAF_MINOR_VERSION 0
-#define AAF_MAINT_RELEASE 0
+#define AAF_MAINT_RELEASE 1
 
-#define AAF_RELEASE_STAGE kAAFVersionBeta
+#define AAF_RELEASE_STAGE kAAFVersionReleased
  
 // these next two lines are monitored/incremented by newbuild.pl
 
-#define AAF_BUILD_NUMBER 502
-#define AAF_CURRENT_YEAR "2001"
+#define AAF_BUILD_NUMBER 504
+#define AAF_CURRENT_YEAR "2002"
 
 //   The lines below shouldn't normally need to be modified
 //
@@ -81,6 +81,6 @@
 
 //  this next line will be updated to synchronise it with the numbers above by newbuild.pl
 
-#define AAF_SHORT_VERSION_STRING "1.0.0 build 502"
+#define AAF_SHORT_VERSION_STRING "1.0.1 build 504"
 
 #endif
