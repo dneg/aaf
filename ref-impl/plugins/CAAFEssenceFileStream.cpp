@@ -32,51 +32,67 @@
 
 
 
+// Changes Nov01: fpos_t is supposed to be opaque ... Glibc 2.2 uses a Struct
+// Attempt to use alternative 64 bit seeks where possible using XOpen5 fseeko
 
+// MacOS CodeWarrior differences
 
+#if defined (__MSL__)
+typedef fpos_t off_t;
+#define fseeko _fseek
+#define ftello _ftell
+#endif
 
-//
-// NOTE: The following two routines will have to be rewritten
-// if fpos_t is defined to be a structure or aafPosition_t is a 
-// structure.
-//
-/*inline*/ bool AafPos2AnsiPos(fpos_t *ansiPos, const aafPosition_t *aafPos)
+// Irix MipsPro differences
+
+#if defined (__sgi) && !defined(__GLIBC__)
+typedef off64_t off_t;
+#define fseeko fseeko64
+#define ftello ftello64
+#endif
+
+// Win32 differences
+
+#if defined (_WIN32)
+typedef fpos_t off_t;
+#define fseeko(fp, off, whence) fsetpos(fp, &off)
+off_t ftello (FILE* fp)
 {
-#if defined (__GLIBC__) && ((__GLIBC__ >= 2) && (__GLIBC_MINOR__ >= 2))
-  // For glibc 2.2 and above fpos_t is a struct
-  // NYI
-  return false;
-#else
-  // For first version just assume that platform an perform conversion.
-  if (sizeof(fpos_t) < sizeof(aafPosition_t))
+off_t position;
+
+if(0 != fgetpos(fp, &position))
+   return -1;
+
+return position;
+}
+#endif
+
+
+/*inline*/ bool AafPos2XopenOff(off_t *xopenOff, const aafPosition_t *aafPos)
+{
+  // For first version just assume that platform can perform conversion.
+  if (sizeof(off_t) < sizeof(aafPosition_t))
   {
     // The following test assumes 64 bit arithematic!
     aafPosition_t trunPos = (AAFCONSTINT64(0x00000000FFFFFFFF) & *aafPos);
     if (trunPos != *aafPos && AAFCONSTINT64(0xFFFFFFFFFFFFFFFF) != *aafPos)
       return false;
 
-    *ansiPos = *aafPos;
+    *xopenOff = *aafPos;
   }
   else
-    *ansiPos = *aafPos;
+    *xopenOff = *aafPos;
 
   return true;
-#endif
 }
 
 
-/*inline*/ bool AnsiPos2AafPos(aafPosition_t *aafPos, const fpos_t *ansiPos)
+/*inline*/ bool XopenOff2AafPos(aafPosition_t *aafPos, const off_t *xopenOff)
 {
-#if defined (__GLIBC__) && ((__GLIBC__ >= 2) && (__GLIBC_MINOR__ >= 2))
-  // For glibc 2.2 and above fpos_t is a struct
-  // NYI
-  return false;
-#else
   // For first version just assume that platform an perform conversion.
-  *aafPos = *ansiPos;
+  *aafPos = *xopenOff;
 
   return true;
-#endif
 }
 
 
@@ -344,8 +360,8 @@ HRESULT STDMETHODCALLTYPE
   }
 
   SetStreamMode(openNew);
-  aafPosition_t zero = 0;
-  AafPos2AnsiPos(&_startingEOF, &zero);
+  
+  _startingEOF = 0;
 
   return AAFRESULT_SUCCESS;
 }
@@ -368,7 +384,25 @@ HRESULT STDMETHODCALLTYPE
   }
 
   SetStreamMode(openRead);
-  if (!GetEOFPos(&_startingEOF))
+  // Save the current position.
+  fpos_t currentPos;
+  errno = 0;
+  if (0 != fgetpos(_pFile, &currentPos))
+    return AAFRESULT_INTERNAL_ERROR;
+
+  errno = 0;
+  if (0 != fseek(_pFile, 0, SEEK_END))
+    return AAFRESULT_INTERNAL_ERROR;
+
+  errno = 0;
+  if ((_startingEOF = ftello(_pFile)) < 0)
+    return AAFRESULT_INTERNAL_ERROR;
+
+  // Save operation so that we can synchronize reading and writing.
+  SetStreamOp(opSetpos);
+
+  errno = 0;
+  if (0 != fsetpos(_pFile, &currentPos))
     return AAFRESULT_INTERNAL_ERROR;
 
   return AAFRESULT_SUCCESS;
@@ -414,7 +448,25 @@ HRESULT STDMETHODCALLTYPE
  
 
   SetStreamMode(openAppend);
-  if (!GetEOFPos(&_startingEOF))
+  // Save the current position.
+  fpos_t currentPos;
+  errno = 0;
+  if (0 != fgetpos(_pFile, &currentPos))
+    return AAFRESULT_INTERNAL_ERROR;
+
+  errno = 0;
+  if (0 != fseek(_pFile, 0, SEEK_END))
+    return AAFRESULT_INTERNAL_ERROR;
+
+  errno = 0;
+  if ((_startingEOF = ftello(_pFile)) < 0)
+    return AAFRESULT_INTERNAL_ERROR;
+
+  // Save operation so that we can synchronize reading and writing.
+  SetStreamOp(opSetpos);
+
+  errno = 0;
+  if (0 != fsetpos(_pFile, &currentPos))
     return AAFRESULT_INTERNAL_ERROR;
 
   return AAFRESULT_SUCCESS;
@@ -524,8 +576,8 @@ HRESULT STDMETHODCALLTYPE
   if (NULL == _pFile) 
     return AAFRESULT_NOT_OPEN;
 
-  fpos_t pos;
-  if (!AafPos2AnsiPos(&pos, &byteOffset))
+  off_t pos;
+  if (!AafPos2XopenOff(&pos, &byteOffset))
     return E_INVALIDARG;
 
   //
@@ -533,7 +585,7 @@ HRESULT STDMETHODCALLTYPE
   SetStreamOp(opSetpos);
 
   errno = 0;
-  if (0 != fsetpos(_pFile, &pos))
+  if (0 != fseeko(_pFile, pos, SEEK_SET))
   { // What error code should we return?
     if (feof(_pFile))
       return AAFRESULT_BADSAMPLEOFFSET;
@@ -626,16 +678,16 @@ HRESULT STDMETHODCALLTYPE
   }
 
   // Attempt to get the current position.
-  fpos_t pos;
+  off_t pos;
   errno = 0;
-  if (0 != fgetpos(_pFile, &pos))
+  if ((pos = ftello(_pFile)) < 0)
   {
     // What error code should we return?
     return AAFRESULT_INTERNAL_ERROR;
   }
   
   // Convert ansi position to aaf position.
-  AnsiPos2AafPos(position, &pos);
+  XopenOff2AafPos(position, &pos);
 
   return AAFRESULT_SUCCESS;
 }
@@ -651,16 +703,15 @@ HRESULT STDMETHODCALLTYPE
 
   if (openRead == _streamMode)
   { // Use our cached value.
-    // Convert ansi position to aaf position.
-    AnsiPos2AafPos(position, &_startingEOF);
+    *position = _startingEOF;
   }
   else
   {
-    fpos_t pos;
-    if (!GetEOFPos(&pos))
+    off_t pos;
+    if ((pos = ftello(_pFile)) < 0)
       return AAFRESULT_INTERNAL_ERROR;
     // Convert ansi position to aaf position.
-    AnsiPos2AafPos(position, &pos);
+    XopenOff2AafPos(position, &pos);
   }
   
   return AAFRESULT_SUCCESS;

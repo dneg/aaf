@@ -265,7 +265,7 @@ public :
   FileStreamOp _lastStreamOp;
   //
   // Cached eof position for openRead and openAppend modes.
-  fpos_t _startingEOF;
+  aafPosition_t _startingEOF;
 };
 
 #endif // ! __CAAFEssenceFileStream_h__
