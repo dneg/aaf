@@ -9,6 +9,9 @@ TIMDUMP=0
 CLIENTTEST=0
 CUTSTEST=0
 PROPDIRECTDUMP=0
+PROPDIRECTACCESS=0
+CREATESEQUENCE=0
+ESSENCEACCESS=0
 AAFINFO=0
 AAFOMFTEST=0
 ALL=0
@@ -29,7 +32,10 @@ PrintHelp ()
 	echo "-cu = ComCutsTest"
 	echo "-e  = ComEssenceDataTest"
 	echo "-m  = ComModAAF"
-	echo "-p  = ComPropDirectDump"
+	echo "-pd = ComPropDirectDump"
+	echo "-pa = ComPropDirectAccess" 
+	echo "-ea = EssenceAccess"
+	echo "-cs = CreateSequence"
 	echo "-t  = dump\n\n"
 	echo "-s  = update AAFWatchDog.log with exit code results"
 	echo "-pp = Print PATH variable\n\n"
@@ -59,7 +65,10 @@ do
 		-t ) TIMDUMP=1;;
 		-cl ) CLIENTTEST=1;;
 		-cu ) CUTSTEST=1;;
-		-p ) PROPDIRECTDUMP=1;;
+		-pd ) PROPDIRECTDUMP=1;;
+		-pa ) PROPDIRECTACCESS=1;;
+		-ea) ESSENCEACCESS=1;;
+		-cs ) CREATESEQUENCE=1;;
 		-i ) AAFINFO=1;;
 		-ao ) AAFOMFTEST=1;;
 		-pp ) PRINTPATH=1;;
@@ -120,6 +129,27 @@ PrintSeparator ()
 	print "****************************************************************************\n\n"
 }
 
+
+VerifyFiles ()
+{
+	FileList=$1
+
+	for File in $FileList; do
+	print -n "running ${File} thru dump...  "
+		${DumpDir}/dump -s -p "$File" > tempdump.log
+		Stat=$?
+		print $Stat
+		if [ $Stat -ne 0 ]; then
+			CheckExitCode $Stat   "     $File <- This File flunked the dump.exe validation test"
+			mv tempdump.log ${File}.log
+		fi
+			
+	done
+
+	rm tempdump.log
+}
+
+
 RunMainScript ()
 {
 	Target=$1
@@ -135,15 +165,20 @@ RunMainScript ()
 	START_DIR="`PWD`"
 
 	cd AAFWinSDK/$Target
+	
+	TargetDir="`PWD`"
+	DumpDir="`PWD`/DevUtils"
+
 
 	if [ MODULETEST -eq 1 ] || [ ALL -eq 1 ]; then
 		cd Test
 		cp ../../Test/Com/ComModTestAAF/Laser.wav .
 		ComModAAF
-
 		CheckExitCode $? "ComModAAF"
 
-		cd ..
+		VerifyFiles "`ls *.aaf`"
+
+		cd $TargetDir
 	fi
 
 	if [ AAFOMFTEST -eq 1 ] || [ ALL -eq 1 ]; then
@@ -151,65 +186,106 @@ RunMainScript ()
 		cd Utilities
 		cp ../Test/AAFSequenceTest.aaf .
 		AafOmf -omf AAFSequenceTest.aaf
-
 		CheckExitCode $? "AafOmf Convertor Test 1 -  AAF -> OMF"
+
+		VerifyFiles "AAFSequenceTest.aaf"
 
 		PrintSeparator "AafOmf Convertor Test 2 -  OMF -> AAF"
 		cp D:/views/Complx2x.omf .
 		AafOmf Complx2x.omf
-
 		CheckExitCode $? "AafOmf Convertor Test 2 -  OMF -> AAF"
 
-		cd ..
+		cd $TargetDir
 	fi
 
-	cd Examples/com
 	if [ CLIENTTEST -eq 1 ] || [ ALL -eq 1 ]; then
 		PrintSeparator "Running COMClientAAF"
+		cd Examples/com
 		COMClientAAF
-
 		CheckExitCode $? "COMClientAAF"
+
+		VerifyFiles "Foo.aaf"
+
+		cd $TargetDir
 	fi
 
 	if [ CUTSTEST -eq 1 ] || [ ALL -eq 1 ]; then
 		PrintSeparator "Running ComCutsTestAAF"
+		cd Examples/com
 		ComCutsTestAAF
-
 		CheckExitCode $? "ComCutsTestAAF"
+
+		VerifyFiles "CutsOnly.aaf"
+
+		cd $TargetDir
 	fi
 
 	if [ ESSENCETEST -eq 1 ] || [ ALL -eq 1 ]; then
-		cp ../../../examples/com-api/ComEssenceDataTest/Laser.wav .
 		PrintSeparator "Running ComEssenceDataTest"
+		cd Examples/com
+		cp ../../../examples/com-api/ComEssenceDataTest/Laser.wav .
 		ComEssenceDataTest
-
 		CheckExitCode $? "ComEssenceDataTest"
+
+		VerifyFiles "EssenceTest.aaf"
+		VerifyFiles "ExternalAAFEssence.aaf"
+
+		cd $TargetDir
 	fi
 
 	if [ AAFINFO -eq 1 ] || [ ALL -eq 1 ]; then
 		PrintSeparator "Running ComAAFInfo on EssenceTest.aaf"
+		cd Examples/com
 		ComAAFInfo EssenceTest.aaf
-
 		CheckExitCode $? "ComAAFInfo"
+
+		cd $TargetDir
 	fi
 	
 	if [ PROPDIRECTDUMP -eq 1 ] || [ ALL -eq 1 ]; then
 		PrintSeparator "Running ComPropDirectDump on EssenceTest.aaf"
+		cd Examples/com
 		ComPropDirectDump EssenceTest.aaf
-
 		CheckExitCode $? "ComPropDirectDump" 
+
+		cd $TargetDir
 	fi
-	cd ../..
 
-	if [ TIMDUMP -eq 1 ] || [ ALL -eq 1 ]; then
-		PrintSeparator "Running dump on AAFSequenceTest.aaf"
-		cd DevUtils
-		cp ../Test/AAFSequenceTest.aaf .
-		dump AAFSequenceTest.aaf
+	if [ PROPDIRECTACCESS -eq 1 ] || [ ALL -eq 1 ]; then
+		PrintSeparator "Running ComPropDirectAccess on EssenceTest.aaf"
+		cd Examples/com
+		ComPropDirectAccess EssenceTest.aaf
+		CheckExitCode $? "ComPropDirectAccess" 
 
-		CheckExitCode $? "dump"
+		cd $TargetDir
+	fi
 
-		cd ..
+	if [ CREATESEQUENCE -eq 1 ] || [ ALL -eq 1 ]; then
+		PrintSeparator "Running CreateSequence"
+		cd Test
+		CreateSequence 10 CreateSequence10
+		CheckExitCode $? "CreateSequence" 
+
+		VerifyFiles "CreateSequence10.aaf"
+
+		cd $TargetDir
+	fi
+
+	if [ ESSENCEACCESS -eq 1 ] || [ ALL -eq 1 ]; then
+		PrintSeparator "Running EssenceAccess"
+		cd Test
+		EssenceAccess 10
+		CheckExitCode $? "EssenceAccess" 
+
+		VerifyFiles "ExternalAAFEssence.aaf"
+		VerifyFiles "ExternalStandardAAF.aaf"
+		VerifyFiles "ExternalStandardRaw.aaf"
+		VerifyFiles "InternalFractional.aaf"
+		VerifyFiles "InternalMulti.aaf"
+		VerifyFiles "InternalStandard.aaf"
+		VerifyFiles "InternalRaw.aaf"
+
+		cd $TargetDir
 	fi
 
 	cd $START_DIR
@@ -241,8 +317,6 @@ if [ CHECK_RELEASE -eq 1 ]; then
 	RunMainScript "Release"
 	PrintExitCodes "Release"
 fi
-
-
 
 
 
