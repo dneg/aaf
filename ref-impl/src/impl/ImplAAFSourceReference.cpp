@@ -118,6 +118,8 @@ AAFRESULT ImplAAFSourceReference::ChangeContainedReferences(aafMobID_constref fr
 
 void ImplAAFSourceReference::onCopy(void* clientContext) const
 {
+   ImplAAFSegment::onCopy(clientContext);
+  
 	if (clientContext) {
 		 ImplAAFCloneResolver* pResolver = reinterpret_cast<ImplAAFCloneResolver*>(clientContext);
 		 pResolver->AddSourceReference(_sourceID);
