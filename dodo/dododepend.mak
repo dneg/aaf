@@ -24,8 +24,10 @@ depend.mk : aafobjects.mk
 	@ echo AAFModule.all...
 	@ echo AAFModule.all : AAFModule.fidl >> depend.tmp
 	@ echo AAFModule.all : AAFModule.frefh >> depend.tmp
+	@ echo AAFModule.all : AAFModule.comc >> depend.tmp
 	@ echo AAFModule.fidl : macros/fidl.mac macros/base.mac >> depend.tmp
 	@ echo AAFModule.frefh : macros/frefh.mac macros/base.mac >> depend.tmp
+	@ echo AAFModule.comc : macros/comc.mac macros/base.mac >> depend.tmp
 	@ echo "" >> depend.tmp
 	@ echo "#" Special case AAFTypes since no object is to be built only headers... >> depend.tmp
 	@ echo AAFTypes.all...
