@@ -28,6 +28,8 @@
 // @doc OMEXTERNAL
 #include "OMRootStorable.h"
 
+#include "OMStoredObject.h"
+
 OMRootStorable::OMRootStorable(void)
 : _clientRoot(0x0002, L"Header"),
   _dictionary(0x0001, L"MetaDictionary")
