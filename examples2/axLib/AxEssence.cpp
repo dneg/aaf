@@ -526,6 +526,23 @@ void AxDigitalImageDescriptor::SetImageAspectRatio( const aafRational_t & aspect
 }
 
 
+void AxDigitalImageDescriptor::SetAlphaTransparency( const aafAlphaTransparency_t& alphaTransparency )
+{
+	CHECK_HRESULT( _spIaafDigitalImageDescriptor->SetAlphaTransparency( alphaTransparency ) );
+}
+
+
+void AxDigitalImageDescriptor::SetGamma( const aafUID_t& gamma )
+{
+	CHECK_HRESULT( _spIaafDigitalImageDescriptor->SetGamma( gamma ) );
+}
+
+void AxDigitalImageDescriptor::SetImageAlignmentFactor( aafUInt32 ImageAlignmentFactor)
+{
+	CHECK_HRESULT( _spIaafDigitalImageDescriptor->SetImageAlignmentFactor( ImageAlignmentFactor ) );
+}
+
+
 void AxDigitalImageDescriptor::GetStoredView( aafUInt32& StoredHeight, aafUInt32& StoredWidth)
 {
 	CHECK_HRESULT( _spIaafDigitalImageDescriptor->GetStoredView( &StoredHeight, &StoredWidth) );
@@ -567,6 +584,33 @@ void AxDigitalImageDescriptor::GetVideoLineMap( aafUInt32  numberElements, aafIn
 }
 
 
+aafAlphaTransparency_t AxDigitalImageDescriptor::GetAlphaTransparency()
+{
+	aafAlphaTransparency_t alpha;
+
+	CHECK_HRESULT( _spIaafDigitalImageDescriptor->GetAlphaTransparency( &alpha ) );
+
+	return alpha;
+}
+
+aafUID_t AxDigitalImageDescriptor::GetGamma()
+{
+	aafUID_t gamma;
+
+	CHECK_HRESULT( _spIaafDigitalImageDescriptor->GetGamma( &gamma ) );
+
+	return gamma;
+}
+
+aafUInt32 AxDigitalImageDescriptor::GetImageAlignmentFactor()
+{
+	aafUInt32 alignment;
+
+	CHECK_HRESULT( _spIaafDigitalImageDescriptor->GetImageAlignmentFactor( &alignment ) );
+
+	return alignment;
+}
+
 //=---------------------------------------------------------------------=
 
 AxCDCIDescriptor::AxCDCIDescriptor( IAAFCDCIDescriptorSP sp )
@@ -595,6 +639,11 @@ void AxCDCIDescriptor::SetHorizontalSubsampling( aafUInt32  HorizontalSubsamplin
 void AxCDCIDescriptor::SetVerticalSubsampling( aafUInt32 VerticalSubsampling )
 {
 	CHECK_HRESULT( _spIaafCDCIDescriptor->SetVerticalSubsampling( VerticalSubsampling ) );
+}
+
+void AxCDCIDescriptor::SetColorSiting( const aafColorSiting_t& ColorSiting )
+{
+	CHECK_HRESULT( _spIaafCDCIDescriptor->SetColorSiting( ColorSiting ) );
 }
 
 void AxCDCIDescriptor::SetBlackReferenceLevel( aafUInt32 BlackReferenceLevel )
@@ -640,6 +689,12 @@ aafUInt32 AxCDCIDescriptor::GetVerticalSubsampling()
   return verticalSubsampling;
 }
 
+aafColorSiting_t AxCDCIDescriptor::GetColorSiting()
+{
+	aafColorSiting_t siting;
+	CHECK_HRESULT( _spIaafCDCIDescriptor->GetColorSiting( &siting ) );
+	return siting;
+}
 
 aafUInt32 AxCDCIDescriptor::GetBlackReferenceLevel()
 {

@@ -353,7 +353,14 @@ public:
 
 	void SetCompression( const aafUID_t& compression );
 
+	void SetAlphaTransparency( const aafAlphaTransparency_t& alphaTransparency );
+
+	void SetGamma( const aafUID_t& gamma );
+
 	void SetImageAspectRatio( const aafRational_t & aspect);
+
+	void SetImageAlignmentFactor( aafUInt32 ImageAlignmentFactor);
+
 
 
 	void GetStoredView( aafUInt32& StoredHeight, aafUInt32& StoredWidth);
@@ -366,12 +373,19 @@ public:
 
 	aafFrameLayout_t GetFrameLayout();
 
-	aafRational_t GetImageAspectRatio();
-
 	// FIXME - surely we can do better than this
 	void GetVideoLineMap( aafUInt32  numberElements, aafInt32*  pVideoLineMap );
 
 	aafUID_t GetCompression();
+
+	aafAlphaTransparency_t GetAlphaTransparency();
+	
+	aafUID_t GetGamma();
+
+	aafRational_t GetImageAspectRatio();
+
+	aafUInt32 GetImageAlignmentFactor();
+
 private:
 	AxDigitalImageDescriptor();
 	AxDigitalImageDescriptor( const AxDigitalImageDescriptor& );
@@ -391,6 +405,7 @@ public:
 	void SetComponentWidth( aafInt32 ComponentWidth );
 	void SetHorizontalSubsampling( aafUInt32  HorizontalSubsampling );
 	void SetVerticalSubsampling( aafUInt32 VerticalSubsampling );
+	void SetColorSiting( const aafColorSiting_t& ColorSiting );
 	void SetBlackReferenceLevel( aafUInt32 BlackReferenceLevel );
 	void SetWhiteReferenceLevel( aafUInt32 WhiteReferenceLevel );
 	void SetColorRange( aafUInt32 ColorRange );
@@ -399,6 +414,7 @@ public:
 	aafInt32  GetComponentWidth();
 	aafUInt32 GetHorizontalSubsampling();
 	aafUInt32 GetVerticalSubsampling();
+	aafColorSiting_t GetColorSiting();
 	aafUInt32 GetBlackReferenceLevel();
 	aafUInt32 GetWhiteReferenceLevel();
 	aafUInt32 GetColorRange();
