@@ -160,6 +160,11 @@ class AAFDotInstanceMapper : public AxBaseObjRecIterListener
 			    std::string objectName, std::string propertyName );
 
 
+   // find the node referenced by the scope reference. 
+   // relative scope > 0 not implemented.  
+   DotRecordNode* GetScopeReference( aafUInt32 relativeScope, aafUInt32 relativeSlot );
+
+
    // The stalkers follow the AAF base object iterator, linking the DOT data tree and the AAF data tree
    Stalker* PopStalker();
    void PushStalker( Stalker *stalker );
