@@ -98,7 +98,15 @@ SOURCE="..\..\..\ref-impl\src\OM\OMDataStreamProperty.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\OM\OMDiskRawStorage.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\OM\OMFile.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\OM\OMMemoryRawStorage.cpp"
 # End Source File
 # Begin Source File
 
@@ -115,6 +123,10 @@ SOURCE="..\..\..\ref-impl\src\OM\OMPropertySet.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\OM\OMPropertyTable.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\OM\OMRawStorageLockBytes.cpp"
 # End Source File
 # Begin Source File
 
@@ -218,6 +230,10 @@ SOURCE="..\..\..\ref-impl\include\OM\OMDictionary.h"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\include\OM\OMDiskRawStorage.h"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\OM\OMFile.h"
 # End Source File
 # Begin Source File
@@ -227,6 +243,14 @@ SOURCE="..\..\..\ref-impl\include\OM\OMFixedSizeProperty.h"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\OM\OMFixedSizePropertyT.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\include\OM\OMMemoryRawStorage.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\OM\OMMSStructuredStorage.h"
 # End Source File
 # Begin Source File
 
@@ -263,6 +287,14 @@ SOURCE="..\..\..\ref-impl\include\OM\OMPropertySet.h"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\include\OM\OMPropertyTable.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\include\OM\OMRawStorage.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\include\OM\OMRawStorageLockBytes.h"
 # End Source File
 # Begin Source File
 
