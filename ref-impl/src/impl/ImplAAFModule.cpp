@@ -150,13 +150,13 @@ STDAPI ImplAAFFileOpenExistingRead (
   /*[out]*/ ImplAAFFile ** ppFile)
 {
   HRESULT hr = S_OK;
-  ImplAAFFile * pFile = NULL;
+  ImplAAFFile * pFile = 0;
 
-  if (NULL == pFileName || NULL == ppFile)
+  if (!pFileName || !ppFile)
     return AAFRESULT_NULL_PARAM;
 
   // Initialize the out parameter.
-  *ppFile = NULL;
+  *ppFile = 0;
 
   //
   // For backwards compatibility with existing client code
@@ -167,7 +167,7 @@ STDAPI ImplAAFFileOpenExistingRead (
 
   // Create an instance of an uninitialized file object.
   pFile = static_cast<ImplAAFFile *>(::CreateImpl(CLSID_AAFFile));
-	if(NULL == pFile)
+	if(!pFile)
 		hr = AAFRESULT_NOMEMORY;
   else
   {
@@ -180,7 +180,7 @@ STDAPI ImplAAFFileOpenExistingRead (
       if (SUCCEEDED(hr))
       {
        *ppFile = pFile;
-       pFile = NULL;
+       pFile = 0;
       }
     }
 
@@ -271,13 +271,13 @@ STDAPI ImplAAFFileOpenExistingModify (
   /*[out]*/ ImplAAFFile ** ppFile)
 {
   HRESULT hr = S_OK;
-  ImplAAFFile * pFile = NULL;
+  ImplAAFFile * pFile = 0;
 
-  if (NULL == pFileName || NULL == pIdent || NULL == ppFile)
+  if (!pFileName || !pIdent || !ppFile)
     return AAFRESULT_NULL_PARAM;
 
   // Initialize the out parameter.
-  *ppFile = NULL;
+  *ppFile = 0;
 
   //
   // For backwards compatibility with existing client code
@@ -288,7 +288,7 @@ STDAPI ImplAAFFileOpenExistingModify (
 
   // Create an instance of an uninitialized file object.
   pFile = static_cast<ImplAAFFile *>(::CreateImpl(CLSID_AAFFile));
-	if(NULL == pFile)
+	if(!pFile)
 		hr = AAFRESULT_NOMEMORY;
   else
   {
@@ -301,7 +301,7 @@ STDAPI ImplAAFFileOpenExistingModify (
       if (SUCCEEDED(hr))
       {
         *ppFile = pFile;
-        pFile = NULL;
+        pFile = 0;
       }
     }
 
@@ -383,13 +383,13 @@ STDAPI ImplAAFFileOpenNewModify (
   /*[out]*/ ImplAAFFile ** ppFile)
 {
   HRESULT hr = S_OK;
-  ImplAAFFile * pFile = NULL;
+  ImplAAFFile * pFile = 0;
 
-  if (NULL == pFileName || NULL == pIdent || NULL == ppFile)
+  if (!pFileName || !pIdent || !ppFile)
     return AAFRESULT_NULL_PARAM;
 
   // Initialize the out parameter.
-  *ppFile = NULL;
+  *ppFile = 0;
 
   //
   // For backwards compatibility with existing client code
@@ -400,7 +400,7 @@ STDAPI ImplAAFFileOpenNewModify (
 
   // Create an instance of an uninitialized file object.
   pFile = static_cast<ImplAAFFile *>(::CreateImpl(CLSID_AAFFile));
-	if(NULL == pFile)
+	if(!pFile)
 		hr = AAFRESULT_NOMEMORY;
   else
   {
@@ -413,7 +413,7 @@ STDAPI ImplAAFFileOpenNewModify (
       if (SUCCEEDED(hr))
       {
         *ppFile = pFile;
-        pFile = NULL;
+        pFile = 0;
       }
     }
 
@@ -471,13 +471,13 @@ STDAPI ImplAAFFileOpenTransient (
 {
   HRESULT hr = S_OK;
 	const aafClassID_t& fileID = *reinterpret_cast<const aafClassID_t *>(&CLSID_AAFFile); 
-  ImplAAFFile * pFile = NULL;
+  ImplAAFFile * pFile = 0;
 
-  if (NULL == pIdent || NULL == ppFile)
+  if (!pIdent || !ppFile)
     return AAFRESULT_NULL_PARAM;
 
   // Initialize the out parameter.
-  *ppFile = NULL;
+  *ppFile = 0;
 
   //
   // For backwards compatibility with existing client code
@@ -488,7 +488,7 @@ STDAPI ImplAAFFileOpenTransient (
 
   // Create an instance of an uninitialized file object.
   pFile = static_cast<ImplAAFFile *>(::CreateImpl(fileID));
-	if(NULL == pFile)
+	if(!pFile)
 		hr = AAFRESULT_NOMEMORY;
   else
   {
@@ -501,7 +501,7 @@ STDAPI ImplAAFFileOpenTransient (
       if (SUCCEEDED(hr))
       {
         *ppFile = pFile;
-        pFile = NULL;
+        pFile = 0;
       }
     }
 
@@ -552,14 +552,14 @@ STDAPI ImplAAFGetPluginManager (
 	HRESULT					hr = S_OK;
 	ImplAAFPluginManager	*implMgr;
 	
-	if (NULL == ppManager)
+	if (!ppManager)
 		return AAFRESULT_NULL_PARAM;
 	
 	// Initialize the out parameter.
-	*ppManager = NULL;
+	*ppManager = 0;
 	
 	implMgr = ImplAAFPluginManager::GetPluginManager();
-  if (NULL == implMgr)
+  if (!implMgr)
     hr = AAFRESULT_NOMEMORY;
   else
     *ppManager = implMgr;
