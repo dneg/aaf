@@ -521,7 +521,6 @@ AD_CLASS_BEGIN\
 #c Argument: Base name
 #c
 #startm AD_FORWARD_DECLARATION 01
-interface I%01;\
 #endm
 
 
