@@ -169,15 +169,4 @@ private:
 
 };
 
-#define OMDECLARE_STORABLE(className)                           \
-public:                                                         \
-  virtual const OMClassId& classId(void) const;
-
-#define OMDEFINE_STORABLE(className, objectId)                  \
-                                                                \
-const OMClassId& className::classId(void) const                 \
-{                                                               \
-  return *reinterpret_cast<const OMClassId* const>(&objectId);  \
-}
-
 #endif
