@@ -143,6 +143,11 @@ function createColorMap(file) {
     if ($1 != "#") {
       if (NF != 0) {
         if ($1 == "color") {
+          if (component == 1) {
+            printf("Error : \"%s\", line %s - illegally placed color.\n",
+                   file, line) | "cat 1>&2";
+            exit 1;
+          }
           if ($2 in colors) {
             printf("Error : \"%s\", line %s - duplicate color \"%s\".\n",
                    file, line, $2) | "cat 1>&2";
