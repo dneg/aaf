@@ -12,7 +12,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -600,6 +600,104 @@ static TypeWeakRefVector s_AAFAllTypeWeakRefVectors [] = {
 0 };
 
 #include "AAFMetaDictionary.h"
+
+
+//
+// pass 20: For extendible enumerations, define individual enumeration
+// fields
+//
+
+//
+// Define structs to describe each member of an extendible enumeration
+// typedef, and to describe the entire extendible enumeration typedef.
+//
+#define AAF_TYPE_TABLE_BEGIN()             \
+                                           \
+struct TypeExtEnumerationMember            \
+{                                          \
+  wchar_t *        memberName;             \
+  aafUID_t         memberValue;            \
+};                                         \
+                                           \
+struct TypeExtEnumeration                  \
+{                                          \
+  aafUID_t                 typeID;         \
+  const wchar_t *          typeName;       \
+  TypeExtEnumerationMember ** members;     \
+};
+
+#define AAF_TYPE_DEFINITION_EXTENDIBLE_ENUMERATION_MEMBER(name, auid, container) \
+static const TypeExtEnumerationMember s_TypeExtEnumerationMember_##container##_##name = \
+{ L#name, \
+  auid \
+};
+
+#define AAF_TYPE(x) aaf##x##_t
+#define AAF_REFERENCE_TYPE(type, target)      AAF_TYPE(target##type)
+#define AAF_REFERENCE_TYPE_NAME(type, target) AAF_TYPE(target##type)
+#include "AAFMetaDictionary.h"
+
+
+//
+// pass 21: For extendible enumerations, create the (null-terminated)
+// field list for each extendible enumeration
+//
+
+#define AAF_TYPE_DEFINITION_EXTENDIBLE_ENUMERATION(name, id) \
+static const TypeExtEnumerationMember *s_TypeExtEnumerationMembers_##name[] = {
+
+#define AAF_TYPE_DEFINITION_EXTENDIBLE_ENUMERATION_MEMBER(name, value, container) \
+	&s_TypeExtEnumerationMember_##container##_##name,
+
+#define AAF_TYPE_DEFINITION_EXTENDIBLE_ENUMERATION_END(name) \
+  0 } ;
+
+#define AAF_TYPE(x) _aaf##x##_t
+#define AAF_REFERENCE_TYPE(type, target)      AAF_TYPE(target##type)
+#define AAF_REFERENCE_TYPE_NAME(type, target) AAF_TYPE(target##type)
+#include "AAFMetaDictionary.h"
+
+
+//
+// pass 22: For extendible enumerations, create each extendible
+// enumeration definition
+//
+
+#define AAF_TYPE_DEFINITION_EXTENDIBLE_ENUMERATION(name, id) \
+static const TypeExtEnumeration s_TypeExtEnumeration_##name = \
+{ id, \
+  L#name, \
+  (TypeExtEnumerationMember **) s_TypeExtEnumerationMembers_##name, \
+ };
+
+#define AAF_TYPE(x) x
+// #define AAF_REFERENCE_TYPE(type, target)      AAF_TYPE(target##type)
+// #define AAF_REFERENCE_TYPE_NAME(type, target) AAF_TYPE(target##type)
+#include "AAFMetaDictionary.h"
+
+
+//
+// pass 32: For extendible enumerations, create a master
+// null-terminated list of all type def extendible enumerations
+//
+
+#define AAF_TYPE_TABLE_BEGIN()   \
+static TypeExtEnumeration * s_AAFAllTypeExtEnumerations [] = {
+
+#define AAF_TYPE_DEFINITION_EXTENDIBLE_ENUMERATION(name, id) \
+  (TypeExtEnumeration*)& s_TypeExtEnumeration_##name,
+
+#define AAF_TYPE_TABLE_END()   \
+0 };
+
+#define AAF_TYPE(x) _aaf##x##_t
+#define AAF_REFERENCE_TYPE(type, target)      AAF_TYPE(target##type)
+#define AAF_REFERENCE_TYPE_NAME(type, target) AAF_TYPE(target##type)
+#include "AAFMetaDictionary.h"
+
+//
+// Done with extendible enumerations.
+//
 
 
 #endif // ! __ImplAAFTypeDefsGen_h__
