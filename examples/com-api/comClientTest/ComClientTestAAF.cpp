@@ -120,7 +120,7 @@ static void convert(wchar_t* wName, size_t length, const wchar_t* name)
 // (as returned by StringFromGUID2).
 const size_t MAX_CLSID_BUFFER = 40;
 
-static void formatMobID(char *cBuffer, size_t length, aafUID_t *pMobID)
+static void formatMobID(char *cBuffer, size_t length, aafMobID_t *pMobID)
 {
   assert(pMobID, "Valid input mobID");
   assert(cBuffer != 0, "Valid output buffer");
@@ -265,7 +265,7 @@ static void ReadAAFFile(aafWChar * pFileName)
             aafWChar name[500], slotName[500];
             char chName[1000], chMobID[MAX_CLSID_BUFFER];
             aafNumSlots_t  numSlots;
-            aafUID_t    mobID = {0};
+            aafMobID_t    mobID = {0};
             aafSlotID_t    trackID;
             aafRational_t  rate;
 
@@ -423,7 +423,7 @@ static void CreateAAFFile(aafWChar * pFileName)
   IAAFHeader *        pHeader = NULL;
   IAAFDictionary *pDictionary = NULL;
   aafProductIdentification_t  ProductInfo;
-  aafUID_t          newUID;
+  aafMobID_t          newMobID;
   
   // delete any previous test file before continuing...
   char chFileName[1000];
@@ -473,9 +473,9 @@ static void CreateAAFFile(aafWChar * pFileName)
                 IID_IAAFSourceMob, 
                 (IUnknown **)&smob));
     check(smob->QueryInterface (IID_IAAFMob, (void **)&pMob));
-    check(CoCreateGuid((GUID *)&newUID)); // hack: we need a utility function.
-    //newUID.Data1 = test;
-    check(pMob->SetMobID(newUID));
+    check(CoCreateGuid((GUID *)&newMobID)); // hack: we need a utility function.
+    //newMobID.Data1 = test;
+    check(pMob->SetMobID(newMobID));
     check(pMob->SetName(names[test]));
 
     check(pDictionary->CreateInstance(
