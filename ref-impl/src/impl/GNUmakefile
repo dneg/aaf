@@ -27,8 +27,6 @@ export PACKAGE
 
 AAFBASE ?= ../../..
 
-CFLAGS = -DOM_KLUDGE_TYPEDEFRECORD
-
 
 # Common definitions
 include $(AAFBASE)/build/common.mk

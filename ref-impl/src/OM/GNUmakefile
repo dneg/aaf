@@ -58,7 +58,7 @@ CXXOBJS:=$(filter-out %/OMGSFStructuredStorage.o,$(CXXOBJS))
 CXXOBJS:=$(filter-out %/OMGSF_SSStoredObjectFactory.o,$(CXXOBJS))
 endif
 
-CFLAGS += -DOM_PERMIT_ZERO_LENGTH -DOM_STACK_TRACE_ON_ASSERT
+CFLAGS += -DOM_STACK_TRACE_ON_ASSERT
 
 
 .PHONY : all

@@ -25,7 +25,6 @@
 // @doc OMEXTERNAL
 // @author Tim Bingham | tjb | Avid Technology, Inc. | OMSSStoredObject
 
-// define OM_PERMIT_ZERO_LENGTH to eliminate debug check for zero-length properties on read
 
 #include "OMSSStoredObject.h"
 
@@ -2141,10 +2140,7 @@ void OMSSStoredObject::read(OMPropertyId ANAME(propertyId),
 {
   TRACE("OMSSStoredObject::read");
   PRECONDITION("Valid data", start != 0);
-
-#ifndef OM_PERMIT_ZERO_LENGTH
-    PRECONDITION("Valid size", size > 0);
-#endif
+  PRECONDITION("Valid size", size > 0);
 
 #if defined(OM_DEBUG)
   // Consistency check - look up propertyId in _index and check that
@@ -2214,10 +2210,7 @@ void OMSSStoredObject::readFromStream(IStream* stream,
   TRACE("OMSSStoredObject::readFromStream");
   PRECONDITION("Valid stream", stream != 0);
   PRECONDITION("Valid data buffer", data != 0);
-
-#ifndef OM_PERMIT_ZERO_LENGTH
-    PRECONDITION("Valid size", size > 0);
-#endif
+  PRECONDITION("Valid size", size > 0);
 
   unsigned long bytesRead;
   HRESULT status = stream->Read(data, size, &bytesRead);
@@ -2241,10 +2234,7 @@ void OMSSStoredObject::readFromStream(IStream* stream,
   TRACE("OMSSStoredObject::readFromStream");
   PRECONDITION("Valid stream", stream != 0);
   PRECONDITION("Valid data buffer", data != 0);
-
-#ifndef OM_PERMIT_ZERO_LENGTH
-    PRECONDITION("Valid size", bytes > 0);
-#endif
+  PRECONDITION("Valid size", bytes > 0);
 
   HRESULT status = stream->Read(data, bytes, &bytesRead);
   checkStatus(status);

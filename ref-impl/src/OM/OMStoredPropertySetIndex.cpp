@@ -26,8 +26,6 @@
 // @author Tim Bingham | tjb | Avid Technology, Inc. |
 //         OMStoredPropertySetIndex
 
-// define OM_PERMIT_ZERO_LENGTH to eliminate debug check for zero-length properties on read
-
 
 #include "OMStoredPropertySetIndex.h"
 
@@ -174,12 +172,10 @@ bool OMStoredPropertySetIndex::isValid(OMPropertyOffset baseOffset) const
     currentOffset = _index[i]._offset;
     currentLength = _index[i]._length;
 
-#ifdef OM_PERMIT_ZERO_LENGTH
     if (currentLength == 0) {
       result = false; // entry has invalid length
       break;
     }
-#endif
 
     if (currentOffset != position) {
       result = false;  // gap or overlap
