@@ -174,7 +174,7 @@ ImplAAFFile::OpenNewModify (wchar_t * pFileName,
 
 
 AAFRESULT STDMETHODCALLTYPE
-ImplAAFFile::OpenTransient ()
+ImplAAFFile::OpenTransient (aafProductIdentification_t * /*pIdent*/)
 {
 
   if (! _initialized)
@@ -194,6 +194,24 @@ ImplAAFFile::OpenTransient ()
 
 AAFRESULT STDMETHODCALLTYPE
 ImplAAFFile::Save ()
+{
+  if (! _initialized)
+	{
+	  return AAFRESULT_NOT_INITIALIZED;
+	}
+
+  if (!_open)
+	{
+	  return AAFRESULT_NOT_OPEN;
+	}
+
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+ImplAAFFile::SaveAs (wchar_t * /*pFileName*/,
+					 aafUInt32 /*modeFlags*/)
 {
   if (! _initialized)
 	{
@@ -282,6 +300,13 @@ void ImplAAFFile::InternalReleaseObjects()
 	  _nilKind->ReleaseReference();
 	  _nilKind = 0;
   }
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+ImplAAFFile::ForceClose ()
+{
+  return Close();
 }
 
 
@@ -699,6 +724,8 @@ AAFRESULT ImplAAFFile::OpenModify(aafWChar*		stream,
   
   return (OM_ERR_NONE);
 }
+
+
 
 #if 0
 extern "C" const aafClassID_t CLSID_AAFFile;

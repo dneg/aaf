@@ -60,13 +60,20 @@ public:
 				   aafProductIdentification_t * pIdent);
 
   virtual AAFRESULT STDMETHODCALLTYPE
-	OpenTransient ();
+	OpenTransient (aafProductIdentification_t * pIdent);
 
   virtual AAFRESULT STDMETHODCALLTYPE
 	Close ();
 
   virtual AAFRESULT STDMETHODCALLTYPE
+	ForceClose ();
+
+  virtual AAFRESULT STDMETHODCALLTYPE
 	Save ();
+
+  virtual AAFRESULT STDMETHODCALLTYPE
+	SaveAs (wchar_t * pFileName,
+			aafUInt32 modeFlags);
 
   virtual AAFRESULT STDMETHODCALLTYPE
 	Revert ();
