@@ -66,7 +66,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /GZ /c
-# ADD CPP /nologo /W3 /Gm /GX /ZI /Od /I "C:\OMF2_12\include" /I "C:\OMF2_12\portinc" /I "../../../ref-impl/include" /I "../../../ref-impl/include/com-api" /I "../../../ref-impl/include/OM" /I "../../ref-impl/include/comidl" /I "../../../utilities/include" /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_UNICODE" /D "UNICODE" /YX /FD /GZ /c
+# ADD CPP /nologo /W3 /Gm /GX /ZI /Od /I "C:\OMF2_12\include" /I "C:\OMF2_12\portinc" /I "../../../ref-impl/include" /I "../../../ref-impl/include/com-api" /I "../../../ref-impl/include/OM" /I "../../ref-impl/include/comidl" /I "../../../utilities/include" /I "../../../ref-impl/src/impl" /I "../../../ref-impl/src/OM" /D "COM_NO_WINDOWS_H" /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_UNICODE" /D "UNICODE" /YX /FD /GZ /c
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
 BSC32=bscmake.exe
@@ -91,7 +91,15 @@ SOURCE="..\..\ref-impl\include\comidl\AAF_i.c"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\impl\aafCvt.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\Utilities\AafOmf\AafOmf.cpp
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\impl\AAFUtils.cpp"
 # End Source File
 # End Group
 # Begin Group "Header Files"
