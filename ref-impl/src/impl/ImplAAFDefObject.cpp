@@ -47,8 +47,7 @@ ImplAAFDefObject::ImplAAFDefObject ()
 : _name           (PID_DefinitionObject_Name,           "Name"),
   _description    (PID_DefinitionObject_Description,    "Description"),
   _identification (PID_DefinitionObject_Identification, "Identification"),
-  _descriptors(    PID_DefinitionObject_PluginDescriptors, "PluginDescriptors"),
-  _pDict (0)
+  _descriptors(    PID_DefinitionObject_PluginDescriptors, "PluginDescriptors")
 {
   _persistentProperties.put(_name.address());
   _persistentProperties.put(_description.address());
@@ -60,12 +59,6 @@ ImplAAFDefObject::ImplAAFDefObject ()
 
 ImplAAFDefObject::~ImplAAFDefObject ()
 {
-  if (_pDict)
-	{
-	  // BobT hack!!!  See comment in SetDict() below...
-	  // _pDict->ReleaseReference ();
-	  _pDict = NULL;
-	}
 }
 
 
@@ -316,27 +309,6 @@ AAFRESULT STDMETHODCALLTYPE
 	(*ppEnum)->SetEnumProperty(this, &_descriptors);
 
 	return(AAFRESULT_SUCCESS);
-}
-
-
-
-// Internal to the toolkit functions
-
-void ImplAAFDefObject::SetDict (ImplAAFDictionary * pDict)
-{
-  _pDict = pDict;
-
-  // BobT Hack!!!! dict hasn't been fully init'd yet when this is
-  // called, so can't AcquireReference.  Must not ReleaseReference on
-  // destruction...
-  // _pDict->AcquireReference();
-}
-
-
-ImplAAFDictionary * ImplAAFDefObject::GetDict ()
-{
-  assert (_pDict);
-  return _pDict;
 }
 
 
