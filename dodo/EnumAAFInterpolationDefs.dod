@@ -13,14 +13,6 @@ AAFRoot\
 #endm
 #c
 AD_HEAD
-/***********************************************\
-*												*
-* Advanced Authoring Format						*
-*												*
-* Copyright (c) 1998-1999 Avid Technology, Inc. *
-*												*
-\***********************************************/
-
 AD_FORWARD_DECLARATION(AAFInterpolationDef)
 
 AD_CLASS_UUID(293600A4, 0D37, 11d3, 80, A9, 00, 60, 08, 14, 3E, 6F)
