@@ -48,6 +48,7 @@ static wchar_t *manuf2URL = L"www.avid.com";
 #include "AAFDataDefs.h"
 #include "AAFDefUIDs.h"
 #include "aafUtils.h"
+#include "AAFCodecDefs.h"
 
 #include "CAAFBuiltinDefs.h"
 
@@ -224,6 +225,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	
 	checkResult(pPlugDef->QueryInterface (IID_IAAFCodecDef,
                                           (void **)&pCodecDef));
+	checkResult(pCodecDef->Initialize (NoCodec, L"TestCodec", L"Just a test"));
 	checkResult(pCodecDef->AddEssenceKind (defs.ddMatte()));
 	checkResult(pDictionary->RegisterCodecDef(pCodecDef));
 	/**/
