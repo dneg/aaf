@@ -86,6 +86,7 @@
 # 16-FEB-2001 : transdel added missing AAFExtEnum.h and AAFFileSignatures.h   #
 # 07-MAR-2001 : tjb copy OMF toolkit DLL once only.                           #
 # 19-MAR-2001 : akharkev Use update.cmd when copying over checked in files.   #
+# 26-DEC-2001 : whoopy include AAFSDKBuild.h in files to be updated for SDK   #
 ###############################################################################
 
 
@@ -258,7 +259,8 @@ TARGET_H_FILES = \
 	$(AAFSDK_INCLUDE)\AAFSmartPointer.h \
 	$(AAFSDK_INCLUDE)\AAFSmartPointerBase.h \
 	$(AAFSDK_INCLUDE)\AAFStoredObjectIDs.h \
-	$(AAFSDK_INCLUDE)\AAFTypeDefUIDs.h
+	$(AAFSDK_INCLUDE)\AAFTypeDefUIDs.h \
+	$(AAFSDK_INCLUDE)\AAFSDKBuild.h
 
 
 #
@@ -557,6 +559,8 @@ $(AAFSDK_INCLUDE)\AAFStoredObjectIDs.h : $(TOOLKIT_INCLUDE)\AAFStoredObjectIDs.h
 $(AAFSDK_INCLUDE)\AAFTypeDefUIDs.h : $(TOOLKIT_INCLUDE)\AAFTypeDefUIDs.h
 	$(UPDATE) $(TOOLKIT_INCLUDE)\AAFTypeDefUIDs.h $@
 
+$(AAFSDK_INCLUDE)\AAFSDKBuild.h : $(TOOLKIT_INCLUDE)\AAFSDKBuild.h
+	$(UPDATE) $(TOOLKIT_INCLUDE)\AAFSDKBuild.h $@
 
 #
 # Dependency and build rules for the IDL targets.
