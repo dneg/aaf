@@ -17,7 +17,7 @@
 //
 // ../smpte/DictP18.csv 
 //
-// This file was generated on Tue May 25 09:42:58 EDT 1999
+// This file was generated on Tue Jun  1 18:12:51 EDT 1999
 // by user tbingham on system TBINGHAMPC.
 //
 // Key to macros.
@@ -1107,7 +1107,7 @@ AAF_CLASS(PluginDescriptor,
   AAF_LITERAL_AUID(0x06444700,
     0x0000, 0x0000,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
-  DefinitionObject)
+  InterchangeObject)
 AAF_PROPERTY(Identification,
   AAF_LITERAL_AUID(0x06444701,
     0x0000, 0x0000,
