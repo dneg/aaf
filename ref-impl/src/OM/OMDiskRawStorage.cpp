@@ -215,7 +215,6 @@ void OMDiskRawStorage::setSize(OMUInt64 newSize)
 
   if (newSize > currentSize) {
 
-#if 1
     // Extend by writing a single byte.
 	//
     OMByte nullByte = 0;
@@ -223,20 +222,6 @@ void OMDiskRawStorage::setSize(OMUInt64 newSize)
 
     writeAt(newSize - 1, &nullByte, 1, bytesWritten);
     ASSERT("Successful write", bytesWritten == 1);
-#else
-    // Harbison and Steele (3rd Ed. page 305) claim that
-    // fseek(_file, positive, SEEK_END) extends the file,
-    // but this is not true in a least one implementation
-    // (Microsoft VC++ 6.0).
-    OMUInt64 additionalBytes = newSize - currentSize;
-
-    ASSERT("Supported offset", additionalBytes <= LONG_MAX); // tjb - limit
-    long int liAdditionalBytes = static_cast<long int>(additionalBytes);
-
-    int seekStatus = fseek(_file, liAdditionalBytes, SEEK_END);
-    ASSERT("Successful seek", seekStatus == 0); // tjb - error
-#endif
-
     ASSERT("Size properly changed", size() == newSize);
   }
   // else no ANSI way to truncate the file in place
