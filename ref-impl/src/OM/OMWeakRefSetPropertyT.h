@@ -751,8 +751,11 @@ OMWeakReferenceSetProperty<ReferencedObject>::remove(void* identification)
 {
   TRACE("OMWeakReferenceSetProperty<ReferencedObject>::remove");
 
-  // TBS
-  return 0;
+  PRECONDITION("Valid identification", identification != 0);
+
+  OMUniqueObjectIdentification* id =
+               reinterpret_cast<OMUniqueObjectIdentification*>(identification);
+  return remove(*id);
 }
 
   // @mfunc Does this <c OMWeakReferenceSetProperty> contain an
@@ -770,8 +773,12 @@ OMWeakReferenceSetProperty<ReferencedObject>::contains(
 {
   TRACE("OMWeakReferenceSetProperty<ReferencedObject>::containsObject");
 
-  // TBS
-  return false;
+
+  PRECONDITION("Valid identification", identification != 0);
+
+  OMUniqueObjectIdentification* id =
+               reinterpret_cast<OMUniqueObjectIdentification*>(identification);
+  return contains(*id);
 }
 
   // @mfunc Find the <c OMObject> in this <c OMWeakReferenceSetProperty>
@@ -793,8 +800,17 @@ OMWeakReferenceSetProperty<ReferencedObject>::findObject(
 {
   TRACE("OMWeakReferenceSetProperty<ReferencedObject>::findObject");
 
-  // TBS
-  return false;
+  PRECONDITION("Valid identification", identification != 0);
+
+  OMUniqueObjectIdentification* id =
+               reinterpret_cast<OMUniqueObjectIdentification*>(identification);
+
+  ReferencedObject* obj = 0;
+
+  bool result = find(*id, obj);
+
+  object = obj;
+  return result;
 }
 
 template<typename ReferencedObject>
