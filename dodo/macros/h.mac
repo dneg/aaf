@@ -1,0 +1,246 @@
+#c /******************************************\
+#c *                                          *
+#c * Advanced Authoring Format                *
+#c *                                          *
+#c * Copyright (c) 1998 Avid Technology, Inc. *
+#c * Copyright (c) 1998 Microsoft Corporation *
+#c *                                          *
+#c \******************************************/
+
+
+
+#ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+#c
+#c AutoDodo macro file for use in generating C++ API header files.
+#c
+#ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Starts a class definition
+#c
+#c Arguments: none
+#c
+#startm AD_CLASS_BEGIN 0
+#ifndef _.this-module_h_
+#define _.this-module_h_
+
+#ifndef _.parent-module_h_
+#include ".parent-module.h"
+#endif
+
+//
+// Forward declaration
+//
+class J.this-module;
+
+
+class .this-module : public .parent-module
+{
+  .this-module ();
+  ~.this-module ();
+  //
+  // Constructor/destructor
+  //
+  //********
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a method which takes no arguments.
+#c
+#c Argument1: method name
+#c Argument2: method description
+#c
+#startm AD_METHOD0 2
+  //@mfunc AAFRESULT | %01 | %02 |
+  // %02
+  virtual AAFRESULT STDMETHODCALLTYPE
+    %01 ();
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a method which takes one argument.
+#c
+#c Argument1: method name
+#c Argument2: argument modifiers (e.g. [in])
+#c Argument3: argument type
+#c Argument4: argument name
+#c Argument5: argument comment
+#c Argument6: method description
+#c
+#startm AD_METHOD1 06
+  //@mfunc AAFRESULT | %01 | %02 |
+  // %06
+  virtual AAFRESULT STDMETHODCALLTYPE
+    %01 (%03 %04 /*@parm %02 %05*/ );
+#endm
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a method which takes two arguments.
+#c
+#c Argument1: method name
+#c Argument2: argument modifiers (e.g. [in])
+#c Argument3: argument type
+#c Argument4: argument name
+#c Argument5: argument comment
+#c Argument6: argument modifiers (e.g. [in])
+#c Argument7: argument type
+#c Argument8: argument name
+#c Argument9: argument comment
+#c Argument10: method description
+#c
+#startm AD_METHOD2 10
+  //@mfunc AAFRESULT | %01 | %02 |
+  // %10
+  virtual AAFRESULT STDMETHODCALLTYPE
+    %01 (%03 %04 /*@parm %02 %05*/, %07 %08 /*@parm %06 %09*/ );
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a method which takes three arguments.
+#c
+#c Argument1: method name
+#c Argument2: argument modifiers (e.g. [in])
+#c Argument3: argument type
+#c Argument4: argument name
+#c Argument5: argument comment
+#c Argument6: argument modifiers (e.g. [in])
+#c Argument7: argument type
+#c Argument8: argument name
+#c Argument9: argument comment
+#c Argument10: argument modifiers (e.g. [in])
+#c Argument11: argument type
+#c Argument12: argument name
+#c Argument13: argument comment
+#c Argument14: method description
+#c
+#startm AD_METHOD3 14
+  //@mfunc AAFRESULT | %01 | %02 |
+  // %14
+  virtual AAFRESULT STDMETHODCALLTYPE
+    %01 (%03 %04 /*@parm %02 %05*/, %07 %08 /*@parm %06 %09*/, %11 %12 /*@parm %10 %13*/ );
+#endm
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a method which takes four arguments.
+#c
+#c Argument1: method name
+#c Argument2: argument modifiers (e.g. [in])
+#c Argument3: argument type
+#c Argument4: argument name
+#c Argument5: argument comment
+#c Argument6: argument modifiers (e.g. [in])
+#c Argument7: argument type
+#c Argument8: argument name
+#c Argument9: argument comment
+#c Argument10: argument modifiers (e.g. [in])
+#c Argument11: argument type
+#c Argument12: argument name
+#c Argument13: argument comment
+#c Argument14: argument modifiers (e.g. [in])
+#c Argument15: argument type
+#c Argument16: argument name
+#c Argument17: argument comment
+#c Argument18: method description
+#c
+#startm AD_METHOD4 18
+  //@mfunc AAFRESULT | %01 | %02 |
+  // %14
+  virtual AAFRESULT STDMETHODCALLTYPE
+    %01 (%03 %04 /*@parm %02 %05*/, %07 %08 /*@parm %06 %09*/, %011 %012 /*@parm %10 %13*/, %015 %016 /*@parm %14 %17*/ );
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a method which takes five arguments.
+#c
+#c Argument1: method name
+#c Argument2: argument modifiers (e.g. [in])
+#c Argument3: argument type
+#c Argument4: argument name
+#c Argument5: argument comment
+#c Argument6: argument modifiers (e.g. [in])
+#c Argument7: argument type
+#c Argument8: argument name
+#c Argument9: argument comment
+#c Argument10: argument modifiers (e.g. [in])
+#c Argument11: argument type
+#c Argument12: argument name
+#c Argument13: argument comment
+#c Argument14: argument modifiers (e.g. [in])
+#c Argument15: argument type
+#c Argument16: argument name
+#c Argument17: argument comment
+#c Argument18: argument modifiers (e.g. [in])
+#c Argument19: argument type
+#c Argument20: argument name
+#c Argument21: argument comment
+#c Argument22: method description
+#c
+#startm AD_METHOD5 22
+  //@mfunc AAFRESULT | %01 | %02 |
+  // %22
+  virtual AAFRESULT STDMETHODCALLTYPE
+    %01 (%03 %04 /*@parm %02 %05*/, %07 %08 /*@parm %06 %09*/, %11 %12 /*@parm %10 %13*/, %15 %16 /*@parm %14 %17*/ , %19 %20 /*@parm %18 %21*/ );
+#endm
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a method which takes six arguments.
+#c
+#c Argument1: method name
+#c Argument2: argument modifiers (e.g. [in])
+#c Argument3: argument type
+#c Argument4: argument name
+#c Argument5: argument comment
+#c Argument6: argument modifiers (e.g. [in])
+#c Argument7: argument type
+#c Argument8: argument name
+#c Argument9: argument comment
+#c Argument10: argument modifiers (e.g. [in])
+#c Argument11: argument type
+#c Argument12: argument name
+#c Argument13: argument comment
+#c Argument14: argument modifiers (e.g. [in])
+#c Argument15: argument type
+#c Argument16: argument name
+#c Argument17: argument comment
+#c Argument18: argument modifiers (e.g. [in])
+#c Argument19: argument type
+#c Argument20: argument name
+#c Argument21: argument comment
+#c Argument22: argument modifiers (e.g. [in])
+#c Argument23: argument type
+#c Argument24: argument name
+#c Argument25: argument comment
+#c Argument26: method description
+#c
+#startm AD_METHOD6 26
+  //@mfunc AAFRESULT | %01 | %02 |
+  // %26
+  virtual AAFRESULT STDMETHODCALLTYPE
+    %01 (%03 %04 /*@parm %02 %05*/, %07 %08 /*@parm %06 %09*/, %11 %12 /*@parm %10 %13*/, %15 %16 /*@parm %14 %17*/ , %19 %20 /*@parm %18 %21*/, %23 %24 /*@parm %22 %25*/ );
+#endm
+
+#ccccccccccccccccccccccccccc
+#c
+#c Ends a class definition
+#c
+#c Arguments: none
+#c
+#startm AD_CLASS_END 0
+private:
+  J.this-module * _rep;
+};
+
+#endif // ! _.this-module_h_
+#endm

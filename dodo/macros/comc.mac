@@ -1,0 +1,257 @@
+#c /******************************************\
+#c *                                          *
+#c * Advanced Authoring Format                *
+#c *                                          *
+#c * Copyright (c) 1998 Avid Technology, Inc. *
+#c * Copyright (c) 1998 Microsoft Corporation *
+#c *                                          *
+#c \******************************************/
+
+
+
+#ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+#c
+#c AutoDodo macro file for use in generating COM API implementation
+#c C++ files.
+#c
+#ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Starts a class definition
+#c
+#c Arguments: none
+#c
+#startm AD_CLASS_BEGIN 00
+#ifndef _C.this-module_h_
+#include "C.this-module.h"
+#endif
+
+#ifndef _J.this-module_h_
+#include "J.this-module.h"
+#endif
+
+#include <assert.h>
+
+
+C.this-module::C.this-module ()
+{
+  _rep = new J.this-module;
+  assert (_rep);
+}
+
+
+C.this-module::~C.this-module ()
+{
+  delete _rep;
+}
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a method which takes no arguments.
+#c
+#c Argument1: method name
+#c Argument2: method description
+#c
+#startm AD_METHOD0 02
+virtual AAFRESULT STDMETHODCALLTYPE
+    C.this-module::%01 ()
+{
+  assert (_rep);
+  return _rep->%01();
+}
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a method which takes one argument.
+#c
+#c Argument1: method name
+#c Argument2: argument modifiers (e.g. [in])
+#c Argument3: argument type
+#c Argument4: argument name
+#c Argument5: argument comment
+#c Argument6: method description
+#c
+#startm AD_METHOD1 06
+virtual AAFRESULT STDMETHODCALLTYPE
+    C.this-module::%01 (%03 %04)
+{
+  assert (_rep);
+  return _rep->%01 (%04);
+}
+#endm
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a method which takes two arguments.
+#c
+#c Argument1: method name
+#c Argument2: argument modifiers (e.g. [in])
+#c Argument3: argument type
+#c Argument4: argument name
+#c Argument5: argument comment
+#c Argument6: argument modifiers (e.g. [in])
+#c Argument7: argument type
+#c Argument8: argument name
+#c Argument9: argument comment
+#c Argument10: method description
+#c
+#startm AD_METHOD2 10
+virtual AAFRESULT STDMETHODCALLTYPE
+    C.this-module::%01 (%03 %04,%07 %08)
+{
+  assert (_rep);
+  return _rep->%01 (%04,%08);
+}
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a method which takes three arguments.
+#c
+#c Argument1: method name
+#c Argument2: argument modifiers (e.g. [in])
+#c Argument3: argument type
+#c Argument4: argument name
+#c Argument5: argument comment
+#c Argument6: argument modifiers (e.g. [in])
+#c Argument7: argument type
+#c Argument8: argument name
+#c Argument9: argument comment
+#c Argument10: argument modifiers (e.g. [in])
+#c Argument11: argument type
+#c Argument12: argument name
+#c Argument13: argument comment
+#c Argument14: method description
+#c
+#startm AD_METHOD3 14
+virtual AAFRESULT STDMETHODCALLTYPE
+    C.this-module::%01 (%03 %04,%07 %08,%10 %11)
+{
+  assert (_rep);
+  return _rep->%01 (%04,%08,%11);
+}
+#endm
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a method which takes four arguments.
+#c
+#c Argument1: method name
+#c Argument2: argument modifiers (e.g. [in])
+#c Argument3: argument type
+#c Argument4: argument name
+#c Argument5: argument comment
+#c Argument6: argument modifiers (e.g. [in])
+#c Argument7: argument type
+#c Argument8: argument name
+#c Argument9: argument comment
+#c Argument10: argument modifiers (e.g. [in])
+#c Argument11: argument type
+#c Argument12: argument name
+#c Argument13: argument comment
+#c Argument14: argument modifiers (e.g. [in])
+#c Argument15: argument type
+#c Argument16: argument name
+#c Argument17: argument comment
+#c Argument18: method description
+#c
+#startm AD_METHOD4 18
+virtual AAFRESULT STDMETHODCALLTYPE
+    C.this-module::%01 (%03 %04,%07 %08,%10 %11,%15 %16)
+{
+  assert (_rep);
+  return _rep->%01 (%04,%08,%11,%16);
+}
+#endm
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a method which takes five arguments.
+#c
+#c Argument1: method name
+#c Argument2: argument modifiers (e.g. [in])
+#c Argument3: argument type
+#c Argument4: argument name
+#c Argument5: argument comment
+#c Argument6: argument modifiers (e.g. [in])
+#c Argument7: argument type
+#c Argument8: argument name
+#c Argument9: argument comment
+#c Argument10: argument modifiers (e.g. [in])
+#c Argument11: argument type
+#c Argument12: argument name
+#c Argument13: argument comment
+#c Argument14: argument modifiers (e.g. [in])
+#c Argument15: argument type
+#c Argument16: argument name
+#c Argument17: argument comment
+#c Argument18: argument modifiers (e.g. [in])
+#c Argument19: argument type
+#c Argument20: argument name
+#c Argument21: argument comment
+#c Argument22: method description
+#c
+#startm AD_METHOD5 22
+virtual AAFRESULT STDMETHODCALLTYPE
+    C.this-module::%01 (%03 %04,%07 %08,%10 %11,%15 %16,%19 %20)
+{
+  assert (_rep);
+  return _rep->%01 (%04,%08,%11,%16,%20);
+}
+#endm
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a method which takes six arguments.
+#c
+#c Argument1: method name
+#c Argument2: argument modifiers (e.g. [in])
+#c Argument3: argument type
+#c Argument4: argument name
+#c Argument5: argument comment
+#c Argument6: argument modifiers (e.g. [in])
+#c Argument7: argument type
+#c Argument8: argument name
+#c Argument9: argument comment
+#c Argument10: argument modifiers (e.g. [in])
+#c Argument11: argument type
+#c Argument12: argument name
+#c Argument13: argument comment
+#c Argument14: argument modifiers (e.g. [in])
+#c Argument15: argument type
+#c Argument16: argument name
+#c Argument17: argument comment
+#c Argument18: argument modifiers (e.g. [in])
+#c Argument19: argument type
+#c Argument20: argument name
+#c Argument21: argument comment
+#c Argument22: argument modifiers (e.g. [in])
+#c Argument23: argument type
+#c Argument24: argument name
+#c Argument25: argument comment
+#c Argument26: method description
+#c
+#startm AD_METHOD6 26
+virtual AAFRESULT STDMETHODCALLTYPE
+    C.this-module::%01 (%03 %04,%07 %08,%10 %11,%15 %16,%19 %20,%23 %24)
+{
+  assert (_rep);
+  return _rep->%01 (%04,%08,%11,%16,%20,%24);
+}
+#endm
+
+#ccccccccccccccccccccccccccc
+#c
+#c Ends a class definition
+#c
+#c Arguments: none
+#c
+#startm AD_CLASS_END 00
+#endm
