@@ -357,7 +357,6 @@ AAFRESULT ImplPropertyCollection::Initialize
 	  if (AAFRESULT_FAILED(ar)) throw ar;
 	  assert (pClassDef);
 
-	  size_t omContext = 0;
 	  OMProperty * pOmProp = NULL;
 	  aafUInt32 presentPropIdx = 0;
 
