@@ -59,7 +59,7 @@ component Documentation Pale-Blue
   meta/
 end
 
-component Examples Pale-Magenta
+component Tests-and-Examples Pale-Magenta
   test/
   examples/
   examples2/
