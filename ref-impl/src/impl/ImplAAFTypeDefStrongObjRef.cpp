@@ -47,14 +47,13 @@ ImplAAFTypeDefStrongObjRef::~ImplAAFTypeDefStrongObjRef ()
 
 // Override from AAFTypeDefObjectRef
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFTypeDefStrongObjRef::Initialize (
-      aafUID_t *  pID,
-      ImplAAFClassDef * pObjType,
+    ImplAAFTypeDefStrongObjRef::pvtInitialize (
+      const aafUID_t *  pID,
+      const aafUID_t * pRefdObjID,
       wchar_t *  pTypeName)
 {
   if (! pID)       return AAFRESULT_NULL_PARAM;
-  // BobT: temporarily allow null class defs until they're hooked up
-  // if (! pObjType)  return AAFRESULT_NULL_PARAM;
+  if (! pRefdObjID)  return AAFRESULT_NULL_PARAM;
   if (! pTypeName) return AAFRESULT_NULL_PARAM;
 
   AAFRESULT hr;
@@ -62,13 +61,7 @@ AAFRESULT STDMETHODCALLTYPE
   hr = SetName (pTypeName);
   if (! AAFRESULT_SUCCEEDED (hr)) return hr;
 
-  if (! pObjType) return AAFRESULT_NULL_PARAM;
-
-  aafUID_t id;
-  assert (pObjType);
-  hr = pObjType->GetAUID(&id);
-  if (! AAFRESULT_SUCCEEDED (hr)) return hr;
-  _referencedType = id;
+  _referencedType = *pRefdObjID;
 
   hr = SetAUID (pID);
   if (! AAFRESULT_SUCCEEDED (hr)) return hr;

@@ -30,7 +30,7 @@ ImplAAFTypeDefStream::~ImplAAFTypeDefStream ()
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDefStream::Initialize (
-      aafUID_t *  /*pID*/,
+      const aafUID_t *  /*pID*/,
       ImplAAFTypeDef * /*pTypeDef*/,
       wchar_t *  /*pTypeName*/)
 {
