@@ -88,8 +88,8 @@ extern "C" const aafClassID_t CLSID_AAFObject;
 
 
 ImplAAFClassDef::ImplAAFClassDef ()
-  : _ParentClass  ( PID_ClassDefinition_ParentClass,  "ParentClass", "/Dictionary/ClassDefinitions", PID_DefinitionObject_Identification),
-	_Properties   ( PID_ClassDefinition_Properties,   "Properties", PID_DefinitionObject_Identification),
+  : _ParentClass  ( PID_ClassDefinition_ParentClass,  "ParentClass", "/Dictionary/ClassDefinitions", PID_MetaDefinition_Identification),
+	_Properties   ( PID_ClassDefinition_Properties,   "Properties", PID_MetaDefinition_Identification),
 	_propTypesLoaded (false),
 	_BootstrapParent(0)
 {

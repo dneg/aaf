@@ -55,7 +55,10 @@
 
 
 ImplAAFTypeDefWeakObjRef::ImplAAFTypeDefWeakObjRef ()
-  : _referencedType (PID_TypeDefinitionWeakObjectReference_ReferencedType, "ReferencedType", "/Dictionary/ClassDefinitions", PID_DefinitionObject_Identification)
+  : _referencedType ( PID_TypeDefinitionWeakObjectReference_ReferencedType, 
+                      "ReferencedType", 
+                      "/Dictionary/ClassDefinitions", 
+                      PID_MetaDefinition_Identification)
 {
   _persistentProperties.put(_referencedType.address());
 }
