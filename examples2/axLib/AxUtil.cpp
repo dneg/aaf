@@ -177,6 +177,58 @@ AxString AxStringUtil::mbtowc( const char* cstr )
 	return AxString( os.str() );
 }
 
+
+//=---------------------------------------------------------------------=
+
+std::string AxStringUtil::wctomb( const AxString& s )
+{
+	std::stringstream os;
+	char c;
+	const wchar_t* ws = s.c_str();
+	
+	int i;
+	for (i = 0; i < s.length(); i++ ){ 
+		char c;
+		if ( -1 != ::wctomb( &c, ws[i] ) ) {
+			os << c;
+		}
+	}
+
+	return os.str();
+}
+
+//=---------------------------------------------------------------------=
+
+long AxStringUtil::strtol( const char* s )
+{
+	long val;
+	char *addr_of_last_processed_char;
+
+	val = ::strtol( s, &addr_of_last_processed_char, 0 );
+
+	// if no characters were converted
+	if ( s == addr_of_last_processed_char ) {
+		throw AxEx( L"strtol() failed, unable to convert: " + mbtowc( s ) );
+	}
+
+	if ( LONG_MAX == val ||
+		 LONG_MIN == val &&
+		 errno == ERANGE ) {
+		throw AxEx( L"strtol() failed, value out of range: " + mbtowc( s ) );
+	}
+
+
+	return val;
+}
+
+//=---------------------------------------------------------------------=
+
+long AxStringUtil::strtol( const AxString& s )
+{
+	std::string s8 = wctomb( s );
+	return strtol( s8.c_str() );
+}
+
 //=---------------------------------------------------------------------=
 
 AxString AxStringUtil::uid2Str(const aafUID_t & uid)
@@ -191,3 +243,4 @@ AxString AxStringUtil::uid2Str(const aafUID_t & uid)
 
 	return uidtextstr.str();
 }
+
