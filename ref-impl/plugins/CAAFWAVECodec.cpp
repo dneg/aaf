@@ -20,6 +20,7 @@
 #include "aafUtils.h"
 #include "aafCvt.h"
 #include "aafDefUIDs.h"
+#include "AAFStoredObjectIDs.h"
 
 #define STD_HDRSIZE_DATA		42
 #define STD_HDRSIZE_NODATA		36
@@ -30,10 +31,17 @@ const aafProductVersion_t AAFPluginImplementationVersion = {1, 0, 0, 1, kVersion
 //{8D7B04B1-95E1-11d2-8089-006008143E6F}
 const CLSID CLSID_AAFWaveCodec = { 0x8D7B04B1, 0x95E1, 0x11d2, { 0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
 
-const IID IID_IAAFSourceMob = { 0xB1A2137C, 0x1A7D, 0x11D2, { 0xBF, 0x78, 0x00, 0x10, 0x4B, 0xC9, 0x15, 0x6D } };
-const IID IID_IAAFWAVEDescriptor = { 0x4c2e1692, 0x8ae6, 0x11d2, { 0x81, 0x3c, 0x00, 0x60, 0x97, 0x31, 0x01, 0x72 } };
-const IID IID_IAAFFileDescriptor = { 0xe58a8561, 0x2a3e, 0x11D2, { 0xbf, 0xa4, 0x00, 0x60, 0x97, 0x11, 0x62, 0x12 } };
-const IID IID_IAAFEssenceAccess = {0xaed97eb0,0x2bc8,0x11D2,{0xbf,0xaa,0x00,0x60,0x97,0x11,0x62,0x12}};
+//const IID IID_IAAFSourceMob = { 0xB1A2137C, 0x1A7D, 0x11D2, { 0xBF, 0x78, 0x00, 0x10, 0x4B, 0xC9, 0x15, 0x6D } };
+//const IID IID_IAAFWAVEDescriptor = { 0x4c2e1692, 0x8ae6, 0x11d2, { 0x81, 0x3c, 0x00, 0x60, 0x97, 0x31, 0x01, 0x72 } };
+//const IID IID_IAAFFileDescriptor = { 0xe58a8561, 0x2a3e, 0x11D2, { 0xbf, 0xa4, 0x00, 0x60, 0x97, 0x11, 0x62, 0x12 } };
+//const IID IID_IAAFEssenceAccess = {0xaed97eb0,0x2bc8,0x11D2,{0xbf,0xaa,0x00,0x60,0x97,0x11,0x62,0x12}};
+//const IID IID_IAAFCodecDef = {0xAD1BB856,0xDBB2,0x11d2,{0x80,0x9C,0x00,0x60,0x08,0x14,0x3E,0x6F}};
+//const IID IID_IAAFContainerDef = {0xAD1BB858,0xDBB2,0x11d2,{0x80,0x9C,0x00,0x60,0x08,0x14,0x3E,0x6F}};
+//const IID IID_IAAFDefObject = {0xdfbd6527,0x1d81,0x11d2,{0xbf,0x96,0x00,0x60,0x97,0x11,0x62,0x12}};
+//const IID IID_IAAFPluggableDef = {0xAD1BB85A,0xDBB2,0x11d2,{0x80,0x9C,0x00,0x60,0x08,0x14,0x3E,0x6F}};
+//const IID IID_IAAFPluginDescriptor = {0xAD1BB854,0xDBB2,0x11d2,{0x80,0x9C,0x00,0x60,0x08,0x14,0x3E,0x6F}};
+
+static void SplitBuffers(void *original, aafInt32 srcSamples, aafInt16 sampleSize, aafInt16 numDest, interleaveBuf_t *destPtr);
 
 HRESULT STDMETHODCALLTYPE
     CAAFWaveCodec::Start (void)
@@ -47,7 +55,119 @@ HRESULT STDMETHODCALLTYPE
 	return AAFRESULT_SUCCESS;
 }
 
-static void SplitBuffers(void *original, aafInt32 srcSamples, aafInt16 sampleSize, aafInt16 numDest, interleaveBuf_t *destPtr);
+HRESULT STDMETHODCALLTYPE
+    CAAFWaveCodec::GetPluginID (aafUID_t *uid)
+{
+	*uid = CodecWave;		// UID of the WAVE codec definition
+	return AAFRESULT_SUCCESS;
+}
+
+HRESULT STDMETHODCALLTYPE
+    CAAFWaveCodec::GetEssenceDescriptorID (aafUID_t *uid)
+{
+	*uid = AUID_AAFWAVEDescriptor;		// stored class UID of the WAVE Decriptor
+	return AAFRESULT_SUCCESS;
+}
+
+HRESULT STDMETHODCALLTYPE
+    CAAFWaveCodec::GetPluggableDefinition (IAAFDictionary *dict, IAAFPluggableDef **def)
+{
+	IAAFCodecDef	*codec;
+	IAAFDefObject	*obj;
+	aafUID_t		uid;
+	
+	XPROTECT()
+	{
+		//!!!Later, add in dataDefs supported & filedescriptor class
+		CHECK(dict->CreateInstance(&AUID_AAFCodecDef,
+							IID_IAAFCodecDef, 
+							(IUnknown **)&codec));
+		uid = CodecWave;
+		CHECK(codec->QueryInterface(IID_IAAFDefObject, (void **)&obj));
+		CHECK(obj->Init(&uid, L"WAVE Codec", L"Handles RIFF WAVE data."));
+		CHECK(codec->QueryInterface(IID_IAAFPluggableDef, (void **)def));
+	}
+	XEXCEPT
+	XEND
+
+	return AAFRESULT_SUCCESS;
+}
+
+static wchar_t *manufURL = L"www.avid.com";
+const aafUID_t MANUF_JEFFS_PLUGINS = { 0xA6487F21, 0xE78F, 0x11d2, { 0x80, 0x9E, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } };		/* operand.expPixelFormat */
+aafVersionType_t samplePluginVersion = { 0, 0 };
+aafVersionType_t sampleMinPlatformVersion = { 1, 2 };
+aafVersionType_t sampleMinEngineVersion = { 5, 6 };
+aafVersionType_t sampleMinAPIVersion = { 10, 11 };
+aafVersionType_t sampleMaxPlatformVersion = { 31, 32 };
+aafVersionType_t sampleMaxEngineVersion = { 35, 36 };
+aafVersionType_t sampleMaxAPIVersion = { 40, 41 };
+
+#define	MobName			L"MasterMOBTest"
+#define	NumMobSlots		3
+
+static wchar_t *manufName = L"Jeff's Plugin-O-Rama";
+static wchar_t *manufRev = L"Rev0.0.0a0";
+
+HRESULT STDMETHODCALLTYPE
+    CAAFWaveCodec::GetDescriptor (IAAFDictionary *dict, IAAFPluginDescriptor **descPtr)
+{
+	IAAFPluginDescriptor	*desc;
+	IAAFNetworkLocator		*pNetLoc;
+	IAAFLocator				*pLoc;
+	aafUID_t				category = AUID_AAFPluggableDefinition, manufacturer = MANUF_JEFFS_PLUGINS;
+	
+	XPROTECT()
+	{
+		CHECK(dict->CreateInstance(&AUID_AAFPluginDescriptor,
+			IID_IAAFPluginDescriptor, 
+			(IUnknown **)&desc));
+		*descPtr = desc;
+		CHECK(dict->CreateInstance(&AUID_AAFNetworkLocator,
+			IID_IAAFNetworkLocator, 
+			(IUnknown **)&pNetLoc));
+		CHECK(pNetLoc->QueryInterface (IID_IAAFLocator,
+			(void **)&pLoc));
+		CHECK(pLoc->SetPath (manufURL));
+		
+		CHECK(desc->SetCategoryClass(&category));
+		CHECK(desc->SetPluginVersionString(manufRev));
+		CHECK(desc->SetManufacturerInfo(pNetLoc));
+		CHECK(desc->SetManufacturerID(&manufacturer));
+		CHECK(desc->SetPluginManufacturerName(manufName));
+		CHECK(desc->SetIsSoftwareOnly(AAFTrue));
+		CHECK(desc->SetIsAccelerated(AAFFalse));
+		CHECK(desc->SetSupportsAuthentication(AAFFalse));
+		
+		//!!!	aafProductVersion_t samplePluginVersion = { 0, 0, 0, 0, kVersionReleased };
+		/**/
+		CHECK(desc->SetHardwarePlatform(kAAFPlatformIndependant));
+		CHECK(desc->SetPlatformMinimumVersion(&sampleMinPlatformVersion));
+		CHECK(desc->SetPlatformMaximumVersion(&sampleMaxPlatformVersion));
+		/**/
+		CHECK(desc->SetEngine(kAAFNoEngine));
+		CHECK(desc->SetEngineMinimumVersion(&sampleMinEngineVersion));
+		CHECK(desc->SetEngineMaximumVersion(&sampleMaxEngineVersion));
+		/**/
+		CHECK(desc->SetPluginAPI(kAAFEssencePluginAPI));
+		CHECK(desc->SetPluginAPIMinimumVersion(&sampleMinAPIVersion));
+		CHECK(desc->SetPluginAPIMaximumVersion(&sampleMaxAPIVersion));
+		
+		/**/
+		CHECK(dict->CreateInstance(&AUID_AAFNetworkLocator,
+			IID_IAAFNetworkLocator, 
+			(IUnknown **)&pNetLoc));
+		CHECK(pNetLoc->QueryInterface (IID_IAAFLocator,
+			(void **)&pLoc));
+		CHECK(pLoc->SetPath (manufURL));
+		CHECK(desc->AppendLocator(pLoc));
+	}
+	XEXCEPT
+	XEND
+
+	return AAFRESULT_SUCCESS;
+}
+
 
 CAAFWaveCodec::CAAFWaveCodec (IUnknown * pControllingUnknown, aafBool doInit)
   : CAAFUnknown (pControllingUnknown)
@@ -1452,6 +1572,12 @@ HRESULT CAAFWaveCodec::InternalQueryInterface
     else if (riid == IID_IAAFEssenceSampleStream) 
     { 
         *ppvObj = (IAAFEssenceSampleStream *)this; 
+        ((IUnknown *)*ppvObj)->AddRef();
+        return S_OK;
+    }
+    else if (riid == IID_IAAFPlugin) 
+    { 
+        *ppvObj = (IAAFPlugin *)this; 
         ((IUnknown *)*ppvObj)->AddRef();
         return S_OK;
     }
