@@ -140,8 +140,8 @@ Returns source information for a track in a Master Mob or Source Mob.
   // omfiMobGetThisSource\, and omfiMobCloseSearch functions for those
   // purposes.)
 
-AD_OVERRIDE(.method-Delete)
+// ADx_OVERRIDE(.method-Delete)
 
-AD_OVERRIDE(.method-IsMobKind)
+// ADx_OVERRIDE(.method-IsMobKind)
 
 AD_CLASS_END
