@@ -62,8 +62,9 @@ ImplAAFKLVData::ImplAAFKLVData ():
 
 ImplAAFKLVData::~ImplAAFKLVData ()
 {
-  if (_cachedRenameTypeDef)
-    _cachedRenameTypeDef->ReleaseReference ();
+//  if (_cachedRenameTypeDef)
+//    _cachedRenameTypeDef->ReleaseReference ();
+  _cachedRenameTypeDef = 0;
 }
 
 
@@ -86,8 +87,13 @@ AAFRESULT STDMETHODCALLTYPE
 	// Save the type so that SetValue will know the type of the value data.
 		CHECK(GetDictionary(&pDict));
 		CHECK(pDict->LookupOpaqueTypeDef(keyUID, &pDef));
-		_cachedRenameTypeDef = dynamic_cast<ImplAAFTypeDefRename*>(pDef);
+    pDef->ReleaseReference(); // This object is owned by the dictionary!
+
+    _cachedRenameTypeDef = dynamic_cast<ImplAAFTypeDefRename*>(pDef);
 		assert(_cachedRenameTypeDef);
+    if (NULL == _cachedRenameTypeDef)
+      RAISE(AAFRESULT_INVALID_OBJ);
+
 		CHECK(SetValue (valueSize, pValue));
 		_initialized = true;
 		if(pDict)
@@ -149,22 +155,22 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFKLVData::GetValue (aafUInt32 valueSize, aafDataBuffer_t pValue, aafUInt32* bytesRead)
 {
-	ImplAAFDictionary	*pDict;
-	ImplAAFTypeDef		*pType;
-	AAFRESULT			hr;
-	aafUID_t			theKey;
+//	ImplAAFDictionary	*pDict;
+//	ImplAAFTypeDef		*pType;
+//	AAFRESULT			hr;
+//	aafUID_t			theKey;
 
 	if (pValue == NULL || bytesRead == NULL)
 		return AAFRESULT_NULL_PARAM;
 
-	GetKey(&theKey);
-	GetDictionary(&pDict);
-	hr = pDict->LookupOpaqueTypeDef(theKey, &pType);
-	if(pDict)
-	  pDict->ReleaseReference();
-	pDict = 0;
-	if(hr != AAFRESULT_SUCCESS)
-		return hr;
+//	GetKey(&theKey);
+//	GetDictionary(&pDict);
+//	hr = pDict->LookupOpaqueTypeDef(theKey, &pType);
+//	if(pDict)
+//	  pDict->ReleaseReference();
+//	pDict = 0;
+//	if(hr != AAFRESULT_SUCCESS)
+//		return hr;
 
 //	if (_value.size() > valueSize)
 //	  return AAFRESULT_SMALLBUF;
@@ -197,6 +203,7 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFKLVData::SetValue (aafUInt32 valueSize, aafDataBuffer_t pValue)
 {
+  AAFRESULT result = AAFRESULT_SUCCESS;
 	ImplAAFTypeDef		*pDef = NULL;
 	ImplAAFDictionary	*pDict = NULL;
 	aafUID_t			keyUID;
@@ -208,12 +215,24 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 		// Lookup the type definition from this KLV data. If it fails
 		// then the control point is invalid!
-		(void)GetDictionary(&pDict);
-		(void)GetKey(&keyUID);
-		if(pDict->LookupTypeDef(keyUID, &pDef) == AAFRESULT_SUCCESS)
-			_cachedRenameTypeDef = dynamic_cast<ImplAAFTypeDefRename*>(pDef);
+		result = GetKey(&keyUID);
+    if (AAFRESULT_FAILED(result))
+      return result;
+
+    result = GetDictionary(&pDict);
+    if (AAFRESULT_FAILED(result))
+      return result;
+
+    result = pDict->LookupTypeDef(keyUID, &pDef);
 		pDict->ReleaseReference();
 		pDict = 0;
+    if (AAFRESULT_FAILED(result))
+      return result;
+    pDef->ReleaseReference(); // This object is owned by the dictionary!
+
+    _cachedRenameTypeDef = dynamic_cast<ImplAAFTypeDefRename*>(pDef);
+    if (NULL == _cachedRenameTypeDef)
+      return AAFRESULT_INVALID_OBJ;
 	}
 	
 	// Validate the property and get the property definition and type definition, 

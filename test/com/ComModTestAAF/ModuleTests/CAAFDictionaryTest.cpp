@@ -208,9 +208,9 @@ static void RegisterNewClass (IAAFDictionary * pDictionary)
 
   // Create new object for our new filler class, and initialize it.
   IAAFClassDefSP pNewFillClass;
-  checkResult (defs.cdClassDef()->
-			   CreateInstance(IID_IAAFClassDef,
-							  (IUnknown **)&pNewFillClass));
+  checkResult (pDictionary->CreateMetaInstance(AUID_AAFClassDef,
+                                               IID_IAAFClassDef,
+                                               (IUnknown **)&pNewFillClass));
   checkResult (pNewFillClass->Initialize (kClassAUID_NewFill,
 										  pFillClass,
 										  L"New Filler",
