@@ -28,6 +28,7 @@ DODO_TARGETS = \
 	AAFAttribute.all \
 	AAFAttributeArray.all \
 	AAFClassDefinition.all \
+	AAFClassDictionary.all \
 	AAFComponent.all \
 	AAFCompositionMob.all \
 	AAFConstValue.all \
@@ -38,10 +39,12 @@ DODO_TARGETS = \
 	AAFEffectDefinition.all \
 	AAFEffectInvocation.all \
 	AAFFiller.all \
+	AAFHeader.all \
 	AAFInt64.all \
 	AAFIntegerAttribute.all \
 	AAFLocator.all \
 	AAFMasterMob.all \
+	AAFMedia.all \
 	AAFMediaDescriptor.all \
 	AAFMediaFileDescriptor.all \
 	AAFMediaTapeDescriptor.all \
@@ -75,23 +78,26 @@ DODO_TARGETS = \
 	AAFUnixLocator.all \
 	AAFVaryingValue.all \
 	AAFWindowsLocator.all \
-	AAFMedia.all \
-	AAFHeader.all \
 	AAFIdentification.all \
+	EnumAAFAttributes.all \
+	EnumAAFClassDefinitions.all \
+	EnumAAFComponents.all \
+	EnumAAFControlCodeDefinitions.all \
+	EnumAAFControlPoints.all \
+	EnumAAFDataDefinitions.all \
+	EnumAAFDefinitions.all \
+	EnumAAFEffectDefinitions.all \
 	EnumAAFIdentifications.all \
+	EnumAAFLocators.all \
+	EnumAAFMedia.all \
 	EnumAAFMobs.all \
 	EnumAAFMobSlots.all \
-	EnumAAFDefinitions.all \
-	EnumAAFDataDefinitions.all \
-	EnumAAFEffectDefinitions.all \
-	EnumAAFTypeDefinitions.all \
-	EnumAAFComponents.all \
-	EnumAAFClassDefinitions.all \
+	EnumAAFParameterSlots.all \
 	EnumAAFPropertyDefinitions.all \
-	EnumAAFMedia.all \
-	EnumAAFComponents.all \
 	EnumAAFReferenceValues.all \
-	AAFClassDictionary.all
+	EnumAAFSegments.all \
+	EnumAAFTypeDefinitions.all
+
 
 # Jeff hasn't finished with these yet
 #	AAFMediaTapeDescriptor.all \
@@ -203,6 +209,19 @@ AAFClassDefinition.comc : AAFClassDefinition.exp macros/comc.mac
 AAFClassDefinition.comh : AAFClassDefinition.exp macros/comh.mac
 AAFClassDefinition.implc : AAFClassDefinition.exp macros/implc.mac
 AAFClassDefinition.implh : AAFClassDefinition.exp macros/implh.mac
+
+AAFClassDictionary.all : AAFClassDictionary.cpp AAFClassDictionary.h
+AAFClassDictionary.all : AAFClassDictionary.comc AAFClassDictionary.comh
+AAFClassDictionary.all : AAFClassDictionary.exp AAFClassDictionary.idl
+AAFClassDictionary.all : AAFClassDictionary.implc AAFClassDictionary.implh
+AAFClassDictionary.exp : AAFUnitTest.exp macros/exp.mac
+AAFClassDictionary.h : AAFClassDictionary.exp macros/h.mac
+AAFClassDictionary.cpp : AAFClassDictionary.exp macros/cpp.mac
+AAFClassDictionary.idl : AAFClassDictionary.exp macros/idl.mac
+AAFClassDictionary.comc : AAFClassDictionary.exp macros/comc.mac
+AAFClassDictionary.comh : AAFClassDictionary.exp macros/comh.mac
+AAFClassDictionary.implc : AAFClassDictionary.exp macros/implc.mac
+AAFClassDictionary.implh : AAFClassDictionary.exp macros/implh.mac
 
 AAFComponent.all : AAFComponent.cpp AAFComponent.h
 AAFComponent.all : AAFComponent.comc AAFComponent.comh
@@ -863,6 +882,109 @@ AAFIdentification.comh : AAFIdentification.exp macros/comh.mac
 AAFIdentification.implc : AAFIdentification.exp macros/implc.mac
 AAFIdentification.implh : AAFIdentification.exp macros/implh.mac
 
+EnumAAFAttributes.all : EnumAAFAttributes.cpp EnumAAFAttributes.h
+EnumAAFAttributes.all : EnumAAFAttributes.comc EnumAAFAttributes.comh
+EnumAAFAttributes.all : EnumAAFAttributes.exp EnumAAFAttributes.idl
+EnumAAFAttributes.all : EnumAAFAttributes.implc EnumAAFAttributes.implh
+EnumAAFAttributes.exp : AAFUnitTest.exp macros/exp.mac
+EnumAAFAttributes.h : EnumAAFAttributes.exp macros/h.mac
+EnumAAFAttributes.cpp : EnumAAFAttributes.exp macros/cpp.mac
+EnumAAFAttributes.idl : EnumAAFAttributes.exp macros/idl.mac
+EnumAAFAttributes.comc : EnumAAFAttributes.exp macros/comc.mac
+EnumAAFAttributes.comh : EnumAAFAttributes.exp macros/comh.mac
+EnumAAFAttributes.implc : EnumAAFAttributes.exp macros/implc.mac
+EnumAAFAttributes.implh : EnumAAFAttributes.exp macros/implh.mac
+
+EnumAAFClassDefinitions.all : EnumAAFClassDefinitions.cpp EnumAAFClassDefinitions.h
+EnumAAFClassDefinitions.all : EnumAAFClassDefinitions.comc EnumAAFClassDefinitions.comh
+EnumAAFClassDefinitions.all : EnumAAFClassDefinitions.exp EnumAAFClassDefinitions.idl
+EnumAAFClassDefinitions.all : EnumAAFClassDefinitions.implc EnumAAFClassDefinitions.implh
+EnumAAFClassDefinitions.exp : AAFUnitTest.exp macros/exp.mac
+EnumAAFClassDefinitions.h : EnumAAFClassDefinitions.exp macros/h.mac
+EnumAAFClassDefinitions.cpp : EnumAAFClassDefinitions.exp macros/cpp.mac
+EnumAAFClassDefinitions.idl : EnumAAFClassDefinitions.exp macros/idl.mac
+EnumAAFClassDefinitions.comc : EnumAAFClassDefinitions.exp macros/comc.mac
+EnumAAFClassDefinitions.comh : EnumAAFClassDefinitions.exp macros/comh.mac
+EnumAAFClassDefinitions.implc : EnumAAFClassDefinitions.exp macros/implc.mac
+EnumAAFClassDefinitions.implh : EnumAAFClassDefinitions.exp macros/implh.mac
+EnumAAFComponents.all : EnumAAFComponents.cpp EnumAAFComponents.h
+EnumAAFComponents.all : EnumAAFComponents.comc EnumAAFComponents.comh
+EnumAAFComponents.all : EnumAAFComponents.exp EnumAAFComponents.idl
+EnumAAFComponents.all : EnumAAFComponents.implc EnumAAFComponents.implh
+EnumAAFComponents.exp : AAFUnitTest.exp macros/exp.mac
+EnumAAFComponents.h : EnumAAFComponents.exp macros/h.mac
+EnumAAFComponents.cpp : EnumAAFComponents.exp macros/cpp.mac
+EnumAAFComponents.idl : EnumAAFComponents.exp macros/idl.mac
+EnumAAFComponents.comc : EnumAAFComponents.exp macros/comc.mac
+EnumAAFComponents.comh : EnumAAFComponents.exp macros/comh.mac
+EnumAAFComponents.implc : EnumAAFComponents.exp macros/implc.mac
+EnumAAFComponents.implh : EnumAAFComponents.exp macros/implh.mac
+
+EnumAAFControlCodeDefinitions.all : EnumAAFControlCodeDefinitions.cpp EnumAAFControlCodeDefinitions.h
+EnumAAFControlCodeDefinitions.all : EnumAAFControlCodeDefinitions.comc EnumAAFControlCodeDefinitions.comh
+EnumAAFControlCodeDefinitions.all : EnumAAFControlCodeDefinitions.exp EnumAAFControlCodeDefinitions.idl
+EnumAAFControlCodeDefinitions.all : EnumAAFControlCodeDefinitions.implc EnumAAFControlCodeDefinitions.implh
+EnumAAFControlCodeDefinitions.exp : AAFUnitTest.exp macros/exp.mac
+EnumAAFControlCodeDefinitions.h : EnumAAFControlCodeDefinitions.exp macros/h.mac
+EnumAAFControlCodeDefinitions.cpp : EnumAAFControlCodeDefinitions.exp macros/cpp.mac
+EnumAAFControlCodeDefinitions.idl : EnumAAFControlCodeDefinitions.exp macros/idl.mac
+EnumAAFControlCodeDefinitions.comc : EnumAAFControlCodeDefinitions.exp macros/comc.mac
+EnumAAFControlCodeDefinitions.comh : EnumAAFControlCodeDefinitions.exp macros/comh.mac
+EnumAAFControlCodeDefinitions.implc : EnumAAFControlCodeDefinitions.exp macros/implc.mac
+EnumAAFControlCodeDefinitions.implh : EnumAAFControlCodeDefinitions.exp macros/implh.mac
+
+EnumAAFControlPoints.all : EnumAAFControlPoints.cpp EnumAAFControlPoints.h
+EnumAAFControlPoints.all : EnumAAFControlPoints.comc EnumAAFControlPoints.comh
+EnumAAFControlPoints.all : EnumAAFControlPoints.exp EnumAAFControlPoints.idl
+EnumAAFControlPoints.all : EnumAAFControlPoints.implc EnumAAFControlPoints.implh
+EnumAAFControlPoints.exp : AAFUnitTest.exp macros/exp.mac
+EnumAAFControlPoints.h : EnumAAFControlPoints.exp macros/h.mac
+EnumAAFControlPoints.cpp : EnumAAFControlPoints.exp macros/cpp.mac
+EnumAAFControlPoints.idl : EnumAAFControlPoints.exp macros/idl.mac
+EnumAAFControlPoints.comc : EnumAAFControlPoints.exp macros/comc.mac
+EnumAAFControlPoints.comh : EnumAAFControlPoints.exp macros/comh.mac
+EnumAAFControlPoints.implc : EnumAAFControlPoints.exp macros/implc.mac
+EnumAAFControlPoints.implh : EnumAAFControlPoints.exp macros/implh.mac
+
+EnumAAFDataDefinitions.all : EnumAAFDataDefinitions.cpp EnumAAFDataDefinitions.h
+EnumAAFDataDefinitions.all : EnumAAFDataDefinitions.comc EnumAAFDataDefinitions.comh
+EnumAAFDataDefinitions.all : EnumAAFDataDefinitions.exp EnumAAFDataDefinitions.idl
+EnumAAFDataDefinitions.all : EnumAAFDataDefinitions.implc EnumAAFDataDefinitions.implh
+EnumAAFDataDefinitions.exp : AAFUnitTest.exp macros/exp.mac
+EnumAAFDataDefinitions.h : EnumAAFDataDefinitions.exp macros/h.mac
+EnumAAFDataDefinitions.cpp : EnumAAFDataDefinitions.exp macros/cpp.mac
+EnumAAFDataDefinitions.idl : EnumAAFDataDefinitions.exp macros/idl.mac
+EnumAAFDataDefinitions.comc : EnumAAFDataDefinitions.exp macros/comc.mac
+EnumAAFDataDefinitions.comh : EnumAAFDataDefinitions.exp macros/comh.mac
+EnumAAFDataDefinitions.implc : EnumAAFDataDefinitions.exp macros/implc.mac
+EnumAAFDataDefinitions.implh : EnumAAFDataDefinitions.exp macros/implh.mac
+
+EnumAAFDefinitions.all : EnumAAFDefinitions.cpp EnumAAFDefinitions.h
+EnumAAFDefinitions.all : EnumAAFDefinitions.comc EnumAAFDefinitions.comh
+EnumAAFDefinitions.all : EnumAAFDefinitions.exp EnumAAFDefinitions.idl
+EnumAAFDefinitions.all : EnumAAFDefinitions.implc EnumAAFDefinitions.implh
+EnumAAFDefinitions.exp : AAFUnitTest.exp macros/exp.mac
+EnumAAFDefinitions.h : EnumAAFDefinitions.exp macros/h.mac
+EnumAAFDefinitions.cpp : EnumAAFDefinitions.exp macros/cpp.mac
+EnumAAFDefinitions.idl : EnumAAFDefinitions.exp macros/idl.mac
+EnumAAFDefinitions.comc : EnumAAFDefinitions.exp macros/comc.mac
+EnumAAFDefinitions.comh : EnumAAFDefinitions.exp macros/comh.mac
+EnumAAFDefinitions.implc : EnumAAFDefinitions.exp macros/implc.mac
+EnumAAFDefinitions.implh : EnumAAFDefinitions.exp macros/implh.mac
+
+EnumAAFEffectDefinitions.all : EnumAAFEffectDefinitions.cpp EnumAAFEffectDefinitions.h
+EnumAAFEffectDefinitions.all : EnumAAFEffectDefinitions.comc EnumAAFEffectDefinitions.comh
+EnumAAFEffectDefinitions.all : EnumAAFEffectDefinitions.exp EnumAAFEffectDefinitions.idl
+EnumAAFEffectDefinitions.all : EnumAAFEffectDefinitions.implc EnumAAFEffectDefinitions.implh
+EnumAAFEffectDefinitions.exp : AAFUnitTest.exp macros/exp.mac
+EnumAAFEffectDefinitions.h : EnumAAFEffectDefinitions.exp macros/h.mac
+EnumAAFEffectDefinitions.cpp : EnumAAFEffectDefinitions.exp macros/cpp.mac
+EnumAAFEffectDefinitions.idl : EnumAAFEffectDefinitions.exp macros/idl.mac
+EnumAAFEffectDefinitions.comc : EnumAAFEffectDefinitions.exp macros/comc.mac
+EnumAAFEffectDefinitions.comh : EnumAAFEffectDefinitions.exp macros/comh.mac
+EnumAAFEffectDefinitions.implc : EnumAAFEffectDefinitions.exp macros/implc.mac
+EnumAAFEffectDefinitions.implh : EnumAAFEffectDefinitions.exp macros/implh.mac
+
 EnumAAFIdentifications.all : EnumAAFIdentifications.cpp EnumAAFIdentifications.h
 EnumAAFIdentifications.all : EnumAAFIdentifications.comc EnumAAFIdentifications.comh
 EnumAAFIdentifications.all : EnumAAFIdentifications.exp EnumAAFIdentifications.idl
@@ -875,6 +997,32 @@ EnumAAFIdentifications.comc : EnumAAFIdentifications.exp macros/comc.mac
 EnumAAFIdentifications.comh : EnumAAFIdentifications.exp macros/comh.mac
 EnumAAFIdentifications.implc : EnumAAFIdentifications.exp macros/implc.mac
 EnumAAFIdentifications.implh : EnumAAFIdentifications.exp macros/implh.mac
+
+EnumAAFLocators.all : EnumAAFLocators.cpp EnumAAFLocators.h
+EnumAAFLocators.all : EnumAAFLocators.comc EnumAAFLocators.comh
+EnumAAFLocators.all : EnumAAFLocators.exp EnumAAFLocators.idl
+EnumAAFLocators.all : EnumAAFLocators.implc EnumAAFLocators.implh
+EnumAAFLocators.exp : AAFUnitTest.exp macros/exp.mac
+EnumAAFLocators.h : EnumAAFLocators.exp macros/h.mac
+EnumAAFLocators.cpp : EnumAAFLocators.exp macros/cpp.mac
+EnumAAFLocators.idl : EnumAAFLocators.exp macros/idl.mac
+EnumAAFLocators.comc : EnumAAFLocators.exp macros/comc.mac
+EnumAAFLocators.comh : EnumAAFLocators.exp macros/comh.mac
+EnumAAFLocators.implc : EnumAAFLocators.exp macros/implc.mac
+EnumAAFLocators.implh : EnumAAFLocators.exp macros/implh.mac
+
+EnumAAFMedia.all : EnumAAFMedia.cpp EnumAAFMedia.h
+EnumAAFMedia.all : EnumAAFMedia.comc EnumAAFMedia.comh
+EnumAAFMedia.all : EnumAAFMedia.exp EnumAAFMedia.idl
+EnumAAFMedia.all : EnumAAFMedia.implc EnumAAFMedia.implh
+EnumAAFMedia.exp : AAFUnitTest.exp macros/exp.mac
+EnumAAFMedia.h : EnumAAFMedia.exp macros/h.mac
+EnumAAFMedia.cpp : EnumAAFMedia.exp macros/cpp.mac
+EnumAAFMedia.idl : EnumAAFMedia.exp macros/idl.mac
+EnumAAFMedia.comc : EnumAAFMedia.exp macros/comc.mac
+EnumAAFMedia.comh : EnumAAFMedia.exp macros/comh.mac
+EnumAAFMedia.implc : EnumAAFMedia.exp macros/implc.mac
+EnumAAFMedia.implh : EnumAAFMedia.exp macros/implh.mac
 
 EnumAAFMobs.all : EnumAAFMobs.cpp EnumAAFMobs.h
 EnumAAFMobs.all : EnumAAFMobs.comc EnumAAFMobs.comh
@@ -902,57 +1050,18 @@ EnumAAFMobSlots.comh : EnumAAFMobSlots.exp macros/comh.mac
 EnumAAFMobSlots.implc : EnumAAFMobSlots.exp macros/implc.mac
 EnumAAFMobSlots.implh : EnumAAFMobSlots.exp macros/implh.mac
 
-EnumAAFDataDefinitions.all : EnumAAFDataDefinitions.cpp EnumAAFDataDefinitions.h
-EnumAAFDataDefinitions.all : EnumAAFDataDefinitions.comc EnumAAFDataDefinitions.comh
-EnumAAFDataDefinitions.all : EnumAAFDataDefinitions.exp EnumAAFDataDefinitions.idl
-EnumAAFDataDefinitions.all : EnumAAFDataDefinitions.implc EnumAAFDataDefinitions.implh
-EnumAAFDataDefinitions.exp : AAFUnitTest.exp macros/exp.mac
-EnumAAFDataDefinitions.h : EnumAAFDataDefinitions.exp macros/h.mac
-EnumAAFDataDefinitions.cpp : EnumAAFDataDefinitions.exp macros/cpp.mac
-EnumAAFDataDefinitions.idl : EnumAAFDataDefinitions.exp macros/idl.mac
-EnumAAFDataDefinitions.comc : EnumAAFDataDefinitions.exp macros/comc.mac
-EnumAAFDataDefinitions.comh : EnumAAFDataDefinitions.exp macros/comh.mac
-EnumAAFDataDefinitions.implc : EnumAAFDataDefinitions.exp macros/implc.mac
-EnumAAFDataDefinitions.implh : EnumAAFDataDefinitions.exp macros/implh.mac
-
-EnumAAFEffectDefinitions.all : EnumAAFEffectDefinitions.cpp EnumAAFEffectDefinitions.h
-EnumAAFEffectDefinitions.all : EnumAAFEffectDefinitions.comc EnumAAFEffectDefinitions.comh
-EnumAAFEffectDefinitions.all : EnumAAFEffectDefinitions.exp EnumAAFEffectDefinitions.idl
-EnumAAFEffectDefinitions.all : EnumAAFEffectDefinitions.implc EnumAAFEffectDefinitions.implh
-EnumAAFEffectDefinitions.exp : AAFUnitTest.exp macros/exp.mac
-EnumAAFEffectDefinitions.h : EnumAAFEffectDefinitions.exp macros/h.mac
-EnumAAFEffectDefinitions.cpp : EnumAAFEffectDefinitions.exp macros/cpp.mac
-EnumAAFEffectDefinitions.idl : EnumAAFEffectDefinitions.exp macros/idl.mac
-EnumAAFEffectDefinitions.comc : EnumAAFEffectDefinitions.exp macros/comc.mac
-EnumAAFEffectDefinitions.comh : EnumAAFEffectDefinitions.exp macros/comh.mac
-EnumAAFEffectDefinitions.implc : EnumAAFEffectDefinitions.exp macros/implc.mac
-EnumAAFEffectDefinitions.implh : EnumAAFEffectDefinitions.exp macros/implh.mac
-
-EnumAAFTypeDefinitions.all : EnumAAFTypeDefinitions.cpp EnumAAFTypeDefinitions.h
-EnumAAFTypeDefinitions.all : EnumAAFTypeDefinitions.comc EnumAAFTypeDefinitions.comh
-EnumAAFTypeDefinitions.all : EnumAAFTypeDefinitions.exp EnumAAFTypeDefinitions.idl
-EnumAAFTypeDefinitions.all : EnumAAFTypeDefinitions.implc EnumAAFTypeDefinitions.implh
-EnumAAFTypeDefinitions.exp : AAFUnitTest.exp macros/exp.mac
-EnumAAFTypeDefinitions.h : EnumAAFTypeDefinitions.exp macros/h.mac
-EnumAAFTypeDefinitions.cpp : EnumAAFTypeDefinitions.exp macros/cpp.mac
-EnumAAFTypeDefinitions.idl : EnumAAFTypeDefinitions.exp macros/idl.mac
-EnumAAFTypeDefinitions.comc : EnumAAFTypeDefinitions.exp macros/comc.mac
-EnumAAFTypeDefinitions.comh : EnumAAFTypeDefinitions.exp macros/comh.mac
-EnumAAFTypeDefinitions.implc : EnumAAFTypeDefinitions.exp macros/implc.mac
-EnumAAFTypeDefinitions.implh : EnumAAFTypeDefinitions.exp macros/implh.mac
-
-EnumAAFClassDefinitions.all : EnumAAFClassDefinitions.cpp EnumAAFClassDefinitions.h
-EnumAAFClassDefinitions.all : EnumAAFClassDefinitions.comc EnumAAFClassDefinitions.comh
-EnumAAFClassDefinitions.all : EnumAAFClassDefinitions.exp EnumAAFClassDefinitions.idl
-EnumAAFClassDefinitions.all : EnumAAFClassDefinitions.implc EnumAAFClassDefinitions.implh
-EnumAAFClassDefinitions.exp : AAFUnitTest.exp macros/exp.mac
-EnumAAFClassDefinitions.h : EnumAAFClassDefinitions.exp macros/h.mac
-EnumAAFClassDefinitions.cpp : EnumAAFClassDefinitions.exp macros/cpp.mac
-EnumAAFClassDefinitions.idl : EnumAAFClassDefinitions.exp macros/idl.mac
-EnumAAFClassDefinitions.comc : EnumAAFClassDefinitions.exp macros/comc.mac
-EnumAAFClassDefinitions.comh : EnumAAFClassDefinitions.exp macros/comh.mac
-EnumAAFClassDefinitions.implc : EnumAAFClassDefinitions.exp macros/implc.mac
-EnumAAFClassDefinitions.implh : EnumAAFClassDefinitions.exp macros/implh.mac
+EnumAAFParameterSlots.all : EnumAAFParameterSlots.cpp EnumAAFParameterSlots.h
+EnumAAFParameterSlots.all : EnumAAFParameterSlots.comc EnumAAFParameterSlots.comh
+EnumAAFParameterSlots.all : EnumAAFParameterSlots.exp EnumAAFParameterSlots.idl
+EnumAAFParameterSlots.all : EnumAAFParameterSlots.implc EnumAAFParameterSlots.implh
+EnumAAFParameterSlots.exp : AAFUnitTest.exp macros/exp.mac
+EnumAAFParameterSlots.h : EnumAAFParameterSlots.exp macros/h.mac
+EnumAAFParameterSlots.cpp : EnumAAFParameterSlots.exp macros/cpp.mac
+EnumAAFParameterSlots.idl : EnumAAFParameterSlots.exp macros/idl.mac
+EnumAAFParameterSlots.comc : EnumAAFParameterSlots.exp macros/comc.mac
+EnumAAFParameterSlots.comh : EnumAAFParameterSlots.exp macros/comh.mac
+EnumAAFParameterSlots.implc : EnumAAFParameterSlots.exp macros/implc.mac
+EnumAAFParameterSlots.implh : EnumAAFParameterSlots.exp macros/implh.mac
 
 EnumAAFPropertyDefinitions.all : EnumAAFPropertyDefinitions.cpp EnumAAFPropertyDefinitions.h
 EnumAAFPropertyDefinitions.all : EnumAAFPropertyDefinitions.comc EnumAAFPropertyDefinitions.comh
@@ -967,45 +1076,6 @@ EnumAAFPropertyDefinitions.comh : EnumAAFPropertyDefinitions.exp macros/comh.mac
 EnumAAFPropertyDefinitions.implc : EnumAAFPropertyDefinitions.exp macros/implc.mac
 EnumAAFPropertyDefinitions.implh : EnumAAFPropertyDefinitions.exp macros/implh.mac
 
-EnumAAFMedia.all : EnumAAFMedia.cpp EnumAAFMedia.h
-EnumAAFMedia.all : EnumAAFMedia.comc EnumAAFMedia.comh
-EnumAAFMedia.all : EnumAAFMedia.exp EnumAAFMedia.idl
-EnumAAFMedia.all : EnumAAFMedia.implc EnumAAFMedia.implh
-EnumAAFMedia.exp : AAFUnitTest.exp macros/exp.mac
-EnumAAFMedia.h : EnumAAFMedia.exp macros/h.mac
-EnumAAFMedia.cpp : EnumAAFMedia.exp macros/cpp.mac
-EnumAAFMedia.idl : EnumAAFMedia.exp macros/idl.mac
-EnumAAFMedia.comc : EnumAAFMedia.exp macros/comc.mac
-EnumAAFMedia.comh : EnumAAFMedia.exp macros/comh.mac
-EnumAAFMedia.implc : EnumAAFMedia.exp macros/implc.mac
-EnumAAFMedia.implh : EnumAAFMedia.exp macros/implh.mac
-
-EnumAAFComponents.all : EnumAAFComponents.cpp EnumAAFComponents.h
-EnumAAFComponents.all : EnumAAFComponents.comc EnumAAFComponents.comh
-EnumAAFComponents.all : EnumAAFComponents.exp EnumAAFComponents.idl
-EnumAAFComponents.all : EnumAAFComponents.implc EnumAAFComponents.implh
-EnumAAFComponents.exp : AAFUnitTest.exp macros/exp.mac
-EnumAAFComponents.h : EnumAAFComponents.exp macros/h.mac
-EnumAAFComponents.cpp : EnumAAFComponents.exp macros/cpp.mac
-EnumAAFComponents.idl : EnumAAFComponents.exp macros/idl.mac
-EnumAAFComponents.comc : EnumAAFComponents.exp macros/comc.mac
-EnumAAFComponents.comh : EnumAAFComponents.exp macros/comh.mac
-EnumAAFComponents.implc : EnumAAFComponents.exp macros/implc.mac
-EnumAAFComponents.implh : EnumAAFComponents.exp macros/implh.mac
-
-EnumAAFDefinitions.all : EnumAAFDefinitions.cpp EnumAAFDefinitions.h
-EnumAAFDefinitions.all : EnumAAFDefinitions.comc EnumAAFDefinitions.comh
-EnumAAFDefinitions.all : EnumAAFDefinitions.exp EnumAAFDefinitions.idl
-EnumAAFDefinitions.all : EnumAAFDefinitions.implc EnumAAFDefinitions.implh
-EnumAAFDefinitions.exp : AAFUnitTest.exp macros/exp.mac
-EnumAAFDefinitions.h : EnumAAFDefinitions.exp macros/h.mac
-EnumAAFDefinitions.cpp : EnumAAFDefinitions.exp macros/cpp.mac
-EnumAAFDefinitions.idl : EnumAAFDefinitions.exp macros/idl.mac
-EnumAAFDefinitions.comc : EnumAAFDefinitions.exp macros/comc.mac
-EnumAAFDefinitions.comh : EnumAAFDefinitions.exp macros/comh.mac
-EnumAAFDefinitions.implc : EnumAAFDefinitions.exp macros/implc.mac
-EnumAAFDefinitions.implh : EnumAAFDefinitions.exp macros/implh.mac
-
 EnumAAFReferenceValues.all : EnumAAFReferenceValues.cpp EnumAAFReferenceValues.h
 EnumAAFReferenceValues.all : EnumAAFReferenceValues.comc EnumAAFReferenceValues.comh
 EnumAAFReferenceValues.all : EnumAAFReferenceValues.exp EnumAAFReferenceValues.idl
@@ -1019,16 +1089,28 @@ EnumAAFReferenceValues.comh : EnumAAFReferenceValues.exp macros/comh.mac
 EnumAAFReferenceValues.implc : EnumAAFReferenceValues.exp macros/implc.mac
 EnumAAFReferenceValues.implh : EnumAAFReferenceValues.exp macros/implh.mac
 
-AAFClassDictionary.all : AAFClassDictionary.cpp AAFClassDictionary.h
-AAFClassDictionary.all : AAFClassDictionary.comc AAFClassDictionary.comh
-AAFClassDictionary.all : AAFClassDictionary.exp AAFClassDictionary.idl
-AAFClassDictionary.all : AAFClassDictionary.implc AAFClassDictionary.implh
-AAFClassDictionary.exp : AAFUnitTest.exp macros/exp.mac
-AAFClassDictionary.h : AAFClassDictionary.exp macros/h.mac
-AAFClassDictionary.cpp : AAFClassDictionary.exp macros/cpp.mac
-AAFClassDictionary.idl : AAFClassDictionary.exp macros/idl.mac
-AAFClassDictionary.comc : AAFClassDictionary.exp macros/comc.mac
-AAFClassDictionary.comh : AAFClassDictionary.exp macros/comh.mac
-AAFClassDictionary.implc : AAFClassDictionary.exp macros/implc.mac
-AAFClassDictionary.implh : AAFClassDictionary.exp macros/implh.mac
+EnumAAFSegments.all : EnumAAFSegments.cpp EnumAAFSegments.h
+EnumAAFSegments.all : EnumAAFSegments.comc EnumAAFSegments.comh
+EnumAAFSegments.all : EnumAAFSegments.exp EnumAAFSegments.idl
+EnumAAFSegments.all : EnumAAFSegments.implc EnumAAFSegments.implh
+EnumAAFSegments.exp : AAFUnitTest.exp macros/exp.mac
+EnumAAFSegments.h : EnumAAFSegments.exp macros/h.mac
+EnumAAFSegments.cpp : EnumAAFSegments.exp macros/cpp.mac
+EnumAAFSegments.idl : EnumAAFSegments.exp macros/idl.mac
+EnumAAFSegments.comc : EnumAAFSegments.exp macros/comc.mac
+EnumAAFSegments.comh : EnumAAFSegments.exp macros/comh.mac
+EnumAAFSegments.implc : EnumAAFSegments.exp macros/implc.mac
+EnumAAFSegments.implh : EnumAAFSegments.exp macros/implh.mac
 
+EnumAAFTypeDefinitions.all : EnumAAFTypeDefinitions.cpp EnumAAFTypeDefinitions.h
+EnumAAFTypeDefinitions.all : EnumAAFTypeDefinitions.comc EnumAAFTypeDefinitions.comh
+EnumAAFTypeDefinitions.all : EnumAAFTypeDefinitions.exp EnumAAFTypeDefinitions.idl
+EnumAAFTypeDefinitions.all : EnumAAFTypeDefinitions.implc EnumAAFTypeDefinitions.implh
+EnumAAFTypeDefinitions.exp : AAFUnitTest.exp macros/exp.mac
+EnumAAFTypeDefinitions.h : EnumAAFTypeDefinitions.exp macros/h.mac
+EnumAAFTypeDefinitions.cpp : EnumAAFTypeDefinitions.exp macros/cpp.mac
+EnumAAFTypeDefinitions.idl : EnumAAFTypeDefinitions.exp macros/idl.mac
+EnumAAFTypeDefinitions.comc : EnumAAFTypeDefinitions.exp macros/comc.mac
+EnumAAFTypeDefinitions.comh : EnumAAFTypeDefinitions.exp macros/comh.mac
+EnumAAFTypeDefinitions.implc : EnumAAFTypeDefinitions.exp macros/implc.mac
+EnumAAFTypeDefinitions.implh : EnumAAFTypeDefinitions.exp macros/implh.mac
