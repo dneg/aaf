@@ -2455,27 +2455,21 @@ int main(int argumentCount, char* argumentVector[])
   switch (option) {
   case raw:
     for (i = flagCount + 1; i < argumentCount; i++) {
-      cout << "Dump of structured storage file"
-           << " \"" << argumentVector[i] << "\""
-           << " (raw)." << endl;
+      cout << "Raw dump." << endl;
       dumpFile(argumentVector[i]);
     }
     break;
 
   case property:
     for (i = flagCount + 1; i < argumentCount; i++) {
-      cout << "Dump of structured storage file"
-           << " \"" << argumentVector[i] << "\""
-           << " (properties)." << endl;
+      cout << "Property dump." << endl;
       dumpFileProperties(argumentVector[i]);
     }
     break;
 
   case aaf:
     for (i = flagCount + 1; i < argumentCount; i++) {
-      cout << "Dump of structured storage file"
-           << " \"" << argumentVector[i] << "\""
-           << " (AAF properties)." << endl;
+      cout << "AAF property dump." << endl;
       if (isAnAAFFile(argumentVector[i])) {
         dumpFileProperties(argumentVector[i]);
       } else {
