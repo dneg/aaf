@@ -38,18 +38,6 @@
  *
  ************************************************************************/
 
-// OMF Includes
-namespace OMF2
-{
-#include "omPublic.h"
-#include "omMedia.h"
-}
-// AAF Utilities Infra-structure 
-#include "UtlConsole.h"
-
-#include "AAFTypes.h"
-#include "AAFResult.h"
-#include "AAFDefUIDs.h"
 
   
 #if defined(_MAC) || defined(macintosh)
@@ -119,9 +107,10 @@ public:
 	HRESULT ConvertOMFMasterMob( OMF2::omfObject_t obj, IAAFMasterMob* pMasterMob );
 	HRESULT ConvertOMFSourceMob( OMF2::omfObject_t obj, IAAFSourceMob* pSourceMob );
 	HRESULT TraverseOMFMob( OMF2::omfObject_t obj, IAAFMob* pMob );
-	HRESULT ProcessOMFComponent( OMF2::omfObject_t obj, IAAFSegment** ppSegment );
+	HRESULT ProcessOMFComponent( OMF2::omfObject_t obj, IAAFComponent** ppComponent );
 	HRESULT TraverseOMFSequence( OMF2::omfObject_t obj, IAAFSequence* pSequence );
 	HRESULT	ConvertOMFSequence( OMF2::omfObject_t sequence, IAAFSequence* pSequence);
+	HRESULT ConvertOMFSourceClip( OMF2::omfObject_t sourceclip, IAAFSourceClip* pSourceClip);
 	HRESULT ConvertOMFComponentProperties(OMF2::omfObject_t sequence, IAAFComponent* pComponent);
 	HRESULT ConvertOMFTransition(OMF2::omfObject_t transition, IAAFTransition* pTransition);
 
