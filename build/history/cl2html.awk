@@ -118,10 +118,14 @@ function rowcolor(files) {
   ff = fns[1];
 #  printf("<!--[%s]-->\n", ff);
   /* Match directory of file to a color */
-  for (x in map) {
+  len = 0;
+  for (x in map) { /* Arbitrary order */
     if (match(ff, "^" x)) {
-      result = map[x];
-      break;
+      if (RLENGTH > len) {
+        /* Take longest match */
+        len = RLENGTH;
+        result = map[x];
+      }
     }
   }
   return result;
