@@ -124,6 +124,7 @@ AAFSDK_CFG=$(AAFSDK)\config.mk
 # Directory structure for the AAF SDK
 #
 AAFSDK_BIN     = $(AAFSDK)\bin
+AAFSDK_DEBUG   = $(AAFSDK_BIN)\debug
 AAFSDK_HELP    = $(AAFSDK)\help
 AAFSDK_INCLUDE = $(AAFSDK)\include
 AAFSDK_LIB     = $(AAFSDK)\lib
@@ -159,6 +160,9 @@ TOOLKIT_TARGET_REFIMPL = $(TOOLKIT_RELEASE_REFIMPL)
 #
 TARGET_DIRS = \
 	$(AAFSDK_BIN) \
+!if "$(CFG)"=="FULL"
+	$(AAFSDK_DEBUG) \
+!endif
 	$(AAFSDK_HELP) \
 	$(AAFSDK_INCLUDE) \
 	$(AAFSDK_LIB)
@@ -233,14 +237,14 @@ TARGET_LIB_FILES = \
 # Release dynamic link libraries.
 #
 RELEASE_DLL_FILES = \
-	$(AAFSDK_BIN)\aaf.dll
+	$(AAFSDK_BIN)\aafcoapi.dll
 
 
 #
 # Release dynamic link libraries.
 #
 DEBUG_DLL_FILES = \
-	$(AAFSDK_BIN)\aafd.dll
+	$(AAFSDK_DEBUG)\aafcoapi.dll
 
 
 
@@ -283,7 +287,7 @@ DLLS_TO_UNREGISTER = \
 !elseif "$(LASTCFG)"=="Debug"
 	$(DEBUG_DLL_FILES)
 !else
-	XDUMMYX.DLL
+	XDUMMY.DLL
 !endif
 
 #
@@ -295,7 +299,7 @@ DLLS_TO_REGISTER = \
 !elseif "$(CFG)"=="Debug"
 	$(DEBUG_DLL_FILES)
 !else
-	XDUMMYX.DLL
+	XDUMMY.DLL
 !endif
 
 
@@ -320,6 +324,7 @@ TARGET_FILES_TO_REMOVE = \
 # Note: Order is important: must have child before parent directory.
 #
 TARGET_DIRS_TO_REMOVE = \
+	$(AAFSDK_DEBUG) \
 	$(AAFSDK_BIN) \
 	$(AAFSDK_HELP) \
 	$(AAFSDK_INCLUDE) \
@@ -374,6 +379,9 @@ $(AAFSDK) :
 
 $(AAFSDK_BIN) : $(AAFSDK)
 	md $(AAFSDK_BIN)
+
+$(AAFSDK_DEBUG) : $(AAFSDK_BIN)
+	md $(AAFSDK_DEBUG)
 
 $(AAFSDK_HELP) : $(AAFSDK)
 	md $(AAFSDK_HELP)
@@ -471,21 +479,24 @@ $(AAFSDK_LIB)\aafd.lib : $(TOOLKIT_DEBUG_REFIMPL)\aafd.lib
 #
 # Dependency and build rules for the Release DLL targets.
 #
-$(AAFSDK_BIN)\aaf.dll : $(TOOLKIT_TARGET_REFIMPL)\aafcoapi.dll
-	$(CP) $(CP_OPTS) $(TOOLKIT_TARGET_REFIMPL)\aafcoapi.dll "$(AAFSDK_BIN)\"
-	if exist $(AAFSDK_BIN)\aaf.dll \
-	    $(RM) $(RM_OPTS) $(AAFSDK_BIN)\aaf.dll
-	ren $(AAFSDK_BIN)\aafcoapi.dll aaf.dll
+$(AAFSDK_BIN)\aafcoapi.dll : $(TOOLKIT_TARGET_REFIMPL)\aafcoapi.dll
+	$(CP) $(CP_OPTS) $(TOOLKIT_RELEASE_REFIMPL)\aafcoapi.dll "$(AAFSDK_BIN)\"
+
 
 
 #
 # Dependency and build rules for the Debug DLL targets.
 #
-$(AAFSDK_BIN)\aafd.dll : $(TOOLKIT_TARGET_REFIMPL)\aafcoapi.dll
-	$(CP) $(CP_OPTS) $(TOOLKIT_TARGET_REFIMPL)\aafcoapi.dll "$(AAFSDK_BIN)\"
-	if exist $(AAFSDK_BIN)\aafd.dll \
-	    $(RM) $(RM_OPTS) $(AAFSDK_BIN)\aafd.dll
-	ren $(AAFSDK_BIN)\aafcoapi.dll aafd.dll
+$(AAFSDK_DEBUG)\aafcoapi.dll : $(TOOLKIT_TARGET_REFIMPL)\aafcoapi.dll
+	$(CP) $(CP_OPTS) $(TOOLKIT_DEBUG_REFIMPL)\aafcoapi.dll "$(AAFSDK_DEBUG)\"
+
+
+
+#
+# fake build rule to satisfy nmake#
+#
+XDUMMY.DLL :
+
 
 
 #
