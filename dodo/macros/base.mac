@@ -679,6 +679,7 @@ AD_X2METHOD3(Next,
 			 count,
 			 number of %02 requested,
 			 xxx,
+			 xxx,
 
 			 [out\\, size_is\\(count\\)\\, length_is\\(*pNumFetched\\)],
 			 objOutArray,
@@ -686,12 +687,14 @@ AD_X2METHOD3(Next,
 			 pp%02,
 			 array to receive elements,
 			 count,
+			 *pNumFetched,
 
 			 [out\\,ref],
 			 objPass,
 			 aafUInt32 *,
 			 pNumFetched,
 			 number of actual %03 objects fetched into pp%02 array,
+			 xxx,
 			 xxx,
 
      Enumerates the next count elements \\(AAF%01 pointers\\) in the
