@@ -210,6 +210,7 @@ void OMStorable::attach(const OMStorable* container, const wchar_t* name)
   TRACE("OMStorable::attach");
   // tjb PRECONDITION("Not attached", !attached());
   PRECONDITION("Valid container", container != 0);
+  PRECONDITION("Valid container", container != this);
   PRECONDITION("Valid name", validWideString(name));
 
   _container = container;
