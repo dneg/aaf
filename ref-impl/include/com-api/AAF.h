@@ -811,6 +811,12 @@ typedef interface IAAFMob2 IAAFMob2;
 #endif 	/* __IAAFMob2_FWD_DEFINED__ */
 
 
+#ifndef __IAAFComponent2_FWD_DEFINED__
+#define __IAAFComponent2_FWD_DEFINED__
+typedef interface IAAFComponent2 IAAFComponent2;
+#endif 	/* __IAAFComponent2_FWD_DEFINED__ */
+
+
 /* header files for imported files */
 #include "unknwn.h"
 #include "objidl.h"
@@ -851,6 +857,7 @@ void __RPC_USER MIDL_user_free( void __RPC_FAR * );
 // AAF Interfaces.
 //=--------------------------------------------------------------------------=
 //
+
 
 
 
@@ -33469,7 +33476,433 @@ void __RPC_STUB IAAFMob2_GetUsageCode_Stub(
 #endif 	/* __IAAFMob2_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_AAF_0206 */
+#ifndef __IAAFComponent2_INTERFACE_DEFINED__
+#define __IAAFComponent2_INTERFACE_DEFINED__
+
+/* interface IAAFComponent2 */
+/* [unique][helpstring][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IAAFComponent2;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("c703e7f5-b97f-44fb-87da-a412e60ea6aa")
+    IAAFComponent2 : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE SetLength( 
+            /* [in] */ aafLength_constref length) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetLength( 
+            /* [out][retval] */ aafLength_t __RPC_FAR *pLength) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetDataDef( 
+            /* [in] */ IAAFDataDef __RPC_FAR *pDataDef) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetDataDef( 
+            /* [retval][out] */ IAAFDataDef __RPC_FAR *__RPC_FAR *ppDatadef) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE AppendKLVData( 
+            /* [in] */ IAAFKLVData __RPC_FAR *pData) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE CountKLVData( 
+            /* [out] */ aafUInt32 __RPC_FAR *pNumData) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetKLVData( 
+            /* [out] */ IEnumAAFKLVData __RPC_FAR *__RPC_FAR *ppEnum) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE RemoveKLVData( 
+            /* [in] */ IAAFKLVData __RPC_FAR *pData) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE AppendComment( 
+            /* [in] */ aafCharacter_constptr pName,
+            /* [in] */ aafCharacter_constptr pValue) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE CountComments( 
+            /* [out] */ aafUInt32 __RPC_FAR *pNumComments) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetComments( 
+            /* [out] */ IEnumAAFTaggedValues __RPC_FAR *__RPC_FAR *ppEnum) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE RemoveComment( 
+            /* [in] */ IAAFTaggedValue __RPC_FAR *pComment) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE AppendAttribute( 
+            /* [in] */ aafCharacter_constptr pName,
+            /* [in] */ aafCharacter_constptr pValue) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE CountAttributes( 
+            /* [out] */ aafUInt32 __RPC_FAR *pNumAttributes) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetAttributes( 
+            /* [out] */ IEnumAAFTaggedValues __RPC_FAR *__RPC_FAR *ppEnum) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE RemoveAttribute( 
+            /* [in] */ IAAFTaggedValue __RPC_FAR *pAttribute) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IAAFComponent2Vtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
+            IAAFComponent2 __RPC_FAR * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
+            IAAFComponent2 __RPC_FAR * This);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
+            IAAFComponent2 __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetLength )( 
+            IAAFComponent2 __RPC_FAR * This,
+            /* [in] */ aafLength_constref length);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetLength )( 
+            IAAFComponent2 __RPC_FAR * This,
+            /* [out][retval] */ aafLength_t __RPC_FAR *pLength);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetDataDef )( 
+            IAAFComponent2 __RPC_FAR * This,
+            /* [in] */ IAAFDataDef __RPC_FAR *pDataDef);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDataDef )( 
+            IAAFComponent2 __RPC_FAR * This,
+            /* [retval][out] */ IAAFDataDef __RPC_FAR *__RPC_FAR *ppDatadef);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AppendKLVData )( 
+            IAAFComponent2 __RPC_FAR * This,
+            /* [in] */ IAAFKLVData __RPC_FAR *pData);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CountKLVData )( 
+            IAAFComponent2 __RPC_FAR * This,
+            /* [out] */ aafUInt32 __RPC_FAR *pNumData);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetKLVData )( 
+            IAAFComponent2 __RPC_FAR * This,
+            /* [out] */ IEnumAAFKLVData __RPC_FAR *__RPC_FAR *ppEnum);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveKLVData )( 
+            IAAFComponent2 __RPC_FAR * This,
+            /* [in] */ IAAFKLVData __RPC_FAR *pData);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AppendComment )( 
+            IAAFComponent2 __RPC_FAR * This,
+            /* [in] */ aafCharacter_constptr pName,
+            /* [in] */ aafCharacter_constptr pValue);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CountComments )( 
+            IAAFComponent2 __RPC_FAR * This,
+            /* [out] */ aafUInt32 __RPC_FAR *pNumComments);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetComments )( 
+            IAAFComponent2 __RPC_FAR * This,
+            /* [out] */ IEnumAAFTaggedValues __RPC_FAR *__RPC_FAR *ppEnum);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveComment )( 
+            IAAFComponent2 __RPC_FAR * This,
+            /* [in] */ IAAFTaggedValue __RPC_FAR *pComment);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AppendAttribute )( 
+            IAAFComponent2 __RPC_FAR * This,
+            /* [in] */ aafCharacter_constptr pName,
+            /* [in] */ aafCharacter_constptr pValue);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CountAttributes )( 
+            IAAFComponent2 __RPC_FAR * This,
+            /* [out] */ aafUInt32 __RPC_FAR *pNumAttributes);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetAttributes )( 
+            IAAFComponent2 __RPC_FAR * This,
+            /* [out] */ IEnumAAFTaggedValues __RPC_FAR *__RPC_FAR *ppEnum);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveAttribute )( 
+            IAAFComponent2 __RPC_FAR * This,
+            /* [in] */ IAAFTaggedValue __RPC_FAR *pAttribute);
+        
+        END_INTERFACE
+    } IAAFComponent2Vtbl;
+
+    interface IAAFComponent2
+    {
+        CONST_VTBL struct IAAFComponent2Vtbl __RPC_FAR *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IAAFComponent2_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IAAFComponent2_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IAAFComponent2_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IAAFComponent2_SetLength(This,length)	\
+    (This)->lpVtbl -> SetLength(This,length)
+
+#define IAAFComponent2_GetLength(This,pLength)	\
+    (This)->lpVtbl -> GetLength(This,pLength)
+
+#define IAAFComponent2_SetDataDef(This,pDataDef)	\
+    (This)->lpVtbl -> SetDataDef(This,pDataDef)
+
+#define IAAFComponent2_GetDataDef(This,ppDatadef)	\
+    (This)->lpVtbl -> GetDataDef(This,ppDatadef)
+
+#define IAAFComponent2_AppendKLVData(This,pData)	\
+    (This)->lpVtbl -> AppendKLVData(This,pData)
+
+#define IAAFComponent2_CountKLVData(This,pNumData)	\
+    (This)->lpVtbl -> CountKLVData(This,pNumData)
+
+#define IAAFComponent2_GetKLVData(This,ppEnum)	\
+    (This)->lpVtbl -> GetKLVData(This,ppEnum)
+
+#define IAAFComponent2_RemoveKLVData(This,pData)	\
+    (This)->lpVtbl -> RemoveKLVData(This,pData)
+
+#define IAAFComponent2_AppendComment(This,pName,pValue)	\
+    (This)->lpVtbl -> AppendComment(This,pName,pValue)
+
+#define IAAFComponent2_CountComments(This,pNumComments)	\
+    (This)->lpVtbl -> CountComments(This,pNumComments)
+
+#define IAAFComponent2_GetComments(This,ppEnum)	\
+    (This)->lpVtbl -> GetComments(This,ppEnum)
+
+#define IAAFComponent2_RemoveComment(This,pComment)	\
+    (This)->lpVtbl -> RemoveComment(This,pComment)
+
+#define IAAFComponent2_AppendAttribute(This,pName,pValue)	\
+    (This)->lpVtbl -> AppendAttribute(This,pName,pValue)
+
+#define IAAFComponent2_CountAttributes(This,pNumAttributes)	\
+    (This)->lpVtbl -> CountAttributes(This,pNumAttributes)
+
+#define IAAFComponent2_GetAttributes(This,ppEnum)	\
+    (This)->lpVtbl -> GetAttributes(This,ppEnum)
+
+#define IAAFComponent2_RemoveAttribute(This,pAttribute)	\
+    (This)->lpVtbl -> RemoveAttribute(This,pAttribute)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IAAFComponent2_SetLength_Proxy( 
+    IAAFComponent2 __RPC_FAR * This,
+    /* [in] */ aafLength_constref length);
+
+
+void __RPC_STUB IAAFComponent2_SetLength_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFComponent2_GetLength_Proxy( 
+    IAAFComponent2 __RPC_FAR * This,
+    /* [out][retval] */ aafLength_t __RPC_FAR *pLength);
+
+
+void __RPC_STUB IAAFComponent2_GetLength_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFComponent2_SetDataDef_Proxy( 
+    IAAFComponent2 __RPC_FAR * This,
+    /* [in] */ IAAFDataDef __RPC_FAR *pDataDef);
+
+
+void __RPC_STUB IAAFComponent2_SetDataDef_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFComponent2_GetDataDef_Proxy( 
+    IAAFComponent2 __RPC_FAR * This,
+    /* [retval][out] */ IAAFDataDef __RPC_FAR *__RPC_FAR *ppDatadef);
+
+
+void __RPC_STUB IAAFComponent2_GetDataDef_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFComponent2_AppendKLVData_Proxy( 
+    IAAFComponent2 __RPC_FAR * This,
+    /* [in] */ IAAFKLVData __RPC_FAR *pData);
+
+
+void __RPC_STUB IAAFComponent2_AppendKLVData_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFComponent2_CountKLVData_Proxy( 
+    IAAFComponent2 __RPC_FAR * This,
+    /* [out] */ aafUInt32 __RPC_FAR *pNumData);
+
+
+void __RPC_STUB IAAFComponent2_CountKLVData_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFComponent2_GetKLVData_Proxy( 
+    IAAFComponent2 __RPC_FAR * This,
+    /* [out] */ IEnumAAFKLVData __RPC_FAR *__RPC_FAR *ppEnum);
+
+
+void __RPC_STUB IAAFComponent2_GetKLVData_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFComponent2_RemoveKLVData_Proxy( 
+    IAAFComponent2 __RPC_FAR * This,
+    /* [in] */ IAAFKLVData __RPC_FAR *pData);
+
+
+void __RPC_STUB IAAFComponent2_RemoveKLVData_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFComponent2_AppendComment_Proxy( 
+    IAAFComponent2 __RPC_FAR * This,
+    /* [in] */ aafCharacter_constptr pName,
+    /* [in] */ aafCharacter_constptr pValue);
+
+
+void __RPC_STUB IAAFComponent2_AppendComment_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFComponent2_CountComments_Proxy( 
+    IAAFComponent2 __RPC_FAR * This,
+    /* [out] */ aafUInt32 __RPC_FAR *pNumComments);
+
+
+void __RPC_STUB IAAFComponent2_CountComments_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFComponent2_GetComments_Proxy( 
+    IAAFComponent2 __RPC_FAR * This,
+    /* [out] */ IEnumAAFTaggedValues __RPC_FAR *__RPC_FAR *ppEnum);
+
+
+void __RPC_STUB IAAFComponent2_GetComments_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFComponent2_RemoveComment_Proxy( 
+    IAAFComponent2 __RPC_FAR * This,
+    /* [in] */ IAAFTaggedValue __RPC_FAR *pComment);
+
+
+void __RPC_STUB IAAFComponent2_RemoveComment_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFComponent2_AppendAttribute_Proxy( 
+    IAAFComponent2 __RPC_FAR * This,
+    /* [in] */ aafCharacter_constptr pName,
+    /* [in] */ aafCharacter_constptr pValue);
+
+
+void __RPC_STUB IAAFComponent2_AppendAttribute_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFComponent2_CountAttributes_Proxy( 
+    IAAFComponent2 __RPC_FAR * This,
+    /* [out] */ aafUInt32 __RPC_FAR *pNumAttributes);
+
+
+void __RPC_STUB IAAFComponent2_CountAttributes_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFComponent2_GetAttributes_Proxy( 
+    IAAFComponent2 __RPC_FAR * This,
+    /* [out] */ IEnumAAFTaggedValues __RPC_FAR *__RPC_FAR *ppEnum);
+
+
+void __RPC_STUB IAAFComponent2_GetAttributes_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFComponent2_RemoveAttribute_Proxy( 
+    IAAFComponent2 __RPC_FAR * This,
+    /* [in] */ IAAFTaggedValue __RPC_FAR *pAttribute);
+
+
+void __RPC_STUB IAAFComponent2_RemoveAttribute_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IAAFComponent2_INTERFACE_DEFINED__ */
+
+
+/* interface __MIDL_itf_AAF_0207 */
 /* [local] */ 
 
   //***********************************************************
@@ -33556,8 +33989,8 @@ STDAPI AAFCreateAAFFileOnRawStorage (
 
 
 
-extern RPC_IF_HANDLE __MIDL_itf_AAF_0206_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_AAF_0206_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_AAF_0207_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_AAF_0207_v0_0_s_ifspec;
 
 /* Additional Prototypes for ALL interfaces */
 
