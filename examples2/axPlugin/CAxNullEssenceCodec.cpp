@@ -33,15 +33,6 @@
 
 #include <memory>
 
-#if defined(OS_MACOS)
-// FIXME - AAFPlugin_i.c is included to work around a Mac link problem.
-// IID_IAAFPlugin and IID_IAAFEssenceCodec are not defined unless I include
-// this here - in the file that references them.  The AAFPlugin_i.c files is
-// also included in 
-#define __IID_DEFINED__
-#include <AAFPlugin_i.c>
-#endif
-
 namespace {
 
 //=---------------------------------------------------------------------=

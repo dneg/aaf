@@ -23,4 +23,9 @@
 
 #include <AAFPlugin.h>
 
+#if defined(OS_MACOS)
+// FIXME - Why is this required on mac, but not on Windows?!?!
+#define __IID_DEFINED__
+#endif
+
 #include <AAFPlugin_i.c>
