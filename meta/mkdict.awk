@@ -88,28 +88,28 @@ BEGIN {
   #
   # SLO<n> SMPTE Label Octet n
   #
-  SLO07C=1
-  SLO08C=2
-  SLO09C=3
-  SLO10C=4
-  SLO11C=5
-  SLO12C=6
-  SLO13C=7
-  SLO14C=8
-  SLO15C=9
+  SLO07C=9
+  SLO08C=10
+  SLO09C=11
+  SLO10C=12
+  SLO11C=13
+  SLO12C=14
+  SLO13C=15
+  SLO14C=16
+  SLO15C=17
   #
-  elementNameC=10
-  typeNameC=22
-  kindC=23
-  qualifC=24
-  elementTypeC=25
-  isMandatoryC=26
-  parentC=29
-  className1C=30
-  pidC=33
-  referenceTypeC=34
-  isAbstractC=35
-  isUidC=36
+  elementNameC=18
+  typeNameC=30
+  kindC=31
+  qualifC=32
+  elementTypeC=33
+  isMandatoryC=34
+  parentC=37
+  className1C=38
+  pidC=41
+  referenceTypeC=42
+  isAbstractC=43
+  isUidC=44
   #
   errors = 0;
   FS=","
