@@ -43,6 +43,10 @@
 // Include the AAF Stored Object identifiers. These symbols are defined in aaf.lib.
 #include "AAFStoredObjectIDs.h"
 
+#if defined(macintosh) || defined(_MAC)
+#include <console.h> /* Mac command line window */
+#endif
+
 // There are differences in the microsoft and other compilers in the "Length" specifier
 // used in printf for 64bit integers.
 //
@@ -468,6 +472,12 @@ void usage(void)
 //  NOTE:  defining [0] program name; [1] Number N of components; [2] filename.aaf; 
 int main(int argumentCount, char *argumentVector[])
 {
+	/* console window for mac */
+
+	#if defined(macintosh) || defined(_MAC)
+	argumentCount = ccommand(&argumentVector);
+	#endif
+
 	programName = argumentVector[0];
 	
 	//  First check for correct number of arguments
