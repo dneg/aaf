@@ -1,5 +1,9 @@
 #include "OMAssertions.h"
 
+#if defined(OM_ENABLE_STACK_TRACE)
+#include "OMStackTrace.h"
+#endif
+
 #include <string.h>
 
 #include <iostream.h>
@@ -17,7 +21,16 @@ void reportAssertionFailure(char* kind,
   cerr << "The failure occurred at line " << lineNumber
        << " in file \"" << fileName << "\"." << endl;
   cerr << "The condition \"" << expressionString << "\" was violated." << endl;
+
+#if defined(OM_ENABLE_STACK_TRACE)
+  printStackTrace(cerr);
+#endif
+
+#if defined(OM_ENABLE_ABORT)
+  abort();
+#else
   exit(FAILURE);
+#endif
 }
 
 bool validString(const char* string)
