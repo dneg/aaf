@@ -71,5 +71,5 @@ AAFRESULT STDMETHODCALLTYPE
 
 extern "C" const aafClassID_t CLSID_AAFSourceReference;
 
-OMDEFINE_STORABLE(AAFSourceReference, CLSID_AAFSourceReference);
+OMDEFINE_STORABLE(ImplAAFSourceReference, CLSID_AAFSourceReference);
 
