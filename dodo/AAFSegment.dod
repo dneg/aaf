@@ -8,6 +8,11 @@ AAFComponent\
 #c
 #import ./AAFComponent.exp
 AD_HEAD
+AD_IDL(//
+// The segment class represents a component that is independent of any
+// surrounding object
+// A segment is an abastract class 
+//)
 AD_CLASS_UUID(7a2f0571, 1ba3, 11D2, bf, aa, 00, 60, 97, 11, 62, 12)
 
 AD_DEFAULT_UUID(7a2f0570, 1ba3, 11D2, bf, aa, 00, 60, 97, 11, 62, 12)
