@@ -59,6 +59,7 @@
 // Some handy smart pointers
 #include "AAFSmartPointer.h"
 typedef IAAFSmartPointer<IAAFDefObject>             IAAFDefObjectSP;
+typedef IAAFSmartPointer<IAAFMetaDefinition>        IAAFMetaDefinitionSP;
 typedef IAAFSmartPointer<IAAFPluginDef>				IAAFPluginDescriptorSP;
 typedef IAAFSmartPointer<IAAFTypeDef>               IAAFTypeDefSP;
 typedef IAAFSmartPointer<IAAFTypeDefInt>            IAAFTypeDefIntSP;
@@ -246,10 +247,12 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	checkResult(pd3->SetDefinitionObjectID(kTestPluginDescID3));
 	checkResult (pDictionary->RegisterPluginDef (pd3));
 
+#if THIS_INFORMATION_IS_OBSOLETE
 	IAAFDefObjectSP pDefObj;
 	checkResult(pTypeDef->QueryInterface (IID_IAAFDefObject,
                                           (void **)&pDefObj));
 
+#endif
 	IAAFTypeDefSP ptd;
 	checkResult(pTypeDef->QueryInterface (IID_IAAFTypeDef,
                                           (void **)&ptd));
@@ -331,13 +334,14 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 		IAAFTypeDefSP pTypeDef;
 		checkResult (pDictionary->LookupTypeDef (kTestTypeId, &pTypeDef));
 
-		IAAFDefObjectSP pDefObj;
-		checkResult(pTypeDef->QueryInterface (IID_IAAFDefObject,
-											  (void **)&pDefObj));
+		IAAFMetaDefinitionSP pDefinition;
+		checkResult(pTypeDef->QueryInterface (IID_IAAFMetaDefinition,
+											  (void **)&pDefinition));
 
 		aafUID_t id;
-		checkResult (pDefObj->GetAUID (&id));
+		checkResult (pDefinition->GetAUID (&id));
 		checkExpression (0 != EqualAUID (&id, &kTestTypeId), AAFRESULT_TEST_FAILED);
+
 	}
 	catch (HRESULT& rResult)
 	{

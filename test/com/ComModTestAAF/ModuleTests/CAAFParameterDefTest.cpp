@@ -255,6 +255,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	IAAFOperationDef		*pOperationDef = NULL;
 	IAAFParameterDef	*pParmDef = NULL;
 	IAAFDefObject*		pDefObject = NULL;
+  IAAFMetaDefinition *pMetaDefinition = NULL;
 	IAAFTypeDef*		pTypeDef = NULL;
 	bool				bFileOpen = false;
 	aafBool				readIsTimeWarp;
@@ -302,11 +303,11 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 		checkResult(pParmDefEnum->NextOne (&pParmDef));
 
 		checkResult(pParmDef->GetTypeDefinition(&pTypeDef));
-		checkResult(pTypeDef->QueryInterface(IID_IAAFDefObject, (void **) &pDefObject));
-		checkResult(pDefObject->GetAUID(&testAUID));
+		checkResult(pTypeDef->QueryInterface(IID_IAAFMetaDefinition, (void **) &pMetaDefinition));
+		checkResult(pMetaDefinition->GetAUID(&testAUID));
 		checkExpression(memcmp(&testAUID, &checkTypeID, sizeof(testAUID)) == 0, AAFRESULT_TEST_FAILED);
-		pDefObject->Release();
-		pDefObject = NULL;
+		pMetaDefinition->Release();
+		pMetaDefinition = NULL;
 		pTypeDef->Release();
 		pTypeDef = NULL;
 		checkResult(pParmDef->GetDisplayUnits (checkName, sizeof(checkName)));
@@ -346,6 +347,9 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
       
 	if (pDefObject)
 		pDefObject->Release();
+
+  if (pMetaDefinition)
+    pMetaDefinition->Release();
 
 	if (pTypeDef)
 		pTypeDef->Release();

@@ -361,6 +361,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	IAAFParameterDef	*pParmDef = NULL;
 	IAAFParameter		*pParameter = NULL;
 	IAAFDefObject*		pDefObject = NULL;
+  IAAFMetaDefinition *pMetaDefinition = NULL;
 	IAAFSegment*		pSeg = NULL;
 	IAAFOperationGroup*			pOperationGroup = NULL;
 	IEnumAAFMobs		*mobIter = NULL;
@@ -414,11 +415,11 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 			pDefObject->Release();
 			pDefObject = NULL;
 			checkResult(pParameter->GetTypeDefinition (&pTypeDef));
-			checkResult(pTypeDef->QueryInterface(IID_IAAFDefObject, (void **) &pDefObject));
-			checkResult(pDefObject->GetAUID (&testUID));
+			checkResult(pTypeDef->QueryInterface(IID_IAAFMetaDefinition, (void **) &pMetaDefinition));
+			checkResult(pMetaDefinition->GetAUID (&testUID));
 			checkExpression(memcmp(&testUID, &kAAFTypeID_Rational, sizeof(testUID)) == 0, AAFRESULT_TEST_FAILED);
-			pDefObject->Release();
-			pDefObject = NULL;
+			pMetaDefinition->Release();
+			pMetaDefinition = NULL;
 
 			pParmDef->Release();
 			pParmDef = NULL;
@@ -490,6 +491,9 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
       
 	if (pDefObject)
 		pDefObject->Release();
+  
+  if (pMetaDefinition)
+    pMetaDefinition->Release();
 
 	if (pParmDef)
 		pParmDef->Release();

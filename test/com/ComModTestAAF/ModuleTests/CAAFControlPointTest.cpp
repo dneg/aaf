@@ -397,7 +397,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	IAAFOperationDef		*pOperationDef = NULL;
 	IAAFParameterDef	*pParmDef = NULL;
 	IAAFParameter		*pParameter = NULL;
-	IAAFDefObject*		pDefObject = NULL;
+	IAAFMetaDefinition*		pMetaDefinition = NULL;
 	IAAFSegment*		pSeg = NULL;
 	IAAFOperationGroup*			pOperationGroup = NULL;
 	IEnumAAFMobs		*mobIter = NULL;
@@ -487,15 +487,15 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 			checkResult(pControlPoint->GetEditHint(&checkEditHint));
   			checkExpression(checkEditHint == kAAFRelativeLeft, AAFRESULT_TEST_FAILED);
 			checkResult(pControlPoint->GetTypeDefinition (&pTypeDef));
- 			checkResult(pTypeDef->QueryInterface(IID_IAAFDefObject, (void **) &pDefObject));
-			checkResult(pDefObject->GetAUID(&testInterpDef));
+ 			checkResult(pTypeDef->QueryInterface(IID_IAAFMetaDefinition, (void **) &pMetaDefinition));
+			checkResult(pMetaDefinition->GetAUID(&testInterpDef));
   			checkExpression(memcmp(&testInterpDef, &checkInterpDef, sizeof(aafUID_t)) == 0, AAFRESULT_TEST_FAILED);
 			pControlPoint->Release();
 			pControlPoint = NULL;
 			pTypeDef->Release();
 			pTypeDef = NULL;
-			pDefObject->Release();
-			pDefObject = NULL;
+			pMetaDefinition->Release();
+			pMetaDefinition = NULL;
 			/**/
 			checkResult(pEnumCP->NextOne(&pControlPoint));
 			checkResult(pControlPoint->GetValueBufLen (&testLen));
@@ -510,8 +510,8 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 			checkResult(pControlPoint->GetEditHint(&checkEditHint));
   			checkExpression(checkEditHint == kAAFProportional, AAFRESULT_TEST_FAILED);
 			checkResult(pControlPoint->GetTypeDefinition (&pTypeDef));
- 			checkResult(pTypeDef->QueryInterface(IID_IAAFDefObject, (void **) &pDefObject));
-			checkResult(pDefObject->GetAUID(&testInterpDef));
+ 			checkResult(pTypeDef->QueryInterface(IID_IAAFMetaDefinition, (void **) &pMetaDefinition));
+			checkResult(pMetaDefinition->GetAUID(&testInterpDef));
   			checkExpression(memcmp(&testInterpDef, &checkInterpDef, sizeof(aafUID_t)) == 0, AAFRESULT_TEST_FAILED);
 
 			pControlPoint->Release();
@@ -520,8 +520,8 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 			pEnumCP = NULL;
 			pTypeDef->Release();
 			pTypeDef = NULL;
-			pDefObject->Release();
-			pDefObject = NULL;
+			pMetaDefinition->Release();
+			pMetaDefinition = NULL;
 
 			/*****/
 
@@ -600,8 +600,8 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	if (pOperationDef)
 		pOperationDef->Release();
       
-	if (pDefObject)
-		pDefObject->Release();
+	if (pMetaDefinition)
+		pMetaDefinition->Release();
 
 	if (pParmDef)
 		pParmDef->Release();
