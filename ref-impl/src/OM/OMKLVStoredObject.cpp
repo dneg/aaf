@@ -92,10 +92,11 @@ OMKLVStoredObject* OMKLVStoredObject::createModify(OMRawStorage* rawStorage,
   //   @parm The name of the file to check.
   //   @parm If recognized, the file signature.
   //   @rdesc True if the file is recognized, false otherwise.
-bool OMKLVStoredObject::isRecognized(const wchar_t* /* fileName */,
+bool OMKLVStoredObject::isRecognized(const wchar_t* ANAME(fileName),
                                      OMFileSignature& /* signature */)
 {
   TRACE("OMKLVStoredObject::isRecognized");
+  PRECONDITION("Valid file name", validWideString(fileName));
   bool result = false;
   ASSERT("Unimplemented code not reached", false);
   return result;
@@ -108,10 +109,11 @@ bool OMKLVStoredObject::isRecognized(const wchar_t* /* fileName */,
   //   @parm If recognized, the file signature.
   //   @rdesc True if the <c OMRawStorage> contains a recognized
   //          file, false otherwise.
-bool OMKLVStoredObject::isRecognized(OMRawStorage* /* rawStorage */,
+bool OMKLVStoredObject::isRecognized(OMRawStorage* ANAME(rawStorage),
                                      OMFileSignature& /* signature */)
 {
   TRACE("OMKLVStoredObject::isRecognized");
+  PRECONDITION("Valid raw storage", rawStorage != 0);
   bool result = false;
   ASSERT("Unimplemented code not reached", false);
   return result;

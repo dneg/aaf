@@ -243,6 +243,7 @@ bool OMMSSStoredObject::isRecognized(const wchar_t* fileName,
                                      OMFileSignature& signature)
 {
   TRACE("OMMSSStoredObject::isRecognized");
+  PRECONDITION("Valid file name", validWideString(fileName));
   bool result = false;
   OMFileSignature sig;
   FILE* f = wfopen(fileName, L"rb");
@@ -278,6 +279,7 @@ bool OMMSSStoredObject::isRecognized(OMRawStorage* rawStorage,
                                      OMFileSignature& signature)
 {
   TRACE("OMMSSStoredObject::isRecognized");
+  PRECONDITION("Valid raw storage", rawStorage != 0);
   bool result = false;
   OMFileSignature sig;
   OMUInt32 count;

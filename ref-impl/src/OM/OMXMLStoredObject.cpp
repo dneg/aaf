@@ -111,10 +111,11 @@ OMXMLStoredObject* OMXMLStoredObject::createModify(OMRawStorage* rawStorage,
   //   @parm The name of the file to check.
   //   @parm If recognized, the file signature.
   //   @rdesc True if the file is recognized, false otherwise.
-bool OMXMLStoredObject::isRecognized(const wchar_t* /* fileName */,
+bool OMXMLStoredObject::isRecognized(const wchar_t* ANAME(fileName),
                                      OMFileSignature& /* signature */)
 {
   TRACE("OMXMLStoredObject::isRecognized");
+  PRECONDITION("Valid file name", validWideString(fileName));
   bool result = false;
   ASSERT("Unimplemented code not reached", false);
   return result;
@@ -127,10 +128,11 @@ bool OMXMLStoredObject::isRecognized(const wchar_t* /* fileName */,
   //   @parm If recognized, the file signature.
   //   @rdesc True if the <c OMRawStorage> contains a recognized
   //          file, false otherwise.
-bool OMXMLStoredObject::isRecognized(OMRawStorage* /* rawStorage */,
+bool OMXMLStoredObject::isRecognized(OMRawStorage* ANAME(rawStorage),
                                      OMFileSignature& /* signature */)
 {
   TRACE("OMXMLStoredObject::isRecognized");
+  PRECONDITION("Valid raw storage", rawStorage != 0);
   bool result = false;
   ASSERT("Unimplemented code not reached", false);
   return result;
