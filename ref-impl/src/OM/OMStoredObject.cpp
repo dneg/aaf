@@ -49,16 +49,16 @@
 #include <objbase.h>
 #endif
 
-const OMUInt32 currentVersion = 23;
+const OMVersion currentVersion = 23;
 
-const size_t indexHeaderSize = sizeof(OMByteOrder) +  // Byte order flag
-                               sizeof(OMUInt32) +     // Version number
-                               sizeof(OMUInt32);      // Count of entries
+const size_t indexHeaderSize = sizeof(OMByteOrder) +
+                               sizeof(OMVersion) +
+                               sizeof(OMPropertyCount);
 
-const size_t indexEntrySize  = sizeof(OMPropertyId) + // Property id
-                               sizeof(OMUInt32) +     // Type
+const size_t indexEntrySize  = sizeof(OMPropertyId) +
+                               sizeof(OMStoredForm) +
                                sizeof(OMUInt32) +     // Offset
-                               sizeof(OMUInt32);      // Length
+                               sizeof(OMPropertySize);
 
 #if defined(_MAC) || defined(macintosh) || \
     defined(__sgi) || defined(__linux__) || defined (__FreeBSD__)
@@ -295,7 +295,7 @@ void OMStoredObject::save(OMStoredPropertySetIndex* index)
 
   // The number of entries in the index.
   //
-  OMUInt32 entries = index->entries();
+  OMPropertyCount entries = index->entries();
   ASSERT("Valid index",
                  index->isValid(indexHeaderSize + (entries * indexEntrySize)));
 
@@ -306,7 +306,7 @@ void OMStoredObject::save(OMStoredPropertySetIndex* index)
 
   // Write version number.
   //
-  OMUInt32 version = currentVersion;
+  OMVersion version = currentVersion;
   writeToStream(_properties, &version, sizeof(version));
   
   // Write count of entries.
@@ -316,9 +316,9 @@ void OMStoredObject::save(OMStoredPropertySetIndex* index)
   // Write entries.
   //
   OMPropertyId propertyId;
-  OMUInt32 type;
+  OMStoredForm type;
   OMUInt32 offset;
-  OMUInt32 length;
+  OMPropertySize length;
   size_t context = 0;
   for (size_t i = 0; i < entries; i++) {
     index->iterate(context, propertyId, type, offset, length);
@@ -349,13 +349,13 @@ OMStoredPropertySetIndex* OMStoredObject::restore(void)
 
   // Read version number.
   //
-  OMUInt32 version;
+  OMVersion version;
   readUInt32FromStream(_properties, version, _reorderBytes);
   ASSERT("Recognized version number", version == currentVersion);
   
   // Read count of entries.
   //
-  OMUInt32 entries;
+  OMPropertyCount entries;
   readUInt32FromStream(_properties, entries, _reorderBytes);
   OMStoredPropertySetIndex* index = new OMStoredPropertySetIndex(entries);
   ASSERT("Valid heap pointer", index != 0);
@@ -363,9 +363,9 @@ OMStoredPropertySetIndex* OMStoredObject::restore(void)
   // Read entries.
   //
   OMPropertyId propertyId;
-  OMUInt32 type;
+  OMStoredForm type;
   OMUInt32 offset;
-  OMUInt32 length;
+  OMPropertySize length;
   for (size_t i = 0; i < entries; i++) {
     readUInt32FromStream(_properties, propertyId, _reorderBytes);
     readUInt32FromStream(_properties, type, _reorderBytes);
@@ -390,9 +390,9 @@ void OMStoredObject::restore(OMPropertySet& properties)
   size_t entries = _index->entries();
   
   OMPropertyId propertyId;
-  OMUInt32 type;
+  OMStoredForm type;
   OMUInt32 offset;
-  OMUInt32 length;
+  OMPropertySize length;
   size_t context = 0;
   for (size_t i = 0; i < entries; i++) {
     _index->iterate(context, propertyId, type, offset, length);
@@ -560,9 +560,9 @@ void OMStoredObject::read(OMPropertyId propertyId,
   // the property type is the expected (passed in) type, and that the
   // property length is the expected (passed in as size) length.
   //
-  OMUInt32 actualType;
+  OMStoredForm actualType;
   OMUInt32 actualOffset;
-  OMUInt32 actualLength;
+  OMPropertySize actualLength;
   bool found = _index->find(propertyId,
                             actualType,
                             actualOffset,
@@ -705,9 +705,9 @@ void OMStoredObject::validate(
   PRECONDITION("Valid property set index", propertySetIndex != 0);
 
   OMPropertyId propertyId;
-  OMUInt32 type;
+  OMStoredForm type;
   OMUInt32 offset;
-  OMUInt32 length;
+  OMPropertySize length;
   size_t context;
 
   // Check that all required properties are present.
@@ -730,7 +730,7 @@ void OMStoredObject::validate(
 
   // Check that there are no spurious properties.
   //
-  OMUInt32 entries = propertySetIndex->entries();
+  OMPropertyCount entries = propertySetIndex->entries();
   context = 0;
   for (size_t k = 0; k < entries; k++) {
     propertySetIndex->iterate(context, propertyId, type, offset, length);
@@ -829,12 +829,12 @@ void OMStoredObject::save(const OMStoredSetIndex* set,
 
   // Write the key pid.
   //
-  OMUInt32 pid = set->keyPropertyId();
+  OMPropertyId pid = set->keyPropertyId();
   writeToStream(setIndexStream, &pid, sizeof(pid));
 
   // Write the key size.
   //
-  OMUInt32 keySize = set->keySize();
+  OMKeySize keySize = set->keySize();
   writeToStream(setIndexStream, &keySize, sizeof(keySize));
 
   // For each element write the element name, reference count and key.
@@ -875,7 +875,7 @@ void OMStoredObject::save(const OMPropertyTable* table)
   writeToStream(stream, &_byteOrder, sizeof(_byteOrder));
 
   // count of strings
-  OMUInt32 count = table->count();
+  OMPropertyCount count = table->count();
   writeToStream(stream, &count, sizeof(count));
  
   // count of bytes
@@ -913,14 +913,14 @@ void OMStoredObject::save(OMPropertyId propertyId,
 
   // tag, key pid, key size, key
   const size_t size = sizeof(tag) +
-                      sizeof(OMPropertyId) + sizeof(OMUInt32) + sizeof(id);
+                      sizeof(OMPropertyId) + sizeof(OMKeySize) + sizeof(id);
   OMByte buffer[size];
   OMByte* p = &buffer[0];
   memcpy(p, &tag, sizeof(tag));
   p += sizeof(tag);
   memcpy(p , &keyPropertyId, sizeof(keyPropertyId));
   p += sizeof(keyPropertyId);
-  OMUInt32 keySize = sizeof(id);
+  OMKeySize keySize = sizeof(id);
   memcpy(p, &keySize, sizeof(keySize));
   p += sizeof(keySize);
   memcpy(p, &id, sizeof(id));
@@ -978,7 +978,7 @@ void OMStoredObject::save(OMPropertyId propertyId,
 
   // Write key size.
   //
-  OMUInt32 keySize = sizeof(OMUniqueObjectIdentification);
+  OMKeySize keySize = sizeof(OMUniqueObjectIdentification);
   writeToStream(indexStream, &keySize, sizeof(keySize));
 
   if (count > 0) {
@@ -1094,12 +1094,12 @@ void OMStoredObject::restore(OMStoredSetIndex*& set,
 
   // Read the key pid.
   //
-  OMUInt32 keyPid;
+  OMPropertyId keyPid;
   readUInt32FromStream(setIndexStream, keyPid, _reorderBytes);
 
   // Read the key size.
   //
-  OMUInt32 keySize;
+  OMKeySize keySize;
   readUInt32FromStream(setIndexStream, keySize, _reorderBytes);
 
   // Create an index.
@@ -1199,7 +1199,7 @@ void OMStoredObject::restore(OMPropertyTable*& table)
   }
 
   // count of strings
-  OMUInt32 count;
+  OMPropertyCount count;
   readUInt32FromStream(stream, count, reorderBytes);
   table = new OMPropertyTable();
   ASSERT("Valid heap pointer", table != 0);
@@ -1241,7 +1241,7 @@ void OMStoredObject::restore(OMPropertyId propertyId,
 
   // tag, key pid, key size, key
   const size_t size = sizeof(tag) +
-                      sizeof(OMPropertyId) + sizeof(OMUInt32) + sizeof(id);
+                      sizeof(OMPropertyId) + sizeof(OMKeySize) + sizeof(id);
   OMByte buffer[size];
   OMByte* p = &buffer[0];
 
@@ -1250,7 +1250,7 @@ void OMStoredObject::restore(OMPropertyId propertyId,
   p += sizeof(tag);
   memcpy(&keyPropertyId, p, sizeof(keyPropertyId));
   p += sizeof(keyPropertyId);
-  OMUInt32 keySize;
+  OMKeySize keySize;
   memcpy(&keySize, p, sizeof(keySize));
   p += sizeof(keySize);
   memcpy(&id, p, sizeof(id));
@@ -1310,7 +1310,7 @@ void OMStoredObject::restore(OMPropertyId propertyId,
 
   // Read the key size.
   //
-  OMUInt32 keySize;
+  OMKeySize keySize;
   readUInt32FromStream(indexStream, keySize, _reorderBytes);
 
   // Create an index.
