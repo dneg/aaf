@@ -185,6 +185,7 @@ int main(int argumentCount, char* argumentVector[])
 {
   if (argumentCount != 2) {
     fprintf(stderr, "Error : wrong number of arguments\n");
+    fprintf(stderr, "Usage : AAFInfo <file>\n");
     return(1);
   }
 
