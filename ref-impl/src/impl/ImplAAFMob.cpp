@@ -61,11 +61,11 @@ extern "C" const aafClassID_t CLSID_AAFSourceClip;
 extern "C" const aafClassID_t CLSID_AAFFindSourceInfo;
 
 ImplAAFMob::ImplAAFMob ()
-: _mobID(			PID_MOB_MOBID,			"MobID"),
-  _name(			PID_MOB_NAME,			"Name"),
-  _creationTime(    PID_MOB_CREATE_TIME,	"CreateTime"),
-  _lastModified(    PID_MOB_MOD_TIME,		"ModTime"),
-  _slots(			PID_MOB_SLOTS,			"Slots")
+: _mobID(			PID_Mob_MobID,			"Mob ID"),
+  _name(			PID_Mob_Name,			"Name"),
+  _creationTime(    PID_Mob_CreationTime,	"Creation Time"),
+  _lastModified(    PID_Mob_LastModified,		"Last Modified"),
+  _slots(			PID_Mob_Slots,			"Slots")
 {
 	_persistentProperties.put(_mobID.address());
 	_persistentProperties.put(_name.address());
@@ -90,7 +90,6 @@ ImplAAFMob::~ImplAAFMob ()
 		{
 			pSlot->ReleaseReference();
 			pSlot = NULL;
-			// Set the current value to 0 so that the OM can perform necessary cleanup.
 			_slots.setValueAt(0, i);
 		}
 	}
