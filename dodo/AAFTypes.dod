@@ -689,7 +689,7 @@ typedef enum _aafSearchTag_t
 	kByMobKind = 2, 
 	kByName = 3, 
 	kByClass = 4, 
-	kByDatakind = 5,
+	kByDataDef = 5,
 	kByMediaCrit = 6
 } aafSearchTag_t;
 
@@ -709,7 +709,7 @@ typedef struct _aafSearchCrit_t
 			aafString_t *name;
         [case(kByClass)]
 			aafClassID_t objClass;	// shouldn't this be a pointer?
-        [case(kByDatakind)]
+        [case(kByDataDef)]
 			aafUID_t datadef;	// shouldn't this be a pointer?
         [case(kByMediaCrit)]
 			aafCriteriaType_t mediaCrit;
