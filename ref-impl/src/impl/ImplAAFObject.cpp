@@ -1,6 +1,6 @@
 /***********************************************************************
  *
- *              Copyright (c) 1998-1999 Avid Technology, Inc.
+ *              Copyright (c) 1998-2000 Avid Technology, Inc.
  *
  * Permission to use, copy and modify this software and accompanying 
  * documentation, and to distribute and sublicense application software
@@ -349,40 +349,50 @@ AAFRESULT ImplPropertyCollection::Initialize
 	  size_t omContext = 0;
 	  OMProperty * pOmProp = NULL;
 	  aafUInt32 presentPropIdx = 0;
-	  for (aafUInt32 definedPropIdx = 0;
-		   definedPropIdx < numPropsDefined;
-		   definedPropIdx++)
+
+	  aafUInt32 propCount = numPropsDefined;
+	  while (1)
 		{
-		  pOMPropSet->iterate (omContext, pOmProp);
-		  assert (pOmProp);
-		  if (pOmProp->isOptional() && !pOmProp->isPresent())
-			// optional property not present
-			continue;
+		  ImplEnumAAFPropertyDefsSP pPropEnum;
+		  ar = pClassDef->GetPropertyDefs (&pPropEnum);
+		  if (AAFRESULT_FAILED(ar)) throw ar;
+		  while (AAFRESULT_SUCCEEDED (pPropEnum->NextOne (&pPropDef)))
+			{
+			  OMPropertyId opid = pPropDef->OmPid ();
+			  if (PID_InterchangeObject_ObjClass == opid)
+				// objclass isn't a real property yet...
+				break;
+			  pOmProp = pOMPropSet->get (opid);
+			  assert (pOmProp);
+			  propCount --;
+			  if (pOmProp->isOptional() && !pOmProp->isPresent())
+				// optional property not present
+				continue;
 
-		  OMPropertyId opid = pOmProp->propertyId ();
-		  assert (pClassDef);
-		  AAFRESULT ar = pClassDef->LookupPropertyDefbyOMPid (opid, &pPropDef);
+			  // Create property; array is smart pointers, which will
+			  // maintain their own reference counts.  First assign new
+			  // prop to temp, so we can release it after the sp
+			  // assignment.
+			  ImplAAFProperty * tmp = (ImplAAFProperty*) CreateImpl (CLSID_AAFProperty);
+			  if (! tmp) 
+				throw AAFRESULT_NOMEMORY;
+			  _pProperties[presentPropIdx] = tmp;
+			  tmp->ReleaseReference ();
+			  tmp = 0;
+
+			  ar = _pProperties[presentPropIdx]->Initialize (pPropDef, pOmProp);
+			  if (AAFRESULT_FAILED (ar)) throw ar;
+
+			  presentPropIdx++;
+			}
+		  ImplAAFClassDefSP pParent;
+		  ar = pClassDef->GetParent (&pParent);
+		  if (AAFRESULT_IS_ROOT_CLASS == ar)
+			break;
 		  if (AAFRESULT_FAILED (ar)) throw ar;
-		  assert (pPropDef);
-
-		  // Create property; array is smart pointers, which will
-		  // maintain their own reference counts.  First assign new
-		  // prop to temp, so we can release it after the sp
-		  // assignment.
-		  ImplAAFProperty * tmp = (ImplAAFProperty*) CreateImpl (CLSID_AAFProperty);
-		  if (! tmp) 
-			throw AAFRESULT_NOMEMORY;
-		  _pProperties[presentPropIdx] = tmp;
-		  tmp->ReleaseReference ();
-		  tmp = 0;
-
-		  ar = _pProperties[presentPropIdx]->Initialize (pPropDef, pOmProp);
-		  if (AAFRESULT_FAILED (ar)) throw ar;
-
-		  presentPropIdx++;
-		  assert (presentPropIdx <= numPropsPresent);
+		  pClassDef = pParent;
 		}
-	  assert (presentPropIdx == numPropsPresent);
+	  assert (0 == propCount);
 	}
   catch (AAFRESULT &rCaught)
 	{
