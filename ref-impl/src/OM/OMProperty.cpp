@@ -90,7 +90,9 @@ void OMSimpleProperty::saveTo(OMStoredObject& s) const
 
 // class OMCollectionProperty
 
-OMCollectionProperty::OMCollectionProperty(int pid, const int type, const char* name)
+OMCollectionProperty::OMCollectionProperty(int pid,
+                                           const int type,
+                                           const char* name)
 : OMProperty(pid, type, name)
 {
 }
@@ -98,32 +100,26 @@ OMCollectionProperty::OMCollectionProperty(int pid, const int type, const char* 
 // class OMStringProperty
 
 OMStringProperty::OMStringProperty(int pid, const char* name)
-: OMVariableSizeProperty<char>(pid, name)
+: OMCharacterStringProperty<char>(pid, name)
 {
 }
 
 OMStringProperty& OMStringProperty::operator = (const char* value)
 {
-  if (value != 0) {
-    setValue(value, strlen(value) + 1);
-  } else {
-    char* emptyString = "";
-    setValue(emptyString, strlen(emptyString) + 1);
-  }
+  assign(value);
   return *this;
 }
-  
-OMStringProperty::operator const char* (void)
+
+// class OMWideStringProperty
+
+OMWideStringProperty::OMWideStringProperty(int pid, const char* name)
+: OMCharacterStringProperty<wchar_t>(pid, name)
 {
-  return reinterpret_cast<const char*>(_bits);
 }
 
-OMStringProperty::operator const char* (void) const
+OMWideStringProperty& OMWideStringProperty::operator = (const wchar_t* value)
 {
-  return reinterpret_cast<const char*>(_bits);
+  assign(value);
+  return *this;
 }
 
-size_t OMStringProperty::length(void)
-{
-  return size() - 1;
-}
