@@ -12,8 +12,8 @@
 #include <assert.h>
 #include <iostream.h>
 
-#ifndef __IAAFSmartPointer_h__
-#include "IAAFSmartPointer.h"
+#ifndef __AAFSmartPointer_h__
+#include "AAFSmartPointer.h"
 #endif
 
 #if defined(macintosh) || defined(_MAC)
