@@ -63,7 +63,6 @@ typedef ImplAAFSmartPointer<ImplAAFRandomRawStorage>
 //{0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xff}};
 
 
-static const aafUID_t kNullAuid = { 0 };
 static const aafProductIdentification_t kNullIdent = { 0 };
 
 //
