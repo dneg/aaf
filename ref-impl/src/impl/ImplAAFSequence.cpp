@@ -174,12 +174,16 @@ AAFRESULT STDMETHODCALLTYPE
 	XPROTECT()
 	{
 		// Verify that component's datadef converts to sequence's datadef
-		GetDataDef(&sequDataDef);
-		pComponent->GetDataDef(&cpntDataDef);
-		CHECK(cpntDataDef->DoesDataDefConvertTo(sequDataDef, &willConvert));
+		if(GetDataDef(&sequDataDef) == AAFRESULT_SUCCESS)
+		{
+			pComponent->GetDataDef(&cpntDataDef);
+			CHECK(cpntDataDef->DoesDataDefConvertTo(sequDataDef, &willConvert));
 		
-		if (willConvert == kAAFFalse)
-			RAISE(AAFRESULT_INVALID_DATADEF);
+			if (willConvert == kAAFFalse)
+				RAISE(AAFRESULT_INVALID_DATADEF);
+		}
+		else
+			SetDataDef(cpntDataDef);
 		
 		status = GetLength(&sequLen);
 		if(status == AAFRESULT_PROP_NOT_PRESENT /*AAFRESULT_BAD_PROP ???*/)

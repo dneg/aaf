@@ -110,6 +110,7 @@
 #include "AAFPropertyIDs.h"
 #include "ImplAAFObjectCreation.h"
 #include "ImplAAFBuiltinDefs.h"
+#include "AAFClassDefUIDs.h"
 
 
 #include <assert.h>
@@ -405,8 +406,8 @@ ImplAAFDictionary::CreateAndInit(ImplAAFClassDef * pClassDef) const
 
 ImplAAFObject* ImplAAFDictionary::pvtInstantiate(const aafUID_t & auid) const
 {
-  static const aafUID_t kNullUID = { 0 } ;
   ImplAAFObject *result = 0;
+  ImplAAFClassDef	*parent;
 
   // Is this a request to create the dictionary?
   if (memcmp(&auid, &AUID_AAFDictionary, sizeof(aafUID_t)) == 0)
@@ -432,13 +433,15 @@ ImplAAFObject* ImplAAFDictionary::pvtInstantiate(const aafUID_t & auid) const
 	  while (result == 0)
 		{
 		  aafUID_t parentAUID = auid;
-		  
+		  aafBool	isRoot;
+
 		  // Not a built-in class; find the nearest built-in parent.
 		  // That is, iterate up the inheritance hierarchy until we
 		  // find a class which we know how to instantiate.
 		  //
 		  ImplAAFClassDefSP pcd;
 		  AAFRESULT hr;
+
 		  hr = ((ImplAAFDictionary*)this)->LookupClassDef (parentAUID, &pcd);
 		  if (AAFRESULT_FAILED (hr))
 			{
@@ -447,8 +450,8 @@ ImplAAFObject* ImplAAFDictionary::pvtInstantiate(const aafUID_t & auid) const
 			  assert (0 == result);
 			  break;
 			}
-		  pcd->pvtGetParentAUID (parentAUID);
-		  if (EqualAUID (&parentAUID, &kNullUID))
+			hr = pcd->IsRoot(&isRoot);
+		  if (isRoot || hr != AAFRESULT_SUCCESS)
 			{
 			  // Class was apparently registered, but no appropriate
 			  // parent class found!  This should not happen, as every
@@ -458,6 +461,8 @@ ImplAAFObject* ImplAAFDictionary::pvtInstantiate(const aafUID_t & auid) const
 			  // pvtCreateBaseClassInstance() call.
 			  assert (0);
 			}
+			hr = pcd->GetParent (&parent);
+			hr = parent->GetAUID(&parentAUID);
 		  result = pvtCreateBaseClassInstance(parentAUID);
 		}
 	}
@@ -589,20 +594,35 @@ AAFRESULT STDMETHODCALLTYPE
   if (! ppClassDef) return AAFRESULT_NULL_PARAM;
 
   if (pvtLookupAxiomaticClassDef (classID, ppClassDef))
-	{
+  {
 	  assert (*ppClassDef);
 	  // Yes, this is an axiomatic class.  classDef should be filled
 	  // in.  Assure that it's in the dictionary, and return it.
-
-	  // Future! here's where we assure it's in the dictionary.
-	  // if (! class-present-in-dictionary)
-	  // {
-	  //   put-it-into-the-dictionary();
-	  // }
-
+	  
+	  // here's where we assure it's in the dictionary.
+	  if(_defRegistrationAllowed)
+	  {
+		  ImplAAFClassDef	*dictValue;
+		  // These classes fail with doubly-opened storages
+		  if(memcmp(&classID, &kAAFClassID_ClassDefinition, sizeof(aafUID_t)) != 0
+		   && memcmp(&classID, &kAAFClassID_TypeDefinitionString, sizeof(aafUID_t)) != 0
+		   && memcmp(&classID, &kAAFClassID_TypeDefinitionVariableArray, sizeof(aafUID_t)) != 0
+		   && memcmp(&classID, &kAAFClassID_TypeDefinitionRecord, sizeof(aafUID_t)) != 0
+		   && memcmp(&classID, &kAAFClassID_TypeDefinitionFixedArray, sizeof(aafUID_t)) != 0
+		   && memcmp(&classID, &kAAFClassID_TypeDefinitionInteger, sizeof(aafUID_t)) != 0)
+		  {
+			  status = dictLookupClassDef(classID, &dictValue);
+			  if(status != AAFRESULT_SUCCESS || dictValue == NULL)
+			  {
+				  status = RegisterClassDef(*ppClassDef);
+				  assert (AAFRESULT_SUCCEEDED (status));
+			  }
+		  }
+	  }
+	  
 	  AssurePropertyTypes (*ppClassDef);
 	  return AAFRESULT_SUCCESS;
-	}
+  }
 
   // Not axiomatic.  Check to see if it's already in the dict.
   status = dictLookupClassDef (classID, ppClassDef);
@@ -645,7 +665,7 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFDictionary::CreateImplClassDef (
       aafUID_constref classID,
-      aafUID_constref parentClassId,
+      ImplAAFClassDef * pParentClass,
       aafCharacter_constptr pClassName,
       ImplAAFClassDef ** ppClassDef)
 {
@@ -663,7 +683,7 @@ AAFRESULT STDMETHODCALLTYPE
   if (NULL == pClassDef)
     return AAFRESULT_NOMEMORY;
 
-  result = pClassDef->pvtInitialize(classID, &parentClassId, pClassName);
+  result = pClassDef->pvtInitialize(classID, pParentClass, pClassName);
   if (AAFRESULT_FAILED(result))
   {
     // Delete the new object.
@@ -1665,6 +1685,8 @@ void ImplAAFDictionary::InitBuiltins()
 	}
   dataDef->ReleaseReference();
   dataDef = NULL;
+
+  _pBuiltinClasses;
 
   AssureClassPropertyTypes ();
 }

@@ -73,11 +73,11 @@ ImplAAFBuiltinClasses::sBuiltinClassTable[] = \
 #define AAF_TABLE_END() \
 };
 
-const static aafUID_t NULL_AUID = { 0 };
+const static aafUID_t NULL2_AUID = { 0 };
 
 // Special case: classes which descend from AAFRoot (actualy only
 // AAFObject) should report NULL as their parent class.
-#define AUID_AAFRoot NULL_AUID
+#define AUID_AAFRoot NULL2_AUID
 
 #define AUID_AAFClassDefinition AUID_AAFClassDef
 #define AUID_AAFDataDefinition AUID_AAFDataDef
@@ -339,38 +339,54 @@ AAFRESULT
 ImplAAFBuiltinClasses::InitBuiltinClassDef (const aafUID_t & rClassID,
 											ImplAAFClassDef * pClass)
 {
-  assert (pClass);
-  AAFRESULT status = AAFRESULT_NO_MORE_OBJECTS;
-  ImplAAFUID popped;
-  aafUInt32 i;
-  const aafUInt32 kNumClasses =
-	sizeof (sBuiltinClassTable) / sizeof (sBuiltinClassTable[0]);
-
-  assert (! _initStack.isPresent (rClassID));
-
-  _initStack.push (rClassID);
-
-  for (i = 0; i < kNumClasses; i++)
+	assert (pClass);
+	AAFRESULT status = AAFRESULT_NO_MORE_OBJECTS;
+	ImplAAFUID popped;
+	ImplAAFClassDef *parent;
+	aafUInt32 i;
+	const aafUInt32 kNumClasses =
+		sizeof (sBuiltinClassTable) / sizeof (sBuiltinClassTable[0]);
+	
+	assert (! _initStack.isPresent (rClassID));
+	
+	_initStack.push (rClassID);
+	
+	for (i = 0; i < kNumClasses; i++)
 	{
-	  if (EqualAUID (sBuiltinClassTable[i].pThisId, &rClassID))
+		if (EqualAUID (sBuiltinClassTable[i].pThisId, &rClassID))
 		{
-		  AAFRESULT hr;
-		  hr = pClass->pvtInitialize (*sBuiltinClassTable[i].pThisId,
-									  sBuiltinClassTable[i].pParentId,
-									  sBuiltinClassTable[i].pName);
+			AAFRESULT hr;
 
-		  assert (AAFRESULT_SUCCEEDED (hr));
 
-		  RegisterBuiltinProperties (pClass);
-
-		  status = AAFRESULT_SUCCESS;
-		  break;
+			if(memcmp(sBuiltinClassTable[i].pParentId, &AUID_AAFRoot, sizeof(aafUID_t)) != 0)
+			{
+				// JeffB: The LookupClassDef() call on the parent may make a recursive
+				// call to InitBuiltinClassDef for the parent class.  Since we have a moderately
+				// shallow tree with no loops, this shouldn't be a problem.
+				hr = _dictionary->LookupClassDef(*sBuiltinClassTable[i].pParentId, &parent);
+ 				assert (AAFRESULT_SUCCEEDED (hr));
+			}
+			else
+				parent = pClass;	// Hit an object whose parent is NULL, end the recursion.
+			hr = pClass->pvtInitialize (*sBuiltinClassTable[i].pThisId,
+										parent,
+										sBuiltinClassTable[i].pName);
+			hr = pClass->SetBootstrapParent(parent);
+			assert (AAFRESULT_SUCCEEDED (hr));
+			
+			assert (AAFRESULT_SUCCEEDED (hr));
+			
+			RegisterBuiltinProperties (pClass);
+	
+			status = AAFRESULT_SUCCESS;
+			break;
 		}
 	}
-  // not found
-  popped = _initStack.pop ();
-  assert (popped == rClassID);
-  return status;
+
+	// not found
+	popped = _initStack.pop ();
+	assert (popped == rClassID);
+	return status;
 }
 
 
@@ -540,7 +556,9 @@ void ImplAAFBuiltinClasses::instantiateProps ()
 
 void ImplAAFBuiltinClasses::instantiateClasses ()
 {
-  aafUInt32 classIdx;
+  aafUInt32			classIdx;
+  ImplAAFClassDef	*parent;
+
   // foreach axiomatic class id, instantiate a class def object.
   for (classIdx = 0; classIdx < ksNumAxClasses; classIdx++)
 	{
@@ -558,7 +576,7 @@ void ImplAAFBuiltinClasses::instantiateClasses ()
 
 	  AAFRESULT hr;
 	  hr = _axClassDefs[classIdx]->pvtInitialize (*cte->pThisId,
-												  cte->pParentId,
+												  NULL,	// Make NULL & fill in later
 												  cte->pName);
 	  assert (AAFRESULT_SUCCEEDED (hr));
 
@@ -578,9 +596,32 @@ void ImplAAFBuiltinClasses::instantiateClasses ()
 		}
 	}
 
+  // JeffB: Pass two on the class structure, fill in the parent of each class
   // Initialize the OM properties for each axiomatic class.
   for (classIdx = 0; classIdx < ksNumAxClasses; classIdx++)
 	{
+	  AAFRESULT hr;
+	  const ClassTblEntry * cte = lookupClassEntry(*sAxClassIDs[classIdx]);
+
+	  // Lookup and set the parent here
+ 	  parent = LookupAxiomaticClass(*cte->pParentId);
+	  if(parent)
+	  {
+		 hr = _axClassDefs[classIdx]->SetParent(parent);
+		 assert (AAFRESULT_SUCCEEDED (hr));
+		 hr = _axClassDefs[classIdx]->SetBootstrapParent(parent);
+		 assert (AAFRESULT_SUCCEEDED (hr));
+	  }
+	  else
+	  {
+			aafBool isRoot;
+		  hr = _axClassDefs[classIdx]->IsRoot(&isRoot);
+		  assert (AAFRESULT_SUCCEEDED (hr));
+		  assert(isRoot);
+		  hr = _axClassDefs[classIdx]->SetParent(_axClassDefs[classIdx]);	// Make root curcular
+		  assert (AAFRESULT_SUCCEEDED (hr));
+	  }
+
 	  ImplAAFClassDef * pcd = _axClassDefs[classIdx];
 	  assert (pcd);
 	  OMPropertySet * ps = pcd->propertySet();

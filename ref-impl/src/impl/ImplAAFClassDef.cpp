@@ -54,12 +54,15 @@
 #include "AAFPropertyIDs.h"
 #include "ImplAAFObjectCreation.h"
 #include "ImplAAFBuiltinDefs.h"
+#include "ImplAAFBuiltinDefs.h"
+#include "ImplAAFHeader.h"
 #include "AAFUtils.h"
 
 #include <assert.h>
 #include <string.h>
 
 extern "C" const aafClassID_t CLSID_EnumAAFPropertyDefs;
+extern "C" const aafClassID_t CLSID_AAFObject;
 
 //
 // locals obj mgmt utils
@@ -89,9 +92,10 @@ extern "C" const aafClassID_t CLSID_EnumAAFPropertyDefs;
 
 
 ImplAAFClassDef::ImplAAFClassDef ()
-  : _ParentClass  ( PID_ClassDefinition_ParentClass,  "ParentClass"),
+  : _ParentClass  ( PID_ClassDefinition_ParentClass,  "ParentClass", "/Dictionary/ClassDefinitions"),
 	_Properties   ( PID_ClassDefinition_Properties,   "Properties"),
-	_propTypesLoaded (false)
+	_propTypesLoaded (false),
+	_BootstrapParent(0)
 {
   _persistentProperties.put(_ParentClass.address());
   _persistentProperties.put(_Properties.address());
@@ -126,43 +130,40 @@ AAFRESULT STDMETHODCALLTYPE
 {
   if (!pClassName) return AAFRESULT_NULL_PARAM;
 
-  HRESULT hr;
-  aafUID_t parentId;
-  if (pParentClass)
-	{
-	  hr = pParentClass->GetAUID(&parentId);
-	  if (! AAFRESULT_SUCCEEDED (hr)) return hr;
-	}
-  else
-	{
-	  aafUID_t NULL_UID = { 0 };
-	  parentId = NULL_UID;
-	}
-
-  return pvtInitialize (classID, &parentId, pClassName);
+  return pvtInitialize (classID, pParentClass, pClassName);
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFClassDef::pvtInitialize (
       const aafUID_t & classID,
-      const aafUID_t * pParentClassId,
+      const ImplAAFClassDef * pParentClass,
       const aafCharacter * pClassName)
 {
-  if (!pClassName) return AAFRESULT_NULL_PARAM;
-  if (! pParentClassId) return AAFRESULT_NULL_PARAM;
-
-
-  HRESULT hr;
-  hr = SetName (pClassName);
-  if (! AAFRESULT_SUCCEEDED (hr)) return hr;
-
-  hr = SetAUID (classID);
-  if (! AAFRESULT_SUCCEEDED (hr)) return hr;
-
-  _ParentClass = *pParentClassId;
-
-  return AAFRESULT_SUCCESS;
+	ImplAAFClassDef	*oldParent;
+	if (!pClassName) return AAFRESULT_NULL_PARAM;	
+	
+	HRESULT hr;
+	hr = SetName (pClassName);
+	if (! AAFRESULT_SUCCEEDED (hr)) return hr;
+	
+	hr = SetAUID (classID);
+	if (! AAFRESULT_SUCCEEDED (hr)) return hr;
+	
+	// find out if this OperationDef is already set
+	if(!_ParentClass.isVoid())
+	{
+		oldParent = _ParentClass;
+		if (oldParent != 0)
+			oldParent->ReleaseReference();
+	}
+	if(pParentClass)
+	{
+		pParentClass->AcquireReference();
+		_ParentClass = pParentClass;
+	}
+	
+	return AAFRESULT_SUCCESS;
 }
 
 
@@ -346,13 +347,19 @@ AAFRESULT STDMETHODCALLTYPE
   // If we're here, there aren't any more props so that prop
   // wasn't found in this class; try any base classes.
   ImplAAFClassDefSP parentSP;
-  AAFRESULT hr = GetParent (&parentSP);
+  aafBool			isRootObject;
+  AAFRESULT hr = IsRoot (&isRootObject);
   if (AAFRESULT_FAILED (hr))
-	return hr;
-  if (parentSP)
-    return parentSP->generalLookupPropertyDef (propId, ppPropDef);
+	  return hr;
+  if(isRootObject)
+	  return AAFRESULT_NO_MORE_OBJECTS;
   else
-	return AAFRESULT_NO_MORE_OBJECTS;
+  {
+	  hr = GetParent (&parentSP);
+	  if (AAFRESULT_FAILED (hr))
+	     return hr;
+      return parentSP->generalLookupPropertyDef (propId, ppPropDef);
+  }
 }
 
 
@@ -382,60 +389,82 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 
-
-void ImplAAFClassDef::pvtGetParentAUID (aafUID_t & result)
-{
-  result = _ParentClass;
-}
-
-
-
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFClassDef::GetParent (
       ImplAAFClassDef ** ppClassDef)
 {
-  if (! ppClassDef) return AAFRESULT_NULL_PARAM;
+	aafBool		isRoot;
+	aafUID_t	uid;	//!!!DEBUG
+	if (! ppClassDef) return AAFRESULT_NULL_PARAM;
+	
+	IsRoot (&isRoot);
+	if(isRoot)
+		return AAFRESULT_IS_ROOT_CLASS;
 
-  if (! _cachedParentClass)
+	GetAUID (&uid);	//!!!DEBUG
+	if(_BootstrapParent == NULL && memcmp(&uid, &AUID_AAFComponent, sizeof(aafUID_t)) == 0) //!!!DEBUG
 	{
-	  ImplAAFDictionarySP pDict;
-	  AAFRESULT hr;
-
-	  // If no parent, return NULL (and success)
-	  aafUID_t parentClass;
-	  pvtGetParentAUID (parentClass);
-	  const aafUID_t null_UID = { 0 };
-	  if (EqualAUID(&parentClass, &null_UID))
-		{
-		  assert (ppClassDef);
-		  *ppClassDef = 0;
-		  return AAFRESULT_SUCCESS;
-		}
-
-	  hr = GetDictionary(&pDict);
-	  if (AAFRESULT_FAILED (hr)) return hr;
-	  assert (pDict);
-
-	  ImplAAFClassDefSP tmp;
-	  assert (! _cachedParentClass);
-	  hr = pDict->LookupClassDef (parentClass, &tmp);
-	  if (AAFRESULT_FAILED (hr))
-		return hr;
-	  // If _cachedParentClass was set during process of looking this
-	  // up, then simply throw away the most recently looked-up one
-	  // (in tmp).
-	  if (! _cachedParentClass)
-		_cachedParentClass = tmp;
-	  assert (_cachedParentClass);
+		GetAUID (&uid);	//!!!DEBUG
 	}
-  assert (ppClassDef);
-  *ppClassDef = _cachedParentClass;
-  assert (*ppClassDef);
-  (*ppClassDef)->AcquireReference ();
 
+	if(_BootstrapParent != NULL)
+		*ppClassDef = _BootstrapParent;	// If we are in the bootstrap process
+	else
+		*ppClassDef = _ParentClass;		// else follow the weak reference
+	assert(*ppClassDef != NULL);
+	if(*ppClassDef != NULL)
+		(*ppClassDef)->AcquireReference ();
+	
+	return AAFRESULT_SUCCESS;
+}
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFClassDef::IsRoot (
+      aafBool * isRoot)
+{
+	aafUID_t	uid;
+	
+	if (! isRoot) return AAFRESULT_NULL_PARAM;
+	
+	GetAUID (&uid);
+	*isRoot = memcmp(&uid, &AUID_AAFObject, sizeof(aafUID_t)) == 0;
+
+	return AAFRESULT_SUCCESS;
+}
+
+// SetParent is SDK INTERNAL
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFClassDef::SetParent (
+      ImplAAFClassDef *pClassDef)
+{
+  ImplAAFClassDef	*oldClassDef;
+  
+  if (! pClassDef)
+	return AAFRESULT_NULL_PARAM;
+
+	// find out if this OperationDef is already set
+	if(!_ParentClass.isVoid())
+	{
+		oldClassDef = _ParentClass;
+		if (oldClassDef != 0)
+			oldClassDef->ReleaseReference();
+	}
+	_ParentClass = pClassDef;
+	if(pClassDef)
+		pClassDef->AcquireReference();
   return AAFRESULT_SUCCESS;
 }
 
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFClassDef::SetBootstrapParent (
+	ImplAAFClassDef *pClassDef)
+{
+	if (! pClassDef)
+		return AAFRESULT_NULL_PARAM;
+	
+	_BootstrapParent = pClassDef;
+	return AAFRESULT_SUCCESS;
+}
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFClassDef::CreateInstance (
@@ -571,10 +600,31 @@ void ImplAAFClassDef::AssurePropertyTypesLoaded ()
 
 		  // Look at the parent of this class
 		  ImplAAFClassDefSP parentSP;
+		  aafBool	isRoot;
+
+		  hr = spDef->IsRoot(&isRoot);
+		  assert (AAFRESULT_SUCCEEDED (hr));
+		  if (isRoot)
+			break;
 		  hr = spDef->GetParent (&parentSP);
 		  assert (AAFRESULT_SUCCEEDED (hr));
-		  if (! parentSP)
-			break;
+//!!!		  if (parentSP == NULL)
+//		  {
+//			 ImplAAFDictionary *pDict;
+//			 ImplAAFClassDef	*curClass;
+//			aafUID_t	uid;
+//
+//			hr = spDef->GetAUID (&uid);
+//		    assert (AAFRESULT_SUCCEEDED (hr));
+//			hr = spDef->GetDictionary(&pDict);
+//		    assert (AAFRESULT_SUCCEEDED (hr));
+//			hr = pDict->LookupClassDef (uid, &curClass);
+//		    assert (AAFRESULT_SUCCEEDED (hr));
+//			hr = curClass->GetParent(&parentSP);
+//		    assert (AAFRESULT_SUCCEEDED (hr));
+//		  }
+
+		  assert (parentSP != NULL);
 		  spDef = parentSP;
 		}
 	}
@@ -630,11 +680,16 @@ void ImplAAFClassDef::InitOMProperties (ImplAAFObject * pObj)
   // Init base class properties first
   //
   ImplAAFClassDefSP parentSP;
-  hr = GetParent (&parentSP);
-  assert (AAFRESULT_SUCCEEDED (hr));
-  // parentSP will be NULL if this class has no parent.
-  if (parentSP)
-	parentSP->InitOMProperties (pObj);
+  aafBool		isRoot;
+
+  hr = IsRoot(&isRoot);
+  if(!isRoot)
+  {
+	hr = GetParent (&parentSP);
+	assert (AAFRESULT_SUCCEEDED (hr));
+	if (parentSP)
+	  parentSP->InitOMProperties (pObj);
+  }
 
   // See if currently existing OM properties are defined in the class
   // def.
@@ -661,32 +716,35 @@ void ImplAAFClassDef::InitOMProperties (ImplAAFObject * pObj)
 		  // property.
 		  pProp = ps->get (defPid);
 		}		  
-	  else
-		{
+	  else if(defPid != PID_InterchangeObject_ObjClass)
+	  {
 		  // Defined property wasn't found in OM property set.
 		  // We'll have to install one.
 		  pProp = propDefSP->CreateOMProperty ();
 		  assert (pProp);
-
+		  
 		  // Remember this property so we can delete it later.
 		  pObj->RememberAddedProp (pProp);
-
+		  
 		  // Add the property to the property set.
 		  ps->put (pProp);
-		}
-
-	  ImplAAFPropertyDef * pPropDef =
-		(ImplAAFPropertyDef*) propDefSP;
-	  OMPropertyDefinition * pOMPropDef =
-		dynamic_cast<OMPropertyDefinition*>(pPropDef);
-	  assert (pOMPropDef);
-
-	  assert (pProp);
-	  pProp->initialize (pOMPropDef);
-
+	  }
+	  
+	  if(defPid != PID_InterchangeObject_ObjClass)
+	  {
+		  ImplAAFPropertyDef * pPropDef =
+			  (ImplAAFPropertyDef*) propDefSP;
+		  OMPropertyDefinition * pOMPropDef =
+			  dynamic_cast<OMPropertyDefinition*>(pPropDef);
+		  assert (pOMPropDef);
+		  
+		  assert (pProp);
+		  pProp->initialize (pOMPropDef);
+		  
+		  pPropDef = 0;
+		  pOMPropDef = 0;
+	  }
 	  propDefSP = 0;
 	  pProp = 0;
-	  pOMPropDef = 0;
-	  pPropDef = 0;
-	}
+  }
 }

@@ -87,7 +87,7 @@ extern "C" const aafClassID_t CLSID_EnumAAFParameters;
 const aafUID_t kNullID = {0};
 
 ImplAAFOperationGroup::ImplAAFOperationGroup ()
-: _operationDefinition( PID_OperationGroup_OperationDefinition, "OperationDefinition"),
+: _operationDefinition( PID_OperationGroup_OperationDefinition, "OperationDefinition", "/Dictionary/OperationDefinitions"),
   _inputSegments( PID_OperationGroup_InputSegments, "InputSegments"),
   _parameters( PID_OperationGroup_Parameters, "Parameters"),
   _bypassOverride( PID_OperationGroup_BypassOverride, "BypassOverride"),
@@ -139,10 +139,7 @@ AAFRESULT STDMETHODCALLTYPE
                              ImplAAFOperationDef* pOperationDef)
 {
 	HRESULT					rc = AAFRESULT_SUCCESS;
-	ImplAAFDictionary*		pDictionary = NULL;
-//	ImplAAFOperationDef*		pOldOperationDef = NULL;
-	aafUID_t				OperationDefAUID;
-	aafUID_t	uid;
+	ImplAAFOperationDef*	pOldOperationDef = NULL;
 
 	if (pOperationDef == NULL)
 		return AAFRESULT_NULL_PARAM;
@@ -152,28 +149,19 @@ AAFRESULT STDMETHODCALLTYPE
 
 	XPROTECT()
 	{
-		// Get the dictionary objects for this file.
-		CHECK(GetDictionary(&pDictionary));
-
 		CHECK(SetNewProps(length, pDataDef));
-		CHECK(pOperationDef->GetAUID(&uid));
-		_operationDefinition = uid;
-		// Lookup the OperationGroup definition's AUID
-		CHECK(pOperationDef->GetAUID(&OperationDefAUID));
 		// find out if this OperationDef is already set
-// !!!JeffB: Not handling weak references as OM references yet.
-//		if (pDictionary->LookupOperationDefinition(&OperationDefAUID, &pOldOperationDef) == AAFRESULT_SUCCESS)
-//			pOldOperationDef->ReleaseReference();
-		_operationDefinition = OperationDefAUID;
-//		pOperationDef->AcquireReference();
-		pDictionary->ReleaseReference();
-		pDictionary = 0;
+		if(!_operationDefinition.isVoid())
+		{
+			pOldOperationDef = _operationDefinition;
+			if (pOldOperationDef != 0)
+				pOldOperationDef->ReleaseReference();
+		}
+		_operationDefinition = pOperationDef;
+		pOperationDef->AcquireReference();
 	}
 	XEXCEPT
 	{
-		if(pDictionary)
-		  pDictionary->ReleaseReference();
-		pDictionary = 0;
 	}
 	XEND;
 
@@ -187,29 +175,15 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFOperationGroup::GetOperationDefinition (ImplAAFOperationDef **OperationDef)
 {
-	aafUID_t			defUID;
-	ImplAAFDictionary	*dict = NULL;
+  ImplAAFOperationDef *pOpDef = _operationDefinition;
+  if(!pOpDef)
+		return AAFRESULT_OBJECT_NOT_FOUND;
 
-	if(OperationDef == NULL)
-		return AAFRESULT_NULL_PARAM;
+  *OperationDef = pOpDef;
+  assert (*OperationDef);
+  (*OperationDef)->AcquireReference ();
 
-	XPROTECT()
-	{
-		defUID = _operationDefinition;
-		CHECK(GetDictionary(&dict));
-		CHECK(dict->LookupOperationDef(defUID, OperationDef));
-		dict->ReleaseReference();
-		dict = 0;
-	}
-	XEXCEPT
-	{
-		if(dict != NULL)
-		  dict->ReleaseReference();
-		dict = 0;
-	}
-	XEND;
-
-	return AAFRESULT_SUCCESS;
+  return AAFRESULT_SUCCESS;
 }
 
 	//@comm Replaces part of omfiOperationGroupGetInfo

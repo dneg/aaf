@@ -440,7 +440,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     CreateImplClassDef (
       aafUID_constref classID,
-      aafUID_constref pParentClassId,
+      ImplAAFClassDef * pParentClass,
       aafCharacter_constptr pClassName,
       ImplAAFClassDef ** ppClassDef);
 

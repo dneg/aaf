@@ -82,11 +82,10 @@ AAFRESULT STDMETHODCALLTYPE
 {
 	if(result == NULL)
 		return(AAFRESULT_NULL_PARAM);
-	*result = _segment;
-	if (*result)
-		(*result)->AcquireReference();
-	else
+	if(_segment.isVoid())
 		return (AAFRESULT_NULLOBJECT);
+	*result = _segment;
+	(*result)->AcquireReference();
 
   return AAFRESULT_SUCCESS;
 }

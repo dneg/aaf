@@ -52,7 +52,7 @@ typedef ImplAAFSmartPointer<ImplAAFDictionary> ImplAAFDictionarySP;
 typedef ImplAAFSmartPointer<ImplAAFDataDef>    ImplAAFDataDefSP;
 
 ImplAAFComponent::ImplAAFComponent ():
-	_dataDef(	PID_Component_DataDefinition,	"DataDefinition"),
+	_dataDef(	PID_Component_DataDefinition,	"DataDefinition", "/Dictionary/DataDefinitions"),
 	_length(	PID_Component_Length,	"Length")
 {
 	_persistentProperties.put(   _dataDef.address());
@@ -108,16 +108,20 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFComponent::SetDataDef (ImplAAFDataDef * pDataDef)
 {
+  ImplAAFDataDef	*oldDataDef;
+  
   if (! pDataDef)
 	return AAFRESULT_NULL_PARAM;
 
-  aafUID_t auid;
-  AAFRESULT hr;
-  assert (pDataDef);
-  hr = pDataDef->GetAUID (&auid);
-  assert (AAFRESULT_SUCCEEDED (hr));
-
-  _dataDef = auid;
+	// find out if this DataDef is already set
+	if(!_dataDef.isVoid())
+	{
+		oldDataDef = _dataDef;
+		if (oldDataDef != 0)
+			oldDataDef->ReleaseReference();
+	}
+	_dataDef = pDataDef;
+	pDataDef->AcquireReference();
   return AAFRESULT_SUCCESS;
 }
 
@@ -128,13 +132,9 @@ AAFRESULT STDMETHODCALLTYPE
   if (! ppDataDef)
 	return AAFRESULT_NULL_PARAM;
 
-  ImplAAFDictionarySP pDict;
-  AAFRESULT hr;
-  hr = GetDictionary (&pDict);
-  assert (AAFRESULT_SUCCEEDED (hr));
-  ImplAAFDataDefSP pDataDef;
-  hr = pDict->LookupDataDef (_dataDef, &pDataDef);
-  assert (AAFRESULT_SUCCEEDED (hr));
+   if(_dataDef.isVoid())
+		return AAFRESULT_OBJECT_NOT_FOUND;
+  ImplAAFDataDef *pDataDef = _dataDef;
 
   *ppDataDef = pDataDef;
   assert (*ppDataDef);
@@ -167,17 +167,12 @@ AAFRESULT ImplAAFComponent::SetNewProps(
 	if (! pDataDef)
 	  return AAFRESULT_NULL_PARAM;
 
-	aafUID_t dataDef;
-	aafError = pDataDef->GetAUID (&dataDef);
-	if (AAFRESULT_SUCCEEDED (aafError))
+	if ( length < 0 )
+	  aafError = AAFRESULT_BAD_LENGTH;
+	else
 	  {
-		if ( length < 0 )
-		  aafError = AAFRESULT_BAD_LENGTH;
-		else
-		  {
-			_length	= length;
-			_dataDef = dataDef;
-		  }
+		_length	= length;
+		_dataDef = pDataDef;
 	  }
 	return aafError;
 }

@@ -158,12 +158,32 @@ public:
         // @parm [out, retval] newly created object
         (ImplAAFObject ** ppobject);
 
+  //****************
+  // IsRoot()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    IsRoot
+        (aafBool* isRootClass);
 
 public:
 
   //
   // Non-published methods
   //
+
+  //****************
+  // SetParent()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    SetParent
+        (ImplAAFClassDef *pClassDef);
+
+  //****************
+  // SetBootstrapParent()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    SetBootstrapParent
+        (ImplAAFClassDef *pClassDef);
 
   //****************
   // pvtInitialize()
@@ -177,7 +197,7 @@ public:
         (const aafUID_t & classID,
 
 		// Inheritance parent of this class
-		const aafUID_t * pParentClassId,
+		const ImplAAFClassDef * pParentClassId,
 
 		// Human-legible name
 		const aafCharacter * pClassName);
@@ -212,12 +232,6 @@ public:
 
          // @parm [out] resulting property definition
          ImplAAFPropertyDef ** ppPropDef) const;
-
-
-  // Returns the AUID of the parent class.  Returns the NULL auid if
-  // this is the end of the line.
-  void pvtGetParentAUID (aafUID_t & result);
-
 
   // Make sure that the type definition of each property definition
   // has been loaded into memory.
@@ -285,12 +299,11 @@ private:
 
 
   // OMWeakReferenceProperty<ImplAAFClassDef> _ParentClass;
-  OMFixedSizeProperty<aafUID_t>                       _ParentClass;
+  OMWeakReferenceProperty<ImplAAFClassDef>         _ParentClass;
 
   OMStrongReferenceSetProperty<ImplAAFPropertyDef> _Properties;
 
-  // didn't use shorthand here in an attempt to avoid circular references
-  ImplAAFSmartPointer<ImplAAFClassDef> _cachedParentClass;
+  ImplAAFClassDef	*_BootstrapParent;
 
   bool _propTypesLoaded;
 };
