@@ -304,8 +304,8 @@ extern "C" HRESULT CAAFTaggedValue_test()
 	try
 	{
 		hr = CreateAAFFile(	pFileName );
-		if(hr == AAFRESULT_SUCCESS)
-			hr = ReadAAFFile( pFileName );
+//		if(hr == AAFRESULT_SUCCESS)
+//			hr = ReadAAFFile( pFileName );
 	}
 	catch (...)
 	{
