@@ -132,6 +132,10 @@ public:
   // in /test/ImplAAFCompositionMobTest.cpp.
   static AAFRESULT test();
 
+  // Return this object's stored object class.
+  virtual AAFRESULT STDMETHODCALLTYPE
+	GetObjectClass(aafUID_t * pClass);
+
 private:
 	OMFixedSizeProperty<aafLength_t>	_defaultFadeLen;
 	OMFixedSizeProperty<aafFadeType_t>	_defaultFadeType;

@@ -151,6 +151,10 @@ public:
   // in /test/ImplAAFSourceClipTest.cpp.
   static AAFRESULT test();
 
+  // Return this objects stored object class.
+  virtual AAFRESULT STDMETHODCALLTYPE
+	GetObjectClass(aafUID_t * pClass);
+
 private:
 	OMFixedSizeProperty<aafInt32>		_fadeInLen;
 	OMFixedSizeProperty<aafFadeType_t>	_fadeInType;
