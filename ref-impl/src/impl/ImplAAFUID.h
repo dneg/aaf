@@ -62,5 +62,4 @@ inline int operator==
   return ! memcmp (&lhs._rep, &rhs._rep, sizeof (lhs._rep));
 }
 
-
 #endif // ! __ImplAAFUID_h__

@@ -41,11 +41,13 @@
 
 #include "ImplAAFDataDef.h"
 #include "ImplAAFPluginManager.h"
+#include "ImplAAFDictionary.h"
+#include "ImplAAFCloneResolver.h"
+
 #include <assert.h>
 #include <string.h>
 #include "aafErr.h"
 #include "AAFUtils.h"
-#include "ImplAAFDictionary.h"
 
 #include "ImplAAFSmartPointer.h"
 typedef ImplAAFSmartPointer<ImplAAFDataDef> ImplAAFDataDefSP;
@@ -384,5 +386,13 @@ AAFRESULT STDMETHODCALLTYPE
 	return(AAFRESULT_SUCCESS);
 }
 
+void ImplAAFCodecDef::onCopy(void* clientContext) const
+{
+  ImplAAFDefObject::onCopy(clientContext);
 
-
+  if ( clientContext ) {
+    ImplAAFCloneResolver* pResolver = reinterpret_cast<ImplAAFCloneResolver*>(clientContext);
+    pResolver->ResolveWeakReference(_dataDefs);
+    pResolver->ResolveWeakReference(_fileDescClass);
+  }
+}

@@ -73,7 +73,6 @@
 #include "ImplAAFSmartPointer.h"
 typedef ImplAAFSmartPointer<ImplAAFDataDef>    ImplAAFDataDefSP;
 
-
 ImplAAFSourceMob::ImplAAFSourceMob ()
 : _essenceDesc(        PID_SourceMob_EssenceDescription,          L"EssenceDescription")
 {

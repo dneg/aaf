@@ -82,6 +82,8 @@ public:
     GetNumElements
         (aafUInt32 * pCount);
 
+  AAFRESULT AddPropertyDef (ImplAAFPropertyDef * pPropDef );
+
   AAFRESULT SetPropertyValue (ImplAAFPropertyDef * pPropDef,
 						 ImplAAFPropertyValue * pNewPropVal);
 
@@ -133,6 +135,65 @@ AAFRESULT ImplPropertyCollection::GetNumElements
 	return AAFRESULT_NULL_PARAM;
   *pCount = _properties.count();
   return AAFRESULT_SUCCESS;
+}
+
+//
+// 1) See if there is an OMProperty in this OMPropertySet
+//    corresponding to the given OMPropertyId.  If not, it's an
+//    error.  If so, remember that OMProperty.
+//
+// 2) See if there is an existing ImplAAFProperty in _pProperties
+//    corresponding to the given OMPropertyId.  If so, remember it.
+//    If not, create one, and initialize it, and remember it.
+//
+// 3) Set the remembered property to contain the new property value.
+//
+// 4) Set the remembered OMProperty's bits to the new prop value's
+//    bits.
+//
+
+AAFRESULT ImplPropertyCollection::AddPropertyDef(ImplAAFPropertyDef * pPropDef )
+{
+  if(!pPropDef)
+	  return(AAFRESULT_NULL_PARAM);
+
+  if(!_pOMPropSet)
+    return(AAFRESULT_NOT_INITIALIZED);
+
+  //
+  // 1) See if there is an OMProperty in this OMPropertySet
+  //    corresponding to the given OMPropertyId.  If not, it's an
+  //    error.  If so, remember that OMProperty.
+  //
+  OMProperty *pOmProp;
+  AAFRESULT ar=LookupOMProperty(pPropDef->OmPid(),&pOmProp);
+  if(AAFRESULT_FAILED(ar))
+	  return(ar);
+	assert (pOmProp);
+
+  //
+  // 2) See if there is an existing ImplAAFProperty in _pProperties
+  //    corresponding to the given OMPropertyId.  If so, remember it.
+  //    If not, create one, initialize it, and remember it.
+  //
+  ImplAAFProperty * pProp = FindProperty(pPropDef->OmPid());
+
+  if (! pProp)
+	{
+	  // There was no existing property in the collection.  Create and
+	  // append a new one.
+	  ImplAAFPropertySP pNewProp;
+	  ar = CreatePropertyInstance(pPropDef, pOmProp, &pNewProp);
+	  if (AAFRESULT_FAILED (ar))
+	    return ar;
+	  
+	  ar = AddProperty(pNewProp);
+	  if (AAFRESULT_FAILED (ar))
+	    return ar;
+	  pProp = pNewProp; // property is now owned by the collection.
+	}
+
+  return(ar);
 }
 
 //
@@ -1378,3 +1439,39 @@ bool ImplAAFObject::dataObject(void) const
   return true;
 }
 
+AAFRESULT ImplAAFObject::CreatePropertyInstanceAndAdd( ImplAAFPropertyDef* pPropDef )
+{
+  if (!pPropDef)
+	return AAFRESULT_NULL_PARAM;
+
+  AAFRESULT ar;
+  if(!_pProperties)
+  {
+    ar=InitProperties();
+	if (AAFRESULT_FAILED(ar))
+		return ar;
+  }
+  assert (_pProperties);
+
+  ImplAAFClassDefSP pClass;
+  ar = GetDefinition (&pClass);
+  assert (AAFRESULT_SUCCEEDED (ar));
+
+  const OMPropertyId pid = pPropDef->OmPid ();
+
+  ImplAAFPropertyDefSP pTempProp;
+  ar = pClass->LookupPropertyDefbyOMPid (pid, &pTempProp);
+  // pTempProp is unused
+  if (AAFRESULT_FAILED (ar))
+	return AAFRESULT_BAD_PROP;
+
+  ar = _pProperties->SynchronizeProperty(this,pPropDef);
+  if (AAFRESULT_FAILED (ar))
+	return AAFRESULT_BAD_PROP;
+
+  if (!pPropDef) {
+    return AAFRESULT_NULL_PARAM;
+  }
+
+  return _pProperties->AddPropertyDef(pPropDef);
+}

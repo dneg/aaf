@@ -37,6 +37,7 @@
 #include "ImplAAFControlPoint.h"
 #include "ImplAAFDictionary.h"
 #include "ImplAAFPluginManager.h"
+#include "ImplAAFCloneResolver.h"
 #include "AAFPlugin.h"
 
 #include <assert.h>
@@ -375,3 +376,12 @@ AAFRESULT STDMETHODCALLTYPE
 	return AAFRESULT_SUCCESS;
 }
 
+void ImplAAFVaryingValue::onCopy(void* clientContext) const
+{
+  ImplAAFParameter::onCopy(clientContext);
+
+  if ( clientContext ) {
+    ImplAAFCloneResolver* pResolver = reinterpret_cast<ImplAAFCloneResolver*>(clientContext);
+    pResolver->ResolveWeakReference(_interpolation);
+  }
+}

@@ -62,8 +62,6 @@
 #include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
 
-
-
 #ifndef __ImplAAFMob_h__
 #include "ImplAAFMob.h"
 #endif
@@ -80,6 +78,7 @@
 #include "AAFDataDefs.h"
 #include "ImplEnumAAFMobSlots.h"
 #include "ImplEnumAAFComponents.h"
+#include "ImplAAFCloneResolver.h"
 
 #include <assert.h>
 #include <wchar.h>
@@ -117,6 +116,7 @@ ImplAAFMob::ImplAAFMob ()
 	(void)aafMobIDNew(&_mobID);		// Move this out of constructor when we get 2-stage create
 	AAFGetDateTime(&_creationTime);
 	AAFGetDateTime(&_lastModified);
+	::memset( &_clsid, 0, sizeof( aafClassID_t ) );
 }
 
 
@@ -1347,11 +1347,9 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 
-
-
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFMob::Copy (const aafCharacter *  /*destMobName*/,
-                           ImplAAFMob ** /*destMob*/)
+    ImplAAFMob::Copy (const aafCharacter *  destMobName,
+                           ImplAAFMob ** destMob)
 {
 #if FULL_TOOLKIT
 	AAFMob * newMob;
@@ -1397,7 +1395,35 @@ AAFRESULT STDMETHODCALLTYPE
 	*destMob = newMob;
 	return(AAFRESULT_SUCCESS);
 #else
-  return AAFRESULT_NOT_IN_CURRENT_VERSION;
+
+	XPROTECT()
+	{
+		OMStorable* newStorable = shallowCopy();
+		
+		ImplAAFMob *newMob = dynamic_cast<ImplAAFMob*>( newStorable );
+		if ( !newMob ) {
+			RAISE(AAFRESULT_BAD_TYPE);
+		}
+
+		aafMobID_t newMobId;
+		CHECK( aafMobIDNew(&newMobId) );
+		CHECK( newMob->SetMobID( newMobId ) );
+
+		if ( destMobName ) {
+	    	 CHECK( newMob->SetName( destMobName ) );
+		}
+
+		deepCopyTo( newStorable, 0 );
+
+			newMob->AcquireReference();
+		*destMob = newMob;
+	}
+	XEXCEPT
+	{
+	}
+	XEND
+
+	return AAFRESULT_SUCCESS;
 #endif
 }
 
@@ -1462,9 +1488,9 @@ AAFRESULT STDMETHODCALLTYPE
  *************************************************************************/
 AAFRESULT STDMETHODCALLTYPE
    ImplAAFMob::CloneExternal (aafDepend_t  /*resolveDependencies*/,
-                           aafIncMedia_t  /*includeMedia*/,
-                           ImplAAFFile * /*destFile*/,
-                           ImplAAFMob ** /*destMob*/)
+                           aafIncMedia_t  includeMedia,
+                           ImplAAFFile * destFile,
+                           ImplAAFMob ** destMob)
 {
 #if FULL_TOOLKIT
     aafMobID_t saveMobID, newMobID;
@@ -1568,6 +1594,89 @@ AAFRESULT STDMETHODCALLTYPE
 	*destMob = tmpDestMob;
 	return(AAFRESULT_SUCCESS);
 #else
+
+	XPROTECT()
+	{
+		//
+		// If includeMedia is true, and essence data exists for this mob,
+		// then copy it.  Essence data only exists for SourceMobs.  We don't
+		// worry about that detail here, rather, just let LookupEssenceData()
+		// fail.
+		//
+		{
+			if ( kAAFIncludeMedia == includeMedia ) {
+				ImplAAFSmartPointer<ImplAAFHeader> spHeader;
+				CHECK( MyHeadObject( &spHeader ) );
+
+				ImplAAFSmartPointer<ImplAAFEssenceData> spEssenceData;
+				HRESULT hr = spHeader->LookupEssenceData( _mobID, &spEssenceData );
+
+				if ( AAFRESULT_SUCCESS == hr ) {
+
+					ImplAAFSmartPointer<ImplAAFDictionary> spDstDict;
+					CHECK( destFile->GetDictionary(&spDstDict) );
+
+					OMStorable* pNewStorable = spEssenceData->shallowCopy(spDstDict);
+					ImplAAFEssenceData* pNewEssenceData = dynamic_cast<ImplAAFEssenceData*>(pNewStorable);
+					if ( !pNewEssenceData ) {
+						RAISE(AAFRESULT_BAD_TYPE);
+					}
+					
+					ImplAAFSmartPointer<ImplAAFHeader> spDstHeader;
+					CHECK( destFile->GetHeader(&spDstHeader) );
+					CHECK( spDstHeader->AddEssenceData(pNewEssenceData) );
+
+					spEssenceData->deepCopyTo( pNewStorable, 0 );
+				}
+			}
+
+		}
+
+		//
+		// Copy the mob.
+		//
+		{
+			ImplAAFSmartPointer<ImplAAFDictionary> spDstDict;
+			CHECK( destFile->GetDictionary(&spDstDict) );
+
+			OMStorable* pNewStorable = shallowCopy(spDstDict);
+		
+			ImplAAFMob* pNewMob = dynamic_cast<ImplAAFMob*>(pNewStorable);
+			if ( !pNewMob ) {
+				RAISE(AAFRESULT_BAD_TYPE);
+			}
+
+			ImplAAFSmartPointer<ImplAAFHeader> spDstHeader;
+			CHECK( destFile->GetHeader(&spDstHeader) );
+			CHECK( spDstHeader->AddMob(pNewMob) );
+
+			// The resolver takes care of resolving weak reference.  It is the
+			// "clientContext" void pointer passed by the OM to onCopy()
+			// implementations. If it  encounters an error (a bad HRESULT) it
+			// will throw ImplAAFCloneResolverEx.  We catch that, and return the 
+			// error.
+			try {
+				ImplAAFCloneResolver resolver(destFile);
+				deepCopyTo( pNewStorable, &resolver );
+			}
+			catch (const ImplAAFCloneResolverEx& ex) {
+				RAISE(ex.GetHResult());
+			}
+
+			pNewMob->AcquireReference();
+			*destMob = pNewMob;
+		}
+
+
+	}
+	XEXCEPT
+	{
+	}
+	XEND
+
+	return AAFRESULT_SUCCESS;
+
+
   return AAFRESULT_NOT_IN_CURRENT_VERSION;
 #endif
 }
@@ -2165,13 +2274,11 @@ AAFRESULT ImplAAFMob::ReconcileMobLength(void)
 	return(AAFRESULT_ABSTRACT_CLASS);	// MUST call one of the subclasses
 }
 
-
 const OMMaterialIdentification&
   ImplAAFMob::identification(void) const
 {
   return *reinterpret_cast<const OMMaterialIdentification*>(&_mobID.reference());
 }
-
 
 
 ////////////////////////////////////////////////////////////////////////////////

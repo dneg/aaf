@@ -62,6 +62,7 @@
 #include "ImplAAFObjectCreation.h"
 #include "ImplAAFDictionary.h"
 #include "ImplEnumAAFParameters.h"
+#include "ImplAAFCloneResolver.h"
 
 #include <assert.h>
 #include <string.h>
@@ -626,4 +627,15 @@ AAFRESULT ImplAAFOperationGroup::ChangeContainedReferences(aafMobID_constref fro
 	XEND;
 
 	return AAFRESULT_SUCCESS;
+}
+
+
+void ImplAAFOperationGroup::onCopy( void* clientContext ) const
+{
+  ImplAAFSegment::onCopy(clientContext);
+
+  if (clientContext) {
+    ImplAAFCloneResolver* pResolver = reinterpret_cast<ImplAAFCloneResolver*>(clientContext);
+    pResolver->ResolveWeakReference(_operationDefinition);
+  }
 }

@@ -60,6 +60,7 @@ typedef ImplAAFSmartPointer<ImplEnumAAFPropertyDefs> ImplEnumAAFPropertyDefsSP;
 #include "AAFPropertyIDs.h"
 #include "ImplAAFObjectCreation.h"
 #include "ImplAAFBuiltinDefs.h"
+#include "ImplAAFCloneResolver.h"
 #include "AAFUtils.h"
 
 #include <assert.h>
@@ -600,12 +601,105 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 const OMPropertyDefinition* ImplAAFClassDef::propertyDefinition(
-                            const OMUniqueObjectIdentification& /* id */) const
+                            const OMUniqueObjectIdentification& id ) const
 {
-  assert(false); // tjb for ak - stub
-  return 0;
+  ImplAAFPropertyDef* pDef = 0;
+  // find() return false if pDef not found.  The result is
+  // intentionally ignored, and a null pDef value returned if
+  // the find() failed.
+  _Properties.find(id, pDef);
+  return pDef;
 }
 
+const OMPropertyDefinition* ImplAAFClassDef::propertyDefinition(
+ 		            const OMStorable* pDstStorable,
+			    const OMPropertyDefinition *pSrcOMPropertyDef )
+{
+  ImplAAFPropertyDef *pSrcAAFPropertyDef =
+	  dynamic_cast<ImplAAFPropertyDef*>( const_cast<OMPropertyDefinition*>(pSrcOMPropertyDef) );
+
+  if ( !pSrcAAFPropertyDef ) {
+    return 0;
+  }
+
+  HRESULT hr;
+
+  // Get the source AUID.  The destintion auid must be identical.
+  aafUID_t auid;
+  hr = pSrcAAFPropertyDef->GetAUID(&auid);
+  if ( AAFRESULT_SUCCESS != hr ) {
+    return 0;
+  }
+
+  // Get the source name, the desitnation name must be identical.
+  aafUInt32 srcNameBufLen;
+  hr = pSrcAAFPropertyDef->GetNameBufLen(&srcNameBufLen);
+  if ( AAFRESULT_SUCCESS != hr ) {
+    return 0;
+  }
+
+  // Allocate space for src name, round srcNameBufLen up to the nearest wchar_t size.
+  int srcNameLen = (srcNameBufLen+1)/2;
+  wchar_t *srcName = new wchar_t [srcNameLen];
+  if ( !srcName ) {
+    return 0;
+  }
+  hr = pSrcAAFPropertyDef->GetName( srcName, srcNameLen*sizeof(wchar_t) );
+  if ( AAFRESULT_SUCCESS != hr ) {
+    return 0;
+  }
+
+  // Get the source type def, and lookup the destination type def.
+  ImplAAFSmartPointer<ImplAAFTypeDef> spTypeDef;
+  hr = pSrcAAFPropertyDef->GetTypeDef( &spTypeDef );
+  if ( AAFRESULT_SUCCESS != hr ) {
+    return 0;
+  }
+
+  // Sanity check.  There is not reason for this to be called
+  // for other than optional properties.
+  aafBool isOptional;
+  hr = pSrcAAFPropertyDef->GetIsOptional(&isOptional);
+  if ( AAFRESULT_SUCCESS != hr ) {
+    return 0;
+  }
+
+  aafUID_t srcTypeId;
+  hr = spTypeDef->GetAUID( &srcTypeId );
+  if ( AAFRESULT_SUCCESS != hr ) {
+    return 0;
+  }
+
+  // Now lookup the type id using the dst storable's dictionary.
+  ImplAAFObject* pDstObj = dynamic_cast<ImplAAFObject*>( const_cast<OMStorable*>(pDstStorable) );
+  if ( !pDstObj ) {
+    return 0;
+  }
+
+  ImplAAFSmartPointer<ImplAAFDictionary> spDstDict;
+  hr = pDstObj->GetDictionary(&spDstDict);
+  if ( AAFRESULT_SUCCESS != hr ) {
+    return 0;
+  }
+  
+  // Get the destination type def.
+  ImplAAFSmartPointer<ImplAAFTypeDef> spDstTypeDef;
+  hr = spDstDict->LookupTypeDef(srcTypeId, &spDstTypeDef);
+  assert( AAFRESULT_SUCCESS == hr );
+
+  ImplAAFPropertyDef* pDstPropertyDef;
+  hr = RegisterOptionalPropertyDef( auid, srcName, spDstTypeDef, &pDstPropertyDef );
+  if ( AAFRESULT_SUCCESS != hr ) {
+    return 0;
+  }
+
+  hr = pDstObj->CreatePropertyInstanceAndAdd( pDstPropertyDef );
+  if ( AAFRESULT_SUCCESS != hr ) {
+    return 0;
+  }
+
+  return pDstPropertyDef;
+}
 
 // Find the unique identifier property defintion for this class or any parent class
 // (RECURSIVE)
@@ -893,4 +987,14 @@ HRESULT ImplAAFClassDef::CompleteClassRegistration(void)
 	}
 
   return result;
+}
+
+void ImplAAFClassDef::onCopy(void* clientContext) const
+{
+  ImplAAFMetaDefinition::onCopy(clientContext);
+  
+  if ( clientContext ) {
+    ImplAAFCloneResolver* pResolver = reinterpret_cast<ImplAAFCloneResolver*>(clientContext);
+    pResolver->ResolveWeakReference(_ParentClass);
+  }
 }

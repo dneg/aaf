@@ -246,8 +246,15 @@ const OMType* ImplAAFPropertyDef::type(void) const
 const OMUniqueObjectIdentification&
 ImplAAFPropertyDef::uniqueIdentification(void) const
 {
-  assert(false); // tjb for ak - stub
-  return nullOMUniqueObjectIdentification;
+  assert( sizeof(OMUniqueObjectIdentification) == sizeof(aafUID_t) );
+  static aafUID_t auid;
+  HRESULT hr = GetAUID( &auid );
+
+  if ( AAFRESULT_SUCCESS != hr ) {
+	return nullOMUniqueObjectIdentification;
+  }
+
+  return reinterpret_cast<const OMUniqueObjectIdentification&>( auid );
 }
 
 const wchar_t* ImplAAFPropertyDef::name(void) const

@@ -43,6 +43,7 @@
 #include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
 #include "ImplAAFObjectCreation.h"
+#include "ImplAAFCloneResolver.h"
 
 #include <assert.h>
 #include <string.h>
@@ -716,4 +717,14 @@ void ImplAAFTypeDefString::onSave(void* clientContext) const
 void ImplAAFTypeDefString::onRestore(void* clientContext) const
 {
   ImplAAFTypeDef::onRestore(clientContext);
+}
+
+void ImplAAFTypeDefString::onCopy(void* clientContext) const
+{
+  ImplAAFTypeDef::onCopy(clientContext);
+
+  if ( clientContext ) {
+    ImplAAFCloneResolver* pResolver = reinterpret_cast<ImplAAFCloneResolver*>(clientContext);
+    pResolver->ResolveWeakReference(_ElementType);
+  }
 }
