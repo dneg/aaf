@@ -77,10 +77,12 @@ function createColorMap() {
   /* Lime green */
   map["ref-impl/src/OM/"]          = "#CCFFCC";
   map["ref-impl/include/OM/"]      = "#CCFFCC";
+  map["ref-impl/dtd/"]             = "#CCFFCC";
 
   /* Pink */
   map["ref-impl/src/impl/"]        = "#FFCCCC";
   map["ref-impl/plugins/"]         = "#FFCCCC";
+  map["ref-impl/aaflib/"]          = "#FFCCCC";
 
   /* Grey */
   map["ref-impl/src/com-api/"]     = "#CCCCCC";
