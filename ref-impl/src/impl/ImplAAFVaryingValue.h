@@ -54,6 +54,20 @@ public:
   //********
   ImplAAFVaryingValue ();
 
+
+  //****************
+  // Initialize()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    Initialize
+        (// @parm [in] // Parameter definition for this object (this determines the type of the constant value)
+         ImplAAFParameterDef * pParameterDef,
+         
+         // @parm [in] Interpolation definition for this object
+         ImplAAFInterpolationDef * pInterpolationDef);
+
+
+
 protected:
   virtual ~ImplAAFVaryingValue ();
 
@@ -148,15 +162,12 @@ public:
 
 public:
 	// SDK-private methods
-	virtual AAFRESULT STDMETHODCALLTYPE
-		GetTypeDef(ImplAAFTypeDef **ppTypeDef);
 
 private:
 	OMFixedSizeProperty<aafUID_t>						 _interpolation;
-    OMStrongReferenceVectorProperty<ImplAAFControlPoint> _controlPoints;
-	OMVariableSizeProperty<aafUInt8>					_value;
-    OMWideStringProperty								 _displayValue;
-	OMFixedSizeProperty<aafReferenceType_t>				_significance;
+  OMStrongReferenceVectorProperty<ImplAAFControlPoint> _controlPoints;
+
+  ImplAAFTypeDef * _cachedTypeDef; // NOT REFERENCE COUNTED!
 };	
 
 #endif // ! __ImplAAFVaryingValue_h__
