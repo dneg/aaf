@@ -31,93 +31,11 @@
  *
  ************************************************************************/
 
-class ImplAAFOperationDef;
+#include "ImplAAFEnumerator.h"
 
+#include "ImplAAFOperationDef.h"
 
-
-
-
-
-
-#ifndef __ImplAAFObject_h__
-#include "ImplAAFObject.h"
-#endif
-#include "OMReferenceContainerIter.h"
-#include "OMVariableSizeProperty.h"
-
-typedef OMVariableSizeProperty<aafUID_t> OperationDefWeakRefArrayProp_t;
-
-class ImplEnumAAFOperationDefs : public ImplAAFRoot
-{
-public:
-  //
-  // Constructor/destructor
-  //
-  //********
-  ImplEnumAAFOperationDefs ();
-
-protected:
-  virtual ~ImplEnumAAFOperationDefs ();
-
-public:
-
-
-  //****************
-  // NextOne()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    NextOne
-        // @parm [out,retval] The Next OperationDefinition
-        (ImplAAFOperationDef ** ppOperationDef);
-
-  //****************
-  // Next()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    Next
-        (// @parm [in] number of effect definitions requested
-         aafUInt32  count,
-
-         // @parm [out, size_is(count), length_is(*pFetched)] array to receive operation definitions
-         ImplAAFOperationDef ** ppOperationDefs,
-
-         // @parm [out,ref] number of actual OperationDefs fetched into ppOperationDefs array
-         aafUInt32 *  pFetched);
-
-  //****************
-  // Skip()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    Skip
-        // @parm [in] Number of elements to skip
-        (aafUInt32  count);
-
-  //****************
-  // Reset()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    Reset ();
-
-
-  //****************
-  // Clone()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    Clone
-        // @parm [out,retval] new enumeration
-        (ImplEnumAAFOperationDefs ** ppEnum);
-
-
-public:
-  // SDK Internal 
-  virtual AAFRESULT STDMETHODCALLTYPE
-	  SetIterator(ImplAAFObject *pObj,
-				OMReferenceContainerIterator* iterator);
-
-private:
-	ImplAAFObject						*_enumObj;
-	OMReferenceContainerIterator*	_iterator;
-};
+typedef ImplAAFEnumerator<ImplAAFOperationDef> ImplEnumAAFOperationDefs;
 
 #endif // ! __ImplEnumAAFOperationDefs_h__
 

@@ -33,11 +33,12 @@
 
 class ImplAAFLocator;
 class ImplAAFParameterDef;
-class ImplEnumAAFOperationDefs;
-class ImplEnumAAFParameterDefs;
+class ImplAAFOperationDef;
 template <class T> 
 class ImplAAFEnumerator;
 typedef ImplAAFEnumerator<ImplAAFLocator> ImplEnumAAFLocators;
+typedef ImplAAFEnumerator<ImplAAFOperationDef> ImplEnumAAFOperationDefs;
+typedef ImplAAFEnumerator<ImplAAFParameterDef> ImplEnumAAFParameterDefs;
 
 #ifndef __ImplAAFDefObject_h__
 #include "ImplAAFDefObject.h"
