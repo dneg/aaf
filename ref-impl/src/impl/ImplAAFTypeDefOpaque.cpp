@@ -83,6 +83,174 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 
+//***********************************************************
+//
+// GetHandle()
+//
+// Used to read and save an unknown property without having to know its contents.
+// This call fills in a handle to a block of data which can be saved in you application, and
+// later written to another file using SetHandle().  Writes the data into the pHandle buffer. 
+// The buffer is allocated by the caller, and the size of the buffer is given by
+// handleSize.
+// 
+// Caller may call GetHandleBufLen() to determine the
+// required buffer size.
+// 
+// Succeeds if all of the following are true:
+// - the pHandle pointer is valid.
+// - handleSize indicates the buffer is large enough to hold the
+//   name.
+// 
+// If this method fails nothing will be written to *pHandle.
+// 
+// This method will return the following codes.  If more than one of
+// the listed errors is in effect, it will return the first one
+// encountered in the order given below:
+// 
+// AAFRESULT_SUCCESS
+//   - succeeded.  (This is the only code indicating success.)
+//
+// AAFRESULT_NULL_PARAM
+//   - pHandle arg is NULL.
+//
+// AAFRESULT_SMALLBUF
+//   - handleSize indicates the buffer is too small to hold the
+//     handle.
+// 
+AAFRESULT ImplAAFTypeDefOpaque::GetHandle (
+    // value to get data from.
+    ImplAAFPropertyValue * pPropVal,
+
+    // Size of preallocated buffer
+    aafUInt32  handleSize,
+
+    // Preallocated buffer to hold handle
+    aafDataBuffer_t  pHandle,
+
+    // Number of actual bytes read
+    aafUInt32*  bytesRead)
+{
+	return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+
+//***********************************************************
+//
+// GetHandleBufLen()
+//
+// Returns the length of buffer required for the GetHandle()
+// method.  The handle is placed into the location specified by
+// pLen.
+//
+// Succeeds if all of the following are true:
+// - the pLen pointer is valid.
+//
+// If this method fails nothing will be written to *pLen.
+//
+// This method will return the following codes.  If more than one of
+// the listed errors is in effect, it will return the first one
+// encountered in the order given below:
+// 
+// AAFRESULT_SUCCESS
+//   - succeeded.  (This is the only code indicating success.)
+//
+// AAFRESULT_NULL_PARAM
+//   - pLen arg is NULL.
+// 
+AAFRESULT ImplAAFTypeDefOpaque::GetHandleBufLen (
+    // value to set.
+   ImplAAFPropertyValue * pPropVal,
+
+    // Pointer to an variable used to return the length
+   aafUInt32 *  pLen)
+{
+	return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+//***********************************************************
+//
+// SetHandle()
+//
+// Used to read and save an unknown property without having to know its contents.
+// This call fills takes a block of unknown data which has been saved in you application, and
+// writes to another file. 
+//
+// Succeeds if all of the following are true:
+// - the pHandle pointer is valid.
+// 
+// This method will return the following codes.  If more than one of
+// the listed errors is in effect, it will return the first one
+// encountered in the order given below:
+// 
+// AAFRESULT_SUCCESS
+//   - succeeded.  (This is the only code indicating success.)
+//
+// AAFRESULT_NOT_INITIALIZED
+//   - This object has not yet had Initialize() called on it.
+//
+// AAFRESULT_NULL_PARAM
+//   - pHandle is null.
+// 
+AAFRESULT ImplAAFTypeDefOpaque::SetHandle (
+    // value to write data to.
+    ImplAAFPropertyValue * pPropVal,
+
+    // Size of preallocated buffer
+	aafUInt32  handleSize,
+
+    // buffer containing handle
+	aafDataBuffer_t  pHandle)
+{
+	return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+
+  //***********************************************************
+  //
+  // CreateValueFromHandle()
+  //
+  // This call takes a block of unknown data created by GetHandle()
+  // and saved in you application, and creates an opaque property value.
+  // Returns the newly-created property value in ppOpaquePropertyValue.
+  //
+  // Succeeds if all of the following are true:
+  // - the pInitData pointer is valid.
+  // - the ppOpaquePropertyValue pointer is valid.
+  // - initDataSize indicates pInitData is the correct size for 
+  //   the actual type.
+  // - compile-time struct has had its member offests registered.
+  //
+  // If this method fails nothing will be written to *ppOpaquePropertyValue.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize() called on it.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - either pInitData or ppOpaquePropertyValue arg is NULL.
+  //
+  // AAFRESULT_ILLEGAL_VALUE
+  //   - initDataSize indicates pInitData is of the wrong size.
+  // 
+  HRESULT ImplAAFTypeDefOpaque::CreateValueFromHandle (
+    // pointer to buffer containing handle to use
+     aafMemPtr_t  pInitData,
+
+    // size of handle in pInitData
+    aafUInt32  initDataSize,
+
+    // newly created property value
+    ImplAAFPropertyValue ** ppOpaquePropertyValue)
+{
+	return AAFRESULT_NOT_IMPLEMENTED;
+}
+
 // Find the actual type definition from the dictionary.
 // This override of TypeDefIndirect will also look in the
 // dictionary for opaque types.
