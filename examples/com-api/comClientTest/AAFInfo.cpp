@@ -112,12 +112,13 @@ static void convert(wchar_t* wName, size_t length, const wchar_t* name)
   }
 }
 
-static void printProductVersion(aafProductVersion_t* pProductVersion)
+static void printProductVersion(const char* label,
+                                aafProductVersion_t* pProductVersion)
 {
-  printf("ProductVersion.major      = %d\n", pProductVersion->major);
-  printf("ProductVersion.minor      = %d\n", pProductVersion->minor);
-  printf("ProductVersion.tertiary   = %d\n", pProductVersion->tertiary);
-  printf("ProductVersion.patchLevel = %d\n", pProductVersion->patchLevel);
+  printf("%s.major      = %d\n", label, pProductVersion->major);
+  printf("%s.minor      = %d\n", label, pProductVersion->minor);
+  printf("%s.tertiary   = %d\n", label, pProductVersion->tertiary);
+  printf("%s.patchLevel = %d\n", label, pProductVersion->patchLevel);
   char* releaseType;
   switch (pProductVersion->type) {
     case kAAFVersionUnknown:
@@ -142,7 +143,7 @@ static void printProductVersion(aafProductVersion_t* pProductVersion)
       releaseType = "Not Recognized";
       break;
   }
-  printf("ProductVersion.type       = \"%s\"\n", releaseType);
+  printf("%s.type       = \"%s\"\n", label, releaseType);
 }
 
 #if defined( OS_UNIX )
@@ -238,7 +239,7 @@ static void printIdentification(IAAFIdentification* pIdent)
 
   aafProductVersion_t version;
   check(pIdent->GetProductVersion(&version));
-  printProductVersion(&version);
+  printProductVersion("ProductVersion", &version);
 
   aafUID_t productID;
   check(pIdent->GetProductID(&productID));
@@ -252,7 +253,7 @@ static void printIdentification(IAAFIdentification* pIdent)
   printf("\n");
 
   check(pIdent->GetRefImplVersion(&version));
-  printProductVersion(&version);
+  printProductVersion("RefImplVersion", &version);
 
   check(pIdent->GetPlatform(wchName, sizeof (wchName)));
   convert(chName, sizeof(chName), wchName);
