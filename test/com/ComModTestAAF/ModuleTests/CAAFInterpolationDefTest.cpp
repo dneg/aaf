@@ -143,7 +143,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 							  IID_IAAFInterpolationDef, 
 							  (IUnknown **)&pInterpolationDef));
     
-		checkResult(pDictionary->RegisterInterpolationDefinition(pInterpolationDef));
+		checkResult(pDictionary->RegisterInterpolationDef(pInterpolationDef));
 	}
 	catch (HRESULT& rResult)
 	{
@@ -193,7 +193,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 
 		checkResult(pHeader->GetDictionary(&pDictionary));
 	
-		checkResult(pDictionary->GetInterpolationDefinitions(&pPlug));
+		checkResult(pDictionary->GetInterpolationDefs(&pPlug));
 		checkResult(pPlug->NextOne (&pPlugDef));
 		checkResult(pPlugDef->QueryInterface (IID_IAAFInterpolationDef, (void **)&pInterpolationDef));
 	}

@@ -205,7 +205,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
     checkResult(pDesc->SetPluginAPIMinimumVersion(sampleMinAPIVersion));
     checkResult(pDesc->SetPluginAPIMaximumVersion(sampleMaxAPIVersion));
 
-	checkResult(pDictionary->RegisterPluginDescriptor (	pDesc));
+	checkResult(pDictionary->RegisterPluginDef (	pDesc));
 
 	  /**/
 	checkResult(pDictionary->CreateInstance(AUID_AAFNetworkLocator,
@@ -216,13 +216,13 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	checkResult(pLoc2->SetPath (manuf2URL));
     checkResult(pDesc->AppendLocator(pLoc2));
 	/**/
-	checkResult(pPlugDef->AppendPluginDescriptor(pDesc));
+	checkResult(pPlugDef->AppendPluginDef(pDesc));
 
 	
 	checkResult(pPlugDef->QueryInterface (IID_IAAFCodecDef,
                                           (void **)&pCodecDef));
-	checkResult(pCodecDef->AppendEssenceKind (DDEF_Matte));
-	checkResult(pDictionary->RegisterCodecDefinition(pCodecDef));
+	checkResult(pCodecDef->AddEssenceKind (DDEF_Matte));
+	checkResult(pDictionary->RegisterCodecDef(pCodecDef));
 	/**/
 	checkResult(pDictionary->CreateInstance(AUID_AAFNetworkLocator,
 							  IID_IAAFNetworkLocator, 
@@ -312,16 +312,16 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 
 		checkResult(pHeader->GetDictionary(&pDictionary));
 	
-		checkResult(pDictionary->GetCodecDefinitions(&pEnumPluggable));
+		checkResult(pDictionary->GetCodecDefs(&pEnumPluggable));
 		checkResult(pEnumPluggable->NextOne (&pCodecDef));
 		checkResult(pCodecDef->QueryInterface (IID_IAAFDefObject, (void **)&pDefObj));
-		checkResult(pDefObj->EnumPluginDescriptors (&pEnumDesc));
+		checkResult(pDefObj->GetPluginDefs (&pEnumDesc));
 		checkResult(pEnumDesc->NextOne (&pPlugin));
 
 		/**/
-		checkResult(pPlugin->GetNumLocators(&count));
+		checkResult(pPlugin->CountLocators(&count));
 		checkExpression (count == 2, AAFRESULT_TEST_FAILED);
-		checkResult(pPlugin->EnumPluginLocators(&pEnumLoc));
+		checkResult(pPlugin->GetLocators(&pEnumLoc));
 
 			/* Read and check the first element */
 			checkResult(pEnumLoc->NextOne(&pLocator));

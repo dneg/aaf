@@ -77,7 +77,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
   IAAFDictionary*  pDictionary = NULL;
 	IAAFMob*					pMob = NULL;
 	IAAFMob*					pReferencedMob = NULL;
-	IAAFMobSlot*				newSlot = NULL;
+	IAAFTimelineMobSlot*		newSlot = NULL;
 	IAAFComponent*				comp = NULL;
 	IAAFSegment*				seg = NULL;
 	aafRational_t				audioRate = { 44100, 1 };
@@ -140,10 +140,16 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		comp->Release();
 		comp = NULL;
 								 		
-		checkResult(pMob->AppendNewSlot (seg, 1, slotName, &newSlot));
+		aafRational_t editRate = { 0, 1};
+		checkResult(pMob->AppendNewTimelineSlot (editRate,
+												 seg,
+												 1,
+												 slotName,
+												 0,
+												 &newSlot));
 
-		checkResult(pHeader->AppendMob(pMob));
-		checkResult(pHeader->AppendMob(pReferencedMob));
+		checkResult(pHeader->AddMob(pMob));
+		checkResult(pHeader->AddMob(pReferencedMob));
 	}
   catch (HRESULT& rResult)
   {
@@ -228,19 +234,19 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		checkResult(pFile->GetHeader(&pHeader));
 
 		// Get the number of mobs in the file (should be one)
-		checkResult(pHeader->GetNumMobs(kAllMob, &numMobs));
+		checkResult(pHeader->CountMobs(kAllMob, &numMobs));
 		checkExpression(2 == numMobs, AAFRESULT_TEST_FAILED);
 
 		// Enumerate over all Composition Mobs
 		criteria.searchTag = kByMobKind;
 		criteria.tags.mobKind = kCompMob;
-		checkResult(pHeader->EnumAAFAllMobs(&criteria, &pMobIter));
+		checkResult(pHeader->GetMobs(&criteria, &pMobIter));
 		while (AAFRESULT_SUCCESS == pMobIter->NextOne(&pMob))
 		{
-			checkResult(pMob->GetNumSlots(&numSlots));
+			checkResult(pMob->CountSlots(&numSlots));
 			checkExpression(1 == numSlots, AAFRESULT_TEST_FAILED);
 
-			checkResult(pMob->EnumAAFAllMobSlots(&pSlotIter));
+			checkResult(pMob->GetSlots(&pSlotIter));
 			while (AAFRESULT_SUCCESS == pSlotIter->NextOne(&pSlot))
 			{
 				// The segment should be a source clip...

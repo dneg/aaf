@@ -63,6 +63,7 @@ typedef IAAFSmartPointer<IAAFPropertyDef>           IAAFPropertyDefSP;
 typedef IAAFSmartPointer<IAAFPropertyValue>         IAAFPropertyValueSP;
 typedef IAAFSmartPointer<IAAFSegment>               IAAFSegmentSP;
 typedef IAAFSmartPointer<IAAFSequence>              IAAFSequenceSP;
+typedef IAAFSmartPointer<IAAFTimelineMobSlot>       IAAFTimelineMobSlotSP;
 typedef IAAFSmartPointer<IAAFTypeDef>               IAAFTypeDefSP;
 typedef IAAFSmartPointer<IAAFTypeDefInt>            IAAFTypeDefIntSP;
 typedef IAAFSmartPointer<IEnumAAFClassDefs>         IEnumAAFClassDefsSP;
@@ -176,7 +177,7 @@ static void RegisterNewClass (IAAFDictionary * pDictionary)
 
   // Look up parent class
   IAAFClassDefSP pFillClass;
-  checkResult (pDictionary->LookupClass (AUID_AAFFiller, &pFillClass));
+  checkResult (pDictionary->LookupClassDef (AUID_AAFFiller, &pFillClass));
   assert (pFillClass);
 
   // Create new object for our new filler class, and initialize it.
@@ -190,20 +191,20 @@ static void RegisterNewClass (IAAFDictionary * pDictionary)
 
   // Get type def for uint32
   IAAFTypeDefSP ptd;
-  checkResult (pDictionary->LookupType (kAAFTypeID_UInt32,
-										&ptd));
+  checkResult (pDictionary->LookupTypeDef (kAAFTypeID_UInt32,
+										   &ptd));
   assert (ptd);
 
   // Initialize new property
   checkResult
-	(pNewFillClass->AppendNewPropertyDef (kPropAUID_NewFill_Odor,
-										  L"Odor",
-										  ptd,
-										  AAFFalse,  // mandatory
-										  0));
+	(pNewFillClass->RegisterNewPropertyDef (kPropAUID_NewFill_Odor,
+											L"Odor",
+											ptd,
+											AAFFalse,  // mandatory
+											0));
 
   // Register it in the dictionary.
-  checkResult (pDictionary->RegisterClass (pNewFillClass));
+  checkResult (pDictionary->RegisterClassDef (pNewFillClass));
 }
 										  
 
@@ -333,7 +334,7 @@ static HRESULT RegisterDefs (IAAFDictionary * pDict)
 				  /* SP for type to QI */          IAAFDefObjectSP,
 				  /* IID of def to register */     IID_IAAFTypeDef,
 				  /* SP for def to register */     IAAFTypeDefSP,
-				  /* reg method on pDict */        RegisterType);
+				  /* reg method on pDict */        RegisterTypeDef);
   
   RegisterOneDef (/* dictionary*/                  pDict,
 				  /* def object's SOID */          AUID_AAFDataDef,
@@ -345,7 +346,7 @@ static HRESULT RegisterDefs (IAAFDictionary * pDict)
 				  /* SP for type to QI */          IAAFDefObjectSP,
 				  /* IID of def to register */     IID_IAAFDataDef,
 				  /* SP for def to register */     IAAFDataDefSP,
-				  /* reg method on pDict */        RegisterDataDefinition);
+				  /* reg method on pDict */        RegisterDataDef);
   
   RegisterOneDef (/* dictionary*/                  pDict,
 				  /* def object's SOID */          AUID_AAFOperationDef,
@@ -357,7 +358,7 @@ static HRESULT RegisterDefs (IAAFDictionary * pDict)
 				  /* SP for type to QI */          IAAFDefObjectSP,
 				  /* IID of def to register */     IID_IAAFOperationDef,
 				  /* SP for def to register */     IAAFOperationDefSP,
-				  /* reg method on pDict */        RegisterOperationDefinition);
+				  /* reg method on pDict */        RegisterOperationDef);
   
   RegisterOneDef (/* dictionary*/                  pDict,
 				  /* def object's SOID */          AUID_AAFParameterDef,
@@ -369,7 +370,7 @@ static HRESULT RegisterDefs (IAAFDictionary * pDict)
 				  /* SP for type to QI */          IAAFDefObjectSP,
 				  /* IID of def to register */     IID_IAAFParameterDef,
 				  /* SP for def to register */     IAAFParameterDefSP,
-				  /* reg method on pDict */        RegisterParameterDefinition);
+				  /* reg method on pDict */        RegisterParameterDef);
 
   RegisterOneDef (/* dictionary*/                  pDict,
 				  /* def object's SOID */          AUID_AAFCodecDef,
@@ -381,15 +382,15 @@ static HRESULT RegisterDefs (IAAFDictionary * pDict)
 				  /* SP for type to QI */          IAAFDefObjectSP,
 				  /* IID of def to register */     IID_IAAFCodecDef,
 				  /* SP for def to register */     IAAFCodecDefSP,
-				  /* reg method on pDict */        RegisterCodecDefinition);
+				  /* reg method on pDict */        RegisterCodecDef);
 
   // Hack! Codec defs must have at least one data def appended in
   // order to be saved correctly...
   {
 	IAAFCodecDefSP cd;
-	checkResult (pDict->LookupCodecDefinition (kTestCodecDefID,
+	checkResult (pDict->LookupCodecDef (kTestCodecDefID,
 										&cd));
-	checkResult (cd->AppendEssenceKind (DDEF_Matte));
+	checkResult (cd->AddEssenceKind (DDEF_Matte));
   }  
 
   RegisterOneDef (/* dictionary*/                  pDict,
@@ -402,7 +403,7 @@ static HRESULT RegisterDefs (IAAFDictionary * pDict)
 				  /* SP for type to QI */          IAAFDefObjectSP,
 				  /* IID of def to register */     IID_IAAFContainerDef,
 				  /* SP for def to register */     IAAFContainerDefSP,
-				  /* reg method on pDict */        RegisterContainerDefinition);
+				  /* reg method on pDict */        RegisterContainerDef);
   
   RegisterOneDef (/* dictionary*/                  pDict,
 				  /* def object's SOID */          AUID_AAFInterpolationDefinition,
@@ -414,7 +415,7 @@ static HRESULT RegisterDefs (IAAFDictionary * pDict)
 				  /* SP for type to QI */          IAAFDefObjectSP,
 				  /* IID of def to register */     IID_IAAFInterpolationDef,
 				  /* SP for def to register */     IAAFInterpolationDefSP,
-				  /* reg method on pDict */        RegisterInterpolationDefinition);
+				  /* reg method on pDict */        RegisterInterpolationDef);
   
   RegisterOneDef (/* dictionary*/                  pDict,
 				  /* def object's SOID */          AUID_AAFPluginDescriptor,
@@ -426,7 +427,7 @@ static HRESULT RegisterDefs (IAAFDictionary * pDict)
 				  /* SP for type to QI */          IAAFObjectSP,
 				  /* IID of def to register */     IID_IAAFPluginDescriptor,
 				  /* SP for def to register */     IAAFPluginDescriptorSP,
-				  /* reg method on pDict */        RegisterPluginDescriptor);
+				  /* reg method on pDict */        RegisterPluginDef);
   
   return AAFRESULT_SUCCESS;
 }
@@ -441,88 +442,88 @@ static HRESULT LookupDefs (IAAFDictionary * pDict)
 				/* def's name */               L"TestUInt8",
 				/* IID of def for lookup */    IID_IAAFTypeDef,
 				/* SP of def to lookup */      IAAFTypeDefSP,
-				/* lookup method on pDict */   LookupType,
+				/* lookup method on pDict */   LookupTypeDef,
 				/* IID of def for name */      IID_IAAFDefObject,
 				/* SP of def for name */       IAAFDefObjectSP,
 				/* SP of enumerator */         IEnumAAFTypeDefsSP,
-				/* get-enum method on pDict */ GetTypeDefinitions);
+				/* get-enum method on pDict */ GetTypeDefs);
 
   LookupOneDef (/* dictionary */               pDict,
 				/* ID of def to look up */     kTestDataDefID,
 				/* def's name */               L"TestDataDef",
 				/* IID of def for lookup */    IID_IAAFDataDef,
 				/* SP of def to lookup */      IAAFDataDefSP,
-				/* lookup method on pDict */   LookupDataDefinition,
+				/* lookup method on pDict */   LookupDataDef,
 				/* IID of def for name */      IID_IAAFDefObject,
 				/* SP of def for name */       IAAFDefObjectSP,
 				/* SP of enumerator */         IEnumAAFDataDefsSP,
-				/* get-enum method on pDict */ GetDataDefinitions);
+				/* get-enum method on pDict */ GetDataDefs);
 
   LookupOneDef (/* dictionary */               pDict,
 				/* ID of def to look up */     kTestOperationDefID,
 				/* def's name */               L"TestOperationDef",
 				/* IID of def for lookup */    IID_IAAFOperationDef,
 				/* SP of def to lookup */      IAAFOperationDefSP,
-				/* lookup method on pDict */   LookupOperationDefinition,
+				/* lookup method on pDict */   LookupOperationDef,
 				/* IID of def for name */      IID_IAAFDefObject,
 				/* SP of def for name */       IAAFDefObjectSP,
 				/* SP of enumerator */         IEnumAAFOperationDefsSP,
-				/* get-enum method on pDict */ GetOperationDefinitions);
+				/* get-enum method on pDict */ GetOperationDefs);
 
   LookupOneDef (/* dictionary */               pDict,
 				/* ID of def to look up */     kTestParameterDefID,
 				/* def's name */               L"TestParameterDef",
 				/* IID of def for lookup */    IID_IAAFParameterDef,
 				/* SP of def to lookup */      IAAFParameterDefSP,
-				/* lookup method on pDict */   LookupParameterDefinition,
+				/* lookup method on pDict */   LookupParameterDef,
 				/* IID of def for name */      IID_IAAFDefObject,
 				/* SP of def for name */       IAAFDefObjectSP,
 				/* SP of enumerator */         IEnumAAFParameterDefsSP,
-				/* get-enum method on pDict */ GetParameterDefinitions);
+				/* get-enum method on pDict */ GetParameterDefs);
 
   LookupOneDef (/* dictionary */               pDict,
 				/* ID of def to look up */     kTestCodecDefID,
 				/* def's name */               L"TestCodecDef",
 				/* IID of def for lookup */    IID_IAAFCodecDef,
 				/* SP of def to lookup */      IAAFCodecDefSP,
-				/* lookup method on pDict */   LookupCodecDefinition,
+				/* lookup method on pDict */   LookupCodecDef,
 				/* IID of def for name */      IID_IAAFDefObject,
 				/* SP of def for name */       IAAFDefObjectSP,
 				/* SP of enumerator */         IEnumAAFCodecDefsSP,
-				/* get-enum method on pDict */ GetCodecDefinitions);
+				/* get-enum method on pDict */ GetCodecDefs);
 
   LookupOneDef (/* dictionary */               pDict,
 				/* ID of def to look up */     kTestContainerDefID,
 				/* def's name */               L"TestContainerDef",
 				/* IID of def for lookup */    IID_IAAFContainerDef,
 				/* SP of def to lookup */      IAAFContainerDefSP,
-				/* lookup method on pDict */   LookupContainerDefinition,
+				/* lookup method on pDict */   LookupContainerDef,
 				/* IID of def for name */      IID_IAAFDefObject,
 				/* SP of def for name */       IAAFDefObjectSP,
 				/* SP of enumerator */         IEnumAAFContainerDefsSP,
-				/* get-enum method on pDict */ GetContainerDefinitions);
+				/* get-enum method on pDict */ GetContainerDefs);
 
   LookupOneDef (/* dictionary */               pDict,
 				/* ID of def to look up */     kTestInterpolationDefID,
 				/* def's name */               L"TestInterpolationDef",
 				/* IID of def for lookup */    IID_IAAFInterpolationDef,
 				/* SP of def to lookup */      IAAFInterpolationDefSP,
-				/* lookup method on pDict */   LookupInterpolationDefinition,
+				/* lookup method on pDict */   LookupInterpolationDef,
 				/* IID of def for name */      IID_IAAFDefObject,
 				/* SP of def for name */       IAAFDefObjectSP,
 				/* SP of enumerator */         IEnumAAFInterpolationDefsSP,
-				/* get-enum method on pDict */ GetInterpolationDefinitions);
+				/* get-enum method on pDict */ GetInterpolationDefs);
 
   LookupOneDef (/* dictionary */               pDict,
 				/* ID of def to look up */     kTestPluginDescriptorID,
 				/* def's name */               L"TestPluginDescriptor",
 				/* IID of def for lookup */    IID_IAAFPluginDescriptor,
 				/* SP of def to lookup */      IAAFPluginDescriptorSP,
-				/* lookup method on pDict */   LookupPluginDescriptor,
+				/* lookup method on pDict */   LookupPluginDef,
 				/* IID of def for name */      IID_IAAFPluginDescriptor,
 				/* SP of def for name */       IAAFPluginDescriptorSP,
 				/* SP of enumerator */         IEnumAAFPluginDescriptorsSP,
-				/* get-enum method on pDict */ GetPluginDescriptors);
+				/* get-enum method on pDict */ GetPluginDefs);
 
   return AAFRESULT_SUCCESS;
 }
@@ -591,7 +592,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
   IAAFHeaderSP     pHeader;
   IAAFDictionarySP pDictionary;
   IAAFMobSP        pMob;
-  IAAFMobSlotSP    pMobSlot;
+  IAAFTimelineMobSlotSP    pMobSlot;
   IAAFSequenceSP   pSequence;
   IAAFSegmentSP    pSegment;
   IAAFComponentSP  pComponent;
@@ -668,8 +669,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 			  //
 			  // 1) Get type def for uint32
 			  IAAFTypeDefSP ptd;
-			  checkResult (pDictionary->LookupType (kAAFTypeID_UInt32,
-													&ptd));
+			  checkResult (pDictionary->LookupTypeDef (kAAFTypeID_UInt32,
+													   &ptd));
 			  assert (ptd);
 			  IAAFTypeDefIntSP pTDUint32;
 			  checkResult(ptd->QueryInterface (IID_IAAFTypeDefInt,
@@ -687,8 +688,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 			  // 3) Look up the property def for the odor property in
 			  //    the new fill class.
 			  IAAFClassDefSP pNewFillClass;
-			  checkResult (pDictionary->LookupClass (kClassAUID_NewFill,
-													 &pNewFillClass));
+			  checkResult (pDictionary->LookupClassDef (kClassAUID_NewFill,
+														&pNewFillClass));
 			  IAAFPropertyDefSP pPropDef;
 			  checkResult (pNewFillClass->LookupPropertyDef (kPropAUID_NewFill_Odor,
 															 &pPropDef));
@@ -703,10 +704,16 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		}
 	  checkResult(pSequence->QueryInterface (IID_IAAFSegment, (void **)&pSegment));
 		
-	  checkResult(pMob->AppendNewSlot(pSegment, 1, L"AAF Test Sequence", &pMobSlot));
+	  aafRational_t editRate = { 0, 1};
+	  checkResult(pMob->AppendNewTimelineSlot(editRate,
+											  pSegment,
+											  1,
+											  L"AAF Test Sequence",
+											  0,
+											  &pMobSlot));
 		
 	  // Add the master mob to the file and cleanup
-	  pHeader->AppendMob(pMob);
+	  pHeader->AddMob(pMob);
 		
 	  checkResult (RegisterDefs (pDictionary));
 	}
@@ -748,7 +755,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	  checkResult(OpenAAFFile(pFileName, kMediaOpenReadOnly, &pFile, &pHeader));
 		
 	  // Validate that there is only one composition mob.
-	  checkResult(pHeader->GetNumMobs(kCompMob, &numMobs));
+	  checkResult(pHeader->CountMobs(kCompMob, &numMobs));
 	  checkExpression(1 == numMobs, AAFRESULT_TEST_FAILED);
 		
 	  // Get the AAF Dictionary so that we can create valid AAF objects.
@@ -757,23 +764,23 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	  // Check a data definition from a composition MOB in order to test weak references
 	  criteria.searchTag = kByMobKind;
 	  criteria.tags.mobKind = kCompMob;
-	  checkResult(pHeader->EnumAAFAllMobs(&criteria, &pMobIter));
+	  checkResult(pHeader->GetMobs(&criteria, &pMobIter));
 	  while (pMobIter && pMobIter->NextOne(&pMob) == AAFRESULT_SUCCESS)
 		{					
 		  // Enumerate the first MOB slot for this MOB
-		  checkResult(pMob->EnumAAFAllMobSlots(&pSlotIter));
+		  checkResult(pMob->GetSlots(&pSlotIter));
 		  checkResult(pSlotIter->NextOne(&pSlot));
 
 		  checkResult(pSlot->GetSegment(&pSegment));
 		  checkResult(pSegment->QueryInterface(IID_IAAFSequence, (void **) &pSequence));
-		  checkResult(pSequence->EnumComponents(&pCompIter));
+		  checkResult(pSequence->GetComponents(&pCompIter));
 		  checkResult(pCompIter->NextOne(&pComp));
 
 		  aafUID_t dataDef;
 		  aafBool  testBool;
 
 		  checkResult(pComp->GetDataDef(&dataDef));
-		  checkResult(pDictionary->LookupDataDefinition(dataDef, &pDataDef));
+		  checkResult(pDictionary->LookupDataDef(dataDef, &pDataDef));
 		  checkResult(pDataDef->IsSoundKind(&testBool));
 		  checkExpression(testBool == AAFFalse, AAFRESULT_TEST_FAILED);
 
@@ -803,8 +810,8 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 
 		  // Now get the class from the dict
 		  IAAFClassDefSP pClassFromDict;
-		  checkResult (pDictionary->LookupClass (kClassAUID_NewFill,
-												 &pClassFromDict));
+		  checkResult (pDictionary->LookupClassDef (kClassAUID_NewFill,
+													&pClassFromDict));
 		  assert (pClassFromDict);
 		  IUnknownSP pUnkFromDict;
 		  checkResult(pClassFromDict->QueryInterface(IID_IUnknown,
@@ -817,7 +824,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 
 		  // To test GetClassDefinitions(), try explicit lookup.
 		  IEnumAAFClassDefsSP pClassDefEnum;
-		  checkResult (pDictionary->GetClassDefinitions (&pClassDefEnum));
+		  checkResult (pDictionary->GetClassDefs (&pClassDefEnum));
 		  bool found = false;
 		  IAAFClassDefSP cd;
 		  while (SUCCEEDED (pClassDefEnum->NextOne (&cd)))
@@ -853,7 +860,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 		  // 
 		  // We know the property is int32; get the int32 type def
 		  IAAFTypeDefSP ptd;
-		  checkResult (pDictionary->LookupType
+		  checkResult (pDictionary->LookupTypeDef
 					   (kAAFTypeID_UInt32,
 						&ptd));
 		  IAAFTypeDefIntSP pTDUint32;

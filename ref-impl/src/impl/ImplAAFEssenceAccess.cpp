@@ -303,7 +303,7 @@ ImplAAFEssenceAccess::Create (ImplAAFMasterMob *    masterMob,
 			dataObj = static_cast<IUnknown *> (implData->GetContainer());
 			
 			CHECK(implData->SetFileMob(_dataFileMob == NULL ? _compFileMob : _dataFileMob));
-			CHECK(dataHead->AppendEssenceData (implData));
+			CHECK(dataHead->AddEssenceData (implData));
 			
 			CHECK(plugins->CreateInstance(CLSID_AAFEssenceDataStream,
 				NULL, 
@@ -601,7 +601,7 @@ AAFRESULT STDMETHODCALLTYPE
 				dataObj = static_cast<IUnknown *> (implData->GetContainer());
 				
 				CHECK(implData->SetFileMob(_dataFileMob == NULL ? _compFileMob : _dataFileMob));
-				CHECK(dataHead->AppendEssenceData (implData));
+				CHECK(dataHead->AddEssenceData (implData));
 				
 				CHECK(plugins->CreateInstance(CLSID_AAFEssenceDataStream,
 					NULL, 
@@ -823,7 +823,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 		CHECK(compHead->GetDictionary (&dict));
-		CHECK(dict->LookupContainerDefinition (testFormat, &containerDef));
+		CHECK(dict->LookupContainerDef (testFormat, &containerDef));
 		dict->ReleaseReference();
 		dict = NULL;
 
@@ -861,7 +861,7 @@ AAFRESULT STDMETHODCALLTYPE
 		{
 			AAFRESULT				status;
 
-			CHECK(_mdes->EnumAAFAllLocators(&enumLocate));
+			CHECK(_mdes->GetLocators(&enumLocate));
 			while(!found && (enumLocate->NextOne (&pLoc) == AAFRESULT_SUCCESS))
 			{
 				
@@ -1159,7 +1159,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 		CHECK(compHead->GetDictionary (&dict));
-		CHECK(dict->LookupContainerDefinition (testFormat, &containerDef));
+		CHECK(dict->LookupContainerDef (testFormat, &containerDef));
 		dict->ReleaseReference();
 		dict = NULL;
 
@@ -1197,7 +1197,7 @@ AAFRESULT STDMETHODCALLTYPE
 		{
 			AAFRESULT				status;
 
-			CHECK(_mdes->EnumAAFAllLocators(&enumLocate));
+			CHECK(_mdes->GetLocators(&enumLocate));
 			while(!found && (enumLocate->NextOne (&pLoc) == AAFRESULT_SUCCESS))
 			{
 				
@@ -2105,7 +2105,7 @@ AAFRESULT STDMETHODCALLTYPE
 	{
  		CHECK(_codec->GetEssenceDescriptorID (&descID))
 		CHECK(mob->GetDictionary(&dict));
-		CHECK(dict->LookupPluginDescriptor(descID, &desc));
+		CHECK(dict->LookupPluginDef(descID, &desc));
 		CHECK(desc->IsAccelerated(result));
 		desc->ReleaseReference();
 		desc = NULL;
@@ -2284,14 +2284,14 @@ ImplAAFEssenceAccess::CreateContainerDef (ImplAAFHeader *head)
 	{
 		plugins = ImplAAFContext::GetInstance()->GetPluginManager();
 		CHECK(head->GetDictionary (&dict));
-		if(dict->LookupContainerDefinition (_fileFormat, &implContainerDef) != AAFRESULT_SUCCESS)
+		if(dict->LookupContainerDef (_fileFormat, &implContainerDef) != AAFRESULT_SUCCESS)
 		{
 			
 			//!!!This should call into the pluginmanager instead of using if?
 			if(EqualAUID(&_fileFormat, &ContainerAAF))
 			{
 				CHECK(MakeAAFContainerDef(head, &implContainerDef));
-				CHECK(dict->RegisterContainerDefinition (implContainerDef));
+				CHECK(dict->RegisterContainerDef (implContainerDef));
 			}
 			else
 			{
@@ -2304,7 +2304,7 @@ ImplAAFEssenceAccess::CreateContainerDef (ImplAAFHeader *head)
 				CHECK(pDef->QueryInterface(IID_IAAFContainerDef, (void **)&containerDef));
 				plug->Release();
 				plug = NULL;
-				CHECK(dictInterface->RegisterContainerDefinition (containerDef));
+				CHECK(dictInterface->RegisterContainerDef (containerDef));
 				containerDef->Release();
 				containerDef = NULL;
 				dictInterface->Release();
@@ -2371,15 +2371,15 @@ ImplAAFEssenceAccess::CreateCodecDef (ImplAAFHeader *head, const aafUID_t & code
 	{
 		plugins = ImplAAFContext::GetInstance()->GetPluginManager();
 		CHECK(head->GetDictionary (&dict));	//!!!Only makes essence in the current file?
-		if(dict->LookupCodecDefinition (codecID, &codecImpl) != AAFRESULT_SUCCESS)
+		if(dict->LookupCodecDef (codecID, &codecImpl) != AAFRESULT_SUCCESS)
 		{
 			pUnknown = static_cast<IUnknown *> (dict->GetContainer());
 			CHECK(pUnknown->QueryInterface(IID_IAAFDictionary, (void **)&dictInterface));
 			CHECK(_codec->QueryInterface(IID_IAAFPlugin, (void **)&plug));
 			CHECK(plug->GetIndexedDefinitionObject (/*!!!*/0,dictInterface, &def));
 			CHECK(def->QueryInterface(IID_IAAFCodecDef, (void **)&codecDef));
-			CHECK(dictInterface->RegisterCodecDefinition (codecDef));
-			CHECK(dict->LookupCodecDefinition (codecID, &codecImpl));
+			CHECK(dictInterface->RegisterCodecDef (codecDef));
+			CHECK(dict->LookupCodecDef (codecID, &codecImpl));
 			
 			plug->Release();
 			plug = NULL;
@@ -2396,7 +2396,7 @@ ImplAAFEssenceAccess::CreateCodecDef (ImplAAFHeader *head, const aafUID_t & code
 		pUnknown = static_cast<IUnknown *> (codecImpl->GetContainer());
 		CHECK(pUnknown->QueryInterface(IID_IAAFDefObject, (void **)&defInterface));
 		
-		CHECK(defInterface->EnumPluginDescriptors (&descEnum));
+		CHECK(defInterface->GetPluginDefs (&descEnum));
 		defInterface->Release();
 		defInterface = NULL;
 		
@@ -2426,7 +2426,7 @@ ImplAAFEssenceAccess::CreateCodecDef (ImplAAFHeader *head, const aafUID_t & code
 			
 			CHECK(plug->CreateDescriptor (dictInterface, &pluginDesc));
 			CHECK(codecDef->QueryInterface(IID_IAAFDefObject, (void **)&def));
-			CHECK(def->AppendPluginDescriptor (pluginDesc));
+			CHECK(def->AppendPluginDef (pluginDesc));
 			if(ppPluginDesc != NULL)
 			{
 				pluginDesc->AddRef();	// About to store this 
@@ -2714,7 +2714,7 @@ ImplAAFEssenceAccess::CreateFileMob (ImplAAFHeader *       newHead,
 		CHECK(mdes->SetContainerFormat (_fileFormat));
 		CHECK(mdes->SetSampleRate(sampleRate));
 		CHECK(fileMob->SetEssenceDescriptor(mdes));
-		CHECK(newHead->AppendMob(fileMob));
+		CHECK(newHead->AddMob(fileMob));
 		if(addLocator != NULL)
 		{
 			CHECK(mdes->AppendLocator(addLocator));

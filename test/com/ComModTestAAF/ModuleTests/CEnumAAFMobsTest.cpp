@@ -124,7 +124,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
     checkResult(pSourceMob->SetEssenceDescriptor (edesc));
 
-	  checkResult(pHeader->AppendMob(pMob));
+	  checkResult(pHeader->AddMob(pMob));
 
     // Reusing local variable so we need to release the inteface.
     pMob->Release();
@@ -139,7 +139,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	  checkResult(pMob->SetMobID(newUID));
 	  checkResult(pMob->SetName(L"Master Mob"));
 
-	  checkResult(pHeader->AppendMob(pMob));
+	  checkResult(pHeader->AddMob(pMob));
 
     // Reusing local variable so we need to release the inteface.
     pMob->Release();
@@ -154,7 +154,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	  checkResult(pMob->SetMobID(newUID));
   	checkResult(pMob->SetName(L"Composition Mob"));
 
-	  checkResult(pHeader->AppendMob(pMob));
+	  checkResult(pHeader->AddMob(pMob));
 	}
   catch (HRESULT& rResult)
   {
@@ -222,16 +222,16 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		checkResult(pFile->GetHeader(&pHeader));
 
 	  // Make sure that we have one master, one file, and one composition (three total)
-	  checkResult(pHeader->GetNumMobs(kAllMob, &numMobs));
+	  checkResult(pHeader->CountMobs(kAllMob, &numMobs));
 	  checkExpression (3 == numMobs, AAFRESULT_TEST_FAILED);
 
-	  checkResult(pHeader->GetNumMobs(kMasterMob, &numMobs));
+	  checkResult(pHeader->CountMobs(kMasterMob, &numMobs));
 	  checkExpression (1 == numMobs, AAFRESULT_TEST_FAILED);
 
-	  checkResult(pHeader->GetNumMobs(kFileMob, &numMobs));
+	  checkResult(pHeader->CountMobs(kFileMob, &numMobs));
 	  checkExpression(1 == numMobs, AAFRESULT_TEST_FAILED);
 
-	  checkResult(pHeader->GetNumMobs(kCompMob, &numMobs));
+	  checkResult(pHeader->CountMobs(kCompMob, &numMobs));
 	  checkExpression(1 == numMobs, AAFRESULT_TEST_FAILED);
 	}
   catch (HRESULT& rResult)

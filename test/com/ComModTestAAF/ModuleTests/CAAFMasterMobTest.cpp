@@ -233,7 +233,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pTapeMob->QueryInterface(IID_IAAFMob, (void **) &pTempMob));
 		checkResult(pTempMob->SetName(TAPE_MOB_NAME));
 		checkResult(pTempMob->GetMobID(&tapeMobID));
-		checkResult(pHeader->AppendMob(pTempMob));
+		checkResult(pHeader->AddMob(pTempMob));
 		pTempMob->Release();
 		pTempMob = NULL;
 		
@@ -265,7 +265,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 			checkResult(pTempMob->SetMobID(TempUID));
 			checkResult(pTempMob->SetName(L"source mob"));
 			
-			checkResult(pHeader->AppendMob(pTempMob));
+			checkResult(pHeader->AddMob(pTempMob));
 			pTempMob->Release();
 			pTempMob = NULL;
 			
@@ -276,7 +276,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		}
 		
 		// Add the master mob to the file and cleanup
-		checkResult(pHeader->AppendMob(pMob));
+		checkResult(pHeader->AddMob(pMob));
 	}
 	catch (HRESULT& rResult)
 	{
@@ -353,13 +353,13 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
     bFileOpen = true;
 
     // Validate that there is on one master mob in the test file.
-	  checkResult(pHeader->GetNumMobs(kMasterMob, &numMobs));
+	  checkResult(pHeader->CountMobs(kMasterMob, &numMobs));
     checkExpression(1 == numMobs, AAFRESULT_TEST_FAILED);
 
 	  // Enumerate over Master MOBs
 	  criteria.searchTag = kByMobKind;
 	  criteria.tags.mobKind = kMasterMob;
-    checkResult(pHeader->EnumAAFAllMobs(&criteria, &pMobIter));
+    checkResult(pHeader->GetMobs(&criteria, &pMobIter));
 	  while (pMobIter && pMobIter->NextOne(&pMob) == AAFRESULT_SUCCESS)
 	  {
 		  aafWChar			name[500];
@@ -375,7 +375,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 		  checkResult(pMob->GetMobID((aafUID_t *)&mobID));
 		  checkExpression(0 != IsEqualGUID(mobID, NewMobID), AAFRESULT_TEST_FAILED);
 
-		  checkResult(pMob->GetNumSlots(&numSlots));
+		  checkResult(pMob->CountSlots(&numSlots));
 		  checkExpression(NumMobSlots == numSlots, AAFRESULT_TEST_FAILED);
 
 //AAFRESULT STDMETHODCALLTYPE
@@ -384,7 +384,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 			unsigned long	s = 0;
 
 			// Enumerate over all MOB slots for this MOB
-			checkResult(pMob->EnumAAFAllMobSlots(&pSlotIter));
+			checkResult(pMob->GetSlots(&pSlotIter));
 			while (pSlotIter && pSlotIter->NextOne(&pSlot) == AAFRESULT_SUCCESS)
 			{
 				aafWChar			slotName[500];

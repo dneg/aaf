@@ -162,8 +162,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 							  IID_IAAFParameterDef, 
 							  (IUnknown **)&pParamDef));
 
-		checkResult(pDictionary->RegisterOperationDefinition(pOperationDef));
-		checkResult(pDictionary->RegisterParameterDefinition(pParamDef));
+		checkResult(pDictionary->RegisterOperationDef(pOperationDef));
+		checkResult(pDictionary->RegisterParameterDef(pParamDef));
 
 		checkResult(pOperationDef->QueryInterface(IID_IAAFDefObject, (void **) &pDefObject));
 		checkResult(pDefObject->SetName (TEST_EFFECT_NAME));
@@ -176,13 +176,13 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pOperationDef->SetIsTimeWarp (AAFFalse));
 		checkResult(pOperationDef->SetNumberInputs (TEST_NUM_INPUTS));
 		checkResult(pOperationDef->SetCategory (TEST_CATEGORY));
-		checkResult(pOperationDef->AddParameterDefs (pParamDef));
+		checkResult(pOperationDef->AddParameterDef (pParamDef));
 		checkResult(pOperationDef->SetBypass (TEST_BYPASS));
 		// !!!Added circular definitions because we don't have optional properties
-		checkResult(pOperationDef->AppendDegradeToOperations (pOperationDef));
+		checkResult(pOperationDef->AppendDegradeToOperation (pOperationDef));
 
 		checkResult(pParamDef->SetDisplayUnits(TEST_PARAM_UNITS));
-		checkResult(pDictionary->LookupType (checkTypeID , &pTypeDef));
+		checkResult(pDictionary->LookupTypeDef (checkTypeID , &pTypeDef));
 		checkResult(pParamDef->SetTypeDef(pTypeDef));
 		pTypeDef->Release();
 		pTypeDef = NULL;
@@ -258,7 +258,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 
 		checkResult(pHeader->GetDictionary(&pDictionary));
 	
-		checkResult(pDictionary->GetOperationDefinitions(&pEffectEnum));
+		checkResult(pDictionary->GetOperationDefs(&pEffectEnum));
 		checkResult(pEffectEnum->NextOne (&pOperationDef));
 		checkResult(pOperationDef->GetDataDefinitionID(&readDataDef));
 
@@ -282,7 +282,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 		checkExpression(checkBypass == TEST_BYPASS, AAFRESULT_TEST_FAILED);
 		checkResult(pOperationDef->GetNumberInputs (&checkNumInputs));
 		checkExpression(checkNumInputs == TEST_NUM_INPUTS, AAFRESULT_TEST_FAILED);
-		checkResult(pOperationDef->GetParameterDefinitions (&pParmDefEnum));
+		checkResult(pOperationDef->GetParameterDefs (&pParmDefEnum));
 		checkResult(pParmDefEnum->NextOne (&pParmDef));
 
 		checkResult(pParmDef->GetTypeDef(&pTypeDef));

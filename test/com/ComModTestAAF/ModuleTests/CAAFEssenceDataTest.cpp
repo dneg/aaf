@@ -355,7 +355,7 @@ void EssenceDataTest::createFileMob()
                                           (void **)&_pEssenceDescriptor));
   check(_pSourceMob->SetEssenceDescriptor (_pEssenceDescriptor));
 
-  check(_pHeader->AppendMob(_pMob));
+  check(_pHeader->AddMob(_pMob));
 
   createEssenceData(_pSourceMob);
 
@@ -388,7 +388,7 @@ void EssenceDataTest::createEssenceData(IAAFSourceMob *pSourceMob)
                          (IUnknown **)&_pEssenceData));
 
   check(_pEssenceData->SetFileMob(pSourceMob));
-  check(_pHeader->AppendEssenceData(_pEssenceData));
+  check(_pHeader->AddEssenceData(_pEssenceData));
   
   writeEssenceData(_pEssenceData, (aafDataBuffer_t)_smiley, sizeof(_smiley));
   writeEssenceData(_pEssenceData, (aafDataBuffer_t)_frowney, sizeof(_frowney));

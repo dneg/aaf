@@ -181,8 +181,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 							  IID_IAAFParameterDef, 
 							  (IUnknown **)&pParamDef));
 
-		checkResult(pDictionary->RegisterOperationDefinition(pOperationDef));
-		checkResult(pDictionary->RegisterParameterDefinition(pParamDef));
+		checkResult(pDictionary->RegisterOperationDef(pOperationDef));
+		checkResult(pDictionary->RegisterParameterDef(pParamDef));
 
 		checkResult(pOperationDef->QueryInterface(IID_IAAFDefObject, (void **) &pDefObject));
 		checkResult(pDefObject->Initialize (effectID, TEST_EFFECT_NAME, TEST_EFFECT_DESC));
@@ -193,10 +193,10 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pOperationDef->SetIsTimeWarp (AAFFalse));
 		checkResult(pOperationDef->SetNumberInputs (TEST_NUM_INPUTS));
 		checkResult(pOperationDef->SetCategory (TEST_CATEGORY));
-		checkResult(pOperationDef->AddParameterDefs (pParamDef));
+		checkResult(pOperationDef->AddParameterDef (pParamDef));
 		checkResult(pOperationDef->SetBypass (TEST_BYPASS));
 		// !!!Added circular definitions because we don't have optional properties
-		checkResult(pOperationDef->AppendDegradeToOperations (pOperationDef));
+		checkResult(pOperationDef->AppendDegradeToOperation (pOperationDef));
 
 		checkResult(pParamDef->SetDisplayUnits(TEST_PARAM_UNITS));
 		checkResult(pParamDef->QueryInterface(IID_IAAFDefObject, (void **) &pDefObject));
@@ -240,8 +240,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 			checkResult(pConstValue->QueryInterface (IID_IAAFParameter, (void **)&pParm));
 			checkResult(pParm->SetParameterDefinition (pParamDef));
  // !!!  ImplAAFParameter::SetTypeDefinition (ImplAAFTypeDef*  pTypeDef)
-			checkResult(pOperationGroup->AddNewParameter (pParm));
-			checkResult(pOperationGroup->AppendNewInputSegment (pFiller));
+			checkResult(pOperationGroup->AddParameter (pParm));
+			checkResult(pOperationGroup->AppendInputSegment (pFiller));
 			pFiller->Release();
 			pFiller = NULL;
 
@@ -281,7 +281,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		}
 
 		// Add the mob to the file.
-		checkResult(pHeader->AppendMob(pMob));
+		checkResult(pHeader->AddMob(pMob));
 	}
 	catch (HRESULT& rResult)
 	{
@@ -379,11 +379,11 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 		
 		aafSearchCrit_t		criteria;
 		criteria.searchTag = kNoSearch;
-		checkResult(pHeader->EnumAAFAllMobs (&criteria, &mobIter));
+		checkResult(pHeader->GetMobs (&criteria, &mobIter));
 				
 		checkResult(mobIter->NextOne (&pMob));			
-		checkResult(pMob->EnumAAFAllMobSlots(&slotIter));
-		checkResult(pMob->GetNumSlots (&numSlots));
+		checkResult(pMob->GetSlots(&slotIter));
+		checkResult(pMob->CountSlots (&numSlots));
 		
 		for(s = 0; s < numSlots; s++)
 		{
@@ -393,9 +393,9 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 			pSeg->Release();
 			pSeg = NULL;
 
-			checkResult(pOperationGroup->GetNumSourceSegments(&testNumSources));
+			checkResult(pOperationGroup->CountSourceSegments(&testNumSources));
 			checkExpression(testNumSources == TEST_NUM_INPUTS, AAFRESULT_TEST_FAILED);
-			checkResult(pOperationGroup->GetNumParameters(&testNumParam));
+			checkResult(pOperationGroup->CountParameters(&testNumParam));
 			checkExpression(testNumSources == 1, AAFRESULT_TEST_FAILED);
 
 			checkResult(pOperationGroup->IsATimeWarp (&readIsTimeWarp));
@@ -407,10 +407,10 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 			checkResult(pOperationGroup->IsValidTranOperation (&readValidTransition));
 			checkExpression(readValidTransition == AAFFalse, AAFRESULT_TEST_FAILED);
 			/**/
-			checkResult(pOperationGroup->GetIndexedInputSegment (0, &pSeg));
+			checkResult(pOperationGroup->GetInputSegmentAt (0, &pSeg));
  			checkResult(pSeg->QueryInterface(IID_IAAFFiller, (void **) &pFill));
 			/**/
-			checkResult(pOperationGroup->GetParameterByArgID (kTestParmID, &pParameter));
+			checkResult(pOperationGroup->LookupParameter (kTestParmID, &pParameter));
  			checkResult(pParameter->QueryInterface(IID_IAAFConstantValue, (void **) &pConstValue));
 
 			/*** Check the ConstValue methods **/

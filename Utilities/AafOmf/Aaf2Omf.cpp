@@ -494,14 +494,14 @@ HRESULT Aaf2Omf::AAFFileRead()
 	IAAFEssenceData*		pEssenceData = NULL;
 	aafSearchCrit_t			criteria;
 
-	rc = pHeader->GetNumMobs(kAllMob, &nAAFNumMobs);
+	rc = pHeader->CountMobs(kAllMob, &nAAFNumMobs);
 	if (gpGlobals->bVerboseMode)
 	{
 		printf(" Found: %ld Mobs in the input file\n", nAAFNumMobs);
 	}
 	criteria.searchTag = kByMobKind;
 	criteria.tags.mobKind = kAllMob;
-	rc = pHeader->EnumAAFAllMobs(&criteria, &pMobIter);
+	rc = pHeader->GetMobs(&criteria, &pMobIter);
 	while (pMobIter && (pMobIter->NextOne(&pMob) == AAFRESULT_SUCCESS))
 	{
 		aafInt32	nameLength = 0;
@@ -563,12 +563,12 @@ HRESULT Aaf2Omf::AAFFileRead()
 				// NOw add user comments 
 				aafUInt32	numComments = 0;
 
-				rc = pMob->GetNumComments(&numComments);
+				rc = pMob->CountComments(&numComments);
 				if (SUCCEEDED(rc) && (numComments > 0))
 				{
 					IEnumAAFTaggedValues*	pCommentIterator = NULL;
 					IAAFTaggedValue*		pMobComment = NULL;
-					rc = pMob->EnumAAFAllMobComments(&pCommentIterator);
+					rc = pMob->GetComments(&pCommentIterator);
 					while ( (SUCCEEDED(rc)) && (SUCCEEDED(pCommentIterator->NextOne(&pMobComment))))
 					{
 						char*		pszComment;
@@ -616,7 +616,7 @@ HRESULT Aaf2Omf::AAFFileRead()
 		pMobIter->Release();
 
 	// Now get the media data.
-	rc = pHeader->GetNumEssenceData(&numEssenceData);
+	rc = pHeader->CountEssenceData(&numEssenceData);
 	if (SUCCEEDED(rc) && numEssenceData > 0)
 	{
 		if (gpGlobals->bVerboseMode)
@@ -1229,11 +1229,11 @@ HRESULT Aaf2Omf::TraverseMob(IAAFMob* pMob,
 //	aafSearchCrit_t			criteria;
 	aafInt32				textSize;
 
-	rc = pMob->GetNumSlots(&numSlots);
+	rc = pMob->CountSlots(&numSlots);
 	if (FAILED(rc))
 		return rc;
 
-	rc = pMob->EnumAAFAllMobSlots(&pSlotIter);
+	rc = pMob->GetSlots(&pSlotIter);
 	if (FAILED(rc))
 		return rc;
 	
@@ -1760,15 +1760,15 @@ HRESULT Aaf2Omf::TraverseSequence(IAAFSequence* pSequence,
 
 	IAAFComponent*			pComponent = NULL;
 	IEnumAAFComponents*		pCompIter = NULL;
-	aafInt32				numComponents;
-	aafInt32				cpntCount;
+	aafUInt32				numComponents;
+	aafUInt32				cpntCount;
 	
 
-	rc = pSequence->GetNumComponents(&numComponents);
+	rc = pSequence->CountComponents(&numComponents);
 	if (FAILED(rc))
 		return rc;
 	
-	rc = pSequence->EnumComponents(&pCompIter);
+	rc = pSequence->GetComponents(&pCompIter);
 	for (cpntCount = 0; cpntCount < numComponents; cpntCount++)
 	{
 		rc = pCompIter->NextOne(&pComponent);
@@ -1886,17 +1886,17 @@ HRESULT Aaf2Omf::ConvertLocator(IAAFEssenceDescriptor* pEssenceDesc,
 	IAAFLocator*			pLocator = NULL;
 	IAAFTextLocator*		pTextLocator = NULL;
 	IEnumAAFLocators*		pLocatorIter = NULL;		
-	aafInt32				numLocators = 0;
+	aafUInt32				numLocators = 0;
     aafWChar*				pwLocatorPath = NULL;
 	aafWChar*				pwName = NULL;
 
 	aafInt32				pathSize = 0;
 	aafUInt32				textSize = 0;
 
-	rc = pEssenceDesc->GetNumLocators(&numLocators);
+	rc = pEssenceDesc->CountLocators(&numLocators);
 	if (SUCCEEDED(rc) && numLocators > 0)
 	{
-		rc = pEssenceDesc->EnumAAFAllLocators(&pLocatorIter);
+		rc = pEssenceDesc->GetLocators(&pLocatorIter);
 		while (SUCCEEDED(rc) && SUCCEEDED(pLocatorIter->NextOne(&pLocator)))
 		{
 			rc = pLocator->QueryInterface(IID_IAAFTextLocator, (void **)&pTextLocator);
@@ -2284,8 +2284,8 @@ HRESULT Aaf2Omf::ConvertEffects(IAAFOperationGroup* pEffect,
 		pComponent->GetDataDef(&effectAUID);
 		ConvertAAFDatadef(effectAUID, &effectDatakind);
 		pEffect->IsATimeWarp(&isATimeWarp);
-		pEffect->GetNumSourceSegments(&numSources);
-		pEffect->GetNumParameters(&numParameters);
+		pEffect->CountSourceSegments(&numSources);
+		pEffect->CountParameters(&numParameters);
 		rc = pEffect->GetOperationDefinition(&pEffectDef);
 		pEffectDef->GetDataDefinitionID(&datadefAUID);
 		checkAAF(pEffectDef->QueryInterface(IID_IAAFDefObject, (void **) &pDefObject));
@@ -2356,10 +2356,10 @@ HRESULT Aaf2Omf::ConvertEffects(IAAFOperationGroup* pEffect,
 		}
         
 		aafInt32	n, numSources;
-		checkAAF(pEffect->GetNumSourceSegments(&numSources));
+		checkAAF(pEffect->CountSourceSegments(&numSources));
 		for(n = 0; n < numSources; n++)
 		{
-			checkAAF(pEffect->GetIndexedInputSegment(n, &pSegment));
+			checkAAF(pEffect->GetInputSegmentAt(n, &pSegment));
 			checkAAF(pSourceRef->QueryInterface(IID_IAAFSourceClip,
 												(void **) &pComponent));
 			checkAAF(ProcessComponent(pComponent,&pOMFSegment));
@@ -2370,28 +2370,28 @@ HRESULT Aaf2Omf::ConvertEffects(IAAFOperationGroup* pEffect,
 		}
        
 		// If the effect ID is known, map to a apecific OMF effect ID
-		if(pEffect->GetParameterByArgID(kAAFParameterDefLevel, &pParameter) == AAFRESULT_SUCCESS)
+		if(pEffect->LookupParameter(kAAFParameterDefLevel, &pParameter) == AAFRESULT_SUCCESS)
 		{
 			checkAAF(ConvertParameter(pParameter, effectDefAUID, (*pOMFEffect), -3,
 										(OMF2::omfLength_t)length));
 		}
-		if(pEffect->GetParameterByArgID(kAAFParameterDefSMPTEWipeNumber, &pParameter) == AAFRESULT_SUCCESS)
+		if(pEffect->LookupParameter(kAAFParameterDefSMPTEWipeNumber, &pParameter) == AAFRESULT_SUCCESS)
 		{
 			checkAAF(ConvertParameter(pParameter, effectDefAUID, (*pOMFEffect),  1,
 										(OMF2::omfLength_t)length));
 		}
-		if(pEffect->GetParameterByArgID(kAAFParameterDefSMPTEReverse, &pParameter) == AAFRESULT_SUCCESS)
+		if(pEffect->LookupParameter(kAAFParameterDefSMPTEReverse, &pParameter) == AAFRESULT_SUCCESS)
 		{
 			checkAAF(ConvertParameter(pParameter, effectDefAUID, (*pOMFEffect),  2,
 										(OMF2::omfLength_t)length));
 		}
 #if 0
-		if(pEffect->GetParameterByArgID(kAAFParameterDefAmplitude, &pParameter) == AAFRESULT_SUCCESS)
+		if(pEffect->LookupParameter(kAAFParameterDefAmplitude, &pParameter) == AAFRESULT_SUCCESS)
 		{
 			checkAAF(ConvertParameter(pParameter, effectDefAUID, (*pOMFEffect),  xxx,
 										(OMF2::omfLength_t)length));
 		}
-		if(pEffect->GetParameterByArgID(kAAFParameterDefPan, &pParameter) == AAFRESULT_SUCCESS)
+		if(pEffect->LookupParameter(kAAFParameterDefPan, &pParameter) == AAFRESULT_SUCCESS)
 		{
 			checkAAF(ConvertParameter(pParameter, effectDefAUID, (*pOMFEffect),  xxx,
 										(OMF2::omfLength_t)length));
@@ -2407,62 +2407,62 @@ HRESULT Aaf2Omf::ConvertEffects(IAAFOperationGroup* pEffect,
 //		kAAFParameterDefSMPTEReplicationH
 //		kAAFParameterDefSMPTEReplicationV
 //		kAAFParameterDefSMPTECheckerboard
-		if(pEffect->GetParameterByArgID(kAAFParameterDefPhaseOffset, &pParameter) == AAFRESULT_SUCCESS)
+		if(pEffect->LookupParameter(kAAFParameterDefPhaseOffset, &pParameter) == AAFRESULT_SUCCESS)
 		{
 			checkAAF(ConvertParameter(pParameter, effectDefAUID, (*pOMFEffect),  xxx,
 										(OMF2::omfLength_t)length));
 		}
-		if(pEffect->GetParameterByArgID(kAAFParameterDefSpeedRatio, &pParameter) == AAFRESULT_SUCCESS)
+		if(pEffect->LookupParameter(kAAFParameterDefSpeedRatio, &pParameter) == AAFRESULT_SUCCESS)
 		{
 			checkAAF(ConvertParameter(pParameter, effectDefAUID, (*pOMFEffect),  xxx,
 										(OMF2::omfLength_t)length));
 		}
-		if(pEffect->GetParameterByArgID(kAAFParamID_AvidBorderWidth, &pParameter) == AAFRESULT_SUCCESS)
+		if(pEffect->LookupParameter(kAAFParamID_AvidBorderWidth, &pParameter) == AAFRESULT_SUCCESS)
 		{
 			checkAAF(ConvertParameter(pParameter, effectDefAUID, (*pOMFEffect),  xxx,
 										(OMF2::omfLength_t)length));
 		}
-		if(pEffect->GetParameterByArgID(kAAFParamID_AvidBorderSoft, &pParameter) == AAFRESULT_SUCCESS)
+		if(pEffect->LookupParameter(kAAFParamID_AvidBorderSoft, &pParameter) == AAFRESULT_SUCCESS)
 		{
 			checkAAF(ConvertParameter(pParameter, effectDefAUID, (*pOMFEffect),  xxx,
 										(OMF2::omfLength_t)length));
 		}
-		if(pEffect->GetParameterByArgID(kAAFParamID_AvidXPos, &pParameter) == AAFRESULT_SUCCESS)
+		if(pEffect->LookupParameter(kAAFParamID_AvidXPos, &pParameter) == AAFRESULT_SUCCESS)
 		{
 			checkAAF(ConvertParameter(pParameter, effectDefAUID, (*pOMFEffect),  xxx,
 										(OMF2::omfLength_t)length));
 		}
-		if(pEffect->GetParameterByArgID(kAAFParamID_AvidYPos, &pParameter) == AAFRESULT_SUCCESS)
+		if(pEffect->LookupParameter(kAAFParamID_AvidYPos, &pParameter) == AAFRESULT_SUCCESS)
 		{
 			checkAAF(ConvertParameter(pParameter, effectDefAUID, (*pOMFEffect),  xxx,
 										(OMF2::omfLength_t)length));
 		}
-		if(pEffect->GetParameterByArgID(kAAFParamID_AvidCrop, &pParameter) == AAFRESULT_SUCCESS)
+		if(pEffect->LookupParameter(kAAFParamID_AvidCrop, &pParameter) == AAFRESULT_SUCCESS)
 		{
 			checkAAF(ConvertParameter(pParameter, effectDefAUID, (*pOMFEffect),  xxx,
 										(OMF2::omfLength_t)length));
 		}
-		if(pEffect->GetParameterByArgID(kAAFParamID_AvidScale, &pParameter) == AAFRESULT_SUCCESS)
+		if(pEffect->LookupParameter(kAAFParamID_AvidScale, &pParameter) == AAFRESULT_SUCCESS)
 		{
 			checkAAF(ConvertParameter(pParameter, (*pOMFEffect),  xxx,
 										(OMF2::omfLength_t)length));
 		}
-		if(pEffect->GetParameterByArgID(kAAFParamID_AvidSpillSupress, &pParameter) == AAFRESULT_SUCCESS)
+		if(pEffect->LookupParameter(kAAFParamID_AvidSpillSupress, &pParameter) == AAFRESULT_SUCCESS)
 		{
 			checkAAF(ConvertParameter(pParameter, (*pOMFEffect),  xxx,
 										(OMF2::omfLength_t)length));
 		}
-		if(pEffect->GetParameterByArgID(kAAFParamID_AvidBounds, &pParameter) == AAFRESULT_SUCCESS)
+		if(pEffect->LookupParameter(kAAFParamID_AvidBounds, &pParameter) == AAFRESULT_SUCCESS)
 		{
 			checkAAF(ConvertParameter(pParameter, (*pOMFEffect),  xxx,
 										(OMF2::omfLength_t)length));
 		}
-		if(pEffect->GetParameterByArgID(kAAFParamID_AvidColor, &pParameter) == AAFRESULT_SUCCESS)
+		if(pEffect->LookupParameter(kAAFParamID_AvidColor, &pParameter) == AAFRESULT_SUCCESS)
 		{
 			checkAAF(ConvertParameter(pParameter, (*pOMFEffect),  xxx,
 										(OMF2::omfLength_t)length));
 		}
-		if(pEffect->GetParameterByArgID(kAAFParamID_AvidUserParam, &pParameter) == AAFRESULT_SUCCESS)
+		if(pEffect->LookupParameter(kAAFParamID_AvidUserParam, &pParameter) == AAFRESULT_SUCCESS)
 		{
 			checkAAF(ConvertParameter(pParameter, (*pOMFEffect),  xxx,
 										(OMF2::omfLength_t)length));

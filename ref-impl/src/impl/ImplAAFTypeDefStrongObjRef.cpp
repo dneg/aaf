@@ -173,7 +173,7 @@ AAFRESULT STDMETHODCALLTYPE
 		return hr;
 	  assert (pDict);
 
-	  hr = pDict->LookupClass (_referencedType, &_cachedObjType);
+	  hr = pDict->LookupClassDef (_referencedType, &_cachedObjType);
 	  if (AAFRESULT_FAILED(hr))
 		return hr;
 	  assert (_cachedObjType);

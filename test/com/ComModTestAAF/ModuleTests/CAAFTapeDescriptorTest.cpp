@@ -164,7 +164,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 						// Add the MOB to the file
 						if (AAFRESULT_SUCCESS == hr)
-							hr = pHeader->AppendMob(pMob);
+							hr = pHeader->AddMob(pMob);
 
 						pMob->Release();
 						pMob = NULL;
@@ -232,12 +232,12 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		hr = pFile->GetHeader(&pHeader);
 		if (AAFRESULT_SUCCESS == hr)
 		{
-			hr = pHeader->GetNumMobs(kAllMob, &numMobs);
+			hr = pHeader->CountMobs(kAllMob, &numMobs);
 			if (AAFRESULT_SUCCESS == hr)
 			{
 				if (1 == numMobs )
 				{
-					hr = pHeader->EnumAAFAllMobs(NULL, &pMobIter);
+					hr = pHeader->GetMobs(NULL, &pMobIter);
 					if (AAFRESULT_SUCCESS == hr)
 					{
 						hr = pMobIter->NextOne(&pMob);

@@ -157,8 +157,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 									  IID_IAAFParameterDef, 
 									  (IUnknown **)&pParamDef));
 		
-		checkResult(pDictionary->RegisterOperationDefinition(pOperationDef));
-		checkResult(pDictionary->RegisterParameterDefinition(pParamDef));
+		checkResult(pDictionary->RegisterOperationDef(pOperationDef));
+		checkResult(pDictionary->RegisterParameterDef(pParamDef));
 		
 		checkResult(pOperationDef->QueryInterface(IID_IAAFDefObject, (void **) &pDef));
 		checkResult(pDef->SetName (sName[n]));
@@ -171,10 +171,10 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pOperationDef->SetIsTimeWarp (AAFFalse));
 		checkResult(pOperationDef->SetNumberInputs (TEST_NUM_INPUTS));
 		checkResult(pOperationDef->SetCategory (TEST_CATEGORY));
-		checkResult(pOperationDef->AddParameterDefs (pParamDef));
+		checkResult(pOperationDef->AddParameterDef (pParamDef));
 		checkResult(pOperationDef->SetBypass (TEST_BYPASS));
 		// !!!Added circular definitions because we don't have optional properties
-		checkResult(pOperationDef->AppendDegradeToOperations (pOperationDef));
+		checkResult(pOperationDef->AppendDegradeToOperation (pOperationDef));
 		
 		checkResult(pParamDef->QueryInterface(IID_IAAFDefObject, (void **) &pDef));
 		checkResult(pDef->SetName (TEST_PARAM_NAME));
@@ -247,7 +247,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 
 		checkResult(pHeader->GetDictionary(&pDictionary));
 	
-		checkResult(pDictionary->GetOperationDefinitions(&pPlug));
+		checkResult(pDictionary->GetOperationDefs(&pPlug));
 		/* Read and check the first element */
 		checkResult(pPlug->NextOne(&pOperationDef));
 		checkResult(pOperationDef->QueryInterface (IID_IAAFDefObject,

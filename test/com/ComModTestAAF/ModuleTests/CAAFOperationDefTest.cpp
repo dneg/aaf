@@ -167,7 +167,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
  		checkResult(pDictionary->CreateInstance(AUID_AAFParameterDef,
 						  IID_IAAFParameterDef, 
 						  (IUnknown **)&pParamDef));
-		checkResult(pDictionary->RegisterParameterDefinition(pParamDef));
+		checkResult(pDictionary->RegisterParameterDef(pParamDef));
 		checkResult(pParamDef->QueryInterface(IID_IAAFDefObject, (void **) &pDefObject));
 		checkResult(pDefObject->Initialize (testParmID, TEST_PARAM_NAME, TEST_PARAM_DESC));
 		pDefObject->Release();
@@ -178,7 +178,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 			checkResult(pDictionary->CreateInstance(AUID_AAFOperationDef,
 				IID_IAAFOperationDef, 
 				(IUnknown **)&pOperationDef));
-			checkResult(pDictionary->RegisterOperationDefinition(pOperationDef));
+			checkResult(pDictionary->RegisterOperationDef(pOperationDef));
 			
 			checkResult(pOperationDef->QueryInterface(IID_IAAFDefObject, (void **) &pDefObject));
 			checkResult(pDefObject->Initialize (effectID[index], effectNames[index], effectDesc[index]));
@@ -189,7 +189,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 			checkResult(pOperationDef->SetIsTimeWarp (AAFFalse));
 			checkResult(pOperationDef->SetNumberInputs (TEST_NUM_INPUTS));
 			checkResult(pOperationDef->SetCategory (TEST_CATEGORY));
-			checkResult(pOperationDef->AddParameterDefs (pParamDef));
+			checkResult(pOperationDef->AddParameterDef (pParamDef));
 			checkResult(pOperationDef->SetBypass (TEST_BYPASS));
 			
 			defResults[index] = pOperationDef;
@@ -197,10 +197,10 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		}
 
 		// !!!Added circular definitions because we don't have optional properties
-		checkResult(defResults[1]->AppendDegradeToOperations (defResults[1]));
-		checkResult(defResults[2]->AppendDegradeToOperations (defResults[2]));
-		checkResult(defResults[0]->AppendDegradeToOperations (defResults[1]));
-		checkResult(defResults[0]->PrependDegradeToOperations (defResults[2]));
+		checkResult(defResults[1]->AppendDegradeToOperation (defResults[1]));
+		checkResult(defResults[2]->AppendDegradeToOperation (defResults[2]));
+		checkResult(defResults[0]->AppendDegradeToOperation (defResults[1]));
+		checkResult(defResults[0]->PrependDegradeToOperation (defResults[2]));
 		for(index = 0; index < 3; index++)
 		{
 			defResults[index]->Release();
@@ -269,7 +269,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 
 		checkResult(pHeader->GetDictionary(&pDictionary));
 	
-		checkResult(pDictionary->GetOperationDefinitions(&pEffectEnum));
+		checkResult(pDictionary->GetOperationDefs(&pEffectEnum));
 		checkResult(pEffectEnum->NextOne (&pOperationDef));
 		checkResult(pOperationDef->GetDataDefinitionID(&readDataDef));
 
@@ -293,7 +293,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 		checkExpression(checkBypass == TEST_BYPASS, AAFRESULT_TEST_FAILED);
 		checkResult(pOperationDef->GetNumberInputs (&checkNumInputs));
 		checkExpression(checkNumInputs == TEST_NUM_INPUTS, AAFRESULT_TEST_FAILED);
-		checkResult(pOperationDef->GetParameterDefinitions (&pParmDefEnum));
+		checkResult(pOperationDef->GetParameterDefs (&pParmDefEnum));
 		checkResult(pParmDefEnum->NextOne (&pParmDef));
 
 		checkResult(pParmDef->QueryInterface(IID_IAAFDefObject, (void **) &pDefObject));

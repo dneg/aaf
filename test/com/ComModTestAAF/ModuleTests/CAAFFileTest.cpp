@@ -122,7 +122,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	  checkResult(pMob->SetName(MOB_NAME_TEST));
 
 		// Add the source mob into the tree
-		checkResult(pHeader->AppendMob(pMob));
+		checkResult(pHeader->AddMob(pMob));
 
 		// Attempt to save the file.
 		checkResult(pFile->Save());
@@ -192,10 +192,10 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
     // We can't really do anthing in AAF without the header.
   	checkResult(pFile->GetHeader(&pHeader));
 
-		checkResult(pHeader->GetNumMobs(kAllMob, &numMobs));
+		checkResult(pHeader->CountMobs(kAllMob, &numMobs));
 		checkExpression (1 == numMobs, AAFRESULT_TEST_FAILED);
 
-    checkResult(pHeader->EnumAAFAllMobs (NULL, &mobIter));
+    checkResult(pHeader->GetMobs (NULL, &mobIter));
     for(n = 0; n < numMobs; n++)
 	  {
 		  checkResult(mobIter->NextOne (&pMob));

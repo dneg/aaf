@@ -67,7 +67,7 @@ IAAFInterpolationDef *AAFDomainUtils::CreateInterpolationDefinition(IAAFDictiona
 	IAAFDefObject			*defObject;
 	AAFRESULT				rc;
 
-	rc = dict->LookupInterpolationDefinition(interpolationDefID,&interpDef);
+	rc = dict->LookupInterpolationDef(interpolationDefID,&interpDef);
 	if(rc == AAFRESULT_SUCCESS && interpDef != NULL)
 		return interpDef;
 
@@ -80,7 +80,7 @@ IAAFInterpolationDef *AAFDomainUtils::CreateInterpolationDefinition(IAAFDictiona
 	if(memcmp(&interpolationDefID, &LinearInterpolator, sizeof(aafUID_t)) == 0)
 	{
  		(void)(defObject->Initialize(interpolationDefID, L"LinearInterp", L"Linear keyframe interpolation"));
-		dict->RegisterInterpolationDefinition(interpDef);
+		dict->RegisterInterpolationDef(interpDef);
 	}
 	else
 	{
@@ -101,7 +101,7 @@ IAAFTypeDef *AAFDomainUtils::CreateTypeDefinition(IAAFDictionary *pDict, aafUID_
 	AAFRESULT		rc;
 
 //	dprintf("AEffect::CreateTypeDefinition()\n");	//JeffB:
-	rc = pDict->LookupType(typeDefID,&typeDef);
+	rc = pDict->LookupTypeDef(typeDefID,&typeDef);
 	if(rc == AAFRESULT_SUCCESS && typeDef != NULL)
 		return typeDef;
 
@@ -124,7 +124,7 @@ IAAFTypeDef *AAFDomainUtils::CreateTypeDefinition(IAAFDictionary *pDict, aafUID_
 	}
 
 	if(typeDef != NULL)
-		pDict->RegisterType(typeDef);
+		pDict->RegisterTypeDef(typeDef);
 //cleanup:
 	if(defObject != NULL)
 		defObject->Release();
@@ -144,7 +144,7 @@ void AAFDomainUtils::AAFAddOnePoint(IAAFDictionary *dict, aafRational_t percentT
 	CHECKAAF(pPoint->SetTypeDefinition(typeDef));
 	CHECKAAF(pPoint->SetValue(buflen, (unsigned char *)buf));
 	CHECKAAF(pPoint->SetTime(percentTime));
-	CHECKAAF(pVVal->AppendPoint(pPoint));
+	CHECKAAF(pVVal->AddControlPoint(pPoint));
 //cleanup:
 	if(pPoint != NULL)
 		pPoint->Release();
@@ -161,7 +161,7 @@ IAAFParameter *AAFDomainUtils::AAFAddConstantVal(IAAFDictionary *dict, long bufl
 		(IUnknown **)&pCVal));
 	CHECKAAF(pCVal->SetValue(buflen, (unsigned char *)buf));
 	CHECKAAF(pCVal->QueryInterface(IID_IAAFParameter, (void **) &pParm));
-	CHECKAAF(pGroup->AddNewParameter(pParm));
+	CHECKAAF(pGroup->AddParameter(pParm));
 //cleanup:
 	if(pCVal)
 		pCVal->Release();
@@ -182,7 +182,7 @@ IAAFVaryingValue *AAFDomainUtils::AAFAddEmptyVaryingVal(IAAFDictionary *dict, IA
 												dict, LinearInterpolator)));
 	CHECKAAF(pVVal->QueryInterface(IID_IAAFParameter, (void **) &pParm));
 		
-	CHECKAAF(pOutputEffect->AddNewParameter(pParm));
+	CHECKAAF(pOutputEffect->AddParameter(pParm));
 //cleanup:
 	if(pParm != NULL)
 		pParm->Release();
@@ -199,7 +199,7 @@ IAAFParameterDef *AAFDomainUtils::CreateParameterDefinition(IAAFDictionary *pDic
 	aafUID_t			typeUID;
 
 //	dprintf("AEffect::CreateParameterDefinition()\n");
-	rc = pDict->LookupParameterDefinition(parmDefID,&parmDef);
+	rc = pDict->LookupParameterDef(parmDefID,&parmDef);
 	if(rc == AAFRESULT_SUCCESS && parmDef != NULL)
 		return parmDef;
 
@@ -226,14 +226,14 @@ IAAFParameterDef *AAFDomainUtils::CreateParameterDefinition(IAAFDictionary *pDic
 
 	if(parmDef != NULL)
 	{
-		rc = pDict->LookupType(typeUID,&typeDef);
+		rc = pDict->LookupTypeDef(typeUID,&typeDef);
 		if(rc != AAFRESULT_SUCCESS || typeDef == NULL)
 		{
 			typeDef = CreateTypeDefinition(pDict, typeUID);
 		}
 		CHECKAAF(parmDef->SetTypeDef(typeDef));
 
-		CHECKAAF(pDict->RegisterParameterDefinition(parmDef));
+		CHECKAAF(pDict->RegisterParameterDef(parmDef));
 	}
 //cleanup:
 	if(defObject != NULL)
@@ -261,7 +261,7 @@ HRESULT AAFDomainUtils::SetIntegerPropOnObject(IAAFObject* pObj, aafUID_t* pClas
 
 	// Create a property value from the supplied value (pValue)
 	IAAFTypeDef*		pTD;
-	hr = dict->LookupType(*pIntTypeID, &pTD);
+	hr = dict->LookupTypeDef(*pIntTypeID, &pTD);
 	AutoRelease<IAAFTypeDef> r1( pTD );
 
 	IAAFTypeDefInt*	pTDInt;
@@ -276,7 +276,7 @@ HRESULT AAFDomainUtils::SetIntegerPropOnObject(IAAFObject* pObj, aafUID_t* pClas
 	// Add the property to the target object.
 	// Get the class def for the object
 	IAAFClassDef*	pCD;
-	hr = dict->LookupClass(*pClassID, &pCD);
+	hr = dict->LookupClassDef(*pClassID, &pCD);
 	AutoRelease<IAAFClassDef> r4( pCD );
 
 	IAAFPropertyDef*	pPD;
@@ -307,7 +307,7 @@ HRESULT AAFDomainUtils::GetIntegerPropFromObject(IAAFObject* pObj, const aafUID_
 
 	// Get the property value for the target property
 	IAAFClassDef*		pCD;
-	hr = dict->LookupClass(*pClassID, &pCD);
+	hr = dict->LookupClassDef(*pClassID, &pCD);
 	AutoRelease<IAAFClassDef> r1(pCD);
 
 	IAAFPropertyDef*	pPD;
@@ -332,7 +332,7 @@ HRESULT AAFDomainUtils::GetIntegerPropFromObject(IAAFObject* pObj, const aafUID_
 	// Get the type def from the dict with which to interpret this
 	// property value.
 	IAAFTypeDef* pTD;
-	hr = dict->LookupType(*pIntTypeID, &pTD);
+	hr = dict->LookupTypeDef(*pIntTypeID, &pTD);
 	AutoRelease< IAAFTypeDef > r4 (pTD);
 
 	IAAFTypeDefInt* pTDInt;
@@ -362,13 +362,13 @@ HRESULT AAFDomainUtils::AddPropertyToClass(IAAFDictionary *dict, const aafUID_t*
 
 	// Get the class definition.
 	IAAFClassDef*	pCD;
-	hr = dict->LookupClass(*pClassID, &pCD);
+	hr = dict->LookupClassDef(*pClassID, &pCD);
 	AutoRelease<IAAFClassDef> r1(pCD);
 	IAAFTypeDef*	pTypeDef;
-	hr = dict->LookupType(*pPropTypeID, &pTypeDef);
+	hr = dict->LookupTypeDef(*pPropTypeID, &pTypeDef);
 	AutoRelease< IAAFTypeDef > r2( pTypeDef );
 	IAAFPropertyDef*	pPropDef;
-	hr = pCD->AppendOptionalPropertyDef(*pPropID, pName, pTypeDef, &pPropDef);
+	hr = pCD->RegisterOptionalPropertyDef(*pPropID, pName, pTypeDef, &pPropDef);
 	AutoRelease< IAAFPropertyDef > r3( pPropDef );	
 	return AAFRESULT_SUCCESS;
 }

@@ -151,7 +151,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 	checkResult(pDef->SetName(sName1));
 	checkResult(pDef->SetDescription(sDescription1));
-	checkResult(pDictionary->RegisterInterpolationDefinition(pInterpolationDef));
+	checkResult(pDictionary->RegisterInterpolationDef(pInterpolationDef));
 	pDef->Release();
 	pDef = NULL;
 	pInterpolationDef->Release();
@@ -166,7 +166,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	checkResult(pDef->SetName(sName2));
 	checkResult(pDef->SetDescription(sDescription2));
 
-	checkResult(pDictionary->RegisterInterpolationDefinition(pInterpolationDef));
+	checkResult(pDictionary->RegisterInterpolationDef(pInterpolationDef));
   }
   catch (HRESULT& rResult)
   {
@@ -224,7 +224,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 
 		checkResult(pHeader->GetDictionary(&pDictionary));
 	
-		checkResult(pDictionary->GetInterpolationDefinitions(&pPlug));
+		checkResult(pDictionary->GetInterpolationDefs(&pPlug));
 		/* Read and check the first element */
 		checkResult(pPlug->NextOne(&pInterpolationDef));
 		checkResult(pInterpolationDef->QueryInterface (IID_IAAFDefObject,

@@ -143,7 +143,7 @@ static HRESULT TestTypeDef ()
   if (! SUCCEEDED (hr)) return hr;
 
   IAAFTypeDefSP pUInt8ArrayType;
-  hr = pDict->LookupType (kAAFTypeID_UInt8Array, &pUInt8ArrayType);
+  hr = pDict->LookupTypeDef (kAAFTypeID_UInt8Array, &pUInt8ArrayType);
   if (! SUCCEEDED (hr)) return hr;
 
   IUnknownSP    pUnkUInt8Array;

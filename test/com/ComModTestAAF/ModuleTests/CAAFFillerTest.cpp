@@ -79,7 +79,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
   IAAFCompositionMob*      pCompMob = NULL;
   IAAFMob*          pMob = NULL;
   IAAFFiller*          pFiller = NULL;
-  IAAFMobSlot*        pSlot = NULL;
+  IAAFTimelineMobSlot*        pSlot = NULL;
   IAAFSegment*        pSegment = NULL;
   aafProductIdentification_t  ProductInfo;
   aafUID_t          newMobID;
@@ -135,10 +135,16 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
     // Set filler properties
     checkResult(pFiller->Initialize( fillerUID, fillerLength));
     // append the filler to the MOB tree
-    checkResult(pMob->AppendNewSlot(pSegment, 1, L"FillerSlot", &pSlot)); 
+	aafRational_t editRate = { 0, 1};
+    checkResult(pMob->AppendNewTimelineSlot(editRate,
+											pSegment,
+											1,
+											L"FillerSlot",
+											0,
+											&pSlot)); 
 
     // Add the Mob to the file
-    checkResult(pHeader->AppendMob(pMob));
+    checkResult(pHeader->AddMob(pMob));
   }
   catch (HRESULT& rResult)
   {
@@ -223,19 +229,19 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
     // We can't really do anthing in AAF without the header.
   	checkResult(pFile->GetHeader(&pHeader));
 
-		checkResult(pHeader->GetNumMobs(kAllMob, &numMobs));
+		checkResult(pHeader->CountMobs(kAllMob, &numMobs));
 		checkExpression (1 == numMobs, AAFRESULT_TEST_FAILED);
 
     // Enumerate over all Composition Mobs
     criteria.searchTag = kByMobKind;
     criteria.tags.mobKind = kCompMob;
-    checkResult(pHeader->EnumAAFAllMobs(&criteria, &pMobIter));
+    checkResult(pHeader->GetMobs(&criteria, &pMobIter));
     while (pMobIter && (pMobIter->NextOne(&pMob) == AAFRESULT_SUCCESS))
     {
-      checkResult(pMob->GetNumSlots(&numSlots));
+      checkResult(pMob->CountSlots(&numSlots));
       checkExpression (1 == numSlots, AAFRESULT_TEST_FAILED);
 
-      checkResult(pMob->EnumAAFAllMobSlots(&pSlotIter));
+      checkResult(pMob->GetSlots(&pSlotIter));
       while (pSlotIter && (pSlotIter->NextOne(&pSlot) == AAFRESULT_SUCCESS))
       {
         checkResult(pSlot->GetSegment(&pSegment));

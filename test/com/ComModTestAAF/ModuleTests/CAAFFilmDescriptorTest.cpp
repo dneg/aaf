@@ -127,7 +127,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	pFilmDesc->Release();
 	pFilmDesc = NULL;
 	// Add the MOB to the file
-	checkResult(pHeader->AppendMob(pMob));
+	checkResult(pHeader->AddMob(pMob));
 						
 	pMob->Release();
 	pMob = NULL;
@@ -184,9 +184,9 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	
 	checkResult(AAFFileOpenExistingRead(pFileName, 0, &pFile));
 	checkResult(pFile->GetHeader(&pHeader));
-	checkResult(pHeader->GetNumMobs(kAllMob, &numMobs));
+	checkResult(pHeader->CountMobs(kAllMob, &numMobs));
 	checkExpression(1 == numMobs, AAFRESULT_TEST_FAILED);
-	checkResult(pHeader->EnumAAFAllMobs(NULL, &pMobIter));
+	checkResult(pHeader->GetMobs(NULL, &pMobIter));
 	checkResult(pMobIter->NextOne(&pMob));
 	checkResult(pMob->QueryInterface(IID_IAAFSourceMob, (void **)&pSourceMob));
 	// Back into testing mode

@@ -151,7 +151,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 	checkResult(pDef->SetName(sName1));
 	checkResult(pDef->SetDescription(sDescription1));
-	checkResult(pDictionary->RegisterContainerDefinition(pContainerDef));
+	checkResult(pDictionary->RegisterContainerDef(pContainerDef));
 	pDef->Release();
 	pDef = NULL;
 	pContainerDef->Release();
@@ -166,7 +166,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	checkResult(pDef->SetName(sName2));
 	checkResult(pDef->SetDescription(sDescription2));
 
-	checkResult(pDictionary->RegisterContainerDefinition(pContainerDef));
+	checkResult(pDictionary->RegisterContainerDef(pContainerDef));
   }
   catch (HRESULT& rResult)
   {
@@ -224,7 +224,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 
 		checkResult(pHeader->GetDictionary(&pDictionary));
 	
-		checkResult(pDictionary->GetContainerDefinitions(&pPlug));
+		checkResult(pDictionary->GetContainerDefs(&pPlug));
 		/* Read and check the first element */
 		checkResult(pPlug->NextOne(&pContainerDef));
 		checkResult(pContainerDef->QueryInterface (IID_IAAFDefObject,

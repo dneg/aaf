@@ -181,7 +181,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		
 		checkResult(pMob->QueryInterface(IID_IAAFMasterMob, (void **) &pMasterMob));
 		// Add the master mob to the file BEFORE creating the essence
-		checkResult(pHeader->AppendMob(pMob));
+		checkResult(pHeader->AddMob(pMob));
 		checkResult(pMasterMob->CreateEssence (1, DDEF_Sound, CodecWave, rate, rate,
 												kSDKCompressionDisable, NULL, ContainerAAF, &pAccess));
 		

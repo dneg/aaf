@@ -201,7 +201,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		pDefObject->Release();
 		pDefObject = NULL;
 
-		checkResult(pDictionary->LookupType (kAAFTypeID_Rational, &pTypeDef));
+		checkResult(pDictionary->LookupTypeDef (kAAFTypeID_Rational, &pTypeDef));
 //		checkResult(pRatDef->Initialize (testInterpDef, sizeof(aafRational_t), AAFTrue, L"Signed Rational Effect Parameter"));
 		checkResult(AAFGetPluginManager(&pMgr));
 		checkResult(pMgr->CreatePluginDefinition(LinearInterpolator, pDictionary, &pDefObject));
@@ -209,9 +209,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		pDefObject->Release();
 		pDefObject = NULL;
 
-		checkResult(pDictionary->RegisterOperationDefinition(pOperationDef));
-		checkResult(pDictionary->RegisterParameterDefinition(pParamDef));
-		checkResult(pDictionary->RegisterInterpolationDefinition(pInterpDef));
+		checkResult(pDictionary->RegisterOperationDef (pOperationDef));
+		checkResult(pDictionary->RegisterParameterDef (pParamDef));
+		checkResult(pDictionary->RegisterInterpolationDef (pInterpDef));
 //		checkResult(pIntDef->QueryInterface(IID_IAAFTypeDef, (void **) &pTypeDef));
 //		checkResult(pDictionary->RegisterType(pTypeDef));
 
@@ -224,10 +224,10 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pOperationDef->SetIsTimeWarp (AAFFalse));
 		checkResult(pOperationDef->SetNumberInputs (TEST_NUM_INPUTS));
 		checkResult(pOperationDef->SetCategory (TEST_CATEGORY));
-		checkResult(pOperationDef->AddParameterDefs (pParamDef));
+		checkResult(pOperationDef->AddParameterDef (pParamDef));
 		checkResult(pOperationDef->SetBypass (TEST_BYPASS));
 		// !!!Added circular definitions because we don't have optional properties
-		checkResult(pOperationDef->AppendDegradeToOperations (pOperationDef));
+		checkResult(pOperationDef->AppendDegradeToOperation (pOperationDef));
 
 		checkResult(pParamDef->SetDisplayUnits(TEST_PARAM_UNITS));
 
@@ -270,7 +270,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 			checkResult(pControlPoint->SetValue(sizeof(testLevel1), (aafDataBuffer_t)&testLevel1));
 			checkResult(pControlPoint->SetTypeDefinition (pTypeDef));
 			checkResult(pControlPoint->SetEditHint(kRelativeLeft));
-			checkResult(pVaryingValue->AppendPoint(pControlPoint));
+			checkResult(pVaryingValue->AddControlPoint(pControlPoint));
 			pControlPoint->Release();
 			pControlPoint = NULL;
 			checkResult(pDictionary->CreateInstance(AUID_AAFControlPoint,
@@ -280,15 +280,15 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 			checkResult(pControlPoint->SetTime(testTime2));
 			checkResult(pControlPoint->SetEditHint(kProportional));
 			checkResult(pControlPoint->SetValue(sizeof(testLevel2), (aafDataBuffer_t)&testLevel2));
-			checkResult(pVaryingValue->AppendPoint(pControlPoint));
+			checkResult(pVaryingValue->AddControlPoint(pControlPoint));
 			pControlPoint->Release();
 			pControlPoint = NULL;
 
 			checkResult(pVaryingValue->QueryInterface (IID_IAAFParameter, (void **)&pParm));
 			checkResult(pParm->SetParameterDefinition (pParamDef));
  // !!!  ImplAAFParameter::SetTypeDefinition (ImplAAFTypeDef*  pTypeDef)
-			checkResult(pOperationGroup->AddNewParameter (pParm));
-			checkResult(pOperationGroup->AppendNewInputSegment (pFiller));
+			checkResult(pOperationGroup->AddParameter (pParm));
+			checkResult(pOperationGroup->AppendInputSegment (pFiller));
 			pFiller->Release();
 			pFiller = NULL;
 
@@ -328,7 +328,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		}
 
 		// Add the mob to the file.
-		checkResult(pHeader->AppendMob(pMob));
+		checkResult(pHeader->AddMob(pMob));
 	}
 	catch (HRESULT& rResult)
 	{
@@ -443,11 +443,11 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 		
 		aafSearchCrit_t		criteria;
 		criteria.searchTag = kNoSearch;
-		checkResult(pHeader->EnumAAFAllMobs (&criteria, &mobIter));
+		checkResult(pHeader->GetMobs (&criteria, &mobIter));
 				
 		checkResult(mobIter->NextOne (&pMob));			
-		checkResult(pMob->EnumAAFAllMobSlots(&slotIter));
-		checkResult(pMob->GetNumSlots (&numSlots));
+		checkResult(pMob->GetSlots(&slotIter));
+		checkResult(pMob->CountSlots (&numSlots));
 		
 		for(s = 0; s < numSlots; s++)
 		{
@@ -457,9 +457,9 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 			pSeg->Release();
 			pSeg = NULL;
 
-			checkResult(pOperationGroup->GetNumSourceSegments(&testNumSources));
+			checkResult(pOperationGroup->CountSourceSegments(&testNumSources));
 			checkExpression(testNumSources == TEST_NUM_INPUTS, AAFRESULT_TEST_FAILED);
-			checkResult(pOperationGroup->GetNumParameters(&testNumParam));
+			checkResult(pOperationGroup->CountParameters(&testNumParam));
 			checkExpression(testNumSources == 1, AAFRESULT_TEST_FAILED);
 
 			checkResult(pOperationGroup->IsATimeWarp (&readIsTimeWarp));
@@ -471,12 +471,12 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 			checkResult(pOperationGroup->IsValidTranOperation (&readValidTransition));
 			checkExpression(readValidTransition == AAFFalse, AAFRESULT_TEST_FAILED);
 			/**/
-			checkResult(pOperationGroup->GetIndexedInputSegment (0, &pSeg));
+			checkResult(pOperationGroup->GetInputSegmentAt (0, &pSeg));
  			checkResult(pSeg->QueryInterface(IID_IAAFFiller, (void **) &pFill));
 			pFill->Release();
 			pFill = NULL;
 			/**/
-			checkResult(pOperationGroup->GetParameterByArgID (kTestParmID, &pParameter));
+			checkResult(pOperationGroup->LookupParameter (kTestParmID, &pParameter));
  			checkResult(pParameter->QueryInterface(IID_IAAFVaryingValue, (void **) &pVaryingValue));
 
 			/*** Check the VaryingValue methods **/

@@ -195,7 +195,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	checkResult(pDef->SetName(sName));
 	checkResult(pDef->SetDescription(sDescription));
 
-	checkResult(pDictionary->RegisterContainerDefinition(pContainerDef));
+	checkResult(pDictionary->RegisterContainerDef(pContainerDef));
 
 	//
 	// Test GetAUID() using a type def
@@ -219,7 +219,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	checkResult (pd1->Initialize (kTestPluginDescID1,
 							L"PluginDesc1",
 							L"Plugin Descriptor 1 description"));
-	checkResult (pDictionary->RegisterPluginDescriptor (pd1));
+	checkResult (pDictionary->RegisterPluginDef (pd1));
 
 	IAAFPluginDescriptorSP pd2;
 	checkResult (pDictionary->CreateInstance (AUID_AAFPluginDescriptor,
@@ -228,7 +228,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	checkResult (pd2->Initialize (kTestPluginDescID2,
 							L"PluginDesc2",
 							L"Plugin Descriptor 2 description"));
-	checkResult (pDictionary->RegisterPluginDescriptor (pd2));
+	checkResult (pDictionary->RegisterPluginDef (pd2));
 
 	IAAFPluginDescriptorSP pd3;
 	checkResult (pDictionary->CreateInstance (AUID_AAFPluginDescriptor,
@@ -237,23 +237,23 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	checkResult (pd3->Initialize (kTestPluginDescID3,
 							L"PluginDesc3",
 							L"Plugin Descriptor 3 description"));
-	checkResult (pDictionary->RegisterPluginDescriptor (pd3));
+	checkResult (pDictionary->RegisterPluginDef (pd3));
 
 	IAAFDefObjectSP pDefObj;
 	checkResult(pTypeDef->QueryInterface (IID_IAAFDefObject,
                                           (void **)&pDefObj));
 
 	// pd2 will eventually be second one
-	checkResult (pDefObj->AppendPluginDescriptor (pd2));
+	checkResult (pDefObj->AppendPluginDef (pd2));
 	// pd3 will eventually be third one
-	checkResult (pDefObj->AppendPluginDescriptor (pd3));
+	checkResult (pDefObj->AppendPluginDef (pd3));
 	// pd1 will be first one
-	checkResult (pDefObj->PrependPluginDescriptor (pd1));
+	checkResult (pDefObj->PrependPluginDef (pd1));
 
 	IAAFTypeDefSP ptd;
 	checkResult(pTypeDef->QueryInterface (IID_IAAFTypeDef,
                                           (void **)&ptd));
-	checkResult (pDictionary->RegisterType (ptd));
+	checkResult (pDictionary->RegisterTypeDef (ptd));
 
   }
   catch (HRESULT& rResult)
@@ -308,7 +308,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 
 		checkResult(pHeader->GetDictionary(&pDictionary));
 	
-		checkResult(pDictionary->GetContainerDefinitions(&pPlug));
+		checkResult(pDictionary->GetContainerDefs(&pPlug));
 		checkResult(pPlug->NextOne(&pContainerDef));
 		checkResult(pContainerDef->QueryInterface (IID_IAAFDefObject,
                                           (void **)&pDef));
@@ -329,7 +329,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 						 AAFRESULT_TEST_FAILED);
 
 		IAAFTypeDefSP pTypeDef;
-		checkResult (pDictionary->LookupType (kTestTypeId, &pTypeDef));
+		checkResult (pDictionary->LookupTypeDef (kTestTypeId, &pTypeDef));
 
 		IAAFDefObjectSP pDefObj;
 		checkResult(pTypeDef->QueryInterface (IID_IAAFDefObject,
@@ -340,7 +340,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 		checkExpression (0 != EqualAUID (&id, &kTestTypeId), AAFRESULT_TEST_FAILED);
 
 		IEnumAAFPluginDescriptorsSP epd;
-		checkResult (pDefObj->EnumPluginDescriptors (&epd));
+		checkResult (pDefObj->GetPluginDefs (&epd));
 
 		IAAFPluginDescriptorSP pd;
 		// Check that plugin descriptors are entered in order.

@@ -155,7 +155,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		}
 		
 		// Add the mob to the file.
-		checkResult(pHeader->AppendMob(pMob));
+		checkResult(pHeader->AddMob(pMob));
 	}
 	catch (HRESULT& rResult)
 	{
@@ -236,13 +236,13 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		checkResult(pFile->GetHeader(&pHeader));
 		
 		
-		checkResult(pHeader->GetNumMobs(kAllMob, &numMobs));
+		checkResult(pHeader->CountMobs(kAllMob, &numMobs));
 		checkExpression(1 == numMobs, AAFRESULT_TEST_FAILED);
 		
 		
 		aafSearchCrit_t		criteria;
 		criteria.searchTag = kNoSearch;
-		checkResult(pHeader->EnumAAFAllMobs (&criteria, &mobIter));
+		checkResult(pHeader->GetMobs (&criteria, &mobIter));
 		
 		for(n = 0; n < numMobs; n++)
 		{
@@ -255,10 +255,10 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 			checkResult(aMob->GetName (name, sizeof(name)));
 			checkResult(aMob->GetMobID (&mobID));
 			
-			checkResult(aMob->GetNumSlots (&numSlots));
+			checkResult(aMob->CountSlots (&numSlots));
 			checkExpression(5 == numSlots, AAFRESULT_TEST_FAILED);
 			
-			checkResult(aMob->EnumAAFAllMobSlots(&slotIter));
+			checkResult(aMob->GetSlots(&slotIter));
 			
 			for(s = 0; s < (aafSlotID_t)numSlots; s++)
 			{

@@ -285,7 +285,7 @@ void EnumEssenceDataTest::createFileMob(int itemNumber)
                                           (void **)&_pEssenceDescriptor));
   check(_pSourceMob->SetEssenceDescriptor (_pEssenceDescriptor));
 
-  check(_pHeader->AppendMob(_pMob));
+  check(_pHeader->AddMob(_pMob));
 
   createEssenceData(_pSourceMob);
 
@@ -316,7 +316,7 @@ void EnumEssenceDataTest::createEssenceData(IAAFSourceMob *pSourceMob)
                          (IUnknown **)&_pEssenceData));
 
   check(_pEssenceData->SetFileMob(pSourceMob));
-  check(_pHeader->AppendEssenceData(_pEssenceData));
+  check(_pHeader->AddEssenceData(_pEssenceData));
   
   _pEssenceData->Release();
   _pEssenceData = NULL;
@@ -330,7 +330,7 @@ void EnumEssenceDataTest::openEssenceData()
   assert(NULL == _pSourceMob);
 
   aafUInt32 essenceDataCount = 0;
-  check(_pHeader->GetNumEssenceData(&essenceDataCount));
+  check(_pHeader->CountEssenceData(&essenceDataCount));
   if (_maxMobCount != essenceDataCount)
     check(AAFRESULT_TEST_FAILED);
  

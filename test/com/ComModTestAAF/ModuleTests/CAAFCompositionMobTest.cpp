@@ -128,7 +128,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pCompMob->SetDefaultFade(fadeInLen, fadeInType, fadeInEditUnit));
 
     // Add the mob to the file.
-    checkResult(pHeader->AppendMob(pMob));
+    checkResult(pHeader->AddMob(pMob));
   }
   catch (HRESULT& rResult)
   {
@@ -197,13 +197,13 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	  checkResult(pFile->GetHeader(&pHeader));
 
 		// Get the number of mobs in the file (should be one)
-		checkResult(pHeader->GetNumMobs( kAllMob, &numMobs ));
+		checkResult(pHeader->CountMobs( kAllMob, &numMobs ));
 		checkExpression(1 == numMobs, AAFRESULT_TEST_FAILED);
 
 		// Enumerate over all Composition Mobs
 		criteria.searchTag = kByMobKind;
 		criteria.tags.mobKind = kCompMob;
-		checkResult(pHeader->EnumAAFAllMobs(&criteria, &pMobIter));
+		checkResult(pHeader->GetMobs(&criteria, &pMobIter));
 		while (pMobIter && (pMobIter->NextOne(&pMob) == AAFRESULT_SUCCESS))
 		{
 			// Get A CompositionMob Interface 

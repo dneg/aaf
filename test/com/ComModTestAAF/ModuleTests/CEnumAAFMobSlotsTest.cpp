@@ -72,7 +72,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
   IAAFHeader *        pHeader = NULL;
   IAAFDictionary*  pDictionary = NULL;
 	IAAFMob						*pMob = NULL;
-	IAAFMobSlot		*newSlot = NULL;
+	IAAFTimelineMobSlot	*newSlot = NULL;
 	IAAFSegment		*seg = NULL;
 	IAAFSourceClip	*sclp = NULL;
 	aafProductIdentification_t	ProductInfo;
@@ -128,20 +128,26 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 		  checkResult(sclp->QueryInterface (IID_IAAFSegment, (void **)&seg));
 
-		  checkResult(pMob->AppendNewSlot (seg, test+1, slotNames[test], &newSlot));
+		  aafRational_t editRate = { 0, 1};
+		  checkResult(pMob->AppendNewTimelineSlot (editRate,
+												   seg,
+												   test+1,
+												   slotNames[test],
+												   0,
+												   &newSlot));
 
 		  newSlot->Release();
-      newSlot = NULL;
+		  newSlot = NULL;
 
 		  seg->Release();
-      seg = NULL;
-
-      sclp->Release();
-      sclp = NULL;
+		  seg = NULL;
+		  
+		  sclp->Release();
+		  sclp = NULL;
 	  }
 
     // Add the mob to the file.
-	  checkResult(pHeader->AppendMob(pMob));
+	  checkResult(pHeader->AddMob(pMob));
   }
   catch (HRESULT& rResult)
   {
@@ -218,13 +224,13 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		checkResult(pFile->GetHeader(&pHeader));
 		
 		
-		checkResult(pHeader->GetNumMobs(kAllMob, &numMobs));
+		checkResult(pHeader->CountMobs(kAllMob, &numMobs));
 		checkExpression(1 == numMobs, AAFRESULT_TEST_FAILED);
 		
 		
 		aafSearchCrit_t		criteria;
 		criteria.searchTag = kNoSearch;
-		checkResult(pHeader->EnumAAFAllMobs (&criteria, &mobIter));
+		checkResult(pHeader->GetMobs (&criteria, &mobIter));
 		
 		for(n = 0; n < numMobs; n++)
 		{
@@ -237,10 +243,10 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 			checkResult(aMob->GetName (name, sizeof(name)));
 			checkResult(aMob->GetMobID (&mobID));
 			
-			checkResult(aMob->GetNumSlots (&numSlots));
+			checkResult(aMob->CountSlots (&numSlots));
 			checkExpression(5 == numSlots, AAFRESULT_TEST_FAILED);
 			
-			checkResult(aMob->EnumAAFAllMobSlots(&slotIter));
+			checkResult(aMob->GetSlots(&slotIter));
 			
 			/* Read and check all elements using NextOne */
 			for(s = 0; s < numSlots; s++)

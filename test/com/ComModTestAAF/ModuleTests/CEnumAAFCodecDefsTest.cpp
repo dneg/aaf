@@ -152,10 +152,10 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	checkResult(pCodecDef->QueryInterface (IID_IAAFDefObject,
                                           (void **)&pDef));
 
-	checkResult(pCodecDef->AppendEssenceKind (DDEF_Matte));
+	checkResult(pCodecDef->AddEssenceKind (DDEF_Matte));
 	uid = NoCodec;
 	checkResult(pDef->Initialize (uid, sName1, sDescription1));
-	checkResult(pDictionary->RegisterCodecDefinition(pCodecDef));
+	checkResult(pDictionary->RegisterCodecDef(pCodecDef));
 	pDef->Release();
 	pDef = NULL;
 	pCodecDef->Release();
@@ -166,11 +166,11 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
     
 	checkResult(pCodecDef->QueryInterface (IID_IAAFDefObject,
                                           (void **)&pDef));
-	checkResult(pCodecDef->AppendEssenceKind (DDEF_Matte));
+	checkResult(pCodecDef->AddEssenceKind (DDEF_Matte));
 	uid = NoCodec;
 	checkResult(pDef->Initialize (uid, sName2, sDescription2));
 
-	checkResult(pDictionary->RegisterCodecDefinition(pCodecDef));
+	checkResult(pDictionary->RegisterCodecDef(pCodecDef));
   }
   catch (HRESULT& rResult)
   {
@@ -228,7 +228,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 
 		checkResult(pHeader->GetDictionary(&pDictionary));
 	
-		checkResult(pDictionary->GetCodecDefinitions(&pPlug));
+		checkResult(pDictionary->GetCodecDefs(&pPlug));
 		/* Read and check the first element */
 		checkResult(pPlug->NextOne(&pCodecDef));
 		checkResult(pCodecDef->QueryInterface (IID_IAAFDefObject,

@@ -391,7 +391,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 		checkResult(pMob->SetName(L"A Master Mob"));
 		
 		// Add it to the file 
-		checkResult(pHeader->AppendMob(pMob));
+		checkResult(pHeader->AddMob(pMob));
 		
 		// !!!Previous revisions of this file contained code here required to handle external essence
 		
@@ -609,11 +609,11 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 		
 		// Here we checkResult on the number of mobs in the file. 
 		// Get the number of master mobs in the file (should be one)
-		checkResult(pHeader->GetNumMobs(kMasterMob, &numMobs));
+		checkResult(pHeader->CountMobs(kMasterMob, &numMobs));
 		checkExpression(1 == numMobs, AAFRESULT_TEST_FAILED);
 		criteria.searchTag = kByMobKind;
 		criteria.tags.mobKind = kMasterMob;
-		checkResult(pHeader->EnumAAFAllMobs(&criteria, &pMobIter));
+		checkResult(pHeader->GetMobs(&criteria, &pMobIter));
 		while(AAFRESULT_SUCCESS == pMobIter->NextOne(&pMob))
 		{
 			char mobIDstr[256];
@@ -625,7 +625,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 			convert(mobName, sizeof(mobName), namebuf);
 			AUIDtoString(&mobID, mobIDstr);
 			// Make sure we have one slot 
-			checkResult(pMob->GetNumSlots(&numSlots));
+			checkResult(pMob->CountSlots(&numSlots));
 			checkExpression(1 == numSlots, AAFRESULT_TEST_FAILED);
 			// The essence data is in SlotID 1
 			// Get a Master Mob interface
@@ -983,7 +983,7 @@ static HRESULT CreateJPEGAAFFile(
 		checkResult(pMob->SetName(L"A Master Mob"));
 		
 		// Add it to the file 
-		checkResult(pHeader->AppendMob(pMob));
+		checkResult(pHeader->AddMob(pMob));
 		
 		// !!!Previous revisions of this file contained code here required to handle external essence
 		
@@ -1311,11 +1311,11 @@ static HRESULT ReadJPEGAAFFile(
 		
 		// Here we checkResult on the number of mobs in the file. 
 		// Get the number of master mobs in the file (should be one)
-		checkResult(pHeader->GetNumMobs(kMasterMob, &numMobs));
+		checkResult(pHeader->CountMobs(kMasterMob, &numMobs));
 		checkExpression(1 == numMobs, AAFRESULT_TEST_FAILED);
 		criteria.searchTag = kByMobKind;
 		criteria.tags.mobKind = kMasterMob;
-		checkResult(pHeader->EnumAAFAllMobs(&criteria, &pMobIter));
+		checkResult(pHeader->GetMobs(&criteria, &pMobIter));
 		while(AAFRESULT_SUCCESS == pMobIter->NextOne(&pMob))
 		{
 			char mobIDstr[256];
@@ -1327,7 +1327,7 @@ static HRESULT ReadJPEGAAFFile(
 			convert(mobName, sizeof(mobName), namebuf);
 			AUIDtoString(&mobID, mobIDstr);
 			// Make sure we have one slot 
-			checkResult(pMob->GetNumSlots(&numSlots));
+			checkResult(pMob->CountSlots(&numSlots));
 			checkExpression(1 == numSlots, AAFRESULT_TEST_FAILED);
 			// The essence data is in SlotID 1
 			// Get a Master Mob interface
@@ -1421,8 +1421,8 @@ static HRESULT ReadJPEGAAFFile(
 				checkExpression(compressedBufferSize == sampleBufferSize, AAFRESULT_TEST_FAILED);
 			}
 
-//			checkResult(pEssenceAccess->GetNumChannels());
-			// trr: The GetNumChannels interface needs to be redesigned. Why doesn't it 
+//			checkResult(pEssenceAccess->CountChannels());
+			// trr: The CountChannels interface needs to be redesigned. Why doesn't it 
 			// defer to the current codec like all of the other information methods?
 
 			// Allocate the data buffer to hold the maximum sample (compressed)
@@ -2009,7 +2009,7 @@ HRESULT CAAFEssenceAccess_test()
 	if (SUCCEEDED(hr))
 	{
 		cout << "The following IAAFEssenceAccess methods have not been tested:" << endl;  
-		cout << "     GetNumChannels" << endl;
+		cout << "     CountChannels" << endl;
 //		cout << "     GetSampleFrameSize" << endl; 
 //		cout << "     GetSampleCount" << endl; 
 //		cout << "     GetCodecName" << endl; 

@@ -204,7 +204,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	  // get class def for the referenced type.  In this case,
 	  // AAFComponent.
 	  IAAFClassDefSP cdComp;
-	  checkResult (pDictionary->LookupClass (AUID_AAFComponent, &cdComp));
+	  checkResult (pDictionary->LookupClassDef (AUID_AAFComponent, &cdComp));
 
 	  // init our new type def strong obj ref
 	  checkResult (tdor->Initialize (kTestTypeID_ObjRef,
@@ -216,7 +216,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	  IAAFTypeDefSP td;
 	  checkResult (tdor->QueryInterface (IID_IAAFTypeDef,
 										 (void **)&td));
-	  checkResult (pDictionary->RegisterType (td));
+	  checkResult (pDictionary->RegisterTypeDef (td));
 
 	  //
 	  // It's now ready for use.  Let's try appending two properties
@@ -225,17 +225,17 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 	  // get the existing class def describing comp mob
 	  IAAFClassDefSP cdCompMob;
-	  checkResult (pDictionary->LookupClass (AUID_AAFCompositionMob, &cdCompMob));
+	  checkResult (pDictionary->LookupClassDef (AUID_AAFCompositionMob, &cdCompMob));
 
 	  // append the new prop defs to it
 	  IAAFPropertyDefSP pd1; // remember this for later use
-	  checkResult (cdCompMob->AppendOptionalPropertyDef
+	  checkResult (cdCompMob->RegisterOptionalPropertyDef
 				   (kTestPropID_CompMob_NewCompProp1,
 					L"NewCompProp1",
 					td,
 					&pd1));
 	  IAAFPropertyDefSP pd2; // remember this for later use
-	  checkResult (cdCompMob->AppendOptionalPropertyDef
+	  checkResult (cdCompMob->RegisterOptionalPropertyDef
 				   (kTestPropID_CompMob_NewCompProp2,
 					L"NewCompProp2",
 					td,
@@ -303,7 +303,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	  checkResult (compMobObject->SetPropertyValue (pd2, pv2));
 
 	  // CompMob is ready to go.  Pop it into the file.
-	  checkResult (pHeader->AppendMob(pMob));
+	  checkResult (pHeader->AddMob(pMob));
 	}		
   catch (HRESULT& rResult)
 	{
@@ -337,7 +337,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 
 	  // Validate that there is only one composition mob.
 	  aafNumSlots_t numMobs = 0;
-	  checkResult(header->GetNumMobs(kCompMob, &numMobs));
+	  checkResult(header->CountMobs(kCompMob, &numMobs));
 	  checkExpression(1 == numMobs, AAFRESULT_TEST_FAILED);
 
 	  // Get an enumerator for the composition mob.
@@ -346,7 +346,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	  criteria.tags.mobKind = kCompMob;
 
 	  IEnumAAFMobsSP mobEnum;
-	  checkResult(header->EnumAAFAllMobs(&criteria, &mobEnum));
+	  checkResult(header->GetMobs(&criteria, &mobEnum));
 
 	  // Now get the mob.
 	  IAAFMobSP mob;
@@ -389,7 +389,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	  
 	  // now get the expected class from the dictionary 
 	  IAAFClassDefSP dictClass;
-	  checkResult (dict->LookupClass (AUID_AAFComponent,
+	  checkResult (dict->LookupClassDef (AUID_AAFComponent,
 									  &dictClass));
 	  IAAFDefObjectSP dictDef;
 	  checkResult (dictClass->QueryInterface (IID_IAAFDefObject,

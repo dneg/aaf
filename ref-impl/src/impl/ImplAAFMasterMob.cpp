@@ -458,7 +458,7 @@ AAFRESULT STDMETHODCALLTYPE
 			pGroup = dynamic_cast<ImplAAFEssenceGroup*>(pSegment);
 			if(pGroup == NULL)
 				return(AAFRESULT_INCONSISTANCY);
-			hr = pGroup->GetIndexedChoice (index, ppSourceClip);
+			hr = pGroup->GetChoiceAt (index, ppSourceClip);
 			pGroup->ReleaseReference();
 			pGroup = NULL;
 			pSegment->ReleaseReference();
@@ -679,17 +679,17 @@ AAFRESULT ImplAAFMasterMob::ReconcileMobLength(void)
 		/* Adjust the SCLP length from the master mob to the length of
 		 * the file mob, in the units of the master mob
 		 */
-		CHECK(EnumAAFAllMobSlots (&slotIter));
-		CHECK(GetNumSlots(&numSlots));
+		CHECK(GetSlots (&slotIter));
+		CHECK(CountSlots(&numSlots));
 		for (loop = 1; loop <= numSlots; loop++)
 		{
 			CHECK(slotIter->NextOne(&slot));
 			CHECK(slot->GetSegment(&seg));
 			CHECK(((ImplAAFSourceClip *)seg)->ResolveRef( &fileMob));
-			CHECK(fileMob->GetNumSlots(&fileNumSlots));
+			CHECK(fileMob->CountSlots(&fileNumSlots));
 			if(fileNumSlots >= 1)
 			{
-				CHECK(fileMob->EnumAAFAllMobSlots (&fileSlotIter));
+				CHECK(fileMob->GetSlots (&fileSlotIter));
 				CHECK(fileSlotIter->NextOne(&fileSlot));
 				CHECK(fileSlot->GetSegment(&fileSeg));
 				CHECK(fileSeg->GetLength(&endPos));

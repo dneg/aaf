@@ -131,7 +131,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFHeader*		pHeader = NULL;
 	IAAFDictionary*  pDictionary = NULL;
 	IAAFMob*		pMob = NULL;
-	IAAFMobSlot*	pMobSlot = NULL;
+	IAAFTimelineMobSlot*	pMobSlot = NULL;
 	IAAFSequence*	pSequence = NULL;
 	IAAFSegment*	pSegment = NULL;
 	IAAFComponent*	pComponent = NULL;
@@ -198,7 +198,13 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		
 		checkResult(pSequence->QueryInterface (IID_IAAFSegment, (void **)&pSegment));
 		
-		checkResult(pMob->AppendNewSlot(pSegment, 1, L"AAF Test Sequence", &pMobSlot));
+		aafRational_t editRate = { 0, 1};
+		checkResult(pMob->AppendNewTimelineSlot(editRate,
+												pSegment,
+												1,
+												L"AAF Test Sequence",
+												0,
+												&pMobSlot));
 		
 		pMobSlot->Release();
 		pMobSlot = NULL;
@@ -207,7 +213,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		pSegment = NULL;
 		
 		// Add the master mob to the file and cleanup
-		pHeader->AppendMob(pMob);
+		pHeader->AddMob(pMob);
 		
 	}
 	catch (HRESULT& rResult)
@@ -278,13 +284,13 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 		checkResult(OpenAAFFile(pFileName, kMediaOpenReadOnly, &pFile, &pHeader));
 		
 		// Validate that there is only one composition mob.
-		checkResult(pHeader->GetNumMobs(kCompMob, &numMobs));
+		checkResult(pHeader->CountMobs(kCompMob, &numMobs));
 		checkExpression(1 == numMobs, AAFRESULT_TEST_FAILED);
 		
 		// Get the AAF Dictionary so that we can create valid AAF objects.
 		checkResult(pHeader->GetDictionary(&pDictionary));
 		
-		checkResult(pDictionary->GetDataDefinitions(&pEnumDataDef));
+		checkResult(pDictionary->GetDataDefs(&pEnumDataDef));
 		/* Read and check the first element */
 		checkResult(pEnumDataDef->NextOne(&pDataDef));
 		checkResult(pDataDef->IsPictureKind(&testBool));
@@ -362,27 +368,27 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 		// Enumerate over Composition MOBs
 		criteria.searchTag = kByMobKind;
 		criteria.tags.mobKind = kCompMob;
-		checkResult(pHeader->EnumAAFAllMobs(&criteria, &pMobIter));
+		checkResult(pHeader->GetMobs(&criteria, &pMobIter));
 		while (pMobIter && pMobIter->NextOne(&pMob) == AAFRESULT_SUCCESS)
 		{
 			aafNumSlots_t		numSlots = 0;
 			
-			checkResult(pMob->GetNumSlots(&numSlots));
+			checkResult(pMob->CountSlots(&numSlots));
 			checkExpression(1 == numSlots, AAFRESULT_TEST_FAILED);
 			
 			// Enumerate over all MOB slots for this MOB
-			checkResult(pMob->EnumAAFAllMobSlots(&pSlotIter));
+			checkResult(pMob->GetSlots(&pSlotIter));
 			while (pSlotIter && pSlotIter->NextOne(&pSlot) == AAFRESULT_SUCCESS)
 			{
-				aafInt32			numCpnts;
+				aafUInt32			numCpnts;
 				
 				checkResult(pSlot->GetSegment(&pSegment));
 				checkResult(pSegment->QueryInterface(IID_IAAFSequence, (void **) &pSequence));
 				
-				checkResult(pSequence->GetNumComponents(&numCpnts));
+				checkResult(pSequence->CountComponents(&numCpnts));
 				checkExpression(numCpnts == kNumComponents, AAFRESULT_TEST_FAILED);
 				
-				checkResult(pSequence->EnumComponents(&pCompIter));
+				checkResult(pSequence->GetComponents(&pCompIter));
 				numCpnts = 0;
 				index = 0;
 				while (pCompIter && pCompIter->NextOne(&pComp) == AAFRESULT_SUCCESS)
@@ -394,7 +400,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 					numCpnts++;
 					
 					checkResult(pComp->GetDataDef(&dataDef));
-					checkResult(pDictionary->LookupDataDefinition(dataDef, &pDataDef));
+					checkResult(pDictionary->LookupDataDef(dataDef, &pDataDef));
 					checkResult(pDataDef->IsSoundKind(&testBool));
 					checkExpression(testBool == AAFFalse, AAFRESULT_TEST_FAILED);
 					checkResult(pDataDef->IsMatteKind(&testBool));

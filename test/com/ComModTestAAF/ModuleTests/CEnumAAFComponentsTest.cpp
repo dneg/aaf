@@ -132,13 +132,13 @@ static HRESULT TestEnumerator(IAAFSequence*	pSequence)
 	aafUInt32			numFetched, i;
 #endif
 	HRESULT				hr = S_OK;
-	aafInt32			numCpnts;
+	aafUInt32			numCpnts;
 
-	pSequence->GetNumComponents(&numCpnts);
+	pSequence->CountComponents(&numCpnts);
 	if (numCpnts != kNumComponents)
 		return AAFRESULT_TEST_FAILED;
 
-	hr = pSequence->EnumComponents(&pCompIter);
+	hr = pSequence->GetComponents(&pCompIter);
 	if (FAILED(hr))
 		return AAFRESULT_TEST_FAILED;
 
@@ -321,7 +321,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	  // This is temporary as the content storage should be created by
 	  // the call to OpenNewModify above.
     aafNumSlots_t n;
-    checkResult(pHeader->GetNumMobs(kAllMob, &n));
+    checkResult(pHeader->CountMobs(kAllMob, &n));
 
     // Get the AAF Dictionary so that we can create valid AAF objects.
     checkResult(pHeader->GetDictionary(&pDictionary));

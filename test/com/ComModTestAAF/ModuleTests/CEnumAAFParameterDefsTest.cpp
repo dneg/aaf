@@ -159,7 +159,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pDictionary->CreateInstance(AUID_AAFOperationDef,
 							  IID_IAAFOperationDef, 
 							  (IUnknown **)&pOperationDef));
-  		checkResult(pDictionary->RegisterOperationDefinition(pOperationDef));
+  		checkResult(pDictionary->RegisterOperationDef(pOperationDef));
 		checkResult(pOperationDef->SetDataDefinitionID (testDataDef));
 		checkResult(pOperationDef->SetIsTimeWarp (AAFFalse));
 		checkResult(pOperationDef->SetNumberInputs (TEST_NUM_INPUTS));
@@ -172,7 +172,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		pDefObject = NULL;
 
 		// !!!Added circular definitions because we don't have optional properties
-		checkResult(pOperationDef->AppendDegradeToOperations (pOperationDef));
+		checkResult(pOperationDef->AppendDegradeToOperation (pOperationDef));
 
 		// Add two parameter defs, so that we can test all functions
 		checkResult(pDictionary->CreateInstance(AUID_AAFParameterDef,
@@ -184,8 +184,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pDefObject->Initialize (TestParamUID1, TEST_PARAM_NAME1, TEST_PARAM_DESC1));
 		pDefObject->Release();
 		pDefObject = NULL;
-		checkResult(pDictionary->RegisterParameterDefinition(pParamDef));
-		checkResult(pOperationDef->AddParameterDefs (pParamDef));
+		checkResult(pDictionary->RegisterParameterDef(pParamDef));
+		checkResult(pOperationDef->AddParameterDef (pParamDef));
 		pParamDef->Release();
 		pParamDef = NULL;
 
@@ -198,8 +198,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pDefObject->Initialize (TestParamUID2, TEST_PARAM_NAME2, TEST_PARAM_DESC2));
 		pDefObject->Release();
 		pDefObject = NULL;
-		checkResult(pDictionary->RegisterParameterDefinition(pParamDef));
-		checkResult(pOperationDef->AddParameterDefs (pParamDef));
+		checkResult(pDictionary->RegisterParameterDef(pParamDef));
+		checkResult(pOperationDef->AddParameterDef (pParamDef));
 		pParamDef->Release();
 		pParamDef = NULL;
 	}
@@ -268,7 +268,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 
 		checkResult(pHeader->GetDictionary(&pDictionary));
 	
-		checkResult(pDictionary->GetOperationDefinitions(&pEffectEnum));
+		checkResult(pDictionary->GetOperationDefs(&pEffectEnum));
 		checkResult(pEffectEnum->NextOne (&pOperationDef));
 		checkResult(pOperationDef->GetDataDefinitionID(&readDataDef));
 
@@ -292,7 +292,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 		checkExpression(checkBypass == TEST_BYPASS, AAFRESULT_TEST_FAILED);
 		checkResult(pOperationDef->GetNumberInputs (&checkNumInputs));
 		checkExpression(checkNumInputs == TEST_NUM_INPUTS, AAFRESULT_TEST_FAILED);
-		checkResult(pOperationDef->GetParameterDefinitions (&pParmDefEnum));
+		checkResult(pOperationDef->GetParameterDefs (&pParmDefEnum));
 
 		/* Read and check the first element */
 		checkResult(pParmDefEnum->NextOne (&pParmDef));

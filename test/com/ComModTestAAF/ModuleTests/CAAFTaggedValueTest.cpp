@@ -87,7 +87,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFMob*			pRMob = NULL;
 	IAAFMasterMob*		pReferencedMob = NULL;
 	IAAFCompositionMob* pCompMob = NULL;
-	IAAFMobSlot			*newSlot = NULL;
+	IAAFTimelineMobSlot	*newSlot = NULL;
 	IAAFSegment			*seg = NULL;
 	IAAFSourceClip		*sclp = NULL;
 	aafProductIdentification_t	ProductInfo;
@@ -165,7 +165,13 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 			checkResult(sclp->QueryInterface (IID_IAAFSegment, (void **)&seg));
 			
-			checkResult(pMob->AppendNewSlot (seg, test+1, slotNames[test], &newSlot));
+			aafRational_t editRate = { 0, 1};
+			checkResult(pMob->AppendNewTimelineSlot (editRate,
+													 seg,
+													 test+1,
+													 slotNames[test],
+													 0,
+													 &newSlot));
 
 			newSlot->Release();
 			newSlot = NULL;
@@ -178,8 +184,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		}
 
 		// Add the mob to the file.
-		checkResult(pHeader->AppendMob(pMob));
-		checkResult(pHeader->AppendMob(pRMob));
+		checkResult(pHeader->AddMob(pMob));
+		checkResult(pHeader->AddMob(pRMob));
 	}
 	catch (HRESULT& rResult)
 	{
@@ -271,11 +277,11 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		criteria.tags.mobKind = kCompMob;
 
 
-		checkResult(pHeader->GetNumMobs(kCompMob, &numMobs));
+		checkResult(pHeader->CountMobs(kCompMob, &numMobs));
 		checkExpression(1 == numMobs, AAFRESULT_TEST_FAILED);
 
 
-		checkResult(pHeader->EnumAAFAllMobs (&criteria, &mobIter));
+		checkResult(pHeader->GetMobs (&criteria, &mobIter));
 
 		for(n = 0; n < numMobs; n++)
 		{
@@ -289,9 +295,9 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 			checkResult(aMob->GetMobID (&mobID));
 
 			// Check for comments
-			checkResult(aMob->GetNumComments(&numComments));
+			checkResult(aMob->CountComments(&numComments));
 			checkExpression(1 == numComments, AAFRESULT_TEST_FAILED);
-			checkResult(aMob->EnumAAFAllMobComments(&pCommentIterator));
+			checkResult(aMob->GetComments(&pCommentIterator));
 			for(com = 0; com < numComments; com++)
 			{
 				checkResult(pCommentIterator->NextOne(&pComment));
@@ -303,10 +309,10 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 			}
 			pCommentIterator->Release();
 			
-			checkResult(aMob->GetNumSlots (&numSlots));
+			checkResult(aMob->CountSlots (&numSlots));
 			checkExpression(5 == numSlots, AAFRESULT_TEST_FAILED);
 
-			checkResult(aMob->EnumAAFAllMobSlots(&slotIter));
+			checkResult(aMob->GetSlots(&slotIter));
 
 			for(slt = 0; slt < numSlots; slt++)
 			{

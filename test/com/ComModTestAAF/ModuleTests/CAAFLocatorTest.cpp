@@ -82,7 +82,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFMob			*pMob = NULL;
 	IAAFEssenceDescriptor *edesc = NULL;
 	aafUID_t					newUID;
-	aafInt32					numLocators;
+	aafUInt32					numLocators;
 	HRESULT						hr = AAFRESULT_SUCCESS;
 	aafRational_t	audioRate = { 44100, 1 };
 
@@ -133,7 +133,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
  		checkResult(pSourceMob->SetEssenceDescriptor(edesc));
 
 			// Verify that there are no locators
-		checkResult(edesc->GetNumLocators(&numLocators));
+		checkResult(edesc->CountLocators(&numLocators));
 		checkExpression(0 == numLocators, AAFRESULT_TEST_FAILED);
 
   
@@ -149,11 +149,11 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
  		checkResult(pSourceMob->SetEssenceDescriptor (edesc));
 
 		// Verify that there is now one locator
-		checkResult(edesc->GetNumLocators(&numLocators));
+		checkResult(edesc->CountLocators(&numLocators));
 		checkExpression(1 == numLocators, AAFRESULT_TEST_FAILED);
 
 		// Add the source mob into the tree
-		checkResult(pHeader->AppendMob(pMob));
+		checkResult(pHeader->AddMob(pMob));
 
 	}
   catch (HRESULT& rResult)
@@ -213,7 +213,8 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	IAAFLocator	*				pLocator = NULL;
 	IEnumAAFMobs *mobIter = NULL;
 	IAAFMob			*aMob = NULL;
-	aafInt32					numLocators, readLen;
+	aafUInt32					numLocators;
+	aafInt32					readLen;
 	aafProductIdentification_t	ProductInfo;
 	aafNumSlots_t	numMobs, n;
 	HRESULT						hr = AAFRESULT_SUCCESS;
@@ -238,7 +239,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 
   	checkResult(pFile->GetHeader(&pHeader));
 
-		checkResult(pHeader->GetNumMobs(kAllMob, &numMobs));
+		checkResult(pHeader->CountMobs(kAllMob, &numMobs));
 		if (1 != numMobs )
 			checkResult(AAFRESULT_TEST_FAILED);
 
@@ -246,7 +247,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	//!!!	aafSearchCrit_t		criteria;
 	//!!!	criteria.searchTag = kNoSearch;
 
-		checkResult(pHeader->EnumAAFAllMobs (NULL, &mobIter));
+		checkResult(pHeader->GetMobs (NULL, &mobIter));
 		for(n = 0; n < numMobs; n++)
 		{
 			aafWChar		name[500];
@@ -260,11 +261,11 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 			checkResult(pSourceMob->GetEssenceDescriptor (&pEdesc));
 
 			// Verify that there is now one locator
-			checkResult(pEdesc->GetNumLocators(&numLocators));
+			checkResult(pEdesc->CountLocators(&numLocators));
 			if (1 != numLocators)
 				checkResult(AAFRESULT_TEST_FAILED);
 		
-			checkResult(pEdesc->EnumAAFAllLocators(&pEnum));
+			checkResult(pEdesc->GetLocators(&pEnum));
 
 			// This should read the one real locator
 			checkResult(pEnum->NextOne(&pLocator));
