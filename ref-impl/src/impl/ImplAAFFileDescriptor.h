@@ -75,21 +75,21 @@ public:
 
 
   //****************
-  // SetIsInContainer()
+  // SetCodecDef()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    SetIsInContainer
+    SetCodecDef
 		// @parm [in] is this AAF or raw essence
-        (aafBool  isAAF);
+        (const aafUID_t & pID);
 
 
   //****************
-  // GetIsInContainer()
+  // GetCodecDef()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetIsInContainer
+    GetCodecDef
 		// @parm [out] is this AAF or raw medi
-        (aafBool*  pIsAAF);
+        (aafUID_t *pID);
 
 
   //****************
@@ -135,7 +135,7 @@ public:
 private:
 	OMFixedSizeProperty<aafRational_t>	_sampleRate;
 	OMFixedSizeProperty<aafLength_t>	_length;
-	OMFixedSizeProperty<aafBool>        _isInContainer;
+	OMFixedSizeProperty<aafUID_t>       _codecDef;
 	OMFixedSizeProperty<aafUID_t>       _containerFmt;
 };
 
