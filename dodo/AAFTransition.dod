@@ -6,7 +6,6 @@ AAFTransition\
 AAFComponent\
 #endm
 #c
-#import ./AAFUnitTest.exp
 #import ./AAFComponent.exp
 AD_HEAD
 
@@ -64,7 +63,5 @@ AD_XMETHOD1(SetEffect,
 			effObj,
 			Effect used by transition,
 			Sets the effect invocation associated with the transition.)
-
-AD_OVERRIDE(.method-Test)
 
 AD_CLASS_END
