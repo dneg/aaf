@@ -255,6 +255,8 @@ public:
   virtual void insert(const size_t index,
                       const OMWeakReferenceVectorElement& element);
 
+  const OMUniqueObjectIdentification& identification(size_t index) const;
+
     // @cmember The <c OMStrongReferenceSet> in which the objects
     //          referenced by this <c OMWeakReferenceVectorProperty>
     //          must reside.

@@ -1065,6 +1065,19 @@ OMWeakReferenceVectorProperty<ReferencedObject>::targetTag(void) const
 }
 
 template <typename ReferencedObject>
+const OMUniqueObjectIdentification&
+OMWeakReferenceVectorProperty<ReferencedObject>::identification(
+                                                            size_t index) const
+{
+  TRACE("OMWeakReferenceVectorProperty<ReferencedObject>::identification");
+  PRECONDITION("Valid index", index < count());
+
+  VectorElement& element = _vector.getAt(index);
+
+  return element.identification();
+}
+
+template <typename ReferencedObject>
 OMStrongReferenceSet*
 OMWeakReferenceVectorProperty<ReferencedObject>::targetSet(void) const
 {
