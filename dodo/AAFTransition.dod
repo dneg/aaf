@@ -31,7 +31,7 @@ AD_DEFAULT_UUID(E3F38312, 2D3C, 11d2, 80, 43, 00, 60, 08, 14, 3E, 6F)
 \***********************************************/
 
 
-AD_CLASS_BEGIN
+AD_XCLASS_BEGIN(Concrete, StoredObject)
 
 AD_XMETHOD4(Create,
 				 [in], objIn, AAFDataDef, datadef, Data Definition object,
@@ -73,4 +73,4 @@ AD_XMETHOD1(SetEffect,
 			Effect used by transition,
 			Sets the effect invocation associated with the transition.)
 
-AD_CLASS_END
+AD_XCLASS_END(Concrete, StoredObject)
