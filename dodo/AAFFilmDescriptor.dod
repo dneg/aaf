@@ -8,17 +8,26 @@ AAFEssenceDescriptor\
 #c
 #c #import ./AAFEssenceDescriptor.exp
 AD_HEAD
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
-
+AD_IDL(//
+// The IAAFFilmDescriptor interface is implemented by objects which
+// describe film essence.  A FilmDescriptor object
+// shall be the EssenceDescription of a  physical Source Mob.
+//
+// In addition to the specific error results listed for each method\,
+// all methods in this interface may also return one of the following
+// values:
+// 
+// AAFRESULT_NOMEMORY
+//   - insufficient system memory is available to perform the
+//     operation.
+//)
 /***********************************************\
-*	Stub only.   Implementation not yet added	*
+*												*
+* Advanced Authoring Format						*
+*												*
+* Copyright (c) 1998-1999 Avid Technology, Inc. *
+* Copyright (c) 1998-1999 Microsoft Corporation *
+*												*
 \***********************************************/
 
 AD_INCLUDE(AAFTypes)
@@ -31,67 +40,355 @@ AD_XCLASS_BEGIN(Concrete, StoredObject)
 //@access Public Members
 
 /****/
-AD_METHOD1(SetFilmManufacturer,
-[in],aafString_t *,name,,
-Sets the manufacturer name of the film stock [optional].)
+AD_XMETHOD1(SetFilmManufacturer,
+			[in\, string],
+			objPass,
+			wchar_t *,
+			pName,
+			Film manufacturer name,
+
+			This method sets the manufacturer name property on a film descriptor to the value
+  // specified in pName.  A copy is made of the data so the caller
+  // retains ownership of the *pName buffer and is responsible for
+  // de-allocating it. 
+  // 
+  // Succeeds if all of the following are true:
+  // - the pName pointer is valid.
+  // 
+  // If this method fails no state will be changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pName arg is NULL.)
 
 /****/
-AD_METHOD1(GetFilmManufacturer,
-[out],aafString_t *,name,Pass in a string object which will be erased and filled,
-Gets the optional manufacturer name of the film stock.)
-	//@comm Returns a zero-length string if the property was not present
+AD_XMETHOD2(GetFilmManufacturer,
+			[in\,string],
+			objPass,
+			wchar_t *,
+			pManufacturer,
+			Film manufacturer name,
+
+			[in],
+			objPass,
+			aafInt32,
+			bufSize,
+			length of the buffer to hold manufacturer Name,
+
+			Writes the film manufacturer name\, with a trailing null character\, into the
+  // pManufacturer buffer.  The buffer is allocated by the caller.  The size
+  // of the buffer is given by bufSize.  If the property name has not
+  // yet been set\, a zero-length string will be written \(that is\,
+  // only the trailing null character\).
+  // 
+  // Caller may call GetFilmManufacturerBufLen\(\) to determine the
+  // required buffer size.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pManufacturer pointer is valid.
+  // - bufSize indicates the buffer is large enough to hold the name.
+  // 
+  // If this method fails nothing will be written to *pname.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pManufacturer arg is NULL.
+  //
+  // AAFRESULT_SMALLBUF
+  //   - bufSize indicates the buffer is too small to hold the string.)
+
+
+AD_XMETHOD1(GetFilmManufacturerBufLen,
+			[out],
+			objPass,
+			aafInt32 *,
+			pLen,
+			Film manufacturer name length,
+
+			Returns the length of buffer required for the GetFilmManufacturer\(\) method.
+  // The value is placed into the location
+  // specified by pLen\, and will include space required for the
+  // trailing null character.
+  //
+  // Succeeds if all of the following are true:
+  // - the pLen pointer is valid.
+  //
+  // If this method fails nothing will be written to *pLen.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pLen arg is NULL.)
+
 	
 /****/
-AD_METHOD1(SetFilmModel,
-[in],aafString_t *,name,,
-Sets the model or brand of the film stock [optional].)
+AD_XMETHOD1(SetFilmModel,
+			[in\, string],
+			objPass,
+			wchar_t *,
+			pName,
+			Film model name,
 
+			This method sets the model or brand of the film stock to the value
+  // specified in pName.  A copy is made of the data so the caller
+  // retains ownership of the *pName buffer and is responsible for
+  // de-allocating it. 
+  // 
+  // Succeeds if all of the following are true:
+  // - the pName pointer is valid.
+  // 
+  // If this method fails no state will be changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pName arg is NULL.)
 /****/
-AD_METHOD1(GetFilmModel,
-[out],aafString_t *,name,Pass in a string object which will be erased and filled,
-Gets the optional model or brand of the film stock.)
+AD_XMETHOD2(GetFilmModel,
+			[in\,string],
+			objPass,
+			wchar_t *,
+			pName,
+			Film manufacturer name,
+
+			[in],
+			objPass,
+			aafInt32,
+			bufSize,
+			length of the buffer to hold manufacturer Name,
+
+			Writes the foptional model or brand of the film stock\, with a trailing null character\, into the
+  // pName buffer.  The buffer is allocated by the caller.  The size
+  // of the buffer is given by bufSize.  If the property name has not
+  // yet been set\, a zero-length string will be written \(that is\,
+  // only the trailing null character\).
+  // 
+  // Caller may call GetFilmManufacturerBufLen\(\) to determine the
+  // required buffer size.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pName pointer is valid.
+  // - bufSize indicates the buffer is large enough to hold the name.
+  // 
+  // If this method fails nothing will be written to *pname.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pName arg is NULL.
+  //
+  // AAFRESULT_SMALLBUF
+  //   - bufSize indicates the buffer is too small to hold the string.)
+
+AD_XMETHOD1(GetFilmModelBufLen,
+			[out],
+			objPass,
+			aafInt32 *,
+			pLen,
+			Film manufacturer name length,
+
+			Returns the length of buffer required for the GetFilmModel\(\) method.
+  // The value is placed into the location
+  // specified by pLen\, and will include space required for the
+  // trailing null character.
+  //
+  // Succeeds if all of the following are true:
+  // - the pLen pointer is valid.
+  //
+  // If this method fails nothing will be written to *pLen.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pLen arg is NULL.)
+
 
 /****/
 AD_METHOD1(GetFilmFormat,
-[out],aafFilmType_t*,filmFormat,filmFormat,
-Get the film format.)
-	//@comm Film format may be: kFt35MM, kFt16MM, kFt8MM, kFt65MM
+[out],aafFilmType_t*,pFilmFormat, pointer to the filmFormat,
+			Gets the film format.  Valid values include
+  // kFt35MM\\\, kFt16MM\\\, kFt8MM\\\, and kFt65MM.
+  // 
+  // This method succeeds if all of the following are true:
+  // - the pFilmFormat pointer is valid.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\\\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \\\(This is the only code indicating success.\\\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\\\(\\\) called on it.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pFilmFormat arg is NULL.)
 
 /****/
 AD_METHOD1(GetFrameRate,
-[out],aafUInt32*,rate,Frame Rate,
-Get the frame rate of the film.)
+[out],aafUInt32*,pRate,Frame Rate,
+Get the frame rate of the film.
+  // 
+  // This method succeeds if all of the following are true:
+  // - the pRate pointer is valid.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\\\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \\\(This is the only code indicating success.\\\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\\\(\\\) called on it.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pRate parameter is NULL.)
+
 
 /****/
 AD_METHOD1(GetPerfPerFrame,
-[out],aafUInt8*,perfPerFrame,Perforations per frame,
-Get the number of perforations per frame.)
+[out],aafUInt8*,pPerfPerFrame,Perforations per frame,
+	Get the number of perforations per frame.
+ // 
+  // This method succeeds if all of the following are true:
+  // - the pPerfPerFrame pointer is valid.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\\\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \\\(This is the only code indicating success.\\\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\\\(\\\) called on it.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pPerfPerFrame parameter is NULL.)
+
 
 /****/
 AD_METHOD1(GetFilmAspectRatio,
-[out],aafRational_t*,aspectRatio,Film Aspect Ratio,
-Get the image aspect ratio.)
+[out],aafRational_t*,pAspectRatio,Film Aspect Ratio,
+Get the image aspect ratio.
+ // 
+  // This method succeeds if all of the following are true:
+  // - the pAspectRatio pointer is valid.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\\\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \\\(This is the only code indicating success.\\\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\\\(\\\) called on it.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pAspectRatio arg is NULL.)
 
 /****/
 AD_METHOD1(SetFilmFormat,
 [in],aafFilmType_t,filmFormat,Film Format,
-Set the film format.)
-	//@comm kFt35MM, kFt16MM, kFt8MM, kFt65MM
+			Sets the film format of the film.  Valid values include
+  // kFt35MM\\\, kFt16MM\\\, kFt8MM\\\, and kFt65MM.
+  // 
+  // This method succeeds if all of the following are true:
+  // - formFactor represents a valid format.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\\\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \\\(This is the only code indicating success.\\\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\\\(\\\) called on it.
+  //
+  // AAFRESULT_BAD_TYPE
+  //	- filmFormat is invalid.)
+
 
 /****/
 AD_METHOD1(SetFrameRate,
 [in],aafUInt32,rate,Frame Rate,
-Set the frame rate of the film.)
+			Set the frame rate of the film.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\\\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \\\(This is the only code indicating success.\\\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\\\(\\\) called on it.)
 
 /****/
 AD_METHOD1(SetPerfPerFrame,
 [in],aafUInt8,perfPerFrame,Perforations per frame,
-Set the number of perforations per frame.)
+		Set the number of perforations per frame.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\\\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \\\(This is the only code indicating success.\\\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\\\(\\\) called on it.)
 
 /****/
 AD_METHOD1(SetFilmAspectRatio,
 [in],aafRational_t,aspectRatio,Film Aspect Ratio,
-Set the image aspect ratio.)
+		Set the image aspect ratio.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\\\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \\\(This is the only code indicating success.\\\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\\\(\\\) called on it.)
 
 AD_XCLASS_END(Concrete, StoredObject)
    
