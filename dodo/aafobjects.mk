@@ -26,8 +26,6 @@ AAFPERSISTENTOBJECTS = \
 	AAFLocator \
 	AAFMacLocator \
 	AAFMasterMob \
-	AAFEssenceDescriptor \
-	AAFFileDescriptor \
 	AAFMediaFilmDescriptor \
 	AAFMediaGroup  \
 	AAFMediaTapeDescriptor \
@@ -40,7 +38,6 @@ AAFPERSISTENTOBJECTS = \
 	AAFReferenceValue \
 	AAFScopeReference \
 	AAFSequence \
-	AAFSourceMob \
 	AAFStringAttribute \
 	AAFTimecode \
 	AAFTimecodeStream \
@@ -93,8 +90,11 @@ HUMAN_TYPED_IMPL = \
 	AAFIdentification \
 	AAFObject \
 	AAFComponent \
+	AAFEssenceDescriptor \
+	AAFFileDescriptor \
 	AAFMob  \
 	AAFSegment \
+	AAFSourceMob \
 	AAFMobSlot \
 	AAFTimelineMobSlot \
 	AAFSourceReference \
