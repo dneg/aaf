@@ -82,13 +82,13 @@ AD_XMETHOD1(SetHorizontalSubsampling,
   //
   //)
 
-AD_XMETHOD1(SetColorSitingType,
+AD_XMETHOD1(SetColorSiting,
 			[in],
 				objPass,
 				aafColorSiting_t,
-				ColorSitingType,
+				ColorSiting,
 				Color siting value.,
-			Sets the ColorSitingType property.  Specifies how to compute subsampled
+			Sets the ColorSiting property.  Specifies how to compute subsampled
   // chrominance values.
   //
   // Valid values are:
@@ -111,9 +111,9 @@ AD_XMETHOD1(SetColorSitingType,
   // This property is optional.  The default value is kCoSiting.
   //
   // Succeeds if all of the following are true:
-  // - ColorSitingType is valid
+  // - ColorSiting is valid
   //
-  // If this method fails\, the ColorSitingType property will not be
+  // If this method fails\, the ColorSiting property will not be
   // changed.
   // 
   // This method will return the following codes:
@@ -273,13 +273,13 @@ AD_XMETHOD1(GetHorizontalSubsampling,
   //
   //)
 
-AD_XMETHOD1(GetColorSitingType,
+AD_XMETHOD1(GetColorSiting,
 			[out],
 				objPass,
 				aafColorSiting_t *,
-				pColorSitingType,
+				pColorSiting,
 				Address to store the color siting value.,
-			Gets the ColorSitingType property.  Specifies how to compute subsampled
+			Gets the ColorSiting property.  Specifies how to compute subsampled
   // chrominance values.
   //
   // Valid values are:
@@ -300,9 +300,9 @@ AD_XMETHOD1(GetColorSitingType,
   //                  of 2.
   //
   // Succeeds if all of the following are true:
-  // - pColorSitingType is a valid pointer.
+  // - pColorSiting is a valid pointer.
   //
-  // If this method fails\, pColorSitingType will not be changed.
+  // If this method fails\, pColorSiting will not be changed.
   // 
   // This method will return the following codes:
   // 
