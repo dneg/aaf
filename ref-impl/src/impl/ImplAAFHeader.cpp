@@ -388,7 +388,7 @@ AAFRESULT STDMETHODCALLTYPE
 	XPROTECT()
 	{
 		cstore = GetContentStorage();		// Does not AddRef
-		CHECK(cstore->LookupEssence(mobID, ppEssenceData));
+		CHECK(cstore->LookupEssenceData(mobID, ppEssenceData));
 	}
 	XEXCEPT
 	XEND
@@ -716,8 +716,7 @@ AAFRESULT ImplAAFHeader::SetToolkitRevisionCurrent()
 
 // trr - NOTE: Eventhough this method returns a reference counted object it
 // does NOT bump the reference count. Currently only other file that calls
-// this method is ImplAAFMob.cpp. We should probably make this method protected
-// or private and create an new version the conforms to our other API guidlines:
+// this method is ImplAAFMob.cpp. There is another version the conforms to our other API guidlines:
 // AAFRESULT GetContentStorage(ImplAAFContentStorage **ppContentStorage);
 // 
 ImplAAFContentStorage *ImplAAFHeader::GetContentStorage()
