@@ -81,6 +81,12 @@ inline void checkExpression(bool expression, HRESULT r)
 #define TEST_PARAM_UNITS	L"Furlongs per Fortnight"
 static aafUID_t	checkTypeID = kAAFTypeID_UInt8;
 
+#define TEST_EFFECT_LEN		60
+
+const aafUID_t kTestEffectID = { 0xD15E7611, 0xFE40, 0x11d2, { 0x80, 0xA5, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } };
+const aafUID_t kTestParmID = { 0xC7265931, 0xFE57, 0x11d2, { 0x80, 0xA5, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } };
+const aafRational_t kTestLevel = { 1, 2 };
+
 static HRESULT OpenAAFFile(aafWChar*			pFileName,
 						   aafMediaOpenMode_t	mode,
 						   IAAFFile**			ppFile,
@@ -137,6 +143,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFParameterDef*	pParamDef = NULL;
 	IAAFDefObject*		pDefObject = NULL;
 	IAAFTypeDef*		pTypeDef = NULL;
+	aafUID_t			effectID = kTestEffectID;
+	aafUID_t			parmID = kTestParmID;
 	bool				bFileOpen = false;
 	HRESULT				hr = S_OK;
 /*	long				test;
@@ -164,7 +172,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 					CreateInstance(IID_IAAFParameterDef, 
 								   (IUnknown **)&pParamDef));
 
+		checkResult(pOperationDef->Initialize (effectID, TEST_EFFECT_NAME, TEST_EFFECT_DESC));
 		checkResult(pDictionary->RegisterOperationDef(pOperationDef));
+		checkResult(pParamDef->Initialize (parmID, TEST_PARAM_NAME, TEST_PARAM_DESC));
 		checkResult(pDictionary->RegisterParameterDef(pParamDef));
 
 		checkResult(pOperationDef->QueryInterface(IID_IAAFDefObject, (void **) &pDefObject));

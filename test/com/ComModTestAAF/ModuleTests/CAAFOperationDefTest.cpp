@@ -177,9 +177,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 			checkResult(defs.cdOperationDef()->
 						CreateInstance(IID_IAAFOperationDef, 
 									   (IUnknown **)&pOperationDef));
+			checkResult(pOperationDef->Initialize (effectID[index], effectNames[index], effectDesc[index]));
 			checkResult(pDictionary->RegisterOperationDef(pOperationDef));
 			
-			checkResult(pOperationDef->Initialize (effectID[index], effectNames[index], effectDesc[index]));
 			
 			checkResult(pOperationDef->SetDataDef (defs.ddPicture()));
 			checkResult(pOperationDef->SetIsTimeWarp (kAAFFalse));

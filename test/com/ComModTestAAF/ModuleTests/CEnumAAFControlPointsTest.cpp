@@ -193,11 +193,12 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		pDefObject->Release();
 		pDefObject = NULL;
 
+		checkResult(pOperationDef->Initialize (effectID, TEST_EFFECT_NAME, TEST_EFFECT_DESC));
 		checkResult(pDictionary->RegisterOperationDef(pOperationDef));
+		checkResult(pParamDef->Initialize (parmID, TEST_PARAM_NAME, TEST_PARAM_DESC));
 		checkResult(pDictionary->RegisterParameterDef(pParamDef));
 		checkResult(pDictionary->RegisterInterpolationDef(pInterpDef));
 
-		checkResult(pOperationDef->Initialize (effectID, TEST_EFFECT_NAME, TEST_EFFECT_DESC));
 
 		checkResult(pOperationDef->SetDataDef (defs.ddPicture()));
 		checkResult(pOperationDef->SetIsTimeWarp (kAAFFalse));
@@ -209,7 +210,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pOperationDef->AppendDegradeToOperation (pOperationDef));
 
 		checkResult(pParamDef->SetDisplayUnits(TEST_PARAM_UNITS));
-		checkResult(pParamDef->Initialize (parmID, TEST_PARAM_NAME, TEST_PARAM_DESC));
 
 		//Make the first mob
 		long	test;
