@@ -82,13 +82,15 @@ class C.this-module
   : public I.this-module,
     public C.parent-module
 {
+protected:
   //
   // Constructor/destructor
   //
+  //********
   C.this-module (IUnknown * pControllingUnknown, aafBool doInit = AAFTrue);
   ~C.this-module ();
 
-  //********
+public:
 #endm
 
 
@@ -113,14 +115,15 @@ class C.this-module
   : public I.this-module,
     public CAAFUnknown
 {
-public:
+protected:
   //
   // Constructor/destructor
   //
+  //********
   C.this-module (IUnknown * pControllingUnknown, aafBool doInit = AAFTrue);
   virtual ~C.this-module ();
 
-  //********
+public:
 #endm
 
 
@@ -527,6 +530,8 @@ public:
 #c Arguments: none
 #c
 #startm AD_CLASS_END 00
+
+protected:
   // 
   // Declare the QI that implements for the interfaces
   // for this module. This will be called by CAAFUnknown::QueryInterface().
