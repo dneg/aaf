@@ -99,6 +99,7 @@ private:
     kOmCreate = 0,
 	kOmModify = 1,
 	kOmOpenRead = 2,
+	kOmTransient = 3,
 	kOmUndefined = -1
   } openType_t;
 	

@@ -91,7 +91,7 @@ ImplAAFFile::OpenExistingRead (wchar_t * pFileName,
 	try
 	{
 		// Ask the OM to open the file.
-		_file = OMFile::openRead(pFileName, _dictionary);
+		_file = OMFile::openExistingRead(pFileName, _dictionary);
 		checkExpression(NULL != _file, AAFRESULT_INTERNAL_ERROR);
 
 		// Get the byte order
@@ -169,7 +169,7 @@ ImplAAFFile::OpenExistingModify (wchar_t * pFileName,
 	try 
 	{
 		// Ask the OM to open the file.
-		_file = OMFile::openModify(pFileName, _dictionary);
+		_file = OMFile::openExistingModify(pFileName, _dictionary);
 		checkExpression(NULL != _file, AAFRESULT_INTERNAL_ERROR);
 
 		// Get the byte order
@@ -258,9 +258,9 @@ ImplAAFFile::OpenNewModify (wchar_t * pFileName,
 		_head = dynamic_cast<ImplAAFHeader*>(CreateImpl(CLSID_AAFHeader));
 		checkExpression(NULL != _head, AAFRESULT_BADHEAD);
 		
-    // Make sure the header is initialized with our previously created
-    // dictionary.
-    _head->SetDictionary(_dictionary);
+		// Make sure the header is initialized with our previously created
+		// dictionary.
+		_head->SetDictionary(_dictionary);
 
 		// Add the ident to the header.
 		checkResult(_head->AddIdentificationObject(&_ident));
@@ -271,10 +271,10 @@ ImplAAFFile::OpenNewModify (wchar_t * pFileName,
 
 		 //JeffB!!! We must decide whether def-only files have a content storage
 		checkResult(_head->GetContentStorage(&pCStore));
-    pCStore->ReleaseReference(); // need to release this pointer!
+		pCStore->ReleaseReference(); // need to release this pointer!
 
 		// Attempt to create the file.
-		_file = OMFile::createModify(pFileName, _dictionary, _byteOrder, _head);
+		_file = OMFile::openNewModify(pFileName, _dictionary, _byteOrder, _head);
 		checkExpression(NULL != _file, AAFRESULT_INTERNAL_ERROR);
 
 		_open = AAFTrue;
@@ -306,8 +306,11 @@ ImplAAFFile::OpenNewModify (wchar_t * pFileName,
 
 
 AAFRESULT STDMETHODCALLTYPE
-ImplAAFFile::OpenTransient (aafProductIdentification_t * /*pIdent*/)
+ImplAAFFile::OpenTransient (aafProductIdentification_t * pIdent)
 {
+	ImplAAFSession * pS;
+	ImplAAFContentStorage	*pCStore = NULL;
+	AAFRESULT stat = AAFRESULT_SUCCESS;
 
 	if (! _initialized)
 		return AAFRESULT_NOT_INITIALIZED;
@@ -316,7 +319,62 @@ ImplAAFFile::OpenTransient (aafProductIdentification_t * /*pIdent*/)
 	if (_open)
 		return AAFRESULT_ALREADY_OPEN;
 
-	return AAFRESULT_NOT_IMPLEMENTED;
+	pS = ImplAAFSession::GetInstance();
+	assert (pS);
+
+	memcpy (&_ident, pIdent, sizeof (_ident));
+
+	try
+	{
+		// Create the header for the OM manager to use as the root
+		// for the file.
+		_head = dynamic_cast<ImplAAFHeader*>(CreateImpl(CLSID_AAFHeader));
+		checkExpression(NULL != _head, AAFRESULT_BADHEAD);
+		
+		// Make sure the header is initialized with our previously created
+		// dictionary.
+		_head->SetDictionary(_dictionary);
+
+		// Add the ident to the header.
+		checkResult(_head->AddIdentificationObject(&_ident));
+		  
+		// Set the byte order
+		_byteOrder = hostByteOrder();
+		_head->SetByteOrder(_byteOrder);
+
+		 //JeffB!!! We must decide whether def-only files have a content storage
+		checkResult(_head->GetContentStorage(&pCStore));
+		pCStore->ReleaseReference(); // need to release this pointer!
+
+		// Attempt to create the file.
+		_file = OMFile::openNewTransient(_dictionary, _byteOrder, _head);
+		checkExpression(NULL != _file, AAFRESULT_INTERNAL_ERROR);
+
+		_open = AAFTrue;
+		_openType = kOmTransient;
+		GetRevision(&_setrev);
+
+
+	}
+	catch (AAFRESULT &rc)
+	{
+		stat = rc;
+
+		// Cleanup after failure.
+		if (_file)
+		{
+			_file->close();
+			_file = 0;
+		}
+
+		if (NULL == _head)
+		{
+			_head->ReleaseReference();
+			_head = 0;
+		}
+	}
+
+	return stat;
 }
 
 
@@ -343,17 +401,13 @@ ImplAAFFile::Save ()
 	// Record the fact that this file was modified
 	_head->SetModified();
 
-
-	// BobT Hack!  We don't have Save() hooked up yet; Close() will
-	// save, so I'll do something extremely ugly and just return without
-	// complaint.
 	return AAFRESULT_SUCCESS;
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
-ImplAAFFile::SaveAs (wchar_t * /*pFileName*/,
-					 aafUInt32 /*modeFlags*/)
+ImplAAFFile::SaveAs (wchar_t * pFileName,
+					 aafUInt32 modeFlags)
 {
 	if (! _initialized)
 		return AAFRESULT_NOT_INITIALIZED;
@@ -361,7 +415,13 @@ ImplAAFFile::SaveAs (wchar_t * /*pFileName*/,
 	if (!_open)
 		return AAFRESULT_NOT_OPEN;
 
-	return AAFRESULT_NOT_IMPLEMENTED;
+	if (modeFlags)
+		return AAFRESULT_BAD_FLAGS;
+
+	assert(_file);
+	_file->saveAs(pFileName);
+
+	return AAFRESULT_SUCCESS;
 }
 
 
@@ -375,7 +435,10 @@ ImplAAFFile::Revert ()
 	if (!_open)
 		return AAFRESULT_NOT_OPEN;
 
-	return AAFRESULT_NOT_IMPLEMENTED;
+        assert(_file);
+        _file->revert();
+
+	return AAFRESULT_SUCCESS;
 }
 
 
