@@ -30,6 +30,9 @@ BEGIN {
 }
 
 END {
+  if (entrytext) {
+    entry(entrytext);
+  }
   printTrailer();
 }
 
