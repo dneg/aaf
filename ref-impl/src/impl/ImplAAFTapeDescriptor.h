@@ -158,14 +158,14 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     SetTapeLength
 		// @parm [in] The length of the tape in minutes.
-        (aafLength_t  pTapeLength);
+        (aafUInt32  tapeLength);
   //****************
   // GetTapeLength()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     GetTapeLength
 		// @parm [out] The length of the tape in minutes.
-        (aafLength_t*  pTapeLength);
+        (aafUInt32*  pTapeLength);
 
 
 
@@ -179,7 +179,7 @@ private:
 	OMFixedSizeProperty<aafTapeCaseType_t>		_formFactor;
 	OMFixedSizeProperty<aafVideoSignalType_t>	_videoSignalType;
 	OMFixedSizeProperty<aafTapeFormatType_t>	_tapeFormat;
-	OMFixedSizeProperty<aafLength_t>			_tapeLength;
+	OMFixedSizeProperty<aafUInt32>				_tapeLength;
 	OMWideStringProperty						_manufacturer;
 	OMWideStringProperty						_model;
 };
