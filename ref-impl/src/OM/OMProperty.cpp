@@ -503,20 +503,62 @@ void OMSimpleProperty::setBits(const OMByte* bits, size_t size)
   set(bits, size);
 }
 
-// class OMCollectionProperty
+// class OMContainerProperty
 
-OMCollectionProperty::OMCollectionProperty(const OMPropertyId propertyId,
-                                           const int storedForm,
-                                           const char* name)
-: OMProperty(propertyId, storedForm, name)
+  // @mfunc Constructor.
+  //   @parm The property id.
+  //   @parm The stored form of this property.
+  //   @parm The name of this property.
+OMContainerProperty::OMContainerProperty(const OMPropertyId propertyId,
+                                         const int storedForm,
+                                         const char* name)
+: OMProperty(propertyId, storedForm, name), _propertyName(0), _key(0)
 {
-  TRACE("OMCollectionProperty::OMCollectionProperty");
+  TRACE("OMContainerProperty::OMContainerProperty");
   PRECONDITION("Valid name", validString(name));
 }
 
-OMCollectionProperty::~OMCollectionProperty(void)
+  // @mfunc Destructor.
+OMContainerProperty::~OMContainerProperty(void)
 {
-  TRACE("OMCollectionProperty::~OMCollectionProperty");
+  TRACE("OMContainerProperty::~OMContainerProperty");
+}
+
+  // @mfunc Compute the name of an element in this <c OMContainter>
+  //        given the name of the <p containerName> and the <p elementKey>.
+  //   @parm The name of this <c OMContainerProperty>.
+  //   @parm The element key.
+char* OMContainerProperty::elementName(const char* containerName,
+                                       size_t elementKey)
+{
+  TRACE("OMContainerProperty::elementName");
+
+  char* elementName = new char[strlen(containerName) + 1 + 1];
+  ASSERT("Valid heap pointer", elementName != 0);
+  strcpy(elementName, containerName);
+  strcat(elementName, "{");
+
+  char number[256];
+  sprintf(number, "%x", elementKey);
+
+  char* storageName = new char[strlen(elementName) + strlen(number) + 1 + 1];
+  ASSERT("Valid heap pointer", storageName != 0);
+  strcpy(storageName, elementName);
+  strcat(storageName, number);
+  strcat(storageName, "}");
+
+  delete [] elementName;
+
+  return storageName;
+}
+
+  // @mfunc Obtain the next available element key.
+  //   @rdesc The next available key.
+OMUInt32 OMContainerProperty::nextKey(void)
+{
+  TRACE("OMContainerProperty::nextKey");
+
+  return _key++;
 }
 
 // class OMStringProperty
