@@ -44,6 +44,7 @@ namespace OMF2
 #include "AafOmf.h"
 #include "EffectTranslate.h"
 #include "AAFClassDefUIDs.h"
+#include "AAFException.h"
 
 #define CompareUUID(a, b) (memcmp((char *)&a, (char *)&b, sizeof(aafUID_t)) == 0)
 
@@ -211,7 +212,6 @@ HRESULT GetEffectIDs(IAAFOperationGroup *effect,
 	IAAFDefObject			*pDef = NULL;
 	IAAFParameter			*pParameter = NULL;
 	IAAFConstantValue		*pCVal = NULL;
-	HRESULT					rc = AAFRESULT_SUCCESS;
 	long					n, numEntries = sizeof(xlateTable)/sizeof(effectXlate_t);
 	long					x, numWipeEntries = sizeof(wipeTable)/sizeof(wipeTable_t);
 	aafUInt32				wipeNumber;
@@ -219,20 +219,12 @@ HRESULT GetEffectIDs(IAAFOperationGroup *effect,
 	bool					found = false;
 	aafUID_t				AAFEffectID, direction;
 
-    rc = effect->GetOperationDefinition(&pOpDef);
-	if(SUCCEEDED(rc))
+	try
 	{
+		AAFCheck rc;
+		rc = effect->GetOperationDefinition(&pOpDef);
 		rc = pOpDef->QueryInterface(IID_IAAFDefObject, (void **) &pDef);
-	}
-
-	if(SUCCEEDED(rc))
-	{
-        rc = pDef->GetAUID(&AAFEffectID);
-	}
-	
-	if(SUCCEEDED(rc))
-	{
-
+		rc = pDef->GetAUID(&AAFEffectID);
 		for(n = 0; (n < numEntries) && !found; n++)
 		{
 			if ( CompareUUID(AAFEffectID, *(xlateTable[n].aafID)))
@@ -328,9 +320,13 @@ HRESULT GetEffectIDs(IAAFOperationGroup *effect,
 			//		fprintf(stderr,"%sInvalid DataDef Found in sequence AUID : %s\n", gpGlobals->indentLeader, szAUID);
 			rc = AAFRESULT_INVALID_DATADEF;
 		}
+	} // end try
+	catch( ExceptionBase &e )
+	{
+		return e.Code();
 	}
 
-	return rc;
+	return AAFRESULT_SUCCESS;
 }
 
 HRESULT GetAAFEffectID(	OMF2::omfUniqueNamePtr_t OMFEffectIDPtr,
@@ -406,7 +402,7 @@ HRESULT GetAAFEffectID(	OMF2::omfUniqueNamePtr_t OMFEffectIDPtr,
 		//		fprintf(stderr,"%sInvalid DataDef Found in sequence AUID : %s\n", gpGlobals->indentLeader, szAUID);
 		rc = AAFRESULT_INVALID_DATADEF;
 	}
-	
+
 	return rc;
 }
 
