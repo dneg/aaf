@@ -64,16 +64,6 @@ public:
     SetPath
         // @parm [in, string] the new path
         (aafCharacter *  pPathBuf);
-
-
-public:
-  // Declare this class to be storable.
-  //
-  OMDECLARE_STORABLE(ImplAAFLocator)
-
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplAAFLocatorTest.cpp.
-  static AAFRESULT test();
 };
 
 #endif // ! __ImplAAFLocator_h__
