@@ -8,6 +8,14 @@ AAFObject\
 #c
 #import ./AAFObject.exp
 AD_HEAD
+AD_IDL(//
+// This interface is AAFMobSlot objects\, which are an abstract superclass for
+// AAFTimelineMobSlot\, AAFStaticMobSlot\, and AAFEventMobSlot.
+// This interface contains only methods which would be valid on all classes of
+// mob slots\, which includes name\, slotID\, segment\, and data definition.
+// EditRate and Offset are parameters of AAFTimelineMobSlot\, and are not present here.
+//)
+
 /******************************************\
 *                                          *
 * Advanced Authoring Format                *
@@ -65,7 +73,8 @@ Returns information about the physical output channel associated with the
 
 AD_METHOD1(GetDataDef,
 [out\\\,retval], aafUID_t *, result, Data Definition AUID,
-This method will return Data Definition object associated with segment in this Mob Slot.)
+This method will return AUID of the Data Definition object associated with segment in this Mob Slot.
+//Common DataDefinition UIDs are DDEF_Video\\\, DDEF_Audio\\\, DDEF_Timecode\\\, and DDEF_Edgecode. )
 
 AD_METHOD1(GetSlotID,
 	   [out\\\,retval], aafSlotID_t *, result, Slot id of the Mob Slot,
