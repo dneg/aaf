@@ -285,7 +285,7 @@ ReferencedObject* OMWeakReferenceVectorProperty<ReferencedObject>::setValueAt(
   setPresent();
 
   POSTCONDITION("Object properly inserted",
-                                    _vector.getAt(index).getValue() == object);
+     _vector.getAt(index).getValue() == const_cast<ReferencedObject*>(object));
   return oldObject;
 }
 
@@ -333,7 +333,12 @@ ReferencedObject* OMWeakReferenceVectorProperty<ReferencedObject>::valueAt(
 
   VectorElement& element = _vector.getAt(index);
 
-  ReferencedObject* result = element.getValue();
+  OMStorable* p = element.getValue();
+  ReferencedObject* result = 0;
+  if (p != 0) {
+    result = dynamic_cast<ReferencedObject*>(p);
+    ASSERT("Object is correct type", result != 0);
+  }
   return result;
 }
 
@@ -358,8 +363,11 @@ void OMWeakReferenceVectorProperty<ReferencedObject>::getValueAt(
 
   VectorElement& element = _vector.getAt(index);
 
-  object = element.getValue();
-
+  OMStorable* p = element.getValue();
+  if (p != 0) {
+    object = dynamic_cast<ReferencedObject*>(p);
+    ASSERT("Object is correct type", object != 0);
+  }
 }
 
   // @mfunc If <p index> is valid, get the value of this
@@ -478,7 +486,7 @@ void OMWeakReferenceVectorProperty<ReferencedObject>::insertAt(
   setPresent();
 
   POSTCONDITION("Object properly inserted",
-                                    _vector.getAt(index).getValue() == object);
+     _vector.getAt(index).getValue() == const_cast<ReferencedObject*>(object));
 }
 
   // @mfunc Does this <c OMWeakReferenceVectorProperty> contain
@@ -500,7 +508,7 @@ bool OMWeakReferenceVectorProperty<ReferencedObject>::containsValue(
   VectorIterator iterator(_vector, OMBefore);
   while (++iterator) {
     VectorElement& element = iterator.value();
-    if (element.pointer() == object) {
+    if (element.pointer() == const_cast<ReferencedObject*>(object)) {
       result = true;
       break;
     }
@@ -608,7 +616,7 @@ size_t OMWeakReferenceVectorProperty<ReferencedObject>::indexOfValue(
   VectorIterator iterator(_vector, OMBefore);
   while (++iterator) {
     VectorElement& element = iterator.value();
-    if (element.pointer() == object) {
+    if (element.pointer() == const_cast<ReferencedObject*>(object)) {
       result = iterator.index();
       break;
     }
@@ -637,7 +645,7 @@ size_t OMWeakReferenceVectorProperty<ReferencedObject>::countOfValue(
   VectorIterator iterator(_vector, OMBefore);
   while (++iterator) {
     VectorElement& element = iterator.value();
-    if (element.pointer() == object) {
+    if (element.pointer() == const_cast<ReferencedObject*>(object)) {
       result = result + 1;
     }
   }
@@ -739,7 +747,7 @@ bool OMWeakReferenceVectorProperty<ReferencedObject>::isVoid(void) const
   VectorIterator iterator(_vector, OMBefore);
   while (++iterator) {
     VectorElement& element = iterator.value();
-    ReferencedObject* object = element.getValue();
+    OMStorable* object = element.getValue();
     if (object != 0) {
       result = false;
       break;
@@ -802,7 +810,7 @@ void OMWeakReferenceVectorProperty<ReferencedObject>::getBits(
   PRECONDITION("Valid bits", bits != 0);
   PRECONDITION("Valid size", size >= bitsSize());
 
-  const ReferencedObject** p = (const ReferencedObject**)bits;
+  const OMStorable** p = (const OMStorable**)bits;
 
   VectorIterator iterator(_vector, OMBefore);
   while (++iterator) {
