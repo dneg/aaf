@@ -411,7 +411,9 @@ AAFRESULT STDMETHODCALLTYPE
   _classDefinitions.appendValue(pClassDef);
   pClassDef->AcquireReference();
 	
-  pClassDef->SetDict(this);
+  // BobT 6/15/99: Remove ImplAAFDefObject::Get/SetDict() in favor of
+  // ImplAAFObject::GetDictionary().
+  // pClassDef->SetDict(this);
 
   return(AAFRESULT_SUCCESS);
 }
@@ -448,12 +450,18 @@ AAFRESULT STDMETHODCALLTYPE
     _typeDefinitions.appendValue(pTypeDef);
     pTypeDef->AcquireReference();
     // Set up the (non-persistent) dictionary pointer.
-    pTypeDef->SetDict(this);
+	//
+    // BobT 6/15/99: Remove ImplAAFDefObject::Get/SetDict() in favor of
+	// ImplAAFObject::GetDictionary().
+	// pTypeDef->SetDict(this);
   } else {
     // This type is already registered, probably because it was
     // already in the persisted dictionary.
     // Set up the (non-persistent) dictionary pointer.
-    pExistingTypeDef->SetDict(this);
+	//
+    // BobT 6/15/99: Remove ImplAAFDefObject::Get/SetDict() in favor of
+	// ImplAAFObject::GetDictionary().
+	// pExistingTypeDef->SetDict(this);
     pExistingTypeDef->ReleaseReference();
   }
 
@@ -563,12 +571,18 @@ AAFRESULT STDMETHODCALLTYPE
     _dataDefinitions.appendValue(pDataDef);
     pDataDef->AcquireReference();
     // Set up the (non-persistent) dictionary pointer.
-    pDataDef->SetDict(this);
+	//
+    // BobT 6/15/99: Remove ImplAAFDefObject::Get/SetDict() in favor of
+	// ImplAAFObject::GetDictionary().
+	// pDataDef->SetDict(this);
   } else {
     // This type is already registered, probably because it was
     // already in the persisted dictionary.
     // Set up the (non-persistent) dictionary pointer.
-    pExistingDataDef->SetDict(this);
+	//
+    // BobT 6/15/99: Remove ImplAAFDefObject::Get/SetDict() in favor of
+	// ImplAAFObject::GetDictionary().
+	// pExistingDataDef->SetDict(this);
     pExistingDataDef->ReleaseReference();
   }
 

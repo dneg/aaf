@@ -130,7 +130,7 @@ public:
 
 
 protected:
-  virtual aafUInt32 pvtCount (ImplAAFPropertyValue * pInPropVal) = 0;
+  virtual aafUInt32 pvtCount (ImplAAFPropertyValue * pInPropVal) const = 0;
   //
   // returns number of elements in this array
 };
