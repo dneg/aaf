@@ -20,7 +20,7 @@
 // aafBool,
 // aafRational_t,
 // aafPosition_t,
-// aafTrackID_t,
+// aafSlotID_t,
 
 
 const int PID_TIMELINEMOBSLOT_EDITRATE	= 4;
@@ -64,11 +64,11 @@ public:
 
 
   //****************
-  // GetTrackID()
+  // GetSlotID()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetTrackID
-        (aafTrackID_t *  result);  //@parm [out,retval] Track id of the Mob Slot
+    GetSlotID
+        (aafSlotID_t *  result);  //@parm [out,retval] Slot id of the Mob Slot
 
 
   // Override from AAFMobSlot
@@ -82,9 +82,9 @@ public:
 	static AAFRESULT test();
 
 	AAFRESULT GetTrackDesc(aafInt32 nameSize,		// IN - Size of name buffer
-							aafString_t *name,			// IN/OUT preallocated buffer to return name
+							aafWChar *name,			// IN/OUT preallocated buffer to return name
 							aafPosition_t *origin,	// OUT - Origin property value
-							aafTrackID_t *trackID);	// OUT - ttrack id property value
+							aafSlotID_t *trackID);	// OUT - ttrack id property value
 
 protected:
 	OMFixedSizeProperty<aafRational_t>	_editRate;
