@@ -4,51 +4,68 @@
 
 # Syntax is
 #
-# <directory-prefix>        <color>
+# color <color-name>        <color>
 #
-# Colors are 6 digit hex RRGGBB 
+# component <component-name> <color-name>
+#   <directory-prefix>
+#   ...
+# end
+#
+# Colors are 6 digit hex REGGIE 
 #
 
-# Lime green
+# Colors
 
-ref-impl/src/OM/          CCFFCC
-ref-impl/include/OM/      CCFFCC
-ref-impl/dtd/             CCFFCC
+color Lime-Green          CCFFCC
+color Pink                FFCCCC
+color Grey                CCCCCC
+color Pale-Blue           CCFFFF
+color Purple              FFCCFF
+color Yellow              FFFFCC
+color Blue                CCCCFF
 
-# Pink
+# Components
 
-ref-impl/src/impl/        FFCCCC
-ref-impl/include/         FFCCCC
-ref-impl/plugins/         FFCCCC
-ref-impl/aaflib/          FFCCCC
+component Object-Manager Lime-Green
+  ref-impl/src/OM/
+  ref-impl/include/OM/
+  ref-impl/dtd/
+end
 
-# Grey
+component Reference-Implementation Pink
+  ref-impl/src/impl/
+  ref-impl/include/
+  ref-impl/plugins/
+  ref-impl/aaflib/
+end
 
-ref-impl/src/com-api/     CCCCCC
-ref-impl/include/com-api/ CCCCCC
-ref-impl/include/ref-api  CCCCCC
-AAF                       CCCCCC
-dodo/                     CCCCCC
+component API Grey
+  ref-impl/src/com-api/
+  ref-impl/include/com-api/
+  ref-impl/include/ref-api
+  AAF
+  dodo/
+end
 
-# Pale blue
+component Documentation Pale-Blue
+  ref-impl/doc/
+  LEGAL/
+  doc/
+  meta/
+end
 
-ref-impl/doc/             CCFFFF
-LEGAL/                    CCFFFF
-doc/                      CCFFFF
-meta/                     CCFFFF
+component Examples Purple
+  test/
+  examples/
+  examples2/
+end
 
-# Purple
+component Utilities Yellow
+  DevUtils/
+  Utilities/
+  OMF/
+end
 
-test/                     FFCCFF
-examples/                 FFCCFF
-examples2/                FFCCFF
-
-# Yellow
-
-DevUtils/                 FFFFCC
-Utilities/                FFFFCC
-OMF/                      FFFFCC
-
-# Blue
-
-build/                    CCCCFF
+component Build Blue
+  build/
+end

@@ -81,23 +81,73 @@ function trim(s, n) {
 }
 
 function createColorMap(file) {
+  component = 0;
   line = 0;
   while (getline < file > 0) {
     line = line + 1;
     if ($1 != "#") {
       if (NF != 0) {
-        if (NF == 2) {
-          map[$1] = "#" $2
+        if ($1 == "color") {
+          if ($2 in colors) {
+            printf("Error : \"%s\", line %s - duplicate color \"%s\".\n",
+                   file, line, $2) | "cat 1>&2";
+            exit 1;
+          } else {
+            colors[$2] = "#" $3
+          }
+        } else if ($1 == "component") {
+          if (component == 0) {
+            if ($2 in names) {
+              printf("Error : \"%s\", line %s - duplicate name \"%s\".\n",
+                     file, line, $2) | "cat 1>&2";
+              exit 1;
+            } else {
+              name = $2;
+            }
+            if ($3 in colors) {
+              color = colors[$3];
+              names[name] = $3;
+            } else {
+              printf("Error : \"%s\", line %s - unknown color \"%s\".\n",
+                     file, line, $3) | "cat 1>&2";
+              exit 1;
+            }
+            component = 1;
+          } else {
+            printf("Error : \"%s\", line %s - unmatched component.\n",
+                   file, line) | "cat 1>&2";
+            exit 1;
+          }
+        } else if ($1 == "end") {
+          if (component == 1) {
+            component = 0;
+          } else {
+            printf("Error : \"%s\", line %s - unmatched end.\n",
+                   file, line) | "cat 1>&2";
+            exit 1;
+          }
+        } else if ($1 == "#") {
+          # ignore comment
         } else {
-          printf("Syntax error : \"%s\", line %s \"%s\"\n",
-                 file, line, $NF) | "cat 1>&2";
-          exit 1;
+          if (component == 1) {
+            map[$1] = color;
+          } else {
+            printf("Error : \"%s\", line %s - unknown item \"%s\".\n",
+                   file, line, $1) | "cat 1>&2";
+            exit 1;
+          }
         }
       } # else ignore empty line
     } # else ignore comment
   }
+#  for (i in colors) {
+#    printf("%s %s\n", i, colors[i]);
+#  }
 #  for (i in map) {
 #    printf("%s %s\n", i, map[i]);
+#  }
+#  for (i in names) {
+#    printf("%s %s\n", i, names[i]);
 #  }
 }
 
