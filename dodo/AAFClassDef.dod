@@ -12,19 +12,8 @@ AD_IDL(//
 // definition.  The operations on a class definition include managing
 // the position of the class within the class heirarchy\, and
 // accessing property definitions associated with the class.
-//
-// In addition to the specific error results listed for each method\,
-// all methods in this interface may also return one of the following
-// values:
-// 
-// AAFRESULT_NOMEMORY
-//   - insufficient system memory is available to perform the
-//     operation.
-//
-
-/***********************************************\
-*	Stub only.   Implementation not yet added	*
-\***********************************************/)
+AD_STD_COMMENT_IFC_HEADER
+AD_STD_COMMENT_IFC_STUB)
 AD_FORWARD_DECLARATION(EnumAAFPropertyDefs)
 AD_FORWARD_DECLARATION(AAFPropertyDef)
 AD_FORWARD_DECLARATION(AAFDefObject)
@@ -33,22 +22,35 @@ AD_CLASS_UUID(dfbd6526, 1d81, 11d2, bf, 96, 00, 60, 97, 11, 62, 12)
 
 AD_DEFAULT_UUID(dfbd6525, 1d81, 11d2, bf, 96, 00, 60, 97, 11, 62, 12)
 AD_XCLASS_BEGIN(Concrete, StoredObject)
+AD_XMETHOD1(Initialize,
+			[in],
+		    objIn,
+		    AAFClassDef,
+		    pParentClass,
+		    existing class from which this one inherits,
+
+     Initializes this class definition object to inherit from the
+  // given parent class.
+  // 
+  // Succeeds if:
+  // - The pParentClass pointer is valid.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pParentClass\))
+
+
 AD_XMETHOD1(GetPropertyDefs,
 			[out\, retval],
 		    objOut,
 		    EnumAAFPropertyDefs,
 		    ppEnum,
 		    Property Definition enumeration,
-			Returns an enumerator over all of the aaf property
-  // definitions attached to the current class.
-  //
-  // Returns one of the following:
-  //
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  // 	 - ppEnum was null.)
+     Returns an enumerator over all of the aaf property definitions
+  // attached to the current class.
+  // 
+  // Succeeds if:
+  // - The ppEnum pointer is valid.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppEnum\))
 
 
 AD_XMETHOD1(CountPropertyDefs,
@@ -57,15 +59,12 @@ AD_XMETHOD1(CountPropertyDefs,
 			aafUInt32 *,
 			pCount,
 			number of properties contained in this class definition,
-			Returns number of property definitions in this class.
-  //
-  // Returns one of the following:
-  //
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  // 	 - ppEnum was null.)
+     Returns number of property definitions in this class.
+  // 
+  // Succeeds if:
+  // - The pCount pointer is valid.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pCount\))
 
 
 AD_XMETHOD5(AppendNewPropertyDef,
@@ -99,19 +98,20 @@ AD_XMETHOD5(AppendNewPropertyDef,
 			ppPropDef,
 			return pointer to newly created property def,
 
-			Creates a new property definition and appends it to this class
-  // definition.  Returns the new property definition in ppPropDef.
+     Creates a new property definition and appends it to this class
+  // definition.  If ppPropDef is non-NULL\, will return the new
+  // property definition in ppPropDef.
+  // 
+  // Succeeds if:
+  // - The pID pointer is valid.
+  // - The pName pointer is valid.
+  // - The pTypeDef pointer is valid.
+  // - the auid specified by pID has not already been registered.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pID\\\, pName\\\, or pTypeDef\)
   //
-  // Returns one of the following:
-  //
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - ppEnum was null.
-  //
-  // AAFRESULT_OPTIONAL
-  //   - If this is a builtin class\, the property must be optional.)
+  // AAFRESULT_BAD_PARAM
+  //   - The given ID has already been registered.)
 
 
 AD_XMETHOD2(LookupPropertyDef,
@@ -127,58 +127,27 @@ AD_XMETHOD2(LookupPropertyDef,
 			ppPropDef,
 			resulting property definition,
 
-  // Looks up the property definition corresponding to the named auid
+     Looks up the property definition corresponding to the named auid
   // and returns a pointer to that property definition in ppPropDef.
+  // 
+  // Succeeds if:
+  // - The pPropID pointer is valid.
+  // - The ppPropDef pointer is valid.
+  // - the auid specified by pID has been registered as a property
+  //   definition for this class definition.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(Either pPropID or ppPropDef\)
   //
-  // Returns one of the following:
-  //
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pName was null.
-  //
-  // AAFRESULT_NOT_FOUND
-  //   - the given property definition is not present in this class
+  // AAFRESULT_BAD_PARAM
+  //   - The given ID has not been registered as a property
   //     definition.)
 
 
-AD_XMETHOD1(GetName,
-			[out\, retval],
-			objPass,
-			aafString_t *,
-			pName,
-			Pointer to name,
-
-			Gets a human-readable name for the class.  This name is not
-  // meant to be a way for programs to refer to the class\, as it is
-  // of undetermined length\, and is not checked to guarantee uniqueness.
-  //
-  // Returns one of the following:
-  //
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_SMALLBUF
-  //   - bufSize indicates that *pBuf is too small to hold the name.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pName was null.)
-
-
-AD_XMETHOD1(GetNameBufLen,
-			[out],
-			objPass,
-			aafUInt32 *,
-			pBufSize,
-			size of required buffer\, in bytes,
-			Returns size of buffer \(in bytes\) required for GetName\(\).
-  //
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pBufSize was null.)
+AD_STD_METHOD_STRING_GET_AND_SIZE(Name,
+     Accesses a human-readable name for the class.  This name is not
+  // meant to be a way for programs to refer to the class\\\, as it is
+  // of undetermined length\\\, and is not checked to guarantee
+  // uniqueness.)
 
 
 AD_XMETHOD1(GetParent,
@@ -187,31 +156,13 @@ AD_XMETHOD1(GetParent,
 			AAFClassDef,
 			pClassDef,
 			parent class definition,
-			Gets the Parent class for this object.  If there is no
-  // parent\, returns the NULL AUID.  The only class which has no parent
-  // should be AAFObject.
-  //
-  // Returns one of the following:
-  //
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pName was null.)
 
-
-AD_XMETHOD1(GetParentAUID,
-			[out\, retval],
-			objPass,
-			aafUID_t *,
-			pAuid,
-			Pointer to an AUID reference,
-			Gets the Parent class AUID for this object.  If there is no
-	// parent\, returns the NULL AUID.  The only class which has no parent
-	// should be AAFObject.
-	//
-	// Returns one of the following:
-	//
-	// AAFRESULT_SUCCESS
-	//   - succeeded.  \(This is the only code indicating success.\))
+     Gets the Parent class for this object.  If there is no parent\,
+  // returns the NULL AUID.  The only class which has no parent will
+  // be AAFObject.
+  // 
+  // Succeeds if:
+  // - The pClassDef pointer is valid.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pClassDef\))
 AD_XCLASS_END(Concrete, StoredObject)
