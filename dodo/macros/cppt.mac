@@ -53,8 +53,38 @@
 #error - improperly defined include guard
 #endif
 
+#include <iostream.h>
+
 AAFRESULT .this-module::test()
 {
+  .this-module * pObject = 0;
+
+  try
+  {
+    // Attempt to create an .this-module.
+    pObject = new .this-module;
+	if (!pObject)
+	{
+      cerr << ".this-module::test...FAILED!";
+      cerr << "\\tnew .this-module returned NULL." << endl;
+	  // return out of memory error code...
+	}
+	  // module-specific tests go here
+
+      if (pObject)
+        delete pObject;
+	  return AAFRESULT_NOT_IMPLEMENTED;
+
+  }
+  catch (...)
+  {
+    cerr << ".this-module::test...Caught general C++ exception!" << endl; 
+  }
+
+
+  // Cleanup our object if it exists.
+  if (pObject)
+	delete pObject;
   return AAFRESULT_NOT_IMPLEMENTED;
 }
 #endm
@@ -84,8 +114,38 @@ AD_CLASS_BEGIN\
 #error - improperly defined include guard
 #endif
 
+#include <iostream.h>
+
 AAFRESULT .this-module::test()
 {
+  .this-module * pObject = 0;
+
+  try
+  {
+    // Attempt to create an .this-module.
+    pObject = new .this-module;
+	if (!pObject)
+	{
+      cerr << ".this-module::test...FAILED!";
+      cerr << "\\tnew .this-module returned NULL." << endl;
+	  // return out of memory error code...
+	}
+	  // module-specific tests go here
+
+      if (pObject)
+        delete pObject;
+	  return AAFRESULT_NOT_IMPLEMENTED;
+
+  }
+  catch (...)
+  {
+    cerr << ".this-module::test...Caught general C++ exception!" << endl; 
+  }
+
+
+  // Cleanup our object if it exists.
+  if (pObject)
+	delete pObject;
   return AAFRESULT_NOT_IMPLEMENTED;
 }
 #endm
