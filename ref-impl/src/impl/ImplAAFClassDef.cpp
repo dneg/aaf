@@ -134,20 +134,26 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFClassDef::GetPropertyDefs (
       ImplEnumAAFPropertyDefs ** ppEnum)
 {
-  ImplEnumAAFPropertyDefsSP theEnum;
+  ImplEnumAAFPropertyDefs * theEnum = NULL;;
 
   if (NULL == ppEnum)
 	return AAFRESULT_NULL_PARAM;
 
   theEnum = (ImplEnumAAFPropertyDefs *)CreateImpl (CLSID_EnumAAFPropertyDefs);
+	if (NULL == theEnum)
+		return AAFRESULT_NOMEMORY;
 	
-  AAFRESULT hr;
+  AAFRESULT hr = AAFRESULT_SUCCESS;
   hr = theEnum->SetEnumStrongProperty(this, &_Properties);
-  if (AAFRESULT_FAILED (hr)) return hr;
-  *ppEnum = theEnum;
-  (*ppEnum)->AcquireReference ();
+  if (AAFRESULT_FAILED (hr))
+	{
+		theEnum->ReleaseReference();
+		theEnum = NULL;
+	}
 	
-  return AAFRESULT_SUCCESS;
+	*ppEnum = theEnum;
+
+  return hr;
 }
 
 
