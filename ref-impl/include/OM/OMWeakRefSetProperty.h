@@ -179,6 +179,10 @@ public:
     //          <c OMWeakReferenceSetProperty>.
   virtual void removeObject(const OMObject* object);
 
+    // @cmember Remove all objects from this
+    //          <c OMWeakReferenceSetProperty>.
+  virtual void removeAllObjects(void);
+
     // @cmember Create an <c OMReferenceContainerIterator> over this
     //          <c OMWeakReferenceSetProperty>.
   virtual OMReferenceContainerIterator* createIterator(void) const;

@@ -707,6 +707,19 @@ OMWeakReferenceSetProperty<ReferencedObject>::removeObject(
   removeValue(p);
 }
 
+  // @mfunc Remove all objects from this <c OMWeakReferenceSetProperty>.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          (contained) object. This type must be a descendant of
+  //          <c OMStorable> and <c OMUnique>.
+template <typename ReferencedObject>
+void OMWeakReferenceSetProperty<ReferencedObject>::removeAllObjects(void)
+{
+  TRACE("OMWeakReferenceSetProperty<ReferencedObject>::removeAllObjects");
+
+  _set.clear();
+  POSTCONDITION("All objects removed", count() == 0);
+}
+
   // @mfunc Create an <c OMReferenceContainerIterator> over this
   //        <c OMWeakReferenceSetProperty>.
   //   @tcarg class | ReferencedObject | The type of the referenced
