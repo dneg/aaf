@@ -124,7 +124,7 @@ The viewer keyboard and mouse commands are described in the Help-Commands menu. 
 5. LICENSES
 ---------------
 
-aaf2dot and aafmeta2dot is licensed (with *exceptions)  under GNU LGPL. See COPYING.
+aaf2dot and aafmeta2dot is licensed (with *exceptions) under GNU GPL. See COPYING.
 *exceptions: the aaf2dot.cpp and AxBaseObjIterExt.cpp/h source files were derived from the AAF SDK source and therefore have the corresponding AAF SDK license.
 
 AAFViewer java code is derived from ZGRViewer, which is part of the ZVTM code on sourceforge. AAFViewer is licensed under GNU LGPL.
