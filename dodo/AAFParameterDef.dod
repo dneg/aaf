@@ -3,28 +3,38 @@ AAFParameterDef\
 #endm
 #c
 #startm .parent-module 0
-AAFDefObject\
+AAFPluggableDef\
 #endm
 #c
 AD_HEAD
+AD_IDL(//
+// The IAAFParameterDef interface is implemented by objects that specify a
+// definition of an effect parameter.  The parameterDef object is separate from the
+// effect definition to allow some parameters\, for example level\, to be specified
+// once for multiple effect definitions.
+// Parmeter definitions define the possible values and display units of a single effect
+// parameter.
+//
+// In addition to the specific error results listed for each method\,
+// all methods in this interface may also return one of the following
+// values:
+// 
+// AAFRESULT_NOMEMORY
+//   - insufficient system memory is available to perform the
+//     operation.
+//)
 
 AD_FORWARD_DECLARATION(AAFReferenceValue)
 AD_FORWARD_DECLARATION(EnumAAFReferenceValues)
 
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
-
- 
 /***********************************************\
-*	Stub only.   Implementation not yet added	*
+*												*
+* Advanced Authoring Format						*
+*												*
+* Copyright (c) 1998-1999 Avid Technology, Inc. *
+* Copyright (c) 1998-1999 Microsoft Corporation *
+*												*
 \***********************************************/
-
 
 AD_CLASS_UUID(20045fa2, 1d87, 11d2, bf, 96, 00, 60, 97, 11, 62, 12) 
 
@@ -36,58 +46,176 @@ AD_METHOD1(GetParameterDataDefID,
 		   aafUID_t *,
 		   pParameterDataDefID,
 		   Pointer to an AUID reference,
-		   Gets the DataDef AUID for this parameter definition.)
+			Places the IAAFDataDefinition object attached to this IAAFParameterDef into the
+  // *ppDataDef argument.  If none exists yet\\\, NULL is placed into the
+  // *ppDataDef argument.
+  //
+  // The returned IAAFDataDefinition object\\\, if it exists\\\, is
+  // AddRef\\\(\\\)ed before it is returned.
+  //
+  // Succeeds if all of the following are true:
+  // - the ppDataDef pointer is valid.
+  // - A valid IAAFDataDefinition exists.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\\\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \\\(This is the only code indicating success.\\\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\\\(\\\) called on it.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppDataDef is null.
+  //
+  // AAFRESULT_NO_ESSENCE_DESC
+  //   - There is no IAAFDataDefinition.  There has to be one of some
+  //     kind for this to be a valid effect definition.)
 
 AD_METHOD1(SetParameterDataDefID,
 		   [in],
 		   aafUID_t,
 		   ParameterDataDefID,
 		   an AUID reference,
-		   Sets the DataDef AUID for this parameter definition.)
+			Sets the IAAFDataDefinition of this IAAFEffectDef to be the given one.
+  //
+  // Succeeds if all of the following are true:
+  // - the pDataDef pointer is valid.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\\\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \\\(This is the only code indicating success.\\\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\\\(\\\) called on it.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pDataDef is null.)
 
-AD_METHOD1(GetDescription,
-		   [retval][out],
-		   aafString_t *,
-		   pstrDescription,
-		   Pointer to description,
-		   Gets the description of the parameter definition.)
+AD_XMETHOD2(GetDisplayUnits,
+			[in\,string],
+			objPass,
+			wchar_t *,
+			pDisplayUnits,
+			DisplayUnits,
 
-AD_METHOD1(SetDescription,
-		   [in],
-		   aafString_t,
-		   strDescription,
-		   description,
-		   Sets the description of the parameter definition.)
+			[in],
+			objPass,
+			aafInt32,
+			bufSize,
+			length of the buffer to hold DisplayUnits,
 
-AD_METHOD1(GetDisplayUnits,
-		   [retval][out],
-		   aafString_t *,
-		   pstrDisplayUnits,
-		   Pointer to Display Units,
-		   Gets the display units of the parameter definition.)
+			Writes the DisplayUnits\, with a trailing null character\, into the
+  // pDisplayUnits buffer.  The buffer is allocated by the caller.  The size
+  // of the buffer is given by bufSize.  If the property name has not
+  // yet been set\, a zero-length string will be written \(that is\,
+  // only the trailing null character\).
+  // 
+  // Caller may call GetDisplayUnitsBufLen\(\) to determine the
+  // required buffer size.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pDisplayUnits pointer is valid.
+  // - bufSize indicates the buffer is large enough to hold the name.
+  // 
+  // If this method fails nothing will be written to *pDisplayUnits.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pDisplayUnits arg is NULL.
+  //
+  // AAFRESULT_SMALLBUF
+  //   - bufSize indicates the buffer is too small to hold the string.)
 
-AD_METHOD1(SetDisplayUnits,
-		   [in],
-		   aafString_t,
-		   strDisplayUnits,
-		   Display Units,
-		   Sets the display units of the parameter definition.)
+AD_XMETHOD1(GetDisplayUnitsBufLen,
+			[out],
+			objPass,
+			aafInt32 *,
+			pLen,
+			DisplayUnits,
 
-AD_XMETHOD1(AppendRefValue,
+			Returns the length of buffer required for the GetDisplayUnits\(\) method.  
+  // The value is placed into the location
+  // specified by pLen. The value will include space required for the
+  // trailing null character.
+  //
+  // Succeeds if all of the following are true:
+  // - the pLen pointer is valid.
+  //
+  // If this method fails nothing will be written to *pLen.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pLen arg is NULL.)
+
+
+
+AD_XMETHOD1(SetDisplayUnits,
+			[in\, string],
+			objPass,
+			wchar_t *,
+			pDisplayUnits,
+			DisplayUnits,
+
+		   Sets the DisplayUnits of the effect definition. DisplayUnits is a
+  // name that describes  a group of effects.  A copy is made of the data so the caller
+  // retains ownership of the *pDisplayUnits buffer and is responsible for
+  // de-allocating it. 
+  // 
+  // Succeeds if all of the following are true:
+  // - the pDisplayUnits pointer is valid.
+  // 
+  // If this method fails no state will be changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pDisplayUnits arg is NULL.)
+
+AD_XMETHOD1(AddReferenceValue,
 			[in],
 			objIn,
 			AAFReferenceValue,
-			pRefValue, 
+			pReferenceValue, 
 			Ref value to be added,
-			Add the reference value  to the ref value list.)
-
-AD_XMETHOD1(RemoveRefValue,
-			[in],
-			objIn,
-			AAFReferenceValue,
-			pRefValue, 
-			Ref value to be removed,
-			Remove the reference value from the ref value list.)
+			Add the ReferenceValue object to the unordered list of ReferenceValues.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pAAFReferenceValue pointer is valid.
+  // 
+  // If this method fails no state will be changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\\\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \\\(This is the only code indicating success.\\\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pReferenceValue is null.)
 
 AD_XMETHOD1(GetRefValues,
 			[out\,retval],
@@ -95,6 +223,21 @@ AD_XMETHOD1(GetRefValues,
 			EnumAAFReferenceValues,
 			ppEnum, 
 			Reference value Enumeration,
-			Return an enumerator for the reference values.)
+			Return an enumerator for the unordered list of AAF ReferenceValue definitions.
+  // 
+  // Succeeds if all of the following are true:
+  // - the ppEnum pointer is valid.
+  // 
+  // If this method fails nothing will be written to *ppEnum.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\\\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded. \\\(This is the only code indicating success.\\\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppEnum is null.)
 
 AD_XCLASS_END(Concrete, StoredObject)
