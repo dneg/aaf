@@ -35,7 +35,7 @@ public:
   ImplAAFSegment ();
   ~ImplAAFSegment ();
 
-  OMDECLARE_STORABLE(AAFSegment);
+  OMDECLARE_STORABLE(ImplAAFSegment);
 
   //****************
   // SegmentOffsetToTC()
