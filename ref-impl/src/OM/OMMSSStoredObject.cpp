@@ -377,7 +377,19 @@ void OMMSSStoredObject::save(const OMPropertySet& properties)
 {
   TRACE("OMMSSStoredObject::save(OMPropertySet)");
 
+#if defined(OM_DEFER_OPEN)
+  if (!_open) {
+    PRECONDITION("Not already open", _properties == 0);
+#if defined(OM_BUFFERED_STREAMS)
+    _properties = openBufferedStream(_storage, propertyStreamName);
+#else
+    _properties = openStream(_storage, propertyStreamName);
+#endif
+    _open = true;
+  }
+#else
   PRECONDITION("Already open", _open);
+#endif
   PRECONDITION("At start of value stream", streamPosition(_properties) == 0);
   PRECONDITION("At start of value stream", _offset == 0);
 
@@ -859,7 +871,11 @@ void OMMSSStoredObject::restore(OMStoredObjectIdentification& id)
 void OMMSSStoredObject::restore(OMPropertySet& properties)
 {
   TRACE("OMMSSStoredObject::restore");
+#if defined(OM_DEFER_OPEN)
+  PRECONDITION("Not already open", !_open);
+#else
   PRECONDITION("Already open", _open);
+#endif
 
   _index = restore();
   size_t entries = _index->entries();
@@ -2822,12 +2838,15 @@ void OMMSSStoredObject::open(const OMFile::OMAccessMode mode)
                              (mode == OMFile::readOnlyMode));
 
   _mode = mode;
+#if defined(OM_DEFER_OPEN)
+#else
 #if defined(OM_BUFFERED_STREAMS)
   _properties = openBufferedStream(_storage, propertyStreamName);
 #else
   _properties = openStream(_storage, propertyStreamName);
 #endif
   _open = true;
+#endif
 }
 
 void OMMSSStoredObject::save(OMStoredPropertySetIndex* index)
@@ -2877,7 +2896,18 @@ void OMMSSStoredObject::save(OMStoredPropertySetIndex* index)
 OMStoredPropertySetIndex* OMMSSStoredObject::restore(void)
 {
   TRACE("OMMSSStoredObject::restore");
+#if defined(OM_DEFER_OPEN)
+  PRECONDITION("Not already open", !_open);
+  PRECONDITION("Not already open", _properties == 0);
+#if defined(OM_BUFFERED_STREAMS)
+  _properties = openBufferedStream(_storage, propertyStreamName);
+#else
+  _properties = openStream(_storage, propertyStreamName);
+#endif
+  _open = true;
+#else
   PRECONDITION("Already open", _open);
+#endif
   PRECONDITION("At start of index stream", streamPosition(_properties) == 0);
 
   // Read byte order flag.
