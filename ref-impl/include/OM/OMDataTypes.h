@@ -261,6 +261,11 @@ inline bool operator > (const OMMaterialIdentification& lhs,
 //
 typedef OMMaterialIdentification OMUniqueMaterialIdentification;
 
+// Stored object encodings
+//
+typedef OMObjectIdentification OMStoredObjectEncoding;
+const OMStoredObjectEncoding nullOMStoredObjectEncoding = {0};
+
 // File signatures
 //
 typedef OMObjectIdentification OMFileSignature;
