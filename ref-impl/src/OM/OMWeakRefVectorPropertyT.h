@@ -926,6 +926,129 @@ OMWeakReferenceVectorProperty<ReferencedObject>::createIterator(void) const
   return result;
 }
 
+  // @mfunc Set the value of this <c OMWeakReferenceVectorProperty>
+  //        at position <p index> to <p object>.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          (contained) object. This type must be a descendant of
+  //          <c OMStorable>.
+  //   @parm The new object.
+  //   @parm The index.
+  //   @rdesc The old object.
+template <typename ReferencedObject>
+OMObject*
+OMWeakReferenceVectorProperty<ReferencedObject>::setObjectAt(
+                                                        const OMObject* object,
+                                                        const size_t index)
+{
+  TRACE("OMWeakReferenceVectorProperty<ReferencedObject>::setObjectAt");
+
+  PRECONDITION("Valid index", index < count());
+
+  // TBS
+  return 0;
+}
+
+  // @mfunc The value of this <c OMWeakReferenceVectorProperty>
+  //        at position <p index>.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          (contained) object. This type must be a descendant of
+  //          <c OMStorable>.
+  //   @parm The index.
+  //   @rdesc The object.
+  //   @this const
+template <typename ReferencedObject>
+OMObject*
+OMWeakReferenceVectorProperty<ReferencedObject>::getObjectAt(
+                                                      const size_t index) const
+{
+  TRACE("OMWeakReferenceVectorProperty<ReferencedObject>::getObjectAt");
+
+  PRECONDITION("Valid index", index <= count());
+
+  // TBS
+  return 0;
+}
+
+  // @mfunc Append the given <p OMObject> <p object> to
+  //        this <c OMWeakReferenceVectorProperty>.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          (contained) object. This type must be a descendant of
+  //          <c OMStorable>.
+  //   @parm The object to append.
+template <typename ReferencedObject>
+void
+OMWeakReferenceVectorProperty<ReferencedObject>::appendObject(
+                                                        const OMObject* object)
+{
+  TRACE("OMWeakReferenceVectorProperty<ReferencedObject>::appendObject");
+
+  PRECONDITION("Valid object ", object != 0);
+
+  insertObjectAt(object, count());
+}
+
+  // @mfunc Prepend the given <p OMObject> <p object> to
+  //        this <c OMWeakReferenceVectorProperty>.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          (contained) object. This type must be a descendant of
+  //          <c OMStorable>.
+  //   @parm The object to prepend.
+template <typename ReferencedObject>
+void
+OMWeakReferenceVectorProperty<ReferencedObject>::prependObject(
+                                                        const OMObject* object)
+{
+  TRACE("OMWeakReferenceVectorProperty<ReferencedObject>::prependObject");
+
+  PRECONDITION("Valid object ", object != 0);
+
+  insertObjectAt(object, 0);
+}
+
+  // @mfunc Remove the object from this
+  //        <c OMWeakReferenceVectorProperty> at position <p index>.
+  //        Existing objects in this <c OMWeakReferenceVectorProperty>
+  //        at <p index> + 1 and higher are shifted down one index
+  //        position.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          (contained) object. This type must be a descendant of
+  //          <c OMStorable>.
+  //   @parm The index of the object to remove.
+template <typename ReferencedObject>
+OMObject*
+OMWeakReferenceVectorProperty<ReferencedObject>::removeObjectAt(
+                                                            const size_t index)
+{
+  TRACE("OMWeakReferenceVectorProperty<ReferencedObject>::removeObjectAt");
+
+  PRECONDITION("Valid index", index < count());
+
+  // TBS
+  return 0;
+}
+
+  // @mfunc Insert <p object> into this <c OMWeakReferenceVectorProperty>
+  //        at position <p index>. Existing objects at <p index> and
+  //        higher are shifted up one index position.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          (contained) object. This type must be a descendant of
+  //          <c OMStorable>.
+  //   @parm The object to insert.
+  //   @parm The index at which to insert the object.
+template <typename ReferencedObject>
+void
+OMWeakReferenceVectorProperty<ReferencedObject>::insertObjectAt(
+                                                        const OMObject* object,
+                                                        const size_t index)
+{
+  TRACE("OMWeakReferenceVectorProperty<ReferencedObject>::insertObjectAt");
+
+  PRECONDITION("Valid index", index <= count());
+  PRECONDITION("Valid object ", object != 0);
+
+  // TBS
+}
+
 template<typename ReferencedObject>
 OMPropertyTag
 OMWeakReferenceVectorProperty<ReferencedObject>::targetTag(void) const
