@@ -3,7 +3,6 @@
 #include "Container.h"
 #include "ImplAAFObject.h"
 #include "AAFUtils.h"
-#include "aafansic.h"
 #include "aafCvt.h"
 
 #include "ImplAAFHeader.h"
