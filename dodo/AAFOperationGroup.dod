@@ -41,8 +41,8 @@ AD_XMETHOD3(Initialize,
 	[in], objIn, AAFEffectDef, effectDef, Effect Definition object,
 	Initializes an effect object with the given property values.)
 	//@comm  This function takes an already created effect definition object as an argument.
-	//@comm  To add slots to the effect, call omfiEffectAddNewSlot.
-	//@comm  To add renderings, call omfiEffectSetFinalRender or omfiEffectSetWorkingRender.
+	//@comm  To add slots to the effect, call AddNewSlot.
+	//@comm  To add renderings, call SetRender.
 
 AD_XMETHOD1(GetEffectDefinition,
 			[out], objOut, AAFEffectDef, effectDef, Effect definition object,
