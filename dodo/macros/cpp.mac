@@ -51,13 +51,24 @@
 
 #ccccccccccccccccccccccccccc
 #c
+#c Starts a class definition with no parent class
+#c
+#c Arguments: none
+#c
+#startm AD_ROOT_CLASS_BEGIN 00
+AD_CLASS_BEGIN
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
 #c Inserts declaration for a method which takes no arguments.
 #c
 #c Argument1: method name
 #c Argument2: method description
 #c
 #startm AD_METHOD0 02
-virtual AAFRESULT STDMETHODCALLTYPE
+AAFRESULT STDMETHODCALLTYPE
     .this-module::%01 ()
 {
   .this-module * ptr;
@@ -80,7 +91,7 @@ virtual AAFRESULT STDMETHODCALLTYPE
 #c Argument6: method description
 #c
 #startm AD_METHOD1 06
-virtual AAFRESULT STDMETHODCALLTYPE
+AAFRESULT STDMETHODCALLTYPE
     .this-module::%01 (%03 %04)
 {
   .this-module * ptr;
@@ -106,10 +117,14 @@ virtual AAFRESULT STDMETHODCALLTYPE
 #c Argument10: method description
 #c
 #startm AD_METHOD2 10
+AAFRESULT STDMETHODCALLTYPE
+    .this-module::%01 (%03 %04, %07 %08)
+{
   .this-module * ptr;
   ptr = static_cast<.this-module*> (_rep);
   assert (ptr);
   return ptr->%01 (%04,%08);
+}
 #endm
 
 
@@ -133,10 +148,14 @@ virtual AAFRESULT STDMETHODCALLTYPE
 #c Argument14: method description
 #c
 #startm AD_METHOD3 14
+AAFRESULT STDMETHODCALLTYPE
+    .this-module::%01 (%03 %04, %07 %08, %11, %12)
+{
   .this-module * ptr;
   ptr = static_cast<.this-module*> (_rep);
   assert (ptr);
   return ptr->%01 (%04,%08,%12);
+}
 #endm
 
 #ccccccccccccccccccccccccccc
@@ -163,10 +182,14 @@ virtual AAFRESULT STDMETHODCALLTYPE
 #c Argument18: method description
 #c
 #startm AD_METHOD4 18
+AAFRESULT STDMETHODCALLTYPE
+    .this-module::%01 (%03 %04, %07 %08, %11 %12, %15, %16)
+{
   .this-module * ptr;
   ptr = static_cast<.this-module*> (_rep);
   assert (ptr);
   return ptr->%01 (%04,%08,%12,%16);
+}
 #endm
 
 #ccccccccccccccccccccccccccc
@@ -197,10 +220,14 @@ virtual AAFRESULT STDMETHODCALLTYPE
 #c Argument22: method description
 #c
 #startm AD_METHOD5 22
+AAFRESULT STDMETHODCALLTYPE
+    .this-module::%01 (%03 %04, %07 %08, %11 %12, %15 %16, %19 %20)
+{
   .this-module * ptr;
   ptr = static_cast<.this-module*> (_rep);
   assert (ptr);
   return ptr->%01 (%04,%08,%12,%16,%20);
+}
 #endm
 
 #ccccccccccccccccccccccccccc
@@ -235,10 +262,14 @@ virtual AAFRESULT STDMETHODCALLTYPE
 #c Argument26: method description
 #c
 #startm AD_METHOD6 26
+AAFRESULT STDMETHODCALLTYPE
+    .this-module::%01 (%03 %04, %07 %08, %11 %12, %15 %16, %19 %20, %23 %24)
+{
   .this-module * ptr;
   ptr = static_cast<.this-module*> (_rep);
   assert (ptr);
   return ptr->%01 (%04,%08,%12,%16,%20,%24);
+}
 #endm
 
 #ccccccccccccccccccccccccccc

@@ -56,6 +56,38 @@ class C.this-module
 
 #ccccccccccccccccccccccccccc
 #c
+#c Starts a class definition with no parent class
+#c
+#c Arguments: none
+#c
+#startm AD_ROOT_CLASS_BEGIN 00
+#ifndef _C.this-module_h_
+#define _C.this-module_h_
+
+#ifndef _I.this-module_h_
+#include "I.this-module.h"
+#endif
+
+//
+// Forward declaration
+//
+class J.this-module;
+
+
+class C.this-module
+  : public I.this-module
+{
+  C.this-module ();
+  ~C.this-module ();
+  //
+  // Constructor/destructor
+  //
+  //********
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
 #c Inserts declaration for a method which takes no arguments.
 #c
 #c Argument1: method name

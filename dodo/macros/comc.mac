@@ -48,6 +48,16 @@ C.this-module::~C.this-module ()
 }
 #endm
 
+#ccccccccccccccccccccccccccc
+#c
+#c Starts a class definition with no parent class
+#c
+#c Arguments: none
+#c
+#startm AD_ROOT_CLASS_BEGIN 00
+AD_CLASS_BEGIN
+#endm
+
 
 #ccccccccccccccccccccccccccc
 #c

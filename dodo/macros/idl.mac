@@ -32,6 +32,17 @@ interface .this-module : IUnknown
 
 #ccccccccccccccccccccccccccc
 #c
+#c Starts a class definition with no parent class
+#c
+#c Arguments: none
+#c
+#startm AD_ROOT_CLASS_BEGIN 00
+AD_CLASS_BEGIN
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
 #c Inserts declaration for a method which takes no arguments.
 #c
 #c Argument1: method name
