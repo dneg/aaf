@@ -11,7 +11,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 // 
-// The Original Code of this file is Copyright 1998-2002, Licensor of the
+// The Original Code of this file is Copyright 1998-2003, Licensor of the
 // AAF Association.
 // 
 // The Initial Developer of the Original Code of this file and the
@@ -264,7 +264,51 @@ inline bool operator > (const OMMaterialIdentification& lhs,
 typedef OMMaterialIdentification OMUniqueMaterialIdentification;
 
 // For (but more general than) a SMPTE Universal label
-typedef OMByte OMKLVKey[16];
+struct OMKLVKey
+{
+  OMUInt8 octet0;
+  OMUInt8 octet1;
+  OMUInt8 octet2;
+  OMUInt8 octet3;
+  OMUInt8 octet4;
+  OMUInt8 octet5;
+  OMUInt8 octet6;
+  OMUInt8 octet7;
+  OMUInt8 octet8;
+  OMUInt8 octet9;
+  OMUInt8 octet10;
+  OMUInt8 octet11;
+  OMUInt8 octet12;
+  OMUInt8 octet13;
+  OMUInt8 octet14;
+  OMUInt8 octet15;
+};
+
+// OMKLVKey comparison operators.
+//
+inline bool operator == (const OMKLVKey& lhs,
+                         const OMKLVKey& rhs)
+{
+  return memcmp(&lhs, &rhs, sizeof(OMKLVKey)) == 0;
+}
+
+inline bool operator != (const OMKLVKey& lhs,
+                         const OMKLVKey& rhs)
+{
+  return memcmp(&lhs, &rhs, sizeof(OMKLVKey)) != 0;
+}
+
+inline bool operator < (const OMKLVKey& lhs,
+                        const OMKLVKey& rhs)
+{
+  return memcmp(&lhs, &rhs, sizeof(OMKLVKey)) < 0;
+}
+
+inline bool operator > (const OMKLVKey& lhs,
+                        const OMKLVKey& rhs)
+{
+  return memcmp(&lhs, &rhs, sizeof(OMKLVKey)) > 0;
+}
 
 // Stored object encodings
 //
