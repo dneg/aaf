@@ -804,7 +804,9 @@ AAFRESULT ImplAAFBuiltinTypes::ImportBuiltinTypeDef (const aafUID_t & rTypeID,
 
 		  assert (ptd);
 		  // (3) init OM props
-		  ptd->InitOMProperties ();
+		  ImplAAFObjectSP objSP;
+		  objSP = ptd;
+		  _dictionary->pvtInitObjectProperties (objSP);
 
 		  assert (ppResult);
 		  *ppResult = ptd;

@@ -48,7 +48,7 @@ public:
 
   // Override from AAFTypeDefObjectRef
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetObjectType (/*[out]*/ ImplAAFClassDef ** ppObjType);
+    GetObjectType (/*[out]*/ ImplAAFClassDef ** ppObjType) const;
 
   // Override from AAFTypeDefObjectRef
   virtual AAFRESULT STDMETHODCALLTYPE
@@ -66,11 +66,6 @@ public:
   //
   OMDECLARE_STORABLE(ImplAAFTypeDefWeakObjRef)
 
-  // non-published overrides from AAFTypeDef
-  aafBool IsFixedSize (void);
-  size_t PropValSize (void);
-
-
   // Override from AAFTypeDefObjectRef
   virtual AAFRESULT STDMETHODCALLTYPE
     Initialize
@@ -78,9 +73,26 @@ public:
          const aafUID_t * pRefdObjID,
          wchar_t *  pTypeName);
 
+  // overrides from ImplAAFTypeDef
+  //
+  aafBool IsFixedSize (void) const;
+  size_t PropValSize (void) const;
+  aafBool IsRegistered (void) const;
+  size_t NativeSize (void) const;
+
+  virtual OMProperty * 
+    pvtCreateOMPropertyMBS (OMPropertyId pid,
+							const char * name) const;
+
+
 private:
   // OMWeakReferenceProperty<ImplAAFClassDef> _referencedType;
   OMFixedSizeProperty<aafUID_t>           _referencedType;
+
+  ImplAAFTypeDefSP                     _cachedAuidType;
+  ImplAAFSmartPointer<ImplAAFClassDef> _cachedObjType;
+
+  ImplAAFTypeDefSP BaseType (void) const;
 };
 
 

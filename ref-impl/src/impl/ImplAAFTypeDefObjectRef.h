@@ -152,6 +152,15 @@ public:
          wchar_t *  pTypeName);
 };
 
+//
+// smart pointer
+//
+
+#ifndef __ImplAAFSmartPointer_h__
+// caution! includes assert.h
+#include "ImplAAFSmartPointer.h"
+#endif
+
+typedef ImplAAFSmartPointer<ImplAAFTypeDefObjectRef> ImplAAFTypeDefObjectRefSP;
+
 #endif // ! __ImplAAFTypeDefObjectRef_h__
-
-

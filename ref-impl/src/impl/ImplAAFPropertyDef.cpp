@@ -89,38 +89,41 @@ AAFRESULT STDMETHODCALLTYPE
 {
   if (! ppTypeDef) return AAFRESULT_NULL_PARAM;
 
-  ImplAAFDictionary * pDict = 0;
-  ImplAAFTypeDef * ptd = 0;
-  AAFRESULT hr;
+  if (! _cachedType)
+	{
+	  ImplAAFDictionarySP pDict;
+	  AAFRESULT hr;
 
-  hr = GetDictionary(&pDict);
-  if (AAFRESULT_FAILED (hr)) return hr;
-  assert (pDict);
+	  hr = GetDictionary(&pDict);
+	  if (AAFRESULT_FAILED (hr)) return hr;
+	  assert (pDict);
 
-  aafUID_t typeId = _Type;
-  hr = pDict->LookupType (&typeId, &ptd);
-  if (AAFRESULT_FAILED (hr))
-    {
-      assert (pDict);
-      pDict->ReleaseReference ();
-      pDict = 0;
-      return hr;
-    }
-  assert (ptd);
+	  ImplAAFPropertyDef * pNonConstThis =
+		  (ImplAAFPropertyDef *) this;
+	  aafUID_t typeId = _Type;
+	  hr = pDict->LookupType (&typeId, &pNonConstThis->_cachedType);
+	  if (AAFRESULT_FAILED (hr))
+		return hr;
+	}
   assert (ppTypeDef);
-  *ppTypeDef = ptd;
-
-  // release/acquire cancel each other
-  // ptd->ReleaseReference ();
-  // (*ppTypeDef)->AcquireReference ();
-
-  assert (pDict);
-  pDict->ReleaseReference ();
-  pDict = 0;
+  *ppTypeDef = _cachedType;
+  assert (*ppTypeDef);
+  (*ppTypeDef)->AcquireReference ();
 
   return AAFRESULT_SUCCESS;
 }
 
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFPropertyDef::GetIsOptional (
+       aafBool * pIsOptional) const
+{
+  if (! pIsOptional)
+	return AAFRESULT_NULL_PARAM;
+  *pIsOptional = _IsOptional;
+  return AAFRESULT_SUCCESS;
+}
 
 
 AAFRESULT STDMETHODCALLTYPE

@@ -295,4 +295,15 @@ private:
 		OMFixedSizeProperty<aafVersionType_t>               _fileRev;
 };
 
+//
+// smart pointer
+//
+
+#ifndef __ImplAAFSmartPointer_h__
+// caution! includes assert.h
+#include "ImplAAFSmartPointer.h"
+#endif
+
+typedef ImplAAFSmartPointer<ImplAAFHeader> ImplAAFHeaderSP;
+
 #endif // ! __ImplAAFHeader_h__
