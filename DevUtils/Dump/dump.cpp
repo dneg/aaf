@@ -4313,10 +4313,24 @@ int main(int argumentCount, char* argumentVector[])
   }
 
   int result;
-  if ((warningCount == 0) || (errorCount == 0)){
-    result = EXIT_SUCCESS;
-  } else {
+  if ((warningCount != 0) && (errorCount != 0)){
+    cerr << programName << ": Dump completed with "
+         << errorCount << " errors and "
+         << warningCount << " warnings."
+         << endl;
+    result = EXIT_FAILURE;
+  } else if (errorCount != 0) {
+    cerr << programName << ": Dump completed with "
+         << errorCount << " errors."
+         << endl;
+    result = EXIT_FAILURE;
+  } else if (warningCount != 0) {
+    cerr << programName << ": Dump completed with "
+         << warningCount << " warnings."
+         << endl;
     result = 2;
+  } else {
+    result = EXIT_SUCCESS;
   }
   return result;
 }
