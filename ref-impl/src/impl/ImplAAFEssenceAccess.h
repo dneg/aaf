@@ -49,16 +49,18 @@ class ImplAAFLocator;
 #include "ImplAAFRoot.h"
 #endif
 
+#ifndef __AAFPlugin_h__
 #include "AAFPlugin.h"
+#endif
 
 typedef struct
 {
-	aafPosition_t	dataOffset;
+//	aafPosition_t	dataOffset;
 	aafUID_t		mediaKind;
 	aafInt32		trackID;
 	aafInt16		physicalOutChan;	/* 1->N */
-	aafRational_t	sampleRate;
-	aafLength_t		numSamples;
+//	aafRational_t	sampleRate;
+//	aafLength_t		numSamples;
 }               aafSubChannel_t;
 
 typedef enum { kAAFCreated, kAAFAppended, kAAFReadOnly } aafOpenType_t;
