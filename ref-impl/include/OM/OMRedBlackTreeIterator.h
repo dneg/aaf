@@ -129,7 +129,7 @@ public:
     //          <p Value> is returned. To preserve the ordering of
     //          <p Key>s, the <p Key> of <p newValue> must be the same as
     //          that of the existing <p Value>.
-  virtual Value setValue(Value newValue);
+  virtual Value setValue(const Key k, Value newValue);
 
     // @cmember Return the <p Key> of the <p Value> in the associated
     //          <c OMRedBlackTree> at the position currently designated by this

@@ -213,17 +213,19 @@ Element& OMSetIterator<Key, Element>::value(void) const
   //   @tcarg class | Key | The type of the unique key that identifies
   //          the contained elements.
   //   @tcarg class | Element | The type of the contained elements.
+  //   @parm The <p Key>.
   //   @parm The new <p Element>.
   //   @rdesc The previous <p Element>.
 template <typename Key, typename Element>
-Element OMSetIterator<Key, Element>::setValue(Element newElement)
+Element OMSetIterator<Key, Element>::setValue(const Key k,
+                                              Element newElement)
 {
   TRACE("OMSetIterator<Key, Element>::setValue");
 
   PRECONDITION("Valid iterator", _iterator.valid());
-  PRECONDITION("Matching keys", newElement.identification() == key());
+  PRECONDITION("Matching keys", k == key());
 
-  return _iterator.setValue(newElement);
+  return _iterator.setValue(k, newElement);
 }
 
   // @mfunc Return the <p Key> of the <p Element> in the associated

@@ -126,7 +126,7 @@ public:
     //          <p Element> is returned. To preserve the ordering of
     //          <p Key>s, the <p Key> of <p newElement> must be the same as
     //          that of the existing <p Element>.
-  virtual Element setValue(Element newElement);
+  virtual Element setValue(const Key k, Element newElement);
 
     // @cmember Return the <p Key> of the <p Element> in the associated
     //          <c OMSet> at the position currently designated by this

@@ -296,16 +296,17 @@ Value& OMRedBlackTreeIterator<Key, Value>::value(void) const
   //   @tcarg class | Key | The type of the unique key that identifies
   //          the contained values.
   //   @tcarg class | Value | The type of the contained values.
+  //   @parm The key <p Key>.
   //   @parm The new <p Value>.
   //   @rdesc The previous <p Value>.
 template <typename Key, typename Value>
-Value OMRedBlackTreeIterator<Key, Value>::setValue(Value newValue)
+Value OMRedBlackTreeIterator<Key, Value>::setValue(const Key k,
+                                                   Value newValue)
 {
   TRACE("OMRedBlackTreeIterator<Key, Value>::setValue");
 
   PRECONDITION("Valid iterator", valid());
-
-  // tjb how do we check that the old and new keys match ?
+  PRECONDITION("Matching keys", k == key());
 
   Value result = _current->_value;
   _current->_value = newValue;

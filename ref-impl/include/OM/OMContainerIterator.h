@@ -102,11 +102,6 @@ public:
     //          <c OMContainerIterator>.
   virtual Element& value(void) const = 0;
 
-    // @cmember Set the <p Element> in the associated <c OMContainer> at the
-    //          position currently designated by this <c OMContainerIterator>
-    //          to <p newElement>. The previous <p Element> is returned.
-  virtual Element setValue(Element newElement) = 0;
-
 };
 
 #endif
