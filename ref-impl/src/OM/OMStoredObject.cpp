@@ -19,33 +19,18 @@
 #endif
 
 #if defined(__sgi)
-#define OMHIGHPART(x) x.u.HighPart
-#define OMLOWPART (x) x.u.LowPart
 #define OMQUADPART(x) x.u.QuadPart
 #define OMSETQUADPART(x,y) (OMQUADPART(x) = (y))
 #elif defined(_MAC) || defined(macintosh)
-// The mac declaration for LARGE_INTEGER and ULARGE_INTEGER
-// does NOT have a QuadPart. The following definition for
-// OMQUADPART only works if correctly if the input value
-// is of type ULARGE_INTEGER. This means that the IStream::Seek
-// used below only works if the LARGE_INTEGER input value is non-negative.
 
-static inline OMInt64 swapHighLowParts(LARGE_INTEGER &x)
-{
-  OMInt64 y = ((unsigned long)x.HighPart << 32) + (x.LowPart);
-  return y;
-}
+// The mac declarations for LARGE_INTEGER and ULARGE_INTEGER don't
+// have a QuadPart because the HighPart and LowPart components on that
+// platform are not in the natural platform order.
 
 static inline OMUInt64 swapHighLowParts(ULARGE_INTEGER &x)
 {
   OMUInt64 y = (x.HighPart << 32) + (x.LowPart);
   return y;
-}
-
-static inline void setHighLowParts(LARGE_INTEGER &x, const OMInt64& y)
-{
-  x.LowPart = (unsigned long)((0xFFFFFFFF00000000 & (OMUInt64)y) >> 32);
-  x.HighPart = (long)(0x00000000FFFFFFFF & (OMUInt64)y);
 }
 
 static inline void setHighLowParts(ULARGE_INTEGER &x, const OMUInt64& y)
@@ -54,13 +39,9 @@ static inline void setHighLowParts(ULARGE_INTEGER &x, const OMUInt64& y)
   x.HighPart = (unsigned long)(0x00000000FFFFFFFF & (OMUInt64)y);
 }
 
-#define OMHIGHPART(x) x.HighPart
-#define OMLOWPART (x) x.LowPart
 #define OMQUADPART(x) (swapHighLowParts(x))
 #define OMSETQUADPART(x,y) (setHighLowParts((x),(y)))
 #else
-#define OMHIGHPART(x) x.HighPart
-#define OMLOWPART (x) x.LowPart
 #define OMQUADPART(x) x.QuadPart
 #define OMSETQUADPART(x,y) (OMQUADPART(x) = (y))
 #endif
@@ -496,7 +477,6 @@ void OMStoredObject::streamSetSize(IStream* stream, const OMUInt64 newSize)
   TRACE("OMStoredObject::streamSetSize");
 
   ULARGE_INTEGER newStreamSize;
-  //OMQUADPART(newStreamSize) = newSize;
   OMSETQUADPART(newStreamSize, newSize);
   HRESULT status = stream->SetSize(newStreamSize);
   if (!check(status)) {
@@ -916,11 +896,12 @@ void OMStoredObject::streamSetPosition(IStream* stream, const OMUInt64 offset)
 {
   TRACE("OMStoredObject::streamSetPosition");
 
-  LARGE_INTEGER newPosition;
+  ULARGE_INTEGER newPosition;
   ULARGE_INTEGER oldPosition;
-  //OMQUADPART(newPosition) = offset;
   OMSETQUADPART(newPosition, offset);
-  HRESULT status = stream->Seek(newPosition, STREAM_SEEK_SET, &oldPosition);
+  LARGE_INTEGER position;
+  memcpy(&position, &newPosition, sizeof(LARGE_INTEGER));
+  HRESULT status = stream->Seek(position, STREAM_SEEK_SET, &oldPosition);
   if (!check(status)) {
     exit(FAILURE);
   }
