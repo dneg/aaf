@@ -24,19 +24,9 @@
  * LIABILITY.
  *
  ************************************************************************/
-#ifndef USE_AAFOBJECT_MODEL
-#define USE_AAFOBJECT_MODEL 0
-#endif
-
-#if USE_AAFOBJECT_MODEL
-
-
-
-// Enable/disable transitional code...
-#define USE_VECTORS_INSTEAD_SETS_FOR_COMPATIBILITY 1
-
 
 #include "AAFObjectModelProcs.h"
+
 #include "AAFObjectModel.h"
 
 // TEMPORARY: Up-cast to dictionary. This will change for the "two-root" meta dictionary.
@@ -62,273 +52,17 @@
 
 #include "ImplAAFBaseClassFactory.h"
 #include "AAFStoredObjectIDs.h"
+#include "AAFPropertyDefs.h"
 #include "AAFTypeDefUIDs.h"
 #include "ImplAAFObjectCreation.h"
 #include "AAFResult.h"
 
+
+#include "ImplAAFObject.h"
+#include "OMStrongRefProperty.h"
+#include "OMStrongRefVectorProperty.h"
+
 #include <assert.h>
-
-
-
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-bool CreateClassDefinition(const ClassDefinition *, ImplAAFMetaDictionary *);
-bool InitializeClassDefinition(const ClassDefinition *, ImplAAFMetaDictionary *);
-
-bool CreatePropertyDefinition(const PropertyDefinition *, ImplAAFMetaDictionary *);
-bool InitializePropertyDefinition(const PropertyDefinition *, ImplAAFMetaDictionary *);
-
-
-bool CreateTypeDefinition(const TypeDefinition *, ImplAAFMetaDictionary *);
-bool InitializeTypeDefinition(const TypeDefinition *, ImplAAFMetaDictionary *);
-
-
-bool CreateTypeDefinitionInteger(const TypeDefinitionInteger *, ImplAAFMetaDictionary *);
-bool InitializeTypeDefinitionInteger(const TypeDefinitionInteger *, ImplAAFMetaDictionary *);
-
-bool CreateTypeDefinitionEnumeration(const TypeDefinitionEnumeration *, ImplAAFMetaDictionary *);
-bool InitializeTypeDefinitionEnumeration(const TypeDefinitionEnumeration *, ImplAAFMetaDictionary *);
-
-bool CreateTypeDefinitionVariableArray(const TypeDefinitionVariableArray *, ImplAAFMetaDictionary *);
-bool InitializeTypeDefinitionVariableArray(const TypeDefinitionVariableArray *, ImplAAFMetaDictionary *);
-
-bool CreateTypeDefinitionFixedArray(const TypeDefinitionFixedArray *, ImplAAFMetaDictionary *);
-bool InitializeTypeDefinitionFixedArray(const TypeDefinitionFixedArray *, ImplAAFMetaDictionary *);
-
-bool CreateTypeDefinitionRecord(const TypeDefinitionRecord *, ImplAAFMetaDictionary *);
-bool InitializeTypeDefinitionRecord(const TypeDefinitionRecord *, ImplAAFMetaDictionary *);
-
-bool CreateTypeDefinitionRename(const TypeDefinitionRename *, ImplAAFMetaDictionary *);
-bool InitializeTypeDefinitionRename(const TypeDefinitionRename *, ImplAAFMetaDictionary *);
-
-bool CreateTypeDefinitionCharacter(const TypeDefinitionCharacter *, ImplAAFMetaDictionary *);
-bool InitializeTypeDefinitionCharacter(const TypeDefinitionCharacter *, ImplAAFMetaDictionary *);
-
-bool CreateTypeDefinitionString(const TypeDefinitionString *, ImplAAFMetaDictionary *);
-bool InitializeTypeDefinitionString(const TypeDefinitionString *, ImplAAFMetaDictionary *);
-
-bool CreateTypeDefinitionExtendibleEnumeration(const TypeDefinitionExtendibleEnumeration *, ImplAAFMetaDictionary *);
-bool InitializeTypeDefinitionExtendibleEnumeration(const TypeDefinitionExtendibleEnumeration *, ImplAAFMetaDictionary *);
-
-bool CreateTypeDefinitionStrongReference(const TypeDefinitionStrongReference *, ImplAAFMetaDictionary *);
-bool InitializeTypeDefinitionStrongReference(const TypeDefinitionStrongReference *, ImplAAFMetaDictionary *);
-
-bool CreateTypeDefinitionStrongReferenceSet(const TypeDefinitionStrongReferenceSet *, ImplAAFMetaDictionary *);
-bool InitializeTypeDefinitionStrongReferenceSet(const TypeDefinitionStrongReferenceSet *, ImplAAFMetaDictionary *);
-
-bool CreateTypeDefinitionStrongReferenceVector(const TypeDefinitionStrongReferenceVector *, ImplAAFMetaDictionary *);
-bool InitializeTypeDefinitionStrongReferenceVector(const TypeDefinitionStrongReferenceVector *, ImplAAFMetaDictionary *);
-
-bool CreateTypeDefinitionWeakReference(const TypeDefinitionWeakReference *, ImplAAFMetaDictionary *);
-bool InitializeTypeDefinitionWeakReference(const TypeDefinitionWeakReference *, ImplAAFMetaDictionary *);
-
-bool CreateTypeDefinitionWeakReferenceSet(const TypeDefinitionWeakReferenceSet *, ImplAAFMetaDictionary *);
-bool InitializeTypeDefinitionWeakReferenceSet(const TypeDefinitionWeakReferenceSet *, ImplAAFMetaDictionary *);
-
-bool CreateTypeDefinitionWeakReferenceVector(const TypeDefinitionWeakReferenceVector *, ImplAAFMetaDictionary *);
-bool InitializeTypeDefinitionWeakReferenceVector(const TypeDefinitionWeakReferenceVector *, ImplAAFMetaDictionary *);
-
-bool CreateTypeDefinitionStream(const TypeDefinitionStream *, ImplAAFMetaDictionary *);
-bool InitializeTypeDefinitionStream(const TypeDefinitionStream *, ImplAAFMetaDictionary *);
-
-bool CreateTypeDefinitionIndirect(const TypeDefinitionIndirect *, ImplAAFMetaDictionary *);
-bool InitializeTypeDefinitionIndirect(const TypeDefinitionIndirect *, ImplAAFMetaDictionary *);
-
-bool CreateTypeDefinitionOpaque(const TypeDefinitionOpaque *, ImplAAFMetaDictionary *);
-bool InitializeTypeDefinitionOpaque(const TypeDefinitionOpaque *, ImplAAFMetaDictionary *);
-
-
-#if USE_VECTORS_INSTEAD_SETS_FOR_COMPATIBILITY
-bool CreateTypeDefinitionSetAsVariableArray(const TypeDefinitionSet *, ImplAAFMetaDictionary *);
-bool InitializeTypeDefinitionSetAsVariableArray(const TypeDefinitionSet *, ImplAAFMetaDictionary *);
-#endif
-
-
-#ifdef __cplusplus
-}
-#endif
-
-
-
-
-// Install all of the callback procs into the MetaDictionary.
-void InstallAAFObjectModelProcs(void)
-{
-  bool sInstalled = false;
-
-  if (sInstalled)
-  {
-    // This is a one-time initialization. The object model call backs
-    // are shared by all meta dictionaries.
-    return;
-  }
-
-
-  //
-  // Install all of the shared callback procs.
-  //
-  aafUInt32 i;
-
-  // Get the one-and-only meta dictionary.
-  const AAFObjectModel *objectModel = AAFObjectModel::singleton();
-
-  // Install the callbacks for the class definitions.
-  // NOTE: The first version uses the same functions for 
-  // both axiomatic and normal built-in classes (properties,
-  // and types).
-  for (i = 0; i < objectModel->countClassDefinitions(); ++i)
-  {
-    const ClassDefinition *classDefinition = objectModel->classDefinitionAt(i);
-
-    const_cast<ClassDefinition *>(classDefinition)->setCreateDefinitionProc((CreateDefinitionProcType)CreateClassDefinition);
-    const_cast<ClassDefinition *>(classDefinition)->setInitializeDefinitionProc((InitializeDefinitionProcType)InitializeClassDefinition);
-  }
-
-  // Install the callbacks for the property definitions.
-  for (i = 0; i < objectModel->countPropertyDefinitions(); ++i)
-  {
-    const PropertyDefinition * propertyDefinition = objectModel->propertyDefinitionAt(i);
-
-    const_cast<PropertyDefinition *>(propertyDefinition)->setCreateDefinitionProc((CreateDefinitionProcType)CreatePropertyDefinition);
-    const_cast<PropertyDefinition *>(propertyDefinition)->setInitializeDefinitionProc((InitializeDefinitionProcType)InitializePropertyDefinition);
-  }
-
-  // Install the callbacks for the type definitions.
-  for (i = 0; i < objectModel->countTypeDefinitions(); ++i)
-  {
-    const TypeDefinition *typeDefinition;
-    typeDefinition = objectModel->typeDefinitionAt(i);
-    
-    switch (typeDefinition->category())
-    {
-    case kAAFTypeCatInt:
-      const_cast<TypeDefinition *>(typeDefinition)->setCreateDefinitionProc((CreateDefinitionProcType)CreateTypeDefinitionInteger);
-      const_cast<TypeDefinition *>(typeDefinition)->setInitializeDefinitionProc((InitializeDefinitionProcType)InitializeTypeDefinitionInteger);
-      break;
-
-    case kAAFTypeCatCharacter:
-      const_cast<TypeDefinition *>(typeDefinition)->setCreateDefinitionProc((CreateDefinitionProcType)CreateTypeDefinitionCharacter);
-      const_cast<TypeDefinition *>(typeDefinition)->setInitializeDefinitionProc((InitializeDefinitionProcType)InitializeTypeDefinitionCharacter);
-      break;
-
-    case kAAFTypeCatStrongObjRef:
-      const_cast<TypeDefinition *>(typeDefinition)->setCreateDefinitionProc((CreateDefinitionProcType)CreateTypeDefinitionStrongReference);
-      const_cast<TypeDefinition *>(typeDefinition)->setInitializeDefinitionProc((InitializeDefinitionProcType)InitializeTypeDefinitionStrongReference);
-      break;
-
-    case kAAFTypeCatWeakObjRef:
-      const_cast<TypeDefinition *>(typeDefinition)->setCreateDefinitionProc((CreateDefinitionProcType)CreateTypeDefinitionWeakReference);
-      const_cast<TypeDefinition *>(typeDefinition)->setInitializeDefinitionProc((InitializeDefinitionProcType)InitializeTypeDefinitionWeakReference);
-      break;
-
-    case kAAFTypeCatRename:
-      const_cast<TypeDefinition *>(typeDefinition)->setCreateDefinitionProc((CreateDefinitionProcType)CreateTypeDefinitionRename);
-      const_cast<TypeDefinition *>(typeDefinition)->setInitializeDefinitionProc((InitializeDefinitionProcType)InitializeTypeDefinitionRename);
-      break;
-
-    case kAAFTypeCatEnum:
-      const_cast<TypeDefinition *>(typeDefinition)->setCreateDefinitionProc((CreateDefinitionProcType)CreateTypeDefinitionEnumeration);
-      const_cast<TypeDefinition *>(typeDefinition)->setInitializeDefinitionProc((InitializeDefinitionProcType)InitializeTypeDefinitionEnumeration);
-      break;
-
-    case kAAFTypeCatFixedArray:
-      const_cast<TypeDefinition *>(typeDefinition)->setCreateDefinitionProc((CreateDefinitionProcType)CreateTypeDefinitionFixedArray);
-      const_cast<TypeDefinition *>(typeDefinition)->setInitializeDefinitionProc((InitializeDefinitionProcType)InitializeTypeDefinitionFixedArray);
-      break;
-
-    case kAAFTypeCatVariableArray:
-      if (dynamic_cast<const TypeDefinitionStrongReferenceVector *>(typeDefinition))
-      {
-        const_cast<TypeDefinition *>(typeDefinition)->setCreateDefinitionProc((CreateDefinitionProcType)CreateTypeDefinitionStrongReferenceVector);
-        const_cast<TypeDefinition *>(typeDefinition)->setInitializeDefinitionProc((InitializeDefinitionProcType)InitializeTypeDefinitionStrongReferenceVector);
-      }
-      else if (dynamic_cast<const TypeDefinitionWeakReferenceVector *>(typeDefinition))
-      {
-        const_cast<TypeDefinition *>(typeDefinition)->setCreateDefinitionProc((CreateDefinitionProcType)CreateTypeDefinitionWeakReferenceVector);
-        const_cast<TypeDefinition *>(typeDefinition)->setInitializeDefinitionProc((InitializeDefinitionProcType)InitializeTypeDefinitionWeakReferenceVector);
-      }
-      else
-      {
-        const_cast<TypeDefinition *>(typeDefinition)->setCreateDefinitionProc((CreateDefinitionProcType)CreateTypeDefinitionVariableArray);
-        const_cast<TypeDefinition *>(typeDefinition)->setInitializeDefinitionProc((InitializeDefinitionProcType)InitializeTypeDefinitionVariableArray);
-      }
-      break;
-
-    case kAAFTypeCatSet:
-      if (dynamic_cast<const TypeDefinitionStrongReferenceSet*>(typeDefinition))
-      {
-#if USE_VECTORS_INSTEAD_SETS_FOR_COMPATIBILITY
-        const_cast<TypeDefinition *>(typeDefinition)->setCreateDefinitionProc((CreateDefinitionProcType)CreateTypeDefinitionSetAsVariableArray);
-        const_cast<TypeDefinition *>(typeDefinition)->setInitializeDefinitionProc((InitializeDefinitionProcType)InitializeTypeDefinitionSetAsVariableArray);
-#else
-        const_cast<TypeDefinition *>(typeDefinition)->setCreateDefinitionProc((CreateDefinitionProcType)CreateTypeDefinitionStrongReferenceSet);
-        const_cast<TypeDefinition *>(typeDefinition)->setInitializeDefinitionProc((InitializeDefinitionProcType)InitializeTypeDefinitionStrongReferenceSet);
-#endif
-      }
-      else if (dynamic_cast<const TypeDefinitionWeakReferenceSet*>(typeDefinition))
-      {
-#if USE_VECTORS_INSTEAD_SETS_FOR_COMPATIBILITY
-        const_cast<TypeDefinition *>(typeDefinition)->setCreateDefinitionProc((CreateDefinitionProcType)CreateTypeDefinitionSetAsVariableArray);
-        const_cast<TypeDefinition *>(typeDefinition)->setInitializeDefinitionProc((InitializeDefinitionProcType)InitializeTypeDefinitionSetAsVariableArray);
-#else
-        const_cast<TypeDefinition *>(typeDefinition)->setCreateDefinitionProc((CreateDefinitionProcType)CreateTypeDefinitionWeakReferenceSet);
-        const_cast<TypeDefinition *>(typeDefinition)->setInitializeDefinitionProc((InitializeDefinitionProcType)InitializeTypeDefinitionWeakReferenceSet);
-#endif
-      }
-      else
-      {
-        assert (dynamic_cast<const TypeDefinitionStrongReferenceSet*>(typeDefinition) ||
-                dynamic_cast<const TypeDefinitionWeakReferenceSet*>(typeDefinition));
-      }
-      break;
-
-    case kAAFTypeCatRecord:
-      const_cast<TypeDefinition *>(typeDefinition)->setCreateDefinitionProc((CreateDefinitionProcType)CreateTypeDefinitionRecord);
-      const_cast<TypeDefinition *>(typeDefinition)->setInitializeDefinitionProc((InitializeDefinitionProcType)InitializeTypeDefinitionRecord);
-      break;
-
-    case kAAFTypeCatStream:
-      const_cast<TypeDefinition *>(typeDefinition)->setCreateDefinitionProc((CreateDefinitionProcType)CreateTypeDefinitionStream);
-      const_cast<TypeDefinition *>(typeDefinition)->setInitializeDefinitionProc((InitializeDefinitionProcType)InitializeTypeDefinitionStream);
-      break;
-
-    case kAAFTypeCatString:
-      const_cast<TypeDefinition *>(typeDefinition)->setCreateDefinitionProc((CreateDefinitionProcType)CreateTypeDefinitionString);
-      const_cast<TypeDefinition *>(typeDefinition)->setInitializeDefinitionProc((InitializeDefinitionProcType)InitializeTypeDefinitionString);
-      break;
-
-    case kAAFTypeCatExtEnum:
-      const_cast<TypeDefinition *>(typeDefinition)->setCreateDefinitionProc((CreateDefinitionProcType)CreateTypeDefinitionExtendibleEnumeration);
-      const_cast<TypeDefinition *>(typeDefinition)->setInitializeDefinitionProc((InitializeDefinitionProcType)InitializeTypeDefinitionExtendibleEnumeration);
-      break;
-
-    case kAAFTypeCatIndirect:
-      const_cast<TypeDefinition *>(typeDefinition)->setCreateDefinitionProc((CreateDefinitionProcType)CreateTypeDefinitionIndirect);
-      const_cast<TypeDefinition *>(typeDefinition)->setInitializeDefinitionProc((InitializeDefinitionProcType)InitializeTypeDefinitionIndirect);
-      break;
-
-    case kAAFTypeCatOpaque:
-      const_cast<TypeDefinition *>(typeDefinition)->setCreateDefinitionProc((CreateDefinitionProcType)CreateTypeDefinitionOpaque);
-      const_cast<TypeDefinition *>(typeDefinition)->setInitializeDefinitionProc((InitializeDefinitionProcType)InitializeTypeDefinitionOpaque);
-      break;
-
-//    case kAAFTypeCatEncrypted:
-//      break;
-
-    default:
-      // Unknown type!
-      assert (0);
-      break;
-    }
-  }
-
-  
-  // All of the callback procs have been installed.
-  sInstalled = true;
-}
 
 
 
@@ -338,7 +72,7 @@ void InstallAAFObjectModelProcs(void)
 //
 // ClassDefinition callbacks
 //
-bool CreateClassDefinition(
+static bool CreateClassDefinition(
   const ClassDefinition *classDefinition, 
   ImplAAFMetaDictionary *metaDictionary)
 {
@@ -356,7 +90,6 @@ bool CreateClassDefinition(
 
     // Initialize just the id and name. All other properties must be initialized
     // after all of the classes have been created.
-//    result = static_cast<ImplAAFMetaDefinition *>(pClass)->Initialize(*classDefinition->id(), classDefinition->name(), NULL);
     result = pClass->SetIdentification(*classDefinition->id());
     if (AAFRESULT_FAILED(result))
     {
@@ -367,7 +100,8 @@ bool CreateClassDefinition(
 
     // Save the new axiomatic class definition in a non-persistent set.
     metaDictionary->addAxiomaticClassDefinition(pClass);
-
+    pClass->ReleaseReference();
+    
     return true;
   }
   else // if (classDefinition->axiomatic())
@@ -376,7 +110,7 @@ bool CreateClassDefinition(
   }
 }
 
-bool InitializeClassDefinition(
+static bool InitializeClassDefinition(
   const ClassDefinition *classDefinition, 
   ImplAAFMetaDictionary *metaDictionary)
 {
@@ -443,30 +177,30 @@ static OMProperty * CreateOMPropTypeSimple
 }
 
 static OMProperty * CreateOMPropTypeWeakReference
-  (OMPropertyId pid,
-   const wchar_t * name)
+  (OMPropertyId /* pid */,
+   const wchar_t * /* name */)
 {
-  assert (name);
-//  if(pid == PID_SourceReference_SourceID)
-//    return new OMSimpleProperty (pid, name, sizeof (aafMobID_t));
-//  else
-    return new OMSimpleProperty (pid, name, sizeof (aafUID_t));
+  // Let's return 0 so the caller will attempt to use the type def to
+  // create the property.
+  return 0;
 }
 
 static OMProperty * CreateOMPropTypeWeakReferenceSet
-  (OMPropertyId pid,
-   const wchar_t * name)
+  (OMPropertyId /* pid */,
+   const wchar_t * /* name */)
 {
-  assert (name);
-  return new OMSimpleProperty (pid, name, sizeof (aafUID_t));
+  // Let's return 0 so the caller will attempt to use the type def to
+  // create the property.
+  return 0;
 }
 
 static OMProperty * CreateOMPropTypeWeakReferenceVector
-  (OMPropertyId pid,
-   const wchar_t * name)
+  (OMPropertyId /* pid */,
+   const wchar_t * /* name */)
 {
-  assert (name);
-  return new OMSimpleProperty (pid, name, sizeof (aafUID_t));
+  // Let's return 0 so the caller will attempt to use the type def to
+  // create the property.
+  return 0;
 }
 
 static OMProperty * CreateOMPropTypeStrongReference
@@ -601,7 +335,7 @@ static ImplAAFOMPropertyCreateFunc_t SelectOMPropertyFactoryFunction(const TypeD
 //
 // PropertyDefinition/ImplAAFPropertyDef callbacks
 //
-bool CreatePropertyDefinition(
+static bool CreatePropertyDefinition(
   const PropertyDefinition *propertyDefinition, 
   ImplAAFMetaDictionary *metaDictionary)
 {
@@ -619,7 +353,6 @@ bool CreatePropertyDefinition(
 
     // Initialize just the id and name. All other properties must be initialized
     // after all of the classes and types have been created.
-//    result = static_cast<ImplAAFMetaDefinition *>(pProperty)->Initialize(*propertyDefinition->id(), propertyDefinition->name(), NULL);
     result = pProperty->SetIdentification(*propertyDefinition->id());
     if (AAFRESULT_FAILED(result))
     {
@@ -637,7 +370,8 @@ bool CreatePropertyDefinition(
 
     // Save the new axiomatic property definition in a non-persistent set.
     metaDictionary->addAxiomaticPropertyDefinition(pProperty);
-
+    pProperty->ReleaseReference();
+    
     return true;
   }
   else // if (propertyDefinition->axiomatic())
@@ -647,7 +381,7 @@ bool CreatePropertyDefinition(
 }
 
 
-bool InitializePropertyDefinition(
+static bool InitializePropertyDefinition(
   const PropertyDefinition *propertyDefinition, 
   ImplAAFMetaDictionary *metaDictionary)
 {
@@ -689,7 +423,7 @@ bool InitializePropertyDefinition(
 //
 // TypeDefinition callbacks
 //
-bool CreateTypeDefinition(
+static bool CreateTypeDefinition(
   const TypeDefinition *typeDefinition, 
   ImplAAFMetaDictionary *metaDictionary)
 {
@@ -712,7 +446,6 @@ bool CreateTypeDefinition(
 
     // Initialize just the id. All other properties must be initialized
     // after all of the classes and types have been created.
-//    result = static_cast<ImplAAFMetaDefinition *>(pType)->Initialize(*typeDefinition->id(), typeDefinition->name(), NULL);
     result = pType->SetIdentification(*typeDefinition->id());
     if (AAFRESULT_FAILED(result))
     {
@@ -723,7 +456,8 @@ bool CreateTypeDefinition(
 
     // Save the new axiomatic type definition in a non-persistent set.
     metaDictionary->addAxiomaticTypeDefinition(pType);
-
+    pType->ReleaseReference();
+    
     return true;
   }
   else
@@ -733,9 +467,9 @@ bool CreateTypeDefinition(
 }
 
 
-bool InitializeTypeDefinition(
-  const TypeDefinition *typeDefinition, 
-  ImplAAFMetaDictionary *metaDictionary)
+static bool InitializeTypeDefinition(
+  const TypeDefinition * /* typeDefinition */, 
+  ImplAAFMetaDictionary * /* metaDictionary */)
 {
   return false;
 }
@@ -744,7 +478,7 @@ bool InitializeTypeDefinition(
 //
 // TypeDefinitionInteger/ImplAAFTypeDef callbacks
 //
-bool CreateTypeDefinitionInteger(
+static bool CreateTypeDefinitionInteger(
   const TypeDefinitionInteger *typeDefinitionInteger, 
   ImplAAFMetaDictionary *metaDictionary)
 {
@@ -759,7 +493,7 @@ bool CreateTypeDefinitionInteger(
 }
 
 
-bool InitializeTypeDefinitionInteger(
+static bool InitializeTypeDefinitionInteger(
   const TypeDefinitionInteger *typeDefinitionInteger, 
   ImplAAFMetaDictionary *metaDictionary)
 {
@@ -794,7 +528,7 @@ bool InitializeTypeDefinitionInteger(
 //
 // TypeDefinitionEnumeration/ImplAAFTypeDef callbacks
 //
-bool CreateTypeDefinitionEnumeration(
+static bool CreateTypeDefinitionEnumeration(
   const TypeDefinitionEnumeration *typeDefinitionEnumeration, 
   ImplAAFMetaDictionary *metaDictionary)
 {
@@ -811,13 +545,11 @@ bool CreateTypeDefinitionEnumeration(
 
 static void InitializeTypeDefinitionEnumeration_cleanup(aafInt64 *memberValues, aafCharacter_constptr *memberNames)
 {
-  if (memberValues)
-    delete [] memberValues;
-  if (memberNames)
-    delete [] memberNames;
+  delete [] memberValues;
+  delete [] memberNames;
 }
 
-bool InitializeTypeDefinitionEnumeration(
+static bool InitializeTypeDefinitionEnumeration(
   const TypeDefinitionEnumeration *typeDefinitionEnumeration, 
   ImplAAFMetaDictionary *metaDictionary)
 {
@@ -899,7 +631,7 @@ bool InitializeTypeDefinitionEnumeration(
 //
 // TypeDefinitionVariableArray/ImplAAFTypeDef callbacks
 //
-bool CreateTypeDefinitionVariableArray(
+static bool CreateTypeDefinitionVariableArray(
   const TypeDefinitionVariableArray *typeDefinitionVariableArray, 
   ImplAAFMetaDictionary *metaDictionary)
 {
@@ -914,7 +646,7 @@ bool CreateTypeDefinitionVariableArray(
 }
 
 
-bool InitializeTypeDefinitionVariableArray(
+static bool InitializeTypeDefinitionVariableArray(
   const TypeDefinitionVariableArray *typeDefinitionVariableArray, 
   ImplAAFMetaDictionary *metaDictionary)
 {
@@ -953,7 +685,7 @@ bool InitializeTypeDefinitionVariableArray(
 //
 // TypeDefinitionFixedArray/ImplAAFTypeDef callbacks
 //
-bool CreateTypeDefinitionFixedArray(
+static bool CreateTypeDefinitionFixedArray(
   const TypeDefinitionFixedArray *typeDefinitionFixedArray, 
   ImplAAFMetaDictionary *metaDictionary)
 {
@@ -968,7 +700,7 @@ bool CreateTypeDefinitionFixedArray(
 }
 
 
-bool InitializeTypeDefinitionFixedArray(
+static bool InitializeTypeDefinitionFixedArray(
   const TypeDefinitionFixedArray *typeDefinitionFixedArray, 
   ImplAAFMetaDictionary *metaDictionary)
 {
@@ -1010,7 +742,7 @@ bool InitializeTypeDefinitionFixedArray(
 //
 // TypeDefinition/ImplAAFTypeDef callbacks
 //
-bool CreateTypeDefinitionRecord(
+static bool CreateTypeDefinitionRecord(
   const TypeDefinitionRecord *typeDefinitionRecord, 
   ImplAAFMetaDictionary *metaDictionary)
 {
@@ -1040,7 +772,7 @@ static void InitializeTypeDefinitionRecord_cleanup(
 }
 
 
-bool InitializeTypeDefinitionRecord(
+static bool InitializeTypeDefinitionRecord(
   const TypeDefinitionRecord *typeDefinitionRecord, 
   ImplAAFMetaDictionary *metaDictionary)
 {
@@ -1131,7 +863,7 @@ bool InitializeTypeDefinitionRecord(
 //
 // TypeDefinitionRename/ImplAAFTypeDef callbacks
 //
-bool CreateTypeDefinitionRename(
+static bool CreateTypeDefinitionRename(
   const TypeDefinitionRename *typeDefinitionRename, 
   ImplAAFMetaDictionary *metaDictionary)
 {
@@ -1146,7 +878,7 @@ bool CreateTypeDefinitionRename(
 }
 
 
-bool InitializeTypeDefinitionRename(
+static bool InitializeTypeDefinitionRename(
   const TypeDefinitionRename *typeDefinitionRename, 
   ImplAAFMetaDictionary *metaDictionary)
 {
@@ -1185,7 +917,7 @@ bool InitializeTypeDefinitionRename(
 //
 // TypeDefinitionCharacter/ImplAAFTypeDef callbacks
 //
-bool CreateTypeDefinitionCharacter(
+static bool CreateTypeDefinitionCharacter(
   const TypeDefinitionCharacter *typeDefinitionCharacter, 
   ImplAAFMetaDictionary *metaDictionary)
 {
@@ -1200,7 +932,7 @@ bool CreateTypeDefinitionCharacter(
 }
 
 
-bool InitializeTypeDefinitionCharacter(
+static bool InitializeTypeDefinitionCharacter(
   const TypeDefinitionCharacter *typeDefinitionCharacter, 
   ImplAAFMetaDictionary *metaDictionary)
 {
@@ -1231,7 +963,7 @@ bool InitializeTypeDefinitionCharacter(
 //
 // TypeDefinitionString/ImplAAFTypeDef callbacks
 //
-bool CreateTypeDefinitionString(
+static bool CreateTypeDefinitionString(
   const TypeDefinitionString *typeDefinitionString, 
   ImplAAFMetaDictionary *metaDictionary)
 {
@@ -1246,7 +978,7 @@ bool CreateTypeDefinitionString(
 }
 
 
-bool InitializeTypeDefinitionString(
+static bool InitializeTypeDefinitionString(
   const TypeDefinitionString *typeDefinitionString, 
   ImplAAFMetaDictionary *metaDictionary)
 {
@@ -1285,7 +1017,7 @@ bool InitializeTypeDefinitionString(
 //
 // TypeDefinitionExtendibleEnumeration/ImplAAFTypeDef callbacks
 //
-bool CreateTypeDefinitionExtendibleEnumeration(
+static bool CreateTypeDefinitionExtendibleEnumeration(
   const TypeDefinitionExtendibleEnumeration *typeDefinitionExtendibleEnumeration, 
   ImplAAFMetaDictionary *metaDictionary)
 {
@@ -1300,9 +1032,9 @@ bool CreateTypeDefinitionExtendibleEnumeration(
 }
 
 
-bool InitializeTypeDefinitionExtendibleEnumeration(
+static bool InitializeTypeDefinitionExtendibleEnumeration(
   const TypeDefinitionExtendibleEnumeration *typeDefinitionExtendibleEnumeration, 
-  ImplAAFMetaDictionary *metaDictionary)
+  ImplAAFMetaDictionary * /* metaDictionary */)
 {
   if (typeDefinitionExtendibleEnumeration->axiomatic())
   {
@@ -1322,7 +1054,7 @@ bool InitializeTypeDefinitionExtendibleEnumeration(
 //
 // TypeDefinitionStrongReference/ImplAAFTypeDef callbacks
 //
-bool CreateTypeDefinitionStrongReference(
+static bool CreateTypeDefinitionStrongReference(
   const TypeDefinitionStrongReference *typeDefinitionStrongReference, 
   ImplAAFMetaDictionary *metaDictionary)
 {
@@ -1337,7 +1069,7 @@ bool CreateTypeDefinitionStrongReference(
 }
 
 
-bool InitializeTypeDefinitionStrongReference(
+static bool InitializeTypeDefinitionStrongReference(
   const TypeDefinitionStrongReference *typeDefinitionStrongReference, 
   ImplAAFMetaDictionary *metaDictionary)
 {
@@ -1375,97 +1107,13 @@ bool InitializeTypeDefinitionStrongReference(
 
 
 
-#if USE_VECTORS_INSTEAD_SETS_FOR_COMPATIBILITY
-//
-// TypeDefinitionSetAsVariableArray
-//
-bool CreateTypeDefinitionSetAsVariableArray(
-  const TypeDefinitionSet *typeDefinitionSet, 
-  ImplAAFMetaDictionary *metaDictionary)
-{
-  ImplAAFTypeDefVariableArray *pType = NULL;
-  AAFRESULT result;
-
-  // We cannot create abstract types.
-  if (!typeDefinitionSet->concrete())
-    return false;
-
-  if (typeDefinitionSet->axiomatic())
-  {
-    // Attempt to create the assoication type definition instance.
-    pType = static_cast<ImplAAFTypeDefVariableArray *>(metaDictionary->pvtCreateMetaDefinition(AUID_AAFTypeDefVariableArray));
-    assert (pType);
-    if (!pType)
-      throw AAFRESULT_NOMEMORY;
-
-    // Initialize just the id. All other properties must be initialized
-    // after all of the classes and types have been created.
-    result = pType->SetIdentification(*typeDefinitionSet->id());
-    if (AAFRESULT_FAILED(result))
-    {
-      pType->ReleaseReference();
-      pType = NULL;
-      throw result;
-    }
-
-    // Save the new axiomatic type definition in a non-persistent set.
-    metaDictionary->addAxiomaticTypeDefinition(pType);
-
-    return true;
-  }
-  else
-  {
-    return false;
-  }
-}
-
-
-bool InitializeTypeDefinitionSetAsVariableArray(
-  const TypeDefinitionSet *typeDefinitionSet, 
-  ImplAAFMetaDictionary *metaDictionary)
-{
-  ImplAAFTypeDefVariableArray *pType = NULL;
-  ImplAAFTypeDefObjectRef *pElementType = NULL;
-  AAFRESULT result;
-
-  
-  if (typeDefinitionSet->axiomatic())
-  {
-    pType = dynamic_cast<ImplAAFTypeDefVariableArray *>
-            (metaDictionary->findAxiomaticTypeDefinition(*typeDefinitionSet->id()));
-    assert (pType);
-    if (!pType)
-      throw AAFRESULT_TYPE_NOT_FOUND;
-
-    pElementType = dynamic_cast<ImplAAFTypeDefObjectRef *>
-                   (metaDictionary->findAxiomaticTypeDefinition(*typeDefinitionSet->elementTypeId()));
-    assert (pElementType);
-    if (!pElementType)
-      throw AAFRESULT_TYPE_NOT_FOUND;
-
-    result = pType->pvtInitialize(*typeDefinitionSet->id(),
-                                  pElementType,
-                                  typeDefinitionSet->name());
-    assert (AAFRESULT_SUCCEEDED(result));
-    if (AAFRESULT_FAILED(result))
-      throw result;
-
-    return true;
-  }
-  else
-  {
-    return false;
-  }
-}
-
-#endif // #if USE_VECTORS_INSTEAD_SETS_FOR_COMPATIBILITY
 
 
 
 //
 // TypeDefinitionStrongReferenceSet/ImplAAFTypeDef callbacks
 //
-bool CreateTypeDefinitionStrongReferenceSet(
+static bool CreateTypeDefinitionStrongReferenceSet(
   const TypeDefinitionStrongReferenceSet *typeDefinitionStrongReferenceSet, 
   ImplAAFMetaDictionary *metaDictionary)
 {
@@ -1480,7 +1128,7 @@ bool CreateTypeDefinitionStrongReferenceSet(
 }
 
 
-bool InitializeTypeDefinitionStrongReferenceSet(
+static bool InitializeTypeDefinitionStrongReferenceSet(
   const TypeDefinitionStrongReferenceSet *typeDefinitionStrongReferenceSet, 
   ImplAAFMetaDictionary *metaDictionary)
 {
@@ -1522,7 +1170,7 @@ bool InitializeTypeDefinitionStrongReferenceSet(
 //
 // TypeDefinitionStrongReferenceVector/ImplAAFTypeDef callbacks
 //
-bool CreateTypeDefinitionStrongReferenceVector(
+static bool CreateTypeDefinitionStrongReferenceVector(
   const TypeDefinitionStrongReferenceVector *typeDefinitionStrongReferenceVector, 
   ImplAAFMetaDictionary *metaDictionary)
 {
@@ -1537,7 +1185,7 @@ bool CreateTypeDefinitionStrongReferenceVector(
 }
 
 
-bool InitializeTypeDefinitionStrongReferenceVector(
+static bool InitializeTypeDefinitionStrongReferenceVector(
   const TypeDefinitionStrongReferenceVector *typeDefinitionStrongReferenceVector, 
   ImplAAFMetaDictionary *metaDictionary)
 {
@@ -1556,7 +1204,7 @@ bool InitializeTypeDefinitionStrongReferenceVector(
 //
 // TypeDefinitionWeakReference/ImplAAFTypeDef callbacks
 //
-bool CreateTypeDefinitionWeakReference(
+static bool CreateTypeDefinitionWeakReference(
   const TypeDefinitionWeakReference *typeDefinitionWeakReference, 
   ImplAAFMetaDictionary *metaDictionary)
 {
@@ -1571,13 +1219,15 @@ bool CreateTypeDefinitionWeakReference(
 }
 
 
-bool InitializeTypeDefinitionWeakReference(
+static bool InitializeTypeDefinitionWeakReference(
   const TypeDefinitionWeakReference *typeDefinitionWeakReference, 
   ImplAAFMetaDictionary *metaDictionary)
 {
   ImplAAFTypeDefWeakObjRef *pType = NULL;
   ImplAAFClassDef *pTarget = NULL;
   AAFRESULT result;
+  aafUInt32 i;
+  const AAFObjectModel * objectModel = typeDefinitionWeakReference->objectModel();
   
   if (typeDefinitionWeakReference->axiomatic())
   {
@@ -1592,9 +1242,60 @@ bool InitializeTypeDefinitionWeakReference(
     if (!pTarget)
       throw AAFRESULT_TYPE_NOT_FOUND;
 
+    aafUID_t * targetSet = new aafUID_t[typeDefinitionWeakReference->targetSetCount()];
+    if (NULL == targetSet)
+      throw AAFRESULT_NOMEMORY;
+    
+    OMPropertyId *targetPids = new OMPropertyId[typeDefinitionWeakReference->targetSetCount() + 1];
+    if (NULL == targetPids)
+    {
+      delete [] targetSet;
+      throw AAFRESULT_NOMEMORY;
+    }
+    
+    for (i = 0; i < typeDefinitionWeakReference->targetSetCount(); i++)
+    {
+      memcpy(&targetSet[i], typeDefinitionWeakReference->targetAt(i), sizeof(aafUID_t));
+    }
+
+    // The first property id must be one of the two-roots strong reference properties.
+    targetPids[0] = 0;
+    if (0 == memcmp(&targetSet[0], &kAAFPropID_Root_MetaDictionary, sizeof(kAAFPropID_Root_MetaDictionary)))
+    {
+      targetPids[0] = 1;
+    }
+    else if (0 == memcmp(&targetSet[0], &kAAFPropID_Root_Header, sizeof(kAAFPropID_Root_Header)))
+    {
+      targetPids[0] = 2;
+    }
+    assert (1 == targetPids[0] || 2 == targetPids[0]);
+    
+    const PropertyDefinition * propertyDefinition = NULL;  
+    for (i = 1; i < typeDefinitionWeakReference->targetSetCount(); i++)
+    {
+      propertyDefinition = objectModel->findPropertyDefinition(&targetSet[i]);
+      assert (propertyDefinition && !propertyDefinition->isNil() && propertyDefinition->axiomatic());
+      targetPids[i] = propertyDefinition->pid();
+    }
+    targetPids[i] = 0; // null terminal the array.
+    
+    // The target of a weak reference must have a unique identifier.
+    const ClassDefinition * classDefinition = objectModel->findClassDefinition(typeDefinitionWeakReference->targetId());
+    assert (classDefinition && ClassDefinition::null() != classDefinition && classDefinition->axiomatic());
+    propertyDefinition = classDefinition->uniqueIdentifierProperty();
+    assert (propertyDefinition && !propertyDefinition->isNil() && propertyDefinition->axiomatic() && propertyDefinition->uid());
+    OMPropertyId uniqueIdentifier = propertyDefinition->pid();
+    assert(0 != uniqueIdentifier);
+    
     result = pType->pvtInitialize(*typeDefinitionWeakReference->id(),
                                   pTarget,
-                                  typeDefinitionWeakReference->name());
+                                  typeDefinitionWeakReference->name(),
+                                  typeDefinitionWeakReference->targetSetCount(),
+                                  targetSet,
+                                  targetPids,
+                                  uniqueIdentifier);
+    delete [] targetPids;
+    delete [] targetSet;
     assert (AAFRESULT_SUCCEEDED(result));
     if (AAFRESULT_FAILED(result))
       throw result;
@@ -1611,7 +1312,7 @@ bool InitializeTypeDefinitionWeakReference(
 //
 // TypeDefinitionWeakReferenceSet/ImplAAFTypeDef callbacks
 //
-bool CreateTypeDefinitionWeakReferenceSet(
+static bool CreateTypeDefinitionWeakReferenceSet(
   const TypeDefinitionWeakReferenceSet *typeDefinitionWeakReferenceSet, 
   ImplAAFMetaDictionary *metaDictionary)
 {
@@ -1626,7 +1327,7 @@ bool CreateTypeDefinitionWeakReferenceSet(
 }
 
 
-bool InitializeTypeDefinitionWeakReferenceSet(
+static bool InitializeTypeDefinitionWeakReferenceSet(
   const TypeDefinitionWeakReferenceSet *typeDefinitionWeakReferenceSet, 
   ImplAAFMetaDictionary *metaDictionary)
 {
@@ -1668,7 +1369,7 @@ bool InitializeTypeDefinitionWeakReferenceSet(
 //
 // TypeDefinitionWeakReferenceVector/ImplAAFTypeDef callbacks
 //
-bool CreateTypeDefinitionWeakReferenceVector(
+static bool CreateTypeDefinitionWeakReferenceVector(
   const TypeDefinitionWeakReferenceVector *typeDefinitionWeakReferenceVector, 
   ImplAAFMetaDictionary *metaDictionary)
 {
@@ -1683,7 +1384,7 @@ bool CreateTypeDefinitionWeakReferenceVector(
 }
 
 
-bool InitializeTypeDefinitionWeakReferenceVector(
+static bool InitializeTypeDefinitionWeakReferenceVector(
   const TypeDefinitionWeakReferenceVector *typeDefinitionWeakReferenceVector, 
   ImplAAFMetaDictionary *metaDictionary)
 {
@@ -1702,7 +1403,7 @@ bool InitializeTypeDefinitionWeakReferenceVector(
 //
 // TypeDefinitionStream/ImplAAFTypeDef callbacks
 //
-bool CreateTypeDefinitionStream(
+static bool CreateTypeDefinitionStream(
   const TypeDefinitionStream *typeDefinitionStream, 
   ImplAAFMetaDictionary *metaDictionary)
 {
@@ -1717,7 +1418,7 @@ bool CreateTypeDefinitionStream(
 }
 
 
-bool InitializeTypeDefinitionStream(
+static bool InitializeTypeDefinitionStream(
   const TypeDefinitionStream *typeDefinitionStream, 
   ImplAAFMetaDictionary *metaDictionary)
 {
@@ -1738,9 +1439,7 @@ bool InitializeTypeDefinitionStream(
     if (!pElementType)
       throw AAFRESULT_TYPE_NOT_FOUND;
 
-    result = pType->pvtInitialize(*typeDefinitionStream->id(),
-                                  pElementType,
-                                  typeDefinitionStream->name());
+    result = pType->pvtInitialize(*typeDefinitionStream->id(), typeDefinitionStream->name());
     assert (AAFRESULT_SUCCEEDED(result));
     if (AAFRESULT_FAILED(result))
       throw result;
@@ -1757,7 +1456,7 @@ bool InitializeTypeDefinitionStream(
 //
 // TypeDefinitionIndirect/ImplAAFTypeDef callbacks
 //
-bool CreateTypeDefinitionIndirect(
+static bool CreateTypeDefinitionIndirect(
   const TypeDefinitionIndirect *typeDefinitionIndirect, 
   ImplAAFMetaDictionary *metaDictionary)
 {
@@ -1772,7 +1471,7 @@ bool CreateTypeDefinitionIndirect(
 }
 
 
-bool InitializeTypeDefinitionIndirect(
+static bool InitializeTypeDefinitionIndirect(
   const TypeDefinitionIndirect *typeDefinitionIndirect, 
   ImplAAFMetaDictionary *metaDictionary)
 {
@@ -1812,7 +1511,7 @@ bool InitializeTypeDefinitionIndirect(
 //
 // TypeDefinitionOpaque/ImplAAFTypeDef callbacks
 //
-bool CreateTypeDefinitionOpaque(
+static bool CreateTypeDefinitionOpaque(
   const TypeDefinitionOpaque *typeDefinitionOpaque, 
   ImplAAFMetaDictionary *metaDictionary)
 {
@@ -1827,7 +1526,7 @@ bool CreateTypeDefinitionOpaque(
 }
 
 
-bool InitializeTypeDefinitionOpaque(
+static bool InitializeTypeDefinitionOpaque(
   const TypeDefinitionOpaque *typeDefinitionOpaque, 
   ImplAAFMetaDictionary *metaDictionary)
 {
@@ -1864,4 +1563,171 @@ bool InitializeTypeDefinitionOpaque(
 }
 
 
-#endif // #if USE_AAFOBJECT_MODEL
+
+
+// Install all of the callback procs into the MetaDictionary.
+void InstallAAFObjectModelProcs(void)
+{
+  bool sInstalled = false;
+
+  if (sInstalled)
+  {
+    // This is a one-time initialization. The object model call backs
+    // are shared by all meta dictionaries.
+    return;
+  }
+
+
+  //
+  // Install all of the shared callback procs.
+  //
+  aafUInt32 i;
+
+  // Get the one-and-only meta dictionary.
+  const AAFObjectModel *objectModel = AAFObjectModel::singleton();
+
+  // Install the callbacks for the class definitions.
+  // NOTE: The first version uses the same functions for 
+  // both axiomatic and normal built-in classes (properties,
+  // and types).
+  for (i = 0; i < objectModel->countClassDefinitions(); ++i)
+  {
+    const ClassDefinition *classDefinition = objectModel->classDefinitionAt(i);
+
+    const_cast<ClassDefinition *>(classDefinition)->setCreateDefinitionProc((CreateDefinitionProcType)CreateClassDefinition);
+    const_cast<ClassDefinition *>(classDefinition)->setInitializeDefinitionProc((InitializeDefinitionProcType)InitializeClassDefinition);
+  }
+
+  // Install the callbacks for the property definitions.
+  for (i = 0; i < objectModel->countPropertyDefinitions(); ++i)
+  {
+    const PropertyDefinition * propertyDefinition = objectModel->propertyDefinitionAt(i);
+
+    const_cast<PropertyDefinition *>(propertyDefinition)->setCreateDefinitionProc((CreateDefinitionProcType)CreatePropertyDefinition);
+    const_cast<PropertyDefinition *>(propertyDefinition)->setInitializeDefinitionProc((InitializeDefinitionProcType)InitializePropertyDefinition);
+  }
+
+  // Install the callbacks for the type definitions.
+  for (i = 0; i < objectModel->countTypeDefinitions(); ++i)
+  {
+    const TypeDefinition *typeDefinition;
+    typeDefinition = objectModel->typeDefinitionAt(i);
+    
+    switch (typeDefinition->category())
+    {
+    case kAAFTypeCatInt:
+      const_cast<TypeDefinition *>(typeDefinition)->setCreateDefinitionProc((CreateDefinitionProcType)CreateTypeDefinitionInteger);
+      const_cast<TypeDefinition *>(typeDefinition)->setInitializeDefinitionProc((InitializeDefinitionProcType)InitializeTypeDefinitionInteger);
+      break;
+
+    case kAAFTypeCatCharacter:
+      const_cast<TypeDefinition *>(typeDefinition)->setCreateDefinitionProc((CreateDefinitionProcType)CreateTypeDefinitionCharacter);
+      const_cast<TypeDefinition *>(typeDefinition)->setInitializeDefinitionProc((InitializeDefinitionProcType)InitializeTypeDefinitionCharacter);
+      break;
+
+    case kAAFTypeCatStrongObjRef:
+      const_cast<TypeDefinition *>(typeDefinition)->setCreateDefinitionProc((CreateDefinitionProcType)CreateTypeDefinitionStrongReference);
+      const_cast<TypeDefinition *>(typeDefinition)->setInitializeDefinitionProc((InitializeDefinitionProcType)InitializeTypeDefinitionStrongReference);
+      break;
+
+    case kAAFTypeCatWeakObjRef:
+      const_cast<TypeDefinition *>(typeDefinition)->setCreateDefinitionProc((CreateDefinitionProcType)CreateTypeDefinitionWeakReference);
+      const_cast<TypeDefinition *>(typeDefinition)->setInitializeDefinitionProc((InitializeDefinitionProcType)InitializeTypeDefinitionWeakReference);
+      break;
+
+    case kAAFTypeCatRename:
+      const_cast<TypeDefinition *>(typeDefinition)->setCreateDefinitionProc((CreateDefinitionProcType)CreateTypeDefinitionRename);
+      const_cast<TypeDefinition *>(typeDefinition)->setInitializeDefinitionProc((InitializeDefinitionProcType)InitializeTypeDefinitionRename);
+      break;
+
+    case kAAFTypeCatEnum:
+      const_cast<TypeDefinition *>(typeDefinition)->setCreateDefinitionProc((CreateDefinitionProcType)CreateTypeDefinitionEnumeration);
+      const_cast<TypeDefinition *>(typeDefinition)->setInitializeDefinitionProc((InitializeDefinitionProcType)InitializeTypeDefinitionEnumeration);
+      break;
+
+    case kAAFTypeCatFixedArray:
+      const_cast<TypeDefinition *>(typeDefinition)->setCreateDefinitionProc((CreateDefinitionProcType)CreateTypeDefinitionFixedArray);
+      const_cast<TypeDefinition *>(typeDefinition)->setInitializeDefinitionProc((InitializeDefinitionProcType)InitializeTypeDefinitionFixedArray);
+      break;
+
+    case kAAFTypeCatVariableArray:
+      if (dynamic_cast<const TypeDefinitionStrongReferenceVector *>(typeDefinition))
+      {
+        const_cast<TypeDefinition *>(typeDefinition)->setCreateDefinitionProc((CreateDefinitionProcType)CreateTypeDefinitionStrongReferenceVector);
+        const_cast<TypeDefinition *>(typeDefinition)->setInitializeDefinitionProc((InitializeDefinitionProcType)InitializeTypeDefinitionStrongReferenceVector);
+      }
+      else if (dynamic_cast<const TypeDefinitionWeakReferenceVector *>(typeDefinition))
+      {
+        const_cast<TypeDefinition *>(typeDefinition)->setCreateDefinitionProc((CreateDefinitionProcType)CreateTypeDefinitionWeakReferenceVector);
+        const_cast<TypeDefinition *>(typeDefinition)->setInitializeDefinitionProc((InitializeDefinitionProcType)InitializeTypeDefinitionWeakReferenceVector);
+      }
+      else
+      {
+        const_cast<TypeDefinition *>(typeDefinition)->setCreateDefinitionProc((CreateDefinitionProcType)CreateTypeDefinitionVariableArray);
+        const_cast<TypeDefinition *>(typeDefinition)->setInitializeDefinitionProc((InitializeDefinitionProcType)InitializeTypeDefinitionVariableArray);
+      }
+      break;
+
+    case kAAFTypeCatSet:
+      if (dynamic_cast<const TypeDefinitionStrongReferenceSet*>(typeDefinition))
+      {
+        const_cast<TypeDefinition *>(typeDefinition)->setCreateDefinitionProc((CreateDefinitionProcType)CreateTypeDefinitionStrongReferenceSet);
+        const_cast<TypeDefinition *>(typeDefinition)->setInitializeDefinitionProc((InitializeDefinitionProcType)InitializeTypeDefinitionStrongReferenceSet);
+      }
+      else if (dynamic_cast<const TypeDefinitionWeakReferenceSet*>(typeDefinition))
+      {
+        const_cast<TypeDefinition *>(typeDefinition)->setCreateDefinitionProc((CreateDefinitionProcType)CreateTypeDefinitionWeakReferenceSet);
+        const_cast<TypeDefinition *>(typeDefinition)->setInitializeDefinitionProc((InitializeDefinitionProcType)InitializeTypeDefinitionWeakReferenceSet);
+      }
+      else
+      {
+        assert (dynamic_cast<const TypeDefinitionStrongReferenceSet*>(typeDefinition) ||
+                dynamic_cast<const TypeDefinitionWeakReferenceSet*>(typeDefinition));
+      }
+      break;
+
+    case kAAFTypeCatRecord:
+      const_cast<TypeDefinition *>(typeDefinition)->setCreateDefinitionProc((CreateDefinitionProcType)CreateTypeDefinitionRecord);
+      const_cast<TypeDefinition *>(typeDefinition)->setInitializeDefinitionProc((InitializeDefinitionProcType)InitializeTypeDefinitionRecord);
+      break;
+
+    case kAAFTypeCatStream:
+      const_cast<TypeDefinition *>(typeDefinition)->setCreateDefinitionProc((CreateDefinitionProcType)CreateTypeDefinitionStream);
+      const_cast<TypeDefinition *>(typeDefinition)->setInitializeDefinitionProc((InitializeDefinitionProcType)InitializeTypeDefinitionStream);
+      break;
+
+    case kAAFTypeCatString:
+      const_cast<TypeDefinition *>(typeDefinition)->setCreateDefinitionProc((CreateDefinitionProcType)CreateTypeDefinitionString);
+      const_cast<TypeDefinition *>(typeDefinition)->setInitializeDefinitionProc((InitializeDefinitionProcType)InitializeTypeDefinitionString);
+      break;
+
+    case kAAFTypeCatExtEnum:
+      const_cast<TypeDefinition *>(typeDefinition)->setCreateDefinitionProc((CreateDefinitionProcType)CreateTypeDefinitionExtendibleEnumeration);
+      const_cast<TypeDefinition *>(typeDefinition)->setInitializeDefinitionProc((InitializeDefinitionProcType)InitializeTypeDefinitionExtendibleEnumeration);
+      break;
+
+    case kAAFTypeCatIndirect:
+      const_cast<TypeDefinition *>(typeDefinition)->setCreateDefinitionProc((CreateDefinitionProcType)CreateTypeDefinitionIndirect);
+      const_cast<TypeDefinition *>(typeDefinition)->setInitializeDefinitionProc((InitializeDefinitionProcType)InitializeTypeDefinitionIndirect);
+      break;
+
+    case kAAFTypeCatOpaque:
+      const_cast<TypeDefinition *>(typeDefinition)->setCreateDefinitionProc((CreateDefinitionProcType)CreateTypeDefinitionOpaque);
+      const_cast<TypeDefinition *>(typeDefinition)->setInitializeDefinitionProc((InitializeDefinitionProcType)InitializeTypeDefinitionOpaque);
+      break;
+
+//    case kAAFTypeCatEncrypted:
+//      break;
+
+    default:
+      // Unknown type!
+      assert (0);
+      break;
+    }
+  }
+
+  
+  // All of the callback procs have been installed.
+  sInstalled = true;
+}
+
