@@ -49,7 +49,7 @@
 //
 // DictP18-277-1847BMaster.csv 
 //
-// This file was generated on Fri Apr  7 10:37:52 EDT 2000
+// This file was generated on Fri Apr  7 13:52:03 EDT 2000
 // by user bedell on system JBEDELL2.
 //
 // Key to macros.
@@ -1216,14 +1216,6 @@ AAF_CLASS(DefinitionObject,
     AAF_TYPE(String),
     false,
     DefinitionObject)
-  AAF_PROPERTY(PluginDescriptors,
-    AAF_LITERAL_AUID(0x06440400,
-      0x0000, 0x0000,
-      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
-    0x1b04,
-    AAF_TYPE(AUIDArray),
-    false,
-    DefinitionObject)
 AAF_CLASS_END(DefinitionObject)
 AAF_CLASS_SEPARATOR()
 
@@ -1413,38 +1405,14 @@ AAF_CLASS(TypeDefinition,
 AAF_CLASS_END(TypeDefinition)
 AAF_CLASS_SEPARATOR()
 
-// PluginDescriptor
+// PluginDefinition
 //
-AAF_CLASS(PluginDescriptor,
+AAF_CLASS(PluginDefinition,
   AAF_LITERAL_AUID(0x06444700,
     0x0000, 0x0000,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
-  InterchangeObject,
+  DefinitionObject,
   true)
-  AAF_PROPERTY(Identification,
-    AAF_LITERAL_AUID(0x06444701,
-      0x0000, 0x0000,
-      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
-    0x2200,
-    AAF_TYPE(AUID),
-    true,
-    PluginDescriptor)
-  AAF_PROPERTY(Name,
-    AAF_LITERAL_AUID(0x06444702,
-      0x0000, 0x0000,
-      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
-    0x2201,
-    AAF_TYPE(String),
-    true,
-    PluginDescriptor)
-  AAF_PROPERTY(Description,
-    AAF_LITERAL_AUID(0x06444703,
-      0x0000, 0x0000,
-      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
-    0x2202,
-    AAF_TYPE(String),
-    false,
-    PluginDescriptor)
   AAF_PROPERTY(CategoryClass,
     AAF_LITERAL_AUID(0x06444704,
       0x0000, 0x0000,
@@ -1452,7 +1420,7 @@ AAF_CLASS(PluginDescriptor,
     0x2203,
     AAF_TYPE(AUID),
     true,
-    PluginDescriptor)
+    PluginDefinition)
   AAF_PROPERTY(VersionNumber,
     AAF_LITERAL_AUID(0x06444705,
       0x0000, 0x0000,
@@ -1460,7 +1428,7 @@ AAF_CLASS(PluginDescriptor,
     0x2204,
     AAF_TYPE(VersionType),
     true,
-    PluginDescriptor)
+    PluginDefinition)
   AAF_PROPERTY(VersionString,
     AAF_LITERAL_AUID(0x06444706,
       0x0000, 0x0000,
@@ -1468,7 +1436,7 @@ AAF_CLASS(PluginDescriptor,
     0x2205,
     AAF_TYPE(String),
     false,
-    PluginDescriptor)
+    PluginDefinition)
   AAF_PROPERTY(Manufacturer,
     AAF_LITERAL_AUID(0x06444707,
       0x0000, 0x0000,
@@ -1476,7 +1444,7 @@ AAF_CLASS(PluginDescriptor,
     0x2206,
     AAF_TYPE(String),
     false,
-    PluginDescriptor)
+    PluginDefinition)
   AAF_PROPERTY(ManufacturerInfo,
     AAF_LITERAL_AUID(0x06444708,
       0x0000, 0x0000,
@@ -1484,7 +1452,7 @@ AAF_CLASS(PluginDescriptor,
     0x2207,
     AAF_REFERENCE_TYPE(StrongReference, NetworkLocator),
     false,
-    PluginDescriptor)
+    PluginDefinition)
   AAF_PROPERTY(ManufacturerID,
     AAF_LITERAL_AUID(0x06444709,
       0x0000, 0x0000,
@@ -1492,7 +1460,7 @@ AAF_CLASS(PluginDescriptor,
     0x2208,
     AAF_TYPE(AUID),
     false,
-    PluginDescriptor)
+    PluginDefinition)
   AAF_PROPERTY(Platform,
     AAF_LITERAL_AUID(0x0644470A,
       0x0000, 0x0000,
@@ -1500,7 +1468,7 @@ AAF_CLASS(PluginDescriptor,
     0x2209,
     AAF_TYPE(AUID),
     false,
-    PluginDescriptor)
+    PluginDefinition)
   AAF_PROPERTY(MinPlatformVersion,
     AAF_LITERAL_AUID(0x0644470B,
       0x0000, 0x0000,
@@ -1508,7 +1476,7 @@ AAF_CLASS(PluginDescriptor,
     0x220a,
     AAF_TYPE(VersionType),
     false,
-    PluginDescriptor)
+    PluginDefinition)
   AAF_PROPERTY(MaxPlatformVersion,
     AAF_LITERAL_AUID(0x0644470C,
       0x0000, 0x0000,
@@ -1516,7 +1484,7 @@ AAF_CLASS(PluginDescriptor,
     0x220b,
     AAF_TYPE(VersionType),
     false,
-    PluginDescriptor)
+    PluginDefinition)
   AAF_PROPERTY(Engine,
     AAF_LITERAL_AUID(0x0644470D,
       0x0000, 0x0000,
@@ -1524,7 +1492,7 @@ AAF_CLASS(PluginDescriptor,
     0x220c,
     AAF_TYPE(AUID),
     false,
-    PluginDescriptor)
+    PluginDefinition)
   AAF_PROPERTY(MinEngineVersion,
     AAF_LITERAL_AUID(0x0644470E,
       0x0000, 0x0000,
@@ -1532,7 +1500,7 @@ AAF_CLASS(PluginDescriptor,
     0x220d,
     AAF_TYPE(VersionType),
     false,
-    PluginDescriptor)
+    PluginDefinition)
   AAF_PROPERTY(MaxEngineVersion,
     AAF_LITERAL_AUID(0x0644470F,
       0x0000, 0x0000,
@@ -1540,7 +1508,7 @@ AAF_CLASS(PluginDescriptor,
     0x220e,
     AAF_TYPE(VersionType),
     false,
-    PluginDescriptor)
+    PluginDefinition)
   AAF_PROPERTY(PluginAPI,
     AAF_LITERAL_AUID(0x06444710,
       0x0000, 0x0000,
@@ -1548,7 +1516,7 @@ AAF_CLASS(PluginDescriptor,
     0x220f,
     AAF_TYPE(AUID),
     false,
-    PluginDescriptor)
+    PluginDefinition)
   AAF_PROPERTY(MinPluginAPI,
     AAF_LITERAL_AUID(0x06444711,
       0x0000, 0x0000,
@@ -1556,7 +1524,7 @@ AAF_CLASS(PluginDescriptor,
     0x2210,
     AAF_TYPE(VersionType),
     false,
-    PluginDescriptor)
+    PluginDefinition)
   AAF_PROPERTY(MaxPluginAPI,
     AAF_LITERAL_AUID(0x06444712,
       0x0000, 0x0000,
@@ -1564,7 +1532,7 @@ AAF_CLASS(PluginDescriptor,
     0x2211,
     AAF_TYPE(VersionType),
     false,
-    PluginDescriptor)
+    PluginDefinition)
   AAF_PROPERTY(SoftwareOnly,
     AAF_LITERAL_AUID(0x06444713,
       0x0000, 0x0000,
@@ -1572,7 +1540,7 @@ AAF_CLASS(PluginDescriptor,
     0x2212,
     AAF_TYPE(Boolean),
     false,
-    PluginDescriptor)
+    PluginDefinition)
   AAF_PROPERTY(Accelerator,
     AAF_LITERAL_AUID(0x06444714,
       0x0000, 0x0000,
@@ -1580,7 +1548,7 @@ AAF_CLASS(PluginDescriptor,
     0x2213,
     AAF_TYPE(Boolean),
     false,
-    PluginDescriptor)
+    PluginDefinition)
   AAF_PROPERTY(Locators,
     AAF_LITERAL_AUID(0x06444715,
       0x0000, 0x0000,
@@ -1588,7 +1556,7 @@ AAF_CLASS(PluginDescriptor,
     0x2214,
     AAF_REFERENCE_TYPE(StrongReferenceVector, Locator),
     false,
-    PluginDescriptor)
+    PluginDefinition)
   AAF_PROPERTY(Authentication,
     AAF_LITERAL_AUID(0x06444716,
       0x0000, 0x0000,
@@ -1596,8 +1564,16 @@ AAF_CLASS(PluginDescriptor,
     0x2215,
     AAF_TYPE(Boolean),
     false,
-    PluginDescriptor)
-AAF_CLASS_END(PluginDescriptor)
+    PluginDefinition)
+  AAF_PROPERTY(DefinitionObject,
+    AAF_LITERAL_AUID(0x06444717,
+      0x0000, 0x0000,
+      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
+    0x2216,
+    AAF_TYPE(AUID),
+    false,
+    PluginDefinition)
+AAF_CLASS_END(PluginDefinition)
 AAF_CLASS_SEPARATOR()
 
 // CodecDefinition
@@ -1710,7 +1686,7 @@ AAF_CLASS(Dictionary,
       0x0000, 0x0000,
       0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
     0x2606,
-    AAF_REFERENCE_TYPE(StrongReferenceSet, PluginDescriptor),
+    AAF_REFERENCE_TYPE(StrongReferenceSet, PluginDefinition),
     false,
     Dictionary)
   AAF_PROPERTY(CodecDefinitions,
@@ -4135,14 +4111,14 @@ AAF_TYPE_DEFINITION_STRONG_REFERENCE(
   AAF_TYPE(ParameterDefinition))
 AAF_TYPE_SEPARATOR()
 
-// StrongReference<PluginDescriptor>
+// StrongReference<PluginDefinition>
 //
 AAF_TYPE_DEFINITION_STRONG_REFERENCE(
-  AAF_REFERENCE_TYPE_NAME(StrongReference, PluginDescriptor), 
+  AAF_REFERENCE_TYPE_NAME(StrongReference, PluginDefinition), 
   AAF_LITERAL_AUID(0x0C0B0017,
     0x0000, 0x0000,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C),
-  AAF_TYPE(PluginDescriptor))
+  AAF_TYPE(PluginDefinition))
 AAF_TYPE_SEPARATOR()
 
 // StrongReference<PropertyDefinition>
@@ -4285,14 +4261,14 @@ AAF_TYPE_DEFINITION_STRONG_REFERENCE_SET(
   AAF_TYPE(ParameterDefinition))
 AAF_TYPE_SEPARATOR()
 
-// StrongReferenceSet<PluginDescriptor>
+// StrongReferenceSet<PluginDefinition>
 //
 AAF_TYPE_DEFINITION_STRONG_REFERENCE_SET(
-  AAF_REFERENCE_TYPE_NAME(StrongReferenceSet, PluginDescriptor), 
+  AAF_REFERENCE_TYPE_NAME(StrongReferenceSet, PluginDefinition), 
   AAF_LITERAL_AUID(0x0C0B010B,
     0x0000, 0x0000,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C),
-  AAF_TYPE(PluginDescriptor))
+  AAF_TYPE(PluginDefinition))
 AAF_TYPE_SEPARATOR()
 
 // StrongReferenceSet<PropertyDefinition>
@@ -4535,14 +4511,14 @@ AAF_TYPE_DEFINITION_WEAK_REFERENCE(
   AAF_TYPE(TypeDefinition))
 AAF_TYPE_SEPARATOR()
 
-// WeakReference<PluginDescriptor>
+// WeakReference<PluginDefinition>
 //
 AAF_TYPE_DEFINITION_WEAK_REFERENCE(
-  AAF_REFERENCE_TYPE_NAME(WeakReference, PluginDescriptor), 
+  AAF_REFERENCE_TYPE_NAME(WeakReference, PluginDefinition), 
   AAF_LITERAL_AUID(0x0C0B030A,
     0x0000, 0x0000,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C),
-  AAF_TYPE(PluginDescriptor))
+  AAF_TYPE(PluginDefinition))
 AAF_TYPE_SEPARATOR()
 
 // WeakReferenceSet<DataDefinition>
@@ -4565,14 +4541,14 @@ AAF_TYPE_DEFINITION_WEAK_REFERENCE_SET(
   AAF_TYPE(ParameterDefinition))
 AAF_TYPE_SEPARATOR()
 
-// WeakReferenceSet<PluginDescriptor>
+// WeakReferenceSet<PluginDefinition>
 //
 AAF_TYPE_DEFINITION_WEAK_REFERENCE_SET(
-  AAF_REFERENCE_TYPE_NAME(WeakReferenceSet, PluginDescriptor), 
+  AAF_REFERENCE_TYPE_NAME(WeakReferenceSet, PluginDefinition), 
   AAF_LITERAL_AUID(0x0C0B0402,
     0x0000, 0x0000,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C),
-  AAF_TYPE(PluginDescriptor))
+  AAF_TYPE(PluginDefinition))
 AAF_TYPE_SEPARATOR()
 
 // WeakReferenceVector<OperationDefinition>
