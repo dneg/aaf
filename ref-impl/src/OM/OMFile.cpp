@@ -562,18 +562,15 @@ void OMFile::close(void)
   TRACE("OMFile::close");
 
   _root->close();
-  if (_mode == modifyMode) {
-    if (_rawStorage != 0 ) {
-      writeSignature(_rawStorage, _signature);
-    } else {
-      writeSignature(_fileName, _signature);
-    }
-  }
-  delete _rawStorage;
-  _rawStorage = 0;
+
+  // TBS - tjb delete _rootStore; _rootStore = 0;
+
   _root->detach();
   delete _root;
   _root = 0;
+
+  delete _rawStorage;
+  _rawStorage = 0;
 }
 
   // @mfunc Retrieve the client root <c OMStorable> from this <c OMFile>.
@@ -861,42 +858,6 @@ void* OMFile::clientOnRestoreContext(void)
   return _clientOnRestoreContext;
 }
 
-  // @mfunc Write the signature to the given file.
-  //   @parm The file name.
-  //   @parm The signature.
-void OMFile::writeSignature(const wchar_t* fileName,
-                            const OMFileSignature& signature)
-{
-  TRACE("OMFile::writeSignature");
-
-  PRECONDITION("Valid file name", validWideString(fileName));
-
-  OMFileSignature sig = signature;
-
-  // There's no ANSI function to open a file with a wchar_t* name.
-  // for now convert the name. In future add 
-  // FILE* fopen(const wchar_t* fileName, const wchar_t* mode);
-  //
-  char cFileName[256];
-  size_t status = wcstombs(cFileName, fileName, 256);
-  ASSERT("Convert succeeded", status != (size_t)-1);
-
-  if (hostByteOrder() != littleEndian) {
-    OMByte* s = reinterpret_cast<OMByte*>(&sig);
-    size_t size = sizeof(OMUniqueObjectIdentification);
-    OMUniqueObjectIdentificationType::instance()->reorder(s, size);
-  }
-
-  FILE* f = fopen(cFileName, "rb+");
-  ASSERT("File exists", f != 0);
-  status = fseek(f, 8, SEEK_SET);
-  ASSERT("Seek succeeded", status == 0);
-  status = fwrite(&sig, sizeof(sig), 1, f);
-  ASSERT("Write succeeded", status == 1);
-
-  fclose(f);
-}
-
   // @mfunc Read the signature from the given file.
   //   @parm The file name.
   //   @parm The signature.
@@ -925,29 +886,6 @@ void OMFile::readSignature(const wchar_t* fileName,
     size_t size = sizeof(OMUniqueObjectIdentification);
     OMUniqueObjectIdentificationType::instance()->reorder(s, size);
   }
-}
-
-  // @mfunc Write the signature to the given raw storage.
-  //   @parm The raw storage.
-  //   @parm The signature.
-void OMFile::writeSignature(OMRawStorage* rawStorage,
-                            const OMFileSignature& signature)
-{
-  TRACE("OMFile::writeSignature");
-
-  OMFileSignature sig = signature;
-  if (hostByteOrder() != littleEndian) {
-    OMByte* s = reinterpret_cast<OMByte*>(&sig);
-    size_t size = sizeof(OMUniqueObjectIdentification);
-    OMUniqueObjectIdentificationType::instance()->reorder(s, size);
-  }
-
-  OMUInt32 count;
-  rawStorage->writeAt(8,
-                      reinterpret_cast<const OMByte*>(&sig),
-                      sizeof(sig),
-                      count);
-  ASSERT("All bytes written", count == sizeof(sig));
 }
 
   // @mfunc Read the signature from the given raw storage.
