@@ -43,7 +43,7 @@
 #define OM_OS_MACOSX
 #elif defined(__GNUC__) && defined(__ppc__) && defined(__APPLE__)
 #define OM_COMPILER_GCC_PPC_MACOSX
-#define OM_OS_MACOSX
+#define OM_OS_UNIX
 #elif defined(__GNUC__) && defined(__mips__) && defined(__sgi__)
 #define OM_COMPILER_GCC_MIPS_SGI
 #define OM_OS_UNIX
