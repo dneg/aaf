@@ -12,6 +12,11 @@
 // multi-line macro expansions, and is portable across platforms.
 //
 
+#if defined(macintosh)
+#define _MAC
+#endif
+
+
 #define DEBUG 0
 
 
@@ -26,8 +31,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#if !defined(macintosh)
 #include <assert.h>
-
+#endif
 
 static void printHelp ()
 {
@@ -133,8 +139,11 @@ static TextStream UnEscape
   return out;
 }
 
-
+#if defined(_MAC)
+void main(int argc,char *argv[],char */*envp[]*/)
+#else
 void main (int argc, char ** argv)
+#endif
 {
   const char * command = argv[0];
 
