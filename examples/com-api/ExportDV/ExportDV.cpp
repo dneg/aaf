@@ -257,23 +257,13 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, bool comp_enable)
 	// Set Format specifiers that describe the essence data
 	aafInt32 YUV_pixel = kAAFColorSpaceYUV;
 	aafInt32 horiz_sub_sampling;
-	aafInt32 frame_layout = kAAFSeparateFields;
 	aafRect_t stored_rect;
 	aafRect_t pal_stored_rect = {0, 0, 720, 576/2};
 	aafRect_t ntsc_stored_rect = {0, 0, 720, 480/2};
 	aafInt32 frameSize;
 	aafUID_t compression = NIL_UID;
 
-	if (useLegacyDV)
-	{
-		// Behaviour of applications using LegacyDV require the incorrect
-		// MixedFields setting
-		frame_layout = kAAFMixedFields;
-
-		// Note that the kAAFLegacyDV format specifier is used to select Legacy DV
-		// rather than passing a compression id to the kAAFCompression format specifier.
-	}
-	else
+	if (! useLegacyDV)
 	{
 		// compression is passed to the kAAFCompression format specifier
 		if (formatPAL)
@@ -306,11 +296,13 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, bool comp_enable)
 	check(pEssenceAccess->GetEmptyFileFormat(&pFormat));
 	check(pFormat->AddFormatSpecifier(kAAFPixelFormat, 4, (unsigned char *) &YUV_pixel));
 	check(pFormat->AddFormatSpecifier(kAAFCDCIHorizSubsampling, 4 ,(unsigned char *) &horiz_sub_sampling));
-	check(pFormat->AddFormatSpecifier(kAAFFrameLayout, 4, (unsigned char *) &frame_layout));
 	check(pFormat->AddFormatSpecifier(kAAFStoredRect, 16, (unsigned char *) &stored_rect));
-	check(pFormat->AddFormatSpecifier(kAAFFrameLayout, 4, (unsigned char *) &frame_layout));
 	if (useLegacyDV)
 	{
+		// kAAFLegacyDV performs many steps including
+		// - setting CompressionID to the same legacy value for all frame dimensions
+		// - extends CDCI descriptor with 6 legacy properties
+		// - forces FrameLayout to have the incorrect legacy value of MixedFields
 		check(pFormat->AddFormatSpecifier(kAAFLegacyDV, 2, (unsigned char *) &useLegacyDV));
 	}
 	else
