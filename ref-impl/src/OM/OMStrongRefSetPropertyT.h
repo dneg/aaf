@@ -271,6 +271,28 @@ void OMStrongReferenceSetProperty<ReferencedObject>::appendValue(
   insert(value);
 }
 
+  // @mfunc Remove the <p ReferencedObject> identified by
+  //        <p identification> from this <c OMStrongReferenceSetProperty>.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          (contained) object. This type must be a descendant of
+  //          <c OMStorable>.
+  //   @parm The unique identification of the object to be removed, the
+  //         search key.
+  //   @rdesc A pointer to the removed <p ReferencedObject>. If lazy
+  //          loading is enabled and the referenced object was never
+  //          loaded the value returned is 0.
+template <typename ReferencedObject>
+ReferencedObject*
+OMStrongReferenceSetProperty<ReferencedObject>::remove(
+                            const OMUniqueObjectIdentification& identification)
+{
+  TRACE("OMStrongReferenceSetProperty<ReferencedObject>::remove");
+
+  ASSERT("Unimplemented code not reached", false);
+
+  return 0;
+}
+
   // @mfunc Remove <p object> from this
   //        <c OMStrongReferenceSetProperty>.
   //   @tcarg class | ReferencedObject | The type of the referenced

@@ -401,6 +401,65 @@ void OMStrongReferenceVectorProperty<ReferencedObject>::removeValue(
   ASSERT("Unimplemented code not reached", false);
 }
 
+  // @mfunc Remove the object from this
+  //        <c OMStrongReferenceVectorProperty> at position <p index>.
+  //        Existing objects in this <c OMStrongReferenceVectorProperty>
+  //        at <p index> + 1 and higher are shifted down one index
+  //        position.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          (contained) object. This type must be a descendant of
+  //          <c OMStorable>.
+  //   @parm The position from which to remove the <p ReferencedObject>.
+  //   @rdesc A pointer to the removed <p ReferencedObject>. If lazy
+  //          loading is enabled and the referenced object was never
+  //          loaded the value returned is 0.
+template <typename ReferencedObject>
+ReferencedObject*
+OMStrongReferenceVectorProperty<ReferencedObject>::removeAt(const size_t index)
+{
+  TRACE("OMStrongReferenceVectorProperty<ReferencedObject>::removeLast");
+
+  ASSERT("Unimplemented code not reached", false);
+
+  return 0;
+}
+
+  // @mfunc Remove the last (index == count() - 1) object
+  //        from this <c OMStrongReferenceVectorProperty>.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          (contained) object. This type must be a descendant of
+  //          <c OMStorable>.
+  //   @rdesc A pointer to the removed <p ReferencedObject>. If lazy
+  //          loading is enabled and the referenced object was never
+  //          loaded the value returned is 0.
+template <typename ReferencedObject>
+ReferencedObject*
+OMStrongReferenceVectorProperty<ReferencedObject>::removeLast(void)
+{
+  TRACE("OMStrongReferenceVectorProperty<ReferencedObject>::removeLast");
+
+  return removeAt(count() - 1);
+}
+
+  // @mfunc Remove the first (index == 0) object
+  //        from this <c OMStrongReferenceVectorProperty>. Existing
+  //        objects in this <c OMStrongReferenceVectorProperty> are
+  //        shifted down one index position.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          (contained) object. This type must be a descendant of
+  //          <c OMStorable>.
+  //   @rdesc A pointer to the removed <p ReferencedObject>. If lazy
+  //          loading is enabled and the referenced object was never
+  //          loaded the value returned is 0.
+template <typename ReferencedObject>
+ReferencedObject*
+OMStrongReferenceVectorProperty<ReferencedObject>::removeFirst(void)
+{
+  TRACE("OMStrongReferenceVectorProperty<ReferencedObject>::removeFirst");
+
+  return removeAt(0);
+}
+
   // @mfunc The index of the <p ReferencedObject*> <p object>.
   //   @tcarg class | ReferencedObject | The type of the referenced
   //          (contained) object. This type must be a descendant of

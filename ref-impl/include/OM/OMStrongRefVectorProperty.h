@@ -114,6 +114,23 @@ public:
     //          <c OMStrongReferenceVectorProperty>.
   void removeValue(const ReferencedObject* object);
 
+    // @cmember Remove the object from this
+    //          <c OMStrongReferenceVectorProperty> at position <p index>.
+    //          Existing objects in this <c OMStrongReferenceVectorProperty>
+    //          at <p index> + 1 and higher are shifted down one index
+    //          position.
+  ReferencedObject* removeAt(const size_t index);
+
+    // @cmember Remove the last (index == count() - 1) object
+    //          from this <c OMStrongReferenceVectorProperty>.
+  ReferencedObject* removeLast(void);
+
+    // @cmember Remove the first (index == 0) object
+    //          from this <c OMStrongReferenceVectorProperty>. Existing
+    //          objects in this <c OMStrongReferenceVectorProperty> are
+    //          shifted down one index position.
+  ReferencedObject* removeFirst(void);
+
     // @cmember The index of the <p ReferencedObject*> <p object>.
   size_t indexOfValue(const ReferencedObject* object) const;
 

@@ -83,6 +83,10 @@ public:
     //          this <c OMStrongReferenceSetProperty>.
   void appendValue(const ReferencedObject*& value);
 
+    // @cmember Remove the <p ReferencedObject> identified by
+    //          <p identification> from this <c OMStrongReferenceSetProperty>.
+  ReferencedObject* remove(const OMUniqueObjectIdentification& identification);
+
     // @cmember Remove <p object> from this
     //          <c OMStrongReferenceSetProperty>.
   void removeValue(const ReferencedObject* object);
