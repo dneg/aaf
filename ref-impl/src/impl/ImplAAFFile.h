@@ -15,10 +15,6 @@
 #include "ImplAAFRoot.h"
 
 
-
-
-
-
 //
 // Forward declaration
 //
@@ -113,5 +109,15 @@ private:
   aafProductIdentification_t _ident;
 };
 
-#endif // ! __ImplAAFFile_h__
+//
+// smart pointer
+//
 
+#ifndef __ImplAAFSmartPointer_h__
+// caution! includes assert.h
+#include "ImplAAFSmartPointer.h"
+#endif
+
+typedef ImplAAFSmartPointer<ImplAAFFile> ImplAAFFileSP;
+
+#endif // ! __ImplAAFFile_h__
