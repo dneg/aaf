@@ -66,6 +66,16 @@ OMMemoryRawStorage::~OMMemoryRawStorage(void)
   }
 }
 
+  // @mfunc Is it possible to read from this <c OMMemoryRawStorage> ?
+  //  @rdesc True if this <c OMMemoryRawStorage> is readable, false otherwise.
+  //  @this const
+bool OMMemoryRawStorage::isReadable(void) const
+{
+  TRACE("OMMemoryRawStorage::isReadable");
+
+  return true;
+}
+
   // @mfunc Is it possible to write to this <c OMMemoryRawStorage> ?
   //  @rdesc True if this <c OMMemoryRawStorage> is writable, false otherwise.
   //  @this const
