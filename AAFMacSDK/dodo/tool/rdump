@@ -1,0 +1,29 @@
+# Wrapper for calling the low-level dumper filtering out
+# selected properties so that the outpout can be used
+# for regression tests.
+
+if "" == "{1}" 
+	echo "# Error: there must be one argument."
+	exit 1
+end
+
+if "" == "`exists -f "{1}"`"
+	echo "# Error: the argument must be a valid file name."
+	exit 2
+end
+
+# 1101 = SourceReference::SourceID
+# 2701 = EssenceData::MobID
+# 3b02 = Header::LastModified
+
+# 3c06 = Identification::Date
+# 3c09 = Identification::GenerationAUID
+
+# 4401 = Mob::MobID
+# 4404 = Mob::LastModified
+# 4405 = Mob::TimeStamp
+#
+
+# Run the filtered dump for the regression test.
+#ccommand dump -a -p -s -z 1101 -z 2701 -z 3b02 -z 4401 -z 4404 -z 4405 "{1}"
+(ccommand dump -a -p -s -z 1101 -z 2701 -z 3b02 -z 3c06 -z 3c09 -z 4401 -z 4404 -z 4405 "{1}" | perl -p -e 's/{[0-9a-f]+}/{X}/g;' -e 's/^[ ]+[0-9a-f]+ : +[0-9a-f]+/       X :          X/g;')
