@@ -355,7 +355,7 @@ static void ReadAAFFile(aafWChar * pFileName)
                   else
                     printf("    It is a source mob, but not a file source mob\n");
 
-                  numLocators = -1;
+                  numLocators = 0;
                   hr = essenceDesc->CountLocators(&numLocators);
                   check(hr); // display error message
                   if(SUCCEEDED(hr))
