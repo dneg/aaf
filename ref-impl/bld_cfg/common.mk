@@ -45,4 +45,4 @@ baseclean:
 	${RM} -f .depend.mk*
 	${RM} -f .objects.*.txt .testobjs.*.txt
 	${RM} -f .comtestobjs.*.txt
-	${RM} -f .cmake.state *.core core
+	${RM} -f *.core core

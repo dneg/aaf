@@ -3,6 +3,8 @@
 
 /******************************************\
 *                                          *
+* Advanced Authoring Format                *
+*                                          *
 * Copyright (c) 1998 Avid Technology, Inc. *
 *                                          *
 \******************************************/
@@ -17,10 +19,6 @@
 /*
 
 Macros defined here:
-
-AAF_BUILD_CONFIG_BUILTIN_BOOL
-	- is defined to be non-zero if this platform/compiler supports
-	  a built-in bool type.
 
 AAF_BUILD_CONFIG_ASSY_POWERPC
 	- is defined to be non-zero if this platform supports PowerPC
@@ -55,25 +53,6 @@ AAF_BUILD_CONFIG_EXTERN_C_TRAILER
  */
 
 
-/*
- * So far the following compilers don't have bool:
- *  SGI
- *  MS VC++ 4.2 or earlier (_MSC_VER == 1020 for 4.2)
- */
-#if ! (__sgi || (_MSC_VER <= 1020))
-  #define AAF_BUILD_CONFIG_BUILTIN_BOOL	1
-#endif
-
-/*
- * However! some compilers which don't have bool have the infuriating
- * characteristic that they still reserve the bool keyword.  Most
- * notably, this occurs in MSVC++4.2.  Of course, all compilers which
- * _do_ have bool also have the keyword reserved.
- */
-#if ! (__sgi)
-  #define AAF_BUILD_CONFIG_BOOL_RESERVED 1
-#endif
-
 #if __cplusplus
   #define AAF_BUILD_CONFIG_CPLUSPLUS 1
 #endif
@@ -88,3 +67,17 @@ AAF_BUILD_CONFIG_EXTERN_C_TRAILER
 
 
 #endif /* ! _aaf_tk_bld_cfg_bld_cfg_h_ */
+
+
+
+///////////////////////////
+// Emacs formatting info //
+///////////////////////////
+
+
+/* INDENT OFF */
+/*
+;;; Local Variables: ***
+;;; tab-width:4 ***
+;;; End: ***
+*/
