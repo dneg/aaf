@@ -93,7 +93,7 @@ OMStrongReferenceSetProperty<UniqueIdentification,
   // create a set index
   //
   size_t count = _set.count();
-  OMUInt32 keySize = sizeof(OMUniqueObjectIdentification);
+  OMUInt32 keySize = sizeof(UniqueIdentification);
   OMStoredSetIndex* index = new OMStoredSetIndex(count,
                                                  _keyPropertyId,
                                                  keySize);
