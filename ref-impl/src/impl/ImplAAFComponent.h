@@ -5,6 +5,9 @@
 
 
 class ImplAAFDataDef;
+class ImplAAFMob;
+class ImplAAFMobSlot;
+class ImplAAFEffectDef;
 
 
 /******************************************\
@@ -22,6 +25,8 @@ class ImplAAFDataDef;
 #ifndef __ImplAAFObject_h__
 #include "ImplAAFObject.h"
 #endif
+
+//#include "ImplAAFMob.h"
 
 #include "OMProperty.h"
 
@@ -77,6 +82,20 @@ public:
 	AAFRESULT SetNewProps(
 				aafLength_t length,		// IN - Length  property value
 				aafUID_t *dataDef);		// IN - DataDef property value
+	virtual AAFRESULT AccumulateLength(aafLength_t *length);
+	virtual AAFRESULT GetMinimumBounds(aafPosition_t rootPos, aafLength_t rootLen,
+										ImplAAFMob *mob, ImplAAFMobSlot *track,
+										aafMediaCriteria_t *mediaCrit,
+										aafPosition_t currentObjPos,
+										aafEffectChoice_t *effectChoice,
+										ImplAAFComponent	*prevObject,
+										ImplAAFComponent *nextObject,
+#ifdef FULL_TOOLKIT
+										AAFScopeStack *scopeStack,
+#endif
+										aafPosition_t *diffPos, aafLength_t *minLength,
+										ImplAAFEffectDef **effeObject, aafInt32	*nestDepth,
+										ImplAAFComponent **found, aafBool *foundTransition);
 
   // Declare the module test method. The implementation of the will be be
   // in /test/ImplAAFComponentTest.cpp.
