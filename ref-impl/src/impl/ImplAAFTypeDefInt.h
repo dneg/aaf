@@ -166,6 +166,11 @@ public:
   aafBool IsRegistered (void) const;
   size_t NativeSize (void) const;
 
+  virtual OMProperty * 
+    pvtCreateOMPropertyMBS (OMPropertyId pid,
+							const char * name) const;
+
+
 private:
   // the size of this integer type in bytes
   OMFixedSizeProperty<aafUInt8> _size;
@@ -173,5 +178,16 @@ private:
   // true if this integer type is signed; false for unsigned
   OMFixedSizeProperty<aafBool>   _isSigned;
 };
+
+//
+// smart pointer
+//
+
+#ifndef __ImplAAFSmartPointer_h__
+// caution! includes assert.h
+#include "ImplAAFSmartPointer.h"
+#endif
+
+typedef ImplAAFSmartPointer<ImplAAFTypeDefInt> ImplAAFTypeDefIntSP;
 
 #endif // ! __ImplAAFTypeDefInt_h__

@@ -162,4 +162,15 @@ private:
   OMVariableSizeProperty<aafUID_t> _descriptors;
 };
 
+//
+// smart pointer
+//
+
+#ifndef __ImplAAFSmartPointer_h__
+// caution! includes assert.h
+#include "ImplAAFSmartPointer.h"
+#endif
+
+typedef ImplAAFSmartPointer<ImplAAFDefObject> ImplAAFPropDefObjectSP;
+
 #endif // ! __ImplAAFDefObject_h__

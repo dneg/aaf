@@ -280,6 +280,10 @@ private:
   // registered, will be determined from PropValSize()s.
   aafUInt32 * _internalSizes;
 
+  ImplAAFTypeDefSP * _cachedMemberTypes;
+
+  aafUInt32          _cachedCount;
+
 public:
   // Declare this class to be storable.
   //
@@ -287,10 +291,25 @@ public:
 
   // overrides from ImplAAFTypeDef
   //
-  virtual aafBool IsFixedSize (void) const;
-  virtual size_t PropValSize (void) const;
+  aafBool IsFixedSize (void) const;
+  size_t PropValSize (void) const;
   aafBool IsRegistered (void) const;
   size_t NativeSize (void) const;
+
+  virtual OMProperty * 
+    pvtCreateOMPropertyMBS (OMPropertyId pid,
+							const char * name) const;
 };
+
+//
+// smart pointer
+//
+
+#ifndef __ImplAAFSmartPointer_h__
+// caution! includes assert.h
+#include "ImplAAFSmartPointer.h"
+#endif
+
+typedef ImplAAFSmartPointer<ImplAAFTypeDefRecord> ImplAAFTypeDefRecordSP;
 
 #endif // ! __ImplAAFTypeDefRecord_h__

@@ -53,7 +53,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     GetType
         // @parm [out] type of elements in this array
-        (ImplAAFTypeDef ** ppTypeDef);
+        (ImplAAFTypeDef ** ppTypeDef) const;
 
 
   //****************
@@ -129,9 +129,26 @@ public:
                            size_t internalBytesSize,
                            OMByteOrder byteOrder) const;
 
+
+  // overrides from ImplAAFTypeDef
+  //
+  aafBool IsFixedSize (void) const;
+  size_t PropValSize (void) const;
+  aafBool IsRegistered (void) const;
+  size_t NativeSize (void) const;
+
+  virtual OMProperty * 
+    pvtCreateOMPropertyMBS (OMPropertyId pid,
+							const char * name) const;
+
+
 private:
   // OMWeakReferenceProperty<ImplAAFTypeDef> _ElementType;
   OMFixedSizeProperty<aafUID_t>           _ElementType;
+
+  ImplAAFTypeDefSP _cachedBaseType;
+
+  ImplAAFTypeDefSP BaseType (void) const;
 
 
 public:
@@ -139,5 +156,12 @@ public:
   //
   OMDECLARE_STORABLE(ImplAAFTypeDefString)
 };
+
+#ifndef __ImplAAFSmartPointer_h__
+// caution! includes assert.h
+#include "ImplAAFSmartPointer.h"
+#endif
+
+typedef ImplAAFSmartPointer<ImplAAFTypeDefString> ImplAAFTypeDefStringSP;
 
 #endif // ! __ImplAAFTypeDefString_h__
