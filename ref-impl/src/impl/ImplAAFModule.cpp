@@ -732,6 +732,18 @@ STDAPI ImplAAFFileIsAAFFile (
   if (pFileIsAAFFile == 0)
     return AAFRESULT_NULL_PARAM;
 
+  // Crude file existance check.  May be better done in 
+  // OMMSSStoredObjectFactory::isRecognized(OMRawStorage* rawStorage) but
+  // reporting the right HRESULT is difficult from there.
+  // There may also be another reason for failing to open the file than
+  // non-existance. e.g. permissions problems.
+  // A better description of the problem may be "Cannot read from file."
+  FILE* f = wfopen(pFileName, L"rb");
+  if(f == 0)
+    return AAFRESULT_FILE_NOT_FOUND;
+  
+  fclose(f);
+ 
   HRESULT hr = S_OK;
 
   OMStoredObjectEncoding encoding;
