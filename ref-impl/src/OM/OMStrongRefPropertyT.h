@@ -449,6 +449,7 @@ void OMStrongReferenceProperty<ReferencedObject>::deepCopyTo(
   ASSERT("Valid source", source != 0);
   OMStorable* d = source->shallowCopy();
   dest->setObject(d);
+  d->onCopy(clientContext);
   source->deepCopyTo(d, clientContext);
 }
 

@@ -1002,6 +1002,7 @@ void OMStrongReferenceVectorProperty<ReferencedObject>::deepCopyTo(
     OMStorable* source = element.getValue();
     OMStorable* d = source->shallowCopy();
     dest->insertObject(d);
+    d->onCopy(clientContext);
     source->deepCopyTo(d, clientContext);
   }
 }
