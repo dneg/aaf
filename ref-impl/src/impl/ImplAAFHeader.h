@@ -16,6 +16,8 @@
 
 class ImplAAFMob;
 
+class ImplAAFMedia;
+
 class ImplEnumAAFMobs;
 
 class ImplEnumAAFMedia;
@@ -86,20 +88,24 @@ public:
 
 
   //****************
-  // GetPrimaryMobs()
+  // EnumAAFPrimaryMobs()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetPrimaryMobs
-        (ImplEnumAAFMobs ** ppEnum);  //@parm [out,retval] Mob Enumeration
+    EnumAAFPrimaryMobs
+		// @parm [out,retval] Mob Enumeration
+        (ImplEnumAAFMobs ** ppEnum);
 
 
   //****************
-  // GetMobs()
+  // EnumAAFAllMobs()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetMobs
-        (aafSearchCrit_t *  pSearchCriteria,   //@parm [in,ref] Search Criteria for enumeration
-		 ImplEnumAAFMobs ** ppEnum);  //@parm [out,retval] Mob Enumeration
+    EnumAAFAllMobs
+	    (// @parm [in,ref] Search Criteria for enumeration
+         aafSearchCrit_t *  pSearchCriteria,
+
+		 // @parm [out,retval] Mob Enumeration
+		 ImplEnumAAFMobs ** ppEnum);
 
 
   //****************
@@ -130,13 +136,33 @@ public:
 
 
   //****************
-  // GetMedia()
+  // EnumAAFMediaObjects()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetMedia
-        (aafMediaCriteria_t *  pMediaCriteria,   //@parm [in,ref] Media Criteria for enumeration
-		 ImplEnumAAFMedia ** ppEnum);  //@parm [out,retval] Media Enumeration
+    EnumAAFMediaObjects
+	    (// @parm [in,ref] Media Criteria for enumeration
+         aafMediaCriteria_t *  pMediaCriteria,
 
+		 // @parm [out,retval] Media Enumeration
+		 ImplEnumAAFMedia ** ppEnum);
+
+
+  //****************
+  // AppendMedia()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    AppendMedia
+		// @parm [in] Media object to append
+        (ImplAAFMedia * pMedia);
+
+
+  //****************
+  // RemoveMedia()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    RemoveMedia
+		// @parm [in] Media object to remove
+        (ImplAAFMedia * pMedia);
 
 
   //****************
@@ -157,29 +183,52 @@ public:
 
 
   //****************
-  // GetIdentification()
+  // GetIdentificationByGen()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetIdentification
-        (aafUID_t *  pGeneration,   //@parm [in,ref] Unique Generation ID
-		 ImplAAFIdentification ** ppIdentification);  //@parm [out,retval] Indentification Object
+    GetIdentificationByGen
+	    (// @parm [in,ref] Unique Generation ID
+         aafUID_t *  pGeneration,
+
+		 // @parm [out,retval] Indentification Object
+		 ImplAAFIdentification ** ppIdentification);
 
 
   //****************
-  // GetIdentificationList()
+  // EnumAAFIdents()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetIdentificationList
-        (ImplEnumAAFIdentifications ** ppEnum);  //@parm [out,retval] Indentification Enumeration
+    EnumAAFIdents
+		// @parm [out,retval] Indentification Enumeration
+        (ImplEnumAAFIdentifications ** ppEnum);
 
 
 
   //****************
-  // GetToolkitVersion()
+  // AppendIdentification()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetToolkitVersion
-        (aafProductVersion_t *  pToolkitVersion);  //@parm [out,retval] The Toolkit Version
+    AppendIdentification
+		// @parm [in] Identification to append
+        (ImplAAFIdentification * pIdent);
+
+
+  //****************
+  // RemoveIdentification()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    RemoveIdentification
+		// @parm [in] Identification to remove
+        (ImplAAFIdentification * pIdent);
+
+
+  //****************
+  // GetRefImplVersion()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetRefImplVersion
+		// @parm [out,retval] The Toolkit Version
+        (aafProductVersion_t *  pToolkitVersion);
 
 
   //****************
@@ -190,14 +239,6 @@ public:
         (aafVersionType_t *  pRevision);  //@parm [out,retval] The Toolkit Version
 
 	
-  //****************
-  // GetByteOrder()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    GetByteOrder
-        (aafInt16 *  pByteOrder);  //@parm [out,retval] The Byte order
-
-
   //****************
   // GetLastModified()
   //
@@ -215,7 +256,7 @@ public:
 	aafBool IsMediaDataPresent( 	aafUID_t				fileMobUid,	/* IN -- */
 									aafFileFormat_t	fmt);
 	AAFRESULT AppendDataObject(aafUID_t mobID,      /* IN - Mob ID */
-						  AAFObject *dataObj) ;    /* IN - Input Mob */ 
+						  ImplAAFObject *dataObj) ;    /* IN - Input Mob */ 
 
 AAFRESULT SetToolkitRevisionCurrent(void);
 AAFRESULT IsValidHeadObject(void);
