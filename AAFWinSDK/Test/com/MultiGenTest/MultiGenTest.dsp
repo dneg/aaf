@@ -102,6 +102,10 @@ SOURCE=..\..\..\..\test\com\MultiGenTest\MultiGenTests\FindMasterMob.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\..\test\com\MultiGenTest\MultiGenTests\LoadLib.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\..\test\com\MultiGenTest\MultiGenTests\noop.cpp
 # End Source File
 # End Group

@@ -494,6 +494,9 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name InfoDumper
     End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name MultiGenTest
+    End Project Dependency
 }}}
 
 ###############################################################################
@@ -525,10 +528,7 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name AAFIID
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name AAFLIB
+    Project_Dep_Name MakeSDK
     End Project Dependency
 }}}
 
