@@ -25,6 +25,9 @@
  *
  ************************************************************************/
 
+#include <stdlib.h>
+#include <string.h>
+
 #include "AAF.h"
 
 #include "CAAFBuiltinDefs.h"

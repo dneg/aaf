@@ -41,7 +41,9 @@
 #include <iostream.h>
 #include <iomanip.h>
 #include <fstream.h>
+#include <stdlib.h>
 #include <stdio.h> // for sprintf()
+#include <string.h>
 
 #ifndef __AAFSmartPointer_h__
 #include "AAFSmartPointer.h"

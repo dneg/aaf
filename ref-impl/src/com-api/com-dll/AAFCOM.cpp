@@ -47,7 +47,7 @@ extern "C" const char * AAFGetLibraryPluginPrefix();
 #include "CAAFInProcServer.h"
 #include "ImplAAFContext.h"
 
-CAAFInProcServer g_AAFInProcServer;
+static CAAFInProcServer g_AAFInProcServer;
 CAAFServer* g_pAAFServer = &g_AAFInProcServer;
 
 
@@ -58,6 +58,7 @@ CAAFServer* g_pAAFServer = &g_AAFInProcServer;
 #include "AAF_i.c"
 #include "AAFPrivate_i.c"
 
+#include <string.h>
 
 #if defined(_MAC)
 
@@ -106,7 +107,26 @@ void pascal DllTerminationRoutine();
 #pragma export on
 #endif // #if defined(_MAC)
 
+#if defined(__sgi)
 
+class Initialize {
+public:
+	Initialize();
+	~Initialize();
+};
+
+Initialize::Initialize()
+{
+	// Initialize the inproc server object.
+	g_AAFInProcServer.Init(AAFObjectMap, 0);
+}
+
+Initialize::~Initialize()
+{}
+
+Initialize init;
+
+#endif
 
 #if defined(WIN32) || defined(_WIN32)
 // Include the entry point for the windows dll.

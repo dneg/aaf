@@ -37,8 +37,7 @@
 #include <stdio.h>
 #include <assert.h>
 #include <stdlib.h>
-
-#include "AAFWideString.h"
+#include <wchar.h>
 
 #include "CAAFBuiltinDefs.h"
 
