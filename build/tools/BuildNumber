@@ -36,6 +36,9 @@ usage()
 	echo The \"-bump\" option will increment the build number, edit
         echo AAFSDKBuild.h, and tag the cvs source tree.
 	echo
+	echo The script will refuse to bump the build number if no changed
+	echo files are detected.  The \"-force\" option overrides that behavior. 
+	echo
 	echo The script always checks the consistency of the build number found
  	echo in AAFSDKBuild.h and the latest build tag in the cvs header
  	echo of the same file.  The build number is consistent if the
@@ -60,6 +63,7 @@ usage()
 
 CHECK_CONSISTENCY=1
 BUMP_BUILD_NUMBER=0
+CHECK_FOR_CHANGES=1
 BASE_DIR=.
 
 # For debug and development purposes the consistency check may
@@ -71,6 +75,7 @@ do
 		-basedir  ) BASE_DIR=$2 ; shift ;;
 		-bump     ) BUMP_BUILD_NUMBER=1 ;;
 #		-nocheck  ) CHECK_CONSISTENCY=0 ;;
+		-force    ) CHECK_FOR_CHANGES=0 ;;
 		-h        ) usage ;;
 		-help     ) usage ;;
 		*         ) echo Unrecognized option $1 ; short_usage ; exit 1 ;;
@@ -229,6 +234,29 @@ if [ $CHECK_CONSISTENCY -eq 1 ]; then
     fi
 fi
 
+if [ $CHECK_FOR_CHANGES -eq 1 ]; then
+    # Determine if any files have changed on the repository since tag
+    # was applied.  If not, then do not change the build number (i.e.
+    # exit the script).
+
+    echo CVS_BUILD_TAG=$CVS_BUILD_TAG
+    echo cvs -nq update -r${CVS_BUILD_TAG} logged to ~/tmp/buildnumber.cvs.update.log
+    cvs -nq update -r${CVS_BUILD_TAG} > ~/tmp/buildnumber.cvs.update.log
+    DIFF_COUNT=`grep -v ^\? ~/tmp/buildnumber.cvs.update.log | wc -l`
+    echo $DIFF_COUNT files have changed since ${CVS_BUILD_TAG}:
+
+    grep -v ^\? ~/tmp/buildnumber.cvs.update.log
+
+    if [ $DIFF_COUNT -eq 0 ]; then
+	echo No files have changed since ${CVS_BUILD_TAG}.
+
+	if [ $BUMP_BUILD_NUMBER -eq 1 ]; then
+	    echo -bump option ignored
+	fi
+
+	exit 0
+    fi
+fi
 
 if [ $BUMP_BUILD_NUMBER -eq 1 ]; then
 
