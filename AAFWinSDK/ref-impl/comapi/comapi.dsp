@@ -54,11 +54,6 @@ BSC32=bscmake.exe
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /dll /machine:I386
 # ADD LINK32 kernel32.lib advapi32.lib ole32.lib uuid.lib /nologo /subsystem:windows /dll /machine:I386 /nodefaultlib:"libc.lib" /nodefaultlib:"libcmt.lib" /nodefaultlib:"libcd.lib" /nodefaultlib:"libcmtd.lib" /nodefaultlib:"msvcrtd.lib" /out:"../../Release/RefImpl/AAFCOAPI.dll"
-# Begin Special Build Tool
-SOURCE="$(InputPath)"
-PostBuild_Desc=Registering DLL...
-PostBuild_Cmds=regsvr32 /s ../../Release/RefImpl/AAFCOAPI.dll
-# End Special Build Tool
 
 !ELSEIF  "$(CFG)" == "comapi - Win32 Debug"
 
@@ -86,11 +81,6 @@ LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /dll /debug /machine:I386 /pdbtype:sept
 # ADD LINK32 kernel32.lib advapi32.lib ole32.lib uuid.lib /nologo /subsystem:windows /dll /debug /machine:I386 /nodefaultlib:"libc.lib" /nodefaultlib:"libcmt.lib" /nodefaultlib:"msvcrt.lib" /nodefaultlib:"libcd.lib" /nodefaultlib:"libcmtd.lib" /out:"../../Debug/RefImpl/AAFCOAPI.dll" /pdbtype:sept
 # SUBTRACT LINK32 /incremental:no /map /nodefaultlib
-# Begin Special Build Tool
-SOURCE="$(InputPath)"
-PostBuild_Desc=Registering DLL...
-PostBuild_Cmds=regsvr32 /s ../../Debug/RefImpl/AAFCOAPI.dll
-# End Special Build Tool
 
 !ENDIF 
 
