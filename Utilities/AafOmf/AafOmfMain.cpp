@@ -32,6 +32,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <ctype.h>
 #include <iostream.h>
 #ifdef macintosh
 	#include "DataInput.h"
@@ -64,7 +65,7 @@ namespace OMF2
 #endif
 #include "Aaf2Omf.h"
 #include "Omf2Aaf.h"
-#include "aafclassdefuids.h"
+#include "AAFClassDefUIDs.h"
 #include "EffectTranslate.h"
 
 static char* baseName(char* fullName);
@@ -76,7 +77,7 @@ static char* baseName(char* fullName)
 #elif defined(_MAC) || defined(macintosh)
 	const int delimiter = ':';
 #else
-	const in delimiter = '/';
+	const int delimiter = '/';
 #endif
 	result = strrchr(fullName, delimiter);
 	if (result == 0)
