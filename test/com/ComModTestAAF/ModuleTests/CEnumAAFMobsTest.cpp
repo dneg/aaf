@@ -138,8 +138,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	  checkResult(pMob->SetMobID(TEST_File_MobID));
 	  checkResult(pMob->SetName(L"File Mob"));
 	
- 	  checkResult(defs.cdFileDescriptor()->
-				  CreateInstance(IID_IAAFFileDescriptor, 
+	  // Create a concrete subclass of FileDescriptor
+ 	  checkResult(defs.cdHTMLDescriptor()->
+				  CreateInstance(IID_IAAFEssenceDescriptor, 
 								 (IUnknown **)&edesc));		
 
     checkResult(pSourceMob->SetEssenceDescriptor (edesc));

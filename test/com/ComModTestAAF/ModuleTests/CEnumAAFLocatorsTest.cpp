@@ -131,8 +131,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pMob->SetMobID(TEST_MobID));
 		checkResult(pMob->SetName(L"EssenceDescriptorTest"));
 		
-		// Create the descriptor:
-		checkResult(defs.cdEssenceDescriptor()->
+		// Create a concrete subclass of the descriptor:
+		checkResult(defs.cdHTMLDescriptor()->
 					CreateInstance(IID_IAAFEssenceDescriptor, 
 								   (IUnknown **)&edesc));		
  		checkResult(pSourceMob->SetEssenceDescriptor (edesc));
