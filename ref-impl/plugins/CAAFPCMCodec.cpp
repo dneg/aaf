@@ -1517,15 +1517,9 @@ HRESULT STDMETHODCALLTYPE
 		CHECK(containerDef->QueryInterface(IID_IAAFDefObject, (void **)&defObj));
 		CHECK(defObj->GetAUID(&_containerFormat));
 
-		if (_containerFormat == ContainerRIFFWAVE)
-		{
-			printf("CAAFPCMCodec::MultiCreate() ... _containerFormat == ContainerRIFFWAVE\n");
-		}
-
 		containerDef->Release();
 		defObj->Release();
 
-		//_snddes->Initialize();			// FIXME: meant to be concrete
 		_pcmdes->Initialize();
 
 		mdes->Release();
