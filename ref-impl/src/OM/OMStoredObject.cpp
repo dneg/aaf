@@ -182,6 +182,8 @@ void OMStoredObject::save(const OMPropertySet& properties)
     p->save();
   }
 
+  validate(&properties, _index);
+
   save(_index);
 
 }
@@ -298,6 +300,8 @@ void OMStoredObject::restore(OMPropertySet& properties)
     ASSERT("Valid property", p != 0);
     p->restoreFrom(*this, length);
   }
+
+  validate(&properties, _index);
 
   streamSetPosition(_propertiesStream, 0);
   POSTCONDITION("At start of properties stream",
@@ -577,6 +581,46 @@ OMStoredObject* OMStoredObject::open(const char* name)
   ASSERT("Valid heap pointer", result != 0);
   result->open(_mode);
   return result;
+}
+
+  // @mfunc Check that the <c OMPropertySet> <p propertySet> is
+  //        consistent with the <c OMStoredPropertySetIndex>
+  //        propertySetIndex.
+  //   @parm The <c OMPropertySet> to validate.
+  //   @parm The <c OMStoredPropertySetIndex> to validate.
+void OMStoredObject::validate(
+                        const OMPropertySet* propertySet,
+                        const OMStoredPropertySetIndex* propertySetIndex) const
+{
+  OMPropertyId propertyId;
+  OMUInt32 type;
+  OMUInt32 offset;
+  OMUInt32 length;
+  size_t context;
+
+  // Check that all required properties are present.
+  //
+  size_t count = propertySet->count();
+  context = 0;
+  for (size_t j = 0; j < count; j++) {
+    OMProperty* p = 0;
+    propertySet->iterate(context, p);
+    ASSERT("Valid property", p != 0);
+    propertyId = p->propertyId();
+    bool found = propertySetIndex->find(propertyId, type, offset, length);
+    ASSERT("Required property present", found);
+  }
+
+  // Check that there are no spurious properties.
+  //
+  OMUInt32 entries = propertySetIndex->entries();
+  context = 0;
+  for (size_t k = 0; k < entries; k++) {
+    propertySetIndex->iterate(context, propertyId, type, offset, length);
+    OMProperty* p = propertySet->get(propertyId);
+    ASSERT("Property allowed", p != 0);
+  }
+
 }
 
   // @mfunc  Save the <c OMStoredVectorIndex> <p vector> in this
