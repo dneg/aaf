@@ -33,6 +33,7 @@
 
 template <typename Element>
 class OMContainerIterator;
+class OMStrongReferenceVectorElement;
 
   // @class Persistent elastic sequential collections of strongly
   //        referenced (contained) objects supported by the Object Manager.
@@ -50,6 +51,12 @@ public:
 
     // @cmember Destructor.
   virtual ~OMStrongReferenceVector(void);
+
+  virtual OMContainerIterator<OMStrongReferenceVectorElement>*
+                                                      iterator(void) const = 0;
+
+  virtual void insert(const size_t index,
+                      const OMStrongReferenceVectorElement& element) = 0;
 
     // @cmember Increase the capacity of this
     //          <c OMStrongReferenceVector> so that it
