@@ -69,6 +69,8 @@ inline void checkExpression(bool expression, HRESULT r)
     throw r;
 }
 
+static const aafUID_t DDEF_TEST = 
+{ 0x81831639, 0xedf4, 0x11d3, { 0xa3, 0x53, 0x0, 0x90, 0x27, 0xdf, 0xca, 0x6a } };
 
 class EventMobSlotTest
 {
@@ -257,11 +259,20 @@ IAAFEvent *EventMobSlotTest::CreateAnEvent(aafPosition_t* position,
 
   IAAFEvent *pEvent = NULL;
   IAAFComponent *pComponent = NULL;
+  IAAFDataDef *pDataDef = NULL;
+  IAAFComponent *pComp = NULL;
+  AAFRESULT	hr;
 
   CAAFBuiltinDefs defs (_pDictionary);
 
   try
   {
+	  // not already in dictionary
+		checkResult(defs.cdDataDef()->
+					CreateInstance (IID_IAAFDataDef,
+									(IUnknown **)&pDataDef));
+	  hr = pDataDef->Initialize (DDEF_TEST, L"Test", L"Test data");
+	  hr = _pDictionary->RegisterDataDef (pDataDef);
     // Create an event (note: this will be replaced by a concrete event in a
     // later version after such an event is implemented.)
     checkResult(defs.cdEvent()->
@@ -269,13 +280,17 @@ IAAFEvent *EventMobSlotTest::CreateAnEvent(aafPosition_t* position,
 							   (IUnknown **)&pEvent));
     checkResult(pEvent->SetPosition(*position));
     checkResult(pEvent->SetComment(L"Event::Comment:This is a test event"));
+	checkResult(pEvent->QueryInterface(IID_IAAFComponent, (void **)&pComp));
+	checkResult(pComp->SetDataDef(defs.ddPicture()));
+	pComp->Release();
+	pComp = NULL;
 
     if (NULL != pSequence)
     {
       // Get the segment inteface to add to the mob slot
       checkResult(pEvent->QueryInterface(IID_IAAFComponent, (void **)&pComponent));
 	  CAAFBuiltinDefs defs (_pDictionary);
-	  checkResult(pComponent->SetDataDef(defs.ddPicture()));	// Give a valid but nonsense kind
+	  checkResult(pComponent->SetDataDef(defs.ddPicture()));
 
       // Add the event to the sequence.
       checkResult(pSequence->AppendComponent(pComponent));
@@ -517,7 +532,7 @@ void EventMobSlotTest::CreateEventSequenceMobSlot()
 							   (IUnknown **)&pSequence));
      checkResult(pSequence->QueryInterface(IID_IAAFComponent, (void **)&pComponent));
 
-	 checkResult(pComponent->SetDataDef(defs.ddPicture()));	// Give a valid but nonsense kind
+	 checkResult(pComponent->SetDataDef(defs.ddPicture()));
 	 pComponent->Release();
 	 pComponent = NULL;
 
