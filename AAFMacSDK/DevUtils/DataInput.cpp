@@ -13,7 +13,6 @@ void getInputData(int *pargc, char **argv, char *inputFile)
 	if (ifsCommandLine.is_open()) 
 	{
 		char inputstr[100];
-		char appname[] = "Dummy App Name";
 		int  count = 0;
 
 		/* Determine the number of lines */
@@ -31,8 +30,11 @@ void getInputData(int *pargc, char **argv, char *inputFile)
 		ifsCommandLine.seekg(0);
 
 		count = 0;
-		newstring = new char [strlen(appname)+1];
-		strcpy(newstring, appname);
+		/* Allocate for argv[0] assuming inputFile = AppName.inp */
+		int inputFileLength = strlen(inputFile);
+		newstring = new char [inputFileLength-3];
+		newstring[inputFileLength-4] = NULL;
+		strncpy(newstring, inputFile, inputFileLength-4);
 		argv[0] = newstring;
 
 		/* Get Data */
