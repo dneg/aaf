@@ -1205,7 +1205,7 @@ aafErr_t NewUIDTable(
 			 aafInt32 numBuckets,
 			 aafTable_t **result)
 {
-  return(NewTable(file, sizeof(aafUID_t), UidMap, Uidcompare, numBuckets, 
+  return(NewTable(file, sizeof(aafMobID_t), UidMap, Uidcompare, numBuckets, 
 		      result));
 }	
 
@@ -1229,7 +1229,7 @@ aafErr_t TableAddUID(
 			void *value,
 			aafTableDuplicate_t dup)
 {
-  return(TableAddValuePtr(table, &key, sizeof(aafUID_t), value, dup));
+  return(TableAddValuePtr(table, &key, sizeof(aafMobID_t), value, dup));
 }
 		
 /************************
@@ -1253,7 +1253,7 @@ aafErr_t TableAddUIDBlock(
 			aafInt32 valueLen,
 			aafTableDuplicate_t dup)
 {
-  return(TableAddValueBlock(table, &key, sizeof(aafUID_t), value, valueLen, dup));
+  return(TableAddValueBlock(table, &key, sizeof(aafMobID_t), value, valueLen, dup));
 }
 		
 /************************
@@ -1349,7 +1349,7 @@ static aafInt32 MobidMap(void *temp)
 
 //!!! Need to include in the hash
 //!!!  aafUInt8  Data4[8];
-  return(key->Data1+key->Data2+key->Data3);
+  return(key->material.Data1+key->material.Data2+key->material.Data3);
 }
 
 static aafBool	Mobidcompare(void *temp1, void *temp2)
@@ -1357,8 +1357,15 @@ static aafBool	Mobidcompare(void *temp1, void *temp2)
   aafMobID_t *key1 = (aafMobID_t *)temp1;
   aafMobID_t *key2 = (aafMobID_t *)temp2;
 
-  return( (key1->Data1 == key2->Data1) && (key1->Data2 == key2->Data2) &&
-	 (key1->Data3 == key2->Data3) && (memcmp(key1->Data4, key2->Data4, 8) == 0)
+  return( (key1->material.Data1 == key2->material.Data1) &&
+		  (key1->material.Data2 == key2->material.Data2) &&
+		  (key1->material.Data3 == key2->material.Data3) &&
+		  (memcmp(key1->material.Data4, key2->material.Data4, 8) == 0) && 
+		  (memcmp(key1->SMPTELabel, key2->SMPTELabel, 12) == 0) && 
+		  (key1->length == key2->length) &&
+		  (key1->instanceHigh == key2->instanceHigh) &&
+		  (key1->instanceMid == key2->instanceMid) &&
+		  (key1->instanceLow == key2->instanceLow)
 	 ? kAAFTrue : kAAFFalse);
 }
 
