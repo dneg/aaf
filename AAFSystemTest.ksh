@@ -2,6 +2,7 @@
 
 
 ROOT_DIR="`PWD`"
+LOGFILE=${ROOT_DIR}/SystemTest.log
 
 AAF_FILES_DIR="${ROOT_DIR}/TestAAFFiles"
 SCRIPT_FILES_DIR="${ROOT_DIR}/TestScriptFiles"
@@ -61,30 +62,6 @@ Clean ()
 		print "   ${CleanTarget}TestResults directory does not exist"
 	fi
 }
-
-
-if [ CLEAN -eq 1 ]; then
-	if [ RELEASE -eq 1 ]; then
-		Clean Release
-	fi
-
-	if [ DEBUG -eq 1 ]; then
-		Clean Debug
-	fi
-
-	if [ RELEASE -eq 0 ] && [ DEBUG -eq 0 ]; then
-		Clean Release
-		Clean Debug
-	fi
-	
-	exit 1
-fi
-
-
-LOGFILE=${ROOT_DIR}/SystemTest.log
-print "AAF System Test" >> $LOGFILE
-date >> $LOGFILE
-
 
 
 RegisterTargetDLLs ()
@@ -283,8 +260,6 @@ RunSystemTest ()
 		fi
 	fi
 
-	##Register DLLs and set PATH
-	RegisterTargetDLLs $TARGET "/s"
 	SetPath $TARGET
 
 
@@ -334,7 +309,7 @@ RunSystemTest ()
 	done
 
 
-print "\n--------------------" | tee -a  $LOGFILE
+	print "\n--------------------" | tee -a  $LOGFILE
 	print "Running Examples AAF Files \n" | tee -a  $LOGFILE
 	for AAFfile in $AAFExamplesFilesList; do
 		print "\n   $AAFfile\n" | tee -a $LOGFILE
@@ -359,7 +334,7 @@ print "\n--------------------" | tee -a  $LOGFILE
 	done
 
 
-print "\n--------------------" | tee -a  $LOGFILE
+	print "\n--------------------" | tee -a  $LOGFILE
 	print "Running TestAAFFiles \n" | tee -a  $LOGFILE
 	for AAFfile in $TestAAFFilesList; do
 		print "\n   $AAFfile\n" | tee -a $LOGFILE
@@ -439,16 +414,36 @@ print "\n--------------------" | tee -a  $LOGFILE
 
 	print "\n\n\n"
 
-	## unregister and reset PATH
-	RegisterTargetDLLs $TARGET "/s /u" 
 	ResetPath
 }
 
+############################################
+# Check for CLEAN
+############################################
+if [ CLEAN -eq 1 ]; then
+	if [ RELEASE -eq 1 ]; then
+		Clean Release
+	fi
+
+	if [ DEBUG -eq 1 ]; then
+		Clean Debug
+	fi
+
+	if [ RELEASE -eq 0 ] && [ DEBUG -eq 0 ]; then
+		Clean Release
+		Clean Debug
+	fi
+	
+	exit 1
+fi
 
 
 ############################################
 # Run the System Tests
 ############################################
+print "AAF System Test" >> $LOGFILE
+date >> $LOGFILE
+
 if [ RELEASE -eq 1 ]; then
 	if [ MODTESTS_AND_EXAMPLES -eq 1 ]; then
 		RunModTestAndExamples -r
