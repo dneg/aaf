@@ -182,6 +182,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pHeader->GetDictionary(&pDictionary));
 		CAAFBuiltinDefs defs (pDictionary);
  		
+		checkResult(pDictionary->LookupTypeDef (kAAFTypeID_UInt8Array, &pBaseType));
+		checkResult(pDictionary->RegisterKLVDataKey(TEST_KLV, pBaseType));
+
 		//Make the first mob
 		long	test;
 		aafRational_t	audioRate = { 44100, 1 };
@@ -200,7 +203,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 					CreateInstance(IID_IAAFKLVData, 
 								   (IUnknown **)&pData));
 		checkResult(pDictionary->LookupTypeDef (kAAFTypeID_UInt8Array, &pBaseType));
-		checkResult(pData->Initialize(TEST_KLV, sizeof(KLVfrowney), (unsigned char *)KLVfrowney, pBaseType));
+		checkResult(pData->Initialize(TEST_KLV, sizeof(KLVfrowney), (unsigned char *)KLVfrowney));
 		checkResult(pData->SetValue(sizeof(KLVsmiley), (unsigned char *)KLVsmiley));
 		checkResult(pMob->AppendKLVData (pData));
 		pData->Release();
@@ -210,7 +213,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 					CreateInstance(IID_IAAFKLVData, 
 								   (IUnknown **)&pData));
 		checkResult(pDictionary->LookupTypeDef (kAAFTypeID_UInt8Array, &pBaseType));
-		checkResult(pData->Initialize(TEST_KLV, sizeof(KLVfrowney), (unsigned char *)KLVfrowney, pBaseType));
+		checkResult(pData->Initialize(TEST_KLV, sizeof(KLVfrowney), (unsigned char *)KLVfrowney));
 		checkResult(pData->SetValue(sizeof(KLVsmiley), (unsigned char *)KLVsmiley));
 		checkResult(pMob->AppendKLVData (pData));
 		checkResult(pMob->CountKLVData(&numComments));
@@ -252,7 +255,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 						CreateInstance(IID_IAAFKLVData, 
 								   (IUnknown **)&pData));
 			checkResult(pDictionary->LookupTypeDef (kAAFTypeID_UInt8Array, &pBaseType));
-			checkResult(pData->Initialize(TEST_KLV, sizeof(KLVfrowney), (unsigned char *)KLVfrowney, pBaseType));
+			checkResult(pData->Initialize(TEST_KLV, sizeof(KLVfrowney), (unsigned char *)KLVfrowney));
 			checkResult(pComponent->AppendKLVData (pData));
 			pData->Release();
 			pData = NULL;
@@ -261,7 +264,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 					CreateInstance(IID_IAAFKLVData, 
 								   (IUnknown **)&pData));
 			checkResult(pDictionary->LookupTypeDef (kAAFTypeID_UInt8Array, &pBaseType));
-			checkResult(pData->Initialize(TEST_KLV, sizeof(KLVfrowney), (unsigned char *)KLVfrowney, pBaseType));
+			checkResult(pData->Initialize(TEST_KLV, sizeof(KLVfrowney), (unsigned char *)KLVfrowney));
 			checkResult(pData->SetValue(sizeof(KLVsmiley), (unsigned char *)KLVsmiley));
 			checkResult(pComponent->AppendKLVData (pData));
 			checkResult(pComponent->CountKLVData(&numComments));
@@ -364,6 +367,8 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	IAAFMob			*aMob = NULL;
 	IEnumAAFMobSlots	*slotIter = NULL;
 	IEnumAAFKLVData* pKLVIterator = NULL;
+	IAAFDictionary*		pDictionary = NULL;
+	IAAFTypeDef*		pBaseType = NULL;
 	IAAFKLVData*		pKLVData = NULL;
 	aafUInt32			testKLVLen;
 	aafUID_t			testKey;
@@ -400,6 +405,9 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		criteria.searchTag = kAAFByMobKind;
 		criteria.tags.mobKind = kAAFCompMob;
 
+		checkResult(pHeader->GetDictionary(&pDictionary));
+		checkResult(pDictionary->LookupTypeDef (kAAFTypeID_UInt8Array, &pBaseType));
+		checkResult(pDictionary->RegisterKLVDataKey(TEST_KLV, pBaseType));
 
 		checkResult(pHeader->CountMobs(kAAFCompMob, &numMobs));
 		checkExpression(1 == numMobs, AAFRESULT_TEST_FAILED);
@@ -501,6 +509,12 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 
   if (mobIter)
     mobIter->Release();
+
+  if (pDictionary)
+    pDictionary->Release();
+
+  if (pBaseType)
+    pBaseType->Release();
 
   if (pHeader)
     pHeader->Release();
