@@ -17,3 +17,8 @@
 
 // Define delegation callbacks...
 #define BOB_TEST
+
+// Use DataInput stuff instead of console
+//
+#define USE_DATAINPUT
+
