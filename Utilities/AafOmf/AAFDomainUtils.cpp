@@ -120,17 +120,14 @@ void AAFDomainUtils::AAFAddOnePoint(IAAFDictionary *dict, aafRational_t percentT
 	CHECKAAF(defs.cdControlPoint()->
 			 CreateInstance(IID_IAAFControlPoint,
 							(IUnknown **)&pPoint));
-		
-	CHECKAAF(pPoint->SetTypeDefinition(typeDef));
-	CHECKAAF(pPoint->SetValue(buflen, (unsigned char *)buf));
-	CHECKAAF(pPoint->SetTime(percentTime));
+	CHECKAAF(pPoint->Initialize (pVVal, percentTime, buflen, (aafDataBuffer_t)buf));
 	CHECKAAF(pVVal->AddControlPoint(pPoint));
 //cleanup:
 	if(pPoint != NULL)
 		pPoint->Release();
 }
 
-IAAFParameter *AAFDomainUtils::AAFAddConstantVal(IAAFDictionary *dict, long buflen, void *buf, IAAFOperationGroup *pGroup)
+IAAFParameter *AAFDomainUtils::AAFAddConstantVal(IAAFDictionary *dict, IAAFParameterDef *pParameterDef, long buflen, void *buf, IAAFOperationGroup *pGroup)
 {
 	IAAFConstantValue	*pCVal = NULL;
 	IAAFParameter		*pParm = NULL;
@@ -141,17 +138,19 @@ IAAFParameter *AAFDomainUtils::AAFAddConstantVal(IAAFDictionary *dict, long bufl
 	CHECKAAF(defs.cdConstantValue()->
 			 CreateInstance(IID_IAAFConstantValue,
 							(IUnknown **)&pCVal));
-	CHECKAAF(pCVal->SetValue(buflen, (unsigned char *)buf));
+	CHECKAAF(pCVal->Initialize (pParameterDef, buflen, (unsigned char *)buf));
 	CHECKAAF(pCVal->QueryInterface(IID_IAAFParameter, (void **) &pParm));
 	CHECKAAF(pGroup->AddParameter(pParm));
 //cleanup:
+	if(pParm)
+		pParm->Release();
 	if(pCVal)
 		pCVal->Release();
 
 	return(pParm);
 }
 
-IAAFVaryingValue *AAFDomainUtils::AAFAddEmptyVaryingVal(IAAFDictionary *dict, IAAFOperationGroup *pOutputEffect)
+IAAFVaryingValue *AAFDomainUtils::AAFAddEmptyVaryingVal(IAAFDictionary *dict, IAAFParameterDef *pParameterDef, IAAFOperationGroup *pOutputEffect)
 {
 	IAAFVaryingValue	*pVVal = NULL;
 	IAAFParameter		*pParm = NULL;
@@ -162,24 +161,28 @@ IAAFVaryingValue *AAFDomainUtils::AAFAddEmptyVaryingVal(IAAFDictionary *dict, IA
 	CHECKAAF(defs.cdVaryingValue()->
 			 CreateInstance(IID_IAAFVaryingValue,
 							(IUnknown **)&pVVal));
-	CHECKAAF(pVVal->SetInterpolationDefinition(CreateInterpolationDefinition(
+  AutoRelease<IAAFVaryingValue> arVaryingValue(pVVal);
+  CHECKAAF(pVVal->Initialize (pParameterDef, CreateInterpolationDefinition(
 												dict, LinearInterpolator)));
 	CHECKAAF(pVVal->QueryInterface(IID_IAAFParameter, (void **) &pParm));
-		
 	CHECKAAF(pOutputEffect->AddParameter(pParm));
 //cleanup:
 	if(pParm != NULL)
 		pParm->Release();
+
+  // Since we are using the "auto release" for the return value that
+  // we just created we need to bump the reference count.
+  pVVal->AddRef();
 
 	return(pVVal);
 }
 
 IAAFParameterDef *AAFDomainUtils::CreateParameterDefinition(IAAFDictionary *pDict, aafUID_t parmDefID)
 {
+	IAAFParameterDef	*returnParmDef = NULL;
 	IAAFParameterDef	*parmDef;
 	IAAFTypeDef			*typeDef;
 	AAFRESULT			rc;
-	aafUID_t			typeUID;
 
 //	dprintf("AEffect::CreateParameterDefinition()\n");
 	rc = pDict->LookupParameterDef(parmDefID,&parmDef);
@@ -191,33 +194,31 @@ IAAFParameterDef *AAFDomainUtils::CreateParameterDefinition(IAAFDictionary *pDic
 	CHECKAAF(defs.cdParameterDef()->
 			 CreateInstance(IID_IAAFParameterDef,
 							(IUnknown **)&parmDef));
-
+  AutoRelease<IAAFParameterDef> arParmDef(parmDef);
 	if(memcmp(&parmDefID, &kAAFParameterDefLevel, sizeof(aafUID_t)) == 0)
 	{
-    	CHECKAAF(parmDef->Initialize(parmDefID, L"Level", L"fractional 0-1 inclusive"));
-		typeUID = kAAFTypeID_Rational;
+    	CHECKAAF(pDict->LookupTypeDef(kAAFTypeID_Rational, &typeDef));
+    	AutoRelease<IAAFTypeDef> r1( typeDef );
+    	CHECKAAF(parmDef->Initialize(parmDefID, L"Level", L"fractional 0-1 inclusive", typeDef));
 	}
 	else if(memcmp(&parmDefID, &kAAFParameterDefSMPTEWipeNumber, sizeof(aafUID_t)) == 0)
 	{
-    	CHECKAAF(parmDef->Initialize(parmDefID, L"WipeCode", L"SMPTE Wipe Code"));
-		typeUID = kAAFTypeID_Int32;
+    	CHECKAAF(pDict->LookupTypeDef(kAAFTypeID_Int32, &typeDef));
+    	AutoRelease<IAAFTypeDef> r2( typeDef );
+    	CHECKAAF(parmDef->Initialize(parmDefID, L"WipeCode", L"SMPTE Wipe Code", typeDef));
 	}
-	else
-	{
-		parmDef->Release();
-		parmDef = NULL;
-	}
+  else
+  {
+    // Unrecognized parameter definition. Should we emit a log entry?
+    return NULL;
+  }
 
 	if(parmDef != NULL)
 	{
-		rc = pDict->LookupTypeDef(typeUID,&typeDef);
-		if(rc != AAFRESULT_SUCCESS || typeDef == NULL)
-		{
-			typeDef = CreateTypeDefinition(pDict, typeUID);
-		}
-		CHECKAAF(parmDef->SetTypeDef(typeDef));
-
 		CHECKAAF(pDict->RegisterParameterDef(parmDef));
+    // Since we are using the "auto release" for the return value that
+    // we just created we need to bump the reference count.
+    parmDef->AddRef();
 	}
 //cleanup:
 
