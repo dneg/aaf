@@ -33,7 +33,6 @@
 
 // Dump specific definitions
 //
-// Use DataInput stuff instead of console
-//
+//#define USECONSOLE
 #define USE_DATAINPUT
-
+//#define NODEBUG
