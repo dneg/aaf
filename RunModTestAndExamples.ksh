@@ -1,5 +1,5 @@
 #! C:/mksnt/sh.exe
-#
+# Terry Skotz
 
 CHECK_DEBUG=0
 CHECK_RELEASE=0
