@@ -63,12 +63,10 @@ public:
     //          <p k>.  If the item is found it is returned in
     //          <p v> and the result is true. If the element is not
     //          found the result is false.
-    //   @this const
   bool find(const Key k, Value& v) const;
 
     // @cmember Does this <c OMRdBlackTree> contain an item
     //          identified by <p k>?
-    //   @this const
   bool contains(const Key k) const;
 
     // @cmember Remove the item assciated with <p Key> k from this
@@ -78,26 +76,22 @@ public:
     // @cmember The number of items in this <c OMRedBlackTree>.
     //          <mf OMRedBlackTree::count> returns the actual number
     //          of items in the <c OMRedBlackTree>.
-    //   @this const
   size_t count(void) const;
 
     // @cmember Traverse this <c OMRedBlackTree> in order, the
     //          function <p f> is called for each item in the tree.
-    //   @this const
   void traverseInOrder(void (*f)(size_t height,
                                  Key k,
                                  const Value& v)) const;
 
     // @cmember Traverse this <c OMRedBlackTree> in pre-order, the
     //          function <p f> is called for each item in the tree.
-    //   @this const
   void traverseInPreOrder(void (*f)(size_t height,
                                     Key k,
                                     const Value& v)) const;
 
     // @cmember Traverse this <c OMRedBlackTree> in post-order, the
     //          function <p f> is called for each item in the tree.
-    //   @this const
   void traverseInPostOrder(void (*f)(size_t height,
                                      Key k,
                                      const Value& v)) const;

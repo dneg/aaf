@@ -46,7 +46,6 @@ public:
     //          function for the data type being described. This class
     //          provides static functions to aid in such an implementation.
     //          The bytes to be swapped are assumed to be in external form.
-    // @this const
   virtual void reorder(OMByte* externalBytes,
                        size_t externalBytesSize) const = 0;
 
@@ -57,7 +56,6 @@ public:
     //          implementation of this virtual function for the data
     //          type being described. This class provides static
     //          functions to aid in such an implementation.
-    // @this const
   virtual size_t externalSize(OMByte* internalBytes,
                               size_t internalBytesSize) const = 0;
 
@@ -78,7 +76,6 @@ public:
     //          implementation of this virtual function for the data
     //          type being described. This class provides static
     //          functions to aid in such an implementation.
-    // @this const
   virtual void externalize(OMByte* internalBytes,
                            size_t internalBytesSize,
                            OMByte* externalBytes,
@@ -93,7 +90,6 @@ public:
     //          implementation of this virtual function for the data
     //          type being described. This class provides static
     //          functions to aid in such an implementation.
-    // @this const
   virtual size_t internalSize(OMByte* externalBytes,
                               size_t externalSize) const = 0;
 
@@ -114,7 +110,6 @@ public:
     //          implementation of this virtual function for the data
     //          type being described. This class provides static
     //          functions to aid in such an implementation.
-    // @this const
   virtual void internalize(OMByte* externalBytes,
                            size_t externalBytesSize,
                            OMByte* internalBytes,

@@ -41,22 +41,18 @@ public:
 
     // @cmember The type of the <c OMProperty> defined by this
     //          <c OMPropertyDefinition>.
-    // @this const 
   virtual const OMType* type(void) const = 0;
 
     // @cmember The name of the <c OMProperty> defined by this
     //          <c OMPropertyDefinition>.
-    // @this const 
   virtual const char* name(void) const = 0;
 
     // @cmember The unique identification of the <c OMProperty> defined by
     //          this <c OMPropertyDefinition>.
-    // @this const
   virtual OMPropertyId identification(void) const = 0;
 
     // @cmember Is the <c OMProperty> defined by this
     //          <c OMPropertyDefinition> optional? 
-    //   @this const
   virtual bool isOptional(void) const = 0;
 
 };

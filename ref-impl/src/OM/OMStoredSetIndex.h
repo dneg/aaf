@@ -64,7 +64,6 @@ public:
               const OMUniqueObjectIdentification& key);
 
     // @cmember The number of elements in this <c OMStoredSetIndex>.
-    // @this const
   size_t entries(void) const;
 
     // @cmember Iterate over the elements in this <c OMStoredSetIndex>.

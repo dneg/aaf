@@ -64,25 +64,21 @@ public:
   virtual void insert(const Element value);
 
     // @cmember Does this <c OMSet> contain <p value> ?
-    //   @this const
   virtual bool contains(const Element value) const;
 
     // @cmember Does this <c OMSet> contain an <p Element>
     //          identified by <p key>?
-    //   @this const
   virtual bool containsKey(const Key key) const;
 
     // @cmember Find the <p Element> in this <c OMSet> identified by
     //          <p key>.  If the element is found it is returned in
     //          <p value> and the result is true. If the element is
     //          not found the result is false.
-    //   @this const
   virtual bool find(const Key key, Element& value) const;
 
     // @cmember The number of elements in this <c OMSet>.
     //          <mf OMSet::count> returns the actual number
     //          of elements in the <c OMSet>.
-    //   @this const
   size_t count(void) const;
 
     // @cmember Append the given <p Element> <p value> to
