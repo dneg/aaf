@@ -232,6 +232,7 @@ public:
   CLASS_DEF_METHOD(TypeDefFixedArray);
   CLASS_DEF_METHOD(TypeDefCharacter);
   CLASS_DEF_METHOD(TypeDefIndirect);
+  CLASS_DEF_METHOD(TypeDefOpaque);
   CLASS_DEF_METHOD(TypeDefInt);
   CLASS_DEF_METHOD(TypeDefRecord);
   CLASS_DEF_METHOD(TypeDefRename);
