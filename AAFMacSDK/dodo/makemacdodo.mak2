@@ -3,15 +3,14 @@
 #   Target:     {refh}AAF.h, {refh}AAFPlugin.h, {refh}AAF_i.c, {refh}AAFPlugin_i.c
 #   Sources:    all frefh files
 #
-"{refh}AAF.h" Ä {GENERATED_FREFH}
+"{refh}AAF.h" Ä "{macdodo}macaafobjects.mk" {GENERATED_FREFH}
 	echo "{refh}AAF.h"
 	if "`exists -f "{refh}AAF.h"`"
 		SetFile -a l "{refh}AAF.h"
 		Delete -i -ay "{refh}AAF.h"
 	end
 	( echo "//=--------------------------------------------------------------------------=" ; ¶
-	  echo "// (C) Copyright 1998-1999 Avid Technology." ; ¶
-	  echo "// (C) Copyright 1998-1999 Microsoft Corporation." ; ¶
+	  echo "// (C) Copyright 1998-2000 Avid Technology." ; ¶
 	  echo "//" ; ¶
 	  echo "// This file was GENERATED for the AAF SDK on " ; ¶
 	  echo "//  "`date` ; ¶
@@ -36,15 +35,15 @@
 	  echo '#endif' ; ¶
 	  echo "" ; ¶
 	  echo '#ifdef __cplusplus' ; ¶
-	  for class in {DODO_TARGET_NAMES} {AAFCOMINTERFACESONLY} ; ¶
+	  for class in {AAFOBJECTS} {AAFCOMINTERFACESONLY} ; ¶
 	      echo "interface I{class};" ; ¶
 	  end ; ¶
 	  echo '#else' ; ¶
-	  for class in {DODO_TARGET_NAMES} {AAFCOMINTERFACESONLY} ; ¶
+	  for class in {AAFOBJECTS} {AAFCOMINTERFACESONLY} ; ¶
 	      echo "typedef interface I{class} I{class};" ; ¶
 	  end ; ¶
 	  echo '#endif' ; ¶
-	  for class in {DODO_TARGET_NAMES} {AAFCOMINTERFACESONLY} ; ¶
+	  for class in {AAFOBJECTS} {AAFCOMINTERFACESONLY} ; ¶
 	      echo "" ; ¶
 	      echo "// I{class}" ; ¶
 	      echo "" ; ¶
@@ -60,15 +59,62 @@
 	SetFile -t TEXT -c CWIE -a L "{refh}AAF.h"
 
 
-"{refh}AAFPlugin.h" Ä {PLUGIN_FREFH_TARGETS}
+"{comh}AAFPrivate.h" Ä "{macdodo}macaafobjects.mk" {GENERATED_PRIVATE_FREFH}
+	echo "{comh}AAFPrivate.h"
+	if "`exists -f "{comh}AAFPrivate.h"`"
+		SetFile -a l "{comh}AAFPrivate.h"
+		Delete -i -ay "{comh}AAFPrivate.h"
+	end
+	( echo "//=--------------------------------------------------------------------------=" ; ¶
+	  echo "// (C) Copyright 1998-2000 Avid Technology." ; ¶
+	  echo "//" ; ¶
+	  echo "// This file was GENERATED for the AAF SDK on " ; ¶
+	  echo "//  "`date` ; ¶
+	  echo "//" ; ¶
+	  echo "// THIS CODE AND INFORMATION IS PROVIDED 'AS IS' WITHOUT WARRANTY OF" ; ¶
+	  echo "// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO" ; ¶
+	  echo "// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A" ; ¶
+	  echo "// PARTICULAR PURPOSE." ; ¶
+	  echo "//=--------------------------------------------------------------------------=" ; ¶
+	  echo "// Private AAF Interfaces." ; ¶
+	  echo "//=--------------------------------------------------------------------------=" ; ¶
+	  echo "//" ; ¶
+	  echo '#ifndef __AAFPrivate_h__' ; ¶
+	  echo '#define __AAFPrivate_h__' ; ¶
+	  echo "" ; ¶
+	  echo '#ifndef __AAF_h__' ; ¶
+	  echo '#include "AAF.h"' ; ¶
+	  echo '#endif' ; ¶
+	  echo "" ; ¶
+	  echo '#ifdef __cplusplus' ; ¶
+	  for class in AAFRoot {PRIVATE_AAFOBJECTS} ; ¶
+	      echo "interface I{class};" ; ¶
+	  end ; ¶
+	  echo '#else' ; ¶
+	  for class in AAFRoot {PRIVATE_AAFOBJECTS} ; ¶
+	      echo "typedef interface I{class} I{class};" ; ¶
+	  end ; ¶
+	  echo '#endif' ; ¶
+	  for class in AAFRoot {PRIVATE_AAFOBJECTS} ; ¶
+	      echo "" ; ¶
+	      echo "// I{class}" ; ¶
+	      echo "" ; ¶
+	      catenate {class}.frefh ; ¶
+	  end ; ¶
+	  echo "" ; ¶
+	  echo '#endif // __AAFPrivate_h__' ; ¶
+	) > "{comh}AAFPrivate.h"
+	SetFile -t TEXT -c CWIE -a L "{comh}AAFPrivate.h"
+
+
+"{refh}AAFPlugin.h" Ä "{macdodo}macaafobjects.mk" {PLUGIN_FREFH_TARGETS}
 	echo "{refh}AAFPlugin.h"
 	if "`exists -f "{refh}AAFPlugin.h"`"
 		SetFile -a l "{refh}AAFPlugin.h"
 		Delete -i -ay "{refh}AAFPlugin.h"
 	end
 	( echo "//=--------------------------------------------------------------------------=" ; ¶
-	  echo "// (C) Copyright 1998-1999 Avid Technology." ; ¶
-	  echo "// (C) Copyright 1998-1999 Microsoft Corporation." ; ¶
+	  echo "// (C) Copyright 1998-2000 Avid Technology." ; ¶
 	  echo "//" ; ¶
 	  echo "// This file was GENERATED for the AAF SDK on " ; ¶
 	  echo "//  "`date` ; ¶
@@ -113,7 +159,7 @@
 	SetFile -t TEXT -c CWIE -a L "{refh}AAFPlugin.h"
 
 
-"{refh}AAF_i.c" Ä "{dod}aafobjects.mk" "{dod}dod2iid.pl" "{macdodo}macaafobjects.mk"
+"{refh}AAF_i.c" Ä "{dod}aafobjects.mk" "{dod}dod2iid.pl" "{macdodo}macaafobjects.mk" {GENERATED_FREFH}
 	echo "{refh}AAF_i.c"
 	if "`exists -f "{refh}AAF_i.c"`"
 		SetFile -a l "{refh}AAF_i.c"
@@ -124,8 +170,7 @@
 	  echo "" ; ¶
 	  echo "/* link this file in with the server and any clients */" ; ¶
 	  echo "//=--------------------------------------------------------------------------=" ; ¶
-	  echo "// (C) Copyright 1998 Avid Technology." ; ¶
-	  echo "// (C) Copyright 1998 Microsoft Corporation." ; ¶
+	  echo "// (C) Copyright 1998-2000 Avid Technology." ; ¶
 	  echo "//" ; ¶
 	  echo "// This file was GENERATED for the AAF SDK on " ; ¶
 	  echo "//  "`date` ; ¶
@@ -171,7 +216,7 @@
 	SetFile -t TEXT -c CWIE -a L "{refh}AAF_i.c"
 
 
-"{refh}AAFPlugin_i.c" Ä "{dod}aafobjects.mk" "{dod}dod2iid.pl" "{macdodo}macaafobjects.mk"
+"{refh}AAFPlugin_i.c" Ä "{dod}aafobjects.mk" "{dod}dod2iid.pl" "{macdodo}macaafobjects.mk" {PLUGIN_FREFH_TARGETS}
 	echo "{refh}AAFPlugin_i.c"
 	if "`exists -f "{refh}AAFPlugin_i.c"`"
 		SetFile -a l "{refh}AAFPlugin_i.c"
@@ -182,8 +227,7 @@
 	  echo "" ; ¶
 	  echo "/* link this file in with the server and any clients */" ; ¶
 	  echo "//=--------------------------------------------------------------------------=" ; ¶
-	  echo "// (C) Copyright 1998 Avid Technology." ; ¶
-	  echo "// (C) Copyright 1998 Microsoft Corporation." ; ¶
+	  echo "// (C) Copyright 1998-2000 Avid Technology." ; ¶
 	  echo "//" ; ¶
 	  echo "// This file was GENERATED for the AAF SDK on " ; ¶
 	  echo "//  "`date` ; ¶
@@ -229,11 +273,11 @@
 	SetFile -t TEXT -c CWIE -a L "{refh}AAFPlugin_i.c"
 
 
-"{refh}AAFRoot_i.c" Ä "{dod}aafobjects.mk" "{dod}dod2iid.pl" "{macdodo}macaafobjects.mk"
-	echo "{refh}AAFRoot_i.c"
-	if "`exists -f "{refh}AAFRoot_i.c"`"
-		SetFile -a l "{refh}AAFRoot_i.c"
-		Delete -i -ay "{refh}AAFRoot_i.c"
+"{comh}AAFPrivate_i.c" Ä "{dod}aafobjects.mk" "{dod}dod2iid.pl" "{macdodo}macaafobjects.mk" {GENERATED_PRIVATE_FREFH}
+	echo "{comh}AAFPrivate_i.c"
+	if "`exists -f "{comh}AAFPrivate_i.c"`"
+		SetFile -a l "{comh}AAFPrivate_i.c"
+		Delete -i -ay "{comh}AAFPrivate_i.c"
 	end
 	( echo "/* this file contains the actual definitions of */" ; ¶
 	  echo "/* the IIDs and CLSIDs */" ; ¶
@@ -241,7 +285,6 @@
 	  echo "/* link this file in with the server and any clients */" ; ¶
 	  echo "//=--------------------------------------------------------------------------=" ; ¶
 	  echo "// (C) Copyright 1998 Avid Technology." ; ¶
-	  echo "// (C) Copyright 1998 Microsoft Corporation." ; ¶
 	  echo "//" ; ¶
 	  echo "// This file was GENERATED for the AAF SDK on " ; ¶
 	  echo "//  "`date` ; ¶
@@ -251,7 +294,7 @@
 	  echo "// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A" ; ¶
 	  echo "// PARTICULAR PURPOSE." ; ¶
 	  echo "//=--------------------------------------------------------------------------=" ; ¶
-	  echo "// Definitions for all public IID's needed by an AAF SDK Plugin author" ; ¶
+	  echo "// Definitions for all Private IID's needed by an AAF SDK Plugin author" ; ¶
 	  echo "//=--------------------------------------------------------------------------=" ; ¶
 	  echo "//" ; ¶
 	  echo "" ; ¶
@@ -278,13 +321,13 @@
 	  echo "typedef IID CLSID;" ; ¶
 	  echo '#endif // CLSID_DEFINED' ; ¶
 	  echo "" ; ¶
-	  perl dod2iid.pl AAFRoot ; ¶
+	  perl dod2iid.pl AAFRoot {PRIVATE_AAFOBJECTS}; ¶
 	  echo '#ifdef __cplusplus' ; ¶
 	  echo "}" ; ¶
 	  echo '#endif' ; ¶
 	  echo "" ; ¶
-	) > "{refh}AAFRoot_i.c"
-	SetFile -t TEXT -c CWIE -a L "{refh}AAFRoot_i.c"
+	) > "{comh}AAFPrivate_i.c"
+	SetFile -t TEXT -c CWIE -a L "{comh}AAFPrivate_i.c"
 
 
 
@@ -295,8 +338,7 @@
 		Delete -i -ay "{impl}AAFClassIDs.h"
 	end
 	( echo "//=--------------------------------------------------------------------------=" ; ¶
-	  echo "// (C) Copyright 1998 Avid Technology." ; ¶
-	  echo "// (C) Copyright 1998 Microsoft Corporation." ; ¶
+	  echo "// (C) Copyright 1998-2000 Avid Technology." ; ¶
 	  echo "//" ; ¶
 	  echo "// This file was GENERATED for the AAF SDK on " ; ¶
 	  echo "//  "`date` ; ¶
@@ -318,7 +360,7 @@
 	  echo '#endif' ; ¶
 	  echo "" ; ¶
 	  echo "" ; ¶
-	  for class in {AAFOBJECTS} ; ¶
+	  for class in {PRIVATE_AAFOBJECTS} {AAFOBJECTS} ; ¶
 	      echo 'extern "C" const aafClassID_t CLSID_'{class}';'; ¶
 	  end ; ¶
 	  echo "" ; ¶
@@ -334,8 +376,7 @@
 		Delete -i -ay "{comh}AAFCLSIDs.h"
 	end
 	( echo "//=--------------------------------------------------------------------------=" ; ¶
-	  echo "// (C) Copyright 1998 Avid Technology." ; ¶
-	  echo "// (C) Copyright 1998 Microsoft Corporation." ; ¶
+	  echo "// (C) Copyright 1998-2000 Avid Technology." ; ¶
 	  echo "//" ; ¶
 	  echo "// This file was GENERATED for the AAF SDK on " ; ¶
 	  echo "//  "`date` ; ¶
@@ -356,7 +397,7 @@
 	  echo '#include "AAFCOMPlatformTypes.h"' ; ¶
 	  echo '#endif' ; ¶
 	  echo "" ; ¶
-	  for class in {AAFOBJECTS} ; 
+	  for class in {PRIVATE_AAFOBJECTS} {AAFOBJECTS} ; ¶
 	      echo 'EXTERN_C const CLSID CLSID_'{class}';'; ¶
 	  end ; ¶
 	  echo "" ; ¶
@@ -370,8 +411,7 @@
 	echo "{comh}AAFObjectTable.h"
 	Delete -i -ay "{comh}AAFObjectTable.tmp"
 	( echo "//=--------------------------------------------------------------------------=" ; ¶
-	  echo "// (C) Copyright 1998-1999 Avid Technology." ; ¶
-	  echo "// (C) Copyright 1998-1999 Microsoft Corporation." ; ¶
+	  echo "// (C) Copyright 1998-2000 Avid Technology." ; ¶
 	  echo "//" ; ¶
 	  echo "// This file was GENERATED for the AAF SDK on " ; ¶
 	  echo "//  "`date` ; ¶
@@ -399,8 +439,12 @@
 	  echo '#define AAF_END_OBJECT_MAP()' ; ¶
 	  echo '#endif' ; ¶
 	  echo "" ; ¶
-	  echo '#ifndef AAF_END_OBJECT_MAP' ; ¶
+	  echo '#ifndef AAF_OBJECT_ENTRY' ; ¶
 	  echo '#define AAF_OBJECT_ENTRY(name)' ; ¶
+	  echo '#endif' ; ¶
+	  echo "" ; ¶
+	  echo '#ifndef AAF_PRIVATE_OBJECT_ENTRY' ; ¶
+	  echo '#define AAF_PRIVATE_OBJECT_ENTRY(name)' ; ¶
 	  echo '#endif' ; ¶
 	  echo "" ; ¶
 	  echo "" ; ¶
@@ -408,6 +452,9 @@
 	  echo "// Include all objects in the following table:" ; ¶
 	  echo "//" ; ¶
 	  echo "AAF_BEGIN_OBJECT_MAP(AAFObjectMap)" ; ¶
+	  for class in {PRIVATE_AAFOBJECTS} ; 
+	      echo '	AAF_PRIVATE_OBJECT_ENTRY('{class}')'; ¶
+	  end ; ¶
 	  for class in {AAFOBJECTS} ; 
 	      echo '	AAF_OBJECT_ENTRY('{class}')'; ¶
 	  end ; ¶
@@ -425,8 +472,7 @@
 	echo "{comh}AAFObjectTable_i.cpp"
 	Delete -i -ay "{comh}AAFObjectTable.tmp"
 	( echo "//=--------------------------------------------------------------------------=" ; ¶
-	  echo "// (C) Copyright 1998-1999 Avid Technology." ; ¶
-	  echo "// (C) Copyright 1998-1999 Microsoft Corporation." ; ¶
+	  echo "// (C) Copyright 1998-2000 Avid Technology." ; ¶
 	  echo "//" ; ¶
 	  echo "// This file was GENERATED for the AAF SDK on " ; ¶
 	  echo "//  "`date` ; ¶
@@ -445,13 +491,17 @@
 	  echo "//" ; ¶
 	  echo "// Include the appropriate header files:" ; ¶
 	  echo "//" ; ¶
+	  for class in {PRIVATE_AAFOBJECTS} ; 
+	      echo '#include"C'{class}'.h"' ; ¶
+	  end ; ¶
 	  for class in {AAFOBJECTS} ; 
 	      echo '#include"C'{class}'.h"' ; ¶
 	  end ; ¶
-	  #for AAF in ${AAFOBJECTS} ; ¶
-	  #    echo ¶#include ¶"C{AAF}.h¶" ; ¶
-	  #done ; ¶
 	  echo "" ; ¶
+	  echo "//" ; ¶
+	  echo "// Include Private AAF Objects Table:" ; ¶
+	  echo "//" ; ¶
+	  echo '#define AAF_PRIVATE_OBJECT_ENTRY(name) AAF_OBJECT_ENTRY(name)' ; ¶
 	  echo "//" ; ¶
 	  echo "// Include AAF Object Table:" ; ¶
 	  echo "//" ; ¶
