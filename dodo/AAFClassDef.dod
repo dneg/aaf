@@ -1,16 +1,16 @@
 #startm .this-module 0
-AAFClassDefinition\
+AAFClassDef\
 #endm
 #c
 #startm .parent-module 0
-AAFDefinitionObject\
+AAFDefObject\
 #endm
 #c
 AD_HEAD
 
-AD_FORWARD_DECLARATION(EnumAAFPropertyDefinitions)
-AD_FORWARD_DECLARATION(AAFPropertyDefinition)
-AD_FORWARD_DECLARATION(AAFDefinitionObject)
+AD_FORWARD_DECLARATION(EnumAAFPropertyDefs)
+AD_FORWARD_DECLARATION(AAFPropertyDef)
+AD_FORWARD_DECLARATION(AAFDefObject)
 
 /******************************************\
 *                                          *
@@ -52,7 +52,7 @@ AD_METHOD1(SetParentAUID,
 AD_XMETHOD1(AppendPropertyDef,
 		    [in],
 		    objIn,
-		    AAFPropertyDefinition,
+		    AAFPropertyDef,
 		    pPropertyDef, 
 		    Property Definition to be added,
 		    Add the Property Definition to the class definition.)
@@ -60,15 +60,15 @@ AD_XMETHOD1(AppendPropertyDef,
 AD_XMETHOD1(RemovePropertyDef,
 		    [in],
 		    objIn,
-		    AAFPropertyDefinition,
+		    AAFPropertyDef,
 		    pPropertyDef, 
 		    Property Definition to be removed,
 		    Remove Property Definition from the class definition.)
 
-AD_XMETHOD1(GetPropertyDefinitions,
+AD_XMETHOD1(GetPropertyDefs,
 		   [out\,retval],
 		    objOut,
-		    EnumAAFPropertyDefinitions,
+		    EnumAAFPropertyDefs,
 		    ppEnum,
 		    Property Definition enumeration,
 		    Returns an enumerator for aaf property definitions.)
