@@ -46,6 +46,7 @@ class ImplAAFFile;
 //#include "ImplAAFSession.h"
 #include "ImplAAFIdentification.h"
 #include "ImplAAFContentStorage.h"
+#include "ImplAAFDictionary.h"
 
 
 class AAFDataKind;
@@ -330,6 +331,7 @@ private:
 		OMFixedSizeProperty<aafTimeStamp_t>                _lastModified;
     OMStrongReferenceVectorProperty<ImplAAFIdentification> _identificationList;
 		OMStrongReferenceProperty<ImplAAFContentStorage>	_contentStorage;
+		OMStrongReferenceProperty<ImplAAFDictionary>	_dictionary;
 };
 
 #endif // ! __ImplAAFHeader_h__
