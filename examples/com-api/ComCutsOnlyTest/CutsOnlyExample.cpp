@@ -65,6 +65,18 @@ const CLSID CLSID_EnumAAFMobs = { 0xB1A21387, 0x1A7D, 0x11D2, { 0xBF, 0x78, 0x00
 
 #endif
 
+// There are differences in the microsoft and other compilers in the "Length" specifier
+// used in printf for 64bit integers.
+//
+// NOTE: If your compiler does not support 64 bit integers then this example will NOT
+// print out the correct lengths.
+#ifdef _MSC_VER
+#define L64 "I64"
+#else
+#define L64 "ll"
+#endif
+
+
 
 static aafWChar *slotName = L"SLOT1";
 static aafInt32 fadeInLen  = 1000;
@@ -618,7 +630,8 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 					if(AAFRESULT_SUCCESS == hr)
 					{
 						printf("    Found source clip on slot\n");
-						printf("        It has length %ld\n", length);
+						printf("        It has length %" L64 "d\n", length);
+
 						hr = pSourceClip->ResolveRef(&pReferencedMob);
 						if(hr == AAFRESULT_SUCCESS)
 						{
@@ -647,7 +660,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 							check(pSequence->GetNumComponents (&numComponents));
 							printf("    Found Sequence on slot with %ld components\n",
 								numComponents);
-							printf("        It has length %lld\n", length);
+							printf("        It has length %" L64 "d\n", length);
 							check(pSequence->EnumComponents (&pCompIter));
 							while (pCompIter && AAFRESULT_SUCCESS == pCompIter->NextOne(&pComponent))
 							{
@@ -659,7 +672,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 									aafSourceRef_t		ref;
 
 									check(pSourceClip->GetSourceReference (&ref));
-									printf("        %ld) A length %lld source clip\n", item, length);
+									printf("        %ld) A length %" L64 "d source clip\n", item, length);
 									check(pSourceClip->ResolveRef(&pReferencedMob));
 									check(pReferencedMob->GetMobID(&mobID));
 									check(pReferencedMob->GetName (bufW, sizeof(bufW)));
@@ -690,7 +703,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 								hr = pComponent->QueryInterface(IID_IAAFFiller, (void **) &pFiller);
 								if(AAFRESULT_SUCCESS == hr)
 								{
-									printf("        %ld) A length %lld filler\n", item, length);
+									printf("        %ld) A length %" L64 "d filler\n", item, length);
 
 									pFiller->Release();
 									pFiller = NULL;
