@@ -175,6 +175,7 @@ typedef OMObjectIdentification OMStoredObjectIdentification;
 // For uniquely identifying an object instance.
 //
 typedef OMObjectIdentification OMUniqueObjectIdentification;
+const OMUniqueObjectIdentification nullOMUniqueObjectIdentification = {0};
 
 // For backwards compatibility - all instances of OMClassId should
 // eventually be replaced with OMStoredObjectIdentification.
