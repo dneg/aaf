@@ -173,10 +173,6 @@ SOURCE=..\..\..\test\com\CAAFEssenceGroupTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\test\com\CAAFEssencePluginTest.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\..\test\com\CAAFEventMobSlotTest.cpp
 # End Source File
 # Begin Source File
@@ -547,6 +543,10 @@ SOURCE=..\..\..\test\com\CEnumAAFTaggedValuesTest.cpp
 
 SOURCE=..\..\..\test\com\CEnumAAFTypeDefsTest.cpp
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\..\test\com\ComModTestAAF.cpp
+# End Source File
 # End Group
 # Begin Source File
 
@@ -563,10 +563,6 @@ SOURCE=..\..\..\test\com\CAAFModuleTest.cpp
 # Begin Source File
 
 SOURCE=..\..\..\test\com\CAAFModuleTest.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\test\com\ComModTestAAF.cpp
 # End Source File
 # Begin Source File
 
