@@ -107,10 +107,6 @@ public:
   // Return true if "classId" is registered.
   virtual bool isRegistered(const OMClassId& classId) const;
 
-  // Copy the class definition identified by "id" to the destination
-  // class factory.
-  virtual void cloneClassDef(const OMClassId& id, OMClassFactory* dstFactory);
-
   // Create an instance of the appropriate derived class, given the
   // class id.  Initializes the OM properties.
   // 

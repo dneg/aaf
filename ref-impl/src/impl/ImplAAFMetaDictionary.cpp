@@ -203,11 +203,6 @@ bool ImplAAFMetaDictionary::isRegistered(const OMClassId& classId ) const
 	return containsClass( reinterpret_cast<const aafUID_t&>(classId) );
 }
 
-void ImplAAFMetaDictionary::cloneClassDef( const OMClassId& id, OMClassFactory* pDstFactory )
-{
-  ImplAAFCloneResolver::CloneClassDef(id, pDstFactory, this);
-}
-
 //
 // Create an instance of the appropriate derived class, given the class id.
 //  This method implements the OMClassFactory interface.
