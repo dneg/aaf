@@ -507,12 +507,22 @@ AD_XMETHOD3(RegisterMembers,
   // - Initialize\(\) has already been called on this object.
   // - pOffsets is a valid pointer.
   // - numMembers matches the number of members defined for this
-  //   record type. 
+  //   record type.
+  // - all types of the fields in this record already have their
+  //   offsets registered.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NO_INIT
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pOffsets\)
   //
   // AAFRESULT_ILLEGAL_VALUE
   //   - numMembers does not match number of members in this record
-  //     type.)
+  //     type.
+  //
+  // AAFRESULT_NOT_REGISTERED
+  //   - The type of any field in this record has not yet had its
+  //     offsets registered.
+  //
+  // AAFRESULT_DEFAULT_ALREADY_USED
+  //   - The default registration for this type has already been used
+  //     to persist or unpersist a property containing this type.)
 AD_XCLASS_END(Concrete, StoredObject)
