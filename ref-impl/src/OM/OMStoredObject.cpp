@@ -14,6 +14,8 @@
 #if defined(_MAC) || defined(macintosh)
 #include "wintypes.h"
 #include <storage.h>
+#elif defined(__sgi)
+#include "storage.h"
 #else
 #include <objbase.h>
 #endif
@@ -29,32 +31,44 @@ const size_t indexEntrySize  = sizeof(OMPropertyId) + // Property id
                                sizeof(OMUInt32) +     // Offset
                                sizeof(OMUInt32);      // Length
 
-#if defined(__sgi)
-#define OMQUADPART(x) x.u.QuadPart
-#define OMSETQUADPART(x,y) (OMQUADPART(x) = (y))
-#elif defined(_MAC) || defined(macintosh)
+#if defined(_MAC) || defined(macintosh) || defined(__sgi)
 
-// The mac declarations for LARGE_INTEGER and ULARGE_INTEGER don't
-// have a QuadPart because the HighPart and LowPart components on that
-// platform are not in the natural platform order.
+// The Macintosh and SGI (SS reference implementation) declarations
+// for LARGE_INTEGER and ULARGE_INTEGER don't have a QuadPart.
+// On Macintosh this is probably because the HighPart and LowPart
+// components on that platform are not in the natural platform order.
 
-static inline OMUInt64 swapHighLowParts(ULARGE_INTEGER &x)
+static inline OMUInt64 toOMUInt64(const ULARGE_INTEGER &x)
 {
-  OMUInt64 y = (x.HighPart << 32) + (x.LowPart);
-  return y;
+  OMUInt64 result = (((OMUInt64)x.HighPart) << 32) + (x.LowPart);
+  return result;
 }
 
-static inline void setHighLowParts(ULARGE_INTEGER &x, const OMUInt64& y)
+static inline ULARGE_INTEGER fromOMUInt64(const OMUInt64& x)
 {
-  x.HighPart = (unsigned long)((0xFFFFFFFF00000000 & (OMUInt64)y) >> 32);
-  x.LowPart  = (unsigned long) (0x00000000FFFFFFFF & (OMUInt64)y);
+  ULARGE_INTEGER result;
+  result.HighPart = (unsigned long)(((OMUInt64)x) >> 32);
+  result.LowPart  = (unsigned long) (0x00000000FFFFFFFF & (OMUInt64)x);
+  return result;
 }
 
-#define OMQUADPART(x) (swapHighLowParts(x))
-#define OMSETQUADPART(x,y) (setHighLowParts((x),(y)))
 #else
-#define OMQUADPART(x) x.QuadPart
-#define OMSETQUADPART(x,y) (OMQUADPART(x) = (y))
+
+static inline OMUInt64 toOMUInt64(const ULARGE_INTEGER &x)
+{
+  OMUInt64 result;
+  result = x.QuadPart;
+  return result;
+}
+
+
+static inline ULARGE_INTEGER fromOMUInt64(const OMUInt64& x)
+{
+  ULARGE_INTEGER result;
+  result.QuadPart = x;
+  return result;
+}
+
 #endif
 
 #if defined(_WIN32) && defined(UNICODE)
@@ -63,13 +77,17 @@ static inline void setHighLowParts(ULARGE_INTEGER &x, const OMUInt64& y)
   typedef char OMCHAR;
 #endif
 
+#if defined(_WIN32) && defined(UNICODE)
 static void convert(wchar_t* wcName, size_t length, const char* name);
+#endif
 
 static void convert(char* cName, size_t length, const wchar_t* name);
 
 static void convert(char* cName, size_t length, const char* name);
 
+#if defined(_WIN32) && defined(UNICODE)
 static void convert(wchar_t* wcName, size_t length, const wchar_t* name);
+#endif
 
 static void formatError(DWORD errorCode);
 
@@ -519,6 +537,9 @@ void OMStoredObject::read(OMPropertyId propertyId,
                             actualLength);
 
   ASSERT("Recognized property", found);
+  if (!found) {
+    // error illegal property for this object
+  }
   ASSERT("Matching property types", (OMUInt32)type == actualType);
   ASSERT("Matching property sizes", size == actualLength);
 
@@ -547,7 +568,7 @@ OMUInt64 OMStoredObject::streamSize(IStream* stream) const
   if (!check(status)) {
     exit(FAILURE);
   }
-  OMUInt64 result = OMQUADPART(statstg.cbSize);
+  OMUInt64 result = toOMUInt64(statstg.cbSize);
   return result;
 }
 
@@ -558,8 +579,7 @@ void OMStoredObject::streamSetSize(IStream* stream, const OMUInt64 newSize)
 {
   TRACE("OMStoredObject::streamSetSize");
 
-  ULARGE_INTEGER newStreamSize;
-  OMSETQUADPART(newStreamSize, newSize);
+  ULARGE_INTEGER newStreamSize = fromOMUInt64(newSize);
   HRESULT status = stream->SetSize(newStreamSize);
   if (!check(status)) {
     exit(FAILURE);
@@ -673,6 +693,9 @@ void OMStoredObject::validate(
     if (propertySet->isRequired(propertyId)) {
       bool found = propertySetIndex->find(propertyId, type, offset, length);
       ASSERT("Required property present", found);
+      if (!found) {
+        // error required property missing
+      }
     }
   }
 
@@ -684,6 +707,9 @@ void OMStoredObject::validate(
     propertySetIndex->iterate(context, propertyId, type, offset, length);
     bool allowed = propertySet->isAllowed(propertyId);
     ASSERT("Property allowed", allowed);
+    if (!allowed) {
+      // error illegal property for this object
+    }
   }
 
 }
@@ -867,9 +893,13 @@ void OMStoredObject::closeStream(IStream*& stream)
   TRACE("OMStoredObject::closeStream");
   PRECONDITION("Valid stream", stream != 0);
 
+#if defined(OM_ENABLE_DEBUG)
   HRESULT resultCode = stream->Release();
-  stream = 0;
   ASSERT("Reference count is 0.", resultCode == 0);
+#else
+  stream->Release();
+#endif
+  stream = 0;
 }
 
 OMByteOrder OMStoredObject::byteOrder(void) const
@@ -950,9 +980,13 @@ void OMStoredObject::closeStorage(IStorage*& storage)
   TRACE("closeStorage");
   PRECONDITION("Valid storage", storage != 0);
 
+#if defined(OM_ENABLE_DEBUG)
   HRESULT resultCode = storage->Release();
-  storage = 0;
   ASSERT("Reference count is 0.", resultCode == 0);
+#else
+  storage->Release();
+#endif
+  storage = 0;
 }
 
   // @mfunc Write <p size> bytes from the buffer at address <p data>
@@ -1124,7 +1158,7 @@ OMUInt64 OMStoredObject::streamPosition(IStream* stream) const
   if (!check(status)) {
     exit(FAILURE);
   }
-  result = OMQUADPART(position);
+  result = toOMUInt64(position);
   return result;
 }
 
@@ -1140,9 +1174,8 @@ void OMStoredObject::streamSetPosition(IStream* stream, const OMUInt64 offset)
   TRACE("OMStoredObject::streamSetPosition");
   PRECONDITION("Valid stream", stream != 0);
 
-  ULARGE_INTEGER newPosition;
+  ULARGE_INTEGER newPosition = fromOMUInt64(offset);
   ULARGE_INTEGER oldPosition;
-  OMSETQUADPART(newPosition, offset);
   LARGE_INTEGER position;
   memcpy(&position, &newPosition, sizeof(LARGE_INTEGER));
   HRESULT status = stream->Seek(position, STREAM_SEEK_SET, &oldPosition);
@@ -1150,6 +1183,8 @@ void OMStoredObject::streamSetPosition(IStream* stream, const OMUInt64 offset)
     exit(FAILURE);
   }
 }
+
+#if defined(_WIN32) && defined(UNICODE)
 
 static void convert(wchar_t* wcName, size_t length, const char* name)
 {
@@ -1170,6 +1205,8 @@ static void convert(wchar_t* wcName, size_t length, const char* name)
     exit(FAILURE);  
   }
 }
+
+#endif
 
 static void convert(char* cName, size_t length, const wchar_t* name)
 {
@@ -1205,6 +1242,8 @@ static void convert(char* cName, size_t length, const char* name)
   }
 }
 
+#if defined(_WIN32) && defined(UNICODE)
+
 static void convert(wchar_t* wcName, size_t length, const wchar_t* name)
 {
   TRACE("convert");
@@ -1222,6 +1261,8 @@ static void convert(wchar_t* wcName, size_t length, const wchar_t* name)
     exit(FAILURE);  
   }
 }
+
+#endif
 
 static void formatError(DWORD errorCode)
 {
