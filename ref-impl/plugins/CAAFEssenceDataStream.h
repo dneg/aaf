@@ -31,10 +31,11 @@
 
 #include "AAFPlugin.h"
 
-EXTERN_C const CLSID CLSID_AAFObjectStream;
+EXTERN_C const CLSID CLSID_AAFEssenceDataStream;
 
-class CAAFObjectStream
-  : public CAAFDefaultStream
+class CAAFEssenceDataStream
+  : public CAAFDefaultStream,
+  public IAAFEssenceDataStream
 {
 protected:
 
@@ -42,10 +43,12 @@ protected:
   //
   // Constructor/destructor
   //
-  CAAFObjectStream (IUnknown * pControllingUnknown, aafBool doInit = AAFTrue);
-  virtual ~CAAFObjectStream ();
+  CAAFEssenceDataStream (IUnknown * pControllingUnknown, aafBool doInit = AAFTrue);
+  virtual ~CAAFEssenceDataStream ();
 
 public:
+  STDMETHOD (Init)
+            (/* [in] */ IUnknown *essenceData);
 
 
   // Write some number of bytes to the stream exactly and with no formatting or compression.
@@ -112,6 +115,8 @@ public:
   // Declare the module test method. The implementation of the will be be
   // in /test/CAAFEssenceStreamTest.cpp.
   static HRESULT test();
+private:
+	IAAFEssenceData		*_data;
 };
 
 #endif // ! __CAAFEssenceStream_h__
