@@ -1,0 +1,204 @@
+#startm .this-module 0
+AAFTypeDefRename\
+#endm
+#c
+#startm .parent-module 0
+AAFTypeDef\
+#endm
+#c
+AD_HEAD
+AD_IDL(//
+// This interface is used to define Renamed types \(analogous to C
+// typedefs\) used in AAF persistent objects.
+//
+// In addition to the specific error results listed for each method\,
+// all methods in this interface may also return one of the following
+// values:
+// 
+// AAFRESULT_NOMEMORY
+//   - insufficient system memory is available to perform the
+//     operation.
+//
+/***********************************************\
+*	Stub only.   Implementation not yet added	*
+\***********************************************/
+)
+AD_CLASS_UUID(307e9e69, dcb2, 11d2, 84, 29, 00, 60, 08, 32, ac, b8)
+
+AD_DEFAULT_UUID(307e9e6a, dcb2, 11d2, 84, 29, 00, 60, 08, 32, ac, b8)
+AD_XCLASS_BEGIN(Concrete, StoredObject)
+AD_XMETHOD3(Initialize,
+			[in],
+			objPass,
+			aafUID_t *,
+			pID,
+			auid to be used to identify this type,
+
+			[in],
+			objIn,
+			AAFTypeDef,
+			pBaseType,
+			type to which this is an alias,
+
+			[in\, string],
+			objPass,
+			wchar_t *,
+			pTypeName,
+			friendly name of this type definition,
+
+			Initializes this type def to be an alias for the given type
+  // \(similar to a C typedef\).
+  // 
+  // This method must be called after allocation\, and before
+  // any other method can be called.
+  //
+  // Succeeds if:
+  // - Initialize\(\) has not yet been called on this object.
+  // - pBaseType is a valid pointer.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  // 
+  // AAFRESULT_NULL_PARAM
+  //   - pBaseType is null.
+  //
+  // AAFRESULT_ALREADY_INITIALIZED
+  //   - Initialize\(\) has already been called on this object.)
+
+
+AD_XMETHOD1(GetBaseType,
+			[out],
+			objOut,
+			AAFTypeDef,
+			ppBaseType,
+			type definition for which this is an alias,
+
+			Returns the type definition to which this type def is an alias.
+  //
+  // Succeeds if:
+  // - this object has been Initialize\(\)d.
+  // - The ppBaseType pointer is valid.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppBaseType pointer is NULL.)
+
+
+AD_XMETHOD2(GetName,
+
+			[out\, size_is\(bufSize\)\, string],
+			objPass,
+			wchar_t *,
+			pName,
+			buffer into which the name is written,
+
+			[in],
+			objPass,
+			aafInt32,
+			bufSize,
+			The size of the pName buffer\, in bytes,
+
+			Writes the human-legible name that identifies this type
+  // definition\, with a trailing null character\, into the pName
+  // buffer.  The buffer is allocated by the caller.  The size of the
+  // buffer is given by bufSize.
+  // 
+  // Caller may call GetNameBufLen\(\) to determine the required
+  // buffer size.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pName pointer is valid.
+  // - bufSize indicates the buffer is large enough to hold the name.
+  // 
+  // If this method fails nothing will be written to
+  // *pName.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pName arg is NULL.
+  //
+  // AAFRESULT_SMALLBUF
+  //   - bufSize indicates the buffer is too small to hold the string.)
+
+
+AD_XMETHOD1(GetNameBufLen,
+			[out],
+			objPass,
+			aafInt32 *,
+			pLen,
+			required buffer length\, in bytes,
+
+			Returns the length of buffer required for the
+  // GetName\(\) method.  The value is placed into the
+  // location specified by pLen. The value will include space required
+  // for the trailing null character.
+  //
+  // Succeeds if all of the following are true:
+  // - the pLen pointer is valid.
+  //
+  // If this method fails nothing will be written to *pLen.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pLen arg is NULL.)
+
+
+AD_XMETHOD2(GetValue,
+			[in],
+			objIn,
+			AAFPropertyValue,
+			pInPropVal,
+			property value from which value is to be read,
+
+			[out],
+			objOut,
+			AAFPropertyValue,
+			ppOutPropVal,
+			pointer to property value represented by base type,
+
+  // Gets the property value of the base type from the given property
+  // value of the typedef type and places a pointer to the base type's
+  // property value into *ppOutPropVal.
+  //
+  // Succeeds if:
+  // - The pInPropVal pointer is valid.
+  // - The ppOutPropVal pointer is valid.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pInPropVal or ppOutPropVal is NULL.)
+AD_XCLASS_END(Concrete, StoredObject)
