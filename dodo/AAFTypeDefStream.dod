@@ -1,0 +1,261 @@
+#startm .this-module 0
+AAFTypeDefStream\
+#endm
+#c
+#startm .parent-module 0
+AAFTypeDef\
+#endm
+#c
+AD_HEAD
+AD_IDL(//
+// This interface is used to define Stream types used in AAF
+// persistent objects.  Streams are conceptually similar to
+// variably-sized arrays except that they are intended to be used for
+// very large pieces of data \(such as essence\).
+//
+AD_STD_COMMENT_IFC_HEADER
+AD_STD_COMMENT_IFC_STUB)
+AD_CLASS_UUID(307e9e6d, dcb2, 11d2, 84, 29, 00, 60, 08, 32, ac, b8)
+
+AD_DEFAULT_UUID(307e9e6e, dcb2, 11d2, 84, 29, 00, 60, 08, 32, ac, b8)
+AD_XCLASS_BEGIN(Concrete, StoredObject)
+AD_XMETHOD3(Initialize,
+			[in],
+			objPass,
+			aafUID_t *,
+			pID,
+			auid to be used to identify this type,
+
+			[in],
+			objIn,
+			AAFTypeDef,
+			pTypeDef,
+			type of each element to be contained in this array,
+
+			[in],
+			objPass,
+			wchar_t *,
+			pTypeName,
+			friendly name of this type definition,
+
+     Initializes this type def to contain elements of the given type.
+  //
+  // This method must be called after allocation\, and before
+  // any other method can be called.
+  //
+  // Succeeds if:
+  // - Initialize\(\) has not yet been called on this object.
+  // - pTypeDef is a valid pointer.
+  //
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_ALREADY_INIT
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(Either pTypeDef or pTypeName\))
+
+
+AD_XMETHOD1(GetType,
+			[out],
+			objOut,
+			AAFTypeDef,
+			ppTypeDef,
+			type of elements in this array,
+
+     Returns the type of elements in this stream.
+  //
+  // Succeeds if:
+  // - Initialize\(\) has already been called on this object.
+  // - ppTypeDef is a valid pointer.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NO_INIT
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppTypeDef\))
+
+
+AD_XMETHOD2(GetCount,
+			[in],
+			objIn,
+			AAFPropertyValue,
+			pPropVal,
+			property value of array,
+
+			[out],
+			objPass,
+			aafInt64 *,
+			pCount,
+			count of elements in the specified stream property value,
+
+     Returns number of elements contained in the referenced property
+  // value.
+  //
+  // Succeeds if:
+  // - Initialize\(\) has already been called on this object.
+  // - pPropVal is a valid pointer.
+  // - pCount is a valid pointer.
+  //
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NO_INIT
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(Either pPropVal or pCount\))
+
+
+AD_X2METHOD3(AppendElements,
+			 [in],
+			 objIn,
+			 AAFPropertyValue,
+			 pInPropVal,
+       property value corresponding to stream to which elements are to
+    // be appended,
+			 ,
+
+			 [in\, size_is\(numElements\)],
+			 objInArray,
+			 AAFPropertyValue,
+			 pMemberPropVals,
+			 values to be appended to this stream,
+			 numElements,
+
+			 [in],
+			 objPass,
+			 aafUInt32,
+			 numElements,
+			 number of values to be appended,
+			 ,
+
+			Appends elements to the end of the array\, setting them to the
+  // values given in the pMemberPropVals array.  The number of values
+  // to be appended is given by numElements.
+  //
+  // Succeeds if:
+  // - Initialize\(\) has already been called on this object.
+  // - pInPropVal pointer is valid.
+  // - pMemberPropVal pointer is valid.
+  //
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pInPropVal or pMemberPropVal\))
+
+
+AD_XMETHOD1(CreateEmpty,
+
+			 [out],
+			 objOut,
+			 AAFPropertyValue,
+			 ppPropVal,
+			 newly-created property value,
+
+     Creates a property value which contains a stream type.  The
+  // stream is initialized to contain no elements.
+  //
+  // Succeeds if all of the following are true:
+  // - the ppPropVal pointer is valid.
+  //
+  // If this method fails nothing will be written to *ppPropVal.
+  //
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NO_INIT
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppPropVal\))
+
+
+AD_X2METHOD4(GetElementValues,
+			 [in],
+			 objIn,
+			 AAFPropertyValue,
+			 pInPropVal,
+			 property value to read,
+			 ,
+
+			 [in],
+			 objPass,
+			 aafInt64,
+			 startElement,
+			 zero-based index into elements in this array type,
+			 ,
+
+			 [out\, size_is\(numElements\)],
+			 objOutArray,
+			 AAFPropertyValue,
+			 pOutPropVals,
+			 array of values that are read,
+			 numElements,
+
+			 [in],
+			 objPass,
+			 aafUInt32,
+			 numElements,
+			 number of elements to get,
+			 ,
+
+     Gets multiple property values\, corresponding to stream element
+  // values\, from the given stream property value.  Elements are
+  // retrieved starting at the startElement index; numElements
+  // elements are retrieved.  Values are placed into the
+  // caller-allocated pOutPropVals array.  The size of the array
+  // allocated by the caller is indicated by the numElements argument.
+  // startElement index is zero-based.  startElement plus numElements
+  // must be less than the value returned by GetCount\(\).
+  // 
+  // Succeeds if:
+  // - Initialize\(\) has already been called on this object.
+  // - the indicated elements exist in this stream type def.
+  // - The pInPropVal pointer is valid.
+  // - The pOutPropVals pointer is valid.
+  //
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NO_INIT
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(Either pInPropVal or pOutPropVals\)
+  // AAFRESULT_BAD_PARAM
+  //   - startElement and numElements indicate elements which are
+  //     outside the bounds of this stream.)
+
+
+AD_XMETHOD4(GetElements,
+			[in],
+			objIn,
+			AAFPropertyValue,
+			pPropVal,
+			property value to read,
+			
+			[in],
+			objPass,
+			aafInt64,
+			startElement,
+			zero-based index into elements in this array type,
+
+			[out\, size_is\(numElements\)],
+			objPass,
+			aafMemPtr_t,
+			pData,
+			buffer into which C array data should be written,
+
+			[in],
+			objPass,
+			aafUInt32,
+			numElements,
+			number of elements to get,
+
+     Copies the stream data contained in the given property value into
+  // the C array pointed to by pData.  Requires that any structures
+  // declared within this array typedef have had their offsets
+  // registered with that type.  The data copied stars with the
+  // element specified by startElement; numElements elements are
+  // copied.  startElement plus numElements must be less than the
+  // value returned by GetCount\(\).
+  //
+  // Succeeds if all of the following are true:
+  // - the pPropVal pointer is valid.
+  // - the pData pointer is valid.
+  // - dataSize indicates pData is large enough to hold the data.
+  // - compile-time struct has had its member offests registered.
+  // - the indicated elements exist in this stream type def.
+  //
+  // If this method fails nothing will be written to *ppPropVal.
+  //
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NO_INIT
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pPropVal or pData\)
+  // AAFRESULT_BAD_PARAM
+  //   - dataSize indicates pData is too small.
+  //
+  // AAFRESULT_NOT_REGISTERED
+  //  - struct offsets have not yet been registered for this typedef.
+  //
+  // AAFRESULT_BAD_PARAM
+  //   - startElement and numElements indicate elements which are
+  //     outside the bounds of this stream.)
+AD_XCLASS_END(Concrete, StoredObject)
