@@ -57,7 +57,7 @@ static HRESULT moduleErrorTmp = S_OK;/* note usage in macro */
 
 static void convert(wchar_t* wcName, size_t length, const char* name)
 {
-  assert((name && *name), "Valid input name");
+  assert((name /* && *name */), "Valid input name");
   assert(wcName != 0, "Valid output buffer");
   assert(length > 0, "Valid output buffer size");
   
@@ -70,7 +70,7 @@ static void convert(wchar_t* wcName, size_t length, const char* name)
 
 static void convert(char* cName, size_t length, const wchar_t* name)
 {
-  assert((name && *name), "Valid input name");
+  assert((name /* && *name */), "Valid input name");
   assert(cName != 0, "Valid output buffer");
   assert(length > 0, "Valid output buffer size");
 
@@ -83,7 +83,7 @@ static void convert(char* cName, size_t length, const wchar_t* name)
 
 static void convert(char* cName, size_t length, const char* name)
 {
-  assert((name && *name), "Valid input name");
+  assert((name /* && *name */), "Valid input name");
   assert(cName != 0, "Valid output buffer");
   assert(length > 0, "Valid output buffer size");
 
@@ -98,7 +98,7 @@ static void convert(char* cName, size_t length, const char* name)
 
 static void convert(wchar_t* wName, size_t length, const wchar_t* name)
 {
-  assert((name && *name), "Valid input name");
+  assert((name /* && *name */), "Valid input name");
   assert(wName != 0, "Valid output buffer");
   assert(length > 0, "Valid output buffer size");
 
