@@ -101,8 +101,6 @@ IAAFSmartPointer<IAAFFile> CreateFileOfKind( const std::string& fileName,
 {
   std::auto_ptr<wchar_t> wfileName( ToWideString( fileName.c_str() ) );
 
-  std::wcout << "WIDE STRING " << wfileName.get() << std::endl;
-  
   IAAFSmartPointer<IAAFRawStorage> spRawStorage;
   CHECK_HRESULT( AAFCreateRawStorageDisk( wfileName.get(),
 					  existance,
