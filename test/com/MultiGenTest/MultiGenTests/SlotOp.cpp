@@ -18,7 +18,7 @@
 
 #include <MultiGenTest.h>
 
-#include <MultiGenCommon.h>
+#include "MultiGenCommon.h"
 
 namespace {
 
