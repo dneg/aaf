@@ -11,7 +11,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 // 
-// The Original Code of this file is Copyright 1998-2001, Licensor of the
+// The Original Code of this file is Copyright 1998-2002, Licensor of the
 // AAF Association.
 // 
 // The Initial Developer of the Original Code of this file and the
@@ -248,5 +248,9 @@ FILE* wfopen(const wchar_t* fileName, const wchar_t* mode);
   //   @parm The file name.
   //   @rdesc 0 if the file is successfuly deleted -1 otherwise. 
 int wremove(const wchar_t* fileName);
+
+// Generating unique identifiers
+
+OMUniqueObjectIdentification createUniqueIdentifier(void);
 
 #endif

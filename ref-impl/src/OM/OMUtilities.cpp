@@ -713,3 +713,79 @@ int wremove(const wchar_t* fileName)
   return result;
 }
 
+#if defined(OM_OS_WINDOWS)
+#define OM_USE_COM_CREATEUUID
+#elif defined(OM_OS_MACOS)
+#define OM_USE_OM_CREATEUUID
+#elif defined(OM_OS_UNIX) && !defined(__MACH__)
+#define OM_USE_LIBUUID_CREATEUUID
+#elif defined(OM_OS_UNIX) && defined(__MACH__)
+#define OM_USE_CF_CREATEUUID
+#elif defined(OM_OS_MACOSX)
+#define OM_USE_OM_CREATEUUID
+#endif
+
+#if defined(OM_USE_COM_CREATEUUID)
+
+#include <objbase.h>
+
+OMUniqueObjectIdentification createUniqueIdentifier(void)
+{
+  OMUniqueObjectIdentification result = {0};
+  GUID u;
+  CoCreateGuid(&u);
+  memcpy(&result, &u, sizeof(OMUniqueObjectIdentification));
+  return result;
+}
+
+#elif defined(OM_USE_OM_CREATEUUID)
+
+#include <time.h>
+
+OMUniqueObjectIdentification createUniqueIdentifier(void)
+{
+  OMUniqueObjectIdentification result = {0};
+  // {FFFFFFFF-3B78-47ec-98DD-68AC60D2539E}
+  static OMUniqueObjectIdentification id =
+    {0xffffffff, 0x3b78, 0x47ec,
+    {0x98, 0xdd, 0x68, 0xac, 0x60, 0xd2, 0x53, 0x9e}};
+
+  if (id.Data1 == 0xffffffff) {
+    OMUInt32 ticks = clock();
+    time_t timer = time(0);
+    id.Data1 += timer + ticks;
+  }
+  ++id.Data1;
+  result = id;
+  return result;
+}
+
+#elif defined(OM_USE_CF_CREATEUUID)
+
+#include <CoreServices/CoreServices.h>
+
+OMUniqueObjectIdentification createUniqueIdentifier(void)
+{
+  OMUniqueObjectIdentification result = {0};
+  CFUUIDRef ur = CFUUIDCreate(kCFAllocatorDefault);
+  CFUUIDBytes ub = CFUUIDGetUUIDBytes(ur);
+  memcpy(&result, &ub, sizeof(OMUniqueObjectIdentification));
+  CFRelease(ur);
+  return result;
+}
+
+#elif defined(OM_USE_LIBUUID_CREATEUUID)
+
+#include <uuid/uuid.h>
+
+OMUniqueObjectIdentification createUniqueIdentifier(void)
+{
+  OMUniqueObjectIdentification result = {0};
+  uuid_t u;
+  uuid_generate(u);
+  memcpy(&result, &u, sizeof(OMUniqueObjectIdentification));
+  return result;
+}
+
+#endif
+
