@@ -70,15 +70,9 @@
 
 extern "C" const aafClassID_t CLSID_AAFEssenceFormat;
 const CLSID CLSID_AAFEssenceDataStream = { 0x42A63FE1, 0x968A, 0x11d2, { 0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
-//extern "C" const aafClassID_t CLSID_AAFContainerDef;
-//extern "C" const CLSID CLSID_AAFEssenceStream = { 0x66FE33B1, 0x946D, 0x11D2, { 0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
-//extern "C" const aafClassID_t CLSID_AAFNetworkLocator;
-//extern "C" const aafClassID_t CLSID_AAFSourceMob;
-extern "C" const CLSID CLSID_AAFFile;
-extern "C" const CLSID CLSID_AAFEssenceStream;
 
-//const IID IID_IAAFEssenceDataStream = { 0xCDDB6AB1, 0x98DC, 0x11d2, { 0x80, 0x8a, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
-//const aafUID_t CLSID_AAFWaveCodec = { 0x8D7B04B1, 0x95E1, 0x11d2, { 0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
+extern "C" const CLSID CLSID_AAFFile;
+
 ImplAAFEssenceAccess::ImplAAFEssenceAccess ()
 {
 	_destination = NULL;
@@ -275,9 +269,8 @@ ImplAAFEssenceAccess::Create (	  ImplAAFMasterMob *masterMob,
 			CHECK(implData->SetFileMob(_dataFileMob == NULL ? _compFileMob : _dataFileMob));
 			CHECK(dataHead->AppendEssenceData (implData));
 			
-			CHECK(CoCreateInstance(CLSID_AAFEssenceDataStream,
+			CHECK(plugins->CreateInstance(CLSID_AAFEssenceDataStream,
 				NULL, 
-				CLSCTX_INPROC_SERVER, 
 				IID_IAAFEssenceStream, 
 				(void **)&_stream));
 //			_stream->AddRef();
@@ -566,9 +559,8 @@ AAFRESULT STDMETHODCALLTYPE
 				CHECK(implData->SetFileMob(_dataFileMob == NULL ? _compFileMob : _dataFileMob));
 				CHECK(dataHead->AppendEssenceData (implData));
 				
-				CHECK(CoCreateInstance(CLSID_AAFEssenceDataStream,
+				CHECK(plugins->CreateInstance(CLSID_AAFEssenceDataStream,
 					NULL, 
-					CLSCTX_INPROC_SERVER, 
 					IID_IAAFEssenceStream, 
 					(void **)&_stream));
 				//			_stream->AddRef();
@@ -791,9 +783,8 @@ AAFRESULT STDMETHODCALLTYPE
 			if(cStore->LookupEssence (&fileMobID, &essenceData) == AAFRESULT_SUCCESS)
 			{
 				found = AAFTrue;
-				CHECK(CoCreateInstance(CLSID_AAFEssenceDataStream,
+				CHECK(plugins->CreateInstance(CLSID_AAFEssenceDataStream,
 					NULL, 
-					CLSCTX_INPROC_SERVER, 
 					IID_IAAFEssenceStream, 
 					(void **)&_stream));
 		
@@ -846,9 +837,8 @@ AAFRESULT STDMETHODCALLTYPE
 
 						if(found && EqualAUID(&_fileFormat, &ContainerAAF))
 						{
-							CHECK(CoCreateInstance(CLSID_AAFEssenceDataStream,
+							CHECK(plugins->CreateInstance(CLSID_AAFEssenceDataStream,
 								NULL, 
-								CLSCTX_INPROC_SERVER, 
 								IID_IAAFEssenceStream, 
 								(void **)&_stream));
 							
@@ -1109,9 +1099,8 @@ AAFRESULT STDMETHODCALLTYPE
 			if(cStore->LookupEssence (&fileMobID, &essenceData) == AAFRESULT_SUCCESS)
 			{
 				found = AAFTrue;
-				CHECK(CoCreateInstance(CLSID_AAFEssenceDataStream,
+				CHECK(plugins->CreateInstance(CLSID_AAFEssenceDataStream,
 					NULL, 
-					CLSCTX_INPROC_SERVER, 
 					IID_IAAFEssenceStream, 
 					(void **)&_stream));
 		
@@ -1164,9 +1153,8 @@ AAFRESULT STDMETHODCALLTYPE
 
 						if(found && EqualAUID(&_fileFormat, &ContainerAAF))
 						{
-							CHECK(CoCreateInstance(CLSID_AAFEssenceDataStream,
+							CHECK(plugins->CreateInstance(CLSID_AAFEssenceDataStream,
 								NULL, 
-								CLSCTX_INPROC_SERVER, 
 								IID_IAAFEssenceStream, 
 								(void **)&_stream));
 							
@@ -1579,19 +1567,20 @@ AAFRESULT STDMETHODCALLTYPE
 	IAAFEssenceStream		*stream;
 	ImplAAFDictionary		*dict = NULL;
 	IUnknown				*iUnk = NULL;
+	ImplAAFPluginManager *plugins = NULL;
 
 	aafAssert(numCh != NULL, _mainFile, AAFRESULT_NULL_PARAM);
 	XPROTECT()
 	{
+		plugins = ImplAAFContext::GetInstance()->GetPluginManager();
 		CvtInt32toPosition(0, zeroPos);	
 		CHECK(masterMob->SearchSource(slotID, zeroPos,kFileMob,
 									   mediaCrit,
 									   NULL,
 									   &sourceInfo));
 		CHECK(sourceInfo->GetMob((ImplAAFMob **)&fileMob));
-		CHECK(CoCreateInstance(CLSID_AAFEssenceDataStream,
+		CHECK(plugins->CreateInstance(CLSID_AAFEssenceDataStream,
 				NULL, 
-				CLSCTX_INPROC_SERVER, 
 				IID_IAAFEssenceStream, 
 				(void **)&stream));
 		iUnk = static_cast<IUnknown *> (fileMob->GetContainer());
@@ -1600,6 +1589,8 @@ AAFRESULT STDMETHODCALLTYPE
 		dict = NULL;
 		stream->Release();
 		stream = NULL;
+		plugins->ReleaseReference();
+		plugins = NULL;
 	}
 	XEXCEPT
 	{
@@ -1607,6 +1598,9 @@ AAFRESULT STDMETHODCALLTYPE
 			dict->ReleaseReference();
 		if(stream)
 			stream->Release();
+		if (plugins)
+			plugins->ReleaseReference();
+
 	}
 	XEND
 	
