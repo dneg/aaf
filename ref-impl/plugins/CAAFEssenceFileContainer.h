@@ -100,28 +100,28 @@ public:
   // for reading and writing.
   STDMETHOD (CreateEssenceStream)
     (/*[in,string]*/ const aafCharacter * pName, // String key to identify the new essence within container
-     /*[in]*/ const aafUID_t * pMobID, // Optional mobID identifying the essence
+     /*[in]*/ aafMobID_constptr pMobID, // Optional mobID identifying the essence
      /*[out,retval]*/ IAAFEssenceStream ** ppEssenceStream); // address of local variable to contain the essence stream pointer. 
 
   // Attempt to create an essence stream in the container 
   // for writing.
   STDMETHOD (CreateEssenceStreamWriteOnly)
     (/*[in,string]*/ const aafCharacter * pPath, // String key to identify the new essence within container
-     /*[in]*/ const aafUID_t * pMobID, // Optional mobID identifying the essence
+     /*[in]*/ aafMobID_constptr pMobID, // Optional mobID identifying the essence
      /*[out,retval]*/ IAAFEssenceStream ** ppEssenceStream); // address of local variable to contain the essence stream pointer. 
 
   // Attempt to open an essence stream for reading.
   // Returns one of the following:
   STDMETHOD (OpenEssenceStreamReadOnly)
     (/*[in,string]*/ const aafCharacter * pFilePath, // String key to identify the existing essence within container
-     /*[in]*/ const aafUID_t * pMobID, // Optional mobID identifying the essence
+     /*[in]*/ aafMobID_constptr pMobID, // Optional mobID identifying the essence
      /*[out,retval]*/ IAAFEssenceStream ** ppEssenceStream); // address of local variable to contain the essence stream pointer. 
 
   // Attempt to open an essence stream for appending.
   // Returns one of the following:
   STDMETHOD (OpenEssenceStreamAppend)
     (/*[in,string]*/ const aafCharacter * pFilePath, // String key to identify the existing essence within container
-     /*[in]*/ const aafUID_t * pMobID, // Optional mobID identifying the essence
+     /*[in]*/ aafMobID_constptr pMobID, // Optional mobID identifying the essence
      /*[out,retval]*/ IAAFEssenceStream ** ppEssenceStream); // address of local variable to contain the essence stream pointer. 
 
 
