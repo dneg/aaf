@@ -330,6 +330,8 @@ PrintExitCodes ()
 
 	if [ AAFWATCHDOG -eq 1 ]; then
 		print "\nPrinting $ExTarget Test Exit Codes:\n$RESULTS" >> D:/AAFWatchDog/AAFWatchDog.log
+		print "\nAll Generated Test and Example files have been run thru the following programs:"
+		print "ComAAFInfo, dump, AAFDump, ComPropDirectDump, ComPropDirectAccess"
 	fi
 }
 
