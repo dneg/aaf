@@ -37,10 +37,11 @@ void MacroSet::Append
 (const MacroDef & src)
 {
   char initial = src.GetInitial();
+  char * tmp;
   _macs.Append (src);
-  for (char * tmp = _nameInitials;
-	   *tmp;
-	   tmp++)
+  for (tmp = _nameInitials;
+       *tmp;
+       tmp++)
 	{
 	  if (*tmp == initial)
 		return;
