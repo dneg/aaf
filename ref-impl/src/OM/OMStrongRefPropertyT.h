@@ -32,6 +32,7 @@
 #define OMSTRONGREFPROPERTYT_H
 
 #include "OMAssertions.h"
+#include "OMStoredObject.h"
 
 template <typename ReferencedObject>
 OMStrongReferenceProperty<ReferencedObject>::OMStrongReferenceProperty(
@@ -212,12 +213,7 @@ void OMStrongReferenceProperty<ReferencedObject>::save(void) const
 {
   TRACE("OMStrongReferenceProperty<ReferencedObject>::save");
 
-  // Write the index entry.
-  //
-  saveName();
-
-  _reference.save();
-
+  store()->save(*this);
 }
 
   // @mfunc Close this <c OMStrongReferenceProperty>.
@@ -258,14 +254,8 @@ void OMStrongReferenceProperty<ReferencedObject>::restore(size_t externalSize)
 {
   TRACE("OMStrongReferenceProperty<ReferencedObject>::restore");
 
-  // retrieve sub-storage name
-  //
-  restoreName(externalSize);
-
-  _reference.restore();
-
+  store()->restore(*this, externalSize);
   setPresent();
-
 }
 
   // @mfunc  Is this <c OMStrongReferenceProperty> void ?
