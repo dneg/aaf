@@ -1209,6 +1209,14 @@ ImplAAFFile::SaveCopyAs (ImplAAFFile * pDestFile)
     ImplAAFSmartPointer<ImplAAFDictionary> spDstDict;
     checkResult( spDstHeader->GetDictionary(&spDstDict) );
 
+    // Merge the dictionary
+    {
+      ImplAAFSmartPointer<ImplAAFDictionary> spSrcDict;
+      checkResult( GetDictionary(&spSrcDict) );
+
+      checkResult( spSrcDict->MergeTo( spDstDict ) );
+    }
+
     // Clone the content store.
     {
       ImplAAFSmartPointer<ImplAAFContentStorage> spSrcContentStore;
