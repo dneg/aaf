@@ -1,0 +1,28 @@
+#startm .this-module 0
+AAFUnixLocator\
+#endm
+#c
+#startm .parent-module 0
+AAFLocator\
+#endm
+#c
+#import ./AAFUnitTest.exp
+
+/******************************************\
+*                                          *
+* Advanced Authoring Format                *
+*                                          *
+* Copyright (c) 1998 Avid Technology, Inc. *
+* Copyright (c) 1998 Microsoft Corporation *
+*                                          *
+\******************************************/
+
+AD_CLASS_BEGIN()
+  //
+  // IAAFUnitTest interface method overrides
+  //
+.method-Test
+
+
+AD_CLASS_END
+
