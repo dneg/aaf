@@ -24,8 +24,6 @@
 
 #define _MSL_USING_NAMESPACE
 
-//#define CHECKMEMORYLEAKS // Uncomment this line to turn leak checking on
-
 #define _MAC
 #define NONAMELESSUNION
 
@@ -37,15 +35,7 @@
 
 #include "MacHeaders.h"
 
-
 // Conditional debugging and ansi assertions disabled
 #ifndef NDEBUG
 #define NDEBUG
 #endif
-
-// Enable PRECONDITION, POSTCONDITION, ASSERT, INVARIANT and IMPLIES macros.
-//#define OM_ENABLE_DEBUG
-
-// Uncomment the following line if you want to see an exhausted list
-// of the calling sequence within the Object Manager.
-//#define OM_ENABLE_TRACE
