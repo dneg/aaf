@@ -120,6 +120,15 @@ public:
                                     const OMLoadMode loadMode,
                                     OMDictionary* dictionary = 0);
 
+    // @cmember Open a new <c OMFile> for write access.
+  static OMFile* openNewWrite(OMRawStorage* rawStorage,
+                              const OMClassFactory* factory,
+                              void* clientOnRestoreContext,
+                              const OMByteOrder byteOrder,
+                              OMStorable* clientRoot,
+                              const OMFileSignature& signature,
+                              OMDictionary* dictionary = 0);
+
     // @cmember Open a new <c OMFile> for modify access.
     // @devnote Will superceed openNewModify() above.
   static OMFile* openNewModify(OMRawStorage* rawStorage,
