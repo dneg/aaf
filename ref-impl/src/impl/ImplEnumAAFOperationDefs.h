@@ -111,15 +111,11 @@ public:
 public:
   // SDK Internal 
   virtual AAFRESULT STDMETHODCALLTYPE
-    SetEnumProperty( ImplAAFObject *pObj, OperationDefWeakRefArrayProp_t *pProp);// !!!TEmp until weak reference code
-  virtual AAFRESULT STDMETHODCALLTYPE
 	  SetIterator(ImplAAFObject *pObj,
 				OMReferenceContainerIterator<ImplAAFOperationDef>* iterator);
 
 private:
-	aafUInt32							_current;
 	ImplAAFObject						*_enumObj;
-	OperationDefWeakRefArrayProp_t		*_enumProp;
 	OMReferenceContainerIterator<ImplAAFOperationDef>*	_iterator;
 };
 

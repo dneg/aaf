@@ -45,11 +45,9 @@
 extern "C" const aafClassID_t CLSID_EnumAAFParameterDefs;
 
 ImplEnumAAFParameterDefs::ImplEnumAAFParameterDefs ()
-: _enumProp(0), _iterator(0)
+: _iterator(0)
 {
-	_current = 0;
 	_enumObj = NULL;
-	_enumProp = NULL;
 }
 
 
@@ -68,59 +66,23 @@ AAFRESULT STDMETHODCALLTYPE
     ImplEnumAAFParameterDefs::NextOne (
       ImplAAFParameterDef **ppParameterDef)
 {
-	aafUInt32			numElem;
-	aafUID_t			value;
-	ImplAAFHeader		*head = NULL;
-	ImplAAFDictionary	*dict = NULL;
 	AAFRESULT ar = AAFRESULT_NO_MORE_OBJECTS;
 
-	if(_enumProp != NULL)
-		numElem = _enumProp->size() / sizeof(aafUID_t);
-	else if(_iterator == NULL)
+	if(_iterator == NULL)
 		return(AAFRESULT_INCONSISTANCY);
 
 	if(ppParameterDef == NULL)
 		return(AAFRESULT_NULL_PARAM);
-	XPROTECT()
+
+	if (_iterator->before() || _iterator->valid())
 	{
-		if(_enumProp != NULL)
+		if (++(*_iterator))
 		{
-			if(_current >= numElem)
-				return AAFRESULT_NO_MORE_OBJECTS;
-			_enumProp->getValueAt(&value, _current);
-			CHECK(_enumObj->MyHeadObject(&head));
-			CHECK(head->GetDictionary (&dict));
-			CHECK(dict->LookupParameterDef (value, ppParameterDef));
-			head->ReleaseReference();
-			head = NULL;
-			dict->ReleaseReference();
-			dict = NULL;
-			_current++;
+			*ppParameterDef = _iterator->value();
+			(*ppParameterDef)->AcquireReference();
 			ar = AAFRESULT_SUCCESS;
 		}
-		else
-		{
-			if (_iterator->before() || _iterator->valid())
-			{
-				if (++(*_iterator))
-				{
-					*ppParameterDef = _iterator->value();
-					(*ppParameterDef)->AcquireReference();
-					ar = AAFRESULT_SUCCESS;
-				}
-			}
-		}
 	}
-	XEXCEPT
-	{
-		if(head)
-		  head->ReleaseReference();
-		head = 0;
-		if(dict)
-		  dict->ReleaseReference();
-		dict = 0;
-	}
-	XEND;
 	
 	return ar;
 }
@@ -160,41 +122,22 @@ AAFRESULT STDMETHODCALLTYPE
       aafUInt32  count)
 {
 	AAFRESULT	ar = AAFRESULT_SUCCESS;
-	aafUInt32	newCurrent;
-	aafUInt32	numElem, n;
+	aafUInt32	n;
 
-	if(_enumProp != NULL)
+		
+	for(n = 1; n <= count; n++)
 	{
-		numElem = _enumProp->size() / sizeof(aafUID_t);
-		
-		newCurrent = _current + count;
-		
-		if(newCurrent < numElem)
+		// Defined behavior of skip is to NOT advance at all if it would push us off of the end
+		if(!++(*_iterator))
 		{
-			_current = newCurrent;
-		}
-		else
-		{
-			ar = E_FAIL;
-		}
-	}
-	else
-	{
-		
-		for(n = 1; n <= count; n++)
-		{
-			// Defined behavior of skip is to NOT advance at all if it would push us off of the end
-			if(!++(*_iterator))
+			// Off the end, decrement n and iterator back to the starting position
+			while(n >= 1)
 			{
-				// Off the end, decrement n and iterator back to the starting position
-				while(n >= 1)
-				{
-					--(*_iterator);
-					n--;
-				}
-				ar = AAFRESULT_NO_MORE_OBJECTS;
-				break;
+				--(*_iterator);
+				n--;
 			}
+			ar = AAFRESULT_NO_MORE_OBJECTS;
+			break;
 		}
 	}
 
@@ -206,14 +149,7 @@ AAFRESULT STDMETHODCALLTYPE
     ImplEnumAAFParameterDefs::Reset ()
 {
 	AAFRESULT ar = AAFRESULT_SUCCESS;
-	if(_enumProp != NULL)
-	{
-		_current = 0;
-	}
-	else
-	{
-		_iterator->reset();
-	}
+	_iterator->reset();
 	return ar;
 }
 
@@ -229,53 +165,21 @@ AAFRESULT STDMETHODCALLTYPE
 	if (result == NULL)
 		return E_FAIL;
 	
-	if(_enumProp != NULL)
+	ar = result->SetIterator(_enumObj,_iterator->copy());
+	if (SUCCEEDED(ar))
 	{
-		ar = result->SetEnumProperty(_enumObj, _enumProp);
-		if (SUCCEEDED(ar))
-		{
-			result->_current = _current;
-			*ppEnum = result;
-		}
-		else
-		{
-			result->ReleaseReference();
-			result = 0;
-			*ppEnum = NULL;
-		}
+		*ppEnum = result;
 	}
 	else
 	{
-		ar = result->SetIterator(_enumObj,_iterator->copy());
-		if (SUCCEEDED(ar))
-		{
-			*ppEnum = result;
-		}
-		else
-		{
-			result->ReleaseReference();
-			result = 0;
-			*ppEnum = NULL;
-		}
+		result->ReleaseReference();
+		result = 0;
+		*ppEnum = NULL;
 	}
 	
 	return ar;
 }
 
-
-AAFRESULT STDMETHODCALLTYPE
-    ImplEnumAAFParameterDefs::SetEnumProperty( ImplAAFObject *pObj, parmDefWeakRefArrayProp_t *pProp)
-{
-	if (_enumObj)
-	  _enumObj->ReleaseReference();
-	_enumObj = 0;
-	_enumObj = pObj;
-	if (pObj)
-		pObj->AcquireReference();
-	_enumProp = pProp;				// Don't refcount, same lifetime as the object.
-
-	return AAFRESULT_SUCCESS;
-}
 
 AAFRESULT STDMETHODCALLTYPE
     ImplEnumAAFParameterDefs::SetIterator(
@@ -284,7 +188,6 @@ AAFRESULT STDMETHODCALLTYPE
 {
 	AAFRESULT ar = AAFRESULT_SUCCESS;
 	
-	_enumProp = NULL;
 	if (_enumObj)
 		_enumObj->ReleaseReference();
 	_enumObj = 0;

@@ -42,6 +42,8 @@ class ImplEnumAAFParameterDefs;
 #endif
 
 #include "OMWeakRefProperty.h"
+#include "OMWeakRefVectorProperty.h"
+#include "OMWeakRefSetProperty.h"
 
 #include "ImplAAFDataDef.h"
 #include "ImplAAFParameterDef.h"
@@ -241,11 +243,11 @@ public:
 private:
 	OMWeakReferenceProperty<ImplAAFDataDef>			_dataDef;
 	OMFixedSizeProperty<aafBool>					_isTimeWarp;
-	OperationDefWeakRefArrayProp_t						_degradeTo;
+	OMWeakReferenceVectorProperty<ImplAAFOperationDef>	_degradeTo;
 	OMFixedSizeProperty<aafUID_t>                   _category;
 	OMFixedSizeProperty<aafInt32>					_numInputs;
 	OMFixedSizeProperty<aafUInt32>					_bypass;
-	parmDefWeakRefArrayProp_t						_paramDefined;
+	OMWeakReferenceSetProperty<ImplAAFParameterDef>	_paramDefined;
 };
 
 #endif // ! __ImplAAFOperationDef_h__
