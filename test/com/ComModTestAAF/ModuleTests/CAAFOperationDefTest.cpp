@@ -328,9 +328,9 @@ HRESULT CAAFOperationDef::test()
 	if (SUCCEEDED(hr))
 	{
 		cout << "The following IAAFOperationDef methods have not been implemented:" << endl; 
-		cout << "     PrependDegradeToEffects" << endl; 
-		cout << "     AppendDegradeToEffects" << endl; 
-		cout << "     GetDegradeToEffects" << endl; 
+		cout << "     PrependDegradeToOperations" << endl; 
+		cout << "     AppendDegradeToOperations" << endl; 
+		cout << "     GetDegradeToOperations" << endl; 
 		hr = AAFRESULT_TEST_PARTIAL_SUCCESS;
 	}
 
