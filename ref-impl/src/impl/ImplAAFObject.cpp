@@ -134,7 +134,8 @@ AAFRESULT ImplPropertyCollection::Initialize
 		  pHead = dynamic_cast<ImplAAFHeader*>(pObj);
 		  if (!pHead)
 			throw AAFRESULT_OBJECT_NOT_ATTACHED;
-		  pHead->AcquireReference();
+		  // smart pointers don't require this
+		  // pHead->AcquireReference();
 		}
 	  else
 		{
@@ -164,10 +165,15 @@ AAFRESULT ImplPropertyCollection::Initialize
 		  if (AAFRESULT_FAILED (hr)) throw hr;
 		  assert (pPropDef);
 
-		  _pProperties[presentPropIdx] =
-			(ImplAAFProperty*) CreateImpl (CLSID_AAFProperty);
-		  if (!_pProperties[presentPropIdx])
+		  // Create property; array is smart pointers, which will
+		  // maintain their own reference counts.  First assign new
+		  // prop to temp, so we can release it after the sp
+		  // assignment.
+		  ImplAAFProperty * tmp = (ImplAAFProperty*) CreateImpl (CLSID_AAFProperty);
+		  if (! tmp) 
 			throw AAFRESULT_NOMEMORY;
+		  _pProperties[presentPropIdx] = tmp;
+		  tmp->ReleaseReference ();
 
 		  hr = _pProperties[presentPropIdx]->Initialize (pPropDef, pOmProp);
 		  if (AAFRESULT_FAILED (hr)) throw hr;
@@ -233,14 +239,14 @@ AAFRESULT ImplPropertyCollection::GetNthElement
 
 ImplAAFObject::ImplAAFObject ()
   : _pProperties (0),
-	_cachedDefinition(NULL),
+	_cachedDefinition (0),
 	_OMPropsInited (AAFFalse)
 {}
 
 
 ImplAAFObject::~ImplAAFObject ()
 {
-	_cachedDefinition = NULL; // we don't need to reference count this defintion
+  _cachedDefinition = 0; // we don't need to reference count this defintion
 
   if (_pProperties)
 	delete _pProperties;
@@ -287,10 +293,10 @@ AAFRESULT STDMETHODCALLTYPE
 		return hr;
 	  assert (_cachedDefinition);
 		
-		// We don't need to reference count the definitions since
-		// they are owned by the dictionary.
-		aafInt32 count = _cachedDefinition->ReleaseReference();
-		assert(0 < count);
+	  // We don't need to reference count the definitions since
+	  // they are owned by the dictionary.
+	  aafInt32 count = _cachedDefinition->ReleaseReference();
+	  assert(0 < count);
 	}
   assert (ppClassDef);
   *ppClassDef = _cachedDefinition;
@@ -542,7 +548,65 @@ ImplAAFObject::GetDictionary(ImplAAFDictionary **ppDictionary) const
 //
 
 
-#include <iostream.h>
+//
+// Private infrastructure to cache property values
+//
+struct propDefPair
+{
+  OMPropertyId         pid;
+  ImplAAFPropertyDefSP pPropDef;
+};
+
+static const int kMaxProps = 100;
+
+static void fillPropDefs (ImplAAFClassDef * pClassDef,
+						  propDefPair * props,
+						  aafUInt32 & numPropsFound)
+{
+  assert (pClassDef);
+  assert (props);
+
+  AAFRESULT hr;
+
+  ImplEnumAAFPropertyDefsSP pEnum;
+  hr = pClassDef->GetPropertyDefs (&pEnum);
+  assert (AAFRESULT_SUCCEEDED (hr));
+  assert (pEnum);
+
+  ImplAAFPropertyDefSP pPropDef;
+  hr = pEnum->NextOne (&pPropDef);
+  while (AAFRESULT_SUCCEEDED (hr))
+	{
+	  props->pid = pPropDef->OmPid();
+	  props->pPropDef = pPropDef;
+	  assert (++numPropsFound <= kMaxProps);
+	  hr = pEnum->NextOne (&pPropDef);
+	  props++;
+	}
+
+  ImplAAFClassDefSP pParent;
+  hr = pClassDef->GetParent (&pParent);
+  assert (AAFRESULT_SUCCEEDED (hr));
+  if (pParent)
+	fillPropDefs (pParent, props, numPropsFound);
+}
+
+
+static ImplAAFPropertyDef * sLookupPropDefByOmpid (propDefPair * props,
+												 aafUInt32 numProps,
+												 OMPropertyId pidToLookup)
+{
+  assert (props);
+
+  while (numProps--)
+	{
+	  if (pidToLookup == props->pid)
+		return (ImplAAFPropertyDef*) props->pPropDef;
+	  props++;
+	}
+  return 0;
+}
+
 
 void ImplAAFObject::InitOMProperties (void)
 {
@@ -581,6 +645,11 @@ void ImplAAFObject::InitOMProperties (void)
   hr = GetDefinition (&spDef);
   assert (AAFRESULT_SUCCEEDED (hr));
   assert (spDef);
+
+  propDefPair propDefs[kMaxProps];
+  aafUInt32 numPropDefs = 0;
+  fillPropDefs (spDef, propDefs, numPropDefs);
+  assert (numPropDefs <= kMaxProps);
 
   OMPropertySet * ps = propertySet();
   assert (ps);
@@ -663,16 +732,12 @@ void ImplAAFObject::InitOMProperties (void)
 	  assert (pProp);
 	  OMPropertyId opid = pProp->propertyId ();
 
-	  ImplAAFTypeDefSP ptd;
-	  assert (spDef);
-	  pdSP = 0;
-	  hr = spDef->LookupPropertyDefbyOMPid (opid, &pdSP);
-
+	  pdSP = sLookupPropDefByOmpid (propDefs, numPropDefs, opid);
 	  // The following assertion will fail if the property is not
 	  // defined in the class definition for this object.
-	  assert (AAFRESULT_SUCCEEDED (hr));
 	  assert (pdSP);
 
+	  ImplAAFTypeDefSP ptd;
 	  hr = pdSP->GetTypeDef (&ptd);
 	  assert (AAFRESULT_SUCCEEDED (hr));
 	  assert (ptd);
