@@ -9,7 +9,7 @@ AAFObject\
 #import ./AAFObject.exp
 AD_HEAD
 
-AD_FORWARD_DECLARATION(AAFDataDefinition)
+AD_FORWARD_DECLARATION(AAFDataDef)
 
 /******************************************\
 *                                          *
@@ -42,20 +42,20 @@ AD_METHOD1(GetLength,
   // stored as an implicit property on 1.x objects\\\, so this routine
   // recursively calculates the length.)
 	
-AD_XMETHOD1(SetDataDefinition,
+AD_XMETHOD1(SetDataDef,
 			[in],
 			objIn,
-			AAFDataDefinition,
+			AAFDataDef,
 			datadef,
-			DataDefinition of this object,
+			DataDef of this object,
 			sets the data definition property value on the input component object.)
 
-AD_XMETHOD1(GetDataDefinition,
+AD_XMETHOD1(GetDataDef,
 			[retval][out],
 			objOut,
-			AAFDataDefinition,
+			AAFDataDef,
 			datadef,
-			DataDefinition of this object,
+			DataDef of this object,
 			returns data definition object)
 
 AD_CLASS_END
