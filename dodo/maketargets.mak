@@ -95,15 +95,15 @@ $(INCLUDE_DIR)/ref-api/AAF.h : $(FREFH_TARGETS)
 	    echo \#endif ; \
 	    echo "" ; \
 	    echo \#ifdef __cplusplus ; \
-	    for class in $(DODO_TARGET_NAMES) ; do \
+	    for class in $(DODO_TARGET_NAMES) $(AAFCOMINTERFACESONLY) ; do \
 	    	echo interface I$$class\;; \
 	    done ; \
 	    echo \#else ; \
-	    for class in $(DODO_TARGET_NAMES) ; do \
+	    for class in $(DODO_TARGET_NAMES) $(AAFCOMINTERFACESONLY) ; do \
 	    	echo typedef interface I$$class I$$class\;;  \
 	    done ; \
 	    echo \#endif ; \
-	    for class in $(DODO_TARGET_NAMES); do \
+	    for class in $(DODO_TARGET_NAMES) $(AAFCOMINTERFACESONLY) ; do \
 	    	echo ""; \
 	    	echo "// I$$class"; \
 	    	echo ""; \
