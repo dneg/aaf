@@ -44,6 +44,8 @@ public:
 
 	IAAFMobSP LookupMob(aafMobID_constref mobid) const;
 	IAAFEssenceDataSP LookupEssenceData(aafMobID_constref mobID);
+	aafUInt32 CountEssenceData() const;
+	aafBoolean_t IsEssenceDataPresent(aafMobID_constref mobID) const;
 
 	aafUInt32 CountIdentifications();
 	IAAFIdentificationSP GetIdentificationAt(aafUInt32 idno);

@@ -136,6 +136,24 @@ IAAFEssenceDataSP AxHeader::LookupEssenceData(aafMobID_constref mobID)
 	return spessdata;
 }
 
+aafUInt32 AxHeader::CountEssenceData() const
+{
+        aafUInt32 result;
+
+        CHECK_HRESULT(_spIaafHeader->CountEssenceData(&result));
+
+        return result;
+}
+
+aafBoolean_t AxHeader::IsEssenceDataPresent(aafMobID_constref mobID) const
+{
+    	aafBoolean_t result;
+
+	CHECK_HRESULT(_spIaafHeader->IsEssenceDataPresent(mobID,kAAFEssence,&result));
+
+	return result;
+}
+
 aafUInt32 AxHeader::CountIdentifications()
 {
 	aafUInt32 idcount;
