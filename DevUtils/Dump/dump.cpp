@@ -3968,6 +3968,9 @@ void usage(void)
   cerr << "--help              = help (-h)          :"
        << "print this message and exit"
        << endl;
+  cerr << "--verbose           = verbose            :"
+       << "print verbose error messages"
+       << endl;
   cerr << endl;
   cerr << "--hex-dump          = hex dump (-x)      :"
        <<"any file"
