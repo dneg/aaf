@@ -39,25 +39,25 @@ AD_DEFAULT_UUID(B1A21376, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
 AD_CLASS_BEGIN
 
 AD_METHOD1(IsATrack,
-[out\,retval], aafBool *, retval, True if slot is a track,
-Tests whether a Mob Slot is a track \(contains a Track Descriptor\, which makes
-  // it externally visible\).)
+[out\\\,retval], aafBool *, retval, True if slot is a track,
+Tests whether a Mob Slot is a track \\\(contains a Track Descriptor\\\, which makes
+  // it externally visible\\\).)
 
 AD_XMETHOD1(GetSegment,
 [out\,retval], objOut, AAFSegment, result, Segment property value,
 This method will get the segment for this mob slot.)
 
 AD_METHOD1(GetName,
-[in\,out], aafString_t *, name, Mob Slot Name,
+[in\\\,out], aafString_t *, name, Mob Slot Name,
 This method will copy the mob slot name into the given aafString.)
 
 AD_METHOD1(GetPhysicalNum,
-[out\,retval], aafUInt32 *, result, The physical track number property value,
+[out\\\,retval], aafUInt32 *, result, The physical track number property value,
 Returns information about the physical output channel associated with the
   // Track.
   // @commThis function returns the physical track number of the specified track. The
   // physical track number identifies the physical track associated with the media.
-  // For File Source Mobs that describe stereo audio media\, the left channel should
+  // For File Source Mobs that describe stereo audio media\\\, the left channel should
   // have a PhysicalTrack of 1 and the right channel should have a Physical-Track
   // of 2.
   // The function returns an error if the object specified in the track parameter is not
@@ -68,7 +68,7 @@ AD_METHOD1(SetPhysicalNum,
 Sets the physical output channel associated with the Track.
   // @commThis function sets the physical track number of the specified track. The physical 
   // track number identifies the physical track associated with the media. For
-  // File Source Mobs that describe stereo audio media\, the left channel should
+  // File Source Mobs that describe stereo audio media\\\, the left channel should
   // have a PhysicalTrack of 1 and the right channel should have a Physical-Track
   // of 2.
   // The function returns an error if the Mob Slot passed in is not a track.)

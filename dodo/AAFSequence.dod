@@ -44,10 +44,10 @@ AD_XMETHOD1(AppendCpnt,
 AD_METHOD1(GetNumCpnts,
 		   [out],aafInt32 *,numCpnts,Number of components in sequence,
   // This set of functions returns the required property values for
-  // the object identified by XXX.  If a value is not requested\, a
+  // the object identified by XXX.  If a value is not requested\\\, a
   // NULL should be passed into the parameter corresponding to that
   // property. For example --
-  //          omfiMobSlotInfo\(file\, slotObj\, NULL\, &segment\);
+  //          omfiMobSlotInfo\\\(file\\\, slotObj\\\, NULL\\\, &segment\\\);
   // would not return the editRate property from a mob slot.
   // Additional functions are provided to return optional properties.)
 
@@ -68,7 +68,7 @@ AD_XMETHOD4(FindSubSegment,
 			[in],objPass,aafPosition_t  ,offset    ,,
 			[out],objPass,aafPosition_t *,sequPosPtr,,
 			[out],objOut,AAFSegment,subseg    ,,
-			[out],aafBool *      ,found     ,,
+			[out],objPass,aafBool *      ,found     ,,
 		   )
 
 AD_XMETHOD3(OffsetToTimecodeClip,
