@@ -1009,6 +1009,26 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 AAFRESULT STDMETHODCALLTYPE
+   ImplAAFMob::AppendNewStaticSlot (ImplAAFSegment * /*pSegment*/,
+                           aafSlotID_t  /*slotID*/,
+                           aafCharacter_constptr  /*pSlotName*/,
+                           ImplAAFStaticMobSlot ** /*ppNewSlot*/)
+{
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+AAFRESULT STDMETHODCALLTYPE
+   ImplAAFMob::AppendNewEventSlot (aafRational_t  /*editRate*/,
+                           ImplAAFSegment * /*pSegment*/,
+                           aafSlotID_t  /*slotID*/,
+                           aafCharacter_constptr  /*pSlotName*/,
+                           aafPosition_t  /*origin*/,
+                           ImplAAFEventMobSlot ** /*ppNewSlot*/)
+{
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+AAFRESULT STDMETHODCALLTYPE
     ImplAAFMob::OffsetToMobTimecode (ImplAAFSegment *pTcSeg,
 				     aafPosition_t *offset,
 				     aafTimecode_t *result)
