@@ -71,50 +71,8 @@ extern "C" {
     typedef enum { STORAGE, STREAM } StgDirType;
     /* Property IDs for for Summary Info
     we do not typedef them on purpose */
-    enum
-    {  PIDSI_TITLE = 0x02,           /* Title */
-       PIDSI_SUBJECT =  0x00000003,  /* Subject */
-       PIDSI_AUTHOR = 0x00000004,    /* Author */
-       PIDSI_KEYWORDS = 0x00000005,  /* Keywords */
-       PIDSI_COMMENTS = 0x00000006,  /* Comments */
-       PIDSI_TEMPLATE = 0x00000007,  /* Template */
-       PIDSI_LASTAUTHOR = 0x00000008,   /* Last Saved By */
-       PIDSI_REVNUMBER = 0x00000009, /* Revision Number*/
-       PIDSI_EDITTIME = 0x0000000A,  /* Total Editing Time */
-       PIDSI_LASTPRINTED = 0x0000000B,  /* Last Printed */
-       PIDSI_CREATE_DTM = 0x0000000C,   /* Create Time/Date */
-       PIDSI_LASTSAVE_DTM = 0x0000000D,/* Last saved Time/Date */
-       PIDSI_PAGECOUNT = 0x0000000E,
-       PIDSI_WORDCOUNT = 0x0000000F,
-       PIDSI_CHARCOUNT = 0x00000010,
-       PIDSI_THUMBNAIL = 0x00000011,	/* used for previews by many applications */
-       PIDSI_APPNAME = 0x00000012,      /* Name of Creating Application */
-       PIDSI_SECURITY = 0x00000013
-    };
 
-    /* Property IDs for for Summary Info
-    we do not typedef them on purpose */
-    enum
-    {
-        PIDDSI_CATEGORY = 0x00000002,
-        PIDDSI_PRESFORMAT = 0x00000003,
-        PIDDSI_BYTECOUNT = 0x00000004,
-        PIDDSI_LINECOUNT = 0x00000005,
-        PIDDSI_PARCOUNT = 0x00000006,
-        PIDDSI_SLIDECOUNT = 0x00000007,
-        PIDDSI_NOTECOUNT = 0x00000008,
-        PIDDSI_HIDDENCOUNT = 0x00000009,
-        PIDDSI_MMCLIPCOUNT = 0x0000000A,
-        PIDDSI_SCALE = 0x0000000B,
-        /* not supported in this version
-           PIDDSI_HEADINGPAIR = 0x0000000C,
-           PIDDSI_DOCPARTS = 0x0000000D,
-        */
-        PIDDSI_MANAGER = 0x0000000E,
-        PIDDSI_COMPANY = 0x0000000F,
-        PIDDSI_LINKSDIRTY = 0x00000010
-    };
-
+ 
     /* Enumeration of supported property streams */
     typedef enum
     {
