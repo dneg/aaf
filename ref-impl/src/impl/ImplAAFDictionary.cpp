@@ -74,19 +74,15 @@ ImplAAFDictionary::ImplAAFDictionary ()
 
 ImplAAFDictionary::~ImplAAFDictionary ()
 {
-	ImplAAFPluggableDef *pPlug = NULL;
-	size_t size, i;
-
+	size_t i;
 	// Release the pluginDefinitions
-	_pluginDefinitions.getSize(size);
+	size_t size = _pluginDefinitions.getSize();
 	for (i = 0; i < size; i++)
 	{
-		_pluginDefinitions.getValueAt(pPlug, i);
+		ImplAAFPluggableDef *pPlug =_pluginDefinitions.setValueAt(0, i);
 		if (pPlug)
 		{
 		  pPlug->ReleaseReference();
-		  // Set value to 0 so OM can perform necessary cleanup.
-		  _pluginDefinitions.setValueAt(0, i);
 		}
 	}
 }
