@@ -108,10 +108,6 @@ SOURCE="..\..\..\ref-impl\src\com-api\com-dll\AAFCOM.DEF"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\com-api\AAFModule.cpp"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\src\com-api\com-dll\AAFObjectCreation.cpp"
 # End Source File
 # Begin Source File
@@ -283,6 +279,10 @@ SOURCE="..\..\..\ref-impl\src\com-api\CAAFMob.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFMobSlot.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFModule.cpp"
 # End Source File
 # Begin Source File
 

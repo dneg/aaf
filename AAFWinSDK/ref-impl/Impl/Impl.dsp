@@ -282,6 +282,10 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFMobSlot.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFModule.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFNestedScope.cpp"
 # End Source File
 # Begin Source File
