@@ -40,6 +40,10 @@
 #include "ImplAAFHeader.h"
 #endif
 
+#ifndef __ImplAAFPropValData_h__
+#include "ImplAAFPropValData.h"
+#endif
+
 #ifndef __AAFTypeDefUIDs_h__
 #include "AAFTypeDefUIDs.h"
 #endif
@@ -182,6 +186,142 @@ ImplAAFTypeDefEnum::pvtInitialize (
 
 
 
+/****/
+//
+// LSB-justifies and zero-fills the input value, copying the result
+// into the output value.  Requires that inVal and outVal are valid
+// pointers, and that inValSize is no larger than outValSize.  Also
+// requires that in/outValSize are supported values from the set {1,
+// 2, 4, 8} bytes.
+//
+static void pvtZeroFill (const aafMemPtr_t inVal,
+						   aafUInt32   inValSize,
+						   aafMemPtr_t outVal,
+						   aafUInt32   outValSize)
+{
+  aafUInt32 localValue;	// only 4 bytes; see below for why it's OK.
+
+  assert (inVal);
+  assert (outVal);
+  assert (inValSize <= outValSize);
+  assert ((1 == inValSize) ||
+		  (2 == inValSize) ||
+		  (4 == inValSize) ||
+		  (8 == inValSize));
+  assert ((1 == outValSize) ||
+		  (2 == outValSize) ||
+		  (4 == outValSize) ||
+		  (8 == outValSize));
+  if (inValSize == outValSize)
+	{
+	  memcpy (outVal, inVal, inValSize);
+	}
+  else
+	{
+	  // At this point we know that inSize < outSize; the largest
+	  // outSize can be is 8 bytes, so the largest inSize can be is 4
+	  // bytes; that's why localValue can work as only a 4-byte int.
+	  switch (inValSize)
+		{
+		case 1:
+		  localValue = *((aafUInt8*) inVal);
+		  break;
+		case 2:
+		  localValue = *((aafUInt16*) inVal);
+		  break;
+		case 4:
+		  localValue = *((aafUInt32*) inVal);
+		  break;
+		case 8:
+		  // inval can't be 8 bytes
+		  assert (0);
+		default:
+		  assert (0);
+		}
+
+	  switch (outValSize)
+		{
+		case 1:
+		  // inval can't be 1 byte
+		  assert (0);
+		case 2:
+		  *((aafUInt16*) outVal) = (aafUInt16) localValue;
+		  break;
+		case 4:
+		  *((aafUInt32*) outVal) = localValue;
+		  break;
+		case 8:
+		  // hack! we don't have unsigned 64-bit, so we'll depend on
+		  // the compiler to sign-extend and zero-fill the unsigned
+		  // localValue, even though the dest (64bit) is signed.
+		  *((aafInt64*) outVal) = localValue;
+		  break;
+		default:
+		  assert (0);
+		}
+	}
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFTypeDefEnum::CreateValue (
+      aafMemPtr_t  pVal,
+      aafUInt32  valSize,
+      ImplAAFPropertyValue ** ppPropVal)
+{
+  if (! pVal)
+	return AAFRESULT_NULL_PARAM;
+  if (! ppPropVal)
+	return AAFRESULT_NULL_PARAM;
+
+  // Get the size of the base integer type
+  aafUInt32	localIntSize = NativeSize();
+
+  if (valSize > localIntSize)
+	return AAFRESULT_BAD_SIZE;
+
+  // current impl only allows 1, 2, 4, and 8-byte ints.
+  if( (1 != valSize) && (2 != valSize) &&
+      (4 != valSize) && (8 != valSize) )
+	return AAFRESULT_BAD_SIZE;
+
+  // zero-fill the value.
+  aafUInt8 valBuf[8];
+  pvtZeroFill (pVal, valSize, valBuf, localIntSize);
+
+  // Create a temporary pointer to copy to the smartptr
+  ImplAAFPropValData * tmp = (ImplAAFPropValData *)CreateImpl(CLSID_AAFPropValData);
+  if (NULL == tmp)
+	return AAFRESULT_NOMEMORY;
+  ImplAAFPropValDataSP pv;
+  pv = tmp;
+
+  // Bobt: Hack bugfix! SmartPointer operator= will automatically
+  // AddRef; CreateImpl *also* will addref, so we've got one too
+  // many.  Put us back to normal.
+  tmp->ReleaseReference(); // we don't need this reference anymore.
+  tmp = 0;
+
+  AAFRESULT hr;
+  hr = pv->Initialize(this);
+  if (! AAFRESULT_SUCCEEDED (hr))
+	return hr;
+
+  aafMemPtr_t pBits = NULL;
+  hr = pv->AllocateBits (localIntSize, &pBits);
+  if (! AAFRESULT_SUCCEEDED (hr))
+	return hr;
+
+  assert (pBits);
+  memcpy (pBits, valBuf, localIntSize);
+
+  *ppPropVal = pv;
+  (*ppPropVal)->AcquireReference ();
+  return AAFRESULT_SUCCESS;
+}
+/****/
+
+
 AAFRESULT STDMETHODCALLTYPE
 ImplAAFTypeDefEnum::GetElementType (
 									ImplAAFTypeDef ** ppTypeDef) const
@@ -281,42 +421,13 @@ ImplAAFTypeDefEnum::CreateValueFromName (
 	
 	// Get the size of the base integer type
 	aafUInt32 localIntSize = NativeSize();
-	
-	//Now allocate a New PV based on the local INT size ....
 
-	ImplAAFTypeDefSP ptd;
-
-	ImplAAFDictionarySP pDict;
-	check_hr ( GetDictionary(&pDict) );
-
-	switch (localIntSize)
-	{
-	case 1:
-		check_hr ( pDict->LookupTypeDef (kAAFTypeID_Int8, &ptd) );
-		break;
-	case 2:
-		check_hr ( pDict->LookupTypeDef (kAAFTypeID_Int16, &ptd) );
-		break;
-	case 4:
-		check_hr ( pDict->LookupTypeDef (kAAFTypeID_Int32, &ptd) );
-		break;
-	case 8:
-		check_hr ( pDict->LookupTypeDef (kAAFTypeID_Int64, &ptd) );
-		break;
-	default:
-		assert(0);
-	}
-	assert (ptd);
-	ImplAAFTypeDefInt * pLocalTd =
-		dynamic_cast<ImplAAFTypeDefInt*>((ImplAAFTypeDef*) ptd);
-	assert (pLocalTd);
-	
 	switch (localIntSize)
 	{
 	case 1:
 		aafInt8 i8Val;
 		i8Val = (aafInt8) the_value;
-		check_hr (  pLocalTd->CreateValue (
+		check_hr (  CreateValue (
 			(aafMemPtr_t) &i8Val,
 			1,  //size in bytes
 			ppPropVal) );
@@ -325,7 +436,7 @@ ImplAAFTypeDefEnum::CreateValueFromName (
 	case 2:
 		aafInt16 i16Val;
 		i16Val = (aafInt16) the_value;
-		check_hr (  pLocalTd->CreateValue (
+		check_hr (  CreateValue (
 			(aafMemPtr_t) &i16Val,
 			2,  //size in bytes
 			ppPropVal) );
@@ -334,7 +445,7 @@ ImplAAFTypeDefEnum::CreateValueFromName (
 	case 4:
 		aafInt32 i32Val;
 		i32Val = (aafInt32) the_value;
-		check_hr (  pLocalTd->CreateValue (
+		check_hr (  CreateValue (
 			(aafMemPtr_t) &i32Val,
 			4,  //size in bytes
 			ppPropVal) );
@@ -342,7 +453,7 @@ ImplAAFTypeDefEnum::CreateValueFromName (
 		
 	case 8:
 		//64 bit ... which is the same as "the_value"
-		check_hr (  pLocalTd->CreateValue (
+		check_hr (  CreateValue (
 			(aafMemPtr_t) &the_value,
 			8,  //size in bytes
 			ppPropVal) );
@@ -366,9 +477,13 @@ ImplAAFTypeDefEnum::GetNameFromValue (
 	if (! pName)
 		return AAFRESULT_NULL_PARAM;
 	
+
 	//Extract the integer value from the PV;  use existing method on integer!
+	// pValue type is validated in GetIntegerValue().
 	aafInt64 val = 0;
-	GetIntegerValue(pValue, &val);
+	HRESULT	 hr = GetIntegerValue(pValue, &val);
+	if( AAFRESULT_FAILED( hr ) )
+	    return hr;
 	
 	//Use an existing method on integer, to find out the name!!! 
 	return (GetNameFromInteger(val, pName, bufSize));
@@ -388,9 +503,12 @@ ImplAAFTypeDefEnum::GetNameBufLenFromValue (
 	if (! pLen)
 		return AAFRESULT_NULL_PARAM;
 	
-	//Extract the integer value from the PV; use existing method on integer!
+	//Extract the integer value from the PV;  use existing method on integer!
+	// pValue type is validated in GetIntegerValue().
 	aafInt64 val = 0;
-	GetIntegerValue(pValue, &val);
+	HRESULT	 hr = GetIntegerValue(pValue, &val);
+	if( AAFRESULT_FAILED( hr ) )
+	    return hr;
 	
 	//Use an existing method on integer, to find out the Buffer Length!!! 
 	return (GetNameBufLenFromInteger(val, pLen));
@@ -489,6 +607,17 @@ ImplAAFTypeDefEnum::GetIntegerValue (
 	if (! pValueOut)
 		return AAFRESULT_NULL_PARAM;
 	
+
+	// Get the property value's embedded type and 
+	// check if it's the same as the local type.
+	ImplAAFTypeDefSP	spPropType;
+	if( AAFRESULT_FAILED( pPropValIn->GetType( &spPropType ) ) )
+		return AAFRESULT_BAD_TYPE;
+	assert (spPropType);
+	if( spPropType != this )
+		return AAFRESULT_BAD_TYPE;
+
+
 	ImplAAFTypeDefSP pBaseType;
 	AAFRESULT hr;
 	
@@ -608,6 +737,15 @@ ImplAAFTypeDefEnum::SetIntegerValue (
 	if (! pPropValToSet)
 		return AAFRESULT_NULL_PARAM;
 	
+	// Get the property value's embedded type and 
+	// check if it's the same as the local type.
+	ImplAAFTypeDefSP	spPropType;
+	if( AAFRESULT_FAILED( pPropValToSet->GetType( &spPropType ) ) )
+		return AAFRESULT_BAD_TYPE;
+	assert (spPropType);
+	if( spPropType != this )
+		return AAFRESULT_BAD_TYPE;
+
 	AAFRESULT hr;
 
 	//check to see if the valueIn is a VALID enumeration 

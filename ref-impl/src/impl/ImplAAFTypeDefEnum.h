@@ -81,6 +81,15 @@ public:
 
 
   //****************
+  // CreateValue()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE CreateValue (
+      aafMemPtr_t  pVal,
+      aafUInt32  valSize,
+      ImplAAFPropertyValue ** ppPropVal);
+
+
+  //****************
   // GetElementType()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
