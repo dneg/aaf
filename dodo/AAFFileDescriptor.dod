@@ -24,39 +24,39 @@ AD_CLASS_BEGIN
 
 /****/
 AD_METHOD1(SetLength,
-[in],AAFLength_t,length,,
+[in],aafLength_t,length,,
 Sets the length of the media in samples [not edit units].)
 
 /****/
 AD_METHOD1(GetLength,
-[out],AAFLength_t *,length,,
+[out],aafLength_t *,length,,
 Gets the length of the media in samples [not edit units].)
 
 /****/
 AD_METHOD1(SetIsAAFMedia,
-[in],AAFBool_t,isOMFI,,
+[in],aafBool,isOMFI,,
 Set to TRUE if this is AAF-wrapped media FALSE if the media is in an external non-AAF file.)
 
 /****/
 AD_METHOD1(GetIsAAFMedia,
-[out],AAFBool_t*,isOMFI,,
+[out],aafBool*,isOMFI,,
 Returns TRUE if this is AAF-wrapped media FALSE if the media is in an external non-AAF file.)
 
 /****/
 AD_METHOD1(SetSampleRate,
-[in],AAFRational_t,rate,,
+[in],aafRational_t,rate,,
 Sets sample rate of the media as opposed to the edit rate.)
 
 /****/
 AD_METHOD1(GetSampleRate,
-[out],AAFRational_t*,rate,,
+[out],aafRational_t*,rate,,
 Sets sample rate of the media as opposed to the edit rate.)
 
 
   //
   // IAAFUnitTest interface method overrides
   //
-.method-Test
+AD_OVERRIDE(.method-Test)
 
 
 AD_CLASS_END
