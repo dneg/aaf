@@ -89,6 +89,11 @@
 
 // Unpublished mode flags
 
+//When set this flag uses the non default library for the structured 
+//storage library;
+
+#define AAF_FILE_MODE_USE_ALTERNATE_LIBRARY    (1 << 27)
+
 // Control of use of large sector size mode in Structured Storage
 // The following applies to:
 //
