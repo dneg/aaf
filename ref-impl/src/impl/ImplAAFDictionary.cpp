@@ -342,6 +342,14 @@ OMStorable* ImplAAFDictionary::create(const OMClassId& classId) const
   pNewObject = pvtInstantiate (*auid);
   if (pNewObject)
 	pNewObject->InitOMProperties ();
+
+  // Attempt to initialize the any class extensions associated with
+  // this object. Only the most derived extension that has an associated
+  // plugin is created.
+  // QUESTION: How should we "deal with" failure? We really need an 
+  // error/warning log file for this kind of information.
+  AAFRESULT result = pNewObject->InitializeExtensions();
+
   return pNewObject;
 }
 
