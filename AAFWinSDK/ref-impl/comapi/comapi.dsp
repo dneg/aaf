@@ -1115,6 +1115,14 @@ SOURCE="..\..\..\ref-impl\src\com-api\test\CEnumAAFSegmentsTest.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFTaggedValues.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\test\CEnumAAFTaggedValuesTest.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFTypeDefs.cpp"
 # End Source File
 # Begin Source File
