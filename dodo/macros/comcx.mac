@@ -321,3 +321,13 @@ AD_CLASS_BEGIN\
 #startm .end-Concrete-StoredObject 00
 AD_CLASS_END\
 #endm
+
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c COMCX 
+#c Declaration for the dictionary's factory method.
+#c
+#startm AD_DICTIONARY_FACTORY 02
+#endm

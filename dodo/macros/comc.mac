@@ -1705,3 +1705,62 @@ AD_CLASS_BEGIN\
 #startm .end-Concrete-StoredObject 00
 AD_CLASS_END\
 #endm
+
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c COMC 
+#c Declaration for the dictionary's factory method.
+#c
+#startm AD_DICTIONARY_FACTORY 02
+//
+// %02
+HRESULT C.this-module::%01
+   (// Class identifier (AUID) of the stored object. This is the
+    // corresponding SMPTE identifier (as a GUID) for all predefined
+    // built-in classes.
+    /*[in, ref]*/ aafUID_t * pAUID,
+
+    // Reference to the identifier of the interface
+    /*[in, ref]*/ REFIID riid,
+
+    // Address of output variable that receives the 
+    // interface pointer requested in riid
+    /*[out, iid_is(riid)]*/ IUnknown ** ppvObject)
+{
+  HRESULT hr = S_OK;
+  AAFRESULT result = AAFRESULT_SUCCESS;
+
+  // Validate the input arguments.
+  if (NULL == pAUID || NULL == ppvObject)
+    return E_INVALIDARG;
+
+  // Find the factory on the corresponding impl class.
+  ImplAAFRoot * pImplRoot = GetRepObject();
+  assert(pImplRoot);
+  Impl.this-module * pImpl.this-module = dynamic_cast<Impl.this-module *>(pImplRoot);
+  if (NULL == pImpl.this-module)
+  { // This should never happen.
+    return AAFRESULT_INTERNAL_ERROR;
+  }
+
+  // Create the corresponding impl object.
+  ImplAAFObject *pObject = NULL;
+  result = pImpl.this-module->CreateInstance(pAUID, &pObject);
+  if (AAFRESULT_SUCCESS != result)
+    return result;
+
+  // Get the COM container for the new Impl object and see if
+  // it supports the requested interface pointer.
+  IUnknown *pUnknown = static_cast<IUnknown *>(pObject->GetContainer());
+  assert(pUnknown);
+  hr = pUnknown->QueryInterface(riid, (void **)ppvObject);
+  
+  // Release the impl object pointer. If the previous QI failed
+  // then the object will be deleted.
+  pObject->ReleaseReference();
+
+  return hr;
+}
+#endm

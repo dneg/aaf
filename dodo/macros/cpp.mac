@@ -1627,3 +1627,56 @@ AD_CLASS_BEGIN\
 #startm .end-Concrete-StoredObject 00
 AD_CLASS_END\
 #endm
+
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c IMPLC 
+#c Declaration for the dictionary's factory method.
+#c
+#startm AD_DICTIONARY_FACTORY 02
+
+#ifndef __ImplAAFBaseClassFactory_h__
+#include "ImplAAFBaseClassFactory.h"
+#endif
+
+
+// %02
+AAFRESULT STDMETHODCALLTYPE 
+  .this-module::%01 (
+    // Class identifier (AUID) of the stored object. This is the
+    // corresponding SMPTE identifier (as a GUID) for all predefined
+    // built-in classes.
+    aafUID_t * pAUID,
+
+    // Address of output variable that receives the 
+    // object pointer requested in pAUID
+    AAFObject ** ppvObject)
+{
+  AAFRESULT result = AAFRESULT_SUCCESS;
+
+  // Validate the input arguments.
+  if (NULL == pAUID || NULL == ppvObject)
+    return AAFRESULT_NULL_PARAM;
+
+  // Find the factory on the corresponding impl class.
+  Impl.this-module * pImpl.this-module = GetRepObject();
+  assert(pImpl.this-module);
+
+  // Create the corresponding impl object.
+  ImplAAFObject *pObject = NULL;
+  result = pImpl.this-module->CreateInstance(pAUID, &pObject);
+  if (AAFRESULT_SUCCESS != result)
+    return result;
+
+  // Get the C++ container for the new Impl object
+  *ppvObject = pObject->GetContainer();
+  
+  // Release the impl object pointer. 
+  if (NULL == *ppvObject)
+    pObject->ReleaseReference();
+
+  return result;
+}
+#endm

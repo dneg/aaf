@@ -1287,3 +1287,27 @@ public:
 
 #endif // ! __Impl.this-module_h__
 #endm
+
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c IMPLH 
+#c Declaration for the dictionary's factory method.
+#c
+#startm AD_DICTIONARY_FACTORY 02
+  //****************
+  // %01()
+  //
+  // %02
+  virtual AAFRESULT STDMETHODCALLTYPE 
+  %01 (
+    // Class identifier (AUID) of the stored object. This is the
+    // corresponding SMPTE identifier (as a GUID) for all predefined
+    // built-in classes.
+    aafUID_t * pAUID,
+
+    // Address of output variable that receives the 
+    // object pointer requested in pAUID
+    ImplAAFObject ** ppvObject);
+#endm

@@ -1030,3 +1030,31 @@ AD_CLASS_BEGIN\
 #startm .end-Concrete-StoredObject 00
 AD_CLASS_END\
 #endm
+
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c FREFH 
+#c Declaration for the dictionary's factory method.
+#c
+#startm AD_DICTIONARY_FACTORY 02
+  //***********************************************************
+  //
+  // %01()
+  //
+  // %02 
+  // 
+  STDMETHOD(%01)(THIS_
+    // Class identifier (AUID) of the stored object. This is the
+    // corresponding SMPTE identifier (as a GUID) for all predefined
+    // built-in classes.
+    aafUID_t * pAUID,
+
+    // Reference to the identifier of the interface
+    REFIID riid,
+
+    // Address of output variable that receives the 
+    // interface pointer requested in riid
+    IUnknown ** ppvObject) PURE;
+#endm
