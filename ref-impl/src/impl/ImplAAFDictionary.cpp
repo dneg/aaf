@@ -1077,8 +1077,7 @@ AAFRESULT STDMETHODCALLTYPE
 	
 	XPROTECT()
 	{
-		CHECK(GetBuiltinDefs()->cdTypeDefRename()->
-				CreateInstance((ImplAAFObject**)&pRenameDef));
+		CHECK(CreateMetaInstance(AUID_AAFTypeDefRename, (ImplAAFMetaDefinition **)&pRenameDef));
 		CHECK(pRenameDef->Initialize (keyUID, underlyingType, L"KLV Data"));
 		CHECK(RegisterOpaqueTypeDef(pRenameDef));
 		pRenameDef->ReleaseReference();
