@@ -125,7 +125,9 @@ static HRESULT ObjectTest ()
   if (pHeader) pHeader->Release();
   if (pFile)
 	{
-	  AAFRESULT temphr = pFile->Close();
+	  AAFRESULT temphr = pFile->Save();
+	  if (! SUCCEEDED (temphr)) return temphr;
+	  temphr = pFile->Close();
 	  if (! SUCCEEDED (temphr)) return temphr;
 	  pFile->Release();
 	}
