@@ -1273,7 +1273,7 @@ size_t sizeOfStream(IStream* stream, const char* streamName)
   STATSTG statstg;
   HRESULT result = stream->Stat(&statstg, STATFLAG_NONAME);
   if (!check(streamName, result)) {
-    fatalError("sizeOfStream", "Falied to Stat() stream.");
+    fatalError("sizeOfStream", "Failed to Stat() stream.");
   }
   unsigned long int streamBytes = statstg.cbSize.LowPart;
   if (statstg.cbSize.HighPart != 0) {
@@ -2991,7 +2991,7 @@ void dumpDataStream(IStream* stream,
   STATSTG statstg;
   HRESULT result = stream->Stat(&statstg, STATFLAG_NONAME);
   if (!check(streamName, result)) {
-    fatalError("dumpdataStream", "Falied to Stat() stream.");
+    fatalError("dumpdataStream", "Failed to Stat() stream.");
   }
   unsigned long int streamBytes = statstg.cbSize.LowPart;
   if (statstg.cbSize.HighPart != 0) {
