@@ -44,33 +44,28 @@ protected:
 public:
 
   //****************
+  // Initialize()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    Initialize
+       (// @parm [in] auid to be used to identify this property definition
+        aafUID_t * pID,
+			
+        // @parm [in] Type definition of this property definition,
+	    ImplAAFTypeDef * pTypeDef,
+
+        // @parm [in, string] friendly name of this type definition
+	    wchar_t * pTypeName);
+	
+
+
+  //****************
   // GetTypeDef()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     GetTypeDef
         // @parm [out] definition of type contained by this property
         (ImplAAFTypeDef ** ppTypeDef);
-
-
-  //****************
-  // GetName()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    GetName
-        (// @parm [out, size_is(bufSize), string] buffer into which the name is written
-         wchar_t *  pName,
-
-         // @parm [in] The size of the pName buffer, in bytes
-         aafInt32  bufSize);
-
-
-  //****************
-  // GetNameBufLen()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    GetNameBufLen
-        // @parm [out] required buffer length, in bytes
-        (aafInt32 *  pLen);
 
 
   //****************
@@ -128,36 +123,6 @@ public:
 
 
   //****************
-  // GetDescription()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    GetDescription
-        (// @parm [out, size_is(bufSize), string] Pointer to description
-         wchar_t *  pStrDescription,
-
-         // @parm [in] The size of the pstrDescription buffer
-         aafInt32  bufSize);
-
-
-  //****************
-  // GetDescriptionBufLen()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    GetDescriptionBufLen
-        // @parm [out] required buffer length
-        (aafInt32 *  pLen);
-
-
-  //****************
-  // SetDescription()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    SetDescription
-        // @parm [in, string] description
-        (wchar_t *  pStrDescription);
-
-
-  //****************
   // GetDefaultValue()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
@@ -192,8 +157,10 @@ public:
   // Declare the module test method. The implementation of the will be be
   // in /test/ImplAAFPropertyDefTest.cpp.
   static AAFRESULT test();
+
+private:
+  // BobT: This should be persistent Real Soon Now...
+  ImplAAFTypeDef * _pTypeDef;
 };
 
 #endif // ! __ImplAAFPropertyDef_h__
-
-
