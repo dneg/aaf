@@ -90,6 +90,10 @@ SOURCE="..\..\..\ref-impl\src\OM\OMAssertions.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\OM\OMClassDefinition.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\OM\OMContainerElement.cpp"
 # End Source File
 # Begin Source File
@@ -238,6 +242,10 @@ SOURCE="..\..\..\ref-impl\src\OM\OMType.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\OM\OMTypeDefinition.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\OM\OMUniqueObjectIdentType.cpp"
 # End Source File
 # Begin Source File
@@ -286,6 +294,10 @@ SOURCE="..\..\..\ref-impl\src\OM\OMCharacterStringPropertyT.h"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\include\OM\OMClassDefinition.h"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\OM\OMClassFactory.h"
 # End Source File
 # Begin Source File
@@ -319,6 +331,10 @@ SOURCE="..\..\..\ref-impl\include\OM\OMDataStreamProperty.h"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\include\OM\OMDataTypes.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\include\OM\OMDefinition.h"
 # End Source File
 # Begin Source File
 
@@ -627,6 +643,10 @@ SOURCE="..\..\..\ref-impl\src\OM\OMStrongRefVectorPropertyT.h"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\include\OM\OMType.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\include\OM\OMTypeDefinition.h"
 # End Source File
 # Begin Source File
 
