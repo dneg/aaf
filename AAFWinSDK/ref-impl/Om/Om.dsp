@@ -118,6 +118,10 @@ SOURCE="..\..\..\ref-impl\src\OM\OMContainerProperty.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\OM\OMDataSet.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\OM\OMDataStream.cpp"
 # End Source File
 # Begin Source File
@@ -474,6 +478,10 @@ SOURCE="..\..\..\ref-impl\include\OM\OMDataContainerIterator.h"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\include\OM\OMDataSet.h"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\include\OM\OMDataStream.h"
 # End Source File
 # Begin Source File
@@ -767,6 +775,10 @@ SOURCE="..\..\..\ref-impl\src\OM\OMSetPropertyT.h"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\OM\OMSetT.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\include\OM\OMSetType.h"
 # End Source File
 # Begin Source File
 
