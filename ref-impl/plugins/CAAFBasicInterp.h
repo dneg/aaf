@@ -55,25 +55,16 @@ protected:
 
 public:
 
-
-  // Set up a codec.
-  STDMETHOD (Start)
-     (void);
-
-  // Tear down a codec.
-  STDMETHOD (Finish)
-     (void);
-
-  STDMETHOD (GetNumDefinitions)(aafInt32 *pDefCount);
-  STDMETHOD (GetIndexedDefinitionID)(aafInt32 index, aafUID_t *result);
+  STDMETHOD (CountDefinitions)(aafUInt32 *pDefCount);
+  STDMETHOD (GetIndexedDefinitionID)(aafUInt32 index, aafUID_t *result);
   STDMETHOD (GetPluginDescriptorID)(aafUID_t *result);
-  STDMETHOD (GetIndexedDefinitionObject)(aafInt32 index, IAAFDictionary *dict, IAAFDefObject **def);
+  STDMETHOD (GetIndexedDefinitionObject)(aafUInt32 index, IAAFDictionary *dict, IAAFDefObject **def);
   STDMETHOD (CreateDescriptor)(IAAFDictionary *dict, IAAFPluginDescriptor **desc);
 
   STDMETHOD (GetNumTypesSupported)(
-    /* [out] */aafInt32*  pCount);
+    /* [out] */aafUInt32*  pCount);
   STDMETHOD (GetIndexedSupportedType)(
-    /* [in] */ aafInt32  index,
+    /* [in] */ aafUInt32  index,
     /* [out] */IAAFTypeDef ** ppType);
   STDMETHOD (GetTypeDefinition)(
     /* [out] */IAAFTypeDef ** ppTypeDef);
@@ -91,7 +82,7 @@ public:
   STDMETHOD (InterpolateMany)(
 	/* [in] */ aafRational_t *  pStartInputValue,
     /* [in] */ aafRational_t *  pInputStep,
-    /* [in] */ aafInt32  pGenerateCount,
+    /* [in] */ aafUInt32  pGenerateCount,
     /* [out] */aafMemPtr_t pOutputValue,
     /* [out] */aafUInt32 *  ppResultCount);
 
