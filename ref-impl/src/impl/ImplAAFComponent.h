@@ -286,6 +286,9 @@ private:
 	OMWeakReferenceProperty<ImplAAFDataDef>		_dataDef;
 	OMFixedSizeProperty<aafLength_t>	_length;
     OMStrongReferenceVectorProperty<ImplAAFKLVData> _KLVData;
+    OMStrongReferenceVectorProperty<ImplAAFTaggedValue> _userComments;
+    OMStrongReferenceVectorProperty<ImplAAFTaggedValue> _attributes;
+
 };
 
 #endif // ! __ImplAAFComponent_h__
