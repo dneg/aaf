@@ -672,7 +672,7 @@ AAFRESULT STDMETHODCALLTYPE
   if (AAFRESULT_FAILED (status))
 	{
 	  // no recognized class guid
-	  return AAFRESULT_NO_MORE_OBJECTS;
+	  return status;
 	}
 
   // Yup, found it in builtins.  Register it.

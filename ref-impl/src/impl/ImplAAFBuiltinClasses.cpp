@@ -383,10 +383,18 @@ ImplAAFBuiltinClasses::InitBuiltinClassDef (const aafUID_t & rClassID,
 			hr = pClass->pvtInitialize (*sBuiltinClassTable[i].pThisId,
 										parent,
 										sBuiltinClassTable[i].pName);
-			hr = pClass->SetBootstrapParent(parent);
-			assert (AAFRESULT_SUCCEEDED (hr));
+			if (AAFRESULT_FAILED (hr))
+				{
+				  status = hr;
+				  break;
+				}
 			
-			assert (AAFRESULT_SUCCEEDED (hr));
+			hr = pClass->SetBootstrapParent(parent);
+			if (AAFRESULT_FAILED (hr))
+				{
+				  status = hr;
+				  break;
+				}
 			
 			RegisterBuiltinProperties (pClass);
 	
