@@ -186,6 +186,14 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFDefObject.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFDescriptiveFramework.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFDescriptiveMarker.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFDictionary.cpp"
 # End Source File
 # Begin Source File

@@ -2,7 +2,7 @@
 
 
 /* File created by MIDL compiler version 5.01.0164 */
-/* at Sat May 01 21:43:56 2004
+/* at Sat May 08 19:12:08 2004
  */
 /* Compiler settings for AAF.idl:
     Os (OptLev=s), W1, Zp8, env=Win32, ms_ext, c_ext
@@ -811,6 +811,18 @@ typedef interface IAAFAuxiliaryDescriptor IAAFAuxiliaryDescriptor;
 #endif 	/* __IAAFAuxiliaryDescriptor_FWD_DEFINED__ */
 
 
+#ifndef __IAAFDescriptiveFramework_FWD_DEFINED__
+#define __IAAFDescriptiveFramework_FWD_DEFINED__
+typedef interface IAAFDescriptiveFramework IAAFDescriptiveFramework;
+#endif 	/* __IAAFDescriptiveFramework_FWD_DEFINED__ */
+
+
+#ifndef __IAAFDescriptiveMarker_FWD_DEFINED__
+#define __IAAFDescriptiveMarker_FWD_DEFINED__
+typedef interface IAAFDescriptiveMarker IAAFDescriptiveMarker;
+#endif 	/* __IAAFDescriptiveMarker_FWD_DEFINED__ */
+
+
 #ifndef __IAAFEndian_FWD_DEFINED__
 #define __IAAFEndian_FWD_DEFINED__
 typedef interface IAAFEndian IAAFEndian;
@@ -917,6 +929,8 @@ void __RPC_USER MIDL_user_free( void __RPC_FAR * );
 // AAF Interfaces.
 //=--------------------------------------------------------------------------=
 //
+
+
 
 
 
@@ -32990,6 +33004,277 @@ void __RPC_STUB IAAFAuxiliaryDescriptor_GetCharSetBufLen_Stub(
 #endif 	/* __IAAFAuxiliaryDescriptor_INTERFACE_DEFINED__ */
 
 
+#ifndef __IAAFDescriptiveFramework_INTERFACE_DEFINED__
+#define __IAAFDescriptiveFramework_INTERFACE_DEFINED__
+
+/* interface IAAFDescriptiveFramework */
+/* [unique][helpstring][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IAAFDescriptiveFramework;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("1cded29f-b8f0-437d-abb0-2144dd35b4aa")
+    IAAFDescriptiveFramework : public IUnknown
+    {
+    public:
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IAAFDescriptiveFrameworkVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
+            IAAFDescriptiveFramework __RPC_FAR * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
+            IAAFDescriptiveFramework __RPC_FAR * This);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
+            IAAFDescriptiveFramework __RPC_FAR * This);
+        
+        END_INTERFACE
+    } IAAFDescriptiveFrameworkVtbl;
+
+    interface IAAFDescriptiveFramework
+    {
+        CONST_VTBL struct IAAFDescriptiveFrameworkVtbl __RPC_FAR *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IAAFDescriptiveFramework_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IAAFDescriptiveFramework_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IAAFDescriptiveFramework_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+
+#endif 	/* __IAAFDescriptiveFramework_INTERFACE_DEFINED__ */
+
+
+#ifndef __IAAFDescriptiveMarker_INTERFACE_DEFINED__
+#define __IAAFDescriptiveMarker_INTERFACE_DEFINED__
+
+/* interface IAAFDescriptiveMarker */
+/* [unique][helpstring][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IAAFDescriptiveMarker;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("c377b78e-591f-4ba9-a069-18438c626e34")
+    IAAFDescriptiveMarker : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE Initialize( void) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetDescribedSlotIDs( 
+            /* [in] */ aafUInt32 numberElements,
+            /* [in] */ aafUInt32 __RPC_FAR *pDescribedSlotIDs) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetDescribedSlotIDs( 
+            /* [in] */ aafUInt32 numberElements,
+            /* [in] */ aafUInt32 __RPC_FAR *pDescribedSlotIDs) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetDescribedSlotIDsSize( 
+            /* [out] */ aafUInt32 __RPC_FAR *numberElements) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetDescriptiveFramework( 
+            /* [in] */ IAAFDescriptiveFramework __RPC_FAR *pDescriptiveFramework) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetDescriptiveFramework( 
+            /* [retval][out] */ IAAFDescriptiveFramework __RPC_FAR *__RPC_FAR *ppDescriptiveFramework) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IAAFDescriptiveMarkerVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
+            IAAFDescriptiveMarker __RPC_FAR * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
+            IAAFDescriptiveMarker __RPC_FAR * This);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
+            IAAFDescriptiveMarker __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Initialize )( 
+            IAAFDescriptiveMarker __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetDescribedSlotIDs )( 
+            IAAFDescriptiveMarker __RPC_FAR * This,
+            /* [in] */ aafUInt32 numberElements,
+            /* [in] */ aafUInt32 __RPC_FAR *pDescribedSlotIDs);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDescribedSlotIDs )( 
+            IAAFDescriptiveMarker __RPC_FAR * This,
+            /* [in] */ aafUInt32 numberElements,
+            /* [in] */ aafUInt32 __RPC_FAR *pDescribedSlotIDs);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDescribedSlotIDsSize )( 
+            IAAFDescriptiveMarker __RPC_FAR * This,
+            /* [out] */ aafUInt32 __RPC_FAR *numberElements);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetDescriptiveFramework )( 
+            IAAFDescriptiveMarker __RPC_FAR * This,
+            /* [in] */ IAAFDescriptiveFramework __RPC_FAR *pDescriptiveFramework);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDescriptiveFramework )( 
+            IAAFDescriptiveMarker __RPC_FAR * This,
+            /* [retval][out] */ IAAFDescriptiveFramework __RPC_FAR *__RPC_FAR *ppDescriptiveFramework);
+        
+        END_INTERFACE
+    } IAAFDescriptiveMarkerVtbl;
+
+    interface IAAFDescriptiveMarker
+    {
+        CONST_VTBL struct IAAFDescriptiveMarkerVtbl __RPC_FAR *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IAAFDescriptiveMarker_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IAAFDescriptiveMarker_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IAAFDescriptiveMarker_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IAAFDescriptiveMarker_Initialize(This)	\
+    (This)->lpVtbl -> Initialize(This)
+
+#define IAAFDescriptiveMarker_SetDescribedSlotIDs(This,numberElements,pDescribedSlotIDs)	\
+    (This)->lpVtbl -> SetDescribedSlotIDs(This,numberElements,pDescribedSlotIDs)
+
+#define IAAFDescriptiveMarker_GetDescribedSlotIDs(This,numberElements,pDescribedSlotIDs)	\
+    (This)->lpVtbl -> GetDescribedSlotIDs(This,numberElements,pDescribedSlotIDs)
+
+#define IAAFDescriptiveMarker_GetDescribedSlotIDsSize(This,numberElements)	\
+    (This)->lpVtbl -> GetDescribedSlotIDsSize(This,numberElements)
+
+#define IAAFDescriptiveMarker_SetDescriptiveFramework(This,pDescriptiveFramework)	\
+    (This)->lpVtbl -> SetDescriptiveFramework(This,pDescriptiveFramework)
+
+#define IAAFDescriptiveMarker_GetDescriptiveFramework(This,ppDescriptiveFramework)	\
+    (This)->lpVtbl -> GetDescriptiveFramework(This,ppDescriptiveFramework)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IAAFDescriptiveMarker_Initialize_Proxy( 
+    IAAFDescriptiveMarker __RPC_FAR * This);
+
+
+void __RPC_STUB IAAFDescriptiveMarker_Initialize_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFDescriptiveMarker_SetDescribedSlotIDs_Proxy( 
+    IAAFDescriptiveMarker __RPC_FAR * This,
+    /* [in] */ aafUInt32 numberElements,
+    /* [in] */ aafUInt32 __RPC_FAR *pDescribedSlotIDs);
+
+
+void __RPC_STUB IAAFDescriptiveMarker_SetDescribedSlotIDs_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFDescriptiveMarker_GetDescribedSlotIDs_Proxy( 
+    IAAFDescriptiveMarker __RPC_FAR * This,
+    /* [in] */ aafUInt32 numberElements,
+    /* [in] */ aafUInt32 __RPC_FAR *pDescribedSlotIDs);
+
+
+void __RPC_STUB IAAFDescriptiveMarker_GetDescribedSlotIDs_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFDescriptiveMarker_GetDescribedSlotIDsSize_Proxy( 
+    IAAFDescriptiveMarker __RPC_FAR * This,
+    /* [out] */ aafUInt32 __RPC_FAR *numberElements);
+
+
+void __RPC_STUB IAAFDescriptiveMarker_GetDescribedSlotIDsSize_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFDescriptiveMarker_SetDescriptiveFramework_Proxy( 
+    IAAFDescriptiveMarker __RPC_FAR * This,
+    /* [in] */ IAAFDescriptiveFramework __RPC_FAR *pDescriptiveFramework);
+
+
+void __RPC_STUB IAAFDescriptiveMarker_SetDescriptiveFramework_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFDescriptiveMarker_GetDescriptiveFramework_Proxy( 
+    IAAFDescriptiveMarker __RPC_FAR * This,
+    /* [retval][out] */ IAAFDescriptiveFramework __RPC_FAR *__RPC_FAR *ppDescriptiveFramework);
+
+
+void __RPC_STUB IAAFDescriptiveMarker_GetDescriptiveFramework_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IAAFDescriptiveMarker_INTERFACE_DEFINED__ */
+
+
 #ifndef __IAAFEndian_INTERFACE_DEFINED__
 #define __IAAFEndian_INTERFACE_DEFINED__
 
@@ -36703,6 +36988,17 @@ EXTERN_C const IID IID_IAAFSourceReference2;
         virtual HRESULT STDMETHODCALLTYPE GetChannelIDsSize( 
             /* [out] */ aafUInt32 __RPC_FAR *numberElements) = 0;
         
+        virtual HRESULT STDMETHODCALLTYPE SetMonoSourceSlotIDs( 
+            /* [in] */ aafUInt32 numberElements,
+            /* [in] */ aafUInt32 __RPC_FAR *pMonoSourceSlotIDs) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetMonoSourceSlotIDs( 
+            /* [in] */ aafUInt32 numberElements,
+            /* [in] */ aafUInt32 __RPC_FAR *pMonoSourceSlotIDs) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetMonoSourceSlotIDsSize( 
+            /* [out] */ aafUInt32 __RPC_FAR *numberElements) = 0;
+        
     };
     
 #else 	/* C style interface */
@@ -36752,6 +37048,20 @@ EXTERN_C const IID IID_IAAFSourceReference2;
             IAAFSourceReference2 __RPC_FAR * This,
             /* [out] */ aafUInt32 __RPC_FAR *numberElements);
         
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetMonoSourceSlotIDs )( 
+            IAAFSourceReference2 __RPC_FAR * This,
+            /* [in] */ aafUInt32 numberElements,
+            /* [in] */ aafUInt32 __RPC_FAR *pMonoSourceSlotIDs);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetMonoSourceSlotIDs )( 
+            IAAFSourceReference2 __RPC_FAR * This,
+            /* [in] */ aafUInt32 numberElements,
+            /* [in] */ aafUInt32 __RPC_FAR *pMonoSourceSlotIDs);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetMonoSourceSlotIDsSize )( 
+            IAAFSourceReference2 __RPC_FAR * This,
+            /* [out] */ aafUInt32 __RPC_FAR *numberElements);
+        
         END_INTERFACE
     } IAAFSourceReference2Vtbl;
 
@@ -36795,6 +37105,15 @@ EXTERN_C const IID IID_IAAFSourceReference2;
 
 #define IAAFSourceReference2_GetChannelIDsSize(This,numberElements)	\
     (This)->lpVtbl -> GetChannelIDsSize(This,numberElements)
+
+#define IAAFSourceReference2_SetMonoSourceSlotIDs(This,numberElements,pMonoSourceSlotIDs)	\
+    (This)->lpVtbl -> SetMonoSourceSlotIDs(This,numberElements,pMonoSourceSlotIDs)
+
+#define IAAFSourceReference2_GetMonoSourceSlotIDs(This,numberElements,pMonoSourceSlotIDs)	\
+    (This)->lpVtbl -> GetMonoSourceSlotIDs(This,numberElements,pMonoSourceSlotIDs)
+
+#define IAAFSourceReference2_GetMonoSourceSlotIDsSize(This,numberElements)	\
+    (This)->lpVtbl -> GetMonoSourceSlotIDsSize(This,numberElements)
 
 #endif /* COBJMACROS */
 
@@ -36883,6 +37202,44 @@ HRESULT STDMETHODCALLTYPE IAAFSourceReference2_GetChannelIDsSize_Proxy(
 
 
 void __RPC_STUB IAAFSourceReference2_GetChannelIDsSize_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFSourceReference2_SetMonoSourceSlotIDs_Proxy( 
+    IAAFSourceReference2 __RPC_FAR * This,
+    /* [in] */ aafUInt32 numberElements,
+    /* [in] */ aafUInt32 __RPC_FAR *pMonoSourceSlotIDs);
+
+
+void __RPC_STUB IAAFSourceReference2_SetMonoSourceSlotIDs_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFSourceReference2_GetMonoSourceSlotIDs_Proxy( 
+    IAAFSourceReference2 __RPC_FAR * This,
+    /* [in] */ aafUInt32 numberElements,
+    /* [in] */ aafUInt32 __RPC_FAR *pMonoSourceSlotIDs);
+
+
+void __RPC_STUB IAAFSourceReference2_GetMonoSourceSlotIDs_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFSourceReference2_GetMonoSourceSlotIDsSize_Proxy( 
+    IAAFSourceReference2 __RPC_FAR * This,
+    /* [out] */ aafUInt32 __RPC_FAR *numberElements);
+
+
+void __RPC_STUB IAAFSourceReference2_GetMonoSourceSlotIDsSize_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
@@ -37573,7 +37930,7 @@ void __RPC_STUB IAAFMasterMob2_CreateEventEssence_Stub(
 #endif 	/* __IAAFMasterMob2_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_AAF_0217 */
+/* interface __MIDL_itf_AAF_0219 */
 /* [local] */ 
 
   //***********************************************************
@@ -37660,8 +38017,8 @@ STDAPI AAFCreateAAFFileOnRawStorage (
 
 
 
-extern RPC_IF_HANDLE __MIDL_itf_AAF_0217_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_AAF_0217_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_AAF_0219_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_AAF_0219_v0_0_s_ifspec;
 
 /* Additional Prototypes for ALL interfaces */
 

@@ -33,6 +33,8 @@
 #include "ImplAAFCommentMarker.h"
 #endif
 
+#include "ImplAAFSourceReference.h"
+
 #include "OMStrongRefProperty.h"
 
 class ImplAAFDescriptiveFramework;

@@ -145,6 +145,14 @@ SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFDefObjectTest.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFDescriptiveFrameworkTest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFDescriptiveMarkerTest.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFDictionaryTest.cpp
 # End Source File
 # Begin Source File
