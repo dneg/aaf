@@ -47,9 +47,10 @@ class OMAssertionViolation;
   //         ASSERT.
   //   @parm The name of the assertion. The assertion name is a
   //         description of the assertion that makes sense from the
-  //         point of view of someone reading the source text. The
-  //         name comprises a portion of the message that is printed
-  //         by this routine.
+  //         internal point of view (that of someone reading the source
+  //         text). The name comprises a portion of the message that is
+  //         printed by this routine. The message that is printed makes
+  //         sense from the external point of view.
   //   @parm The expression, as a text string, that was found not to
   //         be true.
   //   @parm The name of the routine in which the assertion violation
@@ -144,9 +145,10 @@ void obsolete(const char* routineName, const char* newRoutineName);
   //       invocation of the <f TRACE> macro.
   //   @parm The name of the precondition. The precondition name is a
   //         description of the precondition that makes sense from the
-  //         point of view of someone reading the source text. The
-  //         name comprises a portion of the message that is printed
-  //         if the precondition is violated.
+  //         internal point of view (that of someone reading the source
+  //         text). The name comprises a portion of the message that is
+  //         printed if the precondition is violated. The message that
+  //         is printed makes sense from the external point of view.
   //   @parm The precondition expression. The expression should be
   //         free of side effects.
 #define PRECONDITION(name, expression) \
@@ -161,9 +163,10 @@ void obsolete(const char* routineName, const char* newRoutineName);
   //       invocation of the <f TRACE> macro.
   //   @parm The name of the postcondition. The postcondition name is a
   //         description of the postcondition that makes sense from the
-  //         point of view of someone reading the source text. The
-  //         name comprises a portion of the message that is printed
-  //         if the postcondition is violated.
+  //         internal point of view (that of someone reading the source
+  //         text). The name comprises a portion of the message that is
+  //         printed if the postcondition is violated. The message that
+  //         is printed makes sense from the external point of view.
   //   @parm The postcondition expression. The expression should be
   //         free of side effects.
 #define POSTCONDITION(name, expression) \
@@ -178,9 +181,10 @@ void obsolete(const char* routineName, const char* newRoutineName);
   //       invocation of the <f TRACE> macro.
   //   @parm The name of the condition. The condition name is a
   //         description of the condition that makes sense from the
-  //         point of view of someone reading the source text. The
-  //         name comprises a portion of the message that is printed
-  //         if the condition is violated.
+  //         internal point of view (that of someone reading the source
+  //         text). The name comprises a portion of the message that is
+  //         printed if the condition is violated. The message that
+  //         is printed makes sense from the external point of view.
   //   @parm The condition expression. The expression should be
   //         free of side effects.
 #define ASSERT(name, expression) \
