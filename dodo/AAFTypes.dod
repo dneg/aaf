@@ -169,7 +169,6 @@ typedef aafInt64		aafFrameOffset_t;
 typedef aafInt64		aafFrameLength_t;
 typedef aafUInt32   	aafSlotID_t;  
 
-typedef aafInt8			*aafCodecID_t;
 typedef aafInt32   		aafNumSlots_t;
 typedef struct _aafUID_t   aafClassID_t;
 typedef aafUInt8    	*aafDataValue_t;
@@ -185,6 +184,7 @@ AD_CPP_QUOTE(\/*** Types for plugins ***/)
 typedef struct _aafUID_t	aafHardwarePlatform_t;
 typedef struct _aafUID_t	aafEngine_t;
 typedef struct _aafUID_t	aafPluginAPI_t;
+typedef struct _aafUID_t	aafCodecID_t;
 
 AD_CPP_QUOTE(/* typedefs for image processing */)
 typedef aafUInt8 	    aafCompSizeArray_t[MAX_NUM_RGBA_COMPS];
