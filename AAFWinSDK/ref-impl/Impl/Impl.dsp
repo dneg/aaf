@@ -183,10 +183,6 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFEffectDef.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\impl\ImplAAFEffectInvocation.cpp"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFEssenceAccess.cpp"
 # End Source File
 # Begin Source File
@@ -232,6 +228,10 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFFindSourceInfo.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFGPITrigger.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFGroup.cpp"
 # End Source File
 # Begin Source File
 
