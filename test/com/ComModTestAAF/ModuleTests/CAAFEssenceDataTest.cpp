@@ -300,6 +300,8 @@ void EssenceDataTest::createFile(wchar_t *pFileName)
   createFileMob();
   createFileMob();
 
+  check(_pFile->Save());
+
   cleanupReferences();
 }
 
