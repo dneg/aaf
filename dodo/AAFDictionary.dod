@@ -1,8 +1,12 @@
 #startm .this-module 0
-AAFClassDictionary\
+AAFDictionary\
 #endm
 #c
-#import ./AAFUnitTest.exp
+#startm .parent-module 0
+AAFObject\
+#endm
+#c
+#import ./AAFObject.exp
 AD_HEAD
 /******************************************\
 *                                          *
@@ -17,13 +21,20 @@ AD_HEAD
 
 AD_FORWARD_DECLARATION(AAFClassDefinition)
 AD_FORWARD_DECLARATION(EnumAAFClassDefinitions)
+AD_FORWARD_DECLARATION(AAFTypeDefinition)
+AD_FORWARD_DECLARATION(EnumAAFTypeDefinitions)
+AD_FORWARD_DECLARATION(AAFDataDefinition)
+AD_FORWARD_DECLARATION(EnumAAFDataDefinitions)
+AD_FORWARD_DECLARATION(AAFEffectDefinition)
+AD_FORWARD_DECLARATION(EnumAAFEffectDefinitions)
+AD_FORWARD_DECLARATION(EnumAAFDefinitions)
 
 
 
 AD_CLASS_UUID(B1A21399, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
 
 AD_DEFAULT_UUID(B1A21398, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
-AD_ROOT_CLASS_BEGIN
+AD_CLASS_BEGIN
 
 AD_XMETHOD2(LookupClass,
 [in\,ref], objPass, aafUID_t *, pClassID, Class Unique ID,
@@ -34,17 +45,62 @@ AD_XMETHOD1(RegisterClass,
 [in\,ref], objIn, AAFClassDefinition, pClassDefinition, Class Definition,
 Add the class definition object to the dictionary.)
 
-
-AD_XMETHOD1(GetAllClassDefinitions,
+AD_XMETHOD1(GetClassDefinitions,
 [out\,retval], objOut, EnumAAFClassDefinitions, ppEnum, Class Definition Enumeration,
 Return an enumerator for all class definitions.)
 
-AD_XMETHOD2(GetClassDefinitions,
-[in\,ref], objPass, aafSearchDictionaryCrit_t *, pCriteria, criteria to limit definitions in enumeration,
-[out\,retval], objOut, EnumAAFClassDefinitions, ppEnum, Class Definition Enumeration,
-Return an enumerator for all class definitions that match the given criteria.)
+
+AD_XMETHOD1(RegisterType,
+[in\,ref], objIn, AAFTypeDefinition, pTypeDefinition, Type Definition Object,
+Add the type definition object to the header's list of definitions.)
+
+AD_XMETHOD2(LookupType,
+[in\,ref], objPass, aafUID_t *, pTypeID, Type Unique ID,
+[out\,retval], objOut, AAFTypeDefinition, ppTypeDefinition, Type Definition Object,
+Return the type definition object with the given id.)
+
+AD_XMETHOD1(GetTypeDefinitions,
+[out\,retval], objOut, EnumAAFTypeDefinitions, ppEnum, Type Definition Enumeration,
+Return an enumerator for all type definitions.)
 
 
-AD_OVERRIDE(.method-Test)
+AD_XMETHOD1(RegisterDataDefintion,
+[in\,ref], objIn, AAFDataDefinition, pDataDefinition, Data Definition Object,
+Add the data definition object to the header's list of definitions.
+  // @devnote based on omfiDatakindRegister.)
 
-AD_ROOT_CLASS_END
+AD_XMETHOD2(LookupDataDefintion,
+[in\,ref], objPass, aafUID_t *, pDataDefintionID, Datak Defintion Unique ID,
+[out\,retval], objOut, AAFDataDefinition, ppDataDefinition, Data Definition Object,
+Return the data definition object with the given id.
+  // @devnote based on omfiDatakindLookup.)
+
+AD_XMETHOD1(GetDataDefinitions,
+[out\,retval], objOut, EnumAAFDataDefinitions, ppEnum, Definition Enumeration,
+Return an enumerator for aff data definitions.)
+
+
+AD_XMETHOD1(RegisterEffectDefinition,
+[in\,ref], objIn, AAFEffectDefinition, pEffectDefinition, Effect Definition Object,
+Add the effect definition object to the header's list of definitions.
+  // @devnote based on omfiEffectDefRegister.)
+
+AD_XMETHOD2(LookupEffectDefinition,
+[in\,ref], objPass, aafUID_t *, effectID, Effect Unique ID,
+[out\,retval], objOut, AAFEffectDefinition, ppEffectDefinition, Effect definition object,
+Return the effect definition object with the given id.
+  // @devnote based on omfiEffectDefLookup.)
+
+AD_XMETHOD1(GetEffectDefinitions,
+[out\,retval], objOut, EnumAAFEffectDefinitions, ppEnum, Definition Enumeration,
+Return an enumerator for aff effect definitions.)
+
+
+AD_XMETHOD2(GetDefinitions,
+[in\,ref], objPass, aafDefinitionCrit_t *, pDefCriteria, Definition Criteria for enumeration,
+[out\,retval], objOut, EnumAAFDefinitions, ppEnum, Definition Enumeration,
+Return an enumerator for definitions that will apply the criteria.
+// @devnote Should this method be private?)
+
+
+AD_CLASS_END
