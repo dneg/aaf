@@ -28,6 +28,8 @@ DODO_TARGETS = \
 	AAFComponent.all \
 	AAFCompositionMob.all \
 	AAFConstValue.all \
+	AAFEdgecode.all \
+	AAFFiller.all \
 	AAFInt64.all \
 	AAFIntegerAttribute.all \
 	AAFLocator.all \
@@ -42,6 +44,7 @@ DODO_TARGETS = \
 	AAFTimelineMobSlot.all \
 	AAFObjectAttribute.all \
 	AAFSegment.all \
+	AAFSequence.all \
 	AAFSourceClip.all \
 	AAFSourceReference.all \
 	AAFString.all \
@@ -167,6 +170,32 @@ AAFConstValue.comc : AAFConstValue.exp macros/comc.mac
 AAFConstValue.comh : AAFConstValue.exp macros/comh.mac
 AAFConstValue.implc : AAFConstValue.exp macros/implc.mac
 AAFConstValue.implh : AAFConstValue.exp macros/implh.mac
+
+AAFEdgecode.all : AAFEdgecode.cpp AAFEdgecode.h
+AAFEdgecode.all : AAFEdgecode.comc AAFEdgecode.comh
+AAFEdgecode.all : AAFEdgecode.exp AAFEdgecode.idl
+AAFEdgecode.all : AAFEdgecode.implc AAFEdgecode.implh
+AAFEdgecode.exp : AAFSegment.exp AAFUnitTest.exp macros/exp.mac
+AAFEdgecode.h : AAFEdgecode.exp macros/h.mac
+AAFEdgecode.cpp : AAFEdgecode.exp macros/cpp.mac
+AAFEdgecode.idl : AAFEdgecode.exp macros/idl.mac
+AAFEdgecode.comc : AAFEdgecode.exp macros/comc.mac
+AAFEdgecode.comh : AAFEdgecode.exp macros/comh.mac
+AAFEdgecode.implc : AAFEdgecode.exp macros/implc.mac
+AAFEdgecode.implh : AAFEdgecode.exp macros/implh.mac
+
+AAFFiller.all : AAFFiller.cpp AAFFiller.h
+AAFFiller.all : AAFFiller.comc AAFFiller.comh
+AAFFiller.all : AAFFiller.exp AAFFiller.idl
+AAFFiller.all : AAFFiller.implc AAFFiller.implh
+AAFFiller.exp : AAFSegment.exp AAFUnitTest.exp macros/exp.mac
+AAFFiller.h : AAFFiller.exp macros/h.mac
+AAFFiller.cpp : AAFFiller.exp macros/cpp.mac
+AAFFiller.idl : AAFFiller.exp macros/idl.mac
+AAFFiller.comc : AAFFiller.exp macros/comc.mac
+AAFFiller.comh : AAFFiller.exp macros/comh.mac
+AAFFiller.implc : AAFFiller.exp macros/implc.mac
+AAFFiller.implh : AAFFiller.exp macros/implh.mac
 
 AAFInt64.all : AAFInt64.cpp AAFInt64.h
 AAFInt64.all : AAFInt64.comc AAFInt64.comh
@@ -360,6 +389,19 @@ AAFSegment.comc : AAFSegment.exp macros/comc.mac
 AAFSegment.comh : AAFSegment.exp macros/comh.mac
 AAFSegment.implc : AAFSegment.exp macros/implc.mac
 AAFSegment.implh : AAFSegment.exp macros/implh.mac
+
+AAFSequence.all : AAFSequence.cpp AAFSequence.h
+AAFSequence.all : AAFSequence.comc AAFSequence.comh
+AAFSequence.all : AAFSequence.exp AAFSequence.idl
+AAFSequence.all : AAFSequence.implc AAFSequence.implh
+AAFSequence.exp : AAFUnitTest.exp AAFSegment.exp macros/exp.mac
+AAFSequence.h : AAFSequence.exp macros/h.mac
+AAFSequence.cpp : AAFSequence.exp macros/cpp.mac
+AAFSequence.idl : AAFSequence.exp macros/idl.mac
+AAFSequence.comc : AAFSequence.exp macros/comc.mac
+AAFSequence.comh : AAFSequence.exp macros/comh.mac
+AAFSequence.implc : AAFSequence.exp macros/implc.mac
+AAFSequence.implh : AAFSequence.exp macros/implh.mac
 
 AAFSourceClip.all : AAFSourceClip.cpp AAFSourceClip.h
 AAFSourceClip.all : AAFSourceClip.comc AAFSourceClip.comh
