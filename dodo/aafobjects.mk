@@ -19,6 +19,7 @@ AAFPERSISTENTOBJECTS = \
 	AAFEdgecode \
 	AAFEffectDef \
 	AAFEffectInvocation \
+	AAFEssenceData \
 	AAFIntegerAttribute \
 	AAFLocator \
 	AAFMacLocator \
@@ -46,7 +47,7 @@ AAFPERSISTENTOBJECTS = \
 # These are all of the other non-persistent objects:
 AAFNONPERSISTENTOBJECTS = \
 	AAFRoot \
-	AAFMedia \
+	AAFEssenceAccess \
 	EnumAAFAttributes \
 	EnumAAFClassDefs \
 	EnumAAFControlCodeDefs \
@@ -55,7 +56,7 @@ AAFNONPERSISTENTOBJECTS = \
 	EnumAAFDefs \
 	EnumAAFEffectDefs \
 	EnumAAFIdentifications \
-	EnumAAFMedia \
+	EnumAAFEssenceData \
 	EnumAAFMobComments \
 	EnumAAFParameterSlots \
 	EnumAAFPropertyDefs \
