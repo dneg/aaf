@@ -44,7 +44,9 @@
 #include <assert.h>
 #include "aafCvt.h" 
 #include "AAFResult.h"
+#include "AAFUtils.h"
 #include "AAFDefUIDs.h"
+#include "AAFDataDefs.h"
 #include "ImplAAFHeader.h"
 
 #include "ImplAAFSmartPointer.h"
@@ -127,8 +129,8 @@ AAFRESULT STDMETHODCALLTYPE
 
 	else
 	{
-	
-        *fadeInLen      = _fadeInLength;
+		
+		*fadeInLen      = _fadeInLength;
 		*fadeInType		= _fadeInType;
 		if (_fadeInLength > 0)
 		{
@@ -138,7 +140,7 @@ AAFRESULT STDMETHODCALLTYPE
 		{
 			*fadeInPresent = kAAFFalse;
 		}
-
+		
 		*fadeOutLen		= _fadeOutLength;
 		*fadeOutType	= _fadeOutType;
 		if (_fadeOutLength > 0)
@@ -270,23 +272,33 @@ AAFRESULT STDMETHODCALLTYPE
                            aafFadeType_t	fadeInType,
                            aafInt32			fadeOutLen,
                            aafFadeType_t	fadeOutType)
-{
-    AAFRESULT aafError = AAFRESULT_SUCCESS;
-
-	if (fadeInLen > 0)
-	{
-		_fadeInLength	= fadeInLen;
-		_fadeInType	= fadeInType;
-	}
-
-	if (fadeOutLen > 0)
-	{
-		_fadeOutLength		= fadeOutLen;
-		_fadeOutType	= fadeOutType;
-	}
-
-	return aafError;
-}
+ {
+	 AAFRESULT aafError = AAFRESULT_SUCCESS;
+	 
+	 ImplAAFDataDef	*dataDef;
+	 aafBool		isSound;
+	 
+	 GetDataDef (&dataDef);
+	 dataDef->IsSoundKind(&isSound);
+	 if(isSound)
+	 {
+		 if (fadeInLen > 0)
+		 {
+			 _fadeInLength	= fadeInLen;
+			 _fadeInType	= fadeInType;
+		 }
+		 
+		 if (fadeOutLen > 0)
+		 {
+			 _fadeOutLength		= fadeOutLen;
+			 _fadeOutType	= fadeOutType;
+		 }
+	 }
+	 else
+		 aafError = AAFRESULT_INVALID_DATADEF;		// Must be sound Datadef for this call
+	 
+	 return aafError;
+ }
 
 
 AAFRESULT STDMETHODCALLTYPE
