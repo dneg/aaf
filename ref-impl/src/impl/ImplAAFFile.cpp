@@ -38,7 +38,6 @@
 #include "ImplAAFBuiltinDefs.h"
 #include "ImplAAFOMRawStorage.h"
 
-#include "AAFFileSignatures.h"
 #include "AAFFileMode.h"
 #include "AAFFileKinds.h"
 
@@ -211,7 +210,7 @@ ImplAAFFile::OpenExistingRead (const aafCharacter * pFileName,
         OMFileSignature sig = _file->signature();
 		const OMFileSignature aafFileSignature =
 		  *reinterpret_cast<const OMFileSignature *>
-		  (&aafFileSignatureAafSSBinaryGUID);
+		  (&aafFileKindAafSSBinary);
         checkExpression(sig == aafFileSignature, AAFRESULT_NOT_AAF_FILE);
 
 		// Restore the meta dictionary, it should be the same object
@@ -511,7 +510,7 @@ ImplAAFFile::OpenNewModify (const aafCharacter * pFileName,
 		// Attempt to create the file.
 		const OMFileSignature aafFileSignature =
 		  *reinterpret_cast<const OMFileSignature *>
-		  (&aafFileSignatureAafSSBinaryGUID);
+		  (&aafFileKindAafSSBinary);
 		_file = OMFile::openNewModify(pFileName,
 									  _factory,
 									  0,
@@ -860,7 +859,7 @@ ImplAAFFile::Open ()
 		  OMFileSignature sig = _file->signature();
 		  const OMFileSignature aafFileSignature  =
 			*reinterpret_cast<const OMFileSignature *>
-			(&aafFileSignatureAafSSBinaryGUID);
+			(&aafFileKindAafSSBinary);
 		  checkExpression(sig == aafFileSignature, AAFRESULT_NOT_AAF_FILE);
 
 		if (IsWriteable() && _file->byteOrder() != hostByteOrder()) {
