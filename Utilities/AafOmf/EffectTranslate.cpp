@@ -241,3 +241,7 @@ HRESULT EffectTranslate::GetAAFEffectID(	OMF2::omfUniqueNamePtr_t OMFEffectIDPtr
 	return rc;
 }
 
+bool EffectTranslate::RequiresNestedScope(aafUID_t &effectDefAUID)
+{
+	return isPrivateEffect(effectDefAUID);
+}

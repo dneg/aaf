@@ -44,6 +44,7 @@ public:
 	virtual HRESULT GetAAFEffectID(	OMF2::omfUniqueNamePtr_t OMFEffectIDPtr,
 						OMF2::omfUniqueNamePtr_t MCEffectIDPtr,
 						aafUID_t	*aafUID);
+	virtual bool RequiresNestedScope(aafUID_t &effectDefAUID);
 };
 
 typedef struct

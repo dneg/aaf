@@ -531,7 +531,7 @@ int main(int argc, char *argv[])
 		{
 			// User indicated input file must be an AAF 
 			// Convert AAF to OMF
-			check = AAFMain.ConvertFile();
+			AAFMain.ConvertFile();
 		}
 		else
 		{
@@ -561,7 +561,7 @@ int main(int argc, char *argv[])
 		else
 		{
 			gpGlobals->pLogger->Log( kLogError, 
-				"main(): %s exception %ld\n", e.Type(), e.Code() );
+				"main(): %s exception %0lx\n", e.Type(), e.Code() );
 		}
 		hr = e.Code();
 	}
