@@ -61,10 +61,10 @@ typedef IAAFSmartPointer<IEnumAAFMobSlots>      IEnumAAFMobSlotsSP;
 typedef IAAFSmartPointer<IAAFMobSlot>           IAAFMobSlotSP;
 
 //// Our TEST values ...
-	
+
 //Fixed Array
 #define									TEST_FA_NAME	L"FA type Name"
-static  const aafUID_t				TEST_FA_TYPE_ID =
+static  const aafUID_t					TEST_FA_TYPE_ID =
 { 0x47240c2c, 0x19d, 0x11d4, { 0x8e, 0x3d, 0x0, 0x90, 0x27, 0xdf, 0xca, 0x7c } };
 
 
@@ -75,7 +75,7 @@ static const TEST_ELEM_t				TEST_FA_VALUES [TEST_FA_COUNT] = {-27, 3000, -50, 94
 
 // Fixed Array Property
 #define									TEST_PROP_NAME	L"FA Property Name"
-static  const aafUID_t				TEST_PROP_ID =
+static  const aafUID_t					TEST_PROP_ID =
 { 0x47240c2d, 0x19d, 0x11d4, { 0x8e, 0x3d, 0x0, 0x90, 0x27, 0xdf, 0xca, 0x7c } };
 
 
@@ -246,10 +246,10 @@ static HRESULT createFAFiller(IAAFDictionary* const pDict, IAAFFillerSP& spFill)
 
 static HRESULT verifyContents (IAAFHeader* const pHeader, IAAFDictionary* const pDict,
 							   const aafBoolean_t bMinimalTesting)
-
+							   
 {
 	//CAAFBuiltinDefs defs (pDict);
-
+	
 	HRESULT hr;
 	
 	/////////////////////////////////////////
@@ -320,12 +320,12 @@ static HRESULT verifyContents (IAAFHeader* const pHeader, IAAFDictionary* const 
 	
 	//get the array out of it ...
 	TEST_ELEM_t	check_fa [TEST_FA_COUNT] = {0};  //init a checking variable
-
+	
 	//IAAFTypeDefFixedArray::GetCount()
 	aafUInt32 check_count = 0;
 	checkResult(spFA->GetCount(&check_count));
 	checkExpression( check_count == TEST_FA_COUNT, AAFRESULT_TEST_FAILED );	
-
+	
 	//IAAFTypeDefFixedArray::GetType()
 	IAAFTypeDefSP spTestType;
 	checkResult(spFA->GetType(&spTestType));
@@ -333,23 +333,23 @@ static HRESULT verifyContents (IAAFHeader* const pHeader, IAAFDictionary* const 
 	IAAFTypeDefSP spTD_elem;
 	checkResult(pDict->LookupTypeDef (TEST_ELEM_TYPE_ID, &spTD_elem));
 	checkExpression( AreUnksSame(spTestType, spTD_elem), AAFRESULT_TEST_FAILED );
-
+	
 	//IAAFTypeDefFixedArray::GetCArray()
-	aafInt32 i=0;
+	aafUInt32 i=0;
 	checkResult(spFA->GetCArray(spPropVal, (aafMemPtr_t) check_fa, sizeof(check_fa)));
 	//VERIFY values:
 	for (i=0; i<TEST_FA_COUNT; i++)
 		checkExpression( check_fa[i] == TEST_FA_VALUES[i], AAFRESULT_TEST_FAILED );	
-
-
+	
+	
 	//At this point, the test is succesful for both the CREATE and READ (unscrambling of .aaf file) routines
 	if (bMinimalTesting)
 		// so,  bail if we're called from CREATE 
 		return S_OK;
-
+	
 	/////  READ routine .... continue with more tests ....................
-
-
+	
+	
 	//IAAFTypeDefFixedArray::GetElementValue 
 	//Get 3rd index out of array
 	aafUInt32  test_index = 2;
@@ -361,10 +361,10 @@ static HRESULT verifyContents (IAAFHeader* const pHeader, IAAFDictionary* const 
 	//now, test spSomeVal for integer
 	IAAFTypeDefIntSP spSomeInt;
 	checkResult(spTestType->QueryInterface(IID_IAAFTypeDefInt, (void**)&spSomeInt));
-	aafInt32 some_int = -1;
-	checkResult(spSomeInt->GetInteger(spSomeVal, (aafMemPtr_t)&some_int, sizeof (aafInt32)));
+	TEST_ELEM_t some_int = -1;
+	checkResult(spSomeInt->GetInteger(spSomeVal, (aafMemPtr_t)&some_int, sizeof (some_int)));
 	checkExpression( some_int == TEST_FA_VALUES[test_index], AAFRESULT_TEST_FAILED );
-
+	
 	//IAAFTypeDefFixedArray::SetCArray  
 	const TEST_ELEM_t  newArray[TEST_FA_COUNT] = {99, -99, 22, -22, 120};
 	checkResult(spFA->SetCArray (spPropVal, (aafMemPtr_t) newArray,  sizeof(newArray)));
@@ -373,16 +373,61 @@ static HRESULT verifyContents (IAAFHeader* const pHeader, IAAFDictionary* const 
 	checkResult(spFA->GetCArray(spPropVal, (aafMemPtr_t) check_fa, sizeof(check_fa)));
 	for (i=0; i<TEST_FA_COUNT; i++)
 		checkExpression( check_fa[i] == newArray[i], AAFRESULT_TEST_FAILED );	
+	
 
-	//a negative test ...
+	//Test IAAFTypeDefFixedArray::IAAFTypeDefArray::SetElementValue() ....
 
-	//check for bad size request :
-	const TEST_ELEM_t  badSize_array[TEST_FA_COUNT+1] = {10, -20, 30, -44, 55, -360};
+	some_int = -13;
+	checkResult(spSomeInt->CreateValue((aafMemPtr_t)&some_int, sizeof (some_int), &spSomeVal));
+	//try to set the value out-of-bounds
+	hr = spFA->SetElementValue(spPropVal, 5, spSomeVal); //5 is one elem out of bounds
+	checkExpression( hr == AAFRESULT_BADINDEX, AAFRESULT_TEST_FAILED );
+	//Set the element to last index ...
+	checkResult(spFA->SetElementValue(spPropVal, 4, spSomeVal));  //4 is last index position
+	//Now get back the element ...
+	checkResult(spFA->GetElementValue(spPropVal, 4, &spSomeVal));
+	some_int = 0; //reset value
+	checkResult(spSomeInt->GetInteger(spSomeVal, (aafMemPtr_t)&some_int, sizeof (some_int)));
+	//verify retrieved integer
+	checkExpression( -13 == some_int  , AAFRESULT_TEST_FAILED );
+	
+	////
+    //IAAFTypeDefArray::CreateValueFromValues ()
+	const TEST_ELEM_t  newsize_array[7] = {10, -20, 30, -44, 55, -360, 11};
+
+	aafUInt32 bad_count = 7;
+	IAAFPropertyValue * pSourceValArr[7];
+	//setup
+	for (i=0; i<bad_count; i++)
+		checkResult(spSomeInt->CreateValue((aafMemPtr_t)&newsize_array[i], 
+						sizeof (some_int), &pSourceValArr[i]));
+	IAAFPropertyValueSP spTargetValArr;
+	hr = spFA->CreateValueFromValues(pSourceValArr, bad_count, &spTargetValArr );
+	checkExpression(AAFRESULT_DATA_SIZE == hr, AAFRESULT_TEST_FAILED);
+	//ok try again, with the correct count
+	aafUInt32 good_count = 5;
+	checkResult(spFA->CreateValueFromValues(pSourceValArr, good_count, &spTargetValArr ));
+
+	//done with creating Target ValArr;  release Source ValArr elements
+	for (i=0; i<bad_count; i++)
+		pSourceValArr[i]->Release();
+
+	//verify spPropValArr values
+	TEST_ELEM_t	check2_fa [5] = {0};  //init a checking variable
+	checkResult(spFA->GetCArray(spTargetValArr, (aafMemPtr_t) check2_fa, sizeof(check2_fa)));
+	for (i=0; i<good_count; i++)
+		checkExpression( check2_fa[i] == newsize_array[i], AAFRESULT_TEST_FAILED );	
+
+	
+	//another  negative test ...
+	
+	//check for bad size request : like, say 6 elements
+	const TEST_ELEM_t  badSize_array[TEST_FA_COUNT+1] = {99, -2, 78, -12, 77, -55};
 	hr = spFA->SetCArray (spPropVal, (aafMemPtr_t) badSize_array,  sizeof(badSize_array));
 	//we should have got back a BAD SIZE!!!! 
 	checkExpression( hr == AAFRESULT_BAD_SIZE, AAFRESULT_TEST_FAILED );
-
-
+	
+	
 	return S_OK;
 	
 }//verifyContents()
@@ -546,16 +591,7 @@ extern "C" HRESULT CAAFTypeDefFixedArray_test()
 	{
 		hr = CreateAAFFile(	pFileName );
 		if(hr == AAFRESULT_SUCCESS)
-			hr = ReadAAFFile( pFileName );
-
-		if (SUCCEEDED(hr))
-		{
-			hr = AAFRESULT_TEST_PARTIAL_SUCCESS;			
-				
-			cout << "\t  SetElementValue  method is Not Implemented" << endl;
-			cout << "\t  CreateValueFromValues  method is Not Implemented" << endl;
-		}//if
-		
+			hr = ReadAAFFile( pFileName );		
 		
 	}//try
 	catch (...)
