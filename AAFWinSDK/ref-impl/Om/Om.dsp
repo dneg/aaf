@@ -166,6 +166,10 @@ SOURCE="..\..\..\ref-impl\src\OM\OMKLVStoredObject.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\OM\OMKLVStoredObjectFactory.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\OM\OMKLVStoredStream.cpp"
 # End Source File
 # Begin Source File
@@ -179,6 +183,10 @@ SOURCE="..\..\..\ref-impl\src\OM\OMMemoryRawStorage.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\OM\OMMSSStoredObject.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\OM\OMMSSStoredObjectFactory.cpp"
 # End Source File
 # Begin Source File
 
@@ -270,6 +278,10 @@ SOURCE="..\..\..\ref-impl\src\OM\OMStoredObject.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\OM\OMStoredObjectFactory.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\OM\OMStoredPropertySetIndex.cpp"
 # End Source File
 # Begin Source File
@@ -339,6 +351,10 @@ SOURCE="..\..\..\ref-impl\src\OM\OMWideStringProperty.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\OM\OMXMLStoredObject.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\OM\OMXMLStoredObjectFactory.cpp"
 # End Source File
 # Begin Source File
 
@@ -482,6 +498,10 @@ SOURCE="..\..\..\ref-impl\include\OM\OMKLVStoredObject.h"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\include\OM\OMKLVStoredObjectFactory.h"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\include\OM\OMKLVStoredStream.h"
 # End Source File
 # Begin Source File
@@ -511,6 +531,10 @@ SOURCE="..\..\..\ref-impl\include\OM\OMMemoryRawStorage.h"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\include\OM\OMMSSStoredObject.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\include\OM\OMMSSStoredObjectFactory.h"
 # End Source File
 # Begin Source File
 
@@ -706,6 +730,10 @@ SOURCE="..\..\..\ref-impl\src\OM\OMStoredObject.h"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\OM\OMStoredObjectFactory.h"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\OM\OMStoredPropertySetIndex.h"
 # End Source File
 # Begin Source File
@@ -891,6 +919,10 @@ SOURCE="..\..\..\ref-impl\include\OM\OMWideStringProperty.h"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\include\OM\OMXMLStoredObject.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\include\OM\OMXMLStoredObjectFactory.h"
 # End Source File
 # Begin Source File
 
