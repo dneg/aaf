@@ -50,11 +50,9 @@
 #include "ImplAAFTypeDef.h"
 
 ImplAAFParameter::ImplAAFParameter ()
-: _parmDef(			PID_Parameter_Definition,	"Definition"),
-  _typeDef(			PID_Parameter_Type,			"Type")
+: _parmDef(			PID_Parameter_Definition,	"Definition")
 {
 	_persistentProperties.put(_parmDef.address());
-	_persistentProperties.put(_typeDef.address());
 }
 
 
@@ -129,63 +127,29 @@ AAFRESULT STDMETHODCALLTYPE
 
 	
 
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFParameter::SetTypeDefinition (
-      ImplAAFTypeDef*  pTypeDef)
-{
-	aafUID_t			newUID;
-	ImplAAFDictionary	*dict = NULL;
-
-	if(pTypeDef == NULL)
-		return AAFRESULT_NULL_PARAM;
-
-	XPROTECT()
-	{
-		CHECK(pTypeDef->GetAUID(&newUID));
-		CHECK(GetDictionary(&dict));
-// Weak references not yet refcounted
-//		if(dict->LookupTypeDef(&newUID, &def) == AAFRESULT_SUCCESS)
-//			def->ReleaseReference();
-
-		_typeDef = newUID;
-//		pTypeDef->AcquireReference();
-		dict->ReleaseReference();
-		dict = NULL;
-	}
-	XEXCEPT
-	{
-		if(dict)
-		  dict->ReleaseReference();
-		dict = 0;
-	}
-	XEND;
-
-	return AAFRESULT_SUCCESS;
-}
 
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFParameter::GetTypeDefinition (
       ImplAAFTypeDef **ppTypeDef)
 {
-	ImplAAFDictionary	*dict = NULL;
+	ImplAAFParameterDef	*pParameterDef = NULL;
 
 	if(ppTypeDef == NULL)
 		return AAFRESULT_NULL_PARAM;
 
 	XPROTECT()
 	{
-	  CHECK(GetDictionary(&dict));
-		CHECK(dict->LookupTypeDef(_typeDef, ppTypeDef));
-//		(*ppTypeDef)->AcquireReference();
-		dict->ReleaseReference();
-		dict = NULL;
+	  CHECK(GetParameterDefinition(&pParameterDef));
+		CHECK(pParameterDef->GetTypeDefinition (ppTypeDef));
+		pParameterDef->ReleaseReference();
+		pParameterDef = NULL;
 	}
 	XEXCEPT
 	{
-		if(dict)
-		  dict->ReleaseReference();
-		dict = 0;
+		if(pParameterDef)
+		  pParameterDef->ReleaseReference();
+		pParameterDef = 0;
 	}
 	XEND;
 

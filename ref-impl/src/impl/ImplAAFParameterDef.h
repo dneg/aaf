@@ -55,7 +55,8 @@ public:
         // @parm [in] Pointer to an AUID reference
         (const aafUID_t & id,
 		 const aafCharacter *name,
-		 const aafCharacter *description);
+		 const aafCharacter *description,
+     ImplAAFTypeDef * pType);
 
 
 protected:
@@ -68,7 +69,7 @@ public:
   // GetParameterDataDefID()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetTypeDef
+    GetTypeDefinition
         // @parm [retval][out] Pointer to an AUID reference
         (ImplAAFTypeDef **  pParameterDataDefID);
 

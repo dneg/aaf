@@ -64,8 +64,14 @@ public:
         (// @parm [in, string] User defined name of this tagged value object
          const aafCharacter * pName,
 
-         // @parm [in] Type definition of this tagged value object
-         ImplAAFTypeDef * pTypeDef);
+         // @parm [in] Type Definition of the following value data
+         ImplAAFTypeDef * pType,
+         
+         // @parm [in] Size of preallocated buffer
+         aafUInt32  valueSize,
+
+         // @parm [in, size_is(valueSize)] buffer containing value
+         aafDataBuffer_t  pValue);
 
   //****************
   // GetName()
@@ -156,9 +162,10 @@ public:
 
 	// persistent data
 	OMWideStringProperty				_name;
-	OMFixedSizeProperty<aafUID_t>		_type;
 	OMVariableSizeProperty<aafUInt8>	_value;
 
+  bool _initialized;
+  ImplAAFTypeDef * _cachedTypeDef;
 };
 
 #endif // ! __ImplAAFTaggedValue_h__

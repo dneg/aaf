@@ -39,6 +39,7 @@ class ImplAAFParameter;
 #include "ImplAAFParameter.h"
 #endif
 
+class ImplAAFTypeDef;
 
 class ImplAAFConstantValue : public ImplAAFParameter
 {
@@ -48,6 +49,22 @@ public:
   //
   //********
   ImplAAFConstantValue ();
+
+
+  //****************
+  // Initialize()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    Initialize
+        (// @parm [in] // Parameter definition for this object (this determines the type of the constant value)
+         ImplAAFParameterDef * pParameterDef,
+         
+         // @parm [in] Size of preallocated buffer
+         aafUInt32  valueSize,
+
+         // @parm [in, size_is(valueSize)] buffer containing value
+         aafDataBuffer_t  pValue);
+
 
 protected:
   virtual ~ImplAAFConstantValue ();
@@ -92,8 +109,14 @@ public:
          // @parm [in, size_is(valueSize)] buffer containing value
          aafDataBuffer_t  pValue);
 
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetTypeDefinition (
+      ImplAAFTypeDef **ppTypeDef);
+
 private:
   OMVariableSizeProperty<aafUInt8>	_value;
+
+  ImplAAFTypeDef * _cachedTypeDef;
 };
 
 #endif // ! __ImplAAFConstantValue_h__

@@ -40,20 +40,49 @@
 #include "ImplAAFConstantValue.h"
 #endif
 
+#ifndef __ImplAAFTypeDefIndirect_h__
+#include "ImplAAFTypeDefIndirect.h"
+#endif
+
+
 #include <assert.h>
 #include <string.h>
 
 
 ImplAAFConstantValue::ImplAAFConstantValue ()
-: _value(			PID_ConstantValue_Value,			"Value")
+: _value(			PID_ConstantValue_Value,			"Value"),
+  _cachedTypeDef(NULL)
 {
 	_persistentProperties.put(_value.address());
 }
 
 
 ImplAAFConstantValue::~ImplAAFConstantValue ()
-{}
+{  
+  if (_cachedTypeDef)
+    _cachedTypeDef->ReleaseReference ();
+}
 
+  //****************
+  // Initialize()
+  //
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFConstantValue::Initialize (
+         ImplAAFParameterDef * pParameterDef,
+         aafUInt32  valueSize,
+         aafDataBuffer_t  pValue)
+{
+  AAFRESULT result = AAFRESULT_SUCCESS;
+
+  if (!pParameterDef || !pValue)
+    return (AAFRESULT_NULL_PARAM);
+
+  result = SetParameterDefinition (pParameterDef);
+  if (AAFRESULT_SUCCEEDED (result))
+    result = SetValue (valueSize, pValue);
+
+  return result;
+}
 
 	
 /****/
@@ -66,13 +95,16 @@ AAFRESULT STDMETHODCALLTYPE
 	if(pValue == NULL || bytesRead == NULL)
 		return(AAFRESULT_NULL_PARAM);
 
-	if (_value.size() > valueSize)
-	  return AAFRESULT_SMALLBUF;
+//	if (_value.size() > valueSize)
+//	  return AAFRESULT_SMALLBUF;
 
-	_value.copyToBuffer(pValue, valueSize);
-	*bytesRead  = _value.size();
+//	_value.copyToBuffer(pValue, valueSize);
+//	*bytesRead  = _value.size();
+	*bytesRead = 0;
 
-	return(AAFRESULT_SUCCESS); 
+	// Validate the property and get the property definition and type definition, 
+	// and the actual length of the data
+	return (ImplAAFTypeDefIndirect::GetActualPropertyValue (_value, pValue, valueSize, bytesRead));
 }
 
 
@@ -84,9 +116,11 @@ AAFRESULT STDMETHODCALLTYPE
 	if(pLen == NULL)
 		return(AAFRESULT_NULL_PARAM);
 
-	*pLen = _value.size();
+//	*pLen = _value.size();
+	*pLen = 0;
 
-	return(AAFRESULT_SUCCESS); 
+	// Validate the property and get the actual length of the data
+	return (ImplAAFTypeDefIndirect::GetActualPropertySize (_value, pLen)); 
 }
 
 
@@ -96,14 +130,37 @@ AAFRESULT STDMETHODCALLTYPE
       aafUInt32  valueSize,
       aafDataBuffer_t  pValue)
 {
-	if(pValue == NULL)
+	if (!pValue)
 		return(AAFRESULT_NULL_PARAM);
 
-	_value.setValue(pValue, valueSize);
+//	_value.setValue(pValue, valueSize);
 
-	return(AAFRESULT_SUCCESS); 
+  if (!_cachedTypeDef)
+  {
+    // Lookup the type definition from the Parameter parent class.
+    AAFRESULT result = ImplAAFParameter::GetTypeDefinition (&_cachedTypeDef);
+    if (AAFRESULT_FAILED (result))
+      return result;
+  }
+
+  // Validate the property and get the property definition and type definition, 
+	// and the actual length of the data
+	return (ImplAAFTypeDefIndirect::SetActualPropertyValue (_value, _cachedTypeDef, pValue, valueSize));
 }
 
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFConstantValue::GetTypeDefinition (
+      ImplAAFTypeDef **ppTypeDef)
+{
+	if (!ppTypeDef)
+		return AAFRESULT_NULL_PARAM;
+
+	// Validate the property and get the actual type definition from the
+  // indirect value.
+	return (ImplAAFTypeDefIndirect::GetActualPropertyType (_value, ppTypeDef));
+}
 
 
 
