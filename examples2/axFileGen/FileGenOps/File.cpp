@@ -16,10 +16,14 @@
 // 
 //=---------------------------------------------------------------------=
 
+#include "ParamMaps.h"
+
 #include <axFileGen.h>
 
 #include <AxFile.h>
 #include <AxUtil.h>
+
+#include <AAFFileKinds.h>
 
 #include <stdio.h>
 
@@ -140,8 +144,156 @@ void CloseFile::Execute( const std::vector<AxString>& args )
 
 //=---------------------------------------------------------------------=
 
+AXFG_OP(
+  SaveCopyAs,           
+  L"SaveCopyAs",
+  L"Copy all objects in source file to destination file.",
+  L"SrcFile DstFile",
+  L"Destination file must be empty.",
+  3,
+  3 ) 
+
+SaveCopyAs::~SaveCopyAs()
+{}
+
+void SaveCopyAs::Execute( const std::vector<AxString>& argv )
+{
+	AxString srcFileName = argv[1];
+	AxString dstFileName = argv[2];
+
+	IAAFFileSP spSrcFile;
+	GetInstance( srcFileName ).GetCOM( spSrcFile );
+	AxFile axSrcFile( spSrcFile );
+
+	IAAFFileSP spDstFile;
+	GetInstance( dstFileName ).GetCOM( spDstFile );
+
+	axSrcFile.SaveCopyAs( spDstFile );	
+}
+
 //=---------------------------------------------------------------------=
 
+AXFG_OP(
+  SaveAsFile,           
+  L"SaveAsFile",
+  L"Save an IAAFRandomFile as an ordinary file.",
+  L"SrcFile DstFile",
+  L"Destination file must be empty. SrcFile assumes the persona of DstFile.",
+  3,
+  3 ) 
+
+SaveAsFile::~SaveAsFile()
+{}
+
+void SaveAsFile::Execute( const std::vector<AxString>& argv )
+{
+	AxString srcFileName = argv[1];
+	AxString dstFileName = argv[2];
+
+	IAAFRandomFileSP spSrcFile;
+	GetInstance( srcFileName ).GetCOM( spSrcFile );
+	AxRandomFile axSrcFile( spSrcFile );
+
+	IAAFFileSP spDstFile;
+	GetInstance( dstFileName ).GetCOM( spDstFile );
+
+	axSrcFile.SaveAsFile( spDstFile );	
+}
+
+//=---------------------------------------------------------------------=
+
+AXFG_OP(
+  CreateRawStorageMemory,           
+  L"CreateRawStorageMemory",
+  L"Creates an IAAFRawStorage on memory.",
+  L"StorageName file_access",
+  L"",
+  3,
+  3 ) 
+
+CreateRawStorageMemory::~CreateRawStorageMemory()
+{}
+
+void CreateRawStorageMemory::Execute( const std::vector<AxString>& argv )
+{
+	AxString storageName = argv[1];
+	AxString accessMode  = argv[2];
+
+	IAAFRawStorageSP spRawStorage;
+	CHECK_HRESULT(
+		AAFCreateRawStorageMemory( 
+			FileAccessParams::GetInstance().Find( *this, accessMode ),
+			&spRawStorage )
+		);
+
+	SetCOM( spRawStorage );
+	RegisterInstance( storageName );
+}
+
+//=---------------------------------------------------------------------=
+
+AXFG_OP(
+  CreateAAFFileOnRawStorage,           
+  L"CreateAAFFileOnRawStorage",
+  L"Create an IAAFile out of an IAAFRawStorage",
+  L"FileName StorageName",
+  L"existence = new, access = writable, kind = SSBinary, ident = AxProductItentification, mode flags = 0",
+  3,
+  3 ) 
+
+CreateAAFFileOnRawStorage::~CreateAAFFileOnRawStorage()
+{}
+
+void CreateAAFFileOnRawStorage::Execute( const std::vector<AxString>& argv )
+{
+	AxString fileName    = argv[1];
+	AxString storageName = argv[2];
+
+	IAAFRawStorageSP spRawStorage;
+	GetInstance( storageName ).GetCOM( spRawStorage );
+
+	AxProductIdentification ident;
+	IAAFFileSP spFile;
+	CHECK_HRESULT( AAFCreateAAFFileOnRawStorage( spRawStorage,
+												 kAAFFileExistence_new,
+												 kAAFFileAccess_write,
+												 &aafFileKindAafSSBinary,
+												 0,
+												 ident.getProductId(),
+												 &spFile ) );
+	
+
+	CHECK_HRESULT( spFile->Open() );
+	
+	SetCOM( spFile );
+	RegisterInstance( fileName );
+}
+
+//=---------------------------------------------------------------------=
+
+AXFG_OP(
+  OpenTransient,           
+  L"OpenTransient",
+  L"Create a transient, memory backed, file.",
+  L"FileName",
+  L"The same thing can be accompolished using CreateRawStorageMemory and CreateAAFFileOnRawStorage.",
+  2,
+  2 ) 
+
+OpenTransient::~OpenTransient()
+{}
+
+void OpenTransient::Execute( const std::vector<AxString>& argv )
+{
+	AxString name = argv[1];
+
+	AxFile axFile;
+	axFile.OpenTransient();
+
+	IAAFFileSP spFile = axFile;
+	SetCOM( spFile );
+	RegisterInstance( name );
+}
 
 } // end of namespace
 
