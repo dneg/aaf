@@ -880,7 +880,7 @@ AAFRESULT STDMETHODCALLTYPE
 			if (fadeInPresent == kAAFFalse) {
 				fadeIn = 0;
 			}
-			if (fadeOutPresent = kAAFFalse) {
+			if (fadeOutPresent == kAAFFalse) {
 				fadeOut = 0;
 			}
 			CHECK(masterMob->GetDictionary(&pDictionary));
@@ -1352,7 +1352,7 @@ ImplAAFEssenceAccess::MultiAppend (ImplAAFMasterMob *masterMob,
 					if (fadeInPresent == kAAFFalse) {
 						fadeIn = 0;
 					}
-					if (fadeOutPresent = kAAFFalse) {
+					if (fadeOutPresent == kAAFFalse) {
 						fadeOut = 0;
 					}
 					CHECK(masterMob->GetDictionary(&pDictionary));
