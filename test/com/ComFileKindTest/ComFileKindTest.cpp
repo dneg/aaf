@@ -33,7 +33,9 @@ using namespace std;
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>		// for pathconf()
+#ifndef _MSC_VER
+#include <unistd.h>		// POSIX pathconf()
+#endif
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFResult.h"
