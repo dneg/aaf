@@ -1020,11 +1020,10 @@ void testUint64(void)
 aafErr_t TimecodeToString(
 	aafTimecode_t timeCode,   /* IN - Timecode Value */
 	aafInt32 strLen,          /* IN - Length of string to hold timecode */
-	aafString_t tcString)       /* IN/OUT - Pre-allocated buffer to hold
+	wchar_t *tcString)       /* IN/OUT - Pre-allocated buffer to hold
 							   *          timecode string
 							   */
 {
-#if FULL_TOOLKIT
 	register int i, ten;
   aafInt16 hours, minutes, seconds, frames;
   aafErr_t aafError = AAFRESULT_SUCCESS;
@@ -1037,9 +1036,9 @@ aafErr_t TimecodeToString(
 		}
 
 	  if (timeCode.drop == kTcDrop)
-		strcpy(tcString, "00;00;00;00");
+		wcscpy(tcString, L"00;00;00;00");
 	  else 
-		strcpy(tcString, "00:00:00:00");
+		wcscpy(tcString, L"00:00:00:00");
 
 	  CHECK(PvtOffsetToTimecode(timeCode.startFrame, timeCode.fps, timeCode.drop, &hours, 
 							  &minutes, &seconds, &frames));
@@ -1076,7 +1075,6 @@ aafErr_t TimecodeToString(
 	  return(XCODE());
 	}
   XEND;
-#endif
 
   return(AAFRESULT_SUCCESS);
 }
@@ -1086,12 +1084,11 @@ aafErr_t TimecodeToString(
  *************************************************************************/
 static aafInt32 roundFrameRate(aafRational_t frameRate)
 {
-#if FULL_TOOLKIT
 	aafInt32 intRate;
   double tmpFloatRate, floatRate;
 
   tmpFloatRate = FloatFromRational(frameRate);
-  floatRate = (float)CEIL(tmpFloatRate);  /* To make 29.97 into 30 */
+  floatRate = (float)ceil(tmpFloatRate);  /* To make 29.97 into 30 */
 
   if (floatRate == 30.0)
 	intRate = 30;
@@ -1104,102 +1101,97 @@ static aafInt32 roundFrameRate(aafRational_t frameRate)
   else
 	intRate = 0;
   return(intRate);
-#else
- return(1);
-#endif
 }
 
 /*************************************************************************
  * Function: StringToTimecode()
  *************************************************************************/
 aafErr_t StringToTimecode(
-	aafString_t timecodeString, /* IN - Timecode String */
+	wchar_t *timecodeString, /* IN - Timecode String */
 	aafRational_t frameRate,  /* IN - Frame Rate */
 	aafTimecode_t *timecode)  /* OUT - Timecode Value */
 {
-#if FULL_TOOLKIT
-	register char *c;
-  aafInt32 *multiplier, total = 0;
-  aafBool drop;
-  aafInt32 len, k = 0;
-  aafInt32 intFRate;
-  char tcString[36];
-
-  XPROTECT()
+	char *c;
+	aafInt32 *multiplier, total = 0;
+	aafDropType_t drop;
+	aafInt32 len, k = 0;
+	aafInt32 intFRate;
+	char tcString[36];
+	
+	XPROTECT()
 	{
-	  len = strlen(timecodeString);
-
-	  if (len == 0 || len > 12)
+		len = wcslen(timecodeString);
+		
+		if (len == 0 || len > 12)
 		{
-		  RAISE(AAFRESULT_INVALID_TIMECODE);
+			RAISE(AAFRESULT_INVALID_TIMECODE);
 		}
-
-	  strncpy(tcString, timecodeString, len);
-	  tcString[len] = '\0';
-	  intFRate = roundFrameRate(frameRate);
-	  if (intFRate == 0)
+		
+		wcstombs(tcString, timecodeString, sizeof(tcString));
+		intFRate = roundFrameRate(frameRate);
+		if (intFRate == 0)
 		{
-		  RAISE(AAFRESULT_INVALID_TIMECODE);
+			RAISE(AAFRESULT_INVALID_TIMECODE);
 		}
-
-	  /* Prescan for drop/nondrop */
-	  drop = kTcNonDrop;
-	  for (c = &tcString[len-1]; c >= tcString; c--)
-		if (*c == ';')
-		  {
-			drop = kTcDrop;
-			break;
-		  }
-
-	  multiplier = (drop ? dropTbl : nondropTbl);
-	  if (intFRate == 25)
-		{
-		  multiplier = PALnondropTbl;
-		  drop = kTcNonDrop;
-		}
-
-	  for (c = &tcString[len-1]; c >= tcString; c--)
-		{
-		  if (isdigit(*c))
+		
+		/* Prescan for drop/nondrop */
+		drop = kTcNonDrop;
+		for (c = &tcString[len-1]; c >= tcString; c--)
+			if (*c == ';')
 			{
-			  /* If start of a minute which is not a multiple of 10, and frames
-			   * are 0 or 1, then the user typed a bad, move forward
-			   */
-			  if ((k == 4) && (*c != '0') && (total >= 0) && (total <= 1) 
-				  && drop)
+				drop = kTcDrop;
+				break;
+			}
+			
+			multiplier = (drop ? dropTbl : nondropTbl);
+			if (intFRate == 25)
+			{
+				multiplier = PALnondropTbl;
+				drop = kTcNonDrop;
+			}
+			
+			for (c = &tcString[len-1]; c >= tcString; c--)
+			{
+				if (isdigit(*c))
 				{
-				  if (total == 0)
-					total += 2;
-				  else if (total == 1)
-					total++;
+				/* If start of a minute which is not a multiple of 10, and frames
+				* are 0 or 1, then the user typed a bad, move forward
+					*/
+					if ((k == 4) && (*c != '0') && (total >= 0) && (total <= 1) 
+						&& drop)
+					{
+						if (total == 0)
+							total += 2;
+						else if (total == 1)
+							total++;
+					}
+					total += atoi(c) * multiplier[k];
+					*c = '\0';
+					k++;
 				}
-			  total += atoi(c) * multiplier[k];
-			  *c = '\0';
-			  k++;
+				else if (*c != ' ' && *c != ':' && *c != '.' && *c != ';' && *c != '+')
+				{
+					total = 0;		/* error condition */
+					RAISE(AAFRESULT_INVALID_TIMECODE);
+				}
 			}
-		  else if (*c != ' ' && *c != ':' && *c != '.' && *c != ';' && *c != '+')
-			{
-			  total = 0;		/* error condition */
-			  RAISE(AAFRESULT_INVALID_TIMECODE);
-			}
-		}
-	  
-	  if (!drop)
-		(*timecode).drop = kTcNonDrop;
-	  else 
-		(*timecode).drop = kTcDrop;
-	  
-	  (*timecode).fps = (aafUInt16)intFRate;
-	  (*timecode).startFrame = total;
+			
+			if (!drop)
+				(*timecode).drop = kTcNonDrop;
+			else 
+				(*timecode).drop = kTcDrop;
+			
+			(*timecode).fps = (aafUInt16)intFRate;
+			(*timecode).startFrame = total;
 	} /* XPROTECT */
-
-  XEXCEPT
+	
+	XEXCEPT
 	{
-	  return(XCODE());
+		return(XCODE());
 	}
-  XEND;
-#endif
-  return(AAFRESULT_SUCCESS);
+	XEND;
+
+	return(AAFRESULT_SUCCESS);
 }
 
 
