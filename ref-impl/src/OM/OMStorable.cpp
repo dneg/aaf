@@ -55,21 +55,23 @@ void OMStorable::save(void) const
   // @mfunc Close this <c OMStorable>.
 void OMStorable::close(void)
 {
+  TRACE("OMStorable::close");
   PRECONDITION("Object is persistent", persistent());
-  PRECONDITION("Not already closed", _store != 0);
 
-  size_t context = 0;
-  for (size_t i = 0; i < _persistentProperties.count(); i++)
-  {
-    OMProperty* p = 0;
-    _persistentProperties.iterate(context, p);
-    ASSERT("Valid property", p != 0);
-    p->close();
-  }
+  if (_store != 0) {
+    size_t context = 0;
+    for (size_t i = 0; i < _persistentProperties.count(); i++)
+    {
+      OMProperty* p = 0;
+      _persistentProperties.iterate(context, p);
+      ASSERT("Valid property", p != 0);
+      p->close();
+    }
 
-  _store->close();
-  delete _store;
-  _store = 0;
+    _store->close();
+    delete _store;
+    _store = 0;
+  } // else silently ignore unsaved object
 
   POSTCONDITION("Closed", _store == 0);
 }
@@ -165,6 +167,7 @@ void OMStorable::setContainingProperty(const OMProperty* containingProperty,
   //        contained within any <c OMProperty>.
 void OMStorable::clearContainingProperty(void)
 {
+  TRACE("OMStorable::clearContainingProperty");
   _containingProperty = 0;
 }
 
@@ -173,6 +176,7 @@ void OMStorable::clearContainingProperty(void)
   //   @this const
 const char* OMStorable::name(void) const
 {
+  TRACE("OMStorable::name");
   return _name;
 }
 
@@ -220,6 +224,8 @@ const char* OMStorable::pathName(void) const
   //   @this const
 OMStoredObject* OMStorable::store(void) const
 {
+  TRACE("OMStorable::store");
+
   if (_store == 0) {
     OMStorable* container = containingObject();
     ASSERT("Valid container", container != 0);
@@ -236,6 +242,7 @@ OMStoredObject* OMStorable::store(void) const
   //         should be persisted.
 void OMStorable::setStore(OMStoredObject* store)
 {
+  TRACE("OMStorable::setStore");
   PRECONDITION("Valid store", store != 0);
   PRECONDITION("No previous valid store", _store == 0);
   _store = store;
