@@ -631,7 +631,7 @@ STDAPI CoCreateGuid(GUID  *pguid)
 
 
 static void ReadAAFFile(aafWChar * pFileName,
-						/*[in]*/ const aafUID_t & createdMobID)
+						/*[in]*/ aafMobID_constref createdMobID)
 {
   IAAFFileSP spFile;
   check (AAFFileOpenExistingRead(pFileName, 0, &spFile));
@@ -683,7 +683,7 @@ const aafUID_t NIL_UID = { 0 };
 // clip augmented with our optional property.  The resulting generated
 // mob ID is returned via the createdMobID argument.
 static void CreateAAFFile(aafWChar * pFileName,
-						  /*[out]*/ aafUID_t & createdMobID)
+						  /*[out]*/ aafMobID_t & createdMobID)
 {
   aafProductIdentification_t  ProductInfo;
   
@@ -729,9 +729,9 @@ static void CreateAAFFile(aafWChar * pFileName,
   IAAFMobSP spMob;
   check (smob->QueryInterface (IID_IAAFMob, (void **)&spMob));
 
-  aafUID_t newUID;
-  check (CoCreateGuid((GUID *)&newUID)); // hack: we need a utility function.
-  check (spMob->SetMobID(newUID));
+  aafMobID_t newMobID;
+  check (CoCreateGuid((GUID *)&newMobID)); // hack: we need a utility function.
+  check (spMob->SetMobID(newMobID));
   check (spMob->SetName(L"a Source Mob"));
 
   IAAFFileDescriptorSP  spFileDesc;
@@ -768,7 +768,7 @@ static void CreateAAFFile(aafWChar * pFileName,
   check (spFile->Close());
 
   // Return the created mob ID to the user.
-  createdMobID = newUID;
+  createdMobID = newMobID;
 }
 
 
@@ -815,7 +815,7 @@ main()
   aafWChar * pwFileName = L"PropAccess.aaf";
   const char * pFileName = "PropAccess.aaf";
 
-  aafUID_t createdMobID;
+  aafMobID_t createdMobID;
   cout << "***Creating file " << pFileName << endl;
   CreateAAFFile(pwFileName, createdMobID);
   cout << "***Re-opening file " << pFileName << endl;
