@@ -263,9 +263,13 @@ OMStrongReferenceSetIterator<UniqueIdentification,
   SetElement& element = _iterator.value();
 
   ReferencedObject* result = 0;
-  UniqueIdentification* id =
-               const_cast<UniqueIdentification*>(&newObject->identification());
-  OMStorable* p = element.setValue(id, newObject);
+  UniqueIdentification id;
+  if (newObject != 0) {
+    id = newObject->identification();
+  } else {
+    id = *reinterpret_cast<UniqueIdentification*>(element.identification());
+  }
+  OMStorable* p = element.setValue(&id, newObject);
   if (p != 0) {
     result = dynamic_cast<ReferencedObject*>(p);
     ASSERT("Object is correct type", result != 0);
