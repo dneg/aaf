@@ -858,36 +858,36 @@ AAFRESULT ImplAAFPluginManager::UnregisterAllPlugins(void)
 
 // Internal to the toolkit functions
 AAFRESULT
-    ImplAAFPluginManager::GetFirstLoadedPlugin (aafTableIterate_t *iter, ImplAAFPluginDef **ppDesc)
+    ImplAAFPluginManager::GetFirstLoadedPlugin (aafTableIterate_t *iter, aafUID_t *pDesc)
 {
 	aafBool		found;
 	AAFRESULT	status;
 
-	if(ppDesc == NULL || iter == NULL)
+	if(pDesc == NULL || iter == NULL)
 		return(AAFRESULT_NULL_PARAM);
 
 
 	status = TableFirstEntry(_plugins, iter, &found);
 	if(!found)
 		return AAFRESULT_NO_MORE_OBJECTS; // AAFRESULT_BADINDEX ???
-	*ppDesc = (ImplAAFPluginDef *)iter->valuePtr;
+	*pDesc = *((aafUID_t*)iter->valuePtr);
 
 	return status;
 }
 AAFRESULT
-    ImplAAFPluginManager::GetNextLoadedPlugin (aafTableIterate_t *iter, ImplAAFPluginDef **ppDesc)
+    ImplAAFPluginManager::GetNextLoadedPlugin (aafTableIterate_t *iter, aafUID_t *pDesc)
 {
 	aafBool		found;
 	AAFRESULT	status;
 
-	if(ppDesc == NULL || iter == NULL)
+	if(pDesc == NULL || iter == NULL)
 		return(AAFRESULT_NULL_PARAM);
 
 
 	status = TableNextEntry(iter, &found);
 	if(!found)
 		return AAFRESULT_NO_MORE_OBJECTS; // AAFRESULT_BADINDEX ???
-	*ppDesc = (ImplAAFPluginDef *)iter->valuePtr;
+	*pDesc = *((aafUID_t*)iter->valuePtr);
 	return status;
 }
 
