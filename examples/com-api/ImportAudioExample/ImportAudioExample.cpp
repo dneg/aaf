@@ -1,0 +1,555 @@
+// @com Executable example program by Chris Morgan, intern for Avid Technology, Tewksbury 
+// @com This is based upon ComEssenceDataTest.cpp  Last modified on 8/4/99.
+
+/******************************************\
+*                                          *
+* Advanced Authoring Format                *
+*                                          *
+* Copyright (c) 1999 Avid Technology, Inc. *
+*                                          *
+\******************************************/
+
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+//#include "AAFPluginManager.h"
+
+#include "AAFTypes.h"
+#include "AAFResult.h"
+#include "AAFDefUIDS.h"
+#include "AAFDataDefs.h"
+#include "AAFOperationDefs.h"
+#include "AAFContainerDefs.h"
+#include "AAFCodecDefs.h"
+#include "AAFEssenceFormats.h"
+
+// Include the AAF interface declarations.
+#include "AAF.h"
+
+// Include the AAF Stored Object identifiers. These symbols are defined in aaf.lib.
+#include "AAFStoredObjectIDs.h"
+
+
+// The static variables are here so they can be referenced throughout the whole program.
+
+// Filename variables
+aafWChar *	pwFileName; 
+char *	pFileName; 
+
+static aafSourceRef_t sourceRef; 
+
+#define assert(b, msg) \
+  if (!(b)) {fprintf(stderr, "ASSERT: %s\n\n", msg); exit(1);}
+
+
+static aafBool	EqualAUID(aafUID_t *uid1, aafUID_t *uid2)
+{
+	return(memcmp((char *)uid1, (char *)uid2, sizeof(aafUID_t)) == 0 ? AAFTrue : AAFFalse);
+}
+
+#define TEST_PATH	L"SomeFile.dat"
+
+static void     LogError(HRESULT errcode, int line, char *file)
+{
+  printf("Error '%0x' returned at line %d in %s\n", errcode, line, file);
+}
+
+static HRESULT moduleErrorTmp = S_OK; /* note usage in macro */
+#define check(a)  \
+{ moduleErrorTmp = a; \
+	if (!SUCCEEDED(moduleErrorTmp)) \
+	{ \
+	    LogError(moduleErrorTmp, __LINE__, __FILE__);\
+		goto cleanup; \
+	} \
+}
+
+#define checkFatal(a)  \
+{ moduleErrorTmp = a; \
+  if (!SUCCEEDED(moduleErrorTmp)) \
+     exit(1);\
+}
+
+static void convert(char* cName, size_t length, const wchar_t* name)
+{
+  assert((name && *name), "Valid input name");
+  assert(cName != 0, "Valid output buffer");
+  assert(length > 0, "Valid output buffer size");
+
+  size_t status = wcstombs(cName, name, length);
+  if (status == (size_t)-1) {
+    fprintf(stderr, ": Error : Conversion failed.\n\n");
+    exit(1);  
+  }
+}
+
+static void AUIDtoString(aafUID_t *uid, char *buf)
+{
+	sprintf(buf, "%08lx-%04x-%04x-%02x%02x%02x%02x%02x%02x%02x%02x",
+			uid->Data1, uid->Data2, uid->Data3, (int)uid->Data4[0],
+			(int)uid->Data4[1], (int)uid->Data4[2], (int)uid->Data4[3], (int)uid->Data4[4],
+			(int)uid->Data4[5], (int)uid->Data4[6], (int)uid->Data4[7]);
+}
+
+typedef enum { testRawCalls, testStandardCalls, testMultiCalls, testFractionalCalls } testType_t;
+
+typedef aafInt16	AAFByteOrder;
+const AAFByteOrder INTEL_ORDER		      = 0x4949; // 'II' for Intel
+const AAFByteOrder MOTOROLA_ORDER         = 0x4d4d; // 'MM' for Motorola
+
+
+AAFByteOrder GetNativeByteOrder(void);
+void AAFByteSwap32(
+			aafInt32 *lp);	/* IN/OUT -- Byte swap this value */
+void AAFByteSwap16(
+			aafInt16 * wp);	/* IN/OUT -- Byte swap this value */
+void scanWAVEData(aafUInt8 **srcBufHdl, aafInt32 maxsize, void *data);
+void scanSwappedWAVEData(aafUInt8 **srcBufHdl, aafInt32 maxsize, void *data);
+AAFRESULT loadWAVEHeader(aafUInt8 *buf,
+										aafUInt16 *bitsPerSample,
+										aafUInt16 *numCh,
+										aafRational_t *sampleRate,
+										aafUInt32 *dataOffset,
+										aafUInt32 *dataLen);
+
+typedef struct
+{
+	aafWChar	*dataFilename;
+	aafUID_t	dataFormat;
+}
+
+testDataFile_t;
+
+void doSomethingWithAudioFile()
+{
+ // Code here would depend upon required functionality
+}
+
+const aafUID_t NIL_UID = { 0, 0, 0, { 0, 0, 0, 0, 0, 0, 0, 0 } };
+
+static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
+{
+	IAAFFile *					pFile = NULL;
+	IAAFHeader *				pHeader = NULL;
+	IAAFDictionary*				pDictionary = NULL;
+	IAAFEssenceAccess*			pEssenceAccess = NULL;
+	IAAFEssenceRawAccess*		pRawEssence = NULL;
+	IAAFEssenceMultiAccess*		pMultiEssence = NULL;
+	IAAFEssenceFormat			*fmtTemplate =  NULL;
+	IEnumAAFMobs*				pMobIter = NULL;
+	IAAFMob*					pMob = NULL;
+	IAAFMasterMob*				pMasterMob = NULL;
+	IAAFEssenceFormat*			pFormat = NULL;
+	aafNumSlots_t				numMobs, numSlots;
+	aafSearchCrit_t				criteria;
+	aafUID_t					mobID;
+	aafWChar					namebuf[1204];
+	FILE*						pWavFile = NULL;
+
+	/* Open an AAF file */
+	check(AAFFileOpenExistingRead ( pFileName, 0, &pFile));
+	
+	/* Get the Header and iterate through the Master Mobs */
+	check(pFile->GetHeader(&pHeader));
+
+	// Get the AAF Dictionary so that we can create valid AAF objects.
+	check(pHeader->GetDictionary(&pDictionary));
+
+	// Here we check on the number of mobs in the file. 
+	// Get the number of master mobs in the file (must not be zero)
+	check(pHeader->GetNumMobs(kMasterMob, &numMobs));
+	if (numMobs != 0)
+	{
+		printf("Found %ld Master Mobs\n", numMobs);
+		criteria.searchTag = kByMobKind;
+		criteria.tags.mobKind = kMasterMob;
+		check(pHeader->EnumAAFAllMobs(&criteria, &pMobIter));
+		while(AAFRESULT_SUCCESS == pMobIter->NextOne(&pMob))
+		{
+			char mobIDstr[256];
+			char mobName[256];
+
+			check(pMob->GetMobID (&mobID));
+			check(pMob->GetName (namebuf, sizeof(namebuf)));
+			convert(mobName, sizeof(mobName), namebuf);
+			AUIDtoString(&mobID, mobIDstr);
+			printf("    MasterMob Name = '%s'\n", mobName);
+			printf("        (mobID %s)\n", mobIDstr);
+			
+			// Get the number of slots
+			check(pMob->GetNumSlots(&numSlots));
+			
+			/* Iterating through all Mob Slots */
+			IEnumAAFMobSlots* pMobSlotIter = NULL;
+			IAAFMobSlot* pMobSlot = NULL;
+
+			check(pMob->EnumAAFAllMobSlots(&pMobSlotIter));
+			while(AAFRESULT_SUCCESS == pMobSlotIter->NextOne(&pMobSlot))
+			{
+				
+				/* Check to see if it is an Audio Timeline Mob Slot */
+				HRESULT hr;
+				aafUInt32 MobSlotID;
+				aafUID_t SegmentDataDef;
+				IAAFTimelineMobSlot* pTimelineMobSlot = NULL;
+
+				hr=pMobSlot->QueryInterface(IID_IAAFTimelineMobSlot,(void **) &pTimelineMobSlot);
+				if (SUCCEEDED(hr))
+				{
+					pTimelineMobSlot->Release();
+					pTimelineMobSlot = NULL;
+					check(pMobSlot->GetDataDef(&SegmentDataDef));
+
+					// Check that we have a sound file by examining its data definition
+					if (memcmp(&SegmentDataDef, &DDEF_Sound, sizeof(SegmentDataDef))==0)
+					{
+						// Prepare to get audio data: first get MobSlotID
+						check(pMobSlot->GetSlotID(&MobSlotID));
+
+						// Then get a Master Mob interface
+						check(pMob->QueryInterface(IID_IAAFMasterMob, 
+							(void **)&pMasterMob));
+						
+						// Open the Essence Data
+						check(pMasterMob->OpenEssence(MobSlotID,
+												 	  NULL,	
+													  kMediaOpenReadOnly,
+													  kSDKCompressionDisable, 
+													  &pEssenceAccess));
+						
+						// Get the information about the format of the audio data
+						check(pEssenceAccess->GetEmptyFileFormat (&fmtTemplate));
+						check(fmtTemplate->AddFormatSpecifier (kAAFAudioSampleBits, 0, NULL));
+						check(pEssenceAccess->GetFileFormat (fmtTemplate, &pFormat));
+						fmtTemplate->Release();
+						fmtTemplate = NULL;
+						
+						// Work out how much data is read 
+						aafUInt32 sampleBits;
+						aafInt32 bytesRead;
+
+						check(pFormat->GetFormatSpecifier (kAAFAudioSampleBits, 
+							sizeof(sampleBits),
+							(aafDataBuffer_t)&sampleBits, &bytesRead));
+		
+						// Output the size so we can see what's going on
+						printf("File has %ld Sample Bits.\n",sampleBits);
+		
+						pFormat->Release();
+						pFormat = NULL;
+		
+						aafUInt32 dataLen, bytesLeft, samplesRead, actualBytesRead;
+
+						if (sampleBits == 8) 
+							dataLen = 1;
+						
+						// Set a suitable buffer size						
+						unsigned char dataBuff[524288];
+						
+						// Get the sample count
+						aafLength_t sampleCount;
+						check(pEssenceAccess->GetSampleCount(DDEF_Sound,&sampleCount));
+						
+						// Read the samples of audio data
+						bytesLeft = (aafUInt32) sampleCount * dataLen;
+						
+						while (bytesLeft != 0)
+						{
+							check(pEssenceAccess->ReadSamples(dataLen, 
+													sizeof(dataBuff),	// Maximum buffer size
+													dataBuff,			// Buffer for the data
+													&samplesRead,		// Actual number of samples read
+													&actualBytesRead));	// Actual number of bytes read
+							if (actualBytesRead!=0)
+							{ 
+								doSomethingWithAudioFile();
+							} 
+							bytesLeft = bytesLeft - actualBytesRead;
+						}
+						
+						// Inform the user that the process has been successful
+						printf("Essence was read from file.\n");
+					}
+				}				
+			}
+			/* Release COM interfaces */
+			if (pMasterMob)
+			{
+				pMasterMob->Release();
+				pMasterMob = NULL;
+			}
+
+			pMob->Release();
+			pMob = NULL;
+			if (pEssenceAccess)
+			{
+				pEssenceAccess->Release();
+				pEssenceAccess = NULL;
+			}
+		}
+
+		pMobIter->Release();
+		pMobIter = NULL;
+
+	}
+	else
+	{
+		printf("Error with file: File has no Master mobs.\n");
+	}
+
+cleanup:
+	// Cleanup and return
+
+	if (pRawEssence)
+		pRawEssence->Release();
+	if (pMultiEssence)
+		pMultiEssence->Release();
+	if(fmtTemplate)
+	{
+		fmtTemplate->Release();
+		fmtTemplate = NULL;
+	}
+	if (pEssenceAccess)
+	{
+		pEssenceAccess->Release();
+		pEssenceAccess = NULL;
+	}
+	if (pDictionary)
+		pDictionary->Release();
+
+	if (pHeader)
+		pHeader->Release();
+	if (pMobIter)
+		pMobIter->Release();
+	if (pFormat)
+		pFormat->Release();
+
+	/* Close the AAF file */
+	if (pFile) 
+	{
+		pFile->Close();
+		pFile->Release();
+	}
+
+	return moduleErrorTmp;
+}
+
+struct CComInitialize
+{
+  CComInitialize()
+  {
+    CoInitialize(NULL);
+  }
+
+  ~CComInitialize()
+  {
+    CoUninitialize();
+  }
+};
+
+// simple helper class to initialize and cleanup AAF library.
+struct CAAFInitialize
+{
+  CAAFInitialize(const char *dllname = NULL)
+  {
+  	printf("Attempting to load the AAF dll...\n");
+    HRESULT hr = AAFLoad(dllname);
+    (SUCCEEDED(hr)) ? printf("DONE\n\n") : printf("FAILED\n\n");
+  }
+
+  ~CAAFInitialize()
+  {
+    AAFUnload();
+  }
+};
+
+//**********************
+// Extra code required to scan the original WAVE headers and extract metadata parameters & data offset
+AAFByteOrder GetNativeByteOrder(void)
+{
+  aafInt16 word = 0x1234;
+  aafInt8  byte = *((aafInt8*)&word);
+  AAFByteOrder result;
+
+//  ASSERT("Valid byte order", ((byte == 0x12) || (byte == 0x34)));
+
+  if (byte == 0x12) 
+	result = MOTOROLA_ORDER;
+  else
+    result = INTEL_ORDER;
+  
+  return result;
+}
+
+void AAFByteSwap32(aafInt32 *lp)	/* IN/OUT -- Byte swap this value */
+{
+	register unsigned char *cp = (unsigned char *) lp;
+	int t;
+	t		= cp[3];
+	cp[3]	= cp[0];
+	cp[0]	= t;
+	t		= cp[2];
+	cp[2]	= cp[1];
+	cp[1]	= t;
+}
+
+void AAFByteSwap16(
+			aafInt16 * wp)	/* IN/OUT -- Byte swap this value */
+{
+	register unsigned char *cp = (unsigned char *) wp;
+	int t;
+	t		= cp[1];
+	cp[1]	= cp[0];
+	cp[0]	= t;
+}
+
+// Program works on all WAVE files, not just laser.wav.
+void scanWAVEData(aafUInt8 **srcBufHdl, aafInt32 maxsize, void *data)
+{
+	memcpy(data, *srcBufHdl, maxsize);
+	(*srcBufHdl) += maxsize;
+}
+
+void scanSwappedWAVEData(aafUInt8 **srcBufHdl, aafInt32 maxsize, void *data)
+{
+	AAFByteOrder	nativeByteOrder = GetNativeByteOrder()
+		;
+	memcpy(data, *srcBufHdl, maxsize);
+	(*srcBufHdl) += maxsize;
+	
+	if ((maxsize == sizeof(aafInt32)) && (INTEL_ORDER != nativeByteOrder))
+			AAFByteSwap32((aafInt32 *) data);
+	else if ((maxsize == sizeof(aafInt16)) && (INTEL_ORDER != nativeByteOrder))
+			AAFByteSwap16((aafInt16 *) data);
+}
+
+AAFRESULT loadWAVEHeader(aafUInt8 *buf,
+										aafUInt16 *bitsPerSample,
+										aafUInt16 *numCh,
+										aafRational_t *sampleRate,
+										aafUInt32 *dataOffset,
+										aafUInt32 *dataLen)
+{
+	aafInt32			formSize;
+	aafInt16			pcm_format, junk16;
+	aafUInt32			chunkSize;
+	aafBool				fmtFound = AAFFalse, dataFound = AAFFalse;
+	aafUInt8			chunkID[4];
+ 	aafInt32			junk32, rate, bytesPerFrame;
+	aafUInt8			*ptr;
+
+	ptr = buf;
+	scanWAVEData(&ptr, sizeof(chunkID), &chunkID);	
+	if (memcmp(&chunkID, "RIFF", (size_t) 4) != 0)
+		return(AAFRESULT_BADWAVEDATA);
+	scanSwappedWAVEData(&ptr, sizeof(formSize), &formSize);	
+	scanWAVEData(&ptr, sizeof(chunkID), &chunkID);	
+	if (memcmp(&chunkID, "WAVE", (size_t) 4) != 0)
+		return(AAFRESULT_BADWAVEDATA);
+	
+	scanWAVEData(&ptr, sizeof(chunkID), &chunkID);	
+	while ((ptr-buf) < formSize)
+	{
+		scanSwappedWAVEData(&ptr, sizeof(chunkSize), &chunkSize);	
+
+		if (memcmp(&chunkID, "fmt ", (size_t) 4) == 0)
+		{
+			// WAVE field: wFormatTag
+			scanSwappedWAVEData(&ptr, sizeof(aafUInt16), (aafUInt8 *)&pcm_format);
+			if (pcm_format != 1)
+				return(AAFRESULT_BADWAVEDATA);
+	
+			// WAVE field: wChannels
+			scanSwappedWAVEData(&ptr, sizeof(aafUInt16), (aafUInt8 *)numCh);
+	
+			// WAVE field: wSamplesPerSec
+			scanSwappedWAVEData(&ptr, sizeof(aafUInt32), (aafUInt8 *)&rate);
+			sampleRate->numerator = rate;
+			sampleRate->denominator = 1;
+	
+			// Skip WAVE field: avgBytesPerSec (4 bytes)
+			scanSwappedWAVEData(&ptr, sizeof(junk32), (aafUInt8 *)&junk32);
+
+			// WAVE field wBlockAlign
+			scanSwappedWAVEData(&ptr, sizeof(aafUInt16), (aafUInt8 *)&junk16);
+	
+			// WAVE field Sample Width
+			scanSwappedWAVEData(&ptr, sizeof(aafUInt16), (aafUInt8 *)bitsPerSample);
+			bytesPerFrame = (((*bitsPerSample) + 7) / 8) * (*numCh);
+			fmtFound = AAFTrue;
+		} else if (memcmp(&chunkID, "data", (size_t) 4) == 0)
+		{
+			*dataLen = chunkSize / bytesPerFrame;
+			// Positioned at beginning of audio data
+			*dataOffset = ptr - buf;
+	
+			dataFound = AAFTrue;
+		}
+	
+		if((ptr-buf) > formSize)
+			break;
+		if (fmtFound && dataFound)	// Do we have all information yet?
+			break;
+		scanWAVEData(&ptr, sizeof(chunkID), &chunkID);	
+	}	
+	
+	return(AAFRESULT_SUCCESS);
+}
+
+//  A new usage function to make program more friendly
+void usage(void)
+{
+	printf("Usage:\n ImportAudioExample.exe <file name>.aaf \n");
+	printf(" If no filename is given, the filename defaults to ImportAudioExample.aaf\n\n");
+}
+
+//  Main adapted to use command-line arguments with argument checking
+//  NOTE:  defining [0] program name; [1] filename.aaf; 
+//  Specifying that use file ImportAudioExample.aaf as default
+main(int argumentCount, char* argumentVector[])
+{
+	CComInitialize comInit;
+	CAAFInitialize aafInit;
+	
+	
+	if (argumentCount ==1)
+	{
+		// Initialise filename variables to default settings and inform user
+		pwFileName = L"ImportAudioExample.aaf";
+		pFileName = "ImportAudioExample.aaf";
+
+		printf("No file specified => defaulting to ImportAudioExample.aaf\n\n");
+	}
+	else if (argumentCount ==2)
+	{
+		// Set the variables to do the specified case
+		static char* niceFileName = argumentVector[1];
+		
+		// It is a design issue whether argument must end with ".aaf" or not
+		// If one chooses that files are specified without extension, 
+		// then uncomment the following line, which adds the ".aaf" extension
+		//strcat (niceFileName,".aaf");
+		
+		aafWChar FileNameBuffer[80];
+		mbstowcs(FileNameBuffer,niceFileName,80);
+		pwFileName = FileNameBuffer;
+		pFileName = niceFileName;
+	}
+	else
+	{
+		usage();
+		return 0;
+	}
+
+	// Access the AAF file with name set from argument or lack thereof
+	printf("Opening file %s using ReadSamples\n", pFileName);
+	ReadAAFFile(pwFileName, testStandardCalls);
+	printf("DONE\n\n");
+
+	return(0);
+}
+
+
+
+
