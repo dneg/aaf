@@ -135,8 +135,6 @@ OMCachedDiskRawStorage::~OMCachedDiskRawStorage(void)
   //   @parm The number of bytes to read.
   //   @parm The number of bytes actually read.
   //   @this const
-  //   @devnote fseek takes a long int for offset this may not be sufficient
-  //            for 64-bit offsets.
 void OMCachedDiskRawStorage::read(OMByte* bytes,
                                   OMUInt32 byteCount,
                                   OMUInt32& bytesRead) const
@@ -187,8 +185,6 @@ void OMCachedDiskRawStorage::readAt(OMUInt64 position,
   //   @parm The buffer from which the bytes are to be written.
   //   @parm The number of bytes to write.
   //   @parm The actual number of bytes written.
-  //   @devnote fseek takes a long int for offset this may not be sufficient
-  //            for 64-bit offsets.
 void OMCachedDiskRawStorage::write(const OMByte* bytes,
                                    OMUInt32 byteCount,
                                    OMUInt32& bytesWritten)

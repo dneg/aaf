@@ -74,8 +74,6 @@ bool OMMemoryRawStorage::isReadable(void) const
   //   @parm The number of bytes to read.
   //   @parm The number of bytes actually read.
   //   @this const
-  //   @devnote fseek takes a long int for offset this may not be sufficient
-  //            for 64-bit offsets.
 void OMMemoryRawStorage::read(OMByte* bytes,
                               OMUInt32 byteCount,
                               OMUInt32& bytesRead) const
@@ -195,8 +193,6 @@ bool OMMemoryRawStorage::isWritable(void) const
   //   @parm The buffer from which the bytes are to be written.
   //   @parm The number of bytes to write.
   //   @parm The actual number of bytes written.
-  //   @devnote fseek takes a long int for offset this may not be sufficient
-  //            for 64-bit offsets.
 void OMMemoryRawStorage::write(const OMByte* bytes,
                                OMUInt32 byteCount,
                                OMUInt32& bytesWritten)
@@ -319,7 +315,6 @@ OMUInt64 OMMemoryRawStorage::extent(void) const
   //        being set to <mf OMMemoryRawStorage::size>.
   //        precondition - isExtendible()
   //   @parm The new size of this <c OMMemoryRawStorage> in bytes.
-  //   @devnote There is no ANSI way of truncating a file in place.
 void OMMemoryRawStorage::extend(OMUInt64 newSize)
 {
   TRACE("OMMemoryRawStorage::extend");
@@ -436,8 +431,6 @@ OMUInt64 OMMemoryRawStorage::position(void) const
   //        precondition - isPositionable()
   //   @parm The new position.
   //   @this const
-  //   @devnote fseek takes a long int for offset this may not be sufficient
-  //            for 64-bit offsets.
 void OMMemoryRawStorage::setPosition(OMUInt64 newPosition) const
 {
   TRACE("OMMemoryRawStorage::setPosition");

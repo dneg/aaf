@@ -246,7 +246,6 @@ OMUInt64 OMMappedFileRawStorage::extent(void) const
   //        <mf OMMappedFileRawStorage::size>.
   //        precondition - isExtendible()
   //   @parm The new size of this <c OMMappedFileRawStorage> in bytes.
-  //   @devnote There is no ISO/ANSI way of truncating a file in place.
 void OMMappedFileRawStorage::extend(OMUInt64 /* newSize */)
 {
   TRACE("OMMappedFileRawStorage::extend");
@@ -307,8 +306,6 @@ OMUInt64 OMMappedFileRawStorage::position(void) const
   //        precondition - isPositionable()
   //   @parm The new position.
   //   @this const
-  //   @devnote fseek takes a long int for offset this may not be sufficient
-  //            for 64-bit offsets.
 void OMMappedFileRawStorage::setPosition(OMUInt64 /* newPosition */) const
 {
   TRACE("OMMappedFileRawStorage::setPosition");
