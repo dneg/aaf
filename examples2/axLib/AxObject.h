@@ -36,6 +36,7 @@ public:
 	virtual ~AxObject();
 
     AxString GetClassName();
+	IAAFDictionarySP GetDictionary();
 
 	AxPropertyIter CreatePropertyIter();
 #if 0

@@ -48,6 +48,15 @@ AxString AxObject::GetClassName()
 }
 #endif
 
+IAAFDictionarySP AxObject::GetDictionary()
+{
+	IAAFDictionarySP spIaafDictionary;
+
+	CHECK_HRESULT( _spIaafObject->GetDictionary( &spIaafDictionary ) );
+
+	return spIaafDictionary;
+}
+
 #if 0
 IAAFPropertyDefSP AxObject::RegisterOptionalPropertyDef ( aafUID_constref  id,
 											 const AxString&  name,
