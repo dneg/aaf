@@ -14,16 +14,9 @@
 
 const CLSID CLSID_AAFDefaultStream = { 0x83402901, 0x9146, 0x11d2, { 0x80, 0x88, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
 
-#if 1
-
-
 // Default Interface for AAFDefaultStream 
 // {83402902-9146-11d2-8088-006008143e6f}
 const IID IID_IAAFEssenceStream = { 0x83402902, 0x9146, 0x11d2, { 0x80, 0x88, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
-#else
-extern const CLSID CLSID_AAFDefaultStream;
-extern const IID IID_IAAFDefaultStream;
-#endif
 
 
 CAAFDefaultStream::CAAFDefaultStream (IUnknown * pControllingUnknown, aafBool doInit)
