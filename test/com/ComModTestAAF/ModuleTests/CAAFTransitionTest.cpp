@@ -43,7 +43,6 @@
 #include "CAAFBuiltinDefs.h"
 
 // This values are used for testing purposes
-static aafUID_t    fillerUID = DDEF_Picture;
 static aafLength_t  fillerLength = 3200;
 static aafMobID_t	zeroMobID = { 0 };
 
@@ -441,22 +440,9 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	aafLength_t					transitionLength;
 	aafPosition_t				cutPoint;
 
-	aafProductIdentification_t	ProductInfo;
 	aafNumSlots_t				numMobs;
 	aafUInt32					numComponents = 0;
 	HRESULT						hr = S_OK;
-
-	aafProductVersion_t v;
-	v.major = 1;
-	v.minor = 0;
-	v.tertiary = 0;
-	v.patchLevel = 0;
-	v.type = kAAFVersionUnknown;
-	ProductInfo.companyName = L"AAF Developers Desk. NOT!";
-	ProductInfo.productName = L"AAFTransition Test. NOT!";
-	ProductInfo.productVersion = &v;
-	ProductInfo.productVersionString = NULL;
-	ProductInfo.platform = NULL;
 
 	try
 	{

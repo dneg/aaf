@@ -93,9 +93,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	
 	aafProductIdentification_t	ProductInfo;
 	HRESULT						hr = S_OK;
-	aafLength_t					zero;
 	
-	CvtInt32toLength(0, zero);
 	aafProductVersion_t v;
 	v.major = 1;
 	v.minor = 0;
@@ -228,21 +226,8 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	aafUInt32					sourceLen, bytesRead;
 	aafRational_t				checkSpeed;
 	
-	aafProductIdentification_t	ProductInfo;
 	aafNumSlots_t				numMobs;
 	HRESULT						hr = S_OK;
-	
-	aafProductVersion_t v;
-	v.major = 1;
-	v.minor = 0;
-	v.tertiary = 0;
-	v.patchLevel = 0;
-	v.type = kAAFVersionUnknown;
-	ProductInfo.companyName = L"AAF Developers Desk. NOT!";
-	ProductInfo.productName = L"AAFTimecodeStream Test. NOT!";
-	ProductInfo.productVersion = &v;
-	ProductInfo.productVersionString = NULL;
-	ProductInfo.platform = NULL;
 	
 	try
 	{

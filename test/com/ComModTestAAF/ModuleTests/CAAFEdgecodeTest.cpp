@@ -212,21 +212,8 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
   IAAFEdgecode*				pEdgecode = NULL;
   aafEdgecode_t				startEC;
 
-  aafProductIdentification_t	ProductInfo;
   aafNumSlots_t				numMobs;
   HRESULT						hr = S_OK;
-
-  aafProductVersion_t v;
-  v.major = 1;
-  v.minor = 0;
-  v.tertiary = 0;
-  v.patchLevel = 0;
-  v.type = kAAFVersionUnknown;
-  ProductInfo.companyName = L"AAF Developers Desk. NOT!";
-  ProductInfo.productName = L"AAFEdgecode Test. NOT!";
-  ProductInfo.productVersion = &v;
-  ProductInfo.productVersionString = NULL;
-  ProductInfo.platform = NULL;
 
 
   try
