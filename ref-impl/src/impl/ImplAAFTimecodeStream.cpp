@@ -365,33 +365,33 @@ AAFRESULT STDMETHODCALLTYPE
 //*** Abstract operations which must be overridden by a subclass of AAFTimecodeStream
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTimecodeStream::GetUserDataLength (
-      aafInt32 *length)
+      aafInt32 */*length*/)
 {
   return AAFRESULT_ABSTRACT_CLASS;
 }
 
   AAFRESULT STDMETHODCALLTYPE
-	ImplAAFTimecodeStream::UnpackTimecode(aafUInt8 *buffer, aafUInt32 buflen, aafUInt32 fps, aafTimecode_t *tc)
+	ImplAAFTimecodeStream::UnpackTimecode(aafUInt8 */*buffer*/, aafUInt32 /*buflen*/, aafUInt32 /*fps*/, aafTimecode_t */*tc*/)
 {
     return AAFRESULT_ABSTRACT_CLASS;
 }
 
   AAFRESULT STDMETHODCALLTYPE
-	ImplAAFTimecodeStream::PackTimecode(aafTimecode_t *tc, aafUInt8 *buffer, aafUInt32 buflen)
+	ImplAAFTimecodeStream::PackTimecode(aafTimecode_t */*tc*/, aafUInt8 */*buffer*/, aafUInt32 /*buflen*/)
 {
     return AAFRESULT_ABSTRACT_CLASS;
 }
 
   AAFRESULT STDMETHODCALLTYPE
-	ImplAAFTimecodeStream::UnpackUserBits(aafUInt8 *packedBuffer, aafUInt32 packedBuflen,
-									  aafUInt8 *unpackedBuffer, aafUInt32 unpackedBuflen)
+	ImplAAFTimecodeStream::UnpackUserBits(aafUInt8 */*packedBuffer*/, aafUInt32 /*packedBuflen*/,
+									  aafUInt8 */*unpackedBuffer*/, aafUInt32 /*unpackedBuflen*/)
 {
     return AAFRESULT_ABSTRACT_CLASS;
 }
 
   AAFRESULT STDMETHODCALLTYPE
-	ImplAAFTimecodeStream::PackUserBits(aafUInt8 *unpackedBuffer, aafUInt32 unpackedBuflen,
-									  aafUInt8 *packedBuffer, aafUInt32 packedBuflen)
+	ImplAAFTimecodeStream::PackUserBits(aafUInt8 */*unpackedBuffer*/, aafUInt32 /*unpackedBuflen*/,
+									  aafUInt8 */*packedBuffer*/, aafUInt32 /*packedBuflen*/)
 {
     return AAFRESULT_ABSTRACT_CLASS;
 }

@@ -834,8 +834,8 @@ AAFRESULT STDMETHODCALLTYPE
 							aafUInt16  arrayElemCount,
 							aafmMultiCreate_t *mediaArray,
 							aafCompressEnable_t Enable,
-							ImplAAFLocator		*destination,
-							aafUID_t			fileFormat,
+							ImplAAFLocator		*/*destination*/,
+							aafUID_t			/*fileFormat*/,
 							IAAFEssenceMultiAccess **result)
 {
 	ImplAAFEssenceAccess	*access = NULL;

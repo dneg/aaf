@@ -45,8 +45,8 @@ ImplAAFEssencePlugin::~ImplAAFEssencePlugin ()
 
 AAFRESULT STDMETHODCALLTYPE
 	ImplAAFEssencePlugin::NumCodecsMatching(
-		aafUID_t		dataDefinition,	//Looking for audio or video codecs
-		aafFileRev_t	revision,		//for which variety of file,
+		aafUID_t		/*dataDefinition*/,	//Looking for audio or video codecs
+		aafFileRev_t	/*revision*/,		//for which variety of file,
 		aafInt32		*result)		// Returns the number of matches,
 {
 	*result = 1;
@@ -55,12 +55,12 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
 	ImplAAFEssencePlugin::GetIndexedCodecInfo(
-		aafUID_t		dataDefinition,	//Looking for audio or video codecs,
-		aafFileRev_t	revision,		//for which variety of file,
-		aafInt32		index,			// Which codec. 1 to number of codecs,
+		aafUID_t		/*dataDefinition*/,	//Looking for audio or video codecs,
+		aafFileRev_t	/*revision*/,		//for which variety of file,
+		aafInt32		/*index*/,			// Which codec. 1 to number of codecs,
 		wchar_t			*pName,			// Codec Name,
-		aafInt32		bufSize,		//length of the buffer to hold Codec Name,
-		aafUID_t		*codecID)		//ID used to access the codec,
+		aafInt32		/*bufSize*/,		//length of the buffer to hold Codec Name,
+		aafUID_t		*/*codecID*/)		//ID used to access the codec,
 {
 	memcpy(pName, L"Test Codec", 28);
 	return AAFRESULT_SUCCESS;

@@ -60,12 +60,12 @@ AAFRESULT STDMETHODCALLTYPE
   return( SetNewProps( length, pDataDef ) );
 }
 
-AAFRESULT ImplAAFFiller::TraverseToClip(aafLength_t length,
-										 ImplAAFSegment **sclp,
-										 ImplAAFPulldown **pulldownObj,
-										 aafInt32 *pulldownPhase,
-										 aafLength_t *sclpLen,
-										 aafBool *isMask)
+AAFRESULT ImplAAFFiller::TraverseToClip(aafLength_t /*length*/,
+										 ImplAAFSegment **/*sclp*/,
+										 ImplAAFPulldown **/*pulldownObj*/,
+										 aafInt32 */*pulldownPhase*/,
+										 aafLength_t */*sclpLen*/,
+										 aafBool */*isMask*/)
 {
 	return ( AAFRESULT_FILL_FOUND );
 }

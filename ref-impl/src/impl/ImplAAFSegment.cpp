@@ -69,7 +69,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFSegment::SegmentTCToOffset (aafTimecode_t *pTimecode,
-                           aafRational_t *pEditRate,
+                           aafRational_t */*pEditRate*/,
                            aafFrameOffset_t *pOffset)
 {
 	AAFRESULT aafError = AAFRESULT_SUCCESS;
@@ -111,7 +111,7 @@ AAFRESULT ImplAAFSegment::AccumulateLength( aafLength_t *length)
 	return(AAFRESULT_SUCCESS);
 }
 
-AAFRESULT ImplAAFSegment::OffsetToTimecodeClip(aafPosition_t offset,
+AAFRESULT ImplAAFSegment::OffsetToTimecodeClip(aafPosition_t /*offset*/,
 											   ImplAAFTimecode **result,
 											   aafPosition_t *tcStartPos)
 {
@@ -158,12 +158,12 @@ AAFRESULT ImplAAFSegment::FindSubSegment(aafPosition_t offset,
 	return(AAFRESULT_SUCCESS);
 }
 
-AAFRESULT ImplAAFSegment::TraverseToClip(aafLength_t length,
-										 ImplAAFSegment **sclp,
-										 ImplAAFPulldown **pulldownObj,
-										 aafInt32 *pulldownPhase,
-										 aafLength_t *sclpLen,
-										 aafBool *isMask)
+AAFRESULT ImplAAFSegment::TraverseToClip(aafLength_t /*length*/,
+										 ImplAAFSegment **/*sclp*/,
+										 ImplAAFPulldown **/*pulldownObj*/,
+										 aafInt32 */*pulldownPhase*/,
+										 aafLength_t */*sclpLen*/,
+										 aafBool */*isMask*/)
 {
 	return(AAFRESULT_TRAVERSAL_NOT_POSS);
 }
