@@ -156,8 +156,6 @@ private:
 	OMFixedSizeProperty<aafFadeType_t>	_fadeOutType;
 	OMFixedSizeProperty<aafBool>		_fadeOutPresent;
 	OMFixedSizeProperty<aafPosition_t>	_startTime;
-
-	aafBool								_initialized;
 };
 
 #endif // ! __ImplAAFSourceClip_h__
