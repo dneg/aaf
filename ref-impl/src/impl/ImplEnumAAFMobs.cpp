@@ -157,6 +157,16 @@ AAFRESULT STDMETHODCALLTYPE
 		  pCandidate = NULL;
 		  break;
 
+		case kAAFByUsageCode:
+		  
+		  if ( pCandidate->IsUsageCodeEqual( &_criteria.tags.usageCode ) ) {
+		    *ppMob = pCandidate;
+		    return AAFRESULT_SUCCESS;
+		  }
+		  pCandidate->ReleaseReference();
+		  pCandidate = NULL;
+		  break;
+
 		case kAAFByMediaCrit:
 			// intentional fall through
 		default:

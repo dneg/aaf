@@ -2345,4 +2345,21 @@ HRESULT ImplAAFMob::IsClassIDEqual( const aafClassID_t* classId, bool& result ) 
   return AAFRESULT_SUCCESS;
 }
 
+bool ImplAAFMob::IsUsageCodeEqual( const aafUID_t* usageCode ) const
+{
+  if ( !_usageCode.isPresent() ) {
+    return false;
+  }
+
+  aafUID_t thisUsageCode = _usageCode;
+
+  if ( ::memcmp( usageCode, &thisUsageCode, sizeof(aafUID_t) ) == 0 ) {
+    return true;
+  }
+  else {
+    return false;
+  }
+
+}
+
 ////////////////////////////////////////////////////////////////////////////////

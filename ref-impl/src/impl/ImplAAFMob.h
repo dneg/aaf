@@ -658,6 +658,7 @@ virtual AAFRESULT STDMETHODCALLTYPE
   bool IsMobIDEqual( const aafMobID_t* mobID ) const;
   bool IsNameEqual( const aafString_t name ) const;
   HRESULT IsClassIDEqual( const aafClassID_t* id, bool& result ) const;
+  bool IsUsageCodeEqual( const aafUID_t* usageCode ) const;
 
 	protected:
 	OMFixedSizeProperty<aafMobID_t>		_mobID;
