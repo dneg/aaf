@@ -325,7 +325,8 @@ typedef struct
 
 const aafUID_t NIL_UID = { 0, 0, 0, { 0, 0, 0, 0, 0, 0, 0, 0 } };
 
-static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, testType_t testType)
+static HRESULT CreateAudioAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, testType_t testType,
+								  aafUID_t codecID)
 {
 	HRESULT hr = AAFRESULT_SUCCESS;
 	IAAFFile*					pFile = NULL;
@@ -437,7 +438,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 		// now create the Essence data file
 		checkResult(pMasterMob->CreateEssence(1,				// Slot ID
 			defs.ddSound(),	// MediaKind
-			kAAFCodecWAVE,		// codecID
+			codecID,		// kAAFCodecWAVE
 			editRate,		// edit rate
 			sampleRate,		// sample rate
 			kAAFCompressionDisable,
@@ -448,7 +449,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
     // Get the codecID and validate that it is what we expect.
     aafUID_t codecID = {0};
 		checkResult(pEssenceAccess->GetCodecID(&codecID));
-		checkExpression(0 == memcmp(&codecID, &kAAFCodecWAVE, sizeof(codecID)), AAFRESULT_TEST_FAILED);
+		checkExpression(0 == memcmp(&codecID, &codecID, sizeof(codecID)), AAFRESULT_TEST_FAILED);
     
 
 		checkResult(pEssenceAccess->GetFileFormatParameterList (&format));
@@ -564,7 +565,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 	return hr;
 }
 
-static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
+static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType, aafUID_t codecID)
 {
 	HRESULT hr = AAFRESULT_SUCCESS;
 	IAAFFile *					pFile = NULL;
@@ -631,9 +632,9 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 				kAAFCompressionDisable,// Compress disabled
 				&pEssenceAccess));
 			
-			aafUID_t codecID = {0};
-			checkResult(pEssenceAccess->GetCodecID(&codecID));
-			if (false && memcmp(&codecID, &kAAFCodecWAVE, sizeof(codecID)))
+			aafUID_t tstCodecID = {0};
+			checkResult(pEssenceAccess->GetCodecID(&tstCodecID));
+			if (false && memcmp(&tstCodecID, &codecID, sizeof(codecID)))
 			{
 			  cout << "     Warning:GetCodecID did not return CodecJPEG." << endl;
 			}
@@ -1297,7 +1298,7 @@ static HRESULT ReadJPEGAAFFile(
 
 			aafUID_t codecID = {0};
 			checkResult(pEssenceAccess->GetCodecID(&codecID));
-			if (false && memcmp(&codecID, &kAAFCodecWAVE, sizeof(codecID)))
+			if (false && memcmp(&codecID, &kAAFCodecJPEG, sizeof(codecID)))
 			{
 			  cout << "     Warning:GetCodecID did not return CodecJPEG." << endl;
 			}
@@ -1721,22 +1722,22 @@ HRESULT CAAFEssenceAccess_test()
 	if(hr == AAFRESULT_SUCCESS)
 	{
         cout << "        WriteSamples" << endl;
-		hr = CreateAAFFile(L"EssenceAccess.aaf", NULL, testStandardCalls);
+		hr = CreateAudioAAFFile(L"EssenceAccess.aaf", NULL, testStandardCalls, kAAFCodecWAVE);
 	}
 	
 	if(hr == AAFRESULT_SUCCESS)
 	{
-		hr = ReadAAFFile(L"EssenceAccess.aaf", testStandardCalls);
+		hr = ReadAAFFile(L"EssenceAccess.aaf", testStandardCalls, kAAFCodecWAVE);
 	}
 	/**/
 	if(hr == AAFRESULT_SUCCESS)
 	{
         cout << "        WriteMultiSamples" << endl;
-		checkResult(CreateAAFFile(L"EssenceAccessMulti.aaf", NULL, testMultiCalls));
+		checkResult(CreateAudioAAFFile(L"EssenceAccessMulti.aaf", NULL, testMultiCalls, kAAFCodecWAVE));
 	}
 	if(hr == AAFRESULT_SUCCESS)
 	{
-		hr = ReadAAFFile(L"EssenceAccessMulti.aaf", testMultiCalls);
+		hr = ReadAAFFile(L"EssenceAccessMulti.aaf", testMultiCalls, kAAFCodecWAVE);
 	}
 	/**/
 	/**/
@@ -1744,13 +1745,13 @@ HRESULT CAAFEssenceAccess_test()
 	dataFile.dataFormat = ContainerFile;
 	if(hr == AAFRESULT_SUCCESS)
 	{
-        cout << "    External Essence:" << endl;
+        cout << "    External Essence (WAVE)" << endl;
         cout << "        WriteSamples (External Raw Essence)" << endl;
-		hr = CreateAAFFile(L"EssenceAccessRawRef.aaf", &dataFile, testStandardCalls);
+		hr = CreateAudioAAFFile(L"EssenceAccessRawRef.aaf", &dataFile, testStandardCalls, kAAFCodecWAVE);
 	}
 	if(hr == AAFRESULT_SUCCESS)
 	{
-		hr = ReadAAFFile(L"EssenceAccessRawRef.aaf", testStandardCalls);
+		hr = ReadAAFFile(L"EssenceAccessRawRef.aaf", testStandardCalls, kAAFCodecWAVE);
 	}
 	/**/
 	dataFile.dataFilename = externalAAF;
@@ -1758,13 +1759,63 @@ HRESULT CAAFEssenceAccess_test()
 	if(hr == AAFRESULT_SUCCESS)
 	{
         cout << "        WriteSamples (External AAF Essence)" << endl;
-		hr = CreateAAFFile(L"EssenceAccessRef.aaf", &dataFile, testStandardCalls);
+		hr = CreateAudioAAFFile(L"EssenceAccessRef.aaf", &dataFile, testStandardCalls, kAAFCodecWAVE);
 	}
 	if(hr == AAFRESULT_SUCCESS)
 	{
-		hr = ReadAAFFile(L"EssenceAccessRef.aaf", testStandardCalls);
+		hr = ReadAAFFile(L"EssenceAccessRef.aaf", testStandardCalls, kAAFCodecWAVE);
 	}
 	
+  cout << "    Internal Essence (AIFC)" << endl;
+  
+	/**/
+	if(hr == AAFRESULT_SUCCESS)
+	{
+        cout << "        WriteSamples" << endl;
+		hr = CreateAudioAAFFile(L"EssenceAccessAIFC.aaf", NULL, testStandardCalls, kAAFCODEC_AIFC);
+	}
+	
+	if(hr == AAFRESULT_SUCCESS)
+	{
+		hr = ReadAAFFile(L"EssenceAccessAIFC.aaf", testStandardCalls, kAAFCODEC_AIFC);
+	}
+	/**/
+	if(hr == AAFRESULT_SUCCESS)
+	{
+        cout << "        WriteMultiSamples" << endl;
+		checkResult(CreateAudioAAFFile(L"EssenceAccessMultiAIFC.aaf", NULL, testMultiCalls, kAAFCODEC_AIFC));
+	}
+	if(hr == AAFRESULT_SUCCESS)
+	{
+		hr = ReadAAFFile(L"EssenceAccessMultiAIFC.aaf", testMultiCalls, kAAFCODEC_AIFC);
+	}
+	/**/
+	/**/
+	dataFile.dataFilename = rawData;
+	dataFile.dataFormat = ContainerFile;
+	if(hr == AAFRESULT_SUCCESS)
+	{
+        cout << "    External Essence (AIFC)" << endl;
+        cout << "        WriteSamples (External Raw Essence)" << endl;
+		hr = CreateAudioAAFFile(L"EssenceAccessRawRefAIFC.aaf", &dataFile, testStandardCalls, kAAFCODEC_AIFC);
+	}
+	if(hr == AAFRESULT_SUCCESS)
+	{
+		hr = ReadAAFFile(L"EssenceAccessRawRefAIFC.aaf", testStandardCalls, kAAFCODEC_AIFC);
+	}
+	/**/
+	dataFile.dataFilename = externalAAF;
+	dataFile.dataFormat = ContainerAAF;
+	if(hr == AAFRESULT_SUCCESS)
+	{
+        cout << "        WriteSamples (External AAF Essence)" << endl;
+		hr = CreateAudioAAFFile(L"EssenceAccessRefAIFC.aaf", &dataFile, testStandardCalls, kAAFCODEC_AIFC);
+	}
+	if(hr == AAFRESULT_SUCCESS)
+	{
+		hr = ReadAAFFile(L"EssenceAccessRefAIFC.aaf", testStandardCalls, kAAFCODEC_AIFC);
+	}
+
 	if (SUCCEEDED(hr))
   {
     cout << "    Internal Essence (JPEG):" << endl;
