@@ -235,16 +235,16 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pHeader->GetDictionary(&pDictionary));
  		
 		// Create a source mob
-		checkResult(pDictionary->CreateInstance(&AUID_AAFSourceMob,
+		checkResult(pDictionary->CreateInstance(AUID_AAFSourceMob,
 												IID_IAAFSourceMob, 
 												(IUnknown **)&pSourceMob));
 
 		checkResult(pSourceMob->QueryInterface(IID_IAAFMob, (void **)&pMob));
 
 		checkResult(CoCreateGuid((GUID *)&newUID));
-		checkResult(pMob->SetMobID(&newUID));
+		checkResult(pMob->SetMobID(newUID));
 		checkResult(pMob->SetName(L"AIFCDescriptorTest"));
-		checkResult(pDictionary->CreateInstance(&AUID_AAFAIFCDescriptor,
+		checkResult(pDictionary->CreateInstance(AUID_AAFAIFCDescriptor,
 												IID_IAAFAIFCDescriptor, 
 												(IUnknown **)&pAIFCDesc));		
 

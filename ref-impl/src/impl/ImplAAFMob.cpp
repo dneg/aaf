@@ -299,15 +299,12 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFMob::SetMobID (aafUID_t *newMobID)
+    ImplAAFMob::SetMobID (const aafUID_t & newMobID)
 {
 	AAFRESULT				hr = AAFRESULT_SUCCESS;
 	ImplAAFMob				*mobPtr = NULL;
 	ImplAAFHeader			*head = NULL;
 	ImplAAFContentStorage	*cstore = NULL;
-
-	if(newMobID == NULL)
-		return(AAFRESULT_NULL_PARAM);
 
 	XPROTECT()
 	{
@@ -329,7 +326,7 @@ AAFRESULT STDMETHODCALLTYPE
 				}	
 				else if(hr== AAFRESULT_MOB_NOT_FOUND)
 				{
-					_mobID = *newMobID;
+					_mobID = newMobID;
 					CHECK(cstore->ChangeIndexedMobID (this, newMobID));
 				}
 				else
@@ -346,7 +343,7 @@ AAFRESULT STDMETHODCALLTYPE
 			RAISE(hr);
 	  }
     else
-		 _mobID = *newMobID;
+		 _mobID = newMobID;
 
 	} /* XPROTECT */
 	XEXCEPT
@@ -451,10 +448,10 @@ AAFRESULT STDMETHODCALLTYPE
 //
 AAFRESULT STDMETHODCALLTYPE
 	ImplAAFMob::AppendNewTimelineSlot
-        (aafRational_t  editRate,   //@parm [in] Edit rate property value
+        (const aafRational_t &editRate,   //@parm [in] Edit rate property value
 		 ImplAAFSegment * segment,   //@parm [in] Segment to append as slot component
 		 aafSlotID_t  slotID,   //@parm [in] The Slot ID
-         aafWChar *  slotName,   //@parm [in] Slot Name (optional)
+         const aafWChar *  slotName,   //@parm [in] Slot Name (optional)
 		 aafPosition_t  origin,
 		 ImplAAFTimelineMobSlot ** newSlot)  //@parm [out] Newly created slot
 {
@@ -480,7 +477,7 @@ AAFRESULT STDMETHODCALLTYPE
 		CHECK(aSlot->SetSegment(segment));
 		CHECK(aSlot->SetSlotID(slotID));
 		CHECK(aSlot->SetName(slotName));
-		CHECK(aSlot->SetEditRate(&editRate));
+		CHECK(aSlot->SetEditRate(editRate));
 		CHECK(aSlot->SetOrigin(origin));
 
 		/* Append new slot to mob */
@@ -544,7 +541,6 @@ AAFRESULT STDMETHODCALLTYPE
 	
 	aafWChar					oldTagName[64];
 	aafBool						commentFound = AAFFalse;
-	aafUID_t					stringTypeUID = CLSID_AAFTypeDefString;
 	aafUInt32					numComments = 0;
 	ImplAAFDictionary *pDictionary = NULL;
 	
@@ -588,7 +584,7 @@ AAFRESULT STDMETHODCALLTYPE
 			pTaggedValue = (ImplAAFTaggedValue *)pDictionary->CreateImplObject(AUID_AAFTaggedValue);
 			pDictionary->ReleaseReference();
 			pDictionary = NULL;
-			CHECK(pTaggedValue->Initialize(pTagName, &stringTypeUID));
+			CHECK(pTaggedValue->Initialize(pTagName, CLSID_AAFTypeDefString));
 			CHECK(pTaggedValue->SetValue((wcslen(pComment)*sizeof(aafWChar)+2), (aafDataValue_t)pComment));
 			_userComments.appendValue(pTaggedValue);
 		}
@@ -871,10 +867,9 @@ AAFRESULT STDMETHODCALLTYPE
 			* datakind of the slot segment.
 			*/
 			CHECK(seg->GetDataDef(&datakind));
-			CHECK(dict->LookupDataDefinition(&datakind, &dataDef));
-			aafUID_t	uid = DDEF_Timecode;
+			CHECK(dict->LookupDataDefinition(datakind, &dataDef));
 			aafBool		isTimecode;
-			CHECK(dataDef->IsDataDefOf(&uid, &isTimecode));
+			CHECK(dataDef->IsDataDefOf(DDEF_Timecode, &isTimecode));
 			if (isTimecode)
 			{
 				/* Assume found at this point, so finish generating result */
@@ -1100,8 +1095,8 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFMob::ChangeRef (aafUID_t *oldMobID,
-                           aafUID_t *newMobID)
+    ImplAAFMob::ChangeRef (const aafUID_t & oldMobID,
+                           const aafUID_t & newMobID)
 {
 	ImplEnumAAFMobSlots		*iter = NULL;
 	ImplAAFMobSlot			*slot = NULL;
@@ -1295,7 +1290,7 @@ AAFRESULT STDMETHODCALLTYPE
 ImplAAFMob::AddPhysSourceRef (aafAppendOption_t  addType,
 							  aafRational_t  editrate,
 							  aafSlotID_t  aMobSlot,
-							  aafUID_t *pEssenceKind,
+							  const aafUID_t & essenceKind,
 							  aafSourceRef_t  ref,
 							  aafLength_t  srcRefLength)
 {
@@ -1320,7 +1315,7 @@ ImplAAFMob::AddPhysSourceRef (aafAppendOption_t  addType,
 			RAISE(AAFRESULT_NOMEMORY);
 		pDictionary->ReleaseReference();
 		pDictionary = NULL;
-		CHECK(sclp->Initialize(pEssenceKind, &srcRefLength, ref));
+		CHECK(sclp->Initialize(essenceKind, srcRefLength, ref));
 				
 		status = FindSlotBySlotID(aMobSlot, &slot);
 		if (status == AAFRESULT_SUCCESS)

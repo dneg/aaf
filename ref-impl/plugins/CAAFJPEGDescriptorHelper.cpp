@@ -237,10 +237,10 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFJPEGDescriptorHelper::SetSampleRate (aafRational_t *  pRate)
+    CAAFJPEGDescriptorHelper::SetSampleRate (const aafRational_t & rate)
 {
 	checkAssertion(NULL != _filedes);
-	return _filedes->SetSampleRate (pRate);
+	return _filedes->SetSampleRate (rate);
 }
 
 
@@ -253,10 +253,10 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFJPEGDescriptorHelper::SetContainerFormat (aafUID_t *  pFormat)
+    CAAFJPEGDescriptorHelper::SetContainerFormat (const aafUID_t & format)
 {
 	checkAssertion(NULL != _filedes);
-	return _filedes->SetContainerFormat (pFormat);
+	return _filedes->SetContainerFormat (format);
 }
 
 
@@ -270,10 +270,10 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFJPEGDescriptorHelper::SetCompression (aafUID_t *  pCodecID)
+    CAAFJPEGDescriptorHelper::SetCompression (const aafUID_t & codecID)
 {
   checkAssertion(NULL != _dides);
-	return _dides->SetCompression (pCodecID);
+	return _dides->SetCompression (codecID);
 }
 
 
