@@ -49,7 +49,7 @@
 //
 // DictP18-277-1847BMaster.csv 
 //
-// This file was generated on Thu Mar 23 08:53:49 EST 2000
+// This file was generated on Thu Mar 30 11:01:26 EST 2000
 // by user transdel on system TRANSDEL.
 //
 // Key to macros.
@@ -234,13 +234,12 @@
 //     name      = the name of the type
 //
 //
-// AAF_TYPE_DEFINITION_CHARACTER(name, id, size)
+// AAF_TYPE_DEFINITION_CHARACTER(name, id)
 //
 //   Define an AAF character type.
 //
 //     name      = the name of the type
 //     id        = the auid used to identify the type [*]
-//     size      = the size (in bytes) of the type
 //
 // AAF_TYPE_DEFINITION_INDIRECT(name, id)
 //
@@ -422,7 +421,7 @@
 #endif
 
 #ifndef AAF_TYPE_DEFINITION_CHARACTER
-#define AAF_TYPE_DEFINITION_CHARACTER(name, id, size)
+#define AAF_TYPE_DEFINITION_CHARACTER(name, id)
 #endif
 
 #ifndef AAF_TYPE_DEFINITION_INDIRECT
@@ -3158,14 +3157,6 @@ AAF_CLASS(TypeDefinitionCharacter,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
   TypeDefinition,
   true)
-  AAF_PROPERTY(Size,
-    AAF_LITERAL_AUID(0x065E0100,
-      0x0000, 0x0000,
-      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
-    0x5e01,
-    AAF_TYPE(UInt8),
-    true,
-    TypeDefinitionCharacter)
 AAF_CLASS_END(TypeDefinitionCharacter)
 
 AAF_TABLE_END()
@@ -3812,7 +3803,7 @@ AAF_TYPE_SEPARATOR()
 AAF_TYPE_DEFINITION_CHARACTER(Character, 
   AAF_LITERAL_AUID(0x0C090000,
     0x0000, 0x0000,
-    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C), 2)
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C))
 AAF_TYPE_SEPARATOR()
 
 // DataStream

@@ -381,8 +381,8 @@ struct TypeCharacter            \
                                 \
 static TypeCharacter s_AAFAllTypeCharacters [] = {
 
-#define AAF_TYPE_DEFINITION_CHARACTER(name, id, size) \
-  {L##"aaf" L#name, id, size, 1},
+#define AAF_TYPE_DEFINITION_CHARACTER(name, id) \
+  {L##"aaf" L#name, id, 2, 1},
 
 #define AAF_TYPE_TABLE_END()  \
 0 };
