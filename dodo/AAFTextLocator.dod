@@ -14,6 +14,7 @@ AAFLocator\
 #endm
 #c
 #c #import ./AAFLocator.exp
+AD_HEAD
 AD_IDL(//
 // The IAAFTextLocator interface is implemented by objects which
 // provide information to help find a file containing essence data
