@@ -204,12 +204,6 @@
 
 .this-module::~.this-module ()
 {
-#ifdef BOB_TEST
-  ImplAAFRoot * rep;
-  rep = GetRepObject ();
-  assert (rep);
-  delete rep;
-#endif
 }
 #endm
 
@@ -260,7 +254,7 @@ AD_CLASS_BEGIN\
 .this-module::~.this-module ()
 {
 #ifdef BOB_TEST
-  Impl.this-module * rep;
+  ImplAAFRoot * rep;
   rep = GetRepObject ();
   assert (rep);
   delete rep;
