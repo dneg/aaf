@@ -63,6 +63,7 @@
 # 06-APR-2000 : transdel adding new required header files.                    #
 # 27-JUL-2000 : transdel adding support for "aafext" plugin directory         #
 # 20-OCT-2000 : transdel added new platform type include                      #
+# 16-FEB-2001 : transdel added missing AAFExtEnum.h and AAFFileSignatures.h   #
 ###############################################################################
 
 
@@ -216,8 +217,10 @@ TARGET_H_FILES = \
 	$(AAFSDK_INCLUDE)\AAFDataDefs.h \
 	$(AAFSDK_INCLUDE)\AAFDefUIDs.h \
 	$(AAFSDK_INCLUDE)\AAFEssenceFormats.h \
+	$(AAFSDK_INCLUDE)\AAFExtEnum.h \
 	$(AAFSDK_INCLUDE)\AAFFileKinds.h \
 	$(AAFSDK_INCLUDE)\AAFFileMode.h \
+	$(AAFSDK_INCLUDE)\AAFFileSignatures.h \
 	$(AAFSDK_INCLUDE)\AAFInterpolatorDefs.h \
 	$(AAFSDK_INCLUDE)\AAFMetaDictionary.h \
 	$(AAFSDK_INCLUDE)\AAFOperationCategories.h \
@@ -476,11 +479,17 @@ $(AAFSDK_INCLUDE)\AAFDefUIDs.h : $(TOOLKIT_INCLUDE)\AAFDefUIDs.h
 $(AAFSDK_INCLUDE)\AAFEssenceFormats.h : $(TOOLKIT_INCLUDE)\AAFEssenceFormats.h
 	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFEssenceFormats.h $(AAFSDK_INCLUDE)\
 
+$(AAFSDK_INCLUDE)\AAFExtEnum.h : $(TOOLKIT_INCLUDE)\AAFExtEnum.h
+	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFExtEnum.h $(AAFSDK_INCLUDE)\
+
 $(AAFSDK_INCLUDE)\AAFFileKinds.h : $(TOOLKIT_INCLUDE)\AAFFileKinds.h
 	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFFileKinds.h $(AAFSDK_INCLUDE)\
 
 $(AAFSDK_INCLUDE)\AAFFileMode.h : $(TOOLKIT_INCLUDE)\AAFFileMode.h
 	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFFileMode.h $(AAFSDK_INCLUDE)\
+
+$(AAFSDK_INCLUDE)\AAFFileSignatures.h : $(TOOLKIT_INCLUDE)\AAFFileSignatures.h
+	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFFileSignatures.h $(AAFSDK_INCLUDE)\
 
 $(AAFSDK_INCLUDE)\AAFInterpolatorDefs.h : $(TOOLKIT_INCLUDE)\AAFInterpolatorDefs.h
 	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFInterpolatorDefs.h $(AAFSDK_INCLUDE)\
