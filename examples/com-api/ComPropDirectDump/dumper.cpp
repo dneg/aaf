@@ -56,7 +56,7 @@ typedef IAAFSmartPointer<IAAFPropertyValue>        IAAFPropertyValueSP;
 typedef IAAFSmartPointer<IAAFProperty>             IAAFPropertySP;
 typedef IAAFSmartPointer<IAAFPropertyDef>          IAAFPropertyDefSP;
 typedef IAAFSmartPointer<IAAFTypeDef>              IAAFTypeDefSP;
-typedef IAAFSmartPointer<IAAFDefObject>            IAAFDefObjectSP;
+typedef IAAFSmartPointer<IAAFMetaDefinition>       IAAFMetaDefinitionSP;
 typedef IAAFSmartPointer<IAAFDictionary>           IAAFDictionarySP;
 typedef IAAFSmartPointer<IAAFTypeDefCharacter>     IAAFTypeDefCharacterSP;
 typedef IAAFSmartPointer<IAAFTypeDefIndirect>      IAAFTypeDefIndirectSP;
@@ -330,8 +330,8 @@ HRESULT dumpPropertyValue (IAAFPropertyValueSP pPVal,
 	  {
 		aafCharacter bigBuf[100];
 		char mbBigBuf[100 * 3 /*MB_CUR_MAX */];
-		IAAFDefObjectSP pd;
-		checkResult(pTD->QueryInterface(IID_IAAFDefObject, (void**)&pd));
+		IAAFMetaDefinitionSP pd;
+		checkResult(pTD->QueryInterface(IID_IAAFMetaDefinition, (void**)&pd));
 		checkResult(pd->GetName (bigBuf, sizeof (bigBuf)));
 		convert(mbBigBuf, sizeof(mbBigBuf), bigBuf);
 		os << "type: " << mbBigBuf << "; ";
