@@ -101,14 +101,16 @@ OMOStream& endl(OMOStream& s)
  //          Debug use only.
 OMOStream omlog;
 
-// @devnote If your platform doesn't have iostream.h you'll need to
+// @devnote If your platform doesn't have <iostream> you'll need to
 //          implement the following functions differently.
 
 #if !defined(OM_OUTPUT_TO_DEBUGGER)
 
 // Diagnostic output to cerr
 
-#include <iostream.h>
+#include <iostream>
+using std::cerr;
+using std::endl;
 
   // @mfunc Put a character string.
   //   @parm The character string to be written.
@@ -175,13 +177,10 @@ OMOStream& OMOStream::putLine(void)
 #else
 
 // Diagnostic output to debugger
-
-#include <iostream.h>
-#if defined(OM_OS_WINDOWS)
-#include <strstrea.h>
-#else
-#include <strstream.h>
-#endif
+#include <iostream>
+#include <sstream>
+#include <string>
+using namespace std;
 
 #include "OMUtilities.h"
 
@@ -241,51 +240,46 @@ OMOStream& OMOStream::put(const char* string)
 
 OMOStream& OMOStream::put(OMUInt32 i)
 {
-  strstream s;
+  ostringstream s;
   s << i << ends;
-  char* buffer = s.str();
-  debugPrint(buffer);
-  delete [] buffer;
+  string buffer = s.str();
+  debugPrint(buffer.c_str());
   return *this;
 }
 
 OMOStream& OMOStream::put(OMInt32 i)
 {
-  strstream s;
+  ostringstream s;
   s << i << ends;
-  char* buffer = s.str();
-  debugPrint(buffer);
-  delete [] buffer;
+  string buffer = s.str();
+  debugPrint(buffer.c_str());
   return *this;
 }
 
 OMOStream& OMOStream::put(OMUInt16 i)
 {
-  strstream s;
+  ostringstream s;
   s << i << ends;
-  char* buffer = s.str();
-  debugPrint(buffer);
-  delete [] buffer;
+  string buffer = s.str();
+  debugPrint(buffer.c_str());
   return *this;
 }
 
 OMOStream& OMOStream::put(OMInt16 i)
 {
-  strstream s;
+  ostringstream s;
   s << i << ends;
-  char* buffer = s.str();
-  debugPrint(buffer);
-  delete [] buffer;
+  string buffer = s.str();
+  debugPrint(buffer.c_str());
   return *this;
 }
 
 OMOStream& OMOStream::put(void* p)
 {
-  strstream s;
+  ostringstream s;
   s << p << ends;
-  char* buffer = s.str();
-  debugPrint(buffer);
-  delete [] buffer;
+  string buffer = s.str();
+  debugPrint(buffer.c_str());
   return *this;
 }
 
