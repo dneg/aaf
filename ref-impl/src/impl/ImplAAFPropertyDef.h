@@ -86,25 +86,6 @@ public:
       (// @parm [out] pointer to the result
        aafBool * pIsUniqueIdentifier) const;
 
-
-  //****************
-  // GetDefaultValue()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    GetDefaultValue
-        // @parm [out, retval] Pointer to default data value
-        (ImplAAFPropertyValue ** ppDataValue);
-
-
-  //****************
-  // SetDefaultValue()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    SetDefaultValue
-        // @parm [in] default data value
-        (ImplAAFPropertyValue * pDataValue);
-
-
   //
   // Non-published methods (yet still public)
   //
@@ -193,8 +174,6 @@ private:
   OMFixedSizeProperty<aafBool>               _IsOptional;
 
   OMFixedSizeProperty<OMPropertyId>          _pid;
-
-  OMVariableSizeProperty<aafUInt8>			 _DefaultValue;
 
   OMFixedSizeProperty<aafBool>               _IsUniqueIdentifier;
 
