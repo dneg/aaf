@@ -45,6 +45,7 @@ using namespace std;
 #include "AAFCodecDefs.h"
 #include "AAFEssenceFormats.h"
 #include "AAFFileKinds.h"
+#include "AAFFileMode.h"
 #include "AAF.h"
 #include "AAFStoredObjectIDs.h"
 #include "CAAFBuiltinDefs.h"
@@ -79,7 +80,6 @@ const aafInt32 UNC_NTSC_FRAME_SIZE = 720*480*2;
 const aafInt32 DV_PAL_FRAME_SIZE = 144000;
 const aafInt32 DV_NTSC_FRAME_SIZE = 120000;
 
-bool useLegacyDV = false;		// LegacyDV implies 512 sector files (limited to 2GB)
 bool verbose = true;
 
 #define aaf_assert(b, msg) \
@@ -224,7 +224,7 @@ static aafProductVersion_t TestVersion = { 1, 1, 0, 0, kAAFVersionUnknown };
 static aafProductIdentification_t TestProductID;
 
 static HRESULT CreateAAFFileEssenceData(aafWChar *pFileName, int frame_limit,
-									aafLength_t *p_bytes)
+									aafLength_t *p_totalbytes)
 {
 	TestProductID.companyName = L"AAF Association";
 	TestProductID.productName = L"ScaleTest";
@@ -245,10 +245,15 @@ static HRESULT CreateAAFFileEssenceData(aafWChar *pFileName, int frame_limit,
 		// Open new file
 		IAAFFile		*pFile = NULL;
 		TestProductID.productVersionString = L"ScaleTest EssenceData";
-		check( AAFFileOpenNewModifyEx(
+
+		// Large sectors for new files
+		int modeFlags = AAF_FILE_MODE_USE_LARGE_SS_SECTORS;
+
+		// We don't use AAFFileOpenNewModifyEx here since that API uses
+		// RawStorage internally which is not supported for the GSF library.
+		check( AAFFileOpenNewModify(
 						pFileName,
-						filekind_4K,
-						0,
+						modeFlags,
 						&TestProductID,
 						&pFile) );
 
@@ -299,23 +304,23 @@ static HRESULT CreateAAFFileEssenceData(aafWChar *pFileName, int frame_limit,
 		check(pEssenceData->SetFileMob(pSourceMob));
 		check(pHeader->AddEssenceData(pEssenceData));
 
-		*p_bytes = 0;
+		*p_totalbytes = 0;
 		for (int i = 0; i < frame_limit; i++)
 		{
 			check(pEssenceData->Write(
 									sizeof(compressedDV_25_625),
 									(aafUInt8*)compressedDV_25_625,
 									&bytesWritten));
-			*p_bytes += bytesWritten;
+			*p_totalbytes += bytesWritten;
 			if (verbose && (i+1) % 25 == 0)
 			{
-				printf("%6d frames %6.2f%%\r", i+1, (i+1) * 100.0 / frame_limit);
+				printf("  %6d frames %6.2f%%\r", i+1, (i+1) * 100.0 / frame_limit);
 				fflush(stdout);
 			}
 		}
 		if (verbose)
-			printf("%6d frames %6.2f%%  bytes=%"AAFFMT64"d\n",
-					frame_limit, frame_limit * 100.0 / frame_limit, *p_bytes);
+			printf("  %6d frames %6.2f%%  bytes=%"AAFFMT64"d\n",
+					frame_limit, frame_limit * 100.0 / frame_limit, *p_totalbytes);
 		pEssenceData->Release();
 
 		pSourceMob->Release();
@@ -330,8 +335,10 @@ static HRESULT CreateAAFFileEssenceData(aafWChar *pFileName, int frame_limit,
 		check(pFile->Release());
 
 		aafLength_t filesize = getFilesize(cFileName);
-		printf("Wrote %s (EssenceData API) filesize=%"AAFFMT64"d (%s)\n",
-					cFileName, filesize, (filesize > SIZE_2GB) ? "> 2GB" : "<= 2GB");
+		aafLength_t diff = filesize - SIZE_2GB;
+		printf("  Wrote %s (EssenceData API) filesize=%"AAFFMT64"d (2GB %s%"AAFFMT64"d)\n",
+					cFileName, filesize,
+					(diff >= 0) ? "+" : "", diff);
 	}
 	catch (HRESULT& rResult)
 	{
@@ -358,12 +365,41 @@ static HRESULT ReadAAFFileEssenceData(aafWChar *pFileName, int frame_limit, aafL
 		hr = AAFFileOpenExistingRead(pFileName, 0, &pFile);
 		if (hr == S_OK)
 		{
-			printf("FileOpenExistingRead for %s succeeded\n", cFileName);
+			printf("  FileOpenExistingRead for %s succeeded\n", cFileName);
 		}
 		else
 		{
-			printf("FileOpenExistingRead for %s failed hr=0x%08x\n", cFileName, hr);
+			printf("  FileOpenExistingRead for %s failed hr=0x%08x\n", cFileName, hr);
 		}
+
+		// Check that size of essence data stream is what we expect
+		IAAFHeader				*pHeader = NULL;
+		aafUInt32				essenceDataCount = 0;
+		IEnumAAFEssenceData		*pEnumEssenceData;
+		IAAFEssenceData			*pEssenceData;
+
+		check(pFile->GetHeader(&pHeader));
+		check(pHeader->CountEssenceData(&essenceDataCount));
+		check(pHeader->EnumEssenceData(&pEnumEssenceData));
+		for (unsigned i = 0; i < essenceDataCount; i++)
+		{
+			aafLength_t		size = 0;
+			check(pEnumEssenceData->NextOne(&pEssenceData));
+			check(pEssenceData->GetSize(&size));
+			if (size != bytes)
+			{
+				printf("  EssenceData size mismatch: %"AAFFMT64"d != %"AAFFMT64"d\n", size, bytes);
+			}
+			else
+			{
+				printf("  EssenceData size correct (%"AAFFMT64"d bytes)\n", size);
+			}
+			check(pEssenceData->Release());
+		}
+		check(pEnumEssenceData->Release());
+
+		check(pFile->Close());
+		check(pFile->Release());
 	}
 	catch (HRESULT& rResult)
 	{
@@ -377,7 +413,7 @@ static HRESULT ReadAAFFileEssenceData(aafWChar *pFileName, int frame_limit, aafL
 #ifndef AAF_TOOLKIT_V1_0
 static HRESULT CreateAAFFileCodec(aafWChar * pFileName, bool comp_enable,
 								aafUID_t codec, aafUID_t container,
-								int frame_limit, aafLength_t *p_bytes)
+								aafLength_t size_limit, aafLength_t *p_totalbytes)
 {
 	IAAFFile*					pFile = NULL;
 	IAAFHeader*					pHeader = NULL;
@@ -388,21 +424,18 @@ static HRESULT CreateAAFFileCodec(aafWChar * pFileName, bool comp_enable,
 	aafMobID_t					masterMobID;
 	aafProductIdentification_t	ProductInfo;
 	aafRational_t				pictureEditRate = {25, 1}, pictureSampleRate = {25, 1};
-	aafRational_t				soundEditRate = {48000, 1}, soundSampleRate = {48000, 1};
+	aafRational_t				soundEditRate = {25, 1}, soundSampleRate = {48000, 1};
 	aafRational_t				editRate, sampleRate;
 	IAAFClassDef				*pCDMasterMob = NULL;
 	IAAFDataDef					*pPictureDef = NULL, *pSoundDef;
 	IAAFDataDef					*media_kind = NULL;
 	aafUInt32					samplesWritten, bytesWritten;
-	aafInt32					frameSize = 0;
+	aafInt32					frameSize = 0, samplesPerWrite = 0;
 
 	// Delete any previous test file before continuing...
 	char cFileName[FILENAME_MAX];
 	convert(cFileName, sizeof(cFileName), pFileName);
 	remove(cFileName);
-
-	cout << "Creating file " << cFileName << " using WriteSamples with " <<
-		(comp_enable ? "CompressionEnable" : "CompressionDisable") << endl;
 
 	aafProductVersion_t ver = {1, 0, 0, 0, kAAFVersionBeta};
 	ProductInfo.companyName = L"none";
@@ -412,11 +445,13 @@ static HRESULT CreateAAFFileCodec(aafWChar * pFileName, bool comp_enable,
 	ProductInfo.productID = NIL_UID;
 	ProductInfo.platform = NULL;		// Set by SDK when saving
 
-	// Large sectors for new files, small sectors for legacy files
-	const aafUID_t *fileKind = useLegacyDV ? &kAAFFileKind_Aaf512Binary : &kAAFFileKind_Aaf4KBinary;
+	// Large sectors for new files
+	int modeFlags = AAF_FILE_MODE_USE_LARGE_SS_SECTORS;
 
 	// Create a new AAF file
-	check(AAFFileOpenNewModifyEx(pFileName, fileKind, 0, &ProductInfo, &pFile));
+	// We don't use AAFFileOpenNewModifyEx here since that API uses
+	// RawStorage internally which is not supported for the GSF library.
+	check(AAFFileOpenNewModify(pFileName, modeFlags, &ProductInfo, &pFile));
 	check(pFile->GetHeader(&pHeader));
 
 	// Get the AAF Dictionary from the file
@@ -437,8 +472,15 @@ static HRESULT CreateAAFFileCodec(aafWChar * pFileName, bool comp_enable,
 	// Get a Mob interface and set its variables.
 	check(pMasterMob->QueryInterface(IID_IAAFMob, (void **)&pMob));
 	check(pMob->GetMobID(&masterMobID));
+
+	unsigned char video_buf[UNC_PAL_FRAME_SIZE];
 	if (comp_enable)
 	{
+		// Create a frame of colour bars
+		// experiment shows 4 bytes per pixel needed to avoid SMALLBUF using WriteSamples
+		// with kAAFMixedFields and 720x576
+		// 2 bytes per pixel work fine with kAAFSeparateFields and 720x288
+		create_colour_bars(video_buf, true);
 		check(pMob->SetName(L"colour_bars"));
 	}
 	else
@@ -452,26 +494,30 @@ static HRESULT CreateAAFFileCodec(aafWChar * pFileName, bool comp_enable,
 	// Prepare parameters based on codec selected
 	if (codec == kAAFCodecDef_PCM)
 	{
+		comp_enable = false;		// No compression engine (yet) for PCM codec
 		media_kind = pSoundDef;
 		editRate = soundEditRate;
 		sampleRate = soundSampleRate;
+
+		samplesPerWrite = 1920;		// 1920 samples per video frame (48000/25)
+		frameSize = 1920;			// 1 channel at 8 bits per sample
 	}
 	else if (codec == kAAFCodecDef_CDCI)
 	{
 		media_kind = pPictureDef;
 		editRate = pictureEditRate;
 		sampleRate = pictureSampleRate;
+
+		samplesPerWrite = 1;		// write one video frame at a time
+		frameSize = (comp_enable ? UNC_PAL_FRAME_SIZE : DV_PAL_FRAME_SIZE);
+	}
+	else
+	{
+		aaf_assert(0, "codec choice not implemented");
 	}
 
-	// Create a frame of colour bars
-	// experiment shows 4 bytes per pixel needed to avoid SMALLBUF using WriteSamples
-	// with kAAFMixedFields and 720x576
-	// 2 bytes per pixel work fine with kAAFSeparateFields and 720x288
-	unsigned char video_buf[UNC_PAL_FRAME_SIZE];
-	if (comp_enable)
-	{
-		create_colour_bars(video_buf, true);
-	}
+	cout << "Creating file " << cFileName << " using WriteSamples with " <<
+		(comp_enable ? "CompressionEnable" : "CompressionDisable") << endl;
 
 	/* Create the Essence Data specifying the codec, container, edit rate and sample rate */
 	check(pMasterMob->CreateEssence(1,			// Slot ID within MasterMob
@@ -488,8 +534,6 @@ static HRESULT CreateAAFFileCodec(aafWChar * pFileName, bool comp_enable,
 	if (codec == kAAFCodecDef_CDCI)
 	{
 		pEssenceAccess->SetEssenceCodecFlavour( kAAFCodecFlavour_IEC_DV_625_50 );
-
-		frameSize = (comp_enable ? UNC_PAL_FRAME_SIZE : DV_PAL_FRAME_SIZE);
 	}
 
 	// For fun, print the name of the selected codec flavour
@@ -503,10 +547,11 @@ static HRESULT CreateAAFFileCodec(aafWChar * pFileName, bool comp_enable,
 
 	// Write the video samples
 	int total_samples = 0;
+	*p_totalbytes = 0;
 
 	if (comp_enable)				// using generated uncompressed video?
 	{
-		for (int i = 0; i < frame_limit; i++)
+		while (*p_totalbytes < size_limit)
 		{
 			check(pEssenceAccess->WriteSamples(	1,					//
 												sizeof(video_buf),	// buffer size
@@ -514,30 +559,33 @@ static HRESULT CreateAAFFileCodec(aafWChar * pFileName, bool comp_enable,
 												&samplesWritten,
 												&bytesWritten));
 			total_samples += samplesWritten;
+			*p_totalbytes += bytesWritten;
 		}
 	}
-	else // using pre-compressed DV frames
+	else
 	{
+		// using pre-compressed DV frames, uncompressed PCM etc
 		memcpy(video_buf, compressedDV_25_625, sizeof(compressedDV_25_625));
 
-		for (int i = 0; i < frame_limit; i++)
+		while (*p_totalbytes < size_limit)
 		{
 			check(pEssenceAccess->WriteSamples(
-									1,					// number of samples
+									samplesPerWrite,	// number of samples
 									frameSize,			// buffer size
 									dataPtr,			// samples buffer
 									&samplesWritten,
 									&bytesWritten));
 			total_samples += samplesWritten;
-			if (verbose && total_samples % 25 == 0)
+			*p_totalbytes += bytesWritten;
+			if (verbose && (*p_totalbytes) % 1024*1024 == 0)
 			{
-				printf("%6d frames %6.2f%%\r", total_samples, total_samples * 100.0 / frame_limit);
+				printf("  %12"AAFFMT64"d bytes %6.2f%%\r", *p_totalbytes, (*p_totalbytes) * 100.0 / size_limit);
 				fflush(stdout);
 			}
 		}
 	}
 	if (verbose)
-		printf("%6d frames %6.2f%%\n", total_samples, total_samples * 100.0 / frame_limit);
+		printf("  %12"AAFFMT64"d bytes %6.2f%%\n", *p_totalbytes, (*p_totalbytes) * 100.0 / size_limit);
 
 	/* Set the essence to indicate that you have finished writing the samples */
 	check(pEssenceAccess->CompleteWrite());
@@ -560,6 +608,12 @@ static HRESULT CreateAAFFileCodec(aafWChar * pFileName, bool comp_enable,
 	/* Close the AAF file */
 	pFile->Close();
 	pFile->Release();
+
+	aafLength_t filesize = getFilesize(cFileName);
+	aafLength_t diff = filesize - SIZE_2GB;
+	printf("  Wrote %s (EssenceAccess API) filesize=%"AAFFMT64"d (2GB %s%"AAFFMT64"d)\n",
+				cFileName, filesize,
+				(diff >= 0) ? "+" : "", diff);
 
 	return moduleErrorTmp;
 }
@@ -624,14 +678,14 @@ extern int main(int argc, char *argv[])
 {
 	CAAFInitialize aafInit;
 
-	aafWChar *		pwFileName	= L"TestDV.aaf";
 	bool			compressionEnable = false;		// use compressed frames by default
 	bool			testEssenceData = true;
 	bool			testCodecs = false;
 
-	//int				frame_limit = 25 * 60 * 30;		// 30 minutes DV is approx. 6GB
-	//int				frame_limit = 14897;		// just under 2GB by 77824 bytes
-	int				frame_limit = 14898;		// just over 2GB by 69632 bytes
+	// 14897 DV frames + AAF overhead = 2147405824 (2GB - 77824)
+	// 14898 DV frames + AAF overhead = 2147553280 (2GB - 69632)
+	aafLength_t			frame_limit = 14898;		// just over 2GB by 69632 bytes
+	aafLength_t			size_limit = 14898 * DV_PAL_FRAME_SIZE;
 
 	int i = 1;
 	if (argc > 1)
@@ -643,11 +697,6 @@ extern int main(int argc, char *argv[])
 				printUsage(argv[0]);
 				return 0;
 			}
-			else if (!strcmp(argv[i], "-legacyDV"))
-			{
-				useLegacyDV = true;
-				i++;
-			}
 			else if (!strcmp(argv[i], "-n"))
 			{
 				frame_limit = strtol(argv[i+1], NULL, 10);
@@ -656,6 +705,7 @@ extern int main(int argc, char *argv[])
 					printUsage(argv[0]);
 					return 1;
 				}
+				size_limit = frame_limit * DV_PAL_FRAME_SIZE;
 				i+=2;
 			}
 			else if (!strcmp(argv[i], "-q"))
@@ -688,6 +738,7 @@ extern int main(int argc, char *argv[])
 
 	if (testEssenceData)
 	{
+		aafWChar *		pwFileName	= L"TestEssData.aaf";
 		aafLength_t bytes = 0;
 		checkFatal(CreateAAFFileEssenceData(pwFileName, frame_limit, &bytes));
 
@@ -708,17 +759,19 @@ extern int main(int argc, char *argv[])
 		//		external ContainerAAF, ContainerFile
 		//		(note internal/external ContainerRIFFWAVE must be 2GB limited)
 
+		aafWChar			*CDCIName = L"TestCDCI.aaf",
+							*PCMName = L"TestPCM.aaf";
 		aafLength_t bytes = 0;
 
-		checkFatal(CreateAAFFileCodec(pwFileName, compressionEnable, kAAFCodecCDCI, ContainerAAF,
-									frame_limit, &bytes));
-		checkFatal(ReadAAFFileEssenceData(pwFileName, frame_limit, bytes));
+		checkFatal(CreateAAFFileCodec(CDCIName, compressionEnable, kAAFCodecCDCI, ContainerAAF,
+									size_limit, &bytes));
+		checkFatal(ReadAAFFileEssenceData(CDCIName, size_limit, bytes));
 
-		checkFatal(CreateAAFFileCodec(pwFileName, compressionEnable, kAAFCodecPCM, ContainerAAF,
-									frame_limit, &bytes));
-		checkFatal(ReadAAFFileEssenceData(pwFileName, frame_limit, bytes));
+		checkFatal(CreateAAFFileCodec(PCMName, compressionEnable, kAAFCodecPCM, ContainerAAF,
+									size_limit, &bytes));
+		checkFatal(ReadAAFFileEssenceData(PCMName, size_limit, bytes));
 
-		//checkFatal(ReadAAFFileCodec(pwFileName, frame_limit));
+		//checkFatal(ReadAAFFileCodec(pwFileName, size_limit));
 	}
 #endif
 	return(0);
