@@ -119,8 +119,7 @@ ImplAAFTypeDefArray::CreateValue(ImplAAFPropertyValue ** ppPropVal,
 	if (!tmp) return AAFRESULT_NOMEMORY;
 	pvd = tmp;
 	// the pvd smart pointer will maintain a reference for us...
-	aafUInt32 refCount;
-	refCount = tmp->ReleaseReference ();
+	tmp->ReleaseReference ();
 	
 	//Initialize pvd to this type
 	HRESULT hr = pvd->Initialize(this);

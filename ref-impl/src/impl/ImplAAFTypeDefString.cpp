@@ -609,8 +609,7 @@ OMProperty * ImplAAFTypeDefString::pvtCreateOMProperty
 	  {
 	    // element is integral type
 	    aafUInt32 intSize;
-	    AAFRESULT hr;
-	    hr = ptdi->GetSize (&intSize);
+	    ptdi->GetSize (&intSize);
 	    switch (intSize)
 		  {
 		  case 1:

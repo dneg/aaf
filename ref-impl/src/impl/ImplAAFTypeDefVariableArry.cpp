@@ -306,7 +306,6 @@ ImplAAFTypeDefVariableArray::GetElements (
 										  ImplAAFPropertyValue *pInPropVal,
 										  ImplEnumAAFPropertyValues **ppEnum)
 {
-  AAFRESULT result = AAFRESULT_SUCCESS;
   if (NULL == pInPropVal || NULL == ppEnum)
 	  return AAFRESULT_NULL_PARAM;
   *ppEnum = NULL;
