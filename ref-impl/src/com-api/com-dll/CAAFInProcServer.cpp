@@ -29,9 +29,8 @@
 #include "CAAFInProcServer.h"
 #endif
 
-#if defined(macintosh) || defined(_MAC)
-// Temporary.
-#include "aafrdli.h"
+#ifndef __AAFTypes_h__
+#include "AAFTypes.h"
 #endif
 
 #include <assert.h>
@@ -39,11 +38,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#if ! defined (__sgi) && ! defined (__FreeBSD__)
+#if defined( OS_MACOS )
 #include <olectl.h> // need ole control header for SELFREG_E_CLASS definition
+#include "aafrdli.h" // Temporary.
+
+#elif defined( OS_WINDOWS )
+#include <olectl.h> // need ole control header for SELFREG_E_CLASS definition
+
 #endif
 
-#if defined(_WIN32) || defined(WIN32)
+#if defined( OS_WINDOWS )
 # undef __TCHAR_DEFINED // why is this necessary!
 # include <tchar.h>
 #else
@@ -252,7 +256,7 @@ enum eAAFRegFlag
   AAF_REG_SUB_CLSID = 2,
   AAF_REG_SUB_CLASSNAME = 3,
   AAF_REG_SUB_MODULE = 4
-#if defined(_MAC)
+#if defined( OS_MACOS )
   ,AAF_REG_SUB_ALIAS = 5
 #endif
 };
@@ -265,7 +269,7 @@ const AAFRegEntry g_AAFRegEntry[][3] =
     { AAF_REG_SUB_SKIP, 0 }, 
     { AAF_REG_SUB_CLASSNAME, OLESTR("%s Class") }
   },
-#if defined(_MAC) 
+#if defined( OS_MACOS ) 
   {  // [1]
     { AAF_REG_SUB_CLSID, OLESTR("CLSID\\%s\\InprocServer") },
     { AAF_REG_SUB_SKIP, 0 },
@@ -346,7 +350,7 @@ static int FormatRegBuffer
       pParam = pFileName;
       break;
     
-#if defined(_MAC)
+#if defined( OS_MACOS )
     case AAF_REG_SUB_ALIAS:
 #endif
     case AAF_REG_SUB_SKIP:
@@ -400,8 +404,8 @@ HRESULT CAAFInProcServer::RegisterServer
 {
   HRESULT hr = S_OK;
 
-#ifndef __sgi
-#if defined(_MAC)
+#if defined( OS_WINDOWS ) || defined( OS_MACOS )
+#if defined( OS_MACOS )
   // In the MAC version we store the fragment block pointer in the HINSTANCE member.
   CFragInitBlockPtr initBlkPtr = static_cast<CFragInitBlockPtr>(_hInstance);
   assert(initBlkPtr);
@@ -452,7 +456,7 @@ HRESULT CAAFInProcServer::RegisterServer
   int fileNameLength = (int)GetModuleFileName(_hInstance, fileName, MAX_PATH);
   if (0 == fileNameLength)
     return GetLastError();  // TODO: convert to HRESULT!  
-#endif  
+#endif  // OS_MACOS
 
   // Buffer for string version of each object's class id.
   const int MAX_CLSID_SIZE = 40;
@@ -506,7 +510,7 @@ HRESULT CAAFInProcServer::RegisterServer
       long err = RegCreateKey(HKEY_CLASSES_ROOT, pKeyName, &hkey);
       if (ERROR_SUCCESS == err)
       {
-#if defined(_MAC) 
+#if defined( OS_MACOS ) 
         // Set the value. Note: we need to include the null character
         // but tell the registry the actual number of bytes we are
         // writing. (Mac wintypes.h defines BYTE as unsigned char.)
@@ -529,7 +533,8 @@ HRESULT CAAFInProcServer::RegisterServer
         err = RegSetValueEx(hkey, pValueName, 0, 
             REG_SZ, (const BYTE*)pValue,
             (regLength[2] + 1) * sizeof(TCHAR));
-#endif
+
+#endif  // OS_MACOS
 
         RegCloseKey(hkey);
       }
@@ -547,7 +552,7 @@ HRESULT CAAFInProcServer::RegisterServer
     ++objectIndex;
   }
 
-#if defined(_MAC)
+#if defined( OS_MACOS )
   if (hAlias)
   {
     if (pAlias)
@@ -555,7 +560,9 @@ HRESULT CAAFInProcServer::RegisterServer
     DisposeHandle((Handle)hAlias);
   }
 #endif
-#endif // #ifndef __sgi
+
+#endif // OS_WINDOWS || OS_MACOS
+
   return hr;
 }
 
@@ -564,7 +571,7 @@ HRESULT CAAFInProcServer::UnregisterServer
   void
 )
 {
-#ifndef __sgi
+#if defined( OS_WINDOWS ) || defined( OS_MACOS )
   HRESULT hr = S_OK;
 
   // Buffer for string version of each object's class id.
@@ -614,7 +621,8 @@ HRESULT CAAFInProcServer::UnregisterServer
     // Next object in the table...
     ++objectIndex;
   }
-#endif // #ifndef __sgi
+#endif // OS_WINDOWS || OS_MACOS
+
   return S_OK;
 }
 
@@ -658,7 +666,7 @@ const char* CAAFInProcServer::GetServerDirectory() const
 // AAFGetLibraryInfo()
 // Implemented for each platform to get platform specific path information.
 //
-#if defined(WIN32) || defined(_WIN32)
+#if defined( OS_WINDOWS )
 
 HRESULT AAFGetLibraryInfo(HINSTANCE hInstance, char **pServerPath, char **pServerDirectory)
 {
@@ -703,7 +711,7 @@ HRESULT AAFGetLibraryInfo(HINSTANCE hInstance, char **pServerPath, char **pServe
 	return rc;
 }
 
-#elif defined(macintosh) || defined(_MAC)
+#elif defined( OS_MACOS )
 
 HRESULT AAFGetLibraryInfo(HINSTANCE hInstance, char **pServerPath, char **pServerDirectory)
 {
@@ -763,7 +771,7 @@ HRESULT AAFGetLibraryInfo(HINSTANCE hInstance, char **pServerPath, char **pServe
 	return rc;
 }
 
-#elif defined( __sgi )
+#elif defined( OS_UNIX )
 
 HRESULT AAFGetLibraryInfo(
    HINSTANCE hInstance,
@@ -794,11 +802,12 @@ HRESULT AAFGetLibraryInfo(
    return rc;
 }
 
-#else // other Unix?
+#else // other platform?
 
 HRESULT AAFGetLibraryInfo(HINSTANCE hInstance, char **pServerPath, char **pServerDirectory)
 {
 	return AAFRESULT_NOT_IMPLEMENTED;
 }
 
-#endif
+#endif  // OS_WINDOWS
+
