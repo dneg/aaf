@@ -219,6 +219,11 @@ static aafInt32 powi(
 			aafInt32	base,
 			aafInt32	exponent);
 
+double FloatFromRational(
+			aafRational_t	e);		/* IN - Convert this into a double */
+aafRational_t RationalFromFloat(
+			double	f);		/* IN - Convert this number into a rational */
+
 	/************************************************************
 	 *
 	 * Public Functions (Part of the toolkit API)
@@ -360,7 +365,6 @@ void AAFGetDateTime(aafTimeStamp_t *time)
 }
 #endif
 
-#if FULL_TOOLKIT
 aafErr_t AAFConvertEditRate(
 	aafRational_t srcRate,        /* IN - Source Edit Rate */
 	aafPosition_t srcPosition,    /* IN - Source Position */
@@ -371,7 +375,7 @@ aafErr_t AAFConvertEditRate(
 	aafInt64		intPos, destPos;
 	aafInt32		remainder;
 		
-	XPROTECT(NULL)
+	XPROTECT()
 	{
 		CvtInt32toInt64(0, destPosition);
 		if ((howRound != kRoundCeiling) && (howRound != kRoundFloor))
@@ -422,7 +426,6 @@ aafErr_t AAFConvertEditRate(
 
 	return(OM_ERR_NONE);
 }
-#endif
 
 /************************
  * Function: FloatFromRational (INTERNAL)
