@@ -1538,7 +1538,7 @@ AAFRESULT STDMETHODCALLTYPE
 		iFileMob = static_cast<IUnknown *> (fileMob->GetContainer());
 		CHECK(_codec->GetNumChannels(iFileMob, mediaKind, &numCh));
 		if (numCh == 0)
-		  RAISE(OM_ERR_INVALID_DATAKIND);
+		  RAISE(AAFRESULT_INVALID_DATADEF);
 
 		_channels = (aafSubChannel_t *) new aafSubChannel_t[1];
 		if(_channels == NULL)
@@ -2949,7 +2949,7 @@ aafErr_t AAFMedia::SourceGetVideoSignalType(aafVideoSignalType_t *signalType)
 	aafErr_t aafError = OM_ERR_NONE;
 	aafInt32 trackID = -1;
 	aafInt16 i = 0;
-	AAFDataKind *pictureKind = NULL;
+	AAFDataDef *pictureKind = NULL;
 	aafFindSourceInfo_t	sourceInfo;
 	AAFHeader		*mainHead;
 
