@@ -1,0 +1,131 @@
+#c/*************************************************\
+#c*													*
+#c* Advanced Authoring Format						*
+#c*													*
+#c* Copyright (c) 1998-1999 Avid Technology, Inc.	*
+#c*													*
+#c\*************************************************/
+#startm .this-module 0
+AAFTypeDefVariableArrayEx\
+#endm
+#c
+#startm .parent-module 0
+AAFTypeDef\
+#endm
+#c
+#import ./AAFTypeDef.exp
+AD_HEAD
+AD_IDL(//
+// This interface is an extension to the previously definined TypeDefVariableArray
+// interface.  Hence the suffix "Ex" to the name. Additional methods are now included.
+AD_STD_COMMENT_IFC_HEADER)
+AD_FORWARD_DECLARATION(AAFPropertyValue)
+AD_FORWARD_DECLARATION(EnumAAFPropertyValues)
+
+AD_CLASS_UUID(7f73d4b2, 6f9a, 11d4, 8e, 59, 00, 90, 27, df, cc, 26 )
+AD_DEFAULT_UUID(7f73d4b3, 6f9a, 11d4, 8e, 59, 00, 90, 27, df, cc, 26 )
+
+AD_XCLASS_BEGIN(Concrete, StoredObject)
+
+
+AD_XMETHOD2(PrependElement,
+			[in],
+			objIn,
+			AAFPropertyValue,
+			pInPropVal,
+			property value corresponding to array to which element is prepended,
+
+			[in],
+			objIn,
+			AAFPropertyValue,
+			pMemberPropVal,
+			value to be prepended to this array,
+
+			Prepends an element to the end of the array\, setting it to the
+  // value given in pMemberPropVal.
+  //
+  // Succeeds if:
+  // - Initialize\(\) has already been called on this object.
+  // - pInPropVal pointer is valid.
+  // - pMemberPropVal pointer is valid.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pInPropVal or pMemberPropVal\))
+
+
+
+
+AD_XMETHOD2(RemoveElement,
+			[in],
+			objIn,
+			AAFPropertyValue,
+			pInPropVal,
+			property value corresponding to array,
+
+			[in],
+			objPass,
+			aafUInt32,
+			index,
+			zero-based index into elements in this array type,
+
+
+     Remove an element from the Array\, given an index.
+  // Index is zero-based\,
+  // and must be less than the value returned by GetCount\(\).
+  // 
+  // Succeeds if:
+  // - Initialize\(\) has already been called on this object.
+  // - the index exists in this array type def.
+  // - The pInPropVal pointer is valid.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NO_INIT
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pInPropVal\)
+  //
+  // AAFRESULT_BADINDEX
+  //   - The given index is out of range for this array type def.)
+
+
+
+
+AD_XMETHOD3(InsertElement,
+			[in],
+			objIn,
+			AAFPropertyValue,
+			pInPropVal,
+			property value corresponding to array,
+
+			[in],
+			objPass,
+			aafUInt32,
+			index,
+			zero-based index into elements in this array type,
+
+			[in],
+			objIn,
+			AAFPropertyValue,
+			pMemberPropVal,
+			value to be inserted into this array,
+
+     Inserts the value of the single\, indicated element of the fixed
+  // array contained in pInPropVal\, to the value contained in
+  // pMemberPropVal.  Index is zero-based\, and must be less than the
+  // value returned by GetCount\(\).  Property value must be of the
+  // same type as returned by GetType\(\).
+  // 
+  // Succeeds if:
+  // - Initialize\(\) has already been called on this object.
+  // - the index exists in this array type def.
+  // - The pInPropVal pointer is valid.
+  // - The ppOutPropVal pointer is valid.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NO_INIT
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pInPropVal or ppOutPropVal\)
+  //
+  // AAFRESULT_BADINDEX
+  //   - The given index is out of range for this array type def.)
+
+
+
+
+AD_XCLASS_END(Concrete, StoredObject)
+
+
