@@ -36,7 +36,8 @@ AD_XMETHOD6(Initialize,
 			objIn,
 			AAFTypeDef,
 			pType,
-			Type of values in this enumeration,
+			Type of values in this enumeration.
+			// Has to be of type Int,
 
 			[in\, size_is\(numElems\)],
 			objPass,
@@ -95,6 +96,40 @@ AD_XMETHOD6(Initialize,
   //   - base type is not integral type.)
 
 
+AD_XMETHOD2(CreateValueFromName,
+			[in],
+			objPass,
+			aafCharacter_constptr,
+			Name,
+			the Name of a valid Enum symbol,
+
+			[out],
+			objOut,
+			AAFPropertyValue,
+			ppPropVal,
+			newly created property value,
+
+     Creates a property value which contains an Enum type.  A
+  // lookup on the Name is done to find a match in the list of 
+  // legal enumerations for this type. If the Name specified is not
+  // found to exist then an INVALID_PARAM error code is returned.
+  // If it succeeds then a newly-created property value in ppPropVal
+  // is returned.
+  //
+  // Succeeds if all of the following are true:
+  // - the Name pointer is valid.
+  // - the ppPropVal pointer is valid.
+  //
+  // If this method fails nothing will be written to *ppPropVal.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NO_INIT
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppPropVal\)
+  //
+  // AAFRESULT_INVALID_PARAM
+  //   - the Name specified is not in the list of legal Enumerations.)
+  
+  
+  
 AD_XMETHOD1(GetElementType,
 			[out],
 			objOut,
@@ -112,7 +147,110 @@ AD_XMETHOD1(GetElementType,
   AD_STD_COMMENT_METH_ERR_NO_INIT
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppTypeDef\))
 
+AD_XMETHOD2(GetElementValue,
+                      [in],
+                      objPass,
+                      aafUInt32,
+                      index,
+                      index of element to retrieve,
 
+                      [out],
+                      objPass,
+                      aafInt64 *,
+                      pOutValue,
+                      requested value,
+
+     Gets the indexed element in this enumerated type.  The
+  // value is written into the client-allocated *pOutValue.  Index
+  // must be less than the value returned by CountElements\(\).
+  //
+  // Succeeds if:
+  // - pOutValue is a valid pointer.
+  // - index is less than CountElements\(\).
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NO_INIT
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pOutValue\)
+  //
+  // AAFRESULT_BADINDEX
+  //   - index is not less than CountElements\(\).)
+
+AD_XMETHOD3(GetElementName,
+                      [in],
+                      objPass,
+                      aafUInt32,
+                      index,
+                      index of element to retrieve,
+
+                      [out\, size_is\(bufSize\)],
+                      objPass,
+                      aafCharacter *,
+                      pOutValue,
+                      requested value,
+                      
+                      [in],
+                      objPass,
+                      aafUInt32,
+                      bufSize,
+                      The size of the pOutValue buffer in bytes,
+                      
+
+     Gets the indexed element in this enumerated type.  The
+  // Name is written into the client-allocated *pOutValue. The
+  // bufSize argument should be large enough to hold the pOutValue.
+  // Index must be less than the value returned by CountElements\(\).
+  //
+  // Caller may call GetElementNameBufLen\(\) to determine the
+  // required buffer size.
+  //  
+  // Succeeds if:
+  // - pOutValue is a valid pointer.
+  // - index is less than CountElements\(\).
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NO_INIT
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pOutValue\)
+  //
+  // AAFRESULT_BADINDEX
+  //   - index is not less than CountElements\(\).
+  //
+  // AAFRESULT_SMALLBUF
+  //   - bufSize indicates the buffer is too small to hold the string.
+  //)
+  
+  
+
+AD_XMETHOD2(GetElementNameBufLen,
+                      [in],
+                      objPass,
+                      aafUInt32,
+                      index,
+                      index of element to retrieve,
+
+			[out],
+			objPass,
+			aafUInt32 *,
+			pLen,
+			required buffer length\, in bytes,
+
+     Returns the length of buffer required for the GetElementName\(\)
+  // method\, in bytes.  The value is placed into the location
+  // specified by pLen. The value will include space required for the
+  // trailing null character.
+  //
+  // Succeeds if the following is true:
+  // - the pLen pointer is valid.
+  // - index is less than CountElements\(\).
+  //
+  // If this method fails nothing will be written to *pLen.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pLen\)
+  //
+  // AAFRESULT_BADINDEX
+  //   - index is not less than CountElements\(\).
+  //)
+
+
+
+  
 AD_XMETHOD1(CountElements,
 			[out],
 			objPass,
@@ -129,33 +267,6 @@ AD_XMETHOD1(CountElements,
   AD_STD_COMMENT_METH_ERR_NO_INIT
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pCount\))
 
-
-AD_XMETHOD2(GetElementValue,
-			[in],
-			objPass,
-			aafUInt32,
-			index,
-			index of element to retrieve,
-
-			[out],
-			objPass,
-			aafInt64 *,
-			pOutValue,
-			requested value,
-
-     Gets the indexed element in this enumerated type.  The
-  // value is written into the client-allocated *pOutValue.  Index
-  // must be less than the value returned by CountElements\(\).
-  //
-  // Succeeds if:
-  // - pOutValue is a valid pointer.
-  // - index is less than CountElements\(\).
-  AD_STD_COMMENT_METH_ERR_HEADER
-  AD_STD_COMMENT_METH_ERR_NO_INIT
-  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pOutValue\)
-  //
-  // AAFRESULT_BADINDEX
-  //   - index is not less than CountElements\(\).)
 
 
 AD_XMETHOD3(GetNameFromValue,
