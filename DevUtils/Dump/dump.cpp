@@ -140,11 +140,11 @@ const int OLD_TID_DATA_STREAM                    = 4;
 //
 typedef signed char        OMInt8;
 typedef signed short int   OMInt16;
-typedef signed int         OMInt32;
+typedef signed long int    OMInt32;
 
 typedef unsigned char      OMUInt8;
 typedef unsigned short int OMUInt16;
-typedef unsigned int       OMUInt32;
+typedef unsigned long int  OMUInt32;
 
 // Structure of property index header
 //
