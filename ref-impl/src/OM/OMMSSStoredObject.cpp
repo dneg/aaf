@@ -2858,7 +2858,6 @@ void OMMSSStoredObject::writeSignature(const wchar_t* fileName,
 static void convert(char* cName, size_t length, const wchar_t* name)
 {
   TRACE("convert");
-  ASSERT("Valid program name", validString(getProgramName()));
   PRECONDITION("Valid input name", validWideString(name));
   PRECONDITION("Valid output buffer", cName != 0);
   PRECONDITION("Valid output buffer size", length > 0);
