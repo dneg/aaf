@@ -449,6 +449,8 @@ void OMMSSStoredObject::save(const OMSimpleProperty& property)
     OMByte* buffer = new OMByte[externalBytesSize];
     ASSERT("Valid heap pointer", buffer != 0);
 
+	ASSERT( "Zero property length", 0 != externalBytesSize );
+
     // Externalize property value
     propertyType->externalize(bits,
                               size,
