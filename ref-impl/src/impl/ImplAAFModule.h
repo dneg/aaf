@@ -1,6 +1,6 @@
 /***********************************************************************
  *
- *              Copyright (c) 1998-1999 Avid Technology, Inc.
+ *              Copyright (c) 1998-2000 Avid Technology, Inc.
  *
  * Permission to use, copy and modify this software and accompanying 
  * documentation, and to distribute and sublicense application software
@@ -45,6 +45,7 @@
 #include "AAFResult.h"
 #include "ImplAAFPluginManager.h"
 #include "ImplAAFFile.h"
+#include "ImplAAFRawStorage.h"
 //#include "ImplAAFObjectCreation.h"
 
 #include "AAFTypes.h"
@@ -361,3 +362,24 @@ STDAPI ImplAAFFileIsAAFFile (
 STDAPI ImplAAFGetPluginManager (
   /*[out]*/ ImplAAFPluginManager ** ppManager);
 
+
+STDAPI
+ImplAAFCreateRawStorageMemory
+  (aafFileAccess_e  access,
+   ImplAAFRawStorage ** ppNewRawStorage);
+
+STDAPI
+ImplAAFCreateRawStorageDisk
+  (aafCharacter_constptr  pFilename,
+   aafFileExistence_e  existence,
+   aafFileAccess_e  access,
+   ImplAAFRawStorage ** ppNewRawStorage);
+
+
+STDAPI
+ImplAAFCreateAAFFileOnRawStorage
+  (IAAFRawStorage * pRawStorage,
+   aafUID_constptr  pFileKind,
+   aafUInt32  modeFlags,
+   aafProductIdentification_constptr  pIdent,
+   ImplAAFFile ** ppNewFile);
