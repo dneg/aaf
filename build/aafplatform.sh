@@ -21,8 +21,15 @@
 ###############################################################################
 
 
-MACHINE=`(uname -m) 2>/dev/null` || MACHINE=Unknown
 OS=`(uname -s) 2>/dev/null` || OS=Unknown
+
+if [ "$OS" = "SunOS" ] ; then
+	# Under Solaris "uname -p" returns "sparc" or "i386" for modern machines
+	MACHINE=`(uname -p) 2>/dev/null` || MACHINE=Unknown
+else
+	# Other OSes use the POSIX -m flag for machine hardware type
+	MACHINE=`(uname -m) 2>/dev/null` || MACHINE=Unknown
+fi
 
 case "${MACHINE}:${OS}" in
     *:IRIX*)
@@ -33,8 +40,8 @@ case "${MACHINE}:${OS}" in
 	echo ${MACHINE}Linux
 	exit 0;;
 
-    sun*:SunOS)
-	echo SunSunOS
+    sparc*:SunOS)
+	echo SparcSolaris
 	exit 0;;
 
     *86:Windows_NT)
