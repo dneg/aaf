@@ -243,6 +243,8 @@ const CLSID CLSID_AAFHeader =
 //           fixed.
 //  0.15   : Change AUIDs for PullDownKindType, StringArray and
 //           PositionArray since these were not unique !
+//  0.16   : Version 0.15 used in DR1. Bump to 0.16 to continue
+//           development.
 //
 
 // The following may change at run time depending on the file format
@@ -254,7 +256,7 @@ char* _closeArrayKeySymbol = (char*)closeArrayKeySymbol;
 
 // Highest version of file/index format recognized by this dumper
 //
-const OMUInt32 HIGHVERSION = 15;
+const OMUInt32 HIGHVERSION = 16;
 
 // Output format requested
 //
