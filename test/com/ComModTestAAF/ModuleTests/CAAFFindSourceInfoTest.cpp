@@ -53,7 +53,7 @@ static aafWChar* Model = L"MyModel";
 static aafTapeCaseType_t FormFactor = kAAFVHSVideoTape;
 static aafVideoSignalType_t VideoSignalType = kAAFPALSignal;
 static aafTapeFormatType_t TapeFormat = kAAFVHSFormat;
-static aafLength_t TapeLength = 3200 ;
+static aafUInt32 TapeLength = 3200 ;
 
 //static aafMobID_t		NewMobID;
 //--cf  This will require some work!!! 
