@@ -30,6 +30,13 @@ AxParameter::AxParameter( IAAFParameterSP spIaafParameter )
 AxParameter::~AxParameter()
 {}
 
+IAAFParameterDefSP AxParameter::GetParameterDefinition()
+{
+  IAAFParameterDefSP spParamDef;
+  CHECK_HRESULT( _spIaafParameter->GetParameterDefinition( &spParamDef ) );
+  return spParamDef;
+}
+
 //=---------------------------------------------------------------------=
 
 AxConstantValue::AxConstantValue( IAAFConstantValueSP spIaafConstantValue )
@@ -45,6 +52,13 @@ void AxConstantValue::Initialize( IAAFParameterDefSP spParameterDef,
 				  aafDataBuffer_t pValue )
 {
   CHECK_HRESULT( _spIaafConstantValue->Initialize( spParameterDef, valueSize, pValue ) );
+}
+
+void AxConstantValue::GetValue( aafUInt32 valueSize,
+				aafDataBuffer_t pValue,
+				aafUInt32* bytesRead )
+{
+  CHECK_HRESULT( _spIaafConstantValue->GetValue( valueSize, pValue, bytesRead ) );
 }
 
 //=---------------------------------------------------------------------=
