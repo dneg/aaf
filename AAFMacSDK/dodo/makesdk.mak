@@ -96,8 +96,16 @@ checkDirectories Ä
 	OrphanFiles "{incl}AAFSmartPointer.h"
 	
 clean Ä 
+	delete -i -y makesdk.tmp
 	if "`exists -d {incl}`"
 		delete -an -y -i "{incl}" 
+	end
+	if "" != "`exists -d "{aaf}AAFMacSDK:lib:"`"
+		delete -i -p -ay -y "{aaf}AAFMacSDK:lib:"
+	end
+	# The bin directory is special since there are existing files that are under source control.
+	for item in `files -o -f "{aaf}AAFMacSDK:bin:" | StreamEdit -e '/MSL / || /Laser.wav/ Delete'`
+		delete -i -p -ay -y  "{item}"
 	end
 
 
