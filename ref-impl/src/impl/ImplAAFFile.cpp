@@ -547,8 +547,6 @@ void ImplAAFFile::InternalReleaseObjects()
 // Closes an AAF file, saving the result.
 // @end
 //
-// TODO: the FULL_TOOLKIT code closes all associated media files
-// and removes this file node from the session's file list.
 //
 AAFRESULT STDMETHODCALLTYPE
 ImplAAFFile::Close ()
