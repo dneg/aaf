@@ -3776,9 +3776,8 @@ static int isAnAAFFile(const wchar_t* fileName,
 
 void usage(void)
 {
-  cerr << programName << ": Usage : "
-       << programName << " [-x -r -p -a -s -z <pid> -m <n> -l <n> -h] <file...>"
-                      << endl;
+  cerr << programName << ": Usage : " << programName
+       << " [-x -r -p -a -s -z <pid> -m <n> -l <n> -h] <file...>" << endl;
   cerr << "-x       = hex dump"
        << " : for any file." << endl;
   cerr << "-r       = raw dump"
