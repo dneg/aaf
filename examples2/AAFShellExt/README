@@ -28,6 +28,12 @@ improvements implemented soon.  Probably in March.  The so-called
 "recursive iterator" (AxBaseObjRecIter, in axLib) that AxShellExt.cpp
 depends on will also be restructured at that time.
 
+AAFShellExt use axLib, as such, it expects an environment variable
+named AX_AAF_COMAPI that is set to the full path of the AAF COM
+library.  For example:
+
+  AX_AAF_COMAPI = c:/yourpath/AAF/AAFWinSDK/Debug/Refimpl/AAFCOAPI.dll
+
 Once you have the book, copy the following files into the AAFShellExt
 directory:
 
