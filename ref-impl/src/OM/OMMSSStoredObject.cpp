@@ -396,7 +396,6 @@ void OMMSSStoredObject::save(const OMSimpleProperty& property)
   //   @parm TBS
 void OMMSSStoredObject::save(const OMDataVector& property)
 {
-#if 0 // tjb - Not yet
   TRACE("OMMSSStoredObject::save");
 
   // Save as if this were an OMSimpleProperty
@@ -450,7 +449,6 @@ void OMMSSStoredObject::save(const OMDataVector& property)
   }
   delete it;
   delete [] buffer;
-#endif
 }
 
 void OMMSSStoredObject::save(const OMDataSet& property)
