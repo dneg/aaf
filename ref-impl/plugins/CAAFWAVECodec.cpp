@@ -350,6 +350,42 @@ HRESULT STDMETHODCALLTYPE
 }
 
 HRESULT STDMETHODCALLTYPE
+    CAAFWaveCodec::GetSelectInfo (IAAFSourceMob *fileMob,
+        IAAFEssenceStream *stream,
+        aafSelectInfo_t *  pSelectInfo)
+{
+	XPROTECT()
+	{
+		if(!_headerLoaded)
+		{
+			if(_stream == NULL)
+			{
+				_stream = stream;
+				_stream->AddRef();
+			}
+			CHECK(loadWAVEHeader());
+		}
+		pSelectInfo->willHandleMDES = AAFTrue;
+#if PORT_BYTESEX_LITTLE_ENDIAN
+		pSelectInfo->isNative = AAFTrue;
+#else
+		pSelectInfo->isNative = AAFFalse;
+#endif
+		pSelectInfo->hwAssisted = AAFFalse;
+		pSelectInfo->relativeLoss = 0;
+		pSelectInfo->avgBitsPerSec =
+			(_bitsPerSample *
+			_sampleRate.numerator) /
+			_sampleRate.denominator;
+    }
+    XEXCEPT
+    XEND;
+	
+	return AAFRESULT_SUCCESS;
+}
+
+
+HRESULT STDMETHODCALLTYPE
     CAAFWaveCodec::GetNumSamples (
         aafUID_t  essenceKind,
         aafLength_t *  pNumSamples)
