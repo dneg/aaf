@@ -1028,8 +1028,8 @@ void ImplAAFObject::InitOMProperties (ImplAAFClassDef * pClassDef)
 		  pProp = ps->get (defPid);
 		}		  
 		else if(defPid != PID_InterchangeObject_ObjClass
-			&& (defPid != PID_InterchangeObject_Generation)
-			&& (defPid != PID_PropertyDefinition_DefaultValue))
+			/* && (defPid != PID_InterchangeObject_Generation)
+			 && (defPid != PID_PropertyDefinition_DefaultValue) */)
 		{
 		  // Defined property wasn't found in OM property set.
 		  // We'll have to install one.
@@ -1044,8 +1044,8 @@ void ImplAAFObject::InitOMProperties (ImplAAFClassDef * pClassDef)
 	  }
 	  
 	if(defPid != PID_InterchangeObject_ObjClass
-			&& (defPid != PID_InterchangeObject_Generation)
-			&& (defPid != PID_PropertyDefinition_DefaultValue))
+	   /* && (defPid != PID_InterchangeObject_Generation)
+	      && (defPid != PID_PropertyDefinition_DefaultValue) */)
 	{
 		  ImplAAFPropertyDef * pPropDef =
 			  (ImplAAFPropertyDef*) propDefSP;
