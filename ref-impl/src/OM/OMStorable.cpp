@@ -476,8 +476,6 @@ OMStorable* OMStorable::shallowCopy(const OMClassFactory* factory) const
   object = factory->create(id);
   ASSERT("Registered class id", object != 0);
 
-  object->onCopy(0);
-	
   OMPropertySetIterator iterator(_persistentProperties, OMBefore);
   while (++iterator) {
     OMProperty* source = iterator.property();
