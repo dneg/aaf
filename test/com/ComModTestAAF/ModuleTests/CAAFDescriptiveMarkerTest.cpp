@@ -34,6 +34,7 @@
 #include <AAFResult.h>
 #include <AAFTypes.h>
 #include <AAFStoredObjectIDs.h>
+#include <AAFPropertyDefs.h>
 
 #include <iostream>
 
@@ -46,6 +47,68 @@ const aafUID_t TestDesciptiveFrameworkClassID =
 
 aafUInt32 TestDescribedSlotIDsVector[] = { 1, 3, 5, 7, 11 };
 const aafUInt32 TestDescribedIDsVectorSize = 5;
+
+// Verify that values in pEnumSetValues match those in the IDsVector.
+
+aafUInt32 GetNextUInt32( IAAFSmartPointer<IEnumAAFPropertyValues> pEnumSetValues )
+{
+  using namespace mtc;
+
+  IAAFSmartPointer<IAAFPropertyValue> pPropVal;
+  CheckResult( pEnumSetValues->NextOne( &pPropVal ) );
+
+  IAAFSmartPointer<IAAFTypeDef> pElemType;
+  CheckResult( pPropVal->GetType( &pElemType ) );
+
+  IAAFSmartPointer<IAAFTypeDefInt> pIntTypeDef;
+  CheckResult( pElemType->QueryInterface( IID_IAAFTypeDefInt, (void**)&pIntTypeDef ) );
+
+  aafUInt32 val;
+  CheckResult( pIntTypeDef->GetInteger( pPropVal, (aafMemPtr_t)&val, sizeof(val) ) );
+
+  return val;
+}
+
+void VerifySetContents( IAAFSmartPointer<IEnumAAFPropertyValues> pEnumSetValues )
+{
+  using namespace mtc;
+
+  aafUInt32 setVector[TestDescribedIDsVectorSize];
+  bool isMarked[TestDescribedIDsVectorSize];
+
+  // Load contents of set into array.
+  int i;
+  for ( i = 0; i < TestDescribedIDsVectorSize; i++ ) {
+    setVector[i] = GetNextUInt32( pEnumSetValues );
+  }
+
+  // Compare set against expected vector.  Ordering doesn't matter.
+  for ( i = 0; i < TestDescribedIDsVectorSize; i++ ) {
+    isMarked[i] = false;
+  }  
+
+  // For each value in TestDescribedSlotIDsVecto
+  // ... search for first occurence in set that is not marked.
+  // ... and mark found entires in set using isFound
+
+  for ( i = 0; i < TestDescribedIDsVectorSize; i++ ) {
+
+	int j;
+    for ( j = 0; j < TestDescribedIDsVectorSize; j++ ) {
+      if ( !isMarked[j] &&  setVector[j] == TestDescribedSlotIDsVector[i] ) {
+		isMarked[j] = true;
+		break;
+      }
+    }
+
+    // We should find one unmarked ID, and break out of the loop,
+    // each time through the inner loop.
+    CheckExpression( j < TestDescribedIDsVectorSize, AAFRESULT_TEST_FAILED );
+
+  } 
+}	
+	
+
 
 static void RegisterDescriptiveTestFramework( IAAFSmartPointer<IAAFDictionary>& pDict )
 {
@@ -194,7 +257,32 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
     CheckExpression( 0 == memcmp( getSlotIDsVector, TestDescribedSlotIDsVector, sizeof(TestDescribedSlotIDsVector) ),
 		     AAFRESULT_TEST_FAILED );
 
+    // Check that the described slots set can be accessed using a
+    // property value enumerator.
+    IAAFSmartPointer<IAAFObject> pDescMarkerObj;
+    CheckResult( pDescMarker->QueryInterface( IID_IAAFObject, (void**)&pDescMarkerObj ) );
 
+    CheckResult( pDescMarkerObj->GetDefinition( &pClassDef ) );
+
+    IAAFSmartPointer<IAAFPropertyDef> pPropDef;
+    CheckResult( pClassDef->LookupPropertyDef( kAAFPropID_DescriptiveMarker_DescribedSlots,
+					       &pPropDef ) );
+
+    IAAFSmartPointer<IAAFPropertyValue> pPropVal;
+    CheckResult( pDescMarkerObj->GetPropertyValue( pPropDef, &pPropVal ) );
+
+    IAAFSmartPointer<IAAFTypeDef> pTypeDef;
+    CheckResult( pPropDef->GetTypeDef( &pTypeDef ) );
+
+    IAAFSmartPointer<IAAFTypeDefSet> pTypeDefSet;
+    CheckResult( pTypeDef->QueryInterface( IID_IAAFTypeDefSet, (void**)&pTypeDefSet ) );
+
+    IAAFSmartPointer<IEnumAAFPropertyValues> pEnumSetValues;
+    CheckResult( pTypeDefSet->GetElements( pPropVal, &pEnumSetValues ) );
+    
+    VerifySetContents( pEnumSetValues );
+	
+	
     CheckResult( filePointers.pFile->Close() );
   }
   catch( const AAFRESULT& hr ) {
