@@ -32,7 +32,7 @@
 class ExtendedAaf2Omf : public Aaf2Omf
 {
 public:
-	ExtendedAaf2Omf();
+	ExtendedAaf2Omf(AAFDomainUtils *aafDomainUtils, OMFDomainUtils *omfDomainUtils, EffectTranslate *effectTranslate );
 	virtual ~ExtendedAaf2Omf();
 
 public:
@@ -42,7 +42,7 @@ private:
 class ExtendedOmf2Aaf : public Omf2Aaf
 {
 public:
-	ExtendedOmf2Aaf();
+	ExtendedOmf2Aaf( AAFDomainUtils *aafDomainUtils, OMFDomainUtils *omfDomainUtils, EffectTranslate *effectTranslate );
 	virtual ~ExtendedOmf2Aaf();
 
 public:

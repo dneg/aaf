@@ -40,8 +40,8 @@
 class Aaf2Omf
 {
 public:
-	Aaf2Omf();
-	~Aaf2Omf();
+	Aaf2Omf( AAFDomainUtils *aafDomainUtils, OMFDomainUtils *omfDomainUtils, EffectTranslate *effectTranslate );
+	virtual ~Aaf2Omf();
 
 public:
 	void OpenInputFile( void );

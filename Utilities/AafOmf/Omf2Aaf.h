@@ -40,8 +40,8 @@
 class Omf2Aaf
 {
 public:
-	Omf2Aaf();
-	~Omf2Aaf();
+	Omf2Aaf( AAFDomainUtils *aafDomainUtils, OMFDomainUtils *omfDomainUtils, EffectTranslate *effectTranslate );
+	virtual ~Omf2Aaf();
 
 public:
 	void ConvertFile( void );
@@ -86,6 +86,7 @@ public:
 	void	ConvertOMFNestedScope(OMF2::omfSegObj_t segment, IAAFNestedScope* pNestedScope);
 	void	ConvertOMFScopeRef(OMF2::omfSegObj_t segment, IAAFScopeReference* pScopeRef);
 	virtual void ConvertObjectProps(OMF2::omfObject_t pOMFObject, aafUID_t &classID, IAAFObject* pObj);
+	virtual void FinishUpMob(OMF2::omfMobObj_t pOMFMob, IAAFMob* pMob) { };
 
 protected:
 
