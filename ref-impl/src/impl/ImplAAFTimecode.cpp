@@ -23,6 +23,8 @@
 #include "ImplAAFTimecode.h"
 #endif
 
+#include "AAFPropertyIDs.h"
+
 #include <assert.h>
 #include "AAFTypes.h"
 #include "AAFResult.h"
