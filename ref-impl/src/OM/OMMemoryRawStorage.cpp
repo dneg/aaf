@@ -393,6 +393,14 @@ void OMMemoryRawStorage::setPosition(OMUInt64 newPosition)
   _position = newPosition;
 }
 
+  // @mfunc Synchronize this <c OMMemoryRawStorage> with its external
+  //        representation.
+void OMMemoryRawStorage::synchronize(void)
+{
+  TRACE("OMMemoryRawStorage::synchronize");
+  // nothing to do
+}
+
   // @mfunc Write a page or partial page.
   //   @parm The page to be written to.
   //   @parm The starting offset within the page.
