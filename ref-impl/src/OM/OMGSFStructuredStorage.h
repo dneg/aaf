@@ -22,18 +22,6 @@
 //
 //=---------------------------------------------------------------------=
 
-
-/************************************************************************
-* StructuredStorage.h
-* Public Header file for Structured Storage library
-*
-* (c) Schema Software Inc., 2001-2004
-* Authors: Bob Sabiston, Yuri Khramov, Mark Ambachtsheer
-************************************************************************
-
-$Revision$
-$Date$
-*/
 #ifndef OMGSFSTRUCTUREDSTORAGE_H
 #define OMGSFSTRUCTUREDSTORAGE_H
 
@@ -174,7 +162,7 @@ public:
 protected:
 	// Make default contructor private so that an OMGSFIStorage object cannot
 	// be instantiated
-	OMGSFIStorage(GsfStorage *in_storage, GsfAccessMode _mode, const char  *sname);
+	OMGSFIStorage(GsfStorage *in_storage, GsfAccessMode _mode, const char *sname);
 
 	// keeping destructor protected means that the object must always be
 	// instantiated on the heap;
@@ -255,8 +243,8 @@ public:
 
 protected:
 
-	// Make destructor virtual so that this objeact can only be instantiated
-	// on heap
+	// Make destructor virtual so that this object can only be instantiated
+	// on the heap
 	virtual ~OMGSFIStream();
 
 private:
@@ -266,8 +254,8 @@ private:
 
 
 private:
-	GsfStream*			_stream;
-	GsfAccessMode	_mode;				// TODO: does gsf store this somewhere?
+	GsfStream*		_stream;
+	GsfAccessMode	_mode;						// TODO: does gsf store this somewhere?
 	ULONG 			_referenceCount;
 	char 			_streamName[FILENAME_MAX];	// TODO: does gsf store this somewhere?
 };
