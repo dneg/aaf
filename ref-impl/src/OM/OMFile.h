@@ -328,6 +328,8 @@ private:
 
   void createModify(void);
 
+  void createWrite(void);
+
   OMRootStorable* _root;
   OMStoredObject* _rootStore;
 
