@@ -118,10 +118,6 @@ SOURCE="..\..\..\ref-impl\src\OM\OMFile.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\OM\OMIdentitySetT.h"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\src\OM\OMIntegerType.cpp"
 # End Source File
 # Begin Source File
@@ -195,10 +191,6 @@ SOURCE="..\..\..\ref-impl\src\OM\OMRefVectorProperty.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\OM\OMRootStorable.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\OM\OMSingletonT.h"
 # End Source File
 # Begin Source File
 
@@ -339,6 +331,10 @@ SOURCE="..\..\..\ref-impl\src\OM\OMFixedSizePropertyT.h"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\include\OM\OMIdentitySet.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\OM\OMIdentitySetT.h"
 # End Source File
 # Begin Source File
 
@@ -519,6 +515,10 @@ SOURCE="..\..\..\ref-impl\src\OM\OMSetT.h"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\include\OM\OMSingleton.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\OM\OMSingletonT.h"
 # End Source File
 # Begin Source File
 
