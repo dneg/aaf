@@ -11,10 +11,10 @@
 TOOLNAME=${0##*/}
 TOOLPATH=${0%/${TOOLNAME}}
 
-if [[ ${#} != 1 ]]
+if [[ ${#} != 2 ]]
 then
   echo "$TOOLNAME : Error wrong number of arguments (${#})."
-  echo "$TOOLNAME : Usage : $TOOLNAME <tagdates>"
+  echo "$TOOLNAME : Usage : $TOOLNAME <tagdates> <colormap>"
   exit 1
 fi
 
@@ -23,6 +23,14 @@ tagstufffile=${1}
 if [[ ! -s $tagstufffile ]]
 then
   echo "$TOOLNAME : Can't find tag dates \"${tagstufffile}\"."
+  exit 1
+fi
+
+cmfile=${2}
+
+if [[ ! -s $cmfile ]]
+then
+  echo "$TOOLNAME : Can't find color map \"${cmfile}\"."
   exit 1
 fi
 
@@ -89,7 +97,7 @@ do
   # 
   if [[ ! -f $html ]]
   then
-    cat $clog | awk -f ${TOOLPATH}/cl2html.awk ${TOOLPATH}/AAFcolormap > $html
+    cat $clog | awk -f ${TOOLPATH}/cl2html.awk ${cmfile} > $html
   fi
   #
   # next tag
