@@ -126,14 +126,14 @@ typedef struct _kind_info_t
 } kind_info_t;
 
 kind_info_t filekind[] = {
-	{ &aafFileKindAaf4KBinary, "4K" },
-	{ &aafFileKindAaf512Binary, "512" },
-	{ &aafFileKindAafS4KBinary, "S4K" },
-	{ &aafFileKindAafS512Binary, "S512" },
-	{ &aafFileKindAafM4KBinary, "M4K" },
-	{ &aafFileKindAafM512Binary, "M512" },
-	{ &aafFileKindAafG4KBinary, "G4K" },
-	{ &aafFileKindAafG512Binary, "G512" },
+	{ &kAAFFileKind_Aaf4KBinary, "4K" },
+	{ &kAAFFileKind_Aaf512Binary, "512" },
+	{ &kAAFFileKind_AafS4KBinary, "S4K" },
+	{ &kAAFFileKind_AafS512Binary, "S512" },
+	{ &kAAFFileKind_AafM4KBinary, "M4K" },
+	{ &kAAFFileKind_AafM512Binary, "M512" },
+	{ &kAAFFileKind_AafG4KBinary, "G4K" },
+	{ &kAAFFileKind_AafG512Binary, "G512" },
 	{ NULL, ""} };
 
 
@@ -310,28 +310,28 @@ static HRESULT OpenAAFFile(const aafUID_t *written_kind, aafWChar * pFileName)
 					// For RawStorage some combinations are designed not to work
 					// such as reading a 4K file using a 512 implementation
 					// or reading a 512 file using a 4K implementation.
-					if ((filekind[j].kind == &aafFileKindAaf512Binary ||
-						filekind[j].kind == &aafFileKindAafS512Binary ||
-						filekind[j].kind == &aafFileKindAafM512Binary ||
-						filekind[j].kind == &aafFileKindAafG512Binary) &&
+					if ((filekind[j].kind == &kAAFFileKind_Aaf512Binary ||
+						filekind[j].kind == &kAAFFileKind_AafS512Binary ||
+						filekind[j].kind == &kAAFFileKind_AafM512Binary ||
+						filekind[j].kind == &kAAFFileKind_AafG512Binary) &&
 							(written_kind == NULL ||	// NULL (meaning NM default) is 4K
-							written_kind == &aafFileKindAaf4KBinary ||
-							written_kind == &aafFileKindAafS4KBinary ||
-							written_kind == &aafFileKindAafM4KBinary ||
-							written_kind == &aafFileKindAafG4KBinary))
+							written_kind == &kAAFFileKind_Aaf4KBinary ||
+							written_kind == &kAAFFileKind_AafS4KBinary ||
+							written_kind == &kAAFFileKind_AafM4KBinary ||
+							written_kind == &kAAFFileKind_AafG4KBinary))
 					{
 						printf("   ic   ");
 						continue;
 					}
-					if ((filekind[j].kind == &aafFileKindAaf4KBinary ||
-						filekind[j].kind == &aafFileKindAafS4KBinary ||
-						filekind[j].kind == &aafFileKindAafM4KBinary ||
-						filekind[j].kind == &aafFileKindAafG4KBinary) &&
+					if ((filekind[j].kind == &kAAFFileKind_Aaf4KBinary ||
+						filekind[j].kind == &kAAFFileKind_AafS4KBinary ||
+						filekind[j].kind == &kAAFFileKind_AafM4KBinary ||
+						filekind[j].kind == &kAAFFileKind_AafG4KBinary) &&
 							(
-							written_kind == &aafFileKindAaf512Binary ||
-							written_kind == &aafFileKindAafS512Binary ||
-							written_kind == &aafFileKindAafM512Binary ||
-							written_kind == &aafFileKindAafG512Binary))
+							written_kind == &kAAFFileKind_Aaf512Binary ||
+							written_kind == &kAAFFileKind_AafS512Binary ||
+							written_kind == &kAAFFileKind_AafM512Binary ||
+							written_kind == &kAAFFileKind_AafG512Binary))
 					{
 						printf("   ic   ");
 						continue;
