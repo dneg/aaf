@@ -130,6 +130,10 @@ SOURCE="..\..\..\ref-impl\src\OM\OMIntegerType.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\OM\OMIOStream.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\OM\OMKLVStoredObject.cpp"
 # End Source File
 # Begin Source File
@@ -371,6 +375,10 @@ SOURCE="..\..\..\ref-impl\src\OM\OMIdentitySetT.h"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\include\OM\OMIntegerType.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\include\OM\OMIOStream.h"
 # End Source File
 # Begin Source File
 
