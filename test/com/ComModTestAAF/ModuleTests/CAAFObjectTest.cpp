@@ -114,7 +114,7 @@ static HRESULT ObjectTest ()
 	  checkResult (pCMob->QueryInterface (IID_IAAFMob,
 										  (void **) &pMob));
 	  assert (pMob);
-	  checkResult (pHeader->AppendMob (pMob));
+	  checkResult (pHeader->AddMob (pMob));
 
 	  checkResult (pCMob->QueryInterface (IID_IAAFObject,
 										  (void **) &pObj));

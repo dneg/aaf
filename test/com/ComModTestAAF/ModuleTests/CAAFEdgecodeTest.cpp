@@ -72,7 +72,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFDictionary*				pDictionary = NULL;
 	IAAFCompositionMob*			pCompMob=NULL;
 	IAAFMob						*pMob = NULL;
-	IAAFMobSlot					*pNewSlot = NULL;
+	IAAFTimelineMobSlot			*pNewSlot = NULL;
 	IAAFEdgecode				*pEdgecode = NULL;
 	IAAFSegment					*pSeg = NULL;
 
@@ -135,9 +135,15 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pEdgecode->Create (zero, startEC));
 		checkResult(pEdgecode->QueryInterface (IID_IAAFSegment, (void **)&pSeg));
 
-		checkResult(pMob->AppendNewSlot (pSeg, 0, L"edgecode", &pNewSlot));
+		aafRational_t editRate = { 0, 1};
+		checkResult(pMob->AppendNewTimelineSlot (editRate,
+												 pSeg,
+												 0,
+												 L"edgecode",
+												 0,
+												 &pNewSlot));
 		
-		checkResult(pHeader->AppendMob(pMob));
+		checkResult(pHeader->AddMob(pMob));
 	}
   catch (HRESULT& rResult)
   {
@@ -221,13 +227,13 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		checkResult(pFile->GetHeader(&pHeader));
 
 		// Get the number of mobs in the file (should be one)
-		checkResult(pHeader->GetNumMobs(kAllMob, &numMobs));
+		checkResult(pHeader->CountMobs(kAllMob, &numMobs));
 		checkExpression(1 == numMobs, AAFRESULT_TEST_FAILED);
 
-    checkResult(pHeader->EnumAAFAllMobs( NULL, &pMobIter));
+    checkResult(pHeader->GetMobs( NULL, &pMobIter));
 		while (AAFRESULT_SUCCESS == pMobIter->NextOne(&pMob))
 		{
-      checkResult(pMob->EnumAAFAllMobSlots (&pEnum));
+      checkResult(pMob->GetSlots (&pEnum));
 
       while (AAFRESULT_SUCCESS == pEnum->NextOne (&pMobSlot))
       {

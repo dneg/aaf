@@ -75,7 +75,7 @@ ImplAAFEssenceDescriptor::~ImplAAFEssenceDescriptor ()
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceDescriptor::GetNumLocators (aafInt32 *pCount)
+    ImplAAFEssenceDescriptor::CountLocators (aafUInt32 *pCount)
 {
 	size_t	siz;
 	if (! pCount)
@@ -131,6 +131,58 @@ AAFRESULT STDMETHODCALLTYPE
   //@comm    Use this function to add a locator to be scanned first when searching for
   // the essence (a secondary location for the essence).
 
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFEssenceDescriptor::InsertLocatorAt (aafUInt32 index,
+											   ImplAAFLocator *pLocator)
+{
+  if (! pLocator) return AAFRESULT_NULL_PARAM;
+
+  aafUInt32 count;
+  AAFRESULT hr;
+  hr = CountLocators (&count);
+  if (AAFRESULT_FAILED (hr)) return hr;
+
+  if (index > count)
+	return AAFRESULT_BADINDEX;
+
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFEssenceDescriptor::GetLocatorAt (aafUInt32 index,
+											ImplAAFLocator ** ppLocator)
+{
+  if (! ppLocator) return AAFRESULT_NULL_PARAM;
+
+  aafUInt32 count;
+  AAFRESULT hr;
+  hr = CountLocators (&count);
+  if (AAFRESULT_FAILED (hr)) return hr;
+
+  if (index >= count)
+	return AAFRESULT_BADINDEX;
+
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFEssenceDescriptor::RemoveLocatorAt (aafUInt32 index)
+{
+  aafUInt32 count;
+  AAFRESULT hr;
+  hr = CountLocators (&count);
+  if (AAFRESULT_FAILED (hr)) return hr;
+
+  if (index >= count)
+	return AAFRESULT_BADINDEX;
+
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFEssenceDescriptor::RemoveLocator (ImplAAFLocator * /*pLocator*/)
 {
@@ -139,7 +191,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceDescriptor::EnumAAFAllLocators (ImplEnumAAFLocators **ppEnum)
+    ImplAAFEssenceDescriptor::GetLocators (ImplEnumAAFLocators **ppEnum)
 {
 	ImplEnumAAFLocators		*theEnum = (ImplEnumAAFLocators *)CreateImpl (CLSID_EnumAAFLocators);
 		

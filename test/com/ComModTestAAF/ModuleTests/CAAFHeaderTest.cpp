@@ -326,7 +326,7 @@ void HeaderTest::createFileMob(int itemNumber)
                                           (void **)&_pEssenceDescriptor));
   check(_pSourceMob->SetEssenceDescriptor (_pEssenceDescriptor));
 
-  check(_pHeader->AppendMob(_pMob));
+  check(_pHeader->AddMob(_pMob));
 
   createEssenceData(_pSourceMob);
 
@@ -357,7 +357,7 @@ void HeaderTest::createEssenceData(IAAFSourceMob *pSourceMob)
                          (IUnknown **)&_pEssenceData));
 
   check(_pEssenceData->SetFileMob(pSourceMob));
-  check(_pHeader->AppendEssenceData(_pEssenceData));
+  check(_pHeader->AddEssenceData(_pEssenceData));
   
   _pEssenceData->Release();
   _pEssenceData = NULL;
@@ -372,11 +372,11 @@ void HeaderTest::openMobs()
 
 
   aafNumSlots_t mobCount = 0;
-  check(_pHeader->GetNumMobs(kAllMob, &mobCount));
+  check(_pHeader->CountMobs(kAllMob, &mobCount));
   if (gMaxMobCount != mobCount)
     check(AAFRESULT_TEST_FAILED);
  
-  check(_pHeader->EnumAAFAllMobs(NULL, &_pEnumMobs));
+  check(_pHeader->GetMobs(NULL, &_pEnumMobs));
   for (aafUInt32 item = 0; item < mobCount; ++item)
   {
     check(_pEnumMobs->NextOne(&_pMob));
@@ -420,7 +420,7 @@ void HeaderTest::openEssenceData()
   assert(NULL == _pSourceMob);
 
   aafUInt32 essenceDataCount = 0;
-  check(_pHeader->GetNumEssenceData(&essenceDataCount));
+  check(_pHeader->CountEssenceData(&essenceDataCount));
   if (gMaxMobCount != essenceDataCount)
     check(AAFRESULT_TEST_FAILED);
  

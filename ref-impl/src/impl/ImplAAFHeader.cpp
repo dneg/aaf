@@ -168,7 +168,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFHeader::GetNumMobs (aafMobKind_t mobKind,
+    ImplAAFHeader::CountMobs (aafMobKind_t mobKind,
                            aafNumSlots_t *pNumMobs)
 {
     ImplAAFContentStorage *cstore = NULL;
@@ -180,7 +180,7 @@ AAFRESULT STDMETHODCALLTYPE
 	XPROTECT()
 	{
 		cstore = GetContentStorage();		// Does not AddRef
-		CHECK(cstore->GetNumMobs(mobKind, pNumMobs));
+		CHECK(cstore->CountMobs(mobKind, pNumMobs));
 	}
 	XEXCEPT
 	XEND
@@ -190,7 +190,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFHeader::EnumAAFAllMobs (aafSearchCrit_t *pSearchCriteria,
+    ImplAAFHeader::GetMobs (aafSearchCrit_t *pSearchCriteria,
                            ImplEnumAAFMobs **ppEnum)
 {
     ImplAAFContentStorage *cstore = NULL;
@@ -213,7 +213,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFHeader::AppendMob (ImplAAFMob *pMob)
+    ImplAAFHeader::AddMob (ImplAAFMob *pMob)
 {
     ImplAAFContentStorage *cstore = NULL;
 
@@ -224,7 +224,7 @@ AAFRESULT STDMETHODCALLTYPE
 	XPROTECT()
 	{
 		cstore = GetContentStorage();		// Does not AddRef
-		CHECK(cstore->AppendMob(pMob));
+		CHECK(cstore->AddMob(pMob));
 	}
 	XEXCEPT
 	XEND
@@ -255,7 +255,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFHeader::GetNumEssenceData(aafUInt32 *  pNumEssenceData)
+    ImplAAFHeader::CountEssenceData(aafUInt32 *  pNumEssenceData)
 {
     ImplAAFContentStorage *cstore = NULL;
 
@@ -265,7 +265,7 @@ AAFRESULT STDMETHODCALLTYPE
 	XPROTECT()
 	{
 		cstore = GetContentStorage();		// Does not AddRef
-		CHECK(cstore->GetNumEssenceData(pNumEssenceData));
+		CHECK(cstore->CountEssenceData(pNumEssenceData));
 	}
 	XEXCEPT
 	XEND
@@ -322,7 +322,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFHeader::AppendEssenceData (ImplAAFEssenceData * pEssenceData)
+    ImplAAFHeader::AddEssenceData (ImplAAFEssenceData * pEssenceData)
 {
     ImplAAFContentStorage *cstore = NULL;
 	if (! pEssenceData)
@@ -332,7 +332,7 @@ AAFRESULT STDMETHODCALLTYPE
 	XPROTECT()
 	{
 		cstore = GetContentStorage();		// Does not AddRef
-		CHECK(cstore->AppendEssenceData(pEssenceData));
+		CHECK(cstore->AddEssenceData(pEssenceData));
 	}
 	XEXCEPT
 	XEND
@@ -435,7 +435,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFHeader::GetIdentificationByGen (const aafUID_t & generation,
+    ImplAAFHeader::LookupIdentification (const aafUID_t & generation,
                            ImplAAFIdentification ** ppIdentification)
 {
   if ((! ppIdentification))
@@ -447,7 +447,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-ImplAAFHeader::GetNumIdents
+ImplAAFHeader::CountIdentifications
 (aafUInt32 *  pNumIdents)
 {
  	size_t	siz;
@@ -463,7 +463,7 @@ ImplAAFHeader::GetNumIdents
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFHeader::EnumAAFIdents (ImplEnumAAFIdentifications ** ppEnum)
+    ImplAAFHeader::GetIdentifications (ImplEnumAAFIdentifications ** ppEnum)
 {
 	if (NULL == ppEnum)
 		return AAFRESULT_NULL_PARAM;
@@ -488,8 +488,27 @@ AAFRESULT STDMETHODCALLTYPE
 	return(AAFRESULT_SUCCESS);
 }
 
+
+AAFRESULT STDMETHODCALLTYPE
+ImplAAFHeader::GetIdentificationAt
+(aafUInt32 index,
+ ImplAAFIdentification ** ppIdentification)
+{
+  if (! ppIdentification)
+	return AAFRESULT_NULL_PARAM;
+
+  aafUInt32 max;
+  CountIdentifications(&max);
+  if (index >= max)
+	return AAFRESULT_BADINDEX;
+
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+
+/*
 AAFRESULT 
-    ImplAAFHeader::GetNumIdentifications (aafInt32 *pCount)
+    ImplAAFHeader::CountIdentifications (aafInt32 *pCount)
 {
   if (! pCount)
 	{
@@ -500,6 +519,7 @@ AAFRESULT
 	*pCount = size;
   return AAFRESULT_SUCCESS;
 }
+*/
 
 AAFRESULT 
     ImplAAFHeader::AddIdentificationObject (aafProductIdentification_t *pIdent)

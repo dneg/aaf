@@ -421,7 +421,8 @@ AAFRESULT STDMETHODCALLTYPE
 	ImplAAFTimelineMobSlot	*newSlot, *slot;
   	aafFrameOffset_t		tcStartPos;
   	aafTimecode_t			timecode;
-  	aafInt32				sequLoop, numSegs;
+  	aafUInt32				sequLoop;
+	aafUInt32				numSegs;
     ImplEnumAAFComponents	*sequIter = NULL;
 
 	XPROTECT()
@@ -468,8 +469,8 @@ AAFRESULT STDMETHODCALLTYPE
 	  	{
 			CHECK(slot->GetSegment(&seg));
 			CHECK(seg->GenerateSequence(&segSequ));
-  			CHECK(segSequ->EnumComponents(&sequIter));
-  			CHECK(segSequ->GetNumComponents(&numSegs));
+  			CHECK(segSequ->GetComponents(&sequIter));
+  			CHECK(segSequ->CountComponents(&numSegs));
 			for (sequLoop=0, sequPos = 0; sequLoop < numSegs; sequLoop++, sequPos += segLen)
 			{
 				CHECK(sequIter->NextOne(&subSegment));
@@ -716,10 +717,11 @@ AAFRESULT STDMETHODCALLTYPE
 			if(sequence != NULL)
 			{
 				aafLength_t			foundLen;
-				aafInt32			numSegments, n;
+				aafUInt32			numSegments;
+				aafUInt32			n;
 				ImplAAFComponent 	*subSeg;
 				
-				CHECK(sequence->GetNumComponents(&numSegments));
+				CHECK(sequence->CountComponents(&numSegments));
 				if(numSegments == 0)
 				{
 					CHECK(sequence->AppendComponent(pdwn));
@@ -863,7 +865,7 @@ AAFRESULT ImplAAFSourceMob::FindTimecodeClip(
 		CvtInt32toInt64(0, &zeroLen);
 		*tcStartPos = 0;
 		*result = NULL;
-		CHECK(EnumAAFAllMobSlots (&slotIter));
+		CHECK(GetSlots (&slotIter));
 		while((found != AAFTrue) && slotIter->NextOne(&slot) == AAFRESULT_SUCCESS)
 		{
 			CHECK(slot->GetDataDef (&dataDef));
@@ -943,8 +945,8 @@ AAFRESULT ImplAAFSourceMob::ReconcileMobLength(void)
 		physMedia = dynamic_cast<ImplAAFFileDescriptor*>(edesc);
 		if(physMedia != NULL)
 		{
-			CHECK(EnumAAFAllMobSlots (&slotIter));
-			CHECK(GetNumSlots(&numSlots));
+			CHECK(GetSlots (&slotIter));
+			CHECK(CountSlots(&numSlots));
 			for (loop = 1; loop <= numSlots; loop++)
 			{
 				CHECK(slotIter->NextOne((ImplAAFMobSlot **)&slot));

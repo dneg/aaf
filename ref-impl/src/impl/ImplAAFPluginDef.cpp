@@ -842,7 +842,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFPluginDescriptor::GetNumLocators (
+    ImplAAFPluginDescriptor::CountLocators (
       aafUInt32 *pCount)
 {
 	size_t	siz;
@@ -900,6 +900,65 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
+    ImplAAFPluginDescriptor::InsertLocatorAt (
+	  aafUInt32 index,
+      ImplAAFLocator *pLocator)
+{
+	if(pLocator == NULL)
+		return(AAFRESULT_NULL_PARAM);
+
+	aafUInt32 count;
+	AAFRESULT hr;
+	hr = CountLocators (&count);
+	if (AAFRESULT_FAILED (hr)) return hr;
+
+	if (index > count)
+	  return AAFRESULT_BADINDEX;
+
+	return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFPluginDescriptor::GetLocatorAt (
+	  aafUInt32 index,
+      ImplAAFLocator ** ppLocator)
+{
+	if(ppLocator == NULL)
+		return(AAFRESULT_NULL_PARAM);
+
+	aafUInt32 count;
+	AAFRESULT hr;
+	hr = CountLocators (&count);
+	if (AAFRESULT_FAILED (hr)) return hr;
+
+	if (index >= count)
+	  return AAFRESULT_BADINDEX;
+
+	return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFPluginDescriptor::RemoveLocatorAt (
+	  aafUInt32 index)
+{
+	aafUInt32 count;
+	AAFRESULT hr;
+	hr = CountLocators (&count);
+	if (AAFRESULT_FAILED (hr)) return hr;
+
+	if (index >= count)
+	  return AAFRESULT_BADINDEX;
+
+	return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
     ImplAAFPluginDescriptor::IsPluginLocal (
       aafBool *  /*pIsLocal*/)
 {
@@ -930,7 +989,7 @@ AAFRESULT STDMETHODCALLTYPE
   
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFPluginDescriptor::EnumPluginLocators (
+    ImplAAFPluginDescriptor::GetLocators (
       ImplEnumAAFPluginLocators **ppEnum)
 {
 	ImplEnumAAFPluginLocators		*theEnum = (ImplEnumAAFPluginLocators *)CreateImpl (CLSID_EnumAAFPluginLocators);
@@ -972,6 +1031,7 @@ AAFRESULT
 }
 
 // Internal to the toolkit functions
+/*
 AAFRESULT
     ImplAAFPluginDescriptor::GetNumLocators (aafInt32 *pCount)
 {
@@ -985,7 +1045,7 @@ AAFRESULT
 	*pCount = siz;
 	return(AAFRESULT_SUCCESS);
 }
-
+*/
 
 
 

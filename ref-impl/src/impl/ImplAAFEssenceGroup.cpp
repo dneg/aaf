@@ -85,7 +85,7 @@ ImplAAFEssenceGroup::~ImplAAFEssenceGroup ()
 	}
 }
 
-/****/
+
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFEssenceGroup::SetStillFrame (
       ImplAAFSourceClip *stillFrame)
@@ -105,7 +105,7 @@ AAFRESULT STDMETHODCALLTYPE
 		CHECK(stillFrame->GetDataDef(&newDataDef));
 		CHECK(GetDataDef(&groupDataDef));
 		CHECK(GetDictionary(&pDict));
-		CHECK(pDict->LookupDataDefinition(newDataDef, &pDef));
+		CHECK(pDict->LookupDataDef(newDataDef, &pDef));
 		pDict->ReleaseReference();
 		pDict = NULL;
 		CHECK(pDef->DoesDataDefConvertTo(groupDataDef, &willConvert));
@@ -149,7 +149,7 @@ AAFRESULT STDMETHODCALLTYPE
 	return AAFRESULT_SUCCESS;
 }
 
-/****/
+
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFEssenceGroup::GetStillFrame (
       ImplAAFSourceClip **stillFrame)
@@ -170,7 +170,7 @@ AAFRESULT STDMETHODCALLTYPE
 
     //@comm Essence group choices should be added with the AddChoice() function.
     
-/****/
+
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFEssenceGroup::AppendChoice (
       ImplAAFSourceClip *choice)
@@ -190,7 +190,7 @@ AAFRESULT STDMETHODCALLTYPE
 		CHECK(GetDataDef(&groupDataDef));
 		/* Verify that groups's datakind converts to still's datakind */
 		CHECK(GetDictionary(&pDict));
-		CHECK(pDict->LookupDataDefinition(newDataDef, &pDef));
+		CHECK(pDict->LookupDataDef(newDataDef, &pDef));
 		pDict->ReleaseReference();
 		pDict = NULL;
 		CHECK(pDef->DoesDataDefConvertTo(groupDataDef, &willConvert));
@@ -226,9 +226,42 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 
-/****/
+
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceGroup::GetNumChoices (
+    ImplAAFEssenceGroup::PrependChoice (
+      ImplAAFSourceClip *choice)
+{
+  if (! choice)
+	return AAFRESULT_NULL_PARAM;
+
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFEssenceGroup::InsertChoiceAt (
+	  aafUInt32 index,
+      ImplAAFSourceClip *choice)
+{
+  if (! choice)
+	return AAFRESULT_NULL_PARAM;
+
+  aafUInt32 count;
+  AAFRESULT hr;
+  hr = CountChoices (&count);
+  if (AAFRESULT_FAILED (hr)) return hr;
+
+  if (index > count)
+	return AAFRESULT_BADINDEX;
+
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFEssenceGroup::CountChoices (
       aafUInt32  *result)
 {
 	size_t	numClips;
@@ -239,9 +272,9 @@ AAFRESULT STDMETHODCALLTYPE
 	return AAFRESULT_SUCCESS;
 }
 
-/****/
+
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceGroup::GetIndexedChoice (
+    ImplAAFEssenceGroup::GetChoiceAt (
       aafUInt32  index,
       ImplAAFSourceClip  **result)
 {
@@ -261,6 +294,23 @@ AAFRESULT STDMETHODCALLTYPE
 
 	return AAFRESULT_SUCCESS;
 }
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFEssenceGroup::RemoveChoiceAt (
+      aafUInt32  index)
+{
+  aafUInt32 count;
+  AAFRESULT hr;
+  hr = CountChoices (&count);
+  if (AAFRESULT_FAILED (hr)) return hr;
+
+  if (index > count)
+	return AAFRESULT_BADINDEX;
+
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
 
 AAFRESULT ImplAAFEssenceGroup::GetMinimumBounds(aafPosition_t rootPos, aafLength_t rootLen,
 										ImplAAFMob *mob, ImplAAFMobSlot *track,
@@ -344,10 +394,10 @@ AAFRESULT ImplAAFEssenceGroup::GetCriteriaSourceClip(
 		
 	XPROTECT()
 	{
-		CHECK(GetNumChoices(&numReps));
+		CHECK(CountChoices(&numReps));
 		for(n = 0; n < numReps; n++)
 		{
-			CHECK(GetIndexedChoice(n, &sourceClip));
+			CHECK(GetChoiceAt(n, &sourceClip));
 			if(numReps == 0)
 			{
 				highestScoreSourceClip = sourceClip;
@@ -407,5 +457,3 @@ AAFRESULT ImplAAFEssenceGroup::GetCriteriaSourceClip(
 	*retSrcClip = highestScoreSourceClip;
 	return(AAFRESULT_SUCCESS);
 }
-
-

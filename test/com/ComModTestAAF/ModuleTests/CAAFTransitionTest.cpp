@@ -90,7 +90,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFDictionary*				pDictionary = NULL;
 	IAAFCompositionMob*			pCompMob=NULL;
 	IAAFMob*					pMob = NULL;
-	IAAFMobSlot*				pNewSlot = NULL;
+	IAAFTimelineMobSlot*		pNewSlot = NULL;
 	IAAFSourceClip*				pSourceClip = NULL;
 	IAAFSourceReference*		pSourceRef = NULL;
 	IAAFTransition*				pTransition = NULL;
@@ -154,8 +154,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 							  IID_IAAFParameterDef, 
 							  (IUnknown **)&pParamDef));
 
-		checkResult(pDictionary->RegisterOperationDefinition(pOperationDef));
-		checkResult(pDictionary->RegisterParameterDefinition(pParamDef));
+		checkResult(pDictionary->RegisterOperationDef(pOperationDef));
+		checkResult(pDictionary->RegisterParameterDef(pParamDef));
 
 		checkResult(pOperationDef->QueryInterface(IID_IAAFDefObject, (void **) &pDefObject));
 		checkResult(pDefObject->Initialize (effectID, TEST_EFFECT_NAME, TEST_EFFECT_DESC));
@@ -166,10 +166,10 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pOperationDef->SetIsTimeWarp (AAFFalse));
 		checkResult(pOperationDef->SetNumberInputs (TEST_NUM_INPUTS));
 		checkResult(pOperationDef->SetCategory (TEST_CATEGORY));
-		checkResult(pOperationDef->AddParameterDefs (pParamDef));
+		checkResult(pOperationDef->AddParameterDef (pParamDef));
 		checkResult(pOperationDef->SetBypass (TEST_BYPASS));
 		// !!!Added circular definitions because we don't have optional properties
-		checkResult(pOperationDef->AppendDegradeToOperations (pOperationDef));
+		checkResult(pOperationDef->AppendDegradeToOperation (pOperationDef));
 
 		checkResult(pParamDef->SetDisplayUnits(TEST_PARAM_UNITS));
 		checkResult(pParamDef->QueryInterface(IID_IAAFDefObject, (void **) &pDefObject));
@@ -211,8 +211,13 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		pComponent = NULL;
 
 		// Create a new Mob Slot that will contain the sequence
-		checkResult(pMob->AppendNewSlot(pSegment, 1, L"Transition", &pNewSlot));
-
+		aafRational_t editRate = { 0, 1};
+		checkResult(pMob->AppendNewTimelineSlot(editRate,
+												pSegment,
+												1,
+												L"Transition",
+												0,
+												&pNewSlot));
 
 		// Create a Filler
 		checkResult(pDictionary->CreateInstance(AUID_AAFFiller,
@@ -248,11 +253,11 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pParm->SetParameterDefinition (pParamDef));
  // !!!  ImplAAFParameter::SetTypeDefinition (ImplAAFTypeDef*  pTypeDef)
 		checkResult(pOperationGroup->Initialize(datadef, transitionLength, pOperationDef));
-		checkResult(pOperationGroup->AddNewParameter (pParm));
+		checkResult(pOperationGroup->AddParameter (pParm));
 		checkResult(pDictionary->CreateInstance(AUID_AAFFiller,
 												IID_IAAFSegment,
 												(IUnknown **) &pEffectFiller));
-		checkResult(pOperationGroup->AppendNewInputSegment (pEffectFiller));
+		checkResult(pOperationGroup->AppendInputSegment (pEffectFiller));
 		// release the filler
 		pEffectFiller->Release();
 		pEffectFiller  = NULL;
@@ -295,7 +300,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		pFiller = NULL;
 
 		// Now, we append the composition mob to the file	
-		checkResult(pHeader->AppendMob(pMob));
+		checkResult(pHeader->AddMob(pMob));
 		// and we are done !
 	}
 	catch (HRESULT& rResult)
@@ -389,7 +394,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 
 	aafProductIdentification_t	ProductInfo;
 	aafNumSlots_t				numMobs;
-	aafInt32					numComponents = 0;
+	aafUInt32					numComponents = 0;
 	HRESULT						hr = S_OK;
 
 	ProductInfo.companyName = L"AAF Developers Desk. NOT!";
@@ -413,13 +418,13 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		checkResult(pFile->GetHeader(&pHeader));
 
 		// Get the number of mobs in the file (should be one)
-		checkResult(pHeader->GetNumMobs(kAllMob, &numMobs));
+		checkResult(pHeader->CountMobs(kAllMob, &numMobs));
 		checkExpression(1 == numMobs, AAFRESULT_TEST_FAILED);
 
-		checkResult(pHeader->EnumAAFAllMobs( NULL, &pMobIter));
+		checkResult(pHeader->GetMobs( NULL, &pMobIter));
 		while (AAFRESULT_SUCCESS == pMobIter->NextOne(&pMob))
 		{
-			checkResult(pMob->EnumAAFAllMobSlots (&pEnum));
+			checkResult(pMob->GetSlots (&pEnum));
 
 			while (AAFRESULT_SUCCESS == pEnum->NextOne (&pMobSlot))
 			{
@@ -427,10 +432,10 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 				// Check to see if Segment is a Sequence
 				checkResult(pSegment->QueryInterface(IID_IAAFSequence, (void **) &pSequence));
 				// It is, so get a Component Iterator
-				checkResult(pSequence->GetNumComponents(&numComponents));
+				checkResult(pSequence->CountComponents(&numComponents));
 				// Verify that all 3 components(Filler, Transition, Filler) are present
 				checkExpression(numComponents == 3,  AAFRESULT_TEST_FAILED);
-				checkResult(pSequence->EnumComponents(&pCompIter));
+				checkResult(pSequence->GetComponents(&pCompIter));
 				// Now visit each and every one of the components.
 				while(AAFRESULT_SUCCESS == pCompIter->NextOne(&pComponent))
 				{

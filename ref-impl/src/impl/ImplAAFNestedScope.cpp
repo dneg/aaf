@@ -103,15 +103,81 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFNestedScope::RemoveSegment (
-      ImplAAFSegment * /*pSegment*/)
+    ImplAAFNestedScope::PrependSegment (ImplAAFSegment* pSegment)
 {
+	if(pSegment == NULL)
+		return(AAFRESULT_NULL_PARAM);
+
+	return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFNestedScope::InsertSegmentAt (aafUInt32 index,
+										 ImplAAFSegment* pSegment)
+{
+  if(pSegment == NULL)
+	return(AAFRESULT_NULL_PARAM);
+
+  aafUInt32 count;
+  AAFRESULT hr;
+  hr = CountSegments (&count);
+  if (AAFRESULT_FAILED (hr)) return hr;
+
+  if (index > count)
+	return AAFRESULT_BADINDEX;
+
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFNestedScope::CountSegments (aafUInt32 * pResult)
+{
+  if(pResult == NULL)
+	return(AAFRESULT_NULL_PARAM);
+
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFNestedScope::GetSegmentAt (aafUInt32 index,
+									  ImplAAFSegment ** ppSegment)
+{
+  if(ppSegment == NULL)
+	return(AAFRESULT_NULL_PARAM);
+
+  aafUInt32 count;
+  AAFRESULT hr;
+  hr = CountSegments (&count);
+  if (AAFRESULT_FAILED (hr)) return hr;
+
+  if (index >= count)
+	return AAFRESULT_BADINDEX;
+
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFNestedScope::RemoveSegmentAt (
+      aafUInt32 index)
+{
+  aafUInt32 count;
+  AAFRESULT hr;
+  hr = CountSegments (&count);
+  if (AAFRESULT_FAILED (hr)) return hr;
+
+  if (index >= count)
+	return AAFRESULT_BADINDEX;
+
   return AAFRESULT_NOT_IN_CURRENT_VERSION;
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFNestedScope::GetSlots (ImplEnumAAFSegments** ppEnum)
+    ImplAAFNestedScope::GetSegments (ImplEnumAAFSegments** ppEnum)
 {
 	if(ppEnum == NULL)
 		return(AAFRESULT_NULL_PARAM);
