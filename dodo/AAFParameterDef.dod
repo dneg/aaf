@@ -77,25 +77,29 @@ AD_METHOD1(SetDescription,
 		   Display Units,
 		   Sets the display units of the control code definition.)
 
-AD_METHOD1(AppendRefValue,
-		   [in\,ref],
-		   AD_AAFTYPES\(AAFReferenceValue\) *,
-		   pRefValue, 
-		   Ref value to be added,
-		   Add the reference value  to the ref value list.)
+AD_XMETHOD1(AppendRefValue,
+			[in\,ref],
+			objIn,
+			AAFReferenceValue,
+			pRefValue, 
+			Ref value to be added,
+			Add the reference value  to the ref value list.)
 
-AD_METHOD1(RemoveRefValue,
-		   [in\,ref],
-		   AD_AAFTYPES\(AAFReferenceValue\) *,
-		   pRefValue, 
-		   Ref value to be removed,
-		   Remove the reference value from the ref value list.)
+AD_XMETHOD1(RemoveRefValue,
+			[in\,ref],
+			objIn,
+			AAFReferenceValue,
+			pRefValue, 
+			Ref value to be removed,
+			Remove the reference value from the ref value list.)
 
-AD_METHOD1(GetRefValues,
-		   [out\,retval], AD_AAFTYPES\(EnumAAFReferenceValue\) **, 
-		   ppEnum, 
-		   Reference value Enumeration,
-		   Return an enumerator for the reference values.)
+AD_XMETHOD1(GetRefValues,
+			[out\,retval],
+			objOut,
+			EnumAAFReferenceValue,
+			ppEnum, 
+			Reference value Enumeration,
+			Return an enumerator for the reference values.)
 
 AD_OVERRIDE(.method-Test)
 
