@@ -18,6 +18,7 @@
 #endif
 
 #include "AAFTypes.h"
+#include "AAFResult.h"
 
 #include <assert.h>
 
@@ -107,108 +108,240 @@ extern "C" const aafClassID_t CLSID_AAFIdentification;
 
 OMDEFINE_STORABLE(AAFIdentification, CLSID_AAFIdentification);
 
-static void stringPropertyToAAFString(aafString_t *aafString, OMStringProperty& stringProperty)
+/* returns true if string fits into buffer and does the conversion.
+   Returns false otherwise. */
+static bool stringPropertyToWCharString(aafWChar *pWString,
+										aafInt32 buflen,
+										OMStringProperty& stringProperty)
 {
   const char* string = stringProperty;
-  aafString->length = stringProperty.length();
-  aafString->value = new aafWChar[aafString->length + 1];
-  mbstowcs(aafString->value, string, aafString->length);
-  aafString->value[aafString->length] = L'\0';
+  int slen = stringProperty.length();
+  if (buflen < slen)
+	{
+	  return false;
+	}
+  mbstowcs(pWString, string, slen);
+  pWString[slen] = L'\0';
+  return true;
 }
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFIdentification::GetCompanyName (aafString_t *  pCompanyName)
+    ImplAAFIdentification::GetCompanyName (aafWChar *  pName,
+										   aafInt32 bufSize)
 {
-  stringPropertyToAAFString(pCompanyName, _companyName);
+  bool stat;
+  if (! pName)
+	{
+	  return AAFRESULT_NULL_PARAM;
+	}
+  stat = stringPropertyToWCharString(pName, bufSize, _companyName);
+  if (! stat)
+	{
+	  return AAFRESULT_SMALLBUF;
+	}
   return AAFRESULT_SUCCESS;
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFIdentification::GetProductName (aafString_t *  pProductName)
+    ImplAAFIdentification::GetCompanyNameBufLen (aafInt32 *  pLen)
 {
-  stringPropertyToAAFString(pProductName, _productName);
+  if (! pLen)
+	{
+	  return AAFRESULT_NULL_PARAM;
+	}
+  *pLen = _companyName.length();
+  return AAFRESULT_SUCCESS;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFIdentification::GetProductName (aafWChar *  pProductName,
+										   aafInt32 bufSize)
+{
+  bool stat;
+  if (! pProductName)
+	{
+	  return AAFRESULT_NULL_PARAM;
+	}
+  stat = stringPropertyToWCharString(pProductName, bufSize, _productName);
+  if (! stat)
+	{
+	  return AAFRESULT_SMALLBUF;
+	}
   return AAFRESULT_SUCCESS;
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFIdentification::GetProductVersionString (aafString_t *  pProductVersionString)
+    ImplAAFIdentification::GetProductNameBufLen (aafInt32 *  pLen)
 {
-  stringPropertyToAAFString(pProductVersionString, _productVersionString);
+  if (! pLen)
+	{
+	  return AAFRESULT_NULL_PARAM;
+	}
+  *pLen = _productName.length();
+  return AAFRESULT_SUCCESS;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFIdentification::GetProductVersionString (aafWChar *  pVS,
+													aafInt32 bufSize)
+{
+  bool stat;
+  if (! pVS)
+	{
+	  return AAFRESULT_NULL_PARAM;
+	}
+  stat = stringPropertyToWCharString(pVS, bufSize, _productVersionString);
+  if (! stat)
+	{
+	  return AAFRESULT_SMALLBUF;
+	}
   return AAFRESULT_SUCCESS;
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFIdentification::GetProductID (aafUID_t *  /*pProductID*/)
+    ImplAAFIdentification::GetProductVersionStringBufLen (aafInt32 *  pLen)
 {
+  if (! pLen)
+	{
+	  return AAFRESULT_NULL_PARAM;
+	}
+  *pLen = _productVersionString.length();
+  return AAFRESULT_SUCCESS;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFIdentification::GetProductID (aafUID_t * pPID)
+{
+  if (! pPID)
+	{
+	  return AAFRESULT_NULL_PARAM;
+	}
   return AAFRESULT_NOT_IMPLEMENTED;
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFIdentification::GetDate (aafTimeStamp_t *  /*pTimestamp*/)
+    ImplAAFIdentification::GetDate (aafTimeStamp_t * pTS)
 {
+  if (! pTS)
+	{
+	  return AAFRESULT_NULL_PARAM;
+	}
   return AAFRESULT_NOT_IMPLEMENTED;
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFIdentification::GetToolkitVersion (aafProductVersion_t *  /*pToolkitVersion*/)
+    ImplAAFIdentification::GetRefImplVersion (aafProductVersion_t * pV)
 {
+  if (! pV)
+	{
+	  return AAFRESULT_NULL_PARAM;
+	}
   return AAFRESULT_NOT_IMPLEMENTED;
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFIdentification::GetPlatform (aafString_t *  pPlatform)
+    ImplAAFIdentification::GetPlatform (aafWChar *  pPlatform,
+										aafInt32 bufSize)
 {
-  stringPropertyToAAFString(pPlatform, _platform);
+  bool stat;
+  if (! pPlatform)
+	{
+	  return AAFRESULT_NULL_PARAM;
+	}
+  stat = stringPropertyToWCharString(pPlatform, bufSize, _platform);
+  if (! stat)
+	{
+	  return AAFRESULT_SMALLBUF;
+	}
   return AAFRESULT_SUCCESS;
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFIdentification::GetGeneration (aafUID_t *  /*pGeneration*/)
+    ImplAAFIdentification::GetPlatformBufLen (aafInt32 *  pLen)
 {
+  if (! pLen)
+	{
+	  return AAFRESULT_NULL_PARAM;
+	}
+  *pLen = _platform.length();
+  return AAFRESULT_SUCCESS;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFIdentification::GetGeneration (aafUID_t *  pGen)
+{
+  if (! pGen)
+	{
+	  return AAFRESULT_NULL_PARAM;
+	}
   return AAFRESULT_NOT_IMPLEMENTED;
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFIdentification::SetCompanyName (aafString_t *  /*pCompanyName*/)
+    ImplAAFIdentification::SetCompanyName (aafWChar *  pName)
 {
+  if (! pName)
+	{
+	  return AAFRESULT_NULL_PARAM;
+	}
   return AAFRESULT_NOT_IMPLEMENTED;
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFIdentification::SetProductName (aafString_t *  /*pProductName*/)
+    ImplAAFIdentification::SetProductName (aafWChar *  pName)
 {
+  if (! pName)
+	{
+	  return AAFRESULT_NULL_PARAM;
+	}
   return AAFRESULT_NOT_IMPLEMENTED;
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFIdentification::SetProductVersion (aafProductVersion_t *  /*pProductVersion*/)
+    ImplAAFIdentification::SetProductVersion (aafProductVersion_t * pV)
 {
+  if (! pV)
+	{
+	  return AAFRESULT_NULL_PARAM;
+	}
   return AAFRESULT_NOT_IMPLEMENTED;
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFIdentification::SetProductVersionString (aafString_t *  /*pProductVersionString*/)
+    ImplAAFIdentification::SetProductVersionString (aafWChar * pVS)
 {
+  if (! pVS)
+	{
+	  return AAFRESULT_NULL_PARAM;
+	}
   return AAFRESULT_NOT_IMPLEMENTED;
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFIdentification::SetProductID (aafUID_t *  /*pProductID*/)
+    ImplAAFIdentification::SetProductID (aafUID_t * pPID)
 {
+  if (! pPID)
+	{
+	  return AAFRESULT_NULL_PARAM;
+	}
   return AAFRESULT_NOT_IMPLEMENTED;
 }
-
-	
-
