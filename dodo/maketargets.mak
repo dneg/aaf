@@ -1,8 +1,8 @@
-############################################
-#                                          #
-# Copyright (c) 1998 Avid Technology, Inc. #
-#                                          #
-############################################
+#################################################
+#                                               #
+# Copyright (c) 1998-1999 Avid Technology, Inc. #
+#                                               #
+#################################################
 
 all : targets
 
@@ -59,10 +59,27 @@ $(INCLUDE_DIR)/com-api/AAF.idl : $(FIDL_TARGETS)
 	    echo "cpp_quote(\"// This file was GENERATED for the AAF SDK on \")" ; \
 	    echo "cpp_quote(\"//  `date`\")" ; \
 	    echo "cpp_quote(\"//\")" ; \
-	    echo "cpp_quote(\"// THIS CODE AND INFORMATION IS PROVIDED 'AS IS' WITHOUT WARRANTY OF\")" ; \
-	    echo "cpp_quote(\"// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO\")" ; \
-	    echo "cpp_quote(\"// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A\")" ; \
-	    echo "cpp_quote(\"// PARTICULAR PURPOSE.\")" ; \
+	    echo "cpp_quote(\"// Permission to use, copy and modify this software and accompanying \")" ; \
+	    echo "cpp_quote(\"// documentation, and to distribute and sublicense application software \")" ; \
+	    echo "cpp_quote(\"// incorporating this software for any purpose is hereby granted, \")" ; \
+	    echo "cpp_quote(\"// provided that (i) the above copyright notice and this permission \")" ; \
+	    echo "cpp_quote(\"// notice appear in all copies of the software and related documentation, \")" ; \
+	    echo "cpp_quote(\"// and (ii) the name Avid Technology, Inc. may not be used in any \")" ; \
+	    echo "cpp_quote(\"// advertising or publicity relating to the software without the specific, \")" ; \
+	    echo "cpp_quote(\"// prior written permission of Avid Technology, Inc. \")" ; \
+	    echo "cpp_quote(\"//\")" ; \
+	    echo "cpp_quote(\"// THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND, \")" ; \
+	    echo "cpp_quote(\"// EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY \")" ; \
+	    echo "cpp_quote(\"// WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE. \")" ; \
+	    echo "cpp_quote(\"// IN NO EVENT SHALL AVID TECHNOLOGY, INC. BE LIABLE FOR ANY DIRECT, \")" ; \
+	    echo "cpp_quote(\"// SPECIAL, INCIDENTAL, PUNITIVE, INDIRECT, ECONOMIC, CONSEQUENTIAL OR \")" ; \
+	    echo "cpp_quote(\"// OTHER DAMAGES OF ANY KIND, OR ANY DAMAGES WHATSOEVER ARISING OUT OF \")" ; \
+	    echo "cpp_quote(\"// OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE AND \")" ; \
+	    echo "cpp_quote(\"// ACCOMPANYING DOCUMENTATION, INCLUDING, WITHOUT LIMITATION, DAMAGES \")" ; \
+	    echo "cpp_quote(\"// RESULTING FROM LOSS OF USE, DATA OR PROFITS, AND WHETHER OR NOT \")" ; \
+	    echo "cpp_quote(\"// ADVISED OF THE POSSIBILITY OF DAMAGE, REGARDLESS OF THE THEORY OF \")" ; \
+	    echo "cpp_quote(\"// LIABILITY. \")" ; \
+	    echo "cpp_quote(\"// \")" ; \
 	    echo "cpp_quote(\"//=--------------------------------------------------------------------------=\")" ; \
 	    echo "cpp_quote(\"// AAF Interfaces.\")" ; \
 	    echo "cpp_quote(\"//=--------------------------------------------------------------------------=\")" ; \
@@ -105,10 +122,27 @@ $(PLUGIN_DIR)/AAFPlugin.idl : $(PLUGIN_FIDL_TARGETS)
 	    echo "cpp_quote(\"// This file was GENERATED for the AAF SDK on \")" ; \
 	    echo "cpp_quote(\"//  `date`\")" ; \
 	    echo "cpp_quote(\"//\")" ; \
-	    echo "cpp_quote(\"// THIS CODE AND INFORMATION IS PROVIDED 'AS IS' WITHOUT WARRANTY OF\")" ; \
-	    echo "cpp_quote(\"// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO\")" ; \
-	    echo "cpp_quote(\"// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A\")" ; \
-	    echo "cpp_quote(\"// PARTICULAR PURPOSE.\")" ; \
+	    echo "cpp_quote(\"// Permission to use, copy and modify this software and accompanying \")" ; \
+	    echo "cpp_quote(\"// documentation, and to distribute and sublicense application software \")" ; \
+	    echo "cpp_quote(\"// incorporating this software for any purpose is hereby granted, \")" ; \
+	    echo "cpp_quote(\"// provided that (i) the above copyright notice and this permission \")" ; \
+	    echo "cpp_quote(\"// notice appear in all copies of the software and related documentation, \")" ; \
+	    echo "cpp_quote(\"// and (ii) the name Avid Technology, Inc. may not be used in any \")" ; \
+	    echo "cpp_quote(\"// advertising or publicity relating to the software without the specific, \")" ; \
+	    echo "cpp_quote(\"// prior written permission of Avid Technology, Inc. \")" ; \
+	    echo "cpp_quote(\"//\")" ; \
+	    echo "cpp_quote(\"// THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND, \")" ; \
+	    echo "cpp_quote(\"// EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY \")" ; \
+	    echo "cpp_quote(\"// WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE. \")" ; \
+	    echo "cpp_quote(\"// IN NO EVENT SHALL AVID TECHNOLOGY, INC. BE LIABLE FOR ANY DIRECT, \")" ; \
+	    echo "cpp_quote(\"// SPECIAL, INCIDENTAL, PUNITIVE, INDIRECT, ECONOMIC, CONSEQUENTIAL OR \")" ; \
+	    echo "cpp_quote(\"// OTHER DAMAGES OF ANY KIND, OR ANY DAMAGES WHATSOEVER ARISING OUT OF \")" ; \
+	    echo "cpp_quote(\"// OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE AND \")" ; \
+	    echo "cpp_quote(\"// ACCOMPANYING DOCUMENTATION, INCLUDING, WITHOUT LIMITATION, DAMAGES \")" ; \
+	    echo "cpp_quote(\"// RESULTING FROM LOSS OF USE, DATA OR PROFITS, AND WHETHER OR NOT \")" ; \
+	    echo "cpp_quote(\"// ADVISED OF THE POSSIBILITY OF DAMAGE, REGARDLESS OF THE THEORY OF \")" ; \
+	    echo "cpp_quote(\"// LIABILITY. \")" ; \
+	    echo "cpp_quote(\"// \")" ; \
 	    echo "cpp_quote(\"//=--------------------------------------------------------------------------=\")" ; \
 	    echo "cpp_quote(\"// AAF Interfaces.\")" ; \
 	    echo "cpp_quote(\"//=--------------------------------------------------------------------------=\")" ; \
@@ -148,12 +182,29 @@ $(INCLUDE_DIR)/ref-api/AAF.h : $(FREFH_TARGETS)
 	    echo "// (C) Copyright 1998-1999 Avid Technology." ; \
 	    echo "//" ; \
 	    echo "// This file was GENERATED for the AAF SDK on " ; \
-	    echo "//  "`date` ; \
+	    echo "//  `date`" ; \
 	    echo "//" ; \
-	    echo "// THIS CODE AND INFORMATION IS PROVIDED 'AS IS' WITHOUT WARRANTY OF" ; \
-	    echo "// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO" ; \
-	    echo "// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A" ; \
-	    echo "// PARTICULAR PURPOSE." ; \
+	    echo "// Permission to use, copy and modify this software and accompanying " ; \
+	    echo "// documentation, and to distribute and sublicense application software " ; \
+	    echo "// incorporating this software for any purpose is hereby granted, " ; \
+	    echo "// provided that (i) the above copyright notice and this permission " ; \
+	    echo "// notice appear in all copies of the software and related documentation, " ; \
+	    echo "// and (ii) the name Avid Technology, Inc. may not be used in any " ; \
+	    echo "// advertising or publicity relating to the software without the specific, " ; \
+	    echo "// prior written permission of Avid Technology, Inc. " ; \
+	    echo "//" ; \
+	    echo "// THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND, " ; \
+	    echo "// EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY " ; \
+	    echo "// WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE. " ; \
+	    echo "// IN NO EVENT SHALL AVID TECHNOLOGY, INC. BE LIABLE FOR ANY DIRECT, " ; \
+	    echo "// SPECIAL, INCIDENTAL, PUNITIVE, INDIRECT, ECONOMIC, CONSEQUENTIAL OR " ; \
+	    echo "// OTHER DAMAGES OF ANY KIND, OR ANY DAMAGES WHATSOEVER ARISING OUT OF " ; \
+	    echo "// OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE AND " ; \
+	    echo "// ACCOMPANYING DOCUMENTATION, INCLUDING, WITHOUT LIMITATION, DAMAGES " ; \
+	    echo "// RESULTING FROM LOSS OF USE, DATA OR PROFITS, AND WHETHER OR NOT " ; \
+	    echo "// ADVISED OF THE POSSIBILITY OF DAMAGE, REGARDLESS OF THE THEORY OF " ; \
+	    echo "// LIABILITY. " ; \
+	    echo "// " ; \
 	    echo "//=--------------------------------------------------------------------------=" ; \
 	    echo "// AAF Interfaces." ; \
 	    echo "//=--------------------------------------------------------------------------=" ; \
@@ -203,10 +254,26 @@ $(INCLUDE_DIR)/ref-api/AAFPlugin.h : $(PLUGIN_FREFH_TARGETS)
 	    echo "// This file was GENERATED for the AAF SDK on " ; \
 	    echo "//  "`date` ; \
 	    echo "//" ; \
-	    echo "// THIS CODE AND INFORMATION IS PROVIDED 'AS IS' WITHOUT WARRANTY OF" ; \
-	    echo "// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO" ; \
-	    echo "// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A" ; \
-	    echo "// PARTICULAR PURPOSE." ; \
+	    echo "// Permission to use, copy and modify this software and accompanying " ; \
+	    echo "// documentation, and to distribute and sublicense application software " ; \
+	    echo "// incorporating this software for any purpose is hereby granted, " ; \
+	    echo "// provided that (i) the above copyright notice and this permission " ; \
+	    echo "// notice appear in all copies of the software and related documentation, " ; \
+	    echo "// and (ii) the name Avid Technology, Inc. may not be used in any " ; \
+	    echo "// advertising or publicity relating to the software without the specific, " ; \
+	    echo "// prior written permission of Avid Technology, Inc. " ; \
+	    echo "//" ; \
+	    echo "// THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND, " ; \
+	    echo "// EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY " ; \
+	    echo "// WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE. " ; \
+	    echo "// IN NO EVENT SHALL AVID TECHNOLOGY, INC. BE LIABLE FOR ANY DIRECT, " ; \
+	    echo "// SPECIAL, INCIDENTAL, PUNITIVE, INDIRECT, ECONOMIC, CONSEQUENTIAL OR " ; \
+	    echo "// OTHER DAMAGES OF ANY KIND, OR ANY DAMAGES WHATSOEVER ARISING OUT OF " ; \
+	    echo "// OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE AND " ; \
+	    echo "// ACCOMPANYING DOCUMENTATION, INCLUDING, WITHOUT LIMITATION, DAMAGES " ; \
+	    echo "// RESULTING FROM LOSS OF USE, DATA OR PROFITS, AND WHETHER OR NOT " ; \
+	    echo "// ADVISED OF THE POSSIBILITY OF DAMAGE, REGARDLESS OF THE THEORY OF " ; \
+	    echo "// LIABILITY. " ; \
 	    echo "//=--------------------------------------------------------------------------=" ; \
 	    echo "// AAF Plugin Interfaces." ; \
 	    echo "//=--------------------------------------------------------------------------=" ; \
@@ -256,10 +323,26 @@ $(UUID_DIR)/AAF_i.c : aafobjects.mk dod2iid.awk
 	    echo "// This file was GENERATED for the AAF SDK on " ; \
 	    echo "//  "`date` ; \
 	    echo "//" ; \
-	    echo "// THIS CODE AND INFORMATION IS PROVIDED 'AS IS' WITHOUT WARRANTY OF" ; \
-	    echo "// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO" ; \
-	    echo "// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A" ; \
-	    echo "// PARTICULAR PURPOSE." ; \
+	    echo "// Permission to use, copy and modify this software and accompanying " ; \
+	    echo "// documentation, and to distribute and sublicense application software " ; \
+	    echo "// incorporating this software for any purpose is hereby granted, " ; \
+	    echo "// provided that (i) the above copyright notice and this permission " ; \
+	    echo "// notice appear in all copies of the software and related documentation, " ; \
+	    echo "// and (ii) the name Avid Technology, Inc. may not be used in any " ; \
+	    echo "// advertising or publicity relating to the software without the specific, " ; \
+	    echo "// prior written permission of Avid Technology, Inc. " ; \
+	    echo "//" ; \
+	    echo "// THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND, " ; \
+	    echo "// EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY " ; \
+	    echo "// WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE. " ; \
+	    echo "// IN NO EVENT SHALL AVID TECHNOLOGY, INC. BE LIABLE FOR ANY DIRECT, " ; \
+	    echo "// SPECIAL, INCIDENTAL, PUNITIVE, INDIRECT, ECONOMIC, CONSEQUENTIAL OR " ; \
+	    echo "// OTHER DAMAGES OF ANY KIND, OR ANY DAMAGES WHATSOEVER ARISING OUT OF " ; \
+	    echo "// OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE AND " ; \
+	    echo "// ACCOMPANYING DOCUMENTATION, INCLUDING, WITHOUT LIMITATION, DAMAGES " ; \
+	    echo "// RESULTING FROM LOSS OF USE, DATA OR PROFITS, AND WHETHER OR NOT " ; \
+	    echo "// ADVISED OF THE POSSIBILITY OF DAMAGE, REGARDLESS OF THE THEORY OF " ; \
+	    echo "// LIABILITY. " ; \
 	    echo "//=--------------------------------------------------------------------------=" ; \
 	    echo "// Definitions for all of the public IID needed by an AAF SDK client" ; \
 	    echo "//=--------------------------------------------------------------------------=" ; \
@@ -312,10 +395,26 @@ $(UUID_DIR)/AAFPlugin_i.c : aafobjects.mk dod2iid.awk
 	    echo "// This file was GENERATED for the AAF SDK on " ; \
 	    echo "//  "`date` ; \
 	    echo "//" ; \
-	    echo "// THIS CODE AND INFORMATION IS PROVIDED 'AS IS' WITHOUT WARRANTY OF" ; \
-	    echo "// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO" ; \
-	    echo "// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A" ; \
-	    echo "// PARTICULAR PURPOSE." ; \
+	    echo "// Permission to use, copy and modify this software and accompanying " ; \
+	    echo "// documentation, and to distribute and sublicense application software " ; \
+	    echo "// incorporating this software for any purpose is hereby granted, " ; \
+	    echo "// provided that (i) the above copyright notice and this permission " ; \
+	    echo "// notice appear in all copies of the software and related documentation, " ; \
+	    echo "// and (ii) the name Avid Technology, Inc. may not be used in any " ; \
+	    echo "// advertising or publicity relating to the software without the specific, " ; \
+	    echo "// prior written permission of Avid Technology, Inc. " ; \
+	    echo "//" ; \
+	    echo "// THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND, " ; \
+	    echo "// EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY " ; \
+	    echo "// WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE. " ; \
+	    echo "// IN NO EVENT SHALL AVID TECHNOLOGY, INC. BE LIABLE FOR ANY DIRECT, " ; \
+	    echo "// SPECIAL, INCIDENTAL, PUNITIVE, INDIRECT, ECONOMIC, CONSEQUENTIAL OR " ; \
+	    echo "// OTHER DAMAGES OF ANY KIND, OR ANY DAMAGES WHATSOEVER ARISING OUT OF " ; \
+	    echo "// OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE AND " ; \
+	    echo "// ACCOMPANYING DOCUMENTATION, INCLUDING, WITHOUT LIMITATION, DAMAGES " ; \
+	    echo "// RESULTING FROM LOSS OF USE, DATA OR PROFITS, AND WHETHER OR NOT " ; \
+	    echo "// ADVISED OF THE POSSIBILITY OF DAMAGE, REGARDLESS OF THE THEORY OF " ; \
+	    echo "// LIABILITY. " ; \
 	    echo "//=--------------------------------------------------------------------------=" ; \
 	    echo "// Definitions for all public IID's needed by an AAF SDK Plugin author" ; \
 	    echo "//=--------------------------------------------------------------------------=" ; \
@@ -368,10 +467,26 @@ $(UUID_DIR)/AAFRoot_i.c : aafobjects.mk dod2iid.awk
 	    echo "// This file was GENERATED for the AAF SDK on " ; \
 	    echo "//  "`date` ; \
 	    echo "//" ; \
-	    echo "// THIS CODE AND INFORMATION IS PROVIDED 'AS IS' WITHOUT WARRANTY OF" ; \
-	    echo "// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO" ; \
-	    echo "// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A" ; \
-	    echo "// PARTICULAR PURPOSE." ; \
+	    echo "// Permission to use, copy and modify this software and accompanying " ; \
+	    echo "// documentation, and to distribute and sublicense application software " ; \
+	    echo "// incorporating this software for any purpose is hereby granted, " ; \
+	    echo "// provided that (i) the above copyright notice and this permission " ; \
+	    echo "// notice appear in all copies of the software and related documentation, " ; \
+	    echo "// and (ii) the name Avid Technology, Inc. may not be used in any " ; \
+	    echo "// advertising or publicity relating to the software without the specific, " ; \
+	    echo "// prior written permission of Avid Technology, Inc. " ; \
+	    echo "//" ; \
+	    echo "// THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND, " ; \
+	    echo "// EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY " ; \
+	    echo "// WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE. " ; \
+	    echo "// IN NO EVENT SHALL AVID TECHNOLOGY, INC. BE LIABLE FOR ANY DIRECT, " ; \
+	    echo "// SPECIAL, INCIDENTAL, PUNITIVE, INDIRECT, ECONOMIC, CONSEQUENTIAL OR " ; \
+	    echo "// OTHER DAMAGES OF ANY KIND, OR ANY DAMAGES WHATSOEVER ARISING OUT OF " ; \
+	    echo "// OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE AND " ; \
+	    echo "// ACCOMPANYING DOCUMENTATION, INCLUDING, WITHOUT LIMITATION, DAMAGES " ; \
+	    echo "// RESULTING FROM LOSS OF USE, DATA OR PROFITS, AND WHETHER OR NOT " ; \
+	    echo "// ADVISED OF THE POSSIBILITY OF DAMAGE, REGARDLESS OF THE THEORY OF " ; \
+	    echo "// LIABILITY. " ; \
 	    echo "//=--------------------------------------------------------------------------=" ; \
 	    echo "// Definitions for all public IID's needed by an AAF SDK Plugin author" ; \
 	    echo "//=--------------------------------------------------------------------------=" ; \
@@ -420,10 +535,26 @@ $(IMPL_DIR)/AAFClassIDs.h : aafobjects.mk
 	    echo "// This file was GENERATED for the AAF SDK on " ; \
 	    echo "//  "`date` ; \
 	    echo "//" ; \
-	    echo "// THIS CODE AND INFORMATION IS PROVIDED 'AS IS' WITHOUT WARRANTY OF" ; \
-	    echo "// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO" ; \
-	    echo "// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A" ; \
-	    echo "// PARTICULAR PURPOSE." ; \
+	    echo "// Permission to use, copy and modify this software and accompanying " ; \
+	    echo "// documentation, and to distribute and sublicense application software " ; \
+	    echo "// incorporating this software for any purpose is hereby granted, " ; \
+	    echo "// provided that (i) the above copyright notice and this permission " ; \
+	    echo "// notice appear in all copies of the software and related documentation, " ; \
+	    echo "// and (ii) the name Avid Technology, Inc. may not be used in any " ; \
+	    echo "// advertising or publicity relating to the software without the specific, " ; \
+	    echo "// prior written permission of Avid Technology, Inc. " ; \
+	    echo "//" ; \
+	    echo "// THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND, " ; \
+	    echo "// EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY " ; \
+	    echo "// WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE. " ; \
+	    echo "// IN NO EVENT SHALL AVID TECHNOLOGY, INC. BE LIABLE FOR ANY DIRECT, " ; \
+	    echo "// SPECIAL, INCIDENTAL, PUNITIVE, INDIRECT, ECONOMIC, CONSEQUENTIAL OR " ; \
+	    echo "// OTHER DAMAGES OF ANY KIND, OR ANY DAMAGES WHATSOEVER ARISING OUT OF " ; \
+	    echo "// OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE AND " ; \
+	    echo "// ACCOMPANYING DOCUMENTATION, INCLUDING, WITHOUT LIMITATION, DAMAGES " ; \
+	    echo "// RESULTING FROM LOSS OF USE, DATA OR PROFITS, AND WHETHER OR NOT " ; \
+	    echo "// ADVISED OF THE POSSIBILITY OF DAMAGE, REGARDLESS OF THE THEORY OF " ; \
+	    echo "// LIABILITY. " ; \
 	    echo "//=--------------------------------------------------------------------------=" ; \
 	    echo "// Declarations for all of the private AAF code class ids" ; \
 	    echo "// This file is private to the AAF Reference Implementation." ; \
@@ -455,10 +586,26 @@ $(COMAPI_DIR)/AAFCLSIDs.h : aafobjects.mk
 	    echo "// This file was GENERATED for the AAF SDK on " ; \
 	    echo "//  "`date` ; \
 	    echo "//" ; \
-	    echo "// THIS CODE AND INFORMATION IS PROVIDED 'AS IS' WITHOUT WARRANTY OF" ; \
-	    echo "// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO" ; \
-	    echo "// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A" ; \
-	    echo "// PARTICULAR PURPOSE." ; \
+	    echo "// Permission to use, copy and modify this software and accompanying " ; \
+	    echo "// documentation, and to distribute and sublicense application software " ; \
+	    echo "// incorporating this software for any purpose is hereby granted, " ; \
+	    echo "// provided that (i) the above copyright notice and this permission " ; \
+	    echo "// notice appear in all copies of the software and related documentation, " ; \
+	    echo "// and (ii) the name Avid Technology, Inc. may not be used in any " ; \
+	    echo "// advertising or publicity relating to the software without the specific, " ; \
+	    echo "// prior written permission of Avid Technology, Inc. " ; \
+	    echo "//" ; \
+	    echo "// THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND, " ; \
+	    echo "// EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY " ; \
+	    echo "// WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE. " ; \
+	    echo "// IN NO EVENT SHALL AVID TECHNOLOGY, INC. BE LIABLE FOR ANY DIRECT, " ; \
+	    echo "// SPECIAL, INCIDENTAL, PUNITIVE, INDIRECT, ECONOMIC, CONSEQUENTIAL OR " ; \
+	    echo "// OTHER DAMAGES OF ANY KIND, OR ANY DAMAGES WHATSOEVER ARISING OUT OF " ; \
+	    echo "// OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE AND " ; \
+	    echo "// ACCOMPANYING DOCUMENTATION, INCLUDING, WITHOUT LIMITATION, DAMAGES " ; \
+	    echo "// RESULTING FROM LOSS OF USE, DATA OR PROFITS, AND WHETHER OR NOT " ; \
+	    echo "// ADVISED OF THE POSSIBILITY OF DAMAGE, REGARDLESS OF THE THEORY OF " ; \
+	    echo "// LIABILITY. " ; \
 	    echo "//=--------------------------------------------------------------------------=" ; \
 	    echo "// Declarations for all of the private AAF code class ids" ; \
 	    echo "// This file is private to the AAF Reference Implementation." ; \
@@ -489,10 +636,26 @@ $(COMAPI_DIR)/AAFObjectTable.h : aafobjects.mk
 	    echo "// This file was GENERATED for the AAF SDK on " ; \
 	    echo "//  "`date` ; \
 	    echo "//" ; \
-	    echo "// THIS CODE AND INFORMATION IS PROVIDED 'AS IS' WITHOUT WARRANTY OF" ; \
-	    echo "// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO" ; \
-	    echo "// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A" ; \
-	    echo "// PARTICULAR PURPOSE." ; \
+	    echo "// Permission to use, copy and modify this software and accompanying " ; \
+	    echo "// documentation, and to distribute and sublicense application software " ; \
+	    echo "// incorporating this software for any purpose is hereby granted, " ; \
+	    echo "// provided that (i) the above copyright notice and this permission " ; \
+	    echo "// notice appear in all copies of the software and related documentation, " ; \
+	    echo "// and (ii) the name Avid Technology, Inc. may not be used in any " ; \
+	    echo "// advertising or publicity relating to the software without the specific, " ; \
+	    echo "// prior written permission of Avid Technology, Inc. " ; \
+	    echo "//" ; \
+	    echo "// THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND, " ; \
+	    echo "// EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY " ; \
+	    echo "// WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE. " ; \
+	    echo "// IN NO EVENT SHALL AVID TECHNOLOGY, INC. BE LIABLE FOR ANY DIRECT, " ; \
+	    echo "// SPECIAL, INCIDENTAL, PUNITIVE, INDIRECT, ECONOMIC, CONSEQUENTIAL OR " ; \
+	    echo "// OTHER DAMAGES OF ANY KIND, OR ANY DAMAGES WHATSOEVER ARISING OUT OF " ; \
+	    echo "// OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE AND " ; \
+	    echo "// ACCOMPANYING DOCUMENTATION, INCLUDING, WITHOUT LIMITATION, DAMAGES " ; \
+	    echo "// RESULTING FROM LOSS OF USE, DATA OR PROFITS, AND WHETHER OR NOT " ; \
+	    echo "// ADVISED OF THE POSSIBILITY OF DAMAGE, REGARDLESS OF THE THEORY OF " ; \
+	    echo "// LIABILITY. " ; \
 	    echo "//=--------------------------------------------------------------------------=" ; \
 	    echo "// This file contains invocations of the macros described below." ; \
 	    echo "//" ; \
@@ -540,10 +703,26 @@ $(COMAPI_DIR)/AAFObjectTable_i.cpp : aafobjects.mk
 	    echo "// This file was GENERATED for the AAF SDK on " ; \
 	    echo "//  "`date` ; \
 	    echo "//" ; \
-	    echo "// THIS CODE AND INFORMATION IS PROVIDED 'AS IS' WITHOUT WARRANTY OF" ; \
-	    echo "// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO" ; \
-	    echo "// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A" ; \
-	    echo "// PARTICULAR PURPOSE." ; \
+	    echo "// Permission to use, copy and modify this software and accompanying " ; \
+	    echo "// documentation, and to distribute and sublicense application software " ; \
+	    echo "// incorporating this software for any purpose is hereby granted, " ; \
+	    echo "// provided that (i) the above copyright notice and this permission " ; \
+	    echo "// notice appear in all copies of the software and related documentation, " ; \
+	    echo "// and (ii) the name Avid Technology, Inc. may not be used in any " ; \
+	    echo "// advertising or publicity relating to the software without the specific, " ; \
+	    echo "// prior written permission of Avid Technology, Inc. " ; \
+	    echo "//" ; \
+	    echo "// THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND, " ; \
+	    echo "// EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY " ; \
+	    echo "// WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE. " ; \
+	    echo "// IN NO EVENT SHALL AVID TECHNOLOGY, INC. BE LIABLE FOR ANY DIRECT, " ; \
+	    echo "// SPECIAL, INCIDENTAL, PUNITIVE, INDIRECT, ECONOMIC, CONSEQUENTIAL OR " ; \
+	    echo "// OTHER DAMAGES OF ANY KIND, OR ANY DAMAGES WHATSOEVER ARISING OUT OF " ; \
+	    echo "// OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE AND " ; \
+	    echo "// ACCOMPANYING DOCUMENTATION, INCLUDING, WITHOUT LIMITATION, DAMAGES " ; \
+	    echo "// RESULTING FROM LOSS OF USE, DATA OR PROFITS, AND WHETHER OR NOT " ; \
+	    echo "// ADVISED OF THE POSSIBILITY OF DAMAGE, REGARDLESS OF THE THEORY OF " ; \
+	    echo "// LIABILITY. " ; \
 	    echo "//=--------------------------------------------------------------------------=" ; \
 	    echo "" ; \
 	    echo "//" ; \
