@@ -49,7 +49,7 @@ extern "C" const aafClassID_t CLSID_EnumAAFEssenceData;
 ImplAAFContentStorage::ImplAAFContentStorage ()
 : _mobIndex(0),
   _mobs(PID_ContentStorage_Mobs, "Mobs"),
-  _essenceData(PID_ContentStorage_EssenceData, "Essence Data")
+  _essenceData(PID_ContentStorage_EssenceData, "EssenceData")
 {
   _persistentProperties.put(_mobs.address());
   _persistentProperties.put(_essenceData.address());

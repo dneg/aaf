@@ -62,10 +62,10 @@ extern "C" const aafClassID_t CLSID_AAFSourceClip;
 extern "C" const aafClassID_t CLSID_AAFFindSourceInfo;
 
 ImplAAFMob::ImplAAFMob ()
-: _mobID(			PID_Mob_MobID,			"Mob ID"),
+: _mobID(			PID_Mob_MobID,			"MobID"),
   _name(			PID_Mob_Name,			"Name"),
-  _creationTime(    PID_Mob_CreationTime,	"Creation Time"),
-  _lastModified(    PID_Mob_LastModified,		"Last Modified"),
+  _creationTime(    PID_Mob_CreationTime,	"CreationTime"),
+  _lastModified(    PID_Mob_LastModified,		"LastModified"),
   _slots(			PID_Mob_Slots,			"Slots")
 {
 	_persistentProperties.put(_mobID.address());
