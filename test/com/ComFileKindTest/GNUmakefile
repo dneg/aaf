@@ -35,7 +35,7 @@ include $(AAFBASE)/build/common.mk
 INCLUDES = -I../../../ref-impl/include \
 	   -I../../../ref-impl/include/ref-api \
 	   -I../../../ref-impl/include/com-api \
-	   -I../../../Utilities/Include
+	   -I../../../ref-impl/src/com-api
 
 
 .PHONY : all
