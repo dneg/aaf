@@ -26,8 +26,8 @@
 #include "aafCvt.h"
 
 ImplAAFComponent::ImplAAFComponent ():
-	_dataDef(	PID_IDENTIFICATION_DATADEF,	"dataDef"),
-	_length(	PID_IDENTIFICATION_LENGTH,	"length")
+	_dataDef(	PID_COMPONENT_DATADEF,	"dataDef"),
+	_length(	PID_COMPONENT_LENGTH,	"length")
 {
 	_persistentProperties.put(   _dataDef.address());
 	_persistentProperties.put(   _length.address());
