@@ -149,7 +149,7 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 	  return AAFRESULT_NULL_PARAM;
 	}
-  *pLen = _companyName.length();
+  *pLen = _companyName.size();
   return AAFRESULT_SUCCESS;
 }
 
@@ -180,7 +180,7 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 	  return AAFRESULT_NULL_PARAM;
 	}
-  *pLen = _productName.length();
+  *pLen = _productName.size();
   return AAFRESULT_SUCCESS;
 }
 
@@ -211,7 +211,7 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 	  return AAFRESULT_NULL_PARAM;
 	}
-  *pLen = _productVersionString.length();
+  *pLen = _productVersionString.size();
   return AAFRESULT_SUCCESS;
 }
 
@@ -275,7 +275,7 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 	  return AAFRESULT_NULL_PARAM;
 	}
-  *pLen = _platform.length();
+  *pLen = _platform.size();
   return AAFRESULT_SUCCESS;
 }
 
