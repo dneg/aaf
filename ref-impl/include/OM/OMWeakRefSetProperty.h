@@ -231,6 +231,13 @@ private:
 
   friend class OMWeakReferenceSetIterator<ReferencedObject>;
 
+    // OMWeakReferenceSetProperty can't be assigned - declare but don't define
+  OMWeakReferenceSetProperty& operator = (
+                                        const OMWeakReferenceSetProperty& rhs);
+
+    // OMWeakReferenceSetProperty can't be copied - declare but don't define
+  OMWeakReferenceSetProperty(const OMWeakReferenceSetProperty& rhs);
+
 };
 
 #include "OMWeakRefSetPropertyT.h"

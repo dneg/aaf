@@ -135,6 +135,12 @@ private:
   OMPropertyId* _targetPropertyPath;
   OMPropertyId _keyPropertyId;
 
+    // OMWeakReferenceProperty can't be assigned - declare but don't define
+  OMWeakReferenceProperty& operator = (const OMWeakReferenceProperty& rhs);
+
+    // OMWeakReferenceProperty can't be copied - declare but don't define
+  OMWeakReferenceProperty(const OMWeakReferenceProperty& rhs);
+
 };
 
 #include "OMWeakRefPropertyT.h"

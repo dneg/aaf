@@ -281,6 +281,14 @@ private:
 
   friend class OMWeakReferenceVectorIterator<ReferencedObject>;
 
+    // OMWeakReferenceVectorProperty can't be assigned - declare but
+    // don't define
+  OMWeakReferenceVectorProperty& operator = (
+                                     const OMWeakReferenceVectorProperty& rhs);
+
+    // OMWeakReferenceVectorProperty can't be copied - declare but don't define
+  OMWeakReferenceVectorProperty(const OMWeakReferenceVectorProperty& rhs);
+
 };
 
 #include "OMWeakRefVectorPropertyT.h"
