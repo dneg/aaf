@@ -49,7 +49,7 @@
 //
 // DictP18-277-1847BMaster.csv 
 //
-// This file was generated on Tue Sep 21 10:12:03 EDT 1999
+// This file was generated on Thu Sep 23 19:02:27 EDT 1999
 // by user tbingham on system TBINGHAMPC.
 //
 // Key to macros.
@@ -3469,6 +3469,8 @@ AAF_TYPE_DEFINITION_ENUMERATION(EdgeType,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C), AAF_TYPE(UInt8))
   AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(kEtNull,
     0, EdgeType)
+  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(kEtKeycode,
+    1, EdgeType)
   AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(kEtEdgenum4,
     2, EdgeType)
   AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(kEtEdgenum5,
