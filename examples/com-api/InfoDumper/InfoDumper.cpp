@@ -56,6 +56,8 @@
 #else
 #define IOS_FMT_FLAGS long int
 #endif
+#elif defined(__GNUC__) && (__GNUC__ >= 3)
+#define IOS_FMT_FLAGS std::ios_base::fmtflags
 #else
 #define IOS_FMT_FLAGS long int
 #endif
