@@ -394,6 +394,39 @@ OMFile* OMFile::openExistingModify(OMRawStorage* rawStorage,
   return newFile;
 }
 
+OMFile* OMFile::openNewWrite(OMRawStorage* rawStorage,
+                             const OMClassFactory* factory,
+                             void* clientOnRestoreContext,
+                             const OMByteOrder byteOrder,
+                             OMStorable* clientRoot,
+                             const OMFileSignature& signature,
+                             OMDictionary* dictionary)
+{
+  TRACE("OMFile::openNewWrite");
+
+  PRECONDITION("Valid raw storage", rawStorage != 0);
+  PRECONDITION("Valid class factory", factory != 0);
+  PRECONDITION("Valid byte order",
+                    ((byteOrder == littleEndian) || (byteOrder == bigEndian)));
+  PRECONDITION("Valid client root", clientRoot != 0);
+  PRECONDITION("Valid signature", validSignature(signature));
+  PRECONDITION("Valid dictionary ", dictionary != 0);
+
+  OMRootStorable* root = new OMRootStorable(clientRoot, dictionary);
+  ASSERT("Valid heap pointer", root != 0);
+
+  OMFile* newFile = new OMFile(rawStorage,
+                               clientOnRestoreContext,
+                               signature,
+                               writeOnlyMode,
+                               factory,
+                               dictionary,
+                               root,
+                               byteOrder);
+  ASSERT("Valid heap pointer", newFile != 0);
+  return newFile;
+}
+
 OMFile* OMFile::openNewModify(OMRawStorage* rawStorage,
                               const OMClassFactory* factory,
                               void* clientOnRestoreContext,
