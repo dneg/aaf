@@ -251,6 +251,8 @@ void OMStoredObject::save(const OMPropertySet& properties, void* clientContext)
   PRECONDITION("Already open", _open);
 
   size_t count = properties.count();
+  delete _index;
+  _index = 0; // for BoundsChecker
   _index = new OMStoredPropertySetIndex(count);
   ASSERT("Valid heap pointer", _index != 0);
   size_t context = 0;
