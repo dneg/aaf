@@ -79,21 +79,21 @@ depend.mk : aafobjects.mk
 		echo $$base.fidl : macros/fidl.mac macros/base.mac >> depend.tmp ; \
 		echo $$base.comcx : macros/comcx.mac macros/base.mac >> depend.tmp ; \
 		echo $$base.exp : macros/exp.mac macros/base.mac >> depend.tmp ; \
-      done
+	  done
 	@ for base in $(PLUGIN_OBJECTS) ; do \
 		echo $$base.all... ; \
 		echo "" >> depend.tmp ; \
-		echo $$base.all : $$base.fidl >> depend.tmp ; \
+		echo $$base.all : $$base.fidl $$base.frefh >> depend.tmp ; \
 		echo $$base.fidl : macros/fidl.mac macros/base.mac >> depend.tmp ; \
 		echo $$base.exp : macros/exp.mac macros/base.mac >> depend.tmp ; \
 		echo $$base.frefh : macros/frefh.mac macros/base.mac >> depend.tmp ; \
-     done
+	done
 	@ echo "" >> depend.tmp
 	for file in $(HUMAN_TYPED_IMPL) ; do \
 		grep -v $$file\.impl depend.tmp | grep -v $$file\.comt > depend.tmp2 ; \
 		rm depend.tmp ; \
 		mv depend.tmp2 depend.tmp ; \
-      done
+	  done
 	@ mv depend.tmp depend.mk
 	@ echo "Done with depend.mk."
 
