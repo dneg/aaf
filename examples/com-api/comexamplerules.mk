@@ -43,7 +43,7 @@ all : $(OBJDIR) $(BINTARGET)
 
 $(BINTARGET) : $(CXXOBJS)
 	$(LD) $(CXXOBJS) $(RPATH_OPT) \
-	-L$(AAFSDKLIBDIR) -laaflib -laafiid -o $@
+	-L$(AAFSDKLIBDIR) -laaflib -laafiid $(LIBCIO) -o $@
 
 
 .PHONY : clean
