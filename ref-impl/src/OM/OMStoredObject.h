@@ -89,7 +89,7 @@ public:
     // @cmember Restore the class id of this <c OMStoredObject>.
   void restore(OMClassId& cid);
 
-    // @cmember Save the <c OMPropertSet> <p p properties> in this
+    // @cmember Save the <c OMPropertySet> <p properties> in this
     //          <c OMStoredObject>.
   void save(const OMPropertySet& properties);
 
