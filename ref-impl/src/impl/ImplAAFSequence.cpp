@@ -162,8 +162,8 @@ AAFRESULT STDMETHODCALLTYPE
 		if (willConvert == AAFFalse)
 			RAISE(AAFRESULT_INVALID_DATADEF);
 		
-		GetLength(&sequLen);
-		pComponent->GetLength(&cpntLen);
+		CHECK (GetLength(&sequLen));
+		CHECK(pComponent->GetLength(&cpntLen));
 		
 		// Get the previous component in the sequence to verify
 		// neighboring transitions and source clip lengths.
@@ -173,7 +173,7 @@ AAFRESULT STDMETHODCALLTYPE
 			ImplAAFComponent*	pPrevCpnt = NULL;
 			
 			_components.getValueAt(pPrevCpnt, numCpnts - 1);
-			pPrevCpnt->GetLength(&prevLen);
+			CHECK(pPrevCpnt->GetLength(&prevLen));
 			pPrevCpnt->GetComponentType(&type);
 			if (type == kTransition)
 				isPrevTran = AAFTrue;

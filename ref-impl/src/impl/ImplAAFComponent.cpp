@@ -74,17 +74,18 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFComponent::GetLength (aafLength_t * pLength)
 {
-    AAFRESULT aafError = AAFRESULT_SUCCESS;
+  if (pLength == NULL)
+	{
+	  return AAFRESULT_NULL_PARAM;
+	}
 
-	if (pLength == NULL)
+  if (! _length.isPresent())
 	{
-		return AAFRESULT_NULL_PARAM;
+	  return AAFRESULT_BAD_PROP;
 	}
-	else
-	{
-		*pLength = _length;
-	}
-	return aafError;
+	
+  *pLength = _length;
+  return AAFRESULT_SUCCESS;
 }
 
 	

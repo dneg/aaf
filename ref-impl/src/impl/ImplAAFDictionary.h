@@ -343,8 +343,8 @@ public:
   virtual AAFRESULT
     GetNthContainerDef (aafInt32 index, ImplAAFContainerDef **ppEnum);
 
-  AAFRESULT LookupComplexPropTypeByOMPid (OMPropertyId opid,
-										  ImplAAFTypeDef ** ppTypeDef) const;
+  AAFRESULT LookupPropTypeByOMPid (OMPropertyId opid,
+								   ImplAAFTypeDef ** ppTypeDef) const;
 
   AAFRESULT LookupPropDefByOMPid (OMPropertyId opid,
 								  ImplAAFPropertyDef ** ppd) const;
@@ -394,15 +394,19 @@ public:
   // Initializes the built-in types critical to building the dictionary.
   void pvtInitCriticalBuiltins (void);
 
+  // Register the given object to be initialized "at the right time".
+  // If that time is now, will init immediately.  If not ready yet,
+  // will put obj on queue to be initialized when everything's ready.
+  void pvtInitObjectProperties (ImplAAFObjectSP pObj) const;
 
 private:
 
-  // Like the non-private LookupComplexPropTypeByOMPid(), except will
+  // Like the non-private LookupPropTypeByOMPid(), except will
   // only look at types currently registered in this dictionary; will
   // not attempt to look at builtins which may have not already been
   // entered into the dict.
-  AAFRESULT pvtLookupComplexPropTypeByOMPid (OMPropertyId opid,
-											 ImplAAFTypeDef ** ppTypeDef) const;
+  AAFRESULT pvtLookupPropTypeByOMPid (OMPropertyId opid,
+									  ImplAAFTypeDef ** ppTypeDef) const;
 
 
   // Like the non-private LookupPropDefByOMPid(), except will only
@@ -411,6 +415,7 @@ private:
   // entered into the dict.
   AAFRESULT pvtLookupPropDefByOMPid (OMPropertyId opid,
 									 ImplAAFPropertyDef ** ppd) const;
+
 
 
   ImplAAFBuiltinClasses * _pBuiltinClasses;
@@ -425,6 +430,48 @@ private:
   // objects.
   aafBool                 _OKToInitProps;
 
+
+
+  //
+  // Private class to keep a FIFO of objects
+  //
+  struct pvtObjFifo
+  {
+	pvtObjFifo () : _putIdx (0), _getIdx (0) {}
+
+	ImplAAFObjectSP GetNext (void)
+	{
+	  ImplAAFObjectSP result;
+
+	  if (_getIdx < _putIdx)
+		result = _objs[_getIdx++];
+	  else
+		result = 0;
+
+	  return result;
+	}
+
+	void Append (ImplAAFObjectSP obj)
+	{
+	  assert (_putIdx < kPvtMaxInitObjs);
+	  _objs[_putIdx++] = obj;
+	}
+
+  private:
+	enum {
+	  kPvtMaxInitObjs = 200
+	};
+	ImplAAFObjectSP _objs[kPvtMaxInitObjs];
+	aafUInt32 _putIdx;
+	aafUInt32 _getIdx;
+  };
+
+  //
+  // Fifo of objects which will require initialization
+  //
+  pvtObjFifo _objsToInit;
+
+
   OMStrongReferenceVectorProperty<ImplAAFCodecDef>         _codecDefinitions;
   OMStrongReferenceVectorProperty<ImplAAFContainerDef>     _containerDefinitions;
   OMStrongReferenceVectorProperty<ImplAAFOperationDef>     _operationDefinitions;
@@ -435,5 +482,16 @@ private:
   OMStrongReferenceVectorProperty<ImplAAFDataDef>          _dataDefinitions;
   OMStrongReferenceVectorProperty<ImplAAFPluginDescriptor> _pluginDefinitions;
 };
+
+//
+// smart pointer
+//
+
+#ifndef __ImplAAFSmartPointer_h__
+// caution! includes assert.h
+#include "ImplAAFSmartPointer.h"
+#endif
+
+typedef ImplAAFSmartPointer<ImplAAFDictionary> ImplAAFDictionarySP;
 
 #endif // ! __ImplAAFDictionary_h__
