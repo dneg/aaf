@@ -147,9 +147,5 @@ SOURCE=..\..\..\lib\AAFIIDD.lib
 
 # End Source File
 # End Group
-# Begin Source File
-
-SOURCE=.\SaveOpenTimevsObjects.ksh
-# End Source File
 # End Target
 # End Project
