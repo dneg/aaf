@@ -1,9 +1,9 @@
 #c/*************************************************\
-#c*													*
-#c* Advanced Authoring Format						*
-#c*													*
-#c* Copyright (c) 1998-1999 Avid Technology, Inc.	*
-#c*													*
+#c*                                                 *
+#c* Advanced Authoring Format                       *
+#c*                                                 *
+#c* Copyright (c) 1998-1999 Avid Technology, Inc.   *
+#c*                                                 *
 #c\*************************************************/
 #startm .this-module 0
 AAFEssenceData\
@@ -13,7 +13,6 @@ AAFEssenceData\
 AAFObject\
 #endm
 #c
-#c #import ./AAFObject.exp
 AD_HEAD
 
 AD_IDL(//
@@ -43,7 +42,7 @@ AD_DEFAULT_UUID(6a33f4e2, 8ed6, 11d2, bf, 9d, 00, 10, 4b, c9, 15, 6d)
 AD_XCLASS_BEGIN(Concrete, StoredObject)
 AD_METHOD3(Write,
 [in],aafUInt32, bytes, write this many bytes,
-[out\\\, size_is\\\(bytes\\\)\\\, length_is\\\(*bytesWritten\\\)],aafDataBuffer_t,buffer, here is the buffer,
+[out\\\, size_is\\\(bytes\\\)],aafDataBuffer_t,buffer, here is the buffer,
 [out\\\,ref],aafUInt32 *,bytesWritten,,
 Write pre-interleaved data to a essence stream.)
 
@@ -128,4 +127,5 @@ AD_METHOD1(GetFileMobID,
      Return the mob id used to find the file mob associated with this
   // essence.  The file mob must exist in the same file as this
   // essence data.)
+
 AD_XCLASS_END(Concrete, StoredObject)

@@ -138,6 +138,7 @@ public:
 		// @parm [out] the file mob id associated with essence
         (aafMobID_t *  pFileMobID);
 
+
 private:
   OMFixedSizeProperty<aafMobID_t> _fileMobID;
   OMDataStreamProperty _mediaData;

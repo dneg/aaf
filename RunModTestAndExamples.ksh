@@ -310,11 +310,8 @@ RunMainScript ()
 
 		VerifyFiles "ExternalAAFEssence.aaf"
 		VerifyFiles "ExternalStandardAAF.aaf"
-		VerifyFiles "ExternalStandardRaw.aaf"
-		VerifyFiles "InternalFractional.aaf"
 		VerifyFiles "InternalMulti.aaf"
 		VerifyFiles "InternalStandard.aaf"
-		VerifyFiles "InternalRaw.aaf"
 
 		cd $TargetDir
 	fi

@@ -45,6 +45,7 @@ class ImplAAFMasterMob;
 class ImplAAFPluginDescriptor;
 class ImplAAFSourceClip;
 class ImplAAFSourceMob;
+class ImplAAFEssenceSampleIndex;
 
 #ifndef __ImplAAFRoot_h__
 #include "ImplAAFRoot.h"
@@ -57,8 +58,8 @@ class ImplAAFSourceMob;
 typedef struct
 {
   aafUID_t mediaKind;
-  aafInt32 trackID;
-  aafInt16 physicalOutChan;	/* 1->N */
+  aafUInt32 trackID;
+  aafUInt16 physicalOutChan;	/* 1->N */
 } aafSubChannel_t;
 
 typedef enum { kAAFCreated, kAAFAppended, kAAFReadOnly } aafOpenType_t;
@@ -127,8 +128,8 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     MultiCreate
         (					ImplAAFMasterMob *masterMob,
- 							aafUID_t codecID,
-                          aafInt16  /*arrayElemCount*/,
+ 							aafUID_constref codecID,
+                          aafUInt16  /*arrayElemCount*/,
                            aafmMultiCreate_t *  /*mediaArray*/,
                            aafCompressEnable_t  /*Enable*/t);
 	//@comm The essence handle from this call can be used with
@@ -207,7 +208,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     WriteMultiSamples
         (// @parm [in] Do this many transfers
-         aafInt16  arrayElemCount,
+         aafUInt16  arrayElemCount,
 
          // @parm [out,size_is(arrayElemCount)] referencing this array
          aafmMultiXfer_t *  xferArray, aafmMultiResult_t *resultArray);
@@ -226,11 +227,18 @@ public:
         (// @parm [in] write this many samples
          aafUInt32  nSamples,
 
+         // @parm [in] of this size
+         aafUInt32  buflen,
+
          // @parm [in,size_is(buflen)] to a buffer
          aafDataBuffer_t  buffer,
 
-         // @parm [in] of this size
-         aafUInt32  buflen);
+         // @parm [out] samples actually written
+         aafUInt32 * samplesWritten,
+
+         // @parm [out] bytes actually written
+         aafUInt32 * bytesWritten);
+
 	//@comm Takes a essence handle, so the essence must have been opened or created.
 	// A single video frame is ONE sample.
 	// Buflen must be large enough to hold nSamples * the maximum sample size.
@@ -240,69 +248,6 @@ public:
 	// OM_ERR_BADDATAADDRESS -- The buffer must not be a NULL pointer.
 	//@comm Replaces omfmWriteDataSamples
 
-/****/
-  //****************
-  // WriteRawData()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    WriteRawData
-        (// @parm [in] write this many samples
-         aafUInt32  nSamples,
-
-         // @parm [in, size_is(nSamples * sampleSize)] to a buffer
-         aafDataBuffer_t  buffer,
-
-         // @parm [in] of this size
-         aafUInt32  sampleSize);
-	//@comm A single video frame is ONE sample.
-	//@comm Buflen must be large enough to hold
-	// nSamples * the maximum sample size.
-	//@comm Possible Errors:
-	// Standard errors (see top of file).
-	// OM_ERR_BADDATAADDRESS -- The buffer must not be a NULL pointer.
-	//@comm Replaces omfmWriteRawData
-	
-/****/
-  //****************
-  // ReadRawData()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    ReadRawData
-        (// @parm [in] write this many samples
-         aafUInt32  nSamples,
-
-         // @parm [in] to a buffer of this size
-         aafUInt32  buflen,
-
-         // @parm [out, size_is(buflen), length_is(*bytesRead)] here is the buffer
-         aafDataBuffer_t  buffer,
-
-         // @parm [out,ref] 
-         aafUInt32 *  samplesRead,
-
-         // @parm [out,ref] 
-         aafUInt32 *  bytesRead);
-	//@comm A single video frame is ONE sample.
-	//@comm Buflen must be large enough to hold nSamples * the maximum sample size.
-	//@comm Possible Errors:
-	// Standard errors (see top of file).
-	// OM_ERR_BADDATAADDRESS -- The buffer must not be a NULL pointer.
-	//@comm Replaces omfmReadRawData
-	
-/****/
-  //****************
-  // WriteDataLines()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    WriteFractionalSample
-        (// @parm [in] 
-         aafUInt32  nBytes,
-
-         // @parm [in, size_is(nLines * nBytesPerLine)] from a buffer
-         aafDataBuffer_t  buffer,
-
-         // @parm [out,ref] of this size
-         aafUInt32 *  bytesWritten);
 	
 /****/
   //****************
@@ -317,10 +262,10 @@ public:
 
 /****/
   //****************
-  // GetNumChannels()
+  // CountChannels()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetNumChannels
+    CountChannels
         (// @parm [in] In this master mob
          ImplAAFMasterMob * masterMob,
 
@@ -334,7 +279,7 @@ public:
          aafUID_t mediaKind,
 
          // @parm [out] How many channels?
-         aafInt16*  numCh);
+         aafUInt16*  numCh);
 	//@comm Returns the number of interleaved essence channels of a given type in the essence stream referenced by the given file mob
 	//@comm If the data format is not interleaved, then the answer will
 	// always be zero or one.  This function correctly returns zero
@@ -369,7 +314,7 @@ public:
   // GetSampleFrameSize()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetSampleFrameSize
+    GetIndexedSampleSize
         (// @parm [in] and this essence type
          ImplAAFDataDef *  pMediaKind,
 
@@ -401,10 +346,10 @@ public:
 
 /****/
   //****************
-  // GetSampleCount()
+  // CountSamples()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetSampleCount
+    CountSamples
         (// @parm [in] and this essence type
          ImplAAFDataDef * pMediaKind,
 
@@ -446,7 +391,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     ReadMultiSamples
         (// @parm [in] 
-         aafInt16  elemCount,
+         aafUInt16  elemCount,
 
          // @parm [out, size_is(elemCount)] 
          aafmMultiXfer_t *  xferArray, aafmMultiResult_t *resultArray);
@@ -456,20 +401,6 @@ public:
 	// doing the transfer.
 	//@comm Replaces omfmReadMultiSamples
 	
-/****/
-  //****************
-  // ReadDataLines()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    ReadFractionalSample
-        (aafUInt32  bufLen,
-
-         // @parm [out, size_is(bufLen),length_is(*bytesRead)] 
-         aafDataBuffer_t  buffer,
-
-         // @parm [out,ref] 
-         aafUInt32*  bytesRead);
-
 /****/
   //****************
   // GotoFrameNumber()
@@ -574,21 +505,6 @@ public:
 	//@comm The name will be truncated to fit within "buflen" bytes.
 	//@comm Replaces omfmMediaGetCodecID */
 
-/****/
-  //****************
-  // AddSampleIndexEntry()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    AddSampleIndexEntry
-        // @parm [in] add a frame offset to it's frame index
-        (aafInt64  frameOffset);
-	//@comm This function should NOT be called when essence is passed to
-	//the reference implementation in an uncompressed format.
-	//@comm Possible Errors:<nl>
-	//	Standard errors (see top of file).<nl>
-	//	OM_ERR_INVALID_OP_CODEC -- This kind of essence doesn't have a frame index<nl>
-	//	OM_ERR_MEDIA_OPENMODE -- The essence is open for read-only.
-	//@comm Replaces omfmAddFrameIndexEntry */
 
 
   //***********************************************************
@@ -680,17 +596,21 @@ public:
 							 ImplAAFLocator *addLocator,
 							 ImplAAFSourceMob **result);
 
+  AAFRESULT InstallEssenceAccessIntoCodec();
+
 private:
 	aafUID_t				_codecID;
-	aafUID_t				_variety;
+	aafUID_t				_flavour;
 	ImplAAFLocator			*_destination;
-	aafUID_t				_fileFormat;
+	aafUID_t				_containerDefID;
 	ImplAAFSourceMob		*_compFileMob;
-	aafInt32				_numChannels;
+	aafUInt32				_numChannels;
 	aafSubChannel_t			*_channels;
 	ImplAAFMasterMob		*_masterMob;
 	ImplAAFFileDescriptor	*_mdes;
 	IAAFEssenceCodec		*_codec;
+  IAAFMultiEssenceCodec *_multicodec;
+  IAAFEssenceData *_internalEssenceData;
 	IAAFEssenceStream		*_stream;
 	aafOpenType_t			_openType;
 	IAAFPluginDescriptor	*_codecDescriptor;
