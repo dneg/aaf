@@ -87,8 +87,7 @@ char *aafGetExpandedErrorString(aafErr_t code,
 	strncpy(buffer, basic, buflen);
 	if((strlen(basic) < (aafUInt16)buflen) && (file != NULL))
 	{
-		if(code == OM_ERR_BENTO_PROBLEM ||
-		   code == OM_ERR_BADOPEN ||
+		if(code == OM_ERR_BADOPEN ||
 		   code == OM_ERR_NOTAAFFILE ||
 		   code == OM_ERR_FILE_NOT_FOUND)
 		{
@@ -98,7 +97,7 @@ char *aafGetExpandedErrorString(aafErr_t code,
 				strncat(buffer, file->GetContainerErrString(), buflen - strlen(buffer));
 				strncat(buffer, "]", buflen - strlen(buffer));
 			}
-			else if(file->_session->GetBentoError() != 0)
+			else if(file->_session->GetContainerError() != 0)
 			{
 				strncat(buffer, "\n[", buflen - strlen(buffer));
 				strncat(buffer, file->_session->GetContainerErrString(), buflen - strlen(buffer));
@@ -245,7 +244,7 @@ void aafErrorInit(void)
 
 /*** 1.0 COMPATIBILITY ONLY Error Codes ***/
 	localErrorStrings[OM_ERR_BADOBJ] =
-		"AAF_ERR: Null AAF/Bento object";
+		"AAF_ERR: Null AAF object";
 
 	localErrorStrings[OM_ERR_INULLMOBIDPTR] =
 		"AAF_ERR(Import): NULL Mob ID pointer in GetNthMediaDesc/SetMediaDesc";
@@ -268,12 +267,6 @@ void aafErrorInit(void)
 	localErrorStrings[OM_ERR_LRC_MONOONLY] =
 	   "AAF_ERR: Only one channel audio supported for LRC";
 
-	localErrorStrings[OM_ERR_BADSESSION] =
-		"AAF_INTERNAL_ERR: Bad Bento Session operation";
-
-	localErrorStrings[OM_ERR_INTERNAL_BADOBJ] =
-		"AAF_INTERNAL_ERR: Error creating AAF/Bento object";
-
 	localErrorStrings[OM_ERR_BADSAMPLEOFFSET] =
 		"AAF_ERR: Sample Index offset out of range";
 
@@ -291,9 +284,6 @@ void aafErrorInit(void)
 
 	localErrorStrings[OM_ERR_BADSESSIONCLOSE] =
 		"AAF_ERR: Container Session close failed";
-
-	localErrorStrings[OM_ERR_BADCONTAINER] =
-		"AAF_ERR: Cannot find Bento container";
 
 	/* File Error Codes */
 	localErrorStrings[OM_ERR_FILEREV_NOT_SUPP] =
@@ -883,13 +873,7 @@ void aafErrorInit(void)
 		
 	localErrorStrings[OM_ERR_TABLE_BAD_ITER] =
 		"AAF_INTERNAL_ERR: Bad table iterator handle";
-		
-	localErrorStrings[OM_ERR_BENTO_PROBLEM] =
-		"AAF_ERR: Bento container error";
-
-	localErrorStrings[OM_ERR_BENTO_HANDLER] = 
-		"AAF_INTERNAL_ERR: Can't locate Bento handler";
-		
+				
 	localErrorStrings[OM_ERR_PROPID_MATCH] =
 		"AAF_INTERNAL_ERR: Property ID code doesn't match between revs";
 
