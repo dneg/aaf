@@ -266,7 +266,7 @@ AAFRESULT ImplAAFPulldown::MapOffset(aafPosition_t offset,
 			sign = -1;
 		  else 
 			sign = 1;
-		  offset32 = offset;
+		  offset32 = (aafInt32)offset;	// truncate from 64bit to 32bit integer
 
 		  MaskGetBits(maskBits, &maskones);
 		  masksize = (char)maskLen;
