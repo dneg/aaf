@@ -148,6 +148,21 @@ public:
                            OMByteOrder byteOrder) const;
 
 
+  //****************
+  // pvtInitialize()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    pvtInitialize
+        (// @parm [in] auid to be used to identify this type
+         const aafUID_t *  pID,
+
+         // @parm [in] type of each element to be contained in this array
+         const aafUID_t * pTypeID,
+
+         // @parm [in] friendly name of this type definition
+         wchar_t *  pTypeName);
+
+
   // overrides from ImplAAFTypeDef
   //
   aafBool IsFixedSize (void) const;
