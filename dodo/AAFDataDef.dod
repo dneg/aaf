@@ -5,11 +5,7 @@ AAFDataDefinition\
 #startm .parent-module 0
 AAFDefinitionObject\
 #endm
-#c
-#import ./AAFUnitTest.exp
 AD_HEAD
-
-AD_INCLUDE(AAFTypes)
 
 /******************************************\
 *                                          *
@@ -34,174 +30,195 @@ AD_CLASS_UUID(dfbd652A, 1d81, 11d2, bf, 96, 00, 60, 97, 11, 62, 12)
 AD_DEFAULT_UUID(dfbd6529, 1d81, 11d2, bf, 96, 00, 60, 97, 11, 62, 12)
 AD_CLASS_BEGIN
 
-AD_CONSTRUCTOR2([in],aafUID_t,Auid,auid for this definition object,
-				[in],aafString_t, Name, Unique name of this Data definition,
-				Constructs and sets the AUID ad Name of this DataDefinition object.)
 
-AD_METHOD1(GetName,
-		   [retval][out],
+AD_XMETHOD1(GetName,
+		   [retval\,out],
+		   objPass,
 		   aafString_t *,
 		   pstrName,
 		   Pointer to name,
 		   Gets the unique name that identifies this datakind object.)
 
-AD_METHOD1(IsCharKind,
-		   [retval][out],
+AD_XMETHOD1(IsCharKind,
+		   [retval\,out],
+		   objPass,
 		   aafBool *,
 		   bIsCharKind,
 		   pointer to the return value, 
 		   Sets return value to TRUE if DataKind is a Char.)
 
-AD_METHOD1(IsUInt8Kind,
-		   [retval][out],
+AD_XMETHOD1(IsUInt8Kind,
+		   [retval\,out],
+		   objPass,
 		   aafBool *,
 		   bIsUInt8Kind,
 		   pointer to the return value, 
 		   Sets return value to TRUE if DataKind is a UINT8.)
 
-AD_METHOD1(IsUInt16Kind,
-		   [retval][out],
+AD_XMETHOD1(IsUInt16Kind,
+		   [retval\,out],
+		   objPass,
 		   aafBool *,
 		   bIsUIntKind,
 		   pointer to the return value, 
 		   Sets return value to TRUE if DataKind is a UINT16.)
 
-AD_METHOD1(IsUInt32Kind,
-		   [retval][out],
+AD_XMETHOD1(IsUInt32Kind,
+		   [retval\,out],
+		   objPass,
 		   aafBool *,
 		   bIsUInt32Kind,
 		   pointer to the return value, 
 		   Sets return value to TRUE if DataKind is a UINT32.)
 
-AD_METHOD1(IsInt8Kind,
-		   [retval][out],
+AD_XMETHOD1(IsInt8Kind,
+		   [retval\,out],
+		   objPass,
 		   aafBool *,
 		   bIsInt8Kind,
 		   pointer to the return value, 
 		   Sets return value to TRUE if DataKind is a INT8.)
 
-AD_METHOD1(IsInt16Kind,
-		   [retval][out],
+AD_XMETHOD1(IsInt16Kind,
+		   [retval\,out],
+		   objPass,
 		   aafBool *,
 		   bIsIntKind,
 		   pointer to the return value, 
 		   Sets return value to TRUE if DataKind is a INT16.)
 
 
-AD_METHOD1(IsInt32Kind,
-		   [retval][out],
+AD_XMETHOD1(IsInt32Kind,
+		   [retval\,out],
+		   objPass,
 		   aafBool *,
 		   bIsInt32Kind,
 		   pointer to the return value, 
 		   Sets return value to TRUE if DataKind is a INT32.)
 
-AD_METHOD1(IsRationalKind,
-		   [retval][out],
+AD_XMETHOD1(IsRationalKind,
+		   [retval\,out],
+		   objPass,
 		   aafBool *,
 		   bIsRationalKind,
 		   pointer to the return value, 
 		   Sets return value to TRUE if DataKind is a rational.)
 
-AD_METHOD1(IsBooleanKind,
-		   [retval][out],
+AD_XMETHOD1(IsBooleanKind,
+		   [retval\,out],
+		   objPass,
 		   aafBool *,
 		   bIsBooleanKind,
 		   pointer to the return value, 
 		   Sets return value to TRUE if DataKind is a boolean.)
 
-AD_METHOD1(IsStringKind,
-		   [retval][out],
+AD_XMETHOD1(IsStringKind,
+		   [retval\,out],
+		   objPass,
 		   aafBool *,
 		   bIsStringKind,
 		   pointer to the return value, 
 		   Sets return value to TRUE if DataKind is a string.)
 
-AD_METHOD1(IsColorSpaceKind,
-		   [retval][out],
+AD_XMETHOD1(IsColorSpaceKind,
+		   [retval\,out],
+		   objPass,
 		   aafBool *,
 		   bIsColorSpaceKind,
 		   pointer to the return value, 
 		   Sets return value to TRUE if DataKind is a colorspace.)
 
-AD_METHOD1(IsColorKind,
-		   [retval][out],
+AD_XMETHOD1(IsColorKind,
+		   [retval\,out],
+		   objPass,
 		   aafBool *,
 		   bIsColorKind,
 		   pointer to the return value, 
 		   Sets return value to TRUE if DataKind is a Color.)
 
-AD_METHOD1(IsDistanceKind,
-		   [retval][out],
+AD_XMETHOD1(IsDistanceKind,
+		   [retval\,out],
+		   objPass,
 		   aafBool *,
 		   bIsDistanceKind,
 		   pointer to the return value, 
 		   Sets return value to TRUE if DataKind is a distance.)
 
-AD_METHOD1(IsPointKind,
-		   [retval][out],
+AD_XMETHOD1(IsPointKind,
+		   [retval\,out],
+		   objPass,
 		   aafBool *,
 		   bIsPointKind,
 		   pointer to the return value, 
 		   Sets return value to TRUE if DataKind is a point.)
 
-AD_METHOD1(IsDirectionCodeKind,
-		   [retval][out],
+AD_XMETHOD1(IsDirectionCodeKind,
+		   [retval\,out],
+		   objPass,
 		   aafBool *,
 		   bIsDirectionCodeKind,
 		   pointer to the return value, 
 		   Sets return value to TRUE if DataKind is a direction code.)
 
-AD_METHOD1(IsPolynomialKind,
-		   [retval][out],
+AD_XMETHOD1(IsPolynomialKind,
+		   [retval\,out],
+		   objPass,
 		   aafBool *,
 		   bIsPolynomialKind,
 		   pointer to the return value, 
 		   Sets return value to TRUE if DataKind is a polynomial.)
 
-AD_METHOD1(IsPictureKind,
-		   [retval][out],
+AD_XMETHOD1(IsPictureKind,
+		   [retval\,out],
+		   objPass,
 		   aafBool *,
 		   bIsPictureKind,
 		   pointer to the return value, 
 		   Sets return value to TRUE if DataKind is a picture.)
 
-AD_METHOD1(IsMatteKind,
-		   [retval][out],
+AD_XMETHOD1(IsMatteKind,
+		   [retval\,out],
+		   objPass,
 		   aafBool *,
 		   bIsMatteKind,
 		   pointer to the return value, 
 		   Sets return value to TRUE if DataKind is a matte.)
 
-AD_METHOD1(IsPictureWithMatteKind,
-		   [retval][out],
+AD_XMETHOD1(IsPictureWithMatteKind,
+		   [retval\,out],
+		   objPass,
 		   aafBool *,
 		   bIsPictureWithMatteKind,
 		   pointer to the return value, 
 		   Sets return value to TRUE if DataKind is a picture with matte.)
 
-AD_METHOD1(IsSoundKind,
-		   [retval][out],
+AD_XMETHOD1(IsSoundKind,
+		   [retval\,out],
+		   objPass,
 		   aafBool *,
 		   bIsSoundKind,
 		   pointer to the return value, 
 		   Sets return value to TRUE if DataKind is a sound.)
 
-AD_METHOD1(IsStereoSoundKind,
-		   [retval][out],
+AD_XMETHOD1(IsStereoSoundKind,
+		   [retval\,out],
+		   objPass,
 		   aafBool *,
 		   bIsStereoSoundKind,
 		   pointer to the return value, 
 		   Sets return value to TRUE if DataKind is a stereo sound.)
 
-AD_METHOD1(IsTimecodeKind,
-		   [retval][out],
+AD_XMETHOD1(IsTimecodeKind,
+		   [retval\,out],
+		   objPass,
 		   aafBool *,
 		   bIsTimecodeKind,
 		   pointer to the return value, 
 		   Sets return value to TRUE if DataKind is a timecode.)
 
-AD_METHOD1(IsEdgecodeKind,
-		   [retval][out],
+AD_XMETHOD1(IsEdgecodeKind,
+		   [retval\,out],
+		   objPass,
 		   aafBool *,
 		   bIsEdgecodeKind,
 		   pointer to the return value, 
@@ -209,27 +226,25 @@ AD_METHOD1(IsEdgecodeKind,
 
 
 
-AD_METHOD2(DoesDatakindConvertTo,
-		   [retval][out],aafBool *,bDoesConvertTo, pointer to result,
-		   [in],aafUID_t, Auid, Auid to compare against,
+AD_XMETHOD2(DoesDatakindConvertTo,
+		   [in\,ref], objPass, aafUID_t *, pAuid, Auid to compare against,
+		   [retval\,out], objPass, aafBool *, bDoesConvertTo, pointer to result,
 		   Sets return value to TRUE if the datakind of the given object
 		   // can be converted to the datakind specified in the IN 
 		   // parameter with the datakindName string.)
 		   
-AD_METHOD2(IsDatakindOf,
-		   [retval][out],aafBool *,bIsDatakindOf, pointer to result,
-		   [in],aafUID_t, Auid, Auid to compare against,
+AD_XMETHOD2(IsDatakindOf,
+		   [in\,ref], objPass, aafUID_t *, pAuid, Auid to compare against,
+		   [retval\,out], objPass, aafBool *, bIsDatakindOf, pointer to result,
 		   Sets the value to TRUE if the datakind of the given object
 		   // matches the datakind specified in the IN parameter with
 		   // the datakindName string.)
 
-AD_METHOD2(DoesDatakindConvertFrom,
-		   [retval][out],aafBool *,bDoesConvertFrom, pointer to result,
-		   [in],aafUID_t, Auid, Auid to compare against,
+AD_XMETHOD2(DoesDatakindConvertFrom,
+		   [in\,ref], objPass, aafUID_t *, pAuid, Auid to compare against,
+		   [retval\,out], objPass, aafBool *, bDoesConvertFrom, pointer to result,
 		   Sets return value to TRUE if the datakind of the given object
 		   // can be converted from the datakind specified in the IN 
 		   // parameter specified with the datakindName string.)
-
-AD_OVERRIDE(.method-Test)
 
 AD_CLASS_END
