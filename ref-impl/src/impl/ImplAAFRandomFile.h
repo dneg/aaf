@@ -73,10 +73,10 @@ public:
 
 
   //****************
-  // SaveAs()
+  // SaveAsFile()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    SaveAs
+    SaveAsFile
         // @parm [in] The destination file into which the contents of this file are to
     // be written.
         (ImplAAFFile * pDestFile);
