@@ -56,7 +56,15 @@ include $(AAFBASE)/build/cdefs-$(COMPILER).mk
 #------------------------------------------------------------------------------
 # Platform specific compiler options
 #------------------------------------------------------------------------------
-PLATFORM_CFLAGS = 
+PLATFORM_CFLAGS =
+
+# Platform specific compiler options
+# Large File Support definitions (see libc documentation)
+#
+# _LARGEFILE_SOURCE   - declares the functions fseeko() and ftello()
+# _LARGEFILE64_SOURCE - enables 32 bit systems to use files larger than 2GB.
+# _FILE_OFFSET_BITS   - determines which file system interface shall be used.
+PLATFORM_CFLAGS += -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
 
 
 #------------------------------------------------------------------------------

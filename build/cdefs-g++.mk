@@ -70,7 +70,7 @@ ADD_CFLAGS =
 # 
 # Make all char declarations to be signed char declarations.
 #------------------------------------------------------------------------------
-ADD_CFLAGS += -fsigned-char -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+ADD_CFLAGS += -fsigned-char
 
 
 #------------------------------------------------------------------------------
