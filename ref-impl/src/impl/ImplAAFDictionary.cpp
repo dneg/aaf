@@ -1492,9 +1492,9 @@ void ImplAAFDictionary::InitBuiltins()
   InitDataDef (kAAFDataDef_Timecode, L"Timecode", L"Timecode data");
 
   // Legacy definitions
-  InitDataDef (kAAFDataDef_LegacyPicture, L"Picture", L"Picture data (legacy)");
-  InitDataDef (kAAFDataDef_LegacySound, L"Sound", L"Sound data (legacy)");
-  InitDataDef (kAAFDataDef_LegacyTimecode, L"Timecode", L"Timecode data (legacy)");
+  InitDataDef (kAAFDataDef_LegacyPicture, L"Picture", L"Picture data");
+  InitDataDef (kAAFDataDef_LegacySound, L"Sound", L"Sound data");
+  InitDataDef (kAAFDataDef_LegacyTimecode, L"Timecode", L"Timecode data");
 
   //**********************
 
