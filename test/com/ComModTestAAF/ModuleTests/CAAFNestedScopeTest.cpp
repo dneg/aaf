@@ -36,6 +36,7 @@
 #include "AAFDataDefs.h"
 #include "AAFDefUIDs.h"
 
+#include "CAAFBuiltinDefs.h"
 
 #include <iostream.h>
 #include <stdio.h>
@@ -147,7 +148,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	aafFadeType_t		fadeInType = kFadeLinearAmp;
 	aafFadeType_t		fadeOutType = kFadeLinearPower;
 	aafSourceRef_t		sourceRef; 
-	aafUID_t			fillerUID = DDEF_Picture;
 	aafLength_t			fillerLength = 3200;
 
 	HRESULT				hr = AAFRESULT_SUCCESS;
@@ -163,9 +163,10 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 		// Get the AAF Dictionary so that we can create valid AAF objects.
 		checkResult(pHeader->GetDictionary(&pDictionary));
+		CAAFBuiltinDefs defs (pDictionary);
  		
 		// Create a mob to be referenced by the source clip
-		checkResult(pDictionary->CreateInstance(AUID_AAFMasterMob,
+		checkResult(pDictionary->CreateInstance(defs.cdMasterMob(),
 								 IID_IAAFMob, 
 								 (IUnknown **)&pReferencedMob));
 		checkResult(CoCreateGuid((GUID *)&referencedMobID));
@@ -176,7 +177,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		pReferencedMob = NULL;
 
 		// Create a Composition Mob
-		checkResult(pDictionary->CreateInstance(AUID_AAFCompositionMob,
+		checkResult(pDictionary->CreateInstance(defs.cdCompositionMob(),
 											  IID_IAAFCompositionMob, 
 											  (IUnknown **)&pCompMob));
 
@@ -187,7 +188,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pMob->SetName(L"AAFNestedScopeTest"));
 	  
 		// Create a Source clip 
- 		checkResult(pDictionary->CreateInstance(AUID_AAFSourceClip,
+ 		checkResult(pDictionary->CreateInstance(defs.cdSourceClip(),
 						     IID_IAAFSourceClip, 
 						     (IUnknown **)&pSourceClip));		
 
@@ -199,14 +200,14 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pSourceClip->SetSourceReference(sourceRef));
 
 		// create a filler 
-	    checkResult(pDictionary->CreateInstance(AUID_AAFFiller,
+	    checkResult(pDictionary->CreateInstance(defs.cdFiller(),
 												IID_IAAFFiller, 
 												(IUnknown **)&pFiller));
 		// Set its properties.
-	    checkResult(pFiller->Initialize(fillerUID, fillerLength));
+	    checkResult(pFiller->Initialize(defs.ddPicture(), fillerLength));
 
 		// Now create a selector 
-	    checkResult(pDictionary->CreateInstance(AUID_AAFNestedScope,
+	    checkResult(pDictionary->CreateInstance(defs.cdNestedScope(),
 												IID_IAAFNestedScope, 
 												(IUnknown **)&pNestedScope));
 
@@ -440,19 +441,3 @@ extern "C" HRESULT CAAFNestedScope_test()
 //	}
 	return hr;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -14,7 +14,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -54,16 +54,16 @@ public:
 	Initialize ();
 
   virtual AAFRESULT STDMETHODCALLTYPE
-	OpenExistingRead (wchar_t * pFileName,
+	OpenExistingRead (const aafCharacter * pFileName,
 					  aafUInt32 modeFlags);
 
   virtual AAFRESULT STDMETHODCALLTYPE
-	OpenExistingModify (wchar_t * pFileName,
+	OpenExistingModify (const aafCharacter * pFileName,
 						aafUInt32 modeFlags,
 						aafProductIdentification_t * pIdent);
 
   virtual AAFRESULT STDMETHODCALLTYPE
-	OpenNewModify (wchar_t * pFileName,
+	OpenNewModify (const aafCharacter * pFileName,
 				   aafUInt32 modeFlags,
 				   aafProductIdentification_t * pIdent);
 
@@ -77,7 +77,7 @@ public:
 	Save ();
 
   virtual AAFRESULT STDMETHODCALLTYPE
-	SaveAs (wchar_t * pFileName,
+	SaveAs (const aafCharacter * pFileName,
 			aafUInt32 modeFlags);
 
   virtual AAFRESULT STDMETHODCALLTYPE

@@ -38,7 +38,7 @@ AD_XFUNCTION1(AAFLoad,
 			objPass,
 			const char *,
 			dllname,
-			Pointer to the name of AAF dll to load.
+       Pointer to the name of AAF dll to load.
     // If this pointer is NULL the function will attempt to load the
     // default AAF dll.,
 
@@ -62,9 +62,9 @@ AD_XFUNCTION3(AAFFileOpenExistingRead,
 
 			[in\, string],
 			objPass,
-			aafCharacter *,
+			aafCharacter_constptr,
 			pFileName,
-			Null-terminated string containing name of filesystem file to be
+       Null-terminated string containing name of filesystem file to be
     // opened for reading.  Filename must be in a form that would be
     // acceptable to StgOpenStorage\(\) for this platform.,
 
@@ -72,8 +72,8 @@ AD_XFUNCTION3(AAFFileOpenExistingRead,
 			objPass,
 			aafUInt32,
 			modeFlags,
-			File open mode flags.  May be any of the following ORed together.
-    // All other bits must be set to zero.
+       File open mode flags.  May be any of the following ORed
+    // together.  All other bits must be set to zero.
     //  - kAAFFileModeUnbuffered - to indicate buffered mode.  Default
     //    is buffered.,
 
@@ -84,9 +84,9 @@ AD_XFUNCTION3(AAFFileOpenExistingRead,
 			Pointer to buffer to receive pointer to new file.,
 
 
-			Creates an object associated with with an existing
-  // filesystem file that contains data which is only to be read.
-  // Does the following:
+     Creates an object associated with with an existing filesystem
+  // file that contains data which is only to be read.  Does the
+  // following:
   // - Opens the existing named file in the filesystem for reading.
   // - Associates an object with that filesystem file.
   // - Places the object into the Open-read-only state.
@@ -134,7 +134,7 @@ AD_XFUNCTION4(AAFFileOpenExistingModify,
 
 			[in\, string],
 			objPass,
-			aafCharacter *,
+			aafCharacter_constptr,
 			pFileName,
 			Null-terminated string containing name of filesystem file to be
     // opened for modification.  Filename must be in a form that would
@@ -222,7 +222,7 @@ AD_XFUNCTION4(AAFFileOpenNewModify,
 
 			[in\, string],
 			objPass,
-			aafCharacter *,
+			aafCharacter_constptr,
 			pFileName,
 			Null-terminated string containing name of filesystem file to be
     // opened for modification.  Filename must be in a form that would
@@ -342,7 +342,7 @@ AD_XFUNCTION2(AAFFileOpenTransient,
   //   - the pIdent pointer argument is NULL.)
 
 
-  AD_XFUNCTION1(AAFGetPluginManager,
+AD_XFUNCTION1(AAFGetPluginManager,
 			[out],
 			objOut,
 			AAFPluginManager,
@@ -352,5 +352,4 @@ AD_XFUNCTION2(AAFFileOpenTransient,
 
 			Returns an interface of the plugin manager\, which is used to select
   //			plugins for exporting.)
-
 AD_MODULE_END

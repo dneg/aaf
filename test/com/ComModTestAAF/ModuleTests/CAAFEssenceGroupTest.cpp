@@ -38,6 +38,8 @@
 #include "AAFDefUIDs.h"
 #include "AAFUtils.h"
 
+#include "CAAFBuiltinDefs.h"
+
 static aafWChar *slotName = L"SLOT1";
 //static aafInt32 fadeInLen  = 1000;
 //static aafInt32 fadeOutLen = 2000;
@@ -106,21 +108,22 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 	try
 	{
-    // Remove the previous test file if any.
-    RemoveTestFile(pFileName);
+	    // Remove the previous test file if any.
+	    RemoveTestFile(pFileName);
 
-    // Create the file
+		// Create the file
 		checkResult(AAFFileOpenNewModify(pFileName, 0, &ProductInfo, &pFile));
 		bFileOpen = true;
  
-    // We can't really do anthing in AAF without the header.
+		// We can't really do anthing in AAF without the header.
 		checkResult(pFile->GetHeader(&pHeader));
 
-    // Get the AAF Dictionary so that we can create valid AAF objects.
-    checkResult(pHeader->GetDictionary(&pDictionary));
+		// Get the AAF Dictionary so that we can create valid AAF objects.
+		checkResult(pHeader->GetDictionary(&pDictionary));
+		CAAFBuiltinDefs defs (pDictionary);
  		
 		//Make the MOB to be referenced
-		checkResult(pDictionary->CreateInstance(AUID_AAFMasterMob,
+		checkResult(pDictionary->CreateInstance(defs.cdMasterMob(),
 								 IID_IAAFMob, 
 								 (IUnknown **)&pReferencedMob));
 		checkResult(CoCreateGuid((GUID *)&referencedMobID));
@@ -128,7 +131,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pReferencedMob->SetName(L"AAFSourceClipTest::ReferencedMob"));
 
 		// Create a Mob
-		checkResult(pDictionary->CreateInstance(AUID_AAFCompositionMob,
+		checkResult(pDictionary->CreateInstance(defs.cdCompositionMob(),
 								 IID_IAAFMob, 
 								 (IUnknown **)&pMob));
 		checkResult(CoCreateGuid((GUID *)&newMobID));
@@ -136,20 +139,20 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pMob->SetName(L"AAFSourceClipTest"));
 
 		// Create an EssenceGroup
-		checkResult(pDictionary->CreateInstance(AUID_AAFEssenceGroup,
+		checkResult(pDictionary->CreateInstance(defs.cdEssenceGroup(),
 								 IID_IAAFEssenceGroup, 
 								 (IUnknown **)&essenceGroup));
 		checkResult(essenceGroup->QueryInterface (IID_IAAFComponent, (void **)&pComponent));
-		checkResult(pComponent->SetDataDef (DDEF_Sound));
+		checkResult(pComponent->SetDataDef (defs.ddSound()));
 		checkResult(pComponent->SetLength (segLen));
 		pComponent->Release();
 		pComponent = NULL;
 		// Add a source clip still frame
-		checkResult(pDictionary->CreateInstance(AUID_AAFSourceClip,
+		checkResult(pDictionary->CreateInstance(defs.cdSourceClip(),
 								 IID_IAAFSourceClip, 
 								 (IUnknown **)&pSourceClip));
 		checkResult(pSourceClip->QueryInterface (IID_IAAFComponent, (void **)&pComponent));
-		checkResult(pComponent->SetDataDef (DDEF_Sound));
+		checkResult(pComponent->SetDataDef (defs.ddSound()));
 		checkResult(pComponent->SetLength (stillLength));
 		checkResult(essenceGroup->SetStillFrame(pSourceClip)); 
 		pComponent->Release();
@@ -157,11 +160,11 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		pSourceClip->Release();
 		pSourceClip = NULL;
 		// Add a source clip alternate
-		checkResult(pDictionary->CreateInstance(AUID_AAFSourceClip,
+		checkResult(pDictionary->CreateInstance(defs.cdSourceClip(),
 								 IID_IAAFSourceClip, 
 								 (IUnknown **)&pSourceClip));
 		checkResult(pSourceClip->QueryInterface (IID_IAAFComponent, (void **)&pComponent));
-		checkResult(pComponent->SetDataDef (DDEF_Sound));
+		checkResult(pComponent->SetDataDef (defs.ddSound()));
 		checkResult(pComponent->SetLength (segLen));
 		checkResult(essenceGroup->AppendChoice(pSourceClip)); 
 		pComponent->Release();
@@ -189,41 +192,69 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
   }
 
   // Cleanup and return
-	if (pSourceClip)
-		pSourceClip->Release();
-
-	if (pSeg)
-		pSeg->Release();
-
-	if (pComponent)
-		pComponent->Release();
-
-	if (newSlot)
-		newSlot->Release();
-
-	if (essenceGroup)
-		essenceGroup->Release();
-
-	if (pMob)
-		pMob->Release();
-
-	if (pReferencedMob)
-		pReferencedMob->Release();
-
-	if (pDictionary)
-		pDictionary->Release();
-
-	if (pHeader)
-		pHeader->Release();
-
-	if (pFile) 
+  if (pSourceClip)
 	{
-		if (bFileOpen)
-		  {
-			pFile->Save();
-			pFile->Close();
-		  }
-		pFile->Release();
+	  pSourceClip->Release();
+	  pSourceClip = 0;
+	}
+
+  if (pSeg)
+	{
+	  pSeg->Release();
+	  pSeg = 0;
+	}
+
+  if (pComponent)
+	{
+	  pComponent->Release();
+	  pComponent = 0;
+	}
+
+  if (newSlot)
+	{
+	  newSlot->Release();
+	  newSlot = 0;
+	}
+
+  if (essenceGroup)
+	{
+	  essenceGroup->Release();
+	  essenceGroup = 0;
+	}
+
+  if (pMob)
+	{
+	  pMob->Release();
+	  pMob = 0;
+	}
+
+  if (pReferencedMob)
+	{
+	  pReferencedMob->Release();
+	  pReferencedMob = 0;
+	}
+
+  if (pDictionary)
+	{
+	  pDictionary->Release();
+	  pDictionary = 0;
+	}
+
+  if (pHeader)
+	{
+	  pHeader->Release();
+	  pHeader = 0;
+	}
+
+  if (pFile) 
+	{
+	  if (bFileOpen)
+		{
+		  pFile->Save();
+		  pFile->Close();
+		}
+	  pFile->Release();
+	  pFile = 0;
 	}
 
 

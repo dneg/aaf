@@ -9,7 +9,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -42,18 +42,18 @@
 #if !defined(_MSC_VER)
 
 typedef STDAPICALLTYPE HRESULT (* LPFNAAFFILEOPENEXISTINGREAD)(
-    wchar_t *  pFileName,
+    const wchar_t *  pFileName,
     aafUInt32  modeFlags,
     IAAFFile ** ppFile);
 
 typedef STDAPICALLTYPE HRESULT (* LPFNAAFFILEOPENEXISTINGMODIFY)(
-    wchar_t *  pFileName,
+    const wchar_t *  pFileName,
     aafUInt32  modeFlags,
     aafProductIdentification_t *  pIdent,
     IAAFFile ** ppFile);
 
 typedef STDAPICALLTYPE HRESULT (* LPFNAAFFILEOPENNEWMODIFY)(
-    wchar_t *  pFileName,
+    const wchar_t *  pFileName,
     aafUInt32  modeFlags,
     aafProductIdentification_t *  pIdent,
     IAAFFile ** ppFile);
@@ -68,18 +68,18 @@ typedef STDAPICALLTYPE HRESULT (* LPFNAAFGETPLUGINMANAGER)(
 #else
 
 typedef HRESULT (STDAPICALLTYPE * LPFNAAFFILEOPENEXISTINGREAD)(
-    wchar_t *  pFileName,
+    const wchar_t *  pFileName,
     aafUInt32  modeFlags,
     IAAFFile ** ppFile);
 
 typedef HRESULT (STDAPICALLTYPE * LPFNAAFFILEOPENEXISTINGMODIFY)(
-    wchar_t *  pFileName,
+    const wchar_t *  pFileName,
     aafUInt32  modeFlags,
     aafProductIdentification_t *  pIdent,
     IAAFFile ** ppFile);
 
 typedef HRESULT (STDAPICALLTYPE * LPFNAAFFILEOPENNEWMODIFY)(
-    wchar_t *  pFileName,
+    const wchar_t *  pFileName,
     aafUInt32  modeFlags,
     aafProductIdentification_t *  pIdent,
     IAAFFile ** ppFile);
@@ -138,18 +138,18 @@ public:
   // Wrapper functions for calling member entry points.
   //
   HRESULT OpenExistingRead (
-    wchar_t *  pFileName,
+    const wchar_t *  pFileName,
     aafUInt32  modeFlags,
     IAAFFile ** ppFile);
   
   HRESULT OpenExistingModify (
-    wchar_t *  pFileName,
+    const wchar_t *  pFileName,
     aafUInt32  modeFlags,
     aafProductIdentification_t *  pIdent,
     IAAFFile ** ppFile);
 
   HRESULT OpenNewModify (
-    wchar_t *  pFileName,
+    const wchar_t *  pFileName,
     aafUInt32  modeFlags,
     aafProductIdentification_t *  pIdent,
     IAAFFile ** ppFile);

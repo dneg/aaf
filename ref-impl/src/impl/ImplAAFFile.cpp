@@ -9,7 +9,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -86,7 +86,7 @@ ImplAAFFile::Initialize ()
 
 
 AAFRESULT STDMETHODCALLTYPE
-ImplAAFFile::OpenExistingRead (wchar_t * pFileName,
+ImplAAFFile::OpenExistingRead (const aafCharacter * pFileName,
 							   aafUInt32 modeFlags)
 {
 	AAFRESULT stat = AAFRESULT_SUCCESS;
@@ -174,7 +174,7 @@ ImplAAFFile::OpenExistingRead (wchar_t * pFileName,
 
 
 AAFRESULT STDMETHODCALLTYPE
-ImplAAFFile::OpenExistingModify (wchar_t * pFileName,
+ImplAAFFile::OpenExistingModify (const aafCharacter * pFileName,
 								 aafUInt32 modeFlags,
 								 aafProductIdentification_t * pIdent)
 {
@@ -277,7 +277,7 @@ ImplAAFFile::OpenExistingModify (wchar_t * pFileName,
 
 
 AAFRESULT STDMETHODCALLTYPE
-ImplAAFFile::OpenNewModify (wchar_t * pFileName,
+ImplAAFFile::OpenNewModify (const aafCharacter * pFileName,
 							aafUInt32 modeFlags,
 							aafProductIdentification_t * pIdent)
 {
@@ -498,7 +498,7 @@ ImplAAFFile::Save ()
 
 
 AAFRESULT STDMETHODCALLTYPE
-ImplAAFFile::SaveAs (wchar_t * pFileName,
+ImplAAFFile::SaveAs (const aafCharacter * pFileName,
 					 aafUInt32 modeFlags)
 {
 	if (! _initialized)
