@@ -530,10 +530,6 @@ SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFDataDefs.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFDefs.cpp"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFEssenceData.cpp"
 # End Source File
 # Begin Source File
@@ -559,10 +555,6 @@ SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFMobs.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFMobSlots.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFObjects.cpp"
 # End Source File
 # Begin Source File
 
