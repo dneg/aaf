@@ -59,7 +59,13 @@ ImplAAFSourceMob::ImplAAFSourceMob ()
 }
 
 ImplAAFSourceMob::~ImplAAFSourceMob ()
-{}
+{
+	if(_essenceDesc != NULL)
+	{
+		_essenceDesc->ReleaseReference();
+		_essenceDesc = NULL;
+	}
+}
 
 //****************
 // GetEssenceDescription()
@@ -131,8 +137,14 @@ AAFRESULT STDMETHODCALLTYPE
 		CHECK(sub->InitializeSourceClip (dataDef, &length, sourceRef));
 		CHECK(AppendNewTimelineSlot(editRate, sub, slotID, L"Test", zeroPos, 
 												&newSlot));
+
+		sub->ReleaseReference();
 	}
 	XEXCEPT
+	{
+		if(sub != NULL)
+			sub->ReleaseReference();
+	}
 	XEND;
 
 	return(AAFRESULT_SUCCESS);
@@ -149,9 +161,7 @@ AAFRESULT STDMETHODCALLTYPE
 						   aafTimecode_t startTC,
                            aafFrameLength_t length32)
 {
-	ImplAAFSegment *slotComponent= NULL;
 	ImplAAFTimecode *tccp = NULL;
-	ImplAAFSegment *     aSubComponent = NULL;
 	ImplAAFSequence	*aSequ = NULL;
 	aafInt32         zeroL = 0L;
 	aafFrameLength_t maxLength;
@@ -181,13 +191,11 @@ AAFRESULT STDMETHODCALLTYPE
 		tccp->InitTimecode(length, &startTC);		 
  		if (FindSlotBySlotID(slotID, (ImplAAFMobSlot **)&mobSlot) == AAFRESULT_SUCCESS)
 		{
-			CHECK(mobSlot->GetSegment(&slotComponent));	
-			
-			// For now, just release the old slot component and allocate a new sequence
-			//Need to release to old sequence!!!
 			aSequ = (ImplAAFSequence *)CreateImpl(CLSID_AAFSequence);
 			CHECK(aSequ->SetInitialValue(&timecodeKind));
 			CHECK(aSequ->AppendComponent(tccp));
+			CHECK(mobSlot->SetSegment(aSequ));
+
 		} /* FindTimecodeSlot */
 		else
 		{
@@ -196,12 +204,6 @@ AAFRESULT STDMETHODCALLTYPE
 			CHECK(aSequ->AppendComponent(tccp));
 			CHECK(AppendNewTimelineSlot(editrate, aSequ, slotID,
 										NULL, zeroPos, &newSlot));
-		}
-
-		 /* Release reference, so the useCount is decremented */
-		if (slotComponent)
-		{
-//!!!		slotComponent->ReleaseObject();	
 		}
 
 		if(fullLength)
@@ -215,8 +217,18 @@ AAFRESULT STDMETHODCALLTYPE
 				CHECK(aSequ->SetLength(&length) );
 			}
 		}
+		if(aSequ != NULL)
+			aSequ->ReleaseReference();
+		if(tccp != NULL)
+			tccp->ReleaseReference();
 	} /* XPROTECT */
 	XEXCEPT
+	{
+		if(aSequ != NULL)
+			aSequ->ReleaseReference();
+		if(tccp != NULL)
+			tccp->ReleaseReference();
+	}
 	XEND;
 									
 	return (AAFRESULT_SUCCESS);
@@ -237,7 +249,7 @@ AAFRESULT STDMETHODCALLTYPE
                            aafEdgecodeHeader_t  /*header*/)
 {
 #if FULL_TOOLKIT
-	ImplAAFFiller *     filler1, *filler2;
+	ImplAAFFiller *     filler1= NULL, *filler2 = NULL;
 	ImplAAFSequence *ecSequence;
 	ImplAAFEdgecode *edgecodeClip;
 	ImplAAFRESULT			aafError = AAFRESULT_SUCCESS;
@@ -281,8 +293,19 @@ AAFRESULT STDMETHODCALLTYPE
 		CHECK(ecSequence->AppendCpnt(filler2));
 		CHECK(AppendNewSlot(editrate, ecSequence, zeroPos,
 											slotID, NULL, &newSlot));
+
+		if(filler1 != NULL)
+			filler1->ReleaseReference();
+		if(filler2 != NULL)
+			filler2->ReleaseReference();
 	} /* XPROTECT */
 	XEXCEPT
+	{
+		if(filler1 != NULL)
+			filler1->ReleaseReference();
+		if(filler2 != NULL)
+			filler2->ReleaseReference();
+	}
 	XEND;
 
 	return (AAFRESULT_SUCCESS);
@@ -305,8 +328,8 @@ AAFRESULT STDMETHODCALLTYPE
                            aafFrameLength_t  /*length32*/)
 {
 #if FULL_TOOLKIT
-	ImplAAFSourceClip	 *sclp;
-	ImplAAFTimecode *timecodeClip;
+	ImplAAFSourceClip		*sclp = NULL;
+	ImplAAFTimecode			*timecodeClip = NULL;
 	ImplAAFSequence *aSequ, *segSequ;
 	ImplAAFFiller *filler1, *filler2;
 	ImplAAFSegment *seg;
@@ -423,8 +446,18 @@ AAFRESULT STDMETHODCALLTYPE
 				 subSegment = NULL;
 			  }
 		}
+		if(sclp!= NULL)
+			sclp->ReleaseReference();
+		if(timecodeClip!= NULL)
+			timecodeClip->ReleaseReference();
 	}
 	XEXCEPT
+	{
+		if(sclp!= NULL)
+			sclp->ReleaseReference();
+		if(timecodeClip!= NULL)
+			timecodeClip->ReleaseReference();
+	}
 	XEND;
 
 	return (AAFRESULT_SUCCESS);
@@ -448,9 +481,9 @@ AAFRESULT STDMETHODCALLTYPE
                            aafLength_t  /*srcRefLength*/)
 {
 #if FULL_TOOLKIT
-	ImplAAFSegment	*seg = NULL;
-	ImplAAFMobSlot *slot = NULL;
-	AAFRESULT	status = AAFRESULT_SUCCESS;
+	ImplAAFSegment		*seg = NULL;
+	ImplAAFMobSlot		*slot = NULL;
+	AAFRESULT			status = AAFRESULT_SUCCESS;
 	aafSourceRef_t	ref;
 	aafPosition_t	zeroPos;
 	aafSlotID_t tmpSlotID;
@@ -688,7 +721,7 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFSourceMob::GetMobKind (aafMobKind_t *pMobKind)
 {
-	ImplAAFEssenceDescriptor	*edesc;
+	ImplAAFEssenceDescriptor	*edesc = NULL;
 	
 	if(pMobKind == NULL)
 		return(AAFRESULT_NULL_PARAM);
@@ -698,11 +731,16 @@ AAFRESULT STDMETHODCALLTYPE
 		if(edesc != NULL)
 		{
 			CHECK(edesc->GetOwningMobKind(pMobKind));
+			edesc->ReleaseReference();
 		}
 		else
 			*pMobKind = kAllMob;
 	}
 	XEXCEPT
+	{
+		if(edesc != NULL)
+			edesc->ReleaseReference();
+	}
 	XEND;
 
 	return AAFRESULT_SUCCESS;
