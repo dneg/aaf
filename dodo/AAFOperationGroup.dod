@@ -184,7 +184,7 @@ AD_XMETHOD1(GetRender,
 
 AD_METHOD1(IsATimeWarp,
 
-		   [out\, retval],
+		   [out\\\, retval],
 		   aafBoolean_t *,
 		   pIsTimeWarp,
 		   Returned boolean value,
@@ -198,14 +198,14 @@ AD_METHOD1(IsATimeWarp,
   // If this method fails nothing will be written to *pIsTimeWarp.
   // 
   // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
+  // the listed errors is in effect\\\, it will return the first one
   // encountered in the order given below:
   // 
   // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
+  //   - succeeded.  \\\(This is the only code indicating success.\\\)
   //
   // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\(\) called on it.
+  //   - This object has not yet had Initialize\\\(\\\) called on it.
   //
   // AAFRESULT_NULL_PARAM
   //   - pIsTimeWarp arg is NULL.)
@@ -227,14 +227,14 @@ AD_METHOD1(GetBypassOverride,
   // If this method fails nothing will be written to *pBypassOverride.
   // 
   // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
+  // the listed errors is in effect\\\, it will return the first one
   // encountered in the order given below:
   // 
   // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
+  //   - succeeded.  \\\(This is the only code indicating success.\\\)
   //
   // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\(\) called on it.
+  //   - This object has not yet had Initialize\\\(\\\) called on it.
   //
   // AAFRESULT_PROP_NOT_PRESENT
   //   - This property does not exist in the file.
@@ -258,11 +258,11 @@ AD_METHOD1(CountSourceSegments,
   // If this method fails nothing will be written to *pResult.
   // 
   // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
+  // the listed errors is in effect\\\, it will return the first one
   // encountered in the order given below:
   // 
   // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
+  //   - succeeded.  \\\(This is the only code indicating success.\\\)
   //
   // AAFRESULT_NULL_PARAM
   //   - pResult arg is NULL.)
@@ -284,14 +284,14 @@ AD_METHOD1(IsValidTranOperation,
   // If this method fails nothing will be written to *pValidTransition.
   // 
   // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
+  // the listed errors is in effect\\\, it will return the first one
   // encountered in the order given below:
   // 
   // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
+  //   - succeeded.  \\\(This is the only code indicating success.\\\)
   //
   // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\(\) called on it.
+  //   - This object has not yet had Initialize\\\(\\\) called on it.
   //
   // AAFRESULT_NULL_PARAM
   //   - pValidTransition arg is NULL.)
@@ -312,11 +312,11 @@ AD_METHOD1(CountParameters,
   // If this method fails nothing will be written to *pResult.
   // 
   // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
+  // the listed errors is in effect\\\, it will return the first one
   // encountered in the order given below:
   // 
   // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
+  //   - succeeded.  \\\(This is the only code indicating success.\\\)
   //
   // AAFRESULT_NULL_PARAM
   //   - pResult arg is NULL.)
@@ -485,14 +485,14 @@ AD_METHOD1(SetBypassOverride,
   // given operation group object.
   // 
   // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
+  // the listed errors is in effect\\\, it will return the first one
   // encountered in the order given below:
   // 
   // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
+  //   - succeeded.  \\\(This is the only code indicating success.\\\)
   //
   // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\(\) called on it.)
+  //   - This object has not yet had Initialize\\\(\\\) called on it.)
 
 
 AD_XMETHOD1(GetParameters,
