@@ -108,21 +108,12 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFComponent::SetDataDef (ImplAAFDataDef * pDataDef)
 {
-  ImplAAFDataDef	*oldDataDef;
-  
   if (! pDataDef)
 	return AAFRESULT_NULL_PARAM;
 
-	// find out if this DataDef is already set
-	if(!_dataDef.isVoid())
-	{
-		oldDataDef = _dataDef;
-		if (oldDataDef != 0)
-			oldDataDef->ReleaseReference();
-	}
 	_dataDef = pDataDef;
-	pDataDef->AcquireReference();
-  return AAFRESULT_SUCCESS;
+
+	return AAFRESULT_SUCCESS;
 }
 
 
