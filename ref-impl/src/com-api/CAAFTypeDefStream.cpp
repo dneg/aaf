@@ -65,19 +65,6 @@ CAAFTypeDefStream::~CAAFTypeDefStream ()
 
 
 
-
- 
-
-
-
-
-
-
-
-
-
-
-
 HRESULT STDMETHODCALLTYPE
     CAAFTypeDefStream::GetSize (IAAFPropertyValue * pStreamPropertyValue,
         aafInt64 *  pSize)
@@ -327,8 +314,6 @@ HRESULT STDMETHODCALLTYPE
 
 
 
-
-
 HRESULT STDMETHODCALLTYPE
     CAAFTypeDefStream::Read (IAAFPropertyValue * pStreamPropertyValue,
         aafUInt32  dataSize,
@@ -459,9 +444,6 @@ HRESULT STDMETHODCALLTYPE
 }
 
 
-
-
-
 HRESULT STDMETHODCALLTYPE
     CAAFTypeDefStream::Append (IAAFPropertyValue * pStreamPropertyValue,
         aafUInt32  dataSize,
@@ -524,12 +506,6 @@ HRESULT STDMETHODCALLTYPE
   //
   return hr;
 }
-
-
-
-
-
-
 
 
 
@@ -782,12 +758,6 @@ HRESULT STDMETHODCALLTYPE
   //
   return hr;
 }
-
-
-
-
-
-
 
 
 HRESULT STDMETHODCALLTYPE

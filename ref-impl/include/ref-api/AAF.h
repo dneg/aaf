@@ -24581,19 +24581,6 @@ DECLARE_INTERFACE_(IAAFTypeDefStream, IUnknown)
   /* *** IAAFTypeDefStream methods *** */
 
 
-
-  // 
-  // All reads/and writes advance the current position
-  //
-
-
-  //
-  // Raw byte stream access
-  //
-
-
-  // Stream size and positioning
-
   //***********************************************************
   //
   // GetSize()
@@ -24722,12 +24709,11 @@ DECLARE_INTERFACE_(IAAFTypeDefStream, IUnknown)
     /*[in]*/ aafInt64  newPosition) PURE;
 
 
-  // Sequential access
-
   //***********************************************************
   //
   // Read()
   //
+  // Sequential access.
   // Copies the data at the position of the stream to the given
   // buffer.
   //
@@ -24768,6 +24754,7 @@ DECLARE_INTERFACE_(IAAFTypeDefStream, IUnknown)
   //
   // Write()
   //
+  // Sequential access.
   // Copies the data in the given buffer into the stream at the 
   // current position of the stream..
   //
@@ -24800,13 +24787,11 @@ DECLARE_INTERFACE_(IAAFTypeDefStream, IUnknown)
     // buffer into which should contain one element to be written to the stream
     /*[in, ref, size_is(dataSize)]*/ aafMemPtr_t  pData) PURE;
 
-
-  // Extending the stream
-
   //***********************************************************
   //
   // Append()
   //
+  // Extending the stream.
   // Copies the data in the given buffer into the stream at the 
   // end of the stream.
   //
@@ -24838,12 +24823,6 @@ DECLARE_INTERFACE_(IAAFTypeDefStream, IUnknown)
 
     // buffer into which should contain one element to be written to the stream
     /*[in, ref, size_is(dataSize)]*/ aafMemPtr_t  pData) PURE;
-
-
-
-  //
-  // Access byte order of the stream
-  //
 
 
   //***********************************************************
@@ -24882,13 +24861,12 @@ DECLARE_INTERFACE_(IAAFTypeDefStream, IUnknown)
   //
   // GetStoredByteOrder()
   //
-  // Returns kAAFTrue if the stream has a stored byte order or 
-  // kAAFFalse otherwise.
+  // Access byte order of the stream.
   //
   // Succeeds if:
   // - Initialize() has already been called on this object.
   // - pStreamPropertyValue is a valid pointer.
-  // - pHasByteOrder is a valid pointer.
+  // - pByteOrder is a valid pointer.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -24971,16 +24949,11 @@ DECLARE_INTERFACE_(IAAFTypeDefStream, IUnknown)
     // stream property value
     /*[in]*/ IAAFPropertyValue * pStreamPropertyValue) PURE;
 
-
-
-  //
-  // Access in typed chunks of Elements
-  //
-
   //***********************************************************
   //
   // ReadElements()
   //
+  // Access in typed chunks of Elements.
   // Copies the data at the current position of the stream to the given
   // buffer. Requires that any structures declared within element 
   // typedef have had their offsets registered with that type.
@@ -25038,6 +25011,7 @@ DECLARE_INTERFACE_(IAAFTypeDefStream, IUnknown)
   //
   // WriteElements()
   //
+  // Access in typed chunks of Elements.
   // Copies the data in the given buffer into the stream at the  
   // current position of the stream. Requires that any structures 
   // declared within element 
@@ -25093,6 +25067,7 @@ DECLARE_INTERFACE_(IAAFTypeDefStream, IUnknown)
   //
   // AppendElements()
   //
+  // Access in typed chunks of Elements.
   // Copies the data in the given buffer onto the end of the stream. 
   // Requires that any structures declared within element 
   // typedef have had their offsets registered with that type..

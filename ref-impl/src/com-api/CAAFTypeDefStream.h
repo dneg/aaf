@@ -60,19 +60,6 @@ public:
 
 
 
-
-  //  
-  // All reads/and writes advance the current position 
-  // 
-
-
-  // 
-  // Raw byte stream access 
-  // 
-
-
-  // Stream size and positioning 
-
   //***********************************************************
   //
   // GetSize()
@@ -201,12 +188,11 @@ public:
     /*[in]*/ aafInt64  newPosition);
 
 
-  // Sequential access 
-
   //***********************************************************
   //
   // Read()
   //
+  // Sequential access.
   // Copies the data at the position of the stream to the given
   // buffer.
   //
@@ -247,6 +233,7 @@ public:
   //
   // Write()
   //
+  // Sequential access.
   // Copies the data in the given buffer into the stream at the 
   // current position of the stream..
   //
@@ -279,13 +266,11 @@ public:
     // buffer into which should contain one element to be written to the stream
     /*[in, ref, size_is(dataSize)]*/ aafMemPtr_t  pData);
 
-
-  // Extending the stream 
-
   //***********************************************************
   //
   // Append()
   //
+  // Extending the stream.
   // Copies the data in the given buffer into the stream at the 
   // end of the stream.
   //
@@ -317,12 +302,6 @@ public:
 
     // buffer into which should contain one element to be written to the stream
     /*[in, ref, size_is(dataSize)]*/ aafMemPtr_t  pData);
-
-
-
-  // 
-  // Access byte order of the stream 
-  // 
 
 
   //***********************************************************
@@ -361,13 +340,12 @@ public:
   //
   // GetStoredByteOrder()
   //
-  // Returns kAAFTrue if the stream has a stored byte order or 
-  // kAAFFalse otherwise.
+  // Access byte order of the stream.
   //
   // Succeeds if:
   // - Initialize() has already been called on this object.
   // - pStreamPropertyValue is a valid pointer.
-  // - pHasByteOrder is a valid pointer.
+  // - pByteOrder is a valid pointer.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -450,16 +428,11 @@ public:
     // stream property value 
     /*[in]*/ IAAFPropertyValue * pStreamPropertyValue);
 
-
-
-  // 
-  // Access in typed chunks of Elements 
-  // 
-
   //***********************************************************
   //
   // ReadElements()
   //
+  // Access in typed chunks of Elements.
   // Copies the data at the current position of the stream to the given
   // buffer. Requires that any structures declared within element 
   // typedef have had their offsets registered with that type.
@@ -517,6 +490,7 @@ public:
   //
   // WriteElements()
   //
+  // Access in typed chunks of Elements.
   // Copies the data in the given buffer into the stream at the  
   // current position of the stream. Requires that any structures 
   // declared within element 
@@ -572,6 +546,7 @@ public:
   //
   // AppendElements()
   //
+  // Access in typed chunks of Elements.
   // Copies the data in the given buffer onto the end of the stream. 
   // Requires that any structures declared within element 
   // typedef have had their offsets registered with that type..

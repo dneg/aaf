@@ -24621,6 +24621,7 @@ interface IAAFTypeDefSet : IUnknown
 // persistent objects.  Streams are conceptually similar to
 // variably-sized arrays except that they are intended to be used for
 // very large pieces of data (such as essence).
+// Note: All reads/and writes advance the current position.
 //
 // In addition to the specific error results listed for each method,
 // all methods in this interface may also return one of the following
@@ -24645,18 +24646,6 @@ interface IAAFTypeDefSet : IUnknown
 interface IAAFTypeDefStream : IUnknown
 {
 
-
-cpp_quote("  //")  
-cpp_quote("  // All reads/and writes advance the current position") 
-cpp_quote("  //") 
-
-
-cpp_quote("  //") 
-cpp_quote("  // Raw byte stream access") 
-cpp_quote("  //") 
-
-
-cpp_quote("  // Stream size and positioning") 
 
   //***********************************************************
   //
@@ -24786,12 +24775,11 @@ cpp_quote("  // Stream size and positioning")
     [in] aafInt64  newPosition);
 
 
-cpp_quote("  // Sequential access") 
-
   //***********************************************************
   //
   // Read()
   //
+  // Sequential access.
   // Copies the data at the position of the stream to the given
   // buffer.
   //
@@ -24832,6 +24820,7 @@ cpp_quote("  // Sequential access")
   //
   // Write()
   //
+  // Sequential access.
   // Copies the data in the given buffer into the stream at the 
   // current position of the stream..
   //
@@ -24864,13 +24853,11 @@ cpp_quote("  // Sequential access")
     // buffer into which should contain one element to be written to the stream
     [in, ref, size_is(dataSize)] aafMemPtr_t  pData);
 
-
-cpp_quote("  // Extending the stream") 
-
   //***********************************************************
   //
   // Append()
   //
+  // Extending the stream.
   // Copies the data in the given buffer into the stream at the 
   // end of the stream.
   //
@@ -24902,11 +24889,6 @@ cpp_quote("  // Extending the stream")
 
     // buffer into which should contain one element to be written to the stream
     [in, ref, size_is(dataSize)] aafMemPtr_t  pData);
-
-
-cpp_quote("  //") 
-cpp_quote("  // Access byte order of the stream") 
-cpp_quote("  //") 
 
 
   //***********************************************************
@@ -24945,13 +24927,12 @@ cpp_quote("  //")
   //
   // GetStoredByteOrder()
   //
-  // Returns kAAFTrue if the stream has a stored byte order or 
-  // kAAFFalse otherwise.
+  // Access byte order of the stream.
   //
   // Succeeds if:
   // - Initialize() has already been called on this object.
   // - pStreamPropertyValue is a valid pointer.
-  // - pHasByteOrder is a valid pointer.
+  // - pByteOrder is a valid pointer.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -25034,15 +25015,11 @@ cpp_quote("  //")
     // stream property value
     [in] IAAFPropertyValue * pStreamPropertyValue);
 
-
-cpp_quote("  //") 
-cpp_quote("  // Access in typed chunks of Elements") 
-cpp_quote("  //") 
-
   //***********************************************************
   //
   // ReadElements()
   //
+  // Access in typed chunks of Elements.
   // Copies the data at the current position of the stream to the given
   // buffer. Requires that any structures declared within element 
   // typedef have had their offsets registered with that type.
@@ -25100,6 +25077,7 @@ cpp_quote("  //")
   //
   // WriteElements()
   //
+  // Access in typed chunks of Elements.
   // Copies the data in the given buffer into the stream at the  
   // current position of the stream. Requires that any structures 
   // declared within element 
@@ -25155,6 +25133,7 @@ cpp_quote("  // Extend in chunks of typed Elements")
   //
   // AppendElements()
   //
+  // Access in typed chunks of Elements.
   // Copies the data in the given buffer onto the end of the stream. 
   // Requires that any structures declared within element 
   // typedef have had their offsets registered with that type..
