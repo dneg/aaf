@@ -31,11 +31,7 @@
 #include "aafErr.h"		// TODO: this file needs to be moved to a public include directory...
 #include "AAFTypes.h"
 #include "AAFUtils.h"	// TODO: this file needs to be moved to a public include directory...
-#include "AAFMasterMob.h"
-#include "AAFSourceMob.h"
-#include "AAFHeader.h"
-#include "AAFSession.h"
-#include "AAFFile.h"
+#include "AAF.h"
 
 // TODO: these should not be here, I added them for now to get a good link
 const CLSID CLSID_AAFSession = { 0xF0C10891, 0x3073, 0x11d2, { 0x80, 0x4A, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } };
