@@ -31,6 +31,8 @@ const aafProductVersion_t AAFPluginImplementationVersion = {1, 0, 0, 1, kVersion
 //{8D7B04B1-95E1-11d2-8089-006008143E6F}
 const CLSID CLSID_AAFWaveCodec = { 0x8D7B04B1, 0x95E1, 0x11d2, { 0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
 
+const aafUID_t JEFFS_WAVE_PLUGIN = { 0x431D5CA1, 0xEDE2, 0x11d2, { 0x80, 0x9F, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } };
+
 //const IID IID_IAAFSourceMob = { 0xB1A2137C, 0x1A7D, 0x11D2, { 0xBF, 0x78, 0x00, 0x10, 0x4B, 0xC9, 0x15, 0x6D } };
 //const IID IID_IAAFWAVEDescriptor = { 0x4c2e1692, 0x8ae6, 0x11d2, { 0x81, 0x3c, 0x00, 0x60, 0x97, 0x31, 0x01, 0x72 } };
 //const IID IID_IAAFFileDescriptor = { 0xe58a8561, 0x2a3e, 0x11D2, { 0xbf, 0xa4, 0x00, 0x60, 0x97, 0x11, 0x62, 0x12 } };
@@ -56,9 +58,16 @@ HRESULT STDMETHODCALLTYPE
 }
 
 HRESULT STDMETHODCALLTYPE
-    CAAFWaveCodec::GetPluginID (aafUID_t *uid)
+    CAAFWaveCodec::GetPluggableID (aafUID_t *uid)
 {
 	*uid = CodecWave;		// UID of the WAVE codec definition
+	return AAFRESULT_SUCCESS;
+}
+
+HRESULT STDMETHODCALLTYPE
+    CAAFWaveCodec::GetPluginDescriptorID (aafUID_t *uid)
+{
+	*uid = JEFFS_WAVE_PLUGIN;		// UID of the PluginDescriptor
 	return AAFRESULT_SUCCESS;
 }
 
@@ -70,10 +79,17 @@ HRESULT STDMETHODCALLTYPE
 }
 
 HRESULT STDMETHODCALLTYPE
+    CAAFWaveCodec::GetEssenceDataID (aafUID_t *uid)
+{
+	*uid = AUID_AAFWAVEData;		// stored class UID of the WAVE data object
+	return AAFRESULT_SUCCESS;
+}
+
+HRESULT STDMETHODCALLTYPE
     CAAFWaveCodec::GetPluggableDefinition (IAAFDictionary *dict, IAAFPluggableDef **def)
 {
-	IAAFCodecDef	*codec;
-	IAAFDefObject	*obj;
+	IAAFCodecDef	*codecDef = NULL;
+	IAAFDefObject	*obj = NULL;
 	aafUID_t		uid;
 	
 	XPROTECT()
@@ -81,41 +97,46 @@ HRESULT STDMETHODCALLTYPE
 		//!!!Later, add in dataDefs supported & filedescriptor class
 		CHECK(dict->CreateInstance(&AUID_AAFCodecDef,
 							IID_IAAFCodecDef, 
-							(IUnknown **)&codec));
+							(IUnknown **)&codecDef));
 		uid = CodecWave;
-		CHECK(codec->QueryInterface(IID_IAAFDefObject, (void **)&obj));
+		CHECK(codecDef->QueryInterface(IID_IAAFDefObject, (void **)&obj));
 		CHECK(obj->Init(&uid, L"WAVE Codec", L"Handles RIFF WAVE data."));
-		CHECK(codec->QueryInterface(IID_IAAFPluggableDef, (void **)def));
+		obj->Release();
+		obj = NULL;
+		CHECK(codecDef->QueryInterface(IID_IAAFPluggableDef, (void **)def));
+		codecDef->Release();
+		codecDef = NULL;
 	}
 	XEXCEPT
+	{
+		if(codecDef != NULL)
+			codecDef->Release();
+		if(obj != NULL)
+			obj->Release();
+	}
 	XEND
 
 	return AAFRESULT_SUCCESS;
 }
 
-static wchar_t *manufURL = L"www.avid.com";
-const aafUID_t MANUF_JEFFS_PLUGINS = { 0xA6487F21, 0xE78F, 0x11d2, { 0x80, 0x9E, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } };		/* operand.expPixelFormat */
-aafVersionType_t samplePluginVersion = { 0, 0 };
-aafVersionType_t sampleMinPlatformVersion = { 1, 2 };
-aafVersionType_t sampleMinEngineVersion = { 5, 6 };
-aafVersionType_t sampleMinAPIVersion = { 10, 11 };
-aafVersionType_t sampleMaxPlatformVersion = { 31, 32 };
-aafVersionType_t sampleMaxEngineVersion = { 35, 36 };
-aafVersionType_t sampleMaxAPIVersion = { 40, 41 };
+//!!!Need some real values for the descriptor
+static wchar_t *manufURL = L"http://www.avid.com";
+static wchar_t *downloadURL = L"ftp://ftp.avid.com/pub/";
+const aafUID_t MANUF_JEFFS_PLUGINS = { 0xA6487F21, 0xE78F, 0x11d2, { 0x80, 0x9E, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } };
+static aafVersionType_t samplePluginVersion = { 0, 1 };
 
-#define	MobName			L"MasterMOBTest"
-#define	NumMobSlots		3
-
-static wchar_t *manufName = L"Jeff's Plugin-O-Rama";
-static wchar_t *manufRev = L"Rev0.0.0a0";
+static wchar_t *manufName = L"Avid Technology, Inc.";
+static wchar_t *manufRev = L"Rev 0.1";
 
 HRESULT STDMETHODCALLTYPE
     CAAFWaveCodec::GetDescriptor (IAAFDictionary *dict, IAAFPluginDescriptor **descPtr)
 {
-	IAAFPluginDescriptor	*desc;
-	IAAFNetworkLocator		*pNetLoc;
-	IAAFLocator				*pLoc;
+	IAAFPluginDescriptor	*desc = NULL;
+	IAAFLocator				*pLoc = NULL;
+ 	IAAFNetworkLocator		*pNetLoc = NULL;
+	IAAFDefObject			*defObject = NULL;
 	aafUID_t				category = AUID_AAFPluggableDefinition, manufacturer = MANUF_JEFFS_PLUGINS;
+	aafUID_t				plugID = JEFFS_WAVE_PLUGIN;
 	
 	XPROTECT()
 	{
@@ -123,46 +144,51 @@ HRESULT STDMETHODCALLTYPE
 			IID_IAAFPluginDescriptor, 
 			(IUnknown **)&desc));
 		*descPtr = desc;
-		CHECK(dict->CreateInstance(&AUID_AAFNetworkLocator,
-			IID_IAAFNetworkLocator, 
-			(IUnknown **)&pNetLoc));
-		CHECK(pNetLoc->QueryInterface (IID_IAAFLocator,
-			(void **)&pLoc));
-		CHECK(pLoc->SetPath (manufURL));
-		
+		CHECK(desc->QueryInterface(IID_IAAFDefObject, (void **)&defObject));
+		CHECK(defObject->Init(&plugID, L"Example WAVE Codec", L"Handles RIFF WAVE data."));
+		defObject->Release();
+		defObject = NULL;
+
 		CHECK(desc->SetCategoryClass(&category));
 		CHECK(desc->SetPluginVersionString(manufRev));
+		CHECK(dict->CreateInstance(&AUID_AAFNetworkLocator,
+			IID_IAAFLocator, 
+			(IUnknown **)&pLoc));
+		CHECK(pLoc->SetPath (manufURL));
+		CHECK(pLoc->QueryInterface(IID_IAAFNetworkLocator, (void **)&pNetLoc));
 		CHECK(desc->SetManufacturerInfo(pNetLoc));
+		pNetLoc->Release();
+		pNetLoc = NULL;
+		pLoc->Release();
+		pLoc = NULL;
+
 		CHECK(desc->SetManufacturerID(&manufacturer));
 		CHECK(desc->SetPluginManufacturerName(manufName));
 		CHECK(desc->SetIsSoftwareOnly(AAFTrue));
 		CHECK(desc->SetIsAccelerated(AAFFalse));
 		CHECK(desc->SetSupportsAuthentication(AAFFalse));
 		
-		//!!!	aafProductVersion_t samplePluginVersion = { 0, 0, 0, 0, kVersionReleased };
-		/**/
-		CHECK(desc->SetHardwarePlatform(kAAFPlatformIndependant));
-		CHECK(desc->SetPlatformMinimumVersion(&sampleMinPlatformVersion));
-		CHECK(desc->SetPlatformMaximumVersion(&sampleMaxPlatformVersion));
-		/**/
-		CHECK(desc->SetEngine(kAAFNoEngine));
-		CHECK(desc->SetEngineMinimumVersion(&sampleMinEngineVersion));
-		CHECK(desc->SetEngineMaximumVersion(&sampleMaxEngineVersion));
-		/**/
-		CHECK(desc->SetPluginAPI(kAAFEssencePluginAPI));
-		CHECK(desc->SetPluginAPIMinimumVersion(&sampleMinAPIVersion));
-		CHECK(desc->SetPluginAPIMaximumVersion(&sampleMaxAPIVersion));
-		
 		/**/
 		CHECK(dict->CreateInstance(&AUID_AAFNetworkLocator,
-			IID_IAAFNetworkLocator, 
-			(IUnknown **)&pNetLoc));
-		CHECK(pNetLoc->QueryInterface (IID_IAAFLocator,
-			(void **)&pLoc));
-		CHECK(pLoc->SetPath (manufURL));
+			IID_IAAFLocator, 
+			(IUnknown **)&pLoc));
+		CHECK(pLoc->SetPath (downloadURL));
 		CHECK(desc->AppendLocator(pLoc));
+		// Don't release desc, as it's a copy of what we are returning
+		pLoc->Release();
+		pLoc = NULL;
 	}
 	XEXCEPT
+	{
+		if(desc != NULL)
+			desc->Release();
+		if(pLoc != NULL)
+			pLoc->Release();
+		if(pNetLoc != NULL)
+			pNetLoc->Release();
+		if(defObject != NULL)
+			defObject->Release();
+	}
 	XEND
 
 	return AAFRESULT_SUCCESS;
@@ -230,24 +256,6 @@ const aafUID_t LOCAL_AAFWAVEDescriptor = { 0x4c2e1691, 0x8ae6, 0x11d2, { 0x81, 0
 const aafUID_t LOCAL_AAFEssenceData = { 0x6a33f4e1, 0x8ed6, 0x11d2, { 0xbf, 0x9d, 0x00, 0x10, 0x4b, 0xc9, 0x15, 0x6d } };
 
 HRESULT STDMETHODCALLTYPE
-    CAAFWaveCodec::GetMetaInfo (aafCodecMetaInfo_t *  pInfo)
-{
-	pInfo->mdesClassID = LOCAL_AAFWAVEDescriptor;
-    pInfo->dataClassID = LOCAL_AAFEssenceData;		//!!!Isn't this a subclas still?
-//!!!	aafUID_t    			pInfo->plugin.pluginID;					/* OUT */
-	pInfo->plugin.pluginInterfaceRevision = kPluginRev1;	/* IN/OUT */
-	pInfo->plugin.pluginCodeRevision = AAFPluginImplementationVersion;
-	pInfo->plugin.minimumFileRevision = kAAFRev1;		/* OUT - (revs lower than this will be private */
-	pInfo->plugin.validMaximumFileRevision = AAFFalse;	/* OUT - Is there a maximum rev? */
-//	pInfo->plugin.maximumFileRevision;		/* OUT - (revs higher than this will be private */
-	pInfo->plugin.minimumSDKRevision = AAFPluginImplementationVersion;
-    pInfo->numVariants = 0;
-    pInfo->numDataDefinitions = 1;
-
-	return AAFRESULT_SUCCESS;
-}
-
-HRESULT STDMETHODCALLTYPE
     CAAFWaveCodec::GetCodecDisplayName (aafUID_t  variant,
         wchar_t *  pName,
         aafInt32  bufSize)
@@ -258,32 +266,7 @@ HRESULT STDMETHODCALLTYPE
 		len = bufSize;
 	memcpy(pName, "WAVE Codec", len);
 	return AAFRESULT_SUCCESS;
-}
-
-
-HRESULT STDMETHODCALLTYPE
-    CAAFWaveCodec::GetSelectInfo (IUnknown *fileMob,
-        aafCodecSelectInfo_t *  pInfo)
-{
-	XPROTECT()
-	{
-	    if(!_headerLoaded)
-		{
-			CHECK(loadWAVEHeader());
-		}
-		pInfo->willHandleMDES = AAFTrue;
-		pInfo->isNative = (_nativeByteOrder == INTEL_ORDER ? AAFTrue : AAFFalse);
-		pInfo->hwAssisted = AAFFalse;
-        pInfo->relativeLoss = 0;
-        pInfo->avgBitsPerSec = (_bitsPerSample * _sampleRate.numerator) / _sampleRate.denominator;
-    }
-    XEXCEPT
-    XEND
-
-	return(AAFRESULT_SUCCESS);
-}
-
-	
+}	
 
 	
 HRESULT STDMETHODCALLTYPE
