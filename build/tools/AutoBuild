@@ -202,6 +202,10 @@ if [ $BUMP_BUILD_TAG -eq 1 ]; then
 	echo Failed to bump the build number.
 	exit 1
     fi
+else
+    # Run BuildNumber to check the build number consistency.
+    echo Verifying the build number is consistent.
+    BuildNumber -basedir $BASE_DIR
 fi
 
 #
