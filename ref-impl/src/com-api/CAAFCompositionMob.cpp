@@ -63,7 +63,6 @@ CAAFCompositionMob::~CAAFCompositionMob ()
 {
 }
 
-
 HRESULT STDMETHODCALLTYPE
     CAAFCompositionMob::Initialize (aafCharacter_constptr  pName)
 {
@@ -227,6 +226,45 @@ HRESULT STDMETHODCALLTYPE
   return hr;
 }
 
+
+
+HRESULT STDMETHODCALLTYPE
+    CAAFCompositionMob::SetRendering (aafMobID_constref  mobID)
+{
+  HRESULT hr;
+
+  ImplAAFCompositionMob * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAAFCompositionMob*> (pO);
+  assert (ptr);
+
+
+  hr = ptr->SetRendering (mobID);
+
+  return hr;
+}
+
+HRESULT STDMETHODCALLTYPE
+    CAAFCompositionMob::GetRendering (aafMobID_t *  pMobID)
+{
+  HRESULT hr;
+
+  ImplAAFCompositionMob * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAAFCompositionMob*> (pO);
+  assert (ptr);
+
+
+  hr = ptr->GetRendering (pMobID);
+
+  return hr;
+}
+
+
 //
 // 
 // 
@@ -239,6 +277,8 @@ HRESULT CAAFCompositionMob::InternalQueryInterface
     REFIID riid,
     void **ppvObj)
 {
+    HRESULT hr = S_OK;
+
     if (NULL == ppvObj)
         return E_INVALIDARG;
 
@@ -246,6 +286,13 @@ HRESULT CAAFCompositionMob::InternalQueryInterface
     if (EQUAL_UID(riid,IID_IAAFCompositionMob)) 
     { 
         *ppvObj = (IAAFCompositionMob *)this; 
+        ((IUnknown *)*ppvObj)->AddRef();
+        return S_OK;
+    }
+
+    if (EQUAL_UID(riid,IID_IAAFCompositionMob2)) 
+    { 
+        *ppvObj = (IAAFCompositionMob2 *)this; 
         ((IUnknown *)*ppvObj)->AddRef();
         return S_OK;
     }
@@ -258,4 +305,3 @@ HRESULT CAAFCompositionMob::InternalQueryInterface
 // Define the contrete object support implementation.
 // 
 AAF_DEFINE_FACTORY(AAFCompositionMob)
-

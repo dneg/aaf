@@ -37,11 +37,13 @@
 ImplAAFCompositionMob::ImplAAFCompositionMob ():
 	_defaultFadeLen(	PID_CompositionMob_DefaultFadeLength,		L"DefaultFadeLength"),
 	_defaultFadeType(	PID_CompositionMob_DefFadeType,			L"DefFadeType"),
-	_defaultFadeEditUnit(PID_CompositionMob_DefFadeEditUnit,	L"DefFadeEditUnit")
+	_defaultFadeEditUnit(PID_CompositionMob_DefFadeEditUnit,	L"DefFadeEditUnit"),
+	_rendering(PID_CompositionMob_Rendering,	L"Rendering")
 {
 	_persistentProperties.put(		_defaultFadeLen.address());
 	_persistentProperties.put(		_defaultFadeType.address());
 	_persistentProperties.put(		_defaultFadeEditUnit.address());	
+	_persistentProperties.put(		_rendering.address());	
 }
 
 ImplAAFCompositionMob::~ImplAAFCompositionMob ()
@@ -142,4 +144,24 @@ AAFRESULT STDMETHODCALLTYPE
 
 	return AAFRESULT_SUCCESS;
 }
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFCompositionMob::SetRendering (aafMobID_constref mobID)
+{
+  _rendering = mobID;
+
+  return AAFRESULT_SUCCESS;
+}
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFCompositionMob::GetRendering (aafMobID_t *  pMobID)
+{
+  if(pMobID == NULL)
+    return AAFRESULT_NULL_PARAM;
+
+  *pMobID = _rendering;
+
+  return(AAFRESULT_SUCCESS); 
+}
+
 

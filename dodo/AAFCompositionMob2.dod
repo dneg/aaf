@@ -22,7 +22,7 @@
 #c
 #c *********************************************************************
 #startm .this-module 0
-AAFCompositionMob\
+AAFCompositionMob2\
 #endm
 #c
 #startm .parent-module 0
@@ -30,12 +30,9 @@ AAFMob\
 #endm
 #c
 #c #import ./AAFMob.exp
-#import ./AAFCompositionMob2.exp
 AD_HEAD
 AD_IDL(//
-// IAAFCompositionMob is DEPRECATED\, please use IAAFCompositionMob2.
-//
-// The IAAFCompositionMob interface is implemented on objects which
+// The IAAFCompositionMob2 interface is implemented on objects which
 // can specify how to combine content data elements into a sequence\,
 // how to modify content data elements\, and how to synchronize content
 // data elements.	   
@@ -48,10 +45,15 @@ AD_IDL(//
 //   - insufficient system memory is available to perform the
 //     operation.
 //)
-AD_CLASS_UUID(91920d64, 2a2e, 11D2, bf, A3, 00, 60, 97, 11, 62, 12)
+AD_CLASS_UUID(4252586, 6cde, 4d5e, 90, 14, 58, a1, e2, 1f, ad, 3c)
 
-AD_DEFAULT_UUID(91920d63, 2a2e, 11D2, bf, A3, 00, 60, 97, 11, 62, 12)
-AD_COM_EXT_CLASS_BEGIN(public IAAFCompositionMob2)
+AD_DEFAULT_UUID(188a82c7, 0d87, 4af3, 89, e0, 5f, 96, e5, 6f, f9, de)
+AD_XCLASS_BEGIN(Concrete, StoredObject)
+
+#c
+#c Original AAFCompositionMob methods
+#c
+
 AD_XMETHOD1(Initialize,
 			[in\, string],
 			objPass,
@@ -149,10 +151,43 @@ AD_XMETHOD3(SetDefaultFade,
   //   - invalid fadeLength.)
 
 #c
-#c AAFCompositionMob2 methods
+#c New AAFCompositionMob2 methods
 #c
 
-AD_COM_METH(.method-SetRendering)
-AD_COM_METH(.method-GetRendering)
+AD_XMETHOD1(SetRendering,
+                        [in\, ref],
+                        objPass,
+                        aafMobID_constref,
+                        mobID,
+                        Rendering MobID,
+  set the MobID of a rendering of this CompositionMob.
 
-AD_COM_EXT_CLASS_END(AAFCompositionMob2)
+  // This method will return the following codes:
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\))
+
+AD_XMETHOD1(GetRendering,
+                        [out],
+                        objPass,
+                        aafMobID_t *,
+                        pMobID,
+                        Rendering MobID,
+  return the MobID of a rendering of this CompositionMob.
+
+  // Succeeds if all of the following are true:
+  // - the pMobID pointer is valid.
+  //
+  // If this method fails nothing will be written to *pMobID.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  //
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pMobID arg is NULL.)
+
+
+AD_XCLASS_END(Concrete, StoredObject)
