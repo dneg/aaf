@@ -139,12 +139,14 @@ AAFRESULT ImplAAFTimelineMobSlot::FindSegment(aafPosition_t offset,
 		(*diffPos) = offset;
 		CHECK(SubInt64fromInt64(begPos, diffPos));
 		tmpSegment->ReleaseReference();
+		tmpSegment = 0;
 		
 	} /* XPROTECT */
 	XEXCEPT
 	{
 		if (tmpSegment)	
-			tmpSegment->ReleaseReference();
+		  tmpSegment->ReleaseReference();
+		tmpSegment = 0;
 	}
 	XEND;
 	return(AAFRESULT_SUCCESS);

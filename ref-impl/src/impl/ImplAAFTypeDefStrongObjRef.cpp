@@ -90,6 +90,7 @@ AAFRESULT STDMETHODCALLTYPE
 	  ImplAAFObject * tmp = dynamic_cast<ImplAAFObject*>(*ppStorable);
 	  assert (tmp);
 	  tmp->ReleaseReference ();
+	  tmp = 0;
 	  *ppStorable = 0;
 	}
 
