@@ -704,6 +704,19 @@ void OMFile::setReferencedProperties(OMPropertyTable* table)
   _referencedProperties = table;
 }
 
+bool OMFile::propertyTableExists(void) const
+{
+  TRACE("OMFile::propertyTableExists");
+
+  bool result;
+  if (_referencedProperties != 0) {
+    result = true;
+  } else {
+    result = false;
+  }
+  return result;
+}
+
   // @mfunc The byte order of this <c OMFile>.
   //   @rdesc The byte order of this <c OMFile>.
   //   @this const

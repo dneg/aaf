@@ -243,6 +243,8 @@ public:
 
   void setReferencedProperties(OMPropertyTable* table);
 
+  bool propertyTableExists(void) const;
+
     // @cmember The byte order of this <c OMFile>.
   OMByteOrder byteOrder(void) const;
 
