@@ -41,10 +41,14 @@
 #include "ModuleTest.h"
 #include "AAFDataDefs.h"
 #include "AAFDefUIDs.h"
-#include "AAFUtils.h"
 #include "AAFCodecDefs.h"
 
 #include "CAAFBuiltinDefs.h"
+
+static aafBool  EqualAUID(const aafUID_t *uid1, const aafUID_t *uid2)
+{
+    return(memcmp((char *)uid1, (char *)uid2, sizeof(aafUID_t)) == 0 ? kAAFTrue : kAAFFalse);
+}
 
 // Cross-platform utility to delete a file.
 static void RemoveTestFile(const wchar_t* pFileName)

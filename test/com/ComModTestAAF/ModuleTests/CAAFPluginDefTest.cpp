@@ -48,7 +48,6 @@ static wchar_t *manuf3URL = L"www.softimage.com";
 #include "AAFDataDefs.h"
 #include "AAFDefUIDs.h"
 #include "AAFClassDefUIDs.h"
-#include "AAFUtils.h"
 
 #include "CAAFBuiltinDefs.h"
 
@@ -73,6 +72,11 @@ static wchar_t *manufRev = L"Rev0.0.0a0";
 static aafBool	EqualVersion(aafVersionType_t *vers1, aafVersionType_t *vers2)
 {
 	return(memcmp((char *)vers1, (char *)vers2, sizeof(aafVersionType_t)) == 0 ? kAAFTrue : kAAFFalse);
+}
+
+static aafBool  EqualAUID(const aafUID_t *uid1, const aafUID_t *uid2)
+{
+    return(memcmp((char *)uid1, (char *)uid2, sizeof(aafUID_t)) == 0 ? kAAFTrue : kAAFFalse);
 }
 
 // Cross-platform utility to delete a file.
