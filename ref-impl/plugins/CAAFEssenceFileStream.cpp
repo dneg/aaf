@@ -51,8 +51,8 @@
   if (sizeof(fpos_t) < sizeof(aafPosition_t))
   {
     // The following test assumes 64 bit arithematic!
-    aafPosition_t trunPos = (0x00000000FFFFFFFF & *aafPos);
-    if (trunPos != *aafPos && 0xFFFFFFFFFFFFFFFF != *aafPos)
+    aafPosition_t trunPos = (AAFCONSTINT64(0x00000000FFFFFFFF) & *aafPos);
+    if (trunPos != *aafPos && AAFCONSTINT64(0xFFFFFFFFFFFFFFFF) != *aafPos)
       return false;
 
     *ansiPos = *aafPos;
