@@ -1061,6 +1061,7 @@ void OMMSSStoredObject::restore(OMDataVector& property,
 
     property.appendValue(value);
   }
+  delete [] value;
   delete [] buffer;
 }
 

@@ -4076,6 +4076,7 @@ HRESULT CAAFJPEGCodec::ReadSampleIndex32(aafUInt16 fileByteOrder)
 			}
 			_sampleIndex[index] = tempBuf[index];
 		}
+		delete [] tempBuf;
 
 		// Add the extra frame to the sample index so that the last element
 		// can contain the position one byte beyond the end of last sample.
