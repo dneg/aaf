@@ -170,6 +170,10 @@ SOURCE="..\..\..\ref-impl\src\com-api\CAAFEdgecode.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFEnumValidation.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFEssenceAccess.cpp"
 # ADD CPP /I "../../../ref-impl/plugins/"
 # End Source File
