@@ -1224,7 +1224,7 @@ AAFRESULT STDMETHODCALLTYPE
 			new OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFOperationDef>(_operationDefinitions);
 		if(iter == 0)
 			RAISE(AAFRESULT_NOMEMORY);
-		CHECK(theEnum->SetIterator(this, iter));
+		CHECK(theEnum->Initialize(&CLSID_EnumAAFOperationDefs, this, iter));
 		*ppEnum = theEnum;
 	}
 	XEXCEPT
@@ -1317,7 +1317,7 @@ AAFRESULT STDMETHODCALLTYPE
 			new OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFParameterDef>(_parameterDefinitions);
 		if(iter == 0)
 			RAISE(AAFRESULT_NOMEMORY);
-		CHECK(theEnum->SetIterator(this, iter));
+		CHECK(theEnum->Initialize(&CLSID_EnumAAFParameterDefs, this, iter));
 		*ppEnum = theEnum;
 	}
 	XEXCEPT
