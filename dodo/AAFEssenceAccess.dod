@@ -6,6 +6,7 @@ AAFRoot\
 #endm
 #c
 #import ./AAFObject.exp
+#import ./AAFEndian.exp
 AD_HEAD
 /******************************************\
 *                                          *
@@ -25,7 +26,7 @@ AD_CLASS_UUID(aed97eb1, 2bc8, 11D2, bf, aa, 00, 60, 97, 11, 62, 12)
 
 AD_DEFAULT_UUID(aed97eb0, 2bc8, 11D2, bf, aa, 00, 60, 97, 11, 62, 12)
 
-AD_CLASS_BEGIN
+AD_COM_EXT_CLASS_BEGIN(public IAAFEndian)
 
 /****/
 AD_XMETHOD7(AudioMediaCreate,
@@ -630,4 +631,9 @@ AD_METHOD1(SourceGetVideoSignalType,
 Get the video signal type [NTSC/PAL/SECAM].)
 	//@comm Replaces omfmSourceGetVideoSignalType */
 
-AD_CLASS_END
+
+AD_COM_METH(.method-GetStoredByteOrder)
+
+
+AD_COM_METH(.method-GetNativeByteOrder)
+AD_COM_EXT_CLASS_END(AAFEndian)
