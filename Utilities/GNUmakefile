@@ -30,7 +30,7 @@ all : aafomf eli2aaf aafviewer
 # with the SDK.  They are available from http://aafassociation.org/download/
 .PHONY : aafomf
 aafomf:
-	@if [ -e ../OMF/Include/omDefs.h ] ; then cd AafOmf && $(MAKE); else echo; echo "OMF libraries not present - AafOmf will not be built"; echo; fi
+	@if [ -r ../OMF/Include/omDefs.h ] ; then cd AafOmf && $(MAKE); else echo; echo "OMF libraries not present - AafOmf will not be built"; echo; fi
 
 .PHONY : eli2aaf
 eli2aaf:
