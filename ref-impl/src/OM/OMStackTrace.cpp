@@ -193,13 +193,6 @@ void printStackTrace(OMOStream& s)
     stackFrame.AddrFrame.Offset = context.Ebp;
     stackFrame.AddrFrame.Mode = AddrModeFlat;
 
-	// The declarations of PREAD_PROCESS_MEMORY_ROUTINE (a typedef)
-	// and ReadProcessMemory (a function) differ slightly in the
-	// type of their lpBaseAddress arguments.  The former uses
-	// DWORD, the latter LPCVOID.  To work around this problem
-	// ReadProcessMemory is cast to PREAD_PROCESS_MEMORY_ROUTINE.
-	// jptrainor, 30 Jan 2001
-
     do {
       status = _StackWalk(
         IMAGE_FILE_MACHINE_I386,
@@ -207,7 +200,7 @@ void printStackTrace(OMOStream& s)
         GetCurrentThread(),
         &stackFrame,
         0,
-		(PREAD_PROCESS_MEMORY_ROUTINE)ReadProcessMemory,
+        (PREAD_PROCESS_MEMORY_ROUTINE)ReadProcessMemory,
         _SymFunctionTableAccess,
         _SymGetModuleBase,
         0);
