@@ -55,7 +55,7 @@ public:
 	HRESULT ConvertOMFClassDictionaryObject( OMF2::omfObject_t obj);
 	HRESULT ConvertOMFMediaDataObject( OMF2::omfObject_t obj, OMF2::omfUID_t inMediaID);
 	HRESULT ConvertOMFDatakind(OMF2::omfDDefObj_t datakind, aafUID_t* pDatadef);
-	HRESULT ConvertUniqueNameToAUID(OMF2::omfUniqueName_t datakindName, aafUID_t* pDatadef);
+//	HRESULT ConvertUniqueNameToAUID(OMF2::omfUniqueName_t datakindName, aafUID_t* pDatadef);
 	HRESULT ConvertOMFMOBObject( OMF2::omfObject_t obj, IAAFMob* pMob );
 	HRESULT ConvertOMFCompositionObject( OMF2::omfObject_t obj,IAAFCompositionMob* pCompMob );
 	HRESULT ConvertOMFMasterMob( OMF2::omfObject_t obj, IAAFMasterMob* pMasterMob );
@@ -71,8 +71,10 @@ public:
 	HRESULT ConvertOMFLocator(OMF2::omfObject_t locator, IAAFEssenceDescriptor* pEssenceDesc);
 	HRESULT ConvertOMFCDCIDescriptorLocator(OMF2::omfObject_t mediaDescriptor, IAAFCDCIDescriptor* pAAFDescriptor);
 	HRESULT ConvertOMFEffects(OMF2::omfEffObj_t effect, IAAFOperationGroup* pEffect);
-	HRESULT ConvertOMFEffectDefinition(OMF2::omfDDefObj_t effectDef, IAAFOperationDef** ppEffectDef);
-	HRESULT GetAAFOperationDefinition(OMF2::omfUniqueName_t datakindName, char* defName, char* defDescription, aafUInt32 bypassOverride, aafBool isTimeWarp, aafInt32 numberInputs, aafUID_t defDataDef, IAAFOperationDef** ppEffectDef);
+	HRESULT ConvertOMFEffectDefinition(OMF2::omfDDefObj_t effectDef, OMF2::omfObject_t effect, IAAFOperationDef** ppEffectDef);
+	HRESULT GetAAFOperationDefinition(OMF2::omfUniqueName_t datakindName, OMF2::omfUniqueName_t MCEffectID,
+										char* defName, char* defDescription, aafUInt32 bypassOverride, aafBool isTimeWarp,
+										aafInt32 numberInputs, aafUID_t defDataDef, IAAFOperationDef** ppEffectDef);
 	HRESULT GetParameterDefinition(aafUID_t* pDefUID, IAAFTypeDef* pTypeDef,	aafWChar* pwName, aafWChar* pwDesc, aafWChar* pwDisplayUnits, IAAFParameterDef** ppParameterDef);
 	HRESULT	ConvertOMFConstValue(OMF2::omfSegObj_t segment, IAAFConstantValue* pConstValue);
 	HRESULT	ConvertOMFVaryingValue(OMF2::omfSegObj_t segment, IAAFVaryingValue* pVaryingValue);

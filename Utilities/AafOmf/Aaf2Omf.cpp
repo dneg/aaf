@@ -45,6 +45,7 @@ namespace OMF2
 #include "AafOmf.h"
 
 #include "Aaf2Omf.h"
+#include "EffectTranslate.h"
 
 static void     LogError(HRESULT errcode, int line, char *file)
 {
@@ -343,7 +344,7 @@ HRESULT Aaf2Omf::OpenOutputFile ()
 
 	OMFError = OMF2::omfsRegisterDynamicProp(OMFSession, OMF2::kOmfTstRevEither,
 		"AvidPrivateEffectID", OMClassEFFE, OMF2::OMUniqueName,
-		OMF2::kPropOptional, &privateEffectProp);
+		OMF2::kPropOptional, &(gpGlobals->pvtEffectIDProp));
 	
 	bSessionStarted = AAFTrue;
 	OMFError = OMF2::omfmInit(OMFSession);
@@ -1487,330 +1488,6 @@ cleanup:
 	return rc;
 }
 // ============================================================================
-// GetEffectIDsFromAUID
-//
-//			This function converts an AAF effectID into an OMF unique name. 
-//			
-// Returns: AAFRESULT_SUCCESS if datakind is converted succesfully
-//			
-// NOTE :	the buffer passed to this routine should be big enough to accomodate
-//			the whole OMF name.!!
-// ============================================================================
-HRESULT Aaf2Omf::GetEffectIDsFromAUID(aafUID_t Datadef,
-									   OMF2::omfUniqueNamePtr_t effectID,
-									   OMF2::omfUniqueNamePtr_t MCEffectID)
-{
-	HRESULT					rc = AAFRESULT_SUCCESS;
-	// OMF2::omfBool			bFound;
-	char					szAUID[OMUNIQUENAME_SIZE];
-
-	MCEffectID[0] = '\0';
-	if ( memcmp((char *)&Datadef, (char *)&kAAFEffectVideoDissolve, sizeof(aafUID_t)) == 0 )
-	{
-		strcpy(effectID, "omfi:effect:SimpleVideoDissolve");
-		strcpy(MCEffectID, "BLEND_DISSOLVE");
-	}
-	else if ( memcmp((char *)&Datadef, (char *)&kAAFEffectVideoFadeToBlack, sizeof(aafUID_t)) == 0 )
-	{
-		strcpy(effectID, "omfi:effect:VideoFadeToBlack");
-		strcpy(MCEffectID, "BLEND_FADE_DOWN");
-	}
-//!!! Wipe will be more complicated to figure out
-//	else if ( memcmp((char *)&Datadef, (char *)&kAAFEffectSMPTEVideoWipe, sizeof(aafUID_t)) == 0 )
-//	{
-//		strcpy(effectID, "omfi:effect:SMPTEVideoWipe");
-//		strcpy(MCEffectID, xxxx);
-//	}
-	else if ( memcmp((char *)&Datadef, (char *)&kAAFEffectVideoSpeedControl, sizeof(aafUID_t)) == 0 )
-	{
-		strcpy(effectID, "omfi:effect:VideoSpeedControl");
-		strcpy(MCEffectID, "EFF_TIMEWARP.MOTION_CTL");
-	}
-	else if ( memcmp((char *)&Datadef, (char *)&kAAFEffectVideoRepeat, sizeof(aafUID_t)) == 0 )
-	{
-		strcpy(effectID, "omfi:effect:VideoRepeat");
-		strcpy(MCEffectID, "EFF_TIMEWARP.REPEAT");
-	}
-	else if ( memcmp((char *)&Datadef, (char *)&kAAFEffectVideoFrameToMask, sizeof(aafUID_t)) == 0 )
-	{
-		strcpy(effectID, "omfi:effect:VideoFrameMask");
-		strcpy(MCEffectID, "EFF_TIMEWARP.CAPTURE_MASK");
-	}
-	else if ( memcmp((char *)&Datadef, (char *)&kAAFEffectMonoAudioDissolve, sizeof(aafUID_t)) == 0 )
-	{
-		strcpy(effectID, "omfi:effect:SimpleMonoAudioDissolve");
-		strcpy(MCEffectID, "BLEND_AUDIO_DISSOLVE");
-	}
-	else if ( memcmp((char *)&Datadef, (char *)&kAAFEffectMonoAudioPan, sizeof(aafUID_t)) == 0 )
-	{
-		strcpy(effectID, "omfi:effect:MonoAudioPan");
-		strcpy(MCEffectID, "Audio Pan Volume");
-	}
-	else if ( memcmp((char *)&Datadef, (char *)&kAAFEffectMonoAudioGain, sizeof(aafUID_t)) == 0 )
-	{
-		strcpy(effectID, "omfi:effect:MonoAudioGain");
-		strcpy(MCEffectID, "Audio Pan Volume");
-	}
-	else if ( memcmp((char *)&Datadef, (char *)&kAAFEffectStereoAudioDissolve, sizeof(aafUID_t)) == 0 )
-	{
-		strcpy(effectID, "omfi:effect:StereoAudioDissolve");
-	}
-	else if ( memcmp((char *)&Datadef, (char *)&kAAFEffectStereoAudioGain, sizeof(aafUID_t)) == 0 )
-	{
-		strcpy(effectID, "omfi:effect:StereoAudioGain");
-	}
-	else if ( memcmp((char *)&Datadef, (char *)&kEffBlendPIPUUID, sizeof(aafUID_t)) == 0 )
-	{
-		strcpy(MCEffectID, "EFF_BLEND_PIP");
-	}
-	else if ( memcmp((char *)&Datadef, (char *)&kEffBlendSuperUUID, sizeof(aafUID_t)) == 0 )
-	{
-		strcpy(MCEffectID, "BLEND_SUPER");
-	}
-	else if ( memcmp((char *)&Datadef, (char *)&kEffBlendFadeUpUUID, sizeof(aafUID_t)) == 0 )
-	{
-		strcpy(MCEffectID, "BLEND_FADE_UP");
-	}
-	else if ( memcmp((char *)&Datadef, (char *)&kEffBlendDipUUID, sizeof(aafUID_t)) == 0 )
-	{
-		strcpy(MCEffectID, "BLEND_DIP");
-	}
-	else if ( memcmp((char *)&Datadef, (char *)&kEffXRotate, sizeof(aafUID_t)) == 0 )
-	{
-		strcpy(effectID, "OMFI:EFFE:AvidPrivateEffectID");
-		strcpy(MCEffectID, "EFF_BLEND_ROTATE_XROTATE");
-	}
-	else if ( memcmp((char *)&Datadef, (char *)&kEffYRotate, sizeof(aafUID_t)) == 0 )
-	{
-		strcpy(effectID, "OMFI:EFFE:AvidPrivateEffectID");
-		strcpy(MCEffectID, "EFF_BLEND_ROTATE_YROTATE");
-	}
-	else if ( memcmp((char *)&Datadef, (char *)&kEffZRotate, sizeof(aafUID_t)) == 0 )
-	{
-		strcpy(effectID, "OMFI:EFFE:AvidPrivateEffectID");
-		strcpy(MCEffectID, "EFF_BLEND_ROTATE_ZROTATE");
-	}
-	else if ( memcmp((char *)&Datadef, (char *)&kEffSqueezeZoom, sizeof(aafUID_t)) == 0 )
-	{
-		strcpy(effectID, "OMFI:EFFE:AvidPrivateEffectID");
-		strcpy(MCEffectID, "EFF_BLEND_SQUEEZE_ZOOM");
-
-	}
-	else if ( memcmp((char *)&Datadef, (char *)&kEffSqueezeHorz, sizeof(aafUID_t)) == 0 )
-	{
-		strcpy(effectID, "OMFI:EFFE:AvidPrivateEffectID");
-		strcpy(MCEffectID, "EFF_BLEND_SQUEEZE_HORZ");
-	}
-	else if ( memcmp((char *)&Datadef, (char *)&kEffSqueezeVert, sizeof(aafUID_t)) == 0 )
-	{
-		strcpy(effectID, "OMFI:EFFE:AvidPrivateEffectID");
-		strcpy(MCEffectID, "EFF_BLEND_SQUEEZE_VERT");
-	}
-	else if ( memcmp((char *)&Datadef, (char *)&kEffSqueezeBottomCenter, sizeof(aafUID_t)) == 0 )
-	{
-		strcpy(effectID, "OMFI:EFFE:AvidPrivateEffectID");
-		strcpy(MCEffectID, "EFF_BLEND_SQUEEZE_BOTTOMCENTER");
-	}
-	else if ( memcmp((char *)&Datadef, (char *)&kEffSqueezeRightCenter, sizeof(aafUID_t)) == 0 )
-	{
-		strcpy(effectID, "OMFI:EFFE:AvidPrivateEffectID");
-		strcpy(MCEffectID, "EFF_BLEND_SQUEEZE_RIGHTCENTER");
-	}
-	else if ( memcmp((char *)&Datadef, (char *)&kEffSqueezeTopCenter, sizeof(aafUID_t)) == 0 )
-	{
-		strcpy(effectID, "OMFI:EFFE:AvidPrivateEffectID");
-		strcpy(MCEffectID, "EFF_BLEND_SQUEEZE_TOPCENTER");
-	}
-	else if ( memcmp((char *)&Datadef, (char *)&kEffSqueezeLeftCenter, sizeof(aafUID_t)) == 0 )
-	{
-		strcpy(effectID, "OMFI:EFFE:AvidPrivateEffectID");
-		strcpy(MCEffectID, "EFF_BLEND_SQUEEZE_LEFTCENTER");
-	}
-	else if ( memcmp((char *)&Datadef, (char *)&kEffSqueezeTop, sizeof(aafUID_t)) == 0 )
-	{
-		strcpy(effectID, "OMFI:EFFE:AvidPrivateEffectID");
-		strcpy(MCEffectID, "EFF_BLEND_SQUEEZETOP");
-	}
-	else if ( memcmp((char *)&Datadef, (char *)&kEffSqueezeBottom, sizeof(aafUID_t)) == 0 )
-	{
-		strcpy(effectID, "OMFI:EFFE:AvidPrivateEffectID");
-		strcpy(MCEffectID, "EFF_BLEND_SQUEEZEBOTTOM");
-	}
-	else if ( memcmp((char *)&Datadef, (char *)&kEffSqueezeLeft, sizeof(aafUID_t)) == 0 )
-	{
-		strcpy(effectID, "OMFI:EFFE:AvidPrivateEffectID");
-		strcpy(MCEffectID, "EFF_BLEND_SQUEEZELEFT");
-	}
-	else if ( memcmp((char *)&Datadef, (char *)&kEffSqueezeRight, sizeof(aafUID_t)) == 0 )
-	{
-		strcpy(effectID, "OMFI:EFFE:AvidPrivateEffectID");
-		strcpy(MCEffectID, "EFF_BLEND_SQUEEZERIGHT");
-	}
-	else if ( memcmp((char *)&Datadef, (char *)&kEffSqueezeBottomLeft, sizeof(aafUID_t)) == 0 )
-	{
-		strcpy(effectID, "OMFI:EFFE:AvidPrivateEffectID");
-		strcpy(MCEffectID, "EFF_BLEND_SQUEEZE_BOTTOMLEFT");
-	}
-	else if ( memcmp((char *)&Datadef, (char *)&kEffSqueezeTopRight, sizeof(aafUID_t)) == 0 )
-	{
-		strcpy(effectID, "OMFI:EFFE:AvidPrivateEffectID");
-		strcpy(MCEffectID, "EFF_BLEND_SQUEEZE_TOPRIGHT");
-	}
-	else if ( memcmp((char *)&Datadef, (char *)&kEffSqueezeBottomRight, sizeof(aafUID_t)) == 0 )
-	{
-		strcpy(effectID, "OMFI:EFFE:AvidPrivateEffectID");
-		strcpy(MCEffectID, "EFF_BLEND_SQUEEZE_BOTTOMRIGHT");
-	}
-	else if ( memcmp((char *)&Datadef, (char *)&kEffSqueezeTopLeft, sizeof(aafUID_t)) == 0 )
-	{
-		strcpy(effectID, "OMFI:EFFE:AvidPrivateEffectID");
-		strcpy(MCEffectID, "EFF_BLEND_SQUEEZE_TOPLEFT");
-	}
-	else
-	{
-		AUIDtoString(&Datadef, szAUID);
-		printf("%sInvalid DataDef Found in sequence AUID : %s\n", gpGlobals->indentLeader, szAUID);
-		fprintf(stderr,"%sInvalid DataDef Found in sequence AUID : %s\n", gpGlobals->indentLeader, szAUID);
-		rc = AAFRESULT_INVALID_DATADEF;
-	}
-
-#if 0
-#define EFF_EMPTY_EFFECT				"EFF_EMPTY_EFFECT"	//	This is the ID for the effect 
-															//	that is returned when the requested 
-															//	effect is not available
-#define EFF_AUDIO_PANVOL				
-#define EFF_AUDIO_EQMB					"EFF_AUDIO_EQMB"	// Multiband equalization (ADM-style)
-#define EFF_AUDIO_AS_PLUG_IN			"EFF_AUDIO_AS_PLUG_IN"	// Digi Audio Suite Plug-In
-#define EFF_TIME_WARP					"EFF_TIMEWARP"
-#define EFF_MOTION_STROBE				"EFF_TIMEWARP.STROBE"
-#define EFF_AUDIO_WARP                  "EFF_TIMEWARP.AUDIO_TIME_WARP"
-#define EFF_BASIC_PLUGIN				"EFF_BASIC_PLUGIN"
-#define EFF_PLUGIN_FILTER				"EFF_PLUGIN_FILTER"
-#define EFF_PLUGIN_TRANSITION			"EFF_PLUGIN_TRANSITION"        
-#define EFF_PIP							"EFF_PICTURE_IN_PICTURE"
-#define EFF_BLEND_VDISSOLVE				"BLEND_DISSOLVE"
-#define EFF_BLEND_WIPE_RBOX				"EFF_BLEND_WIPE_RBOX"
-#define EFF_BLEND_WIPE_TBOX				"EFF_BLEND_WIPE_TBOX"
-#define EFF_BLEND_WIPE_LBOX				"EFF_BLEND_WIPE_LBOX"
-#define EFF_BLEND_WIPE_BBOX				"EFF_BLEND_WIPE_BBOX"
-#define EFF_BLEND_WIPE_LR				"EFF_BLEND_WIPE_LR"
-#define EFF_BLEND_WIPE_LL				"EFF_BLEND_WIPE_LL"
-#define EFF_BLEND_WIPE_UR				"EFF_BLEND_WIPE_UR"
-#define EFF_BLEND_WIPE_UL				"EFF_BLEND_WIPE_UL"
-#define EFF_BLEND_WIPE_VOPEN			"EFF_BLEND_WIPE_VOPEN"
-#define EFF_BLEND_WIPE_HOPEN			"EFF_BLEND_WIPE_HOPEN"
-#define EFF_BLEND_WIPE_VERT				"EFF_BLEND_WIPE_VERT"
-#define EFF_BLEND_WIPE_HORZ				"EFF_BLEND_WIPE_HORZ"
-#define EFF_BLEND_WIPE_LRLDIAG			"EFF_BLEND_WIPE_LRLDIAG"
-#define EFF_BLEND_WIPE_LLRDIAG			"EFF_BLEND_WIPE_LLRDIAG"
-#define EFF_BLEND_WIPE_URLDIAG			"EFF_BLEND_WIPE_URLDIAG"
-#define EFF_BLEND_WIPE_ULRDIAG			"EFF_BLEND_WIPE_ULRDIAG"
-#define EFF_BLEND_WIPE_SPIRAL			"EFF_BLEND_WIPE_SPIRAL"
-#define EFF_BLEND_WIPE_GRID				"EFF_BLEND_WIPE_GRID"
-#define EFF_BLEND_WIPE_1ROW				"EFF_BLEND_WIPE_1ROW"
-#define EFF_BLEND_WIPE_SPECKLE			"EFF_BLEND_WIPE_SPECKLE"
-#define EFF_BLEND_WIPE_ZIG_ZAG			"EFF_BLEND_WIPE_ZIG_ZAG"
-#define EFF_BLEND_WIPE_VOPEN_SAW		"EFF_BLEND_WIPE_VOPEN_SAW"
-#define EFF_BLEND_WIPE_HOPEN_SAW		"EFF_BLEND_WIPE_HOPEN_SAW"
-#define EFF_BLEND_WIPE_VSAW				"EFF_BLEND_WIPE_VSAW"
-#define EFF_BLEND_WIPE_HSAW				"EFF_BLEND_WIPE_HSAW"
-#define EFF_BLEND_WIPE_4CORNER			"EFF_BLEND_WIPE_4CORNER"
-#define EFF_BLEND_WIPE_BOX				"EFF_BLEND_WIPE_BOX"
-#define EFF_BLEND_WIPE_CIRCLE			"EFF_BLEND_WIPE_CIRCLE"
-#define EFF_BLEND_WIPE_RADAR			"EFF_BLEND_WIPE_RADAR"
-#define EFF_BLEND_WIPE_DIAMOND			"EFF_BLEND_WIPE_DIAMOND"
-#define EFF_BLEND_WIPE_ELLIPSE			"EFF_BLEND_WIPE_ELLIPSE"
-#define EFF_BLEND_WIPE_2ROW				"EFF_BLEND_WIPE_2ROW"		// horizontal bands
-#define EFF_BLEND_WIPE_HBLIND			"EFF_BLEND_WIPE_HBLIND"
-#define EFF_BLEND_WIPE_VBLIND			"EFF_BLEND_WIPE_VBLIND"
-#define EFF_BLEND_MASK_166				"EFF_BLEND_MASK_166"
-#define EFF_BLEND_MASK_185				"EFF_BLEND_MASK_185"
-#define EFF_BLEND_MASK_235				"EFF_BLEND_MASK_235"
-#define EFF_BLEND_MASK_177				"EFF_BLEND_MASK_177"		// 16x9 Mask
-#define EFF_BLEND_VDISSOLVE_LIN			"BLEND_DISSOLVE_LIN"		// film fade
-#define EFF_BLEND_VDISSOLVE_LOG			"BLEND_DISSOLVE_LOG"		// film dissolve
-#define EFF_BLOW_UP						"EFF_BLOW_UP"
-#define EFF_BLEND_MASK					"EFF_BLEND_MASK"
-#define EFF_COLORCORRECT				"EFF_COLORCORRECT"			// Color Effect
-#define EFF_RGB_COLOR_CORRECTION		"EFF_RGB_COLOR_CORRECTION"	// Chameleon Color Correction
-#define EFF_BLEND_FLIP_VERT				"EFF_BLEND_FLIP_VERT"		// flip
-#define EFF_BLEND_FLIP_BOTH				"EFF_BLEND_FLIP_BOTH"		// flip/flop
-#define EFF_BLEND_FLIP_HORZ				"EFF_BLEND_FLIP_HORZ"		// flop
-#define EFF_BLEND_MASK_IMAGE			"EFF_BLEND_MASK_IMAGE"
-#define EFF_PAINT						"EFF_PAINT"
-#define EFF_PAINT_MOSAIC				"EFF_PAINT_MOSAIC"
-#define EFF_PAINT_SPOT_COLOR				"EFF_PAINT_SPOT_COLOR"
-#define EFF_PAINT_MPEG_OUTLINE				"EFF_PAINT_MPEG_OUTLINE"
-#define EFF_PAINT_SCRATCH               "EFF_PAINT_SCRATCH"
-#define EFF_BLEND_RESIZE				"EFF_BLEND_RESIZE"
-#define EFF_PAN_SCAN					"EFF_PAN_SCAN"
-#define EFF_SUBMASTER					"EFF_SUBMASTER"
-#define EFF_ANIMATTE					"EFF_ANIMATTE"
-#define EFF_BLEND_LUMAKEY				"EFF_BLEND_LUMAKEY"
-#define EFF_BLEND_MATTE_KEY				"EFF_BLEND_MATTE_KEY"			// DSF - the software Matte Key
-#define EFF_BLEND_YUV_CHROMAKEY			"EFF_BLEND_YUV_CHROMAKEY"		// real chroma key - 5.2 and beyond
-#define EFF_BLEND_SIMPLE_LUMAKEY		"EFF_BLEND_SIMPLE_LUMAKEY"
-#define EFF_BLEND_SIMPLE_CHROMAKEY		"EFF_BLEND_SIMPLE_CHROMAKEY"	// for debug only
-#define EFF_BLEND_CHROMAKEY				"EFF_BLEND_CHROMAKEY"			// pre 5.2
-#define EFF_BLEND_TOUCAN_CHROMAKEY		"EFF_BLEND_TOUCAN_CHROMAKEY"	// enhanced chromakey plugin
-#define EFF_2DMATTE_KEY					"EFF_2DMATTE"					// real time static matte
-#define EFF_BLEND_CONCEAL_BOTTOMLEFT	"EFF_BLEND_CONCEAL_BOTTOMLEFT"
-#define EFF_BLEND_CONCEAL_BOTTOMRIGHT	"EFF_BLEND_CONCEAL_BOTTOMRIGHT"
-#define EFF_BLEND_CONCEAL_TOPRIGHT		"EFF_BLEND_CONCEAL_TOPRIGHT"
-#define EFF_BLEND_CONCEAL_TOPLEFT		"EFF_BLEND_CONCEAL_TOPLEFT"
-#define EFF_BLEND_CONCEAL_UP			"EFF_BLEND_CONCEAL_UP"
-#define EFF_BLEND_CONCEAL_DOWN			"EFF_BLEND_CONCEAL_DOWN"
-#define EFF_BLEND_CONCEAL_LEFT			"EFF_BLEND_CONCEAL_LEFT"
-#define EFF_BLEND_CONCEAL_RIGHT			"EFF_BLEND_CONCEAL_RIGHT"
-#define EFF_BLEND_LCONCEAL_BOTTOMLEFT	"EFF_BLEND_LCONCEAL_BOTTOMLEFT"
-#define EFF_BLEND_LCONCEAL_BOTTOMRIGHT	"EFF_BLEND_LCONCEAL_BOTTOMRIGHT"
-#define EFF_BLEND_LCONCEAL_TOPRIGHT		"EFF_BLEND_LCONCEAL_TOPRIGHT"
-#define EFF_BLEND_LCONCEAL_TOPLEFT		"EFF_BLEND_LCONCEAL_TOPLEFT"
-#define EFF_BLEND_PEEL_BOTTOMLEFT		"EFF_BLEND_PEEL_BOTTOMLEFT"
-#define EFF_BLEND_PEEL_BOTTOMRIGHT		"EFF_BLEND_PEEL_BOTTOMRIGHT"
-#define EFF_BLEND_PEEL_TOPRIGHT			"EFF_BLEND_PEEL_TOPRIGHT"
-#define EFF_BLEND_PEEL_TOPLEFT			"EFF_BLEND_PEEL_TOPLEFT"
-#define EFF_BLEND_PEEL_TOP				"EFF_BLEND_PEEL_TOP"
-#define EFF_BLEND_PEEL_BOTTOM			"EFF_BLEND_PEEL_BOTTOM"
-#define EFF_BLEND_PEEL_LEFT				"EFF_BLEND_PEEL_LEFT"
-#define EFF_BLEND_PEEL_RIGHT			"EFF_BLEND_PEEL_RIGHT"
-#define EFF_BLEND_PUSH_BOTTOMLEFT		"EFF_BLEND_PUSH_BOTTOMLEFT"
-#define EFF_BLEND_PUSH_BOTTOMRIGHT		"EFF_BLEND_PUSH_BOTTOMRIGHT"
-#define EFF_BLEND_PUSH_TOPRIGHT			"EFF_BLEND_PUSH_TOPRIGHT"
-#define EFF_BLEND_PUSH_TOPLEFT			"EFF_BLEND_PUSH_TOPLEFT"
-#define EFF_BLEND_PUSH_TOP				"EFF_BLEND_PUSH_TOP"
-#define EFF_BLEND_PUSH_BOTTOM			"EFF_BLEND_PUSH_BOTTOM"
-#define EFF_BLEND_PUSH_LEFT				"EFF_BLEND_PUSH_LEFT"
-#define EFF_BLEND_PUSH_RIGHT			"EFF_BLEND_PUSH_RIGHT"
-#define EFF_SBLEND						"EFF_SBLEND"
-#define EFF_3DPIP						"EFF_3DPIP"						// for MCX
-#define EFF_3DSHAPE_PAGE_CURL			"EFF_3DSHAPE_PAGE_CURL"			// for MCX
-#define EFF_3DSHAPE_QUAD_CURL			"EFF_3DSHAPE_QUAD_CURL"			// for MCX
-#define EFF_3DSHAPE_ARROW				"EFF_3DSHAPE_ARROW"				// for MCX
-#define EFF_3DSHAPE_SLATS				"EFF_3DSHAPE_SLATS"				// for MCX
-#define EFF_3DSHAPE_MULTI_WAVE			"EFF_3DSHAPE_MULTI_WAVE"		// for MCX
-#define EFF_3DSHAPE_CENTER_BURST		"EFF_3DSHAPE_CENTER_BURST"		// for MCX
-#define EFF_3DSHAPE_SINE_WAVE			"EFF_3DSHAPE_SINE_WAVE"			// for MCX
-#define EFF_3DSHAPE_BALL				"EFF_3DSHAPE_BALL"				// for MCX
-#define EFF_3DSHAPE_PAGE_FOLD			"EFF_3DSHAPE_PAGE_FOLD"			// for MCX
-#define EFF_3DSHAPE_BUMPS				"EFF_3DSHAPE_BUMPS"				// for MCX
-#define EFF_3DTITLE						"EFF_3DTITLE"
-#define EFF_3DMATTE_KEY					"EFF_3DMATTE"
-#define EFF_ROLLING_TITLE				"EFF_ROLLING_TITLE"
-#define EFF_ROLLING_2DMATTE				"EFF_ROLLING_2DMATTE"
-#define EFF_CRAWLING_TITLE				"EFF_CRAWLING_TITLE"
-#define EFF_CRAWLING_2DMATTE			"EFF_CRAWLING_2DMATTE"
-#define EFF_BLEND_TITLE					"EFF_BLEND_GRAPHIC"
-#define BLEND_DISSOLVE_LIN				"BLEND_DISSOLVE_LIN"		// film fade
-#define BLEND_DISSOLVE_LOG				"BLEND_DISSOLVE_LOG"		// film dissolve
-#define EFF_TEST_ONE_TRACK				"EFF_TEST_ONE_TRACK"
-#define EFF_TEST_TWO_TRACK				"EFF_TEST_TWO_TRACK"
-#define EFF_TEST_THREE_TRACK			"EFF_TEST_THREE_TRACK"
-#endif
-
-	return rc;
-}
-// ============================================================================
 // ConvertAAFDatadef
 //
 //			This function converts an AAF datadef into an OMF datakind. 
@@ -2465,7 +2142,7 @@ HRESULT Aaf2Omf::ConvertEffects(IAAFOperationGroup* pEffect,
 		else
 			byPassPtr = NULL;
 
-		GetEffectIDsFromAUID(effectDefAUID, effectID, MCEffectID);
+		GetEffectIDs(pEffect, effectID, MCEffectID);
 		bDefExists = OMF2::omfiEffectDefLookup(OMFFileHdl, effectID, &effectDef, &OMFError);
 		if (OMFError == OMF2::OM_ERR_NONE && !bDefExists)
 		{
@@ -2487,7 +2164,7 @@ HRESULT Aaf2Omf::ConvertEffects(IAAFOperationGroup* pEffect,
 		
 		if(MCEffectID[0] != '\0')
 		{
-			checkOMF(OMF2::omfsWriteUniqueName(OMFFileHdl, (*pOMFEffect), privateEffectProp,
+			checkOMF(OMF2::omfsWriteUniqueName(OMFFileHdl, (*pOMFEffect), gpGlobals->pvtEffectIDProp,
 											MCEffectID));
 		}
 

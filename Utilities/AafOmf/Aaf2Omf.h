@@ -58,7 +58,6 @@ private:
 	HRESULT ProcessComponent(IAAFComponent* pComponent, OMF2::omfObject_t* pOMFSegment);
 	HRESULT ConvertAAFDatadef(aafUID_t Datadef, OMF2::omfDDefObj_t* pDatakind);
 	HRESULT ConvertAAFTypeIDDatakind(aafUID_t, OMF2::omfDDefObj_t* pDatakind);
-	HRESULT GetEffectIDsFromAUID(aafUID_t Datadef, OMF2::omfUniqueNamePtr_t effectID, OMF2::omfUniqueNamePtr_t MCEffectID);
 	HRESULT TraverseSequence(IAAFSequence* pSequence, OMF2::omfObject_t* pOMFSequence );
 	HRESULT ConvertSelector(IAAFSelector* pSelector, OMF2::omfObject_t* pOMFSelector );
 	HRESULT ConvertLocator(IAAFEssenceDescriptor* pEssenceDesc, OMF2::omfMobObj_t*	pOMFSourceMob );
@@ -72,7 +71,6 @@ private:
     OMF2::omfSessionHdl_t	OMFSession;
 	OMF2::omfHdl_t			OMFFileHdl;
 	OMF2::omfFileRev_t		OMFFileRev;
-	OMF2::omfProperty_t		privateEffectProp;
 	IAAFFile*				pFile;
 	IAAFHeader*				pHeader;
 	IAAFDictionary*			pDictionary;
