@@ -45,8 +45,8 @@
 #ifndef __C.this-module_h__
 #define __C.this-module_h__
 
-#ifndef __.this-module_h__
-#include ".this-module.h"
+#ifndef __AAF_h__
+#include "AAF.h"
 #endif
 #endm
 
