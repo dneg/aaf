@@ -89,6 +89,24 @@ public:
   virtual void getBits(OMByte* bits, size_t size) const = 0;
 
 protected:
+  // @access Public members.
+
+    // @cmember Write this property to persistent store, performing
+    //          any necessary externalization and byte reordering.
+    //   @this const
+  void write(OMPropertyId propertyId,
+             int storedForm,
+             OMByte* internalBytes,
+             size_t internalBytesSize) const;
+
+    // @cmember Read this property from persistent store, performing
+    //          any necessary byte reordering and internalization.
+    //   @this const
+  void read(OMPropertyId propertyId,
+            int storedForm,
+            OMByte* internalBytes,
+            size_t internalBytesSize,
+            size_t externalBytesSize);
 
   int _propertyId;
   int _storedForm; // The on-disk representation used (one of the SF_* values)
