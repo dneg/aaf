@@ -136,7 +136,7 @@ AAFRESULT STDMETHODCALLTYPE
   hr = GetBaseType (&ptd);
   if (AAFRESULT_FAILED (hr)) return hr;
   assert (ptd);
-  aafUInt32 elementSize = ptd->PropValSize();
+//  aafUInt32 elementSize = ptd->PropValSize();
 
   assert (pInPropVal);
   pvd = dynamic_cast<ImplAAFPropValData*> (pInPropVal);
