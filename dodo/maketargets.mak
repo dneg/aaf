@@ -264,12 +264,9 @@ clean:
 		$(RM) -f $(SRC_DIR)/impl/Impl$$file.cpp ; \
 		echo $(RM) -f $(SRC_DIR)/impl/Impl$$file.h ; \
 		$(RM) -f $(SRC_DIR)/impl/Impl$$file.h ; \
-	done
-	@for file in $(AUTO_GEN_COMTEST) ; do \
 		echo $(RM) -f $(SRC_DIR)/com-api/test/C$${file}Test.cpp ; \
 		$(RM) -f $(SRC_DIR)/com-api/test/C$${file}Test.cpp ; \
 	done
-
 
 # This file contains the list of all dependents...
 include depend.mk
