@@ -33,7 +33,6 @@
 
 #include "OMAssertions.h"
 
-#define OMPROPERTYSET_CHUNKSIZE (20)
 
 OMPropertySet::OMPropertySet(void)
 : _set(),
