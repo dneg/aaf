@@ -26,6 +26,8 @@
 ************************************************************************/
 
 // @doc OMEXTERNAL
+// @author Tim Bingham | tjb | Avid Technology, Inc. | OMPropertySet
+
 #include "OMPropertySet.h"
 #include "OMProperty.h"
 #include "OMUtilities.h"
