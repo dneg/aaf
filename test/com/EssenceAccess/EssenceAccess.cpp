@@ -162,6 +162,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 	IAAFEssenceFormat*			pFormat = NULL;
 	IAAFEssenceFormat			*format = NULL;
 	IAAFLocator					*pLocator = NULL;
+	IAAFClassDef                *pCDMasterMob = 0;
+	IAAFClassDef                *pCDNetworkLocator = 0;
+	IAAFDataDef                 *pDdefSound = 0;
 	// !!!Previous revisions of this file contained variables here required to handle external essence
 	aafMobID_t					masterMobID;
 	aafProductIdentification_t	ProductInfo;
@@ -202,13 +205,20 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 	check(AAFFileOpenNewModify (pFileName, 0, &ProductInfo, &pFile));
 	check(pFile->GetHeader(&pHeader));
 
-  // Get the AAF Dictionary so that we can create valid AAF objects.
-  check(pHeader->GetDictionary(&pDictionary));
+	// Get the AAF Dictionary so that we can create valid AAF objects.
+	check(pHeader->GetDictionary(&pDictionary));
+
+	check(pDictionary->LookupClassDef(AUID_AAFMasterMob,
+									  &pCDMasterMob));
+	check(pDictionary->LookupClassDef(AUID_AAFNetworkLocator,
+									  &pCDNetworkLocator));
+	check(pDictionary->LookupDataDef(DDEF_Sound,
+									 &pDdefSound));
 
 	// !!!Previous revisions of this file contained code here required to handle external essence
 
   // Get a Master MOB Interface
-	check(pDictionary->CreateInstance(AUID_AAFMasterMob,
+	check(pDictionary->CreateInstance(pCDMasterMob,
 						   IID_IAAFMasterMob, 
 						   (IUnknown **)&pMasterMob));
 	// Get a Mob interface and set its variables.
@@ -224,7 +234,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 	if(dataFile != NULL)
 	{
 		// Make a locator, and attach it to the EssenceDescriptor
-		check(pDictionary->CreateInstance(AUID_AAFNetworkLocator,
+		check(pDictionary->CreateInstance(pCDNetworkLocator,
 								IID_IAAFLocator, 
 								(IUnknown **)&pLocator));		
 		check(pLocator->SetPath (dataFile->dataFilename));
@@ -268,7 +278,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 
 		// now create the Essence data file
 		check(pMasterMob->CreateEssence(1,				// Slot ID
-									DDEF_Sound,		// MediaKind
+									pDdefSound,		// MediaKind
 									CodecWave,		// codecID
 									editRate,		// edit rate
 									sampleRate,		// sample rate
@@ -448,6 +458,24 @@ cleanup:
 	if (pHeader)
 		pHeader->Release();
 
+	if (pCDMasterMob)
+	  {
+		pCDMasterMob->Release();
+		pCDMasterMob = 0;
+	  }
+
+	if (pCDNetworkLocator)
+	  {
+		pCDNetworkLocator->Release();
+		pCDNetworkLocator = 0;
+	  }
+
+	if (pDdefSound)
+	  {
+		pDdefSound->Release();
+		pDdefSound = 0;
+	  }
+
 	if (pFile)
   {
     pFile->Close();
@@ -471,11 +499,11 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 	IAAFMob*					pMob = NULL;
 	IAAFMasterMob*				pMasterMob = NULL;
 	IAAFEssenceFormat*			pFormat = NULL;
+	IAAFDataDef*				pddSound = 0;
 
 	aafNumSlots_t				numMobs, numSlots;
 	aafSearchCrit_t				criteria;
 	aafMobID_t					mobID;
-	aafUID_t					dataID = DDEF_Sound;
 	aafWChar					namebuf[1204];
 	unsigned char						*AAFDataBuf = NULL;
 	aafUInt32					AAFBytesRead, samplesRead;
@@ -489,7 +517,6 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 
 	// Get the AAF Dictionary so that we can create valid AAF objects.
 	check(pHeader->GetDictionary(&pDictionary));
-
 
 	// Here we check on the number of mobs in the file. 
 	// Get the number of master mobs in the file (should be one)
@@ -554,7 +581,8 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 
 					
 #else
-					check(pEssenceAccess->GetSampleCount(dataID, &sampleCount));
+					check(pDictionary->LookupDataDef(DDEF_Sound, &pddSound));
+					check(pEssenceAccess->GetSampleCount(pddSound, &sampleCount));
 					samplesToRead = (aafInt32)sampleCount;		// !!! Possible loss of data if > 4gig
 #endif
 					aafUInt32			sampleBits;
@@ -742,6 +770,12 @@ cleanup:
 		pMobIter->Release();
 	if (pFormat)
 		pFormat->Release();
+
+	if (pddSound)
+	  {
+		pddSound->Release();
+		pddSound = 0;
+	  }
 
 	if (pFile) 
 	{

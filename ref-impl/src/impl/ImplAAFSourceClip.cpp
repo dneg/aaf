@@ -9,7 +9,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -47,6 +47,10 @@
 #include "AAFDefUIDs.h"
 #include "ImplAAFHeader.h"
 
+#include "ImplAAFSmartPointer.h"
+typedef ImplAAFSmartPointer<ImplAAFDataDef>    ImplAAFDataDefSP;
+typedef ImplAAFSmartPointer<ImplAAFDictionary> ImplAAFDictionarySP;
+
 ImplAAFSourceClip::ImplAAFSourceClip ():
 	_fadeInLength(		PID_SourceClip_FadeInLength,		"FadeInLength"),
 	_fadeInType(	PID_SourceClip_FadeInType,		"FadeInType"),
@@ -68,24 +72,26 @@ ImplAAFSourceClip::~ImplAAFSourceClip ()
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFSourceClip::Initialize(const aafUID_t &       datadef,
+    ImplAAFSourceClip::Initialize(ImplAAFDataDef *       pDataDef,
 								  const aafLength_t &    length,
 								  const aafSourceRef_t & sourceRef)
 {
-    AAFRESULT aafError = AAFRESULT_SUCCESS;
-	SetDataDef( datadef );
-	SetLength( length );
-	SetSourceID( sourceRef.sourceID );
-	SetSourceMobSlotID( sourceRef.sourceSlotID );
-	_startTime = sourceRef.startTime;
+  if (! pDataDef)
+	return AAFRESULT_NULL_PARAM;
 
-	_fadeInLength		= 0;
-	_fadeInType		= kFadeNone;
+  SetDataDef( pDataDef );
+  SetLength( length );
+  SetSourceID( sourceRef.sourceID );
+  SetSourceMobSlotID( sourceRef.sourceSlotID );
+  _startTime = sourceRef.startTime;
+
+  _fadeInLength		= 0;
+  _fadeInType		= kFadeNone;
 	
-	_fadeOutLength		= 0;
-	_fadeOutType	= kFadeNone;
+  _fadeOutLength		= 0;
+  _fadeOutType	= kFadeNone;
 
-	return aafError;
+  return AAFRESULT_SUCCESS;
 }
 
 
@@ -329,6 +335,3 @@ AAFRESULT ImplAAFSourceClip::TraverseToClip(aafLength_t length,
 	
 	return(AAFRESULT_SUCCESS);
 }
-
-
-

@@ -41,6 +41,8 @@
 #include "AAFDefUIDs.h"
 #include "AAFContainerDefs.h"
 
+#include "CAAFBuiltinDefs.h"
+
 // Cross-platform utility to delete a file.
 static void RemoveTestFile(const wchar_t* pFileName)
 {
@@ -139,7 +141,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		// Get the AAF Dictionary so that we can create valid AAF objects.
 		checkResult(pHeader->GetDictionary(&pDictionary));
     
-		checkResult(pDictionary->CreateInstance(AUID_AAFContainerDef,
+		CAAFBuiltinDefs defs (pDictionary);
+		checkResult(pDictionary->CreateInstance(defs.cdContainerDef(),
 							  IID_IAAFContainerDef, 
 							  (IUnknown **)&pContainerDef));
     

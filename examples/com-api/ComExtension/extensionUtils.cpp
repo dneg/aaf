@@ -33,6 +33,8 @@
 
 #include "AAFResult.h"
 
+#include "CAAFBuiltinDefs.h"
+
 #if defined(_MAC) || defined(macintosh)
 #include <wstring.h>
 #endif
@@ -1035,6 +1037,7 @@ void CreateAndRegisterPositionEnum (IAAFDictionary * pDict)
   IAAFTypeDef *ptd = NULL;
   IAAFTypeDefExtEnum *ptde = NULL;
 
+  CAAFBuiltinDefs defs (pDict);
 
   // Check to see if we are have already been registered.
   if (SUCCEEDED(pDict->LookupTypeDef (kTypeID_ePosition, &ptd)))
@@ -1048,7 +1051,7 @@ void CreateAndRegisterPositionEnum (IAAFDictionary * pDict)
   {
     // Instantiate a type definition object which will describe ePosition
     // extensible enumerations.
-    check (pDict->CreateInstance (AUID_AAFTypeDefExtEnum,
+    check (pDict->CreateInstance (defs.cdTypeDefExtEnum(),
 								  IID_IAAFTypeDefExtEnum,
 								  (IUnknown**) &ptde));
 
@@ -1103,6 +1106,7 @@ void CreateAndRegisterPersonnelResource (IAAFDictionary * pDict)
   IAAFTypeDef *ptd_Position=NULL;
   IAAFTypeDef *ptd_ui32=NULL;
 
+  CAAFBuiltinDefs defs (pDict);
 
   // Check to see if we are have already been registered.
   if (SUCCEEDED(pDict->LookupClassDef (kClassID_PersonnelResource,
@@ -1117,7 +1121,7 @@ void CreateAndRegisterPersonnelResource (IAAFDictionary * pDict)
   {
     // Instantiate a class definition object which will describe
     // PersonnelResource objects.
-    check (pDict->CreateInstance (AUID_AAFClassDef,
+    check (pDict->CreateInstance (defs.cdClassDef(),
 								  IID_IAAFClassDef,
 								  (IUnknown**) &pcd));
 
@@ -1286,6 +1290,8 @@ CreateAndRegisterPersonnelResourceReference
   IAAFClassDef *pcd=NULL;
   IAAFTypeDefObjectRef *ptdr=NULL;
 
+  CAAFBuiltinDefs defs (pDict);
+
   // Check to see if we are have already been registered.
   if (SUCCEEDED(pDict->LookupTypeDef
 				(kTypeID_PersonnelResourceStrongReference, &ptd)))
@@ -1307,7 +1313,7 @@ CreateAndRegisterPersonnelResourceReference
     // Instantiate a TypeDefinition for use as a Reference to a
     // PersonnelResource object.  We'll instantiate a
     // TypeDefinitionStrongObjectReference.
-    check (pDict->CreateInstance (AUID_AAFTypeDefStrongObjRef,
+    check (pDict->CreateInstance (defs.cdTypeDefStrongObjRef(),
 								  IID_IAAFTypeDefObjectRef,
 								  (IUnknown**) &ptdr));
 
@@ -1363,6 +1369,7 @@ CreateAndRegisterPersonnelResourceReferenceVector
   IAAFTypeDefVariableArray *ptdv=NULL;
   IAAFTypeDef *ptdr=NULL;
 
+  CAAFBuiltinDefs defs (pDict);
   
   // Check to see if we are have already been registered.
   if (SUCCEEDED(pDict->LookupTypeDef
@@ -1379,7 +1386,7 @@ CreateAndRegisterPersonnelResourceReferenceVector
     // Instantiate a TypeDefinition for use as a Vector of References to
     // PersonnelResource objects.  We'll instantiate a
     // TypeDefinitionVariableArray.
-    check (pDict->CreateInstance (AUID_AAFTypeDefVariableArray,
+    check (pDict->CreateInstance (defs.cdTypeDefVariableArray(),
 								  IID_IAAFTypeDefVariableArray,
 								  (IUnknown**) &ptdv));
 
@@ -1444,6 +1451,8 @@ void CreateAndRegisterAdminMob (IAAFDictionary * pDict)
   IAAFPropertyDef *pd_unused=NULL;
   IAAFTypeDef *ptd_PersonnelVector=NULL;
 
+  CAAFBuiltinDefs defs (pDict);
+
   // Check to see if we are have already been registered.
   if (SUCCEEDED(pDict->LookupClassDef (kClassID_AdminMob, &pcd)))
   {
@@ -1456,7 +1465,7 @@ void CreateAndRegisterAdminMob (IAAFDictionary * pDict)
   {
     // Instantiate a class definition object which will describe
     // AdminMob objects.
-    check (pDict->CreateInstance (AUID_AAFClassDef,
+    check (pDict->CreateInstance (defs.cdClassDef(),
 								  IID_IAAFClassDef,
 								  (IUnknown**) &pcd));
 

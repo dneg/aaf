@@ -37,6 +37,8 @@
 #include "AAFResult.h"
 #include "AAFDefUIDs.h"
 
+#include "CAAFBuiltinDefs.h"
+
 #define	TIFF_VERSION	42
 
 #define	TIFF_BIGENDIAN		0x4d4d
@@ -220,9 +222,10 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 		// Get the AAF Dictionary so that we can create valid AAF objects.
 		checkResult(pHeader->GetDictionary(&pDictionary));
+		CAAFBuiltinDefs defs (pDictionary);
  		
 		// Create a source mob
-		checkResult(pDictionary->CreateInstance(AUID_AAFSourceMob,
+		checkResult(pDictionary->CreateInstance(defs.cdSourceMob(),
 							IID_IAAFSourceMob, 
 							(IUnknown **)&pSourceMob));
 		checkResult(pSourceMob->QueryInterface(IID_IAAFMob, (void **)&pMob));
@@ -230,7 +233,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(CoCreateGuid((GUID *)&newMobID));
 		checkResult(pMob->SetMobID(newMobID));
 		checkResult(pMob->SetName(L"TIFFDescriptorTest"));
-		checkResult(pDictionary->CreateInstance(AUID_AAFTIFFDescriptor,
+		checkResult(pDictionary->CreateInstance(defs.cdTIFFDescriptor(),
 									  IID_IAAFTIFFDescriptor, 
 									  (IUnknown **)&pTIFFDesc));		
 		checkResult(pTIFFDesc->QueryInterface(IID_IAAFEssenceDescriptor, (void **)&pEssDesc));

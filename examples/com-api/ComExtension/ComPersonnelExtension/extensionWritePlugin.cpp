@@ -128,6 +128,7 @@ HRESULT extensionWritePlugin (const aafCharacter * filename)
   IAAFAdminMob *pAdminMob=NULL;
   IAAFMob *pMob=NULL;
   IAAFPersonnelResource *pPersResource=NULL;
+  IAAFClassDef * pcd = 0;
 
 
   cout << "***Creating file " << filename << " with plugin interface***" << endl;
@@ -190,9 +191,13 @@ HRESULT extensionWritePlugin (const aafCharacter * filename)
 
  
     // Instantiate a AdministrativeMob object.
-    check (pDict->CreateInstance (kClassID_AdminMob,
+	check (pDict->LookupClassDef (kClassID_AdminMob, &pcd))
+    check (pDict->CreateInstance (pcd,
 								  IID_IAAFMob,
 								  (IUnknown**) &pMob));
+	pcd->Release ();
+	pcd = 0;
+
     check (pMob->SetName (L"Administrative Information"));
     check (pMob->QueryInterface(IID_IAAFAdminMob, (void **)&pAdminMob));
 
@@ -201,9 +206,12 @@ HRESULT extensionWritePlugin (const aafCharacter * filename)
 
     // Add several PersonnelResource objects to the AdminMob.
     // Instantiate the PersonnelResource object.
-    check (pDict->CreateInstance (kClassID_PersonnelResource,
+	check (pDict->LookupClassDef (kClassID_PersonnelResource, &pcd));
+    check (pDict->CreateInstance (pcd,
 								  IID_IAAFPersonnelResource,
 								  (IUnknown**) &pPersResource));
+	pcd->Release ();
+	pcd = 0;
 
     check (pPersResource->Initialize(
 							     L"Morgan",
@@ -214,9 +222,12 @@ HRESULT extensionWritePlugin (const aafCharacter * filename)
     pPersResource=NULL;
 
   // Instantiate the PersonnelResource object.
-    check (pDict->CreateInstance (kClassID_PersonnelResource,
+	check (pDict->LookupClassDef (kClassID_PersonnelResource, &pcd));
+    check (pDict->CreateInstance (pcd,
 								  IID_IAAFPersonnelResource,
 								  (IUnknown**) &pPersResource));
+	pcd->Release ();
+	pcd = 0;
 
     check (pPersResource->Initialize(
 							     L"Ohanian",
@@ -228,9 +239,12 @@ HRESULT extensionWritePlugin (const aafCharacter * filename)
     pPersResource->Release();
     pPersResource=NULL;
   // Instantiate the PersonnelResource object.
-    check (pDict->CreateInstance (kClassID_PersonnelResource,
+    check (pDict->LookupClassDef (kClassID_PersonnelResource, &pcd));
+    check (pDict->CreateInstance (pcd,
 								  IID_IAAFPersonnelResource,
 								  (IUnknown**) &pPersResource));
+	pcd->Release ();
+	pcd = 0;
 
     check (pPersResource->Initialize(
 							     L"Oldman",
@@ -261,6 +275,11 @@ HRESULT extensionWritePlugin (const aafCharacter * filename)
   if (pHead)
     pHead->Release();
   // Save the file and close it.
+  if (pcd)
+	{
+	  pcd->Release ();
+	  pcd = 0;
+	}
   if (pFile)
   {
     check (pFile->Save());

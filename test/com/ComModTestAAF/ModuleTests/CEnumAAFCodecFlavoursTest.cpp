@@ -43,6 +43,8 @@
 #include "aafUtils.h"
 #include "AAFCodecDefs.h"
 
+#include "CAAFBuiltinDefs.h"
+
 // Cross-platform utility to delete a file.
 static void RemoveTestFile(const wchar_t* pFileName)
 {
@@ -141,12 +143,13 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 		// Get the AAF Dictionary so that we can create valid AAF objects.
 		checkResult(pHeader->GetDictionary(&pDictionary));
+		CAAFBuiltinDefs defs (pDictionary);
     
 		checkResult(AAFGetPluginManager(&mgr));
 		checkResult(mgr->CreatePluginDefinition (CodecWave, pDictionary, &pDef));
 
 		checkResult(pDef->QueryInterface(IID_IAAFCodecDef, (void **)&pCodecDef));
-		checkResult(pCodecDef->AddEssenceKind (DDEF_Sound));
+		checkResult(pCodecDef->AddEssenceKind (defs.ddSound()));
 		checkResult(pDictionary->RegisterCodecDef(pCodecDef));
 	}
 	catch (HRESULT& rResult)
@@ -199,7 +202,6 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	aafBool			testResult;
 	aafUID_t		codecID = CodecWave;
 	// aafUID_t		testMatte = DDEF_Matte;
-	aafUID_t		testPicture = DDEF_Picture;
 	aafUID_t		checkFlavour = NilCodecFlavour;
 	aafUID_t		testFlavour;
 	HRESULT			hr = S_OK;
@@ -211,9 +213,10 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 		bFileOpen = true;
 
 		checkResult(pHeader->GetDictionary(&pDictionary));
+		CAAFBuiltinDefs defs (pDictionary);
 		checkResult(pDictionary->LookupCodecDef(codecID, &pCodec));
 
-		checkResult(pCodec->IsEssenceKindSupported (testPicture, &testResult));
+		checkResult(pCodec->IsEssenceKindSupported (defs.ddPicture(), &testResult));
 		checkExpression (testResult == AAFFalse, AAFRESULT_TEST_FAILED);
 		checkResult(pCodec->EnumCodecFlavours (&pEnum));
 		checkResult(pEnum->NextOne (&testFlavour));

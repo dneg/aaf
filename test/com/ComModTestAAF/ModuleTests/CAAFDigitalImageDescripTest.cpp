@@ -37,6 +37,8 @@
 #include "AAFResult.h"
 #include "AAFDefUIDs.h"
 
+#include "CAAFBuiltinDefs.h"
+
 
 // default test values
 #define kStoredHeightTestVal			248
@@ -167,10 +169,10 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
     // Get the AAF Dictionary so that we can create valid AAF objects.
     checkResult(pHeader->GetDictionary(&pDictionary));
-
+	CAAFBuiltinDefs defs (pDictionary);
 
     // Create a source mob
-    checkResult(pDictionary->CreateInstance(AUID_AAFSourceMob,
+    checkResult(pDictionary->CreateInstance(defs.cdSourceMob(),
                 IID_IAAFSourceMob, 
                 (IUnknown **)&pSourceMob));
     checkResult(pSourceMob->QueryInterface(IID_IAAFMob, (void **)&pMob));
@@ -181,7 +183,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 
     // Create a digitial image descriptor.
-    checkResult(pDictionary->CreateInstance(AUID_AAFDigitalImageDescriptor,
+    checkResult(pDictionary->CreateInstance(defs.cdDigitalImageDescriptor(),
                 IID_IAAFDigitalImageDescriptor, 
                 (IUnknown **)&pDIDesc));		
 

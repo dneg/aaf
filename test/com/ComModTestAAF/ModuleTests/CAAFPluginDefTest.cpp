@@ -49,6 +49,8 @@ static wchar_t *manuf2URL = L"www.avid.com";
 #include "AAFDefUIDs.h"
 #include "aafUtils.h"
 
+#include "CAAFBuiltinDefs.h"
+
 const aafUID_t MANUF_JEFFS_PLUGINS = { 0xA6487F21, 0xE78F, 0x11d2, { 0x80, 0x9E, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } };		/* operand.expPixelFormat */
 aafVersionType_t samplePluginVersion = { 0, 0 };//, 0, 0, kVersionReleased };
 aafVersionType_t sampleMinPlatformVersion = { 1, 2 }; //, 3, 4, kVersionDebug };
@@ -171,15 +173,16 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
     // Get the AAF Dictionary so that we can create valid AAF objects.
     checkResult(pHeader->GetDictionary(&pDictionary));
-    
-	checkResult(pDictionary->CreateInstance(AUID_AAFCodecDef,
+	CAAFBuiltinDefs defs (pDictionary);
+
+	checkResult(pDictionary->CreateInstance(defs.cdCodecDef(),
 							  IID_IAAFDefObject, 
 							  (IUnknown **)&pPlugDef));
     
-	checkResult(pDictionary->CreateInstance(AUID_AAFPluginDescriptor,
+	checkResult(pDictionary->CreateInstance(defs.cdPluginDescriptor(),
 							  IID_IAAFPluginDescriptor, 
 							  (IUnknown **)&pDesc));
-	checkResult(pDictionary->CreateInstance(AUID_AAFNetworkLocator,
+	checkResult(pDictionary->CreateInstance(defs.cdNetworkLocator(),
 							  IID_IAAFNetworkLocator, 
 							  (IUnknown **)&pNetLoc));
 	checkResult(pNetLoc->QueryInterface (IID_IAAFLocator,
@@ -213,7 +216,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	checkResult(pDictionary->RegisterPluginDef (	pDesc));
 
 	  /**/
-	checkResult(pDictionary->CreateInstance(AUID_AAFNetworkLocator,
+	checkResult(pDictionary->CreateInstance(defs.cdNetworkLocator(),
 							  IID_IAAFNetworkLocator, 
 							  (IUnknown **)&pNetLoc2));
 	checkResult(pNetLoc2->QueryInterface (IID_IAAFLocator,
@@ -226,10 +229,10 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	
 	checkResult(pPlugDef->QueryInterface (IID_IAAFCodecDef,
                                           (void **)&pCodecDef));
-	checkResult(pCodecDef->AddEssenceKind (DDEF_Matte));
+	checkResult(pCodecDef->AddEssenceKind (defs.ddMatte()));
 	checkResult(pDictionary->RegisterCodecDef(pCodecDef));
 	/**/
-	checkResult(pDictionary->CreateInstance( AUID_AAFNetworkLocator,
+	checkResult(pDictionary->CreateInstance( defs.cdNetworkLocator(),
 							  IID_IAAFNetworkLocator, 
 							  (IUnknown **)&pNetLoc3));
 	checkResult(pNetLoc3->QueryInterface (IID_IAAFLocator,
@@ -308,7 +311,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
   bool bFileOpen = false;
 	HRESULT			hr = S_OK;
 	aafUID_t		testUID;
-	aafInt32		testInt32;
+	aafUInt32		testUInt32;
 	aafUInt32		count;
 	wchar_t			testString[256];
 	aafBool			testBool;
@@ -343,8 +346,8 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 //	checkResult(pPlugin->GetProductVersionStringLen(aafInt32 *  pLen));
 		checkResult(pPlugin->GetPluginManufacturerName(testString, sizeof(testString)));
 		checkExpression (wcscmp(testString, manufName) == 0, AAFRESULT_TEST_FAILED);
-		checkResult(pPlugin->GetProductManufacturerNameLen(&testInt32));
-//		checkExpression(testInt32 == (aafInt32)wcslen(testString), AAFRESULT_TEST_FAILED);
+		checkResult(pPlugin->GetPluginManufacturerNameBufLen(&testUInt32));
+//		checkExpression(testUInt32 == (aafInt32)wcslen(testString), AAFRESULT_TEST_FAILED);
 		checkResult(pPlugin->GetManufacturerInfo(&pNetLoc));
 		checkResult(pNetLoc->QueryInterface (IID_IAAFLocator,
                                           (void **)&pLoc));

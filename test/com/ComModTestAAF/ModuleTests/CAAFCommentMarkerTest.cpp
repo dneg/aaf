@@ -39,6 +39,8 @@
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFResult.h"
+#include "CAAFBuiltinDefs.h"
+
 
 
 // Cross-platform utility to delete a file.
@@ -256,14 +258,16 @@ void CommentMarkerTest::CreateEvent()
 	IAAFMob *pMob = NULL;
 	
 	
+	CAAFBuiltinDefs defs (_pDictionary);
+
 	try
 	{
 		// Create an event (note: this will be replaced by a concrete event in a
 		// later version after such an event is implemented.)
-		checkResult(_pDictionary->CreateInstance(AUID_AAFCommentMarker,
+		checkResult(_pDictionary->CreateInstance(defs.cdCommentMarker(),
 			IID_IAAFCommentMarker, 
 			(IUnknown **)&pMarker));
-		checkResult(_pDictionary->CreateInstance(AUID_AAFSourceClip,
+		checkResult(_pDictionary->CreateInstance(defs.cdSourceClip(),
 			IID_IAAFSourceReference, 
 			(IUnknown **)&pClip));
 
@@ -280,7 +284,7 @@ void CommentMarkerTest::CreateEvent()
 		checkResult(pEvent->QueryInterface(IID_IAAFSegment, (void **)&pSegment));
 		
 		// Create and initialize an EventMobSlot
-		checkResult(_pDictionary->CreateInstance(AUID_AAFEventMobSlot,
+		checkResult(_pDictionary->CreateInstance(defs.cdEventMobSlot(),
 			IID_IAAFEventMobSlot, 
 			(IUnknown **)&pEventMobSlot));
 		checkResult(pEventMobSlot->SetEditRate(const_cast<aafRational_t *>(&_editRate)));
@@ -292,7 +296,7 @@ void CommentMarkerTest::CreateEvent()
 		checkResult(pMobSlot->SetSegment(pSegment));
 		
 		// Create the mob to hold the new event mob slot.
-		checkResult(_pDictionary->CreateInstance(AUID_AAFCompositionMob,
+		checkResult(_pDictionary->CreateInstance(defs.cdCompositionMob(),
 			IID_IAAFMob, 
 			(IUnknown **)&pMob));
 		checkResult(pMob->SetName(L"CompositionMob::Name:Test mob to hold an event mob slot"));
