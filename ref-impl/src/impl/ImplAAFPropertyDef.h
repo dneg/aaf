@@ -134,8 +134,7 @@ private:
 
   OMFixedSizeProperty<OMPropertyId>          _pid;
 
-  // don't use shortcut in an attempt to avoid including typeDef header
-  ImplAAFSmartPointer<ImplAAFTypeDef> _cachedType;
+  ImplAAFTypeDef *                           _cachedType;
 };
 
 //
