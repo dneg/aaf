@@ -21,7 +21,7 @@ test_only:
 run:
 	 $(SH_PREFIX) cd tool ; $(MAKE) run $(SH_SUFFIX)
 
-.SUFFIXES: .cpp .h .comc .comh .dod .exp .idl .implc .implh .comt .cppt
+.SUFFIXES: .cpp .h .comc .comh .dod .exp .idl .implc .implh .comt .cppt .refh
 
 # This file contains the list of all of the targets to be built...								   
 include targets.mk
@@ -118,6 +118,12 @@ INCLUDE_DIR = ../ref-impl/include
 	$(SH_PREFIX) mv $*.tmp $*.idl $(SH_SUFFIX)
 	$(SH_PREFIX) cp $*.idl $(INCLUDE_DIR)/com-api/ $(SH_SUFFIX)
 
+.dod.refh :
+	$(SH_PREFIX) $(RM) -f $*.refh $(SH_SUFFIX)
+	$(SH_PREFIX) ./tool/$(DODO) -f macros/refh.mac < $*.dod > $*.tmp $(SH_SUFFIX)
+	$(SH_PREFIX) mv $*.tmp $*.refh $(SH_SUFFIX)
+	$(SH_PREFIX) cp $*.refh $(INCLUDE_DIR)/ref-api/$*.h $(SH_SUFFIX)
+
 
 
 clean:
@@ -135,6 +141,8 @@ clean:
 	$(SH_PREFIX) $(RM) -f $(INCLUDE_DIR)/com-api/EnumAAF*.idl $(SH_SUFFIX)
 	$(SH_PREFIX) $(RM) -f $(INCLUDE_DIR)/cpp-api/AAF*.h $(SH_SUFFIX)
 	$(SH_PREFIX) $(RM) -f $(INCLUDE_DIR)/cpp-api/EnumAAF*.h $(SH_SUFFIX)
+	$(SH_PREFIX) $(RM) -f $(INCLUDE_DIR)/ref-api/AAF*.h $(SH_SUFFIX)
+	$(SH_PREFIX) $(RM) -f $(INCLUDE_DIR)/ref-api/EnumAAF*.h $(SH_SUFFIX)
 	@for file in $(SRC_DIR)/impl/Impl*.h ; do \
 		result=`cleartool ls -vob $$file` ; \
 		if test -z "$$result" ; then \
