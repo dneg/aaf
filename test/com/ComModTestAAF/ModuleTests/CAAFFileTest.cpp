@@ -198,11 +198,11 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, bool useEx )
 
 	  // Create the file.
 	  if ( useEx ) {
-	    checkResult(AAFFileOpenNewModify(pFileName, 0, &ProductInfo, &pFile));
-	  }
-	  else {
 	    aafUID_t fileKind = aafFileKindAafSSBinary;
 	    checkResult(AAFFileOpenNewModifyEx(pFileName, &fileKind, 0, &ProductInfo, &pFile));
+	  }
+	  else {
+	    checkResult(AAFFileOpenNewModify(pFileName, 0, &ProductInfo, &pFile));
 	  }
 	  bFileOpen = true;
   
