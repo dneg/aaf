@@ -94,7 +94,7 @@ and the java executable in /usr/java/j2sdk1.4.1_02/bin on Linux and C:\j2sdk1.4.
 An example 'aafviewer' file for linux is provided in AAF/Utilities/aafviewer/linux. An example aafviewer.bat file for windows is provided in AAF/Utilities/aafviewer/windows.
 
 
-The AAFViewer uses a configuration file aafviewer.cfg. This configuration file is expected in your Linux home directory (eg /home/philip) or Windows home directory (eg c:\Documents and Settings\Administrator).
+The AAFViewer uses a configuration file aafviewer.cfg. This configuration file should be placed in the same directory as the startup script (aafviewer/aafviewer.bat). Alternatively you can place the file in your Linux home directory (eg /home/philip) or Windows home directory (eg c:\Documents and Settings\Administrator).
 If you do not have a configuration file, then you must enter the information required in the View-Preferences menu.
 Alternatively, edit the sample-aafviewer.cfg configuration file, rename to aafviewer.cfg and place in your home directory.
 
