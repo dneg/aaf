@@ -62,6 +62,7 @@
 #               release and "FULL" builds of the sdk.                         #
 # 06-APR-2000 : transdel adding new required header files.                    #
 # 27-JUL-2000 : transdel adding support for "aafext" plugin directory         #
+# 20-OCT-2000 : transdel added new platform type include                      #
 ###############################################################################
 
 
@@ -222,6 +223,7 @@ TARGET_H_FILES = \
 	$(AAFSDK_INCLUDE)\AAFOperationCategories.h \
 	$(AAFSDK_INCLUDE)\AAFOperationDefs.h \
 	$(AAFSDK_INCLUDE)\AAFParameterDefs.h \
+	$(AAFSDK_INCLUDE)\AAFPlatform.h \
 	$(AAFSDK_INCLUDE)\AAFPluginDefs.h \
 	$(AAFSDK_INCLUDE)\AAFPropertyDefs.h \
 	$(AAFSDK_INCLUDE)\AAFPropertyIDs.h \
@@ -495,6 +497,9 @@ $(AAFSDK_INCLUDE)\AAFOperationDefs.h : $(TOOLKIT_INCLUDE)\AAFOperationDefs.h
 
 $(AAFSDK_INCLUDE)\AAFParameterDefs.h : $(TOOLKIT_INCLUDE)\AAFParameterDefs.h
 	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFParameterDefs.h $(AAFSDK_INCLUDE)\
+
+$(AAFSDK_INCLUDE)\AAFPlatform.h : $(TOOLKIT_INCLUDE_REFAPI)\AAFPlatform.h
+	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE_REFAPI)\AAFPlatform.h $(AAFSDK_INCLUDE)\
 
 $(AAFSDK_INCLUDE)\AAFPluginDefs.h : $(TOOLKIT_INCLUDE)\AAFPluginDefs.h
 	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFPluginDefs.h $(AAFSDK_INCLUDE)\
