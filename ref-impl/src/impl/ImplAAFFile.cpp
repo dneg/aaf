@@ -1553,13 +1553,13 @@ void ImplAAFFile::registerFactories(void)
                                                        L"AAF Microsoft SS"));
 
 #elif defined( OS_DARWIN )
-// DEFAULT is SSS 512. MSS availability unknown (via Carbon lib(?).
+// DEFAULT is SchemaSoft  512.
 
   OMFile::registerFactory(ENCODING(DEFAULTFileKind),
-                          new OMMSSStoredObjectFactory(AAFMSSEncoding,
+                          new OMSSSStoredObjectFactory(AAFSSSEncoding,
                                                        Signature_SSBinary,
-                                                       L"AAF-M",
-                                                       L"AAF Microsoft SS"));
+                                                       L"AAF-S",
+                                                       L"AAF Schemasoft SS"));
 
 #elif defined( OS_IRIX )
 
