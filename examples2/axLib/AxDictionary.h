@@ -82,12 +82,12 @@ private:
 
 
 template <class Type>
-void AxCreateInstance( AxDictionary& dict,
+void AxCreateInstance( AxDictionary& axDict,
 	    	           IAAFSmartPointer<Type>& sp )
 {
         Type* dummy = 0;
 
-	IUnknownSP spIUnknown = dict.CreateInstance( AxAUID(dummy), AxIID(dummy) );
+	IUnknownSP spIUnknown = axDict.CreateInstance( AxAUID(dummy), AxIID(dummy) );
 	AxQueryInterface( spIUnknown, sp );
 }
 
@@ -95,8 +95,11 @@ template <class Type>
 void AxCreateInstance( IAAFDictionarySP spDict,
 	    	           IAAFSmartPointer<Type>& sp )
 {
+        Type* dummy = 0;
 
-	AxCreateInstance( AxDictionary( spDict ), sp );
+	AxDictionary axDict( spDict );
+	IUnknownSP spIUnknown = axDict.CreateInstance( AxAUID(dummy), AxIID(dummy) );
+	AxQueryInterface( spIUnknown, sp );
 }
 
 template <class Type>
