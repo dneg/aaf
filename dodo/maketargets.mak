@@ -7,6 +7,7 @@
 all : targets
 
 BLD_CFG_DIR = ../ref-impl/bld_cfg
+PLUGIN_DIR = ../ref-impl/plugins
 
 include $(BLD_CFG_DIR)/common.mk
 
@@ -30,7 +31,7 @@ include aafobjects.mk
 
 INCLUDE_DIR = ../ref-impl/include
 
-targets: $(DODO_TARGETS) $(INCLUDE_DIR)/com-api/AAF.idl $(INCLUDE_DIR)/ref-api/AAF.h
+targets: $(DODO_TARGETS) $(PLUGIN_TARGETS) $(INCLUDE_DIR)/com-api/AAF.idl $(INCLUDE_DIR)/ref-api/AAF.h $(PLUGIN_DIR)/Plugin.idl
 
 $(INCLUDE_DIR)/com-api/AAF.idl : $(FIDL_TARGETS)
 	@ echo Generating AAF.idl...
@@ -70,6 +71,45 @@ $(INCLUDE_DIR)/com-api/AAF.idl : $(FIDL_TARGETS)
 	    done ; \
 	) > $(INCLUDE_DIR)/com-api/AAF.idl
 	chmod -w $(INCLUDE_DIR)/com-api/AAF.idl
+
+$(PLUGIN_DIR)/Plugin.idl : $(PLUGIN_FIDL_TARGETS)
+	@ echo Generating Plugin.idl...
+	$(RM) -f $(PLUGIN_DIR)/AAFPlugin.idl
+	@ ( echo "cpp_quote(\"//=--------------------------------------------------------------------------=\")" ; \
+	    echo "cpp_quote(\"// (C) Copyright 1998 Avid Technology.\")" ; \
+	    echo "cpp_quote(\"// (C) Copyright 1998 Microsoft Corporation.\")" ; \
+	    echo "cpp_quote(\"//\")" ; \
+	    echo "cpp_quote(\"// THIS CODE AND INFORMATION IS PROVIDED 'AS IS' WITHOUT WARRANTY OF\")" ; \
+	    echo "cpp_quote(\"// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO\")" ; \
+	    echo "cpp_quote(\"// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A\")" ; \
+	    echo "cpp_quote(\"// PARTICULAR PURPOSE.\")" ; \
+	    echo "cpp_quote(\"//=--------------------------------------------------------------------------=\")" ; \
+	    echo "cpp_quote(\"// AAF Interfaces.\")" ; \
+	    echo "cpp_quote(\"//=--------------------------------------------------------------------------=\")" ; \
+	    echo "cpp_quote(\"//\")" ; \
+	    echo "" ; \
+	    echo \#ifndef DO_NO_IMPORTS ; \
+	    echo import \"unknwn.idl\"\; ; \
+	    echo \#endif ; \
+	    echo "" ; \
+	    echo \#ifndef DO_NO_IMPORTS ; \
+	    echo import \"objidl.idl\"\; ; \
+	    echo \#endif ; \
+	    echo "" ; \
+	    echo \#ifndef DO_NO_IMPORTS ; \
+	    echo import \"AAFTypes.idl\"\; ; \
+	    echo \#endif ; \
+	    echo "" ; \
+	    for class in $(PLUGIN_OBJECTS) ; do \
+	    	echo interface I$$class\;; \
+	    done ; \
+	    for class in $(PLUGIN_OBJECTS) ; do \
+	    	echo ""; \
+	    	echo ""; \
+	    	cat $$class.fidl; \
+	    done ; \
+	) > $(PLUGIN_DIR)/AAFPlugin.idl
+	chmod -w $(PLUGIN_DIR)/AAFPlugin.idl
 
 $(INCLUDE_DIR)/ref-api/AAF.h : $(FREFH_TARGETS)
 	@ echo Generating reference AAF.h...
