@@ -317,8 +317,7 @@ TARGET_DLL_FILES = \
 !endif
 
 
-#
-# Configuration files that need to be cleanup up from LASTCFG.
+## Configuration files that need to be cleanup up from LASTCFG.
 #
 CONFIG_FILES_TO_REMOVE = \
 !if "$(CFG)"=="Release"
@@ -498,8 +497,8 @@ $(AAFSDK_INCLUDE)\AAFOperationDefs.h : $(TOOLKIT_INCLUDE)\AAFOperationDefs.h
 $(AAFSDK_INCLUDE)\AAFParameterDefs.h : $(TOOLKIT_INCLUDE)\AAFParameterDefs.h
 	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFParameterDefs.h $(AAFSDK_INCLUDE)\
 
-$(AAFSDK_INCLUDE)\AAFPlatform.h : $(TOOLKIT_INCLUDE_REFAPI)\AAFPlatform.h
-	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE_REFAPI)\AAFPlatform.h $(AAFSDK_INCLUDE)\
+$(AAFSDK_INCLUDE)\AAFPlatform.h : $(TOOLKIT_INCLUDE)\AAFPlatform.h
+	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFPlatform.h $(AAFSDK_INCLUDE)\
 
 $(AAFSDK_INCLUDE)\AAFPluginDefs.h : $(TOOLKIT_INCLUDE)\AAFPluginDefs.h
 	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFPluginDefs.h $(AAFSDK_INCLUDE)\
