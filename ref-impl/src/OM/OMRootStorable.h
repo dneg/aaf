@@ -33,6 +33,9 @@
 #include "OMStrongRefProperty.h"
 #include "OMDictionary.h"
 
+// @class Concrete sub-class of the abstract OMStorable for use as the
+//        root object in a file that may be managed by the Object Manager.
+//
 class OMRootStorable : public OMStorable {
 public:
 
@@ -43,7 +46,17 @@ public:
 
   ~OMRootStorable(void);
 
+  // OMStorable overrides
+
   virtual const OMClassId& classId(void) const;
+
+    // @cmember Save this <c OMRootStorable>.
+  virtual void save(void) const;
+
+    // @cmember Restore the contents of an <c OMRootStorable>.
+  virtual void restoreContents(void);
+
+  // OMRootStorable functions
 
   OMStorable* clientRoot(void) const;
 

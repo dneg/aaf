@@ -64,6 +64,23 @@ const OMClassId& OMRootStorable::classId(void) const
   return _rootClassId;
 }
 
+  // @mfunc Save this <c OMRootStorable>.
+void OMRootStorable::save(void) const
+{
+  TRACE("OMRootStorable::save");
+
+  store()->save(classId());
+  store()->save(_persistentProperties);
+}
+
+  // @mfunc Restore the contents of an <c OMRootStorable>.
+void OMRootStorable::restoreContents(void)
+{
+  TRACE("OMRootStorable::restoreContents");
+
+  store()->restore(_persistentProperties);
+}
+
 OMStorable* OMRootStorable::clientRoot(void) const
 {
   return _clientRoot;
