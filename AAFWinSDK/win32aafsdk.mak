@@ -587,7 +587,7 @@ $(AAFSDK_DEBUG)\aafpgapi.dll : $(TOOLKIT_DEBUG_REFIMPL)\aafpgapi.dll
 	$(CP) $(CP_OPTS) $(TOOLKIT_DEBUG_REFIMPL)\aafpgapi.dll $(AAFSDK_DEBUG)\
 
 $(AAFSDK_DEBUG)\omfToolkitd.dll : $(OMF_LIBS)\omfToolkitd.dll
-	$(CP) $(CP_OPTS) $(OMF_LIBS)\omfToolkitd.dll $(AAFSDK_BIN)\
+	$(CP) $(CP_OPTS) $(OMF_LIBS)\omfToolkitd.dll $(AAFSDK_DEBUG)\
 
 #
 # Clean out all files that are specific to a particular configuration.
