@@ -49,8 +49,6 @@ const aafUInt32 kSupportedDefinitions = 1;
 const wchar_t kAdminMobDisplayName[] = L"Example AAF Admin Mob Class Extension";
 const wchar_t kAdminMobDescription[] = L"Handles Access to Personnel Mob AAF objects";
 
-const aafProductVersion_t kAAFPluginVersion = {1, 0, 0, 1, kAAFVersionBeta};
-
 //
 // Plugin Descriptor information
 //
@@ -61,7 +59,6 @@ static const aafUID_t AVID_PERSONNELMOB_PLUGIN =
 
 static wchar_t *kManufURL = L"http://www.avid.com";
 static wchar_t *kDownloadURL = L"ftp://ftp.avid.com/pub/";
-static aafVersionType_t samplePluginVersion = { 0, 1 };
 
 static wchar_t *kManufName = L"Avid Technology, Inc.";
 static wchar_t *kManufRev = L"Rev 0.1";
@@ -69,8 +66,6 @@ static wchar_t *kManufRev = L"Rev 0.1";
 // Should be shared by all built-in plugins created by AVID. /* TRR */
 const aafUID_t MANUF_AVID_PLUGINS = { 0xA6487F21, 0xE78F, 0x11d2, { 0x80, 0x9E, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } };
 
-
-const aafUID_t NULL_ID = {0};
 
 // local function for simplifying error handling.
 inline void checkResult(AAFRESULT r)
@@ -520,8 +515,6 @@ HRESULT CAAFAdminMob::InternalQueryInterface
     REFIID riid,
     void **ppvObj)
 {
-    HRESULT hr = S_OK;
-
     if (NULL == ppvObj)
         return E_INVALIDARG;
 
