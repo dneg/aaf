@@ -861,7 +861,7 @@ void Omf2Aaf::ConvertOMFMediaDataObject( omfObject_t obj, omfUID_t inMediaID )
 
 			Assert( numBytes == OMFOffset );
 			if(pBuffer)
-				delete [] pBuffer;
+				delete [] (char *)pBuffer;
 		}
 	}
 
@@ -1529,7 +1529,7 @@ void Omf2Aaf::ProcessOMFComponent(omfObject_t OMFSegment, IAAFComponent** ppComp
 
 					IAAFOperationDef*		pEffectDef;
 					GetAAFOperationDefinition("omfi::effectSimpleMonoAudioDissolve", NULL, "Simple Mono Audio Dissolve", "Combines two mono audio streams",
-									-1, kAAFFalse, 2, DDEF_Sound, &pEffectDef);
+									(aafUInt32)-1, kAAFFalse, 2, DDEF_Sound, &pEffectDef);
 					AutoRelease<IAAFOperationDef> peffdef( pEffectDef );
 
 					IAAFParameterDef*		pParameterDef;
@@ -1544,7 +1544,7 @@ void Omf2Aaf::ProcessOMFComponent(omfObject_t OMFSegment, IAAFComponent** ppComp
 
 					rc = pEffectDef->AddParameterDef(pParameterDef);
 					rc = pEffect->Initialize(pDataDef, (aafLength_t)OMFLength, pEffectDef);
-					rc = pEffect->SetBypassOverride(-1);
+					rc = pEffect->SetBypassOverride((aafUInt32)-1);
 					rc = pEffect->QueryInterface(IID_IAAFComponent, (void **)ppComponent);
 				}
 				else if ( (strcmp(EffectID1x, "Blend:Dissolve") == 0) && 
@@ -1561,7 +1561,7 @@ void Omf2Aaf::ProcessOMFComponent(omfObject_t OMFSegment, IAAFComponent** ppComp
 					IAAFOperationDef* pEffectDef;
 					GetAAFOperationDefinition("omfi::effectSimpleVideoDissolve", NULL, 
 									"Simple Video Dissolve", "Combines two video streams",
-									-1, kAAFFalse, 2, DDEF_PictureWithMatte, &pEffectDef);
+									(aafUInt32)-1, kAAFFalse, 2, DDEF_PictureWithMatte, &pEffectDef);
 					AutoRelease<IAAFOperationDef> peffdef( pEffectDef );
 
 					IAAFParameterDef* pParameterDef;
@@ -1576,7 +1576,7 @@ void Omf2Aaf::ProcessOMFComponent(omfObject_t OMFSegment, IAAFComponent** ppComp
 
 					rc = pEffectDef->AddParameterDef(pParameterDef);
 					rc = pEffect->Initialize(pDataDef, (aafLength_t)OMFLength, pEffectDef);
-					rc = pEffect->SetBypassOverride(-1);
+					rc = pEffect->SetBypassOverride((aafUInt32)-1);
 					rc = pEffect->QueryInterface(IID_IAAFComponent, (void **)ppComponent);
 				}
 				else if ( strncmp(EffectID1x, "Wipe:SMPTE:", 11) == 0)
@@ -1598,11 +1598,11 @@ void Omf2Aaf::ProcessOMFComponent(omfObject_t OMFSegment, IAAFComponent** ppComp
 					IAAFOperationDef* pEffectDef;
 					GetAAFOperationDefinition("omfi:effect:SMPTEVideoWipe", NULL, 
 									"SMPTE Video Wipe", "Combines two video streams according to SMPTE ",
-									-1, kAAFFalse, 2, DDEF_Picture, &pEffectDef);
+									(aafUInt32)-1, kAAFFalse, 2, DDEF_Picture, &pEffectDef);
 					AutoRelease<IAAFOperationDef> peffdef( pEffectDef );
 
 					rc = pEffect->Initialize(pDataDef, (aafLength_t)OMFLength, pEffectDef);
-					rc = pEffect->SetBypassOverride(-1);
+					rc = pEffect->SetBypassOverride((aafUInt32)-1);
 
 					// Port over Wipe number
 					IAAFParameterDef* pParameterDef;
@@ -2660,7 +2660,7 @@ void Omf2Aaf::ConvertOMFConstValue(omfSegObj_t segment,
 		pTypeDef = NULL;
 	}
 	if (pcvBuffer)
-		delete [] pcvBuffer;
+		delete [] (char*)pcvBuffer;
 }
 // ============================================================================
 // ConvertOMFVaryingValue
@@ -2771,7 +2771,7 @@ void Omf2Aaf::ConvertOMFVaryingValue(omfSegObj_t segment,
 			pControlPoint->Release();
 			pControlPoint = NULL;
 			if (pCPBuffer)
-				delete [] pCPBuffer;
+				delete [] (char*)pCPBuffer;
 			if (pControlPoint)
 				pControlPoint->Release();
 			pControlPoint = NULL;

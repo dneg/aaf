@@ -1408,7 +1408,7 @@ void Aaf2Omf::ProcessComponent(IAAFComponent* pComponent,
 			printf("%sProcessing Timecode Clip of length: %ld\n ", gpGlobals->indentLeader, (int)length);
 			IncIndentLevel();
 			printf("%sstart Frame\t: %ld\n", gpGlobals->indentLeader, timecode.startFrame);
-			if (timecode.drop == kAAFTrue)
+			if (timecode.drop == TRUE)
 				printf("%sdrop\t\t: True\n", gpGlobals->indentLeader);
 			else
 				printf("%sdrop\t\t: False\n", gpGlobals->indentLeader);
@@ -2330,7 +2330,7 @@ CopyMedia:
 				AAFOffset += numBytesRead;
 			}while (numBytes > AAFOffset );
 			// Free the allocated buffer 
-			delete [] pBuffer;
+			delete [] (char*)pBuffer;
 		}
 	}
 cleanup:
