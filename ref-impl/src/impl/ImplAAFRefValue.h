@@ -65,13 +65,13 @@ protected:
   // NOTE: The given property's type must be a reference type.
   AAFRESULT Initialize (const ImplAAFTypeDefObjectRef *referenceType,
                         OMProperty *property);
+  
+  // Return the propertyType as a referenceType.
+  const ImplAAFTypeDefObjectRef *referenceType(void) const;             
+  
 public:
 
   virtual AAFRESULT STDMETHODCALLTYPE WriteTo(OMProperty* pOmProp);
-  
-private:
-  OMProperty * _referenceProperty; // TBD: the base class for singleton references
-	ImplAAFRoot * _propertyContainer; // save reference to owning container.
 };
 
 //

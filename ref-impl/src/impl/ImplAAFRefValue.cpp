@@ -44,23 +44,12 @@
 #include <string.h>
 
 
-ImplAAFRefValue::ImplAAFRefValue () :
-  _referenceProperty(NULL),
-  _propertyContainer(NULL)
+ImplAAFRefValue::ImplAAFRefValue ()
 {}
 
 
 ImplAAFRefValue::~ImplAAFRefValue ()
 {
-  _referenceProperty = NULL;
-  
-#if defined(REFERENCE_PROPERTY_CONTAINER)
-  if (_propertyContainer)
-  {
-    _propertyContainer->ReleaseReference();
-    _propertyContainer = NULL;
-  }
-#endif // #if defined(REFERENCE_PROPERTY_CONTAINER)
 }
 
 
@@ -73,49 +62,8 @@ AAFRESULT ImplAAFRefValue::Initialize (
   const ImplAAFTypeDefObjectRef *referenceType,    
   OMProperty *property)
 {
-  AAFRESULT result = AAFRESULT_SUCCESS;
-  
-  assert (!isInitialized());
-  if (isInitialized())
-    return AAFRESULT_ALREADY_INITIALIZED;
-  assert (property);
-  if (NULL == referenceType || NULL == property)
-    return AAFRESULT_NULL_PARAM;
-
-  // Get the type definition. This must be a stream type.
-  assert (property->definition());
-  if (NULL == property->definition())
-    return AAFRESULT_INVALID_PARAM;
-  const OMType *type = property->definition()->type();
-  assert (type);
-  
-// TBD: The given property must be an OM reference property.  
-// Until the OMReferenceProperty is checked in just use the given
-// property as the referenceProperty
-  OMProperty *referenceProperty = property;
-//  OMReferenceProperty *referenceProperty = dynamic_cast<OMReferenceProperty *>(property);
-//  assert (referenceProperty);
-//  if (NULL == referenceProperty)
-//    return AAFRESULT_INVALID_PARAM;
-
-  // Get the storable container for this property. Since this is a "direct 
-  // access" interface we need to hold onto a reference so tha the container
-  // is not deleted.
-  ImplAAFRoot * propertyContainer = dynamic_cast<ImplAAFRoot *>
-                                      (property->propertySet()->container());
-  assert (propertyContainer);
-  if (NULL == propertyContainer)
-    return AAFRESULT_INVALID_PARAM;
-  
-  // Save our initialized member data.
-  SetType(const_cast<ImplAAFTypeDefObjectRef *>(referenceType));
-  _referenceProperty = referenceProperty;
-  _propertyContainer = propertyContainer;
-#if defined(REFERENCE_PROPERTY_CONTAINER)
-  _propertyContainer->AcquireReference();
-#endif // #if defined(REFERENCE_PROPERTY_CONTAINER)
-    
-  return AAFRESULT_SUCCESS;
+  AAFRESULT result = ImplAAFPropertyValue::Initialize(referenceType, property);
+  return result;
 }
 
 //
@@ -127,7 +75,7 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFRefValue::WriteTo(
   // Make sure that the given property is the same one that was used to 
   // initialize this property value. NOTE: Copying an object reference to a 
   // different OMProperty should be handled through another interface.
-  if (pOmProp != _referenceProperty)
+  if (pOmProp != property())
     return AAFRESULT_INVALID_PARAM;
   
   // The first version of this class defers to the older   
