@@ -239,6 +239,7 @@ void OMStoredObject::save(const OMPropertySet& properties)
   while (++iterator) {
     OMProperty* p = iterator.property();
     ASSERT("Valid property", p != 0);
+//  ASSERT("Property has a definition", p->definition() != 0);
     if (!p->isOptional() || p->isPresent()) {
       p->save();
     }
