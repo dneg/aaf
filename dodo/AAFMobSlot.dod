@@ -6,7 +6,6 @@ AAFMobSlot\
 AAFObject\
 #endm
 #c
-#import ./AAFUnitTest.exp
 #import ./AAFObject.exp
 AD_HEAD
 /******************************************\
@@ -77,10 +76,4 @@ AD_XMETHOD1(GetDataKind,
 [out\,retval], objOut, AAFDataDefinition, result, Data Definition object,
 This method will return Data Definition object associated with this Mob Slot.)
 
-
-AD_OVERRIDE(.method-Test)
-
 AD_CLASS_END
-
-
-////////////////////////////////////////////////////////////////////////////////
