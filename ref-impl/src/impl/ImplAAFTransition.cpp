@@ -68,10 +68,10 @@ _cutPoint( PID_Transition_CutPoint, "CutPoint")
 
 ImplAAFTransition::~ImplAAFTransition ()
 {
-	if (_effect)
+	ImplAAFGroup *effect = _effect.setValue(0);
+	if (effect)
 	{
-		_effect->ReleaseReference();
-		_effect = NULL;
+		effect->ReleaseReference();
 	}
 }
 
