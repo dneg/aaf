@@ -53,7 +53,7 @@ extern "C" const aafClassID_t CLSID_AAFPropValData;
 ImplAAFTypeDefStrongObjRef::ImplAAFTypeDefStrongObjRef ()
   : _referencedType ( PID_TypeDefinitionStrongObjectReference_ReferencedType,
                       L"ReferencedType",
-                      L"/Dictionary/ClassDefinitions",
+                      L"/MetaDictionary/ClassDefinitions",
                       PID_MetaDefinition_Identification)
 {
   _persistentProperties.put(_referencedType.address());
