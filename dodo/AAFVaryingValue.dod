@@ -7,49 +7,138 @@ AAFParameter\
 #endm
 #c
 AD_HEAD
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
-
-
+AD_IDL(//
+// The IAAFVaryingValue interface is implemented by objects that specify a parameter
+// whose value changes during the effect.  The actual values are stored in one or
+// more IAAFControlPoints.  For parameters which are constant in value during the effect\,
+// use IAAFConstValue.
+//
+// In addition to the specific error results listed for each method\,
+// all methods in this interface may also return one of the following
+// values:
+// 
+// AAFRESULT_NOMEMORY
+//   - insufficient system memory is available to perform the
+//     operation.
+//)
 /***********************************************\
-*	Stub only.   Implementation not yet added	*
+*												*
+* Advanced Authoring Format						*
+*												*
+* Copyright (c) 1998-1999 Avid Technology, Inc. *
+* Copyright (c) 1998-1999 Microsoft Corporation *
+*												*
 \***********************************************/
 
-
-
 AD_FORWARD_DECLARATION(AAFDataDef)
+AD_FORWARD_DECLARATION(AAFControlPoint)
+AD_FORWARD_DECLARATION(EnumAAFControlPoints)
 
 AD_CLASS_UUID(91920d61, 2a2e, 11D2, bf, A3, 00, 60, 97, 11, 62, 12)
 
 AD_DEFAULT_UUID(91920d60, 2a2e, 11D2, bf, A3, 00, 60, 97, 11, 62, 12)
 AD_XCLASS_BEGIN(Concrete, StoredObject)
 
-AD_XMETHOD5(AddPoint,
-			[in],objPass,aafRational_t, time, time for Control Point,
-			[in],objPass,aafEditHint_t, editHint, Edit hint,
-			[in],objIn,AAFDataDef, datadef, pointer to data definition object,
-			[in],objPass,aafInt32, valueSize, Size of value data,
-			[in\, size_is\(valueSize\)],objPass, aafDataBuffer_t, pValue, Ponter to the value data,
-			This function adds a control point in time order into a varying
-			// value object.)
+AD_XMETHOD1(AddPoint,
+			[in],objIn,AAFControlPoint, pPoint, pointer to IAAFControlPoint object,
+			Adds a control point in time order into a IAAFVaryingValue object.  The point
+  // will be sorted by time order\, not the order in which the points were added.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pPoint pointer is valid.
+  // 
+  // If this method fails no state will be changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pPoint is null.)
 
-AD_XMETHOD3(GetInfo,
-			[out], objPass, aafLength_t *, pLength, Length of varying value object,
-		    [out], objPass, aafInterpKind_t *, pInterpolation, Interpolation method,
-			[out\,retval],objOut,AAFDataDef, pDatadef, Data Definition  object,
-		   This function returns the required property values for the varying
-		   // value object.)
 
-AD_METHOD1(GetNumPoints,
-		   [out\\\,retval],aafInt32 *, pNumPoints, Number of control points,
-		   This function gets the number of control points in the varying
-		   // value object.)
+AD_XMETHOD1(GetControlPoints,
+			[out\,retval], 
+			objOut,
+			EnumAAFControlPoints,
+			ppEnum, 
+			Parameter definition enumeration,
+			Return an enumerator for the list of IAAFControlPoints.  The list
+  // will be returned in time order\, not the order in which the points were added.
+  // 
+  // Succeeds if all of the following are true:
+  // - the ppEnum pointer is valid.
+  // 
+  // If this method fails nothing will be written to *ppEnum.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppEnum is null.)
+
+AD_XMETHOD1(GetValueBufLen,
+			[out],
+			objPass,
+			aafInt32 *,
+			pLen,
+			Mob Name,
+
+			Returns the length of buffer required for the GetInterpolatedValue\(\) method.
+  // The value is placed into the location specified by pLen.
+  //
+  // Succeeds if all of the following are true:
+  // - the pLen pointer is valid.
+  //
+  // If this method fails nothing will be written to *pLen.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pLen arg is NULL.)
+
+AD_METHOD4(GetInterpolatedValue,
+		    [in],aafRational_t, inputValue, Position along the effect,
+			[in],aafInt32,valueSize,Size of preallocated buffer,
+			[out\\\, size_is\\\(valueSize\\\)\\\,length_is\\\(*bytesRead\\\)],aafDataBuffer_t,pValue,Preallocated buffer to hold value,
+			[out],aafInt32*,bytesRead,Number of actual bytes read,
+			Writes the interpolated value of the IAAFVaryingValue at a given position
+  // into the pValue buffer.  The buffer is allocated by the caller\\\,
+  // and the size of the buffer is given by valueSize.
+  // 
+  // Caller may call GetValueBufLen\\\(\\\) to determine the
+  // required buffer size.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pValue pointer is valid.
+  // - valueSize indicates the buffer is large enough to hold the name.
+  // 
+  // If this method fails nothing will be written to *pValue.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\\\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \\\(This is the only code indicating success.\\\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pValue arg is NULL.
+  //
+  // AAFRESULT_SMALLBUF
+  //   - valueSize indicates the buffer is too small to hold the value.)
 
 AD_XCLASS_END(Concrete, StoredObject)
 

@@ -7,20 +7,28 @@ AAFParameter\
 #endm
 #c
 AD_HEAD
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
+AD_IDL(//
+// The IAAFConstValue interface is implemented by objects that specify a parameter
+// whose value is constant for an entire effect.  Use IAAFVaryingValue and one or
+// more IAAFControlPoints for parameters which change in value during the effect.
+//
+// In addition to the specific error results listed for each method\,
+// all methods in this interface may also return one of the following
+// values:
+// 
+// AAFRESULT_NOMEMORY
+//   - insufficient system memory is available to perform the
+//     operation.
+//)
 
- 
 /***********************************************\
-*	Stub only.   Implementation not yet added	*
+*												*
+* Advanced Authoring Format						*
+*												*
+* Copyright (c) 1998-1999 Avid Technology, Inc. *
+* Copyright (c) 1998-1999 Microsoft Corporation *
+*												*
 \***********************************************/
-
 
 AD_FORWARD_DECLARATION(AAFDataDef)
 AD_FORWARD_DECLARATION(AAFParameter)
@@ -31,39 +39,83 @@ AD_DEFAULT_UUID(b8ddc080, 2afa, 11D2, bf, A5, 00, 60, 97, 11, 62, 12)
 
 AD_XCLASS_BEGIN(Concrete, StoredObject)
 
-/****/
-AD_XMETHOD4(SetInitialValues,
-			[in],objIn,AAFDataDef,datadef,DataDef object,
-			[in],objPass,aafLength_t,length,Length property value,
-			[in],objPass,aafInt32,valueSize,Size of the value data,
-			[in\, size_is\(valueSize\)],objPass,aafDataBuffer_t,value,Value data,
-			Constructor given starting parameters)
-			//@comm The value data is passed in as a void * through the "value"
-			// argument.  The size of the value must be passed through the
-														// valueSize argument.
-	//@comm Replaces omfiConstValueNew
 	
 /****/
 AD_METHOD3(GetValue,
-			[in],aafInt32,valueSize,Size of preallocated buffer,
-			[out\\\, size_is\\\(valueSize\\\)\\\,length_is\\\(*bytesRead\\\)],aafDataBuffer_t,value,Preallocated buffer to hold value,
-			[out],aafInt32*,bytesRead,Number of actual bytes read,
-			The data value is returned in a preallocated buffer of size valueSize.)
-			//@comm The actual number of bytes read is returned in
-			// bytesRead.  If the buffer is not big enough to return the entire
-			// value, an error is returned.  GetDataValueSize() can be
-			// called to calculate the size of the buffer to allocate.
-			//@comm Replaces omfiConstValueGetInfo
+			[in],aafUInt32,valueSize,Size of preallocated buffer,
+			[out\\\, size_is\\\(valueSize\\\)\\\,length_is\\\(*bytesRead\\\)],aafDataBuffer_t,pValue,Preallocated buffer to hold value,
+			[out],aafUInt32*,bytesRead,Number of actual bytes read,
+			Writes the value into the pValue buffer.  The buffer is allocated by the caller\\\,
+  // and the size of the buffer is given by valueSize.
+  // 
+  // Caller may call GetValueBufLen\\\(\\\) to determine the
+  // required buffer size.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pValue pointer is valid.
+  // - valueSize indicates the buffer is large enough to hold the name.
+  // 
+  // If this method fails nothing will be written to *pValue.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\\\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \\\(This is the only code indicating success.\\\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pValue arg is NULL.
+  //
+  // AAFRESULT_SMALLBUF
+  //   - valueSize indicates the buffer is too small to hold the value.)
+
+
+AD_XMETHOD1(GetValueBufLen,
+			[out],
+			objPass,
+			aafUInt32 *,
+			pLen,
+			Pointer to an variable used to return the length,
+
+			Returns the length of buffer required for the GetValue\(\) method.
+  // The value is placed into the location specified by pLen.
+  //
+  // Succeeds if all of the following are true:
+  // - the pLen pointer is valid.
+  //
+  // If this method fails nothing will be written to *pLen.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pLen arg is NULL.)
 
 /****/
 AD_METHOD2(SetValue,
-			[in],aafInt32,valueSize, Size of preallocated buffer,
-			[in\\\, size_is\\\(valueSize\\\)],aafDataBuffer_t,value, buffer containing value,
-			The data value is set from a buffer of size valueSize.)
-
-//@com Internal
-//@com private:
-//@com		void			*_value;
-//@com		aafUInt32		_valueLen;
+			[in],aafUInt32,valueSize, Size of preallocated buffer,
+			[in\\\, size_is\\\(valueSize\\\)],aafDataBuffer_t,pValue, buffer containing value,
+			The data value is set from a buffer of size valueSize.
+  //
+  // Succeeds if all of the following are true:
+  // - the pValue pointer is valid.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\\\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \\\(This is the only code indicating success.\\\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\\\(\\\) called on it.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pValue is null.)
 
 AD_XCLASS_END(Concrete, StoredObject)

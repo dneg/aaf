@@ -3,18 +3,6 @@
 #ifndef __ImplAAFParameter_h__
 #define __ImplAAFParameter_h__
 
-
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
-
-
-
 /***********************************************\
 *												*
 * Advanced Authoring Format						*
@@ -24,22 +12,13 @@
 *												*
 \***********************************************/
 
-
-/***********************************************\
-*	Stub only.   Implementation not yet added	*
-\***********************************************/
-
-
 #ifndef __AAFTypes_h__
 #include "AAFTypes.h"
 #endif
 
-class ImplAAFDataDef;
-
-
- 
-
-
+class ImplAAFParameterDef;
+class ImplAAFTypeDef;
+class ImplAAFReferenceValue;
 
 #ifndef __ImplAAFObject_h__
 #include "ImplAAFObject.h"
@@ -59,44 +38,21 @@ protected:
   virtual ~ImplAAFParameter ();
 
 public:
-
-
-  //****************
-  // SetLength()
-  //
   virtual AAFRESULT STDMETHODCALLTYPE
-    SetLength
-        // @parm [in] Length of this object
-        (aafLength_t  length);
+    ImplAAFParameter::SetParameterDefinition (
+      ImplAAFParameterDef *pParmDef);
 
-
-  //****************
-  // GetLength()
-  //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetLength
-        // @parm [out,retval] Length of this component
-        (aafLength_t *  pLength);
-	
+    ImplAAFParameter::GetParameterDefinition (
+      ImplAAFParameterDef **ppParmDef);	
 
-  //****************
-  // SetDataDefID()
-  //
   virtual AAFRESULT STDMETHODCALLTYPE
-    SetDataDefID
-        // @parm [in] Data Definition of this object
-        (aafUID_t  pDataDefID);
+    ImplAAFParameter::SetTypeDefinition (
+      ImplAAFTypeDef*  pTypeDef);
 
-  //****************
-  // GetDataDefID()
-  //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetDataDefID
-        // @parm [out,retval] Data Definition of this object
-        (aafUID_t *  pDataDefID);
-
-
-
+    ImplAAFParameter::GetTypeDefinition (
+      ImplAAFTypeDef **ppTypeDef);
 
 public:
   // Declare this class to be storable.
@@ -106,6 +62,11 @@ public:
   // Declare the module test method. The implementation of the will be be
   // in /test/ImplAAFParameterTest.cpp.
   static AAFRESULT test();
+
+private:
+
+	OMFixedSizeProperty<aafUID_t>				_parmDef;
+	OMFixedSizeProperty<aafUID_t>				_typeDef;
 };
 
 #endif // ! __ImplAAFParameter_h__

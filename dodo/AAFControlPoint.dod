@@ -7,20 +7,29 @@ AAFObject\
 #endm
 #c
 AD_HEAD
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/ 
-
+AD_IDL(//
+// The IAAFControlPoint interface is implemented by objects that an individual point value
+// of a parameter whose value changes during the effect.  IAAFControlPoints must be added to
+// and IAAFVaryingValue\, which is then added to the IAAFGroup.  For parameters which are
+// constant in value during the effect\, use IAAFConstValue.
+//
+// In addition to the specific error results listed for each method\,
+// all methods in this interface may also return one of the following
+// values:
+// 
+// AAFRESULT_NOMEMORY
+//   - insufficient system memory is available to perform the
+//     operation.
+//)
 
 /***********************************************\
-*	Stub only.   Implementation not yet added	*
-\***********************************************/
-
+*												*
+* Advanced Authoring Format						*
+*												*
+* Copyright (c) 1998-1999 Avid Technology, Inc. *
+* Copyright (c) 1998-1999 Microsoft Corporation *
+*												*
+\***********************************************/ 
 
 AD_FORWARD_DECLARATION(AAFDataDef)
 
@@ -34,45 +43,209 @@ AD_METHOD1(GetTime,
 			aafRational_t *,
 			pTime,
 			Pointer to an aafRational_t,
-			Returns the Time of control point.)
+	Returns the position of the control point within an effect\\\, expressed as a rational
+  // running from 0 to 1.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pTime pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pTime.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\\\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \\\(This is the only code indicating success.\\\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\\\(\\\) called on it.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - This property does not exist in the file.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pTime arg is NULL.)
 
 AD_METHOD1(GetEditHint,
 			[out\\\,retval],
 			aafEditHint_t *,
 			pEditHint,
 			Pointer to an aafEditHint_t,
-			Returns the edit hint of control point.)
+			Returns the edit hint of the control point\\\, which describes how to alter the
+  // position if the AAFGroup is made longer or shorter.
+  //
+  // Succeeds if all of the following are true:
+  // - the pEditHint pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pEditHint.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\\\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \\\(This is the only code indicating success.\\\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\\\(\\\) called on it.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - This property does not exist in the file.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pEditHint arg is NULL.)
 
-AD_XMETHOD1(GetDataDef,
+AD_XMETHOD1(GetDataDefID,
 			[out\,retval],
-			objOut,
-			AAFDataDef,
-			pDatadef,
-			Pointer to a Data Definition object,
-			Returns the Data Definition object of the control point.)
+			objPass,
+			aafUID_t *,
+			pDatadefID,
+			Pointer to a Data Definition ID,
+			Returns the Data Definition ID of the control point.
+  //
+  // Succeeds if all of the following are true:
+  // - the pDatadefID pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pDatadefID.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - This property does not exist in the file.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pDatadefID arg is NULL.)
+
+AD_XMETHOD1(GetValueBufLen,
+			[out],
+			objPass,
+			aafUInt32 *,
+			pLen,
+			Pointer to an variable used to return the length,
+
+			Returns the length of buffer required for the GetValue\(\) method.
+  // The value is placed into the location specified by pLen.
+  //
+  // Succeeds if all of the following are true:
+  // - the pLen pointer is valid.
+  //
+  // If this method fails nothing will be written to *pLen.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pLen arg is NULL.)
 
 AD_METHOD3(GetValue,
-		   [in],aafInt32, valueSize, value size,
-		   [out\\\, size_is\\\(valueSize\\\)\\\,length_is\\\(*pBytesRead\\\)], aafDataBuffer_t, pValue, Preallocated buffer to hold value,
-		   [out\\\,ref], aafInt32 *,pBytesRead, Pointer to actual bytes read, 
-		   Returns the data value of the control point.)
+			[in],aafUInt32,valueSize,Size of preallocated buffer,
+			[out\\\, size_is\\\(valueSize\\\)\\\,length_is\\\(*bytesRead\\\)],aafDataBuffer_t,pValue,Preallocated buffer to hold value,
+			[out],aafUInt32*,bytesRead,Number of actual bytes read,
+			Writes the value into the pValue buffer.  The buffer is allocated by the caller\\\,
+  // and the size of the buffer is given by valueSize.
+  // 
+  // Caller may call GetValueBufLen\\\(\\\) to determine the
+  // required buffer size.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pValue pointer is valid.
+  // - valueSize indicates the buffer is large enough to hold the name.
+  // 
+  // If this method fails nothing will be written to *pValue.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\\\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \\\(This is the only code indicating success.\\\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pValue arg is NULL.
+  //
+  // AAFRESULT_SMALLBUF
+  //   - valueSize indicates the buffer is too small to hold the value.)
 
 AD_METHOD1(SetTime,
-		   [in], aafRational_t, Time,Control Point time,
-		   Sets the control point time value.)
+		   [in], aafRational_t, pTime,Control Point time,
+			Sets the position of the control point within an effect\\\, expressed as a rational
+  // running from 0 to 1.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\\\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \\\(This is the only code indicating success.\\\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\\\(\\\) called on it.)
 
 AD_METHOD1(SetEditHint,
 		   [in], aafEditHint_t, editHint,Control Point Edit hint,
-		   Sets the control point Edit hint value.)
+		   Sets the control point Edit hint value\\\, which describes how to alter the
+  // position if the AAFGroup is made longer or shorter.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\\\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \\\(This is the only code indicating success.\\\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\\\(\\\) called on it.)
 
-AD_XMETHOD1(SetDataDef,
-			[in], objIn, AAFDataDef, datadef,Control Point data definition,
-			Sets the control point Data Definition value.)
+AD_METHOD1(SetDataDefID,
+			[in], aafUID_t *, pDatadefID,Control Point data definition ID,
+			Sets the control point Data Definition ID.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\\\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \\\(This is the only code indicating success.\\\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\\\(\\\) called on it.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pDatadefID arg is NULL.)
 
 AD_METHOD2(SetValue,
-		   [in],aafInt32, valueSize, value size,
-		   [in\\\, size_is\\\(valueSize\\\)], aafDataBuffer_t, pValue, Preallocated buffer to hold value,
-		   Sets the control point data value.)
+			[in],aafUInt32,valueSize, Size of preallocated buffer,
+			[in\\\, size_is\\\(valueSize\\\)],aafDataBuffer_t,pValue, buffer containing value,
+			The data value is set from a buffer of size valueSize.
+  //
+  // Succeeds if all of the following are true:
+  // - the pValue pointer is valid.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\\\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \\\(This is the only code indicating success.\\\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\\\(\\\) called on it.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pValue is null.)
 
 AD_XCLASS_END(Concrete, StoredObject)
 
