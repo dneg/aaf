@@ -70,7 +70,7 @@ INCLUDE_DIR = ../ref-impl/include
 
 .dod.implh :
 	@ result=`cleartool ls -vob $(SRC_DIR)/impl/Impl$*.h` ; \
-	if test -z "$$result" ; then ; \
+	if test -z "$$result" ; then \
 		echo $(RM) -f $*.implh ; \
 		$(RM) -f $*.implh ; \
 		echo ./tool/$(DODO) -f macros/implh.mac < $*.dod > $*.tmp ; \
@@ -79,8 +79,8 @@ INCLUDE_DIR = ../ref-impl/include
 		mv $*.tmp $*.implh ; \
 		echo cp $*.implh $(SRC_DIR)/impl/Impl$*.h ; \
 		cp $*.implh $(SRC_DIR)/impl/Impl$*.h ; \
-	else ; \
-		if echo $$result | grep "\[eclipsed\]" ; then ; \
+	else \
+		if echo $$result | grep "\[eclipsed\]" ; then \
 			echo Renaming old dodo file Impl$*.h to Impl$*.h.dodo ; \
 			echo mv $(SRC_DIR)/impl/Impl$*.h $(SRC_DIR)/impl/Impl$*.h.dodo ; \
 			mv $(SRC_DIR)/impl/Impl$*.h $(SRC_DIR)/impl/Impl$*.h.dodo ; \
@@ -89,7 +89,7 @@ INCLUDE_DIR = ../ref-impl/include
 
 .dod.implc :
 	@ result=`cleartool ls -vob $(SRC_DIR)/impl/Impl$*.c` ; \
-	if test -z "$$result" ; then ; \
+	if test -z "$$result" ; then \
 		echo $(RM) -f $*.implc ; \
 		$(RM) -f $*.implc ; \
 		echo ./tool/$(DODO) -f macros/implc.mac < $*.dod > $*.tmp ; \
@@ -98,8 +98,8 @@ INCLUDE_DIR = ../ref-impl/include
 		mv $*.tmp $*.implc ; \
 		echo cp $*.implc $(SRC_DIR)/impl/Impl$*.c ; \
 		cp $*.implc $(SRC_DIR)/impl/Impl$*.c ; \
-	else ; \
-		if echo $$result | grep "\[eclipsed\]" ; then ; \
+	else \
+		if echo $$result | grep "\[eclipsed\]" ; then \
 			echo Renaming old dodo file Impl$*.c to Impl$*.c.dodo ; \
 			echo mv $(SRC_DIR)/impl/Impl$*.c $(SRC_DIR)/impl/Impl$*.c.dodo ; \
 			mv $(SRC_DIR)/impl/Impl$*.c $(SRC_DIR)/impl/Impl$*.c.dodo ; \
