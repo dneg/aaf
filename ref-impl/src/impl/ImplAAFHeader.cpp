@@ -530,7 +530,7 @@ AAFRESULT ImplAAFHeader::SetModified(void)		// To NOW
 	aafTimeStamp_t	now;
 
 	AAFGetDateTime(&now);
-  return AAFRESULT_NOT_IMPLEMENTED;
+	return (OM_ERR_NONE);
 }
 
 AAFRESULT ImplAAFHeader::SetToolkitRevisionCurrent()
