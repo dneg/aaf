@@ -69,8 +69,8 @@ public:
 	//
 	STDMETHOD (SetLength) (aafLength_t  length);
 	STDMETHOD (GetLength) (aafLength_t *  pLength);
-	STDMETHOD (SetIsInContainer) (aafBool  isAAF);
-	STDMETHOD (GetIsInContainer) (aafBool *  pIsAAF);
+	STDMETHOD (SetCodecDef) (const aafUID_t & codecDef);
+	STDMETHOD (GetCodecDef) (aafUID_t *  pCodecDef);
 	STDMETHOD (SetSampleRate) (const aafRational_t & rate);
 	STDMETHOD (GetSampleRate) (aafRational_t*  pRate);
 	STDMETHOD (SetContainerFormat) (const aafUID_t & format);

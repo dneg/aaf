@@ -375,7 +375,6 @@ private:
 
 	// Data from/to FileDescriptor
 	aafLength_t _length; // total size of file (informational?)
-	aafBoolean_t _isInAAFContainer; // set to true by refimpl if the essence stream is actually in an essence data.
 	aafRational_t _sampleRate; // same for all samples.
 	aafUID_t _containerFormat;	// set by refimpl
 
