@@ -309,9 +309,6 @@ public:
   // registration method will fail.
   virtual HRESULT CompleteClassRegistration(void);
 
-  virtual AAFRESULT STDMETHODCALLTYPE
-	InitOMPropertiesForObject(ImplAAFObject *obj);
-
   // Merge this class definition to the destination dictionary.
   // If the class definition doesn't exist in the destination
   // it will be created.
