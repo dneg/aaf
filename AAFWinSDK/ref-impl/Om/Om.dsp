@@ -130,6 +130,10 @@ SOURCE="..\..\..\ref-impl\src\OM\OMEnumeratedType.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\OM\OMExceptions.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\OM\OMFile.cpp"
 # End Source File
 # Begin Source File
@@ -387,6 +391,10 @@ SOURCE="..\..\..\ref-impl\include\OM\OMDiskRawStorage.h"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\include\OM\OMEnumeratedType.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\include\OM\OMExceptions.h"
 # End Source File
 # Begin Source File
 
