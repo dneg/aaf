@@ -132,16 +132,6 @@ public:
     GetNumSlots
         (aafNumSlots_t *  numSlots);  //@parm [out] Number of slots
 
-
-
-  //****************
-  // SetNewProps()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    SetNewProps
-        (aafBool  isMasterMob,   //@parm [in] Whether or not this is a Master Mob
-		 aafWChar *  name);   //@parm [in,ref] Mob Name (optional)
-
   //****************
   // SetModTime()
   //
