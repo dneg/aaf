@@ -136,6 +136,9 @@ AAFRESULT STDMETHODCALLTYPE
 		defUID = _type;
 		CHECK(GetDictionary(&dict));
 		CHECK(dict->LookupTypeDef(defUID, ppTypeDef));
+		if(dict != NULL)
+		  dict->ReleaseReference();
+		dict = 0;
 	}
 	XEXCEPT
 	{
