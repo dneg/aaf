@@ -3,7 +3,6 @@
 #ifndef __ImplAAFCompositionMob_h__
 #define __ImplAAFCompositionMob_h__
 
-#include "OMStorable.h"
 
 /******************************************\
 *                                          *
@@ -19,11 +18,6 @@
 #include "ImplAAFMob.h"
 #endif
 
-#ifndef __ImplAAFObject_h__
-#include "ImplAAFObject.h"
-#endif
-
-#include "OMStorable.h"
 
 
 class ImplAAFCompositionMob : public ImplAAFMob
@@ -116,10 +110,6 @@ public:
   // Declare the module test method. The implementation of the will be be
   // in /test/ImplAAFCompositionMobTest.cpp.
   static AAFRESULT test();
-
-  // Return this object's stored object class.
-  virtual AAFRESULT STDMETHODCALLTYPE
-	GetObjectClass(aafUID_t * pClass);
 
 private:
 	OMFixedSizeProperty<aafLength_t>	_defaultFadeLen;

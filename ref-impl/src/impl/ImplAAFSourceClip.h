@@ -12,7 +12,6 @@
 *                                          *
 \******************************************/
 
-#include "OMStorable.h"
 
 class ImplAAFDataDef;
 
@@ -22,8 +21,6 @@ class ImplAAFMob;
 #include "ImplAAFSourceReference.h"
 #endif
 
-#include "ImplAAFObject.h"
-#include "OMProperty.h"
 
 
 
@@ -134,10 +131,6 @@ public:
 					 aafInt32 *pulldownPhase,
 					 aafLength_t *sclpLen,
 					 aafBool *isMask);
-
-	// Return this objects stored object class.
-  virtual AAFRESULT STDMETHODCALLTYPE
-	GetObjectClass(aafUID_t * pClass);
 
 private:
 	OMFixedSizeProperty<aafInt32>		_fadeInLen;
