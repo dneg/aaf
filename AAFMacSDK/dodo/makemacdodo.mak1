@@ -114,6 +114,13 @@ macaafobjects.mk Ä "{dod}aafobjects.mk"
 	echo '	''SetFile -t TEXT -c CWIE -a L "{refh}AAFTypes.h"'  >> macdodo.tmp
 	echo "" >> macdodo.tmp
 	echo "" >> macdodo.tmp
+	echo '	AAFEnumValidation.all ¶' >> targets_all.tmp
+	echo 'AAFEnumValidation.all Ä "{comc}CAAFEnumValidation.h" "{comc}CAAFEnumValidation.cpp" "{comc}CAAFEnumValidation.log"' >> macdodo.tmp
+	echo '	"{comh}CAAFEnumValidation.h" ¶' >> generated_targets.tmp
+	echo '	"{comc}CAAFEnumValidation.cpp" ¶' >> generated_targets.tmp
+	echo '	"{comh}CAAFEnumValidation.log" ¶' >> generated_targets.tmp
+	echo "" >> macdodo.tmp
+	echo "" >> macdodo.tmp
 	echo '	''AAFRoot.all ¶' >> targets_all.tmp
 	echo 'AAFRoot.all...'
 	echo '# AAFRoot.all composite target' >> macdodo.tmp
