@@ -24,13 +24,18 @@
 #ifndef OMOBJECTMANAGER_H
 #define OMOBJECTMANAGER_H
 
-// @module OMObjectManager| Object Manager global functions.
-//   @mauthor Tim Bingham | tjb | Avid Technology, Inc.
+// @class OMObjectManager| Object Manager global functions.
+//   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 
-  // @func Initialize the Object Manager.
-void initializeObjectManager(void);
+class OMObjectManager {
+public:
 
-  // @func Finalize the Object Manager.
-void finalizeObjectManager(void);
+    // @cmember Initialize the Object Manager.
+  static void initialize(void);
+
+    // @cmember Finalize the Object Manager.
+  static void finalize(void);
+
+};
 
 #endif

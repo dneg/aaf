@@ -30,17 +30,22 @@
 #include "OMDictionary.h"
 #include "OMUniqueObjectIdentType.h"
 #include "OMIntegerType.h"
+#include "OMMSStructuredStorage.h"
 
-void initializeObjectManager(void)
+void OMObjectManager::initialize(void)
 {
+  TRACE("OMObjectManager::initalize");
+
 #if defined(OM_DEBUG)
   checkTypes();
 #endif
   OMDictionary::initialize();
 }
 
-void finalizeObjectManager(void)
+void OMObjectManager::finalize(void)
 {
+  TRACE("OMObjectManager::finalize");
+
   OMInteger08Type::destroy();
   OMInteger16Type::destroy();
   OMInteger32Type::destroy();

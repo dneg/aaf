@@ -102,7 +102,7 @@ ImplAAFContext::ImplAAFContext ()
   _singleton = this;
 
   _plugins = NULL;
-  initializeObjectManager();
+  OMObjectManager::initialize();
 }
 
 ImplAAFContext::~ImplAAFContext ()
@@ -115,7 +115,7 @@ ImplAAFContext::~ImplAAFContext ()
   
   // Thare Can Be Only One!
   _singleton = 0;
-  finalizeObjectManager();
+  OMObjectManager::finalize();
 }
 
 void ImplAAFContext::InitPluginManager (void)
