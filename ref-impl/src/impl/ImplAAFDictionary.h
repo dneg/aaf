@@ -699,22 +699,69 @@ typedef ImplAAFSmartPointer<ImplAAFDictionary> ImplAAFDictionarySP;
 
 
 /*************************************************************************
-    aafLookupTypeDef()
+    aafLookup*Def()
 
-	This helper function searches for specified type definition in 
+	These helper functions search for specified definition in 
 	given object's dictionary.
 
     Inputs:
 	p_holder	- definition object to look in.
-	p_typedef	- type definition to look for.
+	p_*def		- definition to look for.
 
     Returns:
-	kAAFTrue - type definition found in given objects dictionary.
-	kAAFFalse - type def is not in a dictionary.
+	kAAFTrue - definition found in given objects dictionary.
+	kAAFFalse - definition is not in a dictionary.
  *************************************************************************/
+aafBoolean_t aafLookupTypeDef( 
+    ImplAAFObject	*p_holder,
+    ImplAAFTypeDef		*p_typedef );
+aafBoolean_t aafLookupOperationDef( 
+    ImplAAFObject	*p_holder,
+    ImplAAFOperationDef		*p_operdef );
+aafBoolean_t aafLookupParameterDef( 
+    ImplAAFObject	*p_holder,
+    ImplAAFParameterDef		*p_paramdef );
+aafBoolean_t aafLookupClassDef( 
+    ImplAAFObject	*p_holder,
+    ImplAAFClassDef		*p_classdef );
+aafBoolean_t aafLookupDataDef( 
+    ImplAAFObject	*p_holder,
+    ImplAAFDataDef		*p_datadef );
+aafBoolean_t aafLookupCodecDef( 
+    ImplAAFObject	*p_holder,
+    ImplAAFCodecDef		*p_codecdef );
+aafBoolean_t aafLookupContainerDef( 
+    ImplAAFObject	*p_holder,
+    ImplAAFContainerDef		*p_containerdef );
+aafBoolean_t aafLookupInterpolationDef( 
+    ImplAAFObject	*p_holder,
+    ImplAAFInterpolationDef	*p_interpoldef );
+
 aafBoolean_t aafLookupTypeDef( 
     ImplAAFMetaDefinition	*p_holder,
     ImplAAFTypeDef		*p_typedef );
+aafBoolean_t aafLookupOperationDef( 
+    ImplAAFMetaDefinition	*p_holder,
+    ImplAAFOperationDef		*p_operdef );
+aafBoolean_t aafLookupParameterDef( 
+    ImplAAFMetaDefinition	*p_holder,
+    ImplAAFParameterDef		*p_paramdef );
+aafBoolean_t aafLookupClassDef( 
+    ImplAAFMetaDefinition	*p_holder,
+    ImplAAFClassDef		*p_classdef );
+aafBoolean_t aafLookupDataDef( 
+    ImplAAFMetaDefinition	*p_holder,
+    ImplAAFDataDef		*p_datadef );
+aafBoolean_t aafLookupCodecDef( 
+    ImplAAFMetaDefinition	*p_holder,
+    ImplAAFCodecDef		*p_codecdef );
+aafBoolean_t aafLookupContainerDef( 
+    ImplAAFMetaDefinition	*p_holder,
+    ImplAAFContainerDef		*p_containerdef );
+aafBoolean_t aafLookupInterpolationDef( 
+    ImplAAFMetaDefinition	*p_holder,
+    ImplAAFInterpolationDef	*p_interpoldef );
+
 
 
 #endif // ! __ImplAAFDictionary_h__
