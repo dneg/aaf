@@ -23,7 +23,7 @@
 //
 // DictP18-277-1847BMaster.csv 
 //
-// This file was generated on Wed Aug  4 19:13:25 EDT 1999
+// This file was generated on Thu Aug  5 10:46:36 EDT 1999
 // by user tbingham on system TBINGHAMPC.
 //
 // Key to macros.
@@ -3661,13 +3661,76 @@ AAF_TYPE_DEFINITION_VARYING_ARRAY(PositionArray,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0xFF), AAF_TYPE(UInt8))
 AAF_TYPE_SEPARATOR()
 
-// StrongReference<ClassDefinition>
+// StrongReference<ContentStorage>
 //
 AAF_TYPE_DEFINITION_STRONG_REFERENCE(
-AAF_REFERENCE_TYPE_NAME(StrongReference, ClassDefinition), 
+AAF_REFERENCE_TYPE_NAME(StrongReference, ContentStorage), 
   AAF_LITERAL_AUID(0x0C0B0000,
     0x0000, 0x0000,
-    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C), AAF_TYPE(ClassDefinition))
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C), AAF_TYPE(ContentStorage))
+AAF_TYPE_SEPARATOR()
+
+// StrongReference<Dictionary>
+//
+AAF_TYPE_DEFINITION_STRONG_REFERENCE(
+AAF_REFERENCE_TYPE_NAME(StrongReference, Dictionary), 
+  AAF_LITERAL_AUID(0x0C0B0001,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C), AAF_TYPE(Dictionary))
+AAF_TYPE_SEPARATOR()
+
+// StrongReference<EssenceDescriptor>
+//
+AAF_TYPE_DEFINITION_STRONG_REFERENCE(
+AAF_REFERENCE_TYPE_NAME(StrongReference, EssenceDescriptor), 
+  AAF_LITERAL_AUID(0x0C0B0002,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C), AAF_TYPE(EssenceDescriptor))
+AAF_TYPE_SEPARATOR()
+
+// StrongReference<NetworkLocator>
+//
+AAF_TYPE_DEFINITION_STRONG_REFERENCE(
+AAF_REFERENCE_TYPE_NAME(StrongReference, NetworkLocator), 
+  AAF_LITERAL_AUID(0x0C0B0003,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C), AAF_TYPE(NetworkLocator))
+AAF_TYPE_SEPARATOR()
+
+// StrongReference<OperationGroup>
+//
+AAF_TYPE_DEFINITION_STRONG_REFERENCE(
+AAF_REFERENCE_TYPE_NAME(StrongReference, OperationGroup), 
+  AAF_LITERAL_AUID(0x0C0B0004,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C), AAF_TYPE(OperationGroup))
+AAF_TYPE_SEPARATOR()
+
+// StrongReference<Segment>
+//
+AAF_TYPE_DEFINITION_STRONG_REFERENCE(
+AAF_REFERENCE_TYPE_NAME(StrongReference, Segment), 
+  AAF_LITERAL_AUID(0x0C0B0005,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C), AAF_TYPE(Segment))
+AAF_TYPE_SEPARATOR()
+
+// StrongReference<SourceClip>
+//
+AAF_TYPE_DEFINITION_STRONG_REFERENCE(
+AAF_REFERENCE_TYPE_NAME(StrongReference, SourceClip), 
+  AAF_LITERAL_AUID(0x0C0B0006,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C), AAF_TYPE(SourceClip))
+AAF_TYPE_SEPARATOR()
+
+// StrongReference<SourceReference>
+//
+AAF_TYPE_DEFINITION_STRONG_REFERENCE(
+AAF_REFERENCE_TYPE_NAME(StrongReference, SourceReference), 
+  AAF_LITERAL_AUID(0x0C0B0007,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C), AAF_TYPE(SourceReference))
 AAF_TYPE_SEPARATOR()
 
 // StrongReferenceSet<ClassDefinition>
@@ -3679,13 +3742,202 @@ AAF_REFERENCE_TYPE_NAME(StrongReferenceSet, ClassDefinition),
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C), AAF_TYPE(ClassDefinition))
 AAF_TYPE_SEPARATOR()
 
+// StrongReferenceSet<CodecDefinition>
+//
+AAF_TYPE_DEFINITION_STRONG_REFERENCE_SET(
+AAF_REFERENCE_TYPE_NAME(StrongReferenceSet, CodecDefinition), 
+  AAF_LITERAL_AUID(0x0C0B0101,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C), AAF_TYPE(CodecDefinition))
+AAF_TYPE_SEPARATOR()
+
+// StrongReferenceSet<ContainerDefinition>
+//
+AAF_TYPE_DEFINITION_STRONG_REFERENCE_SET(
+AAF_REFERENCE_TYPE_NAME(StrongReferenceSet, ContainerDefinition), 
+  AAF_LITERAL_AUID(0x0C0B0102,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C), AAF_TYPE(ContainerDefinition))
+AAF_TYPE_SEPARATOR()
+
+// StrongReferenceSet<DataDefinition>
+//
+AAF_TYPE_DEFINITION_STRONG_REFERENCE_SET(
+AAF_REFERENCE_TYPE_NAME(StrongReferenceSet, DataDefinition), 
+  AAF_LITERAL_AUID(0x0C0B0103,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C), AAF_TYPE(DataDefinition))
+AAF_TYPE_SEPARATOR()
+
+// StrongReferenceSet<EssenceData>
+//
+AAF_TYPE_DEFINITION_STRONG_REFERENCE_SET(
+AAF_REFERENCE_TYPE_NAME(StrongReferenceSet, EssenceData), 
+  AAF_LITERAL_AUID(0x0C0B0104,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C), AAF_TYPE(EssenceData))
+AAF_TYPE_SEPARATOR()
+
+// StrongReferenceSet<InterpolationDefinition>
+//
+AAF_TYPE_DEFINITION_STRONG_REFERENCE_SET(
+AAF_REFERENCE_TYPE_NAME(StrongReferenceSet, InterpolationDefinition), 
+  AAF_LITERAL_AUID(0x0C0B0105,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C), AAF_TYPE(InterpolationDefinition))
+AAF_TYPE_SEPARATOR()
+
+// StrongReferenceSet<Locator>
+//
+AAF_TYPE_DEFINITION_STRONG_REFERENCE_SET(
+AAF_REFERENCE_TYPE_NAME(StrongReferenceSet, Locator), 
+  AAF_LITERAL_AUID(0x0C0B0106,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C), AAF_TYPE(Locator))
+AAF_TYPE_SEPARATOR()
+
+// StrongReferenceSet<Mob>
+//
+AAF_TYPE_DEFINITION_STRONG_REFERENCE_SET(
+AAF_REFERENCE_TYPE_NAME(StrongReferenceSet, Mob), 
+  AAF_LITERAL_AUID(0x0C0B0107,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C), AAF_TYPE(Mob))
+AAF_TYPE_SEPARATOR()
+
+// StrongReferenceSet<OperationDefinition>
+//
+AAF_TYPE_DEFINITION_STRONG_REFERENCE_SET(
+AAF_REFERENCE_TYPE_NAME(StrongReferenceSet, OperationDefinition), 
+  AAF_LITERAL_AUID(0x0C0B0108,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C), AAF_TYPE(OperationDefinition))
+AAF_TYPE_SEPARATOR()
+
+// StrongReferenceSet<Parameter>
+//
+AAF_TYPE_DEFINITION_STRONG_REFERENCE_SET(
+AAF_REFERENCE_TYPE_NAME(StrongReferenceSet, Parameter), 
+  AAF_LITERAL_AUID(0x0C0B0109,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C), AAF_TYPE(Parameter))
+AAF_TYPE_SEPARATOR()
+
+// StrongReferenceSet<ParameterDefinition>
+//
+AAF_TYPE_DEFINITION_STRONG_REFERENCE_SET(
+AAF_REFERENCE_TYPE_NAME(StrongReferenceSet, ParameterDefinition), 
+  AAF_LITERAL_AUID(0x0C0B010A,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C), AAF_TYPE(ParameterDefinition))
+AAF_TYPE_SEPARATOR()
+
+// StrongReferenceSet<PluginDescriptor>
+//
+AAF_TYPE_DEFINITION_STRONG_REFERENCE_SET(
+AAF_REFERENCE_TYPE_NAME(StrongReferenceSet, PluginDescriptor), 
+  AAF_LITERAL_AUID(0x0C0B010B,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C), AAF_TYPE(PluginDescriptor))
+AAF_TYPE_SEPARATOR()
+
+// StrongReferenceSet<PropertyDefinition>
+//
+AAF_TYPE_DEFINITION_STRONG_REFERENCE_SET(
+AAF_REFERENCE_TYPE_NAME(StrongReferenceSet, PropertyDefinition), 
+  AAF_LITERAL_AUID(0x0C0B010C,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C), AAF_TYPE(PropertyDefinition))
+AAF_TYPE_SEPARATOR()
+
+// StrongReferenceSet<Segment>
+//
+AAF_TYPE_DEFINITION_STRONG_REFERENCE_SET(
+AAF_REFERENCE_TYPE_NAME(StrongReferenceSet, Segment), 
+  AAF_LITERAL_AUID(0x0C0B010D,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C), AAF_TYPE(Segment))
+AAF_TYPE_SEPARATOR()
+
+// StrongReferenceSet<TaggedValue>
+//
+AAF_TYPE_DEFINITION_STRONG_REFERENCE_SET(
+AAF_REFERENCE_TYPE_NAME(StrongReferenceSet, TaggedValue), 
+  AAF_LITERAL_AUID(0x0C0B010E,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C), AAF_TYPE(TaggedValue))
+AAF_TYPE_SEPARATOR()
+
+// StrongReferenceSet<TypeDefinition>
+//
+AAF_TYPE_DEFINITION_STRONG_REFERENCE_SET(
+AAF_REFERENCE_TYPE_NAME(StrongReferenceSet, TypeDefinition), 
+  AAF_LITERAL_AUID(0x0C0B010F,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C), AAF_TYPE(TypeDefinition))
+AAF_TYPE_SEPARATOR()
+
+// StrongReferenceVector<Component>
+//
+AAF_TYPE_DEFINITION_STRONG_REFERENCE_VECTOR(
+AAF_REFERENCE_TYPE_NAME(StrongReferenceVector, Component), 
+  AAF_LITERAL_AUID(0x0C0B0200,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C), AAF_TYPE(Component))
+AAF_TYPE_SEPARATOR()
+
+// StrongReferenceVector<ControlPoint>
+//
+AAF_TYPE_DEFINITION_STRONG_REFERENCE_VECTOR(
+AAF_REFERENCE_TYPE_NAME(StrongReferenceVector, ControlPoint), 
+  AAF_LITERAL_AUID(0x0C0B0201,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C), AAF_TYPE(ControlPoint))
+AAF_TYPE_SEPARATOR()
+
+// StrongReferenceVector<Identification>
+//
+AAF_TYPE_DEFINITION_STRONG_REFERENCE_VECTOR(
+AAF_REFERENCE_TYPE_NAME(StrongReferenceVector, Identification), 
+  AAF_LITERAL_AUID(0x0C0B0202,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C), AAF_TYPE(Identification))
+AAF_TYPE_SEPARATOR()
+
+// StrongReferenceVector<Locator>
+//
+AAF_TYPE_DEFINITION_STRONG_REFERENCE_VECTOR(
+AAF_REFERENCE_TYPE_NAME(StrongReferenceVector, Locator), 
+  AAF_LITERAL_AUID(0x0C0B0203,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C), AAF_TYPE(Locator))
+AAF_TYPE_SEPARATOR()
+
 // StrongReferenceVector<MobSlot>
 //
 AAF_TYPE_DEFINITION_STRONG_REFERENCE_VECTOR(
 AAF_REFERENCE_TYPE_NAME(StrongReferenceVector, MobSlot), 
-  AAF_LITERAL_AUID(0x0C0B0200,
+  AAF_LITERAL_AUID(0x0C0B0204,
     0x0000, 0x0000,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C), AAF_TYPE(MobSlot))
+AAF_TYPE_SEPARATOR()
+
+// StrongReferenceVector<Segment>
+//
+AAF_TYPE_DEFINITION_STRONG_REFERENCE_VECTOR(
+AAF_REFERENCE_TYPE_NAME(StrongReferenceVector, Segment), 
+  AAF_LITERAL_AUID(0x0C0B0205,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C), AAF_TYPE(Segment))
+AAF_TYPE_SEPARATOR()
+
+// StrongReferenceVector<SourceReference>
+//
+AAF_TYPE_DEFINITION_STRONG_REFERENCE_VECTOR(
+AAF_REFERENCE_TYPE_NAME(StrongReferenceVector, SourceReference), 
+  AAF_LITERAL_AUID(0x0C0B0206,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C), AAF_TYPE(SourceReference))
 AAF_TYPE_SEPARATOR()
 
 // WeakReference<ClassDefinition>
@@ -3697,6 +3949,87 @@ AAF_REFERENCE_TYPE_NAME(WeakReference, ClassDefinition),
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C), AAF_TYPE(ClassDefinition))
 AAF_TYPE_SEPARATOR()
 
+// WeakReference<ContainerDefinition>
+//
+AAF_TYPE_DEFINITION_WEAK_REFERENCE(
+AAF_REFERENCE_TYPE_NAME(WeakReference, ContainerDefinition), 
+  AAF_LITERAL_AUID(0x0C0B0301,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C), AAF_TYPE(ContainerDefinition))
+AAF_TYPE_SEPARATOR()
+
+// WeakReference<DataDefinition>
+//
+AAF_TYPE_DEFINITION_WEAK_REFERENCE(
+AAF_REFERENCE_TYPE_NAME(WeakReference, DataDefinition), 
+  AAF_LITERAL_AUID(0x0C0B0302,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C), AAF_TYPE(DataDefinition))
+AAF_TYPE_SEPARATOR()
+
+// WeakReference<DefinitionObject>
+//
+AAF_TYPE_DEFINITION_WEAK_REFERENCE(
+AAF_REFERENCE_TYPE_NAME(WeakReference, DefinitionObject), 
+  AAF_LITERAL_AUID(0x0C0B0303,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C), AAF_TYPE(DefinitionObject))
+AAF_TYPE_SEPARATOR()
+
+// WeakReference<Identification>
+//
+AAF_TYPE_DEFINITION_WEAK_REFERENCE(
+AAF_REFERENCE_TYPE_NAME(WeakReference, Identification), 
+  AAF_LITERAL_AUID(0x0C0B0304,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C), AAF_TYPE(Identification))
+AAF_TYPE_SEPARATOR()
+
+// WeakReference<InterpolationDefinition>
+//
+AAF_TYPE_DEFINITION_WEAK_REFERENCE(
+AAF_REFERENCE_TYPE_NAME(WeakReference, InterpolationDefinition), 
+  AAF_LITERAL_AUID(0x0C0B0305,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C), AAF_TYPE(InterpolationDefinition))
+AAF_TYPE_SEPARATOR()
+
+// WeakReference<Mob>
+//
+AAF_TYPE_DEFINITION_WEAK_REFERENCE(
+AAF_REFERENCE_TYPE_NAME(WeakReference, Mob), 
+  AAF_LITERAL_AUID(0x0C0B0306,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C), AAF_TYPE(Mob))
+AAF_TYPE_SEPARATOR()
+
+// WeakReference<OperationDefinition>
+//
+AAF_TYPE_DEFINITION_WEAK_REFERENCE(
+AAF_REFERENCE_TYPE_NAME(WeakReference, OperationDefinition), 
+  AAF_LITERAL_AUID(0x0C0B0307,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C), AAF_TYPE(OperationDefinition))
+AAF_TYPE_SEPARATOR()
+
+// WeakReference<ParameterDefinition>
+//
+AAF_TYPE_DEFINITION_WEAK_REFERENCE(
+AAF_REFERENCE_TYPE_NAME(WeakReference, ParameterDefinition), 
+  AAF_LITERAL_AUID(0x0C0B0308,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C), AAF_TYPE(ParameterDefinition))
+AAF_TYPE_SEPARATOR()
+
+// WeakReference<TypeDefinition>
+//
+AAF_TYPE_DEFINITION_WEAK_REFERENCE(
+AAF_REFERENCE_TYPE_NAME(WeakReference, TypeDefinition), 
+  AAF_LITERAL_AUID(0x0C0B0309,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C), AAF_TYPE(TypeDefinition))
+AAF_TYPE_SEPARATOR()
+
 // WeakReferenceSet<DataDefinition>
 //
 AAF_TYPE_DEFINITION_WEAK_REFERENCE_SET(
@@ -3706,11 +4039,38 @@ AAF_REFERENCE_TYPE_NAME(WeakReferenceSet, DataDefinition),
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C), AAF_TYPE(DataDefinition))
 AAF_TYPE_SEPARATOR()
 
+// WeakReferenceSet<ParameterDefinition>
+//
+AAF_TYPE_DEFINITION_WEAK_REFERENCE_SET(
+AAF_REFERENCE_TYPE_NAME(WeakReferenceSet, ParameterDefinition), 
+  AAF_LITERAL_AUID(0x0C0B0401,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C), AAF_TYPE(ParameterDefinition))
+AAF_TYPE_SEPARATOR()
+
+// WeakReferenceSet<PluginDescriptor>
+//
+AAF_TYPE_DEFINITION_WEAK_REFERENCE_SET(
+AAF_REFERENCE_TYPE_NAME(WeakReferenceSet, PluginDescriptor), 
+  AAF_LITERAL_AUID(0x0C0B0402,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C), AAF_TYPE(PluginDescriptor))
+AAF_TYPE_SEPARATOR()
+
+// WeakReferenceVector<OperationDefinition>
+//
+AAF_TYPE_DEFINITION_WEAK_REFERENCE_VECTOR(
+AAF_REFERENCE_TYPE_NAME(WeakReferenceVector, OperationDefinition), 
+  AAF_LITERAL_AUID(0x0C0B0500,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C), AAF_TYPE(OperationDefinition))
+AAF_TYPE_SEPARATOR()
+
 // WeakReferenceVector<TypeDefinition>
 //
 AAF_TYPE_DEFINITION_WEAK_REFERENCE_VECTOR(
 AAF_REFERENCE_TYPE_NAME(WeakReferenceVector, TypeDefinition), 
-  AAF_LITERAL_AUID(0x0C0B0500,
+  AAF_LITERAL_AUID(0x0C0B0501,
     0x0000, 0x0000,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C), AAF_TYPE(TypeDefinition))
 
