@@ -17,7 +17,7 @@
 //
 // ../smpte/DictP18.csv 
 //
-// This file was generated on Fri Mar 26 10:31:17 EST 1999
+// This file was generated on Fri Mar 26 16:31:55 EST 1999
 // by user tbingham on system TBINGHAMPC.
 //
 // Key to macros.
@@ -1468,7 +1468,7 @@ AAF_CLASS_SEPARATOR()
 // MIDIFileData
 //
 AAF_CLASS(MIDIFileData,
-  AAF_LITERAL_AUID(0x06464400,
+  AAF_LITERAL_AUID(0x06464600,
     0x0000, 0x0000,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
   EssenceData)
