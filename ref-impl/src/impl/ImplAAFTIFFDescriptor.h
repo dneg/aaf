@@ -32,12 +32,12 @@
 
 
 
-#ifndef __ImplAAFDigitalImageDescriptor_h__
-#include "ImplAAFDigitalImageDescriptor.h"
+#ifndef __ImplAAFFileDescriptor_h__
+#include "ImplAAFFileDescriptor.h"
 #endif
 
 
-class ImplAAFTIFFDescriptor : public ImplAAFDigitalImageDescriptor
+class ImplAAFTIFFDescriptor : public ImplAAFFileDescriptor
 {
 public:
   //
