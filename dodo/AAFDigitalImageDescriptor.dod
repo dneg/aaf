@@ -140,12 +140,12 @@ AD_XMETHOD4(SetDisplayView,
 				Number of pixels in horizontal dimension of display view. Optional.,
 			[in],
 				objPass,
-				aafUInt32,
+				aafInt32,
 				DisplayXOffset,
 				Number of pixels from the top-left corner of the display view. Optional.,
 			[in],
 				objPass,
-				aafUInt32,
+				aafInt32,
 				DisplayYOffset,
 				Number pixels from the top-left corner of the display view. Optional.,
 			Sets the dimension of display view.
@@ -205,12 +205,12 @@ AD_XMETHOD2(SetVideoLineMap,
 			[in],
 				objPass,
 				aafUInt32,
-				size,
-				Size of the array,
-			[in\, size_is\(size\)],
+				numberElements,
+				The number of elements in the array,
+			[in\, size_is\(numberElements\)],
 				objPass,
 				aafInt32 *,
-				VideoLineMap,
+				pVideoLineMap,
 				Array to hold the Video Line Map information,
 			Sets the VideoLineMap property.  The video line map specifies the
   // scan line in the analog source that corresponds to the beginning of each
@@ -218,7 +218,7 @@ AD_XMETHOD2(SetVideoLineMap,
   // For interleaved video\, there are 2 values in the array.
   // 
   // Succeeds if all of the following are true:
-  // - 
+  // - pVideoLineMap is a valid pointer
   // 
   // If this method fails\, the Video Line Map property will not be
   // changed.
@@ -429,12 +429,12 @@ AD_XMETHOD4(GetDisplayView,
 				Number of pixels in horizontal dimension of display view. Optional.,
 			[out],
 				objPass,
-				aafUInt32 *,
+				aafInt32 *,
 				pDisplayXOffset,
 				Number of pixels from the top-left corner of the display view. Optional.,
 			[out],
 				objPass,
-				aafUInt32 *,
+				aafInt32 *,
 				pDisplayYOffset,
 				Number pixels from the top-left corner of the display view. Optional.,
 			Gets the dimension of display view.
@@ -484,16 +484,36 @@ AD_XMETHOD1(GetFrameLayout,
   //
   //)
 
+AD_XMETHOD1(GetVideoLineMapSize,
+			[out],
+				objPass,
+				aafUInt32 *,
+				pNumberElements,
+				The number of elements in the array,
+			Get the number of elements in the VideoLineMap property array.
+  // 
+  // Succeeds if all of the following are true:
+  // - pNumberElements is a valid pointer
+  // 
+  // If this method fails\, pSize will not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.
+  //
+  //)
+
 AD_XMETHOD2(GetVideoLineMap,
 			[in],
 				objPass,
 				aafUInt32,
-				size,
-				Size of the array,
-			[out\, size_is\(size\)],
+				numberElements,
+				The number of elements in the array,
+			[out\, size_is\(numberElements\)],
 				objPass,
 				aafInt32 *,
-				videoLineMap,
+				pVideoLineMap,
 				Array to hold the Video Line Map information,
 			Gets the VideoLineMap property.  The video line map specifies the
   // scan line in the analog source that corresponds to the beginning of each
@@ -501,7 +521,7 @@ AD_XMETHOD2(GetVideoLineMap,
   // For interleaved video\, there are 2 values in the array.
   // 
   // Succeeds if all of the following are true:
-  // - videoLineMap is large enough to hold the data
+  // - pVideoLineMap is a valid pointer and is large enough to hold the data
   // 
   // If this method fails\, videoLineMap will not be changed.
   // 
