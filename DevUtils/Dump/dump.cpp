@@ -1,6 +1,6 @@
 /***********************************************************************
 *
-*              Copyright (c) 1998-1999 Avid Technology, Inc.
+*              Copyright (c) 1998-2000 Avid Technology, Inc.
 *
 * Permission to use, copy and modify this software and accompanying
 * documentation, and to distribute and sublicense application software
@@ -31,6 +31,7 @@
 // Tim Bingham 05-May-1998 Tim_Bingham@avid.com
 //             19-June-1998
 //             12-August-1998
+//                April-2000
 //
 // Tom Ransdell 28-Sept-1998 Tom_Ransdell@avid.com
 //              Adapt to building on the Macintosh with CodeWarrior Pro3
@@ -115,21 +116,8 @@ const bool true = 1;
 #define IOS_FMT_FLAGS long int
 #endif
 
-// The following should be provided in
-// a header file shared between this dumper and the
-// toolkit. That header doesn't yet exist.
-// A higher level dumper should obtaing this information
-// from the AAFDictionary.
-
-// Type ids.
-// Note that these are structural types. These types convey the
-// information needed to understand the structure of a file.
+// Stored forms
 //
-// The actual type of a property can be derived from the stored PID by
-// an association PID -> type in the dictionary.
-//
-
-// version 0.25 and above
 const int SF_DATA                                   = 0x82;
 const int SF_DATA_STREAM                            = 0x42;
 const int SF_STRONG_OBJECT_REFERENCE                = 0x22;
@@ -141,27 +129,6 @@ const int SF_WEAK_OBJECT_REFERENCE_SET              = 0x1A;
 const int SF_WEAK_OBJECT_REFERENCE_STORED_OBJECT_ID = 0x03;
 const int SF_UNIQUE_OBJECT_ID                       = 0x86;
 const int SF_OPAQUE_STREAM                          = 0x40;
-
-// version 0.08 and above
-const int TID_DATA                                   =  0;
-const int TID_DATA_STREAM                            =  1;
-const int TID_STRONG_OBJECT_REFERENCE                =  2;
-const int TID_STRONG_OBJECT_REFERENCE_VECTOR         =  3;
-const int TID_STRONG_OBJECT_REFERENCE_SET            =  4;
-const int TID_WEAK_OBJECT_REFERENCE                  =  5;
-const int TID_WEAK_OBJECT_REFERENCE_VECTOR           =  6;
-const int TID_WEAK_OBJECT_REFERENCE_SET              =  7;
-const int TID_WEAK_OBJECT_REFERENCE_STORED_OBJECT_ID =  8;
-const int TID_UNIQUE_OBJECT_ID                       =  9;
-const int TID_OPAQUE_STREAM                          = 10;
-
-// version 0.07 and below
-const int OLD_TID_DATA                           = 0;
-const int OLD_TID_STRONG_OBJECT_REFERENCE        = 1;
-const int OLD_TID_STRONG_OBJECT_REFERENCE_VECTOR = 2;
-const int OLD_TID_WEAK_OBJECT_REFERENCE          = 3;
-const int OLD_TID_WEAK_OBJECT_REFERENCE_VECTOR   = 5;
-const int OLD_TID_DATA_STREAM                    = 4;
 
 // Integral types
 //
@@ -345,7 +312,6 @@ struct format {
 static size_t signatureSize(void);
 static size_t maxSignatureSize = signatureSize();
 
-// End of stuff that should be in a shared header
 
 // A note on file format versions.
 //
@@ -433,6 +399,30 @@ char* _propertyValueStreamName = (char*)propertiesStreamName;
 char* _propertyIndexStreamName = (char*)propertiesStreamName;
 char* _openArrayKeySymbol = (char*)openArrayKeySymbol;
 char* _closeArrayKeySymbol = (char*)closeArrayKeySymbol;
+
+// Old values for stored forms
+//
+
+// version 0.08 and above
+const int TID_DATA                                   =  0;
+const int TID_DATA_STREAM                            =  1;
+const int TID_STRONG_OBJECT_REFERENCE                =  2;
+const int TID_STRONG_OBJECT_REFERENCE_VECTOR         =  3;
+const int TID_STRONG_OBJECT_REFERENCE_SET            =  4;
+const int TID_WEAK_OBJECT_REFERENCE                  =  5;
+const int TID_WEAK_OBJECT_REFERENCE_VECTOR           =  6;
+const int TID_WEAK_OBJECT_REFERENCE_SET              =  7;
+const int TID_WEAK_OBJECT_REFERENCE_STORED_OBJECT_ID =  8;
+const int TID_UNIQUE_OBJECT_ID                       =  9;
+const int TID_OPAQUE_STREAM                          = 10;
+
+// version 0.07 and below
+const int OLD_TID_DATA                           = 0;
+const int OLD_TID_STRONG_OBJECT_REFERENCE        = 1;
+const int OLD_TID_STRONG_OBJECT_REFERENCE_VECTOR = 2;
+const int OLD_TID_WEAK_OBJECT_REFERENCE          = 3;
+const int OLD_TID_WEAK_OBJECT_REFERENCE_VECTOR   = 5;
+const int OLD_TID_DATA_STREAM                    = 4;
 
 // Highest version of file/index format recognized by this dumper
 //
