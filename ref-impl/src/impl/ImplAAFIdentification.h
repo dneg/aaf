@@ -40,7 +40,7 @@ public:
     const wchar_t* productName,
     const aafProductVersion_t* productVersion,
     const wchar_t* productVersionString,
-    // const AUID* productId,
+    const aafUID_t* productId,
     const aafTimeStamp_t date,
     const aafProductVersion_t* toolKitVersion,
     const wchar_t* platform
@@ -237,7 +237,7 @@ private:
   OMWideStringProperty						_productName;
   OMFixedSizeProperty<aafProductVersion_t>	_productVersion;
   OMWideStringProperty                      _productVersionString;
-  // FixedSizeProperty<AUID>                 _productId;
+  OMFixedSizeProperty<aafUID_t>             _productId;
   OMFixedSizeProperty<aafTimeStamp_t>        _date;
   OMFixedSizeProperty<aafProductVersion_t>	_toolkitVersion;
   OMWideStringProperty                        _platform;
