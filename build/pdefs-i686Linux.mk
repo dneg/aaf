@@ -47,4 +47,4 @@
 #------------------------------------------------------------------------------
 include $(AAFBASE)/build/pdefs-i586Linux.mk
 
-PLATFORM_CFLAGS += -march=i686
+REL_FLAGS += -march=i686

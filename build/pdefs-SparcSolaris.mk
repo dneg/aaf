@@ -59,7 +59,7 @@ include $(AAFBASE)/build/cdefs-$(COMPILER).mk
 #------------------------------------------------------------------------------
 # Platform specific compiler options
 #------------------------------------------------------------------------------
-PLATFORM_CFLAGS = -fPIC -g -D_DEBUG -O0
+PLATFORM_CFLAGS = -fPIC
 
 
 # Platform specific compiler options

@@ -82,7 +82,7 @@ ifeq ($(findstring Debug, $(AAFTARGET)), Debug)
 else
 ifeq ($(AAFTARGET), Release)
     ifneq ($(findstring -DNDEBUG, $(DBG_FLAGS)), -DNDEBUG)
-        DBG_FLAGS = -DNDEBUG
+        DBG_FLAGS = -DNDEBUG $(REL_FLAGS)
     endif
 endif
 endif
