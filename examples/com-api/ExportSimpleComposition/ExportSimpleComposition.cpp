@@ -421,7 +421,7 @@ static HRESULT ProcessAAFFile(aafWChar * pFileName, testType_t testType)
 	IAAFSegment*				pSegment = NULL;
 	IAAFMob*					pCompMob = NULL;
 	IAAFMob*					pMob = NULL;
-	aafPosition_t				zeroPos = NULL;
+	aafPosition_t				zeroPos = 0;
 	IAAFSequence*				pAudioSequence = NULL;
 	IAAFSourceClip*				pSourceClip = NULL;
 	aafLength_t					duration;
