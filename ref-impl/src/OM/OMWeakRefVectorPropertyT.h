@@ -296,7 +296,7 @@ ReferencedObject* OMWeakReferenceVectorProperty<ReferencedObject>::setValueAt(
 {
   TRACE("OMWeakReferenceVectorProperty<ReferencedObject>::setValueAt");
 
-  PRECONDITION("Valid index", index <= count());
+  PRECONDITION("Valid index", index < count());
   PRECONDITION("Valid object", object != 0);
 #if defined(OM_VALIDATE_WEAK_REFERENCES)
   PRECONDITION("Source container object attached to file",
@@ -305,12 +305,6 @@ ReferencedObject* OMWeakReferenceVectorProperty<ReferencedObject>::setValueAt(
   PRECONDITION("Source container object and target object in same file",
                                         container()->file() == object->file());
 #endif
-  if (index == count()) {
-    // This is an append, make sure the new element is defined.
-    OMUniqueObjectIdentification key = object->identification();
-    VectorElement newElement(this, key, _targetTag);
-    _vector.append(newElement);
-  }
 
   // Set the vector to contain the new object
   //
