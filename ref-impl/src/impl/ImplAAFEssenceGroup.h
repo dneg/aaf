@@ -162,6 +162,8 @@ public:
 	AAFRESULT GetCriteriaSegment(
 			aafMediaCriteria_t *criteria,
 			ImplAAFSegment		**retSrcClip);
+	virtual AAFRESULT ChangeContainedReferences(aafMobID_constref from,
+												aafMobID_constref to);
 
 private:
 	OMStrongReferenceVectorProperty<ImplAAFSegment>	_choices;
