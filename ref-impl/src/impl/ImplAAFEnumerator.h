@@ -34,9 +34,9 @@ public:
   // Constructor/destructor
   //
   //********
-  ImplAAFEnumerator<T> (ImplAAFCollection<T> * pCollection);
+  ImplAAFEnumerator (ImplAAFCollection<T> * pCollection);
 
-  virtual ~ImplAAFEnumerator<T> ();
+  virtual ~ImplAAFEnumerator ();
 
 public:
 
@@ -89,9 +89,6 @@ private:
 // Implementation stuff
 //
 
-#include <assert.h>
-
-
 template <typename T>
 ImplAAFEnumerator<T>::ImplAAFEnumerator
 (
@@ -120,7 +117,7 @@ AAFRESULT ImplAAFEnumerator<T>::NextOne
   if (pElem == NULL)
 	return AAFRESULT_NULL_PARAM;
 
-  assert (_pCollection);
+  if (!_pCollection) return AAFRESULT_NULL_PARAM;
   _pCollection->GetNumElements(&siz);
   if(cur < siz)
 	{
