@@ -105,7 +105,7 @@ OMFile::OMFile(const wchar_t* fileName,
   setClassFactory(factory);
   setName(L"<file>");
   _root->attach(this, L"/");
-  _root->setStore(rootStoredObject());
+  _root->setStore(_rootStoredObject);
 }
 
   // @mfunc Destructor.
@@ -301,7 +301,7 @@ OMStorable* OMFile::restore(void)
     ASSERT("Valid dictionary", _dictionary != 0);
     _root = new OMRootStorable();
     _root->attach(this, L"/");
-    _root->setStore(rootStoredObject());
+    _root->setStore(_rootStoredObject);
     _root->setClassFactory(_dictionary);
 
     _root->restoreContents();
@@ -310,7 +310,7 @@ OMStorable* OMFile::restore(void)
     ASSERT("Consistent dictionaries", metaDictionary == _dictionary);
     _root->setClassFactory(classFactory());
   } else {
-    _root = OMStorable::restoreFrom(this, L"/", *rootStoredObject());
+    _root = OMStorable::restoreFrom(this, L"/", *_rootStoredObject);
   }
   return root();
 }
@@ -344,15 +344,6 @@ OMStorable* OMFile::root(void)
     result = _root;
   }
   return result;
-}
-
-  // @mfunc Retrieve the root <c OMStoredObject> from this <c OMFile>.
-  //   @rdesc The root <c OMStoredObject>.
-OMStoredObject* OMFile::rootStoredObject(void)
-{
-  TRACE("OMFile::rootStoredObject");
-
-  return _rootStoredObject;
 }
 
 OMDictionary* OMFile::dictionary(void) const
