@@ -192,10 +192,10 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 
 	IEnumAAFMobs *mobIter;
 
-//!!!	aafSearchCrit_t		criteria;
-//!!!	criteria.searchTag = kNoSearch;
+	aafSearchCrit_t		criteria;
+	criteria.searchTag = kNoSearch;
 
-    hr = pHeader->EnumAAFAllMobs (NULL, &mobIter);
+    hr = pHeader->EnumAAFAllMobs (&criteria, &mobIter);
 	if (AAFRESULT_SUCCESS != hr)
 		return hr;
 	for(n = 0; n < numMobs; n++)

@@ -303,11 +303,16 @@ AAFRESULT STDMETHODCALLTYPE
 // skip virtual aafErr_t Verify(char *buf, validateData_t *result);
 // What doe's this do?
 
+//****************
+// GetMobKind()
+//
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFMob::IsMobKind (aafMobKind_t  mobKind,
-                           aafBool *result)
+    ImplAAFMob::GetMobKind (aafMobKind_t *pMobKind)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	if(pMobKind == NULL)
+		return(AAFRESULT_NULL_PARAM);
+	*pMobKind = kAllMob;				// Abstract superclass, only match "all"
+	return AAFRESULT_SUCCESS;
 }
 
  AAFRESULT STDMETHODCALLTYPE
@@ -374,7 +379,6 @@ AAFRESULT STDMETHODCALLTYPE
 	  {
 		aSlot = (ImplAAFTimelineMobSlot *)CreateImpl (CLSID_AAFTimelineMobSlot);
 		  {
-//!!!			CHECK(tmpSlot->WriteRational(OMMSLTEditRate, editRate));
 			CHECK(aSlot->SetSegment(segment));
 			CHECK(aSlot->SetSlotID(slotID));
 			CHECK(aSlot->SetName(slotName));

@@ -87,17 +87,34 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFContentStorage::GetNumMobs (aafMobKind_t mobKind,
                            aafNumSlots_t *pNumMobs)
 {
-	size_t	siz;
+	size_t				siz;
+	ImplEnumAAFMobs		*mobEnum;
+	aafSearchCrit_t		criteria;
+	AAFRESULT			hr;
+	ImplAAFMob			*aMob;
 
-	if(mobKind == kAllMob)
+	if(pNumMobs == NULL)
+		return AAFRESULT_NULL_PARAM;
+	
+	 if(mobKind == kAllMob)
 	{
 		_mobs.getSize(siz);
-		*pNumMobs = siz;
-		return(AAFRESULT_SUCCESS);
 	}
 	else
-		 return AAFRESULT_NOT_IMPLEMENTED;
-
+	{
+		criteria.searchTag = kByMobKind;
+		criteria.tags.mobKind = mobKind;
+		GetMobs (&criteria,&mobEnum);
+		siz = 0;
+		do {
+			hr = mobEnum->NextOne (&aMob);
+			if(hr == AAFRESULT_SUCCESS)
+				siz++;
+ 		} while(hr == AAFRESULT_SUCCESS);
+	}
+	
+	*pNumMobs = siz;
+	return AAFRESULT_SUCCESS;
 }
 
 
@@ -114,10 +131,10 @@ AAFRESULT STDMETHODCALLTYPE
 {
 	ImplEnumAAFMobs		*theEnum = (ImplEnumAAFMobs *)CreateImpl (CLSID_EnumAAFMobs);
 		
-	// !!!Does not obey search criteria yet
 	XPROTECT()
 	{
 		CHECK(theEnum->SetContentStorage(this));
+		CHECK(theEnum->SetCriteria(pSearchCriteria));
 		CHECK(theEnum->Reset());
 		*ppEnum = theEnum;
 	}
