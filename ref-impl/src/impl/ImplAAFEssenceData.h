@@ -4,6 +4,7 @@
 #define __ImplAAFEssenceData_h__
 
 #include "OMStorable.h"
+#include "OMProperty.h"
 
 /******************************************\
 *                                          *
@@ -13,28 +14,8 @@
 * Copyright (c) 1998 Microsoft Corporation *
 *                                          *
 \******************************************/
-
-
-
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
-
- 
-/***********************************************\
-*  Stub only.   Implementation not yet added    *
-\***********************************************/
 
 class ImplAAFSourceMob;
-
-
-
-
 
 
 #ifndef __ImplAAFObject_h__
@@ -151,6 +132,10 @@ public:
   // Return this objects stored object class.
   virtual AAFRESULT STDMETHODCALLTYPE
 	GetObjectClass(aafUID_t * pClass);
+
+private:
+  OMFixedSizeProperty<aafUID_t> _fileMobID;
+//??  OMMediaProperty _mediaData;
 };
 
 #endif // ! __ImplAAFEssenceData_h__
