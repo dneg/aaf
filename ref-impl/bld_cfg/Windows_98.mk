@@ -7,36 +7,39 @@
 ############################################
 
 #
-# Contains elements for Windows NT/i386 builds.
+# Contains elements for Windows 98 builds.
 #
 
 #
-# Hack! Windows NT doesn't return the proper uname, so when common.mk
+# Hack! Windows doesn't return the proper uname, so when common.mk
 # includes $(UNAME).mk, on WinNT it will only include ".mk", not
 # "Windows_NT.mk".  That's why a file called ".mk" exists in this
 # directory, which includes this file.
 #
 
-PTFM_SUFX = nt
+PTFM_SUFX = w98
 OBJ = obj
 AAF_LIB = lib
 EXE = exe
 
-RM = rm.exe
-ECHO = echo.exe
-CP = cp.exe
-CAT = cat.exe
-CHMOD = chmod.exe
-MV = mv.exe
-SH = sh.exe
-TOUCH = touch.exe
+CMD_DIR = c:/packages/mksnt
+VC_DIR = c:/Progra~1/Micros~8/VC98/bin
 
-SHELL = c:/mksnt/sh.exe
+RM = ${CMD_DIR}/rm.exe
+ECHO = ${CMD_DIR}/echo.exe
+CP = ${CMD_DIR}/cp.exe
+CAT = ${CMD_DIR}/cat.exe
+CHMOD = ${CMD_DIR}/chmod.exe
+MV = ${CMD_DIR}/mv.exe
+SH = ${CMD_DIR}/sh.exe
+TOUCH = ${CMD_DIR}/touch.exe
+
+SHELL = ${CMD_DIR}/sh.exe
 MAKE_SUFFIX =
 
-CC = cl
-LD = cl
-AAF_CMD_LINK = link
+CC = ${VC_DIR}/cl
+LD = ${VC_DIR}/cl
+AAF_CMD_LINK = ${VC_DIR}/link
 
 AAF_LINK_FLAGS = -lib -nologo
 AAF_LINK_OUTPUT_FLAG = -out:
