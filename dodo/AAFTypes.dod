@@ -105,7 +105,6 @@ typedef struct
 } aafString_t;
 
 
-typedef void    		*aafPrivate_t;
 
 
 AD_CPP_QUOTE(/************************************************************)
@@ -172,6 +171,11 @@ typedef enum
 	kTopFieldNone
 } aafFieldTop_t;
 
+// TomR: The following enumeration, aafVideoFmtOpcode_t and aafAudioFmtOpcode_t, will 
+// be replaced by a more general "plugin option" object mechanism [TBD] that does not 
+// require the public AAF api to have any declared public knowledge of any particular
+// code. We do NOT want to change the public api to support any plugin.
+// 
 typedef enum
 {
 	kAAFVFmtEnd = 0,
@@ -234,7 +238,9 @@ typedef enum
 	kAAFSampleSize, 
 	kAAFSampleRate, 
 	kAAFSampleFormat, 
-	kAAFNumChannels
+	kAAFNumChannels,
+	kAAFExpLong,		// TomR:Added to support all options in the union
+	kAAFExpRational 	// TomR:Added to support all options in the union
 } aafAudioFmtOpcode_t;
 
 AD_CPP_QUOTE(#if 0)
@@ -547,60 +553,127 @@ typedef struct
 
 typedef struct
 {
-//	AD_AAFTYPES(AAFDataDefinition) *		mediaKind;		/* IN -- */
 	aafUID_t *			mediaKind;		/* IN -- */
 	aafInt16			subTrackNum;	/* IN - The physical output channel */
 	aafUInt32           numSamples;	/* IN -- */
 	aafUInt32          	buflen;	/* IN -- */
-	void           		*buffer;	/* IN/OUT -- */
+	aafDataBuffer_t		buffer;	/* IN/OUT -- */
 	aafUInt32          	bytesXfered;	/* OUT -- */
 	aafUInt32			samplesXfered;	/* OUT */
 } aafmMultiXfer_t;
 
 typedef struct
 {
-//	AD_AAFTYPES(AAFDataDefinition) *	mediaKind;		/* IN -- */
 	aafUID_t *			mediaKind;		/* IN -- */
 	aafInt16			subTrackNum;	/* IN - The physical output channel */
 	aafInt32           	trackID;		/* IN -- */
 	aafRational_t		sampleRate;
 } aafmMultiCreate_t;
 
-typedef struct
+AD_CPP_QUOTE(#if 0)
+typedef struct _aafVideoMemOp_t
 {
-	aafVideoFmtOpcode_t opcode;
-	union
-	{
-		aafPixelFormat_t	expPixelFormat;
-		aafFrameLayout_t	expFrameLayout;
-		aafFieldDom_t		expFieldDom;
-		aafRect_t			expRect;
-		aafInt32			expInt32;
-		aafInt16			expInt16;
-		aafUInt32			expUInt32;
-		aafRational_t   	expRational;
-		void			   *expPointer;
-		aafCompArray_t		expCompArray;
-		aafCompSizeArray_t	expCompSizeArray;
-		aafColorSiting_t	expColorSiting;
-		aafVideoLineMap_t	expLineMap;
-		aafBool				expBoolean;
-	} operand;
-} aafVideoMemOp_t;
 
-typedef struct
+    aafVideoFmtOpcode_t     opcode;
+    [switch_is(opcode)] union
+    {
+        [case(kAAFPixelFormat)]
+			aafPixelFormat_t	expPixelFormat;
+        [case(kAAFFrameLayout)]
+			aafFrameLayout_t	expFrameLayout;
+        [case(kAAFFieldDominance)]
+			aafFieldDom_t		expFieldDom	;		
+        [case(kAAFStoredRect, kAAFDisplayRect, kAAFSampledRect)]
+			aafRect_t			expRect;			
+        [case(kAAFPixelSize, kAAFCDCIPadBits)]
+			aafInt16			expInt16;			
+        [case(kAAFAspectRatio, kAAFGamma)]
+			aafRational_t   	expRational;			
+        [case(kAAFAlphaTransparency, kAAFImageAlignmentFactor, 
+              kAAFLineLength, kAAFCDCICompWidth, kAAFCDCIHorizSubsampling)]
+			aafInt32			expInt32;			
+        [case(kAAFVideoLineMap)]
+			aafVideoLineMap_t	expLineMap;			
+        [case(kAAFWillTransferLines, kAAFIsCompressed)]
+			aafBool				expBoolean;			
+        [case(kAAFRGBCompLayout, kAAFRGBPaletteLayout)]
+			aafCompArray_t		expCompArray;			
+        [case(kAAFRGBCompSizes, kAAFRGBPaletteSizes)]
+			aafCompSizeArray_t	expCompSizeArray;			
+        [case(kAAFRGBPalette)]
+			aafDataBuffer_t		expPointer;			
+        [case(kAAFCDCIColorSiting)]
+			aafColorSiting_t	expColorSiting;			
+        [case(kAAFCDCIBlackLevel, kAAFCDCIWhiteLevel, kAAFCDCIColorRange)]
+			aafUInt32			expUInt32;			
+						
+        [default] ;
+    } ;
+
+} aafVideoMemOp_t;
+AD_CPP_QUOTE(#endif)
+AD_CPP_QUOTE(//)
+AD_CPP_QUOTE(typedef struct)
+AD_CPP_QUOTE({)
+AD_CPP_QUOTE(\	aafVideoFmtOpcode_t opcode;)
+AD_CPP_QUOTE(\	union)
+AD_CPP_QUOTE(\	{)
+AD_CPP_QUOTE(\		aafPixelFormat_t	expPixelFormat;)
+AD_CPP_QUOTE(\		aafFrameLayout_t	expFrameLayout;)
+AD_CPP_QUOTE(\		aafFieldDom_t		expFieldDom;)
+AD_CPP_QUOTE(\		aafRect_t			expRect;)
+AD_CPP_QUOTE(\		aafInt32			expInt32;)
+AD_CPP_QUOTE(\		aafInt16			expInt16;)
+AD_CPP_QUOTE(\		aafUInt32			expUInt32;)
+AD_CPP_QUOTE(\		aafRational_t   	expRational;)
+AD_CPP_QUOTE(\		aafDataBuffer_t		expPointer;)
+AD_CPP_QUOTE(\		aafCompArray_t		expCompArray;)
+AD_CPP_QUOTE(\		aafCompSizeArray_t	expCompSizeArray;)
+AD_CPP_QUOTE(\		aafColorSiting_t	expColorSiting;)
+AD_CPP_QUOTE(\		aafVideoLineMap_t	expLineMap;)
+AD_CPP_QUOTE(\		aafBool				expBoolean;)
+AD_CPP_QUOTE(\	} operand;)
+AD_CPP_QUOTE(} aafVideoMemOp_t;)
+
+
+AD_CPP_QUOTE(#if 0)
+typedef struct _aafAudioMemOp_t
 {
-	aafAudioFmtOpcode_t opcode;
-	union
-	{
-	    aafAudioSampleType_t	format;	/* OffsetBinary or SignedMagnitude */
-		aafInt16           		sampleSize;
-		aafRational_t   		sampleRate;
-		aafInt16				numChannels;
-		aafInt32				expLong;
-		aafRational_t   		expRational;
-	} operand;
-}               aafAudioMemOp_t;
+
+    aafAudioFmtOpcode_t     opcode;
+    [switch_is(opcode)] union
+    {
+        [case(kAAFSampleFormat)]
+			aafAudioSampleType_t	format;	/* OffsetBinary or SignedMagnitude */
+        [case(kAAFSampleSize)]
+			aafInt16           		sampleSize;
+        [case(kAAFSampleRate)]
+			aafRational_t   		sampleRate;
+        [case(kAAFNumChannels)]
+			aafInt16				numChannels;
+        [case(kAAFExpLong)]
+			aafInt32				expLong;
+        [case(kAAFExpRational)]
+			aafRational_t   		expRational;
+        [default] ;
+    } ;
+
+} aafAudioMemOp_t;
+AD_CPP_QUOTE(#endif)
+AD_CPP_QUOTE(//)
+AD_CPP_QUOTE(typedef struct)
+AD_CPP_QUOTE({)
+AD_CPP_QUOTE(\	aafAudioFmtOpcode_t opcode;)
+AD_CPP_QUOTE(\	union)
+AD_CPP_QUOTE(\	{)
+AD_CPP_QUOTE(\	    aafAudioSampleType_t	format;	/* OffsetBinary or SignedMagnitude */)
+AD_CPP_QUOTE(\		aafInt16           		sampleSize;)
+AD_CPP_QUOTE(\		aafRational_t   		sampleRate;)
+AD_CPP_QUOTE(\		aafInt16				numChannels;)
+AD_CPP_QUOTE(\		aafInt32				expLong;)
+AD_CPP_QUOTE(\		aafRational_t   		expRational;)
+AD_CPP_QUOTE(\	} operand;)
+AD_CPP_QUOTE(\} aafAudioMemOp_t;)
 
 AD_CPP_QUOTE(/* Typedefs specific to edgecode and timecode */)
 typedef enum
@@ -608,7 +681,8 @@ typedef enum
 	kEtNull = 0, 
 	kEtKeycode, 
 	kEtEdgenum4, 
-	kEtEdgenum5
+	kEtEdgenum5,
+	kEtHeaderSize = 8
 } aafEdgeType_t;
 
 typedef enum
@@ -639,12 +713,14 @@ typedef struct
 	aafUInt16		fps;	/* frames per second */
 } aafTimecode_t;
 
+typedef aafUInt8 aafEdgecodeHeader_t[kEtHeaderSize];
+
 typedef struct
 {
 	aafFrameOffset_t   startFrame;
 	aafFilmType_t   filmKind;
 	aafEdgeType_t codeFormat;
-	char			header[8];
+	aafEdgecodeHeader_t header;
 } aafEdgecode_t;
 
 AD_CPP_QUOTE(/*** Types for clips ***/)
@@ -655,21 +731,6 @@ typedef struct
 	aafPosition_t   startTime;
 } aafSourceRef_t;
 
-// TomR: The following struct needs to be converted into its own non-persistent AAF object
-// (not an AAFObject subclass).
-// typedef struct
-// {
-//   AD_AAFTYPES(AAFMob) *	mob;
-//   aafTrackID_t mobTrackID;
-//   aafPosition_t position;
-//   aafRational_t editrate;
-//   aafLength_t minLength;
-//   AD_AAFTYPES(AAFPulldown) *		filmTapePdwn;
-//   aafInt32			filmTapePhase;
-//   AD_AAFTYPES(AAFPulldown) *		tapeFilmPdwn;
-//   aafInt32			tapeFilmPhase;
-//   AD_AAFTYPES(AAFEffect) *		effeObject;
-// } aafFindSourceInfo_t;
 
 typedef struct
 {
@@ -720,19 +781,45 @@ typedef enum
 	kByMediaCrit
 } aafSearchTag_t;
 
-typedef struct
+
+AD_CPP_QUOTE(#if 0)
+typedef struct _aafSearchCrit_t
 {
-	aafSearchTag_t     searchTag;
-	union 
-	{
-		aafUID_t        mobID;		// shouldn't this be a pointer?
-		aafMobKind_t    mobKind;
-		aafString_t       *name;
-		aafClassID_t      objClass;	// shouldn't this be a pointer?
-		aafUID_t		 datadef;	// shouldn't this be a pointer?
-		aafCriteriaType_t mediaCrit;
-	} tags;
+
+    aafSearchTag_t     searchTag;
+    [switch_is(searchTag)] union
+    {
+        [case(kByMobID)]
+			aafUID_t mobID;		// shouldn't this be a pointer?
+        [case(kByMobKind)]
+			aafMobKind_t mobKind;
+        [case(kByName)]
+			aafString_t *name;
+        [case(kByClass)]
+			aafClassID_t objClass;	// shouldn't this be a pointer?
+        [case(kByDatakind)]
+			aafUID_t datadef;	// shouldn't this be a pointer?
+        [case(kByMediaCrit)]
+			aafCriteriaType_t mediaCrit;
+        [default] ;
+    } ;
+
 } aafSearchCrit_t;
+AD_CPP_QUOTE(#endif)
+AD_CPP_QUOTE(//)
+AD_CPP_QUOTE(typedef struct)
+AD_CPP_QUOTE({)
+AD_CPP_QUOTE(\    aafSearchTag_t     searchTag;)
+AD_CPP_QUOTE(\    union)
+AD_CPP_QUOTE(\    {)
+AD_CPP_QUOTE(\        aafUID_t        mobID;		// shouldn't this be a pointer?)
+AD_CPP_QUOTE(\        aafMobKind_t    mobKind;)
+AD_CPP_QUOTE(\        aafString_t       *name;)
+AD_CPP_QUOTE(\        aafClassID_t      objClass;	// shouldn't this be a pointer?)
+AD_CPP_QUOTE(\        aafUID_t		 datadef;	// shouldn't this be a pointer?)
+AD_CPP_QUOTE(\        aafCriteriaType_t mediaCrit;)
+AD_CPP_QUOTE(\    } tags;)
+AD_CPP_QUOTE(} aafSearchCrit_t;)
 
 
 
