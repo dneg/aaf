@@ -31,6 +31,10 @@
 
 #include "OMStreamProperty.h"
 
+  // @mfunc Constructor.
+  //   @tcarg class | Element | The type of an <c OMStreamProperty> element.
+  //   @parm The property id.
+  //   @parm The name of this <c OMStreamProperty>.
 template <typename Element>
 OMStreamProperty<Element>::OMStreamProperty(const OMPropertyId propertyId,
                                             const char* name)
@@ -38,11 +42,20 @@ OMStreamProperty<Element>::OMStreamProperty(const OMPropertyId propertyId,
 {
 }
 
+  // @mfunc Destructor.
+  //   @tcarg class | Element | The type of an <c OMStreamProperty> element.
 template <typename Element>
 OMStreamProperty<Element>::~OMStreamProperty(void)
 {
 }
 
+  // @mfunc Read <p elementCount> <p Element>s, starting at <p index>,
+  //        from this <c OMStreamProperty> into <p elements>.
+  //   @tcarg class | Element | The type of an <c OMStreamProperty> element.
+  //   @parm The index from which to read the elements.
+  //   @parm The element count.
+  //   @parm The elements.
+  //   @this const
 template <typename Element>
 void OMStreamProperty<Element>::readElements(OMUInt64 index,
                                              OMUInt32 count,
@@ -59,6 +72,12 @@ void OMStreamProperty<Element>::readElements(OMUInt64 index,
   readElements(count, elements);
 }
 
+  // @mfunc Write <p elementCount> <p Element>s, starting at <p index>,
+  //        to this <c OMStreamProperty> from <p elements>.
+  //   @tcarg class | Element | The type of an <c OMStreamProperty> element.
+  //   @parm The index at which to write the elements.
+  //   @parm The element count.
+  //   @parm The elements.
 template <typename Element>
 void OMStreamProperty<Element>::writeElements(OMUInt64 index,
                                               OMUInt32 elementCount,
@@ -73,6 +92,12 @@ void OMStreamProperty<Element>::writeElements(OMUInt64 index,
   writeElements(elementCount, elements);
 }
 
+  // @mfunc Read a single <p Element>, at <p index>,
+  //        from this <c OMStreamProperty> into <p element>.
+  //   @tcarg class | Element | The type of an <c OMStreamProperty> element.
+  //   @parm The index from which to read the element.
+  //   @parm The element.
+  //   @this const
 template <typename Element>
 void OMStreamProperty<Element>::readElement(OMUInt64 index,
                                             Element* element) const
@@ -85,6 +110,11 @@ void OMStreamProperty<Element>::readElement(OMUInt64 index,
   readElements(index, 1, element);
 }
 
+  // @mfunc Write a single <p Element>s, at <p index>,
+  //        to this <c OMStreamProperty> from <p element>.
+  //   @tcarg class | Element | The type of an <c OMStreamProperty> element.
+  //   @parm The index at which to write the element.
+  //   @parm The element.
 template <typename Element>
 void OMStreamProperty<Element>::writeElement(OMUInt64 index,
                                              const Element* element)
@@ -96,6 +126,12 @@ void OMStreamProperty<Element>::writeElement(OMUInt64 index,
   writeElements(index, 1, element);
 }
 
+  // @mfunc Read <p elementCount> <p Element>s from the current position in
+  //        this <c OMStreamProperty> into <p elements>.
+  //   @tcarg class | Element | The type of an <c OMStreamProperty> element.
+  //   @parm The element count.
+  //   @parm The elements.
+  //   @this const
 template <typename Element>
 void OMStreamProperty<Element>::readElements(OMUInt32 elementCount,
                                              Element* elements) const
@@ -114,6 +150,11 @@ void OMStreamProperty<Element>::readElements(OMUInt32 elementCount,
   POSTCONDITION("All bytes read", actualByteCount == byteCount);
 }
 
+  // @mfunc Write <p elementCount> <p Element>s to the current position in
+  //        this <c OMStreamProperty> from <p elements>.
+  //   @tcarg class | Element | The type of an <c OMStreamProperty> element.
+  //   @parm The element count.
+  //   @parm The elements.
 template <typename Element>
 void OMStreamProperty<Element>::writeElements(OMUInt32 elementCount,
                                               const Element* elements)
@@ -133,6 +174,11 @@ void OMStreamProperty<Element>::writeElements(OMUInt32 elementCount,
   POSTCONDITION("All bytes written", actualByteCount == byteCount);
 }
 
+  // @mfunc Read a single <p Element> from the current position in
+  //        this <c OMStreamProperty> into <p element>.
+  //   @tcarg class | Element | The type of an <c OMStreamProperty> element.
+  //   @parm The element.
+  //   @this const
 template <typename Element>
 void OMStreamProperty<Element>::readElement(Element* element) const
 {
@@ -143,6 +189,10 @@ void OMStreamProperty<Element>::readElement(Element* element) const
   readElements(index(), 1, element);
 }
 
+  // @mfunc Write a single <p Element> to the current position in
+  //        this <c OMStreamProperty> from <p element>.
+  //   @tcarg class | Element | The type of an <c OMStreamProperty> element.
+  //   @parm The element.
 template <typename Element>
 void OMStreamProperty<Element>::writeElement(const Element* element)
 {
@@ -153,6 +203,11 @@ void OMStreamProperty<Element>::writeElement(const Element* element)
   writeElements(index(), 1, &element);
 }
 
+  // @mfunc Write <p elementCount> <p Element>s to the end of this
+  //        <c OMStreamProperty> from <p elements>.
+  //   @tcarg class | Element | The type of an <c OMStreamProperty> element.
+  //   @parm The element count.
+  //   @parm The elements.
 template <typename Element>
 void OMStreamProperty<Element>::appendElements(OMUInt32 elementCount,
                                                const Element* elements)
@@ -165,6 +220,10 @@ void OMStreamProperty<Element>::appendElements(OMUInt32 elementCount,
   writeElements(elementCount(), elementCount, elements);
 }
 
+  // @mfunc Write a single <p Element> to the end of
+  //        this <c OMStreamProperty>.
+  //   @tcarg class | Element | The type of an <c OMStreamProperty> element.
+  //   @parm The element.
 template <typename Element>
 void OMStreamProperty<Element>::appendElement(const Element element)
 {
@@ -173,6 +232,10 @@ void OMStreamProperty<Element>::appendElement(const Element element)
   writeElements(elementCount(), 1, &element);
 }
 
+  // @mfunc The index of the current <p Element>.
+  //   @tcarg class | Element | The type of an <c OMStreamProperty> element.
+  //   @rdesc The current index.
+  //   @this const
 template <typename Element>
 OMUInt64 OMStreamProperty<Element>::index(void) const
 {
@@ -184,6 +247,10 @@ OMUInt64 OMStreamProperty<Element>::index(void) const
   return result;
 }
 
+  // @mfunc Make the <p Element> at <p newIndex> the current one.
+  //   @tcarg class | Element | The type of an <c OMStreamProperty> element.
+  //   @parm The new value for the current index.
+  //   @this const
 template <typename Element>
 void OMStreamProperty<Element>::setIndex(const OMUInt64 newIndex) const
 {
@@ -193,6 +260,10 @@ void OMStreamProperty<Element>::setIndex(const OMUInt64 newIndex) const
   setPosition(newPosition);
 }
 
+  // @mfunc The count of <p Element>s in this <c OMStreamProperty>.
+  //   @tcarg class | Element | The type of an <c OMStreamProperty> element.
+  //   @rdesc The element count.
+  //   @this const
 template <typename Element>
 OMUInt64 OMStreamProperty<Element>::elementCount(void) const
 {
@@ -204,6 +275,10 @@ OMUInt64 OMStreamProperty<Element>::elementCount(void) const
   return result;
 }
 
+  // @mfunc Set the count of <p Element>s in this <c OMStreamProperty>
+  //        to <p newElementCount>.
+  //   @tcarg class | Element | The type of an <c OMStreamProperty> element.
+  //   @parm The new element count.
 template <typename Element>
 void OMStreamProperty<Element>::setElementCount(OMUInt64 newElementCount)
 {
