@@ -474,7 +474,10 @@ typedef struct {
   OMUInt16 _uDllVersion;
   OMUInt16 _uByteOrder;
   OMUInt16 _uSectorShift;
-  OMUInt8 _padding[512 - 32]; // Other uninteresting fields
+  OMUInt16 _uMiniSectorShift;
+  OMUInt8  _padding1[22]; // Uninteresting fields
+  OMUInt32 _ulMiniSectorCutoff;
+  OMUInt8  _padding2[452]; // Other uninteresting fields
 } StructuredStorageHeader;
 
 // Prototypes for local functions.
@@ -3585,7 +3588,7 @@ void printHeader(StructuredStorageHeader& header)
   char savedFill = cout.fill();
   cout.setf(ios::uppercase);
 
-  cout << "  Signature      = [";
+  cout << "  Signature                 = [";
   for (size_t i = 0; i < 8; i++) {
     cout << setfill('0') << setw(2) << hex << (unsigned int)header._abSig[i];
   }
@@ -3597,13 +3600,13 @@ void printHeader(StructuredStorageHeader& header)
 
   // File signature
   //
-  cout << "  File signature = ";
+  cout << "  File signature            = ";
   printClsid(header._clid, cout);
   cout << endl;
 
   // File version
   //
-  cout << "  File version   = "
+  cout << "  File version              = "
        << dec
        << header._uDllVersion
        << "."
@@ -3612,7 +3615,7 @@ void printHeader(StructuredStorageHeader& header)
 
   // Byte order
   //
-  cout << "  Byte order     = ";
+  cout << "  Byte order                = ";
   if (header._uByteOrder == 0xFFFE) {
     cout << "Intel";
   } else {
@@ -3622,12 +3625,25 @@ void printHeader(StructuredStorageHeader& header)
 
   // Sector shift/sector size
   //
-  cout << "  Sector shift   = "
+  cout << "  Sector shift              = "
        << dec
        << header._uSectorShift
        << " (sector size = "
        << (1 << header._uSectorShift)
        << " bytes)"
+       << endl;
+
+  cout << "  Mini-sector shift         = "
+       << dec
+       << header._uMiniSectorShift
+       << " (mini-sector size = "
+       << (1 << header._uMiniSectorShift)
+       << " bytes)"
+       << endl;
+
+  cout << "  Mini-secctor cutoff size  = "
+       << dec
+       << header._ulMiniSectorCutoff
        << endl;
 }
 
