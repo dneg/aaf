@@ -123,21 +123,64 @@ typedef OMUInt8                OMByte;
 typedef OMUInt8                OMCharacter;
 typedef OMUInt16               OMWideCharacter;
 
-typedef struct _OMClassId
-{
-    OMUInt32 Data1;
-    OMUInt16 Data2;
-    OMUInt16 Data3;
-    OMUInt8  Data4[8];
-} OMClassId;
-
-const OMClassId nullOMClassId = {0};
-
 typedef OMUInt32 OMPropertyId;
 
 typedef OMUInt16 OMByteOrder;
 
 const OMByteOrder littleEndian      = 0x4949; // 'II' for Intel
 const OMByteOrder bigEndian         = 0x4d4d; // 'MM' for Motorola
+
+#include <string.h>  // For use of memcmp() below.
+
+// A GUID in all but name.
+//
+struct OMObjectIdentification
+{
+    OMUInt32 Data1;
+    OMUInt16 Data2;
+    OMUInt16 Data3;
+    OMUInt8  Data4[8];
+};
+
+// OMObjectIdentification comparison operators.
+//
+inline bool operator == (const OMObjectIdentification& lhs,
+                         const OMObjectIdentification& rhs)
+{
+  return memcmp(&lhs, &rhs, sizeof(OMObjectIdentification)) == 0;
+}
+
+inline bool operator != (const OMObjectIdentification& lhs,
+                         const OMObjectIdentification& rhs)
+{
+  return memcmp(&lhs, &rhs, sizeof(OMObjectIdentification)) != 0;
+}
+
+inline bool operator < (const OMObjectIdentification& lhs,
+                        const OMObjectIdentification& rhs)
+{
+  return memcmp(&lhs, &rhs, sizeof(OMObjectIdentification)) < 0;
+}
+
+inline bool operator > (const OMObjectIdentification& lhs,
+                        const OMObjectIdentification& rhs)
+{
+  return memcmp(&lhs, &rhs, sizeof(OMObjectIdentification)) > 0;
+}
+
+// For identifying the class of a persisted object.
+//
+typedef OMObjectIdentification OMStoredObjectIdentification;
+
+// For uniquely identifying an object instance.
+//
+typedef OMObjectIdentification OMUniqueObjectIdentification;
+
+// For backwards compatibility - all instances of OMClassId should
+// eventually be replaced with OMStoredObjectIdentification.
+//
+typedef OMStoredObjectIdentification OMClassId;
+
+const OMClassId nullOMClassId = {0};
 
 #endif
