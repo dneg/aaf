@@ -213,11 +213,9 @@ AAFRESULT STDMETHODCALLTYPE
 {
 	ImplAAFTimecode *tccp = NULL;
 	ImplAAFSequence	*aSequ = NULL;
-	aafInt32         zeroL = 0L;
 	aafFrameLength_t maxLength;
-	AAFRESULT		 aafError = AAFRESULT_SUCCESS;
 	aafPosition_t	zeroPos;
-	aafLength_t		length, zeroLen;
+	aafLength_t		length;
 	ImplAAFTimelineMobSlot *	newSlot = NULL, *mobSlot = NULL;
 	aafBool			fullLength = kAAFFalse;
 	ImplAAFDictionary *pDictionary = NULL;
@@ -232,7 +230,6 @@ AAFRESULT STDMETHODCALLTYPE
 	  fullLength = kAAFFalse;
 	
 	CvtInt32toPosition(0, zeroPos);
-	CvtInt32toLength(0, zeroLen);
  	CvtInt32toLength(length32, length);
 
 	XPROTECT()
@@ -327,7 +324,6 @@ AAFRESULT STDMETHODCALLTYPE
 	ImplAAFFiller *     filler1= NULL, *filler2 = NULL;
 	ImplAAFSequence *ecSequence;
 	ImplAAFEdgecode *edgecodeClip;
-	AAFRESULT			aafError = AAFRESULT_SUCCESS;
 	aafPosition_t	startPos, zeroPos;
 	aafLength_t		length, zeroLen;
 	ImplAAFTimelineMobSlot *	newSlot;
@@ -685,7 +681,6 @@ AAFRESULT STDMETHODCALLTYPE
 	aafSlotID_t 		tmpSlotID;
 	ImplAAFMobSlot *	slot = NULL;
 	aafBool 			isOneToOne;
-	ImplAAFMobSlot * 	maskSlot = NULL;
 	ImplAAFPulldown 	*pdwn = NULL;
 	ImplAAFSequence *	sequence = NULL;
 	ImplAAFDictionary*	dict = NULL;
@@ -878,8 +873,6 @@ AAFRESULT ImplAAFSourceMob::FindTimecodeClip(
 {
 	ImplAAFSegment *		seg = NULL;
 	aafPosition_t			offset;
-	AAFRESULT				status = AAFRESULT_SUCCESS;
-	aafLength_t				zeroLen;
 	aafPosition_t			sequPos;
 	ImplAAFMobSlot			*slot = NULL;
  	ImplEnumAAFMobSlots		*slotIter = NULL;
@@ -889,7 +882,6 @@ AAFRESULT ImplAAFSourceMob::FindTimecodeClip(
 	XPROTECT()
 	{
 		CvtInt32toInt64(position, &offset);
-		CvtInt32toInt64(0, &zeroLen);
 		*tcStartPos = 0;
 		*result = NULL;
 		CHECK(GetSlots (&slotIter));
