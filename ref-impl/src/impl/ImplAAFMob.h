@@ -154,7 +154,7 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     SetModTime
-        (aafTimeStamp_t *  modTime);  //@parm [in, ref] New Modification Time
+        (const aafTimeStamp_t & modTime);  //@parm [in, ref] New Modification Time
 
   //****************
   // SetIdentity()
