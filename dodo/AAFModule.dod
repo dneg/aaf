@@ -8,7 +8,6 @@
 #startm .this-module 0
 AAFModule\
 #endm
-#c
 AD_IDL(\  //***********************************************************
   //
   // Global functions for AAF files:
