@@ -116,6 +116,26 @@ int compareWideString(const wchar_t* string1,
 
 int compareWideString(const wchar_t* string1, const wchar_t* string2);
 
+  // @func Convert a wide character string to a character string. Similar to
+  //       wcstombs() except that the result is always a properly terminated,
+  //       but possibly truncated, character string.
+  //   @parm The resulting character string.
+  //   @parm The wide character string to convert.
+  //   @parm The size, in characters, of the result buffer.
+void convertWideStringToString(char* result,
+                               const wchar_t* string,
+                               size_t resultSize);
+
+  // @func Convert a character string to a wide character string. Similar to
+  //       mbstowcs() except that the result is always a properly terminated,
+  //       but possibly truncated, character string.
+  //   @parm The resulting wide character string.
+  //   @parm The character string to convert.
+  //   @parm The size, in wide characters, of the result buffer.
+void convertStringToWideString(wchar_t* result,
+                               const char* string,
+                               size_t resultSize);
+
 char* convertWideString(const wchar_t* string);
 
 wchar_t* findWideCharacter(const wchar_t* string, wchar_t character);

@@ -219,6 +219,30 @@ int compareWideString(const wchar_t* string1, const wchar_t* string2)
   return result;
 }
 
+void convertWideStringToString(char* /* result */,
+                               const wchar_t* /* string */,
+                               size_t /* resultSize */)
+{
+  TRACE("convertWideStringToString");
+  ASSERT("Unimplemented code not reached", false);
+}
+
+void convertStringToWideString(wchar_t* result,
+                               const char* string,
+                               size_t resultSize)
+{
+  TRACE("convertStringToWideString");
+
+  PRECONDITION("Valid string", string != 0);
+  size_t length = strlen(string);
+  if (length > (resultSize - 1)) {
+    length = resultSize - 1;
+  }
+  size_t status  = mbstowcs(result, string, length);
+  ASSERT("Successful conversion", status != (size_t)-1);
+  result[length] = 0;
+}
+
 char* convertWideString(const wchar_t* string)
 {
   TRACE("convertWideString");
