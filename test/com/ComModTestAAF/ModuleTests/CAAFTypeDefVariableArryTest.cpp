@@ -94,10 +94,6 @@ static  aafMobID_t						TEST_MobID =
 static const aafSlotID_t				TEST_SLOT_ID = 7;
 #define									TEST_SLOT_NAME	L"Slot containing our VA Segment"
 
-//Additional test stuff ...
-static const	aafUID_t  TEST_some_int_id =
-{ 0x47240c30, 0x19d, 0x11d4, { 0x8e, 0x3d, 0x0, 0x90, 0x27, 0xdf, 0xca, 0x7c } };
-
 
 // i find this convenient to compare the IUNK's of two interfaces :
 template <class T1, class T2>
@@ -657,8 +653,6 @@ static HRESULT  ReadAAFFile(aafWChar *  pFileName )
 	IAAFHeader * pHeader = NULL;
 	IAAFDictionary * pDict = NULL;
 	aafBoolean_t  bFileOpen = kAAFFalse;
-	
-	IEnumAAFMobs*				pMobIter = NULL;
 	
 	try
 	{
