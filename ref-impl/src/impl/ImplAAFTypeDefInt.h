@@ -186,6 +186,14 @@ public:
 							const char * name) const;
 
 
+public:
+  // Overrides from ImplAAFTypeDef
+  virtual bool IsAggregatable () const;
+  virtual bool IsStreamable () const;
+  virtual bool IsFixedArrayable () const;
+  virtual bool IsVariableArrayable () const;
+  virtual bool IsStringable () const;
+
 private:
   // the size of this integer type in bytes
   OMFixedSizeProperty<aafUInt8> _size;

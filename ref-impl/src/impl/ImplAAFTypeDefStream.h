@@ -178,8 +178,14 @@ public:
                            size_t internalBytesSize,
                            OMByteOrder byteOrder) const;
 						   */
+
+public:
+  // Overrides from ImplAAFTypeDef
+  virtual bool IsAggregatable () const;
+  virtual bool IsStreamable () const;
+  virtual bool IsFixedArrayable () const;
+  virtual bool IsVariableArrayable () const;
+  virtual bool IsStringable () const;
 };
 
 #endif // ! __ImplAAFTypeDefStream_h__
-
-
