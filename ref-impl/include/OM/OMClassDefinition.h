@@ -30,7 +30,10 @@
 #define OMCLASSDEFINITION_H
 
 class OMClassDefinition {
-  // Nothing yet
+public:
+
+  virtual ~OMClassDefinition(void) {}
+
 };
 
 #endif
