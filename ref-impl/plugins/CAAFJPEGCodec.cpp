@@ -61,9 +61,10 @@ const wchar_t kDisplayName[] = L"AAF JPEG Codec";
 const wchar_t kDescription[] = L"Handles Standard JFIF/JPEG";
 
 const aafProductVersion_t kAAFPluginVersion = {1, 0, 0, 1, kVersionBeta};
-const aafRational_t		kDefaultRate = { 2997, 100 };
-const aafInt32			kDefaultSampleWidth = 24;
+const aafRational_t		kDefaultRate = { 30000, 1001 };
+const aafInt32			kDefaultPixelWidth = 24;
 const aafInt32			kDefaultNumCh = 1;
+const aafInt32			kDefaultComponentWidth = 8;
 
 //
 // Plugin Descriptor information
@@ -145,12 +146,12 @@ CAAFJPEGCodec::CAAFJPEGCodec (IUnknown * pControllingUnknown)
 	_alphaTransparency = kMinValueTransparent;
 	_gamma = NULL_RATIONAL;
 	_imageAlignmentFactor = 0;
-	_componentWidth = 0;
+	_componentWidth = kDefaultComponentWidth;
 	_horizontalSubsampling = 1;
 	_verticalSubsampling = 1;
 	_colorSiting = kCoSiting;
 	_blackReferenceLevel = 0;
-	_whiteReferenceLevel = 0;
+	_whiteReferenceLevel = 255;
 	_colorRange = 0;
 	_paddingBits = 0;
 	_imageHeight = 0;
@@ -164,8 +165,8 @@ CAAFJPEGCodec::CAAFJPEGCodec (IUnknown * pControllingUnknown)
 	_sampleIndex = NULL;
 	_pixelFormat = kColorSpaceRGB;
 	_fieldDominance = kNoDominant;
-	_memBitsPerPixel = 0;
-	_bitsPerPixelAvg = 0;
+	_memBitsPerPixel = kDefaultPixelWidth;
+	_bitsPerPixelAvg = kDefaultPixelWidth;
 	_memBytesPerSample = 0;
 	_bitsPerSample = 0;
 	_numberOfSamples = 0;
@@ -316,6 +317,7 @@ HRESULT STDMETHODCALLTYPE
 
 		// Return a reference to our initialized definition object.
 		*def = obj; // reference count already incremented, we do not need to call AddRef().
+		obj = NULL;
 	}
 	catch (HRESULT& rhr)
 	{
@@ -396,6 +398,7 @@ HRESULT STDMETHODCALLTYPE
 		pLoc = NULL;
 
 		*descPtr = desc; // reference count already incremented, we do not need to call AddRef()
+		desc = NULL;
 	}
 	catch (HRESULT& rhr)
 	{
@@ -534,7 +537,7 @@ HRESULT STDMETHODCALLTYPE
 	else
 		*pNumChannels = 0;
 	
-	return AAFRESULT_NOT_IMPLEMENTED;
+	return AAFRESULT_SUCCESS;
 }
 
 HRESULT STDMETHODCALLTYPE
@@ -712,7 +715,7 @@ HRESULT STDMETHODCALLTYPE
 	
 	if (NULL == unk || NULL == stream || 0 == numParms   || NULL == createParms)
 		return AAFRESULT_NULL_PARAM;
-	else if (0 < numParms || NULL == createParms->mediaKind)
+	else if (0 >= numParms || NULL == createParms->mediaKind)
 		return AAFRESULT_INVALID_PARAM;
 
 
@@ -945,6 +948,10 @@ HRESULT STDMETHODCALLTYPE
 		SetNumberOfSamples(samples);
 		checkResult(ReadSampleIndex());
 
+		// Reset the position to the start of the data so that the next read will 
+		// be from the correct position.
+		checkResult(Seek(0));
+
 		// Initialize the positioning indecies.
 		_startingIndex = static_cast<aafUInt32>(samples - 1);
 
@@ -1052,9 +1059,9 @@ HRESULT STDMETHODCALLTYPE
 			}
 			
 
-			// Make sure that we are already at the end of the stream.
-			if (_currentIndex < _writeIndex)
-				Seek(_writeIndex);
+//			// Make sure that we are already at the end of the stream.
+//			if (_currentIndex < _writeIndex)
+//				Seek(_writeIndex);
 
 			for (n = 0; n < xferBlock[0].numSamples; n++)
 			{
@@ -1221,7 +1228,8 @@ HRESULT STDMETHODCALLTYPE
 		checkExpression(NULL != _sampleIndex, AAFRESULT_NOFRAMEINDEX);
 		// Validate the index.
 		checkExpression(sampleFrame < _numberOfSamples, AAFRESULT_BADFRAMEOFFSET);
-		checkExpression(sampleFrame == _numberOfSamples && kMediaOpenAppend == _openMode, AAFRESULT_BADFRAMEOFFSET);
+		if (kMediaOpenAppend == _openMode)
+			checkExpression(sampleFrame == _numberOfSamples, AAFRESULT_BADFRAMEOFFSET);
 		
 		// Get the corresponding offset from the sample index.
 		aafUInt32 index = static_cast<aafUInt32>(sampleFrame);
@@ -1247,16 +1255,69 @@ HRESULT STDMETHODCALLTYPE
 }
 
 
+void CAAFJPEGCodec::UpdateDescriptor (CAAFJPEGDescriptorHelper& descriptorHelper)
+{
+	checkResult(descriptorHelper.SetLength(_numberOfSamples));
+	//	checkResult(descriptorHelper.SetIsInContainer(_isInAAFContainer));
+	checkResult(descriptorHelper.SetSampleRate(&_sampleRate));
+	//	checkResult(descriptorHelper.SetContainerFormat(_containerFormat));
+	checkResult(descriptorHelper.SetCompression(&_codecID));
+	checkResult(descriptorHelper.SetStoredView(_storedHeight, _storedWidth));
+	checkResult(descriptorHelper.SetSampledView(_sampledHeight, _sampledWidth, _sampledXOffset, _sampledYOffset));
+	checkResult(descriptorHelper.SetDisplayView(_displayHeight, _displayWidth, _displayXOffset, _displayYOffset));
+	checkResult(descriptorHelper.SetFrameLayout(_frameLayout));
+	checkResult(descriptorHelper.SetVideoLineMap(_videoLineMapSize, _videoLineMap));
+	checkResult(descriptorHelper.SetImageAspectRatio(_imageAspectRatio));
+	checkResult(descriptorHelper.SetAlphaTransparency(_alphaTransparency));
+//	checkResult(descriptorHelper.SetGamma(_gamma));
+	checkResult(descriptorHelper.SetImageAlignmentFactor(_imageAlignmentFactor));
+	checkResult(descriptorHelper.SetComponentWidth(_componentWidth));
+	checkResult(descriptorHelper.SetHorizontalSubsampling(_horizontalSubsampling));
+	checkResult(descriptorHelper.SetColorSiting(_colorSiting));
+	checkResult(descriptorHelper.SetBlackReferenceLevel(_blackReferenceLevel));
+	checkResult(descriptorHelper.SetWhiteReferenceLevel(_whiteReferenceLevel));
+	checkResult(descriptorHelper.SetColorRange(_colorRange));
+	checkResult(descriptorHelper.SetPaddingBits(_paddingBits));
+}
+
+
 HRESULT STDMETHODCALLTYPE
     CAAFJPEGCodec::CompleteWrite (IAAFSourceMob *fileMob)
 {
+	HRESULT hr = S_OK;
 
+	try
+	{
+		// Flush the jpeg data source (if necessary)
 
-	// Flush the jpeg data source
+		// Write the sample index onto the end of the stream.
+		checkResult(WriteSampleIndex());
 
-	// Write the sample index onto the end of the stream.
+		// Make sure the descriptor information is up-to-date.
+		UpdateDescriptor(_descriptorHelper); // throw HRESULT
 
-	return AAFRESULT_NOT_IMPLEMENTED;
+		if (NULL != fileMob)
+		{	// Initialize the descriptor helper:
+			CAAFJPEGDescriptorHelper descriptorHelper;
+			checkResult(descriptorHelper.Initialize(fileMob));
+
+			// Make sure the descriptor information is up-to-date.
+			UpdateDescriptor(descriptorHelper); // throw HRESULT
+		}
+
+	}
+	catch (HRESULT& rhr)
+	{
+		hr = rhr; // return thrown error code.
+	}
+	catch (...)
+	{
+		// We CANNOT throw an exception out of a COM interface method!
+		// Return a reasonable exception code.
+		hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+	}
+
+	return hr;
 }		
 
 
@@ -1315,9 +1376,9 @@ HRESULT STDMETHODCALLTYPE
 		checkExpression(_currentIndex >= _startingIndex, AAFRESULT_NOT_WRITEABLE);
 		checkAssertion(_currentIndex <= _writeIndex);
 
-		// Make sure that we are already at the end of the stream.
-		if (_currentIndex < _writeIndex)
-			Seek(_writeIndex);
+//		// Make sure that we are already at the end of the stream.
+//		if (_currentIndex < _writeIndex)
+//			checkResult(Seek(_writeIndex));
 
 
 		// We should only be able to write to the end of the stream. This should be 
@@ -1362,11 +1423,14 @@ HRESULT STDMETHODCALLTYPE
 	// Validate input parameters:
 	// For now we only support writing a single sample since it would be too time consuming
 	// to scan for SOI and EOI markers...
-	if (0 == nSamples || NULL == buffer || 0 == buflen)
+	if (0 == nSamples || NULL == buffer || 0 == buflen || 
+		  NULL == bytesRead || NULL == samplesRead)
 		return AAFRESULT_NULL_PARAM;
 	else if (1 != nSamples)
 		return AAFRESULT_ONESAMPLEWRITE;
 
+	*bytesRead = 0;
+	*samplesRead = 0;
 
 	try
 	{
@@ -1378,11 +1442,13 @@ HRESULT STDMETHODCALLTYPE
 		
 		// Make sure the given buffer is large enougth to hold the current sample
 		aafUInt32 sampleSize = static_cast<aafUInt32>(_sampleIndex[_currentIndex + 1] - _sampleIndex[_currentIndex]);
-		checkExpression(buflen < sampleSize, AAFRESULT_SMALLBUF);
+		checkExpression(buflen >= sampleSize, AAFRESULT_SMALLBUF);
 
 		aafPosition_t offset;
 		checkResult(_stream->GetPosition(&offset));
-		checkResult(_stream->Read(buflen, buffer, bytesRead));
+		checkResult(_stream->Read(sampleSize, buffer, bytesRead));
+
+		*samplesRead = 1; // we currently only support one sample reads...
 
 		// Update the current index.
 		SetCurrentIndex(_currentIndex + 1);
@@ -1596,7 +1662,7 @@ HRESULT STDMETHODCALLTYPE
 				checkExpression(bytesRead == sizeof(param.operand.expInt16), AAFRESULT_INVALID_PARM_SIZE);
 				
 				// We currently only support 8 bit components...
-				checkExpression(8 == param.operand.expInt16, AAFRESULT_JPEGBASELINE); // only 8-bit supported
+				checkExpression(kDefaultComponentWidth == param.operand.expInt16, AAFRESULT_JPEGBASELINE); // only 8-bit supported
 				_componentWidth = param.operand.expInt16;
 			}
 			else if (EqualAUID(&kAAFCDCIColorSiting, &param.opcode))
@@ -1729,7 +1795,7 @@ HRESULT STDMETHODCALLTYPE
 			}
 			else if (EqualAUID(&kAAFCDCICompWidth, &param.opcode))
 			{	// We currently only support 8 bit components...
-				checkExpression(8 == _componentWidth, AAFRESULT_JPEGBASELINE); // only 8-bit supported
+				checkExpression(kDefaultComponentWidth == _componentWidth, AAFRESULT_JPEGBASELINE); // only 8-bit supported
 				param.operand.expInt16 = (aafInt16)_componentWidth;
 				checkResult(fmt->AddFormatSpecifier (kAAFCDCICompWidth, sizeof(param.operand.expRect), (aafDataBuffer_t)&param.operand.expInt16));
 			}
@@ -2472,7 +2538,7 @@ HRESULT CAAFJPEGCodec::ReadNumberOfSamples(
 		memset(&trailer, 0, sizeof(trailer));
 
 		// make sure the last 8 bytes match our expected end marker.
-		offset = streamSize - 1 - kAAFJPEG_MarkerSize;
+		offset = streamSize - kAAFJPEG_MarkerSize;
 		checkResult(stream->Seek(offset));
 		checkResult(stream->Read(kAAFJPEG_MarkerSize, trailer.endMarker, &bytesRead));
 		checkAssertion(kAAFJPEG_MarkerSize == bytesRead);
@@ -2481,7 +2547,7 @@ HRESULT CAAFJPEGCodec::ReadNumberOfSamples(
 		
 		// Read the 8 bytes size of the trailer. This is always in big-endian just like 
 		// the JPEG stream...
-		offset = streamSize - 1 - (kAAFJPEG_MarkerSize + sizeof(aafLength_t));
+		offset = streamSize - (kAAFJPEG_MarkerSize + sizeof(aafLength_t));
 		checkResult(stream->Seek(offset));
 		checkResult(stream->Read(sizeof(aafLength_t), (aafDataBuffer_t)&trailer.sizeOfTrailer, &bytesRead));
 		checkAssertion(sizeof(aafLength_t) == bytesRead);
@@ -2491,7 +2557,7 @@ HRESULT CAAFJPEGCodec::ReadNumberOfSamples(
 
 		// Make sure that there are enough bytes in the stream to read the rest of the trailer.
 		checkExpression(streamSize >= trailer.sizeOfTrailer, AAFRESULT_NOFRAMEINDEX);
-		offset = streamSize - 1 - trailer.sizeOfTrailer;
+		offset = streamSize - trailer.sizeOfTrailer;
 		checkResult(stream->Seek(offset));
 
 		// Read and validate the startMaker...
@@ -2508,6 +2574,12 @@ HRESULT CAAFJPEGCodec::ReadNumberOfSamples(
 			AAFByteSwap64((aafInt64 *)&trailer.numberOfSamples);
 
 		numberOfSamples = trailer.numberOfSamples;
+
+		// Set the position to the end of the essence data so that we 
+		// are ready to read the sample index.
+		offset = streamSize - trailer.sizeOfTrailer;
+		offset -= numberOfSamples * sizeof(aafPosition_t);
+		checkResult(stream->Seek(offset));
 	}
 	catch (HRESULT& rhr)
 	{
@@ -2661,7 +2733,7 @@ HRESULT CAAFJPEGCodec::ReadSampleIndex()
 
 HRESULT CAAFJPEGCodec::WriteSampleIndex()
 {
-	HRESULT hr = HRESULT_NOT_IMPLEMENTED;
+	HRESULT hr = S_OK;
 
 	
 	try
