@@ -956,10 +956,18 @@ AAFRESULT ImplAAFSequence::CheckTypeSemantics( ImplAAFEvent* pEvent )
 	// get with times here and use type_info equality to verify
 	// concrete type identity.
 
+// Ugly workaround for x86 optimisation bug in gcc-3.3.x
+// The bug is not present in gcc-3.2.x or gcc-3.4.x
+#if defined(__i386__) && __GNUC__ == 3 && __GNUC_MINOR__ == 3
+	if ( strcmp(typeid(*GetLastComponent()).name(),
+				typeid(*pEvent).name() != 0) ) {
+		return AAFRESULT_EVENT_SEMANTICS;
+	}
+#else
 	if ( typeid( *GetLastComponent() ) != typeid( *pEvent) ) {
 		return AAFRESULT_EVENT_SEMANTICS;
 	}
-
+#endif
 	return AAFRESULT_SUCCESS;
 }
 
