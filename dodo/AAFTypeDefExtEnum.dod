@@ -28,7 +28,7 @@ AD_XMETHOD2(Initialize,
 
 			[in],
 			objPass,
-			wchar_t *,
+			aafCharacter *,
 			pTypeName,
 			friendly name of this type definition,
 
@@ -111,7 +111,7 @@ AD_XMETHOD3(GetNameFromValue,
 
 			[out\, size_is\(bufSize\)\, string],
 			objPass,
-			wchar_t *,
+			aafCharacter *,
 			pName,
 			buffer into which the element name is written,
 
@@ -191,7 +191,7 @@ AD_XMETHOD3(GetNameFromAUID,
 
 			[out\, size_is\(bufSize\)\, string],
 			objPass,
-			wchar_t *,
+			aafCharacter *,
 			pName,
 			buffer into which the element name is written,
 
@@ -323,7 +323,7 @@ AD_XMETHOD2(AppendElement,
 
 			[in],
 			objPass,
-			wchar_t *,
+			aafCharacter *,
 			pName,
 			name of appended element,
 

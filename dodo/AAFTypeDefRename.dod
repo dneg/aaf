@@ -44,7 +44,7 @@ AD_XMETHOD3(Initialize,
 
 			[in\, string],
 			objPass,
-			wchar_t *,
+			aafCharacter *,
 			pTypeName,
 			friendly name of this type definition,
 
@@ -103,7 +103,7 @@ AD_XMETHOD2(GetName,
 
 			[out\, size_is\(bufSize\)\, string],
 			objPass,
-			wchar_t *,
+			aafCharacter *,
 			pName,
 			buffer into which the name is written,
 

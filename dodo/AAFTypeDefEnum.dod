@@ -54,7 +54,7 @@ AD_XMETHOD6(Initialize,
 
 			[in],
 			objPass,
-			wchar_t *,
+			aafCharacter *,
 			pTypeName,
 			friendly name of this type definition,
 
@@ -160,7 +160,7 @@ AD_XMETHOD3(GetNameFromValue,
 
 			[out\, size_is\(bufSize\)\, string],
 			objPass,
-			wchar_t *,
+			aafCharacter *,
 			pName,
 			buffer into which the element name is written,
 
@@ -240,7 +240,7 @@ AD_XMETHOD3(GetNameFromInteger,
 
 			[out\, size_is\(bufSize\)\, string],
 			objPass,
-			wchar_t *,
+			aafCharacter *,
 			pName,
 			buffer into which the element name is written,
 
