@@ -72,6 +72,11 @@ bool AxDictionary::isKnownOperationDef( const aafUID_t& opId )
 	return result;
 }
 
+void AxDictionary::RegisterClassDef( IAAFClassDefSP spIaafClassDef )
+{
+	CHECK_HRESULT( _spIaafDictionary->RegisterClassDef( spIaafClassDef ) );
+}
+
 IAAFTypeDefSP AxDictionary::LookupTypeDef( const aafUID_t& typeId )
 {
 	IAAFTypeDefSP spTypeDef;

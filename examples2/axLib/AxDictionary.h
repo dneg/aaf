@@ -34,6 +34,8 @@ public:
 	bool isKnownTypeDef( const aafUID_t& typeId );
 	bool isKnownOperationDef( const aafUID_t& typeId );
 	
+	void RegisterClassDef( IAAFClassDefSP spIaafClassDef );
+
 	IAAFTypeDefSP LookupTypeDef( const aafUID_t& typeId );
 	IAAFClassDefSP LookupClassDef( const aafUID_t& classId );
 	IAAFDataDefSP LookupDataDef( const aafUID_t& dataDefId );
