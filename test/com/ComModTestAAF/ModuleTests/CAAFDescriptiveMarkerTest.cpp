@@ -36,7 +36,35 @@
 #include <AAFStoredObjectIDs.h>
 
 #include <iostream>
+
+#include <string.h>
+
 using namespace std;
+
+const aafUID_t TestDesciptiveFrameworkClassID = 
+{ 0x023a1cae, 0xdc16, 0x4db9, { 0x95, 0xf9, 0x43, 0xd0, 0x56, 0xca, 0xd3, 0x78 } };
+
+static void RegisterDescriptiveTestFramework( IAAFSmartPointer<IAAFDictionary>& pDict )
+{
+  using namespace mtc;
+
+  // Create a new class definition for the TestDescriptiveFramework.
+
+  IAAFSmartPointer<IAAFClassDef> pClassDef;
+  CheckResult( pDict->CreateMetaInstance( AUID_AAFClassDef, IID_IAAFClassDef,
+					  (IUnknown**)&pClassDef ) );
+
+  IAAFSmartPointer<IAAFClassDef> pBaseClassDef;
+  CheckResult( pDict->LookupClassDef( AUID_AAFDescriptiveFramework, &pBaseClassDef ) );
+
+  CheckResult( pClassDef->Initialize( TestDesciptiveFrameworkClassID,
+				      pBaseClassDef,
+				      L"TestDescriptiveFramework",
+				      kAAFTrue ) );
+
+  CheckResult( pDict->RegisterClassDef( pClassDef ) );
+}
+
 
 static HRESULT CreateAAFFile(aafWChar * pFileName)
 {
@@ -74,15 +102,16 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 								     0,
 								     &pNewSlot ));
 
+    // Attach a (concrete) descriptive framework object to the marker.
 
-    // FIXME - test framework set here.
-#if 0
+    RegisterDescriptiveTestFramework( filePointers.pDictionary );
+
     IAAFSmartPointer<IAAFDescriptiveFramework> pDescFramework;
-    CheckResult( filePointers.pDictionary->CreateInstance( AUID_AAFDescriptiveFramework,
+    CheckResult( filePointers.pDictionary->CreateInstance( TestDesciptiveFrameworkClassID,
 							   IID_IAAFDescriptiveFramework,
 							   (IUnknown**)&pDescFramework ) );
     CheckResult( pDescMarker->SetDescriptiveFramework( pDescFramework ) );
-#endif
+
 
     CheckResult( filePointers.pFile->Save() );
     CheckResult( filePointers.pFile->Close() );
@@ -102,6 +131,8 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
     SimpleFilePointers filePointers;
     ReadSimpleAAFFile( pFileName, &filePointers );
 
+    RegisterDescriptiveTestFramework( filePointers.pDictionary );
+
     // Get slot 2 from the composition and verify that that attached
     // segment is a DescriptiveMarker.
     
@@ -113,7 +144,24 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
     IAAFSmartPointer<IAAFDescriptiveMarker> pDescMarker;
     CheckResult( pSeg->QueryInterface( IID_IAAFDescriptiveMarker, (void**)&pDescMarker ) );
     
-    // FIXME - Test framework get here.
+    IAAFSmartPointer<IAAFDescriptiveFramework> pDescFramework;
+    CheckResult( pDescMarker->GetDescriptiveFramework( &pDescFramework ) );
+
+    IAAFSmartPointer<IAAFObject> pDescFrameworkAsObj;
+    CheckResult( pDescFramework->QueryInterface( IID_IAAFObject, (void**)&pDescFrameworkAsObj ) );
+    
+    IAAFSmartPointer<IAAFClassDef> pClassDef;
+    CheckResult( pDescFrameworkAsObj->GetDefinition( &pClassDef ) );
+
+    IAAFSmartPointer<IAAFMetaDefinition> pMetaDef;
+    CheckResult( pClassDef->QueryInterface( IID_IAAFMetaDefinition, (void**)&pMetaDef ) );
+
+    aafUID_t auid;
+
+    CheckResult( pMetaDef->GetAUID( &auid ) );
+
+    CheckExpression( memcmp( &auid, &TestDesciptiveFrameworkClassID, sizeof(auid) ) == 0,
+		     AAFRESULT_TEST_FAILED );
 
     CheckResult( filePointers.pFile->Close() );
   }
@@ -125,12 +173,12 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
   return AAFRESULT_SUCCESS;
 }
 
-// Required function prototype.
-extern "C" HRESULT CAAFDescriptiveMarker_test(testMode_t mode);
-HRESULT CAAFDescriptiveMarker_test(testMode_t mode)
+
+HRESULT DescriptiveMarkerAndFrameworkTest( aafCharacter* pFileName,
+					   aafCharacter* pTestName,
+					   testMode_t mode )
 {
   HRESULT hr = AAFRESULT_SUCCESS;
-  aafCharacter* pFileName = L"AAFDescriptiveMarkerTest.aaf";
 
   try {
     if ( kAAFUnitTestReadWrite == mode ) {
@@ -145,10 +193,20 @@ HRESULT CAAFDescriptiveMarker_test(testMode_t mode)
     }
   }
   catch (...) {
-    cerr << "CAAFDescriptiveMarker_test...Caught general C++"
+    cerr << pTestName << L"...Caught general C++"
 	 << " exception!" << endl; 
     hr = AAFRESULT_TEST_FAILED;
   }
 
   return hr;
+}
+
+
+// Required function prototype.
+extern "C" HRESULT CAAFDescriptiveMarker_test(testMode_t mode);
+HRESULT CAAFDescriptiveMarker_test(testMode_t mode)
+{
+  return DescriptiveMarkerAndFrameworkTest( L"AAFDescriptiveMarkerTest.aaf",
+					    L"CAAFDescriptiveMarker_test",
+					    mode );
 }

@@ -26,24 +26,33 @@
 //
 //=---------------------------------------------------------------------=
 
-
-
-
-
-
-
-
-
+#include <ModuleTest.h>
 
 #include "AAFTypes.h" //Use #include "AAF.h" for functional module test.
 #include "AAFResult.h"
 
-// Required function prototype.
-extern "C" HRESULT CAAFDescriptiveFramework_test(void);
+// Test routine defined in CAAFDescriptiveMarkerTest.cpp
+HRESULT DescriptiveMarkerAndFrameworkTest( aafCharacter* pFileName,
+					   aafCharacter* pTestName,
+					   testMode_t mode );
 
-HRESULT CAAFDescriptiveFramework_test()
+// Required function prototype.
+extern "C" HRESULT CAAFDescriptiveFramework_test(testMode_t mode);
+
+HRESULT CAAFDescriptiveFramework_test(testMode_t mode)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  // DescriptiveFramework is an abstract base class.  By itself, there
+  // is nothing to test other than that a concrete instance of a
+  // DescriptiveFramework can be correctly contained by a
+  // DescriptiveMarker.  This is tested in
+  // CAAFDescriptiveMarkerTest.cpp and there is little point in
+  // repeating the code here.  The test is re-executed here to ensure
+  // "ComModAAF AAFDescriptiveFramework" executes a meaningful test in
+  // the event it is run on its own.
+
+  return DescriptiveMarkerAndFrameworkTest( L"AAFDescriptiveFrameworkTest.aaf",
+					    L"CAAFDescriptiveFramework_test",
+					    mode );
 }
 
 
