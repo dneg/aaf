@@ -62,8 +62,8 @@
 static aafWChar *slotName = L"SLOT1";
 static aafInt32 fadeInLen  = 1000;
 static aafInt32 fadeOutLen = 2000;
-static aafFadeType_t fadeInType = kFadeLinearAmp;
-static aafFadeType_t fadeOutType = kFadeLinearPower;
+static aafFadeType_t fadeInType = kAAFFadeLinearAmp;
+static aafFadeType_t fadeOutType = kAAFFadeLinearPower;
 static aafSourceRef_t sourceRef; 
 
 
@@ -158,7 +158,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFClassDef *              pCDFiller = 0;
 	aafRational_t				videoRate = { 30000, 1001 };
 	aafMobID_t					tapeMobID, fileMobID, masterMobID;
-	aafTimecode_t				tapeTC = { 108000, kTcNonDrop, 30};
+	aafTimecode_t				tapeTC = { 108000, kAAFTcNonDrop, 30};
 	aafLength_t					fileLen = FILE1_LENGTH;
 	aafLength_t					fillLen = FILL_LENGTH;
 	aafLength_t					segLen = SEG_LENGTH;
@@ -176,7 +176,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	ProductInfo.productVersion.minor = 0;
 	ProductInfo.productVersion.tertiary = 0;
 	ProductInfo.productVersion.patchLevel = 0;
-	ProductInfo.productVersion.type = kVersionUnknown;
+	ProductInfo.productVersion.type = kAAFVersionUnknown;
 	ProductInfo.productVersionString = NULL;
 	ProductInfo.productID = NIL_UID;
 	ProductInfo.platform = NULL;
@@ -582,7 +582,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	// often get converted first so that the compositions come in without
 	// forward references.
 	// Get the total number of mobs in the file (should be four)
-	check(pHeader->CountMobs(kAllMob, &numMobs));
+	check(pHeader->CountMobs(kAAFAllMob, &numMobs));
 	if (4 != numMobs )
 	{
 		printf("***Wrong number of mobs in the file (was %ld should be %ld)\n",
@@ -591,12 +591,12 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 
 	printf("--------\n");
 	// Get the number of tape mobs in the file (should be one)
-	check(pHeader->CountMobs(kTapeMob, &numTapeMobs));
+	check(pHeader->CountMobs(kAAFTapeMob, &numTapeMobs));
 	if (1 == numTapeMobs )
 	{
 		printf("Found %ld Tape Mobs\n", numTapeMobs);
-		criteria.searchTag = kByMobKind;
-		criteria.tags.mobKind = kTapeMob;
+		criteria.searchTag = kAAFByMobKind;
+		criteria.tags.mobKind = kAAFTapeMob;
 		check(pHeader->GetMobs(&criteria, &pMobIter));
 		while(AAFRESULT_SUCCESS == pMobIter->NextOne(&pMob))
 		{
@@ -623,12 +623,12 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 
 	printf("--------\n");
 	// Get the number of file mobs in the file (should be one)
-	check(pHeader->CountMobs(kFileMob, &numFileMobs));
+	check(pHeader->CountMobs(kAAFFileMob, &numFileMobs));
 	if (1 == numFileMobs )
 	{
 		printf("Found %ld File Mobs\n", numFileMobs);
-		criteria.searchTag = kByMobKind;
-		criteria.tags.mobKind = kFileMob;
+		criteria.searchTag = kAAFByMobKind;
+		criteria.tags.mobKind = kAAFFileMob;
 		check(pHeader->GetMobs(&criteria, &pMobIter));
 		while(AAFRESULT_SUCCESS == pMobIter->NextOne(&pMob))
 		{
@@ -678,12 +678,12 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 
 	printf("--------\n");
 	// Get the number of master mobs in the file (should be one)
-	check(pHeader->CountMobs(kMasterMob, &numMasterMobs));
+	check(pHeader->CountMobs(kAAFMasterMob, &numMasterMobs));
 	if (1 == numMasterMobs )
 	{
 		printf("Found %ld Master Mobs\n", numMasterMobs);
-		criteria.searchTag = kByMobKind;
-		criteria.tags.mobKind = kMasterMob;
+		criteria.searchTag = kAAFByMobKind;
+		criteria.tags.mobKind = kAAFMasterMob;
 		check(pHeader->GetMobs(&criteria, &pMobIter));
 		while(AAFRESULT_SUCCESS == pMobIter->NextOne(&pMob))
 		{
@@ -710,14 +710,14 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 
 	printf("--------\n");
 	// Get the number of composition mobs in the file (should be one)
-	check(pHeader->CountMobs(kCompMob, &numCompMobs));
+	check(pHeader->CountMobs(kAAFCompMob, &numCompMobs));
 	if (1 == numCompMobs )
 	{
 		printf("Found %ld Composition Mobs\n", numCompMobs);
 
 		// Enumerate over all Composition Mobs
-		criteria.searchTag = kByMobKind;
-		criteria.tags.mobKind = kCompMob;
+		criteria.searchTag = kAAFByMobKind;
+		criteria.tags.mobKind = kAAFCompMob;
 		check(pHeader->GetMobs(&criteria, &pMobIter));
 		while (pMobIter && AAFRESULT_SUCCESS == pMobIter->NextOne(&pMob))
 		{
