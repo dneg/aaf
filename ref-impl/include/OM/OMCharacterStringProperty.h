@@ -36,6 +36,7 @@
   //   @tcarg class | CharacterType | The type of the characters that
   //                                  comprise the string.
   //   @base public | <c OMVariableSizeProperty>
+  //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 template <typename CharacterType>
 class OMCharacterStringProperty :
                                  public OMVariableSizeProperty<CharacterType> {

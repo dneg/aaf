@@ -26,6 +26,8 @@
 ************************************************************************/
 
 // @doc OMEXTERNAL
+// @author Tim Bingham | tjb | Avid Technology, Inc. |
+//         OMCharacterStringProperty
 #ifndef OMCHARACTERSTRINGPROPERTYT_H
 #define OMCHARACTERSTRINGPROPERTYT_H
 
