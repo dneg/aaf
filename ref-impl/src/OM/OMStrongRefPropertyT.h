@@ -167,19 +167,13 @@ void OMStrongReferenceProperty<ReferencedObject>::save(void) const
 {
   TRACE("OMStrongReferenceProperty<ReferencedObject>::save");
 
-  ASSERT("Valid property set", _propertySet != 0);
-  OMStorable* container = _propertySet->container();
-  ASSERT("Valid container", container != 0);
-  ASSERT("Container is persistent", container->persistent());
-
   // Write the index entry.
   //
-  OMStoredObject* s = container->store();
   const char* propertyName = name();
-  s->write(_propertyId,
-           _storedForm,
-           (void *)propertyName,
-           strlen(propertyName) + 1);
+  store()->write(_propertyId,
+                 _storedForm,
+                 (void *)propertyName,
+                 strlen(propertyName) + 1);
 
   _reference.save();
 
@@ -228,10 +222,7 @@ void OMStrongReferenceProperty<ReferencedObject>::restore(size_t externalSize)
   char* storageName = new char[externalSize];
   ASSERT("Valid heap pointer", storageName != 0);
 
-  OMStoredObject* store = _propertySet->container()->store();
-  ASSERT("Valid store", store != 0);
-
-  store->read(_propertyId, _storedForm, storageName, externalSize);
+  store()->read(_propertyId, _storedForm, storageName, externalSize);
   ASSERT("Consistent property size", externalSize == strlen(storageName) + 1);
   ASSERT("Consistent property name", strcmp(storageName, name()) == 0);
   delete [] storageName;

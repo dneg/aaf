@@ -69,13 +69,6 @@ void OMStrongReferenceVectorProperty<ReferencedObject>::save(void) const
 
   PRECONDITION("Optional property is present",
                                            IMPLIES(isOptional(), isPresent()));
-  ASSERT("Valid property set", _propertySet != 0);
-  OMStorable* container = _propertySet->container();
-  ASSERT("Valid container", container != 0);
-  ASSERT("Container is persistent", container->persistent());
-  OMStoredObject* s = container->store();
-
-  const char* propertyName = name();
 
   // create a vector index
   //
@@ -107,15 +100,16 @@ void OMStrongReferenceVectorProperty<ReferencedObject>::save(void) const
   // save the vector index
   //
   ASSERT("Valid vector index", index->isValid());
-  s->save(index, name());
+  store()->save(index, name());
   delete index;
 
   // make an entry in the property index
   //
-  s->write(_propertyId,
-           _storedForm,
-           (void *)propertyName,
-           strlen(propertyName) + 1);
+  const char* propertyName = name();
+  store()->write(_propertyId,
+                 _storedForm,
+                 (void *)propertyName,
+                 strlen(propertyName) + 1);
 
 }
 
@@ -168,17 +162,15 @@ void OMStrongReferenceVectorProperty<ReferencedObject>::restore(
   //
   char* propertyName = new char[externalSize];
   ASSERT("Valid heap pointer", propertyName != 0);
-  OMStoredObject* store = _propertySet->container()->store();
-  ASSERT("Valid store", store != 0);
 
-  store->read(_propertyId, _storedForm, propertyName, externalSize);
+  store()->read(_propertyId, _storedForm, propertyName, externalSize);
   ASSERT("Consistent property name", strcmp(propertyName, name()) == 0);
   delete [] propertyName;
 
   // restore the index
   //
   OMStoredVectorIndex* vectorIndex = 0;
-  store->restore(vectorIndex, name());
+  store()->restore(vectorIndex, name());
   ASSERT("Valid vector index", vectorIndex->isValid());
   setLocalKey(vectorIndex->firstFreeKey());
 
