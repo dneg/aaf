@@ -10,13 +10,6 @@ AAFEssenceMultiAccess\
 #endm
 #c
 AD_HEAD
-/************************************************\
-*											    *
-* Advanced Authoring Format					    *
-*										        *
-* Copyright (c) 1998-1999 Avid Technology, Inc. *
-*										        *
-\************************************************/
 
 AD_IDL(//
 // AAFEssenceMultiAccess is an interace which provides streaming access over essence data.  This
