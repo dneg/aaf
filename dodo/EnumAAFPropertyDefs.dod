@@ -35,11 +35,11 @@ AD_XMETHOD1(NextOne,
 AD_XMETHOD3(Next,
 			[in], objPass, aafUInt32, count, number of property definitions requested,
 			[out\, size_is\(count\)\, length_is\(*pFetched\)],
-			objOut, AD_AAFTYPES\(AAFPropertyDefinition\) **, ppPropertyDefinitions,
+			objOut, AAFPropertyDefinition, ppPropertyDefinitions,
 			array to receive property definitions,
 			[out\,ref],objPass, aafUInt32 *, pFetched,
 			number of actual PropertyDefinitions fetched into ppPropertyDefinitions array,
-			Enumerates the next count elements \(AD_AAFTYPES\(AAFPropertyDefinition\) pointers\) in 
+			Enumerates the next count elements \(AAFPropertyDefinition pointers\) in 
   // the enumerator's list\, returning them in the given array along with the actual 
   // number of enumerated elements in pcFetched. The caller is responsible for 
   // properly releasing the returned pointers.)
@@ -47,7 +47,7 @@ AD_XMETHOD3(Next,
 AD_METHOD1(Skip,
 		   [in], aafUInt32, count, Number of elements to skip,
 		   Instructs the enumerator to skip the next count elements in the enumeration so that 
-  // the next call to AD_AAFTYPES\(EnumAAFPropertyDefinitions\)::Next will not return 
+  // the next call to EnumAAFPropertyDefinitions::Next will not return 
   // those elements.)
 
 AD_METHOD0(Reset,
