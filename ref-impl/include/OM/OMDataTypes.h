@@ -266,11 +266,6 @@ typedef OMMaterialIdentification OMUniqueMaterialIdentification;
 typedef OMObjectIdentification OMStoredObjectEncoding;
 const OMStoredObjectEncoding nullOMStoredObjectEncoding = {0};
 
-// File signatures
-//
-typedef OMObjectIdentification OMFileSignature;
-const OMFileSignature nullOMFileSignature = {0};
-
 // Property instance tags.
 //
 typedef OMUInt16 OMPropertyTag;

@@ -158,7 +158,6 @@ OMMSSStoredObject* OMMSSStoredObject::openModify(const wchar_t* fileName)
   TRACE("OMMSSStoredObject::openModify");
   PRECONDITION("Valid file name", validWideString(fileName));
 
-  writeSignature(fileName, nullOMFileSignature);
   OMMSSStoredObject* newStore = OMMSSStoredObject::openFile(
                                                            fileName,
                                                            OMFile::modifyMode);
@@ -221,7 +220,6 @@ OMMSSStoredObject* OMMSSStoredObject::openModify(OMRawStorage* rawStorage)
   PRECONDITION("Compatible raw storage", rawStorage->isPositionable() &&
                                          rawStorage->isExtendible());
 
-  writeSignature(rawStorage, nullOMFileSignature);
   OMMSSStoredObject* newStore = OMMSSStoredObject::openFile(
                                                            rawStorage,
                                                            OMFile::modifyMode);
@@ -277,90 +275,6 @@ OMMSSStoredObject* OMMSSStoredObject::createModify(OMRawStorage* rawStorage,
   newStore->create(byteOrder);
 
   return newStore;
-}
-
-  // @mfunc Is the file named <p fileName> a recognized file ?
-  //        If so, the result is true, and the signature is returned
-  //        in <p signature>.
-  //   @parm The name of the file to check.
-  //   @parm If recognized, the file signature.
-  //   @rdesc True if the file is recognized, false otherwise.
-bool OMMSSStoredObject::isRecognized(const wchar_t* fileName,
-                                     OMFileSignature& signature)
-{
-  TRACE("OMMSSStoredObject::isRecognized");
-  PRECONDITION("Valid file name", validWideString(fileName));
-  bool result = false;
-  OMFileSignature sig;
-  FILE* f = wfopen(fileName, L"rb");
-  if (f != 0) {
-    size_t status = fseek(f, 8, SEEK_SET);
-    if (status == 0) {
-      status = fread(&sig, sizeof(sig), 1, f);
-      if (status == 1) {
-        fclose(f);
-        if (hostByteOrder() != littleEndian) {
-          OMByte* s = reinterpret_cast<OMByte*>(&sig);
-          size_t size = sizeof(OMUniqueObjectIdentification);
-          OMUniqueObjectIdentificationType::instance()->reorder(s, size);
-        }
-        if (isRecognized(sig)) {
-          result = true;
-          signature = sig;
-        }
-      }
-    }
-  }
-  return result;
-}
-
-  // @mfunc Does <p rawStorage> contain a recognized file ?
-  //        If so, the result is true, and the signature is returned
-  //        in <p signature>.
-  //   @parm The <c OMRawStorage> to check.
-  //   @parm If recognized, the file signature.
-  //   @rdesc True if the <c OMRawStorage> contains a recognized
-  //          file, false otherwise.
-bool OMMSSStoredObject::isRecognized(OMRawStorage* rawStorage,
-                                     OMFileSignature& signature)
-{
-  TRACE("OMMSSStoredObject::isRecognized");
-  PRECONDITION("Valid raw storage", rawStorage != 0);
-  bool result = false;
-  OMFileSignature sig;
-  OMUInt32 count;
-  rawStorage->readAt(8,
-                     reinterpret_cast<OMByte*>(&sig),
-                     sizeof(sig),
-                     count);
-
-  if (count == sizeof(sig)) {
-    if (hostByteOrder() != littleEndian) {
-      OMByte* s = reinterpret_cast<OMByte*>(&sig);
-      size_t size = sizeof(OMUniqueObjectIdentification);
-      OMUniqueObjectIdentificationType::instance()->reorder(s, size);
-    }
-    if (isRecognized(sig)) {
-      result = true;
-      signature = sig;
-    }
-  }
-  return result;
-}
-
-  // @mfunc Is <p signature> recognized ?
-  //        If so, the result is true.
-  //   @parm The signature to check.
-  //   @rdesc True if the signature is recognized, false otherwise.
-bool OMMSSStoredObject::isRecognized(const OMFileSignature& signature)
-{
-  TRACE("OMMSSStoredObject::isRecognized");
-  bool result = false;
-  char tag = ((char)((signature.Data1 & 0xff000000) >> 24));
-  if (tag == 'B') {
-    result = true;
-  }
-  return result;
 }
 
   // @mfunc Destructor.
@@ -3203,57 +3117,6 @@ void OMMSSStoredObject::getClass(IStorage* storage, OMClassId& cid)
   checkStatus(status);
   ASSERT("IStorage::Stat() succeeded", SUCCEEDED(status));
   memcpy(&cid, &statstg.clsid, sizeof(OMClassId));
-}
-
-  // @mfunc Write the signature to the given raw storage.
-  //   @parm The raw storage.
-  //   @parm The signature.
-void OMMSSStoredObject::writeSignature(OMRawStorage* rawStorage,
-                                       const OMFileSignature& signature)
-{
-  TRACE("OMMSSStoredObject::writeSignature");
-
-  OMFileSignature sig = signature;
-  if (hostByteOrder() != littleEndian) {
-    OMByte* s = reinterpret_cast<OMByte*>(&sig);
-    size_t size = sizeof(OMUniqueObjectIdentification);
-    OMUniqueObjectIdentificationType::instance()->reorder(s, size);
-  }
-
-  OMUInt32 count;
-  rawStorage->writeAt(8,
-                      reinterpret_cast<const OMByte*>(&sig),
-                      sizeof(sig),
-                      count);
-  ASSERT("All bytes written", count == sizeof(sig));
-}
-
-  // @mfunc Write the signature to the given file.
-  //   @parm The file name.
-  //   @parm The signature.
-void OMMSSStoredObject::writeSignature(const wchar_t* fileName,
-                                       const OMFileSignature& signature)
-{
-  TRACE("OMMSSStoredObject::writeSignature");
-
-  PRECONDITION("Valid file name", validWideString(fileName));
-
-  OMFileSignature sig = signature;
-
-  if (hostByteOrder() != littleEndian) {
-    OMByte* s = reinterpret_cast<OMByte*>(&sig);
-    size_t size = sizeof(OMUniqueObjectIdentification);
-    OMUniqueObjectIdentificationType::instance()->reorder(s, size);
-  }
-
-  FILE* f = wfopen(fileName, L"rb+");
-  ASSERT("File exists", f != 0);
-  size_t status = fseek(f, 8, SEEK_SET);
-  ASSERT("Seek succeeded", status == 0);
-  status = fwrite(&sig, sizeof(sig), 1, f);
-  ASSERT("Write succeeded", status == 1);
-
-  fclose(f);
 }
 
 // We may need to convert our arguments, which are always UNICODE

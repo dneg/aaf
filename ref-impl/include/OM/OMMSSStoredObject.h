@@ -90,21 +90,6 @@ public:
   static OMMSSStoredObject* createModify(OMRawStorage* rawStorage,
                                          const OMByteOrder byteOrder);
 
-     // @cmember Is the file named <p fileName> a recognized file ?
-     //          If so, the result is true, and the signature is returned
-     //          in <p signature>.
-  static bool isRecognized(const wchar_t* fileName,
-                           OMFileSignature& signature);
-
-     // @cmember Does <p rawStorage> contain a recognized file ?
-     //          If so, the result is true, and the signature is returned
-     //          in <p signature>.
-  static bool isRecognized(OMRawStorage* rawStorage,
-                           OMFileSignature& signature);
-
-     // @cmember Is <p signature> recognized ?
-  static bool isRecognized(const OMFileSignature& signature);
-
   // @access Public members.
 
     // @cmember Destructor.
@@ -538,15 +523,6 @@ private:
 
   void setClass(IStorage* storage, const OMClassId& cid);
   void getClass(IStorage* storage, OMClassId& cid);
-
-    // @cmember Write the signature to the given raw storage.
-  static void writeSignature(OMRawStorage* rawStorage,
-                             const OMFileSignature& signature);
-
-    // @cmember Write the signature to the given file.
-    //   @devnote Soon to be obsolete.
-  static void writeSignature(const wchar_t* fileName,
-                             const OMFileSignature& signature);
 
   IStorage* _storage;
   OMStoredPropertySetIndex* _index;
