@@ -277,6 +277,17 @@ RunMainScript ()
 		cd $TargetDir
 	fi
 
+	if [ PROPDIRECTACCESS -eq 1 ] || [ ALL -eq 1 ]; then
+		PrintSeparator "Running ComPropDirectAccess"
+		cd Examples/com
+		ComPropDirectAccess
+		CheckExitCode $? "ComPropDirectAccess"
+
+		VerifyFiles "PropAccess.aaf"
+
+		cd $TargetDir
+	fi
+
 	if [ ESSENCETEST -eq 1 ] || [ ALL -eq 1 ]; then
 		PrintSeparator "Running ComEssenceDataTest"
 		cd Examples/com
