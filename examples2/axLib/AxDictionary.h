@@ -95,7 +95,7 @@ IAAFSmartPointer<Type> AxCreateMetaInstance( AxDictionary& dict,
 											 const aafUID_t& auid,
 											 const IID& iid )
 {
-	Type* dummy;
+	Type* dummy = 0;
 	if ( !( iid == AxIID( dummy ) ) ) {
 		throw AxEx( L"IID Type mismatch" );
 	}
