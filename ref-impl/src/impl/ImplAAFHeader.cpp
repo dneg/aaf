@@ -877,8 +877,6 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFHeader::UpdateEssenceContainers ()
 {
-#if 0  // Avid private
-
   if (_essenceContainers.isPresent())
   {
     _essenceContainers.clear();
@@ -944,7 +942,6 @@ AAFRESULT STDMETHODCALLTYPE
     pSourceMobs->ReleaseReference();
     pSourceMobs = 0;
   }
-#endif  // Avid private
 
 
   return AAFRESULT_SUCCESS;
