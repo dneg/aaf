@@ -193,6 +193,7 @@ TRACE("OMStream::size");
 
 #endif
   ASSERT("Successful seek", status == 0);
+  (void)status;
 
 	// where is the end?
 	OMUInt64 result = position();
