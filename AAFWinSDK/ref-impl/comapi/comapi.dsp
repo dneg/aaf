@@ -256,6 +256,10 @@ SOURCE="..\..\..\ref-impl\src\com-api\CAAFIntraFrameMarker.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFKLVData.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFLocator.cpp"
 # End Source File
 # Begin Source File
@@ -533,6 +537,10 @@ SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFIdentifications.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFInterpolationDefs.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFKLVData.cpp"
 # End Source File
 # Begin Source File
 
