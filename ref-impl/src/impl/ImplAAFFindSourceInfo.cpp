@@ -16,7 +16,7 @@
 #include <string.h>
 #include "aafCvt.h"
 #include "ImplAAFMob.h"
-#include "ImplAAFGroup.h"
+#include "ImplAAFEffect.h"
 #include "aafdefuids.h"
 
 ImplAAFFindSourceInfo::ImplAAFFindSourceInfo ()
@@ -110,7 +110,7 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFFindSourceInfo::Clear(void)
 
 AAFRESULT STDMETHODCALLTYPE
 ImplAAFFindSourceInfo::SetEffect(
-				ImplAAFGroup *effect)
+				ImplAAFEffect *effect)
 {
 	if (_effect)
 		_effect->ReleaseReference();
