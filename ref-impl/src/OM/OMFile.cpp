@@ -217,6 +217,9 @@ OMFile::~OMFile(void)
   _referencedProperties = 0;
   delete _fileName;
   _fileName = 0;
+
+  delete _rawStorage;
+  _rawStorage = 0;
 }
 
   // @mfunc Open an existing <c OMFile> for read-only access, the
@@ -569,8 +572,6 @@ void OMFile::close(void)
   delete _root;
   _root = 0;
 
-  delete _rawStorage;
-  _rawStorage = 0;
 }
 
   // @mfunc Retrieve the client root <c OMStorable> from this <c OMFile>.
