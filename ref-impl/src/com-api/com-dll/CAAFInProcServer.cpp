@@ -1,18 +1,22 @@
-
-
-#ifndef __AAFTypes_h__
-#include "AAFTypes.h"
-#endif
-
 #ifndef __CAAFInProcServer_h__
 #include "CAAFInProcServer.h"
 #endif
 
-#undef __TCHAR_DEFINED // why is this necessary!
-#include <tchar.h> // include wide characters and routines mappings
+
 #include <assert.h>
+#include <string.h>
+#include <stdio.h>
 
 #include <olectl.h> // need ole control header for SELFREG_E_CLASS definition
+
+#if defined(_WIN32) || defined(WIN32)
+# undef __TCHAR_DEFINED // why is this necessary!
+# include <tchar.h>
+#else
+# ifndef _stprintf
+#  define _stprintf sprintf
+# endif
+#endif
 
 CAAFInProcServer::CAAFInProcServer() :
 	CAAFServer(),
@@ -112,6 +116,9 @@ enum eAAFRegFlag
 	AAF_REG_SUB_CLSID = 2,
 	AAF_REG_SUB_CLASSNAME = 3,
 	AAF_REG_SUB_MODULE = 4
+#if defined(_MAC)
+	,AAF_REG_SUB_ALIAS = 5
+#endif
 };
 
 
@@ -122,11 +129,19 @@ const AAFRegEntry g_AAFRegEntry[][3] =
 		{ AAF_REG_SUB_SKIP, NULL }, 
 		{ AAF_REG_SUB_CLASSNAME, OLESTR("%s Class") }
 	},
-	{	// [1] 
-		{ AAF_REG_SUB_CLSID, OLESTR("CLSID\\%s\\InprocServer32") }, 
+#if defined(_MAC) 
+	{	// [1]
+		{ AAF_REG_SUB_CLSID, OLESTR("CLSID\\%s\\InprocServer") },
+		{ AAF_REG_SUB_SKIP, NULL },
+		{ AAF_REG_SUB_MODULE, OLESTR("ALS2:%s") }
+	},
+#else
+	{	// [1]
+		{ AAF_REG_SUB_CLSID, OLESTR("CLSID\\%s\\InprocServer32") },
 		{ AAF_REG_SUB_SKIP, NULL }, 
 		{ AAF_REG_SUB_MODULE, OLESTR("%s") }
 	},
+#endif 
 	{	// [2] 
 		{ AAF_REG_SUB_CLSID, OLESTR("CLSID\\%s\\NotInsertable") }, 
 		{ AAF_REG_SUB_SKIP, NULL }, 
@@ -174,12 +189,12 @@ static int FormatRegBuffer
 (
 	LPTSTR pBuffer,
 	const AAFRegEntry& entry,
-	LPCTSTR pCLSIDString,
-	LPCTSTR pClassName,
-	LPCTSTR pFileName
+	LPOLESTR pCLSIDString,
+	LPCOLESTR pClassName,
+	LPOLESTR pFileName
 )
 {
-	LPCTSTR pParam = NULL;
+	LPCOLESTR pParam = NULL;
 
 	switch (entry.flags)
 	{
@@ -195,6 +210,9 @@ static int FormatRegBuffer
 			pParam = pFileName;
 			break;
 		
+#if defined(_MAC)
+		case AAF_REG_SUB_ALIAS:
+#endif
 		case AAF_REG_SUB_SKIP:
 			pBuffer[0] = 0; // set to empty string so that we set the 
 			return 0;
@@ -210,6 +228,7 @@ static int FormatRegBuffer
 	// Format the buffer.
 	assert(NULL != pParam);
 	return _stprintf(pBuffer, entry.pFormat, pParam);
+	
 }
 
 
@@ -217,21 +236,55 @@ static int FormatRegBuffer
 
 HRESULT CAAFInProcServer::RegisterServer
 ( 
-	BOOL bRegTypeLib
+	BOOL /*bRegTypeLib*/
 )
 {
 	HRESULT hr = S_OK;
 
+
+#if defined(_MAC)
+	// In the MAC version we store the fragment block pointer in the HINSTANCE member.
+	CFragInitBlockPtr initBlkPtr = static_cast<CFragInitBlockPtr>(_hInstance);
+	assert(initBlkPtr);
+	
+	// Create the alias that we will be storing in the registry instead of the module path.
+	AliasHandle hAlias = NULL;
+	AliasPtr pAlias = NULL;
+	unsigned long aliasLength = 0;
+	::NewAlias (NULL, initBlkPtr->fragLocator.u.onDisk.fileSpec, &hAlias);
+	
+	// Alias could not be created: signal failure.
+	if (NULL == hAlias)
+		return SELFREG_E_CLASS;
+	
+	aliasLength = GetHandleSize((Handle)hAlias);
+	OSErr err = MemError();
+	if (noErr != err)
+	{
+		DisposeHandle((Handle)hAlias);
+		hr = E_UNEXPECTED; // need better error code.
+		return hr;
+	}
+	HLock((Handle)hAlias);
+	err = MemError();
+	if (noErr != err)
+	{
+		DisposeHandle((Handle)hAlias);
+		hr = E_UNEXPECTED; // need better error code.
+		return hr;
+	}
+	pAlias = *hAlias;
+	
+	// Copy the file name as the "frag name"
+	OLECHAR fileName[64];
+	memcpy(fileName, &(initBlkPtr->fragLocator.u.onDisk.fileSpec->name[1]), (initBlkPtr->fragLocator.u.onDisk.fileSpec->name[0]));
+	fileName[(initBlkPtr->fragLocator.u.onDisk.fileSpec->name[0])] = 0;
+#else
 	// For the following code to work either _UNICODE and UNICODE
 	// must be defined and OLE2ANSI must NOT be defined or every symbol must be undefined 
 	// or OLE2ANSI defined but _UNICODE and UNICODE are undefined.
 	assert(sizeof(OLECHAR) == sizeof(TCHAR));
 
-
-	// Buffer for string version of each object's class id.
-	const int MAX_CLSID_SIZE = 40;
-	OLECHAR pCLSIDbuffer[MAX_CLSID_SIZE];
-	int clsidLength;
 
 	// All of our objects need to register there module location.
 	// NOTE: This code may be platform dependent.
@@ -240,14 +293,21 @@ HRESULT CAAFInProcServer::RegisterServer
 	int fileNameLength = (int)GetModuleFileName(_hInstance, fileName, MAX_PATH);
 	if (0 == fileNameLength)
 		return GetLastError();	// TODO: convert to HRESULT!	
+#endif	
+
+	// Buffer for string version of each object's class id.
+	const int MAX_CLSID_SIZE = 40;
+	OLECHAR pCLSIDbuffer[MAX_CLSID_SIZE];
+	int clsidLength;
+
 	
 	// Allocate the buffers for the key, value name and value data.
 	const int MAX_REG_BUFFER = 128;
-	TCHAR pRegBuffer[3][MAX_REG_BUFFER];
+	OLECHAR pRegBuffer[3][MAX_REG_BUFFER];
 	int regLength[3];
-	LPCTSTR pKeyName = pRegBuffer[0];
-	LPCTSTR pValueName = pRegBuffer[1];
-	LPCTSTR pValue= pRegBuffer[2];
+	LPOLESTR pKeyName = pRegBuffer[0];
+	LPOLESTR pValueName = pRegBuffer[1];
+	LPOLESTR pValue= pRegBuffer[2];
 
 	// Use g_AAFRegEntry data to register each object in the object info table.
 	// Search the object table for the given class id.
@@ -261,7 +321,10 @@ HRESULT CAAFInProcServer::RegisterServer
 									  MAX_CLSID_SIZE);
 		// Note: The returned length includes the NULL character.
 		if (0 == clsidLength)
-			return E_UNEXPECTED; // need better error code.
+		{
+			hr = E_UNEXPECTED; // need better error code.
+			break;
+		}
 		
 
 		// Now run through the AAF Reg Entries and create the corresponding
@@ -284,12 +347,30 @@ HRESULT CAAFInProcServer::RegisterServer
 			long err = RegCreateKey(HKEY_CLASSES_ROOT, pKeyName, &hkey);
 			if (ERROR_SUCCESS == err)
 			{
+#if defined(_MAC) 
 				// Set the value. Note: we need to include the null character
 				// but tell the registry the actual number of bytes we are
-				// writing.
+				// writing. (Mac wintypes.h defines BYTE as unsigned char.)
+				err = RegSetValueEx(hkey, pValueName, 0, 
+						REG_SZ, (const char*)pValue,
+						(regLength[2] + 1) * sizeof(OLECHAR));
+
+				// The second key need to include an alias on the Macintosh.
+				if (1 == keyIndex)
+				{
+					// Set the value. Note: 
+					err = RegSetValueEx(hkey, OLESTR("Alias"), 0, 
+							REG_BINARY, (const char*)pAlias,
+							aliasLength);
+				}
+#else
+				// Set the value. Note: we need to include the null character
+				// but tell the registry the actual number of bytes we are
+				// writing. (windows defines BYTE as signed char.)
 				err = RegSetValueEx(hkey, pValueName, 0, 
 						REG_SZ, (const BYTE*)pValue,
 						(regLength[2] + 1) * sizeof(TCHAR));
+#endif
 
 				RegCloseKey(hkey);
 			}
@@ -307,6 +388,14 @@ HRESULT CAAFInProcServer::RegisterServer
 		++objectIndex;
 	}
 
+#if defined(_MAC)
+	if (hAlias)
+	{
+		if (pAlias)
+			HUnlock((Handle)hAlias);
+		DisposeHandle((Handle)hAlias);
+	}
+#endif
 	return hr;
 }
 
@@ -324,9 +413,9 @@ HRESULT CAAFInProcServer::UnregisterServer
 
 	// Allocate the buffers for the key, value name and value data.
 	const int MAX_REG_BUFFER = 128;
-	TCHAR pRegBuffer[MAX_REG_BUFFER];
+	OLECHAR pRegBuffer[MAX_REG_BUFFER];
 	int regLength;
-	LPCTSTR pKeyName = pRegBuffer;
+	LPOLESTR pKeyName = pRegBuffer;
 
 	// Use g_AAFRegEntry data to register each object in the object info table.
 	// Search the object table for the given class id.
@@ -367,3 +456,4 @@ HRESULT CAAFInProcServer::UnregisterServer
 
 	return S_OK;
 }
+
