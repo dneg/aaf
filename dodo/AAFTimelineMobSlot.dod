@@ -8,10 +8,6 @@ AAFMobSlot\
 #c
 #import ./AAFMobSlot.exp
 AD_HEAD
-/***********************************************\
-*	Stub only.   Implementation not yet added	*
-\***********************************************/
-
 AD_IDL(//
 // The IAAFTimelineMobSlot interface is implemented by objects which
 // contain time-varying timeline essence.
@@ -72,6 +68,9 @@ AD_METHOD1(GetEditRate,
   // AAFRESULT_SUCCESS
   //   - succeeded.  \\\(This is the only code indicating success.\\\)
   //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\\\(\\\) called on it.
+  //
   // AAFRESULT_NULL_PARAM
   //   - pEditRate arg is NULL.)
 
@@ -92,6 +91,9 @@ AD_METHOD1(SetEditRate,
   // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  \\\(This is the only code indicating success.\\\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\\\(\\\) called on it.
   //
   // AAFRESULT_NULL_PARAM
   //   - pEditRate arg is NULL.)
@@ -114,6 +116,9 @@ AD_METHOD1(GetOrigin,
   // AAFRESULT_SUCCESS
   //   - succeeded.  \\\(This is the only code indicating success.\\\)
   //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\\\(\\\) called on it.
+  //
   // AAFRESULT_NULL_PARAM
   //   - pOrigin arg is NULL.)
 
@@ -130,5 +135,8 @@ AD_METHOD1(SetOrigin,
   // encountered in the order given below:
   // 
   // AAFRESULT_SUCCESS
-  //   - succeeded.  \\\(This is the only code indicating success.\\\).)
+  //   - succeeded.  \\\(This is the only code indicating success.\\\).
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\\\(\\\) called on it.)
 AD_CLASS_END
