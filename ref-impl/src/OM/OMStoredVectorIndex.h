@@ -3,7 +3,7 @@
 #define OMSTOREDVECTORINDEX_H
 
 #include "OMPortability.h"
-#include "OMTypes.h"
+#include "OMDataTypes.h"
 
 #include <stddef.h>
 

@@ -2,7 +2,7 @@
 #define OMCLASSFACTORY_H
 
 #include "OMPortability.h"
-#include "OMTypes.h"
+#include "OMDataTypes.h"
 
 class OMStorable;
 
