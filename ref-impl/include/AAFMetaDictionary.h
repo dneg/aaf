@@ -48,8 +48,8 @@
 //
 // AAFMetaDict.csv 
 //
-// This file was generated on Wed Aug 18 17:52:12 EDT 2004
-// by user jpt on system warbler.localdomain.
+// This file was generated on Wed Sep  1 16:53:09 BST 2004
+// by user phil on system pilot16.
 //
 // Key to macros.
 //
@@ -2792,7 +2792,7 @@ AAF_CLASS(DigitalImageDescriptor,
     AAF_LITERAL_AUID(0x04010201,
       0x0106, 0x0100,
       0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x09),
-    0x3215,
+    0x3219,
     AAF_TYPE(ColorPrimariesType),
     false,
     false,
@@ -2802,7 +2802,7 @@ AAF_CLASS(DigitalImageDescriptor,
     AAF_LITERAL_AUID(0x04010201,
       0x0103, 0x0100,
       0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x02),
-    0x3216,
+    0x321a,
     AAF_TYPE(CodingEquationsType),
     false,
     false,
@@ -2844,6 +2844,46 @@ AAF_CLASS(DigitalImageDescriptor,
       0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x02),
     0x3214,
     AAF_TYPE(UInt32),
+    false,
+    false,
+    DigitalImageDescriptor)
+  AAF_PROPERTY(SignalStandard,
+    // {04050113-0000-0000-060E-2B3401010105}
+    AAF_LITERAL_AUID(0x04050113,
+      0x0000, 0x0000,
+      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x05),
+    0x3215,
+    AAF_TYPE(SignalStandardType),
+    false,
+    false,
+    DigitalImageDescriptor)
+  AAF_PROPERTY(StoredF2Offset,
+    // {04010302-0800-0000-060E-2B3401010105}
+    AAF_LITERAL_AUID(0x04010302,
+      0x0800, 0x0000,
+      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x05),
+    0x3216,
+    AAF_TYPE(Int32),
+    false,
+    false,
+    DigitalImageDescriptor)
+  AAF_PROPERTY(DisplayF2Offset,
+    // {04010302-0700-0000-060E-2B3401010105}
+    AAF_LITERAL_AUID(0x04010302,
+      0x0700, 0x0000,
+      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x05),
+    0x3217,
+    AAF_TYPE(Int32),
+    false,
+    false,
+    DigitalImageDescriptor)
+  AAF_PROPERTY(ActiveFormatDescriptor,
+    // {04010302-0900-0000-060E-2B3401010105}
+    AAF_LITERAL_AUID(0x04010302,
+      0x0900, 0x0000,
+      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x05),
+    0x3218,
+    AAF_TYPE(UInt8),
     false,
     false,
     DigitalImageDescriptor)
@@ -5610,6 +5650,34 @@ AAF_TYPE_DEFINITION_ENUMERATION(ElectroSpatialFormulation,
 AAF_TYPE_DEFINITION_ENUMERATION_END(ElectroSpatialFormulation, 
   // {02010122-0000-0000-060E-2B3401040101}
   AAF_LITERAL_AUID(0x02010122,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x04, 0x01, 0x01), AAF_TYPE(UInt8))
+AAF_TYPE_SEPARATOR()
+
+// SignalStandardType
+//
+AAF_TYPE_DEFINITION_ENUMERATION(SignalStandardType, 
+  // {02010124-0000-0000-060E-2B3401040101}
+  AAF_LITERAL_AUID(0x02010124,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x04, 0x01, 0x01), AAF_TYPE(UInt8))
+  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(SignalNone,
+    0, SignalStandardType)
+  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(SignalS125MInterlace,
+    1, SignalStandardType)
+  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(SignalS125MProgressive,
+    2, SignalStandardType)
+  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(SignalS347M,
+    3, SignalStandardType)
+  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(SignalS274M,
+    4, SignalStandardType)
+  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(SignalS296M,
+    5, SignalStandardType)
+  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(SignalS349M,
+    6, SignalStandardType)
+AAF_TYPE_DEFINITION_ENUMERATION_END(SignalStandardType, 
+  // {02010124-0000-0000-060E-2B3401040101}
+  AAF_LITERAL_AUID(0x02010124,
     0x0000, 0x0000,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x04, 0x01, 0x01), AAF_TYPE(UInt8))
 AAF_TYPE_SEPARATOR()
