@@ -36,13 +36,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <wchar.h>
+#include <time.h>
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFResult.h"
 #include "ModuleTest.h"
 #include "AAFDefUIDs.h"
 #include "CAAFBuiltinDefs.h"
-#include "AAFUtils.h"
 
 HRESULT				localhr = AAFRESULT_SUCCESS;
 HRESULT				hr = S_OK;
@@ -86,6 +86,39 @@ inline void PrintTestResult(char *testName)
 	  hr = AAFRESULT_TEST_FAILED;
 	}
 }
+
+/************************
+ * GetDateTime
+ *
+ * 	Returns the number of seconds since the standard root date
+ *		for the current machine.  The date returned here will be converted
+ *		to the canonical date format in the date write routine.
+ *
+ * Argument Notes:
+ *		Time - is NATIVE format.  That is relative to 1/1/1904 for the
+ *			Mac and 1/1/70? for everyone else.
+ *
+ * ReturnValue:
+ *		None
+ *
+ */
+static void GetDateTime(aafTimeStamp_t *ts)
+{
+    if( ts )
+    {
+	const time_t t = time(0);
+	const struct tm * ansitime = gmtime (&t);
+
+	ts->date.year   = ansitime->tm_year+1900;
+	ts->date.month  = ansitime->tm_mon+1;  // AAF months are 1-based
+	ts->date.day    = ansitime->tm_mday;   // tm_mday already 1-based
+	ts->time.hour   = ansitime->tm_hour;
+	ts->time.minute = ansitime->tm_min;
+	ts->time.second = ansitime->tm_sec;
+	ts->time.fraction = 0;            // not implemented yet!
+    }
+}
+
 
 #define MOB_NAME_TEST L"MOBTest"
 #define MOB_NAME_SIZE 16
@@ -391,7 +424,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 								   (IUnknown **)&pTestIdent));	
 		TestMethod(pTestIdent->GetDate(&timeStamp), AAFRESULT_NOT_INITIALIZED);
 
-		AAFGetDateTime (&startTimeStamp);
+		GetDateTime (&startTimeStamp);
 		TestMethod(pTestIdent->Initialize(COMPANY_NAME,
 									   PRODUCT_NAME,
 									   TEST_VERSION,
