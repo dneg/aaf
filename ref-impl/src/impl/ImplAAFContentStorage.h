@@ -30,20 +30,15 @@
  *
  ************************************************************************/
 
-
-
 class ImplAAFMob;
-
-class ImplEnumAAFMobs;
-
 class ImplAAFEssenceData;
-
-class ImplEnumAAFEssenceData;
-
 class ImplAAFDictionary;
-
 class ImplAAFFile;
 
+class ImplEnumAAFMobs;
+template <class T> 
+class ImplAAFEnumerator;
+typedef ImplAAFEnumerator<ImplAAFEssenceData> ImplEnumAAFEssenceData;
 
 
 
