@@ -19,7 +19,7 @@
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFResult.h"
-#include "AAFDefUIDs.h"
+#include "AAFDataDefs.h"
 
 
 static aafUID_t    fillerUID = DDEF_Timecode;

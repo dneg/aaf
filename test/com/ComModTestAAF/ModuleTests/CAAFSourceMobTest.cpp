@@ -16,7 +16,7 @@
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFResult.h"
-#include "AAFDefUIDs.h"
+#include "AAFDataDefs.h"
 
 static aafWChar *slotNames[5] = { L"SLOT1", L"SLOT2", L"SLOT3", L"SLOT4", L"SLOT5" };
 
@@ -92,7 +92,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
  		
     //Make the first mob
 	  long			test;
-	  aafUID_t		ddef = DDEF_Audio;
+	  aafUID_t		ddef = DDEF_Sound;
 
 	  aafRational_t	audioRate = { 44100, 1 };
 

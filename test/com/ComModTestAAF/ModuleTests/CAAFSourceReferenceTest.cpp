@@ -18,7 +18,7 @@
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFResult.h"
-#include "AAFDefUIDs.h"
+#include "AAFDataDefs.h"
 
 
 
@@ -98,7 +98,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		// module-specific tests go here
 		//		Set Values.	
 
-		inSourceID = DDEF_Video;   // Could have been any other value !
+		inSourceID = DDEF_Picture;   // Could have been any other value !
 		checkResult(pSourceReference->SetSourceID( inSourceID));
 		
 		inMobSlotID = 100;   // Could have been any other value !

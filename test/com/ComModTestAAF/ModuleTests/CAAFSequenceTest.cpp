@@ -17,7 +17,7 @@
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFResult.h"
-#include "AAFDefUIDs.h"
+#include "AAFDataDefs.h"
 
 #define kNumComponents	5
 
@@ -143,7 +143,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
  	  checkResult(pDictionary->CreateInstance(&AUID_AAFSequence,
 						     IID_IAAFSequence, 
 						     (IUnknown **)&pSequence));		
-	  checkResult(pSequence->Initialize((aafUID_t*)&DDEF_Audio));
+	  checkResult(pSequence->Initialize((aafUID_t*)&DDEF_Sound));
 
 	  //
 	  //	Add some segments.  Need to test failure conditions
@@ -158,7 +158,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 								  IID_IAAFComponent, 
 								  (IUnknown **)&pComponent));
 
-		  checkResult(pComponent->SetDataDef((aafUID_t*)&DDEF_Audio));
+		  checkResult(pComponent->SetDataDef((aafUID_t*)&DDEF_Sound));
 		  checkResult(pComponent->SetLength(&len));
 		  checkResult(pSequence->AppendComponent(pComponent));
 
@@ -277,7 +277,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 					numCpnts++;
 
 					checkResult(pComp->GetDataDef(&dataDef));
-					checkExpression(memcmp(&DDEF_Audio, &dataDef, sizeof(aafUID_t)) == 0,
+					checkExpression(memcmp(&DDEF_Sound, &dataDef, sizeof(aafUID_t)) == 0,
 					                AAFRESULT_TEST_FAILED);
 
 					checkResult(pComp->GetLength(&len));
