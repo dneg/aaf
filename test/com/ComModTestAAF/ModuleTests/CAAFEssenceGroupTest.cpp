@@ -123,34 +123,34 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		CAAFBuiltinDefs defs (pDictionary);
  		
 		//Make the MOB to be referenced
-		checkResult(pDictionary->CreateInstance(defs.cdMasterMob(),
-								 IID_IAAFMob, 
-								 (IUnknown **)&pReferencedMob));
+		checkResult(defs.cdMasterMob()->
+					CreateInstance(IID_IAAFMob, 
+								   (IUnknown **)&pReferencedMob));
 		checkResult(CoCreateGuid((GUID *)&referencedMobID));
 		checkResult(pReferencedMob->SetMobID(referencedMobID));
 		checkResult(pReferencedMob->SetName(L"AAFSourceClipTest::ReferencedMob"));
 
 		// Create a Mob
-		checkResult(pDictionary->CreateInstance(defs.cdCompositionMob(),
-								 IID_IAAFMob, 
-								 (IUnknown **)&pMob));
+		checkResult(defs.cdCompositionMob()->
+					CreateInstance(IID_IAAFMob, 
+								   (IUnknown **)&pMob));
 		checkResult(CoCreateGuid((GUID *)&newMobID));
 		checkResult(pMob->SetMobID(newMobID));
 		checkResult(pMob->SetName(L"AAFSourceClipTest"));
 
 		// Create an EssenceGroup
-		checkResult(pDictionary->CreateInstance(defs.cdEssenceGroup(),
-								 IID_IAAFEssenceGroup, 
-								 (IUnknown **)&essenceGroup));
+		checkResult(defs.cdEssenceGroup()->
+					CreateInstance(IID_IAAFEssenceGroup, 
+								   (IUnknown **)&essenceGroup));
 		checkResult(essenceGroup->QueryInterface (IID_IAAFComponent, (void **)&pComponent));
 		checkResult(pComponent->SetDataDef (defs.ddSound()));
 		checkResult(pComponent->SetLength (segLen));
 		pComponent->Release();
 		pComponent = NULL;
 		// Add a source clip still frame
-		checkResult(pDictionary->CreateInstance(defs.cdSourceClip(),
-								 IID_IAAFSourceClip, 
-								 (IUnknown **)&pSourceClip));
+		checkResult(defs.cdSourceClip()->
+					CreateInstance(IID_IAAFSourceClip, 
+								   (IUnknown **)&pSourceClip));
 		checkResult(pSourceClip->QueryInterface (IID_IAAFComponent, (void **)&pComponent));
 		checkResult(pComponent->SetDataDef (defs.ddSound()));
 		checkResult(pComponent->SetLength (stillLength));
@@ -160,9 +160,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		pSourceClip->Release();
 		pSourceClip = NULL;
 		// Add a source clip alternate
-		checkResult(pDictionary->CreateInstance(defs.cdSourceClip(),
-								 IID_IAAFSourceClip, 
-								 (IUnknown **)&pSourceClip));
+		checkResult(defs.cdSourceClip()->
+					CreateInstance(IID_IAAFSourceClip, 
+								   (IUnknown **)&pSourceClip));
 		checkResult(pSourceClip->QueryInterface (IID_IAAFComponent, (void **)&pComponent));
 		checkResult(pComponent->SetDataDef (defs.ddSound()));
 		checkResult(pComponent->SetLength (segLen));
