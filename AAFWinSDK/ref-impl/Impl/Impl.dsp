@@ -115,6 +115,10 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFBaseClassFactory.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFBuiltins.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFCDCIDescriptor.cpp"
 # End Source File
 # Begin Source File
@@ -355,6 +359,10 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFPropertyValue.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFPropValData.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFPulldown.cpp"
 # End Source File
 # Begin Source File
@@ -452,6 +460,10 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFTransition.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFTypeDef.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFTypeDefArray.cpp"
 # End Source File
 # Begin Source File
 
@@ -616,10 +628,6 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFSegments.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFTypeDefs.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\impl\ImplAAFBuiltins.cpp"
 # End Source File
 # End Target
 # End Project
