@@ -90,6 +90,10 @@
 #include "ImplAAFTypeDefStream.h"
 #endif
 
+#ifndef __ImplAAFTypeDefSet_h__
+#include "ImplAAFTypeDefSet.h"
+#endif
+
 #ifndef __AAFStoredObjectIDs_h__
 #include "AAFStoredObjectIDs.h"
 #endif
@@ -1040,6 +1044,7 @@ static AAFRESULT CreateNewStrongRefSetType (const aafUID_t & idToCreate,
 	  // def we want to create.
 	  if (! memcmp (&idToCreate, &curElem->typeId, sizeof (aafUID_t)))
 		{		
+#if 0
 		  // Yes, this is the one.
 		  // Create an impl typedefvariablearray object (as yet uninitialized)
 		  ImplAAFTypeDefVariableArray * ptd = 0;
@@ -1047,7 +1052,13 @@ static AAFRESULT CreateNewStrongRefSetType (const aafUID_t & idToCreate,
 		  if (AAFRESULT_FAILED (hr))
 			return hr;
 		  assert (ptd);
-
+#else
+			ImplAAFTypeDefSet* ptd = NULL;
+		  hr = pDict->CreateMetaInstance (AUID_AAFTypeDefSet, (ImplAAFMetaDefinition **) &ptd);
+		  if (AAFRESULT_FAILED (hr))
+				return hr;
+		  assert (ptd);
+#endif
 		  ImplAAFTypeDefSP pRefdType;
 		  hr = pDict->LookupTypeDef(*curElem->pRefdTypeId, &pRefdType);
 		  assert (AAFRESULT_SUCCEEDED (hr));

@@ -170,7 +170,14 @@ PRIVATE_AAFOBJECTS="\
 	AAFMetaDictionary \
 	AAFPropValData \
 	AAFStreamPropertyValue \
-	AAFTextClip "
+	AAFStrongRefArrayValue \
+	AAFStrongRefSetValue \
+	AAFStrongRefValue \
+	AAFTextClip \
+	AAFWeakRefArrayValue \
+	AAFWeakRefSetValue \
+	AAFWeakRefValue \
+	EnumAAFStorablePropVals "
 
 
 # Build the list of all objects that have automatically-generated
