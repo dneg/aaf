@@ -26,9 +26,9 @@ AD_IDL(//
 //     operation.
 //)
 AD_FORWARD_DECLARATION(AAFMob)
-AD_FORWARD_DECLARATION(AAFMedia)
+AD_FORWARD_DECLARATION(AAFEssenceData)
 AD_FORWARD_DECLARATION(EnumAAFMobs)
-AD_FORWARD_DECLARATION(EnumAAFMedia)
+AD_FORWARD_DECLARATION(EnumAAFEssenceData)
 AD_FORWARD_DECLARATION(AAFDictionary)
 AD_FORWARD_DECLARATION(AAFIdentification)
 AD_FORWARD_DECLARATION(EnumAAFIdentifications)
@@ -185,7 +185,7 @@ AD_XMETHOD1(RemoveMob,
   //   - pMob is null.)
 
 
-AD_XMETHOD3(IsMediaDataPresent,
+AD_XMETHOD3(IsEssenceDataPresent,
 			[in],
 			  objPass,
 			  aafUID_t *,
@@ -195,12 +195,12 @@ AD_XMETHOD3(IsMediaDataPresent,
 			  objPass,
 			  aafFileFormat_t,
 			  fmt,
-			  The Media File Format,
+			  The Essence File Format,
 			[out\,retval],
 			  objPass,
 			  aafBool *,
 			  pResult,
-			  True if the media is found,
+			  True if the essence is found,
   // 
   // Succeeds if all of the following are true:
   // - the pFileMobID pointer is valid.
@@ -219,18 +219,18 @@ AD_XMETHOD3(IsMediaDataPresent,
   //   - either pFileMobID or pResult is null.)
 
 
-AD_XMETHOD2(EnumAAFMediaObjects,
+AD_XMETHOD2(EnumEssenceData,
 			[in\,ref],
 			  objPass,
 			  aafMediaCriteria_t *,
 			  pMediaCriteria,
-			  Media Criteria for enumeration,
+			  Essence Criteria for enumeration,
 			[out\,retval],
 			  objOut,
-			  EnumAAFMedia,
+			  EnumAAFEssenceData,
 			  ppEnum,
-			  Media Enumeration,
-			Places an enumerator for media that applies to the criteria into
+			  Essence Enumeration,
+			Places an enumerator for essence that applies to the criteria into
   // the *ppEnum argument.  The returned enumerator is AddRef\(\)ed
   // before it is returned.
   // 
@@ -251,18 +251,18 @@ AD_XMETHOD2(EnumAAFMediaObjects,
   //   - either pMediaCriteria or ppEnum is null.)
 
 
-AD_XMETHOD1(AppendMedia,
+AD_XMETHOD1(AppendEssenceData,
 			[in],
 			objIn,
-			AAFMedia,
-			pMedia,
-			Media object to append,
-			Appends the given media data object to the header.
+			AAFEssenceData,
+			pEssenceData,
+			Essence data object to append,
+			Appends the given essence data object to the header.
   // 
   // NOTE! Stub only.   Implementation not yet added.
   //
   // Succeeds if all of the following are true:
-  // - the pMedia pointer is valid.
+  // - the pEssenceData pointer is valid.
   // 
   // If this method fails no state will be changed.
   // 
@@ -278,7 +278,7 @@ AD_XMETHOD1(AppendMedia,
   //		mobIDs\, which should be unique.
   //
   // AAFRESULT_NULL_PARAM
-  //   - pMedia is null.)
+  //   - pEssenceData is null.)
 
 
 AD_XMETHOD1(GetDictionary,
