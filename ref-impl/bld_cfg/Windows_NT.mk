@@ -24,7 +24,9 @@ EXE = exe
 CC = cl
 LD = cl
 LFLAGS = 
-CFLAGS = /nologo /Gi-
+CFLAGS = /nologo /Gi- /MDd /W3 /GX /Z7 /Od /Yd /D "WIN32" /D "_DEBUG" /D "_WINDOWS"\
+	/D "_UNICODE" /D "UNICODE"
+#CFLAGS = /nologo /Gi-
 OBJFILE = /Fo$*.${OBJ}
 EXEFLAG = /Fo
 DLL_LINK_FLAGS = /DLL
