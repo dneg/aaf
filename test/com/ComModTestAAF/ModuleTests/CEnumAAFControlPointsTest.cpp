@@ -44,6 +44,7 @@
 #include "AAFDefUIDs.h"
 #include "aafUtils.h"
 #include "AAFInterpolatorDefs.h"
+#include "AAFTypeDefUIDs.h"
 
 static aafUID_t	zeroID = { 0 };
 static aafWChar *slotNames[5] = { L"SLOT1", L"SLOT2", L"SLOT3", L"SLOT4", L"SLOT5" };
@@ -155,7 +156,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFTypeDef			*pTypeDef = NULL;
 	bool				bFileOpen = false;
 	HRESULT				hr = S_OK;
-	aafUID_t			testDataDef = DDEF_Picture, testInterpDef = kAAFExpRational;
+	aafUID_t			testDataDef = DDEF_Picture, testInterpDef = kAAFTypeID_Rational;
 	aafLength_t			effectLen = TEST_EFFECT_LEN;
 	aafUID_t			effectID = kTestEffectID;
 	aafUID_t			parmID = kTestParmID;
