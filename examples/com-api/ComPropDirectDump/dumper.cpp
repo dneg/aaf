@@ -1159,19 +1159,6 @@ static bool dumpFile (aafCharacter * pwFileName,
 }
 
 
-struct CComInitialize
-{
-	CComInitialize()
-	{
-		CoInitialize(NULL);
-	}
-	
-	~CComInitialize()
-	{
-		CoUninitialize();
-	}
-};
-
 // simple helper class to initialize and cleanup AAF library.
 struct CAAFInitialize
 {
@@ -1208,7 +1195,6 @@ int main(int argc, char* argv[])
 	ofstream filestream;
 	bool file_opened = false;
 	
-	CComInitialize comInit;
 	CAAFInitialize aafInit;
 	
 	// If only two args are (correctly) given:
