@@ -40,6 +40,13 @@ class OMRawStorageLockBytes : public ILockBytes {
 public:
   // @access Public members.
 
+  virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid,
+                                                   void** ppvObject);
+
+  virtual ULONG STDMETHODCALLTYPE AddRef(void);
+
+  virtual ULONG STDMETHODCALLTYPE Release(void);
+
     // @cmember Constructor.
   OMRawStorageLockBytes(OMRawStorage* rawStorage);
 
@@ -84,6 +91,7 @@ private:
   // @access Private members.
 
   OMRawStorage* _rawStorage;
+  ULONG _referenceCount;
 
 };
 
