@@ -20,8 +20,6 @@ public:
 	// Factory method for making instances of the built-in base classes.
 	ImplAAFObject* createObject(const aafUID_t*	auid) const;
 
-// Obsolete
-	void RegisterPredefinedClasses(OMFile* file);
 };
 
 
