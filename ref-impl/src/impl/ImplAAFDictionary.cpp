@@ -6,6 +6,10 @@
 * Copyright (c) 1998-1999 Microsoft Corporation *
 *												*
 \************************************************/
+#ifndef __ImplAAFDictionary_h__
+#include "ImplAAFDictionary.h"
+#endif
+
 
 
 #ifndef __ImplAAFClassDef_h__
@@ -56,9 +60,12 @@
 #include "ImplAAFObjectCreation.h"
 #include "ImplEnumAAFPluggableDefs.h"
 
-#ifndef __ImplAAFDictionary_h__
-#include "ImplAAFDictionary.h"
+
+#ifndef __ImplAAFBaseClassFactory_h__
+#include "ImplAAFBaseClassFactory.h"
 #endif
+
+
 
 #include "ImplAAFMob.h"
 
@@ -119,39 +126,79 @@ ImplAAFDictionary::~ImplAAFDictionary ()
 
 
 
-#ifndef __ImplAAFBaseClassFactory_h__
-#include "ImplAAFBaseClassFactory.h"
-#endif
+//
+// Factory function for all built-in classes.
+//
+static ImplAAFObject* CreateBaseClassInstance(const aafUID_t* pAUID) 
+{
+
+  // Lookup the code class id for the given stored object id.
+  const aafClassID_t* id = ImplAAFBaseClassFactory::LookupClassID(pAUID);
+  if (NULL == id)
+    return NULL;
+  
+  // Attempt to create the corresponding storable object.
+  ImplAAFRoot *impl = ::CreateImpl(*id);
+  if (NULL == impl)
+  { // This is a serious programming error. A stored object id was found in the file
+	  // with a known base class id but no base object could be created.
+    assert(NULL != impl);
+    return NULL;
+  }
+
+  // Make sure that the object we created was actually one of our
+  // ImplAAFObject derived classes.
+  ImplAAFObject* object = dynamic_cast<ImplAAFObject*>(impl);
+  if (NULL == object)
+  { // Not a valid object. Release the pointer so we don't leak memory.
+    impl->ReleaseReference();
+    impl = 0;
+    assert(NULL != object);
+	  return NULL;
+  }
+
+  return object;
+}
 
 
 
+
+//
+// Create an instance of the appropriate derived class, given the class id.
+//  This method implements the OMClassFactory interface.
+//
 OMStorable* ImplAAFDictionary::create(const OMClassId& classId) const
 {
+	const aafUID_t* pAUID  = reinterpret_cast<const aafUID_t*>(&classId);
   OMStorable *result = NULL;
 
 
   // If the given classId is for the dictionary then just return 
   // this instance.
-  if (0 == memcmp(&classId, &AUID_AAFDictionary, sizeof(OMClassId)))
+  if (0 == memcmp(pAUID, &AUID_AAFDictionary, sizeof(aafUID_t)))
   {
     // Bump the reference count before returning this.
     AcquireReference();
     return const_cast<ImplAAFDictionary*>(this);
   }
 
+
+  //
+	// Look in the built-in dictionary first.
+  //
+
+  // Lookup the code class id for the given stored object id.
+  result = ::CreateBaseClassInstance(pAUID);
+  if (NULL != result)
+    return result;
+
+
+  //
   // Search the current dictionary...
   // TBD
+  //
   
-
-	// If not in then current dictionary then look in the built-in
-  // dictionary...
-	if (NULL == result)
-	{
-    // Attempt to lookup the class in the base class factory before looking in the
-	  // current file.
-	  const aafUID_t* pAUID  = reinterpret_cast<const aafUID_t*>(&classId);
-    result = ImplAAFBaseClassFactory::CreateInstance(pAUID);
-	}
+	
 
 	return result;
 }
