@@ -123,7 +123,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     Initialize
        (// @parm [in] auid to be used to identify this property definition
-        const aafUID_t * pPropertyAuid,
+        const aafUID_t & propertyAuid,
 			
         // @parm [in] OM pid (small integer) to be used to identify
 		// this property definition
@@ -133,7 +133,7 @@ public:
 	    wchar_t * pPropName,
 	
         // @parm [in] Type definition of this property definition,
-	    const aafUID_t * pTypeID,
+	    const aafUID_t & typeID,
 
         // @parm [in] Is this property optional? (mandatory, if not)
 		aafBool isOptional);
