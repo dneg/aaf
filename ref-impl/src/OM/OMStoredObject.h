@@ -318,11 +318,9 @@ private:
   void save(OMStoredPropertySetIndex *index);
   OMStoredPropertySetIndex* restore(void);
   
-    // @cmember The stream name for the index of a vector named <p vectorName>.
-  char* vectorIndexStreamName(const char* vectorName);
-
-    // @cmember The stream name for the index of a set named <p setName>.
-  char* setIndexStreamName(const char* setName);
+    // @cmember The stream name for the index of a collection
+    //          named <p collectionName>.
+  char* collectionIndexStreamName(const char* collectionName);
 
   IStream* createStream(IStorage* storage, const char* streamName);
   IStream* openStream(IStorage* storage, const char* streamName);
