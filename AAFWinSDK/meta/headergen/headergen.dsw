@@ -1,0 +1,152 @@
+Microsoft Developer Studio Workspace File, Format Version 6.00
+# WARNING: DO NOT EDIT OR DELETE THIS WORKSPACE FILE!
+
+###############################################################################
+
+Project: "all"=.\all\all.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name classDefUids
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name extEnumUid
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name propertyDefUid
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name propertyId
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name storedObjectUid
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name typeDefUid
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name headerGenUtils
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "classDefUids"=.\classDefUids\classDefUids.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name headerGenUtils
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "extEnumUid"=.\extEnumUid\extEnumUid.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name headerGenUtils
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "headerGenUtils"=.\headerGenUtils\headerGenUtils.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "propertyDefUid"=.\propertyDefUid\propertyDefUid.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name headerGenUtils
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "propertyId"=.\propertyId\propertyId.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name headerGenUtils
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "storedObjectUid"=.\storedObjectUid\storedObjectUid.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name headerGenUtils
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "typeDefUid"=.\typeDefUid\typeDefUid.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name headerGenUtils
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Global:
+
+Package=<5>
+{{{
+}}}
+
+Package=<3>
+{{{
+}}}
+
+###############################################################################
+
