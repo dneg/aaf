@@ -17,7 +17,7 @@
 //
 // ../smpte/DictP18.csv 
 //
-// This file was generated on Tue Apr 20 16:27:47 EDT 1999
+// This file was generated on Thu Apr 29 19:04:54 EDT 1999
 // by user tbingham on system TBINGHAMPC.
 //
 // Key to macros.
@@ -327,9 +327,9 @@ AAF_CLASS(Filler,
 AAF_CLASS_END(Filler)
 AAF_CLASS_SEPARATOR()
 
-// Group
+// Effect
 //
-AAF_CLASS(Group,
+AAF_CLASS(Effect,
   AAF_LITERAL_AUID(0x06414146,
     0x0000, 0x0000,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
@@ -341,7 +341,7 @@ AAF_PROPERTY(EffectDefinition ,
   0x0b01,
   RefAUID,
   true,
-  Group)
+  Effect)
 AAF_PROPERTY(InputSegments,
   AAF_LITERAL_AUID(0x06414146,
     0x0200, 0x0000,
@@ -349,7 +349,7 @@ AAF_PROPERTY(InputSegments,
   0x0b02,
   ObjRefArray,
   false,
-  Group)
+  Effect)
 AAF_PROPERTY(Parameters ,
   AAF_LITERAL_AUID(0x06414146,
     0x0300, 0x0000,
@@ -357,7 +357,7 @@ AAF_PROPERTY(Parameters ,
   0x0b03,
   ObjRefArray,
   false,
-  Group)
+  Effect)
 AAF_PROPERTY(BypassOverride,
   AAF_LITERAL_AUID(0x06414146,
     0x0400, 0x0000,
@@ -365,7 +365,7 @@ AAF_PROPERTY(BypassOverride,
   0x0b04,
   UInt32,
   false,
-  Group)
+  Effect)
 AAF_PROPERTY(Rendering,
   AAF_LITERAL_AUID(0x06414146,
     0x0500, 0x0000,
@@ -373,8 +373,8 @@ AAF_PROPERTY(Rendering,
   0x0b05,
   ObjRef,
   false,
-  Group)
-AAF_CLASS_END(Group)
+  Effect)
+AAF_CLASS_END(Effect)
 AAF_CLASS_SEPARATOR()
 
 // NestedScope
