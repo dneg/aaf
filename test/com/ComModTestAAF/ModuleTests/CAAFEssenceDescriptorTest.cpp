@@ -135,10 +135,16 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		
 		// Create the descriptor:
 		// instantiate a concrete subclass of EssenceDescriptor
-		checkResult(defs.cdHTMLDescriptor()->
+		checkResult(defs.cdAIFCDescriptor()->
 					CreateInstance(IID_IAAFEssenceDescriptor, 
 								   (IUnknown **)&edesc));		
- 		checkResult(pSourceMob->SetEssenceDescriptor (edesc));
+		IAAFAIFCDescriptor*			pAIFCDesc = NULL;
+		checkResult(edesc->QueryInterface (IID_IAAFAIFCDescriptor, (void **)&pAIFCDesc));
+		checkResult(pAIFCDesc->SetSummary (5, (unsigned char*)"TEST"));
+		pAIFCDesc->Release();
+		pAIFCDesc = NULL;
+
+		checkResult(pSourceMob->SetEssenceDescriptor (edesc));
 
 
 /* CountLocators()	******************************************/
