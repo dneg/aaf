@@ -76,17 +76,6 @@ size_t OMStoredObject::_openStorages = 0;
 size_t OMStoredObject::_openStreams = 0;
 #endif
 
-  // @mfunc Constructor.
-  //   @parm The IStorage for the persistent representation of
-  //         this <c OMStoredObject>.
-OMStoredObject::OMStoredObject(IStorage* s)
-: _storage(s), _index(0), _properties(0),
-  _offset(0), _open(false), _mode(OMFile::readOnlyMode),
-  _byteOrder(hostByteOrder()), _reorderBytes(false)
-{
-  TRACE("OMStoredObject::OMStoredObject");
-}
-
   // @mfunc Destructor.
 OMStoredObject::~OMStoredObject(void)
 {
@@ -339,6 +328,16 @@ OMStoredPropertySetIndex* OMStoredObject::restore(void)
   return index;
 }
 
+  // @mfunc Restore the <c OMStoredObjectIdentification>
+  //        of this <c OMStoredObject> into <p id>.
+  //   @parm The <c OMStoredObjectIdentification> of this <c OMStoredObject>.
+void OMStoredObject::restore(OMStoredObjectIdentification& id)
+{
+  TRACE("OMStoredObject::restore");
+
+  getClass(_storage, id);
+}
+
   // @mfunc Restore the <c OMPropertySet> <p properties> into
   //        this <c OMStoredObject>.
   //   @parm The <c OMPropertySet> to restore.
@@ -367,6 +366,67 @@ void OMStoredObject::restore(OMPropertySet& properties)
   streamSetPosition(_properties, 0);
   POSTCONDITION("At start of properties stream",
                                        streamPosition(_properties) == 0);
+}
+
+  // @mfunc Constructor.
+  //   @parm The IStorage for the persistent representation of
+  //         this <c OMStoredObject>.
+OMStoredObject::OMStoredObject(IStorage* s)
+: _storage(s), _index(0), _properties(0),
+  _offset(0), _open(false), _mode(OMFile::readOnlyMode),
+  _byteOrder(hostByteOrder()), _reorderBytes(false)
+{
+  TRACE("OMStoredObject::OMStoredObject");
+}
+
+  // @mfunc Check that the <c OMPropertySet> <p propertySet> is
+  //        consistent with the <c OMStoredPropertySetIndex>
+  //        propertySetIndex.
+  //   @parm The <c OMPropertySet> to validate.
+  //   @parm The <c OMStoredPropertySetIndex> to validate.
+void OMStoredObject::validate(
+                        const OMPropertySet* propertySet,
+                        const OMStoredPropertySetIndex* propertySetIndex) const
+{
+  TRACE("OMStoredObject::validate");
+  PRECONDITION("Valid property set", propertySet != 0);
+  PRECONDITION("Valid property set index", propertySetIndex != 0);
+
+  OMPropertyId propertyId;
+  OMStoredForm type;
+  OMUInt32 offset;
+  OMPropertySize length;
+  size_t context;
+
+  // Check that all required properties are present.
+  //
+  OMPropertySetIterator iterator(*propertySet, OMBefore);
+  while (++iterator) {
+    OMProperty* p = iterator.property();
+    ASSERT("Valid property", p != 0);
+    propertyId = p->propertyId();
+    if (!p->isOptional()) {
+      bool found = propertySetIndex->find(propertyId, type, offset, length);
+      ASSERT("Required property present", found);
+      if (!found) {
+        // error required property missing
+      }
+    }
+  }
+
+  // Check that there are no spurious properties.
+  //
+  OMPropertyCount entries = propertySetIndex->entries();
+  context = 0;
+  for (size_t k = 0; k < entries; k++) {
+    propertySetIndex->iterate(context, propertyId, type, offset, length);
+    bool allowed = propertySet->isAllowed(propertyId);
+    ASSERT("Property allowed", allowed);
+    if (!allowed) {
+      // error illegal property for this object
+    }
+  }
+
 }
 
 OMStoredObject* OMStoredObject::openFile(const wchar_t* fileName,
@@ -675,22 +735,14 @@ IStream* OMStoredObject::createStream(const wchar_t* streamName)
   return createStream(_storage, streamName);
 }
 
-  // @mfunc Save the <c OMClassId> <p cid> in this <c OMStoredObject>.
-  //   @parm The <c OMClassId> of this <c OMStoredObject>.
-void OMStoredObject::save(const OMClassId& cid)
+  // @mfunc Save the <c OMStoredObjectIdentification> <p id>
+  //        in this <c OMStoredObject>.
+  //   @parm The <c OMStoredObjectIdentification> of this <c OMStoredObject>.
+void OMStoredObject::save(const OMStoredObjectIdentification& id)
 {
   TRACE("OMStoredObject::save");
 
-  setClass(_storage, cid);
-}
-
-  // @mfunc Restore the class id of this <c OMStoredObject>.
-  //   @parm The <c OMClassId> of this <c OMStoredObject>.
-void OMStoredObject::restore(OMClassId& cid)
-{
-  TRACE("OMStoredObject::restore");
-
-  getClass(_storage, cid);
+  setClass(_storage, id);
 }
 
   // @mfunc Create a new <c OMStoredObject>, named <p name>,
@@ -725,56 +777,6 @@ OMStoredObject* OMStoredObject::open(const wchar_t* name)
   ASSERT("Valid heap pointer", result != 0);
   result->open(_mode);
   return result;
-}
-
-  // @mfunc Check that the <c OMPropertySet> <p propertySet> is
-  //        consistent with the <c OMStoredPropertySetIndex>
-  //        propertySetIndex.
-  //   @parm The <c OMPropertySet> to validate.
-  //   @parm The <c OMStoredPropertySetIndex> to validate.
-void OMStoredObject::validate(
-                        const OMPropertySet* propertySet,
-                        const OMStoredPropertySetIndex* propertySetIndex) const
-{
-  TRACE("OMStoredObject::validate");
-  PRECONDITION("Valid property set", propertySet != 0);
-  PRECONDITION("Valid property set index", propertySetIndex != 0);
-
-  OMPropertyId propertyId;
-  OMStoredForm type;
-  OMUInt32 offset;
-  OMPropertySize length;
-  size_t context;
-
-  // Check that all required properties are present.
-  //
-  OMPropertySetIterator iterator(*propertySet, OMBefore);
-  while (++iterator) {
-    OMProperty* p = iterator.property();
-    ASSERT("Valid property", p != 0);
-    propertyId = p->propertyId();
-    if (!p->isOptional()) {
-      bool found = propertySetIndex->find(propertyId, type, offset, length);
-      ASSERT("Required property present", found);
-      if (!found) {
-        // error required property missing
-      }
-    }
-  }
-
-  // Check that there are no spurious properties.
-  //
-  OMPropertyCount entries = propertySetIndex->entries();
-  context = 0;
-  for (size_t k = 0; k < entries; k++) {
-    propertySetIndex->iterate(context, propertyId, type, offset, length);
-    bool allowed = propertySet->isAllowed(propertyId);
-    ASSERT("Property allowed", allowed);
-    if (!allowed) {
-      // error illegal property for this object
-    }
-  }
-
 }
 
   // @mfunc  Save the <c OMStoredVectorIndex> <p vector> in this
