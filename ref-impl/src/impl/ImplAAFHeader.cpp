@@ -384,7 +384,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFHeader::GetDictionary (ImplAAFDictionary ** ppDictionary)
+    ImplAAFHeader::GetDictionary (ImplAAFDictionary ** ppDictionary) const
 {
   if (! ppDictionary)
 	{
@@ -708,11 +708,26 @@ ImplAAFContentStorage *ImplAAFHeader::GetContentStorage()
 }
 
 // Fill in when dictionary property is supported.
-ImplAAFDictionary *ImplAAFHeader::GetDictionary()
+ImplAAFDictionary *ImplAAFHeader::GetDictionary() const
 {
   ImplAAFDictionary	*result = _dictionary;
-  assert(result);
 
+  // Note - in the case where this is the first GetDictionary() on
+  // Header (in order to initialize the OM properties on the
+  // newly-created Header object), the _dictionary property won't be
+  // set up yet.  If that's the case, get the dictionary the
+  // old-fashioned way (through AAFObject).
+  if (! result)
+	{
+	  AAFRESULT hr = ImplAAFObject::GetDictionary(&result);
+	  assert (AAFRESULT_SUCCEEDED (hr));
+	  assert (result);
+	  // clients of GetDictionary(void) expect the dictionary to *not*
+	  // be reference-counted.
+	  aafUInt32 refcnt = result->ReleaseReference ();
+	  // make sure at least one reference remains.
+	  assert (refcnt > 0);
+	}
   return(result);
 }
 
