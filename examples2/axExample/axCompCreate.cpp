@@ -153,6 +153,8 @@ void AxCreateCompositionExample( AxFile& axFile,
 	
 	AxCompositionMob axCompMob(
 		AxCreateInstance<IAAFCompositionMob>( axDictionary ) );
+	axCompMob.SetName( L"Example Composition" );
+
 	axHeader.AddMob( axCompMob );
 
 	aafRational_t editRate = {25, 1};
@@ -217,7 +219,7 @@ void AxCreateCompositionExample( AxFile& axFile,
 		AxOperationDef axOpDef( AxCreateInstance<IAAFOperationDef> ( axDictionary ) );
 
 		axOpDef.Initialize( kAAFEffectMonoAudioDissolve,
-				    L"Example Mono Dissolve",
+				    L"Example Mono Audio Dissolve",
 				    L"No timewarp, bypass track 0, 2 mono audio inputs" );
 
 	    axOpDef.SetIsTimeWarp( false );
@@ -267,7 +269,7 @@ void AxCreateCompositionExample( AxFile& axFile,
 		AxOperationDef axOpDef( AxCreateInstance<IAAFOperationDef> ( axDictionary ) );
 
 		axOpDef.Initialize( kAAFEffectVideoDissolve,
-				    L"Example Mono Dissolve",
+				    L"Example Video Dissolve",
 				    L"No timewarp, bypass track 0, 2 video inputs" );
 
 		axOpDef.SetIsTimeWarp( false );
@@ -280,7 +282,7 @@ void AxCreateCompositionExample( AxFile& axFile,
 	}
 
 	AxOperationDef axVideoDslvOpDef( axDictionary.LookupOperationDef( kAAFEffectVideoDissolve ) );
-	
+
 	AxOperationGroup axVideoDslvOpGroup( AxCreateInstance<IAAFOperationGroup>( axDictionary ) );
 	
 	// Overlap by one frame.
