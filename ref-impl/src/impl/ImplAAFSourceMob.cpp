@@ -27,7 +27,7 @@
 #include "ImplAAFSegment.h"
 #endif
 
-
+#include "AAFPropertyIDs.h"
 
 
 #ifndef __ImplAAFSourceMob_h__
