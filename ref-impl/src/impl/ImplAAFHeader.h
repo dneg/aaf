@@ -129,6 +129,14 @@ public:
 
 
   //****************
+  // GetNumEssenceData()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetNumEssenceData
+        (aafUInt32 *  pNumEssenceData);  //@parm [out,retval] Total number of essence data with type
+
+
+  //****************
   // IsEssenceDataPresent()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
@@ -148,10 +156,7 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     EnumEssenceData
-	    (// @parm [in,ref] Essence Criteria for enumeration
-         aafMediaCriteria_t *  pMediaCriteria,
-
-		 // @parm [out,retval] Essence Enumeration
+	    ( // @parm [out,retval] Essence Enumeration
 		 ImplEnumAAFEssenceData ** ppEnum);
 
 
