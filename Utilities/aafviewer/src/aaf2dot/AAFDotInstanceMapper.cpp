@@ -509,6 +509,10 @@ AAFDotInstanceMapper::MapAAFPropertyValue( AxPropertyValue axPropertyValue, bool
    {
       // iterator will take us to the base type, so skip this iteration level
    }
+   else if ( axTypeDef.GetTypeCategory() == kAAFTypeCatIndirect )
+   {
+      // iterator will take us to the base type, so skip this iteration level
+   }
    else
    {
       if ( AxStringToString( axTypeDef.GetName() ).compare( "Rational" ) == 0 )
@@ -740,6 +744,44 @@ AAFDotInstanceMapper::MapAAFPropertyValueGeneric( AxTypeDef &axTypeDef,
 	 AxQueryInterface< IAAFTypeDef,IAAFTypeDefEnum > (
 	    axTypeDef ) );
       string value = AxStringToString( axTypeDefEnum.GetNameFromValue( propValue ) );
+      DotRecordNodeAttribute attribute( pStalker->GetName(), value );
+
+      oStalker->GetNode()->AddAttribute( attribute );
+
+
+      PushStalker( oStalker );
+      PushStalker( pStalker );
+   }
+
+   else if ( axTypeDef.GetTypeCategory() == kAAFTypeCatExtEnum)
+   {
+      PropertyValueStalker *pStalker = dynamic_cast< PropertyValueStalker* > ( PopStalker() );
+      if ( pStalker == 0 )
+      {
+	 cerr << "Error: Property value stalker expected." << endl;
+	 throw;
+      }
+      ObjectStalker *oStalker = dynamic_cast< ObjectStalker* > ( PopStalker() );
+      if ( oStalker == 0 )
+      {
+	 cerr << "Error: Object stalker expected." << endl;
+	 throw;
+      }
+
+      IAAFTypeDefExtEnumSP spTypeDefExtEnum(AxQueryInterface<IAAFTypeDef,IAAFTypeDefExtEnum> 
+					    (axTypeDef));
+
+      aafUInt32 sizeInBytes = 0;
+      CHECK_HRESULT(spTypeDefExtEnum->GetNameBufLenFromValue(propValue, &sizeInBytes));
+
+      int sizeInChars = (int)((double)sizeInBytes / sizeof(aafCharacter) + 0.5);
+      vector<aafCharacter> buf(sizeInChars);
+
+      CHECK_HRESULT(spTypeDefExtEnum->GetNameFromValue(propValue, &buf[0], 
+						       sizeInChars*sizeof(aafCharacter)));
+      AxString name(&buf[0]);
+
+      string value = AxStringToString( name );
       DotRecordNodeAttribute attribute( pStalker->GetName(), value );
 
       oStalker->GetNode()->AddAttribute( attribute );
