@@ -33,7 +33,6 @@ CXXFILES = AAFPluginCOM.cpp \
 SUPOBJS = $(OBJDIR)/aafCvt$(OBJ) \
 	  $(OBJDIR)/AAFUtils$(OBJ) \
 	  $(OBJDIR)/../../com-api/obj/com-dll/CAAFClassFactory$(OBJ) \
-	  $(OBJDIR)/../../com-api/obj/com-dll/CAAFClassFactory$(OBJ) \
 	  $(OBJDIR)/../../com-api/obj/com-dll/CAAFServer$(OBJ) \
 	  $(OBJDIR)/../../com-api/obj/com-dll/CAAFUnknown$(OBJ) \
 	  $(OBJDIR)/../../com-api/obj/com-dll/CAAFInProcServer$(OBJ)
