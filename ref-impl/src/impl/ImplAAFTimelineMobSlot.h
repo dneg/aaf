@@ -83,6 +83,10 @@ public:
   // in /test/ImplAAFTimelineMobSlotTest.cpp.
 	static AAFRESULT test();
 
+  // Return this objects stored object class.
+  virtual AAFRESULT STDMETHODCALLTYPE
+	GetObjectClass(aafUID_t * pClass);
+
 protected:
 	OMFixedSizeProperty<aafRational_t>	_editRate;
 	OMFixedSizeProperty<aafPosition_t>	_origin; 
