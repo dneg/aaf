@@ -345,8 +345,7 @@ int main( int argc, const char** argv )
 		// If you follow the code, you will see that the header object is, ultimately,
 		// cast to AxObject so that the IAAFObject interface of the header can be used
 		// to access its properties.
-	
-#if 0	
+		
 		{
 			auto_ptr< AxBaseObjIterPrtcl > axHeaderIter(
 				new AxBaseSolitaryObjIter<AxHeader>(axHeader) );
@@ -361,9 +360,6 @@ int main( int argc, const char** argv )
 			wcout << L"\tOpaques reported by dictionary: " << axDictionary.CountOpaqueTypeDefs() << endl;
 			wcout << L"\tOpaques found and renamed: " << count << endl;
 		}
-#endif
-
-		wcout << L"FIRST TRAVERSAL" << endl;
 		
 		{
 			auto_ptr< AxBaseObjIterPrtcl > axHeaderIter(
@@ -376,23 +372,6 @@ int main( int argc, const char** argv )
 			wcout << endl << L"Recursive Dump:" << endl;
 			wcout << endl << L"  Item  Level   Desc.       Detail" << endl;
 			dumpBaseObjects( axDictionary, recIter, args );
-		}
-
-
-		wcout << endl << endl << L"SECOND TRAVERSAL" << endl;
-		
-		{
-			auto_ptr< AxBaseObjIterPrtcl > axHeaderIter(
-			new AxBaseSolitaryObjIter<AxHeader>(axHeader) );
-
-		    // Create a recursive iterator...
-			AxBaseObjRecIter recIter( axHeaderIter );
-
-			// ... and dump all objects.
-			wcout << endl << L"Recursive Dump:" << endl;
-			wcout << endl << L"  Item  Level   Desc.       Detail" << endl;
-			dumpBaseObjects( axDictionary, recIter, args );
-
 		}
 
 		// That's all folks.
