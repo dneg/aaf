@@ -37,8 +37,8 @@ static inline OMUInt64 swapHighLowParts(ULARGE_INTEGER &x)
 
 static inline void setHighLowParts(ULARGE_INTEGER &x, const OMUInt64& y)
 {
-  x.LowPart = (unsigned long)((0xFFFFFFFF00000000 & (OMUInt64)y) >> 32);
-  x.HighPart = (unsigned long)(0x00000000FFFFFFFF & (OMUInt64)y);
+  x.HighPart = (unsigned long)((0xFFFFFFFF00000000 & (OMUInt64)y) >> 32);
+  x.LowPart  = (unsigned long) (0x00000000FFFFFFFF & (OMUInt64)y);
 }
 
 #define OMQUADPART(x) (swapHighLowParts(x))
