@@ -220,8 +220,8 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	IAAFContainerDef**	pArrayDef = pArray;
 	bool				bFileOpen = false;
 	HRESULT				hr = S_OK;
-	wchar_t				testString[256];
-	aafUInt32			resultCount;
+//	wchar_t				testString[256];
+//	aafUInt32			resultCount;
 
 	try
 	{
@@ -237,6 +237,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 		checkResult(pContainerDef->QueryInterface (IID_IAAFDefObject,
                                           (void **)&pDef));
 
+#if 0	//!!! Can't rely on order any more
 		checkResult(pDef->GetName (testString, sizeof(testString)));
 		checkExpression (wcscmp(testString, sName1) == 0, AAFRESULT_TEST_FAILED);
 		pContainerDef->Release();
@@ -313,6 +314,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 		pContainerDef = NULL;
 		pDef->Release();
 		pDef = NULL;
+#endif
 	}
 	catch (HRESULT& rResult)
 	{

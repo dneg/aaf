@@ -39,7 +39,9 @@
 #include "AAFResult.h"
 #include "AAFDataDefs.h"
 #include "AAFDefUIDs.h"
+#include "AAFCLassDefUIDs.h"
 #include "AAFCodecDefs.h"
+#include "AAFContainerDefs.h"
 
 #include "CAAFBuiltinDefs.h"
 
@@ -132,6 +134,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFHeader *		pHeader = NULL;
 	IAAFDictionary*		pDictionary = NULL;
 	IAAFCodecDef*	pCodecDef = NULL;
+	IAAFClassDef*		pClass = NULL;
 	bool				bFileOpen = false;
 	HRESULT				hr = S_OK;
 	aafUID_t			uid;
@@ -159,6 +162,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	checkResult(pCodecDef->AddEssenceKind (defs.ddMatte()));
 	uid = NoCodec;
 	checkResult(pCodecDef->Initialize (uid, sName1, sDescription1));
+	checkResult(pDictionary->LookupClassDef(kAAFClassID_EssenceDescriptor, &pClass));
+	checkResult(pCodecDef->SetFileDescriptorClass (pClass));
 	checkResult(pDictionary->RegisterCodecDef(pCodecDef));
 	pCodecDef->Release();
 	pCodecDef = NULL;
@@ -169,6 +174,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	checkResult(pCodecDef->AddEssenceKind (defs.ddMatte()));
 	uid = TESTID_2;
 	checkResult(pCodecDef->Initialize (uid, sName2, sDescription2));
+	checkResult(pCodecDef->SetFileDescriptorClass (pClass));
 
 	checkResult(pDictionary->RegisterCodecDef(pCodecDef));
   }
@@ -187,6 +193,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
   if (pHeader)
     pHeader->Release();
+      
+  if (pClass)
+    pClass->Release();
       
   if (pFile)
   {  // Close file
