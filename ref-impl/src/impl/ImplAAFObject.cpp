@@ -1003,9 +1003,14 @@ void ImplAAFObject::InitOMProperties ()
 
 	  // Look at the parent of this class
 	  ImplAAFClassDefSP parentSP;
-	  hr = spDef->GetParent (&parentSP);
-	  assert (AAFRESULT_SUCCEEDED (hr));
-	  if (! parentSP)
+	  aafBool		isRoot;
+	  spDef->IsRoot (&isRoot);
+	  if(!isRoot)
+	  {
+		 hr = spDef->GetParent (&parentSP);
+		assert (AAFRESULT_SUCCEEDED (hr));
+	  }
+	  else
 		break;
 	  spDef = parentSP;
 	}
