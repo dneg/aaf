@@ -217,6 +217,10 @@ SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFEffectInvocationTest.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFEndian.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFFile.cpp"
 # End Source File
 # Begin Source File
