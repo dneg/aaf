@@ -813,9 +813,9 @@ struct CAAFInitialize
 {
   CAAFInitialize(const char *dllname = NULL)
   {
-  	clog << "Attempting to load the AAF dll..." << endl;
+  	// clog << "Attempting to load the AAF dll..." << endl;
     HRESULT hr = AAFLoad(dllname);
-    clog << ((SUCCEEDED(hr)) ? "DONE" : "FAILED") << endl;
+    // clog << ((SUCCEEDED(hr)) ? "DONE" : "FAILED") << endl;
   }
 
   ~CAAFInitialize()
@@ -901,21 +901,24 @@ int main(int argc, char* argv[])
   assert (os);
   convert(pwFileName, 260, infilename);
   
-  clog << "***Dumping file "
-	   << infilename
-	   << " using direct prop access***)" << endl;
+  // clog << "***Dumping file "
+  // << infilename
+  // << " using direct prop access***)" << endl;
   succeeded = dumpFile (pwFileName, infilename, *os);
 
   if (succeeded)
 	{
-	  clog << endl << "Done." << endl;
+	  // clog << endl << "Done." << endl;
 	  if (file_opened)
 		filestream.close ();
 	  exit (0);
 	}
   else
 	{
-	  clog << endl << "Errors were encountered." << endl;
+	  clog << endl
+		   << "Errors were encountered while dumping "
+		   << infilename
+		   << "." << endl;
 	  if (file_opened)
 		filestream.close ();
 	  exit (1);
