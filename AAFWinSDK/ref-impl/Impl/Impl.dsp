@@ -455,6 +455,10 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFTypeDefEnum.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFTypeDefExtEnum.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFTypeDefFixedArray.cpp"
 # End Source File
 # Begin Source File
