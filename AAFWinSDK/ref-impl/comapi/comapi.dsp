@@ -246,6 +246,15 @@ SOURCE="..\..\..\ref-impl\src\com-api\CAAFEndian.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFEssenceAccess.cpp"
+
+!IF  "$(CFG)" == "comapi - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "comapi - Win32 Debug"
+
+# ADD CPP /I "../../../ref-impl/plugins/"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
@@ -262,6 +271,7 @@ SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFEssenceDataTest.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFEssenceDescriptor.cpp"
+# ADD CPP /I "../../../ref-impl/plugins/"
 # End Source File
 # Begin Source File
 
@@ -270,6 +280,14 @@ SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFEssenceDescriptorTest.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFEssenceFormat.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFEssencePlugin.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFEssencePluginTest.cpp"
 # End Source File
 # Begin Source File
 

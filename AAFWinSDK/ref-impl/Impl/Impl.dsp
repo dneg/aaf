@@ -184,6 +184,10 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFEssenceFormat.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFEssencePlugin.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFFile.cpp"
 # End Source File
 # Begin Source File
