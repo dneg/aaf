@@ -1,3 +1,5 @@
+// @doc
+
 #include "OMProperty.h"
 
 #include "OMStorable.h"
@@ -20,23 +22,34 @@ OMProperty::~OMProperty(void)
 {
 }
 
+  // @mfunc The name of this <c OMProperty>.
+  //   @rdesc The property name.
+  //   @this const
 const char* OMProperty::name(void) const
 {
   return _name;
 }
 
+  // @mfunc The property id of this <c OMProperty>.
+  //   @rdesc The property id.
+  //   @this const
 int OMProperty::pid(void) const
 {
   return _pid;
 }
 
+  // @mfunc Inform this <c OMProperty> that it is a property of
+  //        the <c OMStorable> object <p containingObject>.
+  //   @parm The <c OMStorable> object of which this <c OMProperty> is
+  //   a property.
 void OMProperty::setContainingObject(const OMStorable* containingObject)
 {
   _containingObject = containingObject;
 }
 
-// This function is needed because "operator &" is overidden
-//
+  // @mfunc The address of this <c OMProperty> object. This function
+  //        is defined so that descendants may override "operator &".
+  //   @rdesc The address of this <c OMProperty>.
 OMProperty* OMProperty::address(void)
 {
   return this;
