@@ -53,7 +53,7 @@
 #include <assert.h>
 #include <string.h>
 
-extern "C" const aafClassID_t CLSID_AAFPropertyValue;
+extern "C" const aafClassID_t CLSID_AAFPropValData;
 
 
 ImplAAFTypeDefVariableArray::ImplAAFTypeDefVariableArray ()
@@ -110,8 +110,11 @@ AAFRESULT STDMETHODCALLTYPE
 {
   if (! pTypeDef)  return AAFRESULT_NULL_PARAM;
 
-  aafUID_t id;
   assert (pTypeDef);
+  if (! pTypeDef->IsVariableArrayable())
+	return AAFRESULT_BAD_TYPE;
+
+  aafUID_t id;
   AAFRESULT hr = pTypeDef->GetAUID(&id);
   if (! AAFRESULT_SUCCEEDED (hr)) return hr;
 
@@ -253,6 +256,32 @@ ImplAAFTypeDefVariableArray::AppendElement
   memcpy (pBits, buf, newSize);
 
   delete[] buf;
+  return AAFRESULT_SUCCESS;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+ImplAAFTypeDefVariableArray::CreateEmptyValue
+(ImplAAFPropertyValue ** ppPropVal)
+{
+  if (! ppPropVal)
+	return AAFRESULT_NULL_PARAM;
+
+  ImplAAFPropValDataSP pvd;
+  ImplAAFPropValData * tmp;
+  tmp = (ImplAAFPropValData*) CreateImpl (CLSID_AAFPropValData);
+  if (!tmp) return AAFRESULT_NOMEMORY;
+  pvd = tmp;
+  // the pvd smart pointer will maintain a reference for us...
+  aafUInt32 refCount;
+  refCount = tmp->ReleaseReference ();
+  // ...make sure it really does
+  assert (1 == refCount);
+
+  assert (ppPropVal);
+  *ppPropVal = pvd;
+  assert (*ppPropVal);
+  (*ppPropVal)->AcquireReference ();
   return AAFRESULT_SUCCESS;
 }
 
@@ -491,3 +520,19 @@ OMProperty * ImplAAFTypeDefVariableArray::pvtCreateOMPropertyMBS
   assert (result);
   return result;
 }
+
+
+bool ImplAAFTypeDefVariableArray::IsAggregatable () const
+{ return false; }
+
+bool ImplAAFTypeDefVariableArray::IsStreamable () const
+{ return false; }
+
+bool ImplAAFTypeDefVariableArray::IsFixedArrayable () const
+{ return false; }
+
+bool ImplAAFTypeDefVariableArray::IsVariableArrayable () const
+{ return false; }
+
+bool ImplAAFTypeDefVariableArray::IsStringable () const
+{ return false; }
