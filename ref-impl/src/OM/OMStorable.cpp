@@ -70,7 +70,6 @@ void OMStorable::save(void) const
 {
   TRACE("OMStorable::save");
   
-  //_file->objectDirectory()->insert(pathName(), this);
   store()->save(classId());
   store()->save(_persistentProperties);
 }
@@ -133,7 +132,7 @@ OMStorable* OMStorable::restoreFrom(const OMStorable* containingObject,
 void OMStorable::restoreContents(void)
 {
   TRACE("OMStorable::restoreContents");
-  _store->restore(_persistentProperties);
+  store()->restore(_persistentProperties);
 }
 
   // @mfunc Attach this <c OMStorable>.
