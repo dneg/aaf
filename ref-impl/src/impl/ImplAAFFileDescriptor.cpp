@@ -39,14 +39,14 @@
 #include "AAFResult.h"
 
 ImplAAFFileDescriptor::ImplAAFFileDescriptor ()
-: _sampleRate(			PID_FileDescriptor_SampleRate,	"SampleRate"),
- _length(				PID_FileDescriptor_Length,		"Length"),
- _isInContainer(        PID_FileDescriptor_IsInContainer,	"IsInContainer"),
+: _sampleRate(			PID_FileDescriptor_SampleRate,		"SampleRate"),
+ _length(				PID_FileDescriptor_Length,			"Length"),
+ _codecDef(				PID_FileDescriptor_CodecDefinition,		"CodecDefinition"),
  _containerFmt(         PID_FileDescriptor_ContainerFormat,	"ContainerFormat")
 {
   _persistentProperties.put(_sampleRate.address());
   _persistentProperties.put(_length.address());
-  _persistentProperties.put(_isInContainer.address());
+  _persistentProperties.put(_codecDef.address());
   _persistentProperties.put(_containerFmt.address());
 }
 
@@ -83,19 +83,19 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFFileDescriptor::SetIsInContainer (aafBool isAAF)
+    ImplAAFFileDescriptor::SetCodecDef (const aafUID_t & pID)
 {
-	_isInContainer = isAAF;
+	_codecDef = pID;
 	return AAFRESULT_SUCCESS;
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFFileDescriptor::GetIsInContainer (aafBool* pIsAAF)
+    ImplAAFFileDescriptor::GetCodecDef (aafUID_t *pID)
 {
-	if(pIsAAF == NULL)
+	if(pID == NULL)
 		return(AAFRESULT_NULL_PARAM);
-	*pIsAAF = _isInContainer;
+	*pID = _codecDef;
 	return AAFRESULT_SUCCESS;
 }
 
