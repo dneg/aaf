@@ -4,6 +4,7 @@
 
 #include "OMPortability.h"
 #include "OMTypes.h"
+#include "OMFile.h"
 
 #include <stddef.h>
 
@@ -160,11 +161,11 @@ public:
 private:
 
   static OMStoredObject* open(const wchar_t* fileName,
-                              const OMAccessMode mode);
+                              const OMFile::OMAccessMode mode);
   static OMStoredObject* create(const wchar_t* fileName);
 
   void create(const OMByteOrder byteOrder);
-  void open(const OMAccessMode mode);
+  void open(const OMFile::OMAccessMode mode);
 
   void save(OMStoredPropertySetIndex *index);
   OMStoredPropertySetIndex* restore(void);
@@ -177,7 +178,7 @@ private:
   IStorage* createStorage(IStorage* storage, const char* storageName);
   IStorage* openStorage(IStorage* storage,
                         const char* storageName,
-                        const OMAccessMode mode);
+                        const OMFile::OMAccessMode mode);
   void closeStorage(IStorage*& storage);
 
   void setClass(IStorage* storage, const OMClassId& cid);
@@ -190,7 +191,7 @@ private:
   size_t _offset;
 
   bool _open;
-  OMAccessMode _mode;
+  OMFile::OMAccessMode _mode;
   OMByteOrder _byteOrder;
   bool _reorderBytes;
 };
