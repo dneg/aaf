@@ -30,6 +30,10 @@
 #include "ImplAAFPropertyDef.h"
 #endif
 
+#ifndef __ImplAAFClassDef_h__
+#include "ImplAAFClassDef.h"
+#endif
+
 #ifndef __ImplEnumAAFPropertyDefs_h__
 #include "ImplEnumAAFPropertyDefs.h"
 #endif
@@ -175,7 +179,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplEnumAAFPropertyDefs::SetIterator(
-                        ImplAAFObject *pObj,
+                        ImplAAFClassDef *pObj,
                         OMReferenceContainerIterator<ImplAAFPropertyDef>* iterator)
 {
 	AAFRESULT ar = AAFRESULT_SUCCESS;

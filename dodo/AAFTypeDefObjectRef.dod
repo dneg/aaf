@@ -1,9 +1,9 @@
 #c/*************************************************\
-#c*													*
-#c* Advanced Authoring Format						*
-#c*													*
-#c* Copyright (c) 1998-1999 Avid Technology, Inc.	*
-#c*													*
+#c*                                                 *
+#c* Advanced Authoring Format                       *
+#c*                                                 *
+#c* Copyright (c) 1998-2000 Avid Technology, Inc.   *
+#c*                                                 *
 #c\*************************************************/
 #startm .this-module 0
 AAFTypeDefObjectRef\
@@ -19,6 +19,8 @@ AD_IDL(//
 // This interface is used to define Object references \(either strong
 // or weak\) used in AAF persistent objects.
 AD_STD_COMMENT_IFC_HEADER)
+
+AD_FORWARD_DECLARATION(AAFObject)
 AD_FORWARD_DECLARATION(AAFPropertyValue)
 AD_FORWARD_DECLARATION(AAFClassDef)
 AD_CLASS_UUID(c3274643, 9467, 11d2, 84, 1f, 00, 60, 08, 32, ac, b8)

@@ -31,9 +31,10 @@
  ************************************************************************/
 
 class ImplAAFPropertyDef;
+class ImplAAFClassDef;
 
-#ifndef __ImplAAFObject_h__
-#include "ImplAAFObject.h"
+#ifndef __ImplAAFRoot_h__
+#include "ImplAAFRoot.h"
 #endif
 
 #include "OMReferenceContainerIter.h"
@@ -106,11 +107,11 @@ public:
 public:
   // SDK Internal 
   virtual AAFRESULT STDMETHODCALLTYPE
-	  SetIterator(ImplAAFObject *pObj,
+	  SetIterator(ImplAAFClassDef *pObj,
 				OMReferenceContainerIterator<ImplAAFPropertyDef>* iterator);
 
 private:
-	ImplAAFObject                   * _enumObj;
+	ImplAAFClassDef                   * _enumObj;
 	OMReferenceContainerIterator<ImplAAFPropertyDef>*	_iterator;
 };
 
