@@ -167,7 +167,7 @@
 	  echo "" ; ¶
 	  for class in {AAFOBJECTS} {AAFCOMINTERFACESONLY} ; ¶
 	      {DODO} -f :macros:dod2iid.mac < {class}.dod > dod2iid.tmp ; ¶
-	      Search -q 'const IID IID_' dod2iid.tmp ; ¶
+	      Search -q /¥const IID IID_/ dod2iid.tmp ; ¶
 	      echo "" ; ¶
 	      echo "" ; ¶
 	  end ; ¶
@@ -231,7 +231,7 @@
 	  echo "" ; ¶
 	  for class in {PLUGIN_OBJECTS} ; ¶
 	      {DODO} -f :macros:dod2iid.mac < {class}.dod > dod2iid.tmp ; ¶
-	      Search -q 'const IID IID_' dod2iid.tmp ; ¶
+	      Search -q /¥const IID IID_/ dod2iid.tmp ; ¶
 	      echo "" ; ¶
 	      echo "" ; ¶
 	  end ; ¶
