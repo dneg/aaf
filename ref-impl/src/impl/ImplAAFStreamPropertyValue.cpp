@@ -230,32 +230,70 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFStreamPropertyValue::HasStoredByteOrder (
-      aafBoolean_t *  /*pHasByteOrder*/)
+      aafBoolean_t *  pHasByteOrder)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  if (NULL == pHasByteOrder)
+    return AAFRESULT_NULL_PARAM;
+
+  if (_streamProperty->hasByteOrder())
+    *pHasByteOrder = kAAFTrue;
+  else
+    *pHasByteOrder = kAAFFalse;
+
+  return AAFRESULT_SUCCESS;
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFStreamPropertyValue::GetStoredByteOrder (
-      eAAFByteOrder_t *  /*pByteOrder*/)
+      eAAFByteOrder_t *  pByteOrder)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  if (NULL == pByteOrder)
+    return AAFRESULT_NULL_PARAM;
+
+  // Cannot get the byte order if it has never been set.
+  if (!_streamProperty->hasByteOrder())
+    return AAFRESULT_NOBYTEORDER;
+
+  OMByteOrder byteOrder = _streamProperty->byteOrder();
+  if (byteOrder == littleEndian)
+    *pByteOrder = kAAFByteOrderLittle;
+  else
+    *pByteOrder = kAAFByteOrderBig;
+  return AAFRESULT_SUCCESS;
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFStreamPropertyValue::SetStoredByteOrder (
-      eAAFByteOrder_t  /*byteOrder*/)
+      eAAFByteOrder_t  byteOrder)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  // Cannot set the byte order if there is an existing byte order.
+  if (_streamProperty->hasByteOrder())
+    return AAFRESULT_INVALID_BYTEORDER;
+  
+  // Cannot set the byte order if the stream is non-empty.
+  if (0 < _streamProperty->size())
+    return AAFRESULT_INVALID_BYTEORDER;
+  
+  if (byteOrder == kAAFByteOrderLittle)
+    _streamProperty->setByteOrder(littleEndian);
+  else
+    _streamProperty->setByteOrder(bigEndian);
+
+  return AAFRESULT_SUCCESS;
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFStreamPropertyValue::ClearStoredByteOrder (void)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  // Cannot clear the byte order if it has never been set.
+  if (!_streamProperty->hasByteOrder())
+    return AAFRESULT_NOBYTEORDER;
+
+  _streamProperty->clearByteOrder();
+  return AAFRESULT_SUCCESS;
 }
 
 
@@ -271,6 +309,10 @@ AAFRESULT STDMETHODCALLTYPE
     return AAFRESULT_NOT_INITIALIZED;
   if (NULL == pElementType || NULL == pData || NULL == bytesRead)
     return AAFRESULT_NULL_PARAM;    
+
+  // Cannot get the byte order if it has never been set.
+  if (!_streamProperty->hasByteOrder())
+    return AAFRESULT_NOBYTEORDER;
   
   // Element access methods need to fail if the stream element type
   // offsets have not been registered. 
@@ -320,6 +362,10 @@ AAFRESULT STDMETHODCALLTYPE
     return AAFRESULT_NOT_INITIALIZED;
   if (NULL == pElementType || NULL == pData)
     return AAFRESULT_NULL_PARAM;    
+
+  // Cannot get the byte order if it has never been set.
+  if (!_streamProperty->hasByteOrder())
+    return AAFRESULT_NOBYTEORDER;
   
   // Element access methods need to fail if the stream element type
   // offsets have not been registered. 
