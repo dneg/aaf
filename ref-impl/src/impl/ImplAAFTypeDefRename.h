@@ -137,6 +137,9 @@ public:
         // @parm [out] Returned type category
         (eAAFTypeCategory_t *  pTid);
 
+  virtual AAFRESULT STDMETHODCALLTYPE
+    RawAccessType
+        (ImplAAFTypeDef ** ppRawTypeDef);
 
 public:
   // Overrides from ImplAAFTypeDef
