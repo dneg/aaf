@@ -1,5 +1,5 @@
 #startm .this-module 0
-EnumAAFMobCommentComments\
+EnumAAFMobComments\
 #endm
 #c
 #import ./AAFUnitTest.exp
@@ -39,7 +39,7 @@ AD_METHOD3(Next,
 AD_METHOD1(Skip,
 		   [in], aafUInt32, count, Number of elements to skip,
 		   Instructs the enumerator to skip the next count elements in the enumeration so that 
-  // the next call to EnumAAFMobCommentComments::Next will not return 
+  // the next call to EnumAAFMobComments::Next will not return 
   // those elements.)
 
 AD_METHOD0(Reset,
@@ -51,7 +51,7 @@ Instructs the enumerator to position itself at the beginning of the list of elem
 AD_XMETHOD1(Clone,
 			[out\,retval],
 			objOut,
-			EnumAAFMobCommentComments,
+			EnumAAFMobComments,
 			ppEnum,
 			new enumeration,
 			Creates another mob comment enumerator with the same state as the current 
