@@ -75,6 +75,7 @@
 extern "C" const aafClassID_t CLSID_AAFNetworkLocator;
 extern "C" const aafClassID_t CLSID_AAFSourceMob;
 extern "C" const aafClassID_t CLSID_AAFEssenceData;
+extern "C" const aafClassID_t CLSID_AAFEssenceFormat;
 extern "C" const CLSID CLSID_AAFEssenceStream = { 0x66FE33B1, 0x946D, 0x11D2, { 0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
 extern "C" const IID IID_IAAFEssenceStream = { 0x83402902, 0x9146, 0x11d2, { 0x80, 0x88, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
 extern "C" const IID IID_IAAFEssenceCodec = { 0x3631F7A2, 0x9121, 0x11D2, { 0x80, 0x88, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
@@ -169,9 +170,19 @@ ImplAAFEssenceAccess::Create (	  ImplAAFMasterMob *masterMob,
 		_codecID = codecID;
 		if(!EqualAUID(&codecID, &NoCodec))
 		{
+			IUnknown	*iAccess;
+
 			plugins = ImplAAFSession::GetInstance()->GetPluginManager();
 			CHECK(plugins->GetCodecInstance(_codecID, _variety, &_codec));
-			
+
+			createBlock.mediaKind = &mediaKind;
+			createBlock.subTrackNum = 0;		//!!!
+			createBlock.slotID = DEFAULT_FILE_SLOT;
+			createBlock.sampleRate = audioRate;
+
+			iAccess = static_cast<IUnknown *> (this->GetContainer());
+			CHECK(_codec->SetEssenceAccess(iAccess));
+
 			/* RPS-- back to your regularly scheduled program              */
 			
 			/* JEFF!! Changed masterSlotID to be 1 when creating mono 
@@ -486,7 +497,11 @@ AAFRESULT STDMETHODCALLTYPE
 		plugins = ImplAAFSession::GetInstance()->GetPluginManager();
 		CHECK(plugins->GetCodecInstance(CLSID_AAFWaveCodec, _variety, &_codec));
 
-		IUnknown	*iFileMob;
+		IUnknown	*iFileMob, *iAccess;
+
+		iAccess = static_cast<IUnknown *> (this->GetContainer());
+		CHECK(_codec->SetEssenceAccess(iAccess));
+
 //!!!		_physicalOutChanOpen = physicalOutChan;
 		
 //!!!		CHECK(fileMob->LocateMediaFile(&_dataFile, &isAAF));
@@ -1349,23 +1364,61 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFEssenceAccess::GetFileFormat(ImplAAFEssenceFormat * opsTemplate,
          ImplAAFEssenceFormat ** opsResult)
 {
-	ImplAAFEssenceFormat	*ops = opsTemplate;		//!!!Copy here?
-	AAFRESULT				result;
+	IAAFEssenceFormat	*iFormat, *iResultFormat;
+	IUnknown			*iUnknown;
+    IAAFRoot *			iObj;
+    ImplAAFRoot *		arg;
 
-	result = _codec->GetEssenceFormat((IAAFEssenceFormat *)ops->GetContainer());	// !!!COM Dependency
-	*opsResult = ops;
-	return result;
+	XPROTECT()
+	{
+		iUnknown = static_cast<IUnknown *>(opsTemplate->GetContainer());
+		CHECK(iUnknown->QueryInterface(IID_IAAFEssenceFormat, (void **)&iFormat));
+		CHECK(_codec->GetEssenceFormat(iFormat, &iResultFormat));	// !!!COM Dependency
+
+		CHECK(iResultFormat->QueryInterface (IID_IAAFRoot, (void **)&iObj));
+		assert (iObj);
+		CHECK(iObj->GetImplRep((void **)&arg));
+		iObj->Release(); // we are through with this interface pointer.
+		*opsResult = static_cast<ImplAAFEssenceFormat*>(arg);
+	}
+	XEXCEPT
+	XEND
+
+	return AAFRESULT_SUCCESS;
 }
 
 	//@comm Replaces omfmGetVideoInfoArray */
 /****/
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceAccess::GetFileFormatParameterList (ImplAAFEssenceFormat **ops)
+    ImplAAFEssenceAccess::GetEmptyFileFormat (ImplAAFEssenceFormat **ops)
 {
-#if FULL_TOOLKIT
-#else
-	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
+	ImplAAFEssenceFormat	*fmt;
+	fmt = (ImplAAFEssenceFormat *)CreateImpl (CLSID_AAFEssenceFormat);
+	*ops = fmt;
+	return AAFRESULT_SUCCESS;
+}
+
+/****/
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFEssenceAccess::GetFileFormatParameterList (ImplAAFEssenceFormat **opsResult)
+{
+	IAAFEssenceFormat	*iResultFormat;
+    IAAFRoot *			iObj;
+    ImplAAFRoot *		arg;
+
+	XPROTECT()
+	{
+		CHECK(_codec->GetEssenceFormatList(&iResultFormat));	// !!!COM Dependency
+		CHECK(iResultFormat->QueryInterface (IID_IAAFRoot, (void **)&iObj));
+		assert (iObj);
+		CHECK(iObj->GetImplRep((void **)&arg));
+		iObj->Release(); // we are through with this interface pointer.
+		*opsResult = static_cast<ImplAAFEssenceFormat*>(arg);
+	}
+	XEXCEPT
+	XEND
+
+	return AAFRESULT_SUCCESS;
 }
 
 	//@comm Replaces omfmGetVideoInfoArray */
