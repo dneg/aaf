@@ -64,6 +64,20 @@ public:
   static OMStoredObject* createModify(const wchar_t* fileName,
                                       const OMByteOrder byteOrder);
 
+    // @cmember Open the root <c OMStoredObject> in the raw storage
+    //          <p rawStorage> for reading only.
+  static OMStoredObject* openRead(OMRawStorage* rawStorage);
+
+    // @cmember Open the root <c OMStoredObject> in the raw storage
+    //          <p rawStorage> for modification.
+  static OMStoredObject* openModify(OMRawStorage* rawStorage);
+
+    // @cmember Create a new root <c OMStoredObject> in the raw storage
+    //          <p rawStorage>. The byte order of the newly created root
+    //          is given by <p byteOrder>.
+  static OMStoredObject* createModify(OMRawStorage* rawStorage,
+                                      const OMByteOrder byteOrder);
+
   // @access Public members.
 
     // @cmember Constructor.
@@ -333,6 +347,9 @@ private:
   static OMStoredObject* openFile(const wchar_t* fileName,
                                   const OMFile::OMAccessMode mode);
   static OMStoredObject* createFile(const wchar_t* fileName);
+  static OMStoredObject* openFile(OMRawStorage* rawStorage,
+                                  const OMFile::OMAccessMode mode);
+  static OMStoredObject* createFile(OMRawStorage* rawStorage);
 
   void create(const OMByteOrder byteOrder);
   void open(const OMFile::OMAccessMode mode);
