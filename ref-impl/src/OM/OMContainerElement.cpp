@@ -141,7 +141,7 @@ OMStrongReferenceSetElement::OMStrongReferenceSetElement(void)
 : OMStrongReferenceVectorElement()
 {
   TRACE("OMStrongReferenceSetElement::OMStrongReferenceSetElement");
-  initialize(sticky, 0, 0);
+  initialize(_initialReferenceCount, 0, 0);
 }
 
   // @mfunc Constructor.
@@ -162,7 +162,7 @@ OMStrongReferenceSetElement::OMStrongReferenceSetElement(
 {
   TRACE("OMStrongReferenceSetElement::OMStrongReferenceSetElement");
 
-  initialize(sticky, identification, identificationSize);
+  initialize(_initialReferenceCount, identification, identificationSize);
 }
 
   // @mfunc Constructor.
@@ -393,6 +393,8 @@ void OMStrongReferenceSetElement::initialize(OMUInt32 referenceCount,
     memcpy(_identification, identification, _identificationSize);
   }
 }
+
+OMUInt32 OMStrongReferenceSetElement::_initialReferenceCount = sticky;
 
 // class OMWeakReferenceVectorElement
 // @author Tim Bingham | tjb | Avid Technology, Inc. |

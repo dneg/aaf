@@ -315,6 +315,10 @@ private:
   //
   enum {sticky = 0xffffffff};
 
+  // Either 0      - to enable reference counting by default or
+  //        sticky - to disable reference counting by default
+  static OMUInt32 _initialReferenceCount;
+
     // @cmember The unique key of this <c OMStrongReferenceSetElement>.
     //          The element's unique key is in memory even when the
     //          referenced object is not. That way we can tell if an
