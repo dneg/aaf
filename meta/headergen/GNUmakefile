@@ -15,12 +15,12 @@ PROGS=classDefUid$(EXE) \
 
 # main build target
 all : $(PROGS) \
-        AAFClassDefUIDs.h \
-        AAFExtEnum.h \
-        AAFPropertyDefs.h \
-        AAFPropertyIDs.h \
-        AAFStoredObjectIDs.h \
-        AAFTypeDefUIDs.h
+        $(GEN_H_DIR)/AAFClassDefUIDs.h \
+        $(GEN_H_DIR)/AAFExtEnum.h \
+        $(GEN_H_DIR)/AAFPropertyDefs.h \
+        $(GEN_H_DIR)/AAFPropertyIDs.h \
+        $(GEN_H_DIR)/AAFStoredObjectIDs.h \
+        $(GEN_H_DIR)/AAFTypeDefUIDs.h
 
 # utilities
 headerGenUtils$(OBJ) : headerGenUtils.cpp headerGenUtils.h
@@ -91,33 +91,21 @@ AAFTypeDefUIDs.h : typeDefUid$(EXE)
 
 #install targets
 $(INSTALL_H_DIR)/AAFClassDefUIDs.h : $(GEN_H_DIR)/AAFClassDefUIDs.h
-	touch $(INSTALL_H_DIR)/AAFClassDefUIDs.h
-	chmod a+w $(INSTALL_H_DIR)/AAFClassDefUIDs.h
 	cp $(GEN_H_DIR)/AAFClassDefUIDs.h $(INSTALL_H_DIR)/AAFClassDefUIDs.h
 
 $(INSTALL_H_DIR)/AAFExtEnum.h : $(GEN_H_DIR)/AAFExtEnum.h
-	touch $(INSTALL_H_DIR)/AAFExtEnum.h
-	chmod a+w $(INSTALL_H_DIR)/AAFExtEnum.h
 	cp $(GEN_H_DIR)/AAFExtEnum.h $(INSTALL_H_DIR)/AAFExtEnum.h
 
 $(INSTALL_H_DIR)/AAFPropertyDefs.h : $(GEN_H_DIR)/AAFPropertyDefs.h
-	touch $(INSTALL_H_DIR)/AAFPropertyDefs.h
-	chmod a+w $(INSTALL_H_DIR)/AAFPropertyDefs.h
 	cp $(GEN_H_DIR)/AAFPropertyDefs.h $(INSTALL_H_DIR)/AAFPropertyDefs.h
 
 $(INSTALL_H_DIR)/AAFPropertyIDs.h : $(GEN_H_DIR)/AAFPropertyIDs.h
-	touch $(INSTALL_H_DIR)/AAFPropertyIDs.h
-	chmod a+w $(INSTALL_H_DIR)/AAFPropertyIDs.h
 	cp $(GEN_H_DIR)/AAFPropertyIDs.h $(INSTALL_H_DIR)/AAFPropertyIDs.h
 
 $(INSTALL_H_DIR)/AAFStoredObjectIDs.h : $(GEN_H_DIR)/AAFStoredObjectIDs.h
-	touch $(INSTALL_H_DIR)/AAFStoredObjectIDs.h
-	chmod a+w $(INSTALL_H_DIR)/AAFStoredObjectIDs.h
 	cp $(GEN_H_DIR)/AAFStoredObjectIDs.h $(INSTALL_H_DIR)/AAFStoredObjectIDs.h
 
 $(INSTALL_H_DIR)/AAFTypeDefUIDs.h : $(GEN_H_DIR)/AAFTypeDefUIDs.h
-	touch $(INSTALL_H_DIR)/AAFTypeDefUIDs.h
-	chmod a+w $(INSTALL_H_DIR)/AAFTypeDefUIDs.h
 	cp $(GEN_H_DIR)/AAFTypeDefUIDs.h $(INSTALL_H_DIR)/AAFTypeDefUIDs.h
 
 
