@@ -489,7 +489,9 @@ extern "C" HRESULT CAAFPluginDef_test()
 	}
 	catch (...)
 	{
-		cerr << "CAAFPluginDef_test...Caught general C++ exception!" << endl; 
+		cerr << "CAAFPluginDef_test..."
+			 << "Caught general C++ exception!" << endl; 
+		hr = AAFRESULT_TEST_FAILED;
 	}
 
 	return hr;

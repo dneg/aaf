@@ -401,7 +401,9 @@ extern "C" HRESULT CAAFDigitalImageDescriptor_test()
 	}
 	catch (...)
 	{
-		cerr << "CAAFDigitalImageDescriptor_test...Caught general C++ exception!" << endl; 
+		cerr << "CAAFDigitalImageDescriptor_test..."
+			 << "Caught general C++ exception!" << endl; 
+		hr = AAFRESULT_TEST_FAILED;
 	}
 
 	return hr;

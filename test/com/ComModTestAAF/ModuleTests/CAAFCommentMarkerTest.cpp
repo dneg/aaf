@@ -143,7 +143,8 @@ extern "C" HRESULT CAAFCommentMarker_test()
 	}
 	catch (...)
 	{
-		cerr << "CAAFCommentMarker_test...Caught general C++ exception!" << endl;
+		cerr << "CAAFCommentMarker_test..."
+			 << "Caught general C++ exception!" << endl;
 		hr = AAFRESULT_TEST_FAILED;
 	}
 	

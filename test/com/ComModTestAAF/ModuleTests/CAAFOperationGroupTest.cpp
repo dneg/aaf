@@ -655,8 +655,9 @@ extern "C" HRESULT CAAFOperationGroup_test()
 	}
 	catch (...)
 	{
-		cerr << "CAAFOperationGroup_test...Caught general C++ exception!" << endl; 
-    hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+		cerr << "CAAFOperationGroup_test..."
+			 << "Caught general C++ exception!" << endl; 
+		hr = AAFRESULT_TEST_FAILED;
 	}
 	
 	return hr;

@@ -483,7 +483,9 @@ extern "C" HRESULT CAAFSelector_test()
 	}
 	catch (...)
 	{
-		cerr << "CAAFSelector_test...Caught general C++ exception!" << endl; 
+		cerr << "CAAFSelector_test..."
+			 << "Caught general C++ exception!" << endl; 
+		hr = AAFRESULT_TEST_FAILED;
 	}
 
 	return hr;

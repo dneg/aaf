@@ -116,7 +116,8 @@ extern "C" HRESULT CAAFContentStorage_test()
 	catch (...)
 	{
 		cerr << "CAAFContentStorage_test...Caught general C++"
-			" exception!" << endl; 
+			 << " exception!" << endl; 
+		hr = AAFRESULT_TEST_FAILED;
 	}
 	
 	// Cleanup our object if it exists.

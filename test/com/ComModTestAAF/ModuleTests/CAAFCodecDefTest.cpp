@@ -273,7 +273,9 @@ extern "C" HRESULT CAAFCodecDef_test()
 	}
 	catch (...)
 	{
-		cerr << "CAAFCodecDef_test...Caught general C++ exception!" << endl; 
+		cerr << "CAAFCodecDef_test..."
+			 << "Caught general C++ exception!" << endl; 
+		hr = AAFRESULT_TEST_FAILED;
 	}
 
 	// When all of the functionality of this class is tested, we can return success.

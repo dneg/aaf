@@ -266,7 +266,9 @@ extern "C" HRESULT CAAFContainerDef_test()
 	}
 	catch (...)
 	{
-		cerr << "CAAFContainerDef_test...Caught general C++ exception!" << endl; 
+		cerr << "CAAFContainerDef_test..."
+			 << "Caught general C++ exception!" << endl; 
+		hr = AAFRESULT_TEST_FAILED;
 	}
 
 	return hr;
