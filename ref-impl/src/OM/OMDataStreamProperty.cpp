@@ -280,9 +280,9 @@ size_t OMDataStreamProperty::bitsSize(void) const
   //        The raw bits are copied to the buffer at address <p bits> which
   //        is <p size> bytes in size.
   //   @parm The address of the buffer into which the raw bits are copied.
-  //   @parm The size of the buffer.
+  //   @parm size_t | size | The size of the buffer.
   //   @this const
-void OMDataStreamProperty::getBits(OMByte* bits, size_t size) const
+void OMDataStreamProperty::getBits(OMByte* bits, size_t ANAME(size)) const
 {
   TRACE("OMDataStreamProperty::getBits");
   PRECONDITION("Valid bits", bits != 0);
@@ -294,9 +294,11 @@ void OMDataStreamProperty::getBits(OMByte* bits, size_t size) const
   // @mfunc Set the raw bits of this <c OMDataStreamProperty>. The raw
   //         bits are copied from the buffer at address <p bits> which
   //         is <p size> bytes in size.
-  //   @parm The address of the buffer from which the raw bits are copied.
-  //   @parm The size of the buffer.
-void OMDataStreamProperty::setBits(const OMByte* bits, size_t size)
+  //   @parm const OMByte* | bits | The address of the buffer from which the
+  //         raw bits are copied.
+  //   @parm size_t | size | The size of the buffer.
+void OMDataStreamProperty::setBits(const OMByte* ANAME(bits),
+                                   size_t ANAME(size))
 {
   TRACE("OMDataStreamProperty::setBits");
   PRECONDITION("Valid bits", bits != 0);
