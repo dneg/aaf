@@ -330,9 +330,10 @@ HRESULT verifyContents (IAAFHeader *pHeader, IAAFDictionary *pDict)
 	checkExpression( AreUnksSame(spTestType, spTD_elem), AAFRESULT_TEST_FAILED );
 
 	//IAAFTypeDefFixedArray::GetCArray()
+	int i=0;
 	checkResult(spFA->GetCArray(spPropVal, (aafMemPtr_t) check_fa, sizeof(check_fa)));
 	//VERIFY values:
-	for (int i=0; i<TEST_FA_COUNT; i++)
+	for (i=0; i<TEST_FA_COUNT; i++)
 		checkExpression( check_fa[i] == TEST_FA_VALUES[i], AAFRESULT_TEST_FAILED );	
 
 	//IAAFTypeDefFixedArray::GetElementValue 
