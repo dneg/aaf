@@ -140,6 +140,20 @@ AxSearchSource::AxSearchSource( IAAFSearchSourceSP spIaafSearchSource )
 AxSearchSource::~AxSearchSource()
 {}
 
+IAAFFindSourceInfoSP AxSearchSource::SearchSource (aafSlotID_t slotID,
+				aafPosition_t  offset, aafMobKind_t  mobKind,
+				aafMediaCriteria_t *  pMediaCrit,
+				aafOperationChoice_t *  pOperationChoice)
+{
+	IAAFFindSourceInfoSP spIAAFFindSourceInfo;
+
+	CHECK_HRESULT( _spIaafSearchSource->SearchSource(slotID, offset,
+					mobKind, pMediaCrit, pOperationChoice,
+					&spIAAFFindSourceInfo));
+
+	return spIAAFFindSourceInfo;
+}
+
 //=---------------------------------------------------------------------=
 
 AxMasterMob::AxMasterMob( IAAFMasterMobSP spIaafMasterMob )

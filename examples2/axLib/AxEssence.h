@@ -240,6 +240,8 @@ public:
 
        aafUInt32 CountLocators();
 
+	inline operator IAAFEssenceDescriptorSP ()
+	{ return _spIaafEssenceDescriptor; }
 private:
 	AxEssenceDescriptor();
 	AxEssenceDescriptor( const AxEssenceDescriptor& );

@@ -82,6 +82,12 @@ public:
 	AxSearchSource()
 	  {}
 
+	IAAFFindSourceInfoSP SearchSource (aafSlotID_t slotID,
+				aafPosition_t  offset,
+				aafMobKind_t  mobKind,
+				aafMediaCriteria_t *  pMediaCrit,
+				aafOperationChoice_t *  pOperationChoice);
+
 private:
 	AxSearchSource( const AxSearchSource& );
 	AxSearchSource& operator=( const AxSearchSource& );

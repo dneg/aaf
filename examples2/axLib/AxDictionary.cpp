@@ -126,6 +126,15 @@ IEnumAAFTypeDefsSP AxDictionary::GetTypeDefs()
 	return spIEnumAAFTypeDefs;
 }
 
+IEnumAAFDataDefsSP AxDictionary::GetDataDefs()
+{
+	IEnumAAFDataDefsSP spIEnumAAFDataDefs;
+
+	CHECK_HRESULT( _spIaafDictionary->GetDataDefs( &spIEnumAAFDataDefs ) );
+
+	return spIEnumAAFDataDefs;
+}
+
 void AxDictionary::RegisterOpaqueTypeDef( IAAFTypeDefSP spTypeDef )
 {
 	CHECK_HRESULT( _spIaafDictionary->RegisterOpaqueTypeDef( spTypeDef ) );
