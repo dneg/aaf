@@ -203,7 +203,7 @@ AAFRESULT STDMETHODCALLTYPE
 			CHECK(aSequ->Initialize(&timecodeKind));
 			CHECK(aSequ->AppendComponent(tccp));
 			CHECK(AppendNewTimelineSlot(editrate, aSequ, slotID,
-										NULL, zeroPos, &newSlot));
+										L"Timecode", zeroPos, &newSlot));
 		}
 
 		if(fullLength)
