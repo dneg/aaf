@@ -1,9 +1,9 @@
 #c/*************************************************\
-#c*													*
-#c* Advanced Authoring Format						*
-#c*													*
-#c* Copyright (c) 1998-1999 Avid Technology, Inc.	*
-#c*													*
+#c*                                                 *
+#c* Advanced Authoring Format                       *
+#c*                                                 *
+#c* Copyright (c) 1998-1999 Avid Technology, Inc.   *
+#c*                                                 *
 #c\*************************************************/
 #startm .this-module 0
 AAFPlugin\
@@ -13,7 +13,6 @@ AAFPlugin\
 AAFRoot\
 #endm
 #c
-#c #import ./AAFObject.exp
 AD_HEAD
 
 AD_FORWARD_DECLARATION(AAFEssenceStream)
@@ -33,13 +32,10 @@ AD_CLASS_UUID(3631F7A3, 9121, 11d2, 80, 88, 00, 60, 08, 14, 3e, 6f)
 AD_DEFAULT_UUID(3631F7A4, 9121, 11d2, 80, 88, 00, 60, 08, 14, 3e, 6f)
 AD_XCLASS_BEGIN(Abstract, Transient)
 
-AD_METHOD0(Start, Set up a codec.)
-AD_METHOD0(Finish, Tear down a codec.)
-
-AD_XMETHOD1(GetNumDefinitions,
+AD_XMETHOD1(CountDefinitions,
 			[out],
 			objPass,
-			aafInt32 *,
+			aafUInt32 *,
 			pDefCount,
 			The number of definitions associated with this plugin,
 
@@ -67,7 +63,7 @@ AD_XMETHOD1(GetNumDefinitions,
 AD_XMETHOD2(GetIndexedDefinitionID,
 			[in],
 			objPass,
-			aafInt32,
+			aafUInt32,
 			index,
 			An index from 0 to the number of definitions - 1,
 			[out],
@@ -135,7 +131,7 @@ AD_XMETHOD1(GetPluginDescriptorID,
 AD_XMETHOD3(GetIndexedDefinitionObject,
 			[in],
 			objPass,
-			aafInt32,
+			aafUInt32,
 			index,
 			An index from 0 to the number of definitions - 1,
 			[in],

@@ -78,17 +78,11 @@ public:
   // IAAFPlugin interface methods.
   //
 
-  // Set up the plugin.
-  STDMETHOD (Start)(void);
-
-  // Tear down the plugin.
-  STDMETHOD (Finish)(void);
-  
-  STDMETHOD (GetNumDefinitions)(aafInt32 *pDefCount);
-  STDMETHOD (GetIndexedDefinitionID)(aafInt32 index, aafUID_t *result);
+  STDMETHOD (CountDefinitions)(aafUInt32 *pDefCount);
+  STDMETHOD (GetIndexedDefinitionID)(aafUInt32 index, aafUID_t *result);
   STDMETHOD (GetPluginDescriptorID)(aafUID_t *result);
 
-  STDMETHOD (GetIndexedDefinitionObject)(aafInt32 index, IAAFDictionary *dict, IAAFDefObject **def);
+  STDMETHOD (GetIndexedDefinitionObject)(aafUInt32 index, IAAFDictionary *dict, IAAFDefObject **def);
 
   STDMETHOD (CreateDescriptor)(IAAFDictionary *dict, IAAFPluginDescriptor **desc);
 
