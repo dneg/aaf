@@ -25,6 +25,7 @@
 *
 ************************************************************************/
 
+// @doc OMINTERNAL
 #include "OMAssertions.h"
 
 class OMAssertionViolation {
