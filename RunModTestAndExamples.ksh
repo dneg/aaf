@@ -63,7 +63,7 @@ do
 		-i ) AAFINFO=1;;
 		-ao ) AAFOMFTEST=1;;
 		-pp ) PRINTPATH=1;;
-		-s ) SANDBOX=1;;
+		-s ) AAFWATCHDOG=1;;
 		-h ) PrintHelp
 			 exit 1 ;;
 	esac
@@ -224,8 +224,8 @@ PrintExitCodes ()
 
 	print "\nPrinting $ExTarget Test Exit Codes:\n$RESULTS"
 
-	if [ SANDBOX -eq 1 ]; then
-		print "\nPrinting $ExTarget Test Exit Codes:\n$RESULTS" >> D:/Views/Sandbox.log
+	if [ AAFWATCHDOG -eq 1 ]; then
+		print "\nPrinting $ExTarget Test Exit Codes:\n$RESULTS" >> D:/Views/AAFWatchDog.log
 	fi
 }
 
