@@ -21,13 +21,6 @@
 // {a7337030-c103-11d2-8089-006008143e6f}
 const CLSID CLSID_AAFEssenceFileContainer = { 0xa7337030, 0xc103, 0x11d2, { 0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
 
-
-// Default Interface for AAFEssenceFileContainer 
-// {a7337031-c103-11d2-808a-006008143e6f}
-const IID IID_IAAFEssenceContainer = { 0xa7337031, 0xc103, 0x11d2, { 0x80, 0x8a, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
-
-
-
 // convenient error handlers.
 inline void checkResult(HRESULT r)
 {
