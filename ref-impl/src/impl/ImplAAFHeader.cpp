@@ -241,7 +241,7 @@ AAFRESULT
 	aafProductVersion_t			dummyVersion;
 	
 //!!!	aafAssertValidFHdl(_file);
-	XPROTECT(_file)
+	XPROTECT()
 	{		
 		if(pIdent == (aafProductIdentification_t *)NULL)
 		{
