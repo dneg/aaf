@@ -33,6 +33,7 @@
 #include "OMObjectDirectory.h"
 #include "OMDataTypes.h"
 #include "OMProperty.h"
+#include "OMUtilities.h"
 
 #include "OMAssertions.h"
 
@@ -200,9 +201,7 @@ void OMStorable::setName(const char* name)
   PRECONDITION("Valid name", validString(name));
   delete [] _name;
   _name = 0; // for BoundsChecker
-  _name = new char[strlen(name) + 1];
-  ASSERT("Valid heap pointer", _name != 0);
-  strcpy(_name, name);
+  _name = saveString(name);
   delete [] _pathName;
   _pathName = 0;
 }
@@ -455,9 +454,7 @@ char* OMStorable::makePathName(void)
   char* result = 0;
   if (isRoot()) {
     // root
-    result = new char[strlen(name()) + 1];
-    ASSERT("Valid heap pointer", result != 0);
-    strcpy(result, name());
+    result = saveString(name());
   } else {
     const OMStorable* cont = _container;
     if (cont->isRoot()) {
