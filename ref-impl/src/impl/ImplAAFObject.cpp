@@ -173,6 +173,7 @@ AAFRESULT ImplPropertyCollection::Initialize
 			throw AAFRESULT_NOMEMORY;
 		  _pProperties[presentPropIdx] = tmp;
 		  tmp->ReleaseReference ();
+		  tmp = 0;
 
 		  hr = _pProperties[presentPropIdx]->Initialize (pPropDef, pOmProp);
 		  if (AAFRESULT_FAILED (hr)) throw hr;
@@ -547,66 +548,6 @@ ImplAAFObject::GetDictionary(ImplAAFDictionary **ppDictionary) const
 //
 
 
-//
-// Private infrastructure to cache property values
-//
-struct propDefPair
-{
-  OMPropertyId         pid;
-  ImplAAFPropertyDefSP pPropDef;
-};
-
-static const int kMaxProps = 100;
-
-static void fillPropDefs (ImplAAFClassDef * pClassDef,
-						  propDefPair * props,
-						  aafUInt32 & numPropsFound)
-{
-  assert (pClassDef);
-  assert (props);
-
-  AAFRESULT hr;
-
-  ImplEnumAAFPropertyDefsSP pEnum;
-  hr = pClassDef->GetPropertyDefs (&pEnum);
-  assert (AAFRESULT_SUCCEEDED (hr));
-  assert (pEnum);
-
-  ImplAAFPropertyDefSP pPropDef;
-  hr = pEnum->NextOne (&pPropDef);
-  while (AAFRESULT_SUCCEEDED (hr))
-	{
-	  props->pid = pPropDef->OmPid();
-	  props->pPropDef = pPropDef;
-	  assert (++numPropsFound <= kMaxProps);
-	  hr = pEnum->NextOne (&pPropDef);
-	  props++;
-	}
-
-  ImplAAFClassDefSP pParent;
-  hr = pClassDef->GetParent (&pParent);
-  assert (AAFRESULT_SUCCEEDED (hr));
-  if (pParent)
-	fillPropDefs (pParent, props, numPropsFound);
-}
-
-
-static ImplAAFPropertyDef * sLookupPropDefByOmpid (propDefPair * props,
-												 aafUInt32 numProps,
-												 OMPropertyId pidToLookup)
-{
-  assert (props);
-
-  while (numProps--)
-	{
-	  if (pidToLookup == props->pid)
-		return (ImplAAFPropertyDef*) props->pPropDef;
-	  props++;
-	}
-  return 0;
-}
-
-
 void ImplAAFObject::InitOMProperties (void)
 {
   if (_OMPropsInited)
@@ -645,10 +586,11 @@ void ImplAAFObject::InitOMProperties (void)
   assert (AAFRESULT_SUCCEEDED (hr));
   assert (spDef);
 
-  propDefPair propDefs[kMaxProps];
-  aafUInt32 numPropDefs = 0;
-  fillPropDefs (spDef, propDefs, numPropDefs);
-  assert (numPropDefs <= kMaxProps);
+//  propDefPair propDefs[kMaxProps];
+//  memset (propDefs, 0, sizeof (propDefs));
+//  aafUInt32 numPropDefs = 0;
+//  fillPropDefs (spDef, propDefs, numPropDefs);
+//  assert (numPropDefs <= kMaxProps);
 
   OMPropertySet * ps = propertySet();
   assert (ps);
@@ -731,13 +673,19 @@ void ImplAAFObject::InitOMProperties (void)
 	  assert (pProp);
 	  OMPropertyId opid = pProp->propertyId ();
 
-	  pdSP = sLookupPropDefByOmpid (propDefs, numPropDefs, opid);
+	  ImplAAFPropertyDefSP ppd;
+	  ImplAAFClassDefSP pcd;
+	  hr = GetDefinition (&pcd);
+	  assert (AAFRESULT_SUCCEEDED (hr));
+	  hr = pcd->LookupPropertyDefbyOMPid (opid, &ppd);
+	  assert (AAFRESULT_SUCCEEDED (hr));
+
 	  // The following assertion will fail if the property is not
 	  // defined in the class definition for this object.
-	  assert (pdSP);
+	  assert (ppd);
 
 	  ImplAAFTypeDefSP ptd;
-	  hr = pdSP->GetTypeDef (&ptd);
+	  hr = ppd->GetTypeDef (&ptd);
 	  assert (AAFRESULT_SUCCEEDED (hr));
 	  assert (ptd);
 
@@ -772,7 +720,7 @@ void ImplAAFObject::InitOMProperties (void)
 	  const char * propName = pProp->name ();
 	  assert (propName);
 	  aafBool isOptional;
-	  hr = pdSP->GetIsOptional (&isOptional);
+	  hr = ppd->GetIsOptional (&isOptional);
 	  assert (AAFRESULT_SUCCEEDED (hr));
 	  pProp->initialize (opid,
 						 propName,
