@@ -8,19 +8,12 @@
 # Place the object root name is this list if it is a "persistent"
 # aaf object:
 AAFPERSISTENTOBJECTS = \
-	AAFAIFCData \
-	AAFJPEGData \
-	AAFHTMLData \
-	AAFImageData \
 	AAFLocator \
-	AAFMIDIData \
 	AAFMIDIFileDescriptor \
 	AAFPluggableCode \
 	AAFReferenceValue \
 	AAFRGBADescriptor \
-	AAFTIFFData \
-	AAFTypeDefSet \
-	AAFWAVEData
+	AAFTypeDefSet
 
 
 # These are all of the other non-persistent objects:
