@@ -20,6 +20,7 @@
 #include "aafDefUIDs.h"
 #include "AAFStoredObjectIDs.h"
 #include "AAFRational.h"
+#include "AAFInterpolatorDefs.h"
 
 const aafProductVersion_t AAFPluginImplementationVersion = {1, 0, 0, 1, kVersionBeta};
 

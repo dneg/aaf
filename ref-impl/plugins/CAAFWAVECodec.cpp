@@ -20,6 +20,8 @@
 #include "aafDataDefs.h"
 #include "aafDefUIDs.h"
 #include "AAFStoredObjectIDs.h"
+#include "AAFCodecDefs.h"
+#include "AAFEssenceFormats.h"
 
 #define STD_HDRSIZE_DATA		42
 #define STD_HDRSIZE_NODATA		36
@@ -259,7 +261,7 @@ HRESULT STDMETHODCALLTYPE
 {
 	if(pVariant == NULL)
 		return AAFRESULT_NULL_PARAM;
-	*pVariant = NilCodecVariety;	// s/b Flavour
+	*pVariant = NilCodecFlavour;
 	return AAFRESULT_SUCCESS;
 }
 
