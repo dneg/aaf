@@ -24,7 +24,7 @@
 
 #include <assert.h>
 
-EXTERN_C const CLSID CLSID_AAFFile;
+extern "C" const aafClassID_t CLSID_AAFFile;
 
 ImplAAFSession::ImplAAFSession ()
 {}
@@ -167,3 +167,12 @@ ImplAAFSession::GetIdentification (
 
   return (AAFRESULT_SUCCESS);
 }
+
+AAFRESULT STDMETHODCALLTYPE
+ImplAAFSession::BeginSession (
+    aafProductIdentification_t  *ident
+  )
+{
+  return SetDefaultIdentification(ident);
+}
+
