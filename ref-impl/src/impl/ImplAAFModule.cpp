@@ -1,6 +1,6 @@
 /***********************************************************************
  *
- *              Copyright (c) 1998-2000 Avid Technology, Inc.
+ *              Copyright (c) 1998-2001 Avid Technology, Inc.
  *
  * Permission to use, copy and modify this software and accompanying 
  * documentation, and to distribute and sublicense application software
@@ -65,7 +65,12 @@ extern "C" const aafClassID_t CLSID_AAFRandomRawStorage;
 
 #include <assert.h>
 
+// Define this to 1 to use raw storage implementations of the
+// traditional AAFFileOpenXXX(filename) methods.
+#ifndef USE_RAW_STORAGE
 #define USE_RAW_STORAGE 0
+#endif // ! USE_RAW_STORAGE
+
 
 #if USE_RAW_STORAGE
 #include "AAFFileKinds.h"
@@ -177,6 +182,8 @@ STDAPI ImplAAFFileOpenExistingRead (
 	{
 	  hr = ImplAAFCreateAAFFileOnRawStorage
 		(pRawStg,
+		 kAAFFileExistence_existing,
+		 kAAFFileAccess_read,
 		 &aafFileKindAafSSBinary,
 		 modeFlags,
 		 0,
@@ -330,6 +337,8 @@ STDAPI ImplAAFFileOpenExistingModify (
 	{
 	  hr = ImplAAFCreateAAFFileOnRawStorage
 		(pRawStg,
+		 kAAFFileExistence_existing,
+		 kAAFFileAccess_modify,
 		 &aafFileKindAafSSBinary,
 		 modeFlags,
 		 pIdent,
@@ -473,6 +482,8 @@ STDAPI ImplAAFFileOpenNewModify (
 	{
 	  hr = ImplAAFCreateAAFFileOnRawStorage
 		(pRawStg,
+		 kAAFFileExistence_new,
+		 kAAFFileAccess_modify,
 		 &aafFileKindAafSSBinary,
 		 modeFlags,
 		 pIdent,
@@ -589,6 +600,8 @@ STDAPI ImplAAFFileOpenTransient (
 	{
 	  hr = ImplAAFCreateAAFFileOnRawStorage
 		(pRawStg,
+		 kAAFFileExistence_new,
+		 kAAFFileAccess_modify,
 		 &aafFileKindAafSSBinary,
 		 0,
 		 pIdent,
@@ -817,6 +830,8 @@ ImplAAFCreateRawStorageDisk
 STDAPI
 ImplAAFCreateAAFFileOnRawStorage
   (IAAFRawStorage * pRawStorage,
+   aafFileExistence_t existence,
+   aafFileAccess_t access,
    aafUID_constptr pFileKind,
    aafUInt32 modeFlags,
    aafProductIdentification_constptr pIdent,
@@ -827,13 +842,6 @@ ImplAAFCreateAAFFileOnRawStorage
 
   if (! ppNewFile)
 	return AAFRESULT_NULL_PARAM;
-
-  aafBoolean_t readable = kAAFFalse;
-  aafBoolean_t writeable = kAAFFalse;
-  pRawStorage->IsReadable (&readable);
-  pRawStorage->IsWriteable (&writeable);
-  if ((!readable) && (!writeable))
-	return AAFRESULT_INVALID_PARAM;
 
   HRESULT hr = S_OK;
   ImplAAFFileSP pFile;
@@ -869,6 +877,8 @@ ImplAAFCreateAAFFileOnRawStorage
 	{
 	  // Attempt to open the file for modification.
 	  hr = pFile->CreateAAFFileOnRawStorage(pRawStorage,
+											existence,
+											access,
 											pFileKind,
 											modeFlags,
 											pIdent);

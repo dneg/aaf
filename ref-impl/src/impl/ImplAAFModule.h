@@ -1,6 +1,6 @@
 /***********************************************************************
  *
- *              Copyright (c) 1998-2000 Avid Technology, Inc.
+ *              Copyright (c) 1998-2001 Avid Technology, Inc.
  *
  * Permission to use, copy and modify this software and accompanying 
  * documentation, and to distribute and sublicense application software
@@ -379,6 +379,8 @@ ImplAAFCreateRawStorageDisk
 STDAPI
 ImplAAFCreateAAFFileOnRawStorage
   (IAAFRawStorage * pRawStorage,
+   aafFileExistence_t  existence,
+   aafFileAccess_t  access,
    aafUID_constptr  pFileKind,
    aafUInt32  modeFlags,
    aafProductIdentification_constptr  pIdent,
