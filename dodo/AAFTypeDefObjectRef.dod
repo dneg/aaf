@@ -100,13 +100,16 @@ AD_XMETHOD2(SetObject,
 			pObject,
 			The object to be contained,
 
-  // Places the given object to be contained in the specified Property
-  // Value.  Assumes that the given Property Value is of the
-  // kAAFTypeCategoryObject.  It is legal for pObject to be NULL.
+			Places the given object to be contained in the specified Property
+  // Value.  Assumes that the given Property Value refers to an
+  // AAFObject \(that is\, the AAFTypeDef associated with that
+  // PropertyValue has a type category ofkAAFTypeCategoryObject\).  It
+  // is legal for pObject to be NULL.
   //
   // Succeeds if:
   // - The pPVal pointer is valid.
-  // - The given Property Value is a kAAFTypeCategoryObject.
+  // - The given Property Value's type definition is of type category
+  //   kAAFTypeCategoryObject.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect\, it will return the first one
