@@ -6,7 +6,6 @@ AAFUnixLocator\
 AAFLocator\
 #endm
 #c
-#import ./AAFUnitTest.exp
 #import ./AAFLocator.exp
 AD_HEAD
 /******************************************\
@@ -19,7 +18,5 @@ AD_HEAD
 \******************************************/
 
 AD_CLASS_BEGIN
-
-AD_OVERRIDE(.method-Test)
 
 AD_CLASS_END

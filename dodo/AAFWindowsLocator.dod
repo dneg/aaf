@@ -6,7 +6,6 @@ AAFWindowsLocator\
 AAFLocator\
 #endm
 #c
-#import ./AAFUnitTest.exp
 #import ./AAFLocator.exp
 AD_HEAD
 /******************************************\
@@ -31,7 +30,5 @@ AD_METHOD2(SetShortcut,
 		   [in],aafInt32,shortCutLen,Length of the buffer in bytes,
 		   [in],char *  ,shortCutBuf,A Windows shortcut,
 		   Set the windows shortcut.)
-
-AD_OVERRIDE(.method-Test)
 
 AD_CLASS_END

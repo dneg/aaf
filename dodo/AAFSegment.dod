@@ -6,7 +6,6 @@ AAFSegment\
 AAFComponent\
 #endm
 #c
-#import ./AAFUnitTest.exp
 #import ./AAFComponent.exp
 AD_HEAD
 AD_INCLUDE(AAFTypes)
@@ -63,7 +62,5 @@ AD_XMETHOD3(OffsetToTimecodeClip,
 AD_METHOD1(NumRepresentations,
 		   [out],aafInt32 *,count,,
 		   )
-
-AD_OVERRIDE(.method-Test)
 
 AD_CLASS_END

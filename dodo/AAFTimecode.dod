@@ -7,7 +7,6 @@ AAFSegment\
 #endm
 #c
 #import ./AAFSegment.exp
-#import ./AAFUnitTest.exp
 AD_HEAD
 /******************************************\
 *                                          *
@@ -40,7 +39,5 @@ Set the timecode fields.)
 /****/
 AD_OVERRIDE(.method-SegmentOffsetToTC)
 AD_OVERRIDE(.method-SegmentTCToOffset)
-AD_OVERRIDE(.method-Test)
-
 
 AD_CLASS_END

@@ -6,7 +6,6 @@ AAFDataKind\
 AAFObject\
 #endm
 #c
-#import ./AAFUnitTest.exp
 AD_HEAD
 /******************************************\
 *                                          *
@@ -216,7 +215,5 @@ AD_METHOD2(DoesDatakindConvertFrom,
 		   Sets return value to TRUE if the datakind of the given object
 		   // can be converted from the datakind specified in the IN 
 		   // parameter specified with the datakindName string.)
-
-AD_OVERRIDE(.method-Test)
 
 AD_CLASS_END
