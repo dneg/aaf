@@ -24,7 +24,7 @@
 #
 # Command line:
 #
-#   awk -f mkdict.awk ../smpte/DictP18-277-1847BMaster.csv | flip -u > AAFMetaDictionary.h
+# awk -f mkdict.awk DictP18-277-1847BMaster.csv > AAFMetaDictionary.h
 #
 # Author
 #
