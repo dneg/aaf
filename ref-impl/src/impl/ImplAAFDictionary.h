@@ -55,6 +55,17 @@ class ImplEnumAAFPluginDefs;
 class ImplEnumAAFTypeDefs;
 class ImplAAFMetaDictionary;
 class ImplAAFMetaDefinition;
+class ImplAAFTypeDefVariableArray;
+class ImplAAFTypeDefFixedArray;
+class ImplAAFTypeDefRecord;
+class ImplAAFTypeDefRename;
+class ImplAAFTypeDefStream;
+class ImplAAFTypeDefString;
+class ImplAAFTypeDefStrongObjRef;
+class ImplAAFTypeDefWeakObjRef;
+class ImplAAFTypeDefSet;
+
+
 
 #ifndef __ImplAAFObject_h__
 #include "ImplAAFObject.h"
@@ -510,6 +521,120 @@ public:
     CountPluginDefs
         // @parm [out, retval] Total number of plugin definition objects
         (aafUInt32 * pResult);
+
+
+  //
+  // Meta definition factory methods:
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    CreateClassDef (
+      aafUID_constref classID,
+      aafCharacter_constptr pClassName,
+      aafCharacter_constptr pDescription,
+      ImplAAFClassDef * pParentClass,
+      ImplAAFClassDef ** ppNewClass);
+
+  virtual AAFRESULT STDMETHODCALLTYPE
+   CreateTypeDefVariableArray (
+      aafUID_constref typeID,
+      aafCharacter_constptr pTypeName,
+      aafCharacter_constptr pDescription,
+      ImplAAFTypeDef *pElementType,
+      ImplAAFTypeDefVariableArray ** ppNewVariableArray);
+
+  virtual AAFRESULT STDMETHODCALLTYPE
+    CreateTypeDefFixedArray (
+      aafUID_constref typeID,
+      aafCharacter_constptr pTypeName,
+      aafCharacter_constptr pDescription,
+      ImplAAFTypeDef *pElementType,
+      aafUInt32  nElements,
+      ImplAAFTypeDefFixedArray **pNewFixedArray);
+
+  virtual AAFRESULT STDMETHODCALLTYPE
+    CreateTypeDefRecord (
+      aafUID_constref typeID,
+      aafCharacter_constptr pTypeName,
+      aafCharacter_constptr pDescription,
+      ImplAAFTypeDef ** ppMemberTypes,
+      aafCharacter_constptr * pMemberNames,
+      aafUInt32 numMembers,
+      ImplAAFTypeDefRecord ** ppNewRecord);
+
+  virtual AAFRESULT STDMETHODCALLTYPE
+    CreateTypeDefRename (
+      aafUID_constref typeID,
+      aafCharacter_constptr pTypeName,
+      aafCharacter_constptr pDescription,
+      ImplAAFTypeDef *pBaseType,
+      ImplAAFTypeDefRename ** ppNewRename);
+
+  virtual AAFRESULT STDMETHODCALLTYPE
+   CreateTypeDefStream (
+      aafUID_constref typeID,
+      aafCharacter_constptr pTypeName,
+      aafCharacter_constptr pDescription,
+      ImplAAFTypeDef *pElementType,
+      ImplAAFTypeDefStream ** ppNewStream);
+
+  virtual AAFRESULT STDMETHODCALLTYPE
+   CreateTypeDefString (
+      aafUID_constref typeID,
+      aafCharacter_constptr pTypeName,
+      aafCharacter_constptr pDescription,
+      ImplAAFTypeDef *pElementType,
+      ImplAAFTypeDefString ** ppNewString);
+
+  virtual AAFRESULT STDMETHODCALLTYPE
+   CreateTypeDefStrongObjRef (
+      aafUID_constref typeID,
+      aafCharacter_constptr pTypeName,
+      aafCharacter_constptr pDescription,
+      ImplAAFClassDef * pTargetObjType,
+      ImplAAFTypeDefStrongObjRef ** ppNewStrongObjRef);
+
+  virtual AAFRESULT STDMETHODCALLTYPE
+   CreateTypeDefWeakObjRef (
+      aafUID_constref typeID,
+      aafCharacter_constptr pTypeName,
+      aafCharacter_constptr pDescription,
+      ImplAAFClassDef * pTargetObjType,
+      aafUID_constptr * pTargetHint,
+      aafUInt32 targetHintCount,
+      ImplAAFTypeDefWeakObjRef ** ppNewWeakObjRef);
+
+  virtual AAFRESULT STDMETHODCALLTYPE
+   CreateTypeDefStrongObjRefVector (
+      aafUID_constref typeID,
+      aafCharacter_constptr pTypeName,
+      aafCharacter_constptr pDescription,
+      ImplAAFTypeDefStrongObjRef * pStrongObjRef,
+      ImplAAFTypeDefVariableArray ** ppNewStrongObjRefVector);
+
+  virtual AAFRESULT STDMETHODCALLTYPE
+   CreateTypeDefWeakObjRefVector (
+      aafUID_constref typeID,
+      aafCharacter_constptr pTypeName,
+      aafCharacter_constptr pDescription,
+      ImplAAFTypeDefWeakObjRef * pWeakObjRef,
+      ImplAAFTypeDefVariableArray ** ppNewWeakObjRefVector);
+
+  virtual AAFRESULT STDMETHODCALLTYPE
+   CreateTypeDefStrongObjRefSet (
+      aafUID_constref typeID,
+      aafCharacter_constptr pTypeName,
+      aafCharacter_constptr pDescription,
+      ImplAAFTypeDefStrongObjRef * pStrongObjRef,
+      ImplAAFTypeDefSet ** ppNewStrongObjRefSet);
+
+  virtual AAFRESULT STDMETHODCALLTYPE
+   CreateTypeDefWeakObjRefSet (
+      aafUID_constref typeID,
+      aafCharacter_constptr pTypeName,
+      aafCharacter_constptr pDescription,
+      ImplAAFTypeDefWeakObjRef * pWeakObjRef,
+      ImplAAFTypeDefSet ** ppNewWeakObjRefSet);
+
 
 public:
 
