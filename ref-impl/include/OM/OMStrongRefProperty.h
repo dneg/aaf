@@ -121,7 +121,7 @@ public:
 
 private:
 
-  OMStrongObjectReference<ReferencedObject> _reference;
+  OMStrongObjectReference _reference;
 
 };
 

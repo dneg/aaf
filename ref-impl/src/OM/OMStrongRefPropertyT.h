@@ -43,7 +43,7 @@ OMStrongReferenceProperty<ReferencedObject>::OMStrongReferenceProperty(
   TRACE(
      "OMStrongReferenceProperty<ReferencedObject>::OMStrongReferenceProperty");
 
-  _reference = OMStrongObjectReference<ReferencedObject>(this, storedName());
+  _reference = OMStrongObjectReference(this, storedName());
 }
 
 template <typename ReferencedObject>
