@@ -48,6 +48,8 @@ targets: $(COMAPI_DIR)/AAFCLSIDs.h
 targets: $(IMPL_DIR)/AAFClassIDs.h
 targets: $(COMAPI_DIR)/AAFObjectTable.h
 targets: $(COMAPI_DIR)/AAFObjectTable_i.cpp
+targets: $(COMAPI_DIR)/CAAFEnumValidation.h
+targets: $(COMAPI_DIR)/CAAFEnumValidation.cpp
 
 
 $(INCLUDE_DIR)/com-api/AAF.idl : $(FIDL_TARGETS)
@@ -173,6 +175,13 @@ $(COMAPI_DIR)/AAFObjectTable_i.cpp : aafobjects.mk
 	$(RM) -f $(COMAPI_DIR)/AAFObjectTable_i.cpp
 	$(MV) $(COMAPI_DIR)/AAFObjectTable_i.tmp $(COMAPI_DIR)/AAFObjectTable_i.cpp
 	$(CHMOD) -w $(COMAPI_DIR)/AAFObjectTable_i.cpp
+
+
+$(COMAPI_DIR)/CAAFEnumValidation.cpp $(COMAPI_DIR)/CAAFEnumValidation.h : GenEnumValidation.pl AAFPluginTypes.dod AAFTypes.dod
+	@ $(ECHO) Generating references CAAFEnumValidation.cpp and CAAFEnumValidation.h ...
+	$(PERL) GenEnumValidation.pl AAFTypes.dod AAFPluginTypes.dod > GenEnumValidationLog.txt
+	$(MV) -f CAAFEnumValidation.cpp CAAFEnumValidation.h $(COMAPI_DIR)/
+	$(CHMOD) -w $(COMAPI_DIR)/CAAFEnumValidation.cpp $(COMAPI_DIR)/CAAFEnumValidation.h
 
 
 SRC_DIR = ../ref-impl/src
@@ -312,6 +321,8 @@ clean:
 	$(RM) -f $(COMAPI_DIR)/AAFObjectTable_i.tmp
 	$(RM) -f $(COMAPI_DIR)/AAFObjectTable.h
 	$(RM) -f $(COMAPI_DIR)/AAFObjectTable_i.cpp
+	$(RM) -f $(COMAPI_DIR)/CAAFEnumValidation.h
+	$(RM) -f $(COMAPI_DIR)/CAAFEnumValidation_i.cpp
 	$(CP)  aafobjects.mk tmp.sh
 	$(CHMOD) a+w tmp.sh
 	$(CAT) DelTargets.sh >> tmp.sh
