@@ -12,10 +12,18 @@ PROPDIRECTDUMP=0
 AAFINFO=0
 AAFOMFTEST=0
 ALL=0
+PRINTPATH=0
+
 
 #####################
 # Parse Command Line
 #####################
+if [ $# -eq 1 ]; then
+	if [ $1 = "-d" ] || [ $1 = "-r" ]; then
+		ALL=1;
+	fi
+fi
+
 until [ $# = 0 ]
 do
 	case $1 in
@@ -29,25 +37,23 @@ do
 		-p ) PROPDIRECTDUMP=1;;
 		-i ) AAFINFO=1;;
 		-a ) AAFOMFTEST=1;;
-		-h ) echo "\n-r = Release  -d = Debug" 
-			 echo "-e = ComEssenceDataTest\n"
-			 echo "-m = ComModAAF\n"
-			 echo "-t = dump"
+		-pp ) PRINTPATH=1;;
+		-h ) echo "\n-r  = Release"
+			 echo "-d  = Debug" 
+			 echo "-e  = ComEssenceDataTest"
+			 echo "-m  = ComModAAF"
+			 echo "-t  = dump"
 			 echo "-cl = ComClientTest"
 			 echo "-cu = ComCutsTest"
-			 echo "-p = ComPropDirectDump"
-			 echo "-i = ComAAFInfo"
-			 echo "-a = AafOmf"
+			 echo "-p  = ComPropDirectDump"
+			 echo "-i  = ComAAFInfo"
+			 echo "-a  = AafOmf\n\n"
+			 echo "-pp = Print PATH variable\n\n"
 			exit 1 ;;
 	esac
 	shift
 done
 
-if [ $# -eq 1 ]; then
-	if [ CHECK_RELEASE -eq 1 ] || [ CHECK_DEBUG -eq 1 ]; then
-		ALL=1;
-	fi
-fi
 
 DEBUG="AAFWinSDK/Debug"
 RELEASE="AAFWinSDK/Release"
@@ -109,18 +115,24 @@ ResetPath ()
 
 PrintSeparator ()
 {
-	print "\n\n\n\n"
+	print "\n\n"
+	print "****************************************************************************"
+	print "****************************************************************************\n\n"
 }
 
 RunExamples ()
 {
 	Target=$1
 
+	if [ PRINTPATH -eq 1 ]; then 
+		print "PATH = $PATH" 
+		print "\n\n"
+	fi
+
 	START_DIR="`PWD`"
 
 	cd AAFWinSDK/$Target
 
-pwd
 	if [ MODULETEST -eq 1 ] || [ ALL -eq 1 ]; then
 		cd Test
 		cp ../../Test/Com/Laser.wav .
@@ -143,27 +155,31 @@ pwd
 	cd Examples/com
 	if [ CLIENTTEST -eq 1 ] || [ ALL -eq 1 ]; then
 		COMClientAAF
+		PrintSeparator
 	fi
 
 	if [ CUTSTEST -eq 1 ] || [ ALL -eq 1 ]; then
 		ComCutsTestAAF
+		PrintSeparator
 	fi
 
 	if [ ESSENCETEST -eq 1 ] || [ ALL -eq 1 ]; then
 		cp ../../../examples/com-api/ComEssenceDataTest/Laser.wav .
 		ComEssenceDataTest
+		PrintSeparator
 	fi
 	
 	if [ PROPDIRECTDUMP -eq 1 ] || [ ALL -eq 1 ]; then
 		ComPropDirectDump EssenceTest.aaf
+		PrintSeparator
 	fi
 
 	if [ AAFINFO -eq 1 ] || [ ALL -eq 1 ]; then
 		ComAAFInfo EssenceTest.aaf
+		PrintSeparator
 	fi
 	cd ../..
 
-	PrintSeparator
 
 	if [ AAFOMFTEST -eq 1 ] || [ ALL -eq 1 ]; then
 		cd Utilities
@@ -175,9 +191,9 @@ pwd
 		cp D:/views/Complx2x.omf .
 		AafOmf Complx2x.omf
 		cd ..
-	fi
 
-	PrintSeparator
+		PrintSeparator
+	fi
 
 	cd $START_DIR
 }
