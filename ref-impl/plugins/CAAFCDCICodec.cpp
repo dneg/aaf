@@ -245,6 +245,7 @@ HRESULT STDMETHODCALLTYPE CAAFCDCICodec::CreateLegacyPropDefs(
     HRESULT		hr = S_OK;
     IAAFClassDef	*p_did_classdef = NULL;
     IAAFTypeDef		*p_typedef_int32 = NULL;
+    IAAFPropertyDef	*p_propdef = NULL;
 
 
     try
@@ -260,11 +261,15 @@ HRESULT STDMETHODCALLTYPE CAAFCDCICodec::CreateLegacyPropDefs(
 	// Register legacy property definitions
 	checkResult( p_did_classdef->RegisterOptionalPropertyDef( 
 	    kAAFPropID_DIDResolutionID, kAAFPropName_DIDResolutionID, 
-	    p_typedef_int32, NULL ) );
+	    p_typedef_int32, &p_propdef ) );
+	p_propdef->Release();
+	p_propdef = NULL;
 
 	checkResult( p_did_classdef->RegisterOptionalPropertyDef( 
 	    kAAFPropID_DIDFrameSampleSize, kAAFPropName_DIDFrameSampleSize, 
-	    p_typedef_int32, NULL ) );
+	    p_typedef_int32, &p_propdef ) );
+	p_propdef->Release();
+	p_propdef = NULL;
 
     }
     catch( HRESULT& rhr )
@@ -276,6 +281,8 @@ HRESULT STDMETHODCALLTYPE CAAFCDCICodec::CreateLegacyPropDefs(
 	p_did_classdef->Release();
     if( p_typedef_int32 )
 	p_typedef_int32->Release();
+    if( p_propdef )
+	p_propdef->Release();
 
 
     return hr;
