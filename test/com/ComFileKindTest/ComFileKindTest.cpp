@@ -370,14 +370,23 @@ static void SetFilename(aafWChar *filename, const char *api, const char *kind, b
 	}
 	if (largename)
 	{
-		// Experiment showed that many filesystems tested have a
-		// maximum filename length for a directory entry to be 256.
-		// This is not the same as FILENAME_MAX which represents the
-		// maximum length of the pathname including directory names.
-		// FILENAME_MAX is 4096 for GNU/Linux and 260 for WIN32.
+		// POSIX defines NAME_MAX for max bytes in a filename (excluding null term.)
+		// MSVC instead defines _MAX_FNAME.
+		// For max bytes in a full pathname, POSIX and MSVC define FILENAME_MAX.
+		// However under WIN32, FILENAME_MAX=260 and _MAX_FNAME=256 so
+		// there is little scope to test big filepaths larger than 256.
 
-		// Preserve space for terminator (-1) and ".aaf" (-4)
-		for (int i = wcslen(filename); i < 256 - 1 - 4; i++)
+#ifdef _WIN32
+		aafWChar full[FILENAME_MAX] = L"";
+		_wfullpath(full, filename, FILENAME_MAX);
+		// Calculate filepath space remaining in current path
+		// leaving space for terminating null.
+		size_t padlen = FILENAME_MAX - wcslen(full) - 1;
+#else
+		size_t padlen = NAME_MAX - wcslen(filename);
+#endif
+		// Preserve space for ".aaf" (4 chars)
+		for (int i = 0; i < padlen - 4; i++)
 		{
 			wcscat(filename, L"X");
 		}
@@ -524,6 +533,7 @@ int main(void)
 		while (! allTested)
 		{
 			printf("\n");
+			printf("Testing with %s filenames\n", testLongNames ? "long" : "short");
 			printf("write   |                                read method                                     \n");
 			printf("method  |   ER     EM     RS-4K   RS-512  RS-S4K  RS-S512 RS-M4K  RS-M512 RS-G4K  RS-G512\n");
 			printf("--------+--------------------------------------------------------------------------------\n");
