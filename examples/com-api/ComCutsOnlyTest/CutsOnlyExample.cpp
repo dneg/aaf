@@ -960,12 +960,16 @@ struct CComInitialize
 {
   CComInitialize()
   {
+#ifndef __sgi
     CoInitialize(NULL);
+#endif
   }
 
   ~CComInitialize()
   {
+#ifndef __sgi
     CoUninitialize();
+#endif
   }
 };
 
