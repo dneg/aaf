@@ -540,7 +540,7 @@ void OMSimpleProperty::setBits(const OMByte* bits, size_t size)
 OMContainerProperty::OMContainerProperty(const OMPropertyId propertyId,
                                          const int storedForm,
                                          const char* name)
-: OMProperty(propertyId, storedForm, name), _propertyName(0), _localKey(0)
+: OMProperty(propertyId, storedForm, name), _localKey(0)
 {
   TRACE("OMContainerProperty::OMContainerProperty");
   PRECONDITION("Valid name", validString(name));
