@@ -148,18 +148,22 @@ AAFRESULT STDMETHODCALLTYPE
       wchar_t * pDescription,
       aafUInt32 bufSize)
 {
-  bool stat;
-  if (! pDescription)
+	bool stat;
+	if (! pDescription)
 	{
-	  return AAFRESULT_NULL_PARAM;
+		return AAFRESULT_NULL_PARAM;
 	}
-  stat = _description.copyToBuffer(pDescription, bufSize);
-  if (! stat)
+	if (!_description.isPresent())
 	{
-	  return AAFRESULT_SMALLBUF;
+		return AAFRESULT_PROP_NOT_PRESENT;
 	}
-
-  return AAFRESULT_SUCCESS;
+	stat = _description.copyToBuffer(pDescription, bufSize);
+	if (! stat)
+	{
+		return AAFRESULT_SMALLBUF;
+	}
+	
+	return AAFRESULT_SUCCESS;
 }
 
 
@@ -167,12 +171,16 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFDefObject::GetDescriptionBufLen (
       aafUInt32 * pBufSize)  //@parm [in,out] Definition Name length
 {
-  if (! pBufSize)
+	if (! pBufSize)
 	{
-	  return AAFRESULT_NULL_PARAM;
+		return AAFRESULT_NULL_PARAM;
 	}
-  *pBufSize = _description.size();
-  return AAFRESULT_SUCCESS;
+	if (!_description.isPresent())
+		*pBufSize = 0;
+	else
+		*pBufSize = _description.size();
+	
+	return AAFRESULT_SUCCESS;
 }
 
 

@@ -7,18 +7,6 @@
 *                                          *
 \******************************************/
 
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
-
-
-
-
 #ifndef __ImplAAFSourceReference_h__
 #include "ImplAAFSourceReference.h"
 #endif
@@ -50,6 +38,10 @@ AAFRESULT STDMETHODCALLTYPE
 	if (pSourceID == NULL)
 	{
 		aafError = AAFRESULT_NULL_PARAM;
+	}
+	else if (!_sourceID.isPresent())
+	{
+		aafError = AAFRESULT_PROP_NOT_PRESENT;
 	}
 	else
 	{
