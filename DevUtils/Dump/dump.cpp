@@ -77,7 +77,7 @@
 #include <string.h>
 
 #if defined(_MAC) || defined(macintosh)
-#if defined(USE_CONSOLE)
+#if !defined(USE_DATAINPUT)
 #include <console.h>
 #else
 #include "DataInput.h"
@@ -3473,7 +3473,7 @@ int main(int argumentCount, char* argumentVector[])
   checkSizes();
 
 #if defined(_MAC) || defined(macintosh)
-#if !defined(USE_CONSOLE)
+#if defined(USE_DATAINPUT)
   char dataFile[] = "dump.inp";
   getInputData(&argumentCount, argumentVector, dataFile);
 #endif
@@ -3718,7 +3718,7 @@ int main(int argumentCount, char* argumentVector[])
   }
 
 #if defined(_MAC) || defined(macintosh)
-#if !defined(USE_CONSOLE)
+#if defined(USE_DATAINPUT)
   cleanUpInputData(argumentCount, argumentVector);
 #endif
 #endif
