@@ -1143,7 +1143,7 @@ HRESULT Aaf2Omf::ConvertSourceMob(IAAFSourceMob* pSourceMob,
 			IAAFClassDef * classDef = 0;
 			pAAFObject->GetDefinition(&classDef);
 			IAAFDefObject * defObj = 0;
-			pEssenceDesc->QueryInterface(IID_IAAFDefObject, (void **)&defObj);
+			classDef->QueryInterface(IID_IAAFDefObject, (void **)&defObj);
 			defObj->GetAUID (&ObjClass);
 			if (defObj)
 			  {
@@ -1530,14 +1530,14 @@ HRESULT Aaf2Omf::ProcessComponent(IAAFComponent* pComponent,
 	rc = pComponent->QueryInterface(IID_IAAFOperationGroup, (void **)&pEffect);
 	if (SUCCEEDED(rc))
 	{
-		//Component is an effect
-		OMF2::omfEffObj_t	effect = NULL;
+//		//Component is an effect
+//		OMF2::omfEffObj_t	effect = NULL;
 
 		if (gpGlobals->bVerboseMode)
 		{
 			printf("%sProcessing Effect of length: %ld\n ", gpGlobals->indentLeader, (int)length);
 		}
-		rc = ConvertEffects(pEffect, &effect);
+		rc = ConvertEffects(pEffect, pOMFSegment);
 
 		goto cleanup;
 	}
@@ -2360,13 +2360,19 @@ HRESULT Aaf2Omf::ConvertEffects(IAAFOperationGroup* pEffect,
 		for(n = 0; n < numSources; n++)
 		{
 			checkAAF(pEffect->GetInputSegmentAt(n, &pSegment));
-			checkAAF(pSourceRef->QueryInterface(IID_IAAFSourceClip,
+			(void)(pSegment->QueryInterface(IID_IAAFSourceClip,
 												(void **) &pComponent));
-			checkAAF(ProcessComponent(pComponent,&pOMFSegment));
-			checkOMF(OMF2::omfiEffectAddNewSlot(OMFFileHdl,(*pOMFEffect),
+
+			if(pComponent != NULL)
+			{
+				checkAAF(ProcessComponent(pComponent,&pOMFSegment));
+				checkOMF(OMF2::omfiEffectAddNewSlot(OMFFileHdl,(*pOMFEffect),
 									-1*(n+1), pOMFSegment, &pOMFEffectSlot));
+				pComponent->Release();
+			}
+			//!!! Else error
+
 			pSegment->Release();
-			pComponent->Release();
 		}
        
 		// If the effect ID is known, map to a apecific OMF effect ID
@@ -2385,6 +2391,13 @@ HRESULT Aaf2Omf::ConvertEffects(IAAFOperationGroup* pEffect,
 			checkAAF(ConvertParameter(pParameter, effectDefAUID, (*pOMFEffect),  2,
 										(OMF2::omfLength_t)length));
 		}
+#if AVID_SPECIAL
+		if(pEffect->LookupParameter(kAAFParamID_AvidUserParam, &pParameter) == AAFRESULT_SUCCESS)
+		{
+			checkAAF(ConvertParameter(pParameter, effectDefAUID, (*pOMFEffect),  0,
+										(OMF2::omfLength_t)length));
+		}
+#endif
 #if 0
 		if(pEffect->LookupParameter(kAAFParameterDefAmplitude, &pParameter) == AAFRESULT_SUCCESS)
 		{
@@ -2462,11 +2475,6 @@ HRESULT Aaf2Omf::ConvertEffects(IAAFOperationGroup* pEffect,
 			checkAAF(ConvertParameter(pParameter, (*pOMFEffect),  xxx,
 										(OMF2::omfLength_t)length));
 		}
-		if(pEffect->LookupParameter(kAAFParamID_AvidUserParam, &pParameter) == AAFRESULT_SUCCESS)
-		{
-			checkAAF(ConvertParameter(pParameter, (*pOMFEffect),  xxx,
-										(OMF2::omfLength_t)length));
-		}
 #endif
 	}
 cleanup:
@@ -2488,8 +2496,8 @@ cleanup:
 		pParameter->Release();
 	if (pDefObject)
 		pDefObject->Release();
-	if (pSegment)
-		pSegment->Release();
+//	if (pSegment)
+//		pSegment->Release();
 	if (pSourceRef)
 		pSourceRef->Release();
 	if (pFiller)
@@ -2549,7 +2557,8 @@ HRESULT Aaf2Omf::ConvertParameter(	IAAFParameter*		pParm,
 	//!!! This one parameter ID has no OMF equivilent.  make a routine which
 	// knows the valid ones to let through.
 #if AVID_SPECIAL
-	if(memcmp(&paramDefID, &kAAFParamID_AvidSelected, sizeof(paramDefID)) != 0)
+	if(memcmp(&paramDefID, &kAAFParamID_AvidSelected, sizeof(paramDefID)) != 0 &&
+	   memcmp(&paramDefID, &kAAFParamID_AvidUserParam, sizeof(paramDefID)) != 0)
 #endif
 	{
 		checkAAF(ConvertAAFTypeIDDatakind(typeDefID, &pOMFDatakind));

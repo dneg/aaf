@@ -57,7 +57,7 @@ public:
 	void ConvertOMFDataDefinitionObject( OMF2::omfObject_t obj);
 	void ConvertOMFClassDictionaryObject( OMF2::omfObject_t obj);
 	void ConvertOMFMediaDataObject( OMF2::omfObject_t obj, OMF2::omfUID_t inMediaID);
-	void ConvertOMFDatakind(OMF2::omfDDefObj_t datakind, aafUID_t* pDatadef);
+	virtual void ConvertOMFDatakind(OMF2::omfDDefObj_t datakind, aafUID_t* pDatadef);
 //	HRESULT ConvertUniqueNameToAUID(OMF2::omfUniqueName_t datakindName, aafUID_t* pDatadef);
 	void ConvertOMFMOBObject( OMF2::omfObject_t obj, IAAFMob* pMob );
 	void ConvertOMFCompositionObject( OMF2::omfObject_t obj,IAAFCompositionMob* pCompMob );
