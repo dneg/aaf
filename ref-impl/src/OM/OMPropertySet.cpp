@@ -65,7 +65,7 @@ OMProperty* OMPropertySet::get(const OMPropertyId propertyId) const
 {
   TRACE("OMPropertySet::get");
   OMProperty* result;
-  PRECONDITION("Valid property id", propertyId >= 0 );
+  PRECONDITION("Valid property id", propertyId != 0 );
   PRECONDITION("Property is allowed", isAllowed(propertyId));
   PRECONDITION("Property is present", isPresent(propertyId));
   OMPropertySetElement* element = find(propertyId);
@@ -105,7 +105,7 @@ void OMPropertySet::put(OMProperty* property)
   TRACE("OMPropertySet::put");
   // SAVE(_count);
   PRECONDITION("Valid property", property != 0);
-  PRECONDITION("Valid property id", property->propertyId() >= 0);
+  PRECONDITION("Valid property id", property->propertyId() != 0);
   PRECONDITION("Property is not present", !isPresent(property->propertyId()));
 
   OMPropertyId propertyId = property->propertyId();
