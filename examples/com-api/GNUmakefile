@@ -46,3 +46,18 @@ MetadataExample :
 .PHONY : comClientTest
 comClientTest :
 	cd comClientTest && $(MAKE)
+
+.PHONY : clean
+clean :
+	cd ComCutsOnlyTest && $(MAKE) clean
+	cd ComEssenceDataTest && $(MAKE) clean
+	cd ComExtension && $(MAKE) clean
+	cd ComPropDirectAccess && $(MAKE) clean
+	cd ComPropDirectDump && $(MAKE) clean
+	cd ExportAudioExample && $(MAKE) clean
+	cd ExportSimpleComposition && $(MAKE) clean
+	cd ImportAudioExample && $(MAKE) clean
+	cd InfoDumper && $(MAKE) clean
+	cd MetadataExample && $(MAKE) clean
+	cd comClientTest && $(MAKE) clean
+
