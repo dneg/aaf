@@ -120,13 +120,6 @@ static void throwIfError(HRESULT hr)
 	}
 }
 
-// helper class
-struct CComInitialize
-{
-	CComInitialize() { CoInitialize(NULL); }
-	~CComInitialize() { CoUninitialize(); }
-};
-
 
 // simple helper class to initialize and cleanup AAF library.
 struct CAAFInitialize
@@ -193,9 +186,6 @@ int main(int argc, char* argv[])
 	int	startArg = 1;
 	testMode_t	testMode = kAAFUnitTestReadWrite;
 
-
-	// Initialize com library for this process.
-	CComInitialize comInit;
 
 	// Create the module test object.
 	CAAFModuleTest AAFModuleTest;
