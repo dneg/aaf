@@ -57,6 +57,4 @@ AD_XMETHOD2(Create,
   // AAFRESULT_BAD_LENGTH
   //   - length is negative.)
 
-)
-
 AD_CLASS_END
