@@ -490,7 +490,6 @@ int main(int argc, char* argv[])
 
 		// Write the AAF file and the external essence file
 		cout << "  Writing" << endl;
-		RemoveTestFile(UnicodeExtName);
 		if (simpleFileIO)
 			checkResult(WriteAAFFile(pFile, L"external.wav"));
 		else
