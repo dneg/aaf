@@ -96,10 +96,10 @@ static const aafMobID_t	TEST_MobID =
 0x13, 0x00, 0x00, 0x00,
 {0x1f64f50a, 0x03fd, 0x11d4, 0x8e, 0x3d, 0x00, 0x90, 0x27, 0xdf, 0xca, 0x7c}};
 
-#if defined(_WIN32) || defined(WIN32)
-  // Wave data does not have to be swapped on Windows platforms.
-  #define SWAPSUMMARY(summary)
-#else
+//#if defined(_WIN32) || defined(WIN32)
+//  // Wave data does not have to be swapped on Windows platforms.
+ // #define SWAPSUMMARY(summary)
+//#else
   // Assume all other platforms are big-endian.
   // this will change when we adapt the sdk to
   // other platforms...
@@ -133,7 +133,7 @@ static const aafMobID_t	TEST_MobID =
   }
 
   #define SWAPSUMMARY(summary) SwapSummary(summary);
-#endif
+//#endif
 
 // Cross-platform utility to delete a file.
 static void RemoveTestFile(const wchar_t* pFileName)
