@@ -47,6 +47,7 @@ static wchar_t *manuf2URL = L"www.avid.com";
 #include "AAFResult.h"
 #include "AAFDataDefs.h"
 #include "AAFDefUIDs.h"
+#include "AAFClassDefUIDs.h"
 #include "AAFCodecDefs.h"
 #include "aafUtils.h"
 
@@ -156,12 +157,13 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
   IAAFDictionary*	pDictionary = NULL;
   IAAFDefObject*	pPlugDef = NULL;
   IAAFCodecDef*		pCodecDef = NULL;
+  IAAFClassDef*		pClassDef = NULL;
   IAAFPluginDef *pDesc;
   IAAFNetworkLocator *pNetLoc, *pNetLoc2;
   IAAFLocator		*pLoc, *pLoc2;
   aafUID_t			category = AUID_AAFDefObject, manufacturer = ID_MANUFACTURER;
   bool				bFileOpen = false;
-  aafUID_t			*uidPtr;
+  aafUID_t			*uidPtr, uid;
 	HRESULT			hr = S_OK;
 	aafInt32		n;
 
@@ -254,6 +256,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
                                           (void **)&pCodecDef));
 	checkResult(pCodecDef->AddEssenceKind (defs.ddMatte()));
 	checkResult(pCodecDef->Initialize (NoCodec, L"TestCodec", L"Just a test"));
+	uid = kAAFClassID_WAVEDescriptor;
+	checkResult(pDictionary->LookupClassDef(uid, &pClassDef));
+	checkResult(pCodecDef->SetFileDescriptorClass (pClassDef));
 	checkResult(pDictionary->RegisterCodecDef(pCodecDef));
 	pCodecDef->Release();
 	pCodecDef = NULL;
@@ -270,6 +275,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
   if (pCodecDef)
     pCodecDef->Release();
+  if (pClassDef)
+    pClassDef->Release();
 
   if (pDictionary)
     pDictionary->Release();
