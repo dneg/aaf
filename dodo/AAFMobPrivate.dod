@@ -1,0 +1,30 @@
+#startm .this-module 0
+AAFMobPrivate\
+#endm
+#c
+AD_HEAD
+AD_DEFAULT_UUID(CABC27B1, 57D5, 11D2, 84, 1B, 00, 60, 08, 32, AC, B8)
+AD_CLASS_BEGIN
+AD_XMETHOD1(GetMobKind,
+			[out],
+			objPass,
+			aafMobKind_t *,
+			pMobKind,
+			The kind of this mob,
+			This method returns the kind of this mob.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pMobKind pointer is valid.
+  // 
+  // If this method fails nothing is written to *pMobKind.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pMobKind is null.)
+AD_CLASS_END
