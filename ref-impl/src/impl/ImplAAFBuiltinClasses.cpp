@@ -473,7 +473,7 @@ void ImplAAFBuiltinClasses::instantiateProps ()
 		  assert (propDef);
 		  
 		  AAFRESULT hr = propDef->Initialize
-			(propInfo->pOwnerClassGuid,
+			(&propInfo->id,
 			 propInfo->tag,
 			 propInfo->name,
 			 propInfo->pTypeGuid,
