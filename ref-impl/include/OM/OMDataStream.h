@@ -45,6 +45,10 @@ public:
     //          <c OMDataStreamProperty>.
   virtual OMUInt64 size(void) const = 0;
 
+    // @cmember Set the size, in bytes, of the data in this
+    //          <c OMDataStreamProperty>.
+  virtual void setSize(const OMUInt64 newSize) = 0;
+
     // @cmember Set the current position for <f read()> and <f write()>, as an
     //          offset in bytes from the begining of the data stream.
   virtual void setPosition(const OMUInt64 offset) const = 0;
@@ -56,6 +60,14 @@ public:
   virtual void read(OMByte* buffer,
                     const OMUInt32 bytes,
                     OMUInt32& bytesRead) const = 0;
+
+    // @cmember Attempt to write the number of bytes given by <p bytes>
+    //          to the data stream from the buffer at address
+    //          <p buffer>. The actual number of bytes written is returned
+    //          in <p bytesWritten>.
+  virtual void write(const OMByte* buffer,
+                     const OMUInt32 bytes,
+                     OMUInt32& bytesWritten) = 0;
 
   virtual OMByteOrder storedByteOrder(void) const = 0;
 

@@ -64,7 +64,7 @@ public:
 
     // @cmember Set the size, in bytes, of the data in this
     //          <c OMDataStreamProperty>.
-  void setSize(const OMUInt64 newSize);
+  virtual void setSize(const OMUInt64 newSize);
 
     // @cmember The current position for <f read()> and <f write()>, as an
     //          offset in bytes from the begining of the data stream.
@@ -88,9 +88,9 @@ public:
     //          to the data stream from the buffer at address
     //          <p buffer>. The actual number of bytes written is returned
     //          in <p bytesWritten>.
-  void write(const OMByte* buffer,
-             const OMUInt32 bytes,
-             OMUInt32& bytesWritten);
+  virtual void write(const OMByte* buffer,
+                     const OMUInt32 bytes,
+                     OMUInt32& bytesWritten);
 
   // Typed access interface - these functions use the OMType interface
 
