@@ -140,7 +140,7 @@ public:
 
 	AxBuffer& operator=( const AxBuffer& rhs )
 	{
-		if ( this != &rsh ) {
+		if ( this != &rhs ) {
 			_ptr = rhs._ptr;
 			_size = rhs._size;
 		}
