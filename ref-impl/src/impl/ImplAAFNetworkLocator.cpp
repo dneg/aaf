@@ -58,7 +58,7 @@ ImplAAFNetworkLocator::GetPathBufLen (aafInt32 *  pLen)
 	{
 	  return AAFRESULT_NULL_PARAM;
 	}
-  *pLen = _path.length();
+  *pLen = _path.length()+1;
   return AAFRESULT_SUCCESS;
 }
 
@@ -72,7 +72,10 @@ ImplAAFNetworkLocator::SetPath (aafWChar *  pPathBuf)
 	{
 	  return AAFRESULT_NULL_PARAM;
 	}
-  return AAFRESULT_NOT_IMPLEMENTED;
+
+	_path = pPathBuf;
+
+	return(AAFRESULT_SUCCESS); 
 }
 
 
