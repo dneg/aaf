@@ -54,7 +54,6 @@ AAFPERSISTENTOBJECTS = \
 	AAFTextClip \
 	AAFTextLocator \
 	AAFTIFFData \
-	AAFTIFFDescriptor \
 	AAFTimecodeStream \
 	AAFTimecodeStream12M \
 	AAFTypeDef \
@@ -141,6 +140,7 @@ HUMAN_TYPED_IMPL = \
 	AAFTimelineMobSlot \
 	AAFTapeDescriptor \
 	AAFTransition \
+	AAFTIFFDescriptor \
 	AAFTypeDefVariableArray \
 	AAFWAVEDescriptor \
 	EnumAAFComponents \
