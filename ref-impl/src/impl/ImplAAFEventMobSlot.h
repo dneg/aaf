@@ -14,12 +14,6 @@
 \******************************************/
 
 
-
-
-
-
-
-
 #ifndef __ImplAAFMobSlot_h__
 #include "ImplAAFMobSlot.h"
 #endif
@@ -65,16 +59,13 @@ public:
     SetSegment (/*[in]*/ ImplAAFSegment * pSegment);
 
 
-
-
 public:
   // Declare this class to be storable.
   //
   OMDECLARE_STORABLE(ImplAAFEventMobSlot)
 
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplAAFEventMobSlotTest.cpp.
-  static AAFRESULT test();
+protected:
+  OMFixedSizeProperty<aafRational_t>	_editRate;
 };
 
 #endif // ! __ImplAAFEventMobSlot_h__
