@@ -119,10 +119,6 @@ SOURCE="..\..\..\ref-impl\src\com-api\com-dll\CAAFClassFactory.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\plugins\CAAFDefaultCodec.cpp"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\plugins\CAAFDefaultStream.cpp"
 # End Source File
 # Begin Source File
