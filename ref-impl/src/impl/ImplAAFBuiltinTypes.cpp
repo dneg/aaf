@@ -116,8 +116,8 @@ static AAFRESULT CreateNewIntegerType (const aafUID_t & idToCreate,
 		  // Yes, this is the one.
 		  // Create an impl typedefinteger object (as yet uninitialized)
 		  ImplAAFTypeDefInt * ptd = 0;
-		  hr = pDict->CreateInstance (pDict->GetBuiltinDefs()->cdTypeDefInt(),
-									  (ImplAAFObject**) &ptd);
+		  hr = pDict->GetBuiltinDefs()->cdTypeDefInt()->
+			CreateInstance ((ImplAAFObject**) &ptd);
 		  assert (AAFRESULT_SUCCEEDED (hr));
 		  assert (ptd);
 
@@ -197,8 +197,8 @@ static AAFRESULT CreateNewEnumerationType (const aafUID_t & idToCreate,
 
 		  // Create an impl enumeration object (as yet uninitialized)
 		  ImplAAFTypeDefEnum * ptd = 0;
-		  hr = pDict->CreateInstance (pDict->GetBuiltinDefs()->cdTypeDefEnum(),
-									  (ImplAAFObject**) &ptd);
+		  hr = pDict->GetBuiltinDefs()->cdTypeDefEnum()->
+			CreateInstance ((ImplAAFObject**) &ptd);
 		  assert (AAFRESULT_SUCCEEDED (hr));
 		  assert (ptd);
 
@@ -320,8 +320,8 @@ static AAFRESULT CreateNewRecordType (const aafUID_t & idToCreate,
 
 		  // Create an impl record object (as yet uninitialized)
 		  ImplAAFTypeDefRecord * ptd = 0;
-		  hr = pDict->CreateInstance (pDict->GetBuiltinDefs()->cdTypeDefRecord(),
-									  (ImplAAFObject**) &ptd);
+		  hr = pDict->GetBuiltinDefs()->cdTypeDefRecord()->
+			CreateInstance ((ImplAAFObject**) &ptd);
 		  assert (AAFRESULT_SUCCEEDED (hr));
 		  assert (ptd);
 
@@ -419,8 +419,8 @@ static AAFRESULT CreateNewVaryingArrayType (const aafUID_t & idToCreate,
 		  // Yes, this is the one.
 		  // Create an impl typedefvaryingArray object (as yet uninitialized)
 		  ImplAAFTypeDefVariableArray * ptd = 0;
-		  hr = pDict->CreateInstance (pDict->GetBuiltinDefs()->cdTypeDefVariableArray(),
-									  (ImplAAFObject**) &ptd);
+		  hr = pDict->GetBuiltinDefs()->cdTypeDefVariableArray()->
+			CreateInstance ((ImplAAFObject**) &ptd);
 		  assert (AAFRESULT_SUCCEEDED (hr));
 		  assert (ptd);
 
@@ -467,8 +467,8 @@ static AAFRESULT CreateNewFixedArrayType (const aafUID_t & idToCreate,
 		  // Yes, this is the one.
 		  // Create an impl typedeffixedArray object (as yet uninitialized)
 		  ImplAAFTypeDefFixedArray * ptd = 0;
-		  hr = pDict->CreateInstance (pDict->GetBuiltinDefs()->cdTypeDefFixedArray(),
-									  (ImplAAFObject**) &ptd);
+		  hr = pDict->GetBuiltinDefs()->cdTypeDefFixedArray()->
+			CreateInstance ((ImplAAFObject**) &ptd);
 		  assert (AAFRESULT_SUCCEEDED (hr));
 		  assert (ptd);
 
@@ -516,8 +516,8 @@ static AAFRESULT CreateNewRenameType (const aafUID_t & idToCreate,
 		  // Yes, this is the one.
 		  // Create an impl typedefRename object (as yet uninitialized)
 		  ImplAAFTypeDefRename * ptd = 0;
-		  hr = pDict->CreateInstance (pDict->GetBuiltinDefs()->cdTypeDefRename(),
-									  (ImplAAFObject**) &ptd);
+		  hr = pDict->GetBuiltinDefs()->cdTypeDefRename()->
+			CreateInstance ((ImplAAFObject**) &ptd);
 		  assert (AAFRESULT_SUCCEEDED (hr));
 		  assert (ptd);
 
@@ -564,8 +564,8 @@ static AAFRESULT CreateNewStringType (const aafUID_t & idToCreate,
 		  // Yes, this is the one.
 		  // Create an impl typedefString object (as yet uninitialized)
 		  ImplAAFTypeDefString * ptd = 0;
-		  hr = pDict->CreateInstance (pDict->GetBuiltinDefs()->cdTypeDefString(),
-									  (ImplAAFObject**) &ptd);
+		  hr = pDict->GetBuiltinDefs()->cdTypeDefString()->
+			CreateInstance ((ImplAAFObject**) &ptd);
 		  assert (AAFRESULT_SUCCEEDED (hr));
 		  assert (ptd);
 
@@ -612,8 +612,8 @@ static AAFRESULT CreateNewCharacterType (const aafUID_t & idToCreate,
 		  // Yes, this is the one.
 		  // Create an impl typedefinteger object (as yet uninitialized)
 		  ImplAAFTypeDefInt * ptd = 0;
-		  hr = pDict->CreateInstance (pDict->GetBuiltinDefs()->cdTypeDefInt(),
-									  (ImplAAFObject**) &ptd);
+		  hr = pDict->GetBuiltinDefs()->cdTypeDefInt()->
+			CreateInstance ((ImplAAFObject**) &ptd);
 		  assert (AAFRESULT_SUCCEEDED (hr));
 		  assert (ptd);
 
@@ -656,8 +656,8 @@ static AAFRESULT CreateNewStrongRefType (const aafUID_t & idToCreate,
 		  // Yes, this is the one.
 		  // Create an impl typedefStrongRef object (as yet uninitialized)
 		  ImplAAFTypeDefStrongObjRef * ptd = 0;
-		  hr = pDict->CreateInstance (pDict->GetBuiltinDefs()->cdTypeDefStrongObjRef(),
-									  (ImplAAFObject**) &ptd);
+		  hr = pDict->GetBuiltinDefs()->cdTypeDefStrongObjRef()->
+			CreateInstance ((ImplAAFObject**) &ptd);
 		  assert (AAFRESULT_SUCCEEDED (hr));
 		  assert (ptd);
 
@@ -704,8 +704,8 @@ static AAFRESULT CreateNewStrongRefSetType (const aafUID_t & idToCreate,
 		  // Yes, this is the one.
 		  // Create an impl typedefvariablearray object (as yet uninitialized)
 		  ImplAAFTypeDefVariableArray * ptd = 0;
-		  hr = pDict->CreateInstance (pDict->GetBuiltinDefs()->cdTypeDefVariableArray(),
-									  (ImplAAFObject**) &ptd);
+		  hr = pDict->GetBuiltinDefs()->cdTypeDefVariableArray()->
+			CreateInstance ((ImplAAFObject**) &ptd);
 		  assert (AAFRESULT_SUCCEEDED (hr));
 		  assert (ptd);
 
@@ -752,8 +752,8 @@ static AAFRESULT CreateNewStrongRefVectorType (const aafUID_t & idToCreate,
 		  // Yes, this is the one.
 		  // Create an impl typedefvariablearray object (as yet uninitialized)
 		  ImplAAFTypeDefVariableArray * ptd = 0;
-		  hr = pDict->CreateInstance (pDict->GetBuiltinDefs()->cdTypeDefVariableArray(),
-									  (ImplAAFObject**) &ptd);
+		  hr = pDict->GetBuiltinDefs()->cdTypeDefVariableArray()->
+			CreateInstance ((ImplAAFObject**) &ptd);
 		  assert (AAFRESULT_SUCCEEDED (hr));
 		  assert (ptd);
 
@@ -801,8 +801,8 @@ static AAFRESULT CreateNewWeakRefType (const aafUID_t & idToCreate,
 		  // Yes, this is the one.
 		  // Create an impl typedefWeakRef object (as yet uninitialized)
 		  ImplAAFTypeDefWeakObjRef * ptd = 0;
-		  hr = pDict->CreateInstance (pDict->GetBuiltinDefs()->cdTypeDefWeakObjRef(),
-									  (ImplAAFObject**) &ptd);
+		  hr = pDict->GetBuiltinDefs()->cdTypeDefWeakObjRef()->
+			pDict->CreateInstance ((ImplAAFObject**) &ptd);
 		  assert (AAFRESULT_SUCCEEDED (hr));
 		  assert (ptd);
 
@@ -852,8 +852,8 @@ static AAFRESULT CreateNewWeakRefSetType (const aafUID_t & idToCreate,
 		  // Yes, this is the one.
 		  // Create an impl typedefvariablearray object (as yet uninitialized)
 		  ImplAAFTypeDefVariableArray * ptd = 0;
-		  hr = pDict->CreateInstance (pDict->GetBuiltinDefs()->cdTypeDefVariableArray(),
-									  (ImplAAFObject**) &ptd);
+		  hr = pDict->GetBuiltinDefs()->cdTypeDefVariableArray()->
+			CreateInstance ((ImplAAFObject**) &ptd);
 		  assert (AAFRESULT_SUCCEEDED (hr));
 		  assert (ptd);
 
@@ -899,8 +899,8 @@ static AAFRESULT CreateNewWeakRefVectorType (const aafUID_t & idToCreate,
 		  // Yes, this is the one.
 		  // Create an impl typedefvariablearray object (as yet uninitialized)
 		  ImplAAFTypeDefVariableArray * ptd = 0;
-		  hr = pDict->CreateInstance (pDict->GetBuiltinDefs()->cdTypeDefVariableArray(),
-									  (ImplAAFObject**) &ptd);
+		  hr = pDict->GetBuiltinDefs()->cdTypeDefVariableArray()->
+			CreateInstance ((ImplAAFObject**) &ptd);
 		  assert (AAFRESULT_SUCCEEDED (hr));
 		  assert (ptd);
 
