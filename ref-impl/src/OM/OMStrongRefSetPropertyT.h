@@ -263,10 +263,10 @@ void OMStrongReferenceSetProperty<ReferencedObject>::appendValue(
                                                 const ReferencedObject*& value)
 {
   TRACE("OMStrongReferenceSetProperty<ReferencedObject>::appendValue");
-  PRECONDITION("Valid object", object != 0);
+  PRECONDITION("Valid object", value != 0);
 
   OBSOLETE("OMStrongReferenceSetProperty<ReferencedObject>::insert");
-  insert(object);
+  insert(value);
 }
 
   // @mfunc Remove this optional <c OMStrongReferenceSetProperty>.
