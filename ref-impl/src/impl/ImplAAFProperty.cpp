@@ -45,7 +45,8 @@ ImplAAFProperty::ImplAAFProperty ()
 ImplAAFProperty::~ImplAAFProperty ()
 {
   RELEASE_IF_SET (_pPropVal);
-  RELEASE_IF_SET (_pPropDef);
+  // BobT: don't reference count the property def!
+  // RELEASE_IF_SET (_pPropDef);
 }
 
 
@@ -69,7 +70,8 @@ AAFRESULT ImplAAFProperty::Initialize
 	{
 
 	  _pPropDef = pPropDef;
-	  _pPropDef->AcquireReference ();
+	  // BobT: don't reference count the property def!
+	  // _pPropDef->AcquireReference ();
 
 	  AAFRESULT hr;
 	  hr = pPropDef->GetTypeDef (&ptd);
@@ -105,7 +107,10 @@ AAFRESULT ImplAAFProperty::Initialize
 	{
 	  rReturned = rCaught;
 
-	  RELEASE_IF_SET (_pPropDef);
+	  // BobT: don't reference count the property def!
+	  // RELEASE_IF_SET (_pPropDef);
+	  _pPropDef = 0;
+
 	  RELEASE_IF_SET (pvd);
 	}
 
