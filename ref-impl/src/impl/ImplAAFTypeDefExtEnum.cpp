@@ -588,10 +588,10 @@ void ImplAAFTypeDefExtEnum::internalize(OMByte* externalBytes,
 										size_t internalBytesSize,
 										OMByteOrder byteOrder) const
 {
-  BaseType()->internalize (internalBytes,
-						   internalBytesSize,
-						   externalBytes,
+  BaseType()->internalize (externalBytes,
 						   externalBytesSize,
+						   internalBytes,
+						   internalBytesSize,
 						   byteOrder);
 }
 
