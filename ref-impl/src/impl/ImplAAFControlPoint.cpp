@@ -162,7 +162,6 @@ AAFRESULT STDMETHODCALLTYPE
       ImplAAFTypeDef*  pTypeDef)
 {
 	aafUID_t			newUID;
-	ImplAAFHeader		*head = NULL;
 	ImplAAFDictionary	*dict = NULL;
 
 	if(pTypeDef == NULL)
@@ -171,25 +170,17 @@ AAFRESULT STDMETHODCALLTYPE
 	XPROTECT()
 	{
 		CHECK(pTypeDef->GetAUID(&newUID));
-		CHECK(pTypeDef->MyHeadObject(&head));
-		CHECK(head->GetDictionary(&dict));
+		CHECK(GetDictionary(&dict));
 //		if(dict->LookupType(&newUID, &def) == AAFRESULT_SUCCESS)
 //			def->ReleaseReference();
 
 		_type = newUID;
 //		pTypeDef->AcquireReference();
-		head->ReleaseReference();
-		head = NULL;
 		dict->ReleaseReference();
 		dict = NULL;
 	}
 	XEXCEPT
 	{
-		if(head)
-		  {
-			head->ReleaseReference();
-			head = 0;
-		  }
 		if(dict)
 		  {
 			dict->ReleaseReference();
