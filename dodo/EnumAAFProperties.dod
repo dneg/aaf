@@ -6,24 +6,144 @@ EnumAAFProperties\
 AAFRoot\
 #endm
 #c
-AD_HEAD
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
-
- 
 /***********************************************\
 *	Stub only.   Implementation not yet added	*
 \***********************************************/
-
-
+AD_HEAD
+AD_FORWARD_DECLARATION(AAFProperty)
 AD_CLASS_UUID(BE316DB1, 7E73, 11D2, 84, 1D, 00, 60, 08, 32, AC, B8)
 
 AD_DEFAULT_UUID(BE316DB2, 7E73, 11D2, 84, 1D, 00, 60, 08, 32, AC, B8)
 AD_CLASS_BEGIN
+AD_XMETHOD1(NextOne,
+			[out\,retval],
+			objOut,
+			AAFProperty,
+			ppProperty,
+			The Next Property,
+			Enumerates to the next element in the enumerators list. The
+  // caller is responsible for properly releasing the returned pointer
+  // when it is no longer needed.
+  // 
+  // Succeeds if all of the following are true:
+  // - the ppProperty pointer is valid.
+  // - there are Property objects remaining to be returned.
+  // 
+  // If this method fails nothing is written to *ppProperty.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppProperty is null.
+  //
+  // AAFRESULT_NO_MORE_OBJECTS
+  //   - no Properties remaining to be returned.)
+
+
+AD_XMETHOD3(Next,
+			[in],
+			  objPass,
+			  aafUInt32,
+			  count,
+			  number of properties requested,
+			[out\, size_is\(count\)\, length_is\(*pNumFetched\)],
+			  objOut,
+			  AAFProperty,
+			  ppProperties,
+			  array to receive properties,
+			[out\,ref],
+			  objPass,
+			  aafUInt32 *,
+			  pNumFetched,
+			  number of actual Properties fetched into ppProperties array,
+			Enumerates the next count elements \(AAFProperty pointers\) in the
+  // enumerator's list\, returning them in the given array along with
+  // the actual number of enumerated elements in pNumFetched. The caller
+  // is responsible for properly releasing the returned pointers.
+  // 
+  // Succeeds if all of the following are true:
+  // - The ppMobs pointer is valid.
+  // - The pNumFetched pointer is valid. If count is 1\, pNumFetched can be NULL.
+  // - There are Mob objects remaining to be returned.
+  // 
+  // If this method fails nothing is written to *ppProperties or
+  // pNumFetched.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - either ppCompoents or pNumFetched is null.)
+
+
+AD_METHOD1(Skip,
+		   [in],
+		     aafUInt32,
+			 count,
+			 Number of elements to skip,
+			Instructs the enumerator to skip the next count elements in the
+  // enumeration so that the next call to Next will not
+  // return those elements.
+  // 
+  // Succeeds if all of the following are true:
+  // - count is less than or equal to the number of remaining objects.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\\\, it will return the first one
+  // encountered in the order given below:
+  //
+  // AAFRESULT_SUCCESS
+  //   - succeeded.
+  //
+  // AAFRESULT_NO_MORE_OBJECTS
+  //   - count exceeded number of remaining objects.)
+
+
+AD_METHOD0(Reset,
+		   Instructs the enumerator to position itself at the beginning of the list of elements.
+  //
+  // There is no guarantee that the same set of elements will be enumerated on 
+  // each pass through the list\, nor will the elements necessarily be enumerated in 
+  // the same order. The exact behavior depends on the collection being enumerated.
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //)
+
+
+AD_XMETHOD1(Clone,
+			[out\,retval],
+			  objOut,
+			  EnumAAFProperties,
+			  ppEnum,
+			  new enumeration,
+			Creates another property enumerator with the same state as the current
+  // enumerator to iterate over the same list. This method makes it
+  // possible to record a point in the enumeration sequence in order
+  // to return to that point at a later time.
+  //
+  // Note: The caller must release this new enumerator separately from
+  // the first enumerator.
+  // 
+  // Succeeds if all of the following are true:
+  // - the ppEnum pointer is valid.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppEnum is null.)
 AD_CLASS_END
