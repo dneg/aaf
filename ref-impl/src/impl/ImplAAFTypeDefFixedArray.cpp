@@ -369,12 +369,12 @@ OMProperty * ImplAAFTypeDefFixedArray::pvtCreateOMPropertyMBS
   else
 	{
 	  // We don't support variable arrays of variably-sized properties.
-	  assert (ptd->IsFixedSize());
-	  aafUInt32 elemSize = ptd->NativeSize ();
+	  assert (IsFixedSize());
+	  aafUInt32 arraySize = NativeSize ();
 
 	  // But even though elems are fixed size, the variable array is
 	  // of variable size.  Specify a size of one element.
-	  result = new OMSimpleProperty (pid, name, elemSize);
+	  result = new OMSimpleProperty (pid, name, arraySize);
 	}
 
   assert (result);
