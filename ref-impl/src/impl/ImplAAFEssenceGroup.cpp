@@ -31,6 +31,8 @@
 #include "ImplAAFMobSlot.h"
 #include "ImplAAFMob.h"
 #include "ImplAAFMasterMob.h"
+#include "ImplAAFDictionary.h"
+#include "ImplAAFDataDef.h"
 
 ImplAAFEssenceGroup::ImplAAFEssenceGroup ()
 :   _choices(	PID_EssenceGroup_Choices,		"Choices"),
@@ -65,7 +67,10 @@ AAFRESULT STDMETHODCALLTYPE
 {
 	aafUID_t	newDataDef, groupDataDef;
 	aafLength_t	oneLength, stillLength;
-	
+	ImplAAFDictionary	*pDict = NULL;
+	ImplAAFDataDef	*pDef = NULL;
+	aafBool			willConvert;
+
 	if (stillFrame == NULL)
 		return AAFRESULT_NULL_PARAM;
 	
@@ -74,11 +79,16 @@ AAFRESULT STDMETHODCALLTYPE
 		/* Verify that groups's datakind converts to still's datakind */
 		CHECK(stillFrame->GetDataDef(&newDataDef));
 		CHECK(GetDataDef(&groupDataDef));
-		if (!EqualAUID(&newDataDef, &groupDataDef))
-			//!!!!stillDatakind->DoesDatakindConvertTo(datakindName, &aafError))
-		{
+		CHECK(GetDictionary(&pDict));
+		CHECK(pDict->LookupDataDefintion(&newDataDef, &pDef));
+		pDict->ReleaseReference();
+		pDict = NULL;
+		CHECK(pDef->DoesDataDefConvertTo(&groupDataDef, &willConvert));
+		pDef->ReleaseReference();
+		pDef = NULL;
+
+		if (willConvert == AAFFalse)
 			RAISE(AAFRESULT_INVALID_DATADEF);
-		}
 		
 		/* Verify that length of still frame is 1 */
 		CvtInt32toInt64(1, &oneLength);
@@ -99,6 +109,10 @@ AAFRESULT STDMETHODCALLTYPE
 	}
 	XEXCEPT
 	{
+	  if (NULL != pDict)
+	    pDict->ReleaseReference();
+	  if (NULL != pDef)
+	    pDef->ReleaseReference();
 	}
 	XEND;
 	
@@ -114,7 +128,10 @@ AAFRESULT STDMETHODCALLTYPE
 {
 	aafUID_t	newDataDef, groupDataDef;
 	aafLength_t	groupLength, newLength;
-	
+	ImplAAFDictionary	*pDict = NULL;
+	ImplAAFDataDef	*pDef = NULL;
+	aafBool			willConvert;
+
 	if(choice == NULL)
 		return(AAFRESULT_NULL_PARAM);
 	
@@ -123,11 +140,16 @@ AAFRESULT STDMETHODCALLTYPE
 		CHECK(choice->GetDataDef(&newDataDef));
 		CHECK(GetDataDef(&groupDataDef));
 		/* Verify that groups's datakind converts to still's datakind */
-		if (!EqualAUID(&newDataDef, &groupDataDef))
-			//!!!!stillDatakind->DoesDatakindConvertTo(datakindName, &aafError))
-		{
+		CHECK(GetDictionary(&pDict));
+		CHECK(pDict->LookupDataDefintion(&newDataDef, &pDef));
+		pDict->ReleaseReference();
+		pDict = NULL;
+		CHECK(pDef->DoesDataDefConvertTo(&groupDataDef, &willConvert));
+		pDef->ReleaseReference();
+		pDef = NULL;
+
+		if (willConvert == AAFFalse)
 			RAISE(AAFRESULT_INVALID_DATADEF);
-		}
 		
 		/* Verify that length of choice matches length of group */
 		CHECK(GetLength (&groupLength));
@@ -142,6 +164,10 @@ AAFRESULT STDMETHODCALLTYPE
 	}
 	XEXCEPT
 	{
+		if(pDict != NULL)
+			pDict->ReleaseReference();
+		if(pDef != NULL)
+			pDef->ReleaseReference();
 	}
 	XEND;
 	

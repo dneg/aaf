@@ -35,6 +35,8 @@
 #include "ImplAAFSourceMob.h"
 #endif
 
+#include "ImplAAFDictionary.h"
+
 #include <assert.h>
 #include "ImplAAFEssenceDescriptor.h"
 #include "ImplAAFSourceClip.h"
@@ -363,32 +365,30 @@ AAFRESULT STDMETHODCALLTYPE
 // ValidateTimecodeRange()
 //
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFSourceMob::SpecifyValidCodeRange (ImplAAFDataDef * /*pEssenceKind*/,
-                           aafSlotID_t  /*slotID*/,
-                           aafRational_t  /*editrate*/,
-                           aafFrameOffset_t  /*startOffset*/,
-                           aafFrameLength_t  /*length32*/)
+    ImplAAFSourceMob::SpecifyValidCodeRange (ImplAAFDataDef *pEssenceKind,
+                           aafSlotID_t  slotID,
+                           aafRational_t  editrate,
+                           aafFrameOffset_t  startOffset,
+                           aafFrameLength_t  length32)
 {
-#if FULL_TOOLKIT
 	ImplAAFSourceClip		*sclp = NULL;
 	ImplAAFTimecode			*timecodeClip = NULL;
-	ImplAAFSequence *aSequ, *segSequ;
-	ImplAAFFiller *filler1, *filler2;
-	ImplAAFSegment *seg;
-	ImplAAFComponent *subSegment;
-	aafPosition_t	pos, zeroPos, sequPos, begPos, endPos;
-	aafLength_t		length, zeroLen, tcLen, endFillLen, firstFillLen, oldFillLen, segLen;
-	aafLength_t		tcSlotLen, sequLen;
-  	aafSourceRef_t sourceRef;
-	ImplAAFMobSlot *	newSlot, *slot;
-  	aafFrameOffset_t	tcStartPos;
-  	aafTimecode_t	timecode;
-  	aafProperty_t	prop;
-  	aafInt32		sequLoop, numSegs;
-    ImplAAFIterate *		sequIter = NULL;
-  	AAFRESULT		aafError;
+	ImplAAFSequence *		aSequ = NULL, *segSequ = NULL;
+	ImplAAFFiller *			filler1 = NULL, *filler2 = NULL;
+	ImplAAFSegment *		seg = NULL;
+	ImplAAFComponent *		subSegment = NULL;
+	ImplAAFDictionary *		pDict = NULL;
+	aafPosition_t			pos, zeroPos, sequPos, begPos, endPos;
+	aafLength_t				length, zeroLen, tcLen, endFillLen, firstFillLen, oldFillLen, segLen;
+	aafLength_t				tcSlotLen, sequLen;
+  	aafSourceRef_t			sourceRef;
+	ImplAAFTimelineMobSlot	*newSlot, *slot;
+  	aafFrameOffset_t		tcStartPos;
+  	aafTimecode_t			timecode;
+  	aafInt32				sequLoop, numSegs;
+    ImplEnumAAFComponents	*sequIter = NULL;
   	
-	XPROTECT(_file)
+	XPROTECT()
 	{
 		CHECK(FindTimecodeClip(startOffset, &timecodeClip, &tcStartPos,
 								&tcSlotLen));
@@ -407,39 +407,36 @@ AAFRESULT STDMETHODCALLTYPE
 		endFillLen = tcSlotLen;
 		CHECK(SubInt64fromInt64(pos, &endFillLen));
 		CHECK(SubInt64fromInt64(length, &endFillLen));
-		sourceRef.sourceID.prefix = 0;
-		sourceRef.sourceID.major = 0;
-		sourceRef.sourceID.minor = 0;
+		memset(&sourceRef, sizeof(aafUID_t), 0);
 		sourceRef.sourceSlotID = 0;
 		CvtInt32toPosition(0, sourceRef.startTime);
-		sclp = CreatreImpl(CLSID_AAFSourceClip);
-		(_file, mediaKind, length, sourceRef);
+		CHECK(GetDictionary(&pDict));
+		CHECK(pDict->CreateInstance(&AUID_AAFSourceClip, (ImplAAFObject **)&sclp));
 
-		if(FindSlotBySlotID(slotID, &slot) != AAFRESULT_SUCCESS)
+		if(FindSlotBySlotID(slotID, (ImplAAFMobSlot **)&slot) != AAFRESULT_SUCCESS)
 		{
-			aSequ  = CreateImpl(CLSID_AAFSequence(_file, mediaKind);
-			filler1 = CreateImpl(CLSID_AAFFiller(_file, mediaKind, pos);	
+			CHECK(pDict->CreateInstance(&AUID_AAFSequence, (ImplAAFObject **)&aSequ));
+			CHECK(pDict->CreateInstance(&AUID_AAFFiller, (ImplAAFObject **)&filler1));
 			if(aSequ == NULL || filler1 == NULL)
 				RAISE(E_FAIL);
-			CHECK(aSequ->AppendCpnt(filler1));
-			CHECK(aSequ->AppendCpnt(sclp));
-			filler2 = CreateImpl(CLSID_AAFFiller(_file, mediaKind, endFillLen);	
-			CHECK(aSequ->AppendCpnt(filler2));
+			CHECK(aSequ->AppendComponent(filler1));
+			CHECK(aSequ->AppendComponent(sclp));
+			CHECK(pDict->CreateInstance(&AUID_AAFFiller, (ImplAAFObject **)&filler2));
+			CHECK(aSequ->AppendComponent(filler2));
 
 			/* (SPR#343) Change to validate multiple ranges */
-			CHECK(AppendNewSlot(editrate, aSequ, zeroPos, slotID,
-												NULL, &newSlot));
+			CHECK(AppendNewTimelineSlot(editrate, aSequ, slotID,
+												NULL, zeroPos, &newSlot));
 		}
 	  else
 	  	{
-		  CHECK(slot->GetSegment(&seg));
-		  CHECK(seg->GenerateSequence(&segSequ));
-  			sequIter = new AAFIterate(_file);
-  			CHECK(segSequ->GetNumCpnts(&numSegs));
-			for (sequLoop=0; sequLoop < numSegs; sequLoop++)
+			CHECK(slot->GetSegment(&seg));
+			CHECK(seg->GenerateSequence(&segSequ));
+  			CHECK(segSequ->EnumComponents(&sequIter));
+  			CHECK(segSequ->GetNumComponents(&numSegs));
+			for (sequLoop=0, sequPos = 0; sequLoop < numSegs; sequLoop++, sequPos += segLen)
 			{
-				CHECK(sequIter->SequenceGetNextCpnt(segSequ,
-												NULL, &sequPos, &subSegment));
+				CHECK(sequIter->NextOne(&subSegment));
 				CHECK(subSegment->GetLength(&segLen));
 				/* Skip zero-length clips, sometimes found in MC files */
 				if (Int64Equal(segLen, zeroLen))
@@ -450,37 +447,34 @@ AAFRESULT STDMETHODCALLTYPE
 				if (Int64Less(pos, endPos) &&
 					Int64LessEqual(begPos, pos))
 				{
-		 			if(subSegment->IsTypeOf("FILL", &aafError) &&
-		 				(sequLoop == (numSegs-1)))
+//!!!					if(subSegment->IsTypeOf("FILL", &aafError) &&
+//		 				(sequLoop == (numSegs-1)))
 		 			{
-						prop = OMCPNTLength;
-						
 						firstFillLen = pos;
 						CHECK(SubInt64fromInt64(sequPos, &firstFillLen));
-						CHECK(subSegment->ReadLength(prop, &oldFillLen));
+						CHECK(subSegment->GetLength(&oldFillLen));
 						endFillLen = oldFillLen;
 						CHECK(SubInt64fromInt64(length, &endFillLen));
 						CHECK(SubInt64fromInt64(firstFillLen, &endFillLen));
 						/****/
-						CHECK(subSegment->WriteLength(prop, firstFillLen));
+						CHECK(subSegment->SetLength(&firstFillLen));
 						/* 1.x does not have a Sequence Length property */
-						  {
-							CHECK(segSequ->ReadLength(prop, &sequLen));
-							SubInt64fromInt64(oldFillLen, &sequLen);
-							AddInt64toInt64(firstFillLen, &sequLen);
-							CHECK(segSequ->WriteLength(prop, sequLen));
-						  }
+						CHECK(segSequ->GetLength(&sequLen));
+						SubInt64fromInt64(oldFillLen, &sequLen);
+						AddInt64toInt64(firstFillLen, &sequLen);
+						CHECK(segSequ->SetLength(&sequLen));
 
-						filler2 = CreateImpl(CLSID_AAFFiller(_file, mediaKind, endFillLen);	
-						CHECK(segSequ->AppendCpnt(sclp));
-						CHECK(segSequ->AppendCpnt(filler2));
+						CHECK(pDict->CreateInstance(&AUID_AAFFiller, (ImplAAFObject **)&filler2));
+//!!!						filler2 = CreateImpl(CLSID_AAFFiller(_file, mediaKind, endFillLen);	
+						CHECK(segSequ->AppendComponent(sclp));
+						CHECK(segSequ->AppendComponent(filler2));
 						break;
 					}
-					else
-						RAISE(AAFRESULT_NOT_IMPLEMENTED);
+//!!!					else
+//						RAISE(AAFRESULT_NOT_IMPLEMENTED);
 				}
 			} /* for */
-			delete sequIter;
+			sequIter->ReleaseReference();
 			sequIter = NULL;
 			
 //!!!			/* Release reference, so the useCount is decremented */
@@ -490,13 +484,68 @@ AAFRESULT STDMETHODCALLTYPE
 //				 subSegment = NULL;
 //			  }
 		}
+		if(aSequ!= NULL)
+		{
+			aSequ->ReleaseReference();
+			aSequ = NULL;
+		}
+		if(segSequ!= NULL)
+		{
+			segSequ->ReleaseReference();
+			segSequ = NULL;
+		}
+		if(filler1!= NULL)
+		{
+			filler1->ReleaseReference();
+			filler1 = NULL;
+		}
+		if(filler2!= NULL)
+		{
+			filler2->ReleaseReference();
+			filler2 = NULL;
+		}
+		if(seg!= NULL)
+		{
+			seg->ReleaseReference();
+			seg = NULL;
+		}
+		if(subSegment!= NULL)
+		{
+			subSegment->ReleaseReference();
+			subSegment = NULL;
+		}
+		if(pDict!= NULL)
+		{
+			pDict->ReleaseReference();
+			pDict = NULL;
+		}
 		if(sclp!= NULL)
+		{
 			sclp->ReleaseReference();
+			sclp = NULL;
+		}
 		if(timecodeClip!= NULL)
+		{
 			timecodeClip->ReleaseReference();
+			timecodeClip = NULL;
+		}
 	}
 	XEXCEPT
 	{
+		if(aSequ!= NULL)
+			aSequ->ReleaseReference();
+		if(segSequ!= NULL)
+			segSequ->ReleaseReference();
+		if(filler1!= NULL)
+			filler1->ReleaseReference();
+		if(filler2!= NULL)
+			filler2->ReleaseReference();
+		if(seg!= NULL)
+			seg->ReleaseReference();
+		if(subSegment!= NULL)
+			subSegment->ReleaseReference();
+		if(pDict!= NULL)
+			pDict->ReleaseReference();
 		if(sclp!= NULL)
 			sclp->ReleaseReference();
 		if(timecodeClip!= NULL)
@@ -505,9 +554,6 @@ AAFRESULT STDMETHODCALLTYPE
 	XEND;
 
 	return (AAFRESULT_SUCCESS);
-#else
-	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
 }
 
 
