@@ -153,6 +153,14 @@ SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFConstValueTest.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFContentStorage.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFContentStorageTest.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFControlCodeDef.cpp"
 # End Source File
 # Begin Source File
