@@ -75,10 +75,6 @@ BEGIN {
 }
 
 END {
-  if (date != "") {
-    /* Print last table row */
-    printRow(date, name, files, comments, color);
-  }
   printTrailer();
 }
 
