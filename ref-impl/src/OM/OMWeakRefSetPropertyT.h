@@ -824,6 +824,31 @@ OMWeakReferenceSetProperty<ReferencedObject>::findObject(
 }
 
 template <typename ReferencedObject>
+OMContainerIterator<OMWeakReferenceSetElement>*
+OMWeakReferenceSetProperty<ReferencedObject>::iterator(void) const
+{
+  TRACE("OMWeakReferenceSetProperty<ReferencedObject>::iterator");
+
+  OMSetIterator<OMUniqueObjectIdentification, SetElement>* result =
+   new OMSetIterator<OMUniqueObjectIdentification, SetElement>(_set, OMBefore);
+  ASSERT("Valid heap pointer", result != 0);
+  return result;
+}
+
+template <typename ReferencedObject>
+void
+OMWeakReferenceSetProperty<ReferencedObject>::insert(
+                                      void* key,
+                                      const OMWeakReferenceSetElement& element)
+{
+  TRACE("OMWeakReferenceSetProperty<ReferencedObject>::insert");
+
+  OMUniqueObjectIdentification* k =
+                          reinterpret_cast<OMUniqueObjectIdentification*>(key);
+  _set.insert(*k, element);
+}
+
+template <typename ReferencedObject>
 OMPropertyTag
 OMWeakReferenceSetProperty<ReferencedObject>::targetTag(void) const
 {

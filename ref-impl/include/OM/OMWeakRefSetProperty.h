@@ -201,6 +201,11 @@ public:
     //          If the object is not found the result is <e bool.false>.
   virtual bool findObject(void* identification, OMObject*& object) const;
 
+  virtual OMContainerIterator<OMWeakReferenceSetElement>* iterator(void) const;
+
+  virtual void insert(void* key,
+                      const OMWeakReferenceSetElement& element);
+
   virtual OMPropertyId keyPropertyId(void) const;
 
   virtual OMPropertyTag targetTag(void) const;

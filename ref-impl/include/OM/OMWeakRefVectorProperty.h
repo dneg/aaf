@@ -250,6 +250,12 @@ public:
     //          higher are shifted up one index position.
   virtual void insertObjectAt(const OMObject* object, const size_t index);
 
+  virtual OMContainerIterator<OMWeakReferenceVectorElement>*
+                                                          iterator(void) const;
+
+  virtual void insert(const size_t index,
+                      const OMWeakReferenceVectorElement& element);
+
   virtual OMPropertyId keyPropertyId(void) const;
 
   virtual OMPropertyTag targetTag(void) const;

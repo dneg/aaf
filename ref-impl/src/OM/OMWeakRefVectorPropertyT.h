@@ -1089,6 +1089,29 @@ OMWeakReferenceVectorProperty<ReferencedObject>::insertObjectAt(
 }
 
 template <typename ReferencedObject>
+OMContainerIterator<OMWeakReferenceVectorElement>*
+OMWeakReferenceVectorProperty<ReferencedObject>::iterator(void) const
+{
+  TRACE("OMWeakReferenceVectorProperty<ReferencedObject>::iterator");
+
+  OMVectorIterator<VectorElement>* result =
+                        new OMVectorIterator<VectorElement>(_vector, OMBefore);
+  ASSERT("Valid heap pointer", result != 0);
+  return result;
+}
+
+template <typename ReferencedObject>
+void
+OMWeakReferenceVectorProperty<ReferencedObject>::insert(
+                                   const size_t index,
+                                   const OMWeakReferenceVectorElement& element)
+{
+  TRACE("OMWeakReferenceVectorProperty<ReferencedObject>::insert");
+
+  _vector.setAt(element, index);
+}
+
+template <typename ReferencedObject>
 OMPropertyTag
 OMWeakReferenceVectorProperty<ReferencedObject>::targetTag(void) const
 {
