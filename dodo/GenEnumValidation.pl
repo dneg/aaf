@@ -1,12 +1,43 @@
 #
 # File: GenEnumValidation.pl
+#
+# Created: 16-JAN-2000 by Tom Ransdell.
 # 
+# Purpose:
+#   Automatically generate runtime validation code for each enum recognized
+# from dod the files passed on the command line. NOTE: If there are any 
+# dependencies between files then files must be passed in the correct
+# dependency order or the C/C++ compiler will fail to compile the generated
+# validate files, CAAFEnumValidation.h and CAAFEnumValidation.cpp.
+#
+# Typical usage:
+# perl GenEnumValidation.pl AAFTypes.dod AAFPluginTypes.dod > enumValidationLog.txt
+# will generate three files:
+# CAAFEnumValidation.cpp,
+# CAAFEnumValidation.h and
+# enumValidationLog.txt
+#
 
 require 5.002;
 
 use Class::Struct;
 
+#
+# Define a structure to represent an enum.
+#
+struct(EnumStruct => [tag => '$', name => '$', num => '$', member => '@']);
+
+#
+# Define a structure to represent an enum member.
+#
+struct(EnumMemberStruct => [name => '$', value => '$']);
+
+
+
 printf "Running GenEnumValidation.pl...\n";
+
+# Variable to hold the list of processed files.
+my @fileList = ();
 
 # Variable to hold a copy of the current line that we are processing.
 my $line = '';
@@ -25,20 +56,10 @@ my $enumString = '';
 # during processing.
 my %enums = ();
 
-# Initially we want to start out by searching for the first line 
-# that contains an enum declaration.
-my $processLine = \&find_start_of_enum;
+# State variable that holds a reference to the current line
+# matching subroutine.
+my $processLine;
 
-
-#
-# Define a structure to represent an enum.
-#
-struct(EnumStruct => [tag => '$', name => '$', num => '$', member => '@']);
-
-#
-# Define a structure to represent an enum member.
-#
-struct(EnumMemberStruct => [name => '$', value => '$']);
 
 #
 # process all of the input files...
@@ -47,14 +68,25 @@ foreach $file (@ARGV) {
   printf "Processing: %s\n", $file;
 
   open (DODOFILE , "$file") or die "Could not open \"$file\".\n";
+
+  # Save the file name.
+  push @fileList, $file;
+
+  # Initially we want to start out by searching for the first line 
+  # that contains an enum declaration.
+  $processLine = \&find_start_of_enum;
+
 LINE: while (<DODOFILE>) {
 
     # Skip any lines that contain a dodo macro.
     next LINE if (/AD_/ || /\#c/);
 	
-	# special extra enum that we don't need to validate (only exists
-	# to keep Microsoft's MIDL compiler happy.
-	next LINE if (/aafMAX_NUM_RGBA_COMPS/);
+    # special extra enum that we don't need to validate (only exists
+    # to keep Microsoft's MIDL compiler happy.
+    next LINE if (/aafMAX_NUM_RGBA_COMPS/);
+
+    s/\s*\/\/.*$//; # remove c++ comments.
+    s/\/\*.*\*\///; # remove one line c comments. 
 
     $line = $_;
 
@@ -81,7 +113,7 @@ exit;
 sub find_start_of_enum 
 {
   # Find the starting line that defines the enum.
-  if ($line =~ /(typedef)?\s*enum\s+(\w*)\s*(\})?/) {
+  if ($line =~ /^\s*(typedef)?\s*enum\s+(\w*)\s*(\})?/) {
     $enumCount++;
 
     printf "%d: %s: %s", $enumCount, $2, $line;
@@ -141,8 +173,6 @@ sub find_end_of_enum
   } else {
     # Filter out any unnecessary text.
     $_ = $line;
-    s/\s*\/\/.*$//; # remove c++ comments.
-    s/\/\*.*\*\///; # remove one line c comments. 
     s/{//;          # remove any '{'.
     s/\,.*$//;      # remove any commas and trailing characters.
     s/^\s*//;       # remove all leading whitespace.
@@ -212,8 +242,21 @@ sub make_validateHeader
   open(HEADER, ">CAAFEnumValidation.h") || die "Count not create validateEnums.h\n";
 
   printCopywrite(*HEADER);
-  print HEADER '#include "AAFTypes.h"', "\n";
-  print HEADER '#include "AAFPluginTypes.h"', "\n\n";
+  
+  # Include order is important. For now we assume that the files
+  # are being processing in dependency order. For example:
+  # the file list had better have AAFTypes.dod before AAFPluginsTypes.dod.
+  foreach $file (@fileList) {
+    $_ = $file;
+    s/(\.dod)$//;
+    
+    print HEADER '#include "', $_;
+    print HEADER '.h' if ($1 ne ''); # only add if one was removed.
+    print HEADER '"', "\n";
+  }
+
+#  print HEADER '#include "AAFTypes.h"', "\n";
+#  print HEADER '#include "AAFPluginTypes.h"', "\n\n";
 
   # Write out a function prototype to validate each enum.
   print HEADER "\n\n// Function prototypes for all AAF enums.\n\n";
