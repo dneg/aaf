@@ -1,0 +1,62 @@
+#startm .this-module 0
+EnumAAFLocators\
+#endm
+#c
+#import ./AAFUnitTest.exp
+AD_HEAD
+/******************************************\
+*                                          *
+* Advanced Authoring Format                *
+*                                          *
+* Copyright (c) 1998 Avid Technology, Inc. *
+* Copyright (c) 1998 Microsoft Corporation *
+*                                          *
+\******************************************/
+
+AD_FORWARD_DECLARATION(AAFLocator)
+
+
+AD_CLASS_UUID(B1A2139F, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
+
+AD_DEFAULT_UUID(B1A2139E, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
+AD_ROOT_CLASS_BEGIN
+
+AD_METHOD1(NextOne,
+[out\,retval], AD_AAFTYPES\(AAFLocator\) **, ppLocator, The Next Locator,
+Enumerates to the next element in the enumerators list. The caller is responsible for 
+  // properly releasing the returned pointer when it is no longer needed.
+  // @comm This is a just simplified version of the Next method. )
+
+AD_METHOD3(Next,
+[in], aafUInt32, count, number of locators requested,
+[out\, size_is\(count\)\, length_is\(*pFetched\)], AD_AAFTYPES\(AAFLocator\) **, ppLocators, array to receive locators,
+[out\,ref], aafUInt32 *, pFetched, number of actual Locators fetched into ppLocators array,
+Enumerates the next count elements \(AD_AAFTYPES\(AAFLocator\) pointers\) in 
+  // the enumerator's list\, returning them in the given array along with the actual 
+  // number of enumerated elements in pcFetched. The caller is responsible for 
+  // properly releasing the returned pointers.)
+
+AD_METHOD1(Skip,
+[in], aafUInt32, count, Number of elements to skip,
+Instructs the enumerator to skip the next count elements in the enumeration so that 
+  // the next call to AD_AAFTYPES\(EnumAAFLocators\)::Next will not return 
+  // those elements.)
+
+AD_METHOD0(Reset,
+Instructs the enumerator to position itself at the beginning of the list of elements. 
+  // @comm There is no guarantee that the same set of elements will be enumerated on 
+  // each pass through the list\, nor will the elements necessarily be enumerated in 
+  // the same order. The exact behavior depends on the collection being enumerated.)
+
+AD_METHOD1(Clone,
+[out\,retval], AD_AAFTYPES\(EnumAAFLocators\) **, ppEnum, new enumeration,
+Creates another locator enumerator with the same state as the current 
+  // enumerator to iterate over the same list. This method makes it possible to 
+  // record a point in the enumeration sequence in order to return to that point 
+  // at a later time.
+  // @comm The caller must release this new enumerator separately from the first enumerator.)
+
+
+AD_OVERRIDE(.method-Test)
+
+AD_ROOT_CLASS_END
