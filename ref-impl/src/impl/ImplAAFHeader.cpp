@@ -212,6 +212,9 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 
+// Implementer note:
+// based on omfmIsMediaDataPresent
+//
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFHeader::IsMediaDataPresent (aafUID_t *pFileMobID,
                            aafFileFormat_t fmt,
