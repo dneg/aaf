@@ -42,16 +42,12 @@
 #startm AD_HEAD 00
 //@doc
 //@class    .this-module | Implementation class for .this-module
-#ifndef _C.this-module_h_
-#define _C.this-module_h_
+#ifndef __C.this-module_h__
+#define __C.this-module_h__
 
 #ifndef __.this-module_h__
 #include ".this-module.h"
 #endif
-
-// Forward declaration for output stream used by the static test method:
-// C.this-module::test.
-class ostream;
 #endm
 
 
@@ -72,7 +68,7 @@ class ostream;
 #c Arguments: none
 #c
 #startm AD_CLASS_BEGIN 00
-#ifndef _C.parent-module_h_
+#ifndef __C.parent-module_h__
 #include "C.parent-module.h"
 #endif
 
@@ -103,7 +99,7 @@ class C.this-module
 #c Arguments: none
 #c
 #startm AD_ROOT_CLASS_BEGIN 00
-#ifndef _CAAFUnknown_h_
+#ifndef __CAAFUnknown_h__
 #include "CAAFUnknown.h"
 #endif
 
@@ -165,7 +161,7 @@ public:
 #c Arguments: none
 #c
 #startm AD_TYPES_END 00
-#endif // ! _C.this-module_h_
+#endif // ! __C.this-module_h__
 #endm
 
 
@@ -550,7 +546,7 @@ public:
 
   // Declare the module test method. The implementation of the will be be
   // in /test/C.this-moduleTest.cpp.
-  static HRESULT test(ostream& stream);
+  static HRESULT test();
 
   //
   // Return private implementation pointer for delegation.
@@ -559,7 +555,7 @@ public:
   STDMETHOD(GetImplRep)(/*[retval, string, out]*/ unsigned char **);
 };
 
-#endif // ! _C.this-module_h_
+#endif // ! __C.this-module_h__
 #endm
 
 
@@ -591,7 +587,7 @@ public:
 
   // Declare the module test method. The implementation of the will be be
   // in /test/C.this-moduleTest.cpp.
-  static HRESULT test(ostream& stream);
+  static HRESULT test();
 
   //
   // Return private implementation pointer for delegation.
@@ -612,7 +608,7 @@ private:
 
 };
 
-#endif // ! _C.this-module_h_
+#endif // ! __C.this-module_h__
 #endm
 
 

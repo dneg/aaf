@@ -26,7 +26,7 @@
 #c Argument: Base filename
 #c
 #startm AD_INCLUDE 01
-#ifndef _%01_h_
+#ifndef __%01_h__
 #include "%01.h"
 #endif
 #endm
@@ -53,7 +53,7 @@
 #c Arguments: none
 #c
 #startm AD_TYPES_END 00
-#endif // _Impl.this-module_h_
+#endif // __Impl.this-module_h__
 #endm
 
 
@@ -121,12 +121,8 @@ class Impl%01;
 #startm AD_HEAD 00
 //@doc
 //@class    .this-module | Implementation class for .this-module
-#ifndef _Impl.this-module_h_
-#define _Impl.this-module_h_
-
-// Forward declaration for output stream used by the static test method:
-// Impl.this-module::test.
-class ostream;
+#ifndef __Impl.this-module_h__
+#define __Impl.this-module_h__
 #endm
 
 
@@ -148,7 +144,7 @@ class ostream;
 #c
 #startm AD_CLASS_BEGIN 00
 
-#ifndef _Impl.parent-module_h_
+#ifndef __Impl.parent-module_h__
 #include "Impl.parent-module.h"
 #endif
 
@@ -591,10 +587,10 @@ public:
 public:
   // Declare the module test method. The implementation of the will be be
   // in /test/Impl.this-moduleTest.cpp.
-  static AAFRESULT test(ostream& stream);
+  static AAFRESULT test();
 };
 
-#endif // ! _Impl.this-module_h_
+#endif // ! __Impl.this-module_h__
 #endm
 
 
@@ -608,7 +604,7 @@ public:
 public:
   // Declare the module test method. The implementation of the will be be
   // in /test/Impl.this-moduleTest.cpp.
-  static AAFRESULT test(ostream& stream);
+  static AAFRESULT test();
 
   void InitComParent (I.this-module * pComParent);
 
@@ -626,7 +622,7 @@ private:
 
 };
 
-#endif // ! _Impl.this-module_h_
+#endif // ! __Impl.this-module_h__
 #endm
 
 

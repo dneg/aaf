@@ -26,7 +26,7 @@
 #c Argument: Base filename
 #c
 #startm AD_INCLUDE 01
-#ifndef _%01_h_
+#ifndef __%01_h__
 #include "%01.h"
 #endif
 #endm
@@ -43,8 +43,8 @@
 #c TomR:980716: Added
 #c
 #startm AD_TYPES_BEGIN 11
-#ifndef _.this-module_h_
-#define _.this-module_h_
+#ifndef __.this-module_h__
+#define __.this-module_h__
 #endm
 
 
@@ -57,7 +57,7 @@
 #c Arguments: none
 #c
 #startm AD_TYPES_END 00
-#endif // _.this-module_h_
+#endif // __.this-module_h__
 #endm
 
 
@@ -125,12 +125,8 @@ class %01;
 #startm AD_HEAD 00
 //@doc
 //@class    .this-module | Implementation class for .this-module
-#ifndef _.this-module_h_
-#define _.this-module_h_
-
-// Forward declaration for output stream used by the static test method:
-// .this-module::test.
-class ostream;
+#ifndef __.this-module_h__
+#define __.this-module_h__
 #endm
 
 
@@ -151,7 +147,7 @@ class ostream;
 #c Arguments: none
 #c
 #startm AD_CLASS_BEGIN 00
-#ifndef _.parent-module_h_
+#ifndef __.parent-module_h__
 #include ".parent-module.h"
 #endif
 
@@ -180,7 +176,7 @@ class .this-module : public .parent-module
 #c Arguments: none
 #c
 #startm AD_ROOT_CLASS_BEGIN 00
-#ifndef _AAFTypes_h_
+#ifndef __AAFTypes_h__
 #include "AAFTypes.h"
 #endif
 
@@ -638,10 +634,10 @@ public:
 public:
   // Declare the module test method. The implementation of the will be be
   // in /test/.this-moduleTest.cpp.
-  static AAFRESULT test(ostream& stream);
+  static AAFRESULT test();
 };
 
-#endif // ! _.this-module_h_
+#endif // ! __.this-module_h__
 #endm
 
 
@@ -655,7 +651,7 @@ public:
 public:
   // Declare the module test method. The implementation of the will be be
   // in /test/.this-moduleTest.cpp.
-  static AAFRESULT test(ostream& stream);
+  static AAFRESULT test();
 
 protected:
 
@@ -669,7 +665,7 @@ private:
 
 };
 
-#endif // ! _.this-module_h_
+#endif // ! __.this-module_h__
 #endm
 
 

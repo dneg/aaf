@@ -39,11 +39,11 @@
 #c Arguments: none
 #c
 #startm AD_HEAD 00
-#ifndef _C.this-module_h_
+#ifndef __C.this-module_h__
 #include "C.this-module.h"
 #endif
 
-#ifndef _Impl.this-module_h_
+#ifndef __Impl.this-module_h__
 #include "Impl.this-module.h"
 #endif
 
@@ -1291,8 +1291,8 @@ I%01\
 #c Argument: class name
 #c
 #startm AD_FORWARD_DECLARATION 01
-#ifndef __I%01_h__
-#include "I%01.h"
+#ifndef __%01_h__
+#include "%01.h"
 #endif
 #endm
 

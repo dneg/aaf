@@ -95,7 +95,7 @@
 #c Argument: class name
 #c
 #startm AD_FORWARD_DECLARATION 01
-#ifndef _%01_h_
+#ifndef __%01_h__
 #include "%01.h"
 #endif
 #endm
@@ -148,11 +148,11 @@
 #c Arguments: none
 #c
 #startm AD_CLASS_BEGIN 00
-#ifndef _.this-module_h_
+#ifndef __.this-module_h__
 #include ".this-module.h"
 #endif
 
-#ifndef _Impl.this-module_h_
+#ifndef __Impl.this-module_h__
 #include "Impl.this-module.h"
 #endif
 
@@ -193,11 +193,11 @@
 #c Arguments: none
 #c
 #startm AD_ROOT_CLASS_BEGIN 00
-#ifndef _.this-module_h_
+#ifndef __.this-module_h__
 #include ".this-module.h"
 #endif
 
-#ifndef _Impl.this-module_h_
+#ifndef __Impl.this-module_h__
 #include "Impl.this-module.h"
 #endif
 
