@@ -134,7 +134,7 @@ void OMSimpleProperty::save(void) const
   ASSERT("Valid property set", _propertySet != 0);
   OMStorable* container = _propertySet->container();
   ASSERT("Valid container", container != 0);
-  ASSERT("Container is attached", container->attached());
+  ASSERT("Container is persistent", container->persistent());
   OMStoredObject* s = container->store();
 
   s->write(_propertyId, _type, _bits, _size);
