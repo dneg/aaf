@@ -345,9 +345,18 @@ OMFile* OMFile::openExistingRead(OMRawStorage* rawStorage,
   ASSERT("Valid encoding", (encoding == MSSBinaryEncoding) ||
                            (encoding == KLVBinaryEncoding) ||
                            (encoding == XMLTextEncoding));
-
-  // TBS
-
+  switch (encoding) {
+  case MSSBinaryEncoding:
+  //store = OMMSSStoredObject::openRead(rawStorage);
+    store = OMStoredObject::openRead(rawStorage);
+    break;
+  case KLVBinaryEncoding:
+  //store = OMKLVStoredObject::openRead(rawStorage);
+    break;
+  case XMLTextEncoding:
+  //store = OMXMLStoredObject::openRead(rawStorage);
+    break;
+  }
   ASSERT("Valid store", store != 0);
 
   OMFile* newFile = new OMFile(rawStorage,
@@ -382,9 +391,18 @@ OMFile* OMFile::openExistingModify(OMRawStorage* rawStorage,
   ASSERT("Valid encoding", (encoding == MSSBinaryEncoding) ||
                            (encoding == KLVBinaryEncoding) ||
                            (encoding == XMLTextEncoding));
-
-  // TBS
-
+  switch (encoding) {
+  case MSSBinaryEncoding:
+  //store = OMMSSStoredObject::openModify(rawStorage);
+    store = OMStoredObject::openModify(rawStorage);
+    break;
+  case KLVBinaryEncoding:
+  //store = OMKLVStoredObject::openModify(rawStorage);
+    break;
+  case XMLTextEncoding:
+  //store = OMXMLStoredObject::openModify(rawStorage);
+    break;
+  }
   ASSERT("Valid store", store != 0);
 
   OMFile* newFile = new OMFile(rawStorage,
@@ -423,9 +441,18 @@ OMFile* OMFile::openNewModify(OMRawStorage* rawStorage,
                            (encoding == KLVBinaryEncoding) ||
                            (encoding == XMLTextEncoding));
   OMStoredObject* store = 0;
-
-  // TBS
-
+  switch (encoding) {
+  case MSSBinaryEncoding:
+  //store = OMMSSStoredObject::createModify(rawStorage, byteOrder);
+    store = OMStoredObject::createModify(rawStorage, byteOrder);
+    break;
+  case KLVBinaryEncoding:
+  //store = OMKLVStoredObject::createModify(rawStorage, byteOrder);
+    break;
+  case XMLTextEncoding:
+  //store = OMXMLStoredObject::createModify(rawStorage, byteOrder);
+    break;
+  }
   ASSERT("Valid store", store != 0);
 
   OMRootStorable* root = new OMRootStorable(clientRoot, dictionary);
