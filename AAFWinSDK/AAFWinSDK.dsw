@@ -189,6 +189,21 @@ Package=<4>
 
 ###############################################################################
 
+Project: "ComFileKindTest"=.\Test\com\ComFileKindTest\ComFileKindTest.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name MakeSDK
+    End Project Dependency
+}}}
+
+###############################################################################
+
 Project: "ComModTestAAF"=.\Test\com\ComModTestAAF\ComModTestAAF.dsp - Package Owner=<4>
 
 Package=<5>
@@ -322,6 +337,9 @@ Package=<4>
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name MakeSDKUtilities
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name ComFileKindTest
     End Project Dependency
 }}}
 
