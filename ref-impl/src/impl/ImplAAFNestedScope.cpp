@@ -97,7 +97,7 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFNestedScope::RemoveSegment (
       ImplAAFSegment * /*pSegment*/)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  return AAFRESULT_NOT_IN_CURRENT_VERSION;
 }
 
 
