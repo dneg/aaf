@@ -71,6 +71,9 @@ typedef aafUInt32		AAFRESULT;
 AD_CPP_QUOTE(#ifndef AAFRESULT_NOT_IMPLEMENTED)
 AD_CPP_QUOTE(#define AAFRESULT_NOT_IMPLEMENTED	 1	//!!!Move this somewhere else)
 AD_CPP_QUOTE(#endif)
+AD_CPP_QUOTE(#ifndef AAFRESULT_SUCCESS)
+AD_CPP_QUOTE(#define AAFRESULT_SUCCESS	 0	//!!!Move this somewhere else)
+AD_CPP_QUOTE(#endif)
 
 AD_CPP_QUOTE(#ifndef NULL)
 AD_CPP_QUOTE(#define NULL \(\(void *\)0L\))
@@ -151,6 +154,12 @@ AD_CPP_QUOTE(\ *)
 AD_CPP_QUOTE(\ * Enumerated AAFI types.)
 AD_CPP_QUOTE(\ *)
 AD_CPP_QUOTE(\ *************************************************************/)
+
+typedef enum
+{
+  kAAFRev1
+} aafFileRev_t;
+
 typedef enum
 {
 	kMediaOpenReadOnly, 
