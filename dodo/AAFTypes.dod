@@ -94,9 +94,11 @@ typedef AAF_INT64_TYPE aafInt64;
 #endif
 AD_CPP_QUOTE(#else)
 
+AD_CPP_QUOTE(#ifdef __MWERKS)
 AD_CPP_QUOTE(#if \(__MWERKS__ >= 0x1100\))
 AD_CPP_QUOTE(#define AAF_INT64_NATIVE	1)
 AD_CPP_QUOTE(#define AAF_INT64_TYPE		long long)
+AD_CPP_QUOTE(#endif)
 AD_CPP_QUOTE(#endif)
 
 AD_CPP_QUOTE(/* SGI Port definitions */)
@@ -145,9 +147,9 @@ AD_CPP_QUOTE(#endif)
 
 
 AD_CPP_QUOTE(#if 0)
-typedef [string] wchar_t * aafString_t;
+typedef [string] aafWChar * aafString_t;
 AD_CPP_QUOTE(#endif)
-AD_CPP_QUOTE(typedef wchar_t * aafString_t;)
+AD_CPP_QUOTE(typedef aafWChar * aafString_t;)
 
 AD_CPP_QUOTE(/************************************************************)
 AD_CPP_QUOTE(\ *)
@@ -871,8 +873,10 @@ typedef enum _eAAFTypeCategory_t
   kAAFTypeCatEnum          = 5, // enumerated type
   kAAFTypeCatFixedArray    = 6, // fixed-size array
   kAAFTypeCatVariableArray = 7, // variably-sized array
-  kAAFTypeCatComposite     = 8, // a structured type
-  kAAFTypeCatStream        = 9  // potentially huge amount of data
+  kAAFTypeCatRecord        = 8, // a structured type
+  kAAFTypeCatStream        = 9, // potentially huge amount of data
+  kAAFTypeCatString        = 10 // null-terminated variably-sized
+								// array
 } eAAFTypeCategory_t;
 
 

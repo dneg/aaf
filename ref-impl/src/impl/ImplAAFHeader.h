@@ -207,6 +207,14 @@ public:
 
 
   //****************
+  // GetNumIdents()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetNumIdents
+        (aafUInt32 *  pNumIdents);  //@parm [out,retval] Total number of identifications
+
+
+  //****************
   // EnumAAFIdents()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
