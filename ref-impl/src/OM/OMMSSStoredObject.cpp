@@ -65,16 +65,26 @@ const size_t indexEntrySize  = sizeof(OMPropertyId) +
                                sizeof(OMStoredForm) +
                                sizeof(OMPropertySize);
 
+// Determine whether or not UNICODE versions of the Structured Storage
+// APIs are in use.
+//
 #if defined(_WIN32) && defined(UNICODE)
+#define OM_UNICODE_APIS
+#endif
+
+// OMCHAR is used for all character arguments to Structured Storage
+// API functions whose prototype changes when UNICODE is defined.
+//
+#if defined(OM_UNICODE_APIS)
   typedef wchar_t OMCHAR;
 #else
   typedef char OMCHAR;
 #endif
 
-static void convert(char* cName, size_t length, const wchar_t* name);
-
-#if defined(_WIN32) && defined(UNICODE)
+#if defined(OM_UNICODE_APIS)
 static void convert(wchar_t* wcName, size_t length, const wchar_t* name);
+#else
+static void convert(char* cName, size_t length, const wchar_t* name);
 #endif
 
 static void check(HRESULT status);
@@ -3151,18 +3161,16 @@ void OMMSSStoredObject::writeSignature(const wchar_t* fileName,
   fclose(f);
 }
 
-static void convert(char* cName, size_t length, const wchar_t* name)
-{
-  TRACE("convert");
-  PRECONDITION("Valid input name", validWideString(name));
-  PRECONDITION("Valid output buffer", cName != 0);
-  PRECONDITION("Valid output buffer size", length > 0);
+// We may need to convert our arguments, which are always UNICODE
+// strings (wchar_t*), to regular character strings (char*), before
+// passing them to the Structured Storage API. We always call
+// convert() on our arguments before calling the Structured Storage
+// API. convert() has two different definitions, depending on
+// OM_UNICODE_APIS.
+//
+#if defined(OM_UNICODE_APIS)
 
-  size_t status = wcstombs(cName, name, length);
-  ASSERT("wcstombs() succeeded", status != (size_t)-1);
-}
-
-#if defined(_WIN32) && defined(UNICODE)
+// We have UNICODE Structured Storage APIs - conversion is copy.
 
 static void convert(wchar_t* wcName, size_t length, const wchar_t* name)
 {
@@ -3174,6 +3182,21 @@ static void convert(wchar_t* wcName, size_t length, const wchar_t* name)
   size_t sourceLength = lengthOfWideString(name);
   ASSERT("Output buffer large enough", length > sourceLength + 1);
   copyWideString(wcName, name, sourceLength + 1);
+}
+
+#else
+
+// We don't have UNICODE Structured Storage APIs  - convert with wcstombs().
+
+static void convert(char* cName, size_t length, const wchar_t* name)
+{
+  TRACE("convert");
+  PRECONDITION("Valid input name", validWideString(name));
+  PRECONDITION("Valid output buffer", cName != 0);
+  PRECONDITION("Valid output buffer size", length > 0);
+
+  size_t status = wcstombs(cName, name, length);
+  ASSERT("wcstombs() succeeded", status != (size_t)-1);
 }
 
 #endif
