@@ -1037,7 +1037,7 @@ AAFRESULT ImplAAFObject::MyHeadObject
 		if(myFile == NULL)
 			RAISE(AAFRESULT_OBJECT_NOT_IN_FILE);
 
-		theRoot = myFile->root();
+		theRoot = myFile->clientRoot();
 		if(theRoot == NULL)
 			RAISE(AAFRESULT_BADHEAD);
 
