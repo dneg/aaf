@@ -121,6 +121,40 @@ static void convert(wchar_t* wName, size_t length, const wchar_t* name)
   }
 }
 
+#if defined(__sgi) || defined(__linux__) || defined (__FreeBSD__)
+
+static const unsigned char guidMap[] =
+{ 3, 2, 1, 0, '-', 5, 4, '-', 7, 6, '-', 8, 9, '-', 10, 11, 12, 13, 14, 15 }; 
+static const wchar_t digits[] = L"0123456789ABCDEF"; 
+
+#define GUIDSTRMAX 38 
+
+typedef OLECHAR OMCHAR;
+
+int StringFromGUID2(const GUID& guid, OMCHAR* buffer, int bufferSize) 
+{
+  const unsigned char* ip = (const unsigned char*) &guid; // input pointer
+  OMCHAR* op = buffer;                                    // output pointer
+
+  *op++ = L'{'; 
+ 
+  for (size_t i = 0; i < sizeof(guidMap); i++) { 
+
+    if (guidMap[i] == '-') { 
+      *op++ = L'-'; 
+    } else { 
+      *op++ = digits[ (ip[guidMap[i]] & 0xF0) >> 4 ]; 
+      *op++ = digits[ (ip[guidMap[i]] & 0x0F) ]; 
+    } 
+  } 
+  *op++ = L'}'; 
+  *op = L'\0'; 
+ 
+  return GUIDSTRMAX; 
+} 
+
+#endif
+
 // The maximum number of characters in the formated CLSID.
 // (as returned by StringFromGUID2).
 const size_t MAX_CLSID_BUFFER = 40;

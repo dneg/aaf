@@ -252,8 +252,10 @@ void PrintPosition (IAAFDictionary * pDict,
 //
 // Prints the given string.
 //
+// On Irix CC, this operator conflicts with ostream::<<(const wchar_t*)
+#ifndef __sgi
 ostream& operator<< (ostream& s,
 					 aafCharacter_constptr wstring);
-
+#endif
 
 #endif // ! __extensionUtils_h__

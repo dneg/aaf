@@ -144,7 +144,6 @@ HRESULT extensionWritePlugin (const aafCharacter * filename)
   {
     // Load our plugin.
     check(AAFGetPluginManager(&pPluginManager));
-    cout << "AAFGetPluginManager() succeeded." << endl;
     rc = pPluginManager->RegisterPluginFile(AAFPERSONNELEXTENSION_DLLNAME);
     if (AAFRESULT_PLUGIN_ALREADY_REGISTERED == rc)
       rc = S_OK;

@@ -51,6 +51,7 @@
 #include "CAAFAdminMob.h"
 #endif
 
+#include <string.h>
 
 // Structure to define 
 typedef struct tagAAFPluginObjectInfo_t
@@ -441,7 +442,7 @@ HRESULT CAAFPluginServer::GetClassObject
   AAFPluginObjectInfo_t *pResult = NULL;
   for (aafUInt32 i = 0; i < GetClassCount(); ++i)
   {
-    if (rclsid == *AAFPluginObjectMap[i].pCLSID)
+    if (!memcmp(&rclsid,AAFPluginObjectMap[i].pCLSID,sizeof(rclsid)))
     {
       pResult = &AAFPluginObjectMap[i];
       break;
