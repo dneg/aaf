@@ -252,6 +252,11 @@ else
     # Run BuildNumber to check the build number consistency.
     echo Verifying the build number is consistent.
     BuildNumber -basedir $BASE_DIR
+    if [ $? -ne 0 ] ; then
+	echo Can not continue, the build number is not consistent.
+	echo Please repair ${AAFSDKBUILD_H}.
+	exit 1
+    fi
 fi
 
 #
