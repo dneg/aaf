@@ -606,7 +606,7 @@ void * Impl.this-module::GetContainer ()
 #c Argument: method declaration
 #c
 #startm AD_OVERRIDE 01
-Impl%01-cpp(.this-module)
+%01-implc(.this-module)
 #endm
 
 
