@@ -405,7 +405,7 @@ public:
 
   // IUnknown overrides
   HRESULT STDMETHODCALLTYPE
-    QueryInterface (const struct _GUID & iid, void ** ppIfc)
+    QueryInterface (REFIID iid, void ** ppIfc)
     { if (! ppIfc) return AAFRESULT_NULL_PARAM;
 	  if (iid == IID_IUnknown)
 		{ IUnknown * runk = (IAAFRawStorage*) this;
