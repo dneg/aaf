@@ -179,7 +179,7 @@ ImplAAFFile::OpenExistingRead (const aafCharacter * pFileName,
 
         // Check the file's signature.
         OMFileSignature sig = _file->signature();
-		const OMFileSignature aafFileSignature  = *reinterpret_cast<const OMFileSignature *>(&aafFileSignatureGUID);
+		const OMFileSignature aafFileSignature  = *reinterpret_cast<const OMFileSignature *>(&aafFileSignatureAafSSBinaryGUID);
         checkExpression(sig == aafFileSignature, AAFRESULT_NOT_AAF_FILE);
 
 		// Get the byte order
@@ -447,7 +447,7 @@ ImplAAFFile::OpenNewModify (const aafCharacter * pFileName,
 		pCStore = 0;
 
 		// Attempt to create the file.
-		const OMFileSignature aafFileSignature  = *reinterpret_cast<const OMFileSignature *>(&aafFileSignatureGUID);
+		const OMFileSignature aafFileSignature  = *reinterpret_cast<const OMFileSignature *>(&aafFileSignatureAafSSBinaryGUID);
 		_file = OMFile::openNewModify(pFileName, _factory, 0, byteOrder, _head, aafFileSignature, _metafactory);
 		checkExpression(NULL != _file, AAFRESULT_INTERNAL_ERROR);
 
