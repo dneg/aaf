@@ -49,6 +49,30 @@ void CreateNewModify::Execute( const std::vector<AxString>& args )
 //=---------------------------------------------------------------------=
 
 AXFG_OP(
+  OpenExistingRead,
+  L"OpenExistingRead",
+  L"Create a new AAF file.",
+  L"file_name",
+  L"Referenced by file_name.",
+  2,
+  2 );
+
+OpenExistingRead::~OpenExistingRead()
+{}
+
+void OpenExistingRead::Execute( const std::vector<AxString>& args )
+{
+	AxFile axFile;
+	axFile.OpenExistingRead( args[1] );
+	
+	RegisterInstance( args[1] );
+	IAAFFileSP file = axFile;
+	SetCOM( file );
+}
+
+//=---------------------------------------------------------------------=
+
+AXFG_OP(
   SaveFile,
   L"SaveFile",
   L"Save an AAF file.",
