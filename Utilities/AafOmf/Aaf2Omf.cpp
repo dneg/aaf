@@ -1773,6 +1773,14 @@ HRESULT Aaf2Omf::ConvertAAFTypeIDDatakind(aafUID_t typeID, OMF2::omfDDefObj_t* p
 		strcpy(datakindName, "omfi:data:Int32");
 		bFound = OMF2::omfiDatakindLookup(OMFFileHdl, datakindName, pDatakind, (OMF2::omfErr_t *) &rc);
 	}
+	else if ( memcmp((char *)&typeID, (char *)&kAAFTypeID_AvidGlobalKF, sizeof(aafUID_t)) == 0 )
+	{
+		strcpy(datakindName, "omfi:data:EffectGlobals");
+		bFound = OMF2::omfiDatakindLookup(OMFFileHdl, datakindName, pDatakind, (OMF2::omfErr_t *) &rc);
+		if(!bFound)
+			if(OMF2::omfiDatakindNew(OMFFileHdl, datakindName, pDatakind) == OMF2::OM_ERR_NONE)
+				bFound = TRUE;
+	}
 	else
 	{
 		AUIDtoString(&typeID, szAUID);
@@ -2318,7 +2326,7 @@ HRESULT Aaf2Omf::ConvertEffects(IAAFOperationGroup* pEffect,
 	char*					pszName = NULL;
 	char*					pszDesc = NULL;
 	char*					stdName = NULL;
-	aafInt32				kfSlot;
+	aafInt32				kfSlot, globalSlot;
 
 	IncIndentLevel();
 
@@ -2416,6 +2424,7 @@ HRESULT Aaf2Omf::ConvertEffects(IAAFOperationGroup* pEffect,
        
 		// If the effect ID is known, map to a apecific OMF effect ID
 		kfSlot = GetMCKeyframeSlotID(effectDefAUID);
+		globalSlot = GetMCGlobalSlotID(effectDefAUID);
 		if(pEffect->GetParameterByArgID(kAAFParameterDefLevel, &pParameter) == AAFRESULT_SUCCESS)
 		{
 			checkAAF(ConvertParameter(pParameter, (*pOMFEffect), -3, kfSlot,
@@ -2424,6 +2433,11 @@ HRESULT Aaf2Omf::ConvertEffects(IAAFOperationGroup* pEffect,
 		if(pEffect->GetParameterByArgID(kAAFParameterDefSMPTEWipeNumber, &pParameter) == AAFRESULT_SUCCESS)
 		{
 			checkAAF(ConvertParameter(pParameter, (*pOMFEffect),  1, kfSlot,
+										(OMF2::omfLength_t)length));
+		}
+		if(pEffect->GetParameterByArgID(kAAFParamID_AvidGlobalKF, &pParameter) == AAFRESULT_SUCCESS)
+		{
+			checkAAF(ConvertParameter(pParameter, (*pOMFEffect),  globalSlot, kfSlot,
 										(OMF2::omfLength_t)length));
 		}
 #if 0
@@ -2570,6 +2584,8 @@ HRESULT Aaf2Omf::ConvertParameter(	IAAFParameter*		pParm,
 	OMF2::omfSegObj_t	omfSeg;
 	OMF2::omfObject_t	pOMFEffectSlot;
 	OMF2::omfObject_t	pOMFDatakind, pMCKeyframeKind = NULL;
+	OMFIPvtGlobalInfo_t	omfGlobal;
+	AAFPvtGlobalInfo_t	*aafGlobal;
 	
 	moduleErrorTmp = AAFRESULT_SUCCESS;
     checkAAF(pParm->GetTypeDefinition(&pTypeDef));
@@ -2603,6 +2619,21 @@ HRESULT Aaf2Omf::ConvertParameter(	IAAFParameter*		pParm,
 			destValue = srcValue;
 			destValueLen = srcValueLen;
 		}
+		else if(memcmp(&typeDefID, &kAAFTypeID_AvidGlobalKF, sizeof(typeDefID)) == 0)
+		{
+			aafGlobal = (AAFPvtGlobalInfo_t *)srcValue;
+			destValue = (aafDataBuffer_t)&omfGlobal;
+			destValueLen = sizeof(omfGlobal);
+			// !!!Check cookie and revision!
+			omfGlobal.cookie = OMFI_GLB_COOKIE;
+			omfGlobal.rev = OMFI_GLB_REVISION;
+			omfGlobal.kfCurrent = aafGlobal->kfCurrent;
+			omfGlobal.kfSmooth = aafGlobal->kfSmooth;
+			omfGlobal.colorItem = aafGlobal->colorItem;
+			omfGlobal.quality = aafGlobal->quality;
+			omfGlobal.isReversed = aafGlobal->isReversed;
+			omfGlobal.ScalesDetached = aafGlobal->ScalesDetached;
+		}
 		else // Error!!!
 		{
 			destValue = srcValue;
@@ -2610,8 +2641,8 @@ HRESULT Aaf2Omf::ConvertParameter(	IAAFParameter*		pParm,
 		}
 		checkOMF(OMF2::omfiConstValueNew(OMFFileHdl, pOMFDatakind, effectLen,
 									destValueLen, destValue, &omfSeg));
-		if((destValue != NULL) && (srcValue != destValue))
-			delete [] destValue;
+//		if((destValue != NULL) && (srcValue != destValue))
+//			delete [] destValue;
 		delete [] srcValue;
 		destValue = NULL;
 		srcValue = NULL;

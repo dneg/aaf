@@ -134,3 +134,6 @@ HRESULT GetIntegerPropFromObject(IAAFObject* pObj, const aafUID_t* pClassID, aaf
 
 const aafUID_t AUID_PropertyMobAppCode = { 0x96c46992, 0x4f62, 0x11d3, { 0xa0, 0x22, 0x0, 0x60, 0x94, 0xeb, 0x75, 0xcb } };
 
+#define COMMON_ERR_BASE		(AAFRESULT)0xE0000000
+#define AAF2OMF_ERR_BASE	(AAFRESULT)0xE0001000
+#define OMF2AAF_ERR_BASE	(AAFRESULT)0xE0006000
