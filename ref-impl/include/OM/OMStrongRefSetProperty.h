@@ -208,8 +208,6 @@ public:
 
   virtual OMPropertyId keyPropertyId(void) const;
 
-  virtual void find(void* key, OMStrongReferenceSetElement& element) const;
-
   virtual bool find(void* key, OMStrongReferenceSetElement** element) const;
 
   virtual void find(void* key, OMStorable*& object) const;
