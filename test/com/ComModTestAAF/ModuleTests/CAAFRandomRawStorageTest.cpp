@@ -287,10 +287,9 @@ static HRESULT localOpenFileDiskStgRead
 // memory
 //
 static HRESULT localOpenFileMemStgWrite
-  (const aafWChar * pFileName,
+  (const aafWChar * /* pFileName */,
    IAAFFile ** ppFile)
 {
-  assert (pFileName);
   assert (ppFile);
 
   // Create a mem raw storage.
