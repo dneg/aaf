@@ -27,6 +27,7 @@
 #include "OMDataTypes.h"
 
 class OMPropertyDefinition;
+class OMStorable;
 
   // @class Abstract base class used to define persistent classes
   //        supported by the Object Manager.
@@ -41,6 +42,11 @@ public:
     //          by <p id>.
   virtual const OMPropertyDefinition* propertyDefinition(
                              const OMUniqueObjectIdentification& id) const = 0;
+
+
+  virtual const OMPropertyDefinition* propertyDefinition(
+			     const  OMStorable* pDstStorable,
+			     const OMPropertyDefinition* pSrcProperty ) = 0;
 
 };
 

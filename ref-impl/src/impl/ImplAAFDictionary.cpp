@@ -288,10 +288,9 @@ ImplAAFDictionary *ImplAAFDictionary::CreateDictionary(void)
   return pDictionary;
 }
 
-bool ImplAAFDictionary::isRegistered(const OMClassId& /* classId */) const
+bool ImplAAFDictionary::isRegistered(const OMClassId& classId ) const
 {
-  assert(false);
-  return false; // tjb for ak - stub
+  return metaDictionary()->isRegistered( classId );
 }
 
 //

@@ -58,6 +58,7 @@
 #include "ImplAAFEssenceData.h"
 #endif
 
+#include "ImplAAFCloneResolver.h"
 #include "ImplEnumAAFPropertyValues.h"
 #include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
@@ -1056,3 +1057,12 @@ ImplAAFTypeDefVariableArray::InsertElement(
 	return AAFRESULT_SUCCESS;
 }
 	
+void ImplAAFTypeDefVariableArray::onCopy(void* clientContext) const
+{
+  ImplAAFTypeDefArray::onCopy(clientContext);
+
+  if ( clientContext ) {
+    ImplAAFCloneResolver* pResolver = reinterpret_cast<ImplAAFCloneResolver*>(clientContext);
+    pResolver->ResolveWeakReference(_ElementType);
+  }
+}

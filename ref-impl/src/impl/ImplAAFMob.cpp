@@ -62,8 +62,6 @@
 #include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
 
-
-
 #ifndef __ImplAAFMob_h__
 #include "ImplAAFMob.h"
 #endif
@@ -80,6 +78,7 @@
 #include "AAFDataDefs.h"
 #include "ImplEnumAAFMobSlots.h"
 #include "ImplEnumAAFComponents.h"
+#include "ImplAAFCloneResolver.h"
 
 #include <assert.h>
 #include <string.h>
@@ -118,6 +117,7 @@ ImplAAFMob::ImplAAFMob ()
 	(void)aafMobIDNew(&_mobID);		// Move this out of constructor when we get 2-stage create
 	AAFGetDateTime(&_creationTime);
 	AAFGetDateTime(&_lastModified);
+	::memset( &_clsid, 0, sizeof( aafClassID_t ) );
 }
 
 
@@ -1349,58 +1349,38 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 
-
-
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFMob::Copy (const aafCharacter *  /*destMobName*/,
-                           ImplAAFMob ** /*destMob*/)
+    ImplAAFMob::Copy (const aafCharacter *  destMobName,
+                           ImplAAFMob ** destMob)
 {
-#if FULL_TOOLKIT
-	AAFMob * newMob;
-	aafBool isPrimary, isMaster;
-	AAFHeader * head;
-	AAFRESULT aafError = AAFRESULT_SUCCESS;
-	
-	*destMob = NULL;
-	aafAssert((_file->GetOpenType() != kOmOpenRead), _file, 
-					AAFRESULT_WRONG_OPENMODE);
+	XPROTECT()
+	{
+		OMStorable* newStorable = shallowCopy();
+		
+		ImplAAFMob *newMob = dynamic_cast<ImplAAFMob*>( newStorable );
+		if ( !newMob ) {
+			RAISE(AAFRESULT_BAD_TYPE);
+		}
 
-	XPROTECT(_file)
-	  {
-		CHECK(CopyTree((AAFObject **)&newMob));
+		aafMobID_t newMobId;
+		CHECK( aafMobIDNew(&newMobId) );
+		CHECK( newMob->SetMobID( newMobId ) );
 
-		/* MobSetNewProps will create a new mob ID, set name, and add
-		 * to the Primary mobs index if needed
-		 */
+		if ( destMobName ) {
+	    	 CHECK( newMob->SetName( destMobName ) );
+		}
 
-		isPrimary = IsAPrimaryMob(&aafError);
-		isMaster = IsTypeOf("MMOB", &aafError);
-		if (aafError == AAFRESULT_SUCCESS)
-		  {
-			CHECK(newMob->SetPrimary(isPrimary));
-			CHECK(newMob->SetName(destMobName));
-		  }
-		else
-		  {
-			RAISE(aafError);
-		  }
+		deepCopyTo( newStorable, 0 );
 
-		/* Store the new mob in the HEAD Mobs */
-		CHECK(_file->GetHeadObject(&head));
-		CHECK(head->AddToMobList(newMob));
-	  } /* XPROTECT */
-
+			newMob->AcquireReference();
+		*destMob = newMob;
+	}
 	XEXCEPT
-	  {
-		/* NOTE: This function needs more cleanup (delete mob, out of index) */
-	  }
-	XEND;
+	{
+	}
+	XEND
 
-	*destMob = newMob;
-	return(AAFRESULT_SUCCESS);
-#else
-  return AAFRESULT_NOT_IN_CURRENT_VERSION;
-#endif
+	return AAFRESULT_SUCCESS;
 }
 
 AAFRESULT STDMETHODCALLTYPE
@@ -1463,115 +1443,136 @@ AAFRESULT STDMETHODCALLTYPE
  *		Standard errors (see top of file).
  *************************************************************************/
 AAFRESULT STDMETHODCALLTYPE
-   ImplAAFMob::CloneExternal (aafDepend_t  /*resolveDependencies*/,
-                           aafIncMedia_t  /*includeMedia*/,
-                           ImplAAFFile * /*destFile*/,
-                           ImplAAFMob ** /*destMob*/)
+   ImplAAFMob::CloneExternal (aafDepend_t  resolveDependencies,
+			      aafIncMedia_t  includeMedia,
+			      ImplAAFFile * destFile,
+			      ImplAAFMob ** destMob)
 {
-#if FULL_TOOLKIT
-    aafMobID_t saveMobID, newMobID;
-	aafString destMobName = NULL;
-    AAFMob * tmpDestMob = NULL;
-	AAFObject *tmpDestMedia = NULL;
-	AAFHeader *destHead = NULL;
-	aafTimeStamp_t saveCreationTime, saveModTime;
-	aafFileRev_t srcRev, destRev;
-	AAFRESULT aafError = AAFRESULT_SUCCESS;
+	XPROTECT()
+	{
+		//
+		// If includeMedia is true, and essence data exists for this mob,
+		// then copy it.  Essence data only exists for SourceMobs.  We don't
+		// worry about that detail here, rather, just let LookupEssenceData()
+		// fail.
+		//
+		{
+			if ( kAAFIncludeMedia == includeMedia ) {
+				ImplAAFSmartPointer<ImplAAFHeader> spHeader;
+				CHECK( MyHeadObject( &spHeader ) );
 
-	*destMob = NULL;
+				ImplAAFSmartPointer<ImplAAFEssenceData> spEssenceData;
+				HRESULT hr = spHeader->LookupEssenceData( _mobID, &spEssenceData );
 
-	XPROTECT(_file)
-	  {
-		CHECK(_file->GetRevision(&srcRev));
-		CHECK(destFile->GetRevision(&destRev));
-		if (srcRev != destRev)
-		  {
-			RAISE(AAFRESULT_FILEREV_DIFF);
-		  }
+				if ( AAFRESULT_SUCCESS == hr ) {
 
-		/* Copy the Mob, then change the MobID back to its original */
-		/* Remember the creation and modification times, to restore later */
-		CHECK(GetMobID(&saveMobID));
-		CHECK(GetModTime(&saveModTime));
-		CHECK(GetCreateTime(&saveCreationTime));
+					ImplAAFSmartPointer<ImplAAFDictionary> spDstDict;
+					CHECK( destFile->GetDictionary(&spDstDict) );
 
-		destMobName = (aafString)_file->omOptMalloc(OMMOBNAME_SIZE);
-		strncpy(destMobName, "\0", 1);
-		  {
-			aafError = ReadString(OMMOBJName, 
-									  (char *)destMobName, OMMOBNAME_SIZE);
-		  }
+					OMStorable* pNewStorable = spEssenceData->shallowCopy(spDstDict);
+					ImplAAFEssenceData* pNewEssenceData = dynamic_cast<ImplAAFEssenceData*>(pNewStorable);
+					if ( !pNewEssenceData ) {
+						RAISE(AAFRESULT_BAD_TYPE);
+					}
+					
+					ImplAAFSmartPointer<ImplAAFHeader> spDstHeader;
+					CHECK( destFile->GetHeader(&spDstHeader) );
+					CHECK( spDstHeader->AddEssenceData(pNewEssenceData) );
 
-		CHECK(CopyExternal(resolveDependencies,
-								  includeMedia, destMobName, destFile,
-								  &tmpDestMedia, &tmpDestMob));
-		CHECK(tmpDestMob->GetMobID(&newMobID));
+					spEssenceData->deepCopyTo( pNewStorable, 0 );
+				}
+			}
 
-		 /* omfiMobSetIdentity will take out the existing hash table
-		 * entry and add an entry for the original cloned mobID.
-		 */
-		CHECK(tmpDestMob->SetIdentity(saveMobID));
+		}
 
-		/* Restore creation and modification times */
-		  {
-			CHECK(tmpDestMob->WriteTimeStamp(OMMOBJCreationTime,
-									 saveCreationTime));
-		  }
-		CHECK(tmpDestMob->WriteTimeStamp(OMMOBJLastModified,
-								 saveModTime)); 
+		//
+		// Copy the mob.
+		//
+		{
+			ImplAAFSmartPointer<ImplAAFDictionary> spDstDict;
+			CHECK( destFile->GetDictionary(&spDstDict) );
 
-		/* If it is a primary mob, put it in the primary mob index */
-		if (IsAPrimaryMob(&aafError))
-		  {
-			if (aafError == AAFRESULT_SUCCESS)
-			  {
-				CHECK(tmpDestMob->SetPrimary(kAAFTrue));
+			OMStorable* pNewStorable = shallowCopy(spDstDict);
+		
+			ImplAAFMob* pNewMob = dynamic_cast<ImplAAFMob*>(pNewStorable);
+			if ( !pNewMob ) {
+				RAISE(AAFRESULT_BAD_TYPE);
+			}
+
+			ImplAAFSmartPointer<ImplAAFHeader> spDstHeader;
+			CHECK( destFile->GetHeader(&spDstHeader) );
+			CHECK( spDstHeader->AddMob(pNewMob) );
+
+			// The resolver takes care of resolving weak references.  It is the
+			// "clientContext" void pointer passed by the OM to onCopy()
+			// implementations. If it  encounters an error (a bad HRESULT) it
+			// will throw ImplAAFCloneResolverEx.  We catch that, and return the 
+			// error.
+			ImplAAFCloneResolver resolver(destFile);
+			try {
+				deepCopyTo( pNewStorable, &resolver );
+			}
+			catch (const ImplAAFCloneResolverEx& ex) {
+				RAISE(ex.GetHResult());
+			}
+
+			if ( resolveDependencies ) {
+
+			  // Foreach mobId in the resolvers's source reference list:
+			  //  - Lookup the mobId in the source file.  If not present,
+			  //    continue.
+			  //  - Lookup the mobId in the destination file.
+			  //  - If it is not found, then contunue.
+			  //  - Clone the mob.
+
+			  ImplAAFSmartPointer<ImplAAFHeader> spDstHeader;
+			  CHECK( destFile->GetHeader( &spDstHeader ) );
+
+			  ImplAAFSmartPointer<ImplAAFHeader> spSrcHeader;
+			  CHECK( MyHeadObject( &spSrcHeader ) );
+
+			  const OMVector<aafMobID_t>& referencedMobs = resolver.GetSourceReferences();
+			  unsigned int i;
+			  for( i = 0; i < referencedMobs.count(); ++i ) {
+
+			    aafMobID_t mobID = referencedMobs.valueAt(i); 
+
+			    ImplAAFSmartPointer<ImplAAFMob> spSrcMob;
+			    AAFRESULT hr;
+			    hr = spSrcHeader->LookupMob( mobID, &spSrcMob );
+			    if ( AAFRESULT_MOB_NOT_FOUND == hr ) {
+			      continue;
+			    }
+			    else if ( AAFRESULT_SUCCESS != hr ) {
+			      RAISE( hr );
+			    }
+
+			    ImplAAFSmartPointer<ImplAAFMob> spDstMob;
+			    hr = spDstHeader->LookupMob( mobID, &spDstMob );
+			    if ( AAFRESULT_SUCCESS == hr ) {
+			      continue;
+			    }
+			    else if ( AAFRESULT_MOB_NOT_FOUND != hr ) {
+			      RAISE( hr );
+			    }
+
+			    CHECK( spSrcMob->CloneExternal( resolveDependencies,
+							    includeMedia,
+							    destFile,
+							    &spDstMob ) );
 			  }
-			else
-			  {
-				RAISE(aafError);
-			  }
-		  }
-		if (destMobName)
-		  _file->omOptFree(destMobName);
-		destMobName = NULL;
+			}
 
-		if (includeMedia)
-		  {
-			/* The media data object has already been copied.  Now, we have
-			 * to change the MobID back to the original, since we're cloning 
-			 */
-			if (tmpDestMedia)
-			  {
-				/* Change the mob ID to be the original mob ID */
-				  {
-					CHECK(tmpDestMedia->WriteUID(OMMDATMobID,saveMobID));
-				  }
-
-//!!!Need to put this back				CHECK(TableRemoveUID(destHead->_dataObjs, newMobID));
-				/* Add to the MediaData hash table */
-				CHECK(destHead->AppendDataObject(saveMobID, tmpDestMedia));
-			  }
-
-			/* If the media data is not in this file, don't report an error */
-		  }
-
-	  }
+			pNewMob->AcquireReference();
+			*destMob = pNewMob;
+		}
+	}
 	XEXCEPT
-	  {
-		if (destMobName)
-		  _file->omOptFree(destMobName);
-		/* NOTE: This function needs more cleanup (delete mob, out of index) */
-		if (XCODE() == AAFRESULT_TABLE_DUP_KEY)
-		  return(AAFRESULT_DUPLICATE_MOBID);
-	  }
-	XEND;
+	{
+	}
+	XEND
 
-	*destMob = tmpDestMob;
-	return(AAFRESULT_SUCCESS);
-#else
-  return AAFRESULT_NOT_IN_CURRENT_VERSION;
-#endif
+	return AAFRESULT_SUCCESS;
 }
 
 
@@ -2166,7 +2167,6 @@ AAFRESULT ImplAAFMob::ReconcileMobLength(void)
 {
 	return(AAFRESULT_ABSTRACT_CLASS);	// MUST call one of the subclasses
 }
-
 
 const OMMaterialIdentification&
   ImplAAFMob::identification(void) const

@@ -483,6 +483,8 @@ virtual AAFRESULT STDMETHODCALLTYPE
     OMStrongReferenceVectorProperty<ImplAAFMobSlot> _slots;
     OMStrongReferenceVectorProperty<ImplAAFTaggedValue> _userComments;
     OMStrongReferenceVectorProperty<ImplAAFKLVData> _KLVData;
+
+    aafClassID_t _clsid;
 };
 
 #endif // ! __ImplAAFMob_h__

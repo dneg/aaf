@@ -48,6 +48,7 @@
 
 #include "ImplAAFDictionary.h"
 #include "ImplAAFDataDef.h"
+#include "ImplAAFCloneResolver.h"
 
 #include <assert.h>
 #include <string.h>
@@ -427,4 +428,16 @@ AAFRESULT STDMETHODCALLTYPE
 	}
 
 	return (result);
+}
+
+void ImplAAFOperationDef::onCopy(void* clientContext) const
+{
+  ImplAAFDefObject::onCopy(clientContext);
+
+  if ( clientContext ) {
+    ImplAAFCloneResolver* pResolver = reinterpret_cast<ImplAAFCloneResolver*>(clientContext);
+    pResolver->ResolveWeakReference(_dataDef);
+    pResolver->ResolveWeakReference(_degradeTo);
+    pResolver->ResolveWeakReference(_paramDefined);
+  }
 }

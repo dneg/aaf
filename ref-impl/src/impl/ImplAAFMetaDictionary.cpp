@@ -198,10 +198,10 @@ ImplAAFMetaDictionary *ImplAAFMetaDictionary::CreateMetaDictionary(void)
 }
 
 
-bool ImplAAFMetaDictionary::isRegistered(const OMClassId& /* classId */) const
+bool ImplAAFMetaDictionary::isRegistered(const OMClassId& classId ) const
 {
-  assert(false);
-  return false; // tjb for ak - stub
+	assert( sizeof(OMClassId) == sizeof(aafUID_t) );
+	return containsClass( reinterpret_cast<const aafUID_t&>(classId) );
 }
 
 //
@@ -462,7 +462,7 @@ ImplAAFTypeDef * ImplAAFMetaDictionary::findAxiomaticTypeDefinition(aafUID_const
 
 
 // These are low-level OMSet tests for containment.
-bool ImplAAFMetaDictionary::containsClass(aafUID_constref classId)
+bool ImplAAFMetaDictionary::containsClass(aafUID_constref classId) const
 {
   // NOTE: The following type cast is temporary. It should be removed as soon
   // as the OM has a declarative sytax to include the type

@@ -351,3 +351,9 @@ AAFRESULT ImplAAFSourceClip::TraverseToClip(aafLength_t length,
 	
 	return(AAFRESULT_SUCCESS);
 }
+
+
+void ImplAAFSourceClip::onCopy(void* clientContext) const
+{
+  ImplAAFSourceReference::onCopy(clientContext);
+}

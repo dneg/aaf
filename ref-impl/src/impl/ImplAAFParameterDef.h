@@ -110,6 +110,9 @@ public:
         // @parm [in, string] DisplayUnits
         (const aafCharacter *  pDisplayUnits);
 
+  // OM deep copy notification
+  virtual void onCopy(void* clientContext) const;
+
 private:
 	OMWeakReferenceProperty<ImplAAFTypeDef>					_typeDef;
 	OMWideStringProperty									_displayUnits;

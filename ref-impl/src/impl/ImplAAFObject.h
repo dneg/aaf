@@ -228,6 +228,8 @@ public:
   // Return true is this is a data object (Interchange object).
   virtual bool dataObject(void) const;
 
+  AAFRESULT CreatePropertyInstanceAndAdd( ImplAAFPropertyDef* pPropDef );
+
 private:
 
   OMFixedSizeProperty<aafUID_t> _generation;

@@ -271,6 +271,8 @@ public:
 
 	 virtual AAFRESULT ChangeContainedReferences(aafMobID_constref from,
 												aafMobID_constref to);
+	 // OM deep copy notification
+	 virtual void onCopy(void* clientContext) const;
 
 private:
 	OMWeakReferenceProperty<ImplAAFOperationDef>		_operationDefinition;

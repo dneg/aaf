@@ -39,8 +39,7 @@ ImplAAFCompositionMob::ImplAAFCompositionMob ():
 {
 	_persistentProperties.put(		_defaultFadeLen.address());
 	_persistentProperties.put(		_defaultFadeType.address());
-	_persistentProperties.put(		_defaultFadeEditUnit.address());
-	
+	_persistentProperties.put(		_defaultFadeEditUnit.address());	
 }
 
 ImplAAFCompositionMob::~ImplAAFCompositionMob ()

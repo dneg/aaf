@@ -36,13 +36,13 @@
 #include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
 #include "ImplAAFObjectCreation.h"
+#include "ImplAAFDictionary.h"
+#include "ImplAAFCloneResolver.h"
 
 #include <assert.h>
 #include "AAFResult.h"
 #include "aafErr.h"
 #include "aafCvt.h"
-
-#include "ImplAAFDictionary.h"
 #include "ImplAAFSmartPointer.h"
 typedef ImplAAFSmartPointer<ImplAAFDictionary> ImplAAFDictionarySP;
 typedef ImplAAFSmartPointer<ImplAAFDataDef>    ImplAAFDataDefSP;
@@ -341,5 +341,15 @@ AAFRESULT ImplAAFComponent::ChangeContainedReferences(aafMobID_constref /*from*/
 													  aafMobID_constref /*to*/)
 {
 	return AAFRESULT_SUCCESS;
+}
+
+void ImplAAFComponent::onCopy(void* clientContext) const
+{
+  ImplAAFObject::onCopy(clientContext);
+
+  if ( clientContext ) {
+    ImplAAFCloneResolver* pResolver = reinterpret_cast<ImplAAFCloneResolver*>(clientContext);
+    pResolver->ResolveWeakReference(_dataDef);
+  }
 }
 

@@ -65,6 +65,7 @@
 #include "AAFClassDefUIDs.h"
 #endif
 
+#include "ImplAAFCloneResolver.h"
 #include "ImplAAFDictionary.h"
 #include "AAFStoredObjectIDs.h"
 #include "AAFPropertyDefs.h"
@@ -804,3 +805,14 @@ HRESULT ImplAAFTypeDefWeakObjRef::CompleteClassRegistration(void)
 
   return rc;
 }
+
+void ImplAAFTypeDefWeakObjRef::onCopy(void* clientContext) const
+{
+  ImplAAFTypeDefObjectRef::onCopy(clientContext);
+
+  if ( clientContext ) {
+    ImplAAFCloneResolver* pResolver = reinterpret_cast<ImplAAFCloneResolver*>(clientContext);
+    pResolver->ResolveWeakReference(_referencedType);
+  }
+}
+

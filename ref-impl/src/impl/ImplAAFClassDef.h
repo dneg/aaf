@@ -202,6 +202,10 @@ public:
   const OMPropertyDefinition* propertyDefinition(
                                  const OMUniqueObjectIdentification& id) const;
 
+  const OMPropertyDefinition* propertyDefinition(
+			     const OMStorable* pDstStorable,
+				 const OMPropertyDefinition* pSrcPropertyDef );
+
 public:
 
 	bool
@@ -295,6 +299,7 @@ public:
   // Override callbacks from OMStorable
   virtual void onSave(void* clientContext) const;
   virtual void onRestore(void* clientContext) const;
+  virtual void onCopy(void* clientContext) const;
 
 
   // Method is called after associated class has been added to MetaDictionary.

@@ -156,6 +156,8 @@ public:
         // @parm [out,retval] Codec flavour Enumeration
         (ImplEnumAAFCodecFlavours ** ppEnum);
   
+  // OM deep copy notification
+  virtual void onCopy(void* clientContext) const;
 
 private:
 	DataDefWeakRefArrayProp_t			_dataDefs;

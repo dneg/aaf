@@ -288,7 +288,7 @@ public:
 
 
   // These are low-level OMSet tests for containment.
-  bool containsClass(aafUID_constref classId);
+  bool containsClass(aafUID_constref classId) const;
   bool containsType(aafUID_constref typeId);
   bool containsForwardClassReference(aafUID_constref classId);
 
