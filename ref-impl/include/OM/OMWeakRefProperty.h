@@ -71,7 +71,7 @@ public:
   operator ReferencedObject*() const;
 
     // @cmember Save this <c OMWeakReferenceProperty>.
-  virtual void save(void) const;
+  virtual void save(void* clientContext) const;
 
     // @cmember close this <c OMWeakReferenceProperty>.
   virtual void close(void);

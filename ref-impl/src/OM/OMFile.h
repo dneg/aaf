@@ -140,7 +140,7 @@ public:
     // @cmember Save all changes made to the contents of this
     //          <c OMFile>. It is not possible to <mf OMFile::save>
     //          read-only or transient files.
-  void save(void);
+  void save(void* clientContext);
 
     // @cmember Save the entire contents of this <c OMFile> as well as
     //          any unsaved changes in the new file <p fileName>. The file

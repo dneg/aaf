@@ -64,14 +64,15 @@ OMStorable::~OMStorable(void)
 }
 
   // @mfunc Save this <c OMStorable>.
+  //   @parm Client context for callbacks.
   //   @this const
-void OMStorable::save(void) const
+void OMStorable::save(void* clientContext) const
 {
   TRACE("OMStorable::save");
   
   //_file->objectDirectory()->insert(pathName(), this);
   store()->save(classId());
-  store()->save(_persistentProperties);
+  store()->save(_persistentProperties, clientContext);
 }
 
   // @mfunc Close this <c OMStorable>.

@@ -142,9 +142,10 @@ OMWeakReferenceProperty<ReferencedObject>::operator ReferencedObject* () const
   //   @tcarg class | ReferencedObject | The type of the referenced
   //          (pointed to) object. This type must be a descendant of
   //          <c OMStorable>.
+  //   @parm Client context for callbacks.
   //   @this const
 template<typename ReferencedObject>
-void OMWeakReferenceProperty<ReferencedObject>::save(void) const
+void OMWeakReferenceProperty<ReferencedObject>::save(void* clientContext) const
 {
   TRACE("OMWeakReferenceProperty<ReferencedObject>::save");
 
@@ -164,7 +165,7 @@ void OMWeakReferenceProperty<ReferencedObject>::save(void) const
            (void *)pathName,
            strlen(pathName) + 1);
 
-  _reference.save();
+  _reference.save(clientContext);
 
 }
 
