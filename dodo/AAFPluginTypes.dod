@@ -34,47 +34,5 @@ typedef enum _aafCheckWarnings_t
 	kAAFCheckNoWarnings
 } aafCheckWarnings_t;
 
-typedef enum _aafPluginType_t 
-{
-	kPluginLinked, 
-	kPluginCOM, 
-	kPluginCpp
-} aafPluginType_t;
-
-typedef enum _aafPluginInterfaceRev_t
-{
-	kPluginRev1,
-	kPluginCurrentRev=kPluginRev1
-} aafPluginInterfaceRev_t;
-
-typedef struct _aafPluginMetaInfo_t
-{
-	aafUID_t    			pluginID;					/* OUT */
-	aafPluginInterfaceRev_t	pluginInterfaceRevision;	/* IN/OUT */
-	aafProductVersion_t		pluginCodeRevision;
-	aafFileRev_t			minimumFileRevision;		/* OUT - (revs lower than this will be private */
-	aafBool					validMaximumFileRevision;	/* OUT - Is there a maximum rev? */
-	aafFileRev_t			maximumFileRevision;		/* OUT - (revs higher than this will be private */
-	aafProductVersion_t		minimumSDKRevision;
-} aafPluginMetaInfo_t;
-
-typedef struct _aafCodecSelectInfo_t
-{
-	aafBool         	hwAssisted;		/* OUT */
-	aafBool				isNative;		/* OUT */
-	aafBool        		willHandleMDES;	/* OUT */
-	aafInt16			relativeLoss;	/* OUT - 0 == lossless */
-	aafUInt32			avgBitsPerSec;	/* OUT */
-} aafCodecSelectInfo_t;
-	
-typedef struct _aafCodecMetaInfo_t
-{
-	aafUID_t		    mdesClassID;		/* OUT */
-	aafUID_t			dataClassID;		/* OUT */
-	aafPluginMetaInfo_t	plugin;
-	aafInt32			numVariants;		/* OUT */
-	aafInt32			numDataDefinitions;	/* OUT */
-} aafCodecMetaInfo_t;
-
 AD_TYPES_END
 
