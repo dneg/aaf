@@ -461,9 +461,6 @@ void OMSimpleProperty::restore(size_t externalSize)
   TRACE("OMSimpleProperty::restore");
   ASSERT("Sizes match", externalSize == _size);
 
-  OMStoredObject* store = _propertySet->container()->store();
-  ASSERT("Valid store", store != 0);
-
   read(_propertyId, _storedForm, _bits, _size, externalSize);
 }
 
