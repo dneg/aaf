@@ -35,6 +35,10 @@ class OMRawStorage;
 
   // @class An implementation of the Microsoft Structured Storage interface
   //        ILockBytes in terms of <c OMRawStorage>.
+  //        This class is an adapter from the ILockBytes interface to the
+  //        exported <c OMRawStorage> interface. Object Manager clients
+  //        may use the <c OMRawStorage> interface to access or to control
+  //        the storage of the raw bytes of a file.
   //   @base public | ILockBytes
 class OMRawStorageLockBytes : public ILockBytes {
 public:
