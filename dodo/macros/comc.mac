@@ -58,8 +58,8 @@
 #include <assert.h>
 
 
-C.this-module::C.this-module (AAFBool doInit)
-: C.parent-module (AAFFalse)
+C.this-module::C.this-module (IUnknown * pControllingUnknown, AAFBool doInit)
+  : C.parent-module (pControllingUnknown, AAFFalse)
 {
   if (doInit)
     {
@@ -74,10 +74,10 @@ C.this-module::C.this-module (AAFBool doInit)
 
 C.this-module::~C.this-module ()
 {
-  Impl.this-module * rep;
-  rep = GetRepObject ();
-  assert (rep);
-  delete rep;
+//  Impl.this-module * rep;
+//  rep = GetRepObject ();
+//  assert (rep);
+//  delete rep;
 }
 #endm
 
@@ -100,12 +100,17 @@ C.this-module::~C.this-module ()
 #include <assert.h>
 
 
-C.this-module::C.this-module (AAFBool doInit)
+C.this-module::C.this-module (IUnknown * pControllingUnknown, AAFBool doInit)
+  : CAAFUnknown(pControllingUnknown)
 {}
 
 
 C.this-module::~C.this-module ()
-{}
+{
+  // The base class destructor of Impl.this-module must be declared as virtual.
+  if (_rep)
+    delete _rep;  
+}
 
 
 void C.this-module::InitRep (Impl.this-module * newRep)
@@ -121,6 +126,44 @@ Impl.this-module * C.this-module::GetRepObject ()
   assert (_rep);
   return _rep;
 }
+#endm
+
+#ccccccccccccccccccccccccccc
+#c
+#c Types definitions should only be used by idl and c++ & impl headers
+#c 
+#c
+#c GUID
+#c Argument01: hex long  0-3[leading 0's w/o leading 0x]
+#c Argument02: hex short 4-5[leading 0's w/o leading 0x]
+#c Argument03: hex short 6-7[leading 0's w/o leading 0x]
+#c Argument04: hex byte   8 [leading 0's w/o leading 0x]
+#c Argument05: hex byte   9 [leading 0's w/o leading 0x]
+#c Argument06: hex byte  10 [leading 0's w/o leading 0x]
+#c Argument07: hex byte  11 [leading 0's w/o leading 0x]
+#c Argument08: hex byte  12 [leading 0's w/o leading 0x]
+#c Argument09: hex byte  13 [leading 0's w/o leading 0x]
+#c Argument10: hex byte  14 [leading 0's w/o leading 0x]
+#c Argument11: hex byte  15 [leading 0's w/o leading 0x]
+#c
+#c Example:
+#c AD_TYPES_BEGIN(b1a21372, 1a7d, 11d2, bf, 78, 00, 10, 4b, c9, 15, 6d)
+#c
+#c TomR:980716: Added
+#c
+#startm AD_TYPES_BEGIN 11
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Ends a types definition
+#c
+#c Types definitions should only be used by idl and c++ & impl headers
+#c
+#c Arguments: none
+#c
+#startm AD_TYPES_END 00
 #endm
 
 
@@ -527,6 +570,47 @@ AAFRESULT STDMETHODCALLTYPE
 #c Arguments: none
 #c
 #startm AD_CLASS_END 00
+//
+// 
+// 
+AAFRESULT C.this-module::InternalQueryInterface
+(
+	REFIID riid,
+	void **ppvObj)
+{
+	HRESULT hr = S_OK;
+
+	if (NULL == ppvObj)
+		return E_INVALIDARG;
+
+    // We only support the IClassFactory interface 
+    if (riid == IID_I.this-module) 
+    { 
+        *ppvObj = (I.this-module *)this; 
+        ((IUnknown *)*ppvObj)->AddRef();
+		return S_OK;
+    }
+
+	// Always delegate back to base implementation.
+	return C.parent-module::InternalQueryInterface(riid, ppvObj);
+}
+
+//
+// Return private implementation pointer for delegation.
+// NOTE: This is NOT the pointer to the COM object's implementation
+// object!
+//
+void * AAFRESULT STDMETHODCALLTYPE
+    C.this-module::GetImplRep)()
+{
+	return _rep; // GetRepObject();
+}
+
+//
+// Define the contrete object support implementation.
+// 
+AAF_DEFINE_FACTORY(.this-module)
+
 #endm
 
 
@@ -537,6 +621,54 @@ AAFRESULT STDMETHODCALLTYPE
 #c Arguments: none
 #c
 #startm AD_ROOT_CLASS_END 00
+//
+// 
+// 
+AAFRESULT C.this-module::InternalQueryInterface
+(
+	REFIID riid,
+	void **ppvObj)
+{
+	HRESULT hr = S_OK;
+
+	if (NULL == ppvObj)
+		return E_INVALIDARG;
+
+    // We only support the IClassFactory interface 
+    if (riid == IID_I.this-module) 
+    { 
+        *ppvObj = (I.this-module *)this; 
+        ((IUnknown *)*ppvObj)->AddRef();
+		return S_OK;
+    }
+	// All base classes must support unit test.
+	else if (riid == IID_IAAFUnitTest) 
+    { 
+        *ppvObj = (IAAFUnitTest *)this; 
+        ((IUnknown *)*ppvObj)->AddRef();
+		return S_OK;
+    }
+
+	// Always delegate back to base implementation.
+	return CAAFUnknown::InternalQueryInterface(riid, ppvObj);
+}
+
+//
+// Return private implementation pointer for delegation.
+// NOTE: This is NOT the pointer to the COM object's implementation
+// object!
+//
+void * AAFRESULT STDMETHODCALLTYPE
+    C.this-module::GetImplRep)()
+{
+	return _rep; // GetRepObject();
+}
+
+//
+// Define the contrete object support implementation.
+// 
+AAF_DEFINE_FACTORY(.this-module)
+
 #endm
 
 
@@ -750,3 +882,101 @@ AAFRESULT STDMETHODCALLTYPE
   return stat;
 }
 #endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Argument1: text to be quoted.
+#c 
+#c Ignore the input
+#c
+#c TomR:added 980714
+#c
+#startm AD_CPP_QUOTE 01
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Argument1: base name to be converted to output type.
+#c ingnore the input
+#c
+#c TomR:added 980714
+#c
+#startm AD_AAFTYPES 01
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Argument1: base name to be converted to output type.
+#c Ignore input
+#c
+#c TomR:added 980714
+#c
+#startm AD_DECLARE_FORWARD_AAFTYPES 01
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Defining the interface UUID.
+#c NOTE: Should be placed immediately before AD_CLASS_BEGIN
+#c
+#c GUID
+#c Argument01: hex long  0-3[leading 0's w/o leading 0x]
+#c Argument02: hex short 4-5[leading 0's w/o leading 0x]
+#c Argument03: hex short 6-7[leading 0's w/o leading 0x]
+#c Argument04: hex byte   8 [leading 0's w/o leading 0x]
+#c Argument05: hex byte   9 [leading 0's w/o leading 0x]
+#c Argument06: hex byte  10 [leading 0's w/o leading 0x]
+#c Argument07: hex byte  11 [leading 0's w/o leading 0x]
+#c Argument08: hex byte  12 [leading 0's w/o leading 0x]
+#c Argument09: hex byte  13 [leading 0's w/o leading 0x]
+#c Argument10: hex byte  14 [leading 0's w/o leading 0x]
+#c Argument11: hex byte  15 [leading 0's w/o leading 0x]
+#c
+#c Example:
+#c AD_DEFAULT_UUID(b1a21372, 1a7d, 11d2, bf, 78, 00, 10, 4b, c9, 15, 6d)
+#c
+#c TomR:980713: Added
+#c
+#startm AD_DEFAULT_UUID 11
+// Default Interface for .this-module 
+// {%01-%02-%03-%04%05-%06%07%08%09%10%11}
+IID IID_I.this-module = { 0x%01, 0x%02, 0x%03, { 0x%04, 0x%05, 0x%06, 0x%07, 0x%08, 0x%09, 0x%10, 0x%11 } );
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Defining the Class "Factory" UUID.
+#c NOTE: should be placed before AD_DEFAULT_UUID or after
+#c AD_CLASS_END
+#c
+#c GUID
+#c Argument01: hex long  0-3[leading 0's w/o leading 0x]
+#c Argument02: hex short 4-5[leading 0's w/o leading 0x]
+#c Argument03: hex short 6-7[leading 0's w/o leading 0x]
+#c Argument04: hex byte   8 [leading 0's w/o leading 0x]
+#c Argument05: hex byte   9 [leading 0's w/o leading 0x]
+#c Argument06: hex byte  10 [leading 0's w/o leading 0x]
+#c Argument07: hex byte  11 [leading 0's w/o leading 0x]
+#c Argument08: hex byte  12 [leading 0's w/o leading 0x]
+#c Argument09: hex byte  13 [leading 0's w/o leading 0x]
+#c Argument10: hex byte  14 [leading 0's w/o leading 0x]
+#c Argument11: hex byte  15 [leading 0's w/o leading 0x]
+#c
+#c Example:
+#c AD_CLASS_UUID(b1a21373, 1a7d, 11d2, bf, 78, 00, 10, 4b, c9, 15, 6d)
+#c
+#c TomR:980713: Added
+#c
+#startm AD_CLASS_UUID 11
+// CLSID for .this-module 
+// {%01-%02-%03-%04%05-%06%07%08%09%10%11}
+CLSID CLSID_.this-module = { 0x%01, 0x%02, 0x%03, { 0x%04, 0x%05, 0x%06, 0x%07, 0x%08, 0x%09, 0x%10, 0x%11 } );
+#endm
+
+
+
