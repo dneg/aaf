@@ -3,38 +3,18 @@
 #ifndef __ImplAAFFindSourceInfo_h__
 #define __ImplAAFFindSourceInfo_h__
 
-
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
-
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
-
- 
 /***********************************************\
-*	Stub only.   Implementation not yet added	*
+*												*
+* Advanced Authoring Format						*
+*												*
+* Copyright (c) 1998-1999 Avid Technology, Inc. *
+* Copyright (c) 1998-1999 Microsoft Corporation *
+*												*
 \***********************************************/
-
 
 #ifndef __AAFTypes_h__
 #include "AAFTypes.h"
 #endif
-
-
-
-
 
 #ifndef __ImplAAFRoot_h__
 #include "ImplAAFRoot.h"
@@ -42,7 +22,7 @@
 
 class ImplAAFMob;
 class ImplAAFComponent;
-class ImplAAFEffect;
+class ImplAAFOperationGroup;
 class ImplAAFPulldown;
 
 class ImplAAFFindSourceInfo : public ImplAAFRoot
@@ -63,7 +43,7 @@ protected:
 	aafRational_t	_editRate;
 	aafLength_t		_length;
 	ImplAAFComponent *_cpnt;
-	ImplAAFEffect *_effect;
+	ImplAAFOperationGroup *_operationGroup;
 
 public:
 
@@ -74,7 +54,7 @@ public:
 	virtual AAFRESULT STDMETHODCALLTYPE
 		AddPulldown(ImplAAFPulldown *pdwn);
 	virtual AAFRESULT STDMETHODCALLTYPE
-		SetEffect(ImplAAFEffect *effect);
+		SetOperationGroup(ImplAAFOperationGroup *OperationGroup);
 	virtual AAFRESULT STDMETHODCALLTYPE
 		SetComponent(ImplAAFComponent *cpnt);
 
