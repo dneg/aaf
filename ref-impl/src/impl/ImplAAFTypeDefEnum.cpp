@@ -10,23 +10,6 @@
 
 
 
-typedef struct _aafTypeDefEnumElementPair_t
-{
-  [string, size_is(nameSize)] wchar_t * pName;
-  IAAFPropertyValue * pValue;
-  aafUInt32 nameSize;
-} aafTypeDefEnumElementPair_t;
-
-
-
-
-
-
-
-
-
-
-
 
 #include "AAFStoredObjectIDs.h"
 
@@ -49,7 +32,8 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDefEnum::Initialize (
       aafUID_t *  /*pID*/,
       ImplAAFTypeDef * /*pType*/,
-      ImplaafTypeDefEnumElementPair_t ** * /*pElements*/,
+      aafInt32*  /*pElementValues*/,
+      aafString_t *  /*pElementNames*/,
       aafUInt32  /*numElems*/)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
@@ -76,41 +60,61 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFTypeDefEnum::GetElementName (
-      ImplAAFPropertyValue * /*value*/,
-      wchar_t *  /*pName*/,
-      aafInt32  /*bufSize*/)
+    ImplAAFTypeDefEnum::GetElementValues (
+      aafUInt32 *  /*pValues*/,
+      aafUInt32  /*numElems*/)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
 
-  //
-  // AAFRESULT_SMALLBUF
-  //   - bufSize indicates the buffer is too small to hold the string.
-  //
-  // AAFRESULT_BAD_PARAM
-  //   - the given value is not associated with an element of
-  //     this type.)
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFTypeDefEnum::GetElementNameBufLen (
+    ImplAAFTypeDefEnum::GetNameFromValue (
       ImplAAFPropertyValue * /*pValue*/,
-      aafInt32 *  /*pLen*/)
+      wchar_t *  /*pName*/,
+      aafUInt32  /*bufSize*/)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
 
-  //
-  // AAFRESULT_BAD_PARAM
-  //   - the given value is not associated with an element of this
-  //     type.)
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFTypeDefEnum::GetValueAsValue (
+    ImplAAFTypeDefEnum::GetNameBufLenFromValue (
+      ImplAAFPropertyValue * /*pValue*/,
+      aafUInt32 *  /*pLen*/)
+{
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFTypeDefEnum::GetNameFromInteger (
+      aafInt32  /*value*/,
+      wchar_t *  /*pName*/,
+      aafUInt32  /*bufSize*/)
+{
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFTypeDefEnum::GetNameBufLenFromInteger (
+      aafInt32  /*value*/,
+      aafUInt32 *  /*pLen*/)
+{
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFTypeDefEnum::GetIntegerValue (
       ImplAAFPropertyValue * /*pPropValIn*/,
-      ImplAAFPropertyValue ** /*ppPropValOut*/)
+      aafInt32 *  /*pValueOut*/)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
@@ -118,15 +122,22 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFTypeDefEnum::SetValueFromValue (
+    ImplAAFTypeDefEnum::SetIntegerValue (
       ImplAAFPropertyValue * /*pPropValToSet*/,
-      ImplAAFPropertyValue * /*pPropValIn*/)
+      aafInt32  /*valueIn*/)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
 
-  // AAFRESULT_BAD_TYPE
-  //   - pPropValIn's type doesn't match GetElementType\(\))
+
+
+  // Override from AAFTypeDef
+  AAFRESULT STDMETHODCALLTYPE
+    ImplAAFTypeDefEnum::GetTypeCategory (/*[out]*/ eAAFTypeCategory_t *  /*pTid*/)
+  {
+    return AAFRESULT_NOT_IMPLEMENTED;
+  }
+
 
 OMDEFINE_STORABLE(ImplAAFTypeDefEnum, AUID_AAFTypeDefEnum);
 

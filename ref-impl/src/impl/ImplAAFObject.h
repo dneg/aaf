@@ -16,19 +16,18 @@
 //
 // Forward declarations
 //
-//class AAFObject;
 class ImplEnumAAFProperties;
 class ImplAAFClassDef;
+class ImplAAFProperty;
 class ImplAAFPropertyDef;
 class ImplAAFPropertyValue;
-
+class ImplPropertyCollection;
 
 #include "AAFTypes.h"
-
 #include "OMStorable.h"
 #include "OMProperty.h"
-
 #include "ImplAAFRoot.h"
+
 
 class ImplAAFObject : public OMStorable, public ImplAAFRoot
 {
@@ -172,8 +171,13 @@ public:
   static AAFRESULT test();
 
   OMDECLARE_STORABLE(ImplAAFObject)
+
+private:
+  // private method
+  AAFRESULT InitProperties ();
+
+  ImplPropertyCollection * _pProperties;
 };
 
 
 #endif // ! __ImplAAFObject_h__
-

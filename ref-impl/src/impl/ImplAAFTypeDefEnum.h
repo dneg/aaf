@@ -15,23 +15,6 @@
 
 
 
-#if 0 
-typedef struct _aafTypeDefEnumElementPair_t
-{
-  [string, size_is(nameSize)] wchar_t * pName;
-  IAAFPropertyValue * pValue;
-  aafUInt32 nameSize;
-} aafTypeDefEnumElementPair_t;
-#endif 
-// 
-typedef struct _aafTypeDefEnumElementPair_t 
-{ 
-  wchar_t * pName; 
-  IAAFPropertyValue * pValue; 
-  aafUInt32 nameSize; 
-} aafTypeDefEnumElementPair_t; 
-
-
 
 
 
@@ -65,11 +48,15 @@ public:
          // @parm [in] Type of values in this enumeration
          ImplAAFTypeDef * pType,
 
-         // @parm [in, size_is(numElems)] array of element name/value pairs to be represented in this
-	// enumerated type
-         ImplaafTypeDefEnumElementPair_t ** * pElements),
+         // @parm [in, size_is(numElems)] array of element values to be represented in this enumerated
+    // type
+         aafInt32*  pElementValues,
 
-         // @parm [in] number of elements in pElements array
+         // @parm [in, size_is(numElems)] array of element names to be represented in this enumerated
+    // type
+         aafString_t *  pElementNames,
+
+         // @parm [in] number of members in pElementValues and pElementNames arrays
          aafUInt32  numElems);
 
 
@@ -92,67 +79,99 @@ public:
 
 
   //****************
-  // GetElementName()
+  // GetElementValues()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetElementName
+    GetElementValues
+        (// @parm [out, size_is(numElems)] array to hold values
+         aafUInt32 *  pValues,
+
+         // @parm [in] number of elements in the pValues array
+         aafUInt32  numElems);
+
+
+  //****************
+  // GetNameFromValue()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetNameFromValue
         (// @parm [in] value of element to get
-         ImplAAFPropertyValue * value,
+         ImplAAFPropertyValue * pValue,
 
          // @parm [out, size_is(bufSize), string] buffer into which the element name is written
          wchar_t *  pName,
 
          // @parm [in] The size of the pName buffer, in bytes
-         aafInt32  bufSize);
-  //
-  // AAFRESULT_SMALLBUF
-  //   - bufSize indicates the buffer is too small to hold the string.
-  //
-  // AAFRESULT_BAD_PARAM
-  //   - the given value is not associated with an element of
-  //     this type.)
+         aafUInt32  bufSize);
 
 
   //****************
-  // GetElementNameBufLen()
+  // GetNameBufLenFromValue()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetElementNameBufLen
+    GetNameBufLenFromValue
         (// @parm [in] value of element to get
          ImplAAFPropertyValue * pValue,
 
          // @parm [out] required buffer length, in bytes
-         aafInt32 *  pLen);
-  //
-  // AAFRESULT_BAD_PARAM
-  //   - the given value is not associated with an element of this
-  //     type.)
+         aafUInt32 *  pLen);
 
 
   //****************
-  // GetValueAsValue()
+  // GetNameFromInteger()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetValueAsValue
+    GetNameFromInteger
+        (// @parm [in] value of element to get
+         aafInt32  value,
+
+         // @parm [out, size_is(bufSize), string] buffer into which the element name is written
+         wchar_t *  pName,
+
+         // @parm [in] The size of the pName buffer, in bytes
+         aafUInt32  bufSize);
+
+
+  //****************
+  // GetNameBufLenFromInteger()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetNameBufLenFromInteger
+        (// @parm [in] value of element to get
+         aafInt32  value,
+
+         // @parm [out] required buffer length, in bytes
+         aafUInt32 *  pLen);
+
+
+  //****************
+  // GetIntegerValue()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetIntegerValue
         (// @parm [in] property value to read
          ImplAAFPropertyValue * pPropValIn,
 
          // @parm [out] value of the enum represented by the given input property value
-         ImplAAFPropertyValue ** ppPropValOut);
+         aafInt32 *  pValueOut);
 
 
   //****************
-  // SetValueFromValue()
+  // SetIntegerValue()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    SetValueFromValue
+    SetIntegerValue
         (// @parm [in] property value to set
          ImplAAFPropertyValue * pPropValToSet,
 
          // @parm [in] new value of the enum represented by the given property value
-         ImplAAFPropertyValue * pPropValIn);
-  // AAFRESULT_BAD_TYPE
-  //   - pPropValIn's type doesn't match GetElementType\(\))
+         aafInt32  valueIn);
+
+
+  // Override from AAFTypeDef
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetTypeCategory (/*[out]*/ eAAFTypeCategory_t *  pTid);
+
 
 
 public:
