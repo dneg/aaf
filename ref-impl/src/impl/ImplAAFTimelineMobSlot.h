@@ -38,9 +38,6 @@ public:
   ImplAAFTimelineMobSlot ();
   ~ImplAAFTimelineMobSlot ();
 
-  OMDECLARE_STORABLE(ImplAAFMobSlot)
-
-
   virtual AAFRESULT STDMETHODCALLTYPE
 	Initialize ();
 
