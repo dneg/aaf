@@ -74,6 +74,12 @@ public:
                                         OMUInt32 pageSize = defaultPageSize,
                                         OMUInt32 pageCount = defaultPageCount);
 
+    // @cmember Create an <c OMCachedDiskRawStorage> object by creating a new
+    //          temporary file for modify access.
+  static OMCachedDiskRawStorage* openNewModify(
+                                        OMUInt32 pageSize = defaultPageSize,
+                                        OMUInt32 pageCount = defaultPageCount);
+
   // @access Public members.
 
     // @cmember Destructor.

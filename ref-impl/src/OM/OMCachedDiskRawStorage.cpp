@@ -114,6 +114,29 @@ OMCachedDiskRawStorage::openNewModify(const wchar_t* fileName,
   return result;
 }
 
+  // @mfunc Create an <c OMCachedDiskRawStorage> object by creating a new
+  //        temporary file for modify access.
+  //   @parm TBS.
+  //   @parm TBS.
+  //   @rdesc The newly created <c OMCachedDiskRawStorage> object.
+OMCachedDiskRawStorage*
+OMCachedDiskRawStorage::openNewModify(OMUInt32 pageSize,
+                                      OMUInt32 pageCount)
+{
+  TRACE("OMCachedDiskRawStorage::openNewModify");
+
+  OMStream* file = OMStream::openNewModify();
+
+  OMCachedDiskRawStorage* result = new OMCachedDiskRawStorage(
+                                                            file,
+                                                            OMFile::modifyMode,
+                                                            pageSize,
+                                                            pageCount);
+  ASSERT("Valid heap pointer", result != 0);
+
+  return result;
+}
+
   // @mfunc Destructor.
 OMCachedDiskRawStorage::~OMCachedDiskRawStorage(void)
 {
