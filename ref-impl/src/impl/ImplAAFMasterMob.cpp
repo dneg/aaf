@@ -16,6 +16,7 @@
 #include "ImplAAFHeader.h"
 #include "ImplAAFContentStorage.h"
 #include "ImplAAFObjectCreation.h"
+#include "ImplEnumAAFMobSlots.h"
 
 #include <assert.h>
 #include "AAFResult.h"
@@ -509,5 +510,69 @@ ImplAAFMasterMob::GetObjectClass(aafUID_t * pClass)
 	}
   memcpy (pClass, &CLSID_AAFMasterMob, sizeof (aafClassID_t));
   return AAFRESULT_SUCCESS;
+}
+
+/************************
+ * Function: omfsReconcileMasterMobLength (INTERNAL)
+ *
+ * 	Called from omfsReconcileMobLength to handle the master mob case.
+ *		Given a master mob, make sure that all fields which contain the
+ *		length of the mob are in agreement.  Currently only makes sure
+ *		that mob length references are >= each of the track lengths.
+ *
+ *		Since 2.0 does not contain a redundant mob length field, this
+ *		function simply returns on 2.x era files.
+ *
+ * Argument Notes:
+ *		<none>.
+ *
+ * ReturnValue:
+ *		Error code (see below).
+ *
+ * Possible Errors:
+ *		Standard errors (see top of file).
+ */
+AAFRESULT ImplAAFMasterMob::ReconcileMobLength(void)
+{
+	ImplAAFMob			*fileMob;
+	aafInt32			loop;
+	aafInt32			numSlots, fileNumSlots;
+	aafPosition_t		endPos;
+	ImplEnumAAFMobSlots	*slotIter = NULL, *fileSlotIter = NULL;
+	ImplAAFMobSlot		*fileSlot, *slot;
+	ImplAAFSegment		*fileSeg, *seg;
+
+	XPROTECT()
+	{
+		/* Adjust the SCLP length from the master mob to the length of
+		 * the file mob, in the units of the master mob
+		 */
+		CHECK(EnumAAFAllMobSlots (&slotIter));
+		CHECK(GetNumSlots(&numSlots));
+		for (loop = 1; loop <= numSlots; loop++)
+		{
+			CHECK(slotIter->NextOne(&slot));
+			CHECK(slot->GetSegment(&seg));
+			CHECK(((ImplAAFSourceClip *)seg)->ResolveRef( &fileMob));	//!!!
+			CHECK(fileMob->GetNumSlots(&fileNumSlots));
+			if(fileNumSlots >= 1)
+			{
+				CHECK(fileMob->EnumAAFAllMobSlots (&slotIter));
+				CHECK(slotIter->NextOne(&fileSlot));
+				CHECK(fileSlot->GetSegment(&fileSeg));
+				CHECK(fileSeg->GetLength(&endPos));
+				delete fileSlotIter;
+			}
+			
+			CHECK(slot->ConvertToMyRate(endPos, fileSlot, &endPos));
+			CHECK(seg->SetLength(&endPos));
+		}			
+//!!!			delete slotIter;
+//!!!			slotIter = NULL;
+	}
+	XEXCEPT
+	XEND
+		
+	return (AAFRESULT_SUCCESS);
 }
 
