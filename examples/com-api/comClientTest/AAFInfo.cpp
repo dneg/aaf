@@ -20,6 +20,9 @@
 // Licensor of the AAF Association is Avid Technology.
 // All rights reserved.
 //
+// Portions created by British Broadcasting Corporation are
+// Copyright 2004, British Broadcasting Corporation.  All rights reserved.
+//
 //=---------------------------------------------------------------------=
 
 
@@ -31,10 +34,27 @@
 #include "AAF.h"
 #include "AAFTypes.h"
 #include "AAFResult.h"
+#include "AAFFileKinds.h"
+#include "AAFSmartPointer.h"
+#include "AAFFileMode.h"
+#include "AAFPropertyDefs.h"
+#include "AAFTypeDefUIDs.h"
 
 #if defined( OS_MACOS )
 #include "DataInput.h"
 #endif
+
+typedef IAAFSmartPointer<IAAFClassDef> IAAFClassDefSP;
+typedef IAAFSmartPointer<IAAFDefObject> IAAFDefObjectSP;
+typedef IAAFSmartPointer<IAAFDictionary> IAAFDictionarySP;
+typedef IAAFSmartPointer<IAAFMetaDefinition> IAAFMetaDefinitionSP;
+typedef IAAFSmartPointer<IAAFObject> IAAFObjectSP;
+typedef IAAFSmartPointer<IAAFPropertyDef> IAAFPropertyDefSP;
+typedef IAAFSmartPointer<IAAFPropertyValue> IAAFPropertyValueSP;
+typedef IAAFSmartPointer<IAAFTypeDef> IAAFTypeDefSP;
+typedef IAAFSmartPointer<IAAFTypeDefInt> IAAFTypeDefIntSP;
+typedef IAAFSmartPointer<IEnumAAFDataDefs> IEnumAAFDataDefsSP;
+typedef IAAFSmartPointer<IEnumAAFTypeDefs> IEnumAAFTypeDefsSP;
 
 static void     FatalErrorCode(HRESULT errcode, int line, char *file)
 {
@@ -292,13 +312,22 @@ static void printIdentification(IAAFIdentification* pIdent)
   printf("GenerationID         = %s\n", chName);
 }
 
+
+// Values hardcoded here incase the values in AAFDataDefs.h are edited
+const aafUID_t DDEF_Picture_v1 = { 0x6F3C8CE1, 0x6CEF, 0x11D2, { 0x80, 0x7D, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } };
+const aafUID_t DDEF_Picture_v11 =  { 0x01030202, 0x0100, 0x0000, { 0x6, 0xe, 0x2b, 0x34, 0x4, 0x1, 0x1, 0x1 } };
+const aafUID_t DDEF_Sound_v1 = { 0x78E1EBE1, 0x6CEF, 0x11D2, { 0x80, 0x7D, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } };
+const aafUID_t DDEF_Sound_v11 = { 0x01030202, 0x0200, 0x0000, { 0x6, 0xe, 0x2b, 0x34, 0x4, 0x1, 0x1, 0x1 } }; 
+const aafUID_t DDEF_Timecode_v1 = { 0x7F275E81, 0x77E5, 0x11D2, { 0x80, 0x7F, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } };
+const aafUID_t DDEF_Timecode_v11 = { 0x01030201, 0x0100, 0x0000, { 0x6, 0xe, 0x2b, 0x34, 0x4, 0x1, 0x1, 0x1 } };
+
+
 static void ReadAAFFile(aafWChar * pFileName)
 {
   HRESULT hr = S_OK;
   IAAFFile * pFile = NULL;
 
-
-  hr = AAFFileOpenExistingRead (pFileName, 0, &pFile);
+  hr = AAFFileOpenExistingRead (pFileName, AAF_FILE_MODE_LAZY_LOADING, &pFile);
   if (SUCCEEDED(hr))
   {
     IAAFHeader * pHeader = NULL;
@@ -318,10 +347,122 @@ static void ReadAAFFile(aafWChar * pFileName)
         pIdent->Release();
         pIdent = NULL;
 
+        // count Mobs
         aafNumSlots_t n;
         hr = pHeader->CountMobs(kAAFAllMob, &n);
         check(hr);
-        printf("Number of Mobs       = %d\n", n);
+        printf("\nNumber of Mobs       = %d\n", n);
+
+        // Header::Version, Header::ObjectModelVersion
+        aafVersionType_t version = {0};
+        check(pHeader->GetFileRevision (&version) );
+        printf("\nHeader::Version      = %d.%d\n", version.major, version.minor);
+
+        // Public API doesn't have a method to access Header::ObjectModelVersion,
+        // so get it with property direct.
+        printf("Header::ObjectModelVersion = ");
+        IAAFObjectSP pObj;
+        IAAFClassDefSP pClassDef;
+        IAAFPropertyDefSP pPropertyDef;
+        IAAFPropertyValueSP pPropValue;
+        IAAFTypeDefSP pObjVerTypeDef;
+        IAAFTypeDefIntSP pTypeDefInt;
+        aafUInt32 val;
+        check(pHeader->QueryInterface(IID_IAAFObject, (void **)&pObj));
+        check(pObj->GetDefinition (&pClassDef));
+        check(pClassDef->LookupPropertyDef(kAAFPropID_Header_ObjectModelVersion, &pPropertyDef));
+        aafBoolean_t present;
+        check(pObj->IsPropertyPresent(pPropertyDef, &present));
+        aafUInt32 objectModelVersion = 0;
+        if (present)
+        {
+          check(pObj->GetPropertyValue (pPropertyDef, &pPropValue));
+          check(pPropValue->GetType(&pObjVerTypeDef));
+          check(pObjVerTypeDef->QueryInterface(IID_IAAFTypeDefInt, (void**)&pTypeDefInt));
+          check(pTypeDefInt->GetInteger(pPropValue, (aafMemPtr_t) &val, sizeof (val)));
+          objectModelVersion = val;
+          printf("%d\n", objectModelVersion);
+        }
+        else
+          printf("0 (implied by property not being present)\n");
+
+        // Show datadefs, with version number
+        IEnumAAFDataDefsSP pEnumDataDef;
+        IAAFDictionarySP pDictionary;
+        check(pHeader->GetDictionary(&pDictionary));
+        check(pDictionary->GetDataDefs(&pEnumDataDef));
+        IAAFDataDef* pDataDef;
+
+        printf("\nDatadefs             = ");
+        while (SUCCEEDED(pEnumDataDef->NextOne(&pDataDef)))
+        {
+          IAAFDefObjectSP pDefObject;
+          check(pDataDef->QueryInterface(IID_IAAFDefObject, (void**)&pDefObject));
+          pDataDef->Release();
+          pDataDef = NULL;
+
+          aafUID_t id = {0};
+          check(pDefObject->GetAUID(&id));
+
+          aafWChar wchName[500];
+          char chName[1000];
+          check( pDefObject->GetName(wchName, sizeof (wchName)) );
+          convert(chName, sizeof(chName), wchName);
+
+          if (memcmp( &id, &DDEF_Picture_v1, sizeof(id)) == 0)
+            printf("\"%s\" (AAF v1.0)\n", chName);
+          else if (memcmp( &id, &DDEF_Picture_v11, sizeof(id)) == 0)
+            printf("\"%s\" (AAF v1.1)\n", chName);
+          else if (memcmp( &id, &DDEF_Sound_v1, sizeof(id)) == 0)
+            printf("\"%s\" (AAF v1.0)\n", chName);
+          else if (memcmp( &id, &DDEF_Sound_v11, sizeof(id)) == 0)
+            printf("\"%s\" (AAF v1.1)\n", chName);
+          else if (memcmp( &id, &DDEF_Timecode_v1, sizeof(id)) == 0)
+            printf("\"%s\" (AAF v1.0)\n", chName);
+          else if (memcmp( &id, &DDEF_Timecode_v11, sizeof(id)) == 0)
+            printf("\"%s\" (AAF v1.1)\n", chName);
+          else
+            printf("\"%s\"\n", chName);
+          printf("                       ");
+        }
+
+        // Check if file contains TypeDefs known to cause a v1.0 reader to assert.
+        // Known instances of this are UInt32Set and AUIDSet added to the v1.1 SDK.
+        // Cannot use Dictionary::LookupTypeDef to check for them, because this
+        // has the side effect of registering the typedef we are checking for
+        // from the built-in model. Instead, iterate through typedefs (in file)
+        // and check for the known instances.
+        printf("\nTypes incompatible with SDK v1.0.x =");
+        IEnumAAFTypeDefsSP pEnumTypeDef;
+        check(pDictionary->GetTypeDefs(&pEnumTypeDef));
+        IAAFTypeDef* pTypeDef;
+        bool foundToxic = false;
+        while (SUCCEEDED(pEnumTypeDef->NextOne(&pTypeDef)))
+        {
+          IAAFMetaDefinitionSP pMetaDef;
+          check(pTypeDef->QueryInterface(IID_IAAFMetaDefinition, (void**)&pMetaDef));
+          pTypeDef->Release();
+          pTypeDef = NULL;
+
+          aafUID_t typeUID;
+          check(pMetaDef->GetAUID(&typeUID));
+
+          aafWChar wchName[500];
+          char chName[1000];
+          check( pMetaDef->GetName(wchName, sizeof (wchName)) );
+          convert(chName, sizeof(chName), wchName);
+
+          if ((memcmp( &typeUID, &kAAFTypeID_AUIDSet, sizeof(typeUID)) == 0)
+            || (memcmp( &typeUID, &kAAFTypeID_UInt32Set, sizeof(typeUID)) == 0))
+          {
+            printf(" %s", chName);
+            foundToxic = true;
+          }
+        }
+        if (!foundToxic)
+          printf(" (none)");
+        printf("\n\n");
+
       }
       pHeader->Release();
       pHeader = NULL;
@@ -332,6 +473,31 @@ static void ReadAAFFile(aafWChar * pFileName)
 
     pFile->Release();
     pFile = NULL;
+
+    // Get file kind.
+    // Since AAF SDK v1.0.2, the file kind actually identifies the implementation
+    // of the file kind, from which the file kind is inferred.
+    aafUID_t fileKind = {0};
+    aafBool isAAFFile = kAAFFalse;
+
+    check(AAFFileIsAAFFile(pFileName, &fileKind, &isAAFFile));
+    if (isAAFFile)
+    {
+      if (memcmp( &fileKind, &aafFileKindAafM512Binary, sizeof(fileKind)) == 0)
+        printf("Filekind             = 512-byte SS (reading with Microsoft)\n");
+      else if (memcmp( &fileKind, &aafFileKindAafS512Binary, sizeof(fileKind)) == 0)
+        printf("Filekind             = 512-byte SS (reading with Schemasoft)\n");
+      else if (memcmp( &fileKind, &aafFileKindAafG512Binary, sizeof(fileKind)) == 0)
+        printf("Filekind             = 512-byte SS (reading with GSF)\n");
+      else if (memcmp( &fileKind, &aafFileKindAafM4KBinary, sizeof(fileKind)) == 0)
+        printf("Filekind             = 4096-byte SS (reading with Microsoft)\n");
+      else if (memcmp( &fileKind, &aafFileKindAafS4KBinary, sizeof(fileKind)) == 0)
+        printf("Filekind             = 4096-byte SS (reading with Schemasoft)\n");
+      else if (memcmp( &fileKind, &aafFileKindAafG4KBinary, sizeof(fileKind)) == 0)
+        printf("Filekind             = 4096-byte SS (reading with GSF)\n");
+      else
+        printf("Filekind             = Recognized by SDK but unknown to AAFInfo\n");
+    }
   }
   else
   {
