@@ -116,7 +116,7 @@ Adds an Edgecode track and Edgecode to the specified Source Mob.
   // @devnote based on omfmMobAddEdgecodeClip)
 
 AD_XMETHOD5(ValidateTimecodeRange,
-            [in\\\,ref], objIn, AAFDataDefinition, mediaKind,
+            [in\,ref], objIn, AAFDataDefinition, mediaKind,
             Data kind for the track to be added. The mediaKind parameter
   // requires a data kind valid for a media stream. 
   // @ex Valid data kinds are: |
