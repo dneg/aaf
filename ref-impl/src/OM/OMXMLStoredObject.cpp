@@ -35,7 +35,7 @@
 #include "OMWeakReferenceSet.h"
 #include "OMWeakReferenceVector.h"
 
-#include "OMDiskRawStorage.h"
+#include "OMCachedDiskRawStorage.h"
 #include "OMXMLStoredStream.h"
 #include "OMPropertySetIterator.h"
 
@@ -679,7 +679,7 @@ OMStoredStream* OMXMLStoredObject::createStoredStream(
   TRACE("OMXMLStoredObject::createStoredStream");
 
   wchar_t* name = temporaryFileName(property);
-  OMDiskRawStorage* store = OMDiskRawStorage::openNewModify(name);
+  OMRawStorage* store = OMCachedDiskRawStorage::openNewModify(name);
   OMXMLStoredStream* result = new OMXMLStoredStream(store, name);
   ASSERT("Valid heap pointer", result != 0);
   return result;
