@@ -76,9 +76,6 @@ const bool true = 1;
 #endif
 #endif
 
-#define SUCCESS (1)
-#define FAILURE (2)
-
 // The following should be provided in
 // a header file shared between this dumper and the
 // toolkit. That header doesn't yet exist.
@@ -504,7 +501,7 @@ void reportAssertionFailure(char* name,
        << lineNumber << " in file \"" << fileName << "\"." << endl;
   cerr << "The condition \"" << expressionString << "\" was violated." << endl;
 
-  exit(FAILURE);
+  exit(EXIT_FAILURE);
 }
 
 // Assertions are on unless they are explicitly turned off.
@@ -602,7 +599,7 @@ void fatalError(char* routineName, char* message)
        << ": Fatal error in routine \"" << routineName << "\". "
        << message << endl;
 
-  exit(FAILURE);
+  exit(EXIT_FAILURE);
 }
 
 void warning(char* routineName, char* message)
@@ -1894,7 +1891,7 @@ void dumpObject(IStorage* storage, char* pathName, int isRoot)
          << ": Error : Unrecognized format version ("
          << _formatVersion
          << "). Highest recognized version is " << HIGHVERSION << "." << endl;
-    exit(FAILURE);
+    exit(EXIT_FAILURE);
   }
 
   // Should compare the format version for the file (the version of
@@ -1957,20 +1954,20 @@ void openStorage(char* fileName, IStorage** storage)
     cerr << programName << ": Error: "
          << "\"" << fileName << "\" is not a valid file name."
          << endl;
-    exit(FAILURE);
+    exit(EXIT_FAILURE);
     break;
     
   case STG_E_FILENOTFOUND:
     cerr << programName <<": Error: "
          << "File \"" << fileName << "\" not found."
          << endl;
-    exit(FAILURE);
+    exit(EXIT_FAILURE);
     break;
   case STG_E_PATHNOTFOUND:
     cerr << programName <<": Error: "
          << "Path \"" << fileName << "\" not found."
          << endl;
-    exit(FAILURE);
+    exit(EXIT_FAILURE);
     break;
     
   }
@@ -1981,7 +1978,7 @@ void openStorage(char* fileName, IStorage** storage)
   
   if (result != S_OK) {
     cout << "\"" << fileName << "\" is NOT a structured storage file." << endl;
-    exit(FAILURE);
+    exit(EXIT_FAILURE);
   }
   
   result = StgOpenStorage(
@@ -2270,7 +2267,7 @@ void ignore(OMUInt32 pid)
          << ") of property ids to ignore exceeded."
          << endl;
     usage();
-    exit(FAILURE);
+    exit(EXIT_FAILURE);
   }
 }
 
@@ -2359,7 +2356,7 @@ int main(int argumentCount, char* argumentVector[])
                  << "\" is not a valid property id."
                  << endl;
             usage();
-            exit(FAILURE);
+            exit(EXIT_FAILURE);
           }
           if (!ignoring(pid)) {
             ignore(pid);
@@ -2375,7 +2372,7 @@ int main(int argumentCount, char* argumentVector[])
                << ": Error : -z must be followed by a property id."
                << endl;
           usage();
-          exit(FAILURE);
+          exit(EXIT_FAILURE);
         }
         break;
       case 'm':
@@ -2405,7 +2402,7 @@ int main(int argumentCount, char* argumentVector[])
                  << "\" is not a valid byte count."
                  << endl;
             usage();
-            exit(FAILURE);
+            exit(EXIT_FAILURE);
           }
           mLimit = bytes;
         } else {
@@ -2413,12 +2410,12 @@ int main(int argumentCount, char* argumentVector[])
                << ": Error : -m must be followed by a byte count."
                << endl;
           usage();
-          exit(FAILURE);
+          exit(EXIT_FAILURE);
         }
         break;
       case 'h':
         usage();
-        exit(SUCCESS);
+        exit(EXIT_SUCCESS);
         break;
       default:
         cerr << programName
@@ -2427,7 +2424,7 @@ int main(int argumentCount, char* argumentVector[])
              << " is not a recognized option."
              << endl;
         usage();
-        exit(FAILURE);
+        exit(EXIT_FAILURE);
         break;
       }
       flagCount = flagCount + 1;
@@ -2442,7 +2439,7 @@ int main(int argumentCount, char* argumentVector[])
            << ": Error : -z not valid with -r."
            << endl;
       usage();
-      exit(FAILURE);
+      exit(EXIT_FAILURE);
     }
   }
 
@@ -2452,7 +2449,7 @@ int main(int argumentCount, char* argumentVector[])
       << fileCount << ")."
       << endl;
     usage();
-    exit(FAILURE);
+    exit(EXIT_FAILURE);
   }
   
   switch (option) {
@@ -2493,6 +2490,6 @@ int main(int argumentCount, char* argumentVector[])
 
   }
 
-  return (SUCCESS);
+  return (EXIT_SUCCESS);
 }
 
