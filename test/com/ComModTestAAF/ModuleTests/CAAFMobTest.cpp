@@ -47,7 +47,7 @@ static const aafTimeStamp_t creationTimeStamp = { 1941, 12, 7, 5, 31, 12, 1 };
 static const aafTimeStamp_t modificationTimeStamp = { 1941, 12, 7, 5, 31, 12, 2 };
 
 // {21F2083C-B260-11d3-BFFE-00104BC9156D}
-static const aafUID_t MOBTestID = 
+static const aafMobID_t MOBTestID = 
 { 0x21f2083c, 0xb260, 0x11d3, { 0xbf, 0xfe, 0x0, 0x10, 0x4b, 0xc9, 0x15, 0x6d } };
 
 
@@ -257,7 +257,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		{
 		  aafWChar		name[500], slotName[500];
 		  aafNumSlots_t	numSlots;
-		  aafUID_t		mobID;
+		  aafMobID_t		mobID;
 		  aafSlotID_t		trackID;
       aafInt32 nameBufLen = 0;
 

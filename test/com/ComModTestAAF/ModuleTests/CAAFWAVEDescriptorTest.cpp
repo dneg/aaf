@@ -200,7 +200,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFMob*	pMob = NULL;
   IAAFWAVEDescriptor*	pWAVEDesc = NULL;
   IAAFEssenceDescriptor*	pEssDesc = NULL;
-	aafUID_t		newUID;
+	aafMobID_t		newMobID;
 	HRESULT			hr = AAFRESULT_SUCCESS;
 
 
@@ -222,8 +222,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 							(IUnknown **)&pSourceMob));
 		checkResult(pSourceMob->QueryInterface(IID_IAAFMob, (void **)&pMob));
 
-		checkResult(CoCreateGuid((GUID *)&newUID));
-		checkResult(pMob->SetMobID(newUID));
+		checkResult(CoCreateGuid((GUID *)&newMobID));
+		checkResult(pMob->SetMobID(newMobID));
 		checkResult(pMob->SetName(L"WAVEDescriptorTest"));
 		checkResult(pDictionary->CreateInstance(AUID_AAFWAVEDescriptor,
 									  IID_IAAFWAVEDescriptor, 

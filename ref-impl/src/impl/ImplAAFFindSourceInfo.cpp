@@ -184,7 +184,7 @@ AAFRESULT STDMETHODCALLTYPE
 		}
 		else
 		{
-			pSourceRef->sourceID = NilMOBID;
+			memset(&pSourceRef->sourceID, 0, sizeof(pSourceRef->sourceID));
 		}
 	}
 	XEXCEPT

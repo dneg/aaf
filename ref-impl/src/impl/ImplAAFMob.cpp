@@ -86,7 +86,6 @@
 #include "AAFResult.h"
 #include "aafCvt.h"
 #include "AAFUtils.h"
-#include "AAFDefUIDs.h"
 
 extern "C" const aafClassID_t CLSID_EnumAAFMobSlots;
 extern "C" const aafClassID_t CLSID_EnumAAFTaggedValues;
@@ -270,7 +269,7 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFMob::GetMobID (aafUID_t *pMobID)
+    ImplAAFMob::GetMobID (aafMobID_t *pMobID)
 {
 	AAFRESULT aafError = AAFRESULT_SUCCESS;
 
@@ -428,7 +427,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFMob::SetMobID (const aafUID_t & newMobID)
+    ImplAAFMob::SetMobID (aafMobID_constref newMobID)
 {
 	AAFRESULT				hr = AAFRESULT_SUCCESS;
 	ImplAAFMob				*mobPtr = NULL;
@@ -1265,8 +1264,8 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFMob::ChangeRef (const aafUID_t & oldMobID,
-                           const aafUID_t & newMobID)
+    ImplAAFMob::ChangeRef (aafMobID_constref oldMobID,
+                           aafMobID_constref newMobID)
 {
 	ImplEnumAAFMobSlots		*iter = NULL;
 	ImplAAFMobSlot			*slot = NULL;
@@ -1329,7 +1328,7 @@ AAFRESULT STDMETHODCALLTYPE
                            ImplAAFMob ** /*destMob*/)
 {
 #if FULL_TOOLKIT
-    aafUID_t saveMobID, newMobID;
+    aafMobID_t saveMobID, newMobID;
 	aafString destMobName = NULL;
     AAFMob * tmpDestMob = NULL;
 	AAFObject *tmpDestMedia = NULL;
@@ -1752,7 +1751,7 @@ AAFRESULT ImplAAFMob::FindNextMob(ImplAAFMobSlot *track,
 	aafBool					isMask = AAFFalse, reverse = AAFFalse;
 	aafSourceRef_t			sourceRef;
 	ImplAAFMob				*nextMob = NULL;
-	aafUID_t				nullUID = NilMOBID;		// Need "isNIL" utility
+  aafMobID_t				nullMobID = { 0 };		// Need "isNIL" utility
 	ImplAAFMobSlot 			*nextTrack = NULL;
 	aafSlotID_t				tmpTrackID, nextTrackID;
 	aafPosition_t			tmpPos, convertPos;
@@ -1775,7 +1774,7 @@ AAFRESULT ImplAAFMob::FindNextMob(ImplAAFMobSlot *track,
 		
 		
 		CHECK(sclp->GetSourceReference(&sourceRef));
-		if (EqualAUID(&nullUID, &sourceRef.sourceID))
+		if (memcmp(&nullMobID, &sourceRef.sourceID, sizeof(sourceRef.sourceID)) == 0)
 		{
 			RAISE(AAFRESULT_TRAVERSAL_NOT_POSS);
 		}

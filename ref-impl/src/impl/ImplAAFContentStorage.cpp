@@ -78,7 +78,7 @@ ImplAAFContentStorage::ImplAAFContentStorage ()
 	_persistentProperties.put(_mobs.address());
 	_persistentProperties.put(_essenceData.address());
 
-	NewUIDTable(NULL, 100, &_mobIndex);		//!!! Handle error codes
+	NewMobIDTable(100, &_mobIndex);		//!!! Handle error codes
 //	(void)SetTableDispose(_mobIndex, ReleaseMobRefs);
 }
 
@@ -123,7 +123,7 @@ ImplAAFContentStorage::~ImplAAFContentStorage ()
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFContentStorage::LookupMob (const aafUID_t & mobID,
+    ImplAAFContentStorage::LookupMob (aafMobID_constref mobID,
                            ImplAAFMob **ppMob)
 {
 	ImplAAFMob			*tmpMob;
@@ -131,7 +131,7 @@ AAFRESULT STDMETHODCALLTYPE
 	XPROTECT()
 	  {
 		/* Get the mob out of the mob hash table */
-		tmpMob = (ImplAAFMob *)TableUIDLookupPtr(_mobIndex, mobID);
+		tmpMob = (ImplAAFMob *)TableMobIDLookupPtr(_mobIndex, mobID);
 
 		if (tmpMob)
 			{
@@ -275,7 +275,7 @@ AAFRESULT
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFContentStorage::AddMob (ImplAAFMob *pMob)
 {
-	aafUID_t	mobID;
+	aafMobID_t	mobID;
 	ImplAAFMob	*test;
 
 	if (NULL == pMob)
@@ -292,7 +292,7 @@ AAFRESULT STDMETHODCALLTYPE
 			// trr - We are saving a copy of pointer in _mobs so we need
 			// to bump its reference count.
 			pMob->AcquireReference();
-			CHECK(TableAddUID(_mobIndex, mobID, pMob, kAafTableDupError));
+			CHECK(TableAddMobID(_mobIndex, mobID, pMob, kAafTableDupError));
 		}
 		else
 			RAISE(AAFRESULT_DUPLICATE_MOBID);
@@ -309,14 +309,14 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFContentStorage::RemoveMob (ImplAAFMob *pMob)
 {
-	aafUID_t	mobID;
+	aafMobID_t	mobID;
 	if (NULL == pMob)
 		return AAFRESULT_NULL_PARAM;
 
 	XPROTECT()
 	{
 		CHECK(pMob->GetMobID(&mobID));
-		CHECK(TableRemoveUID(_mobIndex, mobID));
+		CHECK(TableRemoveMobID(_mobIndex, mobID));
 //!!!	_mobs.removeValue(pMob);	// This call doesn't exist yet
 	} /* XPROTECT */
 	XEXCEPT
@@ -328,17 +328,17 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 AAFRESULT
-    ImplAAFContentStorage::ChangeIndexedMobID (ImplAAFMob *pMob, const aafUID_t & newID)
+    ImplAAFContentStorage::ChangeIndexedMobID (ImplAAFMob *pMob, aafMobID_constref newID)
 {
-	aafUID_t	mobID;
+	aafMobID_t	mobID;
 	if (NULL == pMob)
 		return AAFRESULT_NULL_PARAM;
 
 	XPROTECT()
 	{
 		CHECK(pMob->GetMobID(&mobID));
-		CHECK(TableAddUID(_mobIndex, newID, pMob, kAafTableDupError));
-		CHECK(TableRemoveUID(_mobIndex, mobID));
+		CHECK(TableAddMobID(_mobIndex, newID, pMob, kAafTableDupError));
+		CHECK(TableRemoveMobID(_mobIndex, mobID));
 	} /* XPROTECT */
 	XEXCEPT
 	{
@@ -364,12 +364,12 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFContentStorage::IsEssenceDataPresent (const aafUID_t & fileMobID,
+    ImplAAFContentStorage::IsEssenceDataPresent (aafMobID_constref fileMobID,
                            aafFileFormat_t fmt,
                            aafBool *pResult)
 {
 	aafUInt32			numEssence, n;
-	aafUID_t			testMobID;
+	aafMobID_t			testMobID;
 	ImplAAFEssenceData	*testData = NULL;
 
 	XPROTECT()
@@ -381,7 +381,7 @@ AAFRESULT STDMETHODCALLTYPE
 		{
 			CHECK(GetNthEssenceData(n, &testData));
 			CHECK(testData->GetFileMobID (&testMobID));
-			if(EqualAUID(&fileMobID, &testMobID))
+			if(memcmp(&fileMobID, &testMobID, sizeof(testMobID)) == 0)
 			{
 				*pResult = AAFTrue;
 			}
@@ -404,12 +404,12 @@ AAFRESULT STDMETHODCALLTYPE
 
 //Internal function only.  Not exposed through the COM API
 AAFRESULT
-    ImplAAFContentStorage::LookupEssence (const aafUID_t & fileMobID,
+    ImplAAFContentStorage::LookupEssence (aafMobID_constref fileMobID,
                            ImplAAFEssenceData **ppEssence)
 {
 	aafUInt32		numEssence, n;
 	aafBool			found;
-	aafUID_t		testMobID;
+	aafMobID_t		testMobID;
 	ImplAAFEssenceData	*testData = NULL;
 
 	XPROTECT()
@@ -420,7 +420,7 @@ AAFRESULT
 		{
 			CHECK(GetNthEssenceData(n, &testData));
 			CHECK(testData->GetFileMobID (&testMobID));
-			if(EqualAUID(&fileMobID, &testMobID))
+			if(memcmp(&fileMobID, &testMobID, sizeof(testMobID)) == 0)
 			{
 				found = AAFTrue;
 				*ppEssence = testData;
@@ -481,7 +481,7 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFContentStorage::AddEssenceData (ImplAAFEssenceData * pEssenceData)
 {
-	aafUID_t	mobID;
+	aafMobID_t	mobID;
 	ImplAAFMob	*pMatchingMob = NULL;
 
 	if (NULL == pEssenceData)
@@ -536,7 +536,7 @@ AAFRESULT ImplAAFContentStorage::LoadMobTables(void)
 	size_t				mobTableSize;
 	aafInt32			siz, n;
 	ImplAAFMob			*mob;
-	aafUID_t			uid;
+	aafMobID_t			mobID;
 	
 	XPROTECT()
 	{
@@ -555,13 +555,13 @@ AAFRESULT ImplAAFContentStorage::LoadMobTables(void)
 			TableDispose(_mobIndex);
 			_mobIndex = 0;
 		}
-		CHECK(NewUIDTable(NULL, mobTableSize, &(_mobIndex)));
+		CHECK(NewMobIDTable(mobTableSize, &(_mobIndex)));
 
 		for(n = 0; n < siz; n++)
 		{
 			_mobs.getValueAt(mob, n);
-			CHECK(mob->GetMobID(&uid));
-			CHECK(TableAddUID(_mobIndex, uid, mob, kAafTableDupAddDup));
+			CHECK(mob->GetMobID(&mobID));
+			CHECK(TableAddMobID(_mobIndex, mobID, mob, kAafTableDupAddDup));
 		}
 	}
 	XEXCEPT
@@ -572,11 +572,11 @@ AAFRESULT ImplAAFContentStorage::LoadMobTables(void)
 	return (AAFRESULT_SUCCESS);
 }
 
-AAFRESULT ImplAAFContentStorage::UnlinkMobID(const aafUID_t & mobID)
+AAFRESULT ImplAAFContentStorage::UnlinkMobID(aafMobID_constref mobID)
 {
 	XPROTECT()
 	{
-		CHECK(TableRemoveUID(_mobIndex, mobID));
+		CHECK(TableRemoveMobID(_mobIndex, mobID));
 	} /* XPROTECT */
 	XEXCEPT
 	{
