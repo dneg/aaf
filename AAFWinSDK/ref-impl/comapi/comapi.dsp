@@ -42,7 +42,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /MT /W3 /GR /GX /O2 /I "../../../ref-impl/src/com-api" /I "../../../ref-impl/include/com-api/" /I "../../../ref-impl/src/impl" /I "../../../ref-impl/src/Om" /I "../../../ref-impl/include/OM" /I "../../../ref-impl/src/com-api/com-dll" /I "../include/comidl" /D "NDEBUG" /D "_WIN32" /D "_WINDOWS" /D "UNICODE" /D "_UNICODE" /D "WIN32" /D "BOB_TEST" /D "AAF_MODULE_TEST" /YX /FD /c
+# ADD CPP /nologo /MT /W3 /GR /GX /O2 /I "../../../ref-impl/src/com-api" /I "../../../ref-impl/include/com-api/" /I "../../../ref-impl/src/impl" /I "../../../ref-impl/src/Om" /I "../../../ref-impl/include/OM" /I "../../../ref-impl/src/com-api/com-dll" /I "../include/comidl" /I "../../../ref-impl/include/ref-api" /D "NDEBUG" /D "_WIN32" /D "_WINDOWS" /D "UNICODE" /D "_UNICODE" /D "WIN32" /D "BOB_TEST" /D "AAF_MODULE_TEST" /YX /FD /c
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o NUL /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o NUL /win32
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -72,7 +72,7 @@ PostBuild_Cmds=regsvr32 /s Release/AAFCOAPI.dll
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /MTd /W3 /Gm /GR /GX /Zi /Od /I "../../../ref-impl/src/com-api" /I "../../../ref-impl/include/com-api/" /I "../../../ref-impl/src/impl" /I "../../../ref-impl/src/Om" /I "../../../ref-impl/include/OM" /I "../../../ref-impl/src/com-api/com-dll" /I "../include/comidl" /D "_DEBUG" /D "OM_ENABLE_DEBUG" /D "_WIN32" /D "_WINDOWS" /D "UNICODE" /D "_UNICODE" /D "WIN32" /D "BOB_TEST" /D "AAF_MODULE_TEST" /FR /YX /FD /c
+# ADD CPP /nologo /MTd /W3 /Gm /GR /GX /Zi /Od /I "../../../ref-impl/src/com-api" /I "../../../ref-impl/include/com-api/" /I "../../../ref-impl/src/impl" /I "../../../ref-impl/src/Om" /I "../../../ref-impl/include/OM" /I "../../../ref-impl/src/com-api/com-dll" /I "../include/comidl" /I "../../../ref-impl/include/ref-api" /D "_DEBUG" /D "OM_ENABLE_DEBUG" /D "_WIN32" /D "_WINDOWS" /D "UNICODE" /D "_UNICODE" /D "WIN32" /D "BOB_TEST" /D "AAF_MODULE_TEST" /FR /YX /FD /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o NUL /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o NUL /win32
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -105,14 +105,6 @@ SOURCE="..\..\..\ref-impl\src\com-api\com-dll\AAFCOM.DEF"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\com-api\com-dll\AAFCOMPlatform.h"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\com-api\com-dll\AAFCOMPlatformTypes.h"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\src\com-api\com-dll\AAFObjectCreation.cpp"
 # End Source File
 # Begin Source File
@@ -134,10 +126,6 @@ SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFClassDefTest.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\com-api\com-dll\CAAFClassFactory.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\com-api\com-dll\CAAFClassFactory.h"
 # End Source File
 # Begin Source File
 
@@ -273,10 +261,6 @@ SOURCE="..\..\..\ref-impl\src\com-api\com-dll\CAAFInProcServer.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\com-api\com-dll\CAAFInProcServer.h"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFIntegerAttribute.cpp"
 # End Source File
 # Begin Source File
@@ -374,10 +358,6 @@ SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFMobTest.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\com-api\com-dll\CAAFModuleTest.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\com-api\com-dll\CAAFModuleTest.h"
 # End Source File
 # Begin Source File
 
@@ -481,10 +461,6 @@ SOURCE="..\..\..\ref-impl\src\com-api\com-dll\CAAFServer.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\com-api\com-dll\CAAFServer.h"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFSession.cpp"
 # End Source File
 # Begin Source File
@@ -582,10 +558,6 @@ SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFUnixLocatorTest.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\com-api\com-dll\CAAFUnknown.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\com-api\com-dll\CAAFUnknown.h"
 # End Source File
 # Begin Source File
 
