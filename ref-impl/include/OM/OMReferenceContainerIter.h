@@ -29,6 +29,8 @@
 #ifndef OMREFERENCECONTAINERITER_H
 #define OMREFERENCECONTAINERITER_H
 
+#include "OMContainerIterator.h"
+
 // @class Abstract base class for iterators over Object Manager reference
 //        container properties.
 //        The references may be Strong or Weak.
