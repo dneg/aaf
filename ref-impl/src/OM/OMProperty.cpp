@@ -44,7 +44,7 @@
   //   @parm The stored form of this <c OMProperty>.
   //   @parm The name of this <c OMProperty>.
 OMProperty::OMProperty(const OMPropertyId propertyId,
-                       const int storedForm,
+                       const OMStoredForm storedForm,
                        const char* name)
 : _propertyId(propertyId), _storedForm(storedForm), _name(name),
   _propertySet(0), _definition(0), _type(0),
