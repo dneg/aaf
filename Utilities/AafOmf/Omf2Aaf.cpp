@@ -85,17 +85,6 @@ Omf2Aaf::Omf2Aaf() : pFile(NULL), pHeader(NULL), pDictionary(NULL)
 // ============================================================================
 Omf2Aaf::~Omf2Aaf()
 {
-	if (gpGlobals->bOMFFileOpen)
-	{
-		OMFFileClose();
-		gpGlobals->bOMFFileOpen = AAFFalse;
-	}
-
-	if (gpGlobals->bAAFFileOpen)
-	{
-		AAFFileClose();
-		gpGlobals->bAAFFileOpen = AAFFalse;
-	}
 }
 // ============================================================================
 // ConvertFile
@@ -108,19 +97,31 @@ HRESULT Omf2Aaf::ConvertFile ()
 	HRESULT		rc = AAFRESULT_SUCCESS;
 
 	rc = OMFFileOpen( gpGlobals->sInFileName );
-	if (FAILED(rc))
-		return rc;
+	if (SUCCEEDED(rc))
+	{
+		rc = OpenOutputFile();
+		if (SUCCEEDED(rc))
+		{
+			rc = ConvertOMFHeader();
+			if (SUCCEEDED(rc))
+			{
+				rc = OMFFileRead();
+			}
+		}
+	}
 
-	rc = OpenOutputFile();
-	if (FAILED(rc))
-		return rc;
+	if (gpGlobals->bOMFFileOpen)
+	{
+		OMFFileClose();
+		gpGlobals->bOMFFileOpen = AAFFalse;
+	}
 
-	rc = ConvertOMFHeader();
-	if (FAILED(rc))
-		return rc;
-
-
-	return (OMFFileRead());
+	if (gpGlobals->bAAFFileOpen)
+	{
+		AAFFileClose();
+		gpGlobals->bAAFFileOpen = AAFFalse;
+	}
+	return rc;
 }
 
 // ============================================================================
@@ -218,6 +219,7 @@ HRESULT Omf2Aaf::AAFFileOpen( char* pFileName)
     aafWChar*				pwProductVersionString = NULL;
     aafWChar*				pwPlatform;
 	aafBool					bAddExtraIdent = AAFFalse;
+	OMF2::omfProductVersion_t OMFVersion;
 
 	aafProductIdentification_t	ProductInfo;
 	IAAFIdentification*		pIdent = NULL;
@@ -248,10 +250,25 @@ HRESULT Omf2Aaf::AAFFileOpen( char* pFileName)
 				strcpy(text, "<Not Specified>");
 			UTLStrAToStrW(text, &pwProductVersionString);
 			ProductInfo.productVersionString = pwProductVersionString;
+			if (OMF2::omfsReadProductVersionType(OMFFileHdl, OMFIdent, OMF2::OMIDNTProductVersion, &OMFVersion) != OMF2::OM_ERR_NONE)
+			{
+				OMFVersion.major = 0;
+				OMFVersion.minor = 0;
+				OMFVersion.tertiary = 0;
+				OMFVersion.patchLevel = 0;
+				OMFVersion.type = OMF2::kVersionUnknown;
+			}
+			ProductInfo.productVersion.major = OMFVersion.major;
+			ProductInfo.productVersion.minor = OMFVersion.minor;
+			ProductInfo.productVersion.tertiary = OMFVersion.tertiary;
+			ProductInfo.productVersion.patchLevel = OMFVersion.type;
+			ProductInfo.productVersion.type = (aafProductReleaseType_t)OMFVersion.type;
+
 			if(OMF2::omfsReadString(OMFFileHdl, OMFIdent, OMF2::OMIDNTPlatform, text, sizeof(text)) != OMF2::OM_ERR_NONE)
 				strcpy(text, "<Not Specified>");
 			UTLStrAToStrW(text, &pwPlatform);
 			ProductInfo.platform = pwPlatform;
+
 			rc = AAFFileOpenNewModify(pwFileName, 0, &ProductInfo, &pFile);
 			bAddExtraIdent = AAFTrue;
 		}
@@ -259,7 +276,7 @@ HRESULT Omf2Aaf::AAFFileOpen( char* pFileName)
 	else
 	{
 		ProductInfo.companyName = L"Company Name";
-		ProductInfo.productName = L"OMF to AAF File Conversion";
+		ProductInfo.productName = L"AAF/OMF File Conversion";
 		ProductInfo.productVersion.major = 1;
 		ProductInfo.productVersion.minor = 0;
 		ProductInfo.productVersion.tertiary = 0;
@@ -436,7 +453,7 @@ HRESULT Omf2Aaf::OMFFileRead()
 							UTLerrprintf("ERROR:Unspecified error convert basic MOB data\n");
 						rc = TraverseOMFMob( OMFMob, pMob);
 						if (rc != AAFRESULT_SUCCESS)
-							UTLerrprintf("ERROR:Unspecied error Traversing MOB\n ");
+							UTLerrprintf("ERROR:Unspecified error Traversing MOB\n ");
 						rc = pHeader->AppendMob(pMob);
 						if (rc != AAFRESULT_SUCCESS)
 							UTLerrprintf("ERROR:Unspecified error appending MOB to the file\n");
@@ -642,7 +659,7 @@ HRESULT Omf2Aaf::ConvertOMFMediaDataObject( OMF2::omfObject_t obj )
 			idProperty = OMF2::OMTIFFData;
 			bConvertMedia = AAFTrue;
 			OMF2::omfiDatakindLookup(OMFFileHdl, "omfi:data:Picture", &datakind, (OMF2::omfErr_t *)&rc);
-
+			pTIFFData->Release();
 		}
 		else if (strncmp(id, "AIFC", 4) == 0)
 		{
@@ -657,6 +674,7 @@ HRESULT Omf2Aaf::ConvertOMFMediaDataObject( OMF2::omfObject_t obj )
 			idProperty = OMF2::OMAIFCData;
 			OMF2::omfiDatakindLookup(OMFFileHdl, "omfi:data:Sound", &datakind, (OMF2::omfErr_t *)&rc);
 			bConvertMedia = AAFTrue;
+			pAIFCData->Release();
 		}
 		else if (strncmp(id, "WAVE", 4) == 0 )
 		{
@@ -671,6 +689,7 @@ HRESULT Omf2Aaf::ConvertOMFMediaDataObject( OMF2::omfObject_t obj )
 			idProperty = OMF2::OMWAVEData;
 			OMF2::omfiDatakindLookup(OMFFileHdl, "omfi:data:Sound", &datakind, (OMF2::omfErr_t *)&rc);
 			bConvertMedia = AAFTrue;
+			pWAVEData->Release();
 		}
 		else if (strncmp(id, "JPEG", 4) == 0)
 		{
@@ -685,6 +704,7 @@ HRESULT Omf2Aaf::ConvertOMFMediaDataObject( OMF2::omfObject_t obj )
 			idProperty = OMF2::OMIDATImageData;
 			OMF2::omfiDatakindLookup(OMFFileHdl, "omfi:data:Picture", &datakind, (OMF2::omfErr_t *)&rc);
 			bConvertMedia = AAFTrue;
+			pJPEGData->Release();
 		}
 		else
 		{
@@ -776,6 +796,9 @@ HRESULT Omf2Aaf::ConvertOMFDatakind( OMF2::omfDDefObj_t datakind,
 		*pDatadef = DDEF_Audio;
 	else if(strncmp("omfi:data:Timecode", datakindName, 18) == 0)
 		*pDatadef = DDEF_Timecode;
+	else if(strncmp("omfi:data:Edgecode", datakindName, 18) == 0)
+		*pDatadef = DDEF_Edgecode;
+
 	else
 	{
 		UTLstdprintf("Invalid DataDef :%s Found in sequence\n", datakindName);
@@ -968,7 +991,8 @@ HRESULT Omf2Aaf::TraverseOMFMob( OMF2::omfObject_t obj, IAAFMob* pMob )
 	OMF2::omfPosition_t		OMFOrigin;
 	OMF2::omfErr_t			OMFError;
 	char					sTrackName[32];
-	aafWChar*				pwTrackName = NULL;					
+	aafWChar*				pwTrackName = NULL;	
+	aafUInt32				physicalTrackNumber = 0;			
 
 	IAAFMobSlot*			pMobSlot = NULL;
 	IAAFSegment*			pSegment = NULL;
@@ -999,6 +1023,7 @@ HRESULT Omf2Aaf::TraverseOMFMob( OMF2::omfObject_t obj, IAAFMob* pMob )
 			{
 				rc = OMF2::omfiTrackGetInfo(OMFFileHdl, obj, OMFSlot, &OMFeditRate, sizeof(sTrackName),
 								sTrackName, &OMFOrigin, &OMFTrackID, &OMFSegment);
+				OMF2::omfiTrackGetPhysicalNum(OMFFileHdl, OMFSlot, (OMF2::omfUInt32 *)&physicalTrackNumber);
 				if (AAFRESULT_SUCCESS == rc)
 				{
 					ProcessOMFComponent(OMFSegment, &pComponent);
@@ -1007,10 +1032,32 @@ HRESULT Omf2Aaf::TraverseOMFMob( OMF2::omfObject_t obj, IAAFMob* pMob )
 					{
 						IncIndentLevel();
 						UTLStrAToStrW(sTrackName, &pwTrackName);
-						pMob->AppendNewSlot( pSegment, (aafSlotID_t)OMFTrackID, pwTrackName, &pMobSlot );
+						// OMF ONLY created timeline mob slots 
+						// so that is what we going to do here
+						rc = pDictionary->CreateInstance(&AUID_AAFTimelineMobSlot,
+														 IID_IAAFTimelineMobSlot,
+														 (IUnknown **)&pTimelineMobSlot);
+						rc = pTimelineMobSlot->QueryInterface(IID_IAAFMobSlot, (void **)&pMobSlot);
+						pTimelineMobSlot->SetEditRate((aafRational_t *)&OMFeditRate);
+						pTimelineMobSlot->SetOrigin((aafPosition_t)OMFOrigin);
+						pMobSlot->SetName(pwTrackName);
+						pMobSlot->SetSlotID((aafSlotID_t)OMFTrackID);
+						pMobSlot->SetSegment(pSegment);
+						pMobSlot->SetPhysicalNum(physicalTrackNumber);
+						rc = pMob->AppendSlot( pMobSlot );
 						if (gpGlobals->bVerboseMode)
 						{
 							UTLstdprintf("%sConverted SlotID: %d, Name: %s\n",gpGlobals->indentLeader, (int)OMFTrackID, sTrackName);
+						}
+						if (pTimelineMobSlot)
+						{
+							pTimelineMobSlot->Release();
+							pTimelineMobSlot = NULL;
+						}
+						if (pMobSlot)
+						{
+							pMobSlot->Release();
+							pMobSlot = NULL;
 						}
 						DecIndentLevel();
 					}
@@ -1212,6 +1259,7 @@ HRESULT Omf2Aaf::ProcessOMFComponent(OMF2::omfObject_t OMFSegment, IAAFComponent
 	else if (OMF2::omfiIsAnEdgecodeClip(OMFFileHdl, OMFSegment, (OMF2::omfErr_t *)&rc) )
 	{
 		// Get edgecode data
+		IAAFComponent*	pTempComp;
 		OMF2::omfiEdgecodeGetInfo(OMFFileHdl, OMFSegment, &OMFDatakind, &OMFLength, &OMFEdgecode);
 		edgecode.startFrame = OMFEdgecode.startFrame;
 		edgecode.filmKind = (aafFilmType_t)OMFEdgecode.filmKind;
@@ -1227,12 +1275,15 @@ HRESULT Omf2Aaf::ProcessOMFComponent(OMF2::omfObject_t OMFSegment, IAAFComponent
 			UTLstdprintf("%sstart Frame\t: %ld\n", gpGlobals->indentLeader, edgecode.startFrame);
 			DecIndentLevel();				
 		}
+		ConvertOMFDatakind(OMFDatakind, &datadef);
 		rc = pDictionary->CreateInstance(&AUID_AAFEdgecode,
 										 IID_IAAFEdgecode,
 										 (IUnknown **)&pEdgecode);
 
 		pEdgecode->Create((aafLength_t)OMFLength, edgecode);
 		pEdgecode->QueryInterface(IID_IAAFComponent, (void **)ppComponent);
+		pTempComp = *ppComponent;
+		pTempComp->SetDataDef(&datadef);
 	}
 	else if (OMF2::omfiIsAFiller(OMFFileHdl, OMFSegment, (OMF2::omfErr_t *)&rc) )
 	{
