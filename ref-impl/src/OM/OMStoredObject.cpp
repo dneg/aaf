@@ -597,6 +597,29 @@ void OMStoredObject::restore(OMDataStream& stream, size_t externalSize)
   ASSERT("Unimplemented code not reached", false);
 }
 
+  // @mfunc Open the <c OMStoredStream> representing the property
+  //        <p property> contained within this <c OMStoredObject>.
+  //   @parm TBS
+  //   @rdesc TBS
+OMStoredStream* OMStoredObject::openStoredStream(const OMDataStream& property)
+{
+  TRACE("OMStoredObject::openStoredStream");
+  ASSERT("Unimplemented code not reached", false);
+  return 0;
+}
+
+  // @mfunc Create an <c OMStoredStream> representing the property
+  //        <p stream> contained within this <c OMStoredObject>.
+  //   @parm TBS
+  //   @rdesc TBS
+OMStoredStream* OMStoredObject::createStoredStream(
+                                                  const OMDataStream& property)
+{
+  TRACE("OMStoredObject::createStoredStream");
+  ASSERT("Unimplemented code not reached", false);
+  return 0;
+}
+
 wchar_t* OMStoredObject::streamName(const wchar_t* propertyName,
                                     OMPropertyId pid)
 {
