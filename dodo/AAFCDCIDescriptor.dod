@@ -27,7 +27,21 @@ AD_DEFAULT_UUID(44861703, 8AEA, 11d2, 81, 3C, 00, 60, 97, 31, 01, 72)
 AD_CLASS_BEGIN
 AD_METHOD0(Initialize,
 		   Initializes a newly allocated\, empty
-  // IAAFCDCIDescriptor-supporting object.)
+  // IAAFCDCIDescriptor-supporting object.  This method must be called
+  // after allocation\, and before any other method can be called.
+  //
+  // Succeeds if:
+  // - Initialize\(\) has not yet been called on this object.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_ALREADY_INITIALIZED
+  //   - Initialize\(\) has already been called on this object.)
 
 
 AD_XMETHOD1(SetComponentWidth,
@@ -50,7 +64,40 @@ AD_XMETHOD1(SetComponentWidth,
   // This method will return the following codes:
   // 
   // AAFRESULT_SUCCESS
-  //   - succeeded.)
+  //   - succeeded.
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.)
+
+
+AD_XMETHOD1(GetComponentWidth,
+			[out],
+				objPass,
+				aafInt32 *,
+				pComponentWidth,
+				Address to store the number of bits.,
+			Gets the ComponentWidth property.  Specifies the number of bits
+  // used to store each component.  Can have a value of 8\, 10\, or
+  // 16.  Each component in a sample is packed contiguously; the
+  // sample is filled with the number of bits specified by the
+  // optional PaddingBits property.  If the PaddingBits property is
+  // omitted\, samples are packed contiguously.
+  //
+  // Succeeds if all of the following are true:
+  // - pComponentWidth is a valid pointer.
+  // 
+  // If this method fails\, pComponentWidth will not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pComponentWidth arg is NULL.)
 
 
 AD_XMETHOD1(SetHorizontalSubsampling,
@@ -73,7 +120,39 @@ AD_XMETHOD1(SetHorizontalSubsampling,
   // This method will return the following codes:
   // 
   // AAFRESULT_SUCCESS
-  //   - succeeded.)
+  //   - succeeded.
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.)
+
+
+AD_XMETHOD1(GetHorizontalSubsampling,
+			[out],
+				objPass,
+				aafUInt32 *,
+				pHorizontalSubsampling,
+				Address to store the integer value.,
+			Gets the HorizontalSubsampling property.  Specifies the ratio of
+  // luminance sampling to chrominance sampling in the horizontal
+  // direction.  For 4:2:2 video\, the value is 2\, which means that
+  // there are twice as many luminance values as there are
+  // color-difference values.  The other legal value is 1.
+  //
+  // Succeeds if all of the following are true:
+  // - pHorizontalSubsampling is a valid pointer.
+  // 
+  // If this method fails\, pHorizontalSubsampling will not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pHorizontalSubsampling arg is NULL.)
 
 
 AD_XMETHOD1(SetColorSiting,
@@ -113,151 +192,10 @@ AD_XMETHOD1(SetColorSiting,
   // This method will return the following codes:
   // 
   // AAFRESULT_SUCCESS
-  //   - succeeded.)
-
-
-AD_XMETHOD1(SetBlackReferenceLevel,
-			[in],
-				objPass,
-				aafUInt32,
-				BlackReferenceLevel,
-				Integer value.,
-			Sets the BlackReferenceLevel property.  Specifies the digital luminance
-  // component component value associated with black.
-  //
-  // For CCIR-601/2\, the value is 16.  For YUV\, the value is 0.  The same value is
-  // used in CDCI and RGBA when standard colorspace conversion is used.
-  //
-  // This property is optional.  The default value is 0.
-  //
-  // Always succeeds.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.)
-
-
-AD_XMETHOD1(SetWhiteReferenceLevel,
-			[in],
-				objPass,
-				aafUInt32,
-				WhiteReferenceLevel,
-				Integer value.,
-			Sets the WhiteReferenceLevel property.  Specifies the digital luminance
-  // component component value associated with white.
-  //
-  // For CCIR-601/2 8-bit video\, the value is 235.  For YUV 8-bit video\, the value
-  // is 255.
-  //
-  // This property is optional.  The default value is the maximum unsigned interger value
-  // for component size.
-  //
-  // Always succeeds.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.)
-
-
-AD_XMETHOD1(SetColorRange,
-			[in],
-				objPass,
-				aafUInt32,
-				ColorRange,
-				Integer value.,
-			Sets the ColorRange property.  Specifies the range of allowable
-  // digital chrominance component values.  Chrominance values are
-  // signed and the range is centered on 0.  This value is used for
-  // both chrominance components.
-  //
-  // For CCIR-601/2\, the value is 225.  For YUV\, the value is 255.
-  //
-  // This property is optional.  The default value is the maximum unsigned interger value
-  // for component size.
-  //
-  // Succeeds if all of the following are true:
-  // 
-  // If this method fails\, the ColorRange property will not be
-  // changed.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.)
-
-
-AD_XMETHOD1(SetPaddingBits,
-			[in],
-				objPass,
-				aafInt16,
-				PaddingBits,
-				Number of bits.,
-			Sets the PaddingBits property.  Specifies the number of bits
-  // padded to each pixel.
-  //
-  // This property is optional.  The default value is 0.
-  //
-  // Always succeeds.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.)
-
-
-AD_XMETHOD1(GetComponentWidth,
-			[out],
-				objPass,
-				aafInt32 *,
-				pComponentWidth,
-				Address to store the number of bits.,
-			Gets the ComponentWidth property.  Specifies the number of bits
-  // used to store each component.  Can have a value of 8\, 10\, or
-  // 16.  Each component in a sample is packed contiguously; the
-  // sample is filled with the number of bits specified by the
-  // optional PaddingBits property.  If the PaddingBits property is
-  // omitted\, samples are packed contiguously.
-  //
-  // Succeeds if all of the following are true:
-  // - pComponentWidth is a valid pointer.
-  // 
-  // If this method fails\, pComponentWidth will not be changed.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
   //   - succeeded.
   //
-  // AAFRESULT_NULL_PARAM
-  //   - pComponentWidth arg is NULL.)
-
-
-AD_XMETHOD1(GetHorizontalSubsampling,
-			[out],
-				objPass,
-				aafUInt32 *,
-				pHorizontalSubsampling,
-				Address to store the integer value.,
-			Gets the HorizontalSubsampling property.  Specifies the ratio of
-  // luminance sampling to chrominance sampling in the horizontal
-  // direction.  For 4:2:2 video\, the value is 2\, which means that
-  // there are twice as many luminance values as there are
-  // color-difference values.  The other legal value is 1.
-  //
-  // Succeeds if all of the following are true:
-  // - pHorizontalSubsampling is a valid pointer.
-  // 
-  // If this method fails\, pHorizontalSubsampling will not be changed.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pHorizontalSubsampling arg is NULL.)
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.)
 
 
 AD_XMETHOD1(GetColorSiting,
@@ -300,8 +238,36 @@ AD_XMETHOD1(GetColorSiting,
   // AAFRESULT_SUCCESS
   //   - succeeded.
   //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
+  //
   // AAFRESULT_NULL_PARAM
   //   - pColorSiting arg is NULL.)
+
+
+AD_XMETHOD1(SetBlackReferenceLevel,
+			[in],
+				objPass,
+				aafUInt32,
+				BlackReferenceLevel,
+				Integer value.,
+			Sets the BlackReferenceLevel property.  Specifies the digital luminance
+  // component component value associated with black.
+  //
+  // For CCIR-601/2\, the value is 16.  For YUV\, the value is 0.  The same value is
+  // used in CDCI and RGBA when standard colorspace conversion is used.
+  //
+  // This property is optional.  The default value is 0.
+  //
+  // Always succeeds.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.)
 
 
 AD_XMETHOD1(GetBlackReferenceLevel,
@@ -327,8 +293,37 @@ AD_XMETHOD1(GetBlackReferenceLevel,
   // AAFRESULT_SUCCESS
   //   - succeeded.
   //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
+  //
   // AAFRESULT_NULL_PARAM
   //   - pBlackReferenceLevel arg is NULL.)
+
+
+AD_XMETHOD1(SetWhiteReferenceLevel,
+			[in],
+				objPass,
+				aafUInt32,
+				WhiteReferenceLevel,
+				Integer value.,
+			Sets the WhiteReferenceLevel property.  Specifies the digital luminance
+  // component component value associated with white.
+  //
+  // For CCIR-601/2 8-bit video\, the value is 235.  For YUV 8-bit video\, the value
+  // is 255.
+  //
+  // This property is optional.  The default value is the maximum unsigned interger value
+  // for component size.
+  //
+  // Always succeeds.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.)
 
 
 AD_XMETHOD1(GetWhiteReferenceLevel,
@@ -353,8 +348,41 @@ AD_XMETHOD1(GetWhiteReferenceLevel,
   // AAFRESULT_SUCCESS
   //   - succeeded.
   //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
+  //
   // AAFRESULT_NULL_PARAM
   //   - pWhiteReferenceLevel arg is NULL.)
+
+
+AD_XMETHOD1(SetColorRange,
+			[in],
+				objPass,
+				aafUInt32,
+				ColorRange,
+				Integer value.,
+			Sets the ColorRange property.  Specifies the range of allowable
+  // digital chrominance component values.  Chrominance values are
+  // signed and the range is centered on 0.  This value is used for
+  // both chrominance components.
+  //
+  // For CCIR-601/2\, the value is 225.  For YUV\, the value is 255.
+  //
+  // This property is optional.  The default value is the maximum unsigned interger value
+  // for component size.
+  //
+  // Succeeds if all of the following are true:
+  // 
+  // If this method fails\, the ColorRange property will not be
+  // changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.)
 
 
 AD_XMETHOD1(GetColorRange,
@@ -380,8 +408,33 @@ AD_XMETHOD1(GetColorRange,
   // AAFRESULT_SUCCESS
   //   - succeeded.
   //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
+  //
   // AAFRESULT_NULL_PARAM
   //   - pColorRange arg is NULL.)
+
+
+AD_XMETHOD1(SetPaddingBits,
+			[in],
+				objPass,
+				aafInt16,
+				PaddingBits,
+				Number of bits.,
+			Sets the PaddingBits property.  Specifies the number of bits
+  // padded to each pixel.
+  //
+  // This property is optional.  The default value is 0.
+  //
+  // Always succeeds.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.)
 
 
 AD_XMETHOD1(GetPaddingBits,
@@ -403,6 +456,9 @@ AD_XMETHOD1(GetPaddingBits,
   // 
   // AAFRESULT_SUCCESS
   //   - succeeded.
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
   //
   // AAFRESULT_NULL_PARAM
   //   - pPaddingBits arg is NULL.)

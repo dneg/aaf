@@ -87,7 +87,7 @@ AD_XMETHOD1(GetEssenceDescriptor,
   //
   // Succeeds if all of the following are true:
   // - the ppEssence pointer is valid.
-  // \(other conditions here\)
+  // - A valid essence descriptor exists.
   // 
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect\, it will return the first one
@@ -96,12 +96,15 @@ AD_XMETHOD1(GetEssenceDescriptor,
   // AAFRESULT_SUCCESS
   //   - succeeded.  \(This is the only code indicating success.\)
   //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
+  //
   // AAFRESULT_NULL_PARAM
   //   - ppEssence is null.
   //
   // AAFRESULT_NO_ESSENCE_DESC
-  //   - There must be an essence descriptor of some kind for this to
-  //     be a valid Mob.)
+  //   - There is no essence descriptor.  There has to be one of some
+  //     kind for this to be a valid Mob.)
 
 
 AD_XMETHOD1(SetEssenceDescriptor,
@@ -121,6 +124,9 @@ AD_XMETHOD1(SetEssenceDescriptor,
   // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
   //
   // AAFRESULT_NULL_PARAM
   //   - pEssence is null.)
@@ -161,7 +167,8 @@ AD_XMETHOD4(AddNilReference,
   // videotape.
   //
   // Succeeds if all of the following are true:
-  // \(other conditions here\)
+  // - dataDef is a valid pointer.
+  // - editRate is valid.
   // 
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect\, it will return the first one
@@ -170,13 +177,14 @@ AD_XMETHOD4(AddNilReference,
   // AAFRESULT_SUCCESS
   //   - succeeded.  \(This is the only code indicating success.\)
   //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
+  //
   // AAFRESULT_NULL_PARAM
   //   - dataDef is NULL
   //
   // AAFRESULT_BADRATE
-  //   - the editRate is not valid
-  //
-  // \(other codes here.\))
+  //   - the editRate is not valid.)
 
 
 AD_XMETHOD4(AppendTimecodeSlot,
@@ -200,7 +208,7 @@ AD_XMETHOD4(AppendTimecodeSlot,
 			  aafFrameLength_t,
 			  length32,
 			  Duration of Timecode.,
-  // This function adds a Timecode slot to a specified tape Mob or
+			This function adds a Timecode slot to a specified tape Mob or
   // film Mob\, with a specified starting timecode\, length\, and edit
   // rate.  Your must also call SpecifyValidCodeRange to add the
   // Filler to the other essence slots to indicate that the Timecode
@@ -213,7 +221,9 @@ AD_XMETHOD4(AppendTimecodeSlot,
   // case the length is 24 hours.
   //
   // Succeeds if all of the following are true:
-  // \(other conditions here\)
+  // - The specified slot ID is not yet used.
+  // - This source mob references an AAFTapeDescriptor as an essence
+  //   descriptor.
   // 
   // If this method fails no state is changed.
   // 
@@ -223,6 +233,9 @@ AD_XMETHOD4(AppendTimecodeSlot,
   // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
   //
   // AAFRESULT_SLOT_EXISTS
   //   - The specified slotID already exists.
@@ -282,7 +295,9 @@ AD_XMETHOD7(AppendEdgecodeSlot,
   // slot with SpecifyValidCodeRange to make the edgecode slot valid.
   //
   // Succeeds if all of the following are true:
-  // \(other conditions here\)
+  // - The specified slot ID is not yet used.
+  // - This source mob references an AAFFilmDescriptor as an essence
+  //   descriptor.
   // 
   // If this method fails no state is changed.
   // 
@@ -293,12 +308,16 @@ AD_XMETHOD7(AppendEdgecodeSlot,
   // AAFRESULT_SUCCESS
   //   - succeeded.  \(This is the only code indicating success.\)
   //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
+  //
   // AAFRESULT_SLOT_EXISTS
   //   - The specified slotID already exists.
   //
   // AAFRESULT_FILMDESC_ONLY
   //   - Valid only for AAFSourceMob referencing an AAFFilmDescriptor
   //   as EssenceDescriptor.)
+
 
 AD_XMETHOD5(SpecifyValidCodeRange,
 			[in],
@@ -326,8 +345,8 @@ AD_XMETHOD5(SpecifyValidCodeRange,
 			  aafFrameLength_t,
 			  length32,
 			  Duration of the Source Clip in the slot,
-  // Adds slot containing Source Clips to a tape Source Mob to
-  // indicate that the Timecode or Edgecode is valid for that channel.
+			Adds slot containing Source Clips to a Source Mob to indicate
+  // that the Timecode or Edgecode is valid for that channel.
   //
   // Note: The pEssenceKind parameter requires a data kind valid for a
   // essence stream.  Valid data kinds are:
@@ -336,7 +355,7 @@ AD_XMETHOD5(SpecifyValidCodeRange,
   //
   // Succeeds if all of the following are true:
   // - the pEssenceKind pointer is valid.
-  // \(other conditions here\)
+  // - The specified slot ID is not yet used.
   // 
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect\, it will return the first one
@@ -344,6 +363,9 @@ AD_XMETHOD5(SpecifyValidCodeRange,
   // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
   //
   // AAFRESULT_NULL_PARAM
   //   - pEssenceKind is null.
@@ -399,7 +421,6 @@ AD_XMETHOD5(AppendPhysSourceRef,
   // Succeeds if all of the following are true:
   // - the pEssenceKind pointer is valid.
   // - the pSourceRefObj pointer is valid.
-  // \(other conditions here\)
   // 
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect\, it will return the first one
@@ -408,10 +429,11 @@ AD_XMETHOD5(AppendPhysSourceRef,
   // AAFRESULT_SUCCESS
   //   - succeeded.  \(This is the only code indicating success.\)
   //
-  // AAFRESULT_NULL_PARAM
-  //   - either pEssenceKind or pSourceRefObj is null.
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
   //
-  // \(other codes here.\))
+  // AAFRESULT_NULL_PARAM
+  //   - either pEssenceKind or pSourceRefObj is null.)
 
 
 AD_XMETHOD5(NewPhysSourceRef,
@@ -461,7 +483,6 @@ AD_XMETHOD5(NewPhysSourceRef,
   // Succeeds if all of the following are true:
   // - the pEssenceKind pointer is valid.
   // - the pSourceRefObj pointer is valid.
-  // \(other conditions here\)
   // 
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect\, it will return the first one
@@ -470,10 +491,11 @@ AD_XMETHOD5(NewPhysSourceRef,
   // AAFRESULT_SUCCESS
   //   - succeeded.  \(This is the only code indicating success.\)
   //
-  // AAFRESULT_NULL_PARAM
-  //   - either pEssenceKind or pSourceRefObj is null.
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
   //
-  // \(other codes here.\))
+  // AAFRESULT_NULL_PARAM
+  //   - either pEssenceKind or pSourceRefObj is null.)
 
 
 AD_XMETHOD9(AddPulldownRef,
@@ -561,12 +583,13 @@ AD_XMETHOD9(AddPulldownRef,
   // AAFRESULT_SUCCESS
   //   - succeeded.  \(This is the only code indicating success.\)
   //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
+  //
   // AAFRESULT_NULL_PARAM
   //   - either pEssenceKind or pSourceRefObj is null.
   //
   // AAFRESULT_PULLDOWN_DIRECTION
   //   - an invalid pulldown direction was specified.)
-
-
 AD_COM_METH(.method-SearchSource)
 AD_CLASS_END
