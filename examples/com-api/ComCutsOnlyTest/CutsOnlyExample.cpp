@@ -142,7 +142,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFLocator*				pLocator = NULL;
 	IAAFNetworkLocator*			pNetLocator = NULL;
 	aafRational_t				videoRate = { 30000, 1001 };
-	aafUID_t					videoDef = DDEF_Video;
+	aafUID_t					videoDef = DDEF_Picture;
 	aafUID_t					tapeMobID, fileMobID, masterMobID;
 	aafTimecode_t				tapeTC = { 108000, kTcNonDrop, 30};
 	aafLength_t					fileLen = FILE1_LENGTH;
