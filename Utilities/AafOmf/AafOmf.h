@@ -118,6 +118,7 @@ typedef struct _AafOmfGlobals
 	OMF2::omfProperty_t		omCDCIWhiteReferenceLevel;
 	OMF2::omfProperty_t		omCDCIColorRange;
 	OMF2::omfProperty_t		omCDCIPaddingBits;
+	~_AafOmfGlobals( void )		{ delete pLogger; }
 } AafOmfGlobals;
 
 int deleteFile( char* fileName );

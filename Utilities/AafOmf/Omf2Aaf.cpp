@@ -60,6 +60,7 @@ AAFRESULT aafMobIDFromMajorMinor(
 #include "EffectTranslate.h"
 #include "AAFException.h"
 #include "OMFException.h"
+#include "AutoRelease.h"
 
 // Include the AAF Stored Object identifiers. These symbols are defined in aaf.lib.
 #include "AAFStoredObjectIDs.h"
@@ -99,36 +100,14 @@ Omf2Aaf::~Omf2Aaf()
 //			by calling all the functions inside this object
 //
 // ============================================================================
-HRESULT Omf2Aaf::ConvertFile ()
+void Omf2Aaf::ConvertFile ()
 {
-	HRESULT		rc = AAFRESULT_SUCCESS;
-
-	rc = OMFFileOpen( gpGlobals->sInFileName );
-	if (SUCCEEDED(rc))
-	{
-		rc = OpenOutputFile();
-		if (SUCCEEDED(rc))
-		{
-			rc = ConvertOMFHeader();
-			if (SUCCEEDED(rc))
-			{
-				rc = OMFFileRead();
-			}
-		}
-	}
-
-	if (gpGlobals->bOMFFileOpen)
-	{
-		OMFFileClose();
-		gpGlobals->bOMFFileOpen = AAFFalse;
-	}
-
-	if (gpGlobals->bAAFFileOpen)
-	{
-		AAFFileClose();
-		gpGlobals->bAAFFileOpen = AAFFalse;
-	}
-	return rc;
+	OMFFileOpen( gpGlobals->sInFileName );
+	OpenOutputFile();
+	ConvertOMFHeader();
+	OMFFileRead();
+	OMFFileClose();
+	AAFFileClose();
 }
 
 // ============================================================================
@@ -136,7 +115,7 @@ HRESULT Omf2Aaf::ConvertFile ()
 //			This function creates the output file.
 //
 // ============================================================================
-HRESULT Omf2Aaf::OpenOutputFile ()
+void Omf2Aaf::OpenOutputFile ()
 {
 	if (strlen(gpGlobals->sOutFileName) == 0)
 	{
@@ -155,7 +134,7 @@ HRESULT Omf2Aaf::OpenOutputFile ()
 	}
 
 	AAFCheck check = AAFFileOpen(gpGlobals->sOutFileName);
-	return AAFRESULT_SUCCESS;
+	return;
 }
 // ============================================================================
 // OMFFileOpen
@@ -163,10 +142,9 @@ HRESULT Omf2Aaf::OpenOutputFile ()
 //		Open an OMF File
 //
 // ============================================================================
-HRESULT Omf2Aaf::OMFFileOpen(char * pFileName)
+void Omf2Aaf::OMFFileOpen(char * pFileName)
 {
 	aafBool				bSessionStarted = AAFFalse;
-	char				szFileVersion[5];
 
 	gpGlobals->pLogger->Log( kLogInfo,"Opening OMF file \"%s\"\n", pFileName);
 	try
@@ -190,20 +168,12 @@ HRESULT Omf2Aaf::OMFFileOpen(char * pFileName)
 	RegisterOMFMCPrivate(gpGlobals, OMFSession);
 
 	OMF2::omfsFileGetRev(OMFFileHdl, &OMFFileRev);
-	if (OMF2::kOmfRev2x == OMFFileRev)
-	{
-		strcpy(szFileVersion, "2.0");
-	}
-	else
-	{
-		strcpy(szFileVersion, "1.0");
-	}
-
+	int revision = (OMF2::kOmfRev2x == OMFFileRev) ? 2 : 1;
 	gpGlobals->pLogger->Log( kLogInfo, 
-		"OMF file \"%s\" opened succesfully.\nFile Revision %s\n", 
-		pFileName, szFileVersion);
+		"OMF file \"%s\" opened succesfully.\nFile Revision %d.0\n", 
+		pFileName, revision);
 
-	return AAFRESULT_SUCCESS;
+	return;
 }
 
 // ============================================================================
@@ -363,10 +333,10 @@ HRESULT Omf2Aaf::AAFFileOpen( char* pFileName)
 //		Objects inside the OMF file.
 //
 // ============================================================================
-HRESULT Omf2Aaf::OMFFileRead()
+void Omf2Aaf::OMFFileRead()
 {
-	HRESULT					rc = AAFRESULT_SUCCESS;
-	OMF2::omfErr_t			OMFError = OMF2::OM_ERR_NONE;
+	AAFCheck				rc;
+	OMFCheck				OMFError;
 	aafInt32				nOMFNumMobs;
 	aafInt32				nOMFMobCount;
 
@@ -377,109 +347,78 @@ HRESULT Omf2Aaf::OMFFileRead()
 	OMF2::omfProperty_t		OMFPropertyID;
 
 	// AAF Variables
-	IAAFMob*				pMob = NULL;
-	IAAFCompositionMob*		pCompMob = NULL;
-	IAAFMasterMob*			pMasterMob = NULL;
-	IAAFSourceMob*			pSourceMob = NULL;
-
 	aafInt32				numMedia;
 	
 	OMFError = OMF2::omfiIteratorAlloc( OMFFileHdl, &OMFMobIter);
-	if (OMF2::OM_ERR_NONE == OMFError)
+	OMFError = OMF2::omfiGetNumMobs( OMFFileHdl, OMF2::kAllMob, &nOMFNumMobs);
+	gpGlobals->pLogger->Log( kLogInfo, "Found: %ld Mobs in the input file\n", nOMFNumMobs);
+	for (nOMFMobCount = 0; nOMFMobCount < nOMFNumMobs; nOMFMobCount++)
 	{
-		OMFError = OMF2::omfiGetNumMobs( OMFFileHdl, OMF2::kAllMob, &nOMFNumMobs);
-		if (OMF2::OM_ERR_NONE == OMFError)
+		OMFError = OMF2::omfiGetNextMob(OMFMobIter, NULL, &OMFMob);
+		IAAFMob*	pMob = NULL;
+		AutoRelease <IAAFMob> pmob;
+		gpGlobals->nNumOMFMobs++;
+		OMF2::omfErr_t err; // Dummy
+		if (OMF2::omfiIsACompositionMob(OMFFileHdl, OMFMob, &err ))
 		{
-			if (gpGlobals->bVerboseMode)
-			{
-				printf("Found: %ld Mobs in the input file\n", nOMFNumMobs);
-			}
-			for (nOMFMobCount = 0; nOMFMobCount < nOMFNumMobs; nOMFMobCount++)
-			{
-				OMFError = OMF2::omfiGetNextMob(OMFMobIter, NULL, &OMFMob);
-				if (OMF2::OM_ERR_NONE == OMFError)
-				{
-					pMob = NULL;
-					gpGlobals->nNumOMFMobs++;
-					if (OMF2::omfiIsACompositionMob(OMFFileHdl, OMFMob, &OMFError))
-					{
-						// Create a new Composition Mob
-						rc = pDictionary->CreateInstance(AUID_AAFCompositionMob, 
-	 													 IID_IAAFCompositionMob,
-														 (IUnknown **)&pCompMob);
-						if (SUCCEEDED(rc))
-						{
-							if (gpGlobals->bVerboseMode)
-								printf( "Created AAF Composition Mob\n");
-							rc = ConvertOMFCompositionObject( OMFMob, pCompMob );
-							pCompMob->QueryInterface(IID_IAAFMob, (void **)&pMob);
-							pCompMob->Release();
-							pCompMob = NULL;
-						}
-					}
-					else if (OMF2::omfiIsAMasterMob(OMFFileHdl, OMFMob, &OMFError) )
-					{
-						// Create a Master Mob 
-						rc = pDictionary->CreateInstance(AUID_AAFMasterMob,
-														 IID_IAAFMasterMob,
-														 (IUnknown **)&pMasterMob);
-						if (SUCCEEDED(rc))
-						{
-							if (gpGlobals->bVerboseMode)
-								printf("Created AAF Master Mob\n");
-							rc = ConvertOMFMasterMob(OMFMob, pMasterMob );
-							pMasterMob->QueryInterface(IID_IAAFMob, (void **)&pMob);
-							pMasterMob->Release();
-							pMasterMob = NULL;
-						}
-					}
-					else if ( OMF2::omfiIsASourceMob(OMFFileHdl, OMFMob, &OMFError) )
-					{
-						rc = pDictionary->CreateInstance(AUID_AAFSourceMob,
-														 IID_IAAFSourceMob,
-														 (IUnknown **)&pSourceMob);
-						if (SUCCEEDED(rc))
-						{
-							if (gpGlobals->bVerboseMode)
-								printf("Created AAF Source Mob\n");
-							rc = ConvertOMFSourceMob( OMFMob, pSourceMob );
-							pSourceMob->QueryInterface(IID_IAAFMob, (void **)&pMob);
-							pSourceMob->Release();
-							pSourceMob = NULL;
-						}
-					}
-					else
-					{
-						OMF2::omfClassID_t		objClass;
-						char					id[5];
+			// Create a new Composition Mob
+			IAAFCompositionMob*		pCompMob;
+			rc = pDictionary->CreateInstance(AUID_AAFCompositionMob, 
+	 										 IID_IAAFCompositionMob,
+											 (IUnknown **)&pCompMob);
+			AutoRelease<IAAFCompositionMob> ar(pCompMob);
+			gpGlobals->pLogger->Log( kLogInfo, "Created AAF Composition Mob\n");
+			rc = ConvertOMFCompositionObject( OMFMob, pCompMob );
+			rc = pCompMob->QueryInterface(IID_IAAFMob, (void **)&pMob);
+			pmob = pMob;
+		}
+		else if (OMF2::omfiIsAMasterMob(OMFFileHdl, OMFMob, &err) )
+		{
+			// Create a Master Mob 
+			IAAFMasterMob*			pMasterMob;
+			rc = pDictionary->CreateInstance(AUID_AAFMasterMob,
+											 IID_IAAFMasterMob,
+											 (IUnknown **)&pMasterMob);
+			AutoRelease<IAAFMasterMob> ar(pMasterMob);
+			gpGlobals->pLogger->Log( kLogInfo, "Created AAF Master Mob\n");
+			rc = ConvertOMFMasterMob(OMFMob, pMasterMob );
+			rc = pMasterMob->QueryInterface(IID_IAAFMob, (void **)&pMob);
+			pmob = pMob;
+		}
+		else if ( OMF2::omfiIsASourceMob(OMFFileHdl, OMFMob, &err) )
+		{
+			IAAFSourceMob*			pSourceMob;
+			rc = pDictionary->CreateInstance(AUID_AAFSourceMob,
+											 IID_IAAFSourceMob,
+											 (IUnknown **)&pSourceMob);
+			AutoRelease<IAAFSourceMob> ar(pSourceMob);
+			gpGlobals->pLogger->Log( kLogInfo, "Created AAF Source Mob\n");
+			rc = ConvertOMFSourceMob( OMFMob, pSourceMob );
+			rc = pSourceMob->QueryInterface(IID_IAAFMob, (void **)&pMob);
+			pmob = pMob;
+		}
+		else
+		{
+			OMF2::omfClassID_t		objClass;
+			char					id[5];
+			OMFError = OMF2::omfsReadClassID(OMFFileHdl, OMFMob, OMF2::OMOOBJObjClass, objClass);
+			strncpy(id, objClass, 4);
+			id[4] = '\0';
+			gpGlobals->pLogger->Log( kLogWarn, "Unrecognized Mob Class ID: %s\n",id);
+		}
 
-						OMFError = OMF2::omfsReadClassID(OMFFileHdl, OMFMob, OMF2::OMOOBJObjClass, objClass);
-						if (OMF2::OM_ERR_NONE == OMFError && gpGlobals->bVerboseMode)
-						{
-							strncpy(id, objClass, 4);
-							id[4] = '\0';
-							printf("Unrecognized Mob Class ID: %s\n",id);
-						}
-					}
-					if (pMob)
-					{
-						rc = ConvertOMFMOBObject( OMFMob, pMob);
-						if (rc != AAFRESULT_SUCCESS)
-							fprintf(stderr,"ERROR:Unspecified error convert basic MOB data\n");
-						rc = TraverseOMFMob( OMFMob, pMob);
-						if (rc != AAFRESULT_SUCCESS)
-							fprintf(stderr,"ERROR:Unspecified error Traversing MOB\n ");
-						rc = pHeader->AppendMob(pMob);
-						if (rc != AAFRESULT_SUCCESS)
-							fprintf(stderr,"ERROR:Unspecified error appending MOB to the file\n");
-						pMob->Release();
-						pMob = NULL;
-						gpGlobals->nNumAAFMobs++;
-					}
-				}
-			}
+		if (pMob)
+		{
+			gpGlobals->pLogger->Log( kLogInfo, "Converting basic MOB data...\n" );
+			rc = ConvertOMFMOBObject( OMFMob, pMob);
+			gpGlobals->pLogger->Log( kLogInfo, "Traversing MOB...\n" );
+			rc = TraverseOMFMob( OMFMob, pMob);
+			gpGlobals->pLogger->Log( kLogInfo, "Appending MOB to file...\n" );
+			rc = pHeader->AppendMob(pMob);
+			gpGlobals->nNumAAFMobs++;
 		}
 	}
+
 	OMF2::omfiIteratorDispose(OMFFileHdl, OMFMobIter);
 	// Now that we have read all the metadata we can get on with
 	// the actual essence (media) data
@@ -496,13 +435,7 @@ HRESULT Omf2Aaf::OMFFileRead()
 		numMedia = OMF2::omfsLengthObjIndex(OMFFileHdl, OMFHeader, OMFPropertyID);
 	}
 
-	if (gpGlobals->bVerboseMode)
-	{
-		if (numMedia > 0)
-			printf("Found: %ld Essence data objects\n", numMedia);
-		else
-			printf("Found: No Essence data objects\n");
-	}
+	gpGlobals->pLogger->Log( kLogInfo, "Found: %ld Essence data objects\n", numMedia);
 	for (int k = 1;k <= numMedia; k++)
 	{
 		OMF2::omfObjIndexElement_t	objIndex;
@@ -522,14 +455,11 @@ HRESULT Omf2Aaf::OMFFileRead()
 			tmpMediaID = objIndex.ID;
 
 		}
-		if (OMF2::OM_ERR_NONE == OMFError)
-		{
-			// Process the given Class Dictionary object.
-			rc = ConvertOMFMediaDataObject(OMFObject, tmpMediaID);
-		}
+		// Process the given Class Dictionary object.
+		rc = ConvertOMFMediaDataObject(OMFObject, tmpMediaID);
 	}
 
-	return rc;
+	return;
 }
 // ============================================================================
 // ConvertOMFHeader
@@ -540,71 +470,51 @@ HRESULT Omf2Aaf::OMFFileRead()
 //			the AAF Class dictionary.
 //
 //			
-// Returns: AAFRESULT_SUCCESS if Header object is converted succesfully
+// Returns: None. Raises an exception if Header object is not converted succesfully
 //
 // ============================================================================
-HRESULT Omf2Aaf::ConvertOMFHeader( void )
+void Omf2Aaf::ConvertOMFHeader( void )
 {
-	HRESULT					rc = AAFRESULT_SUCCESS;
-	OMF2::omfErr_t			OMFError = OMF2::OM_ERR_NONE;
-
+	AAFCheck rc;
+	OMFCheck OMFError;
 	OMF2::omfObject_t		OMFHeader, OMFObject;
-
 	aafInt32				numDefs, numEntries;
 
-
+	gpGlobals->pLogger->Log(kLogInfo, "Processing OMF Header...\n" );
 	OMFError = OMF2::omfsGetHeadObject( OMFFileHdl, &OMFHeader );
-	if (gpGlobals->bVerboseMode)
-	{
-		printf("Processing OMF Header\n");
-	}
 	IncIndentLevel();
-	if (OMF2::OM_ERR_NONE == OMFError)
+	//From the OMF header we will extract all definition Objects and Class Dictionary
+	// First we process the Data definitions
+	numDefs = OMF2::omfsLengthObjRefArray(OMFFileHdl, OMFHeader, OMF2::OMHEADDefinitionObjects);
+	gpGlobals->pLogger->Log( kLogInfo, "%sFound: %ld Data Definitions\n", 
+	gpGlobals->indentLeader, numDefs);
+	for (int i = 1;i <= numDefs;i++)
 	{
-		//From the OMF header we will extract all definition Objects and Class Dictionary
-		// First we process the Data definitions
-		numDefs = OMF2::omfsLengthObjRefArray(OMFFileHdl, OMFHeader, OMF2::OMHEADDefinitionObjects);
-		if (gpGlobals->bVerboseMode)
-		{
-			printf("%sFound: %ld Data Definitions\n", gpGlobals->indentLeader, numDefs);
-		}
-		for (int i = 1;i <= numDefs;i++)
-		{
-			OMFError = OMF2::omfsGetNthObjRefArray(OMFFileHdl, OMFHeader, OMF2::OMHEADDefinitionObjects, &OMFObject, i);
-			if (OMF2::OM_ERR_NONE == OMFError)
-			{
-				// Process the given Data Definition object.
-				rc = ConvertOMFDataDefinitionObject(OMFObject);
-			}
-		}
-		// Now we process the class dictionary
-		if (OMF2::kOmfRev2x == OMFFileRev)
-		{
-			numEntries = OMF2::omfsLengthObjRefArray(OMFFileHdl, OMFHeader, OMF2::OMHEADClassDictionary);
-		}
-		else
-		{
-			numEntries = OMF2::omfsLengthObjRefArray(OMFFileHdl, OMFHeader, OMF2::OMClassDictionary);
-		}
-		if (gpGlobals->bVerboseMode)
-		{
-			printf("Found: %ld Class Definitions\n", numEntries);
-		}
-		for (int j = 1;j <= numEntries; j++)
-		{
-			OMFError = OMF2::omfsGetNthObjRefArray(OMFFileHdl, OMFHeader, OMF2::OMHEADClassDictionary, &OMFObject, j);
-			if (OMF2::OM_ERR_NONE == OMFError)
-			{
-				// Process the given Class Dictionary object.
-				rc = ConvertOMFClassDictionaryObject(OMFObject);
-			}
-		}
+		OMFError = OMF2::omfsGetNthObjRefArray(OMFFileHdl, OMFHeader, OMF2::OMHEADDefinitionObjects, &OMFObject, i);
+		// Process the given Data Definition object.
+		rc = ConvertOMFDataDefinitionObject(OMFObject);
 	}
-	if (AAFRESULT_SUCCESS == rc && gpGlobals->bVerboseMode)
-		printf("Converted OMF Header values to AAF\n");
 
+	// Now we process the class dictionary
+	if (OMF2::kOmfRev2x == OMFFileRev)
+	{
+		numEntries = OMF2::omfsLengthObjRefArray(OMFFileHdl, OMFHeader, OMF2::OMHEADClassDictionary);
+	}
+	else
+	{
+		numEntries = OMF2::omfsLengthObjRefArray(OMFFileHdl, OMFHeader, OMF2::OMClassDictionary);
+	}
+
+	gpGlobals->pLogger->Log( kLogInfo, "Found: %ld Class Definitions\n", numEntries);
+	for (int j = 1;j <= numEntries; j++)
+	{
+		OMFError = OMF2::omfsGetNthObjRefArray(OMFFileHdl, OMFHeader, OMF2::OMHEADClassDictionary, &OMFObject, j);
+		// Process the given Class Dictionary object.
+		rc = ConvertOMFClassDictionaryObject(OMFObject);
+	}
+	gpGlobals->pLogger->Log( kLogInfo, "Converted OMF Header values to AAF\n");
 	DecIndentLevel();
-	return rc;
+	return;
 }
 // ============================================================================
 // ConvertOMFDataDefinitionObject
@@ -3256,10 +3166,14 @@ HRESULT Omf2Aaf::ConvertOMFScopeRef(OMF2::omfSegObj_t segment,
 // ============================================================================
 void Omf2Aaf::OMFFileClose()
 {
-	OMF2::omfsCloseFile(OMFFileHdl);
-	OMF2::omfsEndSession(OMFSession);
-	OMFSession = NULL;
-	OMFFileHdl = NULL;
+	if( gpGlobals->bOMFFileOpen == AAFTrue )
+	{
+		OMFCheck check = OMF2::omfsCloseFile(OMFFileHdl);
+		OMFFileHdl = NULL;
+		check = OMF2::omfsEndSession(OMFSession);
+		OMFSession = NULL;
+	}
+	return;
 }
 
 // ============================================================================
@@ -3283,7 +3197,7 @@ void Omf2Aaf::AAFFileClose( )
 		pHeader->Release();
 		pHeader = NULL;
 	}
-
+	
 	if (pFile)
 	{
 		pFile->Save();
@@ -3291,6 +3205,8 @@ void Omf2Aaf::AAFFileClose( )
 		pFile->Release();
 		pFile = NULL;
 	}
+
+	return;
 }
 static aafUID_t	zeroID = { 0 };
 

@@ -41,16 +41,16 @@ public:
 	~Omf2Aaf();
 
 public:
-	HRESULT ConvertFile( void );
-	HRESULT OpenOutputFile( void );
-	HRESULT OMFFileOpen( char* pFileName );
+	void ConvertFile( void );
+	void OpenOutputFile( void );
+	void OMFFileOpen( char* pFileName );
 	HRESULT	TOCFileCreate( void ); 
 	void OMFFileClose( void );
 	HRESULT AAFFileOpen( char* pFileName );
 	HRESULT AAFDefinitionFileOpen( void );
 	void AAFFileClose(void );
-	HRESULT OMFFileRead( void );
-	HRESULT ConvertOMFHeader( void );
+	void OMFFileRead( void );
+	void ConvertOMFHeader( void );
 	HRESULT ConvertOMFDataDefinitionObject( OMF2::omfObject_t obj);
 	HRESULT ConvertOMFClassDictionaryObject( OMF2::omfObject_t obj);
 	HRESULT ConvertOMFMediaDataObject( OMF2::omfObject_t obj, OMF2::omfUID_t inMediaID);
