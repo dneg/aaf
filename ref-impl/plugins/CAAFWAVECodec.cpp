@@ -303,7 +303,7 @@ HRESULT STDMETHODCALLTYPE
 	if(bufSize == NULL)
 		return AAFRESULT_NULL_PARAM;
 	
-	*bufSize = wcslen(name);
+	*bufSize = sizeof(name)/sizeof(wchar_t);
 	return AAFRESULT_SUCCESS;
 }	
 
@@ -1622,12 +1622,14 @@ HRESULT CAAFWaveCodec::InternalQueryInterface
         ((IUnknown *)*ppvObj)->AddRef();
         return S_OK;
     }
+#if 0
     else if (riid == IID_IAAFEssenceSampleStream) 
     { 
         *ppvObj = (IAAFEssenceSampleStream *)this; 
         ((IUnknown *)*ppvObj)->AddRef();
         return S_OK;
     }
+#endif
     else if (riid == IID_IAAFPlugin) 
     { 
         *ppvObj = (IAAFPlugin *)this; 
