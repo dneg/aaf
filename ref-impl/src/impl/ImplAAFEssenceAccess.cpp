@@ -1698,13 +1698,14 @@ AAFRESULT STDMETHODCALLTYPE
 				&sourceInfo));
 			//			masterMob->AcquireReference();		//!!!DEBUG
 			
-			CHECK(sourceInfo->GetLength(&access.length));
 			CHECK(sourceInfo->GetMob((ImplAAFMob **)&access.fileMob));
 			CHECK(sourceInfo->GetSourceReference(&fileRef));
 			sourceInfo->ReleaseReference();
 			sourceInfo = NULL;
 			
 			CHECK(access.fileMob->GetEssenceDescriptor((ImplAAFEssenceDescriptor **)&access.mdes));
+			CHECK(access.mdes->GetLength(&access.length));
+
 			if(access.mdes->GetContainerFormat (&containerDef) == AAFRESULT_SUCCESS)
 			{
 				CHECK(containerDef->GetAUID(&testFormat));
@@ -2089,13 +2090,14 @@ AAFRESULT STDMETHODCALLTYPE
 				&sourceInfo));
 			//			masterMob->AcquireReference();		//!!!DEBUG
 			
-			CHECK(sourceInfo->GetLength(&access.length));
 			CHECK(sourceInfo->GetMob((ImplAAFMob **)&access.fileMob));
 			CHECK(sourceInfo->GetSourceReference(&fileRef));
 			sourceInfo->ReleaseReference();
 			sourceInfo = NULL;
 			
 			CHECK(access.fileMob->GetEssenceDescriptor((ImplAAFEssenceDescriptor **)&access.mdes));
+			CHECK(access.mdes->GetLength(&access.length));
+
 			if(access.mdes->GetContainerFormat (&containerDef) == AAFRESULT_SUCCESS)
 			{
 				CHECK(containerDef->GetAUID(&testFormat));
