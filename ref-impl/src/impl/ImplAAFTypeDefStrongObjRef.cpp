@@ -190,6 +190,7 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 
+
 aafBool ImplAAFTypeDefStrongObjRef::IsFixedSize (void) const
 {
   return AAFTrue;
