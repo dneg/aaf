@@ -13,9 +13,6 @@ AD_TYPES_HEAD
 \******************************************/
 
 
-// AxD_FORWARD_DECLARATION(AAFMob)
-// AxD_FORWARD_DECLARATION(AAFPulldown)
-// AxD_FORWARD_DECLARATION(AAFEffect)
 
 
 AD_TYPES_BEGIN(B1A2137B, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
@@ -135,7 +132,11 @@ typedef aafInt32   		aafNumTracks_t;
 typedef char   			*aafCodecID_t;
 typedef aafInt32   		aafNumSlots_t;
 typedef struct aafUID   aafClassID_t;
-typedef void    		*aafDataValue_t;
+typedef aafUInt8    	*aafDataValue_t;
+
+// Used by all api methods that need to access an array of bytes.
+typedef aafUInt8    	*aafDataBuffer_t;
+
 
 AD_CPP_QUOTE(\/*** Types for effects ***/)
 typedef struct aafUID   aafArgIDType_t;
