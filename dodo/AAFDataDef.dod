@@ -34,7 +34,7 @@ AD_CLASS_UUID(dfbd652A, 1d81, 11d2, bf, 96, 00, 60, 97, 11, 62, 12)
 AD_DEFAULT_UUID(dfbd6529, 1d81, 11d2, bf, 96, 00, 60, 97, 11, 62, 12)
 AD_CLASS_BEGIN
 
-AD_CONSTRUCTOR2([in],aafAuid_t,Auid,auid for this definition object,
+AD_CONSTRUCTOR2([in],aafUID_t,Auid,auid for this definition object,
 				[in],aafString_t, Name, Unique name of this Data definition,
 				Constructs and sets the AUID ad Name of this DataDefinition object.)
 
@@ -211,21 +211,21 @@ AD_METHOD1(IsEdgecodeKind,
 
 AD_METHOD2(DoesDatakindConvertTo,
 		   [retval][out],aafBool *,bDoesConvertTo, pointer to result,
-		   [in],aafString_t, datakindname, DatakindName to compare against,
+		   [in],aafUID_t, Auid, Auid to compare against,
 		   Sets return value to TRUE if the datakind of the given object
 		   // can be converted to the datakind specified in the IN 
 		   // parameter with the datakindName string.)
 		   
 AD_METHOD2(IsDatakindOf,
 		   [retval][out],aafBool *,bIsDatakindOf, pointer to result,
-		   [in],aafString_t, datakindname, DatakindName to compare against,
+		   [in],aafUID_t, Auid, Auid to compare against,
 		   Sets the value to TRUE if the datakind of the given object
 		   // matches the datakind specified in the IN parameter with
 		   // the datakindName string.)
 
 AD_METHOD2(DoesDatakindConvertFrom,
 		   [retval][out],aafBool *,bDoesConvertFrom, pointer to result,
-		   [in],aafString_t, datakindname, DatakindName to compare against,
+		   [in],aafUID_t, Auid, Auid to compare against,
 		   Sets return value to TRUE if the datakind of the given object
 		   // can be converted from the datakind specified in the IN 
 		   // parameter specified with the datakindName string.)
