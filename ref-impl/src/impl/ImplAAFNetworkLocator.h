@@ -36,6 +36,10 @@ public:
   virtual ~ImplAAFNetworkLocator ();
 
 
+  virtual AAFRESULT STDMETHODCALLTYPE
+	Initialize ();
+
+
   // Override from AAFLocator
   virtual AAFRESULT STDMETHODCALLTYPE
     GetPath (/*[out, size_is(bufSize), string]*/ aafWChar *  pPathBuf,
@@ -68,6 +72,7 @@ public:
 
 private:
   OMWideStringProperty                             _path;
+  aafBool										   _initialized;
 };
 
 #endif // ! __ImplAAFNetworkLocator_h__

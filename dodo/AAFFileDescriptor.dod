@@ -23,24 +23,12 @@ AD_IDL(//
 //
 // AAFRESULT_NOT_INITIALIZED
 //   - This object has not yet had Initialize\(\) called on it through
-//     this object's primary interface.
+//     this object's primary interface.  Note that IAAFFileDescriptor
+//     is a primary interface for an abstract class\, so it is not
+//     appropriate for the Initialize\(\) method to exist in this
+//     interface.  The Initialize\(\) method is available through the
+//     concrete object's primary interface.
 //)
-
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
-
- 
-/***********************************************\
-*	Stub only.   Implementation not yet added	*
-\***********************************************/
-
-
 AD_CLASS_UUID(e58a8562, 2a3e, 11D2, bf, a4, 00, 60, 97, 11, 62, 12)
 
 AD_DEFAULT_UUID(e58a8561, 2a3e, 11D2, bf, a4, 00, 60, 97, 11, 62, 12)

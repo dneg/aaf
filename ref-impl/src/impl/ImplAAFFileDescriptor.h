@@ -14,18 +14,6 @@
 *                                          *
 \******************************************/
 
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
-
-
-
-
 
 #ifndef __ImplAAFEssenceDescriptor_h__
 #include "ImplAAFEssenceDescriptor.h"
@@ -52,7 +40,10 @@ public:
 
 //@access Public Members
 
-/****/
+  virtual AAFRESULT STDMETHODCALLTYPE
+	Initialize ();
+
+
   //****************
   // SetLength()
   //
@@ -61,7 +52,7 @@ public:
 		// @parm [in] length of the essence in samples
         (aafLength_t  length);
 
-/****/
+
   //****************
   // GetLength()
   //
@@ -70,7 +61,7 @@ public:
 		// @parm [out] returns length of the essence in samples
         (aafLength_t *  pLength);
 
-/****/
+
   //****************
   // SetIsInContainer()
   //
@@ -79,7 +70,7 @@ public:
 		// @parm [in] is this AAF or raw essence
         (aafBool  isAAF);
 
-/****/
+
   //****************
   // GetIsInContainer()
   //
@@ -88,7 +79,7 @@ public:
 		// @parm [out] is this AAF or raw medi
         (aafBool*  pIsAAF);
 
-/****/
+
   //****************
   // SetSampleRate()
   //
@@ -97,7 +88,7 @@ public:
 		// @parm [in] sample rate of the essence
         (aafRational_t *  pRate);
 
-/****/
+
   //****************
   // GetSampleRate()
   //
@@ -106,7 +97,7 @@ public:
 		// @parm [out] sample rate of the essence
         (aafRational_t*  pRate);
 
-/****/
+
   //****************
   // SetContainerFormat()
   //
@@ -115,7 +106,7 @@ public:
 		// @parm [in] Identifies the file format
         (aafUID_t *  pFormat);
 
-/****/
+
   //****************
   // GetContainerFormat()
   //
@@ -149,7 +140,7 @@ private:
 	OMFixedSizeProperty<aafLength_t>	_length;
 	OMFixedSizeProperty<aafBool>        _isInContainer;
 	OMFixedSizeProperty<aafUID_t>       _containerFmt;
+	aafBool								_initialized;
 };
 
 #endif // ! __ImplAAFFileDescriptor_h__
-
