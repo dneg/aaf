@@ -174,6 +174,8 @@ const CLSID CLSID_AAFHeader =
 //  0.5    : change the value of many pids because of the addition of the
 //           new plugin related classes
 //  0.6    : change property names to match those in the dictionary
+//  0.7    : change AAFSourceMob::MediaDescription to
+//           AAFSourceMob::EssenceDescription.
 //
 
 // The following may change at run time depending on the file format
@@ -185,7 +187,7 @@ char* _closeArrayKeySymbol = (char*)closeArrayKeySymbol;
 
 // Highest version of file/index format recognized by this dumper
 //
-const int HIGHVERSION = 6;
+const int HIGHVERSION = 7;
 
 // Output format requested
 //
