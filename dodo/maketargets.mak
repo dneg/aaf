@@ -69,19 +69,41 @@ INCLUDE_DIR = ../ref-impl/include
 	$(SH_PREFIX) cp $*.comt $(SRC_DIR)/com-api/test/C$*Test.cpp $(SH_SUFFIX)
 
 .dod.implh :
-	if test -z "`cleartool ls -vob $(SRC_DIR)/impl/Impl$*.h`" ; then ; \
+	@ result=`cleartool ls -vob $(SRC_DIR)/impl/Impl$*.h` ; \
+	if test -z "$$result" ; then ; \
+		echo $(RM) -f $*.implh ; \
 		$(RM) -f $*.implh ; \
+		echo ./tool/$(DODO) -f macros/implh.mac < $*.dod > $*.tmp ; \
 		./tool/$(DODO) -f macros/implh.mac < $*.dod > $*.tmp ; \
+		echo mv $*.tmp $*.implh ; \
 		mv $*.tmp $*.implh ; \
+		echo cp $*.implh $(SRC_DIR)/impl/Impl$*.h ; \
 		cp $*.implh $(SRC_DIR)/impl/Impl$*.h ; \
+	else ; \
+		if echo $$result | grep "\[eclipsed\]" ; then ; \
+			echo Renaming old dodo file Impl$*.h to Impl$*.h.dodo ; \
+			echo mv $(SRC_DIR)/impl/Impl$*.h $(SRC_DIR)/impl/Impl$*.h.dodo ; \
+			mv $(SRC_DIR)/impl/Impl$*.h $(SRC_DIR)/impl/Impl$*.h.dodo ; \
+		fi ; \
 	fi
 
 .dod.implc :
-	if test -z "`cleartool ls -vob $(SRC_DIR)/impl/Impl$*.h`" ; then ; \
+	@ result=`cleartool ls -vob $(SRC_DIR)/impl/Impl$*.c` ; \
+	if test -z "$$result" ; then ; \
+		echo $(RM) -f $*.implc ; \
 		$(RM) -f $*.implc ; \
+		echo ./tool/$(DODO) -f macros/implc.mac < $*.dod > $*.tmp ; \
 		./tool/$(DODO) -f macros/implc.mac < $*.dod > $*.tmp ; \
+		echo mv $*.tmp $*.implc ; \
 		mv $*.tmp $*.implc ; \
-		cp $*.implc $(SRC_DIR)/impl/Impl$*.cpp ; \
+		echo cp $*.implc $(SRC_DIR)/impl/Impl$*.c ; \
+		cp $*.implc $(SRC_DIR)/impl/Impl$*.c ; \
+	else ; \
+		if echo $$result | grep "\[eclipsed\]" ; then ; \
+			echo Renaming old dodo file Impl$*.c to Impl$*.c.dodo ; \
+			echo mv $(SRC_DIR)/impl/Impl$*.c $(SRC_DIR)/impl/Impl$*.c.dodo ; \
+			mv $(SRC_DIR)/impl/Impl$*.c $(SRC_DIR)/impl/Impl$*.c.dodo ; \
+		fi ; \
 	fi
 
 .dod.cpp :
