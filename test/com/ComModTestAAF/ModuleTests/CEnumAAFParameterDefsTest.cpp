@@ -172,9 +172,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pOperationDef->SetCategory (TEST_CATEGORY));
 		checkResult(pOperationDef->SetBypass (TEST_BYPASS));
 
-		// !!!Added circular definitions because we don't have optional properties
-		checkResult(pOperationDef->AppendDegradeToOperation (pOperationDef));
-
 		// Add two parameter defs, so that we can test all functions
 		checkResult(defs.cdParameterDef()->
 					CreateInstance(IID_IAAFParameterDef, 

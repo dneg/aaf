@@ -194,7 +194,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 			pOperationDef = NULL;
 		}
 
-		// !!!Added circular definitions because we don't have optional properties
 		checkResult(defResults[1]->AppendDegradeToOperation (defResults[1]));
 		checkResult(defResults[2]->AppendDegradeToOperation (defResults[2]));
 		checkResult(defResults[0]->AppendDegradeToOperation (defResults[1]));
