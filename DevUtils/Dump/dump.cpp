@@ -246,6 +246,7 @@ static void readIndexEntry(IStream* stream,
                            IndexEntry* entry,
                            bool swapNeeded);
 static IndexEntry* readIndex(IStream* stream, OMUInt32 count, bool swapNeeded);
+static bool isValid(const IndexEntry* index, const OMUInt32 entries);
 static char* typeName(OMUInt32 type);
 static void openStorage(IStorage* parentStorage,
                         char* storageName,
@@ -1037,6 +1038,49 @@ IndexEntry* readIndex(IStream* stream, OMUInt32 count, bool swapNeeded)
   return result;
 }
 
+bool isValid(const IndexEntry* index, const OMUInt32 entries)
+{
+  bool result = true;
+
+  size_t position;
+  size_t previousOffset;
+  size_t currentOffset;
+  size_t currentLength;
+
+  for (size_t i = 0; i < entries; i++) {
+    currentOffset = index[i]._offset;
+    currentLength = index[i]._length;
+    // Check length
+    if (currentLength == 0) {
+      fatalError("isValid", "Property set index entry has zero length.");
+      result = false;
+      break;
+    }
+    if (i == 0) {
+      // First entry
+      previousOffset = currentOffset;
+      position = currentOffset + currentLength;
+    } else {
+      // Subsequent entries
+      if (currentOffset < previousOffset) {
+        warning("isValid", "Property set index entries out of order.");
+        result = false;
+        break;
+      } else if (position > currentOffset) {
+        warning("isValid", "Property set index entries overlap.");
+        result = false;
+        break; 
+      } else {
+        // this entry is valid
+        previousOffset = currentOffset;
+        position = position + currentLength;
+      }
+    }
+  }
+
+  return result;
+}
+
 char* typeName(OMUInt32 type)
 {
   char * result;
@@ -1405,6 +1449,10 @@ void dumpProperties(IStorage* storage,
     fatalError("dumpProperties", "openStream() failed.");
   }
 
+  // Check that the property value stream is the correct size for the
+  // given index.
+  // NYI.
+
   for (OMUInt32 i = 0; i < entries; i++) {
 
     // Count this property
@@ -1534,14 +1582,14 @@ void dumpObject(IStorage* storage, char* pathName, int isRoot)
   openStream(storage, propertyIndexStreamName, &stream);
 
   if (stream == 0) {
-    fatalError("dumpObject", "Property index stream not found");
+    fatalError("dumpObject", "Property index stream not found.");
   }
 
   // Check that the stream is not empty.
   //
   size_t indexStreamSize = sizeOfStream(stream, propertyIndexStreamName);
   if (indexStreamSize == 0){
-    fatalError("dumpObject", "Property index stream empty");
+    fatalError("dumpObject", "Property index stream empty.");
   }
 
   OMUInt16 _byteOrder = readByteOrder(stream);
@@ -1604,8 +1652,10 @@ void dumpObject(IStorage* storage, char* pathName, int isRoot)
   // Check that the stream size is consistent with the entry count
   //
   size_t expectedSize = headSize + (_entryCount * sizeof(IndexEntry));
-  if (indexStreamSize != expectedSize){
-    fatalError("dumpObject", "Property index stream wrong size");
+  if (indexStreamSize < expectedSize) {
+    fatalError("dumpObject", "Property index stream too small.");
+  } else if (indexStreamSize > expectedSize) {
+    warning("dumpObject", "Property index stream too large.");
   }
 
   if ((isRoot) && (_formatVersion < 3)) {
@@ -1647,6 +1697,10 @@ void dumpObject(IStorage* storage, char* pathName, int isRoot)
 
   IndexEntry* index = readIndex(stream, _entryCount, swapNeeded);
   printIndex(index, _entryCount);
+
+  if (!isValid(index, _entryCount)) {
+    fatalError("dumpObject", "Invalid property set index.");
+  }
 
   cout << "Dump of properties" << endl;
   dumpProperties(storage, index, _entryCount, pathName, isRoot, swapNeeded);
