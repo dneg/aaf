@@ -163,7 +163,7 @@ static HRESULT TestOneValue (aafUInt32 setDataSize,
 		{
 		  if (ppv)
 			ppv->Release();
-		  throw AAFRESULT_TEST_FAILED;
+		  return AAFRESULT_TEST_FAILED;
 		}
 	  // good, the creation failed.  Let's let's create one that
 	  // *will* work, and make sure it fails when we try to 'set' it.
@@ -172,7 +172,7 @@ static HRESULT TestOneValue (aafUInt32 setDataSize,
 		{
 		  if (ppv)
 			ppv->Release();
-		  throw AAFRESULT_TEST_FAILED;
+		  return AAFRESULT_TEST_FAILED;
 		}
       assert (ppv);
 
@@ -181,14 +181,14 @@ static HRESULT TestOneValue (aafUInt32 setDataSize,
 		{
 		  if (ppv)
 			ppv->Release();
-		  throw AAFRESULT_TEST_FAILED;
+		  return AAFRESULT_TEST_FAILED;
 		}
 
 	  // OK, it failed where it should have.  Make sure we return the
 	  // 'bad size' err code
 	  if (ppv)
 		ppv->Release();
-	  throw AAFRESULT_BAD_SIZE;
+	  return AAFRESULT_BAD_SIZE;
 	}
 
   // OK, the creation should succeed.
@@ -223,7 +223,7 @@ static HRESULT TestOneValue (aafUInt32 setDataSize,
 	{
 	  if (ppv)
 		ppv->Release();
-	  throw hr;
+	  return hr;
 	}
 
   // OK, ppv is created.  Let's try to get the value.
@@ -240,13 +240,13 @@ static HRESULT TestOneValue (aafUInt32 setDataSize,
 		{
 		  if (ppv)
 			ppv->Release();
-		  throw AAFRESULT_TEST_FAILED;
+		  return AAFRESULT_TEST_FAILED;
 		}
 
 	  // this is what we were expecting.
 	  if (ppv)
 		ppv->Release();
-	  throw AAFRESULT_BAD_SIZE;
+	  return AAFRESULT_BAD_SIZE;
 	}
 
   v8 = v4 = v2 = v1 = -1;
@@ -286,13 +286,19 @@ static HRESULT TestOneValue (aafUInt32 setDataSize,
 	{
 	  if (ppv)
 		ppv->Release();
-	  throw hr;
+	  return hr;
 	}
-  if (getVal != setData)
+
+  aafUInt32 compareSize =
+	getDataSize < setDataSize ? getDataSize : setDataSize;
+  aafInt64 compareMask = ~0;
+  if (compareSize < 8)
+	compareMask = ((aafInt64)1) << ((compareSize*8)-1);
+  if ((getVal&compareMask) != (setData&compareMask))
 	{
 	  if (ppv)
 		ppv->Release();
-	  throw AAFRESULT_TEST_FAILED;
+	  return AAFRESULT_TEST_FAILED;
 	}
 
   // Now let's try a set/get cycle again.
@@ -331,7 +337,7 @@ static HRESULT TestOneValue (aafUInt32 setDataSize,
 	{
 	  if (ppv)
 		ppv->Release();
-	  throw hr;
+	  return hr;
 	}
 
   v8 = v4 = v2 = v1 = -1;
@@ -372,8 +378,8 @@ static HRESULT TestOneValue (aafUInt32 setDataSize,
 
   checkResult (hr);
 
-  if (getVal != setData)
-	throw AAFRESULT_TEST_FAILED;
+  if ((getVal&compareMask) != (setData&compareMask))
+	return AAFRESULT_TEST_FAILED;
 
   return AAFRESULT_SUCCESS;
 }
@@ -499,8 +505,10 @@ static HRESULT TestTypeDefInt ()
 	  const aafUInt32 sizeTable[4] = {1, 2, 4, 8};
 	  IAAFTypeDefInt *typeDefTable[4][2] =
 	  {
-		ptdu8, ptdu16, ptdu32, ptdu64,
-		ptds8, ptds16, ptds32, ptds64
+		ptdu8, ptds8,
+		ptdu16, ptds16,
+		ptdu32, ptds32,
+		ptdu64, ptds64
 	  };
 
 	  aafUInt32  setSize;
@@ -518,14 +526,14 @@ static HRESULT TestTypeDefInt ()
 				{
 				  IAAFTypeDefInt * td;
 
-				  pvSize = 1 << pvIndex;
+				  pvSize = sizeTable[pvIndex];
 
 				  if ((1 == pvSize) ||
 					  (2 == pvSize) ||
 					  (4 == pvSize) ||
 					  (8 == pvSize))
 					{
-					  td = typeDefTable[pvSize][sign];
+					  td = typeDefTable[pvIndex][sign];
 					}
 				  else
 					continue;	// skip rest of the loop
@@ -535,7 +543,7 @@ static HRESULT TestTypeDefInt ()
 				  hr = TestOneValue (setSize,
 									 setData,
 									 getSize,
-									 pvIndex,
+									 pvSize,
 									 sign? AAFTrue : AAFFalse,
 									 td);
 
@@ -551,7 +559,7 @@ static HRESULT TestTypeDefInt ()
 						throw AAFRESULT_TEST_FAILED;
 					}
 
-				  if ((getSize != 1) &&
+				  else if ((getSize != 1) &&
 					  (getSize != 2) &&
 					  (getSize != 4) &&
 					  (getSize != 8))
@@ -560,15 +568,18 @@ static HRESULT TestTypeDefInt ()
 						throw AAFRESULT_TEST_FAILED;
 					}
 
-				  if ((setSize > pvSize) ||
+				  else if ((setSize > pvSize) ||
 					  (pvSize > getSize))
 					{
 					  if (AAFRESULT_BAD_SIZE != hr)
 						throw AAFRESULT_TEST_FAILED;
 					}
 
-				  // if we're here, it should pass.
-				  checkResult (hr);
+				  else
+					{
+					  // if we're here, it should pass.
+					  checkResult (hr);
+					}
 				}
 	}
   catch (HRESULT & rResult)
