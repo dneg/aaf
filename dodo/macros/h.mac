@@ -180,6 +180,10 @@ class .this-module : public .parent-module
 #c Arguments: none
 #c
 #startm AD_ROOT_CLASS_BEGIN 00
+#ifndef _AAFTypes_h_
+#include "AAFTypes.h"
+#endif
+
 //
 // Forward declaration
 //
